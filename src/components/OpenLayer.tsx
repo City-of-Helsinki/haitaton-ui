@@ -205,6 +205,7 @@ const OpenLayer: React.FC = (value: any, callback: any) => {
     if (map) {
       addInteractions();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [drawSource, projects]);
 
   useEffect(() => {
@@ -212,6 +213,7 @@ const OpenLayer: React.FC = (value: any, callback: any) => {
     map.removeInteraction(draw);
     map.removeInteraction(snap);
     addInteractions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectVal, map]);
 
   console.log('fo');
