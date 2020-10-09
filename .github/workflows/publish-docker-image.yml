@@ -15,5 +15,5 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          repository: City-of-Helsinki/haitaton-ui/haitaton-ui-image
+          repository: city-of-helsinki/haitaton-ui/haitaton-ui-image
           tag_with_ref: true
