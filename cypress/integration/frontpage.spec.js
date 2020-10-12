@@ -5,7 +5,7 @@ context('Frontpage', () => {
     cy.visit('http://localhost:3000');
   });
 
-  it('.type() - type into a DOM element', () => {
+  it('Project title should contain Not found', () => {
     cy.get('[data-testid=project-title]').should('contain', 'Not found');
   });
 });
