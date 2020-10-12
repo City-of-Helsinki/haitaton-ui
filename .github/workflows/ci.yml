@@ -16,5 +16,10 @@ jobs:
       - run: yarn test
       - run: yarn lint
       - run: yarn type-check
-      - name: Run E2E
-          uses: cypress-io/github-action@v2
+  e2e:
+    runs-on: ubuntu-16.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
