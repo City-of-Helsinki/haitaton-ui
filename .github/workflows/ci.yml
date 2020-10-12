@@ -16,3 +16,5 @@ jobs:
       - run: yarn test
       - run: yarn lint
       - run: yarn type-check
+      - name: Run E2E
+          uses: cypress-io/github-action@v2
