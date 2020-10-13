@@ -49,7 +49,8 @@
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "lint-staged": "^10.3.0",
     "prettier": "^2.1.1",
-    "prettier-eslint": "^11.0.0"
+    "prettier-eslint": "^11.0.0",
+    "start-server-and-test": "^1.11.5"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -59,6 +60,8 @@
     "type-check": "tsc --pretty --noEmit",
     "format": "prettier --write src/**/*.ts{,x}",
     "lint": "eslint --ext .ts,.tsx src --color",
+    "e2e": "start-server-and-test start :3000 cypress-run-chrome",
+    "cypress-run-chrome": "cypress run --browser chrome",
     "cypress-run-chrome-headless": "cypress run --headless --browser chrome"
   },
   "husky": {
