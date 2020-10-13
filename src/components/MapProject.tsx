@@ -25,7 +25,7 @@ const HaitatonProject: React.FC = () => {
 
   if (!project) {
     return (
-      <WindowContainer id="window-container">
+      <WindowContainer>
         <Title data-testid="project-title">Not found</Title>
       </WindowContainer>
     );
