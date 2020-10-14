@@ -1,0 +1,36 @@
+@import '~hds-core/lib/base.css';
+
+.hankeForm {
+  padding: 20px 30px;
+  .formWpr {
+    padding-bottom: 20px;
+  }
+  .dataWpr {
+    display: flex;
+    .left {
+      padding-right: 50px;
+    }
+  }
+  .calendaraWpr {
+    display: flex;
+    .left {
+      padding-right: 50px;
+    }
+  }
+  .formWprColumns {
+    display: flex;
+    padding-bottom: 20px;
+    .left {
+      width: 47%;
+      margin-right: 5%;
+    }
+    .right {
+      width: 47%;
+    }
+  }
+  .error-text {
+    color: #ca3f00;
+    padding-top: 10px;
+    display: block;
+  }
+}
