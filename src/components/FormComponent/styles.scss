@@ -1,35 +1,40 @@
 @import '~hds-core/lib/base.css';
 
 .hankeForm {
-  padding: 20px 30px;
+  padding: var(--spacing-m) var(--spacing-l);
+
   .formWpr {
-    padding-bottom: 20px;
+    padding-bottom: var(--spacing-m);
   }
   .dataWpr {
-    display: flex;
+    display: grid;
+    grid-gap: var(--grid-gap);
+    grid-template-columns: 1fr 1fr;
     .left {
-      padding-right: 50px;
+      padding-right: var(--spacing-m);
     }
+    padding-bottom: var(--spacing-m);
   }
   .calendaraWpr {
-    display: flex;
+    display: grid;
+    grid-gap: var(--grid-gap);
+    grid-template-columns: 1fr 1fr;
     .left {
-      padding-right: 50px;
+      padding-right: var(--spacing-m);
     }
+    padding-bottom: var(--spacing-m);
   }
   .formWprColumns {
-    display: flex;
-    padding-bottom: 20px;
+    display: grid;
+    grid-gap: var(--grid-gap);
+    grid-template-columns: 1fr 1fr;
     .left {
-      width: 47%;
-      margin-right: 5%;
+      padding-right: var(--spacing-m);
     }
-    .right {
-      width: 47%;
-    }
+    padding-bottom: var(--spacing-m);
   }
   .error-text {
-    color: #ca3f00;
+    color: var(--color-brick);
     padding-top: 10px;
     display: block;
   }

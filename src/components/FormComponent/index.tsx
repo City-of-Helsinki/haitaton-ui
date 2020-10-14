@@ -1,15 +1,14 @@
 import React from 'react';
-import { TextInput, Dropdown, RadioButton, Button } from 'hds-react';
+import { RadioButton, Button } from 'hds-react';
 import { useForm, Controller } from 'react-hook-form';
+
+import DropdownComp from '../../common/DropdownComp';
+import TextInputComp from '../../common/TextInputComp';
 
 import './styles.scss';
 
 // import styled from 'styled-components';
 type Inputs = {
-  name: string;
-  username: string;
-  email: string;
-  test: boolean;
   hankeenNimi: string;
   hankeenVaihe: string;
   hankeOnJulkinen: string;
@@ -37,7 +36,17 @@ const FormComponent: React.FC = (props) => {
     console.log('data', data);
     console.log('form values', getValues());
   };
+  /*
+const hankeVaiheOptions =  ['SUUNNITTELUSSA', 'OHJELMOINTI'];
 
+const getHankeenVaiheOptions = (t) => 
+const hankeVaiheOptions = ['SUUNNITTELUSSA', 'OHJELMOINTI'];
+const getHankeenVaiheOptions = (t: any) =>
+  hankeVaiheOptions.map((key) => ({
+    key,
+    label: t('hankeFormLabels.${KEY}'),
+  }));
+*/
   function getHankeenVaiheOptions() {
     return [{ label: 'Suunnittelussa' }, { label: 'Ohjelmointi vaiheessa' }];
   }
@@ -71,178 +80,108 @@ const FormComponent: React.FC = (props) => {
         </div>
       </div>
       <div className="formWpr">
-        <Controller
+        <TextInputComp
           name="hankeenNimi"
           id="hankeenNimi"
+          label="Hankeen Nimi *"
           control={control}
           rules={{ required: true }}
           defaultValue=""
-          render={({ onChange, onBlur, value, name }) => (
-            <TextInput
-              id="hankeNimi"
-              label="Hankeen Nimi *"
-              invalid={!!errors.hankeenNimi}
-              defaultValue=""
-              name={name}
-              onBlur={onBlur}
-              onChange={onChange}
-            />
-          )}
+          invalid={!!errors.hankeenNimi}
+          errorMsg="Syötä kenttä"
         />
-        {errors.hankeenNimi && <span className="error-text">Syötä kenttä</span>}
       </div>
 
       <div className="calendaraWpr formWpr">
         <div className="left">
-          <Controller
+          <TextInputComp
             name="startDate"
             id="startDate"
+            label="Hankkeen aloituspäivä *"
             control={control}
             rules={{ required: true }}
             defaultValue=""
-            render={({ onChange, onBlur, value, name }) => (
-              <TextInput
-                id="hankeNimi"
-                label="Hankkeen aloituspäivä *"
-                invalid={!!errors.startDate}
-                name={name}
-                onBlur={onBlur}
-                onChange={onChange}
-              />
-            )}
+            invalid={!!errors.startDate}
+            errorMsg="Syötä kenttä"
           />
-          {errors.startDate && <span className="error-text">Syötä kenttä</span>}
         </div>
         <div className="right">
-          <Controller
+          <TextInputComp
             name="endDate"
+            id="endDate"
+            label="Hankkeen loppupäivä *"
             control={control}
             rules={{ required: true }}
             defaultValue=""
-            render={({ onChange, onBlur, value, name }) => (
-              <TextInput
-                id="endDate"
-                label="Hankkeen loppupäivä *"
-                defaultValue=""
-                name={name}
-                invalid={!!errors.endDate}
-                onBlur={onBlur}
-                onChange={onChange}
-              />
-            )}
+            invalid={!!errors.endDate}
+            errorMsg="Syötä kenttä"
           />
-          {errors.endDate && <span className="error-text">Syötä kenttä</span>}
         </div>
       </div>
       <div className="formWpr">
-        <Controller
+        <DropdownComp
           name="hankeenVaihe"
+          id="hankeenVaihe"
           control={control}
+          options={getHankeenVaiheOptions()}
           defaultValue={getHankeenVaiheOptions()[0]}
-          render={({ onChange }) => (
-            <Dropdown
-              options={getHankeenVaiheOptions()}
-              defaultValue={getHankeenVaiheOptions()[0]}
-              label="Hankeen Vaihe"
-              onChange={onChange}
-            />
-          )}
+          label="Hankeen Vaihe"
         />
       </div>
       <div className="formWpr">
-        <Controller
+        <DropdownComp
           name="suunnitteluVaihe"
+          id="suunnitteluVaihe"
           control={control}
+          options={getSuunnitteluVaiheOptions()}
           defaultValue={getSuunnitteluVaiheOptions()[0]}
-          render={({ onChange, onBlur, value, name }) => (
-            <Dropdown
-              options={getSuunnitteluVaiheOptions()}
-              defaultValue={getSuunnitteluVaiheOptions()[0]}
-              label="Suunnitteluvaihe"
-              onChange={onChange}
-            />
-          )}
+          label="Suunnitteluvaihe"
         />
       </div>
       <div className="formWprColumns">
         <div className="left">
-          <Controller
+          <TextInputComp
             name="omistajaOrganisaatio"
             id="omistajaOrganisaatio"
+            label="Omistajaorganisaatio *"
             control={control}
             rules={{ required: true }}
             defaultValue=""
-            render={({ onChange, onBlur, value, name }) => (
-              <TextInput
-                id="omistajaOrganisaatio"
-                label="Omistajaorganisaatio *"
-                defaultValue=""
-                invalid={!!errors.omistajaOrganisaatio}
-                name={name}
-                onBlur={onBlur}
-                onChange={onChange}
-              />
-            )}
+            invalid={!!errors.omistajaOrganisaatio}
+            errorMsg="Syötä kenttä"
           />
           {errors.omistajaOrganisaatio && <span className="error-text">Syötä kenttä</span>}
         </div>
         <div className="right">
-          <Controller
+          <TextInputComp
             name="omistajaOsasto"
             id="omistajaOsasto"
+            label="omistajaosasto"
             control={control}
             defaultValue=""
-            render={({ onChange, onBlur, value, name }) => (
-              <TextInput
-                id="omistajaOsasto"
-                label="Omistajaosasto"
-                defaultValue=""
-                name={name}
-                onBlur={onBlur}
-                onChange={onChange}
-              />
-            )}
           />
         </div>
       </div>
       <div className="formWprColumns">
         <div className="left">
-          <Controller
+          <TextInputComp
             name="arvioijaOrganisaatio"
             id="arvioijaOrganisaatio"
+            label="Omistajaorganisaatio *"
             control={control}
             rules={{ required: true }}
             defaultValue=""
-            render={({ onChange, onBlur, value, name }) => (
-              <TextInput
-                id="arvioijaOrganisaatio"
-                label="Arvioijaorganisaatio *"
-                defaultValue=""
-                invalid={!!errors.arvioijaOrganisaatio}
-                name={name}
-                onBlur={onBlur}
-                onChange={onChange}
-              />
-            )}
+            invalid={!!errors.arvioijaOrganisaatio}
+            errorMsg="Syötä kenttä"
           />
-          {errors.arvioijaOrganisaatio && <span className="error-text">Syötä kenttä</span>}
         </div>
         <div className="right">
-          <Controller
+          <TextInputComp
             name="arvioijaOsasto"
             id="arvioijaOsasto"
+            label="Arvioijaosasto"
             control={control}
             defaultValue=""
-            render={({ onChange, onBlur, value, name }) => (
-              <TextInput
-                id="arvioijaOsasto"
-                label="Arvioijaosasto"
-                defaultValue=""
-                name={name}
-                onBlur={onBlur}
-                onChange={onChange}
-              />
-            )}
           />
         </div>
       </div>
