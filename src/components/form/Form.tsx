@@ -2,8 +2,8 @@ import React from 'react';
 import { RadioButton, Button } from 'hds-react';
 import { useForm, Controller } from 'react-hook-form';
 
-import DropdownComp from '../../common/DropdownComp';
-import TextInputComp from '../../common/TextInputComp';
+import Dropdown from '../../common/dropdown/Dropdown';
+import TextInput from '../../common/textInput/TextInput';
 
 import './styles.scss';
 
@@ -48,10 +48,16 @@ const getHankeenVaiheOptions = (t: any) =>
   }));
 */
   function getHankeenVaiheOptions() {
-    return [{ label: 'Suunnittelussa' }, { label: 'Ohjelmointi vaiheessa' }];
+    return [
+      { value: 'Suunnittelussa', label: 'Suunnittelussa' },
+      { value: 'Ohjelmointi', label: 'Ohjelmointi vaiheessa' },
+    ];
   }
   function getSuunnitteluVaiheOptions() {
-    return [{ label: 'Katusuunnittelu' }, { label: 'Katusuunnittelu2' }];
+    return [
+      { value: 'Katusuunnittelu', label: 'Katusuunnittelu' },
+      { value: 'Katusuunnittelu1', label: 'Katusuunnittelu2' },
+    ];
   }
 
   return (
@@ -80,7 +86,7 @@ const getHankeenVaiheOptions = (t: any) =>
         </div>
       </div>
       <div className="formWpr">
-        <TextInputComp
+        <TextInput
           name="hankeenNimi"
           id="hankeenNimi"
           label="Hankeen Nimi *"
@@ -94,7 +100,7 @@ const getHankeenVaiheOptions = (t: any) =>
 
       <div className="calendaraWpr formWpr">
         <div className="left">
-          <TextInputComp
+          <TextInput
             name="startDate"
             id="startDate"
             label="Hankkeen aloituspäivä *"
@@ -106,7 +112,7 @@ const getHankeenVaiheOptions = (t: any) =>
           />
         </div>
         <div className="right">
-          <TextInputComp
+          <TextInput
             name="endDate"
             id="endDate"
             label="Hankkeen loppupäivä *"
@@ -119,7 +125,7 @@ const getHankeenVaiheOptions = (t: any) =>
         </div>
       </div>
       <div className="formWpr">
-        <DropdownComp
+        <Dropdown
           name="hankeenVaihe"
           id="hankeenVaihe"
           control={control}
@@ -129,7 +135,7 @@ const getHankeenVaiheOptions = (t: any) =>
         />
       </div>
       <div className="formWpr">
-        <DropdownComp
+        <Dropdown
           name="suunnitteluVaihe"
           id="suunnitteluVaihe"
           control={control}
@@ -140,7 +146,7 @@ const getHankeenVaiheOptions = (t: any) =>
       </div>
       <div className="formWprColumns">
         <div className="left">
-          <TextInputComp
+          <TextInput
             name="omistajaOrganisaatio"
             id="omistajaOrganisaatio"
             label="Omistajaorganisaatio *"
@@ -153,7 +159,7 @@ const getHankeenVaiheOptions = (t: any) =>
           {errors.omistajaOrganisaatio && <span className="error-text">Syötä kenttä</span>}
         </div>
         <div className="right">
-          <TextInputComp
+          <TextInput
             name="omistajaOsasto"
             id="omistajaOsasto"
             label="omistajaosasto"
@@ -164,7 +170,7 @@ const getHankeenVaiheOptions = (t: any) =>
       </div>
       <div className="formWprColumns">
         <div className="left">
-          <TextInputComp
+          <TextInput
             name="arvioijaOrganisaatio"
             id="arvioijaOrganisaatio"
             label="Omistajaorganisaatio *"
@@ -176,7 +182,7 @@ const getHankeenVaiheOptions = (t: any) =>
           />
         </div>
         <div className="right">
-          <TextInputComp
+          <TextInput
             name="arvioijaOsasto"
             id="arvioijaOsasto"
             label="Arvioijaosasto"

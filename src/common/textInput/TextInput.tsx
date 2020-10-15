@@ -2,7 +2,7 @@ import React from 'react';
 import { Controller } from 'react-hook-form';
 import { TextInput } from 'hds-react';
 
-type propTypes = {
+type PropTypes = {
   name: string;
   id: string;
   control: any;
@@ -12,7 +12,7 @@ type propTypes = {
   invalid?: boolean;
   errorMsg?: string;
 };
-const TextInputComp: React.FC<propTypes> = (props) => {
+const TextInputComp: React.FC<PropTypes> = (props) => {
   const { name, id, control, rules, defaultValue, label, invalid, errorMsg } = props;
   return (
     <>

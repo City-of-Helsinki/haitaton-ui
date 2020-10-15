@@ -1,16 +1,16 @@
 import React from 'react';
 import { Controller } from 'react-hook-form';
 import { Dropdown } from 'hds-react';
-
-type propTypes = {
+type Option = { value: string; label: string };
+type PropTypes = {
   name: string;
   id: string;
   control: any;
   defaultValue: any;
   label: string;
-  options: any;
+  options: Array<Option>;
 };
-const DropdownComp: React.FC<propTypes> = (props) => {
+const DropdownComp: React.FC<PropTypes> = (props) => {
   const { name, id, control, options, defaultValue, label } = props;
   return (
     <Controller

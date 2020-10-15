@@ -6,7 +6,7 @@ import Layout from './Layout';
 import Main from './Main';
 import store from '../store';
 import OpenLayer from './OpenLayer';
-import FormComponent from './FormComponent';
+import FormComponent from './form/Form';
 
 import './app.scss';
 
