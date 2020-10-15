@@ -29,9 +29,6 @@ const ToggleNav = styled.button`
 `;
 const LinkWpr = styled.div`
   padding-bottom: 0.5rem;
-  a {
-    color: white;
-  }
 `;
 const NavLink = styled(Link)`
   margin-bottom: 0.5rem;
@@ -56,6 +53,9 @@ const Layout: React.FC<Props> = ({ children }) => {
           </LinkWpr>
           <LinkWpr>
             <NavLink to="/openlayer">Open Layers</NavLink>
+          </LinkWpr>
+          <LinkWpr>
+            <NavLink to="/form">Form</NavLink>
           </LinkWpr>
         </Navigation>
         <Container>{children}</Container>
