@@ -2,7 +2,7 @@
 
 context('Frontpage', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000');
+    cy.visit('/');
   });
 
   it('Project title should contain Not found', () => {

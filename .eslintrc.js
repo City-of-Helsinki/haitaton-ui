@@ -1,0 +1,64 @@
+module.exports = {
+  parser: '@typescript-eslint/parser',
+  extends: [
+    'react-app',
+    'plugin:@typescript-eslint/recommended',
+    'prettier/@typescript-eslint', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
+    'plugin:prettier/recommended', // Should be last in the list. Enables eslint-plugin-prettier and eslint-config-prettier. This will display prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
+  ],
+  parserOptions: {
+    project: './tsconfig.json',
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
+    sourceType: 'module', // Allows for the use of imports
+  },
+  rules: {
+    'object-curly-spacing': ['warn', 'always'],
+    'no-unused-vars': [
+      'error',
+      {
+        vars: 'all',
+        args: 'none',
+      },
+    ],
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        vars: 'all',
+        args: 'none',
+      },
+    ],
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    'react/jsx-indent': [2, 2],
+    'react/jsx-uses-react': 'error',
+    'react/no-set-state': 'error',
+    'react/jsx-props-no-spreading': 'off',
+    'import/prefer-default-export': 'off',
+    'react/jsx-boolean-value': 'off',
+    'react/prop-types': 'off',
+    'react/no-unescaped-entities': 'off',
+    'react/jsx-one-expression-per-line': 'off',
+    'react/jsx-wrap-multilines': 'off',
+    'react/destructuring-assignment': 'off',
+    'import/no-extraneous-dependencies': [
+      'error',
+      { devDependencies: ['**/setupTests.ts', '**/*.test.tsx', '**/*.spec.ts'] },
+    ],
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
+  overrides: [
+    {
+      files: ['**/*.test.tsx', '**/*.test.ts'],
+      env: {
+        jest: true,
+      },
+    },
+  ],
+};
