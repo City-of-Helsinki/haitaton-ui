@@ -1,11 +1,12 @@
 import React from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, Control } from 'react-hook-form';
 import { TextInput } from 'hds-react';
 
 type PropTypes = {
   name: string;
   id: string;
-  control: any;
+  control: Control;
+  // eslint-disable-next-line
   rules?: any;
   defaultValue: string;
   label: string;
@@ -22,7 +23,7 @@ const TextInputComp: React.FC<PropTypes> = (props) => {
         control={control}
         rules={rules}
         defaultValue={defaultValue}
-        render={({ onChange, onBlur, name }) => (
+        render={({ onChange, onBlur }) => (
           <TextInput
             id={id}
             label={label}

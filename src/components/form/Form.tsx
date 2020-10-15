@@ -1,13 +1,11 @@
 import React from 'react';
 import { RadioButton, Button } from 'hds-react';
 import { useForm, Controller } from 'react-hook-form';
-
 import Dropdown from '../../common/dropdown/Dropdown';
 import TextInput from '../../common/textInput/TextInput';
 
 import './styles.scss';
 
-// import styled from 'styled-components';
 type Inputs = {
   hankeenNimi: string;
   hankeenVaihe: string;
@@ -33,20 +31,12 @@ const FormComponent: React.FC = (props) => {
   });
 
   const onSubmit = (data: Inputs) => {
+    // eslint-disable-next-line
     console.log('data', data);
+    // eslint-disable-next-line
     console.log('form values', getValues());
   };
-  /*
-const hankeVaiheOptions =  ['SUUNNITTELUSSA', 'OHJELMOINTI'];
 
-const getHankeenVaiheOptions = (t) => 
-const hankeVaiheOptions = ['SUUNNITTELUSSA', 'OHJELMOINTI'];
-const getHankeenVaiheOptions = (t: any) =>
-  hankeVaiheOptions.map((key) => ({
-    key,
-    label: t('hankeFormLabels.${KEY}'),
-  }));
-*/
   function getHankeenVaiheOptions() {
     return [
       { value: 'Suunnittelussa', label: 'Suunnittelussa' },
