@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import * as ol from 'ol';
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -51,7 +51,7 @@ const image = new CircleStyle({
 
 const styles = {
   Point: new Style({
-    image: image,
+    image,
   }),
   LineString: new Style({
     stroke: new Stroke({
@@ -66,7 +66,7 @@ const styles = {
     }),
   }),
   MultiPoint: new Style({
-    image: image,
+    image,
   }),
   MultiPolygon: new Style({
     stroke: new Stroke({
@@ -116,35 +116,35 @@ const styles = {
 };
 const styleFunction = (feature: ol.Feature) => styles[feature.getGeometry().getType()];
 
-const OpenLayer: React.FC = (value: any, callback: any) => {
+const OpenLayer: React.FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [map, setMap] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [draw, setDraw] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [snap, setSnap] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [drawSource] = useState<any>(new VectorSource());
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectVal, setSelectVal] = useState<any>('Point');
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
   const { projects } = useProjects();
 
-  console.log(projects);
-
-  console.log(drawSource.getFeatures());
-
-  const addInteractions = () => {
+  const setIntercations = useCallback(() => {
     if (!map) return;
 
-    const draw = new Draw({
+    const drawInstance = new Draw({
       source: drawSource,
       type: selectVal,
     });
-    map.addInteraction(draw);
-    const snap = new Snap({ source: drawSource });
-    map.addInteraction(snap);
+    map.addInteraction(drawInstance);
+    const snapInstance = new Snap({ source: drawSource });
+    map.addInteraction(snapInstance);
 
-    setDraw(draw);
-    setSnap(snap);
-  };
+    setDraw(drawInstance);
+    setSnap(snapInstance);
+  }, [map, drawSource, selectVal]);
 
   useEffect(() => {
     if (mapContainerRef.current == null) {
@@ -169,8 +169,6 @@ const OpenLayer: React.FC = (value: any, callback: any) => {
       maxZoom: 18,
     });
 
-    console.log(projects);
-
     drawSource.addFeatures(
       new GeoJSON().readFeatures(projects, {
         featureProjection: 'EPSG:3857',
@@ -185,7 +183,7 @@ const OpenLayer: React.FC = (value: any, callback: any) => {
     });
 
     if (!map) {
-      const map = new Map({
+      const mapInstance = new Map({
         layers: [raster, vector],
         target: mapContainerRef.current,
         view: new View({
@@ -197,30 +195,24 @@ const OpenLayer: React.FC = (value: any, callback: any) => {
       });
 
       const modify = new Modify({ source: drawSource });
-      map.addInteraction(modify);
+      mapInstance.addInteraction(modify);
 
-      setMap(map);
+      setMap(mapInstance);
     }
 
-    if (map) {
-      addInteractions();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [drawSource, projects]);
+    setIntercations();
+  }, [map, setIntercations, drawSource, projects]);
 
   useEffect(() => {
     if (!map) return;
     map.removeInteraction(draw);
     map.removeInteraction(snap);
-    addInteractions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectVal, map]);
-
-  console.log('fo');
+  }, [selectVal]);
 
   return (
     <div>
-      <MapContainer ref={mapContainerRef}></MapContainer>
+      <MapContainer ref={mapContainerRef} />
       <Toolbox
         onChange={(event) => {
           setSelectVal(event.target.value);

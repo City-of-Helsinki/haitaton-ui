@@ -8,11 +8,6 @@ const languages = [
   { code: 'en', label: 'English' },
 ];
 
-type Props = {
-  onLanguageChanged?: () => void;
-  className?: string;
-};
-
 const filterLanguages = (i18n: typeof i18next) =>
   languages.filter((lang) =>
     i18n.languages[0].length > 2
@@ -20,13 +15,10 @@ const filterLanguages = (i18n: typeof i18next) =>
       : i18n.languages[0] !== lang.code
   );
 
-const LanguageSwitcher = ({ onLanguageChanged }: Props) => {
+const LanguageSwitcher = () => {
   const { i18n } = useTranslation();
   const setLanguage = (code: string) => {
     i18n.changeLanguage(code);
-    if (onLanguageChanged) {
-      onLanguageChanged();
-    }
   };
 
   return (

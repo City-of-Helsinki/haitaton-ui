@@ -1,13 +1,9 @@
 module.exports = {
+  extends: ['airbnb-typescript-prettier'],
   parser: '@typescript-eslint/parser',
-  extends: [
-    'react-app',
-    'plugin:@typescript-eslint/recommended',
-    'prettier/@typescript-eslint', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
-    'plugin:prettier/recommended', // Should be last in the list. Enables eslint-plugin-prettier and eslint-config-prettier. This will display prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
-  ],
   parserOptions: {
-    project: './tsconfig.json',
+    project: './tsconfig.eslint.json',
+    tsconfigRootDir: __dirname,
     ecmaFeatures: {
       jsx: true,
     },
@@ -15,7 +11,9 @@ module.exports = {
     sourceType: 'module', // Allows for the use of imports
   },
   rules: {
-    'object-curly-spacing': ['warn', 'always'],
+    'no-use-before-define': 'off',
+    '@typescript-eslint/no-use-before-define': ['error'],
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
     'no-unused-vars': [
       'error',
       {
@@ -30,22 +28,20 @@ module.exports = {
         args: 'none',
       },
     ],
-    '@typescript-eslint/no-explicit-any': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    'object-curly-spacing': ['warn', 'always'],
     'react/jsx-indent': [2, 2],
-    'react/jsx-uses-react': 'error',
-    'react/no-set-state': 'error',
     'react/jsx-props-no-spreading': 'off',
     'import/prefer-default-export': 'off',
-    'react/jsx-boolean-value': 'off',
-    'react/prop-types': 'off',
-    'react/no-unescaped-entities': 'off',
-    'react/jsx-one-expression-per-line': 'off',
-    'react/jsx-wrap-multilines': 'off',
-    'react/destructuring-assignment': 'off',
     'import/no-extraneous-dependencies': [
       'error',
       { devDependencies: ['**/setupTests.ts', '**/*.test.tsx', '**/*.spec.ts'] },
+    ],
+    'no-param-reassign': [
+      'error',
+      {
+        props: true,
+        ignorePropertyModificationsFor: ['state'],
+      },
     ],
   },
   settings: {
@@ -54,6 +50,11 @@ module.exports = {
     },
   },
   overrides: [
+    {
+      files: ['*.js'],
+      parser: 'babel-eslint',
+      rules: {},
+    },
     {
       files: ['**/*.test.tsx', '**/*.test.ts'],
       env: {

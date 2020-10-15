@@ -4,6 +4,7 @@ import projectsJSON from '../../mocks/projects.json';
 // https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/master/types/geojson/index.d.ts
 export interface IGeometry {
   type: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   coordinates: any;
 }
 
@@ -11,6 +12,7 @@ export interface IGeoJson {
   type: string;
   geometry: IGeometry;
   bbox?: number[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   properties?: any;
 }
 
@@ -41,13 +43,13 @@ const mapSlice = createSlice({
   },
 });
 
-export const actions = mapSlice.actions;
+export const { actions } = mapSlice;
 
 export default mapSlice.reducer;
 
-export const getProjects = () => (state: { map: State }): any => state.map.projects;
+export const getProjects = () => (state: { map: State }) => state.map.projects;
 
-export const getSelectedProjectId = () => (state: { map: State }): any => state.map.selectedProject;
+export const getSelectedProjectId = () => (state: { map: State }) => state.map.selectedProject;
 
-export const getProjectById = (id: string) => (state: { map: State }): any =>
-  state.map.projects.features.find((feature) => feature.properties.id === id);
+export const getProjectById = (id: string | null) => (state: { map: State }) =>
+  id ? state.map.projects.features.find((feature) => feature.properties.id === id) : null;

@@ -12,7 +12,7 @@ const Projects: React.FC = () => {
   return (
     <div>
       {count}
-      <button onClick={() => incrementByOne()}>
+      <button onClick={() => incrementByOne()} type="button">
         <T id="common:increment" />
       </button>
     </div>

@@ -1,9 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-// import Project from './Project';
 import MapProject from './MapProject';
 import Projects from './Projects';
-// import Map from './Map';
 
 const MainContainer = styled('div')<{ isOpen: boolean }>`
   height: 100vh;
