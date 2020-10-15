@@ -1,0 +1,19 @@
+@font-face {
+  font-family: HelsinkiGrotesk;
+  src: url('../../../assets/fonts/HelsinkiGrotesk-Regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: HelsinkiGrotesk;
+  font-weight: 500;
+  src: url('../../../assets/fonts/HelsinkiGrotesk-Medium.otf') format('opentype');
+}
+@font-face {
+  font-family: HelsinkiGrotesk;
+  font-weight: bold;
+  src: url('../../../assets/fonts/HelsinkiGrotesk-Bold.otf') format('opentype');
+}
+
+body {
+  font-family: 'HelsinkiGrotesk', serif;
+}

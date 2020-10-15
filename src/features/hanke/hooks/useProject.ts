@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { actions, getProjectById, getSelectedProjectId } from '../features/map/reducer';
+import { actions, getProjectById, getSelectedProjectId } from '../../map/reducer';
 
 export const useProject = () => {
   const dispatch = useDispatch();

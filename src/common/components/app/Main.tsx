@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import MapProject from './MapProject';
-import Projects from './Projects';
+import MapProject from '../../../features/hanke/MapProject';
+import Hanke from '../../../features/hanke/Hanke';
+import HankeList from '../../../features/hanke/HankeList';
 
 const MainContainer = styled('div')<{ isOpen: boolean }>`
   height: 100vh;
@@ -33,7 +34,8 @@ const Main: React.FC = () => {
       <Toolbar onClick={() => setIsOpen((v) => !v)}>Toolbar</Toolbar>
       <Center>
         <ContentContainer>
-          <Projects />
+          <HankeList />
+          <Hanke />
           <MapProject />
         </ContentContainer>
       </Center>

@@ -1,7 +1,7 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
-import projectsReducer from './features/projects/reducer';
-import mapReducer from './features/map/reducer';
+import projectsReducer from '../../../features/hanke/reducer';
+import mapReducer from '../../../features/map/reducer';
 
 const rootReducer = combineReducers({
   projects: projectsReducer,

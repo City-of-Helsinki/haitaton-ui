@@ -5,9 +5,9 @@ type Props = {
   id: string;
 };
 
-const T: React.FC<Props> = ({ id }) => {
+const Locale: React.FC<Props> = ({ id }) => {
   const { t } = useTranslation();
   return <>{t(id)}</>;
 };
 
-export default T;
+export default Locale;

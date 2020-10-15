@@ -7,10 +7,9 @@ import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
 import { Draw, Modify, Snap } from 'ol/interaction';
 import { TileWMS, Vector as VectorSource } from 'ol/source';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
-
 import styled from 'styled-components';
 import 'ol/ol.css';
-import { useProjects } from '../hooks/useProjects';
+import { useProjects } from '../hanke/hooks/useProjects';
 
 const MapContainer = styled.div`
   position: absolute;

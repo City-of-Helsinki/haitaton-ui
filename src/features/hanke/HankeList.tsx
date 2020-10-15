@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import T from '../common/T';
-import { getProjects, actions } from '../features/projects/reducer';
+import Locale from '../../common/components/locale/Locale';
+import { getProjects, actions } from './reducer';
 
 const Projects: React.FC = () => {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ const Projects: React.FC = () => {
     <div>
       {count}
       <button onClick={() => incrementByOne()} type="button">
-        <T id="common:increment" />
+        <Locale id="common:increment" />
       </button>
     </div>
   );

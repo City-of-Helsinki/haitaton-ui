@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useProject } from '../hooks/useProject';
+import { useProject } from './hooks/useProject';
 
 const WindowContainer = styled.div`
   border: 1px solid red;

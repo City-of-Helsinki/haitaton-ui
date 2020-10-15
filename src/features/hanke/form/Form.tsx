@@ -1,8 +1,8 @@
 import React from 'react';
 import { RadioButton, Button } from 'hds-react';
 import { useForm, Controller } from 'react-hook-form';
-import Dropdown from '../../common/dropdown/Dropdown';
-import TextInput from '../../common/textInput/TextInput';
+import Dropdown from '../../../common/components/dropdown/Dropdown';
+import TextInput from '../../../common/components/textInput/TextInput';
 
 import './styles.scss';
 

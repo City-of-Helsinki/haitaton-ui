@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
-import LanguageSwitcher from '../i18n/components/LanguageSwitcher';
+import LanguageSwitcher from '../languageSwitcher/LanguageSwitcher';
 
 const GlobalStyle = createGlobalStyle`
   body {
