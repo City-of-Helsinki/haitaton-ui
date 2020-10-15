@@ -1,0 +1,8 @@
+{
+  "common": {
+    "increment": "SV:Lisää"
+  },
+  "featureX": {
+    "hello": "SV:Morjesta featuresta x"
+  }
+}

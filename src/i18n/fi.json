@@ -1,0 +1,8 @@
+{
+  "common": {
+    "increment": "Lisää"
+  },
+  "featureX": {
+    "hello": "Morjesta featuresta x"
+  }
+}

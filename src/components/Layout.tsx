@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
+import LanguageSwitcher from '../i18n/components/LanguageSwitcher';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -57,6 +58,7 @@ const Layout: React.FC<Props> = ({ children }) => {
           <LinkWpr>
             <NavLink to="/form">Form</NavLink>
           </LinkWpr>
+          <LanguageSwitcher />
         </Navigation>
         <Container>{children}</Container>
       </Parent>
