@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import App from './components/App';
+import App from './common/components/app/App';
+import './locales/i18n';
+
 // import * as serviceWorker from './serviceWorker';
 
 if (process.env.NODE_ENV === 'development') {
