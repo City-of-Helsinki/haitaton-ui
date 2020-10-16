@@ -5,3 +5,4 @@ COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 WORKDIR /usr/share/nginx/html
 COPY .env .
 CMD ["/bin/bash", "-c", "nginx -g \"daemon off;\""]
+git a
