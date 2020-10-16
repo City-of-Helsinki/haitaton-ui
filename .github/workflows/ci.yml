@@ -34,7 +34,7 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           start: yarn start
-  push_to_github_packages:
+  docker_build_and_push:
     name: Push Docker image to GitHub Packages
     needs: [build, e2e]
     runs-on: ubuntu-latest
