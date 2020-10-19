@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Box } from '@chakra-ui/core';
 import { useProject } from './hooks/useProject';
 
 const WindowContainer = styled.div`
@@ -26,7 +27,15 @@ const HaitatonProject: React.FC = () => {
   if (!project) {
     return (
       <WindowContainer>
-        <Title data-testid="project-title">Not found</Title>
+        <Box
+          bg={{ s: 'tomato', m: 'green.50' }}
+          w="50%"
+          p={{ s: 's', m: 'l' }}
+          color="white"
+          data-testid="project-title"
+        >
+          Not found
+        </Box>
       </WindowContainer>
     );
   }

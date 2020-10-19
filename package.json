@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@chakra-ui/core": "^0.8.0",
+    "@emotion/core": "^10.0.35",
+    "@emotion/styled": "^10.0.27",
     "@reduxjs/toolkit": "^1.4.0",
     "@types/jest": "^24.0.0",
     "@types/node": "^12.0.0",
@@ -14,8 +17,10 @@
     "@types/styled-components": "^5.1.3",
     "@types/turf": "^3.5.32",
     "axios": "^0.20.0",
-    "hds-react": "^0.13.3",
+    "emotion-theming": "^10.0.27",
     "eslint-config-airbnb-typescript-prettier": "^3.1.0",
+    "hds-design-tokens": "^0.14.0",
+    "hds-react": "^0.13.3",
     "i18next": "^19.8.2",
     "msw": "^0.21.2",
     "node-sass": "^4.14.1",
@@ -49,7 +54,10 @@
     "lint-staged": "^10.3.0",
     "prettier": "^2.1.1",
     "prettier-eslint": "^11.0.0",
-    "start-server-and-test": "^1.11.5"
+    "start-server-and-test": "^1.11.5",
+    "stylelint": "^13.7.2",
+    "stylelint-config-standard": "^20.0.0",
+    "stylelint-value-no-unknown-custom-properties": "^3.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -61,6 +69,7 @@
     "ts-check": "tsc --noEmit --project tsconfig.json",
     "ts-check:cypress": "tsc --noEmit --project ./cypress/tsconfig.json",
     "lint": "yarn ts-check:cypress && yarn ts-check && eslint --ext js,ts,tsx src cypress",
+    "lint:css": "stylelint 'src/**/*.scss'",
     "e2e": "start-server-and-test start :3000 cypress-run-chrome",
     "cypress-run-chrome": "cypress run --browser chrome",
     "cypress-run-chrome-headless": "cypress run --headless --browser chrome"
@@ -75,7 +84,10 @@
     "*.@(js|jsx|ts|tsx)": [
       "yarn lint"
     ],
-    "*.@(js|jsx|ts|tsx|css|md)": [
+    "*.@(css|scss)": [
+      "yarn lint:css"
+    ],
+    "*.@(js|jsx|ts|tsx|scss|css|md)": [
       "yarn format"
     ]
   },
