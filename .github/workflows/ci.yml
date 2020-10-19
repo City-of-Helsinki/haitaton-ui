@@ -83,5 +83,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ghcr.io/city-of-helsinki/haitaton/haitaton-ui:latest
-            ghcr.io/city-of-helsinki/haitaton/haitaton-ui:dev
+            ghcr.io/city-of-helsinki/haitaton/ui:latest
+            ghcr.io/city-of-helsinki/haitaton/ui:dev
