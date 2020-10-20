@@ -6,7 +6,7 @@ const increment: CaseReducer<State, PayloadAction<number>> = (state, action) =>
   state + action.payload;
 
 const projectsSlice = createSlice({
-  name: 'test',
+  name: 'projects',
   initialState: 0,
   reducers: {
     increment,
@@ -16,5 +16,3 @@ const projectsSlice = createSlice({
 export const { actions } = projectsSlice;
 
 export default projectsSlice.reducer;
-
-export const getProjects = (state: { projects: State }): number => state.projects;

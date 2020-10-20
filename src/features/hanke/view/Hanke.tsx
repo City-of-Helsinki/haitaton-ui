@@ -1,25 +1,7 @@
 import axios from 'axios';
 import React from 'react';
-import styled from 'styled-components';
 import { useQuery } from 'react-query';
-
-const WindowContainer = styled.div`
-  border: 1px solid red;
-  width: clamp(23ch, 50%, 46ch);
-  display: flex;
-  flex-direction: column;
-  z-index: 1;
-`;
-
-const Title = styled.div`
-  background: blue;
-  border-bottom: 2px solid black;
-  color: white;
-`;
-
-const Content = styled.div`
-  padding: 5px;
-`;
+import './Hanke.styles.scss';
 
 type ProjectId = number | null;
 
@@ -38,17 +20,17 @@ const HaitatonProject: React.FC = () => {
 
   if (isLoading || isError) {
     return (
-      <WindowContainer>
-        <p>Ladataan...</p>
-      </WindowContainer>
+      <div className="windowContainer">
+        <div className="hanke__content">Ladataan...</div>
+      </div>
     );
   }
 
   return (
-    <WindowContainer>
-      <Title>Haitaton-ID: {data.id} Heikkiläntie</Title>
-      <Content>Jep</Content>
-    </WindowContainer>
+    <div className="windowContainer">
+      <div className="hanke__title">Haitaton-ID: {data.id} Heikkiläntie</div>
+      <div className="hanke__content">Jep</div>
+    </div>
   );
 };
 

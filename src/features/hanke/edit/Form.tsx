@@ -3,8 +3,7 @@ import { RadioButton, Button } from 'hds-react';
 import { useForm, Controller } from 'react-hook-form';
 import Dropdown from '../../../common/components/dropdown/Dropdown';
 import TextInput from '../../../common/components/textInput/TextInput';
-
-import './styles.scss';
+import './Form.styles.scss';
 
 type Inputs = {
   hankeenNimi: string;

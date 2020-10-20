@@ -1,7 +1,8 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Locale from '../../common/components/locale/Locale';
-import { getProjects, actions } from './reducer';
+import Locale from '../../../common/components/locale/Locale';
+import { getProjects } from './selectors';
+import { actions } from './reducer';
 
 const Projects: React.FC = () => {
   const dispatch = useDispatch();

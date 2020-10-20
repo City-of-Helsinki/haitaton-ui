@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import MapProject from '../../../features/hanke/MapProject';
-import Hanke from '../../../features/hanke/Hanke';
-import HankeList from '../../../features/hanke/HankeList';
+import MapProject from '../../../features/hanke/view/MapPopup';
+import HankeView from '../../../features/hanke/view/Hanke';
+import HankeList from '../../../features/hanke/list/HankeList';
 
 const MainContainer = styled('div')<{ isOpen: boolean }>`
   height: 100vh;
@@ -35,7 +35,7 @@ const Main: React.FC = () => {
       <Center>
         <ContentContainer>
           <HankeList />
-          <Hanke />
+          <HankeView />
           <MapProject />
         </ContentContainer>
       </Center>

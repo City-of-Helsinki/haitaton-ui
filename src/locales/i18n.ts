@@ -3,7 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import en from './en.json';
 import fi from './fi.json';
 import sv from './sv.json';
-import { Locale } from '../types/common';
+import { Locale } from '../common/types/locales';
 
 export const getLocale = (locale: Locale) => locale;
 
