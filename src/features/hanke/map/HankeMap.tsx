@@ -9,7 +9,7 @@ import { TileWMS, Vector as VectorSource } from 'ol/source';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import styled from 'styled-components';
 import 'ol/ol.css';
-import { useProjects } from '../hanke/hooks/useProjects';
+import { useProjects } from '../common/hooks/useProjects';
 
 const MapContainer = styled.div`
   position: absolute;
