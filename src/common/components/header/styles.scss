@@ -1,0 +1,22 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-white);
+
+  .logoLink {
+    width: 75px;
+    margin: var(--spacing-xs);
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+  }
+
+  &__navHeader {
+    font-size: var(--fontsize-heading-xxs);
+    margin: 0;
+    padding: 0;
+  }
+}
