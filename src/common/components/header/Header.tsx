@@ -1,23 +1,57 @@
-import React from 'react';
-
-import LanguageSwitcher from '../languageSwitcher/LanguageSwitcher';
-
-import HelLogoLink from '../helLogoLink/HelLogoLink';
-import Nav from './nav/Nav';
+import React, { useState } from 'react';
+import { Navigation } from 'hds-react';
+import { useTranslation } from 'react-i18next';
+import { NavLink } from 'react-router-dom';
 
 import './styles.scss';
 
-const Header: React.FC = () => {
-  return (
-    <header className="header">
-      <div className="header__left">
-        <HelLogoLink />
+const languages = [
+  { code: 'fi', label: 'Suomi' },
+  { code: 'sv', label: 'Svenska' },
+  { code: 'en', label: 'English' },
+];
+type Types = {
+  code: string;
+  label: string;
+};
 
-        <h2 className="header__navHeader">Haitaton 2.0</h2>
-      </div>
-      <Nav />
-      <LanguageSwitcher />
-    </header>
+const Header: React.FC = () => {
+  const [language, setLanguageState] = useState<Types>(languages[0]);
+
+  const { i18n } = useTranslation();
+  const setLanguage = (code: Types) => {
+    setLanguageState(code);
+    i18n.changeLanguage(code.code);
+  };
+  const [menuOpen, setMenuOpen] = useState(false);
+  return (
+    <Navigation
+      menuCloseAriaLabel="Close menu"
+      menuOpenAriaLabel="Open menu"
+      menuOpen={menuOpen}
+      onMenuToggle={() => setMenuOpen(!menuOpen)}
+      title="Haitaton 2.0"
+      skipTo="#"
+      skipToContentLabel="Skip to main content"
+      titleUrl="/"
+    >
+      <Navigation.Row display="inline">
+        <NavLink to="/" exact activeClassName="activeNavItem">
+          Home
+        </NavLink>
+        <NavLink to="/openlayer" activeClassName="activeNavItem">
+          Open Layers
+        </NavLink>
+        <NavLink to="/form" activeClassName="activeNavItem">
+          Form
+        </NavLink>
+      </Navigation.Row>
+      <Navigation.LanguageSelector
+        options={languages}
+        onLanguageChange={setLanguage}
+        value={language}
+      />
+    </Navigation>
   );
 };
 

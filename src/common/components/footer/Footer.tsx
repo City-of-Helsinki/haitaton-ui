@@ -1,13 +1,8 @@
 import React from 'react';
-import HelLogoLink from '../helLogoLink/HelLogoLink';
 import './styles.scss';
 
-const Footer: React.FC = () => {
-  return (
-    <footer className="footer">
-      <HelLogoLink />
-    </footer>
-  );
+const FooterComp: React.FC = () => {
+  return <footer className="footer">&copy; Copyright 2020 &#8226; All rights reserved</footer>;
 };
 
-export default Footer;
+export default FooterComp;
