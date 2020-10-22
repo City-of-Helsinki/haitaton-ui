@@ -26,14 +26,22 @@ jobs:
           path: build.tar
           retention-days: 1
   e2e:
+    name: Browser tests
+    needs: build
     runs-on: ubuntu-16.04
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Download application build files
+        uses: actions/download-artifact@v2
+        with:
+          name: haitaton-ui-build
+      - name: Untar build files
+        run: tar -xvf build.tar
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          build: yarn run build
+          # build: yarn run build
           start: yarn run serve
           wait-on: 'http://localhost:3000'
   docker_build_and_push:
