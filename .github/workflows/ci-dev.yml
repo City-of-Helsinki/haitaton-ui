@@ -19,7 +19,7 @@ jobs:
       - name: Tar build files
         run: tar -cvf build.tar build
       - name: Upload application build files for Docker build job
-        if: ${{ github.ref == 'refs/heads/dev' }}
+        # if: ${{ github.ref == 'refs/heads/dev' }}
         uses: actions/upload-artifact@v2
         with:
           name: haitaton-ui-build
@@ -38,6 +38,10 @@ jobs:
           name: haitaton-ui-build
       - name: Untar build files
         run: tar -xvf build.tar
+      - name: List files after checkout
+        shell: bash
+        run: |
+          ls -ltra
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
