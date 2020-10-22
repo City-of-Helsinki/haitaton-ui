@@ -4,7 +4,6 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
-
 import { Draw, Modify, Snap } from 'ol/interaction';
 import { TileWMS, Vector as VectorSource } from 'ol/source';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';

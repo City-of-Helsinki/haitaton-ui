@@ -42,6 +42,9 @@ const Header: React.FC = () => {
         <NavLink to={`/${language.code}/map`} activeClassName="activeNavItem">
           Map
         </NavLink>
+        <NavLink to={`/${language.code}/projects`} activeClassName="activeNavItem">
+          Hankkeet
+        </NavLink>
         <NavLink to={`/${language.code}/form`} activeClassName="activeNavItem">
           Form
         </NavLink>
