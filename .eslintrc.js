@@ -28,6 +28,8 @@ module.exports = {
         args: 'none',
       },
     ],
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': 'error',
     'object-curly-spacing': ['warn', 'always'],
     'react/jsx-indent': [2, 2],
     'react/jsx-props-no-spreading': 'off',

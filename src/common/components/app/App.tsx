@@ -1,12 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { QueryCache, ReactQueryCacheProvider } from 'react-query';
-import { withRouter, Switch, Route } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { ThemeProvider } from '@chakra-ui/core';
-import OpenLayer from '../../../features/hanke/map/HankeMap';
-import HankeForm from '../../../features/hanke/edit/Form';
+import AppRoutes from '../../routes/AppRoutes';
 import Layout from './Layout';
-import Main from './Main';
 import store from './store';
 import theme from './theme';
 import './app.scss';
@@ -18,11 +16,7 @@ const App: React.FC = () => (
     <ReactQueryCacheProvider queryCache={queryCache}>
       <ThemeProvider theme={theme}>
         <Layout>
-          <Switch>
-            <Route exact path="/" render={() => <Main />} />
-            <Route exact path="/openlayer" render={() => <OpenLayer />} />
-            <Route exact path="/form" render={() => <HankeForm />} />
-          </Switch>
+          <AppRoutes />
         </Layout>
       </ThemeProvider>
     </ReactQueryCacheProvider>

@@ -175,7 +175,7 @@ const OpenLayer: React.FC = () => {
 
     drawSource.addFeatures(
       new GeoJSON().readFeatures(projects, {
-        featureProjection: 'EPSG:3857',
+        featureProjection: 'EPSG:3857', // EPSG:3879
       })
     );
 
