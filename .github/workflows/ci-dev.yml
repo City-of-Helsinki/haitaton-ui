@@ -19,7 +19,6 @@ jobs:
       - name: Tar build files
         run: tar -cvf build.tar build
       - name: Upload application build files for Docker build job
-        # if: ${{ github.ref == 'refs/heads/dev' }}
         uses: actions/upload-artifact@v2
         with:
           name: haitaton-ui-build
@@ -30,6 +29,8 @@ jobs:
     needs: build
     runs-on: ubuntu-16.04
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Download application build files
         uses: actions/download-artifact@v2
         with:
