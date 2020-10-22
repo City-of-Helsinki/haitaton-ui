@@ -5,7 +5,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build-and-serve": "yarn run build && serve -s build -l 3000",
+    "serve": "serve -s build -l 3000",
+    "build-and-serve": "yarn run build && yarn run serve",
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
     "type-check": "tsc --pretty --noEmit",
@@ -85,7 +86,7 @@
     }
   },
   "lint-staged": {
-    "*.@(js|jsx|ts|tsx)": [
+    "*.@(js|jsx|ts|tsx|yml)": [
       "yarn lint"
     ],
     "*.@(css|scss)": [
