@@ -3,7 +3,8 @@ import { Navigation } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import { ROUTES } from '../../constants/routes';
-import './styles.scss';
+import Locale from '../locale/Locale';
+import './Header.styles.scss';
 
 const languages = [
   { code: 'fi', label: 'Suomi' },
@@ -34,19 +35,20 @@ const Header: React.FC = () => {
       skipTo="#"
       skipToContentLabel="Skip to main content"
       titleUrl="/"
+      className="header"
     >
       <Navigation.Row display="inline">
-        <NavLink to={`/${language.code}${ROUTES.HOME}`} exact activeClassName="activeNavItem">
-          Home
+        <NavLink to={`/${language.code}${ROUTES.HOME}`} exact activeClassName="header--active">
+          <Locale id="header:home" />
         </NavLink>
-        <NavLink to={`/${language.code}${ROUTES.MAP}`} activeClassName="activeNavItem">
-          Map
+        <NavLink to={`/${language.code}${ROUTES.MAP}`} activeClassName="header--active">
+          <Locale id="header:map" />
         </NavLink>
-        <NavLink to={`/${language.code}${ROUTES.PROJECTS}`} activeClassName="activeNavItem">
-          Hankkeet
+        <NavLink to={`/${language.code}${ROUTES.PROJECTS}`} activeClassName="header--active">
+          <Locale id="header:projects" />
         </NavLink>
-        <NavLink to={`/${language.code}${ROUTES.FORM}`} activeClassName="activeNavItem">
-          Form
+        <NavLink to={`/${language.code}${ROUTES.FORM}`} activeClassName="header--active">
+          <Locale id="header:form" />
         </NavLink>
       </Navigation.Row>
       <Navigation.LanguageSelector

@@ -2,6 +2,7 @@
   "extends": "stylelint-config-standard",
   "plugins": ["stylelint-value-no-unknown-custom-properties"],
   "rules": {
+    "at-rule-no-unknown": null,
     "csstools/value-no-unknown-custom-properties": [
       true,
       {
