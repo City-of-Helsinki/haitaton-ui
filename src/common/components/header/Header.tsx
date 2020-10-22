@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Navigation } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
-
+import { ROUTES } from '../../constants/routes';
 import './styles.scss';
 
 const languages = [
@@ -36,16 +36,16 @@ const Header: React.FC = () => {
       titleUrl="/"
     >
       <Navigation.Row display="inline">
-        <NavLink to={`/${language.code}/`} exact activeClassName="activeNavItem">
+        <NavLink to={`/${language.code}${ROUTES.HOME}`} exact activeClassName="activeNavItem">
           Home
         </NavLink>
-        <NavLink to={`/${language.code}/map`} activeClassName="activeNavItem">
+        <NavLink to={`/${language.code}${ROUTES.MAP}`} activeClassName="activeNavItem">
           Map
         </NavLink>
-        <NavLink to={`/${language.code}/projects`} activeClassName="activeNavItem">
+        <NavLink to={`/${language.code}${ROUTES.PROJECTS}`} activeClassName="activeNavItem">
           Hankkeet
         </NavLink>
-        <NavLink to={`/${language.code}/form`} activeClassName="activeNavItem">
+        <NavLink to={`/${language.code}${ROUTES.FORM}`} activeClassName="activeNavItem">
           Form
         </NavLink>
       </Navigation.Row>
