@@ -8,6 +8,7 @@ import Layout from './Layout';
 import store from './store';
 import theme from './theme';
 import './app.scss';
+import './layout.scss';
 
 const queryCache = new QueryCache();
 

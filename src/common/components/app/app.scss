@@ -22,6 +22,9 @@
 body {
   font-family: 'HelsinkiGrotesk', serif;
   background: var(--color-black-5);
+  padding-bottom: 60px;
+  position: relative;
+  min-height: 100vh;
 }
 
 .hds-icon {

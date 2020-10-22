@@ -1,5 +1,7 @@
+@import '../../common/components/app/layout.scss';
+
 .hankeForm {
-  padding: var(--spacing-m) var(--spacing-l);
+  padding: var(--spacing-m) var(--spacing-l) var(--spacing-3-xl) var(--spacing-l);
 
   .formWpr {
     padding-bottom: var(--spacing-m);
@@ -27,12 +29,28 @@
     }
 
     padding-bottom: var(--spacing-m);
+
+    @include respond-below(s) {
+      label {
+        height: 40px;
+        display: flex;
+        align-items: flex-end;
+      }
+    }
   }
 
   .formWprColumns {
     display: grid;
     grid-gap: var(--grid-gap);
     grid-template-columns: 1fr 1fr;
+
+    @include respond-below(s) {
+      label {
+        height: 40px;
+        display: flex;
+        align-items: flex-end;
+      }
+    }
 
     .left {
       padding-right: var(--spacing-m);
