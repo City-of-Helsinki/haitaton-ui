@@ -2,6 +2,21 @@
   "name": "haitaton",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
+    "eject": "react-scripts eject",
+    "type-check": "tsc --pretty --noEmit",
+    "format": "prettier --write",
+    "ts-check": "tsc --noEmit --project tsconfig.json",
+    "ts-check:cypress": "tsc --noEmit --project ./cypress/tsconfig.json",
+    "lint": "yarn ts-check:cypress && yarn ts-check && eslint --ext js,ts,tsx src cypress",
+    "lint:css": "stylelint 'src/**/*.scss'",
+    "e2e": "start-server-and-test start :3000 cypress-run-chrome",
+    "cypress-run-chrome": "cypress run --browser chrome",
+    "cypress-run-chrome-headless": "cypress run --headless --browser chrome"
+  },
   "dependencies": {
     "@chakra-ui/core": "^0.8.0",
     "@emotion/core": "^10.0.35",
@@ -60,21 +75,6 @@
     "stylelint": "^13.7.2",
     "stylelint-config-standard": "^20.0.0",
     "stylelint-value-no-unknown-custom-properties": "^3.0.0"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
-    "eject": "react-scripts eject",
-    "type-check": "tsc --pretty --noEmit",
-    "format": "prettier --write",
-    "ts-check": "tsc --noEmit --project tsconfig.json",
-    "ts-check:cypress": "tsc --noEmit --project ./cypress/tsconfig.json",
-    "lint": "yarn ts-check:cypress && yarn ts-check && eslint --ext js,ts,tsx src cypress",
-    "lint:css": "stylelint 'src/**/*.scss'",
-    "e2e": "start-server-and-test start :3000 cypress-run-chrome",
-    "cypress-run-chrome": "cypress run --browser chrome",
-    "cypress-run-chrome-headless": "cypress run --headless --browser chrome"
   },
   "husky": {
     "hooks": {
