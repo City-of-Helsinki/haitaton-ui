@@ -36,13 +36,13 @@ const Header: React.FC = () => {
       titleUrl="/"
     >
       <Navigation.Row display="inline">
-        <NavLink to="/" exact activeClassName="activeNavItem">
+        <NavLink to={`/${language.code}/`} exact activeClassName="activeNavItem">
           Home
         </NavLink>
-        <NavLink to="/openlayer" activeClassName="activeNavItem">
-          Open Layers
+        <NavLink to={`/${language.code}/map`} activeClassName="activeNavItem">
+          Map
         </NavLink>
-        <NavLink to="/form" activeClassName="activeNavItem">
+        <NavLink to={`/${language.code}/form`} activeClassName="activeNavItem">
           Form
         </NavLink>
       </Navigation.Row>

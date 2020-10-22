@@ -4,9 +4,3 @@ export enum ROUTES {
   MAP = '/map',
   FORM = '/form',
 }
-
-export enum SUPPORTED_LANGUAGES {
-  FI = 'fi',
-  SV = 'sv',
-  EN = 'en',
-}

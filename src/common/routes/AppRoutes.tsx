@@ -1,10 +1,10 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { SUPPORTED_LANGUAGES } from '../../../constants';
-import useLocale from '../../../hooks/useLocale';
+import { LANGUAGES } from '../constants/languages';
+import useLocale from '../hooks/useLocale';
 import LocaleRoutes from './LocaleRoutes';
 
-const localeParam = `:locale(${Object.values(SUPPORTED_LANGUAGES).join('|')})`;
+const localeParam = `:locale(${Object.values(LANGUAGES).join('|')})`;
 
 const AppRoutes: React.FC = () => {
   const currentLocale = useLocale();

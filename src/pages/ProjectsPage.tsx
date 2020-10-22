@@ -1,5 +1,5 @@
 import React from 'react';
-import HankeList from '../../domain/hanke/list/HankeList';
+import HankeList from '../domain/hanke/list/HankeList';
 
 const ProjectListPage: React.FC = () => {
   return <HankeList />;
