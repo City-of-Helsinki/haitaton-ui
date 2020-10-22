@@ -19,65 +19,64 @@ jobs:
       - name: Tar build files
         run: tar -cvf build.tar build
       - name: Upload application build files for Docker build job
-        if: ${{ github.ref == 'refs/heads/dev' }}
         uses: actions/upload-artifact@v2
         with:
           name: haitaton-ui-build
           path: build.tar
           retention-days: 1
   e2e:
+    name: Browser tests
+    needs: build
     runs-on: ubuntu-16.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
+      - name: Download application build files
+        uses: actions/download-artifact@v2
+        with:
+          name: haitaton-ui-build
+      - name: Untar build files
+        run: tar -xvf build.tar
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          start: yarn start
+          start: yarn run serve
+          wait-on: 'http://localhost:3000'
   docker_build_and_push:
     name: Push Docker image to GitHub Packages
     needs: [build, e2e]
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/dev' }}
     steps:
-      -
-        name: Check out the repo
+      - name: Check out the repo
         uses: actions/checkout@v2
-      -
-        name: Download application build files
+      - name: Download application build files
         uses: actions/download-artifact@v2
         with:
           name: haitaton-ui-build
-      -
-        name: Untar build files
+      - name: Untar build files
         run: tar -xvf build.tar
-      -
-        name: List files after checkout
+      - name: List files after checkout
         shell: bash
         run: |
           ls -ltra
-      -
-        name: Set up QEMU
+      - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
-      -
-        name: Set up Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-      -
-        name: Login to OpenShift Container Registry
+      - name: Login to OpenShift Container Registry
         uses: docker/login-action@v1
         with:
           registry: registry.redhat.io
           username: ${{ secrets.RHSA_USERNAME }}
           password: ${{ secrets.RHSA_TOKEN }}
-      -
-        name: Login to GitHub Container Registry
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ secrets.CR_OWNER }}
           password: ${{ secrets.CR_PAT }}
-      -
-        uses: docker/build-push-action@v2
+      - uses: docker/build-push-action@v2
         with:
           context: .
           file: ./Dockerfile
