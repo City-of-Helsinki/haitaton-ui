@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import MapProject from '../../../features/hanke/view/MapPopup';
-import HankeView from '../../../features/hanke/view/Hanke';
-import HankeList from '../../../features/hanke/list/HankeList';
+import MapProject from '../../../domain/hanke/view/MapPopup';
+import HankeView from '../../../domain/hanke/view/Hanke';
+import HankeList from '../../../domain/hanke/list/HankeList';
 
 const MainContainer = styled('div')<{ isOpen: boolean }>`
   height: 100vh;

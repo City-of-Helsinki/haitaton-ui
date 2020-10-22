@@ -1,1 +1,1 @@
-export type Locale = 'fi' | 'en' | 'vs';
+export type Language = 'fi' | 'en' | 'sv';
