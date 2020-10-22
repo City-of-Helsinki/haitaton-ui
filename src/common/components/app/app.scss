@@ -1,3 +1,7 @@
+@import '~hds-core/lib/base.css';
+@import '~hds-core/lib/icons/icon.css';
+@import '~hds-core/lib/icons/all.min.css';
+
 @font-face {
   font-family: HelsinkiGrotesk;
   src: url('../../../assets/fonts/HelsinkiGrotesk-Regular.otf') format('opentype');
@@ -17,4 +21,10 @@
 
 body {
   font-family: 'HelsinkiGrotesk', serif;
+  background: var(--color-black-5);
+}
+
+.hds-icon {
+  height: 20px;
+  display: inline-block;
 }

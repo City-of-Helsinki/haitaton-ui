@@ -22,7 +22,7 @@
     "eslint-config-airbnb-typescript-prettier": "^3.1.0",
     "geojson": "^0.5.0",
     "hds-design-tokens": "^0.14.0",
-    "hds-react": "^0.13.3",
+    "hds-react": "^0.14.0",
     "i18next": "^19.8.2",
     "msw": "^0.21.2",
     "node-sass": "^4.14.1",

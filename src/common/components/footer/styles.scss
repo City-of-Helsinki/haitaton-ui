@@ -1,0 +1,19 @@
+.footer {
+  position: relative;
+
+  path {
+    fill: var(--color-summer);
+  }
+
+  svg {
+    width: 100%;
+  }
+
+  p {
+    position: absolute;
+    bottom: var(--spacing-m);
+    left: var(--spacing-s);
+    padding: 0 0 0 var(--spacing-s);
+    margin: 0;
+  }
+}
