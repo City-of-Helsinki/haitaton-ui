@@ -6,9 +6,9 @@
     "hello": "SV:Morjesta featuresta x"
   },
   "header": {
-    "home": "Home",
-    "map": "Map",
-    "projects": "Projects",
-    "form": "Form"
+    "HOME": "Home",
+    "MAP": "Map",
+    "PROJECTS": "Projects",
+    "FORM": "Form"
   }
 }

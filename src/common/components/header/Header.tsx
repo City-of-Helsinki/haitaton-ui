@@ -38,17 +38,17 @@ const Header: React.FC = () => {
       className="header"
     >
       <Navigation.Row display="inline">
-        <NavLink to={`/${language.code}${ROUTES.HOME}`} exact activeClassName="header__active">
-          {`${ROUTES.HOME}`}
+        <NavLink to={`/${language.code}${ROUTES.HOME}`} exact activeClassName="header--active">
+          <Locale id="header:HOME" />
         </NavLink>
         <NavLink to={`/${language.code}${ROUTES.MAP}`} activeClassName="header__active">
-          <Locale id="header:map" />
+          <Locale id="header:MAP" />
         </NavLink>
         <NavLink to={`/${language.code}${ROUTES.PROJECTS}`} activeClassName="header__active">
-          <Locale id="header:projects" />
+          <Locale id="header:PROJECTS" />
         </NavLink>
         <NavLink to={`/${language.code}${ROUTES.FORM}`} activeClassName="header__active">
-          <Locale id="header:form" />
+          <Locale id="header:FORM" />
         </NavLink>
       </Navigation.Row>
       <Navigation.LanguageSelector

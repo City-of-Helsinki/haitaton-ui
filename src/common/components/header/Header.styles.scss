@@ -1,5 +1,5 @@
 .header {
-  &__active::after {
+  &--active::after {
     height: 0.313rem;
     background-color: var(--color-summer);
     bottom: 0;

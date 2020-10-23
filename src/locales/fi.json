@@ -6,9 +6,9 @@
     "hello": "Morjesta featuresta x"
   },
   "header": {
-    "home": "Alkuun",
-    "map": "Kartta",
-    "projects": "Hankkeet",
-    "form": "Kaavake"
+    "HOME": "Alkuun",
+    "MAP": "Kartta",
+    "PROJECTS": "Hankkeet",
+    "FORM": "Kaavake"
   }
 }
