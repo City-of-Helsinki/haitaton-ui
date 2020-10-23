@@ -4,5 +4,11 @@
   },
   "featureX": {
     "hello": "SV:Morjesta featuresta x"
+  },
+  "header": {
+    "HOME": "Home",
+    "MAP": "Map",
+    "PROJECTS": "Projects",
+    "FORM": "Form"
   }
 }

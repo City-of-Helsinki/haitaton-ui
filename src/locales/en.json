@@ -4,5 +4,11 @@
   },
   "featureX": {
     "hello": "Hello from feature X"
+  },
+  "header": {
+    "HOME": "Home",
+    "MAP": "Map",
+    "PROJECTS": "Projects",
+    "FORM": "Form"
   }
 }

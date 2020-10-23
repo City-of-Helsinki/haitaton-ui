@@ -2,6 +2,12 @@
   "extends": "stylelint-config-standard",
   "plugins": ["stylelint-value-no-unknown-custom-properties"],
   "rules": {
+    "at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": ["function", "if", "each", "include", "mixin", "warn"]
+      }
+    ],
     "csstools/value-no-unknown-custom-properties": [
       true,
       {

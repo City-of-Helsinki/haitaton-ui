@@ -1,0 +1,15 @@
+.header {
+  &--active::after {
+    height: 0.313rem;
+    background-color: var(--color-summer);
+    bottom: 0;
+    content: '';
+    left: 0;
+    position: absolute;
+    width: 100%;
+  }
+
+  div[class^='NavigationLanguageSelector'] {
+    margin-top: var(--spacing-2-xs);
+  }
+}

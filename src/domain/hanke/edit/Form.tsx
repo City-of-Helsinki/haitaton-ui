@@ -145,7 +145,6 @@ const FormComponent: React.FC = (props) => {
             invalid={!!errors.omistajaOrganisaatio}
             errorMsg="Syötä kenttä"
           />
-          {errors.omistajaOrganisaatio && <span className="error-text">Syötä kenttä</span>}
         </div>
         <div className="right">
           <TextInput

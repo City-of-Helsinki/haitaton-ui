@@ -4,5 +4,11 @@
   },
   "featureX": {
     "hello": "Morjesta featuresta x"
+  },
+  "header": {
+    "HOME": "Alkuun",
+    "MAP": "Kartta",
+    "PROJECTS": "Hankkeet",
+    "FORM": "Kaavake"
   }
 }
