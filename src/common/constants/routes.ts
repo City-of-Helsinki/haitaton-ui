@@ -1,6 +1,6 @@
 export enum ROUTES {
-  PROJECTS = '/projects',
-  HOME = '/',
-  MAP = '/map',
-  FORM = '/form',
+  PROJECTS = 'PROJECTS',
+  HOME = 'HOME',
+  MAP = 'MAP',
+  FORM = 'FORM',
 }
