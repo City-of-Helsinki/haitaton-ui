@@ -18,7 +18,7 @@ type Types = {
 
 const Header: React.FC = () => {
   const [language, setLanguageState] = useState<Types>(languages[0]);
-  const routes = useLocalizedRoutes();
+  const { HOME, MAP, PROJECTS, FORM } = useLocalizedRoutes();
 
   const { i18n } = useTranslation();
   const setLanguage = (code: Types) => {
@@ -39,17 +39,17 @@ const Header: React.FC = () => {
       className="header"
     >
       <Navigation.Row display="inline">
-        <NavLink to={routes.HOME.path} exact activeClassName="header--active">
-          {routes.HOME.label}
+        <NavLink to={HOME.path} exact activeClassName="header--active">
+          {HOME.label}
         </NavLink>
-        <NavLink to={routes.MAP.path} activeClassName="header__active">
-          {routes.MAP.label}
+        <NavLink to={MAP.path} activeClassName="header__active">
+          {MAP.label}
         </NavLink>
-        <NavLink to={routes.PROJECTS.path} activeClassName="header__active">
-          {routes.PROJECTS.label}
+        <NavLink to={PROJECTS.path} activeClassName="header__active">
+          {PROJECTS.label}
         </NavLink>
-        <NavLink to={routes.FORM.path} activeClassName="header__active">
-          {routes.FORM.label}
+        <NavLink to={FORM.path} activeClassName="header__active">
+          {FORM.label}
         </NavLink>
       </Navigation.Row>
       <Navigation.LanguageSelector
