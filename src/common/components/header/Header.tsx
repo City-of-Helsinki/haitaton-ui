@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Navigation } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
-import { ROUTES } from '../../constants/routes';
-import Locale from '../locale/Locale';
+import { useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
+
 import './Header.styles.scss';
 
 const languages = [
@@ -18,6 +18,7 @@ type Types = {
 
 const Header: React.FC = () => {
   const [language, setLanguageState] = useState<Types>(languages[0]);
+  const { HOME, MAP, PROJECTS, FORM } = useLocalizedRoutes();
 
   const { i18n } = useTranslation();
   const setLanguage = (code: Types) => {
@@ -38,17 +39,17 @@ const Header: React.FC = () => {
       className="header"
     >
       <Navigation.Row display="inline">
-        <NavLink to={`/${language.code}${ROUTES.HOME}`} exact activeClassName="header--active">
-          <Locale id="header:HOME" />
+        <NavLink to={HOME.path} exact activeClassName="header--active" data-testid="home-link">
+          {HOME.label}
         </NavLink>
-        <NavLink to={`/${language.code}${ROUTES.MAP}`} activeClassName="header__active">
-          <Locale id="header:MAP" />
+        <NavLink to={MAP.path} activeClassName="header__active">
+          {MAP.label}
         </NavLink>
-        <NavLink to={`/${language.code}${ROUTES.PROJECTS}`} activeClassName="header__active">
-          <Locale id="header:PROJECTS" />
+        <NavLink to={PROJECTS.path} activeClassName="header__active">
+          {PROJECTS.label}
         </NavLink>
-        <NavLink to={`/${language.code}${ROUTES.FORM}`} activeClassName="header__active">
-          <Locale id="header:FORM" />
+        <NavLink to={FORM.path} activeClassName="header__active">
+          {FORM.label}
         </NavLink>
       </Navigation.Row>
       <Navigation.LanguageSelector

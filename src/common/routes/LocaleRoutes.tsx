@@ -1,12 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
-import { ROUTES } from '../constants/routes';
 import { Language } from '../types/language';
 import ProjectsPage from '../../pages/ProjectsPage';
 import MapPage from '../../pages/MapPage';
 import ProjectPage from '../../pages/ProjectPage';
 import HomePage from '../../pages/HomePage';
+import { useLocalizedRoutes } from '../hooks/useLocalizedRoutes';
 
 interface Params {
   locale: Language;
@@ -19,9 +19,9 @@ const LocaleRoutes: React.FC<Props> = ({
     params: { locale },
   },
 }) => {
-  const { i18n } = useTranslation();
+  const { HOME, FORM, PROJECTS, MAP } = useLocalizedRoutes();
 
-  const getLocelePath = (path: string) => `/${locale}${path}`;
+  const { i18n } = useTranslation();
 
   React.useEffect(() => {
     i18n.changeLanguage(locale);
@@ -29,10 +29,10 @@ const LocaleRoutes: React.FC<Props> = ({
 
   return (
     <Switch>
-      <Route exact path={getLocelePath(ROUTES.HOME)} component={HomePage} />
-      <Route exact path={getLocelePath(ROUTES.FORM)} component={ProjectPage} />
-      <Route exact path={getLocelePath(ROUTES.PROJECTS)} component={ProjectsPage} />
-      <Route exact path={getLocelePath(ROUTES.MAP)} component={MapPage} />
+      <Route exact path={HOME.path} component={HomePage} />
+      <Route exact path={FORM.path} component={ProjectPage} />
+      <Route exact path={PROJECTS.path} component={ProjectsPage} />
+      <Route exact path={MAP.path} component={MapPage} />
     </Switch>
   );
 };

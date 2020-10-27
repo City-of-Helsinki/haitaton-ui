@@ -10,5 +10,35 @@
     "MAP": "Map",
     "PROJECTS": "Projects",
     "FORM": "Form"
+  },
+  "routes": {
+    "HOME": {
+      "path": "/",
+      "headerLabel": "SV::Alkuun",
+      "meta": {
+        "title": "SV::Haitaton 2.0 - Etusivu"
+      }
+    },
+    "PROJECTS": {
+      "path": "/projects",
+      "headerLabel": "SV::Hankesalkku",
+      "meta": {
+        "title": "SV::Haitaton 2.0 - HankeSalkku"
+      }
+    },
+    "MAP": {
+      "path": "/map",
+      "headerLabel": "SV::Kartta",
+      "meta": {
+        "title": "SV::Haitaton 2.0 - Kartta"
+      }
+    },
+    "FORM": {
+      "path": "/form",
+      "headerLabel": "SV::Kaavake",
+      "meta": {
+        "title": "SV::Haitaton 2.0 - Kaavake"
+      }
+    }
   }
 }

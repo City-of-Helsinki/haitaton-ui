@@ -36,7 +36,14 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'import/no-extraneous-dependencies': [
       'error',
-      { devDependencies: ['**/setupTests.ts', '**/*.test.tsx', '**/*.spec.ts'] },
+      {
+        devDependencies: [
+          '**/setupTests.ts',
+          '**/*.test.tsx',
+          '**/testUtils/*.tsx',
+          '**/*.spec.ts',
+        ],
+      },
     ],
     'no-param-reassign': [
       'error',
