@@ -7,29 +7,10 @@ import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
 import { Draw, Modify, Snap } from 'ol/interaction';
 import { TileWMS, Vector as VectorSource } from 'ol/source';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
-import styled from 'styled-components';
 import 'ol/ol.css';
 import { useProjects } from '../common/hooks/useProjects';
 
-const MapContainerWpr = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100vh;
-`;
-const MapContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-`;
-
-const Toolbox = styled.select`
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 10;
-`;
+import './map.styles.scss';
 
 const image = new CircleStyle({
   radius: 5,
@@ -216,10 +197,11 @@ const OpenLayer: React.FC = () => {
 
   return (
     <div>
-      <MapContainerWpr>
-        <MapContainer ref={mapContainerRef} />
-      </MapContainerWpr>
-      <Toolbox
+      <div className="mapContainer">
+        <div className="mapContainer__inner" ref={mapContainerRef} />
+      </div>
+      <select
+        className="mapToolbox"
         onChange={(event) => {
           setSelectVal(event.target.value);
         }}
@@ -229,7 +211,7 @@ const OpenLayer: React.FC = () => {
         <option value="LineString">LineString</option>
         <option value="Polygon">Polygon</option>
         <option value="Circle">Circle</option>
-      </Toolbox>
+      </select>
     </div>
   );
 };
