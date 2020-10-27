@@ -1,6 +1,6 @@
 import React from 'react';
 import Helmet from 'react-helmet';
-import { RouteData } from '../../common/hooks/useLocalizedRoutes';
+import { RouteData } from '../../common/types/route';
 
 type Props = {
   routeData: RouteData;

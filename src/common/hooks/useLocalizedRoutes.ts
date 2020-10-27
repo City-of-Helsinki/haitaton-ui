@@ -1,30 +1,27 @@
-import { TFunction, i18n as Ii18n } from 'i18next';
+import { TFunction, i18n as i18nInstance } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
 import { ROUTES } from '../constants/routes';
+import { RouteMap } from '../types/route';
 
-export type RouteData = {
-  label: string;
-  path: string;
-  meta: {
-    title: string;
-  };
-};
-
-type RouteMap = Record<keyof typeof ROUTES, RouteData>;
-
-type GetLocaleParams = {
+type GetLocalizationParams = {
   t: TFunction;
-  i18n: Ii18n;
+  i18n: i18nInstance;
   language: string | null;
   route: string;
   name: string;
 };
 
-export const getLocale = ({ t, i18n, language, route, name }: GetLocaleParams): string | Error => {
+export const getLocalization = ({
+  t,
+  i18n,
+  language,
+  route,
+  name,
+}: GetLocalizationParams): string | Error => {
   const translationPath = `routes:${route}.${name}`;
   if (!i18n.exists(translationPath)) {
-    throw new Error(`Translation doesnt exists. Path: ${translationPath}`);
+    throw new Error(`Translation doesnt exists: ${translationPath}`);
   }
 
   return language ? `/${language}${t(translationPath)}` : t(translationPath);
@@ -37,13 +34,13 @@ export const useLocalizedRoutes = (): RouteMap => {
   return $enum(ROUTES)
     .getKeys()
     .reduce(
-      (routes: RouteMap, route) => ({
+      (routes, route) => ({
         ...routes,
         [route]: {
-          path: getLocale({ t, i18n, language, route, name: 'path' }),
-          label: getLocale({ t, i18n, language: null, route, name: 'headerLabel' }),
+          path: getLocalization({ t, i18n, language, route, name: 'path' }),
+          label: getLocalization({ t, i18n, language: null, route, name: 'headerLabel' }),
           meta: {
-            title: getLocale({ t, i18n, language: null, route, name: 'meta.title' }),
+            title: getLocalization({ t, i18n, language: null, route, name: 'meta.title' }),
           },
         },
       }),

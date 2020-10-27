@@ -39,7 +39,7 @@ const Header: React.FC = () => {
       className="header"
     >
       <Navigation.Row display="inline">
-        <NavLink to={HOME.path} exact activeClassName="header--active">
+        <NavLink to={HOME.path} exact activeClassName="header--active" data-testid="home-link">
           {HOME.label}
         </NavLink>
         <NavLink to={MAP.path} activeClassName="header__active">

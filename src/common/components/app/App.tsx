@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { QueryCache, ReactQueryCacheProvider } from 'react-query';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import { ThemeProvider } from '@chakra-ui/core';
 import AppRoutes from '../../routes/AppRoutes';
 import Layout from './Layout';
@@ -23,4 +23,4 @@ const App: React.FC = () => (
   </Provider>
 );
 
-export default withRouter(App);
+export default App;

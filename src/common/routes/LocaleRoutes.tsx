@@ -19,7 +19,7 @@ const LocaleRoutes: React.FC<Props> = ({
     params: { locale },
   },
 }) => {
-  const routes = useLocalizedRoutes();
+  const { HOME, FORM, PROJECTS, MAP } = useLocalizedRoutes();
 
   const { i18n } = useTranslation();
 
@@ -29,10 +29,10 @@ const LocaleRoutes: React.FC<Props> = ({
 
   return (
     <Switch>
-      <Route exact path={routes.HOME.path} component={HomePage} />
-      <Route exact path={routes.FORM.path} component={ProjectPage} />
-      <Route exact path={routes.PROJECTS.path} component={ProjectsPage} />
-      <Route exact path={routes.MAP.path} component={MapPage} />
+      <Route exact path={HOME.path} component={HomePage} />
+      <Route exact path={FORM.path} component={ProjectPage} />
+      <Route exact path={PROJECTS.path} component={ProjectsPage} />
+      <Route exact path={MAP.path} component={MapPage} />
     </Switch>
   );
 };
