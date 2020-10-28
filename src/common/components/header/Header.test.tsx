@@ -10,6 +10,8 @@ describe('Header', () => {
     const { container } = render(<Header />);
     expect(getByTestId(container, 'home-link')).toBeDefined();
     expect(getByTestId(container, 'home-link')).toHaveTextContent('Alkuun');
+    expect(getByTestId(container, 'hankeLink')).toBeDefined();
+    expect(getByTestId(container, 'hankeLink')).toHaveTextContent('Luo uusi hanke');
   });
   test('it should change localization correctly to english', () => {
     const { container, getByText } = render(<Header />);

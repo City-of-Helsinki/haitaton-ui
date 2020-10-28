@@ -9,7 +9,8 @@
     "HOME": "Alkuun",
     "MAP": "Kartta",
     "PROJECTS": "Hankkeet",
-    "FORM": "Kaavake"
+    "FORM": "Kaavake",
+    "hankeLink": "Luo uusi hanke"
   },
   "routes": {
     "HOME": {
