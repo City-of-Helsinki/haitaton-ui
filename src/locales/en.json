@@ -9,7 +9,8 @@
     "HOME": "Home",
     "MAP": "Map",
     "PROJECTS": "Projects",
-    "FORM": "Form"
+    "FORM": "Form",
+    "hankeLink": "Luo uusi hanke"
   },
   "routes": {
     "HOME": {

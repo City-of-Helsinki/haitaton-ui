@@ -3,6 +3,7 @@ import { Navigation } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import { useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
+import Locale from '../locale/Locale';
 
 import './Header.styles.scss';
 
@@ -39,7 +40,7 @@ const Header: React.FC = () => {
       className="header"
     >
       <Navigation.Row display="inline">
-        <NavLink to={HOME.path} exact activeClassName="header--active" data-testid="home-link">
+        <NavLink to={HOME.path} exact activeClassName="header--active" data-testid="homeLink">
           {HOME.label}
         </NavLink>
         <NavLink to={MAP.path} activeClassName="header__active">
@@ -52,6 +53,11 @@ const Header: React.FC = () => {
           {FORM.label}
         </NavLink>
       </Navigation.Row>
+      <div className="header__hankeLink">
+        <NavLink data-testid="hankeLink" to={FORM.path} activeClassName="header__active">
+          <Locale id="header:hankeLink" />
+        </NavLink>
+      </div>
       <Navigation.LanguageSelector
         options={languages}
         onLanguageChange={setLanguage}

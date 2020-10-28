@@ -9,6 +9,19 @@
     width: 100%;
   }
 
+  &__hankeLink {
+    display: flex;
+    align-items: center;
+    margin-right: var(--spacing-layout-s);
+
+    a {
+      background: var(--color-coat-of-arms-blue);
+      padding: var(--spacing-2-xs) var(--spacing-s);
+      color: var(--color-white);
+      text-decoration: none;
+    }
+  }
+
   div[class^='NavigationLanguageSelector'] {
     margin-top: var(--spacing-2-xs);
   }
