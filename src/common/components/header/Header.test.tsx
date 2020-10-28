@@ -8,8 +8,8 @@ afterEach(cleanup);
 describe('Header', () => {
   test('it should have Finnish as default language', () => {
     const { container } = render(<Header />);
-    expect(getByTestId(container, 'home-link')).toBeDefined();
-    expect(getByTestId(container, 'home-link')).toHaveTextContent('Alkuun');
+    expect(getByTestId(container, 'homeLink')).toBeDefined();
+    expect(getByTestId(container, 'homeLink')).toHaveTextContent('Alkuun');
     expect(getByTestId(container, 'hankeLink')).toBeDefined();
     expect(getByTestId(container, 'hankeLink')).toHaveTextContent('Luo uusi hanke');
   });
@@ -19,6 +19,6 @@ describe('Header', () => {
     fireEvent.click(getByText('Suomi'));
     fireEvent.click(getByText('English'));
 
-    expect(getByTestId(container, 'home-link')).toHaveTextContent('EN::Alkuun');
+    expect(getByTestId(container, 'homeLink')).toHaveTextContent('EN::Alkuun');
   });
 });

@@ -8,7 +8,7 @@ const HomePage: React.FC = () => {
   return (
     <>
       <PageMeta routeData={HOME} />
-      <h1 data-testid="page-header">Haitaton 2.0</h1>
+      <h1 data-testid="pageHeader">Haitaton 2.0</h1>
     </>
   );
 };
