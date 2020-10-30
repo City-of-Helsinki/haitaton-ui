@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
 import PageMeta from './components/PageMeta';
-import DrawMap from '../domain/hanke/map/Draw';
+import HankeDrawer from '../domain/hanke/map/HankeDrawer';
 
 const MapPage: React.FC = () => {
   const { FORM } = useLocalizedRoutes();
@@ -9,7 +9,7 @@ const MapPage: React.FC = () => {
   return (
     <>
       <PageMeta routeData={FORM} />
-      <DrawMap />
+      <HankeDrawer />
     </>
   );
 };

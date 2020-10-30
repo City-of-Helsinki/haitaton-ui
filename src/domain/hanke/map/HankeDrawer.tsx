@@ -9,7 +9,7 @@ import Kantakartta from './Layers/Kantakartta';
 import HSL from './Layers/HSL';
 import styles from './Map.module.scss';
 
-const DrawMap: React.FC = () => {
+const HankeDrawer: React.FC = () => {
   const [drawSource] = useState<VectorSource>(new VectorSource());
   const [center] = useState([2776000, 8438000]);
   const [zoom] = useState(9);
@@ -46,4 +46,4 @@ const DrawMap: React.FC = () => {
   );
 };
 
-export default DrawMap;
+export default HankeDrawer;
