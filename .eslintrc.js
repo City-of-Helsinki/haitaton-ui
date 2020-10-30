@@ -34,6 +34,23 @@ module.exports = {
     'react/jsx-indent': [2, 2],
     'react/jsx-props-no-spreading': 'off',
     'import/prefer-default-export': 'off',
+    'react-hooks/exhaustive-deps': 'off',
+    'jsx-a11y/label-has-associated-control': [
+      'warn',
+      {
+        required: {
+          some: ['nesting', 'id'],
+        },
+      },
+    ],
+    'jsx-a11y/label-has-for': [
+      'warn',
+      {
+        required: {
+          some: ['nesting', 'id'],
+        },
+      },
+    ],
     'import/no-extraneous-dependencies': [
       'error',
       {
