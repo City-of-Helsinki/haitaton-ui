@@ -9,8 +9,7 @@ import { TileWMS, Vector as VectorSource } from 'ol/source';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import 'ol/ol.css';
 import { useProjects } from '../common/hooks/useProjects';
-
-import './map.styles.scss';
+import styles from './Map.module.scss';
 
 const image = new CircleStyle({
   radius: 5,
@@ -34,7 +33,7 @@ const image = new CircleStyle({
   }),
 }); */
 
-const styles = {
+const geomStyles = {
   Point: new Style({
     image,
   }),
@@ -99,7 +98,7 @@ const styles = {
   }),
   LinearRing: {},
 };
-const styleFunction = (feature: ol.Feature) => styles[feature.getGeometry().getType()];
+const styleFunction = (feature: ol.Feature) => geomStyles[feature.getGeometry().getType()];
 
 const OpenLayer: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -197,11 +196,11 @@ const OpenLayer: React.FC = () => {
 
   return (
     <div>
-      <div className="mapContainer">
-        <div className="mapContainer__inner" ref={mapContainerRef} />
+      <div className={styles.mapContainer}>
+        <div className={styles.mapContainer__inner} ref={mapContainerRef} />
       </div>
       <select
-        className="mapToolbox"
+        className={styles.mapToolbox}
         onChange={(event) => {
           setSelectVal(event.target.value);
         }}
