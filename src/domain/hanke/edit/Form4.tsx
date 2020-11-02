@@ -1,13 +1,14 @@
 import React from 'react';
+import { Button } from 'hds-react';
 
 const Form4: React.FC<any> = (props) => {
   return (
     <div className="form4">
       <h2>Hankkeen haitat</h2>
-      <button type="button" onClick={(e) => props.parentCallback(3)}>
+      <Button type="button" onClick={(e) => props.parentCallback(3)}>
         back
-      </button>
-      <button type="button">Save</button>
+      </Button>
+      <Button type="button">Save</Button>
     </div>
   );
 };
