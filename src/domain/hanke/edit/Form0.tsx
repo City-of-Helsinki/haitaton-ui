@@ -17,6 +17,7 @@ type Inputs = {
   arvioijaOsasto: string;
 };
 
+// eslint-disable-next-line
 const Form0: React.FC<any> = (props) => {
   const { handleSubmit, errors, control, getValues } = useForm<Inputs>({
     mode: 'all',

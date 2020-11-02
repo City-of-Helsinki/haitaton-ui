@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'hds-react';
 
+// eslint-disable-next-line
 const Form1: React.FC<any> = (props) => {
   return (
     <div className="form1">
