@@ -14,7 +14,7 @@ const Projects: React.FC = () => {
 
   return (
     <div>
-      <h1>Hankesalkku</h1>
+      <h1>Hanke</h1>
 
       <ul>
         {projects.features.map((project) => (
