@@ -27,6 +27,7 @@ const DrawControls: React.FC = () => {
         .getValues()
         .map((drawToolVal) => (
           <button
+            key={drawToolVal}
             className={clsx(styles.drawControl__button, {
               [styles['drawControl__button--active']]: drawTool === drawToolVal,
             })}

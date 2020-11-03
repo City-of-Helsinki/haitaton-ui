@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { Vector as VectorSource } from 'ol/source';
 import Map from '../../../common/components/map/Map';
 import Controls from '../../../common/components/map/controls/Controls';
-import TileLayers from '../../../common/components/map/controls/TileLayers';
+import LayerControl from '../../../common/components/map/controls/LayerControl';
 import DrawControl from '../../../common/components/map/controls/DrawControl';
 import VectorLayer from '../../../common/components/map/layers/VectorLayer';
 import DrawIntercation from '../../../common/components/map/interactions/Draw';
 import Kantakartta from './Layers/Kantakartta';
 import HSL from './Layers/HSL';
+import HSLWFS from './Layers/HSLWFS';
 import styles from './Map.module.scss';
 
 const HankeDrawer: React.FC = () => {
@@ -33,11 +34,12 @@ const HankeDrawer: React.FC = () => {
         <DrawIntercation source={drawSource} />
         {showKantakartta && <Kantakartta />}
         {showHSL && <HSL />}
+        <HSLWFS />
         <VectorLayer source={drawSource} zIndex={100} />
         <Controls>
           <DrawControl />
-          <TileLayers
-            layers={[
+          <LayerControl
+            tileLayers={[
               { id: 'hsl', label: 'HSL', onClick: toggleTileLayer, checked: showHSL },
               {
                 id: 'kantakartta',
