@@ -1,16 +1,19 @@
 import React from 'react';
-import OLVectorLayer from 'ol/layer/Layer';
-import * as ol from 'ol';
-
-type Layer = OLVectorLayer;
+import { Layer } from 'ol/layer';
+import { SelectedDrawTool, MapInstance } from './types';
 
 type MapContext = {
-  map: ol.Map | null;
-  layers: Layer[];
+  map: MapInstance;
+  drawTool: SelectedDrawTool;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setDrawTool: any;
+  layers: Layer[]; // Not sure yet is these necessary to keep in context
 };
 
 const MapContext = React.createContext<MapContext>({
   map: null,
+  drawTool: '', // Maybe should be moved to redux in future
+  setDrawTool: null, // Maybe should be moved to redux in future
   layers: [],
 });
 

@@ -1,12 +1,47 @@
-.controls {
-  z-index: 100;
-  position: relative;
-}
-
-.tileLayers {
+.controlLayer {
   position: absolute;
   top: 0;
+  left: 0;
   right: 0;
+  bottom: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.controlPanel {
   background: white;
   color: black;
+  border: 1px solid black;
+  pointer-events: all;
+  padding: var(--spacing-3-xs);
+}
+
+.tileLayerControl {
+  position: absolute;
+  top: var(--spacing-s);
+  right: var(--spacing-s);
+
+  &__button {
+    padding: var(--spacing-3-xs);
+  }
+}
+
+.drawControl {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: var(--spacing-s);
+  bottom: 20%;
+
+  &__button {
+    border: 0;
+
+    &:hover {
+      background: gray;
+    }
+
+    &--active {
+      color: red;
+    }
+  }
 }

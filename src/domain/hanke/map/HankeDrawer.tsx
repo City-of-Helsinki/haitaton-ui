@@ -3,6 +3,7 @@ import { Vector as VectorSource } from 'ol/source';
 import Map from '../../../common/components/map/Map';
 import Controls from '../../../common/components/map/controls/Controls';
 import TileLayers from '../../../common/components/map/controls/TileLayers';
+import DrawControl from '../../../common/components/map/controls/DrawControl';
 import VectorLayer from '../../../common/components/map/layers/VectorLayer';
 import DrawIntercation from '../../../common/components/map/interactions/Draw';
 import Kantakartta from './Layers/Kantakartta';
@@ -12,7 +13,7 @@ import styles from './Map.module.scss';
 const HankeDrawer: React.FC = () => {
   const [drawSource] = useState<VectorSource>(new VectorSource());
   const [center] = useState([2776000, 8438000]);
-  const [zoom] = useState(9);
+  const [zoom] = useState(15);
   const [showKantakartta, setShowKantakartta] = useState(true);
   const [showHSL, setShowHSL] = useState(false);
 
@@ -34,10 +35,16 @@ const HankeDrawer: React.FC = () => {
         {showHSL && <HSL />}
         <VectorLayer source={drawSource} zIndex={100} />
         <Controls>
+          <DrawControl />
           <TileLayers
             layers={[
-              { id: 'hsl', onClick: toggleTileLayer, checked: showHSL },
-              { id: 'kantakartta', onClick: toggleTileLayer, checked: showKantakartta },
+              { id: 'hsl', label: 'HSL', onClick: toggleTileLayer, checked: showHSL },
+              {
+                id: 'kantakartta',
+                label: 'Kantakartta',
+                onClick: toggleTileLayer,
+                checked: showKantakartta,
+              },
             ]}
           />
         </Controls>

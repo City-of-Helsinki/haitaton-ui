@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Vector } from 'ol/source';
 import Feature from 'ol/Feature';
 import Collection from 'ol/Collection';
@@ -11,17 +11,16 @@ type Props = {
 };
 
 const DrawInteraction: React.FC<Props> = ({ source, features = undefined }) => {
-  const { map } = useContext(MapContext);
-  // eslint-disable-next-line
-  const [selectVal, setSelectVal] = useState<any>('');
+  const { map, drawTool } = useContext(MapContext);
 
   useEffect(() => {
-    if (!map || selectVal === null) return;
+    if (!map || drawTool === null) return;
 
     const drawInstance = new Draw({
       source,
       features,
-      type: selectVal,
+      // eslint-disable-next-line
+      type: drawTool as any, // Not sure how this should be typed
     });
 
     map.addInteraction(drawInstance);
@@ -40,21 +39,9 @@ const DrawInteraction: React.FC<Props> = ({ source, features = undefined }) => {
         if (modifyInstance) map.removeInteraction(modifyInstance);
       }
     };
-  }, [selectVal]);
+  }, [drawTool]);
 
-  return (
-    <select
-      style={{ position: 'absolute', left: 0, top: 0, zIndex: 10000 }}
-      onChange={(event) => {
-        setSelectVal(event.target.value);
-      }}
-      value={selectVal}
-    >
-      <option value="Point">Point</option>
-      <option value="Polygon">Polygon</option>
-      <option value="Circle">Circle</option>
-    </select>
-  );
+  return null;
 };
 
 export default DrawInteraction;
