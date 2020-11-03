@@ -77,18 +77,6 @@
     padding-bottom: var(--spacing-m);
   }
 
-  .dataWpr {
-    display: grid;
-    grid-gap: var(--grid-gap);
-    grid-template-columns: 1fr 1fr;
-
-    .left {
-      padding-right: var(--spacing-m);
-    }
-
-    padding-bottom: var(--spacing-m);
-  }
-
   .calendaraWpr {
     display: grid;
     grid-gap: var(--grid-gap);

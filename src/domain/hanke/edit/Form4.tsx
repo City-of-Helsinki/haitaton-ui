@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { Button } from 'hds-react';
+import { useTranslation } from 'react-i18next';
 
-// eslint-disable-next-line
-const Form4: React.FC<any> = (props) => {
+interface IProps {
+  changeWizardView: Dispatch<SetStateAction<number>>;
+}
+
+const Form4: React.FC<IProps> = (props) => {
+  const { t } = useTranslation();
+  const { changeWizardView } = props;
   return (
     <div className="form4">
-      <h2>Hankkeen haitat</h2>
-      <Button type="button" onClick={(e) => props.parentCallback(3)}>
-        back
+      <h2>{t('hankeForm:hankkeenHaitatForm:header')}</h2>
+      <Button type="button" onClick={() => changeWizardView(3)}>
+        {t('hankeForm:previousButton')}
       </Button>
       <Button type="button">Save</Button>
     </div>

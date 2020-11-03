@@ -1,24 +1,31 @@
-import React from 'react';
-import { RadioButton, Button } from 'hds-react';
-import { useForm, Controller } from 'react-hook-form';
+import React, { useState, Dispatch, SetStateAction } from 'react';
+
+import { Button } from 'hds-react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+
 import Dropdown from '../../../common/components/dropdown/Dropdown';
 import TextInput from '../../../common/components/textInput/TextInput';
+import Checkbox from '../../../common/components/checkbox/Checkbox';
 
 type Inputs = {
+  hankeenTunnus: string;
   hankeenNimi: string;
   hankeenVaihe: string;
-  hankeOnJulkinen: string;
-  startDate: string;
   endDate: string;
-  suunnitteluVaihe: string;
   omistajaOrganisaatio: string;
   omistajaOsasto: string;
   arvioijaOrganisaatio: string;
   arvioijaOsasto: string;
 };
 
-// eslint-disable-next-line
-const Form0: React.FC<any> = (props) => {
+interface IProps {
+  changeWizardView: Dispatch<SetStateAction<number>>;
+}
+
+const Form0: React.FC<IProps> = (props) => {
+  const { t } = useTranslation();
+  const { changeWizardView } = props;
   const { handleSubmit, errors, control, getValues } = useForm<Inputs>({
     mode: 'all',
     reValidateMode: 'onBlur',
@@ -42,34 +49,36 @@ const Form0: React.FC<any> = (props) => {
       { value: 'Ohjelmointi', label: 'Ohjelmointi vaiheessa' },
     ];
   }
-  function getSuunnitteluVaiheOptions() {
-    return [
-      { value: 'Katusuunnittelu', label: 'Katusuunnittelu' },
-      { value: 'Katusuunnittelu1', label: 'Katusuunnittelu2' },
-    ];
-  }
+
+  const [ytkChecked, setYtkChecked] = useState(false);
 
   return (
     <div className="form0">
-      <h2>Hankkeen perustiedot</h2>
+      <h2>{t('hankeForm:perustiedotForm:header')}</h2>
       <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
         <div className="dataWpr">
-          <div className="left">
-            <h3>Haitaton tunnus</h3>
-            <p>JUH845</p>
-          </div>
-          <div className="right">
-            <h3>Hankkeen julkisuus</h3>
-
-            <Controller
-              as={RadioButton}
-              name="hankeOnJulkinen"
-              id="hankeOnJulkinen"
+          <div className="formWpr">
+            <TextInput
+              name="hankeenTunnus"
+              id="hankeenTunnus"
+              label={t('hankeForm:perustiedotForm:hankeenTunnusLabel')}
               control={control}
-              label="hanke on julkinen"
-              rules={{ required: true }}
-              defaultValue="hankeOnJulkinen"
-              checked
+              defaultValue=""
+              invalid={!!errors.hankeenTunnus}
+              errorMsg={t('hankeForm:insertFieldError')}
+              disabled
+            />
+          </div>
+          <div className="formWpr">
+            <h3>{t('hankeForm:perustiedotForm:ytkHankeHeader')}</h3>
+            <Checkbox
+              name="YTKHanke"
+              id="YTKHanke"
+              label={t('hankeForm:perustiedotForm:hankeOnYtkHankeLabel')}
+              control={control}
+              invalid={!!errors.hankeenTunnus}
+              checked={ytkChecked}
+              onChange={() => setYtkChecked(!ytkChecked)}
             />
           </div>
         </div>
@@ -77,38 +86,27 @@ const Form0: React.FC<any> = (props) => {
           <TextInput
             name="hankeenNimi"
             id="hankeenNimi"
-            label="Hankeen Nimi *"
+            label={t('hankeForm:perustiedotForm:hankeenNimiLabel')}
             control={control}
             rules={{ required: true }}
             defaultValue=""
             invalid={!!errors.hankeenNimi}
-            errorMsg="Syötä kenttä"
+            errorMsg={t('hankeForm:insertFieldError')}
           />
         </div>
 
         <div className="calendaraWpr formWpr">
-          <div className="left">
-            <TextInput
-              name="startDate"
-              id="startDate"
-              label="Hankkeen aloituspäivä *"
-              control={control}
-              rules={{ required: true }}
-              defaultValue=""
-              invalid={!!errors.startDate}
-              errorMsg="Syötä kenttä"
-            />
-          </div>
+          <div className="left">{t('hankeForm:perustiedotForm:HankkeenAlkupaivaLabel')}</div>
           <div className="right">
             <TextInput
               name="endDate"
               id="endDate"
-              label="Hankkeen loppupäivä *"
+              label={t('hankeForm:perustiedotForm:HankkeenLoppupaivaLabel')}
               control={control}
               rules={{ required: true }}
               defaultValue=""
               invalid={!!errors.endDate}
-              errorMsg="Syötä kenttä"
+              errorMsg={t('hankeForm:insertFieldError')}
             />
           </div>
         </div>
@@ -119,68 +117,13 @@ const Form0: React.FC<any> = (props) => {
             control={control}
             options={getHankeenVaiheOptions()}
             defaultValue={getHankeenVaiheOptions()[0]}
-            label="Hankeen Vaihe"
+            label={t('hankeForm:perustiedotForm:hankeenVaihe')}
           />
         </div>
-        <div className="formWpr">
-          <Dropdown
-            name="suunnitteluVaihe"
-            id="suunnitteluVaihe"
-            control={control}
-            options={getSuunnitteluVaiheOptions()}
-            defaultValue={getSuunnitteluVaiheOptions()[0]}
-            label="Suunnitteluvaihe"
-          />
-        </div>
-        <div className="formWprColumns">
-          <div className="left">
-            <TextInput
-              name="omistajaOrganisaatio"
-              id="omistajaOrganisaatio"
-              label="Omistajaorganisaatio *"
-              control={control}
-              rules={{ required: true }}
-              defaultValue=""
-              invalid={!!errors.omistajaOrganisaatio}
-              errorMsg="Syötä kenttä"
-            />
-          </div>
-          <div className="right">
-            <TextInput
-              name="omistajaOsasto"
-              id="omistajaOsasto"
-              label="omistajaosasto"
-              control={control}
-              defaultValue=""
-            />
-          </div>
-        </div>
-        <div className="formWprColumns">
-          <div className="left">
-            <TextInput
-              name="arvioijaOrganisaatio"
-              id="arvioijaOrganisaatio"
-              label="Omistajaorganisaatio *"
-              control={control}
-              rules={{ required: true }}
-              defaultValue=""
-              invalid={!!errors.arvioijaOrganisaatio}
-              errorMsg="Syötä kenttä"
-            />
-          </div>
-          <div className="right">
-            <TextInput
-              name="arvioijaOsasto"
-              id="arvioijaOsasto"
-              label="Arvioijaosasto"
-              control={control}
-              defaultValue=""
-            />
-          </div>
-        </div>
-        <Button type="button" onClick={(e) => props.parentCallback(1)}>
-          next
+        <Button type="button" onClick={() => changeWizardView(1)}>
+          {t('hankeForm:nextButton')}{' '}
         </Button>
+        <button type="submit">validate</button>
       </form>
     </div>
   );

@@ -12,9 +12,10 @@ type PropTypes = {
   label: string;
   invalid?: boolean;
   errorMsg?: string;
+  disabled?: boolean;
 };
 const TextInputComp: React.FC<PropTypes> = (props) => {
-  const { name, id, control, rules, defaultValue, label, invalid, errorMsg } = props;
+  const { name, id, control, rules, defaultValue, label, invalid, errorMsg, disabled } = props;
   return (
     <>
       <Controller
@@ -31,6 +32,7 @@ const TextInputComp: React.FC<PropTypes> = (props) => {
             name={name}
             onBlur={onBlur}
             onChange={onChange}
+            disabled={disabled}
           />
         )}
       />
