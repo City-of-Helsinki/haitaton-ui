@@ -12,4 +12,14 @@ export type HankeGeoJSONProperties = {
   geomewkt: string;
 };
 
+export type LocationGeoJSONProperties = {
+  id?: string;
+  name: string;
+  distance: string;
+  geomewkt: string;
+};
+
 export type HankeGeoJSON = GeoJSON.FeatureCollection<GeoJSON.Geometry, HankeGeoJSONProperties>;
+
+// eslint-disable-next-line
+export type AnyPropertyGeoJSON = GeoJSON.FeatureCollection<GeoJSON.Geometry, any>;

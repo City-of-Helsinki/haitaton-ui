@@ -8,7 +8,7 @@ import { Draw, Modify, Snap } from 'ol/interaction';
 import { TileWMS, Vector as VectorSource } from 'ol/source';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import 'ol/ol.css';
-import { useProjects } from '../common/hooks/useProjects';
+import { useProjects } from './hooks/useProjects';
 import styles from './Map.module.scss';
 
 const image = new CircleStyle({

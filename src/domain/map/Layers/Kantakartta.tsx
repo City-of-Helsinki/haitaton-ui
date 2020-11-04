@@ -1,6 +1,6 @@
 import React from 'react';
 import { TileWMS } from 'ol/source';
-import TileLayer from '../../../../common/components/map/layers/TileLayer';
+import TileLayer from '../../../common/components/map/layers/TileLayer';
 
 const Kantakartta = () => (
   <TileLayer
