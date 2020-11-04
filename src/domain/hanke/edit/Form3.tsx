@@ -1,12 +1,10 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { Button } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 
-interface IProps {
-  changeWizardView: Dispatch<SetStateAction<number>>;
-}
+import PropTypes from './PropTypes';
 
-const Form3: React.FC<IProps> = (props) => {
+const Form3: React.FC<PropTypes> = (props) => {
   const { t } = useTranslation();
   const { changeWizardView } = props;
   return (
