@@ -24,7 +24,7 @@ const TextInputComp: React.FC<PropTypes> = (props) => {
         control={control}
         rules={rules}
         defaultValue={defaultValue}
-        render={({ onChange, onBlur }) => (
+        render={({ onChange, onBlur, value }) => (
           <TextInput
             id={id}
             label={label}
@@ -33,6 +33,7 @@ const TextInputComp: React.FC<PropTypes> = (props) => {
             onBlur={onBlur}
             onChange={onChange}
             disabled={disabled}
+            value={value}
           />
         )}
       />
