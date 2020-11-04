@@ -27,7 +27,7 @@ const toggleLayer: CaseReducer<State, PayloadAction<MapDatalayer>> = (state, act
 
 const buildDatalayerState = (data: AnyPropertyGeoJSON): MapDatalayerState => ({
   data,
-  visible: false,
+  visible: true,
 });
 
 const initialState: State = {

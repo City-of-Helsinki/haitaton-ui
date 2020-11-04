@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { Vector as VectorSource } from 'ol/source';
-import GeoJSON from 'ol/format/GeoJSON';
 import Map from '../../common/components/map/Map';
 import Controls from '../../common/components/map/controls/Controls';
 import LayerControl from '../../common/components/map/controls/LayerControl';
 import DrawControl from '../../common/components/map/controls/DrawControl';
 import VectorLayer from '../../common/components/map/layers/VectorLayer';
 import DrawIntercation from '../../common/components/map/interactions/Draw';
-import { useDatalayers } from './hooks/useDatalayers';
 import Kantakartta from './Layers/Kantakartta';
+import DataLayers from './Layers/DataLayers';
 import HSL from './Layers/HSL';
 import styles from './Map.module.scss';
 
@@ -18,7 +17,6 @@ const HankeDrawer: React.FC = () => {
   const [zoom] = useState(15);
   const [showKantakartta, setShowKantakartta] = useState(true);
   const [showHSL, setShowHSL] = useState(false);
-  const { datalayers } = useDatalayers();
 
   const toggleTileLayer = () => {
     if (showKantakartta) {
@@ -30,20 +28,13 @@ const HankeDrawer: React.FC = () => {
     }
   };
 
-  const fooSource = new VectorSource();
-  drawSource.addFeatures(
-    new GeoJSON().readFeatures(datalayers.CYCLING_ROADS.data, {
-      featureProjection: 'EPSG:3857', // EPSG:3879
-    })
-  );
-
   return (
     <div className={styles.mapContainer}>
       <Map center={center} zoom={zoom} mapClassName={styles.mapContainer__inner}>
         <DrawIntercation source={drawSource} />
-        {showKantakartta && <VectorLayer source={fooSource} zIndex={3} />}
         {showKantakartta && <Kantakartta />}
         {showHSL && <HSL />}
+        <DataLayers />
         <VectorLayer source={drawSource} zIndex={100} />
         <Controls>
           <DrawControl />
