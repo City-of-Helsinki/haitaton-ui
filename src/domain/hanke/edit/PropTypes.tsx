@@ -6,4 +6,6 @@ export default interface PropTypes {
   errors?: any;
   // eslint-disable-next-line
   control?: any;
+  // eslint-disable-next-line
+  register?: any;
 }

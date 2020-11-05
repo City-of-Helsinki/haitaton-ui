@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 
-import { Button } from 'hds-react';
+import { Button, Checkbox } from 'hds-react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+
+import { getFormData } from './selectors';
 
 import Dropdown from '../../../common/components/dropdown/Dropdown';
 import TextInput from '../../../common/components/textInput/TextInput';
-import Checkbox from '../../../common/components/checkbox/Checkbox';
+// import Checkbox from '../../../common/components/checkbox/Checkbox';
 
 import PropTypes from './PropTypes';
 
 const Form0: React.FC<PropTypes> = (props) => {
   const { t } = useTranslation();
-  const { changeWizardView, control, errors } = props;
+  const { changeWizardView, control, errors, register } = props;
+  const formData = useSelector(getFormData);
+  // const { setValue } = useForm<Inputs>();
 
   function getHankeenVaiheOptions() {
     return [
@@ -20,8 +25,9 @@ const Form0: React.FC<PropTypes> = (props) => {
     ];
   }
 
-  const [ytkChecked, setYtkChecked] = useState(false);
-
+  const [ytkChecked, setYtkChecked] = useState(formData.YTKHanke);
+  // eslint-disable-next-line
+  console.log(formData);
   return (
     <div className="form0">
       <h2>{t('hankeForm:perustiedotForm:header')}</h2>
@@ -44,8 +50,7 @@ const Form0: React.FC<PropTypes> = (props) => {
             name="YTKHanke"
             id="YTKHanke"
             label={t('hankeForm:perustiedotForm:hankeOnYtkHankeLabel')}
-            control={control}
-            invalid={!!errors.hankeenTunnus}
+            ref={register}
             checked={ytkChecked}
             onChange={() => setYtkChecked(!ytkChecked)}
           />
@@ -58,7 +63,7 @@ const Form0: React.FC<PropTypes> = (props) => {
           label={t('hankeForm:perustiedotForm:hankeenNimiLabel')}
           control={control}
           rules={{ required: true }}
-          defaultValue=""
+          defaultValue={formData.hankeenNimi}
           invalid={!!errors.hankeenNimi}
           errorMsg={t('hankeForm:insertFieldError')}
         />
@@ -73,9 +78,9 @@ const Form0: React.FC<PropTypes> = (props) => {
             label={t('hankeForm:perustiedotForm:HankkeenLoppupaivaLabel')}
             control={control}
             rules={{ required: true }}
-            defaultValue=""
             invalid={!!errors.endDate}
             errorMsg={t('hankeForm:insertFieldError')}
+            defaultValue={formData.endDate}
           />
         </div>
       </div>
@@ -85,11 +90,11 @@ const Form0: React.FC<PropTypes> = (props) => {
           id="hankeenVaihe"
           control={control}
           options={getHankeenVaiheOptions()}
-          defaultValue={getHankeenVaiheOptions()[0]}
+          defaultValue={formData.hankeenVaihe}
           label={t('hankeForm:perustiedotForm:hankeenVaihe')}
         />
       </div>
-      <Button type="button" onClick={() => changeWizardView(1)}>
+      <Button type="submit" onClick={() => changeWizardView(1)}>
         {t('hankeForm:nextButton')}{' '}
       </Button>
     </div>

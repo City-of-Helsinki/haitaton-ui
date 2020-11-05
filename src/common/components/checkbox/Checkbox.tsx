@@ -16,6 +16,9 @@ type PropTypes = {
   checked?: boolean;
   // eslint-disable-next-line
   onChange?: any;
+  value?: string;
+  // eslint-disable-next-line
+  register?: any;
 };
 const CheckboxComp: React.FC<PropTypes> = (props) => {
   const {
@@ -25,33 +28,30 @@ const CheckboxComp: React.FC<PropTypes> = (props) => {
     rules,
     defaultValue,
     label,
-    invalid,
-    errorMsg,
     disabled,
     checked,
     onChange,
+    value,
   } = props;
   return (
-    <>
-      <Controller
-        name={name}
-        id={id}
-        control={control}
-        rules={rules}
-        defaultValue={defaultValue}
-        render={() => (
-          <Checkbox
-            id={id}
-            label={label}
-            name={name}
-            onChange={onChange}
-            checked={checked}
-            disabled={disabled}
-          />
-        )}
-      />
-      {invalid && <span className="error-text">{errorMsg}</span>}
-    </>
+    <Controller
+      name={name}
+      id={id}
+      control={control}
+      rules={rules}
+      defaultValue={defaultValue}
+      render={() => (
+        <Checkbox
+          id={id}
+          label={label}
+          name={name}
+          onChange={onChange}
+          checked={checked}
+          disabled={disabled}
+          value={value}
+        />
+      )}
+    />
   );
 };
 export default CheckboxComp;

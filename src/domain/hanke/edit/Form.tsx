@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { getFormData } from './selectors';
+
+import { actions } from './reducer';
 
 import Indicator from './indicator';
 
@@ -14,6 +19,7 @@ import './Form.styles.scss';
 
 type Inputs = {
   hankeenTunnus: string;
+  YTKHanke: boolean;
   hankeenNimi: string;
   hankeenVaihe: string;
   endDate: string;
@@ -21,10 +27,12 @@ type Inputs = {
   omistajaOsasto: string;
   arvioijaOrganisaatio: string;
   arvioijaOsasto: string;
+  example1: string;
 };
 const FormComponent: React.FC = (props) => {
   const { t } = useTranslation();
-
+  const dispatch = useDispatch();
+  const formData = useSelector(getFormData);
   const dummyData = [
     { label: t('hankeForm:perustiedotForm:header'), view: 0 },
     { label: t('hankeForm:hankkeenAlueForm:header'), view: 1 },
@@ -33,7 +41,7 @@ const FormComponent: React.FC = (props) => {
     { label: t('hankeForm:hankkeenHaitatForm:header'), view: 4 },
   ];
   const [viewStatus, setviewStatus] = useState(0);
-  const { handleSubmit, errors, control, getValues } = useForm<Inputs>({
+  const { handleSubmit, errors, control, register } = useForm<Inputs>({
     mode: 'all',
     reValidateMode: 'onBlur',
     resolver: undefined,
@@ -42,12 +50,22 @@ const FormComponent: React.FC = (props) => {
     shouldFocusError: true,
     shouldUnregister: true,
   });
-  const onSubmit = (data: Inputs) => {
+  // eslint-disable-next-line
+  function combineState(data: any) {
+    return { ...formData, ...data };
+  }
+  // eslint-disable-next-line
+  const onSubmit = (values: any) => {
+    // action(data);
+    const data = combineState(values);
+    dispatch(actions.formData(data));
+    // action(data);
     // eslint-disable-next-line
     console.log('data', data);
     // eslint-disable-next-line
-    console.log('form values', getValues());
   };
+  // eslint-disable-next-line
+  console.log('formData', formData);
   return (
     <div className="hankeForm">
       <h1>{t('hankeForm:pageHeader')}</h1>
@@ -56,7 +74,12 @@ const FormComponent: React.FC = (props) => {
         <div className="hankeForm__formWprRight">
           <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
             {viewStatus === 0 && (
-              <Form0 changeWizardView={setviewStatus} errors={errors} control={control} />
+              <Form0
+                changeWizardView={setviewStatus}
+                errors={errors}
+                control={control}
+                register={register()}
+              />
             )}
             {viewStatus === 1 && <Form1 changeWizardView={setviewStatus} />}
             {viewStatus === 2 && (
