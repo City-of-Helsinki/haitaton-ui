@@ -22,7 +22,9 @@ const DataLayers = () => {
   return (
     <>
       {Object.values(datalayers).map((layer) => {
-        return layer.visible ? <VectorLayer source={createSource(layer.data)} zIndex={3} /> : null;
+        return layer.visible ? (
+          <VectorLayer key={layer.id} source={createSource(layer.data)} zIndex={3} />
+        ) : null;
       })}
     </>
   );

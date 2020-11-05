@@ -15,6 +15,7 @@ const Kantakartta = () => (
           HEIGHT: 256,
           VERSION: '1.1.1',
         },
+        projection: 'EPSG:3857',
         imageSmoothing: false,
         hidpi: false,
         serverType: 'geoserver',

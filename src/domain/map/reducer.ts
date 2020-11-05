@@ -25,9 +25,10 @@ const toggleLayer: CaseReducer<State, PayloadAction<MapDatalayer>> = (state, act
   state.dataLayers[action.payload].visible = !state.dataLayers[action.payload].visible;
 };
 
-const buildDatalayerState = (data: AnyPropertyGeoJSON): MapDatalayerState => ({
+const buildDatalayerState = (id: MapDatalayer, data: AnyPropertyGeoJSON): MapDatalayerState => ({
+  id,
   data,
-  visible: true,
+  visible: false,
 });
 
 const initialState: State = {
@@ -36,13 +37,21 @@ const initialState: State = {
   visibleLayers: [],
   dataLayers: {
     [DATALAYERS.RESTAURANTS]: buildDatalayerState(
+      DATALAYERS.RESTAURANTS,
       intersectJSON.restaurantsGeoJSON as AnyPropertyGeoJSON
     ),
-    [DATALAYERS.ROADS]: buildDatalayerState(intersectJSON.roadsGeoJSON as AnyPropertyGeoJSON),
+    [DATALAYERS.ROADS]: buildDatalayerState(
+      DATALAYERS.ROADS,
+      intersectJSON.roadsGeoJSON as AnyPropertyGeoJSON
+    ),
     [DATALAYERS.CYCLING_ROADS]: buildDatalayerState(
+      DATALAYERS.CYCLING_ROADS,
       intersectJSON.cyclingRoadsGeoJSON as AnyPropertyGeoJSON
     ),
-    [DATALAYERS.GREENERY]: buildDatalayerState(intersectJSON.greeneryGeoJSON as AnyPropertyGeoJSON),
+    [DATALAYERS.GREENERY]: buildDatalayerState(
+      DATALAYERS.GREENERY,
+      intersectJSON.greeneryGeoJSON as AnyPropertyGeoJSON
+    ),
   },
 };
 

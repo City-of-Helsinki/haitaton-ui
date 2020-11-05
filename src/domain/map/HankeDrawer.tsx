@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import GeoJSON from 'ol/format/GeoJSON';
 import { Vector as VectorSource } from 'ol/source';
 import Map from '../../common/components/map/Map';
 import Controls from '../../common/components/map/controls/Controls';
@@ -10,9 +11,19 @@ import Kantakartta from './Layers/Kantakartta';
 import DataLayers from './Layers/DataLayers';
 import HSL from './Layers/HSL';
 import styles from './Map.module.scss';
+import { useDatalayers } from './hooks/useDatalayers';
 
 const HankeDrawer: React.FC = () => {
-  const [drawSource] = useState<VectorSource>(new VectorSource());
+  const { datalayers, toggleDatalayer } = useDatalayers();
+
+  const [drawSource] = useState<VectorSource>(
+    new VectorSource({
+      format: new GeoJSON({
+        dataProjection: 'EPSG:3857',
+        featureProjection: 'EPSG:3857',
+      }),
+    })
+  );
   const [center] = useState([2776000, 8438000]);
   const [zoom] = useState(15);
   const [showKantakartta, setShowKantakartta] = useState(true);
@@ -48,6 +59,8 @@ const HankeDrawer: React.FC = () => {
                 checked: showKantakartta,
               },
             ]}
+            dataLayers={Object.values(datalayers)}
+            onClickDatalayer={(id: any) => toggleDatalayer(id)}
           />
         </Controls>
       </Map>

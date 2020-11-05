@@ -8,6 +8,7 @@ import {
   MenuGroup,
   MenuDivider,
 } from '@chakra-ui/core';
+import Locale from '../../locale/Locale';
 import ControlPanel from './ControlPanel';
 import styles from './Controls.module.scss';
 
@@ -18,11 +19,19 @@ type TileLayer = {
   onClick: () => void;
 };
 
-type Props = {
-  tileLayers: TileLayer[];
+type DataLayer = {
+  id: string;
+  data: any;
+  visible: boolean;
 };
 
-const LayerControl: React.FC<Props> = ({ tileLayers }) => (
+type Props = {
+  tileLayers: TileLayer[];
+  dataLayers: DataLayer[];
+  onClickDatalayer: (id: string) => void;
+};
+
+const LayerControl: React.FC<Props> = ({ tileLayers, dataLayers, onClickDatalayer }) => (
   <ControlPanel className={styles.tileLayerControl}>
     <Menu closeOnSelect={false}>
       <MenuButton>
@@ -38,9 +47,9 @@ const LayerControl: React.FC<Props> = ({ tileLayers }) => (
         </MenuGroup>
         <MenuDivider />
         <MenuGroup>
-          {tileLayers.map(({ id, onClick, label }) => (
-            <MenuItem key={id} onClick={() => onClick()}>
-              {label}
+          {dataLayers.map(({ id }) => (
+            <MenuItem key={id} onClick={() => onClickDatalayer(id)}>
+              <Locale id={`map:datalayers:${id}`} />
             </MenuItem>
           ))}
         </MenuGroup>

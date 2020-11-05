@@ -1,4 +1,6 @@
 import React, { useEffect, useContext } from 'react';
+import GeoJSON from 'ol/format/GeoJSON';
+
 import { Vector } from 'ol/source';
 import Feature from 'ol/Feature';
 import Collection from 'ol/Collection';
@@ -22,6 +24,12 @@ const DrawInteraction: React.FC<Props> = ({ source, features = undefined }) => {
       // eslint-disable-next-line
       type: drawTool as any, // Not sure how this should be typed
     });
+
+    // For testing, remove later
+    const format = new GeoJSON({ featureProjection: 'EPSG:3879' });
+    const json = format.writeFeatures(source.getFeatures());
+    // eslint-disable-next-line
+    console.log(json);
 
     map.addInteraction(drawInstance);
 
