@@ -11,6 +11,7 @@ import {
 import Locale from '../../locale/Locale';
 import ControlPanel from './ControlPanel';
 import styles from './Controls.module.scss';
+import { CommonGeoJSON } from '../../../types/hanke';
 
 type TileLayer = {
   id: string;
@@ -20,18 +21,20 @@ type TileLayer = {
 };
 
 type DataLayer = {
-  id: string;
-  data: any;
+  key: string;
+  data: CommonGeoJSON;
   visible: boolean;
 };
 
 type Props = {
   tileLayers: TileLayer[];
   dataLayers: DataLayer[];
-  onClickDatalayer: (id: string) => void;
+  // I dont want to import type from domain
+  // eslint-disable-next-line
+  onClickDataLayer: (key: any) => void;
 };
 
-const LayerControl: React.FC<Props> = ({ tileLayers, dataLayers, onClickDatalayer }) => (
+const LayerControl: React.FC<Props> = ({ tileLayers, dataLayers, onClickDataLayer }) => (
   <ControlPanel className={styles.tileLayerControl}>
     <Menu closeOnSelect={false}>
       <MenuButton>
@@ -47,9 +50,9 @@ const LayerControl: React.FC<Props> = ({ tileLayers, dataLayers, onClickDatalaye
         </MenuGroup>
         <MenuDivider />
         <MenuGroup>
-          {dataLayers.map(({ id }) => (
-            <MenuItem key={id} onClick={() => onClickDatalayer(id)}>
-              <Locale id={`map:datalayers:${id}`} />
+          {dataLayers.map(({ key }) => (
+            <MenuItem key={key} onClick={() => onClickDataLayer(key)}>
+              <Locale id={`map:datalayers:${key}`} />
             </MenuItem>
           ))}
         </MenuGroup>

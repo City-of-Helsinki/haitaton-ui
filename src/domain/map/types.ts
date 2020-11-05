@@ -1,12 +1,12 @@
 import { DATALAYERS } from './constants';
-import { AnyPropertyGeoJSON } from '../hanke/common/types/Hanke';
+import { CommonGeoJSON } from '../../common/types/hanke';
 
-export type MapDatalayer = keyof typeof DATALAYERS;
+export type MapDataLayerKey = keyof typeof DATALAYERS;
 
 export type MapDatalayerState = {
-  id: MapDatalayer;
-  data: AnyPropertyGeoJSON;
+  key: MapDataLayerKey;
+  data: CommonGeoJSON;
   visible: boolean;
 };
 
-export type RouteMap = Record<MapDatalayer, MapDatalayerState>;
+export type RouteMap = Record<MapDataLayerKey, MapDatalayerState>;

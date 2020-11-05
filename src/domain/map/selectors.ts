@@ -7,4 +7,4 @@ export const getSelectedProjectId = () => (state: RootState) => state.map.select
 export const getProjectById = (id: string | null) => (state: RootState) =>
   id ? state.map.projects.features.find((feature) => feature.properties.id === id) : null;
 
-export const getMapDatalayers = () => (state: RootState) => state.map.dataLayers;
+export const getMapDataLayers = () => (state: RootState) => state.map.dataLayers;

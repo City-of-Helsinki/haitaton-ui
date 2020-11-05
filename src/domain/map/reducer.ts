@@ -1,8 +1,8 @@
 import { PayloadAction, CaseReducer, createSlice } from '@reduxjs/toolkit';
 import projectsJSON from '../../mocks/projects.json';
 import intersectJSON from '../../mocks/intersect.json';
-import { HankeGeoJSON, AnyPropertyGeoJSON } from '../hanke/common/types/Hanke';
-import { MapDatalayer, MapDatalayerState } from './types';
+import { HankeGeoJSON, CommonGeoJSON } from '../../common/types/hanke';
+import { MapDataLayerKey, MapDatalayerState } from './types';
 import { DATALAYERS } from './constants';
 
 type State = {
@@ -21,12 +21,12 @@ const selectProject: CaseReducer<State, PayloadAction<string>> = (state, action)
   state.selectedProject = action.payload;
 };
 
-const toggleLayer: CaseReducer<State, PayloadAction<MapDatalayer>> = (state, action) => {
+const toggleLayer: CaseReducer<State, PayloadAction<MapDataLayerKey>> = (state, action) => {
   state.dataLayers[action.payload].visible = !state.dataLayers[action.payload].visible;
 };
 
-const buildDatalayerState = (id: MapDatalayer, data: AnyPropertyGeoJSON): MapDatalayerState => ({
-  id,
+const buildDatalayerState = (key: MapDataLayerKey, data: CommonGeoJSON): MapDatalayerState => ({
+  key,
   data,
   visible: false,
 });
@@ -38,19 +38,19 @@ const initialState: State = {
   dataLayers: {
     [DATALAYERS.RESTAURANTS]: buildDatalayerState(
       DATALAYERS.RESTAURANTS,
-      intersectJSON.restaurantsGeoJSON as AnyPropertyGeoJSON
+      intersectJSON.restaurantsGeoJSON as CommonGeoJSON
     ),
     [DATALAYERS.ROADS]: buildDatalayerState(
       DATALAYERS.ROADS,
-      intersectJSON.roadsGeoJSON as AnyPropertyGeoJSON
+      intersectJSON.roadsGeoJSON as CommonGeoJSON
     ),
     [DATALAYERS.CYCLING_ROADS]: buildDatalayerState(
       DATALAYERS.CYCLING_ROADS,
-      intersectJSON.cyclingRoadsGeoJSON as AnyPropertyGeoJSON
+      intersectJSON.cyclingRoadsGeoJSON as CommonGeoJSON
     ),
     [DATALAYERS.GREENERY]: buildDatalayerState(
       DATALAYERS.GREENERY,
-      intersectJSON.greeneryGeoJSON as AnyPropertyGeoJSON
+      intersectJSON.greeneryGeoJSON as CommonGeoJSON
     ),
   },
 };

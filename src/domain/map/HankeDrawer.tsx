@@ -11,10 +11,11 @@ import Kantakartta from './Layers/Kantakartta';
 import DataLayers from './Layers/DataLayers';
 import HSL from './Layers/HSL';
 import styles from './Map.module.scss';
-import { useDatalayers } from './hooks/useDatalayers';
+import { useMapDataLayers } from './hooks/useMapDataLayers';
+import { MapDataLayerKey } from './types';
 
 const HankeDrawer: React.FC = () => {
-  const { datalayers, toggleDatalayer } = useDatalayers();
+  const { dataLayers, toggleDataLayer } = useMapDataLayers();
 
   const [drawSource] = useState<VectorSource>(
     new VectorSource({
@@ -59,8 +60,8 @@ const HankeDrawer: React.FC = () => {
                 checked: showKantakartta,
               },
             ]}
-            dataLayers={Object.values(datalayers)}
-            onClickDatalayer={(id: any) => toggleDatalayer(id)}
+            dataLayers={Object.values(dataLayers)}
+            onClickDataLayer={(key: MapDataLayerKey) => toggleDataLayer(key)}
           />
         </Controls>
       </Map>

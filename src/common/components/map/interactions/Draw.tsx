@@ -28,8 +28,8 @@ const DrawInteraction: React.FC<Props> = ({ source, features = undefined }) => {
     // For testing, remove later
     const format = new GeoJSON({ featureProjection: 'EPSG:3879' });
     const json = format.writeFeatures(source.getFeatures());
-    // eslint-disable-next-line
-    console.log(json);
+    // eslint-disable-next-line no-console
+    console.log(json); // Should be removed later
 
     map.addInteraction(drawInstance);
 

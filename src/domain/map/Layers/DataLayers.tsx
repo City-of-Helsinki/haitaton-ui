@@ -2,14 +2,14 @@ import React from 'react';
 import { Vector as VectorSource } from 'ol/source';
 import GeoJSON from 'ol/format/GeoJSON';
 import VectorLayer from '../../../common/components/map/layers/VectorLayer';
-import { useDatalayers } from '../hooks/useDatalayers';
+import { useMapDataLayers } from '../hooks/useMapDataLayers';
+import { CommonGeoJSON } from '../../../common/types/hanke';
 
-// eslint-disable-next-line
-const createSource = (data: any) => {
+const createSource = (data: CommonGeoJSON) => {
   const source = new VectorSource();
   source.addFeatures(
     new GeoJSON().readFeatures(data, {
-      featureProjection: 'EPSG:3857', // EPSG:3879
+      featureProjection: 'EPSG:3857',
     })
   );
 
@@ -17,15 +17,15 @@ const createSource = (data: any) => {
 };
 
 const DataLayers = () => {
-  const { datalayers } = useDatalayers();
+  const { dataLayers } = useMapDataLayers();
 
   return (
     <>
-      {Object.values(datalayers).map((layer) => {
-        return layer.visible ? (
-          <VectorLayer key={layer.id} source={createSource(layer.data)} zIndex={3} />
-        ) : null;
-      })}
+      {Object.values(dataLayers).map((layer) =>
+        layer.visible ? (
+          <VectorLayer key={layer.key} source={createSource(layer.data)} zIndex={3} />
+        ) : null
+      )}
     </>
   );
 };
