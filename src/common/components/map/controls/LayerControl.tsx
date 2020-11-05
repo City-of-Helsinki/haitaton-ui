@@ -8,7 +8,8 @@ import {
   MenuGroup,
   MenuDivider,
 } from '@chakra-ui/core';
-import Locale from '../../locale/Locale';
+import { useTranslation } from 'react-i18next';
+import { Checkbox } from 'hds-react';
 import ControlPanel from './ControlPanel';
 import styles from './Controls.module.scss';
 import { CommonGeoJSON } from '../../../types/hanke';
@@ -34,32 +35,46 @@ type Props = {
   onClickDataLayer: (key: any) => void;
 };
 
-const LayerControl: React.FC<Props> = ({ tileLayers, dataLayers, onClickDataLayer }) => (
-  <ControlPanel className={styles.tileLayerControl}>
-    <Menu closeOnSelect={false}>
-      <MenuButton>
-        <Icon name="copy" />
-      </MenuButton>
-      <MenuList>
-        <MenuGroup>
-          {tileLayers.map(({ id, onClick, label, checked }) => (
-            <MenuItem key={id} onClick={() => onClick()} isDisabled={checked}>
-              {label}
-            </MenuItem>
-          ))}
-        </MenuGroup>
-        <MenuDivider />
-        <MenuGroup>
-          {dataLayers.map(({ key }) => (
+const LayerControl: React.FC<Props> = ({ tileLayers, dataLayers, onClickDataLayer }) => {
+  const { t } = useTranslation();
+
+  return (
+    <ControlPanel className={styles.tileLayerControl}>
+      <Menu closeOnSelect={false}>
+        <MenuButton>
+          <Icon name="copy" />
+        </MenuButton>
+        <MenuList>
+          <MenuGroup>
+            {tileLayers.map(({ id, onClick, label, checked }) => (
+              <MenuItem key={id} onClick={() => onClick()} isDisabled={checked}>
+                {label}
+              </MenuItem>
+            ))}
+          </MenuGroup>
+          <MenuDivider />
+          <MenuGroup>
+            {dataLayers.map(({ key, visible }) => (
+              <div className={styles.drawControl__checkbox} key={key}>
+                <Checkbox
+                  id={key}
+                  label={t(`map:datalayers:${key}`)}
+                  checked={visible}
+                  onClick={() => onClickDataLayer(key)}
+                />
+              </div>
+            ))}
+          </MenuGroup>
+        </MenuList>
+      </Menu>
+    </ControlPanel>
+  );
+};
+
+export default LayerControl;
+
+/*
             <MenuItem key={key} onClick={() => onClickDataLayer(key)}>
               <Locale id={`map:datalayers:${key}`} />
             </MenuItem>
-          ))}
-        </MenuGroup>
-        <MenuDivider />
-      </MenuList>
-    </Menu>
-  </ControlPanel>
-);
-
-export default LayerControl;
+            */
