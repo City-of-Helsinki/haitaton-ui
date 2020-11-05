@@ -41,5 +41,13 @@
         "title": "Haitaton 2.0 - Kaavake"
       }
     }
+  },
+  "map": {
+    "datalayers": {
+      "RESTAURANTS": "Ravintolat",
+      "ROADS": "Tiet",
+      "CYCLING_ROADS": "Pyörätiet",
+      "GREENERY": "Viheralueet"
+    }
   }
 }

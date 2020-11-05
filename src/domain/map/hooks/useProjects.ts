@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { getProjects } from '../../map/selectors';
+import { getProjects } from '../selectors';
 
 export const useProjects = () => {
   const dispatch = useDispatch();

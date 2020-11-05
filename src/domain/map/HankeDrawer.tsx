@@ -1,17 +1,30 @@
 import React, { useState } from 'react';
+import GeoJSON from 'ol/format/GeoJSON';
 import { Vector as VectorSource } from 'ol/source';
-import Map from '../../../common/components/map/Map';
-import Controls from '../../../common/components/map/controls/Controls';
-import TileLayers from '../../../common/components/map/controls/TileLayers';
-import DrawControl from '../../../common/components/map/controls/DrawControl';
-import VectorLayer from '../../../common/components/map/layers/VectorLayer';
-import DrawIntercation from '../../../common/components/map/interactions/Draw';
+import Map from '../../common/components/map/Map';
+import Controls from '../../common/components/map/controls/Controls';
+import LayerControl from '../../common/components/map/controls/LayerControl';
+import DrawControl from '../../common/components/map/controls/DrawControl';
+import VectorLayer from '../../common/components/map/layers/VectorLayer';
+import DrawIntercation from '../../common/components/map/interactions/Draw';
 import Kantakartta from './Layers/Kantakartta';
+import DataLayers from './Layers/DataLayers';
 import HSL from './Layers/HSL';
 import styles from './Map.module.scss';
+import { useMapDataLayers } from './hooks/useMapDataLayers';
+import { MapDataLayerKey } from './types';
 
 const HankeDrawer: React.FC = () => {
-  const [drawSource] = useState<VectorSource>(new VectorSource());
+  const { dataLayers, toggleDataLayer } = useMapDataLayers();
+
+  const [drawSource] = useState<VectorSource>(
+    new VectorSource({
+      format: new GeoJSON({
+        dataProjection: 'EPSG:3857',
+        featureProjection: 'EPSG:3857',
+      }),
+    })
+  );
   const [center] = useState([2776000, 8438000]);
   const [zoom] = useState(15);
   const [showKantakartta, setShowKantakartta] = useState(true);
@@ -33,11 +46,12 @@ const HankeDrawer: React.FC = () => {
         <DrawIntercation source={drawSource} />
         {showKantakartta && <Kantakartta />}
         {showHSL && <HSL />}
+        <DataLayers />
         <VectorLayer source={drawSource} zIndex={100} />
         <Controls>
           <DrawControl />
-          <TileLayers
-            layers={[
+          <LayerControl
+            tileLayers={[
               { id: 'hsl', label: 'HSL', onClick: toggleTileLayer, checked: showHSL },
               {
                 id: 'kantakartta',
@@ -46,6 +60,8 @@ const HankeDrawer: React.FC = () => {
                 checked: showKantakartta,
               },
             ]}
+            dataLayers={Object.values(dataLayers)}
+            onClickDataLayer={(key: MapDataLayerKey) => toggleDataLayer(key)}
           />
         </Controls>
       </Map>

@@ -44,4 +44,9 @@
       color: red;
     }
   }
+
+  &__checkbox {
+    padding-left: var(--spacing-xs);
+    padding-bottom: var(--spacing-2-xs);
+  }
 }

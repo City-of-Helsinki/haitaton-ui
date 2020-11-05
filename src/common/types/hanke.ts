@@ -12,4 +12,15 @@ export type HankeGeoJSONProperties = {
   geomewkt: string;
 };
 
+export type CommonGeoJSONProperties = {
+  id?: string | number | undefined;
+  type?: string;
+  Name?: string;
+  name?: string | null;
+  distance?: string;
+  geomewkt?: string;
+};
+
 export type HankeGeoJSON = GeoJSON.FeatureCollection<GeoJSON.Geometry, HankeGeoJSONProperties>;
+
+export type CommonGeoJSON = GeoJSON.FeatureCollection<GeoJSON.Geometry, CommonGeoJSONProperties>;
