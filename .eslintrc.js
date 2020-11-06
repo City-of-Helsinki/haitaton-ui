@@ -69,6 +69,12 @@ module.exports = {
         ignorePropertyModificationsFor: ['state'],
       },
     ],
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
   },
   settings: {
     react: {
