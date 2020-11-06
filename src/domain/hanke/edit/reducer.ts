@@ -1,8 +1,19 @@
 import { PayloadAction, CaseReducer, createSlice } from '@reduxjs/toolkit';
 // eslint-disable-next-line
 type State = any;
-
-const formData: CaseReducer<State, PayloadAction<number>> = (state, action) => action.payload;
+type Inputs = {
+  hankeenTunnus: string;
+  YTKHanke: boolean;
+  hankeenNimi: string;
+  hankeenVaihe: string;
+  endDate: string;
+  omistajaOrganisaatio: string;
+  omistajaOsasto: string;
+  arvioijaOrganisaatio: string;
+  arvioijaOsasto: string;
+  example1: string;
+};
+const formData: CaseReducer<State, PayloadAction<Inputs>> = (state, action) => action.payload;
 
 const projectsSlice = createSlice({
   name: 'projects',
