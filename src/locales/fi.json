@@ -73,5 +73,13 @@
     "hankkeenHaitatForm": {
       "header": "Hankkeen haitat"
     }
+  },
+  "map": {
+    "datalayers": {
+      "RESTAURANTS": "Ravintolat",
+      "ROADS": "Tiet",
+      "CYCLING_ROADS": "Pyörätiet",
+      "GREENERY": "Viheralueet"
+    }
   }
 }

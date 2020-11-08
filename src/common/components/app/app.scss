@@ -26,3 +26,8 @@ body {
   position: relative;
   min-height: 100vh;
 }
+
+// I think we should add css-reset etc
+button {
+  border: 0;
+}

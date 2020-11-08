@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@chakra-ui/core';
-import { useProject } from '../common/hooks/useProject';
+import { useProject } from '../../map/hooks/useProject';
 import './Hanke.styles.scss';
 
 const HaitatonProject: React.FC = () => {

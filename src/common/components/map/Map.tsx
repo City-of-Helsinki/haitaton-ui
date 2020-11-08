@@ -34,6 +34,7 @@ const Map: React.FC<Props> = ({
         zoom,
         minZoom: 12,
         maxZoom: 18,
+        projection: 'EPSG:3857',
       }),
       layers: [],
       controls: [],
