@@ -8,7 +8,7 @@ type PropTypes = {
   name: string;
   id: string;
   control: Control;
-  defaultValue: Option;
+  defaultValue?: Option;
   label: string;
   options: Array<Option>;
 };

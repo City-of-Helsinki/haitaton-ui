@@ -8,7 +8,7 @@ type PropTypes = {
   control: Control;
   // eslint-disable-next-line
   rules?: any;
-  defaultValue: string;
+  defaultValue?: string;
   label: string;
   invalid?: boolean;
   errorMsg?: string;

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Button } from 'hds-react';
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -40,8 +41,10 @@ const FormComponent: React.FC = (props) => {
     { label: t('hankeForm:tyomaanTiedotForm:header'), view: 3 },
     { label: t('hankeForm:hankkeenHaitatForm:header'), view: 4 },
   ];
-  const [viewStatus, setviewStatus] = useState(0);
-  const { handleSubmit, errors, control, register } = useForm<Inputs>({
+  const [WizardView, changeWizardView] = useState(0);
+  const [viewStatusVar, setviewStatusVar] = useState(0);
+
+  const { handleSubmit, errors, control, register, getValues } = useForm<Inputs>({
     mode: 'all',
     reValidateMode: 'onBlur',
     resolver: undefined,
@@ -51,17 +54,24 @@ const FormComponent: React.FC = (props) => {
     shouldUnregister: true,
   });
   // eslint-disable-next-line
-  function combineState(data: any) {
+  function combineState(data: Inputs) {
     return { ...formData, ...data };
   }
+  function goBack(view: number) {
+    const values = combineState(getValues());
+    dispatch(actions.formData(values));
+    changeWizardView(viewStatusVar);
+    setviewStatusVar(view);
+  }
   // eslint-disable-next-line
-  const onSubmit = (values: any) => {
+  const onSubmit = (values: Inputs) => {
     // action(data);
     const data = combineState(values);
     dispatch(actions.formData(data));
     // action(data);
     // eslint-disable-next-line
     console.log('data', data);
+    changeWizardView(viewStatusVar);
     // eslint-disable-next-line
   };
   // eslint-disable-next-line
@@ -70,24 +80,26 @@ const FormComponent: React.FC = (props) => {
     <div className="hankeForm">
       <h1>{t('hankeForm:pageHeader')}</h1>
       <div className="hankeForm__formWpr">
-        <Indicator dataList={dummyData} view={viewStatus} />
+        <Indicator dataList={dummyData} view={WizardView} />
         <div className="hankeForm__formWprRight">
           <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
-            {viewStatus === 0 && (
-              <Form0
-                changeWizardView={setviewStatus}
-                errors={errors}
-                control={control}
-                register={register()}
-              />
-            )}
-            {viewStatus === 1 && <Form1 changeWizardView={setviewStatus} />}
-            {viewStatus === 2 && (
-              <Form2 changeWizardView={setviewStatus} errors={errors} control={control} />
-            )}
-            {viewStatus === 3 && <Form3 changeWizardView={setviewStatus} />}
-            {viewStatus === 4 && <Form4 changeWizardView={setviewStatus} />}
-            <button type="submit">validate</button>
+            {WizardView === 0 && <Form0 errors={errors} control={control} register={register()} />}
+            {WizardView === 1 && <Form1 />}
+            {WizardView === 2 && <Form2 errors={errors} control={control} />}
+            {WizardView === 3 && <Form3 />}
+            {WizardView === 4 && <Form4 />}
+            <div className="btnWpr">
+              {WizardView > 0 && (
+                <Button type="submit" onClick={() => goBack(WizardView - 1)}>
+                  {t('hankeForm:previousButton')}
+                </Button>
+              )}
+              {WizardView < 4 && (
+                <Button type="submit" onClick={() => setviewStatusVar(WizardView + 1)}>
+                  {t('hankeForm:nextButton')}{' '}
+                </Button>
+              )}
+            </div>
           </form>
         </div>
       </div>

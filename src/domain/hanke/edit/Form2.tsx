@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 
 import TextInput from '../../../common/components/textInput/TextInput';
@@ -8,7 +7,7 @@ import PropTypes from './PropTypes';
 
 const Form2: React.FC<PropTypes> = (props) => {
   const { t } = useTranslation();
-  const { changeWizardView, control, errors } = props;
+  const { control, errors } = props;
   return (
     <div className="form2">
       <h2>{t('hankeForm:hankkeenYhteystiedotForm:header')}</h2>
@@ -58,12 +57,6 @@ const Form2: React.FC<PropTypes> = (props) => {
           />
         </div>
       </div>
-      <Button type="button" onClick={() => changeWizardView(1)}>
-        {t('hankeForm:previousButton')}
-      </Button>
-      <Button type="button" onClick={() => changeWizardView(3)}>
-        {t('hankeForm:nextButton')}{' '}
-      </Button>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Button, Checkbox } from 'hds-react';
+import { Checkbox } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
@@ -14,7 +14,7 @@ import PropTypes from './PropTypes';
 
 const Form0: React.FC<PropTypes> = (props) => {
   const { t } = useTranslation();
-  const { changeWizardView, control, errors, register } = props;
+  const { control, errors, register } = props;
   const formData = useSelector(getFormData);
   // const { setValue } = useForm<Inputs>();
 
@@ -94,9 +94,6 @@ const Form0: React.FC<PropTypes> = (props) => {
           label={t('hankeForm:perustiedotForm:hankeenVaihe')}
         />
       </div>
-      <Button type="submit" onClick={() => changeWizardView(1)}>
-        {t('hankeForm:nextButton')}{' '}
-      </Button>
     </div>
   );
 };
