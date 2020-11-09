@@ -1,11 +1,9 @@
 import { PayloadAction, CaseReducer, createSlice } from '@reduxjs/toolkit';
-// eslint-disable-next-line import/no-cycle
-// import { AppThunk } from '../../common/components/app/store';
 import projectsJSON from '../../mocks/projects.json';
 import intersectJSON from '../../mocks/intersect.json';
 import { HankeGeoJSON, CommonGeoJSON } from '../../common/types/hanke';
+import { saveGeometryData } from './thunks';
 import { MapDataLayerKey, MapDatalayerState } from './types';
-import { saveGeometryData } from './api/mapApi';
 import { DATALAYERS } from './constants';
 
 type State = {
@@ -71,12 +69,11 @@ const mapSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(saveGeometryData.fulfilled, (state, { payload }) => {
-      console.log({ payload });
       state.status = 'ok';
     });
     builder.addCase(saveGeometryData.rejected, (state, action) => {
       state.status = 'error';
-      console.log(action);
+      console.log({ action });
       /* if (action.payload) {
         // Since we passed in `MyKnownError` to `rejectValue` in `updateUser`, the type information will be available here.
         state.error = action.payload.errorMessage;

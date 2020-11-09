@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { getMapDataLayers, getStatus } from '../selectors';
 import { actions } from '../reducer';
-import { saveGeometryData } from '../api/mapApi';
+import { saveGeometryData } from '../thunks';
 import { MapDataLayerKey } from '../types';
 
 export const useMapDataLayers = () => {
@@ -13,7 +13,12 @@ export const useMapDataLayers = () => {
     dispatch(actions.toggleLayer(dataLayerKey));
 
   const handleSaveGeometry = async () => {
-    const resultAction = await dispatch(saveGeometryData(1));
+    const resultAction = await dispatch(
+      saveGeometryData({
+        hankeId: '1',
+        geometryData: '',
+      })
+    );
     console.log({ resultAction });
     /* if (saveGeometryData.fulfilled.match(resultAction)) {
       const user = unwrapResult(resultAction);

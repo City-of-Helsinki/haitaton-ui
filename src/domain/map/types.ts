@@ -1,6 +1,10 @@
 import { DATALAYERS } from './constants';
 import { CommonGeoJSON } from '../../common/types/hanke';
 
+export type HankeGeometry = {
+  data: CommonGeoJSON;
+};
+
 export type MapDataLayerKey = keyof typeof DATALAYERS;
 
 export type MapDatalayerState = {
