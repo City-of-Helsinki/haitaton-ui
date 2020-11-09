@@ -1,7 +1,6 @@
 import { PayloadAction, CaseReducer, createSlice } from '@reduxjs/toolkit';
-// eslint-disable-next-line
-type State = any;
-type Inputs = {
+
+type HankeData = {
   hankeenTunnus: string;
   YTKHanke: boolean;
   hankeenNimi: string;
@@ -13,13 +12,24 @@ type Inputs = {
   arvioijaOsasto: string;
   example1: string;
 };
-const formData: CaseReducer<State, PayloadAction<Inputs>> = (state, action) => action.payload;
+
+type State = {
+  hankeData: HankeData | null;
+};
+
+const updateFormData: CaseReducer<State, PayloadAction<HankeData>> = (state, action) => {
+  state.hankeData = action.payload;
+};
+
+const initialState: State = {
+  hankeData: null, // Null or write default HankeData
+};
 
 const projectsSlice = createSlice({
-  name: 'projects',
-  initialState: {},
+  name: 'hankeForm',
+  initialState,
   reducers: {
-    formData,
+    updateFormData,
   },
 });
 

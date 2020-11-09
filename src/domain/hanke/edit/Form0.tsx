@@ -25,7 +25,7 @@ const Form0: React.FC<PropTypes> = (props) => {
     ];
   }
 
-  const [ytkChecked, setYtkChecked] = useState(formData.YTKHanke);
+  const [ytkChecked, setYtkChecked] = useState(formData?.YTKHanke);
   // eslint-disable-next-line
   console.log(formData);
   return (
@@ -63,7 +63,7 @@ const Form0: React.FC<PropTypes> = (props) => {
           label={t('hankeForm:perustiedotForm:hankeenNimiLabel')}
           control={control}
           rules={{ required: true }}
-          defaultValue={formData.hankeenNimi}
+          defaultValue={formData ? formData.hankeenNimi : ''}
           invalid={!!errors.hankeenNimi}
           errorMsg={t('hankeForm:insertFieldError')}
         />
@@ -80,7 +80,7 @@ const Form0: React.FC<PropTypes> = (props) => {
             rules={{ required: true }}
             invalid={!!errors.endDate}
             errorMsg={t('hankeForm:insertFieldError')}
-            defaultValue={formData.endDate}
+            defaultValue={formData ? formData.endDate : ''}
           />
         </div>
       </div>
@@ -90,7 +90,7 @@ const Form0: React.FC<PropTypes> = (props) => {
           id="hankeenVaihe"
           control={control}
           options={getHankeenVaiheOptions()}
-          defaultValue={formData.hankeenVaihe}
+          // defaultValue={formData ? formData.hankeenVaihe : undefined}
           label={t('hankeForm:perustiedotForm:hankeenVaihe')}
         />
       </div>

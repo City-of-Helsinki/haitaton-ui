@@ -1,0 +1,128 @@
+[1mdiff --git a/src/domain/hanke/edit/Form.tsx b/src/domain/hanke/edit/Form.tsx[m
+[1mindex 2bb5308..451923f 100644[m
+[1m--- a/src/domain/hanke/edit/Form.tsx[m
+[1m+++ b/src/domain/hanke/edit/Form.tsx[m
+[36m@@ -53,26 +53,21 @@[m [mconst FormComponent: React.FC = (props) => {[m
+     shouldFocusError: true,[m
+     shouldUnregister: true,[m
+   });[m
+[31m-  // eslint-disable-next-line[m
+[32m+[m
+   function combineState(data: Inputs) {[m
+     return { ...formData, ...data };[m
+   }[m
+   function goBack(view: number) {[m
+     const values = combineState(getValues());[m
+[31m-    dispatch(actions.formData(values));[m
+[32m+[m[32m    dispatch(actions.updateFormData(values));[m
+     changeWizardView(viewStatusVar);[m
+     setviewStatusVar(view);[m
+   }[m
+[31m-  // eslint-disable-next-line[m
+   const onSubmit = (values: Inputs) => {[m
+[31m-    // action(data);[m
+     const data = combineState(values);[m
+[31m-    dispatch(actions.formData(data));[m
+[31m-    // action(data);[m
+[31m-    // eslint-disable-next-line[m
+[31m-    console.log('data', data);[m
+[32m+[m[32m    dispatch(actions.updateFormData(data));[m
+[32m+[m
+     changeWizardView(viewStatusVar);[m
+[31m-    // eslint-disable-next-line[m
+   };[m
+   // eslint-disable-next-line[m
+   console.log('formData', formData);[m
+[1mdiff --git a/src/domain/hanke/edit/Form0.tsx b/src/domain/hanke/edit/Form0.tsx[m
+[1mindex a79dfe5..9e7e962 100644[m
+[1m--- a/src/domain/hanke/edit/Form0.tsx[m
+[1m+++ b/src/domain/hanke/edit/Form0.tsx[m
+[36m@@ -25,7 +25,7 @@[m [mconst Form0: React.FC<PropTypes> = (props) => {[m
+     ];[m
+   }[m
+ [m
+[31m-  const [ytkChecked, setYtkChecked] = useState(formData.YTKHanke);[m
+[32m+[m[32m  const [ytkChecked, setYtkChecked] = useState(formData?.YTKHanke);[m
+   // eslint-disable-next-line[m
+   console.log(formData);[m
+   return ([m
+[36m@@ -63,7 +63,7 @@[m [mconst Form0: React.FC<PropTypes> = (props) => {[m
+           label={t('hankeForm:perustiedotForm:hankeenNimiLabel')}[m
+           control={control}[m
+           rules={{ required: true }}[m
+[31m-          defaultValue={formData.hankeenNimi}[m
+[32m+[m[32m          defaultValue={formData ? formData.hankeenNimi : ''}[m
+           invalid={!!errors.hankeenNimi}[m
+           errorMsg={t('hankeForm:insertFieldError')}[m
+         />[m
+[36m@@ -80,7 +80,7 @@[m [mconst Form0: React.FC<PropTypes> = (props) => {[m
+             rules={{ required: true }}[m
+             invalid={!!errors.endDate}[m
+             errorMsg={t('hankeForm:insertFieldError')}[m
+[31m-            defaultValue={formData.endDate}[m
+[32m+[m[32m            defaultValue={formData ? formData.endDate : ''}[m
+           />[m
+         </div>[m
+       </div>[m
+[36m@@ -90,7 +90,7 @@[m [mconst Form0: React.FC<PropTypes> = (props) => {[m
+           id="hankeenVaihe"[m
+           control={control}[m
+           options={getHankeenVaiheOptions()}[m
+[31m-          defaultValue={formData.hankeenVaihe}[m
+[32m+[m[32m          // defaultValue={formData ? formData.hankeenVaihe : undefined}[m
+           label={t('hankeForm:perustiedotForm:hankeenVaihe')}[m
+         />[m
+       </div>[m
+[1mdiff --git a/src/domain/hanke/edit/reducer.ts b/src/domain/hanke/edit/reducer.ts[m
+[1mindex 8a21f72..14418d4 100644[m
+[1m--- a/src/domain/hanke/edit/reducer.ts[m
+[1m+++ b/src/domain/hanke/edit/reducer.ts[m
+[36m@@ -1,7 +1,6 @@[m
+ import { PayloadAction, CaseReducer, createSlice } from '@reduxjs/toolkit';[m
+[31m-// eslint-disable-next-line[m
+[31m-type State = any;[m
+[31m-type Inputs = {[m
+[32m+[m
+[32m+[m[32mtype HankeData = {[m
+   hankeenTunnus: string;[m
+   YTKHanke: boolean;[m
+   hankeenNimi: string;[m
+[36m@@ -13,13 +12,24 @@[m [mtype Inputs = {[m
+   arvioijaOsasto: string;[m
+   example1: string;[m
+ };[m
+[31m-const formData: CaseReducer<State, PayloadAction<Inputs>> = (state, action) => action.payload;[m
+[32m+[m
+[32m+[m[32mtype State = {[m
+[32m+[m[32m  hankeData: HankeData | null;[m
+[32m+[m[32m};[m
+[32m+[m
+[32m+[m[32mconst updateFormData: CaseReducer<State, PayloadAction<HankeData>> = (state, action) => {[m
+[32m+[m[32m  state.hankeData = action.payload;[m
+[32m+[m[32m};[m
+[32m+[m
+[32m+[m[32mconst initialState: State = {[m
+[32m+[m[32m  hankeData: null, // Null or write default HankeData[m
+[32m+[m[32m};[m
+ [m
+ const projectsSlice = createSlice({[m
+[31m-  name: 'projects',[m
+[31m-  initialState: {},[m
+[32m+[m[32m  name: 'hankeForm',[m
+[32m+[m[32m  initialState,[m
+   reducers: {[m
+[31m-    formData,[m
+[32m+[m[32m    updateFormData,[m
+   },[m
+ });[m
+ [m
+[1mdiff --git a/src/domain/hanke/edit/selectors.ts b/src/domain/hanke/edit/selectors.ts[m
+[1mindex 5bdc8f8..3968b23 100644[m
+[1m--- a/src/domain/hanke/edit/selectors.ts[m
+[1m+++ b/src/domain/hanke/edit/selectors.ts[m
+[36m@@ -1,4 +1,3 @@[m
+ import { RootState } from '../../../common/components/app/store';[m
+ [m
+[31m-// eslint-disable-next-line[m
+[31m-export const getFormData = (state: RootState): any => state.hankeForm;[m
+[32m+[m[32mexport const getFormData = (state: RootState) => state.hankeForm.hankeData;[m

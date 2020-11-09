@@ -53,26 +53,21 @@ const FormComponent: React.FC = (props) => {
     shouldFocusError: true,
     shouldUnregister: true,
   });
-  // eslint-disable-next-line
+
   function combineState(data: Inputs) {
     return { ...formData, ...data };
   }
   function goBack(view: number) {
     const values = combineState(getValues());
-    dispatch(actions.formData(values));
+    dispatch(actions.updateFormData(values));
     changeWizardView(viewStatusVar);
     setviewStatusVar(view);
   }
-  // eslint-disable-next-line
   const onSubmit = (values: Inputs) => {
-    // action(data);
     const data = combineState(values);
-    dispatch(actions.formData(data));
-    // action(data);
-    // eslint-disable-next-line
-    console.log('data', data);
+    dispatch(actions.updateFormData(data));
+
     changeWizardView(viewStatusVar);
-    // eslint-disable-next-line
   };
   // eslint-disable-next-line
   console.log('formData', formData);
