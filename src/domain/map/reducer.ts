@@ -95,7 +95,6 @@ const getRepoDetails = async (orc: string, repo: string) => {
 
 export const fetchIssuesCount = (org: string, repo: string): AppThunk => async (dispatch) => {
   try {
-    console.log("'foo");
     const repoDetails = await getRepoDetails(org, repo);
     dispatch(actions.success(repoDetails));
   } catch (err) {
