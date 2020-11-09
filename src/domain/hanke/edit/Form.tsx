@@ -4,6 +4,7 @@ import { Button } from 'hds-react';
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { HankeData } from './types';
 import { getFormData } from './selectors';
 
 import { actions } from './reducer';
@@ -18,23 +19,11 @@ import Form4 from './Form4';
 
 import './Form.styles.scss';
 
-type Inputs = {
-  hankeenTunnus: string;
-  YTKHanke: boolean;
-  hankeenNimi: string;
-  hankeenVaihe: string;
-  endDate: string;
-  omistajaOrganisaatio: string;
-  omistajaOsasto: string;
-  arvioijaOrganisaatio: string;
-  arvioijaOsasto: string;
-  example1: string;
-};
 const FormComponent: React.FC = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const formData = useSelector(getFormData);
-  const dummyData = [
+  const wizardStateData = [
     { label: t('hankeForm:perustiedotForm:header'), view: 0 },
     { label: t('hankeForm:hankkeenAlueForm:header'), view: 1 },
     { label: t('hankeForm:hankkeenYhteystiedotForm:header'), view: 2 },
@@ -44,7 +33,7 @@ const FormComponent: React.FC = (props) => {
   const [WizardView, changeWizardView] = useState(0);
   const [viewStatusVar, setviewStatusVar] = useState(0);
 
-  const { handleSubmit, errors, control, register, getValues } = useForm<Inputs>({
+  const { handleSubmit, errors, control, register, getValues } = useForm<HankeData>({
     mode: 'all',
     reValidateMode: 'onBlur',
     resolver: undefined,
@@ -54,7 +43,7 @@ const FormComponent: React.FC = (props) => {
     shouldUnregister: true,
   });
 
-  function combineState(data: Inputs) {
+  function combineState(data: HankeData) {
     return { ...formData, ...data };
   }
   function goBack(view: number) {
@@ -63,19 +52,17 @@ const FormComponent: React.FC = (props) => {
     changeWizardView(viewStatusVar);
     setviewStatusVar(view);
   }
-  const onSubmit = (values: Inputs) => {
+  const onSubmit = (values: HankeData) => {
     const data = combineState(values);
     dispatch(actions.updateFormData(data));
 
     changeWizardView(viewStatusVar);
   };
-  // eslint-disable-next-line
-  console.log('formData', formData);
   return (
     <div className="hankeForm">
       <h1>{t('hankeForm:pageHeader')}</h1>
       <div className="hankeForm__formWpr">
-        <Indicator dataList={dummyData} view={WizardView} />
+        <Indicator dataList={wizardStateData} view={WizardView} />
         <div className="hankeForm__formWprRight">
           <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
             {WizardView === 0 && <Form0 errors={errors} control={control} register={register()} />}

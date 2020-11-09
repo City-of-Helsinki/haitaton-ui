@@ -8,7 +8,6 @@ import { getFormData } from './selectors';
 
 import Dropdown from '../../../common/components/dropdown/Dropdown';
 import TextInput from '../../../common/components/textInput/TextInput';
-// import Checkbox from '../../../common/components/checkbox/Checkbox';
 
 import PropTypes from './PropTypes';
 
@@ -16,18 +15,21 @@ const Form0: React.FC<PropTypes> = (props) => {
   const { t } = useTranslation();
   const { control, errors, register } = props;
   const formData = useSelector(getFormData);
-  // const { setValue } = useForm<Inputs>();
 
   function getHankeenVaiheOptions() {
     return [
-      { value: 'Suunnittelussa', label: 'Suunnittelussa' },
-      { value: 'Ohjelmointi', label: 'Ohjelmointi vaiheessa' },
+      {
+        value: 'Suunni',
+        label: t('hankeForm:perustiedotForm:hankeenVaiheDropDown:suunnittelussa'),
+      },
+      {
+        value: 'Ohjelm',
+        label: t('hankeForm:perustiedotForm:hankeenVaiheDropDown:ohjelmointiVaiheessa'),
+      },
     ];
   }
 
   const [ytkChecked, setYtkChecked] = useState(formData?.YTKHanke);
-  // eslint-disable-next-line
-  console.log(formData);
   return (
     <div className="form0">
       <h2>{t('hankeForm:perustiedotForm:header')}</h2>
@@ -90,7 +92,7 @@ const Form0: React.FC<PropTypes> = (props) => {
           id="hankeenVaihe"
           control={control}
           options={getHankeenVaiheOptions()}
-          // defaultValue={formData ? formData.hankeenVaihe : undefined}
+          defaultValue={formData ? formData.hankeenVaihe : undefined}
           label={t('hankeForm:perustiedotForm:hankeenVaihe')}
         />
       </div>

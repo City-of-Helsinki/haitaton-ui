@@ -55,6 +55,10 @@
       "hankeenNimiLabel": "Hankeen Nimi",
       "HankkeenAlkupaivaLabel": "Hankkeen alkupäivä",
       "HankkeenLoppupaivaLabel": "Hankkeen loppupäivä",
+      "hankeenVaiheDropDown": {
+        "suunnittelussa": "Suunnittelussa",
+        "ohjelmointiVaiheessa": "Ohjelmointi vaiheessa"
+      },
       "hankeenVaihe": "Hankeen Vaihe"
     },
     "hankkeenAlueForm": {

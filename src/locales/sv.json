@@ -43,35 +43,39 @@
     }
   },
   "hankeForm": {
-    "pageHeader": "Hanke",
-    "previousButton": "Edellinen",
-    "nextButton": "Seuraava",
-    "insertFieldError": "Syötä kenttä",
+    "pageHeader": "SV:Hanke",
+    "previousButton": "SV:Edellinen",
+    "nextButton": "SV:Seuraava",
+    "insertFieldError": "SV:Syötä kenttä",
     "perustiedotForm": {
-      "header": "Hankkeen perustiedot",
-      "hankeenTunnusLabel": "Hankeen Tunnus",
-      "ytkHankeHeader": "YTK-hanke",
-      "hankeOnYtkHankeLabel": "Hanke on YTK-hanke",
-      "hankeenNimiLabel": "Hankeen Nimi",
-      "HankkeenAlkupaivaLabel": "Hankkeen alkupäivä",
-      "HankkeenLoppupaivaLabel": "Hankkeen loppupäivä",
-      "hankeenVaihe": "Hankeen Vaihe"
+      "header": "SV:Hankkeen perustiedot",
+      "hankeenTunnusLabel": "SV:Hankeen Tunnus",
+      "ytkHankeHeader": "SV:YTK-hanke",
+      "hankeOnYtkHankeLabel": "SV:Hanke on YTK-hanke",
+      "hankeenNimiLabel": "SV:Hankeen Nimi",
+      "HankkeenAlkupaivaLabel": "SV:Hankkeen alkupäivä",
+      "HankkeenLoppupaivaLabel": "SV:Hankkeen loppupäivä",
+      "hankeenVaiheDropDown": {
+        "suunnittelussa": "SV:Suunnittelussa",
+        "ohjelmointiVaiheessa": "SV:Ohjelmointi vaiheessa"
+      },
+      "hankeenVaihe": "SV:Hankeen Vaihe"
     },
     "hankkeenAlueForm": {
-      "header": "Hankkeen alue"
+      "header": "SV:Hankkeen alue"
     },
     "hankkeenYhteystiedotForm": {
-      "header": "Hankkeen yhteystiedot",
-      "omistajaorganisaatioLabel": "Omistajaorganisaatio",
-      "omistajaosastoLabel": "Omistajaosasto",
-      "omistajaNimiLabel": "Omistaja nimi",
-      "arvioijaosastoLabel": "Arvioijaosasto"
+      "header": "SV:Hankkeen yhteystiedot",
+      "omistajaorganisaatioLabel": "SV:Omistajaorganisaatio",
+      "omistajaosastoLabel": "SV:Omistajaosasto",
+      "omistajaNimiLabel": "SV:Omistaja nimi",
+      "arvioijaosastoLabel": "SV:Arvioijaosasto"
     },
     "tyomaanTiedotForm": {
-      "header": "Työmaan tiedot"
+      "header": "SV:Työmaan tiedot"
     },
     "hankkeenHaitatForm": {
-      "header": "Hankkeen haitat"
+      "header": "SV:Hankkeen haitat"
     }
   },
   "map": {
