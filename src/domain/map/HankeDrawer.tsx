@@ -15,7 +15,7 @@ import { useMapDataLayers } from './hooks/useMapDataLayers';
 import { MapDataLayerKey } from './types';
 
 const HankeDrawer: React.FC = () => {
-  const { dataLayers, toggleDataLayer, handleFetch, status } = useMapDataLayers();
+  const { dataLayers, toggleDataLayer, handleSaveGeometry, status } = useMapDataLayers();
 
   const [drawSource] = useState<VectorSource>(
     new VectorSource({
@@ -44,7 +44,7 @@ const HankeDrawer: React.FC = () => {
     <div className={styles.mapContainer}>
       <div style={{ position: 'relative', background: 'pink', zIndex: 100 }}>
         <h1>test {status}</h1>
-        <button onClick={() => handleFetch()} type="button">
+        <button onClick={() => handleSaveGeometry()} type="button">
           Async action
         </button>
       </div>

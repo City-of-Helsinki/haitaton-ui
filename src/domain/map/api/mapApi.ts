@@ -5,8 +5,10 @@ interface MyData {
   name: string;
 }
 
-export const saveGeometryData = createAsyncThunk('map/saveGeometry', async (data: string) => {
-  const response = await api.get(`/api/projects/1`);
-  // Inferred return type: Promise<MyData>
+// const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+export const saveGeometryData = createAsyncThunk('map/saveGeometry', async (userId: number) => {
+  const response = await api.get(`/api/projects/${userId}`);
+
   return (await response.data) as MyData;
 });

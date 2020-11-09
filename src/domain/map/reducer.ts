@@ -1,11 +1,11 @@
 import { PayloadAction, CaseReducer, createSlice } from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-cycle
-import { AppThunk } from '../../common/components/app/store';
+// import { AppThunk } from '../../common/components/app/store';
 import projectsJSON from '../../mocks/projects.json';
 import intersectJSON from '../../mocks/intersect.json';
 import { HankeGeoJSON, CommonGeoJSON } from '../../common/types/hanke';
 import { MapDataLayerKey, MapDatalayerState } from './types';
-
+import { saveGeometryData } from './api/mapApi';
 import { DATALAYERS } from './constants';
 
 type State = {
@@ -28,14 +28,6 @@ const selectProject: CaseReducer<State, PayloadAction<string>> = (state, action)
 
 const toggleLayer: CaseReducer<State, PayloadAction<MapDataLayerKey>> = (state, action) => {
   state.dataLayers[action.payload].visible = !state.dataLayers[action.payload].visible;
-};
-
-const success: CaseReducer<State, PayloadAction<string>> = (state, action) => {
-  state.status = action.payload;
-};
-
-const error: CaseReducer<State, PayloadAction<string>> = (state, action) => {
-  state.error = action.payload;
 };
 
 const buildDatalayerState = (key: MapDataLayerKey, data: CommonGeoJSON): MapDatalayerState => ({
@@ -76,28 +68,25 @@ const mapSlice = createSlice({
   reducers: {
     selectProject,
     toggleLayer,
-    success,
-    error,
+  },
+  extraReducers: (builder) => {
+    builder.addCase(saveGeometryData.fulfilled, (state, { payload }) => {
+      console.log({ payload });
+      state.status = 'ok';
+    });
+    builder.addCase(saveGeometryData.rejected, (state, action) => {
+      state.status = 'error';
+      console.log(action);
+      /* if (action.payload) {
+        // Since we passed in `MyKnownError` to `rejectValue` in `updateUser`, the type information will be available here.
+        state.error = action.payload.errorMessage;
+      } else {
+        state.error = action.error;
+      } */
+    });
   },
 });
 
-export const { actions } = mapSlice;
+export const { actions, caseReducers } = mapSlice;
 
 export default mapSlice.reducer;
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-// eslint-disable-next-line
-const getRepoDetails = async (orc: string, repo: string) => {
-  await sleep(500);
-  return `${orc}-${repo}`;
-};
-
-export const fetchIssuesCount = (org: string, repo: string): AppThunk => async (dispatch) => {
-  try {
-    const repoDetails = await getRepoDetails(org, repo);
-    dispatch(actions.success(repoDetails));
-  } catch (err) {
-    dispatch(actions.error(err.toString()));
-  }
-};
