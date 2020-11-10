@@ -27,8 +27,15 @@ const DropdownComp: React.FC<PropTypes> = (props) => {
       id={id}
       control={control}
       defaultValue={defaultValue}
-      render={({ onChange }) => (
-        <Dropdown options={options} defaultValue={defaultValue} label={label} onChange={onChange} />
+      render={({ onChange, value }) => (
+        <Dropdown
+          options={options}
+          defaultValue={defaultValue}
+          selectedOption={options.find((o) => o.value === value)}
+          label={label}
+          // eslint-disable-next-line
+          onChange={(option: any) => onChange(option.value)}
+        />
       )}
     />
   );

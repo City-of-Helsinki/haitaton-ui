@@ -16,18 +16,16 @@ const Form0: React.FC<PropTypes> = (props) => {
   const { control, errors, register } = props;
   const formData = useSelector(getFormData);
 
-  function getHankeenVaiheOptions() {
-    return [
-      {
-        value: 'Suunni',
-        label: t('hankeForm:perustiedotForm:hankeenVaiheDropDown:suunnittelussa'),
-      },
-      {
-        value: 'Ohjelm',
-        label: t('hankeForm:perustiedotForm:hankeenVaiheDropDown:ohjelmointiVaiheessa'),
-      },
-    ];
-  }
+  const getHankeenVaiheOptions = [
+    {
+      value: 'Suunni',
+      label: t('hankeForm:perustiedotForm:hankeenVaiheDropDown:suunnittelussa'),
+    },
+    {
+      value: 'Ohjelm',
+      label: t('hankeForm:perustiedotForm:hankeenVaiheDropDown:ohjelmointiVaiheessa'),
+    },
+  ];
 
   const [ytkChecked, setYtkChecked] = useState(formData?.YTKHanke);
   return (
@@ -91,8 +89,8 @@ const Form0: React.FC<PropTypes> = (props) => {
           name="hankeenVaihe"
           id="hankeenVaihe"
           control={control}
-          options={getHankeenVaiheOptions()}
-          defaultValue={formData ? formData.hankeenVaihe : undefined}
+          options={getHankeenVaiheOptions}
+          defaultValue={formData?.hankeenVaihe ? formData.hankeenVaihe : null}
           label={t('hankeForm:perustiedotForm:hankeenVaihe')}
         />
       </div>
