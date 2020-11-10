@@ -68,9 +68,19 @@ const Form0: React.FC<PropTypes> = (props) => {
           errorMsg={t('hankeForm:insertFieldError')}
         />
       </div>
-
       <div className="calendaraWpr formWpr">
-        <div className="left">{t('hankeForm:perustiedotForm:HankkeenAlkupaivaLabel')}</div>
+        <div className="left">
+          <TextInput
+            name="StartdDate"
+            id="StartdDate"
+            label={t('hankeForm:perustiedotForm:HankkeenAlkupaivaLabel')}
+            control={control}
+            rules={{ required: true }}
+            invalid={!!errors.StartdDate}
+            errorMsg={t('hankeForm:insertFieldError')}
+            defaultValue={formData ? formData.StartdDate : ''}
+          />
+        </div>
         <div className="right">
           <TextInput
             name="endDate"
