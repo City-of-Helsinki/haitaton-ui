@@ -1,19 +1,20 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../common/utils/api';
-// import { HankeGeometry } from './types';
+import { HankeGeometryApiResponseData, HankeGeometryApiRequestData } from './types';
 
-type SaveGeometryArgs = {
+type SaveGeometryArguments = {
   hankeId: string;
-  geometryData: any;
+  geometryData: HankeGeometryApiRequestData;
 };
 
 export const saveGeometryData = createAsyncThunk(
   'map/saveGeometry',
-  async ({ hankeId, geometryData }: SaveGeometryArgs) => {
-    const response = await api.post(`/api/projects/${hankeId}`, geometryData);
+  async ({ hankeId, geometryData }: SaveGeometryArguments) => {
+    const response = await api.post(`/hankkeet/${hankeId}/geometriat`, geometryData);
 
-    console.log({ geometryData });
+    // eslint-disable-next-line
+    console.log({ geometryData, response });
 
-    return (await response.data) as any;
+    return response.data as HankeGeometryApiResponseData;
   }
 );

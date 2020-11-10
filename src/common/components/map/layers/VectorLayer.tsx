@@ -1,7 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { Vector as VectorSource } from 'ol/source';
 import OLVectorLayer from 'ol/layer/Vector';
-
 import MapContext from '../MapContext';
 
 type Props = {

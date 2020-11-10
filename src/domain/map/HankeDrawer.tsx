@@ -14,14 +14,22 @@ import styles from './Map.module.scss';
 import { useMapDataLayers } from './hooks/useMapDataLayers';
 import { MapDataLayerKey } from './types';
 
+const projection = 'EPSG:3857';
+
 const HankeDrawer: React.FC = () => {
-  const { dataLayers, toggleDataLayer, handleSaveGeometry, status } = useMapDataLayers();
+  const {
+    dataLayers,
+    toggleDataLayer,
+    handleSaveGeometry,
+    // handleUpdateGeometryState,
+    status,
+  } = useMapDataLayers();
 
   const [drawSource] = useState<VectorSource>(
     new VectorSource({
       format: new GeoJSON({
-        dataProjection: 'EPSG:3857',
-        featureProjection: 'EPSG:3857',
+        dataProjection: projection,
+        featureProjection: projection,
       }),
     })
   );
@@ -39,6 +47,14 @@ const HankeDrawer: React.FC = () => {
       setShowKantakartta(true);
     }
   };
+
+  drawSource.on('addfeature', () => {
+    const features = drawSource.getFeatures();
+    const format = new GeoJSON({ featureProjection: projection });
+    const json = format.writeFeatures(features);
+    // eslint-disable-next-line no-console
+    console.log({ features, json });
+  });
 
   return (
     <div className={styles.mapContainer}>

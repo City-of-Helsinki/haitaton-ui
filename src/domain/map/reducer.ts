@@ -1,17 +1,18 @@
 import { PayloadAction, CaseReducer, createSlice } from '@reduxjs/toolkit';
 import projectsJSON from '../../mocks/projects.json';
 import intersectJSON from '../../mocks/intersect.json';
-import { HankeGeoJSON, CommonGeoJSON } from '../../common/types/hanke';
+import { CommonGeoJSON, HankeGeoJSON } from '../../common/types/hanke';
 import { saveGeometryData } from './thunks';
 import { MapDataLayerKey, MapDatalayerState } from './types';
 import { DATALAYERS } from './constants';
 
 type State = {
-  projects: HankeGeoJSON;
+  projects: CommonGeoJSON;
   status: string;
   error: string;
   visibleLayers: string[];
   selectedProject: null | string;
+  geometryData: null | HankeGeoJSON;
   dataLayers: {
     [DATALAYERS.RESTAURANTS]: MapDatalayerState;
     [DATALAYERS.ROADS]: MapDatalayerState;
@@ -28,6 +29,10 @@ const toggleLayer: CaseReducer<State, PayloadAction<MapDataLayerKey>> = (state, 
   state.dataLayers[action.payload].visible = !state.dataLayers[action.payload].visible;
 };
 
+const updateGeometry: CaseReducer<State, PayloadAction<HankeGeoJSON>> = (state, action) => {
+  state.geometryData = action.payload;
+};
+
 const buildDatalayerState = (key: MapDataLayerKey, data: CommonGeoJSON): MapDatalayerState => ({
   key,
   data,
@@ -35,10 +40,11 @@ const buildDatalayerState = (key: MapDataLayerKey, data: CommonGeoJSON): MapData
 });
 
 const initialState: State = {
-  projects: projectsJSON.louhiProjects as HankeGeoJSON,
+  projects: projectsJSON.louhiProjects as CommonGeoJSON,
   status: '',
   error: '',
   selectedProject: null,
+  geometryData: null,
   visibleLayers: [],
   dataLayers: {
     [DATALAYERS.RESTAURANTS]: buildDatalayerState(
@@ -65,6 +71,7 @@ const mapSlice = createSlice({
   initialState,
   reducers: {
     selectProject,
+    updateGeometry,
     toggleLayer,
   },
   extraReducers: (builder) => {
@@ -73,13 +80,6 @@ const mapSlice = createSlice({
     });
     builder.addCase(saveGeometryData.rejected, (state, action) => {
       state.status = 'error';
-      console.log({ action });
-      /* if (action.payload) {
-        // Since we passed in `MyKnownError` to `rejectValue` in `updateUser`, the type information will be available here.
-        state.error = action.payload.errorMessage;
-      } else {
-        state.error = action.error;
-      } */
     });
   },
 });
