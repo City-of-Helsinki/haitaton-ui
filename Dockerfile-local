@@ -4,7 +4,7 @@ WORKDIR /builder
 RUN yarn && yarn cache clean --force
 RUN yarn build
 
-FROM registry.redhat.io/rhel8/nginx-116
+FROM nginx:stable
 EXPOSE 8000
 COPY --from=staticbuilder ./builder/build /usr/share/nginx/html
 COPY --from=staticbuilder ./builder/nginx/nginx.conf /etc/nginx/nginx.conf
