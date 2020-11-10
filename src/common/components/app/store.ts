@@ -1,11 +1,13 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import projectsReducer from '../../../domain/hanke/list/reducer';
+import hankeFormReducer from '../../../domain/hanke/edit/reducer';
 import mapReducer from '../../../domain/map/reducer';
 
 const rootReducer = combineReducers({
   projects: projectsReducer,
   map: mapReducer,
+  hankeForm: hankeFormReducer,
 });
 
 const store = configureStore({

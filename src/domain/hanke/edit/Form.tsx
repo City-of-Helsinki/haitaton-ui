@@ -1,25 +1,39 @@
-import React from 'react';
-import { RadioButton, Button } from 'hds-react';
-import { useForm, Controller } from 'react-hook-form';
-import Dropdown from '../../../common/components/dropdown/Dropdown';
-import TextInput from '../../../common/components/textInput/TextInput';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Button } from 'hds-react';
+import { useForm } from 'react-hook-form';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { HankeData } from './types';
+import { getFormData } from './selectors';
+
+import { actions } from './reducer';
+
+import Indicator from './indicator';
+
+import Form0 from './Form0';
+import Form1 from './Form1';
+import Form2 from './Form2';
+import Form3 from './Form3';
+import Form4 from './Form4';
+
 import './Form.styles.scss';
 
-type Inputs = {
-  hankeenNimi: string;
-  hankeenVaihe: string;
-  hankeOnJulkinen: string;
-  startDate: string;
-  endDate: string;
-  suunnitteluVaihe: string;
-  omistajaOrganisaatio: string;
-  omistajaOsasto: string;
-  arvioijaOrganisaatio: string;
-  arvioijaOsasto: string;
-};
-
 const FormComponent: React.FC = (props) => {
-  const { handleSubmit, errors, control, getValues } = useForm<Inputs>({
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const formData = useSelector(getFormData);
+  const wizardStateData = [
+    { label: t('hankeForm:perustiedotForm:header'), view: 0 },
+    { label: t('hankeForm:hankkeenAlueForm:header'), view: 1 },
+    { label: t('hankeForm:hankkeenYhteystiedotForm:header'), view: 2 },
+    { label: t('hankeForm:tyomaanTiedotForm:header'), view: 3 },
+    { label: t('hankeForm:hankkeenHaitatForm:header'), view: 4 },
+  ];
+  const [WizardView, changeWizardView] = useState(0);
+  const [viewStatusVar, setviewStatusVar] = useState(0);
+
+  const { handleSubmit, errors, control, register, getValues } = useForm<HankeData>({
     mode: 'all',
     reValidateMode: 'onBlur',
     resolver: undefined,
@@ -29,158 +43,49 @@ const FormComponent: React.FC = (props) => {
     shouldUnregister: true,
   });
 
-  const onSubmit = (data: Inputs) => {
-    // eslint-disable-next-line
-    console.log('data', data);
-    // eslint-disable-next-line
-    console.log('form values', getValues());
+  function combineState(data: HankeData) {
+    return { ...formData, ...data };
+  }
+  function goBack(view: number) {
+    const values = combineState(getValues());
+    dispatch(actions.updateFormData(values));
+    changeWizardView(viewStatusVar);
+    setviewStatusVar(view);
+  }
+  const onSubmit = (values: HankeData) => {
+    const data = combineState(values);
+    dispatch(actions.updateFormData(data));
+
+    changeWizardView(viewStatusVar);
   };
-
-  function getHankeenVaiheOptions() {
-    return [
-      { value: 'Suunnittelussa', label: 'Suunnittelussa' },
-      { value: 'Ohjelmointi', label: 'Ohjelmointi vaiheessa' },
-    ];
-  }
-  function getSuunnitteluVaiheOptions() {
-    return [
-      { value: 'Katusuunnittelu', label: 'Katusuunnittelu' },
-      { value: 'Katusuunnittelu1', label: 'Katusuunnittelu2' },
-    ];
-  }
-
   return (
-    <form name="hanke" onSubmit={handleSubmit(onSubmit)} className="hankeForm">
-      <h2>Hankkeen Alue</h2>
-
-      <h2>Hankkeen Perustiedot</h2>
-      <div className="dataWpr">
-        <div className="left">
-          <h3>Haitaton tunnus</h3>
-          <p>JUH845</p>
-        </div>
-        <div className="right">
-          <h3>Hankkeen julkisuus</h3>
-
-          <Controller
-            as={RadioButton}
-            name="hankeOnJulkinen"
-            id="hankeOnJulkinen"
-            control={control}
-            label="hanke on julkinen"
-            rules={{ required: true }}
-            defaultValue="hankeOnJulkinen"
-            checked
-          />
-        </div>
-      </div>
-      <div className="formWpr">
-        <TextInput
-          name="hankeenNimi"
-          id="hankeenNimi"
-          label="Hankeen Nimi *"
-          control={control}
-          rules={{ required: true }}
-          defaultValue=""
-          invalid={!!errors.hankeenNimi}
-          errorMsg="Syötä kenttä"
-        />
-      </div>
-
-      <div className="calendaraWpr formWpr">
-        <div className="left">
-          <TextInput
-            name="startDate"
-            id="startDate"
-            label="Hankkeen aloituspäivä *"
-            control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            invalid={!!errors.startDate}
-            errorMsg="Syötä kenttä"
-          />
-        </div>
-        <div className="right">
-          <TextInput
-            name="endDate"
-            id="endDate"
-            label="Hankkeen loppupäivä *"
-            control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            invalid={!!errors.endDate}
-            errorMsg="Syötä kenttä"
-          />
+    <div className="hankeForm">
+      <h1>{t('hankeForm:pageHeader')}</h1>
+      <div className="hankeForm__formWpr">
+        <Indicator dataList={wizardStateData} view={WizardView} />
+        <div className="hankeForm__formWprRight">
+          <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
+            {WizardView === 0 && <Form0 errors={errors} control={control} register={register()} />}
+            {WizardView === 1 && <Form1 />}
+            {WizardView === 2 && <Form2 errors={errors} control={control} />}
+            {WizardView === 3 && <Form3 />}
+            {WizardView === 4 && <Form4 />}
+            <div className="btnWpr">
+              {WizardView > 0 && (
+                <Button type="submit" onClick={() => goBack(WizardView - 1)}>
+                  {t('hankeForm:previousButton')}
+                </Button>
+              )}
+              {WizardView < 4 && (
+                <Button type="submit" onClick={() => setviewStatusVar(WizardView + 1)}>
+                  {t('hankeForm:nextButton')}{' '}
+                </Button>
+              )}
+            </div>
+          </form>
         </div>
       </div>
-      <div className="formWpr">
-        <Dropdown
-          name="hankeenVaihe"
-          id="hankeenVaihe"
-          control={control}
-          options={getHankeenVaiheOptions()}
-          defaultValue={getHankeenVaiheOptions()[0]}
-          label="Hankeen Vaihe"
-        />
-      </div>
-      <div className="formWpr">
-        <Dropdown
-          name="suunnitteluVaihe"
-          id="suunnitteluVaihe"
-          control={control}
-          options={getSuunnitteluVaiheOptions()}
-          defaultValue={getSuunnitteluVaiheOptions()[0]}
-          label="Suunnitteluvaihe"
-        />
-      </div>
-      <div className="formWprColumns">
-        <div className="left">
-          <TextInput
-            name="omistajaOrganisaatio"
-            id="omistajaOrganisaatio"
-            label="Omistajaorganisaatio *"
-            control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            invalid={!!errors.omistajaOrganisaatio}
-            errorMsg="Syötä kenttä"
-          />
-        </div>
-        <div className="right">
-          <TextInput
-            name="omistajaOsasto"
-            id="omistajaOsasto"
-            label="omistajaosasto"
-            control={control}
-            defaultValue=""
-          />
-        </div>
-      </div>
-      <div className="formWprColumns">
-        <div className="left">
-          <TextInput
-            name="arvioijaOrganisaatio"
-            id="arvioijaOrganisaatio"
-            label="Omistajaorganisaatio *"
-            control={control}
-            rules={{ required: true }}
-            defaultValue=""
-            invalid={!!errors.arvioijaOrganisaatio}
-            errorMsg="Syötä kenttä"
-          />
-        </div>
-        <div className="right">
-          <TextInput
-            name="arvioijaOsasto"
-            id="arvioijaOsasto"
-            label="Arvioijaosasto"
-            control={control}
-            defaultValue=""
-          />
-        </div>
-      </div>
-      <Button type="submit">Submit</Button>
-    </form>
+    </div>
   );
 };
 export default FormComponent;

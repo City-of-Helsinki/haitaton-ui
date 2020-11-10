@@ -8,13 +8,14 @@ type PropTypes = {
   control: Control;
   // eslint-disable-next-line
   rules?: any;
-  defaultValue: string;
+  defaultValue?: string;
   label: string;
   invalid?: boolean;
   errorMsg?: string;
+  disabled?: boolean;
 };
 const TextInputComp: React.FC<PropTypes> = (props) => {
-  const { name, id, control, rules, defaultValue, label, invalid, errorMsg } = props;
+  const { name, id, control, rules, defaultValue, label, invalid, errorMsg, disabled } = props;
   return (
     <>
       <Controller
@@ -23,7 +24,7 @@ const TextInputComp: React.FC<PropTypes> = (props) => {
         control={control}
         rules={rules}
         defaultValue={defaultValue}
-        render={({ onChange, onBlur }) => (
+        render={({ onChange, onBlur, value }) => (
           <TextInput
             id={id}
             label={label}
@@ -31,6 +32,8 @@ const TextInputComp: React.FC<PropTypes> = (props) => {
             name={name}
             onBlur={onBlur}
             onChange={onChange}
+            disabled={disabled}
+            value={value}
           />
         )}
       />

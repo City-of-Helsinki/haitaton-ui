@@ -42,6 +42,42 @@
       }
     }
   },
+  "hankeForm": {
+    "pageHeader": "SV:Hanke",
+    "previousButton": "SV:Edellinen",
+    "nextButton": "SV:Seuraava",
+    "insertFieldError": "SV:Syötä kenttä",
+    "perustiedotForm": {
+      "header": "SV:Hankkeen perustiedot",
+      "hankeenTunnusLabel": "SV:Hankeen Tunnus",
+      "ytkHankeHeader": "SV:YTK-hanke",
+      "hankeOnYtkHankeLabel": "SV:Hanke on YTK-hanke",
+      "hankeenNimiLabel": "SV:Hankeen Nimi",
+      "HankkeenAlkupaivaLabel": "SV:Hankkeen alkupäivä",
+      "HankkeenLoppupaivaLabel": "SV:Hankkeen loppupäivä",
+      "hankeenVaiheDropDown": {
+        "suunnittelussa": "SV:Suunnittelussa",
+        "ohjelmointiVaiheessa": "SV:Ohjelmointi vaiheessa"
+      },
+      "hankeenVaihe": "SV:Hankeen Vaihe"
+    },
+    "hankkeenAlueForm": {
+      "header": "SV:Hankkeen alue"
+    },
+    "hankkeenYhteystiedotForm": {
+      "header": "SV:Hankkeen yhteystiedot",
+      "omistajaorganisaatioLabel": "SV:Omistajaorganisaatio",
+      "omistajaosastoLabel": "SV:Omistajaosasto",
+      "omistajaNimiLabel": "SV:Omistaja nimi",
+      "arvioijaosastoLabel": "SV:Arvioijaosasto"
+    },
+    "tyomaanTiedotForm": {
+      "header": "SV:Työmaan tiedot"
+    },
+    "hankkeenHaitatForm": {
+      "header": "SV:Hankkeen haitat"
+    }
+  },
   "map": {
     "datalayers": {
       "RESTAURANTS": "SV:Ravintolat",

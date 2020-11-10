@@ -3,19 +3,77 @@
 .hankeForm {
   padding: var(--spacing-m) var(--spacing-l) var(--spacing-3-xl) var(--spacing-l);
 
-  .formWpr {
-    padding-bottom: var(--spacing-m);
+  &__formWpr {
+    display: flex;
   }
 
-  .dataWpr {
-    display: grid;
-    grid-gap: var(--grid-gap);
-    grid-template-columns: 1fr 1fr;
+  &__formWprRight {
+    background: var(--color-white);
+    flex-grow: 1;
+    padding: var(--spacing-layout-s);
+    margin-left: var(--spacing-layout-s);
 
-    .left {
-      padding-right: var(--spacing-m);
+    h2 {
+      margin-top: 0;
+      padding-top: 0;
+    }
+  }
+
+  &__indicator {
+    list-style-type: none;
+    flex-grow: 0;
+    padding: var(--spacing-layout-s);
+    margin: 0;
+    background: var(--color-white);
+    display: block;
+
+    li {
+      padding-bottom: var(--spacing-3-xs);
+      margin: 0;
+      display: block;
     }
 
+    .line {
+      background: #808080;
+      height: 27px;
+      width: 2px;
+      margin-left: 10px;
+      margin-bottom: 2px;
+      display: block;
+    }
+
+    &--color .line {
+      background: var(--color-coat-of-arms-blue);
+    }
+
+    li:last-child .line {
+      display: none;
+    }
+
+    &--color .circle circle {
+      stroke: var(--color-coat-of-arms-blue);
+    }
+
+    &__contentWpr {
+      position: relative;
+      top: -6px;
+      left: var(--spacing-2-xs);
+      display: inline-block;
+    }
+
+    &--visuallyHidden {
+      border: 0;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
+  }
+
+  .formWpr {
     padding-bottom: var(--spacing-m);
   }
 
