@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { IconPlusCircle, IconLinkExternal } from 'hds-react';
+import { IconPen } from 'hds-react';
 import clsx from 'clsx';
 import { $enum } from 'ts-enum-util';
 import ControlPanel from './ControlPanel';
@@ -9,10 +9,10 @@ import { DrawTool } from '../constants';
 
 const getDrawIcon = (drawTool: DrawTool) => {
   switch (drawTool) {
-    case DrawTool.CIRCLE:
-      return <IconPlusCircle size="m" aria-hidden="true" />;
+    /* case DrawTool.CIRCLE:
+      return <IconPlusCircle size="m" aria-hidden="true" />; */
     case DrawTool.POLYGON:
-      return <IconLinkExternal size="m" aria-hidden="true" />;
+      return <IconPen size="m" aria-hidden="true" />;
     default:
       return null;
   }

@@ -9,25 +9,26 @@ export const useMapDataLayers = () => {
   const dispatch = useDispatch();
   const dataLayers = useSelector(getMapDataLayers());
   const status = useSelector(getStatus());
-  const geometryData = useSelector(getGeometry());
+  const drawGeometry = useSelector(getGeometry());
 
   const toggleDataLayer = (dataLayerKey: MapDataLayerKey) =>
     dispatch(actions.toggleLayer(dataLayerKey));
 
-  const handleUpdateGeometryState = (geojson: HankeGeoJSON) =>
-    dispatch(actions.updateGeometry(geojson));
+  const handleUpdateGeometryState = (geometryData: HankeGeoJSON) =>
+    dispatch(actions.updateGeometry(geometryData));
 
   const handleSaveGeometry = async () => {
-    if (geometryData) {
-      const resultAction = await dispatch(
+    if (!drawGeometry) return;
+    try {
+      await dispatch(
         saveGeometryData({
-          hankeId: '1',
-          geometryData,
+          hankeId: 'ABC123',
+          data: drawGeometry,
         })
       );
-      console.log({ resultAction });
-    } else {
-      console.error('');
+    } catch (e) {
+      // eslint-disable-next-line
+      console.error(e.message);
     }
   };
 

@@ -4,16 +4,16 @@ import { HankeGeometryApiResponseData, HankeGeometryApiRequestData } from './typ
 
 type SaveGeometryArguments = {
   hankeId: string;
-  geometryData: HankeGeometryApiRequestData;
+  data: HankeGeometryApiRequestData;
 };
 
 export const saveGeometryData = createAsyncThunk(
   'map/saveGeometry',
-  async ({ hankeId, geometryData }: SaveGeometryArguments) => {
-    const response = await api.post(`/hankkeet/${hankeId}/geometriat`, geometryData);
+  async ({ hankeId, data }: SaveGeometryArguments) => {
+    const response = await api.post(`/hankkeet/${hankeId}/geometriat`, data);
 
     // eslint-disable-next-line
-    console.log({ geometryData, response });
+    console.log({ data, hankeId, response });
 
     return response.data as HankeGeometryApiResponseData;
   }

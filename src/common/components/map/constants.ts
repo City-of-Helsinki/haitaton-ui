@@ -13,6 +13,5 @@ enum GeometryType {
 */
 
 export enum DrawTool {
-  CIRCLE = 'Circle',
   POLYGON = 'Polygon',
 }

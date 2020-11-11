@@ -39,7 +39,10 @@ export type HankeDemoGeoJSON = GeoJSON.FeatureCollection<
   HankeDemoGeoJSONProperties
 >;
 
-export interface HankeGeoJSON
+// WIP
+/* export interface HankeGeoJSON
   extends GeoJSON.FeatureCollection<GeoJSON.Geometry, HankeGeoJSONProperties> {
-  crs?: CRS;
-}
+  crs: CRS;
+} */
+
+export type HankeGeoJSON = GeoJSON.FeatureCollection<GeoJSON.Geometry, HankeGeoJSONProperties>;
