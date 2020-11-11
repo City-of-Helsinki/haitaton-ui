@@ -1,31 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navigation } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
+
+import { registerLocale } from 'react-datepicker';
+import fi from 'date-fns/locale/fi';
+import sv from 'date-fns/locale/sv';
+import en from 'date-fns/locale/en-GB';
+
 import { useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
 import Locale from '../locale/Locale';
 
 import './Header.styles.scss';
 
 const languages = [
-  { code: 'fi', label: 'Suomi' },
-  { code: 'sv', label: 'Svenska' },
-  { code: 'en', label: 'English' },
+  { code: 'fi', label: 'Suomi', dateFns: fi },
+  { code: 'sv', label: 'Svenska', dateFns: sv },
+  { code: 'en', label: 'English', dateFns: en },
 ];
-type Types = {
-  code: string;
-  label: string;
-};
+type Types =
+  | {
+      code: string;
+      label: string;
+      // eslint-disable-next-line
+      dateFns: any;
+    }
+  | undefined;
 
 const Header: React.FC = () => {
   const [language, setLanguageState] = useState<Types>(languages[0]);
   const { HOME, MAP, PROJECTS, FORM } = useLocalizedRoutes();
 
   const { i18n } = useTranslation();
+
   const setLanguage = (code: Types) => {
+    if (!code) return;
+    registerLocale(code.dateFns.code, code.dateFns);
     setLanguageState(code);
     i18n.changeLanguage(code.code);
   };
+  useEffect(() => {
+    const langObj = languages.find((item) => item.code === i18n.language);
+    setLanguage(langObj);
+  }, []);
   const [menuOpen, setMenuOpen] = useState(false);
   return (
     <Navigation

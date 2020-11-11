@@ -14,30 +14,37 @@ type PropTypes = {
   name: string;
   id: string;
   control: Control;
+  rules?: { required: boolean };
   defaultValue?: OptionDefault;
   label: string;
   options: Array<Option>;
+  invalid?: boolean;
+  errorMsg?: string;
 };
-
 const DropdownComp: React.FC<PropTypes> = (props) => {
-  const { name, id, control, options, defaultValue, label } = props;
+  const { name, id, control, rules, options, defaultValue, label, invalid, errorMsg } = props;
   return (
-    <Controller
-      name={name}
-      id={id}
-      control={control}
-      defaultValue={defaultValue}
-      render={({ onChange, value }) => (
-        <Dropdown
-          options={options}
-          defaultValue={defaultValue}
-          selectedOption={options.find((o) => o.value === value)}
-          label={label}
-          // eslint-disable-next-line
-          onChange={(option: any) => onChange(option.value)}
-        />
-      )}
-    />
+    <>
+      <Controller
+        name={name}
+        id={id}
+        control={control}
+        defaultValue={defaultValue}
+        rules={rules}
+        render={({ onChange, value }) => (
+          <Dropdown
+            options={options}
+            defaultValue={defaultValue}
+            selectedOption={options.find((o) => o.value === value)}
+            label={label}
+            invalid={invalid}
+            // eslint-disable-next-line
+            onChange={(option: any) => onChange(option.value)}
+          />
+        )}
+      />
+      {invalid && <span className="error-text">{errorMsg}</span>}
+    </>
   );
 };
 export default DropdownComp;

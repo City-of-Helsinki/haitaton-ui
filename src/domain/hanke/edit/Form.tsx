@@ -42,7 +42,6 @@ const FormComponent: React.FC = (props) => {
     shouldFocusError: true,
     shouldUnregister: true,
   });
-
   function combineState(data: HankeData) {
     return { ...formData, ...data };
   }
