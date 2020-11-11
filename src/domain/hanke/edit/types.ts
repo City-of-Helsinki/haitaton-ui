@@ -3,8 +3,8 @@ export type HankeData = {
   YTKHanke: boolean;
   hankeenNimi: string;
   hankeenVaihe: string;
-  StartdDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   omistajaOrganisaatio: string;
   omistajaOsasto: string;
   arvioijaOrganisaatio: string;

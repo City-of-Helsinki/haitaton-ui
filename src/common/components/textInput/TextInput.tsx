@@ -6,8 +6,7 @@ type PropTypes = {
   name: string;
   id: string;
   control: Control;
-  // eslint-disable-next-line
-  rules?: any;
+  rules?: { required: boolean };
   defaultValue?: string;
   label: string;
   invalid?: boolean;

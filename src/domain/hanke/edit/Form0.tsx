@@ -4,6 +4,9 @@ import { Checkbox } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
+import 'react-datepicker/dist/react-datepicker.css';
+import DatePicker from '../../../common/components/datePicker/DatePicker';
+
 import { getFormData } from './selectors';
 
 import Dropdown from '../../../common/components/dropdown/Dropdown';
@@ -12,7 +15,7 @@ import TextInput from '../../../common/components/textInput/TextInput';
 import PropTypes from './PropTypes';
 
 const Form0: React.FC<PropTypes> = (props) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { control, errors, register } = props;
   const formData = useSelector(getFormData);
 
@@ -26,8 +29,8 @@ const Form0: React.FC<PropTypes> = (props) => {
       label: t('hankeForm:perustiedotForm:hankeenVaiheDropDown:ohjelmointiVaiheessa'),
     },
   ];
-
   const [ytkChecked, setYtkChecked] = useState(formData?.YTKHanke);
+
   return (
     <div className="form0">
       <h2>{t('hankeForm:perustiedotForm:header')}</h2>
@@ -70,27 +73,31 @@ const Form0: React.FC<PropTypes> = (props) => {
       </div>
       <div className="calendaraWpr formWpr">
         <div className="left">
-          <TextInput
-            name="StartdDate"
-            id="StartdDate"
+          <DatePicker
+            name="startDate"
+            id="startDate"
             label={t('hankeForm:perustiedotForm:HankkeenAlkupaivaLabel')}
             control={control}
             rules={{ required: true }}
-            invalid={!!errors.StartdDate}
+            locale={i18n.language}
+            dateFormat="dd.MM.yyyy"
+            invalid={!!errors.startDate}
             errorMsg={t('hankeForm:insertFieldError')}
-            defaultValue={formData ? formData.StartdDate : ''}
+            defaultValue={formData ? formData.startDate : null}
           />
         </div>
         <div className="right">
-          <TextInput
+          <DatePicker
             name="endDate"
             id="endDate"
             label={t('hankeForm:perustiedotForm:HankkeenLoppupaivaLabel')}
             control={control}
             rules={{ required: true }}
+            locale={i18n.language}
+            dateFormat="dd.MM.yyyy"
             invalid={!!errors.endDate}
             errorMsg={t('hankeForm:insertFieldError')}
-            defaultValue={formData ? formData.endDate : ''}
+            defaultValue={formData ? formData.endDate : null}
           />
         </div>
       </div>
@@ -102,6 +109,9 @@ const Form0: React.FC<PropTypes> = (props) => {
           options={getHankeenVaiheOptions}
           defaultValue={formData?.hankeenVaihe ? formData.hankeenVaihe : null}
           label={t('hankeForm:perustiedotForm:hankeenVaihe')}
+          rules={{ required: true }}
+          invalid={!!errors.hankeenVaihe}
+          errorMsg={t('hankeForm:insertFieldError')}
         />
       </div>
     </div>
