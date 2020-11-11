@@ -4,7 +4,6 @@ import { Checkbox } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from '../../../common/components/datePicker/DatePicker';
 
 import { getFormData } from './selectors';

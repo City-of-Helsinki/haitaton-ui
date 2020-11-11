@@ -14,14 +14,16 @@ import Locale from '../locale/Locale';
 import './Header.styles.scss';
 
 const languages = [
-  { code: 'fi', label: 'Suomi' },
-  { code: 'sv', label: 'Svenska' },
-  { code: 'en', label: 'English' },
+  { code: 'fi', label: 'Suomi', dateFns: fi },
+  { code: 'sv', label: 'Svenska', dateFns: sv },
+  { code: 'en', label: 'English', dateFns: en },
 ];
 type Types =
   | {
       code: string;
       label: string;
+      // eslint-disable-next-line
+      dateFns: any;
     }
   | undefined;
 
@@ -32,20 +34,10 @@ const Header: React.FC = () => {
   const { i18n } = useTranslation();
 
   const setLanguage = (code: Types) => {
-    if (code) {
-      if (code.code === 'fi') {
-        registerLocale('fi', fi);
-      }
-      if (code.code === 'sv') {
-        registerLocale('sv', sv);
-      }
-      if (code.code === 'en') {
-        registerLocale('en', en);
-      }
-
-      setLanguageState(code);
-      i18n.changeLanguage(code.code);
-    }
+    if (!code) return;
+    registerLocale(code.dateFns.code, code.dateFns);
+    setLanguageState(code);
+    i18n.changeLanguage(code.code);
   };
   useEffect(() => {
     const langObj = languages.find((item) => item.code === i18n.language);
