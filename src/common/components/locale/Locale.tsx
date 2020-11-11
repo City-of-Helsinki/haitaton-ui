@@ -7,7 +7,6 @@ type Props = {
 
 const Locale: React.FC<Props> = ({ id }) => {
   const { t } = useTranslation();
-
   return <>{t(id)}</>;
 };
 
