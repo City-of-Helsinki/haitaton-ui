@@ -56,6 +56,7 @@ module.exports = {
       {
         devDependencies: [
           '**/setupTests.ts',
+          '**/setupProxy.ts',
           '**/*.test.tsx',
           '**/testUtils/*.tsx',
           '**/*.spec.ts',
