@@ -1,6 +1,4 @@
-import React, { useEffect, useContext } from 'react';
-import GeoJSON from 'ol/format/GeoJSON';
-
+import React, { useEffect, useContext, useState, useCallback } from 'react';
 import { Vector } from 'ol/source';
 import Feature from 'ol/Feature';
 import Collection from 'ol/Collection';
@@ -12,41 +10,53 @@ type Props = {
   features?: Collection<Feature>;
 };
 
+type Interaction = Draw | Snap | Modify;
+
 const DrawInteraction: React.FC<Props> = ({ source, features = undefined }) => {
   const { map, drawTool } = useContext(MapContext);
+  const [instances, setInstances] = useState<Interaction[]>([]);
+
+  const setInteractions = useCallback(
+    (type) => {
+      if (!map || drawTool === null) return;
+
+      const drawInstance = new Draw({
+        source,
+        features,
+        type,
+      });
+
+      map.addInteraction(drawInstance);
+
+      const snapInstance = new Snap({ source });
+      map.addInteraction(snapInstance);
+
+      const modifyInstance = new Modify({ source });
+      map.addInteraction(modifyInstance);
+
+      setInstances([drawInstance, snapInstance, modifyInstance]);
+    },
+    [map, source]
+  );
+
+  const removeInteractions = useCallback(() => {
+    instances.forEach((i: Interaction) => {
+      map?.removeInteraction(i);
+    });
+  }, [map, source, instances]);
 
   useEffect(() => {
     if (!map || drawTool === null) return;
 
-    const drawInstance = new Draw({
-      source,
-      features,
-      // eslint-disable-next-line
-      type: drawTool as any, // Not sure how this should be typed
-    });
-
-    // For testing, remove later
-    const format = new GeoJSON({ featureProjection: 'EPSG:3879' });
-    const json = format.writeFeatures(source.getFeatures());
-    // eslint-disable-next-line no-console
-    console.log(json); // Should be removed later
-
-    map.addInteraction(drawInstance);
-
-    const snapInstance = new Snap({ source });
-    map.addInteraction(snapInstance);
-
-    const modifyInstance = new Modify({ source });
-    map.addInteraction(modifyInstance);
-
     // eslint-disable-next-line
     return () => {
-      if (map) {
-        if (drawInstance) map.removeInteraction(drawInstance);
-        if (snapInstance) map.removeInteraction(snapInstance);
-        if (modifyInstance) map.removeInteraction(modifyInstance);
-      }
+      removeInteractions();
     };
+  }, []);
+
+  useEffect(() => {
+    removeInteractions();
+    setInteractions(drawTool);
   }, [drawTool]);
 
   return null;

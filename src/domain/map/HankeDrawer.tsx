@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Vector as VectorSource } from 'ol/source';
 import Map from '../../common/components/map/Map';
@@ -13,22 +13,37 @@ import HSL from './Layers/HSL';
 import styles from './Map.module.scss';
 import { useMapDataLayers } from './hooks/useMapDataLayers';
 import { MapDataLayerKey } from './types';
+import { formatFeaturesToHankeGeoJSON } from './utils';
+
+const projection = 'EPSG:3857';
+
+const drawVectorSource = new VectorSource({
+  format: new GeoJSON({
+    dataProjection: projection,
+    featureProjection: projection,
+  }),
+});
 
 const HankeDrawer: React.FC = () => {
-  const { dataLayers, toggleDataLayer } = useMapDataLayers();
+  const {
+    dataLayers,
+    toggleDataLayer,
+    handleSaveGeometry,
+    handleUpdateGeometryState,
+  } = useMapDataLayers();
 
-  const [drawSource] = useState<VectorSource>(
-    new VectorSource({
-      format: new GeoJSON({
-        dataProjection: 'EPSG:3857',
-        featureProjection: 'EPSG:3857',
-      }),
-    })
-  );
+  const [drawSource] = useState<VectorSource>(drawVectorSource);
   const [center] = useState([2776000, 8438000]);
   const [zoom] = useState(15);
   const [showKantakartta, setShowKantakartta] = useState(true);
   const [showHSL, setShowHSL] = useState(false);
+
+  useEffect(() => {
+    drawSource.on('addfeature', () => {
+      const drawGeometry = formatFeaturesToHankeGeoJSON(drawSource.getFeatures());
+      handleUpdateGeometryState(drawGeometry);
+    });
+  }, []);
 
   const toggleTileLayer = () => {
     if (showKantakartta) {
@@ -42,6 +57,12 @@ const HankeDrawer: React.FC = () => {
 
   return (
     <div className={styles.mapContainer}>
+      <div style={{ position: 'relative', background: 'pink', zIndex: 100 }}>
+        <button onClick={() => handleSaveGeometry()} type="button">
+          Tallenna geometria
+        </button>
+      </div>
+
       <Map center={center} zoom={zoom} mapClassName={styles.mapContainer__inner}>
         <DrawIntercation source={drawSource} />
         {showKantakartta && <Kantakartta />}

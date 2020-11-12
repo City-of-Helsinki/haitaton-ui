@@ -1,5 +1,26 @@
+import Feature from 'ol/Feature';
 import { DATALAYERS } from './constants';
-import { CommonGeoJSON } from '../../common/types/hanke';
+import { CommonGeoJSON, HankeGeoJSON } from '../../common/types/hanke';
+
+export type GeometryData = Feature[];
+
+export interface HankeGeometryApiResponseData extends HankeGeoJSON {
+  hankeId: string;
+  version: string;
+  createdOn: string;
+  updatedOn: string;
+}
+
+export interface HankeGeometryApiRequestData extends HankeGeoJSON {
+  hankeId?: string;
+  version?: string;
+  createdOn?: string;
+  updatedOn?: string;
+}
+
+export type HankeGeometry = {
+  data: CommonGeoJSON;
+};
 
 export type MapDataLayerKey = keyof typeof DATALAYERS;
 
