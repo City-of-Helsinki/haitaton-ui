@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=3001 react-scripts start",
     "build": "react-scripts build",
-    "serve": "serve -s build -l 3000",
+    "serve": "serve -s build -l 3001",
     "build-and-serve": "yarn run build && yarn run serve",
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
@@ -15,7 +15,7 @@
     "ts-check:cypress": "tsc --noEmit --project ./cypress/tsconfig.json",
     "lint": "yarn ts-check:cypress && yarn ts-check && eslint --ext js,ts,tsx src cypress",
     "lint:css": "stylelint 'src/**/*.scss'",
-    "e2e": "start-server-and-test start :3000 cypress-run-chrome",
+    "e2e": "start-server-and-test start :3001 cypress-run-chrome",
     "cypress-run-chrome": "cypress run --browser chrome",
     "cypress-run-chrome-headless": "cypress run --headless --browser chrome"
   },
