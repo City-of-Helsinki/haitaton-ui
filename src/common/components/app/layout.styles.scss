@@ -1,3 +1,5 @@
 .pageContainer {
   position: relative;
+  max-width: var(--breakpoint-xl);
+  margin: auto;
 }

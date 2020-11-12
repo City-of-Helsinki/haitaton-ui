@@ -5,18 +5,18 @@ import { HankeData } from './types';
 type State = {
   hankeData: HankeData | null;
   status: string | null;
-  hankeFormData: any;
+  requestStatus: any;
 };
 
-const updateFormData: CaseReducer<State, PayloadAction<HankeData>> = (state, action) => {
+const updateFormData: CaseReducer<State, PayloadAction<any>> = (state, action) => {
   state.hankeData = action.payload;
-  state.hankeFormData = action.payload;
+  state.requestStatus = action.payload;
 };
 
 const initialState: State = {
   hankeData: null, // Null or write default HankeData
   status: null,
-  hankeFormData: null,
+  requestStatus: null,
 };
 
 const formSlice = createSlice({

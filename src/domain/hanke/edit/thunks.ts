@@ -8,10 +8,10 @@ type SaveGeometryArguments = {
 export const saveFormData = createAsyncThunk(
   'map/saveGeometry',
   async ({ data }: SaveGeometryArguments) => {
+    console.log('data2', data);
     const response = await api.post(`/hankkeet/`, data);
 
     // eslint-disable-next-line
-    console.log('data', data);
 
     return response.data;
   }

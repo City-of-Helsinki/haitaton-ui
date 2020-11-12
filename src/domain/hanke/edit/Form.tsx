@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'hds-react';
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { HankeData } from './types';
-import { getFormData } from './selectors';
+import { getFormData, getRequestStatus } from './selectors';
+
+import NextArrow from '../../../assets/icons/NextArrow';
+import PreviousArrow from '../../../assets/icons/PreviousArrow';
 
 import { actions } from './reducer';
 import { saveFormData } from './thunks';
@@ -24,6 +26,7 @@ const FormComponent: React.FC = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const formData = useSelector(getFormData);
+  const requestStatus = useSelector(getRequestStatus);
   const wizardStateData = [
     { label: t('hankeForm:perustiedotForm:header'), view: 0 },
     { label: t('hankeForm:hankkeenAlueForm:header'), view: 1 },
@@ -44,7 +47,14 @@ const FormComponent: React.FC = (props) => {
     shouldUnregister: true,
   });
   function combineState(data: HankeData) {
-    return { ...formData, ...data };
+    let basicData = {
+      hankeId: '23423423',
+      name: 'Pekka',
+      owner: 'Pekka',
+      phase: 1,
+    };
+    basicData = { ...basicData, ...formData };
+    return { ...basicData, ...data };
   }
   function goBack(view: number) {
     const values = combineState(getValues());
@@ -60,7 +70,7 @@ const FormComponent: React.FC = (props) => {
     try {
       await dispatch(
         saveFormData({
-          data: values,
+          data,
         })
       );
     } catch (e) {
@@ -77,21 +87,32 @@ const FormComponent: React.FC = (props) => {
         <Indicator dataList={wizardStateData} view={WizardView} />
         <div className="hankeForm__formWprRight">
           <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
+            {!!requestStatus && <p>Lomakkeen tiedot tallennettu</p>}
             {WizardView === 0 && <Form0 errors={errors} control={control} register={register()} />}
             {WizardView === 1 && <Form1 />}
             {WizardView === 2 && <Form2 errors={errors} control={control} />}
             {WizardView === 3 && <Form3 />}
             {WizardView === 4 && <Form4 />}
             <div className="btnWpr">
-              {WizardView > 0 && (
-                <Button type="submit" onClick={() => goBack(WizardView - 1)}>
-                  {t('hankeForm:previousButton')}
-                </Button>
-              )}
               {WizardView < 4 && (
-                <Button type="submit" onClick={() => setviewStatusVar(WizardView + 1)}>
-                  {t('hankeForm:nextButton')}{' '}
-                </Button>
+                <button
+                  className="btnWpr--next"
+                  type="submit"
+                  onClick={() => setviewStatusVar(WizardView + 1)}
+                >
+                  <span>{t('hankeForm:nextButton')}</span>
+                  <NextArrow />
+                </button>
+              )}
+              {WizardView > 0 && (
+                <button
+                  className="btnWpr--previous"
+                  type="submit"
+                  onClick={() => goBack(WizardView - 1)}
+                >
+                  <PreviousArrow />
+                  <span>{t('hankeForm:previousButton')}</span>
+                </button>
               )}
             </div>
           </form>

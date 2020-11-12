@@ -9,5 +9,8 @@ export type HankeData = {
   omistajaOsasto: string;
   arvioijaOrganisaatio: string;
   arvioijaOsasto: string;
-  example1: string;
+  hankeId: string;
+  name: string;
+  owner: string;
+  phase: number;
 };

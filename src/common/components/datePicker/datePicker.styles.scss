@@ -1,6 +1,10 @@
 .datePicker {
   position: relative;
 
+  .react-datepicker-wrapper {
+    width: 100%;
+  }
+
   .react-datepicker__input-container {
     --border-radius: 2px;
     --border-width: 2px;
