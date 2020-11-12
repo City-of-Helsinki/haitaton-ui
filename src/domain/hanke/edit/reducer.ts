@@ -5,10 +5,11 @@ import { HankeData } from './types';
 type State = {
   hankeData: HankeData | null;
   status: string | null;
+  // eslint-disable-next-line
   requestStatus: any;
 };
 
-const updateFormData: CaseReducer<State, PayloadAction<any>> = (state, action) => {
+const updateFormData: CaseReducer<State, PayloadAction<HankeData>> = (state, action) => {
   state.hankeData = action.payload;
   state.requestStatus = action.payload;
 };
