@@ -8,6 +8,7 @@ import { HankeData } from './types';
 import { getFormData } from './selectors';
 
 import { actions } from './reducer';
+import { saveFormData } from './thunks';
 
 import Indicator from './indicator';
 
@@ -48,12 +49,24 @@ const FormComponent: React.FC = (props) => {
   function goBack(view: number) {
     const values = combineState(getValues());
     dispatch(actions.updateFormData(values));
+
     changeWizardView(viewStatusVar);
     setviewStatusVar(view);
   }
-  const onSubmit = (values: HankeData) => {
+
+  const onSubmit = async (values: HankeData) => {
     const data = combineState(values);
     dispatch(actions.updateFormData(data));
+    try {
+      await dispatch(
+        saveFormData({
+          data: values,
+        })
+      );
+    } catch (e) {
+      // eslint-disable-next-line
+      console.error(e.message);
+    }
 
     changeWizardView(viewStatusVar);
   };
