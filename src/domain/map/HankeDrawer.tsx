@@ -56,8 +56,8 @@ const HankeDrawer: React.FC = () => {
   };
 
   return (
-    <div className={styles.mapContainer}>
-      <div style={{ position: 'relative', background: 'pink', zIndex: 100 }}>
+    <div className={styles.mapContainer} style={{ width: '100%', height: 500 }}>
+      <div style={{ position: 'relative', zIndex: 100 }}>
         <button onClick={() => handleSaveGeometry()} type="button">
           Tallenna geometria
         </button>

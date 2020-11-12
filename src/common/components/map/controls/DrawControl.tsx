@@ -12,7 +12,7 @@ const getDrawIcon = (drawTool: DrawTool) => {
     /* case DrawTool.CIRCLE:
       return <IconPlusCircle size="m" aria-hidden="true" />; */
     case DrawTool.POLYGON:
-      return <IconPen size="m" aria-hidden="true" />;
+      return <IconPen size="s" aria-hidden="true" />;
     default:
       return null;
   }
