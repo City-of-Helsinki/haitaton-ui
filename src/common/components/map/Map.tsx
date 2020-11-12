@@ -33,7 +33,7 @@ const Map: React.FC<Props> = ({
         center,
         zoom,
         minZoom: 12,
-        maxZoom: 18,
+        maxZoom: 22,
         projection: 'EPSG:3857',
       }),
       layers: [],
