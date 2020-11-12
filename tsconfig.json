@@ -16,5 +16,6 @@
     "jsx": "react",
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/setupProxy.js"]
 }
