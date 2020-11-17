@@ -5,7 +5,7 @@ context('Frontpage', () => {
     cy.visit('/');
   });
 
-  it('Project title should contain Not found', () => {
+  it('Frontpage header should contain Haitaton 2.0', () => {
     cy.get('[data-testid=pageHeader]').should('contain', 'Haitaton 2.0');
   });
 });

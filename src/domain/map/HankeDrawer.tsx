@@ -57,18 +57,24 @@ const HankeDrawer: React.FC = () => {
 
   return (
     <div className={styles.mapContainer} style={{ width: '100%', height: 500 }}>
-      <div style={{ position: 'relative', zIndex: 100 }}>
-        <button onClick={() => handleSaveGeometry()} type="button">
-          Tallenna geometria
-        </button>
-      </div>
+      {drawSource.getFeatures().length > 0 && (
+        <div style={{ position: 'relative', zIndex: 100 }}>
+          <button
+            onClick={() => handleSaveGeometry()}
+            type="button"
+            data-testid="save-geometry-button"
+          >
+            Tallenna geometria
+          </button>
+        </div>
+      )}
 
       <Map center={center} zoom={zoom} mapClassName={styles.mapContainer__inner}>
         <DrawIntercation source={drawSource} />
         {showKantakartta && <Kantakartta />}
         {showHSL && <HSL />}
         <DataLayers />
-        <VectorLayer source={drawSource} zIndex={100} />
+        <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
         <Controls>
           <DrawControl />
           <LayerControl
