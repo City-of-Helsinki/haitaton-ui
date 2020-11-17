@@ -72,9 +72,6 @@ const FormComponent: React.FC = (props) => {
       }
     }
   };
-  const obj1 = { YTKHanke: true };
-  const obj2 = { hankeenVaihe: '', omistajaOrganisaatio: '' };
-  console.log('test', combineObj(obj1, obj2));
   return (
     <div className="hankeForm">
       <h1>{t('hankeForm:pageHeader')}</h1>
