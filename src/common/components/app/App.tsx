@@ -7,6 +7,7 @@ import Layout from './Layout';
 import { store } from './store';
 import theme from './theme';
 import './app.scss';
+import '../../../assets/styles/reset.css';
 
 const queryCache = new QueryCache();
 

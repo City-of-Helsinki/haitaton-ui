@@ -22,12 +22,6 @@
 body {
   font-family: 'HelsinkiGrotesk', serif;
   background: var(--color-black-5);
-  padding-bottom: 60px;
   position: relative;
   min-height: 100vh;
-}
-
-// I think we should add css-reset etc
-button {
-  border: 0;
 }
