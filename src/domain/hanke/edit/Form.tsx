@@ -57,6 +57,7 @@ const FormComponent: React.FC = (props) => {
 
   const onSubmit = async (values: HankeData) => {
     const data = combineObj(values, formData);
+
     if (data) {
       dispatch(actions.updateFormData(data));
       try {
@@ -72,6 +73,7 @@ const FormComponent: React.FC = (props) => {
       }
     }
   };
+
   return (
     <div className="hankeForm">
       <h1>{t('hankeForm:pageHeader')}</h1>

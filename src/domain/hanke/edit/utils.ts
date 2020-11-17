@@ -8,5 +8,5 @@ export function combineObj(obj1: HankeData, obj2: HankeData | null) {
     phase: 1,
   };
   basicData = { ...basicData, ...obj1 };
-  return { ...basicData, ...obj1 };
+  return { ...basicData, ...obj2 };
 }
