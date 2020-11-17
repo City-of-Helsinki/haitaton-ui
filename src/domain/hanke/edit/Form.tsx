@@ -73,7 +73,6 @@ const FormComponent: React.FC = (props) => {
       }
     }
   };
-
   return (
     <div className="hankeForm">
       <h1>{t('hankeForm:pageHeader')}</h1>
