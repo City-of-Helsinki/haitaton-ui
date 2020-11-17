@@ -131,25 +131,5 @@
     justify-content: space-between;
     flex-direction: row-reverse;
     padding-top: var(--spacing-m);
-
-    &--previous,
-    &--next {
-      background: none;
-      display: flex;
-      color: var(--color-coat-of-arms-blue);
-      padding: 0;
-      margin: 0;
-
-      svg {
-        height: 30px;
-        width: 30px;
-        position: relative;
-        top: -7px;
-
-        polygon {
-          fill: var(--color-coat-of-arms-blue);
-        }
-      }
-    }
   }
 }

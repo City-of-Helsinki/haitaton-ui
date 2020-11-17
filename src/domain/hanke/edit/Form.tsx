@@ -3,11 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { combineObj } from './utils';
 import { HankeData } from './types';
 import { getFormData, getRequestStatus } from './selectors';
-
-import NextArrow from '../../../assets/icons/NextArrow';
-import PreviousArrow from '../../../assets/icons/PreviousArrow';
 
 import { actions } from './reducer';
 import { saveFormData } from './thunks';
@@ -46,40 +44,37 @@ const FormComponent: React.FC = (props) => {
     shouldFocusError: true,
     shouldUnregister: true,
   });
-  function combineState(data: HankeData) {
-    let basicData = {
-      hankeId: '23423423',
-      name: 'Pekka',
-      owner: 'Pekka',
-      phase: 1,
-    };
-    basicData = { ...basicData, ...formData };
-    return { ...basicData, ...data };
-  }
+
   function goBack(view: number) {
-    const values = combineState(getValues());
+    const values = combineObj(getValues(), formData);
+    if (!values) return null;
     dispatch(actions.updateFormData(values));
 
     changeWizardView(viewStatusVar);
     setviewStatusVar(view);
+    return false;
   }
 
   const onSubmit = async (values: HankeData) => {
-    const data = combineState(values);
-    dispatch(actions.updateFormData(data));
-    try {
-      await dispatch(
-        saveFormData({
-          data,
-        })
-      );
-    } catch (e) {
-      // eslint-disable-next-line
-      console.error(e.message);
+    const data = combineObj(values, formData);
+    if (data) {
+      dispatch(actions.updateFormData(data));
+      try {
+        await dispatch(
+          saveFormData({
+            data,
+          })
+        );
+        changeWizardView(viewStatusVar);
+      } catch (e) {
+        // eslint-disable-next-line
+        console.error(e.message);
+      }
     }
-
-    changeWizardView(viewStatusVar);
   };
+  const obj1 = { YTKHanke: true };
+  const obj2 = { hankeenVaihe: '', omistajaOrganisaatio: '' };
+  console.log('test', combineObj(obj1, obj2));
   return (
     <div className="hankeForm">
       <h1>{t('hankeForm:pageHeader')}</h1>
@@ -101,7 +96,6 @@ const FormComponent: React.FC = (props) => {
                   onClick={() => setviewStatusVar(WizardView + 1)}
                 >
                   <span>{t('hankeForm:nextButton')}</span>
-                  <NextArrow />
                 </button>
               )}
               {WizardView > 0 && (
@@ -110,7 +104,6 @@ const FormComponent: React.FC = (props) => {
                   type="submit"
                   onClick={() => goBack(WizardView - 1)}
                 >
-                  <PreviousArrow />
                   <span>{t('hankeForm:previousButton')}</span>
                 </button>
               )}
