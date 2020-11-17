@@ -14,5 +14,6 @@
         "importFrom": ["src/assets/styles/variables.css", "node_modules/hds-core/lib/base.css"]
       }
     ]
-  }
+  },
+  "ignoreFiles": "**/reset.css"
 }
