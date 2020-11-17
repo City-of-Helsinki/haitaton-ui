@@ -1,23 +1,19 @@
 import { PayloadAction, CaseReducer, createSlice } from '@reduxjs/toolkit';
-import { saveFormData } from './thunks';
+import { saveForm } from './thunks';
 import { HankeData } from './types';
 
 type State = {
   hankeData: HankeData | null;
   status: string | null;
-  // eslint-disable-next-line
-  requestStatus: any;
 };
 
 const updateFormData: CaseReducer<State, PayloadAction<HankeData>> = (state, action) => {
   state.hankeData = action.payload;
-  state.requestStatus = action.payload;
 };
 
 const initialState: State = {
   hankeData: null, // Null or write default HankeData
   status: null,
-  requestStatus: null,
 };
 
 const formSlice = createSlice({
@@ -27,10 +23,10 @@ const formSlice = createSlice({
     updateFormData,
   },
   extraReducers: (builder) => {
-    builder.addCase(saveFormData.fulfilled, (state, { payload }) => {
+    builder.addCase(saveForm.fulfilled, (state, { payload }) => {
       state.status = 'ok';
     });
-    builder.addCase(saveFormData.rejected, (state, action) => {
+    builder.addCase(saveForm.rejected, (state, action) => {
       state.status = 'error';
     });
   },

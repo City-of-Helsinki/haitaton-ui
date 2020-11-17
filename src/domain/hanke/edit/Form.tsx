@@ -9,7 +9,7 @@ import { HankeData } from './types';
 import { getFormData, getRequestStatus } from './selectors';
 
 import { actions } from './reducer';
-import { saveFormData } from './thunks';
+import { saveForm } from './thunks';
 
 import Indicator from './indicator';
 
@@ -25,7 +25,8 @@ const FormComponent: React.FC = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const formData = useSelector(getFormData);
-  const requestStatus = useSelector(getRequestStatus);
+  const status = useSelector(getRequestStatus);
+
   const wizardStateData = [
     { label: t('hankeForm:perustiedotForm:header'), view: 0 },
     { label: t('hankeForm:hankkeenAlueForm:header'), view: 1 },
@@ -63,7 +64,7 @@ const FormComponent: React.FC = (props) => {
       dispatch(actions.updateFormData(data));
       try {
         await dispatch(
-          saveFormData({
+          saveForm({
             data,
           })
         );
@@ -81,7 +82,7 @@ const FormComponent: React.FC = (props) => {
         <Indicator dataList={wizardStateData} view={WizardView} />
         <div className="hankeForm__formWprRight">
           <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
-            {!!requestStatus && <p>Lomakkeen tiedot tallennettu</p>}
+            {!!status && <p>Lomakkeen tiedot tallennettu</p>}
             {WizardView === 0 && <Form0 errors={errors} control={control} register={register()} />}
             {WizardView === 1 && <Form1 />}
             {WizardView === 2 && <Form2 errors={errors} control={control} />}
