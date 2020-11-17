@@ -23,7 +23,9 @@ export const useMapDataLayers = () => {
       await dispatch(
         saveGeometryData({
           hankeId: '1234567',
-          data: drawGeometry,
+          data: {
+            featureCollection: drawGeometry,
+          },
         })
       );
     } catch (e) {
