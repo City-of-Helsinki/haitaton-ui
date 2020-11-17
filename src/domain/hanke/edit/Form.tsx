@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'hds-react';
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
+import H1 from '../../../common/components/text/H1';
 
 import { HankeData } from './types';
 import { getFormData } from './selectors';
@@ -59,7 +60,7 @@ const FormComponent: React.FC = (props) => {
   };
   return (
     <div className="hankeForm">
-      <h1>{t('hankeForm:pageHeader')}</h1>
+      <H1 stylesAs="h2">{t('hankeForm:pageHeader')}</H1>
       <div className="hankeForm__formWpr">
         <Indicator dataList={wizardStateData} view={WizardView} />
         <div className="hankeForm__formWprRight">
