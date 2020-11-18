@@ -60,13 +60,13 @@ const Header: React.FC = () => {
         <NavLink to={HOME.path} exact activeClassName="header--active" data-testid="homeLink">
           {HOME.label}
         </NavLink>
-        <NavLink to={MAP.path} activeClassName="header__active">
+        <NavLink to={MAP.path} activeClassName="header--active">
           {MAP.label}
         </NavLink>
-        <NavLink to={PROJECTS.path} activeClassName="header__active">
+        <NavLink to={PROJECTS.path} activeClassName="header--active">
           {PROJECTS.label}
         </NavLink>
-        <NavLink to={FORM.path} activeClassName="header__active">
+        <NavLink to={FORM.path} activeClassName="header--active">
           {FORM.label}
         </NavLink>
       </Navigation.Row>

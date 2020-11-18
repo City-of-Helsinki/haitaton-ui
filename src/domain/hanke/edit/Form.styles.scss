@@ -1,7 +1,7 @@
 @import 'layout.scss';
 
 .hankeForm {
-  padding: var(--spacing-m) var(--spacing-l) var(--spacing-3-xl) var(--spacing-l);
+  padding: var(--spacing-s) var(--spacing-l) var(--spacing-3-xl) var(--spacing-l);
 
   &__formWpr {
     display: flex;
@@ -78,15 +78,18 @@
   }
 
   .calendaraWpr {
-    display: grid;
-    grid-gap: var(--grid-gap);
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    padding-bottom: var(--spacing-m);
 
     .left {
-      padding-right: var(--spacing-m);
+      padding-right: var(--spacing-xl);
+      width: 30%;
     }
 
-    padding-bottom: var(--spacing-m);
+    .right {
+      padding-right: var(--spacing-xl);
+      width: 30%;
+    }
 
     @include respond-below(s) {
       label {
@@ -121,5 +124,12 @@
     color: var(--color-brick);
     padding-top: 10px;
     display: block;
+  }
+
+  .btnWpr {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    padding-top: var(--spacing-m);
   }
 }

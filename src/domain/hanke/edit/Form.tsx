@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'hds-react';
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import H1 from '../../../common/components/text/H1';
 
+import { combineObj } from './utils';
 import { HankeData } from './types';
 import { getFormData } from './selectors';
 
 import { actions } from './reducer';
+import { saveForm } from './thunks';
 
 import Indicator from './indicator';
 
@@ -24,6 +25,7 @@ const FormComponent: React.FC = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const formData = useSelector(getFormData);
+
   const wizardStateData = [
     { label: t('hankeForm:perustiedotForm:header'), view: 0 },
     { label: t('hankeForm:hankkeenAlueForm:header'), view: 1 },
@@ -43,20 +45,34 @@ const FormComponent: React.FC = (props) => {
     shouldFocusError: true,
     shouldUnregister: true,
   });
-  function combineState(data: HankeData) {
-    return { ...formData, ...data };
-  }
+
   function goBack(view: number) {
-    const values = combineState(getValues());
+    const values = combineObj(getValues(), formData);
+    if (!values) return null;
     dispatch(actions.updateFormData(values));
-    changeWizardView(viewStatusVar);
-    setviewStatusVar(view);
-  }
-  const onSubmit = (values: HankeData) => {
-    const data = combineState(values);
-    dispatch(actions.updateFormData(data));
 
     changeWizardView(viewStatusVar);
+    setviewStatusVar(view);
+    return false;
+  }
+
+  const onSubmit = async (values: HankeData) => {
+    const data = combineObj(values, formData);
+
+    if (data) {
+      dispatch(actions.updateFormData(data));
+      try {
+        await dispatch(
+          saveForm({
+            data,
+          })
+        );
+        changeWizardView(viewStatusVar);
+      } catch (e) {
+        // eslint-disable-next-line
+        console.error(e.message);
+      }
+    }
   };
   return (
     <div className="hankeForm">
@@ -71,15 +87,23 @@ const FormComponent: React.FC = (props) => {
             {WizardView === 3 && <Form3 />}
             {WizardView === 4 && <Form4 />}
             <div className="btnWpr">
-              {WizardView > 0 && (
-                <Button type="submit" onClick={() => goBack(WizardView - 1)}>
-                  {t('hankeForm:previousButton')}
-                </Button>
-              )}
               {WizardView < 4 && (
-                <Button type="submit" onClick={() => setviewStatusVar(WizardView + 1)}>
-                  {t('hankeForm:nextButton')}{' '}
-                </Button>
+                <button
+                  className="btnWpr--next"
+                  type="submit"
+                  onClick={() => setviewStatusVar(WizardView + 1)}
+                >
+                  <span>{t('hankeForm:nextButton')}</span>
+                </button>
+              )}
+              {WizardView > 0 && (
+                <button
+                  className="btnWpr--previous"
+                  type="submit"
+                  onClick={() => goBack(WizardView - 1)}
+                >
+                  <span>{t('hankeForm:previousButton')}</span>
+                </button>
               )}
             </div>
           </form>
