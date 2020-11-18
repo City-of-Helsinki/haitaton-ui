@@ -23,7 +23,12 @@ const DataLayers = () => {
     <>
       {Object.values(dataLayers).map((layer) =>
         layer.visible ? (
-          <VectorLayer key={layer.key} source={createSource(layer.data)} zIndex={3} />
+          <VectorLayer
+            key={layer.key}
+            source={createSource(layer.data)}
+            zIndex={3}
+            className={`datalayer-${layer.key}`}
+          />
         ) : null
       )}
     </>

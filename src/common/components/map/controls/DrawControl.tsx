@@ -25,16 +25,17 @@ const DrawControls: React.FC = () => {
     <ControlPanel className={styles.drawControl}>
       {$enum(DrawTool)
         .getValues()
-        .map((drawToolVal) => (
+        .map((v) => (
           <button
-            key={drawToolVal}
+            key={v}
             className={clsx(styles.drawControl__button, {
-              [styles['drawControl__button--active']]: drawTool === drawToolVal,
+              [styles['drawControl__button--active']]: drawTool === v,
             })}
             type="button"
-            onClick={() => setDrawTool(drawToolVal)}
+            data-testid={`draw-control-${v}`}
+            onClick={() => setDrawTool(v)}
           >
-            {getDrawIcon(drawToolVal)}
+            {getDrawIcon(v)}
           </button>
         ))}
     </ControlPanel>

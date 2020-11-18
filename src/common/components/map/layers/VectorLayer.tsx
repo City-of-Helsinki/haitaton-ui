@@ -5,10 +5,11 @@ import MapContext from '../MapContext';
 
 type Props = {
   source: VectorSource;
+  className: string;
   zIndex?: number;
 };
 
-const VectorLayer: React.FC<Props> = ({ source, zIndex = 0 }) => {
+const VectorLayer: React.FC<Props> = ({ source, className, zIndex = 0 }) => {
   const { map } = useContext(MapContext);
 
   useEffect(() => {
@@ -16,6 +17,7 @@ const VectorLayer: React.FC<Props> = ({ source, zIndex = 0 }) => {
 
     const vectorLayer = new OLVectorLayer({
       source,
+      className,
       // style,
     });
 
