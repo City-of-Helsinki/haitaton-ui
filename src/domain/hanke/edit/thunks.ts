@@ -5,7 +5,7 @@ import { HankeData } from './types';
 type SaveHankeData = {
   data: HankeData;
 };
-export const saveForm = createAsyncThunk('map/saveGeometry', async ({ data }: SaveHankeData) => {
+export const saveForm = createAsyncThunk('form/saveData', async ({ data }: SaveHankeData) => {
   const response = await api.post(`/hankkeet/`, data);
   return response.data;
 });
