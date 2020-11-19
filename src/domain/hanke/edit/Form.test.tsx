@@ -1,18 +1,18 @@
 import { cleanup } from '@testing-library/react';
 import { combineObj } from './utils';
-import { HANKE_VAIHE } from './types';
+import { HANKE_VAIHE, FORMFIELD } from './types';
 
 afterEach(cleanup);
 
 describe('Form', () => {
-  const obj1 = { YKTHanke: true };
-  const obj2 = { vaihe: HANKE_VAIHE.OHJELMOINTI, omistajaOrganisaatio: '' };
+  const obj1 = { [FORMFIELD.YKT_HANKE]: true };
+  const obj2 = { [FORMFIELD.VAIHE]: HANKE_VAIHE.OHJELMOINTI, [FORMFIELD.OMISTAJAORGANISAATIO]: '' };
   const result = {
-    YKTHanke: true,
-    hankeId: '',
-    vaihe: HANKE_VAIHE.OHJELMOINTI,
-    nimi: '',
-    omistajaOrganisaatio: '',
+    [FORMFIELD.YKT_HANKE]: true,
+    [FORMFIELD.HANKE_ID]: '',
+    [FORMFIELD.VAIHE]: HANKE_VAIHE.OHJELMOINTI,
+    [FORMFIELD.NIMI]: '',
+    [FORMFIELD.OMISTAJAORGANISAATIO]: '',
   };
   test('Combain Objects', () => {
     expect(combineObj(obj1, obj2)).toEqual(result);
