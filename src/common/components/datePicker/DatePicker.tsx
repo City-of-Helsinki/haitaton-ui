@@ -1,6 +1,8 @@
 import React from 'react';
 import { Controller, Control } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
+import { Tooltip } from 'hds-react';
+import { TooltipProps } from 'hds-react/components/Tooltip';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import './datePicker.styles.scss';
@@ -19,6 +21,7 @@ type PropTypes = {
   dateFormat?: string;
   value?: Date;
   defaultValue?: Date | null;
+  tooltip?: TooltipProps;
 };
 const DatePickerComp: React.FC<PropTypes> = (props) => {
   const {
@@ -33,6 +36,7 @@ const DatePickerComp: React.FC<PropTypes> = (props) => {
     locale,
     dateFormat,
     defaultValue,
+    tooltip,
   } = props;
   return (
     <>
@@ -44,7 +48,10 @@ const DatePickerComp: React.FC<PropTypes> = (props) => {
         defaultValue={defaultValue}
         render={({ onChange, onBlur, value }) => (
           <div className="datePicker">
-            <label htmlFor={id}>{label}</label>
+            <label htmlFor={id}>
+              {label}
+              {!!tooltip && <Tooltip {...tooltip} />}
+            </label>
             <DatePicker
               id={id}
               name={name}

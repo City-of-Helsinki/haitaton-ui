@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { Checkbox } from 'hds-react';
+import { Checkbox, Tooltip } from 'hds-react';
+
 import { $enum } from 'ts-enum-util';
 
 import DatePicker from '../../../common/components/datePicker/DatePicker';
@@ -36,7 +37,14 @@ const Form0: React.FC<PropTypes> = (props) => {
           />
         </div>
         <div className="formWpr">
-          <h3>{t('hankeForm:perustiedotForm:ytkHankeHeader')}</h3>
+          <h3 className="labelHeader">
+            <div>{t('hankeForm:perustiedotForm:ytkHankeHeader')}</div>
+            <Tooltip
+              labelText={t(`hankeForm:toolTips:${FORMFIELD.YKT_HANKE}`)}
+              openButtonLabelText={t(`hankeForm:toolTips:tipOpenLabel`)}
+              closeButtonLabelText={t(`hankeForm:toolTips:tipCloseLabel`)}
+            />
+          </h3>
           <Checkbox
             name={FORMFIELD.YKT_HANKE}
             id={FORMFIELD.YKT_HANKE}
@@ -57,6 +65,11 @@ const Form0: React.FC<PropTypes> = (props) => {
           defaultValue={formData ? formData[FORMFIELD.NIMI] : ''}
           invalid={!!errors.hankeenNimi}
           errorMsg={t('hankeForm:insertFieldError')}
+          tooltip={{
+            labelText: t(`hankeForm:toolTips:${FORMFIELD.NIMI}`),
+            openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
+            closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
+          }}
         />
       </div>
       <div className="calendaraWpr formWpr">
@@ -72,6 +85,11 @@ const Form0: React.FC<PropTypes> = (props) => {
             invalid={!!errors.startDate}
             errorMsg={t('hankeForm:insertFieldError')}
             defaultValue={formData ? formData[FORMFIELD.ALKU_PVM] : null}
+            tooltip={{
+              labelText: t(`hankeForm:toolTips:${FORMFIELD.ALKU_PVM}`),
+              openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
+              closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
+            }}
           />
         </div>
         <div className="right">
@@ -86,6 +104,11 @@ const Form0: React.FC<PropTypes> = (props) => {
             invalid={!!errors.endDate}
             errorMsg={t('hankeForm:insertFieldError')}
             defaultValue={formData ? formData[FORMFIELD.LOPPU_PVM] : null}
+            tooltip={{
+              labelText: t(`hankeForm:toolTips:${FORMFIELD.LOPPU_PVM}`),
+              openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
+              closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
+            }}
           />
         </div>
       </div>
@@ -103,6 +126,11 @@ const Form0: React.FC<PropTypes> = (props) => {
           rules={{ required: true }}
           invalid={!!errors[FORMFIELD.VAIHE]}
           errorMsg={t('hankeForm:insertFieldError')}
+          tooltip={{
+            labelText: t(`hankeForm:toolTips:${FORMFIELD.VAIHE}`),
+            openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
+            closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
+          }}
         />
       </div>
     </div>

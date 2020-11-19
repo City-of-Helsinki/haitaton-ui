@@ -106,6 +106,15 @@
       "omistaja": "SV:omistaja",
       "YKTHanke": "SV:Hanke on YKT-hanke"
     },
+    "toolTips": {
+      "tipOpenLabel": "SV:Avaa ohje",
+      "tipCloseLabel": "SV:Sulje ohje",
+      "nimi": "SV:Ohjeteksti",
+      "YKTHanke": "SV:Ohjeteksti",
+      "alkuPvm": "SV:Ohjeteksti",
+      "loppuPvm": "SV:Ohjeteksti",
+      "vaihe": "SV:Ohjeteksti"
+    },
     "perustiedotForm": {
       "header": "SV:Hankkeen perustiedot",
       "ytkHankeHeader": "SV:YTK-hanke"
