@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import H1 from '../../../common/components/text/H1';
 
 import { combineObj } from './utils';
-import { HankeData } from './types';
+import { HankeDataDraft } from './types';
 import { getFormData } from './selectors';
 
 import { actions } from './reducer';
@@ -36,7 +36,7 @@ const FormComponent: React.FC = (props) => {
   const [WizardView, changeWizardView] = useState(0);
   const [viewStatusVar, setviewStatusVar] = useState(0);
 
-  const { handleSubmit, errors, control, register, getValues } = useForm<HankeData>({
+  const { handleSubmit, errors, control, register, getValues } = useForm<HankeDataDraft>({
     mode: 'all',
     reValidateMode: 'onBlur',
     resolver: undefined,
@@ -56,7 +56,7 @@ const FormComponent: React.FC = (props) => {
     return false;
   }
 
-  const onSubmit = async (values: HankeData) => {
+  const onSubmit = async (values: HankeDataDraft) => {
     const data = combineObj(values, formData);
 
     if (data) {
@@ -82,10 +82,10 @@ const FormComponent: React.FC = (props) => {
         <div className="hankeForm__formWprRight">
           <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
             {WizardView === 0 && <Form0 errors={errors} control={control} register={register()} />}
-            {WizardView === 1 && <Form1 />}
-            {WizardView === 2 && <Form2 errors={errors} control={control} />}
-            {WizardView === 3 && <Form3 />}
-            {WizardView === 4 && <Form4 />}
+            {WizardView === 1 && <Form1 errors={errors} control={control} register={register()} />}
+            {WizardView === 2 && <Form2 errors={errors} control={control} register={register()} />}
+            {WizardView === 3 && <Form3 errors={errors} control={control} register={register()} />}
+            {WizardView === 4 && <Form4 errors={errors} control={control} register={register()} />}
             <div className="btnWpr">
               {WizardView < 4 && (
                 <button

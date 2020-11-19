@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-
-import { Checkbox } from 'hds-react';
-import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { Checkbox } from 'hds-react';
+import { $enum } from 'ts-enum-util';
 
 import DatePicker from '../../../common/components/datePicker/DatePicker';
-
-import { getFormData } from './selectors';
-
 import Dropdown from '../../../common/components/dropdown/Dropdown';
 import TextInput from '../../../common/components/textInput/TextInput';
 
+import { HANKE_VAIHE, FORMFIELD } from './types';
+import { getFormData } from './selectors';
 import PropTypes from './PropTypes';
 
 const Form0: React.FC<PropTypes> = (props) => {
@@ -18,17 +17,7 @@ const Form0: React.FC<PropTypes> = (props) => {
   const { control, errors, register } = props;
   const formData = useSelector(getFormData);
 
-  const getHankeenVaiheOptions = [
-    {
-      value: 'Suunni',
-      label: t('hankeForm:perustiedotForm:hankeenVaiheDropDown:suunnittelussa'),
-    },
-    {
-      value: 'Ohjelm',
-      label: t('hankeForm:perustiedotForm:hankeenVaiheDropDown:ohjelmointiVaiheessa'),
-    },
-  ];
-  const [ytkChecked, setYtkChecked] = useState(formData?.YTKHanke);
+  const [ytkChecked, setYtkChecked] = useState(formData[FORMFIELD.YKT_HANKE]);
 
   return (
     <div className="form0">
@@ -36,12 +25,12 @@ const Form0: React.FC<PropTypes> = (props) => {
       <div className="dataWpr">
         <div className="formWpr">
           <TextInput
-            name="hankeenTunnus"
-            id="hankeenTunnus"
-            label={t('hankeForm:perustiedotForm:hankeenTunnusLabel')}
+            name={FORMFIELD.TUNNUS}
+            id={FORMFIELD.TUNNUS}
+            label={t(`hankeForm:labels:${FORMFIELD.TUNNUS}`)}
             control={control}
             defaultValue=""
-            invalid={!!errors.hankeenTunnus}
+            invalid={!!errors[FORMFIELD.TUNNUS]}
             errorMsg={t('hankeForm:insertFieldError')}
             disabled
           />
@@ -49,9 +38,9 @@ const Form0: React.FC<PropTypes> = (props) => {
         <div className="formWpr">
           <h3>{t('hankeForm:perustiedotForm:ytkHankeHeader')}</h3>
           <Checkbox
-            name="YTKHanke"
-            id="YTKHanke"
-            label={t('hankeForm:perustiedotForm:hankeOnYtkHankeLabel')}
+            name={FORMFIELD.YKT_HANKE}
+            id={FORMFIELD.YKT_HANKE}
+            label={t(`hankeForm:labels:${FORMFIELD.YKT_HANKE}`)}
             ref={register}
             checked={ytkChecked}
             onChange={() => setYtkChecked(!ytkChecked)}
@@ -60,12 +49,12 @@ const Form0: React.FC<PropTypes> = (props) => {
       </div>
       <div className="formWpr">
         <TextInput
-          name="hankeenNimi"
-          id="hankeenNimi"
-          label={t('hankeForm:perustiedotForm:hankeenNimiLabel')}
+          name={FORMFIELD.NIMI}
+          id={FORMFIELD.NIMI}
+          label={t(`hankeForm:labels:${FORMFIELD.NIMI}`)}
           control={control}
           rules={{ required: true }}
-          defaultValue={formData ? formData.hankeenNimi : ''}
+          defaultValue={formData ? formData[FORMFIELD.NIMI] : ''}
           invalid={!!errors.hankeenNimi}
           errorMsg={t('hankeForm:insertFieldError')}
         />
@@ -73,43 +62,46 @@ const Form0: React.FC<PropTypes> = (props) => {
       <div className="calendaraWpr formWpr">
         <div className="left">
           <DatePicker
-            name="startDate"
-            id="startDate"
-            label={t('hankeForm:perustiedotForm:HankkeenAlkupaivaLabel')}
+            name={FORMFIELD.ALKU_PVM}
+            id={FORMFIELD.ALKU_PVM}
+            label={t(`hankeForm:labels:${FORMFIELD.ALKU_PVM}`)}
             control={control}
             rules={{ required: true }}
             locale={i18n.language}
             dateFormat="dd.MM.yyyy"
             invalid={!!errors.startDate}
             errorMsg={t('hankeForm:insertFieldError')}
-            defaultValue={formData ? formData.startDate : null}
+            defaultValue={formData ? formData[FORMFIELD.ALKU_PVM] : null}
           />
         </div>
         <div className="right">
           <DatePicker
-            name="endDate"
-            id="endDate"
-            label={t('hankeForm:perustiedotForm:HankkeenLoppupaivaLabel')}
+            name={FORMFIELD.LOPPU_PVM}
+            id={FORMFIELD.LOPPU_PVM}
+            label={t(`hankeForm:labels:${FORMFIELD.LOPPU_PVM}`)}
             control={control}
             rules={{ required: true }}
             locale={i18n.language}
             dateFormat="dd.MM.yyyy"
             invalid={!!errors.endDate}
             errorMsg={t('hankeForm:insertFieldError')}
-            defaultValue={formData ? formData.endDate : null}
+            defaultValue={formData ? formData[FORMFIELD.LOPPU_PVM] : null}
           />
         </div>
       </div>
       <div className="formWpr">
         <Dropdown
-          name="hankeenVaihe"
-          id="hankeenVaihe"
+          name={FORMFIELD.VAIHE}
+          id={FORMFIELD.VAIHE}
           control={control}
-          options={getHankeenVaiheOptions}
-          defaultValue={formData?.hankeenVaihe ? formData.hankeenVaihe : null}
-          label={t('hankeForm:perustiedotForm:hankeenVaihe')}
+          options={$enum(HANKE_VAIHE).map((value) => ({
+            value,
+            label: t(`hanke:vaihe:${value}`),
+          }))}
+          defaultValue={!formData[FORMFIELD.VAIHE] ? formData[FORMFIELD.VAIHE] : null}
+          label={t(`hankeForm:labels:${FORMFIELD.VAIHE}`)}
           rules={{ required: true }}
-          invalid={!!errors.hankeenVaihe}
+          invalid={!!errors[FORMFIELD.VAIHE]}
           errorMsg={t('hankeForm:insertFieldError')}
         />
       </div>

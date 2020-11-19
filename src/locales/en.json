@@ -42,6 +42,13 @@
       }
     }
   },
+  "hanke": {
+    "vaihe": {
+      "SUUNNITTELU": "Suunnittelu",
+      "OHJELMOINTI": "Ohjelmointi",
+      "RAKENTAMINEN": "Rakentaminen"
+    }
+  },
   "hankeForm": {
     "pageHeader": "EN:Hanke",
     "previousButton": "EN:Edellinen",
@@ -55,10 +62,6 @@
       "hankeenNimiLabel": "EN:Hankeen Nimi",
       "HankkeenAlkupaivaLabel": "EN:Hankkeen alkupäivä",
       "HankkeenLoppupaivaLabel": "EN:Hankkeen loppupäivä",
-      "hankeenVaiheDropDown": {
-        "suunnittelussa": "EN:Suunnittelussa",
-        "ohjelmointiVaiheessa": "EN:Ohjelmointi vaiheessa"
-      },
       "hankeenVaihe": "EN:Hankeen Vaihe"
     },
     "hankkeenAlueForm": {

@@ -25,12 +25,12 @@ api.interceptors.response.use(
     if (response) {
       if (response.status >= 400 && response.status < 500) {
         // eslint-disable-next-line
-        alert(response.data?.data?.message);
+        console.error(response.data?.data?.message);
         return null;
       }
     } else if (request) {
       // eslint-disable-next-line
-      alert('Request failed. Please try again.');
+      console.error('Request failed. Please try again.');
       return null;
     }
     return Promise.reject(error);

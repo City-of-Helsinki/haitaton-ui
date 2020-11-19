@@ -1,8 +1,9 @@
+// eslint-disable-next-line
+import { FieldErrors, Control } from 'react-hook-form/dist/types';
+
 export default interface PropTypes {
+  errors: FieldErrors;
+  control: Control;
   // eslint-disable-next-line
-  errors?: any;
-  // eslint-disable-next-line
-  control?: any;
-  // eslint-disable-next-line
-  register?: any;
+  register: any;
 }
