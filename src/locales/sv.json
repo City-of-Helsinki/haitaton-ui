@@ -59,7 +59,15 @@
         "suunnittelussa": "SV:Suunnittelussa",
         "ohjelmointiVaiheessa": "SV:Ohjelmointi vaiheessa"
       },
-      "hankeenVaihe": "SV:Hankeen Vaihe"
+      "hankeenVaiheLabel": "SV:Hankeen Vaihe",
+      "hankeenVaiheLabel": "SV:Hankeen Vaihe",
+      "tooltipLabelOpen": "SV:Avaa ohje",
+      "tooltipLabelClose": "SV:Sulje ohje",
+      "hankeenNimiTooltipLabel": "SV:Ohjeteksti",
+      "hankeOnYtkHankeTooltipLabel": "SV:Ohjeteksti",
+      "HankkeenAlkupaivaToolTipLabel": "SV:Ohjeteksti",
+      "HankkeenLoppupaivaTooltipLabel": "SV:Ohjeteksti",
+      "hankeenVaiheTooltipLabel": "SV:Ohjeteksti"
     },
     "hankkeenAlueForm": {
       "header": "SV:Hankkeen alue"

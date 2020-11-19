@@ -1,0 +1,8 @@
+.dropdownComp {
+  position: relative;
+
+  button[class^='Tooltip-module_buttonTooltip'] {
+    display: block;
+    z-index: 99;
+  }
+}

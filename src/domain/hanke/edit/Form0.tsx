@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Checkbox } from 'hds-react';
+import { Checkbox, Tooltip } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
@@ -47,7 +47,15 @@ const Form0: React.FC<PropTypes> = (props) => {
           />
         </div>
         <div className="formWpr">
-          <h3>{t('hankeForm:perustiedotForm:ytkHankeHeader')}</h3>
+          <h3 className="labelHeader">
+            <div>{t('hankeForm:perustiedotForm:ytkHankeHeader')}</div>
+            <Tooltip
+              labelText={t('hankeForm:perustiedotForm:hankeOnYtkHankeTooltipLabel')}
+              openButtonLabelText={t('hankeForm:perustiedotForm:tooltipLabelOpen')}
+              closeButtonLabelText={t('hankeForm:perustiedotForm:tooltipLabelClose')}
+            />
+          </h3>
+
           <Checkbox
             name="YTKHanke"
             id="YTKHanke"
@@ -68,6 +76,7 @@ const Form0: React.FC<PropTypes> = (props) => {
           defaultValue={formData ? formData.hankeenNimi : ''}
           invalid={!!errors.hankeenNimi}
           errorMsg={t('hankeForm:insertFieldError')}
+          tooltipText={t('hankeForm:perustiedotForm:hankeenNimiTooltipLabel')}
         />
       </div>
       <div className="calendaraWpr formWpr">
@@ -83,6 +92,9 @@ const Form0: React.FC<PropTypes> = (props) => {
             invalid={!!errors.startDate}
             errorMsg={t('hankeForm:insertFieldError')}
             defaultValue={formData ? formData.startDate : null}
+            tooltipText={t('hankeForm:perustiedotForm:HankkeenAlkupaivaToolTipLabel')}
+            tooltipLabelOpen={t('hankeForm:perustiedotForm:tooltipLabelOpen')}
+            tooltipLabelClose={t('hankeForm:perustiedotForm:tooltipLabelClose')}
           />
         </div>
         <div className="right">
@@ -97,6 +109,9 @@ const Form0: React.FC<PropTypes> = (props) => {
             invalid={!!errors.endDate}
             errorMsg={t('hankeForm:insertFieldError')}
             defaultValue={formData ? formData.endDate : null}
+            tooltipText={t('hankeForm:perustiedotForm:HankkeenLoppupaivaTooltipLabel')}
+            tooltipLabelOpen={t('hankeForm:perustiedotForm:tooltipLabelOpen')}
+            tooltipLabelClose={t('hankeForm:perustiedotForm:tooltipLabelClose')}
           />
         </div>
       </div>
@@ -107,10 +122,13 @@ const Form0: React.FC<PropTypes> = (props) => {
           control={control}
           options={getHankeenVaiheOptions}
           defaultValue={formData?.hankeenVaihe ? formData.hankeenVaihe : null}
-          label={t('hankeForm:perustiedotForm:hankeenVaihe')}
+          label={t('hankeForm:perustiedotForm:hankeenVaiheLabel')}
           rules={{ required: true }}
           invalid={!!errors.hankeenVaihe}
           errorMsg={t('hankeForm:insertFieldError')}
+          tooltipText={t('hankeForm:perustiedotForm:hankeenVaiheTooltipLabel')}
+          tooltipLabelOpen={t('hankeForm:perustiedotForm:tooltipLabelOpen')}
+          tooltipLabelClose={t('hankeForm:perustiedotForm:tooltipLabelClose')}
         />
       </div>
     </div>

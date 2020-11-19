@@ -1,6 +1,8 @@
 import React from 'react';
 import { Controller, Control } from 'react-hook-form';
-import { Dropdown } from 'hds-react';
+import { Dropdown, Tooltip } from 'hds-react';
+
+import './dropDown.styles.scss';
 
 type Option = { value: string; label: string };
 // eslint-disable-next-line
@@ -20,11 +22,34 @@ type PropTypes = {
   options: Array<Option>;
   invalid?: boolean;
   errorMsg?: string;
+  tooltipText?: string;
+  tooltipLabelClose?: string;
+  tooltipLabelOpen?: string;
 };
 const DropdownComp: React.FC<PropTypes> = (props) => {
-  const { name, id, control, rules, options, defaultValue, label, invalid, errorMsg } = props;
+  const {
+    name,
+    id,
+    control,
+    rules,
+    options,
+    defaultValue,
+    label,
+    invalid,
+    errorMsg,
+    tooltipText,
+    tooltipLabelClose,
+    tooltipLabelOpen,
+  } = props;
   return (
-    <>
+    <div className="dropdownComp">
+      {tooltipText && (
+        <Tooltip
+          openButtonLabelText={tooltipLabelOpen || ''}
+          closeButtonLabelText={tooltipLabelClose || ''}
+          labelText={tooltipText}
+        />
+      )}
       <Controller
         name={name}
         id={id}
@@ -44,7 +69,7 @@ const DropdownComp: React.FC<PropTypes> = (props) => {
         )}
       />
       {invalid && <span className="error-text">{errorMsg}</span>}
-    </>
+    </div>
   );
 };
 export default DropdownComp;

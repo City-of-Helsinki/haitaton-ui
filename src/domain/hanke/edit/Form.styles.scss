@@ -7,6 +7,20 @@
     display: flex;
   }
 
+  h3.labelHeader {
+    display: flex;
+
+    div[class^='Tooltip-module_wrapper'] {
+      display: inline-block;
+
+      button[class^='Tooltip-module_buttonTooltip'] {
+        position: relative;
+        top: -3px;
+        left: 3px;
+      }
+    }
+  }
+
   &__formWprRight {
     background: var(--color-white);
     flex-grow: 1;
