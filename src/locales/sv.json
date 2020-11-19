@@ -44,9 +44,38 @@
   },
   "hanke": {
     "vaihe": {
-      "SUUNNITTELU": "Suunnittelu",
-      "OHJELMOINTI": "Ohjelmointi",
-      "RAKENTAMINEN": "Rakentaminen"
+      "SUUNNITTELU": "SV:Suunnittelu",
+      "OHJELMOINTI": "SV:Ohjelmointi",
+      "RAKENTAMINEN": "SV:Rakentaminen"
+    },
+    "kaistahaitta": {
+      "EI_VAIKUTA": "SV:Ei vaikuta",
+      "YKSI": "SV:Vähentää samanaikaisesti kaistan yhdellä ajosuunnalla",
+      "KAKSI": "SV:Vähentää samanaikaisesti kaistan kahdella ajosuunnalla",
+      "KOLME": "SV:Vähentää samanaikaisesti useita kaistoja kahdella ajosuunnalla",
+      "NELJA": "SV:Vähentää samanaikaisesti useita kaistoja liittymän eri suunnilla"
+    },
+    "kaistapituushaitta": {
+      "EI_VAIKUTA": "SV:Ei vaikuta",
+      "YKSI": "SV:Alle 10 m",
+      "KAKSI": "SV:10-49 m",
+      "KOLME": "SV:50-99 m",
+      "NELJA": "SV:Yli 100 m"
+    },
+    "meluhaitta": {
+      "YKSI": "SV:Satunnainen haitta",
+      "KAKSI": "SV:Lyhytaikainen toistuva haitta",
+      "KOLME": "SV:Pitkäkestoinen jatkuva haitta"
+    },
+    "polyhaitta": {
+      "YKSI": "SV:Satunnainen haitta",
+      "KAKSI": "SV:Lyhytaikainen toistuva haitta",
+      "KOLME": "SV:Pitkäkestoinen jatkuva haitta"
+    },
+    "tarinahaitta": {
+      "YKSI": "SV:Satunnainen haitta",
+      "KAKSI": "SV:Lyhytaikainen toistuva haitta",
+      "KOLME": "SV:Pitkäkestoinen jatkuva haitta"
     }
   },
   "hankeForm": {
@@ -54,25 +83,38 @@
     "previousButton": "SV:Edellinen",
     "nextButton": "SV:Seuraava",
     "insertFieldError": "SV:Syötä kenttä",
+    "labels": {
+      "tunnus": "SV:Hankkeen tunnus",
+      "nimi": "SV:Hankkeen nimi",
+      "vaihe": "SV:Hankeen Vaihe",
+      "suunnitteluvaihe": "SV:Hankkeen suunnitteluvaihe",
+      "alkuPvm": "SV:Hankkeen alkupäivä",
+      "loppuPvm": "SV:Hankkeen loppupäivä",
+      "tyomaatyyppi": "SV:YTKHanke",
+      "tyomaakoko": "SV:Työmaan koko",
+      "haittaAlkuPvm": "SV:Haitan alkupäivämäärä",
+      "haittaLoppuPvm": "SV:Haitan loppupäivämäärä",
+      "kaistahaitta": "SV:Kaistahaitta",
+      "kaistapituushaitta": "SV:Kaistan pituushaitta",
+      "meluhaitta": "SV:Meluhaitta",
+      "polyhaitta": "SV:Pölyhaitta",
+      "tarinahaitta": "SV:Tärinähaitta",
+      "omistajaOrganisaatio": "SV:Omistajaorganisaatio",
+      "omistajaOsasto": "SV:Omistajaosasto",
+      "arvioijaOrganisaatio": "SV:arvioijaOrganisaatio",
+      "arvioijaOsasto": "SV:Arvioijaosasto",
+      "omistaja": "SV:omistaja",
+      "YKTHanke": "SV:Hanke on YKT-hanke"
+    },
     "perustiedotForm": {
       "header": "SV:Hankkeen perustiedot",
-      "hankeenTunnusLabel": "SV:Hankeen Tunnus",
-      "ytkHankeHeader": "SV:YTK-hanke",
-      "hankeOnYtkHankeLabel": "SV:Hanke on YTK-hanke",
-      "hankeenNimiLabel": "SV:Hankeen Nimi",
-      "HankkeenAlkupaivaLabel": "SV:Hankkeen alkupäivä",
-      "HankkeenLoppupaivaLabel": "SV:Hankkeen loppupäivä",
-      "hankeenVaihe": "SV:Hankeen Vaihe"
+      "ytkHankeHeader": "SV:YTK-hanke"
     },
     "hankkeenAlueForm": {
       "header": "SV:Hankkeen alue"
     },
     "hankkeenYhteystiedotForm": {
-      "header": "SV:Hankkeen yhteystiedot",
-      "omistajaorganisaatioLabel": "SV:Omistajaorganisaatio",
-      "omistajaosastoLabel": "SV:Omistajaosasto",
-      "omistajaNimiLabel": "SV:Omistaja nimi",
-      "arvioijaosastoLabel": "SV:Arvioijaosasto"
+      "header": "SV:Hankkeen yhteystiedot"
     },
     "tyomaanTiedotForm": {
       "header": "SV:Työmaan tiedot"
