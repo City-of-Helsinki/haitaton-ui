@@ -98,7 +98,7 @@ const Form0: React.FC<PropTypes> = (props) => {
             value,
             label: t(`hanke:vaihe:${value}`),
           }))}
-          defaultValue={!formData[FORMFIELD.VAIHE] ? formData[FORMFIELD.VAIHE] : null}
+          defaultValue={!formData[FORMFIELD.VAIHE] ? formData[FORMFIELD.VAIHE] : undefined}
           label={t(`hankeForm:labels:${FORMFIELD.VAIHE}`)}
           rules={{ required: true }}
           invalid={!!errors[FORMFIELD.VAIHE]}

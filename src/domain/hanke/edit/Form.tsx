@@ -44,6 +44,7 @@ const FormComponent: React.FC = (props) => {
     criteriaMode: 'firstError',
     shouldFocusError: true,
     shouldUnregister: true,
+    defaultValues: formData,
   });
 
   function goBack(view: number) {

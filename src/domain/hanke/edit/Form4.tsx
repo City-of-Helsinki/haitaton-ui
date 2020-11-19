@@ -66,7 +66,7 @@ const Form4: React.FC<PropTypes> = (props) => {
               label: t(`hanke:${FORMFIELD.KAISTAHAITTA}:${value}`),
             }))}
             defaultValue={
-              !formData[FORMFIELD.KAISTAHAITTA] ? formData[FORMFIELD.KAISTAHAITTA] : null
+              !formData[FORMFIELD.KAISTAHAITTA] ? formData[FORMFIELD.KAISTAHAITTA] : undefined
             }
             label={t(`hankeForm:labels:${FORMFIELD.KAISTAHAITTA}`)}
             rules={{ required: true }}
@@ -87,7 +87,7 @@ const Form4: React.FC<PropTypes> = (props) => {
             defaultValue={
               !formData[FORMFIELD.KAISTAPITUUSHAITTA]
                 ? formData[FORMFIELD.KAISTAPITUUSHAITTA]
-                : null
+                : undefined
             }
             label={t(`hankeForm:labels:${FORMFIELD.KAISTAPITUUSHAITTA}`)}
             rules={{ required: true }}
@@ -105,7 +105,9 @@ const Form4: React.FC<PropTypes> = (props) => {
               value,
               label: t(`hanke:${FORMFIELD.MELUHAITTA}:${value}`),
             }))}
-            defaultValue={!formData[FORMFIELD.MELUHAITTA] ? formData[FORMFIELD.MELUHAITTA] : null}
+            defaultValue={
+              !formData[FORMFIELD.MELUHAITTA] ? formData[FORMFIELD.MELUHAITTA] : undefined
+            }
             label={t(`hankeForm:labels:${FORMFIELD.MELUHAITTA}`)}
             rules={{ required: true }}
             invalid={!!errors[FORMFIELD.MELUHAITTA]}
@@ -122,7 +124,9 @@ const Form4: React.FC<PropTypes> = (props) => {
               value,
               label: t(`hanke:${FORMFIELD.POLYHAITTA}:${value}`),
             }))}
-            defaultValue={!formData[FORMFIELD.POLYHAITTA] ? formData[FORMFIELD.POLYHAITTA] : null}
+            defaultValue={
+              !formData[FORMFIELD.POLYHAITTA] ? formData[FORMFIELD.POLYHAITTA] : undefined
+            }
             label={t(`hankeForm:labels:${FORMFIELD.POLYHAITTA}`)}
             rules={{ required: true }}
             invalid={!!errors[FORMFIELD.POLYHAITTA]}
@@ -140,7 +144,7 @@ const Form4: React.FC<PropTypes> = (props) => {
               label: t(`hanke:${FORMFIELD.TARINAHAITTA}:${value}`),
             }))}
             defaultValue={
-              !formData[FORMFIELD.TARINAHAITTA] ? formData[FORMFIELD.TARINAHAITTA] : null
+              !formData[FORMFIELD.TARINAHAITTA] ? formData[FORMFIELD.TARINAHAITTA] : undefined
             }
             label={t(`hankeForm:labels:${FORMFIELD.TARINAHAITTA}`)}
             rules={{ required: true }}
