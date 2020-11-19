@@ -1,18 +1,18 @@
 import { PayloadAction, CaseReducer, createSlice } from '@reduxjs/toolkit';
 import { saveForm } from './thunks';
-import { HankeData } from './types';
+import { HankeDataDraft } from './types';
 
 type State = {
-  hankeData: HankeData | null;
+  hankeDataDraft: HankeDataDraft;
   status: string | null;
 };
 
-const updateFormData: CaseReducer<State, PayloadAction<HankeData>> = (state, action) => {
-  state.hankeData = action.payload;
+const updateFormData: CaseReducer<State, PayloadAction<HankeDataDraft>> = (state, action) => {
+  state.hankeDataDraft = action.payload;
 };
 
 const initialState: State = {
-  hankeData: null, // Null or write default HankeData
+  hankeDataDraft: {},
   status: null,
 };
 

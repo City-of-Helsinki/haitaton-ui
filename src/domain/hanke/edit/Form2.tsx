@@ -1,9 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import TextInput from '../../../common/components/textInput/TextInput';
-
 import PropTypes from './PropTypes';
+import { FORMFIELD } from './types';
 
 const Form2: React.FC<PropTypes> = (props) => {
   const { t } = useTranslation();
@@ -14,21 +13,21 @@ const Form2: React.FC<PropTypes> = (props) => {
       <div className="formWprColumns">
         <div className="left">
           <TextInput
-            name="omistajaOrganisaatio"
-            id="omistajaOrganisaatio"
-            label={t('hankeForm:hankkeenYhteystiedotForm:omistajaorganisaatioLabel')}
+            name={FORMFIELD.OMISTAJAORGANISAATIO}
+            id={FORMFIELD.OMISTAJAORGANISAATIO}
+            label={t(`hankeForm:labels:${FORMFIELD.OMISTAJAORGANISAATIO}`)}
             control={control}
             rules={{ required: true }}
             defaultValue=""
-            invalid={!!errors.omistajaOrganisaatio}
+            invalid={!!errors[FORMFIELD.OMISTAJAORGANISAATIO]}
             errorMsg={t('hankeForm:insertFieldError')}
           />
         </div>
         <div className="right">
           <TextInput
-            name="omistajaOsasto"
-            id="omistajaOsasto"
-            label={t('hankeForm:hankkeenYhteystiedotForm:omistajaosastoLabel')}
+            name={FORMFIELD.OMISTAJAOASTO}
+            id={FORMFIELD.OMISTAJAOASTO}
+            label={t(`hankeForm:labels:${FORMFIELD.OMISTAJAORGANISAATIO}`)}
             control={control}
             defaultValue=""
           />
@@ -37,21 +36,21 @@ const Form2: React.FC<PropTypes> = (props) => {
       <div className="formWprColumns">
         <div className="left">
           <TextInput
-            name="arvioijaOrganisaatio"
-            id="arvioijaOrganisaatio"
-            label={t('hankeForm:hankkeenYhteystiedotForm:omistajaNimiLabel')}
+            name={FORMFIELD.ARVIOIJAORGANISAATIO}
+            id={FORMFIELD.ARVIOIJAORGANISAATIO}
+            label={t(`hankeForm:labels:${FORMFIELD.OMISTAJAORGANISAATIO}`)}
             control={control}
             rules={{ required: true }}
             defaultValue=""
-            invalid={!!errors.arvioijaOrganisaatio}
+            invalid={!!errors[FORMFIELD.OMISTAJAORGANISAATIO]}
             errorMsg={t('hankeForm:insertFieldError')}
           />
         </div>
         <div className="right">
           <TextInput
-            name="arvioijaOsasto"
-            id="arvioijaOsasto"
-            label={t('hankeForm:hankkeenYhteystiedotForm:arvioijaosastoLabel')}
+            name={FORMFIELD.ARVIOIJAOSASTO}
+            id={FORMFIELD.ARVIOIJAOSASTO}
+            label={t(`hankeForm:labels:${FORMFIELD.ARVIOIJAOSASTO}`)}
             control={control}
             defaultValue=""
           />

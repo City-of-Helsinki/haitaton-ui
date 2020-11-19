@@ -1,11 +1,10 @@
-import { HankeData } from './types';
+import { HANKE_VAIHE, HankeDataDraft } from './types';
 
-export function combineObj(obj1: HankeData, obj2: HankeData | null) {
+export function combineObj(obj1: HankeDataDraft, obj2: HankeDataDraft) {
   const basicData = {
     hankeId: '',
-    name: '',
-    owner: '',
-    phase: 1,
+    nimi: '',
+    vaihe: HANKE_VAIHE.OHJELMOINTI,
   };
   return { ...basicData, ...obj1, ...obj2 };
 }

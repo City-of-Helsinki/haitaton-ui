@@ -42,34 +42,79 @@
       }
     }
   },
+  "hanke": {
+    "vaihe": {
+      "SUUNNITTELU": "Suunnittelu",
+      "OHJELMOINTI": "Ohjelmointi",
+      "RAKENTAMINEN": "Rakentaminen"
+    },
+    "kaistahaitta": {
+      "EI_VAIKUTA": "Ei vaikuta",
+      "YKSI": "Vähentää samanaikaisesti kaistan yhdellä ajosuunnalla",
+      "KAKSI": "Vähentää samanaikaisesti kaistan kahdella ajosuunnalla",
+      "KOLME": "Vähentää samanaikaisesti useita kaistoja kahdella ajosuunnalla",
+      "NELJA": "Vähentää samanaikaisesti useita kaistoja liittymän eri suunnilla"
+    },
+    "kaistapituushaitta": {
+      "EI_VAIKUTA": "Ei vaikuta",
+      "YKSI": "Alle 10 m",
+      "KAKSI": "10-49 m",
+      "KOLME": "50-99 m",
+      "NELJA": "Yli 100 m"
+    },
+    "meluhaitta": {
+      "YKSI": "Satunnainen haitta",
+      "KAKSI": "Lyhytaikainen toistuva haitta",
+      "KOLME": "Pitkäkestoinen jatkuva haitta"
+    },
+    "polyhaitta": {
+      "YKSI": "Satunnainen haitta",
+      "KAKSI": "Lyhytaikainen toistuva haitta",
+      "KOLME": "Pitkäkestoinen jatkuva haitta"
+    },
+    "tarinahaitta": {
+      "YKSI": "Satunnainen haitta",
+      "KAKSI": "Lyhytaikainen toistuva haitta",
+      "KOLME": "Pitkäkestoinen jatkuva haitta"
+    }
+  },
   "hankeForm": {
     "pageHeader": "Hanke",
     "previousButton": "Edellinen",
     "nextButton": "Seuraava",
     "insertFieldError": "Syötä kenttä",
+    "labels": {
+      "tunnus": "Hankkeen tunnus",
+      "nimi": "Hankkeen nimi",
+      "vaihe": "Hankeen Vaihe",
+      "suunnitteluvaihe": "Hankkeen suunnitteluvaihe",
+      "alkuPvm": "Hankkeen alkupäivä",
+      "loppuPvm": "Hankkeen loppupäivä",
+      "tyomaatyyppi": "YTKHanke",
+      "tyomaakoko": "Työmaan koko",
+      "haittaAlkuPvm": "Haitan alkupäivämäärä",
+      "haittaLoppuPvm": "Haitan loppupäivämäärä",
+      "kaistahaitta": "Kaistahaitta",
+      "kaistapituushaitta": "Kaistan pituushaitta",
+      "meluhaitta": "Meluhaitta",
+      "polyhaitta": "Pölyhaitta",
+      "tarinahaitta": "Tärinähaitta",
+      "omistajaOrganisaatio": "Omistajaorganisaatio",
+      "omistajaOsasto": "Omistajaosasto",
+      "arvioijaOrganisaatio": "arvioijaOrganisaatio",
+      "arvioijaOsasto": "Arvioijaosasto",
+      "omistaja": "omistaja",
+      "YKTHanke": "Hanke on YKT-hanke"
+    },
     "perustiedotForm": {
       "header": "Hankkeen perustiedot",
-      "hankeenTunnusLabel": "Hankeen Tunnus",
-      "ytkHankeHeader": "YTK-hanke",
-      "hankeOnYtkHankeLabel": "Hanke on YTK-hanke",
-      "hankeenNimiLabel": "Hankeen Nimi",
-      "HankkeenAlkupaivaLabel": "Hankkeen alkupäivä",
-      "HankkeenLoppupaivaLabel": "Hankkeen loppupäivä",
-      "hankeenVaiheDropDown": {
-        "suunnittelussa": "Suunnittelussa",
-        "ohjelmointiVaiheessa": "Ohjelmointi vaiheessa"
-      },
-      "hankeenVaihe": "Hankeen Vaihe"
+      "ytkHankeHeader": "YTK-hanke"
     },
     "hankkeenAlueForm": {
       "header": "Hankkeen alue"
     },
     "hankkeenYhteystiedotForm": {
-      "header": "Hankkeen yhteystiedot",
-      "omistajaorganisaatioLabel": "Omistajaorganisaatio",
-      "omistajaosastoLabel": "Omistajaosasto",
-      "omistajaNimiLabel": "Omistaja nimi",
-      "arvioijaosastoLabel": "Arvioijaosasto"
+      "header": "Hankkeen yhteystiedot"
     },
     "tyomaanTiedotForm": {
       "header": "Työmaan tiedot"
