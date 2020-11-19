@@ -5,7 +5,11 @@ import { Dropdown as HdsDropdown, Tooltip } from 'hds-react';
 import './dropDown.styles.scss';
 
 type Option = { value: string; label: string };
-
+type DropdownProps = {
+  labelText: string;
+  openButtonLabelText: string;
+  closeButtonLabelText: string;
+};
 type PropTypes = {
   name: string;
   id: string;
@@ -16,9 +20,7 @@ type PropTypes = {
   options: Array<Option>;
   invalid?: boolean;
   errorMsg?: string;
-  tooltipText?: string;
-  tooltipLabelClose?: string;
-  tooltipLabelOpen?: string;
+  tooltip?: DropdownProps;
 };
 
 const Dropdown: React.FC<PropTypes> = (props) => {
@@ -32,20 +34,13 @@ const Dropdown: React.FC<PropTypes> = (props) => {
     label,
     invalid,
     errorMsg,
-    tooltipText,
-    tooltipLabelClose,
-    tooltipLabelOpen,
+    tooltip,
   } = props;
 
   return (
     <div className="dropdownComp">
-      {tooltipText && (
-        <Tooltip
-          openButtonLabelText={tooltipLabelOpen || ''}
-          closeButtonLabelText={tooltipLabelClose || ''}
-          labelText={tooltipText}
-        />
-      )}
+      {!!tooltip && <Tooltip {...tooltip} />}
+
       <Controller
         name={name}
         id={id}

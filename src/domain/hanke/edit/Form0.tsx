@@ -120,9 +120,11 @@ const Form0: React.FC<PropTypes> = (props) => {
           rules={{ required: true }}
           invalid={!!errors[FORMFIELD.VAIHE]}
           errorMsg={t('hankeForm:insertFieldError')}
-          tooltipText={t(`hankeForm:toolTips:${FORMFIELD.VAIHE}`)}
-          tooltipLabelOpen={t(`hankeForm:toolTips:tipOpenLabel`)}
-          tooltipLabelClose={t(`hankeForm:toolTips:tipCloseLabel`)}
+          tooltip={{
+            labelText: t(`hankeForm:toolTips:${FORMFIELD.VAIHE}`),
+            openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
+            closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
+          }}
         />
       </div>
     </div>
