@@ -77,6 +77,8 @@ const Form0: React.FC<PropTypes> = (props) => {
           invalid={!!errors.hankeenNimi}
           errorMsg={t('hankeForm:insertFieldError')}
           tooltipText={t('hankeForm:perustiedotForm:hankeenNimiTooltipLabel')}
+          openButtonLabelText={t('hankeForm:perustiedotForm:tooltipLabelOpen')}
+          closeButtonLabelText={t('hankeForm:perustiedotForm:tooltipLabelClose')}
         />
       </div>
       <div className="calendaraWpr formWpr">
