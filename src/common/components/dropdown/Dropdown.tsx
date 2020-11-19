@@ -1,15 +1,12 @@
 import React from 'react';
 import { Controller, Control } from 'react-hook-form';
 import { Dropdown as HdsDropdown, Tooltip } from 'hds-react';
+import { TooltipProps } from 'hds-react/components/Tooltip';
 
 import './dropDown.styles.scss';
 
 type Option = { value: string; label: string };
-type DropdownProps = {
-  labelText: string;
-  openButtonLabelText: string;
-  closeButtonLabelText: string;
-};
+
 type PropTypes = {
   name: string;
   id: string;
@@ -20,7 +17,7 @@ type PropTypes = {
   options: Array<Option>;
   invalid?: boolean;
   errorMsg?: string;
-  tooltip?: DropdownProps;
+  tooltip?: TooltipProps;
 };
 
 const Dropdown: React.FC<PropTypes> = (props) => {

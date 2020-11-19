@@ -1,6 +1,7 @@
 import React from 'react';
 import { Controller, Control } from 'react-hook-form';
 import { TextInput } from 'hds-react';
+import { TooltipProps } from 'hds-react/components/Tooltip';
 
 type PropTypes = {
   name: string;
@@ -12,9 +13,7 @@ type PropTypes = {
   invalid?: boolean;
   errorMsg?: string;
   disabled?: boolean;
-  tooltipText?: string;
-  openButtonLabelText?: string;
-  closeButtonLabelText?: string;
+  tooltip?: TooltipProps;
 };
 const TextInputComp: React.FC<PropTypes> = (props) => {
   const {
@@ -27,9 +26,7 @@ const TextInputComp: React.FC<PropTypes> = (props) => {
     invalid,
     errorMsg,
     disabled,
-    tooltipText,
-    openButtonLabelText,
-    closeButtonLabelText,
+    tooltip,
   } = props;
   return (
     <>
@@ -49,9 +46,7 @@ const TextInputComp: React.FC<PropTypes> = (props) => {
             onChange={onChange}
             disabled={disabled}
             value={value}
-            tooltipText={tooltipText}
-            tooltipOpenButtonLabelText={openButtonLabelText}
-            tooltipCloseButtonLabelText={closeButtonLabelText}
+            {...tooltip}
           />
         )}
       />

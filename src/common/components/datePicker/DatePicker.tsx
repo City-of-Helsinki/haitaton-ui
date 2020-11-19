@@ -2,6 +2,7 @@ import React from 'react';
 import { Controller, Control } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import { Tooltip } from 'hds-react';
+import { TooltipProps } from 'hds-react/components/Tooltip';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import './datePicker.styles.scss';
@@ -20,9 +21,7 @@ type PropTypes = {
   dateFormat?: string;
   value?: Date;
   defaultValue?: Date | null;
-  tooltipText?: string;
-  tooltipLabelClose?: string;
-  tooltipLabelOpen?: string;
+  tooltip?: TooltipProps;
 };
 const DatePickerComp: React.FC<PropTypes> = (props) => {
   const {
@@ -37,9 +36,7 @@ const DatePickerComp: React.FC<PropTypes> = (props) => {
     locale,
     dateFormat,
     defaultValue,
-    tooltipText,
-    tooltipLabelOpen,
-    tooltipLabelClose,
+    tooltip,
   } = props;
   return (
     <>
@@ -53,13 +50,7 @@ const DatePickerComp: React.FC<PropTypes> = (props) => {
           <div className="datePicker">
             <label htmlFor={id}>
               {label}
-              {tooltipText && (
-                <Tooltip
-                  openButtonLabelText={tooltipLabelOpen || ''}
-                  closeButtonLabelText={tooltipLabelClose || ''}
-                  labelText={tooltipText}
-                />
-              )}
+              {!!tooltip && <Tooltip {...tooltip} />}
             </label>
             <DatePicker
               id={id}

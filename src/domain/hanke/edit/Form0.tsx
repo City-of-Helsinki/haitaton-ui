@@ -65,9 +65,11 @@ const Form0: React.FC<PropTypes> = (props) => {
           defaultValue={formData ? formData[FORMFIELD.NIMI] : ''}
           invalid={!!errors.hankeenNimi}
           errorMsg={t('hankeForm:insertFieldError')}
-          tooltipText={t(`hankeForm:toolTips:${FORMFIELD.NIMI}`)}
-          openButtonLabelText={t(`hankeForm:toolTips:tipOpenLabel`)}
-          closeButtonLabelText={t(`hankeForm:toolTips:tipCloseLabel`)}
+          tooltip={{
+            labelText: t(`hankeForm:toolTips:${FORMFIELD.NIMI}`),
+            openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
+            closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
+          }}
         />
       </div>
       <div className="calendaraWpr formWpr">
@@ -83,9 +85,11 @@ const Form0: React.FC<PropTypes> = (props) => {
             invalid={!!errors.startDate}
             errorMsg={t('hankeForm:insertFieldError')}
             defaultValue={formData ? formData[FORMFIELD.ALKU_PVM] : null}
-            tooltipText={t(`hankeForm:toolTips:${FORMFIELD.ALKU_PVM}`)}
-            tooltipLabelOpen={t(`hankeForm:toolTips:tipOpenLabel`)}
-            tooltipLabelClose={t(`hankeForm:toolTips:tipCloseLabel`)}
+            tooltip={{
+              labelText: t(`hankeForm:toolTips:${FORMFIELD.ALKU_PVM}`),
+              openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
+              closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
+            }}
           />
         </div>
         <div className="right">
@@ -100,9 +104,11 @@ const Form0: React.FC<PropTypes> = (props) => {
             invalid={!!errors.endDate}
             errorMsg={t('hankeForm:insertFieldError')}
             defaultValue={formData ? formData[FORMFIELD.LOPPU_PVM] : null}
-            tooltipText={t(`hankeForm:toolTips:${FORMFIELD.LOPPU_PVM}`)}
-            tooltipLabelOpen={t(`hankeForm:toolTips:tipOpenLabel`)}
-            tooltipLabelClose={t(`hankeForm:toolTips:tipCloseLabel`)}
+            tooltip={{
+              labelText: t(`hankeForm:toolTips:${FORMFIELD.LOPPU_PVM}`),
+              openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
+              closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
+            }}
           />
         </div>
       </div>
