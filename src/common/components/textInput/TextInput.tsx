@@ -12,9 +12,25 @@ type PropTypes = {
   invalid?: boolean;
   errorMsg?: string;
   disabled?: boolean;
+  tooltipText?: string;
+  openButtonLabelText?: string;
+  closeButtonLabelText?: string;
 };
 const TextInputComp: React.FC<PropTypes> = (props) => {
-  const { name, id, control, rules, defaultValue, label, invalid, errorMsg, disabled } = props;
+  const {
+    name,
+    id,
+    control,
+    rules,
+    defaultValue,
+    label,
+    invalid,
+    errorMsg,
+    disabled,
+    tooltipText,
+    openButtonLabelText,
+    closeButtonLabelText,
+  } = props;
   return (
     <>
       <Controller
@@ -33,6 +49,9 @@ const TextInputComp: React.FC<PropTypes> = (props) => {
             onChange={onChange}
             disabled={disabled}
             value={value}
+            tooltipText={tooltipText}
+            tooltipOpenButtonLabelText={openButtonLabelText}
+            tooltipCloseButtonLabelText={closeButtonLabelText}
           />
         )}
       />

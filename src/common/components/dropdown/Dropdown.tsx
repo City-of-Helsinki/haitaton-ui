@@ -1,6 +1,8 @@
 import React from 'react';
 import { Controller, Control } from 'react-hook-form';
-import { Dropdown as HdsDropdown } from 'hds-react';
+import { Dropdown as HdsDropdown, Tooltip } from 'hds-react';
+
+import './dropDown.styles.scss';
 
 type Option = { value: string; label: string };
 
@@ -14,13 +16,36 @@ type PropTypes = {
   options: Array<Option>;
   invalid?: boolean;
   errorMsg?: string;
+  tooltipText?: string;
+  tooltipLabelClose?: string;
+  tooltipLabelOpen?: string;
 };
 
 const Dropdown: React.FC<PropTypes> = (props) => {
-  const { name, id, control, rules, options, defaultValue, label, invalid, errorMsg } = props;
+  const {
+    name,
+    id,
+    control,
+    rules,
+    options,
+    defaultValue,
+    label,
+    invalid,
+    errorMsg,
+    tooltipText,
+    tooltipLabelClose,
+    tooltipLabelOpen,
+  } = props;
 
   return (
-    <>
+    <div className="dropdownComp">
+      {tooltipText && (
+        <Tooltip
+          openButtonLabelText={tooltipLabelOpen || ''}
+          closeButtonLabelText={tooltipLabelClose || ''}
+          labelText={tooltipText}
+        />
+      )}
       <Controller
         name={name}
         id={id}
@@ -40,7 +65,7 @@ const Dropdown: React.FC<PropTypes> = (props) => {
         )}
       />
       {invalid && <span className="error-text">{errorMsg}</span>}
-    </>
+    </div>
   );
 };
 export default Dropdown;
