@@ -42,7 +42,7 @@ const Form0: React.FC<PropTypes> = (props) => {
             <Tooltip
               labelText={t(`hankeForm:toolTips:${FORMFIELD.YKT_HANKE}`)}
               openButtonLabelText={t(`hankeForm:toolTips:tipOpenLabel`)}
-              closeButtonLabelText={t(`hankeForm:toolTips:tipClosenLabel`)}
+              closeButtonLabelText={t(`hankeForm:toolTips:tipCloseLabel`)}
             />
           </h3>
           <Checkbox
@@ -67,7 +67,7 @@ const Form0: React.FC<PropTypes> = (props) => {
           errorMsg={t('hankeForm:insertFieldError')}
           tooltipText={t(`hankeForm:toolTips:${FORMFIELD.NIMI}`)}
           openButtonLabelText={t(`hankeForm:toolTips:tipOpenLabel`)}
-          closeButtonLabelText={t(`hankeForm:toolTips:tipClosenLabel`)}
+          closeButtonLabelText={t(`hankeForm:toolTips:tipCloseLabel`)}
         />
       </div>
       <div className="calendaraWpr formWpr">
@@ -85,7 +85,7 @@ const Form0: React.FC<PropTypes> = (props) => {
             defaultValue={formData ? formData[FORMFIELD.ALKU_PVM] : null}
             tooltipText={t(`hankeForm:toolTips:${FORMFIELD.ALKU_PVM}`)}
             tooltipLabelOpen={t(`hankeForm:toolTips:tipOpenLabel`)}
-            tooltipLabelClose={t(`hankeForm:toolTips:tipClosenLabel`)}
+            tooltipLabelClose={t(`hankeForm:toolTips:tipCloseLabel`)}
           />
         </div>
         <div className="right">
@@ -102,7 +102,7 @@ const Form0: React.FC<PropTypes> = (props) => {
             defaultValue={formData ? formData[FORMFIELD.LOPPU_PVM] : null}
             tooltipText={t(`hankeForm:toolTips:${FORMFIELD.LOPPU_PVM}`)}
             tooltipLabelOpen={t(`hankeForm:toolTips:tipOpenLabel`)}
-            tooltipLabelClose={t(`hankeForm:toolTips:tipClosenLabel`)}
+            tooltipLabelClose={t(`hankeForm:toolTips:tipCloseLabel`)}
           />
         </div>
       </div>
@@ -122,7 +122,7 @@ const Form0: React.FC<PropTypes> = (props) => {
           errorMsg={t('hankeForm:insertFieldError')}
           tooltipText={t(`hankeForm:toolTips:${FORMFIELD.VAIHE}`)}
           tooltipLabelOpen={t(`hankeForm:toolTips:tipOpenLabel`)}
-          tooltipLabelClose={t(`hankeForm:toolTips:tipClosenLabel`)}
+          tooltipLabelClose={t(`hankeForm:toolTips:tipCloseLabel`)}
         />
       </div>
     </div>

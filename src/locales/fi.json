@@ -108,7 +108,7 @@
     },
     "toolTips": {
       "tipOpenLabel": "Avaa ohje",
-      "tipClosenLabel": "Sulje ohje",
+      "tipCloseLabel": "Sulje ohje",
       "nimi": "Ohjeteksti",
       "YKTHanke": "Ohjeteksti",
       "alkuPvm": "Ohjeteksti",
