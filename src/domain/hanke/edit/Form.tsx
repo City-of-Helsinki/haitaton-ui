@@ -12,6 +12,7 @@ import { actions } from './reducer';
 import { saveForm } from './thunks';
 
 import Indicator from './indicator';
+import ConfirmationDialog from './ConfirmationDialog';
 
 import Form0 from './Form0';
 import Form1 from './Form1';
@@ -20,6 +21,7 @@ import Form3 from './Form3';
 import Form4 from './Form4';
 
 import './Form.styles.scss';
+import './Dialog.styles.scss';
 
 const FormComponent: React.FC = (props) => {
   const { t } = useTranslation();
@@ -58,6 +60,7 @@ const FormComponent: React.FC = (props) => {
   }
 
   const onSubmit = async (values: HankeDataDraft) => {
+    // console.log('test', JSON.stringify(values) === JSON.stringify(formData));
     const data = combineObj(values, formData);
 
     if (data) {
@@ -82,6 +85,7 @@ const FormComponent: React.FC = (props) => {
         <Indicator dataList={wizardStateData} view={WizardView} />
         <div className="hankeForm__formWprRight">
           <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
+            <ConfirmationDialog />
             {WizardView === 0 && <Form0 errors={errors} control={control} register={register()} />}
             {WizardView === 1 && <Form1 errors={errors} control={control} register={register()} />}
             {WizardView === 2 && <Form2 errors={errors} control={control} register={register()} />}

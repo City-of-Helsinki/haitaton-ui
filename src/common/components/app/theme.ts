@@ -1,4 +1,5 @@
 import { theme } from '@chakra-ui/core';
+import { extendTheme } from '@chakra-ui/react';
 
 export const baseSizes = {
   ...theme.space,
@@ -30,11 +31,11 @@ breakpoints.l = breakpoints[3];
 // eslint-disable-next-line
 breakpoints.xl = breakpoints[4];
 
-const customTheme = {
+const customTheme = extendTheme({
   ...theme,
   space: baseSizes,
   // eslint-disable-next-line
   breakpoints: breakpoints,
-};
+});
 
 export default customTheme;
