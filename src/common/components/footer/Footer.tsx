@@ -6,7 +6,7 @@ const FooterComp: React.FC = () => {
   return (
     <footer className="footer">
       <div className="footer__wpr" />
-      <p>&copy; Copyright 2020 &#8226; All rights reserved</p>
+      <p>&copy; Copyright 2020 &#8226; All rights reserved (HAI-275)</p>
       <Koros type="basic" />
     </footer>
   );
