@@ -12,6 +12,7 @@ enum GeometryType {
 }
 */
 
-export enum DrawTool {
+export enum DRAWTOOLTYPE {
   POLYGON = 'Polygon',
+  SQUARE = 'Square',
 }

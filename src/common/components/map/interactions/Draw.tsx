@@ -3,6 +3,8 @@ import { Vector } from 'ol/source';
 import Feature from 'ol/Feature';
 import Collection from 'ol/Collection';
 import { Draw, Snap, Modify } from 'ol/interaction';
+import { createRegularPolygon } from 'ol/interaction/Draw';
+import { DRAWTOOLTYPE } from '../constants';
 import MapContext from '../MapContext';
 
 type Props = {
@@ -13,17 +15,26 @@ type Props = {
 type Interaction = Draw | Snap | Modify;
 
 const DrawInteraction: React.FC<Props> = ({ source, features = undefined }) => {
-  const { map, drawTool } = useContext(MapContext);
+  const { map, selectedDrawtoolType } = useContext(MapContext);
   const [instances, setInstances] = useState<Interaction[]>([]);
 
   const setInteractions = useCallback(
     (type) => {
-      if (!map || drawTool === null) return;
+      if (!map || selectedDrawtoolType === null) return;
+
+      let geometryFunction;
+      let geometryType: any = type;
+
+      if (type === DRAWTOOLTYPE.SQUARE) {
+        geometryFunction = createRegularPolygon(4);
+        geometryType = 'Circle';
+      }
 
       const drawInstance = new Draw({
         source,
         features,
-        type,
+        type: geometryType,
+        geometryFunction,
       });
 
       map.addInteraction(drawInstance);
@@ -46,7 +57,7 @@ const DrawInteraction: React.FC<Props> = ({ source, features = undefined }) => {
   }, [map, source, instances]);
 
   useEffect(() => {
-    if (!map || drawTool === null) return;
+    if (!map || selectedDrawtoolType === null) return;
 
     // eslint-disable-next-line
     return () => {
@@ -56,8 +67,8 @@ const DrawInteraction: React.FC<Props> = ({ source, features = undefined }) => {
 
   useEffect(() => {
     removeInteractions();
-    setInteractions(drawTool);
-  }, [drawTool]);
+    setInteractions(selectedDrawtoolType);
+  }, [selectedDrawtoolType]);
 
   return null;
 };

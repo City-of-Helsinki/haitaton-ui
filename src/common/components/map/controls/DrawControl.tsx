@@ -1,17 +1,17 @@
 import React, { useContext } from 'react';
-import { IconPen } from 'hds-react';
+import { IconPen, IconStarFill } from 'hds-react';
 import clsx from 'clsx';
 import { $enum } from 'ts-enum-util';
 import ControlPanel from './ControlPanel';
 import styles from './Controls.module.scss';
 import MapContext from '../MapContext';
-import { DrawTool } from '../constants';
+import { DRAWTOOLTYPE } from '../constants';
 
-const getDrawIcon = (drawTool: DrawTool) => {
+const getDrawIcon = (drawTool: DRAWTOOLTYPE) => {
   switch (drawTool) {
-    /* case DrawTool.CIRCLE:
-      return <IconPlusCircle size="m" aria-hidden="true" />; */
-    case DrawTool.POLYGON:
+    case DRAWTOOLTYPE.SQUARE:
+      return <IconStarFill size="m" aria-hidden="true" />;
+    case DRAWTOOLTYPE.POLYGON:
       return <IconPen size="s" aria-hidden="true" />;
     default:
       return null;
@@ -19,21 +19,21 @@ const getDrawIcon = (drawTool: DrawTool) => {
 };
 
 const DrawControls: React.FC = () => {
-  const { setDrawTool, drawTool } = useContext(MapContext);
+  const { setSelectedDrawtoolType, selectedDrawtoolType } = useContext(MapContext);
 
   return (
     <ControlPanel className={styles.drawControl}>
-      {$enum(DrawTool)
+      {$enum(DRAWTOOLTYPE)
         .getValues()
         .map((v) => (
           <button
             key={v}
             className={clsx(styles.drawControl__button, {
-              [styles['drawControl__button--active']]: drawTool === v,
+              [styles['drawControl__button--active']]: selectedDrawtoolType === v,
             })}
             type="button"
             data-testid={`draw-control-${v}`}
-            onClick={() => setDrawTool(v)}
+            onClick={() => setSelectedDrawtoolType(v)}
           >
             {getDrawIcon(v)}
           </button>
