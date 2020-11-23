@@ -23,6 +23,7 @@ const DrawInteraction: React.FC<Props> = ({ source, features = undefined }) => {
       if (!map || selectedDrawtoolType === null) return;
 
       let geometryFunction;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let geometryType: any = type;
 
       if (type === DRAWTOOLTYPE.SQUARE) {
