@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import * as ol from 'ol';
 import MapContext from './MapContext';
-import { SelectedDrawTool, MapInstance } from './types';
+import { SelectedDrawtoolType, MapInstance } from './types';
 
 const defaultZoom = 13;
 const helsinkiCoordinates = [2776000, 8438000];
@@ -20,7 +20,7 @@ const Map: React.FC<Props> = ({
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<MapInstance>(null);
-  const [drawTool, setDrawTool] = useState<SelectedDrawTool>('');
+  const [selectedDrawtoolType, setSelectedDrawtoolType] = useState<SelectedDrawtoolType>('');
   const [layers] = useState([]);
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const Map: React.FC<Props> = ({
   }, [center]);
 
   return (
-    <MapContext.Provider value={{ map, layers, drawTool, setDrawTool }}>
+    <MapContext.Provider value={{ map, layers, selectedDrawtoolType, setSelectedDrawtoolType }}>
       <div ref={mapRef} className={mapClassName} id="ol-map">
         {children}
       </div>
