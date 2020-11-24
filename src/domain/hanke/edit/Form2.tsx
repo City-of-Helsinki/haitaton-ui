@@ -1,12 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import TextInput from '../../../common/components/textInput/TextInput';
-import PropTypes from './PropTypes';
-import { FORMFIELD } from './types';
 
-const Form2: React.FC<PropTypes> = (props) => {
+import TextInput from '../../../common/components/textInput/TextInput';
+import { FormProps, FORMFIELD } from './types';
+
+const Form2: React.FC<FormProps> = ({ formData, control, errors }) => {
   const { t } = useTranslation();
-  const { control, errors } = props;
+
   return (
     <div className="form2">
       <h2>{t('hankeForm:hankkeenYhteystiedotForm:header')}</h2>
@@ -18,7 +18,7 @@ const Form2: React.FC<PropTypes> = (props) => {
             label={t(`hankeForm:labels:${FORMFIELD.OMISTAJAORGANISAATIO}`)}
             control={control}
             rules={{ required: true }}
-            defaultValue=""
+            defaultValue={formData[FORMFIELD.OMISTAJAORGANISAATIO] || ''}
             invalid={!!errors[FORMFIELD.OMISTAJAORGANISAATIO]}
             errorMsg={t('hankeForm:insertFieldError')}
           />
@@ -28,8 +28,8 @@ const Form2: React.FC<PropTypes> = (props) => {
             name={FORMFIELD.OMISTAJAOASTO}
             id={FORMFIELD.OMISTAJAOASTO}
             label={t(`hankeForm:labels:${FORMFIELD.OMISTAJAOASTO}`)}
+            defaultValue={formData[FORMFIELD.OMISTAJAOASTO] || ''}
             control={control}
-            defaultValue=""
           />
         </div>
       </div>
@@ -38,10 +38,10 @@ const Form2: React.FC<PropTypes> = (props) => {
           <TextInput
             name={FORMFIELD.ARVIOIJAORGANISAATIO}
             id={FORMFIELD.ARVIOIJAORGANISAATIO}
+            defaultValue={formData[FORMFIELD.ARVIOIJAORGANISAATIO] || ''}
             label={t(`hankeForm:labels:${FORMFIELD.ARVIOIJAORGANISAATIO}`)}
             control={control}
             rules={{ required: true }}
-            defaultValue=""
             invalid={!!errors[FORMFIELD.ARVIOIJAORGANISAATIO]}
             errorMsg={t('hankeForm:insertFieldError')}
           />
@@ -50,9 +50,9 @@ const Form2: React.FC<PropTypes> = (props) => {
           <TextInput
             name={FORMFIELD.ARVIOIJAOSASTO}
             id={FORMFIELD.ARVIOIJAOSASTO}
+            defaultValue={formData[FORMFIELD.ARVIOIJAOSASTO] || ''}
             label={t(`hankeForm:labels:${FORMFIELD.ARVIOIJAOSASTO}`)}
             control={control}
-            defaultValue=""
           />
         </div>
       </div>

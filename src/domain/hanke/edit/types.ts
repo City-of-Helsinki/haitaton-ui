@@ -1,3 +1,14 @@
+// eslint-disable-next-line
+import { FieldErrors, Control } from 'react-hook-form/dist/types';
+
+export interface FormProps {
+  formData: HankeDataDraft;
+  errors: FieldErrors;
+  control: Control;
+  // eslint-disable-next-line
+  register: any;
+}
+
 export enum HANKE_VAIHE {
   OHJELMOINTI = 'OHJELMOINTI',
   SUUNNITTELU = 'SUUNNITTELU',
@@ -128,7 +139,7 @@ export type HankeData = {
   katuosoite: string;
   vaihe: HANKE_VAIHE_KEY;
   suunnitteluvaihe: HANKE_SUUNNITTELUVAIHE_KEY;
-  tyomaatyyppi: HANKE_TYOMAATYYPPI_KEY;
+  tyomaatyyppi: HANKE_TYOMAATYYPPI_KEY[];
   tyomaakoko: HANKE_TYOMAAKOKO_KEY;
   haittaAlkuPvm: Date;
   haittaLoppuPvm: Date;

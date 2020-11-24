@@ -1,12 +1,11 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
 import DatePicker from '../../../common/components/datePicker/DatePicker';
 import Dropdown from '../../../common/components/dropdown/Dropdown';
 import H2 from '../../../common/components/text/H2';
-import PropTypes from './PropTypes';
 import {
+  FormProps,
   FORMFIELD,
   HANKE_KAISTAHAITTA,
   HANKE_KAISTAPITUUSHAITTA,
@@ -14,13 +13,9 @@ import {
   HANKE_POLYAITTA,
   HANKE_TARINAHAITTA,
 } from './types';
-import { getFormData } from './selectors';
 
-const Form4: React.FC<PropTypes> = (props) => {
+const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
   const { t, i18n } = useTranslation();
-  const { control, errors } = props;
-  const formData = useSelector(getFormData());
-
   return (
     <div className="form4">
       <H2>{t('hankeForm:hankkeenHaitatForm:header')}</H2>
@@ -65,7 +60,7 @@ const Form4: React.FC<PropTypes> = (props) => {
               value,
               label: t(`hanke:${FORMFIELD.KAISTAHAITTA}:${value}`),
             }))}
-            defaultValue={formData[FORMFIELD.KAISTAHAITTA]}
+            defaultValue={formData[FORMFIELD.KAISTAHAITTA] || ''}
             label={t(`hankeForm:labels:${FORMFIELD.KAISTAHAITTA}`)}
             rules={{ required: true }}
             invalid={!!errors[FORMFIELD.KAISTAHAITTA]}
@@ -82,7 +77,7 @@ const Form4: React.FC<PropTypes> = (props) => {
               value,
               label: t(`hanke:${FORMFIELD.KAISTAPITUUSHAITTA}:${value}`),
             }))}
-            defaultValue={formData[FORMFIELD.KAISTAPITUUSHAITTA]}
+            defaultValue={formData[FORMFIELD.KAISTAPITUUSHAITTA] || ''}
             label={t(`hankeForm:labels:${FORMFIELD.KAISTAPITUUSHAITTA}`)}
             rules={{ required: true }}
             invalid={!!errors[FORMFIELD.KAISTAPITUUSHAITTA]}
@@ -99,7 +94,7 @@ const Form4: React.FC<PropTypes> = (props) => {
               value,
               label: t(`hanke:${FORMFIELD.MELUHAITTA}:${value}`),
             }))}
-            defaultValue={formData[FORMFIELD.MELUHAITTA]}
+            defaultValue={formData[FORMFIELD.MELUHAITTA] || ''}
             label={t(`hankeForm:labels:${FORMFIELD.MELUHAITTA}`)}
             rules={{ required: true }}
             invalid={!!errors[FORMFIELD.MELUHAITTA]}
@@ -116,7 +111,7 @@ const Form4: React.FC<PropTypes> = (props) => {
               value,
               label: t(`hanke:${FORMFIELD.POLYHAITTA}:${value}`),
             }))}
-            defaultValue={formData[FORMFIELD.POLYHAITTA]}
+            defaultValue={formData[FORMFIELD.POLYHAITTA] || ''}
             label={t(`hankeForm:labels:${FORMFIELD.POLYHAITTA}`)}
             rules={{ required: true }}
             invalid={!!errors[FORMFIELD.POLYHAITTA]}
@@ -133,7 +128,7 @@ const Form4: React.FC<PropTypes> = (props) => {
               value,
               label: t(`hanke:${FORMFIELD.TARINAHAITTA}:${value}`),
             }))}
-            defaultValue={formData[FORMFIELD.TARINAHAITTA]}
+            defaultValue={formData[FORMFIELD.TARINAHAITTA] || ''}
             label={t(`hankeForm:labels:${FORMFIELD.TARINAHAITTA}`)}
             rules={{ required: true }}
             invalid={!!errors[FORMFIELD.TARINAHAITTA]}

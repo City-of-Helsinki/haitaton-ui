@@ -12,13 +12,12 @@ type PropTypes = {
   id: string;
   control: Control;
   rules?: { required: boolean };
-  defaultValue: string | string[];
+  defaultValue: string[];
   label: string;
   options: Array<Option>;
   invalid?: boolean;
   errorMsg?: string;
   tooltip?: TooltipProps;
-  multiselect?: boolean;
 };
 
 const Dropdown: React.FC<PropTypes> = ({
@@ -27,12 +26,11 @@ const Dropdown: React.FC<PropTypes> = ({
   control,
   rules,
   options,
-  defaultValue,
+  defaultValue = [],
   label,
   invalid,
   errorMsg,
   tooltip,
-  multiselect = false,
 }) => {
   return (
     <div className="dropdownComp">
@@ -48,17 +46,13 @@ const Dropdown: React.FC<PropTypes> = ({
           return (
             <HdsDropdown
               options={options}
-              defaultValue={
-                defaultValue ? options.find((o) => o.value === defaultValue) : undefined
-              }
-              selectedOption={options.find((o) => o.value === value)}
+              defaultValues={options.filter((o) => value.includes(o.value))}
+              selectedOption={options.filter((o) => value.includes(o.value))}
               label={label}
               invalid={invalid}
               // eslint-disable-next-line
-              onChange={(option: any) =>
-                multiselect ? onChange(option.map((o: any) => o.value)) : onChange(option.value)
-              }
-              multiselect={multiselect}
+              onChange={(option: any) => onChange(option.map((o: any) => o.value))}
+              multiselect
             />
           );
         }}
