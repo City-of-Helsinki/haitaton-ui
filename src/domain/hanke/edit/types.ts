@@ -96,14 +96,14 @@ export enum HANKE_TARINAHAITTA {
 export type HANKE_TARINAHAITTA_KEY = keyof typeof HANKE_TARINAHAITTA;
 
 export enum FORMFIELD {
-  HANKE_ID = 'hankeId',
-  TUNNUS = 'tunnus',
+  TUNNUS = 'hankeTunnus',
   VAIHE = 'vaihe',
   NIMI = 'nimi',
+  KATUOSOITE = 'katuosoite',
   SUUNNITTELUVAIHE = 'suunnitteluvaihe',
   ALKU_PVM = 'alkuPvm',
   LOPPU_PVM = 'loppuPvm',
-  TYOMAATYYPPI = 'YTKHanke',
+  TYOMAATYYPPI = 'tyomaatyyppi',
   TYOMAAKOKO = 'tyomaakoko',
   HAITTA_ALKU_PVM = 'haittaAlkuPvm',
   HAITTA_LOPPU_PVM = 'haittaLoppuPvm',
@@ -125,6 +125,7 @@ export type HankeData = {
   nimi: string;
   alkuPvm: Date;
   loppuPvm: Date;
+  katuosoite: string;
   vaihe: HANKE_VAIHE_KEY;
   suunnitteluvaihe: HANKE_SUUNNITTELUVAIHE_KEY;
   tyomaatyyppi: HANKE_TYOMAATYYPPI_KEY;

@@ -24,7 +24,7 @@ import './Form.styles.scss';
 const FormComponent: React.FC = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const formData = useSelector(getFormData);
+  const formData = useSelector(getFormData());
 
   const wizardStateData = [
     { label: t('hankeForm:perustiedotForm:header'), view: 0 },
@@ -33,42 +33,34 @@ const FormComponent: React.FC = (props) => {
     { label: t('hankeForm:tyomaanTiedotForm:header'), view: 3 },
     { label: t('hankeForm:hankkeenHaitatForm:header'), view: 4 },
   ];
-  const [WizardView, changeWizardView] = useState(0);
-  const [viewStatusVar, setviewStatusVar] = useState(0);
+  const [formPage, setFormPage] = useState<number>(0);
 
-  const { handleSubmit, errors, control, register, getValues } = useForm<HankeDataDraft>({
+  const { handleSubmit, errors, control, register } = useForm<HankeDataDraft>({
     mode: 'all',
     reValidateMode: 'onBlur',
-    resolver: undefined,
-    context: undefined,
     criteriaMode: 'firstError',
     shouldFocusError: true,
     shouldUnregister: true,
     defaultValues: formData,
   });
 
-  function goBack(view: number) {
-    const values = combineObj(getValues(), formData);
-    if (!values) return null;
-    dispatch(actions.updateFormData(values));
-
-    changeWizardView(viewStatusVar);
-    setviewStatusVar(view);
+  function goBack() {
+    setFormPage((v) => v - 1);
     return false;
   }
 
   const onSubmit = async (values: HankeDataDraft) => {
-    const data = combineObj(values, formData);
+    const data = combineObj(formData, values);
 
     if (data) {
       dispatch(actions.updateFormData(data));
       try {
-        await dispatch(
+        dispatch(
           saveForm({
             data,
           })
         );
-        changeWizardView(viewStatusVar);
+        setFormPage((v) => v + 1);
       } catch (e) {
         // eslint-disable-next-line
         console.error(e.message);
@@ -79,30 +71,22 @@ const FormComponent: React.FC = (props) => {
     <div className="hankeForm">
       <H1 stylesAs="h2">{t('hankeForm:pageHeader')}</H1>
       <div className="hankeForm__formWpr">
-        <Indicator dataList={wizardStateData} view={WizardView} />
+        <Indicator dataList={wizardStateData} view={formPage} />
         <div className="hankeForm__formWprRight">
           <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
-            {WizardView === 0 && <Form0 errors={errors} control={control} register={register()} />}
-            {WizardView === 1 && <Form1 errors={errors} control={control} register={register()} />}
-            {WizardView === 2 && <Form2 errors={errors} control={control} register={register()} />}
-            {WizardView === 3 && <Form3 errors={errors} control={control} register={register()} />}
-            {WizardView === 4 && <Form4 errors={errors} control={control} register={register()} />}
+            {formPage === 0 && <Form0 errors={errors} control={control} register={register()} />}
+            {formPage === 1 && <Form1 errors={errors} control={control} register={register()} />}
+            {formPage === 2 && <Form2 errors={errors} control={control} register={register()} />}
+            {formPage === 3 && <Form3 errors={errors} control={control} register={register()} />}
+            {formPage === 4 && <Form4 errors={errors} control={control} register={register()} />}
             <div className="btnWpr">
-              {WizardView < 4 && (
-                <button
-                  className="btnWpr--next"
-                  type="submit"
-                  onClick={() => setviewStatusVar(WizardView + 1)}
-                >
+              {formPage < 4 && (
+                <button className="btnWpr--next" type="submit">
                   <span>{t('hankeForm:nextButton')}</span>
                 </button>
               )}
-              {WizardView > 0 && (
-                <button
-                  className="btnWpr--previous"
-                  type="submit"
-                  onClick={() => goBack(WizardView - 1)}
-                >
+              {formPage > 0 && (
+                <button className="btnWpr--previous" type="button" onClick={() => goBack()}>
                   <span>{t('hankeForm:previousButton')}</span>
                 </button>
               )}

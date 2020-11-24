@@ -16,9 +16,9 @@ import PropTypes from './PropTypes';
 const Form0: React.FC<PropTypes> = (props) => {
   const { t, i18n } = useTranslation();
   const { control, errors, register } = props;
-  const formData = useSelector(getFormData);
+  const formData = useSelector(getFormData());
 
-  const [ytkChecked, setYtkChecked] = useState(formData[FORMFIELD.YKT_HANKE]);
+  const [ytkChecked, setYtkChecked] = useState(formData[FORMFIELD.YKT_HANKE] || false);
 
   return (
     <div className="form0">
@@ -61,8 +61,8 @@ const Form0: React.FC<PropTypes> = (props) => {
           id={FORMFIELD.NIMI}
           label={t(`hankeForm:labels:${FORMFIELD.NIMI}`)}
           control={control}
-          rules={{ required: true }}
-          defaultValue={formData ? formData[FORMFIELD.NIMI] : ''}
+          // rules={{ required: true }}
+          defaultValue={formData[FORMFIELD.NIMI] || ''}
           invalid={!!errors.hankeenNimi}
           errorMsg={t('hankeForm:insertFieldError')}
           tooltip={{
@@ -79,12 +79,12 @@ const Form0: React.FC<PropTypes> = (props) => {
             id={FORMFIELD.ALKU_PVM}
             label={t(`hankeForm:labels:${FORMFIELD.ALKU_PVM}`)}
             control={control}
-            rules={{ required: true }}
+            // rules={{ required: true }}
             locale={i18n.language}
             dateFormat="dd.MM.yyyy"
             invalid={!!errors.startDate}
             errorMsg={t('hankeForm:insertFieldError')}
-            defaultValue={formData ? formData[FORMFIELD.ALKU_PVM] : null}
+            defaultValue={formData[FORMFIELD.ALKU_PVM] || null}
             tooltip={{
               labelText: t(`hankeForm:toolTips:${FORMFIELD.ALKU_PVM}`),
               openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
@@ -98,12 +98,12 @@ const Form0: React.FC<PropTypes> = (props) => {
             id={FORMFIELD.LOPPU_PVM}
             label={t(`hankeForm:labels:${FORMFIELD.LOPPU_PVM}`)}
             control={control}
-            rules={{ required: true }}
+            // rules={{ required: true }}
             locale={i18n.language}
             dateFormat="dd.MM.yyyy"
             invalid={!!errors.endDate}
             errorMsg={t('hankeForm:insertFieldError')}
-            defaultValue={formData ? formData[FORMFIELD.LOPPU_PVM] : null}
+            defaultValue={formData[FORMFIELD.LOPPU_PVM] || null}
             tooltip={{
               labelText: t(`hankeForm:toolTips:${FORMFIELD.LOPPU_PVM}`),
               openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
@@ -121,9 +121,9 @@ const Form0: React.FC<PropTypes> = (props) => {
             value,
             label: t(`hanke:vaihe:${value}`),
           }))}
-          defaultValue={!formData[FORMFIELD.VAIHE] ? formData[FORMFIELD.VAIHE] : undefined}
+          defaultValue={formData[FORMFIELD.VAIHE]}
           label={t(`hankeForm:labels:${FORMFIELD.VAIHE}`)}
-          rules={{ required: true }}
+          // rules={{ required: true }}
           invalid={!!errors[FORMFIELD.VAIHE]}
           errorMsg={t('hankeForm:insertFieldError')}
           tooltip={{
