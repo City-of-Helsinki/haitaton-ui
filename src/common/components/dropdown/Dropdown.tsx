@@ -18,22 +18,22 @@ type PropTypes = {
   invalid?: boolean;
   errorMsg?: string;
   tooltip?: TooltipProps;
+  multiselect?: boolean;
 };
 
-const Dropdown: React.FC<PropTypes> = (props) => {
-  const {
-    name,
-    id,
-    control,
-    rules,
-    options,
-    defaultValue,
-    label,
-    invalid,
-    errorMsg,
-    tooltip,
-  } = props;
-
+const Dropdown: React.FC<PropTypes> = ({
+  name,
+  id,
+  control,
+  rules,
+  options,
+  defaultValue,
+  label,
+  invalid,
+  errorMsg,
+  tooltip,
+  multiselect = false,
+}) => {
   return (
     <div className="dropdownComp">
       {!!tooltip && <Tooltip {...tooltip} />}
@@ -44,20 +44,26 @@ const Dropdown: React.FC<PropTypes> = (props) => {
         control={control}
         defaultValue={defaultValue}
         rules={rules}
-        render={({ onChange, value }) => (
-          <HdsDropdown
-            options={options}
-            defaultValue={defaultValue ? options.find((o) => o.value === defaultValue) : undefined}
-            selectedOption={options.find((o) => o.value === value)}
-            label={label}
-            invalid={invalid}
-            // eslint-disable-next-line
-            onChange={(option: any) => onChange(option.value)}
-          />
-        )}
+        render={({ onChange, value }) => {
+          return (
+            <HdsDropdown
+              options={options}
+              defaultValue={
+                defaultValue ? options.find((o) => o.value === defaultValue) : undefined
+              }
+              selectedOption={options.find((o) => o.value === value)}
+              label={label}
+              invalid={invalid}
+              // eslint-disable-next-line
+              onChange={(option: any) => onChange(option.value)}
+              multiselect={multiselect}
+            />
+          );
+        }}
       />
       {invalid && <span className="error-text">{errorMsg}</span>}
     </div>
   );
 };
+
 export default Dropdown;
