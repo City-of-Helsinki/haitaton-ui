@@ -18,7 +18,6 @@ type PropTypes = {
   invalid?: boolean;
   errorMsg?: string;
   tooltip?: TooltipProps;
-  multiselect?: boolean;
 };
 
 const Dropdown: React.FC<PropTypes> = ({
@@ -32,7 +31,6 @@ const Dropdown: React.FC<PropTypes> = ({
   invalid,
   errorMsg,
   tooltip,
-  multiselect = false,
 }) => {
   return (
     <div className="dropdownComp">
@@ -55,10 +53,7 @@ const Dropdown: React.FC<PropTypes> = ({
               label={label}
               invalid={invalid}
               // eslint-disable-next-line
-              onChange={(option: any) =>
-                multiselect ? onChange(option.map((o: any) => o.value)) : onChange(option.value)
-              }
-              multiselect={multiselect}
+              onChange={(option: any) => onChange(option.value)}
             />
           );
         }}

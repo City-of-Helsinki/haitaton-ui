@@ -9,10 +9,8 @@ import TextInput from '../../../common/components/textInput/TextInput';
 
 import { FormProps, HANKE_VAIHE, FORMFIELD } from './types';
 
-const Form0: React.FC<FormProps> = (props) => {
+const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => {
   const { t, i18n } = useTranslation();
-  const { control, errors, register, formData } = props;
-
   const [ytkChecked, setYtkChecked] = useState(formData[FORMFIELD.YKT_HANKE] || false);
 
   return (
