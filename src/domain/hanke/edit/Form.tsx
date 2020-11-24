@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
+// import { yupResolver } from '@hookform/resolvers/yup';
+// import * as yup from 'yup';
+
 import H1 from '../../../common/components/text/H1';
 
 import { combineObj } from './utils';
@@ -37,18 +40,30 @@ const FormComponent: React.FC = (props) => {
   ];
   const [WizardView, changeWizardView] = useState(0);
   const [viewStatusVar, setviewStatusVar] = useState(0);
-
-  const { handleSubmit, errors, control, register, getValues } = useForm<HankeDataDraft>({
-    mode: 'all',
-    reValidateMode: 'onBlur',
-    resolver: undefined,
-    context: undefined,
-    criteriaMode: 'firstError',
-    shouldFocusError: true,
-    shouldUnregister: true,
-    defaultValues: formData,
+  /*
+  const schema = yup.object().shape({
+    firstName: yup.string().required(),
+    age: yup.number().positive().integer().required(),
   });
-
+  
+  const test = async () => {
+    const test2 = await yupResolver(schema);
+    console.log(test2);
+  };
+*/
+  const { handleSubmit, errors, control, register, getValues, formState } = useForm<HankeDataDraft>(
+    {
+      mode: 'all',
+      reValidateMode: 'onBlur',
+      resolver: undefined,
+      context: undefined,
+      criteriaMode: 'firstError',
+      shouldFocusError: true,
+      shouldUnregister: true,
+      defaultValues: formData,
+    }
+  );
+  console.log('formState', formState.isValid);
   function goBack(view: number) {
     const values = combineObj(getValues(), formData);
     if (!values) return null;
@@ -56,6 +71,9 @@ const FormComponent: React.FC = (props) => {
 
     changeWizardView(viewStatusVar);
     setviewStatusVar(view);
+    return false;
+  }
+  function tallennaLuonnos() {
     return false;
   }
 
@@ -78,6 +96,7 @@ const FormComponent: React.FC = (props) => {
       }
     }
   };
+
   return (
     <div className="hankeForm">
       <H1 stylesAs="h2">{t('hankeForm:pageHeader')}</H1>
@@ -97,10 +116,19 @@ const FormComponent: React.FC = (props) => {
                   className="btnWpr--next"
                   type="submit"
                   onClick={() => setviewStatusVar(WizardView + 1)}
+                  disabled={formState.isValid}
                 >
                   <span>{t('hankeForm:nextButton')}</span>
                 </button>
               )}
+              <button
+                disabled={formState.isValid}
+                className="btnWpr--luonnos"
+                type="submit"
+                onClick={() => tallennaLuonnos()}
+              >
+                <span>{t('hankeForm:luonoksenaButton')}</span>
+              </button>
               {WizardView > 0 && (
                 <button
                   className="btnWpr--previous"
