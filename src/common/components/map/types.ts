@@ -1,6 +1,6 @@
 import * as ol from 'ol';
-import { DrawTool } from './constants';
+import { DRAWTOOLTYPE } from './constants';
 import { EmptyString } from '../../types/common';
 
-export type SelectedDrawTool = DrawTool | EmptyString;
+export type SelectedDrawtoolType = DRAWTOOLTYPE | EmptyString;
 export type MapInstance = ol.Map | null;

@@ -27,7 +27,7 @@ const Form2: React.FC<PropTypes> = (props) => {
           <TextInput
             name={FORMFIELD.OMISTAJAOASTO}
             id={FORMFIELD.OMISTAJAOASTO}
-            label={t(`hankeForm:labels:${FORMFIELD.OMISTAJAORGANISAATIO}`)}
+            label={t(`hankeForm:labels:${FORMFIELD.OMISTAJAOASTO}`)}
             control={control}
             defaultValue=""
           />
@@ -38,11 +38,11 @@ const Form2: React.FC<PropTypes> = (props) => {
           <TextInput
             name={FORMFIELD.ARVIOIJAORGANISAATIO}
             id={FORMFIELD.ARVIOIJAORGANISAATIO}
-            label={t(`hankeForm:labels:${FORMFIELD.OMISTAJAORGANISAATIO}`)}
+            label={t(`hankeForm:labels:${FORMFIELD.ARVIOIJAORGANISAATIO}`)}
             control={control}
             rules={{ required: true }}
             defaultValue=""
-            invalid={!!errors[FORMFIELD.OMISTAJAORGANISAATIO]}
+            invalid={!!errors[FORMFIELD.ARVIOIJAORGANISAATIO]}
             errorMsg={t('hankeForm:insertFieldError')}
           />
         </div>

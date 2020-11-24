@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
-// import { yupResolver } from '@hookform/resolvers/yup';
-// import * as yup from 'yup';
 
 import H1 from '../../../common/components/text/H1';
 
@@ -29,7 +27,7 @@ import './Dialog.styles.scss';
 const FormComponent: React.FC = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const formData = useSelector(getFormData);
+  const formData = useSelector(getFormData());
 
   const wizardStateData = [
     { label: t('hankeForm:perustiedotForm:header'), view: 0 },
@@ -38,103 +36,74 @@ const FormComponent: React.FC = (props) => {
     { label: t('hankeForm:tyomaanTiedotForm:header'), view: 3 },
     { label: t('hankeForm:hankkeenHaitatForm:header'), view: 4 },
   ];
-  const [WizardView, changeWizardView] = useState(0);
-  const [viewStatusVar, setviewStatusVar] = useState(0);
-  /*
-  const schema = yup.object().shape({
-    firstName: yup.string().required(),
-    age: yup.number().positive().integer().required(),
-  });
-  
-  const test = async () => {
-    const test2 = await yupResolver(schema);
-    console.log(test2);
-  };
-*/
-  const { handleSubmit, errors, control, register, getValues, formState } = useForm<HankeDataDraft>(
-    {
-      mode: 'all',
-      reValidateMode: 'onBlur',
-      resolver: undefined,
-      context: undefined,
-      criteriaMode: 'firstError',
-      shouldFocusError: true,
-      shouldUnregister: true,
-      defaultValues: formData,
-    }
-  );
-  console.log('formState', formState.isValid);
-  function goBack(view: number) {
-    const values = combineObj(getValues(), formData);
-    if (!values) return null;
-    dispatch(actions.updateFormData(values));
+  const [formPage, setFormPage] = useState<number>(0);
 
-    changeWizardView(viewStatusVar);
-    setviewStatusVar(view);
+  const { handleSubmit, errors, control, register, formState } = useForm<HankeDataDraft>({
+    mode: 'all',
+    reValidateMode: 'onBlur',
+    criteriaMode: 'firstError',
+    shouldFocusError: true,
+    shouldUnregister: true,
+    defaultValues: formData,
+  });
+
+  function goBack() {
+    setFormPage((v) => v - 1);
     return false;
   }
   function tallennaLuonnos() {
+    console.log('went luonnos');
     return false;
   }
 
   const onSubmit = async (values: HankeDataDraft) => {
     console.log('test', JSON.stringify(values) === JSON.stringify(formData));
-    const data = combineObj(values, formData);
+    const data = combineObj(formData, values);
 
     if (data) {
       dispatch(actions.updateFormData(data));
       try {
-        await dispatch(
+        dispatch(
           saveForm({
             data,
           })
         );
-        changeWizardView(viewStatusVar);
+        setFormPage((v) => v + 1);
       } catch (e) {
         // eslint-disable-next-line
         console.error(e.message);
       }
     }
   };
-
   return (
     <div className="hankeForm">
       <H1 stylesAs="h2">{t('hankeForm:pageHeader')}</H1>
       <div className="hankeForm__formWpr">
-        <Indicator dataList={wizardStateData} view={WizardView} />
+        <Indicator dataList={wizardStateData} view={formPage} />
         <div className="hankeForm__formWprRight">
           <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
             <ConfirmationDialog />
-            {WizardView === 0 && <Form0 errors={errors} control={control} register={register()} />}
-            {WizardView === 1 && <Form1 errors={errors} control={control} register={register()} />}
-            {WizardView === 2 && <Form2 errors={errors} control={control} register={register()} />}
-            {WizardView === 3 && <Form3 errors={errors} control={control} register={register()} />}
-            {WizardView === 4 && <Form4 errors={errors} control={control} register={register()} />}
+            {formPage === 0 && <Form0 errors={errors} control={control} register={register()} />}
+            {formPage === 1 && <Form1 errors={errors} control={control} register={register()} />}
+            {formPage === 2 && <Form2 errors={errors} control={control} register={register()} />}
+            {formPage === 3 && <Form3 errors={errors} control={control} register={register()} />}
+            {formPage === 4 && <Form4 errors={errors} control={control} register={register()} />}
             <div className="btnWpr">
-              {WizardView < 4 && (
-                <button
-                  className="btnWpr--next"
-                  type="submit"
-                  onClick={() => setviewStatusVar(WizardView + 1)}
-                  disabled={formState.isValid}
-                >
+              {formPage < 4 && (
+                <button className="btnWpr--next" type="submit" disabled={formState.isValid}>
                   <span>{t('hankeForm:nextButton')}</span>
                 </button>
               )}
               <button
-                disabled={formState.isValid}
-                className="btnWpr--luonnos"
+                className="btnWpr--tallennaLuonnos"
                 type="submit"
                 onClick={() => tallennaLuonnos()}
+                disabled={formState.isValid}
               >
-                <span>{t('hankeForm:luonoksenaButton')}</span>
+                <span>{t('hankeForm:tallennaLuonnosButton')}</span>
               </button>
-              {WizardView > 0 && (
-                <button
-                  className="btnWpr--previous"
-                  type="submit"
-                  onClick={() => goBack(WizardView - 1)}
-                >
+              {formPage > 0 && (
+                <button className="btnWpr--previous" type="button" onClick={() => goBack()}>
                   <span>{t('hankeForm:previousButton')}</span>
                 </button>
               )}
