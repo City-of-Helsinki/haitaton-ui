@@ -60,7 +60,7 @@ const FormComponent: React.FC = (props) => {
   }
 
   const onSubmit = async (values: HankeDataDraft) => {
-    // console.log('test', JSON.stringify(values) === JSON.stringify(formData));
+    console.log('test', JSON.stringify(values) === JSON.stringify(formData));
     const data = combineObj(values, formData);
 
     if (data) {
