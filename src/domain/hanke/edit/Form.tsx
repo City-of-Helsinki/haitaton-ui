@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import H1 from '../../../common/components/text/H1';
 
 import { combineObj } from './utils';
-import { HankeDataDraft } from './types';
+import { HankeDataDraft, HANKE_SAVETYPE } from './types';
 import { getFormData } from './selectors';
 
 import { actions } from './reducer';
@@ -58,6 +58,7 @@ const FormComponent: React.FC = (props) => {
         dispatch(
           saveForm({
             data,
+            saveType: HANKE_SAVETYPE.DRAFT,
           })
         );
         setFormPage((v) => v + 1);
@@ -74,11 +75,21 @@ const FormComponent: React.FC = (props) => {
         <Indicator dataList={wizardStateData} view={formPage} />
         <div className="hankeForm__formWprRight">
           <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
-            {formPage === 0 && <Form0 errors={errors} control={control} register={register()} />}
-            {formPage === 1 && <Form1 errors={errors} control={control} register={register()} />}
-            {formPage === 2 && <Form2 errors={errors} control={control} register={register()} />}
-            {formPage === 3 && <Form3 errors={errors} control={control} register={register()} />}
-            {formPage === 4 && <Form4 errors={errors} control={control} register={register()} />}
+            {formPage === 0 && (
+              <Form0 errors={errors} control={control} register={register} formData={formData} />
+            )}
+            {formPage === 1 && (
+              <Form1 errors={errors} control={control} register={register} formData={formData} />
+            )}
+            {formPage === 2 && (
+              <Form2 errors={errors} control={control} register={register} formData={formData} />
+            )}
+            {formPage === 3 && (
+              <Form3 errors={errors} control={control} register={register} formData={formData} />
+            )}
+            {formPage === 4 && (
+              <Form4 errors={errors} control={control} register={register} formData={formData} />
+            )}
             <div className="btnWpr">
               {formPage < 4 && (
                 <button className="btnWpr--next" type="submit">
