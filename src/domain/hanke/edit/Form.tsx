@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
 import { Button } from 'hds-react';
 import { IconAngleRight } from 'hds-react/icons';
 
@@ -9,13 +11,13 @@ import H1 from '../../../common/components/text/H1';
 
 import { combineObj } from './utils';
 import { HankeDataDraft } from './types';
-import { getFormData } from './selectors';
+import { getFormData, getHasFormChanged } from './selectors';
 
 import { actions } from './reducer';
+import { actions as dialogActions } from '../../../common/components/confirmationDialog/reducer';
 import { saveForm } from './thunks';
 
 import Indicator from './indicator';
-import ConfirmationDialog from './ConfirmationDialog';
 
 import Form0 from './Form0';
 import Form1 from './Form1';
@@ -24,12 +26,13 @@ import Form3 from './Form3';
 import Form4 from './Form4';
 
 import './Form.styles.scss';
-import './Dialog.styles.scss';
 
 const FormComponent: React.FC = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const formData = useSelector(getFormData());
+  const hasFormChanged = useSelector(getHasFormChanged());
+  const history = useHistory();
 
   const wizardStateData = [
     { label: t('hankeForm:perustiedotForm:header'), view: 0 },
@@ -39,24 +42,17 @@ const FormComponent: React.FC = (props) => {
     { label: t('hankeForm:hankkeenHaitatForm:header'), view: 4 },
   ];
   const [formPage, setFormPage] = useState<number>(0);
-  const init: any = {
-    YKTHanke: false,
-    hankeTunnus: '',
-    nimi: '',
-    alkuPvm: null,
-    loppuPvm: null,
-    vaihe: undefined,
-  };
-  const { handleSubmit, errors, control, register, formState, getValues } = useForm<HankeDataDraft>(
-    {
-      mode: 'all',
-      reValidateMode: 'onBlur',
-      criteriaMode: 'firstError',
-      shouldFocusError: true,
-      shouldUnregister: true,
-      defaultValues: formData,
-    }
-  );
+
+  const { handleSubmit, errors, control, register, formState, getValues, reset } = useForm<
+    HankeDataDraft
+  >({
+    mode: 'all',
+    reValidateMode: 'onBlur',
+    criteriaMode: 'firstError',
+    shouldFocusError: true,
+    shouldUnregister: true,
+    defaultValues: formData,
+  });
 
   function goBack() {
     setFormPage((v) => v - 1);
@@ -65,6 +61,7 @@ const FormComponent: React.FC = (props) => {
   function tallennaLuonnos() {
     const data = combineObj(formData, getValues());
     dispatch(actions.updateFormData(data));
+    reset(data);
     return false;
   }
 
@@ -84,16 +81,15 @@ const FormComponent: React.FC = (props) => {
       console.error(e.message);
     }
   };
-  useEffect(() => {
-    console.log('joo1', JSON.stringify(init));
-    console.log('joo2', JSON.stringify(getValues()));
-
-    if (JSON.stringify(init) !== JSON.stringify(getValues())) {
-      console.log('meni2');
-      dispatch(actions.updateHasFormChanged(true));
+  function closeForm() {
+    if (hasFormChanged) {
+      dispatch(dialogActions.updateIsDialogOpen({ isDialogOpen: true, redirectUrl: '/' }));
     } else {
-      dispatch(actions.updateHasFormChanged(false));
+      history.push('/');
     }
+  }
+  useEffect(() => {
+    dispatch(actions.updateHasFormChanged(formState.isDirty));
   });
   return (
     <div className="hankeForm">
@@ -102,7 +98,11 @@ const FormComponent: React.FC = (props) => {
         <Indicator dataList={wizardStateData} view={formPage} />
         <div className="hankeForm__formWprRight">
           <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
-            <ConfirmationDialog />
+            <div className="closeFormWpr">
+              <button type="button" onClick={() => closeForm()}>
+                X
+              </button>
+            </div>
             {formPage === 0 && <Form0 errors={errors} control={control} register={register()} />}
             {formPage === 1 && <Form1 errors={errors} control={control} register={register()} />}
             {formPage === 2 && <Form2 errors={errors} control={control} register={register()} />}

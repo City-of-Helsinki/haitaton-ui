@@ -121,10 +121,10 @@ export enum FORMFIELD {
 
 export type HankeData = {
   hankeId: string;
-  tunnus: string;
+  hankeTunnus: string;
   nimi: string;
-  alkuPvm: Date;
-  loppuPvm: Date;
+  alkuPvm: Date | null;
+  loppuPvm: Date | null;
   katuosoite: string;
   vaihe: HANKE_VAIHE_KEY;
   suunnitteluvaihe: HANKE_SUUNNITTELUVAIHE_KEY;
