@@ -1,4 +1,6 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+
 import {
   AlertDialog,
   AlertDialogBody,
@@ -7,17 +9,26 @@ import {
   AlertDialogOverlay,
 } from '@chakra-ui/react';
 import { Button } from 'hds-react';
+import { getFormData, getHasFormChanged } from './selectors';
 
 const ConfirmationDialog: React.FC = (props) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const onClose = () => setIsOpen(false);
   // eslint-disable-next-line
   const cancelRef = React.useRef<any>();
+  const formData = useSelector(getFormData());
+  const hasFormChanged = useSelector(getHasFormChanged());
+  function close(val: boolean) {
+    if (JSON.stringify(formData) === JSON.stringify(hasFormChanged)) {
+      alert('sama');
+    }
 
+    setIsOpen(val);
+  }
   return (
     <>
       <div className="closeFormWpr">
-        <button type="button" onClick={() => setIsOpen(true)}>
+        <button type="button" onClick={() => close(true)}>
           X
         </button>
       </div>

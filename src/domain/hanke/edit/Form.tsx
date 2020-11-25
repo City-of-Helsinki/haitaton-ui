@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
+import { Button } from 'hds-react';
+import { IconAngleRight } from 'hds-react/icons';
 
 import H1 from '../../../common/components/text/H1';
 
@@ -37,44 +39,62 @@ const FormComponent: React.FC = (props) => {
     { label: t('hankeForm:hankkeenHaitatForm:header'), view: 4 },
   ];
   const [formPage, setFormPage] = useState<number>(0);
-
-  const { handleSubmit, errors, control, register, formState } = useForm<HankeDataDraft>({
-    mode: 'all',
-    reValidateMode: 'onBlur',
-    criteriaMode: 'firstError',
-    shouldFocusError: true,
-    shouldUnregister: true,
-    defaultValues: formData,
-  });
+  const init: any = {
+    YKTHanke: false,
+    hankeTunnus: '',
+    nimi: '',
+    alkuPvm: null,
+    loppuPvm: null,
+    vaihe: undefined,
+  };
+  const { handleSubmit, errors, control, register, formState, getValues } = useForm<HankeDataDraft>(
+    {
+      mode: 'all',
+      reValidateMode: 'onBlur',
+      criteriaMode: 'firstError',
+      shouldFocusError: true,
+      shouldUnregister: true,
+      defaultValues: formData,
+    }
+  );
 
   function goBack() {
     setFormPage((v) => v - 1);
     return false;
   }
   function tallennaLuonnos() {
-    console.log('went luonnos');
+    const data = combineObj(formData, getValues());
+    dispatch(actions.updateFormData(data));
     return false;
   }
 
   const onSubmit = async (values: HankeDataDraft) => {
-    console.log('test', JSON.stringify(values) === JSON.stringify(formData));
     const data = combineObj(formData, values);
 
-    if (data) {
-      dispatch(actions.updateFormData(data));
-      try {
-        dispatch(
-          saveForm({
-            data,
-          })
-        );
-        setFormPage((v) => v + 1);
-      } catch (e) {
-        // eslint-disable-next-line
-        console.error(e.message);
-      }
+    dispatch(actions.updateFormData(data));
+    try {
+      dispatch(
+        saveForm({
+          data,
+        })
+      );
+      setFormPage((v) => v + 1);
+    } catch (e) {
+      // eslint-disable-next-line
+      console.error(e.message);
     }
   };
+  useEffect(() => {
+    console.log('joo1', JSON.stringify(init));
+    console.log('joo2', JSON.stringify(getValues()));
+
+    if (JSON.stringify(init) !== JSON.stringify(getValues())) {
+      console.log('meni2');
+      dispatch(actions.updateHasFormChanged(true));
+    } else {
+      dispatch(actions.updateHasFormChanged(false));
+    }
+  });
   return (
     <div className="hankeForm">
       <H1 stylesAs="h2">{t('hankeForm:pageHeader')}</H1>
@@ -90,15 +110,20 @@ const FormComponent: React.FC = (props) => {
             {formPage === 4 && <Form4 errors={errors} control={control} register={register()} />}
             <div className="btnWpr">
               {formPage < 4 && (
-                <button className="btnWpr--next" type="submit" disabled={formState.isValid}>
+                <Button
+                  className="btnWpr--next"
+                  type="submit"
+                  disabled={!formState.isValid}
+                  iconRight={<IconAngleRight />}
+                >
                   <span>{t('hankeForm:nextButton')}</span>
-                </button>
+                </Button>
               )}
               <button
                 className="btnWpr--tallennaLuonnos"
-                type="submit"
+                type="button"
                 onClick={() => tallennaLuonnos()}
-                disabled={formState.isValid}
+                disabled={!formState.isValid}
               >
                 <span>{t('hankeForm:tallennaLuonnosButton')}</span>
               </button>

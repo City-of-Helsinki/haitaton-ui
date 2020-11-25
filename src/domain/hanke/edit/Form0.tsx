@@ -17,7 +17,6 @@ const Form0: React.FC<PropTypes> = (props) => {
   const { t, i18n } = useTranslation();
   const { control, errors, register } = props;
   const formData = useSelector(getFormData());
-
   const [ytkChecked, setYtkChecked] = useState(formData[FORMFIELD.YKT_HANKE] || false);
 
   return (
@@ -61,7 +60,7 @@ const Form0: React.FC<PropTypes> = (props) => {
           id={FORMFIELD.NIMI}
           label={t(`hankeForm:labels:${FORMFIELD.NIMI}`)}
           control={control}
-          // rules={{ required: true }}
+          rules={{ required: true }}
           defaultValue={formData[FORMFIELD.NIMI] || ''}
           invalid={!!errors.hankeenNimi}
           errorMsg={t('hankeForm:insertFieldError')}
@@ -79,7 +78,7 @@ const Form0: React.FC<PropTypes> = (props) => {
             id={FORMFIELD.ALKU_PVM}
             label={t(`hankeForm:labels:${FORMFIELD.ALKU_PVM}`)}
             control={control}
-            // rules={{ required: true }}
+            rules={{ required: true }}
             locale={i18n.language}
             dateFormat="dd.MM.yyyy"
             invalid={!!errors.startDate}
@@ -98,7 +97,7 @@ const Form0: React.FC<PropTypes> = (props) => {
             id={FORMFIELD.LOPPU_PVM}
             label={t(`hankeForm:labels:${FORMFIELD.LOPPU_PVM}`)}
             control={control}
-            // rules={{ required: true }}
+            rules={{ required: true }}
             locale={i18n.language}
             dateFormat="dd.MM.yyyy"
             invalid={!!errors.endDate}
@@ -123,7 +122,7 @@ const Form0: React.FC<PropTypes> = (props) => {
           }))}
           defaultValue={formData[FORMFIELD.VAIHE]}
           label={t(`hankeForm:labels:${FORMFIELD.VAIHE}`)}
-          // rules={{ required: true }}
+          rules={{ required: true }}
           invalid={!!errors[FORMFIELD.VAIHE]}
           errorMsg={t('hankeForm:insertFieldError')}
           tooltip={{
