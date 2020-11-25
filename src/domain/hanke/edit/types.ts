@@ -9,6 +9,13 @@ export interface FormProps {
   register: any;
 }
 
+export enum HANKE_SAVETYPE {
+  AUTO = 'AUTO',
+  DRAFT = 'DRAFT',
+  SUBMIT = 'SUBMIT',
+}
+export type HANKE_SAVETYPE_KEY = keyof typeof HANKE_SAVETYPE;
+
 export enum HANKE_VAIHE {
   OHJELMOINTI = 'OHJELMOINTI',
   SUUNNITTELU = 'SUUNNITTELU',
@@ -127,7 +134,7 @@ export enum FORMFIELD {
   OMISTAJAOASTO = 'omistajaOsasto',
   ARVIOIJAORGANISAATIO = 'arvioijaOrganisaatio',
   ARVIOIJAOSASTO = 'arvioijaOsasto',
-  YKT_HANKE = 'YKTHanke',
+  YKT_HANKE = 'onYKTHanke',
 }
 
 export type HankeData = {
@@ -153,7 +160,7 @@ export type HankeData = {
   arvioijaOrganisaatio: string;
   arvioijaOsasto: string;
   omistaja: string;
-  YKTHanke: boolean;
+  onYKTHanke: boolean;
 };
 
 export type HankeDataDraft = Partial<HankeData>;

@@ -12,7 +12,7 @@ type PropTypes = {
   id: string;
   control: Control;
   rules?: { required: boolean };
-  defaultValue: string | string[];
+  defaultValue: string;
   label: string;
   options: Array<Option>;
   invalid?: boolean;

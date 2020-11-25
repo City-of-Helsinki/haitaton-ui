@@ -144,13 +144,13 @@
       "arvioijaOsasto": "SV:Arvioijaosasto",
       "omistaja": "SV:Omistaja",
       "katuosoite": "SV:Katuosoite",
-      "YKTHanke": "SV:Hanke on YKT-hanke"
+      "onYKTHanke": "SV:Hanke on YKT-hanke"
     },
     "toolTips": {
       "tipOpenLabel": "SV:Avaa ohje",
       "tipCloseLabel": "SV:Sulje ohje",
       "nimi": "SV:Ohjeteksti",
-      "YKTHanke": "SV:Ohjeteksti",
+      "onYKTHanke": "SV:Ohjeteksti",
       "alkuPvm": "SV:Ohjeteksti",
       "loppuPvm": "SV:Ohjeteksti",
       "vaihe": "SV:Ohjeteksti"

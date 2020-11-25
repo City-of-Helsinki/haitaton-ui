@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import H1 from '../../../common/components/text/H1';
 
 import { combineObj } from './utils';
-import { HankeDataDraft } from './types';
+import { HankeDataDraft, HANKE_SAVETYPE } from './types';
 import { getFormData } from './selectors';
 
 import { actions } from './reducer';
@@ -58,6 +58,7 @@ const FormComponent: React.FC = (props) => {
         dispatch(
           saveForm({
             data,
+            saveType: HANKE_SAVETYPE.DRAFT,
           })
         );
         setFormPage((v) => v + 1);
