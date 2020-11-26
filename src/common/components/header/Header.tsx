@@ -47,7 +47,8 @@ const Header: React.FC = () => {
     setLanguageState(code);
     i18n.changeLanguage(code.code);
   };
-  function redirect(e: any, to: string) {
+
+  function redirect(e: React.MouseEvent<HTMLAnchorElement>, to: string) {
     e.preventDefault();
     if (hasFormChanged) {
       dispatch(actions.updateIsDialogOpen({ isDialogOpen: true, redirectUrl: to }));

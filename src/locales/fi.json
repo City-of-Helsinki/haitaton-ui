@@ -121,6 +121,7 @@
     "pageHeader": "Hanke",
     "previousButton": "Edellinen",
     "nextButton": "Seuraava",
+    "tallennaLuonnosButton": "Tallenna luonnos",
     "insertFieldError": "Syötä kenttä",
     "labels": {
       "hankeTunnus": "Hankkeen tunnus",

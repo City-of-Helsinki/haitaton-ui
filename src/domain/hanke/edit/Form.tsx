@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import { Button } from 'hds-react';
-import { IconAngleRight } from 'hds-react/icons';
+import { IconAngleLeft, IconAngleRight, IconCross } from 'hds-react/icons';
 
 import H1 from '../../../common/components/text/H1';
 
@@ -100,7 +100,7 @@ const FormComponent: React.FC = (props) => {
           <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
             <div className="closeFormWpr">
               <button type="button" onClick={() => closeForm()}>
-                X
+                <IconCross />
               </button>
             </div>
             {formPage === 0 && <Form0 errors={errors} control={control} register={register()} />}
@@ -109,28 +109,39 @@ const FormComponent: React.FC = (props) => {
             {formPage === 3 && <Form3 errors={errors} control={control} register={register()} />}
             {formPage === 4 && <Form4 errors={errors} control={control} register={register()} />}
             <div className="btnWpr">
-              {formPage < 4 && (
+              {formPage < 4 ? (
                 <Button
                   className="btnWpr--next"
                   type="submit"
                   disabled={!formState.isValid}
                   iconRight={<IconAngleRight />}
+                  variant="secondary"
                 >
                   <span>{t('hankeForm:nextButton')}</span>
                 </Button>
+              ) : (
+                <div />
               )}
-              <button
+              <Button
                 className="btnWpr--tallennaLuonnos"
                 type="button"
                 onClick={() => tallennaLuonnos()}
                 disabled={!formState.isValid}
               >
                 <span>{t('hankeForm:tallennaLuonnosButton')}</span>
-              </button>
-              {formPage > 0 && (
-                <button className="btnWpr--previous" type="button" onClick={() => goBack()}>
+              </Button>
+              {formPage > 0 ? (
+                <Button
+                  className="btnWpr--previous"
+                  type="button"
+                  onClick={() => goBack()}
+                  iconLeft={<IconAngleLeft />}
+                  variant="secondary"
+                >
                   <span>{t('hankeForm:previousButton')}</span>
-                </button>
+                </Button>
+              ) : (
+                <div />
               )}
             </div>
           </form>

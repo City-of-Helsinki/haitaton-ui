@@ -50,6 +50,10 @@
       padding-bottom: var(--spacing-3-xs);
       margin: 0;
       display: block;
+
+      svg {
+        display: inline-block;
+      }
     }
 
     .line {
@@ -75,7 +79,7 @@
 
     &__contentWpr {
       position: relative;
-      top: -6px;
+      top: 1px;
       left: var(--spacing-2-xs);
       display: inline-block;
     }
@@ -102,12 +106,12 @@
 
     .left {
       padding-right: var(--spacing-xl);
-      width: 30%;
+      width: 225px;
     }
 
     .right {
       padding-right: var(--spacing-xl);
-      width: 30%;
+      width: 225px;
     }
 
     @include respond-below(s) {

@@ -19,9 +19,13 @@
   src: url('../../../assets/fonts/HelsinkiGrotesk-Bold.otf') format('opentype');
 }
 
+html {
+  font-size: 100% !important;
+}
+
 body {
   font-family: 'HelsinkiGrotesk', serif;
-  background: var(--color-black-5);
+  background: var(--color-black-5) !important;
   position: relative;
   min-height: 100vh;
 }

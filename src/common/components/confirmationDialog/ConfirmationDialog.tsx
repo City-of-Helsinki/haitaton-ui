@@ -29,8 +29,8 @@ const ConfirmationDialog: React.FC = (props) => {
     dispatch(actions.updateIsDialogOpen({ isDialogOpen: false, redirectUrl }));
   }
   function exit(val: boolean) {
-    history.push(redirectUrl);
     dispatch(actions.updateIsDialogOpen({ isDialogOpen: false, redirectUrl }));
+    history.push(redirectUrl);
   }
   return (
     <>
