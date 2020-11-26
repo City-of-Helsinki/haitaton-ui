@@ -16,8 +16,7 @@ import { actions } from './reducer';
 import './Dialog.styles.scss';
 
 const ConfirmationDialog: React.FC = (props) => {
-  // eslint-disable-next-line
-  const cancelRef = React.useRef<any>();
+  const cancelRef = React.useRef<HTMLButtonElement>(null);
   const isDialogOpenVal = useSelector(getIsDialogOpen());
   const redirectUrl = useSelector(getRedirectUrl());
   const dispatch = useDispatch();
