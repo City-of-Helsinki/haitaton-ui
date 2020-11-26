@@ -145,13 +145,13 @@
       "arvioijaOsasto": "Arvioijaosasto",
       "omistaja": "Omistaja",
       "katuosoite": "Katuosoite",
-      "YKTHanke": "Hanke on YKT-hanke"
+      "onYKTHanke": "Hanke on YKT-hanke"
     },
     "toolTips": {
       "tipOpenLabel": "Avaa ohje",
       "tipCloseLabel": "Sulje ohje",
       "nimi": "Ohjeteksti",
-      "YKTHanke": "Ohjeteksti",
+      "onYKTHanke": "Ohjeteksti",
       "alkuPvm": "Ohjeteksti",
       "loppuPvm": "Ohjeteksti",
       "vaihe": "Ohjeteksti"

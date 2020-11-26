@@ -10,8 +10,9 @@ import { IconAngleLeft, IconAngleRight, IconCross } from 'hds-react/icons';
 import H1 from '../../../common/components/text/H1';
 
 import { combineObj } from './utils';
-import { HankeDataDraft } from './types';
+
 import { getFormData, getHasFormChanged } from './selectors';
+import { HankeDataDraft, HANKE_SAVETYPE } from './types';
 
 import { actions } from './reducer';
 import { actions as dialogActions } from '../../../common/components/confirmationDialog/reducer';
@@ -68,17 +69,20 @@ const FormComponent: React.FC = (props) => {
   const onSubmit = async (values: HankeDataDraft) => {
     const data = combineObj(formData, values);
 
-    dispatch(actions.updateFormData(data));
-    try {
-      dispatch(
-        saveForm({
-          data,
-        })
-      );
-      setFormPage((v) => v + 1);
-    } catch (e) {
-      // eslint-disable-next-line
-      console.error(e.message);
+    if (data) {
+      dispatch(actions.updateFormData(data));
+      try {
+        dispatch(
+          saveForm({
+            data,
+            saveType: HANKE_SAVETYPE.DRAFT,
+          })
+        );
+        setFormPage((v) => v + 1);
+      } catch (e) {
+        // eslint-disable-next-line
+        console.error(e.message);
+      }
     }
   };
   function closeForm() {
@@ -98,16 +102,24 @@ const FormComponent: React.FC = (props) => {
         <Indicator dataList={wizardStateData} view={formPage} />
         <div className="hankeForm__formWprRight">
           <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
-            <div className="closeFormWpr">
-              <button type="button" onClick={() => closeForm()}>
-                <IconCross />
-              </button>
-            </div>
-            {formPage === 0 && <Form0 errors={errors} control={control} register={register()} />}
-            {formPage === 1 && <Form1 errors={errors} control={control} register={register()} />}
-            {formPage === 2 && <Form2 errors={errors} control={control} register={register()} />}
-            {formPage === 3 && <Form3 errors={errors} control={control} register={register()} />}
-            {formPage === 4 && <Form4 errors={errors} control={control} register={register()} />}
+            <button type="button" onClick={() => closeForm()}>
+              <IconCross />
+            </button>
+            {formPage === 0 && (
+              <Form0 errors={errors} control={control} register={register} formData={formData} />
+            )}
+            {formPage === 1 && (
+              <Form1 errors={errors} control={control} register={register} formData={formData} />
+            )}
+            {formPage === 2 && (
+              <Form2 errors={errors} control={control} register={register} formData={formData} />
+            )}
+            {formPage === 3 && (
+              <Form3 errors={errors} control={control} register={register} formData={formData} />
+            )}
+            {formPage === 4 && (
+              <Form4 errors={errors} control={control} register={register} formData={formData} />
+            )}
             <div className="btnWpr">
               {formPage < 4 ? (
                 <Button

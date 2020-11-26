@@ -8,7 +8,7 @@ type PropTypes = {
   id: string;
   control: Control;
   rules?: { required: boolean };
-  defaultValue?: string;
+  defaultValue: string;
   label: string;
   invalid?: boolean;
   errorMsg?: string;
@@ -28,6 +28,7 @@ const TextInputComp: React.FC<PropTypes> = (props) => {
     disabled,
     tooltip,
   } = props;
+
   return (
     <>
       <Controller
@@ -36,19 +37,21 @@ const TextInputComp: React.FC<PropTypes> = (props) => {
         control={control}
         rules={rules}
         defaultValue={defaultValue}
-        render={({ onChange, onBlur, value }) => (
-          <TextInput
-            id={id}
-            label={label}
-            invalid={invalid}
-            name={name}
-            onBlur={onBlur}
-            onChange={onChange}
-            disabled={disabled}
-            value={value}
-            {...tooltip}
-          />
-        )}
+        render={({ onChange, onBlur, value }) => {
+          return (
+            <TextInput
+              id={id}
+              label={label}
+              invalid={invalid}
+              name={name}
+              onBlur={onBlur}
+              onChange={onChange}
+              disabled={disabled}
+              value={value}
+              {...tooltip}
+            />
+          );
+        }}
       />
       {invalid && <span className="error-text">{errorMsg}</span>}
     </>

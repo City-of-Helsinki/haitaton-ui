@@ -1,24 +1,17 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Checkbox, Tooltip } from 'hds-react';
-
 import { $enum } from 'ts-enum-util';
 
 import DatePicker from '../../../common/components/datePicker/DatePicker';
 import Dropdown from '../../../common/components/dropdown/Dropdown';
 import TextInput from '../../../common/components/textInput/TextInput';
 
-import { HANKE_VAIHE, FORMFIELD } from './types';
-import { getFormData } from './selectors';
-import PropTypes from './PropTypes';
+import { FormProps, HANKE_VAIHE, FORMFIELD } from './types';
 
-const Form0: React.FC<PropTypes> = (props) => {
+const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => {
   const { t, i18n } = useTranslation();
-  const { control, errors, register } = props;
-  const formData = useSelector(getFormData());
   const [ytkChecked, setYtkChecked] = useState(formData[FORMFIELD.YKT_HANKE] || false);
-
   return (
     <div className="form0">
       <h2>{t('hankeForm:perustiedotForm:header')}</h2>
@@ -120,7 +113,7 @@ const Form0: React.FC<PropTypes> = (props) => {
             value,
             label: t(`hanke:vaihe:${value}`),
           }))}
-          defaultValue={formData[FORMFIELD.VAIHE]}
+          defaultValue={formData[FORMFIELD.VAIHE] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.VAIHE}`)}
           rules={{ required: true }}
           invalid={!!errors[FORMFIELD.VAIHE]}

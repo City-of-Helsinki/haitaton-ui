@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import HankeDrawer from '../../map/HankeDrawer';
-import PropTypes from './PropTypes';
+import { FormProps } from './types';
 
-const Form1: React.FC<PropTypes> = (props) => {
+const Form1: React.FC<FormProps> = (props) => {
   const { t } = useTranslation();
   return (
     <div className="form1">
