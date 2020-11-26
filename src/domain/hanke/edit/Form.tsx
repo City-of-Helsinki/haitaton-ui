@@ -102,9 +102,11 @@ const FormComponent: React.FC = (props) => {
         <Indicator dataList={wizardStateData} view={formPage} />
         <div className="hankeForm__formWprRight">
           <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
-            <button type="button" onClick={() => closeForm()}>
-              <IconCross />
-            </button>
+            <div className="closeFormWpr">
+              <button type="button" onClick={() => closeForm()}>
+                <IconCross />
+              </button>
+            </div>
             {formPage === 0 && (
               <Form0 errors={errors} control={control} register={register} formData={formData} />
             )}
@@ -121,7 +123,7 @@ const FormComponent: React.FC = (props) => {
               <Form4 errors={errors} control={control} register={register} formData={formData} />
             )}
             <div className="btnWpr">
-              {formPage < 4 ? (
+              {formPage < 4 && (
                 <Button
                   className="btnWpr--next"
                   type="submit"
@@ -131,8 +133,6 @@ const FormComponent: React.FC = (props) => {
                 >
                   <span>{t('hankeForm:nextButton')}</span>
                 </Button>
-              ) : (
-                <div />
               )}
               <Button
                 className="btnWpr--tallennaLuonnos"
@@ -142,7 +142,7 @@ const FormComponent: React.FC = (props) => {
               >
                 <span>{t('hankeForm:tallennaLuonnosButton')}</span>
               </Button>
-              {formPage > 0 ? (
+              {formPage > 0 && (
                 <Button
                   className="btnWpr--previous"
                   type="button"
@@ -152,8 +152,6 @@ const FormComponent: React.FC = (props) => {
                 >
                   <span>{t('hankeForm:previousButton')}</span>
                 </Button>
-              ) : (
-                <div />
               )}
             </div>
           </form>
