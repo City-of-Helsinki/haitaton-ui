@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import {
   AlertDialog,
@@ -21,13 +22,14 @@ const ConfirmationDialog: React.FC = (props) => {
   const redirectUrl = useSelector(getRedirectUrl());
   const dispatch = useDispatch();
   const history = useHistory();
-  function onClose(val: boolean) {
+  const { t } = useTranslation();
+  function onClose() {
     dispatch(actions.updateIsDialogOpen({ isDialogOpen: false, redirectUrl }));
   }
-  function cancel(val: boolean) {
+  function cancel() {
     dispatch(actions.updateIsDialogOpen({ isDialogOpen: false, redirectUrl }));
   }
-  function exit(val: boolean) {
+  function exit() {
     dispatch(actions.updateIsDialogOpen({ isDialogOpen: false, redirectUrl }));
     history.push(redirectUrl);
   }
@@ -36,21 +38,18 @@ const ConfirmationDialog: React.FC = (props) => {
       <AlertDialog
         isOpen={isDialogOpenVal}
         leastDestructiveRef={cancelRef}
-        onClose={() => onClose(false)}
+        onClose={() => onClose()}
       >
         <AlertDialogOverlay>
           <AlertDialogContent>
-            <AlertDialogBody>
-              Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä,
-              vai poistua, jolloin syöttämäsi tiedot poistuvat
-            </AlertDialogBody>
+            <AlertDialogBody>{t('hanke:confirmationDialog:bodyText')}</AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button type="button" ref={cancelRef} onClick={() => cancel(false)}>
-                Peruuta
+              <Button type="button" ref={cancelRef} onClick={() => cancel()}>
+                {t('hanke:confirmationDialog:cancelButton')}
               </Button>
-              <Button type="button" variant="secondary" onClick={() => exit(false)}>
-                Poistu
+              <Button type="button" variant="secondary" onClick={() => exit()}>
+                {t('hanke:confirmationDialog:exitButton')}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

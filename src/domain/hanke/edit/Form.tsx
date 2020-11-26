@@ -59,7 +59,7 @@ const FormComponent: React.FC = (props) => {
     setFormPage((v) => v - 1);
     return false;
   }
-  function tallennaLuonnos() {
+  function saveDraftButton() {
     const data = combineObj(formData, getValues());
     dispatch(actions.updateFormData(data));
     reset(data);
@@ -78,6 +78,7 @@ const FormComponent: React.FC = (props) => {
             saveType: HANKE_SAVETYPE.DRAFT,
           })
         );
+        reset(data);
         setFormPage((v) => v + 1);
       } catch (e) {
         // eslint-disable-next-line
@@ -134,13 +135,8 @@ const FormComponent: React.FC = (props) => {
                   <span>{t('hankeForm:nextButton')}</span>
                 </Button>
               )}
-              <Button
-                className="btnWpr--tallennaLuonnos"
-                type="button"
-                onClick={() => tallennaLuonnos()}
-                disabled={!formState.isValid}
-              >
-                <span>{t('hankeForm:tallennaLuonnosButton')}</span>
+              <Button type="button" onClick={() => saveDraftButton()} disabled={!formState.isValid}>
+                <span>{t('hankeForm:saveDraftButton')}</span>
               </Button>
               {formPage > 0 && (
                 <Button

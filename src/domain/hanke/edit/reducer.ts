@@ -5,7 +5,6 @@ import { HankeDataDraft } from './types';
 type State = {
   hankeDataDraft: HankeDataDraft;
   hasFormChanged: boolean;
-  isConfirmationDialogOpen: boolean;
   status: string | null;
 };
 
@@ -15,17 +14,9 @@ const updateFormData: CaseReducer<State, PayloadAction<HankeDataDraft>> = (state
 const updateHasFormChanged: CaseReducer<State, PayloadAction<boolean>> = (state, action) => {
   state.hasFormChanged = action.payload;
 };
-const updateIsConfirmationDialogOpen: CaseReducer<State, PayloadAction<boolean>> = (
-  state,
-  action
-) => {
-  state.isConfirmationDialogOpen = action.payload;
-};
-
 const initialState: State = {
   hankeDataDraft: {},
   hasFormChanged: false,
-  isConfirmationDialogOpen: false,
   status: null,
 };
 
@@ -35,7 +26,6 @@ const formSlice = createSlice({
   reducers: {
     updateFormData,
     updateHasFormChanged,
-    updateIsConfirmationDialogOpen,
   },
   extraReducers: (builder) => {
     builder.addCase(saveForm.fulfilled, (state, { payload }) => {

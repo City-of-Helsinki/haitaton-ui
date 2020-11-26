@@ -42,7 +42,13 @@
       }
     }
   },
+
   "hanke": {
+    "confirmationDialog": {
+      "bodyText": "Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä, vai poistua, jolloin syöttämäsi tiedot poistuvat.",
+      "cancelButton": "Peruuta",
+      "exitButton": "Poistu"
+    },
     "vaihe": {
       "SUUNNITTELU": "Suunnittelu",
       "OHJELMOINTI": "Ohjelmointi",
@@ -121,7 +127,7 @@
     "pageHeader": "Hanke",
     "previousButton": "Edellinen",
     "nextButton": "Seuraava",
-    "tallennaLuonnosButton": "Tallenna luonnos",
+    "saveDraftButton": "Tallenna luonnos",
     "insertFieldError": "Syötä kenttä",
     "labels": {
       "hankeTunnus": "Hankkeen tunnus",
