@@ -8,6 +8,7 @@ import Dropdown from '../../../common/components/dropdown/Dropdown';
 import TextInput from '../../../common/components/textInput/TextInput';
 
 import { FormProps, HANKE_VAIHE, FORMFIELD } from './types';
+import H2 from '../../../common/components/text/H2';
 
 const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => {
   const { t, i18n } = useTranslation();
@@ -15,7 +16,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
 
   return (
     <div className="form0">
-      <h2>{t('hankeForm:perustiedotForm:header')}</h2>
+      <H2>{t('hankeForm:perustiedotForm:header')}</H2>
       <div className="dataWpr">
         <div className="formWpr">
           <TextInput
