@@ -1,7 +1,8 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { QueryCache, ReactQueryCacheProvider } from 'react-query';
-import { ThemeProvider } from '@chakra-ui/core';
+import { ChakraProvider } from '@chakra-ui/react';
+
 import AppRoutes from '../../routes/AppRoutes';
 import Layout from './Layout';
 import { store } from './store';
@@ -14,11 +15,11 @@ const queryCache = new QueryCache();
 const App: React.FC = () => (
   <Provider store={store}>
     <ReactQueryCacheProvider queryCache={queryCache}>
-      <ThemeProvider theme={theme}>
+      <ChakraProvider theme={theme}>
         <Layout>
           <AppRoutes />
         </Layout>
-      </ThemeProvider>
+      </ChakraProvider>
     </ReactQueryCacheProvider>
   </Provider>
 );

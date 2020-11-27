@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import { registerLocale } from 'react-datepicker';
+
 import fi from 'date-fns/locale/fi';
 import sv from 'date-fns/locale/sv';
 import en from 'date-fns/locale/en-GB';
@@ -39,6 +40,7 @@ const Header: React.FC = () => {
     setLanguageState(code);
     i18n.changeLanguage(code.code);
   };
+
   useEffect(() => {
     const langObj = languages.find((item) => item.code === i18n.language);
     setLanguage(langObj);

@@ -2,6 +2,7 @@ import React from 'react';
 
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
+import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 
 import './layout.styles.scss';
 
@@ -13,6 +14,7 @@ const Layout: React.FC<Props> = ({ children }) => {
   return (
     <>
       <Header />
+      <ConfirmationDialog />
       <div className="pageContainer">{children}</div>
       <Footer />
     </>

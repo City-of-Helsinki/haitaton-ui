@@ -1,6 +1,11 @@
 {
   "common": {
-    "increment": "Increment"
+    "increment": "Increment",
+    "confirmationDialog": {
+      "bodyText": "EN:Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä, vai poistua, jolloin syöttämäsi tiedot poistuvat.",
+      "cancelButton": "EN:Peruuta",
+      "exitButton": "EN:Poistu"
+    }
   },
   "featureX": {
     "hello": "Hello from feature X"
@@ -121,6 +126,7 @@
     "pageHeader": "EN:Hanke",
     "previousButton": "EN:Edellinen",
     "nextButton": "EN:Seuraava",
+    "saveDraftButton": "EN:Tallenna luonnos",
     "insertFieldError": "EN:Syötä kenttä",
     "labels": {
       "hankeTunnus": "EN:Hankkeen tunnus",

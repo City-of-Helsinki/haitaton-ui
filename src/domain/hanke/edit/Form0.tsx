@@ -13,7 +13,6 @@ import H2 from '../../../common/components/text/H2';
 const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => {
   const { t, i18n } = useTranslation();
   const [ytkChecked, setYtkChecked] = useState(formData[FORMFIELD.YKT_HANKE] || false);
-
   return (
     <div className="form0">
       <H2>{t('hankeForm:perustiedotForm:header')}</H2>
@@ -55,7 +54,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
           id={FORMFIELD.NIMI}
           label={t(`hankeForm:labels:${FORMFIELD.NIMI}`)}
           control={control}
-          // rules={{ required: true }}
+          rules={{ required: true }}
           defaultValue={formData[FORMFIELD.NIMI] || ''}
           invalid={!!errors.hankeenNimi}
           errorMsg={t('hankeForm:insertFieldError')}
@@ -73,7 +72,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             id={FORMFIELD.ALKU_PVM}
             label={t(`hankeForm:labels:${FORMFIELD.ALKU_PVM}`)}
             control={control}
-            // rules={{ required: true }}
+            rules={{ required: true }}
             locale={i18n.language}
             dateFormat="dd.MM.yyyy"
             invalid={!!errors.startDate}
@@ -92,7 +91,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             id={FORMFIELD.LOPPU_PVM}
             label={t(`hankeForm:labels:${FORMFIELD.LOPPU_PVM}`)}
             control={control}
-            // rules={{ required: true }}
+            rules={{ required: true }}
             locale={i18n.language}
             dateFormat="dd.MM.yyyy"
             invalid={!!errors.endDate}
@@ -117,7 +116,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
           }))}
           defaultValue={formData[FORMFIELD.VAIHE] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.VAIHE}`)}
-          // rules={{ required: true }}
+          rules={{ required: true }}
           invalid={!!errors[FORMFIELD.VAIHE]}
           errorMsg={t('hankeForm:insertFieldError')}
           tooltip={{

@@ -1,6 +1,11 @@
 {
   "common": {
-    "increment": "Lisää"
+    "increment": "Lisää",
+    "confirmationDialog": {
+      "bodyText": "Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä, vai poistua, jolloin syöttämäsi tiedot poistuvat.",
+      "cancelButton": "Peruuta",
+      "exitButton": "Poistu"
+    }
   },
   "featureX": {
     "hello": "Morjesta featuresta x"
@@ -42,6 +47,7 @@
       }
     }
   },
+
   "hanke": {
     "vaihe": {
       "SUUNNITTELU": "Suunnittelu",
@@ -121,6 +127,7 @@
     "pageHeader": "Hanke",
     "previousButton": "Edellinen",
     "nextButton": "Seuraava",
+    "saveDraftButton": "Tallenna luonnos",
     "insertFieldError": "Syötä kenttä",
     "labels": {
       "hankeTunnus": "Hankkeen tunnus",

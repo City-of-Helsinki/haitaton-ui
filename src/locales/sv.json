@@ -1,6 +1,11 @@
 {
   "common": {
-    "increment": "SV:Lisää"
+    "increment": "SV:Lisää",
+    "confirmationDialog": {
+      "bodyText": "SV:Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä, vai poistua, jolloin syöttämäsi tiedot poistuvat.",
+      "cancelButton": "SV:Peruuta",
+      "exitButton": "SV:Poistu"
+    }
   },
   "featureX": {
     "hello": "SV:Morjesta featuresta x"
@@ -121,6 +126,7 @@
     "pageHeader": "SV:Hanke",
     "previousButton": "SV:Edellinen",
     "nextButton": "SV:Seuraava",
+    "saveDraftButton": "SV:Tallenna luonnos",
     "insertFieldError": "SV:Syötä kenttä",
     "labels": {
       "hankeTunnus": "SV:Hankkeen tunnus",

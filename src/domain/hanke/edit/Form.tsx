@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
+import { Button } from 'hds-react';
+import { IconAngleLeft, IconAngleRight, IconCross } from 'hds-react/icons';
+
 import H1 from '../../../common/components/text/H1';
 
 import { combineObj } from './utils';
+
+import { getFormData, getHasFormChanged } from './selectors';
 import { HankeDataDraft, HANKE_SAVETYPE } from './types';
-import { getFormData } from './selectors';
 
 import { actions } from './reducer';
+import { actions as dialogActions } from '../../../common/components/confirmationDialog/reducer';
 import { saveForm } from './thunks';
 
 import Indicator from './indicator';
@@ -25,6 +32,8 @@ const FormComponent: React.FC = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const formData = useSelector(getFormData());
+  const hasFormChanged = useSelector(getHasFormChanged());
+  const history = useHistory();
 
   const wizardStateData = [
     { label: t('hankeForm:perustiedotForm:header'), view: 0 },
@@ -35,7 +44,9 @@ const FormComponent: React.FC = (props) => {
   ];
   const [formPage, setFormPage] = useState<number>(0);
 
-  const { handleSubmit, errors, control, register } = useForm<HankeDataDraft>({
+  const { handleSubmit, errors, control, register, formState, getValues, reset } = useForm<
+    HankeDataDraft
+  >({
     mode: 'all',
     reValidateMode: 'onBlur',
     criteriaMode: 'firstError',
@@ -46,6 +57,25 @@ const FormComponent: React.FC = (props) => {
 
   function goBack() {
     setFormPage((v) => v - 1);
+    return false;
+  }
+  function saveDraftButton() {
+    const data = combineObj(formData, getValues());
+    reset(data);
+    if (data) {
+      dispatch(actions.updateFormData(data));
+      try {
+        dispatch(
+          saveForm({
+            data,
+            saveType: HANKE_SAVETYPE.DRAFT,
+          })
+        );
+      } catch (e) {
+        // eslint-disable-next-line
+        console.error(e.message);
+      }
+    }
     return false;
   }
 
@@ -61,6 +91,7 @@ const FormComponent: React.FC = (props) => {
             saveType: HANKE_SAVETYPE.DRAFT,
           })
         );
+        reset(data);
         setFormPage((v) => v + 1);
       } catch (e) {
         // eslint-disable-next-line
@@ -68,6 +99,16 @@ const FormComponent: React.FC = (props) => {
       }
     }
   };
+  function closeForm() {
+    if (hasFormChanged) {
+      dispatch(dialogActions.updateIsDialogOpen({ isDialogOpen: true, redirectUrl: '/' }));
+    } else {
+      history.push('/');
+    }
+  }
+  useEffect(() => {
+    dispatch(actions.updateHasFormChanged(formState.isDirty));
+  });
   return (
     <div className="hankeForm">
       <H1 stylesAs="h2">{t('hankeForm:pageHeader')}</H1>
@@ -75,6 +116,11 @@ const FormComponent: React.FC = (props) => {
         <Indicator dataList={wizardStateData} view={formPage} />
         <div className="hankeForm__formWprRight">
           <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
+            <div className="closeFormWpr">
+              <button type="button" onClick={() => closeForm()}>
+                <IconCross />
+              </button>
+            </div>
             {formPage === 0 && (
               <Form0 errors={errors} control={control} register={register} formData={formData} />
             )}
@@ -92,14 +138,29 @@ const FormComponent: React.FC = (props) => {
             )}
             <div className="btnWpr">
               {formPage < 4 && (
-                <button className="btnWpr--next" type="submit">
+                <Button
+                  className="btnWpr--next"
+                  type="submit"
+                  disabled={!formState.isValid}
+                  iconRight={<IconAngleRight />}
+                  variant="secondary"
+                >
                   <span>{t('hankeForm:nextButton')}</span>
-                </button>
+                </Button>
               )}
+              <Button type="button" onClick={() => saveDraftButton()} disabled={!formState.isValid}>
+                <span>{t('hankeForm:saveDraftButton')}</span>
+              </Button>
               {formPage > 0 && (
-                <button className="btnWpr--previous" type="button" onClick={() => goBack()}>
+                <Button
+                  className="btnWpr--previous"
+                  type="button"
+                  onClick={() => goBack()}
+                  iconLeft={<IconAngleLeft />}
+                  variant="secondary"
+                >
                   <span>{t('hankeForm:previousButton')}</span>
-                </button>
+                </Button>
               )}
             </div>
           </form>

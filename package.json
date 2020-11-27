@@ -20,8 +20,11 @@
     "cypress-run-chrome-headless": "cypress run --headless --browser chrome"
   },
   "dependencies": {
-    "@chakra-ui/core": "^0.8.0",
+    "@chakra-ui/core": "^1.0.0-rc.8",
+    "@chakra-ui/react": "^1.0.1",
+    "@chakra-ui/theme-tools": "^1.0.1",
     "@emotion/core": "^10.0.35",
+    "@emotion/react": "^11.1.1",
     "@emotion/styled": "^10.0.27",
     "@hookform/strictly-typed": "^0.0.4",
     "@reduxjs/toolkit": "^1.4.0",
@@ -42,6 +45,7 @@
     "date-fns": "^2.16.1",
     "emotion-theming": "^10.0.27",
     "eslint-config-airbnb-typescript-prettier": "^3.1.0",
+    "framer-motion": "^2.9.4",
     "geojson": "^0.5.0",
     "hds-design-tokens": "^0.14.0",
     "hds-react": "^0.14.0",

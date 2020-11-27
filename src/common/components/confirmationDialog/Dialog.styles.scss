@@ -1,0 +1,14 @@
+.chakra-modal {
+  &__body {
+    padding-top: var(--spacing-l) !important;
+    padding-bottom: var(--spacing-m) !important;
+  }
+
+  &__footer {
+    justify-content: start !important;
+
+    button {
+      margin-right: var(--spacing-s);
+    }
+  }
+}
