@@ -7,7 +7,7 @@ import { FormProps, FORMFIELD, CONTACT_FORMFIELD, HankeDataDraft } from './types
 import H2 from '../../../common/components/text/H2';
 import H3 from '../../../common/components/text/H3';
 
-const CONTACT_FIELDS = [FORMFIELD.OMISTAJAT, FORMFIELD.ARVIOIJAT, FORMFIELD.TOTEUTTAJAT];
+const CONTACT_TYPES = [FORMFIELD.OMISTAJAT, FORMFIELD.ARVIOIJAT, FORMFIELD.TOTEUTTAJAT];
 
 const Form2: React.FC<FormProps> = ({ control, formData }) => {
   const { t } = useTranslation();
@@ -16,9 +16,9 @@ const Form2: React.FC<FormProps> = ({ control, formData }) => {
   return (
     <div className="form2">
       <H2>{t('hankeForm:hankkeenYhteystiedotForm:header')}</H2>
-      {CONTACT_FIELDS.map((FIELD) => (
-        <div key={FIELD}>
-          <H3>{t(`hankeForm:headers:${FIELD}`)}</H3>
+      {CONTACT_TYPES.map((CONTACT_TYPE) => (
+        <div key={CONTACT_TYPE}>
+          <H3>{t(`hankeForm:headers:${CONTACT_TYPE}`)}</H3>
           <div className="formColumns">
             {$enum(CONTACT_FORMFIELD)
               .getValues()
@@ -27,14 +27,16 @@ const Form2: React.FC<FormProps> = ({ control, formData }) => {
                   key={contactField}
                   // eslint-disable-next-line
                   // @ts-ignore
-                  name={[FIELD, 0, contactField]}
-                  // eslint-disable-next-line
-                  // @ts-ignore
-                  defaultValue={formData[FIELD] ? formData[FIELD][0][contactField] : ''}
+                  name={[CONTACT_TYPE, 0, contactField]}
+                  defaultValue={
+                    // eslint-disable-next-line
+                    // @ts-ignore
+                    formData[CONTACT_TYPE] ? formData[CONTACT_TYPE][0][contactField] : ''
+                  }
                   render={(formProps) => (
                     <TextInput
                       className="formItem"
-                      id={`${FIELD}-${contactField}`}
+                      id={`${CONTACT_TYPE}-${contactField}`}
                       {...formProps}
                       label={t(`hankeForm:labels:${contactField}`)}
                     />
