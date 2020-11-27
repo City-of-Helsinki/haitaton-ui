@@ -61,8 +61,21 @@ const FormComponent: React.FC = (props) => {
   }
   function saveDraftButton() {
     const data = combineObj(formData, getValues());
-    dispatch(actions.updateFormData(data));
     reset(data);
+    if (data) {
+      dispatch(actions.updateFormData(data));
+      try {
+        dispatch(
+          saveForm({
+            data,
+            saveType: HANKE_SAVETYPE.DRAFT,
+          })
+        );
+      } catch (e) {
+        // eslint-disable-next-line
+        console.error(e.message);
+      }
+    }
     return false;
   }
 

@@ -42,14 +42,14 @@ const ConfirmationDialog: React.FC = (props) => {
       >
         <AlertDialogOverlay>
           <AlertDialogContent>
-            <AlertDialogBody>{t('hanke:confirmationDialog:bodyText')}</AlertDialogBody>
+            <AlertDialogBody>{t('common:confirmationDialog:bodyText')}</AlertDialogBody>
 
             <AlertDialogFooter>
               <Button type="button" ref={cancelRef} onClick={() => cancel()}>
-                {t('hanke:confirmationDialog:cancelButton')}
+                {t('common:confirmationDialog:cancelButton')}
               </Button>
               <Button type="button" variant="secondary" onClick={() => exit()}>
-                {t('hanke:confirmationDialog:exitButton')}
+                {t('common:confirmationDialog:exitButton')}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

@@ -1,6 +1,11 @@
 {
   "common": {
-    "increment": "SV:Lisää"
+    "increment": "SV:Lisää",
+    "confirmationDialog": {
+      "bodyText": "SV:Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä, vai poistua, jolloin syöttämäsi tiedot poistuvat.",
+      "cancelButton": "SV:Peruuta",
+      "exitButton": "SV:Poistu"
+    }
   },
   "featureX": {
     "hello": "SV:Morjesta featuresta x"
@@ -43,11 +48,6 @@
     }
   },
   "hanke": {
-    "confirmationDialog": {
-      "bodyText": "SV:Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä, vai poistua, jolloin syöttämäsi tiedot poistuvat.",
-      "cancelButton": "SV:Peruuta",
-      "exitButton": "SV:Poistu"
-    },
     "vaihe": {
       "SUUNNITTELU": "SV:Suunnittelu",
       "OHJELMOINTI": "SV:Ohjelmointi",
