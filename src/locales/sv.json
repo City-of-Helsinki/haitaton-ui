@@ -144,13 +144,18 @@
       "meluhaitta": "SV:Meluhaitta",
       "polyhaitta": "SV:Pölyhaitta",
       "tarinahaitta": "SV:Tärinähaitta",
-      "omistajaOrganisaatio": "SV:Omistajaorganisaatio",
-      "omistajaOsasto": "SV:Omistajaosasto",
-      "arvioijaOrganisaatio": "SV:arvioijaOrganisaatio",
-      "arvioijaOsasto": "SV:Arvioijaosasto",
-      "omistaja": "SV:Omistaja",
       "katuosoite": "SV:Katuosoite",
-      "onYKTHanke": "SV:Hanke on YKT-hanke"
+      "onYKTHanke": "SV:Hanke on YKT-hanke",
+      "sukunimi": "SV:Sukunimi",
+      "etunimi": "SV:Etunimi",
+      "email": "SV:Sähköposti",
+      "puhelinnumero": "SV:Puhelinnumero",
+      "osasto": "SV:Osasto"
+    },
+    "headers": {
+      "arvioijat": "SV:Arvioijat",
+      "omistajat": "SV:Omistajat",
+      "toteuttajat": "SV:Toteuttajat"
     },
     "toolTips": {
       "tipOpenLabel": "SV:Avaa ohje",

@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import { FieldErrors, Control } from 'react-hook-form/dist/types';
+import { FieldErrors, Control } from 'react-hook-form';
 
 export interface FormProps {
   formData: HankeDataDraft;
@@ -130,12 +130,32 @@ export enum FORMFIELD {
   MELUHAITTA = 'meluhaitta',
   POLYHAITTA = 'polyhaitta',
   TARINAHAITTA = 'tarinahaitta',
-  OMISTAJAORGANISAATIO = 'omistajaOrganisaatio',
-  OMISTAJAOASTO = 'omistajaOsasto',
-  ARVIOIJAORGANISAATIO = 'arvioijaOrganisaatio',
-  ARVIOIJAOSASTO = 'arvioijaOsasto',
+  OMISTAJAT = 'omistajat',
+  ARVIOIJAT = 'arvioijat',
+  TOTEUTTAJAT = 'toteuttajat',
   YKT_HANKE = 'onYKTHanke',
 }
+
+export enum CONTACT_FORMFIELD {
+  SUKUNIMI = 'sukunimi',
+  ETUNIMI = 'etunimi',
+  EMAIL = 'email',
+  PUHELINNUMERO = 'puhelinnumero',
+  ORGANISAATIO_ID = 'organisaatioId',
+  ORGANISAATIO_NIMI = 'organisaatioNimi',
+  OSASTO = 'osasto',
+}
+
+export type HankeContact = {
+  id: number | null;
+  sukunimi: string;
+  etunimi: string;
+  email: string;
+  puhelinnumero: string;
+  organisaatioId: number | null;
+  organisaatioNimi: string;
+  osasto: string;
+};
 
 export type HankeData = {
   hankeId: string;
@@ -155,11 +175,9 @@ export type HankeData = {
   meluhaitta: HANKE_MELUHAITTA_KEY;
   polyhaitta: HANKE_POLYAITTA_KEY;
   tarinahaitta: HANKE_TARINAHAITTA_KEY;
-  omistajaOrganisaatio: string;
-  omistajaOsasto: string;
-  arvioijaOrganisaatio: string;
-  arvioijaOsasto: string;
-  omistaja: string;
+  omistajat: Array<HankeContact>;
+  arvioijat: Array<HankeContact>;
+  toteuttajat: Array<HankeContact>;
   onYKTHanke: boolean;
 };
 
