@@ -11,8 +11,23 @@ const updateFormData: CaseReducer<State, PayloadAction<HankeDataDraft>> = (state
   state.hankeDataDraft = action.payload;
 };
 
+const emptyContact = {
+  id: null,
+  sukunimi: '',
+  etunimi: '',
+  email: '',
+  puhelinnumero: '',
+  organisaatioId: null,
+  organisaatioNimi: '',
+  osasto: '',
+};
+
 const initialState: State = {
-  hankeDataDraft: {},
+  hankeDataDraft: {
+    omistajat: [emptyContact],
+    toteuttajat: [emptyContact],
+    arvioijat: [emptyContact],
+  },
   status: null,
 };
 

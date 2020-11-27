@@ -114,24 +114,15 @@
     }
   }
 
-  .formWprColumns {
+  .formColumns {
     display: grid;
     grid-gap: var(--grid-gap);
     grid-template-columns: 1fr 1fr;
-
-    @include respond-below(s) {
-      label {
-        height: 40px;
-        display: flex;
-        align-items: flex-end;
-      }
-    }
-
-    .left {
-      padding-right: var(--spacing-m);
-    }
-
     padding-bottom: var(--spacing-m);
+  }
+
+  .formItem {
+    padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) 0;
   }
 
   .error-text {
