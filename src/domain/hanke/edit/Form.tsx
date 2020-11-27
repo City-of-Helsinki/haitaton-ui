@@ -52,8 +52,6 @@ const FormComponent: React.FC = (props) => {
   const onSubmit = async (values: HankeDataDraft) => {
     const data = combineObj(formData, values);
 
-    console.log({ data });
-
     if (data) {
       dispatch(actions.updateFormData(data));
       try {
