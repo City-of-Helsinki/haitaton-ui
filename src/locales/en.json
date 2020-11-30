@@ -149,7 +149,8 @@
       "etunimi": "EN:Etunimi",
       "email": "EN:Sähköposti",
       "puhelinnumero": "EN:Puhelinnumero",
-      "osasto": "EN:Osasto"
+      "osasto": "EN:Osasto",
+      "organisaatio": "EN:Organisaatio"
     },
     "headers": {
       "arvioijat": "EN:Arvioijat",

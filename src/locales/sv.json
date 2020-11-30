@@ -150,7 +150,8 @@
       "etunimi": "SV:Etunimi",
       "email": "SV:Sähköposti",
       "puhelinnumero": "SV:Puhelinnumero",
-      "osasto": "SV:Osasto"
+      "osasto": "SV:Osasto",
+      "organisaatio": "SV:Organisaatio"
     },
     "headers": {
       "arvioijat": "SV:Arvioijat",

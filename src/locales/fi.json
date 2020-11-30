@@ -151,7 +151,8 @@
       "etunimi": "Etunimi",
       "email": "Sähköposti",
       "puhelinnumero": "Puhelinnumero",
-      "osasto": "Osasto"
+      "osasto": "Osasto",
+      "organisaatio": "Organisaatio"
     },
     "headers": {
       "arvioijat": "Arvioijat",
