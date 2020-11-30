@@ -37,7 +37,6 @@ const Autocomplete: React.FC<PropTypes> = ({
       label={label}
       options={options}
       defaultValue={findSelected(options, defaultValue)}
-      // value={findSelected(options, defaultValue)}
       onChange={(option: Option) => onChange(option)}
       {...rest}
     />

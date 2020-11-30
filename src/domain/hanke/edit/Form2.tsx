@@ -43,45 +43,48 @@ const Form2: React.FC<FormProps> = ({ control, formData, register }) => {
           <H3>{t(`hankeForm:headers:${CONTACT_TYPE}`)}</H3>
           <div className="formColumns">
             {CONTACT_FIELDS.map((contactField) => (
-              <TypedController
-                key={contactField}
-                // eslint-disable-next-line
-                // @ts-ignore
-                name={[CONTACT_TYPE, 0, contactField]}
-                defaultValue={
+              <React.Fragment key={contactField}>
+                <TypedController
                   // eslint-disable-next-line
                   // @ts-ignore
-                  formData[CONTACT_TYPE] ? formData[CONTACT_TYPE][0][contactField] : ''
-                }
-                render={(formProps) => (
-                  <TextInput
+                  name={[CONTACT_TYPE, 0, contactField]}
+                  defaultValue={
+                    // eslint-disable-next-line
+                    // @ts-ignore
+                    formData[CONTACT_TYPE] ? formData[CONTACT_TYPE][0][contactField] : ''
+                  }
+                  render={(formProps) => (
+                    <TextInput
+                      className="formItem"
+                      id={`${CONTACT_TYPE}-${contactField}`}
+                      {...formProps}
+                      label={t(`hankeForm:labels:${contactField}`)}
+                    />
+                  )}
+                />
+                {contactField === CONTACT_FORMFIELD.PUHELINNUMERO && (
+                  <Autocomplete
                     className="formItem"
-                    id={`${CONTACT_TYPE}-${contactField}`}
-                    {...formProps}
-                    label={t(`hankeForm:labels:${contactField}`)}
+                    label={t(`hankeForm:labels:organisaatio`)}
+                    options={organisaatioOptions}
+                    // eslint-disable-next-line
+                    // @ts-ignore
+                    defaultValue={{
+                      // eslint-disable-next-line
+                      // @ts-ignore
+                      label: formData[CONTACT_TYPE][0].organisaatioNimi,
+                      // eslint-disable-next-line
+                      // @ts-ignore
+                      value: formData[CONTACT_TYPE][0].organisaatioId,
+                    }}
+                    onChange={(option: Option): void => {
+                      setValue(`${CONTACT_TYPE}[0].organisaatioId`, option.value);
+                      setValue(`${CONTACT_TYPE}[0].organisaatioNimi`, option.label);
+                    }}
                   />
                 )}
-              />
+              </React.Fragment>
             ))}
-            <Autocomplete
-              className="formItem"
-              label={t(`hankeForm:labels:organisaatio`)}
-              options={organisaatioOptions}
-              // eslint-disable-next-line
-              // @ts-ignore
-              defaultValue={{
-                // eslint-disable-next-line
-                // @ts-ignore
-                label: formData[CONTACT_TYPE][0].organisaatioNimi,
-                // eslint-disable-next-line
-                // @ts-ignore
-                value: formData[CONTACT_TYPE][0].organisaatioId,
-              }}
-              onChange={(option: Option): void => {
-                setValue(`${CONTACT_TYPE}[0].organisaatioId`, option.value);
-                setValue(`${CONTACT_TYPE}[0].organisaatioNimi`, option.label);
-              }}
-            />
           </div>
         </div>
       ))}
