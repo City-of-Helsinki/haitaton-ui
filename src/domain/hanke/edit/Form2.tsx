@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
+import { useQuery } from 'react-query';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useTypedController } from '@hookform/strictly-typed';
 import { TextInput } from 'hds-react';
 import { FormProps, FORMFIELD, CONTACT_FORMFIELD, HankeDataDraft } from './types';
+import api from '../../../common/utils/api';
 import H2 from '../../../common/components/text/H2';
 import H3 from '../../../common/components/text/H3';
 import Autocomplete, { Option } from '../../../common/components/autocomplete/Autocomplete';
@@ -17,15 +19,31 @@ const CONTACT_FIELDS = [
   CONTACT_FORMFIELD.OSASTO,
 ];
 
-const organisaatioOptions = [
-  { label: 'Organisaatio 1', value: 1 },
-  { label: 'Organisaatio 2', value: 2 },
-];
+type OrganizationList = Array<{
+  id: number;
+  nimi: string;
+  tunnus: string;
+}>;
+
+// https://github.com/microsoft/TypeScript/issues/26781
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const fetchOrganizations = async (): Promise<any> => {
+  try {
+    return await api.get<OrganizationList>(`/organisaatiot`);
+  } catch (e) {
+    return [];
+  }
+};
 
 const Form2: React.FC<FormProps> = ({ control, formData, register }) => {
   const { t } = useTranslation();
   const { setValue } = useFormContext();
   const TypedController = useTypedController<HankeDataDraft>({ control });
+
+  const { isFetched, data } = useQuery<OrganizationList>('organisationList', fetchOrganizations, {
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
 
   // Autocomplete doesnt register fields so we need manually register them
   useEffect(() => {
@@ -62,11 +80,18 @@ const Form2: React.FC<FormProps> = ({ control, formData, register }) => {
                     />
                   )}
                 />
-                {contactField === CONTACT_FORMFIELD.PUHELINNUMERO && (
+                {contactField === CONTACT_FORMFIELD.PUHELINNUMERO && isFetched && (
                   <Autocomplete
                     className="formItem"
                     label={t(`hankeForm:labels:organisaatio`)}
-                    options={organisaatioOptions}
+                    options={
+                      data
+                        ? data.map((v) => ({
+                            value: v.id,
+                            label: v.nimi,
+                          }))
+                        : []
+                    }
                     // eslint-disable-next-line
                     // @ts-ignore
                     defaultValue={{
