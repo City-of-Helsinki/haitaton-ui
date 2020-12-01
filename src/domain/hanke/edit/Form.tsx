@@ -109,6 +109,45 @@ const FormComponent: React.FC = (props) => {
   useEffect(() => {
     dispatch(actions.updateHasFormChanged(formState.isDirty));
   });
+  let previousButtonText = '';
+
+  let nextButtonText = '';
+  console.log('formPage', formPage);
+  switch (true) {
+    case formPage === 0: {
+      nextButtonText = 'hankeForm:hankkeenAlueForm:header';
+      console.log('meni', nextButtonText);
+
+      break;
+    }
+
+    case formPage === 1: {
+      previousButtonText = 'hankeForm:perustiedotForm:header';
+      nextButtonText = 'hankeForm:hankkeenYhteystiedotForm:header';
+      break;
+    }
+    case formPage === 2: {
+      previousButtonText = 'hankeForm:hankkeenAlueForm:header';
+      nextButtonText = 'hankeForm:tyomaanTiedotForm:header';
+
+      break;
+    }
+    case formPage === 3: {
+      previousButtonText = 'hankeForm:hankkeenYhteystiedotForm:header';
+      nextButtonText = 'hankeForm:hankkeenHaitatForm:header';
+      break;
+    }
+    case formPage === 4: {
+      previousButtonText = 'hankeForm:tyomaanTiedotForm:header';
+      break;
+    }
+    default: {
+      console.log('meni eka');
+      previousButtonText = '';
+      nextButtonText = '';
+      break;
+    }
+  }
   return (
     <div className="hankeForm">
       <H1 stylesAs="h2">{t('hankeForm:pageHeader')}</H1>
@@ -144,7 +183,7 @@ const FormComponent: React.FC = (props) => {
                   iconRight={<IconAngleRight />}
                   variant="secondary"
                 >
-                  <span>{t('hankeForm:nextButton')}</span>
+                  <span>{t(nextButtonText)}</span>
                 </Button>
               )}
               <Button type="button" onClick={() => saveDraftButton()} disabled={!formState.isValid}>
@@ -158,7 +197,7 @@ const FormComponent: React.FC = (props) => {
                   iconLeft={<IconAngleLeft />}
                   variant="secondary"
                 >
-                  <span>{t('hankeForm:previousButton')}</span>
+                  <span>{t(previousButtonText)}</span>
                 </Button>
               )}
             </div>
