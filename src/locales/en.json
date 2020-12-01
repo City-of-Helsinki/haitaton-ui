@@ -53,6 +53,12 @@
       "OHJELMOINTI": "EN:Ohjelmointi",
       "RAKENTAMINEN": "EN:Rakentaminen"
     },
+    "suunnitteluvaihe": {
+      "YLEIS_TAI_HANKE": "EN:Yleis- tai hankesuunnittelu",
+      "KATUSUUNNITTELU_TAI_ALUEVARAUS": "EN:Katusuunnittelu tai aluevarauksen suunnittelu",
+      "RAKENNUS_TAI_TOTEUTUS": "EN:Rakennus- tai toteutussuunnittelu",
+      "TYOMAAN_TAI_HANKKEEN_AIKAINEN": "EN:Työmaan tai hankkeen aikainen suunnittelu"
+    },
     "tyomaakoko": {
       "SUPPEA_TAI_PISTE": "EN:Yksittäinen suppea kohde ja/tai pistemäinen työmaa",
       "YLI_10M_TAI_KORTTELI": "EN:Työmaa-alueen pituus yli 10 m ja/tai korttelin mittainen työmaa",

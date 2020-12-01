@@ -7,6 +7,7 @@ export interface FormProps {
   control: Control;
   // eslint-disable-next-line
   register: any;
+  vaihe?: string;
 }
 
 export enum HANKE_SAVETYPE {

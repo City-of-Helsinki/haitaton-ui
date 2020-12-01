@@ -12,7 +12,7 @@ import H1 from '../../../common/components/text/H1';
 import { combineObj } from './utils';
 
 import { getFormData, getHasFormChanged } from './selectors';
-import { HankeDataDraft, HANKE_SAVETYPE } from './types';
+import { HankeDataDraft, HANKE_SAVETYPE, FORMFIELD } from './types';
 
 import { actions } from './reducer';
 import { actions as dialogActions } from '../../../common/components/confirmationDialog/reducer';
@@ -125,7 +125,13 @@ const FormComponent: React.FC = (props) => {
                 </button>
               </div>
               {formPage === 0 && (
-                <Form0 errors={errors} control={control} register={register} formData={formData} />
+                <Form0
+                  errors={errors}
+                  control={control}
+                  register={register}
+                  formData={formData}
+                  vaihe={getValues(FORMFIELD.VAIHE)}
+                />
               )}
               {formPage === 1 && (
                 <Form1 errors={errors} control={control} register={register} formData={formData} />
