@@ -133,7 +133,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData, vaihe
           control={control}
           options={$enum(HANKE_SUUNNITTELUVAIHE).map((value) => ({
             value,
-            label: t(`hanke:suunnitteluvaihe:${value}`),
+            label: t(`hanke:suunnitteluVaihe:${value}`),
           }))}
           defaultValue={formData[FORMFIELD.SUUNNITTELUVAIHE] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.SUUNNITTELUVAIHE}`)}

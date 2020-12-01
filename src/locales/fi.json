@@ -54,7 +54,7 @@
       "OHJELMOINTI": "Ohjelmointi",
       "RAKENTAMINEN": "Rakentaminen"
     },
-    "suunnitteluvaihe": {
+    "suunnitteluVaihe": {
       "YLEIS_TAI_HANKE": "Yleis- tai hankesuunnittelu",
       "KATUSUUNNITTELU_TAI_ALUEVARAUS": "Katusuunnittelu tai aluevarauksen suunnittelu",
       "RAKENNUS_TAI_TOTEUTUS": "Rakennus- tai toteutussuunnittelu",
@@ -139,7 +139,7 @@
       "hankeTunnus": "Hankkeen tunnus",
       "nimi": "Hankkeen nimi",
       "vaihe": "Hankeen Vaihe",
-      "suunnitteluvaihe": "Hankkeen suunnitteluvaihe",
+      "suunnitteluVaihe": "Hankkeen suunnitteluvaihe",
       "alkuPvm": "Hankkeen alkupäivä",
       "loppuPvm": "Hankkeen loppupäivä",
       "tyomaatyyppi": "Työmaan tyyppi",
