@@ -15,7 +15,7 @@ import { useMapDataLayers } from './hooks/useMapDataLayers';
 import { MapDataLayerKey } from './types';
 import { formatFeaturesToHankeGeoJSON } from './utils';
 
-const projection = 'EPSG:3857';
+const projection = 'EPSG:3879';
 
 const drawVectorSource = new VectorSource({
   format: new GeoJSON({

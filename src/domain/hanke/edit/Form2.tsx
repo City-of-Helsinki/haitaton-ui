@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useQuery } from 'react-query';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -37,36 +37,13 @@ const fetchOrganizations = async (): Promise<any> => {
 
 const Form2: React.FC<FormProps> = ({ control, formData, register }) => {
   const { t } = useTranslation();
-  const { setValue, unregister } = useFormContext();
+  const { setValue } = useFormContext();
   const TypedController = useTypedController<HankeDataDraft>({ control });
 
   const { isFetched, data } = useQuery<OrganizationList>('organisationList', fetchOrganizations, {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
-
-  // Autocomplete doesnt register fields so we need manually register them
-  useEffect(() => {
-    CONTACT_TYPES.forEach((contactType) => {
-      register(`${contactType}[0].${CONTACT_FORMFIELD.ID}`, { required: false });
-      register(
-        { name: `${contactType}[0].${CONTACT_FORMFIELD.ORGANISAATIO_NIMI}`, type: 'custom' },
-        { required: false }
-      );
-      register(
-        { name: `${contactType}[0].${CONTACT_FORMFIELD.ORGANISAATIO_ID}`, type: 'custom' },
-        { required: false }
-      );
-    });
-
-    return () => {
-      CONTACT_TYPES.forEach((contactType) => {
-        unregister(`${contactType}[0].${CONTACT_FORMFIELD.ID}`);
-        unregister(`${contactType}[0].${CONTACT_FORMFIELD.ORGANISAATIO_NIMI}`);
-        unregister(`${contactType}[0].${CONTACT_FORMFIELD.ORGANISAATIO_ID}`);
-      });
-    };
-  }, []);
 
   return (
     <div className="form2">
