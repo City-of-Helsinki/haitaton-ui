@@ -13,7 +13,6 @@ import H2 from '../../../common/components/text/H2';
 const Form0: React.FC<FormProps> = ({ control, errors, register, formData, vaihe }) => {
   const { t, i18n } = useTranslation();
   const [ytkChecked, setYtkChecked] = useState(formData[FORMFIELD.YKT_HANKE] || false);
-  console.log('formData', formData);
   return (
     <div className="form0">
       <H2>{t('hankeForm:perustiedotForm:header')}</H2>
