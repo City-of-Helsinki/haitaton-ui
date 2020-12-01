@@ -81,13 +81,12 @@ const FormComponent: React.FC = (props) => {
   const onSubmit = async (values: HankeDataDraft) => {
     const data = combineObj(formData, values);
     try {
-      const foo = dispatch(
+      dispatch(
         saveForm({
           data,
           saveType: HANKE_SAVETYPE.DRAFT,
         })
       );
-      console.log({ foo });
       // reset(data);
       setFormPage((v) => v + 1);
     } catch (e) {

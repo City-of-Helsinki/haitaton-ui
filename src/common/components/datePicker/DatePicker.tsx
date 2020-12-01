@@ -1,7 +1,6 @@
 import React from 'react';
 import { Controller, Control } from 'react-hook-form';
 import formatISO from 'date-fns/formatISO';
-// import toDate from 'date-fns/toDate';
 import DatePicker from 'react-datepicker';
 import { Tooltip } from 'hds-react';
 import { TooltipProps } from 'hds-react/components/Tooltip';
