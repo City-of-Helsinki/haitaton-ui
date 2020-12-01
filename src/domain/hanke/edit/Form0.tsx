@@ -2,17 +2,20 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Checkbox, Tooltip } from 'hds-react';
 import { $enum } from 'ts-enum-util';
+import { useFormContext } from 'react-hook-form';
 
 import DatePicker from '../../../common/components/datePicker/DatePicker';
 import Dropdown from '../../../common/components/dropdown/Dropdown';
 import TextInput from '../../../common/components/textInput/TextInput';
 
-import { FormProps, HANKE_VAIHE, FORMFIELD } from './types';
+import { FormProps, HANKE_VAIHE, FORMFIELD, HANKE_SUUNNITTELUVAIHE } from './types';
 import H2 from '../../../common/components/text/H2';
 
 const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => {
   const { t, i18n } = useTranslation();
   const [ytkChecked, setYtkChecked] = useState(formData[FORMFIELD.YKT_HANKE] || false);
+  const { getValues } = useFormContext();
+  const formValues = getValues();
   return (
     <div className="form0">
       <H2>{t('hankeForm:perustiedotForm:header')}</H2>
@@ -127,6 +130,27 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
           }}
           dataTestid={FORMFIELD.VAIHE}
+        />
+      </div>
+      <div className="formWpr">
+        <Dropdown
+          name={FORMFIELD.SUUNNITTELUVAIHE}
+          id={FORMFIELD.SUUNNITTELUVAIHE}
+          control={control}
+          options={$enum(HANKE_SUUNNITTELUVAIHE).map((value) => ({
+            value,
+            label: t(`hanke:suunnitteluVaihe:${value}`),
+          }))}
+          defaultValue={formData[FORMFIELD.SUUNNITTELUVAIHE] || null}
+          label={t(`hankeForm:labels:${FORMFIELD.SUUNNITTELUVAIHE}`)}
+          invalid={!!errors[FORMFIELD.SUUNNITTELUVAIHE]}
+          errorMsg={t('hankeForm:insertFieldError')}
+          tooltip={{
+            labelText: t(`hankeForm:toolTips:${FORMFIELD.SUUNNITTELUVAIHE}`),
+            openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
+            closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
+          }}
+          disabled={formValues.vaihe !== 'SUUNNITTELU'}
         />
       </div>
     </div>

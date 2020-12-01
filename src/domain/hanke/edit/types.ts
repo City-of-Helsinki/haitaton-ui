@@ -118,7 +118,7 @@ export enum FORMFIELD {
   VAIHE = 'vaihe',
   NIMI = 'nimi',
   KATUOSOITE = 'katuosoite',
-  SUUNNITTELUVAIHE = 'suunnitteluvaihe',
+  SUUNNITTELUVAIHE = 'suunnitteluVaihe',
   ALKU_PVM = 'alkuPvm',
   LOPPU_PVM = 'loppuPvm',
   TYOMAATYYPPI = 'tyomaatyyppi',
@@ -165,7 +165,7 @@ export type HankeData = {
   loppuPvm: Date | null;
   katuosoite: string;
   vaihe: HANKE_VAIHE_KEY;
-  suunnitteluvaihe: HANKE_SUUNNITTELUVAIHE_KEY;
+  suunnitteluVaihe: HANKE_SUUNNITTELUVAIHE_KEY | null;
   tyomaatyyppi: HANKE_TYOMAATYYPPI_KEY[];
   tyomaakoko: HANKE_TYOMAAKOKO_KEY;
   haittaAlkuPvm: Date;

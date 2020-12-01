@@ -1,17 +1,57 @@
-import React from 'react';
-import { $enum } from 'ts-enum-util';
+import React, { useEffect } from 'react';
+import { useQuery } from 'react-query';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useTypedController } from '@hookform/strictly-typed';
 import { TextInput } from 'hds-react';
 import { FormProps, FORMFIELD, CONTACT_FORMFIELD, HankeDataDraft } from './types';
+import api from '../../../common/utils/api';
 import H2 from '../../../common/components/text/H2';
 import H3 from '../../../common/components/text/H3';
+import Autocomplete, { Option } from '../../../common/components/autocomplete/Autocomplete';
 
 const CONTACT_TYPES = [FORMFIELD.OMISTAJAT, FORMFIELD.ARVIOIJAT, FORMFIELD.TOTEUTTAJAT];
+const CONTACT_FIELDS = [
+  CONTACT_FORMFIELD.ETUNIMI,
+  CONTACT_FORMFIELD.SUKUNIMI,
+  CONTACT_FORMFIELD.EMAIL,
+  CONTACT_FORMFIELD.PUHELINNUMERO,
+  CONTACT_FORMFIELD.OSASTO,
+];
 
-const Form2: React.FC<FormProps> = ({ control, formData }) => {
+type OrganizationList = Array<{
+  id: number;
+  nimi: string;
+  tunnus: string;
+}>;
+
+// https://github.com/microsoft/TypeScript/issues/26781
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const fetchOrganizations = async (): Promise<any> => {
+  try {
+    return await api.get<OrganizationList>(`/organisaatiot`);
+  } catch (e) {
+    return [];
+  }
+};
+
+const Form2: React.FC<FormProps> = ({ control, formData, register }) => {
   const { t } = useTranslation();
+  const { setValue } = useFormContext();
   const TypedController = useTypedController<HankeDataDraft>({ control });
+
+  const { isFetched, data } = useQuery<OrganizationList>('organisationList', fetchOrganizations, {
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
+
+  // Autocomplete doesnt register fields so we need manually register them
+  useEffect(() => {
+    CONTACT_TYPES.forEach((contactType) => {
+      register({ name: `${contactType}[0].organisaatioNimi`, type: 'custom' }, { required: false });
+      register({ name: `${contactType}[0].organisaatioId`, type: 'custom' }, { required: false });
+    });
+  }, []);
 
   return (
     <div className="form2">
@@ -20,11 +60,9 @@ const Form2: React.FC<FormProps> = ({ control, formData }) => {
         <div key={CONTACT_TYPE}>
           <H3>{t(`hankeForm:headers:${CONTACT_TYPE}`)}</H3>
           <div className="formColumns">
-            {$enum(CONTACT_FORMFIELD)
-              .getValues()
-              .map((contactField) => (
+            {CONTACT_FIELDS.map((contactField) => (
+              <React.Fragment key={contactField}>
                 <TypedController
-                  key={contactField}
                   // eslint-disable-next-line
                   // @ts-ignore
                   name={[CONTACT_TYPE, 0, contactField]}
@@ -42,7 +80,36 @@ const Form2: React.FC<FormProps> = ({ control, formData }) => {
                     />
                   )}
                 />
-              ))}
+                {contactField === CONTACT_FORMFIELD.PUHELINNUMERO && isFetched && (
+                  <Autocomplete
+                    className="formItem"
+                    label={t(`hankeForm:labels:organisaatio`)}
+                    options={
+                      data
+                        ? data.map((v) => ({
+                            value: v.id,
+                            label: v.nimi,
+                          }))
+                        : []
+                    }
+                    // eslint-disable-next-line
+                    // @ts-ignore
+                    defaultValue={{
+                      // eslint-disable-next-line
+                      // @ts-ignore
+                      label: formData[CONTACT_TYPE][0].organisaatioNimi,
+                      // eslint-disable-next-line
+                      // @ts-ignore
+                      value: formData[CONTACT_TYPE][0].organisaatioId,
+                    }}
+                    onChange={(option: Option): void => {
+                      setValue(`${CONTACT_TYPE}[0].organisaatioId`, option.value);
+                      setValue(`${CONTACT_TYPE}[0].organisaatioNimi`, option.label);
+                    }}
+                  />
+                )}
+              </React.Fragment>
+            ))}
           </div>
         </div>
       ))}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
@@ -44,9 +44,7 @@ const FormComponent: React.FC = (props) => {
   ];
   const [formPage, setFormPage] = useState<number>(0);
 
-  const { handleSubmit, errors, control, register, formState, getValues, reset } = useForm<
-    HankeDataDraft
-  >({
+  const formContext = useForm<HankeDataDraft>({
     mode: 'all',
     reValidateMode: 'onBlur',
     criteriaMode: 'firstError',
@@ -54,6 +52,8 @@ const FormComponent: React.FC = (props) => {
     shouldUnregister: true,
     defaultValues: formData,
   });
+
+  const { handleSubmit, errors, control, register, formState, getValues, reset } = formContext;
 
   function goBack() {
     setFormPage((v) => v - 1);
@@ -99,6 +99,7 @@ const FormComponent: React.FC = (props) => {
       }
     }
   };
+
   function closeForm() {
     if (hasFormChanged) {
       dispatch(dialogActions.updateIsDialogOpen({ isDialogOpen: true, redirectUrl: '/' }));
@@ -108,15 +109,13 @@ const FormComponent: React.FC = (props) => {
   }
   useEffect(() => {
     dispatch(actions.updateHasFormChanged(formState.isDirty));
-  });
+  }, [formState.isDirty]);
   let previousButtonText = '';
 
   let nextButtonText = '';
-  console.log('formPage', formPage);
   switch (true) {
     case formPage === 0: {
       nextButtonText = 'hankeForm:hankkeenAlueForm:header';
-      console.log('meni', nextButtonText);
 
       break;
     }
@@ -142,69 +141,75 @@ const FormComponent: React.FC = (props) => {
       break;
     }
     default: {
-      console.log('meni eka');
       previousButtonText = '';
       nextButtonText = '';
       break;
     }
   }
   return (
-    <div className="hankeForm">
-      <H1 stylesAs="h2">{t('hankeForm:pageHeader')}</H1>
-      <div className="hankeForm__formWpr">
-        <Indicator dataList={wizardStateData} view={formPage} />
-        <div className="hankeForm__formWprRight">
-          <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
-            <div className="closeFormWpr">
-              <button type="button" onClick={() => closeForm()}>
-                <IconCross />
-              </button>
-            </div>
-            {formPage === 0 && (
-              <Form0 errors={errors} control={control} register={register} formData={formData} />
-            )}
-            {formPage === 1 && (
-              <Form1 errors={errors} control={control} register={register} formData={formData} />
-            )}
-            {formPage === 2 && (
-              <Form2 errors={errors} control={control} register={register} formData={formData} />
-            )}
-            {formPage === 3 && (
-              <Form3 errors={errors} control={control} register={register} formData={formData} />
-            )}
-            {formPage === 4 && (
-              <Form4 errors={errors} control={control} register={register} formData={formData} />
-            )}
-            <div className="btnWpr">
-              {formPage < 4 && (
-                <Button
-                  className="btnWpr--next"
-                  type="submit"
-                  iconRight={<IconAngleRight />}
-                  variant="secondary"
-                >
-                  <span>{t(nextButtonText)}</span>
-                </Button>
+    <FormProvider {...formContext}>
+      <div className="hankeForm">
+        <H1 stylesAs="h2">{t('hankeForm:pageHeader')}</H1>
+        <div className="hankeForm__formWpr">
+          <Indicator dataList={wizardStateData} view={formPage} />
+          <div className="hankeForm__formWprRight">
+            <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
+              <div className="closeFormWpr">
+                <button type="button" onClick={() => closeForm()}>
+                  <IconCross />
+                </button>
+              </div>
+              {formPage === 0 && (
+                <Form0 errors={errors} control={control} register={register} formData={formData} />
               )}
-              <Button type="button" onClick={() => saveDraftButton()} disabled={!formState.isValid}>
-                <span>{t('hankeForm:saveDraftButton')}</span>
-              </Button>
-              {formPage > 0 && (
+              {formPage === 1 && (
+                <Form1 errors={errors} control={control} register={register} formData={formData} />
+              )}
+              {formPage === 2 && (
+                <Form2 errors={errors} control={control} register={register} formData={formData} />
+              )}
+              {formPage === 3 && (
+                <Form3 errors={errors} control={control} register={register} formData={formData} />
+              )}
+              {formPage === 4 && (
+                <Form4 errors={errors} control={control} register={register} formData={formData} />
+              )}
+              <div className="btnWpr">
+                {formPage < 4 && (
+                  <Button
+                    className="btnWpr--next"
+                    type="submit"
+                    // disabled={!formState.isValid}
+                    iconRight={<IconAngleRight />}
+                    variant="secondary"
+                  >
+                    <span>{t(nextButtonText)}</span>
+                  </Button>
+                )}
                 <Button
-                  className="btnWpr--previous"
                   type="button"
-                  onClick={() => goBack()}
-                  iconLeft={<IconAngleLeft />}
-                  variant="secondary"
+                  onClick={() => saveDraftButton()}
+                  disabled={!formState.isValid}
                 >
-                  <span>{t(previousButtonText)}</span>
+                  <span>{t('hankeForm:saveDraftButton')}</span>
                 </Button>
-              )}
-            </div>
-          </form>
+                {formPage > 0 && (
+                  <Button
+                    className="btnWpr--previous"
+                    type="button"
+                    onClick={() => goBack()}
+                    iconLeft={<IconAngleLeft />}
+                    variant="secondary"
+                  >
+                    <span>{t(previousButtonText)}</span>
+                  </Button>
+                )}
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+    </FormProvider>
   );
 };
 export default FormComponent;
