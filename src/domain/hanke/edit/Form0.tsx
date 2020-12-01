@@ -15,7 +15,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
   const { t, i18n } = useTranslation();
   const [ytkChecked, setYtkChecked] = useState(formData[FORMFIELD.YKT_HANKE] || false);
   const { getValues } = useFormContext();
-  const formvalues = getValues();
+  const formValues = getValues();
   return (
     <div className="form0">
       <H2>{t('hankeForm:perustiedotForm:header')}</H2>
@@ -147,7 +147,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
             closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
           }}
-          disabled={formvalues.vaihe !== 'SUUNNITTELU'}
+          disabled={formValues.vaihe !== 'SUUNNITTELU'}
         />
       </div>
     </div>
