@@ -53,6 +53,12 @@
       "OHJELMOINTI": "SV:Ohjelmointi",
       "RAKENTAMINEN": "SV:Rakentaminen"
     },
+    "suunnitteluVaihe": {
+      "YLEIS_TAI_HANKE": "SV:Yleis- tai hankesuunnittelu",
+      "KATUSUUNNITTELU_TAI_ALUEVARAUS": "SV:Katusuunnittelu tai aluevarauksen suunnittelu",
+      "RAKENNUS_TAI_TOTEUTUS": "SV:Rakennus- tai toteutussuunnittelu",
+      "TYOMAAN_TAI_HANKKEEN_AIKAINEN": "SV:Työmaan tai hankkeen aikainen suunnittelu"
+    },
     "tyomaakoko": {
       "SUPPEA_TAI_PISTE": "SV:Yksittäinen suppea kohde ja/tai pistemäinen työmaa",
       "YLI_10M_TAI_KORTTELI": "SV:Työmaa-alueen pituus yli 10 m ja/tai korttelin mittainen työmaa",
@@ -132,7 +138,7 @@
       "hankeTunnus": "SV:Hankkeen tunnus",
       "nimi": "SV:Hankkeen nimi",
       "vaihe": "SV:Hankeen Vaihe",
-      "suunnitteluvaihe": "SV:Hankkeen suunnitteluvaihe",
+      "suunnitteluVaihe": "SV:Hankkeen suunnitteluvaihe",
       "alkuPvm": "SV:Hankkeen alkupäivä",
       "loppuPvm": "SV:Hankkeen loppupäivä",
       "tyomaatyyppi": "SV:Työmaan tyyppi",
