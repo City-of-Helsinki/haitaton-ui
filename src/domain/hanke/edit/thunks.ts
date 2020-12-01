@@ -10,7 +10,20 @@ type SaveHankeData = {
 export const saveForm = createAsyncThunk(
   'form/saveData',
   async ({ data, saveType }: SaveHankeData) => {
-    const response = await api.post(`/hankkeet/`, { ...data, saveType, createdBy: '1' });
-    return response.data;
+    const requestData = {
+      ...data,
+      saveType,
+      createdBy: '1',
+    };
+
+    let responseData: HankeDataDraft | null;
+
+    if (data.hankeTunnus) {
+      responseData = await api.put(`/hankkeet/${data.hankeTunnus}`, requestData);
+    } else {
+      responseData = await api.post(`/hankkeet`, requestData);
+    }
+
+    return responseData;
   }
 );

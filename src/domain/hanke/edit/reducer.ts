@@ -14,22 +14,12 @@ const updateFormData: CaseReducer<State, PayloadAction<HankeDataDraft>> = (state
 const updateHasFormChanged: CaseReducer<State, PayloadAction<boolean>> = (state, action) => {
   state.hasFormChanged = action.payload;
 };
-const emptyContact = {
-  id: null,
-  sukunimi: '',
-  etunimi: '',
-  email: '',
-  puhelinnumero: '',
-  organisaatioId: null,
-  organisaatioNimi: '',
-  osasto: '',
-};
 
 const initialState: State = {
   hankeDataDraft: {
-    omistajat: [emptyContact],
-    toteuttajat: [emptyContact],
-    arvioijat: [emptyContact],
+    omistajat: [],
+    toteuttajat: [],
+    arvioijat: [],
   },
   hasFormChanged: false,
   status: null,
@@ -44,7 +34,10 @@ const formSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(saveForm.fulfilled, (state, { payload }) => {
-      state.status = 'ok';
+      if (payload) {
+        state.status = 'ok';
+        state.hankeDataDraft = payload;
+      }
     });
     builder.addCase(saveForm.rejected, (state, action) => {
       state.status = 'error';

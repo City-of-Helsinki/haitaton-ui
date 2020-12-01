@@ -76,27 +76,23 @@ const FormComponent: React.FC = (props) => {
         console.error(e.message);
       }
     }
-    return false;
   }
 
   const onSubmit = async (values: HankeDataDraft) => {
     const data = combineObj(formData, values);
-
-    if (data) {
-      dispatch(actions.updateFormData(data));
-      try {
-        dispatch(
-          saveForm({
-            data,
-            saveType: HANKE_SAVETYPE.DRAFT,
-          })
-        );
-        reset(data);
-        setFormPage((v) => v + 1);
-      } catch (e) {
-        // eslint-disable-next-line
-        console.error(e.message);
-      }
+    try {
+      const foo = dispatch(
+        saveForm({
+          data,
+          saveType: HANKE_SAVETYPE.DRAFT,
+        })
+      );
+      console.log({ foo });
+      // reset(data);
+      setFormPage((v) => v + 1);
+    } catch (e) {
+      // eslint-disable-next-line
+      console.error(e.message);
     }
   };
 

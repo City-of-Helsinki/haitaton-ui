@@ -24,7 +24,11 @@ const drawVectorSource = new VectorSource({
   }),
 });
 
-const HankeDrawer: React.FC = () => {
+type Props = {
+  hankeTunnus: string | undefined;
+};
+
+const HankeDrawer: React.FC<Props> = ({ hankeTunnus }) => {
   const {
     dataLayers,
     toggleDataLayer,
@@ -56,43 +60,42 @@ const HankeDrawer: React.FC = () => {
   };
 
   return (
-    <div className={styles.mapContainer} style={{ width: '100%', height: 500 }}>
-      {drawSource.getFeatures().length > 0 && (
-        <div style={{ position: 'relative', zIndex: 100 }}>
-          <button
-            onClick={() => handleSaveGeometry()}
-            type="button"
-            data-testid="save-geometry-button"
-          >
-            Tallenna geometria
-          </button>
-        </div>
+    <>
+      <div className={styles.mapContainer} style={{ width: '100%', height: 500 }}>
+        <Map center={center} zoom={zoom} mapClassName={styles.mapContainer__inner}>
+          <DrawIntercation source={drawSource} />
+          {showKantakartta && <Kantakartta />}
+          {showHSL && <HSL />}
+          <DataLayers />
+          <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
+          <Controls>
+            <DrawControl />
+            <LayerControl
+              tileLayers={[
+                { id: 'hsl', label: 'HSL', onClick: toggleTileLayer, checked: showHSL },
+                {
+                  id: 'kantakartta',
+                  label: 'Kantakartta',
+                  onClick: toggleTileLayer,
+                  checked: showKantakartta,
+                },
+              ]}
+              dataLayers={Object.values(dataLayers)}
+              onClickDataLayer={(key: MapDataLayerKey) => toggleDataLayer(key)}
+            />
+          </Controls>
+        </Map>
+      </div>
+      {drawSource.getFeatures().length > 0 && hankeTunnus && (
+        <button
+          onClick={() => handleSaveGeometry(hankeTunnus)}
+          type="button"
+          data-testid="save-geometry-button"
+        >
+          Tallenna geometria
+        </button>
       )}
-
-      <Map center={center} zoom={zoom} mapClassName={styles.mapContainer__inner}>
-        <DrawIntercation source={drawSource} />
-        {showKantakartta && <Kantakartta />}
-        {showHSL && <HSL />}
-        <DataLayers />
-        <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
-        <Controls>
-          <DrawControl />
-          <LayerControl
-            tileLayers={[
-              { id: 'hsl', label: 'HSL', onClick: toggleTileLayer, checked: showHSL },
-              {
-                id: 'kantakartta',
-                label: 'Kantakartta',
-                onClick: toggleTileLayer,
-                checked: showKantakartta,
-              },
-            ]}
-            dataLayers={Object.values(dataLayers)}
-            onClickDataLayer={(key: MapDataLayerKey) => toggleDataLayer(key)}
-          />
-        </Controls>
-      </Map>
-    </div>
+    </>
   );
 };
 
