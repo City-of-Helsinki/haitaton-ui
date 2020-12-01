@@ -141,7 +141,6 @@ const FormComponent: React.FC = (props) => {
                 <Button
                   className="btnWpr--next"
                   type="submit"
-                  disabled={!formState.isValid}
                   iconRight={<IconAngleRight />}
                   variant="secondary"
                 >

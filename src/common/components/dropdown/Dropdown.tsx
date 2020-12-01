@@ -18,6 +18,7 @@ type PropTypes = {
   invalid?: boolean;
   errorMsg?: string;
   tooltip?: TooltipProps;
+  dataTestid?: string;
 };
 
 const Dropdown: React.FC<PropTypes> = ({
@@ -31,6 +32,7 @@ const Dropdown: React.FC<PropTypes> = ({
   invalid,
   errorMsg,
   tooltip,
+  dataTestid,
 }) => {
   return (
     <div className="dropdownComp">
@@ -54,6 +56,7 @@ const Dropdown: React.FC<PropTypes> = ({
               invalid={invalid}
               // eslint-disable-next-line
               onChange={(option: any) => onChange(option.value)}
+              data-testid={dataTestid}
             />
           );
         }}

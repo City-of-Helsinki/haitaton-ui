@@ -45,6 +45,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             ref={register}
             checked={ytkChecked}
             onChange={() => setYtkChecked(!ytkChecked)}
+            data-testid={FORMFIELD.YKT_HANKE}
           />
         </div>
       </div>
@@ -58,6 +59,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
           defaultValue={formData[FORMFIELD.NIMI] || ''}
           invalid={!!errors.hankeenNimi}
           errorMsg={t('hankeForm:insertFieldError')}
+          dataTestid={FORMFIELD.NIMI}
           tooltip={{
             labelText: t(`hankeForm:toolTips:${FORMFIELD.NIMI}`),
             openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
@@ -124,6 +126,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
             closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
           }}
+          dataTestid={FORMFIELD.VAIHE}
         />
       </div>
     </div>
