@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Checkbox, Tooltip } from 'hds-react';
 import { $enum } from 'ts-enum-util';
+import { useFormContext } from 'react-hook-form';
 
 import DatePicker from '../../../common/components/datePicker/DatePicker';
 import Dropdown from '../../../common/components/dropdown/Dropdown';
@@ -10,9 +11,11 @@ import TextInput from '../../../common/components/textInput/TextInput';
 import { FormProps, HANKE_VAIHE, FORMFIELD, HANKE_SUUNNITTELUVAIHE } from './types';
 import H2 from '../../../common/components/text/H2';
 
-const Form0: React.FC<FormProps> = ({ control, errors, register, formData, vaihe }) => {
+const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => {
   const { t, i18n } = useTranslation();
   const [ytkChecked, setYtkChecked] = useState(formData[FORMFIELD.YKT_HANKE] || false);
+  const { getValues } = useFormContext();
+  const formvalues = getValues();
   return (
     <div className="form0">
       <H2>{t('hankeForm:perustiedotForm:header')}</H2>
@@ -144,7 +147,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData, vaihe
             openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
             closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
           }}
-          disabled={vaihe !== 'SUUNNITTELU'}
+          disabled={formvalues.vaihe !== 'SUUNNITTELU'}
         />
       </div>
     </div>
