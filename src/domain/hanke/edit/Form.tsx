@@ -9,8 +9,6 @@ import { IconAngleLeft, IconAngleRight, IconCross } from 'hds-react/icons';
 
 import H1 from '../../../common/components/text/H1';
 
-import { combineObj } from './utils';
-
 import { getFormData, getHasFormChanged } from './selectors';
 import { HankeDataDraft, HANKE_SAVETYPE } from './types';
 
@@ -49,54 +47,46 @@ const FormComponent: React.FC = (props) => {
     reValidateMode: 'onBlur',
     criteriaMode: 'firstError',
     shouldFocusError: true,
-    shouldUnregister: true,
+    shouldUnregister: false,
     defaultValues: formData,
   });
 
   const { handleSubmit, errors, control, register, formState, getValues, reset } = formContext;
 
+  useEffect(() => {
+    reset(formData);
+  }, [reset, formData]);
+
   function goBack() {
     setFormPage((v) => v - 1);
-    return false;
   }
+
   function saveDraftButton() {
-    const data = combineObj(formData, getValues());
-    reset(data);
-    if (data) {
-      dispatch(actions.updateFormData(data));
-      try {
-        dispatch(
-          saveForm({
-            data,
-            saveType: HANKE_SAVETYPE.DRAFT,
-          })
-        );
-      } catch (e) {
-        // eslint-disable-next-line
-        console.error(e.message);
-      }
+    try {
+      dispatch(
+        saveForm({
+          data: getValues(),
+          saveType: HANKE_SAVETYPE.DRAFT,
+        })
+      );
+    } catch (e) {
+      // eslint-disable-next-line
+      console.error(e.message);
     }
-    return false;
   }
 
-  const onSubmit = async (values: HankeDataDraft) => {
-    const data = combineObj(formData, values);
-
-    if (data) {
-      dispatch(actions.updateFormData(data));
-      try {
-        dispatch(
-          saveForm({
-            data,
-            saveType: HANKE_SAVETYPE.DRAFT,
-          })
-        );
-        reset(data);
-        setFormPage((v) => v + 1);
-      } catch (e) {
-        // eslint-disable-next-line
-        console.error(e.message);
-      }
+  const onSubmit = async (data: HankeDataDraft) => {
+    try {
+      dispatch(
+        saveForm({
+          data,
+          saveType: HANKE_SAVETYPE.DRAFT,
+        })
+      );
+      setFormPage((v) => v + 1);
+    } catch (e) {
+      // eslint-disable-next-line
+      console.error(e.message);
     }
   };
 

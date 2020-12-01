@@ -137,6 +137,7 @@ export enum FORMFIELD {
 }
 
 export enum CONTACT_FORMFIELD {
+  ID = 'id',
   SUKUNIMI = 'sukunimi',
   ETUNIMI = 'etunimi',
   EMAIL = 'email',
@@ -158,11 +159,11 @@ export type HankeContact = {
 };
 
 export type HankeData = {
-  hankeId: string;
+  id: number;
   hankeTunnus: string;
   nimi: string;
-  alkuPvm: Date | null;
-  loppuPvm: Date | null;
+  alkuPvm: string;
+  loppuPvm: string;
   katuosoite: string;
   vaihe: HANKE_VAIHE_KEY;
   suunnitteluVaihe: HANKE_SUUNNITTELUVAIHE_KEY | null;

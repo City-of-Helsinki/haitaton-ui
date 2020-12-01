@@ -9,7 +9,7 @@ const MapPage: React.FC = () => {
   return (
     <>
       <PageMeta routeData={FORM} />
-      <HankeDrawer />
+      <HankeDrawer hankeTunnus="1234567" />
     </>
   );
 };
