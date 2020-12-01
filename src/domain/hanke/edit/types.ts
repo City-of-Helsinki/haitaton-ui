@@ -7,7 +7,7 @@ export interface FormProps {
   control: Control;
   // eslint-disable-next-line
   register: any;
-  vaihe?: string;
+  vaihe?: string | null;
 }
 
 export enum HANKE_SAVETYPE {
@@ -166,7 +166,7 @@ export type HankeData = {
   loppuPvm: Date | null;
   katuosoite: string;
   vaihe: HANKE_VAIHE_KEY;
-  suunnitteluVaihe: HANKE_SUUNNITTELUVAIHE_KEY;
+  suunnitteluVaihe: HANKE_SUUNNITTELUVAIHE_KEY | null;
   tyomaatyyppi: HANKE_TYOMAATYYPPI_KEY[];
   tyomaakoko: HANKE_TYOMAAKOKO_KEY;
   haittaAlkuPvm: Date;
