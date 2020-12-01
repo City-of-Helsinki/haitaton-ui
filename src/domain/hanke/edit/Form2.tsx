@@ -10,7 +10,7 @@ import H2 from '../../../common/components/text/H2';
 import H3 from '../../../common/components/text/H3';
 import Autocomplete, { Option } from '../../../common/components/autocomplete/Autocomplete';
 
-const CONTACT_TYPES = [FORMFIELD.OMISTAJAT /* , FORMFIELD.ARVIOIJAT, FORMFIELD.TOTEUTTAJAT */];
+const CONTACT_TYPES = [FORMFIELD.OMISTAJAT, FORMFIELD.ARVIOIJAT, FORMFIELD.TOTEUTTAJAT];
 const CONTACT_FIELDS = [
   CONTACT_FORMFIELD.ETUNIMI,
   CONTACT_FORMFIELD.SUKUNIMI,
