@@ -137,7 +137,6 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData, vaihe
           }))}
           defaultValue={formData[FORMFIELD.SUUNNITTELUVAIHE] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.SUUNNITTELUVAIHE}`)}
-          rules={{ required: true }}
           invalid={!!errors[FORMFIELD.SUUNNITTELUVAIHE]}
           errorMsg={t('hankeForm:insertFieldError')}
           tooltip={{
