@@ -69,6 +69,7 @@ const Form2: React.FC<FormProps> = ({ control, formData, register }) => {
                       label={t(`hankeForm:labels:${contactField}`)}
                       id={`${CONTACT_TYPE}-${contactField}`}
                       ref={register}
+                      data-testid={`${CONTACT_TYPE}-${contactField}`}
                       {...formProps}
                     />
                   )}

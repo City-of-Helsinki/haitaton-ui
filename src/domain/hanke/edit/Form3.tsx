@@ -22,6 +22,7 @@ const Form3: React.FC<FormProps> = ({ formData, control, errors }) => {
             defaultValue={formData[FORMFIELD.KATUOSOITE] || ''}
             invalid={!!errors[FORMFIELD.KATUOSOITE]}
             errorMsg={t('hankeForm:insertFieldError')}
+            dataTestid={FORMFIELD.KATUOSOITE}
           />
         </div>
         <div className="formWpr">

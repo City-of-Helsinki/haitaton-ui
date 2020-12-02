@@ -53,6 +53,7 @@ const Dropdown: React.FC<PropTypes> = ({
               defaultValue={
                 defaultValue ? options.find((o) => o.value === defaultValue) : undefined
               }
+              id={id}
               selectedOption={options.find((o) => o.value === value)}
               label={label}
               invalid={invalid}
