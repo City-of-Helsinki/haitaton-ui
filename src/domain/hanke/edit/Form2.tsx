@@ -52,17 +52,6 @@ const Form2: React.FC<FormProps> = ({ control, formData, register }) => {
         <div key={CONTACT_TYPE}>
           <H3>{t(`hankeForm:headers:${CONTACT_TYPE}`)}</H3>
           <div className="formColumns">
-            <TypedController
-              // eslint-disable-next-line
-              // @ts-ignore
-              name={[CONTACT_TYPE, 0, CONTACT_FORMFIELD.ID]}
-              defaultValue={
-                // eslint-disable-next-line
-                // @ts-ignore
-                formData[CONTACT_TYPE][0] ? formData[CONTACT_TYPE][0][CONTACT_FORMFIELD.ID] : ''
-              }
-            />
-
             {CONTACT_FIELDS.map((contactField) => (
               <React.Fragment key={contactField}>
                 <TypedController

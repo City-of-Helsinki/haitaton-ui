@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../../common/utils/api';
 import { HankeDataDraft, HANKE_SAVETYPE_KEY } from './types';
+import { filterEmptyContacts } from './utils';
 
 type SaveHankeData = {
   data: HankeDataDraft;
@@ -11,7 +12,7 @@ export const saveForm = createAsyncThunk(
   'form/saveData',
   async ({ data, saveType }: SaveHankeData) => {
     const requestData = {
-      ...data,
+      ...filterEmptyContacts(data),
       saveType,
       createdBy: '1',
     };
