@@ -2,20 +2,21 @@ import React, { useState, useEffect } from 'react';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Vector as VectorSource } from 'ol/source';
 import Map from '../../common/components/map/Map';
-import Controls from '../../common/components/map/controls/Controls';
-import LayerControl from '../../common/components/map/controls/LayerControl';
-import DrawControl from '../../common/components/map/controls/DrawControl';
-import VectorLayer from '../../common/components/map/layers/VectorLayer';
-import DrawIntercation from '../../common/components/map/interactions/Draw';
+// import Controls from '../../common/components/map/controls/Controls';
+// import LayerControl from '../../common/components/map/controls/LayerControl';
+// import DrawControl from '../../common/components/map/controls/DrawControl';
+// import VectorLayer from '../../common/components/map/layers/VectorLayer';
+// import DrawIntercation from '../../common/components/map/interactions/Draw';
 import Kantakartta from './Layers/Kantakartta';
-import DataLayers from './Layers/DataLayers';
+// import DataLayers from './Layers/DataLayers';
 import HSL from './Layers/HSL';
 import styles from './Map.module.scss';
 import { useMapDataLayers } from './hooks/useMapDataLayers';
-import { MapDataLayerKey } from './types';
+// import { MapDataLayerKey } from './types';
 import { formatFeaturesToHankeGeoJSON } from './utils';
+import { projection } from '../../common/components/map/utils';
 
-const projection = 'EPSG:3879';
+console.log({ projection });
 
 const drawVectorSource = new VectorSource({
   format: new GeoJSON({
@@ -30,17 +31,21 @@ type Props = {
 
 const HankeDrawer: React.FC<Props> = ({ hankeTunnus }) => {
   const {
-    dataLayers,
-    toggleDataLayer,
+    // dataLayers,
+    // toggleDataLayer,
     handleSaveGeometry,
     handleUpdateGeometryState,
   } = useMapDataLayers();
 
   const [drawSource] = useState<VectorSource>(drawVectorSource);
-  const [center] = useState([2776000, 8438000]);
+  // const [center] = useState([2776000, 8438000]); // 8357
+  const [center] = useState([25496751.21, 6673140.39]); // HKI
   const [zoom] = useState(15);
-  const [showKantakartta, setShowKantakartta] = useState(true);
-  const [showHSL, setShowHSL] = useState(false);
+  const [showKantakartta /* , setShowKantakartta */] = useState(true);
+  const [showHSL /* , setShowHSL */] = useState(false);
+
+  console.log(drawSource.getFeatures());
+  console.log(formatFeaturesToHankeGeoJSON(drawSource.getFeatures()));
 
   useEffect(() => {
     drawSource.on('addfeature', () => {
@@ -49,7 +54,7 @@ const HankeDrawer: React.FC<Props> = ({ hankeTunnus }) => {
     });
   }, []);
 
-  const toggleTileLayer = () => {
+  /* const toggleTileLayer = () => {
     if (showKantakartta) {
       setShowHSL(true);
       setShowKantakartta(false);
@@ -57,17 +62,16 @@ const HankeDrawer: React.FC<Props> = ({ hankeTunnus }) => {
       setShowHSL(false);
       setShowKantakartta(true);
     }
-  };
+  }; */
 
   return (
     <>
       <div className={styles.mapContainer} style={{ width: '100%', height: 500 }}>
         <Map center={center} zoom={zoom} mapClassName={styles.mapContainer__inner}>
-          <DrawIntercation source={drawSource} />
+          {/* <DrawIntercation source={drawSource} /> */}
           {showKantakartta && <Kantakartta />}
           {showHSL && <HSL />}
-          <DataLayers />
-          <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
+          {/* <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
           <Controls>
             <DrawControl />
             <LayerControl
@@ -83,7 +87,7 @@ const HankeDrawer: React.FC<Props> = ({ hankeTunnus }) => {
               dataLayers={Object.values(dataLayers)}
               onClickDataLayer={(key: MapDataLayerKey) => toggleDataLayer(key)}
             />
-          </Controls>
+            </Controls> */}
         </Map>
       </div>
       {drawSource.getFeatures().length > 0 && hankeTunnus && (
