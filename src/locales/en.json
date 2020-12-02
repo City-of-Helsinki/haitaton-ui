@@ -186,6 +186,9 @@
     },
     "hankkeenHaitatForm": {
       "header": "EN:Hankkeen haitat"
+    },
+    "finishedForm": {
+      "header": "EN:Lomake on lähetetty onnistuneesti"
     }
   },
   "map": {
