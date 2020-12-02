@@ -16,6 +16,7 @@ describe('Form', () => {
         <Form />
       </Provider>
     );
+    jest.setTimeout(25000);
     getByTestId(FORMFIELD.YKT_HANKE).click();
     fireEvent.change(getByTestId(FORMFIELD.NIMI), { target: { value: '23' } });
     fireEvent.change(getByLabelText('Hankkeen alkupäivä'), { target: { value: '24.03.2032' } });
@@ -62,6 +63,7 @@ describe('Form', () => {
     getByText('Vähentää samanaikaisesti kaistan yhdellä ajosuunnalla').click();
 
     getByText('Kaistan pituushaitta').click();
+
     getByText('Ei vaikuta').click();
 
     getByText('Meluhaitta').click();
