@@ -39,22 +39,20 @@ const TextInputComp: React.FC<PropTypes> = (props) => {
         control={control}
         rules={rules}
         defaultValue={defaultValue}
-        render={({ onChange, onBlur, value }) => {
-          return (
-            <TextInput
-              id={id}
-              label={label}
-              invalid={invalid}
-              name={name}
-              onBlur={onBlur}
-              onChange={onChange}
-              disabled={disabled}
-              value={value}
-              data-testid={dataTestid}
-              {...tooltip}
-            />
-          );
-        }}
+        render={({ onChange, onBlur, value }) => (
+          <TextInput
+            id={id}
+            label={label}
+            invalid={invalid}
+            name={name}
+            onBlur={onBlur}
+            onChange={onChange}
+            disabled={disabled}
+            value={value}
+            data-testid={dataTestid}
+            {...tooltip}
+          />
+        )}
       />
       {invalid && <span className="error-text">{errorMsg}</span>}
     </>

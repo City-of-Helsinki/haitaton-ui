@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useQuery } from 'react-query';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -45,14 +45,6 @@ const Form2: React.FC<FormProps> = ({ control, formData, register }) => {
     refetchOnWindowFocus: false,
   });
 
-  // Autocomplete doesnt register fields so we need manually register them
-  useEffect(() => {
-    CONTACT_TYPES.forEach((contactType) => {
-      register({ name: `${contactType}[0].organisaatioNimi`, type: 'custom' }, { required: false });
-      register({ name: `${contactType}[0].organisaatioId`, type: 'custom' }, { required: false });
-    });
-  }, []);
-
   return (
     <div className="form2">
       <H2>{t('hankeForm:hankkeenYhteystiedotForm:header')}</H2>
@@ -69,14 +61,15 @@ const Form2: React.FC<FormProps> = ({ control, formData, register }) => {
                   defaultValue={
                     // eslint-disable-next-line
                     // @ts-ignore
-                    formData[CONTACT_TYPE] ? formData[CONTACT_TYPE][0][contactField] : ''
+                    formData[CONTACT_TYPE][0] ? formData[CONTACT_TYPE][0][contactField] : ''
                   }
                   render={(formProps) => (
                     <TextInput
                       className="formItem"
-                      id={`${CONTACT_TYPE}-${contactField}`}
-                      {...formProps}
                       label={t(`hankeForm:labels:${contactField}`)}
+                      id={`${CONTACT_TYPE}-${contactField}`}
+                      ref={register}
+                      {...formProps}
                     />
                   )}
                 />
@@ -92,15 +85,15 @@ const Form2: React.FC<FormProps> = ({ control, formData, register }) => {
                           }))
                         : []
                     }
-                    // eslint-disable-next-line
-                    // @ts-ignore
                     defaultValue={{
-                      // eslint-disable-next-line
-                      // @ts-ignore
-                      label: formData[CONTACT_TYPE][0].organisaatioNimi,
-                      // eslint-disable-next-line
-                      // @ts-ignore
-                      value: formData[CONTACT_TYPE][0].organisaatioId,
+                      label:
+                        // eslint-disable-next-line
+                        // @ts-ignore
+                        formData[CONTACT_TYPE][0] ? formData[CONTACT_TYPE][0].organisaatioNimi : '',
+                      value:
+                        // eslint-disable-next-line
+                        // @ts-ignore
+                        formData[CONTACT_TYPE][0] ? formData[CONTACT_TYPE][0].organisaatioId : '',
                     }}
                     onChange={(option: Option): void => {
                       setValue(`${CONTACT_TYPE}[0].organisaatioId`, option.value);

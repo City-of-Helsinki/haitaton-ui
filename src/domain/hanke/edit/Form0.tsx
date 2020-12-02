@@ -26,9 +26,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             id={FORMFIELD.TUNNUS}
             label={t(`hankeForm:labels:${FORMFIELD.TUNNUS}`)}
             control={control}
-            defaultValue=""
-            invalid={!!errors[FORMFIELD.TUNNUS]}
-            errorMsg={t('hankeForm:insertFieldError')}
+            defaultValue={formData[FORMFIELD.TUNNUS] || ''}
             disabled
           />
         </div>

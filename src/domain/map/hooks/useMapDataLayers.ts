@@ -17,12 +17,12 @@ export const useMapDataLayers = () => {
   const handleUpdateGeometryState = (geometryData: HankeGeoJSON) =>
     dispatch(actions.updateGeometry(geometryData));
 
-  const handleSaveGeometry = async () => {
+  const handleSaveGeometry = async (hankeTunnus: string) => {
     if (!drawGeometry) return;
     try {
       await dispatch(
         saveGeometryData({
-          hankeId: '1234567',
+          hankeTunnus,
           data: {
             featureCollection: drawGeometry,
           },
