@@ -8,7 +8,7 @@ import Form from './Form';
 import { render } from '../../../testUtils/render';
 
 afterEach(cleanup);
-
+jest.setTimeout(25000);
 describe('Form', () => {
   test('Form testing', async () => {
     const { getByTestId, getByLabelText, getByText, queryAllByText } = render(
@@ -16,7 +16,7 @@ describe('Form', () => {
         <Form />
       </Provider>
     );
-    jest.setTimeout(25000);
+
     getByTestId(FORMFIELD.YKT_HANKE).click();
     fireEvent.change(getByTestId(FORMFIELD.NIMI), { target: { value: '23' } });
     fireEvent.change(getByLabelText('Hankkeen alkupäivä'), { target: { value: '24.03.2032' } });
