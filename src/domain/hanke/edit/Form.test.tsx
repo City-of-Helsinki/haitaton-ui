@@ -23,7 +23,7 @@ describe('Form', () => {
     expect(combineObj(obj1, obj2)).toEqual(result);
   });
   test('Form testing', async () => {
-    const { getByTestId, getByLabelText, getByText } = render(
+    const { getByTestId, getByLabelText, getByText, queryAllByText } = render(
       <Provider store={store}>
         <Form />
       </Provider>
@@ -35,8 +35,13 @@ describe('Form', () => {
 
     getByText('Hankeen Vaihe').click();
     getByText('Ohjelmointi').click();
-    getByText('Seuraava').click();
-    await waitFor(() => getByText('Seuraava').click());
+    // queryAllByText('Hankkeen alue')[1].click(); // changes view to Hankkeen Alue
+    getByTestId('forward').click();
+
+    await waitFor(() => queryAllByText('Hankkeen yhteystiedot')[1]);
+    getByTestId('forward').click();
+
+    //  => getByText('Hankeen alue').click());
 
     // await waitFor(() => expect(document.title).toEqual(''));
     /*

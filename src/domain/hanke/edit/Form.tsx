@@ -182,6 +182,7 @@ const FormComponent: React.FC = (props) => {
                     // disabled={!formState.isValid}
                     iconRight={<IconAngleRight />}
                     variant="secondary"
+                    data-testid="forward"
                   >
                     <span>{t(nextButtonText)}</span>
                   </Button>
