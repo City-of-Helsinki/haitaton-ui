@@ -40,20 +40,19 @@ const ConfirmationDialog: React.FC = (props) => {
         leastDestructiveRef={cancelRef}
         onClose={() => onClose()}
       >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogBody>{t('common:confirmationDialog:bodyText')}</AlertDialogBody>
+        <AlertDialogOverlay />
+        <AlertDialogContent>
+          <AlertDialogBody>{t('common:confirmationDialog:bodyText')}</AlertDialogBody>
 
-            <AlertDialogFooter>
-              <Button type="button" ref={cancelRef} onClick={() => cancel()}>
-                {t('common:confirmationDialog:cancelButton')}
-              </Button>
-              <Button type="button" variant="secondary" onClick={() => exit()}>
-                {t('common:confirmationDialog:exitButton')}
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
+          <AlertDialogFooter>
+            <Button type="button" ref={cancelRef} onClick={() => cancel()}>
+              {t('common:confirmationDialog:cancelButton')}
+            </Button>
+            <Button type="button" variant="secondary" onClick={() => exit()}>
+              {t('common:confirmationDialog:exitButton')}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
       </AlertDialog>
     </>
   );
