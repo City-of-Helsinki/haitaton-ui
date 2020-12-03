@@ -2,5 +2,6 @@
   position: relative;
   padding-bottom: 60px;
   max-width: var(--breakpoint-xl);
+  min-height: calc(100vh - 75px); // Header 75px
   margin: auto;
 }
