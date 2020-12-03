@@ -59,12 +59,12 @@
       "RAKENNUS_TAI_TOTEUTUS": "EN:Rakennus- tai toteutussuunnittelu",
       "TYOMAAN_TAI_HANKKEEN_AIKAINEN": "EN:Työmaan tai hankkeen aikainen suunnittelu"
     },
-    "tyomaakoko": {
+    "tyomaaKoko": {
       "SUPPEA_TAI_PISTE": "EN:Yksittäinen suppea kohde ja/tai pistemäinen työmaa",
       "YLI_10M_TAI_KORTTELI": "EN:Työmaa-alueen pituus yli 10 m ja/tai korttelin mittainen työmaa",
       "LAAJA_TAI_USEA_KORTTELI": "EN:Työmaa ulottuu kadun eri puolille ja/tai usean korttelin mittainen työmaa"
     },
-    "tyomaatyyppi": {
+    "tyomaaTyyppi": {
       "VESI": "EN:Vesi",
       "VIEMARI": "EN:Viemäri",
       "SADEVESI": "EN:Sadevesi",
@@ -98,31 +98,31 @@
       "YLEISOTILAISUUS": "EN:Yleisötilaisuus",
       "VAIHTOLAVA": "EN:Vaihtolava"
     },
-    "kaistahaitta": {
+    "kaistaHaitta": {
       "EI_VAIKUTA": "EN:Ei vaikuta",
       "YKSI": "EN:Vähentää samanaikaisesti kaistan yhdellä ajosuunnalla",
       "KAKSI": "EN:Vähentää samanaikaisesti kaistan kahdella ajosuunnalla",
       "KOLME": "EN:Vähentää samanaikaisesti useita kaistoja kahdella ajosuunnalla",
       "NELJA": "EN:Vähentää samanaikaisesti useita kaistoja liittymän eri suunnilla"
     },
-    "kaistapituushaitta": {
+    "kaistaPituusHaitta": {
       "EI_VAIKUTA": "EN:Ei vaikuta",
       "YKSI": "EN:Alle 10 m",
       "KAKSI": "EN:10-49 m",
       "KOLME": "EN:50-99 m",
       "NELJA": "EN:Yli 100 m"
     },
-    "meluhaitta": {
+    "meluHaitta": {
       "YKSI": "EN:Satunnainen haitta",
       "KAKSI": "EN:Lyhytaikainen toistuva haitta",
       "KOLME": "EN:Pitkäkestoinen jatkuva haitta"
     },
-    "polyhaitta": {
+    "polyHaitta": {
       "YKSI": "EN:Satunnainen haitta",
       "KAKSI": "EN:Lyhytaikainen toistuva haitta",
       "KOLME": "EN:Pitkäkestoinen jatkuva haitta"
     },
-    "tarinahaitta": {
+    "tarinaHaitta": {
       "YKSI": "EN:Satunnainen haitta",
       "KAKSI": "EN:Lyhytaikainen toistuva haitta",
       "KOLME": "EN:Pitkäkestoinen jatkuva haitta"
@@ -141,15 +141,16 @@
       "suunnitteluVaihe": "EN:Hankkeen suunnitteluvaihe",
       "alkuPvm": "EN:Hankkeen alkupäivä",
       "loppuPvm": "EN:Hankkeen loppupäivä",
-      "tyomaatyyppi": "EN:Työmaan tyyppi",
-      "tyomaakoko": "EN:Työmaan koko",
+      "tyomaaTyyppi": "EN:Työmaan tyyppi",
+      "tyomaaKoko": "EN:Työmaan koko",
       "haittaAlkuPvm": "EN:Haitan alkupäivämäärä",
       "haittaLoppuPvm": "EN:Haitan loppupäivämäärä",
-      "kaistahaitta": "EN:Kaistahaitta",
-      "kaistapituushaitta": "EN:Kaistan pituushaitta",
-      "meluhaitta": "EN:Meluhaitta",
-      "polyhaitta": "EN:Pölyhaitta",
-      "tarinahaitta": "EN:Tärinähaitta",
+      "kaistaHaitta": "EN:Kaistahaitta",
+      "kaistaPituusHaitta": "EN:Kaistan pituushaitta",
+      "meluHaitta": "EN:Meluhaitta",
+      "polyHaitta": "EN:Pölyhaitta",
+      "tarinaHaitta": "EN:Tärinähaitta",
+      "tyomaaKatuosoite": "EN:Katuosoite",
       "onYKTHanke": "EN:Hanke on YKT-hanke",
       "sukunimi": "EN:Sukunimi",
       "etunimi": "EN:Etunimi",

@@ -117,19 +117,19 @@ export enum FORMFIELD {
   TUNNUS = 'hankeTunnus',
   VAIHE = 'vaihe',
   NIMI = 'nimi',
-  KATUOSOITE = 'katuosoite',
+  KATUOSOITE = 'tyomaaKatuosoite',
   SUUNNITTELUVAIHE = 'suunnitteluVaihe',
   ALKU_PVM = 'alkuPvm',
   LOPPU_PVM = 'loppuPvm',
-  TYOMAATYYPPI = 'tyomaatyyppi',
-  TYOMAAKOKO = 'tyomaakoko',
+  TYOMAATYYPPI = 'tyomaaTyyppi',
+  TYOMAAKOKO = 'tyomaaKoko',
   HAITTA_ALKU_PVM = 'haittaAlkuPvm',
   HAITTA_LOPPU_PVM = 'haittaLoppuPvm',
-  KAISTAHAITTA = 'kaistahaitta',
-  KAISTAPITUUSHAITTA = 'kaistapituushaitta',
-  MELUHAITTA = 'meluhaitta',
-  POLYHAITTA = 'polyhaitta',
-  TARINAHAITTA = 'tarinahaitta',
+  KAISTAHAITTA = 'kaistaHaitta',
+  KAISTAPITUUSHAITTA = 'kaistaPituusHaitta',
+  MELUHAITTA = 'meluHaitta',
+  POLYHAITTA = 'polyHaitta',
+  TARINAHAITTA = 'tarinaHaitta',
   OMISTAJAT = 'omistajat',
   ARVIOIJAT = 'arvioijat',
   TOTEUTTAJAT = 'toteuttajat',
@@ -164,18 +164,18 @@ export type HankeData = {
   nimi: string;
   alkuPvm: string;
   loppuPvm: string;
-  katuosoite: string;
+  tyomaaKatuosoite: string;
   vaihe: HANKE_VAIHE_KEY;
   suunnitteluVaihe: HANKE_SUUNNITTELUVAIHE_KEY | null;
-  tyomaatyyppi: HANKE_TYOMAATYYPPI_KEY[];
-  tyomaakoko: HANKE_TYOMAAKOKO_KEY;
+  tyomaaTyyppi: HANKE_TYOMAATYYPPI_KEY[];
+  tyomaaKoko: HANKE_TYOMAAKOKO_KEY;
   haittaAlkuPvm: Date;
   haittaLoppuPvm: Date;
-  kaistahaitta: HANKE_KAISTAHAITTA_KEY;
-  kaistapituushaitta: HANKE_KAISTAPITUUSHAITTA_KEY;
-  meluhaitta: HANKE_MELUHAITTA_KEY;
-  polyhaitta: HANKE_POLYAITTA_KEY;
-  tarinahaitta: HANKE_TARINAHAITTA_KEY;
+  kaistaHaitta: HANKE_KAISTAHAITTA_KEY;
+  kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA_KEY;
+  meluHaitta: HANKE_MELUHAITTA_KEY;
+  polyHaitta: HANKE_POLYAITTA_KEY;
+  tarinaHaitta: HANKE_TARINAHAITTA_KEY;
   omistajat: Array<HankeContact>;
   arvioijat: Array<HankeContact>;
   toteuttajat: Array<HankeContact>;
