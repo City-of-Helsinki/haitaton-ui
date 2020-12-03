@@ -13,7 +13,7 @@ export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJS
     crs: {
       type: 'name',
       properties: {
-        name: 'urn:ogc:def:crs:EPSG::3879',
+        name: 'urn:ogc:def:crs:EPSG::3857',
       },
     },
   };
