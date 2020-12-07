@@ -75,6 +75,6 @@ describe('Form', () => {
     getByText('Tärinähaitta').click();
     getByText('Pitkäkestoinen jatkuva haitta').click();
 
-    getByTestId('finish').click();
+    getByText('Tallenna ja poistu').click();
   });
 });

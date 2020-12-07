@@ -130,7 +130,7 @@
   },
   "hankeForm": {
     "pageHeader": "EN:Hanke",
-    "finishButton": "EN:Tallenna",
+    "finishButton": "EN:Tallenna ja poistu",
     "saveDraftButton": "EN:Tallenna luonnos",
     "insertFieldError": "EN:Syötä kenttä",
     "labels": {

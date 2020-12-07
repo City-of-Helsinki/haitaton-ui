@@ -3,9 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-
-import { Button } from 'hds-react';
-import { IconAngleLeft, IconAngleRight, IconCross } from 'hds-react/icons';
+import { IconCross } from 'hds-react/icons';
 
 import H1 from '../../../common/components/text/H1';
 
@@ -23,6 +21,8 @@ import Form1 from './Form1';
 import Form2 from './Form2';
 import Form3 from './Form3';
 import Form4 from './Form4';
+import FormButtons from './FormButtons';
+
 import FinishedForm from './FinishedForm';
 
 import './Form.styles.scss';
@@ -101,42 +101,7 @@ const FormComponent: React.FC = (props) => {
   useEffect(() => {
     dispatch(actions.updateHasFormChanged(formState.isDirty));
   }, [formState.isDirty]);
-  let previousButtonText = '';
 
-  let nextButtonText = '';
-  switch (true) {
-    case formPage === 0: {
-      nextButtonText = 'hankeForm:hankkeenAlueForm:header';
-
-      break;
-    }
-
-    case formPage === 1: {
-      previousButtonText = 'hankeForm:perustiedotForm:header';
-      nextButtonText = 'hankeForm:hankkeenYhteystiedotForm:header';
-      break;
-    }
-    case formPage === 2: {
-      previousButtonText = 'hankeForm:hankkeenAlueForm:header';
-      nextButtonText = 'hankeForm:tyomaanTiedotForm:header';
-
-      break;
-    }
-    case formPage === 3: {
-      previousButtonText = 'hankeForm:hankkeenYhteystiedotForm:header';
-      nextButtonText = 'hankeForm:hankkeenHaitatForm:header';
-      break;
-    }
-    case formPage === 4: {
-      previousButtonText = 'hankeForm:tyomaanTiedotForm:header';
-      break;
-    }
-    default: {
-      previousButtonText = '';
-      nextButtonText = '';
-      break;
-    }
-  }
   return (
     <FormProvider {...formContext}>
       <div className="hankeForm">
@@ -197,51 +162,12 @@ const FormComponent: React.FC = (props) => {
                     formData={formData}
                   />
                 )}
-
-                <div className="btnWpr">
-                  {formPage === 4 && (
-                    <Button
-                      className="btnWpr--next"
-                      type="submit"
-                      // disabled={!formState.isValid}
-                      iconRight={<IconAngleRight />}
-                      variant="secondary"
-                      data-testid="finish"
-                    >
-                      <span>{t('hankeForm:finishButton')}</span>
-                    </Button>
-                  )}
-                  {formPage < 4 && (
-                    <Button
-                      className="btnWpr--next"
-                      type="submit"
-                      // disabled={!formState.isValid}
-                      iconRight={<IconAngleRight />}
-                      variant="secondary"
-                      data-testid="forward"
-                    >
-                      <span>{t(nextButtonText)}</span>
-                    </Button>
-                  )}
-                  <Button
-                    type="button"
-                    onClick={() => saveDraftButton()}
-                    disabled={!formState.isValid}
-                  >
-                    <span>{t('hankeForm:saveDraftButton')}</span>
-                  </Button>
-                  {formPage > 0 && (
-                    <Button
-                      className="btnWpr--previous"
-                      type="button"
-                      onClick={() => goBack()}
-                      iconLeft={<IconAngleLeft />}
-                      variant="secondary"
-                    >
-                      <span>{t(previousButtonText)}</span>
-                    </Button>
-                  )}
-                </div>
+                <FormButtons
+                  goBack={goBack}
+                  saveDraftButton={saveDraftButton}
+                  formPage={formPage}
+                  isValid={formState.isValid}
+                />
               </form>
             </div>
           </div>

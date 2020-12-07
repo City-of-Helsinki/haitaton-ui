@@ -1,4 +1,5 @@
 // eslint-disable-next-line
+import { Dispatch, SetStateAction } from 'react';
 import { FieldErrors, Control } from 'react-hook-form';
 
 export interface FormProps {
@@ -7,6 +8,12 @@ export interface FormProps {
   control: Control;
   // eslint-disable-next-line
   register: any;
+}
+export interface ButtonProps {
+  goBack: () => void;
+  saveDraftButton: () => void;
+  formPage: number;
+  isValid: boolean;
 }
 
 export enum HANKE_SAVETYPE {

@@ -14,7 +14,6 @@ type PropTypes = {
   errorMsg?: string;
   disabled?: boolean;
   tooltip?: TooltipProps;
-  dataTestid?: string;
 };
 const TextInputComp: React.FC<PropTypes> = (props) => {
   const {
@@ -28,7 +27,6 @@ const TextInputComp: React.FC<PropTypes> = (props) => {
     errorMsg,
     disabled,
     tooltip,
-    dataTestid,
   } = props;
 
   return (
@@ -49,7 +47,7 @@ const TextInputComp: React.FC<PropTypes> = (props) => {
             onChange={onChange}
             disabled={disabled}
             value={value}
-            data-testid={dataTestid}
+            data-testid={id}
             {...tooltip}
           />
         )}
