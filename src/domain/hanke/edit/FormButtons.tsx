@@ -12,10 +12,8 @@ const FormButtons: React.FC<ButtonProps> = ({ goBack, saveDraftButton, isValid, 
   switch (formPage) {
     case 0: {
       nextButtonText = 'hankeForm:hankkeenAlueForm:header';
-
       break;
     }
-
     case 1: {
       previousButtonText = 'hankeForm:perustiedotForm:header';
       nextButtonText = 'hankeForm:hankkeenYhteystiedotForm:header';
@@ -24,7 +22,6 @@ const FormButtons: React.FC<ButtonProps> = ({ goBack, saveDraftButton, isValid, 
     case 2: {
       previousButtonText = 'hankeForm:hankkeenAlueForm:header';
       nextButtonText = 'hankeForm:tyomaanTiedotForm:header';
-
       break;
     }
     case 3: {
