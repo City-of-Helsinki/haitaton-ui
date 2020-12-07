@@ -9,30 +9,30 @@ const FormButtons: React.FC<ButtonProps> = ({ goBack, saveDraftButton, isValid, 
   let previousButtonText = '';
 
   let nextButtonText = '';
-  switch (true) {
-    case formPage === 0: {
+  switch (formPage) {
+    case 0: {
       nextButtonText = 'hankeForm:hankkeenAlueForm:header';
 
       break;
     }
 
-    case formPage === 1: {
+    case 1: {
       previousButtonText = 'hankeForm:perustiedotForm:header';
       nextButtonText = 'hankeForm:hankkeenYhteystiedotForm:header';
       break;
     }
-    case formPage === 2: {
+    case 2: {
       previousButtonText = 'hankeForm:hankkeenAlueForm:header';
       nextButtonText = 'hankeForm:tyomaanTiedotForm:header';
 
       break;
     }
-    case formPage === 3: {
+    case 3: {
       previousButtonText = 'hankeForm:hankkeenYhteystiedotForm:header';
       nextButtonText = 'hankeForm:hankkeenHaitatForm:header';
       break;
     }
-    case formPage === 4: {
+    case 4: {
       previousButtonText = 'hankeForm:tyomaanTiedotForm:header';
       break;
     }
@@ -79,6 +79,7 @@ const FormButtons: React.FC<ButtonProps> = ({ goBack, saveDraftButton, isValid, 
           onClick={() => goBack()}
           iconLeft={<IconAngleLeft />}
           variant="secondary"
+          data-testid="backward"
         >
           <span>{t(previousButtonText)}</span>
         </Button>
