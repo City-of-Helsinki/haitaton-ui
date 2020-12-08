@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Checkbox, Tooltip } from 'hds-react';
+import { Checkbox, Tooltip, TextArea } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { useFormContext } from 'react-hook-form';
 
@@ -66,6 +66,21 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
           }}
         />
+      </div>
+      <div className="formWpr">
+        <TextArea
+          id={FORMFIELD.KUVAUS}
+          name={FORMFIELD.KUVAUS}
+          label={t(`hankeForm:labels:${FORMFIELD.KUVAUS}`)}
+          defaultValue={formData[FORMFIELD.KUVAUS] || ''}
+          invalid={!!errors[FORMFIELD.KUVAUS]}
+          ref={register({ required: true })}
+          tooltipLabel={t(`hankeForm:toolTips:tipOpenLabel`)}
+          tooltipText={`hankeForm:toolTips:${FORMFIELD.NIMI}`}
+        />
+        {!!errors[FORMFIELD.KUVAUS] && (
+          <span className="error-text">{t('hankeForm:insertFieldError')}</span>
+        )}
       </div>
       <div className="calendaraWpr formWpr">
         <div className="left">

@@ -138,6 +138,7 @@
       "hankeTunnus": "Hankkeen tunnus",
       "nimi": "Hankkeen nimi",
       "vaihe": "Hankeen Vaihe",
+      "kuvaus": "Hankkeen kuvaus",
       "suunnitteluVaihe": "Hankkeen suunnitteluvaihe",
       "alkuPvm": "Hankkeen alkupäivä",
       "loppuPvm": "Hankkeen loppupäivä",

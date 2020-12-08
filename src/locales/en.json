@@ -137,6 +137,7 @@
       "hankeTunnus": "EN:Hankkeen tunnus",
       "nimi": "EN:Hankkeen nimi",
       "vaihe": "EN:Hankeen Vaihe",
+      "kuvaus": "EN:Hankkeen kuvaus",
       "suunnitteluVaihe": "EN:Hankkeen suunnitteluvaihe",
       "alkuPvm": "EN:Hankkeen alkupäivä",
       "loppuPvm": "EN:Hankkeen loppupäivä",

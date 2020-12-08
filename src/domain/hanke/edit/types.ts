@@ -123,6 +123,7 @@ export enum FORMFIELD {
   TUNNUS = 'hankeTunnus',
   VAIHE = 'vaihe',
   NIMI = 'nimi',
+  KUVAUS = 'kuvaus',
   KATUOSOITE = 'tyomaaKatuosoite',
   SUUNNITTELUVAIHE = 'suunnitteluVaihe',
   ALKU_PVM = 'alkuPvm',
@@ -168,6 +169,7 @@ export type HankeData = {
   id: number;
   hankeTunnus: string;
   nimi: string;
+  kuvaus: string;
   alkuPvm: string;
   loppuPvm: string;
   tyomaaKatuosoite: string;
