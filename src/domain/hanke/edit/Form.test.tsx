@@ -18,6 +18,7 @@ const omistajatEmail = 'test@test.fi';
 const omistajatPuhelinnumero = '0452271079';
 const omistajatOsasto = 'Test';
 const katuosoite = 'Pohjoinen Rautatiekatu 11 b 12';
+const hankeenKuvaus = 'Tässä on kuvaus';
 describe('Form', () => {
   test('Form testing', async () => {
     const { getByTestId, getByLabelText, getByText, queryAllByText } = render(
@@ -28,6 +29,8 @@ describe('Form', () => {
 
     getByTestId(FORMFIELD.YKT_HANKE).click();
     fireEvent.change(getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
+    fireEvent.change(getByTestId(FORMFIELD.KUVAUS), { target: { value: hankeenKuvaus } });
+
     fireEvent.change(getByLabelText('Hankkeen alkupäivä'), { target: { value: alkuPvm } });
     fireEvent.change(getByLabelText('Hankkeen loppupäivä'), { target: { value: loppuPvm } });
 
@@ -37,10 +40,11 @@ describe('Form', () => {
     await waitFor(() => queryAllByText('Hankkeen yhteystiedot')[1]);
     getByTestId('backward').click(); // changes view to form0
     expect(getByTestId(FORMFIELD.YKT_HANKE)).toBeChecked();
-    expect(getByLabelText('Hankkeen alkupäivä')).toHaveAttribute('value', alkuPvm);
-    expect(getByLabelText('Hankkeen loppupäivä')).toHaveAttribute('value', loppuPvm);
+    expect(getByLabelText('Hankkeen alkupäivä')).toHaveValue(alkuPvm);
+    expect(getByLabelText('Hankkeen loppupäivä')).toHaveValue(loppuPvm);
 
-    expect(getByTestId(FORMFIELD.NIMI)).toHaveAttribute('value', nimi);
+    expect(getByTestId(FORMFIELD.NIMI)).toHaveValue(nimi);
+    expect(getByTestId(FORMFIELD.KUVAUS)).toHaveValue(hankeenKuvaus);
     getByTestId('forward').click(); // changes view to form1
     await waitFor(() => queryAllByText('Hankkeen yhteystiedot')[1]);
     getByTestId('forward').click(); // changes view to form2
@@ -65,11 +69,11 @@ describe('Form', () => {
     await waitFor(() => queryAllByText('Työmaan tiedot')[1]);
     getByTestId('backward').click(); // changes view to form2
 
-    expect(getByTestId('omistajat-etunimi')).toHaveAttribute('value', omistajaEtunimi);
-    expect(getByTestId('omistajat-sukunimi')).toHaveAttribute('value', omistajaSukunimi);
-    expect(getByTestId('omistajat-email')).toHaveAttribute('value', omistajatEmail);
-    expect(getByTestId('omistajat-puhelinnumero')).toHaveAttribute('value', omistajatPuhelinnumero);
-    expect(getByTestId('omistajat-osasto')).toHaveAttribute('value', omistajatOsasto);
+    expect(getByTestId('omistajat-etunimi')).toHaveValue(omistajaEtunimi);
+    expect(getByTestId('omistajat-sukunimi')).toHaveValue(omistajaSukunimi);
+    expect(getByTestId('omistajat-email')).toHaveValue(omistajatEmail);
+    expect(getByTestId('omistajat-puhelinnumero')).toHaveValue(omistajatPuhelinnumero);
+    expect(getByTestId('omistajat-osasto')).toHaveValue(omistajatOsasto);
 
     getByTestId('forward').click(); // changes view to form3
     await waitFor(() => queryAllByText('Työmaan tiedot')[1]);
@@ -85,7 +89,7 @@ describe('Form', () => {
     );
     expect(queryAllByText('Vesi')[0]);
     getByTestId('backward').click(); // changes view to form3
-    expect(getByTestId(FORMFIELD.KATUOSOITE)).toHaveAttribute('value', katuosoite);
+    expect(getByTestId(FORMFIELD.KATUOSOITE)).toHaveValue(katuosoite);
     getByTestId('forward').click(); // changes view to form4
     await waitFor(() => queryAllByText('Hankkeen haitat')[1]);
 
@@ -114,8 +118,8 @@ describe('Form', () => {
     getByTestId('forward').click(); // changes view to form4
     await waitFor(() => queryAllByText('Hankkeen haitat')[1]);
 
-    expect(getByLabelText('Haitan alkupäivämäärä')).toHaveAttribute('value', alkuPvm);
-    expect(getByLabelText('Haitan loppupäivämäärä')).toHaveAttribute('value', loppuPvm);
+    expect(getByLabelText('Haitan alkupäivämäärä')).toHaveValue(alkuPvm);
+    expect(getByLabelText('Haitan loppupäivämäärä')).toHaveValue(loppuPvm);
     expect(queryAllByText('Vähentää samanaikaisesti kaistan yhdellä ajosuunnalla')[0]);
     expect(queryAllByText('Ei vaikuta')[0]);
     expect(queryAllByText('Lyhytaikainen toistuva haitta')[0]);
