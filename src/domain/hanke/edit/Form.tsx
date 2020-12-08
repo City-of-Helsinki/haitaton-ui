@@ -63,7 +63,6 @@ const FormComponent: React.FC = (props) => {
   }
 
   function saveDraftButton() {
-    console.log('data', getValues());
     try {
       dispatch(
         saveForm({
