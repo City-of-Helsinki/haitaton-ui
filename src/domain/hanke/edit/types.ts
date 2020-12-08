@@ -8,6 +8,12 @@ export interface FormProps {
   // eslint-disable-next-line
   register: any;
 }
+export interface ButtonProps {
+  goBack: () => void;
+  saveDraftButton: () => void;
+  formPage: number;
+  isValid: boolean;
+}
 
 export enum HANKE_SAVETYPE {
   AUTO = 'AUTO',

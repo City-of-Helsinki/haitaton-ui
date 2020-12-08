@@ -48,10 +48,11 @@ const DatePickerComp: React.FC<PropTypes> = (props) => {
         defaultValue={defaultValue}
         render={({ onChange, value }) => (
           <div className="datePicker">
-            <label htmlFor={id}>
-              {label}
+            <div>
               {!!tooltip && <Tooltip {...tooltip} />}
-            </label>
+
+              <label htmlFor={id}>{label}</label>
+            </div>
             <DatePicker
               id={id}
               name={name}

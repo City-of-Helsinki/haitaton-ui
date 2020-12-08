@@ -46,6 +46,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             ref={register}
             checked={ytkChecked}
             onChange={() => setYtkChecked(!ytkChecked)}
+            data-testid={FORMFIELD.YKT_HANKE}
           />
         </div>
       </div>

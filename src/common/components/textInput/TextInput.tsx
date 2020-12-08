@@ -28,7 +28,7 @@ const TextInputComp: React.FC<PropTypes> = (props) => {
     disabled,
     tooltip,
   } = props;
-
+  const role = 'text';
   return (
     <>
       <Controller
@@ -48,6 +48,8 @@ const TextInputComp: React.FC<PropTypes> = (props) => {
             disabled={disabled}
             value={value}
             {...tooltip}
+            data-testid={id}
+            role={role}
           />
         )}
       />

@@ -130,8 +130,7 @@
   },
   "hankeForm": {
     "pageHeader": "SV:Hanke",
-    "previousButton": "SV:Edellinen",
-    "nextButton": "SV:Seuraava",
+    "finishButton": "SV:Tallenna ja poistu",
     "saveDraftButton": "SV:Tallenna luonnos",
     "insertFieldError": "SV:Syötä kenttä",
     "labels": {
@@ -188,6 +187,9 @@
     },
     "hankkeenHaitatForm": {
       "header": "SV:Hankkeen haitat"
+    },
+    "finishedForm": {
+      "header": "SV:Lomake on lähetetty onnistuneesti"
     }
   },
   "map": {
