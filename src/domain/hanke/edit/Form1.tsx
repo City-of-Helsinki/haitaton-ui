@@ -8,7 +8,7 @@ const Form1: React.FC<FormProps> = ({ formData }) => {
   const { t } = useTranslation();
   return (
     <div className="form1">
-      <H2>{t('hankeForm:hankkeenAlueForm:header')}</H2>
+      <H2 data-testid="hankkeenAlue">{t('hankeForm:hankkeenAlueForm:header')}</H2>
       <div style={{ position: 'relative' }}>
         <HankeDrawer hankeTunnus={formData[FORMFIELD.TUNNUS]} />
       </div>

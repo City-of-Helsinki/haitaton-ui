@@ -66,7 +66,12 @@ const FormButtons: React.FC<ButtonProps> = ({ goBack, saveDraftButton, isValid, 
           <span>{t(nextButtonText)}</span>
         </Button>
       )}
-      <Button type="button" onClick={() => saveDraftButton()} disabled={!isValid}>
+      <Button
+        type="button"
+        data-testid="saveDraft"
+        onClick={() => saveDraftButton()}
+        disabled={!isValid}
+      >
         <span>{t('hankeForm:saveDraftButton')}</span>
       </Button>
       {formPage > 0 && (
