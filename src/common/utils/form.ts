@@ -2,20 +2,17 @@ import { FormatFunction } from 'i18next';
 
 // eslint-disable-next-line
 const isI18nYupMessage = (errors: any, name: string): boolean => {
-  if (
-    typeof errors === 'object' &&
-    errors[name] &&
-    !!errors[name].message?.key &&
-    !!errors[name].message?.values
-  ) {
+  if (errors && errors[name] && !!errors[name].message?.key && !!errors[name].message?.values) {
     return true;
   }
 
-  // eslint-disable-next-line
-  console.warn(
-    `YUP translation key is not setup correctly. Fieldname: '${name}'. Message: `,
-    errors[name]
-  );
+  if (errors && errors[name]) {
+    // eslint-disable-next-line
+    console.warn(
+      `YUP translation key is not setup correctly. Fieldname: '${name}'. Message: `,
+      errors[name]
+    );
+  }
   return false;
 };
 
@@ -31,7 +28,7 @@ export const getInputErrorText = (
   }
 
   // Show YUP default message (english)
-  if (errors[name] && errors[name].message) {
+  if (errors && errors[name] && errors[name].message) {
     return t(`form:validations:default`);
   }
 
