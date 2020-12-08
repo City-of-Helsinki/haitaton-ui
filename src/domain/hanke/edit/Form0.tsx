@@ -77,6 +77,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
           ref={register({ required: true })}
           tooltipLabel={t(`hankeForm:toolTips:tipOpenLabel`)}
           tooltipText={`hankeForm:toolTips:${FORMFIELD.NIMI}`}
+          data-testid={FORMFIELD.KUVAUS}
         />
         {!!errors[FORMFIELD.KUVAUS] && (
           <span className="error-text">{t('hankeForm:insertFieldError')}</span>

@@ -18,6 +18,7 @@ const omistajatEmail = 'test@test.fi';
 const omistajatPuhelinnumero = '0452271079';
 const omistajatOsasto = 'Test';
 const katuosoite = 'Pohjoinen Rautatiekatu 11 b 12';
+const hankeenKuvaus = 'Tässä on kuvaus';
 describe('Form', () => {
   test('Form testing', async () => {
     const { getByTestId, getByLabelText, getByText, queryAllByText } = render(
@@ -28,6 +29,8 @@ describe('Form', () => {
 
     getByTestId(FORMFIELD.YKT_HANKE).click();
     fireEvent.change(getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
+    fireEvent.change(getByTestId(FORMFIELD.KUVAUS), { target: { value: hankeenKuvaus } });
+
     fireEvent.change(getByLabelText('Hankkeen alkupäivä'), { target: { value: alkuPvm } });
     fireEvent.change(getByLabelText('Hankkeen loppupäivä'), { target: { value: loppuPvm } });
 
@@ -41,6 +44,7 @@ describe('Form', () => {
     expect(getByLabelText('Hankkeen loppupäivä')).toHaveAttribute('value', loppuPvm);
 
     expect(getByTestId(FORMFIELD.NIMI)).toHaveAttribute('value', nimi);
+    expect(getByTestId(FORMFIELD.KUVAUS)).toBe(hankeenKuvaus);
     getByTestId('forward').click(); // changes view to form1
     await waitFor(() => queryAllByText('Hankkeen yhteystiedot')[1]);
     getByTestId('forward').click(); // changes view to form2
