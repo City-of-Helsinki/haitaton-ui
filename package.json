@@ -7,7 +7,8 @@
     "build": "react-scripts build",
     "serve": "serve -s build -l 3001",
     "build-and-serve": "yarn run build && yarn run serve",
-    "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
+    "test": "react-scripts test --env=jest-environment-jsdom-sixteen --bail --findRelatedTests",
+    "testWithBail": "react-scripts test  --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
     "type-check": "tsc --pretty --noEmit",
     "format": "prettier --write",
@@ -103,8 +104,7 @@
   },
   "lint-staged": {
     "*.@(js|jsx|ts|tsx)": [
-      "yarn lint",
-      "jest --bail --findRelatedTests"
+      "yarn lint"
     ],
     "*.@(css|scss)": [
       "yarn lint:css"

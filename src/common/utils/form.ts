@@ -6,6 +6,7 @@ const isI18nYupMessage = (errors: any, name: string): boolean => {
     return true;
   }
 
+  // Warn if YUP message is not correct
   if (errors && errors[name]) {
     // eslint-disable-next-line
     console.warn(
