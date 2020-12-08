@@ -14,14 +14,7 @@ const Form3: React.FC<FormProps> = ({ formData, control, errors }) => {
       <H2>{t('hankeForm:tyomaanTiedotForm:header')}</H2>
       <div className="dataWpr">
         <div className="formWpr">
-          <TextInput
-            name={FORMFIELD.KATUOSOITE}
-            id={FORMFIELD.KATUOSOITE}
-            label={t(`hankeForm:labels:${FORMFIELD.KATUOSOITE}`)}
-            control={control}
-            invalid={!!errors[FORMFIELD.KATUOSOITE]}
-            errorMsg={t('hankeForm:insertFieldError')}
-          />
+          <TextInput name={FORMFIELD.KATUOSOITE} />
         </div>
         <div className="formWpr">
           <DropdownMultiselect

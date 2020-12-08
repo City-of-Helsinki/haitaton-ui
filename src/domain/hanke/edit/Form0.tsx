@@ -21,13 +21,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
       <H2>{t('hankeForm:perustiedotForm:header')}</H2>
       <div className="dataWpr">
         <div className="formWpr">
-          <TextInput
-            id={FORMFIELD.TUNNUS}
-            name={FORMFIELD.TUNNUS}
-            label={t(`hankeForm:labels:${FORMFIELD.TUNNUS}`)}
-            control={control}
-            disabled
-          />
+          <TextInput name={FORMFIELD.TUNNUS} disabled />
         </div>
         <div className="formWpr">
           <h3 className="labelHeader">
@@ -52,12 +46,6 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
       <div className="formWpr">
         <TextInput
           name={FORMFIELD.NIMI}
-          id={FORMFIELD.NIMI}
-          label={t(`hankeForm:labels:${FORMFIELD.NIMI}`)}
-          control={control}
-          // defaultValue={formData[FORMFIELD.NIMI] || ''}
-          invalid={!!errors[FORMFIELD.NIMI]}
-          errorMsg={t('hankeForm:insertFieldError')}
           tooltip={{
             labelText: t(`hankeForm:toolTips:${FORMFIELD.NIMI}`),
             openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
@@ -84,8 +72,8 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
       <div className="calendaraWpr formWpr">
         <div className="left">
           <DatePicker
-            name={FORMFIELD.ALKU_PVM}
             id={FORMFIELD.ALKU_PVM}
+            name={FORMFIELD.ALKU_PVM}
             label={t(`hankeForm:labels:${FORMFIELD.ALKU_PVM}`)}
             control={control}
             locale={i18n.language}
@@ -102,8 +90,8 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
         </div>
         <div className="right">
           <DatePicker
-            name={FORMFIELD.LOPPU_PVM}
             id={FORMFIELD.LOPPU_PVM}
+            name={FORMFIELD.LOPPU_PVM}
             label={t(`hankeForm:labels:${FORMFIELD.LOPPU_PVM}`)}
             control={control}
             locale={i18n.language}
@@ -121,8 +109,8 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
       </div>
       <div className="formWpr">
         <Dropdown
-          name={FORMFIELD.VAIHE}
           id={FORMFIELD.VAIHE}
+          name={FORMFIELD.VAIHE}
           control={control}
           options={$enum(HANKE_VAIHE).map((value) => ({
             value,
@@ -141,8 +129,8 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
       </div>
       <div className="formWpr">
         <Dropdown
-          name={FORMFIELD.SUUNNITTELUVAIHE}
           id={FORMFIELD.SUUNNITTELUVAIHE}
+          name={FORMFIELD.SUUNNITTELUVAIHE}
           control={control}
           options={$enum(HANKE_SUUNNITTELUVAIHE).map((value) => ({
             value,

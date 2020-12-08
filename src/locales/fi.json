@@ -7,8 +7,15 @@
       "exitButton": "Poistu"
     }
   },
-  "featureX": {
-    "hello": "Morjesta featuresta x"
+  "form": {
+    "validations": {
+      "default": "Kentän arvo on virheellinen",
+      "required": "Kenttä on pakollinen",
+      "stringMin": "Kentän pituus oltava vähintään {{min}} merkkiä",
+      "stringMax": "Kentän pituus oltava enintään {{max}} merkkiä",
+      "dateMin": "Ensimmäinen mahdollinen päivä on {{min}}",
+      "dateMax": "Viimeinen mahdollinen päivä on {{max}}"
+    }
   },
   "header": {
     "HOME": "Alkuun",
