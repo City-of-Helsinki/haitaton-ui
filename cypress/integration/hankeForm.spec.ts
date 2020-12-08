@@ -10,9 +10,6 @@ context('hanke form', () => {
     const kuvaus = 'my new kuvaus value';
     const alkuPvm = '10.01.2032';
     const loppuPvm = '11.01.2032';
-    cy.get('#vaihe-toggle-button').click();
-    cy.wait(500);
-    cy.get('#vaihe-item-0').click();
     cy.wait(500);
     cy.get('input[data-testid=nimi]').type(nimi);
     cy.wait(500);
@@ -21,6 +18,12 @@ context('hanke form', () => {
     cy.get('#alkuPvm').type(alkuPvm);
     cy.wait(500);
     cy.get('#loppuPvm').type(loppuPvm);
+    cy.wait(500);
+    cy.get('input[data-testid=nimi]').click(); // because needs make datepicker to disappear
+    cy.wait(500);
+    cy.get('#vaihe-toggle-button').click();
+    cy.wait(500);
+    cy.get('#vaihe-item-0').click();
     cy.wait(500);
     cy.get('[data-testid=forward]').trigger('mouseover').click();
     cy.wait(500);
