@@ -103,7 +103,8 @@
   },
   "lint-staged": {
     "*.@(js|jsx|ts|tsx)": [
-      "yarn lint"
+      "yarn lint",
+      "jest --bail --findRelatedTests"
     ],
     "*.@(css|scss)": [
       "yarn lint:css"
