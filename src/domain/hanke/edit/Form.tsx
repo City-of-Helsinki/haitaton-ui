@@ -4,25 +4,21 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { IconCross } from 'hds-react/icons';
-
+import { yupResolver } from '@hookform/resolvers/yup';
 import H1 from '../../../common/components/text/H1';
-
+import { actions as dialogActions } from '../../../common/components/confirmationDialog/reducer';
 import { getFormData, getHasFormChanged } from './selectors';
 import { HankeDataDraft, HANKE_SAVETYPE } from './types';
-
 import { actions } from './reducer';
-import { actions as dialogActions } from '../../../common/components/confirmationDialog/reducer';
 import { saveForm } from './thunks';
-
 import Indicator from './indicator';
-
+import { schema } from './schema';
 import Form0 from './Form0';
 import Form1 from './Form1';
 import Form2 from './Form2';
 import Form3 from './Form3';
 import Form4 from './Form4';
 import FormButtons from './FormButtons';
-
 import FinishedForm from './FinishedForm';
 
 import './Form.styles.scss';
@@ -44,12 +40,13 @@ const FormComponent: React.FC = (props) => {
   const [formPage, setFormPage] = useState<number>(0);
 
   const formContext = useForm<HankeDataDraft>({
-    mode: 'all',
+    mode: 'onBlur',
     reValidateMode: 'onBlur',
     criteriaMode: 'firstError',
     shouldFocusError: true,
     shouldUnregister: false,
     defaultValues: formData,
+    resolver: yupResolver(schema),
   });
 
   const { handleSubmit, errors, control, register, formState, getValues, reset } = formContext;
@@ -98,9 +95,12 @@ const FormComponent: React.FC = (props) => {
       history.push('/');
     }
   }
+
   useEffect(() => {
     dispatch(actions.updateHasFormChanged(formState.isDirty));
   }, [formState.isDirty]);
+
+  console.log(errors);
 
   return (
     <FormProvider {...formContext}>

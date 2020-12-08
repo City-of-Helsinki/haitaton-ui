@@ -19,7 +19,6 @@ const Form3: React.FC<FormProps> = ({ formData, control, errors }) => {
             id={FORMFIELD.KATUOSOITE}
             label={t(`hankeForm:labels:${FORMFIELD.KATUOSOITE}`)}
             control={control}
-            defaultValue={formData[FORMFIELD.KATUOSOITE] || ''}
             invalid={!!errors[FORMFIELD.KATUOSOITE]}
             errorMsg={t('hankeForm:insertFieldError')}
           />
