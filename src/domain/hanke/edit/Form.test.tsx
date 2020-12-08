@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Provider } from 'react-redux';
 import { cleanup, fireEvent, waitFor } from '@testing-library/react';
 import { store } from '../../../common/components/app/store';
@@ -8,7 +7,9 @@ import Form from './Form';
 import { render } from '../../../testUtils/render';
 
 afterEach(cleanup);
+
 jest.setTimeout(25000);
+
 const nimi = 'test kuoppa';
 const alkuPvm = '24.03.2032';
 const loppuPvm = '24.03.2032';
@@ -19,6 +20,7 @@ const omistajatPuhelinnumero = '0452271079';
 const omistajatOsasto = 'Test';
 const katuosoite = 'Pohjoinen Rautatiekatu 11 b 12';
 const hankeenKuvaus = 'Tässä on kuvaus';
+
 describe('Form', () => {
   test('Form testing', async () => {
     const { getByTestId, getByLabelText, getByText, queryAllByText } = render(
