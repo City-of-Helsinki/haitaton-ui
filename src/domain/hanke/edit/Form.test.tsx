@@ -44,7 +44,7 @@ describe('Form', () => {
     expect(getByLabelText('Hankkeen loppupäivä')).toHaveAttribute('value', loppuPvm);
 
     expect(getByTestId(FORMFIELD.NIMI)).toHaveAttribute('value', nimi);
-    expect(getByTestId(FORMFIELD.KUVAUS)).toBe(hankeenKuvaus);
+    expect(getByTestId(FORMFIELD.KUVAUS)).toHaveValue(hankeenKuvaus);
     getByTestId('forward').click(); // changes view to form1
     await waitFor(() => queryAllByText('Hankkeen yhteystiedot')[1]);
     getByTestId('forward').click(); // changes view to form2
