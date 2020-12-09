@@ -1,60 +1,43 @@
 import React from 'react';
-import { Controller, Control } from 'react-hook-form';
-import { TextInput } from 'hds-react';
+import { Controller, useFormContext } from 'react-hook-form';
+import { TextInput as HdsTextInput } from 'hds-react';
+import { useTranslation } from 'react-i18next';
 import { TooltipProps } from 'hds-react/components/Tooltip';
+import { getInputErrorText } from '../../utils/form';
 
 type PropTypes = {
   name: string;
-  id: string;
-  control: Control;
-  rules?: { required: boolean };
-  defaultValue: string;
-  label: string;
-  invalid?: boolean;
-  errorMsg?: string;
+  label?: string;
   disabled?: boolean;
   tooltip?: TooltipProps;
 };
-const TextInputComp: React.FC<PropTypes> = (props) => {
-  const {
-    name,
-    id,
-    control,
-    rules,
-    defaultValue,
-    label,
-    invalid,
-    errorMsg,
-    disabled,
-    tooltip,
-  } = props;
-  const role = 'text';
+
+const TextInput: React.FC<PropTypes> = ({ name, label, disabled, tooltip }) => {
+  const { t } = useTranslation();
+  const { control, errors } = useFormContext();
+
   return (
-    <>
-      <Controller
-        name={name}
-        id={id}
-        control={control}
-        rules={rules}
-        defaultValue={defaultValue}
-        render={({ onChange, onBlur, value }) => (
-          <TextInput
-            id={id}
-            label={label}
-            invalid={invalid}
-            name={name}
-            onBlur={onBlur}
-            onChange={onChange}
-            disabled={disabled}
-            value={value}
-            {...tooltip}
-            data-testid={id}
-            role={role}
-          />
-        )}
-      />
-      {invalid && <span className="error-text">{errorMsg}</span>}
-    </>
+    <Controller
+      name={name}
+      control={control}
+      defaultValue=""
+      render={({ onChange, onBlur, value }) => (
+        <HdsTextInput
+          id={name}
+          name={name}
+          label={label || t(`hankeForm:labels:${name}`)}
+          value={value}
+          helperText={getInputErrorText(t, errors, name)}
+          invalid={!!errors[name]}
+          onBlur={onBlur}
+          onChange={onChange}
+          disabled={disabled}
+          data-testid={name}
+          {...tooltip}
+        />
+      )}
+    />
   );
 };
-export default TextInputComp;
+
+export default TextInput;
