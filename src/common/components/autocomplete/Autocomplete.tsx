@@ -1,5 +1,7 @@
 import React from 'react';
-import { Combobox, Tooltip, TooltipProps } from 'hds-react';
+import { Combobox, Tooltip } from 'hds-react';
+
+import { TooltipProps } from '../../types/tooltip';
 
 export type Option = { value: string | number; label: string };
 
@@ -36,6 +38,7 @@ const Autocomplete: React.FC<PropTypes> = ({
     <Combobox
       label={label}
       options={options}
+      toggleButtonAriaLabel="open"
       defaultValue={findSelected(options, defaultValue)}
       onChange={(option: Option) => onChange(option)}
       {...rest}

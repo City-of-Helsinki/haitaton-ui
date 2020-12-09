@@ -3,8 +3,8 @@ import { Controller, Control } from 'react-hook-form';
 import formatISO from 'date-fns/formatISO';
 import DatePicker from 'react-datepicker';
 import { Tooltip } from 'hds-react';
-import { TooltipProps } from 'hds-react/components/Tooltip';
 
+import { TooltipProps } from '../../types/tooltip';
 import 'react-datepicker/dist/react-datepicker.css';
 import './datePicker.styles.scss';
 
@@ -48,10 +48,13 @@ const DatePickerComp: React.FC<PropTypes> = (props) => {
         defaultValue={defaultValue}
         render={({ onChange, value }) => (
           <div className="datePicker">
-            <div>
-              {!!tooltip && <Tooltip {...tooltip} />}
-
+            <div className="topWpr">
               <label htmlFor={id}>{label}</label>
+              {!!tooltip && (
+                <Tooltip buttonLabel={tooltip.buttonLabel} placement={tooltip.placement}>
+                  {tooltip.tooltipText}
+                </Tooltip>
+              )}
             </div>
             <DatePicker
               id={id}

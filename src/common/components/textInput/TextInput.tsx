@@ -1,7 +1,8 @@
 import React from 'react';
 import { Controller, Control } from 'react-hook-form';
 import { TextInput } from 'hds-react';
-import { TooltipProps } from 'hds-react/components/Tooltip';
+
+import { TooltipProps } from '../../types/tooltip';
 
 type PropTypes = {
   name: string;

@@ -1,16 +1,16 @@
 /* This file needs to be a css file because stylelint-value-no-unknown-custom-properties plugin cannot read .scss files in .stylelintrc.json */
 
 :root {
-  --primary-color: var(--color-coat-of-arms-blue);
+  --primary-color: var(--color-coat-of-arms);
   --haitaton-content-text-color: var(--color-black-90);
   --haitaton-content-background-color: #fafafb;
-  --haitaton-content-link-color: var(--color-coat-of-arms-blue);
+  --haitaton-content-link-color: var(--color-coat-of-arms);
   --haitaton-content-border-color: #c4c4c4;
-  --haitaton-footer-background-color: var(--color-coat-of-arms-blue-light-20);
+  --haitaton-footer-background-color: var(--color-coat-of-arms-light);
   --grid-gap: 1em;
 }
 
 :root .navigation-header {
-  --header-background-color: var(--color-coat-of-arms-blue);
+  --header-background-color: var(--color-coat-of-arms);
   --header-color: var(--color-white);
 }

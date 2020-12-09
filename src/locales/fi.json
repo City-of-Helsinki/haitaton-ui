@@ -167,12 +167,13 @@
     },
     "toolTips": {
       "tipOpenLabel": "Avaa ohje",
-      "tipCloseLabel": "Sulje ohje",
       "nimi": "Ohjeteksti",
       "onYKTHanke": "Ohjeteksti",
       "alkuPvm": "Ohjeteksti",
       "loppuPvm": "Ohjeteksti",
-      "vaihe": "Ohjeteksti"
+      "vaihe": "Ohjeteksti",
+      "kuvaus": "Ohjeteksti",
+      "suunnitteluVaihe": "Ohjeteksti"
     },
     "perustiedotForm": {
       "header": "Hankkeen perustiedot",

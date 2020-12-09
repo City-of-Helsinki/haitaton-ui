@@ -172,7 +172,6 @@ const FormComponent: React.FC = (props) => {
             </div>
           </div>
         )}
-        ;
       </div>
     </FormProvider>
   );

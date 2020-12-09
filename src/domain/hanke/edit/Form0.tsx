@@ -33,11 +33,9 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
         <div className="formWpr">
           <h3 className="labelHeader">
             <div>{t('hankeForm:perustiedotForm:ytkHankeHeader')}</div>
-            <Tooltip
-              labelText={t(`hankeForm:toolTips:${FORMFIELD.YKT_HANKE}`)}
-              openButtonLabelText={t(`hankeForm:toolTips:tipOpenLabel`)}
-              closeButtonLabelText={t(`hankeForm:toolTips:tipCloseLabel`)}
-            />
+            <Tooltip tooltipLabel={t(`hankeForm:toolTips:tipOpenLabel`)}>
+              {t(`hankeForm:toolTips:${FORMFIELD.YKT_HANKE}`)}
+            </Tooltip>
           </h3>
           <Checkbox
             name={FORMFIELD.YKT_HANKE}
@@ -61,9 +59,9 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
           invalid={!!errors.hankeenNimi}
           errorMsg={t('hankeForm:insertFieldError')}
           tooltip={{
-            labelText: t(`hankeForm:toolTips:${FORMFIELD.NIMI}`),
-            openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
-            closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
+            tooltipText: t(`hankeForm:toolTips:${FORMFIELD.NIMI}`),
+            buttonLabel: t(`hankeForm:toolTips:tipOpenLabel`),
+            placement: 'auto',
           }}
         />
       </div>
@@ -76,7 +74,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
           invalid={!!errors[FORMFIELD.KUVAUS]}
           ref={register({ required: true })}
           tooltipLabel={t(`hankeForm:toolTips:tipOpenLabel`)}
-          tooltipText={`hankeForm:toolTips:${FORMFIELD.NIMI}`}
+          tooltipText={t(`hankeForm:toolTips:${FORMFIELD.KUVAUS}`)}
           data-testid={FORMFIELD.KUVAUS}
         />
         {!!errors[FORMFIELD.KUVAUS] && (
@@ -97,9 +95,9 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             errorMsg={t('hankeForm:insertFieldError')}
             defaultValue={formData[FORMFIELD.ALKU_PVM] || null}
             tooltip={{
-              labelText: t(`hankeForm:toolTips:${FORMFIELD.ALKU_PVM}`),
-              openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
-              closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
+              tooltipText: t(`hankeForm:toolTips:${FORMFIELD.ALKU_PVM}`),
+              buttonLabel: t(`hankeForm:toolTips:tipOpenLabel`),
+              placement: 'auto',
             }}
           />
         </div>
@@ -116,9 +114,9 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             errorMsg={t('hankeForm:insertFieldError')}
             defaultValue={formData[FORMFIELD.LOPPU_PVM] || null}
             tooltip={{
-              labelText: t(`hankeForm:toolTips:${FORMFIELD.LOPPU_PVM}`),
-              openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
-              closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
+              tooltipText: t(`hankeForm:toolTips:${FORMFIELD.LOPPU_PVM}`),
+              buttonLabel: t(`hankeForm:toolTips:tipOpenLabel`),
+              placement: 'auto',
             }}
           />
         </div>
@@ -138,9 +136,9 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
           invalid={!!errors[FORMFIELD.VAIHE]}
           errorMsg={t('hankeForm:insertFieldError')}
           tooltip={{
-            labelText: t(`hankeForm:toolTips:${FORMFIELD.VAIHE}`),
-            openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
-            closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
+            tooltipText: t(`hankeForm:toolTips:${FORMFIELD.VAIHE}`),
+            tooltipLabel: t(`hankeForm:toolTips:tipOpenLabel`),
+            placement: 'auto',
           }}
         />
       </div>
@@ -158,9 +156,9 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
           invalid={!!errors[FORMFIELD.SUUNNITTELUVAIHE]}
           errorMsg={t('hankeForm:insertFieldError')}
           tooltip={{
-            labelText: t(`hankeForm:toolTips:${FORMFIELD.SUUNNITTELUVAIHE}`),
-            openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
-            closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
+            tooltipText: t(`hankeForm:toolTips:${FORMFIELD.SUUNNITTELUVAIHE}`),
+            tooltipLabel: t(`hankeForm:toolTips:tipOpenLabel`),
+            placement: 'auto',
           }}
           disabled={formValues.vaihe !== 'SUUNNITTELU'}
         />
