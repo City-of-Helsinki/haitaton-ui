@@ -12,7 +12,7 @@ import { HankeDataDraft, HANKE_SAVETYPE } from './types';
 import { actions } from './reducer';
 import { saveForm } from './thunks';
 import Indicator from './indicator';
-import { schema } from './schema';
+import { hankeSchema } from './validations';
 import Form0 from './Form0';
 import Form1 from './Form1';
 import Form2 from './Form2';
@@ -46,7 +46,10 @@ const FormComponent: React.FC = (props) => {
     shouldFocusError: true,
     shouldUnregister: false,
     defaultValues: formData,
-    resolver: yupResolver(schema),
+    resolver: yupResolver(hankeSchema),
+    context: {
+      formPage,
+    },
   });
 
   const { handleSubmit, errors, control, register, formState, getValues, reset } = formContext;
@@ -99,8 +102,6 @@ const FormComponent: React.FC = (props) => {
   useEffect(() => {
     dispatch(actions.updateHasFormChanged(formState.isDirty));
   }, [formState.isDirty]);
-
-  console.log(errors);
 
   return (
     <FormProvider {...formContext}>

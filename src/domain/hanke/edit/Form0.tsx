@@ -72,14 +72,10 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
       <div className="calendaraWpr formWpr">
         <div className="left">
           <DatePicker
-            id={FORMFIELD.ALKU_PVM}
             name={FORMFIELD.ALKU_PVM}
             label={t(`hankeForm:labels:${FORMFIELD.ALKU_PVM}`)}
-            control={control}
             locale={i18n.language}
             dateFormat="dd.MM.yyyy"
-            invalid={!!errors.startDate}
-            errorMsg={t('hankeForm:insertFieldError')}
             defaultValue={formData[FORMFIELD.ALKU_PVM] || null}
             tooltip={{
               labelText: t(`hankeForm:toolTips:${FORMFIELD.ALKU_PVM}`),
@@ -90,14 +86,10 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
         </div>
         <div className="right">
           <DatePicker
-            id={FORMFIELD.LOPPU_PVM}
             name={FORMFIELD.LOPPU_PVM}
             label={t(`hankeForm:labels:${FORMFIELD.LOPPU_PVM}`)}
-            control={control}
             locale={i18n.language}
             dateFormat="dd.MM.yyyy"
-            invalid={!!errors.endDate}
-            errorMsg={t('hankeForm:insertFieldError')}
             defaultValue={formData[FORMFIELD.LOPPU_PVM] || null}
             tooltip={{
               labelText: t(`hankeForm:toolTips:${FORMFIELD.LOPPU_PVM}`),

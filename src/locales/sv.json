@@ -10,6 +10,8 @@
   "form": {
     "validations": {
       "default": "SV:Kentän arvo on virheellinen",
+      "defined": "SV:Kenttä on pakollinen",
+      "notType": "SV:Kentän tyyppi on virheellinen",
       "required": "SV:Kenttä on pakollinen",
       "stringMin": "SV:Kentän pituus oltava vähintään {{min}} merkkiä",
       "stringMax": "SV:Kentän pituus oltava enintään {{max}} merkkiä",
