@@ -170,6 +170,7 @@ export type HankeData = {
   hankeTunnus: string;
   nimi: string;
   kuvaus: string;
+  // https://github.com/reduxjs/redux-toolkit/issues/456
   alkuPvm: string;
   loppuPvm: string;
   tyomaaKatuosoite: string;
