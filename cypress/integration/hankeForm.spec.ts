@@ -12,61 +12,37 @@ context('hanke form', () => {
     const loppuPvm = '11.01.2032';
 
     cy.get('input[data-testid=nimi]').type(nimi);
-
     cy.get('textarea[data-testid=kuvaus]').type(kuvaus);
-
     cy.get('#alkuPvm').type(alkuPvm);
-
     cy.get('#loppuPvm').type(loppuPvm);
-
     cy.get('input[data-testid=nimi]').click(); // because needs make datepicker to disappear
-
     cy.get('#vaihe-toggle-button').click();
-
     cy.get('#vaihe-item-0').click();
 
-    cy.get('[data-testid=forward]').trigger('mouseover').click();
+    cy.get('[data-testid=forward]').click({ force: true }); // changes view to form1
 
-    cy.get('[data-testid=hankkeenAlue]').then(function () {
-      cy.get('[data-testid=forward]').trigger('mouseover').click();
-    });
+    cy.wait(2000);
+    cy.get('[data-testid=forward]').click({ force: true }); // changes view to form2
 
-    cy.get('[data-testid=forward]').trigger('mouseover').click();
-
-    cy.get('[data-testid=forward]').trigger('mouseover').click();
+    cy.get('[data-testid=forward]').click({ force: true }); // changes view to form3
+    cy.get('[data-testid=forward]').click({ force: true }); // changes view to form4
 
     cy.get('#haittaAlkuPvm').type(alkuPvm);
-
     cy.get('#haittaLoppuPvm').type(loppuPvm);
-
     cy.get('body').click();
-
-    cy.get('#kaistaHaitta-toggle-button').trigger('mouseover').click();
-
-    cy.get('#kaistaHaitta-item-0').trigger('mouseover').click();
-
-    cy.get('#kaistaPituusHaitta-toggle-button').trigger('mouseover').click();
-
-    cy.get('#kaistaPituusHaitta-item-0').trigger('mouseover').click();
-
-    cy.get('#meluHaitta-toggle-button').trigger('mouseover').click();
-
-    cy.get('#meluHaitta-item-0').trigger('mouseover').click();
-
-    cy.get('#polyHaitta-toggle-button').trigger('mouseover').click();
-
-    cy.get('#polyHaitta-item-0').trigger('mouseover').click();
-
-    cy.get('#polyHaitta-toggle-button').trigger('mouseover').click();
-
-    cy.get('#polyHaitta-item-0').trigger('mouseover').click();
-
-    cy.get('#tarinaHaitta-toggle-button').trigger('mouseover').click();
-
-    cy.get('#tarinaHaitta-item-0').trigger('mouseover').click();
-
-    cy.get('[data-testid=finish]').trigger('mouseover').click();
-
+    cy.get('#kaistaHaitta-toggle-button').click({ force: true });
+    cy.get('#kaistaHaitta-item-0').click({ force: true });
+    cy.get('#kaistaPituusHaitta-toggle-button').click({ force: true });
+    cy.get('#kaistaPituusHaitta-item-0').click({ force: true });
+    cy.get('#meluHaitta-toggle-button').click({ force: true });
+    cy.get('#meluHaitta-item-0').click({ force: true });
+    cy.get('#polyHaitta-toggle-button').click({ force: true });
+    cy.get('#polyHaitta-item-0').click({ force: true });
+    cy.get('#polyHaitta-toggle-button').click({ force: true });
+    cy.get('#polyHaitta-item-0').click({ force: true });
+    cy.get('#tarinaHaitta-toggle-button').click({ force: true });
+    cy.get('#tarinaHaitta-item-0').click({ force: true });
+    cy.get('[data-testid=finish]').click({ force: true }); // changes view to FinishedForm
     cy.get('[data-testid=finishedForm]');
   });
 });
