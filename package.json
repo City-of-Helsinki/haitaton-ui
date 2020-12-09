@@ -8,7 +8,7 @@
     "serve": "serve -s build -l 3001",
     "build-and-serve": "yarn run build && yarn run serve",
     "test": "DEBUG_PRINT_LIMIT=50000 react-scripts test --env=jest-environment-jsdom-sixteen",
-    "testWithBail": "react-scripts test  --env=jest-environment-jsdom-sixteen --bail --silent",
+    "testCI": "CI=true react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
     "type-check": "tsc --pretty --noEmit",
     "format": "prettier --write",
@@ -99,7 +99,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "yarn run type-check && yarn testWithBail"
+      "pre-push": "yarn run type-check && yarn testCI"
     }
   },
   "lint-staged": {
