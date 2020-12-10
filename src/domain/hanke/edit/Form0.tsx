@@ -59,7 +59,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
           label={t(`hankeForm:labels:${FORMFIELD.KUVAUS}`)}
           defaultValue={formData[FORMFIELD.KUVAUS] || ''}
           invalid={!!errors[FORMFIELD.KUVAUS]}
-          ref={register({ required: true })}
+          // ref={register({ required: true })}
           tooltipLabel={t(`hankeForm:toolTips:tipOpenLabel`)}
           tooltipText={t(`hankeForm:toolTips:${FORMFIELD.KUVAUS}`)}
           data-testid={FORMFIELD.KUVAUS}
@@ -136,7 +136,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             tooltipLabel: t(`hankeForm:toolTips:tipOpenLabel`),
             placement: 'auto',
           }}
-          disabled={formValues.vaihe !== 'SUUNNITTELU'}
+          disabled={formValues[FORMFIELD.VAIHE] !== 'SUUNNITTELU'}
         />
       </div>
     </div>
