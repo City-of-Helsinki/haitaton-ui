@@ -7,7 +7,7 @@ export type RootState = ReturnType<typeof rootReducer>;
 
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: [...getDefaultMiddleware({ immutableCheck: false })],
+  middleware: [...getDefaultMiddleware({ immutableCheck: false /* , serializableCheck: false */ })],
 });
 
 export type AppDispatch = typeof store.dispatch;

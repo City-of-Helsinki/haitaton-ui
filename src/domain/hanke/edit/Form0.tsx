@@ -72,9 +72,9 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
           <DatePicker
             name={FORMFIELD.ALKU_PVM}
             label={t(`hankeForm:labels:${FORMFIELD.ALKU_PVM}`)}
-            locale={i18n.language}
             dateFormat="dd.MM.yyyy"
             defaultValue={formData[FORMFIELD.ALKU_PVM] || null}
+            locale={i18n.language}
             tooltip={{
               tooltipText: t(`hankeForm:toolTips:${FORMFIELD.ALKU_PVM}`),
               buttonLabel: t(`hankeForm:toolTips:tipOpenLabel`),
@@ -86,9 +86,9 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
           <DatePicker
             name={FORMFIELD.LOPPU_PVM}
             label={t(`hankeForm:labels:${FORMFIELD.LOPPU_PVM}`)}
-            locale={i18n.language}
             dateFormat="dd.MM.yyyy"
             defaultValue={formData[FORMFIELD.LOPPU_PVM] || null}
+            locale={i18n.language}
             tooltip={{
               tooltipText: t(`hankeForm:toolTips:${FORMFIELD.LOPPU_PVM}`),
               buttonLabel: t(`hankeForm:toolTips:tipOpenLabel`),
