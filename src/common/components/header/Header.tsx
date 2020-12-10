@@ -76,25 +76,14 @@ const Header: React.FC = () => {
       </Navigation.Row>
 
       <Navigation.LanguageSelector label={language && language.label}>
-        <Navigation.Item
-          as="a"
-          href="#"
-          label={languages[0].label}
-          onClick={() => setLanguage(languages[0])}
-        />
-        {/* onClick={setLanguage(language)} */}
-        <Navigation.Item
-          as="a"
-          href="#"
-          label={languages[1].label}
-          onClick={() => setLanguage(languages[1])}
-        />
-        <Navigation.Item
-          as="a"
-          href="#"
-          label={languages[2].label}
-          onClick={() => setLanguage(languages[2])}
-        />
+        {languages.map((languageVal) => (
+          <Navigation.Item
+            as="a"
+            href="#"
+            label={languageVal.label}
+            onClick={() => setLanguage(languageVal)}
+          />
+        ))}
       </Navigation.LanguageSelector>
     </Navigation>
   );
