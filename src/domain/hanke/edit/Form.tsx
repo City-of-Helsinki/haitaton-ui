@@ -9,7 +9,7 @@ import H1 from '../../../common/components/text/H1';
 import { actions as dialogActions } from '../../../common/components/confirmationDialog/reducer';
 import { getFormData, getHasFormChanged } from './selectors';
 import { HankeDataDraft, HANKE_SAVETYPE } from './types';
-import { actions } from './reducer';
+import { actions, hankeDataDraftVal } from './reducer';
 import { saveForm } from './thunks';
 import Indicator from './indicator';
 import { hankeSchema } from './validations';
@@ -104,7 +104,7 @@ const FormComponent: React.FC = (props) => {
   }, [formState.isDirty]);
   useEffect(() => {
     return () => {
-      dispatch(actions.updateFormData({}));
+      dispatch(actions.updateFormData(hankeDataDraftVal));
     };
   }, []);
 

@@ -15,12 +15,14 @@ const updateHasFormChanged: CaseReducer<State, PayloadAction<boolean>> = (state,
   state.hasFormChanged = action.payload;
 };
 
-const initialState: State = {
-  hankeDataDraft: {
-    omistajat: [],
-    toteuttajat: [],
-    arvioijat: [],
-  },
+export const hankeDataDraftVal = {
+  omistajat: [],
+  toteuttajat: [],
+  arvioijat: [],
+};
+
+export const initialState: State = {
+  hankeDataDraft: hankeDataDraftVal,
   hasFormChanged: false,
   status: null,
 };
