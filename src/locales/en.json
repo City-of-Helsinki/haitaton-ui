@@ -7,8 +7,17 @@
       "exitButton": "EN:Poistu"
     }
   },
-  "featureX": {
-    "hello": "Hello from feature X"
+  "form": {
+    "validations": {
+      "default": "EN:Kentän arvo on virheellinen",
+      "defined": "EN:Kenttä on pakollinen",
+      "notType": "EN:Kentän tyyppi on virheellinen",
+      "required": "EN:Kenttä on pakollinen",
+      "stringMin": "EN:Kentän pituus oltava vähintään {{min}} merkkiä",
+      "stringMax": "EN:Kentän pituus oltava enintään {{max}} merkkiä",
+      "dateMin": "EN:Ensimmäinen mahdollinen päivä on {{min}}",
+      "dateMax": "EN:Viimeinen mahdollinen päivä on {{max}}"
+    }
   },
   "header": {
     "HOME": "Home",
@@ -166,12 +175,13 @@
     },
     "toolTips": {
       "tipOpenLabel": "EN:Avaa ohje",
-      "tipCloseLabel": "EN:Sulje ohje",
       "nimi": "EN:Ohjeteksti",
       "onYKTHanke": "EN:Ohjeteksti",
       "alkuPvm": "EN:Ohjeteksti",
       "loppuPvm": "EN:Ohjeteksti",
-      "vaihe": "EN:Ohjeteksti"
+      "vaihe": "EN:Ohjeteksti",
+      "kuvaus": "EN:Ohjeteksti",
+      "suunnitteluVaihe": "EN:Ohjeteksti"
     },
     "perustiedotForm": {
       "header": "EN:Hankkeen perustiedot",

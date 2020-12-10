@@ -21,27 +21,18 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
       <H2>{t('hankeForm:perustiedotForm:header')}</H2>
       <div className="dataWpr">
         <div className="formWpr">
-          <TextInput
-            name={FORMFIELD.TUNNUS}
-            id={FORMFIELD.TUNNUS}
-            label={t(`hankeForm:labels:${FORMFIELD.TUNNUS}`)}
-            control={control}
-            defaultValue={formData[FORMFIELD.TUNNUS] || ''}
-            disabled
-          />
+          <TextInput name={FORMFIELD.TUNNUS} disabled />
         </div>
         <div className="formWpr">
           <h3 className="labelHeader">
             <div>{t('hankeForm:perustiedotForm:ytkHankeHeader')}</div>
-            <Tooltip
-              labelText={t(`hankeForm:toolTips:${FORMFIELD.YKT_HANKE}`)}
-              openButtonLabelText={t(`hankeForm:toolTips:tipOpenLabel`)}
-              closeButtonLabelText={t(`hankeForm:toolTips:tipCloseLabel`)}
-            />
+            <Tooltip tooltipLabel={t(`hankeForm:toolTips:tipOpenLabel`)}>
+              {t(`hankeForm:toolTips:${FORMFIELD.YKT_HANKE}`)}
+            </Tooltip>
           </h3>
           <Checkbox
-            name={FORMFIELD.YKT_HANKE}
             id={FORMFIELD.YKT_HANKE}
+            name={FORMFIELD.YKT_HANKE}
             label={t(`hankeForm:labels:${FORMFIELD.YKT_HANKE}`)}
             ref={register}
             checked={ytkChecked}
@@ -53,17 +44,10 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
       <div className="formWpr">
         <TextInput
           name={FORMFIELD.NIMI}
-          id={FORMFIELD.NIMI}
-          label={t(`hankeForm:labels:${FORMFIELD.NIMI}`)}
-          control={control}
-          rules={{ required: true }}
-          defaultValue={formData[FORMFIELD.NIMI] || ''}
-          invalid={!!errors.hankeenNimi}
-          errorMsg={t('hankeForm:insertFieldError')}
           tooltip={{
-            labelText: t(`hankeForm:toolTips:${FORMFIELD.NIMI}`),
-            openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
-            closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
+            tooltipText: t(`hankeForm:toolTips:${FORMFIELD.NIMI}`),
+            tooltipButtonLabel: t(`hankeForm:toolTips:tipOpenLabel`),
+            placement: 'auto',
           }}
         />
       </div>
@@ -76,7 +60,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
           invalid={!!errors[FORMFIELD.KUVAUS]}
           ref={register({ required: true })}
           tooltipLabel={t(`hankeForm:toolTips:tipOpenLabel`)}
-          tooltipText={`hankeForm:toolTips:${FORMFIELD.NIMI}`}
+          tooltipText={t(`hankeForm:toolTips:${FORMFIELD.KUVAUS}`)}
           data-testid={FORMFIELD.KUVAUS}
         />
         {!!errors[FORMFIELD.KUVAUS] && (
@@ -87,46 +71,36 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
         <div className="left">
           <DatePicker
             name={FORMFIELD.ALKU_PVM}
-            id={FORMFIELD.ALKU_PVM}
             label={t(`hankeForm:labels:${FORMFIELD.ALKU_PVM}`)}
-            control={control}
-            rules={{ required: true }}
             locale={i18n.language}
             dateFormat="dd.MM.yyyy"
-            invalid={!!errors.startDate}
-            errorMsg={t('hankeForm:insertFieldError')}
             defaultValue={formData[FORMFIELD.ALKU_PVM] || null}
             tooltip={{
-              labelText: t(`hankeForm:toolTips:${FORMFIELD.ALKU_PVM}`),
-              openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
-              closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
+              tooltipText: t(`hankeForm:toolTips:${FORMFIELD.ALKU_PVM}`),
+              buttonLabel: t(`hankeForm:toolTips:tipOpenLabel`),
+              placement: 'auto',
             }}
           />
         </div>
         <div className="right">
           <DatePicker
             name={FORMFIELD.LOPPU_PVM}
-            id={FORMFIELD.LOPPU_PVM}
             label={t(`hankeForm:labels:${FORMFIELD.LOPPU_PVM}`)}
-            control={control}
-            rules={{ required: true }}
             locale={i18n.language}
             dateFormat="dd.MM.yyyy"
-            invalid={!!errors.endDate}
-            errorMsg={t('hankeForm:insertFieldError')}
             defaultValue={formData[FORMFIELD.LOPPU_PVM] || null}
             tooltip={{
-              labelText: t(`hankeForm:toolTips:${FORMFIELD.LOPPU_PVM}`),
-              openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
-              closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
+              tooltipText: t(`hankeForm:toolTips:${FORMFIELD.LOPPU_PVM}`),
+              buttonLabel: t(`hankeForm:toolTips:tipOpenLabel`),
+              placement: 'auto',
             }}
           />
         </div>
       </div>
       <div className="formWpr">
         <Dropdown
-          name={FORMFIELD.VAIHE}
           id={FORMFIELD.VAIHE}
+          name={FORMFIELD.VAIHE}
           control={control}
           options={$enum(HANKE_VAIHE).map((value) => ({
             value,
@@ -134,20 +108,19 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
           }))}
           defaultValue={formData[FORMFIELD.VAIHE] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.VAIHE}`)}
-          rules={{ required: true }}
           invalid={!!errors[FORMFIELD.VAIHE]}
           errorMsg={t('hankeForm:insertFieldError')}
           tooltip={{
-            labelText: t(`hankeForm:toolTips:${FORMFIELD.VAIHE}`),
-            openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
-            closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
+            tooltipText: t(`hankeForm:toolTips:${FORMFIELD.VAIHE}`),
+            tooltipLabel: t(`hankeForm:toolTips:tipOpenLabel`),
+            placement: 'auto',
           }}
         />
       </div>
       <div className="formWpr">
         <Dropdown
-          name={FORMFIELD.SUUNNITTELUVAIHE}
           id={FORMFIELD.SUUNNITTELUVAIHE}
+          name={FORMFIELD.SUUNNITTELUVAIHE}
           control={control}
           options={$enum(HANKE_SUUNNITTELUVAIHE).map((value) => ({
             value,
@@ -158,9 +131,9 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
           invalid={!!errors[FORMFIELD.SUUNNITTELUVAIHE]}
           errorMsg={t('hankeForm:insertFieldError')}
           tooltip={{
-            labelText: t(`hankeForm:toolTips:${FORMFIELD.SUUNNITTELUVAIHE}`),
-            openButtonLabelText: t(`hankeForm:toolTips:tipOpenLabel`),
-            closeButtonLabelText: t(`hankeForm:toolTips:tipCloseLabel`),
+            tooltipText: t(`hankeForm:toolTips:${FORMFIELD.SUUNNITTELUVAIHE}`),
+            tooltipLabel: t(`hankeForm:toolTips:tipOpenLabel`),
+            placement: 'auto',
           }}
           disabled={formValues.vaihe !== 'SUUNNITTELU'}
         />

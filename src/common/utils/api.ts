@@ -30,8 +30,8 @@ api.interceptors.response.use(
       }
     } else if (request) {
       // eslint-disable-next-line
-      console.error('Request failed. Please try again.');
-      return null;
+      // console.error('Request failed. Please try again.');
+      return Promise.reject(new Error('Request failed. Please try again.'));
     }
     return Promise.reject(error);
   }
