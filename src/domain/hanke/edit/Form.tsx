@@ -77,7 +77,6 @@ const FormComponent: React.FC = (props) => {
   }
 
   const onSubmit = async (data: HankeDataDraft) => {
-    console.log('meni', data);
     try {
       dispatch(
         saveForm({
@@ -103,6 +102,12 @@ const FormComponent: React.FC = (props) => {
   useEffect(() => {
     dispatch(actions.updateHasFormChanged(formState.isDirty));
   }, [formState.isDirty]);
+  useEffect(() => {
+    return () => {
+      dispatch(actions.updateFormData({}));
+    };
+  }, []);
+
   return (
     <FormProvider {...formContext}>
       <div className="hankeForm">
