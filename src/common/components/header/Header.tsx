@@ -82,6 +82,7 @@ const Header: React.FC = () => {
             href="#"
             label={languageVal.label}
             onClick={() => setLanguage(languageVal)}
+            key={languageVal.code}
           />
         ))}
       </Navigation.LanguageSelector>
