@@ -25,18 +25,18 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
             <DatePicker
               name={FORMFIELD.HAITTA_ALKU_PVM}
               label={t(`hankeForm:labels:${FORMFIELD.HAITTA_ALKU_PVM}`)}
-              locale={i18n.language}
               dateFormat="dd.MM.yyyy"
               defaultValue={formData[FORMFIELD.HAITTA_ALKU_PVM] || null}
+              locale={i18n.language}
             />
           </div>
           <div className="right">
             <DatePicker
               name={FORMFIELD.HAITTA_LOPPU_PVM}
               label={t(`hankeForm:labels:${FORMFIELD.HAITTA_LOPPU_PVM}`)}
-              locale={i18n.language}
               dateFormat="dd.MM.yyyy"
               defaultValue={formData[FORMFIELD.HAITTA_LOPPU_PVM] || null}
+              locale={i18n.language}
             />
           </div>
         </div>
