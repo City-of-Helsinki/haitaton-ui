@@ -46,7 +46,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
           name={FORMFIELD.NIMI}
           tooltip={{
             tooltipText: t(`hankeForm:toolTips:${FORMFIELD.NIMI}`),
-            buttonLabel: t(`hankeForm:toolTips:tipOpenLabel`),
+            tooltipButtonLabel: t(`hankeForm:toolTips:tipOpenLabel`),
             placement: 'auto',
           }}
         />

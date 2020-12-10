@@ -1,6 +1,7 @@
 import { Placement } from '@popperjs/core';
 
 export type TooltipProps = React.PropsWithChildren<{
+  tooltipButtonLabel?: string;
   /* Tooltip content text */
   tooltipText?: string;
   /**
