@@ -2,7 +2,7 @@ import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { TextInput as HdsTextInput } from 'hds-react';
 import { useTranslation } from 'react-i18next';
-import { TooltipProps } from 'hds-react/components/Tooltip';
+import { TooltipProps } from '../../types/tooltip';
 import { getInputErrorText } from '../../utils/form';
 
 type PropTypes = {

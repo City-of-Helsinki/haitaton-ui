@@ -5,7 +5,7 @@ import formatISO from 'date-fns/formatISO';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import { Tooltip } from 'hds-react';
 import { useTranslation } from 'react-i18next';
-import { TooltipProps } from 'hds-react/components/Tooltip';
+import { TooltipProps } from '../../types/tooltip';
 import { getInputErrorText } from '../../utils/form';
 import 'react-datepicker/dist/react-datepicker.css';
 import './datePicker.styles.scss';
@@ -46,9 +46,13 @@ const DatePickerComp: React.FC<PropTypes> = ({
         defaultValue={defaultValue}
         render={({ onChange, value }) => (
           <div className="datePicker">
-            <div>
-              {!!tooltip && <Tooltip {...tooltip} />}
+            <div className="topWpr">
               <label htmlFor={name}>{label}</label>
+              {!!tooltip && (
+                <Tooltip buttonLabel={tooltip.buttonLabel} placement={tooltip.placement}>
+                  {tooltip.tooltipText}
+                </Tooltip>
+              )}
             </div>
             <DatePicker
               id={name}

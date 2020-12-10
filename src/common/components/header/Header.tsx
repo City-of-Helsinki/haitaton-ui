@@ -48,8 +48,7 @@ const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   return (
     <Navigation
-      menuCloseAriaLabel="Close menu"
-      menuOpenAriaLabel="Open menu"
+      menuToggleAriaLabel="Open and close menu"
       menuOpen={menuOpen}
       onMenuToggle={() => setMenuOpen(!menuOpen)}
       title="Haitaton 2.0"
@@ -58,7 +57,7 @@ const Header: React.FC = () => {
       titleUrl="/"
       className="header"
     >
-      <Navigation.Row display="inline">
+      <Navigation.Row variant="inline">
         <NavLink to={HOME.path} exact activeClassName="header--active" data-testid="homeLink">
           {HOME.label}
         </NavLink>
@@ -71,17 +70,22 @@ const Header: React.FC = () => {
         <NavLink to={FORM.path} activeClassName="header--active">
           {FORM.label}
         </NavLink>
-      </Navigation.Row>
-      <div className="header__hankeLink">
-        <NavLink data-testid="hankeLink" to={FORM.path} activeClassName="header__active">
+        <NavLink data-testid="hankeLink" to={FORM.path} className="header__hankeLink">
           <Locale id="header:hankeLink" />
         </NavLink>
-      </div>
-      <Navigation.LanguageSelector
-        options={languages}
-        onLanguageChange={setLanguage}
-        value={language}
-      />
+      </Navigation.Row>
+
+      <Navigation.LanguageSelector label={language && language.label}>
+        {languages.map((languageVal) => (
+          <Navigation.Item
+            as="a"
+            href="#"
+            label={languageVal.label}
+            onClick={() => setLanguage(languageVal)}
+            key={languageVal.code}
+          />
+        ))}
+      </Navigation.LanguageSelector>
     </Navigation>
   );
 };
