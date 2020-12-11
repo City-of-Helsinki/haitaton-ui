@@ -27,8 +27,9 @@ context('hanke form', () => {
     cy.get('[data-testid=forward]').click({ force: true }); // changes view to form2
     cy.wait(1000);
     cy.get('[data-testid=forward]').click({ force: true }); // changes view to form3
-    cy.get('[data-testid=tyomaaKatuosoite]').type(osoite);
     cy.wait(1000);
+    cy.get('[data-testid=tyomaaKatuosoite]').type(osoite);
+
     cy.get('[data-testid=forward]').click({ force: true }); // changes view to form4
     cy.wait(1000);
     cy.get('#haittaAlkuPvm').type(alkuPvm);
