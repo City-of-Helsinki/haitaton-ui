@@ -10,7 +10,7 @@ context('hanke form', () => {
     const kuvaus = 'my new kuvaus value';
     const alkuPvm = '10.01.2032';
     const loppuPvm = '11.01.2032';
-
+    const osoite = 'Mannerheimintie 22';
     cy.get('input[data-testid=nimi]').type(nimi);
     cy.get('textarea[data-testid=kuvaus]').type(kuvaus);
     cy.get('#alkuPvm').type(alkuPvm);
@@ -25,6 +25,8 @@ context('hanke form', () => {
     cy.get('[data-testid=forward]').click({ force: true }); // changes view to form2
 
     cy.get('[data-testid=forward]').click({ force: true }); // changes view to form3
+    cy.get('[data-testid=tyomaaKatuosoite]').type(osoite);
+
     cy.get('[data-testid=forward]').click({ force: true }); // changes view to form4
 
     cy.get('#haittaAlkuPvm').type(alkuPvm);
