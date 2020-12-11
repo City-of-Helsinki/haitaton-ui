@@ -11,6 +11,8 @@ context('hanke form', () => {
     const alkuPvm = '10.01.2032';
     const loppuPvm = '11.01.2032';
     const osoite = 'Mannerheimintie 22';
+    cy.location();
+    cy.location('port');
     cy.get('input[data-testid=nimi]').type(nimi);
     cy.get('textarea[data-testid=kuvaus]').type(kuvaus);
     cy.get('#alkuPvm').type(alkuPvm);
