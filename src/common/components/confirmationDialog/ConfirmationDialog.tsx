@@ -16,7 +16,7 @@ import { actions } from './reducer';
 
 import './Dialog.styles.scss';
 
-const ConfirmationDialog: React.FC = (props) => {
+const ConfirmationDialog: React.FC = () => {
   const cancelRef = React.useRef<HTMLButtonElement>(null);
   const isDialogOpenVal = useSelector(getIsDialogOpen());
   const redirectUrl = useSelector(getRedirectUrl());

@@ -9,7 +9,7 @@ import H1 from '../../../common/components/text/H1';
 import { actions as dialogActions } from '../../../common/components/confirmationDialog/reducer';
 import { getFormData, getHasFormChanged } from './selectors';
 import { HankeDataDraft, HANKE_SAVETYPE } from './types';
-import { actions } from './reducer';
+import { actions, hankeDataDraft } from './reducer';
 import { saveForm } from './thunks';
 import Indicator from './indicator';
 import { hankeSchema } from './validations';
@@ -23,7 +23,7 @@ import FinishedForm from './FinishedForm';
 
 import './Form.styles.scss';
 
-const FormComponent: React.FC = (props) => {
+const FormComponent: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const formData = useSelector(getFormData());
@@ -102,6 +102,11 @@ const FormComponent: React.FC = (props) => {
   useEffect(() => {
     dispatch(actions.updateHasFormChanged(formState.isDirty));
   }, [formState.isDirty]);
+  useEffect(() => {
+    return () => {
+      dispatch(actions.updateFormData(hankeDataDraft));
+    };
+  }, []);
 
   return (
     <FormProvider {...formContext}>

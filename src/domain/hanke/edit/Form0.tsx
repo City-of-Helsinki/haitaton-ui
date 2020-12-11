@@ -16,6 +16,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
   const [ytkChecked, setYtkChecked] = useState(formData[FORMFIELD.YKT_HANKE] || false);
   const { getValues } = useFormContext();
   const formValues = getValues();
+
   return (
     <div className="form0">
       <H2>{t('hankeForm:perustiedotForm:header')}</H2>

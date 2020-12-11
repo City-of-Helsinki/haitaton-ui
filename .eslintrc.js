@@ -14,20 +14,8 @@ module.exports = {
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': ['error'],
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    'no-unused-vars': [
-      'error',
-      {
-        vars: 'all',
-        args: 'none',
-      },
-    ],
-    '@typescript-eslint/no-unused-vars': [
-      'error',
-      {
-        vars: 'all',
-        args: 'none',
-      },
-    ],
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'error',
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': 'error',
     'object-curly-spacing': ['warn', 'always'],
