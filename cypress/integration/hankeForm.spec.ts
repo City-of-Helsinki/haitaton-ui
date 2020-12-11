@@ -25,12 +25,12 @@ context('hanke form', () => {
     cy.get('[data-testid=hankkeenAlue]');
 
     cy.get('[data-testid=forward]').click({ force: true }); // changes view to form2
-
+    cy.wait(1000);
     cy.get('[data-testid=forward]').click({ force: true }); // changes view to form3
     cy.get('[data-testid=tyomaaKatuosoite]').type(osoite);
-
+    cy.wait(1000);
     cy.get('[data-testid=forward]').click({ force: true }); // changes view to form4
-
+    cy.wait(1000);
     cy.get('#haittaAlkuPvm').type(alkuPvm);
     cy.get('#haittaLoppuPvm').type(loppuPvm);
     cy.get('body').click();
@@ -47,6 +47,7 @@ context('hanke form', () => {
     cy.get('#tarinaHaitta-toggle-button').click({ force: true });
     cy.get('#tarinaHaitta-item-0').click({ force: true });
     cy.get('[data-testid=finish]').click({ force: true }); // changes view to FinishedForm
+    cy.wait(1000);
     cy.get('[data-testid=finishedForm]');
   });
 });
