@@ -42,6 +42,9 @@ jobs:
         with:
           start: yarn run serve
           wait-on: 'http://localhost:3001'
+        env:
+          ACTIONS_RUNNER_DEBUG: true
+          ACTIONS_STEP_DEBUG: true
   docker_build_and_push:
     name: Push Docker image to GitHub Packages
     needs: [build, e2e]
