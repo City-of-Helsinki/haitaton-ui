@@ -25,6 +25,7 @@ context('hanke form', () => {
 
     cy.get('[data-testid=hankkeenAlue]');
     cy.scrollTo('bottom');
+    cy.wait(5000);
     cy.get('[data-testid=forward]').click({ force: true }); // changes view to form2
 
     cy.get('[data-testid=hankkeenYhteystiedot]');
