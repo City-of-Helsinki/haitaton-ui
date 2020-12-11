@@ -22,6 +22,8 @@ context('hanke form', () => {
     cy.get('[data-testid=forward]').click({ force: true }); // changes view to form1
 
     cy.wait(2000);
+    cy.get('[data-testid=hankkeenAlue]');
+
     cy.get('[data-testid=forward]').click({ force: true }); // changes view to form2
 
     cy.get('[data-testid=forward]').click({ force: true }); // changes view to form3
