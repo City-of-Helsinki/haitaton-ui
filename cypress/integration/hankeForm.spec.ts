@@ -11,8 +11,8 @@ context('hanke form', () => {
     const alkuPvm = '10.01.2032';
     const loppuPvm = '11.01.2032';
     const osoite = 'Mannerheimintie 22';
-    cy.location('host');
-    cy.location('port');
+    console.log('host', cy.location('host'));
+    console.log('port', cy.location('port'));
     cy.get('input[data-testid=nimi]').type(nimi);
     cy.get('textarea[data-testid=kuvaus]').type(kuvaus);
     cy.get('#alkuPvm').type(alkuPvm);
@@ -26,7 +26,7 @@ context('hanke form', () => {
     cy.get('[data-testid=hankkeenAlue]');
     cy.scrollTo('bottom');
     cy.wait(5000);
-    cy.get('[data-testid=forward]').click({ force: true }); // changes view to form2
+    cy.get('[data-testid=hankkeenAlue]').click({ force: true }); // changes view to form2
     cy.get('[data-testid=forward]').click({ force: true }); // changes view to form2
 
     cy.wait(15000);
