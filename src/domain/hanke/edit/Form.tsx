@@ -128,6 +128,12 @@ const FormComponent: React.FC = () => {
                     <IconCross />
                   </button>
                 </div>
+                <FormButtons
+                  goBack={goBack}
+                  saveDraftButton={saveDraftButton}
+                  formPage={formPage}
+                  isValid={formState.isValid}
+                />
                 {formPage === 0 && (
                   <Form0
                     errors={errors}
@@ -168,12 +174,6 @@ const FormComponent: React.FC = () => {
                     formData={formData}
                   />
                 )}
-                <FormButtons
-                  goBack={goBack}
-                  saveDraftButton={saveDraftButton}
-                  formPage={formPage}
-                  isValid={formState.isValid}
-                />
               </form>
             </div>
           </div>
