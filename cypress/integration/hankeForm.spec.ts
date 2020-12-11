@@ -13,7 +13,7 @@ context('hanke form', () => {
     const osoite = 'Mannerheimintie 22';
     console.log('host', cy.location('host'));
     console.log('port', cy.location('port'));
-    cy.get('input[data-testid=nimi]').type(nimi);
+    cy.get('input[data-testid=nimi1]').type(nimi);
     cy.get('textarea[data-testid=kuvaus]').type(kuvaus);
     cy.get('#alkuPvm').type(alkuPvm);
     cy.get('#loppuPvm').type(loppuPvm);
@@ -26,7 +26,8 @@ context('hanke form', () => {
     cy.get('[data-testid=hankkeenAlue]');
     cy.scrollTo('bottom');
     cy.wait(5000);
-    cy.get('[data-testid=hankkeenAlue]').click({ force: true }); // changes view to form2
+
+    cy.get('[data-testid=hankkeenAlue]').click({ force: true });
     cy.get('[data-testid=forward]').click({ force: true }); // changes view to form2
 
     cy.wait(15000);
