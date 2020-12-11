@@ -20,7 +20,7 @@ context('hanke form', () => {
     cy.get('input[data-testid=nimi]').click(); // because needs make datepicker to disappear
     cy.get('#vaihe-toggle-button').click();
     cy.get('#vaihe-item-0').click();
-    cy.scrollTo('top');
+    cy.scrollTo('bottom');
     cy.get('[data-testid=forward]').click({ force: true }); // changes view to form1
 
     cy.get('[data-testid=hankkeenAlue]');
