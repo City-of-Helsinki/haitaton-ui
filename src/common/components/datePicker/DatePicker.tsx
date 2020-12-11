@@ -1,12 +1,12 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { fi } from 'date-fns/esm/locale';
-import formatISO from 'date-fns/formatISO';
-import DatePicker, { registerLocale } from 'react-datepicker';
+import ReactDatePicker, { registerLocale } from 'react-datepicker';
 import { Tooltip } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { TooltipProps } from '../../types/tooltip';
 import { getInputErrorText } from '../../utils/form';
+import { toEndOfDayUTCISO } from '../../utils/date';
 import 'react-datepicker/dist/react-datepicker.css';
 import './datePicker.styles.scss';
 
@@ -20,12 +20,13 @@ type PropTypes = {
   label?: string;
   disabled?: boolean;
   selected?: Date;
-  locale?: string;
+  locale: string;
   dateFormat?: string;
   defaultValue?: Date | string | null;
   tooltip?: TooltipProps;
 };
-const DatePickerComp: React.FC<PropTypes> = ({
+
+const DatePicker: React.FC<PropTypes> = ({
   name,
   label,
   disabled,
@@ -54,10 +55,10 @@ const DatePickerComp: React.FC<PropTypes> = ({
                 </Tooltip>
               )}
             </div>
-            <DatePicker
+            <ReactDatePicker
               id={name}
               name={name}
-              onChange={(date: Date) => date && onChange(formatISO(date))}
+              onChange={(date: Date) => date && onChange(toEndOfDayUTCISO(date))}
               selected={value ? new Date(value) : null}
               disabled={disabled}
               locale={locale}
@@ -71,4 +72,4 @@ const DatePickerComp: React.FC<PropTypes> = ({
     </>
   );
 };
-export default DatePickerComp;
+export default DatePicker;
