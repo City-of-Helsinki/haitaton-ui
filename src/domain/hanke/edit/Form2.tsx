@@ -47,7 +47,7 @@ const Form2: React.FC<FormProps> = ({ control, formData, register }) => {
 
   return (
     <div className="form2">
-      <H2>{t('hankeForm:hankkeenYhteystiedotForm:header')}</H2>
+      <H2 data-testid="hankkeenYhteystiedot">{t('hankeForm:hankkeenYhteystiedotForm:header')}</H2>
       {CONTACT_TYPES.map((CONTACT_TYPE) => (
         <div key={CONTACT_TYPE}>
           <H3>{t(`hankeForm:headers:${CONTACT_TYPE}`)}</H3>
