@@ -35,7 +35,7 @@
     "@types/jest": "^24.0.0",
     "@types/node": "^12.0.0",
     "@types/ol": "^6.4.1",
-    "@types/react": "^16.9.0",
+    "@types/react": "^17.0.0",
     "@types/react-datepicker": "^3.1.1",
     "@types/react-dom": "^16.9.0",
     "@types/react-helmet": "^6.1.0",
@@ -67,7 +67,7 @@
     "react-query": "^2.21.0",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^4.0.0-next.98",
+    "react-scripts": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "serve": "^11.3.2",
     "ts-enum-util": "^4.0.2",
@@ -128,10 +128,6 @@
   },
   "eslintConfig": {
     "extends": "react-app"
-  },
-  "resolutions": {
-    "**/react-scripts/**/@typescript-eslint/eslint-plugin": "^4.4.1",
-    "**/react-scripts/**/@typescript-eslint/parser": "^4.4.1"
   },
   "jest": {
     "transformIgnorePatterns": [
