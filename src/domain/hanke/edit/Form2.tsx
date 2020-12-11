@@ -63,14 +63,14 @@ const Form2: React.FC<FormProps> = ({ control, formData, register }) => {
                     // @ts-ignore
                     formData[CONTACT_TYPE][0] ? formData[CONTACT_TYPE][0][contactField] : ''
                   }
-                  render={({ value }) => (
+                  render={(props) => (
                     <TextInput
                       className="formItem"
                       label={t(`hankeForm:labels:${contactField}`)}
                       id={`${CONTACT_TYPE}-${contactField}`}
                       ref={register}
                       data-testid={`${CONTACT_TYPE}-${contactField}`}
-                      value={value}
+                      {...props}
                     />
                   )}
                 />
