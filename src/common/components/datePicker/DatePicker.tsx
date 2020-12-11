@@ -1,73 +1,75 @@
 import React from 'react';
-import { Controller, Control } from 'react-hook-form';
-import formatISO from 'date-fns/formatISO';
-import DatePicker from 'react-datepicker';
+import { Controller, useFormContext } from 'react-hook-form';
+import { fi } from 'date-fns/esm/locale';
+import ReactDatePicker, { registerLocale } from 'react-datepicker';
 import { Tooltip } from 'hds-react';
-import { TooltipProps } from 'hds-react/components/Tooltip';
-
+import { useTranslation } from 'react-i18next';
+import { TooltipProps } from '../../types/tooltip';
+import { getInputErrorText } from '../../utils/form';
+import { toEndOfDayUTCISO } from '../../utils/date';
 import 'react-datepicker/dist/react-datepicker.css';
 import './datePicker.styles.scss';
 
+// https://github.com/Hacker0x01/react-datepicker/issues/1815
+// you have to register the locale before importing DatePicker
+// Todo: All locales should be registered correctly in Header.tsx
+registerLocale('fi', fi);
+
 type PropTypes = {
   name: string;
-  id: string;
-  control: Control;
-  rules?: { required: boolean };
   label?: string;
-  invalid?: boolean;
-  errorMsg?: string;
   disabled?: boolean;
   selected?: Date;
-  locale?: string;
+  locale: string;
   dateFormat?: string;
   defaultValue?: Date | string | null;
   tooltip?: TooltipProps;
 };
-const DatePickerComp: React.FC<PropTypes> = (props) => {
-  const {
-    name,
-    id,
-    control,
-    rules,
-    label,
-    invalid,
-    errorMsg,
-    disabled,
-    locale,
-    dateFormat,
-    defaultValue,
-    tooltip,
-  } = props;
+
+const DatePicker: React.FC<PropTypes> = ({
+  name,
+  label,
+  disabled,
+  locale,
+  dateFormat,
+  defaultValue,
+  tooltip,
+}) => {
+  const { t } = useTranslation();
+  const { control, errors } = useFormContext();
+  const invalid = !!errors[name];
+
   return (
     <>
       <Controller
         name={name}
-        id={id}
         control={control}
-        rules={rules}
         defaultValue={defaultValue}
         render={({ onChange, value }) => (
           <div className="datePicker">
-            <div>
-              {!!tooltip && <Tooltip {...tooltip} />}
-
-              <label htmlFor={id}>{label}</label>
+            <div className="topWpr">
+              <label htmlFor={name}>{label}</label>
+              {!!tooltip && (
+                <Tooltip buttonLabel={tooltip.buttonLabel} placement={tooltip.placement}>
+                  {tooltip.tooltipText}
+                </Tooltip>
+              )}
             </div>
-            <DatePicker
-              id={id}
+            <ReactDatePicker
+              id={name}
               name={name}
-              onChange={(date: Date) => date && onChange(formatISO(date))}
+              onChange={(date: Date) => date && onChange(toEndOfDayUTCISO(date))}
               selected={value ? new Date(value) : null}
               disabled={disabled}
               locale={locale}
               dateFormat={dateFormat}
               className={invalid ? 'invalid' : ''}
             />
-            {invalid && <span className="error-text">{errorMsg}</span>}
+            {invalid && <span className="error-text">{getInputErrorText(t, errors, name)}</span>}
           </div>
         )}
       />
     </>
   );
 };
-export default DatePickerComp;
+export default DatePicker;

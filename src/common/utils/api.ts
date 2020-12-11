@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 
 const api: AxiosInstance = axios.create({
-  baseURL: '/backend',
+  baseURL: '/api',
 });
 
 api.defaults.headers.post['Content-Type'] = 'application/json';
@@ -30,8 +30,8 @@ api.interceptors.response.use(
       }
     } else if (request) {
       // eslint-disable-next-line
-      console.error('Request failed. Please try again.');
-      return null;
+      // console.error('Request failed. Please try again.');
+      return Promise.reject(new Error('Request failed. Please try again.'));
     }
     return Promise.reject(error);
   }

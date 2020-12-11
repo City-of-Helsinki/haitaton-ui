@@ -14,10 +14,11 @@ describe('Header', () => {
     expect(getByTestId(container, 'hankeLink')).toHaveTextContent('Luo uusi hanke');
   });
   test('it should change localization correctly to english', () => {
-    const { container, getByText } = render(<Header />);
+    const { container, getAllByText } = render(<Header />);
 
-    fireEvent.click(getByText('Suomi'));
-    fireEvent.click(getByText('English'));
+    fireEvent.click(getAllByText('Suomi')[0]);
+
+    fireEvent.click(getAllByText('English')[0]);
 
     expect(getByTestId(container, 'homeLink')).toHaveTextContent('EN::Alkuun');
   });

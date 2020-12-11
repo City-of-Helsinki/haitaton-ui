@@ -66,7 +66,7 @@
     }
 
     &--color .line {
-      background: var(--color-coat-of-arms-blue);
+      background: var(--color-coat-of-arms);
     }
 
     li:last-child .line {
@@ -74,7 +74,7 @@
     }
 
     &--color .circle circle {
-      stroke: var(--color-coat-of-arms-blue);
+      stroke: var(--color-coat-of-arms);
     }
 
     &__contentWpr {

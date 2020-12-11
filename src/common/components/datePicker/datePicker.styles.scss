@@ -1,6 +1,10 @@
 .datePicker {
   position: relative;
 
+  .topWpr {
+    display: flex;
+  }
+
   .react-datepicker-wrapper {
     width: 100%;
   }
@@ -19,7 +23,7 @@
     --input-color-default: var(--color-black-90);
     --input-color-disabled: var(--color-black-40);
     --placeholder-color: var(--color-black-60);
-    --focus-outline-color: var(--color-coat-of-arms-blue);
+    --focus-outline-color: var(--color-coat-of-arms);
 
     &::after {
       content: '';

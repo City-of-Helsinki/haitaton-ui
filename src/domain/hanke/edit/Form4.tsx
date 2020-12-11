@@ -24,29 +24,19 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
           <div className="left">
             <DatePicker
               name={FORMFIELD.HAITTA_ALKU_PVM}
-              id={FORMFIELD.HAITTA_ALKU_PVM}
               label={t(`hankeForm:labels:${FORMFIELD.HAITTA_ALKU_PVM}`)}
-              control={control}
-              rules={{ required: true }}
-              locale={i18n.language}
               dateFormat="dd.MM.yyyy"
-              invalid={!!errors[FORMFIELD.HAITTA_ALKU_PVM]}
-              errorMsg={t('hankeForm:insertFieldError')}
               defaultValue={formData[FORMFIELD.HAITTA_ALKU_PVM] || null}
+              locale={i18n.language}
             />
           </div>
           <div className="right">
             <DatePicker
               name={FORMFIELD.HAITTA_LOPPU_PVM}
-              id={FORMFIELD.HAITTA_LOPPU_PVM}
               label={t(`hankeForm:labels:${FORMFIELD.HAITTA_LOPPU_PVM}`)}
-              control={control}
-              rules={{ required: true }}
-              locale={i18n.language}
               dateFormat="dd.MM.yyyy"
-              invalid={!!errors[FORMFIELD.HAITTA_LOPPU_PVM]}
-              errorMsg={t('hankeForm:insertFieldError')}
               defaultValue={formData[FORMFIELD.HAITTA_LOPPU_PVM] || null}
+              locale={i18n.language}
             />
           </div>
         </div>
@@ -62,7 +52,6 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
             }))}
             defaultValue={formData[FORMFIELD.KAISTAHAITTA] || ''}
             label={t(`hankeForm:labels:${FORMFIELD.KAISTAHAITTA}`)}
-            rules={{ required: true }}
             invalid={!!errors[FORMFIELD.KAISTAHAITTA]}
             errorMsg={t('hankeForm:insertFieldError')}
           />
@@ -79,7 +68,6 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
             }))}
             defaultValue={formData[FORMFIELD.KAISTAPITUUSHAITTA] || ''}
             label={t(`hankeForm:labels:${FORMFIELD.KAISTAPITUUSHAITTA}`)}
-            rules={{ required: true }}
             invalid={!!errors[FORMFIELD.KAISTAPITUUSHAITTA]}
             errorMsg={t('hankeForm:insertFieldError')}
           />
@@ -96,7 +84,6 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
             }))}
             defaultValue={formData[FORMFIELD.MELUHAITTA] || ''}
             label={t(`hankeForm:labels:${FORMFIELD.MELUHAITTA}`)}
-            rules={{ required: true }}
             invalid={!!errors[FORMFIELD.MELUHAITTA]}
             errorMsg={t('hankeForm:insertFieldError')}
           />
@@ -113,7 +100,6 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
             }))}
             defaultValue={formData[FORMFIELD.POLYHAITTA] || ''}
             label={t(`hankeForm:labels:${FORMFIELD.POLYHAITTA}`)}
-            rules={{ required: true }}
             invalid={!!errors[FORMFIELD.POLYHAITTA]}
             errorMsg={t('hankeForm:insertFieldError')}
           />
@@ -130,7 +116,6 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
             }))}
             defaultValue={formData[FORMFIELD.TARINAHAITTA] || ''}
             label={t(`hankeForm:labels:${FORMFIELD.TARINAHAITTA}`)}
-            rules={{ required: true }}
             invalid={!!errors[FORMFIELD.TARINAHAITTA]}
             errorMsg={t('hankeForm:insertFieldError')}
           />

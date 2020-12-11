@@ -75,10 +75,10 @@ const mapSlice = createSlice({
     toggleLayer,
   },
   extraReducers: (builder) => {
-    builder.addCase(saveGeometryData.fulfilled, (state, { payload }) => {
+    builder.addCase(saveGeometryData.fulfilled, (state) => {
       state.status = 'ok';
     });
-    builder.addCase(saveGeometryData.rejected, (state, action) => {
+    builder.addCase(saveGeometryData.rejected, (state) => {
       state.status = 'error';
     });
   },

@@ -10,19 +10,14 @@
   }
 
   &__hankeLink {
-    display: flex;
-    align-items: center;
-    margin-right: var(--spacing-layout-s);
-
-    a {
-      background: var(--color-coat-of-arms-blue);
-      padding: var(--spacing-2-xs) var(--spacing-s);
-      color: var(--color-white);
-      text-decoration: none;
-    }
+    background: var(--color-coat-of-arms);
+    padding: var(--spacing-2-xs) var(--spacing-s);
+    margin: var(--spacing-s) var(--spacing-s);
+    color: var(--color-white);
+    text-decoration: none;
   }
 
-  div[class^='NavigationLanguageSelector'] {
-    margin-top: var(--spacing-2-xs);
+  div[class^='MenuButton-module_menuButton'] {
+    margin-top: 20px;
   }
 }
