@@ -29,7 +29,7 @@ context('hanke form', () => {
     cy.get('[data-testid=forward]').click({ force: true }); // changes view to form2
     cy.wait(15000);
     cy.get('[data-testid=hankkeenAlue]');
-    cy.get('[data-testid=hankkeenYhteystiedot]');
+    cy.get('[data-testid=omistajat-etunimi]');
     cy.scrollTo('bottom');
     cy.get('[data-testid=forward]').click({ force: true }); // changes view to form3
 
