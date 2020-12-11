@@ -21,12 +21,12 @@ context('hanke form', () => {
     cy.get('#vaihe-toggle-button').click();
     cy.get('#vaihe-item-0').click();
     cy.scrollTo('bottom');
-    cy.get('[data-testid=forward]').click({ force: true }); // changes view to form1
+    cy.get('[data-testid=forward]').click(); // changes view to form1
 
     cy.get('[data-testid=hankkeenAlue]');
     cy.scrollTo('bottom');
     cy.wait(5000);
-    cy.get('[data-testid=forward]').click({ force: true }); // changes view to form2
+    cy.get('[data-testid=forward]').click(); // changes view to form2
 
     cy.get('[data-testid=hankkeenYhteystiedot]');
     cy.scrollTo('bottom');
