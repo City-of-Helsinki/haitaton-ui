@@ -1,6 +1,9 @@
 // eslint-disable-next-line
 import { FieldErrors, Control } from 'react-hook-form';
 
+export type PartialExcept<T, K extends keyof T> = Partial<T> & Pick<T, K>;
+export type Optional<T, K extends keyof T> = Omit<T, K> & Partial<T>;
+
 export interface FormProps {
   formData: HankeDataDraft;
   errors: FieldErrors;
@@ -191,4 +194,10 @@ export type HankeData = {
   onYKTHanke: boolean;
 };
 
-export type HankeDataDraft = Partial<HankeData>;
+// type DraftRequiredFields = 'omistajat' | 'toteuttajat' | 'arvioijat';
+type DraftRequiredFields =
+  | `${FORMFIELD.OMISTAJAT}`
+  | `${FORMFIELD.TOTEUTTAJAT}`
+  | `${FORMFIELD.ARVIOIJAT}`;
+
+export type HankeDataDraft = PartialExcept<HankeData, DraftRequiredFields>;

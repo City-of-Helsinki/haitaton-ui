@@ -15,14 +15,14 @@ const updateHasFormChanged: CaseReducer<State, PayloadAction<boolean>> = (state,
   state.hasFormChanged = action.payload;
 };
 
-export const hankeDataDraftVal = {
+export const hankeDataDraft = {
   omistajat: [],
   toteuttajat: [],
   arvioijat: [],
 };
 
 export const initialState: State = {
-  hankeDataDraft: hankeDataDraftVal,
+  hankeDataDraft,
   hasFormChanged: false,
   status: null,
 };
@@ -41,7 +41,7 @@ const formSlice = createSlice({
         state.hankeDataDraft = payload;
       }
     });
-    builder.addCase(saveForm.rejected, (state, action) => {
+    builder.addCase(saveForm.rejected, (state) => {
       state.status = 'error';
     });
   },
