@@ -17,17 +17,18 @@ context('hanke form', () => {
     cy.get('textarea[data-testid=kuvaus]').type(kuvaus);
     cy.get('#alkuPvm').type(alkuPvm);
     cy.get('#loppuPvm').type(loppuPvm);
-    cy.get('input[data-testid=nimi]').click(); // because needs make datepicker to disappear
-    cy.get('#vaihe-toggle-button').click();
-    cy.get('#vaihe-item-0').click();
+    cy.get('input[data-testid=nimi]').click({ force: true }); // because needs make datepicker to disappear
+    cy.get('#vaihe-toggle-button').click({ force: true });
+    cy.get('#vaihe-item-0').click({ force: true });
     cy.scrollTo('bottom');
-    cy.get('[data-testid=forward]').click(); // changes view to form1
+    cy.get('[data-testid=forward]').click({ force: true }); // changes view to form1
 
     cy.get('[data-testid=hankkeenAlue]');
     cy.scrollTo('bottom');
     cy.wait(5000);
     cy.get('[data-testid=forward]').click(); // changes view to form2
-
+    cy.wait(15000);
+    cy.get('[data-testid=hankkeenAlue]');
     cy.get('[data-testid=hankkeenYhteystiedot]');
     cy.scrollTo('bottom');
     cy.get('[data-testid=forward]').click({ force: true }); // changes view to form3
