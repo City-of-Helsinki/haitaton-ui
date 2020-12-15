@@ -117,8 +117,6 @@ const FormComponent: React.FC = () => {
     };
   }, []);
 
-  console.log(errors);
-
   return (
     <FormProvider {...formContext}>
       <div className="hankeForm">

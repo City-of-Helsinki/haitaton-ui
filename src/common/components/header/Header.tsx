@@ -61,10 +61,10 @@ const Header: React.FC = () => {
         <NavLink to={MAP.path} activeClassName="header--active">
           {MAP.label}
         </NavLink>
-        <NavLink to={PROJECTS.path} activeClassName="header--active">
+        <NavLink to={PROJECTS.path} activeClassName="header--active" data-testid="hankeListLink">
           {PROJECTS.label}
         </NavLink>
-        <NavLink data-testid="hankeLink" to={FORM.path} className="header__hankeLink">
+        <NavLink to={FORM.path} className="header__hankeLink" data-testid="hankeLink">
           <Locale id="header:hankeLink" />
         </NavLink>
       </Navigation.Row>
