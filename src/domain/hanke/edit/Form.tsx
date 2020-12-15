@@ -40,7 +40,7 @@ const FormComponent: React.FC = () => {
   const [formPage, setFormPage] = useState<number>(0);
 
   const formContext = useForm<HankeDataDraft>({
-    mode: 'onChange',
+    mode: 'all',
     reValidateMode: 'onChange',
     criteriaMode: 'firstError',
     shouldFocusError: false,
