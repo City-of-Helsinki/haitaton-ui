@@ -13,9 +13,8 @@ export const hankeSchema = yup.object().shape({
   [FORMFIELD.LOPPU_PVM]: yup
     .date()
     .required()
-    .when(
-      FORMFIELD.ALKU_PVM,
-      (alkuPvm: Date, schema: yup.DateSchema) => alkuPvm && schema.min(new Date(alkuPvm))
+    .when(FORMFIELD.ALKU_PVM, (alkuPvm: Date, schema: yup.DateSchema) =>
+      alkuPvm ? schema.min(new Date(alkuPvm)) : schema
     ),
   [FORMFIELD.KATUOSOITE]: yup.string().nullable().when('$formPage', isRequiredByFormPage(3)),
 });

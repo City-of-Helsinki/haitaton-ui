@@ -42,7 +42,7 @@ const FormComponent: React.FC = () => {
   const formContext = useForm<HankeDataDraft>({
     mode: 'all',
     reValidateMode: 'onChange',
-    criteriaMode: 'firstError',
+    criteriaMode: 'all',
     shouldFocusError: false,
     shouldUnregister: false,
     defaultValues: formData,
