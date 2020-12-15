@@ -54,21 +54,15 @@ const Header: React.FC = () => {
       title="Haitaton 2.0"
       skipTo="#"
       skipToContentLabel="Skip to main content"
-      titleUrl="/"
+      titleUrl={HOME.path}
       className="header"
     >
       <Navigation.Row variant="inline">
-        <NavLink to={HOME.path} exact activeClassName="header--active" data-testid="homeLink">
-          {HOME.label}
-        </NavLink>
         <NavLink to={MAP.path} activeClassName="header--active">
           {MAP.label}
         </NavLink>
         <NavLink to={PROJECTS.path} activeClassName="header--active">
           {PROJECTS.label}
-        </NavLink>
-        <NavLink to={FORM.path} activeClassName="header--active">
-          {FORM.label}
         </NavLink>
         <NavLink data-testid="hankeLink" to={FORM.path} className="header__hankeLink">
           <Locale id="header:hankeLink" />

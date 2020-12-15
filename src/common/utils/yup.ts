@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { formatToFinnishDate } from './date';
 
 // https://github.com/jquense/yup/blob/master/src/locale.ts
 yup.setLocale({
@@ -11,12 +12,16 @@ yup.setLocale({
   string: {
     min: ({ min }: { min: number }) => ({ key: 'stringMin', values: { min } }),
     max: ({ max }: { max: number }) => ({ key: 'stringMax', values: { max } }),
-    // length?: Message<{ length: number }>;
-    // email?: Message<{ regex: RegExp }>;
   },
   date: {
-    min: ({ min }: { min: string }) => ({ key: 'dateMin', values: { min } }),
-    max: ({ max }: { max: string }) => ({ key: 'dateMax', values: { max } }),
+    min: ({ min }: { min: string }) => ({
+      key: 'dateMin',
+      values: { min: formatToFinnishDate(min) },
+    }),
+    max: ({ max }: { max: string }) => ({
+      key: 'dateMax',
+      values: { max: formatToFinnishDate(max) },
+    }),
   },
 });
 

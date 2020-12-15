@@ -3,11 +3,18 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'hds-react';
 import { IconAngleLeft, IconAngleRight } from 'hds-react/icons';
 
-import { ButtonProps } from './types';
+type Props = {
+  goBack: () => void;
+  goForward: () => void;
+  saveDraft: () => void;
+  formPage: number;
+  isValid: boolean;
+};
 
-const FormButtons: React.FC<ButtonProps> = ({ goBack, saveDraftButton, isValid, formPage }) => {
+const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, isValid, formPage }) => {
+  const { t } = useTranslation();
+
   let previousButtonText = '';
-
   let nextButtonText = '';
   switch (formPage) {
     case 0: {
@@ -39,17 +46,17 @@ const FormButtons: React.FC<ButtonProps> = ({ goBack, saveDraftButton, isValid, 
       break;
     }
   }
-  const { t } = useTranslation();
+
   return (
     <div className="btnWpr">
       {formPage === 4 && (
         <Button
           className="btnWpr--next"
           type="submit"
-          // disabled={!formState.isValid}
           iconRight={<IconAngleRight />}
           variant="secondary"
           data-testid="finish"
+          disabled={!isValid}
         >
           <span>{t('hankeForm:finishButton')}</span>
         </Button>
@@ -57,18 +64,20 @@ const FormButtons: React.FC<ButtonProps> = ({ goBack, saveDraftButton, isValid, 
       {formPage < 4 && (
         <Button
           className="btnWpr--next"
-          type="submit"
-          // disabled={!formState.isValid}
+          type="button"
+          onClick={() => goForward()}
           iconRight={<IconAngleRight />}
           variant="secondary"
           data-testid="forward"
+          disabled={!isValid}
         >
           <span>{t(nextButtonText)}</span>
         </Button>
       )}
-      <Button type="button" onClick={() => saveDraftButton()} disabled={!isValid}>
+      <Button type="button" onClick={() => saveDraft()} disabled={!isValid}>
         <span>{t('hankeForm:saveDraftButton')}</span>
       </Button>
+
       {formPage > 0 && (
         <Button
           className="btnWpr--previous"
@@ -84,4 +93,5 @@ const FormButtons: React.FC<ButtonProps> = ({ goBack, saveDraftButton, isValid, 
     </div>
   );
 };
+
 export default FormButtons;
