@@ -33,6 +33,7 @@ const TextInput: React.FC<PropTypes> = ({ name, label, disabled, tooltip }) => {
           onChange={onChange}
           disabled={disabled}
           data-testid={name}
+          required
           {...tooltip}
         />
       )}
