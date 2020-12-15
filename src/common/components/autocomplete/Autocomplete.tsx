@@ -1,6 +1,5 @@
 import React from 'react';
 import { Combobox, Tooltip } from 'hds-react';
-
 import { TooltipProps } from '../../types/tooltip';
 
 export type Option = { value: string | number; label: string };

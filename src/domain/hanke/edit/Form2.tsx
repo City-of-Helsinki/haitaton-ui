@@ -96,9 +96,11 @@ const Form2: React.FC<FormProps> = ({ control, formData, register }) => {
                         // @ts-ignore
                         formData[CONTACT_TYPE][0] ? formData[CONTACT_TYPE][0].organisaatioId : '',
                     }}
-                    onChange={(option: Option): void => {
-                      setValue(`${CONTACT_TYPE}[0].organisaatioId`, option.value);
-                      setValue(`${CONTACT_TYPE}[0].organisaatioNimi`, option.label);
+                    onChange={(option?: Option): void => {
+                      if (option) {
+                        setValue(`${CONTACT_TYPE}[0].organisaatioId`, option.value);
+                        setValue(`${CONTACT_TYPE}[0].organisaatioNimi`, option.label);
+                      }
                     }}
                   />
                 )}

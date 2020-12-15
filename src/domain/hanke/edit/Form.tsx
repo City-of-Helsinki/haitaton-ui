@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
@@ -40,10 +40,10 @@ const FormComponent: React.FC = () => {
   const [formPage, setFormPage] = useState<number>(0);
 
   const formContext = useForm<HankeDataDraft>({
-    mode: 'onBlur',
-    reValidateMode: 'onBlur',
+    mode: 'all',
+    reValidateMode: 'onChange',
     criteriaMode: 'firstError',
-    shouldFocusError: true,
+    shouldFocusError: false,
     shouldUnregister: false,
     defaultValues: formData,
     resolver: yupResolver(hankeSchema),
@@ -52,56 +52,65 @@ const FormComponent: React.FC = () => {
     },
   });
 
-  const { handleSubmit, errors, control, register, formState, getValues, reset } = formContext;
+  const {
+    handleSubmit,
+    errors,
+    control,
+    register,
+    formState,
+    getValues,
+    // reset,
+    trigger,
+  } = formContext;
 
   useEffect(() => {
-    reset(formData);
-  }, [reset, formData]);
+    // reset(formData);
+    // trigger();
+  }, [formData]);
 
-  function goBack() {
+  const saveDraft = useCallback(() => {
+    dispatch(
+      saveForm({
+        data: getValues(),
+        saveType: HANKE_SAVETYPE.DRAFT,
+      })
+    );
+  }, [getValues]);
+
+  const goBack = useCallback(() => {
     setFormPage((v) => v - 1);
-  }
+    // Dirty fix to trigger validations after pageChage
+    setTimeout(() => trigger(), 1);
+  }, []);
 
-  function saveDraftButton() {
-    try {
-      dispatch(
-        saveForm({
-          data: getValues(),
-          saveType: HANKE_SAVETYPE.DRAFT,
-        })
-      );
-    } catch (e) {
-      // eslint-disable-next-line
-      console.error(e.message);
+  const goForward = useCallback(() => {
+    if (formPage === 0) {
+      saveDraft();
     }
-  }
+    setFormPage((v) => v + 1);
+    // Dirty fix to trigger validations after pageChage
+    setTimeout(() => trigger(), 1);
+  }, [formPage]);
 
-  const onSubmit = async (data: HankeDataDraft) => {
-    try {
-      dispatch(
-        saveForm({
-          data,
-          saveType: HANKE_SAVETYPE.DRAFT,
-        })
-      );
-      setFormPage((v) => v + 1);
-    } catch (e) {
-      // eslint-disable-next-line
-      console.error(e.message);
-    }
-  };
-
-  function closeForm() {
+  const closeForm = useCallback(() => {
     if (hasFormChanged) {
       dispatch(dialogActions.updateIsDialogOpen({ isDialogOpen: true, redirectUrl: '/' }));
     } else {
       history.push('/');
     }
-  }
+  }, [hasFormChanged]);
+
+  const onSubmit = async (data: HankeDataDraft) => {
+    // eslint-disable-next-line
+    console.log(data);
+    // Todo: Maybe save and redirect to haittojenHallinta?
+  };
 
   useEffect(() => {
     dispatch(actions.updateHasFormChanged(formState.isDirty));
   }, [formState.isDirty]);
+
+  // Clear form data on unmount
   useEffect(() => {
     return () => {
       dispatch(actions.updateFormData(hankeDataDraft));
@@ -170,7 +179,8 @@ const FormComponent: React.FC = () => {
                 )}
                 <FormButtons
                   goBack={goBack}
-                  saveDraftButton={saveDraftButton}
+                  goForward={goForward}
+                  saveDraft={saveDraft}
                   formPage={formPage}
                   isValid={formState.isValid}
                 />

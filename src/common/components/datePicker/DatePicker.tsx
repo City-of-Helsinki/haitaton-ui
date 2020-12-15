@@ -45,7 +45,7 @@ const DatePicker: React.FC<PropTypes> = ({
         name={name}
         control={control}
         defaultValue={defaultValue}
-        render={({ onChange, value }) => (
+        render={({ onChange, value, onBlur }) => (
           <div className="datePicker">
             <div className="topWpr">
               <label htmlFor={name}>{label}</label>
@@ -58,12 +58,18 @@ const DatePicker: React.FC<PropTypes> = ({
             <ReactDatePicker
               id={name}
               name={name}
-              onChange={(date: Date) => date && onChange(toEndOfDayUTCISO(date))}
+              onChange={(date: Date) => {
+                if (date) {
+                  onChange(toEndOfDayUTCISO(date));
+                  onBlur();
+                }
+              }}
               selected={value ? new Date(value) : null}
               disabled={disabled}
               locale={locale}
               dateFormat={dateFormat}
               className={invalid ? 'invalid' : ''}
+              onBlur={onBlur}
             />
             {invalid && <span className="error-text">{getInputErrorText(t, errors, name)}</span>}
           </div>

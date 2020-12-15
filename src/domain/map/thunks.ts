@@ -12,9 +12,6 @@ export const saveGeometryData = createAsyncThunk(
   async ({ hankeTunnus, data }: SaveGeometryArguments) => {
     const response = await api.post(`/hankkeet/${hankeTunnus}/geometriat`, data);
 
-    // eslint-disable-next-line
-    console.log({ data, hankeTunnus, response });
-
     return response.data as HankeGeometryApiResponseData;
   }
 );

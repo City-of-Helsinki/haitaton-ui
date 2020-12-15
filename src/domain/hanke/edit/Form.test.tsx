@@ -12,7 +12,7 @@ jest.setTimeout(10000);
 
 const nimi = 'test kuoppa';
 const alkuPvm = '24.03.2032';
-const loppuPvm = '24.03.2032';
+const loppuPvm = '25.03.2032';
 const omistajaEtunimi = 'Matti';
 const katuosoite = 'Pohjoinen Rautatiekatu 11 b 12';
 const hankeenKuvaus = 'Tässä on kuvaus';
@@ -52,21 +52,22 @@ describe('Form', () => {
     await waitFor(() => queryAllByText('Työmaan tiedot')[1]);
 
     getByTestId('backward').click(); // changes view to form2
+    await waitFor(() => queryAllByText('Hankkeen yhteystiedot')[1]);
     expect(getByTestId('omistajat-etunimi')).toHaveValue(omistajaEtunimi);
 
     getByTestId('forward').click(); // changes view to form3
-    await waitFor(() => queryAllByText('Työmaan tiedot')[1]);
+    await waitFor(() => getByTestId(FORMFIELD.KATUOSOITE));
     fireEvent.change(getByTestId(FORMFIELD.KATUOSOITE), {
       target: { value: katuosoite },
     });
+    await waitFor(() => expect(getByTestId('forward')).not.toBeDisabled());
 
     getByTestId('forward').click(); // changes view to form4
-    await waitFor(() =>
-      fireEvent.change(getByLabelText('Haitan alkupäivämäärä'), { target: { value: '24.03.2032' } })
-    );
-    expect(queryAllByText('Vesi')[0]);
+    await waitFor(() => getByLabelText('Haitan alkupäivämäärä'));
+    fireEvent.change(getByLabelText('Haitan alkupäivämäärä'), { target: { value: '24.03.2032' } });
 
     getByTestId('backward').click(); // changes view to form3
+    await waitFor(() => getByTestId(FORMFIELD.KATUOSOITE));
     expect(getByTestId(FORMFIELD.KATUOSOITE)).toHaveValue(katuosoite);
 
     getByTestId('forward').click(); // changes view to form4
