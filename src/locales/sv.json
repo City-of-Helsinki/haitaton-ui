@@ -16,8 +16,7 @@
       "stringMin": "SV:Kentän pituus oltava vähintään {{min}} merkkiä",
       "stringMax": "SV:Kentän pituus oltava enintään {{max}} merkkiä",
       "dateMin": "SV:Ensimmäinen mahdollinen päivä on {{min}}",
-      "dateMax": "SV:Viimeinen mahdollinen päivä on {{max}}",
-      "dropdown": "SV:Väärä arvo valittu kenttään"
+      "dateMax": "SV:Viimeinen mahdollinen päivä on {{max}}"
     }
   },
   "header": {
