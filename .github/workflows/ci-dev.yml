@@ -43,7 +43,7 @@ jobs:
           ACTIONS_RUNNER_DEBUG: true
           ACTIONS_STEP_DEBUG: true
         with:
-          start: yarn run serve
+          start: yarn run start
           wait-on: 'http://localhost:3001'
   docker_build_and_push:
     name: Push Docker image to GitHub Packages
