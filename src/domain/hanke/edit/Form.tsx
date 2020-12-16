@@ -42,7 +42,7 @@ const FormComponent: React.FC = () => {
   const formContext = useForm<HankeDataDraft>({
     mode: 'all',
     reValidateMode: 'onChange',
-    criteriaMode: 'firstError',
+    criteriaMode: 'all',
     shouldFocusError: false,
     shouldUnregister: false,
     defaultValues: formData,
@@ -59,13 +59,12 @@ const FormComponent: React.FC = () => {
     register,
     formState,
     getValues,
-    // reset,
+    reset,
     trigger,
   } = formContext;
 
   useEffect(() => {
-    // reset(formData);
-    // trigger();
+    reset(formData);
   }, [formData]);
 
   const saveDraft = useCallback(() => {
@@ -79,7 +78,7 @@ const FormComponent: React.FC = () => {
 
   const goBack = useCallback(() => {
     setFormPage((v) => v - 1);
-    // Dirty fix to trigger validations after pageChage
+    // Dirty fix to trigger validations after pageChage. Maybe should run in formPage useEffect instead?
     setTimeout(() => trigger(), 1);
   }, []);
 
