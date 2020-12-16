@@ -115,7 +115,6 @@ const FormComponent: React.FC = () => {
       dispatch(actions.updateFormData(hankeDataDraft));
     };
   }, []);
-  console.log('errors', errors);
   return (
     <FormProvider {...formContext}>
       <div className="hankeForm">

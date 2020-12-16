@@ -1,6 +1,8 @@
 import React from 'react';
-import { Controller, Control } from 'react-hook-form';
+import { Controller, Control, useFormContext } from 'react-hook-form';
 import { Dropdown as HdsDropdown, Tooltip } from 'hds-react';
+import { useTranslation } from 'react-i18next';
+import { getInputErrorText } from '../../utils/form';
 import { TooltipProps } from '../../types/tooltip';
 import './dropDown.styles.scss';
 
@@ -30,11 +32,12 @@ const Dropdown: React.FC<PropTypes> = ({
   defaultValue,
   label,
   invalid,
-  errorMsg,
   tooltip,
   disabled,
   required,
 }) => {
+  const { t } = useTranslation();
+  const { errors } = useFormContext();
   return (
     <div className="dropdownComp">
       {!!tooltip && (
@@ -70,7 +73,7 @@ const Dropdown: React.FC<PropTypes> = ({
           );
         }}
       />
-      {invalid && <span className="error-text">{errorMsg}</span>}
+      {invalid && <span className="error-text">{getInputErrorText(t, errors, name)}</span>}
     </div>
   );
 };

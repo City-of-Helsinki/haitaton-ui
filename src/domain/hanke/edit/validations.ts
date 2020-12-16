@@ -1,6 +1,7 @@
 import startOfDay from 'date-fns/startOfDay';
+import { $enum } from 'ts-enum-util';
 import yup from '../../../common/utils/yup';
-import { FORMFIELD } from './types';
+import { FORMFIELD, HANKE_VAIHE } from './types';
 
 export const today = startOfDay(new Date());
 
@@ -21,7 +22,7 @@ export const hankeSchema = yup.object().shape({
       // @ts-ignore nullable doesnt work with TS
       (alkuPvm: Date, schema: yup.DateSchema) => (alkuPvm ? schema.min(new Date(alkuPvm)) : schema)
     ),
-  [FORMFIELD.VAIHE]: yup.string().required().min(1),
+  [FORMFIELD.VAIHE]: yup.mixed().oneOf($enum(HANKE_VAIHE).getValues()),
   [FORMFIELD.SUUNNITTELUVAIHE]: yup.string().nullable().when([FORMFIELD.VAIHE], {
     is: 'SUUNNITTELU',
     then: yup.string().required(),
