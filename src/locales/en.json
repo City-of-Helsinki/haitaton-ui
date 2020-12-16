@@ -16,7 +16,8 @@
       "stringMin": "EN:Kentän pituus oltava vähintään {{min}} merkkiä",
       "stringMax": "EN:Kentän pituus oltava enintään {{max}} merkkiä",
       "dateMin": "EN:Ensimmäinen mahdollinen päivä on {{min}}",
-      "dateMax": "EN:Viimeinen mahdollinen päivä on {{max}}"
+      "dateMax": "EN:Viimeinen mahdollinen päivä on {{max}}",
+      "dropdown": "EN:Väärä arvo valittu kenttään"
     }
   },
   "header": {
