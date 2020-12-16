@@ -15,9 +15,10 @@ context('HankeForm', () => {
     cy.get('textarea[data-testid=kuvaus]').type(kuvaus);
     cy.get('#alkuPvm').type(alkuPvm);
     cy.get('#loppuPvm').type(loppuPvm);
-    cy.get('input[data-testid=nimi]').click(); // because needs make datepicker to disappear
+    cy.get('input[data-testid=nimi]').click();
     cy.get('#vaihe-toggle-button').click();
     cy.get('#vaihe-item-0').click();
+    cy.get('[data-testid=forward]').should('not.be.disabled');
     cy.get('[data-testid=forward]').click(); // changes view to form1
 
     cy.get('[data-testid=hankkeenAlue]');
