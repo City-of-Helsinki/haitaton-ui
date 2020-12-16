@@ -35,6 +35,8 @@ describe('Form', () => {
       target: { value: loppuPvm },
     });
 
+    queryAllByText('Hankeen Vaihe')[0].click();
+    queryAllByText('Ohjelmointi')[0].click();
     await waitFor(() => expect(getByTestId('forward')).not.toBeDisabled());
     getByTestId('forward').click(); // changes view to form1
     await waitFor(() => queryAllByText('Hankkeen yhteystiedot')[1]);
