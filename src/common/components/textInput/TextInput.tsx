@@ -9,10 +9,11 @@ type PropTypes = {
   name: string;
   label?: string;
   disabled?: boolean;
+  required?: boolean;
   tooltip?: TooltipProps;
 };
 
-const TextInput: React.FC<PropTypes> = ({ name, label, disabled, tooltip }) => {
+const TextInput: React.FC<PropTypes> = ({ name, label, disabled, tooltip, required }) => {
   const { t } = useTranslation();
   const { control, errors } = useFormContext();
 
@@ -33,6 +34,7 @@ const TextInput: React.FC<PropTypes> = ({ name, label, disabled, tooltip }) => {
           onChange={onChange}
           disabled={disabled}
           data-testid={name}
+          required={required}
           {...tooltip}
         />
       )}

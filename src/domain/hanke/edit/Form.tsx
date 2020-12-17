@@ -182,6 +182,7 @@ const FormComponent: React.FC = () => {
                   saveDraft={saveDraft}
                   formPage={formPage}
                   isValid={formState.isValid}
+                  isDirty={formState.isDirty}
                 />
               </form>
             </div>

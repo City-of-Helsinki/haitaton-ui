@@ -9,9 +9,17 @@ type Props = {
   saveDraft: () => void;
   formPage: number;
   isValid: boolean;
+  isDirty: boolean;
 };
 
-const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, isValid, formPage }) => {
+const FormButtons: React.FC<Props> = ({
+  goBack,
+  goForward,
+  saveDraft,
+  isValid,
+  isDirty,
+  formPage,
+}) => {
   const { t } = useTranslation();
 
   let previousButtonText = '';
@@ -74,7 +82,7 @@ const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, isValid, f
           <span>{t(nextButtonText)}</span>
         </Button>
       )}
-      <Button type="button" onClick={() => saveDraft()} disabled={!isValid}>
+      <Button type="button" onClick={() => saveDraft()} disabled={!isValid || !isDirty}>
         <span>{t('hankeForm:saveDraftButton')}</span>
       </Button>
 

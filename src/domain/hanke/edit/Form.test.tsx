@@ -28,8 +28,12 @@ describe('Form', () => {
     getByTestId(FORMFIELD.YKT_HANKE).click();
     fireEvent.change(getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
     fireEvent.change(getByTestId(FORMFIELD.KUVAUS), { target: { value: hankeenKuvaus } });
-    fireEvent.change(getByLabelText('Hankkeen alkupäivä'), { target: { value: alkuPvm } });
-    fireEvent.change(getByLabelText('Hankkeen loppupäivä'), { target: { value: loppuPvm } });
+    fireEvent.change(getByLabelText('Hankkeen alkupäivä', { exact: false }), {
+      target: { value: alkuPvm },
+    });
+    fireEvent.change(getByLabelText('Hankkeen loppupäivä', { exact: false }), {
+      target: { value: loppuPvm },
+    });
 
     await waitFor(() => expect(getByTestId('forward')).not.toBeDisabled());
     getByTestId('forward').click(); // changes view to form1
@@ -37,8 +41,8 @@ describe('Form', () => {
 
     getByTestId('backward').click(); // changes view to form0
     expect(getByTestId(FORMFIELD.YKT_HANKE)).toBeChecked();
-    expect(getByLabelText('Hankkeen alkupäivä')).toHaveValue(alkuPvm);
-    expect(getByLabelText('Hankkeen loppupäivä')).toHaveValue(loppuPvm);
+    expect(getByLabelText('Hankkeen alkupäivä', { exact: false })).toHaveValue(alkuPvm);
+    expect(getByLabelText('Hankkeen loppupäivä', { exact: false })).toHaveValue(loppuPvm);
     expect(getByTestId(FORMFIELD.NIMI)).toHaveValue(nimi);
     expect(getByTestId(FORMFIELD.KUVAUS)).toHaveValue(hankeenKuvaus);
 

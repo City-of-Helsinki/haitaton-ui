@@ -1,7 +1,8 @@
+import startOfDay from 'date-fns/startOfDay';
 import yup from '../../../common/utils/yup';
 import { FORMFIELD } from './types';
 
-export const today = new Date();
+export const today = startOfDay(new Date());
 
 export const isRequiredByFormPage = (formPage: number) => (val: number, schema: yup.MixedSchema) =>
   val === formPage ? schema.required() : schema;

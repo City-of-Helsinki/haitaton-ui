@@ -1,9 +1,7 @@
 import React from 'react';
 import { Controller, Control } from 'react-hook-form';
 import { Dropdown as HdsDropdown, Tooltip } from 'hds-react';
-
 import { TooltipProps } from '../../types/tooltip';
-
 import './dropDown.styles.scss';
 
 type Option = { value: string; label: string };
@@ -20,6 +18,7 @@ type PropTypes = {
   errorMsg?: string;
   tooltip?: TooltipProps;
   disabled?: boolean;
+  required?: boolean;
 };
 
 const Dropdown: React.FC<PropTypes> = ({
@@ -34,6 +33,7 @@ const Dropdown: React.FC<PropTypes> = ({
   errorMsg,
   tooltip,
   disabled,
+  required,
 }) => {
   return (
     <div className="dropdownComp">
@@ -42,14 +42,13 @@ const Dropdown: React.FC<PropTypes> = ({
           {tooltip.tooltipText}
         </Tooltip>
       )}
-
       <Controller
         name={name}
         id={id}
         control={control}
         defaultValue={defaultValue}
         rules={rules}
-        render={({ onChange, value }) => {
+        render={({ onChange, onBlur, value }) => {
           return (
             <HdsDropdown
               options={options}
@@ -61,7 +60,11 @@ const Dropdown: React.FC<PropTypes> = ({
               label={label}
               invalid={invalid}
               // eslint-disable-next-line
-              onChange={(option: any) => onChange(option.value)}
+              onChange={(option: any) => {
+                onChange(option.value);
+                onBlur();
+              }}
+              required={required}
               disabled={disabled}
             />
           );

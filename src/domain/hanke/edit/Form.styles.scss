@@ -106,12 +106,12 @@
 
     .left {
       padding-right: var(--spacing-xl);
-      width: 225px;
+      width: 250px;
     }
 
     .right {
       padding-right: var(--spacing-xl);
-      width: 225px;
+      width: 250px;
     }
 
     @include respond-below(s) {
