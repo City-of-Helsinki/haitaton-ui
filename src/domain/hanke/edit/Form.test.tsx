@@ -17,8 +17,8 @@ const omistajaEtunimi = 'Matti';
 const katuosoite = 'Pohjoinen Rautatiekatu 11 b 12';
 const hankeenKuvaus = 'Tässä on kuvaus';
 
-describe('Form', () => {
-  test('Form testing', async () => {
+describe('HankeForm', () => {
+  test('happypath', async () => {
     const { getByTestId, getByLabelText, getByText, queryAllByText, queryByText } = render(
       <Provider store={store}>
         <Form />
@@ -83,5 +83,33 @@ describe('Form', () => {
     getByText('Tallenna ja poistu').click();
     await waitFor(() => queryByText('Lomake on lähetetty onnistuneesti'));
     expect(queryByText('Lomake on lähetetty onnistuneesti'));
+  });
+
+  test('suunnitteluVaihde should be required when vaihe is suunnittelu', async () => {
+    const { getByTestId, getByLabelText, queryAllByText } = render(
+      <Provider store={store}>
+        <Form />
+      </Provider>
+    );
+
+    getByTestId(FORMFIELD.YKT_HANKE).click();
+    fireEvent.change(getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
+    fireEvent.change(getByTestId(FORMFIELD.KUVAUS), { target: { value: hankeenKuvaus } });
+    fireEvent.change(getByLabelText('Hankkeen alkupäivä', { exact: false }), {
+      target: { value: alkuPvm },
+    });
+    fireEvent.change(getByLabelText('Hankkeen loppupäivä', { exact: false }), {
+      target: { value: loppuPvm },
+    });
+
+    queryAllByText('Hankeen Vaihe')[0].click();
+    queryAllByText('Suunnittelu')[0].click();
+
+    await waitFor(() => expect(getByTestId('forward')).toBeDisabled());
+
+    queryAllByText('Hankkeen suunnitteluvaihe')[0].click();
+    queryAllByText('Yleis- tai hankesuunnittelu')[0].click();
+
+    await waitFor(() => expect(getByTestId('forward')).not.toBeDisabled());
   });
 });
