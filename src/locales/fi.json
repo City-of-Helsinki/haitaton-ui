@@ -12,6 +12,7 @@
       "default": "Kentän arvo on virheellinen",
       "defined": "Kenttä on pakollinen",
       "notType": "Kentän tyyppi on virheellinen",
+      "typeOf": "Kentän tyyppi on virheellinen",
       "required": "Kenttä on pakollinen",
       "stringMin": "Kentän pituus oltava vähintään {{min}} merkkiä",
       "stringMax": "Kentän pituus oltava enintään {{max}} merkkiä",

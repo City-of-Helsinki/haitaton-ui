@@ -8,6 +8,7 @@ yup.setLocale({
     required: { key: 'required', values: {} },
     defined: { key: 'defined', values: {} },
     notType: { key: 'notType', values: {} },
+    typeOf: { key: 'typeOf', values: {} },
   },
   string: {
     min: ({ min }: { min: number }) => ({ key: 'stringMin', values: { min } }),
