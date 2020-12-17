@@ -14,6 +14,7 @@
       "notType": "SV:Kentän tyyppi on virheellinen",
       "typeOf": "SV:Kentän tyyppi on virheellinen",
       "required": "SV:Kenttä on pakollinen",
+      "email": "SV:Sähköposti on virheellinen",
       "stringMin": "SV:Kentän pituus oltava vähintään {{min}} merkkiä",
       "stringMax": "SV:Kentän pituus oltava enintään {{max}} merkkiä",
       "dateMin": "SV:Ensimmäinen mahdollinen päivä on {{min}}",

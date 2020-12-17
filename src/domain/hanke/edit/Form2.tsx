@@ -6,6 +6,8 @@ import { useTypedController } from '@hookform/strictly-typed';
 import { TextInput } from 'hds-react';
 import { FormProps, FORMFIELD, CONTACT_FORMFIELD, HankeDataDraft } from './types';
 import api from '../../../common/utils/api';
+import { getInputErrorText } from '../../../common/utils/form';
+
 import H2 from '../../../common/components/text/H2';
 import H3 from '../../../common/components/text/H3';
 import Autocomplete, { Option } from '../../../common/components/autocomplete/Autocomplete';
@@ -35,7 +37,11 @@ const fetchOrganizations = async (): Promise<any> => {
   }
 };
 
-const Form2: React.FC<FormProps> = ({ control, formData, register }) => {
+// eslint-disable-next-line
+const getArrayFieldErrors = (errors: Record<string, Array<any>>, name: string) =>
+  errors && errors[name] && errors[name][0] ? errors[name][0] : {};
+
+const Form2: React.FC<FormProps> = ({ control, formData, errors, register }) => {
   const { t } = useTranslation();
   const { setValue } = useFormContext();
   const TypedController = useTypedController<HankeDataDraft>({ control });
@@ -70,6 +76,12 @@ const Form2: React.FC<FormProps> = ({ control, formData, register }) => {
                       id={`${CONTACT_TYPE}-${contactField}`}
                       ref={register}
                       data-testid={`${CONTACT_TYPE}-${contactField}`}
+                      helperText={getInputErrorText(
+                        t,
+                        getArrayFieldErrors(errors, CONTACT_TYPE),
+                        contactField
+                      )}
+                      invalid={!!getArrayFieldErrors(errors, CONTACT_TYPE)[contactField]}
                       {...props}
                     />
                   )}
