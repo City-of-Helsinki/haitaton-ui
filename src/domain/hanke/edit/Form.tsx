@@ -12,7 +12,7 @@ import { HankeDataDraft, HANKE_SAVETYPE } from './types';
 import { actions, hankeDataDraft } from './reducer';
 import { saveForm } from './thunks';
 import Indicator from './indicator';
-import { hankeSchema } from './validations';
+import { hankeSchema } from './hankeSchema';
 import Form0 from './Form0';
 import Form1 from './Form1';
 import Form2 from './Form2';
