@@ -9,7 +9,7 @@ export const isRequiredByFormPage = (formPage: number) => (val: number, schema: 
   val === formPage ? schema.required() : schema;
 
 export const hankeSchema = yup.object().shape({
-  [FORMFIELD.NIMI]: yup.string().required().min(3),
+  [FORMFIELD.NIMI]: yup.string().min(3).required(),
   [FORMFIELD.KUVAUS]: yup.string().required().min(1),
   [FORMFIELD.ALKU_PVM]: yup.date().nullable().required().min(today),
   [FORMFIELD.LOPPU_PVM]: yup
@@ -30,5 +30,9 @@ export const hankeSchema = yup.object().shape({
       is: HANKE_VAIHE.SUUNNITTELU,
       then: yup.mixed().oneOf($enum(HANKE_SUUNNITTELUVAIHE).getValues()),
     }),
+  [FORMFIELD.SUUNNITTELUVAIHE]: yup.string().nullable().when([FORMFIELD.VAIHE], {
+    is: 'SUUNNITTELU',
+    then: yup.string().required(),
+  }),
   [FORMFIELD.KATUOSOITE]: yup.string().nullable().when('$formPage', isRequiredByFormPage(3)),
 });
