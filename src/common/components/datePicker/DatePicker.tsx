@@ -24,6 +24,7 @@ type PropTypes = {
   dateFormat?: string;
   defaultValue?: Date | string | null;
   tooltip?: TooltipProps;
+  required?: boolean;
 };
 
 const DatePicker: React.FC<PropTypes> = ({
@@ -34,6 +35,7 @@ const DatePicker: React.FC<PropTypes> = ({
   dateFormat,
   defaultValue,
   tooltip,
+  required,
 }) => {
   const { t } = useTranslation();
   const { control, errors } = useFormContext();
@@ -48,7 +50,9 @@ const DatePicker: React.FC<PropTypes> = ({
         render={({ onChange, value, onBlur }) => (
           <div className="datePicker">
             <div className="topWpr">
-              <label htmlFor={name}>{label}</label>
+              <label htmlFor={name}>
+                {label} {required && '*'}
+              </label>
               {!!tooltip && (
                 <Tooltip buttonLabel={tooltip.buttonLabel} placement={tooltip.placement}>
                   {tooltip.tooltipText}

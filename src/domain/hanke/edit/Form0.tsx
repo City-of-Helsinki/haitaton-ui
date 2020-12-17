@@ -3,19 +3,19 @@ import { useTranslation } from 'react-i18next';
 import { Checkbox, Tooltip, TextArea } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { useFormContext } from 'react-hook-form';
-
 import DatePicker from '../../../common/components/datePicker/DatePicker';
 import Dropdown from '../../../common/components/dropdown/Dropdown';
 import TextInput from '../../../common/components/textInput/TextInput';
-
 import { FormProps, HANKE_VAIHE, FORMFIELD, HANKE_SUUNNITTELUVAIHE } from './types';
 import H2 from '../../../common/components/text/H2';
 
 const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => {
   const { t, i18n } = useTranslation();
   const [ytkChecked, setYtkChecked] = useState(formData[FORMFIELD.YKT_HANKE] || false);
-  const { getValues } = useFormContext();
-  const formValues = getValues();
+  const { watch } = useFormContext();
+
+  // Subscribe to vaihe changes
+  const watchFields = watch([FORMFIELD.VAIHE]);
 
   return (
     <div className="form0">
@@ -45,6 +45,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
       <div className="formWpr">
         <TextInput
           name={FORMFIELD.NIMI}
+          required
           tooltip={{
             tooltipText: t(`hankeForm:toolTips:${FORMFIELD.NIMI}`),
             tooltipButtonLabel: t(`hankeForm:toolTips:tipOpenLabel`),
@@ -63,6 +64,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
           tooltipLabel={t(`hankeForm:toolTips:tipOpenLabel`)}
           tooltipText={t(`hankeForm:toolTips:${FORMFIELD.KUVAUS}`)}
           data-testid={FORMFIELD.KUVAUS}
+          required
         />
         {!!errors[FORMFIELD.KUVAUS] && (
           <span className="error-text">{t('hankeForm:insertFieldError')}</span>
@@ -76,6 +78,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             dateFormat="dd.MM.yyyy"
             defaultValue={formData[FORMFIELD.ALKU_PVM] || null}
             locale={i18n.language}
+            required
             tooltip={{
               tooltipText: t(`hankeForm:toolTips:${FORMFIELD.ALKU_PVM}`),
               buttonLabel: t(`hankeForm:toolTips:tipOpenLabel`),
@@ -90,6 +93,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             dateFormat="dd.MM.yyyy"
             defaultValue={formData[FORMFIELD.LOPPU_PVM] || null}
             locale={i18n.language}
+            required
             tooltip={{
               tooltipText: t(`hankeForm:toolTips:${FORMFIELD.LOPPU_PVM}`),
               buttonLabel: t(`hankeForm:toolTips:tipOpenLabel`),
@@ -116,6 +120,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             tooltipLabel: t(`hankeForm:toolTips:tipOpenLabel`),
             placement: 'auto',
           }}
+          required
         />
       </div>
       <div className="formWpr">
@@ -136,7 +141,8 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             tooltipLabel: t(`hankeForm:toolTips:tipOpenLabel`),
             placement: 'auto',
           }}
-          disabled={formValues[FORMFIELD.VAIHE] !== 'SUUNNITTELU'}
+          disabled={watchFields[FORMFIELD.VAIHE] !== HANKE_VAIHE.SUUNNITTELU}
+          required={watchFields[FORMFIELD.VAIHE] === HANKE_VAIHE.SUUNNITTELU}
         />
       </div>
     </div>
