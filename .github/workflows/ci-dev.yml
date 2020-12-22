@@ -40,7 +40,6 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          install: false
           start: yarn run serve
           wait-on: 'http://localhost:3001'
   docker_build_and_push:
