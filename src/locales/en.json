@@ -14,6 +14,7 @@
       "notType": "EN:Kentän tyyppi on virheellinen",
       "typeOf": "EN:Kentän tyyppi on virheellinen",
       "required": "EN:Kenttä on pakollinen",
+      "email": "EN:Sähköposti on virheellinen",
       "stringMin": "EN:Kentän pituus oltava vähintään {{min}} merkkiä",
       "stringMax": "EN:Kentän pituus oltava enintään {{max}} merkkiä",
       "dateMin": "EN:Ensimmäinen mahdollinen päivä on {{min}}",

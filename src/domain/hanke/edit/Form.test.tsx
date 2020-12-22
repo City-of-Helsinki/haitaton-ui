@@ -112,4 +112,50 @@ describe('HankeForm', () => {
 
     await waitFor(() => expect(getByTestId('forward')).not.toBeDisabled());
   });
+
+  test('contacts should be validated correctly', async () => {
+    const { getByTestId, getByLabelText, queryAllByText } = render(
+      <Provider store={store}>
+        <Form />
+      </Provider>
+    );
+
+    getByTestId(FORMFIELD.YKT_HANKE).click();
+    fireEvent.change(getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
+    fireEvent.change(getByTestId(FORMFIELD.KUVAUS), { target: { value: hankeenKuvaus } });
+    fireEvent.change(getByLabelText('Hankkeen alkupäivä', { exact: false }), {
+      target: { value: alkuPvm },
+    });
+    fireEvent.change(getByLabelText('Hankkeen loppupäivä', { exact: false }), {
+      target: { value: loppuPvm },
+    });
+
+    queryAllByText('Hankeen Vaihe')[0].click();
+    queryAllByText('Ohjelmointi')[0].click();
+
+    await waitFor(() => expect(getByTestId('forward')).not.toBeDisabled());
+
+    getByTestId('forward').click();
+    getByTestId('forward').click();
+    await waitFor(() => queryAllByText('Hankkeen yhteystiedot')[1]);
+    fireEvent.change(getByTestId('omistajat-etunimi'), {
+      target: { value: omistajaEtunimi },
+    });
+    fireEvent.change(getByTestId('omistajat-sukunimi'), {
+      target: { value: 'OmistajaSukunimi' },
+    });
+    fireEvent.change(getByTestId('omistajat-puhelinnumero'), {
+      target: { value: '04500112233' },
+    });
+    fireEvent.change(getByTestId('omistajat-email'), {
+      target: { value: 'wrongEmail' },
+    });
+
+    await waitFor(() => expect(getByTestId('forward')).toBeDisabled());
+    fireEvent.change(getByTestId('omistajat-email'), {
+      target: { value: 'omistaja@foo.bar' },
+    });
+
+    await waitFor(() => expect(getByTestId('forward')).not.toBeDisabled());
+  });
 });

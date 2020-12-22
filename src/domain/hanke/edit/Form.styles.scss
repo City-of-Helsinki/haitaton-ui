@@ -132,6 +132,10 @@
 
   .formItem {
     padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) 0;
+
+    div {
+      height: auto;
+    }
   }
 
   .error-text {

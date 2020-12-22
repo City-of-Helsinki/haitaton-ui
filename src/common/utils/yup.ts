@@ -13,6 +13,7 @@ yup.setLocale({
   string: {
     min: ({ min }: { min: number }) => ({ key: 'stringMin', values: { min } }),
     max: ({ max }: { max: number }) => ({ key: 'stringMax', values: { max } }),
+    email: { key: 'email', values: {} },
   },
   date: {
     min: ({ min }: { min: string }) => ({
