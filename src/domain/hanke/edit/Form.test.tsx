@@ -114,7 +114,7 @@ describe('HankeForm', () => {
   });
 
   test('contacts should be validated correctly', async () => {
-    const { getByTestId, getByLabelText, queryAllByText } = render(
+    const { getByTestId, getByLabelText, queryAllByText, queryByText } = render(
       <Provider store={store}>
         <Form />
       </Provider>
@@ -151,7 +151,9 @@ describe('HankeForm', () => {
       target: { value: 'wrongEmail' },
     });
 
+    await waitFor(() => expect(queryByText('Sähköposti on virheellinen')));
     await waitFor(() => expect(getByTestId('forward')).toBeDisabled());
+
     fireEvent.change(getByTestId('omistajat-email'), {
       target: { value: 'omistaja@foo.bar' },
     });
