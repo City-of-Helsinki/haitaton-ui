@@ -5,6 +5,11 @@
       "bodyText": "SV:Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä, vai poistua, jolloin syöttämäsi tiedot poistuvat.",
       "cancelButton": "SV:Peruuta",
       "exitButton": "SV:Poistu"
+    },
+    "languages": {
+      "fi": "Suomi",
+      "en": "English",
+      "sv": "Svenska"
     }
   },
   "form": {

@@ -5,6 +5,11 @@
       "bodyText": "EN:Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä, vai poistua, jolloin syöttämäsi tiedot poistuvat.",
       "cancelButton": "EN:Peruuta",
       "exitButton": "EN:Poistu"
+    },
+    "languages": {
+      "fi": "Suomi",
+      "en": "English",
+      "sv": "Svenska"
     }
   },
   "form": {
