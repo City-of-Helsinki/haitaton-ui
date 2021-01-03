@@ -70,6 +70,7 @@
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.1",
+    "react-toastify": "^6.2.0",
     "redux-thunk": "^2.3.0",
     "ts-enum-util": "^4.0.2",
     "turf": "^3.0.14",

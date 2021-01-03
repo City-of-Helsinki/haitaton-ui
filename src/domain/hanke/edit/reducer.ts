@@ -1,4 +1,5 @@
 import { PayloadAction, CaseReducer, createSlice } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import { saveForm } from './thunks';
 import { HankeDataDraft } from './types';
 
@@ -26,7 +27,6 @@ export const initialState: State = {
   hasFormChanged: false,
   status: null,
 };
-
 const formSlice = createSlice({
   name: 'hankeForm',
   initialState,
@@ -39,10 +39,12 @@ const formSlice = createSlice({
       if (payload) {
         state.status = 'ok';
         state.hankeDataDraft = payload;
+        toast.success('Tallennettii onnistuneesti');
       }
     });
     builder.addCase(saveForm.rejected, (state) => {
       state.status = 'error';
+      toast.warn('Tallennus epäonnistui');
     });
   },
 });

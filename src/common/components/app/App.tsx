@@ -2,6 +2,9 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { QueryCache, ReactQueryCacheProvider } from 'react-query';
 import { ChakraProvider } from '@chakra-ui/react';
+import { ToastContainer } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 import AppRoutes from '../../routes/AppRoutes';
 import Layout from './Layout';
@@ -17,6 +20,7 @@ const App: React.FC = () => (
     <ReactQueryCacheProvider queryCache={queryCache}>
       <ChakraProvider theme={theme}>
         <Layout>
+          <ToastContainer />
           <AppRoutes />
         </Layout>
       </ChakraProvider>
