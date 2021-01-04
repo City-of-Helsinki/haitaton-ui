@@ -1,51 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Navigation } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
-
-import { registerLocale } from 'react-datepicker';
-
-import fi from 'date-fns/locale/fi';
-import sv from 'date-fns/locale/sv';
-import en from 'date-fns/locale/en-GB';
-
+import { $enum } from 'ts-enum-util';
+import { LANGUAGES, Language } from '../../types/language';
 import { useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
 import Locale from '../locale/Locale';
-
 import './Header.styles.scss';
 
-const languages = [
-  { code: 'fi', label: 'Suomi', dateFns: fi },
-  { code: 'sv', label: 'Svenska', dateFns: sv },
-  { code: 'en', label: 'English', dateFns: en },
-];
-type Types =
-  | {
-      code: string;
-      label: string;
-      // eslint-disable-next-line
-      dateFns: any;
-    }
-  | undefined;
-
 const Header: React.FC = () => {
-  const [language, setLanguageState] = useState<Types>(languages[0]);
+  const [menuOpen, setMenuOpen] = useState(false);
   const { HOME, MAP, PROJECTS, FORM } = useLocalizedRoutes();
+  const { i18n, t } = useTranslation();
 
-  const { i18n } = useTranslation();
-
-  const setLanguage = (code: Types) => {
-    if (!code) return;
-    registerLocale(code.dateFns.code, code.dateFns);
-    setLanguageState(code);
-    i18n.changeLanguage(code.code);
+  const setLanguage = (lang: Language) => {
+    i18n.changeLanguage(lang);
   };
 
-  useEffect(() => {
-    const langObj = languages.find((item) => item.code === i18n.language);
-    setLanguage(langObj);
-  }, []);
-  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <Navigation
       menuToggleAriaLabel="Open and close menu"
@@ -69,14 +40,17 @@ const Header: React.FC = () => {
         </NavLink>
       </Navigation.Row>
 
-      <Navigation.LanguageSelector label={language && language.label}>
-        {languages.map((languageVal) => (
+      <Navigation.LanguageSelector label={t(`common:languages:${i18n.language}`)}>
+        {$enum(LANGUAGES).map((lang) => (
           <Navigation.Item
             as="a"
-            href="#"
-            label={languageVal.label}
-            onClick={() => setLanguage(languageVal)}
-            key={languageVal.code}
+            href={`/${lang}`}
+            label={t(`common:languages:${lang}`)}
+            onClick={(e: React.MouseEvent) => {
+              e.preventDefault();
+              setLanguage(lang);
+            }}
+            key={lang}
           />
         ))}
       </Navigation.LanguageSelector>
