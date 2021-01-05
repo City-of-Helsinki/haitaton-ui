@@ -149,6 +149,10 @@
     "finishButton": "Tallenna ja poistu",
     "saveDraftButton": "Tallenna luonnos",
     "insertFieldError": "Syötä kenttä",
+    "savingSuccessHeader": "Luonnos tallennettu",
+    "savingSuccessText": "Luonnos on tallenettu Hankelistalle",
+    "savingFailHeader": "Joku meni vikaan",
+    "savingFailText": "Luonnosta ei saatu tallennettua, koita uudelleen",
     "labels": {
       "hankeTunnus": "Hankkeen tunnus",
       "nimi": "Hankkeen nimi",
