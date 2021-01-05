@@ -35,22 +35,6 @@ const formSlice = createSlice({
     updateFormData,
     updateHasFormChanged,
   },
-  /*
-  extraReducers: {
-    [saveForm.pending]: (state, action) => {
-      state.status = 'loading';
-    },
-    [saveForm.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
-      // Add any fetched posts to the array
-      state.posts = state.posts.concat(action.payload);
-    },
-    [saveForm.rejected]: (state, action) => {
-      state.status = 'failed';
-      state.error = action.error.message;
-    },
-  },
-*/
   extraReducers: (builder) => {
     builder.addCase(saveForm.pending, (state) => {
       state.showNotification = null;
