@@ -1,0 +1,8 @@
+.hankelista {
+  padding: var(--spacing-s) var(--spacing-l) var(--spacing-3-xl) var(--spacing-l);
+
+  &__inner {
+    padding: var(--spacing-s) var(--spacing-l) var(--spacing-3-xl) var(--spacing-l);
+    background: var(--color-white);
+  }
+}

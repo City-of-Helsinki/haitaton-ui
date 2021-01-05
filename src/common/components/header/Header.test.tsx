@@ -18,6 +18,6 @@ describe('Header', () => {
 
     fireEvent.click(getAllByText('English')[0]);
 
-    expect(getByTestId(container, 'hankeListLink')).toHaveTextContent('EN::Hankesalkku');
+    expect(getByTestId(container, 'hankeListLink')).toHaveTextContent('EN::Hankelista');
   });
 });
