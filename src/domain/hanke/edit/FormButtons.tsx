@@ -65,6 +65,7 @@ const FormButtons: React.FC<Props> = ({
           variant="secondary"
           data-testid="finish"
           disabled={!isValid}
+          theme="coat"
         >
           <span>{t('hankeForm:finishButton')}</span>
         </Button>
@@ -78,11 +79,17 @@ const FormButtons: React.FC<Props> = ({
           variant="secondary"
           data-testid="forward"
           disabled={!isValid}
+          theme="coat"
         >
           <span>{t(nextButtonText)}</span>
         </Button>
       )}
-      <Button type="button" onClick={() => saveDraft()} disabled={!isValid || !isDirty}>
+      <Button
+        type="button"
+        onClick={() => saveDraft()}
+        disabled={!isValid || !isDirty}
+        theme="coat"
+      >
         <span>{t('hankeForm:saveDraftButton')}</span>
       </Button>
 
@@ -94,6 +101,7 @@ const FormButtons: React.FC<Props> = ({
           iconLeft={<IconAngleLeft />}
           variant="secondary"
           data-testid="backward"
+          theme="coat"
         >
           <span>{t(previousButtonText)}</span>
         </Button>
