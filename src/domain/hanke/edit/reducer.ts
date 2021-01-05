@@ -1,5 +1,4 @@
 import { PayloadAction, CaseReducer, createSlice } from '@reduxjs/toolkit';
-import { toast } from 'react-toastify';
 import { saveForm } from './thunks';
 import { HankeDataDraft } from './types';
 
@@ -7,6 +6,7 @@ type State = {
   hankeDataDraft: HankeDataDraft;
   hasFormChanged: boolean;
   status: string | null;
+  showNotification: string | null;
 };
 
 const updateFormData: CaseReducer<State, PayloadAction<HankeDataDraft>> = (state, action) => {
@@ -26,6 +26,7 @@ export const initialState: State = {
   hankeDataDraft,
   hasFormChanged: false,
   status: null,
+  showNotification: null,
 };
 const formSlice = createSlice({
   name: 'hankeForm',
@@ -34,17 +35,36 @@ const formSlice = createSlice({
     updateFormData,
     updateHasFormChanged,
   },
+  /*
+  extraReducers: {
+    [saveForm.pending]: (state, action) => {
+      state.status = 'loading';
+    },
+    [saveForm.fulfilled]: (state, action) => {
+      state.status = 'succeeded';
+      // Add any fetched posts to the array
+      state.posts = state.posts.concat(action.payload);
+    },
+    [saveForm.rejected]: (state, action) => {
+      state.status = 'failed';
+      state.error = action.error.message;
+    },
+  },
+*/
   extraReducers: (builder) => {
+    builder.addCase(saveForm.pending, (state) => {
+      state.showNotification = null;
+    });
     builder.addCase(saveForm.fulfilled, (state, { payload }) => {
       if (payload) {
         state.status = 'ok';
         state.hankeDataDraft = payload;
-        toast.success('Tallennettii onnistuneesti');
+        state.showNotification = 'success';
       }
     });
     builder.addCase(saveForm.rejected, (state) => {
       state.status = 'error';
-      toast.warn('Tallennus epäonnistui');
+      state.showNotification = 'error';
     });
   },
 });
