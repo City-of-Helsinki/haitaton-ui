@@ -5,7 +5,7 @@ import { SelectedDrawtoolType, MapInstance } from './types';
 import { projection } from './utils';
 
 const defaultZoom = 13;
-export const helsinkiCenterCoords = [25495389.68, 6671209.77];
+export const helsinkiCenterCoords = [25496710.16, 6673523.79];
 
 type Props = {
   zoom: number;
@@ -36,7 +36,6 @@ const Map: React.FC<Props> = ({
         minZoom: 5,
         maxZoom: 15,
         projection,
-        constrainResolution: true,
       }),
       layers: [],
       controls: [],
