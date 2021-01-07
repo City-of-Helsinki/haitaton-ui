@@ -4,18 +4,16 @@ import GeoJSON from 'ol/format/GeoJSON';
 import VectorLayer from '../../../common/components/map/layers/VectorLayer';
 import { useMapDataLayers } from '../hooks/useMapDataLayers';
 import { CommonGeoJSON } from '../../../common/types/hanke';
-import { DATAPROJECTION, FEATUREPROJECTION } from '../constants';
+import { epsg3857, epsg3879 } from '../../../common/components/map/constants';
 
 const createSource = (data: CommonGeoJSON) => {
   const source = new VectorSource();
   source.addFeatures(
     new GeoJSON().readFeatures(data, {
-      dataProjection: DATAPROJECTION,
-      featureProjection: FEATUREPROJECTION,
+      dataProjection: epsg3857,
+      featureProjection: epsg3879,
     })
   );
-
-  console.log(source.getFeatures());
 
   return source;
 };

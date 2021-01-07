@@ -1,18 +1,14 @@
 import GeoJSON from 'ol/format/GeoJSON';
 import { HankeGeoJSON } from '../../common/types/hanke';
 import { GeometryData } from './types';
-import { DATAPROJECTION, FEATUREPROJECTION } from './constants';
 
 export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJSON => {
   const format = new GeoJSON();
   const json = format.writeFeatures(features, {
-    dataProjection: DATAPROJECTION,
-    featureProjection: FEATUREPROJECTION,
-    decimals: 1,
+    decimals: 2, // Not sure if this is correct
   });
   const data = JSON.parse(json);
 
-  // ADD CRS (WIP)
   return {
     ...data,
     crs: {

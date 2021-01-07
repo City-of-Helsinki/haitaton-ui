@@ -1,23 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import * as ol from 'ol';
-import proj4 from 'proj4';
-import { register } from 'ol/proj/proj4';
-import { get as getProjection } from 'ol/proj';
-
 import MapContext from './MapContext';
 import { SelectedDrawtoolType, MapInstance } from './types';
+import { projection } from './utils';
 
 const defaultZoom = 13;
-const helsinkiCoordinates = [2776000, 8438000];
-
-proj4.defs(
-  'EPSG:3879',
-  '+proj=tmerc +lat_0=0 +lon_0=25 +k=1 +x_0=25500000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
-);
-register(proj4);
-export const haitatonProjection = getProjection('EPSG:3879');
-
-// proj4.defs("EPSG:3879","+proj=tmerc +lat_0=0 +lon_0=25 +k=1 +x_0=25500000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
+export const helsinkiCenterCoords = [25495389.68, 6671209.77];
 
 type Props = {
   zoom: number;
@@ -28,7 +16,7 @@ type Props = {
 const Map: React.FC<Props> = ({
   children,
   zoom = defaultZoom,
-  center = helsinkiCoordinates,
+  center = helsinkiCenterCoords,
   mapClassName,
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -45,9 +33,10 @@ const Map: React.FC<Props> = ({
       view: new ol.View({
         center,
         zoom,
-        minZoom: 12,
-        maxZoom: 22,
-        // projection: haitatonProjection,
+        minZoom: 5,
+        maxZoom: 15,
+        projection,
+        constrainResolution: true,
       }),
       layers: [],
       controls: [],
@@ -55,7 +44,6 @@ const Map: React.FC<Props> = ({
     };
 
     const mapObject = new ol.Map(options);
-    console.log({ mapObject });
     mapObject.setTarget(mapRef.current);
     setMap(mapObject);
 
