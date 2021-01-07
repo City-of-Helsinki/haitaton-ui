@@ -1,6 +1,7 @@
 import React from 'react';
 import { TileWMS } from 'ol/source';
 import TileLayer from '../../../common/components/map/layers/TileLayer';
+import { projection } from '../../../common/components/map/utils';
 
 const Kantakartta = () => (
   <TileLayer
@@ -14,8 +15,9 @@ const Kantakartta = () => (
           WIDTH: 256,
           HEIGHT: 256,
           VERSION: '1.1.1',
+          TRANSPARENT: 'false',
         },
-        projection: 'EPSG:3857',
+        projection,
         imageSmoothing: false,
         hidpi: false,
         serverType: 'geoserver',

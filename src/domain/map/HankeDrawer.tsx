@@ -14,8 +14,7 @@ import styles from './Map.module.scss';
 import { useMapDataLayers } from './hooks/useMapDataLayers';
 import { MapDataLayerKey } from './types';
 import { formatFeaturesToHankeGeoJSON } from './utils';
-
-const projection = 'EPSG:3879';
+import { projection } from '../../common/components/map/utils';
 
 const drawVectorSource = new VectorSource({
   format: new GeoJSON({
@@ -37,8 +36,7 @@ const HankeDrawer: React.FC<Props> = ({ hankeTunnus }) => {
   } = useMapDataLayers();
 
   const [drawSource] = useState<VectorSource>(drawVectorSource);
-  const [center] = useState([2776000, 8438000]);
-  const [zoom] = useState(15);
+  const [zoom] = useState(0);
   const [showKantakartta, setShowKantakartta] = useState(true);
   const [showHSL, setShowHSL] = useState(false);
 
@@ -62,7 +60,7 @@ const HankeDrawer: React.FC<Props> = ({ hankeTunnus }) => {
   return (
     <>
       <div className={styles.mapContainer} style={{ width: '100%', height: 500 }}>
-        <Map center={center} zoom={zoom} mapClassName={styles.mapContainer__inner}>
+        <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
           <DrawIntercation source={drawSource} />
           {showKantakartta && <Kantakartta />}
           {showHSL && <HSL />}

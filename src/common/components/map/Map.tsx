@@ -2,9 +2,10 @@ import React, { useRef, useState, useEffect } from 'react';
 import * as ol from 'ol';
 import MapContext from './MapContext';
 import { SelectedDrawtoolType, MapInstance } from './types';
+import { projection } from './utils';
 
 const defaultZoom = 13;
-const helsinkiCoordinates = [2776000, 8438000];
+export const helsinkiCenterCoords = [25496710.16, 6673523.79];
 
 type Props = {
   zoom: number;
@@ -15,7 +16,7 @@ type Props = {
 const Map: React.FC<Props> = ({
   children,
   zoom = defaultZoom,
-  center = helsinkiCoordinates,
+  center = helsinkiCenterCoords,
   mapClassName,
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -32,9 +33,9 @@ const Map: React.FC<Props> = ({
       view: new ol.View({
         center,
         zoom,
-        minZoom: 12,
-        maxZoom: 22,
-        projection: 'EPSG:3857',
+        minZoom: 5,
+        maxZoom: 15,
+        projection,
       }),
       layers: [],
       controls: [],
