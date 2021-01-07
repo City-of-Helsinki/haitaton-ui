@@ -3245,7 +3245,7 @@
   resolved "https://registry.yarnpkg.com/@types/object-assign/-/object-assign-4.0.30.tgz#8949371d5a99f4381ee0f1df0a9b7a187e07e652"
   integrity sha1-iUk3HVqZ9Dge4PHfCpt6GH4H5lI=
 
-"@types/ol@^6.5.0":
+"@types/ol@^6.4.2":
   version "6.4.2"
   resolved "https://registry.yarnpkg.com/@types/ol/-/ol-6.4.2.tgz#3992e2f06fb3c224cda28e6727bc283febd5f8ff"
   integrity sha512-lSms1n5obkacAosby0U3HtnDkjhEXNCYNj0BYjQXyAZHz7+QkA3SuvUHiQ91DBUaAPptCrps3E2mtaPTGw74UA==
