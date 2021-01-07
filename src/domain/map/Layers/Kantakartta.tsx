@@ -11,7 +11,7 @@ const Kantakartta = () => (
         url: 'https://kartta.hel.fi/ws/geoserver/avoindata/wms',
         params: {
           LAYERS: 'Kantakartta',
-          FORMAT: 'image/png',
+          FORMAT: 'image/jpeg',
           WIDTH: 256,
           HEIGHT: 256,
           VERSION: '1.1.1',
