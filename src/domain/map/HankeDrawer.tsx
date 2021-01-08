@@ -14,7 +14,6 @@ import styles from './Map.module.scss';
 import { useMapDataLayers } from './hooks/useMapDataLayers';
 import { MapDataLayerKey } from './types';
 import { formatFeaturesToHankeGeoJSON } from './utils';
-import { projection } from '../../common/components/map/utils';
 
 type Props = {
   hankeTunnus: string | undefined;
@@ -30,10 +29,7 @@ const HankeDrawer: React.FC<Props> = ({ hankeTunnus }) => {
 
   const [drawSource] = useState<VectorSource>(
     new VectorSource({
-      format: new GeoJSON({
-        dataProjection: projection,
-        featureProjection: projection,
-      }),
+      format: new GeoJSON(),
     })
   );
   const [zoom] = useState(0);

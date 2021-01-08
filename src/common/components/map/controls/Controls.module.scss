@@ -9,7 +9,7 @@
 }
 
 .controlPanel {
-  background: white;
+  background: var(--color-white);
   color: black;
   border: 1px solid black;
   pointer-events: all;
@@ -17,7 +17,7 @@
 }
 
 .controlMenu {
-  background: white;
+  background: var(--color-white);
   padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-3-xs);
 
   &__divider {
