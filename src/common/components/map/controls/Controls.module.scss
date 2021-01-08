@@ -16,6 +16,16 @@
   padding: var(--spacing-3-xs);
 }
 
+.controlMenu {
+  background: white;
+  padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-3-xs);
+
+  &__divider {
+    margin-top: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
+  }
+}
+
 .tileLayerControl {
   position: absolute;
   top: var(--spacing-s);
