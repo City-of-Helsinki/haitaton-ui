@@ -9,19 +9,11 @@ import VectorLayer from '../../common/components/map/layers/VectorLayer';
 import DrawIntercation from '../../common/components/map/interactions/Draw';
 import Kantakartta from './Layers/Kantakartta';
 import DataLayers from './Layers/DataLayers';
-import HSL from './Layers/HSL';
+import Ortokartta from './Layers/Ortokartta';
 import styles from './Map.module.scss';
 import { useMapDataLayers } from './hooks/useMapDataLayers';
 import { MapDataLayerKey } from './types';
 import { formatFeaturesToHankeGeoJSON } from './utils';
-import { projection } from '../../common/components/map/utils';
-
-const drawVectorSource = new VectorSource({
-  format: new GeoJSON({
-    dataProjection: projection,
-    featureProjection: projection,
-  }),
-});
 
 type Props = {
   hankeTunnus: string | undefined;
@@ -35,10 +27,14 @@ const HankeDrawer: React.FC<Props> = ({ hankeTunnus }) => {
     handleUpdateGeometryState,
   } = useMapDataLayers();
 
-  const [drawSource] = useState<VectorSource>(drawVectorSource);
+  const [drawSource] = useState<VectorSource>(
+    new VectorSource({
+      format: new GeoJSON(),
+    })
+  );
   const [zoom] = useState(0);
   const [showKantakartta, setShowKantakartta] = useState(true);
-  const [showHSL, setShowHSL] = useState(false);
+  const [showOrtokartta, setShowOrtokartta] = useState(false);
 
   useEffect(() => {
     drawSource.on('addfeature', () => {
@@ -49,10 +45,10 @@ const HankeDrawer: React.FC<Props> = ({ hankeTunnus }) => {
 
   const toggleTileLayer = () => {
     if (showKantakartta) {
-      setShowHSL(true);
+      setShowOrtokartta(true);
       setShowKantakartta(false);
     } else {
-      setShowHSL(false);
+      setShowOrtokartta(false);
       setShowKantakartta(true);
     }
   };
@@ -63,14 +59,19 @@ const HankeDrawer: React.FC<Props> = ({ hankeTunnus }) => {
         <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
           <DrawIntercation source={drawSource} />
           {showKantakartta && <Kantakartta />}
-          {showHSL && <HSL />}
+          {showOrtokartta && <Ortokartta />}
           <DataLayers />
           <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
           <Controls>
             <DrawControl />
             <LayerControl
               tileLayers={[
-                { id: 'hsl', label: 'HSL', onClick: toggleTileLayer, checked: showHSL },
+                {
+                  id: 'ortokartta',
+                  label: 'Ortokartta',
+                  onClick: toggleTileLayer,
+                  checked: showOrtokartta,
+                },
                 {
                   id: 'kantakartta',
                   label: 'Kantakartta',

@@ -1,13 +1,6 @@
 import React from 'react';
-import {
-  Icon,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuGroup,
-  MenuDivider,
-} from '@chakra-ui/core';
+import { Menu, MenuButton, MenuList, MenuGroup, MenuDivider } from '@chakra-ui/core';
+import { IconLayers } from 'hds-react/icons';
 import { useTranslation } from 'react-i18next';
 import { Checkbox } from 'hds-react';
 import ControlPanel from './ControlPanel';
@@ -30,7 +23,7 @@ type DataLayer = {
 type Props = {
   tileLayers: TileLayer[];
   dataLayers: DataLayer[];
-  // I dont want to import type from domain
+  // I dont want to import type from domain. Maybe move layers here under common dir?
   // eslint-disable-next-line
   onClickDataLayer: (key: any) => void;
 };
@@ -42,17 +35,17 @@ const LayerControl: React.FC<Props> = ({ tileLayers, dataLayers, onClickDataLaye
     <ControlPanel className={styles.tileLayerControl}>
       <Menu closeOnSelect={false}>
         <MenuButton>
-          <Icon name="copy" />
+          <IconLayers />
         </MenuButton>
-        <MenuList>
+        <MenuList className={styles.controlMenu}>
           <MenuGroup>
             {tileLayers.map(({ id, onClick, label, checked }) => (
-              <MenuItem key={id} onClick={() => onClick()} isDisabled={checked}>
-                {label}
-              </MenuItem>
+              <div className={styles.drawControl__checkbox} key={id}>
+                <Checkbox id={id} label={label} checked={checked} onClick={() => onClick()} />
+              </div>
             ))}
           </MenuGroup>
-          <MenuDivider />
+          <MenuDivider className={styles.controlMenu__divider} />
           <MenuGroup>
             {dataLayers.map(({ key, visible }) => (
               <div className={styles.drawControl__checkbox} key={key}>
@@ -72,9 +65,3 @@ const LayerControl: React.FC<Props> = ({ tileLayers, dataLayers, onClickDataLaye
 };
 
 export default LayerControl;
-
-/*
-            <MenuItem key={key} onClick={() => onClickDataLayer(key)}>
-              <Locale id={`map:datalayers:${key}`} />
-            </MenuItem>
-            */
