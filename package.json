@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "react-spring-issue-1078": "find node_modules -path \\*@react-spring/\\*/package.json -exec sed -i.bak 's/\"sideEffects\": false/\"sideEffects\": true/g' {} +",
+    "postinstall": "npm run react-spring-issue-1078",
     "start": "PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "serve": "ws --spa index.html -d build -p 3001 --rewrite '/api/(.*) -> http://localhost:3000/api/$1'",
