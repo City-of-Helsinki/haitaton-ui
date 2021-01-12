@@ -1,6 +1,6 @@
 import React from 'react';
-import { useTable, useSortBy, usePagination } from 'react-table';
-import { IconAngleDown, IconAngleUp } from 'hds-react/icons';
+import { useTable, useSortBy } from 'react-table';
+import { IconAngleDown, IconAngleUp, IconCrossCircle, IconPen } from 'hds-react/icons';
 import { TableProps } from './types';
 
 const Table: React.FC<TableProps> = ({ columns, data }) => {
@@ -9,8 +9,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
       columns,
       data,
     },
-    useSortBy,
-    usePagination
+    useSortBy
   );
 
   // We don't want to render all 2000 rows for this example, so cap
@@ -44,6 +43,9 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                   </div>
                 </th>
               ))}
+              <th>
+                <div />
+              </th>
             </tr>
           ))}
         </thead>
@@ -55,6 +57,10 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                 {row.cells.map((cell) => {
                   return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
                 })}
+                <td>
+                  <IconPen className="pen" />
+                  <IconCrossCircle className="remove" />
+                </td>
               </tr>
             );
           })}
