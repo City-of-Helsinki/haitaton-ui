@@ -1,3 +1,3 @@
-import { RootState } from '../../../common/components/app/store';
+import { RootState } from '../../../common/redux/store';
 
 export const getProjects = (state: RootState): number => state.projects;

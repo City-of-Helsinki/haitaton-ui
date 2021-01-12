@@ -1,7 +1,6 @@
 import { useContext, useEffect } from 'react';
 import OLTileLayer from 'ol/layer/Tile';
 import { TileWMS, OSM } from 'ol/source';
-
 import MapContext from '../MapContext';
 
 type Props = {

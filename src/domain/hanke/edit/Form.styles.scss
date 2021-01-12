@@ -8,8 +8,9 @@
   }
 
   .closeFormWpr {
-    display: flex;
-    justify-content: flex-end;
+    right: var(--spacing-layout-s);
+    top: var(--spacing-layout-s);
+    position: absolute;
   }
 
   h3.labelHeader {
@@ -31,9 +32,10 @@
     flex-grow: 1;
     padding: var(--spacing-layout-s);
     margin-left: var(--spacing-layout-s);
+    position: relative;
 
     h2 {
-      margin-top: 0;
+      margin-top: -0.5rem;
       padding-top: 0;
     }
   }

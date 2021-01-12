@@ -5,6 +5,11 @@
       "bodyText": "SV:Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä, vai poistua, jolloin syöttämäsi tiedot poistuvat.",
       "cancelButton": "SV:Peruuta",
       "exitButton": "SV:Poistu"
+    },
+    "languages": {
+      "fi": "Suomi",
+      "en": "English",
+      "sv": "Svenska"
     }
   },
   "form": {
@@ -144,6 +149,10 @@
     "finishButton": "SV:Tallenna ja poistu",
     "saveDraftButton": "SV:Tallenna luonnos",
     "insertFieldError": "SV:Syötä kenttä",
+    "savingSuccessHeader": "SV:Luonnos tallennettu",
+    "savingSuccessText": "SV:Luonnos on tallenettu Hankelistalle",
+    "savingFailHeader": "SV:Joku meni vikaan",
+    "savingFailText": "SV:Luonnosta ei saatu tallennettua, koita uudelleen",
     "labels": {
       "hankeTunnus": "SV:Hankkeen tunnus",
       "nimi": "SV:Hankkeen nimi",

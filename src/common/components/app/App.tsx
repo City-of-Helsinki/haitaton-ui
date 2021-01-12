@@ -5,7 +5,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 
 import AppRoutes from '../../routes/AppRoutes';
 import Layout from './Layout';
-import { store } from './store';
+import { store } from '../../redux/store';
 import theme from './theme';
 import './app.scss';
 import '../../../assets/styles/reset.css';

@@ -6,6 +6,7 @@ type State = {
   hankeDataDraft: HankeDataDraft;
   hasFormChanged: boolean;
   status: string | null;
+  showNotification: string | null;
 };
 
 const updateFormData: CaseReducer<State, PayloadAction<HankeDataDraft>> = (state, action) => {
@@ -25,8 +26,8 @@ export const initialState: State = {
   hankeDataDraft,
   hasFormChanged: false,
   status: null,
+  showNotification: null,
 };
-
 const formSlice = createSlice({
   name: 'hankeForm',
   initialState,
@@ -35,14 +36,19 @@ const formSlice = createSlice({
     updateHasFormChanged,
   },
   extraReducers: (builder) => {
+    builder.addCase(saveForm.pending, (state) => {
+      state.showNotification = null;
+    });
     builder.addCase(saveForm.fulfilled, (state, { payload }) => {
       if (payload) {
         state.status = 'ok';
         state.hankeDataDraft = payload;
+        state.showNotification = 'success';
       }
     });
     builder.addCase(saveForm.rejected, (state) => {
       state.status = 'error';
+      state.showNotification = 'error';
     });
   },
 });

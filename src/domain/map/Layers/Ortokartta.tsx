@@ -3,14 +3,14 @@ import { TileWMS } from 'ol/source';
 import TileLayer from '../../../common/components/map/layers/TileLayer';
 import { projection } from '../../../common/components/map/utils';
 
-const Kantakartta = () => (
+const Ortokartta = () => (
   <TileLayer
     zIndex={2}
     source={
       new TileWMS({
         url: 'https://kartta.hel.fi/ws/geoserver/avoindata/wms',
         params: {
-          LAYERS: 'Kantakartta',
+          LAYERS: 'Ortoilmakuva_2020_5cm',
           FORMAT: 'image/jpeg',
           WIDTH: 256,
           HEIGHT: 256,
@@ -27,4 +27,4 @@ const Kantakartta = () => (
   />
 );
 
-export default Kantakartta;
+export default Ortokartta;

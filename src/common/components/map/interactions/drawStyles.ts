@@ -1,4 +1,4 @@
-import * as ol from 'ol';
+// import * as ol from 'ol';
 import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
 
 export const image = new CircleStyle({
@@ -72,4 +72,5 @@ export const styles = {
   }),
   LinearRing: {},
 };
-export const styleFunction = (feature: ol.Feature) => styles[feature.getGeometry().getType()];
+// export const styleFunction = (feature: ol.Feature) => styles.Polygon; // styles[feature.getGeometry().getType()];
+export const styleFunction = () => styles.Polygon; // styles[feature.getGeometry().getType()];

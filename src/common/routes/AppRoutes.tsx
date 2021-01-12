@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { LANGUAGES } from '../constants/languages';
+import { LANGUAGES } from '../types/language';
 import useLocale from '../hooks/useLocale';
 import LocaleRoutes from './LocaleRoutes';
 
@@ -13,11 +13,7 @@ const AppRoutes: React.FC = () => {
     <Switch>
       <Redirect exact path="/" to={`/${currentLocale}`} />
       <Route path={`/${localeParam}`} component={LocaleRoutes} />
-      <Route
-        render={(props) => (
-          <Redirect to={`/${currentLocale}${props.location.pathname}${props.location.search}`} />
-        )}
-      />
+      <Route render={() => <Redirect to={`/${currentLocale}`} />} />
     </Switch>
   );
 };

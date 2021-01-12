@@ -1,1 +1,7 @@
-export type Language = 'fi' | 'en' | 'sv';
+export enum LANGUAGES {
+  fi = 'fi',
+  en = 'en',
+  sv = 'sv',
+}
+
+export type Language = keyof typeof LANGUAGES;
