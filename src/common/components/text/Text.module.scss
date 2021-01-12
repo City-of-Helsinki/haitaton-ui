@@ -1,19 +1,25 @@
 .h1 {
   font-size: var(--fontsize-heading-xl);
-  margin-bottom: var(--spacing-xl);
+  margin-top: var(--spacing-s);
+  margin-bottom: var(--spacing-s);
+  font-weight: bold;
 }
 
 .h2 {
   font-size: var(--fontsize-heading-l);
-  margin-bottom: var(--spacing-l);
+  margin-top: var(--spacing-s);
+  margin-bottom: var(--spacing-s);
+  font-weight: bold;
 }
 
-h3 {
+.h3 {
   font-size: var(--fontsize-heading-m);
-  margin-bottom: var(--spacing-m);
+  margin-bottom: var(--spacing-s);
+  font-weight: bold;
 }
 
-h4 {
+.h4 {
   font-size: var(--fontsize-heading-s);
   margin-bottom: var(--spacing-s);
+  font-weight: bold;
 }

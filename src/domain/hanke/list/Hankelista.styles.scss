@@ -1,8 +1,52 @@
 .hankelista {
-  padding: var(--spacing-s) var(--spacing-l) var(--spacing-3-xl) var(--spacing-l);
+  padding: 0 var(--spacing-l) var(--spacing-3-xl) var(--spacing-l);
 
   &__inner {
-    padding: var(--spacing-s) var(--spacing-l) var(--spacing-3-xl) var(--spacing-l);
+    padding: var(--spacing-l) var(--spacing-l) var(--spacing-3-xl) var(--spacing-l);
     background: var(--color-white);
+
+    table {
+      width: 100%;
+
+      thead th {
+        background: var(--color-black-10);
+        text-align: left;
+        padding: var(--spacing-3-xs) var(--spacing-m);
+
+        div {
+          display: flex;
+          align-items: center;
+
+          .unSelectedWpr {
+            display: inline-block;
+            padding: 0.8rem 0 0 0.2rem;
+          }
+
+          .unSelected {
+            display: block;
+
+            svg {
+              display: block;
+            }
+
+            svg:last-child {
+              position: relative;
+              top: -0.8rem;
+            }
+          }
+        }
+      }
+
+      tbody {
+        td {
+          border-bottom: 1px solid var(--color-black-5);
+          padding: var(--spacing-s) var(--spacing-m);
+        }
+
+        tr:nth-child(even) td {
+          background: var(--color-black-5);
+        }
+      }
+    }
   }
 }
