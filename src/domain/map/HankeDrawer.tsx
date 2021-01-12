@@ -6,7 +6,6 @@ import Controls from '../../common/components/map/controls/Controls';
 import LayerControl from '../../common/components/map/controls/LayerControl';
 import DrawControl from '../../common/components/map/controls/DrawControl';
 import VectorLayer from '../../common/components/map/layers/VectorLayer';
-import HankeGeometryLayer from '../../common/components/map/layers/HankeGeometryLayer';
 import DrawIntercation from '../../common/components/map/interactions/Draw';
 import Kantakartta from './Layers/Kantakartta';
 import DataLayers from './Layers/DataLayers';
@@ -54,93 +53,6 @@ const HankeDrawer: React.FC<Props> = ({ hankeTunnus }) => {
     }
   };
 
-  const sampleHankeGeometry = [
-    {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'Polygon',
-            coordinates: [
-              [
-                [25496585.89, 6673427.46],
-                [25496610.43, 6673428.77],
-                [25496620.93, 6673268.43],
-                [25496675.09, 6673267.37],
-                [25496682.14, 6673156.24],
-                [25496612.66, 6673153.97],
-                [25496593.98, 6673283.58],
-                [25496585.89, 6673427.46],
-              ],
-            ],
-          },
-          properties: null,
-        },
-      ],
-      crs: {
-        type: 'name',
-        properties: {
-          name: 'urn:ogc:def:crs:EPSG::3879',
-        },
-      },
-    },
-    {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'Polygon',
-            coordinates: [
-              [
-                [25496495.01, 6673320.49],
-                [25496588.89, 6673329.8],
-                [25496586.92, 6673344.38],
-                [25496493.25, 6673333.73],
-                [25496495.01, 6673320.49],
-              ],
-            ],
-          },
-          properties: null,
-        },
-      ],
-      crs: {
-        type: 'name',
-        properties: {
-          name: 'urn:ogc:def:crs:EPSG::3879',
-        },
-      },
-    },
-    {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'Polygon',
-            coordinates: [
-              [
-                [25496867.01, 6673084.64],
-                [25496859.74, 6673218.27],
-                [25496918.82, 6673221.91],
-                [25496923.86, 6673092.14],
-                [25496867.01, 6673084.64],
-              ],
-            ],
-          },
-          properties: null,
-        },
-      ],
-      crs: {
-        type: 'name',
-        properties: {
-          name: 'urn:ogc:def:crs:EPSG::3879',
-        },
-      },
-    },
-  ];
-
   return (
     <>
       <div className={styles.mapContainer} style={{ width: '100%', height: 500 }}>
@@ -150,14 +62,6 @@ const HankeDrawer: React.FC<Props> = ({ hankeTunnus }) => {
           {showOrtokartta && <Ortokartta />}
           <DataLayers />
           <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
-
-          {sampleHankeGeometry.map((hankeGeometry) => (
-            <HankeGeometryLayer
-              source={new VectorSource({ features: new GeoJSON().readFeatures(hankeGeometry) })}
-              zIndex={90}
-              className="hankeGeometryLayer"
-            />
-          ))}
 
           <Controls>
             <DrawControl />
