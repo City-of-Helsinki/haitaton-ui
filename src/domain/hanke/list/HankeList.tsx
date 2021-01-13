@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React from 'react';
-import Moment from 'moment';
+import format from 'date-fns/format';
+
 import { NavLink } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { useTranslation } from 'react-i18next';
@@ -40,13 +41,13 @@ const Projects: React.FC = () => {
       {
         Header: 'Aloitus',
         accessor: (d: HankeData) => {
-          return Moment(d.alkuPvm).local().format('DD.MM.YYYY');
+          return format(Date.parse(d.alkuPvm), 'dd.MM.yyyy');
         },
       },
       {
         Header: 'Lopetus',
         accessor: (d: HankeData) => {
-          return Moment(d.alkuPvm).local().format('DD.MM.YYYY');
+          return format(Date.parse(d.alkuPvm), 'dd.MM.yyyy');
         },
       },
     ],
@@ -55,16 +56,14 @@ const Projects: React.FC = () => {
   );
   return (
     <div className="hankelista">
-      <H1 stylesAs="h2">{t('hankeList:pageHeader')}</H1>
+      <H1 stylesAs="h2" data-testid="HankeListPageHeader">
+        {t('hankeList:pageHeader')}
+      </H1>
       {isLoading && <p>ladataan</p>}
       <div className="hankelista__inner">
         <Table columns={columns} data={!isLoading || isError ? data : []} />
-        <div className="hankelista__inner__buttonWpr">
-          <NavLink
-            to={FORM.path}
-            className="hankelista__inner__buttonWpr__hankeLink"
-            data-testid="hankeLink"
-          >
+        <div className="hankelista__buttonWpr">
+          <NavLink data-testid="toFormLink" to={FORM.path} className="hankelista__hankeLink">
             <Locale id="header:hankeLink" />
           </NavLink>
         </div>

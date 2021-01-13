@@ -1,22 +1,22 @@
 .hankelista {
   padding: 0 var(--spacing-l) var(--spacing-3-xl) var(--spacing-l);
 
+  &__buttonWpr {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__hankeLink {
+    background: var(--color-coat-of-arms);
+    padding: var(--spacing-s) var(--spacing-m);
+    margin: var(--spacing-s) 0 var(--spacing-s) var(--spacing-s);
+    color: var(--color-white);
+    text-decoration: none;
+  }
+
   &__inner {
     padding: var(--spacing-l) var(--spacing-l) var(--spacing-3-xl) var(--spacing-l);
     background: var(--color-white);
-
-    &__buttonWpr {
-      display: flex;
-      justify-content: flex-end;
-
-      &__hankeLink {
-        background: var(--color-coat-of-arms);
-        padding: var(--spacing-s) var(--spacing-m);
-        margin: var(--spacing-s) 0 var(--spacing-s) var(--spacing-s);
-        color: var(--color-white);
-        text-decoration: none;
-      }
-    }
 
     table {
       width: 100%;
