@@ -39,14 +39,12 @@ const Projects: React.FC = () => {
       },
       {
         Header: 'Aloitus',
-        // eslint-disable-next-line
         accessor: (d: HankeData) => {
           return Moment(d.alkuPvm).local().format('DD.MM.YYYY');
         },
       },
       {
         Header: 'Lopetus',
-        // eslint-disable-next-line
         accessor: (d: HankeData) => {
           return Moment(d.alkuPvm).local().format('DD.MM.YYYY');
         },

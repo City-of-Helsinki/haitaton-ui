@@ -1,6 +1,10 @@
-export interface TableProps {
+export type headerTypes = {
+  Header: string;
   // eslint-disable-next-line
-  columns: any;
+  accessor: any;
+};
+export interface TableProps {
+  columns: Array<headerTypes>;
   // eslint-disable-next-line
   data: any;
 }
