@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React from 'react';
 import format from 'date-fns/format';
 
@@ -7,6 +6,7 @@ import { useQuery } from 'react-query';
 import { useTranslation } from 'react-i18next';
 
 import H1 from '../../../common/components/text/H1';
+import api from '../../../common/utils/api';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import Locale from '../../../common/components/locale/Locale';
 import { HankeData } from '../edit/types';
@@ -16,13 +16,14 @@ import Table from './Table';
 import './Hankelista.styles.scss';
 
 const getProjects = async () => {
-  const { data } = await axios.get(`/api/hankkeet/`);
+  const data = await api.get(`/hankkeet/`);
   return data;
 };
 const useProject = () => useQuery(['project'], getProjects);
 const Projects: React.FC = () => {
   const { FORM } = useLocalizedRoutes();
   const { isLoading, isError, data } = useProject();
+
   const { t } = useTranslation();
   const columns = React.useMemo(
     () => [
@@ -47,7 +48,7 @@ const Projects: React.FC = () => {
       {
         Header: 'Lopetus',
         accessor: (d: HankeData) => {
-          return format(Date.parse(d.alkuPvm), 'dd.MM.yyyy');
+          return format(Date.parse(d.loppuPvm), 'dd.MM.yyyy');
         },
       },
     ],
@@ -61,7 +62,7 @@ const Projects: React.FC = () => {
       </H1>
       {isLoading && <p>ladataan</p>}
       <div className="hankelista__inner">
-        <Table columns={columns} data={!isLoading || isError ? data : []} />
+        <Table columns={columns} data={(!isLoading || isError) && data ? data : []} />
         <div className="hankelista__buttonWpr">
           <NavLink data-testid="toFormLink" to={FORM.path} className="hankelista__hankeLink">
             <Locale id="header:hankeLink" />
