@@ -42,10 +42,10 @@
       }
     },
     "PROJECTS": {
-      "path": "/hankesalkku",
-      "headerLabel": "Hankesalkku",
+      "path": "/hankelista",
+      "headerLabel": "Hankelista",
       "meta": {
-        "title": "Haitaton 2.0 - HankeSalkku"
+        "title": "Haitaton 2.0 - Hankelista"
       }
     },
     "MAP": {
@@ -213,6 +213,9 @@
     "finishedForm": {
       "header": "Lomake on lähetetty onnistuneesti"
     }
+  },
+  "hankeList": {
+    "pageHeader": "Hankelista"
   },
   "map": {
     "datalayers": {

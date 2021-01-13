@@ -132,7 +132,9 @@ const FormComponent: React.FC = () => {
         </Notification>
       )}
       <div className="hankeForm">
-        <H1 stylesAs="h2">{t('hankeForm:pageHeader')}</H1>
+        <H1 data-testid="formPageHeader" stylesAs="h2">
+          {t('hankeForm:pageHeader')}
+        </H1>
         {formPage === 5 ? (
           <div className="hankeForm__formWpr">
             <div className="hankeForm__formWprRight">

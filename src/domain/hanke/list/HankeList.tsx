@@ -1,34 +1,74 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import format from 'date-fns/format';
+
+import { NavLink } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { useTranslation } from 'react-i18next';
+
+import H1 from '../../../common/components/text/H1';
+import api from '../../../common/utils/api';
+import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import Locale from '../../../common/components/locale/Locale';
-import { getProjects } from './selectors';
-import { actions } from './reducer';
-import { useProjects } from '../../map/hooks/useProjects';
+import { HankeData } from '../edit/types';
 
+import Table from './Table';
+
+import './Hankelista.styles.scss';
+
+const getProjects = async () => {
+  const data = await api.get(`/hankkeet/`);
+  return data;
+};
+const useProject = () => useQuery(['project'], getProjects);
 const Projects: React.FC = () => {
-  const dispatch = useDispatch();
-  const { projects } = useProjects();
-  const count = useSelector(getProjects);
+  const { FORM } = useLocalizedRoutes();
+  const { isLoading, isError, data } = useProject();
 
-  const incrementByOne = () => dispatch(actions.increment(1));
+  const { t } = useTranslation();
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'Tunnus',
+        accessor: 'hankeTunnus',
+      },
+      {
+        Header: 'Nimi',
+        accessor: 'nimi',
+      },
+      {
+        Header: 'Vaihe',
+        accessor: 'vaihe',
+      },
+      {
+        Header: 'Aloitus',
+        accessor: (d: HankeData) => {
+          return format(Date.parse(d.alkuPvm), 'dd.MM.yyyy');
+        },
+      },
+      {
+        Header: 'Lopetus',
+        accessor: (d: HankeData) => {
+          return format(Date.parse(d.loppuPvm), 'dd.MM.yyyy');
+        },
+      },
+    ],
 
+    []
+  );
   return (
-    <div>
-      <h1>Hanke</h1>
-
-      <ul>
-        {projects.features.map((project) => (
-          <li key={`${project.properties.id}-${project.properties.name}`}>
-            {project.properties.name}
-          </li>
-        ))}
-      </ul>
-
-      <h3>Test</h3>
-      {count}
-      <button onClick={() => incrementByOne()} type="button">
-        <Locale id="common:increment" />
-      </button>
+    <div className="hankelista">
+      <H1 stylesAs="h2" data-testid="HankeListPageHeader">
+        {t('hankeList:pageHeader')}
+      </H1>
+      {isLoading && <p>ladataan</p>}
+      <div className="hankelista__inner">
+        <Table columns={columns} data={(!isLoading || isError) && data ? data : []} />
+        <div className="hankelista__buttonWpr">
+          <NavLink data-testid="toFormLink" to={FORM.path} className="hankelista__hankeLink">
+            <Locale id="header:hankeLink" />
+          </NavLink>
+        </div>
+      </div>
     </div>
   );
 };
