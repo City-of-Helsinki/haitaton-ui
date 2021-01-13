@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { Vector as VectorSource } from 'ol/source';
+import { Style } from 'ol/style';
 import OLVectorLayer from 'ol/layer/Vector';
 import MapContext from '../MapContext';
 
@@ -7,9 +8,10 @@ type Props = {
   source: VectorSource;
   className: string;
   zIndex?: number;
+  style?: Style;
 };
 
-const VectorLayer: React.FC<Props> = ({ source, className, zIndex = 0 }) => {
+const VectorLayer: React.FC<Props> = ({ source, className, zIndex = 0, style = undefined }) => {
   const { map } = useContext(MapContext);
 
   useEffect(() => {
@@ -18,7 +20,7 @@ const VectorLayer: React.FC<Props> = ({ source, className, zIndex = 0 }) => {
     const vectorLayer = new OLVectorLayer({
       source,
       className,
-      // style,
+      style,
     });
 
     map.addLayer(vectorLayer);

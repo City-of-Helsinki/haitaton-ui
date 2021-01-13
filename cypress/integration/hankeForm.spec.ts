@@ -1,5 +1,8 @@
 /// <reference types="cypress" />
 
+const drawCoordinateX = 100;
+const drawCoordinateY = 100;
+
 context('HankeForm', () => {
   beforeEach(() => {
     cy.visit('/fi/form');
@@ -22,6 +25,19 @@ context('HankeForm', () => {
     cy.get('[data-testid=forward]').click(); // changes view to form1
 
     cy.get('[data-testid=hankkeenAlue]');
+
+    cy.mapDrawButton('Polygon').click();
+
+    cy.get('#ol-map')
+      .click(drawCoordinateX, drawCoordinateY)
+      .click(drawCoordinateX + 10, drawCoordinateY + 10)
+      .click(drawCoordinateX + 20, drawCoordinateY + 20)
+      .click(drawCoordinateX, drawCoordinateY);
+
+    // Continue implementation of this test once saving geometry for
+    // a project has been implemented further
+    // cy.get('[data-testid=save-geometry-button]').should('exist');
+
     cy.get('[data-testid=forward]').click(); // changes view to form2
 
     cy.get('[data-testid=omistajat-etunimi]');
