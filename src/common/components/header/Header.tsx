@@ -35,6 +35,9 @@ const Header: React.FC = () => {
         <NavLink to={PROJECTS.path} activeClassName="header--active" data-testid="hankeListLink">
           {PROJECTS.label}
         </NavLink>
+        <NavLink to="/login" activeClassName="header--active" data-testid="loginLink">
+          Kirjaudu
+        </NavLink>
         <NavLink to={FORM.path} className="header__hankeLink" data-testid="hankeLink">
           <Locale id="header:hankeLink" />
         </NavLink>
