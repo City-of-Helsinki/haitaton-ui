@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import H1 from '../../../common/components/text/H1';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import Locale from '../../../common/components/locale/Locale';
+import { HankeData } from '../edit/types';
 
 import Table from './Table';
 
@@ -17,7 +18,6 @@ const getProjects = async () => {
   const { data } = await axios.get(`/api/hankkeet/`);
   return data;
 };
-
 const useProject = () => useQuery(['project'], getProjects);
 const Projects: React.FC = () => {
   const { FORM } = useLocalizedRoutes();
@@ -40,14 +40,14 @@ const Projects: React.FC = () => {
       {
         Header: 'Aloitus',
         // eslint-disable-next-line
-        accessor: (d: any) => {
+        accessor: (d: HankeData) => {
           return Moment(d.alkuPvm).local().format('DD.MM.YYYY');
         },
       },
       {
         Header: 'Lopetus',
         // eslint-disable-next-line
-        accessor: (d: any) => {
+        accessor: (d: HankeData) => {
           return Moment(d.alkuPvm).local().format('DD.MM.YYYY');
         },
       },
