@@ -215,7 +215,15 @@
     }
   },
   "hankeList": {
-    "pageHeader": "Hankelista"
+    "pageHeader": "Hankelista",
+    "paginationHeader": "Sivu",
+    "tableHeader": {
+      "id": "Tunnus",
+      "name": "Nimi",
+      "step": "Vaihe",
+      "startDate": "Aloitus",
+      "endDate": "Lopetus"
+    }
   },
   "map": {
     "datalayers": {
