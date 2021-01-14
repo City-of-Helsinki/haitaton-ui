@@ -1,4 +1,11 @@
 {
+  "authentication": {
+    "deviceTimeError": "Et voi kirjautua sisään koska laitteesi kello on yli 5 minuuttia väärässä. Säädä kelloa ja kokeile uudestaan.",
+    "permissionRequestDenied": "Sinun täytyy hyväksyä pyytämämme oikeudet käyttääksesi tätä palvelua. Ole hyvä ja yritä kirjautua uudelleen.",
+    "genericError": "Tapahtui virhe. Yritä uudestaan.",
+    "loginButton": "Kirjaudu",
+    "logoutButton": "Kirjaudu ulos"
+  },
   "common": {
     "increment": "Lisää",
     "confirmationDialog": {

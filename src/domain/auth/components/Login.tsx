@@ -1,13 +1,11 @@
-// import React from 'react';
 import { useLocation } from 'react-router-dom';
 import authService from '../authService';
+import { LOGIN_PATH } from '../constants';
 
 const Login = () => {
   const location = useLocation();
 
-  console.log(location);
-
-  if (location.pathname === '/login') {
+  if (location.pathname === LOGIN_PATH) {
     authService.login();
   }
 

@@ -1,5 +1,5 @@
 import { UserManager, User, UserManagerSettings, Log, WebStorageStateStore } from 'oidc-client';
-import pickProfileApiToken from './pickProfileApiToken';
+import { LOGIN_CALLBACK_PATH } from './constants';
 
 const { origin } = window.location;
 export const API_TOKEN = 'apiToken';
@@ -13,7 +13,7 @@ export class AuthService {
       userStore: new WebStorageStateStore({ store: window.localStorage }),
       authority: process.env.REACT_APP_OIDC_AUTHORITY,
       client_id: process.env.REACT_APP_OIDC_CLIENT_ID,
-      redirect_uri: `${origin}/callback`,
+      redirect_uri: `${origin}${LOGIN_CALLBACK_PATH}`,
       silent_redirect_uri: `${origin}/silent_renew.html`,
       response_type: 'id_token token',
       scope: process.env.REACT_APP_OIDC_SCOPE,
@@ -31,7 +31,6 @@ export class AuthService {
 
     // Public methods
     this.getUser = this.getUser.bind(this);
-    this.getToken = this.getToken.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
     this.login = this.login.bind(this);
     this.endLogin = this.endLogin.bind(this);
@@ -48,9 +47,9 @@ export class AuthService {
       localStorage.removeItem(API_TOKEN);
     });
 
-    this.userManager.events.addUserLoaded(async (user) => {
+    /* this.userManager.events.addUserLoaded(async (user) => {
       this.fetchApiToken(user);
-    });
+    }); */
   }
 
   public getUser(): Promise<User | null> {
@@ -58,25 +57,20 @@ export class AuthService {
   }
 
   // eslint-disable-next-line
-  public getToken(): string | null {
-    return localStorage.getItem(API_TOKEN);
-  }
-
   public isAuthenticated(): boolean {
     const userKey = `oidc.user:${process.env.REACT_APP_OIDC_AUTHORITY}:${process.env.REACT_APP_OIDC_CLIENT_ID}`;
     const oidcStorage = localStorage.getItem(userKey);
-    const apiTokens = this.getToken();
 
-    return !!oidcStorage && !!JSON.parse(oidcStorage).access_token && !!apiTokens;
+    return !!oidcStorage && !!JSON.parse(oidcStorage).access_token;
   }
 
-  public async login(path = '/'): Promise<void> {
+  public async login(): Promise<void> {
     try {
-      return this.userManager.signinRedirect({ data: { path } });
+      return this.userManager.signinRedirect();
     } catch (error) {
       if (error.message !== 'Network Error') {
-        // Sentry.captureException(error);
-        console.error(error);
+        // eslint-disable-next-line no-console
+        console.error(error.message);
       }
       return Promise.reject(new Error('no reason'));
     }
@@ -84,9 +78,6 @@ export class AuthService {
 
   public async endLogin(): Promise<User> {
     const user = await this.userManager.signinRedirectCallback();
-
-    await this.fetchApiToken(user);
-
     return user;
   }
 
@@ -98,20 +89,6 @@ export class AuthService {
     localStorage.removeItem(API_TOKEN);
     this.userManager.clearStaleState();
     await this.userManager.signoutRedirect();
-  }
-
-  // eslint-disable-next-line
-  async fetchApiToken(user: User): Promise<void> {
-    const url = `${process.env.REACT_APP_OIDC_AUTHORITY}api-tokens/`;
-    const response = await fetch(url, {
-      headers: {
-        Authorization: `bearer ${user.access_token}`,
-      },
-    });
-    const result = await response.json();
-    const apiToken = pickProfileApiToken(result);
-
-    localStorage.setItem(API_TOKEN, apiToken);
   }
 }
 
