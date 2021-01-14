@@ -62,6 +62,7 @@ const HankeDrawer: React.FC<Props> = ({ hankeTunnus }) => {
           {showOrtokartta && <Ortokartta />}
           <DataLayers />
           <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
+
           <Controls>
             <DrawControl />
             <LayerControl
