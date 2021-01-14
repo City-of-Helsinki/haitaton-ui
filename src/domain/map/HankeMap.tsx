@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Vector as VectorSource } from 'ol/source';
 import { Style, Fill, Stroke } from 'ol/style';
+import { useQuery } from 'react-query';
 import Map from '../../common/components/map/Map';
 import Controls from '../../common/components/map/controls/Controls';
 import LayerControl from '../../common/components/map/controls/LayerControl';
@@ -11,7 +12,8 @@ import DataLayers from './Layers/DataLayers';
 import Ortokartta from './Layers/Ortokartta';
 import styles from './Map.module.scss';
 import { useMapDataLayers } from './hooks/useMapDataLayers';
-import { MapDataLayerKey } from './types';
+import { HankeResponseWithGeometry, MapDataLayerKey } from './types';
+import api from '../../common/utils/api';
 
 // Temporary reference style implementation. Actual colors
 // are chosen based on törmäysanalyysi
@@ -27,71 +29,17 @@ const geometryStyle = {
   }),
 };
 
-// Temporarily using dummy data prior actual data from API
-const sampleHankeGeometry = {
-  type: 'FeatureCollection',
-  features: [
-    {
-      type: 'Feature',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [
-          [
-            [25496585.89, 6673427.46],
-            [25496610.43, 6673428.77],
-            [25496620.93, 6673268.43],
-            [25496675.09, 6673267.37],
-            [25496682.14, 6673156.24],
-            [25496612.66, 6673153.97],
-            [25496593.98, 6673283.58],
-            [25496585.89, 6673427.46],
-          ],
-        ],
-      },
-      properties: null,
-    },
-    {
-      type: 'Feature',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [
-          [
-            [25496495.01, 6673320.49],
-            [25496588.89, 6673329.8],
-            [25496586.92, 6673344.38],
-            [25496493.25, 6673333.73],
-            [25496495.01, 6673320.49],
-          ],
-        ],
-      },
-      properties: null,
-    },
-    {
-      type: 'Feature',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [
-          [
-            [25496867.01, 6673084.64],
-            [25496859.74, 6673218.27],
-            [25496918.82, 6673221.91],
-            [25496923.86, 6673092.14],
-            [25496867.01, 6673084.64],
-          ],
-        ],
-      },
-      properties: null,
-    },
-  ],
-  crs: {
-    type: 'name',
-    properties: {
-      name: 'urn:ogc:def:crs:EPSG::3879',
-    },
-  },
+const getProjects = async () => {
+  const response = await api.get<HankeResponseWithGeometry[]>('/hankkeet', {
+    params: { geometry: true },
+  });
+  return response;
 };
 
+const useProject = () => useQuery(['project'], getProjects);
+
 const HankeMap: React.FC = () => {
+  const { isLoading, isError, data } = useProject();
   const { dataLayers, toggleDataLayer } = useMapDataLayers();
 
   const [zoom] = useState(0);
@@ -110,17 +58,34 @@ const HankeMap: React.FC = () => {
 
   return (
     <>
-      <div className={styles.mapContainer} style={{ width: '100%', height: 500 }}>
+      <div
+        className={styles.mapContainer}
+        style={{ width: '100%', height: '100%', position: 'absolute' }}
+      >
         <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
           {showKantakartta && <Kantakartta />}
           {showOrtokartta && <Ortokartta />}
           <DataLayers />
-          <VectorLayer
-            source={new VectorSource({ features: new GeoJSON().readFeatures(sampleHankeGeometry) })}
-            zIndex={90}
-            className="hankeGeometryLayer"
-            style={geometryStyle.Blue}
-          />
+
+          {(!isLoading || isError) && data && Array.isArray(data.data) && data.data.length > 0 ? (
+            data.data.map((hanke) => {
+              return (
+                <VectorLayer
+                  source={
+                    new VectorSource({
+                      features: new GeoJSON().readFeatures(hanke.geometriat.featureCollection),
+                    })
+                  }
+                  zIndex={90}
+                  className="hankeGeometryLayer"
+                  style={geometryStyle.Blue}
+                />
+              );
+            })
+          ) : (
+            <p>NO data -- delete me plz</p>
+          )}
+
           <Controls>
             <LayerControl
               tileLayers={[
