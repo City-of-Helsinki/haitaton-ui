@@ -21,7 +21,7 @@ const getProjects = async () => {
 };
 
 const useProject = () => useQuery(['project'], getProjects);
-
+// eslint-disable-next-line
 const Projects: React.FC<any> = ({ fakeData }) => {
   const { FORM } = useLocalizedRoutes();
   let { data } = useProject();
