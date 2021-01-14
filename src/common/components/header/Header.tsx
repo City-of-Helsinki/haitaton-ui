@@ -47,11 +47,11 @@ const Header: React.FC = () => {
               authService.logout();
             }}
           >
-            Kirjaudu ulos
+            {t('authentication:logoutButton')}
           </NavLink>
         ) : (
           <NavLink to="/login" activeClassName="header--active" data-testid="loginLink">
-            Kirjaudu
+            {t('authentication:loginButton')}
           </NavLink>
         )}
         <NavLink to={FORM.path} className="header__hankeLink" data-testid="hankeLink">
