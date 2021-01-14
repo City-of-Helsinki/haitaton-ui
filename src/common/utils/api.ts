@@ -10,7 +10,7 @@ api.interceptors.response.use(
   // eslint-disable-next-line
   async (response: AxiosResponse): Promise<any> => {
     if (response.status >= 200 && response.status < 300) {
-      return response.data;
+      return response;
     }
     return null;
   },
