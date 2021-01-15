@@ -2,7 +2,6 @@ import { UserManager, User, UserManagerSettings, Log, WebStorageStateStore } fro
 import { LOGIN_CALLBACK_PATH } from './constants';
 
 const { origin } = window.location;
-export const API_TOKEN = 'apiToken';
 
 export class AuthService {
   userManager: UserManager;
@@ -44,7 +43,6 @@ export class AuthService {
 
     this.userManager.events.addUserSignedOut(() => {
       this.userManager.clearStaleState();
-      localStorage.removeItem(API_TOKEN);
     });
 
     /* this.userManager.events.addUserLoaded(async (user) => {
@@ -64,9 +62,9 @@ export class AuthService {
     return !!oidcStorage && !!JSON.parse(oidcStorage).access_token;
   }
 
-  public async login(): Promise<void> {
+  public async login(path = '/'): Promise<void> {
     try {
-      return this.userManager.signinRedirect();
+      return this.userManager.signinRedirect({ data: { path } });
     } catch (error) {
       if (error.message !== 'Network Error') {
         // eslint-disable-next-line no-console
@@ -86,7 +84,6 @@ export class AuthService {
   }
 
   public async logout(): Promise<void> {
-    localStorage.removeItem(API_TOKEN);
     this.userManager.clearStaleState();
     await this.userManager.signoutRedirect();
   }
