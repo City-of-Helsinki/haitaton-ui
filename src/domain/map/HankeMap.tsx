@@ -68,22 +68,26 @@ const HankeMap: React.FC = () => {
           <DataLayers />
 
           {(!isLoading || isError) && data && Array.isArray(data.data) && data.data.length > 0 ? (
-            data.data.map((hanke) => {
-              return (
-                <VectorLayer
-                  source={
-                    new VectorSource({
-                      features: new GeoJSON().readFeatures(hanke.geometriat.featureCollection),
-                    })
-                  }
-                  zIndex={90}
-                  className="hankeGeometryLayer"
-                  style={geometryStyle.Blue}
-                />
-              );
-            })
+            data.data
+              .filter((hanke) => {
+                return hanke.geometriat; // remove projects with geometry as null
+              })
+              .map((hanke) => {
+                return (
+                  <VectorLayer
+                    source={
+                      new VectorSource({
+                        features: new GeoJSON().readFeatures(hanke.geometriat.featureCollection),
+                      })
+                    }
+                    zIndex={100}
+                    className="hankeGeometryLayer"
+                    style={geometryStyle.Blue}
+                  />
+                );
+              })
           ) : (
-            <p>NO data -- delete me plz</p>
+            <></>
           )}
 
           <Controls>
