@@ -70,7 +70,7 @@ export class AuthService {
         // eslint-disable-next-line no-console
         console.error(error.message);
       }
-      return Promise.reject(new Error('no reason'));
+      return Promise.reject(new Error('Unkonwn error'));
     }
   }
 

@@ -10,13 +10,12 @@ import OidcCallback from './OidcCallback';
 const history = createMemoryHistory();
 history.replace = jest.fn();
 
-const getWrapper = () => {
-  return render(
+const getWrapper = () =>
+  render(
     <Router history={history}>
       <Route render={(props) => <OidcCallback {...props} />} />
     </Router>
   );
-};
 
 describe('<OidcCallback />', () => {
   afterEach(() => {
