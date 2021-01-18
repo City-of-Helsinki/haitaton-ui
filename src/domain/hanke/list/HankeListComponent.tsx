@@ -7,13 +7,16 @@ import { useTranslation } from 'react-i18next';
 import H1 from '../../../common/components/text/H1';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import Locale from '../../../common/components/locale/Locale';
-import { HankeData } from '../../types/hanke';
+import { HankeDataDraft } from '../../types/hanke';
 
 import Table from './Table';
-
 import './Hankelista.styles.scss';
-// eslint-disable-next-line
-const Projects: React.FC<any> = ({ initialData }) => {
+
+type Props = {
+  initialData: HankeDataDraft[];
+};
+
+const Projects: React.FC<Props> = ({ initialData }) => {
   const { FORM } = useLocalizedRoutes();
 
   const { t } = useTranslation();
@@ -33,18 +36,17 @@ const Projects: React.FC<any> = ({ initialData }) => {
       },
       {
         Header: t('hankeList:tableHeader:startDate'),
-        accessor: (d: HankeData) => {
-          return format(Date.parse(d.alkuPvm), 'dd.MM.yyyy');
+        accessor: (data: HankeDataDraft) => {
+          return data.alkuPvm ? format(Date.parse(data.alkuPvm), 'dd.MM.yyyy') : '';
         },
       },
       {
         Header: t('hankeList:tableHeader:endDate'),
-        accessor: (d: HankeData) => {
-          return format(Date.parse(d.loppuPvm), 'dd.MM.yyyy');
+        accessor: (data: HankeDataDraft) => {
+          return data.loppuPvm ? format(Date.parse(data.loppuPvm), 'dd.MM.yyyy') : '';
         },
       },
     ],
-
     []
   );
   return (

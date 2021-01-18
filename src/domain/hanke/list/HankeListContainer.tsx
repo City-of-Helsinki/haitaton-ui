@@ -1,21 +1,20 @@
 import React from 'react';
 import { useQuery } from 'react-query';
-
 import HankeListComponent from './HankeListComponent';
-
 import api from '../../../common/utils/api';
+import { HankeDataDraft } from '../../types/hanke';
 
-const getProjects = async () => {
-  const { data } = await api.get(`/hankkeet/`);
+const getHankkeet = async () => {
+  const { data } = await api.get<HankeDataDraft[]>(`/hankkeet/`);
   return data;
 };
 
-const useProject = () => useQuery(['project'], getProjects);
-// eslint-disable-next-line
-const Projects: React.FC = () => {
-  const { data } = useProject();
+const useHankeList = () => useQuery<HankeDataDraft[]>(['project'], getHankkeet);
 
-  return <HankeListComponent initialData={data} />;
+const HankeListContainer: React.FC = () => {
+  const { data } = useHankeList();
+
+  return data ? <HankeListComponent initialData={data} /> : null;
 };
 
-export default Projects;
+export default HankeListContainer;

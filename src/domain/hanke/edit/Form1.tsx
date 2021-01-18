@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import HankeDrawer from '../../map/HankeDrawer';
-import { FormProps, FORMFIELD } from './types';
+import { FormProps, FORMFIELD } from '../../types/hanke';
 import H2 from '../../../common/components/text/H2';
 
 const Form1: React.FC<FormProps> = ({ formData }) => {

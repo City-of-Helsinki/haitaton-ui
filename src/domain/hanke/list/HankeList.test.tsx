@@ -4,7 +4,7 @@ import { cleanup, waitFor, getByTestId } from '@testing-library/react';
 import { store } from '../../../common/redux/store';
 import HankeList from './HankeListComponent';
 import { render } from '../../../testUtils/render';
-import initialData from './testInitialDataJson';
+import { initialData } from './testInitialData';
 
 afterEach(cleanup);
 

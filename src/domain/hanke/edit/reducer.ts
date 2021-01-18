@@ -1,6 +1,6 @@
 import { PayloadAction, CaseReducer, createSlice } from '@reduxjs/toolkit';
 import { saveForm } from './thunks';
-import { HankeDataDraft } from './types';
+import { HankeDataDraft } from '../../types/hanke';
 
 type State = {
   hankeDataDraft: HankeDataDraft;
