@@ -7,12 +7,11 @@ import { useTranslation } from 'react-i18next';
 import H1 from '../../../common/components/text/H1';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import Locale from '../../../common/components/locale/Locale';
-import { HankeData } from '../edit/types';
+import { HankeData } from '../../types/hanke';
 
 import Table from './Table';
 
 import './Hankelista.styles.scss';
-
 // eslint-disable-next-line
 const Projects: React.FC<any> = ({ initialData }) => {
   const { FORM } = useLocalizedRoutes();

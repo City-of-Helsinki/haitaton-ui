@@ -6,7 +6,7 @@ import HankeListComponent from './HankeListComponent';
 import api from '../../../common/utils/api';
 
 const getProjects = async () => {
-  const data = await api.get(`/hankkeet/`);
+  const { data } = await api.get(`/hankkeet/`);
   return data;
 };
 

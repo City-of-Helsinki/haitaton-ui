@@ -10,7 +10,7 @@ api.interceptors.response.use(
   // eslint-disable-next-line
   async (response: AxiosResponse): Promise<any> => {
     if (response.status >= 200 && response.status < 300) {
-      return response.data;
+      return response;
     }
     return null;
   },
@@ -26,7 +26,7 @@ api.interceptors.response.use(
       if (response.status >= 400 && response.status < 500) {
         // eslint-disable-next-line
         console.error(response.data?.data?.message);
-        return null;
+        return Promise.reject(error);
       }
     } else if (request) {
       // eslint-disable-next-line

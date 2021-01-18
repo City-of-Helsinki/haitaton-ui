@@ -5,7 +5,8 @@ import Dropdown from '../../../common/components/dropdown/Dropdown';
 import DropdownMultiselect from '../../../common/components/dropdown/DropdownMultiselect';
 import TextInput from '../../../common/components/textInput/TextInput';
 import H2 from '../../../common/components/text/H2';
-import { FormProps, FORMFIELD, HANKE_TYOMAATYYPPI, HANKE_TYOMAAKOKO } from './types';
+import { FormProps, FORMFIELD } from './types';
+import { HANKE_TYOMAATYYPPI, HANKE_TYOMAAKOKO } from '../../types/hanke';
 
 const Form3: React.FC<FormProps> = ({ formData, control, errors }) => {
   const { t } = useTranslation();
