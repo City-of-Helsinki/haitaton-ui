@@ -1,3 +1,5 @@
+import { HankeGeoJSON } from '../../common/types/hanke';
+
 export type PartialExcept<T, K extends keyof T> = Partial<T> & Pick<T, K>;
 export type Optional<T, K extends keyof T> = Omit<T, K> & Partial<T>;
 
@@ -109,6 +111,16 @@ export type HankeContact = {
   osasto: string;
 };
 
+export type HANKKEEN_GEOMETRIAT = {
+  createdAt: Date;
+  createdByUserId: string;
+  featureCollection: HankeGeoJSON;
+  hankeId: number;
+  id: number;
+  modifiedAt: Date;
+  modifiedByUserId: string;
+};
+
 export type HankeData = {
   id: number;
   hankeTunnus: string;
@@ -133,4 +145,5 @@ export type HankeData = {
   arvioijat: Array<HankeContact>;
   toteuttajat: Array<HankeContact>;
   onYKTHanke: boolean;
+  geometriat: HANKKEEN_GEOMETRIAT | null;
 };

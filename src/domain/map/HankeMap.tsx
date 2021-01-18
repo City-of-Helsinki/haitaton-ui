@@ -12,7 +12,8 @@ import DataLayers from './Layers/DataLayers';
 import Ortokartta from './Layers/Ortokartta';
 import styles from './Map.module.scss';
 import { useMapDataLayers } from './hooks/useMapDataLayers';
-import { HankeResponseWithGeometry, MapDataLayerKey } from './types';
+import { MapDataLayerKey } from './types';
+import { HankeData } from '../types/hanke';
 import api from '../../common/utils/api';
 
 // Temporary reference style implementation. Actual colors
@@ -30,7 +31,7 @@ const geometryStyle = {
 };
 
 const getProjects = async () => {
-  const response = await api.get<HankeResponseWithGeometry[]>('/hankkeet', {
+  const response = await api.get<HankeData[]>('/hankkeet', {
     params: { geometry: true },
   });
   return response;
@@ -77,7 +78,10 @@ const HankeMap: React.FC = () => {
                   <VectorLayer
                     source={
                       new VectorSource({
-                        features: new GeoJSON().readFeatures(hanke.geometriat.featureCollection),
+                        // TS fails interpreting filter. Added type guard
+                        features: hanke.geometriat
+                          ? new GeoJSON().readFeatures(hanke.geometriat.featureCollection)
+                          : [],
                       })
                     }
                     zIndex={100}
