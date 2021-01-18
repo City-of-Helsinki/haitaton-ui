@@ -2,57 +2,51 @@ import React from 'react';
 import format from 'date-fns/format';
 
 import { NavLink } from 'react-router-dom';
-import { useQuery } from 'react-query';
 import { useTranslation } from 'react-i18next';
 
 import H1 from '../../../common/components/text/H1';
-import api from '../../../common/utils/api';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import Locale from '../../../common/components/locale/Locale';
-import { HankeData } from '../../types/hanke';
+import { HankeDataDraft } from '../../types/hanke';
 
 import Table from './Table';
-
 import './Hankelista.styles.scss';
 
-const getProjects = async () => {
-  const data = await api.get(`/hankkeet/`);
-  return data;
+type Props = {
+  initialData: HankeDataDraft[];
 };
-const useProject = () => useQuery(['project'], getProjects);
-const Projects: React.FC = () => {
+
+const Projects: React.FC<Props> = ({ initialData }) => {
   const { FORM } = useLocalizedRoutes();
-  const { isLoading, isError, data } = useProject();
 
   const { t } = useTranslation();
   const columns = React.useMemo(
     () => [
       {
-        Header: 'Tunnus',
+        Header: t('hankeList:tableHeader:id'),
         accessor: 'hankeTunnus',
       },
       {
-        Header: 'Nimi',
+        Header: t('hankeList:tableHeader:name'),
         accessor: 'nimi',
       },
       {
-        Header: 'Vaihe',
+        Header: t('hankeList:tableHeader:step'),
         accessor: 'vaihe',
       },
       {
-        Header: 'Aloitus',
-        accessor: (d: HankeData) => {
-          return format(Date.parse(d.alkuPvm), 'dd.MM.yyyy');
+        Header: t('hankeList:tableHeader:startDate'),
+        accessor: (data: HankeDataDraft) => {
+          return data.alkuPvm ? format(Date.parse(data.alkuPvm), 'dd.MM.yyyy') : '';
         },
       },
       {
-        Header: 'Lopetus',
-        accessor: (d: HankeData) => {
-          return format(Date.parse(d.loppuPvm), 'dd.MM.yyyy');
+        Header: t('hankeList:tableHeader:endDate'),
+        accessor: (data: HankeDataDraft) => {
+          return data.loppuPvm ? format(Date.parse(data.loppuPvm), 'dd.MM.yyyy') : '';
         },
       },
     ],
-
     []
   );
   return (
@@ -60,12 +54,8 @@ const Projects: React.FC = () => {
       <H1 stylesAs="h2" data-testid="HankeListPageHeader">
         {t('hankeList:pageHeader')}
       </H1>
-      {isLoading && <p>ladataan</p>}
       <div className="hankelista__inner">
-        <Table
-          columns={columns}
-          data={(!isLoading || isError) && data && Array.isArray(data.data) ? data.data : []}
-        />
+        <Table columns={columns} data={initialData || []} />
         <div className="hankelista__buttonWpr">
           <NavLink data-testid="toFormLink" to={FORM.path} className="hankelista__hankeLink">
             <Locale id="header:hankeLink" />

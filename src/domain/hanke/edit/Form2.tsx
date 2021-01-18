@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useTypedController } from '@hookform/strictly-typed';
 import { TextInput } from 'hds-react';
-import { FormProps, FORMFIELD, CONTACT_FORMFIELD, HankeDataDraft } from './types';
+import { FormProps, FORMFIELD, CONTACT_FORMFIELD, HankeDataDraft } from '../../types/hanke';
 import api from '../../../common/utils/api';
 import { getInputErrorText } from '../../../common/utils/form';
 

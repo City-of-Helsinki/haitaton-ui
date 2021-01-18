@@ -9,7 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import H1 from '../../../common/components/text/H1';
 import { actions as dialogActions } from '../../../common/components/confirmationDialog/reducer';
 import { getFormData, getHasFormChanged, getShowNotification } from './selectors';
-import { HankeDataDraft, HANKE_SAVETYPE } from './types';
+import { HankeDataDraft, HANKE_SAVETYPE } from '../../types/hanke';
 import { actions, hankeDataDraft } from './reducer';
 import { saveForm } from './thunks';
 import Indicator from './indicator';

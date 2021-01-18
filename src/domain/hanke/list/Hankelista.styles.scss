@@ -71,4 +71,35 @@
       }
     }
   }
+
+  .pagination {
+    padding-top: var(--spacing-m);
+
+    button:disabled {
+      cursor: auto;
+
+      svg polygon:last-child {
+        fill: var(--color-black-50);
+      }
+    }
+
+    span.wrp {
+      position: relative;
+      top: 0.1rem;
+      display: inline-block;
+      padding: 0 var(--spacing-2-xs);
+    }
+
+    .toBeginning {
+      svg:last-child {
+        margin-left: -1rem;
+      }
+    }
+
+    .toEnd {
+      svg:first-child {
+        margin-right: -1rem;
+      }
+    }
+  }
 }

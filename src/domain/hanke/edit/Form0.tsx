@@ -6,8 +6,7 @@ import { useFormContext } from 'react-hook-form';
 import DatePicker from '../../../common/components/datePicker/DatePicker';
 import Dropdown from '../../../common/components/dropdown/Dropdown';
 import TextInput from '../../../common/components/textInput/TextInput';
-import { FormProps, FORMFIELD } from './types';
-import { HANKE_VAIHE, HANKE_SUUNNITTELUVAIHE } from '../../types/hanke';
+import { FormProps, FORMFIELD, HANKE_VAIHE, HANKE_SUUNNITTELUVAIHE } from '../../types/hanke';
 import H2 from '../../../common/components/text/H2';
 
 const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => {
@@ -20,7 +19,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
 
   return (
     <div className="form0">
-      <H2>{t('hankeForm:perustiedotForm:header')}</H2>
+      <H2 data-testid="form0Header">{t('hankeForm:perustiedotForm:header')}</H2>
       <div className="dataWpr">
         <div className="formWpr">
           <TextInput name={FORMFIELD.TUNNUS} disabled />

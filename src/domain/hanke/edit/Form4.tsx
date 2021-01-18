@@ -4,8 +4,9 @@ import { $enum } from 'ts-enum-util';
 import DatePicker from '../../../common/components/datePicker/DatePicker';
 import Dropdown from '../../../common/components/dropdown/Dropdown';
 import H2 from '../../../common/components/text/H2';
-import { FormProps, FORMFIELD } from './types';
 import {
+  FormProps,
+  FORMFIELD,
   HANKE_KAISTAHAITTA,
   HANKE_KAISTAPITUUSHAITTA,
   HANKE_MELUHAITTA,

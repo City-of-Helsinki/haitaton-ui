@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../../common/utils/api';
-import { HankeDataDraft, HANKE_SAVETYPE_KEY } from './types';
+import { HankeDataDraft, HANKE_SAVETYPE_KEY } from '../../types/hanke';
 import { filterEmptyContacts } from './utils';
 
 type SaveHankeData = {
