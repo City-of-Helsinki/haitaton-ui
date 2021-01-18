@@ -17,14 +17,10 @@ export const saveForm = createAsyncThunk(
       createdBy: '1',
     };
 
-    let responseData: HankeDataDraft | null;
+    const response = data.hankeTunnus
+      ? await api.put(`/hankkeet/${data.hankeTunnus}`, requestData)
+      : await api.post(`/hankkeet`, requestData);
 
-    if (data.hankeTunnus) {
-      responseData = await api.put(`/hankkeet/${data.hankeTunnus}`, requestData);
-    } else {
-      responseData = await api.post(`/hankkeet`, requestData);
-    }
-
-    return responseData;
+    return response.data as HankeDataDraft;
   }
 );
