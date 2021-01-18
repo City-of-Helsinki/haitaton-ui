@@ -30,17 +30,17 @@ const geometryStyle = {
   }),
 };
 
-const getProjects = async () => {
+const getProjectsWithGeometry = async () => {
   const response = await api.get<HankeData[]>('/hankkeet', {
     params: { geometry: true },
   });
   return response;
 };
 
-const useProject = () => useQuery(['project'], getProjects);
+const useProjectsWithGeometry = () => useQuery(['projectsWithGeometry'], getProjectsWithGeometry);
 
 const HankeMap: React.FC = () => {
-  const { isLoading, isError, data } = useProject();
+  const { isLoading, isError, data } = useProjectsWithGeometry();
   const { dataLayers, toggleDataLayer } = useMapDataLayers();
 
   const [zoom] = useState(0);
