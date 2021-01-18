@@ -1,7 +1,8 @@
 import startOfDay from 'date-fns/startOfDay';
 import { $enum } from 'ts-enum-util';
 import yup from '../../../common/utils/yup';
-import { FORMFIELD, HANKE_VAIHE, HANKE_SUUNNITTELUVAIHE } from './types';
+import { FORMFIELD } from './types';
+import { HANKE_VAIHE, HANKE_SUUNNITTELUVAIHE } from '../../types/hanke';
 
 export const today = startOfDay(new Date());
 

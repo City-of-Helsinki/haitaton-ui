@@ -1,4 +1,5 @@
-import { HankeDataDraft, HankeContact, FORMFIELD } from './types';
+import { HankeDataDraft, FORMFIELD } from './types';
+import { HankeContact } from '../../types/hanke';
 
 const isContactEmpty = ({ etunimi, sukunimi, email }: HankeContact) =>
   etunimi === '' && sukunimi === '' && email === '';

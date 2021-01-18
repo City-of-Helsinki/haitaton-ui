@@ -9,7 +9,7 @@ import H1 from '../../../common/components/text/H1';
 import api from '../../../common/utils/api';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import Locale from '../../../common/components/locale/Locale';
-import { HankeData } from '../edit/types';
+import { HankeData } from '../../types/hanke';
 
 import Table from './Table';
 
