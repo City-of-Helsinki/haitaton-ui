@@ -21,20 +21,15 @@ const CONTACT_FIELDS = [
   CONTACT_FORMFIELD.OSASTO,
 ];
 
-type OrganizationList = Array<{
+type Organization = {
   id: number;
   nimi: string;
   tunnus: string;
-}>;
+};
 
-// https://github.com/microsoft/TypeScript/issues/26781
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const fetchOrganizations = async (): Promise<any> => {
-  try {
-    return await api.get<OrganizationList>(`/organisaatiot`);
-  } catch (e) {
-    return [];
-  }
+const fetchOrganizations = async () => {
+  const response = await api.get<Organization[]>('/organisaatiot');
+  return response;
 };
 
 // eslint-disable-next-line
@@ -46,10 +41,14 @@ const Form2: React.FC<FormProps> = ({ control, formData, errors, register }) => 
   const { setValue } = useFormContext();
   const TypedController = useTypedController<HankeDataDraft>({ control });
 
-  const { isFetched, data } = useQuery<OrganizationList>('organisationList', fetchOrganizations, {
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  });
+  const { isFetched, data: organizationsResponse } = useQuery(
+    'organisationList',
+    fetchOrganizations,
+    {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    }
+  );
 
   return (
     <div className="form2">
@@ -91,8 +90,8 @@ const Form2: React.FC<FormProps> = ({ control, formData, errors, register }) => 
                     className="formItem"
                     label={t(`hankeForm:labels:organisaatio`)}
                     options={
-                      data
-                        ? data.map((v) => ({
+                      organizationsResponse
+                        ? organizationsResponse.data.map((v) => ({
                             value: v.id,
                             label: v.nimi,
                           }))
