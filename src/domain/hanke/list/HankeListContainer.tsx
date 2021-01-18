@@ -12,7 +12,7 @@ const getProjects = async () => {
 
 const useProject = () => useQuery(['project'], getProjects);
 // eslint-disable-next-line
-const Projects: React.FC<any> = ({}) => {
+const Projects: React.FC = () => {
   const { data } = useProject();
 
   return <HankeListComponent initialData={data} />;
