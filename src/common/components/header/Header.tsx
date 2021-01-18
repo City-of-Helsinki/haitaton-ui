@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { $enum } from 'ts-enum-util';
 import { LANGUAGES, Language } from '../../types/language';
 import { useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
+import authService from '../../../domain/auth/authService';
 import Locale from '../locale/Locale';
 import './Header.styles.scss';
 
@@ -12,6 +13,7 @@ const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { HOME, MAP, PROJECTS, FORM } = useLocalizedRoutes();
   const { i18n, t } = useTranslation();
+  const isAuthenticated = authService.isAuthenticated();
 
   const setLanguage = (lang: Language) => {
     i18n.changeLanguage(lang);
@@ -35,6 +37,23 @@ const Header: React.FC = () => {
         <NavLink to={PROJECTS.path} activeClassName="header--active" data-testid="hankeListLink">
           {PROJECTS.label}
         </NavLink>
+        {isAuthenticated ? (
+          <NavLink
+            to="/logout"
+            activeClassName="header--active"
+            data-testid="loginLink"
+            onClick={(e) => {
+              e.preventDefault();
+              authService.logout();
+            }}
+          >
+            {t('authentication:logoutButton')}
+          </NavLink>
+        ) : (
+          <NavLink to="/login" activeClassName="header--active" data-testid="loginLink">
+            {t('authentication:loginButton')}
+          </NavLink>
+        )}
         <NavLink to={FORM.path} className="header__hankeLink" data-testid="hankeLink">
           <Locale id="header:hankeLink" />
         </NavLink>
