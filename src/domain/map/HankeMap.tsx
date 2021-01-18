@@ -40,7 +40,7 @@ const getProjectsWithGeometry = async () => {
 const useProjectsWithGeometry = () => useQuery(['projectsWithGeometry'], getProjectsWithGeometry);
 
 const HankeMap: React.FC = () => {
-  const { isLoading, isError, data } = useProjectsWithGeometry();
+  const { isLoading, isError, data: projectsWithGeometryResponse } = useProjectsWithGeometry();
   const { dataLayers, toggleDataLayer } = useMapDataLayers();
 
   const [zoom] = useState(0);
@@ -68,14 +68,17 @@ const HankeMap: React.FC = () => {
           {showOrtokartta && <Ortokartta />}
           <DataLayers />
 
-          {(!isLoading || isError) && data && Array.isArray(data.data) && data.data.length > 0 ? (
-            data.data
+          {(!isLoading || isError) &&
+          projectsWithGeometryResponse &&
+          Array.isArray(projectsWithGeometryResponse.data) ? (
+            projectsWithGeometryResponse.data
               .filter((hanke) => {
                 return hanke.geometriat; // remove projects with geometry as null
               })
               .map((hanke) => {
                 return (
                   <VectorLayer
+                    key={hanke.geometriat?.id}
                     source={
                       new VectorSource({
                         // TS fails interpreting filter. Added type guard
