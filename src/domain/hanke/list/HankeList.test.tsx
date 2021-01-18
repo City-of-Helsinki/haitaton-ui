@@ -2,9 +2,9 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { cleanup, waitFor, getByTestId } from '@testing-library/react';
 import { store } from '../../../common/redux/store';
-import HankeList from './HankeList';
+import HankeList from './HankeListComponent';
 import { render } from '../../../testUtils/render';
-import dummyJson from './testDummyJson';
+import initialData from './testInitialDataJson';
 
 afterEach(cleanup);
 
@@ -14,11 +14,11 @@ describe('HankeLista', () => {
   test('pagination test', async () => {
     const { container, queryByText, queryAllByText } = render(
       <Provider store={store}>
-        <HankeList fakeData={dummyJson} />
+        <HankeList initialData={initialData} />
       </Provider>
     );
 
-    await waitFor(() => queryByText('Hankkelista'));
+    await waitFor(() => queryByText('Hankelista'));
 
     expect(getByTestId(container, 'amountOfpages')).toHaveTextContent('9');
     getByTestId(container, 'toEnd').click();
@@ -27,7 +27,7 @@ describe('HankeLista', () => {
     expect(getByTestId(container, 'currentPage')).toHaveTextContent('8');
     getByTestId(container, 'forward').click();
     expect(getByTestId(container, 'currentPage')).toHaveTextContent('9');
-    getByTestId(container, 'toBegining').click();
+    getByTestId(container, 'toBeginning').click();
     expect(getByTestId(container, 'currentPage')).toHaveTextContent('1');
     getByTestId(container, 'toFormLink').click();
     await waitFor(() => queryAllByText('Hankkeen perustiedot')[1]);

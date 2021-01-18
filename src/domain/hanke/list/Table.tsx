@@ -97,8 +97,8 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
       <div className="pagination">
         <button
           type="button"
-          className="toBegining"
-          data-testid="toBegining"
+          className="toBeginning"
+          data-testid="toBeginning"
           onClick={() => gotoPage(0)}
           disabled={!canPreviousPage}
         >

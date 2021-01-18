@@ -1,4 +1,4 @@
-const dummyJson = [
+const initialData = [
   {
     id: 1,
     hankeTunnus: 'SMTGEN2_1',
@@ -2430,5 +2430,4 @@ const dummyJson = [
     tarinaHaitta: null,
   },
 ];
-
-export default dummyJson;
+export default initialData;

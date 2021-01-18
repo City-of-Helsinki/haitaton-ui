@@ -2,11 +2,9 @@ import React from 'react';
 import format from 'date-fns/format';
 
 import { NavLink } from 'react-router-dom';
-import { useQuery } from 'react-query';
 import { useTranslation } from 'react-i18next';
 
 import H1 from '../../../common/components/text/H1';
-import api from '../../../common/utils/api';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import Locale from '../../../common/components/locale/Locale';
 import { HankeData } from '../edit/types';
@@ -15,19 +13,10 @@ import Table from './Table';
 
 import './Hankelista.styles.scss';
 
-const getProjects = async () => {
-  const data = await api.get(`/hankkeet/`);
-  return data;
-};
-
-const useProject = () => useQuery(['project'], getProjects);
 // eslint-disable-next-line
-const Projects: React.FC<any> = ({ fakeData }) => {
+const Projects: React.FC<any> = ({ initialData }) => {
   const { FORM } = useLocalizedRoutes();
-  let { data } = useProject();
-  if (fakeData) {
-    data = fakeData;
-  }
+
   const { t } = useTranslation();
   const columns = React.useMemo(
     () => [
@@ -65,7 +54,7 @@ const Projects: React.FC<any> = ({ fakeData }) => {
         {t('hankeList:pageHeader')}
       </H1>
       <div className="hankelista__inner">
-        <Table columns={columns} data={data || []} />
+        <Table columns={columns} data={initialData || []} />
         <div className="hankelista__buttonWpr">
           <NavLink data-testid="toFormLink" to={FORM.path} className="hankelista__hankeLink">
             <Locale id="header:hankeLink" />
