@@ -9,7 +9,7 @@ import H1 from '../../../common/components/text/H1';
 import api from '../../../common/utils/api';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import Locale from '../../../common/components/locale/Locale';
-import { HankeData } from '../edit/types';
+import { HankeData } from '../../types/hanke';
 
 import Table from './Table';
 
@@ -62,7 +62,10 @@ const Projects: React.FC = () => {
       </H1>
       {isLoading && <p>ladataan</p>}
       <div className="hankelista__inner">
-        <Table columns={columns} data={(!isLoading || isError) && data ? data : []} />
+        <Table
+          columns={columns}
+          data={(!isLoading || isError) && data && Array.isArray(data.data) ? data.data : []}
+        />
         <div className="hankelista__buttonWpr">
           <NavLink data-testid="toFormLink" to={FORM.path} className="hankelista__hankeLink">
             <Locale id="header:hankeLink" />
