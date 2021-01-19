@@ -11,6 +11,7 @@ type State = {
 
 const updateFormData: CaseReducer<State, PayloadAction<HankeDataDraft>> = (state, action) => {
   state.hankeDataDraft = action.payload;
+  state.showNotification = null;
 };
 const updateHasFormChanged: CaseReducer<State, PayloadAction<boolean>> = (state, action) => {
   state.hasFormChanged = action.payload;
