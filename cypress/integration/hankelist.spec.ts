@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 // import { initialData } from '../../src/domain/hanke/list/testInitialData';
 
-context('HankeForm', () => {
+context('HankeList', () => {
   beforeEach(() => {
     cy.visit('/fi/hankelista');
   });
