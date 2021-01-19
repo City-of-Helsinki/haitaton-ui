@@ -2,6 +2,21 @@ import Feature from 'ol/Feature';
 import { DATALAYERS } from './constants';
 import { CommonGeoJSON, HankeGeoJSON } from '../../common/types/hanke';
 
+export type ReducerState = {
+  projects: CommonGeoJSON;
+  status: string;
+  error: string;
+  visibleLayers: string[];
+  selectedProject: null | string;
+  drawGeometry: null | HankeGeoJSON;
+  dataLayers: {
+    [DATALAYERS.RESTAURANTS]: MapDatalayerState;
+    [DATALAYERS.ROADS]: MapDatalayerState;
+    [DATALAYERS.CYCLING_ROADS]: MapDatalayerState;
+    [DATALAYERS.GREENERY]: MapDatalayerState;
+  };
+};
+
 export type GeometryData = Feature[];
 
 export interface HankeGeometryApiResponseData {

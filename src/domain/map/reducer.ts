@@ -3,34 +3,22 @@ import projectsJSON from '../../mocks/projects.json';
 import intersectJSON from '../../mocks/intersect.json';
 import { CommonGeoJSON, HankeGeoJSON } from '../../common/types/hanke';
 import { saveGeometryData } from './thunks';
-import { MapDataLayerKey, MapDatalayerState } from './types';
+import { ReducerState, MapDataLayerKey, MapDatalayerState } from './types';
 import { DATALAYERS } from './constants';
 
-type State = {
-  projects: CommonGeoJSON;
-  status: string;
-  error: string;
-  visibleLayers: string[];
-  selectedProject: null | string;
-  geometryData: null | HankeGeoJSON;
-  dataLayers: {
-    [DATALAYERS.RESTAURANTS]: MapDatalayerState;
-    [DATALAYERS.ROADS]: MapDatalayerState;
-    [DATALAYERS.CYCLING_ROADS]: MapDatalayerState;
-    [DATALAYERS.GREENERY]: MapDatalayerState;
-  };
-};
-
-const selectProject: CaseReducer<State, PayloadAction<string>> = (state, action) => {
+const selectProject: CaseReducer<ReducerState, PayloadAction<string>> = (state, action) => {
   state.selectedProject = action.payload;
 };
 
-const toggleLayer: CaseReducer<State, PayloadAction<MapDataLayerKey>> = (state, action) => {
+const toggleLayer: CaseReducer<ReducerState, PayloadAction<MapDataLayerKey>> = (state, action) => {
   state.dataLayers[action.payload].visible = !state.dataLayers[action.payload].visible;
 };
 
-const updateGeometry: CaseReducer<State, PayloadAction<HankeGeoJSON>> = (state, action) => {
-  state.geometryData = action.payload;
+const updateDrawGeometry: CaseReducer<ReducerState, PayloadAction<HankeGeoJSON>> = (
+  state,
+  action
+) => {
+  state.drawGeometry = action.payload;
 };
 
 const buildDatalayerState = (key: MapDataLayerKey, data: CommonGeoJSON): MapDatalayerState => ({
@@ -39,12 +27,12 @@ const buildDatalayerState = (key: MapDataLayerKey, data: CommonGeoJSON): MapData
   visible: false,
 });
 
-const initialState: State = {
+const initialState: ReducerState = {
   projects: projectsJSON.louhiProjects as CommonGeoJSON,
   status: '',
   error: '',
   selectedProject: null,
-  geometryData: null,
+  drawGeometry: null,
   visibleLayers: [],
   dataLayers: {
     [DATALAYERS.RESTAURANTS]: buildDatalayerState(
@@ -71,7 +59,7 @@ const mapSlice = createSlice({
   initialState,
   reducers: {
     selectProject,
-    updateGeometry,
+    updateDrawGeometry,
     toggleLayer,
   },
   extraReducers: (builder) => {

@@ -21,6 +21,7 @@ export const hankeDataDraft = {
   omistajat: [],
   toteuttajat: [],
   arvioijat: [],
+  geometriesChanged: false,
 };
 
 export const initialState: State = {

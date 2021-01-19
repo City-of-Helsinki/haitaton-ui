@@ -1,4 +1,5 @@
 import React from 'react';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'hds-react';
 import { IconAngleLeft, IconAngleRight } from 'hds-react/icons';
@@ -8,19 +9,16 @@ type Props = {
   goForward: () => void;
   saveDraft: () => void;
   formPage: number;
-  isValid: boolean;
-  isDirty: boolean;
 };
 
-const FormButtons: React.FC<Props> = ({
-  goBack,
-  goForward,
-  saveDraft,
-  isValid,
-  isDirty,
-  formPage,
-}) => {
+const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, formPage }) => {
   const { t } = useTranslation();
+  const {
+    formState: { isValid, isDirty },
+    watch,
+  } = useFormContext();
+
+  watch(['geometriesChanged']);
 
   let previousButtonText = '';
   let nextButtonText = '';

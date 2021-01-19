@@ -12,6 +12,8 @@ import { getFormData, getHasFormChanged, getShowNotification } from './selectors
 import { HankeDataDraft, HANKE_SAVETYPE } from '../../types/hanke';
 import { actions, hankeDataDraft } from './reducer';
 import { saveForm } from './thunks';
+import { saveGeometryData } from '../../map/thunks';
+
 import Indicator from './indicator';
 import { hankeSchema } from './hankeSchema';
 import Form0 from './Form0';
@@ -76,9 +78,10 @@ const FormComponent: React.FC = () => {
       saveForm({
         data: getValues(),
         saveType: HANKE_SAVETYPE.DRAFT,
+        formPage,
       })
     );
-  }, [getValues]);
+  }, [getValues, formPage]);
 
   const goBack = useCallback(() => {
     setFormPage((v) => v - 1);
@@ -90,10 +93,16 @@ const FormComponent: React.FC = () => {
     if (formPage === 0) {
       saveDraft();
     }
+    if (formPage === 1) {
+      const values = getValues();
+      if (values.hankeTunnus) {
+        dispatch(saveGeometryData({ hankeTunnus: values.hankeTunnus }));
+      }
+    }
     setFormPage((v) => v + 1);
     // Dirty fix to trigger validations after pageChage
     setTimeout(() => trigger(), 1);
-  }, [formPage]);
+  }, [getValues, formPage]);
 
   const closeForm = useCallback(() => {
     if (hasFormChanged) {
@@ -196,8 +205,6 @@ const FormComponent: React.FC = () => {
                   goForward={goForward}
                   saveDraft={saveDraft}
                   formPage={formPage}
-                  isValid={formState.isValid}
-                  isDirty={formState.isDirty}
                 />
               </form>
             </div>

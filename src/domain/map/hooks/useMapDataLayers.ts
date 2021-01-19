@@ -1,7 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { getMapDataLayers, getStatus, getGeometry } from '../selectors';
+import { getMapDataLayers, getStatus } from '../selectors';
 import { actions } from '../reducer';
-import { saveGeometryData } from '../thunks';
 import { MapDataLayerKey } from '../types';
 import { HankeGeoJSON } from '../../../common/types/hanke';
 
@@ -9,35 +8,16 @@ export const useMapDataLayers = () => {
   const dispatch = useDispatch();
   const dataLayers = useSelector(getMapDataLayers());
   const status = useSelector(getStatus());
-  const drawGeometry = useSelector(getGeometry());
 
   const toggleDataLayer = (dataLayerKey: MapDataLayerKey) =>
     dispatch(actions.toggleLayer(dataLayerKey));
 
   const handleUpdateGeometryState = (geometryData: HankeGeoJSON) =>
-    dispatch(actions.updateGeometry(geometryData));
-
-  const handleSaveGeometry = async (hankeTunnus: string) => {
-    if (!drawGeometry) return;
-    try {
-      await dispatch(
-        saveGeometryData({
-          hankeTunnus,
-          data: {
-            featureCollection: drawGeometry,
-          },
-        })
-      );
-    } catch (e) {
-      // eslint-disable-next-line
-      console.error(e.message);
-    }
-  };
+    dispatch(actions.updateDrawGeometry(geometryData));
 
   return {
     dataLayers,
     toggleDataLayer,
-    handleSaveGeometry,
     handleUpdateGeometryState,
     status,
     dispatch,

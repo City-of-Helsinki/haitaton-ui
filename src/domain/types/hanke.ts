@@ -202,6 +202,7 @@ export type HankeData = {
   modifiedBy?: null | string;
   modifiedAt?: null | string;
   saveType?: string;
+  geometriesChanged: boolean;
 };
 
 type DraftRequiredFields =
