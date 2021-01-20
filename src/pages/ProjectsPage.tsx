@@ -1,4 +1,5 @@
 import React from 'react';
+import Container from '../common/components/container/Container';
 import PageMeta from './components/PageMeta';
 import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
 import HankeListContainer from '../domain/hanke/list/HankeListContainer';
@@ -8,8 +9,10 @@ const ProjectListPage: React.FC = () => {
 
   return (
     <>
-      <PageMeta routeData={PROJECTS} />
-      <HankeListContainer />
+      <Container>
+        <PageMeta routeData={PROJECTS} />
+        <HankeListContainer />
+      </Container>
     </>
   );
 };

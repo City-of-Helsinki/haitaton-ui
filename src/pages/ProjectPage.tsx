@@ -1,4 +1,5 @@
 import React from 'react';
+import Container from '../common/components/container/Container';
 import PageMeta from './components/PageMeta';
 import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
 import HankeForm from '../domain/hanke/edit/Form';
@@ -8,8 +9,10 @@ const MapPage: React.FC = () => {
 
   return (
     <>
-      <PageMeta routeData={MAP} />
-      <HankeForm />
+      <Container>
+        <PageMeta routeData={MAP} />
+        <HankeForm />
+      </Container>
     </>
   );
 };
