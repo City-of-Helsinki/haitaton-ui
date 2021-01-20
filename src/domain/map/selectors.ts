@@ -11,4 +11,4 @@ export const getMapDataLayers = () => (state: RootState) => state.map.dataLayers
 
 export const getStatus = () => (state: RootState) => state.map.status;
 
-export const getGeometry = () => (state: RootState) => state.map.geometryData;
+export const getDrawGeometry = () => (state: RootState) => state.map.drawGeometry;

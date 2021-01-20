@@ -1,10 +1,11 @@
-import { HankeDataDraft, FORMFIELD, HankeContact } from '../../types/hanke';
+import { HankeContact } from '../../types/hanke';
+import { FORMFIELD, HankeDataFormState } from './types';
 
 const isContactEmpty = ({ etunimi, sukunimi, email }: HankeContact) =>
   etunimi === '' && sukunimi === '' && email === '';
 
 // This is temporary solution for sending empty contacts to API
-export const filterEmptyContacts = (hankeData: HankeDataDraft): HankeDataDraft => ({
+export const filterEmptyContacts = (hankeData: HankeDataFormState): HankeDataFormState => ({
   ...hankeData,
   [FORMFIELD.OMISTAJAT]: hankeData[FORMFIELD.OMISTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
   [FORMFIELD.ARVIOIJAT]: hankeData[FORMFIELD.ARVIOIJAT]?.filter((v) => !isContactEmpty(v)) || [],

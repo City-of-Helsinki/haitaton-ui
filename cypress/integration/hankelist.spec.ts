@@ -9,10 +9,10 @@ context('HankeList', () => {
   it('Hanke list testing', () => {
     cy.intercept(
       {
-        method: 'GET', // Route all GET requests
-        url: '/api/hankkeet/', // that have a URL that matches.
+        method: 'GET',
+        url: '/api/hankkeet/',
       },
-      [] // and force the response to be: []
+      []
     );
     cy.get('[data-testid=HankeListPageHeader]').should('contain', 'Hankelista');
     cy.get('[data-testid=toFormLink]').click(); // moves to form

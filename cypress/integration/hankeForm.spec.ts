@@ -3,17 +3,42 @@
 const drawCoordinateX = 100;
 const drawCoordinateY = 100;
 
+const hankeTunnus = 'HAI-testi';
+const nimi = 'nimi';
+const kuvaus = 'kuvaus';
+const alkuPvm = '10.01.2032';
+const loppuPvm = '11.01.2032';
+const osoite = 'Mannerheimintie 22';
+
 context('HankeForm', () => {
   beforeEach(() => {
     cy.visit('/fi/form');
   });
 
   it('Hanke form testing', () => {
-    const nimi = 'nimi';
-    const kuvaus = 'kuvaus';
-    const alkuPvm = '10.01.2032';
-    const loppuPvm = '11.01.2032';
-    const osoite = 'Mannerheimintie 22';
+    cy.intercept(
+      {
+        method: 'POST',
+        url: '/api/hankkeet',
+      },
+      {
+        hankeTunnus,
+        nimi,
+        kuvaus,
+        alkuPvm: '2032-01-10T00:00:00Z',
+        loppuPvm: '2032-01-11T00:00:00Z',
+        vaihe: 'OHJELMOINTI',
+        createdBy: '1',
+        createdAt: '2020-12-10T13:35:16.316476Z',
+        modifiedBy: '1',
+        modifiedAt: '2020-12-10T13:35:17.920239Z',
+        saveType: 'DRAFT',
+        omistajat: [],
+        toteuttajat: [],
+        arvioijat: [],
+      }
+    );
+
     cy.get('input[data-testid=nimi]').type(nimi);
     cy.get('textarea[data-testid=kuvaus]').type(kuvaus);
     cy.get('#alkuPvm').type(alkuPvm);
@@ -25,19 +50,14 @@ context('HankeForm', () => {
     cy.get('[data-testid=forward]').click(); // changes view to form1
 
     cy.get('[data-testid=hankkeenAlue]');
-
-    cy.mapDrawButton('Polygon').click();
-
+    cy.get('[data-testid=save-draft-button]').should('be.disabled');
+    cy.mapDrawButton('Square').click();
     cy.get('#ol-map')
       .click(drawCoordinateX, drawCoordinateY)
       .click(drawCoordinateX + 10, drawCoordinateY + 10)
-      .click(drawCoordinateX + 20, drawCoordinateY + 20)
       .click(drawCoordinateX, drawCoordinateY);
 
-    // Continue implementation of this test once saving geometry for
-    // a project has been implemented further
-    // cy.get('[data-testid=save-geometry-button]').should('exist');
-
+    cy.get('[data-testid=save-draft-button]').should('not.be.disabled');
     cy.get('[data-testid=forward]').click(); // changes view to form2
 
     cy.get('[data-testid=omistajat-etunimi]');

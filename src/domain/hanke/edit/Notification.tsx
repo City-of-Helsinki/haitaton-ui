@@ -1,10 +1,10 @@
 import React from 'react';
 import { Notification, NotificationType } from 'hds-react';
 
-interface Props {
+type Props = {
   label: string;
   typeProps: NotificationType;
-}
+};
 
 const NotificationComp: React.FC<Props> = ({ label, typeProps, children }) => {
   return (

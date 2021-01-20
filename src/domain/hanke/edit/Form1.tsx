@@ -1,16 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import HankeDrawer from '../../map/HankeDrawer';
-import { FormProps, FORMFIELD } from '../../types/hanke';
+import { FORMFIELD, FormProps } from './types';
 import H2 from '../../../common/components/text/H2';
 
-const Form1: React.FC<FormProps> = ({ formData }) => {
+const Form1: React.FC<FormProps> = () => {
   const { t } = useTranslation();
+  const { setValue, register, unregister } = useFormContext();
+
+  useEffect(() => {
+    register({ name: FORMFIELD.GEOMETRIES_CHANGED, type: 'custom' });
+    return () => unregister(FORMFIELD.GEOMETRIES_CHANGED);
+  }, [register]);
+
+  const handleChange = () => {
+    setValue(FORMFIELD.GEOMETRIES_CHANGED, true, { shouldDirty: true });
+  };
+
   return (
     <div className="form1">
       <H2 data-testid="hankkeenAlue">{t('hankeForm:hankkeenAlueForm:header')}</H2>
       <div style={{ position: 'relative' }}>
-        <HankeDrawer hankeTunnus={formData[FORMFIELD.TUNNUS]} />
+        <HankeDrawer onChange={handleChange} />
       </div>
     </div>
   );

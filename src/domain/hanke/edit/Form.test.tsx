@@ -2,7 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { cleanup, fireEvent, waitFor } from '@testing-library/react';
 import { store } from '../../../common/redux/store';
-import { FORMFIELD } from '../../types/hanke';
+import { FORMFIELD } from './types';
 import Form from './Form';
 import { render } from '../../../testUtils/render';
 

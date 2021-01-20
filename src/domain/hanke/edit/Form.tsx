@@ -2,17 +2,18 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
-
 import { useHistory } from 'react-router-dom';
 import { IconCross } from 'hds-react/icons';
 import { yupResolver } from '@hookform/resolvers/yup';
 import H1 from '../../../common/components/text/H1';
 import { actions as dialogActions } from '../../../common/components/confirmationDialog/reducer';
 import { getFormData, getHasFormChanged, getShowNotification } from './selectors';
-import { HankeDataDraft, HANKE_SAVETYPE } from '../../types/hanke';
+import { HankeDataFormState } from './types';
+import { HANKE_SAVETYPE } from '../../types/hanke';
 import { actions, hankeDataDraft } from './reducer';
 import { saveForm } from './thunks';
-import Indicator from './indicator';
+import { saveGeometryData } from '../../map/thunks';
+import StateIndicator from './StateIndicator';
 import { hankeSchema } from './hankeSchema';
 import Form0 from './Form0';
 import Form1 from './Form1';
@@ -31,19 +32,9 @@ const FormComponent: React.FC = () => {
   const formData = useSelector(getFormData());
   const hasFormChanged = useSelector(getHasFormChanged());
   const showNotification = useSelector(getShowNotification());
-
   const history = useHistory();
-
-  const wizardStateData = [
-    { label: t('hankeForm:perustiedotForm:header'), view: 0 },
-    { label: t('hankeForm:hankkeenAlueForm:header'), view: 1 },
-    { label: t('hankeForm:hankkeenYhteystiedotForm:header'), view: 2 },
-    { label: t('hankeForm:tyomaanTiedotForm:header'), view: 3 },
-    { label: t('hankeForm:hankkeenHaitatForm:header'), view: 4 },
-  ];
   const [formPage, setFormPage] = useState<number>(0);
-
-  const formContext = useForm<HankeDataDraft>({
+  const formContext = useForm<HankeDataFormState>({
     mode: 'all',
     reValidateMode: 'onChange',
     criteriaMode: 'all',
@@ -76,9 +67,10 @@ const FormComponent: React.FC = () => {
       saveForm({
         data: getValues(),
         saveType: HANKE_SAVETYPE.DRAFT,
+        formPage,
       })
     );
-  }, [getValues]);
+  }, [getValues, formPage]);
 
   const goBack = useCallback(() => {
     setFormPage((v) => v - 1);
@@ -90,10 +82,16 @@ const FormComponent: React.FC = () => {
     if (formPage === 0) {
       saveDraft();
     }
+    if (formPage === 1) {
+      const values = getValues();
+      if (values.hankeTunnus) {
+        dispatch(saveGeometryData({ hankeTunnus: values.hankeTunnus }));
+      }
+    }
     setFormPage((v) => v + 1);
     // Dirty fix to trigger validations after pageChage
     setTimeout(() => trigger(), 1);
-  }, [formPage]);
+  }, [getValues, formPage]);
 
   const closeForm = useCallback(() => {
     if (hasFormChanged) {
@@ -103,7 +101,7 @@ const FormComponent: React.FC = () => {
     }
   }, [hasFormChanged]);
 
-  const onSubmit = async (data: HankeDataDraft) => {
+  const onSubmit = async (data: HankeDataFormState) => {
     // eslint-disable-next-line
     console.log(data);
     // Todo: Maybe save and redirect to haittojenHallinta?
@@ -119,6 +117,7 @@ const FormComponent: React.FC = () => {
       dispatch(actions.updateFormData(hankeDataDraft));
     };
   }, []);
+
   return (
     <FormProvider {...formContext}>
       {showNotification === 'success' && (
@@ -143,7 +142,7 @@ const FormComponent: React.FC = () => {
           </div>
         ) : (
           <div className="hankeForm__formWpr">
-            <Indicator dataList={wizardStateData} view={formPage} />
+            <StateIndicator formPage={formPage} />
             <div className="hankeForm__formWprRight">
               <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
                 <div className="closeFormWpr">
@@ -196,8 +195,6 @@ const FormComponent: React.FC = () => {
                   goForward={goForward}
                   saveDraft={saveDraft}
                   formPage={formPage}
-                  isValid={formState.isValid}
-                  isDirty={formState.isDirty}
                 />
               </form>
             </div>

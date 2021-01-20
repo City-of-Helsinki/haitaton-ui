@@ -1,57 +1,5 @@
-import { FieldErrors, Control } from 'react-hook-form';
+import { PartialExcept } from '../../common/types/utils';
 import { HankeGeoJSON } from '../../common/types/hanke';
-
-export type PartialExcept<T, K extends keyof T> = Partial<T> & Pick<T, K>;
-export type Optional<T, K extends keyof T> = Omit<T, K> & Partial<T>;
-export interface FormProps {
-  formData: HankeDataDraft;
-  errors: FieldErrors;
-  control: Control;
-  // eslint-disable-next-line
-  register: any;
-}
-
-export enum HANKE_SAVETYPE {
-  AUTO = 'AUTO',
-  DRAFT = 'DRAFT',
-  SUBMIT = 'SUBMIT',
-}
-export type HANKE_SAVETYPE_KEY = keyof typeof HANKE_SAVETYPE;
-
-export enum FORMFIELD {
-  TUNNUS = 'hankeTunnus',
-  VAIHE = 'vaihe',
-  NIMI = 'nimi',
-  KUVAUS = 'kuvaus',
-  KATUOSOITE = 'tyomaaKatuosoite',
-  SUUNNITTELUVAIHE = 'suunnitteluVaihe',
-  ALKU_PVM = 'alkuPvm',
-  LOPPU_PVM = 'loppuPvm',
-  TYOMAATYYPPI = 'tyomaaTyyppi',
-  TYOMAAKOKO = 'tyomaaKoko',
-  HAITTA_ALKU_PVM = 'haittaAlkuPvm',
-  HAITTA_LOPPU_PVM = 'haittaLoppuPvm',
-  KAISTAHAITTA = 'kaistaHaitta',
-  KAISTAPITUUSHAITTA = 'kaistaPituusHaitta',
-  MELUHAITTA = 'meluHaitta',
-  POLYHAITTA = 'polyHaitta',
-  TARINAHAITTA = 'tarinaHaitta',
-  OMISTAJAT = 'omistajat',
-  ARVIOIJAT = 'arvioijat',
-  TOTEUTTAJAT = 'toteuttajat',
-  YKT_HANKE = 'onYKTHanke',
-}
-
-export enum CONTACT_FORMFIELD {
-  ID = 'id',
-  SUKUNIMI = 'sukunimi',
-  ETUNIMI = 'etunimi',
-  EMAIL = 'email',
-  PUHELINNUMERO = 'puhelinnumero',
-  ORGANISAATIO_ID = 'organisaatioId',
-  ORGANISAATIO_NIMI = 'organisaatioNimi',
-  OSASTO = 'osasto',
-}
 
 export enum HANKE_VAIHE {
   OHJELMOINTI = 'OHJELMOINTI',
@@ -150,6 +98,13 @@ export enum HANKE_TARINAHAITTA {
 }
 export type HANKE_TARINAHAITTA_KEY = keyof typeof HANKE_TARINAHAITTA;
 
+export enum HANKE_SAVETYPE {
+  AUTO = 'AUTO',
+  DRAFT = 'DRAFT',
+  SUBMIT = 'SUBMIT',
+}
+export type HANKE_SAVETYPE_KEY = keyof typeof HANKE_SAVETYPE;
+
 export type HankeContact = {
   id: number | null;
   sukunimi: string;
@@ -171,12 +126,11 @@ export type HANKKEEN_GEOMETRIAT = {
   modifiedByUserId: string;
 };
 
-export type HankeData = {
+export interface HankeData {
   id: number;
   hankeTunnus: string;
   nimi: string;
   kuvaus: string;
-  // https://github.com/reduxjs/redux-toolkit/issues/456
   alkuPvm: string;
   loppuPvm: string;
   tyomaaKatuosoite: string;
@@ -195,18 +149,22 @@ export type HankeData = {
   arvioijat: Array<HankeContact>;
   toteuttajat: Array<HankeContact>;
   onYKTHanke: boolean;
+  saveType: HANKE_SAVETYPE_KEY;
   geometriat: HANKKEEN_GEOMETRIAT | null;
   version?: number;
   createdBy?: string;
   createdAt?: string;
   modifiedBy?: null | string;
   modifiedAt?: null | string;
-  saveType?: string;
-};
+}
 
 type DraftRequiredFields =
-  | `${FORMFIELD.OMISTAJAT}`
-  | `${FORMFIELD.TOTEUTTAJAT}`
-  | `${FORMFIELD.ARVIOIJAT}`;
+  | 'id'
+  | 'hankeTunnus'
+  | 'nimi'
+  | 'kuvaus'
+  | 'vaihe'
+  | 'alkuPvm'
+  | 'loppuPvm';
 
 export type HankeDataDraft = PartialExcept<HankeData, DraftRequiredFields>;

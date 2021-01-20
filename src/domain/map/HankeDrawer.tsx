@@ -16,16 +16,11 @@ import { MapDataLayerKey } from './types';
 import { formatFeaturesToHankeGeoJSON } from './utils';
 
 type Props = {
-  hankeTunnus: string | undefined;
+  onChange: () => void;
 };
 
-const HankeDrawer: React.FC<Props> = ({ hankeTunnus }) => {
-  const {
-    dataLayers,
-    toggleDataLayer,
-    handleSaveGeometry,
-    handleUpdateGeometryState,
-  } = useMapDataLayers();
+const HankeDrawer: React.FC<Props> = ({ onChange }) => {
+  const { dataLayers, toggleDataLayer, handleUpdateGeometryState } = useMapDataLayers();
 
   const [drawSource] = useState<VectorSource>(
     new VectorSource({
@@ -40,6 +35,9 @@ const HankeDrawer: React.FC<Props> = ({ hankeTunnus }) => {
     drawSource.on('addfeature', () => {
       const drawGeometry = formatFeaturesToHankeGeoJSON(drawSource.getFeatures());
       handleUpdateGeometryState(drawGeometry);
+    });
+    drawSource.on('change', () => {
+      onChange();
     });
   }, []);
 
@@ -86,15 +84,6 @@ const HankeDrawer: React.FC<Props> = ({ hankeTunnus }) => {
           </Controls>
         </Map>
       </div>
-      {drawSource.getFeatures().length > 0 && hankeTunnus && (
-        <button
-          onClick={() => handleSaveGeometry(hankeTunnus)}
-          type="button"
-          data-testid="save-geometry-button"
-        >
-          Tallenna geometria
-        </button>
-      )}
     </>
   );
 };

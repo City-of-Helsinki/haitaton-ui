@@ -5,14 +5,13 @@ import DatePicker from '../../../common/components/datePicker/DatePicker';
 import Dropdown from '../../../common/components/dropdown/Dropdown';
 import H2 from '../../../common/components/text/H2';
 import {
-  FormProps,
-  FORMFIELD,
   HANKE_KAISTAHAITTA,
   HANKE_KAISTAPITUUSHAITTA,
   HANKE_MELUHAITTA,
   HANKE_POLYAITTA,
   HANKE_TARINAHAITTA,
 } from '../../types/hanke';
+import { FORMFIELD, FormProps } from './types';
 
 const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
   const { t, i18n } = useTranslation();
