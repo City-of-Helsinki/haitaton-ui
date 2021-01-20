@@ -1,0 +1,15 @@
+.dateRangeControl {
+  display: block;
+  background: white;
+  position: fixed;
+  bottom: 7em; // what would be a better measurement than em?
+  left: 50%;
+  padding: 5px;
+}
+
+.datePicker {
+  border-style: solid;
+  border-width: 1px;
+  display: inline-block;
+  padding: 5px;
+}

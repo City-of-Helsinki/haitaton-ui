@@ -6,6 +6,7 @@ import { useQuery } from 'react-query';
 import Map from '../../common/components/map/Map';
 import Controls from '../../common/components/map/controls/Controls';
 import LayerControl from '../../common/components/map/controls/LayerControl';
+import DateRangeControl from '../../common/components/map/controls/DateRangeControl';
 import VectorLayer from '../../common/components/map/layers/VectorLayer';
 import Kantakartta from './Layers/Kantakartta';
 import DataLayers from './Layers/DataLayers';
@@ -93,6 +94,10 @@ const HankeMap: React.FC = () => {
           ) : (
             <></>
           )}
+
+          <Controls>
+            <DateRangeControl />
+          </Controls>
 
           <Controls>
             <LayerControl
