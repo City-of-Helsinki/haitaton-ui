@@ -12,7 +12,7 @@ api.interceptors.response.use(
     if (response.status >= 200 && response.status < 300) {
       return response;
     }
-    return null;
+    return Promise.reject(new Error('Status error'));
   },
   (error: AxiosError) => {
     const {

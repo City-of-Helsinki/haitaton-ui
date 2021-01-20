@@ -2,6 +2,8 @@
 
 const drawCoordinateX = 100;
 const drawCoordinateY = 100;
+
+const hankeTunnus = 'HAI-testi';
 const nimi = 'nimi';
 const kuvaus = 'kuvaus';
 const alkuPvm = '10.01.2032';
@@ -17,10 +19,23 @@ context('HankeForm', () => {
     cy.intercept(
       {
         method: 'POST',
-        url: '/api/hankkeet/',
+        url: '/api/hankkeet',
       },
       {
-        hankeTunnus: 'HAI-testi',
+        hankeTunnus,
+        nimi,
+        kuvaus,
+        alkuPvm: '2032-01-10T00:00:00Z',
+        loppuPvm: '2032-01-11T00:00:00Z',
+        vaihe: 'OHJELMOINTI',
+        createdBy: '1',
+        createdAt: '2020-12-10T13:35:16.316476Z',
+        modifiedBy: '1',
+        modifiedAt: '2020-12-10T13:35:17.920239Z',
+        saveType: 'DRAFT',
+        omistajat: [],
+        toteuttajat: [],
+        arvioijat: [],
       }
     );
 
@@ -36,12 +51,12 @@ context('HankeForm', () => {
 
     cy.get('[data-testid=hankkeenAlue]');
     cy.get('[data-testid=save-draft-button]').should('be.disabled');
-    cy.mapDrawButton('Polygon').click();
+    cy.mapDrawButton('Square').click();
     cy.get('#ol-map')
       .click(drawCoordinateX, drawCoordinateY)
       .click(drawCoordinateX + 10, drawCoordinateY + 10)
-      .click(drawCoordinateX + 20, drawCoordinateY + 20)
       .click(drawCoordinateX, drawCoordinateY);
+
     cy.get('[data-testid=save-draft-button]').should('not.be.disabled');
     cy.get('[data-testid=forward]').click(); // changes view to form2
 
