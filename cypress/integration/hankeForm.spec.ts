@@ -2,6 +2,11 @@
 
 const drawCoordinateX = 100;
 const drawCoordinateY = 100;
+const nimi = 'nimi';
+const kuvaus = 'kuvaus';
+const alkuPvm = '10.01.2032';
+const loppuPvm = '11.01.2032';
+const osoite = 'Mannerheimintie 22';
 
 context('HankeForm', () => {
   beforeEach(() => {
@@ -9,11 +14,6 @@ context('HankeForm', () => {
   });
 
   it('Hanke form testing', () => {
-    const nimi = 'nimi';
-    const kuvaus = 'kuvaus';
-    const alkuPvm = '10.01.2032';
-    const loppuPvm = '11.01.2032';
-    const osoite = 'Mannerheimintie 22';
     cy.get('input[data-testid=nimi]').type(nimi);
     cy.get('textarea[data-testid=kuvaus]').type(kuvaus);
     cy.get('#alkuPvm').type(alkuPvm);
@@ -25,21 +25,14 @@ context('HankeForm', () => {
     cy.get('[data-testid=forward]').click(); // changes view to form1
 
     cy.get('[data-testid=hankkeenAlue]');
-
+    cy.get('[data-testid=save-draft-button]').should('be.disabled');
     cy.mapDrawButton('Polygon').click();
-
     cy.get('#ol-map')
       .click(drawCoordinateX, drawCoordinateY)
       .click(drawCoordinateX + 10, drawCoordinateY + 10)
       .click(drawCoordinateX + 20, drawCoordinateY + 20)
       .click(drawCoordinateX, drawCoordinateY);
-
     cy.get('[data-testid=save-draft-button]').should('not.be.disabled');
-
-    // Continue implementation of this test once saving geometry for
-    // a project has been implemented further
-    // cy.get('[data-testid=save-geometry-button]').should('exist');
-
     cy.get('[data-testid=forward]').click(); // changes view to form2
 
     cy.get('[data-testid=omistajat-etunimi]');

@@ -13,7 +13,7 @@ import { HANKE_SAVETYPE } from '../../types/hanke';
 import { actions, hankeDataDraft } from './reducer';
 import { saveForm } from './thunks';
 import { saveGeometryData } from '../../map/thunks';
-import Indicator from './indicator';
+import StateIndicator from './StateIndicator';
 import { hankeSchema } from './hankeSchema';
 import Form0 from './Form0';
 import Form1 from './Form1';
@@ -32,18 +32,8 @@ const FormComponent: React.FC = () => {
   const formData = useSelector(getFormData());
   const hasFormChanged = useSelector(getHasFormChanged());
   const showNotification = useSelector(getShowNotification());
-
   const history = useHistory();
-
-  const wizardStateData = [
-    { label: t('hankeForm:perustiedotForm:header'), view: 0 },
-    { label: t('hankeForm:hankkeenAlueForm:header'), view: 1 },
-    { label: t('hankeForm:hankkeenYhteystiedotForm:header'), view: 2 },
-    { label: t('hankeForm:tyomaanTiedotForm:header'), view: 3 },
-    { label: t('hankeForm:hankkeenHaitatForm:header'), view: 4 },
-  ];
   const [formPage, setFormPage] = useState<number>(0);
-
   const formContext = useForm<HankeDataFormState>({
     mode: 'all',
     reValidateMode: 'onChange',
@@ -152,7 +142,7 @@ const FormComponent: React.FC = () => {
           </div>
         ) : (
           <div className="hankeForm__formWpr">
-            <Indicator dataList={wizardStateData} view={formPage} />
+            <StateIndicator formPage={formPage} />
             <div className="hankeForm__formWprRight">
               <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
                 <div className="closeFormWpr">
