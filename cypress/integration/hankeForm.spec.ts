@@ -14,6 +14,16 @@ context('HankeForm', () => {
   });
 
   it('Hanke form testing', () => {
+    cy.intercept(
+      {
+        method: 'POST',
+        url: '/api/hankkeet/',
+      },
+      {
+        hankeTunnus: 'HAI-testi',
+      }
+    );
+
     cy.get('input[data-testid=nimi]').type(nimi);
     cy.get('textarea[data-testid=kuvaus]').type(kuvaus);
     cy.get('#alkuPvm').type(alkuPvm);
