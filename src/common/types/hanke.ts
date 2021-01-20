@@ -1,7 +1,3 @@
-export interface IHanke {
-  name: string;
-}
-
 export interface HankeDemoGeoJSONProperties {
   id: string | null;
   name: string;

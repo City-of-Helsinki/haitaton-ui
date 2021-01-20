@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useTypedController } from '@hookform/strictly-typed';
 import { TextInput } from 'hds-react';
-import { FormProps, FORMFIELD, CONTACT_FORMFIELD, HankeDataDraft } from '../../types/hanke';
+import { FORMFIELD, CONTACT_FORMFIELD, FormProps, HankeDataFormState } from './types';
 import api from '../../../common/utils/api';
 import { getInputErrorText } from '../../../common/utils/form';
 
@@ -39,7 +39,7 @@ const getArrayFieldErrors = (errors: Record<string, Array<any>>, name: string) =
 const Form2: React.FC<FormProps> = ({ control, formData, errors, register }) => {
   const { t } = useTranslation();
   const { setValue } = useFormContext();
-  const TypedController = useTypedController<HankeDataDraft>({ control });
+  const TypedController = useTypedController<HankeDataFormState>({ control });
 
   const { isFetched, data: organizationsResponse } = useQuery(
     'organisationList',

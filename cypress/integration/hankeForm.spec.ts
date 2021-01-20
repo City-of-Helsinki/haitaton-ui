@@ -34,6 +34,8 @@ context('HankeForm', () => {
       .click(drawCoordinateX + 20, drawCoordinateY + 20)
       .click(drawCoordinateX, drawCoordinateY);
 
+    cy.get('[data-testid=save-draft-button]').should('not.be.disabled');
+
     // Continue implementation of this test once saving geometry for
     // a project has been implemented further
     // cy.get('[data-testid=save-geometry-button]').should('exist');

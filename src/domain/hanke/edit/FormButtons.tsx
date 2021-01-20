@@ -86,6 +86,7 @@ const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, formPage }
         type="button"
         onClick={() => saveDraft()}
         disabled={!isValid || !isDirty}
+        data-testid="save-draft-button"
         theme="coat"
       >
         <span>{t('hankeForm:saveDraftButton')}</span>

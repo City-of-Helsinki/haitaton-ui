@@ -2,19 +2,20 @@ import React, { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import HankeDrawer from '../../map/HankeDrawer';
-import { FormProps } from '../../types/hanke';
+import { FORMFIELD, FormProps } from './types';
 import H2 from '../../../common/components/text/H2';
 
 const Form1: React.FC<FormProps> = () => {
   const { t } = useTranslation();
-  const { setValue, register } = useFormContext();
+  const { setValue, register, unregister } = useFormContext();
 
   useEffect(() => {
-    register({ name: 'geometriesChanged', type: 'custom' });
-  }, []);
+    register({ name: FORMFIELD.GEOMETRIES_CHANGED, type: 'custom' });
+    return () => unregister(FORMFIELD.GEOMETRIES_CHANGED);
+  }, [register]);
 
   const handleChange = () => {
-    setValue('geometriesChanged', true, { shouldDirty: true });
+    setValue(FORMFIELD.GEOMETRIES_CHANGED, true, { shouldDirty: true });
   };
 
   return (

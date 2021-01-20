@@ -1,11 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../../common/utils/api';
-import { HankeDataDraft, HANKE_SAVETYPE_KEY } from '../../types/hanke';
+import { HankeDataFormState } from './types';
+import { HANKE_SAVETYPE_KEY } from '../../types/hanke';
 import { saveGeometryData } from '../../map/thunks';
 import { filterEmptyContacts } from './utils';
 
 type SaveHankeData = {
-  data: HankeDataDraft;
+  data: HankeDataFormState;
   saveType: HANKE_SAVETYPE_KEY;
   formPage: number;
 };
@@ -24,8 +25,8 @@ export const saveForm = createAsyncThunk(
     }
 
     const response = data.hankeTunnus
-      ? await api.put<HankeDataDraft>(`/hankkeet/${data.hankeTunnus}`, requestData)
-      : await api.post<HankeDataDraft>(`/hankkeet`, requestData);
+      ? await api.put<HankeDataFormState>(`/hankkeet/${data.hankeTunnus}`, requestData)
+      : await api.post<HankeDataFormState>(`/hankkeet`, requestData);
 
     return response.data;
   }

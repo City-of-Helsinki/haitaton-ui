@@ -2,18 +2,17 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
-
 import { useHistory } from 'react-router-dom';
 import { IconCross } from 'hds-react/icons';
 import { yupResolver } from '@hookform/resolvers/yup';
 import H1 from '../../../common/components/text/H1';
 import { actions as dialogActions } from '../../../common/components/confirmationDialog/reducer';
 import { getFormData, getHasFormChanged, getShowNotification } from './selectors';
-import { HankeDataDraft, HANKE_SAVETYPE } from '../../types/hanke';
+import { HankeDataFormState } from './types';
+import { HANKE_SAVETYPE } from '../../types/hanke';
 import { actions, hankeDataDraft } from './reducer';
 import { saveForm } from './thunks';
 import { saveGeometryData } from '../../map/thunks';
-
 import Indicator from './indicator';
 import { hankeSchema } from './hankeSchema';
 import Form0 from './Form0';
@@ -45,7 +44,7 @@ const FormComponent: React.FC = () => {
   ];
   const [formPage, setFormPage] = useState<number>(0);
 
-  const formContext = useForm<HankeDataDraft>({
+  const formContext = useForm<HankeDataFormState>({
     mode: 'all',
     reValidateMode: 'onChange',
     criteriaMode: 'all',
@@ -112,7 +111,7 @@ const FormComponent: React.FC = () => {
     }
   }, [hasFormChanged]);
 
-  const onSubmit = async (data: HankeDataDraft) => {
+  const onSubmit = async (data: HankeDataFormState) => {
     // eslint-disable-next-line
     console.log(data);
     // Todo: Maybe save and redirect to haittojenHallinta?
@@ -128,6 +127,7 @@ const FormComponent: React.FC = () => {
       dispatch(actions.updateFormData(hankeDataDraft));
     };
   }, []);
+
   return (
     <FormProvider {...formContext}>
       {showNotification === 'success' && (

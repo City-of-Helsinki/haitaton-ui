@@ -6,7 +6,8 @@ import { useFormContext } from 'react-hook-form';
 import DatePicker from '../../../common/components/datePicker/DatePicker';
 import Dropdown from '../../../common/components/dropdown/Dropdown';
 import TextInput from '../../../common/components/textInput/TextInput';
-import { FormProps, FORMFIELD, HANKE_VAIHE, HANKE_SUUNNITTELUVAIHE } from '../../types/hanke';
+import { HANKE_VAIHE, HANKE_SUUNNITTELUVAIHE } from '../../types/hanke';
+import { FORMFIELD, FormProps } from './types';
 import H2 from '../../../common/components/text/H2';
 
 const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => {
