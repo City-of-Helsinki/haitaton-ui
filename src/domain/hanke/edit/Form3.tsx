@@ -14,7 +14,7 @@ const Form3: React.FC<FormProps> = ({ formData, control, errors }) => {
       <H2>{t('hankeForm:tyomaanTiedotForm:header')}</H2>
       <div className="dataWpr">
         <div className="formWpr">
-          <TextInput name={FORMFIELD.KATUOSOITE} />
+          <TextInput required name={FORMFIELD.KATUOSOITE} />
         </div>
         <div className="formWpr">
           <DropdownMultiselect
