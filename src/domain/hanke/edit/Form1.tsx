@@ -11,7 +11,10 @@ const Form1: React.FC<FormProps> = ({ formData }) => {
 
   useEffect(() => {
     register({ name: FORMFIELD.GEOMETRIES_CHANGED, type: 'custom' });
-    return () => unregister(FORMFIELD.GEOMETRIES_CHANGED);
+    return () => {
+      setValue(FORMFIELD.GEOMETRIES_CHANGED, false);
+      unregister(FORMFIELD.GEOMETRIES_CHANGED);
+    };
   }, [register]);
 
   const handleGeometriesChange = useCallback(() => {

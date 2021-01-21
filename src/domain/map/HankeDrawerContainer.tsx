@@ -26,7 +26,7 @@ const useHankeGeometry = (hankeTunnus: HankeTunnus) =>
 const HankeDrawerContainer: React.FC<Props> = ({ hankeTunnus, onChangeGeometries }) => {
   const queryClient = useQueryClient();
   const [isGeometryChanged, setIsGeometryChanged] = useState(false);
-  const { data, isLoading } = useHankeGeometry(hankeTunnus);
+  const { data } = useHankeGeometry(hankeTunnus);
 
   // Invalidate cache when unmounting and geometry is changed
   // Otherwise, previous geometry will shown when changing pages
@@ -43,10 +43,6 @@ const HankeDrawerContainer: React.FC<Props> = ({ hankeTunnus, onChangeGeometries
     setIsGeometryChanged(true);
     onChangeGeometries();
   }, []);
-
-  if (isLoading) {
-    return <p>Spinner...</p>;
-  }
 
   return (
     <HankeDrawer

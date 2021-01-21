@@ -23,14 +23,16 @@ type Props = {
 
 const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry }) => {
   const { dataLayers, toggleDataLayer, handleUpdateGeometryState } = useMapDataLayers();
-  const [drawSource] = useState<VectorSource>(
-    new VectorSource({
-      features: geometry ? new GeoJSON().readFeatures(geometry) : [],
-    })
-  );
+  const [drawSource] = useState<VectorSource>(new VectorSource());
   const [zoom] = useState(0);
   const [showKantakartta, setShowKantakartta] = useState(true);
   const [showOrtokartta, setShowOrtokartta] = useState(false);
+
+  useEffect(() => {
+    if (geometry) {
+      drawSource.addFeatures(new GeoJSON().readFeatures(geometry));
+    }
+  }, [geometry]);
 
   useEffect(() => {
     drawSource.on('addfeature', () => {
