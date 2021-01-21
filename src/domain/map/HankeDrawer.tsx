@@ -7,24 +7,25 @@ import LayerControl from '../../common/components/map/controls/LayerControl';
 import DrawControl from '../../common/components/map/controls/DrawControl';
 import VectorLayer from '../../common/components/map/layers/VectorLayer';
 import DrawIntercation from '../../common/components/map/interactions/Draw';
+import { HankeGeoJSON } from '../../common/types/hanke';
 import Kantakartta from './Layers/Kantakartta';
 import DataLayers from './Layers/DataLayers';
 import Ortokartta from './Layers/Ortokartta';
 import styles from './Map.module.scss';
 import { useMapDataLayers } from './hooks/useMapDataLayers';
-import { MapDataLayerKey } from './types';
 import { formatFeaturesToHankeGeoJSON } from './utils';
+import { MapDataLayerKey } from './types';
 
 type Props = {
-  onChange: () => void;
+  geometry: HankeGeoJSON | undefined;
+  onChangeGeometries: () => void;
 };
 
-const HankeDrawer: React.FC<Props> = ({ onChange }) => {
+const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry }) => {
   const { dataLayers, toggleDataLayer, handleUpdateGeometryState } = useMapDataLayers();
-
   const [drawSource] = useState<VectorSource>(
     new VectorSource({
-      format: new GeoJSON(),
+      features: geometry ? new GeoJSON().readFeatures(geometry) : [],
     })
   );
   const [zoom] = useState(0);
@@ -37,7 +38,7 @@ const HankeDrawer: React.FC<Props> = ({ onChange }) => {
       handleUpdateGeometryState(drawGeometry);
     });
     drawSource.on('change', () => {
-      onChange();
+      onChangeGeometries();
     });
   }, []);
 

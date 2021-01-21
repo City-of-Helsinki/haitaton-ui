@@ -46,8 +46,12 @@ export const hankeSchema = yup.object().shape({
     then: yup.string().required(),
   }),
   [FORMFIELD.KATUOSOITE]: yup.string().nullable().when('$formPage', isRequiredByFormPage(3)),
-  [FORMFIELD.KATUOSOITE]: yup.string().nullable().when('$formPage', isRequiredByFormPage(3)),
-  [FORMFIELD.OMISTAJAT]: yup.array().nullable().ensure().of(contactSchema),
+  [FORMFIELD.OMISTAJAT]: yup
+    .array()
+    .nullable()
+    .ensure()
+    .of(contactSchema)
+    .when('$formPage', isRequiredByFormPage(2)),
   [FORMFIELD.ARVIOIJAT]: yup.array().nullable().ensure().of(contactSchema),
   [FORMFIELD.TOTEUTTAJAT]: yup.array().nullable().ensure().of(contactSchema),
 });

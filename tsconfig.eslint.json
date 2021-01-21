@@ -1,4 +1,5 @@
 {
+  "exclude": ["./build"],
   "extends": "./tsconfig.json",
-  "include": ["src", "cypress"]
+  "include": ["src/**/*", "cypress"]
 }
