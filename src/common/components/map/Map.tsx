@@ -63,7 +63,7 @@ const Map: React.FC<Props> = ({
 
   return (
     <MapContext.Provider value={{ map, layers, selectedDrawtoolType, setSelectedDrawtoolType }}>
-      <div ref={mapRef} className={mapClassName} id="ol-map" data-test-id="ol-map">
+      <div ref={mapRef} className={mapClassName} id="ol-map">
         {children}
       </div>
     </MapContext.Provider>
