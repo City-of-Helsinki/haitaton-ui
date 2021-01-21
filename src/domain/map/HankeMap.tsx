@@ -43,7 +43,7 @@ const HankeMap: React.FC = () => {
   const { isLoading, isError, data: projectsWithGeometryResponse } = useProjectsWithGeometry();
   const { dataLayers, toggleDataLayer } = useMapDataLayers();
 
-  const [zoom] = useState(0);
+  const [zoom] = useState(9);
   const [showKantakartta, setShowKantakartta] = useState(true);
   const [showOrtokartta, setShowOrtokartta] = useState(false);
 

@@ -4,8 +4,8 @@ import MapContext from './MapContext';
 import { SelectedDrawtoolType, MapInstance } from './types';
 import { projection } from './utils';
 
-const defaultZoom = 13;
-export const helsinkiCenterCoords = [25496710.16, 6673523.79];
+const defaultZoom = 9;
+export const helsinkiCenterCoords = [25496750, 6673000];
 
 type Props = {
   zoom: number;
