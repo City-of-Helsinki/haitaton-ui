@@ -30,9 +30,15 @@ const geometryStyle = {
   }),
 };
 
+const currentYear = new Date().getFullYear();
+
 const getProjectsWithGeometry = async () => {
   const response = await api.get<HankeData[]>('/hankkeet', {
-    params: { geometry: true },
+    params: {
+      geometry: true,
+      periodBegin: `${currentYear}-01-01`,
+      periodEnd: `${currentYear + 1}-12-31`,
+    },
   });
   return response;
 };
