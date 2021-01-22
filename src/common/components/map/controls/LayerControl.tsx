@@ -28,6 +28,9 @@ type Props = {
   onClickDataLayer: (key: any) => void;
 };
 
+const showDataLayers = false; // HAI-532 hide dataLayers for now as actual data sources
+// are still being investigated
+
 const LayerControl: React.FC<Props> = ({ tileLayers, dataLayers, onClickDataLayer }) => {
   const { t } = useTranslation();
 
@@ -45,19 +48,23 @@ const LayerControl: React.FC<Props> = ({ tileLayers, dataLayers, onClickDataLaye
               </div>
             ))}
           </MenuGroup>
-          <MenuDivider className={styles.controlMenu__divider} />
-          <MenuGroup>
-            {dataLayers.map(({ key, visible }) => (
-              <div className={styles.drawControl__checkbox} key={key}>
-                <Checkbox
-                  id={key}
-                  label={t(`map:datalayers:${key}`)}
-                  checked={visible}
-                  onClick={() => onClickDataLayer(key)}
-                />
-              </div>
-            ))}
-          </MenuGroup>
+          {showDataLayers && (
+            <div>
+              <MenuDivider className={styles.controlMenu__divider} />
+              <MenuGroup>
+                {dataLayers.map(({ key, visible }) => (
+                  <div className={styles.drawControl__checkbox} key={key}>
+                    <Checkbox
+                      id={key}
+                      label={t(`map:datalayers:${key}`)}
+                      checked={visible}
+                      onClick={() => onClickDataLayer(key)}
+                    />
+                  </div>
+                ))}
+              </MenuGroup>
+            </div>
+          )}
         </MenuList>
       </Menu>
     </ControlPanel>
