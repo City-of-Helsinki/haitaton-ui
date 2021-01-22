@@ -15,10 +15,30 @@ const omistajaEtunimi = 'Matti';
 const katuosoite = 'Pohjoinen Rautatiekatu 11 b 12';
 const hankeenKuvaus = 'Tässä on kuvaus';
 
+const formData = {
+  toteuttajat: [],
+  arvioijat: [],
+  omistajat: [],
+};
+
 describe('HankeForm', () => {
   test('happypath', async () => {
+    const handleSave = jest.fn();
+    const handleSaveGeometry = jest.fn();
+    const handleIsDirtyChange = jest.fn();
+    const handleUnmount = jest.fn();
+    const handleFormClose = jest.fn();
+
     const { getByTestId, getByLabelText, getByText, queryAllByText, queryByText } = render(
-      <Form />
+      <Form
+        formData={formData}
+        showNotification={null}
+        onSave={handleSave}
+        onSaveGeometry={handleSaveGeometry}
+        onIsDirtyChange={handleIsDirtyChange}
+        onUnmount={handleUnmount}
+        onFormClose={handleFormClose}
+      />
     );
 
     getByTestId(FORMFIELD.YKT_HANKE).click();
@@ -82,7 +102,23 @@ describe('HankeForm', () => {
   });
 
   test('suunnitteluVaihde should be required when vaihe is suunnittelu', async () => {
-    const { getByTestId, getByLabelText, queryAllByText } = render(<Form />);
+    const handleSave = jest.fn();
+    const handleSaveGeometry = jest.fn();
+    const handleIsDirtyChange = jest.fn();
+    const handleUnmount = jest.fn();
+    const handleFormClose = jest.fn();
+
+    const { getByTestId, getByLabelText, queryAllByText } = render(
+      <Form
+        formData={formData}
+        showNotification={null}
+        onSave={handleSave}
+        onSaveGeometry={handleSaveGeometry}
+        onIsDirtyChange={handleIsDirtyChange}
+        onUnmount={handleUnmount}
+        onFormClose={handleFormClose}
+      />
+    );
 
     getByTestId(FORMFIELD.YKT_HANKE).click();
     fireEvent.change(getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
@@ -106,7 +142,22 @@ describe('HankeForm', () => {
   });
 
   test('contacts should be validated correctly', async () => {
-    const { getByTestId, getByLabelText, queryAllByText, queryByText } = render(<Form />);
+    const handleSave = jest.fn();
+    const handleSaveGeometry = jest.fn();
+    const handleIsDirtyChange = jest.fn();
+    const handleUnmount = jest.fn();
+    const handleFormClose = jest.fn();
+    const { getByTestId, getByLabelText, queryAllByText, queryByText } = render(
+      <Form
+        formData={formData}
+        showNotification={null}
+        onSave={handleSave}
+        onSaveGeometry={handleSaveGeometry}
+        onIsDirtyChange={handleIsDirtyChange}
+        onUnmount={handleUnmount}
+        onFormClose={handleFormClose}
+      />
+    );
 
     getByTestId(FORMFIELD.YKT_HANKE).click();
     fireEvent.change(getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });

@@ -7,13 +7,15 @@ import DatePicker from '../../../common/components/datePicker/DatePicker';
 import Dropdown from '../../../common/components/dropdown/Dropdown';
 import TextInput from '../../../common/components/textInput/TextInput';
 import { HANKE_VAIHE, HANKE_SUUNNITTELUVAIHE } from '../../types/hanke';
-import { FORMFIELD, FormProps } from './types';
 import H2 from '../../../common/components/text/H2';
+import { FORMFIELD, FormProps } from './types';
+import { useFormPage } from './hooks/useFormPage';
 
 const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => {
   const { t, i18n } = useTranslation();
   const [ytkChecked, setYtkChecked] = useState(formData[FORMFIELD.YKT_HANKE] || false);
   const { watch } = useFormContext();
+  useFormPage();
 
   // Subscribe to vaihe changes
   const watchFields = watch([FORMFIELD.VAIHE]);
