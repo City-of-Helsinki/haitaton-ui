@@ -53,4 +53,8 @@ export interface FormProps {
   control: Control;
   // eslint-disable-next-line
   register: any;
+  // eslint-disable-next-line
+  setOrganizationParent?: any;
+  // eslint-disable-next-line
+  organizationState?: any;
 }

@@ -10,6 +10,7 @@ import { FORMFIELD, FormProps } from './types';
 
 const Form3: React.FC<FormProps> = ({ formData, control, errors }) => {
   const { t } = useTranslation();
+
   return (
     <div className="form3">
       <H2>{t('hankeForm:tyomaanTiedotForm:header')}</H2>

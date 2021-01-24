@@ -56,13 +56,79 @@ const FormComponent: React.FC = () => {
     getValues,
     reset,
     trigger,
+    setValue,
   } = formContext;
 
   useEffect(() => {
     reset(formData);
   }, [formData]);
+  const [organizationState, setOrganizationState] = useState([
+    {
+      checked: formData.omistajat[0] && formData.omistajat[0].organisaatioId && true,
+      name:
+        formData.omistajat[0] && !formData.omistajat[0].organisaatioId
+          ? formData.omistajat[0].organisaatioNimi
+          : '',
+    },
+
+    {
+      checked: formData.arvioijat[0] && formData.arvioijat[0].organisaatioId && true,
+      name:
+        formData.arvioijat[0] && !formData.arvioijat[0].organisaatioId
+          ? formData.arvioijat[0].organisaatioNimi
+          : '',
+    },
+
+    {
+      checked: formData.toteuttajat[0] && formData.toteuttajat[0].organisaatioId && true,
+      name:
+        formData.toteuttajat[0] && !formData.toteuttajat[0].organisaatioId
+          ? formData.toteuttajat[0].organisaatioNimi
+          : '',
+    },
+  ]);
+  function setOrganization(index: number, val: string) {
+    if (typeof val === 'boolean') {
+      setOrganizationState((prevState) => {
+        // eslint-disable-next-line
+        prevState[index].checked = val;
+        return {
+          ...prevState,
+        };
+      });
+    } else {
+      setOrganizationState((prevState) => {
+        // eslint-disable-next-line
+        prevState[index].name = val;
+        return {
+          ...prevState,
+        };
+      });
+    }
+  }
+  function formatFormData() {
+    organizationState.forEach((item, index) => {
+      if (item.checked) {
+        if (index === 0) {
+          setValue(`omistajat[0].organisaatioId`, null);
+          setValue(`omistajat[0].organisaatioNimi`, organizationState[index].name);
+        }
+        if (index === 1) {
+          setValue(`arvioijat[0].organisaatioId`, null);
+          setValue(`arvioijat[0].organisaatioNimi`, organizationState[index].name);
+        }
+        if (index === 2) {
+          setValue(`toteuttajat[0].organisaatioId`, null);
+          setValue(`toteuttajat[0].organisaatioNimi`, organizationState[index].name);
+        }
+      }
+    });
+  }
 
   const saveDraft = useCallback(() => {
+    if (formPage === 2) {
+      formatFormData();
+    }
     dispatch(
       saveForm({
         data: getValues(),
@@ -106,7 +172,6 @@ const FormComponent: React.FC = () => {
     console.log(data);
     // Todo: Maybe save and redirect to haittojenHallinta?
   };
-
   useEffect(() => {
     dispatch(actions.updateHasFormChanged(formState.isDirty));
   }, [formState.isDirty]);
@@ -172,6 +237,8 @@ const FormComponent: React.FC = () => {
                     control={control}
                     register={register}
                     formData={formData}
+                    setOrganizationParent={setOrganization}
+                    organizationState={organizationState}
                   />
                 )}
                 {formPage === 3 && (
