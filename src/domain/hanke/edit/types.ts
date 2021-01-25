@@ -46,6 +46,12 @@ type DraftRequiredFields =
 export interface HankeDataFormState extends PartialExcept<HankeData, DraftRequiredFields> {
   geometriesChanged?: boolean; // "virtualField"
 }
+export interface OrganizationStateObj {
+  // eslint-disable-next-line
+  checked: any;
+  name: string;
+}
+export type OrganizationState = Array<OrganizationStateObj>;
 
 export interface FormProps {
   formData: HankeDataFormState;
@@ -54,7 +60,8 @@ export interface FormProps {
   // eslint-disable-next-line
   register: any;
   // eslint-disable-next-line
-  setOrganizationParent?: any;
+  setOrganization?: (index: number, val: any) => void;
+
   // eslint-disable-next-line
-  organizationState?: any;
+  organizationState?: OrganizationState;
 }

@@ -41,7 +41,7 @@ const Form2: React.FC<FormProps> = ({
   formData,
   errors,
   register,
-  setOrganizationParent,
+  setOrganization,
   organizationState,
 }) => {
   const { t } = useTranslation();
@@ -124,6 +124,8 @@ const Form2: React.FC<FormProps> = ({
                           setValue(`${CONTACT_TYPE}[0].organisaatioNimi`, option.label);
                         }
                       }}
+                      // eslint-disable-next-line
+                      // @ts-ignore
                       disabled={organizationState[index].checked}
                     />
                   </>
@@ -134,9 +136,9 @@ const Form2: React.FC<FormProps> = ({
                       id={`${CONTACT_TYPE}-checkbox`}
                       name={FORMFIELD.YKT_HANKE}
                       label={t(`hankeForm:labels:omaOrganisaatio`)}
-                      checked={organizationState[index].checked}
-                      onChange={() =>
-                        setOrganizationParent(index, !organizationState[index].checked)
+                      checked={organizationState && organizationState[index].checked}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setOrganization && setOrganization(index, e.target.checked)
                       }
                       data-testid={FORMFIELD.YKT_HANKE}
                     />
@@ -150,11 +152,11 @@ const Form2: React.FC<FormProps> = ({
                         getArrayFieldErrors(errors, CONTACT_TYPE),
                         contactField
                       )}
-                      onChange={(e: React.FormEvent<HTMLInputElement>): void => {
-                        setOrganizationParent(index, e.currentTarget.value);
-                      }}
-                      value={organizationState[index].name}
-                      disabled={!organizationState[index].checked}
+                      onChange={(e: React.FormEvent<HTMLInputElement>): void =>
+                        setOrganization && setOrganization(index, e.currentTarget.value)
+                      }
+                      value={organizationState && organizationState[index].name}
+                      disabled={organizationState && !organizationState[index].checked}
                     />
                   </div>
                 )}

@@ -237,7 +237,7 @@ const FormComponent: React.FC = () => {
                     control={control}
                     register={register}
                     formData={formData}
-                    setOrganizationParent={setOrganization}
+                    setOrganization={setOrganization}
                     organizationState={organizationState}
                   />
                 )}
