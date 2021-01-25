@@ -1,5 +1,5 @@
 import Feature from 'ol/Feature';
-import { DATALAYERS } from './constants';
+import { DATALAYERS, MAPTILES } from './constants';
 import { CommonGeoJSON, HankeGeoJSON } from '../../common/types/hanke';
 
 export type ReducerState = {
@@ -14,6 +14,10 @@ export type ReducerState = {
     [DATALAYERS.ROADS]: MapDatalayerState;
     [DATALAYERS.CYCLING_ROADS]: MapDatalayerState;
     [DATALAYERS.GREENERY]: MapDatalayerState;
+  };
+  mapTileLayers: {
+    [MAPTILES.KANTAKARTTA]: MapTilelayerState;
+    [MAPTILES.ORTOKARTTA]: MapTilelayerState;
   };
 };
 
@@ -41,9 +45,19 @@ export type HankeGeometry = {
 
 export type MapDataLayerKey = keyof typeof DATALAYERS;
 
+export type MapTileLayerKey = keyof typeof MAPTILES;
+
+export type MapTileLayerId = 'ortokartta' | 'kantakartta';
+
 export type MapDatalayerState = {
   key: MapDataLayerKey;
   data: CommonGeoJSON;
+  visible: boolean;
+};
+
+export type MapTilelayerState = {
+  id: string; // TODO: this doesnt work, why? MAPTILES.ORTOKARTTA | MAPTILES.KANTAKARTTA;
+  label: string;
   visible: boolean;
 };
 

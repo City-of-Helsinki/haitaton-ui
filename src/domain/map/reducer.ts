@@ -3,8 +3,14 @@ import projectsJSON from '../../mocks/projects.json';
 import intersectJSON from '../../mocks/intersect.json';
 import { CommonGeoJSON, HankeGeoJSON } from '../../common/types/hanke';
 import { saveGeometryData } from './thunks';
-import { ReducerState, MapDataLayerKey, MapDatalayerState } from './types';
-import { DATALAYERS } from './constants';
+import {
+  ReducerState,
+  MapDataLayerKey,
+  MapTileLayerId,
+  MapDatalayerState,
+  MapTilelayerState,
+} from './types';
+import { DATALAYERS, MAPTILES } from './constants';
 
 const selectProject: CaseReducer<ReducerState, PayloadAction<string>> = (state, action) => {
   state.selectedProject = action.payload;
@@ -12,6 +18,13 @@ const selectProject: CaseReducer<ReducerState, PayloadAction<string>> = (state, 
 
 const toggleLayer: CaseReducer<ReducerState, PayloadAction<MapDataLayerKey>> = (state, action) => {
   state.dataLayers[action.payload].visible = !state.dataLayers[action.payload].visible;
+};
+
+const toggleMapTileLayer: CaseReducer<ReducerState, PayloadAction<MapTileLayerId>> = (
+  state,
+  action
+) => {
+  state.mapTileLayers[action.payload].visible = !state.mapTileLayers[action.payload].visible; // TODO: map state must be togglable, i.e. when one goes true all others go false
 };
 
 const updateDrawGeometry: CaseReducer<ReducerState, PayloadAction<HankeGeoJSON>> = (
@@ -25,6 +38,16 @@ const buildDatalayerState = (key: MapDataLayerKey, data: CommonGeoJSON): MapData
   key,
   data,
   visible: false,
+});
+
+const buildTilelayerState = (
+  id: string, // TODO: import fromt costants
+  label: string,
+  visible: boolean
+): MapTilelayerState => ({
+  id,
+  label,
+  visible,
 });
 
 const initialState: ReducerState = {
@@ -52,6 +75,10 @@ const initialState: ReducerState = {
       intersectJSON.greeneryGeoJSON as CommonGeoJSON
     ),
   },
+  mapTileLayers: {
+    [MAPTILES.ORTOKARTTA]: buildTilelayerState('ortokartta', 'Ortokartta', true),
+    [MAPTILES.KANTAKARTTA]: buildTilelayerState('kantakartta', 'Kantakartta', false),
+  },
 };
 
 const mapSlice = createSlice({
@@ -61,6 +88,7 @@ const mapSlice = createSlice({
     selectProject,
     updateDrawGeometry,
     toggleLayer,
+    toggleMapTileLayer,
   },
   extraReducers: (builder) => {
     builder.addCase(saveGeometryData.fulfilled, (state) => {

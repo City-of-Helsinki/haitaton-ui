@@ -10,8 +10,7 @@ import { CommonGeoJSON } from '../../../types/hanke';
 type TileLayer = {
   id: string;
   label: string;
-  checked: boolean;
-  onClick: () => void;
+  visible: boolean;
 };
 
 type DataLayer = {
@@ -23,15 +22,19 @@ type DataLayer = {
 type Props = {
   tileLayers: TileLayer[];
   dataLayers: DataLayer[];
-  // I dont want to import type from domain. Maybe move layers here under common dir?
-  // eslint-disable-next-line
-  onClickDataLayer: (key: any) => void;
+  onClickDataLayer: (id: any) => void; // TODO: improve type definition (import key of enum from type)
+  onClickTileLayer: (key: any) => void; // TODO: improve type definition (import key of enum from type)
 };
 
 const showDataLayers = false; // HAI-532 hide dataLayers for now as actual data sources
 // are still being investigated
 
-const LayerControl: React.FC<Props> = ({ tileLayers, dataLayers, onClickDataLayer }) => {
+const LayerControl: React.FC<Props> = ({
+  tileLayers,
+  dataLayers,
+  onClickDataLayer,
+  onClickTileLayer,
+}) => {
   const { t } = useTranslation();
 
   return (
@@ -42,9 +45,14 @@ const LayerControl: React.FC<Props> = ({ tileLayers, dataLayers, onClickDataLaye
         </MenuButton>
         <MenuList className={styles.controlMenu}>
           <MenuGroup>
-            {tileLayers.map(({ id, onClick, label, checked }) => (
+            {tileLayers.map(({ id, label, visible }) => (
               <div className={styles.drawControl__checkbox} key={id}>
-                <Checkbox id={id} label={label} checked={checked} onClick={() => onClick()} />
+                <Checkbox
+                  id={id}
+                  label={label}
+                  checked={visible}
+                  onClick={() => onClickTileLayer(id)}
+                />
               </div>
             ))}
           </MenuGroup>
