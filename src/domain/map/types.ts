@@ -47,7 +47,7 @@ export type MapDataLayerKey = keyof typeof DATALAYERS;
 
 export type MapTileLayerKey = keyof typeof MAPTILES;
 
-export type MapTileLayerId = 'ortokartta' | 'kantakartta';
+export type MapTileLayerId = MAPTILES.ORTOKARTTA | MAPTILES.KANTAKARTTA;
 
 export type MapDatalayerState = {
   key: MapDataLayerKey;
@@ -56,7 +56,7 @@ export type MapDatalayerState = {
 };
 
 export type MapTilelayerState = {
-  id: string; // TODO: this doesnt work, why? MAPTILES.ORTOKARTTA | MAPTILES.KANTAKARTTA;
+  id: MapTileLayerId;
   label: string;
   visible: boolean;
 };
