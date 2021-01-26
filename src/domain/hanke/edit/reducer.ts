@@ -43,13 +43,6 @@ const formSlice = createSlice({
     });
     builder.addCase(saveForm.fulfilled, (state, { payload }) => {
       if (payload) {
-        /*
-        const payloadObj = payload;
-        payloadObj.omistajat[0].isOmaOrganisaatio = true;
-        // state.hankeDataDraft.omistajat[0] && state.hankeDataDraft.omistajat[0].isOmaOrganisaatio;
-        payloadObj.omistajat[0].omaOrganisaatio = 'kissa';
-        // state.hankeDataDraft.omistajat[0] && state.hankeDataDraft.omistajat[0].omaOrganisaatio;
-        */
         state.status = 'ok';
         state.hankeDataDraft = payload;
         state.showNotification = 'success';
