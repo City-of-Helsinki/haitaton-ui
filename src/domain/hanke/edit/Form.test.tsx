@@ -1,9 +1,9 @@
 import React from 'react';
-import { Provider } from 'react-redux';
 import { cleanup, fireEvent, waitFor } from '@testing-library/react';
-import { store } from '../../../common/redux/store';
 import { FORMFIELD } from './types';
 import Form from './Form';
+import FormContainer from './FormContainer';
+
 import { render } from '../../../testUtils/render';
 
 afterEach(cleanup);
@@ -17,12 +17,30 @@ const omistajaEtunimi = 'Matti';
 const katuosoite = 'Pohjoinen Rautatiekatu 11 b 12';
 const hankeenKuvaus = 'Tässä on kuvaus';
 
+const formData = {
+  toteuttajat: [],
+  arvioijat: [],
+  omistajat: [],
+};
+
 describe('HankeForm', () => {
   test('happypath', async () => {
+    const handleSave = jest.fn();
+    const handleSaveGeometry = jest.fn();
+    const handleIsDirtyChange = jest.fn();
+    const handleUnmount = jest.fn();
+    const handleFormClose = jest.fn();
+
     const { getByTestId, getByLabelText, getByText, queryAllByText, queryByText } = render(
-      <Provider store={store}>
-        <Form />
-      </Provider>
+      <Form
+        formData={formData}
+        showNotification={null}
+        onSave={handleSave}
+        onSaveGeometry={handleSaveGeometry}
+        onIsDirtyChange={handleIsDirtyChange}
+        onUnmount={handleUnmount}
+        onFormClose={handleFormClose}
+      />
     );
 
     getByTestId(FORMFIELD.YKT_HANKE).click();
@@ -34,15 +52,17 @@ describe('HankeForm', () => {
     fireEvent.change(getByLabelText('Hankkeen loppupäivä', { exact: false }), {
       target: { value: loppuPvm },
     });
-
     queryAllByText('Hankeen Vaihe')[0].click();
     queryAllByText('Ohjelmointi')[0].click();
+    expect(handleIsDirtyChange).toHaveBeenCalledTimes(2);
     await waitFor(() => expect(getByTestId('forward')).not.toBeDisabled());
+
     getByTestId('forward').click(); // changes view to form1
+    expect(handleSave).toHaveBeenCalledTimes(1);
     await waitFor(() => queryAllByText('Hankkeen yhteystiedot')[1]);
 
     getByTestId('backward').click(); // changes view to form0
-    expect(getByTestId(FORMFIELD.YKT_HANKE)).toBeChecked();
+    // await waitFor(() => expect(getByTestId(FORMFIELD.YKT_HANKE)).toBeChecked());
     expect(getByLabelText('Hankkeen alkupäivä', { exact: false })).toHaveValue(alkuPvm);
     expect(getByLabelText('Hankkeen loppupäivä', { exact: false })).toHaveValue(loppuPvm);
     expect(getByTestId(FORMFIELD.NIMI)).toHaveValue(nimi);
@@ -51,6 +71,7 @@ describe('HankeForm', () => {
     getByTestId('forward').click(); // changes view to form1
     getByTestId('forward').click(); // changes view to form2
     await waitFor(() => queryAllByText('Hankkeen yhteystiedot')[1]);
+    expect(handleSave).toHaveBeenCalledTimes(2);
     fireEvent.change(getByTestId('omistajat-etunimi'), {
       target: { value: omistajaEtunimi },
     });
@@ -83,13 +104,26 @@ describe('HankeForm', () => {
     getByText('Tallenna ja poistu').click();
     await waitFor(() => queryByText('Lomake on lähetetty onnistuneesti'));
     expect(queryByText('Lomake on lähetetty onnistuneesti'));
+    expect(handleSave).toHaveBeenCalledTimes(2);
   });
 
   test('suunnitteluVaihde should be required when vaihe is suunnittelu', async () => {
+    const handleSave = jest.fn();
+    const handleSaveGeometry = jest.fn();
+    const handleIsDirtyChange = jest.fn();
+    const handleUnmount = jest.fn();
+    const handleFormClose = jest.fn();
+
     const { getByTestId, getByLabelText, queryAllByText } = render(
-      <Provider store={store}>
-        <Form />
-      </Provider>
+      <Form
+        formData={formData}
+        showNotification={null}
+        onSave={handleSave}
+        onSaveGeometry={handleSaveGeometry}
+        onIsDirtyChange={handleIsDirtyChange}
+        onUnmount={handleUnmount}
+        onFormClose={handleFormClose}
+      />
     );
 
     getByTestId(FORMFIELD.YKT_HANKE).click();
@@ -114,10 +148,21 @@ describe('HankeForm', () => {
   });
 
   test('contacts should be validated correctly', async () => {
+    const handleSave = jest.fn();
+    const handleSaveGeometry = jest.fn();
+    const handleIsDirtyChange = jest.fn();
+    const handleUnmount = jest.fn();
+    const handleFormClose = jest.fn();
     const { getByTestId, getByLabelText, queryAllByText, queryByText } = render(
-      <Provider store={store}>
-        <Form />
-      </Provider>
+      <Form
+        formData={formData}
+        showNotification={null}
+        onSave={handleSave}
+        onSaveGeometry={handleSaveGeometry}
+        onIsDirtyChange={handleIsDirtyChange}
+        onUnmount={handleUnmount}
+        onFormClose={handleFormClose}
+      />
     );
 
     getByTestId(FORMFIELD.YKT_HANKE).click();
@@ -159,5 +204,64 @@ describe('HankeForm', () => {
     });
 
     await waitFor(() => expect(getByTestId('forward')).not.toBeDisabled());
+  });
+
+  test('Success notification should be shown', async () => {
+    const { queryByTestId, queryByText } = render(
+      <Form
+        formData={formData}
+        showNotification="success"
+        onSave={() => ({})}
+        onSaveGeometry={() => ({})}
+        onIsDirtyChange={() => ({})}
+        onUnmount={() => ({})}
+        onFormClose={() => ({})}
+      />
+    );
+    await waitFor(() => expect(queryByText('Luonnos tallennettu')));
+    await waitFor(() => expect(queryByTestId('notification')).toBeNull());
+  });
+
+  test('Form should be populated correctly ', async () => {
+    const { getByTestId } = render(
+      <Form
+        formData={{
+          ...formData,
+          [FORMFIELD.NIMI]: 'Lenkkeilijä Pekka',
+        }}
+        showNotification={null}
+        onSave={() => ({})}
+        onSaveGeometry={() => ({})}
+        onIsDirtyChange={() => ({})}
+        onUnmount={() => ({})}
+        onFormClose={() => ({})}
+      />
+    );
+    expect(getByTestId(FORMFIELD.NIMI)).toHaveValue('Lenkkeilijä Pekka');
+    expect(getByTestId(FORMFIELD.KUVAUS)).toHaveValue('');
+  });
+
+  test('FormContainer integration should work ', async () => {
+    const { getByText, queryByText, getByTestId, getByLabelText, queryAllByText } = render(
+      <FormContainer />
+    );
+    fireEvent.change(getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
+    fireEvent.change(getByTestId(FORMFIELD.KUVAUS), { target: { value: hankeenKuvaus } });
+    fireEvent.change(getByLabelText('Hankkeen alkupäivä', { exact: false }), {
+      target: { value: alkuPvm },
+    });
+    fireEvent.change(getByLabelText('Hankkeen loppupäivä', { exact: false }), {
+      target: { value: loppuPvm },
+    });
+    queryAllByText('Hankeen Vaihe')[0].click();
+    queryAllByText('Ohjelmointi')[0].click();
+
+    getByText('Tallenna luonnos').click();
+
+    await waitFor(() => expect(getByTestId('forward')).toBeDisabled());
+    await waitFor(() => expect(queryByText('Luonnos tallennettu')));
+
+    expect(getByTestId(FORMFIELD.NIMI)).toHaveValue(nimi);
+    expect(getByTestId(FORMFIELD.KUVAUS)).toHaveValue(hankeenKuvaus);
   });
 });

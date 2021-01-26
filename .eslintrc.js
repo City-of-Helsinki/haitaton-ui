@@ -82,4 +82,5 @@ module.exports = {
       },
     },
   ],
+  ignorePatterns: ['.eslintrc.js'], // https://stackoverflow.com/questions/61956555/why-is-typescript-eslint-parser-including-files-outside-of-those-configured-in
 };

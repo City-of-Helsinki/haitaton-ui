@@ -1,18 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { IconCross } from 'hds-react/icons';
 import { yupResolver } from '@hookform/resolvers/yup';
 import H1 from '../../../common/components/text/H1';
-import { actions as dialogActions } from '../../../common/components/confirmationDialog/reducer';
-import { getFormData, getHasFormChanged, getShowNotification } from './selectors';
-import { HankeDataFormState } from './types';
-import { HANKE_SAVETYPE } from '../../types/hanke';
-import { actions, hankeDataDraft } from './reducer';
-import { saveForm } from './thunks';
-import { saveGeometryData } from '../../map/thunks';
+import { HankeDataFormState, SaveFormArguments } from './types';
 import StateIndicator from './StateIndicator';
 import { hankeSchema } from './hankeSchema';
 import Form0 from './Form0';
@@ -23,16 +15,28 @@ import Form4 from './Form4';
 import FormButtons from './FormButtons';
 import FinishedForm from './FinishedForm';
 import Notification from './Notification';
-
 import './Form.styles.scss';
 
-const FormComponent: React.FC = () => {
+type Props = {
+  formData: HankeDataFormState;
+  showNotification: string | null;
+  onSave: (args: SaveFormArguments) => void;
+  onSaveGeometry: (hankeTunnus: string) => void;
+  onIsDirtyChange: (isDirty: boolean) => void;
+  onUnmount: () => void;
+  onFormClose: () => void;
+};
+
+const HankeForm: React.FC<Props> = ({
+  formData,
+  onSave,
+  onSaveGeometry,
+  onIsDirtyChange,
+  onUnmount,
+  onFormClose,
+  showNotification,
+}) => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const formData = useSelector(getFormData());
-  const hasFormChanged = useSelector(getHasFormChanged());
-  const showNotification = useSelector(getShowNotification());
-  const history = useHistory();
   const [formPage, setFormPage] = useState<number>(0);
   const formContext = useForm<HankeDataFormState>({
     mode: 'all',
@@ -55,7 +59,6 @@ const FormComponent: React.FC = () => {
     formState,
     getValues,
     reset,
-    trigger,
     setValue,
   } = formContext;
   function iniateData() {
@@ -78,6 +81,7 @@ const FormComponent: React.FC = () => {
       }
     }
   }
+
   useEffect(() => {
     reset(formData);
     iniateData();
@@ -99,19 +103,14 @@ const FormComponent: React.FC = () => {
   }
   const saveDraft = useCallback(() => {
     formatSendData();
-    dispatch(
-      saveForm({
-        data: getValues(),
-        saveType: HANKE_SAVETYPE.DRAFT,
-        formPage,
-      })
-    );
+    onSave({
+      data: getValues(),
+      formPage,
+    });
   }, [getValues, formPage]);
 
   const goBack = useCallback(() => {
     setFormPage((v) => v - 1);
-    // Dirty fix to trigger validations after pageChage. Maybe should run in formPage useEffect instead?
-    setTimeout(() => trigger(), 1);
   }, []);
 
   const goForward = useCallback(() => {
@@ -121,21 +120,11 @@ const FormComponent: React.FC = () => {
     if (formPage === 1) {
       const values = getValues();
       if (values.hankeTunnus) {
-        dispatch(saveGeometryData({ hankeTunnus: values.hankeTunnus }));
+        onSaveGeometry(values.hankeTunnus);
       }
     }
     setFormPage((v) => v + 1);
-    // Dirty fix to trigger validations after pageChage
-    setTimeout(() => trigger(), 1);
   }, [getValues, formPage]);
-
-  const closeForm = useCallback(() => {
-    if (hasFormChanged) {
-      dispatch(dialogActions.updateIsDialogOpen({ isDialogOpen: true, redirectUrl: '/' }));
-    } else {
-      history.push('/');
-    }
-  }, [hasFormChanged]);
 
   const onSubmit = async (data: HankeDataFormState) => {
     // eslint-disable-next-line
@@ -143,14 +132,11 @@ const FormComponent: React.FC = () => {
     // Todo: Maybe save and redirect to haittojenHallinta?
   };
   useEffect(() => {
-    dispatch(actions.updateHasFormChanged(formState.isDirty));
+    onIsDirtyChange(formState.isDirty);
   }, [formState.isDirty]);
 
-  // Clear form data on unmount
   useEffect(() => {
-    return () => {
-      dispatch(actions.updateFormData(hankeDataDraft));
-    };
+    return () => onUnmount();
   }, []);
 
   return (
@@ -181,7 +167,7 @@ const FormComponent: React.FC = () => {
             <div className="hankeForm__formWprRight">
               <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
                 <div className="closeFormWpr">
-                  <button type="button" onClick={() => closeForm()}>
+                  <button type="button" onClick={() => onFormClose()}>
                     <IconCross />
                   </button>
                 </div>
@@ -239,4 +225,4 @@ const FormComponent: React.FC = () => {
     </FormProvider>
   );
 };
-export default FormComponent;
+export default HankeForm;

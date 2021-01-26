@@ -1,8 +1,13 @@
 import * as React from 'react';
+import { Provider as ReduxProvider } from 'react-redux';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { render, RenderOptions } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import i18n from '../locales/i18n';
+import { store } from '../common/redux/store';
+
+const queryClient = new QueryClient();
 
 type Props = {
   children: React.ReactChildren;
@@ -10,7 +15,11 @@ type Props = {
 
 const AllTheProviders = ({ children }: Props) => (
   <BrowserRouter>
-    <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
+    <ReduxProvider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
+      </QueryClientProvider>
+    </ReduxProvider>
   </BrowserRouter>
 );
 

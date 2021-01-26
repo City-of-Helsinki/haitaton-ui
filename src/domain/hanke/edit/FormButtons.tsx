@@ -15,10 +15,7 @@ const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, formPage }
   const { t } = useTranslation();
   const {
     formState: { isValid, isDirty },
-    watch,
   } = useFormContext();
-
-  watch(['geometriesChanged']);
 
   let previousButtonText = '';
   let nextButtonText = '';

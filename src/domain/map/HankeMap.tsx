@@ -30,9 +30,15 @@ const geometryStyle = {
   }),
 };
 
+const currentYear = new Date().getFullYear();
+
 const getProjectsWithGeometry = async () => {
   const response = await api.get<HankeData[]>('/hankkeet', {
-    params: { geometry: true },
+    params: {
+      geometry: true,
+      periodBegin: `${currentYear}-01-01`,
+      periodEnd: `${currentYear + 1}-12-31`,
+    },
   });
   return response;
 };
@@ -43,7 +49,7 @@ const HankeMap: React.FC = () => {
   const { isLoading, isError, data: projectsWithGeometryResponse } = useProjectsWithGeometry();
   const { dataLayers, toggleDataLayer } = useMapDataLayers();
 
-  const [zoom] = useState(0);
+  const [zoom] = useState(9);
   const [showKantakartta, setShowKantakartta] = useState(true);
   const [showOrtokartta, setShowOrtokartta] = useState(false);
 

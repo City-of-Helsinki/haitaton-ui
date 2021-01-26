@@ -60,3 +60,8 @@ export interface FormProps {
   // eslint-disable-next-line
   register: any;
 }
+
+export type SaveFormArguments = {
+  data: HankeDataFormState;
+  formPage: number;
+};

@@ -118,7 +118,7 @@ export type HankeContact = {
   omaOrganisaatio: string;
 };
 
-export type HANKKEEN_GEOMETRIAT = {
+export type HankeGeometria = {
   createdAt: Date;
   createdByUserId: string;
   featureCollection: HankeGeoJSON;
@@ -152,7 +152,7 @@ export interface HankeData {
   toteuttajat: Array<HankeContact>;
   onYKTHanke: boolean;
   saveType: HANKE_SAVETYPE_KEY;
-  geometriat: HANKKEEN_GEOMETRIAT | null;
+  geometriat: HankeGeometria | null;
   version?: number;
   createdBy?: string;
   createdAt?: string;
