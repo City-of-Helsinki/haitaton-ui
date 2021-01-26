@@ -59,9 +59,4 @@ export interface FormProps {
   control: Control;
   // eslint-disable-next-line
   register: any;
-  // eslint-disable-next-line
-  setOrganization?: (index: number, val: any) => void;
-
-  // eslint-disable-next-line
-  organizationState?: OrganizationState;
 }

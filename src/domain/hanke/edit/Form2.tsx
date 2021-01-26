@@ -36,16 +36,9 @@ const fetchOrganizations = async () => {
 const getArrayFieldErrors = (errors: Record<string, Array<any>>, name: string) =>
   errors && errors[name] && errors[name][0] ? errors[name][0] : {};
 
-const Form2: React.FC<FormProps> = ({
-  control,
-  formData,
-  errors,
-  register,
-  setOrganization,
-  organizationState,
-}) => {
+const Form2: React.FC<FormProps> = ({ control, formData, errors, register }) => {
   const { t } = useTranslation();
-  const { setValue } = useFormContext();
+  const { setValue, getValues } = useFormContext();
   const TypedController = useTypedController<HankeDataFormState>({ control });
 
   const { isFetched, data: organizationsResponse } = useQuery(
@@ -56,10 +49,13 @@ const Form2: React.FC<FormProps> = ({
       refetchOnWindowFocus: false,
     }
   );
+  // eslint-disable-next-line
+  // @ts-ignore
+  const forceUpdate = React.useState()[1].bind(null, {});
   return (
     <div className="form2">
       <H2>{t('hankeForm:hankkeenYhteystiedotForm:header')}</H2>
-      {CONTACT_TYPES.map((CONTACT_TYPE, index) => (
+      {CONTACT_TYPES.map((CONTACT_TYPE) => (
         <div key={CONTACT_TYPE}>
           <H3>{t(`hankeForm:headers:${CONTACT_TYPE}`)}</H3>
           <div className="formColumns">
@@ -126,7 +122,7 @@ const Form2: React.FC<FormProps> = ({
                       }}
                       // eslint-disable-next-line
                       // @ts-ignore
-                      disabled={organizationState[index].checked}
+                      disabled={getValues(`${CONTACT_TYPE}[0].isOmaOrganisaatio`)}
                     />
                   </>
                 )}
@@ -134,29 +130,31 @@ const Form2: React.FC<FormProps> = ({
                   <div>
                     <Checkbox
                       id={`${CONTACT_TYPE}-checkbox`}
-                      name={FORMFIELD.YKT_HANKE}
+                      name={`${CONTACT_TYPE}-checkbox`}
                       label={t(`hankeForm:labels:omaOrganisaatio`)}
-                      checked={organizationState && organizationState[index].checked}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setOrganization && setOrganization(index, e.target.checked)
-                      }
+                      checked={getValues(`${CONTACT_TYPE}[0].isOmaOrganisaatio`)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setValue(`${CONTACT_TYPE}[0].isOmaOrganisaatio`, e.target.checked);
+                        forceUpdate();
+                      }}
                       data-testid={FORMFIELD.YKT_HANKE}
                     />
                     <TextInput
                       className="formItem"
                       id={`${CONTACT_TYPE}-custom`}
-                      ref={register}
+                      name={`${CONTACT_TYPE}-custom`}
                       data-testid={`${CONTACT_TYPE}-custom`}
                       helperText={getInputErrorText(
                         t,
                         getArrayFieldErrors(errors, CONTACT_TYPE),
                         contactField
                       )}
-                      onChange={(e: React.FormEvent<HTMLInputElement>): void =>
-                        setOrganization && setOrganization(index, e.currentTarget.value)
-                      }
-                      value={organizationState && organizationState[index].name}
-                      disabled={organizationState && !organizationState[index].checked}
+                      onChange={(e: React.FormEvent<HTMLInputElement>): void => {
+                        setValue(`${CONTACT_TYPE}[0].omaOrganisaatio`, e.currentTarget.value);
+                        forceUpdate();
+                      }}
+                      disabled={!getValues(`${CONTACT_TYPE}[0].isOmaOrganisaatio`)}
+                      value={getValues(`${CONTACT_TYPE}[0].omaOrganisaatio`)}
                     />
                   </div>
                 )}

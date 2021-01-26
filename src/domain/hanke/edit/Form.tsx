@@ -58,77 +58,47 @@ const FormComponent: React.FC = () => {
     trigger,
     setValue,
   } = formContext;
-
+  function iniateData() {
+    if (formData.omistajat[0] && !formData.omistajat[0].organisaatioId) {
+      setValue('omistajat[0].omaOrganisaatio', formData.omistajat[0].organisaatioNimi);
+      if (formData.omistajat[0].organisaatioNimi) {
+        setValue('omistajat[0].isOmaOrganisaatio', true);
+      }
+    }
+    if (formData.arvioijat[0] && !formData.arvioijat[0].organisaatioId) {
+      setValue('arvioijat[0].omaOrganisaatio', formData.arvioijat[0].organisaatioNimi);
+      if (formData.arvioijat[0].organisaatioNimi) {
+        setValue('arvioijat[0].isOmaOrganisaatio', true);
+      }
+    }
+    if (formData.toteuttajat[0] && !formData.toteuttajat[0].organisaatioId) {
+      setValue('toteuttajat[0].omaOrganisaatio', formData.toteuttajat[0].organisaatioNimi);
+      if (formData.arvioijat[0].organisaatioNimi) {
+        setValue('arvioijat[0].isOmaOrganisaatio', true);
+      }
+    }
+  }
   useEffect(() => {
     reset(formData);
+    iniateData();
   }, [formData]);
-  const [organizationState, setOrganizationState] = useState([
-    {
-      checked: formData.omistajat[0] && formData.omistajat[0].organisaatioId && true,
-      name:
-        formData.omistajat[0] && !formData.omistajat[0].organisaatioId
-          ? formData.omistajat[0].organisaatioNimi
-          : '',
-    },
 
-    {
-      checked: formData.arvioijat[0] && formData.arvioijat[0].organisaatioId && true,
-      name:
-        formData.arvioijat[0] && !formData.arvioijat[0].organisaatioId
-          ? formData.arvioijat[0].organisaatioNimi
-          : '',
-    },
-
-    {
-      checked: formData.toteuttajat[0] && formData.toteuttajat[0].organisaatioId && true,
-      name:
-        formData.toteuttajat[0] && !formData.toteuttajat[0].organisaatioId
-          ? formData.toteuttajat[0].organisaatioNimi
-          : '',
-    },
-  ]);
-  function setOrganization(index: number, val: string) {
-    if (typeof val === 'boolean') {
-      setOrganizationState((prevState) => {
-        // eslint-disable-next-line
-        prevState[index].checked = val;
-        return {
-          ...prevState,
-        };
-      });
-    } else {
-      setOrganizationState((prevState) => {
-        // eslint-disable-next-line
-        prevState[index].name = val;
-        return {
-          ...prevState,
-        };
-      });
+  function formatSendData() {
+    if (getValues('omistajat[0].isOmaOrganisaatio')) {
+      setValue(`omistajat[0].organisaatioId`, null);
+      setValue(`omistajat[0].organisaatioNimi`, getValues('omistajat[0].omaOrganisaatio'));
+    }
+    if (getValues('arvioijat[0].isOmaOrganisaatio')) {
+      setValue(`arvioijat[0].organisaatioId`, null);
+      setValue(`arvioijat[0].organisaatioNimi`, getValues('arvioijat[0].omaOrganisaatio'));
+    }
+    if (getValues('toteuttajat[0].isOmaOrganisaatio')) {
+      setValue(`toteuttajat[0].organisaatioId`, null);
+      setValue(`toteuttajat[0].organisaatioNimi`, getValues('toteuttajat[0].omaOrganisaatio'));
     }
   }
-  function formatFormData() {
-    organizationState.forEach((item, index) => {
-      if (item.checked) {
-        if (index === 0) {
-          setValue(`omistajat[0].organisaatioId`, null);
-          setValue(`omistajat[0].organisaatioNimi`, organizationState[index].name);
-        }
-        if (index === 1) {
-          setValue(`arvioijat[0].organisaatioId`, null);
-          setValue(`arvioijat[0].organisaatioNimi`, organizationState[index].name);
-        }
-        if (index === 2) {
-          setValue(`toteuttajat[0].organisaatioId`, null);
-          setValue(`toteuttajat[0].organisaatioNimi`, organizationState[index].name);
-        }
-      }
-    });
-  }
-
   const saveDraft = useCallback(() => {
-    if (formPage === 2) {
-      formatFormData();
-    }
+    formatSendData();
     dispatch(
       saveForm({
         data: getValues(),
@@ -237,8 +207,6 @@ const FormComponent: React.FC = () => {
                     control={control}
                     register={register}
                     formData={formData}
-                    setOrganization={setOrganization}
-                    organizationState={organizationState}
                   />
                 )}
                 {formPage === 3 && (

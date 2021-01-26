@@ -114,6 +114,8 @@ export type HankeContact = {
   organisaatioId: number | null;
   organisaatioNimi: string;
   osasto: string;
+  isOmaOrganisaatio: boolean;
+  omaOrganisaatio: string;
 };
 
 export type HANKKEEN_GEOMETRIAT = {
