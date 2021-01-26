@@ -2,12 +2,14 @@ import React, { useEffect, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import HankeDrawer from '../../map/HankeDrawerContainer';
-import { FORMFIELD, FormProps } from './types';
 import H2 from '../../../common/components/text/H2';
+import { useFormPage } from './hooks/useFormPage';
+import { FORMFIELD, FormProps } from './types';
 
 const Form1: React.FC<FormProps> = ({ formData }) => {
   const { t } = useTranslation();
   const { setValue, register, unregister } = useFormContext();
+  useFormPage();
 
   useEffect(() => {
     register({ name: FORMFIELD.GEOMETRIES_CHANGED, type: 'custom' });
