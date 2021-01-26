@@ -22,8 +22,11 @@ type DataLayer = {
 type Props = {
   tileLayers: TileLayer[];
   dataLayers: DataLayer[];
-  onClickDataLayer: (id: any) => void; // TODO: improve type definition (import key of enum from type)
-  onClickTileLayer: (key: any) => void; // TODO: improve type definition (import key of enum from type)
+  // I dont want to import type from domain. Maybe move layers here under common dir?
+  // eslint-disable-next-line
+  onClickDataLayer: (id: any) => void; // TODO: improve type definition: see original comment above
+  // eslint-disable-next-line
+  onClickTileLayer: (key: any) => void; // TODO: improve type definition
 };
 
 const showDataLayers = false; // HAI-532 hide dataLayers for now as actual data sources
