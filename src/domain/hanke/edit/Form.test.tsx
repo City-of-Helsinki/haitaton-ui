@@ -2,6 +2,8 @@ import React from 'react';
 import { cleanup, fireEvent, waitFor } from '@testing-library/react';
 import { FORMFIELD } from './types';
 import Form from './Form';
+import FormContainer from './FormContainer';
+
 import { render } from '../../../testUtils/render';
 
 afterEach(cleanup);
@@ -50,11 +52,13 @@ describe('HankeForm', () => {
     fireEvent.change(getByLabelText('Hankkeen loppupäivä', { exact: false }), {
       target: { value: loppuPvm },
     });
-
     queryAllByText('Hankeen Vaihe')[0].click();
     queryAllByText('Ohjelmointi')[0].click();
+    expect(handleIsDirtyChange).toHaveBeenCalledTimes(2);
     await waitFor(() => expect(getByTestId('forward')).not.toBeDisabled());
+
     getByTestId('forward').click(); // changes view to form1
+    expect(handleSave).toHaveBeenCalledTimes(1);
     await waitFor(() => queryAllByText('Hankkeen yhteystiedot')[1]);
 
     getByTestId('backward').click(); // changes view to form0
@@ -67,6 +71,7 @@ describe('HankeForm', () => {
     getByTestId('forward').click(); // changes view to form1
     getByTestId('forward').click(); // changes view to form2
     await waitFor(() => queryAllByText('Hankkeen yhteystiedot')[1]);
+    expect(handleSave).toHaveBeenCalledTimes(2);
     fireEvent.change(getByTestId('omistajat-etunimi'), {
       target: { value: omistajaEtunimi },
     });
@@ -99,6 +104,7 @@ describe('HankeForm', () => {
     getByText('Tallenna ja poistu').click();
     await waitFor(() => queryByText('Lomake on lähetetty onnistuneesti'));
     expect(queryByText('Lomake on lähetetty onnistuneesti'));
+    expect(handleSave).toHaveBeenCalledTimes(2);
   });
 
   test('suunnitteluVaihde should be required when vaihe is suunnittelu', async () => {
@@ -198,5 +204,70 @@ describe('HankeForm', () => {
     });
 
     await waitFor(() => expect(getByTestId('forward')).not.toBeDisabled());
+  });
+
+  test('Success notification should be shown', async () => {
+    const { queryByTestId, queryByText } = render(
+      <Provider store={store}>
+        <Form
+          formData={formData}
+          showNotification="success"
+          onSave={() => ({})}
+          onSaveGeometry={() => ({})}
+          onIsDirtyChange={() => ({})}
+          onUnmount={() => ({})}
+          onFormClose={() => ({})}
+        />
+      </Provider>
+    );
+    await waitFor(() => expect(queryByText('Luonnos tallennettu')));
+    await waitFor(() => expect(queryByTestId('notification')).toBeNull());
+  });
+
+  test('Form should be populated correctly ', async () => {
+    const { getByTestId } = render(
+      <Provider store={store}>
+        <Form
+          formData={{
+            ...formData,
+            [FORMFIELD.NIMI]: 'Lenkkeilijä Pekka',
+          }}
+          showNotification={null}
+          onSave={() => ({})}
+          onSaveGeometry={() => ({})}
+          onIsDirtyChange={() => ({})}
+          onUnmount={() => ({})}
+          onFormClose={() => ({})}
+        />
+      </Provider>
+    );
+    expect(getByTestId(FORMFIELD.NIMI)).toHaveValue('Lenkkeilijä Pekka');
+    expect(getByTestId(FORMFIELD.KUVAUS)).toHaveValue('');
+  });
+
+  test('FormContainer integration should work ', async () => {
+    const { getByText, queryByText, getByTestId, getByLabelText, queryAllByText } = render(
+      <Provider store={store}>
+        <FormContainer />
+      </Provider>
+    );
+    fireEvent.change(getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
+    fireEvent.change(getByTestId(FORMFIELD.KUVAUS), { target: { value: hankeenKuvaus } });
+    fireEvent.change(getByLabelText('Hankkeen alkupäivä', { exact: false }), {
+      target: { value: alkuPvm },
+    });
+    fireEvent.change(getByLabelText('Hankkeen loppupäivä', { exact: false }), {
+      target: { value: loppuPvm },
+    });
+    queryAllByText('Hankeen Vaihe')[0].click();
+    queryAllByText('Ohjelmointi')[0].click();
+
+    getByText('Tallenna luonnos').click();
+
+    await waitFor(() => expect(getByTestId('forward')).toBeDisabled());
+    await waitFor(() => expect(queryByText('Luonnos tallennettu')));
+
+    expect(getByTestId(FORMFIELD.NIMI)).toHaveValue(nimi);
+    expect(getByTestId(FORMFIELD.KUVAUS)).toHaveValue(hankeenKuvaus);
   });
 });

@@ -17,6 +17,7 @@ const NotificationComp: React.FC<Props> = ({ label, typeProps, children }) => {
       closeButtonLabelText="Close toast"
       type={typeProps}
       style={{ zIndex: 100 }}
+      data-test-id="notification"
     >
       {children}
     </Notification>
