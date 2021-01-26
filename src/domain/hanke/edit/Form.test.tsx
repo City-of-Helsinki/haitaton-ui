@@ -208,17 +208,15 @@ describe('HankeForm', () => {
 
   test('Success notification should be shown', async () => {
     const { queryByTestId, queryByText } = render(
-      <Provider store={store}>
-        <Form
-          formData={formData}
-          showNotification="success"
-          onSave={() => ({})}
-          onSaveGeometry={() => ({})}
-          onIsDirtyChange={() => ({})}
-          onUnmount={() => ({})}
-          onFormClose={() => ({})}
-        />
-      </Provider>
+      <Form
+        formData={formData}
+        showNotification="success"
+        onSave={() => ({})}
+        onSaveGeometry={() => ({})}
+        onIsDirtyChange={() => ({})}
+        onUnmount={() => ({})}
+        onFormClose={() => ({})}
+      />
     );
     await waitFor(() => expect(queryByText('Luonnos tallennettu')));
     await waitFor(() => expect(queryByTestId('notification')).toBeNull());
@@ -226,20 +224,18 @@ describe('HankeForm', () => {
 
   test('Form should be populated correctly ', async () => {
     const { getByTestId } = render(
-      <Provider store={store}>
-        <Form
-          formData={{
-            ...formData,
-            [FORMFIELD.NIMI]: 'Lenkkeilijä Pekka',
-          }}
-          showNotification={null}
-          onSave={() => ({})}
-          onSaveGeometry={() => ({})}
-          onIsDirtyChange={() => ({})}
-          onUnmount={() => ({})}
-          onFormClose={() => ({})}
-        />
-      </Provider>
+      <Form
+        formData={{
+          ...formData,
+          [FORMFIELD.NIMI]: 'Lenkkeilijä Pekka',
+        }}
+        showNotification={null}
+        onSave={() => ({})}
+        onSaveGeometry={() => ({})}
+        onIsDirtyChange={() => ({})}
+        onUnmount={() => ({})}
+        onFormClose={() => ({})}
+      />
     );
     expect(getByTestId(FORMFIELD.NIMI)).toHaveValue('Lenkkeilijä Pekka');
     expect(getByTestId(FORMFIELD.KUVAUS)).toHaveValue('');
@@ -247,9 +243,7 @@ describe('HankeForm', () => {
 
   test('FormContainer integration should work ', async () => {
     const { getByText, queryByText, getByTestId, getByLabelText, queryAllByText } = render(
-      <Provider store={store}>
-        <FormContainer />
-      </Provider>
+      <FormContainer />
     );
     fireEvent.change(getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
     fireEvent.change(getByTestId(FORMFIELD.KUVAUS), { target: { value: hankeenKuvaus } });
