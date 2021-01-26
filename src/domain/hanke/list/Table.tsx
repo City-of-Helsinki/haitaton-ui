@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import { useTranslation } from 'react-i18next';
+import format from 'date-fns/format';
 import {
   IconAngleDown,
   IconAngleUp,
@@ -83,6 +84,9 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map((cell) => {
+                  if (cell.column.id === 'Lopetus' || cell.column.id === 'Aloitus') {
+                    return <td {...cell.getCellProps()}>{format(cell.value, 'dd.MM.yyyy')}</td>;
+                  }
                   return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
                 })}
                 <td>

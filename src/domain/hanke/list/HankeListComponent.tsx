@@ -1,6 +1,4 @@
 import React from 'react';
-import format from 'date-fns/format';
-
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -37,13 +35,13 @@ const Projects: React.FC<Props> = ({ initialData }) => {
       {
         Header: t('hankeList:tableHeader:startDate'),
         accessor: (data: HankeDataDraft) => {
-          return data.alkuPvm ? format(Date.parse(data.alkuPvm), 'dd.MM.yyyy') : '';
+          return data.alkuPvm && Date.parse(data.alkuPvm);
         },
       },
       {
         Header: t('hankeList:tableHeader:endDate'),
         accessor: (data: HankeDataDraft) => {
-          return data.loppuPvm ? format(Date.parse(data.loppuPvm), 'dd.MM.yyyy') : '';
+          return data.loppuPvm && Date.parse(data.loppuPvm);
         },
       },
     ],
