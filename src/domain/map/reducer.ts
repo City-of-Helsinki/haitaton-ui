@@ -24,7 +24,11 @@ const toggleMapTileLayer: CaseReducer<ReducerState, PayloadAction<MapTileLayerId
   state,
   action
 ) => {
-  state.mapTileLayers[action.payload].visible = !state.mapTileLayers[action.payload].visible; // TODO: map state must be togglable, i.e. when one goes true all others go false
+  (Object.keys(state.mapTileLayers) as Array<keyof typeof state.mapTileLayers>).forEach(
+    (mapTileLayerKey) => {
+      state.mapTileLayers[mapTileLayerKey].visible = action.payload === mapTileLayerKey;
+    }
+  );
 };
 
 const updateDrawGeometry: CaseReducer<ReducerState, PayloadAction<HankeGeoJSON>> = (
