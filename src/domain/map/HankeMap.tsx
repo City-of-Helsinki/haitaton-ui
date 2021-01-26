@@ -61,8 +61,8 @@ const HankeMap: React.FC = () => {
         style={{ width: '100%', height: '100%', position: 'absolute' }}
       >
         <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
-          {mapTileLayers.kantakartta.visible && <Ortokartta />}
-          {mapTileLayers.ortokartta.visible && <Kantakartta />}
+          {mapTileLayers.ortokartta.visible && <Ortokartta />}
+          {mapTileLayers.kantakartta.visible && <Kantakartta />}
           <DataLayers />
 
           {(!isLoading || isError) &&
