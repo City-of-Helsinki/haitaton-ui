@@ -53,8 +53,6 @@ const HankeMap: React.FC = () => {
   const { dataLayers, mapTileLayers, toggleDataLayer, toggleMapTileLayer } = useMapDataLayers();
 
   const [zoom] = useState(9); // TODO: also take zoom into consideration
-  const showKantakartta = mapTileLayers.kantakartta.visible; // TODO: improve the way mapTileLayers is accessed and used
-  const showOrtokartta = mapTileLayers.ortokartta.visible;
 
   return (
     <>
@@ -63,8 +61,8 @@ const HankeMap: React.FC = () => {
         style={{ width: '100%', height: '100%', position: 'absolute' }}
       >
         <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
-          {showOrtokartta && <Ortokartta />}
-          {showKantakartta && <Kantakartta />}
+          {mapTileLayers.kantakartta.visible && <Ortokartta />}
+          {mapTileLayers.ortokartta.visible && <Kantakartta />}
           <DataLayers />
 
           {(!isLoading || isError) &&

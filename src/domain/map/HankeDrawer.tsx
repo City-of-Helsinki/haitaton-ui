@@ -31,8 +31,6 @@ const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry }) => {
   } = useMapDataLayers();
   const [drawSource] = useState<VectorSource>(new VectorSource());
   const [zoom] = useState(9); // TODO: also take zoom into consideration
-  const showKantakartta = mapTileLayers.kantakartta.visible; // TODO: improve the way mapTileLayers is accessed and used
-  const showOrtokartta = mapTileLayers.ortokartta.visible;
 
   useEffect(() => {
     if (geometry) {
@@ -55,8 +53,8 @@ const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry }) => {
       <div className={styles.mapContainer} style={{ width: '100%', height: 500 }}>
         <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
           <DrawIntercation source={drawSource} />
-          {showKantakartta && <Kantakartta />}
-          {showOrtokartta && <Ortokartta />}
+          {mapTileLayers.kantakartta.visible && <Kantakartta />}
+          {mapTileLayers.ortokartta.visible && <Ortokartta />}
           <DataLayers />
           <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
 
