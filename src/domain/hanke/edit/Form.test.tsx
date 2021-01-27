@@ -71,7 +71,7 @@ describe('HankeForm', () => {
     getByTestId('forward').click(); // changes view to form1
     getByTestId('forward').click(); // changes view to form2
     await waitFor(() => queryAllByText('Hankkeen yhteystiedot')[1]);
-    expect(handleSave).toHaveBeenCalledTimes(3);
+    expect(handleSave).toHaveBeenCalledTimes(2);
     fireEvent.change(getByTestId('omistajat-etunimi'), {
       target: { value: omistajaEtunimi },
     });
