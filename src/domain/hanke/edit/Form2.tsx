@@ -127,35 +127,39 @@ const Form2: React.FC<FormProps> = ({ control, formData, errors, register }) => 
                     />
                   </>
                 )}
-                {contactField === CONTACT_FORMFIELD.OSASTO && isFetched && (
+                {contactField === CONTACT_FORMFIELD.OSASTO && (
                   <div>
                     <Checkbox
-                      id={`${CONTACT_TYPE}-checkbox`}
-                      name={`${CONTACT_TYPE}-checkbox`}
+                      id={`${CONTACT_TYPE}_isOmaOrganisaatio`}
+                      name={`${CONTACT_TYPE}_isOmaOrganisaatio`}
                       label={t(`hankeForm:labels:omaOrganisaatio`)}
                       checked={getValues(`${CONTACT_TYPE}[0].isOmaOrganisaatio`)}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setValue(`${CONTACT_TYPE}[0].isOmaOrganisaatio`, e.target.checked);
                         forceUpdate();
                       }}
-                      data-testid={`${CONTACT_TYPE}-checkbox`}
+                      data-testid={`${CONTACT_TYPE}_isOmaOrganisaatio`}
                     />
-                    <TextInput
-                      className="formItem"
-                      id={`${CONTACT_TYPE}-custom`}
-                      name={`${CONTACT_TYPE}-custom`}
-                      data-testid={`${CONTACT_TYPE}-custom`}
-                      helperText={getInputErrorText(
-                        t,
-                        getArrayFieldErrors(errors, CONTACT_TYPE),
-                        contactField
+                    <TypedController
+                      // eslint-disable-next-line
+                      // @ts-ignore
+                      name={[CONTACT_TYPE, 0, 'omaOrganisaatio']}
+                      defaultValue={
+                        // eslint-disable-next-line
+                        // @ts-ignore
+                        formData[CONTACT_TYPE][0] ? formData[CONTACT_TYPE][0].omaOrganisaatio : ''
+                      }
+                      render={(props) => (
+                        <TextInput
+                          className="formItem"
+                          id={`${CONTACT_TYPE}_omaOrganisaatio`}
+                          name={`${CONTACT_TYPE}_omaOrganisaatio`}
+                          data-testid={`${CONTACT_TYPE}_omaOrganisaatio`}
+                          ref={register}
+                          disabled={!getValues(`${CONTACT_TYPE}[0].isOmaOrganisaatio`)}
+                          {...props}
+                        />
                       )}
-                      onChange={(e: React.FormEvent<HTMLInputElement>): void => {
-                        setValue(`${CONTACT_TYPE}[0].omaOrganisaatio`, e.currentTarget.value);
-                        forceUpdate();
-                      }}
-                      disabled={!getValues(`${CONTACT_TYPE}[0].isOmaOrganisaatio`)}
-                      value={getValues(`${CONTACT_TYPE}[0].omaOrganisaatio`)}
                     />
                   </div>
                 )}

@@ -59,6 +59,13 @@ context('HankeForm', () => {
 
     cy.get('[data-testid=save-draft-button]').should('not.be.disabled');
     cy.get('[data-testid=forward]').click(); // changes view to form2
+    cy.get('input[data-testid=omistajat-etunimi]').type(nimi);
+    cy.get('input[data-testid=omistajat-sukunimi]').type(nimi);
+    cy.get('input[data-testid=omistajat-email]').type('test@test.fi');
+    cy.get('input[data-testid=omistajat-puhelinnumero]').type('0504578450');
+    cy.get('[data-testid=omistajat_isOmaOrganisaatio]').click();
+    cy.get('input[data-testid=omistajat_omaOrganisaatio]').type('Testi organisaatio');
+    cy.get('[data-testid=save-draft-button]').click();
 
     cy.get('[data-testid=omistajat-etunimi]');
     cy.get('[data-testid=forward]').click(); // changes view to form3

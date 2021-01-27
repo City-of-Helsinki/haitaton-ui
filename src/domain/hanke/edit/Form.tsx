@@ -76,8 +76,8 @@ const HankeForm: React.FC<Props> = ({
     }
     if (formData.toteuttajat[0] && !formData.toteuttajat[0].organisaatioId) {
       setValue('toteuttajat[0].omaOrganisaatio', formData.toteuttajat[0].organisaatioNimi);
-      if (formData.arvioijat[0].organisaatioNimi) {
-        setValue('arvioijat[0].isOmaOrganisaatio', true);
+      if (formData.toteuttajat[0].organisaatioNimi) {
+        setValue('toteuttajat[0].isOmaOrganisaatio', true);
       }
     }
   }

@@ -75,6 +75,30 @@ describe('HankeForm', () => {
     fireEvent.change(getByTestId('omistajat-etunimi'), {
       target: { value: omistajaEtunimi },
     });
+    fireEvent.change(getByTestId('omistajat-sukunimi'), {
+      target: { value: 'Omistaja sukunimi' },
+    });
+    fireEvent.change(getByTestId('omistajat-email'), {
+      target: { value: 'test@test.fi' },
+    });
+    fireEvent.change(getByTestId('omistajat-puhelinnumero'), {
+      target: { value: '050434343' },
+    });
+    getByTestId('omistajat_isOmaOrganisaatio').click();
+    fireEvent.change(getByTestId('omistajat_omaOrganisaatio'), {
+      target: { value: 'Taloyhtiö yksi' },
+    });
+    getByTestId('arvioijat_isOmaOrganisaatio').click();
+    fireEvent.change(getByTestId('arvioijat_omaOrganisaatio'), {
+      target: { value: 'Huoltoyhtiö yksi' },
+    });
+    getByTestId('arvioijat_isOmaOrganisaatio').click();
+    fireEvent.change(getByTestId('toteuttajat_omaOrganisaatio'), {
+      target: { value: 'toteuttajat yksi' },
+    });
+    await waitFor(() => expect(getByTestId('save-draft-button')).not.toBeDisabled());
+    getByTestId('save-draft-button').click();
+    await waitFor(() => queryAllByText('Taloyhtiö yksi')[0]);
 
     getByTestId('forward').click(); // changes view to form3
     await waitFor(() => queryAllByText('Työmaan tiedot')[1]);
