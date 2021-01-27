@@ -45,8 +45,6 @@ export type HankeGeometry = {
 
 export type MapDataLayerKey = keyof typeof DATALAYERS;
 
-export type MapTileLayerKey = keyof typeof MAPTILES;
-
 export type MapTileLayerId = MAPTILES.ORTOKARTTA | MAPTILES.KANTAKARTTA;
 
 export type MapDatalayerState = {
