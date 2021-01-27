@@ -6,12 +6,18 @@ module.exports = function (app) {
   app.use(
     '/api',
     createProxyMiddleware({
+      target: 'http://localhost:8080',
+      changeOrigin: true,
+    })
+    /*    
+    createProxyMiddleware({
       target: 'http://localhost:3000',
       changeOrigin: false,
       pathRewrite: {
         '^/api': '/', // remove base path
       },
-    })
+    }) 
+    */
   );
   app.use(
     '/auth',
