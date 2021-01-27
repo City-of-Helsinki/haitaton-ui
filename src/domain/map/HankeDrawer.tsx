@@ -12,9 +12,9 @@ import Kantakartta from './Layers/Kantakartta';
 import DataLayers from './Layers/DataLayers';
 import Ortokartta from './Layers/Ortokartta';
 import styles from './Map.module.scss';
-import { useMapDataLayers } from './hooks/useMapDataLayers';
+import { useMapDataLayers } from './hooks/useMapLayers';
 import { formatFeaturesToHankeGeoJSON } from './utils';
-import { MapDataLayerKey } from './types';
+import { MapDataLayerKey, MapTileLayerId } from './types';
 
 type Props = {
   geometry: HankeGeoJSON | undefined;
@@ -22,11 +22,15 @@ type Props = {
 };
 
 const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry }) => {
-  const { dataLayers, toggleDataLayer, handleUpdateGeometryState } = useMapDataLayers();
+  const {
+    dataLayers,
+    mapTileLayers,
+    toggleDataLayer,
+    toggleMapTileLayer,
+    handleUpdateGeometryState,
+  } = useMapDataLayers();
   const [drawSource] = useState<VectorSource>(new VectorSource());
-  const [zoom] = useState(0);
-  const [showKantakartta, setShowKantakartta] = useState(true);
-  const [showOrtokartta, setShowOrtokartta] = useState(false);
+  const [zoom] = useState(9); // TODO: also take zoom into consideration
 
   useEffect(() => {
     if (geometry) {
@@ -44,43 +48,21 @@ const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry }) => {
     });
   }, []);
 
-  const toggleTileLayer = () => {
-    if (showKantakartta) {
-      setShowOrtokartta(true);
-      setShowKantakartta(false);
-    } else {
-      setShowOrtokartta(false);
-      setShowKantakartta(true);
-    }
-  };
-
   return (
     <>
       <div className={styles.mapContainer} style={{ width: '100%', height: 500 }}>
         <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
           <DrawIntercation source={drawSource} />
-          {showKantakartta && <Kantakartta />}
-          {showOrtokartta && <Ortokartta />}
+          {mapTileLayers.kantakartta.visible && <Kantakartta />}
+          {mapTileLayers.ortokartta.visible && <Ortokartta />}
           <DataLayers />
           <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
 
           <Controls>
             <DrawControl />
             <LayerControl
-              tileLayers={[
-                {
-                  id: 'ortokartta',
-                  label: 'Ortokartta',
-                  onClick: toggleTileLayer,
-                  checked: showOrtokartta,
-                },
-                {
-                  id: 'kantakartta',
-                  label: 'Kantakartta',
-                  onClick: toggleTileLayer,
-                  checked: showKantakartta,
-                },
-              ]}
+              tileLayers={Object.values(mapTileLayers)}
+              onClickTileLayer={(id: MapTileLayerId) => toggleMapTileLayer(id)}
               dataLayers={Object.values(dataLayers)}
               onClickDataLayer={(key: MapDataLayerKey) => toggleDataLayer(key)}
             />
