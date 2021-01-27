@@ -44,13 +44,8 @@ const buildDatalayerState = (key: MapDataLayerKey, data: CommonGeoJSON): MapData
   visible: false,
 });
 
-const buildTilelayerState = (
-  id: MapTileLayerId,
-  label: string,
-  visible: boolean
-): MapTilelayerState => ({
+const buildTilelayerState = (id: MapTileLayerId, visible: boolean): MapTilelayerState => ({
   id,
-  label,
   visible,
 });
 
@@ -80,8 +75,8 @@ const initialState: ReducerState = {
     ),
   },
   mapTileLayers: {
-    [MAPTILES.ORTOKARTTA]: buildTilelayerState(MAPTILES.ORTOKARTTA, 'Ortokartta', true),
-    [MAPTILES.KANTAKARTTA]: buildTilelayerState(MAPTILES.KANTAKARTTA, 'Kantakartta', false),
+    [MAPTILES.ORTOKARTTA]: buildTilelayerState(MAPTILES.ORTOKARTTA, false),
+    [MAPTILES.KANTAKARTTA]: buildTilelayerState(MAPTILES.KANTAKARTTA, true),
   },
 };
 

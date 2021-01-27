@@ -55,7 +55,6 @@ export type MapDatalayerState = {
 
 export type MapTilelayerState = {
   id: MapTileLayerId;
-  label: string;
   visible: boolean;
 };
 

@@ -9,7 +9,6 @@ import { CommonGeoJSON } from '../../../types/hanke';
 
 type TileLayer = {
   id: string;
-  label: string;
   visible: boolean;
 };
 
@@ -48,13 +47,14 @@ const LayerControl: React.FC<Props> = ({
         </MenuButton>
         <MenuList className={styles.controlMenu}>
           <MenuGroup>
-            {tileLayers.map(({ id, label, visible }) => (
+            {tileLayers.map(({ id, visible }) => (
               <div className={styles.drawControl__checkbox} key={id}>
                 <Checkbox
                   id={id}
-                  label={label}
+                  label={t(`map:tileLayers:${id}`)}
                   checked={visible}
                   onClick={() => onClickTileLayer(id)}
+                  data-testid={`layer-control-${id}`}
                 />
               </div>
             ))}
