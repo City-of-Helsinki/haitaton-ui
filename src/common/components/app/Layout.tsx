@@ -15,7 +15,9 @@ const Layout: React.FC<Props> = ({ children }) => {
     <>
       <Header />
       <ConfirmationDialog />
-      <div className="pageContainer">{children}</div>
+      <div className="pageContainer" role="main">
+        {children}
+      </div>
       <Footer />
     </>
   );
