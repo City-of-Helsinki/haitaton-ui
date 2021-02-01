@@ -79,15 +79,26 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {page.map((row) => {
+          {page.map((row, index) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map((cell) => {
                   if (cell.column.id === 'Lopetus' || cell.column.id === 'Aloitus') {
-                    return <td {...cell.getCellProps()}>{format(cell.value, 'dd.MM.yyyy')}</td>;
+                    return (
+                      <td
+                        data-testid={`row${index}_cell_${cell.column.id}`}
+                        {...cell.getCellProps()}
+                      >
+                        {format(cell.value, 'dd.MM.yyyy')}
+                      </td>
+                    );
                   }
-                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
+                  return (
+                    <td data-testid={`row${index}_cell_${cell.column.id}`} {...cell.getCellProps()}>
+                      {cell.render('Cell')}
+                    </td>
+                  );
                 })}
                 <td>
                   <IconPen className="pen" />
