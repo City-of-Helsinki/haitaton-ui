@@ -1,9 +1,10 @@
 .dateRangeControl {
   display: block;
   background: white;
-  position: fixed;
+  position: absolute;
   bottom: 7em; // what would be a better measurement than em?
   left: 50%;
+  transform: translateX(-50%);
   padding: 5px;
 }
 
