@@ -30,9 +30,6 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
     headerGroups,
     prepareRow,
     page, // Instead of using 'rows', we'll use page,
-    // which has only the rows for the active page
-
-    // The rest of these things are super handy, too ;)
     canPreviousPage,
     canNextPage,
     pageOptions,
@@ -56,8 +53,6 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
     usePagination
   );
   const { t } = useTranslation();
-  // We don't want to render all 2000 rows for this example, so cap
-  // it at 20 for this use case
 
   return (
     <>
