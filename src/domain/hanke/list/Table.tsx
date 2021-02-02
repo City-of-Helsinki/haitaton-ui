@@ -98,7 +98,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                 {row.cells.map((cell) => {
                   return (
                     <td data-testid={`row${index}_cell_${cell.column.id}`} {...cell.getCellProps()}>
-                      {cell.column.id === 'Lopetus' || cell.column.id === 'Aloitus'
+                      {cell.column.id === 'startDate' || cell.column.id === 'endDate'
                         ? format(cell.value, 'dd.MM.yyyy')
                         : cell.render('Cell')}
                     </td>
