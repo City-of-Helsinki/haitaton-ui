@@ -20,16 +20,16 @@ describe('HankeLista', () => {
 
     await waitFor(() => queryByText('Hankelista'));
     getByTestId(container, 'tableHeader0').click();
-    expect(getByTestId(container, 'row0_cell_hankeTunnus')).toHaveTextContent('SMTGEN2_1');
+    expect(getByTestId(container, 'row0_cell_id')).toHaveTextContent('SMTGEN2_1');
     getByTestId(container, 'tableHeader1').click();
-    expect(getByTestId(container, 'row0_cell_nimi')).toHaveTextContent('cc');
+    expect(getByTestId(container, 'row0_cell_name')).toHaveTextContent('cc');
     getByTestId(container, 'tableHeader2').click();
-    expect(getByTestId(container, 'row0_cell_vaihe')).toHaveTextContent('OHJELMOINTI');
+    expect(getByTestId(container, 'row0_cell_step')).toHaveTextContent('OHJELMOINTI');
     getByTestId(container, 'tableHeader3').click();
-    expect(getByTestId(container, 'row0_cell_Aloitus')).toHaveTextContent('10.11.2020');
+    expect(getByTestId(container, 'row0_cell_startDate')).toHaveTextContent('10.11.2020');
     getByTestId(container, 'tableHeader4').click();
     getByTestId(container, 'tableHeader4').click();
-    expect(getByTestId(container, 'row0_cell_Lopetus')).toHaveTextContent('11.01.2032');
+    expect(getByTestId(container, 'row0_cell_endDate')).toHaveTextContent('11.01.2032');
   });
   test('pagination test', async () => {
     const { container, queryAllByText } = render(
