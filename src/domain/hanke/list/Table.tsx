@@ -14,8 +14,8 @@ import { TableProps } from './types';
 
 const Table: React.FC<TableProps> = ({ columns, data }) => {
   function compareIgnoreCase(a: string, b: string) {
-    const r1 = a.toLowerCase();
-    const r2 = b.toLowerCase();
+    const r1 = a.toString().toLowerCase();
+    const r2 = b.toString().toLowerCase();
     if (r1 < r2) {
       return -1;
     }
