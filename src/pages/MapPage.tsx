@@ -4,11 +4,11 @@ import PageMeta from './components/PageMeta';
 import HankeMap from '../domain/map/HankeMap';
 
 const MapPage: React.FC = () => {
-  const { FORM } = useLocalizedRoutes();
+  const { MAP } = useLocalizedRoutes();
 
   return (
     <>
-      <PageMeta routeData={FORM} />
+      <PageMeta routeData={MAP} />
       <HankeMap />
     </>
   );

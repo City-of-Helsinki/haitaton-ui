@@ -1,4 +1,4 @@
-import { HankeContact } from '../../types/hanke';
+import { HankeContact, HankeDataDraft } from '../../types/hanke';
 import { FORMFIELD, HankeDataFormState } from './types';
 
 const isContactEmpty = ({ etunimi, sukunimi, email }: HankeContact) =>
@@ -11,4 +11,11 @@ export const filterEmptyContacts = (hankeData: HankeDataFormState): HankeDataFor
   [FORMFIELD.ARVIOIJAT]: hankeData[FORMFIELD.ARVIOIJAT]?.filter((v) => !isContactEmpty(v)) || [],
   [FORMFIELD.TOTEUTTAJAT]:
     hankeData[FORMFIELD.TOTEUTTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
+});
+
+export const convertHankeDataToFormState = (hankeData: HankeDataDraft): HankeDataFormState => ({
+  ...hankeData,
+  omistajat: hankeData.omistajat ? hankeData.omistajat : [],
+  arvioijat: hankeData.arvioijat ? hankeData.arvioijat : [],
+  toteuttajat: hankeData.toteuttajat ? hankeData.toteuttajat : [],
 });
