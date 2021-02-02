@@ -13,6 +13,17 @@ import {
 import { TableProps } from './types';
 
 const Table: React.FC<TableProps> = ({ columns, data }) => {
+  function compareIgnoreCase(a: string, b: string) {
+    const r1 = a.toLowerCase();
+    const r2 = b.toLowerCase();
+    if (r1 < r2) {
+      return -1;
+    }
+    if (r1 > r2) {
+      return 1;
+    }
+    return 0;
+  }
   const {
     getTableProps,
     getTableBodyProps,
@@ -34,7 +45,13 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
     {
       columns,
       data,
+      sortTypes: {
+        alphanumeric: (row1, row2, columnName) => {
+          return compareIgnoreCase(row1.values[columnName], row2.values[columnName]);
+        },
+      },
     },
+
     useSortBy,
     usePagination
   );
