@@ -1,18 +1,19 @@
 import React from 'react';
 import { useQuery } from 'react-query';
-import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { $enum } from 'ts-enum-util';
 import { useTypedController } from '@hookform/strictly-typed';
 import { TextInput } from 'hds-react';
-import { FORMFIELD, CONTACT_FORMFIELD, FormProps, HankeDataFormState } from './types';
+import { CONTACT_FORMFIELD, FormProps, HankeDataFormState } from './types';
+import { HANKE_CONTACT_TYPE } from '../../types/hanke';
+
 import api from '../../../common/utils/api';
 import { getInputErrorText } from '../../../common/utils/form';
 import H2 from '../../../common/components/text/H2';
 import H3 from '../../../common/components/text/H3';
-import Autocomplete, { Option } from '../../../common/components/autocomplete/Autocomplete';
 import { useFormPage } from './hooks/useFormPage';
+import OrganizationSelect from './OrganizationSelect';
 
-const CONTACT_TYPES = [FORMFIELD.OMISTAJAT, FORMFIELD.ARVIOIJAT, FORMFIELD.TOTEUTTAJAT];
 const CONTACT_FIELDS = [
   CONTACT_FORMFIELD.ETUNIMI,
   CONTACT_FORMFIELD.SUKUNIMI,
@@ -38,86 +39,55 @@ const getArrayFieldErrors = (errors: Record<string, Array<any>>, name: string) =
 
 const Form2: React.FC<FormProps> = ({ control, formData, errors, register }) => {
   const { t } = useTranslation();
-  const { setValue } = useFormContext();
   const TypedController = useTypedController<HankeDataFormState>({ control });
   useFormPage();
 
-  const { isFetched, data: organizationsResponse } = useQuery(
-    'organisationList',
-    fetchOrganizations,
-    {
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-    }
-  );
+  const { isFetched, data: organizationList } = useQuery('organisationList', fetchOrganizations, {
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
 
   return (
     <div className="form2">
       <H2>{t('hankeForm:hankkeenYhteystiedotForm:header')}</H2>
-      {CONTACT_TYPES.map((CONTACT_TYPE) => (
-        <div key={CONTACT_TYPE}>
-          <H3>{t(`hankeForm:headers:${CONTACT_TYPE}`)}</H3>
+      {$enum(HANKE_CONTACT_TYPE).map((contactType) => (
+        <div key={contactType}>
+          <H3>{t(`hankeForm:headers:${contactType}`)}</H3>
           <div className="formColumns">
-            {CONTACT_FIELDS.map((contactField) => (
-              <React.Fragment key={contactField}>
-                <TypedController
-                  // eslint-disable-next-line
-                  // @ts-ignore
-                  name={[CONTACT_TYPE, 0, contactField]}
-                  defaultValue={
-                    // eslint-disable-next-line
-                    // @ts-ignore
-                    formData[CONTACT_TYPE][0] ? formData[CONTACT_TYPE][0][contactField] : ''
-                  }
-                  render={(props) => (
-                    <TextInput
-                      className="formItem"
-                      label={t(`hankeForm:labels:${contactField}`)}
-                      id={`${CONTACT_TYPE}-${contactField}`}
-                      ref={register}
-                      data-testid={`${CONTACT_TYPE}-${contactField}`}
-                      helperText={getInputErrorText(
-                        t,
-                        getArrayFieldErrors(errors, CONTACT_TYPE),
-                        contactField
-                      )}
-                      invalid={!!getArrayFieldErrors(errors, CONTACT_TYPE)[contactField]}
-                      {...props}
+            {CONTACT_FIELDS.map((contactField) => {
+              const contactData = formData[contactType][0];
+              return (
+                <React.Fragment key={contactField}>
+                  <TypedController
+                    name={[contactType, 0, contactField]}
+                    defaultValue={contactData ? contactData[contactField] : ''}
+                    render={(props) => (
+                      <TextInput
+                        className="formItem"
+                        label={t(`hankeForm:labels:${contactField}`)}
+                        id={`${contactType}-${contactField}`}
+                        ref={register}
+                        data-testid={`${contactType}-${contactField}`}
+                        helperText={getInputErrorText(
+                          t,
+                          getArrayFieldErrors(errors, contactType),
+                          contactField
+                        )}
+                        invalid={!!getArrayFieldErrors(errors, contactType)[contactField]}
+                        {...props}
+                      />
+                    )}
+                  />
+                  {contactField === CONTACT_FORMFIELD.PUHELINNUMERO && isFetched && (
+                    <OrganizationSelect
+                      contactType={contactType}
+                      formData={formData}
+                      organizations={organizationList ? organizationList.data : []}
                     />
                   )}
-                />
-                {contactField === CONTACT_FORMFIELD.PUHELINNUMERO && isFetched && (
-                  <Autocomplete
-                    className="formItem"
-                    label={t(`hankeForm:labels:organisaatio`)}
-                    options={
-                      organizationsResponse
-                        ? organizationsResponse.data.map((v) => ({
-                            value: v.id,
-                            label: v.nimi,
-                          }))
-                        : []
-                    }
-                    defaultValue={{
-                      label:
-                        // eslint-disable-next-line
-                        // @ts-ignore
-                        formData[CONTACT_TYPE][0] ? formData[CONTACT_TYPE][0].organisaatioNimi : '',
-                      value:
-                        // eslint-disable-next-line
-                        // @ts-ignore
-                        formData[CONTACT_TYPE][0] ? formData[CONTACT_TYPE][0].organisaatioId : '',
-                    }}
-                    onChange={(option?: Option): void => {
-                      if (option) {
-                        setValue(`${CONTACT_TYPE}[0].organisaatioId`, option.value);
-                        setValue(`${CONTACT_TYPE}[0].organisaatioNimi`, option.label);
-                      }
-                    }}
-                  />
-                )}
-              </React.Fragment>
-            ))}
+                </React.Fragment>
+              );
+            })}
           </div>
         </div>
       ))}
