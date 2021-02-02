@@ -7,10 +7,10 @@ import { TextInput } from 'hds-react';
 import { FORMFIELD, CONTACT_FORMFIELD, FormProps, HankeDataFormState } from './types';
 import api from '../../../common/utils/api';
 import { getInputErrorText } from '../../../common/utils/form';
-
 import H2 from '../../../common/components/text/H2';
 import H3 from '../../../common/components/text/H3';
 import Autocomplete, { Option } from '../../../common/components/autocomplete/Autocomplete';
+import { useFormPage } from './hooks/useFormPage';
 
 const CONTACT_TYPES = [FORMFIELD.OMISTAJAT, FORMFIELD.ARVIOIJAT, FORMFIELD.TOTEUTTAJAT];
 const CONTACT_FIELDS = [
@@ -40,6 +40,7 @@ const Form2: React.FC<FormProps> = ({ control, formData, errors, register }) => 
   const { t } = useTranslation();
   const { setValue } = useFormContext();
   const TypedController = useTypedController<HankeDataFormState>({ control });
+  useFormPage();
 
   const { isFetched, data: organizationsResponse } = useQuery(
     'organisationList',

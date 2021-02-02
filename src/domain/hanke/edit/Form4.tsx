@@ -12,9 +12,11 @@ import {
   HANKE_TARINAHAITTA,
 } from '../../types/hanke';
 import { FORMFIELD, FormProps } from './types';
+import { useFormPage } from './hooks/useFormPage';
 
 const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
   const { t, i18n } = useTranslation();
+  useFormPage();
   return (
     <div className="form4">
       <H2>{t('hankeForm:hankkeenHaitatForm:header')}</H2>

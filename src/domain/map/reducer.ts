@@ -3,8 +3,14 @@ import projectsJSON from '../../mocks/projects.json';
 import intersectJSON from '../../mocks/intersect.json';
 import { CommonGeoJSON, HankeGeoJSON } from '../../common/types/hanke';
 import { saveGeometryData } from './thunks';
-import { ReducerState, MapDataLayerKey, MapDatalayerState } from './types';
-import { DATALAYERS } from './constants';
+import {
+  ReducerState,
+  MapDataLayerKey,
+  MapTileLayerId,
+  MapDatalayerState,
+  MapTilelayerState,
+} from './types';
+import { DATALAYERS, MAPTILES } from './constants';
 
 const selectProject: CaseReducer<ReducerState, PayloadAction<string>> = (state, action) => {
   state.selectedProject = action.payload;
@@ -12,6 +18,17 @@ const selectProject: CaseReducer<ReducerState, PayloadAction<string>> = (state, 
 
 const toggleLayer: CaseReducer<ReducerState, PayloadAction<MapDataLayerKey>> = (state, action) => {
   state.dataLayers[action.payload].visible = !state.dataLayers[action.payload].visible;
+};
+
+const toggleMapTileLayer: CaseReducer<ReducerState, PayloadAction<MapTileLayerId>> = (
+  state,
+  action
+) => {
+  (Object.keys(state.mapTileLayers) as Array<keyof typeof state.mapTileLayers>).forEach(
+    (mapTileLayerKey) => {
+      state.mapTileLayers[mapTileLayerKey].visible = action.payload === mapTileLayerKey;
+    }
+  );
 };
 
 const updateDrawGeometry: CaseReducer<ReducerState, PayloadAction<HankeGeoJSON>> = (
@@ -25,6 +42,11 @@ const buildDatalayerState = (key: MapDataLayerKey, data: CommonGeoJSON): MapData
   key,
   data,
   visible: false,
+});
+
+const buildTilelayerState = (id: MapTileLayerId, visible: boolean): MapTilelayerState => ({
+  id,
+  visible,
 });
 
 const initialState: ReducerState = {
@@ -52,6 +74,10 @@ const initialState: ReducerState = {
       intersectJSON.greeneryGeoJSON as CommonGeoJSON
     ),
   },
+  mapTileLayers: {
+    [MAPTILES.ORTOKARTTA]: buildTilelayerState(MAPTILES.ORTOKARTTA, false),
+    [MAPTILES.KANTAKARTTA]: buildTilelayerState(MAPTILES.KANTAKARTTA, true),
+  },
 };
 
 const mapSlice = createSlice({
@@ -61,6 +87,7 @@ const mapSlice = createSlice({
     selectProject,
     updateDrawGeometry,
     toggleLayer,
+    toggleMapTileLayer,
   },
   extraReducers: (builder) => {
     builder.addCase(saveGeometryData.fulfilled, (state) => {

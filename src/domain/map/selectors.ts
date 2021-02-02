@@ -9,6 +9,8 @@ export const getProjectById = (id: string | null) => (state: RootState) =>
 
 export const getMapDataLayers = () => (state: RootState) => state.map.dataLayers;
 
+export const getMapTileLayers = () => (state: RootState) => state.map.mapTileLayers;
+
 export const getStatus = () => (state: RootState) => state.map.status;
 
 export const getDrawGeometry = () => (state: RootState) => state.map.drawGeometry;

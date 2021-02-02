@@ -9,9 +9,7 @@ import { CommonGeoJSON } from '../../../types/hanke';
 
 type TileLayer = {
   id: string;
-  label: string;
-  checked: boolean;
-  onClick: () => void;
+  visible: boolean;
 };
 
 type DataLayer = {
@@ -25,10 +23,20 @@ type Props = {
   dataLayers: DataLayer[];
   // I dont want to import type from domain. Maybe move layers here under common dir?
   // eslint-disable-next-line
-  onClickDataLayer: (key: any) => void;
+  onClickDataLayer: (id: any) => void; // TODO: improve type definition: see original comment above
+  // eslint-disable-next-line
+  onClickTileLayer: (key: any) => void; // TODO: improve type definition
 };
 
-const LayerControl: React.FC<Props> = ({ tileLayers, dataLayers, onClickDataLayer }) => {
+const showDataLayers = false; // HAI-532 hide dataLayers for now as actual data sources
+// are still being investigated
+
+const LayerControl: React.FC<Props> = ({
+  tileLayers,
+  dataLayers,
+  onClickDataLayer,
+  onClickTileLayer,
+}) => {
   const { t } = useTranslation();
 
   return (
@@ -39,25 +47,35 @@ const LayerControl: React.FC<Props> = ({ tileLayers, dataLayers, onClickDataLaye
         </MenuButton>
         <MenuList className={styles.controlMenu}>
           <MenuGroup>
-            {tileLayers.map(({ id, onClick, label, checked }) => (
+            {tileLayers.map(({ id, visible }) => (
               <div className={styles.drawControl__checkbox} key={id}>
-                <Checkbox id={id} label={label} checked={checked} onClick={() => onClick()} />
-              </div>
-            ))}
-          </MenuGroup>
-          <MenuDivider className={styles.controlMenu__divider} />
-          <MenuGroup>
-            {dataLayers.map(({ key, visible }) => (
-              <div className={styles.drawControl__checkbox} key={key}>
                 <Checkbox
-                  id={key}
-                  label={t(`map:datalayers:${key}`)}
+                  id={id}
+                  label={t(`map:tileLayers:${id}`)}
                   checked={visible}
-                  onClick={() => onClickDataLayer(key)}
+                  onClick={() => onClickTileLayer(id)}
+                  data-testid={`layer-control-${id}`}
                 />
               </div>
             ))}
           </MenuGroup>
+          {showDataLayers && (
+            <div>
+              <MenuDivider className={styles.controlMenu__divider} />
+              <MenuGroup>
+                {dataLayers.map(({ key, visible }) => (
+                  <div className={styles.drawControl__checkbox} key={key}>
+                    <Checkbox
+                      id={key}
+                      label={t(`map:datalayers:${key}`)}
+                      checked={visible}
+                      onClick={() => onClickDataLayer(key)}
+                    />
+                  </div>
+                ))}
+              </MenuGroup>
+            </div>
+          )}
         </MenuList>
       </Menu>
     </ControlPanel>

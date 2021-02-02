@@ -4,3 +4,8 @@ export enum DATALAYERS {
   CYCLING_ROADS = 'CYCLING_ROADS',
   GREENERY = 'GREENERY',
 }
+
+export enum MAPTILES {
+  ORTOKARTTA = 'ortokartta',
+  KANTAKARTTA = 'kantakartta',
+}

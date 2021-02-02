@@ -2,7 +2,7 @@ import React from 'react';
 import Container from '../common/components/container/Container';
 import PageMeta from './components/PageMeta';
 import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
-import HankeForm from '../domain/hanke/edit/Form';
+import HankeFormContainer from '../domain/hanke/edit/FormContainer';
 
 const MapPage: React.FC = () => {
   const { MAP } = useLocalizedRoutes();
@@ -11,7 +11,7 @@ const MapPage: React.FC = () => {
     <>
       <Container>
         <PageMeta routeData={MAP} />
-        <HankeForm />
+        <HankeFormContainer />
       </Container>
     </>
   );

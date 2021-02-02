@@ -11,10 +11,13 @@ import Kantakartta from './Layers/Kantakartta';
 import DataLayers from './Layers/DataLayers';
 import Ortokartta from './Layers/Ortokartta';
 import styles from './Map.module.scss';
-import { useMapDataLayers } from './hooks/useMapDataLayers';
-import { MapDataLayerKey } from './types';
+import { useMapDataLayers } from './hooks/useMapLayers';
+import { MapDataLayerKey, MapTileLayerId } from './types';
 import { HankeData } from '../types/hanke';
 import api from '../../common/utils/api';
+
+// TODO: abstract this into a container that handles state and provides
+// it as pro to this component
 
 // Temporary reference style implementation. Actual colors
 // are chosen based on törmäysanalyysi
@@ -47,21 +50,9 @@ const useProjectsWithGeometry = () => useQuery(['projectsWithGeometry'], getProj
 
 const HankeMap: React.FC = () => {
   const { isLoading, isError, data: projectsWithGeometryResponse } = useProjectsWithGeometry();
-  const { dataLayers, toggleDataLayer } = useMapDataLayers();
+  const { dataLayers, mapTileLayers, toggleDataLayer, toggleMapTileLayer } = useMapDataLayers();
 
-  const [zoom] = useState(9);
-  const [showKantakartta, setShowKantakartta] = useState(true);
-  const [showOrtokartta, setShowOrtokartta] = useState(false);
-
-  const toggleTileLayer = () => {
-    if (showKantakartta) {
-      setShowOrtokartta(true);
-      setShowKantakartta(false);
-    } else {
-      setShowOrtokartta(false);
-      setShowKantakartta(true);
-    }
-  };
+  const [zoom] = useState(9); // TODO: also take zoom into consideration
 
   return (
     <>
@@ -70,8 +61,8 @@ const HankeMap: React.FC = () => {
         style={{ width: '100%', height: '100%', position: 'absolute' }}
       >
         <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
-          {showKantakartta && <Kantakartta />}
-          {showOrtokartta && <Ortokartta />}
+          {mapTileLayers.ortokartta.visible && <Ortokartta />}
+          {mapTileLayers.kantakartta.visible && <Kantakartta />}
           <DataLayers />
 
           {(!isLoading || isError) &&
@@ -105,20 +96,8 @@ const HankeMap: React.FC = () => {
 
           <Controls>
             <LayerControl
-              tileLayers={[
-                {
-                  id: 'ortokartta',
-                  label: 'Ortokartta',
-                  onClick: toggleTileLayer,
-                  checked: showOrtokartta,
-                },
-                {
-                  id: 'kantakartta',
-                  label: 'Kantakartta',
-                  onClick: toggleTileLayer,
-                  checked: showKantakartta,
-                },
-              ]}
+              tileLayers={Object.values(mapTileLayers)}
+              onClickTileLayer={(id: MapTileLayerId) => toggleMapTileLayer(id)}
               dataLayers={Object.values(dataLayers)}
               onClickDataLayer={(key: MapDataLayerKey) => toggleDataLayer(key)}
             />
