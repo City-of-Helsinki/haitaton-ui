@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import { useTranslation } from 'react-i18next';
+import format from 'date-fns/format';
 import {
   IconAngleDown,
   IconAngleUp,
@@ -12,15 +13,23 @@ import {
 import { TableProps } from './types';
 
 const Table: React.FC<TableProps> = ({ columns, data }) => {
+  function compareIgnoreCase(a: string, b: string) {
+    const r1 = a.toString().toLowerCase();
+    const r2 = b.toString().toLowerCase();
+    if (r1 < r2) {
+      return -1;
+    }
+    if (r1 > r2) {
+      return 1;
+    }
+    return 0;
+  }
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     prepareRow,
     page, // Instead of using 'rows', we'll use page,
-    // which has only the rows for the active page
-
-    // The rest of these things are super handy, too ;)
     canPreviousPage,
     canNextPage,
     pageOptions,
@@ -33,13 +42,17 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
     {
       columns,
       data,
+      sortTypes: {
+        alphanumeric: (row1, row2, columnName) => {
+          return compareIgnoreCase(row1.values[columnName], row2.values[columnName]);
+        },
+      },
     },
+
     useSortBy,
     usePagination
   );
   const { t } = useTranslation();
-  // We don't want to render all 2000 rows for this example, so cap
-  // it at 20 for this use case
 
   return (
     <>
@@ -78,12 +91,18 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {page.map((row) => {
+          {page.map((row, index) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map((cell) => {
-                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
+                  return (
+                    <td data-testid={`row${index}_cell_${cell.column.id}`} {...cell.getCellProps()}>
+                      {cell.column.id === 'startDate' || cell.column.id === 'endDate'
+                        ? format(cell.value, 'dd.MM.yyyy')
+                        : cell.render('Cell')}
+                    </td>
+                  );
                 })}
                 <td>
                   <IconPen className="pen" />
