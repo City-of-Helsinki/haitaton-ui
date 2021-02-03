@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
 import { useTypedController } from '@hookform/strictly-typed';
 import { TextInput } from 'hds-react';
-import { CONTACT_FORMFIELD, FormProps, HankeDataFormState } from './types';
+import { CONTACT_FORMFIELD, FormProps, HankeDataFormState, Organization } from './types';
 import { HANKE_CONTACT_TYPE } from '../../types/hanke';
 
 import api from '../../../common/utils/api';
@@ -22,12 +22,6 @@ const CONTACT_FIELDS = [
   CONTACT_FORMFIELD.OSASTO,
 ];
 
-type Organization = {
-  id: number;
-  nimi: string;
-  tunnus: string;
-};
-
 const fetchOrganizations = async () => {
   const response = await api.get<Organization[]>('/organisaatiot');
   return response;
@@ -38,14 +32,18 @@ const getArrayFieldErrors = (errors: Record<string, Array<any>>, name: string) =
   errors && errors[name] && errors[name][0] ? errors[name][0] : {};
 
 const Form2: React.FC<FormProps> = ({ control, formData, errors, register }) => {
+  useFormPage();
   const { t } = useTranslation();
   const TypedController = useTypedController<HankeDataFormState>({ control });
-  useFormPage();
 
-  const { isFetched, data: organizationList } = useQuery('organisationList', fetchOrganizations, {
+  const { data: organizationList } = useQuery('organisationList', fetchOrganizations, {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
+
+  // If future, we'll have multiple contacts per contactType
+  // Then we should use react-hook-form useFieldArray and remove this hard coded index
+  const contactIndex = 0;
 
   return (
     <div className="form2">
@@ -55,11 +53,11 @@ const Form2: React.FC<FormProps> = ({ control, formData, errors, register }) => 
           <H3>{t(`hankeForm:headers:${contactType}`)}</H3>
           <div className="formColumns">
             {CONTACT_FIELDS.map((contactField) => {
-              const contactData = formData[contactType][0];
+              const contactData = formData[contactType][contactIndex];
               return (
                 <React.Fragment key={contactField}>
                   <TypedController
-                    name={[contactType, 0, contactField]}
+                    name={[contactType, contactIndex, contactField]}
                     defaultValue={contactData ? contactData[contactField] : ''}
                     render={(props) => (
                       <TextInput
@@ -78,11 +76,14 @@ const Form2: React.FC<FormProps> = ({ control, formData, errors, register }) => 
                       />
                     )}
                   />
-                  {contactField === CONTACT_FORMFIELD.PUHELINNUMERO && isFetched && (
+                  {contactField === CONTACT_FORMFIELD.PUHELINNUMERO && (
                     <OrganizationSelect
                       contactType={contactType}
-                      formData={formData}
                       organizations={organizationList ? organizationList.data : []}
+                      isOwnOrganization={
+                        contactData?.organisaatioId === null &&
+                        contactData?.organisaatioNimi.length > 0
+                      }
                     />
                   )}
                 </React.Fragment>
@@ -94,4 +95,5 @@ const Form2: React.FC<FormProps> = ({ control, formData, errors, register }) => 
     </div>
   );
 };
+
 export default Form2;

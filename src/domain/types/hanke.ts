@@ -110,7 +110,7 @@ export enum HANKE_CONTACT_TYPE {
   ARVIOIJAT = 'arvioijat',
   TOTEUTTAJAT = 'toteuttajat',
 }
-export type HANKE_CONTACT_TYPE_VAL =
+export type HankeContactKey =
   | HANKE_CONTACT_TYPE.OMISTAJAT
   | HANKE_CONTACT_TYPE.ARVIOIJAT
   | HANKE_CONTACT_TYPE.TOTEUTTAJAT;

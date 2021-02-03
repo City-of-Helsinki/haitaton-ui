@@ -4,39 +4,39 @@ import { useFormContext } from 'react-hook-form';
 import { TextInput, Checkbox } from 'hds-react';
 import { useTypedController } from '@hookform/strictly-typed';
 import Autocomplete, { Option } from '../../../common/components/autocomplete/Autocomplete';
-import { HANKE_CONTACT_TYPE_VAL } from '../../types/hanke';
-import { HankeDataFormState } from './types';
-
-type Organization = {
-  id: number;
-  nimi: string;
-  tunnus: string;
-};
+import { HankeContactKey, HankeContact } from '../../types/hanke';
+import { HankeDataFormState, Organization } from './types';
 
 type Props = {
-  contactType: HANKE_CONTACT_TYPE_VAL;
-  formData: HankeDataFormState;
+  contactType: HankeContactKey;
   organizations: Organization[];
+  isOwnOrganization: boolean;
+  index?: number;
 };
 
-const OrganizationSelect: React.FC<Props> = ({ contactType, formData, organizations }) => {
-  const initialContactData = formData[contactType] && formData[contactType][0];
-  const [isOwn, setIsOwn] = useState(
-    initialContactData?.organisaatioId === null && initialContactData?.organisaatioNimi.length > 0
-  );
+const OrganizationSelect: React.FC<Props> = ({
+  contactType,
+  organizations,
+  isOwnOrganization,
+  index = 0,
+}) => {
+  const [isOwn, setIsOwn] = useState(isOwnOrganization);
   const { t } = useTranslation();
   const { setValue, watch, register, control } = useFormContext();
   const TypedController = useTypedController<HankeDataFormState>({ control });
-
-  const contactData = watch(`${contactType}[0]`);
-
-  // console.log({ contactType, formData, contactData });
+  const contactData: HankeContact | undefined = watch(`${contactType}[${index}]`);
 
   useEffect(() => {
-    if (isOwn) {
-      setValue(`${contactType}[0].organisaatioId`, null);
+    // Clear selections when changing from selected to own
+    if (isOwn && contactData && contactData.organisaatioId !== null) {
+      setValue(`${contactType}[${index}].organisaatioId`, null);
+      setValue(`${contactType}[${index}].organisaatioNimi`, '');
     }
   }, [isOwn]);
+
+  if (!contactData) {
+    return null;
+  }
 
   return (
     <div>
@@ -49,20 +49,20 @@ const OrganizationSelect: React.FC<Props> = ({ contactType, formData, organizati
         }))}
         disabled={isOwn}
         defaultValue={
-          !isOwn
+          isOwn
             ? {
-                label: contactData?.organisaatioNimi || '',
-                value: contactData?.organisaatioId || undefined,
-              }
-            : {
                 label: '',
                 value: undefined,
+              }
+            : {
+                label: contactData.organisaatioNimi || '',
+                value: contactData.organisaatioId || undefined,
               }
         }
         onChange={(option?: Option): void => {
           if (option) {
-            setValue(`${contactType}[0].organisaatioId`, option.value);
-            setValue(`${contactType}[0].organisaatioNimi`, option.label);
+            setValue(`${contactType}[${index}].organisaatioId`, option.value);
+            setValue(`${contactType}[${index}].organisaatioNimi`, option.label);
           }
         }}
       />
@@ -76,8 +76,8 @@ const OrganizationSelect: React.FC<Props> = ({ contactType, formData, organizati
         data-testid={`${contactType}-isOmaOrganisaatio`}
       />
       <TypedController
-        name={[contactType, 0, 'organisaatioNimi']}
-        defaultValue={isOwn && contactData?.organisaatioNimi ? contactData.organisaatioNimi : ''}
+        name={[contactType, index, 'organisaatioNimi']}
+        defaultValue={isOwn ? contactData.organisaatioNimi : ''}
         render={({ value, onChange }) => (
           <TextInput
             className="formItem"
@@ -95,4 +95,4 @@ const OrganizationSelect: React.FC<Props> = ({ contactType, formData, organizati
   );
 };
 
-export default React.memo(OrganizationSelect, () => true);
+export default OrganizationSelect;
