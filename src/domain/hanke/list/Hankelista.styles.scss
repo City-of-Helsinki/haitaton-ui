@@ -34,6 +34,18 @@
           .pen path:last-child {
             fill: var(--color-black-50);
           }
+
+          span {
+            width: 7rem;
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden !important;
+            text-overflow: ellipsis;
+          }
+
+          span.name {
+            width: 9rem;
+          }
         }
 
         tr:nth-child(even) td {
