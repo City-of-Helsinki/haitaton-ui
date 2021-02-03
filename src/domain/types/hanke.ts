@@ -105,6 +105,16 @@ export enum HANKE_SAVETYPE {
 }
 export type HANKE_SAVETYPE_KEY = keyof typeof HANKE_SAVETYPE;
 
+export enum HANKE_CONTACT_TYPE {
+  OMISTAJAT = 'omistajat',
+  ARVIOIJAT = 'arvioijat',
+  TOTEUTTAJAT = 'toteuttajat',
+}
+export type HankeContactKey =
+  | HANKE_CONTACT_TYPE.OMISTAJAT
+  | HANKE_CONTACT_TYPE.ARVIOIJAT
+  | HANKE_CONTACT_TYPE.TOTEUTTAJAT;
+
 export type HankeContact = {
   id: number | null;
   sukunimi: string;

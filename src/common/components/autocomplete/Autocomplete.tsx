@@ -15,6 +15,7 @@ type PropTypes = {
   tooltip?: TooltipProps;
   onChange: (value: Option) => void;
   className: string;
+  disabled?: boolean;
 };
 
 const findSelected = (options: Options, defaultValue?: Partial<Option>) =>
@@ -30,6 +31,7 @@ const Autocomplete: React.FC<PropTypes> = ({
   errorMsg,
   onChange,
   tooltip,
+  disabled,
   ...rest
 }) => (
   <div className="autocomplete">
@@ -40,6 +42,7 @@ const Autocomplete: React.FC<PropTypes> = ({
       toggleButtonAriaLabel="open"
       defaultValue={findSelected(options, defaultValue)}
       onChange={(option: Option) => onChange(option)}
+      disabled={disabled}
       {...rest}
     />
     {invalid && <span className="error-text">{errorMsg}</span>}

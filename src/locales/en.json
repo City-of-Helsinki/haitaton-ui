@@ -184,7 +184,8 @@
       "email": "EN:Sähköposti",
       "puhelinnumero": "EN:Puhelinnumero",
       "osasto": "EN:Osasto",
-      "organisaatio": "EN:Organisaatio"
+      "organisaatio": "EN:Organisaatio",
+      "omaOrganisaatio": "LEN:isää oma organisaatio"
     },
     "headers": {
       "arvioijat": "EN:Arvioijat",
