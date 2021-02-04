@@ -17,6 +17,10 @@
       "fi": "Suomi",
       "en": "English",
       "sv": "Svenska"
+    },
+    "icons": {
+      "arrowUp": "Nuoli ylös ikoni",
+      "arrowDown": "Nuoli alas ikoni"
     }
   },
   "form": {
@@ -233,9 +237,6 @@
       "endDate": "Lopetus"
     },
     "icons": {
-      "sorting": "Lajitteluikoni",
-      "sortAscending": "Nouseva lajitteluikoni",
-      "sortAescendent": "Laskeva lajitteluikoni",
       "edit": "Muokkaa ikoni",
       "delete": "Poista ikoni",
       "angleLeft": "Nuoli vasemmalle ikoni",

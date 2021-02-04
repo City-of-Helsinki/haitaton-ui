@@ -17,6 +17,10 @@
       "fi": "Suomi",
       "en": "English",
       "sv": "Svenska"
+    },
+    "icons": {
+      "arrowUp": "SV:Nuoli ylös ikoni",
+      "arrowDown": "SV:Nuoli alas ikoni"
     }
   },
   "form": {
@@ -233,9 +237,6 @@
       "endDate": "SV:Lopetus"
     },
     "icons": {
-      "sorting": "SV:Lajitteluikoni",
-      "sortAscending": "SV:Nouseva lajitteluikoni",
-      "sortAescendent": "SV:Laskeva lajitteluikoni",
       "edit": "SV:Muokkaa ikoni",
       "delete": "SV:Poista ikoni",
       "angleLeft": "SV:Nuoli vasemmalle ikoni",

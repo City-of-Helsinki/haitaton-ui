@@ -2,15 +2,10 @@ import React from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import { useTranslation } from 'react-i18next';
 import format from 'date-fns/format';
-import {
-  IconAngleDown,
-  IconAngleUp,
-  IconCrossCircle,
-  IconPen,
-  IconAngleLeft,
-  IconAngleRight,
-} from 'hds-react/icons';
+import { IconCrossCircle, IconPen, IconAngleLeft, IconAngleRight } from 'hds-react/icons';
 import { TableProps } from './types';
+import IconAngleUp from '../../../common/icons/AngleUp';
+import IconAngleDown from '../../../common/icons/AngleDown';
 
 const Table: React.FC<TableProps> = ({ columns, data }) => {
   function compareIgnoreCase(a: string, b: string) {
@@ -69,19 +64,13 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                 >
                   <div>
                     {column.render('Header')}
-                    {/* Add a sort direction indicator */}
-                    {column.isSorted &&
-                      (column.isSortedDesc ? (
-                        <IconAngleUp aria-label={t('hankeList:icons:sortAscending')} />
-                      ) : (
-                        <IconAngleDown aria-label={t('hankeList:icons:sortAescendent')} />
-                      ))}
+                    {column.isSorted && (column.isSortedDesc ? <IconAngleUp /> : <IconAngleDown />)}
                     {!column.isSorted && (
                       <>
                         <span className="unSelectedWpr">
                           <span className="unSelected">
-                            <IconAngleUp aria-label={t('hankeList:icons:sorting')} />
-                            <IconAngleDown aria-label={t('hankeList:icons:sorting')} />
+                            <IconAngleUp />
+                            <IconAngleDown />
                           </span>
                         </span>
                       </>
@@ -126,7 +115,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           onClick={() => gotoPage(0)}
           disabled={!canPreviousPage}
         >
-          <span className="acceText">{t('hankeList:buttons:toFirstPage')}</span>
+          <span className="accessibilityText">{t('hankeList:buttons:toFirstPage')}</span>
           <IconAngleLeft aria-label={t('hankeList:icons:angleLeft')} />
           <IconAngleLeft aria-label={t('hankeList:icons:angleLeft')} />
         </button>
@@ -137,7 +126,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           data-testid="backward"
           disabled={!canPreviousPage}
         >
-          <span className="acceText">{t('hankeList:buttons:toPreviousPage')}</span>
+          <span className="accessibilityText">{t('hankeList:buttons:toPreviousPage')}</span>
           <IconAngleLeft aria-label={t('hankeList:icons:angleLeft')} />
         </button>
         <span className="wrp">
@@ -151,7 +140,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           onClick={() => nextPage()}
           disabled={!canNextPage}
         >
-          <span className="acceText">{t('hankeList:buttons:toNextPage')}</span>
+          <span className="accessibilityText">{t('hankeList:buttons:toNextPage')}</span>
           <IconAngleRight aria-label={t('hankeList:icons:angleRight')} />
         </button>
         <button
@@ -163,7 +152,7 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
         >
           <IconAngleRight aria-label={t('hankeList:icons:angleRight')} />
           <IconAngleRight aria-label={t('hankeList:icons:angleRight')} />
-          <span className="acceText">{t('hankeList:buttons:toLastPage')}</span>
+          <span className="accessibilityText">{t('hankeList:buttons:toLastPage')}</span>
         </button>
       </div>
     </>
