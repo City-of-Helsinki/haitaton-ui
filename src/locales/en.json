@@ -62,11 +62,18 @@
         "title": "EN::Haitaton 2.0 - Kartta"
       }
     },
-    "FORM": {
-      "path": "/form",
-      "headerLabel": "EN::Kaavake",
+    "NEW_HANKE": {
+      "path": "/hanke/new",
+      "headerLabel": "EN:Hanke",
       "meta": {
-        "title": "EN::Haitaton 2.0 - Kaavake"
+        "title": "EN:Haitaton 2.0 - Luo uusi hanke"
+      }
+    },
+    "EDIT_HANKE": {
+      "path": "/hanke/:hankeTunnus",
+      "headerLabel": "EN:Hanke",
+      "meta": {
+        "title": "EN:Haitaton 2.0 - Hankkeen muokkaus"
       }
     }
   },

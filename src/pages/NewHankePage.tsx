@@ -4,17 +4,15 @@ import PageMeta from './components/PageMeta';
 import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
 import HankeFormContainer from '../domain/hanke/edit/FormContainer';
 
-const MapPage: React.FC = () => {
-  const { MAP } = useLocalizedRoutes();
+const NewHankePage: React.FC = () => {
+  const { NEW_HANKE } = useLocalizedRoutes();
 
   return (
-    <>
-      <Container>
-        <PageMeta routeData={MAP} />
-        <HankeFormContainer />
-      </Container>
-    </>
+    <Container>
+      <PageMeta routeData={NEW_HANKE} />
+      <HankeFormContainer />
+    </Container>
   );
 };
 
-export default MapPage;
+export default NewHankePage;
