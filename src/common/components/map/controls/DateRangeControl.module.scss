@@ -1,16 +1,17 @@
 .dateRangeControl {
-  display: inline-block;
-  background: white;
   position: absolute;
   bottom: 7em; // what would be a better measurement than em?
   left: 50%;
   transform: translateX(-50%);
-  padding: 5px;
 }
 
 .datePicker {
-  border-style: solid;
-  border-width: 1px;
-  display: inline-block;
   padding: 5px;
+}
+
+.dateHyphen {
+  display: flex;
+  align-items: center;
+  padding-top: 2em;
+  justify-content: center;
 }
