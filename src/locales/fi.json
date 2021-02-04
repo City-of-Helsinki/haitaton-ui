@@ -231,6 +231,21 @@
       "step": "Vaihe",
       "startDate": "Aloitus",
       "endDate": "Lopetus"
+    },
+    "icons": {
+      "sorting": "Lajittelu ikoni",
+      "sortAscending": "Nouseva lajittelu ikoni",
+      "sortAescendent": "Laskeva lajittelu ikoni",
+      "edit": "Muokkaa ikoni",
+      "delete": "Poista ikoni",
+      "angleLeft": "Nuoli vasemmalle ikoni",
+      "angleRight": "Nuoli oikealle ikoni"
+    },
+    "buttons": {
+      "toFirstPage": "Listan ensimmäiselle sivulle",
+      "toPreviousPage": "Listan edelliselle sivulle",
+      "toNextPage": "Listan seuraavalle sivulle",
+      "toLastPage": "Listan viimeiselle sivulle"
     }
   },
   "map": {

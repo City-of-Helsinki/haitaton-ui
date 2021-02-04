@@ -231,6 +231,21 @@
       "step": "SV:Vaihe",
       "startDate": "SV:Aloitus",
       "endDate": "SV:Lopetus"
+    },
+    "icons": {
+      "sorting": "SV:Lajittelu ikoni",
+      "sortAscending": "SV:Nouseva lajittelu ikoni",
+      "sortAescendent": "SV:Laskeva lajittelu ikoni",
+      "edit": "SV:Muokkaa ikoni",
+      "delete": "SV:Poista ikoni",
+      "angleLeft": "SV:Nuoli vasemmalle ikoni",
+      "angleRight": "SV:Nuoli oikealle ikoni"
+    },
+    "buttons": {
+      "toFirstPage": "SV:Listan ensimmäiselle sivulle",
+      "toPreviousPage": "SV:Listan edelliselle sivulle",
+      "toNextPage": "SV:Listan seuraavalle sivulle",
+      "toLastPage": "SV:Listan viimeiselle sivulle"
     }
   },
   "map": {

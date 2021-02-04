@@ -70,13 +70,18 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                   <div>
                     {column.render('Header')}
                     {/* Add a sort direction indicator */}
-                    {column.isSorted && (column.isSortedDesc ? <IconAngleUp /> : <IconAngleDown />)}
+                    {column.isSorted &&
+                      (column.isSortedDesc ? (
+                        <IconAngleUp aria-label={t('hankeList:icons:sortAscending')} />
+                      ) : (
+                        <IconAngleDown aria-label={t('hankeList:icons:sortAescendent')} />
+                      ))}
                     {!column.isSorted && (
                       <>
                         <span className="unSelectedWpr">
                           <span className="unSelected">
-                            <IconAngleUp />
-                            <IconAngleDown />
+                            <IconAngleUp aria-label={t('hankeList:icons:sorting')} />
+                            <IconAngleDown aria-label={t('hankeList:icons:sorting')} />
                           </span>
                         </span>
                       </>
@@ -105,8 +110,8 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                   );
                 })}
                 <td>
-                  <IconPen className="pen" />
-                  <IconCrossCircle className="remove" />
+                  <IconPen className="pen" aria-label={t('hankeList:icons:edit')} />
+                  <IconCrossCircle className="remove" aria-label={t('hankeList:icons:delete')} />
                 </td>
               </tr>
             );
@@ -121,8 +126,9 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           onClick={() => gotoPage(0)}
           disabled={!canPreviousPage}
         >
-          <IconAngleLeft />
-          <IconAngleLeft />
+          <span className="acceText">{t('hankeList:buttons:toFirstPage')}</span>
+          <IconAngleLeft aria-label={t('hankeList:icons:angleLeft')} />
+          <IconAngleLeft aria-label={t('hankeList:icons:angleLeft')} />
         </button>
         <button
           type="button"
@@ -131,7 +137,8 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           data-testid="backward"
           disabled={!canPreviousPage}
         >
-          <IconAngleLeft />
+          <span className="acceText">{t('hankeList:buttons:toPreviousPage')}</span>
+          <IconAngleLeft aria-label={t('hankeList:icons:angleLeft')} />
         </button>
         <span className="wrp">
           {t('hankeList:paginationHeader')} <span data-testid="currentPage">{pageIndex + 1}</span> /{' '}
@@ -144,7 +151,8 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           onClick={() => nextPage()}
           disabled={!canNextPage}
         >
-          <IconAngleRight />
+          <span className="acceText">{t('hankeList:buttons:toNextPage')}</span>
+          <IconAngleRight aria-label={t('hankeList:icons:angleRight')} />
         </button>
         <button
           type="button"
@@ -153,8 +161,9 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           onClick={() => gotoPage(pageCount - 1)}
           disabled={!canNextPage}
         >
-          <IconAngleRight />
-          <IconAngleRight />
+          <IconAngleRight aria-label={t('hankeList:icons:angleRight')} />
+          <IconAngleRight aria-label={t('hankeList:icons:angleRight')} />
+          <span className="acceText">{t('hankeList:buttons:toLastPage')}</span>
         </button>
       </div>
     </>
