@@ -8,17 +8,17 @@ import { render } from '../../../testUtils/render';
 
 afterEach(cleanup);
 
+const defaultContact = {
+  id: 1,
+  sukunimi: 'Pekkala',
+  etunimi: 'Pekka',
+  email: 'pekka.pekkala@pekkapekkala.com',
+  puhelinnumero: '666',
+  osasto: 'Alakerta',
+};
+
 const formData = {
-  omistajat: [
-    {
-      id: 1,
-      sukunimi: 'Pekkala',
-      etunimi: 'Pekka',
-      email: 'pekka.pekkala@pekkapekkala.com',
-      puhelinnumero: '666',
-      osasto: 'Alakerta',
-    },
-  ],
+  omistajat: [defaultContact],
   toteuttajat: [],
   arvioijat: [],
 };
@@ -111,12 +111,7 @@ describe('OrganizationSelect inputs can be controlled with props and isOmaOrgani
         valuesOverwrite={{
           omistajat: [
             {
-              id: 1,
-              sukunimi: 'Pekkala',
-              etunimi: 'Pekka',
-              email: 'pekka.pekkala@pekkapekkala.com',
-              puhelinnumero: '666',
-              osasto: 'Alakerta',
+              ...defaultContact,
               organisaatioId: 1,
               organisaatioNimi: '',
             },
@@ -141,12 +136,7 @@ describe('OrganizationSelect inputs can be controlled with props and isOmaOrgani
         valuesOverwrite={{
           omistajat: [
             {
-              id: 1,
-              sukunimi: 'Pekkala',
-              etunimi: 'Pekka',
-              email: 'pekka.pekkala@pekkapekkala.com',
-              puhelinnumero: '666',
-              osasto: 'Alakerta',
+              ...defaultContact,
               organisaatioId: null,
               organisaatioNimi: 'Oma',
             },
