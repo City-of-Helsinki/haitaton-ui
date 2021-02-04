@@ -114,8 +114,8 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           data-testid="toBeginning"
           onClick={() => gotoPage(0)}
           disabled={!canPreviousPage}
+          aria-label={t('hankeList:buttons:toFirstPage')}
         >
-          <span className="accessibilityText">{t('hankeList:buttons:toFirstPage')}</span>
           <IconAngleLeft aria-label={t('hankeList:icons:angleLeft')} />
           <IconAngleLeft aria-label={t('hankeList:icons:angleLeft')} />
         </button>
@@ -125,8 +125,8 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           onClick={() => previousPage()}
           data-testid="backward"
           disabled={!canPreviousPage}
+          aria-label={t('hankeList:buttons:toPreviousPage')}
         >
-          <span className="accessibilityText">{t('hankeList:buttons:toPreviousPage')}</span>
           <IconAngleLeft aria-label={t('hankeList:icons:angleLeft')} />
         </button>
         <span className="wrp">
@@ -139,8 +139,8 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           data-testid="forward"
           onClick={() => nextPage()}
           disabled={!canNextPage}
+          aria-label={t('hankeList:buttons:toNextPage')}
         >
-          <span className="accessibilityText">{t('hankeList:buttons:toNextPage')}</span>
           <IconAngleRight aria-label={t('hankeList:icons:angleRight')} />
         </button>
         <button
@@ -149,10 +149,10 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           data-testid="toEnd"
           onClick={() => gotoPage(pageCount - 1)}
           disabled={!canNextPage}
+          aria-label={t('hankeList:buttons:toLastPage')}
         >
           <IconAngleRight aria-label={t('hankeList:icons:angleRight')} />
           <IconAngleRight aria-label={t('hankeList:icons:angleRight')} />
-          <span className="accessibilityText">{t('hankeList:buttons:toLastPage')}</span>
         </button>
       </div>
     </>
