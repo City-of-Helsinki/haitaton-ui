@@ -265,6 +265,10 @@
     "tileLayers": {
       "ortokartta": "EN: Ortokartta",
       "kantakartta": "EN: Kantakartta"
+    },
+    "dateRange": {
+      "begin": "EN: Ajanjakon alku",
+      "end": "EN: Ajanjakson loppu"
     }
   }
 }

@@ -19,6 +19,8 @@ export type ReducerState = {
     [MAPTILES.KANTAKARTTA]: MapTilelayerState;
     [MAPTILES.ORTOKARTTA]: MapTilelayerState;
   };
+  hankeFilterStartDate: string;
+  hankeFilterEndDate: string;
 };
 
 export type GeometryData = Feature[];
