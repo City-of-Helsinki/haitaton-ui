@@ -233,9 +233,9 @@
       "endDate": "SV:Lopetus"
     },
     "icons": {
-      "sorting": "SV:Lajittelu ikoni",
-      "sortAscending": "SV:Nouseva lajittelu ikoni",
-      "sortAescendent": "SV:Laskeva lajittelu ikoni",
+      "sorting": "SV:Lajitteluikoni",
+      "sortAscending": "SV:Nouseva lajitteluikoni",
+      "sortAescendent": "SV:Laskeva lajitteluikoni",
       "edit": "SV:Muokkaa ikoni",
       "delete": "SV:Poista ikoni",
       "angleLeft": "SV:Nuoli vasemmalle ikoni",

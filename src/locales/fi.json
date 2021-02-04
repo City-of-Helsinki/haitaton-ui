@@ -233,9 +233,9 @@
       "endDate": "Lopetus"
     },
     "icons": {
-      "sorting": "Lajittelu ikoni",
-      "sortAscending": "Nouseva lajittelu ikoni",
-      "sortAescendent": "Laskeva lajittelu ikoni",
+      "sorting": "Lajitteluikoni",
+      "sortAscending": "Nouseva lajitteluikoni",
+      "sortAescendent": "Laskeva lajitteluikoni",
       "edit": "Muokkaa ikoni",
       "delete": "Poista ikoni",
       "angleLeft": "Nuoli vasemmalle ikoni",
