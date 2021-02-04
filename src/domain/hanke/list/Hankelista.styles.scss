@@ -90,13 +90,6 @@
       padding: 0 var(--spacing-2-xs);
     }
 
-    span.accessibilityText {
-      display: inline-block;
-      height: 0.1rem;
-      overflow: hidden;
-      text-indent: -9999rem;
-    }
-
     .toBeginning {
       svg:last-child {
         margin-left: -1rem;
