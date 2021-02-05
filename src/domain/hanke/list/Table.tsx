@@ -2,10 +2,15 @@ import React from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import { useTranslation } from 'react-i18next';
 import format from 'date-fns/format';
-import { IconCrossCircle, IconPen, IconAngleLeft, IconAngleRight } from 'hds-react/icons';
+import {
+  IconCrossCircle,
+  IconPen,
+  IconAngleLeft,
+  IconAngleRight,
+  IconAngleUp,
+  IconAngleDown,
+} from 'hds-react/icons';
 import { TableProps } from './types';
-import IconAngleUp from '../../../common/icons/AngleUp';
-import IconAngleDown from '../../../common/icons/AngleDown';
 
 const Table: React.FC<TableProps> = ({ columns, data }) => {
   function compareIgnoreCase(a: string, b: string) {
@@ -69,13 +74,17 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                     <div>
                       {column.render('Header')}
                       {column.isSorted &&
-                        (column.isSortedDesc ? <IconAngleUp /> : <IconAngleDown />)}
+                        (column.isSortedDesc ? (
+                          <IconAngleUp aria-hidden="true" />
+                        ) : (
+                          <IconAngleDown aria-hidden="true" />
+                        ))}
                       {!column.isSorted && (
                         <>
                           <span className="unSelectedWpr">
                             <span className="unSelected">
-                              <IconAngleUp />
-                              <IconAngleDown />
+                              <IconAngleUp aria-hidden="true" />
+                              <IconAngleDown aria-hidden="true" />
                             </span>
                           </span>
                         </>
