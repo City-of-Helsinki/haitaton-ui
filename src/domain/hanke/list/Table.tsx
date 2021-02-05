@@ -115,10 +115,10 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                 })}
                 <td>
                   <button type="button" disabled aria-label={t('hankeList:buttons:edit')}>
-                    <IconPen className="pen" aria-label={t('hankeList:icons:edit')} />
+                    <IconPen className="pen" aria-hidden="true" />
                   </button>
                   <button type="button" disabled aria-label={t('hankeList:buttons:delete')}>
-                    <IconCrossCircle className="remove" aria-label={t('hankeList:icons:delete')} />
+                    <IconCrossCircle className="remove" aria-hidden="true" />
                   </button>
                 </td>
               </tr>
