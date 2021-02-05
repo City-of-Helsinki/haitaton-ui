@@ -14,7 +14,7 @@ type Props = {
   initialData: HankeDataDraft[];
 };
 
-const Projects: React.FC<Props> = ({ initialData }) => {
+const HankeList: React.FC<Props> = ({ initialData }) => {
   const { NEW_HANKE } = useLocalizedRoutes();
 
   const { t } = useTranslation();
@@ -69,4 +69,4 @@ const Projects: React.FC<Props> = ({ initialData }) => {
   );
 };
 
-export default Projects;
+export default HankeList;

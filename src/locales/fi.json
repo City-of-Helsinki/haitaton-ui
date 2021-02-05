@@ -70,7 +70,7 @@
       }
     },
     "EDIT_HANKE": {
-      "path": "/hanke/:hankeTunnus",
+      "path": "/hanke/:hankeTunnus/muokkaa",
       "headerLabel": "Hanke",
       "meta": {
         "title": "Haitaton 2.0 - Hankkeen muokkaus"

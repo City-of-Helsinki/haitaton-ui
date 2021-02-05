@@ -20,7 +20,7 @@ const getHanke = async (hankeTunnus?: string) => {
 };
 
 const useHanke = (hankeTunnus?: string) =>
-  useQuery<HankeDataDraft>(['hanke'], () => getHanke(hankeTunnus), {
+  useQuery<HankeDataDraft>(['hanke', hankeTunnus], () => getHanke(hankeTunnus), {
     enabled: !!hankeTunnus,
   });
 

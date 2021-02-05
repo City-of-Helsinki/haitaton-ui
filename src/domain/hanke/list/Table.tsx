@@ -2,6 +2,7 @@ import React from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import { useTranslation } from 'react-i18next';
 import format from 'date-fns/format';
+import { Link } from 'react-router-dom';
 import {
   IconCrossCircle,
   IconPen,
@@ -10,20 +11,35 @@ import {
   IconAngleUp,
   IconAngleDown,
 } from 'hds-react/icons';
-import { TableProps } from './types';
+import useLinkPath from '../../../common/hooks/useLinkPath';
+import { ROUTES } from '../../../common/types/route';
 
-const Table: React.FC<TableProps> = ({ columns, data }) => {
-  function compareIgnoreCase(a: string, b: string) {
-    const r1 = a.toString().toLowerCase();
-    const r2 = b.toString().toLowerCase();
-    if (r1 < r2) {
-      return -1;
-    }
-    if (r1 > r2) {
-      return 1;
-    }
-    return 0;
+function compareIgnoreCase(a: string, b: string) {
+  const r1 = a.toString().toLowerCase();
+  const r2 = b.toString().toLowerCase();
+  if (r1 < r2) {
+    return -1;
   }
+  if (r1 > r2) {
+    return 1;
+  }
+  return 0;
+}
+
+export type HankeListColumn = {
+  Header: string;
+  // eslint-disable-next-line
+  accessor: any;
+};
+
+export interface Props {
+  columns: Array<HankeListColumn>;
+  data: Record<string, unknown>[];
+}
+
+const Table: React.FC<Props> = ({ columns, data }) => {
+  const { t } = useTranslation();
+  const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
   const {
     getTableProps,
     getTableBodyProps,
@@ -48,11 +64,9 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
         },
       },
     },
-
     useSortBy,
     usePagination
   );
-  const { t } = useTranslation();
 
   return (
     <>
@@ -114,12 +128,17 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                   );
                 })}
                 <td>
-                  <button type="button" disabled aria-label={t('hankeList:buttons:edit')}>
-                    <IconPen className="pen" aria-hidden="true" />
-                  </button>
+                  <Link
+                    to={getEditHankePath({ hankeTunnus: row.values.id })}
+                    aria-label={t(`routes:${ROUTES.EDIT_HANKE}.meta.title`)}
+                  >
+                    <IconPen aria-hidden />
+                  </Link>
                   <button type="button" disabled aria-label={t('hankeList:buttons:delete')}>
                     <IconCrossCircle className="remove" aria-hidden="true" />
                   </button>
+
+                  <IconCrossCircle className="remove" />
                 </td>
               </tr>
             );
