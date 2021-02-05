@@ -238,6 +238,21 @@
       "step": "EN:Vaihe",
       "startDate": "EN:Aloitus",
       "endDate": "EN:Lopetus"
+    },
+    "sortButtons": {
+      "id": "EN:Lajittele taulukko tunnuksen mukaan",
+      "name": "EN:Lajittele taulukko nimen mukaan",
+      "step": "EN:Lajittele taulukko vaiheen mukaan",
+      "startDate": "EN:Lajittele taulukko aloitus päivämäärän mukaan",
+      "endDate": "EN:Lajittele taulukko lopetus päivämäärän mukaan"
+    },
+    "buttons": {
+      "edit": "EN:Muokkaa hanketta",
+      "delete": "EN:Poista hanke",
+      "toFirstPage": "EN:Listan ensimmäiselle sivulle",
+      "toPreviousPage": "EN:Listan edelliselle sivulle",
+      "toNextPage": "EN:Listan seuraavalle sivulle",
+      "toLastPage": "EN:Listan viimeiselle sivulle"
     }
   },
   "map": {

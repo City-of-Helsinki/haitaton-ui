@@ -19,16 +19,16 @@ describe('HankeLista', () => {
     );
 
     await waitFor(() => queryByText('Hankelista'));
-    getByTestId(container, 'tableHeader0').click();
+    getByTestId(container, 'tableHeaderButton0').click();
     expect(getByTestId(container, 'row0_cell_id')).toHaveTextContent('SMTGEN2_1');
-    getByTestId(container, 'tableHeader1').click();
+    getByTestId(container, 'tableHeaderButton1').click();
     expect(getByTestId(container, 'row0_cell_name')).toHaveTextContent('cc');
-    getByTestId(container, 'tableHeader2').click();
+    getByTestId(container, 'tableHeaderButton2').click();
     expect(getByTestId(container, 'row0_cell_step')).toHaveTextContent('OHJELMOINTI');
-    getByTestId(container, 'tableHeader3').click();
+    getByTestId(container, 'tableHeaderButton3').click();
     expect(getByTestId(container, 'row0_cell_startDate')).toHaveTextContent('10.11.2020');
-    getByTestId(container, 'tableHeader4').click();
-    getByTestId(container, 'tableHeader4').click();
+    getByTestId(container, 'tableHeaderButton4').click();
+    getByTestId(container, 'tableHeaderButton4').click();
     expect(getByTestId(container, 'row0_cell_endDate')).toHaveTextContent('11.01.2032');
   });
   test('pagination test', async () => {
