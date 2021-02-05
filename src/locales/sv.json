@@ -17,10 +17,6 @@
       "fi": "Suomi",
       "en": "English",
       "sv": "Svenska"
-    },
-    "icons": {
-      "arrowUp": "SV:Nuoli ylös ikoni",
-      "arrowDown": "SV:Nuoli alas ikoni"
     }
   },
   "form": {
@@ -236,13 +232,16 @@
       "startDate": "SV:Aloitus",
       "endDate": "SV:Lopetus"
     },
-    "icons": {
-      "edit": "SV:Muokkaa ikoni",
-      "delete": "SV:Poista ikoni",
-      "angleLeft": "SV:Nuoli vasemmalle ikoni",
-      "angleRight": "SV:Nuoli oikealle ikoni"
+    "sortButtons": {
+      "id": "SV:Lajittele taulukko tunnuksen mukaan",
+      "name": "SV:Lajittele taulukko nimen mukaan",
+      "step": "SV:Lajittele taulukko vaiheen mukaan",
+      "startDate": "SV:Lajittele taulukko aloitus päivämäärän mukaan",
+      "endDate": "SV:Lajittele taulukko lopetus päivämäärän mukaan"
     },
     "buttons": {
+      "edit": "SV:Muokkaa hanketta",
+      "delete": "SV:Poista hanke",
       "toFirstPage": "SV:Listan ensimmäiselle sivulle",
       "toPreviousPage": "SV:Listan edelliselle sivulle",
       "toNextPage": "SV:Listan seuraavalle sivulle",
