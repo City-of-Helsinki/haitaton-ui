@@ -44,11 +44,11 @@ const setHankeFilterStartDate: CaseReducer<ReducerState, PayloadAction<string>> 
   state,
   action
 ) => {
-  state.hankeFilterStartDate = action.payload;
+  state.hankeFilters.startDate = action.payload;
 };
 
 const setHankeFilterEndDate: CaseReducer<ReducerState, PayloadAction<string>> = (state, action) => {
-  state.hankeFilterEndDate = action.payload;
+  state.hankeFilters.endDate = action.payload;
 };
 
 const buildDatalayerState = (key: MapDataLayerKey, data: CommonGeoJSON): MapDatalayerState => ({
@@ -91,8 +91,10 @@ const initialState: ReducerState = {
     [MAPTILES.ORTOKARTTA]: buildTilelayerState(MAPTILES.ORTOKARTTA, false),
     [MAPTILES.KANTAKARTTA]: buildTilelayerState(MAPTILES.KANTAKARTTA, true),
   },
-  hankeFilterStartDate: `${currentYear}-01-01`,
-  hankeFilterEndDate: `${currentYear + 1}-12-31`,
+  hankeFilters: {
+    startDate: `${currentYear}-01-01`,
+    endDate: `${currentYear + 1}-12-31`,
+  },
 };
 
 const mapSlice = createSlice({

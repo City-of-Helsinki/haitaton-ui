@@ -15,6 +15,6 @@ export const getStatus = () => (state: RootState) => state.map.status;
 
 export const getDrawGeometry = () => (state: RootState) => state.map.drawGeometry;
 
-export const getHankeFilterStartDate = () => (state: RootState) => state.map.hankeFilterStartDate;
+export const getHankeFilterStartDate = () => (state: RootState) => state.map.hankeFilters.startDate;
 
-export const getHankeFilterEndDate = () => (state: RootState) => state.map.hankeFilterEndDate;
+export const getHankeFilterEndDate = () => (state: RootState) => state.map.hankeFilters.endDate;

@@ -19,11 +19,15 @@ export type ReducerState = {
     [MAPTILES.KANTAKARTTA]: MapTilelayerState;
     [MAPTILES.ORTOKARTTA]: MapTilelayerState;
   };
-  hankeFilterStartDate: string;
-  hankeFilterEndDate: string;
+  hankeFilters: HankeFilters;
 };
 
 export type GeometryData = Feature[];
+
+export type HankeFilters = {
+  startDate: string;
+  endDate: string;
+};
 
 export interface HankeGeometryApiResponseData {
   hankeId: string;

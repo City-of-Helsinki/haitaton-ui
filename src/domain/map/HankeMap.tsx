@@ -12,9 +12,10 @@ import Kantakartta from './Layers/Kantakartta';
 import DataLayers from './Layers/DataLayers';
 import Ortokartta from './Layers/Ortokartta';
 import styles from './Map.module.scss';
+import { hankeWithGeometryIsBetweenDates } from './utils';
 import { useMapDataLayers } from './hooks/useMapLayers';
 import { useDateRangeFilter } from './hooks/useDateRangeFilter';
-import { MapDataLayerKey, MapTileLayerId } from './types';
+import { MapDataLayerKey, MapTileLayerId, HankeFilters } from './types';
 import { HankeData } from '../types/hanke';
 import api from '../../common/utils/api';
 
@@ -58,22 +59,9 @@ const HankeMap: React.FC = () => {
 
   const [zoom] = useState(9); // TODO: also take zoom into consideration
 
-  const updateDateRange = (data: any) => {
-    setHankeFilterStartDate(data.periodBegin);
-    setHankeFilterEndDate(data.periodEnd);
-  };
-
-  const hankeWithGeometryIsBetweenDates = (hanke: HankeData) => {
-    if (hanke.geometriat) {
-      const startDate = new Date(hankeFilterStartDate);
-      const endDate = new Date(hankeFilterEndDate);
-      const hankeStartDate = new Date(hanke.alkuPvm); // TODO: validoi: haittaAlkuPvm vai alkuPvm?
-      const hankeEndDate = new Date(hanke.loppuPvm); // TODO: validoi: haittaLoppuPvm vai loppuPvm?
-      if (hankeEndDate > startDate && hankeEndDate < endDate) return true;
-      if (hankeStartDate > startDate && hankeEndDate < endDate) return true;
-      if (hankeStartDate > startDate && hankeEndDate > endDate) return true;
-    }
-    return false;
+  const updateDateRange = (data: HankeFilters) => {
+    setHankeFilterStartDate(data.startDate);
+    setHankeFilterEndDate(data.endDate);
   };
 
   return (
@@ -92,8 +80,13 @@ const HankeMap: React.FC = () => {
           Array.isArray(projectsWithGeometryResponse.data) ? (
             projectsWithGeometryResponse.data
               .filter((hanke) => {
-                return hankeWithGeometryIsBetweenDates(hanke);
+                return hankeWithGeometryIsBetweenDates(
+                  hanke,
+                  hankeFilterStartDate,
+                  hankeFilterEndDate
+                );
               })
+
               .map((hanke) => {
                 return (
                   <VectorLayer
@@ -120,9 +113,7 @@ const HankeMap: React.FC = () => {
             <DateRangeControl
               onSubmit={updateDateRange}
               startDate={hankeFilterStartDate}
-              setStartDate={setHankeFilterStartDate}
               endDate={hankeFilterEndDate}
-              setEndDate={setHankeFilterStartDate}
             />
             <LayerControl
               tileLayers={Object.values(mapTileLayers)}

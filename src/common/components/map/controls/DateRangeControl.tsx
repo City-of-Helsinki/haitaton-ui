@@ -5,14 +5,13 @@ import { useTranslation } from 'react-i18next';
 import DatePicker from '../../datePicker/DatePicker';
 import ControlPanel from './ControlPanel';
 import styles from './DateRangeControl.module.scss';
+import { HankeFilters } from '../../../../domain/map/types';
 
 type Props = {
   // eslint-disable-next-line
   onSubmit: (data: any) => void;
   startDate: string;
   endDate: string;
-  setStartDate: (data: any) => void;
-  setEndDate: (data: any) => void;
 };
 
 const DateRangeControl: React.FC<Props> = ({ onSubmit, startDate, endDate }) => {
@@ -20,12 +19,12 @@ const DateRangeControl: React.FC<Props> = ({ onSubmit, startDate, endDate }) => 
 
   // TODO: go through options in
   // https://react-hook-form.com/api
-  const formContext = useForm<any>({});
+  const formContext = useForm<HankeFilters>({});
 
   const { register, handleSubmit } = useForm({
     defaultValues: {
-      periodBegin: startDate,
-      periodEnd: endDate,
+      startDate,
+      endDate,
     },
   });
 
@@ -34,13 +33,13 @@ const DateRangeControl: React.FC<Props> = ({ onSubmit, startDate, endDate }) => 
       <FormProvider {...formContext}>
         <div className={styles.datePicker}>
           <form name="dateRange" onSubmit={handleSubmit(onSubmit)}>
-            <input type="date" name="periodBegin" ref={register} />
-            <input type="date" name="periodEnd" ref={register} />
+            <input type="date" name="startDate" ref={register} />
+            <input type="date" name="endDate" ref={register} />
             <input type="submit" />
             <Grid templateColumns="repeat(9, 1fr)" gap={6}>
               <GridItem colSpan={4}>
                 <DatePicker
-                  name="periodBegin"
+                  name="startDate"
                   label={t(`map:dateRange:begin`)}
                   locale={i18n.language}
                   dateFormat="dd.MM.yyyy"
@@ -58,7 +57,7 @@ const DateRangeControl: React.FC<Props> = ({ onSubmit, startDate, endDate }) => 
               </GridItem>
               <GridItem colSpan={4}>
                 <DatePicker
-                  name="periodEnd"
+                  name="endDate"
                   label={t(`map:dateRange:end`)}
                   dateFormat="dd.MM.yyyy"
                   defaultValue={null}
