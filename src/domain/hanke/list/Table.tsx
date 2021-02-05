@@ -59,8 +59,9 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                 // Add the sorting props to control sorting. For this example
                 // we can add them into the header props
 
-                <th data-testid={`tableHeader${i}`} key={column.id} role="columnheader">
+                <th key={column.id} role="columnheader">
                   <button
+                    data-testid={`tableHeaderButton${i}`}
                     type="button"
                     {...column.getSortByToggleProps()}
                     aria-label={t(`hankeList:sortButtons:${column.id}`)}
