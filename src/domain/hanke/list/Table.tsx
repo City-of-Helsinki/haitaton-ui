@@ -138,8 +138,6 @@ const Table: React.FC<Props> = ({ columns, data }) => {
                   <button type="button" disabled aria-label={t('hankeList:buttons:delete')}>
                     <IconCrossCircle className="remove" aria-hidden="true" />
                   </button>
-
-                  <IconCrossCircle className="remove" />
                 </td>
               </tr>
             );
