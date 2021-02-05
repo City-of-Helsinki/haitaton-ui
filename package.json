@@ -19,7 +19,7 @@
     "lint": "yarn ts-check:cypress && yarn ts-check && eslint --ext js,ts,tsx src cypress",
     "lint:css": "stylelint 'src/**/*.scss'",
     "e2e": "start-server-and-test start :3001 cypress-run-chrome",
-    "cypress-run-chrome": "cypress run --browser chrome --no-exit",
+    "cypress-run-chrome": "cypress run --browser chrome",
     "cypress-run-chrome-headless": "cypress run --headless --browser chrome"
   },
   "dependencies": {

@@ -54,12 +54,12 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()} role="row">
+            <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column, i) => (
                 // Add the sorting props to control sorting. For this example
                 // we can add them into the header props
 
-                <th key={column.id} role="columnheader">
+                <th key={column.id}>
                   <button
                     data-testid={`tableHeaderButton${i}`}
                     type="button"
@@ -121,7 +121,6 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
         <button
           type="button"
           className="toBeginning"
-          id="toBeginning"
           data-testid="toBeginning"
           onClick={() => gotoPage(0)}
           disabled={!canPreviousPage}
@@ -133,7 +132,6 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
         <button
           type="button"
           className="backward"
-          id="backward"
           onClick={() => previousPage()}
           data-testid="backward"
           disabled={!canPreviousPage}
@@ -148,7 +146,6 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
         <button
           type="button"
           className="forward"
-          id="forward"
           data-testid="forward"
           onClick={() => nextPage()}
           disabled={!canNextPage}
@@ -159,7 +156,6 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
         <button
           type="button"
           className="toEnd"
-          id="toEnd"
           data-testid="toEnd"
           onClick={() => gotoPage(pageCount - 1)}
           disabled={!canNextPage}
