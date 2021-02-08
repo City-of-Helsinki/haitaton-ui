@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 import HankeListComponent from './HankeListComponent';
-import api from '../../../common/utils/api';
+import api from '../../api/api';
 import { HankeDataDraft } from '../../types/hanke';
 
 const getHankkeet = async () => {

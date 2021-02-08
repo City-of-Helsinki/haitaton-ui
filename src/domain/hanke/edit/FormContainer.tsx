@@ -12,7 +12,7 @@ import { actions, hankeDataDraft } from './reducer';
 import { SaveFormArguments } from './types';
 import { convertHankeDataToFormState } from './utils';
 
-import api from '../../../common/utils/api';
+import api from '../../api/api';
 
 const getHanke = async (hankeTunnus?: string) => {
   const { data } = await api.get<HankeDataDraft>(`/hankkeet/${hankeTunnus}`);
