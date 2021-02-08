@@ -15,7 +15,7 @@ import styles from './Map.module.scss';
 import { hankeWithGeometryIsBetweenDates } from './utils';
 import { useMapDataLayers } from './hooks/useMapLayers';
 import { useDateRangeFilter } from './hooks/useDateRangeFilter';
-import { MapDataLayerKey, MapTileLayerId, HankeFilters } from './types';
+import { MapDataLayerKey, MapTileLayerId } from './types';
 import { HankeData } from '../types/hanke';
 import api from '../../common/utils/api';
 
@@ -58,11 +58,6 @@ const HankeMap: React.FC = () => {
   } = useDateRangeFilter();
 
   const [zoom] = useState(9); // TODO: also take zoom into consideration
-
-  const updateDateRange = (data: HankeFilters) => {
-    setHankeFilterStartDate(data.startDate);
-    setHankeFilterEndDate(data.endDate);
-  };
 
   return (
     <>
@@ -111,9 +106,10 @@ const HankeMap: React.FC = () => {
 
           <Controls>
             <DateRangeControl
-              onSubmit={updateDateRange}
               startDate={hankeFilterStartDate}
+              updateStartDate={setHankeFilterStartDate}
               endDate={hankeFilterEndDate}
+              updateEndDate={setHankeFilterEndDate}
             />
             <LayerControl
               tileLayers={Object.values(mapTileLayers)}

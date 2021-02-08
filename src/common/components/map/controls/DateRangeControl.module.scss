@@ -10,8 +10,9 @@
 }
 
 .dateHyphen {
-  display: flex;
   align-items: center;
-  padding-top: 2em;
+  // padding-top: 1rem; FIXME: datepicker input width must be limited
+  // otherwise it goes on top of the hyphen
+  padding-top: 10px;
   justify-content: center;
 }
