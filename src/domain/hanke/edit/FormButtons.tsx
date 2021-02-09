@@ -75,6 +75,7 @@ const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, formPage }
           data-testid="forward"
           disabled={!isValid}
           theme="coat"
+          aria-label="test"
         >
           <span>{t(nextButtonText)}</span>
         </Button>

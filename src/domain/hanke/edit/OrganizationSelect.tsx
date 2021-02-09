@@ -81,6 +81,7 @@ const OrganizationSelect: React.FC<Props> = ({
         render={({ value, onChange }) => (
           <TextInput
             className="formItem"
+            label={t(`hankeForm:labels:InsertOmaOrganisaatio`)}
             id={`${contactType}-organisaatioNimi`}
             name={`${contactType}-organisaatioNimi`}
             data-testid={`${contactType}-organisaatioNimi`}

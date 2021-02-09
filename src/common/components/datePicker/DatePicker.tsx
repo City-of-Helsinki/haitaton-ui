@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { TooltipProps } from '../../types/tooltip';
 import { getInputErrorText } from '../../utils/form';
 import { toEndOfDayUTCISO } from '../../utils/date';
+import Calendar from '../icons/Calendar';
 import 'react-datepicker/dist/react-datepicker.css';
 import './datePicker.styles.scss';
 
@@ -75,6 +76,7 @@ const DatePicker: React.FC<PropTypes> = ({
               className={invalid ? 'invalid' : ''}
               onBlur={onBlur}
             />
+            <Calendar />
             {invalid && <span className="error-text">{getInputErrorText(t, errors, name)}</span>}
           </div>
         )}

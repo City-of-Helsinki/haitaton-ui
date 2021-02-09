@@ -8430,27 +8430,27 @@ hash.js@^1.0.0, hash.js@^1.0.3:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
 
-hds-core@0.17.0:
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/hds-core/-/hds-core-0.17.0.tgz#f6b4378f1b1aa8679faae9b2cfe6a0bd687f417a"
-  integrity sha512-WjaTqp3PB+Aq1eZXX+sAnmUHweHrClEJ2wucVC92SEzBc2kyTFZPRVDDfeG+P+K9hPfwLI53df3XrcxvOvdd6A==
+hds-core@0.21.0:
+  version "0.21.0"
+  resolved "https://registry.yarnpkg.com/hds-core/-/hds-core-0.21.0.tgz#5c88c783ce4a4f04c9dec81eac89c3047e7b6753"
+  integrity sha512-il5MxtaRY2Exa8rS4mRhjimIWxXzPra6vRcZ1r7KmUo3aJm69B1ZYF0OXHuWeVSJewOzgyfEZahCT+Mzxq0MVw==
 
-hds-design-tokens@^0.17.0:
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/hds-design-tokens/-/hds-design-tokens-0.17.0.tgz#1fd4e80dd7e5d3a9af0790c3f8cfd66834298e15"
-  integrity sha512-eG23sNmSA7qL3Vy/PF8hDC7/BRIQMID3SsDgxPoUFTSxSRGTiCRI9+nlWUsES8SdTa7JdtHwm6L4tJ5yS+RwGA==
+hds-design-tokens@^0.21.0:
+  version "0.21.0"
+  resolved "https://registry.yarnpkg.com/hds-design-tokens/-/hds-design-tokens-0.21.0.tgz#4930ad28a797200f9409ac5169311f13ad7aa607"
+  integrity sha512-ko6db9pjbNyxQsuQCOQUKW+N+QBC3Jc8j+XL5NoY3WqR/bovI4lp1TI88FZcsx6rmG/4aPhU7kWhxwEPaGz4+A==
 
-hds-react@^0.17.0:
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/hds-react/-/hds-react-0.17.0.tgz#bca440a68afcca36404af7902a4e1c49a4b8403d"
-  integrity sha512-T61xV9h5gylwiq027GSWebYMsybQRv+KQLEjkbXGco9w7Us4iracRJiG4epKVlqXTLRCqyXt1amzaxdhju8FVw==
+hds-react@^0.21.0:
+  version "0.21.0"
+  resolved "https://registry.yarnpkg.com/hds-react/-/hds-react-0.21.0.tgz#13a4124253a314e218f1caf8f556d906223ff3ec"
+  integrity sha512-u6GdIWqqV4va+4Wy4xrzhNKTMzf5Z81icAWHwoaB/nXBCVtw2V4nEHXTC7eCeFEplk1LH/dyvfPPN6b6auyorQ==
   dependencies:
     "@babel/runtime" "7.11.2"
     "@juggle/resize-observer" "3.2.0"
     "@popperjs/core" "2.5.3"
     "@react-aria/visually-hidden" "3.2.0"
     downshift "6.0.6"
-    hds-core "0.17.0"
+    hds-core "0.21.0"
     lodash.isequal "4.5.0"
     lodash.uniqueid "4.0.1"
     react-merge-refs "1.1.0"

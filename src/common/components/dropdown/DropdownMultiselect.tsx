@@ -1,6 +1,7 @@
 import React from 'react';
 import { Controller, Control } from 'react-hook-form';
-import { Dropdown as HdsDropdown, Tooltip } from 'hds-react';
+import { Combobox, Tooltip } from 'hds-react';
+import { useTranslation } from 'react-i18next';
 
 import { TooltipProps } from '../../types/tooltip';
 
@@ -27,12 +28,13 @@ const Dropdown: React.FC<PropTypes> = ({
   control,
   rules,
   options,
-  defaultValue = [],
+  defaultValue,
   label,
   invalid,
   errorMsg,
   tooltip,
 }) => {
+  const { t } = useTranslation();
   return (
     <div className="dropdownComp">
       {!!tooltip && <Tooltip {...tooltip} />}
@@ -45,14 +47,15 @@ const Dropdown: React.FC<PropTypes> = ({
         rules={rules}
         render={({ onChange, value }) => {
           return (
-            <HdsDropdown
+            <Combobox<Option>
               options={options}
-              defaultValues={options.filter((o) => value.includes(o.value))}
-              selectedOption={options.filter((o) => value.includes(o.value))}
               label={label}
               invalid={invalid}
-              // eslint-disable-next-line
-              onChange={(option: any) => onChange(option.map((o: any) => o.value))}
+              defaultValue={options.filter((o) => value.includes(o.value))}
+              onChange={(option: Option[]) => onChange(option.map((o) => o.value))}
+              toggleButtonAriaLabel={t('common:components:multiselect:toggle')}
+              selectedItemRemoveButtonAriaLabel={t('common:components:multiselect:removeSelected')}
+              clearButtonAriaLabel={t('common:components:multiselect:clear')}
               multiselect
             />
           );
