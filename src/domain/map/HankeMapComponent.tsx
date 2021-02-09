@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Vector as VectorSource } from 'ol/source';
 import { Style, Fill, Stroke } from 'ol/style';
-import { useQuery } from 'react-query';
+import { AxiosResponse } from 'axios';
 import Map from '../../common/components/map/Map';
 import Controls from '../../common/components/map/controls/Controls';
 import LayerControl from '../../common/components/map/controls/LayerControl';
@@ -17,10 +17,12 @@ import { useMapDataLayers } from './hooks/useMapLayers';
 import { useDateRangeFilter } from './hooks/useDateRangeFilter';
 import { MapDataLayerKey, MapTileLayerId } from './types';
 import { HankeData } from '../types/hanke';
-import api from '../../common/utils/api';
 
-// TODO: abstract this into a container that handles state and provides
-// it as pro to this component
+type Props = {
+  loadingProjects: boolean;
+  loadingProjectsError: boolean;
+  projectsData: AxiosResponse<HankeData[]> | undefined;
+};
 
 // Temporary reference style implementation. Actual colors
 // are chosen based on törmäysanalyysi
@@ -36,19 +38,11 @@ const geometryStyle = {
   }),
 };
 
-const getProjectsWithGeometry = async () => {
-  const response = await api.get<HankeData[]>('/hankkeet', {
-    params: {
-      geometry: true,
-    },
-  });
-  return response;
-};
-
-const useProjectsWithGeometry = () => useQuery(['projectsWithGeometry'], getProjectsWithGeometry);
-
-const HankeMap: React.FC = () => {
-  const { isLoading, isError, data: projectsWithGeometryResponse } = useProjectsWithGeometry();
+const HankeMapComponent: React.FC<Props> = ({
+  loadingProjects,
+  loadingProjectsError,
+  projectsData,
+}) => {
   const { dataLayers, mapTileLayers, toggleDataLayer, toggleMapTileLayer } = useMapDataLayers();
   const {
     hankeFilterStartDate,
@@ -60,10 +54,8 @@ const HankeMap: React.FC = () => {
   const [zoom] = useState(9); // TODO: also take zoom into consideration
 
   const hankkeetFilteredByAll =
-    (!isLoading || isError) &&
-    projectsWithGeometryResponse &&
-    Array.isArray(projectsWithGeometryResponse.data)
-      ? projectsWithGeometryResponse.data.filter(
+    (!loadingProjects || loadingProjectsError) && projectsData && Array.isArray(projectsData.data)
+      ? projectsData.data.filter(
           byAllHankeFilters({ startDate: hankeFilterStartDate, endDate: hankeFilterEndDate })
         )
       : [];
@@ -121,4 +113,4 @@ const HankeMap: React.FC = () => {
   );
 };
 
-export default HankeMap;
+export default HankeMapComponent;
