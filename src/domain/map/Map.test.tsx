@@ -4,14 +4,19 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { render } from '../../testUtils/render';
 import { store } from '../../common/redux/store';
-import HankeMap from './HankeMap';
+import HankeMapComponent from './HankeMapComponent';
 import HankeDrawer from './HankeDrawer';
+import { projectsData } from './hankeMapTestData';
 
 describe('Map tile layers can be controlled by layercontrol and share the same state', () => {
   test('Map tile layer toggled control changes when clicked', async () => {
     render(
       <Provider store={store}>
-        <HankeMap />
+        <HankeMapComponent
+          loadingProjects={false}
+          loadingProjectsError={false}
+          projectsData={projectsData}
+        />
       </Provider>
     );
 
@@ -43,7 +48,7 @@ describe('Map tile layers can be controlled by layercontrol and share the same s
 
     const { getByTestId } = render(
       <Provider store={store}>
-        <HankeMap />
+        <HankeMapComponent projectsData={projectsData} />
       </Provider>
     );
 
