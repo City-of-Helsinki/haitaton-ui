@@ -21,22 +21,18 @@ export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJS
   };
 };
 
-export const hankeWithGeometryIsBetweenDates = (
-  hanke: HankeData,
-  hankeFilterStartDate: HankeFilters['startDate'],
-  hankeFilterEndDate: HankeFilters['endDate']
-) => {
-  if (!hanke.geometriat) {
-    return false;
-  }
-  if (hanke.geometriat) {
-    const startDate = new Date(hankeFilterStartDate);
-    const endDate = new Date(hankeFilterEndDate);
-    const hankeStartDate = new Date(hanke.alkuPvm); // TODO: validoi: haittaAlkuPvm vai alkuPvm?
-    const hankeEndDate = new Date(hanke.loppuPvm); // TODO: validoi: haittaLoppuPvm vai loppuPvm?
-    if (hankeEndDate > startDate && hankeEndDate < endDate) return true;
-    if (hankeStartDate > startDate && hankeEndDate < endDate) return true;
-    if (hankeStartDate > startDate && hankeEndDate > endDate) return true;
-  }
+export const hankeHasGeometry = (hanke: HankeData) => hanke.geometriat;
+
+export const hankeIsBetweenDates = ({ endDate, startDate }: HankeFilters) => (hanke: HankeData) => {
+  const filterStartDate = new Date(startDate);
+  const filterEndDate = new Date(endDate);
+  const hankeStartDate = new Date(hanke.alkuPvm); // TODO: validoi: haittaAlkuPvm vai alkuPvm?
+  const hankeEndDate = new Date(hanke.loppuPvm); // TODO: validoi: haittaLoppuPvm vai loppuPvm?
+  if (hankeEndDate > filterStartDate && hankeEndDate < filterEndDate) return true;
+  if (hankeStartDate > filterStartDate && hankeEndDate < filterEndDate) return true;
+  if (hankeStartDate > filterStartDate && hankeEndDate > filterEndDate) return true;
   return false;
 };
+
+export const byAllHankeFilters = (hankeFilters: HankeFilters) => (hanke: HankeData) =>
+  hankeHasGeometry(hanke) && hankeIsBetweenDates(hankeFilters)(hanke);

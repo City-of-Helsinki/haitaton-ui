@@ -37,4 +37,18 @@ describe('Map tile layers can be controlled by layercontrol and share the same s
     expect(screen.getByLabelText('Ortokartta')).not.toBeChecked();
     expect(screen.getByLabelText('Kantakartta')).toBeChecked();
   });
+
+  test('Number of projects displayed on the map can be controlled with dateRangeControl', async () => {
+    // TODO: mock useQuery response in component to provide a set of hankkeet
+
+    const { getByTestId } = render(
+      <Provider store={store}>
+        <HankeMap />
+      </Provider>
+    );
+
+    expect(getByTestId('countOfFilteredHankkeet')).toHaveTextContent('0');
+    // TODO: change the input date
+    // TODO: expect the number of filtered hankkeet has changed
+  });
 });

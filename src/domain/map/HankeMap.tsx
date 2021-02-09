@@ -12,7 +12,7 @@ import Kantakartta from './Layers/Kantakartta';
 import DataLayers from './Layers/DataLayers';
 import Ortokartta from './Layers/Ortokartta';
 import styles from './Map.module.scss';
-import { hankeWithGeometryIsBetweenDates } from './utils';
+import { byAllHankeFilters } from './utils';
 import { useMapDataLayers } from './hooks/useMapLayers';
 import { useDateRangeFilter } from './hooks/useDateRangeFilter';
 import { MapDataLayerKey, MapTileLayerId } from './types';
@@ -59,8 +59,20 @@ const HankeMap: React.FC = () => {
 
   const [zoom] = useState(9); // TODO: also take zoom into consideration
 
+  const hankkeetFilteredByAll =
+    (!isLoading || isError) &&
+    projectsWithGeometryResponse &&
+    Array.isArray(projectsWithGeometryResponse.data)
+      ? projectsWithGeometryResponse.data.filter(
+          byAllHankeFilters({ startDate: hankeFilterStartDate, endDate: hankeFilterEndDate })
+        )
+      : [];
+
   return (
     <>
+      <div data-testid="countOfFilteredHankkeet" className={styles.hiddenTestDiv}>
+        {hankkeetFilteredByAll.length}
+      </div>
       <div
         className={styles.mapContainer}
         style={{ width: '100%', height: '100%', position: 'absolute' }}
@@ -70,39 +82,24 @@ const HankeMap: React.FC = () => {
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
           <DataLayers />
 
-          {(!isLoading || isError) &&
-          projectsWithGeometryResponse &&
-          Array.isArray(projectsWithGeometryResponse.data) ? (
-            projectsWithGeometryResponse.data
-              .filter((hanke) => {
-                return hankeWithGeometryIsBetweenDates(
-                  hanke,
-                  hankeFilterStartDate,
-                  hankeFilterEndDate
-                );
-              })
-
-              .map((hanke) => {
-                return (
-                  <VectorLayer
-                    key={hanke.geometriat?.id}
-                    source={
-                      new VectorSource({
-                        // TS fails interpreting filter. Added type guard
-                        features: hanke.geometriat
-                          ? new GeoJSON().readFeatures(hanke.geometriat.featureCollection)
-                          : [],
-                      })
-                    }
-                    zIndex={100}
-                    className="hankeGeometryLayer"
-                    style={geometryStyle.Blue}
-                  />
-                );
-              })
-          ) : (
-            <></>
-          )}
+          {hankkeetFilteredByAll.map((hanke) => {
+            return (
+              <VectorLayer
+                key={hanke.geometriat?.id}
+                source={
+                  new VectorSource({
+                    // TS fails interpreting filter. Added type guard
+                    features: hanke.geometriat
+                      ? new GeoJSON().readFeatures(hanke.geometriat.featureCollection)
+                      : [],
+                  })
+                }
+                zIndex={100}
+                className="hankeGeometryLayer"
+                style={geometryStyle.Blue}
+              />
+            );
+          })}
 
           <Controls>
             <DateRangeControl

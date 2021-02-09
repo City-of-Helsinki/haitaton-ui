@@ -37,6 +37,7 @@ const DateRangeControl: React.FC<Props> = ({
               }}
               value={formatToFinnishDate(startDate)}
               locale={i18n.language}
+              data-testid="filterStartDateInput"
             />
           </GridItem>
           <GridItem colSpan={1} className={styles.dateHyphen}>
