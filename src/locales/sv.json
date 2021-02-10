@@ -69,11 +69,18 @@
         "title": "SV::Haitaton 2.0 - Kartta"
       }
     },
-    "FORM": {
-      "path": "/form",
-      "headerLabel": "SV::Kaavake",
+    "NEW_HANKE": {
+      "path": "/hanke/uusi",
+      "headerLabel": "SV:Hanke",
       "meta": {
-        "title": "SV::Haitaton 2.0 - Kaavake"
+        "title": "SV:Haitaton 2.0 - Luo uusi hanke"
+      }
+    },
+    "EDIT_HANKE": {
+      "path": "/hanke/:hankeTunnus",
+      "headerLabel": "SV:Hanke",
+      "meta": {
+        "title": "SV: Haitaton 2.0 - Hankkeen muokkaus"
       }
     }
   },

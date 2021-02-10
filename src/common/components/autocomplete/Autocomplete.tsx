@@ -2,12 +2,13 @@ import React from 'react';
 import { Combobox, Tooltip } from 'hds-react';
 import { TooltipProps } from '../../types/tooltip';
 
-export type Option = { value: string | number; label: string };
+export type Option = { value: string | number | null; label: string } | null;
 
 type Options = Array<Option>;
 
 type PropTypes = {
-  defaultValue: Partial<Option>;
+  id: string;
+  value: Partial<Option>;
   label: string;
   options: Options;
   invalid?: boolean;
@@ -18,14 +19,20 @@ type PropTypes = {
   disabled?: boolean;
 };
 
-const findSelected = (options: Options, defaultValue?: Partial<Option>) =>
+const findSelected = (options: Option[], defaultValue?: Partial<Option>) =>
   defaultValue
-    ? options.find((o) => o.value === defaultValue.value || o.label === defaultValue.label)
-    : undefined;
+    ? options.find((o) => {
+        if (o === null) {
+          return true;
+        }
+        return o.value === defaultValue.value || o.label === defaultValue.label;
+      })
+    : { label: '', value: null };
 
 const Autocomplete: React.FC<PropTypes> = ({
+  id,
   options,
-  defaultValue,
+  value,
   label,
   invalid,
   errorMsg,
@@ -36,13 +43,15 @@ const Autocomplete: React.FC<PropTypes> = ({
 }) => (
   <div className="autocomplete">
     {!!tooltip && <Tooltip {...tooltip} />}
-    <Combobox
+    <Combobox<Option>
+      id={id}
       label={label}
       options={options}
       toggleButtonAriaLabel="open"
-      defaultValue={findSelected(options, defaultValue)}
+      value={findSelected(options, value)}
       onChange={(option: Option) => onChange(option)}
       disabled={disabled}
+      data-test-id={id}
       {...rest}
     />
     {invalid && <span className="error-text">{errorMsg}</span>}

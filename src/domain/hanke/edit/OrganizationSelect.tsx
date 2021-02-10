@@ -41,6 +41,7 @@ const OrganizationSelect: React.FC<Props> = ({
   return (
     <div>
       <Autocomplete
+        id={`${contactType}-${index}-organizationAutocomplete`}
         className="formItem"
         label={t(`hankeForm:labels:organisaatio`)}
         options={organizations.map((v) => ({
@@ -48,18 +49,19 @@ const OrganizationSelect: React.FC<Props> = ({
           label: v.nimi,
         }))}
         disabled={isOwn}
-        defaultValue={
+        value={
           isOwn
-            ? {
-                label: '',
-                value: undefined,
-              }
+            ? null
             : {
                 label: contactData.organisaatioNimi || '',
-                value: contactData.organisaatioId || undefined,
+                value: contactData.organisaatioId || null,
               }
         }
         onChange={(option?: Option): void => {
+          if (option === null) {
+            setValue(`${contactType}[${index}].organisaatioId`, null);
+            setValue(`${contactType}[${index}].organisaatioNimi`, '');
+          }
           if (option) {
             setValue(`${contactType}[${index}].organisaatioId`, option.value);
             setValue(`${contactType}[${index}].organisaatioNimi`, option.label);
@@ -67,13 +69,13 @@ const OrganizationSelect: React.FC<Props> = ({
         }}
       />
       <Checkbox
-        id={`${contactType}-isOwnOrganization`}
+        id={`${contactType}-${index}-isOmaOrganisaatio`}
         label={t(`hankeForm:labels:omaOrganisaatio`)}
         checked={isOwn}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           setIsOwn(e.target.checked);
         }}
-        data-testid={`${contactType}-isOmaOrganisaatio`}
+        data-testid={`${contactType}-${index}-isOmaOrganisaatio`}
       />
       <TypedController
         name={[contactType, index, 'organisaatioNimi']}
