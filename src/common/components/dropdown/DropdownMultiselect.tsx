@@ -51,7 +51,7 @@ const Dropdown: React.FC<PropTypes> = ({
               options={options}
               label={label}
               invalid={invalid}
-              defaultValue={options.filter((o) => value.includes(o.value))}
+              defaultValue={value && options.filter((o) => value.includes(o.value))}
               onChange={(option: Option[]) => onChange(option.map((o) => o.value))}
               toggleButtonAriaLabel={t('common:components:multiselect:toggle')}
               selectedItemRemoveButtonAriaLabel={t('common:components:multiselect:removeSelected')}
