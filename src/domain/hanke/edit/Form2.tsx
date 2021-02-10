@@ -7,7 +7,7 @@ import { TextInput } from 'hds-react';
 import { CONTACT_FORMFIELD, FormProps, HankeDataFormState, Organization } from './types';
 import { HANKE_CONTACT_TYPE } from '../../types/hanke';
 
-import api from '../../../common/utils/api';
+import api from '../../api/api';
 import { getInputErrorText } from '../../../common/utils/form';
 import H2 from '../../../common/components/text/H2';
 import H3 from '../../../common/components/text/H3';

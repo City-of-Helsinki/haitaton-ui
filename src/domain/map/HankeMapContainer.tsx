@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 import { HankeData } from '../types/hanke';
-import api from '../../common/utils/api';
+import api from '../api/api';
 import HankeMapComponent from './HankeMapComponent';
 
 const getProjectsWithGeometry = async () => {

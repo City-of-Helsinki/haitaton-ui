@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ReducerState, HankeGeometryApiRequestData, HankeGeometryApiResponseData } from './types';
-import api from '../../common/utils/api';
+import api from '../api/api';
 
 type SaveGeometryArguments = {
   hankeTunnus: string;
