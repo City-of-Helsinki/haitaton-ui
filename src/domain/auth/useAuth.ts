@@ -23,19 +23,23 @@ export interface Profile {
 /* eslint-enable  */
 
 interface AuthState {
-  profile: Profile | null;
+  profile: Partial<Profile> | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: Error | null;
 }
 
 function useProfile(): AuthState {
-  const [profile, setProfile] = React.useState<Profile | null>(null);
+  // Temporary hack to bybass auth in e2e tests
+  const [profile, setProfile] = React.useState<Partial<Profile> | null>(
+    process.env.REACT_APP_ENV === 'e2e' ? {} : null
+  );
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<Error | null>(null);
 
   React.useEffect(() => {
-    let ignore = false;
+    // Temporary hack to bybass auth in e2e tests
+    let ignore = process.env.REACT_APP_ENV === 'e2e';
 
     function getUser() {
       setIsLoading(true);
