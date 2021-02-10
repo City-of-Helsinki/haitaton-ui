@@ -19,7 +19,7 @@ context('EditHankePage', () => {
       },
       savedHanke
     );
-    cy.visit(`/fi/hanke/${savedHanke.hankeTunnus}`);
+    cy.visit(`/fi/hanke/${savedHanke.hankeTunnus}/muokkaa`);
   });
 
   it('Editing hanke should fetch and populate form data', () => {

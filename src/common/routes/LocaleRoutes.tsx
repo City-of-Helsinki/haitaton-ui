@@ -26,8 +26,10 @@ const LocaleRoutes: React.FC<Props> = ({
   },
 }) => {
   const history = useHistory();
-  const { i18n, t } = useTranslation();
+  const useTranslationResponse = useTranslation();
   const { HOME, NEW_HANKE, EDIT_HANKE, PROJECTS, MAP } = useLocalizedRoutes();
+
+  const { i18n } = useTranslationResponse;
   const { language: currentLocale } = i18n;
 
   // Update language when route param changes
@@ -41,10 +43,8 @@ const LocaleRoutes: React.FC<Props> = ({
     if (currentLocale === localeParam) return;
     i18n.changeLanguage(currentLocale);
     const redirectPath = getRouteLocalization({
-      t,
-      i18n,
+      useTranslationResponse,
       route: getMatchingRouteKey(i18n, localeParam, location.pathname),
-      language: currentLocale as Language,
       name: 'path',
     });
 
