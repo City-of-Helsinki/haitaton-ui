@@ -6,7 +6,6 @@ import { render } from '../../testUtils/render';
 import { store } from '../../common/redux/store';
 import HankeMapComponent from './HankeMapComponent';
 import HankeDrawer from './HankeDrawer';
-import { projectsData } from './hankeMapTestData';
 
 describe('Map tile layers can be controlled by layercontrol and share the same state', () => {
   test('Map tile layer toggled control changes when clicked', async () => {
@@ -15,7 +14,7 @@ describe('Map tile layers can be controlled by layercontrol and share the same s
         <HankeMapComponent
           loadingProjects={false}
           loadingProjectsError={false}
-          projectsData={projectsData}
+          projectsData={undefined}
         />
       </Provider>
     );
@@ -44,11 +43,15 @@ describe('Map tile layers can be controlled by layercontrol and share the same s
   });
 
   test('Number of projects displayed on the map can be controlled with dateRangeControl', async () => {
-    // TODO: mock useQuery response in component to provide a set of hankkeet
+    // TODO: provide mock API response object to projectsData in order to test the component
 
     const { getByTestId } = render(
       <Provider store={store}>
-        <HankeMapComponent projectsData={projectsData} />
+        <HankeMapComponent
+          loadingProjects={false}
+          loadingProjectsError={false}
+          projectsData={undefined}
+        />
       </Provider>
     );
 
