@@ -84,9 +84,9 @@ const OrganizationSelect: React.FC<Props> = ({
           <TextInput
             className="formItem"
             label={t(`hankeForm:labels:InsertOmaOrganisaatio`)}
-            id={`${contactType}-organisaatioNimi`}
-            name={`${contactType}-organisaatioNimi`}
-            data-testid={`${contactType}-organisaatioNimi`}
+            id={`${contactType}-${index}-organisaatioNimi`}
+            name={`${contactType}-${index}-organisaatioNimi`}
+            data-testid={`${contactType}-${index}-organisaatioNimi`}
             ref={register}
             disabled={!isOwn}
             value={isOwn ? value : ''}
