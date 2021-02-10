@@ -30,16 +30,12 @@ interface AuthState {
 }
 
 function useProfile(): AuthState {
-  // Temporary hack to bybass auth in e2e tests
-  const [profile, setProfile] = React.useState<Partial<Profile> | null>(
-    process.env.REACT_APP_ENV === 'e2e' ? {} : null
-  );
+  const [profile, setProfile] = React.useState<Partial<Profile> | null>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<Error | null>(null);
 
   React.useEffect(() => {
-    // Temporary hack to bybass auth in e2e tests
-    let ignore = process.env.REACT_APP_ENV === 'e2e';
+    let ignore = false;
 
     function getUser() {
       setIsLoading(true);

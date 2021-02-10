@@ -21,7 +21,12 @@ const PrivateRoute: React.FC<Props> = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={(props) => (isAuthenticated ? <Component {...props} /> : <p>Kirjaudu sisään</p>)}
+      render={(props) => (
+        <div>
+          {!isAuthenticated && <p>Kirjaudu sisään</p>}
+          <Component {...props} />
+        </div>
+      )}
     />
   );
 };
