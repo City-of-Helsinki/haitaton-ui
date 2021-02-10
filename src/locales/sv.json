@@ -201,7 +201,7 @@
       "osasto": "SV:Osasto",
       "organisaatio": "SV:Organisaatio",
       "omaOrganisaatio": "SV:Lisää oma organisaatio",
-      "InsertOmaOrganisaatio": "SV:Syötä oma organisaatio"
+      "insertOmaOrganisaatio": "SV:Syötä oma organisaatio"
     },
     "headers": {
       "arvioijat": "SV:Arvioijat",

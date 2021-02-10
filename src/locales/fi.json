@@ -201,7 +201,7 @@
       "osasto": "Osasto",
       "organisaatio": "Organisaatio",
       "omaOrganisaatio": "Lisää oma organisaatio",
-      "InsertOmaOrganisaatio": "Syötä oma organisaatio"
+      "insertOmaOrganisaatio": "Syötä oma organisaatio"
     },
     "headers": {
       "arvioijat": "Arvioijat",

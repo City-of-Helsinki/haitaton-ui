@@ -202,7 +202,7 @@
       "osasto": "EN:Osasto",
       "organisaatio": "EN:Organisaatio",
       "omaOrganisaatio": "EN:Lisää oma organisaatio",
-      "InsertOmaOrganisaatio": "EN:Syötä oma organisaatio"
+      "insertOmaOrganisaatio": "EN:Syötä oma organisaatio"
     },
     "headers": {
       "arvioijat": "EN:Arvioijat",
