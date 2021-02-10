@@ -36,6 +36,8 @@ const DateRangeControl: React.FC<Props> = ({
                 updateStartDate(toEndOfDayUTCISO(date));
               }}
               value={formatToFinnishDate(startDate)}
+              selected={new Date(startDate)}
+              maxDate={new Date(endDate)}
               locale={i18n.language}
               data-testid="filterStartDateInput"
             />
@@ -52,6 +54,8 @@ const DateRangeControl: React.FC<Props> = ({
                   updateEndDate(toEndOfDayUTCISO(date));
                 }}
                 value={formatToFinnishDate(endDate)}
+                selected={new Date(endDate)}
+                minDate={new Date(startDate)}
                 locale={i18n.language}
               />
             </div>
