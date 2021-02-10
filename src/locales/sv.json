@@ -266,6 +266,10 @@
     "tileLayers": {
       "ortokartta": "SV: Ortokartta",
       "kantakartta": "SV: Kantakartta"
+    },
+    "dateRange": {
+      "begin": "SV: Ajanjakson alku",
+      "end": "SV: Ajanjakson loppu"
     }
   }
 }

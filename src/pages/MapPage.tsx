@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
 import PageMeta from './components/PageMeta';
-import HankeMap from '../domain/map/HankeMap';
+import HankeMapContainer from '../domain/map/HankeMapContainer';
 
 const MapPage: React.FC = () => {
   const { MAP } = useLocalizedRoutes();
@@ -9,7 +9,7 @@ const MapPage: React.FC = () => {
   return (
     <>
       <PageMeta routeData={MAP} />
-      <HankeMap />
+      <HankeMapContainer />
     </>
   );
 };

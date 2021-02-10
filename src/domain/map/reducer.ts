@@ -12,6 +12,8 @@ import {
 } from './types';
 import { DATALAYERS, MAPTILES } from './constants';
 
+const currentYear = new Date().getFullYear();
+
 const selectProject: CaseReducer<ReducerState, PayloadAction<string>> = (state, action) => {
   state.selectedProject = action.payload;
 };
@@ -36,6 +38,17 @@ const updateDrawGeometry: CaseReducer<ReducerState, PayloadAction<HankeGeoJSON>>
   action
 ) => {
   state.drawGeometry = action.payload;
+};
+
+const setHankeFilterStartDate: CaseReducer<ReducerState, PayloadAction<string>> = (
+  state,
+  action
+) => {
+  state.hankeFilters.startDate = action.payload;
+};
+
+const setHankeFilterEndDate: CaseReducer<ReducerState, PayloadAction<string>> = (state, action) => {
+  state.hankeFilters.endDate = action.payload;
 };
 
 const buildDatalayerState = (key: MapDataLayerKey, data: CommonGeoJSON): MapDatalayerState => ({
@@ -78,6 +91,10 @@ const initialState: ReducerState = {
     [MAPTILES.ORTOKARTTA]: buildTilelayerState(MAPTILES.ORTOKARTTA, false),
     [MAPTILES.KANTAKARTTA]: buildTilelayerState(MAPTILES.KANTAKARTTA, true),
   },
+  hankeFilters: {
+    startDate: `${currentYear}-01-01`,
+    endDate: `${currentYear + 1}-12-31`,
+  },
 };
 
 const mapSlice = createSlice({
@@ -88,6 +105,8 @@ const mapSlice = createSlice({
     updateDrawGeometry,
     toggleLayer,
     toggleMapTileLayer,
+    setHankeFilterStartDate,
+    setHankeFilterEndDate,
   },
   extraReducers: (builder) => {
     builder.addCase(saveGeometryData.fulfilled, (state) => {
