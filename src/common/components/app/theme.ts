@@ -1,4 +1,3 @@
-// import { theme } from '@chakra-ui/core';
 import { extendTheme } from '@chakra-ui/react';
 import { createBreakpoints } from '@chakra-ui/theme-tools';
 
@@ -27,8 +26,7 @@ export const breakpoints = createBreakpoints({
 });
 
 const customTheme = extendTheme({
-  // space,
-  // breakpoints,
+  breakpoints,
 });
 
 export default customTheme;
