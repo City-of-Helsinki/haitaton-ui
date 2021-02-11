@@ -13,7 +13,11 @@ const getProjectsWithGeometry = async () => {
   return response;
 };
 
-const useProjectsWithGeometry = () => useQuery(['projectsWithGeometry'], getProjectsWithGeometry);
+const useProjectsWithGeometry = () =>
+  useQuery(['projectsWithGeometry'], getProjectsWithGeometry, {
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
 
 const HankeMapContainer: React.FC = () => {
   const { data } = useProjectsWithGeometry();

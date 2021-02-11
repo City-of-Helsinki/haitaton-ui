@@ -1,32 +1,71 @@
 import React from 'react';
-import {
-  Button,
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerOverlay,
-  DrawerHeader,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
+import { Drawer, DrawerBody, DrawerContent, useDisclosure } from '@chakra-ui/react';
+import Text from '../../../../common/components/text/Text';
+import { formatToFinnishDate } from '../../../../common/utils/date';
+import { HankeData } from '../../../types/hanke';
+import styles from './HankeSidebar.module.scss';
 
-const HankeSidebar: React.FC = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+type Props = {
+  hanke: HankeData;
+};
+
+type SectionProps = {
+  title: string;
+  content: string;
+};
+
+const SidebarSection: React.FC<SectionProps> = ({ title, content }) =>
+  title && title !== '' && content && content !== '' ? (
+    <>
+      <Text tag="h3" styleAs="h5" weight="bold" spacingBottom="xs">
+        {title}
+      </Text>
+      <Text tag="p" styleAs="body-s" spacingBottom="s">
+        {content}
+      </Text>
+    </>
+  ) : null;
+
+const HankeSidebar: React.FC<Props> = ({ hanke }) => {
+  const { t } = useTranslation();
+  const { isOpen, onClose } = useDisclosure({
+    defaultIsOpen: true,
+  });
 
   return (
-    <>
-      <Button onClick={onOpen}>Open Drawer</Button>
-      <Drawer placement="left" onClose={onClose} isOpen={isOpen} size="m">
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerHeader borderBottomWidth="1px">Basic Drawer</DrawerHeader>
-          <DrawerBody>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
-    </>
+    <Drawer placement="left" onClose={onClose} isOpen={isOpen} size="md">
+      <DrawerContent className={styles.hankeSidebar__content}>
+        <DrawerBody>
+          <Text tag="h2" weight="bold" styleAs="h4" spacing="xs">
+            {hanke.nimi} ({hanke.hankeTunnus})
+          </Text>
+          <Text tag="h3" styleAs="h5" weight="bold" spacingBottom="xs">
+            {hanke.tyomaaKatuosoite}
+          </Text>
+          <Text tag="h3" styleAs="h6" weight="bold" spacingBottom="s">
+            {formatToFinnishDate(hanke.alkuPvm)} - {formatToFinnishDate(hanke.loppuPvm)}
+          </Text>
+          <SidebarSection
+            title={t('hankeForm:labels.vaihe')}
+            content={t(`hanke:vaihe:${hanke.vaihe}`)}
+          />
+          {hanke.omistajat[0] && (
+            <SidebarSection
+              title={t('hankeForm:labels.organisaatio')}
+              content={hanke.omistajat[0].organisaatioNimi}
+            />
+          )}
+          <SidebarSection
+            title={t('hankeForm:labels.tyomaaTyyppi')}
+            content={hanke.tyomaaTyyppi
+              .map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`))
+              .join(', ')}
+          />
+          <SidebarSection title={t('hankeForm:labels.kuvaus')} content={hanke.kuvaus} />
+        </DrawerBody>
+      </DrawerContent>
+    </Drawer>
   );
 };
 

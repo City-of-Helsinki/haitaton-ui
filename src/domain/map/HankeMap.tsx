@@ -10,7 +10,7 @@ import VectorLayer from '../../common/components/map/layers/VectorLayer';
 import Kantakartta from './components/Layers/Kantakartta';
 import DataLayers from './components/Layers/DataLayers';
 import Ortokartta from './components/Layers/Ortokartta';
-import HankeSidebar from './components/HankeSidebar/HankeSidebar';
+import HankeSidebar from './components/HankeSidebar/HankeSidebarContainer';
 import styles from './Map.module.scss';
 import { byAllHankeFilters } from './utils';
 import { useMapDataLayers } from './hooks/useMapLayers';
