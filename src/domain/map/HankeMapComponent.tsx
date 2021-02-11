@@ -18,8 +18,6 @@ import { MapDataLayerKey, MapTileLayerId } from './types';
 import { HankeData } from '../types/hanke';
 
 type Props = {
-  loadingProjects: boolean;
-  loadingProjectsError: boolean;
   projectsData: HankeData[];
 };
 
@@ -37,11 +35,7 @@ const geometryStyle = {
   }),
 };
 
-const HankeMapComponent: React.FC<Props> = ({
-  loadingProjects,
-  loadingProjectsError,
-  projectsData,
-}) => {
+const HankeMapComponent: React.FC<Props> = ({ projectsData }) => {
   const { dataLayers, mapTileLayers, toggleDataLayer, toggleMapTileLayer } = useMapDataLayers();
   const {
     hankeFilterStartDate,
