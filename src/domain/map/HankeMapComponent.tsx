@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Vector as VectorSource } from 'ol/source';
 import { Style, Fill, Stroke } from 'ol/style';
-import { AxiosResponse } from 'axios';
 import Map from '../../common/components/map/Map';
 import Controls from '../../common/components/map/controls/Controls';
 import LayerControl from '../../common/components/map/controls/LayerControl';
@@ -53,19 +52,20 @@ const HankeMapComponent: React.FC<Props> = ({
 
   const [zoom] = useState(9); // TODO: also take zoom into consideration
 
-  const [hankeSources] = useState<VectorSource>(new VectorSource());
+  const hankeSources = useRef({ features: new VectorSource() });
 
-  const hankkeetFilteredByAll =
-    (!loadingProjects || loadingProjectsError) && projectsData && Array.isArray(projectsData)
-      ? projectsData.filter(
-          byAllHankeFilters({ startDate: hankeFilterStartDate, endDate: hankeFilterEndDate })
-        )
-      : [];
+  const hankkeetFilteredByAll = projectsData.filter(
+    byAllHankeFilters({ startDate: hankeFilterStartDate, endDate: hankeFilterEndDate })
+  );
 
   useEffect(() => {
+    hankeSources.current.features.clear();
     hankkeetFilteredByAll.forEach((hanke) => {
-      if (hanke.geometriat)
-        hankeSources.addFeatures(new GeoJSON().readFeatures(hanke.geometriat.featureCollection));
+      if (hanke.geometriat) {
+        hankeSources.current.features.addFeatures(
+          new GeoJSON().readFeatures(hanke.geometriat.featureCollection)
+        );
+      }
     });
   }, [hankkeetFilteredByAll]);
 
@@ -83,17 +83,12 @@ const HankeMapComponent: React.FC<Props> = ({
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
           <DataLayers />
 
-          {hankkeetFilteredByAll.map((hanke) => {
-            return (
-              <VectorLayer
-                key={hanke.geometriat?.id}
-                source={hankeSources}
-                zIndex={100}
-                className="hankeGeometryLayer"
-                style={geometryStyle.Blue}
-              />
-            );
-          })}
+          <VectorLayer
+            source={hankeSources.current.features}
+            zIndex={100}
+            className="hankeGeometryLayer"
+            style={geometryStyle.Blue}
+          />
 
           <Controls>
             <DateRangeControl
