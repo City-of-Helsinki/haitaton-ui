@@ -1,8 +1,8 @@
-import { theme } from '@chakra-ui/core';
+// import { theme } from '@chakra-ui/core';
 import { extendTheme } from '@chakra-ui/react';
 import { createBreakpoints } from '@chakra-ui/theme-tools';
 
-export const baseSizes = {
+/* export const space = {
   ...theme.space,
   '4xs': '0.125rem',
   '3xs': '0.25rem',
@@ -16,9 +16,9 @@ export const baseSizes = {
   '3xl': '3.5rem',
   '4xl': '4rem',
   '5xl': '4.5rem',
-};
+}; */
 
-const breakpoints = createBreakpoints({
+export const breakpoints = createBreakpoints({
   sm: '320px',
   md: '576px',
   lg: '768px',
@@ -27,10 +27,8 @@ const breakpoints = createBreakpoints({
 });
 
 const customTheme = extendTheme({
-  ...theme,
-  space: baseSizes,
-  // eslint-disable-next-line
-  breakpoints: breakpoints,
+  // space,
+  // breakpoints,
 });
 
 export default customTheme;

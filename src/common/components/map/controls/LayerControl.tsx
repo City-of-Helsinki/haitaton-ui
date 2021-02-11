@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, MenuButton, MenuList, MenuGroup, MenuDivider } from '@chakra-ui/core';
+import { Menu, MenuButton, MenuList, MenuGroup, MenuDivider } from '@chakra-ui/react';
 import { IconLayers } from 'hds-react/icons';
 import { useTranslation } from 'react-i18next';
 import { Checkbox } from 'hds-react';

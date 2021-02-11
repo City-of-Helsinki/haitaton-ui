@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
-import api from '../api/api';
-import { HankeGeometria } from '../types/hanke';
+import api from '../../../api/api';
+import { HankeGeometria } from '../../../types/hanke';
 import HankeDrawer from './HankeDrawer';
 
 type HankeTunnus = string | undefined;

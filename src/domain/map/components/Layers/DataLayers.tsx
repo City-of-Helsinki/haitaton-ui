@@ -1,10 +1,10 @@
 import React from 'react';
 import { Vector as VectorSource } from 'ol/source';
 import GeoJSON from 'ol/format/GeoJSON';
-import VectorLayer from '../../../common/components/map/layers/VectorLayer';
-import { useMapDataLayers } from '../hooks/useMapLayers';
-import { CommonGeoJSON } from '../../../common/types/hanke';
-import { epsg3857, epsg3879 } from '../../../common/components/map/constants';
+import VectorLayer from '../../../../common/components/map/layers/VectorLayer';
+import { useMapDataLayers } from '../../hooks/useMapLayers';
+import { CommonGeoJSON } from '../../../../common/types/hanke';
+import { epsg3857, epsg3879 } from '../../../../common/components/map/constants';
 
 const createSource = (data: CommonGeoJSON) => {
   const source = new VectorSource();
