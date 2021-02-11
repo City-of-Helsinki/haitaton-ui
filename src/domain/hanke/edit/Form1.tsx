@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import HankeDrawer from '../../map/HankeDrawerContainer';
+import HankeDrawer from '../../map/components/HankeDrawer/HankeDrawerContainer';
 import H2 from '../../../common/components/text/H2';
 import { useFormPage } from './hooks/useFormPage';
 import { FORMFIELD, FormProps } from './types';

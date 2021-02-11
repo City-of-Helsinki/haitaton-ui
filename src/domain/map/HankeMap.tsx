@@ -7,9 +7,10 @@ import Controls from '../../common/components/map/controls/Controls';
 import LayerControl from '../../common/components/map/controls/LayerControl';
 import DateRangeControl from '../../common/components/map/controls/DateRangeControl';
 import VectorLayer from '../../common/components/map/layers/VectorLayer';
-import Kantakartta from './Layers/Kantakartta';
-import DataLayers from './Layers/DataLayers';
-import Ortokartta from './Layers/Ortokartta';
+import Kantakartta from './components/Layers/Kantakartta';
+import DataLayers from './components/Layers/DataLayers';
+import Ortokartta from './components/Layers/Ortokartta';
+import HankeSidebar from './components/HankeSidebar/HankeSidebarContainer';
 import styles from './Map.module.scss';
 import { byAllHankeFilters } from './utils';
 import { useMapDataLayers } from './hooks/useMapLayers';
@@ -35,7 +36,7 @@ const geometryStyle = {
   }),
 };
 
-const HankeMapComponent: React.FC<Props> = ({ projectsData }) => {
+const HankeMap: React.FC<Props> = ({ projectsData }) => {
   const { dataLayers, mapTileLayers, toggleDataLayer, toggleMapTileLayer } = useMapDataLayers();
   const {
     hankeFilterStartDate,
@@ -65,6 +66,8 @@ const HankeMapComponent: React.FC<Props> = ({ projectsData }) => {
 
   return (
     <>
+      <HankeSidebar />
+
       <div data-testid="countOfFilteredHankkeet" className={styles.hiddenTestDiv}>
         {hankkeetFilteredByAll.length}
       </div>
@@ -104,4 +107,4 @@ const HankeMapComponent: React.FC<Props> = ({ projectsData }) => {
   );
 };
 
-export default HankeMapComponent;
+export default HankeMap;

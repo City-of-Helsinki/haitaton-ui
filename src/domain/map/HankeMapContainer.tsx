@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import { HankeData } from '../types/hanke';
 import api from '../api/api';
-import HankeMapComponent from './HankeMapComponent';
+import HankeMap from './HankeMap';
 
 const getProjectsWithGeometry = async () => {
   const response = await api.get<HankeData[]>('/hankkeet', {
@@ -13,13 +13,17 @@ const getProjectsWithGeometry = async () => {
   return response;
 };
 
-const useProjectsWithGeometry = () => useQuery(['projectsWithGeometry'], getProjectsWithGeometry);
+const useProjectsWithGeometry = () =>
+  useQuery(['projectsWithGeometry'], getProjectsWithGeometry, {
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
 
 const HankeMapContainer: React.FC = () => {
   const { data } = useProjectsWithGeometry();
   const projectsData = data ? data.data : [];
 
-  return <HankeMapComponent projectsData={projectsData} />;
+  return <HankeMap projectsData={projectsData} />;
 };
 
 export default HankeMapContainer;
