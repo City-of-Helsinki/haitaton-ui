@@ -26,11 +26,36 @@ export const hankeHasGeometry = (hanke: HankeData) => hanke.geometriat;
 export const hankeIsBetweenDates = ({ endDate, startDate }: HankeFilters) => (hanke: HankeData) => {
   const filterStartDate = new Date(startDate);
   const filterEndDate = new Date(endDate);
-  const hankeStartDate = new Date(hanke.alkuPvm); // TODO: validoi: haittaAlkuPvm vai alkuPvm?
-  const hankeEndDate = new Date(hanke.loppuPvm); // TODO: validoi: haittaLoppuPvm vai loppuPvm?
-  if (hankeEndDate > filterStartDate && hankeEndDate < filterEndDate) return true;
-  if (hankeStartDate > filterStartDate && hankeEndDate < filterEndDate) return true;
-  if (hankeStartDate > filterStartDate && hankeEndDate > filterEndDate) return true;
+  const hankeStartDate = new Date(hanke.alkuPvm);
+  const hankeEndDate = new Date(hanke.loppuPvm);
+  if (
+    hankeStartDate < filterStartDate &&
+    hankeStartDate < filterEndDate &&
+    hankeEndDate > filterStartDate &&
+    hankeEndDate < filterEndDate
+  )
+    return true;
+  if (
+    hankeStartDate > filterStartDate &&
+    hankeStartDate < filterEndDate &&
+    hankeEndDate > filterStartDate &&
+    hankeEndDate < filterEndDate
+  )
+    return true;
+  if (
+    hankeStartDate > filterStartDate &&
+    hankeStartDate < filterEndDate &&
+    hankeEndDate > filterStartDate &&
+    hankeEndDate > filterEndDate
+  )
+    return true;
+  if (
+    hankeStartDate < filterStartDate &&
+    hankeStartDate < filterEndDate &&
+    hankeEndDate > filterStartDate &&
+    hankeEndDate < filterEndDate
+  )
+    return true;
   return false;
 };
 
