@@ -14,8 +14,8 @@ type Props = {
   initialData: HankeDataDraft[];
 };
 
-const Projects: React.FC<Props> = ({ initialData }) => {
-  const { FORM } = useLocalizedRoutes();
+const HankeList: React.FC<Props> = ({ initialData }) => {
+  const { NEW_HANKE } = useLocalizedRoutes();
 
   const { t } = useTranslation();
   const columns = React.useMemo(
@@ -60,7 +60,7 @@ const Projects: React.FC<Props> = ({ initialData }) => {
       <div className="hankelista__inner">
         <Table columns={columns} data={initialData || []} />
         <div className="hankelista__buttonWpr">
-          <NavLink data-testid="toFormLink" to={FORM.path} className="hankelista__hankeLink">
+          <NavLink data-testid="toFormLink" to={NEW_HANKE.path} className="hankelista__hankeLink">
             <Locale id="header:hankeLink" />
           </NavLink>
         </div>
@@ -69,4 +69,4 @@ const Projects: React.FC<Props> = ({ initialData }) => {
   );
 };
 
-export default Projects;
+export default HankeList;

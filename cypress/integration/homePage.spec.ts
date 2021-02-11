@@ -3,10 +3,10 @@
 context('HomePage', () => {
   beforeEach(() => {
     cy.visit('/fi/');
+    cy.injectAxe();
   });
 
   it('should be accessible', () => {
-    cy.injectAxe();
     cy.checkA11y();
   });
 });

@@ -4,14 +4,18 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { render } from '../../testUtils/render';
 import { store } from '../../common/redux/store';
-import HankeMap from './HankeMap';
+import HankeMapComponent from './HankeMapComponent';
 import HankeDrawer from './HankeDrawer';
 
 describe('Map tile layers can be controlled by layercontrol and share the same state', () => {
   test('Map tile layer toggled control changes when clicked', async () => {
     render(
       <Provider store={store}>
-        <HankeMap />
+        <HankeMapComponent
+          loadingProjects={false}
+          loadingProjectsError={false}
+          projectsData={undefined}
+        />
       </Provider>
     );
 
@@ -36,5 +40,23 @@ describe('Map tile layers can be controlled by layercontrol and share the same s
     await userEvent.click(screen.getByText('Kantakartta'));
     expect(screen.getByLabelText('Ortokartta')).not.toBeChecked();
     expect(screen.getByLabelText('Kantakartta')).toBeChecked();
+  });
+
+  test('Number of projects displayed on the map can be controlled with dateRangeControl', async () => {
+    // TODO: provide mock API response object to projectsData in order to test the component
+
+    const { getByTestId } = render(
+      <Provider store={store}>
+        <HankeMapComponent
+          loadingProjects={false}
+          loadingProjectsError={false}
+          projectsData={undefined}
+        />
+      </Provider>
+    );
+
+    expect(getByTestId('countOfFilteredHankkeet')).toHaveTextContent('0');
+    // TODO: change the input date
+    // TODO: expect the number of filtered hankkeet has changed
   });
 });

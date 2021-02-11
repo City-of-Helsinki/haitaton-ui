@@ -1,0 +1,18 @@
+.dateRangeControl {
+  position: absolute;
+  bottom: 7rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.datePicker {
+  padding: 5px;
+}
+
+.dateHyphen {
+  align-items: center;
+  // padding-top: 1rem; FIXME: datepicker input width must be limited
+  // otherwise it goes on top of the hyphen
+  padding-top: 10px;
+  justify-content: center;
+}

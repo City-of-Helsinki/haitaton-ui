@@ -2,7 +2,8 @@ export enum ROUTES {
   PROJECTS = 'PROJECTS',
   HOME = 'HOME',
   MAP = 'MAP',
-  FORM = 'FORM',
+  NEW_HANKE = 'NEW_HANKE',
+  EDIT_HANKE = 'EDIT_HANKE',
 }
 
 export type Route = keyof typeof ROUTES;

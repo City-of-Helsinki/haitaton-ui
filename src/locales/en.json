@@ -62,11 +62,18 @@
         "title": "EN::Haitaton 2.0 - Kartta"
       }
     },
-    "FORM": {
-      "path": "/form",
-      "headerLabel": "EN::Kaavake",
+    "NEW_HANKE": {
+      "path": "/hanke/new",
+      "headerLabel": "EN:Hanke",
       "meta": {
-        "title": "EN::Haitaton 2.0 - Kaavake"
+        "title": "EN:Haitaton 2.0 - Luo uusi hanke"
+      }
+    },
+    "EDIT_HANKE": {
+      "path": "/hanke/:hankeTunnus/edit",
+      "headerLabel": "EN:Hanke",
+      "meta": {
+        "title": "EN:Haitaton 2.0 - Hankkeen muokkaus"
       }
     }
   },
@@ -231,6 +238,21 @@
       "step": "EN:Vaihe",
       "startDate": "EN:Aloitus",
       "endDate": "EN:Lopetus"
+    },
+    "sortButtons": {
+      "id": "EN:Lajittele taulukko tunnuksen mukaan",
+      "name": "EN:Lajittele taulukko nimen mukaan",
+      "step": "EN:Lajittele taulukko vaiheen mukaan",
+      "startDate": "EN:Lajittele taulukko aloitus päivämäärän mukaan",
+      "endDate": "EN:Lajittele taulukko lopetus päivämäärän mukaan"
+    },
+    "buttons": {
+      "edit": "EN:Muokkaa hanketta",
+      "delete": "EN:Poista hanke",
+      "toFirstPage": "EN:Listan ensimmäiselle sivulle",
+      "toPreviousPage": "EN:Listan edelliselle sivulle",
+      "toNextPage": "EN:Listan seuraavalle sivulle",
+      "toLastPage": "EN:Listan viimeiselle sivulle"
     }
   },
   "map": {
@@ -243,6 +265,10 @@
     "tileLayers": {
       "ortokartta": "EN: Ortokartta",
       "kantakartta": "EN: Kantakartta"
+    },
+    "dateRange": {
+      "begin": "EN: Ajanjakson alku",
+      "end": "EN: Ajanjakson loppu"
     }
   }
 }

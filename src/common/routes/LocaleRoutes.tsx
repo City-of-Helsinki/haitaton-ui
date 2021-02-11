@@ -2,9 +2,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { Language } from '../types/language';
-import ProjectsPage from '../../pages/ProjectsPage';
+import HankeListPage from '../../pages/HankeListPage';
 import MapPage from '../../pages/MapPage';
-import ProjectPage from '../../pages/ProjectPage';
+import NewHankePage from '../../pages/NewHankePage';
+import EditHankePage from '../../pages/EditHankePage';
 import HomePage from '../../pages/HomePage';
 import {
   useLocalizedRoutes,
@@ -25,8 +26,10 @@ const LocaleRoutes: React.FC<Props> = ({
   },
 }) => {
   const history = useHistory();
-  const { i18n, t } = useTranslation();
-  const { HOME, FORM, PROJECTS, MAP } = useLocalizedRoutes();
+  const useTranslationResponse = useTranslation();
+  const { HOME, NEW_HANKE, EDIT_HANKE, PROJECTS, MAP } = useLocalizedRoutes();
+
+  const { i18n } = useTranslationResponse;
   const { language: currentLocale } = i18n;
 
   // Update language when route param changes
@@ -36,23 +39,24 @@ const LocaleRoutes: React.FC<Props> = ({
 
   // Redirect when user changes langauge
   React.useEffect(() => {
+    // return if nothing changed
+    if (currentLocale === localeParam) return;
     i18n.changeLanguage(currentLocale);
     const redirectPath = getRouteLocalization({
-      t,
-      i18n,
+      useTranslationResponse,
       route: getMatchingRouteKey(i18n, localeParam, location.pathname),
-      language: currentLocale as Language,
       name: 'path',
     });
 
     history.push(redirectPath);
-  }, [currentLocale]);
+  }, [currentLocale, localeParam]);
 
   return (
     <Switch>
       <Route exact path={HOME.path} component={HomePage} />
-      <Route exact path={FORM.path} component={ProjectPage} />
-      <Route exact path={PROJECTS.path} component={ProjectsPage} />
+      <Route exact path={NEW_HANKE.path} component={NewHankePage} />
+      <Route exact path={EDIT_HANKE.path} component={EditHankePage} />
+      <Route exact path={PROJECTS.path} component={HankeListPage} />
       <Route exact path={MAP.path} component={MapPage} />
     </Switch>
   );

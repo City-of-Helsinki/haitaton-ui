@@ -1,6 +1,7 @@
 import GeoJSON from 'ol/format/GeoJSON';
 import { HankeGeoJSON } from '../../common/types/hanke';
-import { GeometryData } from './types';
+import { GeometryData, HankeFilters } from './types';
+import { HankeData } from '../types/hanke';
 
 export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJSON => {
   const format = new GeoJSON();
@@ -19,3 +20,19 @@ export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJS
     },
   };
 };
+
+export const hankeHasGeometry = (hanke: HankeData) => hanke.geometriat;
+
+export const hankeIsBetweenDates = ({ endDate, startDate }: HankeFilters) => (hanke: HankeData) => {
+  const filterStartDate = new Date(startDate);
+  const filterEndDate = new Date(endDate);
+  const hankeStartDate = new Date(hanke.alkuPvm); // TODO: validoi: haittaAlkuPvm vai alkuPvm?
+  const hankeEndDate = new Date(hanke.loppuPvm); // TODO: validoi: haittaLoppuPvm vai loppuPvm?
+  if (hankeEndDate > filterStartDate && hankeEndDate < filterEndDate) return true;
+  if (hankeStartDate > filterStartDate && hankeEndDate < filterEndDate) return true;
+  if (hankeStartDate > filterStartDate && hankeEndDate > filterEndDate) return true;
+  return false;
+};
+
+export const byAllHankeFilters = (hankeFilters: HankeFilters) => (hanke: HankeData) =>
+  hankeHasGeometry(hanke) && hankeIsBetweenDates(hankeFilters)(hanke);

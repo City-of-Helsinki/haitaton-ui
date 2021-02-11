@@ -2,28 +2,44 @@ import React from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import { useTranslation } from 'react-i18next';
 import format from 'date-fns/format';
+import { Link } from 'react-router-dom';
 import {
-  IconAngleDown,
-  IconAngleUp,
   IconCrossCircle,
   IconPen,
   IconAngleLeft,
   IconAngleRight,
+  IconAngleUp,
+  IconAngleDown,
 } from 'hds-react/icons';
-import { TableProps } from './types';
+import useLinkPath from '../../../common/hooks/useLinkPath';
+import { ROUTES } from '../../../common/types/route';
 
-const Table: React.FC<TableProps> = ({ columns, data }) => {
-  function compareIgnoreCase(a: string, b: string) {
-    const r1 = a.toString().toLowerCase();
-    const r2 = b.toString().toLowerCase();
-    if (r1 < r2) {
-      return -1;
-    }
-    if (r1 > r2) {
-      return 1;
-    }
-    return 0;
+function compareIgnoreCase(a: string, b: string) {
+  const r1 = a.toString().toLowerCase();
+  const r2 = b.toString().toLowerCase();
+  if (r1 < r2) {
+    return -1;
   }
+  if (r1 > r2) {
+    return 1;
+  }
+  return 0;
+}
+
+export type HankeListColumn = {
+  Header: string;
+  // eslint-disable-next-line
+  accessor: any;
+};
+
+export interface Props {
+  columns: Array<HankeListColumn>;
+  data: Record<string, unknown>[];
+}
+
+const Table: React.FC<Props> = ({ columns, data }) => {
+  const { t } = useTranslation();
+  const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
   const {
     getTableProps,
     getTableBodyProps,
@@ -48,11 +64,9 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
         },
       },
     },
-
     useSortBy,
     usePagination
   );
-  const { t } = useTranslation();
 
   return (
     <>
@@ -63,25 +77,34 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
               {headerGroup.headers.map((column, i) => (
                 // Add the sorting props to control sorting. For this example
                 // we can add them into the header props
-                <th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  data-testid={`tableHeader${i}`}
-                >
-                  <div>
-                    {column.render('Header')}
-                    {/* Add a sort direction indicator */}
-                    {column.isSorted && (column.isSortedDesc ? <IconAngleUp /> : <IconAngleDown />)}
-                    {!column.isSorted && (
-                      <>
-                        <span className="unSelectedWpr">
-                          <span className="unSelected">
-                            <IconAngleUp />
-                            <IconAngleDown />
+
+                <th key={column.id}>
+                  <button
+                    data-testid={`tableHeaderButton${i}`}
+                    type="button"
+                    {...column.getSortByToggleProps()}
+                    aria-label={t(`hankeList:sortButtons:${column.id}`)}
+                  >
+                    <div>
+                      {column.render('Header')}
+                      {column.isSorted &&
+                        (column.isSortedDesc ? (
+                          <IconAngleUp aria-hidden="true" />
+                        ) : (
+                          <IconAngleDown aria-hidden="true" />
+                        ))}
+                      {!column.isSorted && (
+                        <>
+                          <span className="unSelectedWpr">
+                            <span className="unSelected">
+                              <IconAngleUp aria-hidden="true" />
+                              <IconAngleDown aria-hidden="true" />
+                            </span>
                           </span>
-                        </span>
-                      </>
-                    )}
-                  </div>
+                        </>
+                      )}
+                    </div>
+                  </button>
                 </th>
               ))}
               <th>
@@ -107,10 +130,16 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                   );
                 })}
                 <td>
-                  <span>
-                    <IconPen className="pen" />
-                    <IconCrossCircle className="remove" />
-                  </span>
+                  <Link
+                    to={getEditHankePath({ hankeTunnus: row.values.id })}
+                    aria-label={t(`routes:${ROUTES.EDIT_HANKE}.meta.title`)}
+                    data-testid="hankeEditLink"
+                  >
+                    <IconPen aria-hidden />
+                  </Link>
+                  <button type="button" disabled aria-label={t('hankeList:buttons:delete')}>
+                    <IconCrossCircle className="remove" aria-hidden="true" />
+                  </button>
                 </td>
               </tr>
             );
@@ -124,9 +153,10 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           data-testid="toBeginning"
           onClick={() => gotoPage(0)}
           disabled={!canPreviousPage}
+          aria-label={t('hankeList:buttons:toFirstPage')}
         >
-          <IconAngleLeft />
-          <IconAngleLeft />
+          <IconAngleLeft aria-hidden="true" />
+          <IconAngleLeft aria-hidden="true" />
         </button>
         <button
           type="button"
@@ -134,8 +164,9 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           onClick={() => previousPage()}
           data-testid="backward"
           disabled={!canPreviousPage}
+          aria-label={t('hankeList:buttons:toPreviousPage')}
         >
-          <IconAngleLeft />
+          <IconAngleLeft aria-hidden="true" />
         </button>
         <span className="wrp">
           {t('hankeList:paginationHeader')} <span data-testid="currentPage">{pageIndex + 1}</span> /{' '}
@@ -147,8 +178,9 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           data-testid="forward"
           onClick={() => nextPage()}
           disabled={!canNextPage}
+          aria-label={t('hankeList:buttons:toNextPage')}
         >
-          <IconAngleRight />
+          <IconAngleRight aria-hidden="true" />
         </button>
         <button
           type="button"
@@ -156,9 +188,10 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
           data-testid="toEnd"
           onClick={() => gotoPage(pageCount - 1)}
           disabled={!canNextPage}
+          aria-label={t('hankeList:buttons:toLastPage')}
         >
-          <IconAngleRight />
-          <IconAngleRight />
+          <IconAngleRight aria-hidden="true" />
+          <IconAngleRight aria-hidden="true" />
         </button>
       </div>
     </>

@@ -11,7 +11,7 @@ import './Header.styles.scss';
 
 const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { HOME, MAP, PROJECTS, FORM } = useLocalizedRoutes();
+  const { HOME, MAP, PROJECTS, NEW_HANKE } = useLocalizedRoutes();
   const { i18n, t } = useTranslation();
   const isAuthenticated = authService.isAuthenticated();
 
@@ -54,7 +54,7 @@ const Header: React.FC = () => {
             {t('authentication:loginButton')}
           </NavLink>
         )}
-        <NavLink to={FORM.path} className="header__hankeLink" data-testid="hankeLink">
+        <NavLink to={NEW_HANKE.path} className="header__hankeLink" data-testid="hankeLink">
           <Locale id="header:hankeLink" />
         </NavLink>
       </Navigation.Row>
