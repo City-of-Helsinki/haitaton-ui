@@ -17,12 +17,13 @@ const useProjectsWithGeometry = () => useQuery(['projectsWithGeometry'], getProj
 
 const HankeMapContainer: React.FC = () => {
   const { isLoading, isError, data } = useProjectsWithGeometry();
+  const projectsData = data ? data.data : [];
 
   return (
     <HankeMapComponent
       loadingProjects={isLoading}
       loadingProjectsError={isError}
-      projectsData={data}
+      projectsData={projectsData}
     />
   );
 };

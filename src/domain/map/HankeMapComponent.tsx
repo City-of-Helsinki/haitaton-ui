@@ -21,7 +21,7 @@ import { HankeData } from '../types/hanke';
 type Props = {
   loadingProjects: boolean;
   loadingProjectsError: boolean;
-  projectsData: AxiosResponse<HankeData[]> | undefined;
+  projectsData: HankeData[] | undefined;
 };
 
 // Temporary reference style implementation. Actual colors
@@ -54,8 +54,8 @@ const HankeMapComponent: React.FC<Props> = ({
   const [zoom] = useState(9); // TODO: also take zoom into consideration
 
   const hankkeetFilteredByAll =
-    (!loadingProjects || loadingProjectsError) && projectsData && Array.isArray(projectsData.data)
-      ? projectsData.data.filter(
+    (!loadingProjects || loadingProjectsError) && projectsData && Array.isArray(projectsData)
+      ? projectsData.filter(
           byAllHankeFilters({ startDate: hankeFilterStartDate, endDate: hankeFilterEndDate })
         )
       : [];
