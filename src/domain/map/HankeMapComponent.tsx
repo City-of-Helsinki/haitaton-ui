@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Vector as VectorSource } from 'ol/source';
 import { Style, Fill, Stroke } from 'ol/style';
@@ -21,7 +21,7 @@ import { HankeData } from '../types/hanke';
 type Props = {
   loadingProjects: boolean;
   loadingProjectsError: boolean;
-  projectsData: HankeData[] | undefined;
+  projectsData: HankeData[];
 };
 
 // Temporary reference style implementation. Actual colors
@@ -53,12 +53,21 @@ const HankeMapComponent: React.FC<Props> = ({
 
   const [zoom] = useState(9); // TODO: also take zoom into consideration
 
+  const [hankeSources] = useState<VectorSource>(new VectorSource());
+
   const hankkeetFilteredByAll =
     (!loadingProjects || loadingProjectsError) && projectsData && Array.isArray(projectsData)
       ? projectsData.filter(
           byAllHankeFilters({ startDate: hankeFilterStartDate, endDate: hankeFilterEndDate })
         )
       : [];
+
+  useEffect(() => {
+    hankkeetFilteredByAll.forEach((hanke) => {
+      if (hanke.geometriat)
+        hankeSources.addFeatures(new GeoJSON().readFeatures(hanke.geometriat.featureCollection));
+    });
+  }, [hankkeetFilteredByAll]);
 
   return (
     <>
@@ -78,14 +87,7 @@ const HankeMapComponent: React.FC<Props> = ({
             return (
               <VectorLayer
                 key={hanke.geometriat?.id}
-                source={
-                  new VectorSource({
-                    // TS fails interpreting filter. Added type guard
-                    features: hanke.geometriat
-                      ? new GeoJSON().readFeatures(hanke.geometriat.featureCollection)
-                      : [],
-                  })
-                }
+                source={hankeSources}
                 zIndex={100}
                 className="hankeGeometryLayer"
                 style={geometryStyle.Blue}

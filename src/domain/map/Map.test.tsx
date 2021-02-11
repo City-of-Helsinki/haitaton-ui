@@ -11,11 +11,7 @@ describe('Map tile layers can be controlled by layercontrol and share the same s
   test('Map tile layer toggled control changes when clicked', async () => {
     render(
       <Provider store={store}>
-        <HankeMapComponent
-          loadingProjects={false}
-          loadingProjectsError={false}
-          projectsData={undefined}
-        />
+        <HankeMapComponent loadingProjects={false} loadingProjectsError={false} projectsData={[]} />
       </Provider>
     );
 
@@ -47,11 +43,7 @@ describe('Map tile layers can be controlled by layercontrol and share the same s
 
     const { getByTestId } = render(
       <Provider store={store}>
-        <HankeMapComponent
-          loadingProjects={false}
-          loadingProjectsError={false}
-          projectsData={undefined}
-        />
+        <HankeMapComponent loadingProjects={false} loadingProjectsError={false} projectsData={[]} />
       </Provider>
     );
 
