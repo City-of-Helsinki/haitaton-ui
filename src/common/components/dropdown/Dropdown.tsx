@@ -1,6 +1,6 @@
 import React from 'react';
 import { Controller, Control, useFormContext } from 'react-hook-form';
-import { Dropdown as HdsDropdown, Tooltip } from 'hds-react';
+import { Select, Tooltip } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { getInputErrorText } from '../../utils/form';
 import { TooltipProps } from '../../types/tooltip';
@@ -53,13 +53,14 @@ const Dropdown: React.FC<PropTypes> = ({
         rules={rules}
         render={({ onChange, onBlur, value }) => {
           return (
-            <HdsDropdown
+            <Select
               options={options}
               defaultValue={
-                defaultValue ? options.find((o) => o.value === defaultValue) : undefined
+                defaultValue
+                  ? options.find((o) => o.value === defaultValue)
+                  : options.find((o) => o.value === value)
               }
               id={id}
-              selectedOption={options.find((o) => o.value === value)}
               label={label}
               invalid={invalid}
               // eslint-disable-next-line

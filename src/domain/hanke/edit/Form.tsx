@@ -123,8 +123,12 @@ const HankeForm: React.FC<Props> = ({
             <div className="hankeForm__formWprRight">
               <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
                 <div className="closeFormWpr">
-                  <button type="button" onClick={() => onFormClose()}>
-                    <IconCross />
+                  <button
+                    type="button"
+                    onClick={() => onFormClose()}
+                    aria-label={t('hankeForm:closeAriaLabel')}
+                  >
+                    <IconCross aria-hidden="true" />
                   </button>
                 </div>
                 {formPage === 0 && (

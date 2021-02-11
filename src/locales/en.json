@@ -17,6 +17,13 @@
       "fi": "Suomi",
       "en": "English",
       "sv": "Svenska"
+    },
+    "components": {
+      "multiselect": {
+        "toggle": "EN:Sulje ja avaa valikko",
+        "removeSelected": "EN:Poista valittu",
+        "clear": "EN:Tyhjennä kenttä"
+      }
     }
   },
   "form": {
@@ -167,6 +174,8 @@
     "savingSuccessText": "EN:Luonnos on tallenettu Hankelistalle",
     "savingFailHeader": "EN:Joku meni vikaan",
     "savingFailText": "EN:Luonnosta ei saatu tallennettua, koita uudelleen",
+    "closeAriaLabel": "EN:Poistu kaavakkeelta tallentamatta",
+
     "labels": {
       "hankeTunnus": "EN:Hankkeen tunnus",
       "nimi": "EN:Hankkeen nimi",
@@ -192,7 +201,8 @@
       "puhelinnumero": "EN:Puhelinnumero",
       "osasto": "EN:Osasto",
       "organisaatio": "EN:Organisaatio",
-      "omaOrganisaatio": "LEN:isää oma organisaatio"
+      "omaOrganisaatio": "EN:Lisää oma organisaatio",
+      "insertOmaOrganisaatio": "EN:Syötä oma organisaatio"
     },
     "headers": {
       "arvioijat": "EN:Arvioijat",
