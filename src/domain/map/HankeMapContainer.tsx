@@ -16,15 +16,10 @@ const getProjectsWithGeometry = async () => {
 const useProjectsWithGeometry = () => useQuery(['projectsWithGeometry'], getProjectsWithGeometry);
 
 const HankeMapContainer: React.FC = () => {
-  const { isLoading, isError, data } = useProjectsWithGeometry();
+  const { data } = useProjectsWithGeometry();
+  const projectsData = data ? data.data : [];
 
-  return (
-    <HankeMapComponent
-      loadingProjects={isLoading}
-      loadingProjectsError={isError}
-      projectsData={data}
-    />
-  );
+  return <HankeMapComponent projectsData={projectsData} />;
 };
 
 export default HankeMapContainer;

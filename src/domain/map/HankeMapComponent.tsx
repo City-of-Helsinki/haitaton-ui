@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Vector as VectorSource } from 'ol/source';
 import { Style, Fill, Stroke } from 'ol/style';
-import { AxiosResponse } from 'axios';
 import Map from '../../common/components/map/Map';
 import Controls from '../../common/components/map/controls/Controls';
 import LayerControl from '../../common/components/map/controls/LayerControl';
@@ -19,9 +18,7 @@ import { MapDataLayerKey, MapTileLayerId } from './types';
 import { HankeData } from '../types/hanke';
 
 type Props = {
-  loadingProjects: boolean;
-  loadingProjectsError: boolean;
-  projectsData: AxiosResponse<HankeData[]> | undefined;
+  projectsData: HankeData[];
 };
 
 // Temporary reference style implementation. Actual colors
@@ -38,11 +35,7 @@ const geometryStyle = {
   }),
 };
 
-const HankeMapComponent: React.FC<Props> = ({
-  loadingProjects,
-  loadingProjectsError,
-  projectsData,
-}) => {
+const HankeMapComponent: React.FC<Props> = ({ projectsData }) => {
   const { dataLayers, mapTileLayers, toggleDataLayer, toggleMapTileLayer } = useMapDataLayers();
   const {
     hankeFilterStartDate,
@@ -53,12 +46,22 @@ const HankeMapComponent: React.FC<Props> = ({
 
   const [zoom] = useState(9); // TODO: also take zoom into consideration
 
-  const hankkeetFilteredByAll =
-    (!loadingProjects || loadingProjectsError) && projectsData && Array.isArray(projectsData.data)
-      ? projectsData.data.filter(
-          byAllHankeFilters({ startDate: hankeFilterStartDate, endDate: hankeFilterEndDate })
-        )
-      : [];
+  const hankeSources = useRef({ features: new VectorSource() });
+
+  const hankkeetFilteredByAll = projectsData.filter(
+    byAllHankeFilters({ startDate: hankeFilterStartDate, endDate: hankeFilterEndDate })
+  );
+
+  useEffect(() => {
+    hankeSources.current.features.clear();
+    hankkeetFilteredByAll.forEach((hanke) => {
+      if (hanke.geometriat) {
+        hankeSources.current.features.addFeatures(
+          new GeoJSON().readFeatures(hanke.geometriat.featureCollection)
+        );
+      }
+    });
+  }, [hankkeetFilteredByAll]);
 
   return (
     <>
@@ -74,24 +77,12 @@ const HankeMapComponent: React.FC<Props> = ({
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
           <DataLayers />
 
-          {hankkeetFilteredByAll.map((hanke) => {
-            return (
-              <VectorLayer
-                key={hanke.geometriat?.id}
-                source={
-                  new VectorSource({
-                    // TS fails interpreting filter. Added type guard
-                    features: hanke.geometriat
-                      ? new GeoJSON().readFeatures(hanke.geometriat.featureCollection)
-                      : [],
-                  })
-                }
-                zIndex={100}
-                className="hankeGeometryLayer"
-                style={geometryStyle.Blue}
-              />
-            );
-          })}
+          <VectorLayer
+            source={hankeSources.current.features}
+            zIndex={100}
+            className="hankeGeometryLayer"
+            style={geometryStyle.Blue}
+          />
 
           <Controls>
             <DateRangeControl
