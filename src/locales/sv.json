@@ -265,13 +265,6 @@
     }
   },
   "map": {
-    "datalayers": {
-      "RESTAURANTS": "SV:Ravintolat",
-      "ROADS": "SV:Tiet",
-      "CYCLING_ROADS": "SV:Pyörätiet",
-      "GREENERY": "SV:Viheralueet"
-    },
-
     "tileLayers": {
       "ortokartta": "SV: Ortokartta",
       "kantakartta": "SV: Kantakartta"

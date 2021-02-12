@@ -7,7 +7,7 @@ import DatePicker from '../../../common/components/datePicker/DatePicker';
 import Dropdown from '../../../common/components/dropdown/Dropdown';
 import TextInput from '../../../common/components/textInput/TextInput';
 import { HANKE_VAIHE, HANKE_SUUNNITTELUVAIHE } from '../../types/hanke';
-import H2 from '../../../common/components/text/H2';
+import Text from '../../../common/components/text/Text';
 import { FORMFIELD, FormProps } from './types';
 import { useFormPage } from './hooks/useFormPage';
 
@@ -22,7 +22,9 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
 
   return (
     <div className="form0">
-      <H2 data-testid="form0Header">{t('hankeForm:perustiedotForm:header')}</H2>
+      <Text tag="h2" spacing="s" weight="bold" data-testid="form0Header">
+        {t('hankeForm:perustiedotForm:header')}
+      </Text>
       <div className="dataWpr">
         <div className="formWpr">
           <TextInput name={FORMFIELD.TUNNUS} disabled />

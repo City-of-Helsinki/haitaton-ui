@@ -4,7 +4,7 @@ import { $enum } from 'ts-enum-util';
 import Dropdown from '../../../common/components/dropdown/Dropdown';
 import DropdownMultiselect from '../../../common/components/dropdown/DropdownMultiselect';
 import TextInput from '../../../common/components/textInput/TextInput';
-import H2 from '../../../common/components/text/H2';
+import Text from '../../../common/components/text/Text';
 import { HANKE_TYOMAATYYPPI, HANKE_TYOMAAKOKO } from '../../types/hanke';
 import { FORMFIELD, FormProps } from './types';
 import { useFormPage } from './hooks/useFormPage';
@@ -14,7 +14,9 @@ const Form3: React.FC<FormProps> = ({ formData, control, errors }) => {
   useFormPage();
   return (
     <div className="form3">
-      <H2>{t('hankeForm:tyomaanTiedotForm:header')}</H2>
+      <Text tag="h2" spacing="s" weight="bold">
+        {t('hankeForm:tyomaanTiedotForm:header')}
+      </Text>
       <div className="dataWpr">
         <div className="formWpr">
           <TextInput required name={FORMFIELD.KATUOSOITE} />

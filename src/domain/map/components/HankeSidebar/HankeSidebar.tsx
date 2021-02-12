@@ -18,10 +18,10 @@ type SectionProps = {
 const SidebarSection: React.FC<SectionProps> = ({ title, content }) =>
   title && title !== '' && content && content !== '' ? (
     <>
-      <Text tag="h3" styleAs="h5" weight="bold" spacingBottom="xs">
+      <Text tag="h3" styleAs="h6" weight="bold" spacingBottom="2-xs">
         {title}
       </Text>
-      <Text tag="p" styleAs="body-s" spacingBottom="s">
+      <Text tag="p" styleAs="body-s" spacingBottom="2-xs">
         {content}
       </Text>
     </>
@@ -37,10 +37,10 @@ const HankeSidebar: React.FC<Props> = ({ hanke }) => {
     <Drawer placement="left" onClose={onClose} isOpen={isOpen} size="md">
       <DrawerContent className={styles.hankeSidebar__content}>
         <DrawerBody>
-          <Text tag="h2" weight="bold" styleAs="h4" spacing="xs">
+          <Text tag="h2" weight="bold" styleAs="h4" spacing="2-xs">
             {hanke.nimi} ({hanke.hankeTunnus})
           </Text>
-          <Text tag="h3" styleAs="h5" weight="bold" spacingBottom="xs">
+          <Text tag="h3" styleAs="h5" weight="bold" spacingBottom="2-xs">
             {hanke.tyomaaKatuosoite}
           </Text>
           <Text tag="h3" styleAs="h6" weight="bold" spacingBottom="s">

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { IconCross } from 'hds-react/icons';
 import { yupResolver } from '@hookform/resolvers/yup';
-import H1 from '../../../common/components/text/H1';
+import Text from '../../../common/components/text/Text';
 import { HankeDataFormState, SaveFormArguments } from './types';
 import StateIndicator from './StateIndicator';
 import { hankeSchema } from './hankeSchema';
@@ -81,9 +81,8 @@ const HankeForm: React.FC<Props> = ({
     setFormPage((v) => v + 1);
   }, [getValues, formPage]);
 
+  // eslint-disable-next-line
   const onSubmit = async (data: HankeDataFormState) => {
-    // eslint-disable-next-line
-    console.log(data);
     // Todo: Maybe save and redirect to haittojenHallinta?
   };
 
@@ -108,9 +107,9 @@ const HankeForm: React.FC<Props> = ({
         </Notification>
       )}
       <div className="hankeForm">
-        <H1 data-testid="formPageHeader" stylesAs="h2">
+        <Text tag="h1" data-testid="formPageHeader" styleAs="h2" spacing="s" weight="bold">
           {t('hankeForm:pageHeader')}
-        </H1>
+        </Text>
         {formPage === 5 ? (
           <div className="hankeForm__formWpr">
             <div className="hankeForm__formWprRight">

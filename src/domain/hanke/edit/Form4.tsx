@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
 import DatePicker from '../../../common/components/datePicker/DatePicker';
 import Dropdown from '../../../common/components/dropdown/Dropdown';
-import H2 from '../../../common/components/text/H2';
+import Text from '../../../common/components/text/Text';
 import {
   HANKE_KAISTAHAITTA,
   HANKE_KAISTAPITUUSHAITTA,
@@ -19,7 +19,9 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
   useFormPage();
   return (
     <div className="form4">
-      <H2>{t('hankeForm:hankkeenHaitatForm:header')}</H2>
+      <Text tag="h2" spacing="s" weight="bold">
+        {t('hankeForm:hankkeenHaitatForm:header')}
+      </Text>
       <div className="dataWpr">
         <div className="calendaraWpr formWpr">
           <div className="left">

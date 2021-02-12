@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Vector as VectorSource } from 'ol/source';
 import { Style, Fill, Stroke } from 'ol/style';
@@ -8,14 +8,13 @@ import LayerControl from '../../common/components/map/controls/LayerControl';
 import DateRangeControl from '../../common/components/map/controls/DateRangeControl';
 import VectorLayer from '../../common/components/map/layers/VectorLayer';
 import Kantakartta from './components/Layers/Kantakartta';
-import DataLayers from './components/Layers/DataLayers';
 import Ortokartta from './components/Layers/Ortokartta';
 import HankeSidebar from './components/HankeSidebar/HankeSidebarContainer';
 import styles from './Map.module.scss';
 import { byAllHankeFilters } from './utils';
 import { useMapDataLayers } from './hooks/useMapLayers';
 import { useDateRangeFilter } from './hooks/useDateRangeFilter';
-import { MapDataLayerKey, MapTileLayerId } from './types';
+import { MapTileLayerId } from './types';
 import { HankeData } from '../types/hanke';
 
 type Props = {
@@ -37,7 +36,9 @@ const geometryStyle = {
 };
 
 const HankeMap: React.FC<Props> = ({ projectsData }) => {
-  const { dataLayers, mapTileLayers, toggleDataLayer, toggleMapTileLayer } = useMapDataLayers();
+  const hankeSources = useRef({ features: new VectorSource() });
+  const [zoom] = useState(9); // TODO: also take zoom into consideration
+  const { mapTileLayers, toggleMapTileLayer } = useMapDataLayers();
   const {
     hankeFilterStartDate,
     hankeFilterEndDate,
@@ -45,12 +46,12 @@ const HankeMap: React.FC<Props> = ({ projectsData }) => {
     setHankeFilterEndDate,
   } = useDateRangeFilter();
 
-  const [zoom] = useState(9); // TODO: also take zoom into consideration
-
-  const hankeSources = useRef({ features: new VectorSource() });
-
-  const hankkeetFilteredByAll = projectsData.filter(
-    byAllHankeFilters({ startDate: hankeFilterStartDate, endDate: hankeFilterEndDate })
+  const hankkeetFilteredByAll = useMemo(
+    () =>
+      projectsData.filter(
+        byAllHankeFilters({ startDate: hankeFilterStartDate, endDate: hankeFilterEndDate })
+      ),
+    [projectsData, hankeFilterStartDate, hankeFilterEndDate]
   );
 
   useEffect(() => {
@@ -66,11 +67,10 @@ const HankeMap: React.FC<Props> = ({ projectsData }) => {
 
   return (
     <>
-      <HankeSidebar />
-
       <div data-testid="countOfFilteredHankkeet" className={styles.hiddenTestDiv}>
         {hankkeetFilteredByAll.length}
       </div>
+      <HankeSidebar />
       <div
         className={styles.mapContainer}
         style={{ width: '100%', height: '100%', position: 'absolute' }}
@@ -78,7 +78,6 @@ const HankeMap: React.FC<Props> = ({ projectsData }) => {
         <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
           {mapTileLayers.ortokartta.visible && <Ortokartta />}
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
-          <DataLayers />
 
           <VectorLayer
             source={hankeSources.current.features}
@@ -97,8 +96,6 @@ const HankeMap: React.FC<Props> = ({ projectsData }) => {
             <LayerControl
               tileLayers={Object.values(mapTileLayers)}
               onClickTileLayer={(id: MapTileLayerId) => toggleMapTileLayer(id)}
-              dataLayers={Object.values(dataLayers)}
-              onClickDataLayer={(key: MapDataLayerKey) => toggleDataLayer(key)}
             />
           </Controls>
         </Map>

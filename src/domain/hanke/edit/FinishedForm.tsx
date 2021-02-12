@@ -1,9 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import H2 from '../../../common/components/text/H2';
+import Text from '../../../common/components/text/Text';
 
 const FinishedForm: React.FC = () => {
   const { t } = useTranslation();
-  return <H2>{t('hankeForm:finishedForm:header')}</H2>;
+
+  return (
+    <Text tag="h2" spacing="s" weight="bold">
+      {t('hankeForm:finishedForm:header')}
+    </Text>
+  );
 };
 export default FinishedForm;

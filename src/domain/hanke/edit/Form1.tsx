@@ -2,7 +2,7 @@ import React, { useEffect, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import HankeDrawer from '../../map/components/HankeDrawer/HankeDrawerContainer';
-import H2 from '../../../common/components/text/H2';
+import Text from '../../../common/components/text/Text';
 import { useFormPage } from './hooks/useFormPage';
 import { FORMFIELD, FormProps } from './types';
 
@@ -25,7 +25,9 @@ const Form1: React.FC<FormProps> = ({ formData }) => {
 
   return (
     <div className="form1">
-      <H2 data-testid="hankkeenAlue">{t('hankeForm:hankkeenAlueForm:header')}</H2>
+      <Text tag="h2" spacing="s" weight="bold" data-testid="hankkeenAlue">
+        {t('hankeForm:hankkeenAlueForm:header')}
+      </Text>
       <div style={{ position: 'relative' }}>
         <HankeDrawer
           onChangeGeometries={handleGeometriesChange}

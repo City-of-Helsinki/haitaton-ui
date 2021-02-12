@@ -127,13 +127,14 @@ export type HankeContact = {
 };
 
 export type HankeGeometria = {
-  createdAt: Date;
-  createdByUserId: string;
   featureCollection: HankeGeoJSON;
   hankeId: number;
   id: number;
-  modifiedAt: Date;
-  modifiedByUserId: string;
+  modifiedAt: string | null;
+  version: number | null;
+  createdByUserId: string | null;
+  createdAt: string | null;
+  modifiedByUserId: string | null;
 };
 
 export interface HankeData {

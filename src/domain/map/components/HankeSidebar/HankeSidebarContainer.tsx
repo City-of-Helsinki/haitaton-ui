@@ -27,7 +27,7 @@ const HankeSidebarContainer: React.FC<Props> = ({ hankeTunnus }) => {
   const { isLoading, isError, data } = useGetHanke(hanke);
 
   if (!data || isLoading || isError) {
-    return <p>Loading....</p>;
+    return null;
   }
 
   return <HankeSidebar hanke={data.data} />;

@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { render } from '../../testUtils/render';
 import HankeMap from './HankeMap';
 import HankeDrawer from './components/HankeDrawer/HankeDrawer';
+import hankeMockList from '../mocks/hankeList';
 
 describe('Map tile layers can be controlled by layercontrol and share the same state', () => {
   test('Map tile layer toggled control changes when clicked', async () => {
@@ -27,11 +28,9 @@ describe('Map tile layers can be controlled by layercontrol and share the same s
   });
 
   test('Number of projects displayed on the map can be controlled with dateRangeControl', async () => {
-    // TODO: provide mock API response object to projectsData in order to test the component
+    const { getByTestId } = render(<HankeMap projectsData={hankeMockList} />);
 
-    const { getByTestId } = render(<HankeMap projectsData={[]} />);
-
-    expect(getByTestId('countOfFilteredHankkeet')).toHaveTextContent('0');
+    expect(getByTestId('countOfFilteredHankkeet')).toHaveTextContent('1');
     // TODO: change the input date
     // TODO: expect the number of filtered hankkeet has changed
   });
