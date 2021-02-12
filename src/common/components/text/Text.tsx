@@ -16,7 +16,7 @@ export type StyleAs =
   | 'body-l'
   | 'body-xl';
 
-export type Spacing = 'xs' | 's' | 'm' | 'l';
+export type Spacing = '2-xs' | 'xs' | 's' | 'm' | 'l';
 
 export type Props = {
   tag: Tag;
@@ -36,6 +36,7 @@ const Text = ({
   spacing,
   spacingBottom,
   spacingTop,
+  ...rest
 }: Props) => {
   const Component = tag;
 
@@ -48,6 +49,7 @@ const Text = ({
         [styles[`text--spacing-top-${spacingTop}`]]: spacingTop,
         [styles[`text--spacing-bottom-${spacingBottom}`]]: spacingBottom,
       })}
+      {...rest}
     >
       {children}
     </Component>
