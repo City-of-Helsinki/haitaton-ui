@@ -20,6 +20,8 @@ const HankeClick: React.FC = () => {
               history.push({
                 search: `?hanke=${hankeTunnus}`,
               });
+              const extent = feature.getGeometry()?.getExtent();
+              if (extent) map?.getView().fit(extent, { padding: [150, 100, 100, 300] });
               return true;
             });
           }

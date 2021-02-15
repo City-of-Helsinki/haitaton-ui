@@ -16,7 +16,7 @@ import { useMapDataLayers } from './hooks/useMapLayers';
 import { useDateRangeFilter } from './hooks/useDateRangeFilter';
 import { MapTileLayerId } from './types';
 import { HankeData } from '../types/hanke';
-import HankeClick from '../../common/components/map/interactions/HankeClick';
+import FeatureClick from '../../common/components/map/interactions/FeatureClick';
 
 type Props = {
   projectsData: HankeData[];
@@ -79,7 +79,7 @@ const HankeMap: React.FC<Props> = ({ projectsData }) => {
         <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
           {mapTileLayers.ortokartta.visible && <Ortokartta />}
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
-          <HankeClick />
+          <FeatureClick />
 
           <VectorLayer
             source={hankeSources.current.features}
