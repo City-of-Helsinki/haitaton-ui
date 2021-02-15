@@ -3,7 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactDatePicker from 'react-datepicker';
 import ControlPanel from './ControlPanel';
-import { toEndOfDayUTCISO, formatToFinnishDate } from '../../../utils/date';
+import { toStartOfDayUTCISO, toEndOfDayUTCISO, formatToFinnishDate } from '../../../utils/date';
 import CalendarIcon from '../../icons/Calendar';
 import styles from './DateRangeControl.module.scss';
 
@@ -38,7 +38,7 @@ const DateRangeControl: React.FC<Props> = ({
                 <ReactDatePicker
                   id={startPicker}
                   onChange={(date: Date) => {
-                    updateStartDate(toEndOfDayUTCISO(date));
+                    updateStartDate(toStartOfDayUTCISO(date));
                   }}
                   value={formatToFinnishDate(startDate)}
                   selected={new Date(startDate)}
