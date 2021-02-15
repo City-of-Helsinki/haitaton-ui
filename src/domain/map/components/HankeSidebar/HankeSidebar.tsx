@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Drawer, DrawerBody, DrawerContent } from '@chakra-ui/react';
+import { IconCross } from 'hds-react/icons';
 import Text from '../../../../common/components/text/Text';
 import { formatToFinnishDate } from '../../../../common/utils/date';
 import { HankeData } from '../../../types/hanke';
@@ -33,9 +34,17 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
   const { t } = useTranslation();
 
   return (
-    <Drawer placement="left" onClose={handleClose} isOpen={isOpen} size="md" trapFocus={false}>
+    <Drawer placement="left" isOpen={isOpen} size="md" trapFocus={false} onClose={handleClose}>
       <DrawerContent className={styles.hankeSidebar__content}>
         <DrawerBody>
+          <button
+            className={styles.hankeSidebar__closeButton}
+            type="button"
+            onClick={handleClose}
+            aria-label={t('hankeSidebar:closeButtonAriaLabel')}
+          >
+            <IconCross aria-hidden />
+          </button>
           <Text tag="h2" weight="bold" styleAs="h4" spacing="2-xs">
             {hanke.nimi} ({hanke.hankeTunnus})
           </Text>
