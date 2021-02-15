@@ -34,8 +34,18 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
   const { t } = useTranslation();
 
   return (
-    <Drawer placement="left" isOpen={isOpen} size="md" trapFocus={false} onClose={handleClose}>
-      <DrawerContent className={styles.hankeSidebar__content}>
+    <Drawer
+      placement="left"
+      isOpen={isOpen}
+      size="md"
+      // https://github.com/chakra-ui/chakra-ui/issues/2893
+      // Temporary ixed with global css in app.scss
+      trapFocus={false}
+      useInert={false}
+      onClose={handleClose}
+      blockScrollOnMount={false}
+    >
+      <DrawerContent className={styles.hankeSidebar__content} containerProps={{ className: 'FOO' }}>
         <DrawerBody>
           <button
             className={styles.hankeSidebar__closeButton}
