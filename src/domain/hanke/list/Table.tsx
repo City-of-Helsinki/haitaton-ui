@@ -121,9 +121,11 @@ const Table: React.FC<Props> = ({ columns, data }) => {
                 {row.cells.map((cell) => {
                   return (
                     <td data-testid={`row${index}_cell_${cell.column.id}`} {...cell.getCellProps()}>
-                      {cell.column.id === 'startDate' || cell.column.id === 'endDate'
-                        ? format(cell.value, 'dd.MM.yyyy')
-                        : cell.render('Cell')}
+                      <span className={cell.column.id}>
+                        {cell.column.id === 'startDate' || cell.column.id === 'endDate'
+                          ? format(cell.value, 'dd.MM.yyyy')
+                          : cell.render('Cell')}
+                      </span>
                     </td>
                   );
                 })}

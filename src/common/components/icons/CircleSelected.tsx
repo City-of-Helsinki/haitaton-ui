@@ -9,9 +9,9 @@ const Circle: React.FC = () => {
           <g>
             <g>
               <g>
-                <circle id="Fill" fill="#FFFFFF" cx="12" cy="12" r="12" />
-                <circle id="Border" stroke="#0072CD" strokeWidth="2" cx="12" cy="12" r="11" />
-                <circle id="Selected-dot" fill="#0072C6" cx="12" cy="12" r="6" />
+                <circle fill="#FFFFFF" cx="12" cy="12" r="12" />
+                <circle stroke="#0072CD" strokeWidth="2" cx="12" cy="12" r="11" />
+                <circle fill="#0072C6" cx="12" cy="12" r="6" />
               </g>
             </g>
           </g>

@@ -1,25 +1,120 @@
-.h1 {
-  font-size: var(--fontsize-heading-xl);
-  margin-top: var(--spacing-s);
-  margin-bottom: var(--spacing-s);
-  font-weight: bold;
-}
+.text {
+  font-family: 'HelsinkiGrotesk', serif;
 
-.h2 {
-  font-size: var(--fontsize-heading-l);
-  margin-top: var(--spacing-s);
-  margin-bottom: var(--spacing-s);
-  font-weight: bold;
-}
+  &--h1 {
+    font-size: var(--fontsize-heading-xl);
+  }
 
-.h3 {
-  font-size: var(--fontsize-heading-m);
-  margin-bottom: var(--spacing-s);
-  font-weight: bold;
-}
+  &--h2 {
+    font-size: var(--fontsize-heading-l);
+  }
 
-.h4 {
-  font-size: var(--fontsize-heading-s);
-  margin-bottom: var(--spacing-s);
-  font-weight: bold;
+  &--h3 {
+    font-size: var(--fontsize-heading-m);
+  }
+
+  &--h4 {
+    font-size: var(--fontsize-heading-s);
+  }
+
+  &--h5 {
+    font-size: var(--fontsize-heading-xs);
+  }
+
+  &--h6 {
+    font-size: var(--fontsize-heading-xxs);
+  }
+
+  &--body-xl {
+    font-size: var(--fontsize-body-xl);
+  }
+
+  &--body-l {
+    font-size: var(--fontsize-body-l);
+  }
+
+  &--body-m {
+    font-size: var(--fontsize-body-m);
+  }
+
+  &--body-s {
+    font-size: var(--fontsize-body-s);
+  }
+
+  &--bold {
+    font-weight: 700;
+  }
+
+  &--medium {
+    font-weight: 500;
+  }
+
+  &--light {
+    font-weight: 500;
+  }
+
+  &--spacing-2-xs {
+    margin-top: var(--spacing-2-xs);
+    margin-bottom: var(--spacing-2-xs);
+  }
+
+  &--spacing-xs {
+    margin-top: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  &--spacing-s {
+    margin-top: var(--spacing-s);
+    margin-bottom: var(--spacing-s);
+  }
+
+  &--spacing-m {
+    margin-top: var(--spacing-m);
+    margin-bottom: var(--spacing-m);
+  }
+
+  &--spacing-l {
+    margin-top: var(--spacing-l);
+    margin-bottom: var(--spacing-l);
+  }
+
+  &--spacing-top-2-xs {
+    margin-top: var(--spacing-2-xs);
+  }
+
+  &--spacing-top-xs {
+    margin-top: var(--spacing-xs);
+  }
+
+  &--spacing-top-s {
+    margin-top: var(--spacing-s);
+  }
+
+  &--spacing-top-m {
+    margin-top: var(--spacing-m);
+  }
+
+  &--spacing-top-l {
+    margin-top: var(--spacing-l);
+  }
+
+  &--spacing-bottom-2-xs {
+    margin-bottom: var(--spacing-2-xs);
+  }
+
+  &--spacing-bottom-xs {
+    margin-bottom: var(--spacing-xs);
+  }
+
+  &--spacing-bottom-s {
+    margin-bottom: var(--spacing-s);
+  }
+
+  &--spacing-bottom-m {
+    margin-bottom: var(--spacing-m);
+  }
+
+  &--spacing-bottom-l {
+    margin-bottom: var(--spacing-l);
+  }
 }

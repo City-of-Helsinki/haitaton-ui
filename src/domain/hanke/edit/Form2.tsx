@@ -6,11 +6,9 @@ import { useTypedController } from '@hookform/strictly-typed';
 import { TextInput } from 'hds-react';
 import { CONTACT_FORMFIELD, FormProps, HankeDataFormState, Organization } from './types';
 import { HANKE_CONTACT_TYPE } from '../../types/hanke';
-
 import api from '../../api/api';
 import { getInputErrorText } from '../../../common/utils/form';
-import H2 from '../../../common/components/text/H2';
-import H3 from '../../../common/components/text/H3';
+import Text from '../../../common/components/text/Text';
 import { useFormPage } from './hooks/useFormPage';
 import OrganizationSelect from './OrganizationSelect';
 
@@ -47,10 +45,15 @@ const Form2: React.FC<FormProps> = ({ control, formData, errors, register }) => 
 
   return (
     <div className="form2">
-      <H2>{t('hankeForm:hankkeenYhteystiedotForm:header')}</H2>
+      <Text tag="h2" spacing="s" weight="bold">
+        {t('hankeForm:hankkeenYhteystiedotForm:header')}
+      </Text>
       {$enum(HANKE_CONTACT_TYPE).map((contactType) => (
         <div key={contactType}>
-          <H3>{t(`hankeForm:headers:${contactType}`)}</H3>
+          <Text tag="h3" spacing="s" weight="bold">
+            {t(`hankeForm:headers:${contactType}`)}
+          </Text>
+
           <div className="formColumns">
             {CONTACT_FIELDS.map((contactField) => {
               const contactData = formData[contactType][contactIndex];

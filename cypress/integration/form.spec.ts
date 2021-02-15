@@ -13,6 +13,7 @@ const osoite = 'Mannerheimintie 22';
 context('HankeForm', () => {
   beforeEach(() => {
     cy.visit('/fi/hanke/uusi');
+    cy.injectAxe();
   });
 
   it('Hanke form testing', () => {
@@ -40,6 +41,7 @@ context('HankeForm', () => {
     );
 
     cy.get('input[data-testid=nimi]').type(nimi);
+    cy.checkA11y();
     cy.get('textarea[data-testid=kuvaus]').type(kuvaus);
     cy.get('#alkuPvm').type(alkuPvm);
     cy.get('#loppuPvm').type(loppuPvm);
@@ -50,6 +52,7 @@ context('HankeForm', () => {
     cy.get('[data-testid=forward]').click(); // changes view to form1
 
     cy.get('[data-testid=hankkeenAlue]');
+    // cy.checkA11y(); //enable this after axe fixes has been done to map
     cy.get('[data-testid=save-draft-button]').should('be.disabled');
     cy.mapDrawButton('Square').click();
     cy.get('#ol-map')
@@ -61,12 +64,15 @@ context('HankeForm', () => {
     cy.get('[data-testid=forward]').click(); // changes view to form2
 
     cy.get('[data-testid=omistajat-etunimi]');
+    cy.checkA11y();
     cy.get('[data-testid=forward]').click(); // changes view to form3
 
     cy.get('[data-testid=tyomaaKatuosoite]').type(osoite);
+    cy.checkA11y();
     cy.get('[data-testid=forward]').click(); // changes view to form4
 
     cy.get('#haittaAlkuPvm').type(alkuPvm);
+    cy.checkA11y();
     cy.get('#haittaLoppuPvm').type(loppuPvm);
     cy.get('body').click();
     cy.get('#kaistaHaitta-toggle-button').click();

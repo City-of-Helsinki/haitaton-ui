@@ -6,13 +6,42 @@
 }
 
 .datePicker {
-  padding: 5px;
+  padding: var(--spacing-xs);
+}
+
+.dateWpr {
+  position: relative;
+
+  input {
+    padding: var(--spacing-xs);
+    display: block;
+    border: var(--color-black-70) 0.1rem solid;
+    width: 10rem;
+  }
+
+  svg {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    position: absolute;
+    top: 0.6rem;
+    right: 0.8rem;
+    background: var(--color-white);
+    pointer-events: none;
+  }
+}
+
+.label {
+  font-weight: 500;
+  padding-bottom: 0.5rem;
+  display: block;
 }
 
 .dateHyphen {
-  align-items: center;
-  // padding-top: 1rem; FIXME: datepicker input width must be limited
-  // otherwise it goes on top of the hyphen
-  padding-top: 10px;
-  justify-content: center;
+  display: flex;
+  align-items: flex-end;
+
+  p {
+    padding: 0 0 0.9rem 0.8rem;
+  }
 }

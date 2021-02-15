@@ -1,6 +1,6 @@
-import { HankeDataDraft } from '../../types/hanke';
+import { HankeDataDraft } from '../types/hanke';
 
-export const initialData: HankeDataDraft[] = [
+const hankeDraftList: HankeDataDraft[] = [
   {
     id: 1,
     hankeTunnus: 'SMTGEN2_1',
@@ -1758,4 +1758,5 @@ export const initialData: HankeDataDraft[] = [
     tyomaaTyyppi: [],
   },
 ];
-export default initialData;
+
+export default hankeDraftList;

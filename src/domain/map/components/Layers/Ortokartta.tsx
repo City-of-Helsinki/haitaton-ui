@@ -1,7 +1,7 @@
 import React from 'react';
 import { TileWMS } from 'ol/source';
-import TileLayer from '../../../common/components/map/layers/TileLayer';
-import { projection } from '../../../common/components/map/utils';
+import TileLayer from '../../../../common/components/map/layers/TileLayer';
+import { projection } from '../../../../common/components/map/utils';
 
 const Ortokartta = () => (
   <TileLayer

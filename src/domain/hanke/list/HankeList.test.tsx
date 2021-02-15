@@ -1,10 +1,8 @@
 import React from 'react';
-import { Provider } from 'react-redux';
 import { cleanup, waitFor, getByTestId } from '@testing-library/react';
-import { store } from '../../../common/redux/store';
 import HankeList from './HankeListComponent';
 import { render } from '../../../testUtils/render';
-import { initialData } from './testInitialData';
+import hankeDraftList from '../../mocks/hankeDraftList';
 
 afterEach(cleanup);
 
@@ -12,11 +10,7 @@ jest.setTimeout(10000);
 
 describe('HankeLista', () => {
   test('Sorting test', async () => {
-    const { container, queryByText } = render(
-      <Provider store={store}>
-        <HankeList initialData={initialData} />
-      </Provider>
-    );
+    const { container, queryByText } = render(<HankeList initialData={hankeDraftList} />);
 
     await waitFor(() => queryByText('Hankelista'));
     getByTestId(container, 'tableHeaderButton0').click();
@@ -32,11 +26,7 @@ describe('HankeLista', () => {
     expect(getByTestId(container, 'row0_cell_endDate')).toHaveTextContent('11.01.2032');
   });
   test('pagination test', async () => {
-    const { container, queryAllByText } = render(
-      <Provider store={store}>
-        <HankeList initialData={initialData} />
-      </Provider>
-    );
+    const { container, queryAllByText } = render(<HankeList initialData={hankeDraftList} />);
 
     expect(getByTestId(container, 'amountOfpages')).toHaveTextContent('9');
     getByTestId(container, 'toEnd').click();

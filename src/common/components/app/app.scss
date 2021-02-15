@@ -23,9 +23,17 @@ html {
   font-size: 100% !important;
 }
 
+// https://github.com/chakra-ui/chakra-ui/discussions/2779
+// Need to use importants because Chakra injects
 body {
-  font-family: 'HelsinkiGrotesk', serif;
+  font-family: 'HelsinkiGrotesk', serif !important;
   background: var(--color-black-5) !important;
   position: relative;
   min-height: 100vh;
+}
+
+// https://github.com/chakra-ui/chakra-ui/issues/2893
+// Remove this when above issue is fixed
+.chakra-modal__content-container {
+  width: auto !important;
 }

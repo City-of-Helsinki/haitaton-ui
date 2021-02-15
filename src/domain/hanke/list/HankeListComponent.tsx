@@ -1,8 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
-import H1 from '../../../common/components/text/H1';
+import Text from '../../../common/components/text/Text';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import Locale from '../../../common/components/locale/Locale';
 import { HankeDataDraft } from '../../types/hanke';
@@ -54,9 +53,9 @@ const HankeList: React.FC<Props> = ({ initialData }) => {
   );
   return (
     <div className="hankelista">
-      <H1 stylesAs="h2" data-testid="HankeListPageHeader">
+      <Text tag="h1" data-testid="HankeListPageHeader" styleAs="h2" spacing="s" weight="bold">
         {t('hankeList:pageHeader')}
-      </H1>
+      </Text>
       <div className="hankelista__inner">
         <Table columns={columns} data={initialData || []} />
         <div className="hankelista__buttonWpr">
