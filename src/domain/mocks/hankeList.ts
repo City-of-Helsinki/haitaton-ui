@@ -7,8 +7,8 @@ const hankeList: HankeData[] = [
     onYKTHanke: false,
     nimi: 'Mannerheimintie autottomaksi',
     kuvaus: 'Hankkeen kuvaus',
-    alkuPvm: '2020-11-26T00:00:00Z',
-    loppuPvm: '2020-11-17T00:00:00Z',
+    alkuPvm: '2021-10-02:00:00Z',
+    loppuPvm: '2021-10-10:00:00Z',
     vaihe: 'OHJELMOINTI',
     suunnitteluVaihe: null,
     version: 0,
@@ -21,7 +21,39 @@ const hankeList: HankeData[] = [
     arvioijat: [],
     toteuttajat: [],
     tyomaaTyyppi: ['VESI', 'VIEMARI'],
-    geometriat: null,
+    geometriat: {
+      id: 1,
+      hankeId: 1,
+      featureCollection: {
+        type: 'FeatureCollection',
+        crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:EPSG::3879' } },
+        features: [
+          {
+            type: 'Feature',
+            properties: { hankeTunnus: 'SMTGEN2_2' },
+            geometry: {
+              type: 'Polygon',
+              crs: { type: 'name', properties: { name: 'EPSG:3879' } },
+              coordinates: [
+                [
+                  [2.549619729e7, 6673799.79],
+                  [2.549618361e7, 6674382.48],
+                  [2.549560092e7, 6674368.79],
+                  [2.549561461e7, 6673786.1],
+                  [2.549619729e7, 6673799.79],
+                ],
+              ],
+            },
+          },
+        ],
+      },
+      version: 0,
+      createdByUserId: null,
+      createdAt: '2021-01-19T13:01:26.024Z',
+      modifiedByUserId: null,
+      modifiedAt: '2021-01-19T13:01:26.024Z',
+    },
+
     tyomaaKatuosoite: '',
     tyomaaKoko: null,
     haittaAlkuPvm: null,
@@ -38,8 +70,8 @@ const hankeList: HankeData[] = [
     onYKTHanke: true,
     nimi: 'dsf',
     kuvaus: '',
-    alkuPvm: '2021-11-26T00:00:00Z',
-    loppuPvm: '2021-11-27T00:00:00Z',
+    alkuPvm: '2021-10-02:00:00Z',
+    loppuPvm: '2021-10-05:00:00Z',
     vaihe: 'OHJELMOINTI',
     suunnitteluVaihe: null,
     version: 0,
@@ -53,7 +85,7 @@ const hankeList: HankeData[] = [
     toteuttajat: [],
     tyomaaTyyppi: [],
     geometriat: {
-      id: 1,
+      id: 2,
       hankeId: 2,
       featureCollection: {
         type: 'FeatureCollection',
