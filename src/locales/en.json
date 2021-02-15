@@ -239,6 +239,9 @@
       "header": "EN:Lomake on lähetetty onnistuneesti"
     }
   },
+  "hankeSidebar": {
+    "closeButtonAriaLabel": "EN:Sulje hankevalikko"
+  },
   "hankeList": {
     "pageHeader": "EN:Hankelista",
     "paginationHeader": "EN:Sivu",
