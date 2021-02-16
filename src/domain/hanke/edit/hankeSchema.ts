@@ -9,8 +9,14 @@ export const today = startOfDay(new Date());
 export const isRequiredByFormPage = (formPage: number) => (val: number, schema: yup.MixedSchema) =>
   val === formPage ? schema.required() : schema;
 
+// https://github.com/jquense/yup/issues/176
+// https://github.com/jquense/yup/issues/952
 export const contactSchema = yup.object().shape({
-  sukunimi: yup.string().nullable().max(100),
+  // sukunimi: yup.string().max(100).when(['$formPage', 'etunimi', 'email'], {
+  sukunimi: yup.string().when(['etunimi', 'email'], {
+    is: true,
+    then: yup.string().required(),
+  }),
   etunimi: yup.string().nullable().max(100),
   email: yup.string().email().nullable().max(100),
   puhelinnumero: yup.string().nullable().max(20),
