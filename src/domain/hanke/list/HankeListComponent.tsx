@@ -22,7 +22,9 @@ const HankeList: React.FC<Props> = ({ initialData }) => {
         Header: t('hankeList:tableHeader:id'),
         id: 'id',
         accessor: 'hankeTunnus',
-        Cell: MyCell,
+        sortType: (a: HankeDataDraft, b: HankeDataDraft) => {
+          return -(a.id - b.id);
+        },
       },
       {
         Header: t('hankeList:tableHeader:name'),
