@@ -11,7 +11,7 @@ const getHanke = async (hankeTunnus: string | null) => {
 };
 
 const useGetHanke = (hankeTunnus: string | null) =>
-  useQuery(['hanke', hankeTunnus], () => getHanke(hankeTunnus), {
+  useQuery(['hankeSidebar', hankeTunnus], () => getHanke(hankeTunnus), {
     enabled: !!hankeTunnus,
     refetchOnWindowFocus: false,
     retry: false,
