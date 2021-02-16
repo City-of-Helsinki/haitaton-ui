@@ -239,7 +239,8 @@
     }
   },
   "hankeSidebar": {
-    "closeButtonAriaLabel": "Sulje hankevalikko"
+    "closeButtonAriaLabel": "Sulje hankevalikko",
+    "editHanke": "Muokkaa hankkeen tietoja"
   },
   "hankeList": {
     "pageHeader": "Hankelista",

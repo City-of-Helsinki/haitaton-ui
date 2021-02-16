@@ -240,7 +240,8 @@
     }
   },
   "hankeSidebar": {
-    "closeButtonAriaLabel": "EN:Sulje hankevalikko"
+    "closeButtonAriaLabel": "EN:Sulje hankevalikko",
+    "editHanke": "EN: Muokkaa hankkeen tietoja"
   },
   "hankeList": {
     "pageHeader": "EN:Hankelista",
