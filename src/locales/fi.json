@@ -178,7 +178,7 @@
     "labels": {
       "hankeTunnus": "Hankkeen tunnus",
       "nimi": "Hankkeen nimi",
-      "vaihe": "Hankeen Vaihe",
+      "vaihe": "Hankkeen Vaihe",
       "kuvaus": "Hankkeen kuvaus",
       "suunnitteluVaihe": "Hankkeen suunnitteluvaihe",
       "alkuPvm": "Hankkeen alkupäivä",
@@ -239,7 +239,8 @@
     }
   },
   "hankeSidebar": {
-    "closeButtonAriaLabel": "Sulje hankevalikko"
+    "closeButtonAriaLabel": "Sulje hankevalikko",
+    "editHanke": "Muokkaa hankkeen tietoja"
   },
   "hankeList": {
     "pageHeader": "Hankelista",

@@ -52,7 +52,7 @@ describe('HankeForm', () => {
     fireEvent.change(getByLabelText('Hankkeen loppupäivä', { exact: false }), {
       target: { value: loppuPvm },
     });
-    queryAllByText('Hankeen Vaihe')[0].click();
+    queryAllByText('Hankkeen Vaihe')[0].click();
     queryAllByText('Ohjelmointi')[0].click();
     expect(handleIsDirtyChange).toHaveBeenCalledTimes(2);
     await waitFor(() => expect(getByTestId('forward')).not.toBeDisabled());
@@ -136,7 +136,7 @@ describe('HankeForm', () => {
       target: { value: loppuPvm },
     });
 
-    queryAllByText('Hankeen Vaihe')[0].click();
+    queryAllByText('Hankkeen Vaihe')[0].click();
     queryAllByText('Suunnittelu')[0].click();
 
     await waitFor(() => expect(getByTestId('forward')).toBeDisabled());
@@ -175,7 +175,7 @@ describe('HankeForm', () => {
       target: { value: loppuPvm },
     });
 
-    queryAllByText('Hankeen Vaihe')[0].click();
+    queryAllByText('Hankkeen Vaihe')[0].click();
     queryAllByText('Ohjelmointi')[0].click();
 
     await waitFor(() => expect(getByTestId('forward')).not.toBeDisabled());
@@ -253,7 +253,7 @@ describe('HankeForm', () => {
     fireEvent.change(getByLabelText('Hankkeen loppupäivä', { exact: false }), {
       target: { value: loppuPvm },
     });
-    queryAllByText('Hankeen Vaihe')[0].click();
+    queryAllByText('Hankkeen Vaihe')[0].click();
     queryAllByText('Ohjelmointi')[0].click();
 
     getByText('Tallenna luonnos').click();
