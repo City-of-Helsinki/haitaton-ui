@@ -37,7 +37,7 @@ const HankeSidebarContainer: React.FC<Props> = ({ hankeTunnus }) => {
     history.push(location.pathname);
   };
 
-  if (!data || isLoading || isError) {
+  if (!data || !data.data || isLoading || isError) {
     return null;
   }
 
