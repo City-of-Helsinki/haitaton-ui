@@ -3,6 +3,7 @@ import { cleanup, fireEvent, waitFor } from '@testing-library/react';
 import { FORMFIELD } from './types';
 import Form from './Form';
 import FormContainer from './FormContainer';
+import { HANKE_VAIHE } from '../../types/hanke';
 
 import { render } from '../../../testUtils/render';
 
@@ -18,6 +19,7 @@ const katuosoite = 'Pohjoinen Rautatiekatu 11 b 12';
 const hankeenKuvaus = 'Tässä on kuvaus';
 
 const formData = {
+  vaihe: HANKE_VAIHE.OHJELMOINTI,
   toteuttajat: [],
   arvioijat: [],
   omistajat: [],
@@ -52,7 +54,7 @@ describe('HankeForm', () => {
     fireEvent.change(getByLabelText('Hankkeen loppupäivä', { exact: false }), {
       target: { value: loppuPvm },
     });
-    queryAllByText('Hankeen Vaihe')[0].click();
+    queryAllByText('Hankkeen Vaihe')[0].click();
     queryAllByText('Ohjelmointi')[0].click();
     expect(handleIsDirtyChange).toHaveBeenCalledTimes(2);
     await waitFor(() => expect(getByTestId('forward')).not.toBeDisabled());
@@ -136,7 +138,7 @@ describe('HankeForm', () => {
       target: { value: loppuPvm },
     });
 
-    queryAllByText('Hankeen Vaihe')[0].click();
+    queryAllByText('Hankkeen Vaihe')[0].click();
     queryAllByText('Suunnittelu')[0].click();
 
     await waitFor(() => expect(getByTestId('forward')).toBeDisabled());
@@ -175,7 +177,7 @@ describe('HankeForm', () => {
       target: { value: loppuPvm },
     });
 
-    queryAllByText('Hankeen Vaihe')[0].click();
+    queryAllByText('Hankkeen Vaihe')[0].click();
     queryAllByText('Ohjelmointi')[0].click();
 
     await waitFor(() => expect(getByTestId('forward')).not.toBeDisabled());
@@ -223,7 +225,7 @@ describe('HankeForm', () => {
   });
 
   test('Form should be populated correctly ', async () => {
-    const { getByTestId } = render(
+    const { getByTestId, getByText } = render(
       <Form
         formData={{
           ...formData,
@@ -239,6 +241,8 @@ describe('HankeForm', () => {
     );
     expect(getByTestId(FORMFIELD.NIMI)).toHaveValue('Lenkkeilijä Pekka');
     expect(getByTestId(FORMFIELD.KUVAUS)).toHaveValue('');
+    // expect(findByText('Objelmointi')).toBeTruthy();
+    expect(getByText('Ohjelmointi')).toBeInTheDocument();
   });
 
   test('FormContainer integration should work ', async () => {
@@ -253,7 +257,7 @@ describe('HankeForm', () => {
     fireEvent.change(getByLabelText('Hankkeen loppupäivä', { exact: false }), {
       target: { value: loppuPvm },
     });
-    queryAllByText('Hankeen Vaihe')[0].click();
+    queryAllByText('Hankkeen Vaihe')[0].click();
     queryAllByText('Ohjelmointi')[0].click();
 
     getByText('Tallenna luonnos').click();

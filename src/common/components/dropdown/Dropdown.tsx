@@ -9,8 +9,8 @@ import './dropDown.styles.scss';
 type Option = { value: string; label: string };
 
 type PropTypes = {
-  name: string;
   id: string;
+  name: string;
   control: Control;
   rules?: { required: boolean };
   defaultValue: string | null;
@@ -24,8 +24,8 @@ type PropTypes = {
 };
 
 const Dropdown: React.FC<PropTypes> = ({
-  name,
   id,
+  name,
   control,
   rules,
   options,
@@ -54,18 +54,18 @@ const Dropdown: React.FC<PropTypes> = ({
         render={({ onChange, onBlur, value }) => {
           return (
             <Select
-              options={options}
+              id={id}
+              label={label}
               defaultValue={
                 defaultValue
                   ? options.find((o) => o.value === defaultValue)
                   : options.find((o) => o.value === value)
               }
-              id={id}
-              label={label}
+              options={options}
               invalid={invalid}
-              // eslint-disable-next-line
-              onChange={(option: any) => {
-                onChange(option.value);
+              value={options.find((o) => o.value === value)}
+              onChange={(option: Option) => {
+                if (option) onChange(option.value);
                 onBlur();
               }}
               required={required}
