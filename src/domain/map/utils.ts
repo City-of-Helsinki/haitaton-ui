@@ -29,31 +29,39 @@ export const hankeIsBetweenDates = ({ endDate, startDate }: HankeFilters) => (ha
   const hankeStartDate = new Date(hanke.alkuPvm);
   const hankeEndDate = new Date(hanke.loppuPvm);
   if (
-    hankeStartDate < filterStartDate &&
-    hankeStartDate < filterEndDate &&
-    hankeEndDate > filterStartDate &&
-    hankeEndDate < filterEndDate
+    hankeStartDate <= filterStartDate &&
+    hankeStartDate <= filterEndDate &&
+    hankeEndDate >= filterStartDate &&
+    hankeEndDate <= filterEndDate
   )
     return true;
   if (
-    hankeStartDate > filterStartDate &&
-    hankeStartDate < filterEndDate &&
-    hankeEndDate > filterStartDate &&
-    hankeEndDate < filterEndDate
+    hankeStartDate >= filterStartDate &&
+    hankeStartDate <= filterEndDate &&
+    hankeEndDate >= filterStartDate &&
+    hankeEndDate <= filterEndDate
   )
     return true;
   if (
-    hankeStartDate > filterStartDate &&
-    hankeStartDate < filterEndDate &&
-    hankeEndDate > filterStartDate &&
-    hankeEndDate > filterEndDate
+    hankeStartDate >= filterStartDate &&
+    hankeStartDate <= filterEndDate &&
+    hankeEndDate >= filterStartDate &&
+    hankeEndDate >= filterEndDate
   )
     return true;
   if (
-    hankeStartDate < filterStartDate &&
-    hankeStartDate < filterEndDate &&
-    hankeEndDate > filterStartDate &&
-    hankeEndDate < filterEndDate
+    hankeStartDate <= filterStartDate &&
+    hankeStartDate <= filterEndDate &&
+    hankeEndDate >= filterStartDate &&
+    hankeEndDate <= filterEndDate
+  )
+    return true;
+  if (
+    // filters are between the hankeStart and End
+    filterStartDate >= hankeStartDate &&
+    filterStartDate <= hankeEndDate &&
+    filterEndDate >= hankeStartDate &&
+    filterEndDate <= hankeEndDate
   )
     return true;
   return false;
