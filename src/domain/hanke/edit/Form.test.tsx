@@ -77,6 +77,15 @@ describe('HankeForm', () => {
     fireEvent.change(getByTestId('omistajat-etunimi'), {
       target: { value: omistajaEtunimi },
     });
+    fireEvent.change(getByTestId('omistajat-sukunimi'), {
+      target: { value: omistajaEtunimi },
+    });
+    fireEvent.change(getByTestId('omistajat-email'), {
+      target: { value: 'pekka@omistaja.fi' },
+    });
+    fireEvent.change(getByTestId('omistajat-puhelinnumero'), {
+      target: { value: '0406664200' },
+    });
 
     getByTestId('forward').click(); // changes view to form3
     await waitFor(() => queryAllByText('Työmaan tiedot')[1]);

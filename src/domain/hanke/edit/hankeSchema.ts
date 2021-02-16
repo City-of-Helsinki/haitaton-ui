@@ -9,11 +9,23 @@ export const today = startOfDay(new Date());
 export const isRequiredByFormPage = (formPage: number) => (val: number, schema: yup.MixedSchema) =>
   val === formPage ? schema.required() : schema;
 
+// https://github.com/jquense/yup/issues/176
+// https://github.com/jquense/yup/issues/952
 export const contactSchema = yup.object().shape({
-  sukunimi: yup.string().nullable().max(100),
   etunimi: yup.string().nullable().max(100),
+  sukunimi: yup.string().nullable().max(100),
   email: yup.string().email().nullable().max(100),
   puhelinnumero: yup.string().nullable().max(20),
+  organisaatioId: yup.number().nullable(),
+  organisaatioNimi: yup.string().nullable(),
+  osasto: yup.string().nullable().max(200),
+});
+
+export const requiredContactSchema = yup.object().shape({
+  etunimi: yup.string().required().max(100),
+  sukunimi: yup.string().required(),
+  email: yup.string().email().required().max(100),
+  puhelinnumero: yup.string().required().max(20),
   organisaatioId: yup.number().nullable(),
   organisaatioNimi: yup.string().nullable(),
   osasto: yup.string().nullable().max(200),
@@ -46,7 +58,13 @@ export const hankeSchema = yup.object().shape({
     then: yup.string().required(),
   }),
   [FORMFIELD.KATUOSOITE]: yup.string().nullable().when('$formPage', isRequiredByFormPage(3)),
-  [FORMFIELD.OMISTAJAT]: yup.array().nullable().ensure().of(contactSchema),
+  [FORMFIELD.OMISTAJAT]: yup
+    .array()
+    .nullable()
+    // eslint-disable-next-line
+    .when('$formPage', (val: number, schema: any) =>
+      val === 2 ? schema.ensure().of(requiredContactSchema) : schema
+    ),
   [FORMFIELD.ARVIOIJAT]: yup.array().nullable().ensure().of(contactSchema),
   [FORMFIELD.TOTEUTTAJAT]: yup.array().nullable().ensure().of(contactSchema),
 });
