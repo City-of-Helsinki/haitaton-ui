@@ -5,7 +5,7 @@ import { $enum } from 'ts-enum-util';
 import { useTypedController } from '@hookform/strictly-typed';
 import { TextInput } from 'hds-react';
 import { CONTACT_FORMFIELD, FormProps, HankeDataFormState, Organization } from './types';
-import { HANKE_CONTACT_TYPE } from '../../types/hanke';
+import { HANKE_CONTACT_TYPE, HankeContactKey } from '../../types/hanke';
 import api from '../../api/api';
 import { getInputErrorText } from '../../../common/utils/form';
 import Text from '../../../common/components/text/Text';
@@ -19,6 +19,16 @@ const CONTACT_FIELDS = [
   CONTACT_FORMFIELD.PUHELINNUMERO,
   CONTACT_FORMFIELD.OSASTO,
 ];
+
+const REQUIRED: string[] = [
+  CONTACT_FORMFIELD.ETUNIMI,
+  CONTACT_FORMFIELD.SUKUNIMI,
+  CONTACT_FORMFIELD.EMAIL,
+  CONTACT_FORMFIELD.PUHELINNUMERO,
+];
+
+const isRequired = (type: HankeContactKey, field: string) =>
+  type === HANKE_CONTACT_TYPE.OMISTAJAT && REQUIRED.includes(field);
 
 const fetchOrganizations = async () => {
   const response = await api.get<Organization[]>('/organisaatiot');
@@ -57,6 +67,8 @@ const Form2: React.FC<FormProps> = ({ control, formData, errors, register }) => 
           <div className="formColumns">
             {CONTACT_FIELDS.map((contactField) => {
               const contactData = formData[contactType][contactIndex];
+              const asteriskIfRequired = isRequired(contactType, contactField) ? ' *' : '';
+
               return (
                 <React.Fragment key={contactField}>
                   <TypedController
@@ -65,7 +77,7 @@ const Form2: React.FC<FormProps> = ({ control, formData, errors, register }) => 
                     render={(props) => (
                       <TextInput
                         className="formItem"
-                        label={t(`hankeForm:labels:${contactField}`)}
+                        label={t(`hankeForm:labels:${contactField}`) + asteriskIfRequired}
                         id={`${contactType}-${contactField}`}
                         ref={register}
                         data-testid={`${contactType}-${contactField}`}
