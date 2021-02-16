@@ -79,32 +79,36 @@ const Table: React.FC<Props> = ({ columns, data }) => {
                 // we can add them into the header props
 
                 <th key={column.id}>
-                  <button
-                    data-testid={`tableHeaderButton${i}`}
-                    type="button"
-                    {...column.getSortByToggleProps()}
-                    aria-label={t(`hankeList:sortButtons:${column.id}`)}
-                  >
-                    <div>
-                      {column.render('Header')}
-                      {column.isSorted &&
-                        (column.isSortedDesc ? (
-                          <IconAngleUp aria-hidden="true" />
-                        ) : (
-                          <IconAngleDown aria-hidden="true" />
-                        ))}
-                      {!column.isSorted && (
-                        <>
-                          <span className="unSelectedWpr">
-                            <span className="unSelected">
-                              <IconAngleUp aria-hidden="true" />
-                              <IconAngleDown aria-hidden="true" />
+                  {column.id !== 'id' ? (
+                    <button
+                      data-testid={`tableHeaderButton${i}`}
+                      type="button"
+                      {...column.getSortByToggleProps()}
+                      aria-label={t(`hankeList:sortButtons:${column.id}`)}
+                    >
+                      <div>
+                        {column.render('Header')}
+                        {column.isSorted &&
+                          (column.isSortedDesc ? (
+                            <IconAngleUp aria-hidden="true" />
+                          ) : (
+                            <IconAngleDown aria-hidden="true" />
+                          ))}
+                        {!column.isSorted && (
+                          <>
+                            <span className="unSelectedWpr">
+                              <span className="unSelected">
+                                <IconAngleUp aria-hidden="true" />
+                                <IconAngleDown aria-hidden="true" />
+                              </span>
                             </span>
-                          </span>
-                        </>
-                      )}
-                    </div>
-                  </button>
+                          </>
+                        )}
+                      </div>
+                    </button>
+                  ) : (
+                    column.render('Header')
+                  )}
                 </th>
               ))}
               <th>

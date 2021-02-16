@@ -15,7 +15,6 @@ type Props = {
 
 const HankeList: React.FC<Props> = ({ initialData }) => {
   const { NEW_HANKE } = useLocalizedRoutes();
-
   const { t } = useTranslation();
   const columns = React.useMemo(
     () => [
