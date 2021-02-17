@@ -1,7 +1,7 @@
 @import 'layout.scss';
 
 .hankeForm {
-  padding: var(--spacing-s) var(--spacing-l) var(--spacing-3-xl) var(--spacing-l);
+  padding: 0 var(--spacing-l) var(--spacing-3-xl) var(--spacing-l);
 
   &__formWpr {
     display: flex;
@@ -37,6 +37,7 @@
     h2 {
       margin-top: -0.5rem;
       padding-top: 0;
+      font-size: var(--fontsize-heading-m);
     }
   }
 
