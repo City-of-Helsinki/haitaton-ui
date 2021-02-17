@@ -269,6 +269,9 @@
     }
   },
   "map": {
+    "controls": {
+      "ariaLayerMenu": "Kartan tasojen valinta"
+    },
     "tileLayers": {
       "ortokartta": "Ortokartta",
       "kantakartta": "Kantakartta"
@@ -278,7 +281,6 @@
       "end": "Ajanjakson loppu"
     },
     "drawSquareButtonAria": "Piirrä neliö kartalle",
-    "drawPolygonButtonAria": "Piirrä monikulmio kartalle",
-    "showMapLayersButtonAria": "Näytä karttatasot"
+    "drawPolygonButtonAria": "Piirrä monikulmio kartalle"
   }
 }

@@ -36,7 +36,6 @@ type Props = {
 
 const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
   const { t } = useTranslation();
-
   const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
 
   return (
@@ -51,7 +50,7 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
       onClose={handleClose}
       blockScrollOnMount={false}
     >
-      <DrawerContent className={styles.hankeSidebar__content} containerProps={{ className: 'FOO' }}>
+      <DrawerContent className={styles.hankeSidebar__content} aria-label="Hanke">
         <DrawerBody>
           <button
             className={styles.hankeSidebar__closeButton}
@@ -64,9 +63,11 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
           <Text tag="h2" weight="bold" styleAs="h4" spacing="2-xs">
             {hanke.nimi} ({hanke.hankeTunnus})
           </Text>
-          <Text tag="h3" styleAs="h5" weight="bold" spacingBottom="2-xs">
-            {hanke.tyomaaKatuosoite}
-          </Text>
+          {hanke.tyomaaKatuosoite && (
+            <Text tag="h3" styleAs="h5" weight="bold" spacingBottom="2-xs">
+              {hanke.tyomaaKatuosoite}
+            </Text>
+          )}
           <Text tag="h3" styleAs="h6" weight="bold" spacingBottom="s">
             {formatToFinnishDate(hanke.alkuPvm)} - {formatToFinnishDate(hanke.loppuPvm)}
           </Text>
