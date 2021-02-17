@@ -19,7 +19,7 @@ const HankeListContainer: React.FC = () => {
     });
   }
 
-  return data ? <HankeListComponent initialData={data} /> : null;
+  return data ? <HankeListComponent projectsData={data} /> : null;
 };
 
 export default HankeListContainer;

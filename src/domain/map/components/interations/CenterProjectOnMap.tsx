@@ -28,7 +28,7 @@ const CenterProjectOnMap: React.FC = () => {
 
   useEffect(() => {
     if (hanke) centralizeHankeOnMap(hanke);
-  }, [hanke]);
+  }, [hanke, map]);
 
   return null;
 };
