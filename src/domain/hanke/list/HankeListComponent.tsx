@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Text from '../../../common/components/text/Text';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
@@ -72,9 +72,9 @@ const HankeList: React.FC<Props> = ({ projectsData }) => {
       <div className="hankelista__inner">
         <Table columns={columns} data={projectsData || []} />
         <div className="hankelista__buttonWpr">
-          <NavLink data-testid="toFormLink" to={NEW_HANKE.path} className="hankelista__hankeLink">
+          <Link data-testid="toFormLink" to={NEW_HANKE.path} className="hankelista__hankeLink">
             <Locale id="header:hankeLink" />
-          </NavLink>
+          </Link>
         </div>
       </div>
     </div>

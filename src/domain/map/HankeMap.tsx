@@ -38,7 +38,7 @@ const geometryStyle = {
 };
 
 const HankeMap: React.FC<Props> = ({ projectsData }) => {
-  const hankeSources = useRef({ features: new VectorSource() });
+  const hankeSource = useRef(new VectorSource());
   const [zoom] = useState(9); // TODO: also take zoom into consideration
   const { mapTileLayers, toggleMapTileLayer } = useMapDataLayers();
   const {
@@ -57,10 +57,10 @@ const HankeMap: React.FC<Props> = ({ projectsData }) => {
   );
 
   useEffect(() => {
-    hankeSources.current.features.clear();
+    hankeSource.current.clear();
     hankkeetFilteredByAll.forEach((hanke) => {
       if (hanke.geometriat) {
-        hankeSources.current.features.addFeatures(
+        hankeSource.current.addFeatures(
           new GeoJSON().readFeatures(hanke.geometriat.featureCollection)
         );
       }
@@ -81,12 +81,12 @@ const HankeMap: React.FC<Props> = ({ projectsData }) => {
           {mapTileLayers.ortokartta.visible && <Ortokartta />}
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
 
-          <CenterProjectOnMap />
+          <CenterProjectOnMap source={hankeSource.current} />
 
           <FeatureClick />
 
           <VectorLayer
-            source={hankeSources.current.features}
+            source={hankeSource.current}
             zIndex={100}
             className="hankeGeometryLayer"
             style={geometryStyle.Blue}
