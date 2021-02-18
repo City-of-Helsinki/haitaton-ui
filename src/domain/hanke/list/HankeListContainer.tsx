@@ -13,6 +13,11 @@ const useHankeList = () => useQuery<HankeDataDraft[]>(['project'], getHankkeet);
 
 const HankeListContainer: React.FC = () => {
   const { data } = useHankeList();
+  if (data) {
+    data.sort((a, b) => {
+      return -(a.id - b.id);
+    });
+  }
 
   return data ? <HankeListComponent initialData={data} /> : null;
 };

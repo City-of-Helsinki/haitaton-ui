@@ -13,8 +13,6 @@ describe('HankeLista', () => {
     const { container, queryByText } = render(<HankeList initialData={hankeDraftList} />);
 
     await waitFor(() => queryByText('Hankelista'));
-    getByTestId(container, 'tableHeaderButton0').click();
-    expect(getByTestId(container, 'row0_cell_id')).toHaveTextContent('SMTGEN2_1');
     getByTestId(container, 'tableHeaderButton1').click();
     expect(getByTestId(container, 'row0_cell_name')).toHaveTextContent('cc');
     getByTestId(container, 'tableHeaderButton2').click();
