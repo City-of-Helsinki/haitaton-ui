@@ -86,6 +86,10 @@
           }
         }
       }
+
+      thead th:first-child {
+        font-weight: normal;
+      }
     }
   }
 
