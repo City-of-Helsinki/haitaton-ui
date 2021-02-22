@@ -1,44 +1,19 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
-import GeoJSON from 'ol/format/GeoJSON';
-import { Vector as VectorSource } from 'ol/source';
-import { Style, Fill, Stroke } from 'ol/style';
+import React, { useState } from 'react';
 import Map from '../../common/components/map/Map';
 import Controls from '../../common/components/map/controls/Controls';
 import LayerControl from '../../common/components/map/controls/LayerControl';
 import DateRangeControl from '../../common/components/map/controls/DateRangeControl';
-import VectorLayer from '../../common/components/map/layers/VectorLayer';
 import Kantakartta from './components/Layers/Kantakartta';
 import Ortokartta from './components/Layers/Ortokartta';
+import HankeLayer from './components/Layers/HankeLayer';
 import HankeSidebar from './components/HankeSidebar/HankeSidebarContainer';
 import styles from './Map.module.scss';
-import { byAllHankeFilters } from './utils';
 import { useMapDataLayers } from './hooks/useMapLayers';
 import { useDateRangeFilter } from './hooks/useDateRangeFilter';
 import { MapTileLayerId } from './types';
-import { HankeData } from '../types/hanke';
 import FeatureClick from '../../common/components/map/interactions/FeatureClick';
-import CenterProjectOnMap from './components/interations/CenterProjectOnMap';
 
-type Props = {
-  projectsData: HankeData[];
-};
-
-// Temporary reference style implementation. Actual colors
-// are chosen based on törmäysanalyysi
-const geometryStyle = {
-  Blue: new Style({
-    stroke: new Stroke({
-      color: 'black',
-      width: 1,
-    }),
-    fill: new Fill({
-      color: 'rgba(36, 114, 198, 1)',
-    }),
-  }),
-};
-
-const HankeMap: React.FC<Props> = ({ projectsData }) => {
-  const hankeSource = useRef(new VectorSource());
+const HankeMap: React.FC = () => {
   const [zoom] = useState(9); // TODO: also take zoom into consideration
   const { mapTileLayers, toggleMapTileLayer } = useMapDataLayers();
   const {
@@ -48,33 +23,8 @@ const HankeMap: React.FC<Props> = ({ projectsData }) => {
     setHankeFilterEndDate,
   } = useDateRangeFilter();
 
-  const hankkeetFilteredByAll = useMemo(
-    () =>
-      projectsData.filter(
-        byAllHankeFilters({ startDate: hankeFilterStartDate, endDate: hankeFilterEndDate })
-      ),
-    [projectsData, hankeFilterStartDate, hankeFilterEndDate]
-  );
-
-  useEffect(() => {
-    hankeSource.current.clear();
-    hankkeetFilteredByAll.forEach((hanke) => {
-      if (hanke.geometriat) {
-        hankeSource.current.addFeatures(
-          new GeoJSON().readFeatures(hanke.geometriat.featureCollection)
-        );
-      }
-    });
-    setTimeout(() => {
-      hankeSource.current.dispatchEvent('featuresAdded');
-    }, 1);
-  }, [hankkeetFilteredByAll]);
-
   return (
     <>
-      <div data-testid="countOfFilteredHankkeet" className={styles.hiddenTestDiv}>
-        {hankkeetFilteredByAll.length}
-      </div>
       <HankeSidebar />
       <div
         className={styles.mapContainer}
@@ -84,16 +34,9 @@ const HankeMap: React.FC<Props> = ({ projectsData }) => {
           {mapTileLayers.ortokartta.visible && <Ortokartta />}
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
 
-          <CenterProjectOnMap source={hankeSource.current} />
-
           <FeatureClick />
 
-          <VectorLayer
-            source={hankeSource.current}
-            zIndex={100}
-            className="hankeGeometryLayer"
-            style={geometryStyle.Blue}
-          />
+          <HankeLayer />
 
           <Controls>
             <DateRangeControl
