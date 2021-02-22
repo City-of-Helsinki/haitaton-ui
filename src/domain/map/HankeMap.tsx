@@ -65,6 +65,9 @@ const HankeMap: React.FC<Props> = ({ projectsData }) => {
         );
       }
     });
+    setTimeout(() => {
+      hankeSource.current.dispatchEvent('featuresAdded');
+    }, 1);
   }, [hankkeetFilteredByAll]);
 
   return (
