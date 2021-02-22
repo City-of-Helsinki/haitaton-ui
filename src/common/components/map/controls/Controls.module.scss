@@ -44,6 +44,7 @@
 
   &__button {
     border: 0;
+    color: var(--color-coat-of-arms);
 
     &:hover {
       background: gray;
@@ -52,6 +53,10 @@
     &--active {
       color: red;
     }
+  }
+
+  &__button:first-child {
+    margin-bottom: 0.5rem;
   }
 
   &__checkbox {

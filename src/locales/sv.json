@@ -276,6 +276,9 @@
     "dateRange": {
       "begin": "SV: Ajanjakson alku",
       "end": "SV: Ajanjakson loppu"
-    }
+    },
+    "drawSquareButtonAria": "SV:Piirrä neliö kartalle",
+    "drawPolygonButtonAria": "SV:Piirrä monikulmio kartalle",
+    "showMapLayersButtonAria": "SV:Näytä karttatasot"
   }
 }

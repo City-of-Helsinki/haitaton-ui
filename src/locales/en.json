@@ -277,6 +277,9 @@
     "dateRange": {
       "begin": "EN: Ajanjakson alku",
       "end": "EN: Ajanjakson loppu"
-    }
+    },
+    "drawSquareButtonAria": "EN:Piirrä neliö kartalle",
+    "drawPolygonButtonAria": "EN:Piirrä monikulmio kartalle",
+    "showMapLayersButtonAria": "EN:Näytä karttatasot"
   }
 }

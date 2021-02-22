@@ -276,6 +276,9 @@
     "dateRange": {
       "begin": "Ajanjakson alku",
       "end": "Ajanjakson loppu"
-    }
+    },
+    "drawSquareButtonAria": "Piirrä neliö kartalle",
+    "drawPolygonButtonAria": "Piirrä monikulmio kartalle",
+    "showMapLayersButtonAria": "Näytä karttatasot"
   }
 }

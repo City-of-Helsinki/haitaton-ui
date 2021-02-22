@@ -24,8 +24,8 @@ const LayerControl: React.FC<Props> = ({ tileLayers, onClickTileLayer }) => {
   return (
     <ControlPanel className={styles.tileLayerControl}>
       <Menu closeOnSelect={false}>
-        <MenuButton>
-          <IconLayers />
+        <MenuButton aria-label={t('map:showMapLayersButtonAria')}>
+          <IconLayers aria-hidden="true" />
         </MenuButton>
         <MenuList className={styles.controlMenu}>
           <MenuGroup>
