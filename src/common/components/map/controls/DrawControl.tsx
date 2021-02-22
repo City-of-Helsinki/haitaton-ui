@@ -34,7 +34,6 @@ const DrawControls: React.FC = () => {
             type="button"
             data-testid={`draw-control-${v}`}
             onClick={() => setSelectedDrawtoolType(v)}
-            title="Jepa"
           >
             {getDrawIcon(v)}
           </button>
