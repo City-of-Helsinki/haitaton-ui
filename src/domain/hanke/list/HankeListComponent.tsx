@@ -13,7 +13,7 @@ type Props = {
   projectsData: HankeDataDraft[];
 };
 
-const HankeList: React.FC<Props> = ({ initialData }) => {
+const HankeList: React.FC<Props> = ({ projectsData }) => {
   const { NEW_HANKE } = useLocalizedRoutes();
   const { t } = useTranslation();
   const columns = React.useMemo(
