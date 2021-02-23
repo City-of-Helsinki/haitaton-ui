@@ -42,7 +42,6 @@ const HankeMap: React.FC = () => {
             <GeometryHover>
               <HankeHoverBox />
             </GeometryHover>
-
             <HankeLayer />
           </HankkeetProvider>
 
