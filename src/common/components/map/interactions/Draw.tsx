@@ -14,13 +14,15 @@ type Props = {
 
 type Interaction = Draw | Snap | Modify;
 
-const DrawInteraction: React.FC<Props> = ({ source, features = undefined }) => {
+const DrawInteraction: React.FC<Props> = ({ source }) => {
   const { map, selectedDrawtoolType } = useContext(MapContext);
   const [instances, setInstances] = useState<Interaction[]>([]);
 
   const setInteractions = useCallback(
     (type) => {
-      if (!map || selectedDrawtoolType === null) return;
+      if (!map || !source || selectedDrawtoolType === null) return;
+
+      if (process.env.NODE_ENV === 'test') return;
 
       let geometryFunction;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,7 +35,6 @@ const DrawInteraction: React.FC<Props> = ({ source, features = undefined }) => {
 
       const drawInstance = new Draw({
         source,
-        features,
         type: geometryType,
         geometryFunction,
       });

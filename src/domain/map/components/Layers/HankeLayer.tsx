@@ -42,7 +42,6 @@ const useProjectsWithGeometry = () =>
 
 const HankeLayer = () => {
   const hankeSource = useRef(new VectorSource());
-
   const { hankeFilterStartDate, hankeFilterEndDate } = useDateRangeFilter();
 
   const { data } = useProjectsWithGeometry();
@@ -55,6 +54,7 @@ const HankeLayer = () => {
       ),
     [projectsData, hankeFilterStartDate, hankeFilterEndDate]
   );
+
   useEffect(() => {
     hankeSource.current.clear();
     hankkeetFilteredByAll.forEach((hanke) => {
