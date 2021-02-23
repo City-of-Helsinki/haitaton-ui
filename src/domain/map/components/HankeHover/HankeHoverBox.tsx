@@ -11,9 +11,7 @@ const HankeHoverBox: React.FC = () => {
 
   useEffect(() => {
     if (hoveredHankeTunnus.length > 0) {
-      const foundHanke = hankkeet.find((hanke) => {
-        return hanke.hankeTunnus === hoveredHankeTunnus;
-      });
+      const foundHanke = hankkeet.find((hanke) => hanke.hankeTunnus === hoveredHankeTunnus);
       setHankeData(foundHanke);
     } else {
       setHankeData(undefined);
