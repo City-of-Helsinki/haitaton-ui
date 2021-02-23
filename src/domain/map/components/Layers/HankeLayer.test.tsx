@@ -1,4 +1,20 @@
 import React from 'react';
+import { render } from '../../../../testUtils/render';
+import HankeLayer from './HankeLayer';
+import Map from '../../../../common/components/map/Map';
+
+describe('HankeLayer', () => {
+  test('Render test', async () => {
+    render(
+      <Map zoom={9}>
+        <HankeLayer />
+      </Map>
+    );
+  });
+});
+
+/* 
+
 import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { render } from '../../testUtils/render';
@@ -63,3 +79,4 @@ describe('Map tile layers can be controlled by layercontrol and share the same s
     expect(getByTestId(countOfFilteredHankkeet)).toHaveTextContent('1');
   });
 });
+*/

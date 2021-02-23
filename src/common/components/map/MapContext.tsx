@@ -7,14 +7,14 @@ type MapContext = {
   selectedDrawtoolType: SelectedDrawtoolType;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setSelectedDrawtoolType: any;
-  layers: Layer[]; // Not sure yet is these necessary to keep in context
+  layers: Record<string, Layer>; // Not sure yet is these necessary to keep in context
 };
 
 const MapContext = React.createContext<MapContext>({
   map: null,
   selectedDrawtoolType: '', // Maybe should be moved to redux in future
   setSelectedDrawtoolType: null, // Maybe should be moved to redux in future
-  layers: [],
+  layers: {},
 });
 
 export default MapContext;

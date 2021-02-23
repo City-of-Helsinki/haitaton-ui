@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Text from '../../../common/components/text/Text';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
@@ -10,11 +10,23 @@ import Table from './Table';
 import './Hankelista.styles.scss';
 
 type Props = {
-  initialData: HankeDataDraft[];
+  projectsData: HankeDataDraft[];
 };
 
-const HankeList: React.FC<Props> = ({ initialData }) => {
-  const { NEW_HANKE } = useLocalizedRoutes();
+const HankeList: React.FC<Props> = ({ projectsData }) => {
+  const { MAP, NEW_HANKE } = useLocalizedRoutes();
+
+  // eslint-disable-next-line
+  function MyCell(value: any) {
+    const hasGeometry = value.cell.row.original.tilat?.onGeometrioita;
+    if (hasGeometry) {
+      return (
+        <Link to={`${MAP.path}?hanke=${value.value}`}>{value.cell.row.original.hankeTunnus}</Link>
+      );
+    }
+    return value.value;
+  }
+
   const { t } = useTranslation();
   const columns = React.useMemo(
     () => [
@@ -22,6 +34,7 @@ const HankeList: React.FC<Props> = ({ initialData }) => {
         Header: t('hankeList:tableHeader:id'),
         id: 'id',
         accessor: 'hankeTunnus',
+        Cell: MyCell,
       },
       {
         Header: t('hankeList:tableHeader:name'),
@@ -50,17 +63,18 @@ const HankeList: React.FC<Props> = ({ initialData }) => {
     ],
     []
   );
+
   return (
     <div className="hankelista">
       <Text tag="h1" data-testid="HankeListPageHeader" styleAs="h2" spacing="s" weight="bold">
         {t('hankeList:pageHeader')}
       </Text>
       <div className="hankelista__inner">
-        <Table columns={columns} data={initialData || []} />
+        <Table columns={columns} data={projectsData || []} />
         <div className="hankelista__buttonWpr">
-          <NavLink data-testid="toFormLink" to={NEW_HANKE.path} className="hankelista__hankeLink">
+          <Link data-testid="toFormLink" to={NEW_HANKE.path} className="hankelista__hankeLink">
             <Locale id="header:hankeLink" />
-          </NavLink>
+          </Link>
         </div>
       </div>
     </div>

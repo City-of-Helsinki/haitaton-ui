@@ -10,7 +10,7 @@ jest.setTimeout(10000);
 
 describe('HankeLista', () => {
   test('Sorting test', async () => {
-    const { container, queryByText } = render(<HankeList initialData={hankeDraftList} />);
+    const { container, queryByText } = render(<HankeList projectsData={hankeDraftList} />);
 
     await waitFor(() => queryByText('Hankelista'));
     getByTestId(container, 'tableHeaderButton1').click();
@@ -24,7 +24,7 @@ describe('HankeLista', () => {
     expect(getByTestId(container, 'row0_cell_endDate')).toHaveTextContent('11.01.2032');
   });
   test('pagination test', async () => {
-    const { container, queryAllByText } = render(<HankeList initialData={hankeDraftList} />);
+    const { container, queryAllByText } = render(<HankeList projectsData={hankeDraftList} />);
 
     expect(getByTestId(container, 'amountOfpages')).toHaveTextContent('9');
     getByTestId(container, 'toEnd').click();

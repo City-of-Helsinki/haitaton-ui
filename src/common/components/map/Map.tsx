@@ -22,7 +22,7 @@ const Map: React.FC<Props> = ({
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<MapInstance>(null);
   const [selectedDrawtoolType, setSelectedDrawtoolType] = useState<SelectedDrawtoolType>('');
-  const [layers] = useState([]);
+  const [layers] = useState({});
 
   useEffect(() => {
     if (mapRef.current == null) {
@@ -64,7 +64,7 @@ const Map: React.FC<Props> = ({
   return (
     <MapContext.Provider value={{ map, layers, selectedDrawtoolType, setSelectedDrawtoolType }}>
       <div ref={mapRef} className={mapClassName} id="ol-map">
-        {children}
+        {map && children}
       </div>
     </MapContext.Provider>
   );

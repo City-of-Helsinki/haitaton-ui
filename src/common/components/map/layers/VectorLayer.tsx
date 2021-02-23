@@ -12,7 +12,7 @@ type Props = {
 };
 
 const VectorLayer: React.FC<Props> = ({ source, className, zIndex = 0, style = undefined }) => {
-  const { map } = useContext(MapContext);
+  const { map, layers } = useContext(MapContext);
 
   useEffect(() => {
     if (!map) return;
@@ -25,6 +25,8 @@ const VectorLayer: React.FC<Props> = ({ source, className, zIndex = 0, style = u
 
     map.addLayer(vectorLayer);
     vectorLayer.setZIndex(zIndex);
+
+    layers[className] = vectorLayer;
 
     // eslint-disable-next-line
     return () => {
