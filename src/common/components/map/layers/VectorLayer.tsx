@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { Vector as VectorSource } from 'ol/source';
-import { Style } from 'ol/style';
+import { StyleLike } from 'ol/style/Style';
 import OLVectorLayer from 'ol/layer/Vector';
 import MapContext from '../MapContext';
 
@@ -8,7 +8,7 @@ type Props = {
   source: VectorSource;
   className: string;
   zIndex?: number;
-  style?: Style;
+  style?: StyleLike;
 };
 
 const VectorLayer: React.FC<Props> = ({ source, className, zIndex = 0, style = undefined }) => {
