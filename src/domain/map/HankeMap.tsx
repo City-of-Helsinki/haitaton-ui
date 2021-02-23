@@ -14,6 +14,7 @@ import { MapTileLayerId } from './types';
 import FeatureClick from '../../common/components/map/interactions/FeatureClick';
 import GeometryHover from '../../common/components/map/interactions/hover/GeometryHover';
 import HankeHoverBox from './components/HankeHover/HankeHoverBox';
+import HankkeetProvider from './HankkeetProvider';
 
 const HankeMap: React.FC = () => {
   const [zoom] = useState(9); // TODO: also take zoom into consideration
@@ -36,12 +37,14 @@ const HankeMap: React.FC = () => {
           {mapTileLayers.ortokartta.visible && <Ortokartta />}
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
 
-          <FeatureClick />
-          <GeometryHover>
-            <HankeHoverBox />
-          </GeometryHover>
+          <HankkeetProvider>
+            <FeatureClick />
+            <GeometryHover>
+              <HankeHoverBox />
+            </GeometryHover>
 
-          <HankeLayer />
+            <HankeLayer />
+          </HankkeetProvider>
 
           <Controls>
             <DateRangeControl
