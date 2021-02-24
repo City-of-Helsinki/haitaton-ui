@@ -18,6 +18,7 @@ const Kantakartta = () => (
           TRANSPARENT: 'false',
         },
         projection,
+        cacheSize: 1000,
         imageSmoothing: false,
         hidpi: false,
         serverType: 'geoserver',

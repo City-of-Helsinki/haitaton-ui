@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useMemo } from 'react';
 import { useQuery } from 'react-query';
-import { Fill, Stroke, Style } from 'ol/style';
 import { Vector as VectorSource } from 'ol/source';
 import GeoJSON from 'ol/format/GeoJSON';
 import VectorLayer from '../../../../common/components/map/layers/VectorLayer';
@@ -8,22 +7,8 @@ import { byAllHankeFilters } from '../../utils';
 import { useDateRangeFilter } from '../../hooks/useDateRangeFilter';
 import { HankeData } from '../../../types/hanke';
 import api from '../../../api/api';
-
+import { styleFunction } from '../../utils/geometryStyle';
 import CenterProjectOnMap from '../interations/CenterProjectOnMap';
-
-// Temporary reference style implementation. Actual colors
-// are chosen based on törmäysanalyysi
-const geometryStyle = {
-  Blue: new Style({
-    stroke: new Stroke({
-      color: 'black',
-      width: 1,
-    }),
-    fill: new Fill({
-      color: 'rgba(36, 114, 198, 1)',
-    }),
-  }),
-};
 
 const getProjectsWithGeometry = async () => {
   const response = await api.get<HankeData[]>('/hankkeet', {
@@ -76,7 +61,7 @@ const HankeLayer = () => {
         source={hankeSource.current}
         zIndex={100}
         className="hankeGeometryLayer"
-        style={geometryStyle.Blue}
+        style={styleFunction}
       />
     </>
   );
