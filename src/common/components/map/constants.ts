@@ -12,10 +12,5 @@ enum GeometryType {
 }
 */
 
-export enum DRAWTOOLTYPE {
-  POLYGON = 'Polygon',
-  SQUARE = 'Square',
-}
-
 export const epsg3857 = 'EPSG::3857';
 export const epsg3879 = 'EPSG::3879';

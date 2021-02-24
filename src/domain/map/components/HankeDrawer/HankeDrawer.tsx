@@ -4,9 +4,9 @@ import { Vector as VectorSource } from 'ol/source';
 import Map from '../../../../common/components/map/Map';
 import Controls from '../../../../common/components/map/controls/Controls';
 import LayerControl from '../../../../common/components/map/controls/LayerControl';
-import DrawControl from '../../../../common/components/map/controls/DrawControl';
 import VectorLayer from '../../../../common/components/map/layers/VectorLayer';
-import DrawIntercation from '../../../../common/components/map/interactions/Draw';
+import DrawModule from '../../../../common/components/map/modules/draw/DrawModule';
+
 import { HankeGeoJSON } from '../../../../common/types/hanke';
 import Kantakartta from '../Layers/Kantakartta';
 import Ortokartta from '../Layers/Ortokartta';
@@ -45,13 +45,12 @@ const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry }) => {
     <>
       <div className={styles.mapContainer} style={{ width: '100%', height: 500 }}>
         <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
-          <DrawIntercation source={drawSource} />
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
           {mapTileLayers.ortokartta.visible && <Ortokartta />}
           <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
 
           <Controls>
-            <DrawControl />
+            <DrawModule source={drawSource} />
             <LayerControl
               tileLayers={Object.values(mapTileLayers)}
               onClickTileLayer={(id: MapTileLayerId) => toggleMapTileLayer(id)}

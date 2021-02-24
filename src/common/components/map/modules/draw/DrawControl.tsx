@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { IconPen } from 'hds-react';
 import clsx from 'clsx';
 import { $enum } from 'ts-enum-util';
-import ControlPanel from './ControlPanel';
-import styles from './Controls.module.scss';
-import MapContext from '../MapContext';
-import { DRAWTOOLTYPE } from '../constants';
-import IconSquare from '../../icons/Square';
+import IconSquare from '../../../icons/Square';
+import ControlPanel from '../../controls/ControlPanel';
+import styles from '../../controls/Controls.module.scss';
+import { DrawContext } from './DrawContext';
+import { DRAWTOOLTYPE } from './types';
 
 const getDrawIcon = (drawTool: DRAWTOOLTYPE) => {
   switch (drawTool) {
@@ -21,8 +21,11 @@ const getDrawIcon = (drawTool: DRAWTOOLTYPE) => {
 };
 
 const DrawControls: React.FC = () => {
-  const { setSelectedDrawtoolType, selectedDrawtoolType } = useContext(MapContext);
   const { t } = useTranslation();
+  const { state, actions } = useContext(DrawContext);
+
+  if (!state || !actions) return null;
+
   return (
     <ControlPanel className={styles.drawControl}>
       {$enum(DRAWTOOLTYPE)
@@ -31,7 +34,7 @@ const DrawControls: React.FC = () => {
           <button
             key={v}
             className={clsx(styles.drawControl__button, {
-              [styles['drawControl__button--active']]: selectedDrawtoolType === v,
+              [styles['drawControl__button--active']]: state.selectedDrawtoolType === v,
             })}
             aria-label={
               v === DRAWTOOLTYPE.SQUARE
@@ -40,7 +43,13 @@ const DrawControls: React.FC = () => {
             }
             type="button"
             data-testid={`draw-control-${v}`}
-            onClick={() => setSelectedDrawtoolType(v)}
+            onClick={() => {
+              if (v === state.selectedDrawtoolType) {
+                actions.setSelectedDrawToolType(null);
+              } else {
+                actions.setSelectedDrawToolType(v);
+              }
+            }}
           >
             {getDrawIcon(v)}
           </button>
