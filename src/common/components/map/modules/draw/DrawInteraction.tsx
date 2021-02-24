@@ -3,9 +3,9 @@ import { Vector } from 'ol/source';
 import Feature from 'ol/Feature';
 import Collection from 'ol/Collection';
 import { Draw, Snap, Modify } from 'ol/interaction';
-import { createRegularPolygon } from 'ol/interaction/Draw';
-import { DRAWTOOLTYPE } from '../constants';
-import MapContext from '../MapContext';
+import { DRAWTOOLTYPE } from './types';
+import MapContext from '../../MapContext';
+import { DrawContext } from './DrawContext';
 
 type Props = {
   source: Vector;
@@ -15,28 +15,24 @@ type Props = {
 type Interaction = Draw | Snap | Modify;
 
 const DrawInteraction: React.FC<Props> = ({ source }) => {
-  const { map, selectedDrawtoolType } = useContext(MapContext);
+  const { map } = useContext(MapContext);
+  const { state } = useContext(DrawContext);
   const [instances, setInstances] = useState<Interaction[]>([]);
 
-  const setInteractions = useCallback(
-    (type) => {
-      if (!map || !source || selectedDrawtoolType === null) return;
-
-      if (process.env.NODE_ENV === 'test') return;
-
-      let geometryFunction;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let geometryType: any = type;
-
-      if (type === DRAWTOOLTYPE.SQUARE) {
-        geometryFunction = createRegularPolygon(4);
-        geometryType = 'Circle';
+  const startDraw = useCallback(
+    (type = DRAWTOOLTYPE.POLYGON) => {
+      if (
+        !map ||
+        !source ||
+        state?.selectedDrawtoolType === null ||
+        process.env.NODE_ENV === 'test'
+      ) {
+        return;
       }
 
       const drawInstance = new Draw({
         source,
-        type: geometryType,
-        geometryFunction,
+        type,
       });
 
       map.addInteraction(drawInstance);
@@ -49,28 +45,40 @@ const DrawInteraction: React.FC<Props> = ({ source }) => {
 
       setInstances([drawInstance, snapInstance, modifyInstance]);
     },
-    [map, source]
+    [map, source, state?.selectedDrawtoolType]
   );
 
-  const removeInteractions = useCallback(() => {
+  const startEdit = useCallback(() => {
+    if (!map || !source || process.env.NODE_ENV === 'test') return;
+
+    const modifyInstance = new Modify({ source });
+    map.addInteraction(modifyInstance);
+
+    setInstances([modifyInstance]);
+  }, [map, source]);
+
+  const removeAllInteractions = useCallback(() => {
     instances.forEach((i: Interaction) => {
       map?.removeInteraction(i);
     });
   }, [map, source, instances]);
 
   useEffect(() => {
-    if (!map || selectedDrawtoolType === null) return;
+    if (!map) return;
+    startEdit();
 
     // eslint-disable-next-line
-    return () => {
-      removeInteractions();
-    };
+    return () => removeAllInteractions();
   }, []);
 
   useEffect(() => {
-    removeInteractions();
-    setInteractions(selectedDrawtoolType);
-  }, [selectedDrawtoolType]);
+    removeAllInteractions();
+    if (state?.selectedDrawtoolType) {
+      startDraw(state?.selectedDrawtoolType);
+    } else {
+      startEdit();
+    }
+  }, [state?.selectedDrawtoolType]);
 
   return null;
 };
