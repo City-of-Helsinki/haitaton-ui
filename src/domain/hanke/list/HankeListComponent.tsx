@@ -14,19 +14,7 @@ type Props = {
 };
 
 const HankeList: React.FC<Props> = ({ projectsData }) => {
-  const { MAP, NEW_HANKE } = useLocalizedRoutes();
-
-  // eslint-disable-next-line
-  function MyCell(value: any) {
-    const hasGeometry = value.cell.row.original.tilat?.onGeometrioita;
-    if (hasGeometry) {
-      return (
-        <Link to={`${MAP.path}?hanke=${value.value}`}>{value.cell.row.original.hankeTunnus}</Link>
-      );
-    }
-    return value.value;
-  }
-
+  const { NEW_HANKE } = useLocalizedRoutes();
   const { t } = useTranslation();
   const columns = React.useMemo(
     () => [
@@ -34,7 +22,6 @@ const HankeList: React.FC<Props> = ({ projectsData }) => {
         Header: t('hankeList:tableHeader:id'),
         id: 'id',
         accessor: 'hankeTunnus',
-        Cell: MyCell,
       },
       {
         Header: t('hankeList:tableHeader:name'),
