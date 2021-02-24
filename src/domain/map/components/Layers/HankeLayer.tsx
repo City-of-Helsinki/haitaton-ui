@@ -1,43 +1,24 @@
-import React, { useRef, useEffect, useMemo } from 'react';
-import { useQuery } from 'react-query';
+import React, { useRef, useEffect, useMemo, useContext } from 'react';
 import { Vector as VectorSource } from 'ol/source';
 import GeoJSON from 'ol/format/GeoJSON';
 import VectorLayer from '../../../../common/components/map/layers/VectorLayer';
 import { byAllHankeFilters } from '../../utils';
 import { useDateRangeFilter } from '../../hooks/useDateRangeFilter';
-import { HankeData } from '../../../types/hanke';
-import api from '../../../api/api';
 import { styleFunction } from '../../utils/geometryStyle';
 import CenterProjectOnMap from '../interations/CenterProjectOnMap';
-
-const getProjectsWithGeometry = async () => {
-  const response = await api.get<HankeData[]>('/hankkeet', {
-    params: {
-      geometry: true,
-    },
-  });
-  return response;
-};
-
-const useProjectsWithGeometry = () =>
-  useQuery(['projectsWithGeometry'], getProjectsWithGeometry, {
-    refetchOnWindowFocus: false,
-    retry: false,
-  });
+import HankkeetContext from '../../HankkeetProviderContext';
 
 const HankeLayer = () => {
+  const { hankkeet } = useContext(HankkeetContext);
   const hankeSource = useRef(new VectorSource());
   const { hankeFilterStartDate, hankeFilterEndDate } = useDateRangeFilter();
 
-  const { data } = useProjectsWithGeometry();
-  const projectsData = data ? data.data : [];
-
   const hankkeetFilteredByAll = useMemo(
     () =>
-      projectsData.filter(
+      hankkeet.filter(
         byAllHankeFilters({ startDate: hankeFilterStartDate, endDate: hankeFilterEndDate })
       ),
-    [projectsData, hankeFilterStartDate, hankeFilterEndDate]
+    [hankkeet, hankeFilterStartDate, hankeFilterEndDate]
   );
 
   useEffect(() => {
