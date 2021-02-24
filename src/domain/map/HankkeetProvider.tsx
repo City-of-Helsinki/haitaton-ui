@@ -4,7 +4,7 @@ import api from '../api/api';
 import HankkeetContext from './HankkeetProviderContext';
 import { HankeData } from '../types/hanke';
 
-const GeometryHover: React.FC = ({ children }) => {
+const HankkeetProvider: React.FC = ({ children }) => {
   const getProjectsWithGeometry = async () => {
     const response = await api.get<HankeData[]>('/hankkeet', {
       params: {
@@ -30,4 +30,4 @@ const GeometryHover: React.FC = ({ children }) => {
   );
 };
 
-export default GeometryHover;
+export default HankkeetProvider;

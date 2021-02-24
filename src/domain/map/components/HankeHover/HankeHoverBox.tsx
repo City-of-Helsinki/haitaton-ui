@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
+import { format } from 'date-fns';
 import HoverContext from '../../../../common/components/map/interactions/hover/HoverContext';
 import HankkeetContext from '../../HankkeetProviderContext';
 import styles from './HankeHover.module.scss';
@@ -7,23 +8,24 @@ import { HankeData } from '../../../types/hanke';
 const HankeHoverBox: React.FC = () => {
   const { hoveredHankeTunnus } = useContext(HoverContext);
   const { hankkeet } = useContext(HankkeetContext);
-  const [hankeData, setHankeData] = useState<HankeData>();
+  let foundHanke: HankeData | undefined;
 
-  useEffect(() => {
-    if (hoveredHankeTunnus.length > 0) {
-      const foundHanke = hankkeet.find((hanke) => hanke.hankeTunnus === hoveredHankeTunnus);
-      setHankeData(foundHanke);
-    } else {
-      setHankeData(undefined);
-    }
-  }, [hoveredHankeTunnus]);
+  if (hoveredHankeTunnus.length > 0) {
+    foundHanke = hankkeet.find((hanke) => hanke.hankeTunnus === hoveredHankeTunnus);
+  } else {
+    foundHanke = undefined;
+  }
 
   return (
     <div className={styles.hankeHover}>
-      <h1>Hovering on {hoveredHankeTunnus}</h1>
-      <p>{hankeData?.nimi}</p>
-      <p>{hankeData?.alkuPvm}</p>
-      <p>{hankeData?.loppuPvm}</p>
+      {foundHanke && (
+        <div>
+          <p>{foundHanke?.nimi}</p>
+          <p>({hoveredHankeTunnus})</p>
+          <p>{format(new Date(foundHanke?.alkuPvm), 'dd.MM.yyyy')}</p>
+          <p>{format(new Date(foundHanke?.loppuPvm), 'dd.MM.yyyy')}</p>
+        </div>
+      )}
     </div>
   );
 };
