@@ -1,3 +1,6 @@
+import Feature from 'ol/Feature';
+import { Vector as VectorSource } from 'ol/source';
+
 export enum ACTION {
   SELECT_FEATURE = 'selectFeature',
   SELECT_DRAW_TOOL = 'selectDrawTool',
@@ -9,21 +12,24 @@ export enum DRAWTOOLTYPE {
 }
 
 export type SelectedDrawToolType = DRAWTOOLTYPE | null;
+export type SelectedFeature = Feature | null;
 
 export type State = {
-  selectedFeature: unknown;
+  selectedFeature: SelectedFeature;
   selectedDrawtoolType: SelectedDrawToolType;
 };
 
 export type Action =
-  | { type: ACTION.SELECT_FEATURE; id: string }
-  | { type: ACTION.SELECT_DRAW_TOOL; drawToolType: SelectedDrawToolType };
+  | { type: ACTION.SELECT_FEATURE; selectedFeature: SelectedFeature }
+  | { type: ACTION.SELECT_DRAW_TOOL; selectedDrawtoolType: SelectedDrawToolType };
 
 export type Actions = {
-  setSelectedDrawToolType: (val: SelectedDrawToolType) => void;
+  setSelectedFeature: (selectedFeature: SelectedFeature) => void;
+  setSelectedDrawToolType: (selectedDrawtoolType: SelectedDrawToolType) => void;
 };
 
 export type DrawContextType = {
   state: State | null;
+  source: VectorSource | null;
   actions: Actions | null;
 };

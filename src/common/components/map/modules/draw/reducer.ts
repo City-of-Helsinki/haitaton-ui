@@ -5,10 +5,10 @@ export const initialState: State = { selectedFeature: null, selectedDrawtoolType
 export function reducer(state: State, action: Action) {
   switch (action.type) {
     case ACTION.SELECT_DRAW_TOOL: {
-      return { ...state, selectedDrawtoolType: action.drawToolType };
+      return { ...state, selectedDrawtoolType: action.selectedDrawtoolType };
     }
     case ACTION.SELECT_FEATURE: {
-      return { ...state, selectFeature: action.id };
+      return { ...state, selectedFeature: action.selectedFeature };
     }
     default:
       throw new Error();
