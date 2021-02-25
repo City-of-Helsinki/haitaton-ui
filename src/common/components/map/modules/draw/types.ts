@@ -29,7 +29,7 @@ export type Actions = {
 };
 
 export type DrawContextType = {
-  state: State | null;
-  source: VectorSource | null;
-  actions: Actions | null;
+  state: State;
+  source: VectorSource;
+  actions: Actions;
 };

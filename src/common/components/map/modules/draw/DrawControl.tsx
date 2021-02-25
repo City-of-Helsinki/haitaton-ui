@@ -1,17 +1,13 @@
-import React, { useContext } from 'react';
-<<<<<<< HEAD
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { IconPen } from 'hds-react';
-=======
-import { IconPen, IconStarFill, IconTrash } from 'hds-react';
->>>>>>> 13182a4... HAI-718: Remove geometry feature
+import { IconPen, IconTrash } from 'hds-react';
 import clsx from 'clsx';
 import { $enum } from 'ts-enum-util';
 import IconSquare from '../../../icons/Square';
 import ControlPanel from '../../controls/ControlPanel';
 import styles from '../../controls/Controls.module.scss';
-import { DrawContext } from './DrawContext';
 import { DRAWTOOLTYPE } from './types';
+import useDrawContext from './useDrawContext';
 
 const getDrawIcon = (drawTool: DRAWTOOLTYPE) => {
   switch (drawTool) {
@@ -26,9 +22,7 @@ const getDrawIcon = (drawTool: DRAWTOOLTYPE) => {
 
 const DrawControls: React.FC = () => {
   const { t } = useTranslation();
-  const { state, actions, source } = useContext(DrawContext);
-
-  if (!state || !actions) return null;
+  const { state, actions, source } = useDrawContext();
 
   const handleRemoveFeature = () => {
     if (source && state.selectedFeature !== null && source.hasFeature(state.selectedFeature)) {
@@ -64,7 +58,7 @@ const DrawControls: React.FC = () => {
               [styles['drawControl__button--active']]: state.selectedDrawtoolType === drawToolType,
             })}
             aria-label={
-              v === DRAWTOOLTYPE.SQUARE
+              drawToolType === DRAWTOOLTYPE.SQUARE
                 ? t('map:drawSquareButtonAria')
                 : t('map:drawPolygonButtonAria')
             }
