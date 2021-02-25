@@ -20,6 +20,8 @@ const getHankeGeometry = async (hankeTunnus: HankeTunnus) => {
 const useHankeGeometry = (hankeTunnus: HankeTunnus) =>
   useQuery<HankeGeometria>(['hankeGeometry', hankeTunnus], () => getHankeGeometry(hankeTunnus), {
     retry: false,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
     enabled: !!hankeTunnus,
   });
 
@@ -52,4 +54,6 @@ const HankeDrawerContainer: React.FC<Props> = ({ hankeTunnus, onChangeGeometries
   );
 };
 
-export default HankeDrawerContainer;
+const shouldNotUpdate = () => false;
+
+export default React.memo(HankeDrawerContainer, shouldNotUpdate);

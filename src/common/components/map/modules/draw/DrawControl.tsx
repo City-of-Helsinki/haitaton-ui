@@ -1,6 +1,10 @@
 import React, { useContext } from 'react';
+<<<<<<< HEAD
 import { useTranslation } from 'react-i18next';
 import { IconPen } from 'hds-react';
+=======
+import { IconPen, IconStarFill, IconTrash } from 'hds-react';
+>>>>>>> 13182a4... HAI-718: Remove geometry feature
 import clsx from 'clsx';
 import { $enum } from 'ts-enum-util';
 import IconSquare from '../../../icons/Square';
@@ -22,19 +26,42 @@ const getDrawIcon = (drawTool: DRAWTOOLTYPE) => {
 
 const DrawControls: React.FC = () => {
   const { t } = useTranslation();
-  const { state, actions } = useContext(DrawContext);
+  const { state, actions, source } = useContext(DrawContext);
 
   if (!state || !actions) return null;
 
+  const handleRemoveFeature = () => {
+    if (source && state.selectedFeature !== null && source.hasFeature(state.selectedFeature)) {
+      source?.removeFeature(state.selectedFeature);
+    }
+  };
+
+  const handleClickDrawTool = (drawToolType: DRAWTOOLTYPE) => {
+    if (drawToolType === state.selectedDrawtoolType) {
+      actions.setSelectedDrawToolType(null);
+    } else {
+      actions.setSelectedDrawToolType(drawToolType);
+    }
+  };
+
   return (
     <ControlPanel className={styles.drawControl}>
+      {state?.selectedFeature && (
+        <button
+          type="button"
+          className={clsx(styles.drawControl__button)}
+          onClick={handleRemoveFeature}
+        >
+          <IconTrash size="m" aria-hidden="true" />
+        </button>
+      )}
       {$enum(DRAWTOOLTYPE)
         .getValues()
-        .map((v) => (
+        .map((drawToolType) => (
           <button
-            key={v}
+            key={drawToolType}
             className={clsx(styles.drawControl__button, {
-              [styles['drawControl__button--active']]: state.selectedDrawtoolType === v,
+              [styles['drawControl__button--active']]: state.selectedDrawtoolType === drawToolType,
             })}
             aria-label={
               v === DRAWTOOLTYPE.SQUARE
@@ -42,16 +69,10 @@ const DrawControls: React.FC = () => {
                 : t('map:drawPolygonButtonAria')
             }
             type="button"
-            data-testid={`draw-control-${v}`}
-            onClick={() => {
-              if (v === state.selectedDrawtoolType) {
-                actions.setSelectedDrawToolType(null);
-              } else {
-                actions.setSelectedDrawToolType(v);
-              }
-            }}
+            data-testid={`draw-control-${drawToolType}`}
+            onClick={() => handleClickDrawTool(drawToolType)}
           >
-            {getDrawIcon(v)}
+            {getDrawIcon(drawToolType)}
           </button>
         ))}
     </ControlPanel>

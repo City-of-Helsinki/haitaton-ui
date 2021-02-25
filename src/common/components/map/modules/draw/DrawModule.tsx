@@ -9,8 +9,8 @@ type Props = {
 };
 
 const DrawModule: React.FC<Props> = ({ source }) => (
-  <DrawProvider>
-    <DrawIntercation source={source} />
+  <DrawProvider source={source}>
+    <DrawIntercation />
     <DrawControl />
   </DrawProvider>
 );

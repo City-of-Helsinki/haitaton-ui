@@ -36,6 +36,10 @@ const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry }) => {
       const drawGeometry = formatFeaturesToHankeGeoJSON(drawSource.getFeatures());
       handleUpdateGeometryState(drawGeometry);
     });
+    drawSource.on('removefeature', () => {
+      const drawGeometry = formatFeaturesToHankeGeoJSON(drawSource.getFeatures());
+      handleUpdateGeometryState(drawGeometry);
+    });
     drawSource.on('change', () => {
       onChangeGeometries();
     });
