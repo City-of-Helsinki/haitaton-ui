@@ -7,7 +7,7 @@ import { Draw, Snap, Modify } from 'ol/interaction';
 import { altKeyOnly, click } from 'ol/events/condition';
 import { DRAWTOOLTYPE } from './types';
 import MapContext from '../../MapContext';
-import { DrawContext } from './DrawContext';
+import useDrawContext from './useDrawContext';
 
 type Props = {
   features?: Collection<Feature>;
@@ -18,17 +18,12 @@ type Interaction = Draw | Snap | Modify;
 const DrawInteraction: React.FC<Props> = () => {
   const selection = useRef<null | Select>(null);
   const { map } = useContext(MapContext);
-  const { state, actions, source } = useContext(DrawContext);
+  const { state, actions, source } = useDrawContext();
   const [instances, setInstances] = useState<Interaction[]>([]);
 
   const startDraw = useCallback(
     (type = DRAWTOOLTYPE.POLYGON) => {
-      if (
-        !map ||
-        !source ||
-        state?.selectedDrawtoolType === null ||
-        process.env.NODE_ENV === 'test'
-      ) {
+      if (!map || state.selectedDrawtoolType === null || process.env.NODE_ENV === 'test') {
         return;
       }
 
@@ -48,7 +43,7 @@ const DrawInteraction: React.FC<Props> = () => {
 
       drawInstance.on('drawend', () => {
         if (selection.current) selection.current.getFeatures().clear();
-        actions?.setSelectedFeature(null);
+        actions.setSelectedFeature(null);
       });
 
       map.addInteraction(drawInstance);
@@ -61,7 +56,7 @@ const DrawInteraction: React.FC<Props> = () => {
 
       setInstances([drawInstance, snapInstance, modifyInstance]);
     },
-    [map, source, state?.selectedDrawtoolType]
+    [map, source, state.selectedDrawtoolType]
   );
 
   useEffect(() => {
@@ -81,16 +76,16 @@ const DrawInteraction: React.FC<Props> = () => {
       const feature = features.getArray()[0];
 
       if (feature) {
-        actions?.setSelectedFeature(feature);
+        actions.setSelectedFeature(feature);
       } else {
         // Unselect
         features.clear();
-        actions?.setSelectedFeature(null);
+        actions.setSelectedFeature(null);
       }
     });
 
     source.on('removefeature', () => {
-      actions?.setSelectedFeature(null);
+      actions.setSelectedFeature(null);
     });
   }, []);
 
@@ -98,7 +93,7 @@ const DrawInteraction: React.FC<Props> = () => {
     instances.forEach((i: Interaction) => {
       map?.removeInteraction(i);
     });
-    actions?.setSelectedFeature(null);
+    actions.setSelectedFeature(null);
   }, [map, source, instances]);
 
   useEffect(() => {
@@ -115,10 +110,10 @@ const DrawInteraction: React.FC<Props> = () => {
 
   useEffect(() => {
     removeAllInteractions();
-    if (state?.selectedDrawtoolType) {
-      startDraw(state?.selectedDrawtoolType);
+    if (state.selectedDrawtoolType) {
+      startDraw(state.selectedDrawtoolType);
     }
-  }, [state?.selectedDrawtoolType]);
+  }, [state.selectedDrawtoolType]);
 
   return null;
 };
