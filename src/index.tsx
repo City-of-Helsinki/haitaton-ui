@@ -1,8 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import * as Sentry from '@sentry/react';
+import { Integrations } from '@sentry/tracing';
 import App from './common/components/app/App';
 import './locales/i18n';
 // import * as serviceWorker from './serviceWorker';
+
+Sentry.init({
+  dsn: process.env.REACT_APP_SENTRY_DSN,
+  integrations: [new Integrations.BrowserTracing()],
+
+  tracesSampleRate:
+    // no traces if not in prod or test
+    !process.env.REACT_APP_DISABLE_SENTRY ? 0.0 : 1.0,
+  environment: process.env.NODE_ENV,
+});
 
 if (process.env.NODE_ENV !== 'production') {
   import('@axe-core/react').then((axe) => {
