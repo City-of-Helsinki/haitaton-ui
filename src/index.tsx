@@ -7,12 +7,12 @@ import './locales/i18n';
 // import * as serviceWorker from './serviceWorker';
 
 Sentry.init({
-  dsn: process.env.SENTRY_DSN,
+  dsn: process.env.REACT_APP_SENTRY_DSN,
   integrations: [new Integrations.BrowserTracing()],
 
   tracesSampleRate:
     // no traces if not in prod or test
-    process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test' ? 1.0 : 0.0,
+    !process.env.REACT_APP_DISABLE_SENTRY ? 0.0 : 1.0,
   environment: process.env.NODE_ENV,
 });
 
