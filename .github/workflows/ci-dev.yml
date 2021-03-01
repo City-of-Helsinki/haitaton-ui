@@ -61,10 +61,9 @@ jobs:
         run: ls -l
       - name: Cypress run
         uses: cypress-io/github-action@v2
-        working-directory: ./haitaton-ui
         with:
+          working-directory: haitaton-ui
           start: yarn run serve
-          # working-directory: haitaton-ui
           wait-on: 'http://localhost:3001'
   docker_build_and_push:
     name: Push Docker image to GitHub Packages
