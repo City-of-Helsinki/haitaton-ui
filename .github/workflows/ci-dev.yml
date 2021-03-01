@@ -41,10 +41,6 @@ jobs:
           repository: City-of-Helsinki/haitaton-ui
           ref: dev
           path: ./haitaton-ui
-      - name: Show working directory
-        run: ls -l
-      - name: Show haitaton-backend directory
-        run: ls -l haitaton-backend
       - name: Run Docker Compose
         run: docker-compose --env-file .env.local -f haitaton-backend/docker-compose.yml up -d
       - name: Wait until auth-service is up
@@ -60,15 +56,12 @@ jobs:
           name: haitaton-ui-build
       - name: Untar build files
         run: tar -xvf build.tar
-      - name: Show working directory2
-        run: ls -l
-      - name: Show working directory3
+      - name: Show haitaton-ui directory
         working-directory: ./haitaton-ui
-        run: ls -l
-      - name: Show working directory4
         run: ls -l
       - name: Cypress run
         uses: cypress-io/github-action@v2
+        working-directory: ./haitaton-ui
         with:
           start: yarn run serve
           # working-directory: haitaton-ui
