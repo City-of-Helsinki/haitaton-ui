@@ -60,11 +60,18 @@ jobs:
           name: haitaton-ui-build
       - name: Untar build files
         run: tar -xvf build.tar
+      - name: Show working directory2
+        run: ls -l
+      - name: Show working directory3
+        working-directory: ./haitaton-ui
+        run: ls -l
+      - name: Show working directory4
+        run: ls -l
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
           start: yarn run serve
-          #          working-directory: haitaton-ui
+          # working-directory: haitaton-ui
           wait-on: 'http://localhost:3001'
   docker_build_and_push:
     name: Push Docker image to GitHub Packages
