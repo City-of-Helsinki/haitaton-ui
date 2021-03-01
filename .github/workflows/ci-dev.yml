@@ -27,19 +27,18 @@ jobs:
   e2e:
     name: E2E tests
     needs: build
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-latest
     steps:
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
       - name: Checkout backend
         uses: actions/checkout@v2
         with:
           repository: City-of-Helsinki/haitaton-backend
           ref: dev
           path: ./haitaton-backend
-      - name: Checkout frontend
-        uses: actions/checkout@v2
-        with:
-          repository: City-of-Helsinki/haitaton-ui
-          ref: dev
       - name: Run Docker Compose
         run: docker-compose --env-file .env.local -f haitaton-backend/docker-compose.yml up -d
       - name: Wait until auth-service is up
@@ -49,12 +48,13 @@ jobs:
           responseCode: 200
           timeout: 300000
           interval: 500
-      - name: Use Node.js
-        uses: actions/setup-node@v1
+      - name: Checkout frontend
+        uses: actions/checkout@v2
         with:
-          node-version: '12.x'
-        - run: yarn --frozen-lockfile
-        - run: yarn build
+          repository: City-of-Helsinki/haitaton-ui
+          ref: dev
+      - run: yarn --frozen-lockfile
+      - run: yarn build
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
