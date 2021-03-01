@@ -63,6 +63,7 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           working-directory: haitaton-ui
+          build: sudo yarn build
           start: yarn run serve
           wait-on: 'http://localhost:3001'
   docker_build_and_push:
