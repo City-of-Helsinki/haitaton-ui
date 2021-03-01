@@ -56,14 +56,19 @@ jobs:
           name: haitaton-ui-build
       - name: Untar build files
         run: tar -xvf build.tar
-      - name: Show haitaton-ui directory
+      - name: Show node_modules owner
         working-directory: ./haitaton-ui
-        run: ls -l
+        run: ls -la node_modules
+      - name: Change owner
+        working-directory: ./haitaton-ui
+        run: sudo chown -R $USER /node_modules
+      - name: Show directory
+        working-directory: ./haitaton-ui
+        run: ls -la
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
           working-directory: haitaton-ui
-          build: sudo yarn build
           start: yarn run serve
           wait-on: 'http://localhost:3001'
   docker_build_and_push:
