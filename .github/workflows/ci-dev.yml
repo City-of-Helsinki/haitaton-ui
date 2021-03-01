@@ -25,12 +25,35 @@ jobs:
           path: build.tar
           retention-days: 1
   e2e:
-    name: Browser tests
+    name: E2E tests
     needs: build
     runs-on: ubuntu-16.04
     steps:
-      - name: Checkout
+      - name: Checkout backend
         uses: actions/checkout@v2
+        with:
+          repository: City-of-Helsinki/haitaton-backend
+          ref: dev
+          path: ./haitaton-backend
+      - name: Checkout frontend
+        uses: actions/checkout@v2
+        with:
+          repository: City-of-Helsinki/haitaton-ui
+          ref: dev
+          path: ./haitaton-ui
+      - name: Show working directory
+        run: ls -l
+      - name: Show haitaton-backend directory
+        run: ls -l haitaton-backend
+      - name: Run Docker Compose
+        run: docker-compose --env-file .env.local -f haitaton-backend/docker-compose.yml up -d
+      - name: Wait until auth-service is up
+        uses: nev7n/wait_for_response@v1
+        with:
+          url: 'http://localhost:3030/'
+          responseCode: 200
+          timeout: 300000
+          interval: 500
       - name: Download application build files
         uses: actions/download-artifact@v2
         with:
@@ -41,6 +64,7 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           start: yarn run serve
+          #          working-directory: haitaton-ui
           wait-on: 'http://localhost:3001'
   docker_build_and_push:
     name: Push Docker image to GitHub Packages
