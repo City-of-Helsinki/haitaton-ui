@@ -40,7 +40,6 @@ jobs:
         with:
           repository: City-of-Helsinki/haitaton-ui
           ref: dev
-          path: ./haitaton-ui
       - name: Run Docker Compose
         run: docker-compose --env-file .env.local -f haitaton-backend/docker-compose.yml up -d
       - name: Wait until auth-service is up
@@ -50,25 +49,16 @@ jobs:
           responseCode: 200
           timeout: 300000
           interval: 500
-      - name: Download application build files
-        uses: actions/download-artifact@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
         with:
-          name: haitaton-ui-build
-      - name: Untar build files
-        run: tar -xvf build.tar
-      - name: Show node_modules owner
-        working-directory: ./haitaton-ui
-        run: ls -la node_modules
-      - name: Change owner
-        working-directory: ./haitaton-ui
-        run: sudo chown -R $USER /node_modules
-      - name: Show directory
-        working-directory: ./haitaton-ui
-        run: ls -la
+          node-version: '12.x'
+        - run: yarn --frozen-lockfile
+        - run: yarn build
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          working-directory: haitaton-ui
+          # working-directory: haitaton-ui
           start: yarn run serve
           wait-on: 'http://localhost:3001'
   docker_build_and_push:
