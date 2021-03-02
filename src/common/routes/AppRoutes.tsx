@@ -23,7 +23,7 @@ const PrivateRoute: React.FC<Props> = ({ component: Component, ...rest }) => {
       {...rest}
       render={(props) => (
         <div>
-          {!isAuthenticated && <p>Kirjaudu sisään</p>}
+          {!isAuthenticated && <p data-testid="should-login-text">Kirjaudu sisään</p>}
           <Component {...props} />
         </div>
       )}
