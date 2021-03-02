@@ -8,7 +8,6 @@ import './locales/i18n';
 Sentry.init({
   dsn: process.env.REACT_APP_SENTRY_DSN,
   integrations: [new Integrations.BrowserTracing()],
-
   tracesSampleRate:
     // no traces if not in prod or test
     process.env.REACT_APP_DISABLE_SENTRY ? 0.0 : 1.0,
