@@ -8,5 +8,9 @@ context('HomePage', () => {
   it('should be redirect to login form', () => {
     cy.get('[data-testid=loginLink]').click();
     cy.url().should('include', '/auth/realms/haitaton');
+    cy.get('#username').type('tiinatestaaja');
+    cy.get('#password').type('tiina12');
+    cy.get('#kc-login').click();
+    cy.url().should('include', '/fi');
   });
 });
