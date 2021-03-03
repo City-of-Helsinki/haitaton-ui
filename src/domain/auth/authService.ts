@@ -14,7 +14,9 @@ export class AuthService {
       client_id: process.env.REACT_APP_OIDC_CLIENT_ID,
       redirect_uri: `${origin}${LOGIN_CALLBACK_PATH}`,
       silent_redirect_uri: `${origin}/silent_renew.html`,
-      response_type: 'id_token token',
+      response_type: 'code',
+      response_mode: 'query',
+      // response_type: 'id_token token',
       scope: process.env.REACT_APP_OIDC_SCOPE,
       post_logout_redirect_uri: `${origin}/`,
     };
@@ -74,7 +76,8 @@ export class AuthService {
   }
 
   public async endLogin(): Promise<User> {
-    const user = await this.userManager.signinRedirectCallback();
+    const user = await this.userManager.signinCallback();
+    console.log({ user });
     return user;
   }
 
