@@ -46,19 +46,19 @@ describe('authService', () => {
     // @ts-ignore
     global.fetch.mockResponse(JSON.stringify({ data: {} }));
 
-    it('should call signinRedirectCallback from oidc', () => {
-      const signinRedirectCallback = jest
-        .spyOn(userManager, 'signinRedirectCallback')
+    it('should call signinCallback from oidc', () => {
+      const signinCallback = jest
+        .spyOn(userManager, 'signinCallback')
         .mockImplementation(() => Promise.resolve(mockUser));
 
       authService.endLogin();
 
-      expect(signinRedirectCallback).toHaveBeenCalledTimes(1);
+      expect(signinCallback).toHaveBeenCalledTimes(1);
     });
 
-    it('should return the same user object returned from signinRedirectCallback', async () => {
+    it('should return the same user object returned from signinCallback', async () => {
       expect.assertions(1);
-      jest.spyOn(userManager, 'signinRedirectCallback').mockReturnValue(Promise.resolve(mockUser));
+      jest.spyOn(userManager, 'signinCallback').mockReturnValue(Promise.resolve(mockUser));
 
       const user = await authService.endLogin();
 
