@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-context('HomePage', () => {
+context('Login', () => {
   beforeEach(() => {
     cy.visit('/fi/');
   });
@@ -8,7 +8,7 @@ context('HomePage', () => {
   it('should be redirect to login form', () => {
     cy.get('[data-testid=loginLink]').click();
     cy.url().should('include', '/auth/realms/haitaton');
-    cy.get('#username').type('tiinatestaaja');
+    cy.get('#username').type('tiinatestaaja@gofore.com');
     cy.get('#password').type('tiina12');
     cy.get('#kc-login').click();
     cy.url().should('include', '/fi');
