@@ -9,8 +9,6 @@ const OidcCallback: React.FC<RouteChildrenProps> = ({ history }) => {
   const { t } = useTranslation();
   const [authenticationError, setAuthenticationError] = useState<AuthenticationError | null>(null);
 
-  console.log({ history });
-
   useEffect(() => {
     authService
       .endLogin()
