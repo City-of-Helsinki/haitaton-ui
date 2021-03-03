@@ -12,7 +12,7 @@ Sentry.init({
 
   tracesSampleRate:
     // no traces if not in prod or test
-    !process.env.REACT_APP_DISABLE_SENTRY ? 0.0 : 1.0,
+    process.env.REACT_APP_DISABLE_SENTRY ? 0.0 : 1.0,
   environment: process.env.NODE_ENV,
 });
 
