@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
-// import { initialData } from '../../src/domain/hanke/list/testInitialData';
 
 context('HankeList', () => {
   beforeEach(() => {
-    cy.visit('/fi/hankelista');
+    cy.testLogin();
     cy.injectAxe();
+    cy.visit('/fi/hankelista');
   });
   it('should be accessible', () => {
     cy.intercept(
@@ -14,7 +14,7 @@ context('HankeList', () => {
       },
       []
     );
-    cy.get('[data-testid=HankeListPageHeader]').should('contain', 'Hankelista'); // this makes script to wait untill content is loaded
+    cy.get('[data-testid=HankeListPageHeader]').should('contain', 'Hankelista');
     cy.checkA11y();
   });
   it('Hanke list testing', () => {
@@ -26,7 +26,7 @@ context('HankeList', () => {
       []
     );
     cy.get('[data-testid=HankeListPageHeader]').should('contain', 'Hankelista');
-    cy.get('[data-testid=toFormLink]').click(); // moves to form
+    cy.get('[data-testid=toFormLink]').click();
     cy.get('[data-testid=formPageHeader]').should('contain', 'Hanke');
   });
 

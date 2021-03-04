@@ -12,6 +12,7 @@ const osoite = 'Mannerheimintie 22';
 
 context('HankeForm', () => {
   beforeEach(() => {
+    cy.testLogin();
     cy.visit('/fi/hanke/uusi');
     cy.injectAxe();
   });

@@ -12,6 +12,7 @@ const savedHanke = {
 
 context('EditHankePage', () => {
   beforeEach(() => {
+    cy.testLogin();
     cy.intercept(
       {
         method: 'GET',
