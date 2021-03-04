@@ -49,25 +49,11 @@ jobs:
           responseCode: 200
           timeout: 300000
           interval: 500
-      - name: Download application build files
-        uses: actions/download-artifact@v2
-        with:
-          name: haitaton-ui-build
-      - name: Untar build files
-        run: tar -xvf build.tar
-      - name: Show current dir
-        run: ls -la
-      - name: Show haitaton-ui dir
-        working-directory: ./haitaton-ui
-        run: ls -la
       - name: Change haitaton-ui owner
         run: sudo chown -R $USER ./haitaton-ui
       - name: Change node_modules owner
         working-directory: ./haitaton-ui
         run: sudo chown -R $USER ./node_modules
-      - name: Show directory
-        working-directory: ./haitaton-ui
-        run: ls -la
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
