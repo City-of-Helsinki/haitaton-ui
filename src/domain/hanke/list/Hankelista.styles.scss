@@ -61,6 +61,10 @@
           }
         }
 
+        td:first-child a {
+          color: var(--color-coat-of-arms);
+        }
+
         tr:nth-child(even) td {
           background: var(--color-black-5);
         }
