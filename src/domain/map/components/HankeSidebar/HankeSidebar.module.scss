@@ -21,17 +21,17 @@
     display: flex;
     align-items: center;
     padding: 5px;
+    margin-top: 1.5rem;
 
     &__titlesContainer {
       flex-direction: column;
       flex-grow: 1;
-      margin-top: 1.5rem;
     }
 
     &__numberContainer {
-      margin: 12px;
-      width: 62px;
-      font-size: large;
+      padding-left: 1.5rem;
+      width: 64px;
+      text-align: center;
     }
   }
 }

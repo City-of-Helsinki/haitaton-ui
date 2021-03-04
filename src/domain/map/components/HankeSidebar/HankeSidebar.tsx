@@ -97,19 +97,52 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
             </Button>
           </Link>
 
-          <div className={styles.hankeSidebar__indexContainer}>
-            <div className={styles.hankeSidebar__indexContainer__titlesContainer}>
-              <Text tag="h3" styleAs="h6" weight="bold">
-                Ruuhkautuminen
-              </Text>
-              <Text tag="p" styleAs="body-m">
-                Kiertoreittitarve: todennäköinen
-              </Text>
-            </div>
-            <div className={styles.hankeSidebar__indexContainer__numberContainer}>
-              <StatusLabel type="info">2.7</StatusLabel>
-            </div>
-          </div>
+          <table>
+            <tbody>
+              <tr>
+                <div className={styles.hankeSidebar__indexContainer}>
+                  <div className={styles.hankeSidebar__indexContainer__titlesContainer}>
+                    <Text tag="h3" styleAs="h5" weight="bold">
+                      Liikennehaittaindeksi
+                    </Text>
+                  </div>
+                  <div className={styles.hankeSidebar__indexContainer__numberContainer}>
+                    <StatusLabel type="error">4</StatusLabel>
+                  </div>
+                </div>
+              </tr>
+              <tr>
+                <div className={styles.hankeSidebar__indexContainer}>
+                  <div className={styles.hankeSidebar__indexContainer__titlesContainer}>
+                    <Text tag="h3" styleAs="h6" weight="bold">
+                      Ruuhkautuminen
+                    </Text>
+                    <Text tag="p" styleAs="body-m">
+                      Kiertoreittitarve: todennäköinen
+                    </Text>
+                  </div>
+                  <div className={styles.hankeSidebar__indexContainer__numberContainer}>
+                    <StatusLabel type="alert">2.7</StatusLabel>
+                  </div>
+                </div>
+              </tr>
+              <tr>
+                <div className={styles.hankeSidebar__indexContainer}>
+                  <div className={styles.hankeSidebar__indexContainer__titlesContainer}>
+                    <Text tag="h3" styleAs="h6" weight="bold">
+                      Pyöräilyn pääreitti
+                    </Text>
+                    <Text tag="p" styleAs="body-m">
+                      Kiertoreittitarve: ei tarvetta
+                    </Text>
+                  </div>
+                  <div className={styles.hankeSidebar__indexContainer__numberContainer}>
+                    <StatusLabel type="success">1</StatusLabel>
+                  </div>
+                </div>
+              </tr>
+            </tbody>
+          </table>
         </DrawerBody>
       </DrawerContent>
     </Drawer>
