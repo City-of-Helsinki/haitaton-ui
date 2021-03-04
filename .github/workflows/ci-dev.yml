@@ -49,6 +49,11 @@ jobs:
           responseCode: 200
           timeout: 300000
           interval: 500
+      - name: Change haitaton-ui owner
+        run: sudo chown -R $USER ./haitaton-ui
+      - name: Change node_modules owner
+        working-directory: ./haitaton-ui
+        run: sudo chown -R $USER ./node_modules
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
