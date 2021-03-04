@@ -20,31 +20,18 @@
   &__indexContainer {
     display: flex;
     align-items: center;
-    background-color: rgb(255, 30, 143);
     padding: 5px;
 
     &__titlesContainer {
       flex-direction: column;
       flex-grow: 1;
-      background-color: rgb(34, 128, 221);
-
-      div {
-        background-color: #f1f1f1;
-        margin: 10px;
-        text-align: start;
-        font-size: 30px;
-      }
+      margin-top: 1.5rem;
     }
 
     &__numberContainer {
-      background-color: rgb(150, 255, 30);
-
-      div {
-        background-color: #f1f1f1;
-        margin: 10px;
-        font-size: 30px;
-        width: 48px;
-      }
+      margin: 12px;
+      width: 62px;
+      font-size: large;
     }
   }
 }

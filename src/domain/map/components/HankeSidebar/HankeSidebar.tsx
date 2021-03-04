@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Drawer, DrawerBody, DrawerContent } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { IconCross } from 'hds-react/icons';
-import { Button } from 'hds-react';
+import { Button, StatusLabel } from 'hds-react';
 import Text from '../../../../common/components/text/Text';
 import { formatToFinnishDate } from '../../../../common/utils/date';
 import { HankeData } from '../../../types/hanke';
@@ -99,11 +99,15 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
 
           <div className={styles.hankeSidebar__indexContainer}>
             <div className={styles.hankeSidebar__indexContainer__titlesContainer}>
-              <div>1</div>
-              <div>2</div>
+              <Text tag="h3" styleAs="h6" weight="bold">
+                Ruuhkautuminen
+              </Text>
+              <Text tag="p" styleAs="body-m">
+                Kiertoreittitarve: todennäköinen
+              </Text>
             </div>
             <div className={styles.hankeSidebar__indexContainer__numberContainer}>
-              <div>1</div>
+              <StatusLabel type="info">2.7</StatusLabel>
             </div>
           </div>
         </DrawerBody>
