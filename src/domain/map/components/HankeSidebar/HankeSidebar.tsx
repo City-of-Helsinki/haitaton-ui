@@ -96,6 +96,16 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
               {t('hankeSidebar:editHanke')}
             </Button>
           </Link>
+
+          <div className={styles.hankeSidebar__indexContainer}>
+            <div className={styles.hankeSidebar__indexContainer__titlesContainer}>
+              <div>1</div>
+              <div>2</div>
+            </div>
+            <div className={styles.hankeSidebar__indexContainer__numberContainer}>
+              <div>1</div>
+            </div>
+          </div>
         </DrawerBody>
       </DrawerContent>
     </Drawer>
