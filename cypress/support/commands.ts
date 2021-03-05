@@ -33,10 +33,7 @@ Cypress.Commands.add('testLogin', () => {
   cy.restoreLocalStorage();
   cy.visit('/fi/');
 
-  // const auth = cy.getLocalStorage('oidc.user:/auth/realms/haitaton:haitaton-ui');
-
   cy.get('[data-testid=loginLink]').then(($loginLink) => {
-    console.log($loginLink.text());
     if ($loginLink.text() === 'Kirjaudu') {
       cy.get('[data-testid=loginLink]').click();
       cy.url().should('include', '/auth/realms/haitaton');
