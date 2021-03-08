@@ -136,18 +136,18 @@
       "VAIHTOLAVA": "SV:Vaihtolava"
     },
     "kaistaHaitta": {
-      "EI_VAIKUTA": "SV:Ei vaikuta",
-      "YKSI": "SV:Vähentää samanaikaisesti kaistan yhdellä ajosuunnalla",
-      "KAKSI": "SV:Vähentää samanaikaisesti kaistan kahdella ajosuunnalla",
-      "KOLME": "SV:Vähentää samanaikaisesti useita kaistoja kahdella ajosuunnalla",
-      "NELJA": "SV:Vähentää samanaikaisesti useita kaistoja liittymän eri suunnilla"
+      "YKSI": "SV:Ei vaikuta",
+      "KAKSI": "SV:Vähentää samanaikaisesti kaistan yhdellä ajosuunnalla",
+      "KOLME": "SV:Vähentää samanaikaisesti kaistan kahdella ajosuunnalla",
+      "NELJA": "SV:Vähentää samanaikaisesti useita kaistoja kahdella ajosuunnalla",
+      "VIISI": "SV:Vähentää samanaikaisesti useita kaistoja liittymän eri suunnilla"
     },
     "kaistaPituusHaitta": {
-      "EI_VAIKUTA": "SV:Ei vaikuta",
-      "YKSI": "SV:Alle 10 m",
-      "KAKSI": "SV:10-49 m",
-      "KOLME": "SV:50-99 m",
-      "NELJA": "SV:Yli 100 m"
+      "YKSI": "SV:Ei vaikuta",
+      "KAKSI": "SV:Alle 10 m",
+      "KOLME": "SV:10-49 m",
+      "NELJA": "SV:50-99 m",
+      "VIISI": "SV:Yli 100 m"
     },
     "meluHaitta": {
       "YKSI": "SV:Satunnainen haitta",
