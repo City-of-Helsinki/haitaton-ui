@@ -23,7 +23,7 @@
     "cypress-run-chrome-headless": "cypress run --headless --browser chrome"
   },
   "dependencies": {
-    "@axe-core/react": "^4.1.0",
+    "@axe-core/react": "^4.1.1",
     "@chakra-ui/react": "^1.0.1",
     "@chakra-ui/theme-tools": "^1.0.1",
     "@emotion/core": "^10.0.35",
@@ -52,7 +52,7 @@
     "axios": "^0.20.0",
     "clsx": "^1.1.1",
     "cypress": "^6.0.0",
-    "cypress-axe": "^0.12.0",
+    "cypress-axe": "^0.12.2",
     "date-fns": "^2.16.1",
     "emotion-theming": "^10.0.27",
     "eslint-config-airbnb-typescript-prettier": "^4.1.0",

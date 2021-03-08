@@ -2,11 +2,11 @@
 
 context('HankeList', () => {
   beforeEach(() => {
-    cy.testLogin();
     cy.injectAxe();
-    cy.visit('/fi/hankelista');
+    cy.testLogin();
   });
   it('should be accessible', () => {
+    cy.visit('/fi/hankelista');
     cy.intercept(
       {
         method: 'GET',
@@ -18,6 +18,7 @@ context('HankeList', () => {
     cy.checkA11y();
   });
   it('Hanke list testing', () => {
+    cy.visit('/fi/hankelista');
     cy.intercept(
       {
         method: 'GET',
@@ -31,6 +32,7 @@ context('HankeList', () => {
   });
 
   it('Navigate to hanke edit page', () => {
+    cy.visit('/fi/hankelista');
     cy.intercept(
       {
         method: 'GET',
