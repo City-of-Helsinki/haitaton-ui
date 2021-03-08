@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import * as ol from 'ol';
 import MapContext from './MapContext';
-import { SelectedDrawtoolType, MapInstance } from './types';
+import { MapInstance } from './types';
 import { projection } from './utils';
 
 const defaultZoom = 9;
@@ -21,7 +21,6 @@ const Map: React.FC<Props> = ({
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<MapInstance>(null);
-  const [selectedDrawtoolType, setSelectedDrawtoolType] = useState<SelectedDrawtoolType>('');
   const [layers] = useState({});
 
   useEffect(() => {
@@ -62,7 +61,7 @@ const Map: React.FC<Props> = ({
   }, [center]);
 
   return (
-    <MapContext.Provider value={{ map, layers, selectedDrawtoolType, setSelectedDrawtoolType }}>
+    <MapContext.Provider value={{ map, layers }}>
       <div ref={mapRef} className={mapClassName} id="ol-map">
         {map && children}
       </div>
