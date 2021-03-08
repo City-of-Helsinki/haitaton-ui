@@ -240,6 +240,7 @@
     }
   },
   "hankeSidebar": {
+    "ariaSidebarContent": "EN:Hankkeen tiedot",
     "closeButtonAriaLabel": "EN:Sulje hankevalikko",
     "editHanke": "EN: Muokkaa hankkeen tietoja"
   },
@@ -270,6 +271,9 @@
     }
   },
   "map": {
+    "controls": {
+      "ariaLayerMenu": "EN:Kartan tasojen valinta"
+    },
     "tileLayers": {
       "ortokartta": "EN: Ortokartta",
       "kantakartta": "EN: Kantakartta"
@@ -279,7 +283,6 @@
       "end": "EN: Ajanjakson loppu"
     },
     "drawSquareButtonAria": "EN:Piirrä neliö kartalle",
-    "drawPolygonButtonAria": "EN:Piirrä monikulmio kartalle",
-    "showMapLayersButtonAria": "EN:Näytä karttatasot"
+    "drawPolygonButtonAria": "EN:Piirrä monikulmio kartalle"
   }
 }

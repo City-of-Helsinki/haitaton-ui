@@ -24,13 +24,18 @@ const LayerControl: React.FC<Props> = ({ tileLayers, onClickTileLayer }) => {
   return (
     <ControlPanel className={styles.tileLayerControl}>
       <Menu closeOnSelect={false}>
-        <MenuButton aria-label={t('map:showMapLayersButtonAria')}>
-          <IconLayers aria-hidden="true" />
+        <MenuButton aria-label={t('map:controls:ariaLayerMenu')}>
+          <IconLayers aria-hidden />
         </MenuButton>
-        <MenuList className={styles.controlMenu}>
+        <MenuList className={styles.controlMenu} aria-hidden id="layer-list" role="menu">
           <MenuGroup>
             {tileLayers.map(({ id, visible }) => (
-              <div className={styles.drawControl__checkbox} key={id}>
+              <div
+                className={styles.drawControl__checkbox}
+                key={id}
+                role="menuitemcheckbox"
+                aria-checked={visible}
+              >
                 <Checkbox
                   id={id}
                   label={t(`map:tileLayers:${id}`)}
