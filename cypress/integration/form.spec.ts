@@ -41,8 +41,8 @@ context('HankeForm', () => {
       }
     );
 
-    cy.get('input[data-testid=nimi]').type(nimi);
     cy.checkA11y();
+    cy.get('input[data-testid=nimi]').type(nimi);
     cy.get('textarea[data-testid=kuvaus]').type(kuvaus);
     cy.get('#alkuPvm').type(alkuPvm);
     cy.get('#loppuPvm').type(loppuPvm);

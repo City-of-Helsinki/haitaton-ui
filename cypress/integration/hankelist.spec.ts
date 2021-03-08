@@ -1,8 +1,10 @@
 /// <reference types="cypress" />
 
 context('HankeList', () => {
-  beforeEach(() => {
+  before(() => {
     cy.injectAxe();
+  });
+  beforeEach(() => {
     cy.testLogin();
   });
   it('should be accessible', () => {
@@ -14,8 +16,8 @@ context('HankeList', () => {
       },
       []
     );
-    cy.get('[data-testid=HankeListPageHeader]').should('contain', 'Hankelista');
     cy.checkA11y();
+    cy.get('[data-testid=HankeListPageHeader]').should('contain', 'Hankelista');
   });
   it('Hanke list testing', () => {
     cy.visit('/fi/hankelista');
