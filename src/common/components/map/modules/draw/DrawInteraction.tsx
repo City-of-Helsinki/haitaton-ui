@@ -21,6 +21,22 @@ const DrawInteraction: React.FC<Props> = () => {
   const { state, actions, source } = useDrawContext();
   const [instances, setInstances] = useState<Interaction[]>([]);
 
+  const clearSelection = useCallback(() => {
+    if (selection.current) selection.current.getFeatures().clear();
+    actions.setSelectedFeature(null);
+  }, [selection]);
+
+  const removeDrawInteractions = useCallback(() => {
+    instances.forEach((i: Interaction) => {
+      map?.removeInteraction(i);
+    });
+  }, [instances, map]);
+
+  const removeAllInteractions = useCallback(() => {
+    removeDrawInteractions();
+    clearSelection();
+  }, [map, source, instances]);
+
   const startDraw = useCallback(
     (type = DRAWTOOLTYPE.POLYGON) => {
       if (!map || state.selectedDrawtoolType === null || process.env.NODE_ENV === 'test') {
@@ -42,8 +58,8 @@ const DrawInteraction: React.FC<Props> = () => {
       });
 
       drawInstance.on('drawend', () => {
-        if (selection.current) selection.current.getFeatures().clear();
-        actions.setSelectedFeature(null);
+        clearSelection();
+        actions.setSelectedDrawToolType(null);
       });
 
       map.addInteraction(drawInstance);
@@ -78,34 +94,13 @@ const DrawInteraction: React.FC<Props> = () => {
       if (feature) {
         actions.setSelectedFeature(feature);
       } else {
-        // Unselect
-        features.clear();
-        actions.setSelectedFeature(null);
+        clearSelection();
       }
     });
 
     source.on('removefeature', () => {
-      actions.setSelectedFeature(null);
+      clearSelection();
     });
-  }, []);
-
-  const removeAllInteractions = useCallback(() => {
-    instances.forEach((i: Interaction) => {
-      map?.removeInteraction(i);
-    });
-    actions.setSelectedFeature(null);
-  }, [map, source, instances]);
-
-  useEffect(() => {
-    if (!map) return;
-    // startEdit();
-
-    // eslint-disable-next-line
-    return () => {
-      removeAllInteractions();
-      // Remove selection instance
-      selection.current = null;
-    };
   }, []);
 
   useEffect(() => {
@@ -114,6 +109,14 @@ const DrawInteraction: React.FC<Props> = () => {
       startDraw(state.selectedDrawtoolType);
     }
   }, [state.selectedDrawtoolType]);
+
+  // Unmount
+  useEffect(() => {
+    if (!map) return;
+
+    // eslint-disable-next-line
+    return () => removeAllInteractions();
+  }, []);
 
   return null;
 };
