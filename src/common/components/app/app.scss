@@ -37,3 +37,8 @@ body {
 .chakra-modal__content-container {
   width: auto !important;
 }
+
+.chakra-modal__overlay {
+  background: #333;
+  opacity: 0.2;
+}
