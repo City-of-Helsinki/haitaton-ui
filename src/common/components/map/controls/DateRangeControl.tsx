@@ -50,8 +50,8 @@ const DateRangeControl: React.FC<Props> = ({
               </div>
             </div>
           </GridItem>
-          <GridItem colSpan={1} className={styles.dateHyphen}>
-            <p>─</p>
+          <GridItem colSpan={1} className={styles.dateHyphen} aria-hidden>
+            <p>-</p>
           </GridItem>
           <GridItem colSpan={4}>
             <div>
