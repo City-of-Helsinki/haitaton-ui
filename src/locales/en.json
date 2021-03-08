@@ -144,10 +144,10 @@
     },
     "kaistaPituusHaitta": {
       "YKSI": "EN:Ei vaikuta",
-      "KAKSI": "EN:Alle 10 m",
-      "KOLME": "EN:10-49 m",
-      "NELJA": "EN:50-99 m",
-      "VIISI": "EN:Yli 100 m"
+      "KAKSI": "EN:Enintään 10 m",
+      "KOLME": "EN:11-100 m",
+      "NELJA": "EN:101-500 m",
+      "VIISI": "EN:Yli 500 m"
     },
     "meluHaitta": {
       "YKSI": "EN:Satunnainen haitta",
