@@ -239,6 +239,7 @@
     }
   },
   "hankeSidebar": {
+    "ariaSidebarContent": "EN:Hankkeen tiedot",
     "closeButtonAriaLabel": "SV:Sulje hankevalikko",
     "editHanke": "SV: Muokkaa hankkeen tietoja"
   },

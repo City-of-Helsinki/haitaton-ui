@@ -50,7 +50,10 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
       onClose={handleClose}
       blockScrollOnMount={false}
     >
-      <DrawerContent className={styles.hankeSidebar__content} aria-label="Hanke">
+      <DrawerContent
+        className={styles.hankeSidebar__content}
+        aria-label={t('hankeSidebar:ariaSidebarContent')}
+      >
         <DrawerBody>
           <button
             className={styles.hankeSidebar__closeButton}
