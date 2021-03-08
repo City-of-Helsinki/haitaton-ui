@@ -21,25 +21,4 @@
     margin-top: 24px;
     margin-left: 5px;
   }
-
-  &__indexContainer {
-    display: flex;
-    align-items: center;
-    padding: 1.2rem 0.25rem;
-
-    &__titlesContainer {
-      flex-direction: column;
-      flex-grow: 1;
-    }
-
-    &__statusContainer {
-      padding-left: 1.5rem;
-      width: 64px;
-      text-align: center;
-    }
-  }
-
-  &__indexContainer:nth-child(even) {
-    background-color: var(--color-black-5);
-  }
 }

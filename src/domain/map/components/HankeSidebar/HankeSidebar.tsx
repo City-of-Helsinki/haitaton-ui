@@ -3,11 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { Drawer, DrawerBody, DrawerContent } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { IconCross } from 'hds-react/icons';
-import { Button, StatusLabel } from 'hds-react';
+import { Button } from 'hds-react';
 import Text from '../../../../common/components/text/Text';
 import { formatToFinnishDate } from '../../../../common/utils/date';
 import { HankeData } from '../../../types/hanke';
 import styles from './HankeSidebar.module.scss';
+import HankeIndexes from './HankeIndexes';
 import useLinkPath from '../../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../../common/types/route';
 
@@ -98,44 +99,7 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
           </Link>
           <hr />
 
-          <div className={styles.hankeSidebar__indexes}>
-            <div className={styles.hankeSidebar__indexContainer}>
-              <div className={styles.hankeSidebar__indexContainer__titlesContainer}>
-                <Text tag="h3" styleAs="h5" weight="bold">
-                  Liikennehaittaindeksi
-                </Text>
-              </div>
-              <div className={styles.hankeSidebar__indexContainer__statusContainer}>
-                <StatusLabel type="error">4</StatusLabel>
-              </div>
-            </div>
-            <div className={styles.hankeSidebar__indexContainer}>
-              <div className={styles.hankeSidebar__indexContainer__titlesContainer}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  Ruuhkautuminen
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  Kiertoreittitarve: todennäköinen
-                </Text>
-              </div>
-              <div className={styles.hankeSidebar__indexContainer__statusContainer}>
-                <StatusLabel type="alert">2.7</StatusLabel>
-              </div>
-            </div>
-            <div className={styles.hankeSidebar__indexContainer}>
-              <div className={styles.hankeSidebar__indexContainer__titlesContainer}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  Pyöräilyn pääreitti
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  Kiertoreittitarve: ei tarvetta
-                </Text>
-              </div>
-              <div className={styles.hankeSidebar__indexContainer__statusContainer}>
-                <StatusLabel type="success">1</StatusLabel>
-              </div>
-            </div>
-          </div>
+          <HankeIndexes hankeTunnus={hanke.hankeTunnus} />
         </DrawerBody>
       </DrawerContent>
     </Drawer>
