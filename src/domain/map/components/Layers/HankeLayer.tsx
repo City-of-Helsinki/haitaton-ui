@@ -35,7 +35,9 @@ const HankeLayer = () => {
 
   return (
     <>
-      <div data-testid="countOfFilteredHankkeet">{hankkeetFilteredByAll.length}</div>
+      <div style={{ display: 'none' }} data-testid="countOfFilteredHankkeet">
+        {hankkeetFilteredByAll.length}
+      </div>
       <CenterProjectOnMap source={hankeSource.current} />
 
       <VectorLayer
