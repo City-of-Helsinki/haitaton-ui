@@ -2,17 +2,16 @@
 
 context('Login', () => {
   beforeEach(() => {
+    cy.login();
     cy.visit('/fi/');
   });
 
-  it('should be redirect to login form', () => {
-    cy.get('[data-testid=loginLink]').click();
-    cy.url().should('include', '/auth/realms/haitaton');
-    cy.get('#username').type('tiinatestaaja@gofore.com');
-    cy.get('#password').type('tiina12');
-    cy.get('#kc-login').click();
-    cy.url().should('include', '/fi');
-
+  it('should be logged in', () => {
     cy.get('[data-testid=should-login-text]').should('not.exist');
+  });
+
+  it('should be render hankeLista header', () => {
+    cy.visit('/fi/hankelista');
+    cy.get('[data-testid=HankeListPageHeader]').should('contain', 'Hankelista');
   });
 });

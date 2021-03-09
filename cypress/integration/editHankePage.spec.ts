@@ -12,6 +12,10 @@ const savedHanke = {
 
 context('EditHankePage', () => {
   beforeEach(() => {
+    cy.login();
+  });
+
+  it('Editing hanke should fetch and populate form data', () => {
     cy.intercept(
       {
         method: 'GET',
@@ -20,9 +24,6 @@ context('EditHankePage', () => {
       savedHanke
     );
     cy.visit(`/fi/hanke/${savedHanke.hankeTunnus}/muokkaa`);
-  });
-
-  it('Editing hanke should fetch and populate form data', () => {
     cy.get('[data-testid=save-draft-button]').should('be.disabled');
     cy.get('input[data-testid=nimi]').should('have.value', savedHanke.nimi);
     // Type something to make form dirty and enable save-draft-button

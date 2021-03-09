@@ -10,5 +10,7 @@ declare namespace Cypress {
     window(options?: Partial<Loggable & Timeoutable>): Chainable<CustomWindow>;
 
     mapDrawButton(name: string): Chainable<string>;
+
+    login(): Chainable<Element>;
   }
 }

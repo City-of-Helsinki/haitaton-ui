@@ -24,4 +24,27 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'cypress-localstorage-commands';
+
 Cypress.Commands.add('mapDrawButton', (name) => cy.get(`[data-testid=draw-control-${name}]`));
+
+Cypress.Commands.add('login', () => {
+  cy.restoreLocalStorage();
+  cy.visit('/fi/');
+
+  cy.get('[data-testid=loginLink]').then(($loginLink) => {
+    if ($loginLink.text() === 'Kirjaudu') {
+      cy.get('[data-testid=loginLink]').click();
+      cy.url().should('include', '/auth/realms/haitaton');
+      cy.get('#username').type('tiinatestaaja@gofore.com');
+      cy.get('#password').type('tiina12');
+      cy.get('#kc-login').click();
+      cy.url().should('include', '/fi');
+
+      cy.get('[data-testid=should-login-text]').should('not.exist');
+
+      cy.saveLocalStorage();
+    }
+  });
+});

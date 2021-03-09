@@ -133,7 +133,7 @@ const Table: React.FC<Props> = ({ columns, data }) => {
                 <td>
                   <Link
                     to={getEditHankePath({ hankeTunnus: row.values.id })}
-                    aria-label={t(`routes:${ROUTES.EDIT_HANKE}.meta.title`)}
+                    aria-label={t(`routes:${ROUTES.EDIT_HANKE}.meta.title`) + row.values.id}
                     data-testid="hankeEditLink"
                   >
                     <IconPen aria-hidden />
