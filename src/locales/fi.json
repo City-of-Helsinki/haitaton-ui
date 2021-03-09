@@ -254,7 +254,8 @@
     "merkittavatJoukkoliikennereitit": "Merkittävät joukkoliikennereitit",
     "kiertoreittitarve": "Kiertoreittitarve",
     "todennakoinen": "todennäköinen",
-    "eiTarvetta": "ei tarvetta"
+    "eiTarvetta": "ei tarvetta",
+    "merkittava": "merkittävä"
   },
   "hankeList": {
     "pageHeader": "Hankelista",
