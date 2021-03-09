@@ -31,3 +31,22 @@ export const saveForm = createAsyncThunk(
     return response.data;
   }
 );
+
+export const calculateIndex = createAsyncThunk(
+  'form/calculateIndex',
+  async (hankeTunnus: string) => {
+    try {
+      // thunkApi.dispatch(startLoading());
+      const response = await api.post<HankeDataFormState>(
+        `/hankkeet/${hankeTunnus}/tormaystarkastelu`
+      );
+      // thunkApi.dispatch(stopLoading());
+      return response.data;
+    } catch (err) {
+      // eslint-disable-next-line
+      console.log(err);
+      // thunkApi.dispatch(stopLoading());
+      throw err;
+    }
+  }
+);

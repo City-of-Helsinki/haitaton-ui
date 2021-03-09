@@ -1,12 +1,11 @@
 import { PayloadAction, CaseReducer, createSlice } from '@reduxjs/toolkit';
-import { saveForm } from './thunks';
-import { HankeDataFormState } from './types';
+import { saveForm, calculateIndex } from './thunks';
+import { HankeDataFormState, FormNotification } from './types';
 
 type State = {
   hankeDataDraft: HankeDataFormState;
   hasFormChanged: boolean;
-  status: string | null;
-  showNotification: string | null;
+  showNotification: FormNotification;
 };
 
 const updateFormData: CaseReducer<State, PayloadAction<HankeDataFormState>> = (state, action) => {
@@ -27,7 +26,6 @@ export const hankeDataDraft = {
 export const initialState: State = {
   hankeDataDraft,
   hasFormChanged: false,
-  status: null,
   showNotification: null,
 };
 const formSlice = createSlice({
@@ -43,14 +41,21 @@ const formSlice = createSlice({
     });
     builder.addCase(saveForm.fulfilled, (state, { payload }) => {
       if (payload) {
-        state.status = 'ok';
         state.hankeDataDraft = payload;
         state.showNotification = 'success';
       }
     });
     builder.addCase(saveForm.rejected, (state) => {
-      state.status = 'error';
       state.showNotification = 'error';
+    });
+    builder.addCase(calculateIndex.pending, (state) => {
+      state.showNotification = null;
+    });
+    builder.addCase(calculateIndex.fulfilled, (state) => {
+      state.showNotification = 'indexSuccess';
+    });
+    builder.addCase(calculateIndex.rejected, (state) => {
+      state.showNotification = 'indexError';
     });
   },
 });

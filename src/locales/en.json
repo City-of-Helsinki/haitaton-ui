@@ -171,9 +171,13 @@
     "saveDraftButton": "EN:Tallenna luonnos",
     "insertFieldError": "EN:Syötä kenttä",
     "savingSuccessHeader": "EN:Luonnos tallennettu",
-    "savingSuccessText": "EN:Luonnos on tallenettu Hankelistalle",
+    "savingSuccessText": "EN:Luonnos on tallennettu Hankelistalle",
     "savingFailHeader": "EN:Joku meni vikaan",
     "savingFailText": "EN:Luonnosta ei saatu tallennettua, koita uudelleen",
+    "indexCalculationSuccessHeader": "EN:Törmäystarkastelun laskenta onnistui",
+    "indexCalculationSuccessText": "EN:Törmäystarkastelun laskenta onnistui ja nyt voit katsoa tulokset",
+    "indexCalculationFailHeader": "EN:Törmäystarkastelun laskenta epäonnistui",
+    "indexCalculationFailText": "EN:Tuntematon virhe",
     "closeAriaLabel": "EN:Poistu kaavakkeelta tallentamatta",
 
     "labels": {
