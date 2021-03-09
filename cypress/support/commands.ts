@@ -29,7 +29,7 @@ import 'cypress-localstorage-commands';
 
 Cypress.Commands.add('mapDrawButton', (name) => cy.get(`[data-testid=draw-control-${name}]`));
 
-Cypress.Commands.add('testLogin', () => {
+Cypress.Commands.add('login', () => {
   cy.restoreLocalStorage();
   cy.visit('/fi/');
 

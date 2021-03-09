@@ -2,7 +2,7 @@
 
 context('Login', () => {
   beforeEach(() => {
-    cy.testLogin();
+    cy.login();
     cy.visit('/fi/');
   });
 

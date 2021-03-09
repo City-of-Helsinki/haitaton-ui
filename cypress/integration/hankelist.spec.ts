@@ -4,8 +4,9 @@ context('HankeList', () => {
   before(() => {
     cy.injectAxe();
   });
+
   beforeEach(() => {
-    cy.testLogin();
+    cy.login();
   });
 
   // False positives?
