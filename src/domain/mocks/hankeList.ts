@@ -1,5 +1,14 @@
 import { HankeData } from '../types/hanke';
 
+const tilat = {
+  onGeometrioita: false,
+  onKaikkiPakollisetLuontiTiedot: false,
+  onTiedotLiikenneHaittaIndeksille: false,
+  onLiikenneHaittaIndeksi: false,
+  onViereisiaHankkeita: false,
+  onAsiakasryhmia: false,
+};
+
 const hankeList: HankeData[] = [
   {
     id: 1,
@@ -53,7 +62,7 @@ const hankeList: HankeData[] = [
       modifiedByUserId: null,
       modifiedAt: '2021-01-19T13:01:26.024Z',
     },
-
+    tilat,
     tyomaaKatuosoite: '',
     tyomaaKoko: null,
     haittaAlkuPvm: null,
@@ -116,6 +125,7 @@ const hankeList: HankeData[] = [
       modifiedByUserId: null,
       modifiedAt: '2021-01-19T13:01:26.024Z',
     },
+    tilat,
     tyomaaKatuosoite: '',
     tyomaaKoko: null,
     haittaAlkuPvm: null,

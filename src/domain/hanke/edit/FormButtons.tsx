@@ -3,6 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'hds-react';
 import { IconAngleLeft, IconAngleRight } from 'hds-react/icons';
+import { HankeTilat } from '../../types/hanke';
 
 type Props = {
   goBack: () => void;
@@ -14,8 +15,10 @@ type Props = {
 const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, formPage }) => {
   const { t } = useTranslation();
   const {
+    watch,
     formState: { isValid, isDirty },
   } = useFormContext();
+  const hankeTilat: HankeTilat | undefined = watch('tilat');
 
   let previousButtonText = '';
   let nextButtonText = '';
@@ -58,11 +61,15 @@ const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, formPage }
           type="submit"
           iconRight={<IconAngleRight />}
           variant="secondary"
-          data-testid="finish"
-          disabled={!isValid}
+          data-testid="submitButton"
+          disabled={
+            !isValid ||
+            !hankeTilat?.onTiedotLiikenneHaittaIndeksille ||
+            hankeTilat?.onLiikenneHaittaIndeksi
+          }
           theme="coat"
         >
-          <span>{t('hankeForm:finishButton')}</span>
+          <span>{t('hankeForm:calculateIndexesButton')}</span>
         </Button>
       )}
       {formPage < 4 && (

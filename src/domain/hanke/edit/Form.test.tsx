@@ -33,7 +33,7 @@ describe('HankeForm', () => {
     const handleUnmount = jest.fn();
     const handleFormClose = jest.fn();
 
-    const { getByTestId, getByLabelText, getByText, queryAllByText, queryByText } = render(
+    const { getByTestId, getByLabelText, queryAllByText } = render(
       <Form
         formData={formData}
         showNotification={null}
@@ -112,10 +112,7 @@ describe('HankeForm', () => {
     getByTestId('forward').click(); // changes view to form4
     await waitFor(() => queryAllByText('Hankkeen haitat')[1]);
 
-    getByText('Tallenna ja poistu').click();
-    await waitFor(() => queryByText('Lomake on lähetetty onnistuneesti'));
-    expect(queryByText('Lomake on lähetetty onnistuneesti'));
-    expect(handleSave).toHaveBeenCalledTimes(2);
+    expect(getByTestId('submitButton')).toBeDisabled();
   });
 
   test('suunnitteluVaihde should be required when vaihe is suunnittelu', async () => {

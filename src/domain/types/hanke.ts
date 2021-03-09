@@ -137,6 +137,15 @@ export type HankeGeometria = {
   modifiedByUserId: string | null;
 };
 
+export type HankeTilat = {
+  onGeometrioita: boolean;
+  onKaikkiPakollisetLuontiTiedot: boolean;
+  onTiedotLiikenneHaittaIndeksille: boolean;
+  onLiikenneHaittaIndeksi: boolean;
+  onViereisiaHankkeita: boolean;
+  onAsiakasryhmia: boolean;
+};
+
 export interface HankeData {
   id: number;
   hankeTunnus: string;
@@ -162,6 +171,7 @@ export interface HankeData {
   onYKTHanke: boolean;
   saveType: HANKE_SAVETYPE_KEY;
   geometriat: HankeGeometria | null;
+  tilat: HankeTilat;
   version?: number;
   createdBy?: string;
   createdAt?: string;
@@ -176,6 +186,7 @@ type DraftRequiredFields =
   | 'kuvaus'
   | 'vaihe'
   | 'alkuPvm'
-  | 'loppuPvm';
+  | 'loppuPvm'
+  | 'tilat';
 
 export type HankeDataDraft = PartialExcept<HankeData, DraftRequiredFields>;

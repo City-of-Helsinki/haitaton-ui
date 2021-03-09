@@ -38,6 +38,14 @@ context('HankeForm', () => {
         omistajat: [],
         toteuttajat: [],
         arvioijat: [],
+        tilat: {
+          onGeometrioita: true,
+          onKaikkiPakollisetLuontiTiedot: true,
+          onTiedotLiikenneHaittaIndeksille: true,
+          onLiikenneHaittaIndeksi: false,
+          onViereisiaHankkeita: false,
+          onAsiakasryhmia: false,
+        },
       }
     );
 
@@ -89,6 +97,6 @@ context('HankeForm', () => {
     cy.get('#tarinaHaitta-toggle-button').click();
     cy.get('#tarinaHaitta-item-0').click();
 
-    cy.get('[data-testid=finish]').should('not.be.disabled');
+    cy.get('[data-testid=submitButton]').should('not.be.disabled');
   });
 });
