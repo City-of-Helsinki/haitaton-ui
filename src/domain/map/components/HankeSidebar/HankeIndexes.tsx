@@ -1,6 +1,10 @@
 import React from 'react';
-import { StatusLabel } from 'hds-react';
 import { useTranslation } from 'react-i18next';
+import {
+  LIIKENNEHAITTA_STATUS,
+  getStatusByIndex,
+  getColorByStatus,
+} from '../../../common/utils/liikennehaittaindeksi';
 import Text from '../../../../common/components/text/Text';
 import styles from './HankeIndexes.module.scss';
 
@@ -24,8 +28,14 @@ const IndexSection: React.FC<IndexProps> = ({ title, content, index }) =>
             </Text>
           )}
         </div>
-        <div className={styles.indexContainer__statusContainer}>
-          <StatusLabel type="alert">{index}</StatusLabel>
+        <div
+          className={styles.indexContainer__number}
+          style={{
+            backgroundColor: getColorByStatus(getStatusByIndex(index)),
+            color: getStatusByIndex(index) === LIIKENNEHAITTA_STATUS.YELLOW ? 'black' : 'white',
+          }}
+        >
+          <div>{index}</div>
         </div>
       </div>
     </>
@@ -47,7 +57,7 @@ const HankeIndexes: React.FC<Props> = ({ hankeTunnus }) => {
       <IndexSection
         title={t('hankeIndexes:ruuhkautuminen')}
         content={`${t('hankeIndexes:kiertoreittitarve')}: ${t('hankeIndexes:todennakoinen')}`}
-        index={2.7}
+        index={3.7}
       />
 
       <IndexSection

@@ -8,10 +8,10 @@
     flex-grow: 1;
   }
 
-  &__statusContainer {
-    padding-left: 1.5rem;
-    width: 64px;
+  &__number {
+    width: 34px;
     text-align: center;
+    margin-right: 8px;
   }
 }
 
