@@ -14,25 +14,25 @@ describe('HankeLista', () => {
 
     await waitFor(() => queryByText('Hankelista'));
     getByTestId(container, 'tableHeaderButton1').click();
-    expect(getByTestId(container, 'row0_cell_name')).toHaveTextContent('cc');
+    expect(getByTestId(container, 'row0_cell_name')).toHaveTextContent('Hanke 1');
     getByTestId(container, 'tableHeaderButton2').click();
     expect(getByTestId(container, 'row0_cell_step')).toHaveTextContent('OHJELMOINTI');
     getByTestId(container, 'tableHeaderButton3').click();
-    expect(getByTestId(container, 'row0_cell_startDate')).toHaveTextContent('10.11.2020');
+    expect(getByTestId(container, 'row0_cell_startDate')).toHaveTextContent('23.11.2020');
     getByTestId(container, 'tableHeaderButton4').click();
     getByTestId(container, 'tableHeaderButton4').click();
-    expect(getByTestId(container, 'row0_cell_endDate')).toHaveTextContent('11.01.2032');
+    expect(getByTestId(container, 'row0_cell_endDate')).toHaveTextContent('05.12.2020');
   });
   test('pagination test', async () => {
     const { container, queryAllByText } = render(<HankeList projectsData={hankeDraftList} />);
 
-    expect(getByTestId(container, 'amountOfpages')).toHaveTextContent('9');
+    expect(getByTestId(container, 'amountOfpages')).toHaveTextContent('2');
     getByTestId(container, 'toEnd').click();
-    expect(getByTestId(container, 'currentPage')).toHaveTextContent('9');
+    expect(getByTestId(container, 'currentPage')).toHaveTextContent('2');
     getByTestId(container, 'backward').click();
-    expect(getByTestId(container, 'currentPage')).toHaveTextContent('8');
+    expect(getByTestId(container, 'currentPage')).toHaveTextContent('1');
     getByTestId(container, 'forward').click();
-    expect(getByTestId(container, 'currentPage')).toHaveTextContent('9');
+    expect(getByTestId(container, 'currentPage')).toHaveTextContent('2');
     getByTestId(container, 'toBeginning').click();
     expect(getByTestId(container, 'currentPage')).toHaveTextContent('1');
     getByTestId(container, 'toFormLink').click();

@@ -13,7 +13,6 @@ import Form2 from './Form2';
 import Form3 from './Form3';
 import Form4 from './Form4';
 import FormButtons from './FormButtons';
-import FinishedForm from './FinishedForm';
 import Notification from './Notification';
 import './Form.styles.scss';
 
@@ -83,7 +82,8 @@ const HankeForm: React.FC<Props> = ({
 
   // eslint-disable-next-line
   const onSubmit = async (data: HankeDataFormState) => {
-    // Todo: Maybe save and redirect to haittojenHallinta?
+    // eslint-disable-next-line
+    alert('Todo: Laske indeksit');
   };
 
   useEffect(() => {
@@ -110,76 +110,44 @@ const HankeForm: React.FC<Props> = ({
         <Text tag="h1" data-testid="formPageHeader" styleAs="h2" spacing="s" weight="bold">
           {t('hankeForm:pageHeader')}
         </Text>
-        {formPage === 5 ? (
-          <div className="hankeForm__formWpr">
-            <div className="hankeForm__formWprRight">
-              <FinishedForm />
-            </div>
+
+        <div className="hankeForm__formWpr">
+          <StateIndicator formPage={formPage} />
+          <div className="hankeForm__formWprRight">
+            <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
+              <div className="closeFormWpr">
+                <button
+                  type="button"
+                  onClick={() => onFormClose()}
+                  aria-label={t('hankeForm:closeAriaLabel')}
+                >
+                  <IconCross aria-hidden="true" />
+                </button>
+              </div>
+              {formPage === 0 && (
+                <Form0 errors={errors} control={control} register={register} formData={formData} />
+              )}
+              {formPage === 1 && (
+                <Form1 errors={errors} control={control} register={register} formData={formData} />
+              )}
+              {formPage === 2 && (
+                <Form2 errors={errors} control={control} register={register} formData={formData} />
+              )}
+              {formPage === 3 && (
+                <Form3 errors={errors} control={control} register={register} formData={formData} />
+              )}
+              {formPage === 4 && (
+                <Form4 errors={errors} control={control} register={register} formData={formData} />
+              )}
+              <FormButtons
+                goBack={goBack}
+                goForward={goForward}
+                saveDraft={saveDraft}
+                formPage={formPage}
+              />
+            </form>
           </div>
-        ) : (
-          <div className="hankeForm__formWpr">
-            <StateIndicator formPage={formPage} />
-            <div className="hankeForm__formWprRight">
-              <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
-                <div className="closeFormWpr">
-                  <button
-                    type="button"
-                    onClick={() => onFormClose()}
-                    aria-label={t('hankeForm:closeAriaLabel')}
-                  >
-                    <IconCross aria-hidden="true" />
-                  </button>
-                </div>
-                {formPage === 0 && (
-                  <Form0
-                    errors={errors}
-                    control={control}
-                    register={register}
-                    formData={formData}
-                  />
-                )}
-                {formPage === 1 && (
-                  <Form1
-                    errors={errors}
-                    control={control}
-                    register={register}
-                    formData={formData}
-                  />
-                )}
-                {formPage === 2 && (
-                  <Form2
-                    errors={errors}
-                    control={control}
-                    register={register}
-                    formData={formData}
-                  />
-                )}
-                {formPage === 3 && (
-                  <Form3
-                    errors={errors}
-                    control={control}
-                    register={register}
-                    formData={formData}
-                  />
-                )}
-                {formPage === 4 && (
-                  <Form4
-                    errors={errors}
-                    control={control}
-                    register={register}
-                    formData={formData}
-                  />
-                )}
-                <FormButtons
-                  goBack={goBack}
-                  goForward={goForward}
-                  saveDraft={saveDraft}
-                  formPage={formPage}
-                />
-              </form>
-            </div>
-          </div>
-        )}
+        </div>
       </div>
     </FormProvider>
   );
