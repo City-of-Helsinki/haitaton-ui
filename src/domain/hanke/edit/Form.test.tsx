@@ -45,7 +45,6 @@ describe('HankeForm', () => {
     const { getByTestId, getByLabelText, queryAllByText } = render(
       <Form
         formData={formData}
-        // showNotification={null}
         onSave={handleSave}
         onSubmit={handleSubmit}
         onSaveGeometry={handleSaveGeometry}
@@ -143,7 +142,6 @@ describe('HankeForm', () => {
     const { getByTestId, getByLabelText, queryAllByText } = render(
       <Form
         formData={formData}
-        // showNotification={null}
         onSave={handleSave}
         onSubmit={handleSubmit}
         onSaveGeometry={handleSaveGeometry}
@@ -185,7 +183,6 @@ describe('HankeForm', () => {
     const { getByTestId, getByLabelText, queryAllByText, queryByText } = render(
       <Form
         formData={formData}
-        // showNotification={null}
         onSave={handleSave}
         onSubmit={handleSubmit}
         onSaveGeometry={handleSaveGeometry}
@@ -260,7 +257,6 @@ describe('HankeForm', () => {
           ...formData,
           [FORMFIELD.NIMI]: 'Lenkkeilijä Pekka',
         }}
-        // showNotification={null}
         onSave={() => ({})}
         onSubmit={() => ({})}
         onSaveGeometry={() => ({})}
@@ -271,7 +267,6 @@ describe('HankeForm', () => {
     );
     expect(getByTestId(FORMFIELD.NIMI)).toHaveValue('Lenkkeilijä Pekka');
     expect(getByTestId(FORMFIELD.KUVAUS)).toHaveValue('');
-    // expect(findByText('Objelmointi')).toBeTruthy();
     expect(getByText('Ohjelmointi')).toBeInTheDocument();
   });
 

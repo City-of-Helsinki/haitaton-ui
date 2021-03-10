@@ -33,7 +33,6 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
   const history = useHistory();
   const hasFormChanged = useSelector(getHasFormChanged());
   const formData = useSelector(getFormData());
-  // const showNotification = useSelector(getShowNotification());
 
   const { data: hankeData, isFetched } = useHanke(hankeTunnus);
 
@@ -83,7 +82,6 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
   return (
     <HankeForm
       formData={formData}
-      // showNotification={showNotification}
       onSave={handleSave}
       onSubmit={handleCalculateIndex}
       onSaveGeometry={handleSaveGeometry}
