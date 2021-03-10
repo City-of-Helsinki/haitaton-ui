@@ -16,32 +16,29 @@ type IndexProps = {
   testId: string;
 };
 
-const IndexSection: React.FC<IndexProps> = ({ title, content, index, testId }) =>
-  title && title !== '' && index ? (
-    <>
-      <div className={styles.indexContainer}>
-        <div className={styles.indexContainer__titlesContainer}>
-          <Text tag="h3" styleAs={content ? 'h6' : 'h5'} weight="bold">
-            {title}
-          </Text>
-          {content && (
-            <Text tag="p" styleAs="body-m">
-              {content}
-            </Text>
-          )}
-        </div>
-        <div
-          className={styles.indexContainer__number}
-          style={{
-            backgroundColor: getColorByStatus(getStatusByIndex(index)),
-            color: getStatusByIndex(index) === LIIKENNEHAITTA_STATUS.YELLOW ? 'black' : 'white',
-          }}
-        >
-          <div data-testid={testId}>{index}</div>
-        </div>
-      </div>
-    </>
-  ) : null;
+const IndexSection: React.FC<IndexProps> = ({ title, content, index, testId }) => (
+  <div className={styles.indexContainer}>
+    <div className={styles.indexContainer__titlesContainer}>
+      <Text tag="h3" styleAs={content ? 'h6' : 'h5'} weight="bold">
+        {title}
+      </Text>
+      {content && (
+        <Text tag="p" styleAs="body-m">
+          {content}
+        </Text>
+      )}
+    </div>
+    <div
+      className={styles.indexContainer__number}
+      style={{
+        backgroundColor: getColorByStatus(getStatusByIndex(index)),
+        color: getStatusByIndex(index) === LIIKENNEHAITTA_STATUS.YELLOW ? 'black' : 'white',
+      }}
+    >
+      <div data-testid={testId}>{index}</div>
+    </div>
+  </div>
+);
 
 type Props = {
   hankeIndexData: HankeIndexData;
