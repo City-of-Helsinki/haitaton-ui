@@ -20,10 +20,13 @@ const HankeHoverBox: React.FC = () => {
     <div className={styles.hankeHover}>
       {foundHanke && (
         <div>
-          <p>{foundHanke?.nimi}</p>
-          <p>({hoveredHankeTunnus})</p>
-          <p>{format(new Date(foundHanke?.alkuPvm), 'dd.MM.yyyy')}</p>
-          <p>{format(new Date(foundHanke?.loppuPvm), 'dd.MM.yyyy')}</p>
+          <p>
+            {foundHanke?.nimi}, ({hoveredHankeTunnus})
+          </p>
+          <p>
+            {format(new Date(foundHanke?.alkuPvm), 'dd.MM.yyyy')} -{' '}
+            {format(new Date(foundHanke?.loppuPvm), 'dd.MM.yyyy')}
+          </p>
         </div>
       )}
     </div>

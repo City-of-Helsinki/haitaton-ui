@@ -1,8 +1,17 @@
 .hankeHover {
-  background-color: white;
   position: absolute;
   top: 1rem;
   right: 50%;
   transform: translateX(50%);
-  z-index: 20000;
+  z-index: 1000;
+
+  div {
+    max-width: 21.875rem;
+    background-color: var(--color-coat-of-arms-light);
+    padding: var(--spacing-xs);
+    font-size: var(--fontsize-body-s);
+    line-height: var(--lineheight-xl);
+    font-weight: normal;
+    border-left: 8px solid var(--color-coat-of-arms);
+  }
 }
