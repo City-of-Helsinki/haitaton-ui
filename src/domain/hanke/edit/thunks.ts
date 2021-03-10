@@ -3,6 +3,7 @@ import api from '../../api/api';
 import { HankeDataFormState } from './types';
 import { HANKE_SAVETYPE_KEY } from '../../types/hanke';
 import { saveGeometryData } from '../../map/thunks';
+import { actions } from '../../app/reducer';
 import { filterEmptyContacts } from './utils';
 
 type SaveHankeData = {
@@ -34,18 +35,18 @@ export const saveForm = createAsyncThunk(
 
 export const calculateIndex = createAsyncThunk(
   'form/calculateIndex',
-  async (hankeTunnus: string) => {
+  async (hankeTunnus: string, thunkApi) => {
     try {
-      // thunkApi.dispatch(startLoading());
+      thunkApi.dispatch(actions.updateIsLoading(true));
       const response = await api.post<HankeDataFormState>(
         `/hankkeet/${hankeTunnus}/tormaystarkastelu`
       );
-      // thunkApi.dispatch(stopLoading());
+      thunkApi.dispatch(actions.updateIsLoading(false));
       return response.data;
     } catch (err) {
       // eslint-disable-next-line
       console.log(err);
-      // thunkApi.dispatch(stopLoading());
+      thunkApi.dispatch(actions.updateIsLoading(false));
       throw err;
     }
   }
