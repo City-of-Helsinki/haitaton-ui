@@ -71,9 +71,6 @@ const mapSlice = createSlice({
     setHankeFilterEndDate,
   },
   extraReducers: (builder) => {
-    builder.addCase(saveGeometryData.pending, (state) => {
-      state.status = 'loading';
-    });
     builder.addCase(saveGeometryData.fulfilled, (state) => {
       state.status = 'ok';
     });
