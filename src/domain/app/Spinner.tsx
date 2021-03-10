@@ -4,8 +4,8 @@ import { getIsLoading } from './selectors';
 import OverlaySpinner from '../../common/components/spinner/OverlaySpinner';
 
 const Spinner = () => {
-  const IsLoading = useSelector(getIsLoading());
-  return IsLoading ? <OverlaySpinner /> : null;
+  const isLoading = useSelector(getIsLoading());
+  return isLoading ? <OverlaySpinner /> : null;
 };
 
 export default Spinner;
