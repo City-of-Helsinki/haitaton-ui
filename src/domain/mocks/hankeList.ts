@@ -72,6 +72,7 @@ const hankeList: HankeData[] = [
     meluHaitta: null,
     polyHaitta: null,
     tarinaHaitta: null,
+    liikennehaittaindeksi: null,
   },
   {
     id: 2,
@@ -135,6 +136,7 @@ const hankeList: HankeData[] = [
     meluHaitta: null,
     polyHaitta: null,
     tarinaHaitta: null,
+    liikennehaittaindeksi: null,
   },
 ];
 

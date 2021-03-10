@@ -8,7 +8,7 @@ import Text from '../../../../common/components/text/Text';
 import { formatToFinnishDate } from '../../../../common/utils/date';
 import { HankeData } from '../../../types/hanke';
 import styles from './HankeSidebar.module.scss';
-import HankeIndexes from './HankeIndexes';
+import HankeIndexesContainer from './HankeIndexesContainer';
 import useLinkPath from '../../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../../common/types/route';
 
@@ -99,7 +99,7 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
           </Link>
           <hr />
 
-          <HankeIndexes hankeTunnus={hanke.hankeTunnus} />
+          <HankeIndexesContainer hankeTunnus={hanke.hankeTunnus} />
         </DrawerBody>
       </DrawerContent>
     </Drawer>

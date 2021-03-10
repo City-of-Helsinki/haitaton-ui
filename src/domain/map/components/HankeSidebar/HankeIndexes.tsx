@@ -7,14 +7,16 @@ import {
 } from '../../../common/utils/liikennehaittaindeksi';
 import Text from '../../../../common/components/text/Text';
 import styles from './HankeIndexes.module.scss';
+import { HankeIndexData } from '../../../types/hanke';
 
 type IndexProps = {
   title: string;
   content?: string;
   index: number;
+  testId: string;
 };
 
-const IndexSection: React.FC<IndexProps> = ({ title, content, index }) =>
+const IndexSection: React.FC<IndexProps> = ({ title, content, index, testId }) =>
   title && title !== '' && index ? (
     <>
       <div className={styles.indexContainer}>
@@ -35,41 +37,48 @@ const IndexSection: React.FC<IndexProps> = ({ title, content, index }) =>
             color: getStatusByIndex(index) === LIIKENNEHAITTA_STATUS.YELLOW ? 'black' : 'white',
           }}
         >
-          <div>{index}</div>
+          <div data-testid={testId}>{index}</div>
         </div>
       </div>
     </>
   ) : null;
 
 type Props = {
-  hankeTunnus: string; // FIXME
+  hankeIndexData: HankeIndexData;
 };
 
-const HankeIndexes: React.FC<Props> = ({ hankeTunnus }) => {
+const HankeIndexes: React.FC<Props> = ({ hankeIndexData }) => {
   const { t } = useTranslation();
 
   return (
     <div className={styles.indexes}>
-      <h1>{hankeTunnus}</h1>
+      <IndexSection
+        title={t('hankeIndexes:liikennehaittaindeksi')}
+        index={hankeIndexData.liikennehaittaIndeksi.indeksi}
+        testId="test-liikennehaittaIndeksi"
+      />
 
-      <IndexSection title={t('hankeIndexes:liikennehaittaindeksi')} index={4} />
-
+      {/*
+ ks of now the backend did not respond with an index value for ruuhkautuminen
       <IndexSection
         title={t('hankeIndexes:ruuhkautuminen')}
         content={`${t('hankeIndexes:kiertoreittitarve')}: ${t('hankeIndexes:todennakoinen')}`}
         index={3.7}
       />
+*/}
 
       <IndexSection
         title={t('hankeIndexes:pyorailynPaareitti')}
-        content={`${t('hankeIndexes:kiertoreittitarve')}: ${t('hankeIndexes:eiTarvetta')}`}
-        index={1}
+        content={`${t('hankeIndexes:kiertoreittitarve')}: `}
+        index={hankeIndexData.pyorailyIndeksi}
+        testId="test-pyorailyIndeksi"
       />
 
       <IndexSection
         title={t('hankeIndexes:merkittavatJoukkoliikennereitit')}
-        content={`${t('hankeIndexes:kiertoreittitarve')}: ${t('hankeIndexes:merkittava')}`}
-        index={4}
+        content={`${t('hankeIndexes:kiertoreittitarve')}: `}
+        index={hankeIndexData.joukkoliikenneIndeksi}
+        testId="test-joukkoliikenneIndeksi"
       />
     </div>
   );
