@@ -90,7 +90,7 @@ const HankeForm: React.FC<Props> = ({
 
   return (
     <FormProvider {...formContext}>
-      <FormNotifications />
+      <FormNotifications hankeTunnus={formData.hankeTunnus} />
       <div className="hankeForm">
         <Text tag="h1" data-testid="formPageHeader" styleAs="h2" spacing="s" weight="bold">
           {t('hankeForm:pageHeader')}

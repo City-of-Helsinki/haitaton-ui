@@ -1,12 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import Notification from './Notification';
 import { getShowNotification } from './selectors';
+import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 
-const FormNotifications = () => {
+type Props = {
+  hankeTunnus: string | undefined;
+};
+
+const FormNotifications: React.FC<Props> = ({ hankeTunnus }) => {
   const { t } = useTranslation();
+  const { MAP } = useLocalizedRoutes();
   const showNotification = useSelector(getShowNotification());
+  const history = useHistory();
+
+  // Redirect to map after successful index calculation
+  useEffect(() => {
+    if (showNotification === 'indexSuccess' && hankeTunnus) {
+      setTimeout(() => {
+        history.push(`${MAP.path}?hanke=${hankeTunnus}`);
+      }, 100);
+    }
+  }, [showNotification, hankeTunnus]);
 
   return (
     <>
