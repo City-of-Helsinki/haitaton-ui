@@ -4,12 +4,12 @@ import { useHistory } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { actions as dialogActions } from '../../../common/components/confirmationDialog/reducer';
 import { HANKE_SAVETYPE, HankeDataDraft } from '../../types/hanke';
-import { getHasFormChanged, getFormData, getShowNotification } from './selectors';
-import { saveForm } from './thunks';
+import { getHasFormChanged, getFormData } from './selectors';
+import { saveForm, calculateIndex } from './thunks';
 import { saveGeometryData } from '../../map/thunks';
 import HankeForm from './Form';
 import { actions, hankeDataDraft } from './reducer';
-import { SaveFormArguments } from './types';
+import { SaveFormArguments, HankeDataFormState } from './types';
 import { convertHankeDataToFormState } from './utils';
 
 import api from '../../api/api';
@@ -33,7 +33,6 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
   const history = useHistory();
   const hasFormChanged = useSelector(getHasFormChanged());
   const formData = useSelector(getFormData());
-  const showNotification = useSelector(getShowNotification());
 
   const { data: hankeData, isFetched } = useHanke(hankeTunnus);
 
@@ -52,6 +51,11 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
         formPage,
       })
     );
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  const handleCalculateIndex = ({ hankeTunnus }: HankeDataFormState) => {
+    if (hankeTunnus) dispatch(calculateIndex(hankeTunnus));
   };
 
   const handleSaveGeometry = (id: string) => {
@@ -78,8 +82,8 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
   return (
     <HankeForm
       formData={formData}
-      showNotification={showNotification}
       onSave={handleSave}
+      onSubmit={handleCalculateIndex}
       onSaveGeometry={handleSaveGeometry}
       onIsDirtyChange={handleIsDirtyChange}
       onUnmount={handleUnmount}

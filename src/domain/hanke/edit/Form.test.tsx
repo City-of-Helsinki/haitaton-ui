@@ -3,8 +3,7 @@ import { cleanup, fireEvent, waitFor } from '@testing-library/react';
 import { FORMFIELD } from './types';
 import Form from './Form';
 import FormContainer from './FormContainer';
-import { HANKE_VAIHE } from '../../types/hanke';
-
+import { HANKE_VAIHE, HANKE_TYOMAATYYPPI } from '../../types/hanke';
 import { render } from '../../../testUtils/render';
 
 afterEach(cleanup);
@@ -12,7 +11,7 @@ afterEach(cleanup);
 jest.setTimeout(10000);
 
 const nimi = 'test kuoppa';
-const alkuPvm = '24.03.2032';
+const alkuPvm = '24.03.2021';
 const loppuPvm = '25.03.2032';
 const omistajaEtunimi = 'Matti';
 const katuosoite = 'Pohjoinen Rautatiekatu 11 b 12';
@@ -23,6 +22,15 @@ const formData = {
   toteuttajat: [],
   arvioijat: [],
   omistajat: [],
+  tyomaaTyyppi: [HANKE_TYOMAATYYPPI.AKILLINEN_VIKAKORJAUS],
+  tilat: {
+    onGeometrioita: true,
+    onKaikkiPakollisetLuontiTiedot: true,
+    onTiedotLiikenneHaittaIndeksille: true,
+    onLiikenneHaittaIndeksi: false,
+    onViereisiaHankkeita: false,
+    onAsiakasryhmia: false,
+  },
 };
 
 describe('HankeForm', () => {
@@ -32,12 +40,13 @@ describe('HankeForm', () => {
     const handleIsDirtyChange = jest.fn();
     const handleUnmount = jest.fn();
     const handleFormClose = jest.fn();
+    const handleSubmit = jest.fn();
 
     const { getByTestId, getByLabelText, queryAllByText } = render(
       <Form
         formData={formData}
-        showNotification={null}
         onSave={handleSave}
+        onSubmit={handleSubmit}
         onSaveGeometry={handleSaveGeometry}
         onIsDirtyChange={handleIsDirtyChange}
         onUnmount={handleUnmount}
@@ -103,7 +112,8 @@ describe('HankeForm', () => {
 
     getByTestId('forward').click(); // changes view to form4
     await waitFor(() => getByLabelText('Haitan alkupäivämäärä'));
-    fireEvent.change(getByLabelText('Haitan alkupäivämäärä'), { target: { value: '24.03.2032' } });
+    fireEvent.change(getByLabelText('Haitan alkupäivämäärä'), { target: { value: '24.03.2022' } });
+    fireEvent.change(getByLabelText('Haitan loppupäivämäärä'), { target: { value: '24.12.2022' } });
 
     getByTestId('backward').click(); // changes view to form3
     await waitFor(() => getByTestId(FORMFIELD.KATUOSOITE));
@@ -112,7 +122,13 @@ describe('HankeForm', () => {
     getByTestId('forward').click(); // changes view to form4
     await waitFor(() => queryAllByText('Hankkeen haitat')[1]);
 
-    expect(getByTestId('submitButton')).toBeDisabled();
+    queryAllByText('Kaistahaitta')[0].click();
+    queryAllByText('Ei vaikuta')[0].click();
+
+    queryAllByText('Kaistan pituushaitta')[0].click();
+    queryAllByText('Enintään 10 m')[0].click();
+
+    expect(getByTestId('submitButton')).not.toBeDisabled();
   });
 
   test('suunnitteluVaihde should be required when vaihe is suunnittelu', async () => {
@@ -121,12 +137,13 @@ describe('HankeForm', () => {
     const handleIsDirtyChange = jest.fn();
     const handleUnmount = jest.fn();
     const handleFormClose = jest.fn();
+    const handleSubmit = jest.fn();
 
     const { getByTestId, getByLabelText, queryAllByText } = render(
       <Form
         formData={formData}
-        showNotification={null}
         onSave={handleSave}
+        onSubmit={handleSubmit}
         onSaveGeometry={handleSaveGeometry}
         onIsDirtyChange={handleIsDirtyChange}
         onUnmount={handleUnmount}
@@ -161,11 +178,13 @@ describe('HankeForm', () => {
     const handleIsDirtyChange = jest.fn();
     const handleUnmount = jest.fn();
     const handleFormClose = jest.fn();
+    const handleSubmit = jest.fn();
+
     const { getByTestId, getByLabelText, queryAllByText, queryByText } = render(
       <Form
         formData={formData}
-        showNotification={null}
         onSave={handleSave}
+        onSubmit={handleSubmit}
         onSaveGeometry={handleSaveGeometry}
         onIsDirtyChange={handleIsDirtyChange}
         onUnmount={handleUnmount}
@@ -214,12 +233,13 @@ describe('HankeForm', () => {
     await waitFor(() => expect(getByTestId('forward')).not.toBeDisabled());
   });
 
-  test('Success notification should be shown', async () => {
+  /* test('Success notification should be shown', async () => {
     const { queryByTestId, queryByText } = render(
       <Form
         formData={formData}
-        showNotification="success"
+        // showNotification="success"
         onSave={() => ({})}
+        onSubmit={() => ({})}
         onSaveGeometry={() => ({})}
         onIsDirtyChange={() => ({})}
         onUnmount={() => ({})}
@@ -228,7 +248,7 @@ describe('HankeForm', () => {
     );
     await waitFor(() => expect(queryByText('Luonnos tallennettu')));
     await waitFor(() => expect(queryByTestId('notification')).toBeNull());
-  });
+  }); */
 
   test('Form should be populated correctly ', async () => {
     const { getByTestId, getByText } = render(
@@ -237,8 +257,8 @@ describe('HankeForm', () => {
           ...formData,
           [FORMFIELD.NIMI]: 'Lenkkeilijä Pekka',
         }}
-        showNotification={null}
         onSave={() => ({})}
+        onSubmit={() => ({})}
         onSaveGeometry={() => ({})}
         onIsDirtyChange={() => ({})}
         onUnmount={() => ({})}
@@ -247,7 +267,6 @@ describe('HankeForm', () => {
     );
     expect(getByTestId(FORMFIELD.NIMI)).toHaveValue('Lenkkeilijä Pekka');
     expect(getByTestId(FORMFIELD.KUVAUS)).toHaveValue('');
-    // expect(findByText('Objelmointi')).toBeTruthy();
     expect(getByText('Ohjelmointi')).toBeInTheDocument();
   });
 

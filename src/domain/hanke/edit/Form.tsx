@@ -13,13 +13,13 @@ import Form2 from './Form2';
 import Form3 from './Form3';
 import Form4 from './Form4';
 import FormButtons from './FormButtons';
-import Notification from './Notification';
+import FormNotifications from './FormNotifications';
 import './Form.styles.scss';
 
 type Props = {
   formData: HankeDataFormState;
-  showNotification: string | null;
   onSave: (args: SaveFormArguments) => void;
+  onSubmit: (data: HankeDataFormState) => void;
   onSaveGeometry: (hankeTunnus: string) => void;
   onIsDirtyChange: (isDirty: boolean) => void;
   onUnmount: () => void;
@@ -29,11 +29,11 @@ type Props = {
 const HankeForm: React.FC<Props> = ({
   formData,
   onSave,
+  onSubmit,
   onSaveGeometry,
   onIsDirtyChange,
   onUnmount,
   onFormClose,
-  showNotification,
 }) => {
   const { t } = useTranslation();
   const [formPage, setFormPage] = useState<number>(0);
@@ -80,12 +80,6 @@ const HankeForm: React.FC<Props> = ({
     setFormPage((v) => v + 1);
   }, [getValues, formPage]);
 
-  // eslint-disable-next-line
-  const onSubmit = async (data: HankeDataFormState) => {
-    // eslint-disable-next-line
-    alert('Todo: Laske indeksit');
-  };
-
   useEffect(() => {
     onIsDirtyChange(formState.isDirty);
   }, [formState.isDirty]);
@@ -96,16 +90,7 @@ const HankeForm: React.FC<Props> = ({
 
   return (
     <FormProvider {...formContext}>
-      {showNotification === 'success' && (
-        <Notification label={t('hankeForm:savingSuccessHeader')} typeProps="success">
-          {t('hankeForm:savingSuccessText')}
-        </Notification>
-      )}
-      {showNotification === 'error' && (
-        <Notification label={t('hankeForm:savingFailHeader')} typeProps="error">
-          {t('hankeForm:savingFailText')}
-        </Notification>
-      )}
+      <FormNotifications hankeTunnus={formData.hankeTunnus} />
       <div className="hankeForm">
         <Text tag="h1" data-testid="formPageHeader" styleAs="h2" spacing="s" weight="bold">
           {t('hankeForm:pageHeader')}
