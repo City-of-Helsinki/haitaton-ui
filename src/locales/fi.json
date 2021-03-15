@@ -247,6 +247,16 @@
     "closeButtonAriaLabel": "Sulje hankevalikko",
     "editHanke": "Muokkaa hankkeen tietoja"
   },
+  "hankeIndexes": {
+    "liikennehaittaindeksi": "Liikennehaittaindeksi",
+    "ruuhkautuminen": "Ruuhkautuminen",
+    "pyorailynPaareitti": "Pyöräilyn pääreitti",
+    "merkittavatJoukkoliikennereitit": "Merkittävät joukkoliikennereitit",
+    "kiertoreittitarve": "Kiertoreittitarve",
+    "todennakoinen": "todennäköinen",
+    "eiTarvetta": "ei tarvetta",
+    "merkittava": "merkittävä"
+  },
   "hankeList": {
     "pageHeader": "Hankelista",
     "paginationHeader": "Sivu",

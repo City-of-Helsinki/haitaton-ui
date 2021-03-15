@@ -146,6 +146,21 @@ export type HankeTilat = {
   onAsiakasryhmia: boolean;
 };
 
+export enum HANKE_INDEX_TYPE {
+  PERUSINDEKSI = 'PERUSINDEKSI',
+}
+
+export type LiikenneHaittaIndeksi = {
+  indeksi: number;
+  tyyppi: HANKE_INDEX_TYPE.PERUSINDEKSI;
+};
+
+export enum HANKE_INDEX_STATE {
+  VOIMASSA = 'VOIMASSA',
+}
+
+export type HANKE_INDEX_STATE_KEY = keyof typeof HANKE_INDEX_STATE;
+
 export interface HankeData {
   id: number;
   hankeTunnus: string;
@@ -162,6 +177,7 @@ export interface HankeData {
   haittaLoppuPvm: Date | null;
   kaistaHaitta: HANKE_KAISTAHAITTA_KEY | null;
   kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA_KEY | null;
+  liikennehaittaindeksi: LiikenneHaittaIndeksi | null;
   meluHaitta: HANKE_MELUHAITTA_KEY | null;
   polyHaitta: HANKE_POLYAITTA_KEY | null;
   tarinaHaitta: HANKE_TARINAHAITTA_KEY | null;
@@ -177,6 +193,17 @@ export interface HankeData {
   createdAt?: string;
   modifiedBy?: null | string;
   modifiedAt?: null | string;
+}
+
+export interface HankeIndexData {
+  hankeTunnus: string;
+  hankeId: number;
+  hankeGeometriatId: number;
+  liikennehaittaIndeksi: LiikenneHaittaIndeksi;
+  perusIndeksi: number;
+  pyorailyIndeksi: number;
+  joukkoliikenneIndeksi: number;
+  tila: HANKE_INDEX_STATE_KEY;
 }
 
 type DraftRequiredFields =

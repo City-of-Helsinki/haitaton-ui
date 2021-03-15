@@ -1,0 +1,22 @@
+.indexContainer {
+  display: flex;
+  align-items: center;
+  padding: 1.2rem 0.25rem;
+
+  &__titlesContainer {
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  &__number {
+    width: 34px;
+    text-align: center;
+    margin-right: 8px;
+  }
+}
+
+.indexes {
+  .indexContainer:nth-child(odd) {
+    background-color: var(--color-black-5);
+  }
+}
