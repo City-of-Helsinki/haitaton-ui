@@ -52,35 +52,35 @@
       "path": "/",
       "headerLabel": "Alkuun",
       "meta": {
-        "title": "Haitaton 2.0 - Etusivu"
+        "title": "Haitaton Beta - Etusivu"
       }
     },
     "PROJECTS": {
       "path": "/hankelista",
       "headerLabel": "Hankelista",
       "meta": {
-        "title": "Haitaton 2.0 - Hankelista"
+        "title": "Haitaton Beta - Hankelista"
       }
     },
     "MAP": {
       "path": "/map",
       "headerLabel": "Kartta",
       "meta": {
-        "title": "Haitaton 2.0 - Kartta"
+        "title": "Haitaton Beta - Kartta"
       }
     },
     "NEW_HANKE": {
       "path": "/hanke/uusi",
       "headerLabel": "Hanke",
       "meta": {
-        "title": "Haitaton 2.0 - Luo uusi hanke"
+        "title": "Haitaton Beta - Luo uusi hanke"
       }
     },
     "EDIT_HANKE": {
       "path": "/hanke/:hankeTunnus/muokkaa",
       "headerLabel": "Hanke",
       "meta": {
-        "title": "Haitaton 2.0 - Hankkeen muokkaus"
+        "title": "Haitaton Beta - Hankkeen muokkaus"
       }
     }
   },

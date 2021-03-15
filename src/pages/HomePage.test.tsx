@@ -6,6 +6,6 @@ import { render } from '../testUtils/render';
 describe('HomePage', () => {
   test('it should have correct document title', async () => {
     render(<HomePage />);
-    await waitFor(() => expect(document.title).toEqual('Haitaton 2.0 - Etusivu'));
+    await waitFor(() => expect(document.title).toEqual('Haitaton Beta - Etusivu'));
   });
 });

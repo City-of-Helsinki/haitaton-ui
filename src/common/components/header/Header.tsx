@@ -24,7 +24,7 @@ const Header: React.FC = () => {
       menuToggleAriaLabel="Open and close menu"
       menuOpen={menuOpen}
       onMenuToggle={() => setMenuOpen(!menuOpen)}
-      title="Haitaton 2.0"
+      title="Haitaton Beta"
       skipTo="#"
       skipToContentLabel="Skip to main content"
       titleUrl={HOME.path}

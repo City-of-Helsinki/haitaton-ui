@@ -1,4 +1,4 @@
-# Haitaton 2.0 UI
+# Haitaton Beta UI
 
 ## Requirements
 
