@@ -24,7 +24,12 @@ const LayerControl: React.FC<Props> = ({ tileLayers, onClickTileLayer }) => {
   return (
     <ControlPanel className={styles.tileLayerControl}>
       <Menu closeOnSelect={false}>
-        <MenuButton aria-label={t('map:controls:ariaLayerMenu')}>
+        <MenuButton
+          aria-label={t('map:controls:ariaLayerMenu')}
+          type="button"
+          // Disable form submit
+          onClick={() => false}
+        >
           <IconLayers aria-hidden />
         </MenuButton>
         <MenuList className={styles.controlMenu} aria-hidden id="layer-list" role="menu">
