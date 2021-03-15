@@ -13,6 +13,9 @@ jest.setTimeout(10000);
 const nimi = 'test kuoppa';
 const alkuPvm = '24.03.2021';
 const loppuPvm = '25.03.2032';
+const haittaAlkuPvm = '01.04.2021';
+const haittaLoppuPvm = '01.03.2032';
+
 const omistajaEtunimi = 'Matti';
 const katuosoite = 'Pohjoinen Rautatiekatu 11 b 12';
 const hankeenKuvaus = 'Tässä on kuvaus';
@@ -112,8 +115,12 @@ describe('HankeForm', () => {
 
     getByTestId('forward').click(); // changes view to form4
     await waitFor(() => getByLabelText('Haitan alkupäivämäärä'));
-    fireEvent.change(getByLabelText('Haitan alkupäivämäärä'), { target: { value: '24.03.2022' } });
-    fireEvent.change(getByLabelText('Haitan loppupäivämäärä'), { target: { value: '24.12.2022' } });
+
+    fireEvent.change(getByLabelText('Haitan alkupäivämäärä'), { target: { value: haittaAlkuPvm } });
+
+    fireEvent.change(getByLabelText('Haitan loppupäivämäärä'), {
+      target: { value: haittaLoppuPvm },
+    });
 
     getByTestId('backward').click(); // changes view to form3
     await waitFor(() => getByTestId(FORMFIELD.KATUOSOITE));
