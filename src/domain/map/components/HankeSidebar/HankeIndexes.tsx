@@ -69,14 +69,12 @@ const HankeIndexes: React.FC<Props> = ({ hankeIndexData }) => {
         testId="test-joukkoliikenneIndeksi"
       />
 
-      {/* Ruuhkautuminen is not yet a part of the response
       <IndexSection
         title={t('hankeIndexes:ruuhkautuminen')}
         content={`${t('hankeIndexes:kiertoreittitarve')}: ${t('hankeIndexes:merkittava')}`}
-        index={2}
+        index={hankeIndexData.perusIndeksi}
         testId="test-ruuhkautumisIndeksi"
       />
-      */}
     </div>
   );
 };
