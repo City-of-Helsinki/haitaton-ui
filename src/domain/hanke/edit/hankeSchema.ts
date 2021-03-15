@@ -74,7 +74,7 @@ export const hankeSchema = yup.object().shape({
       ['$formPage', FORMFIELD.ALKU_PVM],
       // eslint-disable-next-line
       // @ts-ignore nullable doesnt work with TS
-      (formPage: number, alkuPvm: Date, schema: any) => {
+      (formPage: number, alkuPvm: Date, schema: yup.DateSchema) => {
         if (formPage !== 4) return schema;
         return alkuPvm ? schema.min(new Date(alkuPvm)) : schema;
       }
@@ -86,7 +86,7 @@ export const hankeSchema = yup.object().shape({
       ['$formPage', FORMFIELD.LOPPU_PVM],
       // eslint-disable-next-line
       // @ts-ignore nullable doesnt work with TS
-      (formPage: number, loppuPvm: Date, schema: any) => {
+      (formPage: number, loppuPvm: Date, schema: yup.DateSchema) => {
         if (formPage !== 4) return schema;
         return loppuPvm ? schema.max(new Date(loppuPvm)) : schema;
       }
