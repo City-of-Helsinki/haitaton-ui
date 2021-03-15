@@ -1,11 +1,19 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { Attribution, defaults as defaultControls } from 'ol/control';
 import * as ol from 'ol';
+
 import MapContext from './MapContext';
 import { MapInstance } from './types';
 import { projection } from './utils';
+import 'ol/ol.css';
 
 const defaultZoom = 9;
 export const helsinkiCenterCoords = [25496750, 6673000];
+
+export const attribution = new Attribution({
+  collapsible: true,
+  collapsed: false,
+});
 
 type Props = {
   zoom: number;
@@ -37,7 +45,11 @@ const Map: React.FC<Props> = ({
         projection,
       }),
       layers: [],
-      controls: [],
+      controls: defaultControls({
+        attribution: false,
+        zoom: false,
+        rotate: false,
+      }).extend([attribution]),
       overlays: [],
     };
 

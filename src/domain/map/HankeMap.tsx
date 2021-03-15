@@ -32,6 +32,7 @@ const HankeMap: React.FC = () => {
       <div
         className={styles.mapContainer}
         style={{ width: '100%', height: '100%', position: 'absolute' }}
+        id="hankemap"
       >
         <h1 className={styles.allyHeader}>Karttasivu</h1> {/* For a11y */}
         <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
