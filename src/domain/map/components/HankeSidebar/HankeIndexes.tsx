@@ -55,15 +55,6 @@ const HankeIndexes: React.FC<Props> = ({ hankeIndexData }) => {
         testId="test-liikennehaittaIndeksi"
       />
 
-      {/*
- ks of now the backend did not respond with an index value for ruuhkautuminen
-      <IndexSection
-        title={t('hankeIndexes:ruuhkautuminen')}
-        content={`${t('hankeIndexes:kiertoreittitarve')}: ${t('hankeIndexes:todennakoinen')}`}
-        index={3.7}
-      />
-*/}
-
       <IndexSection
         title={t('hankeIndexes:pyorailynPaareitti')}
         content={`${t('hankeIndexes:kiertoreittitarve')}: `}
@@ -77,6 +68,15 @@ const HankeIndexes: React.FC<Props> = ({ hankeIndexData }) => {
         index={hankeIndexData.joukkoliikenneIndeksi}
         testId="test-joukkoliikenneIndeksi"
       />
+
+      {/* Ruuhkautuminen is not yet a part of the response
+      <IndexSection
+        title={t('hankeIndexes:ruuhkautuminen')}
+        content={`${t('hankeIndexes:kiertoreittitarve')}: ${t('hankeIndexes:merkittava')}`}
+        index={2}
+        testId="test-ruuhkautumisIndeksi"
+      />
+      */}
     </div>
   );
 };
