@@ -7,7 +7,7 @@ context('Login', () => {
   });
 
   it('should be logged in', () => {
-    cy.get('[data-testid=should-login-text]').should('not.exist');
+    cy.url().should('not.contain', '/auth/realms/haitaton');
   });
 
   it('should be render hankeLista header', () => {

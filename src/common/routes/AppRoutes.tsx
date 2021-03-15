@@ -16,17 +16,19 @@ type Props = {
 };
 
 const PrivateRoute: React.FC<Props> = ({ component: Component, ...rest }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading, isLoaded } = useAuth();
+
+  // Wait for login
+  if (!isLoaded || isLoading) {
+    return null;
+  }
 
   return (
     <Route
       {...rest}
-      render={(props) => (
-        <div>
-          {!isAuthenticated && <p data-testid="should-login-text">Kirjaudu sisään</p>}
-          <Component {...props} />
-        </div>
-      )}
+      render={(props) =>
+        isAuthenticated ? <Component {...props} /> : <Redirect to={LOGIN_PATH} />
+      }
     />
   );
 };

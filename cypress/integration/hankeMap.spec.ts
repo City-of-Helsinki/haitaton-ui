@@ -1,12 +1,16 @@
 /// <reference types="cypress" />
 
 context('HankeMap', () => {
-  beforeEach(() => {
-    cy.visit('/fi/map');
+  before(() => {
     cy.injectAxe();
   });
 
+  beforeEach(() => {
+    cy.login();
+  });
+
   it('should be accessible', () => {
+    cy.visit('/fi/map');
     cy.checkA11y();
   });
 });
