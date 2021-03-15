@@ -22,6 +22,7 @@ const Ortokartta = () => (
         hidpi: false,
         serverType: 'geoserver',
         transition: 0,
+        attributions: ['Aineistot &copy; <a href="https://kartta.hel.fi">Helsingin kaupunki</a>'],
       })
     }
   />
