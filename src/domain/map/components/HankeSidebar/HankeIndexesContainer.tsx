@@ -5,8 +5,7 @@ import api from '../../../api/api';
 import HankeIndexes from './HankeIndexes';
 
 const getHankeIndexes = async (hankeTunnus: string | null) => {
-  const response = await api.get<HankeIndexData>(`/hankkeet/${hankeTunnus}/tormaystarkastelu`);
-  return response;
+  return api.get<HankeIndexData>(`/hankkeet/${hankeTunnus}/tormaystarkastelu`);
 };
 
 const useGetHanke = (hankeTunnus: string | null) =>
