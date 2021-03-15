@@ -23,7 +23,7 @@ const IndexSection: React.FC<IndexProps> = ({ title, content, index, testId }) =
         {title}
       </Text>
       {content && (
-        <Text tag="p" styleAs="body-m">
+        <Text tag="p" styleAs="body-m" data-testid={`${testId}-content`}>
           {content}
         </Text>
       )}
