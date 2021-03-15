@@ -11,7 +11,7 @@ afterEach(cleanup);
 jest.setTimeout(10000);
 
 const nimi = 'test kuoppa';
-const alkuPvm = '24.03.2021';
+const alkuPvm = '24.03.2025';
 const loppuPvm = '25.03.2032';
 const omistajaEtunimi = 'Matti';
 const katuosoite = 'Pohjoinen Rautatiekatu 11 b 12';
@@ -271,7 +271,7 @@ describe('HankeForm', () => {
   });
 
   test('FormContainer integration should work ', async () => {
-    const { getByText, queryByText, getByTestId, getByLabelText, queryAllByText } = render(
+    const { getByText, queryByText, getByLabelText, queryAllByText, getByTestId } = render(
       <FormContainer />
     );
     fireEvent.change(getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });

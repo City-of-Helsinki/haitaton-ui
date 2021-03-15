@@ -4,7 +4,7 @@ import { HankeDataFormState } from './types';
 import { HANKE_SAVETYPE_KEY } from '../../types/hanke';
 import { saveGeometryData } from '../../map/thunks';
 import { actions } from '../../app/reducer';
-import { filterEmptyContacts } from './utils';
+import { filterEmptyContacts, isHankeEditingDisabled } from './utils';
 
 type SaveHankeData = {
   data: HankeDataFormState;
@@ -20,6 +20,10 @@ export const saveForm = createAsyncThunk(
       saveType,
       createdBy: '1',
     };
+
+    if (isHankeEditingDisabled(data)) {
+      throw new Error('Editing disabled');
+    }
 
     if (data.hankeTunnus && formPage === 1) {
       thunkApi.dispatch(saveGeometryData({ hankeTunnus: data.hankeTunnus }));

@@ -1,3 +1,4 @@
+import { isBefore, parseISO } from 'date-fns';
 import { HankeContact, HankeDataDraft } from '../../types/hanke';
 import { FORMFIELD, HankeDataFormState } from './types';
 
@@ -29,3 +30,10 @@ export const convertHankeDataToFormState = (hankeData: HankeDataDraft): HankeDat
   arvioijat: hankeData.arvioijat ? hankeData.arvioijat : [],
   toteuttajat: hankeData.toteuttajat ? hankeData.toteuttajat : [],
 });
+
+export const isHankeEditingDisabled = ({ alkuPvm }: HankeDataDraft | HankeDataFormState) => {
+  if (alkuPvm) {
+    return isBefore(parseISO(alkuPvm), new Date());
+  }
+  return false;
+};

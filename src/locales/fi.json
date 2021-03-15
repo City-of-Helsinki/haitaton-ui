@@ -167,6 +167,7 @@
   },
   "hankeForm": {
     "pageHeader": "Hanke",
+    "editingDisabled": "Hanke on jo alkanut, muokkaaminen on pois käytöstä",
     "calculateIndexesButton": "Laske indeksit",
     "saveDraftButton": "Tallenna luonnos",
     "insertFieldError": "Syötä kenttä",
