@@ -25,9 +25,16 @@ const HankeLayer = () => {
     hankeSource.current.clear();
     hankkeetFilteredByAll.forEach((hanke) => {
       if (hanke.geometriat) {
-        hankeSource.current.addFeatures(
-          new GeoJSON().readFeatures(hanke.geometriat.featureCollection)
-        );
+        const hankeFeatures = new GeoJSON().readFeatures(hanke.geometriat.featureCollection);
+        hankeFeatures.forEach((feature) => {
+          feature.setProperties(
+            {
+              liikennehaittaindeksi: hanke.liikennehaittaindeksi?.indeksi,
+            },
+            true
+          );
+        });
+        hankeSource.current.addFeatures(hankeFeatures);
       }
     });
     hankeSource.current.dispatchEvent('featuresAdded');

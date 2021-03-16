@@ -41,10 +41,8 @@ export const getStyleByStatus = (status: LIIKENNEHAITTA_STATUS): Style =>
 // Performance tips: https://github.com/openlayers/openlayers/issues/8392
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const styleFunction: any = (feature: Feature) => {
-  const hankeTunnus = feature.get('hankeTunnus');
-  // eslint-disable-next-line
-  const fakeIndex = hankeTunnus ? parseInt(hankeTunnus.slice(hankeTunnus.length - 1)) : null; // last number of hankeTunnus
-  const status = getStatusByIndex(fakeIndex);
+  const liikenneHaittaIndeksi = feature.get('liikennehaittaindeksi');
+  const status = getStatusByIndex(liikenneHaittaIndeksi);
 
   return getStyleByStatus(status);
 };
