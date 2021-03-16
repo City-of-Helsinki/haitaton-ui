@@ -26,12 +26,14 @@ interface AuthState {
   profile: Partial<Profile> | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  isLoaded: boolean;
   error: Error | null;
 }
 
 function useProfile(): AuthState {
   const [profile, setProfile] = React.useState<Partial<Profile> | null>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
   const [error, setError] = React.useState<Error | null>(null);
 
   React.useEffect(() => {
@@ -60,7 +62,7 @@ function useProfile(): AuthState {
           if (ignore) {
             return;
           }
-
+          setIsLoaded(true);
           setIsLoading(false);
         });
     }
@@ -76,6 +78,7 @@ function useProfile(): AuthState {
     profile,
     isAuthenticated: !!profile,
     isLoading,
+    isLoaded,
     error,
   };
 }

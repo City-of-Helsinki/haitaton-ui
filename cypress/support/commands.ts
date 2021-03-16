@@ -33,17 +33,17 @@ Cypress.Commands.add('login', () => {
   cy.restoreLocalStorage();
   cy.visit('/fi/');
 
-  cy.get('[data-testid=loginLink]').then(($loginLink) => {
-    if ($loginLink.text() === 'Kirjaudu') {
-      cy.get('[data-testid=loginLink]').click();
+  // cy.get('[data-testid=loginLink]').then(($loginLink) => {
+  //  if ($loginLink.text() === 'Kirjaudu') {
+  //    cy.get('[data-testid=loginLink]').click();
+
+  cy.url().then(($url) => {
+    if ($url.indexOf('/auth/realms/haitaton') !== -1) {
       cy.url().should('include', '/auth/realms/haitaton');
       cy.get('#username').type('tiinatestaaja@gofore.com');
       cy.get('#password').type('tiina12');
       cy.get('#kc-login').click();
       cy.url().should('include', '/fi');
-
-      cy.get('[data-testid=should-login-text]').should('not.exist');
-
       cy.saveLocalStorage();
     }
   });
