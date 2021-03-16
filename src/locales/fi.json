@@ -82,6 +82,34 @@
       "meta": {
         "title": "Haitaton Beta - Hankkeen muokkaus"
       }
+    },
+    "HAITATON_INFO": {
+      "path": "/hankelista",
+      "headerLabel": "Tietoja Haitattomasta",
+      "meta": {
+        "title": "Haitaton Beta - Info"
+      }
+    },
+    "ACCESSIBILITY": {
+      "path": "/map",
+      "headerLabel": "Saavutettavuusseloste",
+      "meta": {
+        "title": "Haitaton Beta - Saavutettavuus"
+      }
+    },
+    "PRIVACY_POLICY": {
+      "path": "/hanke/uusi",
+      "headerLabel": "Rekisteriseloste",
+      "meta": {
+        "title": "Haitaton Beta - Rekisteriseloste"
+      }
+    },
+    "REFERENCES": {
+      "path": "/hanke/:hankeTunnus/muokkaa",
+      "headerLabel": "Lähdeviitteet",
+      "meta": {
+        "title": "Haitaton Beta - Lähdeviitteet"
+      }
     }
   },
   "hanke": {
