@@ -41,7 +41,7 @@ export const getStyleByStatus = (status: LIIKENNEHAITTA_STATUS): Style =>
 // Performance tips: https://github.com/openlayers/openlayers/issues/8392
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const styleFunction: any = (feature: Feature) => {
-  const liikenneHaittaIndeksi = feature.get('liikennehaittaindeksi');
+  const liikenneHaittaIndeksi: number | null = feature.get('liikennehaittaindeksi');
   const status = getStatusByIndex(liikenneHaittaIndeksi);
 
   return getStyleByStatus(status);
