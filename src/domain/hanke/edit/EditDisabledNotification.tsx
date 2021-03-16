@@ -11,7 +11,8 @@ type Props = {
 
 const EditDisabledNotification = ({ formData }: Props) => {
   const { t } = useTranslation();
-  return isHankeEditingDisabled(formData) ? (
+  const disabledReason = isHankeEditingDisabled(formData);
+  return disabledReason ? (
     <Notification
       size="small"
       label=""
@@ -19,7 +20,7 @@ const EditDisabledNotification = ({ formData }: Props) => {
       className="hankeForm__notification"
       dataTestId="editing-disabled-notification"
     >
-      {t('hankeForm:editingDisabled')}
+      {t(`hankeForm:editingDisabled:${disabledReason}`)}
     </Notification>
   ) : null;
 };

@@ -271,7 +271,7 @@ describe('HankeForm', () => {
   });
 
   test('Form editing should be disabled if it is already started ', async () => {
-    const { getByTestId } = render(
+    const { getByTestId, getByText } = render(
       <Form
         formData={{
           ...formData,
@@ -286,6 +286,29 @@ describe('HankeForm', () => {
       />
     );
     expect(getByTestId('editing-disabled-notification')).toBeInTheDocument();
+    expect(getByText(/Käynnissä olevan hankkeen tietoja ei voi muokata/i)).toBeDefined();
+  });
+
+  test('Form editing should be disabled if index is calculated ', async () => {
+    const { getByTestId, getByText } = render(
+      <Form
+        formData={{
+          ...formData,
+          tilat: {
+            ...formData.tilat,
+            onLiikenneHaittaIndeksi: true,
+          },
+        }}
+        onSave={() => ({})}
+        onSubmit={() => ({})}
+        onSaveGeometry={() => ({})}
+        onIsDirtyChange={() => ({})}
+        onUnmount={() => ({})}
+        onFormClose={() => ({})}
+      />
+    );
+    expect(getByTestId('editing-disabled-notification')).toBeInTheDocument();
+    expect(getByText(/Hankkeelle on laskettu indeksit/i)).toBeDefined();
   });
 
   test('FormContainer integration should work ', async () => {

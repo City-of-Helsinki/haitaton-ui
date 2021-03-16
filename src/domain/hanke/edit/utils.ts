@@ -31,9 +31,13 @@ export const convertHankeDataToFormState = (hankeData: HankeDataDraft): HankeDat
   toteuttajat: hankeData.toteuttajat ? hankeData.toteuttajat : [],
 });
 
-export const isHankeEditingDisabled = ({ alkuPvm }: HankeDataDraft | HankeDataFormState) => {
-  if (alkuPvm) {
-    return isBefore(parseISO(alkuPvm), new Date());
+export const isHankeEditingDisabled = ({ alkuPvm, tilat }: HankeDataDraft | HankeDataFormState) => {
+  if (alkuPvm && isBefore(parseISO(alkuPvm), new Date())) {
+    return 'STARTED';
   }
+  if (tilat && tilat.onLiikenneHaittaIndeksi) {
+    return 'INDEX_CALCULATED';
+  }
+
   return false;
 };
