@@ -71,24 +71,24 @@ export const hankeSchema = yup.object().shape({
     .date()
     .nullable()
     .when(
-      ['$formPage', FORMFIELD.ALKU_PVM],
+      ['$formPage', FORMFIELD.ALKU_PVM, FORMFIELD.LOPPU_PVM],
       // eslint-disable-next-line
       // @ts-ignore nullable doesnt work with TS
-      (formPage: number, alkuPvm: Date, schema: yup.DateSchema) => {
+      (formPage: number, alkuPvm: Date, loppuPvm: Date, schema: yup.DateSchema) => {
         if (formPage !== 4) return schema;
-        return alkuPvm ? schema.min(new Date(alkuPvm)) : schema;
+        return alkuPvm ? schema.min(new Date(alkuPvm)).max(new Date(loppuPvm)) : schema;
       }
     ),
   [FORMFIELD.HAITTA_LOPPU_PVM]: yup
     .date()
     .nullable()
     .when(
-      ['$formPage', FORMFIELD.LOPPU_PVM],
+      ['$formPage', FORMFIELD.ALKU_PVM, FORMFIELD.LOPPU_PVM],
       // eslint-disable-next-line
       // @ts-ignore nullable doesnt work with TS
-      (formPage: number, loppuPvm: Date, schema: yup.DateSchema) => {
+      (formPage: number, alkuPvm: Date, loppuPvm: Date, schema: yup.DateSchema) => {
         if (formPage !== 4) return schema;
-        return loppuPvm ? schema.max(new Date(loppuPvm)) : schema;
+        return loppuPvm ? schema.min(new Date(alkuPvm)).max(new Date(loppuPvm)) : schema;
       }
     ),
 });
