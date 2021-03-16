@@ -11,7 +11,7 @@ afterEach(cleanup);
 jest.setTimeout(10000);
 
 const nimi = 'test kuoppa';
-const alkuPvm = '24.03.2021';
+const alkuPvm = '24.03.2025';
 const loppuPvm = '25.03.2032';
 const omistajaEtunimi = 'Matti';
 const katuosoite = 'Pohjoinen Rautatiekatu 11 b 12';
@@ -270,8 +270,49 @@ describe('HankeForm', () => {
     expect(getByText('Ohjelmointi')).toBeInTheDocument();
   });
 
+  test('Form editing should be disabled if it is already started ', async () => {
+    const { getByTestId, getByText } = render(
+      <Form
+        formData={{
+          ...formData,
+          [FORMFIELD.ALKU_PVM]: '1999-03-15T00:00:00Z',
+        }}
+        onSave={() => ({})}
+        onSubmit={() => ({})}
+        onSaveGeometry={() => ({})}
+        onIsDirtyChange={() => ({})}
+        onUnmount={() => ({})}
+        onFormClose={() => ({})}
+      />
+    );
+    expect(getByTestId('editing-disabled-notification')).toBeInTheDocument();
+    expect(getByText(/Käynnissä olevan hankkeen tietoja ei voi muokata/i)).toBeDefined();
+  });
+
+  test('Form editing should be disabled if index is calculated ', async () => {
+    const { getByTestId, getByText } = render(
+      <Form
+        formData={{
+          ...formData,
+          tilat: {
+            ...formData.tilat,
+            onLiikenneHaittaIndeksi: true,
+          },
+        }}
+        onSave={() => ({})}
+        onSubmit={() => ({})}
+        onSaveGeometry={() => ({})}
+        onIsDirtyChange={() => ({})}
+        onUnmount={() => ({})}
+        onFormClose={() => ({})}
+      />
+    );
+    expect(getByTestId('editing-disabled-notification')).toBeInTheDocument();
+    expect(getByText(/Hankkeelle on laskettu indeksit/i)).toBeDefined();
+  });
+
   test('FormContainer integration should work ', async () => {
-    const { getByText, queryByText, getByTestId, getByLabelText, queryAllByText } = render(
+    const { getByText, queryByText, getByLabelText, queryAllByText, getByTestId } = render(
       <FormContainer />
     );
     fireEvent.change(getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });

@@ -109,6 +109,7 @@ const HankeForm: React.FC<Props> = ({
                   <IconCross aria-hidden="true" />
                 </button>
               </div>
+
               {formPage === 0 && (
                 <Form0 errors={errors} control={control} register={register} formData={formData} />
               )}
