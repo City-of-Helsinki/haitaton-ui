@@ -253,9 +253,11 @@
     "pyorailynPaareitti": "SV: Pyöräilyn pääreitti",
     "merkittavatJoukkoliikennereitit": "SV: Merkittävät joukkoliikennereitit",
     "kiertoreittitarve": "SV: Kiertoreittitarve",
-    "todennakoinen": "SV: todennäköinen",
-    "eiTarvetta": "SV: ei tarvetta",
-    "merkittava": "SV: merkittävä"
+    "KIERTOREITTITARPEET": {
+      "TODENNAKOINEN": "SV: todennäköinen",
+      "EI_TARVETTA": "SV: ei tarvetta",
+      "MERKITTAVA": "SV: merkittävä"
+    }
   },
   "hankeList": {
     "pageHeader": "SV:Hankelista",

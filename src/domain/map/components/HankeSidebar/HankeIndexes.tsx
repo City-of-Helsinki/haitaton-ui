@@ -23,7 +23,7 @@ const IndexSection: React.FC<IndexProps> = ({ title, content, index, testId }) =
         {title}
       </Text>
       {content && (
-        <Text tag="p" styleAs="body-m">
+        <Text tag="p" styleAs="body-m" data-testid={`${testId}-content`}>
           {content}
         </Text>
       )}
@@ -39,6 +39,13 @@ const IndexSection: React.FC<IndexProps> = ({ title, content, index, testId }) =
     </div>
   </div>
 );
+
+const getDetourNeedByIndex = (index: IndexProps['index']) => {
+  const staticLocalisationKey = 'hankeIndexes:KIERTOREITTITARPEET:';
+  if (index < 3) return `${staticLocalisationKey}EI_TARVETTA`;
+  if (index < 4) return `${staticLocalisationKey}TODENNAKOINEN`;
+  return `${staticLocalisationKey}MERKITTAVA`;
+};
 
 type Props = {
   hankeIndexData: HankeIndexData;
@@ -57,26 +64,30 @@ const HankeIndexes: React.FC<Props> = ({ hankeIndexData }) => {
 
       <IndexSection
         title={t('hankeIndexes:pyorailynPaareitti')}
-        content={`${t('hankeIndexes:kiertoreittitarve')}: `}
+        content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
+          getDetourNeedByIndex(hankeIndexData.pyorailyIndeksi)
+        )}`}
         index={hankeIndexData.pyorailyIndeksi}
         testId="test-pyorailyIndeksi"
       />
 
       <IndexSection
         title={t('hankeIndexes:merkittavatJoukkoliikennereitit')}
-        content={`${t('hankeIndexes:kiertoreittitarve')}: `}
+        content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
+          getDetourNeedByIndex(hankeIndexData.joukkoliikenneIndeksi)
+        )}`}
         index={hankeIndexData.joukkoliikenneIndeksi}
         testId="test-joukkoliikenneIndeksi"
       />
 
-      {/* Ruuhkautuminen is not yet a part of the response
       <IndexSection
         title={t('hankeIndexes:ruuhkautuminen')}
-        content={`${t('hankeIndexes:kiertoreittitarve')}: ${t('hankeIndexes:merkittava')}`}
-        index={2}
+        content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
+          getDetourNeedByIndex(hankeIndexData.perusIndeksi)
+        )}`}
+        index={hankeIndexData.perusIndeksi}
         testId="test-ruuhkautumisIndeksi"
       />
-      */}
     </div>
   );
 };

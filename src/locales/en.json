@@ -254,9 +254,11 @@
     "pyorailynPaareitti": "EN: Pyöräilyn pääreitti",
     "merkittavatJoukkoliikennereitit": "EN: Merkittävät joukkoliikennereitit",
     "kiertoreittitarve": "EN: Kiertoreittitarve",
-    "todennakoinen": "EN: todennäköinen",
-    "eiTarvetta": "EN: ei tarvetta",
-    "merkittava": "EN: merkittävä"
+    "KIERTOREITTITARPEET": {
+      "TODENNAKOINEN": "EN: todennäköinen",
+      "EI_TARVETTA": "EN: ei tarvetta",
+      "MERKITTAVA": "EN: merkittävä"
+    }
   },
   "hankeList": {
     "pageHeader": "EN:Hankelista",
