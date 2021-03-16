@@ -13,8 +13,8 @@ jest.setTimeout(10000);
 const nimi = 'test kuoppa';
 const alkuPvm = '24.03.2025';
 const loppuPvm = '25.03.2032';
-const haittaAlkuPvm = '01.04.2021';
-const haittaLoppuPvm = '01.03.2032';
+const haittaAlkuPvm = '01.04.2026';
+const haittaLoppuPvm = '01.03.2031';
 
 const omistajaEtunimi = 'Matti';
 const katuosoite = 'Pohjoinen Rautatiekatu 11 b 12';
