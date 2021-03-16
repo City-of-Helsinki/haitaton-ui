@@ -10,6 +10,8 @@ import DrawModule from '../../../../common/components/map/modules/draw/DrawModul
 import { HankeGeoJSON } from '../../../../common/types/hanke';
 import Kantakartta from '../Layers/Kantakartta';
 import Ortokartta from '../Layers/Ortokartta';
+import FitSource from '../interations/FitSource';
+
 import styles from '../../Map.module.scss';
 import { useMapDataLayers } from '../../hooks/useMapLayers';
 import { formatFeaturesToHankeGeoJSON } from '../../utils';
@@ -28,6 +30,7 @@ const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry }) => {
   useEffect(() => {
     if (geometry) {
       drawSource.addFeatures(new GeoJSON().readFeatures(geometry));
+      drawSource.dispatchEvent('featuresAdded');
     }
   }, [geometry]);
 
@@ -52,6 +55,8 @@ const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry }) => {
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
           {mapTileLayers.ortokartta.visible && <Ortokartta />}
           <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
+
+          <FitSource source={drawSource} />
 
           <Controls>
             <DrawModule source={drawSource} />
