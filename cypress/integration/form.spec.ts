@@ -3,12 +3,17 @@
 const drawCoordinateX = 100;
 const drawCoordinateY = 100;
 
-const hankeTunnus = 'HAI-testi';
-const nimi = 'nimi';
-const kuvaus = 'kuvaus';
-const alkuPvm = '10.01.2032';
-const loppuPvm = '11.01.2032';
-const osoite = 'Mannerheimintie 22';
+const hankeMock = {
+  hankeTunnus: 'HAI-testi',
+  nimi: 'Cypress test',
+  kuvaus: 'kuvaus',
+  alkuPvm: '10.01.2030',
+  loppuPvm: '11.01.2032',
+  haittaAlkuPvm: '01.02.2031',
+  haittaLoppuPvm: '31.12.2031',
+  osoite: 'Mannerheimintie 22',
+  vaihe: 'OHJELMOINTI',
+};
 
 context('HankeForm', () => {
   beforeEach(() => {
@@ -18,42 +23,11 @@ context('HankeForm', () => {
   });
 
   it('Hanke form testing', () => {
-    cy.intercept(
-      {
-        method: 'POST',
-        url: '/api/hankkeet',
-      },
-      {
-        hankeTunnus,
-        nimi,
-        kuvaus,
-        alkuPvm: '2032-01-10T00:00:00Z',
-        loppuPvm: '2032-01-11T00:00:00Z',
-        vaihe: 'OHJELMOINTI',
-        createdBy: '1',
-        createdAt: '2020-12-10T13:35:16.316476Z',
-        modifiedBy: '1',
-        modifiedAt: '2020-12-10T13:35:17.920239Z',
-        saveType: 'DRAFT',
-        omistajat: [],
-        toteuttajat: [],
-        arvioijat: [],
-        tilat: {
-          onGeometrioita: true,
-          onKaikkiPakollisetLuontiTiedot: true,
-          onTiedotLiikenneHaittaIndeksille: true,
-          onLiikenneHaittaIndeksi: false,
-          onViereisiaHankkeita: false,
-          onAsiakasryhmia: false,
-        },
-      }
-    );
-
     // cy.checkA11y();
-    cy.get('input[data-testid=nimi]').type(nimi);
-    cy.get('textarea[data-testid=kuvaus]').type(kuvaus);
-    cy.get('#alkuPvm').type(alkuPvm);
-    cy.get('#loppuPvm').type(loppuPvm);
+    cy.get('input[data-testid=nimi]').type(hankeMock.nimi);
+    cy.get('textarea[data-testid=kuvaus]').type(hankeMock.kuvaus);
+    cy.get('#alkuPvm').type(hankeMock.alkuPvm);
+    cy.get('#loppuPvm').type(hankeMock.loppuPvm);
     cy.get('input[data-testid=nimi]').click();
     cy.get('#vaihe-toggle-button').click();
     cy.get('#vaihe-item-0').click();
@@ -76,13 +50,13 @@ context('HankeForm', () => {
     // cy.checkA11y();
     cy.get('[data-testid=forward]').click(); // changes view to form3
 
-    cy.get('[data-testid=tyomaaKatuosoite]').type(osoite);
+    cy.get('[data-testid=tyomaaKatuosoite]').type(hankeMock.osoite);
     // cy.checkA11y();
     cy.get('[data-testid=forward]').click(); // changes view to form4
 
-    cy.get('#haittaAlkuPvm').type(alkuPvm);
+    cy.get('#haittaAlkuPvm').type(hankeMock.haittaAlkuPvm);
     // cy.checkA11y();
-    cy.get('#haittaLoppuPvm').type(loppuPvm);
+    cy.get('#haittaLoppuPvm').type(hankeMock.haittaLoppuPvm);
     cy.get('body').click();
     cy.get('#kaistaHaitta-toggle-button').click();
     cy.get('#kaistaHaitta-item-0').click();
@@ -97,6 +71,20 @@ context('HankeForm', () => {
     cy.get('#tarinaHaitta-toggle-button').click();
     cy.get('#tarinaHaitta-item-0').click();
 
-    cy.get('[data-testid=submitButton]').should('not.be.disabled');
+    cy.get('[data-testid=save-draft-button]').should('not.be.disabled');
+    cy.get('[data-testid=save-draft-button]').click();
+  });
+
+  it('Editing hanke should fetch and populate form data', () => {
+    cy.visit(`/fi/hankelista`);
+    cy.get('[data-testid=hankeEditLink]').first().click();
+    cy.get('[data-testid=save-draft-button]').should('be.disabled');
+    cy.get('input[data-testid=nimi]').should('have.value', hankeMock.nimi);
+    // Type something to make form dirty and enable save-draft-button
+    cy.get('textarea[data-testid=kuvaus]')
+      .clear()
+      .type('Uusi kuvaus')
+      .should('have.value', 'Uusi kuvaus');
+    cy.get('[data-testid=save-draft-button]').should('not.be.disabled');
   });
 });
