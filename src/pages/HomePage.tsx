@@ -11,7 +11,7 @@ const HomePage: React.FC = () => {
     <Container>
       <PageMeta routeData={HOME} />
       <Text tag="h1" data-testid="pageHeader" styleAs="h2" spacing="s" weight="bold">
-        Haitaton 2.0
+        Haitaton Beta
       </Text>
     </Container>
   );
