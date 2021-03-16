@@ -167,7 +167,7 @@
   },
   "hankeForm": {
     "pageHeader": "EN:Hanke",
-    "editingDisabled": "EN:Hanke on jo alkanut, muokkaaminen on pois käytöstä",
+    "editingDisabled": "EN:Käynnissä olevan hankkeen tietoja ei voi muokata",
     "calculateIndexesButton": "EN:Laske indeksit",
     "saveDraftButton": "EN:Tallenna luonnos",
     "insertFieldError": "EN:Syötä kenttä",

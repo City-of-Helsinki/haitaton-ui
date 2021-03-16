@@ -10,6 +10,7 @@ import { HANKE_VAIHE, HANKE_SUUNNITTELUVAIHE } from '../../types/hanke';
 import Text from '../../../common/components/text/Text';
 import { FORMFIELD, FormProps } from './types';
 import { useFormPage } from './hooks/useFormPage';
+import EditDisabledNotification from './EditDisabledNotification';
 
 const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => {
   const { t, i18n } = useTranslation();
@@ -25,6 +26,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
       <Text tag="h2" spacing="s" weight="bold" data-testid="form0Header">
         {t('hankeForm:perustiedotForm:header')}
       </Text>
+      <EditDisabledNotification formData={formData} />
       <div className="dataWpr">
         <div className="formWpr">
           <TextInput name={FORMFIELD.TUNNUS} disabled />

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { IconCross } from 'hds-react/icons';
-import { Notification } from 'hds-react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Text from '../../../common/components/text/Text';
 import { HankeDataFormState, SaveFormArguments } from './types';
@@ -16,7 +15,6 @@ import Form4 from './Form4';
 import FormButtons from './FormButtons';
 import FormNotifications from './FormNotifications';
 import './Form.styles.scss';
-import { isHankeEditingDisabled } from './utils';
 
 type Props = {
   formData: HankeDataFormState;
@@ -111,18 +109,6 @@ const HankeForm: React.FC<Props> = ({
                   <IconCross aria-hidden="true" />
                 </button>
               </div>
-
-              {isHankeEditingDisabled(formData) && (
-                <Notification
-                  size="small"
-                  label=""
-                  type="error"
-                  className="hankeForm__notification"
-                  dataTestId="disabled-notification"
-                >
-                  {t('hankeForm:editingDisabled')}
-                </Notification>
-              )}
 
               {formPage === 0 && (
                 <Form0 errors={errors} control={control} register={register} formData={formData} />

@@ -270,6 +270,24 @@ describe('HankeForm', () => {
     expect(getByText('Ohjelmointi')).toBeInTheDocument();
   });
 
+  test('Form editing should be disabled if it is already started ', async () => {
+    const { getByTestId } = render(
+      <Form
+        formData={{
+          ...formData,
+          [FORMFIELD.ALKU_PVM]: '1999-03-15T00:00:00Z',
+        }}
+        onSave={() => ({})}
+        onSubmit={() => ({})}
+        onSaveGeometry={() => ({})}
+        onIsDirtyChange={() => ({})}
+        onUnmount={() => ({})}
+        onFormClose={() => ({})}
+      />
+    );
+    expect(getByTestId('editing-disabled-notification')).toBeInTheDocument();
+  });
+
   test('FormContainer integration should work ', async () => {
     const { getByText, queryByText, getByLabelText, queryAllByText, getByTestId } = render(
       <FormContainer />
