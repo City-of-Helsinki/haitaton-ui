@@ -8,6 +8,7 @@ import { FORMFIELD, FormProps } from './types';
 
 const Form1: React.FC<FormProps> = ({ formData }) => {
   const { t } = useTranslation();
+  const instructions = t('hankeForm:hankkeenAlueForm:instructions').split('\n');
   const { setValue, register, unregister } = useFormContext();
   useFormPage();
 
@@ -28,6 +29,10 @@ const Form1: React.FC<FormProps> = ({ formData }) => {
       <Text tag="h2" spacing="s" weight="bold" data-testid="hankkeenAlue">
         {t('hankeForm:hankkeenAlueForm:header')}
       </Text>
+      {instructions.map((instruction) => (
+        <p>{instruction}</p>
+      ))}
+      <br />
       <div style={{ position: 'relative' }}>
         <HankeDrawer
           onChangeGeometries={handleGeometriesChange}
