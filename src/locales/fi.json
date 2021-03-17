@@ -84,28 +84,28 @@
       }
     },
     "HAITATON_INFO": {
-      "path": "/info",
+      "path": "/tietoja",
       "headerLabel": "Tietoja Haitattomasta",
       "meta": {
         "title": "Haitaton Beta - Info"
       }
     },
     "ACCESSIBILITY": {
-      "path": "/accessibility",
+      "path": "/saavutettavuusseloste",
       "headerLabel": "Saavutettavuusseloste",
       "meta": {
         "title": "Haitaton Beta - Saavutettavuus"
       }
     },
     "PRIVACY_POLICY": {
-      "path": "/privacypolicy",
+      "path": "/rekisteriseloste",
       "headerLabel": "Rekisteriseloste",
       "meta": {
         "title": "Haitaton Beta - Rekisteriseloste"
       }
     },
     "REFERENCES": {
-      "path": "/references",
+      "path": "/lahdeviitteet",
       "headerLabel": "Lähdeviitteet",
       "meta": {
         "title": "Haitaton Beta - Lähdeviitteet"
