@@ -18,10 +18,10 @@ export const INDEX_GREEN = '#009246';
 export const INDEX_BLUE = '#2472c6';
 
 export enum LIIKENNEHAITTA_STATUS {
-  BLUE = 'BLUE',
-  GREEN = 'GREEN',
-  YELLOW = 'YELLOW',
   RED = 'RED',
+  YELLOW = 'YELLOW',
+  GREEN = 'GREEN',
+  BLUE = 'BLUE',
 }
 
 export const getStatusByIndex = (index: TormaysIndex) => {

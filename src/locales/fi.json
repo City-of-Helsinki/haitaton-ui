@@ -301,6 +301,14 @@
       "begin": "Ajanjakson alku",
       "end": "Ajanjakson loppu"
     },
+    "guide": {
+      "indexColor": {
+        "RED": "Kriittinen",
+        "YELLOW": "Huomioitava",
+        "GREEN": "Ei merkittävä",
+        "BLUE": "Indeksoimaton"
+      }
+    },
     "drawSquareButtonAria": "Piirrä neliö kartalle",
     "drawPolygonButtonAria": "Piirrä monikulmio kartalle"
   }
