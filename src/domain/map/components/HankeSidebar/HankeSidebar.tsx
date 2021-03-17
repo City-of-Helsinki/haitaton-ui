@@ -41,6 +41,7 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
 
   return (
     <Drawer
+      variant="alwaysOpen"
       placement="left"
       isOpen={isOpen}
       size="md"
