@@ -183,7 +183,7 @@
     "indexCalculationFailHeader": "SV:Törmäystarkastelun laskenta epäonnistui",
     "indexCalculationFailText": "SV:Tuntematon virhe",
     "closeAriaLabel": "SV:Poistu kaavakkeelta tallentamatta",
-    "calculateIndexDialogBody": "SV:Haitattoman Beta-versiossa indeksilaskentaa ei voi suorittaa uudelleen, haluatko varmasti laskea indeksit nyt, vai tarkistatko vielä hankkeen tietojen oikeellisuuden?",
+    "calculateIndexDialogBody": "SV:Haitattoman Beta-versiossa hanketta ei voi muokata sen jälkeen kun sille on laskettu haittaindeksit. Ennen kuin lasket indeksit, kannattaa käydä katsomassa hankkeen tilannetta karttanäkymässä (ylävalikossa) ja tarvittaessa muokata hankkeen tietoja ennen indeksien laskentaa. Mikäli olet valmis indeksien laskentaan, voit laskea indeksit nyt, tai palata lomakkeelle ja muokata hankkeen tietoja. Hanke säilyy tallennuksen jälkeen hankelistalla ja karttanäkymässä.",
     "confirmIndexCalculationButton": "SV:Jatka indeksilaskentaan",
     "labels": {
       "hankeTunnus": "SV:Hankkeen tunnus",
