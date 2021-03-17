@@ -19,7 +19,7 @@ import './Form.styles.scss';
 type Props = {
   formData: HankeDataFormState;
   onSave: (args: SaveFormArguments) => void;
-  onSubmit: (data: HankeDataFormState) => void;
+  onCalculateIndexes: (hankeTunnus: string) => void;
   onSaveGeometry: (hankeTunnus: string) => void;
   onIsDirtyChange: (isDirty: boolean) => void;
   onUnmount: () => void;
@@ -29,7 +29,7 @@ type Props = {
 const HankeForm: React.FC<Props> = ({
   formData,
   onSave,
-  onSubmit,
+  onCalculateIndexes,
   onSaveGeometry,
   onIsDirtyChange,
   onUnmount,
@@ -50,7 +50,14 @@ const HankeForm: React.FC<Props> = ({
     },
   });
 
-  const { handleSubmit, errors, control, register, formState, getValues, reset } = formContext;
+  const {
+    /* handleSubmit, */ errors,
+    control,
+    register,
+    formState,
+    getValues,
+    reset,
+  } = formContext;
 
   useEffect(() => {
     reset(formData);
@@ -99,7 +106,11 @@ const HankeForm: React.FC<Props> = ({
         <div className="hankeForm__formWpr">
           <StateIndicator formPage={formPage} />
           <div className="hankeForm__formWprRight">
-            <form name="hanke" onSubmit={handleSubmit(onSubmit)}>
+            <form
+              name="hanke"
+              // eslint-disable-next-line no-console
+              onSubmit={() => console.error('This should not happen.')}
+            >
               <div className="closeFormWpr">
                 <button
                   type="button"
@@ -129,6 +140,7 @@ const HankeForm: React.FC<Props> = ({
                 goBack={goBack}
                 goForward={goForward}
                 saveDraft={saveDraft}
+                onCalculateIndexes={onCalculateIndexes}
                 formPage={formPage}
               />
             </form>

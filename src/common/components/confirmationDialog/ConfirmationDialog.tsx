@@ -2,22 +2,14 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
-import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogFooter,
-  AlertDialogContent,
-  AlertDialogOverlay,
-} from '@chakra-ui/react';
 import { Button } from 'hds-react';
 import { getIsDialogOpen, getRedirectUrl } from './selectors';
 import { actions } from './reducer';
+import ConfirmationDialogUI from './ConfirmationDialogUI';
 
 import './Dialog.styles.scss';
 
 const ConfirmationDialog: React.FC = () => {
-  const cancelRef = React.useRef<HTMLButtonElement>(null);
   const isDialogOpenVal = useSelector(getIsDialogOpen());
   const redirectUrl = useSelector(getRedirectUrl());
   const dispatch = useDispatch();
@@ -26,35 +18,21 @@ const ConfirmationDialog: React.FC = () => {
   function onClose() {
     dispatch(actions.updateIsDialogOpen({ isDialogOpen: false, redirectUrl }));
   }
-  function cancel() {
-    dispatch(actions.updateIsDialogOpen({ isDialogOpen: false, redirectUrl }));
-  }
-  function exit() {
+  function closeAndRedirect() {
     dispatch(actions.updateIsDialogOpen({ isDialogOpen: false, redirectUrl }));
     history.push(redirectUrl);
   }
-  return (
-    <>
-      <AlertDialog
-        isOpen={isDialogOpenVal}
-        leastDestructiveRef={cancelRef}
-        onClose={() => onClose()}
-      >
-        <AlertDialogOverlay />
-        <AlertDialogContent>
-          <AlertDialogBody>{t('common:confirmationDialog:bodyText')}</AlertDialogBody>
 
-          <AlertDialogFooter>
-            <Button type="button" theme="coat" ref={cancelRef} onClick={() => cancel()}>
-              {t('common:confirmationDialog:cancelButton')}
-            </Button>
-            <Button type="button" theme="coat" variant="secondary" onClick={() => exit()}>
-              {t('common:confirmationDialog:exitButton')}
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </>
+  return (
+    <ConfirmationDialogUI
+      handleClose={onClose}
+      body={t('common:confirmationDialog:bodyText')}
+      isOpen={isDialogOpenVal}
+    >
+      <Button type="button" theme="coat" variant="secondary" onClick={() => closeAndRedirect()}>
+        {t('common:confirmationDialog:exitButton')}
+      </Button>
+    </ConfirmationDialogUI>
   );
 };
 export default ConfirmationDialog;
