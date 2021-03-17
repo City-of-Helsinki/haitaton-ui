@@ -29,7 +29,9 @@ const HankeLayer = () => {
         hankeFeatures.forEach((feature) => {
           feature.setProperties(
             {
-              liikennehaittaindeksi: hanke.liikennehaittaindeksi?.indeksi,
+              liikennehaittaindeksi: hanke.liikennehaittaindeksi
+                ? hanke.liikennehaittaindeksi.indeksi
+                : null,
             },
             true
           );
