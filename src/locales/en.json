@@ -91,21 +91,21 @@
       }
     },
     "ACCESSIBILITY": {
-      "path": "/map",
+      "path": "/accessibility",
       "headerLabel": "EN: Saavutettavuusseloste",
       "meta": {
         "title": "EN: Haitaton Beta - Saavutettavuus"
       }
     },
     "PRIVACY_POLICY": {
-      "path": "/hanke/uusi",
+      "path": "/privacypolicy",
       "headerLabel": "EN: Rekisteriseloste",
       "meta": {
         "title": "EN: Haitaton Beta - Rekisteriseloste"
       }
     },
     "REFERENCES": {
-      "path": "/hanke/:hankeTunnus/muokkaa",
+      "path": "/references",
       "headerLabel": "EN: Lähdeviitteet",
       "meta": {
         "title": "EN: Haitaton Beta - Lähdeviitteet"

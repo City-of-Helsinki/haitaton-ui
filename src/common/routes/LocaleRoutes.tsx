@@ -7,6 +7,10 @@ import MapPage from '../../pages/MapPage';
 import NewHankePage from '../../pages/NewHankePage';
 import EditHankePage from '../../pages/EditHankePage';
 import HomePage from '../../pages/HomePage';
+import InfoPage from '../../pages/staticPages/InfoPage';
+import AccessibilityPage from '../../pages/staticPages/AccessibilityPage';
+import ReferencesPage from '../../pages/staticPages/ReferencesPage';
+import PrivacyPolicyPage from '../../pages/staticPages/PrivacyPolicyPage';
 import {
   useLocalizedRoutes,
   getRouteLocalization,
@@ -27,7 +31,17 @@ const LocaleRoutes: React.FC<Props> = ({
 }) => {
   const history = useHistory();
   const useTranslationResponse = useTranslation();
-  const { HOME, NEW_HANKE, EDIT_HANKE, PROJECTS, MAP } = useLocalizedRoutes();
+  const {
+    HOME,
+    NEW_HANKE,
+    EDIT_HANKE,
+    PROJECTS,
+    MAP,
+    HAITATON_INFO,
+    ACCESSIBILITY,
+    REFERENCES,
+    PRIVACY_POLICY,
+  } = useLocalizedRoutes();
 
   const { i18n } = useTranslationResponse;
   const { language: currentLocale } = i18n;
@@ -58,6 +72,10 @@ const LocaleRoutes: React.FC<Props> = ({
       <Route exact path={EDIT_HANKE.path} component={EditHankePage} />
       <Route exact path={PROJECTS.path} component={HankeListPage} />
       <Route exact path={MAP.path} component={MapPage} />
+      <Route exact path={HAITATON_INFO.path} component={InfoPage} />
+      <Route exact path={ACCESSIBILITY.path} component={AccessibilityPage} />
+      <Route exact path={REFERENCES.path} component={ReferencesPage} />
+      <Route exact path={PRIVACY_POLICY.path} component={PrivacyPolicyPage} />
     </Switch>
   );
 };

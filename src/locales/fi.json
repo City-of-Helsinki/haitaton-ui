@@ -84,28 +84,28 @@
       }
     },
     "HAITATON_INFO": {
-      "path": "/hankelista",
+      "path": "/info",
       "headerLabel": "Tietoja Haitattomasta",
       "meta": {
         "title": "Haitaton Beta - Info"
       }
     },
     "ACCESSIBILITY": {
-      "path": "/map",
+      "path": "/accessibility",
       "headerLabel": "Saavutettavuusseloste",
       "meta": {
         "title": "Haitaton Beta - Saavutettavuus"
       }
     },
     "PRIVACY_POLICY": {
-      "path": "/hanke/uusi",
+      "path": "/privacypolicy",
       "headerLabel": "Rekisteriseloste",
       "meta": {
         "title": "Haitaton Beta - Rekisteriseloste"
       }
     },
     "REFERENCES": {
-      "path": "/hanke/:hankeTunnus/muokkaa",
+      "path": "/references",
       "headerLabel": "Lähdeviitteet",
       "meta": {
         "title": "Haitaton Beta - Lähdeviitteet"
