@@ -32,7 +32,7 @@ const ConfirmationDialog: React.FC<Props> = ({ body, children, isOpen, handleClo
           <Button
             type="button"
             theme="coat"
-            variant="secondary"
+            variant="primary"
             ref={cancelRef}
             onClick={handleClose}
           >

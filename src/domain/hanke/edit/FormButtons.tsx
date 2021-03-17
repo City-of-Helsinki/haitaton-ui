@@ -71,15 +71,17 @@ const FormButtons: React.FC<Props> = ({
         isOpen={isOpen}
         handleClose={() => setIsOpen(false)}
       >
-        <button
+        <Button
           type="button"
+          theme="coat"
+          variant="secondary"
           onClick={() => {
             onCalculateIndexes(hankeTunnus);
             setIsOpen(false);
           }}
         >
           {t('hankeForm:confirmIndexCalculationButton')}
-        </button>
+        </Button>
       </ConfirmationDialogUI>
       {formPage === 4 && (
         <Button
