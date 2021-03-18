@@ -302,6 +302,14 @@
       "begin": "EN: Ajanjakson alku",
       "end": "EN: Ajanjakson loppu"
     },
+    "guide": {
+      "indexColor": {
+        "RED": "EN:Kriittinen",
+        "YELLOW": "EN:Huomioitava",
+        "GREEN": "EN:Ei merkittävä",
+        "BLUE": "EN:Indeksoimaton"
+      }
+    },
     "drawSquareButtonAria": "EN:Piirrä neliö kartalle",
     "drawPolygonButtonAria": "EN:Piirrä monikulmio kartalle"
   }

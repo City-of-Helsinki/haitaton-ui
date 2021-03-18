@@ -14,6 +14,7 @@ import { MapTileLayerId } from './types';
 import FeatureClick from '../../common/components/map/interactions/FeatureClick';
 import GeometryHover from '../../common/components/map/interactions/hover/GeometryHover';
 import HankeHoverBox from './components/HankeHover/HankeHoverBox';
+import MapGuide from './components/MapGuide/MapGuide';
 import HankkeetProvider from './HankkeetProvider';
 
 const HankeMap: React.FC = () => {
@@ -36,6 +37,7 @@ const HankeMap: React.FC = () => {
       >
         <h1 className={styles.allyHeader}>Karttasivu</h1> {/* For a11y */}
         <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
+          <MapGuide />
           {mapTileLayers.ortokartta.visible && <Ortokartta />}
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
 
