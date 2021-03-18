@@ -19,7 +19,7 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
   useFormPage();
   return (
     <div className="form4">
-      <Text tag="h2" spacing="s" weight="bold">
+      <Text tag="h2" spacing="s" weight="bold" data-testid="form4Header">
         {t('hankeForm:hankkeenHaitatForm:header')}
       </Text>
       <div className="dataWpr">

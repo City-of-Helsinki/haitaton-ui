@@ -82,6 +82,34 @@
       "meta": {
         "title": "SV: Haitaton Beta - Hankkeen muokkaus"
       }
+    },
+    "HAITATON_INFO": {
+      "path": "/info",
+      "headerLabel": "SV: Tietoja Haitattomasta",
+      "meta": {
+        "title": "SV: Haitaton Beta - Info"
+      }
+    },
+    "ACCESSIBILITY": {
+      "path": "/accessibility",
+      "headerLabel": "SV: Saavutettavuusseloste",
+      "meta": {
+        "title": "SV: Haitaton Beta - Saavutettavuus"
+      }
+    },
+    "PRIVACY_POLICY": {
+      "path": "/privacypolicy",
+      "headerLabel": "SV: Rekisteriseloste",
+      "meta": {
+        "title": "SV: Haitaton Beta - Rekisteriseloste"
+      }
+    },
+    "REFERENCES": {
+      "path": "/references",
+      "headerLabel": "SV: Lähdeviitteet",
+      "meta": {
+        "title": "SV: Haitaton Beta - Lähdeviitteet"
+      }
     }
   },
   "hanke": {
@@ -314,5 +342,31 @@
     },
     "drawSquareButtonAria": "SV:Piirrä neliö kartalle",
     "drawPolygonButtonAria": "SV:Piirrä monikulmio kartalle"
+  },
+  "staticPages": {
+    "info": {
+      "title": "SV: Tietoja haitattomasta",
+      "content": "SV: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+    },
+    "references": {
+      "title": "SV: Lähdeviitteet",
+      "content": "SV: Palvelu käyttää seuraavista lähteistä saatua aineistoa:",
+      "referenceData": {
+        "HEKAYL": { "title": "SV: Helsingin kaupungin yleisten alueiden rekisteri 2021" },
+        "HEKAKA": { "title": "SV: Helsingin kaupungin kaupunkimittauspalvelut 2021" },
+        "OPSTMA": { "title": "SV: OpenStreetMap contributors 2021" },
+        "HSL": { "title": "SV: HSL 2021" },
+        "MAMILA": { "title": "SV: Maanmittauslaitos 2021" },
+        "HEKAKATO": { "title": "SV: Helsingin kaupunki kaupunkiympäristön toimiala 2021" }
+      }
+    },
+    "accessibility": {
+      "title": "SV: Saavutettavuusseloste",
+      "content": "SV: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+    },
+    "privacyPolicy": {
+      "title": "SV: Rekisteriseloste",
+      "content": "SV: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+    }
   }
 }
