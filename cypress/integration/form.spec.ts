@@ -57,7 +57,7 @@ context('HankeForm', () => {
     cy.get('#haittaAlkuPvm').type(hankeMock.haittaAlkuPvm);
     // cy.checkA11y();
     cy.get('#haittaLoppuPvm').type(hankeMock.haittaLoppuPvm);
-    cy.get('body').click();
+    cy.get('[data-testid=form4Header]').click(); // Close datepicker because it is over kaitaHaitta-toggle-button
     cy.get('#kaistaHaitta-toggle-button').click();
     cy.get('#kaistaHaitta-item-0').click();
     cy.get('#kaistaPituusHaitta-toggle-button').click();
