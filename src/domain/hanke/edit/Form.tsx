@@ -50,14 +50,7 @@ const HankeForm: React.FC<Props> = ({
     },
   });
 
-  const {
-    /* handleSubmit, */ errors,
-    control,
-    register,
-    formState,
-    getValues,
-    reset,
-  } = formContext;
+  const { errors, control, register, formState, getValues, reset } = formContext;
 
   useEffect(() => {
     reset(formData);
@@ -106,11 +99,7 @@ const HankeForm: React.FC<Props> = ({
         <div className="hankeForm__formWpr">
           <StateIndicator formPage={formPage} />
           <div className="hankeForm__formWprRight">
-            <form
-              name="hanke"
-              // eslint-disable-next-line no-console
-              onSubmit={() => console.error('This should not happen.')}
-            >
+            <form name="hanke">
               <div className="closeFormWpr">
                 <button
                   type="button"
