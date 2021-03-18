@@ -15,7 +15,6 @@ const alkuPvm = '24.03.2025';
 const loppuPvm = '25.03.2032';
 const haittaAlkuPvm = '01.04.2026';
 const haittaLoppuPvm = '01.03.2031';
-
 const omistajaEtunimi = 'Matti';
 const katuosoite = 'Pohjoinen Rautatiekatu 11 b 12';
 const hankeenKuvaus = 'Tässä on kuvaus';
@@ -43,13 +42,13 @@ describe('HankeForm', () => {
     const handleIsDirtyChange = jest.fn();
     const handleUnmount = jest.fn();
     const handleFormClose = jest.fn();
-    const handleSubmit = jest.fn();
+    const onCalculateIndexes = jest.fn();
 
     const { getByTestId, getByLabelText, queryAllByText } = render(
       <Form
         formData={formData}
         onSave={handleSave}
-        onSubmit={handleSubmit}
+        onCalculateIndexes={onCalculateIndexes}
         onSaveGeometry={handleSaveGeometry}
         onIsDirtyChange={handleIsDirtyChange}
         onUnmount={handleUnmount}
@@ -144,13 +143,13 @@ describe('HankeForm', () => {
     const handleIsDirtyChange = jest.fn();
     const handleUnmount = jest.fn();
     const handleFormClose = jest.fn();
-    const handleSubmit = jest.fn();
+    const onCalculateIndexes = jest.fn();
 
     const { getByTestId, getByLabelText, queryAllByText } = render(
       <Form
         formData={formData}
         onSave={handleSave}
-        onSubmit={handleSubmit}
+        onCalculateIndexes={onCalculateIndexes}
         onSaveGeometry={handleSaveGeometry}
         onIsDirtyChange={handleIsDirtyChange}
         onUnmount={handleUnmount}
@@ -185,13 +184,13 @@ describe('HankeForm', () => {
     const handleIsDirtyChange = jest.fn();
     const handleUnmount = jest.fn();
     const handleFormClose = jest.fn();
-    const handleSubmit = jest.fn();
+    const onCalculateIndexes = jest.fn();
 
     const { getByTestId, getByLabelText, queryAllByText, queryByText } = render(
       <Form
         formData={formData}
         onSave={handleSave}
-        onSubmit={handleSubmit}
+        onCalculateIndexes={onCalculateIndexes}
         onSaveGeometry={handleSaveGeometry}
         onIsDirtyChange={handleIsDirtyChange}
         onUnmount={handleUnmount}
@@ -265,7 +264,7 @@ describe('HankeForm', () => {
           [FORMFIELD.NIMI]: 'Lenkkeilijä Pekka',
         }}
         onSave={() => ({})}
-        onSubmit={() => ({})}
+        onCalculateIndexes={() => ({})}
         onSaveGeometry={() => ({})}
         onIsDirtyChange={() => ({})}
         onUnmount={() => ({})}
@@ -285,7 +284,7 @@ describe('HankeForm', () => {
           [FORMFIELD.ALKU_PVM]: '1999-03-15T00:00:00Z',
         }}
         onSave={() => ({})}
-        onSubmit={() => ({})}
+        onCalculateIndexes={() => ({})}
         onSaveGeometry={() => ({})}
         onIsDirtyChange={() => ({})}
         onUnmount={() => ({})}
@@ -307,7 +306,7 @@ describe('HankeForm', () => {
           },
         }}
         onSave={() => ({})}
-        onSubmit={() => ({})}
+        onCalculateIndexes={() => ({})}
         onSaveGeometry={() => ({})}
         onIsDirtyChange={() => ({})}
         onUnmount={() => ({})}

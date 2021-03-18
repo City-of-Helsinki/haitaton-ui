@@ -9,7 +9,7 @@ import { saveForm, calculateIndex } from './thunks';
 import { saveGeometryData } from '../../map/thunks';
 import HankeForm from './Form';
 import { actions, hankeDataDraft } from './reducer';
-import { SaveFormArguments, HankeDataFormState } from './types';
+import { SaveFormArguments } from './types';
 import { convertHankeDataToFormState } from './utils';
 
 import api from '../../api/api';
@@ -54,7 +54,7 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
-  const handleCalculateIndex = ({ hankeTunnus }: HankeDataFormState) => {
+  const handleCalculateIndex = (hankeTunnus: string) => {
     if (hankeTunnus) dispatch(calculateIndex(hankeTunnus));
   };
 
@@ -83,7 +83,7 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
     <HankeForm
       formData={formData}
       onSave={handleSave}
-      onSubmit={handleCalculateIndex}
+      onCalculateIndexes={handleCalculateIndex}
       onSaveGeometry={handleSaveGeometry}
       onIsDirtyChange={handleIsDirtyChange}
       onUnmount={handleUnmount}

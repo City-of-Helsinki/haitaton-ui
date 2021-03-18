@@ -1,24 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'hds-react';
 import { IconAngleLeft, IconAngleRight } from 'hds-react/icons';
 import { HankeTilat } from '../../types/hanke';
+import ConfirmationDialogUI from '../../../common/components/confirmationDialog/ConfirmationDialogUI';
 
 type Props = {
   goBack: () => void;
+  onCalculateIndexes: (hankeTunnus: string) => void;
   goForward: () => void;
   saveDraft: () => void;
   formPage: number;
 };
 
-const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, formPage }) => {
+const FormButtons: React.FC<Props> = ({
+  goBack,
+  goForward,
+  saveDraft,
+  formPage,
+  onCalculateIndexes,
+}) => {
   const { t } = useTranslation();
+  const [isOpen, setIsOpen] = useState(false);
+
   const {
     watch,
     formState: { isValid, isDirty },
   } = useFormContext();
   const hankeTilat: HankeTilat | undefined = watch('tilat');
+  const hankeTunnus: string = watch('hankeTunnus');
 
   let previousButtonText = '';
   let nextButtonText = '';
@@ -55,6 +66,23 @@ const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, formPage }
 
   return (
     <div className="btnWpr">
+      <ConfirmationDialogUI
+        body={t('hankeForm:calculateIndexDialogBody')}
+        isOpen={isOpen}
+        handleClose={() => setIsOpen(false)}
+      >
+        <Button
+          type="button"
+          theme="coat"
+          variant="secondary"
+          onClick={() => {
+            onCalculateIndexes(hankeTunnus);
+            setIsOpen(false);
+          }}
+        >
+          {t('hankeForm:confirmIndexCalculationButton')}
+        </Button>
+      </ConfirmationDialogUI>
       {formPage === 4 && (
         <Button
           className="btnWpr--next"
@@ -62,6 +90,10 @@ const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, formPage }
           iconRight={<IconAngleRight />}
           variant="secondary"
           data-testid="submitButton"
+          onClick={(e) => {
+            e.preventDefault();
+            setIsOpen(true);
+          }}
           disabled={
             !isValid ||
             !hankeTilat?.onTiedotLiikenneHaittaIndeksille ||

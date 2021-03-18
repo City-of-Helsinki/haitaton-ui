@@ -183,6 +183,8 @@
     "indexCalculationFailHeader": "Törmäystarkastelun laskenta epäonnistui",
     "indexCalculationFailText": "Tuntematon virhe",
     "closeAriaLabel": "Poistu kaavakkeelta tallentamatta",
+    "calculateIndexDialogBody": "Haitattoman Beta-versiossa hanketta ei voi muokata sen jälkeen kun sille on laskettu haittaindeksit. Ennen kuin lasket indeksit, kannattaa käydä katsomassa hankkeen tilannetta karttanäkymässä (ylävalikossa) ja tarvittaessa muokata hankkeen tietoja ennen indeksien laskentaa. Mikäli olet valmis indeksien laskentaan, voit laskea indeksit nyt, tai palata lomakkeelle ja muokata hankkeen tietoja. Hanke säilyy tallennuksen jälkeen hankelistalla ja karttanäkymässä.",
+    "confirmIndexCalculationButton": "Jatka indeksilaskentaan",
     "labels": {
       "hankeTunnus": "Hankkeen tunnus",
       "nimi": "Hankkeen nimi",

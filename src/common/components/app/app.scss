@@ -32,12 +32,6 @@ body {
   min-height: 100vh;
 }
 
-// https://github.com/chakra-ui/chakra-ui/issues/2893
-// Remove this when above issue is fixed
-.chakra-modal__content-container {
-  width: auto !important;
-}
-
 .chakra-modal__overlay {
   background: #333;
   opacity: 0.2;
