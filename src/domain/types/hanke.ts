@@ -84,12 +84,12 @@ export enum HANKE_MELUHAITTA {
 }
 export type HANKE_MELUHAITTA_KEY = keyof typeof HANKE_MELUHAITTA;
 
-export enum HANKE_POLYAITTA {
+export enum HANKE_POLYHAITTA {
   YKSI = 'YKSI',
   KAKSI = 'KAKSI',
   KOLME = 'KOLME',
 }
-export type HANKE_POLYAITTA_KEY = keyof typeof HANKE_POLYAITTA;
+export type HANKE_POLYHAITTA_KEY = keyof typeof HANKE_POLYHAITTA;
 
 export enum HANKE_TARINAHAITTA {
   YKSI = 'YKSI',
@@ -179,7 +179,7 @@ export interface HankeData {
   kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA_KEY | null;
   liikennehaittaindeksi: LiikenneHaittaIndeksi | null;
   meluHaitta: HANKE_MELUHAITTA_KEY | null;
-  polyHaitta: HANKE_POLYAITTA_KEY | null;
+  polyHaitta: HANKE_POLYHAITTA | null;
   tarinaHaitta: HANKE_TARINAHAITTA_KEY | null;
   omistajat: Array<HankeContact>;
   arvioijat: Array<HankeContact>;
