@@ -4,6 +4,11 @@
   left: 0;
   width: 100%;
 
+  .koros {
+    height: 2.2rem;
+    overflow: hidden;
+  }
+
   .container {
     display: flex;
     flex-direction: column;
@@ -11,27 +16,46 @@
     padding-bottom: 1rem;
     background: var(--color-summer);
 
-    .logo {
-      display: flex;
+    .innerContainer {
+      .logo {
+        display: flex;
 
-      div {
-        padding-right: 1.5rem;
-        padding-bottom: 2rem;
+        h3 {
+          margin-left: 1.5rem;
+        }
+      }
+
+      display: flex;
+      justify-content: space-between;
+
+      ul {
+        list-style-type: none;
+        display: flex;
+        padding: 0.5rem 0 0 0;
+        margin: 0;
+
+        li {
+          margin: 0 0 0 1.5rem;
+          padding: 0;
+
+          a {
+            font-weight: 500;
+          }
+
+          a:hover {
+            text-decoration: underline;
+          }
+        }
       }
     }
 
     .linkContainer {
       display: flex;
-
-      div {
-        padding-right: 1.5rem;
-        margin-bottom: 2rem;
-        font-weight: 500;
-      }
     }
   }
 
-  p {
-    margin-bottom: 1rem;
+  .copy {
+    margin: 0;
+    padding: 0.8rem 0;
   }
 }
