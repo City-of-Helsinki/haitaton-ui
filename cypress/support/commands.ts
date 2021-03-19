@@ -37,6 +37,9 @@ Cypress.Commands.add('login', () => {
   //  if ($loginLink.text() === 'Kirjaudu') {
   //    cy.get('[data-testid=loginLink]').click();
 
+  // Wait for a redirect to the login page, otherwise tests would randomly fail
+  cy.get('#kc-header-wrapper', { timeout: 5000 }).should('be.visible');
+
   cy.url().then(($url) => {
     if ($url.indexOf('/auth/realms/haitaton') !== -1) {
       cy.url().should('include', '/auth/realms/haitaton');
