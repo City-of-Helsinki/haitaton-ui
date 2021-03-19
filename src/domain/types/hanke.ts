@@ -173,8 +173,8 @@ export interface HankeData {
   suunnitteluVaihe: HANKE_SUUNNITTELUVAIHE_KEY | null;
   tyomaaTyyppi: HANKE_TYOMAATYYPPI_KEY[];
   tyomaaKoko: HANKE_TYOMAAKOKO_KEY | null;
-  haittaAlkuPvm: Date | null;
-  haittaLoppuPvm: Date | null;
+  haittaAlkuPvm: string | null;
+  haittaLoppuPvm: string | null;
   kaistaHaitta: HANKE_KAISTAHAITTA_KEY | null;
   kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA_KEY | null;
   liikennehaittaindeksi: LiikenneHaittaIndeksi | null;
