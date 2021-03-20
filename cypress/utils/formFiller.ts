@@ -241,8 +241,12 @@ export const fillForm4 = (hankeData: HankeDataDraft) => {
   }
 };
 
-export const countIndexes = () => {
+export const triggerIndexCount = () => {
   // TODO: count indexes implementation here
+  cy.get('[data-testid=submitButton]').click();
+  cy.get('[data-testid=confirmationDialog]').should('be.visible');
+  cy.get('[data-testid=indexConfirmationOK]').click();
+  cy.get('[data-testid=formToastIndexSuccess]').children().should('be.visible');
 };
 
 export const createHankeFromUI = (hankeData: HankeDataDraft, countIndexes: boolean) => {
@@ -261,6 +265,6 @@ export const createHankeFromUI = (hankeData: HankeDataDraft, countIndexes: boole
   fillForm4(hankeData);
   saveDraft();
   if (countIndexes) {
-    // TODO: laske indeksit, hyväksy ehdot
+    triggerIndexCount();
   }
 };

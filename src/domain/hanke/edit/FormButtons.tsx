@@ -79,6 +79,7 @@ const FormButtons: React.FC<Props> = ({
             onCalculateIndexes(hankeTunnus);
             setIsOpen(false);
           }}
+          data-testid="indexConfirmationOK"
         >
           {t('hankeForm:confirmIndexCalculationButton')}
         </Button>
