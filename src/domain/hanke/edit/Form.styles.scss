@@ -52,6 +52,7 @@
     margin: 0;
     background: var(--color-white);
     display: block;
+    min-width: 17rem;
 
     li {
       padding-bottom: var(--spacing-3-xs);
