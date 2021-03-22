@@ -165,7 +165,7 @@
     },
     "kaistaHaitta": {
       "YKSI": "EN:Ei vaikuta",
-      "KAKSI": "EN:Vähentää samanaikaisesti kaistan yhdellä ajosuunnalla",
+      "KAKSI": "EN:Vähentää kaistan yhdellä ajosuunnalla",
       "KOLME": "EN:Vähentää samanaikaisesti kaistan kahdella ajosuunnalla",
       "NELJA": "EN:Vähentää samanaikaisesti useita kaistoja kahdella ajosuunnalla",
       "VIISI": "EN:Vähentää samanaikaisesti useita kaistoja liittymän eri suunnilla"
