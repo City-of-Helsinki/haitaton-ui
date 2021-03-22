@@ -7,6 +7,7 @@
   .koros {
     height: 2.2rem;
     overflow: hidden;
+    fill: var(--color-summer);
   }
 
   .container {
@@ -16,7 +17,7 @@
     padding-bottom: 1rem;
     background: var(--color-summer);
 
-    .innerContainer {
+    .footerContent {
       .logo {
         display: flex;
 
@@ -48,13 +49,9 @@
         }
       }
     }
-
-    .linkContainer {
-      display: flex;
-    }
   }
 
-  .copy {
+  .copyRight {
     margin: 0;
     padding: 0.8rem 0;
   }

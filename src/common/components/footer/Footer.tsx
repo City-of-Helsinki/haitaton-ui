@@ -10,9 +10,9 @@ const FooterComp: React.FC = () => {
 
   return (
     <footer className={styles.footer} role="contentinfo">
-      <Koros type="basic" className={styles.koros} style={{ fill: 'var(--color-summer)' }} />
+      <Koros type="basic" className={styles.koros} />
       <div className={styles.container}>
-        <div className={styles.innerContainer}>
+        <div className={styles.footerContent}>
           <div className={styles.logo}>
             <div>
               <Logo size="medium" />
@@ -23,7 +23,7 @@ const FooterComp: React.FC = () => {
               </Text>
             </div>
           </div>
-          <nav className={styles.linkContainer}>
+          <nav>
             <ul>
               <li>
                 <Link to={HAITATON_INFO.path}>{HAITATON_INFO.label}</Link>
@@ -40,7 +40,7 @@ const FooterComp: React.FC = () => {
             </ul>
           </nav>
         </div>
-        <p className={styles.copy}>&copy; Copyright 2020 &#8226; All rights reserved</p>
+        <p className={styles.copyRight}>&copy; Copyright 2020 &#8226; All rights reserved</p>
       </div>
     </footer>
   );
