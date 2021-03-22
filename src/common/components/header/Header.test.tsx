@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, getByTestId, fireEvent } from '@testing-library/react';
+import { cleanup, getByTestId } from '@testing-library/react';
 import Header from './Header';
 import { render } from '../../../testUtils/render';
 
@@ -10,14 +10,5 @@ describe('Header', () => {
     const { container } = render(<Header />);
     expect(getByTestId(container, 'hankeLink')).toBeDefined();
     expect(getByTestId(container, 'hankeLink')).toHaveTextContent('Luo uusi hanke');
-  });
-  test('it should change localization correctly to english', () => {
-    const { container, getAllByText } = render(<Header />);
-
-    fireEvent.click(getAllByText('Suomi')[0]);
-
-    fireEvent.click(getAllByText('English')[0]);
-
-    expect(getByTestId(container, 'hankeListLink')).toHaveTextContent('EN::Hankelista');
   });
 });
