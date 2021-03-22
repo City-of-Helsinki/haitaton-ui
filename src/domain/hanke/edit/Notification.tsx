@@ -19,7 +19,7 @@ const NotificationComp: React.FC<Props> = ({
       position="top-right"
       dismissible
       autoClose
-      autoCloseDuration={30000}
+      autoCloseDuration={3000}
       closeButtonLabelText="Close toast"
       type={typeProps}
       style={{ zIndex: 100 }}
