@@ -57,6 +57,7 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
             label={t(`hankeForm:labels:${FORMFIELD.KAISTAHAITTA}`)}
             invalid={!!errors[FORMFIELD.KAISTAHAITTA]}
             errorMsg={t('hankeForm:insertFieldError')}
+            required
           />
         </div>
 
@@ -73,6 +74,7 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
             label={t(`hankeForm:labels:${FORMFIELD.KAISTAPITUUSHAITTA}`)}
             invalid={!!errors[FORMFIELD.KAISTAPITUUSHAITTA]}
             errorMsg={t('hankeForm:insertFieldError')}
+            required
           />
         </div>
 
