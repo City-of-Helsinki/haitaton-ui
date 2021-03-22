@@ -10,33 +10,37 @@ const FooterComp: React.FC = () => {
 
   return (
     <footer className={styles.footer} role="contentinfo">
-      <Koros type="basic" style={{ fill: 'var(--color-summer)' }} />
+      <Koros type="basic" className={styles.koros} />
       <div className={styles.container}>
-        <div className={styles.logo}>
-          <div>
-            <Logo size="medium" />
+        <div className={styles.footerContent}>
+          <div className={styles.logo}>
+            <div>
+              <Logo size="medium" />
+            </div>
+            <div>
+              <Text tag="h3" weight="bold" styleAs="h6" spacing="2-xs">
+                Haitaton Beta
+              </Text>
+            </div>
           </div>
-          <div>
-            <Text tag="h3" weight="bold" styleAs="h6" spacing="2-xs">
-              Haitaton Beta
-            </Text>
-          </div>
+          <nav>
+            <ul>
+              <li>
+                <Link to={HAITATON_INFO.path}>{HAITATON_INFO.label}</Link>
+              </li>
+              <li>
+                <Link to={ACCESSIBILITY.path}>{ACCESSIBILITY.label}</Link>
+              </li>
+              <li>
+                <Link to={PRIVACY_POLICY.path}>{PRIVACY_POLICY.label}</Link>
+              </li>
+              <li>
+                <Link to={REFERENCES.path}>{REFERENCES.label}</Link>
+              </li>
+            </ul>
+          </nav>
         </div>
-        <div className={styles.linkContainer}>
-          <div>
-            <Link to={HAITATON_INFO.path}>{HAITATON_INFO.label}</Link>
-          </div>
-          <div>
-            <Link to={ACCESSIBILITY.path}>{ACCESSIBILITY.label}</Link>
-          </div>
-          <div>
-            <Link to={PRIVACY_POLICY.path}>{PRIVACY_POLICY.label}</Link>
-          </div>
-          <div>
-            <Link to={REFERENCES.path}>{REFERENCES.label}</Link>
-          </div>
-        </div>
-        <p>&copy; Copyright 2020 &#8226; All rights reserved</p>
+        <p className={styles.copyRight}>&copy; Copyright 2020 &#8226; All rights reserved</p>
       </div>
     </footer>
   );
