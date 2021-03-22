@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Navigation } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
-import { $enum } from 'ts-enum-util';
-import { LANGUAGES, Language } from '../../types/language';
 import { useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
 import authService from '../../../domain/auth/authService';
 import Locale from '../locale/Locale';
@@ -12,13 +10,13 @@ import './Header.styles.scss';
 const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { HOME, MAP, PROJECTS, NEW_HANKE } = useLocalizedRoutes();
-  const { i18n, t } = useTranslation();
+  const { t } = useTranslation();
   const isAuthenticated = authService.isAuthenticated();
-
-  const setLanguage = (lang: Language) => {
-    i18n.changeLanguage(lang);
-  };
-
+  /*
+    const setLanguage = (lang: Language) => {
+      i18n.changeLanguage(lang);
+    };
+  */
   return (
     <Navigation
       menuToggleAriaLabel="Open and close menu"
@@ -58,7 +56,7 @@ const Header: React.FC = () => {
           <Locale id="header:hankeLink" />
         </NavLink>
       </Navigation.Row>
-
+      {/*
       <Navigation.LanguageSelector label={t(`common:languages:${i18n.language}`)}>
         {$enum(LANGUAGES).map((lang) => (
           <Navigation.Item
@@ -72,7 +70,7 @@ const Header: React.FC = () => {
             key={lang}
           />
         ))}
-      </Navigation.LanguageSelector>
+          </Navigation.LanguageSelector> */}
     </Navigation>
   );
 };
