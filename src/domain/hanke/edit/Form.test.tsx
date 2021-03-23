@@ -13,8 +13,8 @@ jest.setTimeout(10000);
 const nimi = 'test kuoppa';
 const alkuPvm = '24.03.2025';
 const loppuPvm = '25.03.2032';
-const haittaAlkuPvm = '01.04.2026';
-const haittaLoppuPvm = '01.03.2031';
+const haittaAlkuPvm = '24.03.2025';
+const haittaLoppuPvm = '25.03.2032';
 const omistajaEtunimi = 'Matti';
 const katuosoite = 'Pohjoinen Rautatiekatu 11 b 12';
 const hankeenKuvaus = 'Tässä on kuvaus';
@@ -113,11 +113,13 @@ describe('HankeForm', () => {
     await waitFor(() => expect(getByTestId('forward')).not.toBeDisabled());
 
     getByTestId('forward').click(); // changes view to form4
-    await waitFor(() => getByLabelText('Haitan alkupäivämäärä'));
+    await waitFor(() => queryAllByText('Hankkeen haitat')[1]);
 
-    fireEvent.change(getByLabelText('Haitan alkupäivämäärä'), { target: { value: haittaAlkuPvm } });
+    fireEvent.change(getByLabelText('Haitan alkupäivämäärä', { exact: false }), {
+      target: { value: haittaAlkuPvm },
+    });
 
-    fireEvent.change(getByLabelText('Haitan loppupäivämäärä'), {
+    fireEvent.change(getByLabelText('Haitan loppupäivämäärä', { exact: false }), {
       target: { value: haittaLoppuPvm },
     });
 

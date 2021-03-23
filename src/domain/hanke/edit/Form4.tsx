@@ -31,6 +31,7 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
               dateFormat="dd.MM.yyyy"
               defaultValue={formData[FORMFIELD.HAITTA_ALKU_PVM] || null}
               locale={i18n.language}
+              required
             />
           </div>
           <div className="right">
@@ -40,6 +41,7 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
               dateFormat="dd.MM.yyyy"
               defaultValue={formData[FORMFIELD.HAITTA_LOPPU_PVM] || null}
               locale={i18n.language}
+              required
             />
           </div>
         </div>
