@@ -1,4 +1,5 @@
 import startOfDay from 'date-fns/startOfDay';
+import endOfDay from 'date-fns/endOfDay';
 import { $enum } from 'ts-enum-util';
 import yup from '../../../common/utils/yup';
 import { HANKE_VAIHE, HANKE_SUUNNITTELUVAIHE } from '../../types/hanke';
@@ -76,7 +77,9 @@ export const hankeSchema = yup.object().shape({
       // @ts-ignore nullable doesnt work with TS
       (formPage: number, alkuPvm: Date, loppuPvm: Date, schema: yup.DateSchema) => {
         if (formPage !== 4) return schema;
-        return alkuPvm ? schema.min(new Date(alkuPvm)).max(new Date(loppuPvm)) : schema;
+        return alkuPvm
+          ? schema.min(startOfDay(new Date(alkuPvm))).max(endOfDay(new Date(loppuPvm)))
+          : schema;
       }
     ),
   [FORMFIELD.HAITTA_LOPPU_PVM]: yup
@@ -88,7 +91,9 @@ export const hankeSchema = yup.object().shape({
       // @ts-ignore nullable doesnt work with TS
       (formPage: number, alkuPvm: Date, loppuPvm: Date, schema: yup.DateSchema) => {
         if (formPage !== 4) return schema;
-        return loppuPvm ? schema.min(new Date(alkuPvm)).max(new Date(loppuPvm)) : schema;
+        return loppuPvm
+          ? schema.min(startOfDay(new Date(alkuPvm))).max(endOfDay(new Date(loppuPvm)))
+          : schema;
       }
     ),
 });
