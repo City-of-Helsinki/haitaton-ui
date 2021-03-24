@@ -1,3 +1,4 @@
+import { HankeIndexData, HANKE_INDEX_TYPE } from './../../src/domain/types/hanke';
 /// <reference types="cypress" />
 import {
   HANKE_KAISTAHAITTA,
@@ -12,6 +13,7 @@ import {
   HankeDataDraft,
   HANKE_SUUNNITTELUVAIHE,
 } from './../../src/domain/types/hanke';
+import { validateIndexes } from '../utils/indexValidator';
 
 // TODO: define types that would not require unnecessary types
 const hankeMock: HankeDataDraft = {
@@ -55,6 +57,16 @@ const hankeMock: HankeDataDraft = {
   tarinaHaitta: HANKE_TARINAHAITTA.KOLME,
 };
 
+const hankeMockIndex: Partial<HankeIndexData> = {
+  liikennehaittaIndeksi: {
+    indeksi: 4.8,
+    tyyppi: HANKE_INDEX_TYPE.PERUSINDEKSI,
+  },
+  pyorailyIndeksi: 3,
+  joukkoliikenneIndeksi: 4,
+  perusIndeksi: 4.8,
+};
+
 context('HankeForm', () => {
   beforeEach(() => {
     cy.login();
@@ -65,5 +77,6 @@ context('HankeForm', () => {
     createHankeFromUI(hankeMock, countIndexes);
     // TODO: validateHankeInfoFromHankeList(hankeMock)
     // TODO: validateHankeInfoFromMap(hankeMock)
+    validateIndexes(hankeMockIndex);
   });
 });
