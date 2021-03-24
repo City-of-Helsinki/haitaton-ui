@@ -1,5 +1,5 @@
-import { HankeIndexData, HANKE_INDEX_TYPE } from './../../src/domain/types/hanke';
 /// <reference types="cypress" />
+import { HankeIndexData, HANKE_INDEX_TYPE } from './../../src/domain/types/hanke';
 import {
   HANKE_KAISTAHAITTA,
   HANKE_KAISTAPITUUSHAITTA,
@@ -33,8 +33,8 @@ const hankeMock: HankeDataDraft = {
   kuvaus: 'Tämä on hankkeen kuvaus',
   alkuPvm: '10.01.2030',
   loppuPvm: '11.01.2032',
-  haittaAlkuPvm: '10.01.2030',
-  haittaLoppuPvm: '10.01.2032', // TODO: BUG: HAI-974: loppuPvm cant be same as haittaLoppuPvm
+  haittaAlkuPvm: '10.01.2030', // the dates are the same as hankeStart and end on purpose
+  haittaLoppuPvm: '11.01.2032',
   tyomaaKatuosoite: 'Mannerheimintie 14',
   vaihe: HANKE_VAIHE.SUUNNITTELU,
   suunnitteluVaihe: HANKE_SUUNNITTELUVAIHE.KATUSUUNNITTELU_TAI_ALUEVARAUS,
@@ -62,7 +62,7 @@ const hankeMockIndex: Partial<HankeIndexData> = {
     indeksi: 4.8,
     tyyppi: HANKE_INDEX_TYPE.PERUSINDEKSI,
   },
-  pyorailyIndeksi: 3,
+  pyorailyIndeksi: 1,
   joukkoliikenneIndeksi: 4,
   perusIndeksi: 4.8,
 };
@@ -70,13 +70,12 @@ const hankeMockIndex: Partial<HankeIndexData> = {
 context('HankeForm', () => {
   beforeEach(() => {
     cy.login();
+    cy.visit('/fi/hanke/uusi');
   });
 
-  it('Hanke form testing', () => {
+  it('Validate indexes are counted correctly with given hankeData', () => {
     const countIndexes = true;
     createHankeFromUI(hankeMock, countIndexes);
-    // TODO: validateHankeInfoFromHankeList(hankeMock)
-    // TODO: validateHankeInfoFromMap(hankeMock)
     validateIndexes(hankeMockIndex);
   });
 });
