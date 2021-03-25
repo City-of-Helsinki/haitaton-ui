@@ -12,11 +12,6 @@ const Header: React.FC = () => {
   const { HOME, MAP, PROJECTS, NEW_HANKE } = useLocalizedRoutes();
   const { t } = useTranslation();
   const isAuthenticated = authService.isAuthenticated();
-  /*
-    const setLanguage = (lang: Language) => {
-      i18n.changeLanguage(lang);
-    };
-  */
   return (
     <Navigation
       menuToggleAriaLabel="Open and close menu"
@@ -35,27 +30,31 @@ const Header: React.FC = () => {
         <NavLink to={PROJECTS.path} activeClassName="header--active" data-testid="hankeListLink">
           {PROJECTS.label}
         </NavLink>
-        {isAuthenticated ? (
-          <NavLink
-            to="/logout"
-            activeClassName="header--active"
-            data-testid="logoutLink"
-            onClick={(e) => {
-              e.preventDefault();
-              authService.logout();
-            }}
-          >
-            {t('authentication:logoutButton')}
-          </NavLink>
-        ) : (
-          <NavLink to="/login" activeClassName="header--active" data-testid="loginLink">
-            {t('authentication:loginButton')}
-          </NavLink>
-        )}
         <NavLink to={NEW_HANKE.path} className="header__hankeLink" data-testid="hankeLink">
           <Locale id="header:hankeLink" />
         </NavLink>
       </Navigation.Row>
+      <Navigation.Actions>
+        <Navigation.Item>
+          {isAuthenticated ? (
+            <NavLink
+              to="/logout"
+              activeClassName="header--active"
+              data-testid="logoutLink"
+              onClick={(e) => {
+                e.preventDefault();
+                authService.logout();
+              }}
+            >
+              {t('authentication:logoutButton')}
+            </NavLink>
+          ) : (
+            <NavLink to="/login" activeClassName="header--active" data-testid="loginLink">
+              {t('authentication:loginButton')}
+            </NavLink>
+          )}
+        </Navigation.Item>
+      </Navigation.Actions>
       {/*
       <Navigation.LanguageSelector label={t(`common:languages:${i18n.language}`)}>
         {$enum(LANGUAGES).map((lang) => (
