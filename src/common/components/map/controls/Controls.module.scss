@@ -1,0 +1,66 @@
+.controlLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.controlPanel {
+  background: var(--color-white);
+  color: black;
+  pointer-events: all;
+  padding: var(--spacing-3-xs);
+}
+
+.controlMenu {
+  background: var(--color-white);
+  padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-3-xs);
+
+  &__divider {
+    margin-top: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
+  }
+}
+
+.tileLayerControl {
+  position: absolute;
+  top: var(--spacing-s);
+  right: var(--spacing-s);
+
+  &__button {
+    padding: var(--spacing-3-xs);
+  }
+}
+
+.drawControl {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: var(--spacing-s);
+  bottom: var(--spacing-s);
+
+  &__button {
+    border: 0;
+    color: var(--color-coat-of-arms);
+
+    &:hover {
+      background: gray;
+    }
+
+    &--active {
+      color: red;
+    }
+  }
+
+  &__button:first-child {
+    margin-bottom: 0.5rem;
+  }
+
+  &__checkbox {
+    padding-left: var(--spacing-xs);
+    padding-bottom: var(--spacing-2-xs);
+  }
+}

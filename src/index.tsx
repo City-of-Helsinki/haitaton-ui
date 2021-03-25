@@ -1,23 +1,38 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
-import App from './components/App';
-// import * as serviceWorker from './serviceWorker';
+import * as Sentry from '@sentry/react';
+import { Integrations } from '@sentry/tracing';
+import App from './common/components/app/App';
+import './locales/i18n';
 
-if (process.env.NODE_ENV === 'development') {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  // const { worker } = require('./mocks/browser');
-  // worker.start();
-}
+Sentry.init({
+  dsn: process.env.REACT_APP_SENTRY_DSN,
+  integrations: [new Integrations.BrowserTracing()],
+  tracesSampleRate:
+    // no traces if not in prod or test
+    process.env.REACT_APP_DISABLE_SENTRY ? 0.0 : 1.0,
+  environment: process.env.NODE_ENV,
+});
 
-ReactDOM.render(
-  <React.StrictMode>
-    <Router>
+if (process.env.NODE_ENV !== 'production') {
+  import('@axe-core/react').then((axe) => {
+    // https://github.com/dequelabs/axe-core-npm/issues/176
+    axe.default(React, ReactDOM, 1000, {}, undefined);
+    ReactDOM.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>,
+      document.getElementById('root')
+    );
+  });
+} else {
+  ReactDOM.render(
+    <React.StrictMode>
       <App />
-    </Router>
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+    </React.StrictMode>,
+    document.getElementById('root')
+  );
+}
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

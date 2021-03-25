@@ -1,0 +1,47 @@
+@import '~hds-core/lib/base.css';
+@import '~hds-core/lib/icons/icon.css';
+@import '~hds-core/lib/icons/all.min.css';
+
+@font-face {
+  font-family: HelsinkiGrotesk;
+  src: url('../../../assets/fonts/HelsinkiGrotesk-Regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: HelsinkiGrotesk;
+  font-weight: 500;
+  src: url('../../../assets/fonts/HelsinkiGrotesk-Medium.otf') format('opentype');
+}
+
+@font-face {
+  font-family: HelsinkiGrotesk;
+  font-weight: bold;
+  src: url('../../../assets/fonts/HelsinkiGrotesk-Bold.otf') format('opentype');
+}
+
+html {
+  font-size: 100% !important;
+}
+
+// https://github.com/chakra-ui/chakra-ui/discussions/2779
+// Need to use importants because Chakra injects
+body {
+  font-family: 'HelsinkiGrotesk', serif !important;
+  background: var(--color-black-5) !important;
+  position: relative;
+  min-height: 100vh;
+}
+
+.chakra-modal__overlay {
+  background: #333;
+  opacity: 0.2;
+}
+
+#hankemap .ol-attribution {
+  bottom: 10rem;
+}
+
+#root {
+  width: 100%;
+  overflow: hidden;
+}

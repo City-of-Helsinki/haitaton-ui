@@ -1,0 +1,136 @@
+.hankelista {
+  &__buttonWpr {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__hankeLink {
+    background: var(--color-coat-of-arms);
+    padding: var(--spacing-s) var(--spacing-m);
+    margin: var(--spacing-s) 0 var(--spacing-s) var(--spacing-s);
+    color: var(--color-white);
+    text-decoration: none;
+  }
+
+  &__inner {
+    padding: var(--spacing-l) var(--spacing-l) var(--spacing-3-xl) var(--spacing-l);
+    background: var(--color-white);
+    overflow-x: auto;
+
+    table {
+      width: 100%;
+
+      tbody {
+        td {
+          border-bottom: 1px solid var(--color-black-5);
+          padding: var(--spacing-s) 0 var(--spacing-s) var(--spacing-m);
+
+          button:disabled {
+            cursor: auto;
+          }
+
+          button:last-child {
+            margin: 0 0.5rem;
+          }
+
+          .remove path,
+          .pen path:last-child {
+            fill: var(--color-black-50);
+          }
+
+          span {
+            width: 7rem;
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          span.name {
+            width: 21rem;
+          }
+        }
+
+        td:last-child {
+          button,
+          a {
+            position: relative;
+            top: -0.5rem;
+          }
+        }
+
+        td:first-child a {
+          color: var(--color-coat-of-arms-dark);
+        }
+
+        tr:nth-child(even) td {
+          background: var(--color-black-5);
+        }
+      }
+
+      thead th {
+        background: var(--color-black-10);
+        text-align: left;
+        padding: var(--spacing-3-xs) 0 var(--spacing-3-xs) var(--spacing-m);
+
+        div {
+          display: flex;
+          align-items: center;
+
+          .unSelectedWpr {
+            display: inline-block;
+            padding: 0.8rem 0 0 0.2rem;
+          }
+
+          .unSelected {
+            display: block;
+
+            svg {
+              display: block;
+            }
+
+            svg:last-child {
+              position: relative;
+              top: -0.8rem;
+            }
+          }
+        }
+      }
+
+      thead th:first-child {
+        font-weight: normal;
+      }
+    }
+  }
+
+  .pagination {
+    padding-top: var(--spacing-m);
+
+    button:disabled {
+      cursor: auto;
+
+      svg polygon:last-child {
+        fill: var(--color-black-50);
+      }
+    }
+
+    span.wrp {
+      position: relative;
+      top: 0.1rem;
+      display: inline-block;
+      padding: 0 var(--spacing-2-xs);
+    }
+
+    .toBeginning {
+      svg:last-child {
+        margin-left: -1rem;
+      }
+    }
+
+    .toEnd {
+      svg:first-child {
+        margin-right: -1rem;
+      }
+    }
+  }
+}

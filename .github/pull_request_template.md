@@ -1,3 +1,4 @@
+
 # Haitaton-ui pull-request
 
 Kyseessä on
@@ -13,3 +14,4 @@ Kyseessä on
 - [ ] Muuttujat ovat kuvaavasti nimettyjä eikä koodi sisällä kirjoitusvirheitä
 - [ ] Muutokseni eivät aiheuta uusia virheitä consoleen
 - [ ] Olen toteuttanut Jest-testit toiminnallisuuden testaukseen
+

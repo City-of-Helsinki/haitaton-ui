@@ -1,0 +1,12 @@
+FROM node:12-alpine as staticbuilder
+ADD --chown=node:node . /builder/
+WORKDIR /builder
+RUN yarn && yarn cache clean --force
+RUN REACT_APP_DISABLE_SENTRY=1 yarn build
+
+FROM nginx:stable
+EXPOSE 8000
+COPY --from=staticbuilder ./builder/build /usr/share/nginx/html
+COPY --from=staticbuilder ./builder/nginx/nginx.conf /etc/nginx/nginx.conf
+WORKDIR /usr/share/nginx/html
+CMD ["/bin/bash", "-c", "nginx -g \"daemon off;\""]

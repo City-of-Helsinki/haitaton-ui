@@ -1,0 +1,372 @@
+{
+  "authentication": {
+    "deviceTimeError": "EN:Et voi kirjautua sisään koska laitteesi kello on yli 5 minuuttia väärässä. Säädä kelloa ja kokeile uudestaan.",
+    "permissionRequestDenied": "EN:Sinun täytyy hyväksyä pyytämämme oikeudet käyttääksesi tätä palvelua. Ole hyvä ja yritä kirjautua uudelleen.",
+    "genericError": "EN:Tapahtui virhe. Yritä uudestaan.",
+    "loginButton": "EN:Kirjaudu",
+    "logoutButton": "EN:Kirjaudu ulos"
+  },
+  "common": {
+    "increment": "Increment",
+    "confirmationDialog": {
+      "bodyText": "EN:Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä, vai poistua, jolloin syöttämäsi tiedot poistuvat.",
+      "cancelButton": "EN:Peruuta",
+      "exitButton": "EN:Poistu"
+    },
+    "languages": {
+      "fi": "Suomi",
+      "en": "English",
+      "sv": "Svenska"
+    },
+    "components": {
+      "multiselect": {
+        "toggle": "EN:Sulje ja avaa valikko",
+        "removeSelected": "EN:Poista valittu",
+        "clear": "EN:Tyhjennä kenttä"
+      }
+    }
+  },
+  "form": {
+    "validations": {
+      "default": "EN:Kentän arvo on virheellinen",
+      "defined": "EN:Kenttä on pakollinen",
+      "notType": "EN:Kentän tyyppi on virheellinen",
+      "typeOf": "EN:Kentän tyyppi on virheellinen",
+      "required": "EN:Kenttä on pakollinen",
+      "email": "EN:Sähköposti on virheellinen",
+      "stringMin": "EN:Kentän pituus oltava vähintään {{min}} merkkiä",
+      "stringMax": "EN:Kentän pituus oltava enintään {{max}} merkkiä",
+      "dateMin": "EN:Ensimmäinen mahdollinen päivä on {{min}}",
+      "dateMax": "EN:Viimeinen mahdollinen päivä on {{max}}"
+    }
+  },
+  "header": {
+    "HOME": "Home",
+    "MAP": "Map",
+    "PROJECTS": "Projects",
+    "FORM": "Form",
+    "hankeLink": "Luo uusi hanke"
+  },
+  "routes": {
+    "HOME": {
+      "path": "/",
+      "headerLabel": "EN::Alkuun",
+      "meta": {
+        "title": "EN::Haitaton Beta - Etusivu"
+      }
+    },
+    "PROJECTS": {
+      "path": "/projects",
+      "headerLabel": "EN::Hankelista",
+      "meta": {
+        "title": "EN::Haitaton Beta - Hankelista"
+      }
+    },
+    "MAP": {
+      "path": "/map",
+      "headerLabel": "EN::Kartta",
+      "meta": {
+        "title": "EN::Haitaton Beta - Kartta"
+      }
+    },
+    "NEW_HANKE": {
+      "path": "/hanke/new",
+      "headerLabel": "EN:Hanke",
+      "meta": {
+        "title": "EN:Haitaton Beta - Luo uusi hanke"
+      }
+    },
+    "EDIT_HANKE": {
+      "path": "/hanke/:hankeTunnus/edit",
+      "headerLabel": "EN:Hanke",
+      "meta": {
+        "title": "EN:Haitaton Beta - Hankkeen muokkaus"
+      }
+    },
+    "HAITATON_INFO": {
+      "path": "/info",
+      "headerLabel": "EN: Tietoja Haitattomasta",
+      "meta": {
+        "title": "EN: Haitaton Beta - Info"
+      }
+    },
+    "ACCESSIBILITY": {
+      "path": "/accessibility",
+      "headerLabel": "EN: Saavutettavuusseloste",
+      "meta": {
+        "title": "EN: Haitaton Beta - Saavutettavuus"
+      }
+    },
+    "PRIVACY_POLICY": {
+      "path": "/privacypolicy",
+      "headerLabel": "EN: Rekisteriseloste",
+      "meta": {
+        "title": "EN: Haitaton Beta - Rekisteriseloste"
+      }
+    },
+    "REFERENCES": {
+      "path": "/references",
+      "headerLabel": "EN: Lähdeviitteet",
+      "meta": {
+        "title": "EN: Haitaton Beta - Lähdeviitteet"
+      }
+    }
+  },
+  "hanke": {
+    "vaihe": {
+      "SUUNNITTELU": "EN:Suunnittelu",
+      "OHJELMOINTI": "EN:Ohjelmointi",
+      "RAKENTAMINEN": "EN:Rakentaminen"
+    },
+    "suunnitteluVaihe": {
+      "YLEIS_TAI_HANKE": "EN:Yleis- tai hankesuunnittelu",
+      "KATUSUUNNITTELU_TAI_ALUEVARAUS": "EN:Katusuunnittelu tai aluevarauksen suunnittelu",
+      "RAKENNUS_TAI_TOTEUTUS": "EN:Rakennus- tai toteutussuunnittelu",
+      "TYOMAAN_TAI_HANKKEEN_AIKAINEN": "EN:Työmaan tai hankkeen aikainen suunnittelu"
+    },
+    "tyomaaKoko": {
+      "SUPPEA_TAI_PISTE": "EN:Yksittäinen suppea kohde ja/tai pistemäinen työmaa",
+      "YLI_10M_TAI_KORTTELI": "EN:Työmaa-alueen pituus yli 10 m ja/tai korttelin mittainen työmaa",
+      "LAAJA_TAI_USEA_KORTTELI": "EN:Työmaa ulottuu kadun eri puolille ja/tai usean korttelin mittainen työmaa"
+    },
+    "tyomaaTyyppi": {
+      "VESI": "EN:Vesi",
+      "VIEMARI": "EN:Viemäri",
+      "SADEVESI": "EN:Sadevesi",
+      "SAHKO": "EN:Sähkö",
+      "TIETOLIIKENNE": "EN:Tietoliikenne",
+      "LIIKENNEVALO": "EN:Liikennevalo",
+      "YKT": "EN:YKT",
+      "ULKOVALAISTUS": "EN:Ulkovalaistus",
+      "KAAPPITYO": "EN:Kaappityö",
+      "KAUKOLAMPO": "EN:Kaukolämpö",
+      "KAUKOKYLMA": "EN:Kaukokylmä",
+      "KAASUJOHTO": "EN:Kaasujohto",
+      "KISKOTYO": "EN:Kiskotyö",
+      "MUU": "EN:Muu",
+      "KADUNRAKENNUS": "EN:Kadunrakennus",
+      "KADUN_KUNNOSSAPITO": "EN:Kadun kunnossapito",
+      "KIINTEISTOLIITTYMA": "EN:Kiinteistöliittymä",
+      "SULKU_TAI_KAIVO": "EN:Sulku tai kaivo",
+      "UUDISRAKENNUS": "EN:Uudisrakennus",
+      "SANEERAUS": "EN:Saneeraus",
+      "AKILLINEN_VIKAKORJAUS": "EN:Äkillinen vikakorjaus",
+      "VIHERTYO": "EN:Vihertyö",
+      "RUNKOLINJA": "EN:Runkolinja",
+      "NOSTOTYO": "EN:Nostotyö",
+      "MUUTTO": "EN:Muutto",
+      "PYSAKKITYO": "EN:Pysäkkityö",
+      "KIINTEISTOREMONTTI": "EN:Kiinteistöremontti",
+      "ULKOMAINOS": "EN:Ulkomainos",
+      "KUVAUKSET": "EN:Kuvaukset",
+      "LUMENPUDOTUS": "EN:Lumenpudotus",
+      "YLEISOTILAISUUS": "EN:Yleisötilaisuus",
+      "VAIHTOLAVA": "EN:Vaihtolava"
+    },
+    "kaistaHaitta": {
+      "YKSI": "EN:Ei vaikuta",
+      "KAKSI": "EN:Vähentää kaistan yhdellä ajosuunnalla",
+      "KOLME": "EN:Vähentää samanaikaisesti kaistan kahdella ajosuunnalla",
+      "NELJA": "EN:Vähentää samanaikaisesti useita kaistoja kahdella ajosuunnalla",
+      "VIISI": "EN:Vähentää samanaikaisesti useita kaistoja liittymän eri suunnilla"
+    },
+    "kaistaPituusHaitta": {
+      "YKSI": "EN:Ei vaikuta",
+      "KAKSI": "EN:Enintään 10 m",
+      "KOLME": "EN:11-100 m",
+      "NELJA": "EN:101-500 m",
+      "VIISI": "EN:Yli 500 m"
+    },
+    "meluHaitta": {
+      "YKSI": "EN:Satunnainen haitta",
+      "KAKSI": "EN:Lyhytaikainen toistuva haitta",
+      "KOLME": "EN:Pitkäkestoinen jatkuva haitta"
+    },
+    "polyHaitta": {
+      "YKSI": "EN:Satunnainen haitta",
+      "KAKSI": "EN:Lyhytaikainen toistuva haitta",
+      "KOLME": "EN:Pitkäkestoinen jatkuva haitta"
+    },
+    "tarinaHaitta": {
+      "YKSI": "EN:Satunnainen haitta",
+      "KAKSI": "EN:Lyhytaikainen toistuva haitta",
+      "KOLME": "EN:Pitkäkestoinen jatkuva haitta"
+    }
+  },
+  "hankeForm": {
+    "pageHeader": "EN:Hanke",
+    "editingDisabled": {
+      "STARTED": "EN:Käynnissä olevan hankkeen tietoja ei voi muokata.",
+      "INDEX_CALCULATED": "EN:Hankkeelle on laskettu indeksit, joten sen tietoja ei voi muokata."
+    },
+    "calculateIndexesButton": "EN:Laske indeksit",
+    "saveDraftButton": "EN:Tallenna luonnos",
+    "insertFieldError": "EN:Syötä kenttä",
+    "savingSuccessHeader": "EN:Luonnos tallennettu",
+    "savingSuccessText": "EN:Luonnos on tallennettu Hankelistalle",
+    "savingFailHeader": "EN:Joku meni vikaan",
+    "savingFailText": "EN:Luonnosta ei saatu tallennettua, koita uudelleen",
+    "indexCalculationSuccessHeader": "EN:Törmäystarkastelun laskenta onnistui",
+    "indexCalculationSuccessText": "EN:Törmäystarkastelun laskenta onnistui ja nyt voit katsoa tulokset",
+    "indexCalculationFailHeader": "EN:Törmäystarkastelun laskenta epäonnistui",
+    "indexCalculationFailText": "EN:Tuntematon virhe",
+    "closeAriaLabel": "EN:Poistu kaavakkeelta tallentamatta",
+    "calculateIndexDialogBody": "EN:Haitattoman Beta-versiossa hanketta ei voi muokata sen jälkeen kun sille on laskettu haittaindeksit. Ennen kuin lasket indeksit, kannattaa käydä katsomassa hankkeen tilannetta karttanäkymässä (ylävalikossa) ja tarvittaessa muokata hankkeen tietoja ennen indeksien laskentaa. Mikäli olet valmis indeksien laskentaan, voit laskea indeksit nyt, tai palata lomakkeelle ja muokata hankkeen tietoja. Hanke säilyy tallennuksen jälkeen hankelistalla ja karttanäkymässä.",
+    "confirmIndexCalculationButton": "EN:Jatka indeksilaskentaan",
+    "labels": {
+      "hankeTunnus": "EN:Hankkeen tunnus",
+      "nimi": "EN:Hankkeen nimi",
+      "vaihe": "EN:Hankkeen Vaihe",
+      "kuvaus": "EN:Hankkeen kuvaus",
+      "suunnitteluVaihe": "EN:Hankkeen suunnitteluvaihe",
+      "alkuPvm": "EN:Hankkeen alkupäivä",
+      "loppuPvm": "EN:Hankkeen loppupäivä",
+      "tyomaaTyyppi": "EN:Työmaan tyyppi",
+      "tyomaaKoko": "EN:Työmaan koko",
+      "haittaAlkuPvm": "EN:Haitan alkupäivämäärä",
+      "haittaLoppuPvm": "EN:Haitan loppupäivämäärä",
+      "kaistaHaitta": "EN:Kaistahaitta",
+      "kaistaPituusHaitta": "EN:Kaistan pituushaitta",
+      "meluHaitta": "EN:Meluhaitta",
+      "polyHaitta": "EN:Pölyhaitta",
+      "tarinaHaitta": "EN:Tärinähaitta",
+      "tyomaaKatuosoite": "EN:Katuosoite",
+      "onYKTHanke": "EN:Hanke on YKT-hanke",
+      "sukunimi": "EN:Sukunimi",
+      "etunimi": "EN:Etunimi",
+      "email": "EN:Sähköposti",
+      "puhelinnumero": "EN:Puhelinnumero",
+      "osasto": "EN:Osasto",
+      "organisaatio": "EN:Organisaatio",
+      "omaOrganisaatio": "EN:Lisää oma organisaatio",
+      "insertOmaOrganisaatio": "EN:Syötä oma organisaatio"
+    },
+    "headers": {
+      "arvioijat": "EN:Arvioijat",
+      "omistajat": "EN:Omistajat",
+      "toteuttajat": "EN:Toteuttajat"
+    },
+    "toolTips": {
+      "tipOpenLabel": "EN:Avaa ohje",
+      "nimi": "EN:Ohjeteksti",
+      "onYKTHanke": "EN:Ohjeteksti",
+      "alkuPvm": "EN:Ohjeteksti",
+      "loppuPvm": "EN:Ohjeteksti",
+      "vaihe": "EN:Ohjeteksti",
+      "kuvaus": "EN:Ohjeteksti",
+      "suunnitteluVaihe": "EN:Ohjeteksti"
+    },
+    "perustiedotForm": {
+      "header": "EN:Hankkeen perustiedot",
+      "ytkHankeHeader": "EN:YTK-hanke"
+    },
+    "hankkeenAlueForm": {
+      "header": "EN:Hankkeen alue",
+      "instructions": "EN: Piirtotyökalut löytyvät karttaikkunan vasemmasta alalaidasta. Kynätyökalulla voi piirtää monikulmaisia geometrioita klikkaamalla kohtaan, johon haluat kulman. Neliötyökalulla saat muodostettua neliömäisiä alueita klikkaamalla ensin kartalle ja liikuttamalla hiirtä haluamaasi suuntaan. Uudelleenklikkaus \"sulkee\" neliön piirron.  Voit piirtää samalle hankkeelle useita geometrioita.\nGeometriaa voi muokata \"tarttumalla\" geometrian reunasta ja vetämällä. Myös neliömäistä geometriaa voi muokata reunasta tarttumalla.\nJos haluat poistaa yksittäisen geometrian kartalta, aktivoi poisto klikkaamalla ja painamalla paina crtl-näppäintä (Windows) tai  alt-näppäintä (Mac) geometrian sisällä. Geometrian reunat tummenevat ja piirtovalikkoon tulee roskakorikuvake, jota painamalla geometria poistuu.\nHaitattoman Beta-versiossa hanketta ei voi muokata sen jälkeen kun sille on laskettu haittaindeksit. Geometrian piirtämisen jälkeen hanke näkyy karttanäkymässä, joten ennen kuin lasket indeksit, kannattaa käydä katsomassa hankkeen tilannetta kartalla (ylävalikossa) ja tarvittaessa muokata hankkeen tietoja ennen indeksien laskentaa."
+    },
+    "hankkeenYhteystiedotForm": {
+      "header": "EN:Hankkeen yhteystiedot"
+    },
+    "tyomaanTiedotForm": {
+      "header": "EN:Hankkeen lisätiedot"
+    },
+    "hankkeenHaitatForm": {
+      "header": "EN:Hankkeen haitat"
+    },
+    "finishedForm": {
+      "header": "EN:Lomake on lähetetty onnistuneesti"
+    }
+  },
+  "hankeSidebar": {
+    "ariaSidebarContent": "EN:Hankkeen tiedot",
+    "closeButtonAriaLabel": "EN:Sulje hankevalikko",
+    "editHanke": "EN: Muokkaa hankkeen tietoja"
+  },
+  "hankeIndexes": {
+    "liikennehaittaindeksi": "EN: Liikennehaittaindeksi",
+    "ruuhkautuminen": "EN: Ruuhkautuminen",
+    "pyorailynPaareitti": "EN: Pyöräilyn pääreitti",
+    "merkittavatJoukkoliikennereitit": "EN: Merkittävät joukkoliikennereitit",
+    "kiertoreittitarve": "EN: Kiertoreittitarve",
+    "KIERTOREITTITARPEET": {
+      "TODENNAKOINEN": "EN: todennäköinen",
+      "EI_TARVETTA": "EN: ei tarvetta",
+      "MERKITTAVA": "EN: merkittävä"
+    }
+  },
+  "hankeList": {
+    "pageHeader": "EN:Hankelista",
+    "paginationHeader": "EN:Sivu",
+    "tableHeader": {
+      "id": "EN:Tunnus",
+      "name": "EN:Nimi",
+      "step": "EN:Vaihe",
+      "startDate": "EN:Aloitus",
+      "endDate": "EN:Lopetus"
+    },
+    "sortButtons": {
+      "id": "EN:Lajittele taulukko tunnuksen mukaan",
+      "name": "EN:Lajittele taulukko nimen mukaan",
+      "step": "EN:Lajittele taulukko vaiheen mukaan",
+      "startDate": "EN:Lajittele taulukko aloitus päivämäärän mukaan",
+      "endDate": "EN:Lajittele taulukko lopetus päivämäärän mukaan"
+    },
+    "buttons": {
+      "edit": "EN:Muokkaa hanketta",
+      "delete": "EN:Poista hanke",
+      "toFirstPage": "EN:Listan ensimmäiselle sivulle",
+      "toPreviousPage": "EN:Listan edelliselle sivulle",
+      "toNextPage": "EN:Listan seuraavalle sivulle",
+      "toLastPage": "EN:Listan viimeiselle sivulle"
+    }
+  },
+  "map": {
+    "controls": {
+      "ariaLayerMenu": "EN:Kartan tasojen valinta"
+    },
+    "tileLayers": {
+      "ortokartta": "EN: Ortokartta",
+      "kantakartta": "EN: Kantakartta"
+    },
+    "dateRange": {
+      "begin": "EN: Ajanjakson alku",
+      "end": "EN: Ajanjakson loppu"
+    },
+    "guide": {
+      "indexColor": {
+        "RED": "EN:Kriittinen",
+        "YELLOW": "EN:Huomioitava",
+        "GREEN": "EN:Ei merkittävä",
+        "BLUE": "EN:Indeksoimaton"
+      }
+    },
+    "drawSquareButtonAria": "EN:Piirrä neliö kartalle",
+    "drawPolygonButtonAria": "EN:Piirrä monikulmio kartalle"
+  },
+  "staticPages": {
+    "info": {
+      "title": "EN: Tietoja haitattomasta",
+      "content": "EN: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+    },
+    "references": {
+      "title": "EN: Lähdeviitteet",
+      "content": "EN: Palvelu käyttää seuraavista lähteistä saatua aineistoa:",
+      "referenceData": {
+        "HEKAYL": { "title": "EN: Helsingin kaupungin yleisten alueiden rekisteri 2021" },
+        "HEKAKA": { "title": "EN: Helsingin kaupungin kaupunkimittauspalvelut 2021" },
+        "OPSTMA": { "title": "EN: OpenStreetMap contributors 2021" },
+        "HSL": { "title": "EN: HSL 2021" },
+        "MAMILA": { "title": "EN: Maanmittauslaitos 2021" },
+        "HEKAKATO": { "title": "EN: Helsingin kaupunki kaupunkiympäristön toimiala 2021" }
+      }
+    },
+    "accessibility": {
+      "title": "EN: Saavutettavuusseloste",
+      "content": "EN: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+    },
+    "privacyPolicy": {
+      "title": "EN: Rekisteriseloste",
+      "content": "EN: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+    }
+  }
+}

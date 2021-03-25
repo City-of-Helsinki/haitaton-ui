@@ -1,0 +1,23 @@
+.header {
+  &--active::after {
+    height: 0.313rem;
+    background-color: var(--color-summer);
+    bottom: 0;
+    content: '';
+    left: 0;
+    position: absolute;
+    width: 100%;
+  }
+
+  &__hankeLink {
+    background: var(--color-coat-of-arms);
+    padding: var(--spacing-2-xs) var(--spacing-s);
+    margin: var(--spacing-s) var(--spacing-s);
+    color: var(--color-white);
+    text-decoration: none;
+  }
+
+  div[class^='MenuButton-module_menuButton'] {
+    margin-top: 20px;
+  }
+}

@@ -3,17 +3,11 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom/extend-expect';
-import { server } from './mocks/server';
+import 'jest-localstorage-mock';
+import { GlobalWithFetchMock } from 'jest-fetch-mock';
 
-// Establish API mocking before all tests.
-beforeAll(() => {
-  // axios.defaults.adapter = require('axios/lib/adapters/http');
-  server.listen();
-});
+const customGlobal: GlobalWithFetchMock = (global as unknown) as GlobalWithFetchMock;
 
-// Reset any request handlers that we may add during the tests,
-// so they don't affect other tests.
-afterEach(() => server.resetHandlers());
+customGlobal.fetch = require('jest-fetch-mock');
 
-// Clean up after the tests are finished.
-afterAll(() => server.close());
+customGlobal.fetchMock = customGlobal.fetch;
