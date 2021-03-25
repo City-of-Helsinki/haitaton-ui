@@ -20,4 +20,8 @@
   div[class^='MenuButton-module_menuButton'] {
     margin-top: 20px;
   }
+
+  div[class^='NavigationActions-module_navigationActions'] a {
+    font-weight: 500;
+  }
 }

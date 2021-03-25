@@ -5,10 +5,10 @@
   }
 
   &__hankeLink {
-    background: var(--color-coat-of-arms);
-    padding: var(--spacing-s) var(--spacing-m);
-    margin: var(--spacing-s) 0 var(--spacing-s) var(--spacing-s);
-    color: var(--color-white);
+    background: var(--color-coat-of-arms) !important;
+    padding: var(--spacing-s) var(--spacing-m) !important;
+    margin: var(--spacing-s) 0 var(--spacing-s) var(--spacing-s) !important;
+    color: var(--color-white) !important;
     text-decoration: none;
   }
 
