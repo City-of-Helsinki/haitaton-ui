@@ -1,6 +1,9 @@
-name: CI
+name: ui-dev
 
-on: [push]
+on:
+  push:
+    branches:
+      - dev
 
 jobs:
   build:
@@ -64,7 +67,6 @@ jobs:
     name: Push Docker image to GitHub Packages
     needs: [build, e2e]
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/dev' }}
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
