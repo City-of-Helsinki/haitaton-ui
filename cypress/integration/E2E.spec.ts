@@ -1,18 +1,17 @@
 /// <reference types="cypress" />
-import { HankeIndexData, HANKE_INDEX_TYPE } from './../../src/domain/types/hanke';
 import {
+  HankeIndexData,
+  HANKE_INDEX_TYPE,
   HANKE_KAISTAHAITTA,
   HANKE_KAISTAPITUUSHAITTA,
   HANKE_MELUHAITTA,
   HANKE_POLYHAITTA,
   HANKE_TARINAHAITTA,
-} from './../../src/domain/types/hanke';
-import { createHankeFromUI } from './../utils/formFiller';
-import {
   HANKE_VAIHE,
   HankeDataDraft,
   HANKE_SUUNNITTELUVAIHE,
-} from './../../src/domain/types/hanke';
+} from '../../src/domain/types/hanke';
+import { createHankeFromUI } from '../utils/formFiller';
 import { validateIndexes } from '../utils/indexValidator';
 
 // TODO: define types that would not require unnecessary types

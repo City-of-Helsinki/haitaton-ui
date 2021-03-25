@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { HankeIndexData } from './../../src/domain/types/hanke';
+import { HankeIndexData } from '../../src/domain/types/hanke';
 
 export const validateIndexes = (hankeIndexData: Partial<HankeIndexData>) => {
   if (hankeIndexData.liikennehaittaIndeksi && hankeIndexData.liikennehaittaIndeksi.indeksi) {

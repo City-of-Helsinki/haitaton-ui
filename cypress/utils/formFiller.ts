@@ -11,15 +11,12 @@ import {
   HANKE_POLYHAITTA_KEY,
   HANKE_TARINAHAITTA,
   HANKE_TARINAHAITTA_KEY,
-} from './../../src/domain/types/hanke';
-
-import {
   HANKE_VAIHE,
   HankeDataDraft,
   HANKE_SUUNNITTELUVAIHE,
   HANKE_VAIHE_KEY,
   HANKE_SUUNNITTELUVAIHE_KEY,
-} from './../../src/domain/types/hanke';
+} from '../../src/domain/types/hanke';
 
 export const selectHankeVaihe = (
   vaihe: HANKE_VAIHE_KEY,
@@ -210,13 +207,17 @@ export const selectTarinaHaitta = (tarinaHaitta: HANKE_TARINAHAITTA_KEY) => {
 };
 
 export const fillForm4 = (hankeData: HankeDataDraft) => {
-  typeof hankeData.haittaAlkuPvm === 'string'
-    ? cy.get('#haittaAlkuPvm').type(hankeData.haittaAlkuPvm)
-    : cy.get('#haittaAlkuPvm').type(hankeData.alkuPvm);
+  if (typeof hankeData.haittaAlkuPvm === 'string') {
+    cy.get('#haittaAlkuPvm').type(hankeData.haittaAlkuPvm);
+  } else {
+    cy.get('#haittaAlkuPvm').type(hankeData.alkuPvm);
+  }
 
-  typeof hankeData.haittaLoppuPvm === 'string'
-    ? cy.get('#haittaLoppuPvm').type(hankeData.haittaLoppuPvm)
-    : cy.get('#haittaLoppuPvm').type(hankeData.loppuPvm);
+  if (typeof hankeData.haittaLoppuPvm === 'string') {
+    cy.get('#haittaLoppuPvm').type(hankeData.haittaLoppuPvm);
+  } else {
+    cy.get('#haittaLoppuPvm').type(hankeData.loppuPvm);
+  }
 
   cy.get('[data-testid=form4Header]').click(); // Close datepicker because it is over kaistaHaitta-toggle-button
 
