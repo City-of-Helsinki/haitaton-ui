@@ -99,7 +99,7 @@ describe('HankeForm', () => {
     });
 
     getByTestId('forward').click(); // changes view to form3
-    await waitFor(() => queryAllByText('Työmaan tiedot')[1]);
+    await waitFor(() => queryAllByText('Hankkeen lisätiedot')[1]);
 
     getByTestId('backward').click(); // changes view to form2
     await waitFor(() => queryAllByText('Hankkeen yhteystiedot')[1]);
