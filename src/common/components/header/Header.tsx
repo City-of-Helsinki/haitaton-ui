@@ -39,7 +39,7 @@ const Header: React.FC = () => {
           <NavLink
             to="/logout"
             activeClassName="header--active"
-            data-testid="loginLink"
+            data-testid="logoutLink"
             onClick={(e) => {
               e.preventDefault();
               authService.logout();
