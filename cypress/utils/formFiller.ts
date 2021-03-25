@@ -244,7 +244,6 @@ export const fillForm4 = (hankeData: HankeDataDraft) => {
 
 export const triggerIndexCount = () => {
   cy.intercept('/api/hankkeet/*/tormaystarkastelu').as('tormaystarkastelu');
-  // TODO: count indexes implementation here
   cy.get('[data-testid=submitButton]').click();
   cy.get('[data-testid=confirmationDialog]').should('be.visible');
   cy.get('[data-testid=indexConfirmationOK]').click();

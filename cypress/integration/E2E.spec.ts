@@ -14,7 +14,6 @@ import {
 import { createHankeFromUI } from '../utils/formFiller';
 import { validateIndexes } from '../utils/indexValidator';
 
-// TODO: define types that would not require unnecessary types
 const hankeMock: HankeDataDraft = {
   id: 0, // not used but types require it
   hankeTunnus: 'not used', // not used but types require it
