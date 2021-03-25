@@ -13,20 +13,19 @@ const NotificationComp: React.FC<Props> = ({
   testId = 'notification',
   children,
 }) => (
-  <div data-testid={testId}>
-    <Notification
-      label={label}
-      position="top-right"
-      dismissible
-      autoClose
-      autoCloseDuration={3000}
-      closeButtonLabelText="Close toast"
-      type={typeProps}
-      style={{ zIndex: 100 }}
-    >
-      {children}
-    </Notification>
-  </div>
+  <Notification
+    label={label}
+    position="top-right"
+    dismissible
+    autoClose
+    autoCloseDuration={3000}
+    closeButtonLabelText="Close toast"
+    type={typeProps}
+    style={{ zIndex: 100 }}
+    dataTestId={testId}
+  >
+    {children}
+  </Notification>
 );
 
 export default NotificationComp;

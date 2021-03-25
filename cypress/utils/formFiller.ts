@@ -104,7 +104,7 @@ export const fillForm2 = (hankeData: HankeDataDraft) => {
 };
 
 export const fillForm3 = (hankeData: HankeDataDraft) => {
-  if ('tyomaaKatuosoite' in hankeData && typeof hankeData.tyomaaKatuosoite === 'string') {
+  if (hankeData.tyomaaKatuosoite) {
     cy.get('input[data-testid=tyomaaKatuosoite]').type(hankeData.tyomaaKatuosoite);
   }
 };
@@ -207,13 +207,13 @@ export const selectTarinaHaitta = (tarinaHaitta: HANKE_TARINAHAITTA_KEY) => {
 };
 
 export const fillForm4 = (hankeData: HankeDataDraft) => {
-  if (typeof hankeData.haittaAlkuPvm === 'string') {
+  if (hankeData.haittaAlkuPvm) {
     cy.get('#haittaAlkuPvm').type(hankeData.haittaAlkuPvm);
   } else {
     cy.get('#haittaAlkuPvm').type(hankeData.alkuPvm);
   }
 
-  if (typeof hankeData.haittaLoppuPvm === 'string') {
+  if (hankeData.haittaLoppuPvm) {
     cy.get('#haittaLoppuPvm').type(hankeData.haittaLoppuPvm);
   } else {
     cy.get('#haittaLoppuPvm').type(hankeData.loppuPvm);
@@ -221,23 +221,23 @@ export const fillForm4 = (hankeData: HankeDataDraft) => {
 
   cy.get('[data-testid=form4Header]').click(); // Close datepicker because it is over kaistaHaitta-toggle-button
 
-  if (typeof hankeData.kaistaHaitta === 'string') {
+  if (hankeData.kaistaHaitta) {
     selectKaistaHaitta(hankeData.kaistaHaitta);
   }
 
-  if (typeof hankeData.kaistaPituusHaitta === 'string') {
+  if (hankeData.kaistaPituusHaitta) {
     selectKaistanPituusHaitta(hankeData.kaistaPituusHaitta);
   }
 
-  if (typeof hankeData.meluHaitta === 'string') {
+  if (hankeData.meluHaitta) {
     selectMeluHaitta(hankeData.meluHaitta);
   }
 
-  if (typeof hankeData.polyHaitta === 'string') {
+  if (hankeData.polyHaitta) {
     selectPolyHaitta(hankeData.polyHaitta);
   }
 
-  if (typeof hankeData.tarinaHaitta === 'string') {
+  if (hankeData.tarinaHaitta) {
     selectTarinaHaitta(hankeData.tarinaHaitta);
   }
 };
