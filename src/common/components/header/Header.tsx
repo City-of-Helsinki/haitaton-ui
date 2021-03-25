@@ -30,23 +30,6 @@ const Header: React.FC = () => {
         <NavLink to={PROJECTS.path} activeClassName="header--active" data-testid="hankeListLink">
           {PROJECTS.label}
         </NavLink>
-        {isAuthenticated ? (
-          <NavLink
-            to="/logout"
-            activeClassName="header--active"
-            data-testid="logoutLink"
-            onClick={(e) => {
-              e.preventDefault();
-              authService.logout();
-            }}
-          >
-            {t('authentication:logoutButton')}
-          </NavLink>
-        ) : (
-          <NavLink to="/login" activeClassName="header--active" data-testid="loginLink">
-            {t('authentication:loginButton')}
-          </NavLink>
-        )}
         <NavLink to={NEW_HANKE.path} className="header__hankeLink" data-testid="hankeLink">
           <Locale id="header:hankeLink" />
         </NavLink>
