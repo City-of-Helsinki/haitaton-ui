@@ -1,27 +1,17 @@
-# Description
 
-Please include definition of what was done.
+# Haitaton-ui pull-request
 
-### Jira Issue:
+Kyseessä on
 
-## Type of change
+- [ ] Bugikorjaus
+- [ ] Uusi toiminnallisuus (ei muuta olemassaolevaa toteutusta)
+- [ ] Uusi toiminnallisuus (muuttaa jo olemassaolevaa toteutusta)
 
-- [ ] Bug fix
-- [ ] New feature
-- [ ] Other
+## Kuvaus mitä pull-request toteuttaa / korjaa
 
-# Instructions for testing
+## Checklist:
 
-Please describe tests how this change or new feature can be tested.
+- [ ] Muuttujat ovat kuvaavasti nimettyjä eikä koodi sisällä kirjoitusvirheitä
+- [ ] Muutokseni eivät aiheuta uusia virheitä consoleen
+- [ ] Olen toteuttanut Jest-testit toiminnallisuuden testaukseen
 
-# Checklist:
-
-- [ ] I have written new tests (if applicable)
-- [ ] I have ran the tests myself (if applicable)
-- [ ] I have made necessary changes to the documentation, link to confluence
-      or other location:
-
-# Other relevant info
-
-Please describe here if there is e.g. some requirements for this change or
-other info that the tester/user needs to know.
