@@ -25,7 +25,7 @@ const ConfirmationDialog: React.FC<Props> = ({ body, children, isOpen, handleClo
   return (
     <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={handleClose} isCentered>
       <AlertDialogOverlay />
-      <AlertDialogContent>
+      <AlertDialogContent data-testid="confirmationDialog">
         <AlertDialogCloseButton />
         <AlertDialogBody>{body}</AlertDialogBody>
         <AlertDialogFooter>
