@@ -60,7 +60,7 @@ const hankeMockIndex: Partial<HankeIndexData> = {
     indeksi: 4.8,
     tyyppi: HANKE_INDEX_TYPE.PERUSINDEKSI,
   },
-  pyorailyIndeksi: 1,
+  pyorailyIndeksi: 3,
   joukkoliikenneIndeksi: 4,
   perusIndeksi: 4.8,
 };
