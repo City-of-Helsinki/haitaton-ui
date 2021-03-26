@@ -60,6 +60,11 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
             invalid={!!errors[FORMFIELD.KAISTAHAITTA]}
             errorMsg={t('hankeForm:insertFieldError')}
             required
+            tooltip={{
+              tooltipText: t(`hankeForm:toolTips:${FORMFIELD.KAISTAHAITTA}`),
+              tooltipButtonLabel: t(`hankeForm:toolTips:tipOpenLabel`),
+              placement: 'auto',
+            }}
           />
         </div>
 

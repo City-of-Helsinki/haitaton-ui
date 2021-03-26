@@ -3,18 +3,19 @@
 
   .topWpr {
     display: flex;
+    justify-content: space-between;
   }
 
   .react-datepicker-wrapper {
     width: 100%;
   }
 
-  svg {
+  .bottomWpr svg {
     width: 30px;
     height: 30px;
     display: inline-block;
     position: absolute;
-    top: 2.5rem;
+    top: 2.7rem;
     right: 0.8rem;
     background: var(--color-white);
     pointer-events: none;
