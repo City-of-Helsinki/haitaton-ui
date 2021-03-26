@@ -13,7 +13,7 @@ const MapGuide = () => {
   return (
     <div className={styles.mapGuide}>
       {$enum(LIIKENNEHAITTA_STATUS).map((status) => (
-        <div>
+        <div key={status}>
           <span
             className={styles.mapGuide__colorBox}
             style={{
