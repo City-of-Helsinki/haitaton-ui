@@ -71,6 +71,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
           defaultValue={formData[FORMFIELD.KUVAUS] || ''}
           invalid={!!errors[FORMFIELD.KUVAUS]}
           ref={register()}
+          tooltipLabel={t(`hankeForm:toolTips:tipOpenLabel`)}
           tooltipText={t(`hankeForm:toolTips:${FORMFIELD.KUVAUS}`)}
           data-testid={FORMFIELD.KUVAUS}
           required
