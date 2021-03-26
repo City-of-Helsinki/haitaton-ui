@@ -10,11 +10,11 @@
   }
 
   &__hankeLink {
-    background: var(--color-coat-of-arms);
-    padding: var(--spacing-2-xs) var(--spacing-s);
-    margin: var(--spacing-s) var(--spacing-s);
-    color: var(--color-white);
-    text-decoration: none;
+    background: var(--color-coat-of-arms) !important;
+    padding: var(--spacing-2-xs) var(--spacing-s) !important;
+    margin: var(--spacing-s) var(--spacing-s) !important;
+    color: var(--color-white) !important;
+    text-decoration: none !important;
   }
 
   div[class^='MenuButton-module_menuButton'] {
