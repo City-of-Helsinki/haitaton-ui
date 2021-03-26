@@ -4,7 +4,7 @@
     "target": "es5",
     "lib": ["es5", "dom"],
     "isolatedModules": false,
-    "types": ["cypress", "cypress-axe", "cypress-localstorage-commands", "GeoJSON"]
+    "types": ["cypress", "cypress-axe", "cypress-localstorage-commands"]
   },
   "include": ["**/*.ts"]
 }

@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+/// <reference types="GeoJSON" />
 
 // https://github.com/cypress-io/cypress/issues/1065
 declare namespace Cypress {
