@@ -44,7 +44,7 @@ jobs:
           repository: City-of-Helsinki/haitaton-ui
           path: ./haitaton-ui
       - name: Run Docker Compose
-        run: docker-compose --env-file .env.local -f haitaton-backend/docker-compose.yml up -d
+        run: docker-compose --env-file .env.local -f haitaton-backend/docker-compose-e2e.yml up -d
       - name: Wait until auth-service is up
         uses: nev7n/wait_for_response@v1
         with:
