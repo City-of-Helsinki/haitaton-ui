@@ -18,7 +18,37 @@ const InfoPage: React.FC = () => {
       </Text>
 
       <HdsContainer style={{ padding: '2rem', backgroundColor: 'white' }}>
-        <p>{t('staticPages:info:content')}</p>
+        <Text tag="p" spacing="s">
+          Arviointi perustuu yksittäiselle hankegeometrialle tehtävään kolmen eri alaindeksin
+          kriittisyyden määrittämiseen:
+        </Text>
+
+        <ol>
+          <li>
+            Pyöräilyindeksin osalta tunnistetaan pääpyöräilyverkon ja pyöräilyn priorisoitujen
+            reittien olemassaolo;
+          </li>
+          <li>
+            Joukkoliikenneindeksin osalta tunnistetaan raitiotielinjat ja merkittävimmät
+            bussireitit;
+          </li>
+          <li>
+            Perusindeksiin lasketaan hankkeen keston, autoliikennemäärän, liikenteellisen
+            katuluokituksen sekä käyttäjän karkeasti arvioimien kaistavaikutusten pohjalta
+            autoliikenteen merkittävyys (ruuhkautumisherkkyys).
+          </li>
+        </ol>
+
+        <Text tag="p" spacing="s">
+          Suurin alaindeksiluku määrittää koko hankkeen indeksiluvun eli hankkeen kriittisyyden.
+          Yksittäisten hankkeiden liikenneverkollisia yhteisvaikutuksia arvioidaan karttanäkymän
+          avulla. Kartalla yksittäiset hankkeet on rasteroitu niiden saaman indeksiarvon mukaan,
+          mutta kaikkien alaindeksien tuloksia voi myös tarkastella hankekohtaisesti.
+          Kartta-arvioinnin pohjalta käyttäjä voi arvioida eri hankkeiden aikatauluja ja
+          yhteensovitustarpeita erityisesti liikenneverkon osalta, mutta myös muita vaikutuksia
+          hankkeiden ympäristössä. Haitattoman kehitystoiveita voi laittaa osoitteeseen:
+          haitaton(at)hel.fi
+        </Text>
       </HdsContainer>
     </Container>
   );

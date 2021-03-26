@@ -18,7 +18,14 @@ const PrivacyPolicyPage: React.FC = () => {
       </Text>
 
       <HdsContainer style={{ padding: '2rem', backgroundColor: 'white' }}>
-        <p>{t('staticPages:privacyPolicy:content')}</p>
+        <a
+          href="https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Kymp/Alueiden käytön lupa- ja vuokrausasioiden asiakasrekisteri.pdf"
+          target="_blank"
+          rel="noreferrer"
+          style={{ color: 'var(--color-coat-of-arms)' }}
+        >
+          Avaa rekisteriseloste tästä
+        </a>
       </HdsContainer>
     </Container>
   );
