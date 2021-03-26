@@ -5,6 +5,7 @@ import PageMeta from '../components/PageMeta';
 import { useLocalizedRoutes } from '../../common/hooks/useLocalizedRoutes';
 import Container from '../../common/components/container/Container';
 import Text from '../../common/components/text/Text';
+import styles from './StaticContent.module.scss';
 
 const InfoPage: React.FC = () => {
   const { HAITATON_INFO } = useLocalizedRoutes();
@@ -23,7 +24,7 @@ const InfoPage: React.FC = () => {
           kriittisyyden määrittämiseen:
         </Text>
 
-        <ol>
+        <ol className={styles.orderedList}>
           <li>
             Pyöräilyindeksin osalta tunnistetaan pääpyöräilyverkon ja pyöräilyn priorisoitujen
             reittien olemassaolo;
