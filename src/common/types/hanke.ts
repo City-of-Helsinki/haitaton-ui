@@ -1,3 +1,5 @@
+import GeoJSON from 'geojson';
+
 export interface HankeGeoJSONProperties {
   hankeTunnus: string;
 }
