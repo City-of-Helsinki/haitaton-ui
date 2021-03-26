@@ -7,6 +7,9 @@ declare namespace Cypress {
     foo: string;
   }
 
+  // eslint-disable-next-line
+  export type GeoJSON = any;
+
   export interface Chainable {
     window(options?: Partial<Loggable & Timeoutable>): Chainable<CustomWindow>;
 

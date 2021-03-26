@@ -16,6 +16,7 @@ const ReferencesPage: React.FC = () => {
       <PageMeta routeData={HAITATON_INFO} />
       <Text tag="h1" styleAs="h2" spacing="s" weight="bold">
         {t('staticPages:references:title')}
+        Foo
       </Text>
       <HdsContainer style={{ padding: '2rem', backgroundColor: 'white' }}>
         <p>{t('staticPages:references:content')}</p>
