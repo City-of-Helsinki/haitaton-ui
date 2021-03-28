@@ -19,7 +19,8 @@ const HankeListContainer: React.FC = () => {
     });
   }
 
-  return data ? <HankeListComponent projectsData={data} /> : null;
+  // Add header to fix Axe "page-has-heading-one"-error
+  return data ? <HankeListComponent projectsData={data} /> : <h1>Ladataan</h1>;
 };
 
 export default HankeListContainer;

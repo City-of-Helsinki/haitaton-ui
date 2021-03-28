@@ -1,17 +1,11 @@
 /// <reference types="cypress" />
 
-cy.configureAxe({
-  rules: {
-    'color-contrast': {
-      enabled: false,
-    },
-  },
-  exclude: [['footer']],
-});
-
 context('Accessibility', () => {
   beforeEach(() => {
     cy.login();
+    cy.configureAxe({
+      exclude: [['footer']], // False positives on footer color contrast
+    });
     cy.injectAxe();
   });
 
@@ -25,7 +19,7 @@ context('Accessibility', () => {
     cy.checkA11y();
   });
 
-  it('Hankemap should be accessible', () => {
+  it('Hankeform should be accessible', () => {
     cy.visit('/fi/hanke/uusi');
     cy.checkA11y();
   });
