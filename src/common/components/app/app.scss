@@ -45,3 +45,14 @@ body {
   width: 100%;
   overflow: hidden;
 }
+
+// HDS footer custom theme did not worked
+footer {
+  --footer-background: var(--color-summer) !important;
+  --footer-divider-color: var(--color-summer) !important;
+
+  section {
+    padding-top: var(--spacing-s) !important;
+    padding-bottom: var(--spacing-s) !important;
+  }
+}
