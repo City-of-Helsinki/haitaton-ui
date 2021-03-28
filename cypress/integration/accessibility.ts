@@ -3,10 +3,10 @@
 context('Accessibility', () => {
   beforeEach(() => {
     cy.login();
+    cy.injectAxe();
     cy.configureAxe({
       exclude: [['footer']], // False positives on footer color contrast
     });
-    cy.injectAxe();
   });
 
   it('Hankelist should be accessible', () => {
