@@ -9,19 +9,11 @@ const HaitatonFooter: React.FC = () => {
 
   return (
     <Footer title="Haitaton Beta" className={styles.footer}>
-      <Footer.Navigation variant="minimal">
-        <Footer.Item>
-          <Link to={HAITATON_INFO.path}>{HAITATON_INFO.label}</Link>
-        </Footer.Item>
-        <Footer.Item>
-          <Link to={ACCESSIBILITY.path}>{ACCESSIBILITY.label}</Link>
-        </Footer.Item>
-        <Footer.Item>
-          <Link to={PRIVACY_POLICY.path}>{PRIVACY_POLICY.label}</Link>
-        </Footer.Item>
-        <Footer.Item>
-          <Link to={REFERENCES.path}>{REFERENCES.label}</Link>
-        </Footer.Item>
+      <Footer.Navigation variant="minimal" navigationAriaLabel="Haitaton tietosivut">
+        <Footer.Item as={Link} to={HAITATON_INFO.path} label={HAITATON_INFO.label} />
+        <Footer.Item as={Link} to={ACCESSIBILITY.path} label={ACCESSIBILITY.label} />
+        <Footer.Item as={Link} to={PRIVACY_POLICY.path} label={PRIVACY_POLICY.label} />
+        <Footer.Item as={Link} to={REFERENCES.path} label={REFERENCES.label} />
       </Footer.Navigation>
       <Footer.Base copyrightHolder="Copyright" copyrightText="All rights reserved" />
     </Footer>

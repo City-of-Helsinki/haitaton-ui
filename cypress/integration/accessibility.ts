@@ -1,5 +1,14 @@
 /// <reference types="cypress" />
 
+cy.configureAxe({
+  rules: {
+    'color-contrast': {
+      enabled: false,
+    },
+  },
+  exclude: [['footer']],
+});
+
 context('Accessibility', () => {
   beforeEach(() => {
     cy.login();
