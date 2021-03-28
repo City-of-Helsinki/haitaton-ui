@@ -19,7 +19,15 @@ const Form3: React.FC<FormProps> = ({ formData, control, errors }) => {
       </Text>
       <div className="dataWpr">
         <div className="formWpr">
-          <TextInput required name={FORMFIELD.KATUOSOITE} />
+          <TextInput
+            required
+            name={FORMFIELD.KATUOSOITE}
+            tooltip={{
+              tooltipText: t(`hankeForm:toolTips:${FORMFIELD.KATUOSOITE}`),
+              tooltipButtonLabel: t(`hankeForm:toolTips:tipOpenLabel`),
+              placement: 'auto',
+            }}
+          />
         </div>
         <div className="formWpr">
           <DropdownMultiselect
@@ -34,6 +42,11 @@ const Form3: React.FC<FormProps> = ({ formData, control, errors }) => {
             label={t(`hankeForm:labels:${FORMFIELD.TYOMAATYYPPI}`)}
             invalid={!!errors[FORMFIELD.TYOMAATYYPPI]}
             errorMsg={t('hankeForm:insertFieldError')}
+            tooltip={{
+              tooltipText: t(`hankeForm:toolTips:${FORMFIELD.TYOMAATYYPPI}`),
+              tooltipButtonLabel: t(`hankeForm:toolTips:tipOpenLabel`),
+              placement: 'auto',
+            }}
           />
         </div>
         <div className="formWpr">

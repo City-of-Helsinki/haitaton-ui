@@ -248,13 +248,20 @@
     },
     "toolTips": {
       "tipOpenLabel": "EN:Avaa ohje",
-      "nimi": "EN:Ohjeteksti",
-      "onYKTHanke": "EN:Ohjeteksti",
-      "alkuPvm": "EN:Ohjeteksti",
-      "loppuPvm": "EN:Ohjeteksti",
-      "vaihe": "EN:Ohjeteksti",
-      "kuvaus": "EN:Ohjeteksti",
-      "suunnitteluVaihe": "EN:Ohjeteksti"
+      "perustiedot": "EN:Hankkeen pakolliset perustiedot tulee täyttää. Mikäli kaikki pakolliset tiedot eivät ole täytettynä, uusi hanke tallentuu Haitattomaan, muttei voi edetä vaikutusten arviointiin. Hankkeen tietojen täydentämistä voi jatkaa myöhemmin avaamalla se hankelistan kautta",
+      "nimi": "EN:Hanketta tiiviisti kuvaava nimi",
+      "onYKTHanke": "EN:Yhteinen kunnallistekninen työmaa – yhteistoimintasopimuksen mukainen yhteishanke. Osapuolia ovat Helsingin kaupungin kaupunkiympäristön toimialan lisäksi Helsingin kaupungin liikenne -liikelaitos (HKL), Helsingin seudun ympäristöpalvelut -kuntayhtymä HSY,  Helen Oy, Helen Sähköverkko Oy, Auris Kaasunjakelu Oy sekä viestintäverkko operaattorit Cinia Oy, DNA Oyj, Elisa Oyj ja Telia Finland Oyj. YKT -yhteistoiminnalla pyritään sujuvoittamaan kaupungissa tapahtuvaa yleisten alueiden rakentamista ja sovittamaan sopijaosapuolten erillishankkeet yhteisesti toteutettaviksi, infrapalvelujen laatua ja tarjontaa parantaviksi hankkeiksi.",
+      "alkuPvm": "EN:Hankkeen toteutuksen aloituspäivä (Huom! Yleisellä alueella tapahtuva toteutus, ei esimerkiksi tontin puolella tapahtuva toteutus)",
+      "loppuPvm": "EN:Hankkeen toteutuksen lopetuspäivä (Huom! Yleisellä alueella tapahtuva toteutus, ei esimerkiksi tontin puolella tapahtuva toteutus)",
+      "vaihe": "EN:Hankkeen etenemisen tilan kuvaus, jota päivitetään hankkeen edetessä. Ohjelmointivaihe on alustava hankesuunnittelu- tai esisuunnitteluvaihe. Suunnitteluvaiheessa on alavaiheita suunnittelutason tarkkuuden mukaan. Luvanhakuprosessin kannalta hanke on suunnitteluvaiheessa niin kauan, kunnes se saa toteutusluvan kaupungilta. Rakentamisvaiheessa hanke on saanut luvan kaupungilta. Haitaton Beta ei käsittele luvanhaun, rakentamisvaiheen tai hankkeen valmistumisen/ylläpidon/luovutuksen vaiheita.",
+      "kuvaus": "EN:Hankkeen keskeisen sisällön ja tavoitteiden kuvaus. (Huom! Yleisellä alueella tapahtuva toteutus, ei esimerkiksi tontin puolella tapahtuva toteutus)",
+      "suunnitteluVaihe": "EN:Suunnitteluvaihetta tarkentava alavaihe, jota päivitetään hankkeen edetessä.",
+      "omistajat": "EN:Hankkeen omistaja vastaa koko hankkeesta sen alusta aina loppumiseen / valmistumiseen / luovutukseen asti.",
+      "arvioijat": "EN:Hankkeen analysoija tai arvioija voi olla hankkeen omistaja tai omistajan valtuuttama muu taho (esimerkiksi omistajatahon ulkopuolinen hankkeen suunnittelijakonsultti tai urakoitsija).",
+      "toteuttajat": "EN:Hankkeen toteutuksesta vastaava voi olla hankkeen omistaja tai omistajan valtuuttama muu taho (esimerkiksi omistajatahon ulkopuolinen urakoitsija).",
+      "tyomaaKatuosoite": "EN:Hankkeen katuosoite/katuosoitteet sekä numero tai numeroväli (esim. Mannerheimintie 5, Hämeentie 3-27) tai muu paikallistava tieto, mikäli katuosoitetta ei ole saatavilla.",
+      "tyomaaTyyppi": "EN:Hankkeen tyypin monivalinta. Hanke voi koostua useista eri hanketyypeistä, eli voit valita useita hanketyyppejä.",
+      "kaistaHaitta": "EN:Todennäköinen haitta pääajoratojen kaistajärjestelyihin"
     },
     "perustiedotForm": {
       "header": "EN:Hankkeen perustiedot",

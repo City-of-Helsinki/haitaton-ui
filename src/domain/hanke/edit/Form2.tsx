@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import { useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
 import { useTypedController } from '@hookform/strictly-typed';
-import { TextInput } from 'hds-react';
+import { TextInput, Tooltip } from 'hds-react';
 import { CONTACT_FORMFIELD, FormProps, HankeDataFormState, Organization } from './types';
 import { HANKE_CONTACT_TYPE, HankeContactKey } from '../../types/hanke';
 import api from '../../api/api';
@@ -62,13 +62,15 @@ const Form2: React.FC<FormProps> = ({ control, formData, errors, register }) => 
         <div key={contactType}>
           <Text tag="h3" spacing="s" weight="bold">
             {t(`hankeForm:headers:${contactType}`)}
+            <Tooltip tooltipLabel={t(`hankeForm:toolTips:tipOpenLabel`)}>
+              {t(`hankeForm:toolTips:${contactType}`)}
+            </Tooltip>
           </Text>
 
           <div className="formColumns">
             {CONTACT_FIELDS.map((contactField) => {
               const contactData = formData[contactType][contactIndex];
               const asteriskIfRequired = isRequired(contactType, contactField) ? ' *' : '';
-
               return (
                 <React.Fragment key={contactField}>
                   <TypedController
