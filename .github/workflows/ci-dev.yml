@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev
+      - 'HAI-**'
 
 jobs:
   build:
