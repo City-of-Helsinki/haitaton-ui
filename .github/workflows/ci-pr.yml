@@ -1,0 +1,64 @@
+name: ui-pr
+
+on:
+  push:
+    branches:
+      - 'HAI-**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - run: yarn --frozen-lockfile
+      - run: yarn lint
+      - run: yarn test
+      - run: yarn build
+      - run: yarn type-check
+      - name: Tar build files
+        run: tar -cvf build.tar build
+      - name: Upload application build files for Docker build job
+        uses: actions/upload-artifact@v2
+        with:
+          name: haitaton-ui-build
+          path: build.tar
+          retention-days: 1
+  e2e:
+    name: E2E tests
+    needs: build
+    runs-on: ubuntu-16.04
+    steps:
+      - name: Checkout backend
+        uses: actions/checkout@v2
+        with:
+          repository: City-of-Helsinki/haitaton-backend
+          ref: dev
+          path: ./haitaton-backend
+      - name: Checkout frontend
+        uses: actions/checkout@v2
+        with:
+          repository: City-of-Helsinki/haitaton-ui
+          path: ./haitaton-ui
+      - name: Run Docker Compose
+        run: docker-compose --env-file .env.local -f haitaton-backend/docker-compose-e2e.yml up -d
+      - name: Wait until auth-service is up
+        uses: nev7n/wait_for_response@v1
+        with:
+          url: 'http://localhost:3030/'
+          responseCode: 200
+          timeout: 300000
+          interval: 500
+      - name: Change haitaton-ui owner
+        run: sudo chown -R $USER ./haitaton-ui
+      - name: Change node_modules owner
+        working-directory: ./haitaton-ui
+        run: sudo chown -R $USER ./node_modules
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: haitaton-ui
+          wait-on: 'http://localhost:3001'
