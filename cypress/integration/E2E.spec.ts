@@ -11,6 +11,8 @@ import {
   HankeDataDraft,
   HANKE_SUUNNITTELUVAIHE,
 } from '../../src/domain/types/hanke';
+// import { createHankeFromUI } from '../utils/formFiller';
+// import { validateIndexes } from '../utils/indexValidator';
 
 export const hankeMock: HankeDataDraft = {
   id: 0, // not used but types require it
@@ -67,5 +69,11 @@ context('HankeForm', () => {
   beforeEach(() => {
     cy.login();
     cy.visit('/fi/hanke/uusi');
+  });
+
+  it('Validate indexes are counted correctly with given hankeData', () => {
+    // const countIndexes = true;
+    // createHankeFromUI(hankeMock, countIndexes);
+    // validateIndexes(hankeMockIndex);
   });
 });
