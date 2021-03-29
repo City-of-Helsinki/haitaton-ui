@@ -11,10 +11,8 @@ import {
   HankeDataDraft,
   HANKE_SUUNNITTELUVAIHE,
 } from '../../src/domain/types/hanke';
-import { createHankeFromUI } from '../utils/formFiller';
-import { validateIndexes } from '../utils/indexValidator';
 
-const hankeMock: HankeDataDraft = {
+export const hankeMock: HankeDataDraft = {
   id: 0, // not used but types require it
   hankeTunnus: 'not used', // not used but types require it
   tilat: {
@@ -55,7 +53,7 @@ const hankeMock: HankeDataDraft = {
   tarinaHaitta: HANKE_TARINAHAITTA.KOLME,
 };
 
-const hankeMockIndex: Partial<HankeIndexData> = {
+export const hankeMockIndex: Partial<HankeIndexData> = {
   liikennehaittaIndeksi: {
     indeksi: 4.8,
     tyyppi: HANKE_INDEX_TYPE.PERUSINDEKSI,
@@ -69,11 +67,5 @@ context('HankeForm', () => {
   beforeEach(() => {
     cy.login();
     cy.visit('/fi/hanke/uusi');
-  });
-
-  it('Validate indexes are counted correctly with given hankeData', () => {
-    const countIndexes = true;
-    createHankeFromUI(hankeMock, countIndexes);
-    validateIndexes(hankeMockIndex);
   });
 });
