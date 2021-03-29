@@ -6,12 +6,6 @@
       {
         "ignoreAtRules": ["function", "if", "each", "include", "mixin", "warn"]
       }
-    ],
-    "csstools/value-no-unknown-custom-properties": [
-      true,
-      {
-        "importFrom": ["src/assets/styles/variables.css", "node_modules/hds-core/lib/base.css"]
-      }
     ]
   },
   "ignoreFiles": "**/reset.css"

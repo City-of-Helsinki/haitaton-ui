@@ -60,23 +60,25 @@ const DatePicker: React.FC<PropTypes> = ({
                 </Tooltip>
               )}
             </div>
-            <ReactDatePicker
-              id={name}
-              name={name}
-              onChange={(date: Date) => {
-                if (date) {
-                  onChange(toEndOfDayUTCISO(date));
-                  onBlur();
-                }
-              }}
-              selected={value ? new Date(value) : null}
-              disabled={disabled}
-              locale={locale}
-              dateFormat={dateFormat}
-              className={invalid ? 'invalid' : ''}
-              onBlur={onBlur}
-            />
-            <IconCalendar />
+            <div className="bottomWpr">
+              <ReactDatePicker
+                id={name}
+                name={name}
+                onChange={(date: Date) => {
+                  if (date) {
+                    onChange(toEndOfDayUTCISO(date));
+                    onBlur();
+                  }
+                }}
+                selected={value ? new Date(value) : null}
+                disabled={disabled}
+                locale={locale}
+                dateFormat={dateFormat}
+                className={invalid ? 'invalid' : ''}
+                onBlur={onBlur}
+              />
+              <IconCalendar />
+            </div>
             {invalid && <span className="error-text">{getInputErrorText(t, errors, name)}</span>}
           </div>
         )}

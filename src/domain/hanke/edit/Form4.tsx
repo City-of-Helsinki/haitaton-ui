@@ -8,7 +8,7 @@ import {
   HANKE_KAISTAHAITTA,
   HANKE_KAISTAPITUUSHAITTA,
   HANKE_MELUHAITTA,
-  HANKE_POLYAITTA,
+  HANKE_POLYHAITTA,
   HANKE_TARINAHAITTA,
 } from '../../types/hanke';
 import { FORMFIELD, FormProps } from './types';
@@ -60,6 +60,11 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
             invalid={!!errors[FORMFIELD.KAISTAHAITTA]}
             errorMsg={t('hankeForm:insertFieldError')}
             required
+            tooltip={{
+              tooltipText: t(`hankeForm:toolTips:${FORMFIELD.KAISTAHAITTA}`),
+              tooltipButtonLabel: t(`hankeForm:toolTips:tipOpenLabel`),
+              placement: 'auto',
+            }}
           />
         </div>
 
@@ -101,7 +106,7 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
             name={FORMFIELD.POLYHAITTA}
             id={FORMFIELD.POLYHAITTA}
             control={control}
-            options={$enum(HANKE_POLYAITTA).map((value) => ({
+            options={$enum(HANKE_POLYHAITTA).map((value) => ({
               value,
               label: t(`hanke:${FORMFIELD.POLYHAITTA}:${value}`),
             }))}

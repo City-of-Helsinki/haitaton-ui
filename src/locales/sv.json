@@ -248,21 +248,28 @@
     },
     "toolTips": {
       "tipOpenLabel": "SV:Avaa ohje",
-      "nimi": "SV:Ohjeteksti",
-      "onYKTHanke": "SV:Ohjeteksti",
-      "alkuPvm": "SV:Ohjeteksti",
-      "loppuPvm": "SV:Ohjeteksti",
-      "vaihe": "SV:Ohjeteksti",
-      "kuvaus": "SV:Ohjeteksti",
-      "suunnitteluVaihe": "SV:Ohjeteksti"
+      "perustiedot": "SV:Hankkeen pakolliset perustiedot tulee täyttää. Mikäli kaikki pakolliset tiedot eivät ole täytettynä, uusi hanke tallentuu Haitattomaan, muttei voi edetä vaikutusten arviointiin. Hankkeen tietojen täydentämistä voi jatkaa myöhemmin avaamalla se hankelistan kautta",
+      "nimi": "SV:Hanketta tiiviisti kuvaava nimi",
+      "onYKTHanke": "SV:Yhteinen kunnallistekninen työmaa – yhteistoimintasopimuksen mukainen yhteishanke. Osapuolia ovat Helsingin kaupungin kaupunkiympäristön toimialan lisäksi Helsingin kaupungin liikenne -liikelaitos (HKL), Helsingin seudun ympäristöpalvelut -kuntayhtymä HSY,  Helen Oy, Helen Sähköverkko Oy, Auris Kaasunjakelu Oy sekä viestintäverkko operaattorit Cinia Oy, DNA Oyj, Elisa Oyj ja Telia Finland Oyj. YKT -yhteistoiminnalla pyritään sujuvoittamaan kaupungissa tapahtuvaa yleisten alueiden rakentamista ja sovittamaan sopijaosapuolten erillishankkeet yhteisesti toteutettaviksi, infrapalvelujen laatua ja tarjontaa parantaviksi hankkeiksi.",
+      "alkuPvm": "SV:Hankkeen toteutuksen aloituspäivä (Huom! Yleisellä alueella tapahtuva toteutus, ei esimerkiksi tontin puolella tapahtuva toteutus)",
+      "loppuPvm": "SV:Hankkeen toteutuksen lopetuspäivä (Huom! Yleisellä alueella tapahtuva toteutus, ei esimerkiksi tontin puolella tapahtuva toteutus)",
+      "vaihe": "SV:Hankkeen etenemisen tilan kuvaus, jota päivitetään hankkeen edetessä. Ohjelmointivaihe on alustava hankesuunnittelu- tai esisuunnitteluvaihe. Suunnitteluvaiheessa on alavaiheita suunnittelutason tarkkuuden mukaan. Luvanhakuprosessin kannalta hanke on suunnitteluvaiheessa niin kauan, kunnes se saa toteutusluvan kaupungilta. Rakentamisvaiheessa hanke on saanut luvan kaupungilta. Haitaton Beta ei käsittele luvanhaun, rakentamisvaiheen tai hankkeen valmistumisen/ylläpidon/luovutuksen vaiheita.",
+      "kuvaus": "SV:Hankkeen keskeisen sisällön ja tavoitteiden kuvaus. (Huom! Yleisellä alueella tapahtuva toteutus, ei esimerkiksi tontin puolella tapahtuva toteutus)",
+      "suunnitteluVaihe": "SV:Suunnitteluvaihetta tarkentava alavaihe, jota päivitetään hankkeen edetessä.",
+      "omistajat": "SV:Hankkeen omistaja vastaa koko hankkeesta sen alusta aina loppumiseen / valmistumiseen / luovutukseen asti.",
+      "arvioijat": "SV:Hankkeen analysoija tai arvioija voi olla hankkeen omistaja tai omistajan valtuuttama muu taho (esimerkiksi omistajatahon ulkopuolinen hankkeen suunnittelijakonsultti tai urakoitsija).",
+      "toteuttajat": "SV:Hankkeen toteutuksesta vastaava voi olla hankkeen omistaja tai omistajan valtuuttama muu taho (esimerkiksi omistajatahon ulkopuolinen urakoitsija).",
+      "tyomaaKatuosoite": "SV:Hankkeen katuosoite/katuosoitteet sekä numero tai numeroväli (esim. Mannerheimintie 5, Hämeentie 3-27) tai muu paikallistava tieto, mikäli katuosoitetta ei ole saatavilla.",
+      "tyomaaTyyppi": "SV:Hankkeen tyypin monivalinta. Hanke voi koostua useista eri hanketyypeistä, eli voit valita useita hanketyyppejä.",
+      "kaistaHaitta": "SV:Todennäköinen haitta pääajoratojen kaistajärjestelyihin"
     },
     "perustiedotForm": {
       "header": "SV:Hankkeen perustiedot",
-      "ytkHankeHeader": "SV:YTK-hanke"
+      "ytkHankeHeader": "SV:YKT-hanke"
     },
     "hankkeenAlueForm": {
       "header": "SV:Hankkeen alue",
-      "instructions": "SV: Piirtotyökalut löytyvät karttaikkunan vasemmasta alalaidasta. Kynätyökalulla voi piirtää monikulmaisia geometrioita klikkaamalla kohtaan, johon haluat kulman. Neliötyökalulla saat muodostettua neliömäisiä alueita klikkaamalla ensin kartalle ja liikuttamalla hiirtä haluamaasi suuntaan. Uudelleenklikkaus \"sulkee\" neliön piirron.  Voit piirtää samalle hankkeelle useita geometrioita.\nGeometriaa voi muokata \"tarttumalla\" geometrian reunasta ja vetämällä. Myös neliömäistä geometriaa voi muokata reunasta tarttumalla.\nJos haluat poistaa yksittäisen geometrian kartalta, aktivoi poisto klikkaamalla ja painamalla paina crtl-näppäintä (Windows) tai  alt-näppäintä (Mac) geometrian sisällä. Geometrian reunat tummenevat ja piirtovalikkoon tulee roskakorikuvake, jota painamalla geometria poistuu.\nHaitattoman Beta-versiossa hanketta ei voi muokata sen jälkeen kun sille on laskettu haittaindeksit. Geometrian piirtämisen jälkeen hanke näkyy karttanäkymässä, joten ennen kuin lasket indeksit, kannattaa käydä katsomassa hankkeen tilannetta kartalla (ylävalikossa) ja tarvittaessa muokata hankkeen tietoja ennen indeksien laskentaa."
+      "instructions": "SV: Piirtotyökalut löytyvät karttaikkunan vasemmasta alalaidasta. Kynätyökalulla voi piirtää monikulmaisia geometrioita klikkaamalla kohtaan, johon haluat kulman. Neliötyökalulla saat muodostettua neliömäisiä alueita klikkaamalla ensin kartalle ja liikuttamalla hiirtä haluamaasi suuntaan. Uudelleenklikkaus \"sulkee\" neliön piirron.  Voit piirtää samalle hankkeelle useita geometrioita.\nGeometriaa voi muokata \"tarttumalla\" geometrian reunasta ja vetämällä. Myös neliömäistä geometriaa voi muokata reunasta tarttumalla.\nJos haluat poistaa yksittäisen geometrian kartalta, aktivoi poisto klikkaamalla ja painamalla paina alt-näppäintä (Windows) tai  alt/option-näppäintä (Mac) geometrian sisällä. Geometrian reunat tummenevat ja piirtovalikkoon tulee roskakorikuvake, jota painamalla geometria poistuu.\nHaitattoman Beta-versiossa hanketta ei voi muokata sen jälkeen kun sille on laskettu haittaindeksit. Geometrian piirtämisen jälkeen hanke näkyy karttanäkymässä, joten ennen kuin lasket indeksit, kannattaa käydä katsomassa hankkeen tilannetta kartalla (ylävalikossa) ja tarvittaessa muokata hankkeen tietoja ennen indeksien laskentaa."
     },
     "hankkeenYhteystiedotForm": {
       "header": "SV:Hankkeen yhteystiedot"

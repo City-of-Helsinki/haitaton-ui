@@ -1,22 +1,23 @@
 /// <reference types="cypress" />
 
-context('Accessibility', () => {
-  before(() => {
-    cy.injectAxe();
-  });
+const axeConfig = {
+  rules: [
+    {
+      id: 'color-contrast',
+      enabled: false,
+    },
+  ],
+  exclude: [['footer']],
+};
 
+context('Accessibility', () => {
   beforeEach(() => {
     cy.login();
   });
 
-  it('Hankelist should be accessible', () => {
-    cy.visit('/fi/hankelista');
-    // Disabled because of: TypeError: Cannot read property 'run' of undefined in Github actiosn
-    // cy.checkA11y();
-  });
-
-  it('Hankemap should be accessible', () => {
-    cy.visit('/fi/map');
-    // cy.checkA11y();
+  it('Saavutettavuusseloste should be accessible', () => {
+    cy.visit('/fi/saavutettavuusseloste');
+    cy.injectAxe();
+    cy.configureAxe(axeConfig);
   });
 });

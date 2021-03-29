@@ -37,7 +37,11 @@ const Dropdown: React.FC<PropTypes> = ({
   const { t } = useTranslation();
   return (
     <div className="dropdownComp">
-      {!!tooltip && <Tooltip {...tooltip} />}
+      {!!tooltip && (
+        <Tooltip tooltipLabel={t(`hankeForm:toolTips:tipOpenLabel`)} placement={tooltip.placement}>
+          {t(`${tooltip.tooltipText}`)}
+        </Tooltip>
+      )}
 
       <Controller
         name={name}

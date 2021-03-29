@@ -1,58 +1,7 @@
 .footer {
-  position: absolute;
+  position: absolute !important;
   bottom: 0;
   left: 0;
   width: 100%;
-
-  .koros {
-    height: 2.2rem;
-    overflow: hidden;
-    fill: var(--color-summer);
-  }
-
-  .container {
-    display: flex;
-    flex-direction: column;
-    padding: 0 24px;
-    padding-bottom: 1rem;
-    background: var(--color-summer);
-
-    .footerContent {
-      .logo {
-        display: flex;
-
-        h3 {
-          margin-left: 1.5rem;
-        }
-      }
-
-      display: flex;
-      justify-content: space-between;
-
-      ul {
-        list-style-type: none;
-        display: flex;
-        padding: 0.5rem 0 0 0;
-        margin: 0;
-
-        li {
-          margin: 0 0 0 1.5rem;
-          padding: 0;
-
-          a {
-            font-weight: 500;
-          }
-
-          a:hover {
-            text-decoration: underline;
-          }
-        }
-      }
-    }
-  }
-
-  .copyRight {
-    margin: 0;
-    padding: 0.8rem 0;
-  }
+  max-height: 150px;
 }
