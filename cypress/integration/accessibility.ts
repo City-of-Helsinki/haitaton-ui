@@ -15,7 +15,13 @@ context('Accessibility', () => {
     cy.login();
   });
 
-  /*
+  /* it('Hankelist should be accessible', () => {
+    cy.visit('/fi/hankelista');
+    cy.injectAxe();
+    cy.configureAxe(axeConfig);
+    cy.checkA11y();
+  });
+
   it('Hankemap should be accessible', () => {
     cy.visit('/fi/map');
     cy.injectAxe();
