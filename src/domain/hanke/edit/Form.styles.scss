@@ -174,4 +174,8 @@
     flex-direction: row-reverse;
     padding-top: var(--spacing-m);
   }
+
+  section[class^='Tooltip-module_tooltip'] {
+    min-width: 30rem;
+  }
 }
