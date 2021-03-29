@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Navigation } from 'hds-react';
 import { useTranslation } from 'react-i18next';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useRouteMatch } from 'react-router-dom';
 import { useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
 import authService from '../../../domain/auth/authService';
 import Locale from '../locale/Locale';
@@ -9,9 +9,15 @@ import './Header.styles.scss';
 
 const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { HOME, MAP, PROJECTS, NEW_HANKE } = useLocalizedRoutes();
+  const { HOME, MAP, PROJECTS, NEW_HANKE, EDIT_HANKE } = useLocalizedRoutes();
   const { t } = useTranslation();
   const isAuthenticated = authService.isAuthenticated();
+
+  const isHankeEdit = useRouteMatch({
+    path: EDIT_HANKE.path,
+    strict: true,
+  });
+
   return (
     <Navigation
       menuToggleAriaLabel="Open and close menu"
@@ -30,9 +36,17 @@ const Header: React.FC = () => {
         <NavLink to={PROJECTS.path} activeClassName="header--active" data-testid="hankeListLink">
           {PROJECTS.label}
         </NavLink>
-        <NavLink to={NEW_HANKE.path} className="header__hankeLink" data-testid="hankeLink">
-          <Locale id="header:hankeLink" />
-        </NavLink>
+        {/* 
+          Hankelomake menee sekaisin jos sille unmounttia ei tapahdu
+          Sen takia piilotetaan "Luo hanke" -nappi silloin kun hankkeen muokkaus on auki
+        */}
+        {!isHankeEdit ? (
+          <NavLink to={NEW_HANKE.path} className="header__hankeLink" data-testid="hankeLink">
+            <Locale id="header:hankeLink" />
+          </NavLink>
+        ) : (
+          <span />
+        )}
       </Navigation.Row>
       <Navigation.Actions>
         <Navigation.Item>
