@@ -29,13 +29,10 @@ import 'cypress-localstorage-commands';
 
 Cypress.Commands.add('mapDrawButton', (name) => cy.get(`[data-testid=draw-control-${name}]`));
 
-Cypress.Commands.add('login', () => {
+Cypress.Commands.add('login', (path = '') => {
   cy.restoreLocalStorage();
-  cy.visit('/fi/');
-
-  // cy.get('[data-testid=loginLink]').then(($loginLink) => {
-  //  if ($loginLink.text() === 'Kirjaudu') {
-  //    cy.get('[data-testid=loginLink]').click();
+  cy.visit(`/fi${path}`);
+  cy.wait(500); // Todo: Find way to remove this
 
   cy.url().then(($url) => {
     if ($url.indexOf('/auth/realms/haitaton') !== -1) {
@@ -45,6 +42,9 @@ Cypress.Commands.add('login', () => {
       cy.get('#kc-login').click();
       cy.url().should('include', '/fi');
       cy.saveLocalStorage();
+      cy.visit(`/fi${path}`);
     }
   });
+
+  cy.url().should('include', `/fi${path}`);
 });

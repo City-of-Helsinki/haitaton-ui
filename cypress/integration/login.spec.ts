@@ -3,7 +3,6 @@
 context('Login', () => {
   beforeEach(() => {
     cy.login();
-    cy.visit('/fi/');
   });
 
   it('should be logged in', () => {

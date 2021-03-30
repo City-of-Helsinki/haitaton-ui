@@ -67,8 +67,7 @@ const hankeMockIndex: Partial<HankeIndexData> = {
 
 context('HankeForm', () => {
   beforeEach(() => {
-    cy.login();
-    cy.visit('/fi/hanke/uusi');
+    cy.login('/hanke/uusi');
   });
 
   it('Validate indexes are counted correctly with given hankeData', () => {
