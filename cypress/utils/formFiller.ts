@@ -91,7 +91,7 @@ export const drawPolygonToMap = () => {
 };
 
 export const saveDraft = () => {
-  cy.get('[data-testid=save-draft-button]').click();
+  cy.get('[data-testid=save-draft-button]', { timeout: 30000 }).click();
 };
 
 export const fillForm2 = (hankeData: HankeDataDraft) => {
