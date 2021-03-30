@@ -88,10 +88,20 @@ export const drawPolygonToMap = () => {
   cy.get('#ol-map').click(drawCoordinateX + 300, drawCoordinateY + 300);
   cy.get('#ol-map').click(drawCoordinateX, drawCoordinateY + 300);
   cy.get('#ol-map').dblclick(drawCoordinateX + 20, drawCoordinateY + 20);
+  cy.get('[data-testid=hankkeenAlue]').click();
+  cy.wait(100);
+};
+
+export const saveGeoAndDraft = () => {
+  cy.intercept('POST', `/api/hankkeet/*/geometriat`).as('tallennaGeometriat');
+  cy.get('[data-testid=save-draft-button]').click();
+  cy.wait('@tallennaGeometriat');
 };
 
 export const saveDraft = () => {
-  cy.get('[data-testid=save-draft-button]', { timeout: 30000 }).click();
+  cy.intercept('PUT', `/api/hankkeet/*`).as('tallennaHanke');
+  cy.get('[data-testid=save-draft-button]').click();
+  cy.wait('@tallennaHanke');
 };
 
 export const fillForm2 = (hankeData: HankeDataDraft) => {
@@ -256,7 +266,7 @@ export const createHankeFromUI = (hankeData: HankeDataDraft, countIndexes: boole
   fillForm0(hankeData);
   nextFormPage();
   drawPolygonToMap();
-  saveDraft();
+  saveGeoAndDraft();
   nextFormPage();
   fillForm2(hankeData);
   saveDraft();
