@@ -5,6 +5,10 @@ const api: AxiosInstance = axios.create({
   baseURL: '/api',
 });
 
+export function timeout(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 api.defaults.headers.post['Content-Type'] = 'application/json';
 
 api.interceptors.request.use(
@@ -23,6 +27,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   // eslint-disable-next-line
   async (response: AxiosResponse): Promise<any> => {
+    // await timeout(500);
     if (response.status >= 200 && response.status < 300) {
       return response;
     }

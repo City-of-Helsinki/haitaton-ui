@@ -74,9 +74,13 @@ export const fillForm0 = (hankeData: HankeDataDraft) => {
   );
 };
 
-export const nextFormPage = () => {
+export const nextFormPage = (waitResponse = false) => {
+  if (waitResponse) {
+    cy.intercept('POST', `/api/hankkeet`).as('luoHanke');
+  }
   cy.get('[data-testid=forward]').should('not.be.disabled');
   cy.get('[data-testid=forward]').click();
+  if (waitResponse) cy.wait('@luoHanke');
 };
 
 export const drawPolygonToMap = () => {
@@ -264,7 +268,7 @@ export const triggerIndexCount = () => {
 export const createHankeFromUI = (hankeData: HankeDataDraft, countIndexes: boolean) => {
   cy.visit('/fi/hanke/uusi');
   fillForm0(hankeData);
-  nextFormPage();
+  nextFormPage(true);
   drawPolygonToMap();
   saveGeoAndDraft();
   nextFormPage();
