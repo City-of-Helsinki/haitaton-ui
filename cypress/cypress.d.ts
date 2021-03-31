@@ -11,6 +11,6 @@ declare namespace Cypress {
 
     mapDrawButton(name: string): Chainable<string>;
 
-    login(): Chainable<Element>;
+    login(path?: string): Chainable<Element>;
   }
 }

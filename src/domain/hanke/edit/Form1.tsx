@@ -26,7 +26,7 @@ const Form1: React.FC<FormProps> = ({ formData }) => {
 
   return (
     <div className="form1">
-      <Text tag="h2" spacing="s" weight="bold" data-testid="hankkeenAlue">
+      <Text tag="h2" spacing="s" weight="bold" data-testid="hankeFormHeader">
         {t('hankeForm:hankkeenAlueForm:header')}
       </Text>
       {instructions.map((instruction) => (

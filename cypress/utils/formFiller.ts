@@ -60,6 +60,8 @@ export const selectHankeVaihe = (
 };
 
 export const fillForm0 = (hankeData: HankeDataDraft) => {
+  cy.get('[data-testid=hankeFormHeader]').should('exist');
+
   if (hankeData.onYKTHanke) {
     cy.get('input[data-testid=onYKTHanke]').click();
   }
@@ -88,10 +90,16 @@ export const drawPolygonToMap = () => {
   cy.get('#ol-map').click(drawCoordinateX + 300, drawCoordinateY + 300);
   cy.get('#ol-map').click(drawCoordinateX, drawCoordinateY + 300);
   cy.get('#ol-map').dblclick(drawCoordinateX + 20, drawCoordinateY + 20);
+  cy.get('[data-testid=hankeFormHeader]').click();
 };
 
 export const saveDraft = () => {
   cy.get('[data-testid=save-draft-button]').click();
+};
+
+export const waitForToast = () => {
+  cy.get('[data-testid=formToastSuccess]').should('be.visible');
+  cy.get('[data-testid=formToastSuccess]').should('not.be.visible');
 };
 
 export const fillForm2 = (hankeData: HankeDataDraft) => {
@@ -207,6 +215,8 @@ export const selectTarinaHaitta = (tarinaHaitta: HANKE_TARINAHAITTA_KEY) => {
 };
 
 export const fillForm4 = (hankeData: HankeDataDraft) => {
+  cy.get('[data-testid=hankeFormHeader]').should('exist');
+
   if (hankeData.haittaAlkuPvm) {
     cy.get('#haittaAlkuPvm').type(hankeData.haittaAlkuPvm);
   } else {
@@ -219,7 +229,7 @@ export const fillForm4 = (hankeData: HankeDataDraft) => {
     cy.get('#haittaLoppuPvm').type(hankeData.loppuPvm);
   }
 
-  cy.get('[data-testid=form4Header]').click(); // Close datepicker because it is over kaistaHaitta-toggle-button
+  cy.get('[data-testid=hankeFormHeader]').click(); // Close datepicker because it is over kaistaHaitta-toggle-button
 
   if (hankeData.kaistaHaitta) {
     selectKaistaHaitta(hankeData.kaistaHaitta);
@@ -255,15 +265,23 @@ export const createHankeFromUI = (hankeData: HankeDataDraft, countIndexes: boole
   cy.visit('/fi/hanke/uusi');
   fillForm0(hankeData);
   nextFormPage();
+
+  waitForToast();
   drawPolygonToMap();
   saveDraft();
   nextFormPage();
+
+  waitForToast();
   fillForm2(hankeData);
   saveDraft();
   nextFormPage();
+
+  waitForToast();
   fillForm3(hankeData);
   saveDraft();
   nextFormPage();
+
+  waitForToast();
   fillForm4(hankeData);
   saveDraft();
   if (countIndexes) {
