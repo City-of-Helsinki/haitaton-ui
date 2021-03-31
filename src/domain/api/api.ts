@@ -27,7 +27,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   // eslint-disable-next-line
   async (response: AxiosResponse): Promise<any> => {
-    // await timeout(500);
+    // await timeout(2000);
     if (response.status >= 200 && response.status < 300) {
       return response;
     }
