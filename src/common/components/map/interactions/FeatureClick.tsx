@@ -1,14 +1,14 @@
 import React, { useEffect, useContext } from 'react';
 import { MapBrowserEvent } from 'ol';
 import OLVectorLayer from 'ol/layer/Vector';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import MapContext from '../MapContext';
 import { MapInstance } from '../types';
 
 const HankeClick: React.FC = () => {
   const { map } = useContext(MapContext);
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const selectHanke = (mapInstance: MapInstance, evt: MapBrowserEvent<UIEvent>) => {
     mapInstance?.getLayers().forEach((BaseLayer) => {
@@ -17,7 +17,7 @@ const HankeClick: React.FC = () => {
           if (features.length > 0) {
             features.some((feature) => {
               const hankeTunnus = feature.get('hankeTunnus');
-              history.push({
+              navigate({
                 search: `?hanke=${hankeTunnus}`,
               });
               return true;

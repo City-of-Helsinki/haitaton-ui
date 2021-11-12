@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import Notification from './Notification';
@@ -14,13 +14,13 @@ const FormNotifications: React.FC<Props> = ({ hankeTunnus }) => {
   const { t } = useTranslation();
   const { MAP } = useLocalizedRoutes();
   const showNotification = useSelector(getShowNotification());
-  const history = useHistory();
+  const navigate = useNavigate();
 
   // Redirect to map after successful index calculation
   useEffect(() => {
     if (showNotification === 'indexSuccess' && hankeTunnus) {
       setTimeout(() => {
-        history.push(`${MAP.path}?hanke=${hankeTunnus}`);
+        navigate(`${MAP.path}?hanke=${hankeTunnus}`);
       }, 100);
     }
   }, [showNotification, hankeTunnus]);

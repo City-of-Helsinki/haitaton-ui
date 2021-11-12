@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { actions as dialogActions } from '../../../common/components/confirmationDialog/reducer';
 import { HANKE_SAVETYPE, HankeDataDraft } from '../../types/hanke';
@@ -30,7 +30,7 @@ type Props = {
 
 const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const hasFormChanged = useSelector(getHasFormChanged());
   const formData = useSelector(getFormData());
 
@@ -75,7 +75,7 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
     if (hasFormChanged) {
       dispatch(dialogActions.updateIsDialogOpen({ isDialogOpen: true, redirectUrl: '/' }));
     } else {
-      history.push('/');
+      navigate('/');
     }
   }, [hasFormChanged]);
 
