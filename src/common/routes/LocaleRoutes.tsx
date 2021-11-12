@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory, Route, RouteComponentProps, Switch } from 'react-router-dom';
+import { useNavigate, Route, Routes, useParams, useLocation } from 'react-router-dom';
 import { Language } from '../types/language';
 import HankeListPage from '../../pages/HankeListPage';
 import MapPage from '../../pages/MapPage';
@@ -17,19 +17,10 @@ import {
   getMatchingRouteKey,
 } from '../hooks/useLocalizedRoutes';
 
-interface Params {
-  locale: Language;
-}
-
-type Props = RouteComponentProps<Params>;
-
-const LocaleRoutes: React.FC<Props> = ({
-  location,
-  match: {
-    params: { locale: localeParam },
-  },
-}) => {
-  const history = useHistory();
+const LocaleRoutes = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { locale: localeParam } = useParams();
   const useTranslationResponse = useTranslation();
   const {
     HOME,
@@ -48,35 +39,35 @@ const LocaleRoutes: React.FC<Props> = ({
 
   // Update language when route param changes
   React.useEffect(() => {
-    i18n.changeLanguage(localeParam);
+    i18n.changeLanguage(localeParam || 'fi');
   }, [i18n, localeParam]);
 
   // Redirect when user changes langauge
   React.useEffect(() => {
     // return if nothing changed
-    if (currentLocale === localeParam) return;
+    if (currentLocale === localeParam || localeParam === undefined) return;
     i18n.changeLanguage(currentLocale);
     const redirectPath = getRouteLocalization({
       useTranslationResponse,
-      route: getMatchingRouteKey(i18n, localeParam, location.pathname),
+      route: getMatchingRouteKey(i18n, localeParam as Language, location.pathname),
       name: 'path',
     });
 
-    history.push(redirectPath);
+    navigate(redirectPath);
   }, [currentLocale, localeParam]);
 
   return (
-    <Switch>
-      <Route exact path={HOME.path} component={HomePage} />
-      <Route exact path={NEW_HANKE.path} component={NewHankePage} />
-      <Route exact path={EDIT_HANKE.path} component={EditHankePage} />
-      <Route exact path={PROJECTS.path} component={HankeListPage} />
-      <Route exact path={MAP.path} component={MapPage} />
-      <Route exact path={HAITATON_INFO.path} component={InfoPage} />
-      <Route exact path={ACCESSIBILITY.path} component={AccessibilityPage} />
-      <Route exact path={REFERENCES.path} component={ReferencesPage} />
-      <Route exact path={PRIVACY_POLICY.path} component={PrivacyPolicyPage} />
-    </Switch>
+    <Routes>
+      <Route path={HOME.path} element={<HomePage />} />
+      <Route path={NEW_HANKE.path} element={<NewHankePage />} />
+      <Route path={EDIT_HANKE.path} element={<EditHankePage />} />
+      <Route path={PROJECTS.path} element={<HankeListPage />} />
+      <Route path={MAP.path} element={<MapPage />} />
+      <Route path={HAITATON_INFO.path} element={<InfoPage />} />
+      <Route path={ACCESSIBILITY.path} element={<AccessibilityPage />} />
+      <Route path={REFERENCES.path} element={<ReferencesPage />} />
+      <Route path={PRIVACY_POLICY.path} element={<PrivacyPolicyPage />} />
+    </Routes>
   );
 };
 

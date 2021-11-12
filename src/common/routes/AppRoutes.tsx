@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { LANGUAGES } from '../types/language';
 import useLocale from '../hooks/useLocale';
 import Login from '../../domain/auth/components/Login';
@@ -11,11 +11,10 @@ import LocaleRoutes from './LocaleRoutes';
 const localeParam = `:locale(${Object.values(LANGUAGES).join('|')})`;
 
 type Props = {
-  path: string;
-  component: React.ElementType;
+  children: JSX.Element;
 };
 
-const PrivateRoute: React.FC<Props> = ({ component: Component, ...rest }) => {
+const PrivateRoute: React.FC<Props> = ({ children }) => {
   const { isAuthenticated, isLoading, isLoaded } = useAuth();
 
   // Wait for login
@@ -23,27 +22,27 @@ const PrivateRoute: React.FC<Props> = ({ component: Component, ...rest }) => {
     return null;
   }
 
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        isAuthenticated ? <Component {...props} /> : <Redirect to={LOGIN_PATH} />
-      }
-    />
-  );
+  return isAuthenticated ? children : <Navigate to={LOGIN_PATH} />;
 };
 
 const AppRoutes: React.FC = () => {
   const currentLocale = useLocale();
 
   return (
-    <Switch>
-      <Redirect exact path="/" to={`/${currentLocale}`} />
-      <Route exact path={LOGIN_PATH} component={Login} />
-      <Route exact path={LOGIN_CALLBACK_PATH} component={OidcCallback} />
-      <PrivateRoute path={`/${localeParam}`} component={LocaleRoutes} />
-      <Route render={() => <Redirect to={`/${currentLocale}`} />} />
-    </Switch>
+    <Routes>
+      <Navigate to={`/${currentLocale}`} />
+      <Route path={LOGIN_PATH} element={<Login />} />
+      <Route path={LOGIN_CALLBACK_PATH} element={<OidcCallback />} />
+      <Route
+        path={`/${localeParam}`}
+        element={
+          <PrivateRoute>
+            <LocaleRoutes />
+          </PrivateRoute>
+        }
+      />
+      <Route element={<Navigate to={`/${currentLocale}`} />} />
+    </Routes>
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Navigation } from 'hds-react';
 import { useTranslation } from 'react-i18next';
-import { NavLink, useRouteMatch } from 'react-router-dom';
+import { NavLink, useMatch } from 'react-router-dom';
 import { useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
 import authService from '../../../domain/auth/authService';
 import Locale from '../locale/Locale';
@@ -13,9 +13,9 @@ const Header: React.FC = () => {
   const { t } = useTranslation();
   const isAuthenticated = authService.isAuthenticated();
 
-  const isHankeEdit = useRouteMatch({
+  const isHankeEdit = useMatch({
     path: EDIT_HANKE.path,
-    strict: true,
+    end: true,
   });
 
   return (
@@ -30,13 +30,17 @@ const Header: React.FC = () => {
       className="header"
     >
       <Navigation.Row variant="inline">
-        <NavLink to={MAP.path} activeClassName="header--active">
+        <NavLink to={MAP.path} className={(isActive) => (isActive ? 'header--active' : '')}>
           {MAP.label}
         </NavLink>
-        <NavLink to={PROJECTS.path} activeClassName="header--active" data-testid="hankeListLink">
+        <NavLink
+          to={PROJECTS.path}
+          className={(isActive) => (isActive ? 'header--active' : '')}
+          data-testid="hankeListLink"
+        >
           {PROJECTS.label}
         </NavLink>
-        {/* 
+        {/*
           Hankelomake menee sekaisin jos sille unmounttia ei tapahdu
           Sen takia piilotetaan "Luo hanke" -nappi silloin kun hankkeen muokkaus on auki
         */}
@@ -53,7 +57,7 @@ const Header: React.FC = () => {
           {isAuthenticated ? (
             <NavLink
               to="/logout"
-              activeClassName="header--active"
+              className={(isActive) => (isActive ? 'header--active' : '')}
               data-testid="logoutLink"
               onClick={(e) => {
                 e.preventDefault();
@@ -63,7 +67,11 @@ const Header: React.FC = () => {
               {t('authentication:logoutButton')}
             </NavLink>
           ) : (
-            <NavLink to="/login" activeClassName="header--active" data-testid="loginLink">
+            <NavLink
+              to="/login"
+              className={(isActive) => (isActive ? 'header--active' : '')}
+              data-testid="loginLink"
+            >
               {t('authentication:loginButton')}
             </NavLink>
           )}
