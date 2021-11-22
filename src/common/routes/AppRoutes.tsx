@@ -17,6 +17,8 @@ type Props = {
 const PrivateRoute: React.FC<Props> = ({ children }) => {
   const { isAuthenticated, isLoading, isLoaded } = useAuth();
 
+  console.log('testi');
+
   // Wait for login
   if (!isLoaded || isLoading) {
     return null;
@@ -30,7 +32,6 @@ const AppRoutes: React.FC = () => {
 
   return (
     <Routes>
-      <Navigate to={`/${currentLocale}`} />
       <Route path={LOGIN_PATH} element={<Login />} />
       <Route path={LOGIN_CALLBACK_PATH} element={<OidcCallback />} />
       <Route
