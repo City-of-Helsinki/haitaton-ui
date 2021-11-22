@@ -8,16 +8,12 @@ import { LOGIN_CALLBACK_PATH, LOGIN_PATH } from '../../domain/auth/constants';
 import useAuth from '../../domain/auth/useAuth';
 import LocaleRoutes from './LocaleRoutes';
 
-const localeParam = `:locale(${Object.values(LANGUAGES).join('|')})`;
-
 type Props = {
   children: JSX.Element;
 };
 
 const PrivateRoute: React.FC<Props> = ({ children }) => {
   const { isAuthenticated, isLoading, isLoaded } = useAuth();
-
-  console.log('testi');
 
   // Wait for login
   if (!isLoaded || isLoading) {
@@ -34,15 +30,18 @@ const AppRoutes: React.FC = () => {
     <Routes>
       <Route path={LOGIN_PATH} element={<Login />} />
       <Route path={LOGIN_CALLBACK_PATH} element={<OidcCallback />} />
-      <Route
-        path={`/${localeParam}`}
-        element={
-          <PrivateRoute>
-            <LocaleRoutes />
-          </PrivateRoute>
-        }
-      />
-      <Route element={<Navigate to={`/${currentLocale}`} />} />
+      {Object.values(LANGUAGES).map((locale) => (
+        <Route
+          path={`/${locale}/*`}
+          element={
+            <PrivateRoute>
+              <LocaleRoutes />
+            </PrivateRoute>
+          }
+          key={locale}
+        />
+      ))}
+      <Route path="*" element={<Navigate to={`/${currentLocale}`} />} />
     </Routes>
   );
 };
