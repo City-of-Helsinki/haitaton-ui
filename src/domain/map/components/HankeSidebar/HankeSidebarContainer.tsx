@@ -30,7 +30,7 @@ const HankeSidebarContainer: React.FC<Props> = ({ hankeTunnus }) => {
 
   useEffect(() => {
     setIsOpen(true);
-  }, [hanke]); git
+  }, [hanke]);
 
   const handleClose = () => {
     setIsOpen(false);
