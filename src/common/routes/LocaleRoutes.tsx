@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
 import HankeListPage from '../../pages/HankeListPage';
 import MapPage from '../../pages/MapPage';
+import HankePortfolioPage from '../../pages/HankePortfolioPage';
 import NewHankePage from '../../pages/NewHankePage';
 import EditHankePage from '../../pages/EditHankePage';
 import HomePage from '../../pages/HomePage';
@@ -20,6 +21,7 @@ const LocaleRoutes = () => {
       <Route path={t('routes:NEW_HANKE:path')} element={<NewHankePage />} />
       <Route path={t('routes:EDIT_HANKE:path')} element={<EditHankePage />} />
       <Route path={t('routes:PROJECTS:path')} element={<HankeListPage />} />
+      <Route path={t('routes:HANKEPORTFOLIO:path')} element={<HankePortfolioPage />} />
       <Route path={t('routes:MAP:path')} element={<MapPage />} />
       <Route path={t('routes:HAITATON_INFO:path')} element={<InfoPage />} />
       <Route path={t('routes:ACCESSIBILITY:path')} element={<AccessibilityPage />} />

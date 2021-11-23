@@ -19,6 +19,7 @@ const useLinkPath = (route: ROUTES): ((routeParams: RouteParams) => string) => {
   return $enum.visitValue(route).with({
     [ROUTES.HOME]: defaultReturnFunc,
     [ROUTES.PROJECTS]: defaultReturnFunc,
+    [ROUTES.HANKEPORTFOLIO]: defaultReturnFunc,
     [ROUTES.NEW_HANKE]: defaultReturnFunc,
     [ROUTES.EDIT_HANKE]: () => ({ hankeTunnus }: RouteParams) =>
       path.replace(':hankeTunnus', hankeTunnus),

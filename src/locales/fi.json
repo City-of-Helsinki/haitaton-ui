@@ -40,19 +40,19 @@
       "dateMax": "Viimeinen mahdollinen päivä on {{max}}"
     }
   },
-  "header": {
-    "HOME": "Alkuun",
-    "MAP": "Kartta",
-    "PROJECTS": "Hankkeet",
-    "FORM": "Kaavake",
-    "hankeLink": "Luo uusi hanke"
-  },
   "routes": {
     "HOME": {
       "path": "/",
       "headerLabel": "Alkuun",
       "meta": {
         "title": "Haitaton Beta - Etusivu"
+      }
+    },
+    "HANKEPORTFOLIO": {
+      "path": "/hankesalkku",
+      "headerLabel": "Hankesalkku",
+      "meta": {
+        "title": "Haitaton Beta - Hankesalkku"
       }
     },
     "PROJECTS": {
@@ -71,7 +71,7 @@
     },
     "NEW_HANKE": {
       "path": "/hanke/uusi",
-      "headerLabel": "Hanke",
+      "headerLabel": "Luo uusi hanke",
       "meta": {
         "title": "Haitaton Beta - Luo uusi hanke"
       }
@@ -300,6 +300,9 @@
       "EI_TARVETTA": "ei tarvetta",
       "MERKITTAVA": "merkittävä"
     }
+  },
+  "hankePortfolio": {
+    "pageHeader": "Hankesalkku"
   },
   "hankeList": {
     "pageHeader": "Hankelista",
