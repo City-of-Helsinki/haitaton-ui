@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Text from '../../../common/components/text/Text';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
-import Locale from '../../../common/components/locale/Locale';
 import { HankeDataDraft } from '../../types/hanke';
 
 import Table from './Table';
@@ -72,7 +71,7 @@ const HankeList: React.FC<Props> = ({ projectsData }) => {
         <Table columns={columns} data={projectsData || []} />
         <div className="hankelista__buttonWpr">
           <Link data-testid="toFormLink" to={NEW_HANKE.path} className="hankelista__hankeLink">
-            <Locale id="header:hankeLink" />
+            {NEW_HANKE.label}
           </Link>
         </div>
       </div>

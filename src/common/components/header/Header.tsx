@@ -4,12 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { NavLink, useMatch } from 'react-router-dom';
 import { useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
 import authService from '../../../domain/auth/authService';
-import Locale from '../locale/Locale';
 import './Header.styles.scss';
 
 const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { HOME, MAP, PROJECTS, NEW_HANKE, EDIT_HANKE } = useLocalizedRoutes();
+  const { HOME, MAP, PROJECTS, HANKEPORTFOLIO, NEW_HANKE, EDIT_HANKE } = useLocalizedRoutes();
   const { t } = useTranslation();
   const isAuthenticated = authService.isAuthenticated();
 
@@ -34,6 +33,13 @@ const Header: React.FC = () => {
           {MAP.label}
         </NavLink>
         <NavLink
+          to={HANKEPORTFOLIO.path}
+          className={(isActive) => (isActive ? 'header--active' : '')}
+          data-testid="hankeListLink"
+        >
+          {HANKEPORTFOLIO.label}
+        </NavLink>
+        <NavLink
           to={PROJECTS.path}
           className={(isActive) => (isActive ? 'header--active' : '')}
           data-testid="hankeListLink"
@@ -46,7 +52,7 @@ const Header: React.FC = () => {
         */}
         {!isHankeEdit ? (
           <NavLink to={NEW_HANKE.path} className="header__hankeLink" data-testid="hankeLink">
-            <Locale id="header:hankeLink" />
+            {NEW_HANKE.label}
           </NavLink>
         ) : (
           <span />
