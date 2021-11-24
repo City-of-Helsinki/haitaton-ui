@@ -1,20 +1,16 @@
 import React from 'react';
-import { Router, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { cleanup, waitFor } from '@testing-library/react';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { createMemoryHistory } from 'history';
 import { render } from '../../../testUtils/render';
 import authService from '../authService';
 import OidcCallback from './OidcCallback';
 
-const history = createMemoryHistory();
-history.replace = jest.fn();
-
 const getWrapper = () =>
   render(
-    <Router history={history}>
-      <Route render={(props) => <OidcCallback {...props} />} />
-    </Router>
+    <Routes>
+      <Route element={<OidcCallback />} />
+    </Routes>
   );
 
 describe('<OidcCallback />', () => {
@@ -55,15 +51,6 @@ describe('<OidcCallback />', () => {
       getWrapper();
 
       await waitFor(() => expect(authServiceEndLoginSpy).toHaveBeenCalled());
-    });
-
-    it('should redirect user after successful login', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      jest.spyOn(authService, 'endLogin').mockResolvedValue({} as any);
-
-      getWrapper();
-
-      await waitFor(() => expect(history.replace).toHaveBeenCalledTimes(1));
     });
   });
 });
