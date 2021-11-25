@@ -5,12 +5,15 @@ import { cleanup, waitFor } from '@testing-library/react';
 import { render } from '../../../testUtils/render';
 import authService from '../authService';
 import OidcCallback from './OidcCallback';
+import { LOGIN_CALLBACK_PATH } from '../constants';
 
 const getWrapper = () =>
   render(
     <Routes>
-      <Route element={<OidcCallback />} />
-    </Routes>
+      <Route path={LOGIN_CALLBACK_PATH} element={<OidcCallback />} />
+    </Routes>,
+    {},
+    LOGIN_CALLBACK_PATH
   );
 
 describe('<OidcCallback />', () => {
@@ -51,6 +54,15 @@ describe('<OidcCallback />', () => {
       getWrapper();
 
       await waitFor(() => expect(authServiceEndLoginSpy).toHaveBeenCalled());
+    });
+
+    it('should redirect user after successful login', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      jest.spyOn(authService, 'endLogin').mockResolvedValue({} as any);
+
+      getWrapper();
+
+      await waitFor(() => expect(window.location.pathname).toEqual('/'));
     });
   });
 });
