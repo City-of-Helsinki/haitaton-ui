@@ -3,16 +3,10 @@ import { useTable, useSortBy, usePagination } from 'react-table';
 import { useTranslation } from 'react-i18next';
 import format from 'date-fns/format';
 import { Link } from 'react-router-dom';
-import {
-  IconCrossCircle,
-  IconPen,
-  IconAngleLeft,
-  IconAngleRight,
-  IconAngleUp,
-  IconAngleDown,
-} from 'hds-react/icons';
+import { IconCrossCircle, IconPen, IconAngleUp, IconAngleDown } from 'hds-react/icons';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
+import PaginationControl from '../../common/pagination/PaginationControl';
 
 function compareIgnoreCase(a: string, b: string) {
   const r1 = a.toString().toLowerCase();
@@ -62,6 +56,9 @@ const Table: React.FC<Props> = ({ columns, data }) => {
         alphanumeric: (row1, row2, columnName) => {
           return compareIgnoreCase(row1.values[columnName], row2.values[columnName]);
         },
+      },
+      initialState: {
+        pageSize: 10,
       },
     },
     useSortBy,
@@ -151,54 +148,16 @@ const Table: React.FC<Props> = ({ columns, data }) => {
           })}
         </tbody>
       </table>
-      <div className="pagination">
-        <button
-          type="button"
-          className="toBeginning"
-          data-testid="toBeginning"
-          onClick={() => gotoPage(0)}
-          disabled={!canPreviousPage}
-          aria-label={t('hankeList:buttons:toFirstPage')}
-        >
-          <IconAngleLeft aria-hidden="true" />
-          <IconAngleLeft aria-hidden="true" />
-        </button>
-        <button
-          type="button"
-          className="backward"
-          onClick={() => previousPage()}
-          data-testid="backward"
-          disabled={!canPreviousPage}
-          aria-label={t('hankeList:buttons:toPreviousPage')}
-        >
-          <IconAngleLeft aria-hidden="true" />
-        </button>
-        <span className="wrp">
-          {t('hankeList:paginationHeader')} <span data-testid="currentPage">{pageIndex + 1}</span> /{' '}
-          <span data-testid="amountOfpages">{pageOptions.length}</span>
-        </span>
-        <button
-          type="button"
-          className="forward"
-          data-testid="forward"
-          onClick={() => nextPage()}
-          disabled={!canNextPage}
-          aria-label={t('hankeList:buttons:toNextPage')}
-        >
-          <IconAngleRight aria-hidden="true" />
-        </button>
-        <button
-          type="button"
-          className="toEnd"
-          data-testid="toEnd"
-          onClick={() => gotoPage(pageCount - 1)}
-          disabled={!canNextPage}
-          aria-label={t('hankeList:buttons:toLastPage')}
-        >
-          <IconAngleRight aria-hidden="true" />
-          <IconAngleRight aria-hidden="true" />
-        </button>
-      </div>
+      <PaginationControl
+        goToPage={gotoPage}
+        previousPage={previousPage}
+        nextPage={nextPage}
+        canPreviousPage={canPreviousPage}
+        canNextPage={canNextPage}
+        pageCount={pageCount}
+        pageIndex={pageIndex}
+        pagesLength={pageOptions.length}
+      />
     </>
   );
 };

@@ -10,6 +10,7 @@ import { HankeDataDraft } from '../../types/hanke';
 
 import styles from './HankePortfolio.module.scss';
 import { formatToFinnishDate } from '../../../common/utils/date';
+import PaginationControl from '../../common/pagination/PaginationControl';
 
 type CustomAccordionProps = {
   hanke: HankeDataDraft;
@@ -151,10 +152,23 @@ export interface PagedRowsProps {
 }
 
 const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ columns, data }) => {
-  const { page } = useTable(
+  const {
+    canNextPage,
+    canPreviousPage,
+    page,
+    gotoPage,
+    nextPage,
+    previousPage,
+    pageCount,
+    pageOptions,
+    state: { pageIndex },
+  } = useTable(
     {
       columns,
       data,
+      initialState: {
+        pageSize: 10,
+      },
     },
     useSortBy,
     usePagination
@@ -169,6 +183,16 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ columns, data }) => {
           </div>
         );
       })}
+      <PaginationControl
+        goToPage={gotoPage}
+        nextPage={nextPage}
+        previousPage={previousPage}
+        pageCount={pageCount}
+        pageIndex={pageIndex}
+        pagesLength={pageOptions.length}
+        canNextPage={canNextPage}
+        canPreviousPage={canPreviousPage}
+      />
     </>
   );
 };
@@ -213,10 +237,6 @@ const HankePortfolio: React.FC<Props> = ({ hankkeet }) => {
     ],
     []
   );
-  // TODO: Continue with implementing paging
-  // create a static component of paging which receives functions to change
-  // pages as props
-  // then use the implementation for the hankeLista as well
 
   return (
     <div className={styles.hankesalkkuContainer}>
