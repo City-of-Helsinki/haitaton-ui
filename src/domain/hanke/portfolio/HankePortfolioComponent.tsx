@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTable, useSortBy, usePagination } from 'react-table';
-import { useAccordion, Card, Tag, Tabs, Tab, TabList, TabPanel } from 'hds-react';
+import { useFilters, useTable, usePagination, Row } from 'react-table';
+import { useAccordion, Card, Select, Tag, Tabs, Tab, TabList, TabPanel } from 'hds-react';
 import { IconAngleDown, IconAngleUp, IconPen, IconCrossCircle } from 'hds-react/icons';
 import { Link } from 'react-router-dom';
 import Text from '../../../common/components/text/Text';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
-import { HankeDataDraft } from '../../types/hanke';
+import { HankeDataDraft, HANKE_VAIHE } from '../../types/hanke';
 
 import styles from './HankePortfolio.module.scss';
 import { formatToFinnishDate } from '../../../common/utils/date';
@@ -162,6 +162,7 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ columns, data }) => {
     pageCount,
     pageOptions,
     state: { pageIndex },
+    setFilter,
   } = useTable(
     {
       columns,
@@ -170,15 +171,52 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ columns, data }) => {
         pageSize: 10,
       },
     },
-    useSortBy,
+    useFilters,
     usePagination
   );
 
+  const { t } = useTranslation();
+
+  const [selectedHankeVaiheet, setSelectedHankeVaiheet] = useState(Object.keys(HANKE_VAIHE));
+
+  // Initial setup for hankevaihe <Select /> options on first render
+  // Using any: <Select /> component of HDS typing seems incorrect.
+  // Would require OptionType[][] although the component takes in OptionType[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const options: any = [];
+  useEffect(() => {
+    Object.keys(HANKE_VAIHE).map((hankeVaihe) =>
+      options.push({ label: t(`hanke:vaihe:${hankeVaihe}`), value: hankeVaihe })
+    );
+  });
+
+  // Using any: <Select /> component of HDS typing seems incorrect.
+  // Would require OptionType[][] although the component takes in OptionType[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updateHankeVaihe = (changedHankeVaiheet: any[]) =>
+    setSelectedHankeVaiheet(changedHankeVaiheet.map((hankeVaihe) => hankeVaihe.value));
+
+  useEffect(() => {
+    setFilter('vaihe', selectedHankeVaiheet);
+  }, [selectedHankeVaiheet]);
+
   return (
     <>
+      <Select
+        multiselect
+        label="Hankevaiheet"
+        helper="Valitse vaiheet joita haluat tarkastella"
+        options={options}
+        defaultValue={options}
+        clearButtonAriaLabel="Clear all selections"
+        // eslint-disable-next-line no-template-curly-in-string
+        selectedItemRemoveButtonAriaLabel="Remove ${value}"
+        onChange={updateHankeVaihe}
+      />
+
       {page.map((row) => {
         return (
-          <div>
+          <div key={row.original.hankeTunnus}>
             <CustomAccordion hanke={row.original} />
           </div>
         );
@@ -203,6 +241,10 @@ type Props = {
 
 const HankePortfolio: React.FC<Props> = ({ hankkeet }) => {
   const { t } = useTranslation();
+
+  const filterVaihe = (rows: Row[], id: string[], value: string[]) =>
+    rows.filter((hanke) => value.includes(hanke.values.vaihe));
+
   const columns = React.useMemo(
     () => [
       {
@@ -219,6 +261,7 @@ const HankePortfolio: React.FC<Props> = ({ hankkeet }) => {
         Header: 'vaihe',
         id: 'vaihe',
         accessor: 'vaihe',
+        filter: filterVaihe,
       },
       {
         Header: 'alkuPvm',
@@ -238,6 +281,8 @@ const HankePortfolio: React.FC<Props> = ({ hankkeet }) => {
     []
   );
 
+  const memoizedHankkeed = React.useMemo(() => hankkeet, []);
+
   return (
     <div className={styles.hankesalkkuContainer}>
       <div>
@@ -250,8 +295,9 @@ const HankePortfolio: React.FC<Props> = ({ hankkeet }) => {
         >
           {t('hankePortfolio:pageHeader')}
         </Text>
+
         <div className={styles.contentContainer}>
-          <PaginatedPortfolio data={hankkeet} columns={columns} />
+          <PaginatedPortfolio data={memoizedHankkeed} columns={columns} />
         </div>
       </div>
     </div>
