@@ -1,7 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFilters, useTable, usePagination, Row } from 'react-table';
-import { useAccordion, Card, Select, Tag, Tabs, Tab, TabList, TabPanel } from 'hds-react';
+import {
+  useFilters,
+  useTable,
+  usePagination,
+  Row,
+  useGlobalFilter,
+  useAsyncDebounce,
+} from 'react-table';
+import {
+  useAccordion,
+  Card,
+  Select,
+  Tag,
+  Tabs,
+  Tab,
+  TabList,
+  TabPanel,
+  TextInput,
+} from 'hds-react';
 import { IconAngleDown, IconAngleUp, IconPen, IconCrossCircle } from 'hds-react/icons';
 import { Link } from 'react-router-dom';
 import Text from '../../../common/components/text/Text';
@@ -163,6 +180,7 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ columns, data }) => {
     pageOptions,
     state: { pageIndex },
     setFilter,
+    setGlobalFilter,
   } = useTable(
     {
       columns,
@@ -172,6 +190,7 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ columns, data }) => {
       },
     },
     useFilters,
+    useGlobalFilter,
     usePagination
   );
 
@@ -200,12 +219,28 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ columns, data }) => {
     setFilter('vaihe', selectedHankeVaiheet);
   }, [selectedHankeVaiheet]);
 
+  const searchHankeInputChange = (searchInput: string) => {
+    const filter = searchInput && searchInput.length > 0 ? searchInput : undefined;
+    setGlobalFilter(filter);
+  };
+
+  const searchHankeInputChangeDebounced = useAsyncDebounce((e) => {
+    searchHankeInputChange(e);
+  }, 200);
+
   return (
     <>
+      <TextInput
+        id="searchHanke"
+        onChange={(e) => searchHankeInputChangeDebounced(e.target.value)}
+        label={t('hankePortfolio:search')}
+        helperText={t('hankePortfolio:searchHelperText')}
+      />
+
       <Select
         multiselect
-        label="Hankevaiheet"
-        helper="Valitse vaiheet joita haluat tarkastella"
+        label={t('hankePortfolio:hankevaiheet')}
+        helper={t('hankePortfolio:hankevaiheetHelperText')}
         options={options}
         defaultValue={options}
         clearButtonAriaLabel="Clear all selections"
@@ -251,11 +286,13 @@ const HankePortfolio: React.FC<Props> = ({ hankkeet }) => {
         Header: 'hankeTunnus',
         id: 'hankeTunnus',
         accessor: 'hankeTunnus',
+        defaultCanFilter: true,
       },
       {
         Header: 'nimi',
         id: 'nimi',
         accessor: 'nimi',
+        defaultCanFilter: true,
       },
       {
         Header: 'vaihe',
