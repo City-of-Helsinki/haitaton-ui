@@ -302,7 +302,11 @@
     }
   },
   "hankePortfolio": {
-    "pageHeader": "Hankesalkku"
+    "pageHeader": "Hankesalkku",
+    "search": "Haku",
+    "searchHelperText": "Hae hankkeen nimellä tai tunnuksella",
+    "hankevaiheet": "Hankevaiheet",
+    "hankevaiheetHelperText": "Valitse hankevaiheet joita haluat tarkastella"
   },
   "hankeList": {
     "pageHeader": "Hankelista",
