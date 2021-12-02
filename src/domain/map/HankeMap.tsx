@@ -3,6 +3,7 @@ import Map from '../../common/components/map/Map';
 import Controls from '../../common/components/map/controls/Controls';
 import LayerControl from '../../common/components/map/controls/LayerControl';
 import DateRangeControl from '../../common/components/map/controls/DateRangeControl';
+import ControlPanel from '../../common/components/map/controls/ControlPanel';
 import Kantakartta from './components/Layers/Kantakartta';
 import Ortokartta from './components/Layers/Ortokartta';
 import HankeLayer from './components/Layers/HankeLayer';
@@ -50,12 +51,14 @@ const HankeMap: React.FC = () => {
           </HankkeetProvider>
 
           <Controls>
-            <DateRangeControl
-              startDate={hankeFilterStartDate}
-              updateStartDate={setHankeFilterStartDate}
-              endDate={hankeFilterEndDate}
-              updateEndDate={setHankeFilterEndDate}
-            />
+            <ControlPanel className={styles.dateRangeControl}>
+              <DateRangeControl
+                startDate={hankeFilterStartDate}
+                updateStartDate={setHankeFilterStartDate}
+                endDate={hankeFilterEndDate}
+                updateEndDate={setHankeFilterEndDate}
+              />
+            </ControlPanel>
             <LayerControl
               tileLayers={Object.values(mapTileLayers)}
               onClickTileLayer={(id: MapTileLayerId) => toggleMapTileLayer(id)}
