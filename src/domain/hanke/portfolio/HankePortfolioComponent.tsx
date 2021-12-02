@@ -19,7 +19,7 @@ import {
   TabPanel,
   TextInput,
 } from 'hds-react';
-import { IconAngleDown, IconAngleUp, IconPen, IconCrossCircle } from 'hds-react/icons';
+import { IconAngleDown, IconAngleUp, IconPen } from 'hds-react/icons';
 import { Link } from 'react-router-dom';
 import Text from '../../../common/components/text/Text';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
@@ -54,16 +54,23 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
             {hanke.hankeTunnus}
           </Link>
           <div className={styles.hankeName}>
-            <p>{hanke.nimi}</p>
+            <Text tag="p" styleAs="body-m">
+              {hanke.nimi}
+            </Text>
           </div>
           {/* vaihe tagit voisi olla eriväriset eri vaiheille */}
           <Tag className={styles.tag}>{hanke.vaihe}</Tag>
           <div className={styles.hankeDates}>
-            <p>{formatToFinnishDate(hanke.alkuPvm)}</p>-<p>{formatToFinnishDate(hanke.loppuPvm)}</p>
+            <Text tag="p" styleAs="body-m">
+              {formatToFinnishDate(hanke.alkuPvm)}
+            </Text>
+            -
+            <Text tag="p" styleAs="body-m">
+              {formatToFinnishDate(hanke.loppuPvm)}
+            </Text>
           </div>
           <div className={styles.actions}>
             <IconPen />
-            <IconCrossCircle />
           </div>
           <div className={styles.iconWrapper}>{icon}</div>
         </div>
@@ -75,83 +82,317 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
         {...contentProps}
       >
         <Tabs small>
-          <TabList className={styles.tablist}>
+          <TabList>
             <Tab>Perustiedot</Tab>
             <Tab>Yhteystiedot</Tab>
             <Tab>Liitteet</Tab>
           </TabList>
+          {/* Panelien sisältö varmaan kannattaa tehdä erillisiksi komponenteiksi */}
           <TabPanel>
-            <div className={styles.gridTest}>
+            <div className={styles.gridBasicInfo}>
               <div className={`${styles.gridItem} ${styles.gridDescription}`}>
-                <b>Kuvaus</b>
-                <p>lipsum</p>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Kuvaus
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur
+                  mauris augue, at dignissim magna pharetra at. Nulla mollis mattis suscipit.
+                  Maecenas sodales in leo et commodo. Donec hendrerit lacinia mi. Sed feugiat justo
+                  tempor, vulputate nulla ut, vestibulum mauris. Aliquam eget ante nec turpis
+                  aliquam bibendum sed et ex. Sed fermentum ante eros, quis scelerisque libero
+                  facilisis ac.
+                </Text>
               </div>
               <div className={styles.gridItem}>
-                <b>Hankevaihe</b>
-                <p>lipsum</p>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Hankevaihe
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
               </div>
               <div className={styles.gridItem}>
-                <b>Suunnitteluvaihe</b>
-                <p>lipsum</p>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Suunnitteluvaihe
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
               </div>
               <div className={styles.gridItem}>
-                <b>Katuosoite</b>
-                <p>lipsum</p>
+                <div className={styles.linkWrapper}>
+                  <Text tag="h3" styleAs="h6" weight="bold">
+                    Katuosoite
+                  </Text>
+                  <Link
+                    className={styles.link}
+                    to={`${MAP.path}?hanke=${hanke.hankeTunnus}`}
+                    title="Avaa hanke kartalla"
+                  >
+                    Avaa hanke kartalla
+                  </Link>
+                </div>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
               </div>
               <div className={styles.gridItem}>
-                <b>Työmaan koko</b>
-                <p>lipsum</p>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Työmaan koko
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
               </div>
               <div className={`${styles.gridItem} ${styles.gridType}`}>
-                <b>Työmaan tyyppi</b>
-                <p>lipsum</p>
-              </div>
-              <div className={`${styles.gridItem} ${styles.gridType}`}>
-                <b>Haitat väliotsikko</b>
-              </div>
-              <div className={`${styles.gridItem} ${styles.gridInception}`}>
-                <div className={styles.gridHaitat}>
-                  <b>Kaistahaitta</b>
-                  <p>lipsum</p>
-                </div>
-                <div className={styles.gridHaitat}>
-                  <b>Kaistan pituushaitta</b>
-                  <p>lipsum</p>
-                </div>
-                <div className={styles.gridHaitat}>
-                  <b>Meluhaitta</b>
-                  <p>lipsum</p>
-                </div>
-                <div className={styles.gridHaitat}>
-                  <b>Pölyhaitta</b>
-                  <p>lipsum</p>
-                </div>
-                <div className={styles.gridHaitat}>
-                  <b>Tärinähaitta</b>
-                  <p>lipsum</p>
-                </div>
-              </div>
-              <div className={`${styles.gridItem} ${styles.gridInception}`}>
-                <div className={styles.gridIndex}>
-                  <b>Liikennehaitaindeksi</b>
-                  <p>lipsum</p>
-                </div>
-                <div className={styles.gridIndex}>
-                  <b>Pyöräilyn pääreitti</b>
-                  <p>lipsum</p>
-                </div>
-                <div className={styles.gridIndex}>
-                  <b>Merkittävät joukkoliikennereitit</b>
-                  <p>lipsum</p>
-                </div>
-                <div className={styles.gridIndex}>
-                  <b>Ruuhkautuminen</b>
-                  <p>lipsum</p>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Työmaan tyyppi
+                </Text>
+                <div>
+                  <Tag className={styles.hankeTag}>{hanke.vaihe}</Tag>
+                  <Tag className={styles.hankeTag}>{hanke.vaihe}</Tag>
+                  <Tag className={styles.hankeTag}>{hanke.vaihe}</Tag>
                 </div>
               </div>
             </div>
+            <div className={styles.gridBasicInfo}>
+              <div className={`${styles.gridItem} ${styles.gridType}`}>
+                <Text tag="h3" styleAs="h5" weight="bold">
+                  Haitat
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Kaistahaitta
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Liikennehaitaindeksi
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Kaistan pituushaitta
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Pyöräilyn pääreitti
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Meluhaitta
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Merkittävät joukkoliikennereitit
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Pölyhaitta
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Ruuhkautuminen
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Tärinähaitta
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+            </div>
           </TabPanel>
-          <TabPanel>Tab 2 sisältö</TabPanel>
+          <TabPanel>
+            <div className={styles.gridContactInfo}>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h5" weight="bold">
+                  Päätöksenhakija
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h5" weight="bold">
+                  Yhteyshenkilö
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Nimi
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Nimi
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Osoite
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Sähköposti
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+              <div className={styles.gridItem} />
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Puhelin
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+            </div>
+            <div className={styles.gridContactInfo}>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h5" weight="bold">
+                  Rakennuttaja
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h5" weight="bold">
+                  Yhteyshenkilö
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Nimi
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Nimi
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Osoite
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Sähköposti
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+              <div className={styles.gridItem} />
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Puhelin
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+            </div>
+            <div className={styles.gridContactInfo}>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h5" weight="bold">
+                  Työnsuorittaja
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h5" weight="bold">
+                  Yhteyshenkilö
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Nimi
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Nimi
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Osoite
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Sähköposti
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+              <div className={styles.gridItem} />
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  Puhelin
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  lipsum
+                </Text>
+              </div>
+            </div>
+          </TabPanel>
           <TabPanel>Tab 3 sisältö</TabPanel>
         </Tabs>
       </Card>

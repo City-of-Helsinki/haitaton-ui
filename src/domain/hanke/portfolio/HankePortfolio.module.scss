@@ -1,11 +1,12 @@
 .hankesalkkuContainer {
-  width: 65vw;
+  max-width: var(--breakpoint-xl);
+  padding: 0 var(--spacing-l);
   margin: auto;
 
   .contentContainer {
     padding: var(--spacing-l) var(--spacing-l) var(--spacing-3-xl) var(--spacing-l);
     background: var(--color-white);
-    overflow-x: auto;
+    overflow-x: hidden;
 
     .hankeCard {
       height: 70px;
@@ -27,7 +28,7 @@
       align-items: center;
 
       .link {
-        color: blue;
+        color: var(--color-coat-of-arms);
       }
 
       .hankeName {
@@ -64,6 +65,7 @@
     .hankeCardContent {
       border: 2px black solid;
       border-top: none;
+      padding: 0 var(--spacing-s) var(--spacing-s);
 
       .tabs {
         .tablist {
@@ -74,11 +76,12 @@
     }
   }
 
-  .gridTest {
+  .gridBasicInfo {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 50% 50%;
     grid-template-rows: repeat(6, min-content);
-    border: 1px solid black;
+    padding: var(--spacing-s) var(--spacing-s) 0;
+    row-gap: var(--spacing-xs);
 
     .gridDescription {
       grid-column: 1 / span 2;
@@ -88,10 +91,35 @@
       grid-column: 1 / span 2;
     }
 
-    .gridInception {
-      display: grid;
-      border: 1px solid black;
-      grid-template-rows: repeat(5, min-content);
+    .linkWrapper {
+      display: flex;
+      height: min-content;
+      align-items: flex-start;
+
+      .link {
+        padding-left: var(--spacing-xs);
+        color: var(--color-coat-of-arms);
+      }
     }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--color-black-10);
+    }
+  }
+
+  .gridContactInfo {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: repeat(6, min-content);
+    padding: var(--spacing-s) var(--spacing-s) 0;
+    row-gap: var(--spacing-xs);
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--color-black-10);
+    }
+  }
+
+  .hankeTag {
+    margin-right: var(--spacing-xs);
   }
 }
