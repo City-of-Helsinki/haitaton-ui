@@ -23,6 +23,7 @@ import {
 import { IconAngleDown, IconAngleUp, IconPen } from 'hds-react/icons';
 import { Link } from 'react-router-dom';
 import Text from '../../../common/components/text/Text';
+import GridItem from '../../../common/components/grid/GridItem';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import { HankeDataDraft, HANKE_VAIHE } from '../../types/hanke';
 import styles from './HankePortfolio.module.scss';
@@ -86,39 +87,29 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
         <Tabs small>
           <TabList>
             <Tab>{t('hankePortfolio:tabit:perustiedot')}</Tab>
-            <Tab>{t('hankePortfolio:tabit:yhteystiedot')}</Tab>
+            {/* 
+              huom: hankkeen datarakenteessa ei ole suoraa yhteystiedot rakennetta
+              vaan ovat []. Ehkäpä tämän voisi muodostaa vastaanotettaessa hankkeita?
+              <Tab>{t('hankePortfolio:tabit:yhteystiedot')}</Tab> 
+            */}
           </TabList>
           <TabPanel>
             <div className={styles.gridBasicInfo}>
-              <div className={`${styles.gridItem} ${styles.gridDescription}`}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:kuvaus')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur
-                  mauris augue, at dignissim magna pharetra at. Nulla mollis mattis suscipit.
-                  Maecenas sodales in leo et commodo. Donec hendrerit lacinia mi. Sed feugiat justo
-                  tempor, vulputate nulla ut, vestibulum mauris. Aliquam eget ante nec turpis
-                  aliquam bibendum sed et ex. Sed fermentum ante eros, quis scelerisque libero
-                  facilisis ac.
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:hankeVaihe')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  hanke:vaihe:SUUNNITTELU/OHJELMOINTI/RAKENTAMINEN
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:suunnitteluVaihe')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  hanke:suunnitteluVaihe:YLEIS_TAI_HANKE/--/--
-                </Text>
-              </div>
+              <GridItem
+                className={`${styles.gridItem} ${styles.gridDescription}`}
+                title={t('hankePortfolio:labels:hankeVaihe')}
+                content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur mauris augue, at dignissim magna pharetra at. Nulla mollis mattis suscipit. Maecenas sodales in leo et commodo. Donec hendrerit lacinia mi. Sed feugiat justo tempor, vulputate nulla ut, vestibulum mauris. Aliquam eget ante nec turpis aliquam bibendum sed et ex. Sed fermentum ante eros, quis scelerisque libero facilisis ac."
+              />
+              <GridItem
+                className={styles.gridItem}
+                title={t('hankePortfolio:labels:kuvaus')}
+                content={hanke.kuvaus}
+              />
+              <GridItem
+                className={styles.gridItem}
+                title={t('hankePortfolio:labels:suunnitteluVaihe')}
+                content={t(`hanke:vaihe:${hanke.vaihe}`)}
+              />
               <div className={styles.gridItem}>
                 <div className={styles.linkWrapper}>
                   <Text tag="h3" styleAs="h6" weight="bold">
@@ -133,7 +124,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   </Link>
                 </div>
                 <Text tag="p" styleAs="body-m">
-                  lipsum
+                  {hanke.tyomaaKatuosoite}
                 </Text>
               </div>
               <div className={styles.gridItem}>
@@ -141,7 +132,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   {t('hankePortfolio:labels:hankkeenKesto')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
-                  00.00.0000 - 20.20.2000
+                  {formatToFinnishDate(hanke.alkuPvm)} - {formatToFinnishDate(hanke.loppuPvm)}
                 </Text>
               </div>
               <div className={styles.gridItem}>
@@ -149,7 +140,8 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   {t('hankePortfolio:labels:tyomaanKoko')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
-                  hanke:tyoamanKoko:SUPPEA_TAI_PISTE/--/--
+                  {hanke.tyomaaKoko && t(`hanke:tyomaaKoko:${hanke.tyomaaKoko}`)}
+                  {!hanke.tyomaaKoko && '-'}
                 </Text>
               </div>
               <div className={`${styles.gridItem} ${styles.gridType}`}>
@@ -157,10 +149,16 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   {t('hankePortfolio:labels:tyomaanTyyppi')}
                 </Text>
                 <div>
-                  hanke:tyomaanTyyppi:VESI/SAHKO/--/--
-                  <Tag className={styles.hankeTag}>{hanke.vaihe}</Tag>
-                  <Tag className={styles.hankeTag}>{hanke.vaihe}</Tag>
-                  <Tag className={styles.hankeTag}>{hanke.vaihe}</Tag>
+                  {hanke.tyomaaTyyppi &&
+                    hanke.tyomaaTyyppi.length > 0 &&
+                    hanke.tyomaaTyyppi.map((tyomaaTyyppi) => {
+                      return (
+                        <Tag className={styles.hankeTag}>
+                          {t(`hanke:tyomaaTyyppi:${tyomaaTyyppi}`)}
+                        </Tag>
+                      );
+                    })}
+                  {hanke.tyomaaTyyppi && hanke.tyomaaTyyppi.length === 0 && '-'}
                 </div>
               </div>
             </div>
@@ -175,7 +173,8 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   {t('hankeForm:labels:kaistaHaitta')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
-                  hanke:kaistaHaitta:YKSI/KAKSI/--/--
+                  {hanke.kaistaHaitta && t(`hanke:kaistaHaitta:${hanke.kaistaHaitta}`)}
+                  {!hanke.kaistaHaitta && '-'}
                 </Text>
               </div>
               <div className={styles.gridItem}>
@@ -183,7 +182,8 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   {t('hankePortfolio:labels:haitanKesto')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
-                  00.00.0000 - 20.20.2000
+                  {hanke.haittaAlkuPvm && formatToFinnishDate(hanke.haittaAlkuPvm)} -{' '}
+                  {hanke.loppuPvm && formatToFinnishDate(hanke.loppuPvm)}
                 </Text>
               </div>
               <div className={styles.gridItem}>
@@ -191,7 +191,9 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   {t('hankeForm:labels:kaistaPituusHaitta')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
-                  hanke:kaistaPituusHaitta:YKSI/KAKSI/--/--
+                  {hanke.kaistaPituusHaitta &&
+                    t(`hanke:kaistaPituusHaitta:${hanke.kaistaPituusHaitta}`)}
+                  {!hanke.kaistaPituusHaitta && '-'}
                 </Text>
               </div>
               <div className={styles.gridItem}>
@@ -199,7 +201,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   {t('hankeIndexes:liikennehaittaindeksi')}
                 </Text>
                 <div className={styles.index}>
-                  <div className={styles.indexBox}>3.33</div>
+                  <div className={styles.indexBox}>4</div>
                 </div>
               </div>
               <div className={styles.gridItem}>
@@ -207,17 +209,22 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   {t('hankeForm:labels:meluHaitta')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
-                  hanke:meluHaitta:YKSI/KAKSI/--/--
+                  {hanke.meluHaitta && t(`hanke:meluHaitta:${hanke.meluHaitta}`)}
+                  {!hanke.meluHaitta && '-'}
                 </Text>
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
                   {t('hankeIndexes:pyorailynPaareitti')}
                 </Text>
+                {/* 
+                  TODO: indeksit - ovat [] eikä suoraan voida accessoida avaimella.
+                  Katso referenssi kartalta avautuvasta tabista
+                */}
                 <div className={styles.index}>
-                  <div className={styles.indexBox}>3.33</div>
+                  <div className={styles.indexBox}>5</div>
                   <Text tag="p" styleAs="body-m">
-                    {t('hankeIndexes:kieroreittitarve')}:{' '}
+                    {t('hankeIndexes:kiertoreittitarve')}:{' '}
                     {t('hankeIndexes:KIERTOREITTITARPEET:TODENNAKOINEN')}
                   </Text>
                 </div>
@@ -227,7 +234,8 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   {t('hankeForm:labels:polyHaitta')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
-                  hanke:polyHaitta:YKSI/KAKSI/--/--
+                  {hanke.polyHaitta && t(`hanke:polyHaitta:${hanke.polyHaitta}`)}
+                  {!hanke.polyHaitta && '-'}
                 </Text>
               </div>
               <div className={styles.gridItem}>
@@ -235,9 +243,9 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   {t('hankeIndexes:merkittavatJoukkoliikennereitit')}
                 </Text>
                 <div className={styles.index}>
-                  <div className={styles.indexBox}>3.33</div>
+                  <div className={styles.indexBox}>4</div>
                   <Text tag="p" styleAs="body-m">
-                    {t('hankeIndexes:kieroreittitarve')}:{' '}
+                    {t('hankeIndexes:kiertoreittitarve')}:{' '}
                     {t('hankeIndexes:KIERTOREITTITARPEET:MERKITTAVA')}
                   </Text>
                 </div>
@@ -247,7 +255,8 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   {t('hankeForm:labels:tarinaHaitta')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
-                  hanke:tarinaHaitta:YKSI/KAKSI/--/--
+                  {hanke.tarinaHaitta && t(`hanke:tarinaHaitta:${hanke.tarinaHaitta}`)}
+                  {!hanke.tarinaHaitta && '-'}
                 </Text>
               </div>
               <div className={styles.gridItem}>
@@ -255,15 +264,17 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   {t('hankeIndexes:ruuhkautuminen')}
                 </Text>
                 <div className={styles.index}>
-                  <div className={styles.indexBox}>3.33</div>
+                  <div className={styles.indexBox}>3</div>
                   <Text tag="p" styleAs="body-m">
-                    {t('hankeIndexes:kieroreittitarve')}:{' '}
+                    {t('hankeIndexes:kiertoreittitarve')}:{' '}
                     {t('hankeIndexes:KIERTOREITTITARPEET:EI_TARVETTA')}
                   </Text>
                 </div>
               </div>
             </div>
           </TabPanel>
+          {/* Disabloitu toistaiseksi ennen kuin yhteyshenkilöiden tietorakenne saadaan
+              paremmin sointumaan tätä näkymää varten
           <TabPanel>
             <div className={styles.gridContactInfo}>
               <div className={styles.gridItem}>
@@ -425,6 +436,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               </div>
             </div>
           </TabPanel>
+          */}
         </Tabs>
       </Card>
     </>
