@@ -41,6 +41,8 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
   const { isOpen, buttonProps, contentProps } = useAccordion({ initiallyOpen: false });
   // Change icon based on accordion open state
   const icon = isOpen ? <IconAngleDown size="m" /> : <IconAngleUp size="m" />;
+
+  const { t } = useTranslation();
   return (
     <>
       <Card className={styles.hankeCard} border aria-label="Advanced filters" {...buttonProps}>
@@ -83,16 +85,14 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
       >
         <Tabs small>
           <TabList>
-            <Tab>Perustiedot</Tab>
-            <Tab>Yhteystiedot</Tab>
-            <Tab>Liitteet</Tab>
+            <Tab>{t('hankePortfolio:tabit:perustiedot')}</Tab>
+            <Tab>{t('hankePortfolio:tabit:yhteystiedot')}</Tab>
           </TabList>
-          {/* Panelien sisältö varmaan kannattaa tehdä erillisiksi komponenteiksi */}
           <TabPanel>
             <div className={styles.gridBasicInfo}>
               <div className={`${styles.gridItem} ${styles.gridDescription}`}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Kuvaus
+                  {t('hankePortfolio:labels:kuvaus')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur
@@ -105,31 +105,31 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Hankevaihe
+                  {t('hankePortfolio:labels:hankeVaihe')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
-                  lipsum
+                  hanke:vaihe:SUUNNITTELU/OHJELMOINTI/RAKENTAMINEN
                 </Text>
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Suunnitteluvaihe
+                  {t('hankePortfolio:labels:suunnitteluVaihe')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
-                  lipsum
+                  hanke:suunnitteluVaihe:YLEIS_TAI_HANKE/--/--
                 </Text>
               </div>
               <div className={styles.gridItem}>
                 <div className={styles.linkWrapper}>
                   <Text tag="h3" styleAs="h6" weight="bold">
-                    Katuosoite
+                    {t('hankePortfolio:labels:katuosoite')}
                   </Text>
                   <Link
                     className={styles.link}
                     to={`${MAP.path}?hanke=${hanke.hankeTunnus}`}
-                    title="Avaa hanke kartalla"
+                    title={t('hankePortfolio:labels:avaaKartalla')}
                   >
-                    Avaa hanke kartalla
+                    {t('hankePortfolio:labels:avaaKartalla')}
                   </Link>
                 </div>
                 <Text tag="p" styleAs="body-m">
@@ -138,17 +138,26 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Työmaan koko
+                  {t('hankePortfolio:labels:hankkeenKesto')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
-                  lipsum
+                  00.00.0000 - 20.20.2000
+                </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  {t('hankePortfolio:labels:tyomaanKoko')}
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  hanke:tyoamanKoko:SUPPEA_TAI_PISTE/--/--
                 </Text>
               </div>
               <div className={`${styles.gridItem} ${styles.gridType}`}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Työmaan tyyppi
+                  {t('hankePortfolio:labels:tyomaanTyyppi')}
                 </Text>
                 <div>
+                  hanke:tyomaanTyyppi:VESI/SAHKO/--/--
                   <Tag className={styles.hankeTag}>{hanke.vaihe}</Tag>
                   <Tag className={styles.hankeTag}>{hanke.vaihe}</Tag>
                   <Tag className={styles.hankeTag}>{hanke.vaihe}</Tag>
@@ -158,77 +167,100 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
             <div className={styles.gridBasicInfo}>
               <div className={`${styles.gridItem} ${styles.gridType}`}>
                 <Text tag="h3" styleAs="h5" weight="bold">
-                  Haitat
+                  {t('hankePortfolio:labels:hankkeenHaitat')}
                 </Text>
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Kaistahaitta
+                  {t('hankeForm:labels:kaistaHaitta')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
-                  lipsum
+                  hanke:kaistaHaitta:YKSI/KAKSI/--/--
                 </Text>
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Liikennehaitaindeksi
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  Kaistan pituushaitta
+                  {t('hankePortfolio:labels:haitanKesto')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
-                  lipsum
+                  00.00.0000 - 20.20.2000
                 </Text>
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Pyöräilyn pääreitti
+                  {t('hankeForm:labels:kaistaPituusHaitta')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
-                  lipsum
+                  hanke:kaistaPituusHaitta:YKSI/KAKSI/--/--
                 </Text>
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Meluhaitta
+                  {t('hankeIndexes:liikennehaittaindeksi')}
+                </Text>
+                <div className={styles.index}>
+                  <div className={styles.indexBox}>3.33</div>
+                </div>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  {t('hankeForm:labels:meluHaitta')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
-                  lipsum
+                  hanke:meluHaitta:YKSI/KAKSI/--/--
                 </Text>
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Merkittävät joukkoliikennereitit
+                  {t('hankeIndexes:pyorailynPaareitti')}
+                </Text>
+                <div className={styles.index}>
+                  <div className={styles.indexBox}>3.33</div>
+                  <Text tag="p" styleAs="body-m">
+                    {t('hankeIndexes:kieroreittitarve')}:{' '}
+                    {t('hankeIndexes:KIERTOREITTITARPEET:TODENNAKOINEN')}
+                  </Text>
+                </div>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  {t('hankeForm:labels:polyHaitta')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
-                  lipsum
+                  hanke:polyHaitta:YKSI/KAKSI/--/--
                 </Text>
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Pölyhaitta
+                  {t('hankeIndexes:merkittavatJoukkoliikennereitit')}
+                </Text>
+                <div className={styles.index}>
+                  <div className={styles.indexBox}>3.33</div>
+                  <Text tag="p" styleAs="body-m">
+                    {t('hankeIndexes:kieroreittitarve')}:{' '}
+                    {t('hankeIndexes:KIERTOREITTITARPEET:MERKITTAVA')}
+                  </Text>
+                </div>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  {t('hankeForm:labels:tarinaHaitta')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
-                  lipsum
+                  hanke:tarinaHaitta:YKSI/KAKSI/--/--
                 </Text>
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Ruuhkautuminen
+                  {t('hankeIndexes:ruuhkautuminen')}
                 </Text>
-                <Text tag="p" styleAs="body-m">
-                  lipsum
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  Tärinähaitta
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  lipsum
-                </Text>
+                <div className={styles.index}>
+                  <div className={styles.indexBox}>3.33</div>
+                  <Text tag="p" styleAs="body-m">
+                    {t('hankeIndexes:kieroreittitarve')}:{' '}
+                    {t('hankeIndexes:KIERTOREITTITARPEET:EI_TARVETTA')}
+                  </Text>
+                </div>
               </div>
             </div>
           </TabPanel>
@@ -236,17 +268,17 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
             <div className={styles.gridContactInfo}>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h5" weight="bold">
-                  Päätöksenhakija
+                  {t('hankePortfolio:labels:paatoksenHakija')}
                 </Text>
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h5" weight="bold">
-                  Yhteyshenkilö
+                  {t('hankePortfolio:labels:yhteyshenkilo')}
                 </Text>
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Nimi
+                  {t('hankePortfolio:labels:nimi')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
                   lipsum
@@ -254,7 +286,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Nimi
+                  {t('hankePortfolio:labels:nimi')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
                   lipsum
@@ -262,7 +294,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Osoite
+                  {t('hankePortfolio:labels:osoite')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
                   lipsum
@@ -270,7 +302,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Sähköposti
+                  {t('hankePortfolio:labels:sposti')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
                   lipsum
@@ -279,7 +311,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               <div className={styles.gridItem} />
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Puhelin
+                  {t('hankePortfolio:labels:puhelin')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
                   lipsum
@@ -289,17 +321,17 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
             <div className={styles.gridContactInfo}>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h5" weight="bold">
-                  Rakennuttaja
+                  {t('hankePortfolio:labels:rakennuttaja')}
                 </Text>
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h5" weight="bold">
-                  Yhteyshenkilö
+                  {t('hankePortfolio:labels:yhteyshenkilo')}
                 </Text>
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Nimi
+                  {t('hankePortfolio:labels:nimi')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
                   lipsum
@@ -307,7 +339,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Nimi
+                  {t('hankePortfolio:labels:nimi')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
                   lipsum
@@ -315,7 +347,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Osoite
+                  {t('hankePortfolio:labels:osoite')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
                   lipsum
@@ -323,7 +355,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Sähköposti
+                  {t('hankePortfolio:labels:sposti')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
                   lipsum
@@ -332,7 +364,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               <div className={styles.gridItem} />
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Puhelin
+                  {t('hankePortfolio:labels:puhelin')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
                   lipsum
@@ -342,17 +374,17 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
             <div className={styles.gridContactInfo}>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h5" weight="bold">
-                  Työnsuorittaja
+                  {t('hankePortfolio:labels:tyonsuorittaja')}
                 </Text>
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h5" weight="bold">
-                  Yhteyshenkilö
+                  {t('hankePortfolio:labels:yhteyshenkilo')}
                 </Text>
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Nimi
+                  {t('hankePortfolio:labels:nimi')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
                   lipsum
@@ -360,7 +392,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Nimi
+                  {t('hankePortfolio:labels:nimi')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
                   lipsum
@@ -368,7 +400,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Osoite
+                  {t('hankePortfolio:labels:osoite')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
                   lipsum
@@ -376,7 +408,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               </div>
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Sähköposti
+                  {t('hankePortfolio:labels:sposti')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
                   lipsum
@@ -385,7 +417,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               <div className={styles.gridItem} />
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
-                  Puhelin
+                  {t('hankePortfolio:labels:puhelin')}
                 </Text>
                 <Text tag="p" styleAs="body-m">
                   lipsum
@@ -393,7 +425,6 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               </div>
             </div>
           </TabPanel>
-          <TabPanel>Tab 3 sisältö</TabPanel>
         </Tabs>
       </Card>
     </>

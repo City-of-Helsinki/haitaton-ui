@@ -309,7 +309,34 @@
     "noneFound": "Haulla ei löytynyt yhtään hankkeita.",
     "noneExist": "Hankesalkussasi ei ole hankkeita.",
     "hankevaiheet": "Hankevaiheet",
-    "hankevaiheetHelperText": "Valitse hankevaiheet joita haluat tarkastella"
+    "hankevaiheetHelperText": "Valitse hankevaiheet joita haluat tarkastella",
+    "startDate": "Ajanjakson alku",
+    "endDate": "Ajanjakson loppu",
+    "timePeriodHelperText": "Aikaväli jolloin haitta on aktiivinen",
+    "tabit": {
+      "perustiedot": "Perustiedot",
+      "yhteystiedot": "Yhteystiedot"
+    },
+    "labels": {
+      "kuvaus": "Hankkeen kuvaus",
+      "hankeVaihe": "Hankkeen vaihe",
+      "suunnitteluVaihe": "Suunnitteluvaihe",
+      "katuosoite": "Katuosoite",
+      "avaaKartalla": "Avaa kartalla",
+      "hankkeenKesto": "Hankkeen kesto",
+      "tyomaanKoko": "Työmaan koko",
+      "tyomaanTyyppi": "Työmaantyyppi",
+      "hankkeenHaitat": "Hankkeen haitat",
+      "haitanKesto": "Haitan kesto",
+      "paatoksenHakija": "Päätöksenhakija",
+      "rakennuttaja": "Rakennuttaja",
+      "tyonsuorittaja": "Työnsuorittaja",
+      "yhteyshenkilo": "Yhteyshenkilö",
+      "nimi": "Nimi",
+      "osoite": "Osoite",
+      "sposti": "Sähköposti",
+      "puhelin": "Puhelin"
+    }
   },
   "hankeList": {
     "pageHeader": "Hankelista",

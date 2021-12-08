@@ -107,6 +107,18 @@
     }
   }
 
+  .index {
+    display: flex;
+
+    .indexBox {
+      padding: 2px var(--spacing-3-xs) 0;
+      margin-right: var(--spacing-s);
+      background-color: #c4123e;
+      color: white;
+      line-height: 22px;
+    }
+  }
+
   .gridContactInfo {
     display: grid;
     grid-template-columns: 50% 50%;
