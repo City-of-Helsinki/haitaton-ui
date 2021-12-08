@@ -492,7 +492,7 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ columns, data }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const options: any = [];
   useEffect(() => {
-    Object.keys(HANKE_VAIHE).map((hankeVaihe) =>
+    Object.keys(HANKE_VAIHE).forEach((hankeVaihe) =>
       options.push({ label: t(`hanke:vaihe:${hankeVaihe}`), value: hankeVaihe })
     );
   });
