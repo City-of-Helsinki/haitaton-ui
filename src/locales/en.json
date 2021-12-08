@@ -302,9 +302,12 @@
     }
   },
   "hankePortfolio": {
+    "filters": "EN: Rajausehdot",
     "pageHeader": "EN:Hankesalkku",
     "search": "EN: Haku",
     "searchHelperText": "EN: Hae hankkeen nimellä tai tunnuksella",
+    "noneFound": "EN: Haulla ei löytynyt yhtään hankkeita.",
+    "noneExist": "EN: Hankesalkussasi ei ole hankkeita.",
     "hankevaiheet": "EN: Hankevaiheet",
     "hankevaiheetHelperText": "EN: Valitse hankevaiheet joita haluat tarkastella"
   },
