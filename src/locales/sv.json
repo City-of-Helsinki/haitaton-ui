@@ -285,7 +285,7 @@
     }
   },
   "hankeSidebar": {
-    "ariaSidebarContent": "EN:Hankkeen tiedot",
+    "ariaSidebarContent": "SV:Hankkeen tiedot",
     "closeButtonAriaLabel": "SV:Sulje hankevalikko",
     "editHanke": "SV: Muokkaa hankkeen tietoja"
   },
@@ -309,7 +309,33 @@
     "noneFound": "SV: Haulla ei löytynyt yhtään hankkeita.",
     "noneExist": "SV: Hankesalkussasi ei ole hankkeita.",
     "hankevaiheet": "SV: Hankevaiheet",
-    "hankevaiheetHelperText": "SV: Valitse hankevaiheet joita haluat tarkastella"
+    "hankevaiheetHelperText": "SV: Valitse hankevaiheet joita haluat tarkastella",
+    "endDate": "SV: Ajanjakson loppu",
+    "timePeriodHelperText": "SV: Aikaväli jolloin haitta on aktiivinen",
+    "tabit": {
+      "perustiedot": "SV: Perustiedot",
+      "yhteystiedot": "SV: Yhteystiedot"
+    },
+    "labels": {
+      "kuvaus": "SV: Hankkeen kuvaus",
+      "hankeVaihe": "SV: Hankkeen vaihe",
+      "suunnitteluVaihe": "SV: Suunnitteluvaihe",
+      "katuosoite": "SV: Katuosoite",
+      "avaaKartalla": "SV: Avaa kartalla",
+      "hankkeenKesto": "SV: Hankkeen kesto",
+      "tyomaanKoko": "SV: Työmaan koko",
+      "tyomaanTyyppi": "SV: Työmaantyyppi",
+      "hankkeenHaitat": "SV: Hankkeen haitat",
+      "haitanKesto": "SV: Haitan kesto",
+      "paatoksenHakija": "SV: Päätöksenhakija",
+      "rakennuttaja": "SV: Rakennuttaja",
+      "tyonsuorittaja": "SV: Työnsuorittaja",
+      "yhteyshenkilo": "SV: Yhteyshenkilö",
+      "nimi": "SV: Nimi",
+      "osoite": "SV: Osoite",
+      "sposti": "SV: Sähköposti",
+      "puhelin": "SV: Puhelin"
+    }
   },
   "hankeList": {
     "pageHeader": "SV:Hankelista",
