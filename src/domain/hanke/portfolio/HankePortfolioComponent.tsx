@@ -424,6 +424,8 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ columns, data }) => {
     state: { pageIndex },
     setFilter,
     setGlobalFilter,
+    rows,
+    preFilteredRows,
   } = useTable(
     {
       columns,
@@ -513,13 +515,18 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ columns, data }) => {
         onChange={updateHankeVaihe}
       />
 
-      {page.map((row) => {
-        return (
-          <div key={row.original.hankeTunnus}>
-            <CustomAccordion hanke={row.original} />
-          </div>
-        );
-      })}
+      {rows.length > 0 &&
+        page.map((row) => {
+          return (
+            <div key={row.original.hankeTunnus}>
+              <CustomAccordion hanke={row.original} />
+            </div>
+          );
+        })}
+      {rows.length === 0 && preFilteredRows.length > 0 && (
+        <div>{t('hankePortfolio:noneFound')}</div>
+      )}
+      {preFilteredRows.length === 0 && <div>{t('hankePortfolio:noneExist')}</div>}
       <PaginationControl
         goToPage={gotoPage}
         nextPage={nextPage}
