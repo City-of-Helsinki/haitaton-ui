@@ -751,18 +751,6 @@ Object {
                             Perustiedot
                           </span>
                         </li>
-                        <li
-                          aria-controls="tab-1-panel"
-                          aria-selected="false"
-                          class="Tabs-module_tab__3oOoX"
-                          id="tab-1-button"
-                          role="tab"
-                          tabindex="-1"
-                        >
-                          <span>
-                            Yhteystiedot
-                          </span>
-                        </li>
                       </ul>
                     </div>
                   </div>
@@ -780,7 +768,7 @@ Object {
                         <h3
                           class="text--bold text--h6"
                         >
-                          Hankkeen kuvaus
+                          Hankkeen vaihe
                         </h3>
                         <p
                           class="text--normal text--body-m"
@@ -794,12 +782,12 @@ Object {
                         <h3
                           class="text--bold text--h6"
                         >
-                          Hankkeen vaihe
+                          Hankkeen kuvaus
                         </h3>
                         <p
                           class="text--normal text--body-m"
                         >
-                          hanke:vaihe:SUUNNITTELU/OHJELMOINTI/RAKENTAMINEN
+                          Hankkeen kuvaus
                         </p>
                       </div>
                       <div
@@ -813,7 +801,7 @@ Object {
                         <p
                           class="text--normal text--body-m"
                         >
-                          hanke:suunnitteluVaihe:YLEIS_TAI_HANKE/--/--
+                          Ohjelmointi
                         </p>
                       </div>
                       <div
@@ -837,9 +825,7 @@ Object {
                         </div>
                         <p
                           class="text--normal text--body-m"
-                        >
-                          lipsum
-                        </p>
+                        />
                       </div>
                       <div
                         class="gridItem"
@@ -852,7 +838,9 @@ Object {
                         <p
                           class="text--normal text--body-m"
                         >
-                          00.00.0000 - 20.20.2000
+                          02.10.2021
+                           - 
+                          10.10.2021
                         </p>
                       </div>
                       <div
@@ -866,7 +854,7 @@ Object {
                         <p
                           class="text--normal text--body-m"
                         >
-                          hanke:tyoamanKoko:SUPPEA_TAI_PISTE/--/--
+                          -
                         </p>
                       </div>
                       <div
@@ -878,7 +866,6 @@ Object {
                           Työmaantyyppi
                         </h3>
                         <div>
-                          hanke:tyomaanTyyppi:VESI/SAHKO/--/--
                           <div
                             class="Tag-module_tag__3bo5S hankeTag"
                             id="hds-tag"
@@ -890,7 +877,7 @@ Object {
                               <span
                                 aria-hidden="false"
                               >
-                                OHJELMOINTI
+                                Vesi
                               </span>
                             </span>
                           </div>
@@ -905,22 +892,7 @@ Object {
                               <span
                                 aria-hidden="false"
                               >
-                                OHJELMOINTI
-                              </span>
-                            </span>
-                          </div>
-                          <div
-                            class="Tag-module_tag__3bo5S hankeTag"
-                            id="hds-tag"
-                          >
-                            <span
-                              class="Tag-module_label__zCgFr"
-                              id="hds-tag-label"
-                            >
-                              <span
-                                aria-hidden="false"
-                              >
-                                OHJELMOINTI
+                                Viemäri
                               </span>
                             </span>
                           </div>
@@ -950,7 +922,7 @@ Object {
                         <p
                           class="text--normal text--body-m"
                         >
-                          hanke:kaistaHaitta:YKSI/KAKSI/--/--
+                          -
                         </p>
                       </div>
                       <div
@@ -964,7 +936,9 @@ Object {
                         <p
                           class="text--normal text--body-m"
                         >
-                          00.00.0000 - 20.20.2000
+                           -
+                           
+                          10.10.2021
                         </p>
                       </div>
                       <div
@@ -978,7 +952,7 @@ Object {
                         <p
                           class="text--normal text--body-m"
                         >
-                          hanke:kaistaPituusHaitta:YKSI/KAKSI/--/--
+                          -
                         </p>
                       </div>
                       <div
@@ -995,7 +969,7 @@ Object {
                           <div
                             class="indexBox"
                           >
-                            3.33
+                            4
                           </div>
                         </div>
                       </div>
@@ -1010,7 +984,7 @@ Object {
                         <p
                           class="text--normal text--body-m"
                         >
-                          hanke:meluHaitta:YKSI/KAKSI/--/--
+                          -
                         </p>
                       </div>
                       <div
@@ -1027,12 +1001,12 @@ Object {
                           <div
                             class="indexBox"
                           >
-                            3.33
+                            5
                           </div>
                           <p
                             class="text--normal text--body-m"
                           >
-                            kieroreittitarve
+                            Kiertoreittitarve
                             :
                              
                             todennäköinen
@@ -1050,7 +1024,7 @@ Object {
                         <p
                           class="text--normal text--body-m"
                         >
-                          hanke:polyHaitta:YKSI/KAKSI/--/--
+                          -
                         </p>
                       </div>
                       <div
@@ -1067,12 +1041,12 @@ Object {
                           <div
                             class="indexBox"
                           >
-                            3.33
+                            4
                           </div>
                           <p
                             class="text--normal text--body-m"
                           >
-                            kieroreittitarve
+                            Kiertoreittitarve
                             :
                              
                             merkittävä
@@ -1090,7 +1064,7 @@ Object {
                         <p
                           class="text--normal text--body-m"
                         >
-                          hanke:tarinaHaitta:YKSI/KAKSI/--/--
+                          -
                         </p>
                       </div>
                       <div
@@ -1107,12 +1081,12 @@ Object {
                           <div
                             class="indexBox"
                           >
-                            3.33
+                            3
                           </div>
                           <p
                             class="text--normal text--body-m"
                           >
-                            kieroreittitarve
+                            Kiertoreittitarve
                             :
                              
                             ei tarvetta
@@ -1259,18 +1233,6 @@ Object {
                             Perustiedot
                           </span>
                         </li>
-                        <li
-                          aria-controls="tab-1-panel"
-                          aria-selected="false"
-                          class="Tabs-module_tab__3oOoX"
-                          id="tab-1-button"
-                          role="tab"
-                          tabindex="-1"
-                        >
-                          <span>
-                            Yhteystiedot
-                          </span>
-                        </li>
                       </ul>
                     </div>
                   </div>
@@ -1288,7 +1250,7 @@ Object {
                         <h3
                           class="text--bold text--h6"
                         >
-                          Hankkeen kuvaus
+                          Hankkeen vaihe
                         </h3>
                         <p
                           class="text--normal text--body-m"
@@ -1302,13 +1264,11 @@ Object {
                         <h3
                           class="text--bold text--h6"
                         >
-                          Hankkeen vaihe
+                          Hankkeen kuvaus
                         </h3>
                         <p
                           class="text--normal text--body-m"
-                        >
-                          hanke:vaihe:SUUNNITTELU/OHJELMOINTI/RAKENTAMINEN
-                        </p>
+                        />
                       </div>
                       <div
                         class="gridItem"
@@ -1321,7 +1281,7 @@ Object {
                         <p
                           class="text--normal text--body-m"
                         >
-                          hanke:suunnitteluVaihe:YLEIS_TAI_HANKE/--/--
+                          Ohjelmointi
                         </p>
                       </div>
                       <div
@@ -1345,9 +1305,7 @@ Object {
                         </div>
                         <p
                           class="text--normal text--body-m"
-                        >
-                          lipsum
-                        </p>
+                        />
                       </div>
                       <div
                         class="gridItem"
@@ -1360,7 +1318,9 @@ Object {
                         <p
                           class="text--normal text--body-m"
                         >
-                          00.00.0000 - 20.20.2000
+                          02.10.2021
+                           - 
+                          05.10.2021
                         </p>
                       </div>
                       <div
@@ -1374,7 +1334,7 @@ Object {
                         <p
                           class="text--normal text--body-m"
                         >
-                          hanke:tyoamanKoko:SUPPEA_TAI_PISTE/--/--
+                          -
                         </p>
                       </div>
                       <div
@@ -1386,52 +1346,7 @@ Object {
                           Työmaantyyppi
                         </h3>
                         <div>
-                          hanke:tyomaanTyyppi:VESI/SAHKO/--/--
-                          <div
-                            class="Tag-module_tag__3bo5S hankeTag"
-                            id="hds-tag"
-                          >
-                            <span
-                              class="Tag-module_label__zCgFr"
-                              id="hds-tag-label"
-                            >
-                              <span
-                                aria-hidden="false"
-                              >
-                                OHJELMOINTI
-                              </span>
-                            </span>
-                          </div>
-                          <div
-                            class="Tag-module_tag__3bo5S hankeTag"
-                            id="hds-tag"
-                          >
-                            <span
-                              class="Tag-module_label__zCgFr"
-                              id="hds-tag-label"
-                            >
-                              <span
-                                aria-hidden="false"
-                              >
-                                OHJELMOINTI
-                              </span>
-                            </span>
-                          </div>
-                          <div
-                            class="Tag-module_tag__3bo5S hankeTag"
-                            id="hds-tag"
-                          >
-                            <span
-                              class="Tag-module_label__zCgFr"
-                              id="hds-tag-label"
-                            >
-                              <span
-                                aria-hidden="false"
-                              >
-                                OHJELMOINTI
-                              </span>
-                            </span>
-                          </div>
+                          -
                         </div>
                       </div>
                     </div>
@@ -1458,7 +1373,7 @@ Object {
                         <p
                           class="text--normal text--body-m"
                         >
-                          hanke:kaistaHaitta:YKSI/KAKSI/--/--
+                          -
                         </p>
                       </div>
                       <div
@@ -1472,7 +1387,9 @@ Object {
                         <p
                           class="text--normal text--body-m"
                         >
-                          00.00.0000 - 20.20.2000
+                           -
+                           
+                          05.10.2021
                         </p>
                       </div>
                       <div
@@ -1486,7 +1403,7 @@ Object {
                         <p
                           class="text--normal text--body-m"
                         >
-                          hanke:kaistaPituusHaitta:YKSI/KAKSI/--/--
+                          -
                         </p>
                       </div>
                       <div
@@ -1503,7 +1420,7 @@ Object {
                           <div
                             class="indexBox"
                           >
-                            3.33
+                            4
                           </div>
                         </div>
                       </div>
@@ -1518,7 +1435,7 @@ Object {
                         <p
                           class="text--normal text--body-m"
                         >
-                          hanke:meluHaitta:YKSI/KAKSI/--/--
+                          -
                         </p>
                       </div>
                       <div
@@ -1535,12 +1452,12 @@ Object {
                           <div
                             class="indexBox"
                           >
-                            3.33
+                            5
                           </div>
                           <p
                             class="text--normal text--body-m"
                           >
-                            kieroreittitarve
+                            Kiertoreittitarve
                             :
                              
                             todennäköinen
@@ -1558,7 +1475,7 @@ Object {
                         <p
                           class="text--normal text--body-m"
                         >
-                          hanke:polyHaitta:YKSI/KAKSI/--/--
+                          -
                         </p>
                       </div>
                       <div
@@ -1575,12 +1492,12 @@ Object {
                           <div
                             class="indexBox"
                           >
-                            3.33
+                            4
                           </div>
                           <p
                             class="text--normal text--body-m"
                           >
-                            kieroreittitarve
+                            Kiertoreittitarve
                             :
                              
                             merkittävä
@@ -1598,7 +1515,7 @@ Object {
                         <p
                           class="text--normal text--body-m"
                         >
-                          hanke:tarinaHaitta:YKSI/KAKSI/--/--
+                          -
                         </p>
                       </div>
                       <div
@@ -1615,12 +1532,12 @@ Object {
                           <div
                             class="indexBox"
                           >
-                            3.33
+                            3
                           </div>
                           <p
                             class="text--normal text--body-m"
                           >
-                            kieroreittitarve
+                            Kiertoreittitarve
                             :
                              
                             ei tarvetta
@@ -2530,18 +2447,6 @@ Object {
                           Perustiedot
                         </span>
                       </li>
-                      <li
-                        aria-controls="tab-1-panel"
-                        aria-selected="false"
-                        class="Tabs-module_tab__3oOoX"
-                        id="tab-1-button"
-                        role="tab"
-                        tabindex="-1"
-                      >
-                        <span>
-                          Yhteystiedot
-                        </span>
-                      </li>
                     </ul>
                   </div>
                 </div>
@@ -2559,7 +2464,7 @@ Object {
                       <h3
                         class="text--bold text--h6"
                       >
-                        Hankkeen kuvaus
+                        Hankkeen vaihe
                       </h3>
                       <p
                         class="text--normal text--body-m"
@@ -2573,12 +2478,12 @@ Object {
                       <h3
                         class="text--bold text--h6"
                       >
-                        Hankkeen vaihe
+                        Hankkeen kuvaus
                       </h3>
                       <p
                         class="text--normal text--body-m"
                       >
-                        hanke:vaihe:SUUNNITTELU/OHJELMOINTI/RAKENTAMINEN
+                        Hankkeen kuvaus
                       </p>
                     </div>
                     <div
@@ -2592,7 +2497,7 @@ Object {
                       <p
                         class="text--normal text--body-m"
                       >
-                        hanke:suunnitteluVaihe:YLEIS_TAI_HANKE/--/--
+                        Ohjelmointi
                       </p>
                     </div>
                     <div
@@ -2616,9 +2521,7 @@ Object {
                       </div>
                       <p
                         class="text--normal text--body-m"
-                      >
-                        lipsum
-                      </p>
+                      />
                     </div>
                     <div
                       class="gridItem"
@@ -2631,7 +2534,9 @@ Object {
                       <p
                         class="text--normal text--body-m"
                       >
-                        00.00.0000 - 20.20.2000
+                        02.10.2021
+                         - 
+                        10.10.2021
                       </p>
                     </div>
                     <div
@@ -2645,7 +2550,7 @@ Object {
                       <p
                         class="text--normal text--body-m"
                       >
-                        hanke:tyoamanKoko:SUPPEA_TAI_PISTE/--/--
+                        -
                       </p>
                     </div>
                     <div
@@ -2657,7 +2562,6 @@ Object {
                         Työmaantyyppi
                       </h3>
                       <div>
-                        hanke:tyomaanTyyppi:VESI/SAHKO/--/--
                         <div
                           class="Tag-module_tag__3bo5S hankeTag"
                           id="hds-tag"
@@ -2669,7 +2573,7 @@ Object {
                             <span
                               aria-hidden="false"
                             >
-                              OHJELMOINTI
+                              Vesi
                             </span>
                           </span>
                         </div>
@@ -2684,22 +2588,7 @@ Object {
                             <span
                               aria-hidden="false"
                             >
-                              OHJELMOINTI
-                            </span>
-                          </span>
-                        </div>
-                        <div
-                          class="Tag-module_tag__3bo5S hankeTag"
-                          id="hds-tag"
-                        >
-                          <span
-                            class="Tag-module_label__zCgFr"
-                            id="hds-tag-label"
-                          >
-                            <span
-                              aria-hidden="false"
-                            >
-                              OHJELMOINTI
+                              Viemäri
                             </span>
                           </span>
                         </div>
@@ -2729,7 +2618,7 @@ Object {
                       <p
                         class="text--normal text--body-m"
                       >
-                        hanke:kaistaHaitta:YKSI/KAKSI/--/--
+                        -
                       </p>
                     </div>
                     <div
@@ -2743,7 +2632,9 @@ Object {
                       <p
                         class="text--normal text--body-m"
                       >
-                        00.00.0000 - 20.20.2000
+                         -
+                         
+                        10.10.2021
                       </p>
                     </div>
                     <div
@@ -2757,7 +2648,7 @@ Object {
                       <p
                         class="text--normal text--body-m"
                       >
-                        hanke:kaistaPituusHaitta:YKSI/KAKSI/--/--
+                        -
                       </p>
                     </div>
                     <div
@@ -2774,7 +2665,7 @@ Object {
                         <div
                           class="indexBox"
                         >
-                          3.33
+                          4
                         </div>
                       </div>
                     </div>
@@ -2789,7 +2680,7 @@ Object {
                       <p
                         class="text--normal text--body-m"
                       >
-                        hanke:meluHaitta:YKSI/KAKSI/--/--
+                        -
                       </p>
                     </div>
                     <div
@@ -2806,12 +2697,12 @@ Object {
                         <div
                           class="indexBox"
                         >
-                          3.33
+                          5
                         </div>
                         <p
                           class="text--normal text--body-m"
                         >
-                          kieroreittitarve
+                          Kiertoreittitarve
                           :
                            
                           todennäköinen
@@ -2829,7 +2720,7 @@ Object {
                       <p
                         class="text--normal text--body-m"
                       >
-                        hanke:polyHaitta:YKSI/KAKSI/--/--
+                        -
                       </p>
                     </div>
                     <div
@@ -2846,12 +2737,12 @@ Object {
                         <div
                           class="indexBox"
                         >
-                          3.33
+                          4
                         </div>
                         <p
                           class="text--normal text--body-m"
                         >
-                          kieroreittitarve
+                          Kiertoreittitarve
                           :
                            
                           merkittävä
@@ -2869,7 +2760,7 @@ Object {
                       <p
                         class="text--normal text--body-m"
                       >
-                        hanke:tarinaHaitta:YKSI/KAKSI/--/--
+                        -
                       </p>
                     </div>
                     <div
@@ -2886,12 +2777,12 @@ Object {
                         <div
                           class="indexBox"
                         >
-                          3.33
+                          3
                         </div>
                         <p
                           class="text--normal text--body-m"
                         >
-                          kieroreittitarve
+                          Kiertoreittitarve
                           :
                            
                           ei tarvetta
@@ -3038,18 +2929,6 @@ Object {
                           Perustiedot
                         </span>
                       </li>
-                      <li
-                        aria-controls="tab-1-panel"
-                        aria-selected="false"
-                        class="Tabs-module_tab__3oOoX"
-                        id="tab-1-button"
-                        role="tab"
-                        tabindex="-1"
-                      >
-                        <span>
-                          Yhteystiedot
-                        </span>
-                      </li>
                     </ul>
                   </div>
                 </div>
@@ -3067,7 +2946,7 @@ Object {
                       <h3
                         class="text--bold text--h6"
                       >
-                        Hankkeen kuvaus
+                        Hankkeen vaihe
                       </h3>
                       <p
                         class="text--normal text--body-m"
@@ -3081,13 +2960,11 @@ Object {
                       <h3
                         class="text--bold text--h6"
                       >
-                        Hankkeen vaihe
+                        Hankkeen kuvaus
                       </h3>
                       <p
                         class="text--normal text--body-m"
-                      >
-                        hanke:vaihe:SUUNNITTELU/OHJELMOINTI/RAKENTAMINEN
-                      </p>
+                      />
                     </div>
                     <div
                       class="gridItem"
@@ -3100,7 +2977,7 @@ Object {
                       <p
                         class="text--normal text--body-m"
                       >
-                        hanke:suunnitteluVaihe:YLEIS_TAI_HANKE/--/--
+                        Ohjelmointi
                       </p>
                     </div>
                     <div
@@ -3124,9 +3001,7 @@ Object {
                       </div>
                       <p
                         class="text--normal text--body-m"
-                      >
-                        lipsum
-                      </p>
+                      />
                     </div>
                     <div
                       class="gridItem"
@@ -3139,7 +3014,9 @@ Object {
                       <p
                         class="text--normal text--body-m"
                       >
-                        00.00.0000 - 20.20.2000
+                        02.10.2021
+                         - 
+                        05.10.2021
                       </p>
                     </div>
                     <div
@@ -3153,7 +3030,7 @@ Object {
                       <p
                         class="text--normal text--body-m"
                       >
-                        hanke:tyoamanKoko:SUPPEA_TAI_PISTE/--/--
+                        -
                       </p>
                     </div>
                     <div
@@ -3165,52 +3042,7 @@ Object {
                         Työmaantyyppi
                       </h3>
                       <div>
-                        hanke:tyomaanTyyppi:VESI/SAHKO/--/--
-                        <div
-                          class="Tag-module_tag__3bo5S hankeTag"
-                          id="hds-tag"
-                        >
-                          <span
-                            class="Tag-module_label__zCgFr"
-                            id="hds-tag-label"
-                          >
-                            <span
-                              aria-hidden="false"
-                            >
-                              OHJELMOINTI
-                            </span>
-                          </span>
-                        </div>
-                        <div
-                          class="Tag-module_tag__3bo5S hankeTag"
-                          id="hds-tag"
-                        >
-                          <span
-                            class="Tag-module_label__zCgFr"
-                            id="hds-tag-label"
-                          >
-                            <span
-                              aria-hidden="false"
-                            >
-                              OHJELMOINTI
-                            </span>
-                          </span>
-                        </div>
-                        <div
-                          class="Tag-module_tag__3bo5S hankeTag"
-                          id="hds-tag"
-                        >
-                          <span
-                            class="Tag-module_label__zCgFr"
-                            id="hds-tag-label"
-                          >
-                            <span
-                              aria-hidden="false"
-                            >
-                              OHJELMOINTI
-                            </span>
-                          </span>
-                        </div>
+                        -
                       </div>
                     </div>
                   </div>
@@ -3237,7 +3069,7 @@ Object {
                       <p
                         class="text--normal text--body-m"
                       >
-                        hanke:kaistaHaitta:YKSI/KAKSI/--/--
+                        -
                       </p>
                     </div>
                     <div
@@ -3251,7 +3083,9 @@ Object {
                       <p
                         class="text--normal text--body-m"
                       >
-                        00.00.0000 - 20.20.2000
+                         -
+                         
+                        05.10.2021
                       </p>
                     </div>
                     <div
@@ -3265,7 +3099,7 @@ Object {
                       <p
                         class="text--normal text--body-m"
                       >
-                        hanke:kaistaPituusHaitta:YKSI/KAKSI/--/--
+                        -
                       </p>
                     </div>
                     <div
@@ -3282,7 +3116,7 @@ Object {
                         <div
                           class="indexBox"
                         >
-                          3.33
+                          4
                         </div>
                       </div>
                     </div>
@@ -3297,7 +3131,7 @@ Object {
                       <p
                         class="text--normal text--body-m"
                       >
-                        hanke:meluHaitta:YKSI/KAKSI/--/--
+                        -
                       </p>
                     </div>
                     <div
@@ -3314,12 +3148,12 @@ Object {
                         <div
                           class="indexBox"
                         >
-                          3.33
+                          5
                         </div>
                         <p
                           class="text--normal text--body-m"
                         >
-                          kieroreittitarve
+                          Kiertoreittitarve
                           :
                            
                           todennäköinen
@@ -3337,7 +3171,7 @@ Object {
                       <p
                         class="text--normal text--body-m"
                       >
-                        hanke:polyHaitta:YKSI/KAKSI/--/--
+                        -
                       </p>
                     </div>
                     <div
@@ -3354,12 +3188,12 @@ Object {
                         <div
                           class="indexBox"
                         >
-                          3.33
+                          4
                         </div>
                         <p
                           class="text--normal text--body-m"
                         >
-                          kieroreittitarve
+                          Kiertoreittitarve
                           :
                            
                           merkittävä
@@ -3377,7 +3211,7 @@ Object {
                       <p
                         class="text--normal text--body-m"
                       >
-                        hanke:tarinaHaitta:YKSI/KAKSI/--/--
+                        -
                       </p>
                     </div>
                     <div
@@ -3394,12 +3228,12 @@ Object {
                         <div
                           class="indexBox"
                         >
-                          3.33
+                          3
                         </div>
                         <p
                           class="text--normal text--body-m"
                         >
-                          kieroreittitarve
+                          Kiertoreittitarve
                           :
                            
                           ei tarvetta
