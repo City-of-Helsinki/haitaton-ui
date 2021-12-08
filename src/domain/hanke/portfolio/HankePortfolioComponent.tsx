@@ -18,13 +18,13 @@ import {
   TabList,
   TabPanel,
   TextInput,
+  Fieldset,
 } from 'hds-react';
 import { IconAngleDown, IconAngleUp, IconPen } from 'hds-react/icons';
 import { Link } from 'react-router-dom';
 import Text from '../../../common/components/text/Text';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import { HankeDataDraft, HANKE_VAIHE } from '../../types/hanke';
-
 import styles from './HankePortfolio.module.scss';
 import { formatToFinnishDate } from '../../../common/utils/date';
 import PaginationControl from '../../common/pagination/PaginationControl';
@@ -490,30 +490,34 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ columns, data }) => {
 
   return (
     <>
-      <TextInput
-        id="searchHanke"
-        onChange={(e) => searchHankeInputChangeDebounced(e.target.value)}
-        label={t('hankePortfolio:search')}
-        helperText={t('hankePortfolio:searchHelperText')}
-      />
-      <DateRangeControl
-        startDate={hankeFilterStartDate}
-        endDate={hankeFilterEndDate}
-        updateStartDate={setHankeFilterStartDate}
-        updateEndDate={setHankeFilterEndDate}
-      />
+      <Fieldset heading={t('hankePortfolio:filters')} border>
+        <TextInput
+          id="searchHanke"
+          onChange={(e) => searchHankeInputChangeDebounced(e.target.value)}
+          label={t('hankePortfolio:search')}
+          helperText={t('hankePortfolio:searchHelperText')}
+        />
+        <div style={{ display: 'none' }}>
+          <DateRangeControl
+            startDate={hankeFilterStartDate}
+            endDate={hankeFilterEndDate}
+            updateStartDate={setHankeFilterStartDate}
+            updateEndDate={setHankeFilterEndDate}
+          />
+        </div>
 
-      <Select
-        multiselect
-        label={t('hankePortfolio:hankevaiheet')}
-        helper={t('hankePortfolio:hankevaiheetHelperText')}
-        options={options}
-        defaultValue={options}
-        clearButtonAriaLabel="Clear all selections"
-        // eslint-disable-next-line no-template-curly-in-string
-        selectedItemRemoveButtonAriaLabel="Remove ${value}"
-        onChange={updateHankeVaihe}
-      />
+        <Select
+          multiselect
+          label={t('hankePortfolio:hankevaiheet')}
+          helper={t('hankePortfolio:hankevaiheetHelperText')}
+          options={options}
+          defaultValue={options}
+          clearButtonAriaLabel="Clear all selections"
+          // eslint-disable-next-line no-template-curly-in-string
+          selectedItemRemoveButtonAriaLabel="Remove ${value}"
+          onChange={updateHankeVaihe}
+        />
+      </Fieldset>
 
       {rows.length > 0 &&
         page.map((row) => {

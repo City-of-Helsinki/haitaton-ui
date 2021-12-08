@@ -51,7 +51,7 @@ const PaginationControl: React.FC<Props> = ({
         </button>
         <span className={styles.wrp}>
           {t('hankeList:paginationHeader')} <span data-testid="currentPage">{pageIndex + 1}</span> /{' '}
-          <span>{pagesLength}</span>
+          <span data-testid="amountOfPages">{pagesLength}</span>
         </span>
         <button
           type="button"

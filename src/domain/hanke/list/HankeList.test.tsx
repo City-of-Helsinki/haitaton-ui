@@ -26,7 +26,7 @@ describe('HankeLista', () => {
   test('pagination test', async () => {
     const { container, queryAllByText } = render(<HankeList projectsData={hankeDraftList} />);
 
-    expect(getByTestId(container, 'amountOfpages')).toHaveTextContent('2');
+    expect(getByTestId(container, 'amountOfPages')).toHaveTextContent('2');
     getByTestId(container, 'toEnd').click();
     expect(getByTestId(container, 'currentPage')).toHaveTextContent('2');
     getByTestId(container, 'backward').click();

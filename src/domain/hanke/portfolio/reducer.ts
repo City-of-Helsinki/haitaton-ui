@@ -1,8 +1,6 @@
 import { PayloadAction, CaseReducer, createSlice } from '@reduxjs/toolkit';
 import { ReducerState } from './types';
 
-const currentYear = new Date().getFullYear();
-
 const setFilterStartDate: CaseReducer<ReducerState, PayloadAction<string>> = (state, action) => {
   state.portfolioFilters.startDate = action.payload;
 };
@@ -13,8 +11,8 @@ const setFilterEndDate: CaseReducer<ReducerState, PayloadAction<string>> = (stat
 
 const initialState: ReducerState = {
   portfolioFilters: {
-    startDate: `${currentYear}-01-01`,
-    endDate: `${currentYear + 1}-12-31`,
+    startDate: `1990-01-01`,
+    endDate: `2200-12-31`,
   },
 };
 
