@@ -196,6 +196,8 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   {!hanke.kaistaPituusHaitta && '-'}
                 </Text>
               </div>
+
+              {/*
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
                   {t('hankeIndexes:liikennehaittaindeksi')}
@@ -204,6 +206,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   <div className={styles.indexBox}>4</div>
                 </div>
               </div>
+              */}
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
                   {t('hankeForm:labels:meluHaitta')}
@@ -213,14 +216,14 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   {!hanke.meluHaitta && '-'}
                 </Text>
               </div>
+              {/*
+                  huom: indeksit - ovat [] eikä suoraan voida accessoida avaimella.
+                  Katso referenssi kartalta avautuvasta tabista
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
                   {t('hankeIndexes:pyorailynPaareitti')}
                 </Text>
-                {/* 
-                  TODO: indeksit - ovat [] eikä suoraan voida accessoida avaimella.
-                  Katso referenssi kartalta avautuvasta tabista
-                */}
+
                 <div className={styles.index}>
                   <div className={styles.indexBox}>5</div>
                   <Text tag="p" styleAs="body-m">
@@ -228,7 +231,9 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                     {t('hankeIndexes:KIERTOREITTITARPEET:TODENNAKOINEN')}
                   </Text>
                 </div>
+              
               </div>
+              */}
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
                   {t('hankeForm:labels:polyHaitta')}
@@ -238,6 +243,8 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   {!hanke.polyHaitta && '-'}
                 </Text>
               </div>
+
+              {/*
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
                   {t('hankeIndexes:merkittavatJoukkoliikennereitit')}
@@ -249,7 +256,9 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                     {t('hankeIndexes:KIERTOREITTITARPEET:MERKITTAVA')}
                   </Text>
                 </div>
+                
               </div>
+              */}
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
                   {t('hankeForm:labels:tarinaHaitta')}
@@ -259,6 +268,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   {!hanke.tarinaHaitta && '-'}
                 </Text>
               </div>
+              {/*
               <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
                   {t('hankeIndexes:ruuhkautuminen')}
@@ -271,6 +281,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   </Text>
                 </div>
               </div>
+              */}
             </div>
           </TabPanel>
           {/* Disabloitu toistaiseksi ennen kuin yhteyshenkilöiden tietorakenne saadaan

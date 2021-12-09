@@ -961,24 +961,6 @@ Object {
                         <h3
                           class="text--bold text--h6"
                         >
-                          Liikennehaittaindeksi
-                        </h3>
-                        <div
-                          class="index"
-                        >
-                          <div
-                            class="indexBox"
-                          >
-                            4
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        class="gridItem"
-                      >
-                        <h3
-                          class="text--bold text--h6"
-                        >
                           Meluhaitta
                         </h3>
                         <p
@@ -986,32 +968,6 @@ Object {
                         >
                           -
                         </p>
-                      </div>
-                      <div
-                        class="gridItem"
-                      >
-                        <h3
-                          class="text--bold text--h6"
-                        >
-                          Pyöräilyn pääreitti
-                        </h3>
-                        <div
-                          class="index"
-                        >
-                          <div
-                            class="indexBox"
-                          >
-                            5
-                          </div>
-                          <p
-                            class="text--normal text--body-m"
-                          >
-                            Kiertoreittitarve
-                            :
-                             
-                            todennäköinen
-                          </p>
-                        </div>
                       </div>
                       <div
                         class="gridItem"
@@ -1033,32 +989,6 @@ Object {
                         <h3
                           class="text--bold text--h6"
                         >
-                          Merkittävät joukkoliikennereitit
-                        </h3>
-                        <div
-                          class="index"
-                        >
-                          <div
-                            class="indexBox"
-                          >
-                            4
-                          </div>
-                          <p
-                            class="text--normal text--body-m"
-                          >
-                            Kiertoreittitarve
-                            :
-                             
-                            merkittävä
-                          </p>
-                        </div>
-                      </div>
-                      <div
-                        class="gridItem"
-                      >
-                        <h3
-                          class="text--bold text--h6"
-                        >
                           Tärinähaitta
                         </h3>
                         <p
@@ -1066,32 +996,6 @@ Object {
                         >
                           -
                         </p>
-                      </div>
-                      <div
-                        class="gridItem"
-                      >
-                        <h3
-                          class="text--bold text--h6"
-                        >
-                          Ruuhkautuminen
-                        </h3>
-                        <div
-                          class="index"
-                        >
-                          <div
-                            class="indexBox"
-                          >
-                            3
-                          </div>
-                          <p
-                            class="text--normal text--body-m"
-                          >
-                            Kiertoreittitarve
-                            :
-                             
-                            ei tarvetta
-                          </p>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -1412,24 +1316,6 @@ Object {
                         <h3
                           class="text--bold text--h6"
                         >
-                          Liikennehaittaindeksi
-                        </h3>
-                        <div
-                          class="index"
-                        >
-                          <div
-                            class="indexBox"
-                          >
-                            4
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        class="gridItem"
-                      >
-                        <h3
-                          class="text--bold text--h6"
-                        >
                           Meluhaitta
                         </h3>
                         <p
@@ -1437,32 +1323,6 @@ Object {
                         >
                           -
                         </p>
-                      </div>
-                      <div
-                        class="gridItem"
-                      >
-                        <h3
-                          class="text--bold text--h6"
-                        >
-                          Pyöräilyn pääreitti
-                        </h3>
-                        <div
-                          class="index"
-                        >
-                          <div
-                            class="indexBox"
-                          >
-                            5
-                          </div>
-                          <p
-                            class="text--normal text--body-m"
-                          >
-                            Kiertoreittitarve
-                            :
-                             
-                            todennäköinen
-                          </p>
-                        </div>
                       </div>
                       <div
                         class="gridItem"
@@ -1484,32 +1344,6 @@ Object {
                         <h3
                           class="text--bold text--h6"
                         >
-                          Merkittävät joukkoliikennereitit
-                        </h3>
-                        <div
-                          class="index"
-                        >
-                          <div
-                            class="indexBox"
-                          >
-                            4
-                          </div>
-                          <p
-                            class="text--normal text--body-m"
-                          >
-                            Kiertoreittitarve
-                            :
-                             
-                            merkittävä
-                          </p>
-                        </div>
-                      </div>
-                      <div
-                        class="gridItem"
-                      >
-                        <h3
-                          class="text--bold text--h6"
-                        >
                           Tärinähaitta
                         </h3>
                         <p
@@ -1517,32 +1351,6 @@ Object {
                         >
                           -
                         </p>
-                      </div>
-                      <div
-                        class="gridItem"
-                      >
-                        <h3
-                          class="text--bold text--h6"
-                        >
-                          Ruuhkautuminen
-                        </h3>
-                        <div
-                          class="index"
-                        >
-                          <div
-                            class="indexBox"
-                          >
-                            3
-                          </div>
-                          <p
-                            class="text--normal text--body-m"
-                          >
-                            Kiertoreittitarve
-                            :
-                             
-                            ei tarvetta
-                          </p>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -2657,24 +2465,6 @@ Object {
                       <h3
                         class="text--bold text--h6"
                       >
-                        Liikennehaittaindeksi
-                      </h3>
-                      <div
-                        class="index"
-                      >
-                        <div
-                          class="indexBox"
-                        >
-                          4
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="gridItem"
-                    >
-                      <h3
-                        class="text--bold text--h6"
-                      >
                         Meluhaitta
                       </h3>
                       <p
@@ -2682,32 +2472,6 @@ Object {
                       >
                         -
                       </p>
-                    </div>
-                    <div
-                      class="gridItem"
-                    >
-                      <h3
-                        class="text--bold text--h6"
-                      >
-                        Pyöräilyn pääreitti
-                      </h3>
-                      <div
-                        class="index"
-                      >
-                        <div
-                          class="indexBox"
-                        >
-                          5
-                        </div>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                          Kiertoreittitarve
-                          :
-                           
-                          todennäköinen
-                        </p>
-                      </div>
                     </div>
                     <div
                       class="gridItem"
@@ -2729,32 +2493,6 @@ Object {
                       <h3
                         class="text--bold text--h6"
                       >
-                        Merkittävät joukkoliikennereitit
-                      </h3>
-                      <div
-                        class="index"
-                      >
-                        <div
-                          class="indexBox"
-                        >
-                          4
-                        </div>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                          Kiertoreittitarve
-                          :
-                           
-                          merkittävä
-                        </p>
-                      </div>
-                    </div>
-                    <div
-                      class="gridItem"
-                    >
-                      <h3
-                        class="text--bold text--h6"
-                      >
                         Tärinähaitta
                       </h3>
                       <p
@@ -2762,32 +2500,6 @@ Object {
                       >
                         -
                       </p>
-                    </div>
-                    <div
-                      class="gridItem"
-                    >
-                      <h3
-                        class="text--bold text--h6"
-                      >
-                        Ruuhkautuminen
-                      </h3>
-                      <div
-                        class="index"
-                      >
-                        <div
-                          class="indexBox"
-                        >
-                          3
-                        </div>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                          Kiertoreittitarve
-                          :
-                           
-                          ei tarvetta
-                        </p>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -3108,24 +2820,6 @@ Object {
                       <h3
                         class="text--bold text--h6"
                       >
-                        Liikennehaittaindeksi
-                      </h3>
-                      <div
-                        class="index"
-                      >
-                        <div
-                          class="indexBox"
-                        >
-                          4
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="gridItem"
-                    >
-                      <h3
-                        class="text--bold text--h6"
-                      >
                         Meluhaitta
                       </h3>
                       <p
@@ -3133,32 +2827,6 @@ Object {
                       >
                         -
                       </p>
-                    </div>
-                    <div
-                      class="gridItem"
-                    >
-                      <h3
-                        class="text--bold text--h6"
-                      >
-                        Pyöräilyn pääreitti
-                      </h3>
-                      <div
-                        class="index"
-                      >
-                        <div
-                          class="indexBox"
-                        >
-                          5
-                        </div>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                          Kiertoreittitarve
-                          :
-                           
-                          todennäköinen
-                        </p>
-                      </div>
                     </div>
                     <div
                       class="gridItem"
@@ -3180,32 +2848,6 @@ Object {
                       <h3
                         class="text--bold text--h6"
                       >
-                        Merkittävät joukkoliikennereitit
-                      </h3>
-                      <div
-                        class="index"
-                      >
-                        <div
-                          class="indexBox"
-                        >
-                          4
-                        </div>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                          Kiertoreittitarve
-                          :
-                           
-                          merkittävä
-                        </p>
-                      </div>
-                    </div>
-                    <div
-                      class="gridItem"
-                    >
-                      <h3
-                        class="text--bold text--h6"
-                      >
                         Tärinähaitta
                       </h3>
                       <p
@@ -3213,32 +2855,6 @@ Object {
                       >
                         -
                       </p>
-                    </div>
-                    <div
-                      class="gridItem"
-                    >
-                      <h3
-                        class="text--bold text--h6"
-                      >
-                        Ruuhkautuminen
-                      </h3>
-                      <div
-                        class="index"
-                      >
-                        <div
-                          class="indexBox"
-                        >
-                          3
-                        </div>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                          Kiertoreittitarve
-                          :
-                           
-                          ei tarvetta
-                        </p>
-                      </div>
                     </div>
                   </div>
                 </div>
