@@ -768,12 +768,12 @@ Object {
                         <h3
                           class="text--bold text--h6"
                         >
-                          Hankkeen vaihe
+                          Hankkeen kuvaus
                         </h3>
                         <p
                           class="text--normal text--body-m"
                         >
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur mauris augue, at dignissim magna pharetra at. Nulla mollis mattis suscipit. Maecenas sodales in leo et commodo. Donec hendrerit lacinia mi. Sed feugiat justo tempor, vulputate nulla ut, vestibulum mauris. Aliquam eget ante nec turpis aliquam bibendum sed et ex. Sed fermentum ante eros, quis scelerisque libero facilisis ac.
+                          Hankkeen kuvaus
                         </p>
                       </div>
                       <div
@@ -782,12 +782,12 @@ Object {
                         <h3
                           class="text--bold text--h6"
                         >
-                          Hankkeen kuvaus
+                          Hankkeen vaihe
                         </h3>
                         <p
                           class="text--normal text--body-m"
                         >
-                          Hankkeen kuvaus
+                          Ohjelmointi
                         </p>
                       </div>
                       <div
@@ -801,7 +801,7 @@ Object {
                         <p
                           class="text--normal text--body-m"
                         >
-                          Ohjelmointi
+                          suunnitteluVaihe.null
                         </p>
                       </div>
                       <div
@@ -1154,20 +1154,6 @@ Object {
                         <h3
                           class="text--bold text--h6"
                         >
-                          Hankkeen vaihe
-                        </h3>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur mauris augue, at dignissim magna pharetra at. Nulla mollis mattis suscipit. Maecenas sodales in leo et commodo. Donec hendrerit lacinia mi. Sed feugiat justo tempor, vulputate nulla ut, vestibulum mauris. Aliquam eget ante nec turpis aliquam bibendum sed et ex. Sed fermentum ante eros, quis scelerisque libero facilisis ac.
-                        </p>
-                      </div>
-                      <div
-                        class="gridItem"
-                      >
-                        <h3
-                          class="text--bold text--h6"
-                        >
                           Hankkeen kuvaus
                         </h3>
                         <p
@@ -1180,12 +1166,26 @@ Object {
                         <h3
                           class="text--bold text--h6"
                         >
-                          Suunnitteluvaihe
+                          Hankkeen vaihe
                         </h3>
                         <p
                           class="text--normal text--body-m"
                         >
                           Ohjelmointi
+                        </p>
+                      </div>
+                      <div
+                        class="gridItem"
+                      >
+                        <h3
+                          class="text--bold text--h6"
+                        >
+                          Suunnitteluvaihe
+                        </h3>
+                        <p
+                          class="text--normal text--body-m"
+                        >
+                          suunnitteluVaihe.null
                         </p>
                       </div>
                       <div
@@ -2272,12 +2272,12 @@ Object {
                       <h3
                         class="text--bold text--h6"
                       >
-                        Hankkeen vaihe
+                        Hankkeen kuvaus
                       </h3>
                       <p
                         class="text--normal text--body-m"
                       >
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur mauris augue, at dignissim magna pharetra at. Nulla mollis mattis suscipit. Maecenas sodales in leo et commodo. Donec hendrerit lacinia mi. Sed feugiat justo tempor, vulputate nulla ut, vestibulum mauris. Aliquam eget ante nec turpis aliquam bibendum sed et ex. Sed fermentum ante eros, quis scelerisque libero facilisis ac.
+                        Hankkeen kuvaus
                       </p>
                     </div>
                     <div
@@ -2286,12 +2286,12 @@ Object {
                       <h3
                         class="text--bold text--h6"
                       >
-                        Hankkeen kuvaus
+                        Hankkeen vaihe
                       </h3>
                       <p
                         class="text--normal text--body-m"
                       >
-                        Hankkeen kuvaus
+                        Ohjelmointi
                       </p>
                     </div>
                     <div
@@ -2305,7 +2305,7 @@ Object {
                       <p
                         class="text--normal text--body-m"
                       >
-                        Ohjelmointi
+                        suunnitteluVaihe.null
                       </p>
                     </div>
                     <div
@@ -2658,20 +2658,6 @@ Object {
                       <h3
                         class="text--bold text--h6"
                       >
-                        Hankkeen vaihe
-                      </h3>
-                      <p
-                        class="text--normal text--body-m"
-                      >
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur mauris augue, at dignissim magna pharetra at. Nulla mollis mattis suscipit. Maecenas sodales in leo et commodo. Donec hendrerit lacinia mi. Sed feugiat justo tempor, vulputate nulla ut, vestibulum mauris. Aliquam eget ante nec turpis aliquam bibendum sed et ex. Sed fermentum ante eros, quis scelerisque libero facilisis ac.
-                      </p>
-                    </div>
-                    <div
-                      class="gridItem"
-                    >
-                      <h3
-                        class="text--bold text--h6"
-                      >
                         Hankkeen kuvaus
                       </h3>
                       <p
@@ -2684,12 +2670,26 @@ Object {
                       <h3
                         class="text--bold text--h6"
                       >
-                        Suunnitteluvaihe
+                        Hankkeen vaihe
                       </h3>
                       <p
                         class="text--normal text--body-m"
                       >
                         Ohjelmointi
+                      </p>
+                    </div>
+                    <div
+                      class="gridItem"
+                    >
+                      <h3
+                        class="text--bold text--h6"
+                      >
+                        Suunnitteluvaihe
+                      </h3>
+                      <p
+                        class="text--normal text--body-m"
+                      >
+                        suunnitteluVaihe.null
                       </p>
                     </div>
                     <div

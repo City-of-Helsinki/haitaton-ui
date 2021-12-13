@@ -97,18 +97,18 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
             <div className={styles.gridBasicInfo}>
               <GridItem
                 className={`${styles.gridItem} ${styles.gridDescription}`}
-                title={t('hankePortfolio:labels:hankeVaihe')}
-                content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur mauris augue, at dignissim magna pharetra at. Nulla mollis mattis suscipit. Maecenas sodales in leo et commodo. Donec hendrerit lacinia mi. Sed feugiat justo tempor, vulputate nulla ut, vestibulum mauris. Aliquam eget ante nec turpis aliquam bibendum sed et ex. Sed fermentum ante eros, quis scelerisque libero facilisis ac."
-              />
-              <GridItem
-                className={styles.gridItem}
                 title={t('hankePortfolio:labels:kuvaus')}
                 content={hanke.kuvaus}
               />
               <GridItem
                 className={styles.gridItem}
-                title={t('hankePortfolio:labels:suunnitteluVaihe')}
+                title={t('hankePortfolio:labels:hankeVaihe')}
                 content={t(`hanke:vaihe:${hanke.vaihe}`)}
+              />
+              <GridItem
+                className={styles.gridItem}
+                title={t('hankePortfolio:labels:suunnitteluVaihe')}
+                content={t(`hanke:suunnitteluVaihe:${hanke.suunnitteluVaihe}`)}
               />
               <div className={styles.gridItem}>
                 <div className={styles.linkWrapper}>
