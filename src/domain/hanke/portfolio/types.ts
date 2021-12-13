@@ -3,6 +3,6 @@ export type ReducerState = {
 };
 
 export type PortfolioFilters = {
-  startDate: string;
-  endDate: string;
+  startDate: string | null;
+  endDate: string | null;
 };

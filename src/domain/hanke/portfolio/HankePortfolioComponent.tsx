@@ -31,6 +31,7 @@ import { formatToFinnishDate } from '../../../common/utils/date';
 import PaginationControl from '../../common/pagination/PaginationControl';
 import DateRangeControl from '../../../common/components/map/controls/DateRangeControl';
 import { usePortfolioFilter } from './hooks/usePortfolioFilter';
+import { hankeIsBetweenDates } from '../../map/utils';
 
 type CustomAccordionProps = {
   hanke: HankeDataDraft;
@@ -153,7 +154,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                     hanke.tyomaaTyyppi.length > 0 &&
                     hanke.tyomaaTyyppi.map((tyomaaTyyppi) => {
                       return (
-                        <Tag className={styles.hankeTag}>
+                        <Tag className={styles.hankeTag} key={tyomaaTyyppi}>
                           {t(`hanke:tyomaaTyyppi:${tyomaaTyyppi}`)}
                         </Tag>
                       );
@@ -461,11 +462,89 @@ export type Column = {
 };
 
 export interface PagedRowsProps {
-  columns: Array<Column>;
   data: Array<HankeDataDraft>;
 }
 
-const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ columns, data }) => {
+const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
+  const {
+    hankeFilterStartDate,
+    hankeFilterEndDate,
+    setHankeFilterStartDate,
+    setHankeFilterEndDate,
+  } = usePortfolioFilter();
+
+  const filterVaihe = (vaiheRows: Row[], id: string[], value: string[]) =>
+    vaiheRows.filter((hanke) => value.includes(hanke.values.vaihe));
+
+  const dateStartFilter = (dateStartRows: Row[], id: string[], dateStart: string) => {
+    if (dateStart) {
+      if (hankeFilterEndDate) {
+        return dateStartRows.filter((hanke) =>
+          hankeIsBetweenDates({ startDate: dateStart, endDate: hankeFilterEndDate })({
+            startDate: hanke.values.alkuPvm,
+            endDate: hanke.values.loppuPvm,
+          })
+        );
+      }
+      return dateStartRows.filter((hanke) => dateStart <= hanke.values.loppuPvm);
+    }
+    return dateStartRows;
+  };
+
+  const dateEndFilter = (dateEndRows: Row[], id: string[], dateEnd: string) => {
+    if (dateEnd) {
+      if (hankeFilterStartDate) {
+        return dateEndRows.filter((hanke) =>
+          hankeIsBetweenDates({ startDate: hankeFilterStartDate, endDate: dateEnd })({
+            startDate: hanke.values.alkuPvm,
+            endDate: hanke.values.loppuPvm,
+          })
+        );
+      }
+      return dateEndRows.filter((hanke) => hanke.values.alkuPvm <= dateEnd);
+    }
+    return dateEndRows;
+  };
+
+  const columns: Column[] = React.useMemo(
+    () => [
+      {
+        Header: 'hankeTunnus',
+        id: 'hankeTunnus',
+        accessor: 'hankeTunnus',
+        defaultCanFilter: true,
+      },
+      {
+        Header: 'nimi',
+        id: 'nimi',
+        accessor: 'nimi',
+        defaultCanFilter: true,
+      },
+      {
+        Header: 'vaihe',
+        id: 'vaihe',
+        accessor: 'vaihe',
+        filter: filterVaihe,
+      },
+      {
+        Header: 'alkuPvm',
+        id: 'alkuPvm',
+        accessor: (hanke: HankeDataDraft) => {
+          return hanke.alkuPvm && Date.parse(hanke.alkuPvm);
+        },
+        filter: dateStartFilter,
+      },
+      {
+        Header: 'loppuPvm',
+        id: 'loppuPvm',
+        accessor: (hanke: HankeDataDraft) => {
+          return hanke.loppuPvm && Date.parse(hanke.loppuPvm);
+        },
+        filter: dateEndFilter,
+      },
+    ],
+    []
+  );
   const {
     canNextPage,
     canPreviousPage,
@@ -527,19 +606,20 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ columns, data }) => {
     searchHankeInputChange(e);
   }, 200);
 
-  const {
-    hankeFilterStartDate,
-    hankeFilterEndDate,
-    setHankeFilterStartDate,
-    setHankeFilterEndDate,
-  } = usePortfolioFilter();
-
   useEffect(() => {
-    setFilter('alkuPvm', new Date(hankeFilterStartDate).getTime());
+    if (hankeFilterStartDate) {
+      setFilter('alkuPvm', new Date(hankeFilterStartDate).getTime());
+    } else {
+      setFilter('alkuPvm', null);
+    }
   }, [hankeFilterStartDate]);
 
   useEffect(() => {
-    setFilter('loppuPvm', new Date(hankeFilterEndDate).getTime());
+    if (hankeFilterEndDate) {
+      setFilter('loppuPvm', new Date(hankeFilterEndDate).getTime());
+    } else {
+      setFilter('loppuPvm', null);
+    }
   }, [hankeFilterEndDate]);
 
   return (
@@ -551,12 +631,13 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ columns, data }) => {
           label={t('hankePortfolio:search')}
           helperText={t('hankePortfolio:searchHelperText')}
         />
-        <div style={{ display: 'none' }}>
+        <div>
           <DateRangeControl
             startDate={hankeFilterStartDate}
             endDate={hankeFilterEndDate}
             updateStartDate={setHankeFilterStartDate}
             updateEndDate={setHankeFilterEndDate}
+            isClearable
           />
         </div>
 
@@ -571,6 +652,9 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ columns, data }) => {
           selectedItemRemoveButtonAriaLabel="Remove ${value}"
           onChange={updateHankeVaihe}
         />
+        <p data-testid="numberOfFilteredRows" style={{ display: 'none' }}>
+          {rows.length}
+        </p>
       </Fieldset>
 
       {rows.length > 0 &&
@@ -606,55 +690,6 @@ type Props = {
 const HankePortfolio: React.FC<Props> = ({ hankkeet }) => {
   const { t } = useTranslation();
 
-  const filterVaihe = (rows: Row[], id: string[], value: string[]) =>
-    rows.filter((hanke) => value.includes(hanke.values.vaihe));
-
-  const dateStartFilter = (rows: Row[], id: string[], dateStart: string) =>
-    rows.filter((hanke) => dateStart <= hanke.values.alkuPvm);
-
-  const dateEndFilter = (rows: Row[], id: string[], dateEnd: string) =>
-    rows.filter((hanke) => dateEnd >= hanke.values.loppuPvm);
-
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: 'hankeTunnus',
-        id: 'hankeTunnus',
-        accessor: 'hankeTunnus',
-        defaultCanFilter: true,
-      },
-      {
-        Header: 'nimi',
-        id: 'nimi',
-        accessor: 'nimi',
-        defaultCanFilter: true,
-      },
-      {
-        Header: 'vaihe',
-        id: 'vaihe',
-        accessor: 'vaihe',
-        filter: filterVaihe,
-      },
-      {
-        Header: 'alkuPvm',
-        id: 'alkuPvm',
-        accessor: (data: HankeDataDraft) => {
-          return data.alkuPvm && Date.parse(data.alkuPvm);
-        },
-        filter: dateStartFilter,
-      },
-      {
-        Header: 'loppuPvm',
-        id: 'loppuPvm',
-        accessor: (data: HankeDataDraft) => {
-          return data.loppuPvm && Date.parse(data.loppuPvm);
-        },
-        filter: dateEndFilter,
-      },
-    ],
-    []
-  );
-
   const memoizedHankkeet = React.useMemo(() => hankkeet, []);
 
   return (
@@ -671,7 +706,7 @@ const HankePortfolio: React.FC<Props> = ({ hankkeet }) => {
         </Text>
 
         <div className={styles.contentContainer}>
-          <PaginatedPortfolio data={memoizedHankkeet} columns={columns} />
+          <PaginatedPortfolio data={memoizedHankkeet} />
         </div>
       </div>
     </div>
