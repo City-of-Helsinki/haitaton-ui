@@ -23,16 +23,27 @@ export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJS
 
 export const hankeHasGeometry = (hanke: HankeData) => hanke.geometriat;
 
-export const hankeIsBetweenDates = ({ endDate, startDate }: HankeFilters) => (hanke: HankeData) => {
+export const hankeIsBetweenDates = ({ endDate, startDate }: HankeFilters) => ({
+  startDate: comparedStartDate,
+  endDate: comparedEndDate,
+}: HankeFilters) => {
   const filterStartDate = new Date(startDate);
   const filterEndDate = new Date(endDate);
-  const hankeStartDate = new Date(hanke.alkuPvm);
-  const hankeEndDate = new Date(hanke.loppuPvm);
+  const hankeStartDate = new Date(comparedStartDate);
+  const hankeEndDate = new Date(comparedEndDate);
+
   if (
     hankeStartDate <= filterStartDate &&
     hankeStartDate <= filterEndDate &&
     hankeEndDate >= filterStartDate &&
     hankeEndDate <= filterEndDate
+  )
+    return true;
+  if (
+    hankeStartDate <= filterStartDate &&
+    hankeStartDate <= filterEndDate &&
+    hankeEndDate >= filterStartDate &&
+    hankeEndDate >= filterEndDate
   )
     return true;
   if (
@@ -49,23 +60,10 @@ export const hankeIsBetweenDates = ({ endDate, startDate }: HankeFilters) => (ha
     hankeEndDate >= filterEndDate
   )
     return true;
-  if (
-    hankeStartDate <= filterStartDate &&
-    hankeStartDate <= filterEndDate &&
-    hankeEndDate >= filterStartDate &&
-    hankeEndDate <= filterEndDate
-  )
-    return true;
-  if (
-    // filters are between the hankeStart and End
-    filterStartDate >= hankeStartDate &&
-    filterStartDate <= hankeEndDate &&
-    filterEndDate >= hankeStartDate &&
-    filterEndDate <= hankeEndDate
-  )
-    return true;
+
   return false;
 };
 
 export const byAllHankeFilters = (hankeFilters: HankeFilters) => (hanke: HankeData) =>
-  hankeHasGeometry(hanke) && hankeIsBetweenDates(hankeFilters)(hanke);
+  hankeHasGeometry(hanke) &&
+  hankeIsBetweenDates(hankeFilters)({ startDate: hanke.alkuPvm, endDate: hanke.loppuPvm });

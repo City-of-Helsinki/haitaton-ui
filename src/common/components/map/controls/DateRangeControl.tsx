@@ -7,10 +7,11 @@ import CalendarIcon from '../../icons/Calendar';
 import styles from './DateRangeControl.module.scss';
 
 type Props = {
-  startDate: string | undefined;
+  startDate: string | null;
   updateStartDate: (data: string) => void;
-  endDate: string;
+  endDate: string | null;
   updateEndDate: (data: string) => void;
+  isClearable?: boolean;
 };
 
 const startPicker = 'startPicker';
@@ -21,6 +22,7 @@ const DateRangeControl: React.FC<Props> = ({
   endDate,
   updateStartDate,
   updateEndDate,
+  isClearable,
 }) => {
   const { t, i18n } = useTranslation();
 
@@ -36,15 +38,19 @@ const DateRangeControl: React.FC<Props> = ({
               <ReactDatePicker
                 id={startPicker}
                 onChange={(date: Date) => {
-                  updateStartDate(toStartOfDayUTCISO(date));
+                  if (date) {
+                    updateStartDate(toStartOfDayUTCISO(date));
+                  } else {
+                    updateStartDate(date);
+                  }
                 }}
-                value={startDate && formatToFinnishDate(startDate)}
-                selected={startDate ? new Date(startDate) : undefined}
-                maxDate={new Date(endDate)}
+                value={startDate ? formatToFinnishDate(startDate) : undefined}
+                selected={startDate ? new Date(startDate) : null}
+                maxDate={endDate ? new Date(endDate) : null}
                 locale={i18n.language}
-                data-testid="filterStartDateInput"
+                isClearable={isClearable}
               />
-              <CalendarIcon />
+              {!isClearable && <CalendarIcon />}
             </div>
           </div>
         </GridItem>
@@ -60,15 +66,20 @@ const DateRangeControl: React.FC<Props> = ({
               <ReactDatePicker
                 id={endPicker}
                 onChange={(date: Date) => {
-                  updateEndDate(toEndOfDayUTCISO(date));
+                  if (date) {
+                    updateEndDate(toEndOfDayUTCISO(date));
+                  } else {
+                    updateEndDate(date);
+                  }
                 }}
-                value={formatToFinnishDate(endDate)}
-                selected={new Date(endDate)}
-                minDate={startDate ? new Date(startDate) : undefined}
+                value={endDate ? formatToFinnishDate(endDate) : undefined}
+                selected={endDate ? new Date(endDate) : null}
+                minDate={startDate ? new Date(startDate) : null}
                 locale={i18n.language}
                 className={styles.reactDatepicker}
+                isClearable={isClearable}
               />
-              <CalendarIcon />
+              {!isClearable && <CalendarIcon />}
             </div>
           </div>
         </GridItem>

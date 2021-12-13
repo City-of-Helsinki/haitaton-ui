@@ -30,7 +30,7 @@ const Form1: React.FC<FormProps> = ({ formData }) => {
         {t('hankeForm:hankkeenAlueForm:header')}
       </Text>
       {instructions.map((instruction) => (
-        <p>{instruction}</p>
+        <p key={instruction}>{instruction}</p>
       ))}
       <br />
       <div style={{ position: 'relative' }}>
