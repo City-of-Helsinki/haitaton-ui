@@ -5,6 +5,7 @@
 import '@testing-library/jest-dom/extend-expect';
 import 'jest-localstorage-mock';
 import { GlobalWithFetchMock } from 'jest-fetch-mock';
+import 'jest-canvas-mock';
 
 const customGlobal: GlobalWithFetchMock = (global as unknown) as GlobalWithFetchMock;
 
