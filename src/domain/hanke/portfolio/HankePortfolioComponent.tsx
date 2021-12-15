@@ -637,7 +637,6 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
             endDate={hankeFilterEndDate}
             updateStartDate={setHankeFilterStartDate}
             updateEndDate={setHankeFilterEndDate}
-            isClearable
           />
         </div>
 
