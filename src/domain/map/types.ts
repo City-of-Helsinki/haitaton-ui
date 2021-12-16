@@ -18,8 +18,8 @@ export type ReducerState = {
 export type GeometryData = Feature[];
 
 export type HankeFilters = {
-  startDate: string;
-  endDate: string;
+  startDate: string | null;
+  endDate: string | null;
 };
 
 export interface HankeGeometryApiResponseData {
