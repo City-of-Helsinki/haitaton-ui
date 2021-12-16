@@ -27,10 +27,12 @@ export const hankeIsBetweenDates = ({ endDate, startDate }: HankeFilters) => ({
   startDate: comparedStartDate,
   endDate: comparedEndDate,
 }: HankeFilters) => {
-  const filterStartDate = new Date(startDate);
-  const filterEndDate = new Date(endDate);
-  const hankeStartDate = new Date(comparedStartDate);
-  const hankeEndDate = new Date(comparedEndDate);
+  const filterStartDate = startDate ? new Date(startDate) : 0;
+  const filterEndDate = endDate ? new Date(endDate) : 0;
+  const hankeStartDate = comparedStartDate ? new Date(comparedStartDate) : 0;
+  const hankeEndDate = comparedEndDate ? new Date(comparedEndDate) : 0;
+
+  if (filterStartDate === 0 && filterEndDate === 0) return true;
 
   if (
     hankeStartDate <= filterStartDate &&
