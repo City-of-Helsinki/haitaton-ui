@@ -25,7 +25,7 @@ import { Link } from 'react-router-dom';
 import Text from '../../../common/components/text/Text';
 import GridItem from '../../../common/components/grid/GridItem';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
-import { HankeDataDraft, HANKE_VAIHE } from '../../types/hanke';
+import { HankeDataDraft, HANKE_TYOMAATYYPPI, HANKE_VAIHE } from '../../types/hanke';
 import styles from './HankePortfolio.module.scss';
 import { formatToFinnishDate } from '../../../common/utils/date';
 import PaginationControl from '../../common/pagination/PaginationControl';
@@ -476,6 +476,16 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
   const filterVaihe = (vaiheRows: Row[], id: string[], value: string[]) =>
     vaiheRows.filter((hanke) => value.includes(hanke.values.vaihe));
 
+  const filterTyyppi = (tyyppiRows: Row[], id: string[], value: string[]) => {
+    if (value.length === 0) return tyyppiRows;
+    return tyyppiRows.filter((hanke) => {
+      const includedTyypit = hanke.values.tyomaaTyyppi.filter((tyyppi: string) =>
+        value.includes(tyyppi)
+      );
+      return includedTyypit.length > 0;
+    });
+  };
+
   const dateStartFilter = (dateStartRows: Row[], id: string[], dateStart: string) => {
     if (dateStart) {
       if (hankeFilterEndDate) {
@@ -525,6 +535,12 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
         id: 'vaihe',
         accessor: 'vaihe',
         filter: filterVaihe,
+      },
+      {
+        Header: 'tyomaaTyyppi',
+        id: 'tyomaaTyyppi',
+        accessor: 'tyomaaTyyppi',
+        filter: filterTyyppi,
       },
       {
         Header: 'alkuPvm',
@@ -580,10 +596,11 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
   // Using any: <Select /> component of HDS typing seems incorrect.
   // Would require OptionType[][] although the component takes in OptionType[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const options: any = [];
+  const hankeVaiheOptions: any = [];
+
   useEffect(() => {
     Object.keys(HANKE_VAIHE).forEach((hankeVaihe) =>
-      options.push({ label: t(`hanke:vaihe:${hankeVaihe}`), value: hankeVaihe })
+      hankeVaiheOptions.push({ label: t(`hanke:vaihe:${hankeVaihe}`), value: hankeVaihe })
     );
   });
 
@@ -596,6 +613,26 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
   useEffect(() => {
     setFilter('vaihe', selectedHankeVaiheet);
   }, [selectedHankeVaiheet]);
+
+  const [selectedHankeTyypit, setSelectedHankeTyypit] = useState(Object.keys(HANKE_TYOMAATYYPPI));
+
+  const hankeTyyppiOptions: any = [];
+
+  useEffect(() => {
+    Object.keys(HANKE_TYOMAATYYPPI).forEach((hankeTyyppi) =>
+      hankeTyyppiOptions.push({
+        label: t(`hanke:tyomaaTyyppi:${hankeTyyppi}`),
+        value: hankeTyyppi,
+      })
+    );
+  });
+
+  const updateHankeTyyppi = (changedHankeTyypit: any[]) =>
+    setSelectedHankeTyypit(changedHankeTyypit.map((hankeTyyppi) => hankeTyyppi.value));
+
+  useEffect(() => {
+    setFilter('tyomaaTyyppi', selectedHankeTyypit);
+  }, [selectedHankeTyypit]);
 
   const searchHankeInputChange = (searchInput: string) => {
     const filter = searchInput && searchInput.length > 0 ? searchInput : undefined;
@@ -644,12 +681,24 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
           multiselect
           label={t('hankePortfolio:hankevaiheet')}
           helper={t('hankePortfolio:hankevaiheetHelperText')}
-          options={options}
-          defaultValue={options}
+          options={hankeVaiheOptions}
+          defaultValue={hankeVaiheOptions}
           clearButtonAriaLabel="Clear all selections"
           // eslint-disable-next-line no-template-curly-in-string
           selectedItemRemoveButtonAriaLabel="Remove ${value}"
           onChange={updateHankeVaihe}
+        />
+
+        <Select
+          multiselect
+          label="Hankeen tyyppi"
+          helper="Valitse hankkeen tyyppi tai tyypit joita haluat tarkastella"
+          options={hankeTyyppiOptions}
+          defaultValue={hankeTyyppiOptions}
+          clearButtonAriaLabel="Clear all selections"
+          // eslint-disable-next-line no-template-curly-in-string
+          selectedItemRemoveButtonAriaLabel="Remove ${value}"
+          onChange={updateHankeTyyppi}
         />
         <p data-testid="numberOfFilteredRows" style={{ display: 'none' }}>
           {rows.length}
