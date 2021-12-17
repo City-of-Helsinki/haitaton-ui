@@ -313,6 +313,8 @@
     "startDate": "Ajanjakson alku",
     "endDate": "Ajanjakson loppu",
     "timePeriodHelperText": "Aikaväli jolloin haitta on aktiivinen",
+    "hankkeentyyppi": "Hankkeen tyypit",
+    "hankkeentyyppiHelperText": "Valitse hankkeen työmaan tyyppi tai tyypit",
     "tabit": {
       "perustiedot": "Perustiedot",
       "yhteystiedot": "Yhteystiedot"

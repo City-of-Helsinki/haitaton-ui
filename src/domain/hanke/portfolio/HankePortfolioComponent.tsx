@@ -614,7 +614,7 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
     setFilter('vaihe', selectedHankeVaiheet);
   }, [selectedHankeVaiheet]);
 
-  const [selectedHankeTyypit, setSelectedHankeTyypit] = useState(Object.keys(HANKE_TYOMAATYYPPI));
+  const [selectedHankeTyypit, setSelectedHankeTyypit] = useState<string[]>([]);
 
   const hankeTyyppiOptions: any = [];
 
@@ -661,8 +661,9 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
 
   return (
     <>
-      <Fieldset heading={t('hankePortfolio:filters')} border>
+      <Fieldset className={styles.filters} heading={t('hankePortfolio:filters')} border>
         <TextInput
+          className={styles.hankeSearch}
           id="searchHanke"
           onChange={(e) => searchHankeInputChangeDebounced(e.target.value)}
           label={t('hankePortfolio:search')}
@@ -678,6 +679,7 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
         </div>
 
         <Select
+          className={styles.hankeVaihe}
           multiselect
           label={t('hankePortfolio:hankevaiheet')}
           helper={t('hankePortfolio:hankevaiheetHelperText')}
@@ -690,11 +692,12 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
         />
 
         <Select
+          className={styles.hankeTyyppi}
           multiselect
-          label="Hankeen tyyppi"
-          helper="Valitse hankkeen tyyppi tai tyypit joita haluat tarkastella"
+          label={t('hankePortfolio:hankkeentyyppi')}
+          helper={t('hankePortfolio:hankkeentyyppiHelperText')}
           options={hankeTyyppiOptions}
-          defaultValue={hankeTyyppiOptions}
+          defaultValue={[]}
           clearButtonAriaLabel="Clear all selections"
           // eslint-disable-next-line no-template-curly-in-string
           selectedItemRemoveButtonAriaLabel="Remove ${value}"
