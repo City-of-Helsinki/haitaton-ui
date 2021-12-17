@@ -17,7 +17,7 @@ describe('HankeMap', () => {
 
     expect(screen.getByLabelText('Ortokartta')).not.toBeChecked();
     expect(screen.getByLabelText('Kantakartta')).toBeChecked();
-    await userEvent.click(screen.getByText('Ortokartta'));
+    userEvent.click(screen.getByText('Ortokartta'));
     expect(screen.getByLabelText('Ortokartta')).toBeChecked();
     expect(screen.getByLabelText('Kantakartta')).not.toBeChecked();
   });
@@ -46,6 +46,8 @@ describe('HankeMap', () => {
     changeFilterDate(startDateLabel, renderedComponent, null);
     expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
     changeFilterDate(endDateLabel, renderedComponent, null);
+    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
+    changeFilterDate(startDateLabel, renderedComponent, '01.01.2021');
     expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
   });
 });
