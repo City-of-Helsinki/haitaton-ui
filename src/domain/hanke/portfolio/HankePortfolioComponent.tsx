@@ -616,6 +616,7 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
 
   const [selectedHankeTyypit, setSelectedHankeTyypit] = useState<string[]>([]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const hankeTyyppiOptions: any = [];
 
   useEffect(() => {
@@ -627,6 +628,7 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
     );
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateHankeTyyppi = (changedHankeTyypit: any[]) =>
     setSelectedHankeTyypit(changedHankeTyypit.map((hankeTyyppi) => hankeTyyppi.value));
 
