@@ -93,7 +93,7 @@ const hankeList: HankeData[] = [
     omistajat: [],
     arvioijat: [],
     toteuttajat: [],
-    tyomaaTyyppi: ['VESI'],
+    tyomaaTyyppi: ['SADEVESI'],
     geometriat: {
       id: 2,
       hankeId: 2,
