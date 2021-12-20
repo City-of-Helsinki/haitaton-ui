@@ -42,4 +42,21 @@ describe.only('HankePortfolio', () => {
     changeFilterDate(endDateLabel, renderedComponent, null);
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
   });
+
+  test('Changing Hanke type filters correct number of projects', async () => {
+    const renderedComponent = render(<HankePortfolioComponent hankkeet={hankeList} />);
+    expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
+    renderedComponent.getByText('Hankkeen tyypit').click();
+    renderedComponent.getByText('Sähkö').click();
+    renderedComponent.getByText('Hankevaiheet').click();
+    expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
+    renderedComponent.getByText('Hankkeen tyypit').click();
+    renderedComponent.getByText('Viemäri').click();
+    renderedComponent.getByText('Hankevaiheet').click();
+    expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('1');
+    renderedComponent.getByText('Hankkeen tyypit').click();
+    renderedComponent.getByText('Sadevesi').click();
+    renderedComponent.getByText('Hankevaiheet').click();
+    expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
+  });
 });
