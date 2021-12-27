@@ -58,8 +58,6 @@
       .tag {
         background-color: var(--color-copper);
         color: var(--color-black);
-        line-height: 32px;
-        align-items: center;
         text-transform: uppercase;
       }
     }
@@ -156,5 +154,24 @@
     display: grid;
     grid-template-columns: 48% 48%;
     column-gap: var(--spacing-xl);
+    row-gap: var(--spacing-s);
+
+    .dateRange {
+      display: flex;
+    }
+
+    .clearBtn {
+      margin-top: 28px;
+      height: min-content;
+    }
+
+    .dateRangeHelperText {
+      color: #666;
+      display: block;
+      line-height: var(--lineheight-l);
+      font-size: var(--fontsize-body-m);
+      margin-top: var(--spacing-3-xs);
+      white-space: pre-line;
+    }
   }
 }

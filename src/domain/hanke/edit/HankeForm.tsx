@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
-import { IconCross } from 'hds-react/icons';
+import { Button } from 'hds-react';
+import { IconCross, IconCrossCircle } from 'hds-react/icons';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Text from '../../../common/components/text/Text';
 import { HankeDataFormState, SaveFormArguments } from './types';
@@ -24,6 +25,8 @@ type Props = {
   onUnmount: () => void;
   onFormClose: () => void;
   isSaving: boolean;
+  onOpenHankeDelete: () => void;
+  children: React.ReactNode;
 };
 
 const HankeForm: React.FC<Props> = ({
@@ -34,6 +37,8 @@ const HankeForm: React.FC<Props> = ({
   onUnmount,
   onFormClose,
   isSaving,
+  onOpenHankeDelete,
+  children,
 }) => {
   const { t } = useTranslation();
   const [currentFormPage, setCurrentFormPage] = useState<number>(0);
@@ -105,13 +110,24 @@ const HankeForm: React.FC<Props> = ({
           <div className="hankeForm__formWprRight">
             <form name="hanke">
               <div className="closeFormWpr">
-                <button
-                  type="button"
-                  onClick={() => onFormClose()}
-                  aria-label={t('hankeForm:closeAriaLabel')}
+                <Button
+                  className="delteHankeBtn"
+                  onClick={() => onOpenHankeDelete()}
+                  variant="supplementary"
+                  theme="coat"
+                  iconLeft={<IconCrossCircle aria-hidden />}
                 >
-                  <IconCross aria-hidden="true" />
-                </button>
+                  Poista hanke
+                </Button>
+                <Button
+                  className="closeFormBtn"
+                  onClick={() => onFormClose()}
+                  variant="supplementary"
+                  theme="coat"
+                  iconLeft={<IconCross aria-hidden="true" />}
+                >
+                  Keskeytä
+                </Button>
               </div>
 
               {currentFormPage === 0 && (
@@ -139,6 +155,7 @@ const HankeForm: React.FC<Props> = ({
           </div>
         </div>
       </div>
+      {children}
     </FormProvider>
   );
 };

@@ -8,10 +8,19 @@
   },
   "common": {
     "increment": "Increment",
+
     "confirmationDialog": {
-      "bodyText": "EN:Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä, vai poistua, jolloin syöttämäsi tiedot poistuvat.",
-      "cancelButton": "EN:Peruuta",
-      "exitButton": "EN:Poistu"
+      "interruptDialog": {
+        "titleText": "EN: Olet poistumassa lomakkeelta",
+        "bodyText": "EN: Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä, vai poistua, jolloin syöttämäsi tiedot poistuvat.",
+        "exitButton": "EN: Poistu"
+      },
+      "deleteDialog": {
+        "titleText": "EN: Oletko varma että haluat poistaa hankkeen?",
+        "bodyText": "EN: Hankkeen poistaminen on pysyvä toiminto ja hankkeen tietoja ei voi palauttaa poistamisen jälkeen.",
+        "exitButton": "EN: Poista"
+      },
+      "cancelButton": "EN: Peruuta"
     },
     "languages": {
       "fi": "Suomi",

@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
-import { actions as dialogActions } from '../../../common/components/confirmationDialog/reducer';
 import { HANKE_SAVETYPE, HankeDataDraft } from '../../types/hanke';
 import { getHasFormChanged, getFormData, getSaveState } from './selectors';
 import { saveForm } from './thunks';
@@ -11,8 +10,10 @@ import HankeForm from './HankeForm';
 import { actions, hankeDataDraft } from './reducer';
 import { SaveFormArguments } from './types';
 import { convertHankeDataToFormState } from './utils';
+import ConfirmationDialog from '../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 
 import api from '../../api/api';
+import { t } from '../../../locales/i18nForTests';
 
 const getHanke = async (hankeTunnus?: string) => {
   const { data } = await api.get<HankeDataDraft>(`/hankkeet/${hankeTunnus}`);
@@ -34,6 +35,8 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
   const hasFormChanged = useSelector(getHasFormChanged());
   const formData = useSelector(getFormData());
   const isSaving = useSelector(getSaveState());
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [interruptDialogOpen, setInterruptDialogOpen] = useState(false);
 
   const { data: hankeData, isFetched } = useHanke(hankeTunnus);
 
@@ -69,11 +72,24 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
 
   const handleFormClose = useCallback(() => {
     if (hasFormChanged) {
-      dispatch(dialogActions.updateIsDialogOpen({ isDialogOpen: true, redirectUrl: '/' }));
+      setInterruptDialogOpen(true);
     } else {
       navigate('/');
     }
   }, [hasFormChanged]);
+
+  const closeForm = () => {
+    navigate('/');
+  };
+
+  const openHankeDelete = () => {
+    setDeleteDialogOpen(true);
+  };
+
+  const deleteHanke = () => {
+    // add actual delete functionality here
+    setDeleteDialogOpen(false);
+  };
 
   return (
     <HankeForm
@@ -84,7 +100,25 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
       onUnmount={handleUnmount}
       onFormClose={handleFormClose}
       isSaving={isSaving}
-    />
+      onOpenHankeDelete={openHankeDelete}
+    >
+      <ConfirmationDialog
+        title={t('common:confirmationDialog:deleteDialog:titleText')}
+        description={t('common:confirmationDialog:deleteDialog:bodyText')}
+        isOpen={deleteDialogOpen}
+        close={() => setDeleteDialogOpen(false)}
+        mainAction={() => deleteHanke()}
+        mainBtnLabel={t('common:confirmationDialog:deleteDialog:exitButton')}
+      />
+      <ConfirmationDialog
+        title={t('common:confirmationDialog:interruptDialog:titleText')}
+        description={t('common:confirmationDialog:interruptDialog:bodyText')}
+        isOpen={interruptDialogOpen}
+        close={() => setInterruptDialogOpen(false)}
+        mainAction={() => closeForm()}
+        mainBtnLabel={t('common:confirmationDialog:interruptDialog:exitButton')}
+      />
+    </HankeForm>
   );
 };
 
