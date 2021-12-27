@@ -9,9 +9,17 @@
   "common": {
     "increment": "SV:Lisää",
     "confirmationDialog": {
-      "bodyText": "SV:Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä, vai poistua, jolloin syöttämäsi tiedot poistuvat.",
-      "cancelButton": "SV:Peruuta",
-      "exitButton": "SV:Poistu"
+      "interruptDialog": {
+        "titleText": "SV: Olet poistumassa lomakkeelta",
+        "bodyText": "SV: Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä, vai poistua, jolloin syöttämäsi tiedot poistuvat.",
+        "exitButton": "SV: Poistu"
+      },
+      "deleteDialog": {
+        "titleText": "SV: Oletko varma että haluat poistaa hankkeen?",
+        "bodyText": "SV: Hankkeen poistaminen on pysyvä toiminto ja hankkeen tietoja ei voi palauttaa poistamisen jälkeen.",
+        "exitButton": "SV: Poista"
+      },
+      "cancelButton": "SV: Peruuta"
     },
     "languages": {
       "fi": "Suomi",

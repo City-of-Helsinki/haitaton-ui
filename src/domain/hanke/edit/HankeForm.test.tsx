@@ -49,7 +49,10 @@ describe('HankeForm', () => {
         onUnmount={handleUnmount}
         onFormClose={handleFormClose}
         isSaving
-      />
+        onOpenHankeDelete={() => ({})}
+      >
+        child
+      </HankeForm>
     );
 
     getByTestId(FORMFIELD.YKT_HANKE).click();
@@ -89,7 +92,10 @@ describe('HankeForm', () => {
         onUnmount={handleUnmount}
         onFormClose={handleFormClose}
         isSaving
-      />
+        onOpenHankeDelete={() => ({})}
+      >
+        child
+      </HankeForm>
     );
 
     getByTestId(FORMFIELD.YKT_HANKE).click();
@@ -163,7 +169,10 @@ describe('HankeForm', () => {
         onUnmount={() => ({})}
         onFormClose={() => ({})}
         isSaving
-      />
+        onOpenHankeDelete={() => ({})}
+      >
+        child
+      </HankeForm>
     );
     expect(getByTestId(FORMFIELD.NIMI)).toHaveValue('Lenkkeilijä Pekka');
     expect(getByTestId(FORMFIELD.KUVAUS)).toHaveValue('');
@@ -183,7 +192,10 @@ describe('HankeForm', () => {
         onUnmount={() => ({})}
         onFormClose={() => ({})}
         isSaving
-      />
+        onOpenHankeDelete={() => ({})}
+      >
+        child
+      </HankeForm>
     );
     expect(getByTestId('editing-disabled-notification')).toBeInTheDocument();
     expect(getByText(/Käynnissä olevan hankkeen tietoja ei voi muokata/i)).toBeDefined();
