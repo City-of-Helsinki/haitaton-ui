@@ -10,6 +10,7 @@ import {
 } from 'react-table';
 import {
   useAccordion,
+  Button,
   Card,
   Select,
   Tag,
@@ -20,7 +21,7 @@ import {
   TextInput,
   Fieldset,
 } from 'hds-react';
-import { IconAngleDown, IconAngleUp, IconPen } from 'hds-react/icons';
+import { IconAngleDown, IconAngleUp, IconPen, IconCrossCircle } from 'hds-react/icons';
 import { Link } from 'react-router-dom';
 import Text from '../../../common/components/text/Text';
 import GridItem from '../../../common/components/grid/GridItem';
@@ -102,10 +103,10 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
         <Tabs small>
           <TabList>
             <Tab>{t('hankePortfolio:tabit:perustiedot')}</Tab>
-            {/* 
+            {/*
               huom: hankkeen datarakenteessa ei ole suoraa yhteystiedot rakennetta
               vaan ovat []. Ehkäpä tämän voisi muodostaa vastaanotettaessa hankkeita?
-              <Tab>{t('hankePortfolio:tabit:yhteystiedot')}</Tab> 
+              <Tab>{t('hankePortfolio:tabit:yhteystiedot')}</Tab>
             */}
           </TabList>
           <TabPanel>
@@ -206,10 +207,24 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                     {!hanke.kaistaPituusHaitta && '-'}
                   </Text>
                 </div>
-                <div>
-                  <Text tag="h3" styleAs="h6" weight="bold">
-                    {t('hankeForm:labels:meluHaitta')}
-                  </Text>
+              </div>
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  {t('hankeForm:labels:polyHaitta')}
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  {hanke.polyHaitta && t(`hanke:polyHaitta:${hanke.polyHaitta}`)}
+                  {!hanke.polyHaitta && '-'}
+                </Text>
+              </div>
+
+              {/*
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  {t('hankeIndexes:merkittavatJoukkoliikennereitit')}
+                </Text>
+                <div className={styles.index}>
+                  <div className={styles.indexBox}>4</div>
                   <Text tag="p" styleAs="body-m">
                     {hanke.meluHaitta && t(`hanke:meluHaitta:${hanke.meluHaitta}`)}
                     {!hanke.meluHaitta && '-'}
@@ -233,6 +248,17 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                     {!hanke.tarinaHaitta && '-'}
                   </Text>
                 </div>
+
+              </div>
+              */}
+              <div className={styles.gridItem}>
+                <Text tag="h3" styleAs="h6" weight="bold">
+                  {t('hankeForm:labels:tarinaHaitta')}
+                </Text>
+                <Text tag="p" styleAs="body-m">
+                  {hanke.tarinaHaitta && t(`hanke:tarinaHaitta:${hanke.tarinaHaitta}`)}
+                  {!hanke.tarinaHaitta && '-'}
+                </Text>
               </div>
               <div className={styles.haitatIndexes}>
                 <div>
@@ -635,12 +661,25 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
           helperText={t('hankePortfolio:searchHelperText')}
         />
         <div>
-          <DateRangeControl
-            startDate={hankeFilterStartDate}
-            endDate={hankeFilterEndDate}
-            updateStartDate={setHankeFilterStartDate}
-            updateEndDate={setHankeFilterEndDate}
-          />
+          <div className={styles.dateRange}>
+            <DateRangeControl
+              startDate={hankeFilterStartDate}
+              endDate={hankeFilterEndDate}
+              updateStartDate={setHankeFilterStartDate}
+              updateEndDate={setHankeFilterEndDate}
+            />
+            <Button
+              className={styles.clearBtn}
+              onClick={() => setHankeFilterStartDate(null) && setHankeFilterEndDate(null)}
+              variant="supplementary"
+              iconLeft={<IconCrossCircle aria-hidden />}
+            >
+              {t('hankePortfolio:clearDates')}
+            </Button>
+          </div>
+          <span className={styles.dateRangeHelperText}>
+            {t('hankePortfolio:timePeriodHelperText')}
+          </span>
         </div>
 
         <Select

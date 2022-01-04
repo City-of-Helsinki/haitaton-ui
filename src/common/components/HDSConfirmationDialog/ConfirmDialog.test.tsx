@@ -12,6 +12,7 @@ describe('confirmationDialog', () => {
     const open = true;
     const handleClose = jest.fn();
     const handleMainAction = jest.fn();
+    const variant = 'primary';
 
     const renderedDialog = render(
       <ConfirmationDialog
@@ -21,6 +22,7 @@ describe('confirmationDialog', () => {
         close={handleClose}
         mainAction={handleMainAction}
         mainBtnLabel={buttonText}
+        variant={variant}
       />
     );
 

@@ -317,6 +317,7 @@
     "hankevaiheetHelperText": "EN: Valitse hankevaiheet joita haluat tarkastella",
     "startDate": "EN: Ajanjakson alku",
     "endDate": "EN: Ajanjakson loppu",
+    "clearDates": "EN: Tyhjennä",
     "timePeriodHelperText": "EN: Aikaväli jolloin haitta on aktiivinen",
     "hankkeentyyppi": "EN: Hankkeen tyypit",
     "hankkeentyyppiHelperText": "EN: Valitse hankkeen työmaan tyyppi tai tyypit",

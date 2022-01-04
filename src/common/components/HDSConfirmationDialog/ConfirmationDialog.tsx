@@ -1,7 +1,9 @@
 import React from 'react';
 import { Dialog, Button } from 'hds-react';
-import { IconAlertCircle } from 'hds-react/icons';
+import { IconAlertCircle, IconErrorFill } from 'hds-react/icons';
 import { useTranslation } from 'react-i18next';
+
+import styles from './ConfirmationDialog.module.scss';
 
 type Props = {
   title: string;
@@ -10,6 +12,7 @@ type Props = {
   close: () => void;
   mainAction: () => void;
   mainBtnLabel: string;
+  variant: string;
 };
 
 const ConfirmationDialog: React.FC<Props> = ({
@@ -19,6 +22,7 @@ const ConfirmationDialog: React.FC<Props> = ({
   close,
   mainAction,
   mainBtnLabel,
+  variant,
 }) => {
   const { t } = useTranslation();
 
@@ -29,7 +33,11 @@ const ConfirmationDialog: React.FC<Props> = ({
       aria-labelledby={title}
       aria-describedby={description}
       targetElement={document.getElementById('root') || undefined}
-      theme={{ '--accent-line-color': '#0072C6' }}
+      theme={
+        variant === 'danger'
+          ? { '--accent-line-color': '#c4123e' }
+          : { '--accent-line-color': '#0072C6' }
+      }
     >
       <Dialog.Header
         id="dialog-title"
@@ -38,19 +46,34 @@ const ConfirmationDialog: React.FC<Props> = ({
       />
       <Dialog.Content>
         <p data-testid="dialog-description-test">{description}</p>
+        <div className={styles.errorMsg}>
+          <IconErrorFill />
+          <p> error msg </p>
+        </div>
       </Dialog.Content>
       <Dialog.ActionButtons>
-        <Button onClick={() => mainAction()} theme="coat" data-testid="dialog-button-test">
-          {mainBtnLabel}
-        </Button>
+        {variant === 'primary' ? (
+          <Button onClick={() => mainAction()} theme="coat" data-testid="dialog-button-test">
+            {mainBtnLabel}
+          </Button>
+        ) : (
+          ''
+        )}
         <Button
           variant="secondary"
           onClick={() => close()}
-          theme="coat"
+          theme={variant === 'danger' ? 'black' : 'coat'}
           data-testid="dialog-cancel-test"
         >
           {t('common:confirmationDialog:cancelButton')}
         </Button>
+        {variant === 'danger' ? (
+          <Button variant="danger" onClick={() => mainAction()} data-testid="dialog-button-test">
+            {mainBtnLabel}
+          </Button>
+        ) : (
+          ''
+        )}
       </Dialog.ActionButtons>
     </Dialog>
   );
