@@ -109,6 +109,7 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
         close={() => setDeleteDialogOpen(false)}
         mainAction={() => deleteHanke()}
         mainBtnLabel={t('common:confirmationDialog:deleteDialog:exitButton')}
+        variant="danger"
       />
       <ConfirmationDialog
         title={t('common:confirmationDialog:interruptDialog:titleText')}
@@ -117,6 +118,7 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
         close={() => setInterruptDialogOpen(false)}
         mainAction={() => closeForm()}
         mainBtnLabel={t('common:confirmationDialog:interruptDialog:exitButton')}
+        variant="primary"
       />
     </HankeForm>
   );

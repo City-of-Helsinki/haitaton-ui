@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Button } from 'hds-react';
-import { IconCross, IconCrossCircle } from 'hds-react/icons';
+import { IconCross, IconTrash } from 'hds-react/icons';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Text from '../../../common/components/text/Text';
 import { HankeDataFormState, SaveFormArguments } from './types';
@@ -111,11 +111,10 @@ const HankeForm: React.FC<Props> = ({
             <form name="hanke">
               <div className="closeFormWpr">
                 <Button
-                  className="delteHankeBtn"
+                  className="deleteHankeBtn"
                   onClick={() => onOpenHankeDelete()}
                   variant="supplementary"
-                  theme="coat"
-                  iconLeft={<IconCrossCircle aria-hidden />}
+                  iconLeft={<IconTrash aria-hidden />}
                 >
                   Poista hanke
                 </Button>
