@@ -2,7 +2,7 @@ import { FieldErrors, Control } from 'react-hook-form';
 import { PartialExcept } from '../../../common/types/utils';
 import { HankeData, HankeContactKey } from '../../types/hanke';
 
-export type FormNotification = 'ok' | 'success' | 'error' | 'indexSuccess' | 'indexError' | null;
+export type FormNotification = 'ok' | 'success' | 'error' | null;
 
 export enum FORMFIELD {
   TUNNUS = 'hankeTunnus',

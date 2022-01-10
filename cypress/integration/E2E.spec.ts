@@ -1,7 +1,5 @@
 /// <reference types="cypress" />
 import {
-  HankeIndexData,
-  HANKE_INDEX_TYPE,
   HANKE_KAISTAHAITTA,
   HANKE_KAISTAPITUUSHAITTA,
   HANKE_MELUHAITTA,
@@ -9,6 +7,8 @@ import {
   HANKE_TARINAHAITTA,
   HANKE_VAIHE,
   HankeDataDraft,
+  HankeIndexData,
+  HANKE_INDEX_TYPE,
   HANKE_SUUNNITTELUVAIHE,
 } from '../../src/domain/types/hanke';
 import { createHankeFromUI } from '../utils/formFiller';
@@ -71,8 +71,7 @@ context('HankeForm', () => {
   });
 
   it('Validate indexes are counted correctly with given hankeData', () => {
-    const countIndexes = true;
-    createHankeFromUI(hankeMock, countIndexes);
+    createHankeFromUI(hankeMock);
     validateIndexes(hankeMockIndex);
   });
 });

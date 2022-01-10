@@ -137,7 +137,7 @@ export type HankeGeometria = {
   modifiedByUserId: string | null;
 };
 
-export type HankeTilat = {
+type HankeTilat = {
   onGeometrioita: boolean;
   onKaikkiPakollisetLuontiTiedot: boolean;
   onTiedotLiikenneHaittaIndeksille: boolean;

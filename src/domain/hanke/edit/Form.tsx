@@ -19,7 +19,6 @@ import './Form.styles.scss';
 type Props = {
   formData: HankeDataFormState;
   onSave: (args: SaveFormArguments) => void;
-  onCalculateIndexes: (hankeTunnus: string) => void;
   onSaveGeometry: (hankeTunnus: string) => void;
   onIsDirtyChange: (isDirty: boolean) => void;
   onUnmount: () => void;
@@ -29,7 +28,6 @@ type Props = {
 const HankeForm: React.FC<Props> = ({
   formData,
   onSave,
-  onCalculateIndexes,
   onSaveGeometry,
   onIsDirtyChange,
   onUnmount,
@@ -90,7 +88,7 @@ const HankeForm: React.FC<Props> = ({
 
   return (
     <FormProvider {...formContext}>
-      <FormNotifications hankeTunnus={formData.hankeTunnus} />
+      <FormNotifications />
       <div className="hankeForm">
         <Text tag="h1" data-testid="formPageHeader" styleAs="h2" spacing="s" weight="bold">
           {t('hankeForm:pageHeader')}
@@ -129,7 +127,6 @@ const HankeForm: React.FC<Props> = ({
                 goBack={goBack}
                 goForward={goForward}
                 saveDraft={saveDraft}
-                onCalculateIndexes={onCalculateIndexes}
                 formPage={formPage}
               />
             </form>

@@ -252,16 +252,7 @@ export const fillForm4 = (hankeData: HankeDataDraft) => {
   }
 };
 
-export const triggerIndexCount = () => {
-  cy.intercept('/api/hankkeet/*/tormaystarkastelu').as('tormaystarkastelu');
-  cy.get('[data-testid=submitButton]').click();
-  cy.get('[data-testid=confirmationDialog]').should('be.visible');
-  cy.get('[data-testid=indexConfirmationOK]').click();
-  cy.get('[data-testid=formToastIndexSuccess]').children().should('be.visible');
-  cy.wait('@tormaystarkastelu');
-};
-
-export const createHankeFromUI = (hankeData: HankeDataDraft, countIndexes: boolean) => {
+export const createHankeFromUI = (hankeData: HankeDataDraft) => {
   cy.visit('/fi/hanke/uusi');
   fillForm0(hankeData);
   nextFormPage();
@@ -284,7 +275,4 @@ export const createHankeFromUI = (hankeData: HankeDataDraft, countIndexes: boole
   waitForToast();
   fillForm4(hankeData);
   saveDraft();
-  if (countIndexes) {
-    triggerIndexCount();
-  }
 };
