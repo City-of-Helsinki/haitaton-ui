@@ -5,7 +5,7 @@ import { useQuery } from 'react-query';
 import { actions as dialogActions } from '../../../common/components/confirmationDialog/reducer';
 import { HANKE_SAVETYPE, HankeDataDraft } from '../../types/hanke';
 import { getHasFormChanged, getFormData } from './selectors';
-import { saveForm, calculateIndex } from './thunks';
+import { saveForm } from './thunks';
 import { saveGeometryData } from '../../map/thunks';
 import HankeForm from './Form';
 import { actions, hankeDataDraft } from './reducer';
@@ -53,11 +53,6 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
     );
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  const handleCalculateIndex = (hankeTunnus: string) => {
-    if (hankeTunnus) dispatch(calculateIndex(hankeTunnus));
-  };
-
   const handleSaveGeometry = (id: string) => {
     dispatch(saveGeometryData({ hankeTunnus: id }));
   };
@@ -83,7 +78,6 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
     <HankeForm
       formData={formData}
       onSave={handleSave}
-      onCalculateIndexes={handleCalculateIndex}
       onSaveGeometry={handleSaveGeometry}
       onIsDirtyChange={handleIsDirtyChange}
       onUnmount={handleUnmount}

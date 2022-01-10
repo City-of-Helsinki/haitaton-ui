@@ -1,29 +1,12 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import Notification from './Notification';
 import { getShowNotification } from './selectors';
-import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 
-type Props = {
-  hankeTunnus: string | undefined;
-};
-
-const FormNotifications: React.FC<Props> = ({ hankeTunnus }) => {
+const FormNotifications: React.FC = () => {
   const { t } = useTranslation();
-  const { MAP } = useLocalizedRoutes();
   const showNotification = useSelector(getShowNotification());
-  const navigate = useNavigate();
-
-  // Redirect to map after successful index calculation
-  useEffect(() => {
-    if (showNotification === 'indexSuccess' && hankeTunnus) {
-      setTimeout(() => {
-        navigate(`${MAP.path}?hanke=${hankeTunnus}`);
-      }, 100);
-    }
-  }, [showNotification, hankeTunnus]);
 
   return (
     <>
@@ -43,24 +26,6 @@ const FormNotifications: React.FC<Props> = ({ hankeTunnus }) => {
           testId="formToastError"
         >
           {t('hankeForm:savingFailText')}
-        </Notification>
-      )}
-      {showNotification === 'indexSuccess' && (
-        <Notification
-          label={t('hankeForm:indexCalculationSuccessHeader')}
-          typeProps="success"
-          testId="formToastIndexSuccess"
-        >
-          {t('hankeForm:indexCalculationSuccessText')}
-        </Notification>
-      )}
-      {showNotification === 'indexError' && (
-        <Notification
-          label={t('hankeForm:indexCalculationFailHeader')}
-          typeProps="error"
-          testId="formToastIndexError"
-        >
-          {t('hankeForm:indexCalculationFailText')}
         </Notification>
       )}
     </>

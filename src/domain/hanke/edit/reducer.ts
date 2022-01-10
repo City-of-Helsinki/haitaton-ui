@@ -1,5 +1,5 @@
 import { PayloadAction, CaseReducer, createSlice } from '@reduxjs/toolkit';
-import { saveForm, calculateIndex } from './thunks';
+import { saveForm } from './thunks';
 import { HankeDataFormState, FormNotification } from './types';
 
 type State = {
@@ -47,15 +47,6 @@ const formSlice = createSlice({
     });
     builder.addCase(saveForm.rejected, (state) => {
       state.showNotification = 'error';
-    });
-    builder.addCase(calculateIndex.pending, (state) => {
-      state.showNotification = null;
-    });
-    builder.addCase(calculateIndex.fulfilled, (state) => {
-      state.showNotification = 'indexSuccess';
-    });
-    builder.addCase(calculateIndex.rejected, (state) => {
-      state.showNotification = 'indexError';
     });
   },
 });
