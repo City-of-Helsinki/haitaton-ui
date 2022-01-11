@@ -184,6 +184,7 @@ export interface HankeData {
   omistajat: Array<HankeContact>;
   arvioijat: Array<HankeContact>;
   toteuttajat: Array<HankeContact>;
+  tormaystarkasteluTulos: HankeIndexData | null;
   onYKTHanke: boolean;
   saveType: HANKE_SAVETYPE_KEY;
   geometriat: HankeGeometria | null;

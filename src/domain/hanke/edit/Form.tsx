@@ -95,7 +95,7 @@ const HankeForm: React.FC<Props> = ({
         </Text>
 
         <div className="hankeForm__formWpr">
-          <FormStepIndicator currentFormPage={currentFormPage} />
+          <FormStepIndicator currentFormPage={currentFormPage} formData={formData} />
           <div className="hankeForm__formWprRight">
             <form name="hanke">
               <div className="closeFormWpr">
