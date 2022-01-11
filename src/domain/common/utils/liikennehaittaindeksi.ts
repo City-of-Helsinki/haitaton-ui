@@ -16,15 +16,18 @@ export const INDEX_RED = '#c4123e';
 export const INDEX_YELLOW = '#ffda07';
 export const INDEX_GREEN = '#009246';
 export const INDEX_BLUE = '#2472c6';
+export const INDEX_GREY = '#808080';
 
 export enum LIIKENNEHAITTA_STATUS {
   RED = 'RED',
   YELLOW = 'YELLOW',
   GREEN = 'GREEN',
   BLUE = 'BLUE',
+  GREY = 'GREY',
 }
 
-export const getStatusByIndex = (index: TormaysIndex) => {
+export const getStatusByIndex = (index: TormaysIndex | undefined) => {
+  if (index === undefined) return LIIKENNEHAITTA_STATUS.GREY;
   if (index === null) return LIIKENNEHAITTA_STATUS.BLUE;
   if (index < 3) return LIIKENNEHAITTA_STATUS.GREEN;
   if (index < 4) return LIIKENNEHAITTA_STATUS.YELLOW;
@@ -35,6 +38,7 @@ export const getColorByStatus = (status: LIIKENNEHAITTA_STATUS) =>
   $enum.mapValue(status).with({
     [LIIKENNEHAITTA_STATUS.BLUE]: INDEX_BLUE,
     [LIIKENNEHAITTA_STATUS.GREEN]: INDEX_GREEN,
+    [LIIKENNEHAITTA_STATUS.GREY]: INDEX_GREY,
     [LIIKENNEHAITTA_STATUS.YELLOW]: INDEX_YELLOW,
     [LIIKENNEHAITTA_STATUS.RED]: INDEX_RED,
   });

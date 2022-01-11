@@ -293,7 +293,8 @@
       "TODENNAKOINEN": "EN: todennäköinen",
       "EI_TARVETTA": "EN: ei tarvetta",
       "MERKITTAVA": "EN: merkittävä"
-    }
+    },
+    "indexesNotCalculated": "EN: Haittaindeksejä ei ole laskettu."
   },
   "hankePortfolio": {
     "filters": "EN: Rajausehdot",
@@ -377,7 +378,8 @@
         "RED": "EN:Kriittinen",
         "YELLOW": "EN:Huomioitava",
         "GREEN": "EN:Ei merkittävä",
-        "BLUE": "EN:Indeksoimaton"
+        "BLUE": "EN:Indeksoimaton",
+        "GREY": "EN:Indeksoimaton"
       }
     },
     "drawSquareButtonAria": "EN:Piirrä neliö kartalle",

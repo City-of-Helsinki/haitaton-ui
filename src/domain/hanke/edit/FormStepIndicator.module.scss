@@ -1,11 +1,15 @@
+.stepIndicatorContainer {
+  background: var(--color-white);
+  min-width: 18rem;
+}
+
 .stepIndicator {
   list-style-type: none;
   flex-grow: 0;
   padding: var(--spacing-layout-s);
   margin: 0;
-  background: var(--color-white);
   display: block;
-  min-width: 17rem;
+  padding-bottom: 6rem;
 
   li {
     padding-bottom: var(--spacing-3-xs);

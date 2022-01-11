@@ -12,7 +12,7 @@ import { HankeIndexData } from '../../../types/hanke';
 type IndexProps = {
   title: string;
   content?: string;
-  index: number;
+  index: number | undefined;
   testId: string;
 };
 
@@ -28,19 +28,22 @@ const IndexSection: React.FC<IndexProps> = ({ title, content, index, testId }) =
         </Text>
       )}
     </div>
-    <div
-      className={styles.indexContainer__number}
-      style={{
-        backgroundColor: getColorByStatus(getStatusByIndex(index)),
-        color: getStatusByIndex(index) === LIIKENNEHAITTA_STATUS.YELLOW ? 'black' : 'white',
-      }}
-    >
-      <div data-testid={testId}>{index}</div>
+    <div className={styles.indexContainer__number}>
+      {content && <div>&nbsp;</div>}
+      <div
+        style={{
+          backgroundColor: getColorByStatus(getStatusByIndex(index)),
+          color: getStatusByIndex(index) === LIIKENNEHAITTA_STATUS.YELLOW ? 'black' : 'white',
+        }}
+      >
+        <div data-testid={testId}>{index === undefined ? '-' : index}</div>
+      </div>
     </div>
   </div>
 );
 
-const getDetourNeedByIndex = (index: IndexProps['index']) => {
+const getDetourNeedByIndex = (index: IndexProps['index'] | undefined) => {
+  if (!index) return '-';
   const staticLocalisationKey = 'hankeIndexes:KIERTOREITTITARPEET:';
   if (index < 3) return `${staticLocalisationKey}EI_TARVETTA`;
   if (index < 4) return `${staticLocalisationKey}TODENNAKOINEN`;
@@ -48,46 +51,55 @@ const getDetourNeedByIndex = (index: IndexProps['index']) => {
 };
 
 type Props = {
-  hankeIndexData: HankeIndexData;
+  hankeIndexData: HankeIndexData | null | undefined;
 };
 
 const HankeIndexes: React.FC<Props> = ({ hankeIndexData }) => {
   const { t } = useTranslation();
+  const liikennehaittaIndeksi = hankeIndexData?.liikennehaittaIndeksi.indeksi;
+  const pyorailyIndeksi = hankeIndexData?.pyorailyIndeksi;
+  const joukkoliikenneIndeksi = hankeIndexData?.joukkoliikenneIndeksi;
+  const perusIndeksi = hankeIndexData?.perusIndeksi;
 
   return (
-    <div className={styles.indexes}>
-      <IndexSection
-        title={t('hankeIndexes:liikennehaittaindeksi')}
-        index={hankeIndexData.liikennehaittaIndeksi.indeksi}
-        testId="test-liikennehaittaIndeksi"
-      />
+    <div>
+      <div className={styles.indexes}>
+        <IndexSection
+          title={t('hankeIndexes:liikennehaittaindeksi')}
+          index={liikennehaittaIndeksi}
+          testId="test-liikennehaittaIndeksi"
+        />
 
-      <IndexSection
-        title={t('hankeIndexes:pyorailynPaareitti')}
-        content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
-          getDetourNeedByIndex(hankeIndexData.pyorailyIndeksi)
-        )}`}
-        index={hankeIndexData.pyorailyIndeksi}
-        testId="test-pyorailyIndeksi"
-      />
+        <IndexSection
+          title={t('hankeIndexes:pyorailynPaareitti')}
+          content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
+            getDetourNeedByIndex(pyorailyIndeksi)
+          )}`}
+          index={pyorailyIndeksi}
+          testId="test-pyorailyIndeksi"
+        />
 
-      <IndexSection
-        title={t('hankeIndexes:merkittavatJoukkoliikennereitit')}
-        content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
-          getDetourNeedByIndex(hankeIndexData.joukkoliikenneIndeksi)
-        )}`}
-        index={hankeIndexData.joukkoliikenneIndeksi}
-        testId="test-joukkoliikenneIndeksi"
-      />
+        <IndexSection
+          title={t('hankeIndexes:merkittavatJoukkoliikennereitit')}
+          content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
+            getDetourNeedByIndex(joukkoliikenneIndeksi)
+          )}`}
+          index={joukkoliikenneIndeksi}
+          testId="test-joukkoliikenneIndeksi"
+        />
 
-      <IndexSection
-        title={t('hankeIndexes:ruuhkautuminen')}
-        content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
-          getDetourNeedByIndex(hankeIndexData.perusIndeksi)
-        )}`}
-        index={hankeIndexData.perusIndeksi}
-        testId="test-ruuhkautumisIndeksi"
-      />
+        <IndexSection
+          title={t('hankeIndexes:ruuhkautuminen')}
+          content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
+            getDetourNeedByIndex(perusIndeksi)
+          )}`}
+          index={perusIndeksi}
+          testId="test-ruuhkautumisIndeksi"
+        />
+        {hankeIndexData === undefined && (
+          <p className={styles.indexInfo}>{t('hankeIndexes:indexesNotCalculated')}</p>
+        )}
+      </div>
     </div>
   );
 };

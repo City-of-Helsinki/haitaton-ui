@@ -1,7 +1,7 @@
 .indexContainer {
   display: flex;
   align-items: center;
-  padding: 1.2rem 0.25rem;
+  padding: 1.2rem 0.2rem 1.2rem 0.6rem;
 
   &__titlesContainer {
     flex-direction: column;
@@ -11,12 +11,17 @@
   &__number {
     width: 34px;
     text-align: center;
+    flex-direction: column-reverse;
     margin-right: 8px;
   }
 }
 
+.indexInfo {
+  padding: 1rem 0.2rem 1rem 0.6rem;
+}
+
 .indexes {
   .indexContainer:nth-child(odd) {
-    background-color: var(--color-black-5);
+    background-color: var(--color-black-10);
   }
 }
