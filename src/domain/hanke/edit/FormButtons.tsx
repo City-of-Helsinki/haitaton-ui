@@ -8,10 +8,10 @@ type Props = {
   goBack: () => void;
   goForward: () => void;
   saveDraft: () => void;
-  formPage: number;
+  currentFormPage: number;
 };
 
-const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, formPage }) => {
+const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, currentFormPage }) => {
   const { t } = useTranslation();
 
   const {
@@ -20,7 +20,7 @@ const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, formPage }
 
   let previousButtonText = '';
   let nextButtonText = '';
-  switch (formPage) {
+  switch (currentFormPage) {
     case 0: {
       nextButtonText = 'hankeForm:hankkeenAlueForm:header';
       break;
@@ -53,7 +53,7 @@ const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, formPage }
 
   return (
     <div className="btnWpr">
-      {formPage < 4 && (
+      {currentFormPage < 4 && (
         <Button
           className="btnWpr--next"
           type="button"
@@ -77,7 +77,7 @@ const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, formPage }
         <span>{t('hankeForm:saveDraftButton')}</span>
       </Button>
 
-      {formPage > 0 && (
+      {currentFormPage > 0 && (
         <Button
           className="btnWpr--previous"
           type="button"

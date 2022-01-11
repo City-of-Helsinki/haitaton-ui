@@ -5,7 +5,7 @@ import { IconCross } from 'hds-react/icons';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Text from '../../../common/components/text/Text';
 import { HankeDataFormState, SaveFormArguments } from './types';
-import StateIndicator from './StateIndicator';
+import FormStepIndicator from './FormStepIndicator';
 import { hankeSchema } from './hankeSchema';
 import Form0 from './Form0';
 import Form1 from './Form1';
@@ -34,7 +34,7 @@ const HankeForm: React.FC<Props> = ({
   onFormClose,
 }) => {
   const { t } = useTranslation();
-  const [formPage, setFormPage] = useState<number>(0);
+  const [currentFormPage, setCurrentFormPage] = useState<number>(0);
   const formContext = useForm<HankeDataFormState>({
     mode: 'all',
     reValidateMode: 'onChange',
@@ -44,7 +44,7 @@ const HankeForm: React.FC<Props> = ({
     defaultValues: formData,
     resolver: yupResolver(hankeSchema),
     context: {
-      formPage,
+      currentFormPage,
     },
   });
 
@@ -57,26 +57,26 @@ const HankeForm: React.FC<Props> = ({
   const saveDraft = useCallback(() => {
     onSave({
       data: getValues(),
-      formPage,
+      currentFormPage,
     });
-  }, [getValues, formPage]);
+  }, [getValues, currentFormPage]);
 
   const goBack = useCallback(() => {
-    setFormPage((v) => v - 1);
+    setCurrentFormPage((v) => v - 1);
   }, []);
 
   const goForward = useCallback(() => {
-    if (formPage === 0) {
+    if (currentFormPage === 0) {
       saveDraft();
     }
-    if (formPage === 1) {
+    if (currentFormPage === 1) {
       const values = getValues();
       if (values.hankeTunnus) {
         onSaveGeometry(values.hankeTunnus);
       }
     }
-    setFormPage((v) => v + 1);
-  }, [getValues, formPage]);
+    setCurrentFormPage((v) => v + 1);
+  }, [getValues, currentFormPage]);
 
   useEffect(() => {
     onIsDirtyChange(formState.isDirty);
@@ -95,7 +95,7 @@ const HankeForm: React.FC<Props> = ({
         </Text>
 
         <div className="hankeForm__formWpr">
-          <StateIndicator formPage={formPage} />
+          <FormStepIndicator currentFormPage={currentFormPage} />
           <div className="hankeForm__formWprRight">
             <form name="hanke">
               <div className="closeFormWpr">
@@ -108,26 +108,26 @@ const HankeForm: React.FC<Props> = ({
                 </button>
               </div>
 
-              {formPage === 0 && (
+              {currentFormPage === 0 && (
                 <Form0 errors={errors} control={control} register={register} formData={formData} />
               )}
-              {formPage === 1 && (
+              {currentFormPage === 1 && (
                 <Form1 errors={errors} control={control} register={register} formData={formData} />
               )}
-              {formPage === 2 && (
+              {currentFormPage === 2 && (
                 <Form2 errors={errors} control={control} register={register} formData={formData} />
               )}
-              {formPage === 3 && (
+              {currentFormPage === 3 && (
                 <Form3 errors={errors} control={control} register={register} formData={formData} />
               )}
-              {formPage === 4 && (
+              {currentFormPage === 4 && (
                 <Form4 errors={errors} control={control} register={register} formData={formData} />
               )}
               <FormButtons
                 goBack={goBack}
                 goForward={goForward}
                 saveDraft={saveDraft}
-                formPage={formPage}
+                currentFormPage={currentFormPage}
               />
             </form>
           </div>
