@@ -43,12 +43,12 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
     }
   }, [isFetched]);
 
-  const handleSave = ({ data, formPage }: SaveFormArguments) => {
+  const handleSave = ({ data, currentFormPage }: SaveFormArguments) => {
     dispatch(
       saveForm({
         data,
         saveType: HANKE_SAVETYPE.DRAFT,
-        formPage,
+        currentFormPage,
       })
     );
   };

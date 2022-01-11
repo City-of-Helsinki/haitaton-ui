@@ -8,12 +8,12 @@ import { filterEmptyContacts, isHankeEditingDisabled } from './utils';
 type SaveHankeData = {
   data: HankeDataFormState;
   saveType: HANKE_SAVETYPE_KEY;
-  formPage: number;
+  currentFormPage: number;
 };
 
 export const saveForm = createAsyncThunk(
   'form/saveData',
-  async ({ data, saveType, formPage }: SaveHankeData, thunkApi) => {
+  async ({ data, saveType, currentFormPage }: SaveHankeData, thunkApi) => {
     const requestData = {
       ...filterEmptyContacts(data),
       saveType,
@@ -24,7 +24,7 @@ export const saveForm = createAsyncThunk(
       throw new Error('Editing disabled');
     }
 
-    if (data.hankeTunnus && formPage === 1) {
+    if (data.hankeTunnus && currentFormPage === 1) {
       thunkApi.dispatch(saveGeometryData({ hankeTunnus: data.hankeTunnus }));
     }
 

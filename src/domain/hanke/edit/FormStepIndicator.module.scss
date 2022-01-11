@@ -1,0 +1,54 @@
+.stepIndicator {
+  list-style-type: none;
+  flex-grow: 0;
+  padding: var(--spacing-layout-s);
+  margin: 0;
+  background: var(--color-white);
+  display: block;
+  min-width: 17rem;
+
+  li {
+    padding-bottom: var(--spacing-3-xs);
+    margin: 0;
+    display: block;
+
+    svg {
+      display: inline-block;
+    }
+  }
+
+  .line {
+    background: #808080;
+    height: 27px;
+    width: 2px;
+    margin-left: 10px;
+    margin-bottom: 2px;
+    display: block;
+  }
+
+  li:last-child .line {
+    display: none;
+  }
+
+  .coloredLine {
+    background: var(--color-coat-of-arms);
+  }
+
+  .label {
+    position: relative;
+    top: 1px;
+    left: var(--spacing-2-xs);
+    display: inline-block;
+  }
+
+  .hidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+}

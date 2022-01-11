@@ -7,8 +7,10 @@ import { FORMFIELD } from './types';
 
 export const today = startOfDay(new Date());
 
-export const isRequiredByFormPage = (formPage: number) => (val: number, schema: yup.MixedSchema) =>
-  val === formPage ? schema.required() : schema;
+export const isRequiredByFormPage = (currentFormPage: number) => (
+  val: number,
+  schema: yup.MixedSchema
+) => (val === currentFormPage ? schema.required() : schema);
 
 // https://github.com/jquense/yup/issues/176
 // https://github.com/jquense/yup/issues/952
@@ -58,12 +60,12 @@ export const hankeSchema = yup.object().shape({
     is: 'SUUNNITTELU',
     then: yup.string().required(),
   }),
-  [FORMFIELD.KATUOSOITE]: yup.string().nullable().when('$formPage', isRequiredByFormPage(3)),
+  [FORMFIELD.KATUOSOITE]: yup.string().nullable().when('$currentFormPage', isRequiredByFormPage(3)),
   [FORMFIELD.OMISTAJAT]: yup
     .array()
     .nullable()
     // eslint-disable-next-line
-    .when('$formPage', (val: number, schema: any) =>
+    .when('$currentFormPage', (val: number, schema: any) =>
       val === 2 ? schema.ensure().of(requiredContactSchema) : schema
     ),
   [FORMFIELD.ARVIOIJAT]: yup.array().nullable().ensure().of(contactSchema),
@@ -72,11 +74,11 @@ export const hankeSchema = yup.object().shape({
     .date()
     .nullable()
     .when(
-      ['$formPage', FORMFIELD.ALKU_PVM, FORMFIELD.LOPPU_PVM],
+      ['$currentFormPage', FORMFIELD.ALKU_PVM, FORMFIELD.LOPPU_PVM],
       // eslint-disable-next-line
       // @ts-ignore nullable doesnt work with TS
-      (formPage: number, alkuPvm: Date, loppuPvm: Date, schema: yup.DateSchema) => {
-        if (formPage !== 4) return schema;
+      (currentFormPage: number, alkuPvm: Date, loppuPvm: Date, schema: yup.DateSchema) => {
+        if (currentFormPage !== 4) return schema;
         return alkuPvm
           ? schema.min(startOfDay(new Date(alkuPvm))).max(endOfDay(new Date(loppuPvm)))
           : schema;
@@ -86,11 +88,11 @@ export const hankeSchema = yup.object().shape({
     .date()
     .nullable()
     .when(
-      ['$formPage', FORMFIELD.ALKU_PVM, FORMFIELD.LOPPU_PVM],
+      ['$currentFormPage', FORMFIELD.ALKU_PVM, FORMFIELD.LOPPU_PVM],
       // eslint-disable-next-line
       // @ts-ignore nullable doesnt work with TS
-      (formPage: number, alkuPvm: Date, loppuPvm: Date, schema: yup.DateSchema) => {
-        if (formPage !== 4) return schema;
+      (currentFormPage: number, alkuPvm: Date, loppuPvm: Date, schema: yup.DateSchema) => {
+        if (currentFormPage !== 4) return schema;
         return loppuPvm
           ? schema.min(startOfDay(new Date(alkuPvm))).max(endOfDay(new Date(loppuPvm)))
           : schema;

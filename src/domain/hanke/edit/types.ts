@@ -53,7 +53,7 @@ export interface FormProps {
 
 export type SaveFormArguments = {
   data: HankeDataFormState;
-  formPage: number;
+  currentFormPage: number;
 };
 
 export type Organization = {
