@@ -3560,20 +3560,6 @@ Object {
                       <div
                         class="gridItem"
                       >
-                        <h3
-                          class="text--bold text--h6"
-                        >
-                          Suunnitteluvaihe
-                        </h3>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                          suunnitteluVaihe.null
-                        </p>
-                      </div>
-                      <div
-                        class="gridItem"
-                      >
                         <div
                           class="linkWrapper"
                         >
@@ -4116,20 +4102,6 @@ Object {
                           class="text--normal text--body-m"
                         >
                           Ohjelmointi
-                        </p>
-                      </div>
-                      <div
-                        class="gridItem"
-                      >
-                        <h3
-                          class="text--bold text--h6"
-                        >
-                          Suunnitteluvaihe
-                        </h3>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                          suunnitteluVaihe.null
                         </p>
                       </div>
                       <div
@@ -8199,20 +8171,6 @@ Object {
                     <div
                       class="gridItem"
                     >
-                      <h3
-                        class="text--bold text--h6"
-                      >
-                        Suunnitteluvaihe
-                      </h3>
-                      <p
-                        class="text--normal text--body-m"
-                      >
-                        suunnitteluVaihe.null
-                      </p>
-                    </div>
-                    <div
-                      class="gridItem"
-                    >
                       <div
                         class="linkWrapper"
                       >
@@ -8755,20 +8713,6 @@ Object {
                         class="text--normal text--body-m"
                       >
                         Ohjelmointi
-                      </p>
-                    </div>
-                    <div
-                      class="gridItem"
-                    >
-                      <h3
-                        class="text--bold text--h6"
-                      >
-                        Suunnitteluvaihe
-                      </h3>
-                      <p
-                        class="text--normal text--body-m"
-                      >
-                        suunnitteluVaihe.null
                       </p>
                     </div>
                     <div

@@ -107,11 +107,13 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                 title={t('hankePortfolio:labels:hankeVaihe')}
                 content={t(`hanke:vaihe:${hanke.vaihe}`)}
               />
-              <GridItem
-                className={styles.gridItem}
-                title={t('hankePortfolio:labels:suunnitteluVaihe')}
-                content={t(`hanke:suunnitteluVaihe:${hanke.suunnitteluVaihe}`)}
-              />
+              {hanke.suunnitteluVaihe && (
+                <GridItem
+                  className={styles.gridItem}
+                  title={t('hankePortfolio:labels:suunnitteluVaihe')}
+                  content={t(`hanke:suunnitteluVaihe:${hanke.suunnitteluVaihe}`)}
+                />
+              )}
               <div className={styles.gridItem}>
                 <div className={styles.linkWrapper}>
                   <Text tag="h3" styleAs="h6" weight="bold">
