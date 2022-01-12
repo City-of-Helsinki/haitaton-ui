@@ -32,6 +32,7 @@ import PaginationControl from '../../common/pagination/PaginationControl';
 import DateRangeControl from '../../../common/components/map/controls/DateRangeControl';
 import { usePortfolioFilter } from './hooks/usePortfolioFilter';
 import { hankeIsBetweenDates } from '../../map/utils';
+import HankeIndexes from '../../map/components/HankeSidebar/HankeIndexes';
 
 type CustomAccordionProps = {
   hanke: HankeDataDraft;
@@ -97,7 +98,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
           <TabPanel>
             <div className={styles.gridBasicInfo}>
               <GridItem
-                className={`${styles.gridItem} ${styles.gridDescription}`}
+                className={`${styles.gridDescription}`}
                 title={t('hankePortfolio:labels:kuvaus')}
                 content={hanke.kuvaus}
               />
@@ -164,125 +165,72 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               </div>
             </div>
             <div className={styles.gridBasicInfo}>
-              <div className={`${styles.gridItem} ${styles.gridType}`}>
+              <div className={styles.haitatTitle}>
                 <Text tag="h3" styleAs="h5" weight="bold">
                   {t('hankePortfolio:labels:hankkeenHaitat')}
                 </Text>
               </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankeForm:labels:kaistaHaitta')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  {hanke.kaistaHaitta && t(`hanke:kaistaHaitta:${hanke.kaistaHaitta}`)}
-                  {!hanke.kaistaHaitta && '-'}
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:haitanKesto')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  {hanke.haittaAlkuPvm && formatToFinnishDate(hanke.haittaAlkuPvm)} -{' '}
-                  {hanke.loppuPvm && formatToFinnishDate(hanke.loppuPvm)}
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankeForm:labels:kaistaPituusHaitta')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  {hanke.kaistaPituusHaitta &&
-                    t(`hanke:kaistaPituusHaitta:${hanke.kaistaPituusHaitta}`)}
-                  {!hanke.kaistaPituusHaitta && '-'}
-                </Text>
-              </div>
-
-              {/*
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankeIndexes:liikennehaittaindeksi')}
-                </Text>
-                <div className={styles.index}>
-                  <div className={styles.indexBox}>4</div>
-                </div>
-              </div>
-              */}
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankeForm:labels:meluHaitta')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  {hanke.meluHaitta && t(`hanke:meluHaitta:${hanke.meluHaitta}`)}
-                  {!hanke.meluHaitta && '-'}
-                </Text>
-              </div>
-              {/*
-                  huom: indeksit - ovat [] eikä suoraan voida accessoida avaimella.
-                  Katso referenssi kartalta avautuvasta tabista
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankeIndexes:pyorailynPaareitti')}
-                </Text>
-
-                <div className={styles.index}>
-                  <div className={styles.indexBox}>5</div>
+              <div className={styles.haitatInfo}>
+                <div>
+                  <Text tag="h3" styleAs="h6" weight="bold">
+                    {t('hankeForm:labels:kaistaHaitta')}
+                  </Text>
                   <Text tag="p" styleAs="body-m">
-                    {t('hankeIndexes:kiertoreittitarve')}:{' '}
-                    {t('hankeIndexes:KIERTOREITTITARPEET:TODENNAKOINEN')}
+                    {hanke.kaistaHaitta && t(`hanke:kaistaHaitta:${hanke.kaistaHaitta}`)}
+                    {!hanke.kaistaHaitta && '-'}
                   </Text>
                 </div>
-              
-              </div>
-              */}
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankeForm:labels:polyHaitta')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  {hanke.polyHaitta && t(`hanke:polyHaitta:${hanke.polyHaitta}`)}
-                  {!hanke.polyHaitta && '-'}
-                </Text>
-              </div>
 
-              {/*
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankeIndexes:merkittavatJoukkoliikennereitit')}
-                </Text>
-                <div className={styles.index}>
-                  <div className={styles.indexBox}>4</div>
+                <div>
+                  <Text tag="h3" styleAs="h6" weight="bold">
+                    {t('hankeForm:labels:kaistaPituusHaitta')}
+                  </Text>
                   <Text tag="p" styleAs="body-m">
-                    {t('hankeIndexes:kiertoreittitarve')}:{' '}
-                    {t('hankeIndexes:KIERTOREITTITARPEET:MERKITTAVA')}
+                    {hanke.kaistaPituusHaitta &&
+                      t(`hanke:kaistaPituusHaitta:${hanke.kaistaPituusHaitta}`)}
+                    {!hanke.kaistaPituusHaitta && '-'}
                   </Text>
                 </div>
-                
-              </div>
-              */}
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankeForm:labels:tarinaHaitta')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  {hanke.tarinaHaitta && t(`hanke:tarinaHaitta:${hanke.tarinaHaitta}`)}
-                  {!hanke.tarinaHaitta && '-'}
-                </Text>
-              </div>
-              {/*
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankeIndexes:ruuhkautuminen')}
-                </Text>
-                <div className={styles.index}>
-                  <div className={styles.indexBox}>3</div>
+                <div>
+                  <Text tag="h3" styleAs="h6" weight="bold">
+                    {t('hankeForm:labels:meluHaitta')}
+                  </Text>
                   <Text tag="p" styleAs="body-m">
-                    {t('hankeIndexes:kiertoreittitarve')}:{' '}
-                    {t('hankeIndexes:KIERTOREITTITARPEET:EI_TARVETTA')}
+                    {hanke.meluHaitta && t(`hanke:meluHaitta:${hanke.meluHaitta}`)}
+                    {!hanke.meluHaitta && '-'}
+                  </Text>
+                </div>
+                <div>
+                  <Text tag="h3" styleAs="h6" weight="bold">
+                    {t('hankeForm:labels:polyHaitta')}
+                  </Text>
+                  <Text tag="p" styleAs="body-m">
+                    {hanke.polyHaitta && t(`hanke:polyHaitta:${hanke.polyHaitta}`)}
+                    {!hanke.polyHaitta && '-'}
+                  </Text>
+                </div>
+                <div>
+                  <Text tag="h3" styleAs="h6" weight="bold">
+                    {t('hankeForm:labels:tarinaHaitta')}
+                  </Text>
+                  <Text tag="p" styleAs="body-m">
+                    {hanke.tarinaHaitta && t(`hanke:tarinaHaitta:${hanke.tarinaHaitta}`)}
+                    {!hanke.tarinaHaitta && '-'}
                   </Text>
                 </div>
               </div>
-              */}
+              <div className={styles.haitatIndexes}>
+                <div>
+                  <Text tag="h3" styleAs="h6" weight="bold">
+                    {t('hankePortfolio:labels:haitanKesto')}
+                  </Text>
+                  <Text tag="p" styleAs="body-m">
+                    {hanke.haittaAlkuPvm && formatToFinnishDate(hanke.haittaAlkuPvm)} -{' '}
+                    {hanke.loppuPvm && formatToFinnishDate(hanke.loppuPvm)}
+                  </Text>
+                </div>
+                <HankeIndexes hankeIndexData={hanke.tormaystarkasteluTulos} displayTooltip />
+              </div>
             </div>
           </TabPanel>
           {/* Disabloitu toistaiseksi ennen kuin yhteyshenkilöiden tietorakenne saadaan

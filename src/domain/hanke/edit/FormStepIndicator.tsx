@@ -47,7 +47,7 @@ const FormStepIndicator: React.FC<PropTypes> = ({ currentFormPage, formData }) =
         </ol>
       </div>
       <div className={styles.hankeIndexes}>
-        <HankeIndexes hankeIndexData={formData.tormaystarkasteluTulos} />
+        <HankeIndexes hankeIndexData={formData.tormaystarkasteluTulos} displayTooltip />
       </div>
     </div>
   );

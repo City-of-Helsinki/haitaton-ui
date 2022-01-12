@@ -3530,7 +3530,7 @@ Object {
                       class="gridBasicInfo"
                     >
                       <div
-                        class="gridItem gridDescription"
+                        class="gridDescription"
                       >
                         <h3
                           class="text--bold text--h6"
@@ -3670,7 +3670,7 @@ Object {
                       class="gridBasicInfo"
                     >
                       <div
-                        class="gridItem gridType"
+                        class="haitatTitle"
                       >
                         <h3
                           class="text--bold text--h5"
@@ -3679,90 +3679,267 @@ Object {
                         </h3>
                       </div>
                       <div
-                        class="gridItem"
+                        class="haitatInfo"
                       >
-                        <h3
-                          class="text--bold text--h6"
-                        >
-                          Kaistahaitta
-                        </h3>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                          -
-                        </p>
+                        <div>
+                          <h3
+                            class="text--bold text--h6"
+                          >
+                            Kaistahaitta
+                          </h3>
+                          <p
+                            class="text--normal text--body-m"
+                          >
+                            -
+                          </p>
+                        </div>
+                        <div>
+                          <h3
+                            class="text--bold text--h6"
+                          >
+                            Kaistan pituushaitta
+                          </h3>
+                          <p
+                            class="text--normal text--body-m"
+                          >
+                            -
+                          </p>
+                        </div>
+                        <div>
+                          <h3
+                            class="text--bold text--h6"
+                          >
+                            Meluhaitta
+                          </h3>
+                          <p
+                            class="text--normal text--body-m"
+                          >
+                            -
+                          </p>
+                        </div>
+                        <div>
+                          <h3
+                            class="text--bold text--h6"
+                          >
+                            Pölyhaitta
+                          </h3>
+                          <p
+                            class="text--normal text--body-m"
+                          >
+                            -
+                          </p>
+                        </div>
+                        <div>
+                          <h3
+                            class="text--bold text--h6"
+                          >
+                            Tärinähaitta
+                          </h3>
+                          <p
+                            class="text--normal text--body-m"
+                          >
+                            -
+                          </p>
+                        </div>
                       </div>
                       <div
-                        class="gridItem"
+                        class="haitatIndexes"
                       >
-                        <h3
-                          class="text--bold text--h6"
-                        >
-                          Haitan kesto
-                        </h3>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                           -
-                           
-                          10.10.2022
-                        </p>
-                      </div>
-                      <div
-                        class="gridItem"
-                      >
-                        <h3
-                          class="text--bold text--h6"
-                        >
-                          Kaistan pituushaitta
-                        </h3>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                          -
-                        </p>
-                      </div>
-                      <div
-                        class="gridItem"
-                      >
-                        <h3
-                          class="text--bold text--h6"
-                        >
-                          Meluhaitta
-                        </h3>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                          -
-                        </p>
-                      </div>
-                      <div
-                        class="gridItem"
-                      >
-                        <h3
-                          class="text--bold text--h6"
-                        >
-                          Pölyhaitta
-                        </h3>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                          -
-                        </p>
-                      </div>
-                      <div
-                        class="gridItem"
-                      >
-                        <h3
-                          class="text--bold text--h6"
-                        >
-                          Tärinähaitta
-                        </h3>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                          -
-                        </p>
+                        <div>
+                          <h3
+                            class="text--bold text--h6"
+                          >
+                            Haitan kesto
+                          </h3>
+                          <p
+                            class="text--normal text--body-m"
+                          >
+                             -
+                             
+                            10.10.2022
+                          </p>
+                        </div>
+                        <div>
+                          <div
+                            class="indexTitle"
+                          >
+                            <h2
+                              class="text--bold text--h5"
+                            >
+                              Haittaindeksit
+                            </h2>
+                            <div
+                              class="Tooltip-module_root__1Yo9t indexTooltip"
+                            >
+                              <button
+                                aria-expanded="false"
+                                aria-label="Tooltip"
+                                class="Tooltip-module_button__2x9m0"
+                                title="Tooltip"
+                                type="button"
+                              >
+                                <span
+                                  aria-hidden="true"
+                                >
+                                  <svg
+                                    class="Icon-module_icon__1Jtzj icon_hds-icon__1YqNC Icon-module_s__2WGWe icon_hds-icon--size-s__2Lkik"
+                                    role="img"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <g
+                                      fill="none"
+                                      fill-rule="evenodd"
+                                    >
+                                      <path
+                                        d="M0 0h24v24H0z"
+                                      />
+                                      <path
+                                        d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 100 16 8 8 0 000-16zm1 12v2h-2v-2h2zm-.956-10.25c1.99 0 3.673 1.545 3.673 3.674 0 1.357-.47 2.065-1.556 2.882l-.242.178c-.744.545-.963.852-.98 1.658l-.002.108h-2c0-1.575.522-2.412 1.677-3.288l.248-.182c.706-.517.855-.726.855-1.356 0-.985-.75-1.674-1.673-1.674-.853 0-1.565.59-1.662 1.458l-.009.098-1.996-.114c.115-2.019 1.757-3.442 3.667-3.442z"
+                                        fill="currentColor"
+                                      />
+                                    </g>
+                                  </svg>
+                                </span>
+                              </button>
+                            </div>
+                          </div>
+                          <div
+                            class="indexes"
+                          >
+                            <div
+                              class="indexContainer"
+                            >
+                              <div
+                                class="indexContainer__titlesContainer"
+                              >
+                                <h2
+                                  class="text--bold text--h5"
+                                >
+                                  Liikennehaittaindeksi
+                                </h2>
+                              </div>
+                              <div
+                                class="indexContainer__number"
+                              >
+                                <div
+                                  style="background-color: rgb(128, 128, 128); color: white;"
+                                >
+                                  <div
+                                    data-testid="test-liikennehaittaIndeksi"
+                                  >
+                                    -
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="indexContainer"
+                            >
+                              <div
+                                class="indexContainer__titlesContainer"
+                              >
+                                <h2
+                                  class="text--bold text--h6"
+                                >
+                                  Pyöräilyn pääreitti
+                                </h2>
+                                <p
+                                  class="text--normal text--body-m"
+                                  data-testid="test-pyorailyIndeksi-content"
+                                >
+                                  Kiertoreittitarve: -
+                                </p>
+                              </div>
+                              <div
+                                class="indexContainer__number"
+                              >
+                                <div>
+                                   
+                                </div>
+                                <div
+                                  style="background-color: rgb(128, 128, 128); color: white;"
+                                >
+                                  <div
+                                    data-testid="test-pyorailyIndeksi"
+                                  >
+                                    -
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="indexContainer"
+                            >
+                              <div
+                                class="indexContainer__titlesContainer"
+                              >
+                                <h2
+                                  class="text--bold text--h6"
+                                >
+                                  Merkittävät joukkoliikennereitit
+                                </h2>
+                                <p
+                                  class="text--normal text--body-m"
+                                  data-testid="test-joukkoliikenneIndeksi-content"
+                                >
+                                  Kiertoreittitarve: -
+                                </p>
+                              </div>
+                              <div
+                                class="indexContainer__number"
+                              >
+                                <div>
+                                   
+                                </div>
+                                <div
+                                  style="background-color: rgb(128, 128, 128); color: white;"
+                                >
+                                  <div
+                                    data-testid="test-joukkoliikenneIndeksi"
+                                  >
+                                    -
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="indexContainer"
+                            >
+                              <div
+                                class="indexContainer__titlesContainer"
+                              >
+                                <h2
+                                  class="text--bold text--h6"
+                                >
+                                  Ruuhkautuminen
+                                </h2>
+                                <p
+                                  class="text--normal text--body-m"
+                                  data-testid="test-ruuhkautumisIndeksi-content"
+                                >
+                                  Kiertoreittitarve: -
+                                </p>
+                              </div>
+                              <div
+                                class="indexContainer__number"
+                              >
+                                <div>
+                                   
+                                </div>
+                                <div
+                                  style="background-color: rgb(128, 128, 128); color: white;"
+                                >
+                                  <div
+                                    data-testid="test-ruuhkautumisIndeksi"
+                                  >
+                                    -
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -3916,7 +4093,7 @@ Object {
                       class="gridBasicInfo"
                     >
                       <div
-                        class="gridItem gridDescription"
+                        class="gridDescription"
                       >
                         <h3
                           class="text--bold text--h6"
@@ -4039,7 +4216,7 @@ Object {
                       class="gridBasicInfo"
                     >
                       <div
-                        class="gridItem gridType"
+                        class="haitatTitle"
                       >
                         <h3
                           class="text--bold text--h5"
@@ -4048,90 +4225,267 @@ Object {
                         </h3>
                       </div>
                       <div
-                        class="gridItem"
+                        class="haitatInfo"
                       >
-                        <h3
-                          class="text--bold text--h6"
-                        >
-                          Kaistahaitta
-                        </h3>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                          -
-                        </p>
+                        <div>
+                          <h3
+                            class="text--bold text--h6"
+                          >
+                            Kaistahaitta
+                          </h3>
+                          <p
+                            class="text--normal text--body-m"
+                          >
+                            -
+                          </p>
+                        </div>
+                        <div>
+                          <h3
+                            class="text--bold text--h6"
+                          >
+                            Kaistan pituushaitta
+                          </h3>
+                          <p
+                            class="text--normal text--body-m"
+                          >
+                            -
+                          </p>
+                        </div>
+                        <div>
+                          <h3
+                            class="text--bold text--h6"
+                          >
+                            Meluhaitta
+                          </h3>
+                          <p
+                            class="text--normal text--body-m"
+                          >
+                            -
+                          </p>
+                        </div>
+                        <div>
+                          <h3
+                            class="text--bold text--h6"
+                          >
+                            Pölyhaitta
+                          </h3>
+                          <p
+                            class="text--normal text--body-m"
+                          >
+                            -
+                          </p>
+                        </div>
+                        <div>
+                          <h3
+                            class="text--bold text--h6"
+                          >
+                            Tärinähaitta
+                          </h3>
+                          <p
+                            class="text--normal text--body-m"
+                          >
+                            -
+                          </p>
+                        </div>
                       </div>
                       <div
-                        class="gridItem"
+                        class="haitatIndexes"
                       >
-                        <h3
-                          class="text--bold text--h6"
-                        >
-                          Haitan kesto
-                        </h3>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                           -
-                           
-                          05.10.2022
-                        </p>
-                      </div>
-                      <div
-                        class="gridItem"
-                      >
-                        <h3
-                          class="text--bold text--h6"
-                        >
-                          Kaistan pituushaitta
-                        </h3>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                          -
-                        </p>
-                      </div>
-                      <div
-                        class="gridItem"
-                      >
-                        <h3
-                          class="text--bold text--h6"
-                        >
-                          Meluhaitta
-                        </h3>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                          -
-                        </p>
-                      </div>
-                      <div
-                        class="gridItem"
-                      >
-                        <h3
-                          class="text--bold text--h6"
-                        >
-                          Pölyhaitta
-                        </h3>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                          -
-                        </p>
-                      </div>
-                      <div
-                        class="gridItem"
-                      >
-                        <h3
-                          class="text--bold text--h6"
-                        >
-                          Tärinähaitta
-                        </h3>
-                        <p
-                          class="text--normal text--body-m"
-                        >
-                          -
-                        </p>
+                        <div>
+                          <h3
+                            class="text--bold text--h6"
+                          >
+                            Haitan kesto
+                          </h3>
+                          <p
+                            class="text--normal text--body-m"
+                          >
+                             -
+                             
+                            05.10.2022
+                          </p>
+                        </div>
+                        <div>
+                          <div
+                            class="indexTitle"
+                          >
+                            <h2
+                              class="text--bold text--h5"
+                            >
+                              Haittaindeksit
+                            </h2>
+                            <div
+                              class="Tooltip-module_root__1Yo9t indexTooltip"
+                            >
+                              <button
+                                aria-expanded="false"
+                                aria-label="Tooltip"
+                                class="Tooltip-module_button__2x9m0"
+                                title="Tooltip"
+                                type="button"
+                              >
+                                <span
+                                  aria-hidden="true"
+                                >
+                                  <svg
+                                    class="Icon-module_icon__1Jtzj icon_hds-icon__1YqNC Icon-module_s__2WGWe icon_hds-icon--size-s__2Lkik"
+                                    role="img"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <g
+                                      fill="none"
+                                      fill-rule="evenodd"
+                                    >
+                                      <path
+                                        d="M0 0h24v24H0z"
+                                      />
+                                      <path
+                                        d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 100 16 8 8 0 000-16zm1 12v2h-2v-2h2zm-.956-10.25c1.99 0 3.673 1.545 3.673 3.674 0 1.357-.47 2.065-1.556 2.882l-.242.178c-.744.545-.963.852-.98 1.658l-.002.108h-2c0-1.575.522-2.412 1.677-3.288l.248-.182c.706-.517.855-.726.855-1.356 0-.985-.75-1.674-1.673-1.674-.853 0-1.565.59-1.662 1.458l-.009.098-1.996-.114c.115-2.019 1.757-3.442 3.667-3.442z"
+                                        fill="currentColor"
+                                      />
+                                    </g>
+                                  </svg>
+                                </span>
+                              </button>
+                            </div>
+                          </div>
+                          <div
+                            class="indexes"
+                          >
+                            <div
+                              class="indexContainer"
+                            >
+                              <div
+                                class="indexContainer__titlesContainer"
+                              >
+                                <h2
+                                  class="text--bold text--h5"
+                                >
+                                  Liikennehaittaindeksi
+                                </h2>
+                              </div>
+                              <div
+                                class="indexContainer__number"
+                              >
+                                <div
+                                  style="background-color: rgb(128, 128, 128); color: white;"
+                                >
+                                  <div
+                                    data-testid="test-liikennehaittaIndeksi"
+                                  >
+                                    -
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="indexContainer"
+                            >
+                              <div
+                                class="indexContainer__titlesContainer"
+                              >
+                                <h2
+                                  class="text--bold text--h6"
+                                >
+                                  Pyöräilyn pääreitti
+                                </h2>
+                                <p
+                                  class="text--normal text--body-m"
+                                  data-testid="test-pyorailyIndeksi-content"
+                                >
+                                  Kiertoreittitarve: -
+                                </p>
+                              </div>
+                              <div
+                                class="indexContainer__number"
+                              >
+                                <div>
+                                   
+                                </div>
+                                <div
+                                  style="background-color: rgb(128, 128, 128); color: white;"
+                                >
+                                  <div
+                                    data-testid="test-pyorailyIndeksi"
+                                  >
+                                    -
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="indexContainer"
+                            >
+                              <div
+                                class="indexContainer__titlesContainer"
+                              >
+                                <h2
+                                  class="text--bold text--h6"
+                                >
+                                  Merkittävät joukkoliikennereitit
+                                </h2>
+                                <p
+                                  class="text--normal text--body-m"
+                                  data-testid="test-joukkoliikenneIndeksi-content"
+                                >
+                                  Kiertoreittitarve: -
+                                </p>
+                              </div>
+                              <div
+                                class="indexContainer__number"
+                              >
+                                <div>
+                                   
+                                </div>
+                                <div
+                                  style="background-color: rgb(128, 128, 128); color: white;"
+                                >
+                                  <div
+                                    data-testid="test-joukkoliikenneIndeksi"
+                                  >
+                                    -
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="indexContainer"
+                            >
+                              <div
+                                class="indexContainer__titlesContainer"
+                              >
+                                <h2
+                                  class="text--bold text--h6"
+                                >
+                                  Ruuhkautuminen
+                                </h2>
+                                <p
+                                  class="text--normal text--body-m"
+                                  data-testid="test-ruuhkautumisIndeksi-content"
+                                >
+                                  Kiertoreittitarve: -
+                                </p>
+                              </div>
+                              <div
+                                class="indexContainer__number"
+                              >
+                                <div>
+                                   
+                                </div>
+                                <div
+                                  style="background-color: rgb(128, 128, 128); color: white;"
+                                >
+                                  <div
+                                    data-testid="test-ruuhkautumisIndeksi"
+                                  >
+                                    -
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -7815,7 +8169,7 @@ Object {
                     class="gridBasicInfo"
                   >
                     <div
-                      class="gridItem gridDescription"
+                      class="gridDescription"
                     >
                       <h3
                         class="text--bold text--h6"
@@ -7955,7 +8309,7 @@ Object {
                     class="gridBasicInfo"
                   >
                     <div
-                      class="gridItem gridType"
+                      class="haitatTitle"
                     >
                       <h3
                         class="text--bold text--h5"
@@ -7964,90 +8318,267 @@ Object {
                       </h3>
                     </div>
                     <div
-                      class="gridItem"
+                      class="haitatInfo"
                     >
-                      <h3
-                        class="text--bold text--h6"
-                      >
-                        Kaistahaitta
-                      </h3>
-                      <p
-                        class="text--normal text--body-m"
-                      >
-                        -
-                      </p>
+                      <div>
+                        <h3
+                          class="text--bold text--h6"
+                        >
+                          Kaistahaitta
+                        </h3>
+                        <p
+                          class="text--normal text--body-m"
+                        >
+                          -
+                        </p>
+                      </div>
+                      <div>
+                        <h3
+                          class="text--bold text--h6"
+                        >
+                          Kaistan pituushaitta
+                        </h3>
+                        <p
+                          class="text--normal text--body-m"
+                        >
+                          -
+                        </p>
+                      </div>
+                      <div>
+                        <h3
+                          class="text--bold text--h6"
+                        >
+                          Meluhaitta
+                        </h3>
+                        <p
+                          class="text--normal text--body-m"
+                        >
+                          -
+                        </p>
+                      </div>
+                      <div>
+                        <h3
+                          class="text--bold text--h6"
+                        >
+                          Pölyhaitta
+                        </h3>
+                        <p
+                          class="text--normal text--body-m"
+                        >
+                          -
+                        </p>
+                      </div>
+                      <div>
+                        <h3
+                          class="text--bold text--h6"
+                        >
+                          Tärinähaitta
+                        </h3>
+                        <p
+                          class="text--normal text--body-m"
+                        >
+                          -
+                        </p>
+                      </div>
                     </div>
                     <div
-                      class="gridItem"
+                      class="haitatIndexes"
                     >
-                      <h3
-                        class="text--bold text--h6"
-                      >
-                        Haitan kesto
-                      </h3>
-                      <p
-                        class="text--normal text--body-m"
-                      >
-                         -
-                         
-                        10.10.2022
-                      </p>
-                    </div>
-                    <div
-                      class="gridItem"
-                    >
-                      <h3
-                        class="text--bold text--h6"
-                      >
-                        Kaistan pituushaitta
-                      </h3>
-                      <p
-                        class="text--normal text--body-m"
-                      >
-                        -
-                      </p>
-                    </div>
-                    <div
-                      class="gridItem"
-                    >
-                      <h3
-                        class="text--bold text--h6"
-                      >
-                        Meluhaitta
-                      </h3>
-                      <p
-                        class="text--normal text--body-m"
-                      >
-                        -
-                      </p>
-                    </div>
-                    <div
-                      class="gridItem"
-                    >
-                      <h3
-                        class="text--bold text--h6"
-                      >
-                        Pölyhaitta
-                      </h3>
-                      <p
-                        class="text--normal text--body-m"
-                      >
-                        -
-                      </p>
-                    </div>
-                    <div
-                      class="gridItem"
-                    >
-                      <h3
-                        class="text--bold text--h6"
-                      >
-                        Tärinähaitta
-                      </h3>
-                      <p
-                        class="text--normal text--body-m"
-                      >
-                        -
-                      </p>
+                      <div>
+                        <h3
+                          class="text--bold text--h6"
+                        >
+                          Haitan kesto
+                        </h3>
+                        <p
+                          class="text--normal text--body-m"
+                        >
+                           -
+                           
+                          10.10.2022
+                        </p>
+                      </div>
+                      <div>
+                        <div
+                          class="indexTitle"
+                        >
+                          <h2
+                            class="text--bold text--h5"
+                          >
+                            Haittaindeksit
+                          </h2>
+                          <div
+                            class="Tooltip-module_root__1Yo9t indexTooltip"
+                          >
+                            <button
+                              aria-expanded="false"
+                              aria-label="Tooltip"
+                              class="Tooltip-module_button__2x9m0"
+                              title="Tooltip"
+                              type="button"
+                            >
+                              <span
+                                aria-hidden="true"
+                              >
+                                <svg
+                                  class="Icon-module_icon__1Jtzj icon_hds-icon__1YqNC Icon-module_s__2WGWe icon_hds-icon--size-s__2Lkik"
+                                  role="img"
+                                  viewBox="0 0 24 24"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <g
+                                    fill="none"
+                                    fill-rule="evenodd"
+                                  >
+                                    <path
+                                      d="M0 0h24v24H0z"
+                                    />
+                                    <path
+                                      d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 100 16 8 8 0 000-16zm1 12v2h-2v-2h2zm-.956-10.25c1.99 0 3.673 1.545 3.673 3.674 0 1.357-.47 2.065-1.556 2.882l-.242.178c-.744.545-.963.852-.98 1.658l-.002.108h-2c0-1.575.522-2.412 1.677-3.288l.248-.182c.706-.517.855-.726.855-1.356 0-.985-.75-1.674-1.673-1.674-.853 0-1.565.59-1.662 1.458l-.009.098-1.996-.114c.115-2.019 1.757-3.442 3.667-3.442z"
+                                      fill="currentColor"
+                                    />
+                                  </g>
+                                </svg>
+                              </span>
+                            </button>
+                          </div>
+                        </div>
+                        <div
+                          class="indexes"
+                        >
+                          <div
+                            class="indexContainer"
+                          >
+                            <div
+                              class="indexContainer__titlesContainer"
+                            >
+                              <h2
+                                class="text--bold text--h5"
+                              >
+                                Liikennehaittaindeksi
+                              </h2>
+                            </div>
+                            <div
+                              class="indexContainer__number"
+                            >
+                              <div
+                                style="background-color: rgb(128, 128, 128); color: white;"
+                              >
+                                <div
+                                  data-testid="test-liikennehaittaIndeksi"
+                                >
+                                  -
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            class="indexContainer"
+                          >
+                            <div
+                              class="indexContainer__titlesContainer"
+                            >
+                              <h2
+                                class="text--bold text--h6"
+                              >
+                                Pyöräilyn pääreitti
+                              </h2>
+                              <p
+                                class="text--normal text--body-m"
+                                data-testid="test-pyorailyIndeksi-content"
+                              >
+                                Kiertoreittitarve: -
+                              </p>
+                            </div>
+                            <div
+                              class="indexContainer__number"
+                            >
+                              <div>
+                                 
+                              </div>
+                              <div
+                                style="background-color: rgb(128, 128, 128); color: white;"
+                              >
+                                <div
+                                  data-testid="test-pyorailyIndeksi"
+                                >
+                                  -
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            class="indexContainer"
+                          >
+                            <div
+                              class="indexContainer__titlesContainer"
+                            >
+                              <h2
+                                class="text--bold text--h6"
+                              >
+                                Merkittävät joukkoliikennereitit
+                              </h2>
+                              <p
+                                class="text--normal text--body-m"
+                                data-testid="test-joukkoliikenneIndeksi-content"
+                              >
+                                Kiertoreittitarve: -
+                              </p>
+                            </div>
+                            <div
+                              class="indexContainer__number"
+                            >
+                              <div>
+                                 
+                              </div>
+                              <div
+                                style="background-color: rgb(128, 128, 128); color: white;"
+                              >
+                                <div
+                                  data-testid="test-joukkoliikenneIndeksi"
+                                >
+                                  -
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            class="indexContainer"
+                          >
+                            <div
+                              class="indexContainer__titlesContainer"
+                            >
+                              <h2
+                                class="text--bold text--h6"
+                              >
+                                Ruuhkautuminen
+                              </h2>
+                              <p
+                                class="text--normal text--body-m"
+                                data-testid="test-ruuhkautumisIndeksi-content"
+                              >
+                                Kiertoreittitarve: -
+                              </p>
+                            </div>
+                            <div
+                              class="indexContainer__number"
+                            >
+                              <div>
+                                 
+                              </div>
+                              <div
+                                style="background-color: rgb(128, 128, 128); color: white;"
+                              >
+                                <div
+                                  data-testid="test-ruuhkautumisIndeksi"
+                                >
+                                  -
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -8201,7 +8732,7 @@ Object {
                     class="gridBasicInfo"
                   >
                     <div
-                      class="gridItem gridDescription"
+                      class="gridDescription"
                     >
                       <h3
                         class="text--bold text--h6"
@@ -8324,7 +8855,7 @@ Object {
                     class="gridBasicInfo"
                   >
                     <div
-                      class="gridItem gridType"
+                      class="haitatTitle"
                     >
                       <h3
                         class="text--bold text--h5"
@@ -8333,90 +8864,267 @@ Object {
                       </h3>
                     </div>
                     <div
-                      class="gridItem"
+                      class="haitatInfo"
                     >
-                      <h3
-                        class="text--bold text--h6"
-                      >
-                        Kaistahaitta
-                      </h3>
-                      <p
-                        class="text--normal text--body-m"
-                      >
-                        -
-                      </p>
+                      <div>
+                        <h3
+                          class="text--bold text--h6"
+                        >
+                          Kaistahaitta
+                        </h3>
+                        <p
+                          class="text--normal text--body-m"
+                        >
+                          -
+                        </p>
+                      </div>
+                      <div>
+                        <h3
+                          class="text--bold text--h6"
+                        >
+                          Kaistan pituushaitta
+                        </h3>
+                        <p
+                          class="text--normal text--body-m"
+                        >
+                          -
+                        </p>
+                      </div>
+                      <div>
+                        <h3
+                          class="text--bold text--h6"
+                        >
+                          Meluhaitta
+                        </h3>
+                        <p
+                          class="text--normal text--body-m"
+                        >
+                          -
+                        </p>
+                      </div>
+                      <div>
+                        <h3
+                          class="text--bold text--h6"
+                        >
+                          Pölyhaitta
+                        </h3>
+                        <p
+                          class="text--normal text--body-m"
+                        >
+                          -
+                        </p>
+                      </div>
+                      <div>
+                        <h3
+                          class="text--bold text--h6"
+                        >
+                          Tärinähaitta
+                        </h3>
+                        <p
+                          class="text--normal text--body-m"
+                        >
+                          -
+                        </p>
+                      </div>
                     </div>
                     <div
-                      class="gridItem"
+                      class="haitatIndexes"
                     >
-                      <h3
-                        class="text--bold text--h6"
-                      >
-                        Haitan kesto
-                      </h3>
-                      <p
-                        class="text--normal text--body-m"
-                      >
-                         -
-                         
-                        05.10.2022
-                      </p>
-                    </div>
-                    <div
-                      class="gridItem"
-                    >
-                      <h3
-                        class="text--bold text--h6"
-                      >
-                        Kaistan pituushaitta
-                      </h3>
-                      <p
-                        class="text--normal text--body-m"
-                      >
-                        -
-                      </p>
-                    </div>
-                    <div
-                      class="gridItem"
-                    >
-                      <h3
-                        class="text--bold text--h6"
-                      >
-                        Meluhaitta
-                      </h3>
-                      <p
-                        class="text--normal text--body-m"
-                      >
-                        -
-                      </p>
-                    </div>
-                    <div
-                      class="gridItem"
-                    >
-                      <h3
-                        class="text--bold text--h6"
-                      >
-                        Pölyhaitta
-                      </h3>
-                      <p
-                        class="text--normal text--body-m"
-                      >
-                        -
-                      </p>
-                    </div>
-                    <div
-                      class="gridItem"
-                    >
-                      <h3
-                        class="text--bold text--h6"
-                      >
-                        Tärinähaitta
-                      </h3>
-                      <p
-                        class="text--normal text--body-m"
-                      >
-                        -
-                      </p>
+                      <div>
+                        <h3
+                          class="text--bold text--h6"
+                        >
+                          Haitan kesto
+                        </h3>
+                        <p
+                          class="text--normal text--body-m"
+                        >
+                           -
+                           
+                          05.10.2022
+                        </p>
+                      </div>
+                      <div>
+                        <div
+                          class="indexTitle"
+                        >
+                          <h2
+                            class="text--bold text--h5"
+                          >
+                            Haittaindeksit
+                          </h2>
+                          <div
+                            class="Tooltip-module_root__1Yo9t indexTooltip"
+                          >
+                            <button
+                              aria-expanded="false"
+                              aria-label="Tooltip"
+                              class="Tooltip-module_button__2x9m0"
+                              title="Tooltip"
+                              type="button"
+                            >
+                              <span
+                                aria-hidden="true"
+                              >
+                                <svg
+                                  class="Icon-module_icon__1Jtzj icon_hds-icon__1YqNC Icon-module_s__2WGWe icon_hds-icon--size-s__2Lkik"
+                                  role="img"
+                                  viewBox="0 0 24 24"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <g
+                                    fill="none"
+                                    fill-rule="evenodd"
+                                  >
+                                    <path
+                                      d="M0 0h24v24H0z"
+                                    />
+                                    <path
+                                      d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 100 16 8 8 0 000-16zm1 12v2h-2v-2h2zm-.956-10.25c1.99 0 3.673 1.545 3.673 3.674 0 1.357-.47 2.065-1.556 2.882l-.242.178c-.744.545-.963.852-.98 1.658l-.002.108h-2c0-1.575.522-2.412 1.677-3.288l.248-.182c.706-.517.855-.726.855-1.356 0-.985-.75-1.674-1.673-1.674-.853 0-1.565.59-1.662 1.458l-.009.098-1.996-.114c.115-2.019 1.757-3.442 3.667-3.442z"
+                                      fill="currentColor"
+                                    />
+                                  </g>
+                                </svg>
+                              </span>
+                            </button>
+                          </div>
+                        </div>
+                        <div
+                          class="indexes"
+                        >
+                          <div
+                            class="indexContainer"
+                          >
+                            <div
+                              class="indexContainer__titlesContainer"
+                            >
+                              <h2
+                                class="text--bold text--h5"
+                              >
+                                Liikennehaittaindeksi
+                              </h2>
+                            </div>
+                            <div
+                              class="indexContainer__number"
+                            >
+                              <div
+                                style="background-color: rgb(128, 128, 128); color: white;"
+                              >
+                                <div
+                                  data-testid="test-liikennehaittaIndeksi"
+                                >
+                                  -
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            class="indexContainer"
+                          >
+                            <div
+                              class="indexContainer__titlesContainer"
+                            >
+                              <h2
+                                class="text--bold text--h6"
+                              >
+                                Pyöräilyn pääreitti
+                              </h2>
+                              <p
+                                class="text--normal text--body-m"
+                                data-testid="test-pyorailyIndeksi-content"
+                              >
+                                Kiertoreittitarve: -
+                              </p>
+                            </div>
+                            <div
+                              class="indexContainer__number"
+                            >
+                              <div>
+                                 
+                              </div>
+                              <div
+                                style="background-color: rgb(128, 128, 128); color: white;"
+                              >
+                                <div
+                                  data-testid="test-pyorailyIndeksi"
+                                >
+                                  -
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            class="indexContainer"
+                          >
+                            <div
+                              class="indexContainer__titlesContainer"
+                            >
+                              <h2
+                                class="text--bold text--h6"
+                              >
+                                Merkittävät joukkoliikennereitit
+                              </h2>
+                              <p
+                                class="text--normal text--body-m"
+                                data-testid="test-joukkoliikenneIndeksi-content"
+                              >
+                                Kiertoreittitarve: -
+                              </p>
+                            </div>
+                            <div
+                              class="indexContainer__number"
+                            >
+                              <div>
+                                 
+                              </div>
+                              <div
+                                style="background-color: rgb(128, 128, 128); color: white;"
+                              >
+                                <div
+                                  data-testid="test-joukkoliikenneIndeksi"
+                                >
+                                  -
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            class="indexContainer"
+                          >
+                            <div
+                              class="indexContainer__titlesContainer"
+                            >
+                              <h2
+                                class="text--bold text--h6"
+                              >
+                                Ruuhkautuminen
+                              </h2>
+                              <p
+                                class="text--normal text--body-m"
+                                data-testid="test-ruuhkautumisIndeksi-content"
+                              >
+                                Kiertoreittitarve: -
+                              </p>
+                            </div>
+                            <div
+                              class="indexContainer__number"
+                            >
+                              <div>
+                                 
+                              </div>
+                              <div
+                                style="background-color: rgb(128, 128, 128); color: white;"
+                              >
+                                <div
+                                  data-testid="test-ruuhkautumisIndeksi"
+                                >
+                                  -
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
