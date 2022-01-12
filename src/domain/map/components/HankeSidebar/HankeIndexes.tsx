@@ -19,7 +19,7 @@ type IndexProps = {
 const IndexSection: React.FC<IndexProps> = ({ title, content, index, testId }) => (
   <div className={styles.indexContainer}>
     <div className={styles.indexContainer__titlesContainer}>
-      <Text tag="h3" styleAs={content ? 'h6' : 'h5'} weight="bold">
+      <Text tag="h2" styleAs={content ? 'h6' : 'h5'} weight="bold">
         {title}
       </Text>
       {content && (
