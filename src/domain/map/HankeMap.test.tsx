@@ -31,13 +31,13 @@ describe('HankeMap', () => {
       expect(mockAxios.get).toHaveBeenCalledWith('/hankkeet', { params: { geometry: true } });
     });
     expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
-    changeFilterDate(startDateLabel, renderedComponent, '01.01.2021');
+    changeFilterDate(startDateLabel, renderedComponent, '01.01.2022');
     expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
-    changeFilterDate(endDateLabel, renderedComponent, '01.01.2021');
+    changeFilterDate(endDateLabel, renderedComponent, '01.01.2022');
     expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('0');
-    changeFilterDate(endDateLabel, renderedComponent, '12.12.2021');
+    changeFilterDate(endDateLabel, renderedComponent, '12.12.2022');
     expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
-    changeFilterDate(startDateLabel, renderedComponent, '06.10.2021');
+    changeFilterDate(startDateLabel, renderedComponent, '06.10.2022');
     expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('1');
     changeFilterDate(startDateLabel, renderedComponent, '1');
     expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
@@ -47,7 +47,7 @@ describe('HankeMap', () => {
     expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
     changeFilterDate(endDateLabel, renderedComponent, null);
     expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
-    changeFilterDate(startDateLabel, renderedComponent, '01.01.2021');
+    changeFilterDate(startDateLabel, renderedComponent, '01.01.2022');
     expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
   });
 });
