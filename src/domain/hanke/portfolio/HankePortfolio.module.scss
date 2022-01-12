@@ -93,6 +93,21 @@
       grid-column: 1 / span 2;
     }
 
+    .haitatInfo {
+      grid-column: 1 / 2;
+      grid-row: 2 / 2;
+    }
+
+    .haitatIndexes {
+      grid-column: 2 / 2;
+      grid-row: 2 / 2;
+    }
+
+    .haitatTitle {
+      grid-column: 1 / 2;
+      grid-row: 1 / 2;
+    }
+
     .linkWrapper {
       display: flex;
       height: min-content;

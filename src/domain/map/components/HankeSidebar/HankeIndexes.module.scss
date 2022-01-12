@@ -1,7 +1,7 @@
 .indexContainer {
   display: flex;
   align-items: center;
-  padding: 1.2rem 0.2rem 1.2rem 0.6rem;
+  padding: 0.4rem 0.2rem 0.4rem 1rem;
 
   &__titlesContainer {
     flex-direction: column;
@@ -16,8 +16,13 @@
   }
 }
 
-.indexInfo {
-  padding: 1rem 0.2rem 1rem 0.6rem;
+.indexTitle {
+  padding: 0.4rem 0.2rem 0.4rem 1rem;
+  display: flex;
+}
+
+.indexTooltip {
+  padding-left: 1rem;
 }
 
 .indexes {

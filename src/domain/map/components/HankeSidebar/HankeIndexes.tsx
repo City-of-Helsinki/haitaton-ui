@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Tooltip } from 'hds-react';
 import {
   LIIKENNEHAITTA_STATUS,
   getStatusByIndex,
@@ -52,9 +53,10 @@ const getDetourNeedByIndex = (index: IndexProps['index'] | undefined) => {
 
 type Props = {
   hankeIndexData: HankeIndexData | null | undefined;
+  displayTooltip?: boolean;
 };
 
-const HankeIndexes: React.FC<Props> = ({ hankeIndexData }) => {
+const HankeIndexes: React.FC<Props> = ({ hankeIndexData, displayTooltip }) => {
   const { t } = useTranslation();
   const liikennehaittaIndeksi = hankeIndexData?.liikennehaittaIndeksi.indeksi;
   const pyorailyIndeksi = hankeIndexData?.pyorailyIndeksi;
@@ -63,6 +65,16 @@ const HankeIndexes: React.FC<Props> = ({ hankeIndexData }) => {
 
   return (
     <div>
+      <div className={styles.indexTitle}>
+        <Text tag="h2" styleAs="h5" weight="bold">
+          {t('hankeIndexes:haittaindeksit')}
+        </Text>
+        {displayTooltip && (
+          <Tooltip placement="right" className={styles.indexTooltip}>
+            {t('hankeIndexes:haittaindexTooltip')}
+          </Tooltip>
+        )}
+      </div>
       <div className={styles.indexes}>
         <IndexSection
           title={t('hankeIndexes:liikennehaittaindeksi')}

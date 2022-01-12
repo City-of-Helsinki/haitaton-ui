@@ -284,6 +284,8 @@
     "editHanke": "EN: Muokkaa hankkeen tietoja"
   },
   "hankeIndexes": {
+    "haittaindeksit": "EN:Haittaindeksit",
+    "haittaindexTooltip": "EN:Haittaindeksit lasketaan hankkeen alueen mukaan. Indeksit päivittyvät, kun tallennat lomakkeen tiedot tai siirryt seuraavalle sivulle.",
     "liikennehaittaindeksi": "EN: Liikennehaittaindeksi",
     "ruuhkautuminen": "EN: Ruuhkautuminen",
     "pyorailynPaareitti": "EN: Pyöräilyn pääreitti",
