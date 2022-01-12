@@ -21,11 +21,11 @@ describe.only('HankePortfolio', () => {
   test('Changing filter startDates filters correct number of projects', async () => {
     const renderedComponent = render(<HankePortfolioComponent hankkeet={hankeList} />);
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
-    changeFilterDate(startDateLabel, renderedComponent, '02.10.2021');
+    changeFilterDate(startDateLabel, renderedComponent, '02.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
-    changeFilterDate(startDateLabel, renderedComponent, '06.10.2021');
+    changeFilterDate(startDateLabel, renderedComponent, '06.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('1');
-    changeFilterDate(startDateLabel, renderedComponent, '11.10.2021');
+    changeFilterDate(startDateLabel, renderedComponent, '11.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
     changeFilterDate(startDateLabel, renderedComponent, null);
   });
@@ -33,11 +33,11 @@ describe.only('HankePortfolio', () => {
   test('Changing filter endDates filters correct number of projects', async () => {
     const renderedComponent = render(<HankePortfolioComponent hankkeet={hankeList} />);
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
-    changeFilterDate(endDateLabel, renderedComponent, '01.10.2021');
+    changeFilterDate(endDateLabel, renderedComponent, '01.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
-    changeFilterDate(endDateLabel, renderedComponent, '05.10.2021');
+    changeFilterDate(endDateLabel, renderedComponent, '05.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
-    changeFilterDate(endDateLabel, renderedComponent, '11.10.2021');
+    changeFilterDate(endDateLabel, renderedComponent, '11.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
     changeFilterDate(endDateLabel, renderedComponent, null);
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
