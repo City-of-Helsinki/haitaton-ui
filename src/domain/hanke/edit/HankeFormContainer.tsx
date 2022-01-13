@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { actions as dialogActions } from '../../../common/components/confirmationDialog/reducer';
 import { HANKE_SAVETYPE, HankeDataDraft } from '../../types/hanke';
-import { getHasFormChanged, getFormData } from './selectors';
+import { getHasFormChanged, getFormData, getSaveState } from './selectors';
 import { saveForm } from './thunks';
 import { saveGeometryData } from '../../map/thunks';
 import HankeForm from './HankeForm';
@@ -33,6 +33,7 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
   const navigate = useNavigate();
   const hasFormChanged = useSelector(getHasFormChanged());
   const formData = useSelector(getFormData());
+  const isSaving = useSelector(getSaveState());
 
   const { data: hankeData, isFetched } = useHanke(hankeTunnus);
 
@@ -82,6 +83,7 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
       onIsDirtyChange={handleIsDirtyChange}
       onUnmount={handleUnmount}
       onFormClose={handleFormClose}
+      isSaving={isSaving}
     />
   );
 };

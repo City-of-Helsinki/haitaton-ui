@@ -1,7 +1,7 @@
 import React from 'react';
 import { cleanup, fireEvent, waitFor } from '@testing-library/react';
 import { FORMFIELD } from './types';
-import Form from './HankeForm';
+import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
 import { HANKE_VAIHE, HANKE_TYOMAATYYPPI } from '../../types/hanke';
 import { render } from '../../../testUtils/render';
@@ -42,15 +42,17 @@ describe('HankeForm', () => {
     const handleIsDirtyChange = jest.fn();
     const handleUnmount = jest.fn();
     const handleFormClose = jest.fn();
+    const isSaving = false;
 
     const { getByTestId, getByLabelText, queryAllByText } = render(
-      <Form
+      <HankeForm
         formData={formData}
         onSave={handleSave}
         onSaveGeometry={handleSaveGeometry}
         onIsDirtyChange={handleIsDirtyChange}
         onUnmount={handleUnmount}
         onFormClose={handleFormClose}
+        isSaving={isSaving}
       />
     );
 
@@ -143,13 +145,14 @@ describe('HankeForm', () => {
     const handleFormClose = jest.fn();
 
     const { getByTestId, getByLabelText, queryAllByText } = render(
-      <Form
+      <HankeForm
         formData={formData}
         onSave={handleSave}
         onSaveGeometry={handleSaveGeometry}
         onIsDirtyChange={handleIsDirtyChange}
         onUnmount={handleUnmount}
         onFormClose={handleFormClose}
+        isSaving
       />
     );
 
@@ -182,13 +185,14 @@ describe('HankeForm', () => {
     const handleFormClose = jest.fn();
 
     const { getByTestId, getByLabelText, queryAllByText, queryByText } = render(
-      <Form
+      <HankeForm
         formData={formData}
         onSave={handleSave}
         onSaveGeometry={handleSaveGeometry}
         onIsDirtyChange={handleIsDirtyChange}
         onUnmount={handleUnmount}
         onFormClose={handleFormClose}
+        isSaving
       />
     );
 
@@ -235,7 +239,7 @@ describe('HankeForm', () => {
 
   /* test('Success notification should be shown', async () => {
     const { queryByTestId, queryByText } = render(
-      <Form
+      <HankeForm
         formData={formData}
         // showNotification="success"
         onSave={() => ({})}
@@ -252,7 +256,7 @@ describe('HankeForm', () => {
 
   test('Form should be populated correctly ', async () => {
     const { getByTestId, getByText } = render(
-      <Form
+      <HankeForm
         formData={{
           ...formData,
           [FORMFIELD.NIMI]: 'Lenkkeilijä Pekka',
@@ -262,6 +266,7 @@ describe('HankeForm', () => {
         onIsDirtyChange={() => ({})}
         onUnmount={() => ({})}
         onFormClose={() => ({})}
+        isSaving
       />
     );
     expect(getByTestId(FORMFIELD.NIMI)).toHaveValue('Lenkkeilijä Pekka');
@@ -271,7 +276,7 @@ describe('HankeForm', () => {
 
   test('Form editing should be disabled if it is already started ', async () => {
     const { getByTestId, getByText } = render(
-      <Form
+      <HankeForm
         formData={{
           ...formData,
           [FORMFIELD.ALKU_PVM]: '1999-03-15T00:00:00Z',
@@ -281,6 +286,7 @@ describe('HankeForm', () => {
         onIsDirtyChange={() => ({})}
         onUnmount={() => ({})}
         onFormClose={() => ({})}
+        isSaving
       />
     );
     expect(getByTestId('editing-disabled-notification')).toBeInTheDocument();

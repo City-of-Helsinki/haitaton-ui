@@ -9,9 +9,10 @@ import { HankeDataFormState } from '../types';
 type PropTypes = {
   currentFormPage: number;
   formData: HankeDataFormState;
+  isSaving?: boolean;
 };
 
-const FormStepIndicator: React.FC<PropTypes> = ({ currentFormPage, formData }) => {
+const FormStepIndicator: React.FC<PropTypes> = ({ currentFormPage, formData, isSaving }) => {
   const { t } = useTranslation();
 
   const formSteps = [
@@ -47,7 +48,11 @@ const FormStepIndicator: React.FC<PropTypes> = ({ currentFormPage, formData }) =
         </ol>
       </div>
       <div className={styles.hankeIndexes}>
-        <HankeIndexes hankeIndexData={formData.tormaystarkasteluTulos} displayTooltip />
+        <HankeIndexes
+          hankeIndexData={formData.tormaystarkasteluTulos}
+          displayTooltip
+          loading={isSaving}
+        />
       </div>
     </div>
   );

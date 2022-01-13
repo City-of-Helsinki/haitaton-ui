@@ -23,6 +23,7 @@ type Props = {
   onIsDirtyChange: (isDirty: boolean) => void;
   onUnmount: () => void;
   onFormClose: () => void;
+  isSaving: boolean;
 };
 
 const HankeForm: React.FC<Props> = ({
@@ -32,6 +33,7 @@ const HankeForm: React.FC<Props> = ({
   onIsDirtyChange,
   onUnmount,
   onFormClose,
+  isSaving,
 }) => {
   const { t } = useTranslation();
   const [currentFormPage, setCurrentFormPage] = useState<number>(0);
@@ -95,7 +97,11 @@ const HankeForm: React.FC<Props> = ({
         </Text>
 
         <div className="hankeForm__formWpr">
-          <FormStepIndicator currentFormPage={currentFormPage} formData={formData} />
+          <FormStepIndicator
+            currentFormPage={currentFormPage}
+            formData={formData}
+            isSaving={isSaving}
+          />
           <div className="hankeForm__formWprRight">
             <form name="hanke">
               <div className="closeFormWpr">
