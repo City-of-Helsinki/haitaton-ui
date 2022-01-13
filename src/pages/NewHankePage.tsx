@@ -2,7 +2,7 @@ import React from 'react';
 import Container from '../common/components/container/Container';
 import PageMeta from './components/PageMeta';
 import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
-import HankeFormContainer from '../domain/hanke/edit/FormContainer';
+import HankeFormContainer from '../domain/hanke/edit/HankeFormContainer';
 
 const NewHankePage: React.FC = () => {
   const { NEW_HANKE } = useLocalizedRoutes();

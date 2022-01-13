@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Notification } from 'hds-react';
-import './Form.styles.scss';
-import { isHankeEditingDisabled } from './utils';
-import { FormProps } from './types';
+import '../HankeForm.styles.scss';
+import { isHankeEditingDisabled } from '../utils';
+import { FormProps } from '../types';
 
 type Props = {
   formData: FormProps['formData'];

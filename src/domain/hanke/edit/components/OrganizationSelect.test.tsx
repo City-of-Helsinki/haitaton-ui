@@ -1,10 +1,10 @@
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { cleanup, fireEvent } from '@testing-library/react';
-import { HankeDataFormState } from './types';
-import { HANKE_CONTACT_TYPE } from '../../types/hanke';
+import { HankeDataFormState } from '../types';
+import { HANKE_CONTACT_TYPE } from '../../../types/hanke';
 import OrganizationSelect from './OrganizationSelect';
-import { render } from '../../../testUtils/render';
+import { render } from '../../../../testUtils/render';
 
 afterEach(cleanup);
 

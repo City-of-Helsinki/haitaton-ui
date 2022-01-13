@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { TextInput, Checkbox } from 'hds-react';
 import { useTypedController } from '@hookform/strictly-typed';
-import Autocomplete, { Option } from '../../../common/components/autocomplete/Autocomplete';
-import { HankeContactKey, HankeContact } from '../../types/hanke';
-import { HankeDataFormState, Organization } from './types';
+import Autocomplete, { Option } from '../../../../common/components/autocomplete/Autocomplete';
+import { HankeContactKey, HankeContact } from '../../../types/hanke';
+import { HankeDataFormState, Organization } from '../types';
 
 type Props = {
   contactType: HankeContactKey;

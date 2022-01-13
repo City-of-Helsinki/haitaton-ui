@@ -1,8 +1,8 @@
 import React from 'react';
 import { cleanup, fireEvent, waitFor } from '@testing-library/react';
 import { FORMFIELD } from './types';
-import Form from './Form';
-import FormContainer from './FormContainer';
+import Form from './HankeForm';
+import HankeFormContainer from './HankeFormContainer';
 import { HANKE_VAIHE, HANKE_TYOMAATYYPPI } from '../../types/hanke';
 import { render } from '../../../testUtils/render';
 
@@ -287,30 +287,9 @@ describe('HankeForm', () => {
     expect(getByText(/Käynnissä olevan hankkeen tietoja ei voi muokata/i)).toBeDefined();
   });
 
-  test('Form editing should be disabled if index is calculated ', async () => {
-    const { getByTestId, getByText } = render(
-      <Form
-        formData={{
-          ...formData,
-          tilat: {
-            ...formData.tilat,
-            onLiikenneHaittaIndeksi: true,
-          },
-        }}
-        onSave={() => ({})}
-        onSaveGeometry={() => ({})}
-        onIsDirtyChange={() => ({})}
-        onUnmount={() => ({})}
-        onFormClose={() => ({})}
-      />
-    );
-    expect(getByTestId('editing-disabled-notification')).toBeInTheDocument();
-    expect(getByText(/Hankkeelle on laskettu indeksit/i)).toBeDefined();
-  });
-
-  test('FormContainer integration should work ', async () => {
+  test('HankeFormContainer integration should work ', async () => {
     const { getByText, queryByText, getByLabelText, queryAllByText, getByTestId } = render(
-      <FormContainer />
+      <HankeFormContainer />
     );
     fireEvent.change(getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
     fireEvent.change(getByTestId(FORMFIELD.KUVAUS), { target: { value: hankeenKuvaus } });

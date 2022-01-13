@@ -196,8 +196,7 @@
   "hankeForm": {
     "pageHeader": "Hanke",
     "editingDisabled": {
-      "STARTED": "Käynnissä olevan hankkeen tietoja ei voi muokata.",
-      "INDEX_CALCULATED": "Hankkeelle on laskettu indeksit, joten sen tietoja ei voi muokata."
+      "STARTED": "Käynnissä olevan hankkeen tietoja ei voi muokata."
     },
     "saveDraftButton": "Tallenna luonnos",
     "insertFieldError": "Syötä kenttä",
@@ -263,7 +262,7 @@
     },
     "hankkeenAlueForm": {
       "header": "Hankkeen alue",
-      "instructions": "Piirtotyökalut löytyvät karttaikkunan vasemmasta alalaidasta. Kynätyökalulla voi piirtää monikulmaisia geometrioita klikkaamalla kohtaan, johon haluat kulman. Neliötyökalulla saat muodostettua neliömäisiä alueita klikkaamalla ensin kartalle ja liikuttamalla hiirtä haluamaasi suuntaan. Uudelleenklikkaus \"sulkee\" neliön piirron.  Voit piirtää samalle hankkeelle useita geometrioita.\nGeometriaa voi muokata \"tarttumalla\" geometrian reunasta ja vetämällä. Myös neliömäistä geometriaa voi muokata reunasta tarttumalla.\nJos haluat poistaa yksittäisen geometrian kartalta, aktivoi poisto klikkaamalla ja painamalla paina alt-näppäintä (Windows) tai  alt/option-näppäintä (Mac) geometrian sisällä. Geometrian reunat tummenevat ja piirtovalikkoon tulee roskakorikuvake, jota painamalla geometria poistuu.\nHaitattoman Beta-versiossa hanketta ei voi muokata sen jälkeen kun sille on laskettu haittaindeksit. Geometrian piirtämisen jälkeen hanke näkyy karttanäkymässä, joten ennen kuin lasket indeksit, kannattaa käydä katsomassa hankkeen tilannetta kartalla (ylävalikossa) ja tarvittaessa muokata hankkeen tietoja ennen indeksien laskentaa."
+      "instructions": "Piirtotyökalut löytyvät karttaikkunan vasemmasta alalaidasta. Kynätyökalulla voi piirtää monikulmaisia geometrioita klikkaamalla kohtaan, johon haluat kulman. Neliötyökalulla saat muodostettua neliömäisiä alueita klikkaamalla ensin kartalle ja liikuttamalla hiirtä haluamaasi suuntaan. Uudelleenklikkaus \"sulkee\" neliön piirron.  Voit piirtää samalle hankkeelle useita geometrioita.\nGeometriaa voi muokata \"tarttumalla\" geometrian reunasta ja vetämällä. Myös neliömäistä geometriaa voi muokata reunasta tarttumalla.\nJos haluat poistaa yksittäisen geometrian kartalta, aktivoi poisto klikkaamalla ja painamalla paina alt-näppäintä (Windows) tai  alt/option-näppäintä (Mac) geometrian sisällä. Geometrian reunat tummenevat ja piirtovalikkoon tulee roskakorikuvake, jota painamalla geometria poistuu."
     },
     "hankkeenYhteystiedotForm": {
       "header": "Hankkeen yhteystiedot"

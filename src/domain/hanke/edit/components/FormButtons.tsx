@@ -45,8 +45,6 @@ const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, currentFor
       break;
     }
     default: {
-      previousButtonText = '';
-      nextButtonText = '';
       break;
     }
   }

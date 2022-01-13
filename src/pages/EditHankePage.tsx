@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import Container from '../common/components/container/Container';
 import PageMeta from './components/PageMeta';
 import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
-import HankeFormContainer from '../domain/hanke/edit/FormContainer';
+import HankeFormContainer from '../domain/hanke/edit/HankeFormContainer';
 
 const HankeFormPage = () => {
   const { hankeTunnus } = useParams();

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tooltip } from 'hds-react';
+import { LoadingSpinner, Tooltip } from 'hds-react';
 import {
   LIIKENNEHAITTA_STATUS,
   getStatusByIndex,
@@ -15,9 +15,10 @@ type IndexProps = {
   content?: string;
   index: number | undefined;
   testId: string;
+  loading?: boolean;
 };
 
-const IndexSection: React.FC<IndexProps> = ({ title, content, index, testId }) => (
+const IndexSection: React.FC<IndexProps> = ({ title, content, index, testId, loading }) => (
   <div className={styles.indexContainer}>
     <div className={styles.indexContainer__titlesContainer}>
       <Text tag="h2" styleAs={content ? 'h6' : 'h5'} weight="bold">
@@ -31,14 +32,17 @@ const IndexSection: React.FC<IndexProps> = ({ title, content, index, testId }) =
     </div>
     <div className={styles.indexContainer__number}>
       {content && <div>&nbsp;</div>}
-      <div
-        style={{
-          backgroundColor: getColorByStatus(getStatusByIndex(index)),
-          color: getStatusByIndex(index) === LIIKENNEHAITTA_STATUS.YELLOW ? 'black' : 'white',
-        }}
-      >
-        <div data-testid={testId}>{index === undefined ? '-' : index}</div>
-      </div>
+      {loading && <LoadingSpinner small />}
+      {!loading && (
+        <div
+          style={{
+            backgroundColor: getColorByStatus(getStatusByIndex(index)),
+            color: getStatusByIndex(index) === LIIKENNEHAITTA_STATUS.YELLOW ? 'black' : 'white',
+          }}
+        >
+          <div data-testid={testId}>{index === undefined ? '-' : index}</div>
+        </div>
+      )}
     </div>
   </div>
 );
@@ -54,9 +58,10 @@ const getDetourNeedByIndex = (index: IndexProps['index'] | undefined) => {
 type Props = {
   hankeIndexData: HankeIndexData | null | undefined;
   displayTooltip?: boolean;
+  loading?: boolean;
 };
 
-const HankeIndexes: React.FC<Props> = ({ hankeIndexData, displayTooltip }) => {
+const HankeIndexes: React.FC<Props> = ({ hankeIndexData, displayTooltip, loading }) => {
   const { t } = useTranslation();
   const liikennehaittaIndeksi = hankeIndexData?.liikennehaittaIndeksi.indeksi;
   const pyorailyIndeksi = hankeIndexData?.pyorailyIndeksi;
@@ -80,6 +85,7 @@ const HankeIndexes: React.FC<Props> = ({ hankeIndexData, displayTooltip }) => {
           title={t('hankeIndexes:liikennehaittaindeksi')}
           index={liikennehaittaIndeksi}
           testId="test-liikennehaittaIndeksi"
+          loading={loading}
         />
 
         <IndexSection
@@ -89,6 +95,7 @@ const HankeIndexes: React.FC<Props> = ({ hankeIndexData, displayTooltip }) => {
           )}`}
           index={pyorailyIndeksi}
           testId="test-pyorailyIndeksi"
+          loading={loading}
         />
 
         <IndexSection
@@ -98,6 +105,7 @@ const HankeIndexes: React.FC<Props> = ({ hankeIndexData, displayTooltip }) => {
           )}`}
           index={joukkoliikenneIndeksi}
           testId="test-joukkoliikenneIndeksi"
+          loading={loading}
         />
 
         <IndexSection
@@ -107,6 +115,7 @@ const HankeIndexes: React.FC<Props> = ({ hankeIndexData, displayTooltip }) => {
           )}`}
           index={perusIndeksi}
           testId="test-ruuhkautumisIndeksi"
+          loading={loading}
         />
         {hankeIndexData === undefined && (
           <p className={styles.indexInfo}>{t('hankeIndexes:indexesNotCalculated')}</p>
