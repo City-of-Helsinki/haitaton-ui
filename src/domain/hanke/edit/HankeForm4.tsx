@@ -13,9 +13,16 @@ import {
 } from '../../types/hanke';
 import { FORMFIELD, FormProps } from './types';
 import { useFormPage } from './hooks/useFormPage';
+import useLocale from '../../../common/hooks/useLocale';
 
 const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const locale = useLocale();
+  const hankeAlkuPvm = formData[FORMFIELD.ALKU_PVM];
+  const hankeLoppuPvm = formData[FORMFIELD.LOPPU_PVM];
+  const hankeAlkuDate = hankeAlkuPvm ? new Date(hankeAlkuPvm) : undefined;
+  const hankeLoppuDate = hankeLoppuPvm ? new Date(hankeLoppuPvm) : undefined;
+
   useFormPage();
   return (
     <div className="form4">
@@ -30,8 +37,10 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
               label={t(`hankeForm:labels:${FORMFIELD.HAITTA_ALKU_PVM}`)}
               dateFormat="dd.MM.yyyy"
               defaultValue={formData[FORMFIELD.HAITTA_ALKU_PVM] || null}
-              locale={i18n.language}
+              locale={locale}
               required
+              minDate={hankeAlkuDate}
+              maxDate={hankeLoppuDate}
             />
           </div>
           <div className="right">
@@ -40,8 +49,10 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
               label={t(`hankeForm:labels:${FORMFIELD.HAITTA_LOPPU_PVM}`)}
               dateFormat="dd.MM.yyyy"
               defaultValue={formData[FORMFIELD.HAITTA_LOPPU_PVM] || null}
-              locale={i18n.language}
+              locale={locale}
               required
+              minDate={hankeAlkuDate}
+              maxDate={hankeLoppuDate}
             />
           </div>
         </div>

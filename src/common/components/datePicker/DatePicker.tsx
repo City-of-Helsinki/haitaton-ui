@@ -1,42 +1,36 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { fi } from 'date-fns/esm/locale';
-import ReactDatePicker, { registerLocale } from 'react-datepicker';
-import { Tooltip } from 'hds-react';
+import { DateInput, Tooltip } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { TooltipProps } from '../../types/tooltip';
 import { getInputErrorText } from '../../utils/form';
-import { toEndOfDayUTCISO } from '../../utils/date';
-import IconCalendar from '../icons/Calendar';
-import 'react-datepicker/dist/react-datepicker.css';
-import './datePicker.styles.scss';
-
-// https://github.com/Hacker0x01/react-datepicker/issues/1815
-// you have to register the locale before importing DatePicker
-// Todo: All locales should be registered correctly in Header.tsx
-registerLocale('fi', fi);
+import styles from './DatePicker.module.scss';
+import { convertFinnishDate, formatToFinnishDate, toEndOfDayUTCISO } from '../../utils/date';
 
 type PropTypes = {
   name: string;
   label?: string;
   disabled?: boolean;
   selected?: Date;
-  locale: string;
+  locale: 'en' | 'fi' | 'sv' | undefined;
   dateFormat?: string;
   defaultValue?: Date | string | null;
   tooltip?: TooltipProps;
   required?: boolean;
+  maxDate?: Date;
+  minDate?: Date;
 };
 
 const DatePicker: React.FC<PropTypes> = ({
   name,
   label,
   disabled,
-  locale,
-  dateFormat,
   defaultValue,
   tooltip,
   required,
+  minDate,
+  maxDate,
+  locale,
 }) => {
   const { t } = useTranslation();
   const { control, errors } = useFormContext();
@@ -49,35 +43,33 @@ const DatePicker: React.FC<PropTypes> = ({
         control={control}
         defaultValue={defaultValue}
         render={({ onChange, value, onBlur }) => (
-          <div className="datePicker">
-            <div className="topWpr">
-              <label htmlFor={name}>
-                {label} {required && '*'}
-              </label>
+          <div className={styles.datePicker}>
+            <div className={styles.tooltip}>
               {!!tooltip && (
                 <Tooltip buttonLabel={tooltip.buttonLabel} placement={tooltip.placement}>
                   {tooltip.tooltipText}
                 </Tooltip>
               )}
             </div>
-            <div className="bottomWpr">
-              <ReactDatePicker
+            <div className={styles.dateInput}>
+              <DateInput
                 id={name}
                 name={name}
-                onChange={(date: Date) => {
-                  if (date) {
-                    onChange(toEndOfDayUTCISO(date));
-                    onBlur();
-                  }
-                }}
-                selected={value ? new Date(value) : null}
+                label={`${label} ${required && '*'}`}
                 disabled={disabled}
-                locale={locale}
-                dateFormat={dateFormat}
-                className={invalid ? 'invalid' : ''}
                 onBlur={onBlur}
+                onChange={(date: string) => {
+                  const convertedDateString = convertFinnishDate(date);
+                  if (convertedDateString.length > 0) {
+                    onChange(toEndOfDayUTCISO(new Date(convertedDateString)));
+                  }
+                  onBlur();
+                }}
+                value={!value ? undefined : formatToFinnishDate(value)}
+                maxDate={maxDate}
+                minDate={minDate}
+                language={locale}
               />
-              <IconCalendar />
             </div>
             {invalid && <span className="error-text">{getInputErrorText(t, errors, name)}</span>}
           </div>
