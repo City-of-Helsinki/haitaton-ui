@@ -28,7 +28,7 @@ const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry }) => {
   const [zoom] = useState(9); // TODO: also take zoom into consideration
 
   useEffect(() => {
-    if (geometry) {
+    if (geometry && geometry.features.length > 0) {
       drawSource.addFeatures(new GeoJSON().readFeatures(geometry));
       drawSource.dispatchEvent('featuresAdded');
     }
