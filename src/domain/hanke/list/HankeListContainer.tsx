@@ -5,7 +5,7 @@ import api from '../../api/api';
 import { HankeDataDraft } from '../../types/hanke';
 
 const getHankkeet = async () => {
-  const { data } = await api.get<HankeDataDraft[]>(`/hankkeet`);
+  const { data } = await api.get<HankeDataDraft[]>(`/public-hankkeet`);
   return data;
 };
 

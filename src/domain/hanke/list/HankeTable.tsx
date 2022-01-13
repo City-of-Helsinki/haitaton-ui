@@ -2,10 +2,7 @@ import React from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import { useTranslation } from 'react-i18next';
 import format from 'date-fns/format';
-import { Link } from 'react-router-dom';
-import { IconCrossCircle, IconPen, IconAngleUp, IconAngleDown } from 'hds-react/icons';
-import useLinkPath from '../../../common/hooks/useLinkPath';
-import { ROUTES } from '../../../common/types/route';
+import { IconAngleUp, IconAngleDown } from 'hds-react/icons';
 import PaginationControl from '../../common/pagination/PaginationControl';
 
 function compareIgnoreCase(a: string, b: string) {
@@ -33,7 +30,6 @@ export interface Props {
 
 const Table: React.FC<Props> = ({ columns, data }) => {
   const { t } = useTranslation();
-  const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
   const {
     getTableProps,
     getTableBodyProps,
@@ -105,9 +101,6 @@ const Table: React.FC<Props> = ({ columns, data }) => {
                   )}
                 </th>
               ))}
-              <th>
-                <div />
-              </th>
             </tr>
           ))}
         </thead>
@@ -127,22 +120,6 @@ const Table: React.FC<Props> = ({ columns, data }) => {
                     </td>
                   );
                 })}
-                <td>
-                  <Link
-                    to={getEditHankePath({ hankeTunnus: row.values.id })}
-                    aria-label={
-                      // eslint-disable-next-line
-                      t(`routes:${ROUTES.EDIT_HANKE}.meta.title`) +
-                      ` ${row.values.name} - ${row.values.id} `
-                    }
-                    data-testid="hankeEditLink"
-                  >
-                    <IconPen aria-hidden />
-                  </Link>
-                  <button type="button" disabled aria-label={t('hankeList:buttons:delete')}>
-                    <IconCrossCircle className="remove" aria-hidden="true" />
-                  </button>
-                </td>
               </tr>
             );
           })}

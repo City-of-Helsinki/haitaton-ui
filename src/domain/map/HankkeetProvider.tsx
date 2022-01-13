@@ -6,7 +6,7 @@ import { HankeData } from '../types/hanke';
 
 const HankkeetProvider: React.FC = ({ children }) => {
   const getProjectsWithGeometry = async () => {
-    const response = await api.get<HankeData[]>('/hankkeet', {
+    const response = await api.get<HankeData[]>('/public-hankkeet', {
       params: {
         geometry: true,
       },

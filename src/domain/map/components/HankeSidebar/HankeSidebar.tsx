@@ -1,16 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Drawer, DrawerBody, DrawerContent } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
 import { IconCross } from 'hds-react/icons';
-import { Button } from 'hds-react';
 import Text from '../../../../common/components/text/Text';
 import { formatToFinnishDate } from '../../../../common/utils/date';
 import { HankeData } from '../../../types/hanke';
 import styles from './HankeSidebar.module.scss';
 import HankeIndexesContainer from './HankeIndexesContainer';
-import useLinkPath from '../../../../common/hooks/useLinkPath';
-import { ROUTES } from '../../../../common/types/route';
 
 type SectionProps = {
   title: string;
@@ -37,7 +33,6 @@ type Props = {
 
 const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
   const { t } = useTranslation();
-  const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
 
   return (
     <Drawer
@@ -93,11 +88,6 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
               .join(', ')}
           />
           <SidebarSection title={t('hankeForm:labels.kuvaus')} content={hanke.kuvaus} />
-          <Link to={getEditHankePath({ hankeTunnus: hanke.hankeTunnus })}>
-            <Button variant="secondary" className={styles.hankeSidebar__editButton}>
-              {t('hankeSidebar:editHanke')}
-            </Button>
-          </Link>
           <hr />
 
           <HankeIndexesContainer hankeTunnus={hanke.hankeTunnus} />

@@ -28,7 +28,9 @@ describe('HankeMap', () => {
     const renderedComponent = render(<HankeMap />);
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenCalledWith('/hankkeet', { params: { geometry: true } });
+      expect(mockAxios.get).toHaveBeenCalledWith('/public-hankkeet', {
+        params: { geometry: true },
+      });
     });
     expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
     changeFilterDate(startDateLabel, renderedComponent, '01.01.2022');

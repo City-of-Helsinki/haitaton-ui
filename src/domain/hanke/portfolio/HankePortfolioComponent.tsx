@@ -33,6 +33,8 @@ import DateRangeControl from '../../../common/components/map/controls/DateRangeC
 import { usePortfolioFilter } from './hooks/usePortfolioFilter';
 import { hankeIsBetweenDates } from '../../map/utils';
 import HankeIndexes from '../../map/components/HankeSidebar/HankeIndexes';
+import useLinkPath from '../../../common/hooks/useLinkPath';
+import { ROUTES } from '../../../common/types/route';
 
 type CustomAccordionProps = {
   hanke: HankeDataDraft;
@@ -40,6 +42,7 @@ type CustomAccordionProps = {
 
 const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
   const { MAP } = useLocalizedRoutes();
+  const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
   // Handle accordion state with useAccordion hook
   const { isOpen, buttonProps, contentProps } = useAccordion({ initiallyOpen: false });
   // Change icon based on accordion open state
@@ -75,7 +78,17 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
             </Text>
           </div>
           <div className={styles.actions}>
-            <IconPen />
+            <Link
+              to={getEditHankePath({ hankeTunnus: hanke.hankeTunnus })}
+              aria-label={
+                // eslint-disable-next-line
+                t(`routes:${ROUTES.EDIT_HANKE}.meta.title`) +
+                ` ${hanke.nimi} - ${hanke.hankeTunnus} `
+              }
+              data-testid="hankeEditLink"
+            >
+              <IconPen aria-hidden />
+            </Link>
           </div>
           <div className={styles.iconWrapper}>{icon}</div>
         </div>

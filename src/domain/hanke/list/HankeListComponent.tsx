@@ -5,7 +5,7 @@ import Text from '../../../common/components/text/Text';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import { HankeDataDraft } from '../../types/hanke';
 
-import Table from './Table';
+import Table from './HankeTable';
 import './Hankelista.styles.scss';
 
 type Props = {
