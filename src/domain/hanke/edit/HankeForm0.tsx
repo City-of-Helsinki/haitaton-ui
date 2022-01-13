@@ -11,9 +11,11 @@ import Text from '../../../common/components/text/Text';
 import { FORMFIELD, FormProps } from './types';
 import { useFormPage } from './hooks/useFormPage';
 import EditDisabledNotification from './components/EditDisabledNotification';
+import useLocale from '../../../common/hooks/useLocale';
 
 const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const locale = useLocale();
   const [ytkChecked, setYtkChecked] = useState(formData[FORMFIELD.YKT_HANKE] || false);
   const { watch } = useFormContext();
   useFormPage();
@@ -87,7 +89,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             label={t(`hankeForm:labels:${FORMFIELD.ALKU_PVM}`)}
             dateFormat="dd.MM.yyyy"
             defaultValue={formData[FORMFIELD.ALKU_PVM] || null}
-            locale={i18n.language}
+            locale={locale}
             required
             tooltip={{
               tooltipText: t(`hankeForm:toolTips:${FORMFIELD.ALKU_PVM}`),
@@ -102,7 +104,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             label={t(`hankeForm:labels:${FORMFIELD.LOPPU_PVM}`)}
             dateFormat="dd.MM.yyyy"
             defaultValue={formData[FORMFIELD.LOPPU_PVM] || null}
-            locale={i18n.language}
+            locale={locale}
             required
             tooltip={{
               tooltipText: t(`hankeForm:toolTips:${FORMFIELD.LOPPU_PVM}`),

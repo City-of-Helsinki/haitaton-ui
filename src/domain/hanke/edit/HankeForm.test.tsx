@@ -36,6 +36,7 @@ const formData = {
 };
 
 describe('HankeForm', () => {
+  jest.setTimeout(20000);
   test('happypath', async () => {
     const handleSave = jest.fn();
     const handleSaveGeometry = jest.fn();

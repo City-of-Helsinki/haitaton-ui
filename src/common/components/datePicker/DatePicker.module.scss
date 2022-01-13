@@ -1,0 +1,14 @@
+.invalid {
+  border-color: var(--input-border-color-invalid);
+}
+
+.datePicker {
+  position: relative;
+}
+
+.tooltip {
+  position: inline-block;
+  position: absolute;
+  right: 0;
+  z-index: 2;
+}
