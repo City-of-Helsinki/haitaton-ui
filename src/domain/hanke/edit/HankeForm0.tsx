@@ -10,7 +10,7 @@ import { HANKE_VAIHE, HANKE_SUUNNITTELUVAIHE } from '../../types/hanke';
 import Text from '../../../common/components/text/Text';
 import { FORMFIELD, FormProps } from './types';
 import { useFormPage } from './hooks/useFormPage';
-import EditDisabledNotification from './EditDisabledNotification';
+import EditDisabledNotification from './components/EditDisabledNotification';
 
 const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => {
   const { t, i18n } = useTranslation();

@@ -7,7 +7,7 @@ import { HANKE_SAVETYPE, HankeDataDraft } from '../../types/hanke';
 import { getHasFormChanged, getFormData } from './selectors';
 import { saveForm } from './thunks';
 import { saveGeometryData } from '../../map/thunks';
-import HankeForm from './Form';
+import HankeForm from './HankeForm';
 import { actions, hankeDataDraft } from './reducer';
 import { SaveFormArguments } from './types';
 import { convertHankeDataToFormState } from './utils';

@@ -10,7 +10,7 @@ import api from '../../api/api';
 import { getInputErrorText } from '../../../common/utils/form';
 import Text from '../../../common/components/text/Text';
 import { useFormPage } from './hooks/useFormPage';
-import OrganizationSelect from './OrganizationSelect';
+import OrganizationSelect from './components/OrganizationSelect';
 
 const CONTACT_FIELDS = [
   CONTACT_FORMFIELD.ETUNIMI,
@@ -30,10 +30,7 @@ const REQUIRED: string[] = [
 const isRequired = (type: HankeContactKey, field: string) =>
   type === HANKE_CONTACT_TYPE.OMISTAJAT && REQUIRED.includes(field);
 
-const fetchOrganizations = async () => {
-  const response = await api.get<Organization[]>('/organisaatiot');
-  return response;
-};
+const fetchOrganizations = async () => api.get<Organization[]>('/organisaatiot');
 
 // eslint-disable-next-line
 const getArrayFieldErrors = (errors: Record<string, Array<any>>, name: string) =>

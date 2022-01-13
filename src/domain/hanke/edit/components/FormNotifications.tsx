@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import Notification from './Notification';
-import { getShowNotification } from './selectors';
+import { getShowNotification } from '../selectors';
 
 const FormNotifications: React.FC = () => {
   const { t } = useTranslation();

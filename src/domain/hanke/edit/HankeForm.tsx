@@ -5,16 +5,16 @@ import { IconCross } from 'hds-react/icons';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Text from '../../../common/components/text/Text';
 import { HankeDataFormState, SaveFormArguments } from './types';
-import FormStepIndicator from './FormStepIndicator';
+import FormStepIndicator from './components/FormStepIndicator';
 import { hankeSchema } from './hankeSchema';
-import Form0 from './Form0';
-import Form1 from './Form1';
-import Form2 from './Form2';
-import Form3 from './Form3';
-import Form4 from './Form4';
-import FormButtons from './FormButtons';
-import FormNotifications from './FormNotifications';
-import './Form.styles.scss';
+import Form0 from './HankeForm0';
+import Form1 from './HankeForm1';
+import Form2 from './HankeForm2';
+import Form3 from './HankeForm3';
+import Form4 from './HankeForm4';
+import FormButtons from './components/FormButtons';
+import FormNotifications from './components/FormNotifications';
+import './HankeForm.styles.scss';
 
 type Props = {
   formData: HankeDataFormState;

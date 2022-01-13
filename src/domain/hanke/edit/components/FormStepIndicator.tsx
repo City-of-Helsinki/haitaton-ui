@@ -1,10 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import Circle from '../../../common/components/icons/Circle';
-import CircleSelected from '../../../common/components/icons/CircleSelected';
-import HankeIndexes from '../../map/components/HankeSidebar/HankeIndexes';
+import Circle from '../../../../common/components/icons/Circle';
+import CircleSelected from '../../../../common/components/icons/CircleSelected';
+import HankeIndexes from '../../../map/components/HankeSidebar/HankeIndexes';
 import styles from './FormStepIndicator.module.scss';
-import { HankeDataFormState } from './types';
+import { HankeDataFormState } from '../types';
 
 type PropTypes = {
   currentFormPage: number;
