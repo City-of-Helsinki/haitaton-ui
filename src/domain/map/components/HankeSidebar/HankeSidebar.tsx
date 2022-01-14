@@ -6,7 +6,7 @@ import Text from '../../../../common/components/text/Text';
 import { formatToFinnishDate } from '../../../../common/utils/date';
 import { HankeData } from '../../../types/hanke';
 import styles from './HankeSidebar.module.scss';
-import HankeIndexesContainer from './HankeIndexesContainer';
+import HankeIndexes from './HankeIndexes';
 
 type SectionProps = {
   title: string;
@@ -90,7 +90,7 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
           <SidebarSection title={t('hankeForm:labels.kuvaus')} content={hanke.kuvaus} />
           <hr />
 
-          <HankeIndexesContainer hankeTunnus={hanke.hankeTunnus} />
+          <HankeIndexes hankeIndexData={hanke.tormaystarkasteluTulos} />
         </DrawerBody>
       </DrawerContent>
     </Drawer>
