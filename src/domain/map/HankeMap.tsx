@@ -30,7 +30,6 @@ const HankeMap: React.FC = () => {
 
   return (
     <>
-      <HankeSidebar />
       <div
         className={styles.mapContainer}
         style={{ width: '100%', height: '100%', position: 'absolute' }}
@@ -43,6 +42,7 @@ const HankeMap: React.FC = () => {
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
 
           <HankkeetProvider>
+            <HankeSidebar />
             <FeatureClick />
             <GeometryHover>
               <HankeHoverBox />
