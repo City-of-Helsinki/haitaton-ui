@@ -10,7 +10,7 @@ const FitSource: React.FC<Props> = ({ source }) => {
   const { map } = useContext(MapContext);
 
   const fitSource = useCallback(() => {
-    if (!map || !source || !source.isEmpty()) return;
+    if (!map || !source || source.isEmpty()) return;
     map.getView().fit(source.getExtent(), { padding: [100, 100, 100, 100] });
   }, [map, source]);
 
