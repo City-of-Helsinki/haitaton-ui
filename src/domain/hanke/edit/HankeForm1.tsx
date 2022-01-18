@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Accordion } from 'hds-react';
 import HankeDrawer from '../../map/components/HankeDrawer/HankeDrawerContainer';
 import Text from '../../../common/components/text/Text';
 import { useFormPage } from './hooks/useFormPage';
@@ -29,9 +30,11 @@ const Form1: React.FC<FormProps> = ({ formData }) => {
       <Text tag="h2" spacing="s" weight="bold" data-testid="hankeFormHeader">
         {t('hankeForm:hankkeenAlueForm:header')}
       </Text>
-      {instructions.map((instruction) => (
-        <p key={instruction}>{instruction}</p>
-      ))}
+      <Accordion heading="Ohjeet" initiallyOpen>
+        {instructions.map((instruction) => (
+          <p key={instruction}>{instruction}</p>
+        ))}
+      </Accordion>
       <br />
       <div style={{ position: 'relative' }}>
         <HankeDrawer

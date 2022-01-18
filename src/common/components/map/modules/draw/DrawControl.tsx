@@ -12,7 +12,11 @@ import useDrawContext from './useDrawContext';
 const getDrawIcon = (drawTool: DRAWTOOLTYPE) => {
   switch (drawTool) {
     case DRAWTOOLTYPE.SQUARE:
-      return <IconSquare aria-hidden="true" />;
+      return (
+        <div className={styles.drawControl__svgIcon}>
+          <IconSquare aria-hidden="true" />
+        </div>
+      );
     case DRAWTOOLTYPE.POLYGON:
       return <IconPen size="s" aria-hidden="true" />;
     default:
@@ -46,7 +50,7 @@ const DrawControls: React.FC = () => {
           className={clsx(styles.drawControl__button)}
           onClick={handleRemoveFeature}
         >
-          <IconTrash size="m" aria-hidden="true" />
+          <IconTrash size="s" aria-hidden="true" />
         </button>
       )}
       {$enum(DRAWTOOLTYPE)
