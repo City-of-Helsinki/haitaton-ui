@@ -38,25 +38,34 @@
 .drawControl {
   display: flex;
   flex-direction: column;
+  gap: var(--spacing-2-xs);
   position: absolute;
   left: var(--spacing-s);
   bottom: var(--spacing-s);
 
   &__button {
     border: 0;
-    color: var(--color-coat-of-arms);
+    color: var(--color-black-80);
+
+    &svgIcon {
+      path {
+        stroke: var(--color-black-80);
+      }
+    }
 
     &:hover {
-      background: gray;
+      background: lightgray;
     }
 
     &--active {
-      color: red;
-    }
-  }
+      color: var(--color-coat-of-arms);
 
-  &__button:first-child {
-    margin-bottom: 0.5rem;
+      .drawControl__svgIcon {
+        path {
+          stroke: var(--color-coat-of-arms);
+        }
+      }
+    }
   }
 
   &__checkbox {
