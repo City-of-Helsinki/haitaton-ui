@@ -110,14 +110,16 @@ const HankeForm: React.FC<Props> = ({
           <div className="hankeForm__formWprRight">
             <form name="hanke">
               <div className="closeFormWpr">
-                <Button
-                  className="deleteHankeBtn"
-                  onClick={() => onOpenHankeDelete()}
-                  variant="supplementary"
-                  iconLeft={<IconTrash aria-hidden />}
-                >
-                  Poista hanke
-                </Button>
+                {formData.hankeTunnus && (
+                  <Button
+                    className="deleteHankeBtn"
+                    onClick={() => onOpenHankeDelete()}
+                    variant="supplementary"
+                    iconLeft={<IconTrash aria-hidden />}
+                  >
+                    Poista hanke
+                  </Button>
+                )}
                 <Button
                   className="closeFormBtn"
                   onClick={() => onFormClose()}

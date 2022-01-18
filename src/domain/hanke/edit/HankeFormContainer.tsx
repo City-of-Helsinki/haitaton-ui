@@ -8,15 +8,21 @@ import { saveForm } from './thunks';
 import { saveGeometryData } from '../../map/thunks';
 import HankeForm from './HankeForm';
 import { actions, hankeDataDraft } from './reducer';
-import { SaveFormArguments } from './types';
+import { HankeDataFormState, SaveFormArguments } from './types';
 import { convertHankeDataToFormState } from './utils';
 import ConfirmationDialog from '../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 
 import api from '../../api/api';
 import { t } from '../../../locales/i18nForTests';
+import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 
 const getHanke = async (hankeTunnus?: string) => {
   const { data } = await api.get<HankeDataDraft>(`/hankkeet/${hankeTunnus}`);
+  return data;
+};
+
+const deleteHanke = (hankeTunnus: string) => {
+  const data = api.delete<HankeDataDraft>(`/hankkeet/${hankeTunnus}`);
   return data;
 };
 
@@ -37,6 +43,9 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
   const isSaving = useSelector(getSaveState());
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [interruptDialogOpen, setInterruptDialogOpen] = useState(false);
+  const [deleteErrorMsg, setDeleteErrorMsg] = useState('');
+
+  const { HANKEPORTFOLIO } = useLocalizedRoutes();
 
   const { data: hankeData, isFetched } = useHanke(hankeTunnus);
 
@@ -86,9 +95,18 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
     setDeleteDialogOpen(true);
   };
 
-  const deleteHanke = () => {
-    // add actual delete functionality here
-    setDeleteDialogOpen(false);
+  const handleDeleteHanke = (hankeToDelete: HankeDataFormState) => {
+    if (hankeToDelete.hankeTunnus) {
+      deleteHanke(hankeToDelete.hankeTunnus)
+        .then(() => {
+          navigate(HANKEPORTFOLIO.path);
+
+          setDeleteDialogOpen(false);
+        })
+        .catch(() => {
+          setDeleteErrorMsg(t('common:error'));
+        });
+    }
   };
 
   return (
@@ -106,10 +124,14 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
         title={t('common:confirmationDialog:deleteDialog:titleText')}
         description={t('common:confirmationDialog:deleteDialog:bodyText')}
         isOpen={deleteDialogOpen}
-        close={() => setDeleteDialogOpen(false)}
-        mainAction={() => deleteHanke()}
+        close={() => {
+          setDeleteDialogOpen(false);
+          setDeleteErrorMsg('');
+        }}
+        mainAction={() => handleDeleteHanke(formData)}
         mainBtnLabel={t('common:confirmationDialog:deleteDialog:exitButton')}
         variant="danger"
+        errorMsg={deleteErrorMsg}
       />
       <ConfirmationDialog
         title={t('common:confirmationDialog:interruptDialog:titleText')}
