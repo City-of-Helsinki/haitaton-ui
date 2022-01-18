@@ -33,7 +33,8 @@
         "removeSelected": "EN:Poista valittu",
         "clear": "EN:Tyhjennä kenttä"
       }
-    }
+    },
+    "error": "EN: Tapahtui virhe. Yritä uudestaan."
   },
   "form": {
     "validations": {

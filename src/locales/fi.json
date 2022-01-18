@@ -32,7 +32,8 @@
         "removeSelected": "Poista valittu",
         "clear": "Tyhjennä kenttä"
       }
-    }
+    },
+    "error": "Tapahtui virhe. Yritä uudestaan."
   },
   "form": {
     "validations": {

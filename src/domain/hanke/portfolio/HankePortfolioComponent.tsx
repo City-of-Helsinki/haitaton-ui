@@ -207,8 +207,6 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                     {!hanke.kaistaPituusHaitta && '-'}
                   </Text>
                 </div>
-              </div>
-              <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
                   {t('hankeForm:labels:polyHaitta')}
                 </Text>
@@ -216,42 +214,6 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   {hanke.polyHaitta && t(`hanke:polyHaitta:${hanke.polyHaitta}`)}
                   {!hanke.polyHaitta && '-'}
                 </Text>
-              </div>
-
-              {/*
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankeIndexes:merkittavatJoukkoliikennereitit')}
-                </Text>
-                <div className={styles.index}>
-                  <div className={styles.indexBox}>4</div>
-                  <Text tag="p" styleAs="body-m">
-                    {hanke.meluHaitta && t(`hanke:meluHaitta:${hanke.meluHaitta}`)}
-                    {!hanke.meluHaitta && '-'}
-                  </Text>
-                </div>
-                <div>
-                  <Text tag="h3" styleAs="h6" weight="bold">
-                    {t('hankeForm:labels:polyHaitta')}
-                  </Text>
-                  <Text tag="p" styleAs="body-m">
-                    {hanke.polyHaitta && t(`hanke:polyHaitta:${hanke.polyHaitta}`)}
-                    {!hanke.polyHaitta && '-'}
-                  </Text>
-                </div>
-                <div>
-                  <Text tag="h3" styleAs="h6" weight="bold">
-                    {t('hankeForm:labels:tarinaHaitta')}
-                  </Text>
-                  <Text tag="p" styleAs="body-m">
-                    {hanke.tarinaHaitta && t(`hanke:tarinaHaitta:${hanke.tarinaHaitta}`)}
-                    {!hanke.tarinaHaitta && '-'}
-                  </Text>
-                </div>
-
-              </div>
-              */}
-              <div className={styles.gridItem}>
                 <Text tag="h3" styleAs="h6" weight="bold">
                   {t('hankeForm:labels:tarinaHaitta')}
                 </Text>

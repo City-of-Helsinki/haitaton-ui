@@ -13,6 +13,7 @@ type Props = {
   mainAction: () => void;
   mainBtnLabel: string;
   variant: string;
+  errorMsg?: string;
 };
 
 const ConfirmationDialog: React.FC<Props> = ({
@@ -23,6 +24,7 @@ const ConfirmationDialog: React.FC<Props> = ({
   mainAction,
   mainBtnLabel,
   variant,
+  errorMsg,
 }) => {
   const { t } = useTranslation();
 
@@ -46,10 +48,12 @@ const ConfirmationDialog: React.FC<Props> = ({
       />
       <Dialog.Content>
         <p data-testid="dialog-description-test">{description}</p>
-        <div className={styles.errorMsg}>
-          <IconErrorFill />
-          <p> error msg </p>
-        </div>
+        {errorMsg && (
+          <div className={styles.errorMsg}>
+            <IconErrorFill />
+            <p>{errorMsg}</p>
+          </div>
+        )}
       </Dialog.Content>
       <Dialog.ActionButtons>
         {variant === 'primary' ? (
