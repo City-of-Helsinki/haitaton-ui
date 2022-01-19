@@ -30,7 +30,14 @@ const Form1: React.FC<FormProps> = ({ formData }) => {
       <Text tag="h2" spacing="s" weight="bold" data-testid="hankeFormHeader">
         {t('hankeForm:hankkeenAlueForm:header')}
       </Text>
-      <Accordion heading="Ohjeet" initiallyOpen>
+      <Accordion
+        heading="Ohjeet"
+        theme={{
+          '--header-font-size': 'var(--fontsize-heading-s)',
+          '--border-color': 'var(--white)',
+        }}
+        initiallyOpen
+      >
         {instructions.map((instruction) => (
           <p key={instruction}>{instruction}</p>
         ))}
