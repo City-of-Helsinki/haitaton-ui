@@ -1077,12 +1077,11 @@ Object {
                                               </button>
                                             </td>
                                             <td
-                                              aria-current="date"
                                               class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
                                             >
                                               <button
                                                 aria-pressed="false"
-                                                class="DatePicker-module_hds-datepicker__day__2_8jB DatePicker-module_hds-datepicker__day--today__1bi5J"
+                                                class="DatePicker-module_hds-datepicker__day__2_8jB"
                                                 data-date="2022-01-18"
                                                 tabindex="-1"
                                               >
@@ -1100,11 +1099,12 @@ Object {
                                               </button>
                                             </td>
                                             <td
+                                              aria-current="date"
                                               class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
                                             >
                                               <button
                                                 aria-pressed="false"
-                                                class="DatePicker-module_hds-datepicker__day__2_8jB"
+                                                class="DatePicker-module_hds-datepicker__day__2_8jB DatePicker-module_hds-datepicker__day--today__1bi5J"
                                                 data-date="2022-01-19"
                                                 tabindex="-1"
                                               >
@@ -2578,12 +2578,11 @@ Object {
                                             </button>
                                           </td>
                                           <td
-                                            aria-current="date"
                                             class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
                                           >
                                             <button
                                               aria-pressed="false"
-                                              class="DatePicker-module_hds-datepicker__day__2_8jB DatePicker-module_hds-datepicker__day--today__1bi5J"
+                                              class="DatePicker-module_hds-datepicker__day__2_8jB"
                                               data-date="2022-01-18"
                                               tabindex="-1"
                                             >
@@ -2601,11 +2600,12 @@ Object {
                                             </button>
                                           </td>
                                           <td
+                                            aria-current="date"
                                             class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
                                           >
                                             <button
                                               aria-pressed="false"
-                                              class="DatePicker-module_hds-datepicker__day__2_8jB"
+                                              class="DatePicker-module_hds-datepicker__day__2_8jB DatePicker-module_hds-datepicker__day--today__1bi5J"
                                               data-date="2022-01-19"
                                               tabindex="-1"
                                             >
@@ -5723,12 +5723,11 @@ Object {
                                             </button>
                                           </td>
                                           <td
-                                            aria-current="date"
                                             class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
                                           >
                                             <button
                                               aria-pressed="false"
-                                              class="DatePicker-module_hds-datepicker__day__2_8jB DatePicker-module_hds-datepicker__day--today__1bi5J"
+                                              class="DatePicker-module_hds-datepicker__day__2_8jB"
                                               data-date="2022-01-18"
                                               tabindex="-1"
                                             >
@@ -5746,11 +5745,12 @@ Object {
                                             </button>
                                           </td>
                                           <td
+                                            aria-current="date"
                                             class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
                                           >
                                             <button
                                               aria-pressed="false"
-                                              class="DatePicker-module_hds-datepicker__day__2_8jB"
+                                              class="DatePicker-module_hds-datepicker__day__2_8jB DatePicker-module_hds-datepicker__day--today__1bi5J"
                                               data-date="2022-01-19"
                                               tabindex="-1"
                                             >
@@ -7224,12 +7224,11 @@ Object {
                                           </button>
                                         </td>
                                         <td
-                                          aria-current="date"
                                           class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
                                         >
                                           <button
                                             aria-pressed="false"
-                                            class="DatePicker-module_hds-datepicker__day__2_8jB DatePicker-module_hds-datepicker__day--today__1bi5J"
+                                            class="DatePicker-module_hds-datepicker__day__2_8jB"
                                             data-date="2022-01-18"
                                             tabindex="-1"
                                           >
@@ -7247,11 +7246,12 @@ Object {
                                           </button>
                                         </td>
                                         <td
+                                          aria-current="date"
                                           class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
                                         >
                                           <button
                                             aria-pressed="false"
-                                            class="DatePicker-module_hds-datepicker__day__2_8jB"
+                                            class="DatePicker-module_hds-datepicker__day__2_8jB DatePicker-module_hds-datepicker__day--today__1bi5J"
                                             data-date="2022-01-19"
                                             tabindex="-1"
                                           >
