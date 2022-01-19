@@ -1825,49 +1825,15 @@ Object {
                                           <option
                                             value="2023"
                                           >
-                                            <button
-                                              aria-pressed="false"
-                                              class="DatePicker-module_hds-datepicker__day__2_8jB"
-                                              data-date="2022-01-13"
-                                              tabindex="-1"
-                                            >
-                                              <span
-                                                aria-hidden="true"
-                                                class="DatePicker-module_hds-datepicker__day__wrapper__2cskJ"
-                                              >
-                                                13
-                                              </span>
-                                              <span
-                                                class="DatePicker-module_hds-datepicker__day__wrapper-vhidden__3Brgt"
-                                              >
-                                                tammikuu 13
-                                              </span>
-                                            </button>
-                                          </td>
-                                          <td
-                                            class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
+                                            2023
+                                          </option>
+                                          <option
+                                            value="2024"
                                           >
-                                            <button
-                                              aria-pressed="false"
-                                              class="DatePicker-module_hds-datepicker__day__2_8jB"
-                                              data-date="2022-01-14"
-                                              tabindex="-1"
-                                            >
-                                              <span
-                                                aria-hidden="true"
-                                                class="DatePicker-module_hds-datepicker__day__wrapper__2cskJ"
-                                              >
-                                                14
-                                              </span>
-                                              <span
-                                                class="DatePicker-module_hds-datepicker__day__wrapper-vhidden__3Brgt"
-                                              >
-                                                tammikuu 14
-                                              </span>
-                                            </button>
-                                          </td>
-                                          <td
-                                            class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
+                                            2024
+                                          </option>
+                                          <option
+                                            value="2025"
                                           >
                                             2025
                                           </option>
@@ -1884,50 +1850,15 @@ Object {
                                           <option
                                             value="2028"
                                           >
-                                            <button
-                                              aria-pressed="false"
-                                              class="DatePicker-module_hds-datepicker__day__2_8jB"
-                                              data-date="2022-01-18"
-                                              tabindex="-1"
-                                            >
-                                              <span
-                                                aria-hidden="true"
-                                                class="DatePicker-module_hds-datepicker__day__wrapper__2cskJ"
-                                              >
-                                                18
-                                              </span>
-                                              <span
-                                                class="DatePicker-module_hds-datepicker__day__wrapper-vhidden__3Brgt"
-                                              >
-                                                tammikuu 18
-                                              </span>
-                                            </button>
-                                          </td>
-                                          <td
-                                            aria-current="date"
-                                            class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
+                                            2028
+                                          </option>
+                                          <option
+                                            value="2029"
                                           >
-                                            <button
-                                              aria-pressed="false"
-                                              class="DatePicker-module_hds-datepicker__day__2_8jB DatePicker-module_hds-datepicker__day--today__1bi5J"
-                                              data-date="2022-01-19"
-                                              tabindex="-1"
-                                            >
-                                              <span
-                                                aria-hidden="true"
-                                                class="DatePicker-module_hds-datepicker__day__wrapper__2cskJ"
-                                              >
-                                                19
-                                              </span>
-                                              <span
-                                                class="DatePicker-module_hds-datepicker__day__wrapper-vhidden__3Brgt"
-                                              >
-                                                tammikuu 19
-                                              </span>
-                                            </button>
-                                          </td>
-                                          <td
-                                            class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
+                                            2029
+                                          </option>
+                                          <option
+                                            value="2030"
                                           >
                                             2030
                                           </option>
@@ -3085,213 +3016,10 @@ Object {
                                             <span
                                               aria-disabled="true"
                                               aria-hidden="true"
-                                              class="DatePicker-module_hds-datepicker__day__wrapper__2cskJ"
-                                            >
-                                              13
-                                            </span>
-                                            <span
-                                              class="DatePicker-module_hds-datepicker__day__wrapper-vhidden__3Brgt"
-                                            >
-                                              tammikuu 13
-                                            </span>
-                                          </button>
-                                        </td>
-                                        <td
-                                          class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
-                                        >
-                                          <button
-                                            aria-pressed="false"
-                                            class="DatePicker-module_hds-datepicker__day__2_8jB"
-                                            data-date="2022-01-14"
-                                            tabindex="-1"
-                                          >
-                                            <span
-                                              aria-hidden="true"
-                                              class="DatePicker-module_hds-datepicker__day__wrapper__2cskJ"
-                                            >
-                                              14
-                                            </span>
-                                            <span
-                                              class="DatePicker-module_hds-datepicker__day__wrapper-vhidden__3Brgt"
-                                            >
-                                              tammikuu 14
-                                            </span>
-                                          </button>
-                                        </td>
-                                        <td
-                                          class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
-                                        >
-                                          <button
-                                            aria-pressed="false"
-                                            class="DatePicker-module_hds-datepicker__day__2_8jB"
-                                            data-date="2022-01-15"
-                                            tabindex="-1"
-                                          >
-                                            <span
-                                              aria-hidden="true"
-                                              class="DatePicker-module_hds-datepicker__day__wrapper__2cskJ"
-                                            >
-                                              15
-                                            </span>
-                                            <span
-                                              class="DatePicker-module_hds-datepicker__day__wrapper-vhidden__3Brgt"
-                                            >
-                                              tammikuu 15
-                                            </span>
-                                          </button>
-                                        </td>
-                                        <td
-                                          class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
-                                        >
-                                          <button
-                                            aria-pressed="false"
-                                            class="DatePicker-module_hds-datepicker__day__2_8jB"
-                                            data-date="2022-01-16"
-                                            tabindex="-1"
-                                          >
-                                            <span
-                                              aria-hidden="true"
-                                              class="DatePicker-module_hds-datepicker__day__wrapper__2cskJ"
-                                            >
-                                              16
-                                            </span>
-                                            <span
-                                              class="DatePicker-module_hds-datepicker__day__wrapper-vhidden__3Brgt"
-                                            >
-                                              tammikuu 16
-                                            </span>
-                                          </button>
-                                        </td>
-                                      </tr>
-                                      <tr>
-                                        <td
-                                          class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
-                                        >
-                                          <button
-                                            aria-pressed="false"
-                                            class="DatePicker-module_hds-datepicker__day__2_8jB"
-                                            data-date="2022-01-17"
-                                            tabindex="-1"
-                                          >
-                                            <span
-                                              aria-hidden="true"
-                                              class="DatePicker-module_hds-datepicker__day__wrapper__2cskJ"
-                                            >
-                                              17
-                                            </span>
-                                            <span
-                                              class="DatePicker-module_hds-datepicker__day__wrapper-vhidden__3Brgt"
-                                            >
-                                              tammikuu 17
-                                            </span>
-                                          </button>
-                                        </td>
-                                        <td
-                                          class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
-                                        >
-                                          <button
-                                            aria-pressed="false"
-                                            class="DatePicker-module_hds-datepicker__day__2_8jB"
-                                            data-date="2022-01-18"
-                                            tabindex="-1"
-                                          >
-                                            <span
-                                              aria-hidden="true"
-                                              class="DatePicker-module_hds-datepicker__day__wrapper__2cskJ"
-                                            >
-                                              18
-                                            </span>
-                                            <span
-                                              class="DatePicker-module_hds-datepicker__day__wrapper-vhidden__3Brgt"
-                                            >
-                                              tammikuu 18
-                                            </span>
-                                          </button>
-                                        </td>
-                                        <td
-                                          aria-current="date"
-                                          class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
-                                        >
-                                          <button
-                                            aria-pressed="false"
-                                            class="DatePicker-module_hds-datepicker__day__2_8jB DatePicker-module_hds-datepicker__day--today__1bi5J"
-                                            data-date="2022-01-19"
-                                            tabindex="-1"
-                                          >
-                                            <span
-                                              aria-hidden="true"
-                                              class="DatePicker-module_hds-datepicker__day__wrapper__2cskJ"
-                                            >
-                                              19
-                                            </span>
-                                            <span
-                                              class="DatePicker-module_hds-datepicker__day__wrapper-vhidden__3Brgt"
-                                            >
-                                              tammikuu 19
-                                            </span>
-                                          </button>
-                                        </td>
-                                        <td
-                                          class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
-                                        >
-                                          <button
-                                            aria-pressed="false"
-                                            class="DatePicker-module_hds-datepicker__day__2_8jB"
-                                            data-date="2022-01-20"
-                                            tabindex="-1"
-                                          >
-                                            <span
-                                              aria-hidden="true"
-                                              class="DatePicker-module_hds-datepicker__day__wrapper__2cskJ"
-                                            >
-                                              20
-                                            </span>
-                                            <span
-                                              class="DatePicker-module_hds-datepicker__day__wrapper-vhidden__3Brgt"
-                                            >
-                                              tammikuu 20
-                                            </span>
-                                          </button>
-                                        </td>
-                                        <td
-                                          class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
-                                        >
-                                          <button
-                                            aria-pressed="false"
-                                            class="DatePicker-module_hds-datepicker__day__2_8jB"
-                                            data-date="2022-01-21"
-                                            tabindex="-1"
-                                          >
-                                            <span
-                                              aria-hidden="true"
-                                              class="DatePicker-module_hds-datepicker__day__wrapper__2cskJ"
-                                            >
-                                              21
-                                            </span>
-                                            <span
-                                              class="DatePicker-module_hds-datepicker__day__wrapper-vhidden__3Brgt"
-                                            >
-                                              tammikuu 21
-                                            </span>
-                                          </button>
-                                        </td>
-                                        <td
-                                          class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
-                                        >
-                                          <button
-                                            aria-pressed="false"
-                                            class="DatePicker-module_hds-datepicker__day__2_8jB"
-                                            data-date="2022-01-22"
-                                            tabindex="-1"
-                                          >
-                                            <span
-                                              aria-hidden="true"
-                                              class="DatePicker-module_hds-datepicker__day__wrapper__2cskJ"
-                                            >
-                                              22
-                                            </span>
-                                            <span
-                                              class="DatePicker-module_hds-datepicker__day__wrapper-vhidden__3Brgt"
+                                              aria-pressed="false"
+                                              class="DatePicker-module_hds-datepicker__day__2_8jB DatePicker-module_hds-datepicker__day--outside__1rUB8"
+                                              data-date="2022-02-06"
+                                              disabled=""
                                             >
                                               <span
                                                 aria-hidden="true"
@@ -5474,16 +5202,10 @@ Object {
                                             >
                                               lauantaina
                                             </span>
-                                          </button>
-                                        </td>
-                                        <td
-                                          class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
-                                        >
-                                          <button
-                                            aria-pressed="false"
-                                            class="DatePicker-module_hds-datepicker__day__2_8jB"
-                                            data-date="2022-01-14"
-                                            tabindex="-1"
+                                          </th>
+                                          <th
+                                            class="DatePicker-module_hds-datepicker__head__weekday__SwagI"
+                                            scope="col"
                                           >
                                             <span
                                               aria-hidden="true"
@@ -5719,19 +5441,21 @@ Object {
                                               data-date="2022-01-05"
                                               tabindex="-1"
                                             >
-                                              tammikuu 18
-                                            </span>
-                                          </button>
-                                        </td>
-                                        <td
-                                          aria-current="date"
-                                          class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
-                                        >
-                                          <button
-                                            aria-pressed="false"
-                                            class="DatePicker-module_hds-datepicker__day__2_8jB DatePicker-module_hds-datepicker__day--today__1bi5J"
-                                            data-date="2022-01-19"
-                                            tabindex="-1"
+                                              <span
+                                                aria-hidden="true"
+                                                class="DatePicker-module_hds-datepicker__day__wrapper__2cskJ"
+                                              >
+                                                5
+                                              </span>
+                                              <span
+                                                class="DatePicker-module_hds-datepicker__day__wrapper-vhidden__3Brgt"
+                                              >
+                                                tammikuu 5
+                                              </span>
+                                            </button>
+                                          </td>
+                                          <td
+                                            class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
                                           >
                                             <button
                                               aria-pressed="false"
@@ -7352,18 +7076,21 @@ Object {
                                             data-date="2022-01-11"
                                             tabindex="-1"
                                           >
-                                            tammikuu 13
-                                          </span>
-                                        </button>
-                                      </td>
-                                      <td
-                                        class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
-                                      >
-                                        <button
-                                          aria-pressed="false"
-                                          class="DatePicker-module_hds-datepicker__day__2_8jB"
-                                          data-date="2022-01-14"
-                                          tabindex="-1"
+                                            <span
+                                              aria-hidden="true"
+                                              class="DatePicker-module_hds-datepicker__day__wrapper__2cskJ"
+                                            >
+                                              11
+                                            </span>
+                                            <span
+                                              class="DatePicker-module_hds-datepicker__day__wrapper-vhidden__3Brgt"
+                                            >
+                                              tammikuu 11
+                                            </span>
+                                          </button>
+                                        </td>
+                                        <td
+                                          class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
                                         >
                                           <button
                                             aria-pressed="false"
@@ -7483,19 +7210,21 @@ Object {
                                             data-date="2022-01-17"
                                             tabindex="-1"
                                           >
-                                            tammikuu 18
-                                          </span>
-                                        </button>
-                                      </td>
-                                      <td
-                                        aria-current="date"
-                                        class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
-                                      >
-                                        <button
-                                          aria-pressed="false"
-                                          class="DatePicker-module_hds-datepicker__day__2_8jB DatePicker-module_hds-datepicker__day--today__1bi5J"
-                                          data-date="2022-01-19"
-                                          tabindex="-1"
+                                            <span
+                                              aria-hidden="true"
+                                              class="DatePicker-module_hds-datepicker__day__wrapper__2cskJ"
+                                            >
+                                              17
+                                            </span>
+                                            <span
+                                              class="DatePicker-module_hds-datepicker__day__wrapper-vhidden__3Brgt"
+                                            >
+                                              tammikuu 17
+                                            </span>
+                                          </button>
+                                        </td>
+                                        <td
+                                          class="DatePicker-module_hds-datepicker__day-cell__2YHPj"
                                         >
                                           <button
                                             aria-pressed="false"
