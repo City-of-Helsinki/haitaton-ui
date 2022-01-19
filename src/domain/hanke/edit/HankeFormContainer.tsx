@@ -22,8 +22,7 @@ const getHanke = async (hankeTunnus?: string) => {
 };
 
 const deleteHanke = (hankeTunnus: string) => {
-  const data = api.delete<HankeDataDraft>(`/hankkeet/${hankeTunnus}`);
-  return data;
+  return api.delete<HankeDataDraft>(`/hankkeet/${hankeTunnus}`);
 };
 
 const useHanke = (hankeTunnus?: string) =>
