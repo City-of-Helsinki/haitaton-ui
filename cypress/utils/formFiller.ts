@@ -60,7 +60,7 @@ export const selectHankeVaihe = (
 };
 
 export const fillForm0 = (hankeData: HankeDataDraft) => {
-  cy.get('[data-testid=hankeFormHeader]').should('exist');
+  cy.get('[data-testid=formStepIndicator]').should('exist');
 
   if (hankeData.onYKTHanke) {
     cy.get('input[data-testid=onYKTHanke]').click();
@@ -90,7 +90,7 @@ export const drawPolygonToMap = () => {
   cy.get('#ol-map').click(drawCoordinateX + 300, drawCoordinateY + 300);
   cy.get('#ol-map').click(drawCoordinateX, drawCoordinateY + 300);
   cy.get('#ol-map').dblclick(drawCoordinateX + 20, drawCoordinateY + 20);
-  cy.get('[data-testid=hankeFormHeader]').click();
+  cy.get('[data-testid=formStepIndicator]').click();
 };
 
 export const saveDraft = () => {
@@ -215,7 +215,7 @@ export const selectTarinaHaitta = (tarinaHaitta: HANKE_TARINAHAITTA_KEY) => {
 };
 
 export const fillForm4 = (hankeData: HankeDataDraft) => {
-  cy.get('[data-testid=hankeFormHeader]').should('exist');
+  cy.get('[data-testid=formStepIndicator]').should('exist');
 
   if (hankeData.haittaAlkuPvm) {
     cy.get('#haittaAlkuPvm').type(hankeData.haittaAlkuPvm);
@@ -229,7 +229,7 @@ export const fillForm4 = (hankeData: HankeDataDraft) => {
     cy.get('#haittaLoppuPvm').type(hankeData.loppuPvm);
   }
 
-  cy.get('[data-testid=hankeFormHeader]').click(); // Close datepicker because it is over kaistaHaitta-toggle-button
+  cy.get('[data-testid=formStepIndicator]').click(); // Close datepicker because it is over kaistaHaitta-toggle-button
 
   if (hankeData.kaistaHaitta) {
     selectKaistaHaitta(hankeData.kaistaHaitta);

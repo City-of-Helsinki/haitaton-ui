@@ -25,7 +25,7 @@ const FormStepIndicator: React.FC<PropTypes> = ({ currentFormPage, formData, isS
 
   return (
     <div className={styles.stepIndicatorContainer}>
-      <div className={styles.stepIndicator}>
+      <div className={styles.stepIndicator} data-testid="formStepIndicator">
         <ol>
           {formSteps.map((formStep, i) => {
             const isSeen = currentFormPage >= i;

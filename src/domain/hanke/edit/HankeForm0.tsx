@@ -25,7 +25,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
 
   return (
     <div className="form0">
-      <Text tag="h2" spacing="s" weight="bold" data-testid="hankeFormHeader">
+      <Text tag="h2" spacing="s" weight="bold">
         {t('hankeForm:perustiedotForm:header')}
         <Tooltip tooltipLabel={t(`hankeForm:toolTips:tipOpenLabel`)} placement="auto">
           {t(`hankeForm:toolTips:perustiedot`)}
