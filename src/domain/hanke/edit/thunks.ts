@@ -25,7 +25,7 @@ export const saveForm = createAsyncThunk(
     }
 
     if (data.hankeTunnus && currentFormPage === 1) {
-      thunkApi.dispatch(saveGeometryData({ hankeTunnus: data.hankeTunnus }));
+      await thunkApi.dispatch(saveGeometryData({ hankeTunnus: data.hankeTunnus }));
     }
 
     const response = data.hankeTunnus
