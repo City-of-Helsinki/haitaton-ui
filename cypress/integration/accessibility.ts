@@ -34,6 +34,13 @@ context('Accessibility', () => {
     cy.checkA11y();
   });
 
+  it('Frontpage should be accessible', () => {
+    cy.login('/');
+    cy.injectAxe();
+    cy.configureAxe(axeConfig);
+    cy.checkA11y();
+  });
+
   it('Saavutettavuusseloste should be accessible', () => {
     cy.login('/saavutettavuusseloste');
     cy.injectAxe();

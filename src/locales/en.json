@@ -321,6 +321,49 @@
     },
     "indexesNotCalculated": "EN: Haittaindeksejä ei ole laskettu."
   },
+  "homepage": {
+    "pageTitle": "EN: Tervetuloa Haitaton-asiointiportaaliin",
+    "hanke": {
+      "title": "EN: Hanke",
+      "description": "EN: Hankkeet toimivat hakemuskokonaisuuksina, joista pystyt seuraamaan hankkeeseen liittyvien hakemusten tilaa.",
+      "actionText": "EN: Luo hanke"
+    },
+    "hakemus": {
+      "title": "EN: Hakemus/Työvaihe",
+      "description": "EN: Hakemukset ovat kaivu- tai aluevuokraus-ilmoituksia tai tilapäisiä liikennejärjestelyjä.",
+      "actionText": "EN: Luo hakemus"
+    },
+    "johtotietoselvitys": {
+      "title": "EN: Johtotietoselvitys",
+      "description": "EN: Selvityspyyntö tietyn alueen johtotiedoista. Tarvitaan kaivuilmoituksen liitteenä.",
+      "actionText": "EN: Tee Johtotietoselvitys"
+    },
+    "valmistelu": {
+      "title": "EN: Valmisteluvaiheessa oleva hanke",
+      "description": "EN: Pitkän ajanjakson tarkasteluun ja suunnitteluun tarkoitettu hanke, joka ei koostu hakemuksista.",
+      "actionText": "EN: Luo ohjelmointihanke"
+    },
+    "hankesalkku": {
+      "title": "EN: Hankesalkku",
+      "description": "EN: Hankesalkusta näet hankkeet ja hakemukset jotka omistat tai olet valtuutettu näkemään.",
+      "actionText": "EN: Avaa hankesalkku"
+    },
+    "hankelista": {
+      "title": "EN: Hankelista",
+      "description": "EN: Hankelistasta näet kaikki julkiset hankkeet.",
+      "actionText": "EN: Avaa hankelista"
+    },
+    "kartta": {
+      "title": "EN: Kartta",
+      "description": "EN: Kartalta näet halutulta aikaväliltä kaikki julkiset hankkeet ja niiden sijainnin.",
+      "actionText": "EN: Avaa kartta"
+    },
+    "tietoja_haitattomasta": {
+      "title": "EN: Tietoja Haitattomasta",
+      "description": "EN: Täältä löydät tarkempaa tietoa ilmoistus prosessista, sekä Haitattoman eri toiminnallisuuksista.",
+      "actionText": "EN: Lue lisää haitattomasta"
+    }
+  },
   "hankePortfolio": {
     "filters": "EN: Rajausehdot",
     "pageHeader": "EN:Hankesalkku",
