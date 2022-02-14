@@ -320,6 +320,49 @@
     },
     "indexesNotCalculated": "Haittaindeksejä ei ole laskettu."
   },
+  "homepage": {
+    "pageTitle": "Tervetuloa Haitaton-asiointiportaaliin",
+    "hanke": {
+      "title": "Hanke",
+      "description": "Hankkeet toimivat hakemuskokonaisuuksina, joista pystyt seuraamaan hankkeeseen liittyvien hakemusten tilaa.",
+      "actionText": "Luo hanke"
+    },
+    "hakemus": {
+      "title": "Hakemus/Työvaihe",
+      "description": "Hakemukset ovat kaivu- tai aluevuokraus-ilmoituksia tai tilapäisiä liikennejärjestelyjä.",
+      "actionText": "Luo hakemus"
+    },
+    "johtotietoselvitys": {
+      "title": "Johtotietoselvitys",
+      "description": "Selvityspyyntö tietyn alueen johtotiedoista. Tarvitaan kaivuilmoituksen liitteenä.",
+      "actionText": "Tee Johtotietoselvitys"
+    },
+    "valmistelu": {
+      "title": "Valmisteluvaiheessa oleva hanke",
+      "description": "Pitkän ajanjakson tarkasteluun ja suunnitteluun tarkoitettu hanke, joka ei koostu hakemuksista.",
+      "actionText": "Luo ohjelmointihanke"
+    },
+    "hankesalkku": {
+      "title": "Hankesalkku",
+      "description": "Hankesalkusta näet hankkeet ja hakemukset jotka omistat tai olet valtuutettu näkemään.",
+      "actionText": "Avaa hankesalkku"
+    },
+    "hankelista": {
+      "title": "Hankelista",
+      "description": "Hankelistasta näet kaikki julkiset hankkeet.",
+      "actionText": "Avaa hankelista"
+    },
+    "kartta": {
+      "title": "Kartta",
+      "description": "Kartalta näet halutulta aikaväliltä kaikki julkiset hankkeet ja niiden sijainnin.",
+      "actionText": "Avaa kartta"
+    },
+    "tietoja_haitattomasta": {
+      "title": "Tietoja Haitattomasta",
+      "description": "Täältä löydät tarkempaa tietoa ilmoistus prosessista, sekä Haitattoman eri toiminnallisuuksista.",
+      "actionText": "Lue lisää haitattomasta"
+    }
+  },
   "hankePortfolio": {
     "filters": "Rajausehdot",
     "pageHeader": "Hankesalkku",

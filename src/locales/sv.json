@@ -320,6 +320,49 @@
     },
     "indexesNotCalculated": "SV: Haittaindeksejä ei ole laskettu."
   },
+  "homepage": {
+    "pageTitle": "SV: Tervetuloa Haitaton-asiointiportaaliin",
+    "hanke": {
+      "title": "SV: Hanke",
+      "description": "SV: Hankkeet toimivat hakemuskokonaisuuksina, joista pystyt seuraamaan hankkeeseen liittyvien hakemusten tilaa.",
+      "actionText": "SV: Luo hanke"
+    },
+    "hakemus": {
+      "title": "SV: Hakemus/Työvaihe",
+      "description": "SV: Hakemukset ovat kaivu- tai aluevuokraus-ilmoituksia tai tilapäisiä liikennejärjestelyjä.",
+      "actionText": "SV: Luo hakemus"
+    },
+    "johtotietoselvitys": {
+      "title": "SV: Johtotietoselvitys",
+      "description": "SV: Selvityspyyntö tietyn alueen johtotiedoista. Tarvitaan kaivuilmoituksen liitteenä.",
+      "actionText": "SV: Tee Johtotietoselvitys"
+    },
+    "valmistelu": {
+      "title": "SV: Valmisteluvaiheessa oleva hanke",
+      "description": "SV: Pitkän ajanjakson tarkasteluun ja suunnitteluun tarkoitettu hanke, joka ei koostu hakemuksista.",
+      "actionText": "SV: Luo ohjelmointihanke"
+    },
+    "hankesalkku": {
+      "title": "SV: Hankesalkku",
+      "description": "SV: Hankesalkusta näet hankkeet ja hakemukset jotka omistat tai olet valtuutettu näkemään.",
+      "actionText": "SV: Avaa hankesalkku"
+    },
+    "hankelista": {
+      "title": "SV: Hankelista",
+      "description": "SV: Hankelistasta näet kaikki julkiset hankkeet.",
+      "actionText": "SV: Avaa hankelista"
+    },
+    "kartta": {
+      "title": "SV: Kartta",
+      "description": "SV: Kartalta näet halutulta aikaväliltä kaikki julkiset hankkeet ja niiden sijainnin.",
+      "actionText": "SV: Avaa kartta"
+    },
+    "tietoja_haitattomasta": {
+      "title": "SV: Tietoja Haitattomasta",
+      "description": "SV: Täältä löydät tarkempaa tietoa ilmoistus prosessista, sekä Haitattoman eri toiminnallisuuksista.",
+      "actionText": "SV: Lue lisää haitattomasta"
+    }
+  },
   "hankePortfolio": {
     "filters": "SV: Rajausehdot",
     "pageHeader": "SV:Hankesalkku",
