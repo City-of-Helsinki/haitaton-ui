@@ -1,12 +1,10 @@
 .hankeHover {
   position: absolute;
-  top: 1rem;
-  right: 50%;
-  transform: translateX(50%);
   z-index: 1000;
 
   div {
     max-width: 21.875rem;
+    min-width: 21.875rem;
     background-color: var(--color-coat-of-arms-light);
     padding: var(--spacing-xs);
     font-size: var(--fontsize-body-s);

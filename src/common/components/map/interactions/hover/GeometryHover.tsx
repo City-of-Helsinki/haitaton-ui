@@ -1,30 +1,26 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { MapBrowserEvent } from 'ol';
-import OLVectorLayer from 'ol/layer/Vector';
 import MapContext from '../../MapContext';
 import { MapInstance } from '../../types';
 import HoverContext from './HoverContext';
 
 const GeometryHover: React.FC = ({ children }) => {
   const { map } = useContext(MapContext);
-  const [hoveredHankeTunnus, setHoveredHankeTunnus] = useState('');
+  const [hoverPosition, setHoverPosition] = useState([0, 0]);
+  const [hoveredHankeTunnukset, setHoveredHankeTunnukset] = useState(['']);
 
   const highlightHankeOnPixel = (mapInstance: MapInstance, evt: MapBrowserEvent<UIEvent>) => {
-    mapInstance?.getLayers().forEach((BaseLayer) => {
-      if (BaseLayer instanceof OLVectorLayer) {
-        BaseLayer.getFeatures(evt.pixel).then((features) => {
-          if (features.length > 0) {
-            features.some((feature) => {
-              const hankeTunnus = feature.get('hankeTunnus');
-              setHoveredHankeTunnus(hankeTunnus);
-              return true;
-            });
-          } else {
-            setHoveredHankeTunnus('');
-          }
-        });
-      }
-    });
+    setHoveredHankeTunnukset([]);
+    const hankeTunnuksetAtPixel: string[] = [];
+    const foundFeatures = mapInstance?.getFeaturesAtPixel(evt.pixel) || [];
+    if (foundFeatures?.length > 0) {
+      foundFeatures?.forEach((feature) => {
+        const hankeTunnus = String(feature.get('hankeTunnus'));
+        hankeTunnuksetAtPixel.push(hankeTunnus);
+      });
+    }
+    setHoveredHankeTunnukset(hankeTunnuksetAtPixel);
+    setHoverPosition(evt.pixel);
   };
 
   useEffect(() => {
@@ -36,7 +32,11 @@ const GeometryHover: React.FC = ({ children }) => {
     }
   }, [map]);
 
-  return <HoverContext.Provider value={{ hoveredHankeTunnus }}>{children}</HoverContext.Provider>;
+  return (
+    <HoverContext.Provider value={{ hoverPosition, hoveredHankeTunnukset }}>
+      {children}
+    </HoverContext.Provider>
+  );
 };
 
 export default GeometryHover;
