@@ -34,6 +34,14 @@ context('Accessibility', () => {
     cy.checkA11y();
   });
 
+  it('Projectportfolio should be accessible', () => {
+    cy.login('/hankesalkku');
+    cy.injectAxe();
+    cy.configureAxe(axeConfig);
+    cy.checkA11y();
+  });
+
+  /*
   it('Saavutettavuusseloste should be accessible', () => {
     cy.login('/saavutettavuusseloste');
     cy.injectAxe();

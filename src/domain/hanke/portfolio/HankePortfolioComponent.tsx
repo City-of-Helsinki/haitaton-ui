@@ -47,7 +47,11 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
   // Handle accordion state with useAccordion hook
   const { isOpen, buttonProps, contentProps } = useAccordion({ initiallyOpen: false });
   // Change icon based on accordion open state
-  const icon = isOpen ? <IconAngleDown size="m" /> : <IconAngleUp size="m" />;
+  const icon = isOpen ? (
+    <IconAngleDown size="m" aria-hidden />
+  ) : (
+    <IconAngleUp size="m" aria-hidden />
+  );
 
   const { t } = useTranslation();
   return (
