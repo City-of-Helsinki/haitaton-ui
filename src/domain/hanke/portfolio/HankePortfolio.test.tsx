@@ -13,11 +13,6 @@ const endDateLabel = 'Ajanjakson loppu';
 afterEach(cleanup);
 
 describe.only('HankePortfolio', () => {
-  test('Should match snapshot', async () => {
-    const renderedComponent = render(<HankePortfolioComponent hankkeet={hankeList} />);
-    expect(renderedComponent).toMatchSnapshot();
-  });
-
   test('Changing filter startDates filters correct number of projects', async () => {
     const renderedComponent = render(<HankePortfolioComponent hankkeet={hankeList} />);
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
