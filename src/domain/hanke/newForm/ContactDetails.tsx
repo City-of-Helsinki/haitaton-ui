@@ -1,29 +1,22 @@
-import { useFormik } from 'formik';
+import { useFormikContext } from 'formik';
+import { TextArea } from 'hds-react';
 import React from 'react';
+import { HakemusFormValues } from './types';
 
 const ContactDetails: React.FC = () => {
-  const formik = useFormik({
-    initialValues: {
-      email: '',
-    },
-    onSubmit: (values) => {
-      console.log(JSON.stringify(values, null, 2));
-    },
-  });
+  const formik = useFormikContext<HakemusFormValues>();
   return (
     <div>
-      <h1>Step2</h1>
-      <form>
-        <label htmlFor="email">Email address</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          onChange={formik.handleChange}
-          value={formik.values.email}
-        />
-        <button type="submit">Submit</button>
-      </form>
+      <h1>ContactDetails</h1>
+      <TextArea
+        id="hakijanNimi"
+        label="hakijannimi"
+        placeholder="hakijannimi"
+        helperText="Helper text"
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        value={formik.values.hakijanNimi}
+      />
     </div>
   );
 };
