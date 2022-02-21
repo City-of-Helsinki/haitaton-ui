@@ -93,6 +93,13 @@
         "title": "EN:Haitaton Beta - Hankkeen muokkaus"
       }
     },
+    "HAKEMUS": {
+      "path": "/hakemus/*",
+      "headerLabel": "Luo uusi hakemus",
+      "meta": {
+        "title": "Haitaton Beta - Luo uusi hakemus"
+      }
+    },
     "HAITATON_INFO": {
       "path": "/info",
       "headerLabel": "EN: Tietoja Haitattomasta",
