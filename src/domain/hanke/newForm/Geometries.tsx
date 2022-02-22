@@ -7,7 +7,7 @@ const Geometries: React.FC = () => {
   const formik = useFormikContext<HakemusFormValues>();
   return (
     <div>
-      <h1>Geometries</h1>
+      <h1>Geometrioiden piirto kartalle</h1>
       <TextArea
         id="kuvaus"
         label="Kuvaus"

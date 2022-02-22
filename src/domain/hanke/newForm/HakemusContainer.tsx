@@ -43,9 +43,15 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextLink, backLink }) => {
 };
 const HakemusContainer: React.FC = () => {
   const initialValues: HakemusFormValues = {
+    hankeTunnus: '',
+    onYKTHanke: false,
     nimi: '',
+    alkuPvm: '',
+    loppuPvm: '',
     kuvaus: '',
     hakijanNimi: '',
+    vaihe: '',
+    suunnitteluVaihe: null,
   };
 
   const formSteps = [
@@ -55,14 +61,14 @@ const HakemusContainer: React.FC = () => {
       title: 'Perustiedot',
     },
     {
+      path: '/geometry',
+      element: <Geometries />,
+      title: 'Hankkeen alue',
+    },
+    {
       path: '/contactdetails',
       element: <ContactDetails />,
       title: 'Yhteystiedot',
-    },
-    {
-      path: '/geometry',
-      element: <Geometries />,
-      title: 'Aluetiedot',
     },
     {
       path: '/attachments',
