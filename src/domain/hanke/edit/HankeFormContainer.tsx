@@ -15,7 +15,7 @@ import ConfirmationDialog from '../../../common/components/HDSConfirmationDialog
 import api from '../../api/api';
 import { t } from '../../../locales/i18nForTests';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
-import GenericForm from '../../forms/GenericForm';
+// import GenericForm from '../../forms/GenericForm';
 
 const getHanke = async (hankeTunnus?: string) => {
   const { data } = await api.get<HankeDataDraft>(`/hankkeet/${hankeTunnus}`);
@@ -111,9 +111,9 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
 
   return (
     <>
-      <GenericForm formData={formData} isSaving={isSaving}>
+      {/* <GenericForm formData={formData} isSaving={isSaving}>
         aaaaa
-      </GenericForm>
+  </GenericForm> */}
       <HankeForm
         formData={formData}
         onSave={handleSave}
