@@ -2,12 +2,12 @@ import React from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Formik, useFormikContext } from 'formik';
 import { Button } from 'hds-react';
-import * as Yup from 'yup';
 import BasicHankeInfo from './BasicHankeInfo';
-import ContactDetails from './ContactDetails';
+import Contacts from './Contacts';
 import Geometries from './Geometries';
-import Attachments from './Attachments';
-import { HakemusFormValues } from './types';
+import Haitat from './Haitat';
+import AdditionalInformation from './AdditionalInformation';
+import { HakemusFormValues, HankeContact } from './types';
 
 interface ButtonProps {
   nextLink?: string;
@@ -31,17 +31,36 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextLink, backLink }) => {
       {nextLink && (
         <Button
           onClick={() => {
+            console.log('Next clicked');
+            console.log(formik.values);
             navigate(`/fi/hakemus${nextLink}`); // TODO: localized links
           }}
         >
           {nextLink}
         </Button>
       )}
-      <Button onClick={() => formik.submitForm()}>Submit</Button>
+      <Button
+        onClick={() => {
+          formik.submitForm();
+        }}
+      >
+        Submit
+      </Button>
     </div>
   );
 };
 const HakemusContainer: React.FC = () => {
+  const initialContact: HankeContact = {
+    etunimi: '',
+    sukunimi: '',
+    email: '',
+    id: null,
+    organisaatioId: null,
+    organisaatioNimi: '',
+    osasto: '',
+    puhelinnumero: '',
+  };
+
   const initialValues: HakemusFormValues = {
     hankeTunnus: '',
     onYKTHanke: false,
@@ -52,6 +71,18 @@ const HakemusContainer: React.FC = () => {
     hakijanNimi: '',
     vaihe: '',
     suunnitteluVaihe: null,
+    tyomaaKatuosoite: '',
+    haittaAlkuPvm: '',
+    haittaLoppuPvm: '',
+    kaistaHaitta: null,
+    kaistaPituusHaitta: null,
+    meluHaitta: null,
+    polyHaitta: null,
+    tarinaHaitta: null,
+    geometriat: null,
+    omistajat: [initialContact],
+    toteuttajat: [initialContact],
+    arvioijat: [initialContact],
   };
 
   const formSteps = [
@@ -67,13 +98,18 @@ const HakemusContainer: React.FC = () => {
     },
     {
       path: '/contactdetails',
-      element: <ContactDetails />,
+      element: <Contacts />,
       title: 'Yhteystiedot',
     },
     {
-      path: '/attachments',
-      element: <Attachments />,
-      title: 'Liitteet',
+      path: '/additional-information',
+      element: <AdditionalInformation />,
+      title: 'Hankkeen lisätiedot',
+    },
+    {
+      path: '/haitat',
+      element: <Haitat />,
+      title: 'Hankkeen haitat',
     },
   ];
   return (
@@ -81,15 +117,9 @@ const HakemusContainer: React.FC = () => {
       <Formik
         initialValues={initialValues}
         onSubmit={(values, actions) => {
+          console.log('Formik has submitted');
           console.log({ values, actions });
-          alert(JSON.stringify(values, null, 2));
-          actions.setSubmitting(false);
         }}
-        validationSchema={Yup.object().shape({
-          nimi: Yup.string().required('Please enter this text'),
-          kuvaus: Yup.string().required('Please enter your kuvaus text'),
-          hakijanNimi: Yup.string().required('Please enter hakijanNimi'),
-        })}
       >
         <Routes>
           {formSteps.map((formStep, i) => {

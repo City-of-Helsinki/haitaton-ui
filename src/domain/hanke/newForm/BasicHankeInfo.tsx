@@ -1,7 +1,8 @@
 import React, { useRef } from 'react';
 import { useFormikContext } from 'formik';
 import { Checkbox, TextArea, TextInput, DateInput, Select } from 'hds-react';
-import { HakemusFormValues } from './types';
+import { $enum } from 'ts-enum-util';
+import { HakemusFormValues, HANKE_SUUNNITTELUVAIHE, HANKE_VAIHE, Option } from './types';
 
 // TODO: add tooltips
 // TODO: add validation error messages
@@ -20,12 +21,12 @@ const BasicHankeInfo: React.FC = () => {
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values.hankeTunnus}
+        disabled
       />
       <Checkbox
         id="onYKTHanke"
         name="onYKTHanke"
         label="Hanke on YKT-hanke"
-        required
         checked={formik.values.onYKTHanke === true}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
@@ -85,31 +86,25 @@ const BasicHankeInfo: React.FC = () => {
       <Select
         required
         label="Hankkeen vaihe"
-        options={[
-          { label: 'Ohjelmointi', value: 'OHJELMOINTI' },
-          { label: 'Suunnittelu', value: 'SUUNNITTELU' },
-          { label: 'Rakentaminen', value: 'RAKENTAMINEN' },
-        ]}
-        onChange={(selection: any) => {
+        options={$enum(HANKE_VAIHE).map((value) => ({
+          value,
+          label: value,
+        }))}
+        onChange={(selection: Option) => {
+          if (selection.value !== HANKE_VAIHE.SUUNNITTELU) {
+            formik.setFieldValue('suunnitteluVaihe', null);
+          }
           formik.setFieldValue('vaihe', selection.value);
         }}
       />
       <Select
         required
         label="Hankkeen suunnitteluvaihe"
-        options={[
-          { label: 'Yleis- tai hankesuunnittelu', value: 'YLEIS_TAI_HANKE' },
-          {
-            label: 'Katusuunnittelu tai aluevarauksen suunnittelu',
-            value: 'KATUSUUNNITTELU_TAI_ALUEVARAUS',
-          },
-          { label: 'Rakennus- tai toteutussuunnittelu', value: 'RAKENNUS_TAI_TOTEUTUS' },
-          {
-            label: 'Työmaan tai hankkeen aikainen suunnittelu',
-            value: 'TYOMAAN_TAI_HANKKEEN_AIKAINEN',
-          },
-        ]}
-        onChange={(selection: any) => {
+        options={$enum(HANKE_SUUNNITTELUVAIHE).map((value) => ({
+          value,
+          label: value,
+        }))}
+        onChange={(selection: Option) => {
           formik.setFieldValue('suunnitteluVaihe', selection.value);
         }}
       />
