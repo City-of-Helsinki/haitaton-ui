@@ -100,6 +100,7 @@ const BasicHankeInfo: React.FC = () => {
       <Select
         required
         label="Hankkeen suunnitteluvaihe"
+        disabled={!(HANKE_VAIHE.SUUNNITTELU === formik.values.vaihe)}
         options={$enum(HANKE_SUUNNITTELUVAIHE).map((value) => ({
           value,
           label: value,

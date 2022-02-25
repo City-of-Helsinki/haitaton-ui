@@ -7,21 +7,73 @@ import Contacts from './Contacts';
 import Geometries from './Geometries';
 import Haitat from './Haitat';
 import AdditionalInformation from './AdditionalInformation';
-import { HakemusFormValues, initialContact } from './types';
+import { HakemusFormValues, HankeContact, initialContact } from './types';
+import { FORMFIELD } from '../edit/types';
+import { PartialExcept } from '../../../common/types/utils';
+import { HankeContactKey } from '../../types/hanke';
+import api from '../../api/api';
 
 interface ButtonProps {
   nextLink?: string;
   backLink?: string;
 }
 
+const isContactEmpty = ({
+  etunimi,
+  sukunimi,
+  email,
+  puhelinnumero,
+  organisaatioNimi,
+}: HankeContact) =>
+  etunimi === '' &&
+  sukunimi === '' &&
+  email === '' &&
+  puhelinnumero === '' &&
+  organisaatioNimi === '';
+
+const filterEmptyContacts = (
+  formData: PartialExcept<HakemusFormValues, HankeContactKey>
+): PartialExcept<HakemusFormValues, HankeContactKey> => ({
+  ...formData,
+  [FORMFIELD.OMISTAJAT]: formData[FORMFIELD.OMISTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
+  [FORMFIELD.ARVIOIJAT]: formData[FORMFIELD.ARVIOIJAT]?.filter((v) => !isContactEmpty(v)) || [],
+  [FORMFIELD.TOTEUTTAJAT]: formData[FORMFIELD.TOTEUTTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
+});
+
 const NavigationButtons: React.FC<ButtonProps> = ({ nextLink, backLink }) => {
   const navigate = useNavigate();
-  const formik = useFormikContext();
+  const formik = useFormikContext<HakemusFormValues>();
+
+  const saveFormState = async () => {
+    const formData = formik.values;
+    const dataWithoutEmptyFields: Partial<HakemusFormValues> = Object.fromEntries(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      Object.entries(formData).filter(([key, value]) => {
+        return value !== null && value !== '';
+      })
+    );
+    const dataWithoutEmptyContacts = filterEmptyContacts({
+      ...dataWithoutEmptyFields,
+      omistajat: dataWithoutEmptyFields.omistajat ? dataWithoutEmptyFields.omistajat : [],
+      arvioijat: dataWithoutEmptyFields.arvioijat ? dataWithoutEmptyFields.arvioijat : [],
+      toteuttajat: dataWithoutEmptyFields.toteuttajat ? dataWithoutEmptyFields.toteuttajat : [],
+    });
+
+    const response = formData.hankeTunnus
+      ? await api.put<Partial<HakemusFormValues>>(
+          `/hankkeet/${formData.hankeTunnus}`,
+          dataWithoutEmptyContacts
+        )
+      : await api.post<Partial<HakemusFormValues>>('/hankkeet', dataWithoutEmptyContacts);
+    console.log('Response received after saving hakemus');
+    console.log(response);
+  };
   return (
     <div>
       {backLink && (
         <Button
           onClick={() => {
+            saveFormState();
             navigate(`/fi/hakemus${backLink}`); // TODO: localized links
           }}
         >
@@ -33,6 +85,7 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextLink, backLink }) => {
           onClick={() => {
             console.log('Next clicked');
             console.log(formik.values);
+            saveFormState();
             navigate(`/fi/hakemus${nextLink}`); // TODO: localized links
           }}
         >
@@ -49,6 +102,7 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextLink, backLink }) => {
     </div>
   );
 };
+
 const HakemusContainer: React.FC = () => {
   const initialValues: HakemusFormValues = {
     hankeTunnus: '',
