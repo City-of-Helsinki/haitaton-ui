@@ -1,14 +1,16 @@
 import { useFormikContext } from 'formik';
 import { TextInput, Checkbox, Combobox } from 'hds-react';
 import React, { useState } from 'react';
+import { Organization } from '../edit/types';
 import { HakemusFormValues, HANKE_CONTACT_KEY, Option } from './types';
 
 type Props = {
   contactType: HANKE_CONTACT_KEY;
   index: number;
+  organizationList: Organization[];
 };
 
-const ContactDetails: React.FC<Props> = ({ contactType, index }) => {
+const ContactDetails: React.FC<Props> = ({ contactType, index, organizationList }) => {
   const [addOmaOrganisaatio, setAddOmaOrganisaatio] = useState(false);
   const formik = useFormikContext<HakemusFormValues>();
 
@@ -46,13 +48,16 @@ const ContactDetails: React.FC<Props> = ({ contactType, index }) => {
       <Combobox<Option>
         id={`${contactType}-${index}-organisaatio`}
         label="Organisaatio"
+        disabled={addOmaOrganisaatio}
         clearButtonAriaLabel="Clear selection"
         selectedItemRemoveButtonAriaLabel="Remove"
         toggleButtonAriaLabel="toggle selection"
-        options={[{ label: 'asd', value: 'ysd' }]}
-        onChange={(change: Option) => {
-          console.log('Vaihtui');
-          console.log(change);
+        options={organizationList.map((organization) => ({
+          value: organization.id.toString(),
+          label: organization.nimi,
+        }))}
+        onChange={(selection: Option) => {
+          formik.setFieldValue(`${contactType}-{index}-organisaatio`, selection.value);
         }}
       />
       <Checkbox

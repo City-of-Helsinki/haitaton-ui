@@ -7,7 +7,7 @@ import Contacts from './Contacts';
 import Geometries from './Geometries';
 import Haitat from './Haitat';
 import AdditionalInformation from './AdditionalInformation';
-import { HakemusFormValues, HankeContact } from './types';
+import { HakemusFormValues, initialContact } from './types';
 
 interface ButtonProps {
   nextLink?: string;
@@ -50,17 +50,6 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextLink, backLink }) => {
   );
 };
 const HakemusContainer: React.FC = () => {
-  const initialContact: HankeContact = {
-    etunimi: '',
-    sukunimi: '',
-    email: '',
-    id: null,
-    organisaatioId: null,
-    organisaatioNimi: '',
-    osasto: '',
-    puhelinnumero: '',
-  };
-
   const initialValues: HakemusFormValues = {
     hankeTunnus: '',
     onYKTHanke: false,
@@ -112,6 +101,7 @@ const HakemusContainer: React.FC = () => {
       title: 'Hankkeen haitat',
     },
   ];
+
   return (
     <>
       <Formik

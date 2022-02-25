@@ -151,3 +151,14 @@ export type HankeContact = {
   organisaatioNimi: string;
   osasto: string;
 };
+
+export const initialContact: HankeContact = {
+  etunimi: '',
+  sukunimi: '',
+  email: '',
+  id: null,
+  organisaatioId: null,
+  organisaatioNimi: '',
+  osasto: '',
+  puhelinnumero: '',
+};
