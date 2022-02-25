@@ -1,5 +1,5 @@
 import { useFormikContext } from 'formik';
-import { TextInput, Checkbox, Combobox } from 'hds-react';
+import { TextInput, Checkbox, Select } from 'hds-react';
 import React, { useState } from 'react';
 import { Organization } from '../edit/types';
 import { HakemusFormValues, HANKE_CONTACT_KEY, Option } from './types';
@@ -17,51 +17,52 @@ const ContactDetails: React.FC<Props> = ({ contactType, index, organizationList 
   return (
     <div>
       <h1>ContactType: {contactType}</h1>
+      <h2>{JSON.stringify(formik.values[contactType])}</h2>
       <TextInput
-        id={`${contactType}-${index}-etunimi`}
+        id={`${contactType}.${index}.etunimi`}
         label="Etunimi"
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values[contactType][index].etunimi}
       />
       <TextInput
-        id={`${contactType}-${index}-sukunimi`}
+        id={`${contactType}.${index}.sukunimi`}
         label="Sukunimi"
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values[contactType][index].sukunimi}
       />
       <TextInput
-        id={`${contactType}-${index}-email`}
+        id={`${contactType}.${index}.email`}
         label="Sähköposti"
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values[contactType][index].email}
       />
       <TextInput
-        id={`${contactType}-${index}-puhelinnumero`}
+        id={`${contactType}.${index}.puhelinnumero`}
         label="Puhelinnumero"
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values[contactType][index].puhelinnumero}
       />
-      <Combobox<Option>
-        id={`${contactType}-${index}-organisaatio`}
-        label="Organisaatio"
+      <Select
+        id={`${contactType}.${index}.organisaatioId`}
         disabled={addOmaOrganisaatio}
-        clearButtonAriaLabel="Clear selection"
-        selectedItemRemoveButtonAriaLabel="Remove"
-        toggleButtonAriaLabel="toggle selection"
+        label="Organisaatio"
         options={organizationList.map((organization) => ({
           value: organization.id.toString(),
           label: organization.nimi,
         }))}
-        onChange={(selection: Option) => {
-          formik.setFieldValue(`${contactType}-{index}-organisaatio`, selection.value);
+        onChange={(option: Option) => {
+          formik.setFieldValue(
+            `${contactType}.${index}.organisaatioId`,
+            parseInt(option.value, 10)
+          );
         }}
       />
       <Checkbox
-        id={`${contactType}-${index}-addOmaOrganisaatio`}
+        id={`${contactType}.${index}.addOmaOrganisaatio`}
         name="addOmaOrganisaatio"
         label="Lisää oma organisaatio"
         checked={addOmaOrganisaatio}
@@ -70,7 +71,7 @@ const ContactDetails: React.FC<Props> = ({ contactType, index, organizationList 
         }}
       />
       <TextInput
-        id={`${contactType}-${index}-omaOrganisaatio`}
+        id={`${contactType}.${index}.omaOrganisaatio`}
         label="Syötä oma organisaatio"
         disabled={!addOmaOrganisaatio}
         onChange={formik.handleChange}
