@@ -7,7 +7,7 @@ import Contacts from './Contacts';
 import Geometries from './Geometries';
 import Haitat from './Haitat';
 import AdditionalInformation from './AdditionalInformation';
-import { HakemusFormValues, HankeContact, initialContact } from './types';
+import { HakemusFormValues, HankeContact, HANKE_CONTACT_TYPE, initialContact } from './types';
 import { FORMFIELD } from '../edit/types';
 import { PartialExcept } from '../../../common/types/utils';
 import { HankeContactKey } from '../../types/hanke';
@@ -44,30 +44,61 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextLink, backLink }) => {
   const navigate = useNavigate();
   const formik = useFormikContext<HakemusFormValues>();
 
+  const updateFormFieldsWithAPIResponse = (
+    data: HakemusFormValues | Partial<HakemusFormValues>
+  ) => {
+    const dataKeys = Object.keys(data) as Array<keyof HakemusFormValues>;
+    dataKeys.forEach((dataKey) => {
+      // If there are no contacts, then do not update state as empty contacts
+      // are required as initial values for the Contacts.tsx
+      if (
+        dataKey === HANKE_CONTACT_TYPE.ARVIOIJAT ||
+        dataKey === HANKE_CONTACT_TYPE.OMISTAJAT ||
+        dataKey === HANKE_CONTACT_TYPE.TOTEUTTAJAT
+      ) {
+        // .. typescript typeguards
+        const contactsData = data[dataKey];
+        if (contactsData) {
+          const nonUndefinedContactsData: HankeContact[] = contactsData;
+          if (nonUndefinedContactsData.length > 0) {
+            formik.setFieldValue(dataKey, nonUndefinedContactsData);
+          }
+        }
+      } else {
+        formik.setFieldValue(dataKey, data[dataKey]);
+      }
+    });
+  };
+
   const saveFormState = async () => {
     const formData = formik.values;
-    const dataWithoutEmptyFields: Partial<HakemusFormValues> = Object.fromEntries(
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      Object.entries(formData).filter(([key, value]) => {
-        return value !== null && value !== '';
-      })
-    );
     const dataWithoutEmptyContacts = filterEmptyContacts({
-      ...dataWithoutEmptyFields,
-      omistajat: dataWithoutEmptyFields.omistajat ? dataWithoutEmptyFields.omistajat : [],
-      arvioijat: dataWithoutEmptyFields.arvioijat ? dataWithoutEmptyFields.arvioijat : [],
-      toteuttajat: dataWithoutEmptyFields.toteuttajat ? dataWithoutEmptyFields.toteuttajat : [],
+      ...formData,
+      omistajat: formData.omistajat ? formData.omistajat : [],
+      arvioijat: formData.arvioijat ? formData.arvioijat : [],
+      toteuttajat: formData.toteuttajat ? formData.toteuttajat : [],
       saveType: 'DRAFT',
     });
-
-    const response = formData.hankeTunnus
-      ? await api.put<Partial<HakemusFormValues>>(
-          `/hankkeet/${formData.hankeTunnus}`,
-          dataWithoutEmptyContacts
-        )
-      : await api.post<Partial<HakemusFormValues>>('/hankkeet', dataWithoutEmptyContacts);
-    console.log('Response received after saving hakemus');
-    console.log(response);
+    // When updating a hanke the API takes the entire object
+    if (formData.hankeTunnus) {
+      const { data } = await api.put<HakemusFormValues>(
+        `/hankkeet/${formData.hankeTunnus}`,
+        dataWithoutEmptyContacts
+      );
+      updateFormFieldsWithAPIResponse(data);
+    } else {
+      const dataWithoutEmptyFields: Partial<HakemusFormValues> = Object.fromEntries(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        Object.entries(dataWithoutEmptyContacts).filter(([key, value]) => {
+          return value !== null && value !== '';
+        })
+      );
+      const { data } = await api.post<Partial<HakemusFormValues>>(
+        '/hankkeet',
+        dataWithoutEmptyFields
+      );
+      updateFormFieldsWithAPIResponse(data);
+    }
   };
   return (
     <div>
@@ -112,10 +143,11 @@ const HakemusContainer: React.FC = () => {
     alkuPvm: '',
     loppuPvm: '',
     kuvaus: '',
-    hakijanNimi: '',
     vaihe: '',
     suunnitteluVaihe: null,
     tyomaaKatuosoite: '',
+    tyomaaTyyppi: [],
+    tyomaaKoko: null,
     haittaAlkuPvm: '',
     haittaLoppuPvm: '',
     kaistaHaitta: null,
@@ -128,6 +160,15 @@ const HakemusContainer: React.FC = () => {
     toteuttajat: [initialContact],
     arvioijat: [initialContact],
     saveType: 'DRAFT',
+    id: null,
+    liikennehaittaindeksi: null,
+    tormaystarkasteluTulos: null,
+    createdAt: null,
+    createdBy: null,
+    modifiedAt: null,
+    modifiedBy: null,
+    permissions: null,
+    version: null,
   };
 
   const formSteps = [

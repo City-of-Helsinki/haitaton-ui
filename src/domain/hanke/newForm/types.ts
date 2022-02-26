@@ -6,6 +6,7 @@ export interface Option {
 }
 
 export interface HakemusFormValues {
+  id: number | null;
   hankeTunnus: string;
   onYKTHanke: boolean;
   nimi: string;
@@ -14,8 +15,9 @@ export interface HakemusFormValues {
   loppuPvm: string;
   vaihe: HANKE_VAIHE_KEY | '';
   suunnitteluVaihe: HANKE_SUUNNITTELUVAIHE_KEY | null;
-  hakijanNimi: string;
   tyomaaKatuosoite: string;
+  tyomaaTyyppi: HANKE_TYOMAATYYPPI_KEY[];
+  tyomaaKoko: HANKE_TYOMAAKOKO_KEY | null;
   haittaAlkuPvm: string;
   haittaLoppuPvm: string;
   kaistaHaitta: HANKE_KAISTAHAITTA_KEY | null;
@@ -24,10 +26,38 @@ export interface HakemusFormValues {
   polyHaitta: HANKE_POLYHAITTA | null;
   tarinaHaitta: HANKE_TARINAHAITTA_KEY | null;
   geometriat: HankeGeometria | null;
+  liikennehaittaindeksi: LiikenneHaittaIndeksi | null; // TODO: miksi tämä on olemassa?
   omistajat: Array<HankeContact>;
   arvioijat: Array<HankeContact>;
   toteuttajat: Array<HankeContact>;
+  tormaystarkasteluTulos: HankeIndexData | null;
+  permissions: null; // TODO: add permissions into typedef correctly
   saveType: HANKE_SAVETYPE_KEY;
+  createdBy: null | string;
+  createdAt: null | string;
+  modifiedBy: null | string;
+  modifiedAt: null | string;
+  version: null | number;
+}
+
+export type LiikenneHaittaIndeksi = {
+  indeksi: number;
+  tyyppi: HANKE_INDEX_TYPE.PERUSINDEKSI; // TODO: Miksi tämä on olemassa?
+};
+
+export interface HankeIndexData {
+  hankeTunnus: string;
+  hankeId: number;
+  hankeGeometriatId: number;
+  liikennehaittaIndeksi: LiikenneHaittaIndeksi;
+  perusIndeksi: number;
+  pyorailyIndeksi: number;
+  joukkoliikenneIndeksi: number;
+  // TODO: onko tätä olemassa? tila: HANKE_INDEX_STATE_KEY;
+}
+
+export enum HANKE_INDEX_TYPE {
+  PERUSINDEKSI = 'PERUSINDEKSI',
 }
 
 export enum HANKE_TYOMAATYYPPI {
@@ -64,6 +94,15 @@ export enum HANKE_TYOMAATYYPPI {
   YLEISOTILAISUUS = 'YLEISOTILAISUUS',
   VAIHTOLAVA = 'VAIHTOLAVA',
 }
+
+export type HANKE_TYOMAATYYPPI_KEY = keyof typeof HANKE_TYOMAATYYPPI;
+
+export enum HANKE_TYOMAAKOKO {
+  SUPPEA_TAI_PISTE = 'SUPPEA_TAI_PISTE',
+  YLI_10M_TAI_KORTTELI = 'YLI_10M_TAI_KORTTELI',
+  LAAJA_TAI_USEA_KORTTELI = 'LAAJA_TAI_USEA_KORTTELI',
+}
+export type HANKE_TYOMAAKOKO_KEY = keyof typeof HANKE_TYOMAAKOKO;
 
 export enum HANKE_VAIHE {
   OHJELMOINTI = 'OHJELMOINTI',
