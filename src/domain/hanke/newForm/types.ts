@@ -27,6 +27,7 @@ export interface HakemusFormValues {
   omistajat: Array<HankeContact>;
   arvioijat: Array<HankeContact>;
   toteuttajat: Array<HankeContact>;
+  saveType: HANKE_SAVETYPE_KEY;
 }
 
 export enum HANKE_TYOMAATYYPPI {
@@ -162,3 +163,10 @@ export const initialContact: HankeContact = {
   osasto: '',
   puhelinnumero: '',
 };
+
+export enum HANKE_SAVETYPE {
+  AUTO = 'AUTO',
+  DRAFT = 'DRAFT',
+  SUBMIT = 'SUBMIT',
+}
+export type HANKE_SAVETYPE_KEY = keyof typeof HANKE_SAVETYPE;

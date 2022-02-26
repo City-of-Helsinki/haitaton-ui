@@ -57,6 +57,7 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextLink, backLink }) => {
       omistajat: dataWithoutEmptyFields.omistajat ? dataWithoutEmptyFields.omistajat : [],
       arvioijat: dataWithoutEmptyFields.arvioijat ? dataWithoutEmptyFields.arvioijat : [],
       toteuttajat: dataWithoutEmptyFields.toteuttajat ? dataWithoutEmptyFields.toteuttajat : [],
+      saveType: 'DRAFT',
     });
 
     const response = formData.hankeTunnus
@@ -126,6 +127,7 @@ const HakemusContainer: React.FC = () => {
     omistajat: [initialContact],
     toteuttajat: [initialContact],
     arvioijat: [initialContact],
+    saveType: 'DRAFT',
   };
 
   const formSteps = [
