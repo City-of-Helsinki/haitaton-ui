@@ -71,7 +71,7 @@ const ContactDetails: React.FC<Props> = ({ contactType, index, organizationList 
         }}
       />
       <TextInput
-        id={`${contactType}.${index}.omaOrganisaatio`}
+        id={`${contactType}.${index}.organisaatioNimi`}
         label="Syötä oma organisaatio"
         disabled={!addOmaOrganisaatio}
         onChange={formik.handleChange}
