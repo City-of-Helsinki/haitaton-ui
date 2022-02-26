@@ -3,6 +3,12 @@ import { useFormikContext } from 'formik';
 import { Checkbox, TextArea, TextInput, DateInput, Select } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { HakemusFormValues, HANKE_SUUNNITTELUVAIHE, HANKE_VAIHE, Option } from './types';
+import {
+  convertFinnishDate,
+  formatToFinnishDate,
+  toEndOfDayUTCISO,
+  toStartOfDayUTCISO,
+} from '../../../common/utils/date';
 
 // TODO: add tooltips
 // TODO: add validation error messages
@@ -54,16 +60,22 @@ const BasicHankeInfo: React.FC = () => {
         name="alkuPvm"
         label="Hankkeen alkupäivä"
         minDate={new Date()}
-        onChange={(value) => {
+        onChange={(date: string) => {
+          const convertedDateString = convertFinnishDate(date);
+          if (convertedDateString.length > 0) {
+            formik.setFieldValue(
+              'alkuPvm',
+              toStartOfDayUTCISO(new Date(convertedDateString)) || ''
+            );
+          }
           alkuPvmInputIsDirty.current = true;
-          formik.setFieldValue('alkuPvm', value || '');
         }}
         onBlur={() => {
           if (alkuPvmInputIsDirty.current) {
             formik.handleBlur({ target: { name: 'alkuPvm' } });
           }
         }}
-        value={formik.values.alkuPvm}
+        value={!formik.values.alkuPvm ? undefined : formatToFinnishDate(formik.values.alkuPvm)}
         required
       />
       <DateInput
@@ -71,16 +83,19 @@ const BasicHankeInfo: React.FC = () => {
         name="loppuPvm"
         label="Hankkeen loppupäivä"
         minDate={new Date()}
-        onChange={(value) => {
+        onChange={(date: string) => {
+          const convertedDateString = convertFinnishDate(date);
+          if (convertedDateString.length > 0) {
+            formik.setFieldValue('loppuPvm', toEndOfDayUTCISO(new Date(convertedDateString)) || '');
+          }
           loppuPvmInputIsDirty.current = true;
-          formik.setFieldValue('loppuPvm', value || '');
         }}
         onBlur={() => {
           if (loppuPvmInputIsDirty.current) {
             formik.handleBlur({ target: { name: 'loppuPvm' } });
           }
         }}
-        value={formik.values.loppuPvm}
+        value={!formik.values.loppuPvm ? undefined : formatToFinnishDate(formik.values.loppuPvm)}
         required
       />
       <Select
