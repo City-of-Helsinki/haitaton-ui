@@ -115,8 +115,6 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextLink, backLink }) => {
       {nextLink && (
         <Button
           onClick={() => {
-            console.log('Next clicked');
-            console.log(formik.values);
             saveFormState();
             navigate(`/fi/hakemus${nextLink}`); // TODO: localized links
           }}
@@ -124,13 +122,16 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextLink, backLink }) => {
           {nextLink}
         </Button>
       )}
-      <Button
-        onClick={() => {
-          formik.submitForm();
-        }}
-      >
-        Submit
-      </Button>
+      {!nextLink && ( // Final page reached, provide an action to save
+        <Button
+          onClick={() => {
+            saveFormState();
+            // navigate(`/fi/hakemus${nextLink}`); // TODO: localized links
+          }}
+        >
+          Tallenna
+        </Button>
+      )}
     </div>
   );
 };
@@ -203,9 +204,8 @@ const HakemusContainer: React.FC = () => {
     <>
       <Formik
         initialValues={initialValues}
-        onSubmit={(values, actions) => {
-          console.log('Formik has submitted');
-          console.log({ values, actions });
+        onSubmit={() => {
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
         }}
       >
         <Routes>

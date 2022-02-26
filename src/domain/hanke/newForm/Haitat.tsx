@@ -10,6 +10,12 @@ import {
   HANKE_POLYHAITTA,
   HANKE_TARINAHAITTA,
 } from './types';
+import {
+  convertFinnishDate,
+  formatToFinnishDate,
+  toEndOfDayUTCISO,
+  toStartOfDayUTCISO,
+} from '../../../common/utils/date';
 
 type Option = { value: string; label: string };
 
@@ -21,20 +27,30 @@ const Haitat: React.FC = () => {
     <div>
       <h1>Hankkeen haitat</h1>
       <DateInput
-        id="haittaAlkPvm"
+        id="haittaAlkuPvm"
         name="haittaAlkuPvm"
         label="Haitan alkupäivämäärä"
         minDate={new Date()}
-        onChange={(value) => {
+        onChange={(date: string) => {
+          const convertedDateString = convertFinnishDate(date);
+          if (convertedDateString.length > 0) {
+            formik.setFieldValue(
+              'haittaAlkuPvm',
+              toStartOfDayUTCISO(new Date(convertedDateString)) || ''
+            );
+          }
           haittaAlkuPvmIsDirty.current = true;
-          formik.setFieldValue('haittaAlkuPvm', value || '');
         }}
         onBlur={() => {
           if (haittaAlkuPvmIsDirty.current) {
             formik.handleBlur({ target: { name: 'haittaAlkuPvm' } });
           }
         }}
-        value={formik.values.alkuPvm}
+        value={
+          !formik.values.haittaAlkuPvm
+            ? undefined
+            : formatToFinnishDate(formik.values.haittaAlkuPvm)
+        }
         required
       />
       <DateInput
@@ -42,16 +58,26 @@ const Haitat: React.FC = () => {
         name="haittaLoppuPvm"
         label="Haitan loppupäivämäärä"
         minDate={new Date()}
-        onChange={(value) => {
+        onChange={(date: string) => {
+          const convertedDateString = convertFinnishDate(date);
+          if (convertedDateString.length > 0) {
+            formik.setFieldValue(
+              'haittaLoppuPvm',
+              toEndOfDayUTCISO(new Date(convertedDateString)) || ''
+            );
+          }
           haittaLoppuPvmIsDirty.current = true;
-          formik.setFieldValue('haittaLoppuPvm', value || '');
         }}
         onBlur={() => {
           if (haittaLoppuPvmIsDirty.current) {
             formik.handleBlur({ target: { name: 'haittaLoppuPvm' } });
           }
         }}
-        value={formik.values.loppuPvm}
+        value={
+          !formik.values.haittaLoppuPvm
+            ? undefined
+            : formatToFinnishDate(formik.values.haittaLoppuPvm)
+        }
         required
       />
       <Select
