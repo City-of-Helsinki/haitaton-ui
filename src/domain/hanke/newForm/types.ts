@@ -192,17 +192,6 @@ export type HankeContact = {
   osasto: string;
 };
 
-export const initialContact: HankeContact = {
-  etunimi: '',
-  sukunimi: '',
-  email: '',
-  id: null,
-  organisaatioId: null,
-  organisaatioNimi: '',
-  osasto: '',
-  puhelinnumero: '',
-};
-
 export enum HANKE_SAVETYPE {
   AUTO = 'AUTO',
   DRAFT = 'DRAFT',

@@ -6,7 +6,9 @@ import { HakemusFormValues, HANKE_TYOMAAKOKO, HANKE_TYOMAATYYPPI } from './types
 
 type Option = { value: string; label: string };
 
-const AdditionalInformation: React.FC = () => {
+export const initialValues = { tyomaaKatuosoite: '', tyomaaTyyppi: [], tyomaaKoko: null };
+
+export const AdditionalInformation: React.FC = () => {
   const formik = useFormikContext<HakemusFormValues>();
   return (
     <div>

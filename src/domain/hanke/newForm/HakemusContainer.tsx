@@ -2,12 +2,15 @@ import React from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Formik, useFormikContext } from 'formik';
 import { Button } from 'hds-react';
-import BasicHankeInfo from './BasicHankeInfo';
-import Contacts from './Contacts';
-import Geometries from './Geometries';
-import Haitat from './Haitat';
-import AdditionalInformation from './AdditionalInformation';
-import { HakemusFormValues, HankeContact, HANKE_CONTACT_TYPE, initialContact } from './types';
+import { BasicHankeInfo, initialValues as initialValuesBasicHankeInfo } from './BasicHankeInfo';
+import { Geometries, initialValues as initialValuesGeometries } from './Geometries';
+import { Contacts, initialValues as initialValuesContacts } from './Contacts';
+import {
+  AdditionalInformation,
+  initialValues as initialValuesAdditionalInformation,
+} from './AdditionalInformation';
+import { Haitat, initialValues as initialValuesHaitat } from './Haitat';
+import { HakemusFormValues, HankeContact, HANKE_CONTACT_TYPE } from './types';
 import { FORMFIELD } from '../edit/types';
 import { PartialExcept } from '../../../common/types/utils';
 import { HankeContactKey } from '../../types/hanke';
@@ -138,30 +141,12 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextLink, backLink }) => {
 
 const HakemusContainer: React.FC = () => {
   const initialValues: HakemusFormValues = {
-    hankeTunnus: '',
-    onYKTHanke: false,
-    nimi: '',
-    alkuPvm: '',
-    loppuPvm: '',
-    kuvaus: '',
-    vaihe: '',
-    suunnitteluVaihe: null,
-    tyomaaKatuosoite: '',
-    tyomaaTyyppi: [],
-    tyomaaKoko: null,
-    haittaAlkuPvm: '',
-    haittaLoppuPvm: '',
-    kaistaHaitta: null,
-    kaistaPituusHaitta: null,
-    meluHaitta: null,
-    polyHaitta: null,
-    tarinaHaitta: null,
-    geometriat: null,
-    omistajat: [initialContact],
-    toteuttajat: [initialContact],
-    arvioijat: [initialContact],
+    ...initialValuesBasicHankeInfo,
+    ...initialValuesGeometries,
+    ...initialValuesContacts,
+    ...initialValuesAdditionalInformation,
+    ...initialValuesHaitat,
     saveType: 'DRAFT',
-    id: null,
     liikennehaittaindeksi: null,
     tormaystarkasteluTulos: null,
     createdAt: null,
@@ -205,6 +190,7 @@ const HakemusContainer: React.FC = () => {
       <Formik
         initialValues={initialValues}
         onSubmit={() => {
+          // TODO: maybe needed for entire form validation prior to last page submit?
           // eslint-disable-next-line @typescript-eslint/no-empty-function
         }}
       >

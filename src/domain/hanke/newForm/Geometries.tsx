@@ -16,7 +16,11 @@ import Controls from '../../../common/components/map/controls/Controls';
 import DrawModule from '../../../common/components/map/modules/draw/DrawModule';
 import { formatFeaturesToHankeGeoJSON } from '../../map/utils';
 
-const Geometries: React.FC = () => {
+export const initialValues = {
+  geometriat: null,
+};
+
+export const Geometries: React.FC = () => {
   const formik = useFormikContext<HakemusFormValues>();
   const [drawSource] = useState<VectorSource>(new VectorSource());
   const { mapTileLayers } = useMapDataLayers();

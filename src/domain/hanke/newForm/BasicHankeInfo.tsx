@@ -2,7 +2,14 @@ import React, { useRef } from 'react';
 import { useFormikContext } from 'formik';
 import { Checkbox, TextArea, TextInput, DateInput, Select } from 'hds-react';
 import { $enum } from 'ts-enum-util';
-import { HakemusFormValues, HANKE_SUUNNITTELUVAIHE, HANKE_VAIHE, Option } from './types';
+import {
+  HakemusFormValues,
+  HANKE_SUUNNITTELUVAIHE,
+  HANKE_SUUNNITTELUVAIHE_KEY,
+  HANKE_VAIHE,
+  HANKE_VAIHE_KEY,
+  Option,
+} from './types';
 import {
   convertFinnishDate,
   formatToFinnishDate,
@@ -15,7 +22,31 @@ import {
 // TODO: go through dynamic form example and see what is missing
 // TODO: date input min and max validation based on set dates
 
-const BasicHankeInfo: React.FC = () => {
+export interface types {
+  id: number | null;
+  hankeTunnus: string;
+  onYKTHanke: boolean;
+  nimi: string;
+  kuvaus: string;
+  alkuPvm: string;
+  loppuPvm: string;
+  vaihe: HANKE_VAIHE_KEY | '';
+  suunnitteluVaihe: HANKE_SUUNNITTELUVAIHE_KEY | null;
+}
+
+export const initialValues: types = {
+  id: null,
+  hankeTunnus: '',
+  onYKTHanke: false,
+  nimi: '',
+  kuvaus: '',
+  alkuPvm: '',
+  loppuPvm: '',
+  vaihe: '',
+  suunnitteluVaihe: null,
+};
+
+export const BasicHankeInfo: React.FC = () => {
   const formik = useFormikContext<HakemusFormValues>();
   const alkuPvmInputIsDirty = useRef(false);
   const loppuPvmInputIsDirty = useRef(false);
@@ -127,4 +158,3 @@ const BasicHankeInfo: React.FC = () => {
     </div>
   );
 };
-export default BasicHankeInfo;

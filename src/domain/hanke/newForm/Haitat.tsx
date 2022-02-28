@@ -19,7 +19,17 @@ import {
 
 type Option = { value: string; label: string };
 
-const Haitat: React.FC = () => {
+export const initialValues = {
+  haittaAlkuPvm: '',
+  haittaLoppuPvm: '',
+  kaistaHaitta: null,
+  kaistaPituusHaitta: null,
+  meluHaitta: null,
+  polyHaitta: null,
+  tarinaHaitta: null,
+};
+
+export const Haitat: React.FC = () => {
   const formik = useFormikContext<HakemusFormValues>();
   const haittaAlkuPvmIsDirty = useRef(false);
   const haittaLoppuPvmIsDirty = useRef(false);

@@ -6,9 +6,26 @@ import { $enum } from 'ts-enum-util';
 import api from '../../api/api';
 import { Organization } from '../edit/types';
 import ContactDetails from './ContactDetail';
-import { HakemusFormValues, HANKE_CONTACT_KEY, HANKE_CONTACT_TYPE, initialContact } from './types';
+import { HakemusFormValues, HankeContact, HANKE_CONTACT_KEY, HANKE_CONTACT_TYPE } from './types';
 
-const Contacts: React.FC = () => {
+const initialContact: HankeContact = {
+  etunimi: '',
+  sukunimi: '',
+  email: '',
+  id: null,
+  organisaatioId: null,
+  organisaatioNimi: '',
+  osasto: '',
+  puhelinnumero: '',
+};
+
+export const initialValues = {
+  omistajat: [initialContact],
+  toteuttajat: [initialContact],
+  arvioijat: [initialContact],
+};
+
+export const Contacts: React.FC = () => {
   const formik = useFormikContext<HakemusFormValues>();
 
   const fetchOrganizations = async () => api.get<Organization[]>('/organisaatiot');
