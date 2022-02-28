@@ -2,6 +2,8 @@ import React, { useRef } from 'react';
 import { useFormikContext } from 'formik';
 import { Checkbox, TextArea, TextInput, DateInput, Select } from 'hds-react';
 import { $enum } from 'ts-enum-util';
+import * as Yup from 'yup';
+import { startOfDay } from 'date-fns';
 import {
   HakemusFormValues,
   HANKE_SUUNNITTELUVAIHE,
@@ -16,14 +18,28 @@ import {
   toEndOfDayUTCISO,
   toStartOfDayUTCISO,
 } from '../../../common/utils/date';
+import yup from '../../../common/utils/yup';
 
 // TODO: add tooltips
 // TODO: add validation error messages
 // TODO: go through dynamic form example and see what is missing
 // TODO: date input min and max validation based on set dates
 
+export const today = startOfDay(new Date());
+
+export const validationSchema = {
+  nimi: Yup.string().required('Please enter a name for the hanke'),
+  kuvaus: Yup.string().required('Please enter a kuvaus for the hanke'),
+  alkuPvm: Yup.date().required('Hankkeella tulee olla aloituspäivämäärä'),
+  loppuPvm: Yup.date().required('Hankkeella tulee olla päättymispäivämäärä'),
+  vaihe: Yup.mixed().required().oneOf($enum(HANKE_VAIHE).getValues()),
+  suunnitteluVaihe: Yup.mixed()
+    .nullable()
+    .when(['vaihe'], { is: HANKE_VAIHE.SUUNNITTELU, then: yup.string().required() }),
+};
+
 export interface types {
-  id: number | null;
+  id: number | null; // TODO: required? Check whether actually used or just hankeTunnus
   hankeTunnus: string;
   onYKTHanke: boolean;
   nimi: string;
@@ -50,6 +66,9 @@ export const BasicHankeInfo: React.FC = () => {
   const formik = useFormikContext<HakemusFormValues>();
   const alkuPvmInputIsDirty = useRef(false);
   const loppuPvmInputIsDirty = useRef(false);
+  const getErrorMessage = (fieldName: keyof typeof initialValues) => {
+    return formik.touched[fieldName] ? formik.errors[fieldName] : undefined;
+  };
   return (
     <div>
       <TextInput
@@ -76,6 +95,7 @@ export const BasicHankeInfo: React.FC = () => {
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values.nimi}
+        errorText={getErrorMessage('nimi')}
       />
       <TextArea
         id="kuvaus"
@@ -85,6 +105,7 @@ export const BasicHankeInfo: React.FC = () => {
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values.kuvaus}
+        errorText={getErrorMessage('kuvaus')}
       />
       <DateInput
         id="alkuPvm"
@@ -108,6 +129,7 @@ export const BasicHankeInfo: React.FC = () => {
         }}
         value={!formik.values.alkuPvm ? undefined : formatToFinnishDate(formik.values.alkuPvm)}
         required
+        errorText={getErrorMessage('alkuPvm')}
       />
       <DateInput
         id="loppuPvm"
@@ -128,6 +150,7 @@ export const BasicHankeInfo: React.FC = () => {
         }}
         value={!formik.values.loppuPvm ? undefined : formatToFinnishDate(formik.values.loppuPvm)}
         required
+        errorText={getErrorMessage('loppuPvm')}
       />
       <Select
         required
@@ -154,6 +177,7 @@ export const BasicHankeInfo: React.FC = () => {
         onChange={(selection: Option) => {
           formik.setFieldValue('suunnitteluVaihe', selection.value);
         }}
+        error={getErrorMessage('vaihe')}
       />
     </div>
   );

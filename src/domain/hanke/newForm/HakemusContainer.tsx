@@ -2,7 +2,12 @@ import React from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Formik, useFormikContext } from 'formik';
 import { Button } from 'hds-react';
-import { BasicHankeInfo, initialValues as initialValuesBasicHankeInfo } from './BasicHankeInfo';
+import * as Yup from 'yup';
+import {
+  BasicHankeInfo,
+  initialValues as initialValuesBasicHankeInfo,
+  validationSchema as validationBasicHankeInfo,
+} from './BasicHankeInfo';
 import { Geometries, initialValues as initialValuesGeometries } from './Geometries';
 import { Contacts, initialValues as initialValuesContacts } from './Contacts';
 import {
@@ -108,6 +113,7 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextLink, backLink }) => {
       {backLink && (
         <Button
           onClick={() => {
+            // TODO: trigger form validation, continue if OK
             saveFormState();
             navigate(`/fi/hakemus${backLink}`); // TODO: localized links
           }}
@@ -118,6 +124,7 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextLink, backLink }) => {
       {nextLink && (
         <Button
           onClick={() => {
+            // TODO: trigger form validation, continue if OK
             saveFormState();
             navigate(`/fi/hakemus${nextLink}`); // TODO: localized links
           }}
@@ -193,6 +200,7 @@ const HakemusContainer: React.FC = () => {
           // TODO: maybe needed for entire form validation prior to last page submit?
           // eslint-disable-next-line @typescript-eslint/no-empty-function
         }}
+        validationSchema={Yup.object().shape({ ...validationBasicHankeInfo })}
       >
         <Routes>
           {formSteps.map((formStep, i) => {
