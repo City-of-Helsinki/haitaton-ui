@@ -2,11 +2,13 @@ import { useFormikContext } from 'formik';
 import { TextInput, Select, Combobox } from 'hds-react';
 import React from 'react';
 import { $enum } from 'ts-enum-util';
+import { HANKE_TYOMAATYYPPI_KEY } from '../../types/hanke';
 import { HakemusFormValues, HANKE_TYOMAAKOKO, HANKE_TYOMAATYYPPI } from './types';
 
 type Option = { value: string; label: string };
+type OptionTyyppi = { value: HANKE_TYOMAATYYPPI_KEY; label: string };
 
-export const initialValues = { tyomaaKatuosoite: '', tyomaaTyyppi: [], tyomaaKoko: null };
+export const initialValues = { tyomaaKatuosoite: '', tyomaaTyyppi: null, tyomaaKoko: null };
 
 export const AdditionalInformation: React.FC = () => {
   const formik = useFormikContext<HakemusFormValues>();
@@ -21,7 +23,7 @@ export const AdditionalInformation: React.FC = () => {
         onBlur={formik.handleBlur}
         value={formik.values.tyomaaKatuosoite}
       />
-      <Combobox<Option>
+      <Combobox<OptionTyyppi>
         multiselect
         required
         label="Työmaan tyyppi"
@@ -32,7 +34,7 @@ export const AdditionalInformation: React.FC = () => {
           value,
           label: value,
         }))}
-        onChange={(selection: Option[]) => {
+        onChange={(selection: OptionTyyppi[]) => {
           formik.setFieldValue(
             'tyomaaTyyppi',
             selection.map((option) => option.value)

@@ -39,7 +39,7 @@ export const validationSchema = {
 };
 
 export interface types {
-  id: number | null; // TODO: required? Check whether actually used or just hankeTunnus
+  id: number | null;
   hankeTunnus: string;
   onYKTHanke: boolean;
   nimi: string;
