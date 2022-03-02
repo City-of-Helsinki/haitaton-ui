@@ -21,6 +21,23 @@ export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJS
   };
 };
 
+export const formatFeaturesToAlluGeoJSON = (features: GeometryData): unknown => {
+  const geoJson = new GeoJSON().writeFeaturesObject(features, {
+    decimals: 2, // Not sure if this is correct
+  });
+
+  return {
+    type: 'GeometryCollection',
+    crs: {
+      type: 'name',
+      properties: {
+        name: 'EPSG:3879',
+      },
+    },
+    geometries: geoJson.features.map((feature) => feature.geometry),
+  };
+};
+
 export const hankeHasGeometry = (hanke: HankeData) => hanke.geometriat;
 
 export const hankeIsBetweenDates = ({ endDate, startDate }: HankeFilters) => ({
