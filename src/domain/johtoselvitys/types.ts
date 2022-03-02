@@ -1,5 +1,6 @@
 import { HaitatonGeometry } from '../../common/types/hanke';
-type ApplicationType = 'CABLE_APPLICATION';
+
+export type ApplicationType = 'CABLE_APPLICATION';
 
 export type Contact = {
   name: string;
@@ -15,8 +16,15 @@ export type Contact = {
   orderer: boolean;
 };
 
+export enum ContactType {
+  PERSON = 'PERSON',
+  COMPANY = 'COMPANY',
+  ASSOCIATION = 'ASSOCIATION',
+  OTHER = 'OTHER',
+}
+
 export type Customer = {
-  type: string;
+  type: ContactType | '';
   name: string;
   country: string;
   postalAddress: {
@@ -29,7 +37,7 @@ export type Customer = {
   email: string;
   phone: string;
   registryKey: string;
-  ovt: string | null;
+  ovt: string;
   invoicingOperator: string | null;
   sapCustomerNumber: string | null;
 };
@@ -38,8 +46,12 @@ export type JohtoselvitysFormData = {
   name: string;
   customerWithContacts: {
     customer: Customer;
+    contacts: Contact[];
   };
-  contacts: Contact[];
+  contractorWithContacts: {
+    customer: Customer;
+    contacts: Contact[];
+  };
   geometry: HaitatonGeometry;
   startTime: number | null;
   endTime: number | null;
@@ -47,10 +59,6 @@ export type JohtoselvitysFormData = {
   identificationNumber: string; // hankeTunnus
   clientApplicationKind: string;
   workDescription: string;
-  contractorWithContacts: {
-    customer: Customer;
-    contacts: Contact[];
-  };
   postalAddress: string;
   representativeWithContacts: null;
   invoicingCustomer: null;

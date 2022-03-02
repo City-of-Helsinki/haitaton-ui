@@ -1,18 +1,71 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-import {
-  BasicHankeInfo,
-  initialValues as initialValuesBasicHankeInfo,
-  validationSchema as validationBasicInfo,
-} from './BasicInfo';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Formik, useFormikContext } from 'formik';
+import { Button } from 'hds-react';
+import { BasicHankeInfo } from './BasicInfo';
 
 import { JohtoselvitysFormValues } from './types';
+import { Contacts } from './Contacts';
+import { Geometries } from './Geometries';
+import { ReviewAndSend } from './ReviewAndSend';
+
+interface ButtonProps {
+  nextPath?: string;
+  previousPath?: string;
+}
+
+const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) => {
+  const navigate = useNavigate();
+  const formik = useFormikContext<JohtoselvitysFormValues>();
+
+  const saveFormState = () => {
+    console.log('saveFormState');
+    console.log(formik.values);
+  };
+
+  const sendFormToAllu = () => {
+    console.log('and now send the application');
+    console.log(formik.values);
+  };
+
+  return (
+    <div>
+      {previousPath && (
+        <Button
+          onClick={() => {
+            saveFormState();
+            navigate(`/fi/johtoselvityshakemus${previousPath}`); // TODO: localized links
+          }}
+        >
+          {previousPath}
+        </Button>
+      )}
+      {nextPath && (
+        <Button
+          onClick={() => {
+            saveFormState();
+            navigate(`/fi/johtoselvityshakemus${nextPath}`); // TODO: localized links
+          }}
+        >
+          {nextPath}
+        </Button>
+      )}
+      {!nextPath && ( // Final page reached, provide an action to save
+        <Button
+          onClick={() => {
+            sendFormToAllu();
+            // navigate(`/fi/hakemus${nextPath}`); // TODO: localized links
+          }}
+        >
+          Lähetä hakemus
+        </Button>
+      )}
+    </div>
+  );
+};
 
 const JohtoselvitysContainer: React.FC = () => {
   const initialValues: JohtoselvitysFormValues = {
-    ...initialValuesBasicHankeInfo,
     id: undefined,
     userId: null,
     applicationType: 'CABLE_APPLICATION',
@@ -37,22 +90,16 @@ const JohtoselvitysContainer: React.FC = () => {
           invoicingOperator: '',
           sapCustomerNumber: '',
         },
-      },
-      contacts: [
-        {
-          name: '',
-          postalAddress: {
-            streetAddress: {
-              streetName: '',
-            },
-            postalCode: '',
-            city: '',
+        contacts: [
+          {
+            email: '',
+            name: '',
+            orderer: true,
+            phone: '',
+            postalAddress: { city: '', postalCode: '', streetAddress: { streetName: '' } },
           },
-          email: '',
-          phone: '',
-          orderer: true,
-        },
-      ],
+        ],
+      },
       geometry: {
         type: 'GeometryCollection',
         crs: {
@@ -84,7 +131,7 @@ const JohtoselvitysContainer: React.FC = () => {
           email: '',
           phone: '',
           registryKey: '',
-          ovt: null,
+          ovt: '',
           invoicingOperator: null,
           sapCustomerNumber: null,
         },
@@ -110,7 +157,7 @@ const JohtoselvitysContainer: React.FC = () => {
       customerReference: null,
       area: null,
       propertyDeveloperWithContacts: null,
-      constructionWork: true,
+      constructionWork: false,
       maintenanceWork: false,
       emergencyWork: false,
       propertyConnectivity: false,
@@ -123,6 +170,21 @@ const JohtoselvitysContainer: React.FC = () => {
       element: <BasicHankeInfo />,
       title: 'Perustiedot',
     },
+    {
+      path: '/contacts',
+      element: <Contacts />,
+      title: 'Yhteystiedot',
+    },
+    {
+      path: '/alueet',
+      element: <Geometries />,
+      title: 'Aluetiedot',
+    },
+    {
+      path: '/yhteenveto',
+      element: <ReviewAndSend />,
+      title: 'Yhteenveto',
+    },
   ];
 
   return (
@@ -133,11 +195,24 @@ const JohtoselvitysContainer: React.FC = () => {
           // TODO: maybe needed for entire form validation prior to last page submit?
           // eslint-disable-next-line @typescript-eslint/no-empty-function
         }}
-        validationSchema={Yup.object().shape({ ...validationBasicInfo })}
       >
         <Routes>
-          {formSteps.map((formStep) => {
-            return <Route path={formStep.path} element={<>{formStep.element}</>} />;
+          {formSteps.map((formStep, i) => {
+            return (
+              <Route
+                path={formStep.path}
+                element={
+                  <>
+                    {formStep.element}
+                    <br />
+                    <NavigationButtons
+                      nextPath={formSteps[i + 1]?.path}
+                      previousPath={formSteps[i - 1]?.path}
+                    />{' '}
+                  </>
+                }
+              />
+            );
           })}
         </Routes>
       </Formik>

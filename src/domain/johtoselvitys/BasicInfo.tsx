@@ -1,13 +1,10 @@
 import React, { useRef } from 'react';
 import { useFormikContext } from 'formik';
 import { Checkbox, TextArea, TextInput, DateInput, Select } from 'hds-react';
-import { $enum } from 'ts-enum-util';
 import * as Yup from 'yup';
 import { startOfDay } from 'date-fns';
-import { HANKE_SUUNNITTELUVAIHE_KEY, HANKE_VAIHE, HANKE_VAIHE_KEY } from '../hanke/newForm/types';
 import { convertFinnishDate, toStartOfDayUTCISO } from '../../common/utils/date';
-import yup from '../../common/utils/yup';
-import { JohtoselvitysFormValues } from './types';
+import { ApplicationType, JohtoselvitysFormValues } from './types';
 
 // TODO: add tooltips
 // TODO: add validation error messages
@@ -17,53 +14,59 @@ import { JohtoselvitysFormValues } from './types';
 export const today = startOfDay(new Date());
 
 export const validationSchema = {
-  nimi: Yup.string().required('Please enter a name for the hanke'),
-  kuvaus: Yup.string().required('Please enter a kuvaus for the hanke'),
-  alkuPvm: Yup.date().required('Hankkeella tulee olla aloituspäivämäärä').min(7),
-  loppuPvm: Yup.date().required('Hankkeella tulee olla päättymispäivämäärä'),
-  vaihe: Yup.mixed().required().oneOf($enum(HANKE_VAIHE).getValues()),
-  suunnitteluVaihe: Yup.mixed()
-    .nullable()
-    .when(['vaihe'], { is: HANKE_VAIHE.SUUNNITTELU, then: yup.string().required() }),
+  name: Yup.string().required('Lisää nimi'),
+  startTime: Yup.string().required('Lisää aloituspäivä'),
+  endTime: Yup.string().required('Lisää lopetuspäivä'),
+  identificationNumber: Yup.string().required('Lisää liittyvä hanke'),
+  workDescription: Yup.string().required('Lisää työnkuvaus'),
 };
 
 export interface types {
-  id: number | null;
-  hankeTunnus: string;
-  onYKTHanke: boolean;
-  nimi: string;
-  kuvaus: string;
-  alkuPvm: string;
-  loppuPvm: string;
-  vaihe: HANKE_VAIHE_KEY | '';
-  suunnitteluVaihe: HANKE_SUUNNITTELUVAIHE_KEY | null;
+  applicationType: ApplicationType;
+  applicationData: {
+    name: string;
+    startTime: number | null;
+    endTime: number | null;
+    identificationNumber: string; // hankeTunnus
+    clientApplicationKind: string;
+    workDescription: string;
+    constructionWork: boolean;
+    maintenanceWork: boolean;
+    emergencyWork: boolean;
+    propertyConnectivity: boolean;
+  };
 }
 
 export const initialValues: types = {
-  id: null,
-  hankeTunnus: '',
-  onYKTHanke: false,
-  nimi: '',
-  kuvaus: '',
-  alkuPvm: '',
-  loppuPvm: '',
-  vaihe: '',
-  suunnitteluVaihe: null,
+  applicationType: 'CABLE_APPLICATION',
+  applicationData: {
+    name: '',
+    startTime: null,
+    endTime: null,
+    identificationNumber: '',
+    clientApplicationKind: '',
+    workDescription: '',
+    constructionWork: false,
+    maintenanceWork: false,
+    emergencyWork: false,
+    propertyConnectivity: false,
+  },
 };
 
 type Option = { value: string; label: string };
 
 export const BasicHankeInfo: React.FC = () => {
   const formik = useFormikContext<JohtoselvitysFormValues>();
-  const alkuPvmInputIsDirty = useRef(false);
+  const startTimeInputIsDirty = useRef(false);
+  const endTimeInputIsDirty = useRef(false);
   return (
     <div>
-      <p>{JSON.stringify(formik.errors)}</p>
       <Select
         required
         label="Tyyppi"
-        disabled
-        options={[]}
+        defaultValue={{ value: 'CABLE_APPLICATION', label: 'Johtoselvityshakemus' }}
+        value={{ value: 'CABLE_APPLICATION', label: 'Johtoselvityshakemus' }}
+        options={[{ value: 'CABLE_APPLICATION', label: 'Johtoselvityshakemus' }]}
         onChange={(selection: Option) => {
           console.log('Changed option');
           console.log(selection);
@@ -73,68 +76,120 @@ export const BasicHankeInfo: React.FC = () => {
       <Select
         required
         label="Liittyvä hanke"
-        disabled
         options={[]}
+        disabled
         onChange={(selection: Option) => {
           console.log('Changed option');
           console.log(selection);
-          formik.setFieldValue('applicationType', selection.value);
+          formik.setFieldValue('applicationData.identificationNumber', selection.value);
         }}
       />
       <TextInput
-        id="nimi"
+        id="applicationData.name"
         label="Nimi"
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values.applicationData.name}
-        disabled
       />
       <TextInput
-        id="id"
+        id="applicationData.id"
         label="Hakemustunnus"
-        disabled
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values.id?.toString()}
+        defaultValue={formik.values.id?.toString()}
+        disabled
       />
-
       <TextArea
-        id="kuvaus"
+        id="applicationData.workDescription"
         label="Kuvaus"
-        placeholder="name"
-        helperText="Hankkeen kuvaus"
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values.applicationData.workDescription}
       />
       <DateInput
-        id="alkuPvm"
-        name="alkuPvm"
-        label="Hankkeen alkupäivä"
+        id="applicationData.startTime"
+        name="applicationData.startTime"
+        label="Aloituspäivä"
         minDate={new Date()}
         onChange={(date: string) => {
+          console.log(date);
           const convertedDateString = convertFinnishDate(date);
+          console.log(convertedDateString);
+
           if (convertedDateString.length > 0) {
+            // TODO convert to unix timestamp
             formik.setFieldValue(
-              'alkuPvm',
+              'applicationData.startTime',
               toStartOfDayUTCISO(new Date(convertedDateString)) || ''
             );
           }
-          alkuPvmInputIsDirty.current = true;
+          startTimeInputIsDirty.current = true;
         }}
         onBlur={() => {
-          if (alkuPvmInputIsDirty.current) {
-            formik.handleBlur({ target: { name: 'alkuPvm' } });
+          if (startTimeInputIsDirty.current) {
+            formik.handleBlur({ target: { name: 'applicationData.startTime' } });
           }
         }}
-        value={!formik.values.applicationData.startTime ? undefined : '1234'}
         required
+      />
+      <DateInput
+        id="applicationData.endTime"
+        name="applicationData.endTime"
+        label="Lopetuspäivä"
+        minDate={new Date()}
+        onChange={(date: string) => {
+          console.log(date);
+          const convertedDateString = convertFinnishDate(date);
+          console.log(convertedDateString);
+
+          if (convertedDateString.length > 0) {
+            // TODO convert to unix timestamp
+            formik.setFieldValue(
+              'applicationData.endTime',
+              toStartOfDayUTCISO(new Date(convertedDateString)) || ''
+            );
+          }
+          endTimeInputIsDirty.current = true;
+        }}
+        onBlur={() => {
+          if (endTimeInputIsDirty.current) {
+            formik.handleBlur({ target: { name: 'applicationData.endTime' } });
+          }
+        }}
+        required
+      />
+      <br />
+      <div style={{ fontSize: 'var(--fontsize-body-m)', fontWeight: 500 }}>Työssä on kyse:</div>
+      <Checkbox
+        id="applicationData.constructionWork"
+        name="applicationData.constructionWork"
+        label="Uuden rakenteen tai johdon rakentamisesta"
+        checked={formik.values.applicationData.constructionWork === true}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
       />
       <Checkbox
         id="applicationData.maintenanceWork"
         name="applicationData.maintenanceWork"
-        label="Uuden rakenteen tai johdon rakentamisesta"
+        label="Olemassaolevan rakenteen kunnossapitotyöstä"
         checked={formik.values.applicationData.maintenanceWork === true}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+      />
+      <Checkbox
+        id="applicationData.propertyConnectivity"
+        name="applicationData.propertyConnectivity"
+        label="Kiinteistöliittymien rakentamisesta"
+        checked={formik.values.applicationData.propertyConnectivity === true}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+      />
+      <Checkbox
+        id="applicationData.emergencyWork"
+        name="applicationData.emergencyWork"
+        label="Kaivutyö on aloitettu jo ennen johtoselvityksen tilaamista merkittävien vahinkojen estämiseksi (hätätyön luonteinen työ)"
+        checked={formik.values.applicationData.emergencyWork === true}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
       />
