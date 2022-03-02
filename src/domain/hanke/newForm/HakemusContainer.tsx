@@ -22,8 +22,10 @@ import { HankeContactKey } from '../../types/hanke';
 import api from '../../api/api';
 
 interface ButtonProps {
-  nextLink?: string;
-  backLink?: string;
+  nextPath?: string;
+  previousPath?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  path: string;
 }
 
 const isContactEmpty = ({
@@ -48,9 +50,17 @@ const filterEmptyContacts = (
   [FORMFIELD.TOTEUTTAJAT]: formData[FORMFIELD.TOTEUTTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
 });
 
-const NavigationButtons: React.FC<ButtonProps> = ({ nextLink, backLink }) => {
+const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, path }) => {
   const navigate = useNavigate();
   const formik = useFormikContext<HakemusFormValues>();
+
+  const fieldsInPathAreValid = (pathToValidate: string) => {
+    console.log('VALIDATE FIELDS IN PATH, hard code for now with a switch');
+    console.log(pathToValidate);
+    formik.validateField('alkuPvm');
+    formik.validateField('nimi');
+    return false;
+  };
 
   const updateFormFieldsWithAPIResponse = (
     data: HakemusFormValues | Partial<HakemusFormValues>
@@ -110,33 +120,39 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextLink, backLink }) => {
   };
   return (
     <div>
-      {backLink && (
+      {previousPath && (
         <Button
           onClick={() => {
             // TODO: trigger form validation, continue if OK
-            saveFormState();
-            navigate(`/fi/hakemus${backLink}`); // TODO: localized links
+            if (fieldsInPathAreValid(path)) {
+              saveFormState();
+              navigate(`/fi/hakemus${previousPath}`); // TODO: localized links
+            }
           }}
         >
-          {backLink}
+          {previousPath}
         </Button>
       )}
-      {nextLink && (
+      {nextPath && (
         <Button
           onClick={() => {
             // TODO: trigger form validation, continue if OK
-            saveFormState();
-            navigate(`/fi/hakemus${nextLink}`); // TODO: localized links
+            // for field in currentFormStep.fields
+            // formik.validateField(field)
+            if (fieldsInPathAreValid(path)) {
+              saveFormState();
+              navigate(`/fi/hakemus${nextPath}`); // TODO: localized links
+            }
           }}
         >
-          {nextLink}
+          {nextPath}
         </Button>
       )}
-      {!nextLink && ( // Final page reached, provide an action to save
+      {!nextPath && ( // Final page reached, provide an action to save
         <Button
           onClick={() => {
             saveFormState();
-            // navigate(`/fi/hakemus${nextLink}`); // TODO: localized links
+            // navigate(`/fi/hakemus${nextPath}`); // TODO: localized links
           }}
         >
           Tallenna
@@ -211,8 +227,9 @@ const HakemusContainer: React.FC = () => {
                   <>
                     {formStep.element}
                     <NavigationButtons
-                      nextLink={formSteps[i + 1]?.path}
-                      backLink={formSteps[i - 1]?.path}
+                      path={formStep.path}
+                      nextPath={formSteps[i + 1]?.path}
+                      previousPath={formSteps[i - 1]?.path}
                     />
                   </>
                 }
