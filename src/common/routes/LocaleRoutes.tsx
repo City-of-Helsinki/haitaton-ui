@@ -12,6 +12,7 @@ import AccessibilityPage from '../../pages/staticPages/AccessibilityPage';
 import ReferencesPage from '../../pages/staticPages/ReferencesPage';
 import PrivacyPolicyPage from '../../pages/staticPages/PrivacyPolicyPage';
 import NewHakemusPage from '../../pages/NewHakemusPage';
+import Johtoselvitys from '../../pages/Johtoselvitys';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
@@ -26,6 +27,7 @@ const LocaleRoutes = () => {
       <Route path={t('routes:MAP:path')} element={<MapPage />} />
       <Route path={t('routes:HAITATON_INFO:path')} element={<InfoPage />} />
       <Route path={t('routes:HAKEMUS:path')} element={<NewHakemusPage />} />
+      <Route path={t('routes:JOHTOSELVITYSHAKEMUS:path')} element={<Johtoselvitys />} />
       <Route path={t('routes:ACCESSIBILITY:path')} element={<AccessibilityPage />} />
       <Route path={t('routes:REFERENCES:path')} element={<ReferencesPage />} />
       <Route path={t('routes:PRIVACY_POLICY:path')} element={<PrivacyPolicyPage />} />
