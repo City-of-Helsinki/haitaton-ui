@@ -25,6 +25,7 @@ const useLinkPath = (route: ROUTES): ((routeParams: RouteParams) => string) => {
       path.replace(':hankeTunnus', hankeTunnus),
     [ROUTES.MAP]: defaultReturnFunc,
     [ROUTES.HAKEMUS]: defaultReturnFunc,
+    [ROUTES.JOHTOSELVITYSHAKEMUS]: defaultReturnFunc,
     [ROUTES.HAITATON_INFO]: defaultReturnFunc,
     [ROUTES.ACCESSIBILITY]: defaultReturnFunc,
     [ROUTES.PRIVACY_POLICY]: defaultReturnFunc,

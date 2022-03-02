@@ -99,6 +99,13 @@
         "title": "Haitaton Beta - Luo uusi hakemus"
       }
     },
+    "JOHTOSELVITYSHAKEMUS": {
+      "path": "/johtoselvityshakemus/*",
+      "headerLabel": "Luo uusi johtoselvityshakemus",
+      "meta": {
+        "title": "Haitaton Beta - Luo uusi johtoselvityshakemus"
+      }
+    },
     "HAITATON_INFO": {
       "path": "/info",
       "headerLabel": "SV: Tietoja Haitattomasta",
