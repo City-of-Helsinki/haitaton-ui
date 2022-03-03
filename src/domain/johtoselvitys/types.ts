@@ -1,6 +1,6 @@
 import { HaitatonGeometry } from '../../common/types/hanke';
 
-export type ApplicationType = 'CABLE_APPLICATION';
+export type ApplicationType = 'CABLE_REPORT';
 
 export type Contact = {
   name: string;
@@ -24,7 +24,7 @@ export enum ContactType {
 }
 
 export type Customer = {
-  type: ContactType | '';
+  type: 'PERSON' | 'COMPANY' | 'ASSOCIATION' | 'OTHER';
   name: string;
   country: string;
   postalAddress: {
@@ -37,7 +37,7 @@ export type Customer = {
   email: string;
   phone: string;
   registryKey: string;
-  ovt: string;
+  ovt: string | null;
   invoicingOperator: string | null;
   sapCustomerNumber: string | null;
 };
@@ -59,7 +59,7 @@ export type JohtoselvitysFormData = {
   identificationNumber: string; // hankeTunnus
   clientApplicationKind: string;
   workDescription: string;
-  postalAddress: string;
+  postalAddress: string | null;
   representativeWithContacts: null;
   invoicingCustomer: null;
   customerReference: null;
@@ -72,8 +72,7 @@ export type JohtoselvitysFormData = {
 };
 
 export interface JohtoselvitysFormValues {
-  id: number | undefined;
-  userId: string | null;
+  id: number | null;
   applicationType: ApplicationType;
   applicationData: JohtoselvitysFormData;
 }

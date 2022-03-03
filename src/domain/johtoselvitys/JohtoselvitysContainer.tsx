@@ -8,6 +8,7 @@ import { JohtoselvitysFormValues } from './types';
 import { Contacts } from './Contacts';
 import { Geometries } from './Geometries';
 import { ReviewAndSend } from './ReviewAndSend';
+import api from '../api/api';
 
 interface ButtonProps {
   nextPath?: string;
@@ -18,14 +19,20 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) =>
   const navigate = useNavigate();
   const formik = useFormikContext<JohtoselvitysFormValues>();
 
-  const saveFormState = () => {
+  const saveFormState = async () => {
     console.log('saveFormState');
     console.log(formik.values);
+    const { data } = await api.post<JohtoselvitysFormValues>('/hakemukset', formik.values);
+    formik.setValues(data);
   };
 
-  const sendFormToAllu = () => {
-    console.log('and now send the application');
-    console.log(formik.values);
+  const sendFormToAllu = async () => {
+    const { data } = await api.post<unknown>(
+      `/hakemukset/${formik.values.id}/send-application`,
+      {}
+    );
+    console.log('Value requested to be sent to allu');
+    console.log(data);
   };
 
   return (
@@ -33,7 +40,7 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) =>
       {previousPath && (
         <Button
           onClick={() => {
-            saveFormState();
+            // saveFormState();
             navigate(`/fi/johtoselvityshakemus${previousPath}`); // TODO: localized links
           }}
         >
@@ -43,7 +50,7 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) =>
       {nextPath && (
         <Button
           onClick={() => {
-            saveFormState();
+            // saveFormState();
             navigate(`/fi/johtoselvityshakemus${nextPath}`); // TODO: localized links
           }}
         >
@@ -51,14 +58,25 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) =>
         </Button>
       )}
       {!nextPath && ( // Final page reached, provide an action to save
-        <Button
-          onClick={() => {
-            sendFormToAllu();
-            // navigate(`/fi/hakemus${nextPath}`); // TODO: localized links
-          }}
-        >
-          Lähetä hakemus
-        </Button>
+        <div>
+          <Button
+            onClick={() => {
+              saveFormState();
+              // navigate(`/fi/hakemus${nextPath}`); // TODO: localized links
+            }}
+          >
+            Tallenna hakemus
+          </Button>
+          <hr />
+          <Button
+            onClick={() => {
+              sendFormToAllu();
+              // navigate(`/fi/hakemus${nextPath}`); // TODO: localized links
+            }}
+          >
+            Lähetä hakemus
+          </Button>
+        </div>
       )}
     </div>
   );
@@ -66,16 +84,15 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) =>
 
 const JohtoselvitysContainer: React.FC = () => {
   const initialValues: JohtoselvitysFormValues = {
-    id: undefined,
-    userId: null,
-    applicationType: 'CABLE_APPLICATION',
+    id: null,
+    applicationType: 'CABLE_REPORT',
     applicationData: {
       name: '',
       customerWithContacts: {
         customer: {
-          type: '',
+          type: 'PERSON',
           name: '',
-          country: '',
+          country: 'FI',
           postalAddress: {
             streetAddress: {
               streetName: '',
@@ -86,9 +103,9 @@ const JohtoselvitysContainer: React.FC = () => {
           email: '',
           phone: '',
           registryKey: '',
-          ovt: '',
-          invoicingOperator: '',
-          sapCustomerNumber: '',
+          ovt: null, // TODO: add to frontend
+          invoicingOperator: null,
+          sapCustomerNumber: null,
         },
         contacts: [
           {
@@ -110,17 +127,17 @@ const JohtoselvitysContainer: React.FC = () => {
         },
         geometries: [],
       },
-      startTime: null,
-      endTime: null,
+      startTime: 1646267516.878748,
+      endTime: 1646267516.878748,
       pendingOnClient: true,
-      identificationNumber: '',
-      clientApplicationKind: '',
+      identificationNumber: 'HAI-123', // TODO: add to UI
+      clientApplicationKind: 'HAITATON', // TODO: add to UI
       workDescription: '',
       contractorWithContacts: {
         customer: {
-          type: '',
+          type: 'COMPANY',
           name: '',
-          country: '',
+          country: 'FI',
           postalAddress: {
             streetAddress: {
               streetName: '',
@@ -131,7 +148,7 @@ const JohtoselvitysContainer: React.FC = () => {
           email: '',
           phone: '',
           registryKey: '',
-          ovt: '',
+          ovt: null, // TODO: add to frontend
           invoicingOperator: null,
           sapCustomerNumber: null,
         },
@@ -151,7 +168,7 @@ const JohtoselvitysContainer: React.FC = () => {
           },
         ],
       },
-      postalAddress: '',
+      postalAddress: null,
       representativeWithContacts: null,
       invoicingCustomer: null,
       customerReference: null,

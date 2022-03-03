@@ -38,7 +38,7 @@ export interface types {
 }
 
 export const initialValues: types = {
-  applicationType: 'CABLE_APPLICATION',
+  applicationType: 'CABLE_REPORT',
   applicationData: {
     name: '',
     startTime: null,
