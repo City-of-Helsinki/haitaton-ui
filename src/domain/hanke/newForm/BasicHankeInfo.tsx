@@ -32,7 +32,9 @@ export const validationSchema = {
   kuvaus: Yup.string().required('Please enter a kuvaus for the hanke'),
   alkuPvm: Yup.date().required('Hankkeella tulee olla aloituspäivämäärä').min(7),
   loppuPvm: Yup.date().required('Hankkeella tulee olla päättymispäivämäärä'),
-  vaihe: Yup.mixed().required().oneOf($enum(HANKE_VAIHE).getValues()),
+  vaihe: Yup.mixed()
+    .required('Hankkeen vaihe pitää olla asetettu')
+    .oneOf($enum(HANKE_VAIHE).getValues()),
   suunnitteluVaihe: Yup.mixed()
     .nullable()
     .when(['vaihe'], { is: HANKE_VAIHE.SUUNNITTELU, then: yup.string().required() }),
@@ -66,12 +68,10 @@ export const BasicHankeInfo: React.FC = () => {
   const formik = useFormikContext<HakemusFormValues>();
   const alkuPvmInputIsDirty = useRef(false);
   const loppuPvmInputIsDirty = useRef(false);
-  const getErrorMessage = (fieldName: keyof typeof initialValues) => {
-    return formik.touched[fieldName] ? formik.errors[fieldName] : undefined;
-  };
+  const getErrorMessage = (fieldname: keyof typeof initialValues) =>
+    formik.touched[fieldname] ? formik.errors[fieldname] : undefined;
   return (
     <div>
-      <p>{JSON.stringify(formik.errors)}</p>
       <TextInput
         id="hankeTunnus"
         label="Hankkeen tunnus"
@@ -166,6 +166,8 @@ export const BasicHankeInfo: React.FC = () => {
           }
           formik.setFieldValue('vaihe', selection.value);
         }}
+        error={getErrorMessage('vaihe')}
+        invalid={!!getErrorMessage('vaihe')}
       />
       <Select
         required
@@ -178,7 +180,6 @@ export const BasicHankeInfo: React.FC = () => {
         onChange={(selection: Option) => {
           formik.setFieldValue('suunnitteluVaihe', selection.value);
         }}
-        error={getErrorMessage('vaihe')}
       />
     </div>
   );
