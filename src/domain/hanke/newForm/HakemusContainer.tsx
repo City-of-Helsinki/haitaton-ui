@@ -20,13 +20,8 @@ import { FORMFIELD } from '../edit/types';
 import { PartialExcept } from '../../../common/types/utils';
 import { HankeContactKey } from '../../types/hanke';
 import api from '../../api/api';
-
-interface ButtonProps {
-  nextPath?: string;
-  previousPath?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  path: string;
-}
+import FormPagination from '../../forms/components/FormPageIndicator';
+import styles from './HakemusContainer.module.scss';
 
 const isContactEmpty = ({
   etunimi,
@@ -50,16 +45,29 @@ const filterEmptyContacts = (
   [FORMFIELD.TOTEUTTAJAT]: formData[FORMFIELD.TOTEUTTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
 });
 
-const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, path }) => {
+interface ButtonProps {
+  nextPath?: string;
+  previousPath?: string;
+  fieldsToValidate: string[];
+}
+
+const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, fieldsToValidate }) => {
   const navigate = useNavigate();
   const formik = useFormikContext<HakemusFormValues>();
 
-  const fieldsInPathAreValid = (pathToValidate: string) => {
-    console.log('VALIDATE FIELDS IN PATH, hard code for now with a switch');
-    console.log(pathToValidate);
-    formik.validateField('alkuPvm');
-    formik.validateField('nimi');
-    return false;
+  const fieldsAreValid = () => {
+    return new Promise((resolve) => {
+      fieldsToValidate.forEach((fieldname) => {
+        formik.setFieldTouched(fieldname, true);
+      });
+      formik.validateForm().then((validationErrors) => {
+        resolve(
+          !fieldsToValidate.some((fieldToValidate) =>
+            Object.keys(validationErrors).includes(fieldToValidate)
+          )
+        );
+      });
+    });
   };
 
   const updateFormFieldsWithAPIResponse = (
@@ -122,9 +130,8 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, path
     <div>
       {previousPath && (
         <Button
-          onClick={() => {
-            // TODO: trigger form validation, continue if OK
-            if (fieldsInPathAreValid(path)) {
+          onClick={async () => {
+            if (await fieldsAreValid()) {
               saveFormState();
               navigate(`/fi/hakemus${previousPath}`); // TODO: localized links
             }
@@ -135,11 +142,8 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, path
       )}
       {nextPath && (
         <Button
-          onClick={() => {
-            // TODO: trigger form validation, continue if OK
-            // for field in currentFormStep.fields
-            // formik.validateField(field)
-            if (fieldsInPathAreValid(path)) {
+          onClick={async () => {
+            if (await fieldsAreValid()) {
               saveFormState();
               navigate(`/fi/hakemus${nextPath}`); // TODO: localized links
             }
@@ -150,9 +154,11 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, path
       )}
       {!nextPath && ( // Final page reached, provide an action to save
         <Button
-          onClick={() => {
-            saveFormState();
-            // navigate(`/fi/hakemus${nextPath}`); // TODO: localized links
+          onClick={async () => {
+            if (await fieldsAreValid()) {
+              saveFormState();
+              // navigate(`/fi/hakemus${nextPath}`); // TODO: localized links
+            }
           }}
         >
           Tallenna
@@ -185,26 +191,31 @@ const HakemusContainer: React.FC = () => {
       path: '/',
       element: <BasicHankeInfo />,
       title: 'Perustiedot',
+      fieldsToValidate: ['nimi', 'kuvaus', 'alkuPvm', 'loppuPvm', 'vaihe'],
     },
     {
       path: '/geometry',
       element: <Geometries />,
-      title: 'Hankkeen alue',
+      title: 'Alue',
+      fieldsToValidate: [],
     },
     {
       path: '/contactdetails',
       element: <Contacts />,
       title: 'Yhteystiedot',
+      fieldsToValidate: [],
     },
     {
       path: '/additional-information',
       element: <AdditionalInformation />,
-      title: 'Hankkeen lisätiedot',
+      title: 'Lisätiedot',
+      fieldsToValidate: [],
     },
     {
       path: '/haitat',
       element: <Haitat />,
-      title: 'Hankkeen haitat',
+      title: 'Haitat',
+      fieldsToValidate: [],
     },
   ];
 
@@ -218,25 +229,36 @@ const HakemusContainer: React.FC = () => {
         }}
         validationSchema={Yup.object().shape({ ...validationBasicHankeInfo })}
       >
-        <Routes>
-          {formSteps.map((formStep, i) => {
-            return (
-              <Route
-                path={formStep.path}
-                element={
-                  <>
-                    {formStep.element}
-                    <NavigationButtons
-                      path={formStep.path}
-                      nextPath={formSteps[i + 1]?.path}
-                      previousPath={formSteps[i - 1]?.path}
-                    />
-                  </>
-                }
-              />
-            );
-          })}
-        </Routes>
+        <div className={styles.formWrapper}>
+          <Routes>
+            {formSteps.map((formStep, i) => {
+              return (
+                <Route
+                  path={formStep.path}
+                  element={
+                    <>
+                      <div className={styles.pagination}>
+                        <FormPagination
+                          currentLabel={formStep.title}
+                          formPageLabels={formSteps.map((formPage) => formPage.title)}
+                        />
+                      </div>
+                      <div className={styles.actions}>
+                        lomake action buttonit - poista, keskeytä ja tallenna
+                      </div>
+                      <div className={styles.content}>{formStep.element}</div>
+                      <NavigationButtons
+                        nextPath={formSteps[i + 1]?.path}
+                        previousPath={formSteps[i - 1]?.path}
+                        fieldsToValidate={formSteps[i].fieldsToValidate}
+                      />
+                    </>
+                  }
+                />
+              );
+            })}
+          </Routes>
+        </div>
       </Formik>
     </>
   );

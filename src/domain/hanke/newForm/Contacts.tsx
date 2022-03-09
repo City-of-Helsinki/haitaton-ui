@@ -1,14 +1,28 @@
 import { useFormikContext } from 'formik';
-import { Button } from 'hds-react';
+import { Button, IconPlusCircle, IconTrash } from 'hds-react';
 import React from 'react';
+import * as Yup from 'yup';
 import { useQuery } from 'react-query';
 import { $enum } from 'ts-enum-util';
 import api from '../../api/api';
 import { Organization } from '../edit/types';
-import ContactDetails from './ContactDetail';
+import ContactDetail from './ContactDetail';
 import { HakemusFormValues, HankeContact, HANKE_CONTACT_KEY, HANKE_CONTACT_TYPE } from './types';
+import styles from './Contacts.module.scss';
 
-const initialContact: HankeContact = {
+const contactSchema = Yup.object().shape({
+  etunimi: Yup.string().required('Tieto tarvitaan'),
+  sukunimi: Yup.string().required('Tieto tarvitaan'),
+  email: Yup.string().required('Tieto tarvitaan'),
+});
+
+export const contactsValidationSchema = {
+  omistajat: Yup.array().of(contactSchema),
+  toteuttajat: Yup.array().of(contactSchema),
+  arvioijat: Yup.array().of(contactSchema),
+};
+
+export const initialContact: HankeContact = {
   etunimi: '',
   sukunimi: '',
   email: '',
@@ -51,29 +65,45 @@ export const Contacts: React.FC = () => {
     <div>
       {$enum(HANKE_CONTACT_TYPE).map((contactType) => (
         <div>
-          {formik.values[contactType].map((hankeContact, index) => {
-            return (
-              <>
-                <ContactDetails
-                  contactType={contactType}
-                  index={index}
-                  organizationList={organizationList ? organizationList.data : []}
-                />
-                {index > 0 ? (
-                  <Button onClick={() => deleteContact(contactType, index)}>Poista kontakti</Button>
-                ) : (
-                  ''
-                )}
-                {formik.values[contactType].length === index + 1 ? (
-                  <Button onClick={() => addContact(contactType)}>
-                    Lisää kontakti {contactType}
-                  </Button>
-                ) : (
-                  ''
-                )}
-              </>
-            );
-          })}
+          <p>{JSON.stringify(formik.errors)}</p>
+          <div className={styles.contactTypeContainer}>
+            <h3 style={{ fontSize: 'var(--fontsize-heading-l) ' }} className={styles.contactTitle}>
+              {contactType}
+            </h3>
+            {formik.values[contactType].map((hankeContact, index) => {
+              return (
+                <>
+                  <ContactDetail
+                    contactType={contactType}
+                    index={index}
+                    organizationList={organizationList ? organizationList.data : []}
+                  />
+                  {formik.values[contactType].length === index + 1 ? (
+                    <Button
+                      variant="supplementary"
+                      iconLeft={<IconPlusCircle />}
+                      onClick={() => addContact(contactType)}
+                    >
+                      Lisää toinen yhteyshenkilö
+                    </Button>
+                  ) : (
+                    ''
+                  )}
+                  {index > 0 ? (
+                    <Button
+                      variant="supplementary"
+                      iconLeft={<IconTrash />}
+                      onClick={() => deleteContact(contactType, index)}
+                    >
+                      Poista kontakti
+                    </Button>
+                  ) : (
+                    ''
+                  )}
+                </>
+              );
+            })}
+          </div>
         </div>
       ))}
     </div>

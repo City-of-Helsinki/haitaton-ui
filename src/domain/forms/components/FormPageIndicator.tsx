@@ -4,38 +4,29 @@ import Circle from '../../../common/components/icons/Circle';
 import CircleSelected from '../../../common/components/icons/CircleSelected';
 
 type PropTypes = {
-  currentFormPage: number;
+  formPageLabels: string[];
+  currentLabel: string;
 };
 
-const FormPagination: React.FC<PropTypes> = ({ currentFormPage }) => {
-  const formSteps = [
-    { label: 'perustiedot' },
-    { label: 'yhteystiedot' },
-    { label: 'aluetiedot' },
-    { label: 'liitteet' },
-  ];
-
+const FormPagination: React.FC<PropTypes> = ({ formPageLabels, currentLabel }) => {
   return (
     <>
       <ol className={styles.stepIndicator}>
-        {formSteps.map((formStep, i) => {
-          const isSeen = currentFormPage >= i;
+        {formPageLabels.map((formPageLabel, i) => {
+          const isCurrent = currentLabel === formPageLabels[i];
           return (
-            <li key={formStep.label} className={styles.step}>
-              {currentFormPage > i && <p className={styles.hidden}>Completed: </p>}
-              {currentFormPage === i ? (
+            <li key={formPageLabel} className={styles.step}>
+              {isCurrent ? (
                 <>
                   <p className={styles.hidden}>Current: </p>
                   <CircleSelected />
                 </>
               ) : (
-                <Circle active={isSeen} />
+                <Circle active={isCurrent} />
               )}
-              <div className={`${styles.line} ${isSeen ? styles.coloredLine : ''}`} />
-              <span
-                className={`${styles.label} ${currentFormPage === i ? styles.labelActive : ''}`}
-              >
-                {formStep.label}
+              <div className={`${styles.line} ${isCurrent ? styles.coloredLine : ''}`} />
+              <span className={`${styles.label} ${isCurrent ? styles.labelActive : ''}`}>
+                {formPageLabel}
               </span>
             </li>
           );
