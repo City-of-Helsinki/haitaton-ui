@@ -1,7 +1,6 @@
 import React from 'react';
 import { Accordion } from 'hds-react';
 import styles from './GenericForm.module.scss';
-import FormPageIndicator from './components/FormPageIndicator';
 import HankeIndexes from '../map/components/HankeSidebar/HankeIndexes';
 import { HankeDataFormState } from '../hanke/edit/types';
 
@@ -14,9 +13,6 @@ type Props = {
 const GenericForm: React.FC<Props> = ({ formData, isSaving }) => {
   return (
     <div className={styles.formWrapper}>
-      <div className={styles.pagination}>
-        <FormPageIndicator currentFormPage={2} />
-      </div>
       <div className={styles.actions}>lomake action buttonit - poista, keskeytä ja tallenna</div>
       <Accordion heading="Haittaindeksit" card className={styles.index}>
         <HankeIndexes

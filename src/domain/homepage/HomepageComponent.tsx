@@ -18,74 +18,54 @@ const Homepage: React.FC = () => {
     {
       key: 'hanke',
       title: 'Hanke',
-      description:
-        'Hankkeet toimivat hakemus kokonaisuuksina, josta pystyy seuraamaan hankkeeseen liittyvien hakemusten tilaa.',
-      actionText: 'Luo Hanke',
       actionIcon: Icons.plus,
       actionLink: NEW_HANKE.path,
     },
+    /*
     {
       key: 'hakemus',
       title: 'Hakemus/Työvaihe',
-      description:
-        'Hankkeet toimivat hakemus kokonaisuuksina, josta pystyy seuraamaan hankkeeseen liittyvien hakemusten tilaa.',
-      actionText: 'Luo Hakemus',
       actionIcon: Icons.plus,
       actionLink: '/#',
     },
+    */
     {
       key: 'johtotietoselvitys',
       title: 'Johtotietoselvitys',
-      description:
-        'Hankkeet toimivat hakemus kokonaisuuksina, josta pystyy seuraamaan hankkeeseen liittyvien hakemusten tilaa.',
-      actionText: 'Luo Hanke',
       actionIcon: Icons.plus,
-      actionLink: '/#',
+      actionLink: '/fi/johtoselvityshakemus',
     },
+    /*
     {
       key: 'valmistelu',
       title: 'Valmisteluvaiheessa oleva hanke',
-      description:
-        'Hankkeet toimivat hakemus kokonaisuuksina, josta pystyy seuraamaan hankkeeseen liittyvien hakemusten tilaa.',
-      actionText: 'Luo Hanke',
       actionIcon: Icons.plus,
       actionLink: '/#',
     },
+    */
     {
       key: 'hankesalkku',
       title: 'Hankesalkku',
-      description:
-        'Hankkeet toimivat hakemus kokonaisuuksina, josta pystyy seuraamaan hankkeeseen liittyvien hakemusten tilaa.',
-      actionText: 'Luo Hanke',
       actionIcon: Icons.document,
       actionLink: HANKEPORTFOLIO.path,
     },
     {
       key: 'hankelista',
       title: 'Hankelista',
-      description:
-        'Hankkeet toimivat hakemus kokonaisuuksina, josta pystyy seuraamaan hankkeeseen liittyvien hakemusten tilaa.',
-      actionText: 'Luo Hanke',
       actionIcon: Icons.document,
       actionLink: PROJECTS.path,
     },
     {
       key: 'kartta',
       title: 'Kartta',
-      description:
-        'Hankkeet toimivat hakemus kokonaisuuksina, josta pystyy seuraamaan hankkeeseen liittyvien hakemusten tilaa.',
-      actionText: 'Luo Hanke',
       actionIcon: Icons.map,
       actionLink: MAP.path,
     },
     {
       key: 'tietoja_haitattomasta',
       title: 'Tietoja Haitattomasta',
-      description:
-        'Hankkeet toimivat hakemus kokonaisuuksina, josta pystyy seuraamaan hankkeeseen liittyvien hakemusten tilaa.',
-      actionText: 'Luo Hanke',
       actionIcon: Icons.info,
-      actionLink: '/#',
+      actionLink: '/fi/tietoja',
     },
   ];
 

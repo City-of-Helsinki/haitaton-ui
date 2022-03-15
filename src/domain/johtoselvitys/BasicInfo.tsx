@@ -21,7 +21,7 @@ export const validationSchema = {
   workDescription: Yup.string().required('Lisää työnkuvaus'),
 };
 
-export interface types {
+export interface InitialValueTypes {
   applicationType: ApplicationType;
   applicationData: {
     name: string;
@@ -37,7 +37,7 @@ export interface types {
   };
 }
 
-export const initialValues: types = {
+export const initialValues: InitialValueTypes = {
   applicationType: 'CABLE_REPORT',
   applicationData: {
     name: '',
@@ -68,19 +68,16 @@ export const BasicHankeInfo: React.FC = () => {
         value={{ value: 'CABLE_APPLICATION', label: 'Johtoselvityshakemus' }}
         options={[{ value: 'CABLE_APPLICATION', label: 'Johtoselvityshakemus' }]}
         onChange={(selection: Option) => {
-          console.log('Changed option');
-          console.log(selection);
           formik.setFieldValue('applicationType', selection.value);
         }}
       />
+      {/* TODO: HAI-1160 */}
       <Select
         required
         label="Liittyvä hanke"
         options={[]}
         disabled
         onChange={(selection: Option) => {
-          console.log('Changed option');
-          console.log(selection);
           formik.setFieldValue('applicationData.identificationNumber', selection.value);
         }}
       />
@@ -113,9 +110,7 @@ export const BasicHankeInfo: React.FC = () => {
         label="Aloituspäivä"
         minDate={new Date()}
         onChange={(date: string) => {
-          console.log(date);
           const convertedDateString = convertFinnishDate(date);
-          console.log(convertedDateString);
 
           if (convertedDateString.length > 0) {
             // TODO convert to unix timestamp
@@ -139,9 +134,7 @@ export const BasicHankeInfo: React.FC = () => {
         label="Lopetuspäivä"
         minDate={new Date()}
         onChange={(date: string) => {
-          console.log(date);
           const convertedDateString = convertFinnishDate(date);
-          console.log(convertedDateString);
 
           if (convertedDateString.length > 0) {
             // TODO convert to unix timestamp

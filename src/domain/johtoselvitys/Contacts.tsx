@@ -43,6 +43,8 @@ export const Contacts: React.FC = () => {
         onBlur={formik.handleBlur}
         value={formik.values.applicationData.customerWithContacts.customer.registryKey}
       />
+
+      {/* TODO: HAI-1164 OVT-tunnuksen lisääminen
       <TextInput
         id="applicationData.customerWithContacts.customer.ovt"
         label="OVT-tunnus"
@@ -50,6 +52,7 @@ export const Contacts: React.FC = () => {
         onBlur={formik.handleBlur}
         value={formik.values.applicationData.customerWithContacts.customer.ovt}
       />
+      */}
       <TextInput
         id="applicationData.customerWithContacts.customer.email"
         label="Sähköposti"
@@ -171,6 +174,7 @@ export const Contacts: React.FC = () => {
         onBlur={formik.handleBlur}
         value={formik.values.applicationData.contractorWithContacts.customer.registryKey}
       />
+      {/* TODO: HAI-1164 OVT-tunnuksen lisääminen
       <TextInput
         id="applicationData.contractorWithContacts.customer.ovt"
         label="OVT-tunnus"
@@ -178,6 +182,7 @@ export const Contacts: React.FC = () => {
         onBlur={formik.handleBlur}
         value={formik.values.applicationData.contractorWithContacts.customer.ovt}
       />
+      */}
       <TextInput
         id="applicationData.contractorWithContacts.customer.email"
         label="Sähköposti"
