@@ -157,7 +157,7 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, fiel
           onClick={async () => {
             if (await fieldsAreValid()) {
               saveFormState();
-              // navigate(`/fi/hakemus${nextPath}`); // TODO: localized links
+              // TODO: navigate to hanke on map with a localized link
             }
           }}
         >

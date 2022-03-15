@@ -2,8 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { useFormikContext } from 'formik';
 import VectorSource from 'ol/source/Vector';
-import { Feature } from 'ol';
-import Geometry from 'ol/geom/Geometry';
 import VectorLayer from '../../../common/components/map/layers/VectorLayer';
 import Map from '../../../common/components/map/Map';
 import FitSource from '../../map/components/interations/FitSource';
@@ -24,13 +22,10 @@ export const Geometries: React.FC = () => {
   const formik = useFormikContext<HakemusFormValues>();
   const [drawSource] = useState<VectorSource>(new VectorSource());
   const { mapTileLayers } = useMapDataLayers();
-  const [features, setFeatures] = useState<Feature<Geometry>[]>([]);
 
   const onDrawChange = () => {
-    setFeatures(drawSource.getFeatures());
     const hankeGeometries = formatFeaturesToHankeGeoJSON(drawSource.getFeatures());
     formik.setFieldValue('geometriat', hankeGeometries);
-    // Backend ei kuitenkaan vielä huoli ylläolevan mukaista geometrioiden tallennusta
   };
 
   useEffect(() => {
@@ -54,11 +49,6 @@ export const Geometries: React.FC = () => {
           </Controls>
         </Map>
       </div>
-      {features.map((feature) => {
-        const featureGeometry = feature.getGeometry();
-        return <p>{JSON.stringify(featureGeometry)}</p>;
-      })}
-      <p>{JSON.stringify(formik.values.geometriat)}</p>
     </div>
   );
 };

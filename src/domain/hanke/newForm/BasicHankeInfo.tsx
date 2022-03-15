@@ -40,7 +40,7 @@ export const validationSchema = {
     .when(['vaihe'], { is: HANKE_VAIHE.SUUNNITTELU, then: yup.string().required() }),
 };
 
-export interface types {
+export interface InitialValueTypes {
   id: number | null;
   hankeTunnus: string;
   onYKTHanke: boolean;
@@ -52,7 +52,7 @@ export interface types {
   suunnitteluVaihe: HANKE_SUUNNITTELUVAIHE_KEY | null;
 }
 
-export const initialValues: types = {
+export const initialValues: InitialValueTypes = {
   id: null,
   hankeTunnus: '',
   onYKTHanke: false,
@@ -172,7 +172,7 @@ export const BasicHankeInfo: React.FC = () => {
       <Select
         required
         label="Hankkeen suunnitteluvaihe"
-        disabled={!(HANKE_VAIHE.SUUNNITTELU === formik.values.vaihe)}
+        disabled={HANKE_VAIHE.SUUNNITTELU !== formik.values.vaihe}
         options={$enum(HANKE_SUUNNITTELUVAIHE).map((value) => ({
           value,
           label: value,

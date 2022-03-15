@@ -9,6 +9,8 @@ import { Contacts } from './Contacts';
 import { Geometries } from './Geometries';
 import { ReviewAndSend } from './ReviewAndSend';
 import api from '../api/api';
+import FormPagination from '../forms/components/FormPageIndicator';
+import styles from './Johtoselvitys.module.scss';
 
 interface ButtonProps {
   nextPath?: string;
@@ -20,19 +22,16 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) =>
   const formik = useFormikContext<JohtoselvitysFormValues>();
 
   const saveFormState = async () => {
-    console.log('saveFormState');
-    console.log(formik.values);
     const { data } = await api.post<JohtoselvitysFormValues>('/hakemukset', formik.values);
     formik.setValues(data);
+    // TODO: HAI-1156
+    // TODO: HAI-1159
   };
 
   const sendFormToAllu = async () => {
-    const { data } = await api.post<unknown>(
-      `/hakemukset/${formik.values.id}/send-application`,
-      {}
-    );
-    console.log('Value requested to be sent to allu');
-    console.log(data);
+    await api.post<unknown>(`/hakemukset/${formik.values.id}/send-application`, {});
+    // TODO: HAI-1157
+    // TODO: HAI-1158
   };
 
   return (
@@ -40,7 +39,8 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) =>
       {previousPath && (
         <Button
           onClick={() => {
-            // saveFormState();
+            // TODO: HAI-1165
+            // TODO: HAI-1166
             navigate(`/fi/johtoselvityshakemus${previousPath}`); // TODO: localized links
           }}
         >
@@ -50,7 +50,8 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) =>
       {nextPath && (
         <Button
           onClick={() => {
-            // saveFormState();
+            // TODO: HAI-1165
+            // TODO: HAI-1166
             navigate(`/fi/johtoselvityshakemus${nextPath}`); // TODO: localized links
           }}
         >
@@ -62,7 +63,6 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) =>
           <Button
             onClick={() => {
               saveFormState();
-              // navigate(`/fi/hakemus${nextPath}`); // TODO: localized links
             }}
           >
             Tallenna hakemus
@@ -130,7 +130,7 @@ const JohtoselvitysContainer: React.FC = () => {
       startTime: 1646267516.878748,
       endTime: 1646267516.878748,
       pendingOnClient: true,
-      identificationNumber: 'HAI-123', // TODO: add to UI
+      identificationNumber: 'HAI-123', // TODO: HAI-1160
       clientApplicationKind: 'HAITATON', // TODO: add to UI
       workDescription: '',
       contractorWithContacts: {
@@ -220,12 +220,19 @@ const JohtoselvitysContainer: React.FC = () => {
                 path={formStep.path}
                 element={
                   <>
-                    {formStep.element}
-                    <br />
-                    <NavigationButtons
-                      nextPath={formSteps[i + 1]?.path}
-                      previousPath={formSteps[i - 1]?.path}
-                    />{' '}
+                    <div className={styles.formWrapper}>
+                      <div className={styles.pagination}>
+                        <FormPagination
+                          currentLabel={formStep.title}
+                          formPageLabels={formSteps.map((formPage) => formPage.title)}
+                        />
+                      </div>
+                      <div className={styles.content}>{formStep.element}</div>
+                      <NavigationButtons
+                        nextPath={formSteps[i + 1]?.path}
+                        previousPath={formSteps[i - 1]?.path}
+                      />{' '}
+                    </div>
                   </>
                 }
               />
