@@ -1,37 +1,46 @@
 import Feature from 'ol/Feature';
 import { $enum } from 'ts-enum-util';
-import { Fill, Style } from 'ol/style';
+import { Fill, Stroke, Style } from 'ol/style';
 import {
   getStatusByIndex,
   getColorByStatus,
   LIIKENNEHAITTA_STATUS,
 } from '../../common/utils/liikennehaittaindeksi';
 
+const opacity = 0.75;
+
+const stroke = new Stroke({ color: 'black', width: 2 });
+
 const STYLES = {
   [LIIKENNEHAITTA_STATUS.BLUE]: new Style({
     fill: new Fill({
-      color: getColorByStatus(LIIKENNEHAITTA_STATUS.BLUE),
+      color: getColorByStatus(LIIKENNEHAITTA_STATUS.BLUE, opacity),
     }),
+    stroke,
   }),
   [LIIKENNEHAITTA_STATUS.GREEN]: new Style({
     fill: new Fill({
-      color: getColorByStatus(LIIKENNEHAITTA_STATUS.GREEN),
+      color: getColorByStatus(LIIKENNEHAITTA_STATUS.GREEN, opacity),
     }),
+    stroke,
   }),
   [LIIKENNEHAITTA_STATUS.GREY]: new Style({
     fill: new Fill({
-      color: getColorByStatus(LIIKENNEHAITTA_STATUS.GREY),
+      color: getColorByStatus(LIIKENNEHAITTA_STATUS.GREY, opacity),
     }),
+    stroke,
   }),
   [LIIKENNEHAITTA_STATUS.YELLOW]: new Style({
     fill: new Fill({
-      color: getColorByStatus(LIIKENNEHAITTA_STATUS.YELLOW),
+      color: getColorByStatus(LIIKENNEHAITTA_STATUS.YELLOW, opacity),
     }),
+    stroke,
   }),
   [LIIKENNEHAITTA_STATUS.RED]: new Style({
     fill: new Fill({
-      color: getColorByStatus(LIIKENNEHAITTA_STATUS.RED),
+      color: getColorByStatus(LIIKENNEHAITTA_STATUS.RED, opacity),
     }),
+    stroke,
   }),
 };
 
