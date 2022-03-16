@@ -17,6 +17,7 @@ import GeometryHover from '../../common/components/map/interactions/hover/Geomet
 import HankeHoverBox from './components/HankeHover/HankeHoverBox';
 import MapGuide from './components/MapGuide/MapGuide';
 import HankkeetProvider from './HankkeetProvider';
+import MapControl from '../../common/components/map/controls/MapControl';
 
 const HankeMap: React.FC = () => {
   const [zoom] = useState(9); // TODO: also take zoom into consideration
@@ -40,6 +41,7 @@ const HankeMap: React.FC = () => {
           <MapGuide />
           {mapTileLayers.ortokartta.visible && <Ortokartta />}
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
+          <MapControl />
 
           <HankkeetProvider>
             <HankeSidebar />

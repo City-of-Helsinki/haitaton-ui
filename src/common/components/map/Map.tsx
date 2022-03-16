@@ -41,7 +41,7 @@ const Map: React.FC<Props> = ({
         center,
         zoom,
         minZoom: 5,
-        maxZoom: 15,
+        maxZoom: 13,
         projection,
       }),
       layers: [],
