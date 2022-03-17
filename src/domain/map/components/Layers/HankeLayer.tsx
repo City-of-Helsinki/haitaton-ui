@@ -7,6 +7,7 @@ import { useDateRangeFilter } from '../../hooks/useDateRangeFilter';
 import { styleFunction } from '../../utils/geometryStyle';
 import CenterProjectOnMap from '../interations/CenterProjectOnMap';
 import HankkeetContext from '../../HankkeetProviderContext';
+import HighlightFeatureOnMap from '../interations/HighlightFeatureOnMap';
 
 const HankeLayer = () => {
   const { hankkeet } = useContext(HankkeetContext);
@@ -48,6 +49,7 @@ const HankeLayer = () => {
         {hankkeetFilteredByAll.length}
       </div>
       <CenterProjectOnMap source={hankeSource.current} />
+      <HighlightFeatureOnMap source={hankeSource.current} />
 
       <VectorLayer
         source={hankeSource.current}

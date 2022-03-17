@@ -48,8 +48,8 @@ const HankeMap: React.FC = () => {
             <FeatureClick />
             <GeometryHover>
               <HankeHoverBox />
+              <HankeLayer />
             </GeometryHover>
-            <HankeLayer />
           </HankkeetProvider>
 
           <Controls>
