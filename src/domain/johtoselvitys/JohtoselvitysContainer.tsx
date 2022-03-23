@@ -22,7 +22,9 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) =>
   const formik = useFormikContext<JohtoselvitysFormValues>();
 
   const saveFormState = async () => {
-    const { data } = await api.post<JohtoselvitysFormValues>('/hakemukset', formik.values);
+    const { data } = formik.values.id
+      ? await api.put<JohtoselvitysFormValues>(`/hakemukset/${formik.values.id}`, formik.values)
+      : await api.post<JohtoselvitysFormValues>('/hakemukset', formik.values);
     formik.setValues(data);
     // TODO: HAI-1156
     // TODO: HAI-1159
