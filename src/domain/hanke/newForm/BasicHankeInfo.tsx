@@ -30,7 +30,7 @@ export const today = startOfDay(new Date());
 export const validationSchema = {
   nimi: Yup.string().required('Please enter a name for the hanke'),
   kuvaus: Yup.string().required('Please enter a kuvaus for the hanke'),
-  alkuPvm: Yup.date().required('Hankkeella tulee olla aloituspäivämäärä').min(7),
+  alkuPvm: Yup.date().required('Hankkeella tulee olla aloituspäivämäärä'),
   loppuPvm: Yup.date().required('Hankkeella tulee olla päättymispäivämäärä'),
   vaihe: Yup.mixed()
     .required('Hankkeen vaihe pitää olla asetettu')
