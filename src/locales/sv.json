@@ -445,8 +445,7 @@
         "RED": "SV:Kriittinen",
         "YELLOW": "SV:Huomioitava",
         "GREEN": "SV:Ei merkittävä",
-        "BLUE": "SV:Indeksoimaton",
-        "GREY": "SV:Indeksoimaton"
+        "BLUE": "SV:Indeksoimaton"
       }
     },
     "drawSquareButtonAria": "SV:Piirrä neliö kartalle",

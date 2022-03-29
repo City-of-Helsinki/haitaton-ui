@@ -38,18 +38,6 @@ const STYLES = {
     }),
     stroke: strokeHL,
   }),
-  GREY: new Style({
-    fill: new Fill({
-      color: getColorByStatus(LIIKENNEHAITTA_STATUS.GREY, opacity),
-    }),
-    stroke,
-  }),
-  GREY_HL: new Style({
-    fill: new Fill({
-      color: getColorByStatus(LIIKENNEHAITTA_STATUS.GREY, opacityHL),
-    }),
-    stroke: strokeHL,
-  }),
   YELLOW: new Style({
     fill: new Fill({
       color: getColorByStatus(LIIKENNEHAITTA_STATUS.YELLOW, opacity),
@@ -80,7 +68,6 @@ export const getStyleByStatus = (status: LIIKENNEHAITTA_STATUS, highlight = fals
   $enum.mapValue(status).with({
     [LIIKENNEHAITTA_STATUS.BLUE]: highlight ? STYLES.BLUE_HL : STYLES.BLUE,
     [LIIKENNEHAITTA_STATUS.GREEN]: highlight ? STYLES.GREEN_HL : STYLES.GREEN,
-    [LIIKENNEHAITTA_STATUS.GREY]: highlight ? STYLES.GREY_HL : STYLES.GREY,
     [LIIKENNEHAITTA_STATUS.YELLOW]: highlight ? STYLES.YELLOW_HL : STYLES.YELLOW,
     [LIIKENNEHAITTA_STATUS.RED]: highlight ? STYLES.RED_HL : STYLES.RED,
   });

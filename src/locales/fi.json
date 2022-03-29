@@ -446,8 +446,7 @@
         "RED": "Kriittinen",
         "YELLOW": "Huomioitava",
         "GREEN": "Ei merkittävä",
-        "BLUE": "Indeksoimaton",
-        "GREY": "Indeksoimaton"
+        "BLUE": "Indeksoimaton"
       }
     },
     "drawSquareButtonAria": "Piirrä neliö kartalle",
