@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   margin: var(--spacing-xl) 0;
-  gap: var(--spacing-xl);
 
   .pagination {
     background-color: white;
@@ -22,4 +21,32 @@
     background-color: white;
     padding: var(--spacing-l);
   }
+}
+
+.navButtonContainer {
+  min-width: 18rem;
+  background-color: white;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 15% 10% 20% 10% 20% 10% 15%;
+}
+
+.navPrev {
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+
+.navNext {
+  grid-column-start: 7;
+  grid-column-end: 8;
+}
+
+.navSave {
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+
+.navPublish {
+  grid-column-start: 5;
+  grid-column-end: 6;
 }

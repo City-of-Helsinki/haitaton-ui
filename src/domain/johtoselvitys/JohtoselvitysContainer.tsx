@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Formik, useFormikContext } from 'formik';
 import { Button } from 'hds-react';
@@ -20,65 +20,92 @@ interface ButtonProps {
 const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) => {
   const navigate = useNavigate();
   const formik = useFormikContext<JohtoselvitysFormValues>();
+  const [saveLoading, setSaveLoading] = useState(false);
+  const [publishLoading, setPublishLoading] = useState(false);
 
   const saveFormState = async () => {
-    const { data } = formik.values.id
-      ? await api.put<JohtoselvitysFormValues>(`/hakemukset/${formik.values.id}`, formik.values)
-      : await api.post<JohtoselvitysFormValues>('/hakemukset', formik.values);
-    formik.setValues(data);
+    setSaveLoading(true);
+    if (formik.values.id) {
+      const { data } = await api.put<JohtoselvitysFormValues>(
+        `/hakemukset/${formik.values.id}`,
+        formik.values
+      );
+      formik.setValues(data);
+    } else {
+      const { data } = await api.post<JohtoselvitysFormValues>('/hakemukset', formik.values);
+      formik.setValues(data);
+    }
+    setSaveLoading(false);
     // TODO: HAI-1156
     // TODO: HAI-1159
   };
 
   const sendFormToAllu = async () => {
+    setPublishLoading(true);
     await api.post<unknown>(`/hakemukset/${formik.values.id}/send-application`, {});
     // TODO: HAI-1157
     // TODO: HAI-1158
+    setPublishLoading(false);
   };
 
   return (
-    <div>
+    <div className={styles.navButtonContainer}>
       {previousPath && (
-        <Button
-          onClick={() => {
-            // TODO: HAI-1165
-            // TODO: HAI-1166
-            navigate(`/fi/johtoselvityshakemus${previousPath}`); // TODO: localized links
-          }}
-        >
-          {previousPath}
-        </Button>
-      )}
-      {nextPath && (
-        <Button
-          onClick={() => {
-            // TODO: HAI-1165
-            // TODO: HAI-1166
-            navigate(`/fi/johtoselvityshakemus${nextPath}`); // TODO: localized links
-          }}
-        >
-          {nextPath}
-        </Button>
-      )}
-      {!nextPath && ( // Final page reached, provide an action to save
-        <div>
+        <div className={styles.navPrev}>
           <Button
+            variant="secondary"
             onClick={() => {
-              saveFormState();
+              // TODO: HAI-1165
+              // TODO: HAI-1166
+              navigate(`/fi/johtoselvityshakemus${previousPath}`); // TODO: localized links
             }}
           >
-            Tallenna hakemus
-          </Button>
-          <hr />
-          <Button
-            onClick={() => {
-              sendFormToAllu();
-              // navigate(`/fi/hakemus${nextPath}`); // TODO: localized links
-            }}
-          >
-            Lähetä hakemus
+            Edellinen
           </Button>
         </div>
+      )}
+      {nextPath && (
+        <div className={styles.navNext}>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              // TODO: HAI-1165
+              // TODO: HAI-1166
+              navigate(`/fi/johtoselvityshakemus${nextPath}`); // TODO: localized links
+            }}
+          >
+            Seuraava
+          </Button>
+        </div>
+      )}
+      {!nextPath && ( // Final page reached, provide an action to save
+        <>
+          <div className={styles.navSave}>
+            <Button
+              isLoading={saveLoading}
+              loadingText="Tallennetaan... "
+              onClick={() => {
+                saveFormState();
+              }}
+            >
+              Tallenna hakemus
+            </Button>
+          </div>
+          <div className={styles.navPublish}>
+            <Button
+              isLoading={publishLoading}
+              loadingText="Lähetetään... "
+              // eslint-disable-next-line no-unneeded-ternary
+              disabled={formik.values.id ? false : true}
+              onClick={() => {
+                sendFormToAllu();
+                // navigate(`/fi/hakemus${nextPath}`); // TODO: localized links
+              }}
+            >
+              Lähetä hakemus
+            </Button>
+          </div>
+        </>
       )}
     </div>
   );
