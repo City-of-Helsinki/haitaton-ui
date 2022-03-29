@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { startOfDay } from 'date-fns';
 import { convertFinnishDate, toStartOfDayUTCISO } from '../../common/utils/date';
 import { ApplicationType, JohtoselvitysFormValues } from './types';
+import styles from './BasicInfo.module.scss';
 
 // TODO: add tooltips
 // TODO: add validation error messages
@@ -60,19 +61,23 @@ export const BasicHankeInfo: React.FC = () => {
   const startTimeInputIsDirty = useRef(false);
   const endTimeInputIsDirty = useRef(false);
   return (
-    <div>
-      <Select
-        required
-        label="Tyyppi"
-        defaultValue={{ value: 'CABLE_APPLICATION', label: 'Johtoselvityshakemus' }}
-        value={{ value: 'CABLE_APPLICATION', label: 'Johtoselvityshakemus' }}
-        options={[{ value: 'CABLE_APPLICATION', label: 'Johtoselvityshakemus' }]}
-        onChange={(selection: Option) => {
-          formik.setFieldValue('applicationType', selection.value);
-        }}
-      />
+    <div className={styles.gridContainer}>
+      <div className={styles.gridItem}>
+        <Select
+          className={styles.gridItem}
+          required
+          label="Tyyppi"
+          defaultValue={{ value: 'CABLE_APPLICATION', label: 'Johtoselvityshakemus' }}
+          value={{ value: 'CABLE_APPLICATION', label: 'Johtoselvityshakemus' }}
+          options={[{ value: 'CABLE_APPLICATION', label: 'Johtoselvityshakemus' }]}
+          onChange={(selection: Option) => {
+            formik.setFieldValue('applicationType', selection.value);
+          }}
+        />
+      </div>
       {/* TODO: HAI-1160 */}
       <Select
+        className={styles.gridItem}
         required
         label="Liittyvä hanke"
         options={[]}
@@ -81,111 +86,126 @@ export const BasicHankeInfo: React.FC = () => {
           formik.setFieldValue('applicationData.identificationNumber', selection.value);
         }}
       />
-      <TextInput
-        id="applicationData.name"
-        label="Nimi"
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.applicationData.name}
-      />
-      <TextInput
-        id="applicationData.id"
-        label="Hakemustunnus"
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.id?.toString()}
-        defaultValue={formik.values.id?.toString()}
-        disabled
-      />
+      <div className={styles.nimi}>
+        <TextInput
+          className={styles.gridItem}
+          id="applicationData.name"
+          label="Nimi"
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.applicationData.name}
+        />
+      </div>
+
+      <div className={styles.hakemusTunnus}>
+        <TextInput
+          className={styles.gridItem}
+          id="applicationData.id"
+          label="Hakemustunnus"
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.id?.toString()}
+          defaultValue={formik.values.id?.toString()}
+          disabled
+        />
+      </div>
       <TextArea
+        className={styles.gridItem}
         id="applicationData.workDescription"
         label="Kuvaus"
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values.applicationData.workDescription}
       />
-      <DateInput
-        id="applicationData.startTime"
-        name="applicationData.startTime"
-        label="Aloituspäivä"
-        minDate={new Date()}
-        onChange={(date: string) => {
-          const convertedDateString = convertFinnishDate(date);
 
-          if (convertedDateString.length > 0) {
-            // TODO convert to unix timestamp
-            formik.setFieldValue(
-              'applicationData.startTime',
-              toStartOfDayUTCISO(new Date(convertedDateString)) || ''
-            );
-          }
-          startTimeInputIsDirty.current = true;
-        }}
-        onBlur={() => {
-          if (startTimeInputIsDirty.current) {
-            formik.handleBlur({ target: { name: 'applicationData.startTime' } });
-          }
-        }}
-        required
-      />
-      <DateInput
-        id="applicationData.endTime"
-        name="applicationData.endTime"
-        label="Lopetuspäivä"
-        minDate={new Date()}
-        onChange={(date: string) => {
-          const convertedDateString = convertFinnishDate(date);
+      <div className={styles.dateInputLeft}>
+        <DateInput
+          className={styles.dateInputLeft}
+          id="applicationData.startTime"
+          name="applicationData.startTime"
+          label="Aloituspäivä"
+          minDate={new Date()}
+          onChange={(date: string) => {
+            const convertedDateString = convertFinnishDate(date);
 
-          if (convertedDateString.length > 0) {
-            // TODO convert to unix timestamp
-            formik.setFieldValue(
-              'applicationData.endTime',
-              toStartOfDayUTCISO(new Date(convertedDateString)) || ''
-            );
-          }
-          endTimeInputIsDirty.current = true;
-        }}
-        onBlur={() => {
-          if (endTimeInputIsDirty.current) {
-            formik.handleBlur({ target: { name: 'applicationData.endTime' } });
-          }
-        }}
-        required
-      />
-      <br />
-      <div style={{ fontSize: 'var(--fontsize-body-m)', fontWeight: 500 }}>Työssä on kyse:</div>
-      <Checkbox
-        id="applicationData.constructionWork"
-        name="applicationData.constructionWork"
-        label="Uuden rakenteen tai johdon rakentamisesta"
-        checked={formik.values.applicationData.constructionWork === true}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-      />
-      <Checkbox
-        id="applicationData.maintenanceWork"
-        name="applicationData.maintenanceWork"
-        label="Olemassaolevan rakenteen kunnossapitotyöstä"
-        checked={formik.values.applicationData.maintenanceWork === true}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-      />
-      <Checkbox
-        id="applicationData.propertyConnectivity"
-        name="applicationData.propertyConnectivity"
-        label="Kiinteistöliittymien rakentamisesta"
-        checked={formik.values.applicationData.propertyConnectivity === true}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-      />
-      <Checkbox
-        id="applicationData.emergencyWork"
-        name="applicationData.emergencyWork"
-        label="Kaivutyö on aloitettu jo ennen johtoselvityksen tilaamista merkittävien vahinkojen estämiseksi (hätätyön luonteinen työ)"
-        checked={formik.values.applicationData.emergencyWork === true}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-      />
+            if (convertedDateString.length > 0) {
+              // TODO convert to unix timestamp
+              formik.setFieldValue(
+                'applicationData.startTime',
+                toStartOfDayUTCISO(new Date(convertedDateString)) || ''
+              );
+            }
+            startTimeInputIsDirty.current = true;
+          }}
+          onBlur={() => {
+            if (startTimeInputIsDirty.current) {
+              formik.handleBlur({ target: { name: 'applicationData.startTime' } });
+            }
+          }}
+          required
+        />
+      </div>
+      <div className={styles.dateInputRight}>
+        <DateInput
+          id="applicationData.endTime"
+          name="applicationData.endTime"
+          label="Lopetuspäivä"
+          minDate={new Date()}
+          onChange={(date: string) => {
+            const convertedDateString = convertFinnishDate(date);
+
+            if (convertedDateString.length > 0) {
+              // TODO convert to unix timestamp
+              formik.setFieldValue(
+                'applicationData.endTime',
+                toStartOfDayUTCISO(new Date(convertedDateString)) || ''
+              );
+            }
+            endTimeInputIsDirty.current = true;
+          }}
+          onBlur={() => {
+            if (endTimeInputIsDirty.current) {
+              formik.handleBlur({ target: { name: 'applicationData.endTime' } });
+            }
+          }}
+          required
+        />
+      </div>
+      <div className={styles.gridItem}>
+        <div style={{ fontSize: 'var(--fontsize-body-m)', fontWeight: 500 }}>Työssä on kyse:</div>
+        <Checkbox
+          id="applicationData.constructionWork"
+          name="applicationData.constructionWork"
+          label="Uuden rakenteen tai johdon rakentamisesta"
+          checked={formik.values.applicationData.constructionWork === true}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+        <Checkbox
+          id="applicationData.maintenanceWork"
+          name="applicationData.maintenanceWork"
+          label="Olemassaolevan rakenteen kunnossapitotyöstä"
+          checked={formik.values.applicationData.maintenanceWork === true}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+        <Checkbox
+          id="applicationData.propertyConnectivity"
+          name="applicationData.propertyConnectivity"
+          label="Kiinteistöliittymien rakentamisesta"
+          checked={formik.values.applicationData.propertyConnectivity === true}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+        <Checkbox
+          id="applicationData.emergencyWork"
+          name="applicationData.emergencyWork"
+          label="Kaivutyö on aloitettu jo ennen johtoselvityksen tilaamista merkittävien vahinkojen estämiseksi (hätätyön luonteinen työ)"
+          checked={formik.values.applicationData.emergencyWork === true}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+      </div>
     </div>
   );
 };
