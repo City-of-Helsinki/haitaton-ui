@@ -26,7 +26,7 @@ import { Link } from 'react-router-dom';
 import Text from '../../../common/components/text/Text';
 import GridItem from '../../../common/components/grid/GridItem';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
-import { HankeDataDraft, HANKE_TYOMAATYYPPI, HANKE_VAIHE } from '../../types/hanke';
+import { HankeData, HANKE_TYOMAATYYPPI, HANKE_VAIHE } from '../../types/hanke';
 import styles from './HankePortfolio.module.scss';
 import { formatToFinnishDate } from '../../../common/utils/date';
 import PaginationControl from '../../common/pagination/PaginationControl';
@@ -38,7 +38,7 @@ import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
 
 type CustomAccordionProps = {
-  hanke: HankeDataDraft;
+  hanke: HankeData;
 };
 
 const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
@@ -413,7 +413,7 @@ export type Column = {
 };
 
 export interface PagedRowsProps {
-  data: Array<HankeDataDraft>;
+  data: Array<HankeData>;
 }
 
 const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
@@ -496,7 +496,7 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
       {
         Header: 'alkuPvm',
         id: 'alkuPvm',
-        accessor: (hanke: HankeDataDraft) => {
+        accessor: (hanke: HankeData) => {
           return hanke.alkuPvm && Date.parse(hanke.alkuPvm);
         },
         filter: dateStartFilter,
@@ -504,7 +504,7 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
       {
         Header: 'loppuPvm',
         id: 'loppuPvm',
-        accessor: (hanke: HankeDataDraft) => {
+        accessor: (hanke: HankeData) => {
           return hanke.loppuPvm && Date.parse(hanke.loppuPvm);
         },
         filter: dateEndFilter,
@@ -701,7 +701,7 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
 };
 
 type Props = {
-  hankkeet: HankeDataDraft[];
+  hankkeet: HankeData[];
 };
 
 const HankePortfolio: React.FC<Props> = ({ hankkeet }) => {

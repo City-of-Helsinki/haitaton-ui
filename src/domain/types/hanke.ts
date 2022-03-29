@@ -137,15 +137,6 @@ export type HankeGeometria = {
   modifiedByUserId: string | null;
 };
 
-type HankeTilat = {
-  onGeometrioita: boolean;
-  onKaikkiPakollisetLuontiTiedot: boolean;
-  onTiedotLiikenneHaittaIndeksille: boolean;
-  onLiikenneHaittaIndeksi: boolean;
-  onViereisiaHankkeita: boolean;
-  onAsiakasryhmia: boolean;
-};
-
 export enum HANKE_INDEX_TYPE {
   PERUSINDEKSI = 'PERUSINDEKSI',
 }
@@ -164,31 +155,30 @@ export type HANKE_INDEX_STATE_KEY = keyof typeof HANKE_INDEX_STATE;
 export interface HankeData {
   id: number;
   hankeTunnus: string;
+  onYKTHanke: boolean;
   nimi: string;
   kuvaus: string;
   alkuPvm: string;
   loppuPvm: string;
-  tyomaaKatuosoite: string | null;
   vaihe: HANKE_VAIHE_KEY;
   suunnitteluVaihe: HANKE_SUUNNITTELUVAIHE_KEY | null;
+  tyomaaKatuosoite: string | null;
   tyomaaTyyppi: HANKE_TYOMAATYYPPI_KEY[];
   tyomaaKoko: HANKE_TYOMAAKOKO_KEY | null;
   haittaAlkuPvm: string | null;
   haittaLoppuPvm: string | null;
   kaistaHaitta: HANKE_KAISTAHAITTA_KEY | null;
   kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA_KEY | null;
-  liikennehaittaindeksi: LiikenneHaittaIndeksi | null;
   meluHaitta: HANKE_MELUHAITTA_KEY | null;
   polyHaitta: HANKE_POLYHAITTA | null;
   tarinaHaitta: HANKE_TARINAHAITTA_KEY | null;
+  geometriat: HankeGeometria | null;
+  liikennehaittaindeksi: LiikenneHaittaIndeksi | null;
   omistajat: Array<HankeContact>;
   arvioijat: Array<HankeContact>;
   toteuttajat: Array<HankeContact>;
   tormaystarkasteluTulos: HankeIndexData | null;
-  onYKTHanke: boolean;
   saveType: HANKE_SAVETYPE_KEY;
-  geometriat: HankeGeometria | null;
-  tilat: HankeTilat;
   version?: number;
   createdBy?: string;
   createdAt?: string;
@@ -207,14 +197,6 @@ export interface HankeIndexData {
   tila: HANKE_INDEX_STATE_KEY;
 }
 
-type DraftRequiredFields =
-  | 'id'
-  | 'hankeTunnus'
-  | 'nimi'
-  | 'kuvaus'
-  | 'vaihe'
-  | 'alkuPvm'
-  | 'loppuPvm'
-  | 'tilat';
+type DraftRequiredFields = 'nimi' | 'kuvaus' | 'vaihe' | 'alkuPvm' | 'loppuPvm';
 
 export type HankeDataDraft = PartialExcept<HankeData, DraftRequiredFields>;

@@ -1,15 +1,15 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 import api from '../../api/api';
-import { HankeDataDraft } from '../../types/hanke';
+import { HankeData } from '../../types/hanke';
 import HankePortfolioComponent from './HankePortfolioComponent';
 
 const getHankkeet = async () => {
-  const { data } = await api.get<HankeDataDraft[]>(`/hankkeet/`);
+  const { data } = await api.get<HankeData[]>(`/hankkeet/`);
   return data;
 };
 
-const useHankeList = () => useQuery<HankeDataDraft[]>(['project'], getHankkeet);
+const useHankeList = () => useQuery<HankeData[]>(['project'], getHankkeet);
 
 const HankePortfolioContainer: React.FC = () => {
   const { data } = useHankeList();

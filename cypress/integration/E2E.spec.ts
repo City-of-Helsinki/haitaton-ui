@@ -17,15 +17,6 @@ import { validateIndexes } from '../utils/indexValidator';
 const hankeMock: HankeDataDraft = {
   id: 0, // not used but types require it
   hankeTunnus: 'not used', // not used but types require it
-  tilat: {
-    // not used but types require it
-    onGeometrioita: false,
-    onKaikkiPakollisetLuontiTiedot: false,
-    onTiedotLiikenneHaittaIndeksille: false,
-    onLiikenneHaittaIndeksi: false,
-    onViereisiaHankkeita: false,
-    onAsiakasryhmia: false,
-  },
   onYKTHanke: true,
   nimi: 'E2E-hankkeen-testaus',
   kuvaus: 'Tämä on hankkeen kuvaus',
