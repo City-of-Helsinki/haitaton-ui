@@ -11,6 +11,11 @@
     row-gap: var(--spacing-xs);
   }
 
+  .feedbackInfo {
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+
   .basicInfoContainer {
     display: grid;
     padding: 0 var(--spacing-s) 2rem 2rem;
