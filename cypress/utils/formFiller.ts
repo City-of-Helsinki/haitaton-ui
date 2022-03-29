@@ -62,18 +62,23 @@ export const selectHankeVaihe = (
 export const fillForm0 = (hankeData: HankeDataDraft) => {
   cy.get('[data-testid=formStepIndicator]').should('exist');
 
-  if (hankeData.onYKTHanke) {
-    cy.get('input[data-testid=onYKTHanke]').click();
-  }
   cy.get('input[data-testid=nimi]').type(hankeData.nimi);
   cy.get('textarea[data-testid=kuvaus]').type(hankeData.kuvaus);
+  if (hankeData.tyomaaKatuosoite) {
+    cy.get('#tyomaaKatuosoite').type(hankeData.tyomaaKatuosoite);
+  }
   cy.get('#alkuPvm').type(hankeData.alkuPvm);
   cy.get('#loppuPvm').type(hankeData.loppuPvm);
   cy.get('input[data-testid=nimi]').click();
+
   selectHankeVaihe(
     hankeData.vaihe,
     hankeData.suunnitteluVaihe ? hankeData.suunnitteluVaihe : undefined
   );
+
+  if (hankeData.onYKTHanke) {
+    cy.get('input[data-testid=onYKTHanke]').click();
+  }
 };
 
 export const nextFormPage = () => {
@@ -108,12 +113,6 @@ export const fillForm2 = (hankeData: HankeDataDraft) => {
     cy.get('input[data-testid=omistajat-sukunimi]').type(hankeData.omistajat[0].sukunimi);
     cy.get('input[data-testid=omistajat-email]').type(hankeData.omistajat[0].email);
     cy.get('input[data-testid=omistajat-puhelinnumero]').type(hankeData.omistajat[0].puhelinnumero);
-  }
-};
-
-export const fillForm3 = (hankeData: HankeDataDraft) => {
-  if (hankeData.tyomaaKatuosoite) {
-    cy.get('input[data-testid=tyomaaKatuosoite]').type(hankeData.tyomaaKatuosoite);
   }
 };
 
@@ -214,7 +213,7 @@ export const selectTarinaHaitta = (tarinaHaitta: HANKE_TARINAHAITTA_KEY) => {
   }
 };
 
-export const fillForm4 = (hankeData: HankeDataDraft) => {
+export const fillForm1 = (hankeData: HankeDataDraft) => {
   cy.get('[data-testid=formStepIndicator]').should('exist');
 
   if (hankeData.haittaAlkuPvm) {
@@ -259,20 +258,11 @@ export const createHankeFromUI = (hankeData: HankeDataDraft) => {
 
   waitForToast();
   drawPolygonToMap();
+  fillForm1(hankeData);
   saveDraft();
   nextFormPage();
 
   waitForToast();
   fillForm2(hankeData);
-  saveDraft();
-  nextFormPage();
-
-  waitForToast();
-  fillForm3(hankeData);
-  saveDraft();
-  nextFormPage();
-
-  waitForToast();
-  fillForm4(hankeData);
   saveDraft();
 };
