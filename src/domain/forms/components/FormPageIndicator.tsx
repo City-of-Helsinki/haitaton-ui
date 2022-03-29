@@ -6,12 +6,25 @@ import CircleSelected from '../../../common/components/icons/CircleSelected';
 type PropTypes = {
   formPageLabels: string[];
   currentLabel: string;
+  nextPath?: string;
+  previousPath?: string;
 };
 
 const FormPagination: React.FC<PropTypes> = ({ formPageLabels, currentLabel }) => {
   return (
-    <>
+    <div className={styles.stepIndicatorContainer}>
       <ol className={styles.stepIndicator}>
+        {/*
+        <Button
+          variant="secondary"
+          size="small"
+          className={styles.navButton}
+          // eslint-disable-next-line no-unneeded-ternary
+          disabled={previousPath ? false : true}
+        >
+          Edellinen
+        </Button>
+        */}
         {formPageLabels.map((formPageLabel, i) => {
           const isCurrent = currentLabel === formPageLabels[i];
           return (
@@ -31,8 +44,19 @@ const FormPagination: React.FC<PropTypes> = ({ formPageLabels, currentLabel }) =
             </li>
           );
         })}
+        {/*
+        <Button
+          variant="secondary"
+          size="small"
+          className={styles.navButton}
+          // eslint-disable-next-line no-unneeded-ternary
+          disabled={nextPath ? false : true}
+        >
+          Seuraava
+        </Button>
+        */}
       </ol>
-    </>
+    </div>
   );
 };
 
