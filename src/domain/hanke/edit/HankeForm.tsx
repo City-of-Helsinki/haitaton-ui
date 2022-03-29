@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Button } from 'hds-react';
 import { IconCross, IconTrash } from 'hds-react/icons';
@@ -11,8 +10,6 @@ import { hankeSchema } from './hankeSchema';
 import Form0 from './HankeForm0';
 import Form1 from './HankeForm1';
 import Form2 from './HankeForm2';
-import Form3 from './HankeForm3';
-import Form4 from './HankeForm4';
 import FormButtons from './components/FormButtons';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
@@ -40,7 +37,6 @@ const HankeForm: React.FC<Props> = ({
   onOpenHankeDelete,
   children,
 }) => {
-  const { t } = useTranslation();
   const [currentFormPage, setCurrentFormPage] = useState<number>(0);
   const formContext = useForm<HankeDataFormState>({
     mode: 'all',
@@ -98,7 +94,7 @@ const HankeForm: React.FC<Props> = ({
       <FormNotifications />
       <div className="hankeForm">
         <Text tag="h1" data-testid="formPageHeader" styleAs="h2" spacing="s" weight="bold">
-          {t('hankeForm:pageHeader')}
+          &nbsp;
         </Text>
 
         <div className="hankeForm__formWpr">
@@ -139,12 +135,6 @@ const HankeForm: React.FC<Props> = ({
               )}
               {currentFormPage === 2 && (
                 <Form2 errors={errors} control={control} register={register} formData={formData} />
-              )}
-              {currentFormPage === 3 && (
-                <Form3 errors={errors} control={control} register={register} formData={formData} />
-              )}
-              {currentFormPage === 4 && (
-                <Form4 errors={errors} control={control} register={register} formData={formData} />
               )}
               <FormButtons
                 goBack={goBack}
