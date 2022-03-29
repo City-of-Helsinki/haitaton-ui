@@ -1,4 +1,11 @@
-import { IconDocument, IconInfoCircle, IconMap, IconPlusCircle, Link } from 'hds-react';
+import {
+  IconDocument,
+  IconInfoCircle,
+  IconMap,
+  IconPlusCircle,
+  Link,
+  Notification,
+} from 'hds-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Text from '../../common/components/text/Text';
@@ -75,6 +82,18 @@ const Homepage: React.FC = () => {
         <Text tag="h1" styleAs="h2" spacing="s" weight="bold">
           {t('homepage:pageTitle')}
         </Text>
+        <div className={styles.feedbackInfo}>
+          <Notification
+            label="Auta meitä tekemään Haitattomasta vielä parempi!"
+            type="info"
+            autoClose={false}
+          >
+            <p>
+              Ideoita ja havaintoja voit lähettää osoitteeseen{' '}
+              <a href="mailto:haitaton@hel.fi">haitaton@hel.fi</a>
+            </p>
+          </Notification>
+        </div>
         <div className={styles.contentContainer}>
           {basicInfo.map((item) => {
             return (
