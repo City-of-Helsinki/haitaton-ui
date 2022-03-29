@@ -50,7 +50,10 @@ const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry }) => {
 
   return (
     <>
-      <div className={styles.mapContainer} style={{ width: '100%', height: 500 }}>
+      <div
+        className={`${styles.mapContainer} ${styles.borders}`}
+        style={{ width: '100%', height: 500 }}
+      >
         <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
           {mapTileLayers.ortokartta.visible && <Ortokartta />}
