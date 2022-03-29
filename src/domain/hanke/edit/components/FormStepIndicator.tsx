@@ -19,8 +19,6 @@ const FormStepIndicator: React.FC<PropTypes> = ({ currentFormPage, formData, isS
     { label: t('hankeForm:perustiedotForm:header') },
     { label: t('hankeForm:hankkeenAlueForm:header') },
     { label: t('hankeForm:hankkeenYhteystiedotForm:header') },
-    { label: t('hankeForm:tyomaanTiedotForm:header') },
-    { label: t('hankeForm:hankkeenHaitatForm:header') },
   ];
 
   return (

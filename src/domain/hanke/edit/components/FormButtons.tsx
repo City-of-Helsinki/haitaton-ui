@@ -51,7 +51,7 @@ const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, currentFor
 
   return (
     <div className="btnWpr">
-      {currentFormPage < 4 && (
+      {currentFormPage < 2 && (
         <Button
           className="btnWpr--next"
           type="button"

@@ -71,16 +71,15 @@
 
   .calendaraWpr {
     display: flex;
-    padding-bottom: var(--spacing-m);
 
     .left {
-      padding-right: var(--spacing-xl);
-      width: 250px;
+      padding-right: var(--spacing-m);
+      width: 50%;
     }
 
     .right {
-      padding-right: var(--spacing-xl);
-      width: 250px;
+      padding-left: var(--spacing-m);
+      width: 50%;
     }
 
     @include respond-below(s) {
