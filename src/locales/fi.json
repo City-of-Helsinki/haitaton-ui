@@ -359,7 +359,7 @@
     },
     "tietoja_haitattomasta": {
       "title": "Tietoja Haitattomasta",
-      "description": "Täältä löydät tarkempaa tietoa ilmoistus prosessista, sekä Haitattoman eri toiminnallisuuksista.",
+      "description": "Täältä löydät tarkempaa tietoa ilmoitusprosessista, sekä Haitattoman eri toiminnallisuuksista.",
       "actionText": "Lue lisää haitattomasta"
     }
   },

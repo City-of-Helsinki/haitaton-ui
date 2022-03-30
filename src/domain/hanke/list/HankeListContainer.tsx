@@ -12,15 +12,23 @@ const getHankkeet = async () => {
 const useHankeList = () => useQuery<HankeData[]>(['project'], getHankkeet);
 
 const HankeListContainer: React.FC = () => {
-  const { data } = useHankeList();
+  const { data, isLoading, isError } = useHankeList();
   if (data) {
     data.sort((a, b) => {
       return -(a.id - b.id);
     });
   }
 
-  // Add header to fix Axe "page-has-heading-one"-error
-  return data ? <HankeListComponent projectsData={data} /> : <h1>Ladataan</h1>;
+  if (isLoading) {
+    return <h1>Ladataan</h1>;
+  }
+  if (isError) {
+    return <h1>Ladattaessa tapahtui virhe. Voit kokeilla kirjautua ulos ja takaisin uudelleen.</h1>;
+  }
+  if (data) {
+    return <HankeListComponent projectsData={data} />;
+  }
+  return <h1>Ladataan</h1>;
 };
 
 export default HankeListContainer;
