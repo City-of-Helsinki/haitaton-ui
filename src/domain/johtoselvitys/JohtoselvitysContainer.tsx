@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Formik, useFormikContext } from 'formik';
-import { Button } from 'hds-react';
+import { Button, Notification } from 'hds-react';
 import { BasicHankeInfo } from './BasicInfo';
 
 import { JohtoselvitysFormValues } from './types';
@@ -21,28 +21,42 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) =>
   const navigate = useNavigate();
   const formik = useFormikContext<JohtoselvitysFormValues>();
   const [saveLoading, setSaveLoading] = useState(false);
+  const [showSaveOK, setShowSaveOK] = useState(false);
+  const [showSaveError, setShowSaveError] = useState(false);
   const [publishLoading, setPublishLoading] = useState(false);
+  const [showPublishOK, setShowPublishOK] = useState(false);
+  const [showPublishError, setShowPublishError] = useState(false);
 
   const saveFormState = async () => {
     setSaveLoading(true);
-    if (formik.values.id) {
-      const { data } = await api.put<JohtoselvitysFormValues>(
-        `/hakemukset/${formik.values.id}`,
-        formik.values
-      );
-      formik.setValues(data);
-    } else {
-      const { data } = await api.post<JohtoselvitysFormValues>('/hakemukset', formik.values);
-      formik.setValues(data);
+    try {
+      if (formik.values.id) {
+        const { data } = await api.put<JohtoselvitysFormValues>(
+          `/hakemukset/${formik.values.id}`,
+          formik.values
+        );
+        formik.setValues(data);
+      } else {
+        const { data } = await api.post<JohtoselvitysFormValues>('/hakemukset', formik.values);
+        formik.setValues(data);
+      }
+      // TODO: HAI-1156
+      // TODO: HAI-1159
+      setShowSaveOK(true);
+    } catch (error) {
+      setShowSaveError(true);
     }
     setSaveLoading(false);
-    // TODO: HAI-1156
-    // TODO: HAI-1159
   };
 
   const sendFormToAllu = async () => {
     setPublishLoading(true);
-    await api.post<unknown>(`/hakemukset/${formik.values.id}/send-application`, {});
+    try {
+      await api.post<unknown>(`/hakemukset/${formik.values.id}/send-application`, {});
+      setShowPublishOK(true);
+    } catch (error) {
+      setShowPublishError(true);
+    }
     // TODO: HAI-1157
     // TODO: HAI-1158
     setPublishLoading(false);
@@ -90,6 +104,41 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) =>
             >
               Tallenna hakemus
             </Button>
+            {showSaveOK && (
+              <Notification
+                key={new Date().toString()}
+                position="top-right"
+                displayAutoCloseProgress={false}
+                autoClose
+                dismissible
+                label="Hakemus tallennettu"
+                type="success"
+                onClose={() => {
+                  setShowPublishOK(false);
+                }}
+                closeButtonLabelText="closebuttonlbl"
+              >
+                Hakemuksen tallentaminen onnistui
+              </Notification>
+            )}
+            {showSaveError && (
+              <Notification
+                key={new Date().toString()}
+                position="top-right"
+                displayAutoCloseProgress={false}
+                autoClose
+                dismissible
+                label="Hakemuksen tallennus epäonnistui"
+                type="error"
+                onClose={() => {
+                  setShowPublishError(false);
+                }}
+                closeButtonLabelText="closebuttonlbl"
+              >
+                Hakemusta ei voitu tallentaa. Tarkista hakemuksen oikea sisältö ja että olet
+                kirjautunut.
+              </Notification>
+            )}
           </div>
           <div className={styles.navPublish}>
             <Button
@@ -104,6 +153,40 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) =>
             >
               Lähetä hakemus
             </Button>
+            {showPublishOK && (
+              <Notification
+                key={new Date().toString()}
+                position="top-right"
+                displayAutoCloseProgress={false}
+                autoClose
+                dismissible
+                label="Form saved!"
+                type="success"
+                onClose={() => {
+                  setShowPublishOK(false);
+                }}
+                closeButtonLabelText="closebuttonlbl"
+              >
+                Saving your form was successful.
+              </Notification>
+            )}
+            {showPublishError && (
+              <Notification
+                key={new Date().toString()}
+                position="top-right"
+                displayAutoCloseProgress={false}
+                autoClose
+                dismissible
+                label="Hakemuksen lähetys epäonnistui"
+                type="error"
+                onClose={() => {
+                  setShowPublishError(false);
+                }}
+                closeButtonLabelText="closebuttonlbl"
+              >
+                Hakemusta ei voitu lähettää. Tarkista hakemuksen oikea sisältö ja tiedot.
+              </Notification>
+            )}
           </div>
         </>
       )}
