@@ -1,25 +1,12 @@
-.formWrapper {
+.navigationButtons {
   display: flex;
-  flex-direction: column;
-  margin: var(--spacing-xl) 0;
-  gap: var(--spacing-xl);
+  justify-content: space-between;
+}
 
-  .pagination {
-    background-color: white;
-    padding: var(--spacing-l);
-  }
+.hidden {
+  visibility: hidden;
+}
 
-  .actions {
-    background-color: white;
-    padding: var(--spacing-l);
-  }
-
-  .index {
-    background-color: white;
-  }
-
-  .content {
-    background-color: white;
-    padding: var(--spacing-l);
-  }
+.content {
+  margin-bottom: var(--spacing-xl);
 }
