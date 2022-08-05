@@ -49,14 +49,83 @@ const filterEmptyContacts = (
 interface ButtonProps {
   nextPath?: string;
   previousPath?: string;
-  fieldsToValidate: string[];
+  onPageChange: (path: string) => void;
 }
 
-const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, fieldsToValidate }) => {
+const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, onPageChange }) => {
+  return (
+    <div className={styles.navigationButtons}>
+      <Button
+        variant="secondary"
+        className={!previousPath ? styles.hidden : ''}
+        onClick={() => {
+          onPageChange(`/fi/hakemus${previousPath}`); // TODO: localized links
+        }}
+      >
+        Edellinen
+      </Button>
+
+      {nextPath && (
+        <Button
+          variant="secondary"
+          onClick={() => {
+            onPageChange(`/fi/hakemus${nextPath}`); // TODO: localized links
+          }}
+        >
+          Seuraava
+        </Button>
+      )}
+      {!nextPath && ( // Final page reached, provide an action to save
+        <Button
+          onClick={async () => {
+            onPageChange(''); // TODO: navigate to hanke on map with a localized link
+          }}
+        >
+          Tallenna
+        </Button>
+      )}
+    </div>
+  );
+};
+
+const FormContent: React.FC = () => {
   const navigate = useNavigate();
   const formik = useFormikContext<HakemusFormValues>();
 
-  const fieldsAreValid = () => {
+  const formSteps = [
+    {
+      path: '/',
+      element: <BasicHankeInfo />,
+      title: 'Perustiedot',
+      fieldsToValidate: ['nimi', 'kuvaus', 'alkuPvm', 'loppuPvm', 'vaihe'],
+    },
+    {
+      path: '/geometry',
+      element: <Geometries />,
+      title: 'Alue',
+      fieldsToValidate: [],
+    },
+    {
+      path: '/contactdetails',
+      element: <Contacts />,
+      title: 'Yhteystiedot',
+      fieldsToValidate: [],
+    },
+    {
+      path: '/additional-information',
+      element: <AdditionalInformation />,
+      title: 'Lisätiedot',
+      fieldsToValidate: [],
+    },
+    {
+      path: '/haitat',
+      element: <Haitat />,
+      title: 'Haitat',
+      fieldsToValidate: [],
+    },
+  ];
+
+  const fieldsAreValid = (fieldsToValidate: string[]) => {
     return new Promise((resolve) => {
       fieldsToValidate.forEach((fieldname) => {
         formik.setFieldTouched(fieldname, true);
@@ -127,53 +196,56 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, fiel
       updateFormFieldsWithAPIResponse(data);
     }
   };
-  return (
-    <div className={styles.navigationButtons}>
-      <Button
-        variant="secondary"
-        className={!previousPath ? styles.hidden : ''}
-        onClick={async () => {
-          if (await fieldsAreValid()) {
-            saveFormState();
-            navigate(`/fi/hakemus${previousPath}`); // TODO: localized links
-          }
-        }}
-      >
-        Edellinen
-      </Button>
 
-      {nextPath && (
-        <Button
-          variant="secondary"
-          onClick={async () => {
-            if (await fieldsAreValid()) {
-              saveFormState();
-              navigate(`/fi/hakemus${nextPath}`); // TODO: localized links
+  const handleNavigation = async (path: string, fieldsToValidate: string[]) => {
+    if (await fieldsAreValid(fieldsToValidate)) {
+      saveFormState();
+      if (path !== '') {
+        navigate(path);
+      }
+    }
+  };
+
+  return (
+    <Routes>
+      {formSteps.map((formStep, i) => {
+        return (
+          <Route
+            key={formStep.path}
+            path={formStep.path}
+            element={
+              <GenericForm
+                pagination={
+                  <FormPagination
+                    currentLabel={formStep.title}
+                    formPageLabels={formSteps.map((formPage) => formPage.title)}
+                    onPageChange={(pageIndex) => {
+                      handleNavigation(
+                        `/fi/hakemus${formSteps[pageIndex].path}`,
+                        formStep.fieldsToValidate
+                      );
+                    }}
+                  />
+                }
+              >
+                <div className={styles.content}>{formStep.element}</div>
+                <NavigationButtons
+                  nextPath={formSteps[i + 1]?.path}
+                  previousPath={formSteps[i - 1]?.path}
+                  onPageChange={(path) => {
+                    handleNavigation(path, formStep.fieldsToValidate);
+                  }}
+                />
+              </GenericForm>
             }
-          }}
-        >
-          Seuraava
-        </Button>
-      )}
-      {!nextPath && ( // Final page reached, provide an action to save
-        <Button
-          onClick={async () => {
-            if (await fieldsAreValid()) {
-              saveFormState();
-              // TODO: navigate to hanke on map with a localized link
-            }
-          }}
-        >
-          Tallenna
-        </Button>
-      )}
-    </div>
+          />
+        );
+      })}
+    </Routes>
   );
 };
 
 const HakemusContainer: React.FC = () => {
-  const navigate = useNavigate();
-
   const initialValues: HakemusFormValues = {
     ...initialValuesBasicHankeInfo,
     ...initialValuesGeometries,
@@ -191,39 +263,6 @@ const HakemusContainer: React.FC = () => {
     version: null,
   };
 
-  const formSteps = [
-    {
-      path: '/',
-      element: <BasicHankeInfo />,
-      title: 'Perustiedot',
-      fieldsToValidate: ['nimi', 'kuvaus', 'alkuPvm', 'loppuPvm', 'vaihe'],
-    },
-    {
-      path: '/geometry',
-      element: <Geometries />,
-      title: 'Alue',
-      fieldsToValidate: [],
-    },
-    {
-      path: '/contactdetails',
-      element: <Contacts />,
-      title: 'Yhteystiedot',
-      fieldsToValidate: [],
-    },
-    {
-      path: '/additional-information',
-      element: <AdditionalInformation />,
-      title: 'Lisätiedot',
-      fieldsToValidate: [],
-    },
-    {
-      path: '/haitat',
-      element: <Haitat />,
-      title: 'Haitat',
-      fieldsToValidate: [],
-    },
-  ];
-
   return (
     <>
       <Formik
@@ -234,36 +273,7 @@ const HakemusContainer: React.FC = () => {
         }}
         validationSchema={Yup.object().shape({ ...validationBasicHankeInfo })}
       >
-        <Routes>
-          {formSteps.map((formStep, i) => {
-            return (
-              <Route
-                key={formStep.path}
-                path={formStep.path}
-                element={
-                  <GenericForm
-                    pagination={
-                      <FormPagination
-                        currentLabel={formStep.title}
-                        formPageLabels={formSteps.map((formPage) => formPage.title)}
-                        onPageChange={(pageIndex) =>
-                          navigate(`/fi/hakemus${formSteps[pageIndex].path}`)
-                        }
-                      />
-                    }
-                  >
-                    <div className={styles.content}>{formStep.element}</div>
-                    <NavigationButtons
-                      nextPath={formSteps[i + 1]?.path}
-                      previousPath={formSteps[i - 1]?.path}
-                      fieldsToValidate={formSteps[i].fieldsToValidate}
-                    />
-                  </GenericForm>
-                }
-              />
-            );
-          })}
-        </Routes>
+        <FormContent />
       </Formik>
     </>
   );
