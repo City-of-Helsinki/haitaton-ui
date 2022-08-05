@@ -195,6 +195,8 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) =>
 };
 
 const JohtoselvitysContainer: React.FC = () => {
+  const navigate = useNavigate();
+
   const initialValues: JohtoselvitysFormValues = {
     id: null,
     applicationType: 'CABLE_REPORT',
@@ -337,6 +339,9 @@ const JohtoselvitysContainer: React.FC = () => {
                         <FormPagination
                           currentLabel={formStep.title}
                           formPageLabels={formSteps.map((formPage) => formPage.title)}
+                          onPageChange={(pageIndex) =>
+                            navigate(`/fi/johtoselvityshakemus${formSteps[pageIndex].path}`)
+                          }
                         />
                       </div>
                       <div className={styles.content}>{formStep.element}</div>

@@ -22,6 +22,7 @@ import { HankeContactKey } from '../../types/hanke';
 import api from '../../api/api';
 import FormPagination from '../../forms/components/FormPageIndicator';
 import styles from './HakemusContainer.module.scss';
+import GenericForm from '../../forms/GenericForm';
 
 const isContactEmpty = ({
   etunimi,
@@ -127,21 +128,23 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, fiel
     }
   };
   return (
-    <div>
-      {previousPath && (
-        <Button
-          onClick={async () => {
-            if (await fieldsAreValid()) {
-              saveFormState();
-              navigate(`/fi/hakemus${previousPath}`); // TODO: localized links
-            }
-          }}
-        >
-          {previousPath}
-        </Button>
-      )}
+    <div className={styles.navigationButtons}>
+      <Button
+        variant="secondary"
+        className={!previousPath ? styles.hidden : ''}
+        onClick={async () => {
+          if (await fieldsAreValid()) {
+            saveFormState();
+            navigate(`/fi/hakemus${previousPath}`); // TODO: localized links
+          }
+        }}
+      >
+        Edellinen
+      </Button>
+
       {nextPath && (
         <Button
+          variant="secondary"
           onClick={async () => {
             if (await fieldsAreValid()) {
               saveFormState();
@@ -149,7 +152,7 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, fiel
             }
           }}
         >
-          {nextPath}
+          Seuraava
         </Button>
       )}
       {!nextPath && ( // Final page reached, provide an action to save
@@ -169,6 +172,8 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, fiel
 };
 
 const HakemusContainer: React.FC = () => {
+  const navigate = useNavigate();
+
   const initialValues: HakemusFormValues = {
     ...initialValuesBasicHankeInfo,
     ...initialValuesGeometries,
@@ -229,36 +234,36 @@ const HakemusContainer: React.FC = () => {
         }}
         validationSchema={Yup.object().shape({ ...validationBasicHankeInfo })}
       >
-        <div className={styles.formWrapper}>
-          <Routes>
-            {formSteps.map((formStep, i) => {
-              return (
-                <Route
-                  path={formStep.path}
-                  element={
-                    <>
-                      <div className={styles.pagination}>
-                        <FormPagination
-                          currentLabel={formStep.title}
-                          formPageLabels={formSteps.map((formPage) => formPage.title)}
-                        />
-                      </div>
-                      <div className={styles.actions}>
-                        lomake action buttonit - poista, keskeytä ja tallenna
-                      </div>
-                      <div className={styles.content}>{formStep.element}</div>
-                      <NavigationButtons
-                        nextPath={formSteps[i + 1]?.path}
-                        previousPath={formSteps[i - 1]?.path}
-                        fieldsToValidate={formSteps[i].fieldsToValidate}
+        <Routes>
+          {formSteps.map((formStep, i) => {
+            return (
+              <Route
+                key={formStep.path}
+                path={formStep.path}
+                element={
+                  <GenericForm
+                    pagination={
+                      <FormPagination
+                        currentLabel={formStep.title}
+                        formPageLabels={formSteps.map((formPage) => formPage.title)}
+                        onPageChange={(pageIndex) =>
+                          navigate(`/fi/hakemus${formSteps[pageIndex].path}`)
+                        }
                       />
-                    </>
-                  }
-                />
-              );
-            })}
-          </Routes>
-        </div>
+                    }
+                  >
+                    <div className={styles.content}>{formStep.element}</div>
+                    <NavigationButtons
+                      nextPath={formSteps[i + 1]?.path}
+                      previousPath={formSteps[i - 1]?.path}
+                      fieldsToValidate={formSteps[i].fieldsToValidate}
+                    />
+                  </GenericForm>
+                }
+              />
+            );
+          })}
+        </Routes>
       </Formik>
     </>
   );
