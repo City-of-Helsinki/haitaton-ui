@@ -222,6 +222,7 @@
       "STARTED": "Käynnissä olevan hankkeen tietoja ei voi muokata."
     },
     "saveDraftButton": "Tallenna luonnos",
+    "cancelButton": "Keskeytä",
     "insertFieldError": "Syötä kenttä",
     "savingSuccessHeader": "Luonnos tallennettu",
     "savingSuccessText": "Luonnos on tallennettu Hankelistalle",
@@ -461,12 +462,24 @@
       "title": "Lähdeviitteet",
       "content": "Palvelu käyttää seuraavista lähteistä saatua aineistoa:",
       "referenceData": {
-        "HEKAYL": { "title": "Helsingin kaupungin yleisten alueiden rekisteri 2021" },
-        "HEKAKA": { "title": "Helsingin kaupungin kaupunkimittauspalvelut 2021" },
-        "OPSTMA": { "title": "OpenStreetMap contributors 2021" },
-        "HSL": { "title": "HSL 2021" },
-        "MAMILA": { "title": "Maanmittauslaitos 2021" },
-        "HEKAKATO": { "title": "Helsingin kaupunki kaupunkiympäristön toimiala 2021" }
+        "HEKAYL": {
+          "title": "Helsingin kaupungin yleisten alueiden rekisteri 2021"
+        },
+        "HEKAKA": {
+          "title": "Helsingin kaupungin kaupunkimittauspalvelut 2021"
+        },
+        "OPSTMA": {
+          "title": "OpenStreetMap contributors 2021"
+        },
+        "HSL": {
+          "title": "HSL 2021"
+        },
+        "MAMILA": {
+          "title": "Maanmittauslaitos 2021"
+        },
+        "HEKAKATO": {
+          "title": "Helsingin kaupunki kaupunkiympäristön toimiala 2021"
+        }
       }
     },
     "accessibility": {

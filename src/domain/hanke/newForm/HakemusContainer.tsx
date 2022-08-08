@@ -125,7 +125,7 @@ const FormContent: React.FC = () => {
     },
   ];
 
-  const fieldsAreValid = (fieldsToValidate: string[]) => {
+  function fieldsAreValid(fieldsToValidate: string[]) {
     return new Promise((resolve) => {
       fieldsToValidate.forEach((fieldname) => {
         formik.setFieldTouched(fieldname, true);
@@ -138,11 +138,9 @@ const FormContent: React.FC = () => {
         );
       });
     });
-  };
+  }
 
-  const updateFormFieldsWithAPIResponse = (
-    data: HakemusFormValues | Partial<HakemusFormValues>
-  ) => {
+  function updateFormFieldsWithAPIResponse(data: HakemusFormValues | Partial<HakemusFormValues>) {
     const dataKeys = Object.keys(data) as Array<keyof HakemusFormValues>;
     dataKeys.forEach((dataKey) => {
       // If there are no contacts, then do not update state as empty contacts
@@ -164,9 +162,9 @@ const FormContent: React.FC = () => {
         formik.setFieldValue(dataKey, data[dataKey]);
       }
     });
-  };
+  }
 
-  const saveFormState = async () => {
+  async function saveFormState() {
     const formData = formik.values;
     const dataWithoutEmptyContacts = filterEmptyContacts({
       ...formData,
@@ -195,16 +193,30 @@ const FormContent: React.FC = () => {
       );
       updateFormFieldsWithAPIResponse(data);
     }
-  };
+  }
 
-  const handleNavigation = async (path: string, fieldsToValidate: string[]) => {
+  async function handleNavigation(path: string, fieldsToValidate: string[]) {
     if (await fieldsAreValid(fieldsToValidate)) {
       saveFormState();
       if (path !== '') {
         navigate(path);
       }
     }
-  };
+  }
+
+  function handleDelete() {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+  }
+
+  function handleClose() {
+    navigate('/');
+  }
+
+  async function handleSave(fieldsToValidate: string[]) {
+    if (await fieldsAreValid(fieldsToValidate)) {
+      saveFormState();
+    }
+  }
 
   return (
     <Routes>
@@ -215,6 +227,9 @@ const FormContent: React.FC = () => {
             path={formStep.path}
             element={
               <GenericForm
+                onDelete={handleDelete}
+                onClose={handleClose}
+                onSave={() => handleSave(formStep.fieldsToValidate)}
                 pagination={
                   <FormPagination
                     currentLabel={formStep.title}
