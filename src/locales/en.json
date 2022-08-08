@@ -8,7 +8,6 @@
   },
   "common": {
     "increment": "Increment",
-
     "confirmationDialog": {
       "interruptDialog": {
         "titleText": "EN: Olet poistumassa lomakkeelta",
@@ -223,6 +222,7 @@
       "STARTED": "EN:Käynnissä olevan hankkeen tietoja ei voi muokata."
     },
     "saveDraftButton": "EN:Tallenna luonnos",
+    "cancelButton": "EN:Keskeytä",
     "insertFieldError": "EN:Syötä kenttä",
     "savingSuccessHeader": "EN:Luonnos tallennettu",
     "savingSuccessText": "EN:Luonnos on tallennettu Hankelistalle",
@@ -462,12 +462,24 @@
       "title": "EN: Lähdeviitteet",
       "content": "EN: Palvelu käyttää seuraavista lähteistä saatua aineistoa:",
       "referenceData": {
-        "HEKAYL": { "title": "EN: Helsingin kaupungin yleisten alueiden rekisteri 2021" },
-        "HEKAKA": { "title": "EN: Helsingin kaupungin kaupunkimittauspalvelut 2021" },
-        "OPSTMA": { "title": "EN: OpenStreetMap contributors 2021" },
-        "HSL": { "title": "EN: HSL 2021" },
-        "MAMILA": { "title": "EN: Maanmittauslaitos 2021" },
-        "HEKAKATO": { "title": "EN: Helsingin kaupunki kaupunkiympäristön toimiala 2021" }
+        "HEKAYL": {
+          "title": "EN: Helsingin kaupungin yleisten alueiden rekisteri 2021"
+        },
+        "HEKAKA": {
+          "title": "EN: Helsingin kaupungin kaupunkimittauspalvelut 2021"
+        },
+        "OPSTMA": {
+          "title": "EN: OpenStreetMap contributors 2021"
+        },
+        "HSL": {
+          "title": "EN: HSL 2021"
+        },
+        "MAMILA": {
+          "title": "EN: Maanmittauslaitos 2021"
+        },
+        "HEKAKATO": {
+          "title": "EN: Helsingin kaupunki kaupunkiympäristön toimiala 2021"
+        }
       }
     },
     "accessibility": {
