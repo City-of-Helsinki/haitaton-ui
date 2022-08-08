@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Formik, useFormikContext } from 'formik';
 import { Button } from 'hds-react';
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import {
   BasicHankeInfo,
   initialValues as initialValuesBasicHankeInfo,
@@ -23,6 +24,7 @@ import api from '../../api/api';
 import FormPagination from '../../forms/components/FormPageIndicator';
 import styles from './HakemusContainer.module.scss';
 import GenericForm from '../../forms/GenericForm';
+import Notification from '../edit/components/Notification';
 
 const isContactEmpty = ({
   etunimi,
@@ -89,6 +91,7 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, onPa
 };
 
 const FormContent: React.FC = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const formik = useFormikContext<HakemusFormValues>();
 
@@ -124,6 +127,8 @@ const FormContent: React.FC = () => {
       fieldsToValidate: [],
     },
   ];
+
+  const [showNotification, setShowNotification] = useState('' as 'success' | 'error' | '');
 
   function fieldsAreValid(fieldsToValidate: string[]) {
     return new Promise((resolve) => {
@@ -165,6 +170,8 @@ const FormContent: React.FC = () => {
   }
 
   async function saveFormState() {
+    setShowNotification('');
+
     const formData = formik.values;
     const dataWithoutEmptyContacts = filterEmptyContacts({
       ...formData,
@@ -173,25 +180,30 @@ const FormContent: React.FC = () => {
       toteuttajat: formData.toteuttajat ? formData.toteuttajat : [],
       saveType: 'DRAFT',
     });
-    // When updating a hanke the API takes the entire object
-    if (formData.hankeTunnus) {
-      const { data } = await api.put<HakemusFormValues>(
-        `/hankkeet/${formData.hankeTunnus}`,
-        dataWithoutEmptyContacts
-      );
-      updateFormFieldsWithAPIResponse(data);
-    } else {
-      const dataWithoutEmptyFields: Partial<HakemusFormValues> = Object.fromEntries(
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        Object.entries(dataWithoutEmptyContacts).filter(([key, value]) => {
-          return value !== null && value !== '';
-        })
-      );
-      const { data } = await api.post<Partial<HakemusFormValues>>(
-        '/hankkeet',
-        dataWithoutEmptyFields
-      );
-      updateFormFieldsWithAPIResponse(data);
+    try {
+      // When updating a hanke the API takes the entire object
+      if (formData.hankeTunnus) {
+        const { data } = await api.put<HakemusFormValues>(
+          `/hankkeet/${formData.hankeTunnus}`,
+          dataWithoutEmptyContacts
+        );
+        updateFormFieldsWithAPIResponse(data);
+      } else {
+        const dataWithoutEmptyFields: Partial<HakemusFormValues> = Object.fromEntries(
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          Object.entries(dataWithoutEmptyContacts).filter(([key, value]) => {
+            return value !== null && value !== '';
+          })
+        );
+        const { data } = await api.post<Partial<HakemusFormValues>>(
+          '/hankkeet',
+          dataWithoutEmptyFields
+        );
+        updateFormFieldsWithAPIResponse(data);
+      }
+      setShowNotification('success');
+    } catch (error) {
+      setShowNotification('error');
     }
   }
 
@@ -243,6 +255,24 @@ const FormContent: React.FC = () => {
                   />
                 }
               >
+                {showNotification === 'success' && (
+                  <Notification
+                    label={t('hankeForm:savingSuccessHeader')}
+                    typeProps="success"
+                    testId="formToastSuccess"
+                  >
+                    {t('hankeForm:savingSuccessText')}
+                  </Notification>
+                )}
+                {showNotification === 'error' && (
+                  <Notification
+                    label={t('hankeForm:savingFailHeader')}
+                    typeProps="error"
+                    testId="formToastError"
+                  >
+                    {t('hankeForm:savingFailText')}
+                  </Notification>
+                )}
                 <div className={styles.content}>{formStep.element}</div>
                 <NavigationButtons
                   nextPath={formSteps[i + 1]?.path}
