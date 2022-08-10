@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Formik, useFormikContext } from 'formik';
-import { Button } from 'hds-react';
 import * as Yup from 'yup';
-import { useTranslation } from 'react-i18next';
 import {
   BasicHankeInfo,
   initialValues as initialValuesBasicHankeInfo,
@@ -21,10 +19,7 @@ import { FORMFIELD } from '../edit/types';
 import { PartialExcept } from '../../../common/types/utils';
 import { HankeContactKey } from '../../types/hanke';
 import api from '../../api/api';
-import FormPagination from '../../forms/components/FormPageIndicator';
-import styles from './HakemusContainer.module.scss';
 import GenericForm from '../../forms/GenericForm';
-import Notification from '../edit/components/Notification';
 
 const isContactEmpty = ({
   etunimi,
@@ -48,50 +43,7 @@ const filterEmptyContacts = (
   [FORMFIELD.TOTEUTTAJAT]: formData[FORMFIELD.TOTEUTTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
 });
 
-interface ButtonProps {
-  nextPath?: string;
-  previousPath?: string;
-  onPageChange: (path: string) => void;
-}
-
-const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, onPageChange }) => {
-  return (
-    <div className={styles.navigationButtons}>
-      <Button
-        variant="secondary"
-        className={!previousPath ? styles.hidden : ''}
-        onClick={() => {
-          onPageChange(`/fi/hakemus${previousPath}`); // TODO: localized links
-        }}
-      >
-        Edellinen
-      </Button>
-
-      {nextPath && (
-        <Button
-          variant="secondary"
-          onClick={() => {
-            onPageChange(`/fi/hakemus${nextPath}`); // TODO: localized links
-          }}
-        >
-          Seuraava
-        </Button>
-      )}
-      {!nextPath && ( // Final page reached, provide an action to save
-        <Button
-          onClick={async () => {
-            onPageChange(''); // TODO: navigate to hanke on map with a localized link
-          }}
-        >
-          Tallenna
-        </Button>
-      )}
-    </div>
-  );
-};
-
 const FormContent: React.FC = () => {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const formik = useFormikContext<HakemusFormValues>();
 
@@ -129,21 +81,6 @@ const FormContent: React.FC = () => {
   ];
 
   const [showNotification, setShowNotification] = useState('' as 'success' | 'error' | '');
-
-  function fieldsAreValid(fieldsToValidate: string[]) {
-    return new Promise((resolve) => {
-      fieldsToValidate.forEach((fieldname) => {
-        formik.setFieldTouched(fieldname, true);
-      });
-      formik.validateForm().then((validationErrors) => {
-        resolve(
-          !fieldsToValidate.some((fieldToValidate) =>
-            Object.keys(validationErrors).includes(fieldToValidate)
-          )
-        );
-      });
-    });
-  }
 
   function updateFormFieldsWithAPIResponse(data: HakemusFormValues | Partial<HakemusFormValues>) {
     const dataKeys = Object.keys(data) as Array<keyof HakemusFormValues>;
@@ -207,15 +144,6 @@ const FormContent: React.FC = () => {
     }
   }
 
-  async function handleNavigation(path: string, fieldsToValidate: string[]) {
-    if (await fieldsAreValid(fieldsToValidate)) {
-      saveFormState();
-      if (path !== '') {
-        navigate(path);
-      }
-    }
-  }
-
   function handleDelete() {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
   }
@@ -224,69 +152,15 @@ const FormContent: React.FC = () => {
     navigate('/');
   }
 
-  async function handleSave(fieldsToValidate: string[]) {
-    if (await fieldsAreValid(fieldsToValidate)) {
-      saveFormState();
-    }
-  }
-
   return (
-    <Routes>
-      {formSteps.map((formStep, i) => {
-        return (
-          <Route
-            key={formStep.path}
-            path={formStep.path}
-            element={
-              <GenericForm
-                onDelete={handleDelete}
-                onClose={handleClose}
-                onSave={() => handleSave(formStep.fieldsToValidate)}
-                pagination={
-                  <FormPagination
-                    currentLabel={formStep.title}
-                    formPageLabels={formSteps.map((formPage) => formPage.title)}
-                    onPageChange={(pageIndex) => {
-                      handleNavigation(
-                        `/fi/hakemus${formSteps[pageIndex].path}`,
-                        formStep.fieldsToValidate
-                      );
-                    }}
-                  />
-                }
-              >
-                {showNotification === 'success' && (
-                  <Notification
-                    label={t('hankeForm:savingSuccessHeader')}
-                    typeProps="success"
-                    testId="formToastSuccess"
-                  >
-                    {t('hankeForm:savingSuccessText')}
-                  </Notification>
-                )}
-                {showNotification === 'error' && (
-                  <Notification
-                    label={t('hankeForm:savingFailHeader')}
-                    typeProps="error"
-                    testId="formToastError"
-                  >
-                    {t('hankeForm:savingFailText')}
-                  </Notification>
-                )}
-                <div className={styles.content}>{formStep.element}</div>
-                <NavigationButtons
-                  nextPath={formSteps[i + 1]?.path}
-                  previousPath={formSteps[i - 1]?.path}
-                  onPageChange={(path) => {
-                    handleNavigation(path, formStep.fieldsToValidate);
-                  }}
-                />
-              </GenericForm>
-            }
-          />
-        );
-      })}
-    </Routes>
+    <GenericForm<HakemusFormValues>
+      formSteps={formSteps}
+      showNotification={showNotification}
+      formBasePath="/fi/hakemus" // TODO: localized links
+      onDelete={handleDelete}
+      onClose={handleClose}
+      onSave={saveFormState}
+    />
   );
 };
 
@@ -309,18 +183,16 @@ const HakemusContainer: React.FC = () => {
   };
 
   return (
-    <>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={() => {
-          // TODO: maybe needed for entire form validation prior to last page submit?
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-        }}
-        validationSchema={Yup.object().shape({ ...validationBasicHankeInfo })}
-      >
-        <FormContent />
-      </Formik>
-    </>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={() => {
+        // TODO: maybe needed for entire form validation prior to last page submit?
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+      }}
+      validationSchema={Yup.object().shape({ ...validationBasicHankeInfo })}
+    >
+      <FormContent />
+    </Formik>
   );
 };
 
