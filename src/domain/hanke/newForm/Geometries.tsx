@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
 import { useFormikContext } from 'formik';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import { useTranslation } from 'react-i18next';
+import { useAsyncDebounce } from 'react-table';
 import VectorLayer from '../../../common/components/map/layers/VectorLayer';
 import Map from '../../../common/components/map/Map';
 import FitSource from '../../map/components/interations/FitSource';
@@ -16,9 +16,9 @@ import Controls from '../../../common/components/map/controls/Controls';
 import DrawModule from '../../../common/components/map/modules/draw/DrawModule';
 import { formatFeaturesToHankeGeoJSON } from '../../map/utils';
 import api from '../../api/api';
-import { HankeGeometryApiRequestData, HankeGeometryApiResponseData } from '../../map/types';
 import { HankeGeoJSON } from '../../../common/types/hanke';
 import Text from '../../../common/components/text/Text';
+import { Haitat } from './Haitat';
 
 export const initialValues = {
   geometriat: null,
@@ -31,24 +31,17 @@ export const Geometries: React.FC = () => {
   const { mapTileLayers } = useMapDataLayers();
   const [geometry, setGeometry] = useState<HankeGeoJSON | null>(null);
 
-  const onDrawChange = async () => {
+  const onDrawChange = () => {
     const hankeGeometries = formatFeaturesToHankeGeoJSON(drawSource.getFeatures());
     formik.setFieldValue('geometriat', hankeGeometries);
-
-    const requestData: HankeGeometryApiRequestData = {
-      featureCollection: hankeGeometries,
-    };
-
-    await api.post<HankeGeometryApiResponseData>(
-      `/hankkeet/${formik.values.hankeTunnus}/geometriat`,
-      requestData
-    );
   };
 
+  const onDrawChangeDebounced = useAsyncDebounce(onDrawChange, 500);
+
   useEffect(() => {
-    drawSource.on('addfeature', () => onDrawChange());
-    drawSource.on('removefeature', () => onDrawChange());
-    drawSource.on('changefeature', () => onDrawChange());
+    drawSource.on('addfeature', onDrawChange);
+    drawSource.on('removefeature', onDrawChange);
+    drawSource.on('changefeature', onDrawChangeDebounced);
 
     if (formik.values.hankeTunnus) {
       api
@@ -60,10 +53,17 @@ export const Geometries: React.FC = () => {
           // eslint-disable-next-line
         });
     }
+
+    return () => {
+      drawSource.un('addfeature', onDrawChange);
+      drawSource.un('removefeature', onDrawChange);
+      drawSource.un('changefeature', onDrawChangeDebounced);
+    };
   }, [formik.values.hankeTunnus]);
 
   useEffect(() => {
     if (geometry && geometry.features.length > 0) {
+      drawSource.clear();
       drawSource.addFeatures(new GeoJSON().readFeatures(geometry));
     }
   }, [geometry]);
@@ -86,6 +86,8 @@ export const Geometries: React.FC = () => {
           </Controls>
         </Map>
       </div>
+
+      <Haitat />
     </div>
   );
 };
