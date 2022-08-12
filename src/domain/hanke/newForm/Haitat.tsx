@@ -2,6 +2,8 @@ import React, { useRef } from 'react';
 import { useFormikContext } from 'formik';
 import { Select, DateInput } from 'hds-react';
 import { $enum } from 'ts-enum-util';
+import { Grid } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import {
   HakemusFormValues,
   HANKE_KAISTAHAITTA,
@@ -30,12 +32,12 @@ export const initialValues = {
 };
 
 export const Haitat: React.FC = () => {
+  const { t } = useTranslation();
   const formik = useFormikContext<HakemusFormValues>();
   const haittaAlkuPvmIsDirty = useRef(false);
   const haittaLoppuPvmIsDirty = useRef(false);
   return (
-    <div>
-      <h1>Hankkeen haitat</h1>
+    <Grid templateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap={10}>
       <DateInput
         id="haittaAlkuPvm"
         name="haittaAlkuPvm"
@@ -92,10 +94,11 @@ export const Haitat: React.FC = () => {
       />
       <Select
         required
+        id="kaistaHaitta"
         label="Kaistahaitta"
         options={$enum(HANKE_KAISTAHAITTA).map((value) => ({
           value,
-          label: value,
+          label: t(`hanke:kaistaHaitta:${value}`),
         }))}
         onChange={(option: Option) => {
           formik.setFieldValue('kaistaHaitta', option.value);
@@ -103,10 +106,11 @@ export const Haitat: React.FC = () => {
       />
       <Select
         required
+        id="kaistaPituusHaitta"
         label="Kaistan pituushaitta"
         options={$enum(HANKE_KAISTAPITUUSHAITTA).map((value) => ({
           value,
-          label: value,
+          label: t(`hanke:kaistaPituusHaitta:${value}`),
         }))}
         onChange={(option: Option) => {
           formik.setFieldValue('kaistaPituusHaitta', option.value);
@@ -114,10 +118,11 @@ export const Haitat: React.FC = () => {
       />
       <Select
         required
+        id="meluHaitta"
         label="Meluhaitta"
         options={$enum(HANKE_MELUHAITTA).map((value) => ({
           value,
-          label: value,
+          label: t(`hanke:meluHaitta:${value}`),
         }))}
         onChange={(option: Option) => {
           formik.setFieldValue('meluHaitta', option.value);
@@ -125,10 +130,11 @@ export const Haitat: React.FC = () => {
       />
       <Select
         required
+        id="polyHaitta"
         label="Pölyhaitta"
         options={$enum(HANKE_POLYHAITTA).map((value) => ({
           value,
-          label: value,
+          label: t(`hanke:polyHaitta:${value}`),
         }))}
         onChange={(option: Option) => {
           formik.setFieldValue('polyHaitta', option.value);
@@ -136,16 +142,17 @@ export const Haitat: React.FC = () => {
       />
       <Select
         required
+        id="tarinaHaitta"
         label="Tärinähaitta"
         options={$enum(HANKE_TARINAHAITTA).map((value) => ({
           value,
-          label: value,
+          label: t(`hanke:tarinaHaitta:${value}`),
         }))}
         onChange={(option: Option) => {
           formik.setFieldValue('tarinaHaitta', option.value);
         }}
       />
-    </div>
+    </Grid>
   );
 };
 export default Haitat;

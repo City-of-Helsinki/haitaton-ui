@@ -1,5 +1,6 @@
 .mapContainer {
   position: relative;
+  margin-bottom: var(--spacing-l);
 
   &__inner {
     position: absolute;

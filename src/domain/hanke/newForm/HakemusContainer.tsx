@@ -13,13 +13,14 @@ import {
   AdditionalInformation,
   initialValues as initialValuesAdditionalInformation,
 } from './AdditionalInformation';
-import { Haitat, initialValues as initialValuesHaitat } from './Haitat';
+import { initialValues as initialValuesHaitat } from './Haitat';
 import { HakemusFormValues, HankeContact, HANKE_CONTACT_TYPE } from './types';
 import { FORMFIELD } from '../edit/types';
 import { PartialExcept } from '../../../common/types/utils';
 import { HankeContactKey } from '../../types/hanke';
 import api from '../../api/api';
 import GenericForm from '../../forms/GenericForm';
+import { HankeGeometryApiResponseData } from '../../map/types';
 
 const isContactEmpty = ({
   etunimi,
@@ -57,7 +58,7 @@ const FormContent: React.FC = () => {
     {
       path: '/geometry',
       element: <Geometries />,
-      title: 'Alue',
+      title: 'Aluetiedot',
       fieldsToValidate: [],
     },
     {
@@ -70,12 +71,6 @@ const FormContent: React.FC = () => {
       path: '/additional-information',
       element: <AdditionalInformation />,
       title: 'Lisätiedot',
-      fieldsToValidate: [],
-    },
-    {
-      path: '/haitat',
-      element: <Haitat />,
-      title: 'Haitat',
       fieldsToValidate: [],
     },
   ];
@@ -137,6 +132,15 @@ const FormContent: React.FC = () => {
           dataWithoutEmptyFields
         );
         updateFormFieldsWithAPIResponse(data);
+      }
+      if (formik.values.hankeTunnus && formik.values.geometriat) {
+        // Save geometries
+        await api.post<HankeGeometryApiResponseData>(
+          `/hankkeet/${formik.values.hankeTunnus}/geometriat`,
+          {
+            featureCollection: formik.values.geometriat,
+          }
+        );
       }
       setShowNotification('success');
     } catch (error) {
