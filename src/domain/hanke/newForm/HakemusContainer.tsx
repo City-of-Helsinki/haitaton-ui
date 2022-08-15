@@ -8,7 +8,11 @@ import {
   validationSchema as validationBasicHankeInfo,
 } from './BasicHankeInfo';
 import { Geometries, initialValues as initialValuesGeometries } from './Geometries';
-import { Contacts, initialValues as initialValuesContacts } from './Contacts';
+import {
+  Contacts,
+  contactsValidationSchema,
+  initialValues as initialValuesContacts,
+} from './Contacts';
 import {
   AdditionalInformation,
   initialValues as initialValuesAdditionalInformation,
@@ -56,15 +60,15 @@ const FormContent: React.FC = () => {
       fieldsToValidate: ['nimi', 'kuvaus', 'alkuPvm', 'loppuPvm', 'vaihe'],
     },
     {
-      path: '/geometry',
-      element: <Geometries />,
-      title: 'Aluetiedot',
-      fieldsToValidate: [],
-    },
-    {
       path: '/contactdetails',
       element: <Contacts />,
       title: 'Yhteystiedot',
+      fieldsToValidate: [],
+    },
+    {
+      path: '/geometry',
+      element: <Geometries />,
+      title: 'Aluetiedot',
       fieldsToValidate: [],
     },
     {
@@ -193,7 +197,10 @@ const HakemusContainer: React.FC = () => {
         // TODO: maybe needed for entire form validation prior to last page submit?
         // eslint-disable-next-line @typescript-eslint/no-empty-function
       }}
-      validationSchema={Yup.object().shape({ ...validationBasicHankeInfo })}
+      validationSchema={Yup.object().shape({
+        ...validationBasicHankeInfo,
+        ...contactsValidationSchema,
+      })}
     >
       <FormContent />
     </Formik>
