@@ -1,25 +1,22 @@
 import { useFormikContext } from 'formik';
 import { Button, IconPlusCircle, IconTrash } from 'hds-react';
 import React from 'react';
-import * as Yup from 'yup';
 import { useQuery } from 'react-query';
 import { $enum } from 'ts-enum-util';
+import { useTranslation } from 'react-i18next';
 import api from '../../api/api';
 import { Organization } from '../edit/types';
 import ContactDetail from './ContactDetail';
 import { HakemusFormValues, HankeContact, HANKE_CONTACT_KEY, HANKE_CONTACT_TYPE } from './types';
 import styles from './Contacts.module.scss';
-
-const contactSchema = Yup.object().shape({
-  etunimi: Yup.string().required('Tieto tarvitaan'),
-  sukunimi: Yup.string().required('Tieto tarvitaan'),
-  email: Yup.string().required('Tieto tarvitaan'),
-});
+import Text from '../../../common/components/text/Text';
+import { contactSchema, requiredContactSchema } from '../edit/hankeSchema';
+import yup from '../../../common/utils/yup';
 
 export const contactsValidationSchema = {
-  omistajat: Yup.array().of(contactSchema),
-  toteuttajat: Yup.array().of(contactSchema),
-  arvioijat: Yup.array().of(contactSchema),
+  omistajat: yup.array().of(requiredContactSchema),
+  toteuttajat: yup.array().of(contactSchema),
+  arvioijat: yup.array().of(contactSchema),
 };
 
 export const initialContact: HankeContact = {
@@ -40,6 +37,7 @@ export const initialValues = {
 };
 
 export const Contacts: React.FC = () => {
+  const { t } = useTranslation();
   const formik = useFormikContext<HakemusFormValues>();
 
   const fetchOrganizations = async () => api.get<Organization[]>('/organisaatiot');
@@ -63,16 +61,20 @@ export const Contacts: React.FC = () => {
 
   return (
     <div>
+      <Text tag="h1" spacing="s" weight="bold" styleAs="h3">
+        {t('hankeForm:hankkeenYhteystiedotForm:header')}
+      </Text>
       {$enum(HANKE_CONTACT_TYPE).map((contactType) => (
-        <div>
-          <p>{JSON.stringify(formik.errors)}</p>
+        <div key={contactType}>
+          {/* <p>{JSON.stringify(formik.errors)}</p> */}
           <div className={styles.contactTypeContainer}>
-            <h3 style={{ fontSize: 'var(--fontsize-heading-l) ' }} className={styles.contactTitle}>
-              {contactType}
-            </h3>
+            <Text tag="h2" spacing="s" weight="bold" styleAs="h4">
+              {t(`hankeForm:headers:${contactType}`)}
+            </Text>
             {formik.values[contactType].map((hankeContact, index) => {
               return (
-                <>
+                // eslint-disable-next-line react/no-array-index-key
+                <div key={index}>
                   <ContactDetail
                     contactType={contactType}
                     index={index}
@@ -100,7 +102,7 @@ export const Contacts: React.FC = () => {
                   ) : (
                     ''
                   )}
-                </>
+                </div>
               );
             })}
           </div>
