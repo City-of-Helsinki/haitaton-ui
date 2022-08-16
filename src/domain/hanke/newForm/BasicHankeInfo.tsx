@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useFormikContext } from 'formik';
-import { Checkbox, TextArea, TextInput, DateInput, Select, Tooltip } from 'hds-react';
+import { Checkbox, TextArea, TextInput, DateInput, Select, Tooltip, Combobox } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import * as Yup from 'yup';
 import { startOfDay } from 'date-fns';
@@ -9,6 +9,10 @@ import {
   HakemusFormValues,
   HANKE_SUUNNITTELUVAIHE,
   HANKE_SUUNNITTELUVAIHE_KEY,
+  HANKE_TYOMAAKOKO,
+  HANKE_TYOMAAKOKO_KEY,
+  HANKE_TYOMAATYYPPI,
+  HANKE_TYOMAATYYPPI_KEY,
   HANKE_VAIHE,
   HANKE_VAIHE_KEY,
   Option,
@@ -22,6 +26,7 @@ import {
 import yup from '../../../common/utils/yup';
 import Text from '../../../common/components/text/Text';
 import './NewHankeForm.styles.scss';
+import { getFormErrorText } from '../../forms/utils';
 
 // TODO: add validation error messages
 // TODO: go through dynamic form example and see what is missing
@@ -40,6 +45,7 @@ export const validationSchema = {
   suunnitteluVaihe: Yup.mixed()
     .nullable()
     .when(['vaihe'], { is: HANKE_VAIHE.SUUNNITTELU, then: yup.string().required() }),
+  tyomaaKatuosoite: yup.string().nullable(),
 };
 
 export interface InitialValueTypes {
@@ -50,6 +56,9 @@ export interface InitialValueTypes {
   kuvaus: string;
   alkuPvm: string;
   loppuPvm: string;
+  tyomaaKatuosoite: string;
+  tyomaaTyyppi: HANKE_TYOMAATYYPPI_KEY[];
+  tyomaaKoko: HANKE_TYOMAAKOKO_KEY | null;
   vaihe: HANKE_VAIHE_KEY | '';
   suunnitteluVaihe: HANKE_SUUNNITTELUVAIHE_KEY | null;
 }
@@ -62,9 +71,14 @@ export const initialValues: InitialValueTypes = {
   kuvaus: '',
   alkuPvm: '',
   loppuPvm: '',
+  tyomaaKatuosoite: '',
+  tyomaaTyyppi: [],
+  tyomaaKoko: null,
   vaihe: '',
   suunnitteluVaihe: null,
 };
+
+type OptionTyyppi = { value: HANKE_TYOMAATYYPPI_KEY; label: string };
 
 export const BasicHankeInfo: React.FC = () => {
   const { t } = useTranslation();
@@ -72,7 +86,12 @@ export const BasicHankeInfo: React.FC = () => {
   const alkuPvmInputIsDirty = useRef(false);
   const loppuPvmInputIsDirty = useRef(false);
   const getErrorMessage = (fieldname: keyof typeof initialValues) =>
-    formik.touched[fieldname] ? formik.errors[fieldname] : undefined;
+    getFormErrorText(t, formik.errors, formik.touched, fieldname);
+
+  const tyomaaTyyppiOptions = $enum(HANKE_TYOMAATYYPPI).map((value) => ({
+    value,
+    label: t(`hanke:tyomaaTyyppi:${value}`),
+  }));
   return (
     <div>
       <Text tag="h1" spacing="s" weight="bold" styleAs="h3">
@@ -106,6 +125,14 @@ export const BasicHankeInfo: React.FC = () => {
         value={formik.values.kuvaus}
         errorText={getErrorMessage('kuvaus')}
         required
+      />
+      <TextInput
+        className="mb-m"
+        id="tyomaaKatuosoite"
+        label="Katuosoite"
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        value={formik.values.tyomaaKatuosoite}
       />
       <div className="two-col mb-m">
         <DateInput
@@ -158,32 +185,65 @@ export const BasicHankeInfo: React.FC = () => {
           errorText={getErrorMessage('loppuPvm')}
         />
       </div>
-      <div className="select-container">
-        <Tooltip tooltipLabel={t(`hankeForm:toolTips:tipOpenLabel`)} className="select-tooltip">
-          {t(`hankeForm:toolTips:vaihe`)}
-        </Tooltip>
-        <Select
-          className="mb-m"
-          required
-          label="Hankkeen vaihe"
-          options={$enum(HANKE_VAIHE).map((value) => ({
-            value,
-            label: t(`hanke:vaihe:${value}`),
-          }))}
-          onChange={(selection: Option) => {
-            if (selection.value !== HANKE_VAIHE.SUUNNITTELU) {
-              formik.setFieldValue('suunnitteluVaihe', null);
-            }
-            formik.setFieldValue('vaihe', selection.value);
-          }}
-          value={{
-            value: formik.values.vaihe,
-            label: formik.values.vaihe ? t(`hanke:vaihe:${formik.values.vaihe}`) : '',
-          }}
-          error={getErrorMessage('vaihe')}
-          invalid={!!getErrorMessage('vaihe')}
-        />
-      </div>
+      <Combobox<OptionTyyppi>
+        className="mb-m"
+        multiselect
+        label="Työmaan tyyppi"
+        clearButtonAriaLabel="Clear all selections"
+        selectedItemRemoveButtonAriaLabel="Remove value"
+        toggleButtonAriaLabel="Toggle menu"
+        options={tyomaaTyyppiOptions}
+        onChange={(selection: OptionTyyppi[]) => {
+          formik.setFieldValue(
+            'tyomaaTyyppi',
+            selection.map((option) => option.value)
+          );
+        }}
+        value={
+          formik.values.tyomaaTyyppi.map(
+            (value) => tyomaaTyyppiOptions.find((option) => option.value === value)
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ) as any
+        }
+      />
+      <Select
+        className="mb-m"
+        label="Työmaan koko"
+        options={$enum(HANKE_TYOMAAKOKO).map((value) => ({
+          value,
+          label: t(`hanke:tyomaaKoko:${value}`),
+        }))}
+        onChange={(selection: Option) => {
+          formik.setFieldValue('tyomaaKoko', selection.value);
+        }}
+        value={{
+          value: formik.values.tyomaaKoko || '',
+          label: formik.values.tyomaaKoko ? t(`hanke:tyomaaKoko:${formik.values.tyomaaKoko}`) : '',
+        }}
+      />
+      <Select
+        className="mb-m"
+        required
+        label="Hankkeen vaihe"
+        options={$enum(HANKE_VAIHE).map((value) => ({
+          value,
+          label: t(`hanke:vaihe:${value}`),
+        }))}
+        onChange={(selection: Option) => {
+          if (selection.value !== HANKE_VAIHE.SUUNNITTELU) {
+            formik.setFieldValue('suunnitteluVaihe', null);
+          }
+          formik.setFieldValue('vaihe', selection.value);
+        }}
+        value={{
+          value: formik.values.vaihe,
+          label: formik.values.vaihe ? t(`hanke:vaihe:${formik.values.vaihe}`) : '',
+        }}
+        error={getErrorMessage('vaihe')}
+        invalid={!!getErrorMessage('vaihe')}
+        tooltipLabel={t(`hankeForm:toolTips:tipOpenLabel`)}
+        tooltipText={t(`hankeForm:toolTips:vaihe`)}
+      />
       <Select
         className="mb-l"
         label="Hankkeen suunnitteluvaihe"
