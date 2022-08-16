@@ -2,7 +2,7 @@ import React from 'react';
 import Container from '../common/components/container/Container';
 import PageMeta from './components/PageMeta';
 import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
-import HankeFormContainer from '../domain/hanke/edit/HankeFormContainer';
+import HakemusContainer from '../domain/hanke/newForm/HakemusContainer';
 
 const NewHankePage: React.FC = () => {
   const { NEW_HANKE } = useLocalizedRoutes();
@@ -10,7 +10,7 @@ const NewHankePage: React.FC = () => {
   return (
     <Container>
       <PageMeta routeData={NEW_HANKE} />
-      <HankeFormContainer />
+      <HakemusContainer />
     </Container>
   );
 };

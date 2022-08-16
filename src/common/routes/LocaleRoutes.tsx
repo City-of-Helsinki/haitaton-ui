@@ -11,7 +11,6 @@ import InfoPage from '../../pages/staticPages/InfoPage';
 import AccessibilityPage from '../../pages/staticPages/AccessibilityPage';
 import ReferencesPage from '../../pages/staticPages/ReferencesPage';
 import PrivacyPolicyPage from '../../pages/staticPages/PrivacyPolicyPage';
-import NewHakemusPage from '../../pages/NewHakemusPage';
 import Johtoselvitys from '../../pages/Johtoselvitys';
 
 const LocaleRoutes = () => {
@@ -20,13 +19,12 @@ const LocaleRoutes = () => {
   return (
     <Routes>
       <Route path={t('routes:HOME:path')} element={<HomePage />} />
-      <Route path={t('routes:NEW_HANKE:path')} element={<NewHankePage />} />
+      <Route path={`${t('routes:NEW_HANKE:path')}/*`} element={<NewHankePage />} />
       <Route path={t('routes:EDIT_HANKE:path')} element={<EditHankePage />} />
       <Route path={t('routes:PROJECTS:path')} element={<HankeListPage />} />
       <Route path={t('routes:HANKEPORTFOLIO:path')} element={<HankePortfolioPage />} />
       <Route path={t('routes:MAP:path')} element={<MapPage />} />
       <Route path={t('routes:HAITATON_INFO:path')} element={<InfoPage />} />
-      <Route path={t('routes:HAKEMUS:path')} element={<NewHakemusPage />} />
       <Route path={t('routes:JOHTOSELVITYSHAKEMUS:path')} element={<Johtoselvitys />} />
       <Route path={t('routes:ACCESSIBILITY:path')} element={<AccessibilityPage />} />
       <Route path={t('routes:REFERENCES:path')} element={<ReferencesPage />} />
