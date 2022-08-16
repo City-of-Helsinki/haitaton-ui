@@ -156,6 +156,7 @@ const FormContent: React.FC = () => {
       formSteps={formSteps}
       showNotification={showNotification}
       formBasePath="/fi/hanke/uusi" // TODO: localized links
+      hankeIndexData={formik.values.tormaystarkasteluTulos}
       onDelete={handleDelete}
       onClose={handleClose}
       onSave={saveFormState}
