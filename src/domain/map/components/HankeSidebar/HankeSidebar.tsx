@@ -75,17 +75,17 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
             title={t('hankeForm:labels.vaihe')}
             content={t(`hanke:vaihe:${hanke.vaihe}`)}
           />
-          {hanke.omistajat[0] && (
-            <SidebarSection
-              title={t('hankeForm:labels.organisaatio')}
-              content={hanke.omistajat[0].organisaatioNimi}
-            />
-          )}
+          <SidebarSection
+            title={t('hankeForm:labels.organisaatio')}
+            content={hanke.omistajat[0]?.organisaatioNimi || '-'}
+          />
           <SidebarSection
             title={t('hankeForm:labels.tyomaaTyyppi')}
-            content={hanke.tyomaaTyyppi
-              .map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`))
-              .join(', ')}
+            content={
+              hanke.tyomaaTyyppi.length
+                ? hanke.tyomaaTyyppi.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')
+                : '-'
+            }
           />
           <SidebarSection title={t('hankeForm:labels.kuvaus')} content={hanke.kuvaus} />
           <hr />
