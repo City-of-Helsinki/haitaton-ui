@@ -2,11 +2,14 @@ import React from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useFormikContext } from 'formik';
+import { Accordion } from 'hds-react';
 import FormActions from './components/FormActions';
 import styles from './GenericForm.module.scss';
 import Notification from '../hanke/edit/components/Notification';
 import FormPagination from './components/FormPageIndicator';
 import NavigationButtons from './components/NavigationButtons';
+import HankeIndexes from '../map/components/HankeSidebar/HankeIndexes';
+import { HankeIndexData } from '../hanke/newForm/types';
 
 type FormStep = {
   path: string;
@@ -19,6 +22,7 @@ type Props = {
   formSteps: FormStep[];
   showNotification: 'success' | 'error' | '';
   formBasePath: string;
+  hankeIndexData: HankeIndexData | null;
   onDelete: () => void;
   onClose: () => void;
   onSave: () => void;
@@ -28,6 +32,7 @@ function GenericForm<T>({
   formSteps,
   showNotification,
   formBasePath,
+  hankeIndexData,
   onDelete,
   onClose,
   onSave,
@@ -109,6 +114,9 @@ function GenericForm<T>({
                       }
                     }}
                   />
+                  <Accordion heading="Haittaindeksit" card className={styles.index}>
+                    <HankeIndexes hankeIndexData={hankeIndexData} displayTooltip loading={false} />
+                  </Accordion>
                   <div className={styles.content}>
                     {formStep.element}
                     <NavigationButtons

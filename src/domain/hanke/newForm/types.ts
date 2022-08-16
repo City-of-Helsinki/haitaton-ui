@@ -53,8 +53,14 @@ export interface HankeIndexData {
   perusIndeksi: number;
   pyorailyIndeksi: number;
   joukkoliikenneIndeksi: number;
-  // TODO: onko tätä olemassa? tila: HANKE_INDEX_STATE_KEY;
+  tila: HANKE_INDEX_STATE_KEY; // TODO: onko tätä olemassa?
 }
+
+export enum HANKE_INDEX_STATE {
+  VOIMASSA = 'VOIMASSA',
+}
+
+export type HANKE_INDEX_STATE_KEY = keyof typeof HANKE_INDEX_STATE;
 
 export enum HANKE_INDEX_TYPE {
   PERUSINDEKSI = 'PERUSINDEKSI',
