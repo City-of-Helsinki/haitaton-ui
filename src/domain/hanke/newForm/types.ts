@@ -16,7 +16,7 @@ export interface HakemusFormValues {
   vaihe: HANKE_VAIHE_KEY | '';
   suunnitteluVaihe: HANKE_SUUNNITTELUVAIHE_KEY | null;
   tyomaaKatuosoite: string;
-  tyomaaTyyppi: Array<HANKE_TYOMAATYYPPI_KEY> | null;
+  tyomaaTyyppi: Array<HANKE_TYOMAATYYPPI_KEY>;
   tyomaaKoko: HANKE_TYOMAAKOKO_KEY | null;
   haittaAlkuPvm: string;
   haittaLoppuPvm: string;

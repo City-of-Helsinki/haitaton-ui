@@ -13,10 +13,6 @@ import {
   contactsValidationSchema,
   initialValues as initialValuesContacts,
 } from './Contacts';
-import {
-  AdditionalInformation,
-  initialValues as initialValuesAdditionalInformation,
-} from './AdditionalInformation';
 import { initialValues as initialValuesHaitat } from './Haitat';
 import { HakemusFormValues, HankeContact, HANKE_CONTACT_TYPE } from './types';
 import { FORMFIELD } from '../edit/types';
@@ -69,12 +65,6 @@ const FormContent: React.FC = () => {
       path: '/geometry',
       element: <Geometries />,
       title: 'Aluetiedot',
-      fieldsToValidate: [],
-    },
-    {
-      path: '/additional-information',
-      element: <AdditionalInformation />,
-      title: 'Lisätiedot',
       fieldsToValidate: [],
     },
   ];
@@ -177,7 +167,6 @@ const HakemusContainer: React.FC = () => {
     ...initialValuesBasicHankeInfo,
     ...initialValuesGeometries,
     ...initialValuesContacts,
-    ...initialValuesAdditionalInformation,
     ...initialValuesHaitat,
     saveType: 'DRAFT',
     liikennehaittaindeksi: null,
