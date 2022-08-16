@@ -56,13 +56,14 @@ const FormContent: React.FC = () => {
       fieldsToValidate: ['nimi', 'kuvaus', 'alkuPvm', 'loppuPvm', 'vaihe'],
     },
     {
-      path: '/contactdetails',
+      // TODO: localized links
+      path: '/yhteystiedot',
       element: <Contacts />,
       title: 'Yhteystiedot',
       fieldsToValidate: [],
     },
     {
-      path: '/geometry',
+      path: '/alueet',
       element: <Geometries />,
       title: 'Aluetiedot',
       fieldsToValidate: [],
@@ -154,7 +155,7 @@ const FormContent: React.FC = () => {
     <GenericForm<HakemusFormValues>
       formSteps={formSteps}
       showNotification={showNotification}
-      formBasePath="/fi/hakemus" // TODO: localized links
+      formBasePath="/fi/hanke/uusi" // TODO: localized links
       onDelete={handleDelete}
       onClose={handleClose}
       onSave={saveFormState}
