@@ -34,6 +34,11 @@ type Props = {
 const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
   const { t } = useTranslation();
 
+  const organisaatioContent = hanke.omistajat[0]?.organisaatioNimi || '-';
+  const tyomaaTyyppiContent = hanke.tyomaaTyyppi.length
+    ? hanke.tyomaaTyyppi.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')
+    : '-';
+
   return (
     <Drawer
       variant="alwaysOpen"
@@ -77,15 +82,11 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
           />
           <SidebarSection
             title={t('hankeForm:labels.organisaatio')}
-            content={hanke.omistajat[0]?.organisaatioNimi || '-'}
+            content={organisaatioContent}
           />
           <SidebarSection
             title={t('hankeForm:labels.tyomaaTyyppi')}
-            content={
-              hanke.tyomaaTyyppi.length
-                ? hanke.tyomaaTyyppi.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')
-                : '-'
-            }
+            content={tyomaaTyyppiContent}
           />
           <SidebarSection title={t('hankeForm:labels.kuvaus')} content={hanke.kuvaus} />
           <hr />
