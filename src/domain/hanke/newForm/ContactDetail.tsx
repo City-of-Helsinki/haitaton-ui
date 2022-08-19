@@ -32,7 +32,7 @@ const ContactDetail: React.FC<Props> = ({ contactType, index, organizationList }
     <Grid templateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap={10} mb={20}>
       <TextInput
         id={`${contactType}.${index}.etunimi`}
-        label="Etunimi"
+        label={t('hankeForm:labels:etunimi')}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values[contactType][index].etunimi}
@@ -41,7 +41,7 @@ const ContactDetail: React.FC<Props> = ({ contactType, index, organizationList }
       />
       <TextInput
         id={`${contactType}.${index}.sukunimi`}
-        label="Sukunimi"
+        label={t('hankeForm:labels:sukunimi')}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values[contactType][index].sukunimi}
@@ -50,7 +50,7 @@ const ContactDetail: React.FC<Props> = ({ contactType, index, organizationList }
       />
       <TextInput
         id={`${contactType}.${index}.email`}
-        label="Sähköposti"
+        label={t('hankeForm:labels:email')}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values[contactType][index].email}
@@ -59,7 +59,7 @@ const ContactDetail: React.FC<Props> = ({ contactType, index, organizationList }
       />
       <TextInput
         id={`${contactType}.${index}.puhelinnumero`}
-        label="Puhelinnumero"
+        label={t('hankeForm:labels:puhelinnumero')}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values[contactType][index].puhelinnumero}
@@ -69,7 +69,7 @@ const ContactDetail: React.FC<Props> = ({ contactType, index, organizationList }
       <Select
         id={`${contactType}.${index}.organisaatioId`}
         disabled={addOmaOrganisaatio}
-        label="Organisaatio"
+        label={t('hankeForm:labels:organisaatio')}
         options={organizationList.map((organization) => ({
           value: organization.id.toString(),
           label: organization.nimi,
@@ -85,7 +85,7 @@ const ContactDetail: React.FC<Props> = ({ contactType, index, organizationList }
       <Checkbox
         id={`${contactType}.${index}.addOmaOrganisaatio`}
         name="addOmaOrganisaatio"
-        label="Lisää oma organisaatio"
+        label={t('hankeForm:labels:omaOrganisaatio')}
         checked={addOmaOrganisaatio}
         onChange={() => {
           setAddOmaOrganisaatio(!addOmaOrganisaatio);
@@ -93,7 +93,7 @@ const ContactDetail: React.FC<Props> = ({ contactType, index, organizationList }
       />
       <TextInput
         id={`${contactType}.${index}.organisaatioNimi`}
-        label="Syötä oma organisaatio"
+        label={t('hankeForm:labels:insertOmaOrganisaatio')}
         disabled={!addOmaOrganisaatio}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}

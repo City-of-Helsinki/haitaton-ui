@@ -100,7 +100,7 @@ export const BasicHankeInfo: React.FC = () => {
       <TextInput
         className="mb-m"
         id="hankeTunnus"
-        label="Hankkeen tunnus"
+        label={t('hankeForm:labels:hankeTunnus')}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values.hankeTunnus}
@@ -109,7 +109,7 @@ export const BasicHankeInfo: React.FC = () => {
       <TextInput
         className="mb-m"
         id="nimi"
-        label="Hankkeen nimi"
+        label={t('hankeForm:labels:nimi')}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values.nimi}
@@ -119,7 +119,7 @@ export const BasicHankeInfo: React.FC = () => {
       <TextArea
         className="mb-m"
         id="kuvaus"
-        label="Hankkeen kuvaus"
+        label={t('hankeForm:labels:kuvaus')}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values.kuvaus}
@@ -129,17 +129,19 @@ export const BasicHankeInfo: React.FC = () => {
       <TextInput
         className="mb-m"
         id="tyomaaKatuosoite"
-        label="Katuosoite"
+        label={t('hankeForm:labels:tyomaaKatuosoite')}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values.tyomaaKatuosoite}
+        tooltipLabel={t(`hankeForm:toolTips:tipOpenLabel`)}
+        tooltipText={t(`hankeForm:toolTips:tyomaaKatuosoite`)}
       />
       <div className="two-col mb-m">
         <DateInput
           className="mr-l"
           id="alkuPvm"
           name="alkuPvm"
-          label="Hankkeen alkupäivä"
+          label={t('hankeForm:labels:alkuPvm')}
           minDate={new Date()}
           onChange={(date: string) => {
             const convertedDateString = convertFinnishDate(date);
@@ -163,7 +165,7 @@ export const BasicHankeInfo: React.FC = () => {
         <DateInput
           id="loppuPvm"
           name="loppuPvm"
-          label="Hankkeen loppupäivä"
+          label={t('hankeForm:labels:loppuPvm')}
           minDate={formik.values.alkuPvm !== '' ? new Date(formik.values.alkuPvm) : new Date()}
           onChange={(date: string) => {
             const convertedDateString = convertFinnishDate(date);
@@ -188,10 +190,10 @@ export const BasicHankeInfo: React.FC = () => {
       <Combobox<OptionTyyppi>
         className="mb-m"
         multiselect
-        label="Työmaan tyyppi"
-        clearButtonAriaLabel="Clear all selections"
-        selectedItemRemoveButtonAriaLabel="Remove value"
-        toggleButtonAriaLabel="Toggle menu"
+        label={t('hankeForm:labels:tyomaaTyyppi')}
+        clearButtonAriaLabel={t('common:components:multiselect:clear')}
+        selectedItemRemoveButtonAriaLabel={t('common:components:multiselect:removeSelected')}
+        toggleButtonAriaLabel={t('common:components:multiselect:toggle')}
         options={tyomaaTyyppiOptions}
         onChange={(selection: OptionTyyppi[]) => {
           formik.setFieldValue(
@@ -208,7 +210,7 @@ export const BasicHankeInfo: React.FC = () => {
       />
       <Select
         className="mb-m"
-        label="Työmaan koko"
+        label={t('hankeForm:labels:tyomaaKoko')}
         options={$enum(HANKE_TYOMAAKOKO).map((value) => ({
           value,
           label: t(`hanke:tyomaaKoko:${value}`),
@@ -224,7 +226,7 @@ export const BasicHankeInfo: React.FC = () => {
       <Select
         className="mb-m"
         required
-        label="Hankkeen vaihe"
+        label={t('hankeForm:labels:vaihe')}
         options={$enum(HANKE_VAIHE).map((value) => ({
           value,
           label: t(`hanke:vaihe:${value}`),
@@ -246,7 +248,7 @@ export const BasicHankeInfo: React.FC = () => {
       />
       <Select
         className="mb-l"
-        label="Hankkeen suunnitteluvaihe"
+        label={t('hankeForm:labels:suunnitteluVaihe')}
         disabled={HANKE_VAIHE.SUUNNITTELU !== formik.values.vaihe}
         options={$enum(HANKE_SUUNNITTELUVAIHE).map((value) => ({
           value,
