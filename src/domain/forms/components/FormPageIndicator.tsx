@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from 'hds-react';
+import { useTranslation } from 'react-i18next';
 import styles from './FormPageIndicator.module.scss';
 import Circle from '../../../common/components/icons/Circle';
 import CircleSelected from '../../../common/components/icons/CircleSelected';
@@ -11,6 +12,8 @@ type PropTypes = {
 };
 
 const FormPagination: React.FC<PropTypes> = ({ formPageLabels, currentLabel, onPageChange }) => {
+  const { t } = useTranslation();
+
   return (
     <div className={styles.stepIndicatorContainer}>
       <ol className={styles.stepIndicator}>
@@ -23,7 +26,7 @@ const FormPagination: React.FC<PropTypes> = ({ formPageLabels, currentLabel, onP
             }`}
             onClick={() => onPageChange(formPageLabels.indexOf(currentLabel) - 1)}
           >
-            Edellinen
+            {t('hankeForm:previousButton')}
           </Button>
         </li>
 
@@ -56,7 +59,7 @@ const FormPagination: React.FC<PropTypes> = ({ formPageLabels, currentLabel, onP
             }`}
             onClick={() => onPageChange(formPageLabels.indexOf(currentLabel) + 1)}
           >
-            Seuraava
+            {t('hankeForm:nextButton')}
           </Button>
         </li>
       </ol>
