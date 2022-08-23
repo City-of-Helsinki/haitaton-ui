@@ -144,10 +144,7 @@ export const BasicHankeInfo: React.FC = () => {
           onChange={(date: string) => {
             const convertedDateString = convertFinnishDate(date);
             if (convertedDateString.length > 0) {
-              formik.setFieldValue(
-                'alkuPvm',
-                toStartOfDayUTCISO(new Date(convertedDateString)) || ''
-              );
+              formik.setFieldValue('alkuPvm', toStartOfDayUTCISO(new Date(convertedDateString)));
             }
             alkuPvmInputIsDirty.current = true;
           }}
@@ -159,6 +156,7 @@ export const BasicHankeInfo: React.FC = () => {
           value={!formik.values.alkuPvm ? undefined : formatToFinnishDate(formik.values.alkuPvm)}
           required
           errorText={getErrorMessage('alkuPvm')}
+          disableConfirmation
         />
         <DateInput
           id="loppuPvm"
@@ -168,10 +166,7 @@ export const BasicHankeInfo: React.FC = () => {
           onChange={(date: string) => {
             const convertedDateString = convertFinnishDate(date);
             if (convertedDateString.length > 0) {
-              formik.setFieldValue(
-                'loppuPvm',
-                toEndOfDayUTCISO(new Date(convertedDateString)) || ''
-              );
+              formik.setFieldValue('loppuPvm', toEndOfDayUTCISO(new Date(convertedDateString)));
             }
             loppuPvmInputIsDirty.current = true;
           }}
@@ -183,6 +178,7 @@ export const BasicHankeInfo: React.FC = () => {
           value={!formik.values.loppuPvm ? undefined : formatToFinnishDate(formik.values.loppuPvm)}
           required
           errorText={getErrorMessage('loppuPvm')}
+          disableConfirmation
         />
       </div>
       <Combobox<OptionTyyppi>
