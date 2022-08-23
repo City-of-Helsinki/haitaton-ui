@@ -3,18 +3,17 @@ import api from '../../api/api';
 import { HankeDataFormState } from './types';
 import { HANKE_SAVETYPE_KEY } from '../../types/hanke';
 import { saveGeometryData } from '../../map/thunks';
-import { actions } from '../../app/reducer';
 import { filterEmptyContacts, isHankeEditingDisabled } from './utils';
 
 type SaveHankeData = {
   data: HankeDataFormState;
   saveType: HANKE_SAVETYPE_KEY;
-  formPage: number;
+  currentFormPage: number;
 };
 
 export const saveForm = createAsyncThunk(
   'form/saveData',
-  async ({ data, saveType, formPage }: SaveHankeData, thunkApi) => {
+  async ({ data, saveType, currentFormPage }: SaveHankeData, thunkApi) => {
     const requestData = {
       ...filterEmptyContacts(data),
       saveType,
@@ -25,8 +24,8 @@ export const saveForm = createAsyncThunk(
       throw new Error('Editing disabled');
     }
 
-    if (data.hankeTunnus && formPage === 1) {
-      thunkApi.dispatch(saveGeometryData({ hankeTunnus: data.hankeTunnus }));
+    if (data.hankeTunnus && currentFormPage === 1) {
+      await thunkApi.dispatch(saveGeometryData({ hankeTunnus: data.hankeTunnus }));
     }
 
     const response = data.hankeTunnus
@@ -34,24 +33,5 @@ export const saveForm = createAsyncThunk(
       : await api.post<HankeDataFormState>(`/hankkeet`, requestData);
 
     return response.data;
-  }
-);
-
-export const calculateIndex = createAsyncThunk(
-  'form/calculateIndex',
-  async (hankeTunnus: string, thunkApi) => {
-    try {
-      thunkApi.dispatch(actions.updateIsLoading(true));
-      const response = await api.post<HankeDataFormState>(
-        `/hankkeet/${hankeTunnus}/tormaystarkastelu`
-      );
-      thunkApi.dispatch(actions.updateIsLoading(false));
-      return response.data;
-    } catch (err) {
-      // eslint-disable-next-line
-      console.log(err);
-      thunkApi.dispatch(actions.updateIsLoading(false));
-      throw err;
-    }
   }
 );

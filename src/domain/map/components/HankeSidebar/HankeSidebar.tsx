@@ -1,16 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Drawer, DrawerBody, DrawerContent } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
 import { IconCross } from 'hds-react/icons';
-import { Button } from 'hds-react';
 import Text from '../../../../common/components/text/Text';
 import { formatToFinnishDate } from '../../../../common/utils/date';
 import { HankeData } from '../../../types/hanke';
 import styles from './HankeSidebar.module.scss';
-import HankeIndexesContainer from './HankeIndexesContainer';
-import useLinkPath from '../../../../common/hooks/useLinkPath';
-import { ROUTES } from '../../../../common/types/route';
+import HankeIndexes from './HankeIndexes';
 
 type SectionProps = {
   title: string;
@@ -37,7 +33,11 @@ type Props = {
 
 const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
   const { t } = useTranslation();
-  const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
+
+  const organisaatioContent = hanke.omistajat[0]?.organisaatioNimi || '-';
+  const tyomaaTyyppiContent = hanke.tyomaaTyyppi.length
+    ? hanke.tyomaaTyyppi.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')
+    : '-';
 
   return (
     <Drawer
@@ -80,27 +80,18 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
             title={t('hankeForm:labels.vaihe')}
             content={t(`hanke:vaihe:${hanke.vaihe}`)}
           />
-          {hanke.omistajat[0] && (
-            <SidebarSection
-              title={t('hankeForm:labels.organisaatio')}
-              content={hanke.omistajat[0].organisaatioNimi}
-            />
-          )}
+          <SidebarSection
+            title={t('hankeForm:labels.organisaatio')}
+            content={organisaatioContent}
+          />
           <SidebarSection
             title={t('hankeForm:labels.tyomaaTyyppi')}
-            content={hanke.tyomaaTyyppi
-              .map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`))
-              .join(', ')}
+            content={tyomaaTyyppiContent}
           />
           <SidebarSection title={t('hankeForm:labels.kuvaus')} content={hanke.kuvaus} />
-          <Link to={getEditHankePath({ hankeTunnus: hanke.hankeTunnus })}>
-            <Button variant="secondary" className={styles.hankeSidebar__editButton}>
-              {t('hankeSidebar:editHanke')}
-            </Button>
-          </Link>
           <hr />
 
-          <HankeIndexesContainer hankeTunnus={hanke.hankeTunnus} />
+          <HankeIndexes hankeIndexData={hanke.tormaystarkasteluTulos} />
         </DrawerBody>
       </DrawerContent>
     </Drawer>

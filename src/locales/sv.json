@@ -9,9 +9,17 @@
   "common": {
     "increment": "SV:Lisää",
     "confirmationDialog": {
-      "bodyText": "SV:Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä, vai poistua, jolloin syöttämäsi tiedot poistuvat.",
-      "cancelButton": "SV:Peruuta",
-      "exitButton": "SV:Poistu"
+      "interruptDialog": {
+        "titleText": "SV: Olet poistumassa lomakkeelta",
+        "bodyText": "SV: Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä, vai poistua, jolloin syöttämäsi tiedot poistuvat.",
+        "exitButton": "SV: Poistu"
+      },
+      "deleteDialog": {
+        "titleText": "SV: Oletko varma että haluat poistaa hankkeen?",
+        "bodyText": "SV: Hankkeen poistaminen on pysyvä toiminto ja hankkeen tietoja ei voi palauttaa poistamisen jälkeen.",
+        "exitButton": "SV: Poista"
+      },
+      "cancelButton": "SV: Peruuta"
     },
     "languages": {
       "fi": "Suomi",
@@ -24,7 +32,8 @@
         "removeSelected": "SV:Poista valittu",
         "clear": "SV:Tyhjennä kenttä"
       }
-    }
+    },
+    "error": "SV: Tapahtui virhe. Yritä uudestaan."
   },
   "form": {
     "validations": {
@@ -39,13 +48,6 @@
       "dateMin": "SV:Ensimmäinen mahdollinen päivä on {{min}}",
       "dateMax": "SV:Viimeinen mahdollinen päivä on {{max}}"
     }
-  },
-  "header": {
-    "HOME": "Home",
-    "MAP": "Map",
-    "PROJECTS": "Projects",
-    "FORM": "Form",
-    "hankeLink": "Luo uusi hanke"
   },
   "routes": {
     "HOME": {
@@ -62,6 +64,13 @@
         "title": "SV::Haitaton Beta - Hankelista"
       }
     },
+    "HANKEPORTFOLIO": {
+      "path": "/hankesalkku",
+      "headerLabel": "SV::Hankesalkku",
+      "meta": {
+        "title": "SV::Haitaton Beta - Hankesalkku"
+      }
+    },
     "MAP": {
       "path": "/map",
       "headerLabel": "SV::Kartta",
@@ -71,7 +80,7 @@
     },
     "NEW_HANKE": {
       "path": "/hanke/uusi",
-      "headerLabel": "SV:Hanke",
+      "headerLabel": "SV:Luo uusi hanke",
       "meta": {
         "title": "SV:Haitaton Beta - Luo uusi hanke"
       }
@@ -81,6 +90,20 @@
       "headerLabel": "SV:Hanke",
       "meta": {
         "title": "SV: Haitaton Beta - Hankkeen muokkaus"
+      }
+    },
+    "HAKEMUS": {
+      "path": "/hakemus/*",
+      "headerLabel": "Luo uusi hakemus",
+      "meta": {
+        "title": "Haitaton Beta - Luo uusi hakemus"
+      }
+    },
+    "JOHTOSELVITYSHAKEMUS": {
+      "path": "/johtoselvityshakemus/*",
+      "headerLabel": "Luo uusi johtoselvityshakemus",
+      "meta": {
+        "title": "Haitaton Beta - Luo uusi johtoselvityshakemus"
       }
     },
     "HAITATON_INFO": {
@@ -196,22 +219,16 @@
   "hankeForm": {
     "pageHeader": "SV:Hanke",
     "editingDisabled": {
-      "STARTED": "SV:Käynnissä olevan hankkeen tietoja ei voi muokata.",
-      "INDEX_CALCULATED": "SV:Hankkeelle on laskettu indeksit, joten sen tietoja ei voi muokata."
+      "STARTED": "SV:Käynnissä olevan hankkeen tietoja ei voi muokata."
     },
-    "calculateIndexesButton": "SV:Laske indeksit",
     "saveDraftButton": "SV:Tallenna luonnos",
+    "cancelButton": "SV:Keskeytä",
     "insertFieldError": "SV:Syötä kenttä",
     "savingSuccessHeader": "SV:Luonnos tallennettu",
     "savingSuccessText": "SV:Luonnos on tallennettu Hankelistalle",
     "savingFailHeader": "SV:Joku meni vikaan",
     "savingFailText": "SV:Luonnosta ei saatu tallennettua, koita uudelleen",
-    "indexCalculationSuccessHeader": "SV:Törmäystarkastelun laskenta onnistui",
-    "indexCalculationSuccessText": "SV:Törmäystarkastelun laskenta onnistui ja nyt voit katsoa tulokset",
-    "indexCalculationFailHeader": "SV:Törmäystarkastelun laskenta epäonnistui",
-    "indexCalculationFailText": "SV:Tuntematon virhe",
     "closeAriaLabel": "SV:Poistu kaavakkeelta tallentamatta",
-    "calculateIndexDialogBody": "SV:Haitattoman Beta-versiossa hanketta ei voi muokata sen jälkeen kun sille on laskettu haittaindeksit. Ennen kuin lasket indeksit, kannattaa käydä katsomassa hankkeen tilannetta karttanäkymässä (ylävalikossa) ja tarvittaessa muokata hankkeen tietoja ennen indeksien laskentaa. Mikäli olet valmis indeksien laskentaan, voit laskea indeksit nyt, tai palata lomakkeelle ja muokata hankkeen tietoja. Hanke säilyy tallennuksen jälkeen hankelistalla ja karttanäkymässä.",
     "confirmIndexCalculationButton": "SV:Jatka indeksilaskentaan",
     "labels": {
       "hankeTunnus": "SV:Hankkeen tunnus",
@@ -269,7 +286,7 @@
     },
     "hankkeenAlueForm": {
       "header": "SV:Hankkeen alue",
-      "instructions": "SV: Piirtotyökalut löytyvät karttaikkunan vasemmasta alalaidasta. Kynätyökalulla voi piirtää monikulmaisia geometrioita klikkaamalla kohtaan, johon haluat kulman. Neliötyökalulla saat muodostettua neliömäisiä alueita klikkaamalla ensin kartalle ja liikuttamalla hiirtä haluamaasi suuntaan. Uudelleenklikkaus \"sulkee\" neliön piirron.  Voit piirtää samalle hankkeelle useita geometrioita.\nGeometriaa voi muokata \"tarttumalla\" geometrian reunasta ja vetämällä. Myös neliömäistä geometriaa voi muokata reunasta tarttumalla.\nJos haluat poistaa yksittäisen geometrian kartalta, aktivoi poisto klikkaamalla ja painamalla paina alt-näppäintä (Windows) tai  alt/option-näppäintä (Mac) geometrian sisällä. Geometrian reunat tummenevat ja piirtovalikkoon tulee roskakorikuvake, jota painamalla geometria poistuu.\nHaitattoman Beta-versiossa hanketta ei voi muokata sen jälkeen kun sille on laskettu haittaindeksit. Geometrian piirtämisen jälkeen hanke näkyy karttanäkymässä, joten ennen kuin lasket indeksit, kannattaa käydä katsomassa hankkeen tilannetta kartalla (ylävalikossa) ja tarvittaessa muokata hankkeen tietoja ennen indeksien laskentaa."
+      "instructions": "SV: Hankkeelle voi piirttää useita geometrioita. Geometria alueet vaikuttavat hankkeen liikennehaittaindekseihin.\nPiirtotyökalut löytyvät karttanäkymän vasemmasta alalaidasta. Kynätyökalulla voi piirtää monikulmaisia geometrioita klikkaamalla kohtaan, johon haluat kulman. Neliötyökalulla saat muodostettua neliömäisiä alueita klikkaamalla ensin kartalle ja liikuttamalla hiirtä haluamaasi suuntaan. Uudelleenklikkaus \"sulkee\" neliön piirron.\nGeometriaa voi muokata \"tarttumalla\" geometrian reunasta ja vetämällä. Myös neliömäistä geometriaa voi muokata reunasta tarttumalla.\nVoit poistaa geometrian valitsemalla ensin geometrian klikkaamalla sitä, jolloin vasemman alalaidan piirtotyökaluihin ilmestyy roskakori ikoni, jota klikkaamalla geometrian voi poistaa."
     },
     "hankkeenYhteystiedotForm": {
       "header": "SV:Hankkeen yhteystiedot"
@@ -285,11 +302,13 @@
     }
   },
   "hankeSidebar": {
-    "ariaSidebarContent": "EN:Hankkeen tiedot",
+    "ariaSidebarContent": "SV:Hankkeen tiedot",
     "closeButtonAriaLabel": "SV:Sulje hankevalikko",
     "editHanke": "SV: Muokkaa hankkeen tietoja"
   },
   "hankeIndexes": {
+    "haittaindeksit": "SV:Haittaindeksit",
+    "haittaindexTooltip": "SV:Haittaindeksit lasketaan hankkeen alueen mukaan. Indeksit päivittyvät, kun tallennat lomakkeen tiedot tai siirryt seuraavalle sivulle.",
     "liikennehaittaindeksi": "SV: Liikennehaittaindeksi",
     "ruuhkautuminen": "SV: Ruuhkautuminen",
     "pyorailynPaareitti": "SV: Pyöräilyn pääreitti",
@@ -299,6 +318,89 @@
       "TODENNAKOINEN": "SV: todennäköinen",
       "EI_TARVETTA": "SV: ei tarvetta",
       "MERKITTAVA": "SV: merkittävä"
+    },
+    "indexesNotCalculated": "SV: Haittaindeksejä ei ole laskettu."
+  },
+  "homepage": {
+    "pageTitle": "SV: Tervetuloa Haitaton-asiointiportaaliin",
+    "hanke": {
+      "title": "SV: Hanke",
+      "description": "SV: Hankkeet toimivat hakemuskokonaisuuksina, joista pystyt seuraamaan hankkeeseen liittyvien hakemusten tilaa.",
+      "actionText": "SV: Luo hanke"
+    },
+    "hakemus": {
+      "title": "SV: Hakemus/Työvaihe",
+      "description": "SV: Hakemukset ovat kaivu- tai aluevuokraus-ilmoituksia tai tilapäisiä liikennejärjestelyjä.",
+      "actionText": "SV: Luo hakemus"
+    },
+    "johtotietoselvitys": {
+      "title": "SV: Johtotietoselvitys",
+      "description": "SV: Selvityspyyntö tietyn alueen johtotiedoista. Tarvitaan kaivuilmoituksen liitteenä.",
+      "actionText": "SV: Tee Johtotietoselvitys"
+    },
+    "valmistelu": {
+      "title": "SV: Valmisteluvaiheessa oleva hanke",
+      "description": "SV: Pitkän ajanjakson tarkasteluun ja suunnitteluun tarkoitettu hanke, joka ei koostu hakemuksista.",
+      "actionText": "SV: Luo ohjelmointihanke"
+    },
+    "hankesalkku": {
+      "title": "SV: Hankesalkku",
+      "description": "SV: Hankesalkusta näet hankkeet ja hakemukset jotka omistat tai olet valtuutettu näkemään.",
+      "actionText": "SV: Avaa hankesalkku"
+    },
+    "hankelista": {
+      "title": "SV: Hankelista",
+      "description": "SV: Hankelistasta näet kaikki julkiset hankkeet.",
+      "actionText": "SV: Avaa hankelista"
+    },
+    "kartta": {
+      "title": "SV: Kartta",
+      "description": "SV: Kartalta näet halutulta aikaväliltä kaikki julkiset hankkeet ja niiden sijainnin.",
+      "actionText": "SV: Avaa kartta"
+    },
+    "tietoja_haitattomasta": {
+      "title": "SV: Tietoja Haitattomasta",
+      "description": "SV: Täältä löydät tarkempaa tietoa ilmoitusprosessista, sekä Haitattoman eri toiminnallisuuksista.",
+      "actionText": "SV: Lue lisää haitattomasta"
+    }
+  },
+  "hankePortfolio": {
+    "filters": "SV: Rajausehdot",
+    "pageHeader": "SV:Hankesalkku",
+    "search": "SV: Haku",
+    "searchHelperText": "SV: Hae hankkeen nimellä tai tunnuksella",
+    "noneFound": "SV: Haulla ei löytynyt yhtään hankkeita.",
+    "noneExist": "SV: Hankesalkussasi ei ole hankkeita.",
+    "hankevaiheet": "SV: Hankevaiheet",
+    "hankevaiheetHelperText": "SV: Valitse hankevaiheet joita haluat tarkastella",
+    "endDate": "SV: Ajanjakson loppu",
+    "clearDates": "SV: Tyhjennä",
+    "timePeriodHelperText": "SV: Aikaväli jolloin haitta on aktiivinen",
+    "hankkeentyyppi": "SV: Hankkeen tyypit",
+    "hankkeentyyppiHelperText": "SV: Valitse hankkeen työmaan tyyppi tai tyypit",
+    "tabit": {
+      "perustiedot": "SV: Perustiedot",
+      "yhteystiedot": "SV: Yhteystiedot"
+    },
+    "labels": {
+      "kuvaus": "SV: Hankkeen kuvaus",
+      "hankeVaihe": "SV: Hankkeen vaihe",
+      "suunnitteluVaihe": "SV: Suunnitteluvaihe",
+      "katuosoite": "SV: Katuosoite",
+      "avaaKartalla": "SV: Avaa kartalla",
+      "hankkeenKesto": "SV: Hankkeen kesto",
+      "tyomaanKoko": "SV: Työmaan koko",
+      "tyomaanTyyppi": "SV: Työmaantyyppi",
+      "hankkeenHaitat": "SV: Hankkeen haitat",
+      "haitanKesto": "SV: Haitan kesto",
+      "paatoksenHakija": "SV: Päätöksenhakija",
+      "rakennuttaja": "SV: Rakennuttaja",
+      "tyonsuorittaja": "SV: Työnsuorittaja",
+      "yhteyshenkilo": "SV: Yhteyshenkilö",
+      "nimi": "SV: Nimi",
+      "osoite": "SV: Osoite",
+      "sposti": "SV: Sähköposti",
+      "puhelin": "SV: Puhelin"
     }
   },
   "hankeList": {
@@ -359,12 +461,24 @@
       "title": "SV: Lähdeviitteet",
       "content": "SV: Palvelu käyttää seuraavista lähteistä saatua aineistoa:",
       "referenceData": {
-        "HEKAYL": { "title": "SV: Helsingin kaupungin yleisten alueiden rekisteri 2021" },
-        "HEKAKA": { "title": "SV: Helsingin kaupungin kaupunkimittauspalvelut 2021" },
-        "OPSTMA": { "title": "SV: OpenStreetMap contributors 2021" },
-        "HSL": { "title": "SV: HSL 2021" },
-        "MAMILA": { "title": "SV: Maanmittauslaitos 2021" },
-        "HEKAKATO": { "title": "SV: Helsingin kaupunki kaupunkiympäristön toimiala 2021" }
+        "HEKAYL": {
+          "title": "SV: Helsingin kaupungin yleisten alueiden rekisteri 2021"
+        },
+        "HEKAKA": {
+          "title": "SV: Helsingin kaupungin kaupunkimittauspalvelut 2021"
+        },
+        "OPSTMA": {
+          "title": "SV: OpenStreetMap contributors 2021"
+        },
+        "HSL": {
+          "title": "SV: HSL 2021"
+        },
+        "MAMILA": {
+          "title": "SV: Maanmittauslaitos 2021"
+        },
+        "HEKAKATO": {
+          "title": "SV: Helsingin kaupunki kaupunkiympäristön toimiala 2021"
+        }
       }
     },
     "accessibility": {

@@ -1,0 +1,12 @@
+.navigationButtons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.content {
+  margin-bottom: var(--spacing-xl);
+}

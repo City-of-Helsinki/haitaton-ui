@@ -60,18 +60,25 @@ export const selectHankeVaihe = (
 };
 
 export const fillForm0 = (hankeData: HankeDataDraft) => {
-  if (hankeData.onYKTHanke) {
-    cy.get('input[data-testid=onYKTHanke]').click();
-  }
+  cy.get('[data-testid=formStepIndicator]').should('exist');
+
   cy.get('input[data-testid=nimi]').type(hankeData.nimi);
   cy.get('textarea[data-testid=kuvaus]').type(hankeData.kuvaus);
+  if (hankeData.tyomaaKatuosoite) {
+    cy.get('#tyomaaKatuosoite').type(hankeData.tyomaaKatuosoite);
+  }
   cy.get('#alkuPvm').type(hankeData.alkuPvm);
   cy.get('#loppuPvm').type(hankeData.loppuPvm);
   cy.get('input[data-testid=nimi]').click();
+
   selectHankeVaihe(
     hankeData.vaihe,
     hankeData.suunnitteluVaihe ? hankeData.suunnitteluVaihe : undefined
   );
+
+  if (hankeData.onYKTHanke) {
+    cy.get('input[data-testid=onYKTHanke]').click();
+  }
 };
 
 export const nextFormPage = () => {
@@ -88,10 +95,16 @@ export const drawPolygonToMap = () => {
   cy.get('#ol-map').click(drawCoordinateX + 300, drawCoordinateY + 300);
   cy.get('#ol-map').click(drawCoordinateX, drawCoordinateY + 300);
   cy.get('#ol-map').dblclick(drawCoordinateX + 20, drawCoordinateY + 20);
+  cy.get('[data-testid=formStepIndicator]').click();
 };
 
 export const saveDraft = () => {
   cy.get('[data-testid=save-draft-button]').click();
+};
+
+export const waitForToast = () => {
+  cy.get('[data-testid=formToastSuccess]').should('be.visible');
+  cy.get('[data-testid=formToastSuccess]').should('not.be.visible');
 };
 
 export const fillForm2 = (hankeData: HankeDataDraft) => {
@@ -100,12 +113,6 @@ export const fillForm2 = (hankeData: HankeDataDraft) => {
     cy.get('input[data-testid=omistajat-sukunimi]').type(hankeData.omistajat[0].sukunimi);
     cy.get('input[data-testid=omistajat-email]').type(hankeData.omistajat[0].email);
     cy.get('input[data-testid=omistajat-puhelinnumero]').type(hankeData.omistajat[0].puhelinnumero);
-  }
-};
-
-export const fillForm3 = (hankeData: HankeDataDraft) => {
-  if (hankeData.tyomaaKatuosoite) {
-    cy.get('input[data-testid=tyomaaKatuosoite]').type(hankeData.tyomaaKatuosoite);
   }
 };
 
@@ -206,7 +213,9 @@ export const selectTarinaHaitta = (tarinaHaitta: HANKE_TARINAHAITTA_KEY) => {
   }
 };
 
-export const fillForm4 = (hankeData: HankeDataDraft) => {
+export const fillForm1 = (hankeData: HankeDataDraft) => {
+  cy.get('[data-testid=formStepIndicator]').should('exist');
+
   if (hankeData.haittaAlkuPvm) {
     cy.get('#haittaAlkuPvm').type(hankeData.haittaAlkuPvm);
   } else {
@@ -219,7 +228,7 @@ export const fillForm4 = (hankeData: HankeDataDraft) => {
     cy.get('#haittaLoppuPvm').type(hankeData.loppuPvm);
   }
 
-  cy.get('[data-testid=form4Header]').click(); // Close datepicker because it is over kaistaHaitta-toggle-button
+  cy.get('[data-testid=formStepIndicator]').click(); // Close datepicker because it is over kaistaHaitta-toggle-button
 
   if (hankeData.kaistaHaitta) {
     selectKaistaHaitta(hankeData.kaistaHaitta);
@@ -242,31 +251,18 @@ export const fillForm4 = (hankeData: HankeDataDraft) => {
   }
 };
 
-export const triggerIndexCount = () => {
-  cy.intercept('/api/hankkeet/*/tormaystarkastelu').as('tormaystarkastelu');
-  cy.get('[data-testid=submitButton]').click();
-  cy.get('[data-testid=confirmationDialog]').should('be.visible');
-  cy.get('[data-testid=indexConfirmationOK]').click();
-  cy.get('[data-testid=formToastIndexSuccess]').children().should('be.visible');
-  cy.wait('@tormaystarkastelu');
-};
-
-export const createHankeFromUI = (hankeData: HankeDataDraft, countIndexes: boolean) => {
+export const createHankeFromUI = (hankeData: HankeDataDraft) => {
   cy.visit('/fi/hanke/uusi');
   fillForm0(hankeData);
   nextFormPage();
+
+  waitForToast();
   drawPolygonToMap();
+  fillForm1(hankeData);
   saveDraft();
   nextFormPage();
+
+  waitForToast();
   fillForm2(hankeData);
   saveDraft();
-  nextFormPage();
-  fillForm3(hankeData);
-  saveDraft();
-  nextFormPage();
-  fillForm4(hankeData);
-  saveDraft();
-  if (countIndexes) {
-    triggerIndexCount();
-  }
 };

@@ -1,0 +1,125 @@
+@import 'layout.scss';
+
+.hankeForm {
+  padding: 0 var(--spacing-l) 0 var(--spacing-l);
+
+  &__formWpr {
+    display: flex;
+  }
+
+  &__notification {
+    margin-bottom: 2rem;
+  }
+
+  .closeFormWpr {
+    right: var(--spacing-layout-s);
+    top: 13px;
+    position: absolute;
+  }
+
+  h3.labelHeader {
+    display: flex;
+
+    div[class^='Tooltip-module_wrapper'] {
+      display: inline-block;
+
+      button[class^='Tooltip-module_buttonTooltip'] {
+        position: relative;
+        top: -3px;
+        left: 3px;
+      }
+    }
+  }
+
+  &__formWprRight {
+    background: var(--color-white);
+    flex-grow: 1;
+    padding: var(--spacing-layout-s);
+    margin-left: var(--spacing-layout-s);
+    position: relative;
+
+    h2 {
+      margin-top: -0.5rem;
+      padding-top: 0;
+      font-size: var(--fontsize-heading-m);
+
+      div[class^='Tooltip-module_root'] {
+        display: inline-block;
+        position: relative;
+        left: 0.5rem;
+        bottom: -0.3rem;
+      }
+    }
+
+    h3 {
+      display: flex;
+
+      div[class^='Tooltip-module_root'] {
+        position: relative;
+        left: 0.5rem;
+      }
+    }
+
+    .deleteHankeBtn {
+      color: #c4123e;
+    }
+  }
+
+  .formWpr {
+    margin-bottom: var(--spacing-m);
+  }
+
+  .calendaraWpr {
+    display: flex;
+
+    .left {
+      padding-right: var(--spacing-m);
+      width: 50%;
+    }
+
+    .right {
+      padding-left: var(--spacing-m);
+      width: 50%;
+    }
+
+    @include respond-below(s) {
+      label {
+        height: 40px;
+        display: flex;
+        align-items: flex-end;
+      }
+    }
+  }
+
+  .formColumns {
+    display: grid;
+    grid-gap: var(--grid-gap);
+    grid-template-columns: 1fr 1fr;
+    padding-bottom: var(--spacing-m);
+  }
+
+  .formItem {
+    padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) 0;
+
+    div {
+      height: auto;
+    }
+  }
+
+  .error-text {
+    color: var(--color-brick);
+    padding-top: 10px;
+    display: block;
+  }
+
+  .btnWpr {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    padding-top: var(--spacing-m);
+  }
+
+  section[class^='Tooltip-module_tooltip'] {
+    min-width: 20rem;
+  }
+}

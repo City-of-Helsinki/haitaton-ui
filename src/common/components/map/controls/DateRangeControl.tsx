@@ -1,16 +1,20 @@
 import { GridItem, Grid } from '@chakra-ui/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import ReactDatePicker from 'react-datepicker';
-import ControlPanel from './ControlPanel';
-import { toStartOfDayUTCISO, toEndOfDayUTCISO, formatToFinnishDate } from '../../../utils/date';
-import CalendarIcon from '../../icons/Calendar';
+import { DateInput } from 'hds-react';
 import styles from './DateRangeControl.module.scss';
+import useLocale from '../../../hooks/useLocale';
+import {
+  convertFinnishDate,
+  formatToFinnishDate,
+  toEndOfDayUTCISO,
+  toStartOfDayUTCISO,
+} from '../../../utils/date';
 
 type Props = {
-  startDate: string;
+  startDate: string | null;
   updateStartDate: (data: string) => void;
-  endDate: string;
+  endDate: string | null;
   updateEndDate: (data: string) => void;
 };
 
@@ -23,60 +27,58 @@ const DateRangeControl: React.FC<Props> = ({
   updateStartDate,
   updateEndDate,
 }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const locale = useLocale();
 
   return (
-    <ControlPanel className={styles.dateRangeControl}>
-      <div className={styles.datePicker}>
-        <Grid templateColumns="repeat(9, 1fr)" w="360px">
-          <GridItem colSpan={4}>
-            <div>
-              <label htmlFor={startPicker} className={styles.label}>
-                {t('map:dateRange:begin')}
-              </label>
-              <div className={styles.dateWpr}>
-                <ReactDatePicker
-                  id={startPicker}
-                  onChange={(date: Date) => {
-                    updateStartDate(toStartOfDayUTCISO(date));
-                  }}
-                  value={formatToFinnishDate(startDate)}
-                  selected={new Date(startDate)}
-                  maxDate={new Date(endDate)}
-                  locale={i18n.language}
-                  data-testid="filterStartDateInput"
-                />
-                <CalendarIcon />
-              </div>
-            </div>
-          </GridItem>
-          <GridItem colSpan={1} className={styles.dateHyphen} aria-hidden>
-            <p>-</p>
-          </GridItem>
-          <GridItem colSpan={4}>
-            <div>
-              <label htmlFor={endPicker} className={styles.label}>
-                {t('map:dateRange:end')}
-              </label>
-              <div className={styles.dateWpr}>
-                <ReactDatePicker
-                  id={endPicker}
-                  onChange={(date: Date) => {
-                    updateEndDate(toEndOfDayUTCISO(date));
-                  }}
-                  value={formatToFinnishDate(endDate)}
-                  selected={new Date(endDate)}
-                  minDate={new Date(startDate)}
-                  locale={i18n.language}
-                  className={styles.reactDatepicker}
-                />
-                <CalendarIcon />
-              </div>
-            </div>
-          </GridItem>
-        </Grid>
-      </div>
-    </ControlPanel>
+    <div className={styles.datePicker}>
+      <Grid templateColumns="repeat(9, 1fr)" w="360px">
+        <GridItem colSpan={4}>
+          <div>
+            <DateInput
+              id={startPicker}
+              value={!startDate ? undefined : formatToFinnishDate(startDate)}
+              initialMonth={new Date()}
+              label={t('map:dateRange:begin')}
+              maxLength={10}
+              language={locale}
+              onChange={(e) => {
+                const convertedDateString = convertFinnishDate(e);
+                if (convertedDateString.length > 0) {
+                  updateStartDate(toStartOfDayUTCISO(new Date(convertedDateString)));
+                } else {
+                  updateStartDate('');
+                }
+              }}
+              maxDate={endDate ? new Date(endDate) : undefined}
+              disableConfirmation
+            />
+          </div>
+        </GridItem>
+        <GridItem colSpan={1} className={styles.dateHyphen} aria-hidden>
+          <p>-</p>
+        </GridItem>
+        <GridItem colSpan={4}>
+          <DateInput
+            id={endPicker}
+            value={!endDate ? undefined : formatToFinnishDate(endDate)}
+            label={t('map:dateRange:end')}
+            language={locale}
+            maxLength={10}
+            onChange={(e) => {
+              const convertedDateString = convertFinnishDate(e);
+              if (convertedDateString.length > 0) {
+                updateEndDate(toEndOfDayUTCISO(new Date(convertedDateString)));
+              } else {
+                updateEndDate('');
+              }
+            }}
+            minDate={startDate ? new Date(startDate) : undefined}
+            disableConfirmation
+          />
+        </GridItem>
+      </Grid>
+    </div>
   );
 };
 

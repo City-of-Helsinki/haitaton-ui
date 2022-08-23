@@ -1,7 +1,5 @@
 /// <reference types="cypress" />
 import {
-  HankeIndexData,
-  HANKE_INDEX_TYPE,
   HANKE_KAISTAHAITTA,
   HANKE_KAISTAPITUUSHAITTA,
   HANKE_MELUHAITTA,
@@ -9,21 +7,16 @@ import {
   HANKE_TARINAHAITTA,
   HANKE_VAIHE,
   HankeDataDraft,
+  HankeIndexData,
+  HANKE_INDEX_TYPE,
   HANKE_SUUNNITTELUVAIHE,
 } from '../../src/domain/types/hanke';
+import { createHankeFromUI } from '../utils/formFiller';
+import { validateIndexes } from '../utils/indexValidator';
 
-export const hankeMock: HankeDataDraft = {
+const hankeMock: HankeDataDraft = {
   id: 0, // not used but types require it
   hankeTunnus: 'not used', // not used but types require it
-  tilat: {
-    // not used but types require it
-    onGeometrioita: false,
-    onKaikkiPakollisetLuontiTiedot: false,
-    onTiedotLiikenneHaittaIndeksille: false,
-    onLiikenneHaittaIndeksi: false,
-    onViereisiaHankkeita: false,
-    onAsiakasryhmia: false,
-  },
   onYKTHanke: true,
   nimi: 'E2E-hankkeen-testaus',
   kuvaus: 'Tämä on hankkeen kuvaus',
@@ -53,7 +46,7 @@ export const hankeMock: HankeDataDraft = {
   tarinaHaitta: HANKE_TARINAHAITTA.KOLME,
 };
 
-export const hankeMockIndex: Partial<HankeIndexData> = {
+const hankeMockIndex: Partial<HankeIndexData> = {
   liikennehaittaIndeksi: {
     indeksi: 4.8,
     tyyppi: HANKE_INDEX_TYPE.PERUSINDEKSI,
@@ -65,7 +58,11 @@ export const hankeMockIndex: Partial<HankeIndexData> = {
 
 context('HankeForm', () => {
   beforeEach(() => {
-    cy.login();
-    cy.visit('/fi/hanke/uusi');
+    cy.login('/hanke/uusi');
+  });
+
+  it('Validate indexes are counted correctly with given hankeData', () => {
+    createHankeFromUI(hankeMock);
+    validateIndexes(hankeMockIndex);
   });
 });

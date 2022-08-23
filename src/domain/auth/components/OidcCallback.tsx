@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { RouteChildrenProps } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import authService from '../authService';
 
 type AuthenticationError = 'deviceTimeError' | 'permissionDeniedByUserError' | 'unknown';
 
-const OidcCallback: React.FC<RouteChildrenProps> = ({ history }) => {
+const OidcCallback = () => {
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [authenticationError, setAuthenticationError] = useState<AuthenticationError | null>(null);
 
@@ -13,7 +14,7 @@ const OidcCallback: React.FC<RouteChildrenProps> = ({ history }) => {
     authService
       .endLogin()
       .then(() => {
-        history.replace('/');
+        navigate('/');
       })
       .catch((error: Error) => {
         // Handle error caused by device time being more than 5 minutes off
@@ -33,7 +34,7 @@ const OidcCallback: React.FC<RouteChildrenProps> = ({ history }) => {
           setAuthenticationError('unknown');
         }
       });
-  }, [history, t]);
+  }, [navigate, t]);
 
   return (
     <>

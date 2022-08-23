@@ -1,3 +1,7 @@
+.borders {
+  border: 1px solid black;
+}
+
 .mapContainer {
   position: relative;
 
@@ -17,4 +21,12 @@
 
 .hiddenTestDiv {
   display: none;
+}
+
+.dateRangeControl {
+  position: absolute;
+  bottom: 10rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--spacing-xs);
 }

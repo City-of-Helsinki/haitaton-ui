@@ -1,0 +1,29 @@
+.container {
+  max-width: var(--breakpoint-xl);
+
+  .contentContainer {
+    background: var(--color-white);
+    overflow-x: hidden;
+    min-height: 65vh;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    padding: 4rem 8rem;
+    row-gap: var(--spacing-xs);
+  }
+
+  .feedbackInfo {
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+
+  .basicInfoContainer {
+    display: grid;
+    padding: 0 var(--spacing-s) 2rem 2rem;
+
+    .link {
+      padding-left: 2rem;
+      padding-top: 1rem;
+      color: var(--color-coat-of-arms);
+    }
+  }
+}

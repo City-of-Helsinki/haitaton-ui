@@ -2,15 +2,9 @@ import React from 'react';
 
 const Square: React.FC = () => {
   return (
-    <svg width="26px" height="26px" viewBox="0 0 26 26">
-      <title>Rectangle</title>
-      <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-        <g transform="translate(-391.000000, -794.000000)" stroke="#0072C6" strokeWidth="2">
-          <g transform="translate(364.000000, 320.000000)">
-            <rect x="28" y="475" width="24" height="24" />
-          </g>
-        </g>
-      </g>
+    <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <title>Square</title>
+      <path d="M3 21V3h18v18H3Z" stroke="#000" strokeWidth="1.75" />
     </svg>
   );
 };

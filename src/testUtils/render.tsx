@@ -23,8 +23,10 @@ const AllTheProviders = ({ children }: Props) => (
   </BrowserRouter>
 );
 
-const customRender = (ui: React.ReactElement, options: RenderOptions = {}) =>
-  render(ui, { wrapper: AllTheProviders as React.ComponentType, ...options });
+const customRender = (ui: React.ReactElement, options: RenderOptions = {}, route = '/') => {
+  window.history.pushState({}, 'Test page', route);
+  return render(ui, { wrapper: AllTheProviders as React.ComponentType, ...options });
+};
 
 // re-export everything
 export * from '@testing-library/react';

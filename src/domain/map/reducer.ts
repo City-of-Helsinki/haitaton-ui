@@ -28,14 +28,17 @@ const updateDrawGeometry: CaseReducer<ReducerState, PayloadAction<HankeGeoJSON>>
   state.drawGeometry = action.payload;
 };
 
-const setHankeFilterStartDate: CaseReducer<ReducerState, PayloadAction<string>> = (
+const setHankeFilterStartDate: CaseReducer<ReducerState, PayloadAction<string | null>> = (
   state,
   action
 ) => {
   state.hankeFilters.startDate = action.payload;
 };
 
-const setHankeFilterEndDate: CaseReducer<ReducerState, PayloadAction<string>> = (state, action) => {
+const setHankeFilterEndDate: CaseReducer<ReducerState, PayloadAction<string | null>> = (
+  state,
+  action
+) => {
   state.hankeFilters.endDate = action.payload;
 };
 

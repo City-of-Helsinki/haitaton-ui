@@ -1,12 +1,9 @@
-import {
-  getStatusByIndex,
-  getColorByStatus,
-  LIIKENNEHAITTA_STATUS,
-  INDEX_RED,
-  INDEX_BLUE,
-  INDEX_GREEN,
-  INDEX_YELLOW,
-} from './liikennehaittaindeksi';
+import { getStatusByIndex, getColorByStatus, LIIKENNEHAITTA_STATUS } from './liikennehaittaindeksi';
+
+const INDEX_BLUE = `rgba(36, 114, 198, 1)`;
+const INDEX_GREEN = `rgba(0, 146, 70, 1)`;
+const INDEX_YELLOW = `rgba(255, 218, 7, 1)`;
+const INDEX_RED = 'rgba(196, 18, 62, 1)';
 
 describe('Liikennehaittaindeksi utils', () => {
   test('status and color with null should be blue', async () => {

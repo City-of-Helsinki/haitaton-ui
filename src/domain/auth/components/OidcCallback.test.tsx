@@ -1,20 +1,19 @@
 import React from 'react';
-import { Router, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { cleanup, waitFor } from '@testing-library/react';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { createMemoryHistory } from 'history';
 import { render } from '../../../testUtils/render';
 import authService from '../authService';
 import OidcCallback from './OidcCallback';
-
-const history = createMemoryHistory();
-history.replace = jest.fn();
+import { LOGIN_CALLBACK_PATH } from '../constants';
 
 const getWrapper = () =>
   render(
-    <Router history={history}>
-      <Route render={(props) => <OidcCallback {...props} />} />
-    </Router>
+    <Routes>
+      <Route path={LOGIN_CALLBACK_PATH} element={<OidcCallback />} />
+    </Routes>,
+    {},
+    LOGIN_CALLBACK_PATH
   );
 
 describe('<OidcCallback />', () => {
@@ -63,7 +62,7 @@ describe('<OidcCallback />', () => {
 
       getWrapper();
 
-      await waitFor(() => expect(history.replace).toHaveBeenCalledTimes(1));
+      await waitFor(() => expect(window.location.pathname).toEqual('/'));
     });
   });
 });

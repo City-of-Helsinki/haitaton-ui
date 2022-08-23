@@ -22,7 +22,7 @@ type PropTypes = {
   tooltip?: TooltipProps;
 };
 
-const Dropdown: React.FC<PropTypes> = ({
+const DropdownMultiselect: React.FC<PropTypes> = ({
   name,
   id,
   control,
@@ -70,4 +70,4 @@ const Dropdown: React.FC<PropTypes> = ({
   );
 };
 
-export default Dropdown;
+export default DropdownMultiselect;

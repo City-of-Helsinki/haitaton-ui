@@ -8,12 +8,11 @@ export class AuthService {
 
   constructor() {
     const settings: UserManagerSettings = {
-      automaticSilentRenew: false,
+      automaticSilentRenew: true,
       userStore: new WebStorageStateStore({ store: window.localStorage }),
       authority: process.env.REACT_APP_OIDC_AUTHORITY,
       client_id: process.env.REACT_APP_OIDC_CLIENT_ID,
       redirect_uri: `${origin}${LOGIN_CALLBACK_PATH}`,
-      silent_redirect_uri: `${origin}/silent_renew.html`,
       response_type: 'code',
       scope: process.env.REACT_APP_OIDC_SCOPE,
       post_logout_redirect_uri: `${origin}/`,
@@ -33,7 +32,6 @@ export class AuthService {
     this.isAuthenticated = this.isAuthenticated.bind(this);
     this.login = this.login.bind(this);
     this.endLogin = this.endLogin.bind(this);
-    this.renewToken = this.renewToken.bind(this);
     this.logout = this.logout.bind(this);
 
     // Events
@@ -75,11 +73,8 @@ export class AuthService {
 
   public async endLogin(): Promise<User> {
     const user = await this.userManager.signinCallback();
-    return user;
-  }
 
-  public renewToken(): Promise<User> {
-    return this.userManager.signinSilent();
+    return user;
   }
 
   public async logout(): Promise<void> {

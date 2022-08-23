@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'hds-react';
 import { getIsDialogOpen, getRedirectUrl } from './selectors';
@@ -13,14 +13,14 @@ const ConfirmationDialog: React.FC = () => {
   const isDialogOpenVal = useSelector(getIsDialogOpen());
   const redirectUrl = useSelector(getRedirectUrl());
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   function onClose() {
     dispatch(actions.updateIsDialogOpen({ isDialogOpen: false, redirectUrl }));
   }
   function closeAndRedirect() {
     dispatch(actions.updateIsDialogOpen({ isDialogOpen: false, redirectUrl }));
-    history.push(redirectUrl);
+    navigate(redirectUrl);
   }
 
   return (

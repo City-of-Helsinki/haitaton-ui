@@ -4,7 +4,7 @@ import Select from 'ol/interaction/Select';
 import { createRegularPolygon } from 'ol/interaction/Draw';
 import Collection from 'ol/Collection';
 import { Draw, Snap, Modify } from 'ol/interaction';
-import { altKeyOnly, click } from 'ol/events/condition';
+import { click } from 'ol/events/condition';
 import { DRAWTOOLTYPE } from './types';
 import MapContext from '../../MapContext';
 import useDrawContext from './useDrawContext';
@@ -82,7 +82,7 @@ const DrawInteraction: React.FC<Props> = () => {
     map.addInteraction(modifyInstance);
 
     selection.current = new Select({
-      condition: (mapBrowserEvent) => click(mapBrowserEvent) && altKeyOnly(mapBrowserEvent),
+      condition: (mapBrowserEvent) => click(mapBrowserEvent),
     });
 
     map.addInteraction(selection.current);
