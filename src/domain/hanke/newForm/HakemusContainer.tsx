@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, useFormikContext } from 'formik';
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import {
   BasicHankeInfo,
   initialValues as initialValuesBasicHankeInfo,
@@ -21,6 +22,8 @@ import { HankeContactKey } from '../../types/hanke';
 import api from '../../api/api';
 import GenericForm from '../../forms/GenericForm';
 import { HankeGeometryApiResponseData } from '../../map/types';
+import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
+import ConfirmationDialog from '../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 
 const isContactEmpty = ({
   etunimi,
@@ -45,8 +48,10 @@ const filterEmptyContacts = (
 });
 
 const FormContent: React.FC = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const formik = useFormikContext<HakemusFormValues>();
+  const { HANKEPORTFOLIO } = useLocalizedRoutes();
 
   const formSteps = [
     {
@@ -71,6 +76,8 @@ const FormContent: React.FC = () => {
   ];
 
   const [showNotification, setShowNotification] = useState('' as 'success' | 'error' | '');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteErrorMsg, setDeleteErrorMsg] = useState('');
 
   function updateFormFieldsWithAPIResponse(data: HakemusFormValues | Partial<HakemusFormValues>) {
     const dataKeys = Object.keys(data) as Array<keyof HakemusFormValues>;
@@ -143,8 +150,25 @@ const FormContent: React.FC = () => {
     }
   }
 
+  function deleteHanke(hankeTunnus: string) {
+    return api.delete<Partial<HakemusFormValues>>(`/hankkeet/${hankeTunnus}`);
+  }
+
   function handleDelete() {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    if (formik.values.hankeTunnus) {
+      deleteHanke(formik.values.hankeTunnus)
+        .then(() => {
+          setDeleteDialogOpen(false);
+          navigate(HANKEPORTFOLIO.path);
+        })
+        .catch(() => {
+          setDeleteErrorMsg(t('common:error'));
+        });
+    }
+  }
+
+  function openDeleteDialog() {
+    setDeleteDialogOpen(true);
   }
 
   function handleClose() {
@@ -152,15 +176,30 @@ const FormContent: React.FC = () => {
   }
 
   return (
-    <GenericForm<HakemusFormValues>
-      formSteps={formSteps}
-      showNotification={showNotification}
-      formBasePath="/fi/hanke/uusi" // TODO: localized links
-      hankeIndexData={formik.values.tormaystarkasteluTulos}
-      onDelete={handleDelete}
-      onClose={handleClose}
-      onSave={saveFormState}
-    />
+    <>
+      <ConfirmationDialog
+        title={t('common:confirmationDialog:deleteDialog:titleText')}
+        description={t('common:confirmationDialog:deleteDialog:bodyText')}
+        isOpen={deleteDialogOpen}
+        close={() => {
+          setDeleteDialogOpen(false);
+          setDeleteErrorMsg('');
+        }}
+        mainAction={() => handleDelete()}
+        mainBtnLabel={t('common:confirmationDialog:deleteDialog:exitButton')}
+        variant="danger"
+        errorMsg={deleteErrorMsg}
+      />
+      <GenericForm<HakemusFormValues>
+        formSteps={formSteps}
+        showNotification={showNotification}
+        formBasePath="/fi/hanke/uusi" // TODO: localized links
+        hankeIndexData={formik.values.tormaystarkasteluTulos}
+        onDelete={openDeleteDialog}
+        onClose={handleClose}
+        onSave={saveFormState}
+      />
+    </>
   );
 };
 
