@@ -48,7 +48,7 @@ export const Haitat: React.FC = () => {
           if (convertedDateString.length > 0) {
             formik.setFieldValue(
               'haittaAlkuPvm',
-              toStartOfDayUTCISO(new Date(convertedDateString)) || ''
+              toStartOfDayUTCISO(new Date(convertedDateString))
             );
           }
           haittaAlkuPvmIsDirty.current = true;
@@ -64,6 +64,7 @@ export const Haitat: React.FC = () => {
             : formatToFinnishDate(formik.values.haittaAlkuPvm)
         }
         required
+        disableConfirmation
       />
       <DateInput
         id="haittaLoppuPvm"
@@ -73,10 +74,7 @@ export const Haitat: React.FC = () => {
         onChange={(date: string) => {
           const convertedDateString = convertFinnishDate(date);
           if (convertedDateString.length > 0) {
-            formik.setFieldValue(
-              'haittaLoppuPvm',
-              toEndOfDayUTCISO(new Date(convertedDateString)) || ''
-            );
+            formik.setFieldValue('haittaLoppuPvm', toEndOfDayUTCISO(new Date(convertedDateString)));
           }
           haittaLoppuPvmIsDirty.current = true;
         }}
@@ -91,6 +89,7 @@ export const Haitat: React.FC = () => {
             : formatToFinnishDate(formik.values.haittaLoppuPvm)
         }
         required
+        disableConfirmation
       />
       <Select
         required
