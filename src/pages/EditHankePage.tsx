@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import Container from '../common/components/container/Container';
 import PageMeta from './components/PageMeta';
 import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
-import HankeFormContainer from '../domain/hanke/edit/HankeFormContainer';
+import HakemusContainer from '../domain/hanke/newForm/HakemusContainer';
 
 const HankeFormPage = () => {
   const { hankeTunnus } = useParams();
@@ -12,7 +12,7 @@ const HankeFormPage = () => {
   return (
     <Container>
       <PageMeta routeData={EDIT_HANKE} />
-      <HankeFormContainer hankeTunnus={hankeTunnus} />
+      <HakemusContainer hankeTunnus={hankeTunnus} />
     </Container>
   );
 };

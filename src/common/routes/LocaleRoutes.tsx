@@ -20,7 +20,7 @@ const LocaleRoutes = () => {
     <Routes>
       <Route path={t('routes:HOME:path')} element={<HomePage />} />
       <Route path={`${t('routes:NEW_HANKE:path')}/*`} element={<NewHankePage />} />
-      <Route path={t('routes:EDIT_HANKE:path')} element={<EditHankePage />} />
+      <Route path={`${t('routes:EDIT_HANKE:path')}/*`} element={<EditHankePage />} />
       <Route path={t('routes:PROJECTS:path')} element={<HankeListPage />} />
       <Route path={t('routes:HANKEPORTFOLIO:path')} element={<HankePortfolioPage />} />
       <Route path={t('routes:MAP:path')} element={<MapPage />} />

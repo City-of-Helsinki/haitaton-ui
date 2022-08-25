@@ -14,7 +14,7 @@ const Header: React.FC = () => {
 
   const isHankeEdit = useMatch({
     path: EDIT_HANKE.path,
-    end: true,
+    end: false,
   });
 
   return (
