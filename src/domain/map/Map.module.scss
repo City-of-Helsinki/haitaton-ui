@@ -1,3 +1,5 @@
+@import 'layout.scss';
+
 .borders {
   border: 1px solid black;
 }
@@ -11,6 +13,17 @@
     left: 0;
     bottom: 0;
     right: 0;
+  }
+
+  &__addressSearch {
+    position: absolute;
+    top: 1rem;
+    left: 150px;
+    width: 300px;
+
+    @include respond-below(s) {
+      width: auto;
+    }
   }
 }
 

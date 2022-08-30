@@ -1,3 +1,5 @@
+@import 'layout.scss';
+
 .mapContainer {
   position: relative;
   margin-bottom: var(--spacing-l);
@@ -8,5 +10,17 @@
     left: 0;
     bottom: 0;
     right: 0;
+  }
+
+  &__addressSearch {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1000;
+    width: 300px;
+
+    @include respond-below(s) {
+      width: auto;
+    }
   }
 }

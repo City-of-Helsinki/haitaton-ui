@@ -12,8 +12,10 @@ api.interceptors.request.use(
     const oidcStorage = localStorage.getItem(LOCALSTORAGE_OIDC_KEY);
     if (oidcStorage) {
       const token = JSON.parse(oidcStorage).access_token;
-      // eslint-disable-next-line no-param-reassign
-      config.headers.Authorization = `Bearer ${token}`;
+      if (config.headers) {
+        // eslint-disable-next-line no-param-reassign
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
     return config;
   },

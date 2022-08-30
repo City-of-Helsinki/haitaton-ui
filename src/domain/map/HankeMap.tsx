@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Coordinate } from 'ol/coordinate';
 import Map from '../../common/components/map/Map';
 import Controls from '../../common/components/map/controls/Controls';
 import LayerControl from '../../common/components/map/controls/LayerControl';
@@ -18,6 +19,8 @@ import HankeHoverBox from './components/HankeHover/HankeHoverBox';
 import MapGuide from './components/MapGuide/MapGuide';
 import HankkeetProvider from './HankkeetProvider';
 import MapControl from '../../common/components/map/controls/MapControl';
+import AddressSearch from './components/AddressSearch/AddressSearch';
+import CenterOnCoordinate from './components/interations/CenterOnCoordinate';
 
 const HankeMap: React.FC = () => {
   const [zoom] = useState(9); // TODO: also take zoom into consideration
@@ -28,6 +31,11 @@ const HankeMap: React.FC = () => {
     setHankeFilterStartDate,
     setHankeFilterEndDate,
   } = useDateRangeFilter();
+  const [addressCoordinate, setAddressCoordinate] = useState<Coordinate | undefined>();
+
+  function handleAddressSelect(coordinate: Coordinate | undefined) {
+    setAddressCoordinate(coordinate);
+  }
 
   return (
     <>
@@ -38,6 +46,10 @@ const HankeMap: React.FC = () => {
       >
         <h1 className={styles.allyHeader}>Karttasivu</h1> {/* For a11y */}
         <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
+          <div className={styles.mapContainer__addressSearch}>
+            <AddressSearch onAddressSelect={handleAddressSelect} />
+          </div>
+
           <MapGuide />
           {mapTileLayers.ortokartta.visible && <Ortokartta />}
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
@@ -51,6 +63,8 @@ const HankeMap: React.FC = () => {
               <HankeLayer />
             </GeometryHover>
           </HankkeetProvider>
+
+          <CenterOnCoordinate coordinate={addressCoordinate} />
 
           <Controls>
             <ControlPanel className={styles.dateRangeControl}>

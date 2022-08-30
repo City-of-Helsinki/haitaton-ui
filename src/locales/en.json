@@ -31,6 +31,10 @@
         "toggle": "EN:Sulje ja avaa valikko",
         "removeSelected": "EN:Poista valittu",
         "clear": "EN:Tyhjennä kenttä"
+      },
+      "searchInput": {
+        "placeholder": "EN:Etsi osoitteella",
+        "searchButtonAriaLabel": "EN:Hae"
       }
     },
     "error": "EN: Tapahtui virhe. Yritä uudestaan."
