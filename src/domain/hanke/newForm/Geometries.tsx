@@ -20,8 +20,7 @@ import api from '../../api/api';
 import { HankeGeoJSON } from '../../../common/types/hanke';
 import Text from '../../../common/components/text/Text';
 import { Haitat } from './Haitat';
-import AddressSearch from '../../map/components/AddressSearch/AddressSearch';
-import CenterOnCoordinate from '../../map/components/interations/CenterOnCoordinate';
+import AddressSearchContainer from '../../map/components/AddressSearch/AddressSearchContainer';
 
 export const initialValues = {
   geometriat: null,
@@ -80,27 +79,20 @@ export const Geometries: React.FC = () => {
     }
   }, [formik.values.tyomaaKatuosoite]);
 
-  function handleAddressSelect(coordinate: Coordinate | undefined) {
-    setAddressCoordinate(coordinate);
-  }
-
   return (
     <div>
       <Text tag="h1" spacing="s" weight="bold" styleAs="h3">
         {t('hankeForm:hankkeenAlueForm:header')}
       </Text>
       <div className={styles.mapContainer} style={{ width: '100%', height: 500 }}>
-        <Map zoom={9} mapClassName={styles.mapContainer__inner}>
-          <div className={styles.mapContainer__addressSearch}>
-            <AddressSearch onAddressSelect={handleAddressSelect} />
-          </div>
+        <Map zoom={9} center={addressCoordinate} mapClassName={styles.mapContainer__inner}>
+          <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} />
+
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
           {mapTileLayers.ortokartta.visible && <Ortokartta />}
           <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
 
           <FitSource source={drawSource} />
-
-          <CenterOnCoordinate coordinate={addressCoordinate} />
 
           <Controls>
             <DrawModule source={drawSource} />
