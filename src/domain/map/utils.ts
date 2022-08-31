@@ -108,7 +108,7 @@ function getStreetName(input: string) {
 }
 
 function getStreetNumber(input: string) {
-  const matches = input.match(/[0-9]+$/);
+  const matches = input.match(/[0-9]{1,5}$/);
   if (matches) {
     return matches[0];
   }
