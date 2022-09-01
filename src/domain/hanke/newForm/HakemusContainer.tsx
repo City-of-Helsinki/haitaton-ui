@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { Formik, useFormikContext } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import { LoadingSpinner, Notification } from 'hds-react';
+import { Flex } from '@chakra-ui/react';
+import { useQuery } from 'react-query';
 import {
   BasicHankeInfo,
   initialValues as initialValuesBasicHankeInfo,
@@ -12,6 +15,7 @@ import { Geometries, initialValues as initialValuesGeometries } from './Geometri
 import {
   Contacts,
   contactsValidationSchema,
+  initialContact,
   initialValues as initialValuesContacts,
 } from './Contacts';
 import { initialValues as initialValuesHaitat } from './Haitat';
@@ -47,6 +51,29 @@ const filterEmptyContacts = (
   [FORMFIELD.TOTEUTTAJAT]: formData[FORMFIELD.TOTEUTTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
 });
 
+// If there are no contacts (contacts array is empty), set those contacts to initial values
+// as empty contacts are required as initial values for the Contacts.tsx
+function initializeNonExistingContacts(data: HakemusFormValues) {
+  const clonedData: HakemusFormValues = JSON.parse(JSON.stringify(data));
+
+  if (clonedData[HANKE_CONTACT_TYPE.OMISTAJAT]?.length === 0) {
+    clonedData[HANKE_CONTACT_TYPE.OMISTAJAT] = [initialContact];
+  }
+  if (clonedData[HANKE_CONTACT_TYPE.ARVIOIJAT]?.length === 0) {
+    clonedData[HANKE_CONTACT_TYPE.ARVIOIJAT] = [initialContact];
+  }
+  if (clonedData[HANKE_CONTACT_TYPE.TOTEUTTAJAT]?.length === 0) {
+    clonedData[HANKE_CONTACT_TYPE.TOTEUTTAJAT] = [initialContact];
+  }
+
+  return clonedData;
+}
+
+async function getHanke(hankeTunnus?: string) {
+  const { data } = await api.get<HakemusFormValues>(`/hankkeet/${hankeTunnus}`);
+  return data;
+}
+
 const FormContent: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -79,28 +106,8 @@ const FormContent: React.FC = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteErrorMsg, setDeleteErrorMsg] = useState('');
 
-  function updateFormFieldsWithAPIResponse(data: HakemusFormValues | Partial<HakemusFormValues>) {
-    const dataKeys = Object.keys(data) as Array<keyof HakemusFormValues>;
-    dataKeys.forEach((dataKey) => {
-      // If there are no contacts, then do not update state as empty contacts
-      // are required as initial values for the Contacts.tsx
-      if (
-        dataKey === HANKE_CONTACT_TYPE.ARVIOIJAT ||
-        dataKey === HANKE_CONTACT_TYPE.OMISTAJAT ||
-        dataKey === HANKE_CONTACT_TYPE.TOTEUTTAJAT
-      ) {
-        // .. typescript typeguards
-        const contactsData = data[dataKey];
-        if (contactsData) {
-          const nonUndefinedContactsData: HankeContact[] = contactsData;
-          if (nonUndefinedContactsData.length > 0) {
-            formik.setFieldValue(dataKey, nonUndefinedContactsData);
-          }
-        }
-      } else {
-        formik.setFieldValue(dataKey, data[dataKey]);
-      }
-    });
+  function updateFormFieldsWithAPIResponse(data: HakemusFormValues) {
+    formik.setValues(initializeNonExistingContacts(data));
   }
 
   async function saveFormState() {
@@ -115,6 +122,15 @@ const FormContent: React.FC = () => {
       saveType: 'DRAFT',
     });
     try {
+      // Save geometries first if any
+      if (formik.values.hankeTunnus && formik.values.geometriat) {
+        await api.post<HankeGeometryApiResponseData>(
+          `/hankkeet/${formik.values.hankeTunnus}/geometriat`,
+          {
+            featureCollection: formik.values.geometriat,
+          }
+        );
+      }
       // When updating a hanke the API takes the entire object
       if (formData.hankeTunnus) {
         const { data } = await api.put<HakemusFormValues>(
@@ -129,20 +145,8 @@ const FormContent: React.FC = () => {
             return value !== null && value !== '';
           })
         );
-        const { data } = await api.post<Partial<HakemusFormValues>>(
-          '/hankkeet',
-          dataWithoutEmptyFields
-        );
+        const { data } = await api.post<HakemusFormValues>('/hankkeet', dataWithoutEmptyFields);
         updateFormFieldsWithAPIResponse(data);
-      }
-      if (formik.values.hankeTunnus && formik.values.geometriat) {
-        // Save geometries
-        await api.post<HankeGeometryApiResponseData>(
-          `/hankkeet/${formik.values.hankeTunnus}/geometriat`,
-          {
-            featureCollection: formik.values.geometriat,
-          }
-        );
       }
       setShowNotification('success');
     } catch (error) {
@@ -193,7 +197,6 @@ const FormContent: React.FC = () => {
       <GenericForm<HakemusFormValues>
         formSteps={formSteps}
         showNotification={showNotification}
-        formBasePath="/fi/hanke/uusi" // TODO: localized links
         hankeIndexData={formik.values.tormaystarkasteluTulos}
         onDelete={openDeleteDialog}
         onClose={handleClose}
@@ -203,12 +206,22 @@ const FormContent: React.FC = () => {
   );
 };
 
-const HakemusContainer: React.FC = () => {
+const HakemusContainer: React.FC<{ hankeTunnus?: string }> = ({ hankeTunnus }) => {
+  const { t } = useTranslation();
+  const { data: hankeData, isLoading, isError } = useQuery(
+    ['hanke', hankeTunnus],
+    () => getHanke(hankeTunnus),
+    { enabled: Boolean(hankeTunnus) }
+  );
+
+  const existingValues = hankeData ? initializeNonExistingContacts(hankeData) : null;
+
   const initialValues: HakemusFormValues = {
     ...initialValuesBasicHankeInfo,
     ...initialValuesGeometries,
     ...initialValuesContacts,
     ...initialValuesHaitat,
+    ...existingValues,
     saveType: 'DRAFT',
     liikennehaittaindeksi: null,
     tormaystarkasteluTulos: null,
@@ -219,6 +232,22 @@ const HakemusContainer: React.FC = () => {
     permissions: null,
     version: null,
   };
+
+  if (isLoading) {
+    return (
+      <Flex justify="center" mt="var(--spacing-xl)">
+        <LoadingSpinner />
+      </Flex>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Notification size="small" type="error">
+        {t('common:error')}
+      </Notification>
+    );
+  }
 
   return (
     <Formik

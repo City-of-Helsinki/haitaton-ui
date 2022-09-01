@@ -21,7 +21,6 @@ type FormStep = {
 type Props = {
   formSteps: FormStep[];
   showNotification: 'success' | 'error' | '';
-  formBasePath: string;
   hankeIndexData: HankeIndexData | null;
   onDelete: () => void;
   onClose: () => void;
@@ -31,7 +30,6 @@ type Props = {
 function GenericForm<T>({
   formSteps,
   showNotification,
-  formBasePath,
   hankeIndexData,
   onDelete,
   onClose,
@@ -60,7 +58,7 @@ function GenericForm<T>({
     if (await fieldsAreValid(fieldsToValidate)) {
       onSave();
       if (path !== '') {
-        navigate(path);
+        navigate(`.${path}`);
       }
     }
   }
@@ -98,10 +96,7 @@ function GenericForm<T>({
                       currentLabel={formStep.title}
                       formPageLabels={formSteps.map((formPage) => formPage.title)}
                       onPageChange={(pageIndex) => {
-                        handleNavigation(
-                          `${formBasePath}${formSteps[pageIndex].path}`,
-                          formStep.fieldsToValidate
-                        );
+                        handleNavigation(`${formSteps[pageIndex].path}`, formStep.fieldsToValidate);
                       }}
                     />
                   </div>
@@ -123,7 +118,7 @@ function GenericForm<T>({
                       nextPath={formSteps[i + 1]?.path}
                       previousPath={formSteps[i - 1]?.path}
                       onPageChange={(path) => {
-                        handleNavigation(`${formBasePath}${path}`, formStep.fieldsToValidate);
+                        handleNavigation(path, formStep.fieldsToValidate);
                       }}
                     />
                   </div>

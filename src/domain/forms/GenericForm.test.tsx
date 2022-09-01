@@ -74,7 +74,6 @@ test('form pages can be navigated and validation works', async () => {
       <GenericForm<{ testInput: string }>
         formSteps={formSteps}
         showNotification=""
-        formBasePath=""
         hankeIndexData={null}
         onDelete={handleDelete}
         onClose={handleClose}
@@ -144,7 +143,6 @@ test('success and error notifications work', async () => {
       <GenericForm<{ testInput: string }>
         formSteps={formSteps}
         showNotification={showNotification}
-        formBasePath=""
         hankeIndexData={null}
         onDelete={handleDelete}
         onClose={handleClose}
