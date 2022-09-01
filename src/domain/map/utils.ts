@@ -1,4 +1,5 @@
 import GeoJSON from 'ol/format/GeoJSON';
+import axios from 'axios';
 import { HankeGeoJSON } from '../../common/types/hanke';
 import { GeometryData, HankeFilters } from './types';
 import { HankeData } from '../types/hanke';
@@ -97,3 +98,38 @@ export const hankeIsBetweenDates = ({ endDate, startDate }: HankeFilters) => ({
 export const byAllHankeFilters = (hankeFilters: HankeFilters) => (hanke: HankeData) =>
   hankeHasGeometry(hanke) &&
   hankeIsBetweenDates(hankeFilters)({ startDate: hanke.alkuPvm, endDate: hanke.loppuPvm });
+
+function getStreetName(input: string) {
+  const matches = input.match(/^\D+/);
+  if (matches) {
+    return matches[0].trimEnd();
+  }
+  return '';
+}
+
+function getStreetNumber(input: string) {
+  const matches = input.match(/[0-9]{1,5}$/);
+  if (matches) {
+    return matches[0];
+  }
+  return '';
+}
+
+// Search address geographic data based on search string:
+// https://www.hel.fi/helsinki/fi/kartat-ja-liikenne/kartat-ja-paikkatieto/paikkatiedot+ja+-aineistot/avoimet+paikkatiedot
+// https://kartta.hel.fi/avoindata/dokumentit/Prosessi_Työohje_kyselypalveluiden_kaytto_ulkoverkko.pdf
+export function doAddressSearch(searchValue: string, abortController?: AbortController) {
+  const streetName = getStreetName(searchValue);
+  const streetNumber = getStreetNumber(searchValue);
+
+  let url =
+    'https://kartta.hel.fi/ws/geoserver/avoindata/wfs?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&TYPENAME=avoindata:Helsinki_osoiteluettelo&OUTPUTFORMAT=json&SORTBY=katunimi,osoitenumero&COUNT=300';
+
+  if (!streetNumber) {
+    url += `&CQL_FILTER=(katunimi%20ILIKE%20%27${streetName}%25%27%20OR%20gatan%20ILIKE%20%27${streetName}%25%27)`;
+  } else {
+    url += `&CQL_FILTER=((katunimi%20ILIKE%20%27${streetName}%25%27%20OR%20gatan%20ILIKE%20%27${streetName}%25%27)AND(osoitenumero=%27${streetNumber}%27))`;
+  }
+
+  return axios.get(url, { signal: abortController?.signal });
+}

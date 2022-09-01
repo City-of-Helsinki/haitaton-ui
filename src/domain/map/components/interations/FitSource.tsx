@@ -15,10 +15,10 @@ const FitSource: React.FC<Props> = ({ source }) => {
   }, [map, source]);
 
   useEffect(() => {
-    source.on('featuresAdded', () => {
+    source.on('addfeature', () => {
       fitSource();
     });
-  }, []);
+  }, [source, fitSource]);
 
   return null;
 };
