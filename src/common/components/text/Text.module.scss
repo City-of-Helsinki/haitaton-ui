@@ -1,16 +1,30 @@
+@import 'layout.scss';
+
 .text {
   font-family: 'HelsinkiGrotesk', serif;
 
   &--h1 {
     font-size: var(--fontsize-heading-xl);
+
+    @include respond-below(m) {
+      font-size: var(--fontsize-heading-l);
+    }
   }
 
   &--h2 {
     font-size: var(--fontsize-heading-l);
+
+    @include respond-below(m) {
+      font-size: var(--fontsize-heading-m);
+    }
   }
 
   &--h3 {
     font-size: var(--fontsize-heading-m);
+
+    @include respond-below(m) {
+      font-size: var(--fontsize-heading-s);
+    }
   }
 
   &--h4 {
