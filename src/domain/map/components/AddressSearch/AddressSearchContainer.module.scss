@@ -2,7 +2,6 @@
 
 .container {
   position: absolute;
-  z-index: 1000;
   width: 300px;
 
   @include respond-below(s) {
