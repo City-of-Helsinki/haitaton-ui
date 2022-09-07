@@ -1,14 +1,25 @@
 import { useContext, useEffect } from 'react';
 import OLTileLayer from 'ol/layer/Tile';
 import { TileWMS } from 'ol/source';
-import * as ol from 'ol';
+import { MapBrowserEvent, View } from 'ol';
 import { OverviewMap } from 'ol/control';
+import clsx from 'clsx';
 import { DragZoom } from 'ol/interaction';
 import MapContext from '../MapContext';
 import { projection } from '../utils';
-import './MapControl.scss';
+import './OverviewMapControl.scss';
 
-const MapControl: React.FC = () => {
+type Props = {
+  /**
+   * Additional CSS classes for OverviewMap control
+   */
+  className?: string;
+};
+
+/**
+ * Control with a map acting as an overview map for another defined map
+ */
+const OverviewMapControl: React.FC<Props> = ({ className }) => {
   const { map } = useContext(MapContext);
 
   useEffect(() => {
@@ -35,12 +46,12 @@ const MapControl: React.FC = () => {
     });
 
     const overviewMapControl = new OverviewMap({
-      className: 'ol-overviewmap ol-custom-overviewmap',
+      className: clsx(['ol-overviewmap', 'ol-custom-overviewmap', className]),
       layers: [overviewMapTileLayer],
       collapseLabel: '\u00BB',
-      label: '\u00BB',
+      label: '\u00AB',
       collapsed: false,
-      view: new ol.View({
+      view: new View({
         zoom: 3,
         minZoom: 2,
         maxZoom: 6,
@@ -51,15 +62,21 @@ const MapControl: React.FC = () => {
     map.addControl(overviewMapControl);
     map.addInteraction(new DragZoom());
 
+    // Add possibility to move map by clicking a point
+    // on overview map
+    function overviewMapClick(e: MapBrowserEvent<UIEvent>) {
+      map?.getView().setCenter(e.coordinate);
+    }
+    overviewMapControl.getOverviewMap().on('click', overviewMapClick);
+
     // eslint-disable-next-line
-    return () => {
-      if (map) {
-        map.removeControl(overviewMapControl);
-      }
+    return function cleanup() {
+      overviewMapControl.getOverviewMap().un('click', overviewMapClick);
+      map.removeControl(overviewMapControl);
     };
-  }, [map]);
+  }, [map, className]);
 
   return null;
 };
 
-export default MapControl;
+export default OverviewMapControl;

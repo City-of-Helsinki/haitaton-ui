@@ -21,6 +21,7 @@ import { HankeGeoJSON } from '../../../common/types/hanke';
 import Text from '../../../common/components/text/Text';
 import { Haitat } from './Haitat';
 import AddressSearchContainer from '../../map/components/AddressSearch/AddressSearchContainer';
+import OverviewMapControl from '../../../common/components/map/controls/OverviewMapControl';
 
 export const initialValues = {
   geometriat: null,
@@ -86,7 +87,9 @@ export const Geometries: React.FC = () => {
       </Text>
       <div className={styles.mapContainer} style={{ width: '100%', height: 500 }}>
         <Map zoom={9} center={addressCoordinate} mapClassName={styles.mapContainer__inner}>
-          <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} />
+          <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} zIndex={1000} />
+
+          <OverviewMapControl className={styles.overviewMap} />
 
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
           {mapTileLayers.ortokartta.visible && <Ortokartta />}

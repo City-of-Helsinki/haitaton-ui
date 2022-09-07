@@ -13,9 +13,10 @@ type Props = {
     right?: PositionType;
     bottom?: PositionType;
   };
+  zIndex?: number;
 };
 
-const AddressSearchContainer: React.FC<Props> = ({ position }) => {
+const AddressSearchContainer: React.FC<Props> = ({ position, zIndex }) => {
   const [addressCoordinate, setAddressCoordinate] = useState<Coordinate | undefined>();
   useCenterOnCoordinate(addressCoordinate);
 
@@ -31,6 +32,7 @@ const AddressSearchContainer: React.FC<Props> = ({ position }) => {
         left: position?.left,
         right: position?.right,
         bottom: position?.bottom,
+        zIndex,
       }}
     >
       <AddressSearch onAddressSelect={handleAddressSelect} />

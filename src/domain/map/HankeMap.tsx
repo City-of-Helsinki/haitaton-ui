@@ -17,7 +17,7 @@ import GeometryHover from '../../common/components/map/interactions/hover/Geomet
 import HankeHoverBox from './components/HankeHover/HankeHoverBox';
 import MapGuide from './components/MapGuide/MapGuide';
 import HankkeetProvider from './HankkeetProvider';
-import MapControl from '../../common/components/map/controls/MapControl';
+import OverviewMapControl from '../../common/components/map/controls/OverviewMapControl';
 import AddressSearchContainer from './components/AddressSearch/AddressSearchContainer';
 
 const HankeMap: React.FC = () => {
@@ -44,7 +44,7 @@ const HankeMap: React.FC = () => {
           <MapGuide />
           {mapTileLayers.ortokartta.visible && <Ortokartta />}
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
-          <MapControl />
+          <OverviewMapControl />
 
           <HankkeetProvider>
             <HankeSidebar />
