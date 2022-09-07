@@ -330,11 +330,12 @@
     "indexesNotCalculated": "Haittaindeksejä ei ole laskettu."
   },
   "homepage": {
-    "pageTitle": "Tervetuloa Haitaton-asiointiportaaliin",
+    "pageTitle": "Tervetuloa Haitaton-palveluun",
+    "pageSubTitle": "Palvelu yleisille alueille sijoittuvien hankkeiden edistämiseen ja haittojen hallintaan",
     "hanke": {
-      "title": "Hanke",
-      "description": "Hankkeet toimivat hakemuskokonaisuuksina, joista pystyt seuraamaan hankkeeseen liittyvien hakemusten tilaa.",
-      "actionText": "Luo hanke"
+      "title": "Luo uusi hanke",
+      "description": "Luomalla Haitaton-hankkeen pystyt suunnittelemaan etukäteen yleisellä alueella tapahtuvaa työtä sekä tekemään hakemuksia, kuten johtoselvityksiä.",
+      "actionText": "Luo uusi hanke"
     },
     "hakemus": {
       "title": "Hakemus/Työvaihe",
@@ -352,9 +353,9 @@
       "actionText": "Luo ohjelmointihanke"
     },
     "hankesalkku": {
-      "title": "Hankesalkku",
-      "description": "Hankesalkusta näet hankkeet ja hakemukset jotka omistat tai olet valtuutettu näkemään.",
-      "actionText": "Avaa hankesalkku"
+      "title": "Omat hankkeet",
+      "description": "Omista hankkeista löydät aiemmin luomasi hankkeet ja hakemukset.",
+      "actionText": "Avaa omat hankkeet"
     },
     "hankelista": {
       "title": "Hankelista",
@@ -362,14 +363,19 @@
       "actionText": "Avaa hankelista"
     },
     "kartta": {
-      "title": "Kartta",
-      "description": "Kartalta näet halutulta aikaväliltä kaikki julkiset hankkeet ja niiden sijainnin.",
-      "actionText": "Avaa kartta"
+      "title": "Tutustu hankkeisiin",
+      "description": "Tutustu käynnissä oleviin ja tuleviin hankkeisiin yleisillä alueillakartalla tai listauksena.",
+      "actionText": "Tutustu hankkeisiin kartalla"
     },
     "tietoja_haitattomasta": {
       "title": "Tietoja Haitattomasta",
       "description": "Täältä löydät tarkempaa tietoa ilmoitusprosessista, sekä Haitattoman eri toiminnallisuuksista.",
       "actionText": "Lue lisää haitattomasta"
+    },
+    "ohjeet": {
+      "title": "Ohjeet",
+      "description": "Tutustu yleisten alueiden hankkeita koskeviin ohjeistuksiin.",
+      "actionText": "Tutustu ohjeisiin"
     }
   },
   "hankePortfolio": {
