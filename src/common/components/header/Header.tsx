@@ -1,87 +1,77 @@
-import React, { useState } from 'react';
-import { Navigation } from 'hds-react';
+import React from 'react';
+import { IconSignout, Navigation } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useMatch } from 'react-router-dom';
 import { useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
 import authService from '../../../domain/auth/authService';
-import './Header.styles.scss';
+import useUser from '../../../domain/auth/useUser';
 
 const Header: React.FC = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const { HOME, MAP, PROJECTS, HANKEPORTFOLIO, NEW_HANKE, EDIT_HANKE } = useLocalizedRoutes();
+  const { HOME, MAP, HANKEPORTFOLIO, NEW_HANKE } = useLocalizedRoutes();
   const { t } = useTranslation();
-  const isAuthenticated = authService.isAuthenticated();
+  const { data: user } = useUser();
 
-  const isHankeEdit = useMatch({
-    path: EDIT_HANKE.path,
+  const isMapPath = useMatch({
+    path: MAP.path,
+    end: false,
+  });
+  const isNewHankePath = useMatch({
+    path: NEW_HANKE.path,
+    end: false,
+  });
+  const isHankePortfolioPath = useMatch({
+    path: HANKEPORTFOLIO.path,
     end: false,
   });
 
   return (
     <Navigation
-      menuToggleAriaLabel="Open and close menu"
-      menuOpen={menuOpen}
-      onMenuToggle={() => setMenuOpen(!menuOpen)}
+      menuToggleAriaLabel={t('common:components:multiselect:toggle')}
       title="Haitaton Beta"
       skipTo="#"
-      skipToContentLabel="Skip to main content"
+      skipToContentLabel={t('common:components:header:skipToContentLabel')}
       titleUrl={HOME.path}
       className="header"
     >
-      <Navigation.Row variant="inline">
-        <NavLink to={MAP.path} className={(isActive) => (isActive ? 'header--active' : '')}>
+      <Navigation.Row>
+        <Navigation.Item as={NavLink} to={MAP.path} active={Boolean(isMapPath)}>
           {MAP.label}
-        </NavLink>
-        <NavLink
+        </Navigation.Item>
+        <Navigation.Item
+          as={NavLink}
+          to={NEW_HANKE.path}
+          active={Boolean(isNewHankePath)}
+          data-testid="hankeLink"
+        >
+          {NEW_HANKE.label}
+        </Navigation.Item>
+        <Navigation.Item
+          as={NavLink}
           to={HANKEPORTFOLIO.path}
-          className={(isActive) => (isActive ? 'header--active' : '')}
+          active={Boolean(isHankePortfolioPath)}
           data-testid="hankeListLink"
         >
           {HANKEPORTFOLIO.label}
-        </NavLink>
-        <NavLink
-          to={PROJECTS.path}
-          className={(isActive) => (isActive ? 'header--active' : '')}
-          data-testid="hankeListLink"
-        >
-          {PROJECTS.label}
-        </NavLink>
-        {/*
-          Hankelomake menee sekaisin jos sille unmounttia ei tapahdu
-          Sen takia piilotetaan "Luo hanke" -nappi silloin kun hankkeen muokkaus on auki
-        */}
-        {!isHankeEdit ? (
-          <NavLink to={NEW_HANKE.path} className="header__hankeLink" data-testid="hankeLink">
-            {NEW_HANKE.label}
-          </NavLink>
-        ) : (
-          <span />
-        )}
+        </Navigation.Item>
+        <Navigation.Item href={t('routes:WORKINSTRUCTIONS:path')} target="_blank" rel="noreferrer">
+          {t('routes:WORKINSTRUCTIONS:headerLabel')}
+        </Navigation.Item>
       </Navigation.Row>
       <Navigation.Actions>
-        <Navigation.Item>
-          {isAuthenticated ? (
-            <NavLink
-              to="/logout"
-              className={(isActive) => (isActive ? 'header--active' : '')}
-              data-testid="logoutLink"
-              onClick={(e) => {
-                e.preventDefault();
-                authService.logout();
-              }}
-            >
-              {t('authentication:logoutButton')}
-            </NavLink>
-          ) : (
-            <NavLink
-              to="/login"
-              className={(isActive) => (isActive ? 'header--active' : '')}
-              data-testid="loginLink"
-            >
-              {t('authentication:loginButton')}
-            </NavLink>
-          )}
-        </Navigation.Item>
+        <Navigation.User
+          authenticated={Boolean(user?.profile)}
+          onSignIn={authService.login}
+          label={t('authentication:loginButton')}
+          userName={user?.profile?.name}
+        >
+          <Navigation.Item
+            icon={<IconSignout aria-hidden />}
+            label={t('authentication:logoutButton')}
+            variant="supplementary"
+            onClick={authService.logout}
+            data-testid="logoutLink"
+          />
+        </Navigation.User>
       </Navigation.Actions>
       {/*
       <Navigation.LanguageSelector label={t(`common:languages:${i18n.language}`)}>

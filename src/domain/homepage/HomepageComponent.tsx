@@ -37,8 +37,7 @@ const Homepage: React.FC = () => {
     },
     {
       key: 'ohjeet',
-      actionLink:
-        'https://www.hel.fi/helsinki/fi/asuminen-ja-ymparisto/tontit/luvat/kaduilla-ja-puistoissa-tehtavat-tyot/',
+      actionLink: t('routes:WORKINSTRUCTIONS:path'),
       imgProps: undefined,
       external: true,
     },

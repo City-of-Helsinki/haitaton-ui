@@ -35,6 +35,9 @@
       "searchInput": {
         "placeholder": "EN:Etsi osoitteella",
         "searchButtonAriaLabel": "EN:Hae"
+      },
+      "header": {
+        "skipToContentLabel": "EN:Siirry pääsisältöön"
       }
     },
     "error": "EN: Tapahtui virhe. Yritä uudestaan."
@@ -63,7 +66,7 @@
     },
     "HANKEPORTFOLIO": {
       "path": "/hankesalkku",
-      "headerLabel": "EN::Hankesalkku",
+      "headerLabel": "EN:Omat hankkeet",
       "meta": {
         "title": "EN::Haitaton Beta - Hankesalkku"
       }
@@ -77,7 +80,7 @@
     },
     "MAP": {
       "path": "/map",
-      "headerLabel": "EN::Kartta",
+      "headerLabel": "EN:Hankkeet yleisillä alueilla",
       "meta": {
         "title": "EN::Haitaton Beta - Kartta"
       }
@@ -136,6 +139,13 @@
       "headerLabel": "EN: Lähdeviitteet",
       "meta": {
         "title": "EN: Haitaton Beta - Lähdeviitteet"
+      }
+    },
+    "WORKINSTRUCTIONS": {
+      "path": "https://www.hel.fi/helsinki/en/housing/plots-land-buildings/permits-for-public-areas/working-on-streets-and-in-parks",
+      "headerLabel": "EN:Työohjeet",
+      "meta": {
+        "title": "EN:Haitaton Beta - Työohjeet"
       }
     }
   },
