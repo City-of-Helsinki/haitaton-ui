@@ -51,7 +51,12 @@ const HankeForm: React.FC<Props> = ({
     },
   });
 
-  const { errors, control, register, formState, getValues, reset } = formContext;
+  const {
+    register,
+    formState: { errors, isDirty },
+    getValues,
+    reset,
+  } = formContext;
 
   useEffect(() => {
     reset(formData);
@@ -79,11 +84,11 @@ const HankeForm: React.FC<Props> = ({
       }
     }
     setCurrentFormPage((v) => v + 1);
-  }, [getValues, currentFormPage]);
+  }, [getValues, currentFormPage, saveDraft, onSaveGeometry]);
 
   useEffect(() => {
-    onIsDirtyChange(formState.isDirty);
-  }, [formState.isDirty]);
+    onIsDirtyChange(isDirty);
+  }, [isDirty]);
 
   useEffect(() => {
     return () => onUnmount();
@@ -128,13 +133,13 @@ const HankeForm: React.FC<Props> = ({
               </div>
 
               {currentFormPage === 0 && (
-                <Form0 errors={errors} control={control} register={register} formData={formData} />
+                <Form0 errors={errors} register={register} formData={formData} />
               )}
               {currentFormPage === 1 && (
-                <Form1 errors={errors} control={control} register={register} formData={formData} />
+                <Form1 errors={errors} register={register} formData={formData} />
               )}
               {currentFormPage === 2 && (
-                <Form2 errors={errors} control={control} register={register} formData={formData} />
+                <Form2 errors={errors} register={register} formData={formData} />
               )}
               <FormButtons
                 goBack={goBack}

@@ -1,54 +1,33 @@
 import React from 'react';
-import { Controller, Control } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { Checkbox } from 'hds-react';
 
 type PropTypes = {
   name: string;
   id: string;
-  control: Control;
-  // eslint-disable-next-line
-  rules?: any;
+  rules?: Record<string, unknown>;
   defaultValue?: string;
   label: string;
-  invalid?: boolean;
-  errorMsg?: string;
   disabled?: boolean;
-  checked?: boolean;
-  // eslint-disable-next-line
-  onChange?: any;
-  value?: string;
-  // eslint-disable-next-line
-  register?: any;
 };
 const CheckboxComp: React.FC<PropTypes> = (props) => {
-  const {
-    name,
-    id,
-    control,
-    rules,
-    defaultValue,
-    label,
-    disabled,
-    checked,
-    onChange,
-    value,
-  } = props;
+  const { name, id, rules, defaultValue, label, disabled } = props;
+  const { control } = useFormContext();
+
   return (
     <Controller
       name={name}
-      id={id}
       control={control}
       rules={rules}
       defaultValue={defaultValue}
-      render={() => (
+      render={({ field }) => (
         <Checkbox
           id={id}
           label={label}
-          name={name}
-          onChange={onChange}
-          checked={checked}
+          {...field}
+          checked={field.value}
           disabled={disabled}
-          value={value}
+          data-testid={name}
         />
       )}
     />

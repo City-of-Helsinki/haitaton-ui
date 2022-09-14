@@ -9,5 +9,5 @@ export const useFormPage = () => {
     return () => {
       triggerValidations();
     };
-  }, []);
+  }, [triggerValidations]);
 };

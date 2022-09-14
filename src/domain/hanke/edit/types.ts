@@ -1,4 +1,4 @@
-import { FieldErrors, Control } from 'react-hook-form';
+import { FieldErrors } from 'react-hook-form';
 import { PartialExcept } from '../../../common/types/utils';
 import { HankeData, HankeContactKey } from '../../types/hanke';
 
@@ -46,7 +46,6 @@ export interface HankeDataFormState extends PartialExcept<HankeData, HankeContac
 export interface FormProps {
   formData: HankeDataFormState;
   errors: FieldErrors;
-  control: Control;
   // eslint-disable-next-line
   register: any;
 }

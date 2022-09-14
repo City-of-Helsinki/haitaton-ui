@@ -1,5 +1,5 @@
 import React from 'react';
-import { Controller, Control, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { Select, Tooltip } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { getInputErrorText } from '../../utils/form';
@@ -11,7 +11,6 @@ type Option = { value: string; label: string };
 type PropTypes = {
   id: string;
   name: string;
-  control: Control;
   rules?: { required: boolean };
   defaultValue: string | null;
   label: string;
@@ -26,7 +25,6 @@ type PropTypes = {
 const Dropdown: React.FC<PropTypes> = ({
   id,
   name,
-  control,
   rules,
   options,
   defaultValue,
@@ -37,7 +35,11 @@ const Dropdown: React.FC<PropTypes> = ({
   required,
 }) => {
   const { t } = useTranslation();
-  const { errors } = useFormContext();
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
+
   return (
     <div className="dropdownComp">
       {!!tooltip && (
@@ -47,11 +49,10 @@ const Dropdown: React.FC<PropTypes> = ({
       )}
       <Controller
         name={name}
-        id={id}
         control={control}
         defaultValue={defaultValue}
         rules={rules}
-        render={({ onChange, onBlur, value }) => {
+        render={({ field: { onChange, onBlur, value } }) => {
           return (
             <Select
               id={id}

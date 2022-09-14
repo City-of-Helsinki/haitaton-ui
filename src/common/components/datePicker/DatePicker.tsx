@@ -33,7 +33,8 @@ const DatePicker: React.FC<PropTypes> = ({
   locale,
 }) => {
   const { t } = useTranslation();
-  const { control, errors } = useFormContext();
+  const { control, formState } = useFormContext();
+  const { errors } = formState;
   const invalid = !!errors[name];
 
   return (
@@ -42,7 +43,7 @@ const DatePicker: React.FC<PropTypes> = ({
         name={name}
         control={control}
         defaultValue={defaultValue}
-        render={({ onChange, value, onBlur }) => (
+        render={({ field: { onChange, onBlur, value } }) => (
           <div className={styles.datePicker}>
             <div className={styles.tooltip}>
               {!!tooltip && (
@@ -69,6 +70,7 @@ const DatePicker: React.FC<PropTypes> = ({
                 maxDate={maxDate}
                 minDate={minDate}
                 language={locale}
+                disableConfirmation
               />
             </div>
             {invalid && <span className="error-text">{getInputErrorText(t, errors, name)}</span>}

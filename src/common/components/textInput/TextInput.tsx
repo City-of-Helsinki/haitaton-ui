@@ -15,14 +15,17 @@ type PropTypes = {
 
 const TextInput: React.FC<PropTypes> = ({ name, label, disabled, tooltip, required }) => {
   const { t } = useTranslation();
-  const { control, errors } = useFormContext();
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
 
   return (
     <Controller
       name={name}
       control={control}
       defaultValue=""
-      render={({ onChange, onBlur, value }) => (
+      render={({ field: { onChange, onBlur, value } }) => (
         <HdsTextInput
           id={name}
           name={name}

@@ -15,7 +15,7 @@ import { FORMFIELD, FormProps } from './types';
 import { useFormPage } from './hooks/useFormPage';
 import useLocale from '../../../common/hooks/useLocale';
 
-const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
+const Form4: React.FC<FormProps> = ({ errors, formData }) => {
   const { t } = useTranslation();
   const locale = useLocale();
   const hankeAlkuPvm = formData[FORMFIELD.ALKU_PVM];
@@ -61,7 +61,6 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
           <Dropdown
             name={FORMFIELD.KAISTAHAITTA}
             id={FORMFIELD.KAISTAHAITTA}
-            control={control}
             options={$enum(HANKE_KAISTAHAITTA).map((value) => ({
               value,
               label: t(`hanke:${FORMFIELD.KAISTAHAITTA}:${value}`),
@@ -83,7 +82,6 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
           <Dropdown
             name={FORMFIELD.KAISTAPITUUSHAITTA}
             id={FORMFIELD.KAISTAPITUUSHAITTA}
-            control={control}
             options={$enum(HANKE_KAISTAPITUUSHAITTA).map((value) => ({
               value,
               label: t(`hanke:${FORMFIELD.KAISTAPITUUSHAITTA}:${value}`),
@@ -100,7 +98,6 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
           <Dropdown
             name={FORMFIELD.MELUHAITTA}
             id={FORMFIELD.MELUHAITTA}
-            control={control}
             options={$enum(HANKE_MELUHAITTA).map((value) => ({
               value,
               label: t(`hanke:${FORMFIELD.MELUHAITTA}:${value}`),
@@ -116,7 +113,6 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
           <Dropdown
             name={FORMFIELD.POLYHAITTA}
             id={FORMFIELD.POLYHAITTA}
-            control={control}
             options={$enum(HANKE_POLYHAITTA).map((value) => ({
               value,
               label: t(`hanke:${FORMFIELD.POLYHAITTA}:${value}`),
@@ -132,7 +128,6 @@ const Form4: React.FC<FormProps> = ({ control, errors, formData }) => {
           <Dropdown
             name={FORMFIELD.TARINAHAITTA}
             id={FORMFIELD.TARINAHAITTA}
-            control={control}
             options={$enum(HANKE_TARINAHAITTA).map((value) => ({
               value,
               label: t(`hanke:${FORMFIELD.TARINAHAITTA}:${value}`),

@@ -9,7 +9,7 @@ import { HANKE_TYOMAATYYPPI, HANKE_TYOMAAKOKO } from '../../types/hanke';
 import { FORMFIELD, FormProps } from './types';
 import { useFormPage } from './hooks/useFormPage';
 
-const Form3: React.FC<FormProps> = ({ formData, control, errors }) => {
+const Form3: React.FC<FormProps> = ({ formData, errors }) => {
   const { t } = useTranslation();
   useFormPage();
   return (
@@ -33,7 +33,6 @@ const Form3: React.FC<FormProps> = ({ formData, control, errors }) => {
           <DropdownMultiselect
             name={FORMFIELD.TYOMAATYYPPI}
             id={FORMFIELD.TYOMAATYYPPI}
-            control={control}
             options={$enum(HANKE_TYOMAATYYPPI).map((value) => ({
               value,
               label: t(`hanke:${FORMFIELD.TYOMAATYYPPI}:${value}`),
@@ -53,7 +52,6 @@ const Form3: React.FC<FormProps> = ({ formData, control, errors }) => {
           <Dropdown
             name={FORMFIELD.TYOMAAKOKO}
             id={FORMFIELD.TYOMAAKOKO}
-            control={control}
             options={$enum(HANKE_TYOMAAKOKO).map((value) => ({
               value,
               label: t(`hanke:${FORMFIELD.TYOMAAKOKO}:${value}`),
