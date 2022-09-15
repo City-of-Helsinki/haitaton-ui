@@ -27,7 +27,7 @@ const Header: React.FC = () => {
   return (
     <Navigation
       menuToggleAriaLabel={t('common:components:multiselect:toggle')}
-      title="Haitaton Beta"
+      title="Haitaton"
       skipTo="#"
       skipToContentLabel={t('common:components:header:skipToContentLabel')}
       titleUrl={HOME.path}
