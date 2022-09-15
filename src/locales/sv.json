@@ -35,6 +35,9 @@
       "searchInput": {
         "placeholder": "SV:Etsi osoitteella",
         "searchButtonAriaLabel": "SV:Hae"
+      },
+      "header": {
+        "skipToContentLabel": "SV:Siirry pääsisältöön"
       }
     },
     "error": "SV: Tapahtui virhe. Yritä uudestaan."
@@ -70,14 +73,14 @@
     },
     "HANKEPORTFOLIO": {
       "path": "/hankesalkku",
-      "headerLabel": "SV::Hankesalkku",
+      "headerLabel": "SV:Omat hankkeet",
       "meta": {
         "title": "SV::Haitaton Beta - Hankesalkku"
       }
     },
     "MAP": {
       "path": "/map",
-      "headerLabel": "SV::Kartta",
+      "headerLabel": "SV:Hankkeet yleisillä alueilla",
       "meta": {
         "title": "SV::Haitaton Beta - Kartta"
       }
@@ -136,6 +139,13 @@
       "headerLabel": "SV: Lähdeviitteet",
       "meta": {
         "title": "SV: Haitaton Beta - Lähdeviitteet"
+      }
+    },
+    "WORKINSTRUCTIONS": {
+      "path": "https://www.hel.fi/helsinki/sv/boende-och-miljo/tomter/tillstond-for-allmanna-omraden/arbete-pa-gatu-eller-parkomraden",
+      "headerLabel": "SV:Työohjeet",
+      "meta": {
+        "title": "SV:Haitaton Beta - Työohjeet"
       }
     }
   },

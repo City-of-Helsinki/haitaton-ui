@@ -35,6 +35,9 @@
       "searchInput": {
         "placeholder": "Etsi osoitteella",
         "searchButtonAriaLabel": "Hae"
+      },
+      "header": {
+        "skipToContentLabel": "Siirry pääsisältöön"
       }
     },
     "error": "Tapahtui virhe. Yritä uudestaan."
@@ -63,7 +66,7 @@
     },
     "HANKEPORTFOLIO": {
       "path": "/hankesalkku",
-      "headerLabel": "Hankesalkku",
+      "headerLabel": "Omat hankkeet",
       "meta": {
         "title": "Haitaton Beta - Hankesalkku"
       }
@@ -77,7 +80,7 @@
     },
     "MAP": {
       "path": "/map",
-      "headerLabel": "Kartta",
+      "headerLabel": "Hankkeet yleisillä alueilla",
       "meta": {
         "title": "Haitaton Beta - Kartta"
       }
@@ -136,6 +139,13 @@
       "headerLabel": "Lähdeviitteet",
       "meta": {
         "title": "Haitaton Beta - Lähdeviitteet"
+      }
+    },
+    "WORKINSTRUCTIONS": {
+      "path": "https://www.hel.fi/helsinki/fi/asuminen-ja-ymparisto/tontit/luvat/kaduilla-ja-puistoissa-tehtavat-tyot/",
+      "headerLabel": "Työohjeet",
+      "meta": {
+        "title": "Haitaton Beta - Työohjeet"
       }
     }
   },
