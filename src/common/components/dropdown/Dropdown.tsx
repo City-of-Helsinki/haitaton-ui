@@ -50,7 +50,6 @@ const Dropdown: React.FC<PropTypes> = ({
       <Controller
         name={name}
         control={control}
-        defaultValue={defaultValue}
         rules={rules}
         render={({ field: { onChange, onBlur, value } }) => {
           return (
@@ -64,7 +63,7 @@ const Dropdown: React.FC<PropTypes> = ({
               }
               options={options}
               invalid={invalid}
-              value={options.find((o) => o.value === value)}
+              value={options.find((o) => o.value === value) || null}
               onChange={(option: Option) => {
                 if (option) onChange(option.value);
                 onBlur();

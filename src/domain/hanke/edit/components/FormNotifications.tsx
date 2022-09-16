@@ -1,12 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { FormNotification } from '../types';
 import Notification from './Notification';
-import { getShowNotification } from '../selectors';
 
-const FormNotifications: React.FC = () => {
+type Props = {
+  showNotification: FormNotification;
+};
+
+const FormNotifications: React.FC<Props> = ({ showNotification }) => {
   const { t } = useTranslation();
-  const showNotification = useSelector(getShowNotification());
 
   return (
     <>

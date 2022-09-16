@@ -19,7 +19,7 @@ import { MapTileLayerId } from '../../types';
 
 type Props = {
   geometry: HankeGeoJSON | undefined;
-  onChangeGeometries: () => void;
+  onChangeGeometries: (geometry: HankeGeoJSON) => void;
 };
 
 const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry }) => {
@@ -32,21 +32,25 @@ const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry }) => {
       drawSource.addFeatures(new GeoJSON().readFeatures(geometry));
       drawSource.dispatchEvent('featuresAdded');
     }
-  }, [geometry]);
+  }, [geometry, drawSource]);
 
   useEffect(() => {
     const updateState = () => {
       const drawGeometry = formatFeaturesToHankeGeoJSON(drawSource.getFeatures());
       handleUpdateGeometryState(drawGeometry);
+      onChangeGeometries(drawGeometry);
     };
 
-    drawSource.on('addfeature', () => updateState());
-    drawSource.on('removefeature', () => updateState());
-    drawSource.on('changefeature', () => updateState());
-    drawSource.on('change', () => {
-      onChangeGeometries();
-    });
-  }, []);
+    drawSource.on('addfeature', updateState);
+    drawSource.on('removefeature', updateState);
+    drawSource.on('changefeature', updateState);
+
+    return function cleanUp() {
+      drawSource.un('addfeature', updateState);
+      drawSource.un('removefeature', updateState);
+      drawSource.un('changefeature', updateState);
+    };
+  }, [drawSource, handleUpdateGeometryState, onChangeGeometries]);
 
   return (
     <>

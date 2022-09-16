@@ -3,8 +3,9 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Button } from 'hds-react';
 import { IconCross, IconTrash } from 'hds-react/icons';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation } from 'react-query';
 import Text from '../../../common/components/text/Text';
-import { HankeDataFormState, SaveFormArguments } from './types';
+import { FormNotification, HankeDataFormState } from './types';
 import FormStepIndicator from './components/FormStepIndicator';
 import { hankeSchema } from './hankeSchema';
 import Form0 from './HankeForm0';
@@ -13,31 +14,50 @@ import Form2 from './HankeForm2';
 import FormButtons from './components/FormButtons';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
+import { HANKE_SAVETYPE } from '../../types/hanke';
+import { filterEmptyContacts, isHankeEditingDisabled } from './utils';
+import api from '../../api/api';
+
+async function saveHanke(data: HankeDataFormState, saveType = HANKE_SAVETYPE.DRAFT) {
+  const requestData = {
+    ...filterEmptyContacts(data),
+    saveType,
+  };
+
+  if (isHankeEditingDisabled(data)) {
+    throw new Error('Editing disabled');
+  }
+
+  if (data.hankeTunnus && data.geometriat) {
+    await api.post(`/hankkeet/${data.hankeTunnus}/geometriat`, {
+      featureCollection: data.geometriat,
+    });
+  }
+
+  const response = data.hankeTunnus
+    ? await api.put<HankeDataFormState>(`/hankkeet/${data.hankeTunnus}`, requestData)
+    : await api.post<HankeDataFormState>(`/hankkeet`, requestData);
+
+  return response.data;
+}
 
 type Props = {
   formData: HankeDataFormState;
-  onSave: (args: SaveFormArguments) => void;
-  onSaveGeometry: (hankeTunnus: string) => void;
   onIsDirtyChange: (isDirty: boolean) => void;
-  onUnmount: () => void;
   onFormClose: () => void;
-  isSaving: boolean;
   onOpenHankeDelete: () => void;
   children: React.ReactNode;
 };
 
 const HankeForm: React.FC<Props> = ({
   formData,
-  onSave,
-  onSaveGeometry,
   onIsDirtyChange,
-  onUnmount,
   onFormClose,
-  isSaving,
   onOpenHankeDelete,
   children,
 }) => {
   const [currentFormPage, setCurrentFormPage] = useState<number>(0);
+  const [showNotification, setShowNotification] = useState<FormNotification | null>(null);
   const formContext = useForm<HankeDataFormState>({
     mode: 'all',
     reValidateMode: 'onChange',
@@ -58,16 +78,28 @@ const HankeForm: React.FC<Props> = ({
     reset,
   } = formContext;
 
+  const hankeMutation = useMutation(saveHanke, {
+    onMutate() {
+      setShowNotification(null);
+    },
+    onError() {
+      setShowNotification('error');
+    },
+    onSuccess() {
+      setShowNotification('success');
+    },
+  });
+
   useEffect(() => {
-    reset(formData);
-  }, [formData]);
+    if (hankeMutation.data) {
+      // Update form data with API response
+      reset(hankeMutation.data);
+    }
+  }, [hankeMutation.data, reset]);
 
   const saveDraft = useCallback(() => {
-    onSave({
-      data: getValues(),
-      currentFormPage,
-    });
-  }, [getValues, currentFormPage]);
+    hankeMutation.mutate(getValues());
+  }, [getValues, hankeMutation]);
 
   const goBack = useCallback(() => {
     setCurrentFormPage((v) => v - 1);
@@ -77,26 +109,17 @@ const HankeForm: React.FC<Props> = ({
     if (currentFormPage === 0) {
       saveDraft();
     }
-    if (currentFormPage === 1) {
-      const values = getValues();
-      if (values.hankeTunnus) {
-        onSaveGeometry(values.hankeTunnus);
-      }
-    }
+
     setCurrentFormPage((v) => v + 1);
-  }, [getValues, currentFormPage, saveDraft, onSaveGeometry]);
+  }, [currentFormPage, saveDraft]);
 
   useEffect(() => {
     onIsDirtyChange(isDirty);
-  }, [isDirty]);
-
-  useEffect(() => {
-    return () => onUnmount();
-  }, []);
+  }, [isDirty, onIsDirtyChange]);
 
   return (
     <FormProvider {...formContext}>
-      <FormNotifications />
+      <FormNotifications showNotification={showNotification} />
       <div className="hankeForm">
         <Text tag="h1" data-testid="formPageHeader" styleAs="h2" spacing="s" weight="bold">
           &nbsp;
@@ -105,8 +128,8 @@ const HankeForm: React.FC<Props> = ({
         <div className="hankeForm__formWpr">
           <FormStepIndicator
             currentFormPage={currentFormPage}
-            formData={formData}
-            isSaving={isSaving}
+            formData={getValues()}
+            isSaving={hankeMutation.isLoading}
           />
           <div className="hankeForm__formWprRight">
             <form name="hanke">

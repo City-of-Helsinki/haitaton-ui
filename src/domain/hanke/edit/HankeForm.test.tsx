@@ -51,21 +51,14 @@ const formData: HankeDataFormState = {
 
 describe('HankeForm', () => {
   test('suunnitteluVaihde should be required when vaihe is suunnittelu', async () => {
-    const handleSave = jest.fn();
-    const handleSaveGeometry = jest.fn();
     const handleIsDirtyChange = jest.fn();
-    const handleUnmount = jest.fn();
     const handleFormClose = jest.fn();
 
     const { getByTestId, getByLabelText, queryAllByText } = render(
       <HankeForm
         formData={formData}
-        onSave={handleSave}
-        onSaveGeometry={handleSaveGeometry}
         onIsDirtyChange={handleIsDirtyChange}
-        onUnmount={handleUnmount}
         onFormClose={handleFormClose}
-        isSaving
         onOpenHankeDelete={() => ({})}
       >
         child
@@ -103,12 +96,8 @@ describe('HankeForm', () => {
           [FORMFIELD.NIMI]: 'Formin nimi',
           [FORMFIELD.KUVAUS]: 'Formin kuvaus',
         }}
-        onSave={() => ({})}
-        onSaveGeometry={() => ({})}
         onIsDirtyChange={() => ({})}
-        onUnmount={() => ({})}
         onFormClose={() => ({})}
-        isSaving
         onOpenHankeDelete={() => ({})}
       >
         child
@@ -126,12 +115,8 @@ describe('HankeForm', () => {
           ...formData,
           [FORMFIELD.ALKU_PVM]: '1999-03-15T00:00:00Z',
         }}
-        onSave={() => ({})}
-        onSaveGeometry={() => ({})}
         onIsDirtyChange={() => ({})}
-        onUnmount={() => ({})}
         onFormClose={() => ({})}
-        isSaving
         onOpenHankeDelete={() => ({})}
       >
         child

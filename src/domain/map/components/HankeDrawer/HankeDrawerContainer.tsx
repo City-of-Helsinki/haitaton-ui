@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
+import { HankeGeoJSON } from '../../../../common/types/hanke';
 import api from '../../../api/api';
 import { HankeGeometria } from '../../../types/hanke';
 import HankeDrawer from './HankeDrawer';
@@ -8,7 +9,7 @@ type HankeTunnus = string | undefined;
 
 type Props = {
   hankeTunnus: HankeTunnus;
-  onChangeGeometries: () => void;
+  onChangeGeometries: (geometry: HankeGeoJSON) => void;
 };
 
 // enabled-config should prevent running this when hankeTunnus is undefined?
@@ -38,13 +39,16 @@ const HankeDrawerContainer: React.FC<Props> = ({ hankeTunnus, onChangeGeometries
         queryClient.invalidateQueries(['hankeGeometry', hankeTunnus]);
       }
     };
-  }, [queryClient, isGeometryChanged]);
+  }, [queryClient, isGeometryChanged, hankeTunnus]);
 
   // Update local state and form
-  const handleChangeAndInvalidateCache = useCallback(() => {
-    setIsGeometryChanged(true);
-    onChangeGeometries();
-  }, []);
+  const handleChangeAndInvalidateCache = useCallback(
+    (geometry: HankeGeoJSON) => {
+      setIsGeometryChanged(true);
+      onChangeGeometries(geometry);
+    },
+    [onChangeGeometries]
+  );
 
   return (
     <HankeDrawer

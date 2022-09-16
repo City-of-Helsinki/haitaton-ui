@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Accordion } from 'hds-react';
@@ -17,30 +17,26 @@ import {
   HANKE_POLYHAITTA,
   HANKE_TARINAHAITTA,
 } from '../../types/hanke';
+import { HankeGeoJSON } from '../../../common/types/hanke';
 
 const Form1: React.FC<FormProps> = ({ errors, formData }) => {
   const { t } = useTranslation();
   const locale = useLocale();
   const instructions = t('hankeForm:hankkeenAlueForm:instructions').split('\n');
-  const { setValue, register } = useFormContext();
+  const { setValue } = useFormContext();
   const hankeAlkuPvm = formData[FORMFIELD.ALKU_PVM];
   const hankeLoppuPvm = formData[FORMFIELD.LOPPU_PVM];
   const hankeAlkuDate = hankeAlkuPvm ? new Date(hankeAlkuPvm) : undefined;
   const hankeLoppuDate = hankeLoppuPvm ? new Date(hankeLoppuPvm) : undefined;
   useFormPage();
 
-  useEffect(() => {
-    register(FORMFIELD.GEOMETRIES_CHANGED);
-    return () => {
-      setValue(FORMFIELD.GEOMETRIES_CHANGED, false);
-      // TODO: unregister below causes crash in some case
-      // unregister(FORMFIELD.GEOMETRIES_CHANGED);
-    };
-  }, [register]);
-
-  const handleGeometriesChange = useCallback(() => {
-    setValue(FORMFIELD.GEOMETRIES_CHANGED, true, { shouldDirty: true });
-  }, [setValue]);
+  const handleGeometriesChange = useCallback(
+    (geometry: HankeGeoJSON) => {
+      setValue(FORMFIELD.GEOMETRIES_CHANGED, true, { shouldDirty: true });
+      setValue(FORMFIELD.GEOMETRIAT, geometry);
+    },
+    [setValue]
+  );
 
   return (
     <div className="form1">

@@ -1,17 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
-import { HANKE_SAVETYPE, HankeDataDraft } from '../../types/hanke';
-import { getHasFormChanged, getFormData, getSaveState } from './selectors';
-import { saveForm } from './thunks';
-import { saveGeometryData } from '../../map/thunks';
+import { Flex } from '@chakra-ui/react';
+import { LoadingSpinner } from 'hds-react';
+import { HankeDataDraft } from '../../types/hanke';
 import HankeForm from './HankeForm';
-import { actions, hankeDataDraft } from './reducer';
-import { HankeDataFormState, SaveFormArguments } from './types';
+import { HankeDataFormState } from './types';
 import { convertHankeDataToFormState } from './utils';
 import ConfirmationDialog from '../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
-
 import api from '../../api/api';
 import { t } from '../../../locales/i18nForTests';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
@@ -35,48 +31,20 @@ type Props = {
 };
 
 const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const hasFormChanged = useSelector(getHasFormChanged());
-  const formData = useSelector(getFormData());
-  const isSaving = useSelector(getSaveState());
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [interruptDialogOpen, setInterruptDialogOpen] = useState(false);
   const [deleteErrorMsg, setDeleteErrorMsg] = useState('');
+  const [hasFormChanged, setHasFormChanged] = useState(false);
 
   const { HANKEPORTFOLIO } = useLocalizedRoutes();
 
-  const { data: hankeData, isFetched } = useHanke(hankeTunnus);
+  const { data: hankeData, isLoading } = useHanke(hankeTunnus);
+  const formData = convertHankeDataToFormState(hankeData);
 
-  useEffect(() => {
-    // Update fetched hankeData to redux
-    if (hankeTunnus && isFetched && hankeData) {
-      dispatch(actions.updateFormData(convertHankeDataToFormState(hankeData)));
-    }
-  }, [isFetched]);
-
-  const handleSave = ({ data, currentFormPage }: SaveFormArguments) => {
-    dispatch(
-      saveForm({
-        data,
-        saveType: HANKE_SAVETYPE.DRAFT,
-        currentFormPage,
-      })
-    );
-  };
-
-  const handleSaveGeometry = (id: string) => {
-    dispatch(saveGeometryData({ hankeTunnus: id }));
-  };
-
-  const handleIsDirtyChange = (isDirty: boolean) => {
-    dispatch(actions.updateHasFormChanged(isDirty));
-  };
-
-  // Clear form data on unmount
-  const handleUnmount = () => {
-    dispatch(actions.updateFormData(hankeDataDraft));
-  };
+  const handleIsDirtyChange = useCallback((isDirty: boolean) => {
+    setHasFormChanged(isDirty);
+  }, []);
 
   const handleFormClose = useCallback(() => {
     if (hasFormChanged) {
@@ -84,7 +52,7 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
     } else {
       navigate('/');
     }
-  }, [hasFormChanged]);
+  }, [hasFormChanged, navigate]);
 
   const closeForm = () => {
     navigate('/');
@@ -108,16 +76,20 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <Flex justify="center" mt="var(--spacing-xl)">
+        <LoadingSpinner />
+      </Flex>
+    );
+  }
+
   return (
     <>
       <HankeForm
         formData={formData}
-        onSave={handleSave}
-        onSaveGeometry={handleSaveGeometry}
         onIsDirtyChange={handleIsDirtyChange}
-        onUnmount={handleUnmount}
         onFormClose={handleFormClose}
-        isSaving={isSaving}
         onOpenHankeDelete={openHankeDelete}
       >
         <ConfirmationDialog
