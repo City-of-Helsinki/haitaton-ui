@@ -1,10 +1,9 @@
 import React from 'react';
-import { cleanup, fireEvent, waitFor } from '@testing-library/react';
 import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
 import { HANKE_VAIHE, HANKE_TYOMAATYYPPI } from '../../types/hanke';
-import { render } from '../../../testUtils/render';
+import { render, cleanup, fireEvent, waitFor, screen } from '../../../testUtils/render';
 
 afterEach(cleanup);
 
@@ -54,7 +53,7 @@ describe('HankeForm', () => {
     const handleIsDirtyChange = jest.fn();
     const handleFormClose = jest.fn();
 
-    const { getByTestId, getByLabelText, queryAllByText } = render(
+    render(
       <HankeForm
         formData={formData}
         onIsDirtyChange={handleIsDirtyChange}
@@ -65,31 +64,35 @@ describe('HankeForm', () => {
       </HankeForm>
     );
 
-    fireEvent.change(getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
-    fireEvent.change(getByTestId(FORMFIELD.KUVAUS), { target: { value: hankkeenKuvaus } });
-    fireEvent.change(getByTestId(FORMFIELD.KATUOSOITE), { target: { value: hankkeenOsoite } });
-    fireEvent.change(getByLabelText('Hankkeen alkupäivä', { exact: false }), {
+    fireEvent.change(screen.getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
+    fireEvent.change(screen.getByTestId(FORMFIELD.KUVAUS), { target: { value: hankkeenKuvaus } });
+    fireEvent.change(screen.getByTestId(FORMFIELD.KATUOSOITE), {
+      target: { value: hankkeenOsoite },
+    });
+    fireEvent.change(screen.getByLabelText('Hankkeen alkupäivä', { exact: false }), {
       target: { value: alkuPvm },
     });
-    fireEvent.change(getByLabelText('Hankkeen loppupäivä', { exact: false }), {
+    fireEvent.change(screen.getByLabelText('Hankkeen loppupäivä', { exact: false }), {
       target: { value: loppuPvm },
     });
 
-    queryAllByText('Hankkeen Vaihe')[0].click();
-    queryAllByText('Suunnittelu')[0].click();
+    screen.queryByText('Hankkeen Vaihe')?.click();
+    screen.queryAllByText('Suunnittelu')[0].click();
 
-    getByTestId(FORMFIELD.YKT_HANKE).click();
+    screen.getByTestId(FORMFIELD.YKT_HANKE).click();
 
-    await waitFor(() => expect(getByTestId('forward')).toBeDisabled());
+    expect(screen.getByRole('button', { name: 'Tallenna luonnos' })).toBeDisabled();
 
-    queryAllByText('Hankkeen suunnitteluvaihe')[0].click();
-    queryAllByText('Yleis- tai hankesuunnittelu')[0].click();
+    screen.queryAllByText('Hankkeen suunnitteluvaihe')[0].click();
+    screen.queryAllByText('Yleis- tai hankesuunnittelu')[0].click();
 
-    await waitFor(() => expect(getByTestId('forward')).not.toBeDisabled());
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Tallenna luonnos' })).not.toBeDisabled()
+    );
   });
 
-  test('Form should be populated correctly ', async () => {
-    const { getByTestId, getByText } = render(
+  test('Form should be populated correctly ', () => {
+    render(
       <HankeForm
         formData={{
           ...formData,
@@ -103,13 +106,13 @@ describe('HankeForm', () => {
         child
       </HankeForm>
     );
-    expect(getByTestId(FORMFIELD.NIMI)).toHaveValue('Formin nimi');
-    expect(getByTestId(FORMFIELD.KUVAUS)).toHaveValue('Formin kuvaus');
-    expect(getByText('Ohjelmointi')).toBeInTheDocument();
+    expect(screen.getByTestId(FORMFIELD.NIMI)).toHaveValue('Formin nimi');
+    expect(screen.getByTestId(FORMFIELD.KUVAUS)).toHaveValue('Formin kuvaus');
+    expect(screen.getByText('Ohjelmointi')).toBeInTheDocument();
   });
 
-  test('Form editing should be disabled if it is already started ', async () => {
-    const { getByTestId, getByText } = render(
+  test('Form editing should be disabled if it is already started ', () => {
+    render(
       <HankeForm
         formData={{
           ...formData,
@@ -122,31 +125,28 @@ describe('HankeForm', () => {
         child
       </HankeForm>
     );
-    expect(getByTestId('editing-disabled-notification')).toBeInTheDocument();
-    expect(getByText(/Käynnissä olevan hankkeen tietoja ei voi muokata/i)).toBeDefined();
+    expect(screen.getByTestId('editing-disabled-notification')).toBeInTheDocument();
+    expect(screen.getByText(/Käynnissä olevan hankkeen tietoja ei voi muokata/i)).toBeDefined();
   });
 
   test('HankeFormContainer integration should work ', async () => {
-    const { getByText, queryByText, getByLabelText, queryAllByText, getByTestId } = render(
-      <HankeFormContainer />
-    );
-    fireEvent.change(getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
-    fireEvent.change(getByTestId(FORMFIELD.KUVAUS), { target: { value: hankkeenKuvaus } });
-    fireEvent.change(getByLabelText('Hankkeen alkupäivä', { exact: false }), {
+    render(<HankeFormContainer />);
+    fireEvent.change(screen.getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
+    fireEvent.change(screen.getByTestId(FORMFIELD.KUVAUS), { target: { value: hankkeenKuvaus } });
+    fireEvent.change(screen.getByLabelText('Hankkeen alkupäivä', { exact: false }), {
       target: { value: alkuPvm },
     });
-    fireEvent.change(getByLabelText('Hankkeen loppupäivä', { exact: false }), {
+    fireEvent.change(screen.getByLabelText('Hankkeen loppupäivä', { exact: false }), {
       target: { value: loppuPvm },
     });
-    queryAllByText('Hankkeen Vaihe')[0].click();
-    queryAllByText('Ohjelmointi')[0].click();
+    screen.queryAllByText('Hankkeen Vaihe')[0].click();
+    screen.queryAllByText('Ohjelmointi')[0].click();
 
-    getByText('Tallenna luonnos').click();
+    screen.getByText('Tallenna luonnos').click();
 
-    await waitFor(() => expect(getByTestId('forward')).toBeDisabled());
-    await waitFor(() => expect(queryByText('Luonnos tallennettu')));
+    await waitFor(() => expect(screen.queryByText('Luonnos tallennettu')));
 
-    expect(getByTestId(FORMFIELD.NIMI)).toHaveValue(nimi);
-    expect(getByTestId(FORMFIELD.KUVAUS)).toHaveValue(hankkeenKuvaus);
+    expect(screen.getByTestId(FORMFIELD.NIMI)).toHaveValue(nimi);
+    expect(screen.getByTestId(FORMFIELD.KUVAUS)).toHaveValue(hankkeenKuvaus);
   });
 });

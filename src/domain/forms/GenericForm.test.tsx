@@ -1,42 +1,13 @@
-import React, { useState } from 'react';
-import { fireEvent, screen, waitFor } from '@testing-library/react';
-import { Formik, useFormikContext } from 'formik';
+import React from 'react';
 import { TextInput } from 'hds-react';
-import * as Yup from 'yup';
 import GenericForm from './GenericForm';
-import { render } from '../../testUtils/render';
-
-const validationSchema = {
-  testInput: Yup.string().required('Please enter a value for input'),
-};
-
-function TestForm({ children }: { children: React.ReactNode }) {
-  return (
-    <Formik
-      initialValues={{ testInput: '' }}
-      onSubmit={() => {
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-      }}
-      validationSchema={Yup.object().shape({ ...validationSchema })}
-    >
-      {children}
-    </Formik>
-  );
-}
+import { render, fireEvent, screen, waitFor } from '../../testUtils/render';
 
 function Page1() {
-  const formik = useFormikContext<{ testInput: string }>();
-
   return (
     <div>
       <h1>Page 1</h1>
-      <TextInput
-        id="testInput"
-        label="Test input"
-        onChange={formik.handleChange}
-        value={formik.values.testInput}
-        errorText="Please enter a value for input"
-      />
+      <TextInput id="testInput" label="Test input" errorText="Please enter a value for input" />
     </div>
   );
 }
@@ -49,19 +20,17 @@ function Page2() {
   );
 }
 
-test('form pages can be navigated and validation works', async () => {
+test('form pages can be navigated', async () => {
   const formSteps = [
     {
       path: '/',
       element: <Page1 />,
       title: 'Title 1',
-      fieldsToValidate: ['testInput'],
     },
     {
       path: '/page2',
       element: <Page2 />,
       title: 'Title 2',
-      fieldsToValidate: [],
     },
   ];
 
@@ -70,29 +39,21 @@ test('form pages can be navigated and validation works', async () => {
   const handleSave = jest.fn();
 
   render(
-    <TestForm>
-      <GenericForm<{ testInput: string }>
-        formSteps={formSteps}
-        showNotification=""
-        hankeIndexData={null}
-        onDelete={handleDelete}
-        onClose={handleClose}
-        onSave={handleSave}
-      />
-    </TestForm>
+    <GenericForm
+      formSteps={formSteps}
+      isFormValid
+      onDelete={handleDelete}
+      onClose={handleClose}
+      onSave={handleSave}
+    />
   );
 
-  const nextButtons = screen.getAllByText('Seuraava');
-  const prevButtons = screen.getAllByText('Edellinen');
+  const nextButtons = screen.getAllByRole('button', { name: 'Seuraava' });
+  const prevButtons = screen.getAllByRole('button', { name: 'Edellinen' });
   const nextButtonTop = nextButtons[0];
   const prevButtonTop = prevButtons[0];
   const prevButtonBottom = prevButtons[1];
 
-  fireEvent.click(nextButtonTop);
-  await waitFor(() => screen.getByText('Please enter a value for input'));
-  expect(screen.getByText('Page 1')).toBeDefined();
-
-  fireEvent.change(screen.getByLabelText('Test input'), { target: { value: 'text' } });
   fireEvent.click(nextButtonTop);
   await waitFor(() => expect(handleSave).toHaveBeenCalledTimes(1));
   expect(screen.getByText('Page 2')).toBeDefined();
@@ -110,60 +71,35 @@ test('form pages can be navigated and validation works', async () => {
   expect(screen.getByText('Page 1')).toBeDefined();
 });
 
-test('success and error notifications work', async () => {
-  function FormContent() {
-    const [showNotification, setShowNotification] = useState('' as 'success' | 'error' | '');
+test('next and save buttons are disabled when form is not valid', () => {
+  const formSteps = [
+    {
+      path: '/',
+      element: <Page1 />,
+      title: 'Title 1',
+    },
+    {
+      path: '/page2',
+      element: <Page2 />,
+      title: 'Title 2',
+    },
+  ];
 
-    const formSteps = [
-      {
-        path: '/',
-        element: <Page1 />,
-        title: 'Title 1',
-        fieldsToValidate: [],
-      },
-      {
-        path: '/page2',
-        element: <Page2 />,
-        title: 'Title 2',
-        fieldsToValidate: [],
-      },
-    ];
-
-    const handleDelete = jest.fn();
-
-    function handleClose() {
-      setShowNotification('error');
-    }
-
-    function handleSave() {
-      setShowNotification('success');
-    }
-
-    return (
-      <GenericForm<{ testInput: string }>
-        formSteps={formSteps}
-        showNotification={showNotification}
-        hankeIndexData={null}
-        onDelete={handleDelete}
-        onClose={handleClose}
-        onSave={handleSave}
-      />
-    );
-  }
+  const handleDelete = jest.fn();
+  const handleClose = jest.fn();
+  const handleSave = jest.fn();
 
   render(
-    <TestForm>
-      <FormContent />
-    </TestForm>
+    <GenericForm
+      formSteps={formSteps}
+      isFormValid={false}
+      onDelete={handleDelete}
+      onClose={handleClose}
+      onSave={handleSave}
+    />
   );
 
-  fireEvent.click(screen.getByText('Tallenna luonnos'));
-  await waitFor(() =>
-    expect(screen.getByText('Luonnos on tallennettu Hankelistalle')).toBeDefined()
-  );
-
-  fireEvent.click(screen.getByText('Keskeytä'));
-  await waitFor(() =>
-    expect(screen.getByText('Luonnosta ei saatu tallennettua, koita uudelleen')).toBeDefined()
-  );
+  expect(screen.getAllByRole('button', { name: 'Seuraava' })[0]).toBeDisabled();
+  expect(screen.getAllByRole('button', { name: 'Seuraava' })[1]).toBeDisabled();
+  expect(screen.getByRole('button', { name: 'Tallenna luonnos' })).toBeDisabled();
 });

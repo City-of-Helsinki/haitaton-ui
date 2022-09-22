@@ -1,22 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Button } from 'hds-react';
-import { IconCross, IconTrash } from 'hds-react/icons';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
 import Text from '../../../common/components/text/Text';
 import { FormNotification, HankeDataFormState } from './types';
-import FormStepIndicator from './components/FormStepIndicator';
 import { hankeSchema } from './hankeSchema';
 import Form0 from './HankeForm0';
 import Form1 from './HankeForm1';
 import Form2 from './HankeForm2';
-import FormButtons from './components/FormButtons';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
 import { HANKE_SAVETYPE } from '../../types/hanke';
 import { filterEmptyContacts, isHankeEditingDisabled } from './utils';
 import api from '../../api/api';
+import GenericForm from '../../forms/GenericForm';
 
 async function saveHanke(data: HankeDataFormState, saveType = HANKE_SAVETYPE.DRAFT) {
   const requestData = {
@@ -56,7 +53,6 @@ const HankeForm: React.FC<Props> = ({
   onOpenHankeDelete,
   children,
 }) => {
-  const [currentFormPage, setCurrentFormPage] = useState<number>(0);
   const [showNotification, setShowNotification] = useState<FormNotification | null>(null);
   const formContext = useForm<HankeDataFormState>({
     mode: 'all',
@@ -66,14 +62,11 @@ const HankeForm: React.FC<Props> = ({
     shouldUnregister: false,
     defaultValues: formData,
     resolver: yupResolver(hankeSchema),
-    context: {
-      currentFormPage,
-    },
   });
 
   const {
     register,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, isValid },
     getValues,
     reset,
   } = formContext;
@@ -101,21 +94,27 @@ const HankeForm: React.FC<Props> = ({
     hankeMutation.mutate(getValues());
   }, [getValues, hankeMutation]);
 
-  const goBack = useCallback(() => {
-    setCurrentFormPage((v) => v - 1);
-  }, []);
-
-  const goForward = useCallback(() => {
-    if (currentFormPage === 0) {
-      saveDraft();
-    }
-
-    setCurrentFormPage((v) => v + 1);
-  }, [currentFormPage, saveDraft]);
-
   useEffect(() => {
     onIsDirtyChange(isDirty);
   }, [isDirty, onIsDirtyChange]);
+
+  const formSteps = [
+    {
+      path: '/',
+      element: <Form0 errors={errors} register={register} formData={formData} />,
+      title: 'Perustiedot',
+    },
+    {
+      path: '/yhteystiedot',
+      element: <Form2 errors={errors} register={register} formData={formData} />,
+      title: 'Yhteystiedot',
+    },
+    {
+      path: '/alueet',
+      element: <Form1 errors={errors} register={register} formData={formData} />,
+      title: 'Aluetiedot',
+    },
+  ];
 
   return (
     <FormProvider {...formContext}>
@@ -125,54 +124,14 @@ const HankeForm: React.FC<Props> = ({
           &nbsp;
         </Text>
 
-        <div className="hankeForm__formWpr">
-          <FormStepIndicator
-            currentFormPage={currentFormPage}
-            formData={getValues()}
-            isSaving={hankeMutation.isLoading}
-          />
-          <div className="hankeForm__formWprRight">
-            <form name="hanke">
-              <div className="closeFormWpr">
-                {formData.hankeTunnus && (
-                  <Button
-                    className="deleteHankeBtn"
-                    onClick={() => onOpenHankeDelete()}
-                    variant="supplementary"
-                    iconLeft={<IconTrash aria-hidden />}
-                  >
-                    Poista hanke
-                  </Button>
-                )}
-                <Button
-                  className="closeFormBtn"
-                  onClick={() => onFormClose()}
-                  variant="supplementary"
-                  theme="coat"
-                  iconLeft={<IconCross aria-hidden="true" />}
-                >
-                  Keskeytä
-                </Button>
-              </div>
-
-              {currentFormPage === 0 && (
-                <Form0 errors={errors} register={register} formData={formData} />
-              )}
-              {currentFormPage === 1 && (
-                <Form1 errors={errors} register={register} formData={formData} />
-              )}
-              {currentFormPage === 2 && (
-                <Form2 errors={errors} register={register} formData={formData} />
-              )}
-              <FormButtons
-                goBack={goBack}
-                goForward={goForward}
-                saveDraft={saveDraft}
-                currentFormPage={currentFormPage}
-              />
-            </form>
-          </div>
-        </div>
+        <GenericForm
+          showDelete={Boolean(formData.hankeTunnus)}
+          isFormValid={isValid}
+          formSteps={formSteps}
+          onClose={onFormClose}
+          onDelete={onOpenHankeDelete}
+          onSave={saveDraft}
+        />
       </div>
       {children}
     </FormProvider>

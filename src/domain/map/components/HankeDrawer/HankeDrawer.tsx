@@ -13,9 +13,12 @@ import Ortokartta from '../Layers/Ortokartta';
 import FitSource from '../interations/FitSource';
 
 import styles from '../../Map.module.scss';
+import hankeDrawerStyles from './HankeDrawer.module.scss';
 import { useMapDataLayers } from '../../hooks/useMapLayers';
 import { formatFeaturesToHankeGeoJSON } from '../../utils';
 import { MapTileLayerId } from '../../types';
+import AddressSearchContainer from '../AddressSearch/AddressSearchContainer';
+import OverviewMapControl from '../../../../common/components/map/controls/OverviewMapControl';
 
 type Props = {
   geometry: HankeGeoJSON | undefined;
@@ -59,6 +62,10 @@ const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry }) => {
         style={{ width: '100%', height: 500 }}
       >
         <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
+          <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} zIndex={1000} />
+
+          <OverviewMapControl className={hankeDrawerStyles.overviewMap} />
+
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
           {mapTileLayers.ortokartta.visible && <Ortokartta />}
           <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />

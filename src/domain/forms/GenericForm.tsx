@@ -1,88 +1,44 @@
 import React from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useFormikContext } from 'formik';
-import { Accordion } from 'hds-react';
 import FormActions from './components/FormActions';
 import styles from './GenericForm.module.scss';
-import Notification from '../hanke/edit/components/Notification';
 import FormPagination from './components/FormPageIndicator';
 import NavigationButtons from './components/NavigationButtons';
-import HankeIndexes from '../map/components/HankeSidebar/HankeIndexes';
-import { HankeIndexData } from '../hanke/newForm/types';
 
 type FormStep = {
   path: string;
   element: React.ReactNode;
   title: string;
-  fieldsToValidate: string[];
 };
 
-type Props = {
+interface Props extends React.HTMLProps<HTMLFormElement> {
   formSteps: FormStep[];
-  showNotification: 'success' | 'error' | '';
-  hankeIndexData: HankeIndexData | null;
+  showDelete?: boolean;
+  isFormValid?: boolean;
   onDelete: () => void;
   onClose: () => void;
   onSave: () => void;
-};
+}
 
-function GenericForm<T>({
+const GenericForm: React.FC<Props> = ({
   formSteps,
-  showNotification,
-  hankeIndexData,
+  showDelete = false,
+  isFormValid = false,
   onDelete,
   onClose,
   onSave,
-}: Props) {
-  const { t } = useTranslation();
-  const formik = useFormikContext<T>();
+}) => {
   const navigate = useNavigate();
 
-  function fieldsAreValid(fieldsToValidate: string[]) {
-    return new Promise((resolve) => {
-      fieldsToValidate.forEach((fieldname) => {
-        formik.setFieldTouched(fieldname, true);
-      });
-      formik.validateForm().then((validationErrors) => {
-        resolve(
-          !fieldsToValidate.some((fieldToValidate) =>
-            Object.keys(validationErrors).includes(fieldToValidate)
-          )
-        );
-      });
-    });
-  }
-
-  async function handleNavigation(path: string, fieldsToValidate: string[]) {
-    if (await fieldsAreValid(fieldsToValidate)) {
-      onSave();
-      if (path !== '') {
-        navigate(`.${path}`);
-      }
+  async function handleNavigation(path: string) {
+    onSave();
+    if (path !== '') {
+      navigate(`.${path}`);
     }
   }
 
   return (
-    <div className={styles.formWrapper}>
-      {showNotification === 'success' && (
-        <Notification
-          label={t('hankeForm:savingSuccessHeader')}
-          typeProps="success"
-          testId="formToastSuccess"
-        >
-          {t('hankeForm:savingSuccessText')}
-        </Notification>
-      )}
-      {showNotification === 'error' && (
-        <Notification
-          label={t('hankeForm:savingFailHeader')}
-          typeProps="error"
-          testId="formToastError"
-        >
-          {t('hankeForm:savingFailText')}
-        </Notification>
-      )}
+    <form className={styles.formWrapper}>
       <Routes>
         {formSteps.map((formStep, i) => {
           return (
@@ -95,30 +51,27 @@ function GenericForm<T>({
                     <FormPagination
                       currentLabel={formStep.title}
                       formPageLabels={formSteps.map((formPage) => formPage.title)}
+                      isFormValid={isFormValid}
                       onPageChange={(pageIndex) => {
-                        handleNavigation(`${formSteps[pageIndex].path}`, formStep.fieldsToValidate);
+                        handleNavigation(`${formSteps[pageIndex].path}`);
                       }}
                     />
                   </div>
                   <FormActions
+                    showDelete={showDelete}
+                    isFormValid={isFormValid}
                     onDelete={onDelete}
                     onClose={onClose}
-                    onSave={async () => {
-                      if (await fieldsAreValid(formStep.fieldsToValidate)) {
-                        onSave();
-                      }
-                    }}
+                    onSave={onSave}
                   />
-                  <Accordion heading="Haittaindeksit" card className={styles.index}>
-                    <HankeIndexes hankeIndexData={hankeIndexData} displayTooltip loading={false} />
-                  </Accordion>
                   <div className={styles.content}>
                     {formStep.element}
                     <NavigationButtons
                       nextPath={formSteps[i + 1]?.path}
                       previousPath={formSteps[i - 1]?.path}
+                      isFormValid={isFormValid}
                       onPageChange={(path) => {
-                        handleNavigation(path, formStep.fieldsToValidate);
+                        handleNavigation(path);
                       }}
                     />
                   </div>
@@ -128,8 +81,8 @@ function GenericForm<T>({
           );
         })}
       </Routes>
-    </div>
+    </form>
   );
-}
+};
 
 export default GenericForm;
