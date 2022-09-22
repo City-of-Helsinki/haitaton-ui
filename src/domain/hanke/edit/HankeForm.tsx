@@ -71,6 +71,8 @@ const HankeForm: React.FC<Props> = ({
     reset,
   } = formContext;
 
+  const formValues = getValues();
+
   const hankeMutation = useMutation(saveHanke, {
     onMutate() {
       setShowNotification(null);
@@ -101,17 +103,17 @@ const HankeForm: React.FC<Props> = ({
   const formSteps = [
     {
       path: '/',
-      element: <Form0 errors={errors} register={register} formData={formData} />,
+      element: <Form0 errors={errors} register={register} formData={formValues} />,
       title: 'Perustiedot',
     },
     {
       path: '/yhteystiedot',
-      element: <Form2 errors={errors} register={register} formData={formData} />,
+      element: <Form2 errors={errors} register={register} formData={formValues} />,
       title: 'Yhteystiedot',
     },
     {
       path: '/alueet',
-      element: <Form1 errors={errors} register={register} formData={formData} />,
+      element: <Form1 errors={errors} register={register} formData={formValues} />,
       title: 'Aluetiedot',
     },
   ];

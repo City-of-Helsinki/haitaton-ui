@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
+import { Coordinate } from 'ol/coordinate';
 import { HankeGeoJSON } from '../../../../common/types/hanke';
 import api from '../../../api/api';
 import { HankeGeometria } from '../../../types/hanke';
@@ -10,6 +11,7 @@ type HankeTunnus = string | undefined;
 type Props = {
   hankeTunnus: HankeTunnus;
   onChangeGeometries: (geometry: HankeGeoJSON) => void;
+  center?: Coordinate;
 };
 
 // enabled-config should prevent running this when hankeTunnus is undefined?
@@ -26,7 +28,7 @@ const useHankeGeometry = (hankeTunnus: HankeTunnus) =>
     enabled: !!hankeTunnus,
   });
 
-const HankeDrawerContainer: React.FC<Props> = ({ hankeTunnus, onChangeGeometries }) => {
+const HankeDrawerContainer: React.FC<Props> = ({ hankeTunnus, onChangeGeometries, center }) => {
   const queryClient = useQueryClient();
   const [isGeometryChanged, setIsGeometryChanged] = useState(false);
   const { data } = useHankeGeometry(hankeTunnus);
@@ -54,6 +56,7 @@ const HankeDrawerContainer: React.FC<Props> = ({ hankeTunnus, onChangeGeometries
     <HankeDrawer
       onChangeGeometries={handleChangeAndInvalidateCache}
       geometry={data ? data.featureCollection : undefined}
+      center={center}
     />
   );
 };

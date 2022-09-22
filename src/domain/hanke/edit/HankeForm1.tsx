@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Accordion } from 'hds-react';
 import { $enum } from 'ts-enum-util';
+import { Coordinate } from 'ol/coordinate';
 import HankeDrawer from '../../map/components/HankeDrawer/HankeDrawerContainer';
 import Text from '../../../common/components/text/Text';
 import { useFormPage } from './hooks/useFormPage';
@@ -18,6 +19,7 @@ import {
   HANKE_TARINAHAITTA,
 } from '../../types/hanke';
 import { HankeGeoJSON } from '../../../common/types/hanke';
+import { doAddressSearch } from '../../map/utils';
 
 const Form1: React.FC<FormProps> = ({ errors, formData }) => {
   const { t } = useTranslation();
@@ -28,6 +30,7 @@ const Form1: React.FC<FormProps> = ({ errors, formData }) => {
   const hankeLoppuPvm = formData[FORMFIELD.LOPPU_PVM];
   const hankeAlkuDate = hankeAlkuPvm ? new Date(hankeAlkuPvm) : undefined;
   const hankeLoppuDate = hankeLoppuPvm ? new Date(hankeLoppuPvm) : undefined;
+  const [addressCoordinate, setAddressCoordinate] = useState<Coordinate | undefined>();
   useFormPage();
 
   const handleGeometriesChange = useCallback(
@@ -37,6 +40,14 @@ const Form1: React.FC<FormProps> = ({ errors, formData }) => {
     },
     [setValue]
   );
+
+  useEffect(() => {
+    if (formData.tyomaaKatuosoite) {
+      doAddressSearch(formData.tyomaaKatuosoite).then(({ data }) => {
+        setAddressCoordinate(data.features[0]?.geometry.coordinates);
+      });
+    }
+  }, [formData.tyomaaKatuosoite]);
 
   return (
     <div className="form1">
@@ -60,6 +71,7 @@ const Form1: React.FC<FormProps> = ({ errors, formData }) => {
         <HankeDrawer
           onChangeGeometries={handleGeometriesChange}
           hankeTunnus={formData.hankeTunnus}
+          center={addressCoordinate}
         />
       </div>
 
