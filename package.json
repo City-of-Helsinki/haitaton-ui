@@ -5,12 +5,13 @@
   "scripts": {
     "react-spring-issue-1078": "find node_modules -path \\*@react-spring/\\*/package.json -exec sed -i.bak 's/\"sideEffects\": false/\"sideEffects\": true/g' {} +",
     "postinstall": "npm run react-spring-issue-1078",
-    "start": "PORT=3001 REACT_APP_DISABLE_SENTRY=1 react-scripts start",
+    "start": "REACT_APP_DISABLE_SENTRY=1 yarn run update-runtime-env && PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "serve": "ws --spa index.html -d build -p 3001'",
     "serve-local": "ws --spa index.html -d build -p 3001 --rewrite '/api/(.*) -> http://localhost:3000/$1' --rewrite '/auth/(.*) -> http://localhost:3030/auth/$1'",
     "build-and-serve": "yarn run build && yarn run serve",
-    "test": "DEBUG_PRINT_LIMIT=50000 react-scripts test --env=jest-environment-jsdom-sixteen",
+    "update-runtime-env": "ts-node -P ./scripts/tsconfig.json --files scripts/update-runtime-env.ts",
+    "test": "TEST=true yarn run update-runtime-env && DEBUG_PRINT_LIMIT=50000 react-scripts test --env=jest-environment-jsdom-sixteen",
     "testCI": "CI=true react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
     "type-check": "tsc --pretty --noEmit",
@@ -111,7 +112,8 @@
     "prettier-eslint": "^12.0.0",
     "start-server-and-test": "^1.12.0",
     "stylelint": "^13.7.2",
-    "stylelint-config-standard": "^20.0.0"
+    "stylelint-config-standard": "^20.0.0",
+    "ts-node": "^8.8.2"
   },
   "resolutions": {
     "immer": "8.0.2",
