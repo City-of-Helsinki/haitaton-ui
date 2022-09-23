@@ -107,14 +107,14 @@ const HankeForm: React.FC<Props> = ({
       title: 'Perustiedot',
     },
     {
-      path: '/yhteystiedot',
-      element: <Form2 errors={errors} register={register} formData={formValues} />,
-      title: 'Yhteystiedot',
-    },
-    {
       path: '/alueet',
       element: <Form1 errors={errors} register={register} formData={formValues} />,
       title: 'Aluetiedot',
+    },
+    {
+      path: '/yhteystiedot',
+      element: <Form2 errors={errors} register={register} formData={formValues} />,
+      title: 'Yhteystiedot',
     },
   ];
 
