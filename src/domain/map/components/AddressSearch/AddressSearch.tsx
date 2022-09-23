@@ -15,7 +15,7 @@ type Address = {
 };
 
 const AddressSearch: React.FC<Props> = ({ onAddressSelect }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const suggestions = useRef([] as Address[]);
   const abortController = useRef(null as AbortController | null);
 
@@ -28,7 +28,13 @@ const AddressSearch: React.FC<Props> = ({ onAddressSelect }) => {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const suggestionItems: Address[] = data.features.map((feature: any) => {
-        let label = i18n.language === 'sv' ? feature.properties.gatan : feature.properties.katunimi;
+        // Use Finnish street name as a label if it seems that user was searching for that,
+        // otherwise use Swedish street name
+        let label = feature.properties.katunimi.toLowerCase().includes(searchValue.toLowerCase())
+          ? feature.properties.katunimi
+          : feature.properties.gatan;
+
+        // Append street number to label if it exists in the result
         if (feature.properties.osoitenumero_teksti) {
           label += ` ${feature.properties.osoitenumero_teksti}`;
         }
