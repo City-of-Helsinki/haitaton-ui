@@ -10,7 +10,7 @@ Sentry.init({
   integrations: [new Integrations.BrowserTracing()],
   tracesSampleRate:
     // no traces if not in prod or test
-    window._env_.REACT_APP_DISABLE_SENTRY ? 0.0 : 1.0,
+    window._env_.REACT_APP_DISABLE_SENTRY === '1' ? 0.0 : 1.0,
   environment: process.env.NODE_ENV,
 });
 
