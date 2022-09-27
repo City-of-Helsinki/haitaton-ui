@@ -24,6 +24,11 @@ You will also see any lint errors in the console.
 Launches the test runner in the interactive watch mode.<br />
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
+First, scripts generate environment variables to `public/test-env-config.js`
+with `scripts/update-runtime-env.ts`, which contains the actual used variables when running the app.
+App is not using create-react-app's default `process.env` way to refer of variables
+but `window._env_` object.
+
 ### 'yarn e2e'
 
 Runs E2E cypress tests
@@ -37,6 +42,22 @@ The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+## Environment variables
+
+Scripts generate first environment variables to `public/env-config.js` with
+`scripts/update-runtime-env.ts`, which contains the actual used variables when running the app. App
+is not using create-react-app's default `process.env` way to refer of variables but `window._env_`
+object.
+
+Note that running built application locally you need to generate also `public/env-config.js` file.
+It can be done with `yarn update-runtime-env`. By default, it's generated for development
+environment if no `NODE_ENV` is set.
+
+For docker, the scripts/env.sh is added to the pod. This is run when the pod starts, and it writes
+the env-config.js file, reading the values of the variables of the pod environment. It only
+processes variables mentioned in `.env`. If there's no value for a variable in the environment, the
+default value from `.env` is used.
 
 ## Learn More
 

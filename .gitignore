@@ -23,6 +23,10 @@ package-lock.json
 .env.production.local
 .eslintcache
 
+# Created environment files
+public/env-config.js
+public/test-env-config.js
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

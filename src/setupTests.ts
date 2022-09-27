@@ -12,3 +12,8 @@ const customGlobal: GlobalWithFetchMock = (global as unknown) as GlobalWithFetch
 customGlobal.fetch = require('jest-fetch-mock');
 
 customGlobal.fetchMock = customGlobal.fetch;
+
+jest.mock('./domain/auth/constants', () => {
+  jest.requireActual('../public/test-env-config');
+  return jest.requireActual('./domain/auth/constants');
+});
