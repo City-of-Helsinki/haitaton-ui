@@ -4,7 +4,8 @@ ENVDIR=${1:-.}
 TARGETDIR=${2:-.}
 
 #TODO: Debug prints
-echo $($whoami) ${ENVDIR} ${TARGETDIR}
+whoami
+echo ${ENVDIR} ${TARGETDIR}
 ls -al $TARGETDIR
 
 # Recreate config file
