@@ -10,8 +10,15 @@ WORKDIR /usr/share/nginx/html
 COPY ./scripts/env.sh /opt/env.sh
 COPY .env /opt/.env
 COPY package.json /opt/package.json
+
+RUN whoami
+
+USER root
+
 RUN chmod +x /opt/env.sh
 
 COPY .env .
+
+USER appuser
 
 CMD ["/bin/bash", "-c", "/opt/env.sh /opt /usr/share/nginx/html && nginx -g \"daemon off;\""]
