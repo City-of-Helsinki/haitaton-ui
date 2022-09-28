@@ -2,12 +2,6 @@
 
 ENVDIR=${1:-.}
 TARGETDIR=${2:-.}
-
-#TODO: Debug prints
-whoami
-echo ${ENVDIR} ${TARGETDIR}
-ls -al $TARGETDIR
-
 # Recreate config file
 rm -f $TARGETDIR/env-config.js
 touch $TARGETDIR/env-config.js

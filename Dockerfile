@@ -5,8 +5,6 @@ COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 WORKDIR /usr/share/nginx/html
 COPY .env .
 
-RUN whoami
-
 USER root
 
 RUN chgrp -R 0 /usr/share/nginx/html && \
@@ -17,9 +15,6 @@ RUN chgrp -R 0 /usr/share/nginx/html && \
 COPY ./scripts/env.sh /opt/env.sh
 COPY .env /opt/.env
 COPY package.json /opt/package.json
-
-RUN whoami
-
 RUN chmod +x /opt/env.sh
 
 CMD ["/bin/bash", "-c", "/opt/env.sh /opt /usr/share/nginx/html && nginx -g \"daemon off;\""]
