@@ -86,7 +86,7 @@ export const Contacts: React.FC = () => {
                       iconLeft={<IconPlusCircle />}
                       onClick={() => addContact(contactType)}
                     >
-                      Lisää toinen yhteyshenkilö
+                      {t('hankeForm:addContactButton')}
                     </Button>
                   ) : (
                     ''
@@ -97,7 +97,7 @@ export const Contacts: React.FC = () => {
                       iconLeft={<IconTrash />}
                       onClick={() => deleteContact(contactType, index)}
                     >
-                      Poista kontakti
+                      {t('hankeForm:removeContactButton')}
                     </Button>
                   ) : (
                     ''

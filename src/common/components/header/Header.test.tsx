@@ -1,14 +1,38 @@
 import React from 'react';
-import { cleanup, getByTestId } from '@testing-library/react';
+import { render, cleanup, screen } from '../../../testUtils/render';
 import Header from './Header';
-import { render } from '../../../testUtils/render';
+import useUser from '../../../domain/auth/useUser';
 
-afterEach(cleanup);
+const mockedUseUser = useUser as jest.Mock<any>;
+jest.mock('../../../domain/auth/useUser');
 
 describe('Header', () => {
-  test('it should have Finnish as default language', () => {
-    const { container } = render(<Header />);
-    expect(getByTestId(container, 'hankeLink')).toBeDefined();
-    expect(getByTestId(container, 'hankeLink')).toHaveTextContent('Luo uusi hanke');
+  beforeEach(() => {
+    const mockedUser = {
+      profile: {
+        name: 'Test User',
+      },
+    };
+    mockedUseUser.mockImplementation(() => ({ data: mockedUser }));
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+    cleanup();
+  });
+
+  test('it should render correct links', () => {
+    render(<Header />);
+
+    expect(screen.getByText('Hankkeet yleisillä alueilla')).toBeInTheDocument();
+    expect(screen.getByText('Luo uusi hanke')).toBeInTheDocument();
+    expect(screen.getByText('Omat hankkeet')).toBeInTheDocument();
+    expect(screen.getByText('Työohjeet')).toBeInTheDocument();
+  });
+
+  test('it should display user name', () => {
+    render(<Header />);
+
+    expect(screen.getAllByText('Test User')).toHaveLength(2);
   });
 });

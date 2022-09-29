@@ -31,6 +31,13 @@
         "toggle": "Sulje ja avaa valikko",
         "removeSelected": "Poista valittu",
         "clear": "Tyhjennä kenttä"
+      },
+      "searchInput": {
+        "placeholder": "Etsi osoitteella",
+        "searchButtonAriaLabel": "Hae"
+      },
+      "header": {
+        "skipToContentLabel": "Siirry pääsisältöön"
       }
     },
     "error": "Tapahtui virhe. Yritä uudestaan."
@@ -59,7 +66,7 @@
     },
     "HANKEPORTFOLIO": {
       "path": "/hankesalkku",
-      "headerLabel": "Hankesalkku",
+      "headerLabel": "Omat hankkeet",
       "meta": {
         "title": "Haitaton Beta - Hankesalkku"
       }
@@ -73,7 +80,7 @@
     },
     "MAP": {
       "path": "/map",
-      "headerLabel": "Kartta",
+      "headerLabel": "Hankkeet yleisillä alueilla",
       "meta": {
         "title": "Haitaton Beta - Kartta"
       }
@@ -132,6 +139,13 @@
       "headerLabel": "Lähdeviitteet",
       "meta": {
         "title": "Haitaton Beta - Lähdeviitteet"
+      }
+    },
+    "WORKINSTRUCTIONS": {
+      "path": "https://www.hel.fi/helsinki/fi/asuminen-ja-ymparisto/tontit/luvat/kaduilla-ja-puistoissa-tehtavat-tyot/",
+      "headerLabel": "Työohjeet",
+      "meta": {
+        "title": "Haitaton Beta - Työohjeet"
       }
     }
   },
@@ -223,6 +237,10 @@
     },
     "saveDraftButton": "Tallenna luonnos",
     "cancelButton": "Keskeytä",
+    "nextButton": "Seuraava",
+    "previousButton": "Edellinen",
+    "addContactButton": "Lisää yhteyshenkilö",
+    "removeContactButton": "Poista yhteyshenkilö",
     "insertFieldError": "Syötä kenttä",
     "savingSuccessHeader": "Luonnos tallennettu",
     "savingSuccessText": "Luonnos on tallennettu Hankelistalle",
@@ -322,11 +340,12 @@
     "indexesNotCalculated": "Haittaindeksejä ei ole laskettu."
   },
   "homepage": {
-    "pageTitle": "Tervetuloa Haitaton-asiointiportaaliin",
+    "pageTitle": "Tervetuloa Haitaton-palveluun",
+    "pageSubTitle": "Palvelu yleisille alueille sijoittuvien hankkeiden edistämiseen ja haittojen hallintaan",
     "hanke": {
-      "title": "Hanke",
-      "description": "Hankkeet toimivat hakemuskokonaisuuksina, joista pystyt seuraamaan hankkeeseen liittyvien hakemusten tilaa.",
-      "actionText": "Luo hanke"
+      "title": "Luo uusi hanke",
+      "description": "Luomalla Haitaton-hankkeen pystyt suunnittelemaan etukäteen yleisellä alueella tapahtuvaa työtä sekä tekemään hakemuksia, kuten johtoselvityksiä.",
+      "actionText": "Luo uusi hanke"
     },
     "hakemus": {
       "title": "Hakemus/Työvaihe",
@@ -344,9 +363,9 @@
       "actionText": "Luo ohjelmointihanke"
     },
     "hankesalkku": {
-      "title": "Hankesalkku",
-      "description": "Hankesalkusta näet hankkeet ja hakemukset jotka omistat tai olet valtuutettu näkemään.",
-      "actionText": "Avaa hankesalkku"
+      "title": "Omat hankkeet",
+      "description": "Omista hankkeista löydät aiemmin luomasi hankkeet ja hakemukset.",
+      "actionText": "Avaa omat hankkeet"
     },
     "hankelista": {
       "title": "Hankelista",
@@ -354,14 +373,19 @@
       "actionText": "Avaa hankelista"
     },
     "kartta": {
-      "title": "Kartta",
-      "description": "Kartalta näet halutulta aikaväliltä kaikki julkiset hankkeet ja niiden sijainnin.",
-      "actionText": "Avaa kartta"
+      "title": "Tutustu hankkeisiin",
+      "description": "Tutustu käynnissä oleviin ja tuleviin hankkeisiin yleisillä alueillakartalla tai listauksena.",
+      "actionText": "Tutustu hankkeisiin kartalla"
     },
     "tietoja_haitattomasta": {
       "title": "Tietoja Haitattomasta",
       "description": "Täältä löydät tarkempaa tietoa ilmoitusprosessista, sekä Haitattoman eri toiminnallisuuksista.",
       "actionText": "Lue lisää haitattomasta"
+    },
+    "ohjeet": {
+      "title": "Ohjeet",
+      "description": "Tutustu yleisten alueiden hankkeita koskeviin ohjeistuksiin.",
+      "actionText": "Tutustu ohjeisiin"
     }
   },
   "hankePortfolio": {

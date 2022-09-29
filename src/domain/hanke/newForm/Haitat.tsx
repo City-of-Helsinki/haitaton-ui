@@ -36,19 +36,30 @@ export const Haitat: React.FC = () => {
   const formik = useFormikContext<HakemusFormValues>();
   const haittaAlkuPvmIsDirty = useRef(false);
   const haittaLoppuPvmIsDirty = useRef(false);
+
+  const {
+    haittaAlkuPvm,
+    haittaLoppuPvm,
+    kaistaHaitta,
+    kaistaPituusHaitta,
+    meluHaitta,
+    polyHaitta,
+    tarinaHaitta,
+  } = formik.values;
+
   return (
     <Grid templateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap={10}>
       <DateInput
         id="haittaAlkuPvm"
         name="haittaAlkuPvm"
-        label="Haitan alkupäivämäärä"
+        label={t('hankeForm:labels:haittaAlkuPvm')}
         minDate={new Date()}
         onChange={(date: string) => {
           const convertedDateString = convertFinnishDate(date);
           if (convertedDateString.length > 0) {
             formik.setFieldValue(
               'haittaAlkuPvm',
-              toStartOfDayUTCISO(new Date(convertedDateString)) || ''
+              toStartOfDayUTCISO(new Date(convertedDateString))
             );
           }
           haittaAlkuPvmIsDirty.current = true;
@@ -58,25 +69,19 @@ export const Haitat: React.FC = () => {
             formik.handleBlur({ target: { name: 'haittaAlkuPvm' } });
           }
         }}
-        value={
-          !formik.values.haittaAlkuPvm
-            ? undefined
-            : formatToFinnishDate(formik.values.haittaAlkuPvm)
-        }
+        value={!haittaAlkuPvm ? undefined : formatToFinnishDate(haittaAlkuPvm)}
         required
+        disableConfirmation
       />
       <DateInput
         id="haittaLoppuPvm"
         name="haittaLoppuPvm"
-        label="Haitan loppupäivämäärä"
+        label={t('hankeForm:labels:haittaLoppuPvm')}
         minDate={new Date()}
         onChange={(date: string) => {
           const convertedDateString = convertFinnishDate(date);
           if (convertedDateString.length > 0) {
-            formik.setFieldValue(
-              'haittaLoppuPvm',
-              toEndOfDayUTCISO(new Date(convertedDateString)) || ''
-            );
+            formik.setFieldValue('haittaLoppuPvm', toEndOfDayUTCISO(new Date(convertedDateString)));
           }
           haittaLoppuPvmIsDirty.current = true;
         }}
@@ -85,17 +90,14 @@ export const Haitat: React.FC = () => {
             formik.handleBlur({ target: { name: 'haittaLoppuPvm' } });
           }
         }}
-        value={
-          !formik.values.haittaLoppuPvm
-            ? undefined
-            : formatToFinnishDate(formik.values.haittaLoppuPvm)
-        }
+        value={!haittaLoppuPvm ? undefined : formatToFinnishDate(haittaLoppuPvm)}
         required
+        disableConfirmation
       />
       <Select
         required
         id="kaistaHaitta"
-        label="Kaistahaitta"
+        label={t('hankeForm:labels:kaistaHaitta')}
         options={$enum(HANKE_KAISTAHAITTA).map((value) => ({
           value,
           label: t(`hanke:kaistaHaitta:${value}`),
@@ -103,11 +105,15 @@ export const Haitat: React.FC = () => {
         onChange={(option: Option) => {
           formik.setFieldValue('kaistaHaitta', option.value);
         }}
+        value={{
+          value: kaistaHaitta || '',
+          label: kaistaHaitta ? t(`hanke:kaistaHaitta:${kaistaHaitta}`) : '',
+        }}
       />
       <Select
         required
         id="kaistaPituusHaitta"
-        label="Kaistan pituushaitta"
+        label={t('hankeForm:labels:kaistaPituusHaitta')}
         options={$enum(HANKE_KAISTAPITUUSHAITTA).map((value) => ({
           value,
           label: t(`hanke:kaistaPituusHaitta:${value}`),
@@ -115,11 +121,15 @@ export const Haitat: React.FC = () => {
         onChange={(option: Option) => {
           formik.setFieldValue('kaistaPituusHaitta', option.value);
         }}
+        value={{
+          value: formik.values.kaistaPituusHaitta || '',
+          label: kaistaPituusHaitta ? t(`hanke:kaistaPituusHaitta:${kaistaPituusHaitta}`) : '',
+        }}
       />
       <Select
         required
         id="meluHaitta"
-        label="Meluhaitta"
+        label={t('hankeForm:labels:meluHaitta')}
         options={$enum(HANKE_MELUHAITTA).map((value) => ({
           value,
           label: t(`hanke:meluHaitta:${value}`),
@@ -127,11 +137,15 @@ export const Haitat: React.FC = () => {
         onChange={(option: Option) => {
           formik.setFieldValue('meluHaitta', option.value);
         }}
+        value={{
+          value: meluHaitta || '',
+          label: meluHaitta ? t(`hanke:meluHaitta:${meluHaitta}`) : '',
+        }}
       />
       <Select
         required
         id="polyHaitta"
-        label="Pölyhaitta"
+        label={t('hankeForm:labels:polyHaitta')}
         options={$enum(HANKE_POLYHAITTA).map((value) => ({
           value,
           label: t(`hanke:polyHaitta:${value}`),
@@ -139,17 +153,25 @@ export const Haitat: React.FC = () => {
         onChange={(option: Option) => {
           formik.setFieldValue('polyHaitta', option.value);
         }}
+        value={{
+          value: polyHaitta || '',
+          label: polyHaitta ? t(`hanke:polyHaitta:${polyHaitta}`) : '',
+        }}
       />
       <Select
         required
         id="tarinaHaitta"
-        label="Tärinähaitta"
+        label={t('hankeForm:labels:tarinaHaitta')}
         options={$enum(HANKE_TARINAHAITTA).map((value) => ({
           value,
           label: t(`hanke:tarinaHaitta:${value}`),
         }))}
         onChange={(option: Option) => {
           formik.setFieldValue('tarinaHaitta', option.value);
+        }}
+        value={{
+          value: tarinaHaitta || '',
+          label: tarinaHaitta ? t(`hanke:tarinaHaitta:${tarinaHaitta}`) : '',
         }}
       />
     </Grid>

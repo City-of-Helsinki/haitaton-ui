@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Notification, NotificationType } from 'hds-react';
 
 type Props = {
@@ -12,20 +12,29 @@ const NotificationComp: React.FC<Props> = ({
   typeProps,
   testId = 'notification',
   children,
-}) => (
-  <Notification
-    label={label}
-    position="top-right"
-    dismissible
-    autoClose
-    autoCloseDuration={2000}
-    closeButtonLabelText="Close toast"
-    type={typeProps}
-    style={{ zIndex: 100 }}
-    dataTestId={testId}
-  >
-    {children}
-  </Notification>
-);
+}) => {
+  const [open, setOpen] = useState(true);
+
+  if (open) {
+    return (
+      <Notification
+        label={label}
+        position="top-right"
+        dismissible
+        autoClose
+        autoCloseDuration={2000}
+        closeButtonLabelText="Close toast"
+        onClose={() => setOpen(false)}
+        type={typeProps}
+        style={{ zIndex: 100 }}
+        dataTestId={testId}
+      >
+        {children}
+      </Notification>
+    );
+  }
+
+  return null;
+};
 
 export default NotificationComp;

@@ -31,6 +31,13 @@
         "toggle": "EN:Sulje ja avaa valikko",
         "removeSelected": "EN:Poista valittu",
         "clear": "EN:Tyhjennä kenttä"
+      },
+      "searchInput": {
+        "placeholder": "EN:Etsi osoitteella",
+        "searchButtonAriaLabel": "EN:Hae"
+      },
+      "header": {
+        "skipToContentLabel": "EN:Siirry pääsisältöön"
       }
     },
     "error": "EN: Tapahtui virhe. Yritä uudestaan."
@@ -59,7 +66,7 @@
     },
     "HANKEPORTFOLIO": {
       "path": "/hankesalkku",
-      "headerLabel": "EN::Hankesalkku",
+      "headerLabel": "EN:Omat hankkeet",
       "meta": {
         "title": "EN::Haitaton Beta - Hankesalkku"
       }
@@ -73,7 +80,7 @@
     },
     "MAP": {
       "path": "/map",
-      "headerLabel": "EN::Kartta",
+      "headerLabel": "EN:Hankkeet yleisillä alueilla",
       "meta": {
         "title": "EN::Haitaton Beta - Kartta"
       }
@@ -132,6 +139,13 @@
       "headerLabel": "EN: Lähdeviitteet",
       "meta": {
         "title": "EN: Haitaton Beta - Lähdeviitteet"
+      }
+    },
+    "WORKINSTRUCTIONS": {
+      "path": "https://www.hel.fi/helsinki/en/housing/plots-land-buildings/permits-for-public-areas/working-on-streets-and-in-parks",
+      "headerLabel": "EN:Työohjeet",
+      "meta": {
+        "title": "EN:Haitaton Beta - Työohjeet"
       }
     }
   },
@@ -223,6 +237,10 @@
     },
     "saveDraftButton": "EN:Tallenna luonnos",
     "cancelButton": "EN:Keskeytä",
+    "nextButton": "EN:Seuraava",
+    "previousButton": "EN:Edellinen",
+    "addContactButton": "EN:Lisää yhteyshenkilö",
+    "removeContactButton": "EN:Poista yhteyshenkilö",
     "insertFieldError": "EN:Syötä kenttä",
     "savingSuccessHeader": "EN:Luonnos tallennettu",
     "savingSuccessText": "EN:Luonnos on tallennettu Hankelistalle",
@@ -322,11 +340,12 @@
     "indexesNotCalculated": "EN: Haittaindeksejä ei ole laskettu."
   },
   "homepage": {
-    "pageTitle": "EN: Tervetuloa Haitaton-asiointiportaaliin",
+    "pageTitle": "EN: Tervetuloa Haitaton-palveluun",
+    "pageSubTitle": "EN: Palvelu yleisille alueille sijoittuvien hankkeiden edistämiseen ja haittojen hallintaan",
     "hanke": {
-      "title": "EN: Hanke",
-      "description": "EN: Hankkeet toimivat hakemuskokonaisuuksina, joista pystyt seuraamaan hankkeeseen liittyvien hakemusten tilaa.",
-      "actionText": "EN: Luo hanke"
+      "title": "EN: Luo uusi hanke",
+      "description": "EN: Luomalla Haitaton-hankkeen pystyt suunnittelemaan etukäteen yleisellä alueella tapahtuvaa työtä sekä tekemään hakemuksia, kuten johtoselvityksiä.",
+      "actionText": "EN: Luo uusi hanke"
     },
     "hakemus": {
       "title": "EN: Hakemus/Työvaihe",
@@ -344,9 +363,9 @@
       "actionText": "EN: Luo ohjelmointihanke"
     },
     "hankesalkku": {
-      "title": "EN: Hankesalkku",
-      "description": "EN: Hankesalkusta näet hankkeet ja hakemukset jotka omistat tai olet valtuutettu näkemään.",
-      "actionText": "EN: Avaa hankesalkku"
+      "title": "EN: Omat hankkeet",
+      "description": "EN: Omista hankkeista löydät aiemmin luomasi hankkeet ja hakemukset.",
+      "actionText": "EN: Avaa omat hankkeet"
     },
     "hankelista": {
       "title": "EN: Hankelista",
@@ -354,14 +373,19 @@
       "actionText": "EN: Avaa hankelista"
     },
     "kartta": {
-      "title": "EN: Kartta",
-      "description": "EN: Kartalta näet halutulta aikaväliltä kaikki julkiset hankkeet ja niiden sijainnin.",
-      "actionText": "EN: Avaa kartta"
+      "title": "EN: Tutustu hankkeisiin",
+      "description": "EN: Tutustu käynnissä oleviin ja tuleviin hankkeisiin yleisillä alueillakartalla tai listauksena.",
+      "actionText": "EN: Tutustu hankkeisiin kartalla"
     },
     "tietoja_haitattomasta": {
       "title": "EN: Tietoja Haitattomasta",
       "description": "EN: Täältä löydät tarkempaa tietoa ilmoitusprosessista, sekä Haitattoman eri toiminnallisuuksista.",
       "actionText": "EN: Lue lisää haitattomasta"
+    },
+    "ohjeet": {
+      "title": "EN: Ohjeet",
+      "description": "EN: Tutustu yleisten alueiden hankkeita koskeviin ohjeistuksiin.",
+      "actionText": "EN: Tutustu ohjeisiin"
     }
   },
   "hankePortfolio": {

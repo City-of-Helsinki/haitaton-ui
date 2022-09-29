@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from 'hds-react';
+import { useTranslation } from 'react-i18next';
 import styles from './NavigationButtons.module.scss';
 
 interface ButtonProps {
@@ -9,6 +10,8 @@ interface ButtonProps {
 }
 
 const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, onPageChange }) => {
+  const { t } = useTranslation();
+
   return (
     <div className={styles.navigationButtons}>
       <Button
@@ -18,7 +21,7 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, onPa
           onPageChange(`${previousPath}`);
         }}
       >
-        Edellinen
+        {t('hankeForm:previousButton')}
       </Button>
 
       {nextPath && (
@@ -28,7 +31,7 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, onPa
             onPageChange(`${nextPath}`);
           }}
         >
-          Seuraava
+          {t('hankeForm:nextButton')}
         </Button>
       )}
       {!nextPath && ( // Final page reached, provide an action to save

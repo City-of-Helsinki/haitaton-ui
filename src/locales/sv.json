@@ -31,6 +31,13 @@
         "toggle": "SV:Sulje ja avaa valikko",
         "removeSelected": "SV:Poista valittu",
         "clear": "SV:Tyhjennä kenttä"
+      },
+      "searchInput": {
+        "placeholder": "SV:Etsi osoitteella",
+        "searchButtonAriaLabel": "SV:Hae"
+      },
+      "header": {
+        "skipToContentLabel": "SV:Siirry pääsisältöön"
       }
     },
     "error": "SV: Tapahtui virhe. Yritä uudestaan."
@@ -66,14 +73,14 @@
     },
     "HANKEPORTFOLIO": {
       "path": "/hankesalkku",
-      "headerLabel": "SV::Hankesalkku",
+      "headerLabel": "SV:Omat hankkeet",
       "meta": {
         "title": "SV::Haitaton Beta - Hankesalkku"
       }
     },
     "MAP": {
       "path": "/map",
-      "headerLabel": "SV::Kartta",
+      "headerLabel": "SV:Hankkeet yleisillä alueilla",
       "meta": {
         "title": "SV::Haitaton Beta - Kartta"
       }
@@ -132,6 +139,13 @@
       "headerLabel": "SV: Lähdeviitteet",
       "meta": {
         "title": "SV: Haitaton Beta - Lähdeviitteet"
+      }
+    },
+    "WORKINSTRUCTIONS": {
+      "path": "https://www.hel.fi/helsinki/sv/boende-och-miljo/tomter/tillstond-for-allmanna-omraden/arbete-pa-gatu-eller-parkomraden",
+      "headerLabel": "SV:Työohjeet",
+      "meta": {
+        "title": "SV:Haitaton Beta - Työohjeet"
       }
     }
   },
@@ -223,6 +237,10 @@
     },
     "saveDraftButton": "SV:Tallenna luonnos",
     "cancelButton": "SV:Keskeytä",
+    "nextButton": "SV:Seuraava",
+    "previousButton": "SV:Edellinen",
+    "addContactButton": "SV:Lisää yhteyshenkilö",
+    "removeContactButton": "SV:Poista yhteyshenkilö",
     "insertFieldError": "SV:Syötä kenttä",
     "savingSuccessHeader": "SV:Luonnos tallennettu",
     "savingSuccessText": "SV:Luonnos on tallennettu Hankelistalle",
@@ -322,11 +340,12 @@
     "indexesNotCalculated": "SV: Haittaindeksejä ei ole laskettu."
   },
   "homepage": {
-    "pageTitle": "SV: Tervetuloa Haitaton-asiointiportaaliin",
+    "pageTitle": "SV: Tervetuloa Haitaton-palveluun",
+    "pageSubTitle": "SV: Palvelu yleisille alueille sijoittuvien hankkeiden edistämiseen ja haittojen hallintaan",
     "hanke": {
-      "title": "SV: Hanke",
-      "description": "SV: Hankkeet toimivat hakemuskokonaisuuksina, joista pystyt seuraamaan hankkeeseen liittyvien hakemusten tilaa.",
-      "actionText": "SV: Luo hanke"
+      "title": "SV: Luo uusi hanke",
+      "description": "SV: Luomalla Haitaton-hankkeen pystyt suunnittelemaan etukäteen yleisellä alueella tapahtuvaa työtä sekä tekemään hakemuksia, kuten johtoselvityksiä.",
+      "actionText": "SV: Luo uusi hanke"
     },
     "hakemus": {
       "title": "SV: Hakemus/Työvaihe",
@@ -344,9 +363,9 @@
       "actionText": "SV: Luo ohjelmointihanke"
     },
     "hankesalkku": {
-      "title": "SV: Hankesalkku",
-      "description": "SV: Hankesalkusta näet hankkeet ja hakemukset jotka omistat tai olet valtuutettu näkemään.",
-      "actionText": "SV: Avaa hankesalkku"
+      "title": "SV: Omat hankkeet",
+      "description": "SV: Omista hankkeista löydät aiemmin luomasi hankkeet ja hakemukset.",
+      "actionText": "SV: Avaa omat hankkeet"
     },
     "hankelista": {
       "title": "SV: Hankelista",
@@ -354,14 +373,19 @@
       "actionText": "SV: Avaa hankelista"
     },
     "kartta": {
-      "title": "SV: Kartta",
-      "description": "SV: Kartalta näet halutulta aikaväliltä kaikki julkiset hankkeet ja niiden sijainnin.",
-      "actionText": "SV: Avaa kartta"
+      "title": "SV: Tutustu hankkeisiin",
+      "description": "SV: Tutustu käynnissä oleviin ja tuleviin hankkeisiin yleisillä alueillakartalla tai listauksena.",
+      "actionText": "SV: Tutustu hankkeisiin kartalla"
     },
     "tietoja_haitattomasta": {
       "title": "SV: Tietoja Haitattomasta",
       "description": "SV: Täältä löydät tarkempaa tietoa ilmoitusprosessista, sekä Haitattoman eri toiminnallisuuksista.",
       "actionText": "SV: Lue lisää haitattomasta"
+    },
+    "ohjeet": {
+      "title": "SV: Ohjeet",
+      "description": "SV: Tutustu yleisten alueiden hankkeita koskeviin ohjeistuksiin.",
+      "actionText": "SV: Tutustu ohjeisiin"
     }
   },
   "hankePortfolio": {

@@ -17,7 +17,8 @@ import GeometryHover from '../../common/components/map/interactions/hover/Geomet
 import HankeHoverBox from './components/HankeHover/HankeHoverBox';
 import MapGuide from './components/MapGuide/MapGuide';
 import HankkeetProvider from './HankkeetProvider';
-import MapControl from '../../common/components/map/controls/MapControl';
+import OverviewMapControl from '../../common/components/map/controls/OverviewMapControl';
+import AddressSearchContainer from './components/AddressSearch/AddressSearchContainer';
 
 const HankeMap: React.FC = () => {
   const [zoom] = useState(9); // TODO: also take zoom into consideration
@@ -38,10 +39,12 @@ const HankeMap: React.FC = () => {
       >
         <h1 className={styles.allyHeader}>Karttasivu</h1> {/* For a11y */}
         <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
+          <AddressSearchContainer position={{ top: '1rem', left: 150 }} />
+
           <MapGuide />
           {mapTileLayers.ortokartta.visible && <Ortokartta />}
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
-          <MapControl />
+          <OverviewMapControl />
 
           <HankkeetProvider>
             <HankeSidebar />
