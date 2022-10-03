@@ -8,10 +8,16 @@ import CircleSelected from '../../../common/components/icons/CircleSelected';
 type PropTypes = {
   formPageLabels: string[];
   currentLabel: string;
+  isFormValid?: boolean;
   onPageChange: (pageIndex: number) => void;
 };
 
-const FormPagination: React.FC<PropTypes> = ({ formPageLabels, currentLabel, onPageChange }) => {
+const FormPagination: React.FC<PropTypes> = ({
+  formPageLabels,
+  currentLabel,
+  isFormValid,
+  onPageChange,
+}) => {
   const { t } = useTranslation();
 
   return (
@@ -54,6 +60,7 @@ const FormPagination: React.FC<PropTypes> = ({ formPageLabels, currentLabel, onP
           <Button
             variant="secondary"
             size="small"
+            disabled={!isFormValid}
             className={`${styles.navButton} ${
               currentLabel === formPageLabels[formPageLabels.length - 1] ? styles.hiddenButton : ''
             }`}

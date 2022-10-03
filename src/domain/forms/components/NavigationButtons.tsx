@@ -6,10 +6,16 @@ import styles from './NavigationButtons.module.scss';
 interface ButtonProps {
   nextPath?: string;
   previousPath?: string;
+  isFormValid?: boolean;
   onPageChange: (path: string) => void;
 }
 
-const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, onPageChange }) => {
+const NavigationButtons: React.FC<ButtonProps> = ({
+  nextPath,
+  previousPath,
+  isFormValid,
+  onPageChange,
+}) => {
   const { t } = useTranslation();
 
   return (
@@ -27,6 +33,7 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, onPa
       {nextPath && (
         <Button
           variant="secondary"
+          disabled={!isFormValid}
           onClick={() => {
             onPageChange(`${nextPath}`);
           }}
@@ -36,6 +43,7 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath, onPa
       )}
       {!nextPath && ( // Final page reached, provide an action to save
         <Button
+          disabled={!isFormValid}
           onClick={async () => {
             onPageChange(''); // TODO: navigate to hanke on map with a localized link
           }}

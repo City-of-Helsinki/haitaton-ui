@@ -15,19 +15,22 @@ type PropTypes = {
 
 const TextInput: React.FC<PropTypes> = ({ name, label, disabled, tooltip, required }) => {
   const { t } = useTranslation();
-  const { control, errors } = useFormContext();
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
 
   return (
     <Controller
       name={name}
       control={control}
       defaultValue=""
-      render={({ onChange, onBlur, value }) => (
+      render={({ field: { onChange, onBlur, value } }) => (
         <HdsTextInput
           id={name}
           name={name}
           label={label || t(`hankeForm:labels:${name}`)}
-          value={value}
+          value={value || ''}
           helperText={getInputErrorText(t, errors, name)}
           invalid={!!errors[name]}
           onBlur={onBlur}

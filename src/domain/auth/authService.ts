@@ -63,9 +63,9 @@ export class AuthService {
     try {
       return this.userManager.signinRedirect({ data: { path } });
     } catch (error) {
-      if (error.message !== 'Network Error') {
+      if ((<Error>error).message !== 'Network Error') {
         // eslint-disable-next-line no-console
-        console.error(error.message);
+        console.error((<Error>error).message);
       }
       return Promise.reject(new Error('Unkonwn error'));
     }

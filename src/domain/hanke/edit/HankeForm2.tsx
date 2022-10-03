@@ -2,9 +2,9 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import { useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
-import { useTypedController } from '@hookform/strictly-typed';
 import { TextInput, Tooltip } from 'hds-react';
-import { CONTACT_FORMFIELD, FormProps, HankeDataFormState, Organization } from './types';
+import { Controller } from 'react-hook-form';
+import { CONTACT_FORMFIELD, FormProps, Organization } from './types';
 import { HANKE_CONTACT_TYPE, HankeContactKey } from '../../types/hanke';
 import api from '../../api/api';
 import { getInputErrorText } from '../../../common/utils/form';
@@ -33,13 +33,12 @@ const isRequired = (type: HankeContactKey, field: string) =>
 const fetchOrganizations = async () => api.get<Organization[]>('/organisaatiot');
 
 // eslint-disable-next-line
-const getArrayFieldErrors = (errors: Record<string, Array<any>>, name: string) =>
+const getArrayFieldErrors = (errors: Record<string, any>, name: string) =>
   errors && errors[name] && errors[name][0] ? errors[name][0] : {};
 
-const Form2: React.FC<FormProps> = ({ control, formData, errors, register }) => {
+const Form2: React.FC<FormProps> = ({ formData, errors, register }) => {
   useFormPage();
   const { t } = useTranslation();
-  const TypedController = useTypedController<HankeDataFormState>({ control });
 
   const { data: organizationList } = useQuery('organisationList', fetchOrganizations, {
     refetchOnMount: false,
@@ -68,17 +67,17 @@ const Form2: React.FC<FormProps> = ({ control, formData, errors, register }) => 
             {CONTACT_FIELDS.map((contactField) => {
               const contactData = formData[contactType][contactIndex];
               const asteriskIfRequired = isRequired(contactType, contactField) ? ' *' : '';
+              const fieldName = `${contactType}.${contactIndex}.${contactField}`;
               return (
                 <React.Fragment key={contactField}>
-                  <TypedController
-                    name={[contactType, contactIndex, contactField]}
+                  <Controller
+                    name={fieldName}
                     defaultValue={contactData ? contactData[contactField] : ''}
-                    render={(props) => (
+                    render={({ field }) => (
                       <TextInput
                         className="formItem"
                         label={t(`hankeForm:labels:${contactField}`) + asteriskIfRequired}
                         id={`${contactType}-${contactField}`}
-                        ref={register}
                         data-testid={`${contactType}-${contactField}`}
                         helperText={getInputErrorText(
                           t,
@@ -86,7 +85,8 @@ const Form2: React.FC<FormProps> = ({ control, formData, errors, register }) => 
                           contactField
                         )}
                         invalid={!!getArrayFieldErrors(errors, contactType)[contactField]}
-                        {...props}
+                        {...register(fieldName)}
+                        {...field}
                       />
                     )}
                   />

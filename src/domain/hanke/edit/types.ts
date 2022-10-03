@@ -1,6 +1,6 @@
-import { FieldErrors, Control } from 'react-hook-form';
+import { FieldErrors } from 'react-hook-form';
 import { PartialExcept } from '../../../common/types/utils';
-import { HankeData, HankeContactKey } from '../../types/hanke';
+import { HankeData, HankeContactKey, HankeGeometria } from '../../types/hanke';
 
 export type FormNotification = 'ok' | 'success' | 'error' | null;
 
@@ -27,6 +27,7 @@ export enum FORMFIELD {
   TOTEUTTAJAT = 'toteuttajat',
   YKT_HANKE = 'onYKTHanke',
   GEOMETRIES_CHANGED = 'geometriesChanged',
+  GEOMETRIAT = 'geometriat',
 }
 
 export enum CONTACT_FORMFIELD {
@@ -41,12 +42,12 @@ export enum CONTACT_FORMFIELD {
 }
 export interface HankeDataFormState extends PartialExcept<HankeData, HankeContactKey> {
   geometriesChanged?: boolean; // "virtualField"
+  geometriat?: HankeGeometria | null;
 }
 
 export interface FormProps {
   formData: HankeDataFormState;
   errors: FieldErrors;
-  control: Control;
   // eslint-disable-next-line
   register: any;
 }

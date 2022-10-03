@@ -24,11 +24,13 @@ export const filterEmptyContacts = (hankeData: HankeDataFormState): HankeDataFor
     hankeData[FORMFIELD.TOTEUTTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
 });
 
-export const convertHankeDataToFormState = (hankeData: HankeDataDraft): HankeDataFormState => ({
+export const convertHankeDataToFormState = (
+  hankeData: HankeDataDraft | undefined
+): HankeDataFormState => ({
   ...hankeData,
-  omistajat: hankeData.omistajat ? hankeData.omistajat : [],
-  arvioijat: hankeData.arvioijat ? hankeData.arvioijat : [],
-  toteuttajat: hankeData.toteuttajat ? hankeData.toteuttajat : [],
+  omistajat: hankeData?.omistajat ? hankeData.omistajat : [],
+  arvioijat: hankeData?.arvioijat ? hankeData.arvioijat : [],
+  toteuttajat: hankeData?.toteuttajat ? hankeData.toteuttajat : [],
 });
 
 export const isHankeEditingDisabled = ({ alkuPvm }: HankeDataDraft | HankeDataFormState) => {
