@@ -7,12 +7,19 @@ import authService from '../../../domain/auth/authService';
 import useUser from '../../../domain/auth/useUser';
 
 const Header: React.FC = () => {
-  const { HOME, MAP, HANKEPORTFOLIO, NEW_HANKE } = useLocalizedRoutes();
+  const {
+    HOME,
+    PUBLIC_HANKKEET,
+    PUBLIC_HANKKEET_MAP,
+    HANKEPORTFOLIO,
+    NEW_HANKE,
+  } = useLocalizedRoutes();
   const { t } = useTranslation();
   const { data: user } = useUser();
+  const isAuthenticated = Boolean(user?.profile);
 
   const isMapPath = useMatch({
-    path: MAP.path,
+    path: PUBLIC_HANKKEET.path,
     end: false,
   });
   const isNewHankePath = useMatch({
@@ -33,33 +40,39 @@ const Header: React.FC = () => {
       titleUrl={HOME.path}
       className="header"
     >
-      <Navigation.Row>
-        <Navigation.Item as={NavLink} to={MAP.path} active={Boolean(isMapPath)}>
-          {MAP.label}
-        </Navigation.Item>
-        <Navigation.Item
-          as={NavLink}
-          to={NEW_HANKE.path}
-          active={Boolean(isNewHankePath)}
-          data-testid="hankeLink"
-        >
-          {NEW_HANKE.label}
-        </Navigation.Item>
-        <Navigation.Item
-          as={NavLink}
-          to={HANKEPORTFOLIO.path}
-          active={Boolean(isHankePortfolioPath)}
-          data-testid="hankeListLink"
-        >
-          {HANKEPORTFOLIO.label}
-        </Navigation.Item>
-        <Navigation.Item href={t('routes:WORKINSTRUCTIONS:path')} target="_blank" rel="noreferrer">
-          {t('routes:WORKINSTRUCTIONS:headerLabel')}
-        </Navigation.Item>
-      </Navigation.Row>
+      {isAuthenticated && (
+        <Navigation.Row>
+          <Navigation.Item as={NavLink} to={PUBLIC_HANKKEET_MAP.path} active={Boolean(isMapPath)}>
+            {PUBLIC_HANKKEET.label}
+          </Navigation.Item>
+          <Navigation.Item
+            as={NavLink}
+            to={NEW_HANKE.path}
+            active={Boolean(isNewHankePath)}
+            data-testid="hankeLink"
+          >
+            {NEW_HANKE.label}
+          </Navigation.Item>
+          <Navigation.Item
+            as={NavLink}
+            to={HANKEPORTFOLIO.path}
+            active={Boolean(isHankePortfolioPath)}
+            data-testid="hankeListLink"
+          >
+            {HANKEPORTFOLIO.label}
+          </Navigation.Item>
+          <Navigation.Item
+            href={t('routes:WORKINSTRUCTIONS:path')}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {t('routes:WORKINSTRUCTIONS:headerLabel')}
+          </Navigation.Item>
+        </Navigation.Row>
+      )}
       <Navigation.Actions>
         <Navigation.User
-          authenticated={Boolean(user?.profile)}
+          authenticated={isAuthenticated}
           onSignIn={authService.login}
           label={t('authentication:loginButton')}
           userName={user?.profile?.name}

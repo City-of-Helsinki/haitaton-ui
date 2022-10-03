@@ -1,7 +1,7 @@
 import React from 'react';
-import { cleanup, waitFor, getByTestId } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { render, cleanup, screen } from '../../../testUtils/render';
 import HankeList from './HankeListComponent';
-import { render } from '../../../testUtils/render';
 import hankeDraftList from '../../mocks/hankeDraftList';
 
 afterEach(cleanup);
@@ -10,32 +10,54 @@ jest.setTimeout(10000);
 
 describe('HankeLista', () => {
   test('Sorting test', async () => {
-    const { container, queryByText } = render(<HankeList projectsData={hankeDraftList} />);
+    render(<HankeList projectsData={hankeDraftList} />);
 
-    await waitFor(() => queryByText('Hankelista'));
-    getByTestId(container, 'tableHeaderButton1').click();
-    expect(getByTestId(container, 'row0_cell_name')).toHaveTextContent('Hanke 1');
-    getByTestId(container, 'tableHeaderButton2').click();
-    expect(getByTestId(container, 'row0_cell_step')).toHaveTextContent('OHJELMOINTI');
-    getByTestId(container, 'tableHeaderButton3').click();
-    expect(getByTestId(container, 'row0_cell_startDate')).toHaveTextContent('23.11.2020');
-    getByTestId(container, 'tableHeaderButton4').click();
-    getByTestId(container, 'tableHeaderButton4').click();
-    expect(getByTestId(container, 'row0_cell_endDate')).toHaveTextContent('05.12.2020');
+    const user = userEvent.setup();
+
+    await user.click(screen.getByTestId('hds-table-sorting-header-nimi'));
+    expect(screen.getByTestId('nimi-0')).toHaveTextContent('Hanke 1');
+    await user.click(screen.getByTestId('hds-table-sorting-header-vaihe'));
+    expect(screen.getByTestId('vaihe-0')).toHaveTextContent('OHJELMOINTI');
+    await user.click(screen.getByTestId('hds-table-sorting-header-vaihe'));
+    expect(screen.getByTestId('vaihe-0')).toHaveTextContent('SUUNNITTELU');
+    expect(screen.getByTestId('vaihe-2')).toHaveTextContent('RAKENTAMINEN');
+    await user.click(screen.getByTestId('hds-table-sorting-header-alkuPvm'));
+    expect(screen.getByTestId('alkuPvm-0')).toHaveTextContent('23.11.2020');
+    await user.click(screen.getByTestId('hds-table-sorting-header-loppuPvm'));
+    await user.click(screen.getByTestId('hds-table-sorting-header-loppuPvm'));
+    expect(screen.getByTestId('loppuPvm-0')).toHaveTextContent('05.12.2020');
   });
-  test('pagination test', async () => {
-    const { container, queryAllByText } = render(<HankeList projectsData={hankeDraftList} />);
 
-    expect(getByTestId(container, 'amountOfPages')).toHaveTextContent('2');
-    getByTestId(container, 'toEnd').click();
-    expect(getByTestId(container, 'currentPage')).toHaveTextContent('2');
-    getByTestId(container, 'backward').click();
-    expect(getByTestId(container, 'currentPage')).toHaveTextContent('1');
-    getByTestId(container, 'forward').click();
-    expect(getByTestId(container, 'currentPage')).toHaveTextContent('2');
-    getByTestId(container, 'toBeginning').click();
-    expect(getByTestId(container, 'currentPage')).toHaveTextContent('1');
-    getByTestId(container, 'toFormLink').click();
-    await waitFor(() => queryAllByText('Hankkeen perustiedot')[1]);
+  test('pagination test', async () => {
+    render(<HankeList projectsData={hankeDraftList} />);
+
+    const user = userEvent.setup();
+
+    expect(screen.getByTestId('hds-pagination-page-1')).toHaveTextContent('1');
+    expect(screen.getByTestId('hds-pagination-page-2')).toHaveTextContent('2');
+
+    expect(screen.getByTestId('hds-pagination-previous-button')).toBeDisabled();
+    expect(screen.getByText('Hanke 1')).toBeInTheDocument();
+    expect(screen.getByText('Hanke 2')).toBeInTheDocument();
+    expect(screen.getByText('Hanke 3')).toBeInTheDocument();
+    expect(screen.getByText('Hanke 4')).toBeInTheDocument();
+    expect(screen.getByText('Hanke 5')).toBeInTheDocument();
+    expect(screen.getByText('Hanke 6')).toBeInTheDocument();
+    expect(screen.getByText('Hanke 7')).toBeInTheDocument();
+    expect(screen.getByText('Hanke 8')).toBeInTheDocument();
+
+    await user.click(screen.getByTestId('hds-pagination-next-button'));
+
+    expect(screen.getByText('Hanke 9')).toBeInTheDocument();
+    expect(screen.getByText('Hanke 10')).toBeInTheDocument();
+    expect(screen.getByText('Hanke 11')).toBeInTheDocument();
+    expect(screen.getByTestId('hds-pagination-next-button')).toBeDisabled();
+  });
+
+  test('renders link to hanke in map when there is geometry data', () => {
+    render(<HankeList projectsData={hankeDraftList} />);
+
+    expect(screen.getByRole('link', { name: 'HANKE_2' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'HANKE_1' })).not.toBeInTheDocument();
   });
 });

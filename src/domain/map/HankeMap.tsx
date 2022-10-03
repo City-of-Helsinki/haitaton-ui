@@ -32,14 +32,10 @@ const HankeMap: React.FC = () => {
 
   return (
     <>
-      <div
-        className={styles.mapContainer}
-        style={{ width: '100%', height: '100%', position: 'absolute' }}
-        id="hankemap"
-      >
+      <div className={styles.mapContainer} id="hankemap">
         <h1 className={styles.allyHeader}>Karttasivu</h1> {/* For a11y */}
         <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
-          <AddressSearchContainer position={{ top: '1rem', left: 150 }} />
+          <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} />
 
           <MapGuide />
           {mapTileLayers.ortokartta.visible && <Ortokartta />}
@@ -72,6 +68,7 @@ const HankeMap: React.FC = () => {
         </Map>
       </div>
     </>
+    // </div>
   );
 };
 

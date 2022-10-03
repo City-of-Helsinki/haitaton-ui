@@ -11,13 +11,17 @@ const startDateLabel = 'Ajanjakson alku';
 const endDateLabel = 'Ajanjakson loppu';
 const countOfFilteredHankkeet = 'countOfFilteredHankkeet';
 
+jest.setTimeout(10000);
+
 describe('HankeMap', () => {
   test('Render test', async () => {
     render(<HankeMap />);
 
+    const user = userEvent.setup();
+
     expect(screen.getByLabelText('Ortokartta')).not.toBeChecked();
     expect(screen.getByLabelText('Kantakartta')).toBeChecked();
-    userEvent.click(screen.getByText('Ortokartta'));
+    await user.click(screen.getByText('Ortokartta'));
     expect(screen.getByLabelText('Ortokartta')).toBeChecked();
     expect(screen.getByLabelText('Kantakartta')).not.toBeChecked();
   });
