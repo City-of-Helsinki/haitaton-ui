@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Checkbox, Tooltip, TextArea } from 'hds-react';
+import { Tooltip, TextArea } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { useFormContext } from 'react-hook-form';
 import DatePicker from '../../../common/components/datePicker/DatePicker';
@@ -18,16 +18,16 @@ import { useFormPage } from './hooks/useFormPage';
 import EditDisabledNotification from './components/EditDisabledNotification';
 import useLocale from '../../../common/hooks/useLocale';
 import DropdownMultiselect from '../../../common/components/dropdown/DropdownMultiselect';
+import Checkbox from '../../../common/components/checkbox/Checkbox';
 
-const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => {
+const Form0: React.FC<FormProps> = ({ errors, register, formData }) => {
   const { t } = useTranslation();
   const locale = useLocale();
-  const [ytkChecked, setYtkChecked] = useState(formData[FORMFIELD.YKT_HANKE] || false);
   const { watch } = useFormContext();
   useFormPage();
 
   // Subscribe to vaihe changes
-  const watchFields = watch([FORMFIELD.VAIHE]);
+  const hankeVaiheField = watch(FORMFIELD.VAIHE);
 
   return (
     <div className="form0">
@@ -44,13 +44,14 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
         <TextInput name={FORMFIELD.NIMI} required />
       </div>
       <div className="formWpr">
+        {/* TODO: Should there be a wrapper component for this as well? */}
         <TextArea
           id={FORMFIELD.KUVAUS}
           name={FORMFIELD.KUVAUS}
           label={t(`hankeForm:labels:${FORMFIELD.KUVAUS}`)}
           defaultValue={formData[FORMFIELD.KUVAUS] || ''}
           invalid={!!errors[FORMFIELD.KUVAUS]}
-          ref={register()}
+          {...register(FORMFIELD.KUVAUS)}
           data-testid={FORMFIELD.KUVAUS}
           required
         />
@@ -97,7 +98,6 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             <DropdownMultiselect
               name={FORMFIELD.TYOMAATYYPPI}
               id={FORMFIELD.TYOMAATYYPPI}
-              control={control}
               options={$enum(HANKE_TYOMAATYYPPI).map((value) => ({
                 value,
                 label: t(`hanke:${FORMFIELD.TYOMAATYYPPI}:${value}`),
@@ -112,7 +112,6 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
             <Dropdown
               name={FORMFIELD.TYOMAAKOKO}
               id={FORMFIELD.TYOMAAKOKO}
-              control={control}
               options={$enum(HANKE_TYOMAAKOKO).map((value) => ({
                 value,
                 label: t(`hanke:${FORMFIELD.TYOMAAKOKO}:${value}`),
@@ -129,7 +128,6 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
         <Dropdown
           id={FORMFIELD.VAIHE}
           name={FORMFIELD.VAIHE}
-          control={control}
           options={$enum(HANKE_VAIHE).map((value) => ({
             value,
             label: t(`hanke:vaihe:${value}`),
@@ -150,7 +148,6 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
         <Dropdown
           id={FORMFIELD.SUUNNITTELUVAIHE}
           name={FORMFIELD.SUUNNITTELUVAIHE}
-          control={control}
           options={$enum(HANKE_SUUNNITTELUVAIHE).map((value) => ({
             value,
             label: t(`hanke:suunnitteluVaihe:${value}`),
@@ -159,8 +156,8 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
           label={t(`hankeForm:labels:${FORMFIELD.SUUNNITTELUVAIHE}`)}
           invalid={!!errors[FORMFIELD.SUUNNITTELUVAIHE]}
           errorMsg={t('hankeForm:insertFieldError')}
-          disabled={watchFields[FORMFIELD.VAIHE] !== HANKE_VAIHE.SUUNNITTELU}
-          required={watchFields[FORMFIELD.VAIHE] === HANKE_VAIHE.SUUNNITTELU}
+          disabled={hankeVaiheField !== HANKE_VAIHE.SUUNNITTELU}
+          required={hankeVaiheField === HANKE_VAIHE.SUUNNITTELU}
         />
       </div>
       <div className="formWpr">
@@ -176,10 +173,7 @@ const Form0: React.FC<FormProps> = ({ control, errors, register, formData }) => 
           id={FORMFIELD.YKT_HANKE}
           name={FORMFIELD.YKT_HANKE}
           label={t(`hankeForm:labels:${FORMFIELD.YKT_HANKE}`)}
-          ref={register}
-          checked={ytkChecked}
-          onChange={() => setYtkChecked(!ytkChecked)}
-          data-testid={FORMFIELD.YKT_HANKE}
+          rules={{ required: true }}
         />
       </div>
     </div>

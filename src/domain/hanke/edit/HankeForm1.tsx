@@ -1,8 +1,9 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Accordion } from 'hds-react';
 import { $enum } from 'ts-enum-util';
+import { Coordinate } from 'ol/coordinate';
 import HankeDrawer from '../../map/components/HankeDrawer/HankeDrawerContainer';
 import Text from '../../../common/components/text/Text';
 import { useFormPage } from './hooks/useFormPage';
@@ -17,29 +18,36 @@ import {
   HANKE_POLYHAITTA,
   HANKE_TARINAHAITTA,
 } from '../../types/hanke';
+import { HankeGeoJSON } from '../../../common/types/hanke';
+import { doAddressSearch } from '../../map/utils';
 
-const Form1: React.FC<FormProps> = ({ control, errors, formData }) => {
+const Form1: React.FC<FormProps> = ({ errors, formData }) => {
   const { t } = useTranslation();
   const locale = useLocale();
   const instructions = t('hankeForm:hankkeenAlueForm:instructions').split('\n');
-  const { setValue, register, unregister } = useFormContext();
+  const { setValue } = useFormContext();
   const hankeAlkuPvm = formData[FORMFIELD.ALKU_PVM];
   const hankeLoppuPvm = formData[FORMFIELD.LOPPU_PVM];
   const hankeAlkuDate = hankeAlkuPvm ? new Date(hankeAlkuPvm) : undefined;
   const hankeLoppuDate = hankeLoppuPvm ? new Date(hankeLoppuPvm) : undefined;
+  const [addressCoordinate, setAddressCoordinate] = useState<Coordinate | undefined>();
   useFormPage();
 
-  useEffect(() => {
-    register({ name: FORMFIELD.GEOMETRIES_CHANGED, type: 'custom' });
-    return () => {
-      setValue(FORMFIELD.GEOMETRIES_CHANGED, false);
-      unregister(FORMFIELD.GEOMETRIES_CHANGED);
-    };
-  }, [register]);
+  const handleGeometriesChange = useCallback(
+    (geometry: HankeGeoJSON) => {
+      setValue(FORMFIELD.GEOMETRIES_CHANGED, true, { shouldDirty: true });
+      setValue(FORMFIELD.GEOMETRIAT, geometry);
+    },
+    [setValue]
+  );
 
-  const handleGeometriesChange = useCallback(() => {
-    setValue(FORMFIELD.GEOMETRIES_CHANGED, true, { shouldDirty: true });
-  }, []);
+  useEffect(() => {
+    if (formData.tyomaaKatuosoite) {
+      doAddressSearch(formData.tyomaaKatuosoite).then(({ data }) => {
+        setAddressCoordinate(data.features[0]?.geometry.coordinates);
+      });
+    }
+  }, [formData.tyomaaKatuosoite]);
 
   return (
     <div className="form1">
@@ -63,6 +71,7 @@ const Form1: React.FC<FormProps> = ({ control, errors, formData }) => {
         <HankeDrawer
           onChangeGeometries={handleGeometriesChange}
           hankeTunnus={formData.hankeTunnus}
+          center={addressCoordinate}
         />
       </div>
 
@@ -100,7 +109,6 @@ const Form1: React.FC<FormProps> = ({ control, errors, formData }) => {
           <Dropdown
             name={FORMFIELD.KAISTAHAITTA}
             id={FORMFIELD.KAISTAHAITTA}
-            control={control}
             options={$enum(HANKE_KAISTAHAITTA).map((value) => ({
               value,
               label: t(`hanke:${FORMFIELD.KAISTAHAITTA}:${value}`),
@@ -122,7 +130,6 @@ const Form1: React.FC<FormProps> = ({ control, errors, formData }) => {
           <Dropdown
             name={FORMFIELD.KAISTAPITUUSHAITTA}
             id={FORMFIELD.KAISTAPITUUSHAITTA}
-            control={control}
             options={$enum(HANKE_KAISTAPITUUSHAITTA).map((value) => ({
               value,
               label: t(`hanke:${FORMFIELD.KAISTAPITUUSHAITTA}:${value}`),
@@ -139,7 +146,6 @@ const Form1: React.FC<FormProps> = ({ control, errors, formData }) => {
           <Dropdown
             name={FORMFIELD.MELUHAITTA}
             id={FORMFIELD.MELUHAITTA}
-            control={control}
             options={$enum(HANKE_MELUHAITTA).map((value) => ({
               value,
               label: t(`hanke:${FORMFIELD.MELUHAITTA}:${value}`),
@@ -155,7 +161,6 @@ const Form1: React.FC<FormProps> = ({ control, errors, formData }) => {
           <Dropdown
             name={FORMFIELD.POLYHAITTA}
             id={FORMFIELD.POLYHAITTA}
-            control={control}
             options={$enum(HANKE_POLYHAITTA).map((value) => ({
               value,
               label: t(`hanke:${FORMFIELD.POLYHAITTA}:${value}`),
@@ -171,7 +176,6 @@ const Form1: React.FC<FormProps> = ({ control, errors, formData }) => {
           <Dropdown
             name={FORMFIELD.TARINAHAITTA}
             id={FORMFIELD.TARINAHAITTA}
-            control={control}
             options={$enum(HANKE_TARINAHAITTA).map((value) => ({
               value,
               label: t(`hanke:${FORMFIELD.TARINAHAITTA}:${value}`),

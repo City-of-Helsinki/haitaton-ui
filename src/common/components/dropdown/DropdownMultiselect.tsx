@@ -1,5 +1,5 @@
 import React from 'react';
-import { Controller, Control } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { Combobox, Tooltip } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 
@@ -12,7 +12,6 @@ type Option = { value: string; label: string };
 type PropTypes = {
   name: string;
   id: string;
-  control: Control;
   rules?: { required: boolean };
   defaultValue: string[];
   label: string;
@@ -24,8 +23,6 @@ type PropTypes = {
 
 const DropdownMultiselect: React.FC<PropTypes> = ({
   name,
-  id,
-  control,
   rules,
   options,
   defaultValue,
@@ -35,6 +32,8 @@ const DropdownMultiselect: React.FC<PropTypes> = ({
   tooltip,
 }) => {
   const { t } = useTranslation();
+  const { control } = useFormContext();
+
   return (
     <div className="dropdownComp">
       {!!tooltip && (
@@ -45,11 +44,10 @@ const DropdownMultiselect: React.FC<PropTypes> = ({
 
       <Controller
         name={name}
-        id={id}
         control={control}
         defaultValue={defaultValue}
         rules={rules}
-        render={({ onChange, value }) => {
+        render={({ field: { onChange, value } }) => {
           return (
             <Combobox<Option>
               options={options}

@@ -6,11 +6,11 @@ import App from './common/components/app/App';
 import './locales/i18n';
 
 Sentry.init({
-  dsn: process.env.REACT_APP_SENTRY_DSN,
+  dsn: window._env_.REACT_APP_SENTRY_DSN,
   integrations: [new Integrations.BrowserTracing()],
   tracesSampleRate:
     // no traces if not in prod or test
-    process.env.REACT_APP_DISABLE_SENTRY ? 0.0 : 1.0,
+    window._env_.REACT_APP_DISABLE_SENTRY === '1' ? 0.0 : 1.0,
   environment: process.env.NODE_ENV,
 });
 
@@ -32,6 +32,13 @@ if (process.env.NODE_ENV !== 'production') {
     </React.StrictMode>,
     document.getElementById('root')
   );
+}
+
+declare global {
+  interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    _env_: any;
+  }
 }
 
 // If you want your app to work offline and load faster, you can change

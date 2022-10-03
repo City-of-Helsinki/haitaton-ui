@@ -63,11 +63,11 @@ describe('OrganizationSelect inputs can be controlled with props and isOmaOrgani
         />
       </HankeFormTestContainer>
     );
-    expect(getByTestId(`${contactType}-${index}-isOmaOrganisaatio`)).not.toBeChecked();
-    getByTestId(`${contactType}-${index}-isOmaOrganisaatio`).click();
-    expect(getByTestId(`${contactType}-${index}-isOmaOrganisaatio`)).toBeChecked();
+    expect(getByTestId(`${contactType}.${index}.isOmaOrganisaatio`)).not.toBeChecked();
+    getByTestId(`${contactType}.${index}.isOmaOrganisaatio`).click();
+    expect(getByTestId(`${contactType}.${index}.isOmaOrganisaatio`)).toBeChecked();
     expect(getAllByLabelText('Organisaatio')[0]).toBeDisabled();
-    expect(getByTestId(`${contactType}-${index}-organisaatioNimi`)).not.toBeDisabled();
+    expect(getByTestId(`${contactType}.${index}.organisaatioNimi`)).not.toBeDisabled();
   });
 
   test('checking omaOrganisaatio should clear inputs correctly', async () => {
@@ -92,16 +92,16 @@ describe('OrganizationSelect inputs can be controlled with props and isOmaOrgani
     queryAllByText('Foo')[0].click();
     expect(getAllByLabelText('Organisaatio')[0]).toHaveValue('Foo');
 
-    getByTestId(`${contactType}-${index}-isOmaOrganisaatio`).click();
+    getByTestId(`${contactType}.${index}.isOmaOrganisaatio`).click();
 
     expect(getAllByLabelText('Organisaatio')[0]).toHaveValue('');
 
-    fireEvent.change(getByTestId(`${contactType}-${index}-organisaatioNimi`), {
+    fireEvent.change(getByTestId(`${contactType}.${index}.organisaatioNimi`), {
       target: { value: 'Oma' },
     });
-    expect(getByTestId(`${contactType}-${index}-organisaatioNimi`)).toHaveValue('Oma');
-    getByTestId(`${contactType}-${index}-isOmaOrganisaatio`).click();
-    expect(getByTestId(`${contactType}-${index}-organisaatioNimi`)).toHaveValue('');
+    expect(getByTestId(`${contactType}.${index}.organisaatioNimi`)).toHaveValue('Oma');
+    getByTestId(`${contactType}.${index}.isOmaOrganisaatio`).click();
+    expect(getByTestId(`${contactType}.${index}.organisaatioNimi`)).toHaveValue('');
     expect(getAllByLabelText('Organisaatio')[0]).toHaveValue('');
   });
 
@@ -152,6 +152,6 @@ describe('OrganizationSelect inputs can be controlled with props and isOmaOrgani
       </HankeFormTestContainer>
     );
 
-    expect(getByTestId(`${contactType}-${index}-organisaatioNimi`)).toHaveValue('Oma');
+    expect(getByTestId(`${contactType}.${index}.organisaatioNimi`)).toHaveValue('Oma');
   });
 });

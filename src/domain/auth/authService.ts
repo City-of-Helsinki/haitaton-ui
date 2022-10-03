@@ -10,11 +10,11 @@ export class AuthService {
     const settings: UserManagerSettings = {
       automaticSilentRenew: true,
       userStore: new WebStorageStateStore({ store: window.localStorage }),
-      authority: process.env.REACT_APP_OIDC_AUTHORITY,
-      client_id: process.env.REACT_APP_OIDC_CLIENT_ID,
+      authority: window._env_.REACT_APP_OIDC_AUTHORITY,
+      client_id: window._env_.REACT_APP_OIDC_CLIENT_ID,
       redirect_uri: `${origin}${LOGIN_CALLBACK_PATH}`,
       response_type: 'code',
-      scope: process.env.REACT_APP_OIDC_SCOPE,
+      scope: window._env_.REACT_APP_OIDC_SCOPE,
       post_logout_redirect_uri: `${origin}/`,
     };
 
@@ -63,9 +63,9 @@ export class AuthService {
     try {
       return this.userManager.signinRedirect({ data: { path } });
     } catch (error) {
-      if (error.message !== 'Network Error') {
+      if ((<Error>error).message !== 'Network Error') {
         // eslint-disable-next-line no-console
-        console.error(error.message);
+        console.error((<Error>error).message);
       }
       return Promise.reject(new Error('Unkonwn error'));
     }

@@ -1,23 +1,22 @@
 import React from 'react';
-import { useFormikContext } from 'formik';
 import { Button, IconCross, IconSaveDiskette, IconTrash } from 'hds-react';
 import { useTranslation } from 'react-i18next';
-import { HakemusFormValues } from '../../hanke/newForm/types';
 import styles from './FormActions.module.scss';
 
 interface Props extends React.HTMLProps<HTMLDivElement> {
+  showDelete?: boolean;
+  isFormValid?: boolean;
   onDelete: () => void;
   onClose: () => void;
   onSave: () => void;
 }
 
-const FormActions: React.FC<Props> = ({ onDelete, onClose, onSave }) => {
+const FormActions: React.FC<Props> = ({ showDelete, isFormValid, onDelete, onClose, onSave }) => {
   const { t } = useTranslation();
-  const { values } = useFormikContext<HakemusFormValues>();
 
   return (
     <div className={styles.actions}>
-      {values.hankeTunnus && (
+      {showDelete && (
         <Button
           className={styles.deleteHankeBtn}
           variant="supplementary"
@@ -35,7 +34,13 @@ const FormActions: React.FC<Props> = ({ onDelete, onClose, onSave }) => {
       >
         {t('hankeForm:cancelButton')}
       </Button>
-      <Button theme="coat" iconLeft={<IconSaveDiskette aria-hidden="true" />} onClick={onSave}>
+      <Button
+        disabled={!isFormValid}
+        theme="coat"
+        iconLeft={<IconSaveDiskette aria-hidden="true" />}
+        onClick={onSave}
+        data-testid="save-form-btn"
+      >
         {t('hankeForm:saveDraftButton')}
       </Button>
     </div>

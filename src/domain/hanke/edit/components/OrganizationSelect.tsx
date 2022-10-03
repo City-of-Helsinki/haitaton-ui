@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { TextInput, Checkbox } from 'hds-react';
-import { useTypedController } from '@hookform/strictly-typed';
 import Autocomplete, { Option } from '../../../../common/components/autocomplete/Autocomplete';
 import { HankeContactKey, HankeContact } from '../../../types/hanke';
-import { HankeDataFormState, Organization } from '../types';
+import { Organization } from '../types';
 
 type Props = {
   contactType: HankeContactKey;
@@ -22,9 +21,8 @@ const OrganizationSelect: React.FC<Props> = ({
 }) => {
   const [isOwn, setIsOwn] = useState(isOwnOrganization);
   const { t } = useTranslation();
-  const { setValue, watch, register, control } = useFormContext();
-  const TypedController = useTypedController<HankeDataFormState>({ control });
-  const contactData: HankeContact | undefined = watch(`${contactType}[${index}]`);
+  const { setValue, watch, register } = useFormContext();
+  const contactData: HankeContact | null = watch(`${contactType}.${index}`);
 
   useEffect(() => {
     // Clear selections when changing from selected to own
@@ -32,7 +30,7 @@ const OrganizationSelect: React.FC<Props> = ({
       setValue(`${contactType}[${index}].organisaatioId`, null);
       setValue(`${contactType}[${index}].organisaatioNimi`, '');
     }
-  }, [isOwn]);
+  }, [isOwn, contactType, index, contactData, setValue]);
 
   if (!contactData) {
     return null;
@@ -69,25 +67,24 @@ const OrganizationSelect: React.FC<Props> = ({
         }}
       />
       <Checkbox
-        id={`${contactType}-${index}-isOmaOrganisaatio`}
+        id={`${contactType}.${index}.isOmaOrganisaatio`}
         label={t(`hankeForm:labels:omaOrganisaatio`)}
         checked={isOwn}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           setIsOwn(e.target.checked);
         }}
-        data-testid={`${contactType}-${index}-isOmaOrganisaatio`}
+        data-testid={`${contactType}.${index}.isOmaOrganisaatio`}
       />
-      <TypedController
-        name={[contactType, index, 'organisaatioNimi']}
+      <Controller
+        name={`${contactType}.${index}.organisaatioNimi`}
         defaultValue={isOwn ? contactData.organisaatioNimi : ''}
-        render={({ value, onChange }) => (
+        render={({ field: { value, onChange } }) => (
           <TextInput
             className="formItem"
+            {...register(`${contactType}.${index}.organisaatioNimi`)}
             label={t(`hankeForm:labels:insertOmaOrganisaatio`)}
-            id={`${contactType}-${index}-organisaatioNimi`}
-            name={`${contactType}-${index}-organisaatioNimi`}
-            data-testid={`${contactType}-${index}-organisaatioNimi`}
-            ref={register}
+            id={`${contactType}.${index}.organisaatioNimi`}
+            data-testid={`${contactType}.${index}.organisaatioNimi`}
             disabled={!isOwn}
             value={isOwn ? value : ''}
             onChange={onChange}
