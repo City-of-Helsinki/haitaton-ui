@@ -25,6 +25,7 @@ module.exports = {
     'react/jsx-props-no-spreading': 'off',
     'import/prefer-default-export': 'off',
     'react-hooks/exhaustive-deps': 'off',
+    'no-underscore-dangle': ['error', { allow: ['__typename', '_env_'] }],
     'jsx-a11y/label-has-associated-control': [
       'warn',
       {
