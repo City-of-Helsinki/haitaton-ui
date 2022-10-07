@@ -55,7 +55,7 @@ const HankeForm: React.FC<Props> = ({
 }) => {
   const [showNotification, setShowNotification] = useState<FormNotification | null>(null);
   const formContext = useForm<HankeDataFormState>({
-    mode: 'all',
+    mode: 'onTouched',
     reValidateMode: 'onChange',
     criteriaMode: 'all',
     shouldFocusError: false,

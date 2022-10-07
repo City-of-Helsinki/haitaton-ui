@@ -75,8 +75,6 @@ const Form0: React.FC<FormProps> = ({ errors, register, formData }) => {
           <DatePicker
             name={FORMFIELD.ALKU_PVM}
             label={t(`hankeForm:labels:${FORMFIELD.ALKU_PVM}`)}
-            dateFormat="dd.MM.yyyy"
-            defaultValue={formData[FORMFIELD.ALKU_PVM] || null}
             locale={locale}
             required
           />
@@ -85,8 +83,6 @@ const Form0: React.FC<FormProps> = ({ errors, register, formData }) => {
           <DatePicker
             name={FORMFIELD.LOPPU_PVM}
             label={t(`hankeForm:labels:${FORMFIELD.LOPPU_PVM}`)}
-            dateFormat="dd.MM.yyyy"
-            defaultValue={formData[FORMFIELD.LOPPU_PVM] || null}
             locale={locale}
             required
           />

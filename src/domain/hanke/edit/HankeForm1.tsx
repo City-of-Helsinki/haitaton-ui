@@ -83,8 +83,6 @@ const Form1: React.FC<FormProps> = ({ errors, formData }) => {
             <DatePicker
               name={FORMFIELD.HAITTA_ALKU_PVM}
               label={t(`hankeForm:labels:${FORMFIELD.HAITTA_ALKU_PVM}`)}
-              dateFormat="dd.MM.yyyy"
-              defaultValue={formData[FORMFIELD.ALKU_PVM]}
               locale={locale}
               required
               minDate={hankeAlkuDate}
@@ -95,8 +93,6 @@ const Form1: React.FC<FormProps> = ({ errors, formData }) => {
             <DatePicker
               name={FORMFIELD.HAITTA_LOPPU_PVM}
               label={t(`hankeForm:labels:${FORMFIELD.HAITTA_LOPPU_PVM}`)}
-              dateFormat="dd.MM.yyyy"
-              defaultValue={formData[FORMFIELD.LOPPU_PVM]}
               locale={locale}
               required
               minDate={hankeAlkuDate}
