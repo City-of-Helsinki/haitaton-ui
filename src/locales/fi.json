@@ -61,91 +61,112 @@
       "path": "/",
       "headerLabel": "Alkuun",
       "meta": {
-        "title": "Haitaton Beta - Etusivu"
+        "title": "Haitaton - Etusivu"
       }
     },
     "HANKEPORTFOLIO": {
       "path": "/hankesalkku",
       "headerLabel": "Omat hankkeet",
       "meta": {
-        "title": "Haitaton Beta - Hankesalkku"
+        "title": "Haitaton - Hankesalkku"
+      }
+    },
+    "PUBLIC_HANKKEET": {
+      "path": "/julkisethankkeet",
+      "headerLabel": "Hankkeet yleisillä alueilla",
+      "meta": {
+        "title": "Haitaton - Hankkeet yleisillä alueilla"
+      }
+    },
+    "PUBLIC_HANKKEET_MAP": {
+      "path": "/julkisethankkeet/kartta",
+      "headerLabel": "Hankkeet yleisillä alueilla",
+      "meta": {
+        "title": "Haitaton - Hankkeet yleisillä alueilla"
+      }
+    },
+    "PUBLIC_HANKKEET_LIST": {
+      "path": "/julkisethankkeet/hankelista",
+      "headerLabel": "Hankkeet yleisillä alueilla",
+      "meta": {
+        "title": "Haitaton - Hankelista"
       }
     },
     "PROJECTS": {
-      "path": "/hankelista",
+      "path": "hankelista",
       "headerLabel": "Hankelista",
       "meta": {
-        "title": "Haitaton Beta - Hankelista"
+        "title": "Haitaton - Hankelista"
       }
     },
     "MAP": {
-      "path": "/map",
+      "path": "kartta",
       "headerLabel": "Hankkeet yleisillä alueilla",
       "meta": {
-        "title": "Haitaton Beta - Kartta"
+        "title": "Haitaton - Kartta"
       }
     },
     "NEW_HANKE": {
       "path": "/hanke/uusi",
       "headerLabel": "Luo uusi hanke",
       "meta": {
-        "title": "Haitaton Beta - Luo uusi hanke"
+        "title": "Haitaton - Luo uusi hanke"
       }
     },
     "EDIT_HANKE": {
       "path": "/hanke/:hankeTunnus/muokkaa",
       "headerLabel": "Hanke",
       "meta": {
-        "title": "Haitaton Beta - Hankkeen muokkaus"
+        "title": "Haitaton - Hankkeen muokkaus"
       }
     },
     "HAKEMUS": {
       "path": "/hakemus/*",
       "headerLabel": "Luo uusi hakemus",
       "meta": {
-        "title": "Haitaton Beta - Luo uusi hakemus"
+        "title": "Haitaton - Luo uusi hakemus"
       }
     },
     "JOHTOSELVITYSHAKEMUS": {
       "path": "/johtoselvityshakemus/*",
       "headerLabel": "Luo uusi johtoselvityshakemus",
       "meta": {
-        "title": "Haitaton Beta - Luo uusi johtoselvityshakemus"
+        "title": "Haitaton - Luo uusi johtoselvityshakemus"
       }
     },
     "HAITATON_INFO": {
       "path": "/tietoja",
       "headerLabel": "Tietoja Haitattomasta",
       "meta": {
-        "title": "Haitaton Beta - Info"
+        "title": "Haitaton - Info"
       }
     },
     "ACCESSIBILITY": {
       "path": "/saavutettavuusseloste",
       "headerLabel": "Saavutettavuusseloste",
       "meta": {
-        "title": "Haitaton Beta - Saavutettavuus"
+        "title": "Haitaton - Saavutettavuus"
       }
     },
     "PRIVACY_POLICY": {
       "path": "/rekisteriseloste",
       "headerLabel": "Rekisteriseloste",
       "meta": {
-        "title": "Haitaton Beta - Rekisteriseloste"
+        "title": "Haitaton - Rekisteriseloste"
       }
     },
     "REFERENCES": {
       "path": "/lahdeviitteet",
       "headerLabel": "Lähdeviitteet",
       "meta": {
-        "title": "Haitaton Beta - Lähdeviitteet"
+        "title": "Haitaton - Lähdeviitteet"
       }
     },
     "WORKINSTRUCTIONS": {
       "path": "https://www.hel.fi/helsinki/fi/asuminen-ja-ymparisto/tontit/luvat/kaduilla-ja-puistoissa-tehtavat-tyot/",
       "headerLabel": "Työohjeet",
       "meta": {
-        "title": "Haitaton Beta - Työohjeet"
+        "title": "Haitaton - Työohjeet"
       }
     }
   },
@@ -288,7 +309,7 @@
       "onYKTHanke": "Yhteinen kunnallistekninen työmaa – yhteistoimintasopimuksen mukainen yhteishanke. Osapuolia ovat Helsingin kaupungin kaupunkiympäristön toimialan lisäksi Helsingin kaupungin liikenne -liikelaitos (HKL), Helsingin seudun ympäristöpalvelut -kuntayhtymä HSY,  Helen Oy, Helen Sähköverkko Oy, Auris Kaasunjakelu Oy sekä viestintäverkko operaattorit Cinia Oy, DNA Oyj, Elisa Oyj ja Telia Finland Oyj. YKT -yhteistoiminnalla pyritään sujuvoittamaan kaupungissa tapahtuvaa yleisten alueiden rakentamista ja sovittamaan sopijaosapuolten erillishankkeet yhteisesti toteutettaviksi, infrapalvelujen laatua ja tarjontaa parantaviksi hankkeiksi.",
       "alkuPvm": "Hankkeen toteutuksen aloituspäivä (Huom! Yleisellä alueella tapahtuva toteutus, ei esimerkiksi tontin puolella tapahtuva toteutus)",
       "loppuPvm": "Hankkeen toteutuksen lopetuspäivä (Huom! Yleisellä alueella tapahtuva toteutus, ei esimerkiksi tontin puolella tapahtuva toteutus)",
-      "vaihe": "Hankkeen etenemisen tilan kuvaus, jota päivitetään hankkeen edetessä. Ohjelmointivaihe on alustava hankesuunnittelu- tai esisuunnitteluvaihe. Suunnitteluvaiheessa on alavaiheita suunnittelutason tarkkuuden mukaan. Luvanhakuprosessin kannalta hanke on suunnitteluvaiheessa niin kauan, kunnes se saa toteutusluvan kaupungilta. Rakentamisvaiheessa hanke on saanut luvan kaupungilta. Haitaton Beta ei käsittele luvanhaun, rakentamisvaiheen tai hankkeen valmistumisen/ylläpidon/luovutuksen vaiheita.",
+      "vaihe": "Hankkeen etenemisen tilan kuvaus, jota päivitetään hankkeen edetessä. Ohjelmointivaihe on alustava hankesuunnittelu- tai esisuunnitteluvaihe. Suunnitteluvaiheessa on alavaiheita suunnittelutason tarkkuuden mukaan. Luvanhakuprosessin kannalta hanke on suunnitteluvaiheessa niin kauan, kunnes se saa toteutusluvan kaupungilta. Rakentamisvaiheessa hanke on saanut luvan kaupungilta. Haitaton ei käsittele luvanhaun, rakentamisvaiheen tai hankkeen valmistumisen/ylläpidon/luovutuksen vaiheita.",
       "kuvaus": "Hankkeen keskeisen sisällön ja tavoitteiden kuvaus. (Huom! Yleisellä alueella tapahtuva toteutus, ei esimerkiksi tontin puolella tapahtuva toteutus)",
       "suunnitteluVaihe": "Suunnitteluvaihetta tarkentava alavaihe, jota päivitetään hankkeen edetessä.",
       "omistajat": "Hankkeen omistaja vastaa koko hankkeesta sen alusta aina loppumiseen / valmistumiseen / luovutukseen asti.",
@@ -341,7 +362,10 @@
   },
   "homepage": {
     "pageTitle": "Tervetuloa Haitaton-palveluun",
-    "pageSubTitle": "Palvelu yleisille alueille sijoittuvien hankkeiden edistämiseen ja haittojen hallintaan",
+    "pageSubTitle_loggedIn": "Palvelu yleisille alueille sijoittuvien hankkeiden edistämiseen ja haittojen hallintaan",
+    "pageSubTitle": "Palvelu yleisille alueille sijoittuvien hankkeiden ja niiden haittojen seurantaan ",
+    "info": "Haitaton-palvelussa pääset tutustumaan kaikkiin yleisillä alueilla käynnissä oleviin ja tuleviin hankkeisiin sekä antamaan niille palautetta. Voit tarkastella hankkeita kartalla tai listalla. Oletko perustamassa hanketta tai tekemässä hakemuksia?",
+    "info_link": "Siirry Haitaton-asiointiin",
     "hanke": {
       "title": "Luo uusi hanke",
       "description": "Luomalla Haitaton-hankkeen pystyt suunnittelemaan etukäteen yleisellä alueella tapahtuvaa työtä sekä tekemään hakemuksia, kuten johtoselvityksiä.",
@@ -368,13 +392,18 @@
       "actionText": "Avaa omat hankkeet"
     },
     "hankelista": {
-      "title": "Hankelista",
-      "description": "Hankelistasta näet kaikki julkiset hankkeet.",
+      "title": "Hankkeet listana",
+      "description": "Tutustu käynnissä oleviin ja tuleviin hankkeisiin listauksena.",
       "actionText": "Avaa hankelista"
     },
     "kartta": {
       "title": "Tutustu hankkeisiin",
-      "description": "Tutustu käynnissä oleviin ja tuleviin hankkeisiin yleisillä alueillakartalla tai listauksena.",
+      "description": "Tutustu käynnissä oleviin ja tuleviin hankkeisiin yleisillä alueilla kartalla tai listauksena.",
+      "actionText": "Tutustu hankkeisiin kartalla"
+    },
+    "kartta_kirjautumaton": {
+      "title": "Hankkeet kartalla",
+      "description": "Tutustu käynnissä oleviin ja tuleviin hankkeisiin kartalla",
       "actionText": "Tutustu hankkeisiin kartalla"
     },
     "tietoja_haitattomasta": {
@@ -428,9 +457,16 @@
       "puhelin": "Puhelin"
     }
   },
+  "publicHankkeet": {
+    "buttons": {
+      "map": "Kartta",
+      "list": "Lista"
+    }
+  },
   "hankeList": {
     "pageHeader": "Hankelista",
     "paginationHeader": "Sivu",
+    "paginatioAriaLabel": "Sivutus",
     "tableHeader": {
       "id": "Tunnus",
       "name": "Nimi",

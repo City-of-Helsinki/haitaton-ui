@@ -31,47 +31,41 @@ const HankeMap: React.FC = () => {
   } = useDateRangeFilter();
 
   return (
-    <>
-      <div
-        className={styles.mapContainer}
-        style={{ width: '100%', height: '100%', position: 'absolute' }}
-        id="hankemap"
-      >
-        <h1 className={styles.allyHeader}>Karttasivu</h1> {/* For a11y */}
-        <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
-          <AddressSearchContainer position={{ top: '1rem', left: 150 }} />
+    <div className={styles.mapContainer} id="hankemap">
+      <h1 className={styles.allyHeader}>Karttasivu</h1> {/* For a11y */}
+      <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
+        <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} />
 
-          <MapGuide />
-          {mapTileLayers.ortokartta.visible && <Ortokartta />}
-          {mapTileLayers.kantakartta.visible && <Kantakartta />}
-          <OverviewMapControl />
+        <MapGuide />
+        {mapTileLayers.ortokartta.visible && <Ortokartta />}
+        {mapTileLayers.kantakartta.visible && <Kantakartta />}
+        <OverviewMapControl />
 
-          <HankkeetProvider>
-            <HankeSidebar />
-            <FeatureClick />
-            <GeometryHover>
-              <HankeHoverBox />
-              <HankeLayer />
-            </GeometryHover>
-          </HankkeetProvider>
+        <HankkeetProvider>
+          <HankeSidebar />
+          <FeatureClick />
+          <GeometryHover>
+            <HankeHoverBox />
+            <HankeLayer />
+          </GeometryHover>
+        </HankkeetProvider>
 
-          <Controls>
-            <ControlPanel className={styles.dateRangeControl}>
-              <DateRangeControl
-                startDate={hankeFilterStartDate}
-                updateStartDate={setHankeFilterStartDate}
-                endDate={hankeFilterEndDate}
-                updateEndDate={setHankeFilterEndDate}
-              />
-            </ControlPanel>
-            <LayerControl
-              tileLayers={Object.values(mapTileLayers)}
-              onClickTileLayer={(id: MapTileLayerId) => toggleMapTileLayer(id)}
+        <Controls>
+          <ControlPanel className={styles.dateRangeControl}>
+            <DateRangeControl
+              startDate={hankeFilterStartDate}
+              updateStartDate={setHankeFilterStartDate}
+              endDate={hankeFilterEndDate}
+              updateEndDate={setHankeFilterEndDate}
             />
-          </Controls>
-        </Map>
-      </div>
-    </>
+          </ControlPanel>
+          <LayerControl
+            tileLayers={Object.values(mapTileLayers)}
+            onClickTileLayer={(id: MapTileLayerId) => toggleMapTileLayer(id)}
+          />
+        </Controls>
+      </Map>
+    </div>
   );
 };
 

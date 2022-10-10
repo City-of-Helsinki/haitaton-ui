@@ -18,7 +18,7 @@ test('Address can be selected from suggestions', async () => {
   await waitFor(() => {
     expect(mockAxios.get).toHaveBeenCalledTimes(1);
   });
-  userEvent.click(screen.getByText('Elielinaukio 3'));
+  await userEvent.click(screen.getByText('Elielinaukio 3'));
   expect(handleAddressSelect).toHaveBeenCalledWith([25496700, 6673224]);
 });
 

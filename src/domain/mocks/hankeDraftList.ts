@@ -42,6 +42,50 @@ const hankeDraftList: HankeDataDraft[] = [
     arvioijat: [],
     toteuttajat: [],
     tyomaaTyyppi: [],
+    geometriat: {
+      id: 37,
+      version: 0,
+      hankeId: 2,
+      createdByUserId: null,
+      modifiedByUserId: null,
+      createdAt: '2020-11-27T11:43:43.481215Z',
+      modifiedAt: null,
+      featureCollection: {
+        type: 'FeatureCollection',
+        crs: {
+          type: 'name',
+          properties: {
+            name: 'urn:ogc:def:crs:EPSG::3879',
+          },
+        },
+        features: [
+          {
+            type: 'Feature',
+            properties: {
+              hankeTunnus: 'HANKE_2',
+            },
+            geometry: {
+              type: 'Polygon',
+              crs: {
+                type: 'name',
+                properties: {
+                  name: 'EPSG:3879',
+                },
+              },
+              coordinates: [
+                [
+                  [25496803.95, 6671970.73],
+                  [25496808.63, 6672031.04],
+                  [25496741.78, 6672035.04],
+                  [25496723.8, 6671958.88],
+                  [25496803.95, 6671970.73],
+                ],
+              ],
+            },
+          },
+        ],
+      },
+    },
   },
   {
     id: 3,
@@ -72,7 +116,7 @@ const hankeDraftList: HankeDataDraft[] = [
     kuvaus: '',
     alkuPvm: '2020-11-25T00:00:00Z',
     loppuPvm: '2020-11-28T00:00:00Z',
-    vaihe: 'OHJELMOINTI',
+    vaihe: 'RAKENTAMINEN',
     suunnitteluVaihe: null,
     version: 0,
     createdBy: '1',
@@ -114,7 +158,7 @@ const hankeDraftList: HankeDataDraft[] = [
     kuvaus: '',
     alkuPvm: '2020-11-24T00:00:00Z',
     loppuPvm: '2020-11-28T00:00:00Z',
-    vaihe: 'OHJELMOINTI',
+    vaihe: 'SUUNNITTELU',
     suunnitteluVaihe: null,
     version: 0,
     createdBy: '1',
@@ -135,7 +179,7 @@ const hankeDraftList: HankeDataDraft[] = [
     kuvaus: '',
     alkuPvm: '2020-11-24T00:00:00Z',
     loppuPvm: '2020-11-28T00:00:00Z',
-    vaihe: 'OHJELMOINTI',
+    vaihe: 'SUUNNITTELU',
     suunnitteluVaihe: null,
     version: 0,
     createdBy: '1',

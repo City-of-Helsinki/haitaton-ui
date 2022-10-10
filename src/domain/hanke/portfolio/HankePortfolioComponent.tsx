@@ -42,7 +42,7 @@ type CustomAccordionProps = {
 };
 
 const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
-  const { MAP } = useLocalizedRoutes();
+  const { PUBLIC_HANKKEET_MAP } = useLocalizedRoutes();
   const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
   // Handle accordion state with useAccordion hook
   const { isOpen, buttonProps, contentProps } = useAccordion({ initiallyOpen: false });
@@ -57,7 +57,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
         <div className={styles.hankeCardHeader}>
           <Link
             className={styles.link}
-            to={`${MAP.path}?hanke=${hanke.hankeTunnus}`}
+            to={`${PUBLIC_HANKKEET_MAP.path}?hanke=${hanke.hankeTunnus}`}
             title="Avaa hanke kartalla"
           >
             {hanke.hankeTunnus}
@@ -135,7 +135,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                   </Text>
                   <Link
                     className={styles.link}
-                    to={`${MAP.path}?hanke=${hanke.hankeTunnus}`}
+                    to={`${PUBLIC_HANKKEET_MAP.path}?hanke=${hanke.hankeTunnus}`}
                     title={t('hankePortfolio:labels:avaaKartalla')}
                   >
                     {t('hankePortfolio:labels:avaaKartalla')}

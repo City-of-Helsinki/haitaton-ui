@@ -1,0 +1,11 @@
+.layoutContainer {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.pageContainer {
+  position: relative;
+  padding-bottom: var(--spacing-xl);
+  flex-grow: 1;
+}
