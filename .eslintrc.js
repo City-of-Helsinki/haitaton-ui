@@ -24,7 +24,7 @@ module.exports = {
     'react/jsx-indent': [2, 2],
     'react/jsx-props-no-spreading': 'off',
     'import/prefer-default-export': 'off',
-    'react-hooks/exhaustive-deps': 'off',
+    'react-hooks/exhaustive-deps': 'warn',
     'no-underscore-dangle': ['error', { allow: ['__typename', '_env_'] }],
     'jsx-a11y/label-has-associated-control': [
       'warn',

@@ -28,11 +28,11 @@ const LocaleRoutes = () => {
     <Routes>
       <Route path={t('routes:HOME:path')} element={<HomePage />} />
       <Route
-        path={`${t('routes:NEW_HANKE:path')}/*`}
+        path={`${t('routes:NEW_HANKE:path')}/`}
         element={<PrivateRoute element={<NewHankePage />} />}
       />
       <Route
-        path={`${t('routes:EDIT_HANKE:path')}/*`}
+        path={`${t('routes:EDIT_HANKE:path')}/`}
         element={<PrivateRoute element={<EditHankePage />} />}
       />
       <Route

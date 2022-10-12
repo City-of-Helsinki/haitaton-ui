@@ -5,7 +5,6 @@ import { Accordion } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { Coordinate } from 'ol/coordinate';
 import HankeDrawer from '../../map/components/HankeDrawer/HankeDrawerContainer';
-import Text from '../../../common/components/text/Text';
 import { useFormPage } from './hooks/useFormPage';
 import { FORMFIELD, FormProps } from './types';
 import DatePicker from '../../../common/components/datePicker/DatePicker';
@@ -51,9 +50,6 @@ const Form1: React.FC<FormProps> = ({ errors, formData }) => {
 
   return (
     <div className="form1">
-      <Text tag="h2" spacing="s" weight="bold">
-        {t('hankeForm:hankkeenAlueForm:header')}
-      </Text>
       <Accordion
         heading="Ohjeet alueen piirtämiseen"
         theme={{

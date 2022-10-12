@@ -7,11 +7,6 @@ import { FORMFIELD } from './types';
 
 export const today = startOfDay(new Date());
 
-export const isRequiredByFormPage = (currentFormPage: number) => (
-  val: number,
-  schema: yup.MixedSchema
-) => (val === currentFormPage ? schema.required() : schema);
-
 // https://github.com/jquense/yup/issues/176
 // https://github.com/jquense/yup/issues/952
 export const contactSchema = yup.object().shape({
@@ -37,6 +32,7 @@ export const requiredContactSchema = yup.object().shape({
 export const hankeSchema = yup.object().shape({
   [FORMFIELD.NIMI]: yup.string().min(3).required(),
   [FORMFIELD.KUVAUS]: yup.string().required().min(1),
+  [FORMFIELD.KATUOSOITE]: yup.string().required(),
   [FORMFIELD.ALKU_PVM]: yup.date().nullable().required().min(today),
   [FORMFIELD.LOPPU_PVM]: yup
     .date()
@@ -60,7 +56,6 @@ export const hankeSchema = yup.object().shape({
     is: 'SUUNNITTELU',
     then: yup.string().required(),
   }),
-  [FORMFIELD.KATUOSOITE]: yup.string().nullable().when('$currentFormPage', isRequiredByFormPage(3)),
   [FORMFIELD.OMISTAJAT]: yup
     .array()
     .nullable()

@@ -12,7 +12,6 @@ import {
   HANKE_TYOMAATYYPPI,
   HANKE_TYOMAAKOKO,
 } from '../../types/hanke';
-import Text from '../../../common/components/text/Text';
 import { FORMFIELD, FormProps } from './types';
 import { useFormPage } from './hooks/useFormPage';
 import EditDisabledNotification from './components/EditDisabledNotification';
@@ -31,9 +30,6 @@ const Form0: React.FC<FormProps> = ({ errors, register, formData }) => {
 
   return (
     <div className="form0">
-      <Text tag="h2" spacing="s" weight="bold">
-        {t('hankeForm:perustiedotForm:header')}
-      </Text>
       <EditDisabledNotification formData={formData} />
       <div className="dataWpr">
         <div className="formWpr">
