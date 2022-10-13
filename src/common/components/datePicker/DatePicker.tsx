@@ -13,8 +13,6 @@ type PropTypes = {
   disabled?: boolean;
   selected?: Date;
   locale: 'en' | 'fi' | 'sv' | undefined;
-  dateFormat?: string;
-  defaultValue?: Date | string | null;
   tooltip?: TooltipProps;
   required?: boolean;
   maxDate?: Date;
@@ -25,7 +23,6 @@ const DatePicker: React.FC<PropTypes> = ({
   name,
   label,
   disabled,
-  defaultValue,
   tooltip,
   required,
   minDate,
@@ -42,7 +39,6 @@ const DatePicker: React.FC<PropTypes> = ({
       <Controller
         name={name}
         control={control}
-        defaultValue={defaultValue}
         render={({ field: { onChange, onBlur, value } }) => (
           <div className={styles.datePicker}>
             <div className={styles.tooltip}>
@@ -56,24 +52,23 @@ const DatePicker: React.FC<PropTypes> = ({
               <DateInput
                 id={name}
                 name={name}
-                label={`${label} ${required && '*'}`}
+                label={label}
                 disabled={disabled}
                 onBlur={onBlur}
-                onChange={(date: string) => {
+                invalid={invalid}
+                onChange={(date) => {
                   const convertedDateString = convertFinnishDate(date);
-                  if (convertedDateString.length > 0) {
-                    onChange(toEndOfDayUTCISO(new Date(convertedDateString)));
-                  }
-                  onBlur();
+                  onChange(toEndOfDayUTCISO(new Date(convertedDateString)));
                 }}
-                value={!value ? undefined : formatToFinnishDate(value)}
+                value={formatToFinnishDate(value)}
                 maxDate={maxDate}
                 minDate={minDate}
                 language={locale}
+                required={required}
                 disableConfirmation
+                errorText={getInputErrorText(t, errors, name)}
               />
             </div>
-            {invalid && <span className="error-text">{getInputErrorText(t, errors, name)}</span>}
           </div>
         )}
       />

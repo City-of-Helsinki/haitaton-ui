@@ -1,5 +1,6 @@
 import { isBefore, parseISO } from 'date-fns';
 import { HankeContact, HankeDataDraft } from '../../types/hanke';
+import { today } from './hankeSchema';
 import { FORMFIELD, HankeDataFormState } from './types';
 
 const isContactEmpty = ({
@@ -34,7 +35,7 @@ export const convertHankeDataToFormState = (
 });
 
 export const isHankeEditingDisabled = ({ alkuPvm }: HankeDataDraft | HankeDataFormState) => {
-  if (alkuPvm && isBefore(parseISO(alkuPvm), new Date())) {
+  if (alkuPvm && isBefore(parseISO(alkuPvm), today)) {
     return 'STARTED';
   }
 

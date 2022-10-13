@@ -98,6 +98,8 @@ describe('HankeForm', () => {
           ...formData,
           [FORMFIELD.NIMI]: 'Formin nimi',
           [FORMFIELD.KUVAUS]: 'Formin kuvaus',
+          [FORMFIELD.ALKU_PVM]: '2022-11-06T00:00:00Z',
+          [FORMFIELD.LOPPU_PVM]: '2023-01-18T00:00:00Z',
         }}
         onIsDirtyChange={() => ({})}
         onFormClose={() => ({})}
@@ -109,6 +111,8 @@ describe('HankeForm', () => {
     expect(screen.getByTestId(FORMFIELD.NIMI)).toHaveValue('Formin nimi');
     expect(screen.getByTestId(FORMFIELD.KUVAUS)).toHaveValue('Formin kuvaus');
     expect(screen.getByText('Ohjelmointi')).toBeInTheDocument();
+    expect(screen.getByLabelText('Hankkeen alkupäivä', { exact: false })).toHaveValue('6.11.2022');
+    expect(screen.getByLabelText('Hankkeen loppupäivä', { exact: false })).toHaveValue('18.1.2023');
   });
 
   test('Form editing should be disabled if it is already started ', () => {
@@ -148,5 +152,50 @@ describe('HankeForm', () => {
 
     expect(screen.getByTestId(FORMFIELD.NIMI)).toHaveValue(nimi);
     expect(screen.getByTestId(FORMFIELD.KUVAUS)).toHaveValue(hankkeenKuvaus);
+  });
+
+  test('Date control validations should work', async () => {
+    render(<HankeFormContainer />);
+
+    const startDateControl = screen.getByLabelText('Hankkeen alkupäivä', { exact: false });
+    const endDateControl = screen.getByLabelText('Hankkeen loppupäivä', { exact: false });
+
+    fireEvent.change(startDateControl, {
+      target: { value: '1.13.2023' },
+    });
+    fireEvent.blur(startDateControl);
+
+    await waitFor(() =>
+      expect(screen.queryByText('Kentän tyyppi on virheellinen')).toBeInTheDocument()
+    );
+
+    fireEvent.change(startDateControl, {
+      target: { value: '1.12.2023' },
+    });
+    fireEvent.blur(startDateControl);
+
+    await waitFor(() =>
+      expect(screen.queryByText('Kentän tyyppi on virheellinen')).not.toBeInTheDocument()
+    );
+
+    fireEvent.change(endDateControl, {
+      target: { value: '1.11.2023' },
+    });
+    fireEvent.blur(endDateControl);
+
+    await waitFor(() =>
+      expect(screen.queryByText('Ensimmäinen mahdollinen päivä on 1.12.2023')).toBeInTheDocument()
+    );
+
+    fireEvent.change(endDateControl, {
+      target: { value: '1.12.2023' },
+    });
+    fireEvent.blur(endDateControl);
+
+    await waitFor(() =>
+      expect(
+        screen.queryByText('Ensimmäinen mahdollinen päivä on 1.12.2023')
+      ).not.toBeInTheDocument()
+    );
   });
 });

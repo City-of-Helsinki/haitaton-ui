@@ -46,7 +46,13 @@ export const hankeSchema = yup.object().shape({
       FORMFIELD.ALKU_PVM,
       // eslint-disable-next-line
       // @ts-ignore nullable doesnt work with TS
-      (alkuPvm: Date, schema: yup.DateSchema) => (alkuPvm ? schema.min(new Date(alkuPvm)) : schema)
+      (alkuPvm: Date, schema: yup.DateSchema) => {
+        try {
+          return alkuPvm ? schema.min(alkuPvm) : schema;
+        } catch (error) {
+          return schema;
+        }
+      }
     ),
   [FORMFIELD.VAIHE]: yup.mixed().oneOf($enum(HANKE_VAIHE).getValues()).required(),
   [FORMFIELD.SUUNNITTELUVAIHE]: yup
