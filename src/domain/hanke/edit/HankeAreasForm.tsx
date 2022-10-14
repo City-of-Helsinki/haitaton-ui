@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Accordion } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { Coordinate } from 'ol/coordinate';
+import { Box } from '@chakra-ui/react';
 import HankeDrawer from '../../map/components/HankeDrawer/HankeDrawerContainer';
 import Text from '../../../common/components/text/Text';
 import { useFormPage } from './hooks/useFormPage';
@@ -21,7 +22,7 @@ import {
 import { HankeGeoJSON } from '../../../common/types/hanke';
 import { doAddressSearch } from '../../map/utils';
 
-const Form1: React.FC<FormProps> = ({ errors, formData }) => {
+const HankeAreasForm: React.FC<FormProps> = ({ errors, formData }) => {
   const { t } = useTranslation();
   const locale = useLocale();
   const instructions = t('hankeForm:hankkeenAlueForm:instructions').split('\n');
@@ -50,7 +51,7 @@ const Form1: React.FC<FormProps> = ({ errors, formData }) => {
   }, [formData.tyomaaKatuosoite]);
 
   return (
-    <div className="form1">
+    <div>
       <Text tag="h2" spacing="s" weight="bold">
         {t('hankeForm:hankkeenAlueForm:header')}
       </Text>
@@ -63,10 +64,16 @@ const Form1: React.FC<FormProps> = ({ errors, formData }) => {
         initiallyOpen
       >
         {instructions.map((instruction) => (
-          <p key={instruction}>{instruction}</p>
+          <Box key={instruction} mb="var(--spacing-xs)">
+            <p>{instruction}</p>
+          </Box>
         ))}
       </Accordion>
-      <br />
+      <Text tag="h3" styleAs="h4" weight="bold">
+        <Box color="var(--color-bus)" mb="var(--spacing-m)">
+          Hanke-alueet
+        </Box>
+      </Text>
       <div style={{ position: 'relative' }}>
         <HankeDrawer
           onChangeGeometries={handleGeometriesChange}
@@ -186,4 +193,4 @@ const Form1: React.FC<FormProps> = ({ errors, formData }) => {
     </div>
   );
 };
-export default Form1;
+export default HankeAreasForm;

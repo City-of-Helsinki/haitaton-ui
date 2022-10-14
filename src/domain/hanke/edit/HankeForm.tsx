@@ -6,7 +6,7 @@ import Text from '../../../common/components/text/Text';
 import { FormNotification, HankeDataFormState } from './types';
 import { hankeSchema } from './hankeSchema';
 import Form0 from './HankeForm0';
-import Form1 from './HankeForm1';
+import HankeAreasForm from './HankeAreasForm';
 import Form2 from './HankeForm2';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
@@ -108,7 +108,7 @@ const HankeForm: React.FC<Props> = ({
     },
     {
       path: '/alueet',
-      element: <Form1 errors={errors} register={register} formData={formValues} />,
+      element: <HankeAreasForm errors={errors} register={register} formData={formValues} />,
       title: 'Aluetiedot',
     },
     {

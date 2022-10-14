@@ -20,6 +20,9 @@ import { formatFeaturesToHankeGeoJSON } from '../../utils';
 import { MapTileLayerId } from '../../types';
 import AddressSearchContainer from '../AddressSearch/AddressSearchContainer';
 import OverviewMapControl from '../../../../common/components/map/controls/OverviewMapControl';
+import ControlPanel from '../../../../common/components/map/controls/ControlPanel';
+import DateRangeControl from '../../../../common/components/map/controls/DateRangeControl';
+import { useDateRangeFilter } from '../../hooks/useDateRangeFilter';
 
 type Props = {
   geometry: HankeGeoJSON | undefined;
@@ -31,6 +34,13 @@ const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry, center }) 
   const { mapTileLayers, toggleMapTileLayer, handleUpdateGeometryState } = useMapDataLayers();
   const [drawSource] = useState<VectorSource>(new VectorSource());
   const [zoom] = useState(9); // TODO: also take zoom into consideration
+
+  const {
+    hankeFilterStartDate,
+    hankeFilterEndDate,
+    setHankeFilterStartDate,
+    setHankeFilterEndDate,
+  } = useDateRangeFilter();
 
   useEffect(() => {
     if (geometry && geometry.features.length > 0) {
@@ -76,6 +86,14 @@ const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry, center }) 
 
           <Controls>
             <DrawModule source={drawSource} />
+            <ControlPanel className={hankeDrawerStyles.dateRangeControl}>
+              <DateRangeControl
+                startDate={hankeFilterStartDate}
+                updateStartDate={setHankeFilterStartDate}
+                endDate={hankeFilterEndDate}
+                updateEndDate={setHankeFilterEndDate}
+              />
+            </ControlPanel>
             <LayerControl
               tileLayers={Object.values(mapTileLayers)}
               onClickTileLayer={(id: MapTileLayerId) => toggleMapTileLayer(id)}
