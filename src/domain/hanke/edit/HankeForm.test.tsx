@@ -81,13 +81,13 @@ describe('HankeForm', () => {
 
     screen.getByTestId(FORMFIELD.YKT_HANKE).click();
 
-    expect(screen.getByRole('button', { name: 'Tallenna luonnos' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Tallenna ja keskeytä' })).toBeDisabled();
 
     screen.queryAllByText('Hankkeen suunnitteluvaihe')[0].click();
     screen.queryAllByText('Yleis- tai hankesuunnittelu')[0].click();
 
     await waitFor(() =>
-      expect(screen.getByRole('button', { name: 'Tallenna luonnos' })).not.toBeDisabled()
+      expect(screen.getByRole('button', { name: 'Tallenna ja keskeytä' })).not.toBeDisabled()
     );
   });
 
@@ -146,7 +146,7 @@ describe('HankeForm', () => {
     screen.queryAllByText('Hankkeen Vaihe')[0].click();
     screen.queryAllByText('Ohjelmointi')[0].click();
 
-    screen.getByText('Tallenna luonnos').click();
+    screen.getByText('Tallenna ja keskeytä').click();
 
     await waitFor(() => expect(screen.queryByText('Luonnos tallennettu')));
 

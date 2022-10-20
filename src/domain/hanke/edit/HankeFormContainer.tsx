@@ -36,6 +36,7 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
   const [interruptDialogOpen, setInterruptDialogOpen] = useState(false);
   const [deleteErrorMsg, setDeleteErrorMsg] = useState('');
   const [hasFormChanged, setHasFormChanged] = useState(false);
+  const [hankeTunnusToDelete, setHankeTunnusToDelete] = useState<string | undefined>();
 
   const { HANKEPORTFOLIO } = useLocalizedRoutes();
 
@@ -46,25 +47,14 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
     setHasFormChanged(isDirty);
   }, []);
 
-  const handleFormClose = useCallback(() => {
-    if (hasFormChanged) {
-      setInterruptDialogOpen(true);
-    } else {
-      navigate('/');
-    }
-  }, [hasFormChanged, navigate]);
-
-  const closeForm = () => {
-    navigate('/');
-  };
-
   const openHankeDelete = () => {
     setDeleteDialogOpen(true);
   };
 
   const handleDeleteHanke = (hankeToDelete: HankeDataFormState) => {
-    if (hankeToDelete.hankeTunnus) {
-      deleteHanke(hankeToDelete.hankeTunnus)
+    const id = hankeToDelete.hankeTunnus || hankeTunnusToDelete;
+    if (id) {
+      deleteHanke(id)
         .then(() => {
           navigate(HANKEPORTFOLIO.path);
 
@@ -74,6 +64,27 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
           setDeleteErrorMsg(t('common:error'));
         });
     }
+  };
+
+  const handleFormClose = useCallback(
+    (idToDelete?: string) => {
+      // If close callback is called with hankeTunnus
+      // meaning that form has already been saved and
+      // one has been created, open delete dialog.
+      if (idToDelete) {
+        setHankeTunnusToDelete(idToDelete);
+        openHankeDelete();
+      } else if (hasFormChanged) {
+        setInterruptDialogOpen(true);
+      } else {
+        navigate('/');
+      }
+    },
+    [hasFormChanged, navigate]
+  );
+
+  const closeForm = () => {
+    navigate('/');
   };
 
   if (isLoading) {
@@ -110,7 +121,7 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
           description={t('common:confirmationDialog:interruptDialog:bodyText')}
           isOpen={interruptDialogOpen}
           close={() => setInterruptDialogOpen(false)}
-          mainAction={() => closeForm()}
+          mainAction={closeForm}
           mainBtnLabel={t('common:confirmationDialog:interruptDialog:exitButton')}
           variant="primary"
         />
