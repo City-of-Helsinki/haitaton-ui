@@ -1,0 +1,13 @@
+.formContainer {
+  background-color: white;
+  margin: var(--spacing-2-xl) 0;
+  padding: var(--spacing-l);
+
+  .stepper {
+    * {
+      box-sizing: content-box;
+    }
+
+    margin-bottom: var(--spacing-l);
+  }
+}

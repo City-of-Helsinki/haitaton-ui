@@ -51,9 +51,6 @@ const Form2: React.FC<FormProps> = ({ formData, errors, register }) => {
 
   return (
     <div className="form2">
-      <Text tag="h2" spacing="s" weight="bold">
-        {t('hankeForm:hankkeenYhteystiedotForm:header')}
-      </Text>
       {$enum(HANKE_CONTACT_TYPE).map((contactType) => (
         <div key={contactType}>
           <Text tag="h3" spacing="s" weight="bold">

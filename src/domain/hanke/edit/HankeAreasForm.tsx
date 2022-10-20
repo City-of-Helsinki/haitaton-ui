@@ -6,7 +6,6 @@ import { $enum } from 'ts-enum-util';
 import { Coordinate } from 'ol/coordinate';
 import { Box } from '@chakra-ui/react';
 import HankeDrawer from '../../map/components/HankeDrawer/HankeDrawerContainer';
-import Text from '../../../common/components/text/Text';
 import { useFormPage } from './hooks/useFormPage';
 import { FORMFIELD, FormProps } from './types';
 import DatePicker from '../../../common/components/datePicker/DatePicker';

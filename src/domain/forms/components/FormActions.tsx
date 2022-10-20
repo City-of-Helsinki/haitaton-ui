@@ -1,48 +1,46 @@
 import React from 'react';
-import { Button, IconCross, IconSaveDiskette, IconTrash } from 'hds-react';
+import { Button, IconArrowLeft, IconArrowRight } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import styles from './FormActions.module.scss';
 
-interface Props extends React.HTMLProps<HTMLDivElement> {
-  showDelete?: boolean;
+interface Props {
   isFormValid?: boolean;
-  onDelete: () => void;
-  onClose: () => void;
-  onSave: () => void;
+  activeStepIndex: number;
+  totalSteps: number;
+  onPrevious: () => void;
+  onNext: () => void;
 }
 
-const FormActions: React.FC<Props> = ({ showDelete, isFormValid, onDelete, onClose, onSave }) => {
+const FormActions: React.FC<Props> = ({
+  children,
+  isFormValid,
+  activeStepIndex,
+  totalSteps,
+  onPrevious,
+  onNext,
+}) => {
   const { t } = useTranslation();
+  const firstStep = activeStepIndex === 0;
+  const lastStep = activeStepIndex === totalSteps - 1;
 
   return (
     <div className={styles.actions}>
-      {showDelete && (
-        <Button
-          className={styles.deleteHankeBtn}
-          variant="supplementary"
-          iconLeft={<IconTrash aria-hidden />}
-          onClick={onDelete}
-        >
-          {t('hankeList:buttons:delete')}
+      {!firstStep && (
+        <Button iconLeft={<IconArrowLeft />} variant="secondary" onClick={onPrevious}>
+          {t('hankeForm:previousButton')}
         </Button>
       )}
-      <Button
-        theme="coat"
-        variant="supplementary"
-        iconLeft={<IconCross aria-hidden="true" />}
-        onClick={onClose}
-      >
-        {t('hankeForm:cancelButton')}
-      </Button>
-      <Button
-        disabled={!isFormValid}
-        theme="coat"
-        iconLeft={<IconSaveDiskette aria-hidden="true" />}
-        onClick={onSave}
-        data-testid="save-form-btn"
-      >
-        {t('hankeForm:saveDraftButton')}
-      </Button>
+      {children}
+      {!lastStep && (
+        <Button
+          iconRight={<IconArrowRight />}
+          variant="secondary"
+          onClick={onNext}
+          disabled={!isFormValid}
+        >
+          {t('hankeForm:nextButton')}
+        </Button>
+      )}
     </div>
   );
 };

@@ -252,12 +252,15 @@
     }
   },
   "hankeForm": {
-    "pageHeader": "SV:Hanke",
+    "pageHeaderNew": "SV:Uusi hanke",
+    "pageHeaderEdit": "SV:Muokkaa hanketta {{hankeTunnus}}",
     "editingDisabled": {
       "STARTED": "SV:Käynnissä olevan hankkeen tietoja ei voi muokata."
     },
-    "saveDraftButton": "SV:Tallenna luonnos",
-    "cancelButton": "SV:Keskeytä",
+    "saveDraftButton": "SV:Tallenna ja keskeytä",
+    "saveButton": "SV:Tallenna",
+    "saveAndAddButton": "SV:Tallenna ja lisää hakemuksia",
+    "cancelButton": "SV:Peru hanke",
     "nextButton": "SV:Seuraava",
     "previousButton": "SV:Edellinen",
     "addContactButton": "SV:Lisää yhteyshenkilö",
@@ -324,7 +327,7 @@
       "ytkHankeHeader": "SV:YKT-hanke"
     },
     "hankkeenAlueForm": {
-      "header": "SV:Hankkeen alue",
+      "header": "SV:Alueet",
       "instructions": "SV: Hankkeelle voi piirttää useita geometrioita. Geometria alueet vaikuttavat hankkeen liikennehaittaindekseihin.\nPiirtotyökalut löytyvät karttanäkymän vasemmasta alalaidasta. Kynätyökalulla voi piirtää monikulmaisia geometrioita klikkaamalla kohtaan, johon haluat kulman. Neliötyökalulla saat muodostettua neliömäisiä alueita klikkaamalla ensin kartalle ja liikuttamalla hiirtä haluamaasi suuntaan. Uudelleenklikkaus \"sulkee\" neliön piirron.\nGeometriaa voi muokata \"tarttumalla\" geometrian reunasta ja vetämällä. Myös neliömäistä geometriaa voi muokata reunasta tarttumalla.\nVoit poistaa geometrian valitsemalla ensin geometrian klikkaamalla sitä, jolloin vasemman alalaidan piirtotyökaluihin ilmestyy roskakori ikoni, jota klikkaamalla geometrian voi poistaa."
     },
     "hankkeenYhteystiedotForm": {
