@@ -33,6 +33,7 @@ const Dropdown: React.FC<PropTypes> = ({
   tooltip,
   disabled,
   required,
+  errorMsg,
 }) => {
   const { t } = useTranslation();
   const {
@@ -70,11 +71,11 @@ const Dropdown: React.FC<PropTypes> = ({
               }}
               required={required}
               disabled={disabled}
+              error={errorMsg || getInputErrorText(t, errors, name)}
             />
           );
         }}
       />
-      {invalid && <span className="error-text">{getInputErrorText(t, errors, name)}</span>}
     </div>
   );
 };

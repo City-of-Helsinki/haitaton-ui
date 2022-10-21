@@ -21,6 +21,7 @@ const hankeList: HankeData[] = [
     arvioijat: [],
     toteuttajat: [],
     tyomaaTyyppi: ['VESI', 'VIEMARI'],
+    hankeAlueet: [],
     geometriat: {
       id: 1,
       hankeId: 1,
@@ -85,6 +86,7 @@ const hankeList: HankeData[] = [
     arvioijat: [],
     toteuttajat: [],
     tyomaaTyyppi: ['SADEVESI'],
+    hankeAlueet: [],
     geometriat: {
       id: 2,
       hankeId: 2,

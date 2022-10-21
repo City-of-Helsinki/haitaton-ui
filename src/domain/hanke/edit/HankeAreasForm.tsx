@@ -1,45 +1,30 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Accordion } from 'hds-react';
-import { $enum } from 'ts-enum-util';
+import { Tab, TabList, TabPanel, Tabs } from 'hds-react';
+import { Feature } from 'ol';
+import VectorSource from 'ol/source/Vector';
 import { Coordinate } from 'ol/coordinate';
+import Geometry from 'ol/geom/Geometry';
 import { Box } from '@chakra-ui/react';
-import HankeDrawer from '../../map/components/HankeDrawer/HankeDrawerContainer';
+import HankeDrawer from '../../map/components/HankeDrawer/HankeDrawer';
 import { useFormPage } from './hooks/useFormPage';
 import { FORMFIELD, FormProps } from './types';
-import DatePicker from '../../../common/components/datePicker/DatePicker';
-import Dropdown from '../../../common/components/dropdown/Dropdown';
-import useLocale from '../../../common/hooks/useLocale';
-import {
-  HANKE_KAISTAHAITTA,
-  HANKE_KAISTAPITUUSHAITTA,
-  HANKE_MELUHAITTA,
-  HANKE_POLYHAITTA,
-  HANKE_TARINAHAITTA,
-} from '../../types/hanke';
-import { HankeGeoJSON } from '../../../common/types/hanke';
-import { doAddressSearch } from '../../map/utils';
+import { doAddressSearch, formatSurfaceArea } from '../../map/utils';
+import Haitat from './components/Haitat';
+import Text from '../../../common/components/text/Text';
+import { STYLES } from '../../map/utils/geometryStyle';
 
-const HankeAreasForm: React.FC<FormProps> = ({ errors, formData }) => {
+const HankeAreasForm: React.FC<FormProps> = ({ formData }) => {
   const { t } = useTranslation();
-  const locale = useLocale();
-  const instructions = t('hankeForm:hankkeenAlueForm:instructions').split('\n');
-  const { setValue } = useFormContext();
-  const hankeAlkuPvm = formData[FORMFIELD.ALKU_PVM];
-  const hankeLoppuPvm = formData[FORMFIELD.LOPPU_PVM];
-  const hankeAlkuDate = hankeAlkuPvm ? new Date(hankeAlkuPvm) : undefined;
-  const hankeLoppuDate = hankeLoppuPvm ? new Date(hankeLoppuPvm) : undefined;
+  const { setValue, trigger } = useFormContext();
+  const { fields: hankeAlueet, append, remove } = useFieldArray({
+    name: FORMFIELD.HANKEALUEET,
+  });
+  const [drawSource] = useState<VectorSource>(new VectorSource());
   const [addressCoordinate, setAddressCoordinate] = useState<Coordinate | undefined>();
+  const [highlightedFeature, setHighlightedFeature] = useState<Feature | undefined>();
   useFormPage();
-
-  const handleGeometriesChange = useCallback(
-    (geometry: HankeGeoJSON) => {
-      setValue(FORMFIELD.GEOMETRIES_CHANGED, true, { shouldDirty: true });
-      setValue(FORMFIELD.GEOMETRIAT, geometry);
-    },
-    [setValue]
-  );
 
   useEffect(() => {
     if (formData.tyomaaKatuosoite) {
@@ -49,146 +34,92 @@ const HankeAreasForm: React.FC<FormProps> = ({ errors, formData }) => {
     }
   }, [formData.tyomaaKatuosoite]);
 
+  // Set highlight style for areas feature
+  const higlightArea = useCallback(
+    (feature: Feature | undefined) => {
+      // Reset previously selected feature style
+      highlightedFeature?.setStyle();
+
+      setHighlightedFeature(feature);
+
+      feature?.setStyle(STYLES.BLUE_HL);
+    },
+    [highlightedFeature]
+  );
+
+  const handleAddFeature = useCallback(
+    (feature: Feature<Geometry>) => {
+      const geom = feature.getGeometry();
+      if (geom) {
+        append({ feature });
+      }
+
+      if (hankeAlueet.length === 0) {
+        higlightArea(feature);
+      }
+
+      setValue(FORMFIELD.GEOMETRIES_CHANGED, true, { shouldDirty: true });
+    },
+    [setValue, append, higlightArea, hankeAlueet]
+  );
+
+  const handleChangeFeature = useCallback(() => {
+    // When changing feature, trigger validation on
+    // geometriesChanged field in order to update
+    // surface area calculation for the changed area
+    trigger(FORMFIELD.GEOMETRIES_CHANGED);
+  }, [trigger]);
+
+  function removeArea(index: number) {
+    remove(index);
+    if (formData.hankeAlueet) {
+      drawSource.removeFeature(formData.hankeAlueet[index].feature);
+    }
+  }
+
   return (
     <div>
-      <Text tag="h2" spacing="s" weight="bold">
-        {t('hankeForm:hankkeenAlueForm:header')}
-      </Text>
-      <Accordion
-        heading="Ohjeet alueen piirtämiseen"
-        theme={{
-          '--header-font-size': 'var(--fontsize-heading-s)',
-          '--border-color': 'var(--white)',
-        }}
-        initiallyOpen
-      >
-        {instructions.map((instruction) => (
-          <Box key={instruction} mb="var(--spacing-xs)">
-            <p>{instruction}</p>
-          </Box>
-        ))}
-      </Accordion>
+      <Box mb="var(--spacing-m)">
+        <p>{t('hankeForm:hankkeenAlueForm:instructions')}</p>
+      </Box>
+
       <Text tag="h3" styleAs="h4" weight="bold">
         <Box color="var(--color-bus)" mb="var(--spacing-m)">
-          Hanke-alueet
+          {t('hankeForm:hankkeenAlueForm:subHeader')}
         </Box>
       </Text>
-      <div style={{ position: 'relative' }}>
+
+      <Box mb="var(--spacing-m)">
         <HankeDrawer
-          onChangeGeometries={handleGeometriesChange}
-          hankeTunnus={formData.hankeTunnus}
+          onAddFeature={handleAddFeature}
+          onChangeFeature={handleChangeFeature}
+          geometry={undefined}
           center={addressCoordinate}
+          drawSource={drawSource}
         />
-      </div>
+      </Box>
 
-      <div>
-        <br />
-        <br />
-        <div className="calendaraWpr formWpr">
-          <div className="left">
-            <DatePicker
-              name={FORMFIELD.HAITTA_ALKU_PVM}
-              label={t(`hankeForm:labels:${FORMFIELD.HAITTA_ALKU_PVM}`)}
-              locale={locale}
-              required
-              minDate={hankeAlkuDate}
-              maxDate={hankeLoppuDate}
-            />
-          </div>
-          <div className="right">
-            <DatePicker
-              name={FORMFIELD.HAITTA_LOPPU_PVM}
-              label={t(`hankeForm:labels:${FORMFIELD.HAITTA_LOPPU_PVM}`)}
-              locale={locale}
-              required
-              minDate={hankeAlkuDate}
-              maxDate={hankeLoppuDate}
-            />
-          </div>
-        </div>
-
-        <div className="formWpr">
-          <Dropdown
-            name={FORMFIELD.KAISTAHAITTA}
-            id={FORMFIELD.KAISTAHAITTA}
-            options={$enum(HANKE_KAISTAHAITTA).map((value) => ({
-              value,
-              label: t(`hanke:${FORMFIELD.KAISTAHAITTA}:${value}`),
-            }))}
-            defaultValue={formData[FORMFIELD.KAISTAHAITTA] || ''}
-            label={t(`hankeForm:labels:${FORMFIELD.KAISTAHAITTA}`)}
-            invalid={!!errors[FORMFIELD.KAISTAHAITTA]}
-            errorMsg={t('hankeForm:insertFieldError')}
-            required
-            tooltip={{
-              tooltipText: t(`hankeForm:toolTips:${FORMFIELD.KAISTAHAITTA}`),
-              tooltipButtonLabel: t(`hankeForm:toolTips:tipOpenLabel`),
-              placement: 'auto',
-            }}
-          />
-        </div>
-
-        <div className="formWpr">
-          <Dropdown
-            name={FORMFIELD.KAISTAPITUUSHAITTA}
-            id={FORMFIELD.KAISTAPITUUSHAITTA}
-            options={$enum(HANKE_KAISTAPITUUSHAITTA).map((value) => ({
-              value,
-              label: t(`hanke:${FORMFIELD.KAISTAPITUUSHAITTA}:${value}`),
-            }))}
-            defaultValue={formData[FORMFIELD.KAISTAPITUUSHAITTA] || ''}
-            label={t(`hankeForm:labels:${FORMFIELD.KAISTAPITUUSHAITTA}`)}
-            invalid={!!errors[FORMFIELD.KAISTAPITUUSHAITTA]}
-            errorMsg={t('hankeForm:insertFieldError')}
-            required
-          />
-        </div>
-
-        <div className="formWpr">
-          <Dropdown
-            name={FORMFIELD.MELUHAITTA}
-            id={FORMFIELD.MELUHAITTA}
-            options={$enum(HANKE_MELUHAITTA).map((value) => ({
-              value,
-              label: t(`hanke:${FORMFIELD.MELUHAITTA}:${value}`),
-            }))}
-            defaultValue={formData[FORMFIELD.MELUHAITTA] || ''}
-            label={t(`hankeForm:labels:${FORMFIELD.MELUHAITTA}`)}
-            invalid={!!errors[FORMFIELD.MELUHAITTA]}
-            errorMsg={t('hankeForm:insertFieldError')}
-          />
-        </div>
-
-        <div className="formWpr">
-          <Dropdown
-            name={FORMFIELD.POLYHAITTA}
-            id={FORMFIELD.POLYHAITTA}
-            options={$enum(HANKE_POLYHAITTA).map((value) => ({
-              value,
-              label: t(`hanke:${FORMFIELD.POLYHAITTA}:${value}`),
-            }))}
-            defaultValue={formData[FORMFIELD.POLYHAITTA] || ''}
-            label={t(`hankeForm:labels:${FORMFIELD.POLYHAITTA}`)}
-            invalid={!!errors[FORMFIELD.POLYHAITTA]}
-            errorMsg={t('hankeForm:insertFieldError')}
-          />
-        </div>
-
-        <div className="formWpr">
-          <Dropdown
-            name={FORMFIELD.TARINAHAITTA}
-            id={FORMFIELD.TARINAHAITTA}
-            options={$enum(HANKE_TARINAHAITTA).map((value) => ({
-              value,
-              label: t(`hanke:${FORMFIELD.TARINAHAITTA}:${value}`),
-            }))}
-            defaultValue={formData[FORMFIELD.TARINAHAITTA] || ''}
-            label={t(`hankeForm:labels:${FORMFIELD.TARINAHAITTA}`)}
-            invalid={!!errors[FORMFIELD.TARINAHAITTA]}
-            errorMsg={t('hankeForm:insertFieldError')}
-          />
-        </div>
-      </div>
+      <Tabs>
+        <TabList>
+          {hankeAlueet.map((item, index) => {
+            const hankeAlue = formData.hankeAlueet && formData.hankeAlueet[index];
+            const hankeGeometry = hankeAlue?.feature.getGeometry();
+            const surfaceArea = hankeGeometry && `(${formatSurfaceArea(hankeGeometry)})`;
+            return (
+              <Tab key={item.id} onClick={() => higlightArea(hankeAlue?.feature)}>
+                <div>
+                  {t('hankeForm:hankkeenAlueForm:area')} {index + 1} {surfaceArea}
+                </div>
+              </Tab>
+            );
+          })}
+        </TabList>
+        {hankeAlueet.map((item, index) => (
+          <TabPanel key={item.id}>
+            <Haitat index={index} onRemoveArea={removeArea} />
+          </TabPanel>
+        ))}
+      </Tabs>
     </div>
   );
 };

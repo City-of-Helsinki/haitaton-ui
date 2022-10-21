@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Vector as VectorSource } from 'ol/source';
+import { VectorSourceEvent } from 'ol/source/Vector';
+import { Feature } from 'ol';
+import Geometry from 'ol/geom/Geometry';
 import { Coordinate } from 'ol/coordinate';
+import { debounce } from 'lodash';
 import Map from '../../../../common/components/map/Map';
 import Controls from '../../../../common/components/map/controls/Controls';
 import LayerControl from '../../../../common/components/map/controls/LayerControl';
@@ -11,7 +15,6 @@ import DrawModule from '../../../../common/components/map/modules/draw/DrawModul
 import { HankeGeoJSON } from '../../../../common/types/hanke';
 import Kantakartta from '../Layers/Kantakartta';
 import Ortokartta from '../Layers/Ortokartta';
-import FitSource from '../interations/FitSource';
 
 import styles from '../../Map.module.scss';
 import hankeDrawerStyles from './HankeDrawer.module.scss';
@@ -26,14 +29,25 @@ import { useDateRangeFilter } from '../../hooks/useDateRangeFilter';
 
 type Props = {
   geometry: HankeGeoJSON | undefined;
-  onChangeGeometries: (geometry: HankeGeoJSON) => void;
+  onAddFeature?: (feature: Feature<Geometry>) => void;
+  onChangeFeature?: (feature: Feature<Geometry>) => void;
+  onRemoveFeature?: (feature: Feature<Geometry>) => void;
   center?: Coordinate;
+  drawSource?: VectorSource;
+  zoom?: number;
 };
 
-const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry, center }) => {
+const HankeDrawer: React.FC<Props> = ({
+  onAddFeature,
+  onChangeFeature,
+  onRemoveFeature,
+  geometry,
+  center,
+  drawSource: existingDrawSource,
+  zoom = 9,
+}) => {
   const { mapTileLayers, toggleMapTileLayer, handleUpdateGeometryState } = useMapDataLayers();
-  const [drawSource] = useState<VectorSource>(new VectorSource());
-  const [zoom] = useState(9); // TODO: also take zoom into consideration
+  const [drawSource] = useState<VectorSource>(existingDrawSource || new VectorSource());
 
   const {
     hankeFilterStartDate,
@@ -53,19 +67,39 @@ const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry, center }) 
     const updateState = () => {
       const drawGeometry = formatFeaturesToHankeGeoJSON(drawSource.getFeatures());
       handleUpdateGeometryState(drawGeometry);
-      onChangeGeometries(drawGeometry);
     };
 
-    drawSource.on('addfeature', updateState);
-    drawSource.on('removefeature', updateState);
-    drawSource.on('changefeature', updateState);
+    function handleAddFeature(e: VectorSourceEvent<Geometry>) {
+      if (onAddFeature) {
+        onAddFeature(e.feature);
+      }
+      updateState();
+    }
+
+    const handleChangeFeature = debounce((e: VectorSourceEvent<Geometry>) => {
+      if (onChangeFeature) {
+        onChangeFeature(e.feature);
+      }
+      updateState();
+    }, 100);
+
+    function handleRemoveFeature(e: VectorSourceEvent<Geometry>) {
+      if (onRemoveFeature) {
+        onRemoveFeature(e.feature);
+      }
+      updateState();
+    }
+
+    drawSource.on('addfeature', handleAddFeature);
+    drawSource.on('changefeature', handleChangeFeature);
+    drawSource.on('removefeature', handleRemoveFeature);
 
     return function cleanUp() {
-      drawSource.un('addfeature', updateState);
-      drawSource.un('removefeature', updateState);
-      drawSource.un('changefeature', updateState);
+      drawSource.un('addfeature', handleAddFeature);
+      drawSource.un('changefeature', handleChangeFeature);
+      drawSource.un('removefeature', handleRemoveFeature);
     };
-  }, [drawSource, handleUpdateGeometryState, onChangeGeometries]);
+  }, [drawSource, handleUpdateGeometryState, onAddFeature, onChangeFeature, onRemoveFeature]);
 
   return (
     <>
@@ -81,8 +115,6 @@ const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry, center }) 
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
           {mapTileLayers.ortokartta.visible && <Ortokartta />}
           <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
-
-          <FitSource source={drawSource} />
 
           <Controls>
             <DrawModule source={drawSource} />

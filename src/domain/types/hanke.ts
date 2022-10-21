@@ -1,3 +1,5 @@
+import { Feature } from 'ol';
+import Geometry from 'ol/geom/Geometry';
 import { PartialExcept } from '../../common/types/utils';
 import { HankeGeoJSON } from '../../common/types/hanke';
 
@@ -128,13 +130,26 @@ export type HankeContact = {
 
 export type HankeGeometria = {
   featureCollection: HankeGeoJSON;
-  hankeId: number;
-  id: number;
-  modifiedAt: string | null;
-  version: number | null;
-  createdByUserId: string | null;
-  createdAt: string | null;
-  modifiedByUserId: string | null;
+  hankeId?: number;
+  id?: number;
+  modifiedAt?: string | null;
+  version?: number | null;
+  createdByUserId?: string | null;
+  createdAt?: string | null;
+  modifiedByUserId?: string | null;
+};
+
+export type HankeAlue = {
+  id: number | null;
+  feature: Feature<Geometry>;
+  geometria: HankeGeometria;
+  haittaAlkuPvm: string | null;
+  haittaLoppuPvm: string | null;
+  kaistaHaitta: HANKE_KAISTAHAITTA_KEY | null;
+  kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA_KEY | null;
+  meluHaitta: HANKE_MELUHAITTA_KEY | null;
+  polyHaitta: HANKE_POLYHAITTA | null;
+  tarinaHaitta: HANKE_TARINAHAITTA_KEY | null;
 };
 
 export enum HANKE_INDEX_TYPE {
@@ -165,6 +180,7 @@ export interface HankeData {
   tyomaaKatuosoite: string | null;
   tyomaaTyyppi: HANKE_TYOMAATYYPPI_KEY[];
   tyomaaKoko: HANKE_TYOMAAKOKO_KEY | null;
+  hankeAlueet: HankeAlue[];
   haittaAlkuPvm: string | null;
   haittaLoppuPvm: string | null;
   kaistaHaitta: HANKE_KAISTAHAITTA_KEY | null;

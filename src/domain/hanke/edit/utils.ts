@@ -2,6 +2,7 @@ import { isBefore, parseISO } from 'date-fns';
 import { HankeContact, HankeDataDraft } from '../../types/hanke';
 import { today } from './hankeSchema';
 import { FORMFIELD, HankeDataFormState } from './types';
+import { formatFeaturesToHankeGeoJSON } from '../../map/utils';
 
 const isContactEmpty = ({
   etunimi,
@@ -23,6 +24,16 @@ export const filterEmptyContacts = (hankeData: HankeDataFormState): HankeDataFor
   [FORMFIELD.ARVIOIJAT]: hankeData[FORMFIELD.ARVIOIJAT]?.filter((v) => !isContactEmpty(v)) || [],
   [FORMFIELD.TOTEUTTAJAT]:
     hankeData[FORMFIELD.TOTEUTTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
+});
+
+export const convertHankeAlueGeometries = (hankeData: HankeDataFormState): HankeDataFormState => ({
+  ...hankeData,
+  [FORMFIELD.HANKEALUEET]: hankeData[FORMFIELD.HANKEALUEET]?.map((alue) => {
+    return {
+      ...alue,
+      geometria: { featureCollection: formatFeaturesToHankeGeoJSON([alue.feature]) },
+    };
+  }),
 });
 
 export const convertHankeDataToFormState = (

@@ -282,10 +282,10 @@
       "loppuPvm": "Hankkeen loppupäivä",
       "tyomaaTyyppi": "Työmaan tyyppi",
       "tyomaaKoko": "Työmaan koko",
-      "haittaAlkuPvm": "Haitan alkupäivämäärä",
-      "haittaLoppuPvm": "Haitan loppupäivämäärä",
-      "kaistaHaitta": "Kaistahaitta",
-      "kaistaPituusHaitta": "Kaistan pituushaitta",
+      "haittaAlkuPvm": "Haittojen alkupäivämäärä",
+      "haittaLoppuPvm": "Haittojen loppupäivämäärä",
+      "kaistaHaitta": "Autoliikenteen kaistahaitta",
+      "kaistaPituusHaitta": "Kaistahaittojen pituus",
       "meluHaitta": "Meluhaitta",
       "polyHaitta": "Pölyhaitta",
       "tarinaHaitta": "Tärinähaitta",
@@ -328,7 +328,12 @@
     },
     "hankkeenAlueForm": {
       "header": "Alueet",
-      "instructions": "Hankkeelle voi piirttää useita geometrioita. Geometria alueet vaikuttavat hankkeen liikennehaittaindekseihin.\nPiirtotyökalut löytyvät karttanäkymän vasemmasta alalaidasta. Kynätyökalulla voi piirtää monikulmaisia geometrioita klikkaamalla kohtaan, johon haluat kulman. Neliötyökalulla saat muodostettua neliömäisiä alueita klikkaamalla ensin kartalle ja liikuttamalla hiirtä haluamaasi suuntaan. Uudelleenklikkaus \"sulkee\" neliön piirron.\nGeometriaa voi muokata \"tarttumalla\" geometrian reunasta ja vetämällä. Myös neliömäistä geometriaa voi muokata reunasta tarttumalla.\nVoit poistaa geometrian valitsemalla ensin geometrian klikkaamalla sitä, jolloin vasemman alalaidan piirtotyökaluihin ilmestyy roskakori ikoni, jota klikkaamalla geometrian voi poistaa."
+      "subHeader": "Hanke-alueet",
+      "area": "Alue",
+      "instructions": "Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 1-5, 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen tärkeimmillä reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein.",
+      "haitatHeader": "Alueen haitta-arviot",
+      "haitatInstructions": "Anna arvio suurimmista mahdollisista vaikutuksista hankealueella.",
+      "removeAreaButton": "Poista alue"
     },
     "hankkeenYhteystiedotForm": {
       "header": "Yhteystiedot"

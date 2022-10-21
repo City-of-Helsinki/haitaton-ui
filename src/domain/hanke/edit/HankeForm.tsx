@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useState, useEffect, useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
@@ -20,7 +21,7 @@ import Form2 from './HankeForm2';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
 import { HANKE_SAVETYPE } from '../../types/hanke';
-import { filterEmptyContacts, isHankeEditingDisabled } from './utils';
+import { convertHankeAlueGeometries, filterEmptyContacts, isHankeEditingDisabled } from './utils';
 import api from '../../api/api';
 import MultipageForm from '../../forms/MultipageForm';
 import FormActions from '../../forms/components/FormActions';
@@ -35,18 +36,12 @@ async function saveHanke({
   navigateTo?: string;
 }) {
   const requestData = {
-    ...filterEmptyContacts(data),
+    ...filterEmptyContacts(convertHankeAlueGeometries(data)),
     saveType,
   };
 
   if (isHankeEditingDisabled(data)) {
     throw new Error('Editing disabled');
-  }
-
-  if (data.hankeTunnus && data.geometriat) {
-    await api.post(`/hankkeet/${data.hankeTunnus}/geometriat`, {
-      featureCollection: data.geometriat,
-    });
   }
 
   const response = data.hankeTunnus
@@ -149,9 +144,9 @@ const HankeForm: React.FC<Props> = ({
       state: StepState.available,
     },
     {
-      path: '/alueet',
       element: <HankeAreasForm errors={errors} register={register} formData={formValues} />,
-      title: 'Aluetiedot',
+      label: t('hankeForm:hankkeenAlueForm:header'),
+      state: isNewHanke ? StepState.disabled : StepState.available,
     },
     {
       element: <Form2 errors={errors} register={register} formData={formValues} />,

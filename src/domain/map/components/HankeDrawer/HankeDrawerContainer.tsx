@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
+import VectorSource from 'ol/source/Vector';
 import { Coordinate } from 'ol/coordinate';
-import { HankeGeoJSON } from '../../../../common/types/hanke';
+import { Feature } from 'ol';
+import Geometry from 'ol/geom/Geometry';
 import api from '../../../api/api';
 import { HankeGeometria } from '../../../types/hanke';
 import HankeDrawer from './HankeDrawer';
@@ -10,8 +12,9 @@ type HankeTunnus = string | undefined;
 
 type Props = {
   hankeTunnus: HankeTunnus;
-  onChangeGeometries: (geometry: HankeGeoJSON) => void;
+  onChangeGeometries: (feature: Feature<Geometry>) => void;
   center?: Coordinate;
+  drawSource?: VectorSource;
 };
 
 // enabled-config should prevent running this when hankeTunnus is undefined?
@@ -28,7 +31,12 @@ const useHankeGeometry = (hankeTunnus: HankeTunnus) =>
     enabled: !!hankeTunnus,
   });
 
-const HankeDrawerContainer: React.FC<Props> = ({ hankeTunnus, onChangeGeometries, center }) => {
+const HankeDrawerContainer: React.FC<Props> = ({
+  hankeTunnus,
+  onChangeGeometries,
+  center,
+  drawSource,
+}) => {
   const queryClient = useQueryClient();
   const [isGeometryChanged, setIsGeometryChanged] = useState(false);
   const { data } = useHankeGeometry(hankeTunnus);
@@ -45,7 +53,7 @@ const HankeDrawerContainer: React.FC<Props> = ({ hankeTunnus, onChangeGeometries
 
   // Update local state and form
   const handleChangeAndInvalidateCache = useCallback(
-    (geometry: HankeGeoJSON) => {
+    (geometry: Feature<Geometry>) => {
       setIsGeometryChanged(true);
       onChangeGeometries(geometry);
     },
@@ -54,9 +62,10 @@ const HankeDrawerContainer: React.FC<Props> = ({ hankeTunnus, onChangeGeometries
 
   return (
     <HankeDrawer
-      onChangeGeometries={handleChangeAndInvalidateCache}
+      onAddFeature={handleChangeAndInvalidateCache}
       geometry={data ? data.featureCollection : undefined}
       center={center}
+      drawSource={drawSource}
     />
   );
 };

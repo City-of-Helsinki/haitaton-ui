@@ -1,8 +1,15 @@
 import startOfDay from 'date-fns/startOfDay';
-import endOfDay from 'date-fns/endOfDay';
 import { $enum } from 'ts-enum-util';
 import yup from '../../../common/utils/yup';
-import { HANKE_VAIHE, HANKE_SUUNNITTELUVAIHE } from '../../types/hanke';
+import {
+  HANKE_VAIHE,
+  HANKE_SUUNNITTELUVAIHE,
+  HANKE_MELUHAITTA,
+  HANKE_POLYHAITTA,
+  HANKE_TARINAHAITTA,
+  HANKE_KAISTAHAITTA,
+  HANKE_KAISTAPITUUSHAITTA,
+} from '../../types/hanke';
 import { FORMFIELD } from './types';
 
 export const today = startOfDay(new Date());
@@ -27,6 +34,28 @@ export const requiredContactSchema = yup.object().shape({
   organisaatioId: yup.number().nullable(),
   organisaatioNimi: yup.string().nullable(),
   osasto: yup.string().nullable().max(200),
+});
+
+export const hankeAlueSchema = yup.object().shape({
+  [FORMFIELD.HAITTA_ALKU_PVM]: yup.date().required(),
+  [FORMFIELD.HAITTA_LOPPU_PVM]: yup
+    .date()
+    .required()
+    .when(FORMFIELD.HAITTA_ALKU_PVM, (alkuPvm: Date, schema: yup.DateSchema) => {
+      try {
+        return alkuPvm ? schema.min(alkuPvm) : schema;
+      } catch (error) {
+        return schema;
+      }
+    }),
+  [FORMFIELD.MELUHAITTA]: yup.mixed().oneOf($enum(HANKE_MELUHAITTA).getValues()).required(),
+  [FORMFIELD.POLYHAITTA]: yup.mixed().oneOf($enum(HANKE_POLYHAITTA).getValues()).required(),
+  [FORMFIELD.TARINAHAITTA]: yup.mixed().oneOf($enum(HANKE_TARINAHAITTA).getValues()).required(),
+  [FORMFIELD.KAISTAHAITTA]: yup.mixed().oneOf($enum(HANKE_KAISTAHAITTA).getValues()).required(),
+  [FORMFIELD.KAISTAPITUUSHAITTA]: yup
+    .mixed()
+    .oneOf($enum(HANKE_KAISTAPITUUSHAITTA).getValues())
+    .required(),
 });
 
 export const hankeSchema = yup.object().shape({
@@ -71,32 +100,5 @@ export const hankeSchema = yup.object().shape({
     ),
   [FORMFIELD.ARVIOIJAT]: yup.array().nullable().ensure().of(contactSchema),
   [FORMFIELD.TOTEUTTAJAT]: yup.array().nullable().ensure().of(contactSchema),
-  [FORMFIELD.HAITTA_ALKU_PVM]: yup
-    .date()
-    .nullable()
-    .when(
-      ['$currentFormPage', FORMFIELD.ALKU_PVM, FORMFIELD.LOPPU_PVM],
-      // eslint-disable-next-line
-      // @ts-ignore nullable doesnt work with TS
-      (currentFormPage: number, alkuPvm: Date, loppuPvm: Date, schema: yup.DateSchema) => {
-        if (currentFormPage !== 4) return schema;
-        return alkuPvm
-          ? schema.min(startOfDay(new Date(alkuPvm))).max(endOfDay(new Date(loppuPvm)))
-          : schema;
-      }
-    ),
-  [FORMFIELD.HAITTA_LOPPU_PVM]: yup
-    .date()
-    .nullable()
-    .when(
-      ['$currentFormPage', FORMFIELD.ALKU_PVM, FORMFIELD.LOPPU_PVM],
-      // eslint-disable-next-line
-      // @ts-ignore nullable doesnt work with TS
-      (currentFormPage: number, alkuPvm: Date, loppuPvm: Date, schema: yup.DateSchema) => {
-        if (currentFormPage !== 4) return schema;
-        return loppuPvm
-          ? schema.min(startOfDay(new Date(alkuPvm))).max(endOfDay(new Date(loppuPvm)))
-          : schema;
-      }
-    ),
+  [FORMFIELD.HANKEALUEET]: yup.array().ensure().of(hankeAlueSchema),
 });
