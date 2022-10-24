@@ -8,6 +8,8 @@
   },
   "common": {
     "increment": "SV:Lisää",
+    "yes": "SV:Kyllä",
+    "no": "SV:Ei",
     "confirmationDialog": {
       "interruptDialog": {
         "titleText": "SV: Olet poistumassa lomakkeelta",
@@ -280,8 +282,8 @@
       "suunnitteluVaihe": "SV:Hankkeen suunnitteluvaihe",
       "alkuPvm": "SV:Hankkeen alkupäivä",
       "loppuPvm": "SV:Hankkeen loppupäivä",
-      "tyomaaTyyppi": "SV:Työmaan tyyppi",
-      "tyomaaKoko": "SV:Työmaan koko",
+      "tyomaaTyyppi": "SV:Työn tyyppi",
+      "tyomaaKoko": "SV:Hankkeen koko",
       "haittaAlkuPvm": "SV:Haitan alkupäivämäärä",
       "haittaLoppuPvm": "SV:Haitan loppupäivämäärä",
       "kaistaHaitta": "SV:Kaistahaitta",
@@ -290,7 +292,7 @@
       "polyHaitta": "SV:Pölyhaitta",
       "tarinaHaitta": "SV:Tärinähaitta",
       "tyomaaKatuosoite": "SV:Katuosoite",
-      "onYKTHanke": "SV:Hanke on YKT-hanke",
+      "onYKTHanke": "SV:YKT-hanke",
       "sukunimi": "SV:Sukunimi",
       "etunimi": "SV:Etunimi",
       "email": "SV:Sähköposti",
@@ -338,6 +340,10 @@
     },
     "hankkeenHaitatForm": {
       "header": "SV:Hankkeen haitat"
+    },
+    "hankkeenYhteenvetoForm": {
+      "header": "SV:Yhteenveto",
+      "instructions": "SV:Tarkista antamasi tiedot ja tallenna hanke tai tallenna ja siirry lisäämään hakemuksia."
     },
     "finishedForm": {
       "header": "SV:Lomake on lähetetty onnistuneesti"
