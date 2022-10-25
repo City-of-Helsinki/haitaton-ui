@@ -4,7 +4,8 @@
   padding: 0.4rem 0.2rem 0.4rem 1rem;
 
   &__titlesContainer {
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(auto, 300px));
     flex-grow: 1;
   }
 
@@ -13,11 +14,12 @@
     text-align: center;
     flex-direction: column-reverse;
     margin-right: 8px;
+    flex-shrink: 0;
   }
 }
 
 .indexTitle {
-  padding: 0.4rem 0.2rem 0.4rem 1rem;
+  padding: 0.4rem 0.2rem 0.4rem 0;
   display: flex;
 }
 

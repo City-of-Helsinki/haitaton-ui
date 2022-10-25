@@ -25,6 +25,7 @@ import api from '../../api/api';
 import MultipageForm from '../../forms/MultipageForm';
 import FormActions from '../../forms/components/FormActions';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
+import HankeHaitatForm from './HankeHaitatForm';
 
 async function saveHanke({
   data,
@@ -151,6 +152,11 @@ const HankeForm: React.FC<Props> = ({
     {
       element: <Form1 errors={errors} register={register} formData={formValues} />,
       label: t('hankeForm:hankkeenAlueForm:header'),
+      state: isNewHanke ? StepState.disabled : StepState.available,
+    },
+    {
+      element: <HankeHaitatForm formData={formValues} />,
+      label: t('hankeForm:hankkeenHaitatForm:header'),
       state: isNewHanke ? StepState.disabled : StepState.available,
     },
     {
