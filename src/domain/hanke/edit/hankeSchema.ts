@@ -33,7 +33,7 @@ export const hankeSchema = yup.object().shape({
   [FORMFIELD.NIMI]: yup.string().min(3).required(),
   [FORMFIELD.KUVAUS]: yup.string().required().min(1),
   [FORMFIELD.KATUOSOITE]: yup.string().required(),
-  [FORMFIELD.ALKU_PVM]: yup.date().nullable().required().min(today),
+  [FORMFIELD.ALKU_PVM]: yup.date().nullable().required(),
   [FORMFIELD.LOPPU_PVM]: yup
     .date()
     .nullable()

@@ -20,7 +20,7 @@ import Form2 from './HankeForm2';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
 import { HANKE_SAVETYPE } from '../../types/hanke';
-import { filterEmptyContacts, isHankeEditingDisabled } from './utils';
+import { filterEmptyContacts } from './utils';
 import api from '../../api/api';
 import MultipageForm from '../../forms/MultipageForm';
 import FormActions from '../../forms/components/FormActions';
@@ -38,10 +38,6 @@ async function saveHanke({
     ...filterEmptyContacts(data),
     saveType,
   };
-
-  if (isHankeEditingDisabled(data)) {
-    throw new Error('Editing disabled');
-  }
 
   if (data.hankeTunnus && data.geometriat) {
     await api.post(`/hankkeet/${data.hankeTunnus}/geometriat`, {

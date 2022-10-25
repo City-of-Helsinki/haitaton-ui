@@ -115,24 +115,6 @@ describe('HankeForm', () => {
     expect(screen.getByLabelText('Hankkeen loppupäivä', { exact: false })).toHaveValue('18.1.2023');
   });
 
-  test('Form editing should be disabled if it is already started ', () => {
-    render(
-      <HankeForm
-        formData={{
-          ...formData,
-          [FORMFIELD.ALKU_PVM]: '1999-03-15T00:00:00Z',
-        }}
-        onIsDirtyChange={() => ({})}
-        onFormClose={() => ({})}
-        onOpenHankeDelete={() => ({})}
-      >
-        child
-      </HankeForm>
-    );
-    expect(screen.getByTestId('editing-disabled-notification')).toBeInTheDocument();
-    expect(screen.getByText(/Käynnissä olevan hankkeen tietoja ei voi muokata/i)).toBeDefined();
-  });
-
   test('HankeFormContainer integration should work ', async () => {
     render(<HankeFormContainer />);
     fireEvent.change(screen.getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
