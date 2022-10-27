@@ -5,8 +5,6 @@ import yup from '../../../common/utils/yup';
 import { HANKE_VAIHE, HANKE_SUUNNITTELUVAIHE } from '../../types/hanke';
 import { FORMFIELD } from './types';
 
-export const today = startOfDay(new Date());
-
 // https://github.com/jquense/yup/issues/176
 // https://github.com/jquense/yup/issues/952
 export const contactSchema = yup.object().shape({
