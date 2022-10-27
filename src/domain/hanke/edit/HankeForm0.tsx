@@ -14,7 +14,6 @@ import {
 } from '../../types/hanke';
 import { FORMFIELD, FormProps } from './types';
 import { useFormPage } from './hooks/useFormPage';
-import EditDisabledNotification from './components/EditDisabledNotification';
 import useLocale from '../../../common/hooks/useLocale';
 import DropdownMultiselect from '../../../common/components/dropdown/DropdownMultiselect';
 import Checkbox from '../../../common/components/checkbox/Checkbox';
@@ -30,7 +29,6 @@ const Form0: React.FC<FormProps> = ({ errors, register, formData }) => {
 
   return (
     <div className="form0">
-      <EditDisabledNotification formData={formData} />
       <div className="dataWpr">
         <div className="formWpr">
           <TextInput name={FORMFIELD.TUNNUS} disabled />

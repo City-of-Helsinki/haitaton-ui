@@ -5,8 +5,6 @@ import yup from '../../../common/utils/yup';
 import { HANKE_VAIHE, HANKE_SUUNNITTELUVAIHE } from '../../types/hanke';
 import { FORMFIELD } from './types';
 
-export const today = startOfDay(new Date());
-
 // https://github.com/jquense/yup/issues/176
 // https://github.com/jquense/yup/issues/952
 export const contactSchema = yup.object().shape({
@@ -33,7 +31,7 @@ export const hankeSchema = yup.object().shape({
   [FORMFIELD.NIMI]: yup.string().min(3).required(),
   [FORMFIELD.KUVAUS]: yup.string().required().min(1),
   [FORMFIELD.KATUOSOITE]: yup.string().required(),
-  [FORMFIELD.ALKU_PVM]: yup.date().nullable().required().min(today),
+  [FORMFIELD.ALKU_PVM]: yup.date().nullable().required(),
   [FORMFIELD.LOPPU_PVM]: yup
     .date()
     .nullable()
