@@ -1,4 +1,5 @@
 import React from 'react';
+import userEvent from '@testing-library/user-event';
 import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
@@ -50,6 +51,7 @@ describe('HankeForm', () => {
   test('suunnitteluVaihde should be required when vaihe is suunnittelu', async () => {
     const handleIsDirtyChange = jest.fn();
     const handleFormClose = jest.fn();
+    const user = userEvent.setup();
 
     render(
       <HankeForm
@@ -68,19 +70,18 @@ describe('HankeForm', () => {
       target: { value: hankkeenOsoite },
     });
 
-    screen.queryByText('Hankkeen Vaihe')?.click();
-    screen.queryAllByText('Suunnittelu')[0].click();
+    expect(screen.queryByText('Hankkeen suunnitteluvaihe')).not.toBeInTheDocument();
 
-    screen.getByTestId(FORMFIELD.YKT_HANKE).click();
+    await user.click(screen.getByRole('radio', { name: 'Suunnittelu' }));
+
+    await user.click(screen.getByRole('checkbox', { name: 'Hanke on YKT-hanke' }));
 
     expect(screen.getByRole('button', { name: 'Tallenna ja keskeytä' })).toBeDisabled();
 
-    screen.queryAllByText('Hankkeen suunnitteluvaihe')[0].click();
-    screen.queryAllByText('Yleis- tai hankesuunnittelu')[0].click();
+    await user.click(screen.getByText('Hankkeen suunnitteluvaihe'));
+    await user.click(screen.getByText('Yleis- tai hankesuunnittelu'));
 
-    await waitFor(() =>
-      expect(screen.getByRole('button', { name: 'Tallenna ja keskeytä' })).not.toBeDisabled()
-    );
+    expect(screen.getByRole('button', { name: 'Tallenna ja keskeytä' })).not.toBeDisabled();
   });
 
   test('Form should be populated correctly ', () => {
