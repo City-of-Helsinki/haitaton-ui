@@ -19,6 +19,7 @@
 
   h3.labelHeader {
     display: flex;
+    gap: var(--spacing-2-xs);
 
     div[class^='Tooltip-module_wrapper'] {
       display: inline-block;
@@ -65,8 +66,19 @@
     }
   }
 
+  .formInstructions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-s);
+    margin-bottom: var(--spacing-s);
+  }
+
   .formWpr {
     margin-bottom: var(--spacing-m);
+  }
+
+  .formWprShort {
+    max-width: 520px;
   }
 
   .calendaraWpr {
