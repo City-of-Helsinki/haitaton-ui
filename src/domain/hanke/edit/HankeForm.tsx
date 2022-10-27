@@ -19,7 +19,7 @@ import Form1 from './HankeForm1';
 import Form2 from './HankeForm2';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
-import { HANKE_SAVETYPE } from '../../types/hanke';
+import { HANKE_SAVETYPE, HANKE_TYOMAAKOKO, HANKE_VAIHE } from '../../types/hanke';
 import { filterEmptyContacts, isHankeEditingDisabled } from './utils';
 import api from '../../api/api';
 import MultipageForm from '../../forms/MultipageForm';
@@ -82,7 +82,11 @@ const HankeForm: React.FC<Props> = ({
     criteriaMode: 'all',
     shouldFocusError: false,
     shouldUnregister: false,
-    defaultValues: formData,
+    defaultValues: {
+      vaihe: HANKE_VAIHE.OHJELMOINTI,
+      tyomaaKoko: HANKE_TYOMAAKOKO.SUPPEA_TAI_PISTE,
+      ...formData,
+    },
     resolver: yupResolver(hankeSchema),
   });
 
