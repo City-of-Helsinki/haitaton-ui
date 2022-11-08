@@ -54,6 +54,59 @@
       "stringMax": "Kentän pituus oltava enintään {{max}} merkkiä",
       "dateMin": "Ensimmäinen mahdollinen päivä on {{min}}",
       "dateMax": "Viimeinen mahdollinen päivä on {{max}}"
+    },
+    "yhteystiedot": {
+      "header": "Yhteystiedot",
+      "instructions": "Hankkeelle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hankkeeseeen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hanketta ja luomaan hankkeelle hakemuksia.",
+      "titles": {
+        "omistaja": "Hankkeen omistaja",
+        "rakennuttajat": "Rakennuttaja",
+        "toteuttajat": "Toteuttaja",
+        "muutTahot": "Muu taho",
+        "lisaaRakennuttajia": "Lisää rakennuttajia",
+        "lisaaRakennuttaja": "Lisää rakennuttaja",
+        "lisaaToteuttajia": "Lisää toteuttajia",
+        "lisaaToteuttaja": "Lisää toteuttaja",
+        "lisaaMuitaTahoja": "Lisää muita tahoja",
+        "lisaaMuuTaho": "Lisää muu taho",
+        "subContact": "Yhteyshenkilö",
+        "subContactInformation": "Yhteyshenkilön tiedot"
+      },
+      "labels": {
+        "tyyppi": "Tyyppi",
+        "nimi": "Nimi",
+        "tunnus": "Y-tunnus tai henkilötunnus",
+        "osoite": "Katuosoite",
+        "postiNro": "Postinumero",
+        "postiToimiPaikka": "Postitoimipaikka",
+        "email": "Sähköposti",
+        "puhelinnumero": "Puhelinnumero",
+        "rooli": "Rooli",
+        "osasto": "Osasto",
+        "organisaatio": "Organisaatio",
+        "rakennuttaja": "Rakennuttaja",
+        "erillinenYhteyshenkilo": "Erillinen yhteyshenkilö"
+      },
+      "placeholders": {
+        "otherPartyRole": "Isännöitsijä, konsultti..."
+      },
+      "helperTexts": {
+        "otherPartyRole": "Tahon rooli hankkeessa"
+      },
+      "contactType": {
+        "YKSITYISHENKILO": "Yksityishenkilö",
+        "YRITYS": "Yritys",
+        "YHTEISO": "Yhteisö"
+      },
+      "buttons": {
+        "addSubContact": "Lisää yhteyshenkilö",
+        "removeSubContact": "Poista yhteyshenkilö",
+        "remove": {
+          "rakennuttajat": "Poista rakennuttaja",
+          "toteuttajat": "Poista toteuttaja",
+          "muutTahot": "Poista muu taho"
+        }
+      }
     }
   },
   "routes": {
@@ -263,8 +316,6 @@
     "cancelButton": "Peru hanke",
     "nextButton": "Seuraava",
     "previousButton": "Edellinen",
-    "addContactButton": "Lisää yhteyshenkilö",
-    "removeContactButton": "Poista yhteyshenkilö",
     "insertFieldError": "Syötä kenttä",
     "savingSuccessHeader": "Luonnos tallennettu",
     "savingSuccessText": "Luonnos on tallennettu Hankelistalle",
@@ -300,11 +351,6 @@
       "omaOrganisaatio": "Lisää oma organisaatio",
       "insertOmaOrganisaatio": "Syötä oma organisaatio"
     },
-    "headers": {
-      "arvioijat": "Arvioijat",
-      "omistajat": "Omistajat",
-      "toteuttajat": "Toteuttajat"
-    },
     "toolTips": {
       "tipOpenLabel": "Avaa ohje",
       "perustiedot": "Hankkeen pakolliset perustiedot tulee täyttää. Mikäli kaikki pakolliset tiedot eivät ole täytettynä, uusi hanke tallentuu Haitattomaan, muttei voi edetä vaikutusten arviointiin. Hankkeen tietojen täydentämistä voi jatkaa myöhemmin avaamalla se hankelistan kautta",
@@ -329,9 +375,6 @@
     "hankkeenAlueForm": {
       "header": "Alueet",
       "instructions": "Hankkeelle voi piirttää useita geometrioita. Geometria alueet vaikuttavat hankkeen liikennehaittaindekseihin.\nPiirtotyökalut löytyvät karttanäkymän vasemmasta alalaidasta. Kynätyökalulla voi piirtää monikulmaisia geometrioita klikkaamalla kohtaan, johon haluat kulman. Neliötyökalulla saat muodostettua neliömäisiä alueita klikkaamalla ensin kartalle ja liikuttamalla hiirtä haluamaasi suuntaan. Uudelleenklikkaus \"sulkee\" neliön piirron.\nGeometriaa voi muokata \"tarttumalla\" geometrian reunasta ja vetämällä. Myös neliömäistä geometriaa voi muokata reunasta tarttumalla.\nVoit poistaa geometrian valitsemalla ensin geometrian klikkaamalla sitä, jolloin vasemman alalaidan piirtotyökaluihin ilmestyy roskakori ikoni, jota klikkaamalla geometrian voi poistaa."
-    },
-    "hankkeenYhteystiedotForm": {
-      "header": "Yhteystiedot"
     },
     "tyomaanTiedotForm": {
       "header": "Hankkeen lisätiedot"

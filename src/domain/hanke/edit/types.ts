@@ -1,6 +1,6 @@
 import { FieldErrors } from 'react-hook-form';
 import { PartialExcept } from '../../../common/types/utils';
-import { HankeData, HankeContactKey, HankeGeometria } from '../../types/hanke';
+import { HankeData, HankeContactTypeKey, HankeGeometria } from '../../types/hanke';
 
 export type FormNotification = 'ok' | 'success' | 'error' | null;
 
@@ -22,9 +22,10 @@ export enum FORMFIELD {
   MELUHAITTA = 'meluHaitta',
   POLYHAITTA = 'polyHaitta',
   TARINAHAITTA = 'tarinaHaitta',
-  OMISTAJAT = 'omistajat',
-  ARVIOIJAT = 'arvioijat',
+  OMISTAJA = 'omistaja',
+  RAKENNUTTAJAT = 'rakennuttajat',
   TOTEUTTAJAT = 'toteuttajat',
+  MUUTTAHOT = 'muutTahot',
   YKT_HANKE = 'onYKTHanke',
   GEOMETRIES_CHANGED = 'geometriesChanged',
   GEOMETRIAT = 'geometriat',
@@ -32,15 +33,19 @@ export enum FORMFIELD {
 
 export enum CONTACT_FORMFIELD {
   ID = 'id',
-  SUKUNIMI = 'sukunimi',
-  ETUNIMI = 'etunimi',
+  TYYPPI = 'tyyppi',
+  ROOLI = 'rooli',
+  NIMI = 'nimi',
+  TUNNUS = 'tunnus',
+  OSOITE = 'osoite',
+  POSTINRO = 'postiNro',
+  POSTITOIMIPAIKKA = 'postiToimiPaikka',
   EMAIL = 'email',
   PUHELINNUMERO = 'puhelinnumero',
-  ORGANISAATIO_ID = 'organisaatioId',
-  ORGANISAATIO_NIMI = 'organisaatioNimi',
+  ORGANISAATIO = 'organisaatio',
   OSASTO = 'osasto',
 }
-export interface HankeDataFormState extends PartialExcept<HankeData, HankeContactKey> {
+export interface HankeDataFormState extends PartialExcept<HankeData, HankeContactTypeKey> {
   geometriesChanged?: boolean; // "virtualField"
   geometriat?: HankeGeometria | null;
 }

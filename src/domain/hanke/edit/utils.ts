@@ -1,37 +1,28 @@
 import { isBefore, parseISO } from 'date-fns';
-import { HankeContact, HankeDataDraft } from '../../types/hanke';
+import { HankeDataDraft, HankeRakennuttaja, HankeMuuTaho } from '../../types/hanke';
 import { today } from './hankeSchema';
 import { FORMFIELD, HankeDataFormState } from './types';
 
-const isContactEmpty = ({
-  etunimi,
-  sukunimi,
-  email,
-  puhelinnumero,
-  organisaatioNimi,
-}: HankeContact) =>
-  etunimi === '' &&
-  sukunimi === '' &&
-  email === '' &&
-  puhelinnumero === '' &&
-  organisaatioNimi === '';
+const isContactEmpty = ({ nimi, email, puhelinnumero }: HankeRakennuttaja | HankeMuuTaho) =>
+  nimi === '' && email === '' && puhelinnumero === '';
 
 // This is temporary solution for sending empty contacts to API
 export const filterEmptyContacts = (hankeData: HankeDataFormState): HankeDataFormState => ({
   ...hankeData,
-  [FORMFIELD.OMISTAJAT]: hankeData[FORMFIELD.OMISTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
-  [FORMFIELD.ARVIOIJAT]: hankeData[FORMFIELD.ARVIOIJAT]?.filter((v) => !isContactEmpty(v)) || [],
+  [FORMFIELD.RAKENNUTTAJAT]:
+    hankeData[FORMFIELD.RAKENNUTTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
   [FORMFIELD.TOTEUTTAJAT]:
     hankeData[FORMFIELD.TOTEUTTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
+  [FORMFIELD.MUUTTAHOT]: hankeData[FORMFIELD.MUUTTAHOT]?.filter((v) => !isContactEmpty(v)) || [],
 });
 
 export const convertHankeDataToFormState = (
   hankeData: HankeDataDraft | undefined
 ): HankeDataFormState => ({
   ...hankeData,
-  omistajat: hankeData?.omistajat ? hankeData.omistajat : [],
-  arvioijat: hankeData?.arvioijat ? hankeData.arvioijat : [],
+  rakennuttajat: hankeData?.rakennuttajat ? hankeData.rakennuttajat : [],
   toteuttajat: hankeData?.toteuttajat ? hankeData.toteuttajat : [],
+  muutTahot: hankeData?.muutTahot ? hankeData.muutTahot : [],
 });
 
 export const isHankeEditingDisabled = ({ alkuPvm }: HankeDataDraft | HankeDataFormState) => {

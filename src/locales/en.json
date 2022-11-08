@@ -54,6 +54,59 @@
       "stringMax": "EN:Kentän pituus oltava enintään {{max}} merkkiä",
       "dateMin": "EN:Ensimmäinen mahdollinen päivä on {{min}}",
       "dateMax": "EN:Viimeinen mahdollinen päivä on {{max}}"
+    },
+    "yhteystiedot": {
+      "header": "EN:Yhteystiedot",
+      "instructions": "EN:Hankkeelle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hankkeeseeen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hanketta ja luomaan hankkeelle hakemuksia.",
+      "titles": {
+        "omistaja": "EN:Hankkeen omistaja",
+        "rakennuttajat": "EN:Rakennuttaja",
+        "toteuttajat": "EN:Toteuttaja",
+        "muutTahot": "EN:Muu taho",
+        "lisaaRakennuttajia": "EN:Lisää rakennuttajia",
+        "lisaaRakennuttaja": "EN:Lisää rakennuttaja",
+        "lisaaToteuttajia": "EN:Lisää toteuttajia",
+        "lisaaToteuttaja": "EN:Lisää toteuttaja",
+        "lisaaMuitaTahoja": "EN:Lisää muita tahoja",
+        "lisaaMuuTaho": "EN:Lisää muu taho",
+        "subContact": "EN:Yhteyshenkilö",
+        "subContactInformation": "EN:Yhteyshenkilön tiedot"
+      },
+      "labels": {
+        "tyyppi": "EN:Tyyppi",
+        "nimi": "EN:Nimi",
+        "tunnus": "EN:Y-tunnus tai henkilötunnus",
+        "osoite": "EN:Katuosoite",
+        "postiNro": "EN:Postinumero",
+        "postiToimiPaikka": "EN:Postitoimipaikka",
+        "email": "EN:Sähköposti",
+        "puhelinnumero": "EN:Puhelinnumero",
+        "rooli": "EN:Rooli",
+        "osasto": "EN:Osasto",
+        "organisaatio": "EN:Organisaatio",
+        "rakennuttaja": "EN:Rakennuttaja",
+        "erillinenYhteyshenkilo": "EN:Erillinen yhteyshenkilö"
+      },
+      "placeholders": {
+        "otherPartyRole": "EN:Isännöitsijä, konsultti..."
+      },
+      "helperTexts": {
+        "otherPartyRole": "EN:Tahon rooli hankkeessa"
+      },
+      "contactType": {
+        "YKSITYISHENKILO": "EN:Yksityishenkilö",
+        "YRITYS": "EN:Yritys",
+        "YHTEISO": "EN:Yhteisö"
+      },
+      "buttons": {
+        "addSubContact": "EN:Lisää yhteyshenkilö",
+        "removeSubContact": "EN:Poista yhteyshenkilö",
+        "remove": {
+          "rakennuttajat": "EN:Poista rakennuttaja",
+          "toteuttajat": "EN:Poista toteuttaja",
+          "muutTahot": "EN:Poista muu taho"
+        }
+      }
     }
   },
   "routes": {
@@ -300,11 +353,6 @@
       "omaOrganisaatio": "EN:Lisää oma organisaatio",
       "insertOmaOrganisaatio": "EN:Syötä oma organisaatio"
     },
-    "headers": {
-      "arvioijat": "EN:Arvioijat",
-      "omistajat": "EN:Omistajat",
-      "toteuttajat": "EN:Toteuttajat"
-    },
     "toolTips": {
       "tipOpenLabel": "EN:Avaa ohje",
       "perustiedot": "EN:Hankkeen pakolliset perustiedot tulee täyttää. Mikäli kaikki pakolliset tiedot eivät ole täytettynä, uusi hanke tallentuu Haitattomaan, muttei voi edetä vaikutusten arviointiin. Hankkeen tietojen täydentämistä voi jatkaa myöhemmin avaamalla se hankelistan kautta",
@@ -329,9 +377,6 @@
     "hankkeenAlueForm": {
       "header": "EN:Alueet",
       "instructions": "EN: Hankkeelle voi piirttää useita geometrioita. Geometria alueet vaikuttavat hankkeen liikennehaittaindekseihin.\nPiirtotyökalut löytyvät karttanäkymän vasemmasta alalaidasta. Kynätyökalulla voi piirtää monikulmaisia geometrioita klikkaamalla kohtaan, johon haluat kulman. Neliötyökalulla saat muodostettua neliömäisiä alueita klikkaamalla ensin kartalle ja liikuttamalla hiirtä haluamaasi suuntaan. Uudelleenklikkaus \"sulkee\" neliön piirron.\nGeometriaa voi muokata \"tarttumalla\" geometrian reunasta ja vetämällä. Myös neliömäistä geometriaa voi muokata reunasta tarttumalla.\nVoit poistaa geometrian valitsemalla ensin geometrian klikkaamalla sitä, jolloin vasemman alalaidan piirtotyökaluihin ilmestyy roskakori ikoni, jota klikkaamalla geometrian voi poistaa."
-    },
-    "hankkeenYhteystiedotForm": {
-      "header": "EN:Hankkeen yhteystiedot"
     },
     "tyomaanTiedotForm": {
       "header": "EN:Hankkeen lisätiedot"

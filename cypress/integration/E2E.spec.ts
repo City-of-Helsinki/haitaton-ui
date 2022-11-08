@@ -27,18 +27,14 @@ const hankeMock: HankeDataDraft = {
   tyomaaKatuosoite: 'Mannerheimintie 14',
   vaihe: HANKE_VAIHE.SUUNNITTELU,
   suunnitteluVaihe: HANKE_SUUNNITTELUVAIHE.KATUSUUNNITTELU_TAI_ALUEVARAUS,
-  omistajat: [
-    {
-      id: null, // not used but types require it
-      etunimi: 'Harri',
-      sukunimi: 'Hankettaja',
-      email: 'harri.hanketest@hankekatu.foo',
-      puhelinnumero: '12341234',
-      organisaatioId: null, // not used but types require it
-      organisaatioNimi: '', // not used but types require it
-      osasto: '', // not used but types require it
-    },
-  ],
+  omistaja: {
+    id: null, // not used but types require it
+    tyyppi: 'YKSITYISHENKILO',
+    tunnus: '000000-000X',
+    nimi: 'Harri Hankettaja',
+    email: 'harri.hanketest@hankekatu.foo',
+    puhelinnumero: '12341234',
+  },
   kaistaHaitta: HANKE_KAISTAHAITTA.VIISI,
   kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA.VIISI,
   meluHaitta: HANKE_MELUHAITTA.KOLME,

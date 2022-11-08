@@ -122,4 +122,9 @@
   section[class^='Tooltip-module_tooltip'] {
     min-width: 20rem;
   }
+
+  .fieldset {
+    padding: var(--spacing-s);
+    margin-bottom: var(--spacing-s);
+  }
 }

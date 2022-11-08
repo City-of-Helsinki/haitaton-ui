@@ -108,11 +108,10 @@ export const waitForToast = () => {
 };
 
 export const fillForm2 = (hankeData: HankeDataDraft) => {
-  if (hankeData.omistajat && hankeData.omistajat[0]) {
-    cy.get('input[data-testid=omistajat-etunimi]').type(hankeData.omistajat[0].etunimi);
-    cy.get('input[data-testid=omistajat-sukunimi]').type(hankeData.omistajat[0].sukunimi);
-    cy.get('input[data-testid=omistajat-email]').type(hankeData.omistajat[0].email);
-    cy.get('input[data-testid=omistajat-puhelinnumero]').type(hankeData.omistajat[0].puhelinnumero);
+  if (hankeData.omistaja) {
+    cy.get('input[data-testid=omistaja.nimi]').type(hankeData.omistaja.nimi);
+    cy.get('input[data-testid=omistaja.email]').type(hankeData.omistaja.email);
+    cy.get('input[data-testid=omistaja.puhelinnumero]').type(hankeData.omistaja.puhelinnumero);
   }
 };
 
