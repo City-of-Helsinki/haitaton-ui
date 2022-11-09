@@ -64,13 +64,6 @@
         "title": "SV::Haitaton - Etusivu"
       }
     },
-    "PROJECTS": {
-      "path": "/projects",
-      "headerLabel": "SV::Hankelista",
-      "meta": {
-        "title": "SV::Haitaton - Hankelista"
-      }
-    },
     "HANKEPORTFOLIO": {
       "path": "/hankesalkku",
       "headerLabel": "SV:Omat hankkeet",
@@ -97,13 +90,6 @@
       "headerLabel": "SV:Hankkeet yleisillä alueilla",
       "meta": {
         "title": "SV:Haitaton - Hankelista"
-      }
-    },
-    "MAP": {
-      "path": "/map",
-      "headerLabel": "SV:Hankkeet yleisillä alueilla",
-      "meta": {
-        "title": "SV::Haitaton - Kartta"
       }
     },
     "NEW_HANKE": {

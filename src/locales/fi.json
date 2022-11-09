@@ -92,20 +92,6 @@
         "title": "Haitaton - Hankelista"
       }
     },
-    "PROJECTS": {
-      "path": "hankelista",
-      "headerLabel": "Hankelista",
-      "meta": {
-        "title": "Haitaton - Hankelista"
-      }
-    },
-    "MAP": {
-      "path": "kartta",
-      "headerLabel": "Hankkeet yleisillä alueilla",
-      "meta": {
-        "title": "Haitaton - Kartta"
-      }
-    },
     "NEW_HANKE": {
       "path": "/hanke/uusi",
       "headerLabel": "Luo uusi hanke",

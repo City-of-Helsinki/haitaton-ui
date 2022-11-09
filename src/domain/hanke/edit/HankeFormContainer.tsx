@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Flex } from '@chakra-ui/react';
 import { LoadingSpinner } from 'hds-react';
+import { useTranslation } from 'react-i18next';
 import { HankeDataDraft } from '../../types/hanke';
 import HankeForm from './HankeForm';
 import { HankeDataFormState } from './types';
 import { convertHankeDataToFormState } from './utils';
 import ConfirmationDialog from '../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import api from '../../api/api';
-import { t } from '../../../locales/i18nForTests';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 
 const getHanke = async (hankeTunnus?: string) => {
@@ -31,6 +31,7 @@ type Props = {
 };
 
 const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [interruptDialogOpen, setInterruptDialogOpen] = useState(false);

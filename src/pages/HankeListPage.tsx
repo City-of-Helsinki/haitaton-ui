@@ -5,11 +5,11 @@ import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
 import HankeListContainer from '../domain/hanke/list/HankeListContainer';
 
 const HankeListPage: React.FC = () => {
-  const { PROJECTS } = useLocalizedRoutes();
+  const { PUBLIC_HANKKEET_LIST } = useLocalizedRoutes();
 
   return (
     <Container>
-      <PageMeta routeData={PROJECTS} />
+      <PageMeta routeData={PUBLIC_HANKKEET_LIST} />
       <HankeListContainer />
     </Container>
   );
