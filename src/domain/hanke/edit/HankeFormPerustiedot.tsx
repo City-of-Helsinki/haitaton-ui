@@ -14,7 +14,6 @@ import {
 } from '../../types/hanke';
 import { FORMFIELD, FormProps } from './types';
 import { useFormPage } from './hooks/useFormPage';
-import EditDisabledNotification from './components/EditDisabledNotification';
 import DropdownMultiselect from '../../../common/components/dropdown/DropdownMultiselect';
 import Checkbox from '../../../common/components/checkbox/Checkbox';
 import { getInputErrorText } from '../../../common/utils/form';
@@ -46,7 +45,6 @@ const HankeFormPerustiedot: React.FC<FormProps> = ({ errors, register, formData 
       <Box mb="var(--spacing-l)">
         <p>{t('form:requiredInstruction')}</p>
       </Box>
-      <EditDisabledNotification formData={formData} />
       <div className="formWpr">
         <TextInput name={FORMFIELD.NIMI} required />
       </div>

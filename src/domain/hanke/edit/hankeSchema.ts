@@ -1,10 +1,7 @@
-import startOfDay from 'date-fns/startOfDay';
 import { $enum } from 'ts-enum-util';
 import yup from '../../../common/utils/yup';
 import { HANKE_VAIHE, HANKE_SUUNNITTELUVAIHE } from '../../types/hanke';
 import { FORMFIELD } from './types';
-
-export const today = startOfDay(new Date());
 
 // https://github.com/jquense/yup/issues/176
 // https://github.com/jquense/yup/issues/952
