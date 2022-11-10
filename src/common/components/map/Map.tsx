@@ -59,18 +59,18 @@ const Map: React.FC<Props> = ({
 
     // eslint-disable-next-line
     return () => mapObject.setTarget(undefined);
-  }, []);
+  }, [center, zoom]);
 
   useEffect(() => {
     if (!map) return;
     map.getView().setZoom(zoom);
-  }, [zoom]);
+  }, [map, zoom]);
 
   useEffect(() => {
     if (!map) return;
 
     map.getView().setCenter(center);
-  }, [center]);
+  }, [map, center]);
 
   return (
     <MapContext.Provider value={{ map, layers }}>

@@ -499,6 +499,7 @@
         "BLUE": "EN:Indeksoimaton"
       }
     },
+    "attribution": "EN:Aineistot &copy; <a href='https://kartta.hel.fi'>Helsingin kaupunki</a>",
     "drawSquareButtonAria": "EN:Piirrä neliö kartalle",
     "drawPolygonButtonAria": "EN:Piirrä monikulmio kartalle"
   },
