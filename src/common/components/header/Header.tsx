@@ -109,6 +109,7 @@ const Header: React.FC = () => {
                 setLanguage(lang);
               }}
               key={lang}
+              lang={lang}
             />
           ))}
         </Navigation.LanguageSelector>

@@ -5,6 +5,8 @@ import Header from './Header';
 import useUser from '../../../domain/auth/useUser';
 import i18next from '../../../locales/i18nForTests';
 
+jest.setTimeout(10000);
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockedUseUser = useUser as jest.Mock<any>;
 jest.mock('../../../domain/auth/useUser');
