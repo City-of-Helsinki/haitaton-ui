@@ -46,8 +46,8 @@ const LocaleRoutes = () => {
       />
       <Route path={t('routes:PUBLIC_HANKKEET:path')} element={<MapAndListPage />}>
         <Route element={<MapPage />} index />
-        <Route path={t('routes:MAP:path')} element={<MapPage />} />
-        <Route path={t('routes:PROJECTS:path')} element={<HankeListPage />} />
+        <Route path={t('routes:PUBLIC_HANKKEET_MAP:path')} element={<MapPage />} />
+        <Route path={t('routes:PUBLIC_HANKKEET_LIST:path')} element={<HankeListPage />} />
       </Route>
       <Route path={t('routes:ACCESSIBILITY:path')} element={<AccessibilityPage />} />
       <Route path={t('routes:REFERENCES:path')} element={<ReferencesPage />} />

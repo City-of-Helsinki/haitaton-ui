@@ -18,12 +18,10 @@ const useLinkPath = (route: ROUTES): ((routeParams: RouteParams) => string) => {
   // https://github.com/UselessPickles/ts-enum-util/blob/master/docs/EnumValueVisitor.md#basic-usage-examples
   return $enum.visitValue(route).with({
     [ROUTES.HOME]: defaultReturnFunc,
-    [ROUTES.PROJECTS]: defaultReturnFunc,
     [ROUTES.HANKEPORTFOLIO]: defaultReturnFunc,
     [ROUTES.NEW_HANKE]: defaultReturnFunc,
     [ROUTES.EDIT_HANKE]: () => ({ hankeTunnus }: RouteParams) =>
       path.replace(':hankeTunnus', hankeTunnus),
-    [ROUTES.MAP]: defaultReturnFunc,
     [ROUTES.PUBLIC_HANKKEET]: defaultReturnFunc,
     [ROUTES.PUBLIC_HANKKEET_MAP]: defaultReturnFunc,
     [ROUTES.PUBLIC_HANKKEET_LIST]: defaultReturnFunc,
