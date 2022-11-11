@@ -54,6 +54,13 @@
       "stringMax": "SV:Kentän pituus oltava enintään {{max}} merkkiä",
       "dateMin": "SV:Ensimmäinen mahdollinen päivä on {{min}}",
       "dateMax": "SV:Viimeinen mahdollinen päivä on {{max}}"
+    },
+    "headers": {
+      "liitteet": "SV:Liitteet"
+    },
+    "labels": {
+      "selectFile": "SV:Valitse lisättävä tiedosto",
+      "selectFiles": "SV:Valitse lisättävät tiedostot"
     }
   },
   "routes": {
@@ -324,6 +331,9 @@
     },
     "hankkeenHaitatForm": {
       "header": "SV:Haitat"
+    },
+    "hankkeenLiitteetForm": {
+      "instructions": "SV:Lisää mahdolliset liitteet. Hankkeelle lisättävät liitteet eivät siirry hakemuksille."
     },
     "finishedForm": {
       "header": "SV:Lomake on lähetetty onnistuneesti"

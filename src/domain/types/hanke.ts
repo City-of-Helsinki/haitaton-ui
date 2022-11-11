@@ -179,6 +179,7 @@ export interface HankeData {
   toteuttajat: Array<HankeContact>;
   tormaystarkasteluTulos: HankeIndexData | null;
   saveType: HANKE_SAVETYPE_KEY;
+  liitteet?: Array<File>;
   version?: number;
   createdBy?: string;
   createdAt?: string;

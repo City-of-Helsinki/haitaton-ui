@@ -28,6 +28,7 @@ export enum FORMFIELD {
   YKT_HANKE = 'onYKTHanke',
   GEOMETRIES_CHANGED = 'geometriesChanged',
   GEOMETRIAT = 'geometriat',
+  LIITTEET = 'liitteet',
 }
 
 export enum CONTACT_FORMFIELD {
