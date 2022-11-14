@@ -67,10 +67,10 @@ describe('authService', () => {
   });
 
   describe('logout', () => {
-    it('should call signoutRedirect from oidc', () => {
+    it('should call signoutRedirect from oidc', async () => {
       const signoutRedirect = jest.spyOn(userManager, 'signoutRedirect');
 
-      authService.logout();
+      await authService.logout();
 
       expect(signoutRedirect).toHaveBeenCalledTimes(1);
     });
