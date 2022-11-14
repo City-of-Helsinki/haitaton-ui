@@ -1,11 +1,10 @@
-.hankesalkkuContainer {
-  max-width: var(--breakpoint-xl);
-  padding: 0 var(--spacing-l);
-  margin: auto;
+@import 'layout.scss';
 
+.hankesalkkuContainer {
   .contentContainer {
+    max-width: var(--breakpoint-xl);
+    margin: auto;
     padding: var(--spacing-l) var(--spacing-l) var(--spacing-3-xl) var(--spacing-l);
-    background: var(--color-white);
     overflow-x: hidden;
     min-height: 65vh;
 
@@ -150,28 +149,38 @@
     margin-right: var(--spacing-xs);
   }
 
-  .filters {
-    display: grid;
-    grid-template-columns: 48% 48%;
-    column-gap: var(--spacing-xl);
-    row-gap: var(--spacing-s);
+  .headerContainer {
+    background-color: var(--color-summer-light);
+    padding: var(--spacing-s) var(--spacing-xl) var(--spacing-3-xl);
 
-    .dateRange {
-      display: flex;
-    }
+    .filters {
+      display: grid;
+      grid-template-columns: 1fr;
+      column-gap: var(--spacing-xl);
+      row-gap: var(--spacing-s);
+      max-width: var(--breakpoint-l);
 
-    .clearBtn {
-      margin-top: 28px;
-      height: min-content;
-    }
+      @include respond-above(m) {
+        grid-template-columns: 1fr 1fr;
+      }
 
-    .dateRangeHelperText {
-      color: #666;
-      display: block;
-      line-height: var(--lineheight-l);
-      font-size: var(--fontsize-body-m);
-      margin-top: var(--spacing-3-xs);
-      white-space: pre-line;
+      .dateRange {
+        display: flex;
+      }
+
+      .clearBtn {
+        margin-top: 28px;
+        height: min-content;
+      }
+
+      .dateRangeHelperText {
+        color: #666;
+        display: block;
+        line-height: var(--lineheight-l);
+        font-size: var(--fontsize-body-m);
+        margin-top: var(--spacing-3-xs);
+        white-space: pre-line;
+      }
     }
   }
 }

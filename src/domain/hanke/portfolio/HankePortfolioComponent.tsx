@@ -10,7 +10,6 @@ import {
 } from 'react-table';
 import {
   useAccordion,
-  Button,
   Card,
   Select,
   Tag,
@@ -19,9 +18,8 @@ import {
   TabList,
   TabPanel,
   TextInput,
-  Fieldset,
 } from 'hds-react';
-import { IconAngleDown, IconAngleUp, IconPen, IconCrossCircle } from 'hds-react/icons';
+import { IconAngleDown, IconAngleUp, IconPen } from 'hds-react/icons';
 import { Link } from 'react-router-dom';
 import Text from '../../../common/components/text/Text';
 import GridItem from '../../../common/components/grid/GridItem';
@@ -236,170 +234,6 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               </div>
             </div>
           </TabPanel>
-          {/* Disabloitu toistaiseksi ennen kuin yhteyshenkilöiden tietorakenne saadaan
-              paremmin sointumaan tätä näkymää varten
-          <TabPanel>
-            <div className={styles.gridContactInfo}>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h5" weight="bold">
-                  {t('hankePortfolio:labels:paatoksenHakija')}
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h5" weight="bold">
-                  {t('hankePortfolio:labels:yhteyshenkilo')}
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:nimi')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  lipsum
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:nimi')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  lipsum
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:osoite')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  lipsum
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:sposti')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  lipsum
-                </Text>
-              </div>
-              <div className={styles.gridItem} />
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:puhelin')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  lipsum
-                </Text>
-              </div>
-            </div>
-            <div className={styles.gridContactInfo}>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h5" weight="bold">
-                  {t('hankePortfolio:labels:rakennuttaja')}
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h5" weight="bold">
-                  {t('hankePortfolio:labels:yhteyshenkilo')}
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:nimi')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  lipsum
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:nimi')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  lipsum
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:osoite')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  lipsum
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:sposti')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  lipsum
-                </Text>
-              </div>
-              <div className={styles.gridItem} />
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:puhelin')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  lipsum
-                </Text>
-              </div>
-            </div>
-            <div className={styles.gridContactInfo}>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h5" weight="bold">
-                  {t('hankePortfolio:labels:tyonsuorittaja')}
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h5" weight="bold">
-                  {t('hankePortfolio:labels:yhteyshenkilo')}
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:nimi')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  lipsum
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:nimi')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  lipsum
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:osoite')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  lipsum
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:sposti')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  lipsum
-                </Text>
-              </div>
-              <div className={styles.gridItem} />
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:puhelin')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  lipsum
-                </Text>
-              </div>
-            </div>
-          </TabPanel>
-          */}
         </Tabs>
       </Card>
     </>
@@ -437,38 +271,38 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
     });
   };
 
-  const dateStartFilter = (dateStartRows: Row[], id: string[], dateStart: string) => {
-    if (dateStart) {
-      if (hankeFilterEndDate) {
-        return dateStartRows.filter((hanke) =>
-          hankeIsBetweenDates({ startDate: dateStart, endDate: hankeFilterEndDate })({
-            startDate: hanke.values.alkuPvm,
-            endDate: hanke.values.loppuPvm,
-          })
-        );
+  const columns: Column[] = React.useMemo(() => {
+    const dateStartFilter = (dateStartRows: Row[], id: string[], dateStart: string) => {
+      if (dateStart) {
+        if (hankeFilterEndDate) {
+          return dateStartRows.filter((hanke) =>
+            hankeIsBetweenDates({ startDate: dateStart, endDate: hankeFilterEndDate })({
+              startDate: hanke.values.alkuPvm,
+              endDate: hanke.values.loppuPvm,
+            })
+          );
+        }
+        return dateStartRows.filter((hanke) => dateStart <= hanke.values.loppuPvm);
       }
-      return dateStartRows.filter((hanke) => dateStart <= hanke.values.loppuPvm);
-    }
-    return dateStartRows;
-  };
+      return dateStartRows;
+    };
 
-  const dateEndFilter = (dateEndRows: Row[], id: string[], dateEnd: string) => {
-    if (dateEnd) {
-      if (hankeFilterStartDate) {
-        return dateEndRows.filter((hanke) =>
-          hankeIsBetweenDates({ startDate: hankeFilterStartDate, endDate: dateEnd })({
-            startDate: hanke.values.alkuPvm,
-            endDate: hanke.values.loppuPvm,
-          })
-        );
+    const dateEndFilter = (dateEndRows: Row[], id: string[], dateEnd: string) => {
+      if (dateEnd) {
+        if (hankeFilterStartDate) {
+          return dateEndRows.filter((hanke) =>
+            hankeIsBetweenDates({ startDate: hankeFilterStartDate, endDate: dateEnd })({
+              startDate: hanke.values.alkuPvm,
+              endDate: hanke.values.loppuPvm,
+            })
+          );
+        }
+        return dateEndRows.filter((hanke) => hanke.values.alkuPvm <= dateEnd);
       }
-      return dateEndRows.filter((hanke) => hanke.values.alkuPvm <= dateEnd);
-    }
-    return dateEndRows;
-  };
+      return dateEndRows;
+    };
 
-  const columns: Column[] = React.useMemo(
-    () => [
+    return [
       {
         Header: 'hankeTunnus',
         id: 'hankeTunnus',
@@ -509,9 +343,9 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
         },
         filter: dateEndFilter,
       },
-    ],
-    []
-  );
+    ];
+  }, [hankeFilterStartDate, hankeFilterEndDate]);
+
   const {
     canNextPage,
     canPreviousPage,
@@ -563,7 +397,7 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
 
   useEffect(() => {
     setFilter('vaihe', selectedHankeVaiheet);
-  }, [selectedHankeVaiheet]);
+  }, [selectedHankeVaiheet, setFilter]);
 
   const [selectedHankeTyypit, setSelectedHankeTyypit] = useState<string[]>([]);
 
@@ -585,7 +419,7 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
 
   useEffect(() => {
     setFilter('tyomaaTyyppi', selectedHankeTyypit);
-  }, [selectedHankeTyypit]);
+  }, [selectedHankeTyypit, setFilter]);
 
   const searchHankeInputChange = (searchInput: string) => {
     const filter = searchInput && searchInput.length > 0 ? searchInput : undefined;
@@ -602,7 +436,7 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
     } else {
       setFilter('alkuPvm', null);
     }
-  }, [hankeFilterStartDate]);
+  }, [hankeFilterStartDate, setFilter]);
 
   useEffect(() => {
     if (hankeFilterEndDate) {
@@ -610,92 +444,92 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
     } else {
       setFilter('loppuPvm', null);
     }
-  }, [hankeFilterEndDate]);
+  }, [hankeFilterEndDate, setFilter]);
 
   return (
     <>
-      <Fieldset className={styles.filters} heading={t('hankePortfolio:filters')} border>
-        <TextInput
-          className={styles.hankeSearch}
-          id="searchHanke"
-          onChange={(e) => searchHankeInputChangeDebounced(e.target.value)}
-          label={t('hankePortfolio:search')}
-          helperText={t('hankePortfolio:searchHelperText')}
-        />
-        <div>
-          <div className={styles.dateRange}>
-            <DateRangeControl
-              startDate={hankeFilterStartDate}
-              endDate={hankeFilterEndDate}
-              updateStartDate={setHankeFilterStartDate}
-              updateEndDate={setHankeFilterEndDate}
-            />
-            <Button
-              className={styles.clearBtn}
-              onClick={() => setHankeFilterStartDate(null) && setHankeFilterEndDate(null)}
-              variant="supplementary"
-              iconLeft={<IconCrossCircle aria-hidden />}
-            >
-              {t('hankePortfolio:clearDates')}
-            </Button>
-          </div>
-          <span className={styles.dateRangeHelperText}>
-            {t('hankePortfolio:timePeriodHelperText')}
-          </span>
-        </div>
+      <div className={styles.headerContainer}>
+        <Text
+          tag="h1"
+          data-testid="HankePortfolioPageHeader"
+          styleAs="h1"
+          spacingBottom="s"
+          weight="bold"
+        >
+          {t('hankePortfolio:pageHeader')}
+        </Text>
 
-        <Select
-          className={styles.hankeVaihe}
-          multiselect
-          label={t('hankePortfolio:hankevaiheet')}
-          helper={t('hankePortfolio:hankevaiheetHelperText')}
-          options={hankeVaiheOptions}
-          defaultValue={hankeVaiheOptions}
-          clearButtonAriaLabel="Clear all selections"
-          // eslint-disable-next-line no-template-curly-in-string
-          selectedItemRemoveButtonAriaLabel="Remove ${value}"
-          onChange={updateHankeVaihe}
-        />
-
-        <Select
-          className={styles.hankeTyyppi}
-          multiselect
-          label={t('hankePortfolio:hankkeentyyppi')}
-          helper={t('hankePortfolio:hankkeentyyppiHelperText')}
-          options={hankeTyyppiOptions}
-          defaultValue={[]}
-          clearButtonAriaLabel="Clear all selections"
-          // eslint-disable-next-line no-template-curly-in-string
-          selectedItemRemoveButtonAriaLabel="Remove ${value}"
-          onChange={updateHankeTyyppi}
-        />
-        <p data-testid="numberOfFilteredRows" style={{ display: 'none' }}>
-          {rows.length}
-        </p>
-      </Fieldset>
-
-      {rows.length > 0 &&
-        page.map((row) => {
-          return (
-            <div key={row.original.hankeTunnus}>
-              <CustomAccordion hanke={row.original} />
+        <div className={styles.filters}>
+          <TextInput
+            className={styles.hankeSearch}
+            id="searchHanke"
+            onChange={(e) => searchHankeInputChangeDebounced(e.target.value)}
+            label={t('hankePortfolio:search')}
+          />
+          <div>
+            <div className={styles.dateRange}>
+              <DateRangeControl
+                startDate={hankeFilterStartDate}
+                endDate={hankeFilterEndDate}
+                updateStartDate={setHankeFilterStartDate}
+                updateEndDate={setHankeFilterEndDate}
+              />
             </div>
-          );
-        })}
-      {rows.length === 0 && preFilteredRows.length > 0 && (
-        <div>{t('hankePortfolio:noneFound')}</div>
-      )}
-      {preFilteredRows.length === 0 && <div>{t('hankePortfolio:noneExist')}</div>}
-      <PaginationControl
-        goToPage={gotoPage}
-        nextPage={nextPage}
-        previousPage={previousPage}
-        pageCount={pageCount}
-        pageIndex={pageIndex}
-        pagesLength={pageOptions.length}
-        canNextPage={canNextPage}
-        canPreviousPage={canPreviousPage}
-      />
+          </div>
+
+          <Select
+            className={styles.hankeVaihe}
+            multiselect
+            label={t('hankePortfolio:hankevaiheet')}
+            options={hankeVaiheOptions}
+            defaultValue={hankeVaiheOptions}
+            clearButtonAriaLabel="Clear all selections"
+            // eslint-disable-next-line no-template-curly-in-string
+            selectedItemRemoveButtonAriaLabel="Remove ${value}"
+            onChange={updateHankeVaihe}
+          />
+
+          <Select
+            className={styles.hankeTyyppi}
+            multiselect
+            label={t('hankePortfolio:hankkeentyyppi')}
+            options={hankeTyyppiOptions}
+            defaultValue={[]}
+            clearButtonAriaLabel="Clear all selections"
+            // eslint-disable-next-line no-template-curly-in-string
+            selectedItemRemoveButtonAriaLabel="Remove ${value}"
+            onChange={updateHankeTyyppi}
+          />
+          <p data-testid="numberOfFilteredRows" style={{ display: 'none' }}>
+            {rows.length}
+          </p>
+        </div>
+      </div>
+
+      <div className={styles.contentContainer}>
+        {rows.length > 0 &&
+          page.map((row) => {
+            return (
+              <div key={row.original.hankeTunnus}>
+                <CustomAccordion hanke={row.original} />
+              </div>
+            );
+          })}
+        {rows.length === 0 && preFilteredRows.length > 0 && (
+          <div>{t('hankePortfolio:noneFound')}</div>
+        )}
+        {preFilteredRows.length === 0 && <div>{t('hankePortfolio:noneExist')}</div>}
+        <PaginationControl
+          goToPage={gotoPage}
+          nextPage={nextPage}
+          previousPage={previousPage}
+          pageCount={pageCount}
+          pageIndex={pageIndex}
+          pagesLength={pageOptions.length}
+          canNextPage={canNextPage}
+          canPreviousPage={canPreviousPage}
+        />
+      </div>
     </>
   );
 };
@@ -705,27 +539,9 @@ type Props = {
 };
 
 const HankePortfolio: React.FC<Props> = ({ hankkeet }) => {
-  const { t } = useTranslation();
-
-  const memoizedHankkeet = React.useMemo(() => hankkeet, []);
-
   return (
     <div className={styles.hankesalkkuContainer}>
-      <div>
-        <Text
-          tag="h1"
-          data-testid="HankePortfolioPageHeader"
-          styleAs="h2"
-          spacing="s"
-          weight="bold"
-        >
-          {t('hankePortfolio:pageHeader')}
-        </Text>
-
-        <div className={styles.contentContainer}>
-          <PaginatedPortfolio data={memoizedHankkeet} />
-        </div>
-      </div>
+      <PaginatedPortfolio data={hankkeet} />
     </div>
   );
 };

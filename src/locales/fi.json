@@ -68,7 +68,7 @@
       "path": "/hankesalkku",
       "headerLabel": "Omat hankkeet",
       "meta": {
-        "title": "Haitaton - Hankesalkku"
+        "title": "Haitaton - Omat hankkeet"
       }
     },
     "PUBLIC_HANKKEET": {
@@ -408,7 +408,7 @@
   },
   "hankePortfolio": {
     "filters": "Rajausehdot",
-    "pageHeader": "Hankesalkku",
+    "pageHeader": "Omat hankkeet",
     "search": "Haku",
     "searchHelperText": "Hae hankkeen nimellä tai tunnuksella",
     "noneFound": "Haulla ei löytynyt yhtään hankkeita.",
@@ -419,7 +419,7 @@
     "endDate": "Ajanjakson loppu",
     "clearDates": "Tyhjennä",
     "timePeriodHelperText": "Aikaväli jolloin haitta on aktiivinen",
-    "hankkeentyyppi": "Hankkeen tyypit",
+    "hankkeentyyppi": "Työn tyyppi",
     "hankkeentyyppiHelperText": "Valitse hankkeen työmaan tyyppi tai tyypit",
     "tabit": {
       "perustiedot": "Perustiedot",
