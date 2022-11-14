@@ -18,7 +18,7 @@ const themes = {
   },
 };
 
-const HankeVaiheTag: React.FC<TagProps> = ({ tagName }) => {
+const HankeVaiheTag: React.FC<React.PropsWithChildren<TagProps>> = ({ tagName }) => {
   return <Tag theme={themes[tagName]}>{tagName}</Tag>;
 };
 

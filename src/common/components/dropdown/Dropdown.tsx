@@ -22,7 +22,7 @@ type PropTypes = {
   required?: boolean;
 };
 
-const Dropdown: React.FC<PropTypes> = ({
+const Dropdown: React.FC<React.PropsWithChildren<PropTypes>> = ({
   id,
   name,
   rules,

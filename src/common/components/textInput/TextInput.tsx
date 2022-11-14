@@ -13,7 +13,13 @@ type PropTypes = {
   tooltip?: TooltipProps;
 };
 
-const TextInput: React.FC<PropTypes> = ({ name, label, disabled, tooltip, required }) => {
+const TextInput: React.FC<React.PropsWithChildren<PropTypes>> = ({
+  name,
+  label,
+  disabled,
+  tooltip,
+  required,
+}) => {
   const { t } = useTranslation();
   const {
     control,

@@ -13,7 +13,7 @@ import img4 from './kartta.png';
 import Linkbox from '../../common/components/Linkbox/Linkbox';
 import useUser from '../auth/useUser';
 
-const Homepage: React.FC = () => {
+const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation();
   const {
     PUBLIC_HANKKEET_MAP,

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Circle: React.FC = () => {
+const Circle: React.FC<React.PropsWithChildren<unknown>> = () => {
   return (
     <svg width="24px" height="25px" viewBox="0 0 24 25" version="1.1" className="circleSelected">
       <title>Selected</title>

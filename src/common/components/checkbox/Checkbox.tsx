@@ -10,7 +10,7 @@ type PropTypes = {
   label: string;
   disabled?: boolean;
 };
-const CheckboxComp: React.FC<PropTypes> = (props) => {
+const CheckboxComp: React.FC<React.PropsWithChildren<PropTypes>> = (props) => {
   const { name, id, rules, defaultValue, label, disabled } = props;
   const { control } = useFormContext();
 

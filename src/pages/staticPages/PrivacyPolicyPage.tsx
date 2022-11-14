@@ -6,7 +6,7 @@ import { useLocalizedRoutes } from '../../common/hooks/useLocalizedRoutes';
 import Container from '../../common/components/container/Container';
 import Text from '../../common/components/text/Text';
 
-const PrivacyPolicyPage: React.FC = () => {
+const PrivacyPolicyPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { PRIVACY_POLICY } = useLocalizedRoutes();
 
   const { t } = useTranslation();

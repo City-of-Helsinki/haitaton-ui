@@ -8,7 +8,7 @@ type Props = {
   source: VectorSource;
 };
 
-const DrawModule: React.FC<Props> = ({ source }) => (
+const DrawModule: React.FC<React.PropsWithChildren<Props>> = ({ source }) => (
   <DrawProvider source={source}>
     <DrawIntercation />
     <DrawControl />

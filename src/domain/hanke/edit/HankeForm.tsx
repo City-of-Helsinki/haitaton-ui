@@ -61,7 +61,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const HankeForm: React.FC<Props> = ({
+const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   formData,
   onIsDirtyChange,
   onFormClose,

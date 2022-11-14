@@ -14,7 +14,7 @@ export interface Props {
   pagesLength: number;
 }
 
-const PaginationControl: React.FC<Props> = ({
+const PaginationControl: React.FC<React.PropsWithChildren<Props>> = ({
   goToPage,
   previousPage,
   nextPage,

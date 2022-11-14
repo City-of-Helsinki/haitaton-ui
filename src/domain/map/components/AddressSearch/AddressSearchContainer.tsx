@@ -16,7 +16,7 @@ type Props = {
   zIndex?: number;
 };
 
-const AddressSearchContainer: React.FC<Props> = ({ position, zIndex }) => {
+const AddressSearchContainer: React.FC<React.PropsWithChildren<Props>> = ({ position, zIndex }) => {
   const [addressCoordinate, setAddressCoordinate] = useState<Coordinate | undefined>();
   useCenterOnCoordinate(addressCoordinate);
 

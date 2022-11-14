@@ -6,7 +6,7 @@ type Props = {
   source: VectorSource;
 };
 
-const FitSource: React.FC<Props> = ({ source }) => {
+const FitSource: React.FC<React.PropsWithChildren<Props>> = ({ source }) => {
   const { map } = useContext(MapContext);
 
   const fitSource = useCallback(() => {

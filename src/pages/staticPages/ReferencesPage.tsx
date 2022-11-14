@@ -6,7 +6,7 @@ import { useLocalizedRoutes } from '../../common/hooks/useLocalizedRoutes';
 import Container from '../../common/components/container/Container';
 import Text from '../../common/components/text/Text';
 
-const ReferencesPage: React.FC = () => {
+const ReferencesPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { HAITATON_INFO } = useLocalizedRoutes();
   const { t } = useTranslation();
   const referenceKeys = ['HEKAYL', 'HEKAKA', 'OPSTMA', 'HSL', 'MAMILA', 'HEKAKATO'];

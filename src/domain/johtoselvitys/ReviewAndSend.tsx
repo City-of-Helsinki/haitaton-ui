@@ -2,7 +2,7 @@ import React from 'react';
 import { useFormikContext } from 'formik';
 import { JohtoselvitysFormValues } from './types';
 
-export const ReviewAndSend: React.FC = () => {
+export const ReviewAndSend: React.FC<React.PropsWithChildren<unknown>> = () => {
   const formik = useFormikContext<JohtoselvitysFormValues>();
 
   return (

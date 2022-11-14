@@ -15,7 +15,7 @@ type Props = {
 
 type Interaction = Draw | Snap | Modify;
 
-const DrawInteraction: React.FC<Props> = () => {
+const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = () => {
   const selection = useRef<null | Select>(null);
   const { map } = useContext(MapContext);
   const { state, actions, source } = useDrawContext();

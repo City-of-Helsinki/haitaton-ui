@@ -18,7 +18,7 @@ import useLocale from '../../../common/hooks/useLocale';
 import DropdownMultiselect from '../../../common/components/dropdown/DropdownMultiselect';
 import Checkbox from '../../../common/components/checkbox/Checkbox';
 
-const Form0: React.FC<FormProps> = ({ errors, register, formData }) => {
+const Form0: React.FC<React.PropsWithChildren<FormProps>> = ({ errors, register, formData }) => {
   const { t } = useTranslation();
   const locale = useLocale();
   const { watch } = useFormContext();

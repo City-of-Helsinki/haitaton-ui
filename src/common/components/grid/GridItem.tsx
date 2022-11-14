@@ -7,7 +7,7 @@ type Props = {
   content: string;
 };
 
-const GridItem: React.FC<Props> = ({ className, title, content }) => {
+const GridItem: React.FC<React.PropsWithChildren<Props>> = ({ className, title, content }) => {
   return (
     <div className={className}>
       <Text tag="h3" styleAs="h6" weight="bold">

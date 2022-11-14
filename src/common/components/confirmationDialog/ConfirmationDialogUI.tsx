@@ -18,7 +18,7 @@ type Props = {
   handleClose: () => void;
 };
 
-const ConfirmationDialog: React.FC<Props> = ({ body, children, isOpen, handleClose }) => {
+const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({ body, children, isOpen, handleClose }) => {
   const cancelRef = React.useRef<HTMLButtonElement>(null);
   const { t } = useTranslation();
 

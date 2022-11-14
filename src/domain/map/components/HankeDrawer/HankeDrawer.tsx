@@ -27,7 +27,7 @@ type Props = {
   center?: Coordinate;
 };
 
-const HankeDrawer: React.FC<Props> = ({ onChangeGeometries, geometry, center }) => {
+const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({ onChangeGeometries, geometry, center }) => {
   const { mapTileLayers, toggleMapTileLayer, handleUpdateGeometryState } = useMapDataLayers();
   const [drawSource] = useState<VectorSource>(new VectorSource());
   const [zoom] = useState(9); // TODO: also take zoom into consideration

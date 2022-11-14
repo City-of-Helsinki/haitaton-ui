@@ -19,7 +19,7 @@ type PropTypes = {
   minDate?: Date;
 };
 
-const DatePicker: React.FC<PropTypes> = ({
+const DatePicker: React.FC<React.PropsWithChildren<PropTypes>> = ({
   name,
   label,
   disabled,

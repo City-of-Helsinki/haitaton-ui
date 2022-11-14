@@ -11,7 +11,7 @@ const getHankkeet = async () => {
 
 const useHankeList = () => useQuery<HankeData[]>(['project'], getHankkeet);
 
-const HankeListContainer: React.FC = () => {
+const HankeListContainer: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { data, isLoading, isError } = useHankeList();
   if (data) {
     data.sort((a, b) => {

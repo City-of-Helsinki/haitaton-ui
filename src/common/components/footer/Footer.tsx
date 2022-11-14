@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Footer } from 'hds-react';
 import { useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
 
-const HaitatonFooter: React.FC = () => {
+const HaitatonFooter: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { HAITATON_INFO, ACCESSIBILITY, PRIVACY_POLICY, REFERENCES } = useLocalizedRoutes();
 
   return (

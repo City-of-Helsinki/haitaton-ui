@@ -18,7 +18,7 @@ export const initialValues = {
   geometriat: null,
 };
 
-export const Geometries: React.FC = () => {
+export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
   const formik = useFormikContext<JohtoselvitysFormValues>();
   const [drawSource] = useState<VectorSource>(new VectorSource());
   const { mapTileLayers } = useMapDataLayers();

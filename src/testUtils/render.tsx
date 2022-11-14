@@ -25,7 +25,7 @@ const AllTheProviders = ({ children }: Props) => (
 
 const customRender = (ui: React.ReactElement, options: RenderOptions = {}, route = '/') => {
   window.history.pushState({}, 'Test page', route);
-  return render(ui, { wrapper: AllTheProviders as React.ComponentType, ...options });
+  return render(ui, { wrapper: AllTheProviders as React.ComponentType<React.PropsWithChildren<unknown>>, ...options });
 };
 
 // re-export everything

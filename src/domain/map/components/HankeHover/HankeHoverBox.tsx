@@ -7,7 +7,7 @@ import HankkeetContext from '../../HankkeetProviderContext';
 import styles from './HankeHover.module.scss';
 import { HankeData } from '../../../types/hanke';
 
-const HankeHoverBox: React.FC = () => {
+const HankeHoverBox: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { hoveredHankeTunnukset, hoverPosition } = useContext(HoverContext);
   const { hankkeet } = useContext(HankkeetContext);
   const foundHankkeet: HankeData[] = [];

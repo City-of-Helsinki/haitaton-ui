@@ -20,7 +20,7 @@ import {
 import { HankeGeoJSON } from '../../../common/types/hanke';
 import { doAddressSearch } from '../../map/utils';
 
-const Form1: React.FC<FormProps> = ({ errors, formData }) => {
+const Form1: React.FC<React.PropsWithChildren<FormProps>> = ({ errors, formData }) => {
   const { t } = useTranslation();
   const locale = useLocale();
   const instructions = t('hankeForm:hankkeenAlueForm:instructions').split('\n');
@@ -58,7 +58,7 @@ const Form1: React.FC<FormProps> = ({ errors, formData }) => {
         }}
         initiallyOpen
       >
-        {instructions.map((instruction) => (
+        {instructions.map((instruction: string) => (
           <p key={instruction}>{instruction}</p>
         ))}
       </Accordion>

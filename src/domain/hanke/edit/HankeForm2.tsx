@@ -36,7 +36,7 @@ const fetchOrganizations = async () => api.get<Organization[]>('/organisaatiot')
 const getArrayFieldErrors = (errors: Record<string, any>, name: string) =>
   errors && errors[name] && errors[name][0] ? errors[name][0] : {};
 
-const Form2: React.FC<FormProps> = ({ formData, errors, register }) => {
+const Form2: React.FC<React.PropsWithChildren<FormProps>> = ({ formData, errors, register }) => {
   useFormPage();
   const { t } = useTranslation();
 

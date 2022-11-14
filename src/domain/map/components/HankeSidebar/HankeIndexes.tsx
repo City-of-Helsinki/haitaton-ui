@@ -18,7 +18,7 @@ type IndexProps = {
   loading?: boolean;
 };
 
-const IndexSection: React.FC<IndexProps> = ({ title, content, index, testId, loading }) => (
+const IndexSection: React.FC<React.PropsWithChildren<IndexProps>> = ({ title, content, index, testId, loading }) => (
   <div className={styles.indexContainer}>
     <div className={styles.indexContainer__titlesContainer}>
       <Text tag="h2" styleAs="h6" weight="bold">
@@ -60,7 +60,7 @@ type Props = {
   loading?: boolean;
 };
 
-const HankeIndexes: React.FC<Props> = ({ hankeIndexData, displayTooltip, loading }) => {
+const HankeIndexes: React.FC<React.PropsWithChildren<Props>> = ({ hankeIndexData, displayTooltip, loading }) => {
   const { t } = useTranslation();
   const liikennehaittaIndeksi = hankeIndexData?.liikennehaittaIndeksi.indeksi;
   const pyorailyIndeksi = hankeIndexData?.pyorailyIndeksi;

@@ -31,10 +31,10 @@ const organizations = [
   { nimi: 'Bar', id: 2, tunnus: 'bar' },
 ];
 
-const HankeFormTestContainer: React.FC<{
+const HankeFormTestContainer: React.FC<React.PropsWithChildren<{
   children: React.ReactNode;
   valuesOverwrite?: Record<string, unknown>;
-}> = ({ children, valuesOverwrite = {} }) => {
+}>> = ({ children, valuesOverwrite = {} }) => {
   const formContext = useForm<HankeDataFormState>({
     mode: 'all',
     reValidateMode: 'onChange',

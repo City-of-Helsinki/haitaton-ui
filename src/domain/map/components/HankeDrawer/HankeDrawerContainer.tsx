@@ -28,7 +28,7 @@ const useHankeGeometry = (hankeTunnus: HankeTunnus) =>
     enabled: !!hankeTunnus,
   });
 
-const HankeDrawerContainer: React.FC<Props> = ({ hankeTunnus, onChangeGeometries, center }) => {
+const HankeDrawerContainer: React.FC<React.PropsWithChildren<Props>> = ({ hankeTunnus, onChangeGeometries, center }) => {
   const queryClient = useQueryClient();
   const [isGeometryChanged, setIsGeometryChanged] = useState(false);
   const { data } = useHankeGeometry(hankeTunnus);

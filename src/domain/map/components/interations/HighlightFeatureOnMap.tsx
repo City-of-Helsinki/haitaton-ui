@@ -9,7 +9,7 @@ type Props = {
   source: VectorSource;
 };
 
-const HighlightFeatureOnMap: React.FC<Props> = ({ source }) => {
+const HighlightFeatureOnMap: React.FC<React.PropsWithChildren<Props>> = ({ source }) => {
   const location = useLocation();
   const { map } = useContext(MapContext);
   const { hoveredHankeTunnukset } = useContext(HoverContext);

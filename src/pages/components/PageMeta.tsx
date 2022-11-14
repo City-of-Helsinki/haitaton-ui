@@ -6,7 +6,7 @@ type Props = {
   routeData: RouteData;
 };
 
-const PageMeta: React.FC<Props> = ({ routeData }) => (
+const PageMeta: React.FC<React.PropsWithChildren<Props>> = ({ routeData }) => (
   <Helmet>
     <title>{routeData.meta.title}</title>
   </Helmet>

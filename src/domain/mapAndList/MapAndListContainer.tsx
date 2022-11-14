@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Outlet, NavLink } from 'react-router-dom';
 import { useLocalizedRoutes } from '../../common/hooks/useLocalizedRoutes';
 
-const MapAndListContainer: React.FC = () => {
+const MapAndListContainer: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { PUBLIC_HANKKEET_LIST, PUBLIC_HANKKEET_MAP } = useLocalizedRoutes();
   const { t } = useTranslation();
 

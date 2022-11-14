@@ -30,7 +30,7 @@ type Props = {
   hankeTunnus?: string;
 };
 
-const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
+const HankeFormContainer: React.FC<React.PropsWithChildren<Props>> = ({ hankeTunnus }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);

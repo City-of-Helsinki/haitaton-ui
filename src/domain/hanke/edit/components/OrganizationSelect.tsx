@@ -13,7 +13,7 @@ type Props = {
   index?: number;
 };
 
-const OrganizationSelect: React.FC<Props> = ({
+const OrganizationSelect: React.FC<React.PropsWithChildren<Props>> = ({
   contactType,
   organizations,
   isOwnOrganization,

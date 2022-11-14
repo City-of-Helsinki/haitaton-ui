@@ -7,7 +7,7 @@ type Props = {
   hankeTunnus?: string;
 };
 
-const HankeSidebarContainer: React.FC<Props> = ({ hankeTunnus }) => {
+const HankeSidebarContainer: React.FC<React.PropsWithChildren<Props>> = ({ hankeTunnus }) => {
   const { hankkeetObject } = useContext(HankkeetContext);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);

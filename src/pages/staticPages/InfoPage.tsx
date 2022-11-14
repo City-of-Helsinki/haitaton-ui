@@ -7,7 +7,7 @@ import Container from '../../common/components/container/Container';
 import Text from '../../common/components/text/Text';
 import styles from './StaticContent.module.scss';
 
-const InfoPage: React.FC = () => {
+const InfoPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { HAITATON_INFO } = useLocalizedRoutes();
   const { t } = useTranslation();
 

@@ -20,7 +20,7 @@ import HankkeetProvider from './HankkeetProvider';
 import OverviewMapControl from '../../common/components/map/controls/OverviewMapControl';
 import AddressSearchContainer from './components/AddressSearch/AddressSearchContainer';
 
-const HankeMap: React.FC = () => {
+const HankeMap: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [zoom] = useState(9); // TODO: also take zoom into consideration
   const { mapTileLayers, toggleMapTileLayer } = useMapDataLayers();
   const {

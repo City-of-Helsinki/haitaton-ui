@@ -6,7 +6,7 @@ import { useLocalizedRoutes } from '../../common/hooks/useLocalizedRoutes';
 import Container from '../../common/components/container/Container';
 import Text from '../../common/components/text/Text';
 
-const AccessibilityPage: React.FC = () => {
+const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { ACCESSIBILITY } = useLocalizedRoutes();
   const { t } = useTranslation();
 

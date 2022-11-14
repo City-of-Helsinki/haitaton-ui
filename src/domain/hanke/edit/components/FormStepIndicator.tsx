@@ -12,7 +12,7 @@ type PropTypes = {
   isSaving?: boolean;
 };
 
-const FormStepIndicator: React.FC<PropTypes> = ({ currentFormPage, formData, isSaving }) => {
+const FormStepIndicator: React.FC<React.PropsWithChildren<PropTypes>> = ({ currentFormPage, formData, isSaving }) => {
   const { t } = useTranslation();
 
   const formSteps = [

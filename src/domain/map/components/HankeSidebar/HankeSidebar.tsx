@@ -13,7 +13,7 @@ type SectionProps = {
   content: string;
 };
 
-const SidebarSection: React.FC<SectionProps> = ({ title, content }) =>
+const SidebarSection: React.FC<React.PropsWithChildren<SectionProps>> = ({ title, content }) =>
   title && title !== '' && content && content !== '' ? (
     <>
       <Text tag="h3" styleAs="h6" weight="bold" spacingBottom="2-xs">
@@ -31,7 +31,7 @@ type Props = {
   handleClose: () => void;
 };
 
-const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
+const HankeSidebar: React.FC<React.PropsWithChildren<Props>> = ({ hanke, isOpen, handleClose }) => {
   const { t } = useTranslation();
 
   const organisaatioContent = hanke.omistajat[0]?.organisaatioNimi || '-';

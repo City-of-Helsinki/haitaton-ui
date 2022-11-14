@@ -14,7 +14,7 @@ type Address = {
   coordinate: Coordinate;
 };
 
-const AddressSearch: React.FC<Props> = ({ onAddressSelect }) => {
+const AddressSearch: React.FC<React.PropsWithChildren<Props>> = ({ onAddressSelect }) => {
   const { t } = useTranslation();
   const suggestions = useRef([] as Address[]);
   const abortController = useRef(null as AbortController | null);

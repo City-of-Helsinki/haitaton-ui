@@ -11,7 +11,7 @@ interface Props {
   onNext: () => void;
 }
 
-const FormActions: React.FC<Props> = ({
+const FormActions: React.FC<React.PropsWithChildren<Props>> = ({
   children,
   isFormValid,
   activeStepIndex,

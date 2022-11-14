@@ -10,7 +10,7 @@ type Option = {
   label: string;
 };
 
-export const Contacts: React.FC = () => {
+export const Contacts: React.FC<React.PropsWithChildren<unknown>> = () => {
   const formik = useFormikContext<JohtoselvitysFormValues>();
 
   return (

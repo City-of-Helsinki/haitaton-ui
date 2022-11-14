@@ -17,7 +17,7 @@ interface ButtonProps {
   previousPath?: string;
 }
 
-const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) => {
+const NavigationButtons: React.FC<React.PropsWithChildren<ButtonProps>> = ({ nextPath, previousPath }) => {
   const navigate = useNavigate();
   const formik = useFormikContext<JohtoselvitysFormValues>();
   const [saveLoading, setSaveLoading] = useState(false);
@@ -63,7 +63,7 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) =>
   };
 
   return (
-    <div className={styles.navButtonContainer}>
+    (<div className={styles.navButtonContainer}>
       {previousPath && (
         <div className={styles.navPrev}>
           <Button
@@ -93,7 +93,7 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) =>
         </div>
       )}
       {!nextPath && ( // Final page reached, provide an action to save
-        <>
+        (<>
           <div className={styles.navSave}>
             <Button
               isLoading={saveLoading}
@@ -188,13 +188,13 @@ const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) =>
               </Notification>
             )}
           </div>
-        </>
+        </>)
       )}
-    </div>
+    </div>)
   );
 };
 
-const JohtoselvitysContainer: React.FC = () => {
+const JohtoselvitysContainer: React.FC<React.PropsWithChildren<unknown>> = () => {
   const navigate = useNavigate();
 
   const initialValues: JohtoselvitysFormValues = {

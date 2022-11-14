@@ -56,7 +56,7 @@ export const initialValues: InitialValueTypes = {
 
 type Option = { value: string; label: string };
 
-export const BasicHankeInfo: React.FC = () => {
+export const BasicHankeInfo: React.FC<React.PropsWithChildren<unknown>> = () => {
   const formik = useFormikContext<JohtoselvitysFormValues>();
   const startTimeInputIsDirty = useRef(false);
   const endTimeInputIsDirty = useRef(false);

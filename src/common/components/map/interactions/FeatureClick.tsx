@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import MapContext from '../MapContext';
 import { MapInstance } from '../types';
 
-const HankeClick: React.FC = () => {
+const HankeClick: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { map } = useContext(MapContext);
 
   const navigate = useNavigate();

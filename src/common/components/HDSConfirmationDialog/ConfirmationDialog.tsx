@@ -16,7 +16,7 @@ type Props = {
   errorMsg?: string;
 };
 
-const ConfirmationDialog: React.FC<Props> = ({
+const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
   title,
   description,
   isOpen,

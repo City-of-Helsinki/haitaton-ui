@@ -18,7 +18,7 @@ const queryClient = new QueryClient({
   },
 });
 
-const App: React.FC = () => (
+const App: React.FC<React.PropsWithChildren<unknown>> = () => (
   <Router>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
