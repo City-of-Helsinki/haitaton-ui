@@ -8,13 +8,13 @@ type TagProps = {
 
 const themes = {
   [HANKE_VAIHE.OHJELMOINTI]: {
-    '--tag-background': 'var(--color-engel)',
+    '--tag-background': 'var(--color-coat-of-arms-light)',
   },
   [HANKE_VAIHE.SUUNNITTELU]: {
-    '--tag-background': 'var(--color-summer)',
+    '--tag-background': 'var(--color-brick-light)',
   },
   [HANKE_VAIHE.RAKENTAMINEN]: {
-    '--tag-background': 'var(--color-copper)',
+    '--tag-background': 'var(--color-bus-light)',
   },
 };
 

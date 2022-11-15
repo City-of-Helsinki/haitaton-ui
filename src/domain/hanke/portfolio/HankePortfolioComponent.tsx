@@ -19,8 +19,9 @@ import {
   TabPanel,
   TextInput,
 } from 'hds-react';
-import { IconAngleDown, IconAngleUp, IconPen } from 'hds-react/icons';
+import { IconAngleDown, IconAngleUp, IconEye, IconPen } from 'hds-react/icons';
 import { Link } from 'react-router-dom';
+import clsx from 'clsx';
 import Text from '../../../common/components/text/Text';
 import GridItem from '../../../common/components/grid/GridItem';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
@@ -34,6 +35,7 @@ import { hankeIsBetweenDates } from '../../map/utils';
 import HankeIndexes from '../../map/components/HankeSidebar/HankeIndexes';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
+import HankeVaiheTag from '../vaiheTag/HankeVaiheTag';
 
 type CustomAccordionProps = {
   hanke: HankeData;
@@ -49,24 +51,21 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
 
   const { t } = useTranslation();
   return (
-    <>
-      <Card className={styles.hankeCard} border aria-label="Advanced filters" {...buttonProps}>
-        {/* voi siirtää omaan palikkaan kortin headerin */}
-        <div className={styles.hankeCardHeader}>
-          <Link
-            className={styles.link}
-            to={`${PUBLIC_HANKKEET_MAP.path}?hanke=${hanke.hankeTunnus}`}
-            title="Avaa hanke kartalla"
-          >
+    <Card className={styles.hankeCard} border>
+      <div
+        className={clsx([styles.hankeCardHeader, styles.hankeCardFlexContainer])}
+        {...buttonProps}
+      >
+        <div className={clsx([styles.hankeCardFlexContainer, styles.flexWrap])}>
+          <Text tag="p" styleAs="body-m">
             {hanke.hankeTunnus}
-          </Link>
+          </Text>
           <div className={styles.hankeName}>
-            <Text tag="p" styleAs="body-m">
+            <Text tag="p" styleAs="body-xl" weight="bold">
               {hanke.nimi}
             </Text>
+            <HankeVaiheTag tagName={hanke.vaihe}>{hanke.vaihe}</HankeVaiheTag>
           </div>
-          {/* vaihe tagit voisi olla eriväriset eri vaiheille */}
-          <Tag className={styles.tag}>{hanke.vaihe}</Tag>
           <div className={styles.hankeDates}>
             <Text tag="p" styleAs="body-m">
               {formatToFinnishDate(hanke.alkuPvm)}
@@ -76,28 +75,25 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               {formatToFinnishDate(hanke.loppuPvm)}
             </Text>
           </div>
-          <div className={styles.actions}>
-            <Link
-              to={getEditHankePath({ hankeTunnus: hanke.hankeTunnus })}
-              aria-label={
-                // eslint-disable-next-line
-                t(`routes:${ROUTES.EDIT_HANKE}.meta.title`) +
-                ` ${hanke.nimi} - ${hanke.hankeTunnus} `
-              }
-              data-testid="hankeEditLink"
-            >
-              <IconPen aria-hidden />
-            </Link>
-          </div>
-          <div className={styles.iconWrapper}>{icon}</div>
         </div>
-      </Card>
-      <Card
-        className={styles.hankeCardContent}
-        border
-        aria-label="Advanced filters"
-        {...contentProps}
-      >
+        <div className={styles.actions}>
+          <Link to="/" data-testid="hankeViewLink">
+            <IconEye aria-hidden />
+          </Link>
+          <Link
+            to={getEditHankePath({ hankeTunnus: hanke.hankeTunnus })}
+            aria-label={
+              // eslint-disable-next-line
+              t(`routes:${ROUTES.EDIT_HANKE}.meta.title`) + ` ${hanke.nimi} - ${hanke.hankeTunnus} `
+            }
+            data-testid="hankeEditLink"
+          >
+            <IconPen aria-hidden />
+          </Link>
+        </div>
+        <div className={styles.iconWrapper}>{icon}</div>
+      </div>
+      <div className={styles.hankeCardContent} {...contentProps}>
         <Tabs small>
           <TabList>
             <Tab>{t('hankePortfolio:tabit:perustiedot')}</Tab>
@@ -235,8 +231,8 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
             </div>
           </TabPanel>
         </Tabs>
-      </Card>
-    </>
+      </div>
+    </Card>
   );
 };
 
@@ -483,9 +479,12 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
             label={t('hankePortfolio:hankevaiheet')}
             options={hankeVaiheOptions}
             defaultValue={hankeVaiheOptions}
-            clearButtonAriaLabel="Clear all selections"
+            clearButtonAriaLabel={
+              // eslint-disable-next-line prefer-template
+              t('common:components:multiselect:clear') + ' ' + t('hankePortfolio:hankevaiheet')
+            }
             // eslint-disable-next-line no-template-curly-in-string
-            selectedItemRemoveButtonAriaLabel="Remove ${value}"
+            selectedItemRemoveButtonAriaLabel="Remove {value}"
             onChange={updateHankeVaihe}
           />
 
@@ -495,9 +494,12 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
             label={t('hankePortfolio:hankkeentyyppi')}
             options={hankeTyyppiOptions}
             defaultValue={[]}
-            clearButtonAriaLabel="Clear all selections"
+            clearButtonAriaLabel={
+              // eslint-disable-next-line prefer-template
+              t('common:components:multiselect:clear') + ' ' + t('hankePortfolio:hankkeentyyppi')
+            }
             // eslint-disable-next-line no-template-curly-in-string
-            selectedItemRemoveButtonAriaLabel="Remove ${value}"
+            selectedItemRemoveButtonAriaLabel="Remove {value}"
             onChange={updateHankeTyyppi}
           />
           <p data-testid="numberOfFilteredRows" style={{ display: 'none' }}>
@@ -507,28 +509,34 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
       </div>
 
       <div className={styles.contentContainer}>
-        {rows.length > 0 &&
-          page.map((row) => {
-            return (
-              <div key={row.original.hankeTunnus}>
-                <CustomAccordion hanke={row.original} />
-              </div>
-            );
-          })}
-        {rows.length === 0 && preFilteredRows.length > 0 && (
-          <div>{t('hankePortfolio:noneFound')}</div>
-        )}
-        {preFilteredRows.length === 0 && <div>{t('hankePortfolio:noneExist')}</div>}
-        <PaginationControl
-          goToPage={gotoPage}
-          nextPage={nextPage}
-          previousPage={previousPage}
-          pageCount={pageCount}
-          pageIndex={pageIndex}
-          pagesLength={pageOptions.length}
-          canNextPage={canNextPage}
-          canPreviousPage={canPreviousPage}
-        />
+        <div>
+          <Text tag="p" styleAs="h3" weight="bold" spacingBottom="m">
+            {t('hankePortfolio:searchResults', { count: rows.length })}
+          </Text>
+
+          {rows.length > 0 &&
+            page.map((row) => {
+              return (
+                <div key={row.original.hankeTunnus}>
+                  <CustomAccordion hanke={row.original} />
+                </div>
+              );
+            })}
+          {rows.length === 0 && preFilteredRows.length > 0 && (
+            <div>{t('hankePortfolio:noneFound')}</div>
+          )}
+          {preFilteredRows.length === 0 && <div>{t('hankePortfolio:noneExist')}</div>}
+          <PaginationControl
+            goToPage={gotoPage}
+            nextPage={nextPage}
+            previousPage={previousPage}
+            pageCount={pageCount}
+            pageIndex={pageIndex}
+            pagesLength={pageOptions.length}
+            canNextPage={canNextPage}
+            canPreviousPage={canPreviousPage}
+          />
+        </div>
       </div>
     </>
   );

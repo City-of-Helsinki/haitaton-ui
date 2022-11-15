@@ -9,23 +9,15 @@
     min-height: 65vh;
 
     .hankeCard {
-      height: 70px;
-      padding: 0 var(--spacing-s);
+      padding: var(--spacing-s);
       margin-top: var(--spacing-xs);
       align-items: center;
-
-      &:hover {
-        background-color: var(--color-black-10);
-      }
     }
 
     .hankeCardHeader {
-      height: 100%;
-      display: flex;
-      flex-direction: row;
-      gap: var(--spacing-s);
-      justify-content: space-between;
-      align-items: center;
+      &:hover {
+        cursor: pointer;
+      }
 
       .link {
         color: var(--color-coat-of-arms);
@@ -33,12 +25,15 @@
 
       .hankeName {
         flex-grow: 1;
+        display: flex;
+        gap: var(--spacing-s);
+        align-items: center;
+        flex-wrap: wrap;
       }
 
       .hankeDates {
         display: flex;
         flex-direction: row;
-        width: 175px;
 
         p {
           margin: 0 5px;
@@ -47,23 +42,28 @@
 
       .actions {
         display: flex;
-        gap: var(--spacing-3-xs);
+        gap: var(--spacing-xs);
       }
 
       .iconWrapper {
         flex-grow: 0;
       }
+    }
 
-      .tag {
-        background-color: var(--color-copper);
-        color: var(--color-black);
-        text-transform: uppercase;
-      }
+    .hankeCardFlexContainer {
+      display: flex;
+      flex-direction: row;
+      gap: var(--spacing-s);
+      justify-content: space-between;
+      align-items: center;
+      flex: 1 1 auto;
+    }
+
+    .flexWrap {
+      flex-wrap: wrap;
     }
 
     .hankeCardContent {
-      border: 2px black solid;
-      border-top: none;
       padding: 0 var(--spacing-s) var(--spacing-s);
 
       .tabs {

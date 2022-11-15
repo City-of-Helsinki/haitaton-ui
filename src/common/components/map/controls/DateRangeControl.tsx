@@ -32,7 +32,7 @@ const DateRangeControl: React.FC<Props> = ({
 
   return (
     <div className={styles.datePicker}>
-      <Grid templateColumns="repeat(9, 1fr)" w="360px">
+      <Grid templateColumns="repeat(9, 1fr)" maxW="360px">
         <GridItem colSpan={4}>
           <div>
             <DateInput

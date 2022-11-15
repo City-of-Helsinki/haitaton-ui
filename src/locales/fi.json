@@ -411,6 +411,8 @@
     "pageHeader": "Omat hankkeet",
     "search": "Haku",
     "searchHelperText": "Hae hankkeen nimellä tai tunnuksella",
+    "searchResults": "{{count}} hakutulos",
+    "searchResults_plural": "{{count}} hakutulosta",
     "noneFound": "Haulla ei löytynyt yhtään hankkeita.",
     "noneExist": "Hankesalkussasi ei ole hankkeita.",
     "hankevaiheet": "Hankevaiheet",
