@@ -7,9 +7,9 @@ import fs from 'fs';
 
 import fi from '../src/locales/fi.json';
 
-const file_fi = '../src/locales/fi.json';
-const file_sv = '../src/locales/sv.json';
-const file_en = '../src/locales/en.json';
+const file_fi = 'src/locales/fi.json';
+const file_sv = 'src/locales/sv.json';
+const file_en = 'src/locales/en.json';
 
 function read_locales() {
   const file = XLSX.readFile('locale_export.xlsx');
