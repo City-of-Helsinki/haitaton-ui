@@ -1,8 +1,8 @@
 #!/usr/bin/env ts-node-script
 
-import * as _ from 'lodash';
+import _ from 'lodash';
 import XLSX from 'xlsx';
-import { LocaleMap, ResultMap, traverse } from './translate-common';
+import { ResultMap, traverse } from './translate-common';
 
 import fi from '../src/locales/fi.json';
 

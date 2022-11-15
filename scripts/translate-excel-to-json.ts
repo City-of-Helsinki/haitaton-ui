@@ -1,6 +1,6 @@
 #!/usr/bin/env ts-node-script
 
-import * as _ from 'lodash';
+import _ from 'lodash';
 import XLSX from 'xlsx';
 import { ResultMap, traverse, flatToDeep } from './translate-common';
 import fs from 'fs';
