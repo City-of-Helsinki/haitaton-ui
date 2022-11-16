@@ -8,7 +8,15 @@ import {
   useGlobalFilter,
   useAsyncDebounce,
 } from 'react-table';
-import { useAccordion, Card, Select, TextInput, Link as HdsLink, Button } from 'hds-react';
+import {
+  useAccordion,
+  Card,
+  Select,
+  TextInput,
+  Link as HdsLink,
+  Button,
+  Notification,
+} from 'hds-react';
 import {
   IconAngleDown,
   IconAngleUp,
@@ -33,10 +41,26 @@ import HankeVaiheTag from '../vaiheTag/HankeVaiheTag';
 import Map from '../../../common/components/map/Map';
 import Kantakartta from '../../map/components/Layers/Kantakartta';
 import OverviewMapControl from '../../../common/components/map/controls/OverviewMapControl';
+import { hankeSchema } from '../edit/hankeSchema';
 
 type CustomAccordionProps = {
   hanke: HankeData;
 };
+
+/**
+ * Check if hanke data matches hanke schema
+ */
+function useIsHankeValid(hanke: HankeData) {
+  const [isValid, setIsValid] = useState(false);
+
+  useEffect(() => {
+    hankeSchema.isValid(hanke).then((valid) => {
+      setIsValid(valid);
+    });
+  }, [hanke]);
+
+  return isValid;
+}
 
 const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
   const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
@@ -46,6 +70,9 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
   // Change icon based on accordion open state
   const icon = isOpen ? <IconAngleDown size="m" /> : <IconAngleUp size="m" />;
 
+  // Check if hanke has all the required fields filled
+  const isHankeValid = useIsHankeValid(hanke);
+
   const { t } = useTranslation();
 
   const tyomaaTyyppiContent = hanke.tyomaaTyyppi.length
@@ -54,47 +81,60 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
 
   return (
     <Card className={styles.hankeCard} border>
-      <div
-        className={clsx([styles.hankeCardHeader, styles.hankeCardFlexContainer])}
-        {...buttonProps}
-      >
-        <div className={clsx([styles.hankeCardFlexContainer, styles.flexWrap])}>
-          <Text tag="p" styleAs="body-m">
-            {hanke.hankeTunnus}
-          </Text>
-          <div className={styles.hankeName}>
-            <Text tag="p" styleAs="body-xl" weight="bold">
-              {hanke.nimi}
-            </Text>
-            <HankeVaiheTag tagName={hanke.vaihe}>{hanke.vaihe}</HankeVaiheTag>
-          </div>
-          <div className={styles.hankeDates}>
+      <>
+        <div
+          className={clsx([styles.hankeCardHeader, styles.hankeCardFlexContainer])}
+          {...buttonProps}
+        >
+          <div className={clsx([styles.hankeCardFlexContainer, styles.flexWrap])}>
             <Text tag="p" styleAs="body-m">
-              {formatToFinnishDate(hanke.alkuPvm)}
+              {hanke.hankeTunnus}
             </Text>
-            -
-            <Text tag="p" styleAs="body-m">
-              {formatToFinnishDate(hanke.loppuPvm)}
-            </Text>
+            <div className={styles.hankeName}>
+              <Text tag="p" styleAs="body-xl" weight="bold">
+                {hanke.nimi}
+              </Text>
+              <HankeVaiheTag tagName={hanke.vaihe}>{hanke.vaihe}</HankeVaiheTag>
+            </div>
+            <div className={styles.hankeDates}>
+              <Text tag="p" styleAs="body-m">
+                {formatToFinnishDate(hanke.alkuPvm)}
+              </Text>
+              -
+              <Text tag="p" styleAs="body-m">
+                {formatToFinnishDate(hanke.loppuPvm)}
+              </Text>
+            </div>
           </div>
+          <div className={styles.actions}>
+            <Link to="/" data-testid="hankeViewLink">
+              <IconEye aria-hidden />
+            </Link>
+            <Link
+              to={getEditHankePath({ hankeTunnus: hanke.hankeTunnus })}
+              aria-label={
+                // eslint-disable-next-line
+                t(`routes:${ROUTES.EDIT_HANKE}.meta.title`) +
+                ` ${hanke.nimi} - ${hanke.hankeTunnus} `
+              }
+              data-testid="hankeEditLink"
+            >
+              <IconPen aria-hidden />
+            </Link>
+          </div>
+          <div className={styles.iconWrapper}>{icon}</div>
         </div>
-        <div className={styles.actions}>
-          <Link to="/" data-testid="hankeViewLink">
-            <IconEye aria-hidden />
-          </Link>
-          <Link
-            to={getEditHankePath({ hankeTunnus: hanke.hankeTunnus })}
-            aria-label={
-              // eslint-disable-next-line
-              t(`routes:${ROUTES.EDIT_HANKE}.meta.title`) + ` ${hanke.nimi} - ${hanke.hankeTunnus} `
-            }
-            data-testid="hankeEditLink"
+        {!isHankeValid && (
+          <Notification
+            size="small"
+            label={t('hankePortfolio:draftStateLabel')}
+            className={styles.notification}
+            type="alert"
           >
-            <IconPen aria-hidden />
-          </Link>
-        </div>
-        <div className={styles.iconWrapper}>{icon}</div>
-      </div>
+            {t('hankePortfolio:draftState')}
+          </Notification>
+        )}
+      </>
       <div className={styles.hankeCardContent} {...contentProps}>
         <div>
           <div className={styles.gridBasicInfo}>

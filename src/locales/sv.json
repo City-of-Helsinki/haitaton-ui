@@ -434,6 +434,8 @@
     "openMapToNewWindow": "SV:Avaa kartta uuteen ikkunaan",
     "showHankeButton": "SV:Näytä hanke",
     "showApplicationsButton": "SV:Näytä hankkeen hakemukset",
+    "draftStateLabel": "SV:Hanke on luonnostilassa",
+    "draftState": "SV:Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.",
     "tabit": {
       "perustiedot": "SV: Perustiedot",
       "yhteystiedot": "SV: Yhteystiedot"

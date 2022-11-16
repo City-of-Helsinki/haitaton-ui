@@ -50,6 +50,10 @@
       }
     }
 
+    .notification {
+      margin-top: var(--spacing-s);
+    }
+
     .hankeCardFlexContainer {
       display: flex;
       flex-direction: row;

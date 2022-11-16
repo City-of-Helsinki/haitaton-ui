@@ -435,6 +435,8 @@
     "openMapToNewWindow": "Avaa kartta uuteen ikkunaan",
     "showHankeButton": "Näytä hanke",
     "showApplicationsButton": "Näytä hankkeen hakemukset",
+    "draftStateLabel": "Hanke on luonnostilassa",
+    "draftState": "Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.",
     "tabit": {
       "perustiedot": "Perustiedot",
       "yhteystiedot": "Yhteystiedot"
