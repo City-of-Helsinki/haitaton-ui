@@ -106,6 +106,13 @@
         "title": "SV: Haitaton - Hankkeen muokkaus"
       }
     },
+    "FULL_PAGE_MAP": {
+      "path": "/kokosivunkartta/:hankeTunnus",
+      "headerLabel": "SV:Koko sivun kartta",
+      "meta": {
+        "title": "SV:Haitaton - Koko sivun kartta"
+      }
+    },
     "HAKEMUS": {
       "path": "/hakemus/*",
       "headerLabel": "Luo uusi hakemus",
@@ -266,7 +273,7 @@
       "suunnitteluVaihe": "SV:Hankkeen suunnitteluvaihe",
       "alkuPvm": "SV:Hankkeen alkupäivä",
       "loppuPvm": "SV:Hankkeen loppupäivä",
-      "tyomaaTyyppi": "SV:Työmaan tyyppi",
+      "tyomaaTyyppi": "SV:Työn tyyppi",
       "tyomaaKoko": "SV:Työmaan koko",
       "haittaAlkuPvm": "SV:Haitan alkupäivämäärä",
       "haittaLoppuPvm": "SV:Haitan loppupäivämäärä",
@@ -284,7 +291,8 @@
       "osasto": "SV:Osasto",
       "organisaatio": "SV:Organisaatio",
       "omaOrganisaatio": "SV:Lisää oma organisaatio",
-      "insertOmaOrganisaatio": "SV:Syötä oma organisaatio"
+      "insertOmaOrganisaatio": "SV:Syötä oma organisaatio",
+      "rights": "SV:Käyttöoikeutesi hankkeelle"
     },
     "headers": {
       "arvioijat": "SV:Arvioijat",
@@ -411,6 +419,8 @@
     "pageHeader": "SV:Omat hankkeet",
     "search": "SV: Haku",
     "searchHelperText": "SV: Hae hankkeen nimellä tai tunnuksella",
+    "searchResults": "SV: {{count}} hakutulos",
+    "searchResults_plural": "SV: {{count}} hakutulosta",
     "noneFound": "SV: Haulla ei löytynyt yhtään hankkeita.",
     "noneExist": "SV: Hankesalkussasi ei ole hankkeita.",
     "hankevaiheet": "SV: Hankevaiheet",
@@ -420,6 +430,8 @@
     "timePeriodHelperText": "SV: Aikaväli jolloin haitta on aktiivinen",
     "hankkeentyyppi": "SV: Työn tyyppi",
     "hankkeentyyppiHelperText": "SV: Valitse hankkeen työmaan tyyppi tai tyypit",
+    "areaLocation": "SV:Alueiden sijainti",
+    "openMapToNewWindow": "SV:Avaa kartta uuteen ikkunaan",
     "tabit": {
       "perustiedot": "SV: Perustiedot",
       "yhteystiedot": "SV: Yhteystiedot"

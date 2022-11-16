@@ -41,15 +41,15 @@ describe.only('HankePortfolio', () => {
   test('Changing Hanke type filters correct number of projects', async () => {
     const renderedComponent = render(<HankePortfolioComponent hankkeet={hankeList} />);
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
-    renderedComponent.getByText('Työn tyyppi').click();
+    renderedComponent.getByRole('button', { name: 'Työn tyyppi' }).click();
     renderedComponent.getByText('Sähkö').click();
     renderedComponent.getByText('Hankevaiheet').click();
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
-    renderedComponent.getByText('Työn tyyppi').click();
+    renderedComponent.getByRole('button', { name: 'Työn tyyppi' }).click();
     renderedComponent.getByText('Viemäri').click();
     renderedComponent.getByText('Hankevaiheet').click();
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('1');
-    renderedComponent.getByText('Työn tyyppi').click();
+    renderedComponent.getByRole('button', { name: 'Työn tyyppi' }).click();
     renderedComponent.getByText('Sadevesi').click();
     renderedComponent.getByText('Hankevaiheet').click();
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');

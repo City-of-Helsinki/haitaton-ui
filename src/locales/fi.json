@@ -106,6 +106,13 @@
         "title": "Haitaton - Hankkeen muokkaus"
       }
     },
+    "FULL_PAGE_MAP": {
+      "path": "/kokosivunkartta/:hankeTunnus",
+      "headerLabel": "Koko sivun kartta",
+      "meta": {
+        "title": "Haitaton - Koko sivun kartta"
+      }
+    },
     "HAKEMUS": {
       "path": "/hakemus/*",
       "headerLabel": "Luo uusi hakemus",
@@ -266,7 +273,7 @@
       "suunnitteluVaihe": "Hankkeen suunnitteluvaihe",
       "alkuPvm": "Hankkeen alkupäivä",
       "loppuPvm": "Hankkeen loppupäivä",
-      "tyomaaTyyppi": "Työmaan tyyppi",
+      "tyomaaTyyppi": "Työn tyyppi",
       "tyomaaKoko": "Työmaan koko",
       "haittaAlkuPvm": "Haitan alkupäivämäärä",
       "haittaLoppuPvm": "Haitan loppupäivämäärä",
@@ -284,7 +291,8 @@
       "osasto": "Osasto",
       "organisaatio": "Organisaatio",
       "omaOrganisaatio": "Lisää oma organisaatio",
-      "insertOmaOrganisaatio": "Syötä oma organisaatio"
+      "insertOmaOrganisaatio": "Syötä oma organisaatio",
+      "rights": "Käyttöoikeutesi hankkeelle"
     },
     "headers": {
       "arvioijat": "Arvioijat",
@@ -423,6 +431,8 @@
     "timePeriodHelperText": "Aikaväli jolloin haitta on aktiivinen",
     "hankkeentyyppi": "Työn tyyppi",
     "hankkeentyyppiHelperText": "Valitse hankkeen työmaan tyyppi tai tyypit",
+    "areaLocation": "Alueiden sijainti",
+    "openMapToNewWindow": "Avaa kartta uuteen ikkunaan",
     "tabit": {
       "perustiedot": "Perustiedot",
       "yhteystiedot": "Yhteystiedot"

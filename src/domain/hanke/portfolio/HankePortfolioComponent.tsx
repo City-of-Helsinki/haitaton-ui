@@ -8,23 +8,18 @@ import {
   useGlobalFilter,
   useAsyncDebounce,
 } from 'react-table';
+import { useAccordion, Card, Select, TextInput, Link as HdsLink } from 'hds-react';
 import {
-  useAccordion,
-  Card,
-  Select,
-  Tag,
-  Tabs,
-  Tab,
-  TabList,
-  TabPanel,
-  TextInput,
-} from 'hds-react';
-import { IconAngleDown, IconAngleUp, IconEye, IconPen } from 'hds-react/icons';
+  IconAngleDown,
+  IconAngleUp,
+  IconEye,
+  IconLinkExternal,
+  IconLocation,
+  IconPen,
+} from 'hds-react/icons';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import Text from '../../../common/components/text/Text';
-import GridItem from '../../../common/components/grid/GridItem';
-import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import { HankeData, HANKE_TYOMAATYYPPI, HANKE_VAIHE } from '../../types/hanke';
 import styles from './HankePortfolio.module.scss';
 import { formatToFinnishDate } from '../../../common/utils/date';
@@ -32,24 +27,31 @@ import PaginationControl from '../../common/pagination/PaginationControl';
 import DateRangeControl from '../../../common/components/map/controls/DateRangeControl';
 import { usePortfolioFilter } from './hooks/usePortfolioFilter';
 import { hankeIsBetweenDates } from '../../map/utils';
-import HankeIndexes from '../../map/components/HankeSidebar/HankeIndexes';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
 import HankeVaiheTag from '../vaiheTag/HankeVaiheTag';
+import Map from '../../../common/components/map/Map';
+import Kantakartta from '../../map/components/Layers/Kantakartta';
+import OverviewMapControl from '../../../common/components/map/controls/OverviewMapControl';
 
 type CustomAccordionProps = {
   hanke: HankeData;
 };
 
 const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
-  const { PUBLIC_HANKKEET_MAP } = useLocalizedRoutes();
   const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
+  const getFullPageMapPath = useLinkPath(ROUTES.FULL_PAGE_MAP);
   // Handle accordion state with useAccordion hook
   const { isOpen, buttonProps, contentProps } = useAccordion({ initiallyOpen: false });
   // Change icon based on accordion open state
   const icon = isOpen ? <IconAngleDown size="m" /> : <IconAngleUp size="m" />;
 
   const { t } = useTranslation();
+
+  const tyomaaTyyppiContent = hanke.tyomaaTyyppi.length
+    ? hanke.tyomaaTyyppi.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')
+    : '-';
+
   return (
     <Card className={styles.hankeCard} border>
       <div
@@ -94,143 +96,90 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
         <div className={styles.iconWrapper}>{icon}</div>
       </div>
       <div className={styles.hankeCardContent} {...contentProps}>
-        <Tabs small>
-          <TabList>
-            <Tab>{t('hankePortfolio:tabit:perustiedot')}</Tab>
-            {/*
-              huom: hankkeen datarakenteessa ei ole suoraa yhteystiedot rakennetta
-              vaan ovat []. Ehkäpä tämän voisi muodostaa vastaanotettaessa hankkeita?
-              <Tab>{t('hankePortfolio:tabit:yhteystiedot')}</Tab>
-            */}
-          </TabList>
-          <TabPanel>
-            <div className={styles.gridBasicInfo}>
-              <GridItem
-                className={`${styles.gridDescription}`}
-                title={t('hankePortfolio:labels:kuvaus')}
-                content={hanke.kuvaus}
-              />
-              <GridItem
-                className={styles.gridItem}
-                title={t('hankePortfolio:labels:hankeVaihe')}
-                content={t(`hanke:vaihe:${hanke.vaihe}`)}
-              />
-              {hanke.suunnitteluVaihe && (
-                <GridItem
-                  className={styles.gridItem}
-                  title={t('hankePortfolio:labels:suunnitteluVaihe')}
-                  content={t(`hanke:suunnitteluVaihe:${hanke.suunnitteluVaihe}`)}
-                />
-              )}
-              <div className={styles.gridItem}>
-                <div className={styles.linkWrapper}>
-                  <Text tag="h3" styleAs="h6" weight="bold">
-                    {t('hankePortfolio:labels:katuosoite')}
-                  </Text>
-                  <Link
-                    className={styles.link}
-                    to={`${PUBLIC_HANKKEET_MAP.path}?hanke=${hanke.hankeTunnus}`}
-                    title={t('hankePortfolio:labels:avaaKartalla')}
-                  >
-                    {t('hankePortfolio:labels:avaaKartalla')}
-                  </Link>
-                </div>
-                <Text tag="p" styleAs="body-m">
-                  {hanke.tyomaaKatuosoite}
+        <div>
+          <div className={styles.gridBasicInfo}>
+            <Text tag="h3" styleAs="body-m" weight="bold" className={styles.infoHeader}>
+              {t('hankeForm:labels:kuvaus')}
+            </Text>
+            <Text tag="p" styleAs="body-m" className={styles.infoContent}>
+              {hanke.kuvaus}
+            </Text>
+          </div>
+          <div className={styles.gridBasicInfo}>
+            <Text tag="h3" styleAs="body-m" weight="bold" className={styles.infoHeader}>
+              {t('hankeForm:labels:tyomaaKatuosoite')}
+            </Text>
+            <Text tag="p" styleAs="body-m" className={styles.infoContent}>
+              {hanke.tyomaaKatuosoite}
+            </Text>
+          </div>
+          <div className={styles.gridBasicInfo}>
+            <Text tag="h3" styleAs="body-m" weight="bold" className={styles.infoHeader}>
+              {t('hankeForm:labels:alkuPvm')}
+            </Text>
+            <Text tag="p" styleAs="body-m" className={styles.infoContent}>
+              {formatToFinnishDate(hanke.alkuPvm)}
+            </Text>
+          </div>
+          <div className={styles.gridBasicInfo}>
+            <Text tag="h3" styleAs="body-m" weight="bold" className={styles.infoHeader}>
+              {t('hankeForm:labels:loppuPvm')}
+            </Text>
+            <Text tag="p" styleAs="body-m" className={styles.infoContent}>
+              {formatToFinnishDate(hanke.loppuPvm)}
+            </Text>
+          </div>
+          <div className={styles.gridBasicInfo}>
+            <Text tag="h3" styleAs="body-m" weight="bold" className={styles.infoHeader}>
+              {t('hankeForm:labels:tyomaaTyyppi')}
+            </Text>
+            <Text tag="p" styleAs="body-m" className={styles.infoContent}>
+              {tyomaaTyyppiContent}
+            </Text>
+          </div>
+          <div className={styles.gridBasicInfo}>
+            <Text tag="h3" styleAs="h6" weight="bold" className={styles.infoHeader}>
+              {t('hankeForm:labels:vaihe')}
+            </Text>
+            <Text tag="p" styleAs="body-m" className={styles.infoContent}>
+              {t(`hanke:vaihe:${hanke.vaihe}`)}
+            </Text>
+          </div>
+          <div className={styles.gridBasicInfo}>
+            <Text tag="h3" styleAs="h6" weight="bold" className={styles.infoHeader}>
+              Hankkeen omistaja
+            </Text>
+          </div>
+          <div className={styles.gridBasicInfo}>
+            <Text tag="h3" styleAs="h6" weight="bold" className={styles.infoHeader}>
+              {t('hankeForm:labels:rights')}
+            </Text>
+          </div>
+        </div>
+        {isOpen && (
+          <div>
+            <div className={styles.mapHeader}>
+              <div className={styles.mapHeader__inner}>
+                <IconLocation />
+                <Text tag="h3" styleAs="h4" weight="bold">
+                  {t('hankePortfolio:areaLocation')}
                 </Text>
               </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:hankkeenKesto')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  {formatToFinnishDate(hanke.alkuPvm)} - {formatToFinnishDate(hanke.loppuPvm)}
-                </Text>
-              </div>
-              <div className={styles.gridItem}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:tyomaanKoko')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  {hanke.tyomaaKoko && t(`hanke:tyomaaKoko:${hanke.tyomaaKoko}`)}
-                  {!hanke.tyomaaKoko && '-'}
-                </Text>
-              </div>
-              <div className={`${styles.gridItem} ${styles.gridType}`}>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankePortfolio:labels:tyomaanTyyppi')}
-                </Text>
-                <div>
-                  {hanke.tyomaaTyyppi &&
-                    hanke.tyomaaTyyppi.length > 0 &&
-                    hanke.tyomaaTyyppi.map((tyomaaTyyppi) => {
-                      return (
-                        <Tag className={styles.hankeTag} key={tyomaaTyyppi}>
-                          {t(`hanke:tyomaaTyyppi:${tyomaaTyyppi}`)}
-                        </Tag>
-                      );
-                    })}
-                  {hanke.tyomaaTyyppi && hanke.tyomaaTyyppi.length === 0 && '-'}
-                </div>
+              <div>
+                <HdsLink href={getFullPageMapPath({ hankeTunnus: hanke.hankeTunnus })} openInNewTab>
+                  {t('hankePortfolio:openMapToNewWindow')}
+                </HdsLink>
+                <IconLinkExternal size="xs" />
               </div>
             </div>
-            <div className={styles.gridBasicInfo}>
-              <div className={styles.haitatTitle}>
-                <Text tag="h3" styleAs="h5" weight="bold">
-                  {t('hankePortfolio:labels:hankkeenHaitat')}
-                </Text>
-              </div>
-              <div className={styles.haitatInfo}>
-                <div>
-                  <Text tag="h3" styleAs="h6" weight="bold">
-                    {t('hankeForm:labels:kaistaHaitta')}
-                  </Text>
-                  <Text tag="p" styleAs="body-m">
-                    {hanke.kaistaHaitta && t(`hanke:kaistaHaitta:${hanke.kaistaHaitta}`)}
-                    {!hanke.kaistaHaitta && '-'}
-                  </Text>
-                </div>
-
-                <div>
-                  <Text tag="h3" styleAs="h6" weight="bold">
-                    {t('hankeForm:labels:kaistaPituusHaitta')}
-                  </Text>
-                  <Text tag="p" styleAs="body-m">
-                    {hanke.kaistaPituusHaitta &&
-                      t(`hanke:kaistaPituusHaitta:${hanke.kaistaPituusHaitta}`)}
-                    {!hanke.kaistaPituusHaitta && '-'}
-                  </Text>
-                </div>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankeForm:labels:polyHaitta')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  {hanke.polyHaitta && t(`hanke:polyHaitta:${hanke.polyHaitta}`)}
-                  {!hanke.polyHaitta && '-'}
-                </Text>
-                <Text tag="h3" styleAs="h6" weight="bold">
-                  {t('hankeForm:labels:tarinaHaitta')}
-                </Text>
-                <Text tag="p" styleAs="body-m">
-                  {hanke.tarinaHaitta && t(`hanke:tarinaHaitta:${hanke.tarinaHaitta}`)}
-                  {!hanke.tarinaHaitta && '-'}
-                </Text>
-              </div>
-              <div className={styles.haitatIndexes}>
-                <div>
-                  <Text tag="h3" styleAs="h6" weight="bold">
-                    {t('hankePortfolio:labels:haitanKesto')}
-                  </Text>
-                  <Text tag="p" styleAs="body-m">
-                    {hanke.haittaAlkuPvm && formatToFinnishDate(hanke.haittaAlkuPvm)} -{' '}
-                    {hanke.loppuPvm && formatToFinnishDate(hanke.loppuPvm)}
-                  </Text>
-                </div>
-                <HankeIndexes hankeIndexData={hanke.tormaystarkasteluTulos} displayTooltip />
-              </div>
+            <div className={styles.mapContainer}>
+              <Map zoom={9} mapClassName={styles.mapContainer__inner} showAttribution={false}>
+                <Kantakartta />
+                <OverviewMapControl className={styles.overviewMap} />
+              </Map>
             </div>
-          </TabPanel>
-        </Tabs>
+          </div>
+        )}
       </div>
     </Card>
   );
@@ -491,12 +440,12 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
           <Select
             className={styles.hankeTyyppi}
             multiselect
-            label={t('hankePortfolio:hankkeentyyppi')}
+            label={t('hankeForm:labels:tyomaaTyyppi')}
             options={hankeTyyppiOptions}
             defaultValue={[]}
             clearButtonAriaLabel={
               // eslint-disable-next-line prefer-template
-              t('common:components:multiselect:clear') + ' ' + t('hankePortfolio:hankkeentyyppi')
+              t('common:components:multiselect:clear') + ' ' + t('hankeForm:labels:tyomaaTyyppi')
             }
             // eslint-disable-next-line no-template-curly-in-string
             selectedItemRemoveButtonAriaLabel="Remove {value}"
