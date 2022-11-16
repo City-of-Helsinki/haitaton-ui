@@ -17,10 +17,14 @@ function read_locales() {
   return _.keyBy(data, 'path');
 }
 
+function stringify(result: ResultMap, lang: 'fi' | 'sv' | 'en') {
+  return JSON.stringify(flatToDeep(result, lang), null, 2).replace(/(\r\n|\r)/g, '\n');
+}
+
 function write_locales(result: ResultMap) {
-  fs.writeFileSync(file_fi, JSON.stringify(flatToDeep(result, 'fi'), null, 2));
-  fs.writeFileSync(file_sv, JSON.stringify(flatToDeep(result, 'sv'), null, 2));
-  fs.writeFileSync(file_en, JSON.stringify(flatToDeep(result, 'en'), null, 2));
+  fs.writeFileSync(file_fi, stringify(result, 'fi'));
+  fs.writeFileSync(file_sv, stringify(result, 'sv'));
+  fs.writeFileSync(file_en, stringify(result, 'en'));
 }
 
 function run() {
