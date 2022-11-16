@@ -432,6 +432,8 @@
     "hankkeentyyppiHelperText": "SV: Valitse hankkeen työmaan tyyppi tai tyypit",
     "areaLocation": "SV:Alueiden sijainti",
     "openMapToNewWindow": "SV:Avaa kartta uuteen ikkunaan",
+    "showHankeButton": "SV:Näytä hanke",
+    "showApplicationsButton": "SV:Näytä hankkeen hakemukset",
     "tabit": {
       "perustiedot": "SV: Perustiedot",
       "yhteystiedot": "SV: Yhteystiedot"

@@ -8,7 +8,7 @@ import {
   useGlobalFilter,
   useAsyncDebounce,
 } from 'react-table';
-import { useAccordion, Card, Select, TextInput, Link as HdsLink } from 'hds-react';
+import { useAccordion, Card, Select, TextInput, Link as HdsLink, Button } from 'hds-react';
 import {
   IconAngleDown,
   IconAngleUp,
@@ -180,6 +180,15 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
             </div>
           </div>
         )}
+
+        <div>
+          <Button theme="coat" className={styles.showHankeButton}>
+            {t('hankePortfolio:showHankeButton')}
+          </Button>
+          <Button theme="coat" variant="secondary">
+            {t('hankePortfolio:showApplicationsButton')}
+          </Button>
+        </div>
       </div>
     </Card>
   );

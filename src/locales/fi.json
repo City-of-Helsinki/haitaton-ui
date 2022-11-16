@@ -433,6 +433,8 @@
     "hankkeentyyppiHelperText": "Valitse hankkeen työmaan tyyppi tai tyypit",
     "areaLocation": "Alueiden sijainti",
     "openMapToNewWindow": "Avaa kartta uuteen ikkunaan",
+    "showHankeButton": "Näytä hanke",
+    "showApplicationsButton": "Näytä hankkeen hakemukset",
     "tabit": {
       "perustiedot": "Perustiedot",
       "yhteystiedot": "Yhteystiedot"

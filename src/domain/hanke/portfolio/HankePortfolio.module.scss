@@ -72,6 +72,10 @@
       @include respond-above(l) {
         grid-template-columns: 5fr 4fr;
       }
+
+      .showHankeButton {
+        margin-right: var(--spacing-xs);
+      }
     }
   }
 
