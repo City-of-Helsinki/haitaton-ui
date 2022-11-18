@@ -6,7 +6,14 @@
     margin: auto;
     padding: var(--spacing-l) var(--spacing-l) var(--spacing-3-xl) var(--spacing-l);
     overflow-x: hidden;
-    min-height: 65vh;
+
+    .notFoundContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: var(--spacing-3-xl);
+      text-align: center;
+    }
 
     .hankeCard {
       padding: var(--spacing-s);
@@ -142,7 +149,7 @@
 
   .headerContainer {
     background-color: var(--color-summer-light);
-    padding: var(--spacing-s) var(--spacing-xl) var(--spacing-3-xl);
+    padding: var(--spacing-s) var(--spacing-xl) 0 var(--spacing-3-xl);
 
     .filters {
       display: grid;
@@ -171,6 +178,17 @@
         font-size: var(--fontsize-body-m);
         margin-top: var(--spacing-3-xs);
         white-space: pre-line;
+      }
+    }
+
+    .clearFiltersButton {
+      width: fit-content;
+      text-decoration: underline;
+      padding-top: var(--spacing-m);
+      padding-bottom: var(--spacing-m);
+
+      &__hidden {
+        visibility: hidden;
       }
     }
   }

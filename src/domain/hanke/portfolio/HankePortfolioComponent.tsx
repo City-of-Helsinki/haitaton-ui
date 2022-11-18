@@ -24,6 +24,7 @@ import {
   IconLinkExternal,
   IconLocation,
   IconPen,
+  IconSearch,
 } from 'hds-react/icons';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
@@ -206,7 +207,11 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                 </Text>
               </div>
               <div>
-                <HdsLink href={getFullPageMapPath({ hankeTunnus: hanke.hankeTunnus })} openInNewTab>
+                <HdsLink
+                  href={getFullPageMapPath({ hankeTunnus: hanke.hankeTunnus })}
+                  openInNewTab
+                  disableVisitedStyles
+                >
                   {t('hankePortfolio:openMapToNewWindow')}
                 </HdsLink>
                 <IconLinkExternal size="xs" />
@@ -252,8 +257,10 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
     setHankeFilterEndDate,
   } = usePortfolioFilter();
 
-  const filterVaihe = (vaiheRows: Row[], id: string[], value: string[]) =>
-    vaiheRows.filter((hanke) => value.includes(hanke.values.vaihe));
+  const filterVaihe = (vaiheRows: Row[], id: string[], value: string[]) => {
+    if (value.length === 0) return vaiheRows;
+    return vaiheRows.filter((hanke) => value.includes(hanke.values.vaihe));
+  };
 
   const filterTyyppi = (tyyppiRows: Row[], id: string[], value: string[]) => {
     if (value.length === 0) return tyyppiRows;
@@ -349,7 +356,7 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
     previousPage,
     pageCount,
     pageOptions,
-    state: { pageIndex },
+    state: { pageIndex, filters, globalFilter },
     setFilter,
     setGlobalFilter,
     rows,
@@ -369,19 +376,16 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
 
   const { t } = useTranslation();
 
-  const [selectedHankeVaiheet, setSelectedHankeVaiheet] = useState(Object.keys(HANKE_VAIHE));
+  const [selectedHankeVaiheet, setSelectedHankeVaiheet] = useState<string[]>([]);
 
   // Initial setup for hankevaihe <Select /> options on first render
   // Using any: <Select /> component of HDS typing seems incorrect.
   // Would require OptionType[][] although the component takes in OptionType[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const hankeVaiheOptions: any = [];
-
-  useEffect(() => {
-    Object.keys(HANKE_VAIHE).forEach((hankeVaihe) =>
-      hankeVaiheOptions.push({ label: t(`hanke:vaihe:${hankeVaihe}`), value: hankeVaihe })
-    );
-  });
+  const hankeVaiheOptions: any = Object.keys(HANKE_VAIHE).map((hankeVaihe) => ({
+    label: t(`hanke:vaihe:${hankeVaihe}`),
+    value: hankeVaihe,
+  }));
 
   // Using any: <Select /> component of HDS typing seems incorrect.
   // Would require OptionType[][] although the component takes in OptionType[]
@@ -396,16 +400,10 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
   const [selectedHankeTyypit, setSelectedHankeTyypit] = useState<string[]>([]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const hankeTyyppiOptions: any = [];
-
-  useEffect(() => {
-    Object.keys(HANKE_TYOMAATYYPPI).forEach((hankeTyyppi) =>
-      hankeTyyppiOptions.push({
-        label: t(`hanke:tyomaaTyyppi:${hankeTyyppi}`),
-        value: hankeTyyppi,
-      })
-    );
-  });
+  const hankeTyyppiOptions: any = Object.keys(HANKE_TYOMAATYYPPI).map((hankeTyyppi) => ({
+    label: t(`hanke:tyomaaTyyppi:${hankeTyyppi}`),
+    value: hankeTyyppi,
+  }));
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateHankeTyyppi = (changedHankeTyypit: any[]) =>
@@ -415,6 +413,8 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
     setFilter('tyomaaTyyppi', selectedHankeTyypit);
   }, [selectedHankeTyypit, setFilter]);
 
+  const [hankeSearchValue, setHankeSearchValue] = useState('');
+
   const searchHankeInputChange = (searchInput: string) => {
     const filter = searchInput && searchInput.length > 0 ? searchInput : undefined;
     setGlobalFilter(filter);
@@ -423,6 +423,10 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
   const searchHankeInputChangeDebounced = useAsyncDebounce((e) => {
     searchHankeInputChange(e);
   }, 200);
+
+  useEffect(() => {
+    searchHankeInputChangeDebounced(hankeSearchValue);
+  }, [hankeSearchValue, searchHankeInputChangeDebounced]);
 
   useEffect(() => {
     if (hankeFilterStartDate) {
@@ -439,6 +443,28 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
       setFilter('loppuPvm', null);
     }
   }, [hankeFilterEndDate, setFilter]);
+
+  const [isFiltered, setIsFiltered] = useState(false);
+
+  const resetFilters = () => {
+    setHankeSearchValue('');
+    setHankeFilterStartDate(null);
+    setHankeFilterEndDate(null);
+    updateHankeVaihe([]);
+    updateHankeTyyppi([]);
+  };
+
+  useEffect(() => {
+    const areFilters = filters.some((filter) => {
+      const { value } = filter;
+      if (Array.isArray(value)) {
+        return value.length > 0;
+      }
+      return value !== null;
+    });
+
+    setIsFiltered(Boolean(globalFilter) || areFilters);
+  }, [setIsFiltered, filters, globalFilter]);
 
   return (
     <>
@@ -457,7 +483,8 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
           <TextInput
             className={styles.hankeSearch}
             id="searchHanke"
-            onChange={(e) => searchHankeInputChangeDebounced(e.target.value)}
+            value={hankeSearchValue}
+            onChange={(e) => setHankeSearchValue(e.target.value)}
             label={t('hankePortfolio:search')}
           />
           <div>
@@ -476,7 +503,7 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
             multiselect
             label={t('hankePortfolio:hankevaiheet')}
             options={hankeVaiheOptions}
-            defaultValue={hankeVaiheOptions}
+            defaultValue={[]}
             clearButtonAriaLabel={
               // eslint-disable-next-line prefer-template
               t('common:components:multiselect:clear') + ' ' + t('hankePortfolio:hankevaiheet')
@@ -484,6 +511,13 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
             // eslint-disable-next-line no-template-curly-in-string
             selectedItemRemoveButtonAriaLabel="Remove {value}"
             onChange={updateHankeVaihe}
+            value={
+              selectedHankeVaiheet.map((hankeVaihe) => ({
+                label: t(`hanke:vaihe:${hankeVaihe}`),
+                value: hankeVaihe,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              })) as any
+            }
           />
 
           <Select
@@ -499,11 +533,28 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
             // eslint-disable-next-line no-template-curly-in-string
             selectedItemRemoveButtonAriaLabel="Remove {value}"
             onChange={updateHankeTyyppi}
+            value={
+              selectedHankeTyypit.map((hankeTyyppi) => ({
+                label: t(`hanke:tyomaaTyyppi:${hankeTyyppi}`),
+                value: hankeTyyppi,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              })) as any
+            }
           />
           <p data-testid="numberOfFilteredRows" style={{ display: 'none' }}>
             {rows.length}
           </p>
         </div>
+
+        <button
+          className={clsx(styles.clearFiltersButton, {
+            [styles.clearFiltersButton__hidden]: !isFiltered,
+          })}
+          type="button"
+          onClick={resetFilters}
+        >
+          {t('hankePortfolio:clearFiltersButton')}
+        </button>
       </div>
 
       <div className={styles.contentContainer}>
@@ -521,19 +572,33 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
               );
             })}
           {rows.length === 0 && preFilteredRows.length > 0 && (
-            <div>{t('hankePortfolio:noneFound')}</div>
+            <div className={styles.notFoundContainer}>
+              <IconSearch size="l" />
+              <Text tag="p" styleAs="h3" weight="bold" spacingTop="m">
+                {t('hankePortfolio:noneFound')}
+              </Text>
+            </div>
           )}
-          {preFilteredRows.length === 0 && <div>{t('hankePortfolio:noneExist')}</div>}
-          <PaginationControl
-            goToPage={gotoPage}
-            nextPage={nextPage}
-            previousPage={previousPage}
-            pageCount={pageCount}
-            pageIndex={pageIndex}
-            pagesLength={pageOptions.length}
-            canNextPage={canNextPage}
-            canPreviousPage={canPreviousPage}
-          />
+          {preFilteredRows.length === 0 && (
+            <div className={styles.notFoundContainer}>
+              <Text tag="p" styleAs="h3" weight="bold" spacingTop="m">
+                {t('hankePortfolio:noneExist')}
+              </Text>
+            </div>
+          )}
+
+          {rows.length > 0 && (
+            <PaginationControl
+              goToPage={gotoPage}
+              nextPage={nextPage}
+              previousPage={previousPage}
+              pageCount={pageCount}
+              pageIndex={pageIndex}
+              pagesLength={pageOptions.length}
+              canNextPage={canNextPage}
+              canPreviousPage={canPreviousPage}
+            />
+          )}
         </div>
       </div>
     </>

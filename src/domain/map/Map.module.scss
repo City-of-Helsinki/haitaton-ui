@@ -6,6 +6,7 @@
   position: relative;
   flex-grow: 1;
   overflow: hidden;
+  min-height: 300px;
 
   &__inner {
     position: absolute;

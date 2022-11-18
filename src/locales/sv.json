@@ -421,8 +421,8 @@
     "searchHelperText": "SV: Hae hankkeen nimellä tai tunnuksella",
     "searchResults": "SV: {{count}} hakutulos",
     "searchResults_plural": "SV: {{count}} hakutulosta",
-    "noneFound": "SV: Haulla ei löytynyt yhtään hankkeita.",
-    "noneExist": "SV: Hankesalkussasi ei ole hankkeita.",
+    "noneFound": "SV: Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta",
+    "noneExist": "SV: Hankesalkussasi ei ole hankkeita",
     "hankevaiheet": "SV: Hankevaiheet",
     "hankevaiheetHelperText": "SV: Valitse hankevaiheet joita haluat tarkastella",
     "endDate": "SV: Ajanjakson loppu",
@@ -436,6 +436,7 @@
     "showApplicationsButton": "SV:Näytä hankkeen hakemukset",
     "draftStateLabel": "SV:Hanke on luonnostilassa",
     "draftState": "SV:Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.",
+    "clearFiltersButton": "SV:Tyhjennä hakuehdot",
     "tabit": {
       "perustiedot": "SV: Perustiedot",
       "yhteystiedot": "SV: Yhteystiedot"
