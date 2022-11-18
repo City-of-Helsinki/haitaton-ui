@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   useFilters,
@@ -7,6 +7,7 @@ import {
   Row,
   useGlobalFilter,
   useAsyncDebounce,
+  useSortBy,
 } from 'react-table';
 import {
   useAccordion,
@@ -16,6 +17,7 @@ import {
   Link as HdsLink,
   Button,
   Notification,
+  Pagination,
 } from 'hds-react';
 import {
   IconAngleDown,
@@ -32,7 +34,6 @@ import Text from '../../../common/components/text/Text';
 import { HankeData, HANKE_TYOMAATYYPPI, HANKE_VAIHE } from '../../types/hanke';
 import styles from './HankePortfolio.module.scss';
 import { formatToFinnishDate } from '../../../common/utils/date';
-import PaginationControl from '../../common/pagination/PaginationControl';
 import DateRangeControl from '../../../common/components/map/controls/DateRangeControl';
 import { usePortfolioFilter } from './hooks/usePortfolioFilter';
 import { hankeIsBetweenDates } from '../../map/utils';
@@ -43,6 +44,7 @@ import Map from '../../../common/components/map/Map';
 import Kantakartta from '../../map/components/Layers/Kantakartta';
 import OverviewMapControl from '../../../common/components/map/controls/OverviewMapControl';
 import { hankeSchema } from '../edit/hankeSchema';
+import { Language } from '../../../common/types/language';
 
 type CustomAccordionProps = {
   hanke: HankeData;
@@ -348,14 +350,9 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
   }, [hankeFilterStartDate, hankeFilterEndDate]);
 
   const {
-    canNextPage,
-    canPreviousPage,
     page,
     gotoPage,
-    nextPage,
-    previousPage,
     pageCount,
-    pageOptions,
     state: { pageIndex, filters, globalFilter },
     setFilter,
     setGlobalFilter,
@@ -367,14 +364,16 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
       data,
       initialState: {
         pageSize: 10,
+        sortBy: useMemo(() => [{ id: 'alkuPvm', desc: false }], []),
       },
     },
     useFilters,
     useGlobalFilter,
+    useSortBy,
     usePagination
   );
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [selectedHankeVaiheet, setSelectedHankeVaiheet] = useState<string[]>([]);
 
@@ -465,6 +464,11 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
 
     setIsFiltered(Boolean(globalFilter) || areFilters);
   }, [setIsFiltered, filters, globalFilter]);
+
+  function handlePageChange(e: React.MouseEvent, index: number) {
+    e.preventDefault();
+    gotoPage(index);
+  }
 
   return (
     <>
@@ -588,16 +592,16 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
           )}
 
           {rows.length > 0 && (
-            <PaginationControl
-              goToPage={gotoPage}
-              nextPage={nextPage}
-              previousPage={previousPage}
-              pageCount={pageCount}
-              pageIndex={pageIndex}
-              pagesLength={pageOptions.length}
-              canNextPage={canNextPage}
-              canPreviousPage={canPreviousPage}
-            />
+            <div className={styles.pagination}>
+              <Pagination
+                language={i18n.language as Language}
+                onChange={handlePageChange}
+                pageHref={() => ''}
+                pageCount={pageCount}
+                pageIndex={pageIndex}
+                paginationAriaLabel={t('hankeList:paginatioAriaLabel')}
+              />
+            </div>
           )}
         </div>
       </div>

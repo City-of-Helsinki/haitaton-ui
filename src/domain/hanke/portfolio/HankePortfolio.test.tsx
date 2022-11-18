@@ -13,6 +13,8 @@ const endDateLabel = 'Ajanjakson loppu';
 
 afterEach(cleanup);
 
+jest.setTimeout(10000);
+
 describe.only('HankePortfolio', () => {
   test('Changing search text filters correct number of projects', async () => {
     const user = userEvent.setup();
