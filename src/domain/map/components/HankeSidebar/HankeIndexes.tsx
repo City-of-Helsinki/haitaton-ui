@@ -21,7 +21,7 @@ type IndexProps = {
 const IndexSection: React.FC<IndexProps> = ({ title, content, index, testId, loading }) => (
   <div className={styles.indexContainer}>
     <div className={styles.indexContainer__titlesContainer}>
-      <Text tag="h2" styleAs={content ? 'h6' : 'h5'} weight="bold">
+      <Text tag="h2" styleAs="h6" weight="bold">
         {title}
       </Text>
       {content && (
@@ -31,7 +31,6 @@ const IndexSection: React.FC<IndexProps> = ({ title, content, index, testId, loa
       )}
     </div>
     <div className={styles.indexContainer__number}>
-      {content && <div>&nbsp;</div>}
       {loading && <LoadingSpinner small />}
       {!loading && (
         <div
@@ -71,7 +70,7 @@ const HankeIndexes: React.FC<Props> = ({ hankeIndexData, displayTooltip, loading
   return (
     <div>
       <div className={styles.indexTitle}>
-        <Text tag="h2" styleAs="h5" weight="bold">
+        <Text tag="h2" styleAs="h4" weight="bold">
           {t('hankeIndexes:haittaindeksit')}
         </Text>
         {displayTooltip && (

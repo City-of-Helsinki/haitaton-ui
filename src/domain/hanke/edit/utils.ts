@@ -1,6 +1,4 @@
-import { isBefore, parseISO } from 'date-fns';
 import { HankeContact, HankeDataDraft } from '../../types/hanke';
-import { today } from './hankeSchema';
 import { FORMFIELD, HankeDataFormState } from './types';
 import { formatFeaturesToHankeGeoJSON } from '../../map/utils';
 
@@ -44,11 +42,3 @@ export const convertHankeDataToFormState = (
   arvioijat: hankeData?.arvioijat ? hankeData.arvioijat : [],
   toteuttajat: hankeData?.toteuttajat ? hankeData.toteuttajat : [],
 });
-
-export const isHankeEditingDisabled = ({ alkuPvm }: HankeDataDraft | HankeDataFormState) => {
-  if (alkuPvm && isBefore(parseISO(alkuPvm), today)) {
-    return 'STARTED';
-  }
-
-  return false;
-};

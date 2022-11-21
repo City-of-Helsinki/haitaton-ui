@@ -29,7 +29,7 @@ const OverviewMapControl: React.FC<Props> = ({ className }) => {
       source: new TileWMS({
         url: 'https://kartta.hel.fi/ws/geoserver/avoindata/wms',
         params: {
-          LAYERS: 'Kantakartta',
+          LAYERS: 'Opaskartta_Helsinki',
           FORMAT: 'image/jpeg',
           WIDTH: 256,
           HEIGHT: 256,

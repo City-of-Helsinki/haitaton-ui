@@ -1,10 +1,13 @@
 import React from 'react';
 import { IconSignout, Navigation } from 'hds-react';
 import { useTranslation } from 'react-i18next';
-import { NavLink, useMatch } from 'react-router-dom';
-import { useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
+import { NavLink, useMatch, useLocation, useNavigate } from 'react-router-dom';
+import { $enum } from 'ts-enum-util';
+import { getMatchingRouteKey, useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
 import authService from '../../../domain/auth/authService';
 import useUser from '../../../domain/auth/useUser';
+import { Language, LANGUAGES } from '../../types/language';
+import { I18NLANGKEY } from '../../../locales/constants';
 
 const Header: React.FC = () => {
   const {
@@ -14,7 +17,7 @@ const Header: React.FC = () => {
     HANKEPORTFOLIO,
     NEW_HANKE,
   } = useLocalizedRoutes();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { data: user } = useUser();
   const isAuthenticated = Boolean(user?.profile);
 
@@ -30,6 +33,17 @@ const Header: React.FC = () => {
     path: HANKEPORTFOLIO.path,
     end: false,
   });
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  async function setLanguage(lang: Language) {
+    localStorage.setItem(I18NLANGKEY, lang);
+    const routeKey = getMatchingRouteKey(i18n, i18n.language as Language, location.pathname);
+    await i18n.changeLanguage(lang);
+    const to = lang + t(`routes:${routeKey}.path`);
+    navigate(to);
+  }
 
   return (
     <Navigation
@@ -85,22 +99,21 @@ const Header: React.FC = () => {
             data-testid="logoutLink"
           />
         </Navigation.User>
+        <Navigation.LanguageSelector label={t(`common:languages:${i18n.language}`)}>
+          {$enum(LANGUAGES).map((lang) => (
+            <Navigation.Item
+              as="a"
+              label={t(`common:languages:${lang}`)}
+              onClick={(e: React.MouseEvent) => {
+                e.preventDefault();
+                setLanguage(lang);
+              }}
+              key={lang}
+              lang={lang}
+            />
+          ))}
+        </Navigation.LanguageSelector>
       </Navigation.Actions>
-      {/*
-      <Navigation.LanguageSelector label={t(`common:languages:${i18n.language}`)}>
-        {$enum(LANGUAGES).map((lang) => (
-          <Navigation.Item
-            as="a"
-            href={`/${lang}`}
-            label={t(`common:languages:${lang}`)}
-            onClick={(e: React.MouseEvent) => {
-              e.preventDefault();
-              setLanguage(lang);
-            }}
-            key={lang}
-          />
-        ))}
-          </Navigation.LanguageSelector> */}
     </Navigation>
   );
 };

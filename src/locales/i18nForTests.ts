@@ -13,7 +13,7 @@ instance.init({
   },
   fallbackLng: 'fi',
   lng: 'fi',
-  debug: false,
+  debug: true,
   interpolation: {
     escapeValue: false,
   },

@@ -10,7 +10,7 @@ const Ortokartta = () => (
       new TileWMS({
         url: 'https://kartta.hel.fi/ws/geoserver/avoindata/wms',
         params: {
-          LAYERS: 'Ortoilmakuva_2020_5cm',
+          LAYERS: 'Ortoilmakuva',
           FORMAT: 'image/jpeg',
           WIDTH: 256,
           HEIGHT: 256,

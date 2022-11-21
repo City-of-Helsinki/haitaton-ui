@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
@@ -21,11 +20,12 @@ import Form2 from './HankeForm2';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
 import { HANKE_SAVETYPE } from '../../types/hanke';
-import { convertHankeAlueGeometries, filterEmptyContacts, isHankeEditingDisabled } from './utils';
+import { convertHankeAlueGeometries, filterEmptyContacts } from './utils';
 import api from '../../api/api';
 import MultipageForm from '../../forms/MultipageForm';
 import FormActions from '../../forms/components/FormActions';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
+import HankeHaitatForm from './HankeHaitatForm';
 
 async function saveHanke({
   data,
@@ -39,10 +39,6 @@ async function saveHanke({
     ...filterEmptyContacts(convertHankeAlueGeometries(data)),
     saveType,
   };
-
-  if (isHankeEditingDisabled(data)) {
-    throw new Error('Editing disabled');
-  }
 
   const response = data.hankeTunnus
     ? await api.put<HankeDataFormState>(`/hankkeet/${data.hankeTunnus}`, requestData)
@@ -146,6 +142,11 @@ const HankeForm: React.FC<Props> = ({
     {
       element: <HankeAreasForm errors={errors} register={register} formData={formValues} />,
       label: t('hankeForm:hankkeenAlueForm:header'),
+      state: isNewHanke ? StepState.disabled : StepState.available,
+    },
+    {
+      element: <HankeHaitatForm formData={formValues} />,
+      label: t('hankeForm:hankkeenHaitatForm:header'),
       state: isNewHanke ? StepState.disabled : StepState.available,
     },
     {

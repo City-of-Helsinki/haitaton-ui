@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { render, RenderOptions } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
-import i18n from '../locales/i18n';
+import i18n from '../locales/i18nForTests';
 import { store } from '../common/redux/store';
 
 const queryClient = new QueryClient();

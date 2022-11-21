@@ -5,10 +5,12 @@ import MapContext from '../MapContext';
 
 type Props = {
   source: TileWMS | OSM;
+  minZoom?: number;
+  maxZoom?: number;
   zIndex?: number;
 };
 
-const TileLayer: React.FC<Props> = ({ source, zIndex = 0 }) => {
+const TileLayer: React.FC<Props> = ({ source, minZoom, maxZoom, zIndex = 0 }) => {
   const { map } = useContext(MapContext);
 
   useEffect(() => {
@@ -16,6 +18,8 @@ const TileLayer: React.FC<Props> = ({ source, zIndex = 0 }) => {
 
     const tileLayer = new OLTileLayer({
       source,
+      minZoom,
+      maxZoom,
       zIndex,
     });
 
@@ -28,7 +32,7 @@ const TileLayer: React.FC<Props> = ({ source, zIndex = 0 }) => {
         map.removeLayer(tileLayer);
       }
     };
-  }, [map]);
+  }, [map, maxZoom, minZoom, zIndex, source]);
 
   return null;
 };

@@ -64,13 +64,6 @@
         "title": "SV::Haitaton - Etusivu"
       }
     },
-    "PROJECTS": {
-      "path": "/projects",
-      "headerLabel": "SV::Hankelista",
-      "meta": {
-        "title": "SV::Haitaton - Hankelista"
-      }
-    },
     "HANKEPORTFOLIO": {
       "path": "/hankesalkku",
       "headerLabel": "SV:Omat hankkeet",
@@ -97,13 +90,6 @@
       "headerLabel": "SV:Hankkeet yleisillä alueilla",
       "meta": {
         "title": "SV:Haitaton - Hankelista"
-      }
-    },
-    "MAP": {
-      "path": "/map",
-      "headerLabel": "SV:Hankkeet yleisillä alueilla",
-      "meta": {
-        "title": "SV::Haitaton - Kartta"
       }
     },
     "NEW_HANKE": {
@@ -342,7 +328,7 @@
       "header": "SV:Hankkeen lisätiedot"
     },
     "hankkeenHaitatForm": {
-      "header": "SV:Hankkeen haitat"
+      "header": "SV:Haitat"
     },
     "finishedForm": {
       "header": "SV:Lomake on lähetetty onnistuneesti"
@@ -517,6 +503,7 @@
         "BLUE": "SV:Indeksoimaton"
       }
     },
+    "attribution": "SV:Aineistot &copy; <a href='https://kartta.hel.fi'>Helsingin kaupunki</a>",
     "drawSquareButtonAria": "SV:Piirrä neliö kartalle",
     "drawPolygonButtonAria": "SV:Piirrä monikulmio kartalle"
   },
