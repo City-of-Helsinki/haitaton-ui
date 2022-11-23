@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Tab, TabList, TabPanel, Tabs } from 'hds-react';
@@ -15,7 +15,7 @@ import Haitat from './components/Haitat';
 import Text from '../../../common/components/text/Text';
 import { STYLES } from '../../map/utils/geometryStyle';
 
-const HankeAreasForm: React.FC<FormProps> = ({ formData }) => {
+const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
   const { t } = useTranslation();
   const { setValue, trigger } = useFormContext();
   const { fields: hankeAlueet, append, remove } = useFieldArray({
@@ -72,10 +72,14 @@ const HankeAreasForm: React.FC<FormProps> = ({ formData }) => {
 
   function removeArea(index: number) {
     remove(index);
-    if (formData.hankeAlueet) {
-      drawSource.removeFeature(formData.hankeAlueet[index].feature);
+    const featureToRemove = formData.alueet && formData.alueet[index].feature;
+    if (featureToRemove) {
+      drawSource.removeFeature(featureToRemove);
     }
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const features = useMemo(() => formData.alueet?.map((alue) => alue.feature!), [formData.alueet]);
 
   return (
     <div>
@@ -93,7 +97,7 @@ const HankeAreasForm: React.FC<FormProps> = ({ formData }) => {
         <HankeDrawer
           onAddFeature={handleAddFeature}
           onChangeFeature={handleChangeFeature}
-          geometry={undefined}
+          features={features}
           center={addressCoordinate}
           drawSource={drawSource}
         />
@@ -102,8 +106,8 @@ const HankeAreasForm: React.FC<FormProps> = ({ formData }) => {
       <Tabs>
         <TabList>
           {hankeAlueet.map((item, index) => {
-            const hankeAlue = formData.hankeAlueet && formData.hankeAlueet[index];
-            const hankeGeometry = hankeAlue?.feature.getGeometry();
+            const hankeAlue = formData.alueet && formData.alueet[index];
+            const hankeGeometry = hankeAlue?.feature?.getGeometry();
             const surfaceArea = hankeGeometry && `(${formatSurfaceArea(hankeGeometry)})`;
             return (
               <Tab key={item.id} onClick={() => higlightArea(hankeAlue?.feature)}>
@@ -123,4 +127,4 @@ const HankeAreasForm: React.FC<FormProps> = ({ formData }) => {
     </div>
   );
 };
-export default HankeAreasForm;
+export default HankeFormAlueet;

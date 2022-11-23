@@ -4,7 +4,7 @@ import Geometry from 'ol/geom/Geometry';
 import { getArea } from 'ol/sphere';
 import { HankeGeoJSON } from '../../common/types/hanke';
 import { GeometryData, HankeFilters } from './types';
-import { HankeData } from '../types/hanke';
+import { HankeData, HankeDataDraft } from '../types/hanke';
 
 export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJSON => {
   const format = new GeoJSON();
@@ -41,7 +41,8 @@ export const formatFeaturesToAlluGeoJSON = (features: GeometryData): unknown => 
   };
 };
 
-export const hankeHasGeometry = (hanke: HankeData) => hanke.geometriat;
+export const hankeHasGeometry = (hanke: HankeData | HankeDataDraft) =>
+  hanke.alueet?.some((alue) => Boolean(alue.geometria));
 
 export const hankeIsBetweenDates = ({ endDate, startDate }: HankeFilters) => ({
   startDate: comparedStartDate,

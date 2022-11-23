@@ -25,20 +25,20 @@ const HankeLayer = () => {
   useEffect(() => {
     hankeSource.current.clear();
     hankkeetFilteredByAll.forEach((hanke) => {
-      if (hanke.geometriat) {
-        const hankeFeatures = new GeoJSON().readFeatures(hanke.geometriat.featureCollection);
-        hankeFeatures.forEach((feature) => {
-          feature.setProperties(
-            {
-              liikennehaittaindeksi: hanke.liikennehaittaindeksi
-                ? hanke.liikennehaittaindeksi.indeksi
-                : null,
-            },
-            true
-          );
-        });
-        hankeSource.current.addFeatures(hankeFeatures);
-      }
+      const hankeFeatures = hanke.alueet.flatMap((alue) =>
+        new GeoJSON().readFeatures(alue.geometria.featureCollection)
+      );
+      hankeFeatures.forEach((feature) => {
+        feature.setProperties(
+          {
+            liikennehaittaindeksi: hanke.liikennehaittaindeksi
+              ? hanke.liikennehaittaindeksi.indeksi
+              : null,
+          },
+          true
+        );
+      });
+      hankeSource.current.addFeatures(hankeFeatures);
     });
     hankeSource.current.dispatchEvent('featuresAdded');
   }, [hankkeetFilteredByAll]);

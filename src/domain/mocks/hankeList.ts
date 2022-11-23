@@ -1,4 +1,4 @@
-import { HankeData } from '../types/hanke';
+import { HankeData, HANKE_POLYHAITTA } from '../types/hanke';
 
 const hankeList: HankeData[] = [
   {
@@ -21,49 +21,53 @@ const hankeList: HankeData[] = [
     arvioijat: [],
     toteuttajat: [],
     tyomaaTyyppi: ['VESI', 'VIEMARI'],
-    hankeAlueet: [],
-    geometriat: {
-      id: 1,
-      hankeId: 1,
-      featureCollection: {
-        type: 'FeatureCollection',
-        crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:EPSG::3879' } },
-        features: [
-          {
-            type: 'Feature',
-            properties: { hankeTunnus: 'SMTGEN2_2' },
-            geometry: {
-              type: 'Polygon',
-              crs: { type: 'name', properties: { name: 'EPSG:3879' } },
-              coordinates: [
-                [
-                  [2.549619729e7, 6673799.79],
-                  [2.549618361e7, 6674382.48],
-                  [2.549560092e7, 6674368.79],
-                  [2.549561461e7, 6673786.1],
-                  [2.549619729e7, 6673799.79],
-                ],
-              ],
-            },
+    alueet: [
+      {
+        id: 1,
+        geometria: {
+          id: 1,
+          hankeId: 1,
+          featureCollection: {
+            type: 'FeatureCollection',
+            crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:EPSG::3879' } },
+            features: [
+              {
+                type: 'Feature',
+                properties: { hankeTunnus: 'SMTGEN2_2' },
+                geometry: {
+                  type: 'Polygon',
+                  crs: { type: 'name', properties: { name: 'EPSG:3879' } },
+                  coordinates: [
+                    [
+                      [2.549619729e7, 6673799.79],
+                      [2.549618361e7, 6674382.48],
+                      [2.549560092e7, 6674368.79],
+                      [2.549561461e7, 6673786.1],
+                      [2.549619729e7, 6673799.79],
+                    ],
+                  ],
+                },
+              },
+            ],
           },
-        ],
+          version: 0,
+          createdByUserId: null,
+          createdAt: '2022-01-19T13:01:26.024Z',
+          modifiedByUserId: null,
+          modifiedAt: '2022-01-19T13:01:26.024Z',
+        },
+        haittaAlkuPvm: '2022-11-21T21:59:59.999Z',
+        haittaLoppuPvm: '2022-11-30T21:59:59.999Z',
+        meluHaitta: 'YKSI',
+        polyHaitta: HANKE_POLYHAITTA.KAKSI,
+        tarinaHaitta: 'YKSI',
+        kaistaHaitta: 'KAKSI',
+        kaistaPituusHaitta: 'KOLME',
       },
-      version: 0,
-      createdByUserId: null,
-      createdAt: '2022-01-19T13:01:26.024Z',
-      modifiedByUserId: null,
-      modifiedAt: '2022-01-19T13:01:26.024Z',
-    },
+    ],
     tyomaaKatuosoite: '',
     tyomaaKoko: null,
     tormaystarkasteluTulos: null,
-    haittaAlkuPvm: null,
-    haittaLoppuPvm: null,
-    kaistaHaitta: null,
-    kaistaPituusHaitta: null,
-    meluHaitta: null,
-    polyHaitta: null,
-    tarinaHaitta: null,
     liikennehaittaindeksi: null,
   },
   {
@@ -86,49 +90,53 @@ const hankeList: HankeData[] = [
     arvioijat: [],
     toteuttajat: [],
     tyomaaTyyppi: ['SADEVESI'],
-    hankeAlueet: [],
-    geometriat: {
-      id: 2,
-      hankeId: 2,
-      featureCollection: {
-        type: 'FeatureCollection',
-        crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:EPSG::3879' } },
-        features: [
-          {
-            type: 'Feature',
-            properties: { hankeTunnus: 'SMTGEN2_2' },
-            geometry: {
-              type: 'Polygon',
-              crs: { type: 'name', properties: { name: 'EPSG:3879' } },
-              coordinates: [
-                [
-                  [2.549619722e7, 6673792.79],
-                  [2.549618354e7, 6674375.48],
-                  [2.549560085e7, 6674361.79],
-                  [2.549561454e7, 6673779.1],
-                  [2.549619722e7, 6673792.79],
-                ],
-              ],
-            },
+    alueet: [
+      {
+        id: 2,
+        geometria: {
+          id: 2,
+          hankeId: 2,
+          featureCollection: {
+            type: 'FeatureCollection',
+            crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:EPSG::3879' } },
+            features: [
+              {
+                type: 'Feature',
+                properties: { hankeTunnus: 'SMTGEN2_2' },
+                geometry: {
+                  type: 'Polygon',
+                  crs: { type: 'name', properties: { name: 'EPSG:3879' } },
+                  coordinates: [
+                    [
+                      [2.549619722e7, 6673792.79],
+                      [2.549618354e7, 6674375.48],
+                      [2.549560085e7, 6674361.79],
+                      [2.549561454e7, 6673779.1],
+                      [2.549619722e7, 6673792.79],
+                    ],
+                  ],
+                },
+              },
+            ],
           },
-        ],
+          version: 0,
+          createdByUserId: null,
+          createdAt: '2022-01-19T13:01:26.024Z',
+          modifiedByUserId: null,
+          modifiedAt: '2022-01-19T13:01:26.024Z',
+        },
+        haittaAlkuPvm: '2022-11-14T21:59:59.999Z',
+        haittaLoppuPvm: '2022-11-27T21:59:59.999Z',
+        meluHaitta: 'KOLME',
+        polyHaitta: HANKE_POLYHAITTA.KOLME,
+        tarinaHaitta: 'KOLME',
+        kaistaHaitta: 'KOLME',
+        kaistaPituusHaitta: 'VIISI',
       },
-      version: 0,
-      createdByUserId: null,
-      createdAt: '2022-01-19T13:01:26.024Z',
-      modifiedByUserId: null,
-      modifiedAt: '2022-01-19T13:01:26.024Z',
-    },
+    ],
     tyomaaKatuosoite: '',
     tyomaaKoko: null,
     tormaystarkasteluTulos: null,
-    haittaAlkuPvm: null,
-    haittaLoppuPvm: null,
-    kaistaHaitta: null,
-    kaistaPituusHaitta: null,
-    meluHaitta: null,
-    polyHaitta: null,
-    tarinaHaitta: null,
     liikennehaittaindeksi: null,
   },
 ];

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import GeoJSON from 'ol/format/GeoJSON';
+import React, { useState, useEffect, useRef } from 'react';
 import { Vector as VectorSource } from 'ol/source';
 import { VectorSourceEvent } from 'ol/source/Vector';
 import { Feature } from 'ol';
@@ -12,7 +11,6 @@ import LayerControl from '../../../../common/components/map/controls/LayerContro
 import VectorLayer from '../../../../common/components/map/layers/VectorLayer';
 import DrawModule from '../../../../common/components/map/modules/draw/DrawModule';
 
-import { HankeGeoJSON } from '../../../../common/types/hanke';
 import Kantakartta from '../Layers/Kantakartta';
 import Ortokartta from '../Layers/Ortokartta';
 
@@ -26,9 +24,10 @@ import OverviewMapControl from '../../../../common/components/map/controls/Overv
 import ControlPanel from '../../../../common/components/map/controls/ControlPanel';
 import DateRangeControl from '../../../../common/components/map/controls/DateRangeControl';
 import { useDateRangeFilter } from '../../hooks/useDateRangeFilter';
+import FitSource from '../interations/FitSource';
 
 type Props = {
-  geometry: HankeGeoJSON | undefined;
+  features: Feature[] | undefined;
   onAddFeature?: (feature: Feature<Geometry>) => void;
   onChangeFeature?: (feature: Feature<Geometry>) => void;
   onRemoveFeature?: (feature: Feature<Geometry>) => void;
@@ -41,7 +40,7 @@ const HankeDrawer: React.FC<Props> = ({
   onAddFeature,
   onChangeFeature,
   onRemoveFeature,
-  geometry,
+  features,
   center,
   drawSource: existingDrawSource,
   zoom = 9,
@@ -56,12 +55,16 @@ const HankeDrawer: React.FC<Props> = ({
     setHankeFilterEndDate,
   } = useDateRangeFilter();
 
+  const featuresLoaded = useRef(false);
+
+  // Draw existing features once if any
   useEffect(() => {
-    if (geometry && geometry.features.length > 0) {
-      drawSource.addFeatures(new GeoJSON().readFeatures(geometry));
+    if (features && features.length > 0 && !featuresLoaded.current) {
+      drawSource.addFeatures(features);
       drawSource.dispatchEvent('featuresAdded');
     }
-  }, [geometry, drawSource]);
+    featuresLoaded.current = true;
+  }, [features, drawSource]);
 
   useEffect(() => {
     const updateState = () => {
@@ -115,6 +118,8 @@ const HankeDrawer: React.FC<Props> = ({
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
           {mapTileLayers.ortokartta.visible && <Ortokartta />}
           <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
+
+          {featuresLoaded.current && <FitSource source={drawSource} />}
 
           <Controls>
             <DrawModule source={drawSource} />

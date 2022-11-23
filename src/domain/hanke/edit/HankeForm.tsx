@@ -15,12 +15,12 @@ import { useNavigate } from 'react-router-dom';
 import { FormNotification, HankeDataFormState } from './types';
 import { hankeSchema } from './hankeSchema';
 import Form0 from './HankeForm0';
-import HankeAreasForm from './HankeAreasForm';
+import HankeFormAlueet from './HankeFormAlueet';
 import Form2 from './HankeForm2';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
 import { HANKE_SAVETYPE } from '../../types/hanke';
-import { convertHankeAlueGeometries, filterEmptyContacts } from './utils';
+import { convertFormStateToHankeData } from './utils';
 import api from '../../api/api';
 import MultipageForm from '../../forms/MultipageForm';
 import FormActions from '../../forms/components/FormActions';
@@ -36,7 +36,7 @@ async function saveHanke({
   navigateTo?: string;
 }) {
   const requestData = {
-    ...filterEmptyContacts(convertHankeAlueGeometries(data)),
+    ...convertFormStateToHankeData(data),
     saveType,
   };
 
@@ -140,7 +140,7 @@ const HankeForm: React.FC<Props> = ({
       state: StepState.available,
     },
     {
-      element: <HankeAreasForm errors={errors} register={register} formData={formValues} />,
+      element: <HankeFormAlueet errors={errors} register={register} formData={formValues} />,
       label: t('hankeForm:hankkeenAlueForm:header'),
       state: isNewHanke ? StepState.disabled : StepState.available,
     },

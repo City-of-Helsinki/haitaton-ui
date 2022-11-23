@@ -141,7 +141,7 @@ export type HankeGeometria = {
 
 export type HankeAlue = {
   id: number | null;
-  feature: Feature<Geometry>;
+  feature?: Feature<Geometry>;
   geometria: HankeGeometria;
   haittaAlkuPvm: string | null;
   haittaLoppuPvm: string | null;
@@ -180,15 +180,7 @@ export interface HankeData {
   tyomaaKatuosoite: string | null;
   tyomaaTyyppi: HANKE_TYOMAATYYPPI_KEY[];
   tyomaaKoko: HANKE_TYOMAAKOKO_KEY | null;
-  hankeAlueet: HankeAlue[];
-  haittaAlkuPvm: string | null;
-  haittaLoppuPvm: string | null;
-  kaistaHaitta: HANKE_KAISTAHAITTA_KEY | null;
-  kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA_KEY | null;
-  meluHaitta: HANKE_MELUHAITTA_KEY | null;
-  polyHaitta: HANKE_POLYHAITTA | null;
-  tarinaHaitta: HANKE_TARINAHAITTA_KEY | null;
-  geometriat: HankeGeometria | null;
+  alueet: HankeAlue[];
   liikennehaittaindeksi: LiikenneHaittaIndeksi | null;
   omistajat: Array<HankeContact>;
   arvioijat: Array<HankeContact>;
