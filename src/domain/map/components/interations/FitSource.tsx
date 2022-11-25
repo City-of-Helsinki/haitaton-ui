@@ -15,7 +15,7 @@ const FitSource: React.FC<Props> = ({ source }) => {
   }, [map, source]);
 
   useEffect(() => {
-    fitSource();
+    setTimeout(fitSource, 0);
 
     source.on('addfeature', fitSource);
 

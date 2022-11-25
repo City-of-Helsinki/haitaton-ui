@@ -42,7 +42,7 @@ export const formatFeaturesToAlluGeoJSON = (features: GeometryData): unknown => 
 };
 
 export const hankeHasGeometry = (hanke: HankeData | HankeDataDraft) =>
-  hanke.alueet?.some((alue) => Boolean(alue.geometria));
+  hanke.alueet?.some((alue) => Boolean(alue.geometriat));
 
 export const hankeIsBetweenDates = ({ endDate, startDate }: HankeFilters) => ({
   startDate: comparedStartDate,

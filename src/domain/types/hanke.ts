@@ -1,5 +1,3 @@
-import { Feature } from 'ol';
-import Geometry from 'ol/geom/Geometry';
 import { PartialExcept } from '../../common/types/utils';
 import { HankeGeoJSON } from '../../common/types/hanke';
 
@@ -130,7 +128,6 @@ export type HankeContact = {
 
 export type HankeGeometria = {
   featureCollection: HankeGeoJSON;
-  hankeId?: number;
   id?: number;
   modifiedAt?: string | null;
   version?: number | null;
@@ -141,8 +138,8 @@ export type HankeGeometria = {
 
 export type HankeAlue = {
   id: number | null;
-  feature?: Feature<Geometry>;
-  geometria: HankeGeometria;
+  hankeId?: number;
+  geometriat: HankeGeometria;
   haittaAlkuPvm: string | null;
   haittaLoppuPvm: string | null;
   kaistaHaitta: HANKE_KAISTAHAITTA_KEY | null;

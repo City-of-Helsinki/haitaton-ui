@@ -24,9 +24,9 @@ const hankeList: HankeData[] = [
     alueet: [
       {
         id: 1,
-        geometria: {
+        hankeId: 1,
+        geometriat: {
           id: 1,
-          hankeId: 1,
           featureCollection: {
             type: 'FeatureCollection',
             crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:EPSG::3879' } },
@@ -93,9 +93,9 @@ const hankeList: HankeData[] = [
     alueet: [
       {
         id: 2,
-        geometria: {
+        hankeId: 2,
+        geometriat: {
           id: 2,
-          hankeId: 2,
           featureCollection: {
             type: 'FeatureCollection',
             crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:EPSG::3879' } },

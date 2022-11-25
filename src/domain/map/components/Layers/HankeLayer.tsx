@@ -26,7 +26,7 @@ const HankeLayer = () => {
     hankeSource.current.clear();
     hankkeetFilteredByAll.forEach((hanke) => {
       const hankeFeatures = hanke.alueet.flatMap((alue) =>
-        new GeoJSON().readFeatures(alue.geometria.featureCollection)
+        new GeoJSON().readFeatures(alue.geometriat.featureCollection)
       );
       hankeFeatures.forEach((feature) => {
         feature.setProperties(

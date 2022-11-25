@@ -28,7 +28,7 @@ export const convertFormStateToHankeData = (hankeData: HankeDataFormState): Hank
   [FORMFIELD.HANKEALUEET]: hankeData[FORMFIELD.HANKEALUEET]?.map((alue) => {
     return {
       ...alue,
-      geometria: {
+      geometriat: {
         featureCollection: formatFeaturesToHankeGeoJSON(alue.feature ? [alue.feature] : []),
       },
     };
@@ -50,7 +50,7 @@ export const convertHankeDataToFormState = (
   [FORMFIELD.HANKEALUEET]:
     hankeData &&
     hankeData[FORMFIELD.HANKEALUEET]?.map((alue) => {
-      const geometry = alue.geometria?.featureCollection.features[0].geometry as GeoJSONPolygon;
+      const geometry = alue.geometriat?.featureCollection.features[0].geometry as GeoJSONPolygon;
       return {
         ...alue,
         feature: new Feature(new Polygon(geometry.coordinates)),

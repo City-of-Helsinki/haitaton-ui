@@ -25,9 +25,9 @@ const hankeMock: HankeDataDraft = {
   alueet: [
     {
       id: 0,
-      geometria: {
+      hankeId: 2,
+      geometriat: {
         id: 2,
-        hankeId: 2,
         featureCollection: {
           type: 'FeatureCollection',
           crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:EPSG::3879' } },

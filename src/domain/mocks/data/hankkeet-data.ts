@@ -1,4 +1,4 @@
-import { HankeDataDraft } from '../../types/hanke';
+import { HankeDataDraft, HANKE_POLYHAITTA } from '../../types/hanke';
 
 const hankkeet: HankeDataDraft[] = [
   {
@@ -42,50 +42,62 @@ const hankkeet: HankeDataDraft[] = [
     arvioijat: [],
     toteuttajat: [],
     tyomaaTyyppi: [],
-    geometriat: {
-      id: 37,
-      version: 0,
-      hankeId: 2,
-      createdByUserId: null,
-      modifiedByUserId: null,
-      createdAt: '2020-11-27T11:43:43.481215Z',
-      modifiedAt: null,
-      featureCollection: {
-        type: 'FeatureCollection',
-        crs: {
-          type: 'name',
-          properties: {
-            name: 'urn:ogc:def:crs:EPSG::3879',
-          },
-        },
-        features: [
-          {
-            type: 'Feature',
-            properties: {
-              hankeTunnus: 'HANKE_2',
+    alueet: [
+      {
+        id: 1,
+        hankeId: 2,
+        haittaAlkuPvm: '2022-11-26T00:00:00Z',
+        haittaLoppuPvm: '2022-11-27T00:00:00Z',
+        kaistaHaitta: 'KOLME',
+        kaistaPituusHaitta: 'NELJA',
+        meluHaitta: 'KAKSI',
+        polyHaitta: HANKE_POLYHAITTA.KAKSI,
+        tarinaHaitta: 'YKSI',
+        geometriat: {
+          id: 37,
+          version: 0,
+          createdByUserId: null,
+          modifiedByUserId: null,
+          createdAt: '2020-11-27T11:43:43.481215Z',
+          modifiedAt: null,
+          featureCollection: {
+            type: 'FeatureCollection',
+            crs: {
+              type: 'name',
+              properties: {
+                name: 'urn:ogc:def:crs:EPSG::3879',
+              },
             },
-            geometry: {
-              type: 'Polygon',
-              crs: {
-                type: 'name',
+            features: [
+              {
+                type: 'Feature',
                 properties: {
-                  name: 'EPSG:3879',
+                  hankeTunnus: 'HANKE_2',
+                },
+                geometry: {
+                  type: 'Polygon',
+                  crs: {
+                    type: 'name',
+                    properties: {
+                      name: 'EPSG:3879',
+                    },
+                  },
+                  coordinates: [
+                    [
+                      [25496803.95, 6671970.73],
+                      [25496808.63, 6672031.04],
+                      [25496741.78, 6672035.04],
+                      [25496723.8, 6671958.88],
+                      [25496803.95, 6671970.73],
+                    ],
+                  ],
                 },
               },
-              coordinates: [
-                [
-                  [25496803.95, 6671970.73],
-                  [25496808.63, 6672031.04],
-                  [25496741.78, 6672035.04],
-                  [25496723.8, 6671958.88],
-                  [25496803.95, 6671970.73],
-                ],
-              ],
-            },
+            ],
           },
-        ],
+        },
       },
-    },
+    ],
   },
   {
     id: 3,

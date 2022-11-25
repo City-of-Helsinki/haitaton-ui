@@ -34,18 +34,20 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
     }
   }, [formData.tyomaaKatuosoite]);
 
-  // Set highlight style for areas feature
-  const higlightArea = useCallback(
-    (feature: Feature | undefined) => {
+  useEffect(() => {
+    return () => {
       // Reset previously selected feature style
+      // when higlighted feature changes
       highlightedFeature?.setStyle();
+    };
+  }, [highlightedFeature]);
 
-      setHighlightedFeature(feature);
+  // Set highlight style for areas feature
+  const higlightArea = useCallback((feature: Feature | undefined) => {
+    setHighlightedFeature(feature);
 
-      feature?.setStyle(STYLES.BLUE_HL);
-    },
-    [highlightedFeature]
-  );
+    feature?.setStyle(STYLES.BLUE_HL);
+  }, []);
 
   const handleAddFeature = useCallback(
     (feature: Feature<Geometry>) => {
@@ -78,8 +80,7 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const features = useMemo(() => formData.alueet?.map((alue) => alue.feature!), [formData.alueet]);
+  const features = useMemo(() => formData.alueet?.map((alue) => alue.feature), [formData.alueet]);
 
   return (
     <div>

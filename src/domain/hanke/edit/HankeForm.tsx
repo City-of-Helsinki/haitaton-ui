@@ -80,7 +80,6 @@ const HankeForm: React.FC<Props> = ({
     register,
     formState: { errors, isDirty, isValid },
     getValues,
-    reset,
     handleSubmit,
   } = formContext;
 
@@ -105,13 +104,6 @@ const HankeForm: React.FC<Props> = ({
       }
     },
   });
-
-  useEffect(() => {
-    if (hankeMutation.data) {
-      // Update form data with API response
-      reset(hankeMutation.data);
-    }
-  }, [hankeMutation.data, reset]);
 
   function saveDraft() {
     hankeMutation.mutate({ data: getValues() });

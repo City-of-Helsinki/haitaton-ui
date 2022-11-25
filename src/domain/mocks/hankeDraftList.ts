@@ -45,6 +45,7 @@ const hankeDraftList: HankeDataDraft[] = [
     alueet: [
       {
         id: null,
+        hankeId: 2,
         haittaAlkuPvm: '2022-11-21T21:59:59.999Z',
         haittaLoppuPvm: '2022-11-30T21:59:59.999Z',
         meluHaitta: 'YKSI',
@@ -52,10 +53,9 @@ const hankeDraftList: HankeDataDraft[] = [
         tarinaHaitta: 'YKSI',
         kaistaHaitta: 'KAKSI',
         kaistaPituusHaitta: 'KOLME',
-        geometria: {
+        geometriat: {
           id: 37,
           version: 0,
-          hankeId: 2,
           createdByUserId: null,
           modifiedByUserId: null,
           createdAt: '2020-11-27T11:43:43.481215Z',
