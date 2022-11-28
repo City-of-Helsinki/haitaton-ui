@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { FormNotification, HankeDataFormState } from './types';
 import { hankeSchema } from './hankeSchema';
-import Form0 from './HankeForm0';
+import HankeFormPerustiedot from './HankeFormPerustiedot';
 import Form1 from './HankeForm1';
 import Form2 from './HankeForm2';
 import FormNotifications from './components/FormNotifications';
@@ -141,7 +141,7 @@ const HankeForm: React.FC<Props> = ({
 
   const formSteps = [
     {
-      element: <Form0 errors={errors} register={register} formData={formValues} />,
+      element: <HankeFormPerustiedot errors={errors} register={register} formData={formValues} />,
       label: t('hankeForm:perustiedotForm:header'),
       state: StepState.available,
     },

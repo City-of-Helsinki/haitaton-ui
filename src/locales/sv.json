@@ -54,7 +54,8 @@
       "stringMax": "SV:Kentän pituus oltava enintään {{max}} merkkiä",
       "dateMin": "SV:Ensimmäinen mahdollinen päivä on {{min}}",
       "dateMax": "SV:Viimeinen mahdollinen päivä on {{max}}"
-    }
+    },
+    "requiredInstruction": "SV:Kaikki tähdellä * merkityt kentät ovat pakollisia."
   },
   "routes": {
     "HOME": {
@@ -310,7 +311,8 @@
     },
     "perustiedotForm": {
       "header": "SV:Hankkeen perustiedot",
-      "ytkHankeHeader": "SV:YKT-hanke"
+      "ytkHankeHeader": "SV:YKT-hanke",
+      "instructions": "<1>SV:Hankkeen luonnin kautta pääset lähettämään myös hakemuksia.</1><1><0>HUOM!</0> Mikäli teet pelkkää johtoselvitystä yksityiselle alueelle, <3>täytä hakemus</3>. Yleisten alueiden johtoselvitykset haetaan hankkeen luonnin jälkeen kaivuilmoituksen kautta.</1><1>Lisäämällä hankkeen tiedot, pystyt kopioimaan ne lopuksi tarvitsemiisi hakemuksiin.</1>"
     },
     "hankkeenAlueForm": {
       "header": "SV:Alueet",

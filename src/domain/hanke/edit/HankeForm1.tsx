@@ -25,10 +25,6 @@ const Form1: React.FC<FormProps> = ({ errors, formData }) => {
   const locale = useLocale();
   const instructions = t('hankeForm:hankkeenAlueForm:instructions').split('\n');
   const { setValue } = useFormContext();
-  const hankeAlkuPvm = formData[FORMFIELD.ALKU_PVM];
-  const hankeLoppuPvm = formData[FORMFIELD.LOPPU_PVM];
-  const hankeAlkuDate = hankeAlkuPvm ? new Date(hankeAlkuPvm) : undefined;
-  const hankeLoppuDate = hankeLoppuPvm ? new Date(hankeLoppuPvm) : undefined;
   const [addressCoordinate, setAddressCoordinate] = useState<Coordinate | undefined>();
   useFormPage();
 
@@ -81,8 +77,6 @@ const Form1: React.FC<FormProps> = ({ errors, formData }) => {
               label={t(`hankeForm:labels:${FORMFIELD.HAITTA_ALKU_PVM}`)}
               locale={locale}
               required
-              minDate={hankeAlkuDate}
-              maxDate={hankeLoppuDate}
             />
           </div>
           <div className="right">
@@ -91,8 +85,6 @@ const Form1: React.FC<FormProps> = ({ errors, formData }) => {
               label={t(`hankeForm:labels:${FORMFIELD.HAITTA_LOPPU_PVM}`)}
               locale={locale}
               required
-              minDate={hankeAlkuDate}
-              maxDate={hankeLoppuDate}
             />
           </div>
         </div>
