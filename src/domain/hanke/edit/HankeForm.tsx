@@ -35,6 +35,10 @@ async function saveHanke({
   saveType?: HANKE_SAVETYPE;
   navigateTo?: string;
 }) {
+  if (!data.alueet?.length) {
+    return data;
+  }
+
   const requestData = {
     ...convertFormStateToHankeData(data),
     saveType,
@@ -99,7 +103,9 @@ const HankeForm: React.FC<Props> = ({
       setShowNotification('error');
     },
     onSuccess(data, { navigateTo }) {
-      setShowNotification('success');
+      if (data.alueet) {
+        setShowNotification('success');
+      }
       if (navigateTo) {
         navigate(navigateTo);
       }

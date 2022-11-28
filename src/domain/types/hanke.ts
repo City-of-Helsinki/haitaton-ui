@@ -140,8 +140,8 @@ export type HankeAlue = {
   id: number | null;
   hankeId?: number;
   geometriat: HankeGeometria;
-  haittaAlkuPvm: string | null;
-  haittaLoppuPvm: string | null;
+  haittaAlkuPvm: string;
+  haittaLoppuPvm: string;
   kaistaHaitta: HANKE_KAISTAHAITTA_KEY | null;
   kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA_KEY | null;
   meluHaitta: HANKE_MELUHAITTA_KEY | null;
