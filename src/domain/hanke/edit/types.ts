@@ -45,7 +45,7 @@ export enum CONTACT_FORMFIELD {
 }
 
 interface HankeAlueFormState extends HankeAlue {
-  feature: Feature<Geometry>; // "virtualField"
+  feature?: Feature<Geometry>; // "virtualField"
 }
 
 export interface HankeDataFormState extends PartialExcept<HankeData, HankeContactKey> {

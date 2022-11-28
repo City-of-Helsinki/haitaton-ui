@@ -80,6 +80,7 @@ const HankeForm: React.FC<Props> = ({
     register,
     formState: { errors, isDirty, isValid },
     getValues,
+    setValue,
     handleSubmit,
   } = formContext;
 
@@ -104,6 +105,15 @@ const HankeForm: React.FC<Props> = ({
       }
     },
   });
+
+  useEffect(() => {
+    if (hankeMutation.data?.hankeTunnus) {
+      if (!getValues().hankeTunnus) {
+        // Update hankeTunnus
+        setValue('hankeTunnus', hankeMutation.data.hankeTunnus);
+      }
+    }
+  }, [hankeMutation.data, getValues, setValue]);
 
   function saveDraft() {
     hankeMutation.mutate({ data: getValues() });

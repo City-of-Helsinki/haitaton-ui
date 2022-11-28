@@ -27,7 +27,7 @@ import { useDateRangeFilter } from '../../hooks/useDateRangeFilter';
 import FitSource from '../interations/FitSource';
 
 type Props = {
-  features: Feature[] | undefined;
+  features: Array<Feature | undefined> | undefined;
   onAddFeature?: (feature: Feature<Geometry>) => void;
   onChangeFeature?: (feature: Feature<Geometry>) => void;
   onRemoveFeature?: (feature: Feature<Geometry>) => void;
@@ -60,7 +60,11 @@ const HankeDrawer: React.FC<Props> = ({
   // Draw existing features once if any
   useEffect(() => {
     if (features && features.length > 0 && !featuresLoaded.current) {
-      drawSource.addFeatures(features);
+      features.forEach((feature) => {
+        if (feature) {
+          drawSource.addFeature(feature);
+        }
+      });
       drawSource.dispatchEvent('featuresAdded');
     }
     featuresLoaded.current = true;

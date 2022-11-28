@@ -72,7 +72,7 @@ const DrawInteraction: React.FC<Props> = () => {
 
       setInstances([drawInstance, snapInstance, modifyInstance]);
     },
-    [map, source, state.selectedDrawtoolType]
+    [map, source, state.selectedDrawtoolType, actions, clearSelection]
   );
 
   useEffect(() => {
@@ -101,7 +101,7 @@ const DrawInteraction: React.FC<Props> = () => {
     source.on('removefeature', () => {
       clearSelection();
     });
-  }, []);
+  }, [map, source, actions, clearSelection]);
 
   useEffect(() => {
     removeAllInteractions();
@@ -116,6 +116,7 @@ const DrawInteraction: React.FC<Props> = () => {
 
     // eslint-disable-next-line
     return () => removeAllInteractions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return null;
