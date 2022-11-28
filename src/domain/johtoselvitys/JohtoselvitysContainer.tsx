@@ -201,6 +201,7 @@ const JohtoselvitysContainer: React.FC = () => {
     id: null,
     applicationType: 'CABLE_REPORT',
     applicationData: {
+      applicationType: 'CABLE_REPORT',
       name: '',
       customerWithContacts: {
         customer: {
