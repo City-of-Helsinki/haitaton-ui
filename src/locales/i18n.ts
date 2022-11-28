@@ -15,7 +15,7 @@ i18n
       sv,
     },
     detection: {
-      order: ['localStorage', 'sessionStorage', 'path', 'navigator'],
+      order: ['localStorage', 'sessionStorage', 'path'],
     },
     fallbackLng: 'fi',
     debug: false,
