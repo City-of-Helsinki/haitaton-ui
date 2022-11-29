@@ -57,7 +57,7 @@ const HankeFormPerustiedot: React.FC<FormProps> = ({ errors, register, formData 
           {...register(FORMFIELD.KUVAUS)}
           data-testid={FORMFIELD.KUVAUS}
           required
-          errorText={getInputErrorText(t, errors, FORMFIELD.KUVAUS)}
+          errorText={getInputErrorText(t, errors[FORMFIELD.KUVAUS])}
         />
       </div>
       <div className="formWpr formWprShort">
@@ -76,7 +76,7 @@ const HankeFormPerustiedot: React.FC<FormProps> = ({ errors, register, formData 
           direction="horizontal"
           label={t(`hankeForm:labels:${FORMFIELD.VAIHE}`)}
           required
-          errorText={getInputErrorText(t, errors, FORMFIELD.VAIHE)}
+          errorText={getInputErrorText(t, errors[FORMFIELD.VAIHE])}
         >
           {$enum(HANKE_VAIHE).map((value) => {
             return (
@@ -104,7 +104,6 @@ const HankeFormPerustiedot: React.FC<FormProps> = ({ errors, register, formData 
             defaultValue={formData[FORMFIELD.SUUNNITTELUVAIHE] || null}
             label={t(`hankeForm:labels:${FORMFIELD.SUUNNITTELUVAIHE}`)}
             invalid={!!errors[FORMFIELD.SUUNNITTELUVAIHE]}
-            errorMsg={t('hankeForm:insertFieldError')}
             required={hankeVaiheField === HANKE_VAIHE.SUUNNITTELU}
           />
         </div>

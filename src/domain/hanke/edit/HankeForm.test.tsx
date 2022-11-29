@@ -1,14 +1,16 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
+import MockAxios from 'jest-mock-axios';
 import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
 import { HANKE_VAIHE, HANKE_TYOMAATYYPPI } from '../../types/hanke';
 import { render, cleanup, fireEvent, waitFor, screen } from '../../../testUtils/render';
+import hankeMock from '../../mocks/hankeDraft';
 
 afterEach(cleanup);
 
-jest.setTimeout(10000);
+jest.setTimeout(20000);
 
 const nimi = 'test kuoppa';
 const hankkeenKuvaus = 'Tässä on kuvaus';
@@ -39,13 +41,28 @@ const hankeData: HankeDataDraft = {
 
 const formData: HankeDataFormState = {
   vaihe: HANKE_VAIHE.OHJELMOINTI,
+  rakennuttajat: [],
   toteuttajat: [],
-  arvioijat: [],
-  omistajat: [],
+  muutTahot: [],
   tyomaaTyyppi: [HANKE_TYOMAATYYPPI.AKILLINEN_VIKAKORJAUS],
   nimi: 'testi kuoppa',
   kuvaus: 'testi kuvaus',
 };
+
+async function setupYhteystiedotPage(jsx: JSX.Element) {
+  MockAxios.get.mockResolvedValueOnce({ data: hankeMock });
+  const user = userEvent.setup();
+  const renderResult = render(jsx);
+
+  await waitFor(() => expect(screen.queryByText('Perustiedot')).toBeInTheDocument());
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+  await waitFor(() => expect(screen.queryByText(/hankkeen omistaja/i)).toBeInTheDocument());
+
+  return {
+    user,
+    ...renderResult,
+  };
+}
 
 describe('HankeForm', () => {
   test('suunnitteluVaihde should be required when vaihe is suunnittelu', async () => {
@@ -117,5 +134,51 @@ describe('HankeForm', () => {
 
     expect(screen.getByTestId(FORMFIELD.NIMI)).toHaveValue(nimi);
     expect(screen.getByTestId(FORMFIELD.KUVAUS)).toHaveValue(hankkeenKuvaus);
+  });
+
+  test('Yhteystiedot can be filled', async () => {
+    const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI-1" />);
+
+    await user.click(screen.getByRole('button', { name: /tyyppi/i }));
+    await user.click(screen.getByText(/yritys/i));
+    await user.type(screen.getByRole('textbox', { name: /nimi/i }), 'Olli Omistaja');
+    await user.type(
+      screen.getByRole('textbox', { name: /y-tunnus tai henkilötunnus/i }),
+      'y-tunnus'
+    );
+    await user.type(screen.getByRole('textbox', { name: /katuosoite/i }), 'Testikuja 1');
+    await user.type(screen.getByRole('textbox', { name: /postinumero/i }), '00000');
+    await user.type(screen.getByRole('textbox', { name: /postitoimipaikka/i }), 'Testikaupunki');
+    await user.type(screen.getByRole('textbox', { name: /sähköposti/i }), 'test@mail.com');
+    await user.type(screen.getByRole('textbox', { name: /puhelinnumero/i }), '0400000000');
+
+    expect(screen.queryByRole('group', { name: 'Yhteyshenkilö' })).not.toBeInTheDocument();
+    await user.click(screen.getByLabelText(/erillinen yhteyshenkilö/i));
+    expect(screen.getByRole('group', { name: 'Yhteyshenkilö' })).toBeInTheDocument();
+
+    await user.type(screen.getAllByRole('textbox', { name: /nimi/i })[1], 'Testi Yhteyshenkilö');
+    await user.type(
+      screen.getAllByRole('textbox', { name: /sähköposti/i })[1],
+      'yhteyshenkilo@mail.com'
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Lisää rakennuttajia' }));
+    await user.click(screen.getByText(/lisää rakennuttaja/i));
+    expect(screen.getAllByText('Rakennuttaja')).toHaveLength(1);
+
+    await user.click(screen.getByText(/lisää yhteyshenkilö/i));
+    await user.click(screen.getByText(/lisää yhteyshenkilö/i));
+    expect(screen.getByRole('tablist').childElementCount).toBe(2);
+
+    await user.click(screen.getByText(/lisää rakennuttaja/i));
+    expect(screen.getAllByText('Rakennuttaja')).toHaveLength(2);
+
+    await user.click(screen.getAllByText(/poista rakennuttaja/i)[1]);
+    expect(screen.getAllByText('Rakennuttaja')).toHaveLength(1);
+
+    await user.click(screen.getByText(/poista yhteyshenkilö/i));
+    expect(screen.getByRole('tablist').childElementCount).toBe(1);
+    await user.click(screen.getByText(/poista yhteyshenkilö/i));
+    expect(screen.queryByText('Yhteyshenkilön tiedot')).not.toBeInTheDocument();
   });
 });

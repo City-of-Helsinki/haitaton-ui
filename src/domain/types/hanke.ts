@@ -107,24 +107,54 @@ export type HANKE_SAVETYPE_KEY = keyof typeof HANKE_SAVETYPE;
 
 export enum HANKE_CONTACT_TYPE {
   OMISTAJAT = 'omistajat',
-  ARVIOIJAT = 'arvioijat',
+  RAKENNUTTAJAT = 'rakennuttajat',
   TOTEUTTAJAT = 'toteuttajat',
+  MUUTTAHOT = 'muutTahot',
 }
-export type HankeContactKey =
+export type HankeContactTypeKey =
   | HANKE_CONTACT_TYPE.OMISTAJAT
-  | HANKE_CONTACT_TYPE.ARVIOIJAT
-  | HANKE_CONTACT_TYPE.TOTEUTTAJAT;
+  | HANKE_CONTACT_TYPE.RAKENNUTTAJAT
+  | HANKE_CONTACT_TYPE.TOTEUTTAJAT
+  | HANKE_CONTACT_TYPE.MUUTTAHOT;
 
-export type HankeContact = {
-  id: number | null;
-  sukunimi: string;
-  etunimi: string;
+export interface HankeSubContact {
+  nimi: string;
+  osoite?: string;
+  postiNro?: string;
+  postiToimiPaikka?: string;
   email: string;
   puhelinnumero: string;
-  organisaatioId: number | null;
-  organisaatioNimi: string;
+}
+
+export interface HankeContact extends HankeSubContact {
+  id: number | null;
+  tyyppi: keyof typeof CONTACT_TYYPPI | null;
+  tunnus: string;
+}
+
+export interface HankeOmistaja extends HankeContact {
+  subContact?: HankeSubContact;
+}
+
+export interface HankeRakennuttaja extends HankeContact {
+  subContacts?: HankeSubContact[];
+}
+
+export type HankeMuuTaho = {
+  rooli: string;
+  nimi: string;
+  organisaatio: string;
   osasto: string;
+  email: string;
+  puhelinnumero?: string;
+  subContacts: HankeSubContact[];
 };
+
+export enum CONTACT_TYYPPI {
+  YKSITYISHENKILO = 'YKSITYISHENKILO',
+  YRITYS = 'YRITYS',
+  YHTEISO = 'YHTEISO',
+}
 
 export type HankeGeometria = {
   featureCollection: HankeGeoJSON;
@@ -179,9 +209,10 @@ export interface HankeData {
   tyomaaKoko: HANKE_TYOMAAKOKO_KEY | null;
   alueet: HankeAlue[];
   liikennehaittaindeksi: LiikenneHaittaIndeksi | null;
-  omistajat: Array<HankeContact>;
-  arvioijat: Array<HankeContact>;
-  toteuttajat: Array<HankeContact>;
+  omistajat?: Array<HankeOmistaja>;
+  rakennuttajat: Array<HankeRakennuttaja>;
+  toteuttajat: Array<HankeRakennuttaja>;
+  muutTahot: Array<HankeMuuTaho>;
   tormaystarkasteluTulos: HankeIndexData | null;
   saveType: HANKE_SAVETYPE_KEY;
   version?: number;

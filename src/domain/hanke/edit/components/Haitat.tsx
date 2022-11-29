@@ -17,7 +17,6 @@ import {
   HANKE_TARINAHAITTA,
 } from '../../../types/hanke';
 import styles from './Haitat.module.scss';
-import { getInputErrorText } from '../../../../common/utils/form';
 
 type Props = {
   index: number;
@@ -27,12 +26,7 @@ type Props = {
 const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
   const { t } = useTranslation();
   const locale = useLocale();
-  const {
-    getValues,
-    formState: { errors },
-    watch,
-    setValue,
-  } = useFormContext();
+  const { getValues, watch, setValue } = useFormContext();
   const formValues: HankeAlue[] = getValues(FORMFIELD.HANKEALUEET);
 
   const watchHankeAlueet: HankeAlue[] = watch(FORMFIELD.HANKEALUEET);
@@ -45,22 +39,6 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
       setValue(`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.HAITTA_LOPPU_PVM}`, haittaAlkuPvm);
     }
   }, [haittaAlkuPvm, haittaLoppuPvm, index, setValue]);
-
-  const hankeAlueErrors =
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    errors[FORMFIELD.HANKEALUEET] && (errors[FORMFIELD.HANKEALUEET] as any)[index];
-
-  const startDateError = getInputErrorText(t, hankeAlueErrors, FORMFIELD.HAITTA_ALKU_PVM);
-  const endDateError = getInputErrorText(t, hankeAlueErrors, FORMFIELD.HAITTA_LOPPU_PVM);
-  const meluHaittaError = getInputErrorText(t, hankeAlueErrors, FORMFIELD.MELUHAITTA);
-  const polyHaittaError = getInputErrorText(t, hankeAlueErrors, FORMFIELD.POLYHAITTA);
-  const tarinaHaittaError = getInputErrorText(t, hankeAlueErrors, FORMFIELD.TARINAHAITTA);
-  const kaistaHaittaError = getInputErrorText(t, hankeAlueErrors, FORMFIELD.KAISTAHAITTA);
-  const kaistaPituusHaittaError = getInputErrorText(
-    t,
-    hankeAlueErrors,
-    FORMFIELD.KAISTAPITUUSHAITTA
-  );
 
   return (
     <Fieldset
@@ -78,14 +56,12 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
           label={t(`hankeForm:labels:${FORMFIELD.HAITTA_ALKU_PVM}`)}
           locale={locale}
           required
-          errorText={startDateError}
         />
         <DatePicker
           name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.HAITTA_LOPPU_PVM}`}
           label={t(`hankeForm:labels:${FORMFIELD.HAITTA_LOPPU_PVM}`)}
           locale={locale}
           required
-          errorText={endDateError}
           minDate={minEndDate || undefined}
         />
         <Spacer />
@@ -101,8 +77,6 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
           }))}
           defaultValue={formValues[index][FORMFIELD.MELUHAITTA] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.MELUHAITTA}`)}
-          invalid={Boolean(meluHaittaError)}
-          errorMsg={meluHaittaError}
           required
         />
         <Dropdown
@@ -114,8 +88,6 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
           }))}
           defaultValue={formValues[index][FORMFIELD.POLYHAITTA] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.POLYHAITTA}`)}
-          invalid={Boolean(polyHaittaError)}
-          errorMsg={polyHaittaError}
           required
         />
         <Dropdown
@@ -127,8 +99,6 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
           }))}
           defaultValue={formValues[index][FORMFIELD.TARINAHAITTA] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.TARINAHAITTA}`)}
-          invalid={Boolean(tarinaHaittaError)}
-          errorMsg={tarinaHaittaError}
           required
         />
       </div>
@@ -143,8 +113,6 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
           }))}
           defaultValue={formValues[index][FORMFIELD.KAISTAHAITTA] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.KAISTAHAITTA}`)}
-          invalid={Boolean(kaistaHaittaError)}
-          errorMsg={kaistaHaittaError}
           required
         />
         <Dropdown
@@ -156,8 +124,6 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
           }))}
           defaultValue={formValues[index][FORMFIELD.KAISTAPITUUSHAITTA] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.KAISTAPITUUSHAITTA}`)}
-          invalid={Boolean(kaistaPituusHaittaError)}
-          errorMsg={kaistaPituusHaittaError}
           required
         />
       </div>

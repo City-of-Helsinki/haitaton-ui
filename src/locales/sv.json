@@ -55,7 +55,60 @@
       "dateMin": "SV:Ensimmäinen mahdollinen päivä on {{min}}",
       "dateMax": "SV:Viimeinen mahdollinen päivä on {{max}}"
     },
-    "requiredInstruction": "SV:Kaikki tähdellä * merkityt kentät ovat pakollisia."
+    "requiredInstruction": "SV:Kaikki tähdellä * merkityt kentät ovat pakollisia.",
+    "yhteystiedot": {
+      "header": "SV:Yhteystiedot",
+      "instructions": "SV:Hankkeelle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hankkeeseeen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hanketta ja luomaan hankkeelle hakemuksia.",
+      "titles": {
+        "omistaja": "SV:Hankkeen omistaja",
+        "rakennuttajat": "SV:Rakennuttaja",
+        "toteuttajat": "SV:Toteuttaja",
+        "muutTahot": "SV:Muu taho",
+        "lisaaRakennuttajia": "SV:Lisää rakennuttajia",
+        "lisaaRakennuttaja": "SV:Lisää rakennuttaja",
+        "lisaaToteuttajia": "SV:Lisää toteuttajia",
+        "lisaaToteuttaja": "SV:Lisää toteuttaja",
+        "lisaaMuitaTahoja": "SV:Lisää muita tahoja",
+        "lisaaMuuTaho": "SV:Lisää muu taho",
+        "subContact": "SV:Yhteyshenkilö",
+        "subContactInformation": "SV:Yhteyshenkilön tiedot"
+      },
+      "labels": {
+        "tyyppi": "SV:Tyyppi",
+        "nimi": "SV:Nimi",
+        "tunnus": "SV:Y-tunnus tai henkilötunnus",
+        "osoite": "SV:Katuosoite",
+        "postiNro": "SV:Postinumero",
+        "postiToimiPaikka": "SV:Postitoimipaikka",
+        "email": "SV:Sähköposti",
+        "puhelinnumero": "SV:Puhelinnumero",
+        "rooli": "SV:Rooli",
+        "osasto": "SV:Osasto",
+        "organisaatio": "SV:Organisaatio",
+        "rakennuttaja": "SV:Rakennuttaja",
+        "erillinenYhteyshenkilo": "SV:Erillinen yhteyshenkilö"
+      },
+      "placeholders": {
+        "otherPartyRole": "SV:Isännöitsijä, konsultti..."
+      },
+      "helperTexts": {
+        "otherPartyRole": "SV:Tahon rooli hankkeessa"
+      },
+      "contactType": {
+        "YKSITYISHENKILO": "SV:Yksityishenkilö",
+        "YRITYS": "SV:Yritys",
+        "YHTEISO": "SV:Yhteisö"
+      },
+      "buttons": {
+        "addSubContact": "SV:Lisää yhteyshenkilö",
+        "removeSubContact": "SV:Poista yhteyshenkilö",
+        "remove": {
+          "rakennuttajat": "SV:Poista rakennuttaja",
+          "toteuttajat": "SV:Poista toteuttaja",
+          "muutTahot": "SV:Poista muu taho"
+        }
+      }
+    }
   },
   "routes": {
     "HOME": {
@@ -287,11 +340,6 @@
       "omaOrganisaatio": "SV:Lisää oma organisaatio",
       "insertOmaOrganisaatio": "SV:Syötä oma organisaatio"
     },
-    "headers": {
-      "arvioijat": "SV:Arvioijat",
-      "omistajat": "SV:Omistajat",
-      "toteuttajat": "SV:Toteuttajat"
-    },
     "toolTips": {
       "tipOpenLabel": "SV:Avaa ohje",
       "perustiedot": "SV:Hankkeen pakolliset perustiedot tulee täyttää. Mikäli kaikki pakolliset tiedot eivät ole täytettynä, uusi hanke tallentuu Haitattomaan, muttei voi edetä vaikutusten arviointiin. Hankkeen tietojen täydentämistä voi jatkaa myöhemmin avaamalla se hankelistan kautta",
@@ -322,9 +370,6 @@
       "haitatHeader": "SV:Alueen haitta-arviot",
       "haitatInstructions": "SV:Anna arvio suurimmista mahdollisista vaikutuksista hankealueella.",
       "removeAreaButton": "SV:Poista alue"
-    },
-    "hankkeenYhteystiedotForm": {
-      "header": "SV:Hankkeen yhteystiedot"
     },
     "tyomaanTiedotForm": {
       "header": "SV:Hankkeen lisätiedot"

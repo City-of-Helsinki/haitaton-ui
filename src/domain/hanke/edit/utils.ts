@@ -2,22 +2,12 @@ import { Feature } from 'ol';
 import Polygon from 'ol/geom/Polygon';
 import { Polygon as GeoJSONPolygon } from 'geojson';
 import { max, min } from 'date-fns';
-import { HankeContact, HankeDataDraft } from '../../types/hanke';
+import { HankeDataDraft, HankeRakennuttaja, HankeMuuTaho } from '../../types/hanke';
 import { FORMFIELD, HankeDataFormState } from './types';
 import { formatFeaturesToHankeGeoJSON } from '../../map/utils';
 
-const isContactEmpty = ({
-  etunimi,
-  sukunimi,
-  email,
-  puhelinnumero,
-  organisaatioNimi,
-}: HankeContact) =>
-  etunimi === '' &&
-  sukunimi === '' &&
-  email === '' &&
-  puhelinnumero === '' &&
-  organisaatioNimi === '';
+const isContactEmpty = ({ nimi, email, puhelinnumero }: HankeRakennuttaja | HankeMuuTaho) =>
+  nimi === '' && email === '' && puhelinnumero === '';
 
 /**
  * Make sure that hanke data to be sent to API matches requirements.
@@ -49,9 +39,11 @@ export const convertFormStateToHankeData = (hankeData: HankeDataFormState): Hank
     ...(minAreaStartDate && { alkuPvm: minAreaStartDate.toISOString() }),
     ...(maxAreaEndDate && { loppuPvm: maxAreaEndDate.toISOString() }),
     [FORMFIELD.OMISTAJAT]: hankeData[FORMFIELD.OMISTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
-    [FORMFIELD.ARVIOIJAT]: hankeData[FORMFIELD.ARVIOIJAT]?.filter((v) => !isContactEmpty(v)) || [],
+    [FORMFIELD.RAKENNUTTAJAT]:
+      hankeData[FORMFIELD.RAKENNUTTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
     [FORMFIELD.TOTEUTTAJAT]:
       hankeData[FORMFIELD.TOTEUTTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
+    [FORMFIELD.MUUTTAHOT]: hankeData[FORMFIELD.MUUTTAHOT]?.filter((v) => !isContactEmpty(v)) || [],
   };
 };
 
@@ -76,6 +68,7 @@ export const convertHankeDataToFormState = (
       };
     }),
   omistajat: hankeData?.omistajat ? hankeData.omistajat : [],
-  arvioijat: hankeData?.arvioijat ? hankeData.arvioijat : [],
+  rakennuttajat: hankeData?.rakennuttajat ? hankeData.rakennuttajat : [],
   toteuttajat: hankeData?.toteuttajat ? hankeData.toteuttajat : [],
+  muutTahot: hankeData?.muutTahot ? hankeData.muutTahot : [],
 });

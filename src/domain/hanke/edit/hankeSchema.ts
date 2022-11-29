@@ -8,30 +8,40 @@ import {
   HANKE_TARINAHAITTA,
   HANKE_KAISTAHAITTA,
   HANKE_KAISTAPITUUSHAITTA,
+  CONTACT_TYYPPI,
 } from '../../types/hanke';
 import { FORMFIELD } from './types';
 
-// https://github.com/jquense/yup/issues/176
-// https://github.com/jquense/yup/issues/952
-export const contactSchema = yup.object().shape({
-  etunimi: yup.string().nullable().max(100),
-  sukunimi: yup.string().nullable().max(100),
-  email: yup.string().email().nullable().max(100),
-  puhelinnumero: yup.string().nullable().max(20),
-  organisaatioId: yup.number().nullable(),
-  organisaatioNimi: yup.string().nullable(),
-  osasto: yup.string().nullable().max(200),
+const subContactSchema = yup
+  .object()
+  .nullable()
+  .default(null)
+  .shape({
+    nimi: yup.string().max(100).required(),
+    osoite: yup.string(),
+    postiNro: yup.string(),
+    postiTmPaikka: yup.string(),
+    email: yup.string().email().max(100).required(),
+    puhelinnumero: yup.string().nullable().default(null).max(20),
+  });
+
+const ownerSchema = subContactSchema.shape({
+  tyyppi: yup.string().oneOf($enum(CONTACT_TYYPPI).getValues()).required(),
+  tunnus: yup.string().required(),
+  subContact: subContactSchema,
 });
 
-export const requiredContactSchema = yup.object().shape({
-  etunimi: yup.string().required().max(100),
-  sukunimi: yup.string().required(),
-  email: yup.string().email().required().max(100),
-  puhelinnumero: yup.string().required().max(20),
-  organisaatioId: yup.number().nullable(),
-  organisaatioNimi: yup.string().nullable(),
-  osasto: yup.string().nullable().max(200),
+const contactSchema = ownerSchema.shape({
+  subContacts: yup.array().ensure().of(subContactSchema),
 });
+
+const otherPartySchema = contactSchema
+  .omit(['tyyppi', 'yTunnus', 'osoite', 'postiNro', 'postiTmPaikka'])
+  .shape({
+    rooli: yup.string().required(),
+    organisaatio: yup.string(),
+    osasto: yup.string(),
+  });
 
 export const hankeAlueSchema = yup.object().shape({
   [FORMFIELD.HAITTA_ALKU_PVM]: yup.date().required(),
@@ -67,14 +77,9 @@ export const hankeSchema = yup.object().shape({
       is: HANKE_VAIHE.SUUNNITTELU,
       then: yup.mixed().oneOf($enum(HANKE_SUUNNITTELUVAIHE).getValues()).required(),
     }),
-  [FORMFIELD.OMISTAJAT]: yup
-    .array()
-    .nullable()
-    // eslint-disable-next-line
-    .when('$currentFormPage', (val: number, schema: any) =>
-      val === 2 ? schema.ensure().of(requiredContactSchema) : schema
-    ),
-  [FORMFIELD.ARVIOIJAT]: yup.array().nullable().ensure().of(contactSchema),
-  [FORMFIELD.TOTEUTTAJAT]: yup.array().nullable().ensure().of(contactSchema),
   [FORMFIELD.HANKEALUEET]: yup.array().ensure().of(hankeAlueSchema),
+  [FORMFIELD.OMISTAJAT]: yup.array().ensure().of(ownerSchema),
+  [FORMFIELD.RAKENNUTTAJAT]: yup.array().ensure().of(contactSchema),
+  [FORMFIELD.TOTEUTTAJAT]: yup.array().ensure().of(contactSchema),
+  [FORMFIELD.MUUTTAHOT]: yup.array().ensure().of(otherPartySchema),
 });

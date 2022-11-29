@@ -72,13 +72,11 @@ const hankeMock: HankeDataDraft = {
   omistajat: [
     {
       id: null, // not used but types require it
-      etunimi: 'Harri',
-      sukunimi: 'Hankettaja',
+      nimi: 'Harri Hankettaja',
       email: 'harri.hanketest@hankekatu.foo',
       puhelinnumero: '12341234',
-      organisaatioId: null, // not used but types require it
-      organisaatioNimi: '', // not used but types require it
-      osasto: '', // not used but types require it
+      tyyppi: 'YKSITYISHENKILO',
+      tunnus: 'tunnus',
     },
   ],
 };

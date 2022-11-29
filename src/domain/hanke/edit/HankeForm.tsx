@@ -16,7 +16,7 @@ import { FormNotification, HankeDataFormState } from './types';
 import { hankeSchema } from './hankeSchema';
 import HankeFormAlueet from './HankeFormAlueet';
 import HankeFormPerustiedot from './HankeFormPerustiedot';
-import Form2 from './HankeForm2';
+import HankeFormYhteystiedot from './HankeFormYhteystiedot';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
 import { HANKE_SAVETYPE } from '../../types/hanke';
@@ -158,8 +158,8 @@ const HankeForm: React.FC<Props> = ({
       state: isNewHanke ? StepState.disabled : StepState.available,
     },
     {
-      element: <Form2 errors={errors} register={register} formData={formValues} />,
-      label: t('hankeForm:hankkeenYhteystiedotForm:header'),
+      element: <HankeFormYhteystiedot errors={errors} register={register} formData={formValues} />,
+      label: t('form:yhteystiedot:header'),
       state: isNewHanke ? StepState.disabled : StepState.available,
     },
   ];

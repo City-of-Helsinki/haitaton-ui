@@ -18,8 +18,9 @@ const hankeList: HankeData[] = [
     modifiedAt: null,
     saveType: 'DRAFT',
     omistajat: [],
-    arvioijat: [],
+    rakennuttajat: [],
     toteuttajat: [],
+    muutTahot: [],
     tyomaaTyyppi: ['VESI', 'VIEMARI'],
     alueet: [
       {
@@ -87,8 +88,9 @@ const hankeList: HankeData[] = [
     modifiedAt: null,
     saveType: 'DRAFT',
     omistajat: [],
-    arvioijat: [],
+    rakennuttajat: [],
     toteuttajat: [],
+    muutTahot: [],
     tyomaaTyyppi: ['SADEVESI'],
     alueet: [
       {
