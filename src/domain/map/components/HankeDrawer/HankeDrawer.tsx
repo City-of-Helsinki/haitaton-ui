@@ -21,9 +21,6 @@ import { formatFeaturesToHankeGeoJSON } from '../../utils';
 import { MapTileLayerId } from '../../types';
 import AddressSearchContainer from '../AddressSearch/AddressSearchContainer';
 import OverviewMapControl from '../../../../common/components/map/controls/OverviewMapControl';
-import ControlPanel from '../../../../common/components/map/controls/ControlPanel';
-import DateRangeControl from '../../../../common/components/map/controls/DateRangeControl';
-import { useDateRangeFilter } from '../../hooks/useDateRangeFilter';
 import FitSource from '../interations/FitSource';
 
 type Props = {
@@ -47,13 +44,6 @@ const HankeDrawer: React.FC<Props> = ({
 }) => {
   const { mapTileLayers, toggleMapTileLayer, handleUpdateGeometryState } = useMapDataLayers();
   const [drawSource] = useState<VectorSource>(existingDrawSource || new VectorSource());
-
-  const {
-    hankeFilterStartDate,
-    hankeFilterEndDate,
-    setHankeFilterStartDate,
-    setHankeFilterEndDate,
-  } = useDateRangeFilter();
 
   const featuresLoaded = useRef(false);
 
@@ -127,14 +117,6 @@ const HankeDrawer: React.FC<Props> = ({
 
           <Controls>
             <DrawModule source={drawSource} />
-            <ControlPanel className={hankeDrawerStyles.dateRangeControl}>
-              <DateRangeControl
-                startDate={hankeFilterStartDate}
-                updateStartDate={setHankeFilterStartDate}
-                endDate={hankeFilterEndDate}
-                updateEndDate={setHankeFilterEndDate}
-              />
-            </ControlPanel>
             <LayerControl
               tileLayers={Object.values(mapTileLayers)}
               onClickTileLayer={(id: MapTileLayerId) => toggleMapTileLayer(id)}
