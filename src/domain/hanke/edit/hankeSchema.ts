@@ -10,37 +10,39 @@ import {
   HANKE_KAISTAPITUUSHAITTA,
   CONTACT_TYYPPI,
 } from '../../types/hanke';
-import { FORMFIELD } from './types';
+import { FORMFIELD, CONTACT_FORMFIELD } from './types';
 
 const subContactSchema = yup
   .object()
   .nullable()
   .default(null)
   .shape({
-    nimi: yup.string().max(100).required(),
-    osoite: yup.string(),
-    postiNro: yup.string(),
-    postiTmPaikka: yup.string(),
-    email: yup.string().email().max(100).required(),
-    puhelinnumero: yup.string().nullable().default(null).max(20),
+    [CONTACT_FORMFIELD.NIMI]: yup.string().max(100).required(),
+    [CONTACT_FORMFIELD.OSOITE]: yup.string(),
+    [CONTACT_FORMFIELD.POSTINRO]: yup.string(),
+    [CONTACT_FORMFIELD.POSTITOIMIPAIKKA]: yup.string(),
+    [CONTACT_FORMFIELD.EMAIL]: yup.string().email().max(100).required(),
+    [CONTACT_FORMFIELD.PUHELINNUMERO]: yup.string().nullable().default(null).max(20),
   });
 
-const ownerSchema = subContactSchema.shape({
-  tyyppi: yup.string().oneOf($enum(CONTACT_TYYPPI).getValues()).required(),
-  tunnus: yup.string().required(),
-  subContact: subContactSchema,
-});
-
-const contactSchema = ownerSchema.shape({
-  subContacts: yup.array().ensure().of(subContactSchema),
+const contactSchema = subContactSchema.shape({
+  [CONTACT_FORMFIELD.TYYPPI]: yup.string().oneOf($enum(CONTACT_TYYPPI).getValues()).required(),
+  [CONTACT_FORMFIELD.TUNNUS]: yup.string().required(),
+  [CONTACT_FORMFIELD.ALIKONTAKTIT]: yup.array().ensure().of(subContactSchema),
 });
 
 const otherPartySchema = contactSchema
-  .omit(['tyyppi', 'yTunnus', 'osoite', 'postiNro', 'postiTmPaikka'])
+  .omit([
+    CONTACT_FORMFIELD.TYYPPI,
+    CONTACT_FORMFIELD.TUNNUS,
+    CONTACT_FORMFIELD.OSOITE,
+    CONTACT_FORMFIELD.POSTINRO,
+    CONTACT_FORMFIELD.POSTITOIMIPAIKKA,
+  ])
   .shape({
-    rooli: yup.string().required(),
-    organisaatio: yup.string(),
-    osasto: yup.string(),
+    [CONTACT_FORMFIELD.ROOLI]: yup.string().required(),
+    [CONTACT_FORMFIELD.ORGANISAATIO]: yup.string(),
+    [CONTACT_FORMFIELD.OSASTO]: yup.string(),
   });
 
 export const hankeAlueSchema = yup.object().shape({
@@ -78,7 +80,7 @@ export const hankeSchema = yup.object().shape({
       then: yup.mixed().oneOf($enum(HANKE_SUUNNITTELUVAIHE).getValues()).required(),
     }),
   [FORMFIELD.HANKEALUEET]: yup.array().ensure().of(hankeAlueSchema),
-  [FORMFIELD.OMISTAJAT]: yup.array().ensure().of(ownerSchema),
+  [FORMFIELD.OMISTAJAT]: yup.array().ensure().of(contactSchema),
   [FORMFIELD.RAKENNUTTAJAT]: yup.array().ensure().of(contactSchema),
   [FORMFIELD.TOTEUTTAJAT]: yup.array().ensure().of(contactSchema),
   [FORMFIELD.MUUTTAHOT]: yup.array().ensure().of(otherPartySchema),

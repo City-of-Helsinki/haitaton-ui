@@ -43,7 +43,7 @@ const formData: HankeDataFormState = {
   vaihe: HANKE_VAIHE.OHJELMOINTI,
   rakennuttajat: [],
   toteuttajat: [],
-  muutTahot: [],
+  muut: [],
   tyomaaTyyppi: [HANKE_TYOMAATYYPPI.AKILLINEN_VIKAKORJAUS],
   nimi: 'testi kuoppa',
   kuvaus: 'testi kuvaus',

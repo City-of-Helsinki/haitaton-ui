@@ -2,11 +2,11 @@ import { Feature } from 'ol';
 import Polygon from 'ol/geom/Polygon';
 import { Polygon as GeoJSONPolygon } from 'geojson';
 import { max, min } from 'date-fns';
-import { HankeDataDraft, HankeRakennuttaja, HankeMuuTaho } from '../../types/hanke';
+import { HankeDataDraft, HankeContact, HankeMuuTaho } from '../../types/hanke';
 import { FORMFIELD, HankeDataFormState } from './types';
 import { formatFeaturesToHankeGeoJSON } from '../../map/utils';
 
-const isContactEmpty = ({ nimi, email, puhelinnumero }: HankeRakennuttaja | HankeMuuTaho) =>
+const isContactEmpty = ({ nimi, email, puhelinnumero }: HankeContact | HankeMuuTaho) =>
   nimi === '' && email === '' && puhelinnumero === '';
 
 /**
@@ -70,5 +70,5 @@ export const convertHankeDataToFormState = (
   omistajat: hankeData?.omistajat ? hankeData.omistajat : [],
   rakennuttajat: hankeData?.rakennuttajat ? hankeData.rakennuttajat : [],
   toteuttajat: hankeData?.toteuttajat ? hankeData.toteuttajat : [],
-  muutTahot: hankeData?.muutTahot ? hankeData.muutTahot : [],
+  muut: hankeData?.muut ? hankeData.muut : [],
 });

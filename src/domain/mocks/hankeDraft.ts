@@ -19,7 +19,7 @@ const hankeDraft: HankeDataDraft = {
   omistajat: [],
   rakennuttajat: [],
   toteuttajat: [],
-  muutTahot: [],
+  muut: [],
   tyomaaTyyppi: [],
 };
 

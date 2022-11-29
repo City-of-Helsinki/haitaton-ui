@@ -20,7 +20,7 @@ const hankeDraftList: HankeDataDraft[] = [
     omistajat: [],
     rakennuttajat: [],
     toteuttajat: [],
-    muutTahot: [],
+    muut: [],
     tyomaaTyyppi: [],
   },
   {
@@ -42,7 +42,7 @@ const hankeDraftList: HankeDataDraft[] = [
     omistajat: [],
     rakennuttajat: [],
     toteuttajat: [],
-    muutTahot: [],
+    muut: [],
     tyomaaTyyppi: [],
     alueet: [
       {
@@ -120,7 +120,7 @@ const hankeDraftList: HankeDataDraft[] = [
     omistajat: [],
     rakennuttajat: [],
     toteuttajat: [],
-    muutTahot: [],
+    muut: [],
     tyomaaTyyppi: [],
   },
   {
@@ -142,7 +142,7 @@ const hankeDraftList: HankeDataDraft[] = [
     omistajat: [],
     rakennuttajat: [],
     toteuttajat: [],
-    muutTahot: [],
+    muut: [],
     tyomaaTyyppi: [],
   },
   {
@@ -164,7 +164,7 @@ const hankeDraftList: HankeDataDraft[] = [
     omistajat: [],
     rakennuttajat: [],
     toteuttajat: [],
-    muutTahot: [],
+    muut: [],
     tyomaaTyyppi: [],
   },
   {
@@ -186,7 +186,7 @@ const hankeDraftList: HankeDataDraft[] = [
     omistajat: [],
     rakennuttajat: [],
     toteuttajat: [],
-    muutTahot: [],
+    muut: [],
     tyomaaTyyppi: [],
   },
   {
@@ -208,7 +208,7 @@ const hankeDraftList: HankeDataDraft[] = [
     omistajat: [],
     rakennuttajat: [],
     toteuttajat: [],
-    muutTahot: [],
+    muut: [],
     tyomaaTyyppi: [],
   },
   {
@@ -230,7 +230,7 @@ const hankeDraftList: HankeDataDraft[] = [
     omistajat: [],
     rakennuttajat: [],
     toteuttajat: [],
-    muutTahot: [],
+    muut: [],
     tyomaaTyyppi: [],
   },
   {
@@ -252,7 +252,7 @@ const hankeDraftList: HankeDataDraft[] = [
     omistajat: [],
     rakennuttajat: [],
     toteuttajat: [],
-    muutTahot: [],
+    muut: [],
     tyomaaTyyppi: [],
   },
   {
@@ -274,7 +274,7 @@ const hankeDraftList: HankeDataDraft[] = [
     omistajat: [],
     rakennuttajat: [],
     toteuttajat: [],
-    muutTahot: [],
+    muut: [],
     tyomaaTyyppi: [],
   },
   {
@@ -296,7 +296,7 @@ const hankeDraftList: HankeDataDraft[] = [
     omistajat: [],
     rakennuttajat: [],
     toteuttajat: [],
-    muutTahot: [],
+    muut: [],
     tyomaaTyyppi: [],
   },
 ];

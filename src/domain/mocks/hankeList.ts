@@ -20,7 +20,7 @@ const hankeList: HankeData[] = [
     omistajat: [],
     rakennuttajat: [],
     toteuttajat: [],
-    muutTahot: [],
+    muut: [],
     tyomaaTyyppi: ['VESI', 'VIEMARI'],
     alueet: [
       {
@@ -90,7 +90,7 @@ const hankeList: HankeData[] = [
     omistajat: [],
     rakennuttajat: [],
     toteuttajat: [],
-    muutTahot: [],
+    muut: [],
     tyomaaTyyppi: ['SADEVESI'],
     alueet: [
       {

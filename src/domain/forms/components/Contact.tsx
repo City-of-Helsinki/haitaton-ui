@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useFieldArray, UseFieldArrayRemove } from 'react-hook-form';
 import Text from '../../../common/components/text/Text';
 import styles from './Contact.module.scss';
+import { CONTACT_FORMFIELD } from '../../hanke/edit/types';
 
 interface Props<T> {
   contactType: T;
@@ -29,7 +30,7 @@ const Contact = <T extends unknown>({
     append: appendSubContact,
     remove: removeSubContact,
   } = useFieldArray({
-    name: `${contactType}.${index}.subContacts`,
+    name: `${contactType}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}`,
   });
 
   function addSubContact() {

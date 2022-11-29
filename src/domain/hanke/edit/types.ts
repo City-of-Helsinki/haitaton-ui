@@ -25,7 +25,7 @@ export enum FORMFIELD {
   OMISTAJAT = 'omistajat',
   RAKENNUTTAJAT = 'rakennuttajat',
   TOTEUTTAJAT = 'toteuttajat',
-  MUUTTAHOT = 'muutTahot',
+  MUUTTAHOT = 'muut',
   YKT_HANKE = 'onYKTHanke',
   GEOMETRIES_CHANGED = 'geometriesChanged',
   GEOMETRIAT = 'geometriat',
@@ -37,14 +37,15 @@ export enum CONTACT_FORMFIELD {
   TYYPPI = 'tyyppi',
   ROOLI = 'rooli',
   NIMI = 'nimi',
-  TUNNUS = 'tunnus',
+  TUNNUS = 'ytunnusTaiHetu',
   OSOITE = 'osoite',
-  POSTINRO = 'postiNro',
-  POSTITOIMIPAIKKA = 'postiToimiPaikka',
+  POSTINRO = 'postinumero',
+  POSTITOIMIPAIKKA = 'postitoimipaikka',
   EMAIL = 'email',
   PUHELINNUMERO = 'puhelinnumero',
-  ORGANISAATIO = 'organisaatio',
+  ORGANISAATIO = 'organisaatioNimi',
   OSASTO = 'osasto',
+  ALIKONTAKTIT = 'alikontaktit',
 }
 
 interface HankeAlueFormState extends HankeAlue {
