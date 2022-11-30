@@ -17,6 +17,8 @@ import { hankeSchema } from './hankeSchema';
 import HankeFormAlueet from './HankeFormAlueet';
 import HankeFormPerustiedot from './HankeFormPerustiedot';
 import HankeFormYhteystiedot from './HankeFormYhteystiedot';
+import HankeHaitatForm from './HankeHaitatForm';
+import HankeFormSummary from './HankeFormSummary';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
 import { HANKE_SAVETYPE } from '../../types/hanke';
@@ -25,7 +27,6 @@ import api from '../../api/api';
 import MultipageForm from '../../forms/MultipageForm';
 import FormActions from '../../forms/components/FormActions';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
-import HankeHaitatForm from './HankeHaitatForm';
 
 async function saveHanke({
   data,
@@ -160,6 +161,11 @@ const HankeForm: React.FC<Props> = ({
     {
       element: <HankeFormYhteystiedot errors={errors} register={register} formData={formValues} />,
       label: t('form:yhteystiedot:header'),
+      state: isNewHanke ? StepState.disabled : StepState.available,
+    },
+    {
+      element: <HankeFormSummary formData={formValues} />,
+      label: t('hankeForm:hankkeenYhteenvetoForm:header'),
       state: isNewHanke ? StepState.disabled : StepState.available,
     },
   ];

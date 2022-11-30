@@ -7,7 +7,9 @@
     "logoutButton": "EN:Kirjaudu ulos"
   },
   "common": {
-    "increment": "Increment",
+    "increment": "EN:Increment",
+    "yes": "EN:Kyllä",
+    "no": "EN:Ei",
     "confirmationDialog": {
       "interruptDialog": {
         "titleText": "EN: Olet poistumassa lomakkeelta",
@@ -320,8 +322,8 @@
       "suunnitteluVaihe": "EN:Hankkeen suunnitteluvaihe",
       "alkuPvm": "EN:Hankkeen alkupäivä",
       "loppuPvm": "EN:Hankkeen loppupäivä",
-      "tyomaaTyyppi": "EN:Työmaan tyyppi",
-      "tyomaaKoko": "EN:Työmaan koko",
+      "tyomaaTyyppi": "EN:Työn tyyppi",
+      "tyomaaKoko": "EN:Hankkeen koko",
       "haittaAlkuPvm": "EN:Haittojen alkupäivämäärä",
       "haittaLoppuPvm": "EN:Haittojen loppupäivämäärä",
       "kaistaHaitta": "EN:Autoliikenteen kaistahaitta",
@@ -330,7 +332,7 @@
       "polyHaitta": "EN:Pölyhaitta",
       "tarinaHaitta": "EN:Tärinähaitta",
       "tyomaaKatuosoite": "EN:Katuosoite",
-      "onYKTHanke": "EN:Hanke on YKT-hanke",
+      "onYKTHanke": "EN:YKT-hanke",
       "sukunimi": "EN:Sukunimi",
       "etunimi": "EN:Etunimi",
       "email": "EN:Sähköposti",
@@ -376,6 +378,10 @@
     },
     "hankkeenHaitatForm": {
       "header": "EN:Haitat"
+    },
+    "hankkeenYhteenvetoForm": {
+      "header": "EN:Yhteenveto",
+      "instructions": "EN:Tarkista antamasi tiedot ja tallenna hanke tai tallenna ja siirry lisäämään hakemuksia."
     },
     "finishedForm": {
       "header": "EN:Lomake on lähetetty onnistuneesti"
