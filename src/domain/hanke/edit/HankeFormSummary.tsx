@@ -63,7 +63,7 @@ const HankeFormSummary: React.FC<Props> = ({ formData }) => {
         <SectionItemContent />
       </FormSummarySection>
 
-      <SectionTitle>{t('hankeForm:hankkeenYhteystiedotForm:header')}</SectionTitle>
+      <SectionTitle>{t('form:yhteystiedot:header')}</SectionTitle>
       <FormSummarySection>
         <SectionItemTitle>Perustaja</SectionItemTitle>
         <SectionItemContent />
