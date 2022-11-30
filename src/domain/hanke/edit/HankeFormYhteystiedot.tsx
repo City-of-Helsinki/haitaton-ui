@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
-import { useQuery } from 'react-query';
 import { useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
 import { Accordion, Button, Fieldset, IconCross, IconPlusCircle, ToggleButton } from 'hds-react';
 import { useFieldArray } from 'react-hook-form';
-import { CONTACT_FORMFIELD, FORMFIELD, FormProps, Organization } from './types';
+import { CONTACT_FORMFIELD, FORMFIELD, FormProps } from './types';
 import {
   HankeContact,
   CONTACT_TYYPPI,
   HANKE_CONTACT_TYPE,
   HankeContactTypeKey,
 } from '../../types/hanke';
-import api from '../../api/api';
 import Text from '../../../common/components/text/Text';
 import { useFormPage } from './hooks/useFormPage';
 import TextInput from '../../../common/components/textInput/TextInput';
@@ -41,8 +39,6 @@ const REQUIRED_CONTACT_FIELDS: Array<keyof HankeContact> = [
 function isRequiredContactField(field: keyof HankeContact) {
   return REQUIRED_CONTACT_FIELDS.includes(field);
 }
-
-const fetchOrganizations = async () => api.get<Organization[]>('/organisaatiot');
 
 const SubContactFields: React.FC<{ fieldPath: string; onRemove: () => void }> = ({
   fieldPath,
@@ -127,11 +123,6 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
   useFormPage();
   const { t } = useTranslation();
   const locale = useLocale();
-
-  const { data: organizationList } = useQuery('organisationList', fetchOrganizations, {
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  });
 
   const [separateContact, setSeparateContact] = useState(false);
 
@@ -329,19 +320,9 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
                   label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.NIMI}`)}
                   required
                 />
-                <Dropdown
-                  id={`${fieldPath}.${CONTACT_FORMFIELD.ORGANISAATIO}`}
+                <TextInput
                   name={`${fieldPath}.${CONTACT_FORMFIELD.ORGANISAATIO}`}
-                  defaultValue=""
                   label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.ORGANISAATIO}`)}
-                  options={
-                    organizationList?.data
-                      ? organizationList?.data.map((organization) => ({
-                          value: organization.tunnus,
-                          label: organization.nimi,
-                        }))
-                      : []
-                  }
                 />
                 <TextInput
                   name={`${fieldPath}.${CONTACT_FORMFIELD.OSASTO}`}

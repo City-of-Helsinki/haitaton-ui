@@ -63,7 +63,7 @@
         "omistaja": "EN:Hankkeen omistaja",
         "rakennuttajat": "EN:Rakennuttaja",
         "toteuttajat": "EN:Toteuttaja",
-        "muutTahot": "EN:Muu taho",
+        "muut": "EN:Muu taho",
         "lisaaRakennuttajia": "EN:Lisää rakennuttajia",
         "lisaaRakennuttaja": "EN:Lisää rakennuttaja",
         "lisaaToteuttajia": "EN:Lisää toteuttajia",
@@ -105,7 +105,7 @@
         "remove": {
           "rakennuttajat": "EN:Poista rakennuttaja",
           "toteuttajat": "EN:Poista toteuttaja",
-          "muutTahot": "EN:Poista muu taho"
+          "muut": "EN:Poista muu taho"
         }
       }
     }
