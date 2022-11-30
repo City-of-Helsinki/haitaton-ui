@@ -48,7 +48,7 @@ export enum CONTACT_FORMFIELD {
   ALIKONTAKTIT = 'alikontaktit',
 }
 
-interface HankeAlueFormState extends HankeAlue {
+export interface HankeAlueFormState extends HankeAlue {
   feature?: Feature<Geometry>; // "virtualField"
 }
 

@@ -1,6 +1,7 @@
-import { Box, Grid } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import React from 'react';
 import Text from '../../../common/components/text/Text';
+import styles from './FormSummarySection.module.scss';
 
 const SectionTitle: React.FC = ({ children }) => {
   return (
@@ -31,17 +32,7 @@ const SectionItemContent: React.FC = ({ children }) => {
 };
 
 const FormSummarySection: React.FC = ({ children }) => {
-  return (
-    <Grid
-      as="section"
-      templateColumns="1fr 4fr"
-      columnGap="var(--spacing-xl)"
-      rowGap="var(--spacing-m)"
-      mb="var(--spacing-2-xl)"
-    >
-      {children}
-    </Grid>
-  );
+  return <section className={styles.container}>{children}</section>;
 };
 
 export { FormSummarySection, SectionTitle, SectionItemTitle, SectionItemContent };

@@ -57,6 +57,9 @@
       "dateMin": "SV:Ensimmäinen mahdollinen päivä on {{min}}",
       "dateMax": "SV:Viimeinen mahdollinen päivä on {{max}}"
     },
+    "labels": {
+      "pintaAla": "SV:Pinta-ala"
+    },
     "requiredInstruction": "SV:Kaikki tähdellä * merkityt kentät ovat pakollisia.",
     "yhteystiedot": {
       "header": "SV:Yhteystiedot",

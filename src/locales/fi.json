@@ -57,6 +57,9 @@
       "dateMin": "Ensimmäinen mahdollinen päivä on {{min}}",
       "dateMax": "Viimeinen mahdollinen päivä on {{max}}"
     },
+    "labels": {
+      "pintaAla": "Pinta-ala"
+    },
     "requiredInstruction": "Kaikki tähdellä * merkityt kentät ovat pakollisia.",
     "yhteystiedot": {
       "header": "Yhteystiedot",
@@ -330,7 +333,7 @@
       "polyHaitta": "Pölyhaitta",
       "tarinaHaitta": "Tärinähaitta",
       "tyomaaKatuosoite": "Katuosoite",
-      "onYKTHanke": "YKT-hanke",
+      "onYKTHanke": "Hanke on YKT-hanke",
       "sukunimi": "Sukunimi",
       "etunimi": "Etunimi",
       "email": "Sähköposti",

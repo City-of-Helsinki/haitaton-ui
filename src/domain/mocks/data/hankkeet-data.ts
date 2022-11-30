@@ -1,12 +1,13 @@
-import { HankeDataDraft, HANKE_POLYHAITTA } from '../../types/hanke';
+import { HankeDataDraft, HANKE_POLYHAITTA, HANKE_TYOMAAKOKO } from '../../types/hanke';
 
 const hankkeet: HankeDataDraft[] = [
   {
     id: 1,
-    hankeTunnus: 'HANKE_1',
+    hankeTunnus: 'HAI22-1',
     onYKTHanke: false,
     nimi: 'Hanke 1',
-    kuvaus: '',
+    kuvaus:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
     alkuPvm: '2022-11-26T00:00:00Z',
     loppuPvm: '2022-11-17T00:00:00Z',
     vaihe: 'OHJELMOINTI',
@@ -25,42 +26,135 @@ const hankkeet: HankeDataDraft[] = [
   },
   {
     id: 2,
-    hankeTunnus: 'HANKE_2',
+    hankeTunnus: 'HAI22-2',
     onYKTHanke: true,
     nimi: 'Hanke 2',
-    kuvaus: '',
-    alkuPvm: '2022-11-26T00:00:00Z',
-    loppuPvm: '2022-11-27T00:00:00Z',
+    kuvaus:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
+    tyomaaKatuosoite: 'Aidasmäentie 5',
+    alkuPvm: '2023-01-12T00:00:00Z',
+    loppuPvm: '2024-11-27T00:00:00Z',
     vaihe: 'OHJELMOINTI',
     suunnitteluVaihe: null,
+    tyomaaKoko: HANKE_TYOMAAKOKO.SUPPEA_TAI_PISTE,
     version: 0,
     createdBy: '1',
-    createdAt: '2020-11-27T11:43:43.481215Z',
+    createdAt: '2022-11-27T11:43:43.481215Z',
     modifiedBy: null,
     modifiedAt: null,
     saveType: 'DRAFT',
-    omistajat: [],
-    rakennuttajat: [],
+    liikennehaittaindeksi: {
+      indeksi: 4.0,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      tyyppi: 'JOUKKOLIIKENNEINDEKSI' as any,
+    },
+    tormaystarkasteluTulos: {
+      hankeId: 2,
+      hankeTunnus: 'HAI22-2',
+      hankeGeometriatId: 2,
+      tila: 'VOIMASSA',
+      perusIndeksi: 3.5,
+      pyorailyIndeksi: 3,
+      joukkoliikenneIndeksi: 4,
+      liikennehaittaIndeksi: {
+        indeksi: 4,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        tyyppi: 'JOUKKOLIIKENNEINDEKSI' as any,
+      },
+    },
+    omistajat: [
+      {
+        id: 1,
+        tyyppi: 'YRITYS',
+        nimi: 'Yritys Oy',
+        ytunnusTaiHetu: 'y-1234567',
+        osoite: '',
+        postinumero: '',
+        postitoimipaikka: '',
+        email: 'yritys@testi.com',
+        puhelinnumero: '',
+        alikontaktit: [
+          {
+            nimi: 'Esa Kauppinen',
+            osoite: 'Lehdenkatu 3',
+            postinumero: '42100',
+            postitoimipaikka: 'Lahti',
+            email: 'esa.kauppinen@maansiirtofirma.com',
+            puhelinnumero: '',
+          },
+        ],
+      },
+    ],
+    rakennuttajat: [
+      {
+        id: 1,
+        tyyppi: 'YRITYS',
+        nimi: 'Yritys 2 Oy',
+        ytunnusTaiHetu: 'y-1234567',
+        osoite: '',
+        postinumero: '',
+        postitoimipaikka: '',
+        email: 'yritys2@testi.com',
+        puhelinnumero: '',
+        alikontaktit: [
+          {
+            nimi: 'Matti Meikäläinen',
+            osoite: 'Katukuja 6',
+            postinumero: '',
+            postitoimipaikka: '',
+            email: 'matti.meikalainen@testi.com',
+            puhelinnumero: '',
+          },
+          {
+            nimi: 'Esa Kauppinen',
+            osoite: 'Lehdenkatu 3',
+            postinumero: '42100',
+            postitoimipaikka: 'Lahti',
+            email: 'esa.kauppinen@maansiirtofirma.com',
+            puhelinnumero: '',
+          },
+        ],
+      },
+    ],
     toteuttajat: [],
-    muut: [],
+    muut: [
+      {
+        rooli: 'Isännöitsijä',
+        nimi: 'Yritys 2 Oy',
+        email: 'yritys2@testi.com',
+        puhelinnumero: '',
+        organisaatioNimi: 'Organisaatio',
+        osasto: '',
+        alikontaktit: [
+          {
+            nimi: 'Matti Meikäläinen',
+            osoite: 'Katukuja 6',
+            postinumero: '',
+            postitoimipaikka: '',
+            email: 'matti.meikalainen@testi.com',
+            puhelinnumero: '',
+          },
+        ],
+      },
+    ],
     tyomaaTyyppi: [],
     alueet: [
       {
         id: 1,
         hankeId: 2,
-        haittaAlkuPvm: '2022-11-26T00:00:00Z',
-        haittaLoppuPvm: '2022-11-27T00:00:00Z',
+        haittaAlkuPvm: '2023-01-12T00:00:00Z',
+        haittaLoppuPvm: '2024-11-27T00:00:00Z',
         kaistaHaitta: 'KOLME',
         kaistaPituusHaitta: 'NELJA',
-        meluHaitta: 'KAKSI',
-        polyHaitta: HANKE_POLYHAITTA.KAKSI,
+        meluHaitta: 'KOLME',
+        polyHaitta: HANKE_POLYHAITTA.KOLME,
         tarinaHaitta: 'YKSI',
         geometriat: {
           id: 37,
           version: 0,
           createdByUserId: null,
           modifiedByUserId: null,
-          createdAt: '2020-11-27T11:43:43.481215Z',
+          createdAt: '2022-11-27T11:43:43.481215Z',
           modifiedAt: null,
           featureCollection: {
             type: 'FeatureCollection',
@@ -74,7 +168,7 @@ const hankkeet: HankeDataDraft[] = [
               {
                 type: 'Feature',
                 properties: {
-                  hankeTunnus: 'HANKE_2',
+                  hankeTunnus: 'HAI22-2',
                 },
                 geometry: {
                   type: 'Polygon',
@@ -86,11 +180,11 @@ const hankkeet: HankeDataDraft[] = [
                   },
                   coordinates: [
                     [
-                      [25496803.95, 6671970.73],
-                      [25496808.63, 6672031.04],
-                      [25496741.78, 6672035.04],
-                      [25496723.8, 6671958.88],
-                      [25496803.95, 6671970.73],
+                      [25498583.867247857, 6679281.28058593],
+                      [25498584.13087749, 6679314.065289769],
+                      [25498573.17171292, 6679313.3807182815],
+                      [25498571.913494226, 6679281.456795131],
+                      [25498583.867247857, 6679281.28058593],
                     ],
                   ],
                 },
@@ -99,14 +193,57 @@ const hankkeet: HankeDataDraft[] = [
           },
         },
       },
+      {
+        id: 2,
+        hankeId: 2,
+        haittaAlkuPvm: '2023-05-15T20:59:59.999Z',
+        haittaLoppuPvm: '2023-09-30T20:59:59.999Z',
+        meluHaitta: 'KAKSI',
+        polyHaitta: HANKE_POLYHAITTA.KOLME,
+        tarinaHaitta: 'YKSI',
+        kaistaHaitta: 'KAKSI',
+        kaistaPituusHaitta: 'KOLME',
+        geometriat: {
+          featureCollection: {
+            type: 'FeatureCollection',
+            features: [
+              {
+                type: 'Feature',
+                geometry: {
+                  type: 'Polygon',
+                  coordinates: [
+                    [
+                      [25498584.03, 6679338],
+                      [25498590.26, 6679375.03],
+                      [25498578.5, 6679383.45],
+                      [25498573.66, 6679337.88],
+                      [25498584.03, 6679338],
+                    ],
+                  ],
+                },
+                properties: {
+                  hankeTunnus: 'HAI22-2',
+                },
+              },
+            ],
+            crs: {
+              type: 'name',
+              properties: {
+                name: 'urn:ogc:def:crs:EPSG::3879',
+              },
+            },
+          },
+        },
+      },
     ],
   },
   {
     id: 3,
-    hankeTunnus: 'HANKE_3',
+    hankeTunnus: 'HAI22-3',
     onYKTHanke: false,
     nimi: 'Hanke 3',
-    kuvaus: '',
+    kuvaus:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
     alkuPvm: '2022-11-24T00:00:00Z',
     loppuPvm: '2022-11-20T00:00:00Z',
     vaihe: 'OHJELMOINTI',
@@ -125,10 +262,11 @@ const hankkeet: HankeDataDraft[] = [
   },
   {
     id: 4,
-    hankeTunnus: 'HANKE_4',
+    hankeTunnus: 'HAI22-4',
     onYKTHanke: false,
     nimi: 'Hanke 4',
-    kuvaus: '',
+    kuvaus:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
     alkuPvm: '2022-11-25T00:00:00Z',
     loppuPvm: '2022-11-28T00:00:00Z',
     vaihe: 'RAKENTAMINEN',
@@ -147,10 +285,11 @@ const hankkeet: HankeDataDraft[] = [
   },
   {
     id: 5,
-    hankeTunnus: 'HANKE_5',
+    hankeTunnus: 'HAI22-5',
     onYKTHanke: true,
     nimi: 'Hanke 5',
-    kuvaus: '',
+    kuvaus:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
     alkuPvm: '2022-11-23T00:00:00Z',
     loppuPvm: '2022-11-20T00:00:00Z',
     vaihe: 'OHJELMOINTI',
@@ -169,10 +308,11 @@ const hankkeet: HankeDataDraft[] = [
   },
   {
     id: 6,
-    hankeTunnus: 'HANKE_6',
+    hankeTunnus: 'HAI22-6',
     onYKTHanke: true,
     nimi: 'Hanke 6',
-    kuvaus: '',
+    kuvaus:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
     alkuPvm: '2022-11-24T00:00:00Z',
     loppuPvm: '2022-11-28T00:00:00Z',
     vaihe: 'SUUNNITTELU',
@@ -191,10 +331,11 @@ const hankkeet: HankeDataDraft[] = [
   },
   {
     id: 7,
-    hankeTunnus: 'HANKE_7',
+    hankeTunnus: 'HAI22-7',
     onYKTHanke: true,
     nimi: 'Hanke 7',
-    kuvaus: '',
+    kuvaus:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
     alkuPvm: '2022-11-24T00:00:00Z',
     loppuPvm: '2022-11-28T00:00:00Z',
     vaihe: 'SUUNNITTELU',
@@ -213,10 +354,11 @@ const hankkeet: HankeDataDraft[] = [
   },
   {
     id: 8,
-    hankeTunnus: 'HANKE_8',
+    hankeTunnus: 'HAI22-8',
     onYKTHanke: true,
     nimi: 'Hanke 8',
-    kuvaus: '',
+    kuvaus:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
     alkuPvm: '2022-11-24T00:00:00Z',
     loppuPvm: '2022-11-28T00:00:00Z',
     vaihe: 'OHJELMOINTI',
@@ -235,10 +377,11 @@ const hankkeet: HankeDataDraft[] = [
   },
   {
     id: 9,
-    hankeTunnus: 'HANKE_9',
+    hankeTunnus: 'HAI22-9',
     onYKTHanke: true,
     nimi: 'Hanke 9',
-    kuvaus: '',
+    kuvaus:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
     alkuPvm: '2022-11-24T00:00:00Z',
     loppuPvm: '2022-11-28T00:00:00Z',
     vaihe: 'OHJELMOINTI',
@@ -257,10 +400,11 @@ const hankkeet: HankeDataDraft[] = [
   },
   {
     id: 10,
-    hankeTunnus: 'HANKE_10',
+    hankeTunnus: 'HAI22-10',
     onYKTHanke: false,
     nimi: 'Hanke 10',
-    kuvaus: '',
+    kuvaus:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
     alkuPvm: '2022-12-02T00:00:00Z',
     loppuPvm: '2022-12-05T00:00:00Z',
     vaihe: 'OHJELMOINTI',
@@ -279,10 +423,11 @@ const hankkeet: HankeDataDraft[] = [
   },
   {
     id: 11,
-    hankeTunnus: 'HANKE_11',
+    hankeTunnus: 'HAI22-11',
     onYKTHanke: false,
     nimi: 'Hanke 11',
-    kuvaus: '',
+    kuvaus:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
     alkuPvm: '2022-12-02T00:00:00Z',
     loppuPvm: '2022-11-28T00:00:00Z',
     vaihe: 'OHJELMOINTI',
