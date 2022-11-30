@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { Tooltip, TextArea, SelectionGroup, RadioButton, Link } from 'hds-react';
 import { $enum } from 'ts-enum-util';
@@ -20,13 +20,19 @@ import { getInputErrorText } from '../../../common/utils/form';
 
 const HankeFormPerustiedot: React.FC<FormProps> = ({ errors, register, formData }) => {
   const { t } = useTranslation();
-  const { watch } = useFormContext();
+  const { watch, setValue } = useFormContext();
   useFormPage();
 
   // Subscribe to vaihe changes
   const hankeVaiheField = watch(FORMFIELD.VAIHE);
   // Subscribe to tyomaaKoko changes
   const tyomaaKokoField = watch(FORMFIELD.TYOMAAKOKO);
+
+  useEffect(() => {
+    if (hankeVaiheField !== HANKE_VAIHE.SUUNNITTELU) {
+      setValue(FORMFIELD.SUUNNITTELUVAIHE, null);
+    }
+  }, [hankeVaiheField, setValue]);
 
   return (
     <div className="form0">
@@ -92,22 +98,21 @@ const HankeFormPerustiedot: React.FC<FormProps> = ({ errors, register, formData 
           })}
         </SelectionGroup>
       </div>
-      {hankeVaiheField === HANKE_VAIHE.SUUNNITTELU && (
-        <div className="formWpr">
-          <Dropdown
-            id={FORMFIELD.SUUNNITTELUVAIHE}
-            name={FORMFIELD.SUUNNITTELUVAIHE}
-            options={$enum(HANKE_SUUNNITTELUVAIHE).map((value) => ({
-              value,
-              label: t(`hanke:suunnitteluVaihe:${value}`),
-            }))}
-            defaultValue={formData[FORMFIELD.SUUNNITTELUVAIHE] || null}
-            label={t(`hankeForm:labels:${FORMFIELD.SUUNNITTELUVAIHE}`)}
-            invalid={!!errors[FORMFIELD.SUUNNITTELUVAIHE]}
-            required={hankeVaiheField === HANKE_VAIHE.SUUNNITTELU}
-          />
-        </div>
-      )}
+      <div className="formWpr">
+        <Dropdown
+          id={FORMFIELD.SUUNNITTELUVAIHE}
+          name={FORMFIELD.SUUNNITTELUVAIHE}
+          options={$enum(HANKE_SUUNNITTELUVAIHE).map((value) => ({
+            value,
+            label: t(`hanke:suunnitteluVaihe:${value}`),
+          }))}
+          defaultValue={formData[FORMFIELD.SUUNNITTELUVAIHE] || null}
+          label={t(`hankeForm:labels:${FORMFIELD.SUUNNITTELUVAIHE}`)}
+          invalid={!!errors[FORMFIELD.SUUNNITTELUVAIHE]}
+          required={hankeVaiheField === HANKE_VAIHE.SUUNNITTELU}
+          disabled={hankeVaiheField !== HANKE_VAIHE.SUUNNITTELU}
+        />
+      </div>
       <div className="form3">
         <div className="dataWpr">
           <div className="formWpr">

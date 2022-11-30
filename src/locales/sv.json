@@ -317,7 +317,7 @@
     "labels": {
       "hankeTunnus": "SV:Hankkeen tunnus",
       "nimi": "SV:Hankkeen nimi",
-      "vaihe": "SV:Hankkeen Vaihe",
+      "vaihe": "SV:Hankkeen vaihe",
       "kuvaus": "SV:Hankkeen kuvaus",
       "suunnitteluVaihe": "SV:Hankkeen suunnitteluvaihe",
       "alkuPvm": "SV:Hankkeen alkupäivä",
