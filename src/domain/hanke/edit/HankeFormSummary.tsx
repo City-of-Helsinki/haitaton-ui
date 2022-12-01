@@ -12,6 +12,7 @@ import {
 import { CONTACT_FORMFIELD, FORMFIELD, HankeAlueFormState, HankeDataFormState } from './types';
 import { formatSurfaceArea } from '../../map/utils';
 import { HankeContact, HankeMuuTaho, HankeSubContact } from '../../types/hanke';
+import { getAreasMaxEndDate, getAreasMinStartDate } from './utils';
 
 const AreaSummary: React.FC<{ area: HankeAlueFormState; index: number }> = ({ area, index }) => {
   const { t } = useTranslation();
@@ -110,13 +111,13 @@ const ContactsSummary: React.FC<{ contacts: HankeContact[] | HankeMuuTaho[]; tit
       <SectionItemContent>
         {contacts.map((contact) => {
           return (
-            <>
+            <React.Fragment key={contact.email}>
               <ContactSummary contact={contact} />
-              {contact.alikontaktit?.length && (
+              {contact.alikontaktit && contact.alikontaktit?.length > 0 && (
                 <>
-                  <p style={{ marginBottom: 'var(--spacing-xs)' }}>
+                  <h3 style={{ marginBottom: 'var(--spacing-xs)' }}>
                     <strong>Yhteyshenkilöt</strong>
-                  </p>
+                  </h3>
                   <Grid
                     templateColumns="repeat(auto-fit, minmax(250px, 300px))"
                     gap={15}
@@ -124,12 +125,12 @@ const ContactsSummary: React.FC<{ contacts: HankeContact[] | HankeMuuTaho[]; tit
                     alignItems="start"
                   >
                     {contact.alikontaktit?.map((alikontakti) => {
-                      return <SubContactSummary contact={alikontakti} />;
+                      return <SubContactSummary key={alikontakti.email} contact={alikontakti} />;
                     })}
                   </Grid>
                 </>
               )}
-            </>
+            </React.Fragment>
           );
         })}
       </SectionItemContent>
@@ -143,6 +144,10 @@ type Props = {
 
 const HankeFormSummary: React.FC<Props> = ({ formData }) => {
   const { t } = useTranslation();
+
+  const hankeAreas = formData[FORMFIELD.HANKEALUEET];
+  const minAreaStartDate = getAreasMinStartDate(hankeAreas);
+  const maxAreaEndDate = getAreasMaxEndDate(hankeAreas);
 
   const areasTotalSurfaceArea = formData.alueet?.reduce((surfaceArea, currArea) => {
     const geom = currArea?.feature?.getGeometry();
@@ -161,34 +166,46 @@ const HankeFormSummary: React.FC<Props> = ({ formData }) => {
         <SectionItemTitle>Perustaja</SectionItemTitle>
         <SectionItemContent />
         <SectionItemTitle>{t('hankeForm:labels:nimi')}</SectionItemTitle>
-        <SectionItemContent>{formData.nimi}</SectionItemContent>
+        <SectionItemContent>
+          <p>{formData.nimi}</p>
+        </SectionItemContent>
         <SectionItemTitle>{t('hankeForm:labels:hankeTunnus')}</SectionItemTitle>
-        <SectionItemContent>{formData.hankeTunnus}</SectionItemContent>
+        <SectionItemContent>
+          <p>{formData.hankeTunnus}</p>
+        </SectionItemContent>
         <SectionItemTitle>{t('hankeForm:labels:kuvaus')}</SectionItemTitle>
-        <SectionItemContent>{formData.kuvaus}</SectionItemContent>
+        <SectionItemContent>
+          <p>{formData.kuvaus}</p>
+        </SectionItemContent>
         <SectionItemTitle>{t('hankeForm:labels:tyomaaKatuosoite')}</SectionItemTitle>
-        <SectionItemContent>{formData.tyomaaKatuosoite}</SectionItemContent>
+        <SectionItemContent>
+          <p>{formData.tyomaaKatuosoite}</p>
+        </SectionItemContent>
         <SectionItemTitle>{t('hankeForm:labels:alkuPvm')}</SectionItemTitle>
         <SectionItemContent>
-          {formData.alkuPvm && formatToFinnishDate(formData.alkuPvm)}
+          <p>{minAreaStartDate && formatToFinnishDate(minAreaStartDate.toISOString())}</p>
         </SectionItemContent>
         <SectionItemTitle>{t('hankeForm:labels:loppuPvm')}</SectionItemTitle>
         <SectionItemContent>
-          {formData.loppuPvm && formatToFinnishDate(formData.loppuPvm)}
+          <p>{maxAreaEndDate && formatToFinnishDate(maxAreaEndDate.toISOString())}</p>
         </SectionItemContent>
         <SectionItemTitle>{t('hankeForm:labels:vaihe')}</SectionItemTitle>
-        <SectionItemContent>{t(`hanke:vaihe:${formData.vaihe}`)}</SectionItemContent>
+        <SectionItemContent>
+          <p>{t(`hanke:vaihe:${formData.vaihe}`)}</p>
+        </SectionItemContent>
         <SectionItemTitle>{t('hankeForm:labels:tyomaaTyyppi')}</SectionItemTitle>
         <SectionItemContent>
-          {formData.tyomaaTyyppi?.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')}
+          <p>
+            {formData.tyomaaTyyppi?.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')}
+          </p>
         </SectionItemContent>
         <SectionItemTitle>{t('hankeForm:labels:tyomaaKoko')}</SectionItemTitle>
         <SectionItemContent>
-          {formData.tyomaaKoko && <>{t(`hanke:tyomaaKoko:${formData.tyomaaKoko}`)}</>}
+          <p>{formData.tyomaaKoko && <>{t(`hanke:tyomaaKoko:${formData.tyomaaKoko}`)}</>}</p>
         </SectionItemContent>
         <SectionItemTitle>{t('hankeForm:labels:onYKTHanke')}</SectionItemTitle>
         <SectionItemContent>
-          {formData.onYKTHanke ? t('common:yes') : t('common:no')}
+          <p>{formData.onYKTHanke ? t('common:yes') : t('common:no')}</p>
         </SectionItemContent>
       </FormSummarySection>
 
@@ -196,19 +213,20 @@ const HankeFormSummary: React.FC<Props> = ({ formData }) => {
       <FormSummarySection>
         <SectionItemTitle>Alueiden kokonaispinta-ala</SectionItemTitle>
         <SectionItemContent>
-          {areasTotalSurfaceArea && <>{areasTotalSurfaceArea} m²</>}
+          <p>{areasTotalSurfaceArea && areasTotalSurfaceArea} m²</p>
         </SectionItemContent>
         <SectionItemTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionItemTitle>
         <SectionItemContent>
           {formData.alueet?.map((alue, index) => (
-            <AreaSummary area={alue} index={index} />
+            // eslint-disable-next-line react/no-array-index-key
+            <AreaSummary key={index} area={alue} index={index} />
           ))}
         </SectionItemContent>
       </FormSummarySection>
 
       <SectionTitle>{t('form:yhteystiedot:header')}</SectionTitle>
       <FormSummarySection>
-        {formData.omistajat?.length && formData.omistajat.length > 0 && (
+        {formData.omistajat && formData.omistajat.length > 0 && (
           <ContactsSummary contacts={formData.omistajat} title="Hankkeen omistaja" />
         )}
         {formData.rakennuttajat?.length > 0 && (

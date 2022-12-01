@@ -2,9 +2,25 @@ import { Feature } from 'ol';
 import Polygon from 'ol/geom/Polygon';
 import { Polygon as GeoJSONPolygon } from 'geojson';
 import { max, min } from 'date-fns';
-import { HankeDataDraft, HankeContact, HankeMuuTaho } from '../../types/hanke';
+import { HankeDataDraft, HankeContact, HankeMuuTaho, HankeAlue } from '../../types/hanke';
 import { FORMFIELD, HankeDataFormState } from './types';
 import { formatFeaturesToHankeGeoJSON } from '../../map/utils';
+
+export function getAreasMinStartDate(areas: HankeAlue[] | undefined) {
+  const areaStartDates = areas?.map((alue) => {
+    return new Date(alue.haittaAlkuPvm);
+  });
+  const minAreaStartDate = areaStartDates && min(areaStartDates);
+  return minAreaStartDate;
+}
+
+export function getAreasMaxEndDate(areas: HankeAlue[] | undefined) {
+  const areaEndDates = areas?.map((alue) => {
+    return new Date(alue.haittaLoppuPvm);
+  });
+  const maxAreaEndDate = areaEndDates && max(areaEndDates);
+  return maxAreaEndDate;
+}
 
 const isContactEmpty = ({ nimi, email, puhelinnumero }: HankeContact | HankeMuuTaho) =>
   nimi === '' && email === '' && puhelinnumero === '';
@@ -16,15 +32,9 @@ const isContactEmpty = ({ nimi, email, puhelinnumero }: HankeContact | HankeMuuT
  * Filter out empty contacts (temporary solution for sending empty contacts to API).
  */
 export const convertFormStateToHankeData = (hankeData: HankeDataFormState): HankeDataFormState => {
-  const areaStartDates = hankeData[FORMFIELD.HANKEALUEET]?.map((alue) => {
-    return new Date(alue.haittaAlkuPvm);
-  });
-  const minAreaStartDate = areaStartDates && min(areaStartDates);
-
-  const areaEndDates = hankeData[FORMFIELD.HANKEALUEET]?.map((alue) => {
-    return new Date(alue.haittaLoppuPvm);
-  });
-  const maxAreaEndDate = areaEndDates && max(areaEndDates);
+  const hankeAreas = hankeData[FORMFIELD.HANKEALUEET];
+  const minAreaStartDate = getAreasMinStartDate(hankeAreas);
+  const maxAreaEndDate = getAreasMaxEndDate(hankeAreas);
 
   return {
     ...hankeData,
