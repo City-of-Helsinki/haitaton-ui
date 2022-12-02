@@ -83,7 +83,7 @@ const HankeForm: React.FC<Props> = ({
 
   const {
     register,
-    formState: { errors, isDirty, isValid },
+    formState: { errors, isDirty },
     getValues,
     setValue,
     handleSubmit,
@@ -186,7 +186,6 @@ const HankeForm: React.FC<Props> = ({
               <FormActions
                 activeStepIndex={activeStepIndex}
                 totalSteps={formSteps.length}
-                isFormValid={isValid}
                 onPrevious={handlePrevious}
                 onNext={handleNext}
               >
@@ -210,7 +209,6 @@ const HankeForm: React.FC<Props> = ({
                 )}
                 {!lastStep && (
                   <Button
-                    disabled={!isValid}
                     variant="supplementary"
                     iconLeft={<IconSaveDiskette aria-hidden="true" />}
                     onClick={saveDraftAndQuit}
