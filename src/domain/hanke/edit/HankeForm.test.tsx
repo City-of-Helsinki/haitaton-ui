@@ -10,7 +10,7 @@ import hankeMock from '../../mocks/hankeDraft';
 
 afterEach(cleanup);
 
-jest.setTimeout(20000);
+jest.setTimeout(30000);
 
 const nimi = 'test kuoppa';
 const hankkeenKuvaus = 'Tässä on kuvaus';
@@ -91,12 +91,8 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByRole('checkbox', { name: 'Hanke on YKT-hanke' }));
 
-    expect(screen.getByRole('button', { name: 'Tallenna ja keskeytä' })).toBeDisabled();
-
     await user.click(screen.getByText('Hankkeen suunnitteluvaihe'));
     await user.click(screen.getByText('Yleis- tai hankesuunnittelu'));
-
-    expect(screen.getByRole('button', { name: 'Tallenna ja keskeytä' })).not.toBeDisabled();
   });
 
   test('Form should be populated correctly ', () => {
