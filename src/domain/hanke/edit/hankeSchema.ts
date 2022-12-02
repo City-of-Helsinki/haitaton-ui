@@ -80,7 +80,7 @@ export const hankeSchema = yup.object().shape({
       then: yup.mixed().oneOf($enum(HANKE_SUUNNITTELUVAIHE).getValues()).required(),
     }),
   [FORMFIELD.HANKEALUEET]: yup.array().ensure().of(hankeAlueSchema),
-  [FORMFIELD.OMISTAJAT]: yup.array().ensure().of(contactSchema),
+  [FORMFIELD.OMISTAJAT]: yup.array().length(1).ensure().of(contactSchema),
   [FORMFIELD.RAKENNUTTAJAT]: yup.array().ensure().of(contactSchema),
   [FORMFIELD.TOTEUTTAJAT]: yup.array().ensure().of(contactSchema),
   [FORMFIELD.MUUTTAHOT]: yup.array().ensure().of(otherPartySchema),
