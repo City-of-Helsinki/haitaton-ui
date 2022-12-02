@@ -26,6 +26,12 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(hankkeet));
   }),
 
+  rest.post(`${apiUrl}/hankkeet`, async (req, res, ctx) => {
+    const reqBody: HankeDataDraft = await req.json();
+    const hanke = await hankkeetDB.create(reqBody);
+    return res(ctx.status(200), ctx.json(hanke));
+  }),
+
   rest.put(`${apiUrl}/hankkeet/:hankeTunnus`, async (req, res, ctx) => {
     const { hankeTunnus } = req.params;
     const reqBody: HankeDataDraft = await req.json();
