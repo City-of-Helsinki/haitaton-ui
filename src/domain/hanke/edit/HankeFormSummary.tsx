@@ -148,6 +148,13 @@ const HankeFormSummary: React.FC<Props> = ({ formData }) => {
   const hankeAreas = formData[FORMFIELD.HANKEALUEET];
   const minAreaStartDate = getAreasMinStartDate(hankeAreas);
   const maxAreaEndDate = getAreasMaxEndDate(hankeAreas);
+  let startDate;
+  let endDate;
+  try {
+    startDate = minAreaStartDate && formatToFinnishDate(minAreaStartDate.toISOString());
+    endDate = maxAreaEndDate && formatToFinnishDate(maxAreaEndDate.toISOString());
+    // eslint-disable-next-line no-empty
+  } catch (error) {}
 
   const areasTotalSurfaceArea = formData.alueet?.reduce((surfaceArea, currArea) => {
     const geom = currArea?.feature?.getGeometry();
@@ -183,11 +190,11 @@ const HankeFormSummary: React.FC<Props> = ({ formData }) => {
         </SectionItemContent>
         <SectionItemTitle>{t('hankeForm:labels:alkuPvm')}</SectionItemTitle>
         <SectionItemContent>
-          <p>{minAreaStartDate && formatToFinnishDate(minAreaStartDate.toISOString())}</p>
+          <p>{startDate}</p>
         </SectionItemContent>
         <SectionItemTitle>{t('hankeForm:labels:loppuPvm')}</SectionItemTitle>
         <SectionItemContent>
-          <p>{maxAreaEndDate && formatToFinnishDate(maxAreaEndDate.toISOString())}</p>
+          <p>{endDate}</p>
         </SectionItemContent>
         <SectionItemTitle>{t('hankeForm:labels:vaihe')}</SectionItemTitle>
         <SectionItemContent>
