@@ -40,11 +40,9 @@ import { hankeIsBetweenDates } from '../../map/utils';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
 import HankeVaiheTag from '../vaiheTag/HankeVaiheTag';
-import Map from '../../../common/components/map/Map';
-import Kantakartta from '../../map/components/Layers/Kantakartta';
-import OverviewMapControl from '../../../common/components/map/controls/OverviewMapControl';
 import { hankeSchema } from '../edit/hankeSchema';
 import { Language } from '../../../common/types/language';
+import SingleHankeMap from '../../map/components/SingleHankeMap/SingleHankeMap';
 
 type CustomAccordionProps = {
   hanke: HankeData;
@@ -71,7 +69,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
   // Handle accordion state with useAccordion hook
   const { isOpen, buttonProps, contentProps } = useAccordion({ initiallyOpen: false });
   // Change icon based on accordion open state
-  const icon = isOpen ? <IconAngleDown size="m" /> : <IconAngleUp size="m" />;
+  const icon = isOpen ? <IconAngleUp size="m" /> : <IconAngleDown size="m" />;
 
   // Check if hanke has all the required fields filled
   const isHankeValid = useIsHankeValid(hanke);
@@ -192,6 +190,9 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
             <Text tag="h3" styleAs="h6" weight="bold" className={styles.infoHeader}>
               Hankkeen omistaja
             </Text>
+            <Text tag="p" styleAs="body-m" className={styles.infoContent}>
+              {hanke.omistajat[0]?.etunimi} {hanke.omistajat[0]?.sukunimi}
+            </Text>
           </div>
           <div className={styles.gridBasicInfo}>
             <Text tag="h3" styleAs="h6" weight="bold" className={styles.infoHeader}>
@@ -219,12 +220,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
                 <IconLinkExternal size="xs" />
               </div>
             </div>
-            <div className={styles.mapContainer}>
-              <Map zoom={9} mapClassName={styles.mapContainer__inner} showAttribution={false}>
-                <Kantakartta />
-                <OverviewMapControl className={styles.overviewMap} />
-              </Map>
-            </div>
+            <SingleHankeMap hanke={hanke} />
           </div>
         )}
 
