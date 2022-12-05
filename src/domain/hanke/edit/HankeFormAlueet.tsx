@@ -14,6 +14,7 @@ import { doAddressSearch, formatSurfaceArea } from '../../map/utils';
 import Haitat from './components/Haitat';
 import Text from '../../../common/components/text/Text';
 import { STYLES } from '../../map/utils/geometryStyle';
+import useSelectableTabs from '../../../common/hooks/useSelectableTabs';
 
 const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
   const { t } = useTranslation();
@@ -25,6 +26,8 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
   const [addressCoordinate, setAddressCoordinate] = useState<Coordinate | undefined>();
   const [highlightedFeature, setHighlightedFeature] = useState<Feature | undefined>();
   useFormPage();
+
+  const { tabRefs, setSelectendTabIndex } = useSelectableTabs(hankeAlueet.length);
 
   useEffect(() => {
     if (formData.tyomaaKatuosoite) {
@@ -42,6 +45,10 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
     };
   }, [highlightedFeature]);
 
+  useEffect(() => {
+    setSelectendTabIndex(hankeAlueet.length - 1);
+  }, [hankeAlueet.length, setSelectendTabIndex]);
+
   // Set highlight style for areas feature
   const higlightArea = useCallback((feature: Feature | undefined) => {
     setHighlightedFeature(feature);
@@ -56,13 +63,11 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
         append({ feature });
       }
 
-      if (hankeAlueet.length === 0) {
-        higlightArea(feature);
-      }
+      higlightArea(feature);
 
       setValue(FORMFIELD.GEOMETRIES_CHANGED, true, { shouldDirty: true });
     },
-    [setValue, append, higlightArea, hankeAlueet]
+    [setValue, append, higlightArea]
   );
 
   const handleChangeFeature = useCallback(() => {
@@ -112,7 +117,7 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
             const surfaceArea = hankeGeometry && `(${formatSurfaceArea(hankeGeometry)})`;
             return (
               <Tab key={item.id} onClick={() => higlightArea(hankeAlue?.feature)}>
-                <div>
+                <div ref={tabRefs[index]}>
                   {t('hankeForm:hankkeenAlueForm:area')} {index + 1} {surfaceArea}
                 </div>
               </Tab>
