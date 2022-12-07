@@ -469,95 +469,97 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
   return (
     <>
       <div className={styles.headerContainer}>
-        <Text
-          tag="h1"
-          data-testid="HankePortfolioPageHeader"
-          styleAs="h1"
-          spacingBottom="s"
-          weight="bold"
-        >
-          {t('hankePortfolio:pageHeader')}
-        </Text>
+        <div className={styles.maxWidthContainer}>
+          <Text
+            tag="h1"
+            data-testid="HankePortfolioPageHeader"
+            styleAs="h1"
+            spacingBottom="s"
+            weight="bold"
+          >
+            {t('hankePortfolio:pageHeader')}
+          </Text>
 
-        <div className={styles.filters}>
-          <TextInput
-            className={styles.hankeSearch}
-            id="searchHanke"
-            value={hankeSearchValue}
-            onChange={(e) => setHankeSearchValue(e.target.value)}
-            label={t('hankePortfolio:search')}
-          />
-          <div>
-            <div className={styles.dateRange}>
-              <DateRangeControl
-                startDate={hankeFilterStartDate}
-                endDate={hankeFilterEndDate}
-                updateStartDate={setHankeFilterStartDate}
-                updateEndDate={setHankeFilterEndDate}
-              />
+          <div className={styles.filters}>
+            <TextInput
+              className={styles.hankeSearch}
+              id="searchHanke"
+              value={hankeSearchValue}
+              onChange={(e) => setHankeSearchValue(e.target.value)}
+              label={t('hankePortfolio:search')}
+            />
+            <div>
+              <div className={styles.dateRange}>
+                <DateRangeControl
+                  startDate={hankeFilterStartDate}
+                  endDate={hankeFilterEndDate}
+                  updateStartDate={setHankeFilterStartDate}
+                  updateEndDate={setHankeFilterEndDate}
+                />
+              </div>
             </div>
+
+            <Select
+              className={styles.hankeVaihe}
+              multiselect
+              label={t('hankePortfolio:hankevaiheet')}
+              options={hankeVaiheOptions}
+              defaultValue={[]}
+              clearButtonAriaLabel={
+                // eslint-disable-next-line prefer-template
+                t('common:components:multiselect:clear') + ' ' + t('hankePortfolio:hankevaiheet')
+              }
+              // eslint-disable-next-line no-template-curly-in-string
+              selectedItemRemoveButtonAriaLabel="Remove {value}"
+              onChange={updateHankeVaihe}
+              value={
+                selectedHankeVaiheet.map((hankeVaihe) => ({
+                  label: t(`hanke:vaihe:${hankeVaihe}`),
+                  value: hankeVaihe,
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                })) as any
+              }
+            />
+
+            <Select
+              className={styles.hankeTyyppi}
+              multiselect
+              label={t('hankeForm:labels:tyomaaTyyppi')}
+              options={hankeTyyppiOptions}
+              defaultValue={[]}
+              clearButtonAriaLabel={
+                // eslint-disable-next-line prefer-template
+                t('common:components:multiselect:clear') + ' ' + t('hankeForm:labels:tyomaaTyyppi')
+              }
+              // eslint-disable-next-line no-template-curly-in-string
+              selectedItemRemoveButtonAriaLabel="Remove {value}"
+              onChange={updateHankeTyyppi}
+              value={
+                selectedHankeTyypit.map((hankeTyyppi) => ({
+                  label: t(`hanke:tyomaaTyyppi:${hankeTyyppi}`),
+                  value: hankeTyyppi,
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                })) as any
+              }
+            />
+            <p data-testid="numberOfFilteredRows" style={{ display: 'none' }}>
+              {rows.length}
+            </p>
           </div>
 
-          <Select
-            className={styles.hankeVaihe}
-            multiselect
-            label={t('hankePortfolio:hankevaiheet')}
-            options={hankeVaiheOptions}
-            defaultValue={[]}
-            clearButtonAriaLabel={
-              // eslint-disable-next-line prefer-template
-              t('common:components:multiselect:clear') + ' ' + t('hankePortfolio:hankevaiheet')
-            }
-            // eslint-disable-next-line no-template-curly-in-string
-            selectedItemRemoveButtonAriaLabel="Remove {value}"
-            onChange={updateHankeVaihe}
-            value={
-              selectedHankeVaiheet.map((hankeVaihe) => ({
-                label: t(`hanke:vaihe:${hankeVaihe}`),
-                value: hankeVaihe,
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              })) as any
-            }
-          />
-
-          <Select
-            className={styles.hankeTyyppi}
-            multiselect
-            label={t('hankeForm:labels:tyomaaTyyppi')}
-            options={hankeTyyppiOptions}
-            defaultValue={[]}
-            clearButtonAriaLabel={
-              // eslint-disable-next-line prefer-template
-              t('common:components:multiselect:clear') + ' ' + t('hankeForm:labels:tyomaaTyyppi')
-            }
-            // eslint-disable-next-line no-template-curly-in-string
-            selectedItemRemoveButtonAriaLabel="Remove {value}"
-            onChange={updateHankeTyyppi}
-            value={
-              selectedHankeTyypit.map((hankeTyyppi) => ({
-                label: t(`hanke:tyomaaTyyppi:${hankeTyyppi}`),
-                value: hankeTyyppi,
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              })) as any
-            }
-          />
-          <p data-testid="numberOfFilteredRows" style={{ display: 'none' }}>
-            {rows.length}
-          </p>
+          <button
+            className={clsx(styles.clearFiltersButton, {
+              [styles.clearFiltersButton__hidden]: !isFiltered,
+            })}
+            type="button"
+            onClick={resetFilters}
+          >
+            {t('hankePortfolio:clearFiltersButton')}
+          </button>
         </div>
-
-        <button
-          className={clsx(styles.clearFiltersButton, {
-            [styles.clearFiltersButton__hidden]: !isFiltered,
-          })}
-          type="button"
-          onClick={resetFilters}
-        >
-          {t('hankePortfolio:clearFiltersButton')}
-        </button>
       </div>
 
-      <div className={styles.contentContainer}>
+      <div className={clsx(styles.contentContainer, styles.maxWidthContainer)}>
         <div>
           <Text tag="p" styleAs="h3" weight="bold" spacingBottom="m">
             {t('hankePortfolio:searchResults', { count: rows.length })}
