@@ -9,12 +9,25 @@ import Geometry from 'ol/geom/Geometry';
 import { Box } from '@chakra-ui/react';
 import HankeDrawer from '../../map/components/HankeDrawer/HankeDrawer';
 import { useFormPage } from './hooks/useFormPage';
-import { FORMFIELD, FormProps } from './types';
+import { FORMFIELD, FormProps, HankeAlueFormState } from './types';
 import { doAddressSearch, formatSurfaceArea } from '../../map/utils';
 import Haitat from './components/Haitat';
 import Text from '../../../common/components/text/Text';
 import { STYLES } from '../../map/utils/geometryStyle';
 import useSelectableTabs from '../../../common/hooks/useSelectableTabs';
+
+function getEmptyArea(feature: Feature): Omit<HankeAlueFormState, 'id' | 'geometriat'> {
+  return {
+    feature,
+    haittaAlkuPvm: '',
+    haittaLoppuPvm: '',
+    meluHaitta: null,
+    polyHaitta: null,
+    tarinaHaitta: null,
+    kaistaHaitta: null,
+    kaistaPituusHaitta: null,
+  };
+}
 
 const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
   const { t } = useTranslation();
@@ -60,7 +73,7 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
     (feature: Feature<Geometry>) => {
       const geom = feature.getGeometry();
       if (geom) {
-        append({ feature });
+        append(getEmptyArea(feature));
       }
 
       higlightArea(feature);

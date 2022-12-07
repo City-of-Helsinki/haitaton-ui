@@ -6,6 +6,18 @@ import { useFieldArray, UseFieldArrayRemove } from 'react-hook-form';
 import Text from '../../../common/components/text/Text';
 import styles from './Contact.module.scss';
 import { CONTACT_FORMFIELD } from '../../hanke/edit/types';
+import { HankeSubContact } from '../../types/hanke';
+
+function getEmptySubContact(): HankeSubContact {
+  return {
+    nimi: '',
+    osoite: '',
+    postinumero: '',
+    postitoimipaikka: '',
+    email: '',
+    puhelinnumero: '',
+  };
+}
 
 interface Props<T> {
   contactType: T;
@@ -34,7 +46,7 @@ const Contact = <T extends unknown>({
   });
 
   function addSubContact() {
-    appendSubContact({});
+    appendSubContact(getEmptySubContact());
   }
 
   const renderSubContacts = subContactFields.length > 0 && renderSubContact;

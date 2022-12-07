@@ -9,6 +9,7 @@ import {
   CONTACT_TYYPPI,
   HANKE_CONTACT_TYPE,
   HankeContactTypeKey,
+  HankeMuuTaho,
 } from '../../types/hanke';
 import Text from '../../../common/components/text/Text';
 import { useFormPage } from './hooks/useFormPage';
@@ -38,6 +39,32 @@ const REQUIRED_CONTACT_FIELDS: Array<keyof HankeContact> = [
 
 function isRequiredContactField(field: keyof HankeContact) {
   return REQUIRED_CONTACT_FIELDS.includes(field);
+}
+
+function getEmptyContact(): Omit<HankeContact, 'id'> {
+  return {
+    nimi: '',
+    tyyppi: null,
+    ytunnusTaiHetu: '',
+    osoite: '',
+    postinumero: '',
+    postitoimipaikka: '',
+    email: '',
+    puhelinnumero: '',
+    alikontaktit: [],
+  };
+}
+
+function getEmptyOtherContact(): HankeMuuTaho {
+  return {
+    rooli: '',
+    nimi: '',
+    organisaatioNimi: '',
+    osasto: '',
+    email: '',
+    puhelinnumero: '',
+    alikontaktit: [],
+  };
 }
 
 const SubContactFields: React.FC<{ fieldPath: string; onRemove: () => void }> = ({
@@ -240,7 +267,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
         <Button
           variant="supplementary"
           iconLeft={<IconPlusCircle aria-hidden />}
-          onClick={() => appendRakennuttaja({})}
+          onClick={() => appendRakennuttaja(getEmptyContact())}
         >
           {t('form:yhteystiedot:titles:lisaaRakennuttaja')}
         </Button>
@@ -279,7 +306,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
         <Button
           variant="supplementary"
           iconLeft={<IconPlusCircle aria-hidden />}
-          onClick={() => appendToteuttaja({})}
+          onClick={() => appendToteuttaja(getEmptyContact())}
         >
           {t('form:yhteystiedot:titles:lisaaToteuttaja')}
         </Button>
@@ -345,7 +372,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
         <Button
           variant="supplementary"
           iconLeft={<IconPlusCircle aria-hidden />}
-          onClick={() => appendMuuTaho({})}
+          onClick={() => appendMuuTaho(getEmptyOtherContact())}
         >
           {t('form:yhteystiedot:titles:lisaaMuuTaho')}
         </Button>
