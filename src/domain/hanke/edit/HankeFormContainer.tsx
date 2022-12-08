@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from 'react-query';
 import { Flex } from '@chakra-ui/react';
 import { LoadingSpinner } from 'hds-react';
 import { useTranslation } from 'react-i18next';
@@ -11,20 +10,11 @@ import { convertHankeDataToFormState } from './utils';
 import ConfirmationDialog from '../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import api from '../../api/api';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
-
-const getHanke = async (hankeTunnus?: string) => {
-  const { data } = await api.get<HankeDataDraft>(`/hankkeet/${hankeTunnus}`);
-  return data;
-};
+import useHanke from '../hooks/useHanke';
 
 const deleteHanke = (hankeTunnus: string) => {
   return api.delete<HankeDataDraft>(`/hankkeet/${hankeTunnus}`);
 };
-
-const useHanke = (hankeTunnus?: string) =>
-  useQuery<HankeDataDraft>(['hanke', hankeTunnus], () => getHanke(hankeTunnus), {
-    enabled: !!hankeTunnus,
-  });
 
 type Props = {
   hankeTunnus?: string;

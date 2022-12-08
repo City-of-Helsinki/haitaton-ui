@@ -72,6 +72,13 @@
         "title": "Haitaton - Hankesalkku"
       }
     },
+    "HANKE": {
+      "path": "/hankesalkku/:hankeTunnus",
+      "headerLabel": "Hankkeet",
+      "meta": {
+        "title": "Haitaton - Hankesivu"
+      }
+    },
     "PUBLIC_HANKKEET": {
       "path": "/julkisethankkeet",
       "headerLabel": "Hankkeet yleisillä alueilla",
@@ -445,7 +452,8 @@
       "nimi": "Nimi",
       "osoite": "Osoite",
       "sposti": "Sähköposti",
-      "puhelin": "Puhelin"
+      "puhelin": "Puhelin",
+      "oikeudet": "Käyttöoikeutesi hankkeelle"
     }
   },
   "publicHankkeet": {
