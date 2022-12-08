@@ -483,6 +483,9 @@
     "buttons": {
       "edit": "Muokkaa hanketta",
       "delete": "Poista hanke",
+      "endHanke": "Päätä hanke",
+      "addApplication": "Lisää hakemus",
+      "editRights": "Hallitse käyttöoikeuksia",
       "toFirstPage": "Listan ensimmäiselle sivulle",
       "toPreviousPage": "Listan edelliselle sivulle",
       "toNextPage": "Listan seuraavalle sivulle",
