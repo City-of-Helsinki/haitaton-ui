@@ -8,9 +8,11 @@ import styles from './HankeView.module.scss';
 
 type Props = {
   hankeData?: HankeDataDraft;
+  onEditHanke: () => void;
+  onDeleteHanke: () => void;
 };
 
-const HankeView: React.FC<Props> = ({ hankeData }) => {
+const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) => {
   const { t } = useTranslation();
 
   return (
@@ -28,7 +30,12 @@ const HankeView: React.FC<Props> = ({ hankeData }) => {
           </Text>
 
           <div className={styles.buttonContainer}>
-            <Button variant="primary" iconLeft={<IconPen aria-hidden="true" />} theme="coat">
+            <Button
+              onClick={onEditHanke}
+              variant="primary"
+              iconLeft={<IconPen aria-hidden="true" />}
+              theme="coat"
+            >
               {t('hankeList:buttons:edit')}
             </Button>
             <Button variant="primary" iconLeft={<IconPlusCircle aria-hidden="true" />} theme="coat">
@@ -40,7 +47,11 @@ const HankeView: React.FC<Props> = ({ hankeData }) => {
             <Button variant="primary" iconLeft={<IconCross aria-hidden="true" />} theme="black">
               {t('hankeList:buttons:endHanke')}
             </Button>
-            <Button variant="danger" iconLeft={<IconTrash aria-hidden="true" />}>
+            <Button
+              onClick={onDeleteHanke}
+              variant="danger"
+              iconLeft={<IconTrash aria-hidden="true" />}
+            >
               {t('hankeList:buttons:delete')}
             </Button>
           </div>
