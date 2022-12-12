@@ -3,30 +3,23 @@ import { getInputErrorText } from './form';
 
 describe('form:utils:getInputErrorText', () => {
   test('it returns correct key ', () => {
-    const key = getInputErrorText(t, { foo: { message: { key: 'bar', values: {} } } }, 'foo');
+    const key = getInputErrorText(t, {
+      message: { key: 'bar', values: {} },
+      ref: { name: 'foo' },
+    });
     expect(key).toEqual('validations.bar');
   });
 
   test('it returns "default" translation when key exists but message is not correctly formatted', () => {
-    const key = getInputErrorText(
-      t,
-      { foo: { message: 'This is like YUP default message' } },
-      'foo'
-    );
+    const key = getInputErrorText(t, {
+      message: 'This is like YUP default message',
+      ref: { name: 'foo' },
+    });
     expect(key).toEqual('Kentän arvo on virheellinen');
   });
 
-  test('it returns undefined when key not found', () => {
-    const key = getInputErrorText(
-      t,
-      { shouldNotFound: { message: { key: 'bar', values: {} } } },
-      'foo'
-    );
-    expect(key).toEqual(undefined);
-  });
-
-  test('it return undefined when errors is null', () => {
-    const key = getInputErrorText(t, null, 'foo');
+  test('it return undefined when error is undefined', () => {
+    const key = getInputErrorText(t, undefined);
     expect(key).toEqual(undefined);
   });
 });

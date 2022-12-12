@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import styles from './FormActions.module.scss';
 
 interface Props {
-  isFormValid?: boolean;
   activeStepIndex: number;
   totalSteps: number;
   onPrevious: () => void;
@@ -13,7 +12,6 @@ interface Props {
 
 const FormActions: React.FC<Props> = ({
   children,
-  isFormValid,
   activeStepIndex,
   totalSteps,
   onPrevious,
@@ -32,12 +30,7 @@ const FormActions: React.FC<Props> = ({
       )}
       {children}
       {!lastStep && (
-        <Button
-          iconRight={<IconArrowRight />}
-          variant="secondary"
-          onClick={onNext}
-          disabled={!isFormValid}
-        >
+        <Button iconRight={<IconArrowRight />} variant="secondary" onClick={onNext}>
           {t('hankeForm:nextButton')}
         </Button>
       )}

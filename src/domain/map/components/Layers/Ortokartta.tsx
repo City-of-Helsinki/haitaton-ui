@@ -28,4 +28,4 @@ const Ortokartta = () => (
   />
 );
 
-export default Ortokartta;
+export default React.memo(Ortokartta);

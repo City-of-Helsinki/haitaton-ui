@@ -1,8 +1,10 @@
 import GeoJSON from 'ol/format/GeoJSON';
 import axios from 'axios';
+import Geometry from 'ol/geom/Geometry';
+import { getArea } from 'ol/sphere';
 import { HankeGeoJSON } from '../../common/types/hanke';
 import { GeometryData, HankeFilters } from './types';
-import { HankeData } from '../types/hanke';
+import { HankeData, HankeDataDraft } from '../types/hanke';
 
 export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJSON => {
   const format = new GeoJSON();
@@ -39,7 +41,8 @@ export const formatFeaturesToAlluGeoJSON = (features: GeometryData): unknown => 
   };
 };
 
-export const hankeHasGeometry = (hanke: HankeData) => hanke.geometriat;
+export const hankeHasGeometry = (hanke: HankeData | HankeDataDraft) =>
+  hanke.alueet?.some((alue) => Boolean(alue.geometriat));
 
 export const hankeIsBetweenDates = ({ endDate, startDate }: HankeFilters) => ({
   startDate: comparedStartDate,
@@ -132,4 +135,14 @@ export function doAddressSearch(searchValue: string, abortController?: AbortCont
   }
 
   return axios.get(url, { signal: abortController?.signal });
+}
+
+/**
+ * Calculate and format a surface area (pinta-ala) for a given geometry
+ * @param geometry Openlayers Geometry object
+ * @returns surface area in square metres rounded to the nearest integer as string (e.g. 200 m²)
+ */
+export function formatSurfaceArea(geometry: Geometry) {
+  const area = getArea(geometry);
+  return `${Math.round(area)} m²`;
 }

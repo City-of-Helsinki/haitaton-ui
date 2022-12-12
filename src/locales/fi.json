@@ -8,6 +8,8 @@
   },
   "common": {
     "increment": "Lisää",
+    "yes": "Kyllä",
+    "no": "Ei",
     "confirmationDialog": {
       "interruptDialog": {
         "titleText": "Olet poistumassa lomakkeelta",
@@ -55,7 +57,63 @@
       "dateMin": "Ensimmäinen mahdollinen päivä on {{min}}",
       "dateMax": "Viimeinen mahdollinen päivä on {{max}}"
     },
-    "requiredInstruction": "Kaikki tähdellä * merkityt kentät ovat pakollisia."
+    "labels": {
+      "pintaAla": "Pinta-ala"
+    },
+    "requiredInstruction": "Kaikki tähdellä * merkityt kentät ovat pakollisia.",
+    "yhteystiedot": {
+      "header": "Yhteystiedot",
+      "instructions": "Hankkeelle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hankkeeseeen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hanketta ja luomaan hankkeelle hakemuksia.",
+      "titles": {
+        "omistaja": "Hankkeen omistaja",
+        "rakennuttajat": "Rakennuttaja",
+        "toteuttajat": "Toteuttaja",
+        "muut": "Muu taho",
+        "lisaaRakennuttajia": "Lisää rakennuttajia",
+        "lisaaRakennuttaja": "Lisää rakennuttaja",
+        "lisaaToteuttajia": "Lisää toteuttajia",
+        "lisaaToteuttaja": "Lisää toteuttaja",
+        "lisaaMuitaTahoja": "Lisää muita tahoja",
+        "lisaaMuuTaho": "Lisää muu taho",
+        "subContact": "Yhteyshenkilö",
+        "subContactInformation": "Yhteyshenkilön tiedot"
+      },
+      "labels": {
+        "tyyppi": "Tyyppi",
+        "nimi": "Nimi",
+        "ytunnusTaiHetu": "Y-tunnus tai henkilötunnus",
+        "osoite": "Katuosoite",
+        "postinumero": "Postinumero",
+        "postitoimipaikka": "Postitoimipaikka",
+        "email": "Sähköposti",
+        "puhelinnumero": "Puhelinnumero",
+        "rooli": "Rooli",
+        "osasto": "Osasto",
+        "organisaatioNimi": "Organisaatio",
+        "rakennuttaja": "Rakennuttaja",
+        "erillinenYhteyshenkilo": "Erillinen yhteyshenkilö"
+      },
+      "placeholders": {
+        "otherPartyRole": "Isännöitsijä, konsultti..."
+      },
+      "helperTexts": {
+        "otherPartyRole": "Tahon rooli hankkeessa"
+      },
+      "contactType": {
+        "YKSITYISHENKILO": "Yksityishenkilö",
+        "YRITYS": "Yritys",
+        "YHTEISO": "Yhteisö"
+      },
+      "buttons": {
+        "addSubContact": "Lisää yhteyshenkilö",
+        "removeSubContact": "Poista yhteyshenkilö",
+        "remove": {
+          "rakennuttajat": "Poista rakennuttaja",
+          "toteuttajat": "Poista toteuttaja",
+          "muut": "Poista muu taho"
+        }
+      }
+    }
   },
   "routes": {
     "HOME": {
@@ -257,8 +315,6 @@
     "cancelButton": "Peru hanke",
     "nextButton": "Seuraava",
     "previousButton": "Edellinen",
-    "addContactButton": "Lisää yhteyshenkilö",
-    "removeContactButton": "Poista yhteyshenkilö",
     "insertFieldError": "Syötä kenttä",
     "savingSuccessHeader": "Luonnos tallennettu",
     "savingSuccessText": "Luonnos on tallennettu Hankelistalle",
@@ -269,17 +325,17 @@
     "labels": {
       "hankeTunnus": "Hankkeen tunnus",
       "nimi": "Hankkeen nimi",
-      "vaihe": "Hankkeen Vaihe",
+      "vaihe": "Hankkeen vaihe",
       "kuvaus": "Hankkeen kuvaus",
       "suunnitteluVaihe": "Hankkeen suunnitteluvaihe",
       "alkuPvm": "Hankkeen alkupäivä",
       "loppuPvm": "Hankkeen loppupäivä",
-      "tyomaaTyyppi": "Työmaan tyyppi",
-      "tyomaaKoko": "Työmaan koko",
-      "haittaAlkuPvm": "Haitan alkupäivämäärä",
-      "haittaLoppuPvm": "Haitan loppupäivämäärä",
-      "kaistaHaitta": "Kaistahaitta",
-      "kaistaPituusHaitta": "Kaistan pituushaitta",
+      "tyomaaTyyppi": "Työn tyyppi",
+      "tyomaaKoko": "Hankkeen koko",
+      "haittaAlkuPvm": "Haittojen alkupäivämäärä",
+      "haittaLoppuPvm": "Haittojen loppupäivämäärä",
+      "kaistaHaitta": "Autoliikenteen kaistahaitta",
+      "kaistaPituusHaitta": "Kaistahaittojen pituus",
       "meluHaitta": "Meluhaitta",
       "polyHaitta": "Pölyhaitta",
       "tarinaHaitta": "Tärinähaitta",
@@ -293,11 +349,6 @@
       "organisaatio": "Organisaatio",
       "omaOrganisaatio": "Lisää oma organisaatio",
       "insertOmaOrganisaatio": "Syötä oma organisaatio"
-    },
-    "headers": {
-      "arvioijat": "Arvioijat",
-      "omistajat": "Omistajat",
-      "toteuttajat": "Toteuttajat"
     },
     "toolTips": {
       "tipOpenLabel": "Avaa ohje",
@@ -323,16 +374,22 @@
     },
     "hankkeenAlueForm": {
       "header": "Alueet",
-      "instructions": "Hankkeelle voi piirttää useita geometrioita. Geometria alueet vaikuttavat hankkeen liikennehaittaindekseihin.\nPiirtotyökalut löytyvät karttanäkymän vasemmasta alalaidasta. Kynätyökalulla voi piirtää monikulmaisia geometrioita klikkaamalla kohtaan, johon haluat kulman. Neliötyökalulla saat muodostettua neliömäisiä alueita klikkaamalla ensin kartalle ja liikuttamalla hiirtä haluamaasi suuntaan. Uudelleenklikkaus \"sulkee\" neliön piirron.\nGeometriaa voi muokata \"tarttumalla\" geometrian reunasta ja vetämällä. Myös neliömäistä geometriaa voi muokata reunasta tarttumalla.\nVoit poistaa geometrian valitsemalla ensin geometrian klikkaamalla sitä, jolloin vasemman alalaidan piirtotyökaluihin ilmestyy roskakori ikoni, jota klikkaamalla geometrian voi poistaa."
-    },
-    "hankkeenYhteystiedotForm": {
-      "header": "Yhteystiedot"
+      "subHeader": "Hanke-alueet",
+      "area": "Alue",
+      "instructions": "Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 1-5, 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen tärkeimmillä reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein.",
+      "haitatHeader": "Alueen haitta-arviot",
+      "haitatInstructions": "Anna arvio suurimmista mahdollisista vaikutuksista hankealueella.",
+      "removeAreaButton": "Poista alue"
     },
     "tyomaanTiedotForm": {
       "header": "Hankkeen lisätiedot"
     },
     "hankkeenHaitatForm": {
       "header": "Haitat"
+    },
+    "hankkeenYhteenvetoForm": {
+      "header": "Yhteenveto",
+      "instructions": "Tarkista antamasi tiedot ja tallenna hanke tai tallenna ja siirry lisäämään hakemuksia."
     },
     "finishedForm": {
       "header": "Lomake on lähetetty onnistuneesti"
