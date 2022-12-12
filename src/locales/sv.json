@@ -430,8 +430,12 @@
     "hankkeentyyppi": "SV: Hankkeen tyypit",
     "hankkeentyyppiHelperText": "SV: Valitse hankkeen työmaan tyyppi tai tyypit",
     "tabit": {
-      "perustiedot": "SV: Perustiedot",
-      "yhteystiedot": "SV: Yhteystiedot"
+      "perustiedot": "Perustiedot",
+      "alueet": "Alueet",
+      "haittojenHallinta": "Haittojen hallinta",
+      "yhteystiedot": "Yhteystiedot",
+      "liitteet": "Liitteet",
+      "hakemukset": "Hakemukset"
     },
     "labels": {
       "kuvaus": "SV: Hankkeen kuvaus",

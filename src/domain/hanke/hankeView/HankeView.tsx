@@ -1,5 +1,16 @@
 import React from 'react';
-import { Button, IconCross, IconPen, IconPlusCircle, IconTrash, IconUser } from 'hds-react';
+import {
+  Button,
+  IconCross,
+  IconPen,
+  IconPlusCircle,
+  IconTrash,
+  IconUser,
+  Tab,
+  TabList,
+  TabPanel,
+  Tabs,
+} from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import Container from '../../../common/components/container/Container';
 import Text from '../../../common/components/text/Text';
@@ -58,7 +69,29 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
         </Container>
       </header>
 
-      <Container className={styles.contentContainer}>Content</Container>
+      <div className={styles.contentContainerOut}>
+        <Container className={styles.contentContainerIn}>
+          <div className={styles.mainContent}>
+            <Tabs>
+              <TabList className={styles.tabList}>
+                <Tab>{t('hankePortfolio:tabit:perustiedot')}</Tab>
+                <Tab>{t('hankePortfolio:tabit:alueet')}</Tab>
+                <Tab>{t('hankePortfolio:tabit:haittojenHallinta')}</Tab>
+                <Tab>{t('hankePortfolio:tabit:yhteystiedot')}</Tab>
+                <Tab>{t('hankePortfolio:tabit:hakemukset')}</Tab>
+              </TabList>
+              <TabPanel>Perustiedot</TabPanel>
+              <TabPanel>Alueet</TabPanel>
+              <TabPanel>Haittojen hallinta</TabPanel>
+              <TabPanel>Yhteystiedot</TabPanel>
+              <TabPanel>Hakemukset</TabPanel>
+            </Tabs>
+          </div>
+          <div className={styles.sideBar}>
+            <p>Side content</p>
+          </div>
+        </Container>
+      </div>
     </article>
   );
 };

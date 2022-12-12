@@ -432,7 +432,11 @@
     "hankkeentyyppiHelperText": "Valitse hankkeen työmaan tyyppi tai tyypit",
     "tabit": {
       "perustiedot": "Perustiedot",
-      "yhteystiedot": "Yhteystiedot"
+      "alueet": "Alueet",
+      "haittojenHallinta": "Haittojen hallinta",
+      "yhteystiedot": "Yhteystiedot",
+      "liitteet": "Liitteet",
+      "hakemukset": "Hakemukset"
     },
     "labels": {
       "kuvaus": "Hankkeen kuvaus",
