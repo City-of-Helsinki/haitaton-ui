@@ -8,6 +8,6 @@
   margin-bottom: var(--spacing-2-xl);
 
   @include respond-above(m) {
-    grid-template-columns: 1fr 4fr;
+    grid-template-columns: 1.1fr 4fr;
   }
 }

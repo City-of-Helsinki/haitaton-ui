@@ -67,8 +67,11 @@
       "titles": {
         "omistaja": "SV:Hankkeen omistaja",
         "rakennuttajat": "SV:Rakennuttaja",
+        "rakennuttajatPlural": "Rakennuttajat",
         "toteuttajat": "SV:Toteuttaja",
+        "toteuttajatPlural": "Toteuttajat",
         "muut": "SV:Muu taho",
+        "muutPlural": "Muut tahot",
         "lisaaRakennuttajia": "SV:Lisää rakennuttajia",
         "lisaaRakennuttaja": "SV:Lisää rakennuttaja",
         "lisaaToteuttajia": "SV:Lisää toteuttajia",

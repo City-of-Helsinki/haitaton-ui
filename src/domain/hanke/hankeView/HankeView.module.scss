@@ -27,13 +27,14 @@
 
     @include respond-above(l) {
       display: grid;
-      grid-template-columns: 67% 34%;
+      grid-template-columns: 68% 33%;
       padding-right: 0;
     }
 
     .mainContent {
       padding-top: var(--spacing-s);
       padding-bottom: var(--spacing-s);
+      padding-right: var(--spacing-xs);
     }
 
     .sideBar {
