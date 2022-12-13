@@ -5,7 +5,7 @@ import { max, min } from 'date-fns';
 import { getArea } from 'ol/sphere';
 import { HankeDataDraft, HankeContact, HankeMuuTaho, HankeAlue } from '../../types/hanke';
 import { FORMFIELD, HankeDataFormState } from './types';
-import { formatFeaturesToHankeGeoJSON } from '../../map/utils';
+import { formatFeaturesToHankeGeoJSON, getFeatureFromHankeGeometry } from '../../map/utils';
 
 export function getAreasMinStartDate(areas: HankeAlue[] | undefined) {
   const areaStartDates = areas?.map((alue) => {
@@ -90,9 +90,7 @@ export const convertHankeDataToFormState = (
 export function calculateTotalSurfaceArea(areas?: HankeAlue[]) {
   try {
     const areasTotalSurfaceArea = areas?.reduce((surfaceArea, currArea) => {
-      const feature = new Feature(
-        new Polygon(currArea.geometriat?.featureCollection.features[0]?.geometry.coordinates)
-      );
+      const feature = getFeatureFromHankeGeometry(currArea.geometriat);
       const geom = feature.getGeometry();
       const currAreaSurface = geom && Math.round(getArea(geom));
       return currAreaSurface ? surfaceArea + currAreaSurface : surfaceArea;

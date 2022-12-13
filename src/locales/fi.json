@@ -304,6 +304,13 @@
       "YKSI": "Satunnainen haitta",
       "KAKSI": "Lyhytaikainen toistuva haitta",
       "KOLME": "Pitkäkestoinen jatkuva haitta"
+    },
+    "alue": {
+      "title": "Hankealue {{index}}",
+      "duration": "Hankealueen kesto",
+      "surfaceArea": "Piirroksen pinta-ala",
+      "liikenneverkollinenHaitta": "Hankealueen liikenneverkollinen haitta",
+      "haittaMaarittelyt": "Hankealueen omat haittamäärittelyt"
     }
   },
   "hankeForm": {

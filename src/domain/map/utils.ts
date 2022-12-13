@@ -2,9 +2,11 @@ import GeoJSON from 'ol/format/GeoJSON';
 import axios from 'axios';
 import Geometry from 'ol/geom/Geometry';
 import { getArea } from 'ol/sphere';
+import { Feature } from 'ol';
+import Polygon from 'ol/geom/Polygon';
 import { HankeGeoJSON } from '../../common/types/hanke';
 import { GeometryData, HankeFilters } from './types';
-import { HankeData, HankeDataDraft } from '../types/hanke';
+import { HankeData, HankeDataDraft, HankeGeometria } from '../types/hanke';
 
 export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJSON => {
   const format = new GeoJSON();
@@ -139,10 +141,27 @@ export function doAddressSearch(searchValue: string, abortController?: AbortCont
 
 /**
  * Calculate and format a surface area (pinta-ala) for a given geometry
- * @param geometry Openlayers Geometry object
+ * @param geometry OpenLayers Geometry object
  * @returns surface area in square metres rounded to the nearest integer as string (e.g. 200 m²)
  */
-export function formatSurfaceArea(geometry: Geometry) {
+export function formatSurfaceArea(geometry: Geometry | undefined) {
+  if (!geometry) {
+    return null;
+  }
+
   const area = getArea(geometry);
   return `${Math.round(area)} m²`;
+}
+
+/**
+ * Get OpenLayers Feature from Hanke geometry
+ * @param geometry Hanke area geometry
+ * @returns OpenLayers Feature
+ */
+export function getFeatureFromHankeGeometry(geometry: HankeGeometria) {
+  const feature = new Feature(
+    new Polygon(geometry.featureCollection.features[0]?.geometry.coordinates)
+  );
+
+  return feature;
 }

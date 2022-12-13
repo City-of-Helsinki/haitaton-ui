@@ -16,16 +16,28 @@ type IndexProps = {
   index: number | undefined;
   testId: string;
   loading?: boolean;
+  mainIndex?: boolean;
 };
 
-const IndexSection: React.FC<IndexProps> = ({ title, content, index, testId, loading }) => (
+const IndexSection: React.FC<IndexProps> = ({
+  title,
+  content,
+  index,
+  testId,
+  loading,
+  mainIndex,
+}) => (
   <div className={styles.indexContainer}>
     <div className={styles.indexContainer__titlesContainer}>
-      <Text tag="h2" styleAs="h6" weight="bold">
+      <Text
+        tag="h3"
+        styleAs={mainIndex ? 'body-m' : 'body-s'}
+        weight={mainIndex ? 'bold' : 'normal'}
+      >
         {title}
       </Text>
       {content && (
-        <Text tag="p" styleAs="body-m" data-testid={`${testId}-content`}>
+        <Text tag="p" styleAs="body-s" data-testid={`${testId}-content`}>
           {content}
         </Text>
       )}
@@ -33,14 +45,22 @@ const IndexSection: React.FC<IndexProps> = ({ title, content, index, testId, loa
     <div className={styles.indexContainer__number}>
       {loading && <LoadingSpinner small />}
       {!loading && (
-        <div
-          style={{
-            backgroundColor: getColorByStatus(getStatusByIndex(index)),
-            color: getStatusByIndex(index) === LIIKENNEHAITTA_STATUS.YELLOW ? 'black' : 'white',
-          }}
-        >
-          <div data-testid={testId}>{index === undefined ? '-' : index}</div>
-        </div>
+        <>
+          {!mainIndex && (
+            <Text tag="p" styleAs="body-s" className={styles.indexContainer__number__description}>
+              Haittaindeksi
+            </Text>
+          )}
+          <div
+            style={{
+              backgroundColor: getColorByStatus(getStatusByIndex(index)),
+              color: getStatusByIndex(index) === LIIKENNEHAITTA_STATUS.YELLOW ? 'black' : 'white',
+              width: '38px',
+            }}
+          >
+            <div data-testid={testId}>{index === undefined ? '-' : index}</div>
+          </div>
+        </>
       )}
     </div>
   </div>
@@ -56,22 +76,31 @@ const getDetourNeedByIndex = (index: IndexProps['index'] | undefined) => {
 
 type Props = {
   hankeIndexData: HankeIndexData | null | undefined;
+  indexTitle?: string;
   displayTooltip?: boolean;
   loading?: boolean;
+  containerClassName?: string;
 };
 
-const HankeIndexes: React.FC<Props> = ({ hankeIndexData, displayTooltip, loading }) => {
+const HankeIndexes: React.FC<Props> = ({
+  hankeIndexData,
+  indexTitle,
+  displayTooltip,
+  loading,
+  containerClassName,
+}) => {
   const { t } = useTranslation();
+  const hankeIndexTitle = indexTitle || t('hankeIndexes:haittaindeksit');
   const liikennehaittaIndeksi = hankeIndexData?.liikennehaittaIndeksi.indeksi;
   const pyorailyIndeksi = hankeIndexData?.pyorailyIndeksi;
   const joukkoliikenneIndeksi = hankeIndexData?.joukkoliikenneIndeksi;
   const perusIndeksi = hankeIndexData?.perusIndeksi;
 
   return (
-    <div>
+    <div className={containerClassName}>
       <div className={styles.indexTitle}>
         <Text tag="h2" styleAs="h4" weight="bold">
-          {t('hankeIndexes:haittaindeksit')}
+          {hankeIndexTitle}
         </Text>
         {displayTooltip && (
           <Tooltip placement="right" className={styles.indexTooltip}>
@@ -85,6 +114,7 @@ const HankeIndexes: React.FC<Props> = ({ hankeIndexData, displayTooltip, loading
           index={liikennehaittaIndeksi}
           testId="test-liikennehaittaIndeksi"
           loading={loading}
+          mainIndex
         />
 
         <IndexSection
