@@ -89,7 +89,7 @@ const HankeList: React.FC<Props> = ({ projectsData }) => {
               headerName: t('hankeList:tableHeader:step'),
               key: 'vaihe',
               isSortable: true,
-              transform: (args: HankeDataDraft) => <HankeVaiheTag tagName={args.vaihe} />,
+              transform: (args: HankeDataDraft) => <HankeVaiheTag tagName={args.vaihe} uppercase />,
             },
             {
               headerName: t('hankeList:tableHeader:startDate'),

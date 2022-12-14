@@ -16,6 +16,7 @@ import useUser from '../../domain/auth/useUser';
 import PrivateRoute from './PrivateRoute';
 import MapAndListPage from '../../pages/MapAndListPage';
 import HankePage from '../../pages/HankePage';
+import FullPageMapPage from '../../pages/FullPageMapPage';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
@@ -46,6 +47,7 @@ const LocaleRoutes = () => {
         path={t('routes:JOHTOSELVITYSHAKEMUS:path')}
         element={<PrivateRoute element={<Johtoselvitys />} />}
       />
+      <Route path={t('routes:FULL_PAGE_MAP:path')} element={<FullPageMapPage />} />
       <Route path={t('routes:PUBLIC_HANKKEET:path')} element={<MapAndListPage />}>
         <Route element={<MapPage />} index />
         <Route path={t('routes:PUBLIC_HANKKEET_MAP:path')} element={<MapPage />} />

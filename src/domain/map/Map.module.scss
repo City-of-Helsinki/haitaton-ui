@@ -6,6 +6,8 @@
   position: relative;
   flex-grow: 1;
   margin-bottom: var(--spacing-xl);
+  overflow: hidden;
+  min-height: 300px;
 
   &__inner {
     position: absolute;
