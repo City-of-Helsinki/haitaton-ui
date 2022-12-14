@@ -411,6 +411,7 @@
     "editHanke": "Muokkaa hankkeen tietoja"
   },
   "hankeIndexes": {
+    "haittaindeksi": "Haittaindeksi",
     "haittaindeksit": "Haittaindeksit",
     "haittaindexTooltip": "Haittaindeksit lasketaan hankkeen alueen mukaan. Indeksit päivittyvät, kun tallennat lomakkeen tiedot tai siirryt seuraavalle sivulle.",
     "liikennehaittaindeksi": "Liikennehaittaindeksi",

@@ -86,7 +86,7 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
           <SidebarSection title={t('hankeForm:labels.kuvaus')} content={hanke.kuvaus} />
           <hr />
 
-          <HankeIndexes hankeIndexData={hanke.tormaystarkasteluTulos} />
+          <HankeIndexes hankeIndexData={hanke.tormaystarkasteluTulos} small />
         </DrawerBody>
       </DrawerContent>
     </Drawer>

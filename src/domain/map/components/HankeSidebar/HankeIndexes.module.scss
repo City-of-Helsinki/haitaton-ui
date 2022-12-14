@@ -1,3 +1,5 @@
+@import 'layout.scss';
+
 .indexContainer {
   display: flex;
   align-items: center;
@@ -11,14 +13,25 @@
   }
 
   &__number {
-    width: 100px;
     text-align: center;
     flex-direction: column;
     display: flex;
     align-items: center;
+    min-width: auto;
+
+    &--minWidth {
+      @include respond-above(s) {
+        min-width: 90px;
+      }
+    }
 
     &__description {
       color: var(--color-black-70);
+      display: none;
+
+      @include respond-above(s) {
+        display: block;
+      }
     }
   }
 }

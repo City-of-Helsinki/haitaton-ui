@@ -413,6 +413,7 @@
     "editHanke": "SV: Muokkaa hankkeen tietoja"
   },
   "hankeIndexes": {
+    "haittaindeksi": "Haittaindeksi",
     "haittaindeksit": "SV:Haittaindeksit",
     "haittaindexTooltip": "SV:Haittaindeksit lasketaan hankkeen alueen mukaan. Indeksit päivittyvät, kun tallennat lomakkeen tiedot tai siirryt seuraavalle sivulle.",
     "liikennehaittaindeksi": "SV: Liikennehaittaindeksi",
