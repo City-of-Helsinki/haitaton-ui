@@ -158,8 +158,8 @@ const HankeFormSummary: React.FC<Props> = ({ formData }) => {
 
   const areasTotalSurfaceArea = formData.alueet?.reduce((surfaceArea, currArea) => {
     const geom = currArea?.feature?.getGeometry();
-    const currAreaSurface = geom && Math.round(getArea(geom));
-    return currAreaSurface ? surfaceArea + currAreaSurface : surfaceArea;
+    const currAreaSurface: number = geom ? Math.round(getArea(geom)) : 0;
+    return surfaceArea + currAreaSurface;
   }, 0);
 
   return (
