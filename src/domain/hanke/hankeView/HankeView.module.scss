@@ -27,7 +27,7 @@
 
     @include respond-above(l) {
       display: grid;
-      grid-template-columns: 68% 33%;
+      grid-template-columns: 67% 34%;
       padding-right: 0;
     }
 
@@ -39,7 +39,7 @@
 
     .sideBar {
       background-color: var(--color-black-5);
-      padding: var(--spacing-l);
+      padding: var(--spacing-m);
     }
   }
 }

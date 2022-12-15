@@ -2,19 +2,18 @@ import React, { useRef } from 'react';
 import VectorSource from 'ol/source/Vector';
 import Map from '../../../../common/components/map/Map';
 import Kantakartta from '../Layers/Kantakartta';
-import OverviewMapControl from '../../../../common/components/map/controls/OverviewMapControl';
 import { HankeData } from '../../../types/hanke';
-import styles from './SingleHankeMap.module.scss';
 import VectorLayer from '../../../../common/components/map/layers/VectorLayer';
 import { styleFunction } from '../../utils/geometryStyle';
 import FitSource from '../interations/FitSource';
 import useHankeFeatures from '../../hooks/useHankeFeatures';
+import styles from './OwnHankeMap.module.scss';
 
 type Props = {
   hanke: HankeData;
 };
 
-const SingleHankeMap: React.FC<Props> = ({ hanke }) => {
+const OwnHankeMap: React.FC<Props> = ({ hanke }) => {
   const hankeSource = useRef(new VectorSource());
   useHankeFeatures(hankeSource.current, [hanke]);
 
@@ -29,10 +28,9 @@ const SingleHankeMap: React.FC<Props> = ({ hanke }) => {
           style={styleFunction}
         />
         <FitSource source={hankeSource.current} />
-        <OverviewMapControl className={styles.overviewMap} />
       </Map>
     </div>
   );
 };
 
-export default SingleHankeMap;
+export default OwnHankeMap;

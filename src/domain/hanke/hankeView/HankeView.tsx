@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { Flex } from '@chakra-ui/react';
 import Container from '../../../common/components/container/Container';
 import Text from '../../../common/components/text/Text';
-import { HankeAlue, HankeDataDraft, HankeIndexData } from '../../types/hanke';
+import { HankeAlue, HankeData, HankeIndexData } from '../../types/hanke';
 import styles from './HankeView.module.scss';
 import BasicInformationSummary from '../edit/components/BasicInformationSummary';
 import {
@@ -32,6 +32,8 @@ import { FORMFIELD } from '../edit/types';
 import useLocale from '../../../common/hooks/useLocale';
 import { formatToFinnishDate } from '../../../common/utils/date';
 import { formatSurfaceArea, getFeatureFromHankeGeometry } from '../../map/utils';
+import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
+import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
 
 type AreaProps = {
   area: HankeAlue;
@@ -97,7 +99,7 @@ const HankeAreaInfo: React.FC<AreaProps> = ({ area, hankeIndexData, index }) => 
 };
 
 type Props = {
-  hankeData?: HankeDataDraft;
+  hankeData?: HankeData;
   onEditHanke: () => void;
   onDeleteHanke: () => void;
 };
@@ -224,7 +226,8 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
             </Tabs>
           </div>
           <div className={styles.sideBar}>
-            <p>Side content</p>
+            <OwnHankeMapHeader hankeTunnus={hankeData.hankeTunnus} />
+            <OwnHankeMap hanke={hankeData} />
           </div>
         </Container>
       </div>
