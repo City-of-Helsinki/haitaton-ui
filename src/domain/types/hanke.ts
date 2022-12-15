@@ -107,34 +107,69 @@ export type HANKE_SAVETYPE_KEY = keyof typeof HANKE_SAVETYPE;
 
 export enum HANKE_CONTACT_TYPE {
   OMISTAJAT = 'omistajat',
-  ARVIOIJAT = 'arvioijat',
+  RAKENNUTTAJAT = 'rakennuttajat',
   TOTEUTTAJAT = 'toteuttajat',
+  MUUTTAHOT = 'muut',
 }
-export type HankeContactKey =
+export type HankeContactTypeKey =
   | HANKE_CONTACT_TYPE.OMISTAJAT
-  | HANKE_CONTACT_TYPE.ARVIOIJAT
-  | HANKE_CONTACT_TYPE.TOTEUTTAJAT;
+  | HANKE_CONTACT_TYPE.RAKENNUTTAJAT
+  | HANKE_CONTACT_TYPE.TOTEUTTAJAT
+  | HANKE_CONTACT_TYPE.MUUTTAHOT;
 
-export type HankeContact = {
-  id: number | null;
-  sukunimi: string;
-  etunimi: string;
+export interface HankeSubContact {
+  nimi: string;
+  osoite?: string;
+  postinumero?: string;
+  postitoimipaikka?: string;
   email: string;
   puhelinnumero: string;
-  organisaatioId: number | null;
+}
+
+export interface HankeContact extends HankeSubContact {
+  id: number | null;
+  tyyppi: keyof typeof CONTACT_TYYPPI | null;
+  ytunnusTaiHetu: string;
+  alikontaktit?: HankeSubContact[];
+}
+
+export type HankeMuuTaho = {
+  rooli: string;
+  nimi: string;
   organisaatioNimi: string;
   osasto: string;
+  email: string;
+  puhelinnumero?: string;
+  alikontaktit?: HankeSubContact[];
 };
+
+export enum CONTACT_TYYPPI {
+  YKSITYISHENKILO = 'YKSITYISHENKILO',
+  YRITYS = 'YRITYS',
+  YHTEISO = 'YHTEISO',
+}
 
 export type HankeGeometria = {
   featureCollection: HankeGeoJSON;
-  hankeId: number;
-  id: number;
-  modifiedAt: string | null;
-  version: number | null;
-  createdByUserId: string | null;
-  createdAt: string | null;
-  modifiedByUserId: string | null;
+  id?: number;
+  modifiedAt?: string | null;
+  version?: number | null;
+  createdByUserId?: string | null;
+  createdAt?: string | null;
+  modifiedByUserId?: string | null;
+};
+
+export type HankeAlue = {
+  id: number | null;
+  hankeId?: number;
+  geometriat: HankeGeometria;
+  haittaAlkuPvm: string;
+  haittaLoppuPvm: string;
+  kaistaHaitta: HANKE_KAISTAHAITTA_KEY | null;
+  kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA_KEY | null;
+  meluHaitta: HANKE_MELUHAITTA_KEY | null;
+  polyHaitta: HANKE_POLYHAITTA | null;
+  tarinaHaitta: HANKE_TARINAHAITTA_KEY | null;
 };
 
 export enum HANKE_INDEX_TYPE {
@@ -165,18 +200,12 @@ export interface HankeData {
   tyomaaKatuosoite: string | null;
   tyomaaTyyppi: HANKE_TYOMAATYYPPI_KEY[];
   tyomaaKoko: HANKE_TYOMAAKOKO_KEY | null;
-  haittaAlkuPvm: string | null;
-  haittaLoppuPvm: string | null;
-  kaistaHaitta: HANKE_KAISTAHAITTA_KEY | null;
-  kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA_KEY | null;
-  meluHaitta: HANKE_MELUHAITTA_KEY | null;
-  polyHaitta: HANKE_POLYHAITTA | null;
-  tarinaHaitta: HANKE_TARINAHAITTA_KEY | null;
-  geometriat: HankeGeometria | null;
+  alueet: HankeAlue[];
   liikennehaittaindeksi: LiikenneHaittaIndeksi | null;
-  omistajat: Array<HankeContact>;
-  arvioijat: Array<HankeContact>;
+  omistajat?: Array<HankeContact>;
+  rakennuttajat: Array<HankeContact>;
   toteuttajat: Array<HankeContact>;
+  muut: Array<HankeMuuTaho>;
   tormaystarkasteluTulos: HankeIndexData | null;
   saveType: HANKE_SAVETYPE_KEY;
   version?: number;

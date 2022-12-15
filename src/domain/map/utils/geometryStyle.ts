@@ -13,7 +13,7 @@ const opacityHL = 0.85;
 const stroke = new Stroke({ color: 'black', width: 2 });
 const strokeHL = new Stroke({ color: 'black', width: 6 });
 
-const STYLES = {
+export const STYLES = {
   BLUE: new Style({
     fill: new Fill({
       color: getColorByStatus(LIIKENNEHAITTA_STATUS.BLUE, opacity),

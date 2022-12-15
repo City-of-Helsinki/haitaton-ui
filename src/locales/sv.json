@@ -8,6 +8,8 @@
   },
   "common": {
     "increment": "SV:Lisää",
+    "yes": "SV:Kyllä",
+    "no": "SV:Ei",
     "confirmationDialog": {
       "interruptDialog": {
         "titleText": "SV: Olet poistumassa lomakkeelta",
@@ -55,7 +57,63 @@
       "dateMin": "SV:Ensimmäinen mahdollinen päivä on {{min}}",
       "dateMax": "SV:Viimeinen mahdollinen päivä on {{max}}"
     },
-    "requiredInstruction": "SV:Kaikki tähdellä * merkityt kentät ovat pakollisia."
+    "labels": {
+      "pintaAla": "SV:Pinta-ala"
+    },
+    "requiredInstruction": "SV:Kaikki tähdellä * merkityt kentät ovat pakollisia.",
+    "yhteystiedot": {
+      "header": "SV:Yhteystiedot",
+      "instructions": "SV:Hankkeelle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hankkeeseeen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hanketta ja luomaan hankkeelle hakemuksia.",
+      "titles": {
+        "omistaja": "SV:Hankkeen omistaja",
+        "rakennuttajat": "SV:Rakennuttaja",
+        "toteuttajat": "SV:Toteuttaja",
+        "muut": "SV:Muu taho",
+        "lisaaRakennuttajia": "SV:Lisää rakennuttajia",
+        "lisaaRakennuttaja": "SV:Lisää rakennuttaja",
+        "lisaaToteuttajia": "SV:Lisää toteuttajia",
+        "lisaaToteuttaja": "SV:Lisää toteuttaja",
+        "lisaaMuitaTahoja": "SV:Lisää muita tahoja",
+        "lisaaMuuTaho": "SV:Lisää muu taho",
+        "subContact": "SV:Yhteyshenkilö",
+        "subContactInformation": "SV:Yhteyshenkilön tiedot"
+      },
+      "labels": {
+        "tyyppi": "SV:Tyyppi",
+        "nimi": "SV:Nimi",
+        "ytunnusTaiHetu": "SV:Y-tunnus tai henkilötunnus",
+        "osoite": "SV:Katuosoite",
+        "postinumero": "SV:Postinumero",
+        "postitoimipaikka": "SV:Postitoimipaikka",
+        "email": "SV:Sähköposti",
+        "puhelinnumero": "SV:Puhelinnumero",
+        "rooli": "SV:Rooli",
+        "osasto": "SV:Osasto",
+        "organisaatioNimi": "SV:Organisaatio",
+        "rakennuttaja": "SV:Rakennuttaja",
+        "erillinenYhteyshenkilo": "SV:Erillinen yhteyshenkilö"
+      },
+      "placeholders": {
+        "otherPartyRole": "SV:Isännöitsijä, konsultti..."
+      },
+      "helperTexts": {
+        "otherPartyRole": "SV:Tahon rooli hankkeessa"
+      },
+      "contactType": {
+        "YKSITYISHENKILO": "SV:Yksityishenkilö",
+        "YRITYS": "SV:Yritys",
+        "YHTEISO": "SV:Yhteisö"
+      },
+      "buttons": {
+        "addSubContact": "SV:Lisää yhteyshenkilö",
+        "removeSubContact": "SV:Poista yhteyshenkilö",
+        "remove": {
+          "rakennuttajat": "SV:Poista rakennuttaja",
+          "toteuttajat": "SV:Poista toteuttaja",
+          "muut": "SV:Poista muu taho"
+        }
+      }
+    }
   },
   "routes": {
     "HOME": {
@@ -262,22 +320,22 @@
     "labels": {
       "hankeTunnus": "SV:Hankkeen tunnus",
       "nimi": "SV:Hankkeen nimi",
-      "vaihe": "SV:Hankkeen Vaihe",
+      "vaihe": "SV:Hankkeen vaihe",
       "kuvaus": "SV:Hankkeen kuvaus",
       "suunnitteluVaihe": "SV:Hankkeen suunnitteluvaihe",
       "alkuPvm": "SV:Hankkeen alkupäivä",
       "loppuPvm": "SV:Hankkeen loppupäivä",
-      "tyomaaTyyppi": "SV:Työmaan tyyppi",
-      "tyomaaKoko": "SV:Työmaan koko",
-      "haittaAlkuPvm": "SV:Haitan alkupäivämäärä",
-      "haittaLoppuPvm": "SV:Haitan loppupäivämäärä",
-      "kaistaHaitta": "SV:Kaistahaitta",
-      "kaistaPituusHaitta": "SV:Kaistan pituushaitta",
+      "tyomaaTyyppi": "SV:Työn tyyppi",
+      "tyomaaKoko": "SV:Hankkeen koko",
+      "haittaAlkuPvm": "SV:Haittojen alkupäivämäärä",
+      "haittaLoppuPvm": "SV:Haittojen loppupäivämäärä",
+      "kaistaHaitta": "SV:Autoliikenteen kaistahaitta",
+      "kaistaPituusHaitta": "SV:Kaistahaittojen pituus",
       "meluHaitta": "SV:Meluhaitta",
       "polyHaitta": "SV:Pölyhaitta",
       "tarinaHaitta": "SV:Tärinähaitta",
       "tyomaaKatuosoite": "SV:Katuosoite",
-      "onYKTHanke": "SV:Hanke on YKT-hanke",
+      "onYKTHanke": "SV:YKT-hanke",
       "sukunimi": "SV:Sukunimi",
       "etunimi": "SV:Etunimi",
       "email": "SV:Sähköposti",
@@ -286,11 +344,6 @@
       "organisaatio": "SV:Organisaatio",
       "omaOrganisaatio": "SV:Lisää oma organisaatio",
       "insertOmaOrganisaatio": "SV:Syötä oma organisaatio"
-    },
-    "headers": {
-      "arvioijat": "SV:Arvioijat",
-      "omistajat": "SV:Omistajat",
-      "toteuttajat": "SV:Toteuttajat"
     },
     "toolTips": {
       "tipOpenLabel": "SV:Avaa ohje",
@@ -316,16 +369,22 @@
     },
     "hankkeenAlueForm": {
       "header": "SV:Alueet",
-      "instructions": "SV: Hankkeelle voi piirttää useita geometrioita. Geometria alueet vaikuttavat hankkeen liikennehaittaindekseihin.\nPiirtotyökalut löytyvät karttanäkymän vasemmasta alalaidasta. Kynätyökalulla voi piirtää monikulmaisia geometrioita klikkaamalla kohtaan, johon haluat kulman. Neliötyökalulla saat muodostettua neliömäisiä alueita klikkaamalla ensin kartalle ja liikuttamalla hiirtä haluamaasi suuntaan. Uudelleenklikkaus \"sulkee\" neliön piirron.\nGeometriaa voi muokata \"tarttumalla\" geometrian reunasta ja vetämällä. Myös neliömäistä geometriaa voi muokata reunasta tarttumalla.\nVoit poistaa geometrian valitsemalla ensin geometrian klikkaamalla sitä, jolloin vasemman alalaidan piirtotyökaluihin ilmestyy roskakori ikoni, jota klikkaamalla geometrian voi poistaa."
-    },
-    "hankkeenYhteystiedotForm": {
-      "header": "SV:Hankkeen yhteystiedot"
+      "subHeader": "SV:Hanke-alueet",
+      "area": "SV:Alue",
+      "instructions": "SV:Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 1-5, 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen tärkeimmillä reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein.",
+      "haitatHeader": "SV:Alueen haitta-arviot",
+      "haitatInstructions": "SV:Anna arvio suurimmista mahdollisista vaikutuksista hankealueella.",
+      "removeAreaButton": "SV:Poista alue"
     },
     "tyomaanTiedotForm": {
       "header": "SV:Hankkeen lisätiedot"
     },
     "hankkeenHaitatForm": {
       "header": "SV:Haitat"
+    },
+    "hankkeenYhteenvetoForm": {
+      "header": "SV:Yhteenveto",
+      "instructions": "SV:Tarkista antamasi tiedot ja tallenna hanke tai tallenna ja siirry lisäämään hakemuksia."
     },
     "finishedForm": {
       "header": "SV:Lomake on lähetetty onnistuneesti"

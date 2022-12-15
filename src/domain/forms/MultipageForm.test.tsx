@@ -69,7 +69,6 @@ test('form pages can be navigated', async () => {
         <FormActions
           activeStepIndex={activeStepIndex}
           totalSteps={formSteps.length}
-          isFormValid
           onPrevious={handlePrevious}
           onNext={handleNext}
         />
@@ -100,37 +99,4 @@ test('form pages can be navigated', async () => {
   expect(handleSave).toHaveBeenCalledTimes(4);
   expect(screen.getByText('Vaihe 1/2: Title 1')).toBeDefined();
   expect(screen.getByText('Page 1')).toBeDefined();
-});
-
-test('next button is disabled when form is not valid', () => {
-  const formSteps = [
-    {
-      element: <Page1 />,
-      label: 'Title 1',
-      state: StepState.available,
-    },
-    {
-      element: <Page2 />,
-      label: 'Title 2',
-      state: StepState.disabled,
-    },
-  ];
-
-  const handleSave = jest.fn();
-
-  render(
-    <MultipageForm heading="Test form" formSteps={formSteps} onStepChange={handleSave}>
-      {(activeStepIndex, handlePrevious, handleNext) => (
-        <FormActions
-          activeStepIndex={activeStepIndex}
-          totalSteps={formSteps.length}
-          isFormValid={false}
-          onPrevious={handlePrevious}
-          onNext={handleNext}
-        />
-      )}
-    </MultipageForm>
-  );
-
-  expect(screen.getByRole('button', { name: 'Seuraava' })).toBeDisabled();
 });

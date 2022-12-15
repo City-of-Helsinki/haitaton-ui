@@ -1,0 +1,27 @@
+.haitatContainer {
+  padding: var(--spacing-m);
+  margin-top: var(--spacing-xs);
+}
+
+.formRow {
+  display: flex;
+  gap: var(--spacing-s);
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-m);
+}
+
+.formRowEven {
+  & > div {
+    flex: 1 1 250px;
+  }
+}
+
+.formRowUnEven {
+  & > div:first-child {
+    flex: 2 1 250px;
+  }
+
+  & > div:last-child {
+    flex: 1 1 250px;
+  }
+}
