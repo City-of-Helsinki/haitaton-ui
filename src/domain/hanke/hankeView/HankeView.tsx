@@ -27,13 +27,14 @@ import {
 } from '../../forms/components/FormSummarySection';
 import { calculateTotalSurfaceArea } from '../edit/utils';
 import ContactsSummary from '../edit/components/ContactsSummary';
-import HankeIndexes from '../../map/components/HankeSidebar/HankeIndexes';
+import HankeIndexes from '../hankeIndexes/HankeIndexes';
 import { FORMFIELD } from '../edit/types';
 import useLocale from '../../../common/hooks/useLocale';
 import { formatToFinnishDate } from '../../../common/utils/date';
 import { formatSurfaceArea, getFeatureFromHankeGeometry } from '../../map/utils';
 import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
+import CompressedAreaIndex from '../hankeIndexes/CompressedAreaIndex';
 
 type AreaProps = {
   area: HankeAlue;
@@ -117,7 +118,7 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
 
   const areasTotalSurfaceArea = calculateTotalSurfaceArea(hankeData.alueet);
 
-  const { omistajat, rakennuttajat, toteuttajat, muut } = hankeData;
+  const { omistajat, rakennuttajat, toteuttajat, muut, tormaystarkasteluTulos, alueet } = hankeData;
 
   return (
     <article className={styles.hankeViewContainer}>
@@ -182,12 +183,12 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
                 </BasicInformationSummary>
               </TabPanel>
               <TabPanel>
-                {hankeData.alueet?.map((area, index) => {
+                {alueet?.map((area, index) => {
                   return (
                     <HankeAreaInfo
                       key={area.id}
                       area={area}
-                      hankeIndexData={hankeData.tormaystarkasteluTulos}
+                      hankeIndexData={tormaystarkasteluTulos}
                       index={index}
                     />
                   );
@@ -228,6 +229,16 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
           <div className={styles.sideBar}>
             <OwnHankeMapHeader hankeTunnus={hankeData.hankeTunnus} />
             <OwnHankeMap hanke={hankeData} />
+            {alueet?.map((area, index) => {
+              return (
+                <CompressedAreaIndex
+                  area={area}
+                  haittaIndex={tormaystarkasteluTulos?.liikennehaittaIndeksi.indeksi}
+                  index={index}
+                  className={styles.compressedAreaIndex}
+                />
+              );
+            })}
           </div>
         </Container>
       </div>

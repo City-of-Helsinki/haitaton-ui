@@ -1,6 +1,7 @@
 .mapHeader {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   margin-bottom: var(--spacing-xs);
 
   &__inner {
