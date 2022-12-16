@@ -7,6 +7,7 @@ import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import { HankeDataDraft } from '../../types/hanke';
 import HankeVaiheTag from '../vaiheTag/HankeVaiheTag';
 import './Hankelista.styles.scss';
+import { hankeHasGeometry } from '../../map/utils';
 
 type Props = {
   projectsData: HankeDataDraft[];
@@ -27,7 +28,7 @@ const HankeList: React.FC<Props> = ({ projectsData }) => {
   const pageCount = Math.ceil(projectsData.length / PAGE_SIZE);
 
   function getHankeLink(args: HankeDataDraft) {
-    const hasGeometry = Boolean(args.geometriat);
+    const hasGeometry = hankeHasGeometry(args);
     if (hasGeometry) {
       return (
         <Link to={`${PUBLIC_HANKKEET_MAP.path}?hanke=${args.hankeTunnus}`}>{args.hankeTunnus}</Link>

@@ -1,0 +1,20 @@
+@import 'layout.scss';
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: var(--spacing-s);
+  margin-bottom: var(--spacing-s);
+
+  @include respond-above(m) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond-above(l) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  button {
+    align-self: flex-end;
+  }
+}

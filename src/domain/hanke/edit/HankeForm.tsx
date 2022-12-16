@@ -14,18 +14,19 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { FormNotification, HankeDataFormState } from './types';
 import { hankeSchema } from './hankeSchema';
-import Form0 from './HankeForm0';
-import Form1 from './HankeForm1';
-import Form2 from './HankeForm2';
+import HankeFormAlueet from './HankeFormAlueet';
+import HankeFormPerustiedot from './HankeFormPerustiedot';
+import HankeFormYhteystiedot from './HankeFormYhteystiedot';
+import HankeFormHaitat from './HankeFormHaitat';
+import HankeFormSummary from './HankeFormSummary';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
 import { HANKE_SAVETYPE } from '../../types/hanke';
-import { filterEmptyContacts } from './utils';
+import { convertFormStateToHankeData } from './utils';
 import api from '../../api/api';
 import MultipageForm from '../../forms/MultipageForm';
 import FormActions from '../../forms/components/FormActions';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
-import HankeHaitatForm from './HankeHaitatForm';
 
 async function saveHanke({
   data,
@@ -35,16 +36,14 @@ async function saveHanke({
   saveType?: HANKE_SAVETYPE;
   navigateTo?: string;
 }) {
+  if (!data.alueet?.length) {
+    return data;
+  }
+
   const requestData = {
-    ...filterEmptyContacts(data),
+    ...convertFormStateToHankeData(data),
     saveType,
   };
-
-  if (data.hankeTunnus && data.geometriat) {
-    await api.post(`/hankkeet/${data.hankeTunnus}/geometriat`, {
-      featureCollection: data.geometriat,
-    });
-  }
 
   const response = data.hankeTunnus
     ? await api.put<HankeDataFormState>(`/hankkeet/${data.hankeTunnus}`, requestData)
@@ -84,9 +83,9 @@ const HankeForm: React.FC<Props> = ({
 
   const {
     register,
-    formState: { errors, isDirty, isValid },
+    formState: { errors, isDirty },
     getValues,
-    reset,
+    setValue,
     handleSubmit,
   } = formContext;
 
@@ -105,7 +104,9 @@ const HankeForm: React.FC<Props> = ({
       setShowNotification('error');
     },
     onSuccess(data, { navigateTo }) {
-      setShowNotification('success');
+      if (data.alueet) {
+        setShowNotification('success');
+      }
       if (navigateTo) {
         navigate(navigateTo);
       }
@@ -113,11 +114,13 @@ const HankeForm: React.FC<Props> = ({
   });
 
   useEffect(() => {
-    if (hankeMutation.data) {
-      // Update form data with API response
-      reset(hankeMutation.data);
+    if (hankeMutation.data?.hankeTunnus) {
+      if (!getValues().hankeTunnus) {
+        // Update hankeTunnus
+        setValue('hankeTunnus', hankeMutation.data.hankeTunnus);
+      }
     }
-  }, [hankeMutation.data, reset]);
+  }, [hankeMutation.data, getValues, setValue]);
 
   function saveDraft() {
     hankeMutation.mutate({ data: getValues() });
@@ -141,23 +144,28 @@ const HankeForm: React.FC<Props> = ({
 
   const formSteps = [
     {
-      element: <Form0 errors={errors} register={register} formData={formValues} />,
+      element: <HankeFormPerustiedot errors={errors} register={register} formData={formValues} />,
       label: t('hankeForm:perustiedotForm:header'),
       state: StepState.available,
     },
     {
-      element: <Form1 errors={errors} register={register} formData={formValues} />,
+      element: <HankeFormAlueet errors={errors} register={register} formData={formValues} />,
       label: t('hankeForm:hankkeenAlueForm:header'),
       state: isNewHanke ? StepState.disabled : StepState.available,
     },
     {
-      element: <HankeHaitatForm formData={formValues} />,
+      element: <HankeFormHaitat formData={formValues} />,
       label: t('hankeForm:hankkeenHaitatForm:header'),
       state: isNewHanke ? StepState.disabled : StepState.available,
     },
     {
-      element: <Form2 errors={errors} register={register} formData={formValues} />,
-      label: t('hankeForm:hankkeenYhteystiedotForm:header'),
+      element: <HankeFormYhteystiedot errors={errors} register={register} formData={formValues} />,
+      label: t('form:yhteystiedot:header'),
+      state: isNewHanke ? StepState.disabled : StepState.available,
+    },
+    {
+      element: <HankeFormSummary formData={formValues} />,
+      label: t('hankeForm:hankkeenYhteenvetoForm:header'),
       state: isNewHanke ? StepState.disabled : StepState.available,
     },
   ];
@@ -178,7 +186,6 @@ const HankeForm: React.FC<Props> = ({
               <FormActions
                 activeStepIndex={activeStepIndex}
                 totalSteps={formSteps.length}
-                isFormValid={isValid}
                 onPrevious={handlePrevious}
                 onNext={handleNext}
               >
@@ -202,7 +209,6 @@ const HankeForm: React.FC<Props> = ({
                 )}
                 {!lastStep && (
                   <Button
-                    disabled={!isValid}
                     variant="supplementary"
                     iconLeft={<IconSaveDiskette aria-hidden="true" />}
                     onClick={saveDraftAndQuit}

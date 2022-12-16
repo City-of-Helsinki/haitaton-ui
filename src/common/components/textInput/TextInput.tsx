@@ -3,6 +3,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { TextInput as HdsTextInput } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { TooltipProps } from '../../types/tooltip';
+
 import { getInputErrorText } from '../../utils/form';
 
 type PropTypes = {
@@ -11,28 +12,40 @@ type PropTypes = {
   disabled?: boolean;
   required?: boolean;
   tooltip?: TooltipProps;
+  placeholder?: string;
+  helperText?: string;
+  shouldUnregister?: boolean;
 };
 
-const TextInput: React.FC<PropTypes> = ({ name, label, disabled, tooltip, required }) => {
+const TextInput: React.FC<PropTypes> = ({
+  name,
+  label,
+  disabled,
+  tooltip,
+  required,
+  placeholder,
+  helperText,
+  shouldUnregister,
+}) => {
   const { t } = useTranslation();
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext();
+  const { control } = useFormContext();
 
   return (
     <Controller
       name={name}
       control={control}
       defaultValue=""
-      render={({ field: { onChange, onBlur, value } }) => (
+      shouldUnregister={shouldUnregister}
+      render={({ field: { onChange, onBlur, value }, fieldState: { error, isTouched } }) => (
         <HdsTextInput
           id={name}
           name={name}
           label={label || t(`hankeForm:labels:${name}`)}
           value={value || ''}
-          helperText={getInputErrorText(t, errors, name)}
-          invalid={!!errors[name]}
+          helperText={helperText}
+          placeholder={placeholder}
+          errorText={isTouched ? getInputErrorText(t, error) : undefined}
+          invalid={isTouched && Boolean(error)}
           onBlur={onBlur}
           onChange={onChange}
           disabled={disabled}

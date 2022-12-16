@@ -16,7 +16,6 @@ type PropTypes = {
   label: string;
   options: Array<Option>;
   invalid?: boolean;
-  errorMsg?: string;
   tooltip?: TooltipProps;
   disabled?: boolean;
   required?: boolean;
@@ -35,10 +34,7 @@ const Dropdown: React.FC<PropTypes> = ({
   required,
 }) => {
   const { t } = useTranslation();
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext();
+  const { control } = useFormContext();
 
   return (
     <div className="dropdownComp">
@@ -51,7 +47,7 @@ const Dropdown: React.FC<PropTypes> = ({
         name={name}
         control={control}
         rules={rules}
-        render={({ field: { onChange, onBlur, value } }) => {
+        render={({ field: { onChange, onBlur, value }, fieldState: { error, isTouched } }) => {
           return (
             <Select
               id={id}
@@ -62,19 +58,20 @@ const Dropdown: React.FC<PropTypes> = ({
                   : options.find((o) => o.value === value)
               }
               options={options}
-              invalid={invalid}
+              invalid={invalid || (isTouched && Boolean(error))}
               value={options.find((o) => o.value === value) || null}
+              onBlur={onBlur}
               onChange={(option: Option) => {
                 if (option) onChange(option.value);
                 onBlur();
               }}
               required={required}
               disabled={disabled}
+              error={isTouched ? getInputErrorText(t, error) : undefined}
             />
           );
         }}
       />
-      {invalid && <span className="error-text">{getInputErrorText(t, errors, name)}</span>}
     </div>
   );
 };

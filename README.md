@@ -59,6 +59,11 @@ the env-config.js file, reading the values of the variables of the pod environme
 processes variables mentioned in `.env`. If there's no value for a variable in the environment, the
 default value from `.env` is used.
 
+## API mocking
+
+`yarn start-msw` runs the app in development mode using MSW (Mock Service Worker)
+to mock API. Definitions can be found in `src/domain/mocks`.
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).

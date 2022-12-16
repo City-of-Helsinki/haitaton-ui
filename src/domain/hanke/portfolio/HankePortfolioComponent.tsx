@@ -191,7 +191,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               Hankkeen omistaja
             </Text>
             <Text tag="p" styleAs="body-m" className={styles.infoContent}>
-              {hanke.omistajat[0]?.etunimi} {hanke.omistajat[0]?.sukunimi}
+              {hanke.omistajat && hanke.omistajat[0]?.nimi}
             </Text>
           </div>
           <div className={styles.gridBasicInfo}>
