@@ -34,7 +34,6 @@ type Props = {
 const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
   const { t } = useTranslation();
 
-  const organisaatioContent = hanke.omistajat[0]?.organisaatioNimi || '-';
   const tyomaaTyyppiContent = hanke.tyomaaTyyppi.length
     ? hanke.tyomaaTyyppi.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')
     : '-';
@@ -79,10 +78,6 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
           <SidebarSection
             title={t('hankeForm:labels.vaihe')}
             content={t(`hanke:vaihe:${hanke.vaihe}`)}
-          />
-          <SidebarSection
-            title={t('hankeForm:labels.organisaatio')}
-            content={organisaatioContent}
           />
           <SidebarSection
             title={t('hankeForm:labels.tyomaaTyyppi')}

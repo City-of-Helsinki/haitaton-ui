@@ -31,7 +31,7 @@ const DateRangeControl: React.FC<Props> = ({
   const locale = useLocale();
 
   return (
-    <div className={styles.datePicker}>
+    <div className={styles.container}>
       <Grid templateColumns="repeat(9, 1fr)" w="360px">
         <GridItem colSpan={4}>
           <div>

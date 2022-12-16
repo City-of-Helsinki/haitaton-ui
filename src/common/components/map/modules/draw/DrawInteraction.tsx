@@ -24,7 +24,8 @@ const DrawInteraction: React.FC<Props> = () => {
   const clearSelection = useCallback(() => {
     if (selection.current) selection.current.getFeatures().clear();
     actions.setSelectedFeature(null);
-  }, [selection]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const removeDrawInteractions = useCallback(() => {
     instances.forEach((i: Interaction) => {
@@ -35,7 +36,7 @@ const DrawInteraction: React.FC<Props> = () => {
   const removeAllInteractions = useCallback(() => {
     removeDrawInteractions();
     clearSelection();
-  }, [map, source, instances]);
+  }, [clearSelection, removeDrawInteractions]);
 
   const startDraw = useCallback(
     (type = DRAWTOOLTYPE.POLYGON) => {
@@ -72,7 +73,7 @@ const DrawInteraction: React.FC<Props> = () => {
 
       setInstances([drawInstance, snapInstance, modifyInstance]);
     },
-    [map, source, state.selectedDrawtoolType]
+    [map, source, state.selectedDrawtoolType, actions, clearSelection]
   );
 
   useEffect(() => {
@@ -101,13 +102,23 @@ const DrawInteraction: React.FC<Props> = () => {
     source.on('removefeature', () => {
       clearSelection();
     });
-  }, []);
+
+    // eslint-disable-next-line consistent-return
+    return function cleanUp() {
+      map.removeInteraction(modifyInstance);
+      if (selection.current) {
+        map.removeInteraction(selection.current);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, source]);
 
   useEffect(() => {
     removeAllInteractions();
     if (state.selectedDrawtoolType) {
       startDraw(state.selectedDrawtoolType);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.selectedDrawtoolType]);
 
   // Unmount
@@ -116,6 +127,7 @@ const DrawInteraction: React.FC<Props> = () => {
 
     // eslint-disable-next-line
     return () => removeAllInteractions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return null;

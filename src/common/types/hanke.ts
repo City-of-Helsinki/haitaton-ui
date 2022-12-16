@@ -14,6 +14,7 @@ export type HaitatonGeometry = GeoJSON.Geometry & {
   crs: CRS;
 };
 
-export type HankeGeoJSON = GeoJSON.FeatureCollection<HaitatonGeometry, HankeGeoJSONProperties> & {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type HankeGeoJSON = GeoJSON.FeatureCollection<any, HankeGeoJSONProperties> & {
   crs: CRS;
 };
