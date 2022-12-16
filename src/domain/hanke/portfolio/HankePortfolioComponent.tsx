@@ -43,6 +43,7 @@ import HankeVaiheTag from '../vaiheTag/HankeVaiheTag';
 import { hankeSchema } from '../edit/hankeSchema';
 import { Language } from '../../../common/types/language';
 import SingleHankeMap from '../../map/components/SingleHankeMap/SingleHankeMap';
+import Container from '../../../common/components/container/Container';
 
 type CustomAccordionProps = {
   hanke: HankeData;
@@ -469,7 +470,7 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
   return (
     <>
       <div className={styles.headerContainer}>
-        <div className={styles.maxWidthContainer}>
+        <Container>
           <Text
             tag="h1"
             data-testid="HankePortfolioPageHeader"
@@ -556,52 +557,54 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
           >
             {t('hankePortfolio:clearFiltersButton')}
           </button>
-        </div>
+        </Container>
       </div>
 
-      <div className={clsx(styles.contentContainer, styles.maxWidthContainer)}>
-        <div>
-          <Text tag="p" styleAs="h3" weight="bold" spacingBottom="m">
-            {t('hankePortfolio:searchResults', { count: rows.length })}
-          </Text>
+      <div className={styles.contentContainer}>
+        <Container>
+          <div>
+            <Text tag="p" styleAs="h3" weight="bold" spacingBottom="m">
+              {t('hankePortfolio:searchResults', { count: rows.length })}
+            </Text>
 
-          {rows.length > 0 &&
-            page.map((row) => {
-              return (
-                <div key={row.original.hankeTunnus}>
-                  <CustomAccordion hanke={row.original} />
-                </div>
-              );
-            })}
-          {rows.length === 0 && preFilteredRows.length > 0 && (
-            <div className={styles.notFoundContainer}>
-              <IconSearch size="l" />
-              <Text tag="p" styleAs="h3" weight="bold" spacingTop="m">
-                {t('hankePortfolio:noneFound')}
-              </Text>
-            </div>
-          )}
-          {preFilteredRows.length === 0 && (
-            <div className={styles.notFoundContainer}>
-              <Text tag="p" styleAs="h3" weight="bold" spacingTop="m">
-                {t('hankePortfolio:noneExist')}
-              </Text>
-            </div>
-          )}
+            {rows.length > 0 &&
+              page.map((row) => {
+                return (
+                  <div key={row.original.hankeTunnus}>
+                    <CustomAccordion hanke={row.original} />
+                  </div>
+                );
+              })}
+            {rows.length === 0 && preFilteredRows.length > 0 && (
+              <div className={styles.notFoundContainer}>
+                <IconSearch size="l" />
+                <Text tag="p" styleAs="h3" weight="bold" spacingTop="m">
+                  {t('hankePortfolio:noneFound')}
+                </Text>
+              </div>
+            )}
+            {preFilteredRows.length === 0 && (
+              <div className={styles.notFoundContainer}>
+                <Text tag="p" styleAs="h3" weight="bold" spacingTop="m">
+                  {t('hankePortfolio:noneExist')}
+                </Text>
+              </div>
+            )}
 
-          {rows.length > 0 && (
-            <div className={styles.pagination}>
-              <Pagination
-                language={i18n.language as Language}
-                onChange={handlePageChange}
-                pageHref={() => ''}
-                pageCount={pageCount}
-                pageIndex={pageIndex}
-                paginationAriaLabel={t('hankeList:paginatioAriaLabel')}
-              />
-            </div>
-          )}
-        </div>
+            {rows.length > 0 && (
+              <div className={styles.pagination}>
+                <Pagination
+                  language={i18n.language as Language}
+                  onChange={handlePageChange}
+                  pageHref={() => ''}
+                  pageCount={pageCount}
+                  pageIndex={pageIndex}
+                  paginationAriaLabel={t('hankeList:paginatioAriaLabel')}
+                />
+              </div>
+            )}
+          </div>
+        </Container>
       </div>
     </>
   );
