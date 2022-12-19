@@ -57,13 +57,14 @@ const HankeAreaInfo: React.FC<AreaProps> = ({ area, hankeIndexData, index }) => 
       className={styles.hankeAreaContainer}
     >
       <div className={styles.hankeAreaContent}>
-        <Text tag="p" styleAs="body-s" spacingBottom="3-xs">
-          {t('hanke:alue:duration')}: {formatToFinnishDate(area.haittaAlkuPvm)}–
-          {formatToFinnishDate(area.haittaLoppuPvm)}
-        </Text>
-        <Text tag="p" styleAs="body-s" spacingBottom="s">
-          {t('hanke:alue:surfaceArea')}: {formatSurfaceArea(areaGeometry)}
-        </Text>
+        <FormSummarySection>
+          <SectionItemTitle>{t('hanke:alue:duration')}</SectionItemTitle>
+          <SectionItemContent>
+            {formatToFinnishDate(area.haittaAlkuPvm)}–{formatToFinnishDate(area.haittaLoppuPvm)}
+          </SectionItemContent>
+          <SectionItemTitle>{t('hanke:alue:surfaceArea')}</SectionItemTitle>
+          <SectionItemContent>{formatSurfaceArea(areaGeometry)}</SectionItemContent>
+        </FormSummarySection>
 
         <HankeIndexes
           hankeIndexData={hankeIndexData}
