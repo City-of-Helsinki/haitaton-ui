@@ -35,6 +35,7 @@ import { formatSurfaceArea, getFeatureFromHankeGeometry } from '../../map/utils'
 import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
 import CompressedAreaIndex from '../hankeIndexes/CompressedAreaIndex';
+import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotification';
 
 type AreaProps = {
   area: HankeAlue;
@@ -166,6 +167,10 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
       <div className={styles.contentContainerOut}>
         <Container className={styles.contentContainerIn}>
           <div className={styles.mainContent}>
+            <div className={styles.draftStateNotification}>
+              <HankeDraftStateNotification hanke={hankeData} />
+            </div>
+
             <Tabs>
               <TabList className={styles.tabList}>
                 <Tab>{t('hankePortfolio:tabit:perustiedot')}</Tab>
@@ -176,7 +181,7 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
               </TabList>
               <TabPanel>
                 <BasicInformationSummary formData={hankeData}>
-                  <SectionItemTitle>Hanke-alueiden kokonaispinta-ala</SectionItemTitle>
+                  <SectionItemTitle>{t('hanke:alue:totalSurfaceAreaLong')}</SectionItemTitle>
                   <SectionItemContent>
                     {areasTotalSurfaceArea && <p>{areasTotalSurfaceArea} m²</p>}
                   </SectionItemContent>

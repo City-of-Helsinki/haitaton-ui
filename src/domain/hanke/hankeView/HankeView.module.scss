@@ -35,6 +35,15 @@
       padding-top: var(--spacing-s);
       padding-bottom: var(--spacing-s);
       padding-right: var(--spacing-xs);
+
+      .draftStateNotification {
+        margin-bottom: var(--spacing-s);
+        margin-top: var(--spacing-s);
+
+        @include respond-above(m) {
+          padding-right: var(--spacing-l);
+        }
+      }
     }
 
     .sideBar {

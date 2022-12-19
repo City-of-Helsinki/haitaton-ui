@@ -9,7 +9,7 @@ import {
   useAsyncDebounce,
   useSortBy,
 } from 'react-table';
-import { useAccordion, Card, Select, TextInput, Button, Notification, Pagination } from 'hds-react';
+import { useAccordion, Card, Select, TextInput, Button, Pagination } from 'hds-react';
 import { IconAngleDown, IconAngleUp, IconEye, IconPen, IconSearch } from 'hds-react/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
@@ -23,29 +23,14 @@ import { hankeIsBetweenDates } from '../../map/utils';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
 import HankeVaiheTag from '../vaiheTag/HankeVaiheTag';
-import { hankeSchema } from '../edit/hankeSchema';
 import { Language } from '../../../common/types/language';
 import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
+import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotification';
 
 type CustomAccordionProps = {
   hanke: HankeData;
 };
-
-/**
- * Check if hanke data matches hanke schema
- */
-function useIsHankeValid(hanke: HankeData) {
-  const [isValid, setIsValid] = useState(false);
-
-  useEffect(() => {
-    hankeSchema.isValid(hanke).then((valid) => {
-      setIsValid(valid);
-    });
-  }, [hanke]);
-
-  return isValid;
-}
 
 const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
   const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
@@ -54,11 +39,9 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
 
   // Handle accordion state with useAccordion hook
   const { isOpen, buttonProps, contentProps } = useAccordion({ initiallyOpen: false });
+
   // Change icon based on accordion open state
   const icon = isOpen ? <IconAngleUp size="m" /> : <IconAngleDown size="m" />;
-
-  // Check if hanke has all the required fields filled
-  const isHankeValid = useIsHankeValid(hanke);
 
   const { t } = useTranslation();
 
@@ -124,16 +107,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
           </div>
           <div className={styles.iconWrapper}>{icon}</div>
         </div>
-        {!isHankeValid && (
-          <Notification
-            size="small"
-            label={t('hankePortfolio:draftStateLabel')}
-            className={styles.notification}
-            type="alert"
-          >
-            {t('hankePortfolio:draftState')}
-          </Notification>
-        )}
+        <HankeDraftStateNotification hanke={hanke} className={styles.draftNotification} />
       </>
       <div className={styles.hankeCardContent} {...contentProps}>
         <div>
