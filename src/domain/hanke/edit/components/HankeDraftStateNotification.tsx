@@ -1,23 +1,8 @@
 import { Notification } from 'hds-react';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { HankeData } from '../../../types/hanke';
-import { hankeSchema } from '../hankeSchema';
-
-/**
- * Check that hanke data is valid against hanke yup schema
- */
-function useIsHankeValid(hanke: HankeData) {
-  const [isValid, setIsValid] = useState(false);
-
-  useEffect(() => {
-    hankeSchema.isValid(hanke).then((valid) => {
-      setIsValid(valid);
-    });
-  }, [hanke]);
-
-  return isValid;
-}
+import { useIsHankeValid } from '../hooks/useIsHankeValid';
 
 type Props = {
   /** Hanke data */

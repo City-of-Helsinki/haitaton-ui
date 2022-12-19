@@ -36,6 +36,7 @@ import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
 import CompressedAreaIndex from '../hankeIndexes/CompressedAreaIndex';
 import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotification';
+import { useIsHankeValid } from '../edit/hooks/useIsHankeValid';
 
 type AreaProps = {
   area: HankeAlue;
@@ -110,6 +111,8 @@ type Props = {
 const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) => {
   const { t } = useTranslation();
 
+  const isHankeValid = useIsHankeValid(hankeData);
+
   if (!hankeData) {
     return (
       <Flex justify="center" mt="var(--spacing-xl)">
@@ -145,13 +148,23 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
             >
               {t('hankeList:buttons:edit')}
             </Button>
-            <Button variant="primary" iconLeft={<IconPlusCircle aria-hidden="true" />} theme="coat">
+            <Button
+              variant="primary"
+              iconLeft={<IconPlusCircle aria-hidden="true" />}
+              theme="coat"
+              disabled={!isHankeValid}
+            >
               {t('hankeList:buttons:addApplication')}
             </Button>
             <Button variant="primary" iconLeft={<IconUser aria-hidden="true" />} theme="coat">
               {t('hankeList:buttons:editRights')}
             </Button>
-            <Button variant="primary" iconLeft={<IconCross aria-hidden="true" />} theme="black">
+            <Button
+              variant="primary"
+              iconLeft={<IconCross aria-hidden="true" />}
+              theme="black"
+              disabled={!isHankeValid}
+            >
               {t('hankeList:buttons:endHanke')}
             </Button>
             <Button
