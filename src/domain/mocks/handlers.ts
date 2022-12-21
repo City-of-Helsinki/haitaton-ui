@@ -49,6 +49,22 @@ export const handlers = [
     }
   }),
 
+  rest.delete(`${apiUrl}/hankkeet/:hankeTunnus`, async (req, res, ctx) => {
+    const { hankeTunnus } = req.params;
+    try {
+      const hanke = await hankkeetDB.remove(hankeTunnus as string);
+      return res(ctx.status(200), ctx.json(hanke));
+    } catch (error) {
+      return res(
+        ctx.status(404),
+        ctx.json({
+          errorMessage: 'Hanke not found',
+          errorCode: 'HAI1001',
+        })
+      );
+    }
+  }),
+
   rest.get(`${apiUrl}/public-hankkeet`, async (req, res, ctx) => {
     const hankkeet = await hankkeetDB.readAll();
     return res(ctx.status(200), ctx.json(hankkeet));

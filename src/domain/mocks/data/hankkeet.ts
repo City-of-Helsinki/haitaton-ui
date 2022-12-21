@@ -1,7 +1,7 @@
 import { HankeDataDraft } from '../../types/hanke';
 import hankkeetData from './hankkeet-data';
 
-const hankkeet = [...hankkeetData];
+let hankkeet = [...hankkeetData];
 
 function generateHankeTunnus() {
   return `HAI22-${hankkeet.length + 1}`;
@@ -36,4 +36,13 @@ export async function update(hankeTunnus: string, updates: HankeDataDraft) {
   }
   hanke = Object.assign(hanke, updates);
   return hanke;
+}
+
+export async function remove(hankeTunnus: string) {
+  const hankeToRemove = await read(hankeTunnus);
+  if (!hankeToRemove) {
+    throw new Error(`No hanke with hankeTunnus ${hankeTunnus}`);
+  }
+  hankkeet = hankkeet.filter((hanke) => hanke.hankeTunnus !== hankeToRemove.hankeTunnus);
+  return hankeToRemove;
 }

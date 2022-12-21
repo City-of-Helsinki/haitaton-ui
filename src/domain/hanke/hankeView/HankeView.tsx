@@ -251,6 +251,7 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
             {alueet?.map((area, index) => {
               return (
                 <CompressedAreaIndex
+                  key={area.id}
                   area={area}
                   haittaIndex={tormaystarkasteluTulos?.liikennehaittaIndeksi.indeksi}
                   index={index}
