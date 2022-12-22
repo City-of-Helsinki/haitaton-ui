@@ -25,6 +25,7 @@ export const validationSchema = {
 export interface InitialValueTypes {
   applicationType: ApplicationType;
   applicationData: {
+    applicationType: ApplicationType;
     name: string;
     startTime: number | null;
     endTime: number | null;
@@ -41,6 +42,7 @@ export interface InitialValueTypes {
 export const initialValues: InitialValueTypes = {
   applicationType: 'CABLE_REPORT',
   applicationData: {
+    applicationType: 'CABLE_REPORT',
     name: '',
     startTime: null,
     endTime: null,
