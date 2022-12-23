@@ -48,7 +48,8 @@ const HankeAreaInfo: React.FC<AreaProps> = ({ area, hankeIndexData, index }) => 
   const { t } = useTranslation();
   const locale = useLocale();
 
-  const areaGeometry = getFeatureFromHankeGeometry(area.geometriat).getGeometry();
+  const areaGeometry =
+    area.geometriat && getFeatureFromHankeGeometry(area.geometriat).getGeometry();
 
   return (
     <Accordion

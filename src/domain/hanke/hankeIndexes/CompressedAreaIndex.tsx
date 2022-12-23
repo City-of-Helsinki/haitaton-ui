@@ -18,7 +18,8 @@ const CompressedAreaIndex: React.FC<Props> = ({ area, haittaIndex, index, classN
   const { t } = useTranslation();
   const areaStartDate = formatToFinnishDate(area.haittaAlkuPvm);
   const areaEndDate = formatToFinnishDate(area.haittaLoppuPvm);
-  const areaGeometry = getFeatureFromHankeGeometry(area.geometriat).getGeometry();
+  const areaGeometry =
+    area.geometriat && getFeatureFromHankeGeometry(area.geometriat).getGeometry();
 
   return (
     <Flex
