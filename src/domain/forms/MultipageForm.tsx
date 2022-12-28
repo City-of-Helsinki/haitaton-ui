@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import { Stepper } from 'hds-react';
+import { Stepper, StepState } from 'hds-react';
 import styles from './MultipageForm.module.scss';
 import useLocale from '../../common/hooks/useLocale';
 import Text from '../../common/components/text/Text';
@@ -8,6 +8,8 @@ import { ACTION_TYPE, StepperStep } from './types';
 
 interface FormStep extends StepperStep {
   element: React.ReactNode;
+  label: string;
+  state: StepState;
 }
 
 interface Props {

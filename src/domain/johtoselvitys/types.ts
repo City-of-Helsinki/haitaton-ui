@@ -2,15 +2,17 @@ import { HaitatonGeometry } from '../../common/types/hanke';
 
 export type ApplicationType = 'CABLE_REPORT';
 
+export type PostalAddress = {
+  streetAddress: {
+    streetName: string;
+  };
+  postalCode: string;
+  city: string;
+};
+
 export type Contact = {
   name: string;
-  postalAddress: {
-    streetAddress: {
-      streetName: string;
-    };
-    postalCode: string;
-    city: string;
-  };
+  postalAddress: PostalAddress;
   email: string;
   phone: string;
   orderer: boolean;
@@ -27,13 +29,7 @@ export type Customer = {
   type: 'PERSON' | 'COMPANY' | 'ASSOCIATION' | 'OTHER';
   name: string;
   country: string;
-  postalAddress: {
-    streetAddress: {
-      streetName: string;
-    };
-    postalCode: string;
-    city: string;
-  };
+  postalAddress: PostalAddress;
   email: string;
   phone: string;
   registryKey: string;
@@ -60,7 +56,7 @@ export type JohtoselvitysFormData = {
   identificationNumber: string; // hankeTunnus
   clientApplicationKind: string;
   workDescription: string;
-  postalAddress: string | null;
+  postalAddress: PostalAddress | null;
   representativeWithContacts: null;
   invoicingCustomer: null;
   customerReference: null;

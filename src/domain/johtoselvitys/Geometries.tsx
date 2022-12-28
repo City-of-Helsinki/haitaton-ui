@@ -1,14 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
-import { useFormikContext } from 'formik';
 import VectorSource from 'ol/source/Vector';
+import { useFormContext } from 'react-hook-form';
 import VectorLayer from '../../common/components/map/layers/VectorLayer';
 import Map from '../../common/components/map/Map';
 import FitSource from '../map/components/interations/FitSource';
 import Kantakartta from '../map/components/Layers/Kantakartta';
 import Ortokartta from '../map/components/Layers/Ortokartta';
 import { useMapDataLayers } from '../map/hooks/useMapLayers';
-import { JohtoselvitysFormValues } from './types';
 import styles from './Geometries.module.scss';
 import Controls from '../../common/components/map/controls/Controls';
 import DrawModule from '../../common/components/map/modules/draw/DrawModule';
@@ -19,14 +17,14 @@ export const initialValues = {
 };
 
 export const Geometries: React.FC = () => {
-  const formik = useFormikContext<JohtoselvitysFormValues>();
+  const { setValue } = useFormContext();
   const [drawSource] = useState<VectorSource>(new VectorSource());
   const { mapTileLayers } = useMapDataLayers();
 
   const onDrawChange = () => {
     const hankeGeometries = formatFeaturesToAlluGeoJSON(drawSource.getFeatures());
 
-    formik.setFieldValue('applicationData.geometry', hankeGeometries);
+    setValue('applicationData.geometry', hankeGeometries);
     // Backend ei kuitenkaan vielä huoli ylläolevan mukaista geometrioiden tallennusta
   };
 
