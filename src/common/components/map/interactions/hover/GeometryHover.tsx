@@ -24,12 +24,18 @@ const GeometryHover: React.FC = ({ children }) => {
   };
 
   useEffect(() => {
-    if (map) {
-      map.on('pointermove', (evt) => {
-        if (evt.dragging) return;
-        highlightHankeOnPixel(map, evt);
-      });
+    function handlePointerMover(evt: MapBrowserEvent<UIEvent>) {
+      if (evt.dragging) return;
+      highlightHankeOnPixel(map, evt);
     }
+
+    if (map) {
+      map.on('pointermove', handlePointerMover);
+    }
+
+    return function cleanUp() {
+      map?.un('pointermove', handlePointerMover);
+    };
   }, [map]);
 
   return (
