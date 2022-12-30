@@ -130,6 +130,13 @@
         "title": "SV:Haitaton - Omat hankkeet"
       }
     },
+    "HANKE": {
+      "path": "/hankesalkku/:hankeTunnus",
+      "headerLabel": "Hankkeet",
+      "meta": {
+        "title": "Haitaton - Hankesivu"
+      }
+    },
     "PUBLIC_HANKKEET": {
       "path": "/julkisethankkeet",
       "headerLabel": "SV:Hankkeet yleisillä alueilla",
@@ -520,7 +527,8 @@
       "nimi": "SV: Nimi",
       "osoite": "SV: Osoite",
       "sposti": "SV: Sähköposti",
-      "puhelin": "SV: Puhelin"
+      "puhelin": "SV: Puhelin",
+      "oikeudet": "Käyttöoikeutesi hankkeelle"
     }
   },
   "publicHankkeet": {
@@ -550,6 +558,9 @@
     "buttons": {
       "edit": "SV:Muokkaa hanketta",
       "delete": "SV:Poista hanke",
+      "endHanke": "Päätä hanke",
+      "addApplication": "Lisää hakemus",
+      "editRights": "Hallitse käyttöoikeuksia",
       "toFirstPage": "SV:Listan ensimmäiselle sivulle",
       "toPreviousPage": "SV:Listan edelliselle sivulle",
       "toNextPage": "SV:Listan seuraavalle sivulle",

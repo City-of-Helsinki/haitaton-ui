@@ -14,7 +14,9 @@ export default function useHankeFeatures(source: Vector, hankkeet: HankeData[]) 
     hankkeet.forEach((hanke) => {
       if (hanke.alueet?.length > 0) {
         const hankeFeatures = hanke.alueet.flatMap((alue) =>
-          new GeoJSON().readFeatures(alue.geometriat.featureCollection)
+          alue.geometriat?.featureCollection
+            ? new GeoJSON().readFeatures(alue.geometriat.featureCollection)
+            : []
         );
         hankeFeatures.forEach((feature) => {
           feature.setProperties(
