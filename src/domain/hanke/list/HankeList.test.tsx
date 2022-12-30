@@ -17,10 +17,10 @@ describe('HankeLista', () => {
     await user.click(screen.getByTestId('hds-table-sorting-header-nimi'));
     expect(screen.getByTestId('nimi-0')).toHaveTextContent('Hanke 1');
     await user.click(screen.getByTestId('hds-table-sorting-header-vaihe'));
-    expect(screen.getByTestId('vaihe-0')).toHaveTextContent('OHJELMOINTI');
+    expect(screen.getByTestId('vaihe-0')).toHaveTextContent(/ohjelmointi/i);
     await user.click(screen.getByTestId('hds-table-sorting-header-vaihe'));
-    expect(screen.getByTestId('vaihe-0')).toHaveTextContent('SUUNNITTELU');
-    expect(screen.getByTestId('vaihe-2')).toHaveTextContent('RAKENTAMINEN');
+    expect(screen.getByTestId('vaihe-0')).toHaveTextContent(/suunnittelu/i);
+    expect(screen.getByTestId('vaihe-2')).toHaveTextContent(/rakentaminen/i);
     await user.click(screen.getByTestId('hds-table-sorting-header-alkuPvm'));
     expect(screen.getByTestId('alkuPvm-0')).toHaveTextContent('23.11.2020');
     await user.click(screen.getByTestId('hds-table-sorting-header-loppuPvm'));

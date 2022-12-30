@@ -127,7 +127,7 @@
       "path": "/hankesalkku",
       "headerLabel": "Omat hankkeet",
       "meta": {
-        "title": "Haitaton - Hankesalkku"
+        "title": "Haitaton - Omat hankkeet"
       }
     },
     "PUBLIC_HANKKEET": {
@@ -163,6 +163,13 @@
       "headerLabel": "Hanke",
       "meta": {
         "title": "Haitaton - Hankkeen muokkaus"
+      }
+    },
+    "FULL_PAGE_MAP": {
+      "path": "/kokosivunkartta/:hankeTunnus",
+      "headerLabel": "Koko sivun kartta",
+      "meta": {
+        "title": "Haitaton - Koko sivun kartta"
       }
     },
     "HAKEMUS": {
@@ -341,7 +348,8 @@
       "osasto": "Osasto",
       "organisaatio": "Organisaatio",
       "omaOrganisaatio": "Lisää oma organisaatio",
-      "insertOmaOrganisaatio": "Syötä oma organisaatio"
+      "insertOmaOrganisaatio": "Syötä oma organisaatio",
+      "rights": "Käyttöoikeutesi hankkeelle"
     },
     "toolTips": {
       "tipOpenLabel": "Avaa ohje",
@@ -467,19 +475,28 @@
   },
   "hankePortfolio": {
     "filters": "Rajausehdot",
-    "pageHeader": "Hankesalkku",
+    "pageHeader": "Omat hankkeet",
     "search": "Haku",
     "searchHelperText": "Hae hankkeen nimellä tai tunnuksella",
-    "noneFound": "Haulla ei löytynyt yhtään hankkeita.",
-    "noneExist": "Hankesalkussasi ei ole hankkeita.",
+    "searchResults": "{{count}} hakutulos",
+    "searchResults_plural": "{{count}} hakutulosta",
+    "noneFound": "Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta",
+    "noneExist": "Hankesalkussasi ei ole hankkeita",
     "hankevaiheet": "Hankevaiheet",
     "hankevaiheetHelperText": "Valitse hankevaiheet joita haluat tarkastella",
     "startDate": "Ajanjakson alku",
     "endDate": "Ajanjakson loppu",
     "clearDates": "Tyhjennä",
     "timePeriodHelperText": "Aikaväli jolloin haitta on aktiivinen",
-    "hankkeentyyppi": "Hankkeen tyypit",
+    "hankkeentyyppi": "Työn tyyppi",
     "hankkeentyyppiHelperText": "Valitse hankkeen työmaan tyyppi tai tyypit",
+    "areaLocation": "Alueiden sijainti",
+    "openMapToNewWindow": "Avaa kartta uuteen ikkunaan",
+    "showHankeButton": "Näytä hanke",
+    "showApplicationsButton": "Näytä hankkeen hakemukset",
+    "draftStateLabel": "Hanke on luonnostilassa",
+    "draftState": "Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.",
+    "clearFiltersButton": "Tyhjennä hakuehdot",
     "tabit": {
       "perustiedot": "Perustiedot",
       "yhteystiedot": "Yhteystiedot"
