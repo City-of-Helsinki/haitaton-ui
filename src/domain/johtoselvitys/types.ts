@@ -43,6 +43,7 @@ export type Customer = {
 };
 
 export type JohtoselvitysFormData = {
+  applicationType: ApplicationType;
   name: string;
   customerWithContacts: {
     customer: Customer;

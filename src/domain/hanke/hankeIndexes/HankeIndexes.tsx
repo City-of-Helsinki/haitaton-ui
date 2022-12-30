@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { LoadingSpinner, Tooltip } from 'hds-react';

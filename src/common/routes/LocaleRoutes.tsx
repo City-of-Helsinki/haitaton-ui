@@ -15,8 +15,8 @@ import Johtoselvitys from '../../pages/Johtoselvitys';
 import useUser from '../../domain/auth/useUser';
 import PrivateRoute from './PrivateRoute';
 import MapAndListPage from '../../pages/MapAndListPage';
-import HankePage from '../../pages/HankePage';
 import FullPageMapPage from '../../pages/FullPageMapPage';
+import HankePage from '../../pages/HankePage';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();

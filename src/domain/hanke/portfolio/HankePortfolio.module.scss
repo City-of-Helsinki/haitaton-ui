@@ -1,13 +1,6 @@
 @import 'layout.scss';
 
 .hankesalkkuContainer {
-  .maxWidthContainer {
-    max-width: var(--breakpoint-xl);
-    margin: auto;
-    padding-left: var(--spacing-l);
-    padding-right: var(--spacing-l);
-  }
-
   .contentContainer {
     padding-top: var(--spacing-l);
     padding-bottom: var(--spacing-3-xl);
