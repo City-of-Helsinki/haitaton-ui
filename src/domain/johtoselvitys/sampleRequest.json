@@ -1,7 +1,7 @@
 {
   "id": null,
   "userId": "JaskaJokunen",
-  "applicationType": "CABLE_APPLICATION",
+  "applicationType": "CABLE_REPORT",
   "applicationData": {
     "name": "Haitaton hankkeen nimi",
     "customerWithContacts": {

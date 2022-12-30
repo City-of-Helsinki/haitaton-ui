@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Coordinate } from 'ol/coordinate';
+import clsx from 'clsx';
 import styles from './AddressSearchContainer.module.scss';
 import AddressSearch from './AddressSearch';
 import useCenterOnCoordinate from '../../hooks/useCenterOnCoordinate';
@@ -14,9 +15,10 @@ type Props = {
     bottom?: PositionType;
   };
   zIndex?: number;
+  className?: string;
 };
 
-const AddressSearchContainer: React.FC<Props> = ({ position, zIndex }) => {
+const AddressSearchContainer: React.FC<Props> = ({ position, zIndex, className }) => {
   const [addressCoordinate, setAddressCoordinate] = useState<Coordinate | undefined>();
   useCenterOnCoordinate(addressCoordinate);
 
@@ -26,7 +28,7 @@ const AddressSearchContainer: React.FC<Props> = ({ position, zIndex }) => {
 
   return (
     <div
-      className={styles.container}
+      className={clsx([styles.container, className])}
       style={{
         top: position?.top,
         left: position?.left,

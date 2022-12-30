@@ -130,7 +130,14 @@
       "path": "/hankesalkku",
       "headerLabel": "SV:Omat hankkeet",
       "meta": {
-        "title": "SV::Haitaton - Hankesalkku"
+        "title": "SV:Haitaton - Omat hankkeet"
+      }
+    },
+    "HANKE": {
+      "path": "/hankesalkku/:hankeTunnus",
+      "headerLabel": "Hankkeet",
+      "meta": {
+        "title": "Haitaton - Hankesivu"
       }
     },
     "HANKE": {
@@ -173,6 +180,13 @@
       "headerLabel": "SV:Hanke",
       "meta": {
         "title": "SV: Haitaton - Hankkeen muokkaus"
+      }
+    },
+    "FULL_PAGE_MAP": {
+      "path": "/kokosivunkartta/:hankeTunnus",
+      "headerLabel": "SV:Koko sivun kartta",
+      "meta": {
+        "title": "SV:Haitaton - Koko sivun kartta"
       }
     },
     "HAKEMUS": {
@@ -360,7 +374,8 @@
       "osasto": "SV:Osasto",
       "organisaatio": "SV:Organisaatio",
       "omaOrganisaatio": "SV:Lisää oma organisaatio",
-      "insertOmaOrganisaatio": "SV:Syötä oma organisaatio"
+      "insertOmaOrganisaatio": "SV:Syötä oma organisaatio",
+      "rights": "SV:Käyttöoikeutesi hankkeelle"
     },
     "toolTips": {
       "tipOpenLabel": "SV:Avaa ohje",
@@ -487,18 +502,27 @@
   },
   "hankePortfolio": {
     "filters": "SV: Rajausehdot",
-    "pageHeader": "SV:Hankesalkku",
+    "pageHeader": "SV:Omat hankkeet",
     "search": "SV: Haku",
     "searchHelperText": "SV: Hae hankkeen nimellä tai tunnuksella",
-    "noneFound": "SV: Haulla ei löytynyt yhtään hankkeita.",
-    "noneExist": "SV: Hankesalkussasi ei ole hankkeita.",
+    "searchResults": "SV: {{count}} hakutulos",
+    "searchResults_plural": "SV: {{count}} hakutulosta",
+    "noneFound": "SV: Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta",
+    "noneExist": "SV: Hankesalkussasi ei ole hankkeita",
     "hankevaiheet": "SV: Hankevaiheet",
     "hankevaiheetHelperText": "SV: Valitse hankevaiheet joita haluat tarkastella",
     "endDate": "SV: Ajanjakson loppu",
     "clearDates": "SV: Tyhjennä",
     "timePeriodHelperText": "SV: Aikaväli jolloin haitta on aktiivinen",
-    "hankkeentyyppi": "SV: Hankkeen tyypit",
+    "hankkeentyyppi": "SV: Työn tyyppi",
     "hankkeentyyppiHelperText": "SV: Valitse hankkeen työmaan tyyppi tai tyypit",
+    "areaLocation": "SV:Alueiden sijainti",
+    "openMapToNewWindow": "SV:Avaa kartta uuteen ikkunaan",
+    "showHankeButton": "SV:Näytä hanke",
+    "showApplicationsButton": "SV:Näytä hankkeen hakemukset",
+    "draftStateLabel": "SV:Hanke on luonnostilassa",
+    "draftState": "SV:Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.",
+    "clearFiltersButton": "SV:Tyhjennä hakuehdot",
     "tabit": {
       "perustiedot": "Perustiedot",
       "alueet": "Alueet",

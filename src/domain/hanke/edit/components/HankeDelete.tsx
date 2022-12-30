@@ -23,15 +23,14 @@ const HankeDelete: React.FC<Props> = ({ isOpen, onClose, hankeTunnus, navigatePa
   const [deleteErrorMsg, setDeleteErrorMsg] = useState('');
   const { HANKEPORTFOLIO } = useLocalizedRoutes();
 
-  function handleDeleteHanke() {
+  async function handleDeleteHanke() {
     if (hankeTunnus) {
-      deleteHanke(hankeTunnus)
-        .then(() => {
-          navigate(navigatePath || HANKEPORTFOLIO.path);
-        })
-        .catch(() => {
-          setDeleteErrorMsg(t('common:error'));
-        });
+      try {
+        await deleteHanke(hankeTunnus);
+        navigate(navigatePath || HANKEPORTFOLIO.path);
+      } catch (error) {
+        setDeleteErrorMsg(t('common:error'));
+      }
     }
   }
 

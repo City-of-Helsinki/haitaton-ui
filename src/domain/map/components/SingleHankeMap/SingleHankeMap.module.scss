@@ -1,0 +1,17 @@
+.mapContainer {
+  position: relative;
+  flex-grow: 1;
+  height: 321px;
+
+  &__inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+
+  .overviewMap {
+    bottom: 5px;
+  }
+}
