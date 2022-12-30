@@ -67,8 +67,11 @@
       "titles": {
         "omistaja": "Hankkeen omistaja",
         "rakennuttajat": "Rakennuttaja",
+        "rakennuttajatPlural": "Rakennuttajat",
         "toteuttajat": "Toteuttaja",
+        "toteuttajatPlural": "Toteuttajat",
         "muut": "Muu taho",
+        "muutPlural": "Muut tahot",
         "lisaaRakennuttajia": "Lisää rakennuttajia",
         "lisaaRakennuttaja": "Lisää rakennuttaja",
         "lisaaToteuttajia": "Lisää toteuttajia",
@@ -128,6 +131,13 @@
       "headerLabel": "Omat hankkeet",
       "meta": {
         "title": "Haitaton - Omat hankkeet"
+      }
+    },
+    "HANKE": {
+      "path": "/hankesalkku/:hankeTunnus",
+      "headerLabel": "Hankkeet",
+      "meta": {
+        "title": "Haitaton - Hankesivu"
       }
     },
     "HANKE": {
@@ -308,6 +318,13 @@
       "YKSI": "Satunnainen haitta",
       "KAKSI": "Lyhytaikainen toistuva haitta",
       "KOLME": "Pitkäkestoinen jatkuva haitta"
+    },
+    "alue": {
+      "title": "Hankealue {{index}}",
+      "duration": "Hankealueen kesto",
+      "surfaceArea": "Piirroksen pinta-ala",
+      "liikenneverkollinenHaitta": "Hankealueen liikenneverkollinen haitta",
+      "haittaMaarittelyt": "Hankealueen omat haittamäärittelyt"
     }
   },
   "hankeForm": {
@@ -409,6 +426,7 @@
     "editHanke": "Muokkaa hankkeen tietoja"
   },
   "hankeIndexes": {
+    "haittaindeksi": "Haittaindeksi",
     "haittaindeksit": "Haittaindeksit",
     "haittaindexTooltip": "Haittaindeksit lasketaan hankkeen alueen mukaan. Indeksit päivittyvät, kun tallennat lomakkeen tiedot tai siirryt seuraavalle sivulle.",
     "liikennehaittaindeksi": "Liikennehaittaindeksi",
@@ -506,7 +524,11 @@
     "clearFiltersButton": "Tyhjennä hakuehdot",
     "tabit": {
       "perustiedot": "Perustiedot",
-      "yhteystiedot": "Yhteystiedot"
+      "alueet": "Alueet",
+      "haittojenHallinta": "Haittojen hallinta",
+      "yhteystiedot": "Yhteystiedot",
+      "liitteet": "Liitteet",
+      "hakemukset": "Hakemukset"
     },
     "labels": {
       "kuvaus": "Hankkeen kuvaus",

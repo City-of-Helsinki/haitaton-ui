@@ -16,7 +16,7 @@ export type StyleAs =
   | 'body-l'
   | 'body-xl';
 
-export type Spacing = '2-xs' | 'xs' | 's' | 'm' | 'l';
+export type Spacing = '3-xs' | '2-xs' | 'xs' | 's' | 'm' | 'l';
 
 export type Props = {
   tag: Tag;

@@ -67,8 +67,11 @@
       "titles": {
         "omistaja": "SV:Hankkeen omistaja",
         "rakennuttajat": "SV:Rakennuttaja",
+        "rakennuttajatPlural": "Rakennuttajat",
         "toteuttajat": "SV:Toteuttaja",
+        "toteuttajatPlural": "Toteuttajat",
         "muut": "SV:Muu taho",
+        "muutPlural": "Muut tahot",
         "lisaaRakennuttajia": "SV:Lisää rakennuttajia",
         "lisaaRakennuttaja": "SV:Lisää rakennuttaja",
         "lisaaToteuttajia": "SV:Lisää toteuttajia",
@@ -128,6 +131,13 @@
       "headerLabel": "SV:Omat hankkeet",
       "meta": {
         "title": "SV:Haitaton - Omat hankkeet"
+      }
+    },
+    "HANKE": {
+      "path": "/hankesalkku/:hankeTunnus",
+      "headerLabel": "Hankkeet",
+      "meta": {
+        "title": "Haitaton - Hankesivu"
       }
     },
     "HANKE": {
@@ -308,6 +318,13 @@
       "YKSI": "SV:Satunnainen haitta",
       "KAKSI": "SV:Lyhytaikainen toistuva haitta",
       "KOLME": "SV:Pitkäkestoinen jatkuva haitta"
+    },
+    "alue": {
+      "title": "Hankealue {{index}}",
+      "duration": "Hankealueen kesto",
+      "surfaceArea": "Piirroksen pinta-ala",
+      "liikenneverkollinenHaitta": "Hankealueen liikenneverkollinen haitta",
+      "haittaMaarittelyt": "Hankealueen omat haittamäärittelyt"
     }
   },
   "hankeForm": {
@@ -411,6 +428,7 @@
     "editHanke": "SV: Muokkaa hankkeen tietoja"
   },
   "hankeIndexes": {
+    "haittaindeksi": "Haittaindeksi",
     "haittaindeksit": "SV:Haittaindeksit",
     "haittaindexTooltip": "SV:Haittaindeksit lasketaan hankkeen alueen mukaan. Indeksit päivittyvät, kun tallennat lomakkeen tiedot tai siirryt seuraavalle sivulle.",
     "liikennehaittaindeksi": "SV: Liikennehaittaindeksi",
@@ -506,8 +524,12 @@
     "draftState": "SV:Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.",
     "clearFiltersButton": "SV:Tyhjennä hakuehdot",
     "tabit": {
-      "perustiedot": "SV: Perustiedot",
-      "yhteystiedot": "SV: Yhteystiedot"
+      "perustiedot": "Perustiedot",
+      "alueet": "Alueet",
+      "haittojenHallinta": "Haittojen hallinta",
+      "yhteystiedot": "Yhteystiedot",
+      "liitteet": "Liitteet",
+      "hakemukset": "Hakemukset"
     },
     "labels": {
       "kuvaus": "SV: Hankkeen kuvaus",

@@ -67,6 +67,11 @@
     font-weight: 500;
   }
 
+  &--spacing-3-xs {
+    margin-top: var(--spacing-3-xs);
+    margin-bottom: var(--spacing-3-xs);
+  }
+
   &--spacing-2-xs {
     margin-top: var(--spacing-2-xs);
     margin-bottom: var(--spacing-2-xs);
@@ -92,6 +97,10 @@
     margin-bottom: var(--spacing-l);
   }
 
+  &--spacing-top-3-xs {
+    margin-top: var(--spacing-3-xs);
+  }
+
   &--spacing-top-2-xs {
     margin-top: var(--spacing-2-xs);
   }
@@ -110,6 +119,10 @@
 
   &--spacing-top-l {
     margin-top: var(--spacing-l);
+  }
+
+  &--spacing-bottom-3-xs {
+    margin-bottom: var(--spacing-3-xs);
   }
 
   &--spacing-bottom-2-xs {
