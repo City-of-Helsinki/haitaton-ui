@@ -36,7 +36,7 @@ describe('HankeMap', () => {
         params: { geometry: true },
       });
     });
-    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
+    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('0');
     changeFilterDate(startDateLabel, renderedComponent, '01.01.2022');
     expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
     changeFilterDate(endDateLabel, renderedComponent, '01.01.2022');

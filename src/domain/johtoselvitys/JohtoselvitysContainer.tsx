@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, IconCross, IconSaveDiskette, StepState } from 'hds-react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { JohtoselvitysFormValues } from './types';
 import { BasicHankeInfo } from './BasicInfo';
@@ -10,6 +11,7 @@ import { Geometries } from './Geometries';
 import { ReviewAndSend } from './ReviewAndSend';
 import MultipageForm from '../forms/MultipageForm';
 import FormActions from '../forms/components/FormActions';
+import { validationSchema } from './validationSchema';
 
 const JohtoselvitysContainer: React.FC = () => {
   const { t } = useTranslation();
@@ -120,6 +122,7 @@ const JohtoselvitysContainer: React.FC = () => {
     shouldFocusError: false,
     shouldUnregister: false,
     defaultValues: initialValues,
+    resolver: yupResolver(validationSchema),
   });
 
   const formSteps = [

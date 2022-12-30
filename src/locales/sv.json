@@ -66,7 +66,11 @@
       "hakemusInfo": "Hakemuksen tiedot"
     },
     "labels": {
-      "pintaAla": "SV:Pinta-ala"
+      "pintaAla": "SV:Pinta-ala",
+      "omatTiedot": "Omat tiedot",
+      "role": "Rooli",
+      "roleHelper": "Pääasiallinen roolisi työssä",
+      "fromHelsinkiProfile": "Haettu Helsinki-profiilin perusteella"
     },
     "requiredInstruction": "SV:Kaikki tähdellä * merkityt kentät ovat pakollisia.",
     "yhteystiedot": {
@@ -87,7 +91,10 @@
         "lisaaMuitaTahoja": "SV:Lisää muita tahoja",
         "lisaaMuuTaho": "SV:Lisää muu taho",
         "subContact": "SV:Yhteyshenkilö",
-        "subContactInformation": "SV:Yhteyshenkilön tiedot"
+        "subContactInformation": "SV:Yhteyshenkilön tiedot",
+        "customerWithContacts": "Työstä vastaava",
+        "contractorWithContacts": "Työn suorittaja",
+        "representativeWithContacts": "Asianhoitaja"
       },
       "labels": {
         "tyyppi": "SV:Tyyppi",
