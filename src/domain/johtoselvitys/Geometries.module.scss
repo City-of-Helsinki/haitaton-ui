@@ -1,5 +1,7 @@
 .mapContainer {
   position: relative;
+  width: 100%;
+  height: 500px;
 
   &__inner {
     position: absolute;

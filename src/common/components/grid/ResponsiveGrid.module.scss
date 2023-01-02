@@ -13,8 +13,4 @@
   @include respond-above(l) {
     grid-template-columns: repeat(3, 1fr);
   }
-
-  button {
-    align-self: flex-end;
-  }
 }

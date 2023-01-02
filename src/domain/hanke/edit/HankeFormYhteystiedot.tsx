@@ -108,7 +108,12 @@ const SubContactFields: React.FC<{ fieldPath: string; onRemove: () => void }> = 
           name={`${fieldPath}.${CONTACT_FORMFIELD.PUHELINNUMERO}`}
           label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.PUHELINNUMERO}`)}
         />
-        <Button variant="supplementary" iconLeft={<IconCross aria-hidden />} onClick={onRemove}>
+        <Button
+          variant="supplementary"
+          iconLeft={<IconCross aria-hidden />}
+          onClick={onRemove}
+          style={{ alignSelf: 'end' }}
+        >
           {t(`form:yhteystiedot:buttons:removeSubContact`)}
         </Button>
       </ResponsiveGrid>
