@@ -205,7 +205,7 @@
       }
     },
     "JOHTOSELVITYSHAKEMUS": {
-      "path": "/johtoselvityshakemus/*",
+      "path": "/johtoselvityshakemus",
       "headerLabel": "Luo uusi johtoselvityshakemus",
       "meta": {
         "title": "Haitaton - Luo uusi johtoselvityshakemus"
