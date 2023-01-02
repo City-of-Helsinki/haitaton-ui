@@ -58,19 +58,19 @@
       "dateMax": "EN:Viimeinen mahdollinen päivä on {{max}}"
     },
     "headers": {
-      "perustiedot": "Perustiedot",
-      "alueet": "Alueet",
-      "yhteystiedot": "Yhteystiedot",
-      "liitteetJaLisatiedot": "Liitteet ja lisätiedot",
-      "yhteenveto": "Yhteenveto",
-      "hakemusInfo": "Hakemuksen tiedot"
+      "perustiedot": "EN:Perustiedot",
+      "alueet": "EN:Alueet",
+      "yhteystiedot": "EN:Yhteystiedot",
+      "liitteetJaLisatiedot": "EN:Liitteet ja lisätiedot",
+      "yhteenveto": "EN:Yhteenveto",
+      "hakemusInfo": "EN:Hakemuksen tiedot"
     },
     "labels": {
       "pintaAla": "EN:Pinta-ala",
-      "omatTiedot": "Omat tiedot",
-      "role": "Rooli",
-      "roleHelper": "Pääasiallinen roolisi työssä",
-      "fromHelsinkiProfile": "Haettu Helsinki-profiilin perusteella"
+      "omatTiedot": "EN:Omat tiedot",
+      "role": "EN:Rooli",
+      "roleHelper": "EN:Pääasiallinen roolisi työssä",
+      "fromHelsinkiProfile": "EN:Haettu Helsinki-profiilin perusteella"
     },
     "requiredInstruction": "EN:Kaikki tähdellä * merkityt kentät ovat pakollisia.",
     "yhteystiedot": {
@@ -81,9 +81,9 @@
         "rakennuttajat": "EN:Rakennuttaja",
         "rakennuttajatPlural": "Rakennuttajat",
         "toteuttajat": "EN:Toteuttaja",
-        "toteuttajatPlural": "Toteuttajat",
+        "toteuttajatPlural": "EN:Toteuttajat",
         "muut": "EN:Muu taho",
-        "muutPlural": "Muut tahot",
+        "muutPlural": "EN:Muut tahot",
         "lisaaRakennuttajia": "EN:Lisää rakennuttajia",
         "lisaaRakennuttaja": "EN:Lisää rakennuttaja",
         "lisaaToteuttajia": "EN:Lisää toteuttajia",
@@ -92,9 +92,9 @@
         "lisaaMuuTaho": "EN:Lisää muu taho",
         "subContact": "EN:Yhteyshenkilö",
         "subContactInformation": "EN:Yhteyshenkilön tiedot",
-        "customerWithContacts": "Työstä vastaava",
-        "contractorWithContacts": "Työn suorittaja",
-        "representativeWithContacts": "Asianhoitaja"
+        "customerWithContacts": "EN:Työstä vastaava",
+        "contractorWithContacts": "EN:Työn suorittaja",
+        "representativeWithContacts": "EN:Asianhoitaja"
       },
       "labels": {
         "tyyppi": "EN:Tyyppi",
@@ -150,16 +150,9 @@
     },
     "HANKE": {
       "path": "/hankesalkku/:hankeTunnus",
-      "headerLabel": "Hankkeet",
+      "headerLabel": "EN:Hankkeet",
       "meta": {
-        "title": "Haitaton - Hankesivu"
-      }
-    },
-    "HANKE": {
-      "path": "/hankesalkku/:hankeTunnus",
-      "headerLabel": "Hankkeet",
-      "meta": {
-        "title": "Haitaton - Hankesivu"
+        "title": "EN:Haitaton - Hankesivu"
       }
     },
     "PUBLIC_HANKKEET": {
@@ -206,16 +199,16 @@
     },
     "HAKEMUS": {
       "path": "/hakemus/*",
-      "headerLabel": "Luo uusi hakemus",
+      "headerLabel": "EN:Luo uusi hakemus",
       "meta": {
-        "title": "Haitaton - Luo uusi hakemus"
+        "title": "EN:Haitaton - Luo uusi hakemus"
       }
     },
     "JOHTOSELVITYSHAKEMUS": {
       "path": "/johtoselvityshakemus/*",
-      "headerLabel": "Luo uusi johtoselvityshakemus",
+      "headerLabel": "EN:Luo uusi johtoselvityshakemus",
       "meta": {
-        "title": "Haitaton - Luo uusi johtoselvityshakemus"
+        "title": "EN:Haitaton - Luo uusi johtoselvityshakemus"
       }
     },
     "HAITATON_INFO": {
@@ -438,20 +431,20 @@
     }
   },
   "johtoselvitysForm": {
-    "pageHeader": "Johtoselvityshakemus",
+    "pageHeader": "EN:Johtoselvityshakemus",
     "perustiedot": {
-      "instructions": "<0>Huomioithan, että johtoselvitys on voimassa 1 kuukauden. Johtoselvityksen tulee olla voimassa johtojen maastonäyttöjä tilattaessa sekä Johtoselvitysta tehdessä. Johtoselvitys on tarvittaessa päivitettävä.</0><0>Yleisellä alueella tehtävästä työstä on tehtävä erillinen ilmoitus kaupungille. Mikäli joudut rajoittamaan liikennettä esimerkiksi työkoneiden kuljetuksen vuoksi tai poistamaan pysäköintipaikkoja kadun varresta, tulee sinun tehdä myös aluevuokraushakemus liikennejärjestelysuunnitelmineen.</0>"
+      "instructions": "EN:<0>Huomioithan, että johtoselvitys on voimassa 1 kuukauden. Johtoselvityksen tulee olla voimassa johtojen maastonäyttöjä tilattaessa sekä Johtoselvitysta tehdessä. Johtoselvitys on tarvittaessa päivitettävä.</0><0>Yleisellä alueella tehtävästä työstä on tehtävä erillinen ilmoitus kaupungille. Mikäli joudut rajoittamaan liikennettä esimerkiksi työkoneiden kuljetuksen vuoksi tai poistamaan pysäköintipaikkoja kadun varresta, tulee sinun tehdä myös aluevuokraushakemus liikennejärjestelysuunnitelmineen.</0>"
     }
   },
   "hakemus": {
     "labels": {
-      "nimi": "Työn nimi",
-      "tyossaKyse": "Työssä on kyse",
-      "kuvaus": "Työn kuvaus",
-      "constructionWork": "Uuden rakenteen tai johdon rakentamisesta",
-      "maintenanceWork": "Olemassaolevan rakenteen kunnossapitotyöstä",
-      "propertyConnectivity": "Kiinteistöliittymien rakentamisesta",
-      "emergencyWork": "Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi"
+      "nimi": "EN:Työn nimi",
+      "tyossaKyse": "EN:Työssä on kyse",
+      "kuvaus": "EN:Työn kuvaus",
+      "constructionWork": "EN:Uuden rakenteen tai johdon rakentamisesta",
+      "maintenanceWork": "EN:Olemassaolevan rakenteen kunnossapitotyöstä",
+      "propertyConnectivity": "EN:Kiinteistöliittymien rakentamisesta",
+      "emergencyWork": "EN:Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi"
     }
   },
   "hankeSidebar": {
@@ -557,12 +550,12 @@
     "draftState": "EN:Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.",
     "clearFiltersButton": "EN:Tyhjennä hakuehdot",
     "tabit": {
-      "perustiedot": "Perustiedot",
-      "alueet": "Alueet",
-      "haittojenHallinta": "Haittojen hallinta",
-      "yhteystiedot": "Yhteystiedot",
-      "liitteet": "Liitteet",
-      "hakemukset": "Hakemukset"
+      "perustiedot": "EN:Perustiedot",
+      "alueet": "EN:Alueet",
+      "haittojenHallinta": "EN:Haittojen hallinta",
+      "yhteystiedot": "EN:Yhteystiedot",
+      "liitteet": "EN:Liitteet",
+      "hakemukset": "EN:Hakemukset"
     },
     "labels": {
       "kuvaus": "EN: Hankkeen kuvaus",
@@ -583,7 +576,7 @@
       "osoite": "EN: Osoite",
       "sposti": "EN: Sähköposti",
       "puhelin": "EN: Puhelin",
-      "oikeudet": "Käyttöoikeutesi hankkeelle"
+      "oikeudet": "EN:Käyttöoikeutesi hankkeelle"
     }
   },
   "publicHankkeet": {

@@ -58,19 +58,19 @@
       "dateMax": "SV:Viimeinen mahdollinen päivä on {{max}}"
     },
     "headers": {
-      "perustiedot": "Perustiedot",
-      "alueet": "Alueet",
-      "yhteystiedot": "Yhteystiedot",
-      "liitteetJaLisatiedot": "Liitteet ja lisätiedot",
-      "yhteenveto": "Yhteenveto",
-      "hakemusInfo": "Hakemuksen tiedot"
+      "perustiedot": "SV:Perustiedot",
+      "alueet": "SV:Alueet",
+      "yhteystiedot": "SV:Yhteystiedot",
+      "liitteetJaLisatiedot": "SV:Liitteet ja lisätiedot",
+      "yhteenveto": "SV:Yhteenveto",
+      "hakemusInfo": "SV:Hakemuksen tiedot"
     },
     "labels": {
       "pintaAla": "SV:Pinta-ala",
-      "omatTiedot": "Omat tiedot",
-      "role": "Rooli",
-      "roleHelper": "Pääasiallinen roolisi työssä",
-      "fromHelsinkiProfile": "Haettu Helsinki-profiilin perusteella"
+      "omatTiedot": "SV:Omat tiedot",
+      "role": "SV:Rooli",
+      "roleHelper": "SV:Pääasiallinen roolisi työssä",
+      "fromHelsinkiProfile": "SV:Haettu Helsinki-profiilin perusteella"
     },
     "requiredInstruction": "SV:Kaikki tähdellä * merkityt kentät ovat pakollisia.",
     "yhteystiedot": {
@@ -83,7 +83,7 @@
         "toteuttajat": "SV:Toteuttaja",
         "toteuttajatPlural": "Toteuttajat",
         "muut": "SV:Muu taho",
-        "muutPlural": "Muut tahot",
+        "muutPlural": "SV:Muut tahot",
         "lisaaRakennuttajia": "SV:Lisää rakennuttajia",
         "lisaaRakennuttaja": "SV:Lisää rakennuttaja",
         "lisaaToteuttajia": "SV:Lisää toteuttajia",
@@ -92,9 +92,9 @@
         "lisaaMuuTaho": "SV:Lisää muu taho",
         "subContact": "SV:Yhteyshenkilö",
         "subContactInformation": "SV:Yhteyshenkilön tiedot",
-        "customerWithContacts": "Työstä vastaava",
-        "contractorWithContacts": "Työn suorittaja",
-        "representativeWithContacts": "Asianhoitaja"
+        "customerWithContacts": "SV:Työstä vastaava",
+        "contractorWithContacts": "SV:Työn suorittaja",
+        "representativeWithContacts": "SV:Asianhoitaja"
       },
       "labels": {
         "tyyppi": "SV:Tyyppi",
@@ -150,16 +150,9 @@
     },
     "HANKE": {
       "path": "/hankesalkku/:hankeTunnus",
-      "headerLabel": "Hankkeet",
+      "headerLabel": "SV:Hankkeet",
       "meta": {
-        "title": "Haitaton - Hankesivu"
-      }
-    },
-    "HANKE": {
-      "path": "/hankesalkku/:hankeTunnus",
-      "headerLabel": "Hankkeet",
-      "meta": {
-        "title": "Haitaton - Hankesivu"
+        "title": "SV:Haitaton - Hankesivu"
       }
     },
     "PUBLIC_HANKKEET": {
@@ -206,16 +199,16 @@
     },
     "HAKEMUS": {
       "path": "/hakemus/*",
-      "headerLabel": "Luo uusi hakemus",
+      "headerLabel": "SV:Luo uusi hakemus",
       "meta": {
-        "title": "Haitaton - Luo uusi hakemus"
+        "title": "SV:Haitaton - Luo uusi hakemus"
       }
     },
     "JOHTOSELVITYSHAKEMUS": {
       "path": "/johtoselvityshakemus/*",
-      "headerLabel": "Luo uusi johtoselvityshakemus",
+      "headerLabel": "SV:Luo uusi johtoselvityshakemus",
       "meta": {
-        "title": "Haitaton - Luo uusi johtoselvityshakemus"
+        "title": "SV:Haitaton - Luo uusi johtoselvityshakemus"
       }
     },
     "HAITATON_INFO": {
@@ -438,20 +431,20 @@
     }
   },
   "johtoselvitysForm": {
-    "pageHeader": "Johtoselvityshakemus",
+    "pageHeader": "SV:Johtoselvityshakemus",
     "perustiedot": {
-      "instructions": "<0>Huomioithan, että johtoselvitys on voimassa 1 kuukauden. Johtoselvityksen tulee olla voimassa johtojen maastonäyttöjä tilattaessa sekä Johtoselvitysta tehdessä. Johtoselvitys on tarvittaessa päivitettävä.</0><0>Yleisellä alueella tehtävästä työstä on tehtävä erillinen ilmoitus kaupungille. Mikäli joudut rajoittamaan liikennettä esimerkiksi työkoneiden kuljetuksen vuoksi tai poistamaan pysäköintipaikkoja kadun varresta, tulee sinun tehdä myös aluevuokraushakemus liikennejärjestelysuunnitelmineen.</0>"
+      "instructions": "SV:<0>Huomioithan, että johtoselvitys on voimassa 1 kuukauden. Johtoselvityksen tulee olla voimassa johtojen maastonäyttöjä tilattaessa sekä Johtoselvitysta tehdessä. Johtoselvitys on tarvittaessa päivitettävä.</0><0>Yleisellä alueella tehtävästä työstä on tehtävä erillinen ilmoitus kaupungille. Mikäli joudut rajoittamaan liikennettä esimerkiksi työkoneiden kuljetuksen vuoksi tai poistamaan pysäköintipaikkoja kadun varresta, tulee sinun tehdä myös aluevuokraushakemus liikennejärjestelysuunnitelmineen.</0>"
     }
   },
   "hakemus": {
     "labels": {
-      "nimi": "Työn nimi",
-      "tyossaKyse": "Työssä on kyse",
-      "kuvaus": "Työn kuvaus",
-      "constructionWork": "Uuden rakenteen tai johdon rakentamisesta",
-      "maintenanceWork": "Olemassaolevan rakenteen kunnossapitotyöstä",
-      "propertyConnectivity": "Kiinteistöliittymien rakentamisesta",
-      "emergencyWork": "Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi"
+      "nimi": "SV:Työn nimi",
+      "tyossaKyse": "SV:Työssä on kyse",
+      "kuvaus": "SV:Työn kuvaus",
+      "constructionWork": "SV:Uuden rakenteen tai johdon rakentamisesta",
+      "maintenanceWork": "SV:Olemassaolevan rakenteen kunnossapitotyöstä",
+      "propertyConnectivity": "SV:Kiinteistöliittymien rakentamisesta",
+      "emergencyWork": "SV:Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi"
     }
   },
   "hankeSidebar": {
@@ -556,12 +549,12 @@
     "draftState": "SV:Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.",
     "clearFiltersButton": "SV:Tyhjennä hakuehdot",
     "tabit": {
-      "perustiedot": "Perustiedot",
-      "alueet": "Alueet",
-      "haittojenHallinta": "Haittojen hallinta",
-      "yhteystiedot": "Yhteystiedot",
-      "liitteet": "Liitteet",
-      "hakemukset": "Hakemukset"
+      "perustiedot": "SV:Perustiedot",
+      "alueet": "SV:Alueet",
+      "haittojenHallinta": "SV:Haittojen hallinta",
+      "yhteystiedot": "SV:Yhteystiedot",
+      "liitteet": "SV:Liitteet",
+      "hakemukset": "SV:Hakemukset"
     },
     "labels": {
       "kuvaus": "SV: Hankkeen kuvaus",
@@ -582,7 +575,7 @@
       "osoite": "SV: Osoite",
       "sposti": "SV: Sähköposti",
       "puhelin": "SV: Puhelin",
-      "oikeudet": "Käyttöoikeutesi hankkeelle"
+      "oikeudet": "SV:Käyttöoikeutesi hankkeelle"
     }
   },
   "publicHankkeet": {

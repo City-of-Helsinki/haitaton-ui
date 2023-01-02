@@ -155,13 +155,6 @@
         "title": "Haitaton - Hankesivu"
       }
     },
-    "HANKE": {
-      "path": "/hankesalkku/:hankeTunnus",
-      "headerLabel": "Hankkeet",
-      "meta": {
-        "title": "Haitaton - Hankesivu"
-      }
-    },
     "PUBLIC_HANKKEET": {
       "path": "/julkisethankkeet",
       "headerLabel": "Hankkeet yleisillä alueilla",
