@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Checkbox, Select, SelectionGroup } from 'hds-react';
-// import * as Yup from 'yup';
 import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
-import { Box } from '@chakra-ui/react';
 import { findKey } from 'lodash';
 import { ApplicationType } from './types';
 import styles from './BasicInfo.module.scss';
@@ -217,19 +215,28 @@ export const BasicHankeInfo: React.FC = () => {
         />
       </ResponsiveGrid>
 
-      <Text tag="p" styleAs="body-m" spacingBottom="xs">
+      {/* TODO: Getting the profile information will be done in HAI-1398 */}
+      {/* Until then, user can input name */}
+      {/* <Text tag="p" styleAs="body-m" spacingBottom="xs">
         <Box as="span" fontWeight={500}>
           {t('form:yhteystiedot:labels:nimi')} *
         </Box>
       </Text>
       <Text tag="p" styleAs="body-l" spacingBottom="xs">
         {getValues(`applicationData.${selectedRole}.contacts.0.name`)}
-      </Text>
-      <Text tag="p" styleAs="body-m" spacingBottom="s">
+      </Text> */}
+      {/* <Text tag="p" styleAs="body-m" spacingBottom="s">
         <Box as="span" color="var(--color-black-60)">
           {t('form:labels:fromHelsinkiProfile')}
         </Box>
-      </Text>
+      </Text> */}
+      <ResponsiveGrid>
+        <TextInput
+          name={`applicationData.${selectedRole}.contacts.0.name`}
+          label={t('form:yhteystiedot:labels:nimi')}
+          required
+        />
+      </ResponsiveGrid>
 
       <ResponsiveGrid className={styles.formRow}>
         <TextInput
