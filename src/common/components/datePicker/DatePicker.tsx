@@ -17,7 +17,8 @@ type PropTypes = {
   required?: boolean;
   maxDate?: Date;
   minDate?: Date;
-  dateConvertFunction?: (value: string, valueAsDate: Date) => string | number;
+  initialMonth?: Date;
+  helperText?: string;
 };
 
 const DatePicker: React.FC<PropTypes> = ({
@@ -28,18 +29,12 @@ const DatePicker: React.FC<PropTypes> = ({
   required,
   minDate,
   maxDate,
+  initialMonth,
+  helperText,
   locale,
-  dateConvertFunction,
 }) => {
   const { t } = useTranslation();
   const { control } = useFormContext();
-
-  const convertDate =
-    dateConvertFunction ||
-    function defaultConvertDate(date) {
-      const convertedDateString = convertFinnishDate(date);
-      return toEndOfDayUTCISO(new Date(convertedDateString));
-    };
 
   return (
     <>
@@ -63,15 +58,18 @@ const DatePicker: React.FC<PropTypes> = ({
                 disabled={disabled}
                 onBlur={onBlur}
                 invalid={isTouched && Boolean(error)}
-                onChange={(date, valueAsDate) => {
-                  onChange(convertDate(date, valueAsDate));
+                onChange={(date) => {
+                  const convertedDateString = convertFinnishDate(date);
+                  onChange(toEndOfDayUTCISO(new Date(convertedDateString)));
                 }}
                 value={formatToFinnishDate(value)}
                 maxDate={maxDate}
                 minDate={minDate}
+                initialMonth={initialMonth}
                 language={locale}
                 required={required}
                 disableConfirmation
+                helperText={helperText}
                 errorText={isTouched ? getInputErrorText(t, error) : undefined}
               />
             </div>
