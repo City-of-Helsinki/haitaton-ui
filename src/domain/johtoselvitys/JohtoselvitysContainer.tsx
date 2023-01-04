@@ -24,7 +24,7 @@ const JohtoselvitysContainer: React.FC = () => {
       name: '',
       customerWithContacts: {
         customer: {
-          type: 'PERSON',
+          type: null,
           name: '',
           country: 'FI',
           postalAddress: {
@@ -69,7 +69,7 @@ const JohtoselvitysContainer: React.FC = () => {
       workDescription: '',
       contractorWithContacts: {
         customer: {
-          type: 'COMPANY',
+          type: null,
           name: '',
           country: 'FI',
           postalAddress: {
@@ -86,28 +86,54 @@ const JohtoselvitysContainer: React.FC = () => {
           invoicingOperator: null,
           sapCustomerNumber: null,
         },
-        contacts: [
-          {
-            name: '',
-            postalAddress: {
-              streetAddress: {
-                streetName: '',
-              },
-              postalCode: '',
-              city: '',
-            },
-            email: '',
-            phone: '',
-            orderer: false,
-          },
-        ],
+        contacts: [],
       },
       postalAddress: null,
-      representativeWithContacts: null,
+      representativeWithContacts: {
+        customer: {
+          type: null,
+          name: '',
+          country: 'FI',
+          postalAddress: {
+            streetAddress: {
+              streetName: '',
+            },
+            postalCode: '',
+            city: '',
+          },
+          email: '',
+          phone: '',
+          registryKey: '',
+          ovt: null,
+          invoicingOperator: null,
+          sapCustomerNumber: null,
+        },
+        contacts: [],
+      },
       invoicingCustomer: null,
       customerReference: null,
       area: null,
-      propertyDeveloperWithContacts: null,
+      propertyDeveloperWithContacts: {
+        customer: {
+          type: null,
+          name: '',
+          country: 'FI',
+          postalAddress: {
+            streetAddress: {
+              streetName: '',
+            },
+            postalCode: '',
+            city: '',
+          },
+          email: '',
+          phone: '',
+          registryKey: '',
+          ovt: null,
+          invoicingOperator: null,
+          sapCustomerNumber: null,
+        },
+        contacts: [],
+      },
       constructionWork: false,
       maintenanceWork: false,
       emergencyWork: false,

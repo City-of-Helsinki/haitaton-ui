@@ -25,8 +25,14 @@ export enum ContactType {
   OTHER = 'OTHER',
 }
 
+export type CustomerType =
+  | 'customerWithContacts'
+  | 'contractorWithContacts'
+  | 'propertyDeveloperWithContacts'
+  | 'representativeWithContacts';
+
 export type Customer = {
-  type: 'PERSON' | 'COMPANY' | 'ASSOCIATION' | 'OTHER';
+  type: keyof typeof ContactType | null;
   name: string;
   country: string;
   postalAddress: PostalAddress;
@@ -57,11 +63,17 @@ export type JohtoselvitysFormData = {
   clientApplicationKind: string;
   workDescription: string;
   postalAddress: PostalAddress | null;
-  representativeWithContacts: null;
+  representativeWithContacts: {
+    customer: Customer;
+    contacts: Contact[];
+  };
   invoicingCustomer: null;
   customerReference: null;
   area: null;
-  propertyDeveloperWithContacts: null;
+  propertyDeveloperWithContacts: {
+    customer: Customer;
+    contacts: Contact[];
+  };
   constructionWork: boolean;
   maintenanceWork: boolean;
   emergencyWork: boolean;

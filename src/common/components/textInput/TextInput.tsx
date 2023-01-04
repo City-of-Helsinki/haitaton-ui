@@ -11,6 +11,7 @@ type PropTypes = {
   label?: string;
   disabled?: boolean;
   required?: boolean;
+  readOnly?: boolean;
   tooltip?: TooltipProps;
   placeholder?: string;
   helperText?: string;
@@ -24,6 +25,7 @@ const TextInput: React.FC<PropTypes> = ({
   disabled,
   tooltip,
   required,
+  readOnly,
   placeholder,
   helperText,
   shouldUnregister,
@@ -54,6 +56,7 @@ const TextInput: React.FC<PropTypes> = ({
           disabled={disabled}
           data-testid={name}
           required={required}
+          readOnly={readOnly}
           {...tooltip}
         />
       )}

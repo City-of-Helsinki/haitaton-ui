@@ -97,7 +97,11 @@
         "subContactInformation": "SV:Yhteyshenkilön tiedot",
         "customerWithContacts": "SV:Työstä vastaava",
         "contractorWithContacts": "SV:Työn suorittaja",
-        "representativeWithContacts": "SV:Asianhoitaja"
+        "propertyDeveloperWithContacts": "SV:Rakennuttaja",
+        "representativeWithContacts": "SV:Asianhoitaja",
+        "addContractors": "SV:Lisää työn suorittajia",
+        "addRepresentatives": "SV:Lisää asianhoitajia",
+        "applicant": "SV:Hakija"
       },
       "labels": {
         "tyyppi": "SV:Tyyppi",
@@ -123,7 +127,11 @@
       "contactType": {
         "YKSITYISHENKILO": "SV:Yksityishenkilö",
         "YRITYS": "SV:Yritys",
-        "YHTEISO": "SV:Yhteisö"
+        "YHTEISO": "SV:Yhteisö",
+        "PERSON": "SV:Yksityishenkilö",
+        "COMPANY": "SV:Yritys",
+        "ASSOCIATION": "SV:Yhdistys",
+        "OTHER": "SV:Muu"
       },
       "buttons": {
         "addSubContact": "SV:Lisää yhteyshenkilö",
@@ -441,6 +449,9 @@
     "alueet": {
       "instructions": "SV:Voit lisätä selvitettävän alueen piirtämällä sen kartalle. Voit lisätä samalle hakemukselle useampia alueita, mikäli niitä koskeva aikaväli on sama.",
       "giveDates": "SV:Valitse työn päivämäärät piirtääksesi selvitettävät alueet kartalle."
+    },
+    "yhteystiedot": {
+      "instructions": "SV:<0>Hakemukselle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hakemukseen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hakemusta. Tarvittaessa voit antaa heille laajemmat käyttöoikeudet Omat hankkeet -näkymässä.</0><0>Hakijan yhteyshenkilö on oletuksena johtoselvityksen tilaaja. Tarvittaessa voit vaihtaa jonkun muista yhteyshenkilöistä tilaajaksi. Huomioithan, että johtoselvityksen tilaaja voi olla vain yksi henkilö.</0>"
     }
   },
   "hakemus": {
