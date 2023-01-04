@@ -1,14 +1,14 @@
 import React from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormikContext } from 'formik';
 import { JohtoselvitysFormValues } from './types';
 
 export const ReviewAndSend: React.FC = () => {
-  const { getValues } = useFormContext<JohtoselvitysFormValues>();
+  const formik = useFormikContext<JohtoselvitysFormValues>();
 
   return (
     <div>
       <div style={{ fontSize: 'var(--fontsize-body-m)', fontWeight: 500 }}>Annetut tiedot</div>
-      <p>{JSON.stringify(getValues())}</p>
+      <p>{JSON.stringify(formik.values)}</p>
     </div>
   );
 };
