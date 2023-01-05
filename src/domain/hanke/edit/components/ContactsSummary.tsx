@@ -52,6 +52,8 @@ const ContactsSummary: React.FC<{ contacts: HankeContact[] | HankeMuuTaho[]; tit
   contacts,
   title,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <>
       <SectionItemTitle>{title}</SectionItemTitle>
@@ -63,7 +65,7 @@ const ContactsSummary: React.FC<{ contacts: HankeContact[] | HankeMuuTaho[]; tit
               {contact.alikontaktit && contact.alikontaktit?.length > 0 && (
                 <>
                   <h3 style={{ marginBottom: 'var(--spacing-xs)' }}>
-                    <strong>Yhteyshenkilöt</strong>
+                    <strong>{t('form:yhteystiedot:titles:subContacts')}</strong>
                   </h3>
                   <Grid
                     templateColumns="repeat(auto-fit, minmax(280px, 290px))"

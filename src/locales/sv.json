@@ -70,7 +70,9 @@
       "omatTiedot": "SV:Omat tiedot",
       "role": "SV:Rooli",
       "roleHelper": "SV:Pääasiallinen roolisi työssä",
-      "fromHelsinkiProfile": "SV:Haettu Helsinki-profiilin perusteella"
+      "fromHelsinkiProfile": "SV:Haettu Helsinki-profiilin perusteella",
+      "addressInformation": "SV:Osoitetiedot",
+      "kokonaisAla": "SV:Alueiden kokonaispinta-ala"
     },
     "helperTexts": {
       "dateInForm": "SV:Anna muodossa P.K.VVVV"
@@ -94,11 +96,15 @@
         "lisaaMuitaTahoja": "SV:Lisää muita tahoja",
         "lisaaMuuTaho": "SV:Lisää muu taho",
         "subContact": "SV:Yhteyshenkilö",
+        "subContacts": "Yhteyshenkilöt",
         "subContactInformation": "SV:Yhteyshenkilön tiedot",
         "customerWithContacts": "SV:Työstä vastaava",
+        "customerWithContactsPlural": "SV:Työstä vastaavat",
         "contractorWithContacts": "SV:Työn suorittaja",
+        "contractorWithContactsPlural": "SV:Työn suorittajat",
         "propertyDeveloperWithContacts": "SV:Rakennuttaja",
         "representativeWithContacts": "SV:Asianhoitaja",
+        "representativeWithContactsPlural": "SV:Asianhoitajat",
         "addContractors": "SV:Lisää työn suorittajia",
         "addRepresentatives": "SV:Lisää asianhoitajia",
         "applicant": "SV:Hakija"
@@ -466,7 +472,8 @@
       "startDate": "SV:Työn arvioitu alkupäivä",
       "endDate": "SV:Työn arvioitu loppupäivä",
       "workArea": "SV:Työalue",
-      "areaInfo": "SV:Alueen tiedot"
+      "areaInfo": "SV:Alueen tiedot",
+      "checkInfo": "SV:Tarkista antamasi tiedot ja lähetä hakemus."
     }
   },
   "hankeSidebar": {
