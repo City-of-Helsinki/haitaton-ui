@@ -1,6 +1,6 @@
 import { $enum } from 'ts-enum-util';
 import yup from '../../common/utils/yup';
-import { ContactType } from './types';
+import { ContactType } from '../application/types/application';
 
 const requiredAddressSchema = yup.object().shape({
   streetAddress: yup.object().shape({
@@ -30,7 +30,7 @@ const contactSchema = yup
   });
 
 const customerSchema = contactSchema.shape({
-  type: yup.string().oneOf($enum(ContactType).getValues()).required(),
+  type: yup.string().oneOf($enum(ContactType).getValues()).nullable().required(),
   registryKey: yup.string().required(), // social security number or business id i.e. Y-tunnus
 });
 
@@ -44,11 +44,11 @@ export const validationSchema = yup.object().shape({
     name: yup.string().required(),
     postalAddress: requiredAddressSchema,
     workDescription: yup.string().required(),
-    contractorWithContacts: customerWithContactsSchema.required(),
-    customerWithContacts: customerWithContactsSchema.required(),
+    contractorWithContacts: customerWithContactsSchema,
+    customerWithContacts: customerWithContactsSchema,
     propertyDeveloperWithContacts: customerWithContactsSchema,
     representativeWithContacts: customerWithContactsSchema,
-    startTime: yup.date().required(),
-    endTime: yup.date().required(),
+    startTime: yup.date().nullable().required(),
+    endTime: yup.date().nullable().required(),
   }),
 });

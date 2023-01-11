@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Checkbox, Select, SelectionGroup } from 'hds-react';
 import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
-import { findKey } from 'lodash';
-import { ApplicationType } from './types';
+import { ApplicationType, CustomerType } from '../application/types/application';
 import styles from './BasicInfo.module.scss';
 import TextInput from '../../common/components/textInput/TextInput';
 import TextArea from '../../common/components/textArea/TextArea';
 import Text from '../../common/components/text/Text';
 import ResponsiveGrid from '../../common/components/grid/ResponsiveGrid';
 import useUser from '../auth/useUser';
+import { findOrdererKey } from './utils';
 
 export interface InitialValueTypes {
   applicationType: ApplicationType;
@@ -45,21 +45,17 @@ export const initialValues: InitialValueTypes = {
   },
 };
 
-type Option = { value: string; label: string };
+type Option = { value: CustomerType; label: string };
 
 export const BasicHankeInfo: React.FC = () => {
   const { register, watch, setValue, getValues, resetField } = useFormContext();
   const { t } = useTranslation();
   const user = useUser();
 
-  const [selectedRole, setSelectedRole] = useState(() => {
-    // Find the contact key that has orderer field true
-    // and set that to be the initial selected role.
-    const ordererRole = findKey(getValues('applicationData'), (obj) => {
-      return obj?.contacts && obj.contacts[0]?.orderer;
-    });
-    return ordererRole;
-  });
+  const [selectedRole, setSelectedRole] = useState(() =>
+    // Set contact key with orderer field true to be the initial selected role.
+    findOrdererKey(getValues('applicationData'))
+  );
 
   const [
     constructionWorkChecked,

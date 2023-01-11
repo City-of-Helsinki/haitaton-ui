@@ -1,8 +1,16 @@
-import React from 'react';
-import { Button, IconCross, IconSaveDiskette, StepState } from 'hds-react';
+import React, { useState } from 'react';
+import {
+  Button,
+  IconCross,
+  IconEnvelope,
+  IconSaveDiskette,
+  Notification,
+  StepState,
+} from 'hds-react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation } from 'react-query';
 
 import { JohtoselvitysFormValues } from './types';
 import { BasicHankeInfo } from './BasicInfo';
@@ -12,6 +20,9 @@ import { ReviewAndSend } from './ReviewAndSend';
 import MultipageForm from '../forms/MultipageForm';
 import FormActions from '../forms/components/FormActions';
 import { validationSchema } from './validationSchema';
+import { findOrdererKey } from './utils';
+import { changeFormStep } from '../forms/utils';
+import { saveApplication, sendApplication } from '../application/utils';
 
 const JohtoselvitysContainer: React.FC = () => {
   const { t } = useTranslation();
@@ -63,7 +74,7 @@ const JohtoselvitysContainer: React.FC = () => {
       },
       startTime: null,
       endTime: null,
-      pendingOnClient: false,
+      pendingOnClient: true,
       identificationNumber: 'HAI-123', // TODO: HAI-1160
       clientApplicationKind: 'HAITATON', // TODO: add to UI
       workDescription: '',
@@ -151,6 +162,50 @@ const JohtoselvitysContainer: React.FC = () => {
     resolver: yupResolver(validationSchema),
   });
 
+  const { getValues, setValue, handleSubmit, trigger } = formContext;
+
+  const [showSaveNotification, setShowSaveNotification] = useState(false);
+  const [showSendNotification, setShowSendNotification] = useState(false);
+
+  const applicationSaveMutation = useMutation(saveApplication, {
+    onMutate() {
+      setShowSaveNotification(false);
+    },
+    onSuccess(data) {
+      if (!getValues().id) {
+        setValue('id', data.id);
+      }
+    },
+    onSettled() {
+      setShowSaveNotification(true);
+    },
+  });
+
+  const applicationSendMutation = useMutation(sendApplication, {
+    onMutate() {
+      setShowSendNotification(false);
+    },
+    onSettled() {
+      setShowSendNotification(true);
+    },
+  });
+
+  async function saveCableApplication() {
+    return applicationSaveMutation.mutateAsync(getValues());
+  }
+
+  async function sendCableApplication() {
+    let { id } = getValues();
+    // If for some reason application has not been saved before
+    // sending, meaning id is null, save it before sending
+    if (!id) {
+      const responseData = await saveCableApplication();
+      setShowSaveNotification(false);
+      id = responseData.id as number;
+    }
+    applicationSendMutation.mutate(id);
+  }
+
   const formSteps = [
     {
       element: <BasicHankeInfo />,
@@ -174,28 +229,114 @@ const JohtoselvitysContainer: React.FC = () => {
     },
   ];
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const pageFieldsToValidate: any[][] = [
+    // Basic information page
+    [
+      'applicationData.name',
+      'applicationData.postalAddress',
+      'applicationData.workDescription',
+      `applicationData.${findOrdererKey(getValues('applicationData'))}.contacts`,
+    ],
+    // Areas page
+    ['applicationData.startTime', 'applicationData.endTime'],
+    // Contacts page
+    [
+      'applicationData.customerWithContacts',
+      'applicationData.contractorWithContacts',
+      getValues().applicationData.propertyDeveloperWithContacts &&
+        'applicationData.propertyDeveloperWithContacts',
+      getValues().applicationData.representativeWithContacts &&
+        'applicationData.representativeWithContacts',
+    ],
+  ];
+
   return (
     <FormProvider {...formContext}>
-      <MultipageForm heading={t('johtoselvitysForm:pageHeader')} formSteps={formSteps}>
+      {/* Notification for saving application */}
+      {showSaveNotification && (
+        <Notification
+          position="top-right"
+          dismissible
+          displayAutoCloseProgress={false}
+          autoClose
+          label={
+            applicationSaveMutation.isSuccess
+              ? t('hakemus:notifications:saveSuccessLabel')
+              : t('hakemus:notifications:saveErrorLabel')
+          }
+          type={applicationSaveMutation.isSuccess ? 'success' : 'error'}
+          closeButtonLabelText={t('common:components:notification:closeButtonLabelText')}
+          onClose={() => setShowSaveNotification(false)}
+        >
+          {applicationSaveMutation.isSuccess
+            ? t('hakemus:notifications:saveSuccessText')
+            : t('hakemus:notifications:saveErrorText')}
+        </Notification>
+      )}
+
+      {/* Notification for sending application */}
+      {showSendNotification && (
+        <Notification
+          position="top-right"
+          dismissible
+          label={
+            applicationSendMutation.isSuccess
+              ? t('hakemus:notifications:sendSuccessLabel')
+              : t('hakemus:notifications:sendErrorLabel')
+          }
+          type={applicationSendMutation.isSuccess ? 'success' : 'error'}
+          closeButtonLabelText={t('common:components:notification:closeButtonLabelText')}
+          onClose={() => setShowSendNotification(false)}
+        >
+          {applicationSendMutation.isSuccess
+            ? t('hakemus:notifications:sendSuccessText')
+            : t('hakemus:notifications:sendErrorText')}
+        </Notification>
+      )}
+
+      <MultipageForm
+        heading={t('johtoselvitysForm:pageHeader')}
+        formSteps={formSteps}
+        onStepChange={saveCableApplication}
+        onSubmit={handleSubmit(sendCableApplication)}
+      >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
+          function handleNextPage() {
+            changeFormStep(handleNext, pageFieldsToValidate[activeStepIndex], trigger);
+          }
+
           const lastStep = activeStepIndex === formSteps.length - 1;
           return (
             <FormActions
               activeStepIndex={activeStepIndex}
               totalSteps={formSteps.length}
               onPrevious={handlePrevious}
-              onNext={handleNext}
+              onNext={handleNextPage}
             >
               <Button variant="secondary" iconLeft={<IconCross aria-hidden />}>
                 {t('hankeForm:cancelButton')}
               </Button>
-              {!lastStep && (
+
+              <Button
+                variant="secondary"
+                iconLeft={<IconSaveDiskette aria-hidden="true" />}
+                data-testid="save-form-btn"
+                onClick={saveCableApplication}
+                isLoading={applicationSaveMutation.isLoading}
+                loadingText="Tallennetaan"
+              >
+                {t('hankeForm:saveDraftButton')}
+              </Button>
+
+              {lastStep && (
                 <Button
-                  variant="supplementary"
-                  iconLeft={<IconSaveDiskette aria-hidden="true" />}
-                  data-testid="save-form-btn"
+                  type="submit"
+                  iconLeft={<IconEnvelope aria-hidden="true" />}
+                  isLoading={applicationSendMutation.isLoading}
+                  loadingText="Lähetetään"
                 >
-                  {t('hankeForm:saveDraftButton')}
+                  {t('hakemus:buttons:sendApplication')}
                 </Button>
               )}
             </FormActions>

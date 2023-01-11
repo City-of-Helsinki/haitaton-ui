@@ -3,7 +3,11 @@ import { Accordion, Button, Fieldset, IconCross } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
-import { ContactType, CustomerType, Contact as ApplicationContact } from './types';
+import {
+  ContactType,
+  CustomerType,
+  Contact as ApplicationContact,
+} from '../application/types/application';
 import styles from './Contacts.module.scss';
 import Text from '../../common/components/text/Text';
 import ResponsiveGrid from '../../common/components/grid/ResponsiveGrid';

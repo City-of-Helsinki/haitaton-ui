@@ -1,4 +1,4 @@
-import GeoJSON from 'geojson';
+import GeoJSON, { Polygon } from 'geojson';
 
 export interface HankeGeoJSONProperties {
   hankeTunnus: string;
@@ -12,6 +12,7 @@ export interface CRS {
 
 export type HaitatonGeometry = GeoJSON.Geometry & {
   crs: CRS;
+  geometries: Polygon[];
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

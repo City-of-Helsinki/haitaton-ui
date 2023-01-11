@@ -40,6 +40,9 @@
       },
       "header": {
         "skipToContentLabel": "Siirry pääsisältöön"
+      },
+      "notification": {
+        "closeButtonLabelText": "Sulje ilmoitus"
       }
     },
     "error": "Tapahtui virhe. Yritä uudestaan."
@@ -472,6 +475,19 @@
       "workArea": "Työalue",
       "areaInfo": "Alueen tiedot",
       "checkInfo": "Tarkista antamasi tiedot ja lähetä hakemus."
+    },
+    "notifications": {
+      "saveSuccessLabel": "Hakemus tallennettu",
+      "saveErrorLabel": "Hakemuksen tallennus epäonnistui",
+      "saveSuccessText": "Hakemuksen tallentaminen onnistui",
+      "saveErrorText": "Hakemusta ei voitu tallentaa. Tarkista hakemuksen oikea sisältö ja että olet kirjautunut.",
+      "sendSuccessLabel": "Hakemus lähetetty",
+      "sendErrorLabel": "Hakemuksen lähetys epäonnistui",
+      "sendSuccessText": "Hakemuksen lähetys onnistui",
+      "sendErrorText": "Hakemusta ei voitu lähettää. Tarkista hakemuksen oikea sisältö ja että olet kirjautunut."
+    },
+    "buttons": {
+      "sendApplication": "Lähetä hakemus"
     }
   },
   "hankeSidebar": {
