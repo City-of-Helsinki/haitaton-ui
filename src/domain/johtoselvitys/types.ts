@@ -44,17 +44,13 @@ export type Customer = {
   sapCustomerNumber: string | null;
 };
 
+export type CustomerWithContacts = { customer: Customer; contacts: Contact[] };
+
 export type JohtoselvitysFormData = {
   applicationType: ApplicationType;
   name: string;
-  customerWithContacts: {
-    customer: Customer;
-    contacts: Contact[];
-  };
-  contractorWithContacts: {
-    customer: Customer;
-    contacts: Contact[];
-  };
+  customerWithContacts: CustomerWithContacts;
+  contractorWithContacts: CustomerWithContacts;
   geometry: HaitatonGeometry;
   startTime: number | null;
   endTime: number | null;
@@ -63,17 +59,11 @@ export type JohtoselvitysFormData = {
   clientApplicationKind: string;
   workDescription: string;
   postalAddress: PostalAddress | null;
-  representativeWithContacts: {
-    customer: Customer;
-    contacts: Contact[];
-  };
+  representativeWithContacts: CustomerWithContacts | null;
   invoicingCustomer: null;
   customerReference: null;
   area: null;
-  propertyDeveloperWithContacts: {
-    customer: Customer;
-    contacts: Contact[];
-  };
+  propertyDeveloperWithContacts: CustomerWithContacts | null;
   constructionWork: boolean;
   maintenanceWork: boolean;
   emergencyWork: boolean;

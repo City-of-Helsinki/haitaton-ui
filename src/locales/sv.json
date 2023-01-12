@@ -101,6 +101,7 @@
         "representativeWithContacts": "SV:Asianhoitaja",
         "addContractors": "SV:Lisää työn suorittajia",
         "addRepresentatives": "SV:Lisää asianhoitajia",
+        "addRepresentative": "SV:Lisää asianhoitaja",
         "applicant": "SV:Hakija"
       },
       "labels": {
@@ -139,7 +140,9 @@
         "remove": {
           "rakennuttajat": "SV:Poista rakennuttaja",
           "toteuttajat": "SV:Poista toteuttaja",
-          "muut": "SV:Poista muu taho"
+          "muut": "SV:Poista muu taho",
+          "propertyDeveloperWithContacts": "SV:Poista rakennuttaja",
+          "representativeWithContacts": "SV:Poista asianhoitaja"
         }
       }
     }
