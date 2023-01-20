@@ -12,14 +12,21 @@ import { ReviewAndSend } from './ReviewAndSend';
 import MultipageForm from '../forms/MultipageForm';
 import FormActions from '../forms/components/FormActions';
 import { validationSchema } from './validationSchema';
+import { HankeData } from '../types/hanke';
 
-const JohtoselvitysContainer: React.FC = () => {
+type Props = {
+  hanke: HankeData;
+};
+
+const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
   const { t } = useTranslation();
 
   const initialValues: JohtoselvitysFormValues = {
     id: null,
     applicationType: 'CABLE_REPORT',
     applicationData: {
+      hanke: hanke.id,
+      hankeTunnus: hanke.hankeTunnus,
       applicationType: 'CABLE_REPORT',
       name: '',
       customerWithContacts: {

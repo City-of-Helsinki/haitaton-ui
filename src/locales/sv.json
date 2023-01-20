@@ -42,7 +42,8 @@
         "skipToContentLabel": "SV:Siirry pääsisältöön"
       }
     },
-    "error": "SV: Tapahtui virhe. Yritä uudestaan."
+    "error": "SV: Tapahtui virhe. Yritä uudestaan.",
+    "closeButtonLabelText": "SV:Sulje"
   },
   "form": {
     "validations": {
@@ -444,8 +445,21 @@
       "constructionWork": "SV:Uuden rakenteen tai johdon rakentamisesta",
       "maintenanceWork": "SV:Olemassaolevan rakenteen kunnossapitotyöstä",
       "propertyConnectivity": "SV:Kiinteistöliittymien rakentamisesta",
-      "emergencyWork": "SV:Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi"
-    }
+      "emergencyWork": "SV:Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi",
+      "applicationType": "SV:Hakemustyyppi",
+      "copyPreviousApplication": "SV:Kopioi aiempi hakemus pohjaksi",
+      "applicationToUseAsBase": "SV:Pohjana käytettävä hakemus"
+    },
+    "buttons": {
+      "continueToApplication": "SV:Jatka hakemukseen"
+    },
+    "headers": {
+      "pickApplication": "SV:Valitse luotava hakemus"
+    },
+    "applicationTypes": {
+      "CABLE_REPORT": "SV:Johtoselvitys"
+    },
+    "applicationTypeInstruction": "SV:Valitse hakemustyyppi. Osaan hakemuksista voit myös kopioida aiemman hakemuksen pohjaksi. Kaivuilmoituksen kautta pääset tekemään myös johtoselvityksen, mikäli sinulla ei sellaista vielä ole."
   },
   "hankeSidebar": {
     "ariaSidebarContent": "SV:Hankkeen tiedot",

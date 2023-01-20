@@ -21,12 +21,13 @@ import HankeFormHaitat from './HankeFormHaitat';
 import HankeFormSummary from './HankeFormSummary';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
-import { HANKE_SAVETYPE } from '../../types/hanke';
+import { HankeData, HANKE_SAVETYPE } from '../../types/hanke';
 import { convertFormStateToHankeData } from './utils';
 import api from '../../api/api';
 import MultipageForm from '../../forms/MultipageForm';
 import FormActions from '../../forms/components/FormActions';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
+import ApplicationCreateDialog from '../../application/components/ApplicationCreateDialog';
 
 async function saveHanke({
   data,
@@ -71,6 +72,7 @@ const HankeForm: React.FC<Props> = ({
   const { HANKEPORTFOLIO } = useLocalizedRoutes();
   const navigate = useNavigate();
   const [showNotification, setShowNotification] = useState<FormNotification | null>(null);
+  const [showAddApplicationDialog, setShowAddApplicationDialog] = useState(false);
   const formContext = useForm<HankeDataFormState>({
     mode: 'onTouched',
     reValidateMode: 'onChange',
@@ -83,7 +85,7 @@ const HankeForm: React.FC<Props> = ({
 
   const {
     register,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, isValid },
     getValues,
     setValue,
     handleSubmit,
@@ -138,6 +140,14 @@ const HankeForm: React.FC<Props> = ({
     });
   }
 
+  function saveAndAddApplication() {
+    setShowAddApplicationDialog(true);
+  }
+
+  function closeAddApplicationDialog() {
+    setShowAddApplicationDialog(false);
+  }
+
   useEffect(() => {
     onIsDirtyChange(isDirty);
   }, [isDirty, onIsDirtyChange]);
@@ -173,6 +183,11 @@ const HankeForm: React.FC<Props> = ({
   return (
     <FormProvider {...formContext}>
       <FormNotifications showNotification={showNotification} />
+      <ApplicationCreateDialog
+        isOpen={showAddApplicationDialog}
+        onClose={closeAddApplicationDialog}
+        hanke={getValues() as HankeData}
+      />
       <div className="hankeForm">
         <MultipageForm
           heading={formHeading}
@@ -219,7 +234,12 @@ const HankeForm: React.FC<Props> = ({
                 )}
                 {lastStep && (
                   <>
-                    <Button variant="secondary" iconLeft={<IconPlusCircle aria-hidden />}>
+                    <Button
+                      variant="secondary"
+                      iconLeft={<IconPlusCircle aria-hidden />}
+                      onClick={saveAndAddApplication}
+                      disabled={!isValid}
+                    >
                       {t('hankeForm:saveAndAddButton')}
                     </Button>
                     <Button

@@ -39,6 +39,8 @@ export type Customer = {
 };
 
 export type JohtoselvitysFormData = {
+  hanke: number; // Hanke id
+  hankeTunnus: string;
   applicationType: ApplicationType;
   name: string;
   customerWithContacts: {
