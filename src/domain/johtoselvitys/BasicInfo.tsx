@@ -1,26 +1,15 @@
-import React, { useRef } from 'react';
-import { useFormikContext } from 'formik';
-import { Checkbox, TextArea, TextInput, DateInput, Select } from 'hds-react';
-import * as Yup from 'yup';
-import { startOfDay } from 'date-fns';
-import { convertFinnishDate, toStartOfDayUTCISO } from '../../common/utils/date';
-import { ApplicationType, JohtoselvitysFormValues } from './types';
+import React, { useEffect, useState } from 'react';
+import { Checkbox, Select, SelectionGroup } from 'hds-react';
+import { useFormContext } from 'react-hook-form';
+import { Trans, useTranslation } from 'react-i18next';
+import { findKey } from 'lodash';
+import { ApplicationType } from './types';
 import styles from './BasicInfo.module.scss';
-
-// TODO: add tooltips
-// TODO: add validation error messages
-// TODO: go through dynamic form example and see what is missing
-// TODO: date input min and max validation based on set dates
-
-export const today = startOfDay(new Date());
-
-export const validationSchema = {
-  name: Yup.string().required('Lisää nimi'),
-  startTime: Yup.string().required('Lisää aloituspäivä'),
-  endTime: Yup.string().required('Lisää lopetuspäivä'),
-  identificationNumber: Yup.string().required('Lisää liittyvä hanke'),
-  workDescription: Yup.string().required('Lisää työnkuvaus'),
-};
+import TextInput from '../../common/components/textInput/TextInput';
+import TextArea from '../../common/components/textArea/TextArea';
+import Text from '../../common/components/text/Text';
+import ResponsiveGrid from '../../common/components/grid/ResponsiveGrid';
+import useUser from '../auth/useUser';
 
 export interface InitialValueTypes {
   applicationType: ApplicationType;
@@ -59,155 +48,222 @@ export const initialValues: InitialValueTypes = {
 type Option = { value: string; label: string };
 
 export const BasicHankeInfo: React.FC = () => {
-  const formik = useFormikContext<JohtoselvitysFormValues>();
-  const startTimeInputIsDirty = useRef(false);
-  const endTimeInputIsDirty = useRef(false);
+  const { register, watch, setValue, getValues, resetField } = useFormContext();
+  const { t } = useTranslation();
+  const user = useUser();
+
+  const [selectedRole, setSelectedRole] = useState(() => {
+    // Find the contact key that has orderer field true
+    // and set that to be the initial selected role.
+    const ordererRole = findKey(getValues('applicationData'), (obj) => {
+      return obj?.contacts && obj.contacts[0]?.orderer;
+    });
+    return ordererRole;
+  });
+
+  const [
+    constructionWorkChecked,
+    maintenanceWorkChecked,
+    propertyConnectivityChecked,
+    emergencyWorkChecked,
+  ] = watch([
+    'applicationData.constructionWork',
+    'applicationData.maintenanceWork',
+    'applicationData.propertyConnectivity',
+    'applicationData.emergencyWork',
+  ]);
+
+  useEffect(() => {
+    if (user.data?.profile.name) {
+      setValue(`applicationData.${selectedRole}.contacts.0.name`, user.data?.profile.name);
+    }
+  }, [user.data?.profile.name, setValue, selectedRole]);
+
+  useEffect(() => {
+    if (user.data?.profile.email) {
+      setValue(`applicationData.${selectedRole}.contacts.0.email`, user.data?.profile.email);
+    }
+  }, [user.data?.profile.email, setValue, selectedRole]);
+
+  const roleOptions: Option[] = [
+    { value: 'customerWithContacts', label: t('form:yhteystiedot:titles:customerWithContacts') },
+    {
+      value: 'contractorWithContacts',
+      label: t('form:yhteystiedot:titles:contractorWithContacts'),
+    },
+    { value: 'propertyDeveloperWithContacts', label: t('form:yhteystiedot:titles:rakennuttajat') },
+    {
+      value: 'representativeWithContacts',
+      label: t('form:yhteystiedot:titles:representativeWithContacts'),
+    },
+  ];
+
+  function handleRoleChange(role: Option) {
+    const previousValues = getValues(`applicationData.${selectedRole}.contacts.0`);
+
+    // Reset contacts array of previously selected role
+    resetField(`applicationData.${selectedRole}.contacts`, {
+      defaultValue: [],
+    });
+
+    setValue(`applicationData.${role.value}.contacts.0`, previousValues);
+    setSelectedRole(role.value);
+  }
+
   return (
-    <div className={styles.gridContainer}>
-      <div className={styles.gridItem}>
-        <Select
-          className={styles.gridItem}
-          required
-          label="Tyyppi"
-          defaultValue={{ value: 'CABLE_APPLICATION', label: 'Johtoselvityshakemus' }}
-          value={{ value: 'CABLE_APPLICATION', label: 'Johtoselvityshakemus' }}
-          options={[{ value: 'CABLE_APPLICATION', label: 'Johtoselvityshakemus' }]}
-          onChange={(selection: Option) => {
-            formik.setFieldValue('applicationType', selection.value);
-          }}
-        />
+    <div>
+      <div className={styles.formInstructions}>
+        <Trans i18nKey="johtoselvitysForm:perustiedot:instructions">
+          <p>
+            Huomioithan, että johtoselvitys on voimassa 1 kuukauden. Johtoselvityksen tulee olla
+            voimassa johtojen maastonäyttöjä tilattaessa sekä Johtoselvitysta tehdessä.
+            Johtoselvitys on tarvittaessa päivitettävä.
+          </p>
+          <p>
+            Yleisellä alueella tehtävästä työstä on tehtävä erillinen ilmoitus kaupungille. Mikäli
+            joudut rajoittamaan liikennettä esimerkiksi työkoneiden kuljetuksen vuoksi tai
+            poistamaan pysäköintipaikkoja kadun varresta, tulee sinun tehdä myös aluevuokraushakemus
+            liikennejärjestelysuunnitelmineen.
+          </p>
+        </Trans>
       </div>
-      {/* TODO: HAI-1160 */}
-      <Select
-        className={styles.gridItem}
+
+      <Text tag="p" spacingBottom="l">
+        {t('form:requiredInstruction')}
+      </Text>
+
+      <Text tag="h2" styleAs="h4" weight="bold" spacingBottom="s">
+        {t('form:headers:hakemusInfo')}
+      </Text>
+
+      <TextInput
+        className={styles.formRow}
+        name="applicationData.name"
+        label={t('hakemus:labels:nimi')}
         required
-        label="Liittyvä hanke"
-        options={[]}
-        disabled
-        onChange={(selection: Option) => {
-          formik.setFieldValue('applicationData.identificationNumber', selection.value);
-        }}
-      />
-      <div className={styles.nimi}>
-        <TextInput
-          className={styles.gridItem}
-          id="applicationData.name"
-          label="Nimi"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.applicationData.name}
-        />
-      </div>
-
-      <div className={styles.hakemusTunnus}>
-        <TextInput
-          className={styles.gridItem}
-          id="applicationData.id"
-          label="Hakemustunnus"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.id?.toString()}
-          defaultValue={formik.values.id?.toString()}
-          disabled
-        />
-      </div>
-      <TextArea
-        className={styles.gridItem}
-        id="applicationData.workDescription"
-        label="Kuvaus"
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.applicationData.workDescription}
       />
 
-      <div className={styles.dateInputLeft}>
-        <DateInput
-          className={styles.dateInputLeft}
-          id="applicationData.startTime"
-          name="applicationData.startTime"
-          label="Aloituspäivä"
-          minDate={new Date()}
-          onChange={(date: string) => {
-            const convertedDateString = convertFinnishDate(date);
-
-            if (convertedDateString.length > 0) {
-              // TODO convert to unix timestamp
-              formik.setFieldValue(
-                'applicationData.startTime',
-                toStartOfDayUTCISO(new Date(convertedDateString)) || ''
-              );
-            }
-            startTimeInputIsDirty.current = true;
-          }}
-          onBlur={() => {
-            if (startTimeInputIsDirty.current) {
-              formik.handleBlur({ target: { name: 'applicationData.startTime' } });
-            }
-          }}
+      <ResponsiveGrid className={styles.formRow}>
+        <TextInput
+          name="applicationData.postalAddress.streetAddress.streetName"
+          label={t('form:yhteystiedot:labels:osoite')}
           required
         />
-      </div>
-      <div className={styles.dateInputRight}>
-        <DateInput
-          id="applicationData.endTime"
-          name="applicationData.endTime"
-          label="Lopetuspäivä"
-          minDate={new Date()}
-          onChange={(date: string) => {
-            const convertedDateString = convertFinnishDate(date);
-
-            if (convertedDateString.length > 0) {
-              // TODO convert to unix timestamp
-              formik.setFieldValue(
-                'applicationData.endTime',
-                toStartOfDayUTCISO(new Date(convertedDateString)) || ''
-              );
-            }
-            endTimeInputIsDirty.current = true;
-          }}
-          onBlur={() => {
-            if (endTimeInputIsDirty.current) {
-              formik.handleBlur({ target: { name: 'applicationData.endTime' } });
-            }
-          }}
+        <TextInput
+          name="applicationData.postalAddress.postalCode"
+          label={t('form:yhteystiedot:labels:postinumero')}
           required
         />
-      </div>
-      <div className={styles.gridItem}>
-        <div style={{ fontSize: 'var(--fontsize-body-m)', fontWeight: 500 }}>Työssä on kyse:</div>
+        <TextInput
+          name="applicationData.postalAddress.city"
+          label={t('form:yhteystiedot:labels:postitoimipaikka')}
+          required
+        />
+      </ResponsiveGrid>
+
+      <SelectionGroup label={t('hakemus:labels:tyossaKyse')} required className={styles.formRow}>
         <Checkbox
+          {...register('applicationData.constructionWork')}
           id="applicationData.constructionWork"
           name="applicationData.constructionWork"
-          label="Uuden rakenteen tai johdon rakentamisesta"
-          checked={formik.values.applicationData.constructionWork === true}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
+          label={t('hakemus:labels:constructionWork')}
+          checked={constructionWorkChecked}
         />
         <Checkbox
+          {...register('applicationData.maintenanceWork')}
           id="applicationData.maintenanceWork"
           name="applicationData.maintenanceWork"
-          label="Olemassaolevan rakenteen kunnossapitotyöstä"
-          checked={formik.values.applicationData.maintenanceWork === true}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
+          label={t('hakemus:labels:maintenanceWork')}
+          checked={maintenanceWorkChecked}
         />
         <Checkbox
+          {...register('applicationData.propertyConnectivity')}
           id="applicationData.propertyConnectivity"
           name="applicationData.propertyConnectivity"
-          label="Kiinteistöliittymien rakentamisesta"
-          checked={formik.values.applicationData.propertyConnectivity === true}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
+          label={t('hakemus:labels:propertyConnectivity')}
+          checked={propertyConnectivityChecked}
         />
         <Checkbox
+          {...register('applicationData.emergencyWork')}
           id="applicationData.emergencyWork"
           name="applicationData.emergencyWork"
-          label="Kaivutyö on aloitettu jo ennen johtoselvityksen tilaamista merkittävien vahinkojen estämiseksi (hätätyön luonteinen työ)"
-          checked={formik.values.applicationData.emergencyWork === true}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
+          label={t('hakemus:labels:emergencyWork')}
+          checked={emergencyWorkChecked}
         />
-      </div>
+      </SelectionGroup>
+
+      <TextArea
+        className={styles.formRow}
+        name="applicationData.workDescription"
+        label={t('hakemus:labels:kuvaus')}
+        required
+      />
+
+      <Text tag="h2" styleAs="h4" weight="bold" spacingBottom="s">
+        {t('form:labels:omatTiedot')}
+      </Text>
+
+      <ResponsiveGrid className={styles.formRow}>
+        <Select<Option>
+          options={roleOptions}
+          id="roleInApplication"
+          defaultValue={roleOptions.find((role) => role.value === selectedRole)}
+          label={t('form:labels:role')}
+          onChange={handleRoleChange}
+          helper={t('form:labels:roleHelper')}
+          required
+        />
+      </ResponsiveGrid>
+
+      {/* TODO: Getting the profile information will be done in HAI-1398 */}
+      {/* Until then, user can input name */}
+      {/* <Text tag="p" styleAs="body-m" spacingBottom="xs">
+        <Box as="span" fontWeight={500}>
+          {t('form:yhteystiedot:labels:nimi')} *
+        </Box>
+      </Text>
+      <Text tag="p" styleAs="body-l" spacingBottom="xs">
+        {getValues(`applicationData.${selectedRole}.contacts.0.name`)}
+      </Text> */}
+      {/* <Text tag="p" styleAs="body-m" spacingBottom="s">
+        <Box as="span" color="var(--color-black-60)">
+          {t('form:labels:fromHelsinkiProfile')}
+        </Box>
+      </Text> */}
+      <ResponsiveGrid>
+        <TextInput
+          name={`applicationData.${selectedRole}.contacts.0.name`}
+          label={t('form:yhteystiedot:labels:nimi')}
+          required
+        />
+      </ResponsiveGrid>
+
+      <ResponsiveGrid className={styles.formRow}>
+        <TextInput
+          name={`applicationData.${selectedRole}.contacts.0.postalAddress.streetAddress.streetName`}
+          label={t('form:yhteystiedot:labels:osoite')}
+        />
+        <TextInput
+          name={`applicationData.${selectedRole}.contacts.0.postalAddress.postalCode`}
+          label={t('form:yhteystiedot:labels:postinumero')}
+        />
+        <TextInput
+          name={`applicationData.${selectedRole}.contacts.0.postalAddress.city`}
+          label={t('form:yhteystiedot:labels:postitoimipaikka')}
+        />
+      </ResponsiveGrid>
+      <ResponsiveGrid className={styles.formRow}>
+        <TextInput
+          name={`applicationData.${selectedRole}.contacts.0.email`}
+          label={t('form:yhteystiedot:labels:email')}
+          required
+        />
+        <TextInput
+          name={`applicationData.${selectedRole}.contacts.0.phone`}
+          label={t('form:yhteystiedot:labels:puhelinnumero')}
+          required
+        />
+      </ResponsiveGrid>
     </div>
   );
 };

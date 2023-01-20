@@ -15,6 +15,7 @@ type PropTypes = {
   placeholder?: string;
   helperText?: string;
   shouldUnregister?: boolean;
+  className?: string;
 };
 
 const TextInput: React.FC<PropTypes> = ({
@@ -26,6 +27,7 @@ const TextInput: React.FC<PropTypes> = ({
   placeholder,
   helperText,
   shouldUnregister,
+  className,
 }) => {
   const { t } = useTranslation();
   const { control } = useFormContext();
@@ -40,6 +42,7 @@ const TextInput: React.FC<PropTypes> = ({
         <HdsTextInput
           id={name}
           name={name}
+          className={className}
           label={label || t(`hankeForm:labels:${name}`)}
           value={value || ''}
           helperText={helperText}

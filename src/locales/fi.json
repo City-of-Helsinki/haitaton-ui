@@ -57,8 +57,20 @@
       "dateMin": "Ensimmäinen mahdollinen päivä on {{min}}",
       "dateMax": "Viimeinen mahdollinen päivä on {{max}}"
     },
+    "headers": {
+      "perustiedot": "Perustiedot",
+      "alueet": "Alueet",
+      "yhteystiedot": "Yhteystiedot",
+      "liitteetJaLisatiedot": "Liitteet ja lisätiedot",
+      "yhteenveto": "Yhteenveto",
+      "hakemusInfo": "Hakemuksen tiedot"
+    },
     "labels": {
-      "pintaAla": "Pinta-ala"
+      "pintaAla": "Pinta-ala",
+      "omatTiedot": "Omat tiedot",
+      "role": "Rooli",
+      "roleHelper": "Pääasiallinen roolisi työssä",
+      "fromHelsinkiProfile": "Haettu Helsinki-profiilin perusteella"
     },
     "requiredInstruction": "Kaikki tähdellä * merkityt kentät ovat pakollisia.",
     "yhteystiedot": {
@@ -79,7 +91,10 @@
         "lisaaMuitaTahoja": "Lisää muita tahoja",
         "lisaaMuuTaho": "Lisää muu taho",
         "subContact": "Yhteyshenkilö",
-        "subContactInformation": "Yhteyshenkilön tiedot"
+        "subContactInformation": "Yhteyshenkilön tiedot",
+        "customerWithContacts": "Työstä vastaava",
+        "contractorWithContacts": "Työn suorittaja",
+        "representativeWithContacts": "Asianhoitaja"
       },
       "labels": {
         "tyyppi": "Tyyppi",
@@ -190,7 +205,7 @@
       }
     },
     "JOHTOSELVITYSHAKEMUS": {
-      "path": "/johtoselvityshakemus/*",
+      "path": "/johtoselvityshakemus",
       "headerLabel": "Luo uusi johtoselvityshakemus",
       "meta": {
         "title": "Haitaton - Luo uusi johtoselvityshakemus"
@@ -414,6 +429,23 @@
     },
     "finishedForm": {
       "header": "Lomake on lähetetty onnistuneesti"
+    }
+  },
+  "johtoselvitysForm": {
+    "pageHeader": "Johtoselvityshakemus",
+    "perustiedot": {
+      "instructions": "<0>Huomioithan, että johtoselvitys on voimassa 1 kuukauden. Johtoselvityksen tulee olla voimassa johtojen maastonäyttöjä tilattaessa sekä Johtoselvitysta tehdessä. Johtoselvitys on tarvittaessa päivitettävä.</0><0>Yleisellä alueella tehtävästä työstä on tehtävä erillinen ilmoitus kaupungille. Mikäli joudut rajoittamaan liikennettä esimerkiksi työkoneiden kuljetuksen vuoksi tai poistamaan pysäköintipaikkoja kadun varresta, tulee sinun tehdä myös aluevuokraushakemus liikennejärjestelysuunnitelmineen.</0>"
+    }
+  },
+  "hakemus": {
+    "labels": {
+      "nimi": "Työn nimi",
+      "tyossaKyse": "Työssä on kyse",
+      "kuvaus": "Työn kuvaus",
+      "constructionWork": "Uuden rakenteen tai johdon rakentamisesta",
+      "maintenanceWork": "Olemassaolevan rakenteen kunnossapitotyöstä",
+      "propertyConnectivity": "Kiinteistöliittymien rakentamisesta",
+      "emergencyWork": "Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi"
     }
   },
   "hankeSidebar": {

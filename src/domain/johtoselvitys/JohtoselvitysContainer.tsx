@@ -1,201 +1,20 @@
-import React, { useState } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
-import { Formik, useFormikContext } from 'formik';
-import { Button, Notification } from 'hds-react';
-import { BasicHankeInfo } from './BasicInfo';
+import React from 'react';
+import { Button, IconCross, IconSaveDiskette, StepState } from 'hds-react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { JohtoselvitysFormValues } from './types';
+import { BasicHankeInfo } from './BasicInfo';
 import { Contacts } from './Contacts';
 import { Geometries } from './Geometries';
 import { ReviewAndSend } from './ReviewAndSend';
-import api from '../api/api';
-import FormPagination from '../forms/components/FormPageIndicator';
-import styles from './Johtoselvitys.module.scss';
-
-interface ButtonProps {
-  nextPath?: string;
-  previousPath?: string;
-}
-
-const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) => {
-  const navigate = useNavigate();
-  const formik = useFormikContext<JohtoselvitysFormValues>();
-  const [saveLoading, setSaveLoading] = useState(false);
-  const [showSaveOK, setShowSaveOK] = useState(false);
-  const [showSaveError, setShowSaveError] = useState(false);
-  const [publishLoading, setPublishLoading] = useState(false);
-  const [showPublishOK, setShowPublishOK] = useState(false);
-  const [showPublishError, setShowPublishError] = useState(false);
-
-  const saveFormState = async () => {
-    setSaveLoading(true);
-    try {
-      if (formik.values.id) {
-        const { data } = await api.put<JohtoselvitysFormValues>(
-          `/hakemukset/${formik.values.id}`,
-          formik.values
-        );
-        formik.setValues(data);
-      } else {
-        const { data } = await api.post<JohtoselvitysFormValues>('/hakemukset', formik.values);
-        formik.setValues(data);
-      }
-      // TODO: HAI-1156
-      // TODO: HAI-1159
-      setShowSaveOK(true);
-    } catch (error) {
-      setShowSaveError(true);
-    }
-    setSaveLoading(false);
-  };
-
-  const sendFormToAllu = async () => {
-    setPublishLoading(true);
-    try {
-      await api.post<unknown>(`/hakemukset/${formik.values.id}/send-application`, {});
-      setShowPublishOK(true);
-    } catch (error) {
-      setShowPublishError(true);
-    }
-    // TODO: HAI-1157
-    // TODO: HAI-1158
-    setPublishLoading(false);
-  };
-
-  return (
-    <div className={styles.navButtonContainer}>
-      {previousPath && (
-        <div className={styles.navPrev}>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              // TODO: HAI-1165
-              // TODO: HAI-1166
-              navigate(`/fi/johtoselvityshakemus${previousPath}`); // TODO: localized links
-            }}
-          >
-            Edellinen
-          </Button>
-        </div>
-      )}
-      {nextPath && (
-        <div className={styles.navNext}>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              // TODO: HAI-1165
-              // TODO: HAI-1166
-              navigate(`/fi/johtoselvityshakemus${nextPath}`); // TODO: localized links
-            }}
-          >
-            Seuraava
-          </Button>
-        </div>
-      )}
-      {!nextPath && ( // Final page reached, provide an action to save
-        <>
-          <div className={styles.navSave}>
-            <Button
-              isLoading={saveLoading}
-              loadingText="Tallennetaan... "
-              onClick={() => {
-                saveFormState();
-              }}
-            >
-              Tallenna hakemus
-            </Button>
-            {showSaveOK && (
-              <Notification
-                key={new Date().toString()}
-                position="top-right"
-                displayAutoCloseProgress={false}
-                autoClose
-                dismissible
-                label="Hakemus tallennettu"
-                type="success"
-                onClose={() => {
-                  setShowPublishOK(false);
-                }}
-                closeButtonLabelText="closebuttonlbl"
-              >
-                Hakemuksen tallentaminen onnistui
-              </Notification>
-            )}
-            {showSaveError && (
-              <Notification
-                key={new Date().toString()}
-                position="top-right"
-                displayAutoCloseProgress={false}
-                autoClose
-                dismissible
-                label="Hakemuksen tallennus epäonnistui"
-                type="error"
-                onClose={() => {
-                  setShowPublishError(false);
-                }}
-                closeButtonLabelText="closebuttonlbl"
-              >
-                Hakemusta ei voitu tallentaa. Tarkista hakemuksen oikea sisältö ja että olet
-                kirjautunut.
-              </Notification>
-            )}
-          </div>
-          <div className={styles.navPublish}>
-            <Button
-              isLoading={publishLoading}
-              loadingText="Lähetetään... "
-              // eslint-disable-next-line no-unneeded-ternary
-              disabled={formik.values.id ? false : true}
-              onClick={() => {
-                sendFormToAllu();
-                // navigate(`/fi/hakemus${nextPath}`); // TODO: localized links
-              }}
-            >
-              Lähetä hakemus
-            </Button>
-            {showPublishOK && (
-              <Notification
-                key={new Date().toString()}
-                position="top-right"
-                displayAutoCloseProgress={false}
-                autoClose
-                dismissible
-                label="Form saved!"
-                type="success"
-                onClose={() => {
-                  setShowPublishOK(false);
-                }}
-                closeButtonLabelText="closebuttonlbl"
-              >
-                Saving your form was successful.
-              </Notification>
-            )}
-            {showPublishError && (
-              <Notification
-                key={new Date().toString()}
-                position="top-right"
-                displayAutoCloseProgress={false}
-                autoClose
-                dismissible
-                label="Hakemuksen lähetys epäonnistui"
-                type="error"
-                onClose={() => {
-                  setShowPublishError(false);
-                }}
-                closeButtonLabelText="closebuttonlbl"
-              >
-                Hakemusta ei voitu lähettää. Tarkista hakemuksen oikea sisältö ja tiedot.
-              </Notification>
-            )}
-          </div>
-        </>
-      )}
-    </div>
-  );
-};
+import MultipageForm from '../forms/MultipageForm';
+import FormActions from '../forms/components/FormActions';
+import { validationSchema } from './validationSchema';
 
 const JohtoselvitysContainer: React.FC = () => {
-  const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const initialValues: JohtoselvitysFormValues = {
     id: null,
@@ -244,7 +63,7 @@ const JohtoselvitysContainer: React.FC = () => {
       },
       startTime: 1646267516.878748,
       endTime: 1646267516.878748,
-      pendingOnClient: true,
+      pendingOnClient: false,
       identificationNumber: 'HAI-123', // TODO: HAI-1160
       clientApplicationKind: 'HAITATON', // TODO: add to UI
       workDescription: '',
@@ -296,69 +115,68 @@ const JohtoselvitysContainer: React.FC = () => {
     },
   };
 
+  const formContext = useForm<JohtoselvitysFormValues>({
+    mode: 'onTouched',
+    reValidateMode: 'onChange',
+    criteriaMode: 'all',
+    shouldFocusError: false,
+    shouldUnregister: false,
+    defaultValues: initialValues,
+    resolver: yupResolver(validationSchema),
+  });
+
   const formSteps = [
     {
-      path: '/',
       element: <BasicHankeInfo />,
-      title: 'Perustiedot',
+      label: t('form:headers:perustiedot'),
+      state: StepState.available,
     },
     {
-      path: '/contacts',
-      element: <Contacts />,
-      title: 'Yhteystiedot',
-    },
-    {
-      path: '/alueet',
       element: <Geometries />,
-      title: 'Aluetiedot',
+      label: t('form:headers:alueet'),
+      state: StepState.disabled,
     },
     {
-      path: '/yhteenveto',
+      element: <Contacts />,
+      label: t('form:headers:yhteystiedot'),
+      state: StepState.disabled,
+    },
+    {
       element: <ReviewAndSend />,
-      title: 'Yhteenveto',
+      label: t('form:headers:yhteenveto'),
+      state: StepState.disabled,
     },
   ];
 
   return (
-    <>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={() => {
-          // TODO: maybe needed for entire form validation prior to last page submit?
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
+    <FormProvider {...formContext}>
+      <MultipageForm heading={t('johtoselvitysForm:pageHeader')} formSteps={formSteps}>
+        {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
+          const lastStep = activeStepIndex === formSteps.length - 1;
+          return (
+            <FormActions
+              activeStepIndex={activeStepIndex}
+              totalSteps={formSteps.length}
+              onPrevious={handlePrevious}
+              onNext={handleNext}
+            >
+              <Button variant="secondary" iconLeft={<IconCross aria-hidden />}>
+                {t('hankeForm:cancelButton')}
+              </Button>
+              {!lastStep && (
+                <Button
+                  variant="supplementary"
+                  iconLeft={<IconSaveDiskette aria-hidden="true" />}
+                  data-testid="save-form-btn"
+                >
+                  {t('hankeForm:saveDraftButton')}
+                </Button>
+              )}
+            </FormActions>
+          );
         }}
-      >
-        <Routes>
-          {formSteps.map((formStep, i) => {
-            return (
-              <Route
-                path={formStep.path}
-                element={
-                  <>
-                    <div className={styles.formWrapper}>
-                      <div className={styles.pagination}>
-                        <FormPagination
-                          currentLabel={formStep.title}
-                          formPageLabels={formSteps.map((formPage) => formPage.title)}
-                          onPageChange={(pageIndex) =>
-                            navigate(`/fi/johtoselvityshakemus${formSteps[pageIndex].path}`)
-                          }
-                        />
-                      </div>
-                      <div className={styles.content}>{formStep.element}</div>
-                      <NavigationButtons
-                        nextPath={formSteps[i + 1]?.path}
-                        previousPath={formSteps[i - 1]?.path}
-                      />{' '}
-                    </div>
-                  </>
-                }
-              />
-            );
-          })}
-        </Routes>
-      </Formik>
-    </>
+      </MultipageForm>
+    </FormProvider>
   );
 };
 
