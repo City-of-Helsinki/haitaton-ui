@@ -10,7 +10,15 @@ const Johtoselvitys: React.FC = () => {
 
   const result = useHankeDataInApplication();
 
-  if (!result || result.isLoading || !result.data) return null;
+  // TODO: Case where there is no related hanke for new
+  // cable application, will be implemented later
+  if (result === null) {
+    // eslint-disable-next-line no-console
+    console.error('Provide hankeTunnus in URL search params, e.g. ?hanke=HAI22-1');
+    return null;
+  }
+
+  if (result.isLoading || !result.data) return null;
 
   return (
     <Container>

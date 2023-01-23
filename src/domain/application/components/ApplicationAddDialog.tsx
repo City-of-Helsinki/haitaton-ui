@@ -19,7 +19,7 @@ type Option = {
   value: ApplicationType;
 };
 
-const ApplicationCreateDialog: React.FC<Props> = ({ isOpen, onClose, hanke }) => {
+const ApplicationAddDialog: React.FC<Props> = ({ isOpen, onClose, hanke }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();
@@ -105,7 +105,7 @@ const ApplicationCreateDialog: React.FC<Props> = ({ isOpen, onClose, hanke }) =>
       </Dialog.Content>
 
       <Dialog.ActionButtons>
-        <Button onClick={continueToApplication} type="button" disabled={!selectedApplicationType}>
+        <Button onClick={continueToApplication} disabled={!selectedApplicationType}>
           {t('hakemus:buttons:continueToApplication')}
         </Button>
         <Button variant="secondary" onClick={onClose}>
@@ -116,4 +116,4 @@ const ApplicationCreateDialog: React.FC<Props> = ({ isOpen, onClose, hanke }) =>
   );
 };
 
-export default ApplicationCreateDialog;
+export default ApplicationAddDialog;

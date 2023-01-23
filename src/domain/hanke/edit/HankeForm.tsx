@@ -27,7 +27,7 @@ import api from '../../api/api';
 import MultipageForm from '../../forms/MultipageForm';
 import FormActions from '../../forms/components/FormActions';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
-import ApplicationCreateDialog from '../../application/components/ApplicationCreateDialog';
+import ApplicationAddDialog from '../../application/components/ApplicationAddDialog';
 
 async function saveHanke({
   data,
@@ -141,6 +141,7 @@ const HankeForm: React.FC<Props> = ({
   }
 
   function saveAndAddApplication() {
+    hankeMutation.mutate({ data: getValues(), saveType: HANKE_SAVETYPE.SUBMIT });
     setShowAddApplicationDialog(true);
   }
 
@@ -183,7 +184,7 @@ const HankeForm: React.FC<Props> = ({
   return (
     <FormProvider {...formContext}>
       <FormNotifications showNotification={showNotification} />
-      <ApplicationCreateDialog
+      <ApplicationAddDialog
         isOpen={showAddApplicationDialog}
         onClose={closeAddApplicationDialog}
         hanke={getValues() as HankeData}

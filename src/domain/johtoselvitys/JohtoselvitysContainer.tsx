@@ -25,7 +25,6 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
     id: null,
     applicationType: 'CABLE_REPORT',
     applicationData: {
-      hanke: hanke.id,
       hankeTunnus: hanke.hankeTunnus,
       applicationType: 'CABLE_REPORT',
       name: '',
@@ -155,9 +154,15 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
     },
   ];
 
+  const hankeNameText = `${t('hankeForm:labels:nimi')} (${hanke.nimi})`;
+
   return (
     <FormProvider {...formContext}>
-      <MultipageForm heading={t('johtoselvitysForm:pageHeader')} formSteps={formSteps}>
+      <MultipageForm
+        heading={t('johtoselvitysForm:pageHeader')}
+        subHeading={hankeNameText}
+        formSteps={formSteps}
+      >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           const lastStep = activeStepIndex === formSteps.length - 1;
           return (

@@ -25,6 +25,7 @@ interface Props {
   ) => React.ReactNode;
   /** Heading of the form */
   heading: string;
+  subHeading?: string;
   /** Array of form steps to render */
   formSteps: FormStep[];
   /** Function that is called when step is changed */
@@ -39,6 +40,7 @@ interface Props {
 const MultipageForm: React.FC<Props> = ({
   children,
   heading,
+  subHeading,
   formSteps,
   onStepChange,
   onSubmit,
@@ -81,6 +83,12 @@ const MultipageForm: React.FC<Props> = ({
       <Text tag="h1" styleAs="h1" weight="bold">
         {heading}
       </Text>
+
+      {subHeading && (
+        <Text tag="h2" styleAs="h4" spacingBottom="m">
+          {subHeading}
+        </Text>
+      )}
 
       <div className={styles.stepper}>
         <Stepper

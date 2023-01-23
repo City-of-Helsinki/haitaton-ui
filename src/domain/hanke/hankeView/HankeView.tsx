@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Accordion,
   Button,
@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { Flex } from '@chakra-ui/react';
 import Container from '../../../common/components/container/Container';
 import Text from '../../../common/components/text/Text';
-import { HankeAlue, HankeDataDraft, HankeIndexData } from '../../types/hanke';
+import { HankeAlue, HankeData, HankeIndexData } from '../../types/hanke';
 import styles from './HankeView.module.scss';
 import BasicInformationSummary from '../edit/components/BasicInformationSummary';
 import {
@@ -32,6 +32,7 @@ import { FORMFIELD } from '../edit/types';
 import useLocale from '../../../common/hooks/useLocale';
 import { formatToFinnishDate } from '../../../common/utils/date';
 import { formatSurfaceArea, getFeatureFromHankeGeometry } from '../../map/utils';
+import ApplicationAddDialog from '../../application/components/ApplicationAddDialog';
 
 type AreaProps = {
   area: HankeAlue;
@@ -97,13 +98,22 @@ const HankeAreaInfo: React.FC<AreaProps> = ({ area, hankeIndexData, index }) => 
 };
 
 type Props = {
-  hankeData?: HankeDataDraft;
+  hankeData?: HankeData;
   onEditHanke: () => void;
   onDeleteHanke: () => void;
 };
 
 const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) => {
   const { t } = useTranslation();
+  const [showAddApplicationDialog, setShowAddApplicationDialog] = useState(false);
+
+  function addApplication() {
+    setShowAddApplicationDialog(true);
+  }
+
+  function closeAddApplicationDialog() {
+    setShowAddApplicationDialog(false);
+  }
 
   if (!hankeData) {
     return (
@@ -119,6 +129,12 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
 
   return (
     <article className={styles.hankeViewContainer}>
+      <ApplicationAddDialog
+        isOpen={showAddApplicationDialog}
+        onClose={closeAddApplicationDialog}
+        hanke={hankeData}
+      />
+
       <header className={styles.headerContainer}>
         <Container>
           <Text tag="h1" styleAs="h1" weight="bold">
@@ -140,7 +156,12 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
             >
               {t('hankeList:buttons:edit')}
             </Button>
-            <Button variant="primary" iconLeft={<IconPlusCircle aria-hidden="true" />} theme="coat">
+            <Button
+              variant="primary"
+              iconLeft={<IconPlusCircle aria-hidden="true" />}
+              theme="coat"
+              onClick={addApplication}
+            >
               {t('hankeList:buttons:addApplication')}
             </Button>
             <Button variant="primary" iconLeft={<IconUser aria-hidden="true" />} theme="coat">
