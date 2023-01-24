@@ -153,7 +153,7 @@ describe('HankeForm', () => {
       'yhteyshenkilo@mail.com'
     );
 
-    await user.click(screen.getByRole('button', { name: 'Lisää rakennuttajia' }));
+    await user.click(screen.getByText(/lisää rakennuttajia/i));
     await user.click(screen.getByText(/lisää rakennuttaja/i));
     expect(screen.getAllByText('Rakennuttaja')).toHaveLength(1);
 
