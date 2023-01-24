@@ -1,5 +1,5 @@
 import React from 'react';
-import HankeIndexes from '../../map/components/HankeSidebar/HankeIndexes';
+import HankeIndexes from '../hankeIndexes/HankeIndexes';
 import { HankeDataFormState } from './types';
 
 type Props = {

@@ -9,26 +9,9 @@ import {
   useAsyncDebounce,
   useSortBy,
 } from 'react-table';
-import {
-  useAccordion,
-  Card,
-  Select,
-  TextInput,
-  Link as HdsLink,
-  Button,
-  Notification,
-  Pagination,
-} from 'hds-react';
-import {
-  IconAngleDown,
-  IconAngleUp,
-  IconEye,
-  IconLinkExternal,
-  IconLocation,
-  IconPen,
-  IconSearch,
-} from 'hds-react/icons';
-import { Link } from 'react-router-dom';
+import { useAccordion, Card, Select, TextInput, Button, Pagination } from 'hds-react';
+import { IconAngleDown, IconAngleUp, IconEye, IconPen, IconSearch } from 'hds-react/icons';
+import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import Text from '../../../common/components/text/Text';
 import { HankeData, HANKE_TYOMAATYYPPI, HANKE_VAIHE } from '../../types/hanke';
@@ -40,46 +23,38 @@ import { hankeIsBetweenDates } from '../../map/utils';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
 import HankeVaiheTag from '../vaiheTag/HankeVaiheTag';
-import { hankeSchema } from '../edit/hankeSchema';
 import { Language } from '../../../common/types/language';
-import SingleHankeMap from '../../map/components/SingleHankeMap/SingleHankeMap';
+import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
+import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
+import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotification';
 import Container from '../../../common/components/container/Container';
 
 type CustomAccordionProps = {
   hanke: HankeData;
 };
 
-/**
- * Check if hanke data matches hanke schema
- */
-function useIsHankeValid(hanke: HankeData) {
-  const [isValid, setIsValid] = useState(false);
-
-  useEffect(() => {
-    hankeSchema.isValid(hanke).then((valid) => {
-      setIsValid(valid);
-    });
-  }, [hanke]);
-
-  return isValid;
-}
-
 const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
   const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
-  const getFullPageMapPath = useLinkPath(ROUTES.FULL_PAGE_MAP);
+  const getViewHankePath = useLinkPath(ROUTES.HANKE);
+  const viewHankePath = getViewHankePath({ hankeTunnus: hanke.hankeTunnus });
+
   // Handle accordion state with useAccordion hook
   const { isOpen, buttonProps, contentProps } = useAccordion({ initiallyOpen: false });
+
   // Change icon based on accordion open state
   const icon = isOpen ? <IconAngleUp size="m" /> : <IconAngleDown size="m" />;
 
-  // Check if hanke has all the required fields filled
-  const isHankeValid = useIsHankeValid(hanke);
-
   const { t } = useTranslation();
+
+  const navigate = useNavigate();
 
   const tyomaaTyyppiContent = hanke.tyomaaTyyppi.length
     ? hanke.tyomaaTyyppi.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')
     : '-';
+
+  function navigateToHanke() {
+    navigate(viewHankePath);
+  }
 
   return (
     <Card className={styles.hankeCard} border>
@@ -109,7 +84,14 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
             </div>
           </div>
           <div className={styles.actions}>
-            <Link to="/" data-testid="hankeViewLink">
+            <Link
+              to={viewHankePath}
+              aria-label={
+                // eslint-disable-next-line
+                t(`routes:${ROUTES.HANKE}.meta.title`) + ` ${hanke.nimi} - ${hanke.hankeTunnus} `
+              }
+              data-testid="hankeViewLink"
+            >
               <IconEye aria-hidden />
             </Link>
             <Link
@@ -126,16 +108,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
           </div>
           <div className={styles.iconWrapper}>{icon}</div>
         </div>
-        {!isHankeValid && (
-          <Notification
-            size="small"
-            label={t('hankePortfolio:draftStateLabel')}
-            className={styles.notification}
-            type="alert"
-          >
-            {t('hankePortfolio:draftState')}
-          </Notification>
-        )}
+        <HankeDraftStateNotification hanke={hanke} className={styles.draftNotification} />
       </>
       <div className={styles.hankeCardContent} {...contentProps}>
         <div>
@@ -203,30 +176,13 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
         </div>
         {isOpen && (
           <div>
-            <div className={styles.mapHeader}>
-              <div className={styles.mapHeader__inner}>
-                <IconLocation />
-                <Text tag="h3" styleAs="h4" weight="bold">
-                  {t('hankePortfolio:areaLocation')}
-                </Text>
-              </div>
-              <div>
-                <HdsLink
-                  href={getFullPageMapPath({ hankeTunnus: hanke.hankeTunnus })}
-                  openInNewTab
-                  disableVisitedStyles
-                >
-                  {t('hankePortfolio:openMapToNewWindow')}
-                </HdsLink>
-                <IconLinkExternal size="xs" />
-              </div>
-            </div>
-            <SingleHankeMap hanke={hanke} />
+            <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} />
+            <OwnHankeMap hanke={hanke} />
           </div>
         )}
 
         <div>
-          <Button theme="coat" className={styles.showHankeButton}>
+          <Button theme="coat" className={styles.showHankeButton} onClick={navigateToHanke}>
             {t('hankePortfolio:showHankeButton')}
           </Button>
           <Button theme="coat" variant="secondary">

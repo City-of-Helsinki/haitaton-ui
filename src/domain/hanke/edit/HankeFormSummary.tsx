@@ -33,7 +33,7 @@ const HankeFormSummary: React.FC<Props> = ({ formData }) => {
 
       <SectionTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionTitle>
       <FormSummarySection>
-        <SectionItemTitle>Alueiden kokonaispinta-ala</SectionItemTitle>
+        <SectionItemTitle>{t('hanke:alue:totalSurfaceArea')}</SectionItemTitle>
         <SectionItemContent>
           {areasTotalSurfaceArea && <p>{areasTotalSurfaceArea} m²</p>}
         </SectionItemContent>
