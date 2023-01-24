@@ -92,6 +92,7 @@ const Header: React.FC = () => {
           userName={user?.profile?.name}
         >
           <Navigation.Item
+            href=""
             icon={<IconSignout aria-hidden />}
             label={t('authentication:logoutButton')}
             variant="supplementary"
@@ -103,6 +104,7 @@ const Header: React.FC = () => {
           {$enum(LANGUAGES).map((lang) => (
             <Navigation.Item
               as="a"
+              href=""
               label={t(`common:languages:${lang}`)}
               onClick={(e: React.MouseEvent) => {
                 e.preventDefault();

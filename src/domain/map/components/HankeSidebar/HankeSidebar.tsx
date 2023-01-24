@@ -6,7 +6,7 @@ import Text from '../../../../common/components/text/Text';
 import { formatToFinnishDate } from '../../../../common/utils/date';
 import { HankeData } from '../../../types/hanke';
 import styles from './HankeSidebar.module.scss';
-import HankeIndexes from './HankeIndexes';
+import HankeIndexes from '../../../hanke/hankeIndexes/HankeIndexes';
 
 type SectionProps = {
   title: string;

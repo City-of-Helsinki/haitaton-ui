@@ -1,4 +1,4 @@
-import { fireEvent, RenderResult } from '@testing-library/react';
+import { fireEvent, RenderResult, screen, waitForElementToBeRemoved } from '@testing-library/react';
 
 export const changeFilterDate = (
   label: string,
@@ -9,3 +9,9 @@ export const changeFilterDate = (
     target: { value },
   });
 };
+
+export function waitForLoadingToFinish() {
+  return waitForElementToBeRemoved(() => screen.queryByText(/page is loading/i), {
+    timeout: 4000,
+  });
+}

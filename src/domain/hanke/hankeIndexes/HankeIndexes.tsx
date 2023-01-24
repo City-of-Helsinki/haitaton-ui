@@ -3,14 +3,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { LoadingSpinner, Tooltip } from 'hds-react';
 import clsx from 'clsx';
-import {
-  LIIKENNEHAITTA_STATUS,
-  getStatusByIndex,
-  getColorByStatus,
-} from '../../../common/utils/liikennehaittaindeksi';
-import Text from '../../../../common/components/text/Text';
+import Text from '../../../common/components/text/Text';
 import styles from './HankeIndexes.module.scss';
-import { HankeIndexData } from '../../../types/hanke';
+import { HankeIndexData } from '../../types/hanke';
+import HaittaIndexNumber from './HaittaIndexNumber';
 
 type IndexProps = {
   title: string;
@@ -62,15 +58,7 @@ const IndexSection: React.FC<IndexProps> = ({
                 {t('hankeIndexes:haittaindeksi')}
               </Text>
             )}
-            <div
-              style={{
-                backgroundColor: getColorByStatus(getStatusByIndex(index)),
-                color: getStatusByIndex(index) === LIIKENNEHAITTA_STATUS.YELLOW ? 'black' : 'white',
-                width: '38px',
-              }}
-            >
-              <div data-testid={testId}>{index === undefined ? '-' : index}</div>
-            </div>
+            <HaittaIndexNumber index={index} testId={testId} />
           </>
         )}
       </div>

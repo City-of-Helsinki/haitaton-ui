@@ -345,6 +345,8 @@
       "title": "Hankealue {{index}}",
       "duration": "Hankealueen kesto",
       "surfaceArea": "Piirroksen pinta-ala",
+      "totalSurfaceArea": "Alueiden kokonaispinta-ala",
+      "totalSurfaceAreaLong": "Hanke-alueiden kokonaispinta-ala",
       "liikenneverkollinenHaitta": "Hankealueen liikenneverkollinen haitta",
       "haittaMaarittelyt": "Hankealueen omat haittamäärittelyt"
     }
@@ -397,7 +399,8 @@
       "organisaatio": "EN:Organisaatio",
       "omaOrganisaatio": "EN:Lisää oma organisaatio",
       "insertOmaOrganisaatio": "EN:Syötä oma organisaatio",
-      "rights": "EN:Käyttöoikeutesi hankkeelle"
+      "rights": "EN:Käyttöoikeutesi hankkeelle",
+      "perustaja": "Perustaja"
     },
     "toolTips": {
       "tipOpenLabel": "EN:Avaa ohje",

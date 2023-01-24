@@ -1,8 +1,8 @@
 import React from 'react';
 import { cleanup } from '@testing-library/react';
 import HankeIndexes from './HankeIndexes';
-import { render } from '../../../../testUtils/render';
-import hankeIndexData from '../../../mocks/hankeIndexData';
+import { render } from '../../../testUtils/render';
+import hankeIndexData from '../../mocks/hankeIndexData';
 
 afterEach(cleanup);
 

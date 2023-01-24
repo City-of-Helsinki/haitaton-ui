@@ -16,8 +16,7 @@ const ContactSummary: React.FC<{ contact: HankeContact | HankeMuuTaho }> = ({ co
         <p>{contact.ytunnusTaiHetu}</p>
         {contact.osoite && <p>{contact.osoite}</p>}
         <p>
-          <span>{contact.postinumero}</span>
-          <span>{contact.postitoimipaikka}</span>
+          {contact.postinumero} {contact.postitoimipaikka}
         </p>
       </div>
     );
@@ -41,8 +40,7 @@ const SubContactSummary: React.FC<{ contact: HankeSubContact }> = ({ contact }) 
       <p>{contact.email}</p>
       {contact.osoite && <p>{contact.osoite}</p>}
       <p>
-        <span>{contact.postinumero}</span>&nbsp;
-        <span>{contact.postitoimipaikka}</span>
+        {contact.postinumero} {contact.postitoimipaikka}
       </p>
     </div>
   );

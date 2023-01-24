@@ -27,7 +27,7 @@
 
     @include respond-above(l) {
       display: grid;
-      grid-template-columns: 68% 33%;
+      grid-template-columns: 67% 34%;
       padding-right: 0;
     }
 
@@ -35,11 +35,20 @@
       padding-top: var(--spacing-s);
       padding-bottom: var(--spacing-s);
       padding-right: var(--spacing-xs);
+
+      .draftStateNotification {
+        margin-bottom: var(--spacing-s);
+        margin-top: var(--spacing-s);
+
+        @include respond-above(m) {
+          padding-right: var(--spacing-l);
+        }
+      }
     }
 
     .sideBar {
       background-color: var(--color-black-5);
-      padding: var(--spacing-l);
+      padding: var(--spacing-m);
     }
   }
 }
@@ -58,4 +67,9 @@
   .areaIndexes {
     margin-bottom: var(--spacing-s);
   }
+}
+
+.compressedAreaIndex {
+  margin-top: var(--spacing-m);
+  margin-bottom: var(--spacing-m);
 }

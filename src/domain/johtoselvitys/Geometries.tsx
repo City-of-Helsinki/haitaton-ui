@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Feature } from 'ol';
 import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
+import GeoJSON from 'ol/format/GeoJSON';
+import GeometryCollection from 'ol/geom/GeometryCollection';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@chakra-ui/react';
@@ -23,6 +25,68 @@ import OverviewMapControl from '../../common/components/map/controls/OverviewMap
 import useSelectableTabs from '../../common/hooks/useSelectableTabs';
 import useHighlightArea from '../map/hooks/useHighlightArea';
 
+function useFeatures(
+  vectorSource: VectorSource,
+  collection: GeometryCollection | Feature[] | null
+) {
+  const [features, setFeatures] = useState<Feature[]>([]);
+  const featuresAdded = useRef(false);
+
+  // Add features to vector source if they have not been added yet
+  useEffect(() => {
+    if (!featuresAdded.current && collection !== null) {
+      let featuresToAdd = null;
+
+      if (collection instanceof GeometryCollection) {
+        featuresToAdd = collection.getGeometries().map((geom) => new Feature(geom));
+      } else {
+        featuresToAdd = collection;
+      }
+
+      featuresToAdd.map((feature) => {
+        if (!feature.getId()) {
+          feature.setId(uniqueId());
+        }
+        return feature;
+      });
+
+      if (featuresToAdd.length > 0) {
+        vectorSource.addFeatures(featuresToAdd);
+        setFeatures(featuresToAdd);
+      }
+
+      featuresAdded.current = true;
+    }
+  }, [features.length, vectorSource, collection]);
+
+  // Update features array when features in vector source change
+  useEffect(() => {
+    const onDrawChange = debounce((event: VectorSourceEvent<Geometry>) => {
+      const featuresInSource = vectorSource.getFeatures();
+
+      const { feature } = event;
+      if (!feature.getId()) {
+        feature.setId(uniqueId());
+      }
+
+      setFeatures(featuresInSource);
+    }, 100);
+
+    vectorSource.on('addfeature', onDrawChange);
+    vectorSource.on('changefeature', onDrawChange);
+    vectorSource.on('removefeature', onDrawChange);
+
+    return function cleanup() {
+      onDrawChange.cancel();
+      vectorSource.un('addfeature', onDrawChange);
+      vectorSource.un('changefeature', onDrawChange);
+      vectorSource.un('removefeature', onDrawChange);
+    };
+  }, [vectorSource]);
+
+  return sortBy(features, (feature) => feature.getId());
+}
+
 export const initialValues = {
   geometriat: null,
 };
@@ -30,9 +94,13 @@ export const initialValues = {
 export const Geometries: React.FC = () => {
   const { t } = useTranslation();
   const locale = useLocale();
-  const { setValue, watch } = useFormContext();
+  const { setValue, watch, getValues } = useFormContext();
   const [drawSource] = useState<VectorSource>(new VectorSource());
-  const [features, setFeatures] = useState<Feature[]>([]);
+
+  const features = useFeatures(
+    drawSource,
+    new GeoJSON().readGeometry(getValues('applicationData.geometry')) as GeometryCollection
+  );
 
   const { tabRefs } = useSelectableTabs(features.length, { selectLastTabOnChange: true });
 
@@ -45,29 +113,10 @@ export const Geometries: React.FC = () => {
   const workTimesSet = startTime && endTime;
 
   useEffect(() => {
-    const onDrawChange = debounce((event: VectorSourceEvent<Geometry>) => {
-      const featuresInSource = drawSource.getFeatures();
-      const hankeGeometries = formatFeaturesToAlluGeoJSON(featuresInSource);
-      setValue('applicationData.geometry', hankeGeometries);
-
-      const { feature } = event;
-      if (!feature.getId()) {
-        feature.setId(uniqueId());
-      }
-
-      setFeatures(sortBy(featuresInSource, (featureInSource) => featureInSource.getId()));
-    }, 100);
-
-    drawSource.on('addfeature', onDrawChange);
-    drawSource.on('removefeature', onDrawChange);
-    drawSource.on('changefeature', onDrawChange);
-
-    return function cleanup() {
-      drawSource.un('addfeature', onDrawChange);
-      drawSource.un('removefeature', onDrawChange);
-      drawSource.un('changefeature', onDrawChange);
-    };
-  }, [drawSource, setValue]);
+    // Update geometry collection to form state
+    const hankeGeometries = formatFeaturesToAlluGeoJSON(features);
+    setValue('applicationData.geometry', hankeGeometries);
+  }, [features, setValue]);
 
   return (
     <div>
