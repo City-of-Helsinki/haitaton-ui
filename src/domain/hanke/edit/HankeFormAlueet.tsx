@@ -13,8 +13,8 @@ import { FORMFIELD, FormProps, HankeAlueFormState } from './types';
 import { doAddressSearch, formatSurfaceArea } from '../../map/utils';
 import Haitat from './components/Haitat';
 import Text from '../../../common/components/text/Text';
-import { STYLES } from '../../map/utils/geometryStyle';
 import useSelectableTabs from '../../../common/hooks/useSelectableTabs';
+import useHighlightArea from '../../map/hooks/useHighlightArea';
 
 function getEmptyArea(feature: Feature): Omit<HankeAlueFormState, 'id' | 'geometriat'> {
   return {
@@ -37,10 +37,11 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
   });
   const [drawSource] = useState<VectorSource>(new VectorSource());
   const [addressCoordinate, setAddressCoordinate] = useState<Coordinate | undefined>();
-  const [highlightedFeature, setHighlightedFeature] = useState<Feature | undefined>();
   useFormPage();
 
-  const { tabRefs, setSelectendTabIndex } = useSelectableTabs(hankeAlueet.length);
+  const { tabRefs } = useSelectableTabs(hankeAlueet.length, { selectLastTabOnChange: true });
+
+  const higlightArea = useHighlightArea();
 
   useEffect(() => {
     if (formData.tyomaaKatuosoite) {
@@ -50,25 +51,6 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
     }
   }, [formData.tyomaaKatuosoite]);
 
-  useEffect(() => {
-    return () => {
-      // Reset previously selected feature style
-      // when higlighted feature changes
-      highlightedFeature?.setStyle();
-    };
-  }, [highlightedFeature]);
-
-  useEffect(() => {
-    setSelectendTabIndex(hankeAlueet.length - 1);
-  }, [hankeAlueet.length, setSelectendTabIndex]);
-
-  // Set highlight style for areas feature
-  const higlightArea = useCallback((feature: Feature | undefined) => {
-    setHighlightedFeature(feature);
-
-    feature?.setStyle(STYLES.BLUE_HL);
-  }, []);
-
   const handleAddFeature = useCallback(
     (feature: Feature<Geometry>) => {
       const geom = feature.getGeometry();
@@ -76,11 +58,9 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
         append(getEmptyArea(feature));
       }
 
-      higlightArea(feature);
-
       setValue(FORMFIELD.GEOMETRIES_CHANGED, true, { shouldDirty: true });
     },
-    [setValue, append, higlightArea]
+    [setValue, append]
   );
 
   const handleChangeFeature = useCallback(() => {

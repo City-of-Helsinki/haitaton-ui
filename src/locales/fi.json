@@ -72,6 +72,9 @@
       "roleHelper": "Pääasiallinen roolisi työssä",
       "fromHelsinkiProfile": "Haettu Helsinki-profiilin perusteella"
     },
+    "helperTexts": {
+      "dateInForm": "Anna muodossa P.K.VVVV"
+    },
     "requiredInstruction": "Kaikki tähdellä * merkityt kentät ovat pakollisia.",
     "yhteystiedot": {
       "header": "Yhteystiedot",
@@ -435,6 +438,10 @@
     "pageHeader": "Johtoselvityshakemus",
     "perustiedot": {
       "instructions": "<0>Huomioithan, että johtoselvitys on voimassa 1 kuukauden. Johtoselvityksen tulee olla voimassa johtojen maastonäyttöjä tilattaessa sekä Johtoselvitysta tehdessä. Johtoselvitys on tarvittaessa päivitettävä.</0><0>Yleisellä alueella tehtävästä työstä on tehtävä erillinen ilmoitus kaupungille. Mikäli joudut rajoittamaan liikennettä esimerkiksi työkoneiden kuljetuksen vuoksi tai poistamaan pysäköintipaikkoja kadun varresta, tulee sinun tehdä myös aluevuokraushakemus liikennejärjestelysuunnitelmineen.</0>"
+    },
+    "alueet": {
+      "instructions": "Voit lisätä selvitettävän alueen piirtämällä sen kartalle. Voit lisätä samalle hakemukselle useampia alueita, mikäli niitä koskeva aikaväli on sama.",
+      "giveDates": "Valitse työn päivämäärät piirtääksesi selvitettävät alueet kartalle."
     }
   },
   "hakemus": {
@@ -445,7 +452,11 @@
       "constructionWork": "Uuden rakenteen tai johdon rakentamisesta",
       "maintenanceWork": "Olemassaolevan rakenteen kunnossapitotyöstä",
       "propertyConnectivity": "Kiinteistöliittymien rakentamisesta",
-      "emergencyWork": "Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi"
+      "emergencyWork": "Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi",
+      "startDate": "Työn arvioitu alkupäivä",
+      "endDate": "Työn arvioitu loppupäivä",
+      "workArea": "Työalue",
+      "areaInfo": "Alueen tiedot"
     }
   },
   "hankeSidebar": {

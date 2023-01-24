@@ -17,6 +17,8 @@ type PropTypes = {
   required?: boolean;
   maxDate?: Date;
   minDate?: Date;
+  initialMonth?: Date;
+  helperText?: string;
 };
 
 const DatePicker: React.FC<PropTypes> = ({
@@ -27,6 +29,8 @@ const DatePicker: React.FC<PropTypes> = ({
   required,
   minDate,
   maxDate,
+  initialMonth,
+  helperText,
   locale,
 }) => {
   const { t } = useTranslation();
@@ -61,9 +65,11 @@ const DatePicker: React.FC<PropTypes> = ({
                 value={formatToFinnishDate(value)}
                 maxDate={maxDate}
                 minDate={minDate}
+                initialMonth={initialMonth}
                 language={locale}
                 required={required}
                 disableConfirmation
+                helperText={helperText}
                 errorText={isTouched ? getInputErrorText(t, error) : undefined}
               />
             </div>

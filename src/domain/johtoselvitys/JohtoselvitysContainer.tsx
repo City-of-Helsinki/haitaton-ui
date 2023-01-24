@@ -61,8 +61,8 @@ const JohtoselvitysContainer: React.FC = () => {
         },
         geometries: [],
       },
-      startTime: 1646267516.878748,
-      endTime: 1646267516.878748,
+      startTime: null,
+      endTime: null,
       pendingOnClient: false,
       identificationNumber: 'HAI-123', // TODO: HAI-1160
       clientApplicationKind: 'HAITATON', // TODO: add to UI
