@@ -8,6 +8,7 @@ import authService from '../../../domain/auth/authService';
 import useUser from '../../../domain/auth/useUser';
 import { Language, LANGUAGES } from '../../types/language';
 import { I18NLANGKEY } from '../../../locales/constants';
+import { SKIP_TO_ELEMENT_ID } from '../../constants/constants';
 
 const Header: React.FC = () => {
   const {
@@ -49,7 +50,7 @@ const Header: React.FC = () => {
     <Navigation
       menuToggleAriaLabel={t('common:components:multiselect:toggle')}
       title="Haitaton"
-      skipTo="#"
+      skipTo={`#${SKIP_TO_ELEMENT_ID}`}
       skipToContentLabel={t('common:components:header:skipToContentLabel')}
       titleUrl={HOME.path}
       className="header"

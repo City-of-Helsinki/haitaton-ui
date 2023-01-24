@@ -12,6 +12,7 @@ import img3 from './HKMS000005_km003yz2.webp';
 import img4 from './kartta.png';
 import Linkbox from '../../common/components/Linkbox/Linkbox';
 import useUser from '../auth/useUser';
+import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
 
 const Homepage: React.FC = () => {
   const { t } = useTranslation();
@@ -77,7 +78,14 @@ const Homepage: React.FC = () => {
     <>
       <div className={styles.heroContainer}>
         <section className={styles.hero}>
-          <Text tag="h1" styleAs="h1" spacing="s" weight="bold">
+          <Text
+            tag="h1"
+            styleAs="h1"
+            spacing="s"
+            weight="bold"
+            id={SKIP_TO_ELEMENT_ID}
+            tabIndex={-1}
+          >
             {t('homepage:pageTitle')}
           </Text>
           <Text tag="h2" styleAs="h3" spacing="s" weight="bold">

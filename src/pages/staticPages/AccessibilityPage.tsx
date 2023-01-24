@@ -5,6 +5,7 @@ import PageMeta from '../components/PageMeta';
 import { useLocalizedRoutes } from '../../common/hooks/useLocalizedRoutes';
 import Container from '../../common/components/container/Container';
 import Text from '../../common/components/text/Text';
+import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
 
 const AccessibilityPage: React.FC = () => {
   const { ACCESSIBILITY } = useLocalizedRoutes();
@@ -13,7 +14,7 @@ const AccessibilityPage: React.FC = () => {
   return (
     <Container>
       <PageMeta routeData={ACCESSIBILITY} />
-      <Text tag="h1" styleAs="h2" spacing="s" weight="bold">
+      <Text tag="h1" styleAs="h2" spacing="s" weight="bold" id={SKIP_TO_ELEMENT_ID} tabIndex={-1}>
         {t('staticPages:accessibility:title')}
       </Text>
       <HdsContainer style={{ padding: '2rem', backgroundColor: 'white' }}>
