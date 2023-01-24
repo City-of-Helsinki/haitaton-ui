@@ -42,7 +42,11 @@
         "skipToContentLabel": "SV:Siirry pääsisältöön"
       }
     },
-    "error": "SV: Tapahtui virhe. Yritä uudestaan."
+    "error": "SV: Tapahtui virhe. Yritä uudestaan.",
+    "ariaLabels": {
+      "profileButton": "SV:Käyttäjäprofiili",
+      "menuToggle": "SV:Valikko"
+    }
   },
   "form": {
     "validations": {

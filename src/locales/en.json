@@ -42,7 +42,11 @@
         "skipToContentLabel": "EN:Siirry pääsisältöön"
       }
     },
-    "error": "EN: Tapahtui virhe. Yritä uudestaan."
+    "error": "EN: Tapahtui virhe. Yritä uudestaan.",
+    "ariaLabels": {
+      "profileButton": "EN:Käyttäjäprofiili",
+      "menuToggle": "EN:Valikko"
+    }
   },
   "form": {
     "validations": {
