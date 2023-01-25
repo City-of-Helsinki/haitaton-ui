@@ -39,6 +39,7 @@ export type Customer = {
 };
 
 export type JohtoselvitysFormData = {
+  hankeTunnus: string;
   applicationType: ApplicationType;
   name: string;
   customerWithContacts: {

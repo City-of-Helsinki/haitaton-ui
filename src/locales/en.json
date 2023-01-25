@@ -45,7 +45,8 @@
     "error": "EN: Tapahtui virhe. Yritä uudestaan.",
     "ariaLabels": {
       "profileButton": "EN:Käyttäjäprofiili",
-      "menuToggle": "EN:Valikko"
+      "menuToggle": "EN:Valikko",
+      "closeButtonLabelText": "EN:Sulje"
     }
   },
   "form": {
@@ -459,11 +460,24 @@
       "maintenanceWork": "EN:Olemassaolevan rakenteen kunnossapitotyöstä",
       "propertyConnectivity": "EN:Kiinteistöliittymien rakentamisesta",
       "emergencyWork": "EN:Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi",
+      "applicationType": "EN:Hakemustyyppi",
+      "copyPreviousApplication": "EN:Kopioi aiempi hakemus pohjaksi",
+      "applicationToUseAsBase": "EN:Pohjana käytettävä hakemus",
       "startDate": "EN:Työn arvioitu alkupäivä",
       "endDate": "EN:Työn arvioitu loppupäivä",
       "workArea": "EN:Työalue",
       "areaInfo": "EN:Alueen tiedot"
-    }
+    },
+    "buttons": {
+      "continueToApplication": "EN:Jatka hakemukseen"
+    },
+    "headers": {
+      "pickApplication": "EN:Valitse luotava hakemus"
+    },
+    "applicationTypes": {
+      "CABLE_REPORT": "EN:Johtoselvitys"
+    },
+    "applicationTypeInstruction": "EN:Valitse hakemustyyppi. Osaan hakemuksista voit myös kopioida aiemman hakemuksen pohjaksi. Kaivuilmoituksen kautta pääset tekemään myös johtoselvityksen, mikäli sinulla ei sellaista vielä ole."
   },
   "hankeSidebar": {
     "ariaSidebarContent": "EN:Hankkeen tiedot",
