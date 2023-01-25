@@ -48,5 +48,7 @@ export const validationSchema = yup.object().shape({
     customerWithContacts: customerWithContactsSchema.required(),
     propertyDeveloperWithContacts: customerWithContactsSchema,
     representativeWithContacts: customerWithContactsSchema,
+    startTime: yup.date().required(),
+    endTime: yup.date().required(),
   }),
 });

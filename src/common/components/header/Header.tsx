@@ -47,7 +47,7 @@ const Header: React.FC = () => {
 
   return (
     <Navigation
-      menuToggleAriaLabel={t('common:components:multiselect:toggle')}
+      menuToggleAriaLabel={t('common:ariaLabels:menuToggle')}
       title="Haitaton"
       skipTo="#"
       skipToContentLabel={t('common:components:header:skipToContentLabel')}
@@ -90,8 +90,10 @@ const Header: React.FC = () => {
           onSignIn={authService.login}
           label={t('authentication:loginButton')}
           userName={user?.profile?.name}
+          buttonAriaLabel={t('common:ariaLabels:profileButton')}
         >
           <Navigation.Item
+            href=""
             icon={<IconSignout aria-hidden />}
             label={t('authentication:logoutButton')}
             variant="supplementary"
@@ -103,6 +105,7 @@ const Header: React.FC = () => {
           {$enum(LANGUAGES).map((lang) => (
             <Navigation.Item
               as="a"
+              href=""
               label={t(`common:languages:${lang}`)}
               onClick={(e: React.MouseEvent) => {
                 e.preventDefault();

@@ -30,7 +30,7 @@ const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
 
   return (
     <FormSummarySection>
-      <SectionItemTitle>Perustaja</SectionItemTitle>
+      <SectionItemTitle>{t('hankeForm:labels:perustaja')}</SectionItemTitle>
       <SectionItemContent />
       <SectionItemTitle>{t('hankeForm:labels:nimi')}</SectionItemTitle>
       <SectionItemContent>

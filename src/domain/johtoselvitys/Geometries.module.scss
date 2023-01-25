@@ -1,5 +1,8 @@
 .mapContainer {
   position: relative;
+  width: 100%;
+  height: 500px;
+  margin-bottom: var(--spacing-s);
 
   &__inner {
     position: absolute;
@@ -8,4 +11,10 @@
     bottom: 0;
     right: 0;
   }
+}
+
+.areaInfoContainer {
+  padding: var(--spacing-m);
+  margin-top: var(--spacing-xs);
+  margin-bottom: var(--spacing-s);
 }

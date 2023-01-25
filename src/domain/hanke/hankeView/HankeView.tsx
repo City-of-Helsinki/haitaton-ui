@@ -27,12 +27,17 @@ import {
 } from '../../forms/components/FormSummarySection';
 import { calculateTotalSurfaceArea } from '../edit/utils';
 import ContactsSummary from '../edit/components/ContactsSummary';
-import HankeIndexes from '../../map/components/HankeSidebar/HankeIndexes';
+import HankeIndexes from '../hankeIndexes/HankeIndexes';
 import { FORMFIELD } from '../edit/types';
 import useLocale from '../../../common/hooks/useLocale';
 import { formatToFinnishDate } from '../../../common/utils/date';
 import { formatSurfaceArea, getFeatureFromHankeGeometry } from '../../map/utils';
 import ApplicationAddDialog from '../../application/components/ApplicationAddDialog';
+import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
+import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
+import CompressedAreaIndex from '../hankeIndexes/CompressedAreaIndex';
+import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotification';
+import { useIsHankeValid } from '../edit/hooks/useIsHankeValid';
 
 type AreaProps = {
   area: HankeAlue;
@@ -44,7 +49,8 @@ const HankeAreaInfo: React.FC<AreaProps> = ({ area, hankeIndexData, index }) => 
   const { t } = useTranslation();
   const locale = useLocale();
 
-  const areaGeometry = getFeatureFromHankeGeometry(area.geometriat).getGeometry();
+  const areaGeometry =
+    area.geometriat && getFeatureFromHankeGeometry(area.geometriat).getGeometry();
 
   return (
     <Accordion
@@ -54,13 +60,14 @@ const HankeAreaInfo: React.FC<AreaProps> = ({ area, hankeIndexData, index }) => 
       className={styles.hankeAreaContainer}
     >
       <div className={styles.hankeAreaContent}>
-        <Text tag="p" styleAs="body-s" spacingBottom="3-xs">
-          {t('hanke:alue:duration')}: {formatToFinnishDate(area.haittaAlkuPvm)}–
-          {formatToFinnishDate(area.haittaLoppuPvm)}
-        </Text>
-        <Text tag="p" styleAs="body-s" spacingBottom="s">
-          {t('hanke:alue:surfaceArea')}: {formatSurfaceArea(areaGeometry)}
-        </Text>
+        <FormSummarySection>
+          <SectionItemTitle>{t('hanke:alue:duration')}</SectionItemTitle>
+          <SectionItemContent>
+            {formatToFinnishDate(area.haittaAlkuPvm)}–{formatToFinnishDate(area.haittaLoppuPvm)}
+          </SectionItemContent>
+          <SectionItemTitle>{t('hanke:alue:surfaceArea')}</SectionItemTitle>
+          <SectionItemContent>{formatSurfaceArea(areaGeometry)}</SectionItemContent>
+        </FormSummarySection>
 
         <HankeIndexes
           hankeIndexData={hankeIndexData}
@@ -115,6 +122,8 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
     setShowAddApplicationDialog(false);
   }
 
+  const isHankeValid = useIsHankeValid(hankeData);
+
   if (!hankeData) {
     return (
       <Flex justify="center" mt="var(--spacing-xl)">
@@ -125,7 +134,7 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
 
   const areasTotalSurfaceArea = calculateTotalSurfaceArea(hankeData.alueet);
 
-  const { omistajat, rakennuttajat, toteuttajat, muut } = hankeData;
+  const { omistajat, rakennuttajat, toteuttajat, muut, tormaystarkasteluTulos, alueet } = hankeData;
 
   return (
     <article className={styles.hankeViewContainer}>
@@ -161,13 +170,19 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
               iconLeft={<IconPlusCircle aria-hidden="true" />}
               theme="coat"
               onClick={addApplication}
+              disabled={!isHankeValid}
             >
               {t('hankeList:buttons:addApplication')}
             </Button>
             <Button variant="primary" iconLeft={<IconUser aria-hidden="true" />} theme="coat">
               {t('hankeList:buttons:editRights')}
             </Button>
-            <Button variant="primary" iconLeft={<IconCross aria-hidden="true" />} theme="black">
+            <Button
+              variant="primary"
+              iconLeft={<IconCross aria-hidden="true" />}
+              theme="black"
+              disabled={!isHankeValid}
+            >
               {t('hankeList:buttons:endHanke')}
             </Button>
             <Button
@@ -184,6 +199,10 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
       <div className={styles.contentContainerOut}>
         <Container className={styles.contentContainerIn}>
           <div className={styles.mainContent}>
+            <div className={styles.draftStateNotification}>
+              <HankeDraftStateNotification hanke={hankeData} />
+            </div>
+
             <Tabs>
               <TabList className={styles.tabList}>
                 <Tab>{t('hankePortfolio:tabit:perustiedot')}</Tab>
@@ -194,19 +213,19 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
               </TabList>
               <TabPanel>
                 <BasicInformationSummary formData={hankeData}>
-                  <SectionItemTitle>Hanke-alueiden kokonaispinta-ala</SectionItemTitle>
+                  <SectionItemTitle>{t('hanke:alue:totalSurfaceAreaLong')}</SectionItemTitle>
                   <SectionItemContent>
                     {areasTotalSurfaceArea && <p>{areasTotalSurfaceArea} m²</p>}
                   </SectionItemContent>
                 </BasicInformationSummary>
               </TabPanel>
               <TabPanel>
-                {hankeData.alueet?.map((area, index) => {
+                {alueet?.map((area, index) => {
                   return (
                     <HankeAreaInfo
                       key={area.id}
                       area={area}
-                      hankeIndexData={hankeData.tormaystarkasteluTulos}
+                      hankeIndexData={tormaystarkasteluTulos}
                       index={index}
                     />
                   );
@@ -245,7 +264,19 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
             </Tabs>
           </div>
           <div className={styles.sideBar}>
-            <p>Side content</p>
+            <OwnHankeMapHeader hankeTunnus={hankeData.hankeTunnus} />
+            <OwnHankeMap hanke={hankeData} />
+            {alueet?.map((area, index) => {
+              return (
+                <CompressedAreaIndex
+                  key={area.id}
+                  area={area}
+                  haittaIndex={tormaystarkasteluTulos?.liikennehaittaIndeksi.indeksi}
+                  index={index}
+                  className={styles.compressedAreaIndex}
+                />
+              );
+            })}
           </div>
         </Container>
       </div>

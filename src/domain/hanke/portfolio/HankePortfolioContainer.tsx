@@ -5,7 +5,11 @@ import { HankeData } from '../../types/hanke';
 import HankePortfolioComponent from './HankePortfolioComponent';
 
 const getHankkeet = async () => {
-  const { data } = await api.get<HankeData[]>(`/hankkeet/`);
+  const { data } = await api.get<HankeData[]>(`/hankkeet/`, {
+    params: {
+      geometry: true,
+    },
+  });
   return data;
 };
 

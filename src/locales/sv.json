@@ -43,7 +43,11 @@
       }
     },
     "error": "SV: Tapahtui virhe. Yritä uudestaan.",
-    "closeButtonLabelText": "SV:Sulje"
+    "ariaLabels": {
+      "profileButton": "SV:Käyttäjäprofiili",
+      "menuToggle": "SV:Valikko",
+      "closeButtonLabelText": "SV:Sulje"
+    }
   },
   "form": {
     "validations": {
@@ -72,6 +76,9 @@
       "role": "SV:Rooli",
       "roleHelper": "SV:Pääasiallinen roolisi työssä",
       "fromHelsinkiProfile": "SV:Haettu Helsinki-profiilin perusteella"
+    },
+    "helperTexts": {
+      "dateInForm": "SV:Anna muodossa P.K.VVVV"
     },
     "requiredInstruction": "SV:Kaikki tähdellä * merkityt kentät ovat pakollisia.",
     "yhteystiedot": {
@@ -332,6 +339,8 @@
       "title": "Hankealue {{index}}",
       "duration": "Hankealueen kesto",
       "surfaceArea": "Piirroksen pinta-ala",
+      "totalSurfaceArea": "Alueiden kokonaispinta-ala",
+      "totalSurfaceAreaLong": "Hanke-alueiden kokonaispinta-ala",
       "liikenneverkollinenHaitta": "Hankealueen liikenneverkollinen haitta",
       "haittaMaarittelyt": "Hankealueen omat haittamäärittelyt"
     }
@@ -384,7 +393,8 @@
       "organisaatio": "SV:Organisaatio",
       "omaOrganisaatio": "SV:Lisää oma organisaatio",
       "insertOmaOrganisaatio": "SV:Syötä oma organisaatio",
-      "rights": "SV:Käyttöoikeutesi hankkeelle"
+      "rights": "SV:Käyttöoikeutesi hankkeelle",
+      "perustaja": "Perustaja"
     },
     "toolTips": {
       "tipOpenLabel": "SV:Avaa ohje",
@@ -435,6 +445,10 @@
     "pageHeader": "SV:Johtoselvityshakemus",
     "perustiedot": {
       "instructions": "SV:<0>Huomioithan, että johtoselvitys on voimassa 1 kuukauden. Johtoselvityksen tulee olla voimassa johtojen maastonäyttöjä tilattaessa sekä Johtoselvitysta tehdessä. Johtoselvitys on tarvittaessa päivitettävä.</0><0>Yleisellä alueella tehtävästä työstä on tehtävä erillinen ilmoitus kaupungille. Mikäli joudut rajoittamaan liikennettä esimerkiksi työkoneiden kuljetuksen vuoksi tai poistamaan pysäköintipaikkoja kadun varresta, tulee sinun tehdä myös aluevuokraushakemus liikennejärjestelysuunnitelmineen.</0>"
+    },
+    "alueet": {
+      "instructions": "SV:Voit lisätä selvitettävän alueen piirtämällä sen kartalle. Voit lisätä samalle hakemukselle useampia alueita, mikäli niitä koskeva aikaväli on sama.",
+      "giveDates": "SV:Valitse työn päivämäärät piirtääksesi selvitettävät alueet kartalle."
     }
   },
   "hakemus": {
@@ -448,7 +462,11 @@
       "emergencyWork": "SV:Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi",
       "applicationType": "SV:Hakemustyyppi",
       "copyPreviousApplication": "SV:Kopioi aiempi hakemus pohjaksi",
-      "applicationToUseAsBase": "SV:Pohjana käytettävä hakemus"
+      "applicationToUseAsBase": "SV:Pohjana käytettävä hakemus",
+      "startDate": "SV:Työn arvioitu alkupäivä",
+      "endDate": "SV:Työn arvioitu loppupäivä",
+      "workArea": "SV:Työalue",
+      "areaInfo": "SV:Alueen tiedot"
     },
     "buttons": {
       "continueToApplication": "SV:Jatka hakemukseen"
