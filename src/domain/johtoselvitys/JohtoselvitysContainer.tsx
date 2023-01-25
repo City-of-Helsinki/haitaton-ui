@@ -12,14 +12,20 @@ import { ReviewAndSend } from './ReviewAndSend';
 import MultipageForm from '../forms/MultipageForm';
 import FormActions from '../forms/components/FormActions';
 import { validationSchema } from './validationSchema';
+import { HankeData } from '../types/hanke';
 
-const JohtoselvitysContainer: React.FC = () => {
+type Props = {
+  hanke: HankeData;
+};
+
+const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
   const { t } = useTranslation();
 
   const initialValues: JohtoselvitysFormValues = {
     id: null,
     applicationType: 'CABLE_REPORT',
     applicationData: {
+      hankeTunnus: hanke.hankeTunnus,
       applicationType: 'CABLE_REPORT',
       name: '',
       customerWithContacts: {
@@ -142,9 +148,15 @@ const JohtoselvitysContainer: React.FC = () => {
     },
   ];
 
+  const hankeNameText = `${t('hankeForm:labels:nimi')} (${hanke.nimi})`;
+
   return (
     <FormProvider {...formContext}>
-      <MultipageForm heading={t('johtoselvitysForm:pageHeader')} formSteps={formSteps}>
+      <MultipageForm
+        heading={t('johtoselvitysForm:pageHeader')}
+        subHeading={hankeNameText}
+        formSteps={formSteps}
+      >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           const lastStep = activeStepIndex === formSteps.length - 1;
           return (

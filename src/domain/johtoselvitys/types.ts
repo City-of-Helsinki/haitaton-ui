@@ -47,6 +47,7 @@ export type Customer = {
 export type CustomerWithContacts = { customer: Customer; contacts: Contact[] };
 
 export type JohtoselvitysFormData = {
+  hankeTunnus: string;
   applicationType: ApplicationType;
   name: string;
   customerWithContacts: CustomerWithContacts;

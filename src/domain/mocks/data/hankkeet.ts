@@ -17,6 +17,7 @@ export async function readAll() {
 
 export async function create(data: HankeDataDraft) {
   const newHanke: HankeDataDraft = {
+    id: hankkeet.length + 1,
     hankeTunnus: generateHankeTunnus(),
     suunnitteluVaihe: null,
     tyomaaKatuosoite: '',

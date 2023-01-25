@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Accordion,
   Button,
@@ -32,6 +32,7 @@ import { FORMFIELD } from '../edit/types';
 import useLocale from '../../../common/hooks/useLocale';
 import { formatToFinnishDate } from '../../../common/utils/date';
 import { formatSurfaceArea, getFeatureFromHankeGeometry } from '../../map/utils';
+import ApplicationAddDialog from '../../application/components/ApplicationAddDialog';
 import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
 import CompressedAreaIndex from '../hankeIndexes/CompressedAreaIndex';
@@ -111,6 +112,15 @@ type Props = {
 
 const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) => {
   const { t } = useTranslation();
+  const [showAddApplicationDialog, setShowAddApplicationDialog] = useState(false);
+
+  function addApplication() {
+    setShowAddApplicationDialog(true);
+  }
+
+  function closeAddApplicationDialog() {
+    setShowAddApplicationDialog(false);
+  }
 
   const isHankeValid = useIsHankeValid(hankeData);
 
@@ -128,6 +138,12 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
 
   return (
     <article className={styles.hankeViewContainer}>
+      <ApplicationAddDialog
+        isOpen={showAddApplicationDialog}
+        onClose={closeAddApplicationDialog}
+        hanke={hankeData}
+      />
+
       <header className={styles.headerContainer}>
         <Container>
           <Text tag="h1" styleAs="h1" weight="bold">
@@ -153,6 +169,7 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
               variant="primary"
               iconLeft={<IconPlusCircle aria-hidden="true" />}
               theme="coat"
+              onClick={addApplication}
               disabled={!isHankeValid}
             >
               {t('hankeList:buttons:addApplication')}

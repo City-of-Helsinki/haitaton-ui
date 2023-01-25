@@ -47,7 +47,7 @@ const Header: React.FC = () => {
 
   return (
     <Navigation
-      menuToggleAriaLabel={t('common:components:multiselect:toggle')}
+      menuToggleAriaLabel={t('common:ariaLabels:menuToggle')}
       title="Haitaton"
       skipTo="#"
       skipToContentLabel={t('common:components:header:skipToContentLabel')}
@@ -90,6 +90,7 @@ const Header: React.FC = () => {
           onSignIn={authService.login}
           label={t('authentication:loginButton')}
           userName={user?.profile?.name}
+          buttonAriaLabel={t('common:ariaLabels:profileButton')}
         >
           <Navigation.Item
             href=""
