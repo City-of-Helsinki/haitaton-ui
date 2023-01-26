@@ -24,7 +24,7 @@ const PrivacyPolicyPage: React.FC = () => {
           rel="noreferrer"
           style={{ color: 'var(--color-coat-of-arms)' }}
         >
-          Avaa rekisteriseloste tästä
+          {t('staticPages:privacyPolicy:linkText')}
         </a>
       </HdsContainer>
     </Container>
