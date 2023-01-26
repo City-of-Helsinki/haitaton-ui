@@ -480,7 +480,9 @@
       "startDate": "SV:Työn arvioitu alkupäivä",
       "endDate": "SV:Työn arvioitu loppupäivä",
       "workArea": "SV:Työalue",
-      "areaInfo": "SV:Alueen tiedot"
+      "areaInfo": "SV:Alueen tiedot",
+      "preFilledInfo": "SV:Esitäytetyt tiedot",
+      "preFilledInfoHelp": "SV:Valitse nimi hankkeen tiedoista"
     },
     "buttons": {
       "continueToApplication": "SV:Jatka hakemukseen"

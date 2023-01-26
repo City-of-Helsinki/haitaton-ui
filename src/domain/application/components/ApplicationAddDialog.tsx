@@ -56,7 +56,7 @@ const ApplicationAddDialog: React.FC<Props> = ({ isOpen, onClose, hanke }) => {
       aria-labelledby={dialogTitle}
       variant="primary"
       close={onClose}
-      closeButtonLabelText={t('common:closeButtonLabelText')}
+      closeButtonLabelText={t('common:ariaLabels:closeButtonLabelText')}
     >
       <Dialog.Header
         id="application-create-title"

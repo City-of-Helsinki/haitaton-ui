@@ -478,7 +478,9 @@
       "startDate": "Työn arvioitu alkupäivä",
       "endDate": "Työn arvioitu loppupäivä",
       "workArea": "Työalue",
-      "areaInfo": "Alueen tiedot"
+      "areaInfo": "Alueen tiedot",
+      "preFilledInfo": "Esitäytetyt tiedot",
+      "preFilledInfoHelp": "Valitse nimi hankkeen tiedoista"
     },
     "buttons": {
       "continueToApplication": "Jatka hakemukseen"
