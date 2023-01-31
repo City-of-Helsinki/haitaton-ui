@@ -153,7 +153,7 @@
       "path": "/hankesalkku",
       "headerLabel": "Omat hankkeet",
       "meta": {
-        "title": "Haitaton - Omat hankkeet"
+        "title": "Haitaton - Hankesalkku"
       }
     },
     "HANKE": {
@@ -213,7 +213,7 @@
       }
     },
     "JOHTOSELVITYSHAKEMUS": {
-      "path": "/johtoselvityshakemus",
+      "path": "/johtoselvityshakemus/*",
       "headerLabel": "Luo uusi johtoselvityshakemus",
       "meta": {
         "title": "Haitaton - Luo uusi johtoselvityshakemus"
@@ -291,7 +291,7 @@
       "KADUN_KUNNOSSAPITO": "Kadun kunnossapito",
       "KIINTEISTOLIITTYMA": "Kiinteistöliittymä",
       "SULKU_TAI_KAIVO": "Sulku tai kaivo",
-      "UUDISRAKENNUS": "Uudisrakennus",
+      "UUDISRAKENNUS": "Uudisrakentaminen",
       "SANEERAUS": "Saneeraus",
       "AKILLINEN_VIKAKORJAUS": "Äkillinen vikakorjaus",
       "VIHERTYO": "Vihertyö",
@@ -367,17 +367,17 @@
     "labels": {
       "hankeTunnus": "Hankkeen tunnus",
       "nimi": "Hankkeen nimi",
-      "vaihe": "Hankkeen vaihe",
+      "vaihe": "Hankkeen Vaihe",
       "kuvaus": "Hankkeen kuvaus",
       "suunnitteluVaihe": "Hankkeen suunnitteluvaihe",
       "alkuPvm": "Hankkeen alkupäivä",
       "loppuPvm": "Hankkeen loppupäivä",
-      "tyomaaTyyppi": "Työn tyyppi",
-      "tyomaaKoko": "Hankkeen koko",
-      "haittaAlkuPvm": "Haittojen alkupäivämäärä",
-      "haittaLoppuPvm": "Haittojen loppupäivämäärä",
-      "kaistaHaitta": "Autoliikenteen kaistahaitta",
-      "kaistaPituusHaitta": "Kaistahaittojen pituus",
+      "tyomaaTyyppi": "Työmaan tyyppi",
+      "tyomaaKoko": "Työmaan koko",
+      "haittaAlkuPvm": "Haitan alkupäivämäärä",
+      "haittaLoppuPvm": "Haitan loppupäivämäärä",
+      "kaistaHaitta": "Kaistahaitta",
+      "kaistaPituusHaitta": "Kaistan pituushaitta",
       "meluHaitta": "Meluhaitta",
       "polyHaitta": "Pölyhaitta",
       "tarinaHaitta": "Tärinähaitta",
@@ -420,7 +420,7 @@
       "header": "Alueet",
       "subHeader": "Hanke-alueet",
       "area": "Alue",
-      "instructions": "Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 1-5, 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen tärkeimmillä reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein.",
+      "instructions": "Hankkeelle voi piirttää useita geometrioita. Geometria alueet vaikuttavat hankkeen liikennehaittaindekseihin. Piirtotyökalut löytyvät karttanäkymän vasemmasta alalaidasta. Kynätyökalulla voi piirtää monikulmaisia geometrioita klikkaamalla kohtaan, johon haluat kulman. Neliötyökalulla saat muodostettua neliömäisiä alueita klikkaamalla ensin kartalle ja liikuttamalla hiirtä haluamaasi suuntaan. Uudelleenklikkaus \"sulkee\" neliön piirron. Geometriaa voi muokata \"tarttumalla\" geometrian reunasta ja vetämällä. Myös neliömäistä geometriaa voi muokata reunasta tarttumalla. Voit poistaa geometrian valitsemalla ensin geometrian klikkaamalla sitä, jolloin vasemman alalaidan piirtotyökaluihin ilmestyy roskakori ikoni, jota klikkaamalla geometrian voi poistaa.",
       "haitatHeader": "Alueen haitta-arviot",
       "haitatInstructions": "Anna arvio suurimmista mahdollisista vaikutuksista hankealueella.",
       "removeAreaButton": "Poista alue"
@@ -437,6 +437,16 @@
     },
     "finishedForm": {
       "header": "Lomake on lähetetty onnistuneesti"
+    },
+    "addContactButton": "Lisää yhteyshenkilö",
+    "removeContactButton": "Poista yhteyshenkilö",
+    "headers": {
+      "arvioijat": "Arvioijat",
+      "omistajat": "Omistajat",
+      "toteuttajat": "Toteuttajat"
+    },
+    "hankkeenYhteystiedotForm": {
+      "header": "Yhteystiedot"
     }
   },
   "johtoselvitysForm": {
@@ -557,20 +567,20 @@
   },
   "hankePortfolio": {
     "filters": "Rajausehdot",
-    "pageHeader": "Omat hankkeet",
+    "pageHeader": "Hankesalkku",
     "search": "Haku",
     "searchHelperText": "Hae hankkeen nimellä tai tunnuksella",
     "searchResults": "{{count}} hakutulos",
     "searchResults_plural": "{{count}} hakutulosta",
-    "noneFound": "Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta",
-    "noneExist": "Hankesalkussasi ei ole hankkeita",
+    "noneFound": "Haulla ei löytynyt yhtään hankkeita.",
+    "noneExist": "Hankesalkussasi ei ole hankkeita.",
     "hankevaiheet": "Hankevaiheet",
     "hankevaiheetHelperText": "Valitse hankevaiheet joita haluat tarkastella",
     "startDate": "Ajanjakson alku",
     "endDate": "Ajanjakson loppu",
     "clearDates": "Tyhjennä",
     "timePeriodHelperText": "Aikaväli jolloin haitta on aktiivinen",
-    "hankkeentyyppi": "Työn tyyppi",
+    "hankkeentyyppi": "Hankkeen tyypit",
     "hankkeentyyppiHelperText": "Valitse hankkeen työmaan tyyppi tai tyypit",
     "areaLocation": "Alueiden sijainti",
     "openMapToNewWindow": "Avaa kartta uuteen ikkunaan",
