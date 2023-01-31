@@ -48,15 +48,15 @@ describe('Header', () => {
     await user.click(screen.getAllByRole('button', { name: /suomi/i })[0]);
     await user.click(screen.getAllByText(/english/i)[0]);
     expect(i18next.language).toBe('en');
-    expect(window.location.pathname).toBe('/en/julkisethankkeet/kartta');
+    expect(window.location.pathname).toBe('/en/publicprojects/map');
 
     await user.click(screen.getAllByRole('button', { name: /english/i })[0]);
     await user.click(screen.getAllByText(/svenska/i)[0]);
     expect(i18next.language).toBe('sv');
-    expect(window.location.pathname).toBe('/sv/julkisethankkeet/kartta');
+    expect(window.location.pathname).toBe('/sv/allmannaprojekt/karta');
 
     await user.click(screen.getAllByRole('button', { name: /svenska/i })[0]);
-    await user.click(screen.getAllByText(/suomi/i)[0]);
+    await user.click(screen.getAllByText(/finska/i)[0]);
     expect(i18next.language).toBe('fi');
     expect(window.location.pathname).toBe('/fi/julkisethankkeet/kartta');
   });

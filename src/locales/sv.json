@@ -171,7 +171,7 @@
       }
     },
     "PUBLIC_HANKKEET_MAP": {
-      "path": "/julkisethankkeet/kartta",
+      "path": "/allmannaprojekt/karta",
       "headerLabel": "Projekt på allmänna områden",
       "meta": {
         "title": "Haitaton - Projekt på allmänna områden"
@@ -213,7 +213,7 @@
       }
     },
     "JOHTOSELVITYSHAKEMUS": {
-      "path": "/ansokan-om-ledningsutredning/*",
+      "path": "/ansokan-om-ledningsutredning",
       "headerLabel": "Skapa ny ansökan om ledningsutredning",
       "meta": {
         "title": "Haitaton - Skapa ny ansökan om ledningsutredning"

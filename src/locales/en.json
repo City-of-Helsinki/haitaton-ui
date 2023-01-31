@@ -171,7 +171,7 @@
       }
     },
     "PUBLIC_HANKKEET_MAP": {
-      "path": "/julkisethankkeet/kartta",
+      "path": "/publicprojects/map",
       "headerLabel": "Projects in public areas",
       "meta": {
         "title": "Haitaton - Projects in public areas"
@@ -213,7 +213,7 @@
       }
     },
     "JOHTOSELVITYSHAKEMUS": {
-      "path": "/cable-report-application/*",
+      "path": "/cable-report-application",
       "headerLabel": "Create a cable report application",
       "meta": {
         "title": "Haitaton - Create a new cable report application"
