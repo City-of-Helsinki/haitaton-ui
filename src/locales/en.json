@@ -23,11 +23,6 @@
       },
       "cancelButton": "Cancel"
     },
-    "languages": {
-      "fi": "Finnish",
-      "en": "English",
-      "sv": "Svenska"
-    },
     "components": {
       "multiselect": {
         "toggle": "Close and open the menu",

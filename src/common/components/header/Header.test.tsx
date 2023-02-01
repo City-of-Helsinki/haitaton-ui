@@ -56,7 +56,7 @@ describe('Header', () => {
     expect(window.location.pathname).toBe('/sv/allmannaprojekt/karta');
 
     await user.click(screen.getAllByRole('button', { name: /svenska/i })[0]);
-    await user.click(screen.getAllByText(/finska/i)[0]);
+    await user.click(screen.getAllByText(/suomi/i)[0]);
     expect(i18next.language).toBe('fi');
     expect(window.location.pathname).toBe('/fi/julkisethankkeet/kartta');
   });

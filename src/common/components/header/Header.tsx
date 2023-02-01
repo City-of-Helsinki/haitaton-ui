@@ -9,6 +9,12 @@ import useUser from '../../../domain/auth/useUser';
 import { Language, LANGUAGES } from '../../types/language';
 import { I18NLANGKEY } from '../../../locales/constants';
 
+const languageLabels = {
+  fi: 'Suomi',
+  en: 'English',
+  sv: 'Svenska',
+};
+
 const Header: React.FC = () => {
   const {
     HOME,
@@ -101,12 +107,12 @@ const Header: React.FC = () => {
             data-testid="logoutLink"
           />
         </Navigation.User>
-        <Navigation.LanguageSelector label={t(`common:languages:${i18n.language}`)}>
+        <Navigation.LanguageSelector label={languageLabels[i18n.language as LANGUAGES]}>
           {$enum(LANGUAGES).map((lang) => (
             <Navigation.Item
               as="a"
               href=""
-              label={t(`common:languages:${lang}`)}
+              label={languageLabels[lang]}
               onClick={(e: React.MouseEvent) => {
                 e.preventDefault();
                 setLanguage(lang);

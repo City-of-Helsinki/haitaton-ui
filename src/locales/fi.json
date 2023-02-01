@@ -23,11 +23,6 @@
       },
       "cancelButton": "Peruuta"
     },
-    "languages": {
-      "fi": "Suomi",
-      "en": "English",
-      "sv": "Svenska"
-    },
     "components": {
       "multiselect": {
         "toggle": "Sulje ja avaa valikko",

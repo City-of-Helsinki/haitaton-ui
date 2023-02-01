@@ -23,11 +23,6 @@
       },
       "cancelButton": "Ångra"
     },
-    "languages": {
-      "fi": "Finska",
-      "en": "English",
-      "sv": "Svenska"
-    },
     "components": {
       "multiselect": {
         "toggle": "Stäng och öppna menyn",
