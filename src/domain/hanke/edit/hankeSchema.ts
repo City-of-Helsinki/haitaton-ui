@@ -68,6 +68,7 @@ export const hankeAlueSchema = yup.object().shape({
 });
 
 export const hankeSchema = yup.object().shape({
+  hankeTunnus: yup.string().required(),
   [FORMFIELD.NIMI]: yup.string().min(3).required(),
   [FORMFIELD.KUVAUS]: yup.string().required().min(1),
   [FORMFIELD.KATUOSOITE]: yup.string().required(),

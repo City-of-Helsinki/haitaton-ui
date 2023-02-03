@@ -5,7 +5,11 @@ import { SectionItemContent, SectionItemTitle } from '../../forms/components/For
 import { Contact, Customer, CustomerWithContacts, PostalAddress } from '../types';
 import Text from '../../../common/components/text/Text';
 
-function isCustomerEmpty(customer: Customer) {
+function isCustomerEmpty(customer?: Customer) {
+  if (customer === undefined) {
+    return true;
+  }
+
   if (
     customer.name === '' &&
     customer.registryKey === '' &&
@@ -56,13 +60,13 @@ export const ContactSummary: React.FC<{ contact: Contact }> = ({ contact }) => {
   );
 };
 
-const ContactsSummary: React.FC<{ customerWithContacts: CustomerWithContacts; title: string }> = ({
-  customerWithContacts,
-  title,
-}) => {
+const ContactsSummary: React.FC<{
+  customerWithContacts: CustomerWithContacts | null;
+  title: string;
+}> = ({ customerWithContacts, title }) => {
   const { t } = useTranslation();
 
-  if (isCustomerEmpty(customerWithContacts.customer)) {
+  if (customerWithContacts === null || isCustomerEmpty(customerWithContacts.customer)) {
     return null;
   }
 

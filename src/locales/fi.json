@@ -42,7 +42,12 @@
         "skipToContentLabel": "Siirry pääsisältöön"
       }
     },
-    "error": "Tapahtui virhe. Yritä uudestaan."
+    "error": "Tapahtui virhe. Yritä uudestaan.",
+    "ariaLabels": {
+      "profileButton": "Käyttäjäprofiili",
+      "menuToggle": "Valikko",
+      "closeButtonLabelText": "Sulje"
+    }
   },
   "form": {
     "validations": {
@@ -145,7 +150,9 @@
         "remove": {
           "rakennuttajat": "Poista rakennuttaja",
           "toteuttajat": "Poista toteuttaja",
-          "muut": "Poista muu taho"
+          "muut": "Poista muu taho",
+          "propertyDeveloperWithContacts": "Poista rakennuttaja",
+          "representativeWithContacts": "Poista asianhoitaja"
         }
       }
     }
@@ -348,6 +355,8 @@
       "title": "Hankealue {{index}}",
       "duration": "Hankealueen kesto",
       "surfaceArea": "Piirroksen pinta-ala",
+      "totalSurfaceArea": "Alueiden kokonaispinta-ala",
+      "totalSurfaceAreaLong": "Hanke-alueiden kokonaispinta-ala",
       "liikenneverkollinenHaitta": "Hankealueen liikenneverkollinen haitta",
       "haittaMaarittelyt": "Hankealueen omat haittamäärittelyt"
     }
@@ -398,7 +407,8 @@
       "organisaatio": "Organisaatio",
       "omaOrganisaatio": "Lisää oma organisaatio",
       "insertOmaOrganisaatio": "Syötä oma organisaatio",
-      "rights": "Käyttöoikeutesi hankkeelle"
+      "rights": "Käyttöoikeutesi hankkeelle",
+      "perustaja": "Perustaja"
     },
     "toolTips": {
       "tipOpenLabel": "Avaa ohje",
@@ -467,12 +477,27 @@
       "maintenanceWork": "Olemassaolevan rakenteen kunnossapitotyöstä",
       "propertyConnectivity": "Kiinteistöliittymien rakentamisesta",
       "emergencyWork": "Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi",
+      "applicationType": "Hakemustyyppi",
+      "copyPreviousApplication": "Kopioi aiempi hakemus pohjaksi",
+      "applicationToUseAsBase": "Pohjana käytettävä hakemus",
       "startDate": "Työn arvioitu alkupäivä",
       "endDate": "Työn arvioitu loppupäivä",
       "workArea": "Työalue",
       "areaInfo": "Alueen tiedot",
-      "checkInfo": "Tarkista antamasi tiedot ja lähetä hakemus."
-    }
+      "checkInfo": "Tarkista antamasi tiedot ja lähetä hakemus.",
+      "preFilledInfo": "Esitäytetyt tiedot",
+      "preFilledInfoHelp": "Valitse nimi hankkeen tiedoista"
+    },
+    "buttons": {
+      "continueToApplication": "Jatka hakemukseen"
+    },
+    "headers": {
+      "pickApplication": "Valitse luotava hakemus"
+    },
+    "applicationTypes": {
+      "CABLE_REPORT": "Johtoselvitys"
+    },
+    "applicationTypeInstruction": "Valitse hakemustyyppi. Osaan hakemuksista voit myös kopioida aiemman hakemuksen pohjaksi. Kaivuilmoituksen kautta pääset tekemään myös johtoselvityksen, mikäli sinulla ei sellaista vielä ole."
   },
   "hankeSidebar": {
     "ariaSidebarContent": "Hankkeen tiedot",

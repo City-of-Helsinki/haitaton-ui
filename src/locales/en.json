@@ -42,7 +42,12 @@
         "skipToContentLabel": "EN:Siirry pääsisältöön"
       }
     },
-    "error": "EN: Tapahtui virhe. Yritä uudestaan."
+    "error": "EN: Tapahtui virhe. Yritä uudestaan.",
+    "ariaLabels": {
+      "profileButton": "EN:Käyttäjäprofiili",
+      "menuToggle": "EN:Valikko",
+      "closeButtonLabelText": "EN:Sulje"
+    }
   },
   "form": {
     "validations": {
@@ -145,7 +150,9 @@
         "remove": {
           "rakennuttajat": "EN:Poista rakennuttaja",
           "toteuttajat": "EN:Poista toteuttaja",
-          "muut": "EN:Poista muu taho"
+          "muut": "EN:Poista muu taho",
+          "propertyDeveloperWithContacts": "EN:Poista rakennuttaja",
+          "representativeWithContacts": "EN:Poista asianhoitaja"
         }
       }
     }
@@ -348,6 +355,8 @@
       "title": "Hankealue {{index}}",
       "duration": "Hankealueen kesto",
       "surfaceArea": "Piirroksen pinta-ala",
+      "totalSurfaceArea": "Alueiden kokonaispinta-ala",
+      "totalSurfaceAreaLong": "Hanke-alueiden kokonaispinta-ala",
       "liikenneverkollinenHaitta": "Hankealueen liikenneverkollinen haitta",
       "haittaMaarittelyt": "Hankealueen omat haittamäärittelyt"
     }
@@ -400,7 +409,8 @@
       "organisaatio": "EN:Organisaatio",
       "omaOrganisaatio": "EN:Lisää oma organisaatio",
       "insertOmaOrganisaatio": "EN:Syötä oma organisaatio",
-      "rights": "EN:Käyttöoikeutesi hankkeelle"
+      "rights": "EN:Käyttöoikeutesi hankkeelle",
+      "perustaja": "Perustaja"
     },
     "toolTips": {
       "tipOpenLabel": "EN:Avaa ohje",
@@ -469,12 +479,27 @@
       "maintenanceWork": "EN:Olemassaolevan rakenteen kunnossapitotyöstä",
       "propertyConnectivity": "EN:Kiinteistöliittymien rakentamisesta",
       "emergencyWork": "EN:Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi",
+      "applicationType": "EN:Hakemustyyppi",
+      "copyPreviousApplication": "EN:Kopioi aiempi hakemus pohjaksi",
+      "applicationToUseAsBase": "EN:Pohjana käytettävä hakemus",
       "startDate": "EN:Työn arvioitu alkupäivä",
       "endDate": "EN:Työn arvioitu loppupäivä",
       "workArea": "EN:Työalue",
       "areaInfo": "EN:Alueen tiedot",
-      "checkInfo": "EN:Tarkista antamasi tiedot ja lähetä hakemus."
-    }
+      "checkInfo": "EN:Tarkista antamasi tiedot ja lähetä hakemus.",
+      "preFilledInfo": "EN:Esitäytetyt tiedot",
+      "preFilledInfoHelp": "EN:Valitse nimi hankkeen tiedoista"
+    },
+    "buttons": {
+      "continueToApplication": "EN:Jatka hakemukseen"
+    },
+    "headers": {
+      "pickApplication": "EN:Valitse luotava hakemus"
+    },
+    "applicationTypes": {
+      "CABLE_REPORT": "EN:Johtoselvitys"
+    },
+    "applicationTypeInstruction": "EN:Valitse hakemustyyppi. Osaan hakemuksista voit myös kopioida aiemman hakemuksen pohjaksi. Kaivuilmoituksen kautta pääset tekemään myös johtoselvityksen, mikäli sinulla ei sellaista vielä ole."
   },
   "hankeSidebar": {
     "ariaSidebarContent": "EN:Hankkeen tiedot",

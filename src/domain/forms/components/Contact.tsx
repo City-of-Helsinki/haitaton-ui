@@ -10,6 +10,7 @@ import styles from './Contact.module.scss';
 interface Props<T> {
   contactType: T;
   index?: number;
+  showContactTitle?: boolean;
   onRemoveContact?: UseFieldArrayRemove;
   renderSubContact?: (subContactIndex: number, remove: UseFieldArrayRemove) => JSX.Element;
   subContactPath: string;
@@ -20,6 +21,7 @@ interface Props<T> {
 const Contact = <T extends unknown>({
   contactType,
   index,
+  showContactTitle = true,
   onRemoveContact,
   renderSubContact,
   subContactPath,
@@ -45,9 +47,11 @@ const Contact = <T extends unknown>({
   return (
     <>
       <Flex justify="space-between" align="center" mb="var(--spacing-s)">
-        <Text tag="h3" styleAs="body-l" weight="bold">
-          {t(`form:yhteystiedot:titles:${contactType}`)}
-        </Text>
+        {showContactTitle && (
+          <Text tag="h3" styleAs="body-l" weight="bold">
+            {t(`form:yhteystiedot:titles:${contactType}`)}
+          </Text>
+        )}
         {onRemoveContact && (
           <Button
             variant="supplementary"

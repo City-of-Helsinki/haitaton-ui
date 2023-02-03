@@ -50,6 +50,7 @@ export type CustomerWithContacts = {
 };
 
 export type JohtoselvitysFormData = {
+  hankeTunnus: string;
   applicationType: ApplicationType;
   name: string;
   customerWithContacts: CustomerWithContacts;
@@ -62,11 +63,11 @@ export type JohtoselvitysFormData = {
   clientApplicationKind: string;
   workDescription: string;
   postalAddress: PostalAddress | null;
-  representativeWithContacts: CustomerWithContacts;
+  representativeWithContacts: CustomerWithContacts | null;
   invoicingCustomer: null;
   customerReference: null;
   area: null;
-  propertyDeveloperWithContacts: CustomerWithContacts;
+  propertyDeveloperWithContacts: CustomerWithContacts | null;
   constructionWork: boolean;
   maintenanceWork: boolean;
   emergencyWork: boolean;
