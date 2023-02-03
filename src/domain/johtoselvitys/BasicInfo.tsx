@@ -74,16 +74,19 @@ export const BasicHankeInfo: React.FC = () => {
   ]);
 
   useEffect(() => {
-    if (user.data?.profile.name) {
+    if (user.data?.profile.name && !getValues(`applicationData.${selectedRole}.contacts.0.name`)) {
       setValue(`applicationData.${selectedRole}.contacts.0.name`, user.data?.profile.name);
     }
-  }, [user.data?.profile.name, setValue, selectedRole]);
+  }, [user.data?.profile.name, setValue, selectedRole, getValues]);
 
   useEffect(() => {
-    if (user.data?.profile.email) {
+    if (
+      user.data?.profile.email &&
+      !getValues(`applicationData.${selectedRole}.contacts.0.email`)
+    ) {
       setValue(`applicationData.${selectedRole}.contacts.0.email`, user.data?.profile.email);
     }
-  }, [user.data?.profile.email, setValue, selectedRole]);
+  }, [user.data?.profile.email, setValue, selectedRole, getValues]);
 
   const roleOptions: Option[] = [
     { value: 'customerWithContacts', label: t('form:yhteystiedot:titles:customerWithContacts') },

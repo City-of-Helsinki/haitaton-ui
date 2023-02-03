@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import React from 'react';
 import { Flex } from '@chakra-ui/react';
 import { Button, IconCross, IconPlusCircle, Tab, TabList, TabPanel, Tabs } from 'hds-react';
@@ -5,34 +6,26 @@ import { useTranslation } from 'react-i18next';
 import { useFieldArray, UseFieldArrayRemove } from 'react-hook-form';
 import Text from '../../../common/components/text/Text';
 import styles from './Contact.module.scss';
-import { CONTACT_FORMFIELD } from '../../hanke/edit/types';
-import { HankeSubContact } from '../../types/hanke';
-
-function getEmptySubContact(): HankeSubContact {
-  return {
-    nimi: '',
-    osoite: '',
-    postinumero: '',
-    postitoimipaikka: '',
-    email: '',
-    puhelinnumero: '',
-  };
-}
 
 interface Props<T> {
   contactType: T;
-  index: number;
-  onRemoveContact: UseFieldArrayRemove;
-  // eslint-disable-next-line react/require-default-props
+  index?: number;
+  showContactTitle?: boolean;
+  onRemoveContact?: UseFieldArrayRemove;
   renderSubContact?: (subContactIndex: number, remove: UseFieldArrayRemove) => JSX.Element;
+  subContactPath: string;
+  emptySubContact: unknown;
   children: React.ReactNode;
 }
 
 const Contact = <T extends unknown>({
   contactType,
   index,
+  showContactTitle = true,
   onRemoveContact,
   renderSubContact,
+  subContactPath,
+  emptySubContact,
   children,
 }: Props<T>) => {
   const { t } = useTranslation();
@@ -42,11 +35,11 @@ const Contact = <T extends unknown>({
     append: appendSubContact,
     remove: removeSubContact,
   } = useFieldArray({
-    name: `${contactType}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}`,
+    name: subContactPath,
   });
 
   function addSubContact() {
-    appendSubContact(getEmptySubContact());
+    appendSubContact(emptySubContact);
   }
 
   const renderSubContacts = subContactFields.length > 0 && renderSubContact;
@@ -54,16 +47,20 @@ const Contact = <T extends unknown>({
   return (
     <>
       <Flex justify="space-between" align="center" mb="var(--spacing-s)">
-        <Text tag="h3" styleAs="body-l" weight="bold">
-          {t(`form:yhteystiedot:titles:${contactType}`)}
-        </Text>
-        <Button
-          variant="supplementary"
-          iconLeft={<IconCross aria-hidden />}
-          onClick={() => onRemoveContact(index)}
-        >
-          {t(`form:yhteystiedot:buttons:remove:${contactType}`)}
-        </Button>
+        {showContactTitle && (
+          <Text tag="h3" styleAs="body-l" weight="bold">
+            {t(`form:yhteystiedot:titles:${contactType}`)}
+          </Text>
+        )}
+        {onRemoveContact && (
+          <Button
+            variant="supplementary"
+            iconLeft={<IconCross aria-hidden />}
+            onClick={() => onRemoveContact(index)}
+          >
+            {t(`form:yhteystiedot:buttons:remove:${contactType}`)}
+          </Button>
+        )}
       </Flex>
 
       {children}
@@ -71,8 +68,13 @@ const Contact = <T extends unknown>({
       {renderSubContacts && (
         <Tabs>
           <TabList className={styles.tabList}>
-            {subContactFields.map((subContact) => {
-              return <Tab key={subContact.id}>Yhteyshenkilö</Tab>;
+            {subContactFields.map((subContact, subContactIndex) => {
+              return (
+                <Tab key={subContact.id}>
+                  {t('hankePortfolio:labels:yhteyshenkilo')}{' '}
+                  {subContactIndex > 0 && subContactIndex + 1}
+                </Tab>
+              );
             })}
           </TabList>
 

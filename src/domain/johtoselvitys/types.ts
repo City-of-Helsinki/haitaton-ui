@@ -25,8 +25,14 @@ export enum ContactType {
   OTHER = 'OTHER',
 }
 
+export type CustomerType =
+  | 'customerWithContacts'
+  | 'contractorWithContacts'
+  | 'propertyDeveloperWithContacts'
+  | 'representativeWithContacts';
+
 export type Customer = {
-  type: 'PERSON' | 'COMPANY' | 'ASSOCIATION' | 'OTHER';
+  type: keyof typeof ContactType | null;
   name: string;
   country: string;
   postalAddress: PostalAddress;
@@ -38,18 +44,14 @@ export type Customer = {
   sapCustomerNumber: string | null;
 };
 
+export type CustomerWithContacts = { customer: Customer; contacts: Contact[] };
+
 export type JohtoselvitysFormData = {
   hankeTunnus: string;
   applicationType: ApplicationType;
   name: string;
-  customerWithContacts: {
-    customer: Customer;
-    contacts: Contact[];
-  };
-  contractorWithContacts: {
-    customer: Customer;
-    contacts: Contact[];
-  };
+  customerWithContacts: CustomerWithContacts;
+  contractorWithContacts: CustomerWithContacts;
   geometry: HaitatonGeometry;
   startTime: number | null;
   endTime: number | null;
@@ -58,11 +60,11 @@ export type JohtoselvitysFormData = {
   clientApplicationKind: string;
   workDescription: string;
   postalAddress: PostalAddress | null;
-  representativeWithContacts: null;
+  representativeWithContacts: CustomerWithContacts | null;
   invoicingCustomer: null;
   customerReference: null;
   area: null;
-  propertyDeveloperWithContacts: null;
+  propertyDeveloperWithContacts: CustomerWithContacts | null;
   constructionWork: boolean;
   maintenanceWork: boolean;
   emergencyWork: boolean;

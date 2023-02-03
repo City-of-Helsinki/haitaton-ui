@@ -12,7 +12,7 @@ import { ReviewAndSend } from './ReviewAndSend';
 import MultipageForm from '../forms/MultipageForm';
 import FormActions from '../forms/components/FormActions';
 import { validationSchema } from './validationSchema';
-import { HankeData } from '../types/hanke';
+import { HankeContacts, HankeData } from '../types/hanke';
 
 type Props = {
   hanke: HankeData;
@@ -30,7 +30,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
       name: '',
       customerWithContacts: {
         customer: {
-          type: 'PERSON',
+          type: null,
           name: '',
           country: 'FI',
           postalAddress: {
@@ -75,7 +75,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
       workDescription: '',
       contractorWithContacts: {
         customer: {
-          type: 'COMPANY',
+          type: null,
           name: '',
           country: 'FI',
           postalAddress: {
@@ -94,17 +94,11 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
         },
         contacts: [
           {
-            name: '',
-            postalAddress: {
-              streetAddress: {
-                streetName: '',
-              },
-              postalCode: '',
-              city: '',
-            },
             email: '',
-            phone: '',
+            name: '',
             orderer: false,
+            phone: '',
+            postalAddress: { city: '', postalCode: '', streetAddress: { streetName: '' } },
           },
         ],
       },
@@ -131,6 +125,13 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
     resolver: yupResolver(validationSchema),
   });
 
+  const hankeContacts: HankeContacts = [
+    hanke.omistajat,
+    hanke.rakennuttajat,
+    hanke.toteuttajat,
+    hanke.muut,
+  ];
+
   const formSteps = [
     {
       element: <BasicHankeInfo />,
@@ -143,7 +144,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
       state: StepState.disabled,
     },
     {
-      element: <Contacts />,
+      element: <Contacts hankeContacts={hankeContacts} />,
       label: t('form:headers:yhteystiedot'),
       state: StepState.disabled,
     },

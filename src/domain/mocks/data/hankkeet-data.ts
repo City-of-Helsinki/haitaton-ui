@@ -68,11 +68,11 @@ const hankkeet: HankeDataDraft[] = [
         tyyppi: 'YRITYS',
         nimi: 'Yritys Oy',
         ytunnusTaiHetu: 'y-1234567',
-        osoite: '',
-        postinumero: '',
-        postitoimipaikka: '',
+        osoite: 'Yrityskuja 5',
+        postinumero: '00100',
+        postitoimipaikka: 'Helsinki',
         email: 'yritys@testi.com',
-        puhelinnumero: '',
+        puhelinnumero: '0000000000',
         alikontaktit: [
           {
             nimi: 'Esa Kauppinen',
@@ -120,8 +120,8 @@ const hankkeet: HankeDataDraft[] = [
     muut: [
       {
         rooli: 'Isännöitsijä',
-        nimi: 'Yritys 2 Oy',
-        email: 'yritys2@testi.com',
+        nimi: 'Yritys 3 Oy',
+        email: 'yritys3@testi.com',
         puhelinnumero: '',
         organisaatioNimi: 'Organisaatio',
         osasto: '',

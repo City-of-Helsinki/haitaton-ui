@@ -102,7 +102,12 @@
         "subContactInformation": "Yhteyshenkilön tiedot",
         "customerWithContacts": "Työstä vastaava",
         "contractorWithContacts": "Työn suorittaja",
-        "representativeWithContacts": "Asianhoitaja"
+        "propertyDeveloperWithContacts": "Rakennuttaja",
+        "representativeWithContacts": "Asianhoitaja",
+        "addContractors": "Lisää työn suorittajia",
+        "addRepresentatives": "Lisää asianhoitajia",
+        "addRepresentative": "Lisää asianhoitaja",
+        "applicant": "Hakija"
       },
       "labels": {
         "tyyppi": "Tyyppi",
@@ -128,7 +133,11 @@
       "contactType": {
         "YKSITYISHENKILO": "Yksityishenkilö",
         "YRITYS": "Yritys",
-        "YHTEISO": "Yhteisö"
+        "YHTEISO": "Yhteisö",
+        "PERSON": "Yksityishenkilö",
+        "COMPANY": "Yritys",
+        "ASSOCIATION": "Yhdistys",
+        "OTHER": "Muu"
       },
       "buttons": {
         "addSubContact": "Lisää yhteyshenkilö",
@@ -136,7 +145,9 @@
         "remove": {
           "rakennuttajat": "Poista rakennuttaja",
           "toteuttajat": "Poista toteuttaja",
-          "muut": "Poista muu taho"
+          "muut": "Poista muu taho",
+          "propertyDeveloperWithContacts": "Poista rakennuttaja",
+          "representativeWithContacts": "Poista asianhoitaja"
         }
       }
     }
@@ -447,6 +458,9 @@
     "alueet": {
       "instructions": "Voit lisätä selvitettävän alueen piirtämällä sen kartalle. Voit lisätä samalle hakemukselle useampia alueita, mikäli niitä koskeva aikaväli on sama.",
       "giveDates": "Valitse työn päivämäärät piirtääksesi selvitettävät alueet kartalle."
+    },
+    "yhteystiedot": {
+      "instructions": "<0>Hakemukselle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hakemukseen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hakemusta. Tarvittaessa voit antaa heille laajemmat käyttöoikeudet Omat hankkeet -näkymässä.</0><0>Hakijan yhteyshenkilö on oletuksena johtoselvityksen tilaaja. Tarvittaessa voit vaihtaa jonkun muista yhteyshenkilöistä tilaajaksi. Huomioithan, että johtoselvityksen tilaaja voi olla vain yksi henkilö.</0>"
     }
   },
   "hakemus": {
@@ -464,7 +478,9 @@
       "startDate": "Työn arvioitu alkupäivä",
       "endDate": "Työn arvioitu loppupäivä",
       "workArea": "Työalue",
-      "areaInfo": "Alueen tiedot"
+      "areaInfo": "Alueen tiedot",
+      "preFilledInfo": "Esitäytetyt tiedot",
+      "preFilledInfoHelp": "Valitse nimi hankkeen tiedoista"
     },
     "buttons": {
       "continueToApplication": "Jatka hakemukseen"
