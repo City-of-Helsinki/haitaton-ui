@@ -23,11 +23,6 @@
       },
       "cancelButton": "Peruuta"
     },
-    "languages": {
-      "fi": "Suomi",
-      "en": "English",
-      "sv": "Svenska"
-    },
     "components": {
       "multiselect": {
         "toggle": "Sulje ja avaa valikko",
@@ -302,7 +297,7 @@
       "KADUN_KUNNOSSAPITO": "Kadun kunnossapito",
       "KIINTEISTOLIITTYMA": "Kiinteistöliittymä",
       "SULKU_TAI_KAIVO": "Sulku tai kaivo",
-      "UUDISRAKENNUS": "Uudisrakennus",
+      "UUDISRAKENNUS": "Uudisrakentaminen",
       "SANEERAUS": "Saneeraus",
       "AKILLINEN_VIKAKORJAUS": "Äkillinen vikakorjaus",
       "VIHERTYO": "Vihertyö",
@@ -385,8 +380,8 @@
       "loppuPvm": "Hankkeen loppupäivä",
       "tyomaaTyyppi": "Työn tyyppi",
       "tyomaaKoko": "Hankkeen koko",
-      "haittaAlkuPvm": "Haittojen alkupäivämäärä",
-      "haittaLoppuPvm": "Haittojen loppupäivämäärä",
+      "haittaAlkuPvm": "Haittojen alkupäivä",
+      "haittaLoppuPvm": "Haittojen loppupäivä",
       "kaistaHaitta": "Autoliikenteen kaistahaitta",
       "kaistaPituusHaitta": "Kaistahaittojen pituus",
       "meluHaitta": "Meluhaitta",
@@ -431,7 +426,7 @@
       "header": "Alueet",
       "subHeader": "Hanke-alueet",
       "area": "Alue",
-      "instructions": "Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 1-5, 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen tärkeimmillä reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein.",
+      "instructions": "Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 1-5, 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen tärkeimmillä reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein (vihreä = ei haittaa, keltainen = todennäköinen haitta, punainen = merkittävä haitta).",
       "haitatHeader": "Alueen haitta-arviot",
       "haitatInstructions": "Anna arvio suurimmista mahdollisista vaikutuksista hankealueella.",
       "removeAreaButton": "Poista alue"
@@ -448,6 +443,16 @@
     },
     "finishedForm": {
       "header": "Lomake on lähetetty onnistuneesti"
+    },
+    "addContactButton": "Lisää yhteyshenkilö",
+    "removeContactButton": "Poista yhteyshenkilö",
+    "headers": {
+      "arvioijat": "Arvioijat",
+      "omistajat": "Omistajat",
+      "toteuttajat": "Toteuttajat"
+    },
+    "hankkeenYhteystiedotForm": {
+      "header": "Yhteystiedot"
     }
   },
   "johtoselvitysForm": {
