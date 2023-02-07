@@ -155,7 +155,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
     },
   ];
 
-  const hankeNameText = `${t('hankeForm:labels:nimi')} (${hanke.nimi})`;
+  const hankeNameText = `${hanke.nimi} (${hanke.hankeTunnus})`;
 
   return (
     <FormProvider {...formContext}>

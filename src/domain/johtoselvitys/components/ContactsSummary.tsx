@@ -77,7 +77,7 @@ const ContactsSummary: React.FC<{
         <CustomerSummary customer={customerWithContacts.customer} />
         {customerWithContacts.contacts.length > 0 && (
           <>
-            <Text tag="h3" weight="bold">
+            <Text tag="h3" weight="bold" spacingBottom="xs">
               {t('form:yhteystiedot:titles:subContacts')}
             </Text>
             <Grid
