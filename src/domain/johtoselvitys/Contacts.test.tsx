@@ -20,7 +20,7 @@ test('Contacts can be filled with hanke contact info', async () => {
   await waitForLoadingToFinish();
 
   expect(
-    screen.queryByText('Hankkeen nimi (Aidasmäentien vesihuollon rakentaminen)')
+    screen.queryByText('Aidasmäentien vesihuollon rakentaminen (HAI22-2)')
   ).toBeInTheDocument();
 
   const nextButton = screen.getByRole('button', { name: /seuraava/i });

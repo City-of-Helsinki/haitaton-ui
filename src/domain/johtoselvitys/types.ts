@@ -44,7 +44,10 @@ export type Customer = {
   sapCustomerNumber: string | null;
 };
 
-export type CustomerWithContacts = { customer: Customer; contacts: Contact[] };
+export type CustomerWithContacts = {
+  customer: Customer;
+  contacts: Contact[];
+};
 
 export type JohtoselvitysFormData = {
   hankeTunnus: string;
@@ -53,8 +56,8 @@ export type JohtoselvitysFormData = {
   customerWithContacts: CustomerWithContacts;
   contractorWithContacts: CustomerWithContacts;
   geometry: HaitatonGeometry;
-  startTime: number | null;
-  endTime: number | null;
+  startTime: string | null;
+  endTime: string | null;
   pendingOnClient: boolean;
   identificationNumber: string; // hankeTunnus
   clientApplicationKind: string;

@@ -70,7 +70,9 @@
       "omatTiedot": "EN:Omat tiedot",
       "role": "EN:Rooli",
       "roleHelper": "EN:Pääasiallinen roolisi työssä",
-      "fromHelsinkiProfile": "EN:Haettu Helsinki-profiilin perusteella"
+      "fromHelsinkiProfile": "EN:Haettu Helsinki-profiilin perusteella",
+      "addressInformation": "EN:Osoitetiedot",
+      "kokonaisAla": "EN:Alueiden kokonaispinta-ala"
     },
     "helperTexts": {
       "dateInForm": "EN:Anna muodossa P.K.VVVV"
@@ -94,14 +96,17 @@
         "lisaaMuitaTahoja": "EN:Lisää muita tahoja",
         "lisaaMuuTaho": "EN:Lisää muu taho",
         "subContact": "EN:Yhteyshenkilö",
+        "subContacts": "EN:Yhteyshenkilöt",
         "subContactInformation": "EN:Yhteyshenkilön tiedot",
         "customerWithContacts": "EN:Työstä vastaava",
+        "customerWithContactsPlural": "EN:Työstä vastaavat",
         "contractorWithContacts": "EN:Työn suorittaja",
+        "contractorWithContactsPlural": "EN:Työn suorittajat",
         "propertyDeveloperWithContacts": "EN:Rakennuttaja",
         "representativeWithContacts": "EN:Asianhoitaja",
+        "representativeWithContactsPlural": "EN:Asianhoitajat",
         "addContractors": "EN:Lisää työn suorittajia",
         "addRepresentatives": "EN:Lisää asianhoitajia",
-        "addRepresentative": "EN:Lisää asianhoitaja",
         "applicant": "EN:Hakija"
       },
       "labels": {
@@ -484,6 +489,7 @@
       "endDate": "EN:Työn arvioitu loppupäivä",
       "workArea": "EN:Työalue",
       "areaInfo": "EN:Alueen tiedot",
+      "checkInfo": "EN:Tarkista antamasi tiedot ja lähetä hakemus.",
       "preFilledInfo": "EN:Esitäytetyt tiedot",
       "preFilledInfoHelp": "EN:Valitse nimi hankkeen tiedoista"
     },
