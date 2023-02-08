@@ -369,4 +369,3 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
     </div>
   );
 };
-export default Contacts;

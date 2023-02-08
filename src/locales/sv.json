@@ -45,6 +45,10 @@
       "profileButton": "SV:Käyttäjäprofiili",
       "menuToggle": "SV:Valikko",
       "closeButtonLabelText": "SV:Sulje"
+    },
+    "buttons": {
+      "savingText": "SV:Tallennetaan",
+      "sendingText": "SV:Lähetetään"
     }
   },
   "form": {

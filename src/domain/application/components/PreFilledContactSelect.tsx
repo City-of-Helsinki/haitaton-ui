@@ -24,11 +24,9 @@ const PreFilledContactSelect: React.FC<{
   const { t } = useTranslation();
   const { setValue } = useFormContext();
 
-  const preFilledContactOptions: (
-    | PreFilledContactOption
-    | undefined
-  )[] = allHankeContacts.flatMap((hankeContacts) =>
-    hankeContacts?.map((contact) => ({ label: contact.nimi, value: contact }))
+  const preFilledContactOptions: PreFilledContactOption[] = allHankeContacts.flatMap(
+    (hankeContacts) =>
+      hankeContacts ? hankeContacts.map((contact) => ({ label: contact.nimi, value: contact })) : []
   );
 
   function handlePreFilledContactChange(option: PreFilledContactOption | undefined) {
@@ -66,7 +64,7 @@ const PreFilledContactSelect: React.FC<{
 
   return (
     <ResponsiveGrid>
-      <Select
+      <Select<PreFilledContactOption>
         options={preFilledContactOptions}
         id="roleInApplication"
         label={t('hakemus:labels:preFilledInfo')}

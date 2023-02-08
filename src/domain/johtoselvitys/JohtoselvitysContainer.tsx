@@ -241,8 +241,9 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
         <Notification
           position="top-right"
           dismissible
-          displayAutoCloseProgress={false}
+          displayAutoCloseProgress
           autoClose
+          autoCloseDuration={5000}
           label={
             applicationSaveMutation.isSuccess
               ? t('hakemus:notifications:saveSuccessLabel')
@@ -263,6 +264,9 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
         <Notification
           position="top-right"
           dismissible
+          displayAutoCloseProgress
+          autoClose
+          autoCloseDuration={8000}
           label={
             applicationSendMutation.isSuccess
               ? t('hakemus:notifications:sendSuccessLabel')
@@ -308,7 +312,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
                 data-testid="save-form-btn"
                 onClick={saveCableApplication}
                 isLoading={applicationSaveMutation.isLoading}
-                loadingText="Tallennetaan"
+                loadingText={t('common:buttons:savingText')}
               >
                 {t('hankeForm:saveDraftButton')}
               </Button>
@@ -318,7 +322,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
                   type="submit"
                   iconLeft={<IconEnvelope aria-hidden="true" />}
                   isLoading={applicationSendMutation.isLoading}
-                  loadingText="Lähetetään"
+                  loadingText={t('common:buttons:sendingText')}
                 >
                   {t('hakemus:buttons:sendApplication')}
                 </Button>
