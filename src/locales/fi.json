@@ -23,11 +23,6 @@
       },
       "cancelButton": "Peruuta"
     },
-    "languages": {
-      "fi": "Suomi",
-      "en": "English",
-      "sv": "Svenska"
-    },
     "components": {
       "multiselect": {
         "toggle": "Sulje ja avaa valikko",
@@ -45,7 +40,12 @@
         "closeButtonLabelText": "Sulje ilmoitus"
       }
     },
-    "error": "Tapahtui virhe. Yritä uudestaan."
+    "error": "Tapahtui virhe. Yritä uudestaan.",
+    "ariaLabels": {
+      "profileButton": "Käyttäjäprofiili",
+      "menuToggle": "Valikko",
+      "closeButtonLabelText": "Sulje"
+    }
   },
   "form": {
     "validations": {
@@ -109,6 +109,7 @@
         "representativeWithContacts": "Asianhoitaja",
         "representativeWithContactsPlural": "Asianhoitajat",
         "addContractors": "Lisää työn suorittajia",
+        "addRepresentative": "Lisää asianhoitaja",
         "addRepresentatives": "Lisää asianhoitajia",
         "applicant": "Hakija"
       },
@@ -148,7 +149,9 @@
         "remove": {
           "rakennuttajat": "Poista rakennuttaja",
           "toteuttajat": "Poista toteuttaja",
-          "muut": "Poista muu taho"
+          "muut": "Poista muu taho",
+          "propertyDeveloperWithContacts": "Poista rakennuttaja",
+          "representativeWithContacts": "Poista asianhoitaja"
         }
       }
     }
@@ -303,7 +306,7 @@
       "KADUN_KUNNOSSAPITO": "Kadun kunnossapito",
       "KIINTEISTOLIITTYMA": "Kiinteistöliittymä",
       "SULKU_TAI_KAIVO": "Sulku tai kaivo",
-      "UUDISRAKENNUS": "Uudisrakennus",
+      "UUDISRAKENNUS": "Uudisrakentaminen",
       "SANEERAUS": "Saneeraus",
       "AKILLINEN_VIKAKORJAUS": "Äkillinen vikakorjaus",
       "VIHERTYO": "Vihertyö",
@@ -351,6 +354,8 @@
       "title": "Hankealue {{index}}",
       "duration": "Hankealueen kesto",
       "surfaceArea": "Piirroksen pinta-ala",
+      "totalSurfaceArea": "Alueiden kokonaispinta-ala",
+      "totalSurfaceAreaLong": "Hanke-alueiden kokonaispinta-ala",
       "liikenneverkollinenHaitta": "Hankealueen liikenneverkollinen haitta",
       "haittaMaarittelyt": "Hankealueen omat haittamäärittelyt"
     }
@@ -384,8 +389,8 @@
       "loppuPvm": "Hankkeen loppupäivä",
       "tyomaaTyyppi": "Työn tyyppi",
       "tyomaaKoko": "Hankkeen koko",
-      "haittaAlkuPvm": "Haittojen alkupäivämäärä",
-      "haittaLoppuPvm": "Haittojen loppupäivämäärä",
+      "haittaAlkuPvm": "Haittojen alkupäivä",
+      "haittaLoppuPvm": "Haittojen loppupäivä",
       "kaistaHaitta": "Autoliikenteen kaistahaitta",
       "kaistaPituusHaitta": "Kaistahaittojen pituus",
       "meluHaitta": "Meluhaitta",
@@ -401,7 +406,8 @@
       "organisaatio": "Organisaatio",
       "omaOrganisaatio": "Lisää oma organisaatio",
       "insertOmaOrganisaatio": "Syötä oma organisaatio",
-      "rights": "Käyttöoikeutesi hankkeelle"
+      "rights": "Käyttöoikeutesi hankkeelle",
+      "perustaja": "Perustaja"
     },
     "toolTips": {
       "tipOpenLabel": "Avaa ohje",
@@ -429,7 +435,7 @@
       "header": "Alueet",
       "subHeader": "Hanke-alueet",
       "area": "Alue",
-      "instructions": "Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 1-5, 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen tärkeimmillä reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein.",
+      "instructions": "Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 1-5, 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen tärkeimmillä reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein (vihreä = ei haittaa, keltainen = todennäköinen haitta, punainen = merkittävä haitta).",
       "haitatHeader": "Alueen haitta-arviot",
       "haitatInstructions": "Anna arvio suurimmista mahdollisista vaikutuksista hankealueella.",
       "removeAreaButton": "Poista alue"
@@ -446,6 +452,16 @@
     },
     "finishedForm": {
       "header": "Lomake on lähetetty onnistuneesti"
+    },
+    "addContactButton": "Lisää yhteyshenkilö",
+    "removeContactButton": "Poista yhteyshenkilö",
+    "headers": {
+      "arvioijat": "Arvioijat",
+      "omistajat": "Omistajat",
+      "toteuttajat": "Toteuttajat"
+    },
+    "hankkeenYhteystiedotForm": {
+      "header": "Yhteystiedot"
     }
   },
   "johtoselvitysForm": {
@@ -470,11 +486,16 @@
       "maintenanceWork": "Olemassaolevan rakenteen kunnossapitotyöstä",
       "propertyConnectivity": "Kiinteistöliittymien rakentamisesta",
       "emergencyWork": "Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi",
+      "applicationType": "Hakemustyyppi",
+      "copyPreviousApplication": "Kopioi aiempi hakemus pohjaksi",
+      "applicationToUseAsBase": "Pohjana käytettävä hakemus",
       "startDate": "Työn arvioitu alkupäivä",
       "endDate": "Työn arvioitu loppupäivä",
       "workArea": "Työalue",
       "areaInfo": "Alueen tiedot",
-      "checkInfo": "Tarkista antamasi tiedot ja lähetä hakemus."
+      "checkInfo": "Tarkista antamasi tiedot ja lähetä hakemus.",
+      "preFilledInfo": "Esitäytetyt tiedot",
+      "preFilledInfoHelp": "Valitse nimi hankkeen tiedoista"
     },
     "notifications": {
       "saveSuccessLabel": "Hakemus tallennettu",
@@ -487,8 +508,16 @@
       "sendErrorText": "Hakemusta ei voitu lähettää. Tarkista hakemuksen oikea sisältö ja että olet kirjautunut."
     },
     "buttons": {
+      "continueToApplication": "Jatka hakemukseen",
       "sendApplication": "Lähetä hakemus"
-    }
+    },
+    "headers": {
+      "pickApplication": "Valitse luotava hakemus"
+    },
+    "applicationTypes": {
+      "CABLE_REPORT": "Johtoselvitys"
+    },
+    "applicationTypeInstruction": "Valitse hakemustyyppi. Osaan hakemuksista voit myös kopioida aiemman hakemuksen pohjaksi. Kaivuilmoituksen kautta pääset tekemään myös johtoselvityksen, mikäli sinulla ei sellaista vielä ole."
   },
   "hankeSidebar": {
     "ariaSidebarContent": "Hankkeen tiedot",

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Checkbox, Select, SelectionGroup } from 'hds-react';
 import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
+import { isEqual } from 'lodash';
 import { ApplicationType, CustomerType } from '../application/types/application';
 import styles from './BasicInfo.module.scss';
 import TextInput from '../../common/components/textInput/TextInput';
@@ -48,7 +49,7 @@ export const initialValues: InitialValueTypes = {
 type Option = { value: CustomerType; label: string };
 
 export const BasicHankeInfo: React.FC = () => {
-  const { register, watch, setValue, getValues, resetField } = useFormContext();
+  const { register, watch, setValue, getValues } = useFormContext();
   const { t } = useTranslation();
   const user = useUser();
 
@@ -98,14 +99,34 @@ export const BasicHankeInfo: React.FC = () => {
   ];
 
   function handleRoleChange(role: Option) {
-    const previousValues = getValues(`applicationData.${selectedRole}.contacts.0`);
+    const emptyContact = {
+      email: '',
+      name: '',
+      orderer: false,
+      phone: '',
+      postalAddress: { city: '', postalCode: '', streetAddress: { streetName: '' } },
+    };
 
-    // Reset contacts array of previously selected role
-    resetField(`applicationData.${selectedRole}.contacts`, {
-      defaultValue: [],
-    });
+    const previousRoleContacts = getValues(`applicationData.${selectedRole}.contacts`);
 
-    setValue(`applicationData.${role.value}.contacts.0`, previousValues);
+    // Remove moved contact from previous selected role contacts
+    setValue(
+      `applicationData.${selectedRole}.contacts`,
+      previousRoleContacts.length > 1 ? previousRoleContacts.slice(1) : []
+    );
+
+    let selectedRoleContacts = getValues(`applicationData.${role.value}.contacts`);
+
+    const contactToMove = previousRoleContacts.slice(0, 1);
+
+    selectedRoleContacts =
+      selectedRoleContacts === null ||
+      (selectedRoleContacts.length === 1 && isEqual(selectedRoleContacts[0], emptyContact))
+        ? contactToMove
+        : contactToMove.concat(selectedRoleContacts);
+
+    setValue(`applicationData.${role.value}.contacts`, selectedRoleContacts);
+
     setSelectedRole(role.value);
   }
 

@@ -10,7 +10,11 @@ import {
 } from '../../application/types/application';
 import Text from '../../../common/components/text/Text';
 
-function isCustomerEmpty(customer: Customer) {
+function isCustomerEmpty(customer?: Customer) {
+  if (customer === undefined) {
+    return true;
+  }
+
   if (
     customer.name === '' &&
     customer.registryKey === '' &&
@@ -61,13 +65,13 @@ export const ContactSummary: React.FC<{ contact: Contact }> = ({ contact }) => {
   );
 };
 
-const ContactsSummary: React.FC<{ customerWithContacts: CustomerWithContacts; title: string }> = ({
-  customerWithContacts,
-  title,
-}) => {
+const ContactsSummary: React.FC<{
+  customerWithContacts: CustomerWithContacts | null;
+  title: string;
+}> = ({ customerWithContacts, title }) => {
   const { t } = useTranslation();
 
-  if (isCustomerEmpty(customerWithContacts.customer)) {
+  if (customerWithContacts === null || isCustomerEmpty(customerWithContacts.customer)) {
     return null;
   }
 
@@ -78,7 +82,7 @@ const ContactsSummary: React.FC<{ customerWithContacts: CustomerWithContacts; ti
         <CustomerSummary customer={customerWithContacts.customer} />
         {customerWithContacts.contacts.length > 0 && (
           <>
-            <Text tag="h3" weight="bold">
+            <Text tag="h3" weight="bold" spacingBottom="xs">
               {t('form:yhteystiedot:titles:subContacts')}
             </Text>
             <Grid

@@ -1,12 +1,10 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import MockAxios from 'jest-mock-axios';
 import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
 import { HANKE_VAIHE, HANKE_TYOMAATYYPPI } from '../../types/hanke';
 import { render, cleanup, fireEvent, waitFor, screen } from '../../../testUtils/render';
-import hankeMock from '../../mocks/hankeDraft';
 
 afterEach(cleanup);
 
@@ -50,7 +48,6 @@ const formData: HankeDataFormState = {
 };
 
 async function setupYhteystiedotPage(jsx: JSX.Element) {
-  MockAxios.get.mockResolvedValueOnce({ data: hankeMock });
   const user = userEvent.setup();
   const renderResult = render(jsx);
 
@@ -131,7 +128,7 @@ describe('HankeForm', () => {
   });
 
   test('Yhteystiedot can be filled', async () => {
-    const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI-1" />);
+    const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
 
     await user.click(screen.getByRole('button', { name: /tyyppi/i }));
     await user.click(screen.getByText(/yritys/i));
@@ -156,7 +153,7 @@ describe('HankeForm', () => {
       'yhteyshenkilo@mail.com'
     );
 
-    await user.click(screen.getByRole('button', { name: 'Lisää rakennuttajia' }));
+    await user.click(screen.getByText(/lisää rakennuttajia/i));
     await user.click(screen.getByText(/lisää rakennuttaja/i));
     expect(screen.getAllByText('Rakennuttaja')).toHaveLength(1);
 

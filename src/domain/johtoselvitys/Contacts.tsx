@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, Button, Fieldset, IconCross } from 'hds-react';
+import { Accordion, Button, Fieldset, IconCross, IconPlusCircle } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
@@ -7,6 +7,7 @@ import {
   ContactType,
   CustomerType,
   Contact as ApplicationContact,
+  CustomerWithContacts,
 } from '../application/types/application';
 import styles from './Contacts.module.scss';
 import Text from '../../common/components/text/Text';
@@ -15,6 +16,8 @@ import TextInput from '../../common/components/textInput/TextInput';
 import Contact from '../forms/components/Contact';
 import useLocale from '../../common/hooks/useLocale';
 import Dropdown from '../../common/components/dropdown/Dropdown';
+import { HankeContacts } from '../types/hanke';
+import PreFilledContactSelect from '../application/components/PreFilledContactSelect';
 
 function getEmptyContact(): ApplicationContact {
   return {
@@ -30,57 +33,89 @@ function getEmptyContact(): ApplicationContact {
   };
 }
 
-const CustomerFields: React.FC<{ customerType: CustomerType }> = ({ customerType }) => {
+function getEmptyCustomerWithContacts(): CustomerWithContacts {
+  return {
+    customer: {
+      type: null,
+      name: '',
+      country: 'FI',
+      postalAddress: {
+        streetAddress: {
+          streetName: '',
+        },
+        postalCode: '',
+        city: '',
+      },
+      email: '',
+      phone: '',
+      registryKey: '',
+      ovt: null,
+      invoicingOperator: null,
+      sapCustomerNumber: null,
+    },
+    contacts: [getEmptyContact()],
+  };
+}
+
+const CustomerFields: React.FC<{ customerType: CustomerType; hankeContacts?: HankeContacts }> = ({
+  customerType,
+  hankeContacts,
+}) => {
   const { t } = useTranslation();
 
   return (
-    <ResponsiveGrid>
-      <Dropdown
-        id={`applicationData.${customerType}.customer.type`}
-        name={`applicationData.${customerType}.customer.type`}
-        required
-        defaultValue={null}
-        label={t('form:yhteystiedot:labels:tyyppi')}
-        options={$enum(ContactType).map((value) => {
-          return {
-            value,
-            label: t(`form:yhteystiedot:contactType:${value}`),
-          };
-        })}
-      />
-      <TextInput
-        name={`applicationData.${customerType}.customer.name`}
-        label={t('form:yhteystiedot:labels:nimi')}
-        required
-      />
-      <TextInput
-        name={`applicationData.${customerType}.customer.registryKey`}
-        label={t('form:yhteystiedot:labels:ytunnusTaiHetu')}
-        required
-      />
-      <TextInput
-        name={`applicationData.${customerType}.customer.postalAddress.streetAddress.streetName`}
-        label={t('form:yhteystiedot:labels:osoite')}
-      />
-      <TextInput
-        name={`applicationData.${customerType}.customer.postalAddress.postalCode`}
-        label={t('form:yhteystiedot:labels:postinumero')}
-      />
-      <TextInput
-        name={`applicationData.${customerType}.customer.postalAddress.city`}
-        label={t('form:yhteystiedot:labels:postitoimipaikka')}
-      />
-      <TextInput
-        name={`applicationData.${customerType}.customer.email`}
-        label={t('form:yhteystiedot:labels:email')}
-        required
-      />
-      <TextInput
-        name={`applicationData.${customerType}.customer.phone`}
-        label={t('form:yhteystiedot:labels:puhelinnumero')}
-        required
-      />
-    </ResponsiveGrid>
+    <>
+      {hankeContacts && (
+        <PreFilledContactSelect customerType={customerType} allHankeContacts={hankeContacts} />
+      )}
+      <ResponsiveGrid>
+        <Dropdown
+          id={`applicationData.${customerType}.customer.type`}
+          name={`applicationData.${customerType}.customer.type`}
+          required
+          defaultValue={null}
+          label={t('form:yhteystiedot:labels:tyyppi')}
+          options={$enum(ContactType).map((value) => {
+            return {
+              value,
+              label: t(`form:yhteystiedot:contactType:${value}`),
+            };
+          })}
+        />
+        <TextInput
+          name={`applicationData.${customerType}.customer.name`}
+          label={t('form:yhteystiedot:labels:nimi')}
+          required
+        />
+        <TextInput
+          name={`applicationData.${customerType}.customer.registryKey`}
+          label={t('form:yhteystiedot:labels:ytunnusTaiHetu')}
+          required
+        />
+        <TextInput
+          name={`applicationData.${customerType}.customer.postalAddress.streetAddress.streetName`}
+          label={t('form:yhteystiedot:labels:osoite')}
+        />
+        <TextInput
+          name={`applicationData.${customerType}.customer.postalAddress.postalCode`}
+          label={t('form:yhteystiedot:labels:postinumero')}
+        />
+        <TextInput
+          name={`applicationData.${customerType}.customer.postalAddress.city`}
+          label={t('form:yhteystiedot:labels:postitoimipaikka')}
+        />
+        <TextInput
+          name={`applicationData.${customerType}.customer.email`}
+          label={t('form:yhteystiedot:labels:email')}
+          required
+        />
+        <TextInput
+          name={`applicationData.${customerType}.customer.phone`}
+          label={t('form:yhteystiedot:labels:puhelinnumero')}
+          required
+        />
+      </ResponsiveGrid>
+    </>
   );
 };
 
@@ -94,6 +129,8 @@ const ContactFields: React.FC<{
   const { getValues } = useFormContext();
 
   const orderer = getValues(`applicationData.${customerType}.contacts.${index}.orderer`);
+  const contactsLength: number = getValues().applicationData[customerType]?.contacts.length || 0;
+  const showRemoveContactButton = !orderer && contactsLength > 1;
 
   return (
     <Fieldset
@@ -137,7 +174,7 @@ const ContactFields: React.FC<{
           required
           readOnly={orderer}
         />
-        {!orderer && (
+        {showRemoveContactButton && (
           <Button
             variant="supplementary"
             iconLeft={<IconCross aria-hidden="true" />}
@@ -152,9 +189,34 @@ const ContactFields: React.FC<{
   );
 };
 
-export const Contacts: React.FC = () => {
+export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeContacts }) => {
   const { t } = useTranslation();
   const locale = useLocale();
+  const { watch, setValue } = useFormContext();
+
+  const [propertyDeveloper, representative] = watch([
+    'applicationData.propertyDeveloperWithContacts',
+    'applicationData.representativeWithContacts',
+  ]);
+
+  const isPropertyDeveloper = Boolean(propertyDeveloper);
+  const isRepresentative = Boolean(representative);
+
+  function addCustomerWithContacts(customerType: CustomerType) {
+    setValue(`applicationData.${customerType}`, getEmptyCustomerWithContacts());
+  }
+
+  function removeCustomerWithContacts(customerType: CustomerType) {
+    setValue(`applicationData.${customerType}`, null);
+  }
+
+  const handleRemovePropertyDeveloper = !propertyDeveloper?.contacts[0]?.orderer
+    ? () => removeCustomerWithContacts('propertyDeveloperWithContacts')
+    : undefined;
+
+  const handleRemoveRepresentative = !representative?.contacts[0]?.orderer
+    ? () => removeCustomerWithContacts('representativeWithContacts')
+    : undefined;
 
   return (
     <div>
@@ -182,9 +244,10 @@ export const Contacts: React.FC = () => {
         {t('form:yhteystiedot:titles:applicant')}
       </Text>
 
-      {/* Työstä vastaava */}
+      {/* Hakija */}
       <Contact<CustomerType>
         contactType="customerWithContacts"
+        showContactTitle={false}
         subContactPath="applicationData.customerWithContacts.contacts"
         emptySubContact={getEmptyContact()}
         renderSubContact={(subContactIndex, removeSubContact) => {
@@ -197,11 +260,15 @@ export const Contacts: React.FC = () => {
           );
         }}
       >
-        <CustomerFields customerType="customerWithContacts" />
+        <CustomerFields customerType="customerWithContacts" hankeContacts={hankeContacts} />
       </Contact>
 
       {/* Työn suorittaja */}
-      <Accordion language={locale} heading={t('form:yhteystiedot:titles:addContractors')}>
+      <Accordion
+        language={locale}
+        heading={t('form:yhteystiedot:titles:addContractors')}
+        initiallyOpen
+      >
         <Contact<CustomerType>
           contactType="contractorWithContacts"
           subContactPath="applicationData.contractorWithContacts.contacts"
@@ -216,48 +283,88 @@ export const Contacts: React.FC = () => {
             );
           }}
         >
-          <CustomerFields customerType="contractorWithContacts" />
+          <CustomerFields customerType="contractorWithContacts" hankeContacts={hankeContacts} />
         </Contact>
       </Accordion>
 
       {/* Rakennuttaja */}
-      <Accordion language={locale} heading={t('form:yhteystiedot:titles:lisaaRakennuttajia')}>
-        <Contact<CustomerType>
-          contactType="propertyDeveloperWithContacts"
-          subContactPath="applicationData.propertyDeveloperWithContacts.contacts"
-          emptySubContact={getEmptyContact()}
-          renderSubContact={(subContactIndex, removeSubContact) => {
-            return (
-              <ContactFields
-                customerType="propertyDeveloperWithContacts"
-                index={subContactIndex}
-                onRemove={() => removeSubContact(subContactIndex)}
-              />
-            );
-          }}
-        >
-          <CustomerFields customerType="propertyDeveloperWithContacts" />
-        </Contact>
+      <Accordion
+        language={locale}
+        heading={t('form:yhteystiedot:titles:lisaaRakennuttajia')}
+        initiallyOpen={isPropertyDeveloper}
+      >
+        {isPropertyDeveloper && (
+          <Contact<CustomerType>
+            contactType="propertyDeveloperWithContacts"
+            onRemoveContact={handleRemovePropertyDeveloper}
+            subContactPath="applicationData.propertyDeveloperWithContacts.contacts"
+            emptySubContact={getEmptyContact()}
+            renderSubContact={(subContactIndex, removeSubContact) => {
+              return (
+                <ContactFields
+                  customerType="propertyDeveloperWithContacts"
+                  index={subContactIndex}
+                  onRemove={() => removeSubContact(subContactIndex)}
+                />
+              );
+            }}
+          >
+            <CustomerFields
+              customerType="propertyDeveloperWithContacts"
+              hankeContacts={hankeContacts}
+            />
+          </Contact>
+        )}
+
+        {!isPropertyDeveloper && (
+          <Button
+            variant="supplementary"
+            iconLeft={<IconPlusCircle aria-hidden="true" />}
+            onClick={() => addCustomerWithContacts('propertyDeveloperWithContacts')}
+          >
+            {t('form:yhteystiedot:titles:lisaaRakennuttaja')}
+          </Button>
+        )}
       </Accordion>
 
       {/* Asianhoitaja */}
-      <Accordion language={locale} heading={t('form:yhteystiedot:titles:addRepresentatives')}>
-        <Contact<CustomerType>
-          contactType="representativeWithContacts"
-          subContactPath="applicationData.representativeWithContacts.contacts"
-          emptySubContact={getEmptyContact()}
-          renderSubContact={(subContactIndex, removeSubContact) => {
-            return (
-              <ContactFields
-                customerType="representativeWithContacts"
-                index={subContactIndex}
-                onRemove={() => removeSubContact(subContactIndex)}
-              />
-            );
-          }}
-        >
-          <CustomerFields customerType="representativeWithContacts" />
-        </Contact>
+      <Accordion
+        language={locale}
+        heading={t('form:yhteystiedot:titles:addRepresentatives')}
+        initiallyOpen={isRepresentative}
+      >
+        {isRepresentative && (
+          <Contact<CustomerType>
+            contactType="representativeWithContacts"
+            onRemoveContact={handleRemoveRepresentative}
+            subContactPath="applicationData.representativeWithContacts.contacts"
+            emptySubContact={getEmptyContact()}
+            renderSubContact={(subContactIndex, removeSubContact) => {
+              return (
+                <ContactFields
+                  customerType="representativeWithContacts"
+                  index={subContactIndex}
+                  onRemove={() => removeSubContact(subContactIndex)}
+                />
+              );
+            }}
+          >
+            <CustomerFields
+              customerType="representativeWithContacts"
+              hankeContacts={hankeContacts}
+            />
+          </Contact>
+        )}
+
+        {!isRepresentative && (
+          <Button
+            variant="supplementary"
+            iconLeft={<IconPlusCircle aria-hidden="true" />}
+            onClick={() => addCustomerWithContacts('representativeWithContacts')}
+          >
+            {t('form:yhteystiedot:titles:addRepresentative')}
+          </Button>
+        )}
       </Accordion>
     </div>
   );

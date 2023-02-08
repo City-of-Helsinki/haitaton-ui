@@ -23,14 +23,20 @@ import { validationSchema } from './validationSchema';
 import { findOrdererKey } from './utils';
 import { changeFormStep } from '../forms/utils';
 import { saveApplication, sendApplication } from '../application/utils';
+import { HankeContacts, HankeData } from '../types/hanke';
 
-const JohtoselvitysContainer: React.FC = () => {
+type Props = {
+  hanke: HankeData;
+};
+
+const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
   const { t } = useTranslation();
 
   const initialValues: JohtoselvitysFormValues = {
     id: null,
     applicationType: 'CABLE_REPORT',
     applicationData: {
+      hankeTunnus: hanke.hankeTunnus,
       applicationType: 'CABLE_REPORT',
       name: '',
       customerWithContacts: {
@@ -97,54 +103,22 @@ const JohtoselvitysContainer: React.FC = () => {
           invoicingOperator: null,
           sapCustomerNumber: null,
         },
-        contacts: [],
+        contacts: [
+          {
+            email: '',
+            name: '',
+            orderer: false,
+            phone: '',
+            postalAddress: { city: '', postalCode: '', streetAddress: { streetName: '' } },
+          },
+        ],
       },
       postalAddress: null,
-      representativeWithContacts: {
-        customer: {
-          type: null,
-          name: '',
-          country: 'FI',
-          postalAddress: {
-            streetAddress: {
-              streetName: '',
-            },
-            postalCode: '',
-            city: '',
-          },
-          email: '',
-          phone: '',
-          registryKey: '',
-          ovt: null,
-          invoicingOperator: null,
-          sapCustomerNumber: null,
-        },
-        contacts: [],
-      },
+      representativeWithContacts: null,
       invoicingCustomer: null,
       customerReference: null,
       area: null,
-      propertyDeveloperWithContacts: {
-        customer: {
-          type: null,
-          name: '',
-          country: 'FI',
-          postalAddress: {
-            streetAddress: {
-              streetName: '',
-            },
-            postalCode: '',
-            city: '',
-          },
-          email: '',
-          phone: '',
-          registryKey: '',
-          ovt: null,
-          invoicingOperator: null,
-          sapCustomerNumber: null,
-        },
-        contacts: [],
-      },
+      propertyDeveloperWithContacts: null,
       constructionWork: false,
       maintenanceWork: false,
       emergencyWork: false,
@@ -206,6 +180,13 @@ const JohtoselvitysContainer: React.FC = () => {
     applicationSendMutation.mutate(id);
   }
 
+  const hankeContacts: HankeContacts = [
+    hanke.omistajat,
+    hanke.rakennuttajat,
+    hanke.toteuttajat,
+    hanke.muut,
+  ];
+
   const formSteps = [
     {
       element: <BasicHankeInfo />,
@@ -218,7 +199,7 @@ const JohtoselvitysContainer: React.FC = () => {
       state: StepState.disabled,
     },
     {
-      element: <Contacts />,
+      element: <Contacts hankeContacts={hankeContacts} />,
       label: t('form:headers:yhteystiedot'),
       state: StepState.disabled,
     },
@@ -250,6 +231,8 @@ const JohtoselvitysContainer: React.FC = () => {
         'applicationData.representativeWithContacts',
     ],
   ];
+
+  const hankeNameText = `${hanke.nimi} (${hanke.hankeTunnus})`;
 
   return (
     <FormProvider {...formContext}>
@@ -297,6 +280,7 @@ const JohtoselvitysContainer: React.FC = () => {
 
       <MultipageForm
         heading={t('johtoselvitysForm:pageHeader')}
+        subHeading={hankeNameText}
         formSteps={formSteps}
         onStepChange={saveCableApplication}
         onSubmit={handleSubmit(sendCableApplication)}

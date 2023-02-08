@@ -90,6 +90,7 @@ export const convertHankeDataToFormState = (
 export function calculateTotalSurfaceArea(areas?: HankeAlue[]) {
   try {
     const areasTotalSurfaceArea = areas?.reduce((surfaceArea, currArea) => {
+      if (!currArea.geometriat) return surfaceArea;
       const feature = getFeatureFromHankeGeometry(currArea.geometriat);
       const geom = feature.getGeometry();
       const currAreaSurface = geom && Math.round(getArea(geom));

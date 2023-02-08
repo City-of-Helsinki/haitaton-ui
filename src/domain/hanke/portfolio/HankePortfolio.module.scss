@@ -56,7 +56,7 @@
       }
     }
 
-    .notification {
+    .draftNotification {
       margin-top: var(--spacing-s);
     }
 
@@ -197,22 +197,6 @@
       &__hidden {
         visibility: hidden;
       }
-    }
-  }
-
-  .mapHeader {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: var(--spacing-xs);
-
-    &__inner {
-      display: flex;
-      gap: var(--spacing-3-xs);
-    }
-
-    &__link {
-      text-decoration: underline;
-      margin-right: var(--spacing-3-xs);
     }
   }
 }

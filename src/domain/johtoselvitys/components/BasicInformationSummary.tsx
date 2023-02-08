@@ -69,7 +69,7 @@ const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
       </SectionItemContent>
       <SectionItemTitle>{t('hakemus:labels:kuvaus')}</SectionItemTitle>
       <SectionItemContent>
-        <p>{workDescription}</p>
+        <p style={{ whiteSpace: 'pre-wrap' }}>{workDescription}</p>
       </SectionItemContent>
       <SectionItemTitle>{t('form:labels:omatTiedot')}</SectionItemTitle>
       <SectionItemContent>{orderer && <ContactSummary contact={orderer} />}</SectionItemContent>
