@@ -548,8 +548,9 @@
   },
   "homepage": {
     "pageTitle": "Tervetuloa Haitaton-palveluun",
-    "pageSubTitle_loggedIn": "Palvelu yleisille alueille sijoittuvien hankkeiden edistämiseen ja haittojen hallintaan",
-    "pageSubTitle": "Palvelu yleisille alueille sijoittuvien hankkeiden ja niiden haittojen seurantaan ",
+    "pageTitle_loggedIn": "Tervetuloa Haitaton-asiointiin",
+    "pageSubTitle_loggedIn": "Asiointijärjestelmä yleisille alueille sijoittuvien hankkeiden edistämiseen ja haittojen hallintaan",
+    "pageSubTitle": "Palvelu yleisille alueille sijoittuvien hankkeiden ja niiden haittojen seurantaan",
     "info": "Haitaton-palvelussa pääset tutustumaan kaikkiin yleisillä alueilla käynnissä oleviin ja tuleviin hankkeisiin sekä antamaan niille palautetta. Voit tarkastella hankkeita kartalla tai listalla. Oletko perustamassa hanketta tai tekemässä hakemuksia?",
     "info_link": "Siirry Haitaton-asiointiin",
     "hanke": {

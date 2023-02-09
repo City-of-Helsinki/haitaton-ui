@@ -548,8 +548,9 @@
   },
   "homepage": {
     "pageTitle": "Välkommen till tjänsten Haitaton",
-    "pageSubTitle_loggedIn": "En tjänst för främjande av projekt på allmänna områden och för hantering av olägenheterna",
-    "pageSubTitle": "En tjänst för uppföljning av projekt på allmänna områden och uppföljning av deras olägenheter ",
+    "pageTitle_loggedIn": "SV:Tervetuloa Haitaton-asiointiin",
+    "pageSubTitle_loggedIn": "SV:Asiointijärjestelmä yleisille alueille sijoittuvien hankkeiden edistämiseen ja haittojen hallintaan",
+    "pageSubTitle": "En tjänst för uppföljning av projekt på allmänna områden och uppföljning av deras olägenheter",
     "info": "I tjänsten Haitaton kan du bekanta dig med alla pågående och kommande projekt på allmänna områden samt ge respons på dem. Du kan granska projekt på kartan eller i en lista. Ska du starta ett projekt eller lämna ansökningar?",
     "info_link": "Gå till ärendehantering i Haitaton",
     "hanke": {

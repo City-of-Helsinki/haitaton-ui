@@ -548,8 +548,9 @@
   },
   "homepage": {
     "pageTitle": "Welcome to the Haitaton service",
-    "pageSubTitle_loggedIn": "Service for the promotion of projects and management of nuisances in public areas",
-    "pageSubTitle": "Service for monitoring projects and their negative impacts in public areas ",
+    "pageTitle_loggedIn": "EN:Tervetuloa Haitaton-asiointiin",
+    "pageSubTitle_loggedIn": "EN:Asiointijärjestelmä yleisille alueille sijoittuvien hankkeiden edistämiseen ja haittojen hallintaan",
+    "pageSubTitle": "Service for monitoring projects and their negative impacts in public areas",
     "info": "In the Haitaton service, you can learn about and give feedback on all ongoing and upcoming projects in public areas. You can view projects on a map or in a list. Are you starting a project or submitting applications?",
     "info_link": "Go to the Haitaton service",
     "hanke": {
