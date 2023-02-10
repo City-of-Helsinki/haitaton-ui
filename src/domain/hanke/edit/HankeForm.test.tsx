@@ -132,26 +132,38 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByRole('button', { name: /tyyppi/i }));
     await user.click(screen.getByText(/yritys/i));
-    await user.type(screen.getByRole('textbox', { name: /nimi/i }), 'Olli Omistaja');
-    await user.type(
-      screen.getByRole('textbox', { name: /y-tunnus tai henkilötunnus/i }),
-      'y-tunnus'
-    );
-    await user.type(screen.getByRole('textbox', { name: /katuosoite/i }), 'Testikuja 1');
-    await user.type(screen.getByRole('textbox', { name: /postinumero/i }), '00000');
-    await user.type(screen.getByRole('textbox', { name: /postitoimipaikka/i }), 'Testikaupunki');
-    await user.type(screen.getByRole('textbox', { name: /sähköposti/i }), 'test@mail.com');
-    await user.type(screen.getByRole('textbox', { name: /puhelinnumero/i }), '0400000000');
+    fireEvent.change(screen.getByLabelText(/nimi/i), {
+      target: { value: 'Olli Omistaja' },
+    });
+    fireEvent.change(screen.getByLabelText(/y-tunnus tai henkilötunnus/i), {
+      target: { value: 'y-tunnus' },
+    });
+    fireEvent.change(screen.getByLabelText(/katuosoite/i), {
+      target: { value: 'Testikuja 1' },
+    });
+    fireEvent.change(screen.getByLabelText(/postinumero/i), {
+      target: { value: '00000' },
+    });
+    fireEvent.change(screen.getByLabelText(/postitoimipaikka/i), {
+      target: { value: 'Testikaupunki' },
+    });
+    fireEvent.change(screen.getByLabelText(/sähköposti/i), {
+      target: { value: 'test@mail.com' },
+    });
+    fireEvent.change(screen.getByLabelText(/puhelinnumero/i), {
+      target: { value: '0400000000' },
+    });
 
     expect(screen.queryByRole('group', { name: 'Yhteyshenkilö' })).not.toBeInTheDocument();
     await user.click(screen.getByLabelText(/erillinen yhteyshenkilö/i));
     expect(screen.getByRole('group', { name: 'Yhteyshenkilö' })).toBeInTheDocument();
 
-    await user.type(screen.getAllByRole('textbox', { name: /nimi/i })[1], 'Testi Yhteyshenkilö');
-    await user.type(
-      screen.getAllByRole('textbox', { name: /sähköposti/i })[1],
-      'yhteyshenkilo@mail.com'
-    );
+    fireEvent.change(screen.getAllByLabelText(/nimi/i)[1], {
+      target: { value: 'Testi Yhteyshenkilö' },
+    });
+    fireEvent.change(screen.getAllByLabelText(/sähköposti/i)[1], {
+      target: { value: 'yhteyshenkilo@mail.com' },
+    });
 
     await user.click(screen.getByText(/lisää rakennuttajia/i));
     await user.click(screen.getByText(/lisää rakennuttaja/i));
