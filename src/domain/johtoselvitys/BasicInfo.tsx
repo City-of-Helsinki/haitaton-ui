@@ -11,6 +11,7 @@ import Text from '../../common/components/text/Text';
 import ResponsiveGrid from '../../common/components/grid/ResponsiveGrid';
 import useUser from '../auth/useUser';
 import { findOrdererKey } from './utils';
+import { JohtoselvitysFormValues } from './types';
 
 export interface InitialValueTypes {
   applicationType: ApplicationType;
@@ -49,7 +50,7 @@ export const initialValues: InitialValueTypes = {
 type Option = { value: CustomerType; label: string };
 
 export const BasicHankeInfo: React.FC = () => {
-  const { register, watch, setValue, getValues } = useFormContext();
+  const { register, watch, setValue, getValues } = useFormContext<JohtoselvitysFormValues>();
   const { t } = useTranslation();
   const user = useUser();
 

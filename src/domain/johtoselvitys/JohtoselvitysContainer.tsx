@@ -54,7 +54,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
           email: '',
           phone: '',
           registryKey: '',
-          ovt: null, // TODO: add to frontend
+          ovt: null,
           invoicingOperator: null,
           sapCustomerNumber: null,
         },
@@ -80,7 +80,6 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
       },
       startTime: null,
       endTime: null,
-      pendingOnClient: true,
       identificationNumber: 'HAI-123', // TODO: HAI-1160
       clientApplicationKind: 'HAITATON', // TODO: add to UI
       workDescription: '',
@@ -99,7 +98,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
           email: '',
           phone: '',
           registryKey: '',
-          ovt: null, // TODO: add to frontend
+          ovt: null,
           invoicingOperator: null,
           sapCustomerNumber: null,
         },

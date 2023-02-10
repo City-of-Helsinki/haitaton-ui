@@ -58,8 +58,7 @@ export type JohtoselvitysData = {
   geometry: HaitatonGeometry;
   startTime: string | null;
   endTime: string | null;
-  pendingOnClient: boolean;
-  identificationNumber: string; // hankeTunnus
+  identificationNumber: string; // asiointitunnus
   clientApplicationKind: string;
   workDescription: string;
   postalAddress: PostalAddress | null;
