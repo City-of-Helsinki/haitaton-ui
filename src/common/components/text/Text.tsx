@@ -18,6 +18,8 @@ export type StyleAs =
 
 export type Spacing = '3-xs' | '2-xs' | 'xs' | 's' | 'm' | 'l';
 
+type RestProps = Record<string, unknown>;
+
 export type Props = {
   tag: Tag;
   weight?: Weight;
@@ -39,7 +41,7 @@ const Text = ({
   spacingTop,
   className,
   ...rest
-}: Props) => {
+}: Props & RestProps) => {
   const Component = tag;
 
   return (

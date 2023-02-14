@@ -8,6 +8,13 @@ import authService from '../../../domain/auth/authService';
 import useUser from '../../../domain/auth/useUser';
 import { Language, LANGUAGES } from '../../types/language';
 import { I18NLANGKEY } from '../../../locales/constants';
+import { SKIP_TO_ELEMENT_ID } from '../../constants/constants';
+
+const languageLabels = {
+  fi: 'Suomi',
+  en: 'English',
+  sv: 'Svenska',
+};
 
 const Header: React.FC = () => {
   const {
@@ -49,13 +56,13 @@ const Header: React.FC = () => {
     <Navigation
       menuToggleAriaLabel={t('common:ariaLabels:menuToggle')}
       title="Haitaton"
-      skipTo="#"
+      skipTo={`#${SKIP_TO_ELEMENT_ID}`}
       skipToContentLabel={t('common:components:header:skipToContentLabel')}
       titleUrl={HOME.path}
       className="header"
     >
       {isAuthenticated && (
-        <Navigation.Row>
+        <Navigation.Row ariaLabel={t('common:ariaLabels:topNavigation')}>
           <Navigation.Item as={NavLink} to={PUBLIC_HANKKEET_MAP.path} active={Boolean(isMapPath)}>
             {PUBLIC_HANKKEET.label}
           </Navigation.Item>
@@ -101,12 +108,12 @@ const Header: React.FC = () => {
             data-testid="logoutLink"
           />
         </Navigation.User>
-        <Navigation.LanguageSelector label={t(`common:languages:${i18n.language}`)}>
+        <Navigation.LanguageSelector label={languageLabels[i18n.language as LANGUAGES]}>
           {$enum(LANGUAGES).map((lang) => (
             <Navigation.Item
               as="a"
               href=""
-              label={t(`common:languages:${lang}`)}
+              label={languageLabels[lang]}
               onClick={(e: React.MouseEvent) => {
                 e.preventDefault();
                 setLanguage(lang);

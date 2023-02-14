@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Checkbox, Select, SelectionGroup } from 'hds-react';
 import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
-import { findKey } from 'lodash';
-import { ApplicationType } from './types';
+import { isEqual } from 'lodash';
+import { ApplicationType, CustomerType } from '../application/types/application';
 import styles from './BasicInfo.module.scss';
 import TextInput from '../../common/components/textInput/TextInput';
 import TextArea from '../../common/components/textArea/TextArea';
 import Text from '../../common/components/text/Text';
 import ResponsiveGrid from '../../common/components/grid/ResponsiveGrid';
 import useUser from '../auth/useUser';
+import { findOrdererKey } from './utils';
+import { JohtoselvitysFormValues } from './types';
 
 export interface InitialValueTypes {
   applicationType: ApplicationType;
@@ -45,21 +47,17 @@ export const initialValues: InitialValueTypes = {
   },
 };
 
-type Option = { value: string; label: string };
+type Option = { value: CustomerType; label: string };
 
 export const BasicHankeInfo: React.FC = () => {
-  const { register, watch, setValue, getValues, resetField } = useFormContext();
+  const { register, watch, setValue, getValues } = useFormContext<JohtoselvitysFormValues>();
   const { t } = useTranslation();
   const user = useUser();
 
-  const [selectedRole, setSelectedRole] = useState(() => {
-    // Find the contact key that has orderer field true
-    // and set that to be the initial selected role.
-    const ordererRole = findKey(getValues('applicationData'), (obj) => {
-      return obj?.contacts && obj.contacts[0]?.orderer;
-    });
-    return ordererRole;
-  });
+  const [selectedRole, setSelectedRole] = useState(() =>
+    // Set contact key with orderer field true to be the initial selected role.
+    findOrdererKey(getValues('applicationData'))
+  );
 
   const [
     constructionWorkChecked,
@@ -74,16 +72,19 @@ export const BasicHankeInfo: React.FC = () => {
   ]);
 
   useEffect(() => {
-    if (user.data?.profile.name) {
+    if (user.data?.profile.name && !getValues(`applicationData.${selectedRole}.contacts.0.name`)) {
       setValue(`applicationData.${selectedRole}.contacts.0.name`, user.data?.profile.name);
     }
-  }, [user.data?.profile.name, setValue, selectedRole]);
+  }, [user.data?.profile.name, setValue, selectedRole, getValues]);
 
   useEffect(() => {
-    if (user.data?.profile.email) {
+    if (
+      user.data?.profile.email &&
+      !getValues(`applicationData.${selectedRole}.contacts.0.email`)
+    ) {
       setValue(`applicationData.${selectedRole}.contacts.0.email`, user.data?.profile.email);
     }
-  }, [user.data?.profile.email, setValue, selectedRole]);
+  }, [user.data?.profile.email, setValue, selectedRole, getValues]);
 
   const roleOptions: Option[] = [
     { value: 'customerWithContacts', label: t('form:yhteystiedot:titles:customerWithContacts') },
@@ -99,14 +100,34 @@ export const BasicHankeInfo: React.FC = () => {
   ];
 
   function handleRoleChange(role: Option) {
-    const previousValues = getValues(`applicationData.${selectedRole}.contacts.0`);
+    const emptyContact = {
+      email: '',
+      name: '',
+      orderer: false,
+      phone: '',
+      postalAddress: { city: '', postalCode: '', streetAddress: { streetName: '' } },
+    };
 
-    // Reset contacts array of previously selected role
-    resetField(`applicationData.${selectedRole}.contacts`, {
-      defaultValue: [],
-    });
+    const previousRoleContacts = getValues(`applicationData.${selectedRole}.contacts`);
 
-    setValue(`applicationData.${role.value}.contacts.0`, previousValues);
+    // Remove moved contact from previous selected role contacts
+    setValue(
+      `applicationData.${selectedRole}.contacts`,
+      previousRoleContacts.length > 1 ? previousRoleContacts.slice(1) : []
+    );
+
+    let selectedRoleContacts = getValues(`applicationData.${role.value}.contacts`);
+
+    const contactToMove = previousRoleContacts.slice(0, 1);
+
+    selectedRoleContacts =
+      selectedRoleContacts === null ||
+      (selectedRoleContacts.length === 1 && isEqual(selectedRoleContacts[0], emptyContact))
+        ? contactToMove
+        : contactToMove.concat(selectedRoleContacts);
+
+    setValue(`applicationData.${role.value}.contacts`, selectedRoleContacts);
+
     setSelectedRole(role.value);
   }
 

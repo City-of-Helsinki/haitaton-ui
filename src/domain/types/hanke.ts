@@ -143,6 +143,12 @@ export type HankeMuuTaho = {
   alikontaktit?: HankeSubContact[];
 };
 
+export type HankeContacts = Array<(HankeContact | HankeMuuTaho)[] | undefined>;
+
+export function isHankeContact(contact: HankeContact | HankeMuuTaho): contact is HankeContact {
+  return (contact as HankeContact).ytunnusTaiHetu !== undefined;
+}
+
 export enum CONTACT_TYYPPI {
   YKSITYISHENKILO = 'YKSITYISHENKILO',
   YRITYS = 'YRITYS',

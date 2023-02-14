@@ -1,4 +1,6 @@
 import React from 'react';
+import { Flex } from '@chakra-ui/react';
+import { LoadingSpinner } from 'hds-react';
 import Container from '../common/components/container/Container';
 import PageMeta from './components/PageMeta';
 import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
@@ -18,7 +20,15 @@ const Johtoselvitys: React.FC = () => {
     return null;
   }
 
-  if (result.isLoading || !result.data) return null;
+  if (result.isLoading) {
+    return (
+      <Flex justify="center" mt="var(--spacing-xl)">
+        <LoadingSpinner />
+      </Flex>
+    );
+  }
+
+  if (!result.data) return null;
 
   return (
     <Container>

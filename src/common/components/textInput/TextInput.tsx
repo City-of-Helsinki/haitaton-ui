@@ -11,6 +11,7 @@ type PropTypes = {
   label?: string;
   disabled?: boolean;
   required?: boolean;
+  readOnly?: boolean;
   tooltip?: TooltipProps;
   placeholder?: string;
   helperText?: string;
@@ -24,6 +25,7 @@ const TextInput: React.FC<PropTypes> = ({
   disabled,
   tooltip,
   required,
+  readOnly,
   placeholder,
   helperText,
   shouldUnregister,
@@ -38,7 +40,7 @@ const TextInput: React.FC<PropTypes> = ({
       control={control}
       defaultValue=""
       shouldUnregister={shouldUnregister}
-      render={({ field: { onChange, onBlur, value }, fieldState: { error, isTouched } }) => (
+      render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
         <HdsTextInput
           id={name}
           name={name}
@@ -47,13 +49,14 @@ const TextInput: React.FC<PropTypes> = ({
           value={value || ''}
           helperText={helperText}
           placeholder={placeholder}
-          errorText={isTouched ? getInputErrorText(t, error) : undefined}
-          invalid={isTouched && Boolean(error)}
+          errorText={getInputErrorText(t, error)}
+          invalid={Boolean(error)}
           onBlur={onBlur}
           onChange={onChange}
           disabled={disabled}
           data-testid={name}
           required={required}
+          readOnly={readOnly}
           {...tooltip}
         />
       )}

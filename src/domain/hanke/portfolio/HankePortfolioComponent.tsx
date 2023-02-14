@@ -28,6 +28,7 @@ import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
 import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotification';
 import Container from '../../../common/components/container/Container';
+import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
 
 type CustomAccordionProps = {
   hanke: HankeData;
@@ -433,6 +434,8 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
             styleAs="h1"
             spacingBottom="s"
             weight="bold"
+            id={SKIP_TO_ELEMENT_ID}
+            tabIndex={-1}
           >
             {t('hankePortfolio:pageHeader')}
           </Text>

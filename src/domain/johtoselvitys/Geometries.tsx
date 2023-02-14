@@ -24,6 +24,8 @@ import useLocale from '../../common/hooks/useLocale';
 import OverviewMapControl from '../../common/components/map/controls/OverviewMapControl';
 import useSelectableTabs from '../../common/hooks/useSelectableTabs';
 import useHighlightArea from '../map/hooks/useHighlightArea';
+import { JohtoselvitysFormValues } from './types';
+import { HaitatonGeometry } from '../../common/types/hanke';
 
 function useFeatures(
   vectorSource: VectorSource,
@@ -94,7 +96,7 @@ export const initialValues = {
 export const Geometries: React.FC = () => {
   const { t } = useTranslation();
   const locale = useLocale();
-  const { setValue, watch, getValues } = useFormContext();
+  const { setValue, watch, getValues } = useFormContext<JohtoselvitysFormValues>();
   const [drawSource] = useState<VectorSource>(new VectorSource());
 
   const features = useFeatures(
@@ -106,15 +108,17 @@ export const Geometries: React.FC = () => {
 
   const higlightArea = useHighlightArea();
 
-  const startTime: number | null = watch('applicationData.startTime');
-  const endTime: number | null = watch('applicationData.endTime');
+  const startTime: string | null = watch('applicationData.startTime');
+  const endTime: string | null = watch('applicationData.endTime');
   const minEndDate = startTime ? new Date(startTime) : undefined;
 
   const workTimesSet = startTime && endTime;
 
   useEffect(() => {
     // Update geometry collection to form state
-    const hankeGeometries = formatFeaturesToAlluGeoJSON(features);
+    const hankeGeometries: HaitatonGeometry = formatFeaturesToAlluGeoJSON(
+      features
+    ) as HaitatonGeometry;
     setValue('applicationData.geometry', hankeGeometries);
   }, [features, setValue]);
 
