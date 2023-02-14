@@ -2,7 +2,6 @@ import React from 'react';
 import GeoJSON from 'ol/format/GeoJSON';
 import GeometryCollection from 'ol/geom/GeometryCollection';
 import Geometry from 'ol/geom/Geometry';
-import { getArea } from 'ol/sphere';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@chakra-ui/react';
 import {
@@ -14,11 +13,12 @@ import { JohtoselvitysFormValues } from '../types';
 import Text from '../../../common/components/text/Text';
 import { formatSurfaceArea } from '../../map/utils';
 import { formatToFinnishDate } from '../../../common/utils/date';
+import { getSurfaceArea } from '../../../common/components/map/utils';
 
 function getTotalSurfaceArea(geometries: Geometry[]) {
   try {
     const totalSurfaceArea = geometries.reduce((totalArea, geom) => {
-      return totalArea + Math.round(getArea(geom));
+      return totalArea + Math.round(getSurfaceArea(geom));
     }, 0);
     return totalSurfaceArea;
   } catch (error) {

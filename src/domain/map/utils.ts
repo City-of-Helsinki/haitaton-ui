@@ -1,12 +1,12 @@
 import GeoJSON from 'ol/format/GeoJSON';
 import axios from 'axios';
 import Geometry from 'ol/geom/Geometry';
-import { getArea } from 'ol/sphere';
 import { Feature } from 'ol';
 import Polygon from 'ol/geom/Polygon';
 import { HankeGeoJSON } from '../../common/types/hanke';
 import { GeometryData, HankeFilters } from './types';
 import { HankeData, HankeDataDraft, HankeGeometria } from '../types/hanke';
+import { getSurfaceArea } from '../../common/components/map/utils';
 
 export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJSON => {
   const format = new GeoJSON();
@@ -149,7 +149,7 @@ export function formatSurfaceArea(geometry: Geometry | undefined) {
     return null;
   }
 
-  const area = getArea(geometry);
+  const area = getSurfaceArea(geometry);
   return `${Math.round(area)} m²`;
 }
 
