@@ -47,7 +47,7 @@ const Dropdown: React.FC<PropTypes> = ({
         name={name}
         control={control}
         rules={rules}
-        render={({ field: { onChange, onBlur, value }, fieldState: { error, isTouched } }) => {
+        render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
           return (
             <Select
               id={id}
@@ -58,7 +58,7 @@ const Dropdown: React.FC<PropTypes> = ({
                   : options.find((o) => o.value === value)
               }
               options={options}
-              invalid={invalid || (isTouched && Boolean(error))}
+              invalid={invalid || Boolean(error)}
               value={options.find((o) => o.value === value) || null}
               onBlur={onBlur}
               onChange={(option: Option) => {
@@ -67,7 +67,7 @@ const Dropdown: React.FC<PropTypes> = ({
               }}
               required={required}
               disabled={disabled}
-              error={isTouched ? getInputErrorText(t, error) : undefined}
+              error={getInputErrorText(t, error)}
             />
           );
         }}

@@ -132,25 +132,25 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByRole('button', { name: /tyyppi/i }));
     await user.click(screen.getByText(/yritys/i));
-    fireEvent.change(screen.getByRole('textbox', { name: /nimi/i }), {
+    fireEvent.change(screen.getByLabelText(/nimi/i), {
       target: { value: 'Olli Omistaja' },
     });
-    fireEvent.change(screen.getByRole('textbox', { name: /y-tunnus tai henkilötunnus/i }), {
+    fireEvent.change(screen.getByLabelText(/y-tunnus tai henkilötunnus/i), {
       target: { value: 'y-tunnus' },
     });
-    fireEvent.change(screen.getByRole('textbox', { name: /katuosoite/i }), {
+    fireEvent.change(screen.getByLabelText(/katuosoite/i), {
       target: { value: 'Testikuja 1' },
     });
-    fireEvent.change(screen.getByRole('textbox', { name: /postinumero/i }), {
+    fireEvent.change(screen.getByLabelText(/postinumero/i), {
       target: { value: '00000' },
     });
-    fireEvent.change(screen.getByRole('textbox', { name: /postitoimipaikka/i }), {
+    fireEvent.change(screen.getByLabelText(/postitoimipaikka/i), {
       target: { value: 'Testikaupunki' },
     });
-    fireEvent.change(screen.getByRole('textbox', { name: /sähköposti/i }), {
+    fireEvent.change(screen.getByLabelText(/sähköposti/i), {
       target: { value: 'test@mail.com' },
     });
-    fireEvent.change(screen.getByRole('textbox', { name: /puhelinnumero/i }), {
+    fireEvent.change(screen.getByLabelText(/puhelinnumero/i), {
       target: { value: '0400000000' },
     });
 
@@ -158,10 +158,10 @@ describe('HankeForm', () => {
     await user.click(screen.getByLabelText(/erillinen yhteyshenkilö/i));
     expect(screen.getByRole('group', { name: 'Yhteyshenkilö' })).toBeInTheDocument();
 
-    fireEvent.change(screen.getAllByRole('textbox', { name: /nimi/i })[1], {
+    fireEvent.change(screen.getAllByLabelText(/nimi/i)[1], {
       target: { value: 'Testi Yhteyshenkilö' },
     });
-    fireEvent.change(screen.getAllByRole('textbox', { name: /sähköposti/i })[1], {
+    fireEvent.change(screen.getAllByLabelText(/sähköposti/i)[1], {
       target: { value: 'yhteyshenkilo@mail.com' },
     });
 

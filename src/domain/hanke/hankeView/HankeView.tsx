@@ -38,6 +38,7 @@ import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeade
 import CompressedAreaIndex from '../hankeIndexes/CompressedAreaIndex';
 import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotification';
 import { useIsHankeValid } from '../edit/hooks/useIsHankeValid';
+import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
 
 type AreaProps = {
   area: HankeAlue;
@@ -146,7 +147,7 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
 
       <header className={styles.headerContainer}>
         <Container>
-          <Text tag="h1" styleAs="h1" weight="bold">
+          <Text tag="h1" styleAs="h1" weight="bold" id={SKIP_TO_ELEMENT_ID} tabIndex={-1}>
             {hankeData?.nimi}
           </Text>
           <Text tag="h2" styleAs="h3" weight="bold" spacingBottom="l">

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Text from '../../../common/components/text/Text';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
-import { ApplicationType } from '../../johtoselvitys/types';
+import { ApplicationType } from '../types/application';
 import { HankeData } from '../../types/hanke';
 
 type Props = {
@@ -56,7 +56,7 @@ const ApplicationAddDialog: React.FC<Props> = ({ isOpen, onClose, hanke }) => {
       aria-labelledby={dialogTitle}
       variant="primary"
       close={onClose}
-      closeButtonLabelText={t('common:closeButtonLabelText')}
+      closeButtonLabelText={t('common:ariaLabels:closeButtonLabelText')}
     >
       <Dialog.Header
         id="application-create-title"

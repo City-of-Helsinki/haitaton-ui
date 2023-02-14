@@ -23,11 +23,6 @@
       },
       "cancelButton": "Peruuta"
     },
-    "languages": {
-      "fi": "Suomi",
-      "en": "English",
-      "sv": "Svenska"
-    },
     "components": {
       "multiselect": {
         "toggle": "Sulje ja avaa valikko",
@@ -40,6 +35,9 @@
       },
       "header": {
         "skipToContentLabel": "Siirry pääsisältöön"
+      },
+      "notification": {
+        "closeButtonLabelText": "Sulje ilmoitus"
       }
     },
     "error": "Tapahtui virhe. Yritä uudestaan.",
@@ -49,6 +47,10 @@
       "closeButtonLabelText": "Sulje",
       "topNavigation": "Haitaton navigaatio",
       "footerNavigation": "Haitaton tietosivut"
+    },
+    "buttons": {
+      "savingText": "Tallennetaan",
+      "sendingText": "Lähetetään"
     }
   },
   "form": {
@@ -77,7 +79,9 @@
       "omatTiedot": "Omat tiedot",
       "role": "Rooli",
       "roleHelper": "Pääasiallinen roolisi työssä",
-      "fromHelsinkiProfile": "Haettu Helsinki-profiilin perusteella"
+      "fromHelsinkiProfile": "Haettu Helsinki-profiilin perusteella",
+      "addressInformation": "Osoitetiedot",
+      "kokonaisAla": "Alueiden kokonaispinta-ala"
     },
     "helperTexts": {
       "dateInForm": "Anna muodossa P.K.VVVV"
@@ -101,10 +105,19 @@
         "lisaaMuitaTahoja": "Lisää muita tahoja",
         "lisaaMuuTaho": "Lisää muu taho",
         "subContact": "Yhteyshenkilö",
+        "subContacts": "Yhteyshenkilöt",
         "subContactInformation": "Yhteyshenkilön tiedot",
         "customerWithContacts": "Työstä vastaava",
+        "customerWithContactsPlural": "Työstä vastaavat",
         "contractorWithContacts": "Työn suorittaja",
-        "representativeWithContacts": "Asianhoitaja"
+        "contractorWithContactsPlural": "Työn suorittajat",
+        "propertyDeveloperWithContacts": "Rakennuttaja",
+        "representativeWithContacts": "Asianhoitaja",
+        "representativeWithContactsPlural": "Asianhoitajat",
+        "addContractors": "Lisää työn suorittajia",
+        "addRepresentative": "Lisää asianhoitaja",
+        "addRepresentatives": "Lisää asianhoitajia",
+        "applicant": "Hakija"
       },
       "labels": {
         "tyyppi": "Tyyppi",
@@ -130,7 +143,11 @@
       "contactType": {
         "YKSITYISHENKILO": "Yksityishenkilö",
         "YRITYS": "Yritys",
-        "YHTEISO": "Yhteisö"
+        "YHTEISO": "Yhteisö",
+        "PERSON": "Yksityishenkilö",
+        "COMPANY": "Yritys",
+        "ASSOCIATION": "Yhdistys",
+        "OTHER": "Muu"
       },
       "buttons": {
         "addSubContact": "Lisää yhteyshenkilö",
@@ -138,7 +155,9 @@
         "remove": {
           "rakennuttajat": "Poista rakennuttaja",
           "toteuttajat": "Poista toteuttaja",
-          "muut": "Poista muu taho"
+          "muut": "Poista muu taho",
+          "propertyDeveloperWithContacts": "Poista rakennuttaja",
+          "representativeWithContacts": "Poista asianhoitaja"
         }
       }
     }
@@ -293,7 +312,7 @@
       "KADUN_KUNNOSSAPITO": "Kadun kunnossapito",
       "KIINTEISTOLIITTYMA": "Kiinteistöliittymä",
       "SULKU_TAI_KAIVO": "Sulku tai kaivo",
-      "UUDISRAKENNUS": "Uudisrakennus",
+      "UUDISRAKENNUS": "Uudisrakentaminen",
       "SANEERAUS": "Saneeraus",
       "AKILLINEN_VIKAKORJAUS": "Äkillinen vikakorjaus",
       "VIHERTYO": "Vihertyö",
@@ -376,8 +395,8 @@
       "loppuPvm": "Hankkeen loppupäivä",
       "tyomaaTyyppi": "Työn tyyppi",
       "tyomaaKoko": "Hankkeen koko",
-      "haittaAlkuPvm": "Haittojen alkupäivämäärä",
-      "haittaLoppuPvm": "Haittojen loppupäivämäärä",
+      "haittaAlkuPvm": "Haittojen alkupäivä",
+      "haittaLoppuPvm": "Haittojen loppupäivä",
       "kaistaHaitta": "Autoliikenteen kaistahaitta",
       "kaistaPituusHaitta": "Kaistahaittojen pituus",
       "meluHaitta": "Meluhaitta",
@@ -422,7 +441,7 @@
       "header": "Alueet",
       "subHeader": "Hanke-alueet",
       "area": "Alue",
-      "instructions": "Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 1-5, 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen tärkeimmillä reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein.",
+      "instructions": "Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 1-5, 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen tärkeimmillä reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein (vihreä = ei haittaa, keltainen = todennäköinen haitta, punainen = merkittävä haitta).",
       "haitatHeader": "Alueen haitta-arviot",
       "haitatInstructions": "Anna arvio suurimmista mahdollisista vaikutuksista hankealueella.",
       "removeAreaButton": "Poista alue"
@@ -439,6 +458,16 @@
     },
     "finishedForm": {
       "header": "Lomake on lähetetty onnistuneesti"
+    },
+    "addContactButton": "Lisää yhteyshenkilö",
+    "removeContactButton": "Poista yhteyshenkilö",
+    "headers": {
+      "arvioijat": "Arvioijat",
+      "omistajat": "Omistajat",
+      "toteuttajat": "Toteuttajat"
+    },
+    "hankkeenYhteystiedotForm": {
+      "header": "Yhteystiedot"
     }
   },
   "johtoselvitysForm": {
@@ -449,6 +478,9 @@
     "alueet": {
       "instructions": "Voit lisätä selvitettävän alueen piirtämällä sen kartalle. Voit lisätä samalle hakemukselle useampia alueita, mikäli niitä koskeva aikaväli on sama.",
       "giveDates": "Valitse työn päivämäärät piirtääksesi selvitettävät alueet kartalle."
+    },
+    "yhteystiedot": {
+      "instructions": "<0>Hakemukselle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hakemukseen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hakemusta. Tarvittaessa voit antaa heille laajemmat käyttöoikeudet Omat hankkeet -näkymässä.</0><0>Hakijan yhteyshenkilö on oletuksena johtoselvityksen tilaaja. Tarvittaessa voit vaihtaa jonkun muista yhteyshenkilöistä tilaajaksi. Huomioithan, että johtoselvityksen tilaaja voi olla vain yksi henkilö.</0>"
     }
   },
   "hakemus": {
@@ -466,10 +498,24 @@
       "startDate": "Työn arvioitu alkupäivä",
       "endDate": "Työn arvioitu loppupäivä",
       "workArea": "Työalue",
-      "areaInfo": "Alueen tiedot"
+      "areaInfo": "Alueen tiedot",
+      "checkInfo": "Tarkista antamasi tiedot ja lähetä hakemus.",
+      "preFilledInfo": "Esitäytetyt tiedot",
+      "preFilledInfoHelp": "Valitse nimi hankkeen tiedoista"
+    },
+    "notifications": {
+      "saveSuccessLabel": "Hakemus tallennettu",
+      "saveErrorLabel": "Hakemuksen tallennus epäonnistui",
+      "saveSuccessText": "Hakemuksen tallentaminen onnistui",
+      "saveErrorText": "Hakemusta ei voitu tallentaa. Tarkista hakemuksen oikea sisältö ja että olet kirjautunut.",
+      "sendSuccessLabel": "Hakemus lähetetty",
+      "sendErrorLabel": "Hakemuksen lähetys epäonnistui",
+      "sendSuccessText": "Hakemuksen lähetys onnistui",
+      "sendErrorText": "Hakemusta ei voitu lähettää. Tarkista hakemuksen oikea sisältö ja että olet kirjautunut."
     },
     "buttons": {
-      "continueToApplication": "Jatka hakemukseen"
+      "continueToApplication": "Jatka hakemukseen",
+      "sendApplication": "Lähetä hakemus"
     },
     "headers": {
       "pickApplication": "Valitse luotava hakemus"

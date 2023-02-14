@@ -36,7 +36,7 @@ const TextArea: React.FC<Props> = ({
       control={control}
       defaultValue=""
       shouldUnregister={shouldUnregister}
-      render={({ field: { onChange, onBlur, value }, fieldState: { error, isTouched } }) => {
+      render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
         return (
           <HdsTextArea
             id={name}
@@ -48,11 +48,11 @@ const TextArea: React.FC<Props> = ({
             value={value || ''}
             onChange={onChange}
             onBlur={onBlur}
-            invalid={isTouched && Boolean(error)}
+            invalid={Boolean(error)}
             data-testid={testId}
             required={required}
             disabled={disabled}
-            errorText={isTouched ? getInputErrorText(t, error) : undefined}
+            errorText={getInputErrorText(t, error)}
           />
         );
       }}

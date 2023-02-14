@@ -6,6 +6,7 @@ import { useLocalizedRoutes } from '../../common/hooks/useLocalizedRoutes';
 import Container from '../../common/components/container/Container';
 import Text from '../../common/components/text/Text';
 import styles from './StaticContent.module.scss';
+import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
 
 const InfoPage: React.FC = () => {
   const { HAITATON_INFO } = useLocalizedRoutes();
@@ -14,7 +15,7 @@ const InfoPage: React.FC = () => {
   return (
     <Container>
       <PageMeta routeData={HAITATON_INFO} />
-      <Text tag="h1" styleAs="h2" spacing="s" weight="bold">
+      <Text tag="h1" styleAs="h2" spacing="s" weight="bold" id={SKIP_TO_ELEMENT_ID} tabIndex={-1}>
         {t('staticPages:info:title')}
       </Text>
 

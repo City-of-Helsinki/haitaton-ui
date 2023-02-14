@@ -10,6 +10,7 @@ import {
   HANKE_CONTACT_TYPE,
   HankeContactTypeKey,
   HankeMuuTaho,
+  HankeSubContact,
 } from '../../types/hanke';
 import Text from '../../../common/components/text/Text';
 import { useFormPage } from './hooks/useFormPage';
@@ -64,6 +65,17 @@ function getEmptyOtherContact(): HankeMuuTaho {
     email: '',
     puhelinnumero: '',
     alikontaktit: [],
+  };
+}
+
+function getEmptySubContact(): HankeSubContact {
+  return {
+    nimi: '',
+    osoite: '',
+    postinumero: '',
+    postitoimipaikka: '',
+    email: '',
+    puhelinnumero: '',
   };
 }
 
@@ -247,6 +259,8 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
               contactType={HANKE_CONTACT_TYPE.RAKENNUTTAJAT}
               index={index}
               onRemoveContact={removeRakennuttaja}
+              subContactPath={`${HANKE_CONTACT_TYPE.RAKENNUTTAJAT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}`}
+              emptySubContact={getEmptySubContact()}
               renderSubContact={(subContactIndex, removeSubContact) => {
                 const fieldPath = `${HANKE_CONTACT_TYPE.RAKENNUTTAJAT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}.${subContactIndex}`;
                 return (
@@ -286,6 +300,8 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
               contactType={HANKE_CONTACT_TYPE.TOTEUTTAJAT}
               index={index}
               onRemoveContact={removeToteuttaja}
+              subContactPath={`${HANKE_CONTACT_TYPE.TOTEUTTAJAT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}`}
+              emptySubContact={getEmptySubContact()}
               renderSubContact={(subContactIndex, removeSubContact) => {
                 const fieldPath = `${HANKE_CONTACT_TYPE.TOTEUTTAJAT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}.${subContactIndex}`;
                 return (
@@ -327,6 +343,8 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
               contactType={HANKE_CONTACT_TYPE.MUUTTAHOT}
               index={index}
               onRemoveContact={removeMuuTaho}
+              subContactPath={`${HANKE_CONTACT_TYPE.MUUTTAHOT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}`}
+              emptySubContact={getEmptySubContact()}
               renderSubContact={(subContactIndex, removeSubContact) => {
                 const subContactFieldPath = `${HANKE_CONTACT_TYPE.MUUTTAHOT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}.${subContactIndex}`;
                 return (
