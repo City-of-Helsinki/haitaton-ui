@@ -62,7 +62,7 @@ const Header: React.FC = () => {
       className="header"
     >
       {isAuthenticated && (
-        <Navigation.Row>
+        <Navigation.Row ariaLabel={t('common:ariaLabels:topNavigation')}>
           <Navigation.Item as={NavLink} to={PUBLIC_HANKKEET_MAP.path} active={Boolean(isMapPath)}>
             {PUBLIC_HANKKEET.label}
           </Navigation.Item>

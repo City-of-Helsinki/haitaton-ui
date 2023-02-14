@@ -44,7 +44,9 @@
     "ariaLabels": {
       "profileButton": "Käyttäjäprofiili",
       "menuToggle": "Valikko",
-      "closeButtonLabelText": "Sulje"
+      "closeButtonLabelText": "Sulje",
+      "topNavigation": "Haitaton navigaatio",
+      "footerNavigation": "Haitaton tietosivut"
     },
     "buttons": {
       "savingText": "Tallennetaan",
