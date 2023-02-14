@@ -12,7 +12,6 @@ import AccessibilityPage from '../../pages/staticPages/AccessibilityPage';
 import ReferencesPage from '../../pages/staticPages/ReferencesPage';
 import PrivacyPolicyPage from '../../pages/staticPages/PrivacyPolicyPage';
 import Johtoselvitys from '../../pages/Johtoselvitys';
-import JohtoselvitysOld from '../../pages/JohtoselvitysOld';
 import useUser from '../../domain/auth/useUser';
 import PrivateRoute from './PrivateRoute';
 import MapAndListPage from '../../pages/MapAndListPage';
@@ -47,10 +46,6 @@ const LocaleRoutes = () => {
       <Route
         path={t('routes:JOHTOSELVITYSHAKEMUS:path')}
         element={<PrivateRoute element={<Johtoselvitys />} />}
-      />
-      <Route
-        path="/johtoselvityshakemusvanha/*"
-        element={<PrivateRoute element={<JohtoselvitysOld />} />}
       />
       <Route path={t('routes:FULL_PAGE_MAP:path')} element={<FullPageMapPage />} />
       <Route path={t('routes:PUBLIC_HANKKEET:path')} element={<MapAndListPage />}>
