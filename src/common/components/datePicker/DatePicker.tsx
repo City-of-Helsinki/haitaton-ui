@@ -41,7 +41,7 @@ const DatePicker: React.FC<PropTypes> = ({
       <Controller
         name={name}
         control={control}
-        render={({ field: { onChange, onBlur, value }, fieldState: { error, isTouched } }) => (
+        render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
           <div className={styles.datePicker}>
             <div className={styles.tooltip}>
               {!!tooltip && (
@@ -57,7 +57,7 @@ const DatePicker: React.FC<PropTypes> = ({
                 label={label}
                 disabled={disabled}
                 onBlur={onBlur}
-                invalid={isTouched && Boolean(error)}
+                invalid={Boolean(error)}
                 onChange={(date) => {
                   const convertedDateString = convertFinnishDate(date);
                   onChange(toEndOfDayUTCISO(new Date(convertedDateString)));
@@ -70,7 +70,7 @@ const DatePicker: React.FC<PropTypes> = ({
                 required={required}
                 disableConfirmation
                 helperText={helperText}
-                errorText={isTouched ? getInputErrorText(t, error) : undefined}
+                errorText={getInputErrorText(t, error)}
               />
             </div>
           </div>

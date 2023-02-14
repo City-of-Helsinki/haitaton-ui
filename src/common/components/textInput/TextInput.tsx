@@ -40,7 +40,7 @@ const TextInput: React.FC<PropTypes> = ({
       control={control}
       defaultValue=""
       shouldUnregister={shouldUnregister}
-      render={({ field: { onChange, onBlur, value }, fieldState: { error, isTouched } }) => (
+      render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
         <HdsTextInput
           id={name}
           name={name}
@@ -49,8 +49,8 @@ const TextInput: React.FC<PropTypes> = ({
           value={value || ''}
           helperText={helperText}
           placeholder={placeholder}
-          errorText={isTouched ? getInputErrorText(t, error) : undefined}
-          invalid={isTouched && Boolean(error)}
+          errorText={getInputErrorText(t, error)}
+          invalid={Boolean(error)}
           onBlur={onBlur}
           onChange={onChange}
           disabled={disabled}

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Text from '../../../common/components/text/Text';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
-import { ApplicationType } from '../../johtoselvitys/types';
+import { ApplicationType } from '../types/application';
 import { HankeData } from '../../types/hanke';
 
 type Props = {

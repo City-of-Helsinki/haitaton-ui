@@ -35,6 +35,9 @@
       },
       "header": {
         "skipToContentLabel": "Gå till huvudinnehåll"
+      },
+      "notification": {
+        "closeButtonLabelText": "SV:Sulje ilmoitus"
       }
     },
     "error": "Det inträffade ett fel. Försök på nytt.",
@@ -42,6 +45,10 @@
       "profileButton": "SV:Käyttäjäprofiili",
       "menuToggle": "SV:Valikko",
       "closeButtonLabelText": "SV:Sulje"
+    },
+    "buttons": {
+      "savingText": "SV:Tallennetaan",
+      "sendingText": "SV:Lähetetään"
     }
   },
   "form": {
@@ -106,6 +113,7 @@
         "representativeWithContacts": "SV:Asianhoitaja",
         "representativeWithContactsPlural": "SV:Asianhoitajat",
         "addContractors": "SV:Lisää työn suorittajia",
+        "addRepresentative": "SV:Lisää asianhoitaja",
         "addRepresentatives": "SV:Lisää asianhoitajia",
         "applicant": "SV:Hakija"
       },
@@ -493,8 +501,19 @@
       "preFilledInfo": "SV:Esitäytetyt tiedot",
       "preFilledInfoHelp": "SV:Valitse nimi hankkeen tiedoista"
     },
+    "notifications": {
+      "saveSuccessLabel": "SV:Hakemus tallennettu",
+      "saveErrorLabel": "SV:Hakemuksen tallennus epäonnistui",
+      "saveSuccessText": "SV:Hakemuksen tallentaminen onnistui",
+      "saveErrorText": "SV:Hakemusta ei voitu tallentaa. Tarkista hakemuksen oikea sisältö ja että olet kirjautunut.",
+      "sendSuccessLabel": "SV:Hakemus lähetetty",
+      "sendErrorLabel": "SV:Hakemuksen lähetys epäonnistui",
+      "sendSuccessText": "SV:Hakemuksen lähetys onnistui",
+      "sendErrorText": "SV:Hakemusta ei voitu lähettää. Tarkista hakemuksen oikea sisältö ja että olet kirjautunut."
+    },
     "buttons": {
-      "continueToApplication": "SV:Jatka hakemukseen"
+      "continueToApplication": "SV:Jatka hakemukseen",
+      "sendApplication": "SV:Lähetä hakemus"
     },
     "headers": {
       "pickApplication": "SV:Valitse luotava hakemus"

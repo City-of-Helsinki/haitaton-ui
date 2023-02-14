@@ -8,7 +8,7 @@ import {
   CustomerType,
   Contact as ApplicationContact,
   CustomerWithContacts,
-} from './types';
+} from '../application/types/application';
 import styles from './Contacts.module.scss';
 import Text from '../../common/components/text/Text';
 import ResponsiveGrid from '../../common/components/grid/ResponsiveGrid';
@@ -18,6 +18,7 @@ import useLocale from '../../common/hooks/useLocale';
 import Dropdown from '../../common/components/dropdown/Dropdown';
 import { HankeContacts } from '../types/hanke';
 import PreFilledContactSelect from '../application/components/PreFilledContactSelect';
+import { JohtoselvitysFormValues } from './types';
 
 function getEmptyContact(): ApplicationContact {
   return {
@@ -126,7 +127,7 @@ const ContactFields: React.FC<{
   onRemove: () => void;
 }> = ({ customerType, index, onRemove }) => {
   const { t } = useTranslation();
-  const { getValues } = useFormContext();
+  const { getValues } = useFormContext<JohtoselvitysFormValues>();
 
   const orderer = getValues(`applicationData.${customerType}.contacts.${index}.orderer`);
   const contactsLength: number = getValues().applicationData[customerType]?.contacts.length || 0;
@@ -192,7 +193,7 @@ const ContactFields: React.FC<{
 export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeContacts }) => {
   const { t } = useTranslation();
   const locale = useLocale();
-  const { watch, setValue } = useFormContext();
+  const { watch, setValue } = useFormContext<JohtoselvitysFormValues>();
 
   const [propertyDeveloper, representative] = watch([
     'applicationData.propertyDeveloperWithContacts',
@@ -369,4 +370,3 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
     </div>
   );
 };
-export default Contacts;

@@ -6,8 +6,9 @@ import {
   SectionItemContent,
   SectionItemTitle,
 } from '../../forms/components/FormSummarySection';
-import { Contact, JohtoselvitysFormValues } from '../types';
+import { JohtoselvitysFormValues } from '../types';
 import { ContactSummary } from './ContactsSummary';
+import { Contact } from '../../application/types/application';
 
 function findOrderer(formData: JohtoselvitysFormValues): Contact | null {
   const customerWithContacts = find(formData.applicationData, (value) => {

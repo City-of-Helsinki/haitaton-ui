@@ -35,6 +35,9 @@
       },
       "header": {
         "skipToContentLabel": "Go to main content"
+      },
+      "notification": {
+        "closeButtonLabelText": "EN:Sulje ilmoitus"
       }
     },
     "error": "An error occurred. Try again.",
@@ -42,6 +45,10 @@
       "profileButton": "EN:Käyttäjäprofiili",
       "menuToggle": "EN:Valikko",
       "closeButtonLabelText": "EN:Sulje"
+    },
+    "buttons": {
+      "savingText": "EN:Tallennetaan",
+      "sendingText": "EN:Lähetetään"
     }
   },
   "form": {
@@ -106,6 +113,7 @@
         "representativeWithContacts": "EN:Asianhoitaja",
         "representativeWithContactsPlural": "EN:Asianhoitajat",
         "addContractors": "EN:Lisää työn suorittajia",
+        "addRepresentative": "EN:Lisää asianhoitaja",
         "addRepresentatives": "EN:Lisää asianhoitajia",
         "applicant": "EN:Hakija"
       },
@@ -493,8 +501,19 @@
       "preFilledInfo": "EN:Esitäytetyt tiedot",
       "preFilledInfoHelp": "EN:Valitse nimi hankkeen tiedoista"
     },
+    "notifications": {
+      "saveSuccessLabel": "EN:Hakemus tallennettu",
+      "saveErrorLabel": "EN:Hakemuksen tallennus epäonnistui",
+      "saveSuccessText": "EN:Hakemuksen tallentaminen onnistui",
+      "saveErrorText": "EN:Hakemusta ei voitu tallentaa. Tarkista hakemuksen oikea sisältö ja että olet kirjautunut.",
+      "sendSuccessLabel": "EN:Hakemus lähetetty",
+      "sendErrorLabel": "EN:Hakemuksen lähetys epäonnistui",
+      "sendSuccessText": "EN:Hakemuksen lähetys onnistui",
+      "sendErrorText": "EN:Hakemusta ei voitu lähettää. Tarkista hakemuksen oikea sisältö ja että olet kirjautunut."
+    },
     "buttons": {
-      "continueToApplication": "EN:Jatka hakemukseen"
+      "continueToApplication": "EN:Jatka hakemukseen",
+      "sendApplication": "EN:Lähetä hakemus"
     },
     "headers": {
       "pickApplication": "EN:Valitse luotava hakemus"
