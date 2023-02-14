@@ -2,10 +2,10 @@ import { Feature } from 'ol';
 import Polygon from 'ol/geom/Polygon';
 import { Polygon as GeoJSONPolygon } from 'geojson';
 import { max, min } from 'date-fns';
-import { getArea } from 'ol/sphere';
 import { HankeDataDraft, HankeContact, HankeMuuTaho, HankeAlue } from '../../types/hanke';
-import { FORMFIELD, HankeDataFormState } from './types';
+import { FORMFIELD, HankeAlueFormState, HankeDataFormState } from './types';
 import { formatFeaturesToHankeGeoJSON, getFeatureFromHankeGeometry } from '../../map/utils';
+import { getSurfaceArea } from '../../../common/components/map/utils';
 
 export function getAreasMinStartDate(areas: HankeAlue[] | undefined) {
   const areaStartDates = areas?.map((alue) => {
@@ -87,13 +87,16 @@ export const convertHankeDataToFormState = (
 /**
  * Calculate total surface area of all hanke areas
  */
-export function calculateTotalSurfaceArea(areas?: HankeAlue[]) {
+export function calculateTotalSurfaceArea(areas?: HankeAlueFormState[]) {
   try {
     const areasTotalSurfaceArea = areas?.reduce((surfaceArea, currArea) => {
-      if (!currArea.geometriat) return surfaceArea;
-      const feature = getFeatureFromHankeGeometry(currArea.geometriat);
+      const feature =
+        currArea.feature ||
+        (currArea.geometriat && getFeatureFromHankeGeometry(currArea.geometriat));
+
+      if (!feature) return surfaceArea;
       const geom = feature.getGeometry();
-      const currAreaSurface = geom && Math.round(getArea(geom));
+      const currAreaSurface = geom && Math.round(getSurfaceArea(geom));
       return currAreaSurface ? surfaceArea + currAreaSurface : surfaceArea;
     }, 0);
 

@@ -57,10 +57,10 @@ test('Correct information about hanke should be displayed', async () => {
     screen.queryByText('Työmaa ulottuu kadun eri puolille ja/tai usean korttelin mittainen työmaa')
   ).toBeInTheDocument();
   expect(screen.queryByText('Ei')).toBeInTheDocument();
-  expect(screen.queryByText('4699 m²')).toBeInTheDocument();
+  expect(screen.queryByText('11974 m²')).toBeInTheDocument();
 
   // Data in side bar
-  expect(screen.queryByText('Hankealue 1 (4699 m²)')).toBeInTheDocument();
+  expect(screen.queryByText('Hankealue 1 (11974 m²)')).toBeInTheDocument();
   expect(screen.queryByText('2.1.2023–24.2.2023')).toBeInTheDocument();
 
   // Change to areas tab
@@ -73,7 +73,7 @@ test('Correct information about hanke should be displayed', async () => {
   expect(screen.getByTestId('test-pyorailyIndeksi')).toHaveTextContent('3.5');
   expect(screen.getByTestId('test-joukkoliikenneIndeksi')).toHaveTextContent('2');
   expect(screen.getByTestId('test-ruuhkautumisIndeksi')).toHaveTextContent('1.5');
-  expect(screen.queryByText('4699 m²')).toBeInTheDocument();
+  expect(screen.queryByText('11974 m²')).toBeInTheDocument();
   expect(screen.queryByText('Meluhaitta: Satunnainen haitta')).toBeInTheDocument();
   expect(screen.queryByText('Pölyhaitta: Satunnainen haitta')).toBeInTheDocument();
   expect(screen.queryByText('Tärinähaitta: Lyhytaikainen toistuva haitta')).toBeInTheDocument();
