@@ -5,13 +5,20 @@ import { IconMap, IconLayers } from 'hds-react/icons';
 import { useTranslation } from 'react-i18next';
 import { Outlet, NavLink } from 'react-router-dom';
 import { useLocalizedRoutes } from '../../common/hooks/useLocalizedRoutes';
+import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
 
 const MapAndListContainer: React.FC = () => {
   const { PUBLIC_HANKKEET_LIST, PUBLIC_HANKKEET_MAP } = useLocalizedRoutes();
   const { t } = useTranslation();
 
   return (
-    <Flex direction="column" height="100%" marginBottom="var(--spacing-2-xl)">
+    <Flex
+      direction="column"
+      height="100%"
+      marginBottom="var(--spacing-2-xl)"
+      id={SKIP_TO_ELEMENT_ID}
+      tabIndex={-1}
+    >
       <Flex justify="center" align="center" margin="var(--spacing-m)">
         <div>
           <NavLink to={PUBLIC_HANKKEET_MAP.path}>
