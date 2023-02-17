@@ -20,7 +20,7 @@ import { ReviewAndSend } from './ReviewAndSend';
 import MultipageForm from '../forms/MultipageForm';
 import FormActions from '../forms/components/FormActions';
 import { validationSchema } from './validationSchema';
-import { findOrdererKey } from './utils';
+import { convertFormStateToApplicationData, findOrdererKey } from './utils';
 import { changeFormStep } from '../forms/utils';
 import { saveApplication, sendApplication } from '../application/utils';
 import { HankeContacts, HankeData } from '../types/hanke';
@@ -68,16 +68,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
           },
         ],
       },
-      geometry: {
-        type: 'GeometryCollection',
-        crs: {
-          type: 'name',
-          properties: {
-            name: 'EPSG:3879',
-          },
-        },
-        geometries: [],
-      },
+      areas: [],
       startTime: null,
       endTime: null,
       identificationNumber: 'HAI-123', // TODO: HAI-1160
@@ -164,7 +155,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
   });
 
   async function saveCableApplication() {
-    return applicationSaveMutation.mutateAsync(getValues());
+    const data = convertFormStateToApplicationData(getValues());
+    return applicationSaveMutation.mutateAsync(data);
   }
 
   async function sendCableApplication() {

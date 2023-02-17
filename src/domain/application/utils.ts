@@ -1,3 +1,4 @@
+import { TFunction } from 'i18next';
 import api from '../api/api';
 import { Application } from './types/application';
 
@@ -18,4 +19,10 @@ export async function saveApplication(data: Application) {
 export async function sendApplication(applicationId: number) {
   const response = await api.post<Application>(`/hakemukset/${applicationId}/send-application`, {});
   return response.data;
+}
+
+export function getAreaDefaultName(t: TFunction, index: number) {
+  const label = t('hakemus:labels:workArea');
+  if (index > 0) return `${label} ${index + 1}`;
+  return label;
 }
