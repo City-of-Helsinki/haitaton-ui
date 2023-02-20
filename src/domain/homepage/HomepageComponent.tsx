@@ -70,6 +70,8 @@ const Homepage: React.FC = () => {
 
   const links = isAuthenticated ? loggedInLinks : loggedOutLinks;
 
+  const pageTitle = isAuthenticated ? t('homepage:pageTitle_loggedIn') : t('homepage:pageTitle');
+
   const pageSubtitle = isAuthenticated
     ? t('homepage:pageSubTitle_loggedIn')
     : t('homepage:pageSubTitle');
@@ -86,7 +88,7 @@ const Homepage: React.FC = () => {
             id={SKIP_TO_ELEMENT_ID}
             tabIndex={-1}
           >
-            {t('homepage:pageTitle')}
+            {pageTitle}
           </Text>
           <Text tag="h2" styleAs="h3" spacing="s" weight="bold">
             {pageSubtitle}
