@@ -71,6 +71,7 @@ export type JohtoselvitysData = {
   maintenanceWork: boolean;
   emergencyWork: boolean;
   propertyConnectivity: boolean;
+  rockExcavation: boolean | null;
 };
 
 export interface Application {

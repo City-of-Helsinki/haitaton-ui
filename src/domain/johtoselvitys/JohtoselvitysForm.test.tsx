@@ -36,6 +36,8 @@ test('Cable report application form can be filled and saved and sent to Allu', a
 
   fireEvent.click(screen.getByLabelText(/uuden rakenteen tai johdon rakentamisesta/i));
 
+  fireEvent.click(screen.getByLabelText(/kyllä/i));
+
   fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
     target: { value: 'Testataan johtoselvityslomaketta' },
   });

@@ -7,7 +7,7 @@ import {
   Notification,
   StepState,
 } from 'hds-react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
@@ -122,6 +122,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
       maintenanceWork: false,
       emergencyWork: false,
       propertyConnectivity: false,
+      rockExcavation: null,
     },
   };
 
@@ -209,14 +210,15 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
     },
   ];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const pageFieldsToValidate: any[][] = [
+  // Fields that are validated in each page when moving forward in form
+  const pageFieldsToValidate: FieldPath<JohtoselvitysFormValues>[][] = [
     // Basic information page
     [
       'applicationData.name',
       'applicationData.postalAddress',
       'applicationData.workDescription',
       `applicationData.${findOrdererKey(getValues('applicationData'))}.contacts`,
+      'applicationData.rockExcavation',
     ],
     // Areas page
     ['applicationData.startTime', 'applicationData.endTime'],
@@ -224,10 +226,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
     [
       'applicationData.customerWithContacts',
       'applicationData.contractorWithContacts',
-      getValues().applicationData.propertyDeveloperWithContacts &&
-        'applicationData.propertyDeveloperWithContacts',
-      getValues().applicationData.representativeWithContacts &&
-        'applicationData.representativeWithContacts',
+      'applicationData.propertyDeveloperWithContacts',
+      'applicationData.representativeWithContacts',
     ],
   ];
 
