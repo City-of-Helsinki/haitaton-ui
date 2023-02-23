@@ -7,6 +7,8 @@ import AppRoutes from '../../routes/AppRoutes';
 import Layout from './Layout';
 import { store } from '../../redux/store';
 import theme from './theme';
+import { GlobalNotificationProvider } from '../globalNotification/GlobalNotificationContext';
+import GlobalNotification from '../globalNotification/GlobalNotification';
 import './app.scss';
 import '../../../assets/styles/reset.css';
 
@@ -24,7 +26,10 @@ const App: React.FC = () => (
       <QueryClientProvider client={queryClient}>
         <ChakraProvider theme={theme}>
           <Layout>
-            <AppRoutes />
+            <GlobalNotificationProvider>
+              <AppRoutes />
+              <GlobalNotification />
+            </GlobalNotificationProvider>
           </Layout>
         </ChakraProvider>
       </QueryClientProvider>

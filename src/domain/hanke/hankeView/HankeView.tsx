@@ -15,6 +15,7 @@ import {
 } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { Flex } from '@chakra-ui/react';
+import { useLocation } from 'react-router-dom';
 import Container from '../../../common/components/container/Container';
 import Text from '../../../common/components/text/Text';
 import { HankeAlue, HankeData, HankeIndexData } from '../../types/hanke';
@@ -113,6 +114,14 @@ type Props = {
 
 const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) => {
   const { t } = useTranslation();
+  const location = useLocation();
+
+  // Get initially active tab from location state if there is such defined
+  const initiallyActiveTab: number | undefined =
+    location.state !== null
+      ? (location.state as { initiallyActiveTab: number | undefined }).initiallyActiveTab
+      : undefined;
+
   const [showAddApplicationDialog, setShowAddApplicationDialog] = useState(false);
 
   function addApplication() {
@@ -204,7 +213,7 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
               <HankeDraftStateNotification hanke={hankeData} />
             </div>
 
-            <Tabs>
+            <Tabs initiallyActiveTab={initiallyActiveTab}>
               <TabList className={styles.tabList}>
                 <Tab>{t('hankePortfolio:tabit:perustiedot')}</Tab>
                 <Tab>{t('hankePortfolio:tabit:alueet')}</Tab>
