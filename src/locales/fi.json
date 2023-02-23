@@ -503,7 +503,8 @@
       "areaInfo": "Alueen tiedot",
       "checkInfo": "Tarkista antamasi tiedot ja lähetä hakemus.",
       "preFilledInfo": "Esitäytetyt tiedot",
-      "preFilledInfoHelp": "Valitse nimi hankkeen tiedoista"
+      "preFilledInfoHelp": "Valitse nimi hankkeen tiedoista",
+      "rockExcavation": "Louhitaanko työn yhteydessä, esimerkiksi kallioperää?"
     },
     "notifications": {
       "saveSuccessLabel": "Hakemus tallennettu",
