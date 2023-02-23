@@ -29,6 +29,7 @@ const BooleanRadioButton = <T extends FieldValues>({ name, id, label, value }: P
       onBlur={onBlur}
       value={value.toString()}
       checked={value === inputValue}
+      data-testid={id}
     />
   );
 };
