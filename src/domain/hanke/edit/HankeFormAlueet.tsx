@@ -1,20 +1,20 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Tab, TabList, TabPanel, Tabs } from 'hds-react';
 import { Feature } from 'ol';
 import VectorSource from 'ol/source/Vector';
-import { Coordinate } from 'ol/coordinate';
 import Geometry from 'ol/geom/Geometry';
 import { Box } from '@chakra-ui/react';
 import HankeDrawer from '../../map/components/HankeDrawer/HankeDrawer';
 import { useFormPage } from './hooks/useFormPage';
 import { FORMFIELD, FormProps, HankeAlueFormState } from './types';
-import { doAddressSearch, formatSurfaceArea } from '../../map/utils';
+import { formatSurfaceArea } from '../../map/utils';
 import Haitat from './components/Haitat';
 import Text from '../../../common/components/text/Text';
 import useSelectableTabs from '../../../common/hooks/useSelectableTabs';
 import useHighlightArea from '../../map/hooks/useHighlightArea';
+import useAddressCoordinate from '../../map/hooks/useAddressCoordinate';
 
 function getEmptyArea(feature: Feature): Omit<HankeAlueFormState, 'id' | 'geometriat'> {
   return {
@@ -36,20 +36,12 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
     name: FORMFIELD.HANKEALUEET,
   });
   const [drawSource] = useState<VectorSource>(new VectorSource());
-  const [addressCoordinate, setAddressCoordinate] = useState<Coordinate | undefined>();
+  const addressCoordinate = useAddressCoordinate(formData.tyomaaKatuosoite);
   useFormPage();
 
   const { tabRefs } = useSelectableTabs(hankeAlueet.length, { selectLastTabOnChange: true });
 
   const higlightArea = useHighlightArea();
-
-  useEffect(() => {
-    if (formData.tyomaaKatuosoite) {
-      doAddressSearch(formData.tyomaaKatuosoite).then(({ data }) => {
-        setAddressCoordinate(data.features[0]?.geometry.coordinates);
-      });
-    }
-  }, [formData.tyomaaKatuosoite]);
 
   const handleAddFeature = useCallback(
     (feature: Feature<Geometry>) => {

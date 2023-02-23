@@ -154,6 +154,20 @@ export function formatSurfaceArea(geometry: Geometry | undefined) {
 }
 
 /**
+ * Calculate total surface area for array of geometries
+ */
+export function getTotalSurfaceArea(geometries: Geometry[]): number {
+  try {
+    const totalSurfaceArea = geometries.reduce((totalArea, geom) => {
+      return totalArea + Math.round(getSurfaceArea(geom));
+    }, 0);
+    return totalSurfaceArea;
+  } catch (error) {
+    return 0;
+  }
+}
+
+/**
  * Get OpenLayers Feature from Hanke geometry
  * @param geometry Hanke area geometry
  * @returns OpenLayers Feature

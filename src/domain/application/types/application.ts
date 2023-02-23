@@ -1,4 +1,6 @@
-import { HaitatonGeometry } from '../../../common/types/hanke';
+import { Polygon, Position } from 'geojson';
+import { Coordinate } from 'ol/coordinate';
+import { CRS } from '../../../common/types/hanke';
 
 export type ApplicationType = 'CABLE_REPORT';
 
@@ -49,13 +51,37 @@ export type CustomerWithContacts = {
   contacts: Contact[];
 };
 
+type PolygonWithCRS = Polygon & { crs: CRS };
+
+export class ApplicationGeometry implements PolygonWithCRS {
+  type: 'Polygon' = 'Polygon';
+
+  crs: CRS = {
+    type: 'name',
+    properties: {
+      name: 'urn:ogc:def:crs:EPSG::3879',
+    },
+  };
+
+  coordinates: Position[][] = [];
+
+  constructor(coordinates: Coordinate[][]) {
+    this.coordinates = coordinates;
+  }
+}
+
+export type ApplicationArea = {
+  name: string;
+  geometry: ApplicationGeometry;
+};
+
 export type JohtoselvitysData = {
   hankeTunnus: string;
   applicationType: ApplicationType;
   name: string;
   customerWithContacts: CustomerWithContacts;
   contractorWithContacts: CustomerWithContacts;
-  geometry: HaitatonGeometry;
+  areas: ApplicationArea[];
   startTime: string | null;
   endTime: string | null;
   identificationNumber: string; // asiointitunnus
