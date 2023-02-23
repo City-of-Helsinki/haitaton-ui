@@ -81,10 +81,12 @@
       "roleHelper": "SV:Pääasiallinen roolisi työssä",
       "fromHelsinkiProfile": "SV:Haettu Helsinki-profiilin perusteella",
       "addressInformation": "SV:Osoitetiedot",
-      "kokonaisAla": "SV:Alueiden kokonaispinta-ala"
+      "kokonaisAla": "SV:Alueiden kokonaispinta-ala",
+      "areaName": "SV:Alueen nimi"
     },
     "helperTexts": {
-      "dateInForm": "SV:Anna muodossa P.K.VVVV"
+      "dateInForm": "SV:Anna muodossa P.K.VVVV",
+      "areaName": "SV:Halutessasi voit nimetä alueen"
     },
     "requiredInstruction": "SV:Kaikki tähdellä * merkityt kentät ovat pakollisia.",
     "yhteystiedot": {

@@ -12,6 +12,8 @@ import ResponsiveGrid from '../../common/components/grid/ResponsiveGrid';
 import useUser from '../auth/useUser';
 import { findOrdererKey } from './utils';
 import { JohtoselvitysFormValues } from './types';
+import { getInputErrorText } from '../../common/utils/form';
+import BooleanRadioButton from '../../common/components/radiobutton/BooleanRadioButton';
 
 export interface InitialValueTypes {
   applicationType: ApplicationType;
@@ -50,7 +52,13 @@ export const initialValues: InitialValueTypes = {
 type Option = { value: CustomerType; label: string };
 
 export const BasicHankeInfo: React.FC = () => {
-  const { register, watch, setValue, getValues } = useFormContext<JohtoselvitysFormValues>();
+  const {
+    register,
+    watch,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useFormContext<JohtoselvitysFormValues>();
   const { t } = useTranslation();
   const user = useUser();
 
@@ -210,6 +218,28 @@ export const BasicHankeInfo: React.FC = () => {
           name="applicationData.emergencyWork"
           label={t('hakemus:labels:emergencyWork')}
           checked={emergencyWorkChecked}
+        />
+      </SelectionGroup>
+
+      <SelectionGroup
+        label={t('hakemus:labels:rockExcavation')}
+        direction="horizontal"
+        required
+        className={styles.formRow}
+        errorText={getInputErrorText(t, errors?.applicationData?.rockExcavation)}
+      >
+        <BooleanRadioButton<JohtoselvitysFormValues>
+          name="applicationData.rockExcavation"
+          label={t('common:yes')}
+          id="excavationYes"
+          // eslint-disable-next-line react/jsx-boolean-value
+          value={true}
+        />
+        <BooleanRadioButton<JohtoselvitysFormValues>
+          name="applicationData.rockExcavation"
+          label={t('common:no')}
+          id="excavationNo"
+          value={false}
         />
       </SelectionGroup>
 

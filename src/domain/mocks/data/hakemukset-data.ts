@@ -38,16 +38,7 @@ const hakemukset: Application[] = [
           },
         ],
       },
-      geometry: {
-        type: 'GeometryCollection',
-        crs: {
-          type: 'name',
-          properties: {
-            name: 'EPSG:3879',
-          },
-        },
-        geometries: [],
-      },
+      areas: [],
       startTime: null,
       endTime: null,
       identificationNumber: 'HAI-123',
@@ -96,6 +87,7 @@ const hakemukset: Application[] = [
       maintenanceWork: false,
       emergencyWork: false,
       propertyConnectivity: false,
+      rockExcavation: null,
     },
   },
   {
@@ -135,16 +127,7 @@ const hakemukset: Application[] = [
           },
         ],
       },
-      geometry: {
-        type: 'GeometryCollection',
-        crs: {
-          type: 'name',
-          properties: {
-            name: 'EPSG:3879',
-          },
-        },
-        geometries: [],
-      },
+      areas: [],
       startTime: '2023-07-13T21:59:59.999Z',
       endTime: '2023-09-31T21:59:59.999Z',
       identificationNumber: 'HAI-123',
@@ -193,6 +176,7 @@ const hakemukset: Application[] = [
       maintenanceWork: false,
       emergencyWork: false,
       propertyConnectivity: false,
+      rockExcavation: false,
     },
   },
   {
@@ -232,16 +216,7 @@ const hakemukset: Application[] = [
           },
         ],
       },
-      geometry: {
-        type: 'GeometryCollection',
-        crs: {
-          type: 'name',
-          properties: {
-            name: 'EPSG:3879',
-          },
-        },
-        geometries: [],
-      },
+      areas: [],
       startTime: '2023-07-13T21:59:59.999Z',
       endTime: '2023-09-31T21:59:59.999Z',
       identificationNumber: 'HAI-123',
@@ -290,6 +265,7 @@ const hakemukset: Application[] = [
       maintenanceWork: false,
       emergencyWork: false,
       propertyConnectivity: false,
+      rockExcavation: true,
     },
   },
 ];

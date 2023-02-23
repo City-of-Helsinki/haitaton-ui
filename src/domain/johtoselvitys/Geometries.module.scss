@@ -1,3 +1,5 @@
+@import 'layout.scss';
+
 .mapContainer {
   position: relative;
   width: 100%;
@@ -17,4 +19,16 @@
   padding: var(--spacing-m);
   margin-top: var(--spacing-xs);
   margin-bottom: var(--spacing-s);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--spacing-s);
+
+  .nameInput {
+    width: auto;
+
+    @include respond-above(s) {
+      width: 350px;
+    }
+  }
 }

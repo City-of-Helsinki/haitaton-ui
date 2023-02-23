@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, IconEnvelope, IconSaveDiskette, Notification, StepState } from 'hds-react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, FieldPath } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
@@ -13,7 +13,7 @@ import { ReviewAndSend } from './ReviewAndSend';
 import MultipageForm from '../forms/MultipageForm';
 import FormActions from '../forms/components/FormActions';
 import { validationSchema } from './validationSchema';
-import { findOrdererKey } from './utils';
+import { convertFormStateToApplicationData, findOrdererKey } from './utils';
 import { changeFormStep } from '../forms/utils';
 import { saveApplication, sendApplication } from '../application/utils';
 import { HankeContacts, HankeData } from '../types/hanke';
@@ -63,16 +63,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
           },
         ],
       },
-      geometry: {
-        type: 'GeometryCollection',
-        crs: {
-          type: 'name',
-          properties: {
-            name: 'EPSG:3879',
-          },
-        },
-        geometries: [],
-      },
+      areas: [],
       startTime: null,
       endTime: null,
       identificationNumber: 'HAI-123', // TODO: HAI-1160
@@ -117,6 +108,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
       maintenanceWork: false,
       emergencyWork: false,
       propertyConnectivity: false,
+      rockExcavation: null,
     },
   };
 
@@ -158,7 +150,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
   });
 
   async function saveCableApplication() {
-    return applicationSaveMutation.mutateAsync(getValues());
+    const data = convertFormStateToApplicationData(getValues());
+    return applicationSaveMutation.mutateAsync(data);
   }
 
   async function sendCableApplication() {
@@ -203,14 +196,15 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
     },
   ];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const pageFieldsToValidate: any[][] = [
+  // Fields that are validated in each page when moving forward in form
+  const pageFieldsToValidate: FieldPath<JohtoselvitysFormValues>[][] = [
     // Basic information page
     [
       'applicationData.name',
       'applicationData.postalAddress',
       'applicationData.workDescription',
       `applicationData.${findOrdererKey(getValues('applicationData'))}.contacts`,
+      'applicationData.rockExcavation',
     ],
     // Areas page
     ['applicationData.startTime', 'applicationData.endTime'],
@@ -218,10 +212,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
     [
       'applicationData.customerWithContacts',
       'applicationData.contractorWithContacts',
-      getValues().applicationData.propertyDeveloperWithContacts &&
-        'applicationData.propertyDeveloperWithContacts',
-      getValues().applicationData.representativeWithContacts &&
-        'applicationData.representativeWithContacts',
+      'applicationData.propertyDeveloperWithContacts',
+      'applicationData.representativeWithContacts',
     ],
   ];
 

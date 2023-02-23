@@ -81,10 +81,12 @@
       "roleHelper": "Pääasiallinen roolisi työssä",
       "fromHelsinkiProfile": "Haettu Helsinki-profiilin perusteella",
       "addressInformation": "Osoitetiedot",
-      "kokonaisAla": "Alueiden kokonaispinta-ala"
+      "kokonaisAla": "Alueiden kokonaispinta-ala",
+      "areaName": "Alueen nimi"
     },
     "helperTexts": {
-      "dateInForm": "Anna muodossa P.K.VVVV"
+      "dateInForm": "Anna muodossa P.K.VVVV",
+      "areaName": "Halutessasi voit nimetä alueen"
     },
     "requiredInstruction": "Kaikki tähdellä * merkityt kentät ovat pakollisia.",
     "yhteystiedot": {
@@ -503,7 +505,8 @@
       "preFilledInfo": "Esitäytetyt tiedot",
       "preFilledInfoHelp": "Valitse nimi hankkeen tiedoista",
       "cancelTitle": "Oletko varma että haluat perua hakemuksen",
-      "cancelDescription": "Hakemuksen peruminen on pysyvä toiminto ja hakemuksen tietoja ei voi palauttaa perumisen jälkeen."
+      "cancelDescription": "Hakemuksen peruminen on pysyvä toiminto ja hakemuksen tietoja ei voi palauttaa perumisen jälkeen.",
+      "rockExcavation": "Louhitaanko työn yhteydessä, esimerkiksi kallioperää?"
     },
     "notifications": {
       "saveSuccessLabel": "Hakemus tallennettu",

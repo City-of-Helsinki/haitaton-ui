@@ -44,6 +44,7 @@ export const validationSchema = yup.object().shape({
     name: yup.string().required(),
     postalAddress: requiredAddressSchema,
     workDescription: yup.string().required(),
+    rockExcavation: yup.boolean().nullable().required(),
     contractorWithContacts: customerWithContactsSchema.required(),
     customerWithContacts: customerWithContactsSchema.required(),
     propertyDeveloperWithContacts: customerWithContactsSchema.nullable(),

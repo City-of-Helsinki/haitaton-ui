@@ -1,3 +1,4 @@
+import { TFunction } from 'i18next';
 import api from '../api/api';
 import { AlluStatus, AlluStatusStrings, Application } from './types/application';
 
@@ -36,4 +37,10 @@ export async function cancelApplication(applicationId: number | null) {
 
   const response = await api.delete<Application>(`/hakemukset/${applicationId}`);
   return response.data;
+}
+
+export function getAreaDefaultName(t: TFunction, index: number) {
+  const label = t('hakemus:labels:workArea');
+  if (index > 0) return `${label} ${index + 1}`;
+  return label;
 }
