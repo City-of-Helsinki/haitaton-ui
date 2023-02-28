@@ -51,6 +51,30 @@ export type CustomerWithContacts = {
   contacts: Contact[];
 };
 
+export enum AlluStatus {
+  PRE_RESERVED = 'PRE_RESERVED',
+  NOTE = 'NOTE',
+  PENDING_CLIENT = 'PENDING_CLIENT',
+  PENDING = 'PENDING',
+  WAITING_INFORMATION = 'WAITING_INFORMATION',
+  INFORMATION_RECEIVED = 'INFORMATION_RECEIVED',
+  HANDLING = 'HANDLING',
+  RETURNED_TO_PREPARATION = 'RETURNED_TO_PREPARATION',
+  WAITING_CONTRACT_APPROVAL = 'WAITING_CONTRACT_APPROVAL',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  DECISIONMAKING = 'DECISIONMAKING',
+  DECISION = 'DECISION',
+  OPERATIONAL_CONDITION = 'OPERATIONAL_CONDITION',
+  TERMINATED = 'TERMINATED',
+  FINISHED = 'FINISHED',
+  CANCELLED = 'CANCELLED',
+  ARCHIVED = 'ARCHIVED',
+  REPLACED = 'REPLACED',
+}
+
+export type AlluStatusStrings = keyof typeof AlluStatus;
+
 type PolygonWithCRS = Polygon & { crs: CRS };
 
 export class ApplicationGeometry implements PolygonWithCRS {
@@ -103,6 +127,7 @@ export type JohtoselvitysData = {
 export interface Application {
   id: number | null;
   alluid?: number | null;
+  alluStatus: AlluStatusStrings | null;
   applicationType: ApplicationType;
   applicationData: JohtoselvitysData;
 }

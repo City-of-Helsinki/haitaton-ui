@@ -6,6 +6,7 @@ import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import i18n from '../locales/i18nForTests';
 import { store } from '../common/redux/store';
+import { GlobalNotificationProvider } from '../common/components/globalNotification/GlobalNotificationContext';
 
 const queryClient = new QueryClient();
 
@@ -17,7 +18,9 @@ const AllTheProviders = ({ children }: Props) => (
   <BrowserRouter>
     <ReduxProvider store={store}>
       <QueryClientProvider client={queryClient}>
-        <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
+        <I18nextProvider i18n={i18n}>
+          <GlobalNotificationProvider>{children}</GlobalNotificationProvider>
+        </I18nextProvider>
       </QueryClientProvider>
     </ReduxProvider>
   </BrowserRouter>

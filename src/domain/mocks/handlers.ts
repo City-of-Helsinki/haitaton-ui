@@ -3,6 +3,7 @@ import { JohtoselvitysFormValues } from '../johtoselvitys/types';
 import { HankeDataDraft } from '../types/hanke';
 import * as hankkeetDB from './data/hankkeet';
 import * as hakemuksetDB from './data/hakemukset';
+import ApiError from './apiError';
 
 const apiUrl = '/api';
 
@@ -110,5 +111,22 @@ export const handlers = [
     }
 
     return res(ctx.status(200), ctx.json(hakemus));
+  }),
+
+  rest.delete(`${apiUrl}/hakemukset/:id`, async (req, res, ctx) => {
+    const { id } = req.params;
+    try {
+      await hakemuksetDB.remove(Number(id));
+      return res(ctx.status(200), ctx.json(null));
+    } catch (error) {
+      const { status, message } = error as ApiError;
+      return res(
+        ctx.status(status),
+        ctx.json({
+          errorMessage: message,
+          errorCode: 'HAI1001',
+        })
+      );
+    }
   }),
 ];

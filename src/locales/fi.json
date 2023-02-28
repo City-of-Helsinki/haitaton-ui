@@ -504,6 +504,8 @@
       "checkInfo": "Tarkista antamasi tiedot ja lähetä hakemus.",
       "preFilledInfo": "Esitäytetyt tiedot",
       "preFilledInfoHelp": "Valitse nimi hankkeen tiedoista",
+      "cancelTitle": "Oletko varma että haluat perua hakemuksen",
+      "cancelDescription": "Hakemuksen peruminen on pysyvä toiminto ja hakemuksen tietoja ei voi palauttaa perumisen jälkeen.",
       "rockExcavation": "Louhitaanko työn yhteydessä, esimerkiksi kallioperää?"
     },
     "notifications": {
@@ -514,11 +516,17 @@
       "sendSuccessLabel": "Hakemus lähetetty",
       "sendErrorLabel": "Hakemuksen lähetys epäonnistui",
       "sendSuccessText": "Hakemuksen lähetys onnistui",
-      "sendErrorText": "Hakemusta ei voitu lähettää. Tarkista hakemuksen oikea sisältö ja että olet kirjautunut."
+      "sendErrorText": "Hakemusta ei voitu lähettää. Tarkista hakemuksen oikea sisältö ja että olet kirjautunut.",
+      "cancelSuccessLabel": "Hakemus peruttiin",
+      "cancelSuccessText": "Hakemus peruttiin onnistuneesti"
     },
     "buttons": {
       "continueToApplication": "Jatka hakemukseen",
-      "sendApplication": "Lähetä hakemus"
+      "sendApplication": "Lähetä hakemus",
+      "cancelApplication": "Peru hakemus"
+    },
+    "errors": {
+      "cancelConflict": "Hakemusta ei voida perua, koska se on edennyt käsittelyyn"
     },
     "headers": {
       "pickApplication": "Valitse luotava hakemus"

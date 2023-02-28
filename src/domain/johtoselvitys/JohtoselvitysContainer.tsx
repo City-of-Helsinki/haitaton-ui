@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  IconCross,
-  IconEnvelope,
-  IconSaveDiskette,
-  Notification,
-  StepState,
-} from 'hds-react';
-import { FieldPath, FormProvider, useForm } from 'react-hook-form';
+import { Button, IconEnvelope, IconSaveDiskette, Notification, StepState } from 'hds-react';
+import { FormProvider, useForm, FieldPath } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
@@ -24,6 +17,7 @@ import { convertFormStateToApplicationData, findOrdererKey } from './utils';
 import { changeFormStep } from '../forms/utils';
 import { saveApplication, sendApplication } from '../application/utils';
 import { HankeContacts, HankeData } from '../types/hanke';
+import { ApplicationCancel } from '../application/components/ApplicationCancel';
 
 type Props = {
   hanke: HankeData;
@@ -34,6 +28,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
 
   const initialValues: JohtoselvitysFormValues = {
     id: null,
+    alluStatus: null,
     applicationType: 'CABLE_REPORT',
     applicationData: {
       hankeTunnus: hanke.hankeTunnus,
@@ -137,9 +132,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
       setShowSaveNotification(false);
     },
     onSuccess(data) {
-      if (!getValues().id) {
-        setValue('id', data.id);
-      }
+      setValue('id', data.id);
+      setValue('alluStatus', data.alluStatus);
     },
     onSettled() {
       setShowSaveNotification(true);
@@ -293,9 +287,11 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
               onPrevious={handlePrevious}
               onNext={handleNextPage}
             >
-              <Button variant="secondary" iconLeft={<IconCross aria-hidden />}>
-                {t('hankeForm:cancelButton')}
-              </Button>
+              <ApplicationCancel
+                applicationId={getValues('id')}
+                alluStatus={getValues('alluStatus')}
+                hankeTunnus={hanke.hankeTunnus}
+              />
 
               <Button
                 variant="secondary"
