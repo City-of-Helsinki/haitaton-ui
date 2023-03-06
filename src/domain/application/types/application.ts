@@ -100,7 +100,6 @@ export type ApplicationArea = {
 };
 
 export type JohtoselvitysData = {
-  hankeTunnus: string;
   applicationType: ApplicationType;
   name: string;
   customerWithContacts: CustomerWithContacts;
@@ -130,6 +129,7 @@ export interface Application {
   alluStatus: AlluStatusStrings | null;
   applicationType: ApplicationType;
   applicationData: JohtoselvitysData;
+  hankeTunnus: string;
 }
 
 export function isCustomerWithContacts(value: unknown): value is CustomerWithContacts {

@@ -30,8 +30,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
     id: null,
     alluStatus: null,
     applicationType: 'CABLE_REPORT',
+    hankeTunnus: hanke.hankeTunnus,
     applicationData: {
-      hankeTunnus: hanke.hankeTunnus,
       applicationType: 'CABLE_REPORT',
       name: '',
       customerWithContacts: {

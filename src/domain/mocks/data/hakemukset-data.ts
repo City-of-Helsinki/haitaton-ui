@@ -5,8 +5,8 @@ const hakemukset: Application[] = [
     id: 1,
     alluStatus: null,
     applicationType: 'CABLE_REPORT',
+    hankeTunnus: 'HAI22-2',
     applicationData: {
-      hankeTunnus: 'HAI22-2',
       applicationType: 'CABLE_REPORT',
       name: 'Mannerheimintien kaivuut',
       customerWithContacts: {
@@ -94,8 +94,8 @@ const hakemukset: Application[] = [
     id: 2,
     alluStatus: AlluStatus.PENDING,
     applicationType: 'CABLE_REPORT',
+    hankeTunnus: 'HAI22-2',
     applicationData: {
-      hankeTunnus: 'HAI22-2',
       applicationType: 'CABLE_REPORT',
       name: 'Mannerheimintien kuopat',
       customerWithContacts: {
@@ -183,8 +183,8 @@ const hakemukset: Application[] = [
     id: 3,
     alluStatus: AlluStatus.HANDLING,
     applicationType: 'CABLE_REPORT',
+    hankeTunnus: 'HAI22-2',
     applicationData: {
-      hankeTunnus: 'HAI22-2',
       applicationType: 'CABLE_REPORT',
       name: 'Mannerheimintien kuopat',
       customerWithContacts: {
