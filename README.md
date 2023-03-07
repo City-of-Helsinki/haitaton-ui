@@ -43,6 +43,16 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+### `yarn locales:export`
+
+Exports frontend localizations into `locale_export.xlsx` for easier translation. Data is loaded
+from `src/locales/`.
+
+### `yarn locales:import`
+
+Imports frontend localizations from `locale_export.xlsx`. Translations are merged on corresponding translation files
+in `src/locales/`.
+
 ## Environment variables
 
 Scripts generate first environment variables to `public/env-config.js` with
