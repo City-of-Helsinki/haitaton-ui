@@ -23,7 +23,9 @@
     "lint:css": "stylelint 'src/**/*.scss'",
     "e2e": "start-server-and-test start :3001 cypress-run-chrome",
     "cypress-run-chrome": "cypress run --browser chrome",
-    "cypress-run-chrome-headless": "cypress run --headless --browser chrome"
+    "cypress-run-chrome-headless": "cypress run --headless --browser chrome",
+    "locales:export": "ts-node -P ./scripts/tsconfig.json ./scripts/translate-json-to-excel.ts",
+    "locales:import": "ts-node -P ./scripts/tsconfig.json ./scripts/translate-excel-to-json.ts"
   },
   "dependencies": {
     "@axe-core/react": "^4.1.1",
@@ -112,7 +114,8 @@
     "start-server-and-test": "^1.12.0",
     "stylelint": "^13.7.2",
     "stylelint-config-standard": "^20.0.0",
-    "ts-node": "^8.8.2"
+    "ts-node": "^8.8.2",
+    "xlsx": "^0.18.5"
   },
   "resolutions": {
     "immer": "8.0.2",
