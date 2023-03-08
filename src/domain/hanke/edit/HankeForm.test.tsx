@@ -72,7 +72,6 @@ describe('HankeForm', () => {
         formData={formData}
         onIsDirtyChange={handleIsDirtyChange}
         onFormClose={handleFormClose}
-        onOpenHankeDelete={() => ({})}
       >
         child
       </HankeForm>
@@ -102,7 +101,6 @@ describe('HankeForm', () => {
         }}
         onIsDirtyChange={() => ({})}
         onFormClose={() => ({})}
-        onOpenHankeDelete={() => ({})}
       >
         child
       </HankeForm>

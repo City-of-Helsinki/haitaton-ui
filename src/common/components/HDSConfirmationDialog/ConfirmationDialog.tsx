@@ -1,6 +1,6 @@
 import React from 'react';
-import { Dialog, Button } from 'hds-react';
-import { IconAlertCircle, IconErrorFill } from 'hds-react/icons';
+import { Dialog, Button, DialogVariant } from 'hds-react';
+import { IconAlertCircleFill, IconErrorFill } from 'hds-react/icons';
 import { useTranslation } from 'react-i18next';
 
 import styles from './ConfirmationDialog.module.scss';
@@ -12,8 +12,12 @@ type Props = {
   close: () => void;
   mainAction: () => void;
   mainBtnLabel: string;
-  variant: string;
+  mainBtnIcon?: React.ReactElement;
+  variant: DialogVariant;
   errorMsg?: string;
+  showCloseButton?: boolean;
+  showSecondaryButton?: boolean;
+  isLoading?: boolean;
 };
 
 const ConfirmationDialog: React.FC<Props> = ({
@@ -23,8 +27,12 @@ const ConfirmationDialog: React.FC<Props> = ({
   close,
   mainAction,
   mainBtnLabel,
+  mainBtnIcon,
   variant,
   errorMsg,
+  showCloseButton = false,
+  showSecondaryButton = true,
+  isLoading = false,
 }) => {
   const { t } = useTranslation();
 
@@ -35,16 +43,20 @@ const ConfirmationDialog: React.FC<Props> = ({
       aria-labelledby={title}
       aria-describedby={description}
       targetElement={document.getElementById('root') || undefined}
-      theme={
-        variant === 'danger'
-          ? { '--accent-line-color': '#c4123e' }
-          : { '--accent-line-color': '#0072C6' }
-      }
+      variant={variant}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      close={showCloseButton ? (close as any) : undefined}
+      closeButtonLabelText={t('common:ariaLabels:closeButtonLabelText')}
     >
       <Dialog.Header
         id="dialog-title"
         title={title}
-        iconLeft={<IconAlertCircle aria-hidden="true" />}
+        iconLeft={
+          <IconAlertCircleFill
+            aria-hidden="true"
+            color={variant === 'primary' ? 'var(--color-bus)' : 'var(--color-brick)'}
+          />
+        }
       />
       <Dialog.Content>
         <p data-testid="dialog-description-test">{description}</p>
@@ -56,27 +68,24 @@ const ConfirmationDialog: React.FC<Props> = ({
         )}
       </Dialog.Content>
       <Dialog.ActionButtons>
-        {variant === 'primary' ? (
-          <Button onClick={() => mainAction()} theme="coat" data-testid="dialog-button-test">
-            {mainBtnLabel}
-          </Button>
-        ) : (
-          ''
-        )}
         <Button
-          variant="secondary"
-          onClick={() => close()}
-          theme={variant === 'danger' ? 'black' : 'coat'}
-          data-testid="dialog-cancel-test"
+          onClick={mainAction}
+          data-testid="dialog-button-test"
+          variant={variant}
+          iconLeft={mainBtnIcon}
+          isLoading={isLoading}
         >
-          {t('common:confirmationDialog:cancelButton')}
+          {mainBtnLabel}
         </Button>
-        {variant === 'danger' ? (
-          <Button variant="danger" onClick={() => mainAction()} data-testid="dialog-button-test">
-            {mainBtnLabel}
+        {showSecondaryButton && (
+          <Button
+            variant="secondary"
+            onClick={close}
+            theme={variant === 'danger' ? 'black' : 'default'}
+            data-testid="dialog-cancel-test"
+          >
+            {t('common:confirmationDialog:cancelButton')}
           </Button>
-        ) : (
-          ''
         )}
       </Dialog.ActionButtons>
     </Dialog>

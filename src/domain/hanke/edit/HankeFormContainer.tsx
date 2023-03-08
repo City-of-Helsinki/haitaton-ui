@@ -71,7 +71,6 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
         formData={formData}
         onIsDirtyChange={handleIsDirtyChange}
         onFormClose={handleFormClose}
-        onOpenHankeDelete={openHankeDelete}
       >
         <HankeDelete
           isOpen={deleteDialogOpen}

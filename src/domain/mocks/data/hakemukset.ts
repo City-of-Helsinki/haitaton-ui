@@ -14,6 +14,11 @@ export async function readAll() {
   return hakemukset;
 }
 
+export async function readAllForHanke(hankeTunnus: string) {
+  const applications = await readAll();
+  return applications.filter((application) => application.hankeTunnus === hankeTunnus);
+}
+
 export async function create(data: Application) {
   const newHakemus: Application = {
     ...data,

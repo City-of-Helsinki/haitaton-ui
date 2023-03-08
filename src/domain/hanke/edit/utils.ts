@@ -6,6 +6,8 @@ import { HankeDataDraft, HankeContact, HankeMuuTaho, HankeAlue } from '../../typ
 import { FORMFIELD, HankeAlueFormState, HankeDataFormState } from './types';
 import { formatFeaturesToHankeGeoJSON, getFeatureFromHankeGeometry } from '../../map/utils';
 import { getSurfaceArea } from '../../../common/components/map/utils';
+import { Application } from '../../application/types/application';
+import { canApplicationBeCancelled } from '../../application/utils';
 
 export function getAreasMinStartDate(areas: HankeAlue[] | undefined) {
   const areaStartDates = areas?.map((alue) => {
@@ -104,4 +106,11 @@ export function calculateTotalSurfaceArea(areas?: HankeAlueFormState[]) {
   } catch (error) {
     return null;
   }
+}
+
+/**
+ * Check if it is possible to cancel hanke
+ */
+export function canHankeBeCancelled(applications: Application[]): boolean {
+  return applications.every((application) => canApplicationBeCancelled(application.alluStatus));
 }

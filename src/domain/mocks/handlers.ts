@@ -58,10 +58,11 @@ export const handlers = [
       const hanke = await hankkeetDB.remove(hankeTunnus as string);
       return res(ctx.status(200), ctx.json(hanke));
     } catch (error) {
+      const { status, message } = error as ApiError;
       return res(
-        ctx.status(404),
+        ctx.status(status),
         ctx.json({
-          errorMessage: 'Hanke not found',
+          errorMessage: message,
           errorCode: 'HAI1001',
         })
       );
@@ -71,6 +72,11 @@ export const handlers = [
   rest.get(`${apiUrl}/public-hankkeet`, async (req, res, ctx) => {
     const hankkeet = await hankkeetDB.readAll();
     return res(ctx.status(200), ctx.json(hankkeet));
+  }),
+
+  rest.get(`${apiUrl}/hakemukset`, async (req, res, ctx) => {
+    const hakemukset = await hakemuksetDB.readAll();
+    return res(ctx.status(200), ctx.json(hakemukset));
   }),
 
   rest.post(`${apiUrl}/hakemukset`, async (req, res, ctx) => {

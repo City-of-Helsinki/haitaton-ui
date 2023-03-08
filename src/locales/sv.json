@@ -16,11 +16,6 @@
         "bodyText": "Det finns osparade uppgifter på formuläret. Vill du fortsätta skriva in uppgifter, eller lämna? Om du lämnar försvinner de uppgifter du skrivit in.",
         "exitButton": "Lämna"
       },
-      "deleteDialog": {
-        "titleText": "Är du säker på att du vill ta bort projektet?",
-        "bodyText": "Borttagning av projekt är permanent och projektets uppgifter kan inte återställas efter borttagning.",
-        "exitButton": "Ta bort"
-      },
       "cancelButton": "Ångra"
     },
     "components": {

@@ -268,6 +268,95 @@ const hakemukset: Application[] = [
       rockExcavation: true,
     },
   },
+  {
+    id: 4,
+    alluStatus: AlluStatus.PENDING,
+    applicationType: 'CABLE_REPORT',
+    hankeTunnus: 'HAI22-3',
+    applicationData: {
+      applicationType: 'CABLE_REPORT',
+      name: 'Mannerheimintien kairaukset',
+      customerWithContacts: {
+        customer: {
+          type: 'COMPANY',
+          name: 'Yritys Oy',
+          country: 'FI',
+          postalAddress: {
+            streetAddress: {
+              streetName: '',
+            },
+            postalCode: '',
+            city: '',
+          },
+          email: 'yritys@test.com',
+          phone: '0000000000',
+          registryKey: '',
+          ovt: null,
+          invoicingOperator: null,
+          sapCustomerNumber: null,
+        },
+        contacts: [
+          {
+            email: 'matti@test.com',
+            name: 'Matti Meikäläinen',
+            orderer: true,
+            phone: '0000000000',
+            postalAddress: { city: '', postalCode: '', streetAddress: { streetName: '' } },
+          },
+        ],
+      },
+      areas: [],
+      startTime: '2023-06-13T21:59:59.999Z',
+      endTime: '2023-10-15T21:59:59.999Z',
+      identificationNumber: 'HAI-123',
+      clientApplicationKind: 'HAITATON',
+      workDescription: 'Kairataan Mannerheimintiellä',
+      contractorWithContacts: {
+        customer: {
+          type: 'COMPANY',
+          name: 'Yritys 2 Oy',
+          country: 'FI',
+          postalAddress: {
+            streetAddress: {
+              streetName: '',
+            },
+            postalCode: '',
+            city: '',
+          },
+          email: 'yritys2@test.com',
+          phone: '0000000000',
+          registryKey: '',
+          ovt: null,
+          invoicingOperator: null,
+          sapCustomerNumber: null,
+        },
+        contacts: [
+          {
+            email: 'matti@test.com',
+            name: 'Matti Meikäläinen',
+            orderer: true,
+            phone: '0000000000',
+            postalAddress: { city: '', postalCode: '', streetAddress: { streetName: '' } },
+          },
+        ],
+      },
+      postalAddress: {
+        city: 'Helsinki',
+        postalCode: '00100',
+        streetAddress: { streetName: 'Mannerheimintie 50' },
+      },
+      representativeWithContacts: null,
+      invoicingCustomer: null,
+      customerReference: null,
+      area: null,
+      propertyDeveloperWithContacts: null,
+      constructionWork: false,
+      maintenanceWork: false,
+      emergencyWork: false,
+      propertyConnectivity: false,
+      rockExcavation: true,
+    },
+  },
 ];
 
 export default hakemukset;
