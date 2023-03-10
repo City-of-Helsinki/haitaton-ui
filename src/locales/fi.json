@@ -510,9 +510,9 @@
     },
     "notifications": {
       "saveSuccessLabel": "Hakemus tallennettu",
-      "saveErrorLabel": "Hakemuksen tallennus epäonnistui",
+      "saveErrorLabel": "Tallentaminen epäonnistui",
       "saveSuccessText": "Hakemuksen tallentaminen onnistui",
-      "saveErrorText": "Hakemusta ei voitu tallentaa. Tarkista hakemuksen oikea sisältö ja että olet kirjautunut.",
+      "saveErrorText": "<0>Hakemuksen tallentaminen epäonnistui. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>",
       "sendSuccessLabel": "Hakemus lähetetty",
       "sendErrorLabel": "Hakemuksen lähetys epäonnistui",
       "sendSuccessText": "Hakemuksen lähetys onnistui",

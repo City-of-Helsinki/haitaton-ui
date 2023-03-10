@@ -2,14 +2,12 @@ import React, { useState } from 'react';
 import { useMutation } from 'react-query';
 import { Button, IconCross } from 'hds-react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { AlluStatusStrings } from '../types/application';
 import { canApplicationBeCancelled, cancelApplication } from '../utils';
 import ConfirmationDialog from '../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
-import useLinkPath from '../../../common/hooks/useLinkPath';
-import { ROUTES } from '../../../common/types/route';
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
+import useNavigateToApplicationList from '../../hanke/hooks/useNavigateToApplicationList';
 
 type Props = {
   applicationId: number | null;
@@ -19,10 +17,7 @@ type Props = {
 
 export const ApplicationCancel: React.FC<Props> = ({ applicationId, alluStatus, hankeTunnus }) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-
-  const getHankeViewPath = useLinkPath(ROUTES.HANKE);
-  const viewHankePath = getHankeViewPath({ hankeTunnus });
+  const navigateToApplicationList = useNavigateToApplicationList(hankeTunnus);
 
   const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -50,8 +45,7 @@ export const ApplicationCancel: React.FC<Props> = ({ applicationId, alluStatus, 
         autoClose: true,
         autoCloseDuration: 7000,
       });
-      // Navigate to hanke view with application list tab initially open
-      navigate(viewHankePath, { state: { initiallyActiveTab: 4 } });
+      navigateToApplicationList();
     },
   });
 

@@ -18,6 +18,9 @@ import { changeFormStep } from '../forms/utils';
 import { saveApplication, sendApplication } from '../application/utils';
 import { HankeContacts, HankeData } from '../types/hanke';
 import { ApplicationCancel } from '../application/components/ApplicationCancel';
+import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
+import useNavigateToApplicationList from '../hanke/hooks/useNavigateToApplicationList';
+import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 
 type Props = {
   hanke: HankeData;
@@ -25,6 +28,8 @@ type Props = {
 
 const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
   const { t } = useTranslation();
+  const navigateToApplicationList = useNavigateToApplicationList(hanke.hankeTunnus);
+  const { setNotification } = useGlobalNotification();
 
   const initialValues: JohtoselvitysFormValues = {
     id: null,
@@ -149,21 +154,45 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
     },
   });
 
-  async function saveCableApplication() {
+  function saveCableApplication() {
     const data = convertFormStateToApplicationData(getValues());
-    return applicationSaveMutation.mutateAsync(data);
+    applicationSaveMutation.mutate(data);
   }
 
   async function sendCableApplication() {
-    let { id } = getValues();
+    const data = getValues();
+    let { id } = data;
     // If for some reason application has not been saved before
     // sending, meaning id is null, save it before sending
     if (!id) {
-      const responseData = await saveCableApplication();
-      setShowSaveNotification(false);
-      id = responseData.id as number;
+      try {
+        const responseData = await applicationSaveMutation.mutateAsync(
+          convertFormStateToApplicationData(data)
+        );
+        setShowSaveNotification(false);
+        id = responseData.id as number;
+      } catch (error) {
+        return;
+      }
     }
     applicationSendMutation.mutate(id);
+  }
+
+  function saveAndQuit() {
+    saveCableApplication();
+
+    navigateToApplicationList();
+
+    setNotification(true, {
+      position: 'top-right',
+      dismissible: true,
+      autoClose: true,
+      autoCloseDuration: 5000,
+      label: t('hakemus:notifications:saveSuccessLabel'),
+      message: t('hakemus:notifications:saveSuccessText'),
+      type: 'success',
+      closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+    });
   }
 
   const hankeContacts: HankeContacts = [
@@ -223,25 +252,10 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
     <FormProvider {...formContext}>
       {/* Notification for saving application */}
       {showSaveNotification && (
-        <Notification
-          position="top-right"
-          dismissible
-          displayAutoCloseProgress
-          autoClose
-          autoCloseDuration={5000}
-          label={
-            applicationSaveMutation.isSuccess
-              ? t('hakemus:notifications:saveSuccessLabel')
-              : t('hakemus:notifications:saveErrorLabel')
-          }
-          type={applicationSaveMutation.isSuccess ? 'success' : 'error'}
-          closeButtonLabelText={t('common:components:notification:closeButtonLabelText')}
+        <ApplicationSaveNotification
+          saveSuccess={applicationSaveMutation.isSuccess}
           onClose={() => setShowSaveNotification(false)}
-        >
-          {applicationSaveMutation.isSuccess
-            ? t('hakemus:notifications:saveSuccessText')
-            : t('hakemus:notifications:saveErrorText')}
-        </Notification>
+        />
       )}
 
       {/* Notification for sending application */}
@@ -279,6 +293,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
             changeFormStep(handleNext, pageFieldsToValidate[activeStepIndex], trigger);
           }
 
+          const firstStep = activeStepIndex === 0;
           const lastStep = activeStepIndex === formSteps.length - 1;
           return (
             <FormActions
@@ -293,16 +308,18 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
                 hankeTunnus={hanke.hankeTunnus}
               />
 
-              <Button
-                variant="secondary"
-                iconLeft={<IconSaveDiskette aria-hidden="true" />}
-                data-testid="save-form-btn"
-                onClick={saveCableApplication}
-                isLoading={applicationSaveMutation.isLoading}
-                loadingText={t('common:buttons:savingText')}
-              >
-                {t('hankeForm:saveDraftButton')}
-              </Button>
+              {!firstStep && (
+                <Button
+                  variant="secondary"
+                  iconLeft={<IconSaveDiskette aria-hidden="true" />}
+                  data-testid="save-form-btn"
+                  onClick={saveAndQuit}
+                  isLoading={applicationSaveMutation.isLoading}
+                  loadingText={t('common:buttons:savingText')}
+                >
+                  {t('hankeForm:saveDraftButton')}
+                </Button>
+              )}
 
               {lastStep && (
                 <Button

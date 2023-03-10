@@ -40,6 +40,7 @@ export default function GlobalNotification() {
       type={type}
       closeButtonLabelText={closeButtonLabelText || defaultCloseButtonLabelText}
       onClose={closeNotification}
+      style={{ zIndex: 100 }}
     >
       {message}
     </Notification>
