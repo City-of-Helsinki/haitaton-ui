@@ -1,25 +1,16 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
+import { rest } from 'msw';
 import { render, cleanup, fireEvent, screen } from '../../testUtils/render';
 import Johtoselvitys from '../../pages/Johtoselvitys';
 import { waitForLoadingToFinish } from '../../testUtils/helperFunctions';
+import { server } from '../mocks/test-server';
 
 afterEach(cleanup);
 
 jest.setTimeout(30000);
 
-test('Cable report application form can be filled and saved and sent to Allu', async () => {
-  const user = userEvent.setup();
-
-  render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
-
-  await waitForLoadingToFinish();
-
-  expect(
-    screen.queryByText('Aidasmäentien vesihuollon rakentaminen (HAI22-2)')
-  ).toBeInTheDocument();
-
-  // Fill basic information page
+function fillBasicInformation() {
   fireEvent.change(screen.getByLabelText(/työn nimi/i), {
     target: { value: 'Johtoselvitys' },
   });
@@ -51,6 +42,21 @@ test('Cable report application form can be filled and saved and sent to Allu', a
   fireEvent.change(screen.getByLabelText(/puhelinnumero/i), {
     target: { value: '0000000000' },
   });
+}
+
+test('Cable report application form can be filled and saved and sent to Allu', async () => {
+  const user = userEvent.setup();
+
+  render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
+
+  await waitForLoadingToFinish();
+
+  expect(
+    screen.queryByText('Aidasmäentien vesihuollon rakentaminen (HAI22-2)')
+  ).toBeInTheDocument();
+
+  // Fill basic information page
+  fillBasicInformation();
 
   // Move to areas page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
@@ -131,4 +137,24 @@ test('Cable report application form can be filled and saved and sent to Allu', a
 
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
   expect(screen.queryByText(/Hakemus lähetetty/i)).toBeInTheDocument();
+});
+
+test('Should show error message when saving fails', async () => {
+  const user = userEvent.setup();
+
+  server.use(
+    rest.post('/api/hakemukset', async (req, res, ctx) => {
+      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    })
+  );
+
+  render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
+
+  // Fill basic information page, so that form can be saved for the first time
+  fillBasicInformation();
+
+  // Move to next page to save form
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+  expect(screen.queryAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
 });

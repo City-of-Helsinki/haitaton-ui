@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext, useState } from 'react';
+import React, { createContext, ReactNode, useCallback, useContext, useState } from 'react';
 import { NotificationProps } from 'hds-react';
 
 type GlobalNotificationProviderProps = {
@@ -23,10 +23,10 @@ export function GlobalNotificationProvider({ children }: GlobalNotificationProvi
     undefined
   );
 
-  function setNotification(open: boolean, options?: NotificationOptions) {
+  const setNotification = useCallback((open: boolean, options?: NotificationOptions) => {
     setIsOpen(open);
     setNotificationOptions(options);
-  }
+  }, []);
 
   const value = {
     isOpen,
