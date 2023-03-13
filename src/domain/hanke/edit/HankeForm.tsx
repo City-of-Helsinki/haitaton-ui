@@ -2,14 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
-import {
-  Button,
-  IconCross,
-  IconPlusCircle,
-  IconSaveDiskette,
-  IconTrash,
-  StepState,
-} from 'hds-react';
+import { Button, IconCross, IconPlusCircle, IconSaveDiskette, StepState } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { FormNotification, HankeDataFormState } from './types';
@@ -57,17 +50,10 @@ type Props = {
   formData: HankeDataFormState;
   onIsDirtyChange: (isDirty: boolean) => void;
   onFormClose: (hankeTunnus?: string) => void;
-  onOpenHankeDelete: () => void;
   children: React.ReactNode;
 };
 
-const HankeForm: React.FC<Props> = ({
-  formData,
-  onIsDirtyChange,
-  onFormClose,
-  onOpenHankeDelete,
-  children,
-}) => {
+const HankeForm: React.FC<Props> = ({ formData, onIsDirtyChange, onFormClose, children }) => {
   const { t } = useTranslation();
   const { HANKEPORTFOLIO } = useLocalizedRoutes();
   const navigate = useNavigate();
@@ -106,6 +92,8 @@ const HankeForm: React.FC<Props> = ({
       setShowNotification('error');
     },
     onSuccess(data, { navigateTo }) {
+      setValue('hankeTunnus', data.hankeTunnus);
+      setValue('tormaystarkasteluTulos', data.tormaystarkasteluTulos);
       if (data.alueet) {
         setShowNotification('success');
       }
@@ -114,15 +102,6 @@ const HankeForm: React.FC<Props> = ({
       }
     },
   });
-
-  useEffect(() => {
-    if (hankeMutation.data?.hankeTunnus) {
-      if (!getValues().hankeTunnus) {
-        // Update hankeTunnus
-        setValue('hankeTunnus', hankeMutation.data.hankeTunnus);
-      }
-    }
-  }, [hankeMutation.data, getValues, setValue]);
 
   function saveDraft() {
     hankeMutation.mutate({ data: getValues() });
@@ -212,15 +191,6 @@ const HankeForm: React.FC<Props> = ({
                     onClick={() => onFormClose(formValues.hankeTunnus)}
                   >
                     {t('hankeForm:cancelButton')}
-                  </Button>
-                )}
-                {!isNewHanke && (
-                  <Button
-                    variant="danger"
-                    iconLeft={<IconTrash aria-hidden />}
-                    onClick={onOpenHankeDelete}
-                  >
-                    {t('hankeList:buttons:delete')}
                   </Button>
                 )}
                 {!lastStep && (

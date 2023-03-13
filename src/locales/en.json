@@ -16,11 +16,6 @@
         "bodyText": "The form contains unsaved data. Do you want to continue entering data or exit, in which case the data you entered will be deleted?",
         "exitButton": "Exit"
       },
-      "deleteDialog": {
-        "titleText": "Are you sure you want to delete the project?",
-        "bodyText": "Deleting the project is a permanent action and the project data cannot be restored after deletion.",
-        "exitButton": "Delete"
-      },
       "cancelButton": "Cancel"
     },
     "components": {

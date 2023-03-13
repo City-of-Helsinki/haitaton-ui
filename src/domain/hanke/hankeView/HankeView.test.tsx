@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { cleanup, render, screen } from '../../../testUtils/render';
 import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import HankeViewContainer from './HankeViewContainer';
+import GlobalNotification from '../../../common/components/globalNotification/GlobalNotification';
 
 afterEach(cleanup);
 
@@ -16,7 +17,7 @@ test('Draft state notification is rendered when hanke is in draft state', async 
   expect(draftStateElements[0]).toBeInTheDocument();
 });
 
-test('Add application and End hanke buttons are disabled when hanke is in draft state', async () => {
+test('Add application and End hanke buttons are disabled when hanke is in draft state', () => {
   render(<HankeViewContainer hankeTunnus="HAI22-1" />);
 
   expect(screen.getByRole('button', { name: /lisää hakemus/i })).toBeDisabled();
@@ -89,4 +90,32 @@ test('Correct information about hanke should be displayed', async () => {
   expect(screen.queryByText('y-1234567')).toBeInTheDocument();
   expect(screen.queryByText('Lahdenkatu 3')).toBeInTheDocument();
   expect(screen.queryByText('42100 Lahti')).toBeInTheDocument();
+});
+
+test('It is possible to delete hanke if it has no active applications', async () => {
+  const user = userEvent.setup();
+
+  render(
+    <>
+      <GlobalNotification />
+      <HankeViewContainer hankeTunnus="HAI22-3" />
+    </>
+  );
+
+  const cancelHankeButton = screen.getByRole('button', { name: /peru hanke/i });
+
+  expect(cancelHankeButton).toBeInTheDocument();
+
+  await user.click(cancelHankeButton);
+
+  await user.click(screen.getByRole('button', { name: /vahvista/i }));
+
+  expect(window.location.pathname).toBe('/fi/hankesalkku');
+  expect(screen.queryByText('Hanke poistettiin onnistuneesti')).toBeInTheDocument();
+});
+
+test('It is not possible to delete hanke if it has active applications', () => {
+  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
+
+  expect(screen.queryByRole('button', { name: /peru hanke/i })).not.toBeInTheDocument();
 });

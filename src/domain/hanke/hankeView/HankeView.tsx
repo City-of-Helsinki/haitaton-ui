@@ -26,7 +26,7 @@ import {
   SectionItemContent,
   SectionItemTitle,
 } from '../../forms/components/FormSummarySection';
-import { calculateTotalSurfaceArea } from '../edit/utils';
+import { calculateTotalSurfaceArea, canHankeBeCancelled } from '../edit/utils';
 import ContactsSummary from '../edit/components/ContactsSummary';
 import HankeIndexes from '../hankeIndexes/HankeIndexes';
 import { FORMFIELD } from '../edit/types';
@@ -40,6 +40,7 @@ import CompressedAreaIndex from '../hankeIndexes/CompressedAreaIndex';
 import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotification';
 import { useIsHankeValid } from '../edit/hooks/useIsHankeValid';
 import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
+import { Application } from '../../application/types/application';
 
 type AreaProps = {
   area: HankeAlue;
@@ -109,10 +110,11 @@ const HankeAreaInfo: React.FC<AreaProps> = ({ area, hankeIndexData, index }) => 
 type Props = {
   hankeData?: HankeData;
   onEditHanke: () => void;
-  onDeleteHanke: () => void;
+  onCancelHanke: () => void;
+  applications: Application[];
 };
 
-const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) => {
+const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onCancelHanke, applications }) => {
   const { t } = useTranslation();
   const location = useLocation();
 
@@ -133,6 +135,7 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
   }
 
   const isHankeValid = useIsHankeValid(hankeData);
+  const isCancelPossible = canHankeBeCancelled(applications);
 
   if (!hankeData) {
     return (
@@ -195,13 +198,15 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onDeleteHanke }) =
             >
               {t('hankeList:buttons:endHanke')}
             </Button>
-            <Button
-              onClick={onDeleteHanke}
-              variant="danger"
-              iconLeft={<IconTrash aria-hidden="true" />}
-            >
-              {t('hankeList:buttons:delete')}
-            </Button>
+            {isCancelPossible && (
+              <Button
+                onClick={onCancelHanke}
+                variant="danger"
+                iconLeft={<IconTrash aria-hidden="true" />}
+              >
+                {t('hankeForm:cancelButton')}
+              </Button>
+            )}
           </div>
         </Container>
       </header>

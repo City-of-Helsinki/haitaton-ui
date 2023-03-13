@@ -16,12 +16,8 @@
         "bodyText": "Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä, vai poistua, jolloin syöttämäsi tiedot poistuvat.",
         "exitButton": "Poistu"
       },
-      "deleteDialog": {
-        "titleText": "Oletko varma että haluat poistaa hankkeen?",
-        "bodyText": "Hankkeen poistaminen on pysyvä toiminto ja hankkeen tietoja ei voi palauttaa poistamisen jälkeen.",
-        "exitButton": "Poista"
-      },
-      "cancelButton": "Peruuta"
+      "cancelButton": "Peruuta",
+      "confirmButton": "Vahvista"
     },
     "components": {
       "multiselect": {
@@ -378,6 +374,10 @@
     "saveButton": "Tallenna",
     "saveAndAddButton": "Tallenna ja lisää hakemuksia",
     "cancelButton": "Peru hanke",
+    "cancelSuccessHeader": "Hanke poistettu",
+    "cancelSuccessText": "Hanke poistettiin onnistuneesti",
+    "activeApplicationsHeader": "Hankkeella on aktiivisia hakemuksia",
+    "activeApplicationsDescription": "Hankkeella on meneillään olevia hankkeita tai hakemuksia, joten sitä ei voi perua tai merkitä valmiiksi. Tarkastele meneillään olevia hakemuksia Hakemukset-välilehdellä.",
     "nextButton": "Seuraava",
     "previousButton": "Edellinen",
     "insertFieldError": "Syötä kenttä",
@@ -387,6 +387,10 @@
     "savingFailText": "Luonnosta ei saatu tallennettua, koita uudelleen",
     "closeAriaLabel": "Poistu kaavakkeelta tallentamatta",
     "confirmIndexCalculationButton": "Jatka indeksilaskentaan",
+    "cancelDialog": {
+      "titleText": "Peru hanke?",
+      "bodyText": "Haluatko varmasti perua hankkeen? Hanke poistetaan kokonaan järjestelmästä."
+    },
     "labels": {
       "hankeTunnus": "Hankkeen tunnus",
       "nimi": "Hankkeen nimi",
