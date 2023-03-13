@@ -10,18 +10,7 @@ afterEach(cleanup);
 
 jest.setTimeout(30000);
 
-test('Cable report application form can be filled and saved and sent to Allu', async () => {
-  const user = userEvent.setup();
-
-  render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
-
-  await waitForLoadingToFinish();
-
-  expect(
-    screen.queryByText('Aidasmäentien vesihuollon rakentaminen (HAI22-2)')
-  ).toBeInTheDocument();
-
-  // Fill basic information page
+function fillBasicInformation() {
   fireEvent.change(screen.getByLabelText(/työn nimi/i), {
     target: { value: 'Johtoselvitys' },
   });
@@ -53,6 +42,21 @@ test('Cable report application form can be filled and saved and sent to Allu', a
   fireEvent.change(screen.getByLabelText(/puhelinnumero/i), {
     target: { value: '0000000000' },
   });
+}
+
+test('Cable report application form can be filled and saved and sent to Allu', async () => {
+  const user = userEvent.setup();
+
+  render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
+
+  await waitForLoadingToFinish();
+
+  expect(
+    screen.queryByText('Aidasmäentien vesihuollon rakentaminen (HAI22-2)')
+  ).toBeInTheDocument();
+
+  // Fill basic information page
+  fillBasicInformation();
 
   // Move to areas page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
@@ -147,32 +151,7 @@ test('Should show error message when saving fails', async () => {
   render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
 
   // Fill basic information page, so that form can be saved for the first time
-  fireEvent.change(screen.getByLabelText(/työn nimi/i), {
-    target: { value: 'Mannerheimintien johdot' },
-  });
-  fireEvent.change(screen.getAllByLabelText(/katuosoite/i)[0], {
-    target: { value: 'Mannerheimintie 50' },
-  });
-  fireEvent.change(screen.getAllByLabelText(/postinumero/i)[0], {
-    target: { value: '00100' },
-  });
-  fireEvent.change(screen.getAllByLabelText(/postitoimipaikka/i)[0], {
-    target: { value: 'Helsinki' },
-  });
-  fireEvent.click(screen.getByLabelText(/kiinteistöliittymien rakentamisesta/i));
-  fireEvent.click(screen.getByTestId('excavationYes'));
-  fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
-    target: { value: 'Kaivetaan Mannerheimintiellä' },
-  });
-  fireEvent.change(screen.getByLabelText(/Nimi/), {
-    target: { value: 'Matti Meikäläinen' },
-  });
-  fireEvent.change(screen.getByLabelText(/sähköposti/i), {
-    target: { value: 'matti.meikalainen@test.com' },
-  });
-  fireEvent.change(screen.getByLabelText(/puhelinnumero/i), {
-    target: { value: '0000000000' },
-  });
+  fillBasicInformation();
 
   // Move to next page to save form
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
