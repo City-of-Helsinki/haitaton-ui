@@ -10,7 +10,14 @@ import {
   useSortBy,
 } from 'react-table';
 import { useAccordion, Card, Select, TextInput, Button, Pagination } from 'hds-react';
-import { IconAngleDown, IconAngleUp, IconEye, IconPen, IconSearch } from 'hds-react/icons';
+import {
+  IconAngleDown,
+  IconAngleUp,
+  IconEye,
+  IconInfoCircle,
+  IconPen,
+  IconSearch,
+} from 'hds-react/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import Text from '../../../common/components/text/Text';
@@ -440,7 +447,11 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
             {t('hankePortfolio:pageHeader')}
           </Text>
 
-          <div className={styles.filters}>
+          <div
+            className={styles.filters}
+            aria-label={t('hankePortfolio:filters')}
+            aria-describedby={t('hankePortfolio:filtersInfoText')}
+          >
             <TextInput
               className={styles.hankeSearch}
               id="searchHanke"
@@ -516,6 +527,12 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
           >
             {t('hankePortfolio:clearFiltersButton')}
           </button>
+          <div className={styles.filtersInfoText} aria-hidden>
+            <div className={styles.icon}>
+              <IconInfoCircle size="xs" color="var(--color-black-60)" />
+            </div>
+            <p>{t('hankePortfolio:filtersInfoText')}</p>
+          </div>
         </Container>
       </div>
 
