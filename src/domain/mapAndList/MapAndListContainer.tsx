@@ -19,6 +19,12 @@ const MapAndListContainer: React.FC = () => {
       id={SKIP_TO_ELEMENT_ID}
       tabIndex={-1}
     >
+      <Flex
+        margin="var(--spacing-xl) var(--spacing-xl) var(--spacing-l) var(--spacing-xl)"
+        justify="center"
+      >
+        <h1 className="heading-xl">{t('publicHankkeet:pageHeader')}</h1>
+      </Flex>
       <Flex justify="center" align="center" margin="var(--spacing-m)">
         <div>
           <NavLink to={PUBLIC_HANKKEET_MAP.path}>

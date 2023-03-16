@@ -674,6 +674,7 @@
     }
   },
   "publicHankkeet": {
+    "pageHeader": "Hankkeet yleisillä alueilla",
     "buttons": {
       "map": "Kartta",
       "list": "Lista"
