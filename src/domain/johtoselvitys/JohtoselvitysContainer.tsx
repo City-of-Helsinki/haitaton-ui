@@ -4,6 +4,7 @@ import { FormProvider, useForm, FieldPath } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
+import { merge } from 'lodash';
 
 import { JohtoselvitysFormValues } from './types';
 import { BasicHankeInfo } from './BasicInfo';
@@ -24,9 +25,10 @@ import { useGlobalNotification } from '../../common/components/globalNotificatio
 
 type Props = {
   hanke: HankeData;
+  application?: JohtoselvitysFormValues;
 };
 
-const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
+const JohtoselvitysContainer: React.FC<Props> = ({ hanke, application }) => {
   const { t } = useTranslation();
   const navigateToApplicationList = useNavigateToApplicationList(hanke.hankeTunnus);
   const { setNotification } = useGlobalNotification();
@@ -123,7 +125,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
     criteriaMode: 'all',
     shouldFocusError: false,
     shouldUnregister: false,
-    defaultValues: initialValues,
+    defaultValues: merge(initialValues, application),
     resolver: yupResolver(validationSchema),
   });
 
@@ -234,9 +236,10 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
       'applicationData.workDescription',
       `applicationData.${findOrdererKey(getValues('applicationData'))}.contacts`,
       'applicationData.rockExcavation',
+      'applicationData.constructionWork',
     ],
     // Areas page
-    ['applicationData.startTime', 'applicationData.endTime'],
+    ['applicationData.startTime', 'applicationData.endTime', 'applicationData.areas'],
     // Contacts page
     [
       'applicationData.customerWithContacts',

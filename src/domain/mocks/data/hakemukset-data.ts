@@ -38,7 +38,29 @@ const hakemukset: Application[] = [
           },
         ],
       },
-      areas: [],
+      areas: [
+        {
+          name: '',
+          geometry: {
+            type: 'Polygon',
+            crs: {
+              type: 'name',
+              properties: {
+                name: 'urn:ogc:def:crs:EPSG::3879',
+              },
+            },
+            coordinates: [
+              [
+                [25498583.87, 6679281.28],
+                [25498584.13, 6679314.07],
+                [25498573.17, 6679313.38],
+                [25498571.91, 6679281.46],
+                [25498583.87, 6679281.28],
+              ],
+            ],
+          },
+        },
+      ],
       startTime: null,
       endTime: null,
       identificationNumber: 'HAI-123',

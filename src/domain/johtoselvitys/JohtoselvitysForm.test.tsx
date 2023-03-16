@@ -3,8 +3,12 @@ import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { render, cleanup, fireEvent, screen } from '../../testUtils/render';
 import Johtoselvitys from '../../pages/Johtoselvitys';
+import JohtoselvitysContainer from './JohtoselvitysContainer';
 import { waitForLoadingToFinish } from '../../testUtils/helperFunctions';
 import { server } from '../mocks/test-server';
+import { HankeData } from '../types/hanke';
+import hankkeet from '../mocks/data/hankkeet-data';
+import applications from '../mocks/data/hakemukset-data';
 
 afterEach(cleanup);
 
@@ -47,9 +51,10 @@ function fillBasicInformation() {
 test('Cable report application form can be filled and saved and sent to Allu', async () => {
   const user = userEvent.setup();
 
-  render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
+  const hankeData = hankkeet[1] as HankeData;
+  const application = applications[0];
 
-  await waitForLoadingToFinish();
+  render(<JohtoselvitysContainer hanke={hankeData} application={application} />);
 
   expect(
     screen.queryByText('Aidasmäentien vesihuollon rakentaminen (HAI22-2)')
@@ -149,6 +154,8 @@ test('Should show error message when saving fails', async () => {
   );
 
   render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
+
+  await waitForLoadingToFinish();
 
   // Fill basic information page, so that form can be saved for the first time
   fillBasicInformation();
