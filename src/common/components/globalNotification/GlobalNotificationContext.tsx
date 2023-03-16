@@ -6,7 +6,7 @@ type GlobalNotificationProviderProps = {
 };
 
 type NotificationOptions = NotificationProps & {
-  message: string;
+  message: string | React.ReactElement;
 };
 
 type NotificationContextProps = {
