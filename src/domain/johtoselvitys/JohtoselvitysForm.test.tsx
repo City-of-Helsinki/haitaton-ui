@@ -8,11 +8,119 @@ import { waitForLoadingToFinish } from '../../testUtils/helperFunctions';
 import { server } from '../mocks/test-server';
 import { HankeData } from '../types/hanke';
 import hankkeet from '../mocks/data/hankkeet-data';
-import applications from '../mocks/data/hakemukset-data';
+import { JohtoselvitysFormValues } from './types';
 
 afterEach(cleanup);
 
-jest.setTimeout(30000);
+jest.setTimeout(40000);
+
+const application: JohtoselvitysFormValues = {
+  id: null,
+  alluStatus: null,
+  applicationType: 'CABLE_REPORT',
+  hankeTunnus: 'HAI22-2',
+  applicationData: {
+    applicationType: 'CABLE_REPORT',
+    name: '',
+    customerWithContacts: {
+      customer: {
+        type: null,
+        name: '',
+        country: '',
+        postalAddress: {
+          streetAddress: {
+            streetName: '',
+          },
+          postalCode: '',
+          city: '',
+        },
+        email: '',
+        phone: '',
+        registryKey: '',
+        ovt: null,
+        invoicingOperator: null,
+        sapCustomerNumber: null,
+      },
+      contacts: [
+        {
+          email: '',
+          name: '',
+          orderer: true,
+          phone: '',
+          postalAddress: { city: '', postalCode: '', streetAddress: { streetName: '' } },
+        },
+      ],
+    },
+    areas: [
+      {
+        name: '',
+        geometry: {
+          type: 'Polygon',
+          crs: {
+            type: 'name',
+            properties: {
+              name: 'urn:ogc:def:crs:EPSG::3879',
+            },
+          },
+          coordinates: [
+            [
+              [25498583.87, 6679281.28],
+              [25498584.13, 6679314.07],
+              [25498573.17, 6679313.38],
+              [25498571.91, 6679281.46],
+              [25498583.87, 6679281.28],
+            ],
+          ],
+        },
+      },
+    ],
+    startTime: null,
+    endTime: null,
+    identificationNumber: 'HAI-123',
+    clientApplicationKind: 'HAITATON',
+    workDescription: '',
+    contractorWithContacts: {
+      customer: {
+        type: null,
+        name: '',
+        country: 'FI',
+        postalAddress: {
+          streetAddress: {
+            streetName: '',
+          },
+          postalCode: '',
+          city: '',
+        },
+        email: '',
+        phone: '',
+        registryKey: '',
+        ovt: null,
+        invoicingOperator: null,
+        sapCustomerNumber: null,
+      },
+      contacts: [
+        {
+          email: '',
+          name: '',
+          orderer: false,
+          phone: '',
+          postalAddress: { city: '', postalCode: '', streetAddress: { streetName: '' } },
+        },
+      ],
+    },
+    postalAddress: null,
+    representativeWithContacts: null,
+    invoicingCustomer: null,
+    customerReference: null,
+    area: null,
+    propertyDeveloperWithContacts: null,
+    constructionWork: false,
+    maintenanceWork: false,
+    emergencyWork: false,
+    propertyConnectivity: false,
+    rockExcavation: null,
+  },
+};
 
 function fillBasicInformation() {
   fireEvent.change(screen.getByLabelText(/työn nimi/i), {
@@ -48,50 +156,19 @@ function fillBasicInformation() {
   });
 }
 
-test('Cable report application form can be filled and saved and sent to Allu', async () => {
-  const user = userEvent.setup();
-
-  const hankeData = hankkeet[1] as HankeData;
-  const application = applications[0];
-
-  render(<JohtoselvitysContainer hanke={hankeData} application={application} />);
-
-  expect(
-    screen.queryByText('Aidasmäentien vesihuollon rakentaminen (HAI22-2)')
-  ).toBeInTheDocument();
-
-  // Fill basic information page
-  fillBasicInformation();
-
-  // Move to areas page
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
-
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
-  fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
-
-  expect(screen.queryByText('Vaihe 2/4: Alueet')).toBeInTheDocument();
-
-  // Fill areas page
+function fillAreasInformation() {
   fireEvent.change(screen.getByLabelText(/työn arvioitu alkupäivä/i), {
     target: { value: '1.4.2024' },
   });
   fireEvent.change(screen.getByLabelText(/työn arvioitu loppupäivä/i), {
     target: { value: '1.6.2024' },
   });
+}
 
-  // Move to contacts page
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
-
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
-  fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
-
-  expect(screen.queryByText('Vaihe 3/4: Yhteystiedot')).toBeInTheDocument();
-
-  // Fill contacts page
-
+function fillContactsInformation() {
   // Fill customer info
-  await user.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
-  await user.click(screen.getAllByText(/yritys/i)[0]);
+  fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+  fireEvent.click(screen.getAllByText(/yritys/i)[0]);
   fireEvent.change(screen.getAllByLabelText('Nimi *')[0], {
     target: { value: 'Yritys Oy' },
   });
@@ -106,8 +183,8 @@ test('Cable report application form can be filled and saved and sent to Allu', a
   });
 
   // Fill contractor info
-  await user.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
-  await user.click(screen.getAllByText(/yritys/i)[1]);
+  fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+  fireEvent.click(screen.getAllByText(/yritys/i)[1]);
   fireEvent.change(screen.getAllByLabelText('Nimi *')[2], {
     target: { value: 'Yritys 2 Oy' },
   });
@@ -131,6 +208,43 @@ test('Cable report application form can be filled and saved and sent to Allu', a
   fireEvent.change(screen.getAllByLabelText(/puhelinnumero/i)[3], {
     target: { value: '0000000000' },
   });
+}
+
+test('Cable report application form can be filled and saved and sent to Allu', async () => {
+  const user = userEvent.setup();
+
+  const hankeData = hankkeet[1] as HankeData;
+
+  render(<JohtoselvitysContainer hanke={hankeData} application={application} />);
+
+  expect(
+    screen.queryByText('Aidasmäentien vesihuollon rakentaminen (HAI22-2)')
+  ).toBeInTheDocument();
+
+  // Fill basic information page
+  fillBasicInformation();
+
+  // Move to areas page
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
+
+  expect(screen.queryByText('Vaihe 2/4: Alueet')).toBeInTheDocument();
+
+  // Fill areas page
+  fillAreasInformation();
+
+  // Move to contacts page
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
+
+  expect(screen.queryByText('Vaihe 3/4: Yhteystiedot')).toBeInTheDocument();
+
+  // Fill contacts page
+  fillContactsInformation();
 
   // Move to summary page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
@@ -141,7 +255,7 @@ test('Cable report application form can be filled and saved and sent to Allu', a
   expect(screen.queryByText('Vaihe 4/4: Yhteenveto')).toBeInTheDocument();
 
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
-  expect(screen.queryByText(/Hakemus lähetetty/i)).toBeInTheDocument();
+  expect(screen.queryByText(/hakemus lähetetty/i)).toBeInTheDocument();
 });
 
 test('Should show error message when saving fails', async () => {
@@ -164,4 +278,28 @@ test('Should show error message when saving fails', async () => {
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
   expect(screen.queryAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
+});
+
+test('Should show error message when sending fails', async () => {
+  const user = userEvent.setup();
+
+  server.use(
+    rest.post('/api/hakemukset/:id/send-application', async (req, res, ctx) => {
+      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    })
+  );
+
+  const hankeData = hankkeet[1] as HankeData;
+
+  render(<JohtoselvitysContainer hanke={hankeData} application={application} />);
+
+  fillBasicInformation();
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  fillAreasInformation();
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  fillContactsInformation();
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
+
+  expect(screen.queryByText(/lähettäminen epäonnistui/i)).toBeInTheDocument();
 });
