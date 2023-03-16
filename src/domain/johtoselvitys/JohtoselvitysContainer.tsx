@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, IconEnvelope, IconSaveDiskette, Notification, StepState } from 'hds-react';
+import { Button, IconEnvelope, IconSaveDiskette, StepState } from 'hds-react';
 import { FormProvider, useForm, FieldPath } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -21,6 +21,7 @@ import { ApplicationCancel } from '../application/components/ApplicationCancel';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
 import useNavigateToApplicationList from '../hanke/hooks/useNavigateToApplicationList';
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
+import useApplicationSendNotification from '../application/hooks/useApplicationSendNotification';
 
 type Props = {
   hanke: HankeData;
@@ -30,6 +31,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
   const { t } = useTranslation();
   const navigateToApplicationList = useNavigateToApplicationList(hanke.hankeTunnus);
   const { setNotification } = useGlobalNotification();
+  const { showSendSuccess, showSendError } = useApplicationSendNotification();
 
   const initialValues: JohtoselvitysFormValues = {
     id: null,
@@ -130,7 +132,6 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
   const { getValues, setValue, handleSubmit, trigger } = formContext;
 
   const [showSaveNotification, setShowSaveNotification] = useState(false);
-  const [showSendNotification, setShowSendNotification] = useState(false);
 
   const applicationSaveMutation = useMutation(saveApplication, {
     onMutate() {
@@ -146,11 +147,14 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
   });
 
   const applicationSendMutation = useMutation(sendApplication, {
-    onMutate() {
-      setShowSendNotification(false);
+    onError() {
+      showSendError();
+    },
+    onSuccess() {
+      showSendSuccess();
     },
     onSettled() {
-      setShowSendNotification(true);
+      navigateToApplicationList();
     },
   });
 
@@ -256,29 +260,6 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke }) => {
           saveSuccess={applicationSaveMutation.isSuccess}
           onClose={() => setShowSaveNotification(false)}
         />
-      )}
-
-      {/* Notification for sending application */}
-      {showSendNotification && (
-        <Notification
-          position="top-right"
-          dismissible
-          displayAutoCloseProgress
-          autoClose
-          autoCloseDuration={8000}
-          label={
-            applicationSendMutation.isSuccess
-              ? t('hakemus:notifications:sendSuccessLabel')
-              : t('hakemus:notifications:sendErrorLabel')
-          }
-          type={applicationSendMutation.isSuccess ? 'success' : 'error'}
-          closeButtonLabelText={t('common:components:notification:closeButtonLabelText')}
-          onClose={() => setShowSendNotification(false)}
-        >
-          {applicationSendMutation.isSuccess
-            ? t('hakemus:notifications:sendSuccessText')
-            : t('hakemus:notifications:sendErrorText')}
-        </Notification>
       )}
 
       <MultipageForm

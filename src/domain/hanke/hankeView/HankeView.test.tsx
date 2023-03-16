@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 import { cleanup, render, screen } from '../../../testUtils/render';
 import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import HankeViewContainer from './HankeViewContainer';
-import GlobalNotification from '../../../common/components/globalNotification/GlobalNotification';
 
 afterEach(cleanup);
 
@@ -95,12 +94,7 @@ test('Correct information about hanke should be displayed', async () => {
 test('It is possible to delete hanke if it has no active applications', async () => {
   const user = userEvent.setup();
 
-  render(
-    <>
-      <GlobalNotification />
-      <HankeViewContainer hankeTunnus="HAI22-3" />
-    </>
-  );
+  render(<HankeViewContainer hankeTunnus="HAI22-3" />);
 
   const cancelHankeButton = screen.getByRole('button', { name: /peru hanke/i });
 
