@@ -34,6 +34,10 @@
       },
       "notification": {
         "closeButtonLabelText": "Sulje ilmoitus"
+      },
+      "errorLoadingInfo": {
+        "textTop": "Virhe tietojen lataamisessa.",
+        "textBottom": "Yritä hetken päästä uudelleen."
       }
     },
     "error": "Tapahtui virhe. Yritä uudestaan.",
@@ -522,7 +526,24 @@
       "sendSuccessText": "Hakemus on lähetetty käsiteltäväksi.",
       "sendErrorText": "<0>Hakemus on tallennettu luonnoksena, koska hakemuksen lähettäminen käsittelyyn epäonnistui. Yritä lähettämistä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi.</1></0>",
       "cancelSuccessLabel": "Hakemus peruttiin",
-      "cancelSuccessText": "Hakemus peruttiin onnistuneesti"
+      "cancelSuccessText": "Hakemus peruttiin onnistuneesti",
+      "noApplications": "Hankkeella ei ole lisättyjä hakemuksia"
+    },
+    "status": {
+      "PENDING_CLIENT": "Näkyy viranomaiselle",
+      "PENDING": "Odottaa käsittelyä",
+      "WAITING_INFORMATION": "Täydennyspyyntö",
+      "INFORMATION_RECEIVED": "Täydennetty käsittelyyn",
+      "HANDLING": "Käsittelyssä",
+      "RETURNED_TO_PREPARATION": "Käsittelyssä",
+      "DECISIONMAKING": "Odottaa päätöstä",
+      "DECISION": "Päätös",
+      "OPERATIONAL_CONDITION": "Toiminnallinen kunto hyväksytty",
+      "FINISHED": "Työ valmis hyväksytty",
+      "CANCELLED": "Hakemus peruttu",
+      "ARCHIVED": "Työ arkistoitu",
+      "REPLACED": "Korvattu",
+      "null": "Luonnos"
     },
     "buttons": {
       "continueToApplication": "Jatka hakemukseen",
@@ -537,6 +558,9 @@
     },
     "applicationTypes": {
       "CABLE_REPORT": "Johtoselvitys"
+    },
+    "applicationTypeDraft": {
+      "CABLE_REPORT": "JS-luonnos"
     },
     "applicationTypeInstruction": "Valitse hakemustyyppi. Osaan hakemuksista voit myös kopioida aiemman hakemuksen pohjaksi. Kaivuilmoituksen kautta pääset tekemään myös johtoselvityksen, mikäli sinulla ei sellaista vielä ole."
   },

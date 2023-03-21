@@ -129,6 +129,7 @@ export interface Application {
   alluStatus: AlluStatusStrings | null;
   applicationType: ApplicationType;
   applicationData: JohtoselvitysData;
+  applicationIdentifier?: string | null;
   hankeTunnus: string;
 }
 

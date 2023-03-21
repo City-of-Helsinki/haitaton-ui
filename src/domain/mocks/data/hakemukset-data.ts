@@ -6,6 +6,7 @@ const hakemukset: Application[] = [
     alluStatus: null,
     applicationType: 'CABLE_REPORT',
     hankeTunnus: 'HAI22-2',
+    applicationIdentifier: null,
     applicationData: {
       applicationType: 'CABLE_REPORT',
       name: 'Mannerheimintien kaivuut',
@@ -95,6 +96,7 @@ const hakemukset: Application[] = [
     alluStatus: AlluStatus.PENDING,
     applicationType: 'CABLE_REPORT',
     hankeTunnus: 'HAI22-2',
+    applicationIdentifier: 'JS2300001',
     applicationData: {
       applicationType: 'CABLE_REPORT',
       name: 'Mannerheimintien kuopat',
@@ -184,9 +186,10 @@ const hakemukset: Application[] = [
     alluStatus: AlluStatus.HANDLING,
     applicationType: 'CABLE_REPORT',
     hankeTunnus: 'HAI22-2',
+    applicationIdentifier: 'JS2300002',
     applicationData: {
       applicationType: 'CABLE_REPORT',
-      name: 'Mannerheimintien kuopat',
+      name: 'Mannerheimintien parantaminen',
       customerWithContacts: {
         customer: {
           type: 'COMPANY',
@@ -273,6 +276,7 @@ const hakemukset: Application[] = [
     alluStatus: AlluStatus.PENDING,
     applicationType: 'CABLE_REPORT',
     hankeTunnus: 'HAI22-3',
+    applicationIdentifier: 'JS2300003',
     applicationData: {
       applicationType: 'CABLE_REPORT',
       name: 'Mannerheimintien kairaukset',

@@ -9,26 +9,34 @@ import { store } from '../common/redux/store';
 import { GlobalNotificationProvider } from '../common/components/globalNotification/GlobalNotificationContext';
 import GlobalNotification from '../common/components/globalNotification/GlobalNotification';
 
-const queryClient = new QueryClient();
-
 type Props = {
   children: React.ReactChildren;
 };
 
-const AllTheProviders = ({ children }: Props) => (
-  <BrowserRouter>
-    <ReduxProvider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <I18nextProvider i18n={i18n}>
-          <GlobalNotificationProvider>
-            {children}
-            <GlobalNotification />
-          </GlobalNotificationProvider>
-        </I18nextProvider>
-      </QueryClientProvider>
-    </ReduxProvider>
-  </BrowserRouter>
-);
+const AllTheProviders = ({ children }: Props) => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retryDelay: 0,
+      },
+    },
+  });
+
+  return (
+    <BrowserRouter>
+      <ReduxProvider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <I18nextProvider i18n={i18n}>
+            <GlobalNotificationProvider>
+              {children}
+              <GlobalNotification />
+            </GlobalNotificationProvider>
+          </I18nextProvider>
+        </QueryClientProvider>
+      </ReduxProvider>
+    </BrowserRouter>
+  );
+};
 
 const customRender = (ui: React.ReactElement, options: RenderOptions = {}, route = '/') => {
   window.history.pushState({}, 'Test page', route);

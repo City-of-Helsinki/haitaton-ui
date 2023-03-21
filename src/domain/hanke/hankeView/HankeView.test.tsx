@@ -1,10 +1,10 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import { cleanup, render, screen } from '../../../testUtils/render';
+import { rest } from 'msw';
+import { render, screen } from '../../../testUtils/render';
 import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import HankeViewContainer from './HankeViewContainer';
-
-afterEach(cleanup);
+import { server } from '../../mocks/test-server';
 
 test('Draft state notification is rendered when hanke is in draft state', async () => {
   render(<HankeViewContainer hankeTunnus="HAI22-1" />);
@@ -16,8 +16,10 @@ test('Draft state notification is rendered when hanke is in draft state', async 
   expect(draftStateElements[0]).toBeInTheDocument();
 });
 
-test('Add application and End hanke buttons are disabled when hanke is in draft state', () => {
+test('Add application and End hanke buttons are disabled when hanke is in draft state', async () => {
   render(<HankeViewContainer hankeTunnus="HAI22-1" />);
+
+  await waitForLoadingToFinish();
 
   expect(screen.getByRole('button', { name: /lisää hakemus/i })).toBeDisabled();
   expect(screen.getByRole('button', { name: /päätä hanke/i })).toBeDisabled();
@@ -96,6 +98,8 @@ test('It is possible to delete hanke if it has no active applications', async ()
 
   render(<HankeViewContainer hankeTunnus="HAI22-3" />);
 
+  await waitForLoadingToFinish();
+
   const cancelHankeButton = screen.getByRole('button', { name: /peru hanke/i });
 
   expect(cancelHankeButton).toBeInTheDocument();
@@ -112,4 +116,47 @@ test('It is not possible to delete hanke if it has active applications', () => {
   render(<HankeViewContainer hankeTunnus="HAI22-2" />);
 
   expect(screen.queryByRole('button', { name: /peru hanke/i })).not.toBeInTheDocument();
+});
+
+test('Should render correct number of applications if they exist', async () => {
+  const user = userEvent.setup();
+
+  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  await user.click(screen.getByRole('tab', { name: /hakemukset/i }));
+
+  expect(screen.getAllByTestId('application-card')).toHaveLength(3);
+});
+
+test('Should show information if no applications exist', async () => {
+  const user = userEvent.setup();
+
+  render(<HankeViewContainer hankeTunnus="HAI22-1" />);
+
+  await waitForLoadingToFinish();
+
+  await user.click(screen.getByRole('tab', { name: /hakemukset/i }));
+
+  expect(screen.queryByText('Hankkeella ei ole lisättyjä hakemuksia')).toBeInTheDocument();
+});
+
+test('Should show error notification if loading applications fails', async () => {
+  const user = userEvent.setup();
+
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/hakemukset', async (req, res, ctx) => {
+      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    })
+  );
+
+  render(<HankeViewContainer hankeTunnus="HAI22-1" />);
+
+  await waitForLoadingToFinish();
+
+  await user.click(screen.getByRole('tab', { name: /hakemukset/i }));
+
+  expect(screen.queryByText('Virhe tietojen lataamisessa.')).toBeInTheDocument();
+  expect(screen.queryByText('Yritä hetken päästä uudelleen.')).toBeInTheDocument();
 });

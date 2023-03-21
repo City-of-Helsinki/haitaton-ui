@@ -7,16 +7,21 @@ async function getApplications() {
   return data;
 }
 
+async function getApplicationsForHanke(hankeTunnus?: string) {
+  const { data } = await api.get<{ applications: Application[] }>(
+    `/hankkeet/${hankeTunnus}/hakemukset`
+  );
+  return data;
+}
+
 export function useApplications() {
   return useQuery<Application[]>(['applications'], getApplications);
 }
 
-export function useApplicationsForHanke(
-  hankeTunnus?: string
-): { data: Application[]; error: unknown; isLoading: boolean } {
-  const { data: allApplications, error, isLoading } = useApplications();
-  const applicationsForHanke = allApplications?.filter(
-    (application) => application.hankeTunnus === hankeTunnus
+export function useApplicationsForHanke(hankeTunnus?: string) {
+  return useQuery<{ applications: Application[] }>(
+    ['applicationsForHanke'],
+    () => getApplicationsForHanke(hankeTunnus),
+    { enabled: Boolean(hankeTunnus) }
   );
-  return { data: applicationsForHanke || [], error, isLoading };
 }
