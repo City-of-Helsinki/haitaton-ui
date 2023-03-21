@@ -156,7 +156,8 @@
 
   .headerContainer {
     background-color: var(--color-summer-light);
-    padding-top: var(--spacing-s);
+    padding-top: var(--spacing-l);
+    padding-bottom: var(--spacing-l);
 
     .filters {
       display: grid;
@@ -196,6 +197,16 @@
 
       &__hidden {
         visibility: hidden;
+      }
+    }
+
+    .filtersInfoText {
+      display: flex;
+      align-items: center;
+      color: var(--color-black-60);
+
+      .icon {
+        padding-right: var(--spacing-3-xs);
       }
     }
   }

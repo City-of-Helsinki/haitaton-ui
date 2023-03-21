@@ -643,6 +643,7 @@
     "draftStateLabel": "Hanke on luonnostilassa",
     "draftState": "Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.",
     "clearFiltersButton": "Tyhjennä hakuehdot",
+    "filtersInfoText": "Hakuehtojen muuttaminen päivittää hankelistan.",
     "tabit": {
       "perustiedot": "Perustiedot",
       "alueet": "Alueet",
