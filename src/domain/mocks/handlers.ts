@@ -69,6 +69,12 @@ export const handlers = [
     }
   }),
 
+  rest.get(`${apiUrl}/hankkeet/:hankeTunnus/hakemukset`, async (req, res, ctx) => {
+    const { hankeTunnus } = req.params;
+    const hakemukset = await hakemuksetDB.readAllForHanke(hankeTunnus as string);
+    return res(ctx.status(200), ctx.json({ applications: hakemukset }));
+  }),
+
   rest.get(`${apiUrl}/public-hankkeet`, async (req, res, ctx) => {
     const hankkeet = await hankkeetDB.readAll();
     return res(ctx.status(200), ctx.json(hankkeet));

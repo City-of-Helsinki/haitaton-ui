@@ -40,7 +40,9 @@ import CompressedAreaIndex from '../hankeIndexes/CompressedAreaIndex';
 import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotification';
 import { useIsHankeValid } from '../edit/hooks/useIsHankeValid';
 import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
-import { Application } from '../../application/types/application';
+import { useApplicationsForHanke } from '../../application/hooks/useApplications';
+import ApplicationList from '../../application/components/ApplicationList';
+import ErrorLoadingText from '../../../common/components/errorLoadingText/ErrorLoadingText';
 
 type AreaProps = {
   area: HankeAlue;
@@ -111,12 +113,14 @@ type Props = {
   hankeData?: HankeData;
   onEditHanke: () => void;
   onCancelHanke: () => void;
-  applications: Application[];
 };
 
-const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onCancelHanke, applications }) => {
+const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onCancelHanke }) => {
   const { t } = useTranslation();
   const location = useLocation();
+  const { data: applicationsResponse, isLoading, error } = useApplicationsForHanke(
+    hankeData?.hankeTunnus
+  );
 
   // Get initially active tab from location state if there is such defined
   const initiallyActiveTab: number | undefined =
@@ -135,7 +139,9 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onCancelHanke, app
   }
 
   const isHankeValid = useIsHankeValid(hankeData);
-  const isCancelPossible = canHankeBeCancelled(applications);
+  const isCancelPossible = applicationsResponse
+    ? canHankeBeCancelled(applicationsResponse.applications)
+    : true;
 
   if (!hankeData) {
     return (
@@ -198,7 +204,7 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onCancelHanke, app
             >
               {t('hankeList:buttons:endHanke')}
             </Button>
-            {isCancelPossible && (
+            {!isLoading && isCancelPossible && (
               <Button
                 onClick={onCancelHanke}
                 variant="danger"
@@ -275,7 +281,17 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onCancelHanke, app
                   )}
                 </FormSummarySection>
               </TabPanel>
-              <TabPanel>Hakemukset</TabPanel>
+              <TabPanel>
+                {isLoading && (
+                  <Flex justify="center" mt="var(--spacing-xl)">
+                    <LoadingSpinner />
+                  </Flex>
+                )}
+                {applicationsResponse?.applications && (
+                  <ApplicationList applications={applicationsResponse.applications} />
+                )}
+                {error && <ErrorLoadingText />}
+              </TabPanel>
             </Tabs>
           </div>
           <div className={styles.sideBar}>

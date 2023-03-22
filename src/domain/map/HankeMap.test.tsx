@@ -26,6 +26,8 @@ describe('HankeMap', () => {
   test('Number of projects displayed on the map can be controlled with dateRangeControl', async () => {
     const renderedComponent = render(<HankeMap />);
 
+    await screen.findByPlaceholderText('Etsi osoitteella');
+
     expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
     changeFilterDate(startDateLabel, renderedComponent, '1.1.2022');
     expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');

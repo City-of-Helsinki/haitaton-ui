@@ -157,6 +157,8 @@ test('Should show error message when saving fails', async () => {
 
   render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
 
+  await waitForLoadingToFinish();
+
   // Fill basic information page, so that form can be saved for the first time
   fillBasicInformation();
 
@@ -176,6 +178,8 @@ test('Should show error message when sending fails', async () => {
   );
 
   render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
+
+  await waitForLoadingToFinish();
 
   fillBasicInformation();
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
