@@ -160,3 +160,29 @@ test('Should show error notification if loading applications fails', async () =>
   expect(screen.queryByText('Virhe tietojen lataamisessa.')).toBeInTheDocument();
   expect(screen.queryByText('Yritä hetken päästä uudelleen.')).toBeInTheDocument();
 });
+
+test('Should navigate to application view when clicking application identifier link', async () => {
+  const user = userEvent.setup();
+
+  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+  await user.click(screen.getByRole('tab', { name: /hakemukset/i }));
+  await user.click(screen.getByTestId('applicationViewLinkIdentifier-2'));
+
+  expect(window.location.pathname).toBe('/fi/hakemus/2');
+  expect(screen.queryByText('Mannerheimintien kuopat')).toBeInTheDocument();
+});
+
+test('Should navigate to application view when clicking the eye icon', async () => {
+  const user = userEvent.setup();
+
+  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+  await user.click(screen.getByRole('tab', { name: /hakemukset/i }));
+  await user.click(screen.getByTestId('applicationViewLink-2'));
+
+  expect(window.location.pathname).toBe('/fi/hakemus/2');
+  expect(screen.queryByText('Mannerheimintien kuopat')).toBeInTheDocument();
+});

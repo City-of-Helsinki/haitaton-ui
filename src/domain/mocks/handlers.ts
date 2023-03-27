@@ -85,6 +85,20 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(hakemukset));
   }),
 
+  rest.get(`${apiUrl}/hakemukset/:id`, async (req, res, ctx) => {
+    const { id } = req.params;
+    const hakemus = await hakemuksetDB.read(Number(id as string));
+    if (!hakemus) {
+      return res(
+        ctx.status(404),
+        ctx.json({
+          errorMessage: 'Application not found',
+        })
+      );
+    }
+    return res(ctx.status(200), ctx.json(hakemus));
+  }),
+
   rest.post(`${apiUrl}/hakemukset`, async (req, res, ctx) => {
     const reqBody: JohtoselvitysFormValues = await req.json();
     const hakemus = await hakemuksetDB.create(reqBody);

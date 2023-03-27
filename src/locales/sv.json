@@ -105,7 +105,6 @@
         "subContacts": "SV:Yhteyshenkilöt",
         "subContactInformation": "SV:Yhteyshenkilön tiedot",
         "customerWithContacts": "SV:Työstä vastaava",
-        "customerWithContactsPlural": "SV:Työstä vastaavat",
         "contractorWithContacts": "SV:Työn suorittaja",
         "contractorWithContactsPlural": "SV:Työn suorittajat",
         "propertyDeveloperWithContacts": "SV:Rakennuttaja",
@@ -113,8 +112,7 @@
         "representativeWithContactsPlural": "SV:Asianhoitajat",
         "addContractors": "SV:Lisää työn suorittajia",
         "addRepresentative": "SV:Lisää asianhoitaja",
-        "addRepresentatives": "SV:Lisää asianhoitajia",
-        "applicant": "SV:Hakija"
+        "addRepresentatives": "SV:Lisää asianhoitajia"
       },
       "labels": {
         "tyyppi": "SV:Tyyppi",
@@ -224,10 +222,10 @@
       }
     },
     "HAKEMUS": {
-      "path": "/ansokan/*",
-      "headerLabel": "Skapa ny ansökan",
+      "path": "/ansokan/:id",
+      "headerLabel": "Ansökan",
       "meta": {
-        "title": "Haitaton - Skapa ny ansökan"
+        "title": "Haitaton - Ansökan"
       }
     },
     "JOHTOSELVITYSHAKEMUS": {

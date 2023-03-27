@@ -1,4 +1,4 @@
-import Feature from 'ol/Feature';
+import { FeatureLike } from 'ol/Feature';
 import { $enum } from 'ts-enum-util';
 import { Fill, Stroke, Style } from 'ol/style';
 import {
@@ -8,10 +8,10 @@ import {
 } from '../../common/utils/liikennehaittaindeksi';
 
 const opacity = 0.45;
-const opacityHL = 0.85;
+const opacityHL = 0.75;
 
-const stroke = new Stroke({ color: 'black', width: 2 });
-const strokeHL = new Stroke({ color: 'black', width: 6 });
+const stroke = new Stroke({ color: 'black', width: 1 });
+const strokeHL = new Stroke({ color: 'black', width: 3 });
 
 export const STYLES = {
   BLUE: new Style({
@@ -74,7 +74,7 @@ export const getStyleByStatus = (status: LIIKENNEHAITTA_STATUS, highlight = fals
 
 // Performance tips: https://github.com/openlayers/openlayers/issues/8392
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const styleFunction: any = (feature: Feature, renderFeature: any, highlight = false) => {
+export const styleFunction: any = (feature: FeatureLike, renderFeature: any, highlight = false) => {
   const liikenneHaittaIndeksi: number | null = feature.get('liikennehaittaindeksi');
   const status = getStatusByIndex(liikenneHaittaIndeksi);
 

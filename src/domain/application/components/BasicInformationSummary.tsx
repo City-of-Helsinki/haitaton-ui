@@ -6,9 +6,9 @@ import {
   SectionItemContent,
   SectionItemTitle,
 } from '../../forms/components/FormSummarySection';
-import { JohtoselvitysFormValues } from '../types';
+import { JohtoselvitysFormValues } from '../../johtoselvitys/types';
 import { ContactSummary } from './ContactsSummary';
-import { Contact } from '../../application/types/application';
+import { Contact } from '../types/application';
 
 function findOrderer(formData: JohtoselvitysFormValues): Contact | null {
   const customerWithContacts = find(formData.applicationData, (value) => {
@@ -43,6 +43,7 @@ const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
     maintenanceWork,
     emergencyWork,
     propertyConnectivity,
+    rockExcavation,
   } = formData.applicationData;
 
   const orderer = findOrderer(formData);
@@ -66,6 +67,12 @@ const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
         {maintenanceWork && <p>{t('hakemus:labels:maintenanceWork')}</p>}
         {emergencyWork && <p>{t('hakemus:labels:emergencyWork')}</p>}
         {propertyConnectivity && <p>{t('hakemus:labels:propertyConnectivity')}</p>}
+      </SectionItemContent>
+      <SectionItemTitle>
+        <p>{t('hakemus:labels:rockExcavationShort')}</p>
+      </SectionItemTitle>
+      <SectionItemContent>
+        <p>{rockExcavation ? t('common:yes') : t('common:no')}</p>
       </SectionItemContent>
       <SectionItemTitle>{t('hakemus:labels:kuvaus')}</SectionItemTitle>
       <SectionItemContent>

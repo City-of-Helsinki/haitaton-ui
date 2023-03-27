@@ -105,7 +105,6 @@
         "subContacts": "EN:Yhteyshenkilöt",
         "subContactInformation": "EN:Yhteyshenkilön tiedot",
         "customerWithContacts": "EN:Työstä vastaava",
-        "customerWithContactsPlural": "EN:Työstä vastaavat",
         "contractorWithContacts": "EN:Työn suorittaja",
         "contractorWithContactsPlural": "EN:Työn suorittajat",
         "propertyDeveloperWithContacts": "EN:Rakennuttaja",
@@ -113,8 +112,7 @@
         "representativeWithContactsPlural": "EN:Asianhoitajat",
         "addContractors": "EN:Lisää työn suorittajia",
         "addRepresentative": "EN:Lisää asianhoitaja",
-        "addRepresentatives": "EN:Lisää asianhoitajia",
-        "applicant": "EN:Hakija"
+        "addRepresentatives": "EN:Lisää asianhoitajia"
       },
       "labels": {
         "tyyppi": "EN:Tyyppi",
@@ -224,10 +222,10 @@
       }
     },
     "HAKEMUS": {
-      "path": "/application/*",
-      "headerLabel": "Create a new application",
+      "path": "/application/:id",
+      "headerLabel": "Application",
       "meta": {
-        "title": "Haitaton - Create a new application"
+        "title": "Haitaton - Application page"
       }
     },
     "JOHTOSELVITYSHAKEMUS": {

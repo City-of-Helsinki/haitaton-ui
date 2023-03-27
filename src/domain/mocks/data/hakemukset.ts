@@ -1,4 +1,3 @@
-import { uniqueId } from 'lodash';
 import { Application } from '../../application/types/application';
 import hakemuksetData from './hakemukset-data';
 import { canApplicationBeCancelled } from '../../application/utils';
@@ -22,7 +21,7 @@ export async function readAllForHanke(hankeTunnus: string) {
 export async function create(data: Application) {
   const newHakemus: Application = {
     ...data,
-    id: Number(uniqueId()),
+    id: hakemukset.length + 1,
   };
   hakemukset.push(newHakemus);
   return newHakemus;

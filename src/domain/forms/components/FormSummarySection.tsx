@@ -1,4 +1,5 @@
 import { Box } from '@chakra-ui/react';
+import clsx from 'clsx';
 import React from 'react';
 import Text from '../../../common/components/text/Text';
 import styles from './FormSummarySection.module.scss';
@@ -27,8 +28,16 @@ const SectionItemContent: React.FC = ({ children }) => {
   return <Box color="var(--color-black-60)">{children}</Box>;
 };
 
-const FormSummarySection: React.FC = ({ children }) => {
-  return <section className={styles.container}>{children}</section>;
+const FormSummarySection: React.FC<{ className?: string; style?: React.CSSProperties }> = ({
+  children,
+  className,
+  style,
+}) => {
+  return (
+    <section className={clsx(styles.container, className)} style={style}>
+      {children}
+    </section>
+  );
 };
 
 export { FormSummarySection, SectionTitle, SectionItemTitle, SectionItemContent };

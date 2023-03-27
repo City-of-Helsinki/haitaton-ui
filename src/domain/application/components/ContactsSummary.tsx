@@ -2,12 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Grid } from '@chakra-ui/react';
 import { SectionItemContent, SectionItemTitle } from '../../forms/components/FormSummarySection';
-import {
-  Contact,
-  Customer,
-  CustomerWithContacts,
-  PostalAddress,
-} from '../../application/types/application';
+import { Contact, Customer, CustomerWithContacts, PostalAddress } from '../types/application';
 import Text from '../../../common/components/text/Text';
 
 function isCustomerEmpty(customer?: Customer) {
