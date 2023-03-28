@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, IconEnvelope, IconSaveDiskette, StepState } from 'hds-react';
+import { Button, IconCross, IconEnvelope, IconSaveDiskette, StepState } from 'hds-react';
 import { FormProvider, useForm, FieldPath } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -286,6 +286,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
                 applicationId={getValues('id')}
                 alluStatus={getValues('alluStatus')}
                 hankeTunnus={hanke?.hankeTunnus}
+                buttonVariant="secondary"
+                buttonIcon={<IconCross aria-hidden />}
               />
 
               {!firstStep && (
