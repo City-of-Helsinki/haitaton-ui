@@ -55,3 +55,25 @@ test('Should show error notification if loading application fails', async () => 
   expect(screen.queryByText('Virhe tietojen lataamisessa.')).toBeInTheDocument();
   expect(screen.queryByText('Yritä hetken päästä uudelleen.')).toBeInTheDocument();
 });
+
+test('Should be able to cancel application if it is possible', async () => {
+  const user = userEvent.setup();
+
+  render(<ApplicationViewContainer id={4} />);
+
+  await waitForLoadingToFinish();
+
+  await user.click(screen.getByRole('button', { name: 'Peru hakemus' }));
+  await user.click(screen.getByRole('button', { name: 'Vahvista' }));
+
+  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-3');
+  expect(screen.queryByText('Hakemus peruttiin onnistuneesti')).toBeInTheDocument();
+});
+
+test('Should not be able to cancel application if it has moved to handling in Allu', async () => {
+  render(<ApplicationViewContainer id={3} />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.queryByRole('button', { name: 'Peru hakemus' })).not.toBeInTheDocument();
+});
