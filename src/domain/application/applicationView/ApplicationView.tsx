@@ -107,7 +107,7 @@ function ApplicationView({ application, hanke }: Props) {
               <BasicInformationSummary formData={application}>
                 <SectionItemTitle>{t('hakemus:labels:totalSurfaceArea')}</SectionItemTitle>
                 <SectionItemContent>
-                  {totalSurfaceArea && <p>{totalSurfaceArea} m²</p>}
+                  {totalSurfaceArea > 0 && <p>{totalSurfaceArea} m²</p>}
                 </SectionItemContent>
               </BasicInformationSummary>
             </TabPanel>
