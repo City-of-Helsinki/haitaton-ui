@@ -26,7 +26,7 @@ interface Props {
   ) => React.ReactNode;
   /** Heading of the form */
   heading: string;
-  subHeading?: string;
+  subHeading?: string | JSX.Element;
   /** Array of form steps to render */
   formSteps: FormStep[];
   /** Function that is called when step is changed */

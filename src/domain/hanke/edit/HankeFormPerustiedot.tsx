@@ -17,10 +17,12 @@ import { useFormPage } from './hooks/useFormPage';
 import DropdownMultiselect from '../../../common/components/dropdown/DropdownMultiselect';
 import Checkbox from '../../../common/components/checkbox/Checkbox';
 import { getInputErrorText } from '../../../common/utils/form';
+import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 
 const HankeFormPerustiedot: React.FC<FormProps> = ({ errors, register, formData }) => {
   const { t } = useTranslation();
   const { watch, setValue } = useFormContext();
+  const { JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();
   useFormPage();
 
   // Subscribe to vaihe changes
@@ -41,9 +43,8 @@ const HankeFormPerustiedot: React.FC<FormProps> = ({ errors, register, formData 
           <p>Hankkeen luonnin kautta pääset lähettämään myös hakemuksia.</p>
           <p>
             <strong>HUOM!</strong> Mikäli teet pelkkää johtoselvitystä yksityiselle alueelle,
-            {/* TODO: Link href to actual hakemus page when that's implemented */}
-            <Link href="/">täytä hakemus</Link>. Yleisten alueiden johtoselvitykset haetaan hankkeen
-            luonnin jälkeen kaivuilmoituksen kautta.
+            <Link href={JOHTOSELVITYSHAKEMUS.path}>täytä hakemus</Link>. Yleisten alueiden
+            johtoselvitykset haetaan hankkeen luonnin jälkeen kaivuilmoituksen kautta.
           </p>
           <p>Lisäämällä hankkeen tiedot, pystyt kopioimaan ne lopuksi tarvitsemiisi hakemuksiin.</p>
         </Trans>

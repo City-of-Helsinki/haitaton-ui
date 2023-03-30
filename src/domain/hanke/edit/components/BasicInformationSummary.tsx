@@ -58,7 +58,7 @@ const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
       </SectionItemContent>
       <SectionItemTitle>{t('hankeForm:labels:vaihe')}</SectionItemTitle>
       <SectionItemContent>
-        <p>{t(`hanke:vaihe:${formData.vaihe}`)}</p>
+        {formData.vaihe !== null && <p>{t(`hanke:vaihe:${formData.vaihe}`)}</p>}
       </SectionItemContent>
       <SectionItemTitle>{t('hankeForm:labels:tyomaaTyyppi')}</SectionItemTitle>
       <SectionItemContent>

@@ -6,7 +6,7 @@ import { HANKE_VAIHE, HANKE_VAIHE_KEY } from '../../types/hanke';
 import styles from './HankeVaiheTag.module.scss';
 
 type TagProps = {
-  tagName: HANKE_VAIHE_KEY;
+  tagName: HANKE_VAIHE_KEY | null;
   uppercase?: boolean;
 };
 
@@ -24,6 +24,10 @@ const themes = {
 
 const HankeVaiheTag: React.FC<TagProps> = ({ tagName, uppercase }) => {
   const { t } = useTranslation();
+
+  if (tagName === null) {
+    return null;
+  }
 
   return (
     <Tag theme={themes[tagName]} className={clsx({ [styles.uppercase]: uppercase })}>

@@ -40,7 +40,7 @@ export type Customer = {
   postalAddress: PostalAddress;
   email: string;
   phone: string;
-  registryKey: string;
+  registryKey: string | null;
   ovt: string | null;
   invoicingOperator: string | null;
   sapCustomerNumber: string | null;
@@ -130,7 +130,7 @@ export interface Application {
   applicationType: ApplicationType;
   applicationData: JohtoselvitysData;
   applicationIdentifier?: string | null;
-  hankeTunnus: string;
+  hankeTunnus: string | null;
 }
 
 export function isCustomerWithContacts(value: unknown): value is CustomerWithContacts {

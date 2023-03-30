@@ -144,6 +144,7 @@ test('Cable report application form can be filled and saved and sent to Allu', a
 
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
   expect(screen.queryByText(/hakemus lähetetty/i)).toBeInTheDocument();
+  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2');
 });
 
 test('Should show error message when saving fails', async () => {
@@ -190,4 +191,62 @@ test('Should show error message when sending fails', async () => {
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
 
   expect(screen.queryByText(/lähettäminen epäonnistui/i)).toBeInTheDocument();
+});
+
+test('Form can be saved without hanke existing first', async () => {
+  const user = userEvent.setup();
+
+  render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
+
+  // Fill basic information page
+  fillBasicInformation();
+
+  // Move to areas page
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
+  expect(screen.queryByText('Johtoselvitys (HAI22-12)')).toBeInTheDocument();
+  expect(screen.queryByText('Vaihe 2/4: Alueet')).toBeInTheDocument();
+});
+
+test('Save and quit works', async () => {
+  const user = userEvent.setup();
+
+  render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
+
+  await waitForLoadingToFinish();
+
+  // Fill basic information page
+  fillBasicInformation();
+
+  // Move to areas page
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
+  await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
+
+  expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
+  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2');
+});
+
+test('Save and quit works without hanke existing first', async () => {
+  const user = userEvent.setup();
+
+  render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
+
+  // Fill basic information page
+  fillBasicInformation();
+
+  // Move to areas page
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
+  await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
+
+  expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
+  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-13');
 });
