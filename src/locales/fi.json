@@ -66,6 +66,9 @@
       "dateMin": "Ensimmäinen mahdollinen päivä on {{min}}",
       "dateMax": "Viimeinen mahdollinen päivä on {{max}}"
     },
+    "errors": {
+      "areaRequired": "Vähintään yksi alue vaaditaan"
+    },
     "headers": {
       "perustiedot": "Perustiedot",
       "alueet": "Alueet",

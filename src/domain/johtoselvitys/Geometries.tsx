@@ -6,7 +6,16 @@ import Geometry from 'ol/geom/Geometry';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@chakra-ui/react';
-import { Button, Fieldset, IconTrash, Tab, TabList, TabPanel, Tabs } from 'hds-react';
+import {
+  Button,
+  Fieldset,
+  IconAlertCircleFill,
+  IconTrash,
+  Tab,
+  TabList,
+  TabPanel,
+  Tabs,
+} from 'hds-react';
 import { debounce } from 'lodash';
 
 import VectorLayer from '../../common/components/map/layers/VectorLayer';
@@ -43,7 +52,11 @@ function getEmptyArea(feature: Feature<Geometry>): JohtoselvitysArea {
 export const Geometries: React.FC = () => {
   const { t } = useTranslation();
   const locale = useLocale();
-  const { watch, getValues } = useFormContext<JohtoselvitysFormValues>();
+  const {
+    watch,
+    getValues,
+    formState: { errors },
+  } = useFormContext<JohtoselvitysFormValues>();
 
   const { fields: applicationAreas, append, remove } = useFieldArray<
     JohtoselvitysFormValues,
@@ -149,6 +162,19 @@ export const Geometries: React.FC = () => {
       {!workTimesSet && (
         <Box px="var(--spacing-l)" py="var(--spacing-2-xl)" textAlign="center">
           <Text tag="p">{t('johtoselvitysForm:alueet:giveDates')}</Text>
+        </Box>
+      )}
+
+      {errors.applicationData?.areas && (
+        <Box
+          px="var(--spacing-l)"
+          pb="var(--spacing-xl)"
+          textAlign="center"
+          color="var(--color-error)"
+        >
+          <Text tag="p">
+            <IconAlertCircleFill /> {t('form:errors:areaRequired')}
+          </Text>
         </Box>
       )}
 
