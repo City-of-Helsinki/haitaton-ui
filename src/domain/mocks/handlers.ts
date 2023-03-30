@@ -91,7 +91,7 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(hakemus));
   }),
 
-  rest.post(`${apiUrl}/hakemukset/luo-hanke`, async (req, res, ctx) => {
+  rest.post(`${apiUrl}/hakemukset/johtoselvitys`, async (req, res, ctx) => {
     const reqBody: JohtoselvitysFormValues = await req.json();
     const hanke = await hankkeetDB.create({
       nimi: reqBody.applicationData.name,
