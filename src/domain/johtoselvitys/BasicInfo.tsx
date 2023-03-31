@@ -190,7 +190,12 @@ export const BasicHankeInfo: React.FC = () => {
         />
       </ResponsiveGrid>
 
-      <SelectionGroup label={t('hakemus:labels:tyossaKyse')} required className={styles.formRow}>
+      <SelectionGroup
+        label={t('hakemus:labels:tyossaKyse')}
+        required
+        className={styles.formRow}
+        errorText={errors?.applicationData?.constructionWork && t('form:validations:required')}
+      >
         <Checkbox
           {...register('applicationData.constructionWork')}
           id="applicationData.constructionWork"
