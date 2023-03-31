@@ -2,12 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Grid } from '@chakra-ui/react';
 import { SectionItemContent, SectionItemTitle } from '../../forms/components/FormSummarySection';
-import {
-  Contact,
-  Customer,
-  CustomerWithContacts,
-  PostalAddress,
-} from '../../application/types/application';
+import { Contact, Customer, CustomerWithContacts } from '../../application/types/application';
 import Text from '../../../common/components/text/Text';
 
 function isCustomerEmpty(customer?: Customer) {
@@ -19,26 +14,12 @@ function isCustomerEmpty(customer?: Customer) {
     customer.name === '' &&
     customer.registryKey === '' &&
     customer.email === '' &&
-    customer.phone === '' &&
-    customer.postalAddress.streetAddress.streetName === '' &&
-    customer.postalAddress.postalCode === '' &&
-    customer.postalAddress.city === ''
+    customer.phone === ''
   ) {
     return true;
   }
   return false;
 }
-
-const AddressSummary: React.FC<{ postalAddress: PostalAddress }> = ({ postalAddress }) => {
-  return (
-    <>
-      <p>{postalAddress.streetAddress.streetName}</p>
-      <p>
-        {postalAddress.postalCode} {postalAddress.city}
-      </p>
-    </>
-  );
-};
 
 const CustomerSummary: React.FC<{ customer: Customer }> = ({ customer }) => {
   return (
@@ -49,7 +30,6 @@ const CustomerSummary: React.FC<{ customer: Customer }> = ({ customer }) => {
       <p>{customer.registryKey}</p>
       <p>{customer.email}</p>
       <p>{customer.phone}</p>
-      <AddressSummary postalAddress={customer.postalAddress} />
     </Box>
   );
 };
@@ -60,7 +40,6 @@ export const ContactSummary: React.FC<{ contact: Contact }> = ({ contact }) => {
       <p>{contact.name}</p>
       <p>{contact.email}</p>
       <p>{contact.phone}</p>
-      <AddressSummary postalAddress={contact.postalAddress} />
     </div>
   );
 };

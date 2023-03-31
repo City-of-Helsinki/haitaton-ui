@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Accordion, Button, Fieldset, IconCross, IconPlusCircle } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { Trans, useTranslation } from 'react-i18next';
@@ -8,6 +8,7 @@ import {
   CustomerType,
   Contact as ApplicationContact,
   CustomerWithContacts,
+  Customer,
 } from '../application/types/application';
 import styles from './Contacts.module.scss';
 import Text from '../../common/components/text/Text';
@@ -19,16 +20,12 @@ import Dropdown from '../../common/components/dropdown/Dropdown';
 import { HankeContacts } from '../types/hanke';
 import PreFilledContactSelect from '../application/components/PreFilledContactSelect';
 import { JohtoselvitysFormValues } from './types';
+import useForceUpdate from '../../common/hooks/useForceUpdate';
 
 function getEmptyContact(): ApplicationContact {
   return {
     name: '',
     orderer: false,
-    postalAddress: {
-      streetAddress: { streetName: '' },
-      city: '',
-      postalCode: '',
-    },
     email: '',
     phone: '',
   };
@@ -40,13 +37,6 @@ function getEmptyCustomerWithContacts(): CustomerWithContacts {
       type: null,
       name: '',
       country: 'FI',
-      postalAddress: {
-        streetAddress: {
-          streetName: '',
-        },
-        postalCode: '',
-        city: '',
-      },
       email: '',
       phone: '',
       registryKey: '',
@@ -63,11 +53,32 @@ const CustomerFields: React.FC<{ customerType: CustomerType; hankeContacts?: Han
   hankeContacts,
 }) => {
   const { t } = useTranslation();
+  const { watch, setValue } = useFormContext<JohtoselvitysFormValues>();
+  const forceUpdate = useForceUpdate();
+
+  const selectedContactType = watch(`applicationData.${customerType}.customer.type`);
+
+  useEffect(() => {
+    // If setting contact type to other than company, set null to registry key
+    if (selectedContactType !== 'COMPANY') {
+      setValue(`applicationData.${customerType}.customer.registryKey`, null, {
+        shouldValidate: true,
+      });
+    }
+  }, [selectedContactType, customerType, setValue]);
+
+  function handlePreFilledContactChange(customer: Customer) {
+    setValue(`applicationData.${customerType}.customer`, customer, { shouldValidate: true });
+    forceUpdate();
+  }
 
   return (
     <>
       {hankeContacts && (
-        <PreFilledContactSelect customerType={customerType} allHankeContacts={hankeContacts} />
+        <PreFilledContactSelect
+          allHankeContacts={hankeContacts}
+          onChange={handlePreFilledContactChange}
+        />
       )}
       <ResponsiveGrid>
         <Dropdown
@@ -90,20 +101,8 @@ const CustomerFields: React.FC<{ customerType: CustomerType; hankeContacts?: Han
         />
         <TextInput
           name={`applicationData.${customerType}.customer.registryKey`}
-          label={t('form:yhteystiedot:labels:ytunnusTaiHetu')}
-          required
-        />
-        <TextInput
-          name={`applicationData.${customerType}.customer.postalAddress.streetAddress.streetName`}
-          label={t('form:yhteystiedot:labels:osoite')}
-        />
-        <TextInput
-          name={`applicationData.${customerType}.customer.postalAddress.postalCode`}
-          label={t('form:yhteystiedot:labels:postinumero')}
-        />
-        <TextInput
-          name={`applicationData.${customerType}.customer.postalAddress.city`}
-          label={t('form:yhteystiedot:labels:postitoimipaikka')}
+          label={t('form:yhteystiedot:labels:ytunnus')}
+          disabled={selectedContactType !== 'COMPANY'}
         />
         <TextInput
           name={`applicationData.${customerType}.customer.email`}
@@ -148,21 +147,6 @@ const ContactFields: React.FC<{
         />
       </ResponsiveGrid>
       <ResponsiveGrid>
-        <TextInput
-          name={`applicationData.${customerType}.contacts.${index}.postalAddress.streetAddress.streetName`}
-          label={t('form:yhteystiedot:labels:osoite')}
-          readOnly={orderer}
-        />
-        <TextInput
-          name={`applicationData.${customerType}.contacts.${index}.postalAddress.postalCode`}
-          label={t('form:yhteystiedot:labels:postinumero')}
-          readOnly={orderer}
-        />
-        <TextInput
-          name={`applicationData.${customerType}.contacts.${index}.postalAddress.city`}
-          label={t('form:yhteystiedot:labels:postitoimipaikka')}
-          readOnly={orderer}
-        />
         <TextInput
           name={`applicationData.${customerType}.contacts.${index}.email`}
           label={t('form:yhteystiedot:labels:email')}
@@ -267,7 +251,7 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
       {/* Työn suorittaja */}
       <Accordion
         language={locale}
-        heading={t('form:yhteystiedot:titles:addContractors')}
+        heading={t('form:yhteystiedot:titles:addContractor')}
         initiallyOpen
       >
         <Contact<CustomerType>
@@ -291,7 +275,7 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
       {/* Rakennuttaja */}
       <Accordion
         language={locale}
-        heading={t('form:yhteystiedot:titles:lisaaRakennuttajia')}
+        heading={t('form:yhteystiedot:titles:lisaaRakennuttaja')}
         initiallyOpen={isPropertyDeveloper}
       >
         {isPropertyDeveloper && (
@@ -331,7 +315,7 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
       {/* Asianhoitaja */}
       <Accordion
         language={locale}
-        heading={t('form:yhteystiedot:titles:addRepresentatives')}
+        heading={t('form:yhteystiedot:titles:addRepresentative')}
         initiallyOpen={isRepresentative}
       >
         {isRepresentative && (

@@ -2,17 +2,18 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm } from 'react-hook-form';
-import { render, screen } from '../../testUtils/render';
+import { fireEvent, render, screen } from '../../testUtils/render';
 import { Contacts } from './Contacts';
 import hankkeet from '../mocks/data/hankkeet-data';
 import { HankeContact, HankeDataDraft } from '../types/hanke';
 
 jest.setTimeout(10000);
 
-function Form({ hanke }: { hanke: HankeDataDraft }) {
+// eslint-disable-next-line react/require-default-props
+function Form({ hanke }: { hanke?: HankeDataDraft }) {
   const methods = useForm({});
 
-  const hankeContacts = [hanke.omistajat, hanke.rakennuttajat, hanke.toteuttajat, hanke.muut];
+  const hankeContacts = [hanke?.omistajat, hanke?.rakennuttajat, hanke?.toteuttajat, hanke?.muut];
 
   return (
     <FormProvider {...methods}>
@@ -35,20 +36,39 @@ test('Contacts can be filled with hanke contact info', async () => {
 
   expect(screen.getAllByRole('button', { name: /tyyppi/i })[0]).toHaveTextContent('Yritys');
   expect(screen.getAllByRole('textbox', { name: /nimi/i })[0]).toHaveValue(hankeOwner.nimi);
-  expect(screen.getAllByRole('textbox', { name: /Y-tunnus tai henkilötunnus/i })[0]).toHaveValue(
+  expect(screen.getAllByRole('textbox', { name: /Y-tunnus/i })[0]).toHaveValue(
     hankeOwner.ytunnusTaiHetu
-  );
-  expect(screen.getAllByRole('textbox', { name: /katuosoite/i })[0]).toHaveValue(
-    hankeOwner.osoite!
-  );
-  expect(screen.getAllByRole('textbox', { name: /postinumero/i })[0]).toHaveValue(
-    hankeOwner.postinumero!
-  );
-  expect(screen.getAllByRole('textbox', { name: /postitoimipaikka/i })[0]).toHaveValue(
-    hankeOwner.postitoimipaikka!
   );
   expect(screen.getAllByRole('textbox', { name: /sähköposti/i })[0]).toHaveValue(hankeOwner.email);
   expect(screen.getAllByRole('textbox', { name: /puhelinnumero/i })[0]).toHaveValue(
     hankeOwner.puhelinnumero
   );
+});
+
+test('Business id field is disabled if customer type not company', () => {
+  render(<Form />);
+
+  fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+  fireEvent.click(screen.getAllByText(/yksityishenkilö/i)[0]);
+
+  expect(screen.getAllByLabelText(/y-tunnus/i)[0]).toBeDisabled();
+
+  fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+  fireEvent.click(screen.getAllByText(/yhdistys/i)[0]);
+
+  expect(screen.getAllByLabelText(/y-tunnus/i)[0]).toBeDisabled();
+
+  fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+  fireEvent.click(screen.getAllByText(/muu/i)[0]);
+
+  expect(screen.getAllByLabelText(/y-tunnus/i)[0]).toBeDisabled();
+});
+
+test('Business id field is not disabled if customer type is company', () => {
+  render(<Form />);
+
+  fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+  fireEvent.click(screen.getAllByText(/yritys/i)[0]);
+
+  expect(screen.getAllByLabelText(/y-tunnus/i)[0]).not.toBeDisabled();
 });

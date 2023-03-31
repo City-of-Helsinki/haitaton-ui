@@ -116,7 +116,7 @@
         "propertyDeveloperWithContacts": "Rakennuttaja",
         "representativeWithContacts": "Asianhoitaja",
         "representativeWithContactsPlural": "Asianhoitajat",
-        "addContractors": "Lisää työn suorittajia",
+        "addContractor": "Lisää työn suorittaja",
         "addRepresentative": "Lisää asianhoitaja",
         "addRepresentatives": "Lisää asianhoitajia",
         "applicant": "Hakija"
@@ -125,6 +125,7 @@
         "tyyppi": "Tyyppi",
         "nimi": "Nimi",
         "ytunnusTaiHetu": "Y-tunnus tai henkilötunnus",
+        "ytunnus": "Y-tunnus",
         "osoite": "Katuosoite",
         "postinumero": "Postinumero",
         "postitoimipaikka": "Postitoimipaikka",

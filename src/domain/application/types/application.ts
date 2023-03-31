@@ -14,7 +14,6 @@ export type PostalAddress = {
 
 export type Contact = {
   name: string;
-  postalAddress: PostalAddress;
   email: string;
   phone: string;
   orderer: boolean;
@@ -37,10 +36,9 @@ export type Customer = {
   type: keyof typeof ContactType | null;
   name: string;
   country: string;
-  postalAddress: PostalAddress;
   email: string;
   phone: string;
-  registryKey: string;
+  registryKey: string | null;
   ovt: string | null;
   invoicingOperator: string | null;
   sapCustomerNumber: string | null;

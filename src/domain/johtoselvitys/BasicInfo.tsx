@@ -291,20 +291,6 @@ export const BasicHankeInfo: React.FC = () => {
 
       <ResponsiveGrid className={styles.formRow}>
         <TextInput
-          name={`applicationData.${selectedRole}.contacts.0.postalAddress.streetAddress.streetName`}
-          label={t('form:yhteystiedot:labels:osoite')}
-        />
-        <TextInput
-          name={`applicationData.${selectedRole}.contacts.0.postalAddress.postalCode`}
-          label={t('form:yhteystiedot:labels:postinumero')}
-        />
-        <TextInput
-          name={`applicationData.${selectedRole}.contacts.0.postalAddress.city`}
-          label={t('form:yhteystiedot:labels:postitoimipaikka')}
-        />
-      </ResponsiveGrid>
-      <ResponsiveGrid className={styles.formRow}>
-        <TextInput
           name={`applicationData.${selectedRole}.contacts.0.email`}
           label={t('form:yhteystiedot:labels:email')}
           required
