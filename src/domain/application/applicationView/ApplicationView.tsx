@@ -19,7 +19,7 @@ import {
 } from '../../forms/components/FormSummarySection';
 import { HankeData } from '../../types/hanke';
 import ApplicationStatusTag from '../components/ApplicationStatusTag';
-import { Application } from '../types/application';
+import { AlluStatus, Application } from '../types/application';
 import BasicInformationSummary from '../components/BasicInformationSummary';
 import { getAreaGeometries, getAreaGeometry } from '../../johtoselvitys/utils';
 import { formatSurfaceArea, getTotalSurfaceArea } from '../../map/utils';
@@ -31,6 +31,8 @@ import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeade
 import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import Link from '../../../common/components/Link/Link';
 import useHankeViewPath from '../../hanke/hooks/useHankeViewPath';
+import DecisionLink from '../components/DecisionLink';
+import { useDecision } from '../hooks/useDecision';
 
 type Props = {
   application: Application;
@@ -44,7 +46,7 @@ function ApplicationView({ application, hanke }: Props) {
 
   const hankeViewPath = useHankeViewPath(application.hankeTunnus);
 
-  const { applicationData, applicationIdentifier, applicationType, alluStatus } = application;
+  const { applicationData, applicationIdentifier, applicationType, alluStatus, id } = application;
   const {
     name,
     areas,
@@ -55,6 +57,8 @@ function ApplicationView({ application, hanke }: Props) {
     propertyDeveloperWithContacts,
     representativeWithContacts,
   } = applicationData;
+
+  const { data: decisionUrl } = useDecision(id, alluStatus);
 
   const applicationId =
     applicationIdentifier || t(`hakemus:applicationTypeDraft:${applicationType}`);
@@ -82,7 +86,16 @@ function ApplicationView({ application, hanke }: Props) {
           </SectionItemContent>
           <SectionItemTitle>{t('hakemus:labels:applicationState')}:</SectionItemTitle>
           <SectionItemContent>
-            <ApplicationStatusTag status={alluStatus} />
+            <Box as="span" mr="var(--spacing-2-xs)">
+              <ApplicationStatusTag status={alluStatus} />
+            </Box>
+            {alluStatus === AlluStatus.DECISION && (
+              <DecisionLink
+                url={decisionUrl}
+                linkText={t('hakemus:labels:downloadDecisionShort')}
+                filename={applicationIdentifier}
+              />
+            )}
           </SectionItemContent>
           <SectionItemTitle>{t('hakemus:labels:relatedHanke')}:</SectionItemTitle>
           <SectionItemContent>

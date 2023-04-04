@@ -521,7 +521,9 @@
       "areaDuration": "Työalueen kesto",
       "totalSurfaceArea": "Työ-alueiden kokonaispinta-ala",
       "applicationState": "Hakemuksen tila",
-      "relatedHanke": "Liittyy hankkeeseen"
+      "relatedHanke": "Liittyy hankkeeseen",
+      "downloadDecision": "Lataa päätös (PDF)",
+      "downloadDecisionShort": "Lataa PDF"
     },
     "notifications": {
       "saveSuccessLabel": "Hakemus tallennettu",
