@@ -39,7 +39,7 @@ function getEmptyCustomerWithContacts(): CustomerWithContacts {
       country: 'FI',
       email: '',
       phone: '',
-      registryKey: '',
+      registryKey: null,
       ovt: null,
       invoicingOperator: null,
       sapCustomerNumber: null,
@@ -56,7 +56,10 @@ const CustomerFields: React.FC<{ customerType: CustomerType; hankeContacts?: Han
   const { watch, setValue } = useFormContext<JohtoselvitysFormValues>();
   const forceUpdate = useForceUpdate();
 
-  const selectedContactType = watch(`applicationData.${customerType}.customer.type`);
+  const [selectedContactType, registryKey] = watch([
+    `applicationData.${customerType}.customer.type`,
+    `applicationData.${customerType}.customer.registryKey`,
+  ]);
 
   useEffect(() => {
     // If setting contact type to other than company, set null to registry key
@@ -66,6 +69,15 @@ const CustomerFields: React.FC<{ customerType: CustomerType; hankeContacts?: Han
       });
     }
   }, [selectedContactType, customerType, setValue]);
+
+  useEffect(() => {
+    // When emptying registry key field, set its value to null
+    if (registryKey === '') {
+      setValue(`applicationData.${customerType}.customer.registryKey`, null, {
+        shouldValidate: true,
+      });
+    }
+  }, [registryKey, customerType, setValue]);
 
   function handlePreFilledContactChange(customer: Customer) {
     setValue(`applicationData.${customerType}.customer`, customer, { shouldValidate: true });
