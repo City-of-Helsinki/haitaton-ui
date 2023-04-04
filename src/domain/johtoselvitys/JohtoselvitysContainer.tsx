@@ -23,15 +23,16 @@ import ApplicationSaveNotification from '../application/components/ApplicationSa
 import useNavigateToApplicationList from '../hanke/hooks/useNavigateToApplicationList';
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 import useApplicationSendNotification from '../application/hooks/useApplicationSendNotification';
+import useHanke from '../hanke/hooks/useHanke';
 
 type Props = {
-  hanke: HankeData;
+  hankeData?: HankeData;
   application?: JohtoselvitysFormValues;
 };
 
-const JohtoselvitysContainer: React.FC<Props> = ({ hanke, application }) => {
+const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => {
+  let hanke = hankeData;
   const { t } = useTranslation();
-  const navigateToApplicationList = useNavigateToApplicationList(hanke.hankeTunnus);
   const { setNotification } = useGlobalNotification();
   const { showSendSuccess, showSendError } = useApplicationSendNotification();
 
@@ -39,7 +40,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke, application }) => {
     id: null,
     alluStatus: null,
     applicationType: 'CABLE_REPORT',
-    hankeTunnus: hanke.hankeTunnus,
+    hankeTunnus: hanke ? hanke.hankeTunnus : null,
     applicationData: {
       applicationType: 'CABLE_REPORT',
       name: '',
@@ -57,7 +58,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke, application }) => {
           },
           email: '',
           phone: '',
-          registryKey: '',
+          registryKey: null,
           ovt: null,
           invoicingOperator: null,
           sapCustomerNumber: null,
@@ -92,7 +93,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke, application }) => {
           },
           email: '',
           phone: '',
-          registryKey: '',
+          registryKey: null,
           ovt: null,
           invoicingOperator: null,
           sapCustomerNumber: null,
@@ -133,6 +134,15 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke, application }) => {
 
   const { getValues, setValue, handleSubmit, trigger } = formContext;
 
+  // If application is created without hanke existing first, get generated hanke data
+  // after first save when hankeTunnus is available
+  const { data: generatedHanke } = useHanke(!hankeData ? getValues('hankeTunnus') : null);
+  if (generatedHanke) {
+    hanke = generatedHanke;
+  }
+
+  const navigateToApplicationList = useNavigateToApplicationList(hanke?.hankeTunnus);
+
   const [showSaveNotification, setShowSaveNotification] = useState(false);
 
   const applicationSaveMutation = useMutation(saveApplication, {
@@ -142,6 +152,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke, application }) => {
     onSuccess(data) {
       setValue('id', data.id);
       setValue('alluStatus', data.alluStatus);
+      setValue('hankeTunnus', data.hankeTunnus);
     },
     onSettled() {
       setShowSaveNotification(true);
@@ -201,12 +212,9 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke, application }) => {
     });
   }
 
-  const hankeContacts: HankeContacts = [
-    hanke.omistajat,
-    hanke.rakennuttajat,
-    hanke.toteuttajat,
-    hanke.muut,
-  ];
+  const hankeContacts: HankeContacts | undefined = hankeData
+    ? [hankeData.omistajat, hankeData.rakennuttajat, hankeData.toteuttajat, hankeData.muut]
+    : undefined;
 
   const formSteps = [
     {
@@ -253,7 +261,11 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke, application }) => {
     ],
   ];
 
-  const hankeNameText = `${hanke.nimi} (${hanke.hankeTunnus})`;
+  const hankeNameText = (
+    <div style={{ visibility: hanke !== undefined ? 'visible' : 'hidden' }}>
+      {`${hanke?.nimi} (${hanke?.hankeTunnus})`}
+    </div>
+  );
 
   return (
     <FormProvider {...formContext}>
@@ -289,7 +301,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hanke, application }) => {
               <ApplicationCancel
                 applicationId={getValues('id')}
                 alluStatus={getValues('alluStatus')}
-                hankeTunnus={hanke.hankeTunnus}
+                hankeTunnus={hanke?.hankeTunnus}
               />
 
               {!firstStep && (

@@ -12,15 +12,7 @@ const Johtoselvitys: React.FC = () => {
 
   const result = useHankeDataInApplication();
 
-  // TODO: Case where there is no related hanke for new
-  // cable application, will be implemented later
-  if (result === null) {
-    // eslint-disable-next-line no-console
-    console.error('Provide hankeTunnus in URL search params, e.g. ?hanke=HAI22-1');
-    return null;
-  }
-
-  if (result.isLoading) {
+  if (result?.isLoading) {
     return (
       <Flex justify="center" mt="var(--spacing-xl)">
         <LoadingSpinner />
@@ -28,12 +20,10 @@ const Johtoselvitys: React.FC = () => {
     );
   }
 
-  if (!result.data) return null;
-
   return (
     <Container>
       <PageMeta routeData={JOHTOSELVITYSHAKEMUS} />
-      <JohtoselvitysContainer hanke={result.data} />
+      <JohtoselvitysContainer hankeData={result?.data} />
     </Container>
   );
 };

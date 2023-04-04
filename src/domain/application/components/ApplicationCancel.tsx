@@ -12,7 +12,7 @@ import useNavigateToApplicationList from '../../hanke/hooks/useNavigateToApplica
 type Props = {
   applicationId: number | null;
   alluStatus: AlluStatusStrings | null;
-  hankeTunnus: string;
+  hankeTunnus?: string;
 };
 
 export const ApplicationCancel: React.FC<Props> = ({ applicationId, alluStatus, hankeTunnus }) => {
