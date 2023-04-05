@@ -105,6 +105,20 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(hakemus));
   }),
 
+  rest.post(`${apiUrl}/hakemukset/johtoselvitys`, async (req, res, ctx) => {
+    const reqBody: JohtoselvitysFormValues = await req.json();
+    const hanke = await hankkeetDB.create({
+      nimi: reqBody.applicationData.name,
+      alkuPvm: '',
+      loppuPvm: '',
+      vaihe: 'SUUNNITTELU',
+      kuvaus: '',
+    });
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const hakemus = await hakemuksetDB.create({ ...reqBody, hankeTunnus: hanke.hankeTunnus! });
+    return res(ctx.status(200), ctx.json(hakemus));
+  }),
+
   rest.put(`${apiUrl}/hakemukset/:id`, async (req, res, ctx) => {
     const { id } = req.params;
     const reqBody: JohtoselvitysFormValues = await req.json();

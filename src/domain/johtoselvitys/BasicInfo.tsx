@@ -190,7 +190,12 @@ export const BasicHankeInfo: React.FC = () => {
         />
       </ResponsiveGrid>
 
-      <SelectionGroup label={t('hakemus:labels:tyossaKyse')} required className={styles.formRow}>
+      <SelectionGroup
+        label={t('hakemus:labels:tyossaKyse')}
+        required
+        className={styles.formRow}
+        errorText={errors?.applicationData?.constructionWork && t('form:validations:required')}
+      >
         <Checkbox
           {...register('applicationData.constructionWork')}
           id="applicationData.constructionWork"
@@ -289,20 +294,6 @@ export const BasicHankeInfo: React.FC = () => {
         />
       </ResponsiveGrid>
 
-      <ResponsiveGrid className={styles.formRow}>
-        <TextInput
-          name={`applicationData.${selectedRole}.contacts.0.postalAddress.streetAddress.streetName`}
-          label={t('form:yhteystiedot:labels:osoite')}
-        />
-        <TextInput
-          name={`applicationData.${selectedRole}.contacts.0.postalAddress.postalCode`}
-          label={t('form:yhteystiedot:labels:postinumero')}
-        />
-        <TextInput
-          name={`applicationData.${selectedRole}.contacts.0.postalAddress.city`}
-          label={t('form:yhteystiedot:labels:postitoimipaikka')}
-        />
-      </ResponsiveGrid>
       <ResponsiveGrid className={styles.formRow}>
         <TextInput
           name={`applicationData.${selectedRole}.contacts.0.email`}

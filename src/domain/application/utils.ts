@@ -6,9 +6,16 @@ import { AlluStatus, AlluStatusStrings, Application } from './types/application'
  * Save application to Haitaton backend
  */
 export async function saveApplication(data: Application) {
+  // If there is no hankeTunnus when creating new cable report application
+  // call /hakemukset/luo-hanke endpoint, so that hanke is generated in the backend
+  const postUrl: string =
+    data.hankeTunnus === null && data.applicationType === 'CABLE_REPORT'
+      ? '/hakemukset/johtoselvitys'
+      : '/hakemukset';
+
   const response = data.id
     ? await api.put<Application>(`/hakemukset/${data.id}`, data)
-    : await api.post<Application>('/hakemukset', data);
+    : await api.post<Application>(postUrl, data);
 
   return response.data;
 }

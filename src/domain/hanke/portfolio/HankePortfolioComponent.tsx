@@ -79,16 +79,20 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               <Text tag="p" styleAs="body-xl" weight="bold">
                 {hanke.nimi}
               </Text>
-              <HankeVaiheTag tagName={hanke.vaihe}>{hanke.vaihe}</HankeVaiheTag>
+              <HankeVaiheTag tagName={hanke.vaihe} />
             </div>
             <div className={styles.hankeDates}>
-              <Text tag="p" styleAs="body-m">
-                {formatToFinnishDate(hanke.alkuPvm)}
-              </Text>
-              -
-              <Text tag="p" styleAs="body-m">
-                {formatToFinnishDate(hanke.loppuPvm)}
-              </Text>
+              {hanke.alkuPvm && hanke.loppuPvm ? (
+                <>
+                  <Text tag="p" styleAs="body-m">
+                    {formatToFinnishDate(hanke.alkuPvm)}
+                  </Text>
+                  -
+                  <Text tag="p" styleAs="body-m">
+                    {formatToFinnishDate(hanke.loppuPvm)}
+                  </Text>
+                </>
+              ) : null}
             </div>
           </div>
           <div className={styles.actions}>
@@ -165,7 +169,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               {t('hankeForm:labels:vaihe')}
             </Text>
             <Text tag="p" styleAs="body-m" className={styles.infoContent}>
-              {t(`hanke:vaihe:${hanke.vaihe}`)}
+              {hanke.vaihe !== null && t(`hanke:vaihe:${hanke.vaihe}`)}
             </Text>
           </div>
           <div className={styles.gridBasicInfo}>

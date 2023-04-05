@@ -66,6 +66,9 @@
       "dateMin": "Ensimmäinen mahdollinen päivä on {{min}}",
       "dateMax": "Viimeinen mahdollinen päivä on {{max}}"
     },
+    "errors": {
+      "areaRequired": "Vähintään yksi alue vaaditaan"
+    },
     "headers": {
       "perustiedot": "Perustiedot",
       "alueet": "Alueet",
@@ -115,7 +118,7 @@
         "propertyDeveloperWithContacts": "Rakennuttaja",
         "representativeWithContacts": "Asianhoitaja",
         "representativeWithContactsPlural": "Asianhoitajat",
-        "addContractors": "Lisää työn suorittajia",
+        "addContractor": "Lisää työn suorittaja",
         "addRepresentative": "Lisää asianhoitaja",
         "addRepresentatives": "Lisää asianhoitajia"
       },
@@ -123,6 +126,7 @@
         "tyyppi": "Tyyppi",
         "nimi": "Nimi",
         "ytunnusTaiHetu": "Y-tunnus tai henkilötunnus",
+        "ytunnus": "Y-tunnus",
         "osoite": "Katuosoite",
         "postinumero": "Postinumero",
         "postitoimipaikka": "Postitoimipaikka",
