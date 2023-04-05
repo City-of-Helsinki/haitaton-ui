@@ -1,6 +1,7 @@
 import { $enum } from 'ts-enum-util';
 import yup from '../../common/utils/yup';
 import { ContactType } from '../application/types/application';
+import isValidBusinessId from '../../common/utils/isValidBusinessId';
 
 const requiredAddressSchema = yup.object().shape({
   streetAddress: yup.object().shape({
@@ -10,28 +11,27 @@ const requiredAddressSchema = yup.object().shape({
   city: yup.string().nullable().required(),
 });
 
-const addressSchema = yup.object().shape({
-  streetAddress: yup.object().shape({
-    streetName: yup.string(),
-  }),
-  postalCode: yup.string(),
-  city: yup.string(),
-});
-
 const contactSchema = yup
   .object()
   .nullable()
   .default(null)
   .shape({
     name: yup.string().max(100).required(),
-    postalAddress: addressSchema,
     email: yup.string().email().max(100).required(),
     phone: yup.string().max(20).required(),
   });
 
 const customerSchema = contactSchema.shape({
   type: yup.string().oneOf($enum(ContactType).getValues()).nullable().required(),
-  registryKey: yup.string().required(), // social security number or business id i.e. Y-tunnus
+  registryKey: yup // business id i.e. Y-tunnus
+    .string()
+    .nullable()
+    .when('type', {
+      is: 'COMPANY',
+      then: (schema) =>
+        schema.test('is-business-id', 'Is not valid business id', isValidBusinessId),
+      otherwise: (schema) => schema,
+    }),
 });
 
 const customerWithContactsSchema = yup.object().shape({

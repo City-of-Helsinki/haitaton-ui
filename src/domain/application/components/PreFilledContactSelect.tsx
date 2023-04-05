@@ -1,9 +1,8 @@
 import React from 'react';
 import { Select } from 'hds-react';
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
 import ResponsiveGrid from '../../../common/components/grid/ResponsiveGrid';
-import { ContactType, Customer, CustomerType } from '../types/application';
+import { ContactType, Customer } from '../types/application';
 import {
   CONTACT_TYYPPI,
   HankeContact,
@@ -18,11 +17,10 @@ type PreFilledContactOption = {
 };
 
 const PreFilledContactSelect: React.FC<{
-  customerType: CustomerType;
   allHankeContacts: HankeContacts;
-}> = ({ customerType, allHankeContacts }) => {
+  onChange: (customer: Customer) => void;
+}> = ({ allHankeContacts, onChange }) => {
   const { t } = useTranslation();
-  const { setValue } = useFormContext();
 
   const preFilledContactOptions: PreFilledContactOption[] = allHankeContacts.flatMap(
     (hankeContacts) =>
@@ -43,22 +41,15 @@ const PreFilledContactSelect: React.FC<{
         type: (isHankeContact(value) && mapType(value.tyyppi)) || null,
         name: value.nimi,
         country: 'FI',
-        postalAddress: {
-          streetAddress: {
-            streetName: (isHankeContact(value) && value.osoite) || '',
-          },
-          postalCode: (isHankeContact(value) && value.postinumero) || '',
-          city: (isHankeContact(value) && value.postitoimipaikka) || '',
-        },
         email: value.email,
         phone: value.puhelinnumero || '',
-        registryKey: (isHankeContact(value) && value.ytunnusTaiHetu) || '',
+        registryKey: (isHankeContact(value) && value.ytunnusTaiHetu) || null,
         ovt: null,
         invoicingOperator: null,
         sapCustomerNumber: null,
       };
 
-      setValue(`applicationData.${customerType}.customer`, customer);
+      onChange(customer);
     }
   }
 

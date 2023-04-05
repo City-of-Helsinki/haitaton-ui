@@ -49,13 +49,6 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
           type: null,
           name: '',
           country: 'FI',
-          postalAddress: {
-            streetAddress: {
-              streetName: '',
-            },
-            postalCode: '',
-            city: '',
-          },
           email: '',
           phone: '',
           registryKey: null,
@@ -69,7 +62,6 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
             name: '',
             orderer: true,
             phone: '',
-            postalAddress: { city: '', postalCode: '', streetAddress: { streetName: '' } },
           },
         ],
       },
@@ -84,13 +76,6 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
           type: null,
           name: '',
           country: 'FI',
-          postalAddress: {
-            streetAddress: {
-              streetName: '',
-            },
-            postalCode: '',
-            city: '',
-          },
           email: '',
           phone: '',
           registryKey: null,
@@ -104,7 +89,6 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
             name: '',
             orderer: false,
             phone: '',
-            postalAddress: { city: '', postalCode: '', streetAddress: { streetName: '' } },
           },
         ],
       },

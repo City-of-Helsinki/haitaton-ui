@@ -169,11 +169,11 @@ function fillContactsInformation() {
   // Fill customer info
   fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
   fireEvent.click(screen.getAllByText(/yritys/i)[0]);
-  fireEvent.change(screen.getAllByLabelText('Nimi *')[0], {
+  fireEvent.change(screen.getAllByLabelText(/Nimi/)[0], {
     target: { value: 'Yritys Oy' },
   });
-  fireEvent.change(screen.getAllByLabelText(/y-tunnus tai henkilötunnus/i)[0], {
-    target: { value: 'y-tunnus' },
+  fireEvent.change(screen.getAllByLabelText(/y-tunnus/i)[0], {
+    target: { value: '2182805-0' },
   });
   fireEvent.change(screen.getAllByLabelText(/sähköposti/i)[0], {
     target: { value: 'yritys@test.com' },
@@ -185,11 +185,11 @@ function fillContactsInformation() {
   // Fill contractor info
   fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
   fireEvent.click(screen.getAllByText(/yritys/i)[1]);
-  fireEvent.change(screen.getAllByLabelText('Nimi *')[2], {
+  fireEvent.change(screen.getAllByLabelText(/Nimi/)[2], {
     target: { value: 'Yritys 2 Oy' },
   });
-  fireEvent.change(screen.getAllByLabelText(/y-tunnus tai henkilötunnus/i)[1], {
-    target: { value: 'y-tunnus2' },
+  fireEvent.change(screen.getAllByLabelText(/y-tunnus/i)[1], {
+    target: { value: '7126070-7' },
   });
   fireEvent.change(screen.getAllByLabelText(/sähköposti/i)[2], {
     target: { value: 'yritys2@test.com' },
@@ -199,7 +199,7 @@ function fillContactsInformation() {
   });
 
   // Fill contact of contractor
-  fireEvent.change(screen.getAllByLabelText('Nimi *')[3], {
+  fireEvent.change(screen.getAllByLabelText(/Nimi/)[3], {
     target: { value: 'Alli Asiakas' },
   });
   fireEvent.change(screen.getAllByLabelText(/sähköposti/i)[3], {
