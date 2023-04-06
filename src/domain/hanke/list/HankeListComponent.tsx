@@ -54,13 +54,18 @@ const HankeList: React.FC<Props> = ({ projectsData }) => {
       const aValue = a[colKey as sortColKey];
       const bValue = b[colKey as sortColKey];
 
+      if (aValue === undefined) {
+        return order === 'asc' ? -1 : 1;
+      }
+      if (bValue === undefined) {
+        return order === 'asc' ? 1 : -1;
+      }
       if (aValue < bValue) {
         return order === 'asc' ? -1 : 1;
       }
       if (aValue > bValue) {
         return order === 'asc' ? 1 : -1;
       }
-
       return 0;
     });
 
@@ -94,14 +99,16 @@ const HankeList: React.FC<Props> = ({ projectsData }) => {
             {
               headerName: t('hankeList:tableHeader:startDate'),
               key: 'alkuPvm',
-              transform: (args: HankeDataDraft) => format(Date.parse(args.alkuPvm), 'dd.MM.yyyy'),
+              transform: (args: HankeDataDraft) =>
+                args.alkuPvm ? format(Date.parse(args.alkuPvm), 'dd.MM.yyyy') : '',
               isSortable: true,
               sortIconType: 'other',
             },
             {
               headerName: t('hankeList:tableHeader:endDate'),
               key: 'loppuPvm',
-              transform: (args: HankeDataDraft) => format(Date.parse(args.loppuPvm), 'dd.MM.yyyy'),
+              transform: (args: HankeDataDraft) =>
+                args.loppuPvm ? format(Date.parse(args.loppuPvm), 'dd.MM.yyyy') : '',
               isSortable: true,
               sortIconType: 'other',
             },
