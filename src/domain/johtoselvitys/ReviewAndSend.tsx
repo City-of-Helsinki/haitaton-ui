@@ -4,9 +4,9 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { JohtoselvitysFormValues } from './types';
 import { FormSummarySection, SectionTitle } from '../forms/components/FormSummarySection';
-import BasicInformationSummary from './components/BasicInformationSummary';
-import AreaSummary from './components/AreaSummary';
-import ContactsSummary from './components/ContactsSummary';
+import BasicInformationSummary from '../application/components/BasicInformationSummary';
+import AreaSummary from '../application/components/AreaSummary';
+import ContactsSummary from '../application/components/ContactsSummary';
 
 export const ReviewAndSend: React.FC = () => {
   const { getValues } = useFormContext<JohtoselvitysFormValues>();
@@ -35,7 +35,7 @@ export const ReviewAndSend: React.FC = () => {
       <FormSummarySection>
         <ContactsSummary
           customerWithContacts={customerWithContacts}
-          title={t('form:yhteystiedot:titles:customerWithContactsPlural')}
+          title={t('form:yhteystiedot:titles:customerWithContacts')}
         />
         <ContactsSummary
           customerWithContacts={contractorWithContacts}

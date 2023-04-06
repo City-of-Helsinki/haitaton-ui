@@ -21,6 +21,12 @@ const useLinkPath = (route: ROUTES): ((routeParams: RouteParams) => string) => {
     };
   }
 
+  function applicationIdReturnFunc() {
+    return function replaceParam({ id }: RouteParams) {
+      return path.replace(':id', id);
+    };
+  }
+
   // https://github.com/UselessPickles/ts-enum-util/blob/master/docs/EnumValueVisitor.md#basic-usage-examples
   return $enum.visitValue(route).with({
     [ROUTES.HOME]: defaultReturnFunc,
@@ -32,7 +38,7 @@ const useLinkPath = (route: ROUTES): ((routeParams: RouteParams) => string) => {
     [ROUTES.PUBLIC_HANKKEET_MAP]: defaultReturnFunc,
     [ROUTES.PUBLIC_HANKKEET_LIST]: defaultReturnFunc,
     [ROUTES.FULL_PAGE_MAP]: hankeTunnusReturnFunc,
-    [ROUTES.HAKEMUS]: defaultReturnFunc,
+    [ROUTES.HAKEMUS]: applicationIdReturnFunc,
     [ROUTES.JOHTOSELVITYSHAKEMUS]: defaultReturnFunc,
     [ROUTES.HAITATON_INFO]: defaultReturnFunc,
     [ROUTES.ACCESSIBILITY]: defaultReturnFunc,

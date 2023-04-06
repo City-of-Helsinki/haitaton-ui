@@ -36,6 +36,7 @@ import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeade
 import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotification';
 import Container from '../../../common/components/container/Container';
 import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
+import useHankeViewPath from '../hooks/useHankeViewPath';
 
 type CustomAccordionProps = {
   hanke: HankeData;
@@ -43,8 +44,7 @@ type CustomAccordionProps = {
 
 const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
   const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
-  const getViewHankePath = useLinkPath(ROUTES.HANKE);
-  const viewHankePath = getViewHankePath({ hankeTunnus: hanke.hankeTunnus });
+  const hankeViewPath = useHankeViewPath(hanke?.hankeTunnus);
 
   // Handle accordion state with useAccordion hook
   const { isOpen, buttonProps, contentProps } = useAccordion({ initiallyOpen: false });
@@ -61,7 +61,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
     : '-';
 
   function navigateToHanke() {
-    navigate(viewHankePath);
+    navigate(hankeViewPath);
   }
 
   return (
@@ -97,7 +97,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
           </div>
           <div className={styles.actions}>
             <Link
-              to={viewHankePath}
+              to={hankeViewPath}
               aria-label={
                 // eslint-disable-next-line
                 t(`routes:${ROUTES.HANKE}.meta.title`) + ` ${hanke.nimi} - ${hanke.hankeTunnus} `

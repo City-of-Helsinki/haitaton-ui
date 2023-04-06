@@ -2,39 +2,28 @@ import React from 'react';
 import { Card, IconEye } from 'hds-react';
 import { Box, Flex } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { Application } from '../types/application';
-import { formatToFinnishDate } from '../../../common/utils/date';
 import styles from './ApplicationListItem.module.scss';
 import Text from '../../../common/components/text/Text';
 import ApplicationStatusTag from './ApplicationStatusTag';
-
-function ApplicationDates({
-  startTime,
-  endTime,
-}: {
-  startTime: string | null;
-  endTime: string | null;
-}) {
-  if (startTime === null || endTime === null) {
-    return <div />;
-  }
-
-  return (
-    <p>
-      {formatToFinnishDate(startTime)}–{formatToFinnishDate(endTime)}
-    </p>
-  );
-}
+import useLinkPath from '../../../common/hooks/useLinkPath';
+import { ROUTES } from '../../../common/types/route';
+import ApplicationDates from './ApplicationDates';
 
 type Props = { application: Application };
 
 function ApplicationListItem({ application }: Props) {
   const { t } = useTranslation();
-  const { applicationData, alluStatus, applicationIdentifier } = application;
+  const getApplicationPathView = useLinkPath(ROUTES.HAKEMUS);
+
+  const { applicationData, alluStatus, applicationIdentifier, id } = application;
   const { name, applicationType, startTime, endTime } = applicationData;
 
   const applicationId =
     applicationIdentifier || t(`hakemus:applicationTypeDraft:${applicationType}`);
+
+  const applicationViewPath = getApplicationPathView({ id: (id as number).toString() });
 
   return (
     <Card border className={styles.applicationCard} data-testid="application-card">
@@ -42,9 +31,17 @@ function ApplicationListItem({ application }: Props) {
         <div className={styles.applicationInfoRow}>
           <Flex mr="var(--spacing-s)" flexWrap="wrap">
             <Box mr="var(--spacing-s)">
-              <Text tag="p" weight="bold">
+              <Link
+                to={applicationViewPath}
+                aria-label={
+                  // eslint-disable-next-line
+                  t(`routes:${ROUTES.HAKEMUS}.meta.title`) + ` ${name}` + ` ${applicationId}`
+                }
+                data-testid={`applicationViewLinkIdentifier-${id}`}
+                className={styles.applicationLink}
+              >
                 {applicationId}
-              </Text>
+              </Link>
             </Box>
             <Text tag="p">{name}</Text>
           </Flex>
@@ -54,7 +51,16 @@ function ApplicationListItem({ application }: Props) {
           </div>
         </div>
         <Box flex="0 0 60px">
-          <IconEye />
+          <Link
+            to={applicationViewPath}
+            aria-label={
+              // eslint-disable-next-line
+              t(`routes:${ROUTES.HAKEMUS}.meta.title`) + ` ${name}`
+            }
+            data-testid={`applicationViewLink-${id}`}
+          >
+            <IconEye aria-hidden="true" />
+          </Link>
         </Box>
       </Flex>
       <p>{t(`hakemus:applicationTypes:${applicationType}`)}</p>

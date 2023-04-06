@@ -1,55 +1,11 @@
 @import 'layout.scss';
 
-.hankeViewContainer {
-  background-color: var(--color-white);
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
+.draftStateNotification {
+  margin-bottom: var(--spacing-s);
+  margin-top: var(--spacing-s);
 
-.headerContainer {
-  background-color: var(--color-summer-light);
-  padding-top: var(--spacing-2-xl);
-  padding-bottom: var(--spacing-xl);
-}
-
-.buttonContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-s);
-}
-
-.contentContainerOut {
-  flex: 1 1 auto;
-
-  .contentContainerIn {
-    height: 100%;
-
-    @include respond-above(l) {
-      display: grid;
-      grid-template-columns: 67% 34%;
-      padding-right: 0;
-    }
-
-    .mainContent {
-      padding-top: var(--spacing-s);
-      padding-bottom: var(--spacing-s);
-      padding-right: var(--spacing-xs);
-
-      .draftStateNotification {
-        margin-bottom: var(--spacing-s);
-        margin-top: var(--spacing-s);
-
-        @include respond-above(m) {
-          padding-right: var(--spacing-l);
-        }
-      }
-    }
-
-    .sideBar {
-      background-color: var(--color-black-5);
-      padding: var(--spacing-m);
-    }
+  @include respond-above(m) {
+    padding-right: var(--spacing-l);
   }
 }
 

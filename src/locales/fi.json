@@ -112,8 +112,7 @@
         "subContact": "Yhteyshenkilö",
         "subContacts": "Yhteyshenkilöt",
         "subContactInformation": "Yhteyshenkilön tiedot",
-        "customerWithContacts": "Työstä vastaava",
-        "customerWithContactsPlural": "Työstä vastaavat",
+        "customerWithContacts": "Hakija",
         "contractorWithContacts": "Työn suorittaja",
         "contractorWithContactsPlural": "Työn suorittajat",
         "propertyDeveloperWithContacts": "Rakennuttaja",
@@ -121,8 +120,7 @@
         "representativeWithContactsPlural": "Asianhoitajat",
         "addContractor": "Lisää työn suorittaja",
         "addRepresentative": "Lisää asianhoitaja",
-        "addRepresentatives": "Lisää asianhoitajia",
-        "applicant": "Hakija"
+        "addRepresentatives": "Lisää asianhoitajia"
       },
       "labels": {
         "tyyppi": "Tyyppi",
@@ -233,10 +231,10 @@
       }
     },
     "HAKEMUS": {
-      "path": "/hakemus/*",
-      "headerLabel": "Luo uusi hakemus",
+      "path": "/hakemus/:id",
+      "headerLabel": "Hakemus",
       "meta": {
-        "title": "Haitaton - Luo uusi hakemus"
+        "title": "Haitaton - Hakemussivu"
       }
     },
     "JOHTOSELVITYSHAKEMUS": {
@@ -518,7 +516,12 @@
       "preFilledInfoHelp": "Valitse nimi hankkeen tiedoista",
       "cancelTitle": "Oletko varma että haluat perua hakemuksen",
       "cancelDescription": "Hakemuksen peruminen on pysyvä toiminto ja hakemuksen tietoja ei voi palauttaa perumisen jälkeen.",
-      "rockExcavation": "Louhitaanko työn yhteydessä, esimerkiksi kallioperää?"
+      "rockExcavation": "Louhitaanko työn yhteydessä, esimerkiksi kallioperää?",
+      "rockExcavationShort": "Louhitaanko työn yhteydessä",
+      "areaDuration": "Työalueen kesto",
+      "totalSurfaceArea": "Työ-alueiden kokonaispinta-ala",
+      "applicationState": "Hakemuksen tila",
+      "relatedHanke": "Liittyy hankkeeseen"
     },
     "notifications": {
       "saveSuccessLabel": "Hakemus tallennettu",
@@ -555,7 +558,8 @@
       "cancelApplication": "Peru hakemus"
     },
     "errors": {
-      "cancelConflict": "Hakemusta ei voida perua, koska se on edennyt käsittelyyn"
+      "cancelConflict": "Hakemusta ei voida perua, koska se on edennyt käsittelyyn",
+      "notFound": "Hakemusta ei löytynyt"
     },
     "headers": {
       "pickApplication": "Valitse luotava hakemus"

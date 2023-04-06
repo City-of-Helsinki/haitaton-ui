@@ -238,7 +238,7 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
       </Text>
 
       <Text tag="h2" styleAs="h4" weight="bold" spacingBottom="s">
-        {t('form:yhteystiedot:titles:applicant')}
+        {t('form:yhteystiedot:titles:customerWithContacts')}
       </Text>
 
       {/* Hakija */}

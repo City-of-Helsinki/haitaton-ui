@@ -16,7 +16,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Flex } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
-import Container from '../../../common/components/container/Container';
 import Text from '../../../common/components/text/Text';
 import { HankeAlue, HankeData, HankeIndexData } from '../../types/hanke';
 import styles from './HankeView.module.scss';
@@ -43,6 +42,14 @@ import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
 import { useApplicationsForHanke } from '../../application/hooks/useApplications';
 import ApplicationList from '../../application/components/ApplicationList';
 import ErrorLoadingText from '../../../common/components/errorLoadingText/ErrorLoadingText';
+import {
+  InformationViewContainer,
+  InformationViewContentContainer,
+  InformationViewHeader,
+  InformationViewHeaderButtons,
+  InformationViewMainContent,
+  InformationViewSidebar,
+} from '../../common/components/hankeInformationView/HankeInformationView';
 
 type AreaProps = {
   area: HankeAlue;
@@ -156,162 +163,158 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onCancelHanke }) =
   const { omistajat, rakennuttajat, toteuttajat, muut, tormaystarkasteluTulos, alueet } = hankeData;
 
   return (
-    <article className={styles.hankeViewContainer}>
+    <InformationViewContainer>
       <ApplicationAddDialog
         isOpen={showAddApplicationDialog}
         onClose={closeAddApplicationDialog}
         hanke={hankeData}
       />
 
-      <header className={styles.headerContainer}>
-        <Container>
-          <Text tag="h1" styleAs="h1" weight="bold" id={SKIP_TO_ELEMENT_ID} tabIndex={-1}>
-            {hankeData?.nimi}
-          </Text>
-          <Text tag="h2" styleAs="h3" weight="bold" spacingBottom="l">
-            {hankeData?.hankeTunnus}
-          </Text>
-          <Text tag="p" styleAs="body-s" weight="bold" spacingBottom="l">
-            {t('hankePortfolio:labels:oikeudet')}:
-          </Text>
+      <InformationViewHeader backgroundColor="var(--color-summer-light)">
+        <Text tag="h1" styleAs="h1" weight="bold" id={SKIP_TO_ELEMENT_ID} tabIndex={-1}>
+          {hankeData?.nimi}
+        </Text>
+        <Text tag="h2" styleAs="h3" weight="bold" spacingBottom="l">
+          {hankeData?.hankeTunnus}
+        </Text>
+        <Text tag="p" styleAs="body-s" weight="bold" spacingBottom="l">
+          {t('hankePortfolio:labels:oikeudet')}:
+        </Text>
 
-          <div className={styles.buttonContainer}>
+        <InformationViewHeaderButtons>
+          <Button
+            onClick={onEditHanke}
+            variant="primary"
+            iconLeft={<IconPen aria-hidden="true" />}
+            theme="coat"
+          >
+            {t('hankeList:buttons:edit')}
+          </Button>
+          <Button
+            variant="primary"
+            iconLeft={<IconPlusCircle aria-hidden="true" />}
+            theme="coat"
+            onClick={addApplication}
+            disabled={!isHankeValid}
+          >
+            {t('hankeList:buttons:addApplication')}
+          </Button>
+          <Button variant="primary" iconLeft={<IconUser aria-hidden="true" />} theme="coat">
+            {t('hankeList:buttons:editRights')}
+          </Button>
+          <Button
+            variant="primary"
+            iconLeft={<IconCross aria-hidden="true" />}
+            theme="black"
+            disabled={!isHankeValid}
+          >
+            {t('hankeList:buttons:endHanke')}
+          </Button>
+          {!isLoading && isCancelPossible && (
             <Button
-              onClick={onEditHanke}
-              variant="primary"
-              iconLeft={<IconPen aria-hidden="true" />}
-              theme="coat"
+              onClick={onCancelHanke}
+              variant="danger"
+              iconLeft={<IconTrash aria-hidden="true" />}
             >
-              {t('hankeList:buttons:edit')}
+              {t('hankeForm:cancelButton')}
             </Button>
-            <Button
-              variant="primary"
-              iconLeft={<IconPlusCircle aria-hidden="true" />}
-              theme="coat"
-              onClick={addApplication}
-              disabled={!isHankeValid}
-            >
-              {t('hankeList:buttons:addApplication')}
-            </Button>
-            <Button variant="primary" iconLeft={<IconUser aria-hidden="true" />} theme="coat">
-              {t('hankeList:buttons:editRights')}
-            </Button>
-            <Button
-              variant="primary"
-              iconLeft={<IconCross aria-hidden="true" />}
-              theme="black"
-              disabled={!isHankeValid}
-            >
-              {t('hankeList:buttons:endHanke')}
-            </Button>
-            {!isLoading && isCancelPossible && (
-              <Button
-                onClick={onCancelHanke}
-                variant="danger"
-                iconLeft={<IconTrash aria-hidden="true" />}
-              >
-                {t('hankeForm:cancelButton')}
-              </Button>
-            )}
+          )}
+        </InformationViewHeaderButtons>
+      </InformationViewHeader>
+
+      <InformationViewContentContainer>
+        <InformationViewMainContent>
+          <div className={styles.draftStateNotification}>
+            <HankeDraftStateNotification hanke={hankeData} />
           </div>
-        </Container>
-      </header>
 
-      <div className={styles.contentContainerOut}>
-        <Container className={styles.contentContainerIn}>
-          <div className={styles.mainContent}>
-            <div className={styles.draftStateNotification}>
-              <HankeDraftStateNotification hanke={hankeData} />
-            </div>
-
-            <Tabs initiallyActiveTab={initiallyActiveTab}>
-              <TabList className={styles.tabList}>
-                <Tab>{t('hankePortfolio:tabit:perustiedot')}</Tab>
-                <Tab>{t('hankePortfolio:tabit:alueet')}</Tab>
-                <Tab>{t('hankePortfolio:tabit:haittojenHallinta')}</Tab>
-                <Tab>{t('hankePortfolio:tabit:yhteystiedot')}</Tab>
-                <Tab>{t('hankePortfolio:tabit:hakemukset')}</Tab>
-              </TabList>
-              <TabPanel>
-                <BasicInformationSummary formData={hankeData}>
-                  <SectionItemTitle>{t('hanke:alue:totalSurfaceAreaLong')}</SectionItemTitle>
-                  <SectionItemContent>
-                    {areasTotalSurfaceArea && <p>{areasTotalSurfaceArea} m²</p>}
-                  </SectionItemContent>
-                </BasicInformationSummary>
-              </TabPanel>
-              <TabPanel>
-                {alueet?.map((area, index) => {
-                  return (
-                    <HankeAreaInfo
-                      key={area.id}
-                      area={area}
-                      hankeIndexData={tormaystarkasteluTulos}
-                      index={index}
-                    />
-                  );
-                })}
-              </TabPanel>
-              <TabPanel>Haittojen hallinta</TabPanel>
-              <TabPanel>
-                <FormSummarySection>
-                  {omistajat && omistajat.length > 0 && (
-                    <ContactsSummary
-                      contacts={omistajat}
-                      title={t('form:yhteystiedot:titles:omistaja')}
-                    />
-                  )}
-                  {rakennuttajat && rakennuttajat.length > 0 && (
-                    <ContactsSummary
-                      contacts={rakennuttajat}
-                      title={t('form:yhteystiedot:titles:rakennuttajatPlural')}
-                    />
-                  )}
-                  {toteuttajat && toteuttajat?.length > 0 && (
-                    <ContactsSummary
-                      contacts={toteuttajat}
-                      title={t('form:yhteystiedot:titles:toteuttajatPlural')}
-                    />
-                  )}
-                  {muut && muut?.length > 0 && (
-                    <ContactsSummary
-                      contacts={muut}
-                      title={t('form:yhteystiedot:titles:muutPlural')}
-                    />
-                  )}
-                </FormSummarySection>
-              </TabPanel>
-              <TabPanel>
-                {isLoading && (
-                  <Flex justify="center" mt="var(--spacing-xl)">
-                    <LoadingSpinner />
-                  </Flex>
+          <Tabs initiallyActiveTab={initiallyActiveTab}>
+            <TabList className={styles.tabList}>
+              <Tab>{t('hankePortfolio:tabit:perustiedot')}</Tab>
+              <Tab>{t('hankePortfolio:tabit:alueet')}</Tab>
+              <Tab>{t('hankePortfolio:tabit:haittojenHallinta')}</Tab>
+              <Tab>{t('hankePortfolio:tabit:yhteystiedot')}</Tab>
+              <Tab>{t('hankePortfolio:tabit:hakemukset')}</Tab>
+            </TabList>
+            <TabPanel>
+              <BasicInformationSummary formData={hankeData}>
+                <SectionItemTitle>{t('hanke:alue:totalSurfaceAreaLong')}</SectionItemTitle>
+                <SectionItemContent>
+                  {areasTotalSurfaceArea && <p>{areasTotalSurfaceArea} m²</p>}
+                </SectionItemContent>
+              </BasicInformationSummary>
+            </TabPanel>
+            <TabPanel>
+              {alueet?.map((area, index) => {
+                return (
+                  <HankeAreaInfo
+                    key={area.id}
+                    area={area}
+                    hankeIndexData={tormaystarkasteluTulos}
+                    index={index}
+                  />
+                );
+              })}
+            </TabPanel>
+            <TabPanel>Haittojen hallinta</TabPanel>
+            <TabPanel>
+              <FormSummarySection>
+                {omistajat && omistajat.length > 0 && (
+                  <ContactsSummary
+                    contacts={omistajat}
+                    title={t('form:yhteystiedot:titles:omistaja')}
+                  />
                 )}
-                {applicationsResponse?.applications && (
-                  <ApplicationList applications={applicationsResponse.applications} />
+                {rakennuttajat && rakennuttajat.length > 0 && (
+                  <ContactsSummary
+                    contacts={rakennuttajat}
+                    title={t('form:yhteystiedot:titles:rakennuttajatPlural')}
+                  />
                 )}
-                {error && <ErrorLoadingText />}
-              </TabPanel>
-            </Tabs>
-          </div>
-          <div className={styles.sideBar}>
-            <OwnHankeMapHeader hankeTunnus={hankeData.hankeTunnus} />
-            <OwnHankeMap hanke={hankeData} />
-            {alueet?.map((area, index) => {
-              return (
-                <CompressedAreaIndex
-                  key={area.id}
-                  area={area}
-                  haittaIndex={tormaystarkasteluTulos?.liikennehaittaIndeksi.indeksi}
-                  index={index}
-                  className={styles.compressedAreaIndex}
-                />
-              );
-            })}
-          </div>
-        </Container>
-      </div>
-    </article>
+                {toteuttajat && toteuttajat?.length > 0 && (
+                  <ContactsSummary
+                    contacts={toteuttajat}
+                    title={t('form:yhteystiedot:titles:toteuttajatPlural')}
+                  />
+                )}
+                {muut && muut?.length > 0 && (
+                  <ContactsSummary
+                    contacts={muut}
+                    title={t('form:yhteystiedot:titles:muutPlural')}
+                  />
+                )}
+              </FormSummarySection>
+            </TabPanel>
+            <TabPanel>
+              {isLoading && (
+                <Flex justify="center" mt="var(--spacing-xl)">
+                  <LoadingSpinner />
+                </Flex>
+              )}
+              {applicationsResponse?.applications && (
+                <ApplicationList applications={applicationsResponse.applications} />
+              )}
+              {error && <ErrorLoadingText />}
+            </TabPanel>
+          </Tabs>
+        </InformationViewMainContent>
+        <InformationViewSidebar>
+          <OwnHankeMapHeader hankeTunnus={hankeData.hankeTunnus} />
+          <OwnHankeMap hanke={hankeData} />
+          {alueet?.map((area, index) => {
+            return (
+              <CompressedAreaIndex
+                key={area.id}
+                area={area}
+                haittaIndex={tormaystarkasteluTulos?.liikennehaittaIndeksi.indeksi}
+                index={index}
+                className={styles.compressedAreaIndex}
+              />
+            );
+          })}
+        </InformationViewSidebar>
+      </InformationViewContentContainer>
+    </InformationViewContainer>
   );
 };
 

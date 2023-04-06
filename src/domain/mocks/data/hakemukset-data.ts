@@ -275,7 +275,30 @@ const hakemukset: Application[] = [
           },
         ],
       },
-      areas: [],
+      areas: [
+        {
+          name: 'Kuoppa',
+          geometry: {
+            coordinates: [
+              [
+                [25496600.4, 6672964.92],
+                [25496623.43, 6672970.52],
+                [25496648.96, 6672941.62],
+                [25496646.75, 6672912.49],
+                [25496623.66, 6672920.17],
+                [25496600.4, 6672964.92],
+              ],
+            ],
+            type: 'Polygon',
+            crs: {
+              type: 'Polygon',
+              properties: {
+                name: '',
+              },
+            },
+          },
+        },
+      ],
       startTime: '2023-06-13T21:59:59.999Z',
       endTime: '2023-10-15T21:59:59.999Z',
       identificationNumber: 'HAI-123',
