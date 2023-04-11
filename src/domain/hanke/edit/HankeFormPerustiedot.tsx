@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { Tooltip, TextArea, SelectionGroup, RadioButton, Link } from 'hds-react';
+import { Tooltip, TextArea, SelectionGroup, RadioButton } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { useFormContext } from 'react-hook-form';
 import { Box } from '@chakra-ui/react';
@@ -18,6 +18,7 @@ import DropdownMultiselect from '../../../common/components/dropdown/DropdownMul
 import Checkbox from '../../../common/components/checkbox/Checkbox';
 import { getInputErrorText } from '../../../common/utils/form';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
+import Link from '../../../common/components/Link/Link';
 
 const HankeFormPerustiedot: React.FC<FormProps> = ({ errors, register, formData }) => {
   const { t } = useTranslation();

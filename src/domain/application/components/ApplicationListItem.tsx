@@ -1,15 +1,17 @@
 import React from 'react';
 import { Card, IconEye } from 'hds-react';
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, Grid } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Application } from '../types/application';
+import { AlluStatus, Application } from '../types/application';
 import styles from './ApplicationListItem.module.scss';
 import Text from '../../../common/components/text/Text';
 import ApplicationStatusTag from './ApplicationStatusTag';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
 import ApplicationDates from './ApplicationDates';
+import DecisionLink from './DecisionLink';
+import { useDecision } from '../hooks/useDecision';
 
 type Props = { application: Application };
 
@@ -19,6 +21,7 @@ function ApplicationListItem({ application }: Props) {
 
   const { applicationData, alluStatus, applicationIdentifier, id } = application;
   const { name, applicationType, startTime, endTime } = applicationData;
+  const { data: decisionUrl } = useDecision(id, alluStatus);
 
   const applicationId =
     applicationIdentifier || t(`hakemus:applicationTypeDraft:${applicationType}`);
@@ -46,9 +49,16 @@ function ApplicationListItem({ application }: Props) {
             <Text tag="p">{name}</Text>
           </Flex>
           <ApplicationDates startTime={startTime} endTime={endTime} />
-          <div>
+          <Grid alignItems="start" templateColumns="auto 1fr" columnGap="var(--spacing-xs)">
             <ApplicationStatusTag status={alluStatus} />
-          </div>
+            {alluStatus === AlluStatus.DECISION && (
+              <DecisionLink
+                url={decisionUrl}
+                linkText={t('hakemus:labels:downloadDecision')}
+                filename={applicationIdentifier}
+              />
+            )}
+          </Grid>
         </div>
         <Box flex="0 0 60px">
           <Link

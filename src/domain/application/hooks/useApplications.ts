@@ -20,7 +20,7 @@ export function useApplications() {
 
 export function useApplicationsForHanke(hankeTunnus?: string) {
   return useQuery<{ applications: Application[] }>(
-    ['applicationsForHanke'],
+    ['applicationsForHanke', hankeTunnus],
     () => getApplicationsForHanke(hankeTunnus),
     { enabled: Boolean(hankeTunnus) }
   );

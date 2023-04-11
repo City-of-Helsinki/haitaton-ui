@@ -12,13 +12,7 @@ import GlobalNotification from '../globalNotification/GlobalNotification';
 import './app.scss';
 import '../../../assets/styles/reset.css';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      cacheTime: 0, // Disable cache
-    },
-  },
-});
+const queryClient = new QueryClient();
 
 const App: React.FC = () => (
   <Router>
