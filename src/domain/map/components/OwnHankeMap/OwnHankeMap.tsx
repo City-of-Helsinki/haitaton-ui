@@ -41,7 +41,7 @@ const OwnHankeMap: React.FC<Props> = ({ hanke, application }) => {
           className="applicationGeometryLayer"
           style={(feature: FeatureLike) => styleFunction(feature, undefined, true)}
         />
-        <FitSource source={hankeSource.current} />
+        <FitSource source={application ? applicationSource.current : hankeSource.current} />
       </Map>
     </div>
   );
