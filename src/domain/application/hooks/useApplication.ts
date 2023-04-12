@@ -8,7 +8,7 @@ async function getApplication(id?: number) {
 }
 
 export function useApplication(id?: number) {
-  return useQuery<Application>(['application'], () => getApplication(id), {
+  return useQuery<Application>(['application', id], () => getApplication(id), {
     enabled: Boolean(id),
   });
 }

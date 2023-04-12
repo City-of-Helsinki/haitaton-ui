@@ -11,7 +11,6 @@ import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
 import ApplicationDates from './ApplicationDates';
 import DecisionLink from './DecisionLink';
-import { useDecision } from '../hooks/useDecision';
 
 type Props = { application: Application };
 
@@ -21,7 +20,6 @@ function ApplicationListItem({ application }: Props) {
 
   const { applicationData, alluStatus, applicationIdentifier, id } = application;
   const { name, applicationType, startTime, endTime } = applicationData;
-  const { data: decisionUrl } = useDecision(id, alluStatus);
 
   const applicationId =
     applicationIdentifier || t(`hakemus:applicationTypeDraft:${applicationType}`);
@@ -53,7 +51,7 @@ function ApplicationListItem({ application }: Props) {
             <ApplicationStatusTag status={alluStatus} />
             {alluStatus === AlluStatus.DECISION && (
               <DecisionLink
-                url={decisionUrl}
+                applicationId={id}
                 linkText={t('hakemus:labels:downloadDecision')}
                 filename={applicationIdentifier}
               />
