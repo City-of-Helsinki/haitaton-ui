@@ -32,7 +32,6 @@ import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import Link from '../../../common/components/Link/Link';
 import useHankeViewPath from '../../hanke/hooks/useHankeViewPath';
 import DecisionLink from '../components/DecisionLink';
-import { useDecision } from '../hooks/useDecision';
 
 type Props = {
   application: Application;
@@ -57,8 +56,6 @@ function ApplicationView({ application, hanke }: Props) {
     propertyDeveloperWithContacts,
     representativeWithContacts,
   } = applicationData;
-
-  const { data: decisionUrl } = useDecision(id, alluStatus);
 
   const applicationId =
     applicationIdentifier || t(`hakemus:applicationTypeDraft:${applicationType}`);
@@ -91,7 +88,7 @@ function ApplicationView({ application, hanke }: Props) {
             </Box>
             {alluStatus === AlluStatus.DECISION && (
               <DecisionLink
-                url={decisionUrl}
+                applicationId={id}
                 linkText={t('hakemus:labels:downloadDecisionShort')}
                 filename={applicationIdentifier}
               />
