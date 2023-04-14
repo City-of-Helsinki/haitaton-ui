@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Button, IconEnvelope, IconSaveDiskette, StepState } from 'hds-react';
 import { FormProvider, useForm, FieldPath } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { merge } from 'lodash';
 
 import { JohtoselvitysFormValues } from './types';
@@ -14,8 +14,12 @@ import { ReviewAndSend } from './ReviewAndSend';
 import MultipageForm from '../forms/MultipageForm';
 import FormActions from '../forms/components/FormActions';
 import { validationSchema } from './validationSchema';
-import { convertFormStateToApplicationData, findOrdererKey } from './utils';
-import { changeFormStep } from '../forms/utils';
+import {
+  convertApplicationDataToFormState,
+  convertFormStateToApplicationData,
+  findOrdererKey,
+} from './utils';
+import { changeFormStep, isPageValid } from '../forms/utils';
 import { saveApplication, sendApplication } from '../application/utils';
 import { HankeContacts, HankeData } from '../types/hanke';
 import { ApplicationCancel } from '../application/components/ApplicationCancel';
@@ -24,10 +28,11 @@ import useNavigateToApplicationList from '../hanke/hooks/useNavigateToApplicatio
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 import useApplicationSendNotification from '../application/hooks/useApplicationSendNotification';
 import useHanke from '../hanke/hooks/useHanke';
+import { Application } from '../application/types/application';
 
 type Props = {
   hankeData?: HankeData;
-  application?: JohtoselvitysFormValues;
+  application?: Application;
 };
 
 const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => {
@@ -35,6 +40,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
   const { t } = useTranslation();
   const { setNotification } = useGlobalNotification();
   const { showSendSuccess, showSendError } = useApplicationSendNotification();
+  const queryClient = useQueryClient();
 
   const initialValues: JohtoselvitysFormValues = {
     id: null,
@@ -112,7 +118,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     criteriaMode: 'all',
     shouldFocusError: false,
     shouldUnregister: false,
-    defaultValues: merge(initialValues, application),
+    defaultValues: merge(initialValues, convertApplicationDataToFormState(application)),
     resolver: yupResolver(validationSchema),
   });
 
@@ -151,6 +157,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
       showSendSuccess();
     },
     onSettled() {
+      queryClient.invalidateQueries('application', { refetchInactive: true });
       navigateToApplicationList();
     },
   });
@@ -196,54 +203,84 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     });
   }
 
-  const hankeContacts: HankeContacts | undefined = hankeData
-    ? [hankeData.omistajat, hankeData.rakennuttajat, hankeData.toteuttajat, hankeData.muut]
-    : undefined;
-
-  const formSteps = [
-    {
-      element: <BasicHankeInfo />,
-      label: t('form:headers:perustiedot'),
-      state: StepState.available,
-    },
-    {
-      element: <Geometries />,
-      label: t('form:headers:alueet'),
-      state: StepState.disabled,
-    },
-    {
-      element: <Contacts hankeContacts={hankeContacts} />,
-      label: t('form:headers:yhteystiedot'),
-      state: StepState.disabled,
-    },
-    {
-      element: <ReviewAndSend />,
-      label: t('form:headers:yhteenveto'),
-      state: StepState.disabled,
-    },
-  ];
-
   // Fields that are validated in each page when moving forward in form
-  const pageFieldsToValidate: FieldPath<JohtoselvitysFormValues>[][] = [
-    // Basic information page
-    [
-      'applicationData.name',
-      'applicationData.postalAddress',
-      'applicationData.workDescription',
-      `applicationData.${findOrdererKey(getValues('applicationData'))}.contacts`,
-      'applicationData.rockExcavation',
-      'applicationData.constructionWork',
+  const pageFieldsToValidate: FieldPath<JohtoselvitysFormValues>[][] = useMemo(
+    () => [
+      // Basic information page
+      [
+        'applicationData.name',
+        'applicationData.postalAddress',
+        'applicationData.workDescription',
+        `applicationData.${findOrdererKey(getValues('applicationData'))}.contacts`,
+        'applicationData.rockExcavation',
+        'applicationData.constructionWork',
+      ],
+      // Areas page
+      ['applicationData.startTime', 'applicationData.endTime', 'applicationData.areas'],
+      // Contacts page
+      [
+        'applicationData.customerWithContacts',
+        'applicationData.contractorWithContacts',
+        'applicationData.propertyDeveloperWithContacts',
+        'applicationData.representativeWithContacts',
+      ],
     ],
-    // Areas page
-    ['applicationData.startTime', 'applicationData.endTime', 'applicationData.areas'],
-    // Contacts page
-    [
-      'applicationData.customerWithContacts',
-      'applicationData.contractorWithContacts',
-      'applicationData.propertyDeveloperWithContacts',
-      'applicationData.representativeWithContacts',
-    ],
-  ];
+    [getValues]
+  );
+
+  const formSteps = useMemo(() => {
+    const hankeContacts: HankeContacts | undefined = hankeData
+      ? [hankeData.omistajat, hankeData.rakennuttajat, hankeData.toteuttajat, hankeData.muut]
+      : undefined;
+
+    const formValues = getValues();
+
+    return [
+      {
+        element: <BasicHankeInfo />,
+        label: t('form:headers:perustiedot'),
+        state: StepState.available,
+      },
+      {
+        element: <Geometries />,
+        label: t('form:headers:alueet'),
+        /*
+         * Determine initial state for the form step.
+         * If all the fields in the previous page are valid, step is available,
+         * otherwise it's disabled.
+         */
+        state: isPageValid<JohtoselvitysFormValues>(
+          validationSchema,
+          pageFieldsToValidate[0],
+          formValues
+        )
+          ? StepState.available
+          : StepState.disabled,
+      },
+      {
+        element: <Contacts hankeContacts={hankeContacts} />,
+        label: t('form:headers:yhteystiedot'),
+        state: isPageValid<JohtoselvitysFormValues>(
+          validationSchema,
+          pageFieldsToValidate[1],
+          formValues
+        )
+          ? StepState.available
+          : StepState.disabled,
+      },
+      {
+        element: <ReviewAndSend />,
+        label: t('form:headers:yhteenveto'),
+        state: isPageValid<JohtoselvitysFormValues>(
+          validationSchema,
+          pageFieldsToValidate[2],
+          formValues
+        )
+          ? StepState.available
+          : StepState.disabled,
+      },
+    ];
+  }, [t, getValues, pageFieldsToValidate, hankeData]);
 
   const hankeNameText = (
     <div style={{ visibility: hanke !== undefined ? 'visible' : 'hidden' }}>

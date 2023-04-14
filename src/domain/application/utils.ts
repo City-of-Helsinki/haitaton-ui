@@ -29,9 +29,10 @@ export async function sendApplication(applicationId: number) {
 }
 
 /**
- * Check if it is possible to cancel application
+ * Check if application is pending or in draft state, meaning it's not
+ * yet being handled in Allu
  */
-export function canApplicationBeCancelled(alluStatus: AlluStatusStrings | null): boolean {
+export function isApplicationPending(alluStatus: AlluStatusStrings | null): boolean {
   return (
     alluStatus === null ||
     alluStatus === AlluStatus.PENDING_CLIENT ||

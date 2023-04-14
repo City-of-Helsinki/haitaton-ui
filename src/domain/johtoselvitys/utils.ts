@@ -1,4 +1,5 @@
 import { cloneDeep, findKey } from 'lodash';
+import { Feature } from 'ol';
 import Geometry from 'ol/geom/Geometry';
 import Polygon from 'ol/geom/Polygon';
 import {
@@ -56,6 +57,30 @@ export function convertFormStateToApplicationData(formState: JohtoselvitysFormVa
       return {
         name,
         geometry: new ApplicationGeometry(coordinates),
+      };
+    }
+  );
+
+  data.applicationData.areas = updatedAreas;
+
+  return data;
+}
+
+export function convertApplicationDataToFormState(
+  application: Application | undefined
+): JohtoselvitysFormValues | undefined {
+  if (application === undefined) {
+    return undefined;
+  }
+
+  const data = cloneDeep(application);
+
+  const updatedAreas: JohtoselvitysArea[] = application.applicationData.areas.map(
+    function mapToJohtoselvitysArea({ name, geometry }): JohtoselvitysArea {
+      return {
+        name,
+        geometry,
+        feature: new Feature(new Polygon(geometry.coordinates)),
       };
     }
   );

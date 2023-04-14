@@ -55,3 +55,21 @@ test('Should show error notification if loading application fails', async () => 
   expect(screen.queryByText('Virhe tietojen lataamisessa.')).toBeInTheDocument();
   expect(screen.queryByText('Yritä hetken päästä uudelleen.')).toBeInTheDocument();
 });
+
+test('Should be able to go editing application when editing is possible', async () => {
+  const user = userEvent.setup();
+  render(<ApplicationViewContainer id={4} />);
+
+  await waitForLoadingToFinish();
+  await user.click(screen.getByRole('button', { name: 'Muokkaa hakemusta' }));
+
+  expect(window.location.pathname).toBe('/fi/johtoselvityshakemus/4/muokkaa');
+});
+
+test('Application edit button should not be displayed when editing is not possible', async () => {
+  render(<ApplicationViewContainer id={3} />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.queryByRole('button', { name: 'Muokkaa hakemusta' })).not.toBeInTheDocument();
+});

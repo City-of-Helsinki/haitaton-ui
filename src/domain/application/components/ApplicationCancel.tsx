@@ -4,7 +4,7 @@ import { Button, IconCross } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
 import { AlluStatusStrings } from '../types/application';
-import { canApplicationBeCancelled, cancelApplication } from '../utils';
+import { isApplicationPending, cancelApplication } from '../utils';
 import ConfirmationDialog from '../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
 import useNavigateToApplicationList from '../../hanke/hooks/useNavigateToApplicationList';
@@ -22,7 +22,7 @@ export const ApplicationCancel: React.FC<Props> = ({ applicationId, alluStatus, 
   const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const isCancelPossible = canApplicationBeCancelled(alluStatus);
+  const isCancelPossible = isApplicationPending(alluStatus);
 
   const { setNotification } = useGlobalNotification();
 
