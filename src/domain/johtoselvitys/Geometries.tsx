@@ -55,6 +55,7 @@ export const Geometries: React.FC = () => {
   const {
     watch,
     getValues,
+    setValue,
     formState: { errors },
   } = useFormContext<JohtoselvitysFormValues>();
 
@@ -76,6 +77,8 @@ export const Geometries: React.FC = () => {
     getValues('applicationData.postalAddress.streetAddress.streetName')
   );
 
+  const [featuresLoaded, setFeaturesLoaded] = useState(false);
+
   useEffect(() => {
     function handleAddFeature(e: VectorSourceEvent<Geometry>) {
       append(getEmptyArea(e.feature));
@@ -83,16 +86,25 @@ export const Geometries: React.FC = () => {
 
     const handleChangeFeature = debounce(() => {
       forceUpdate();
+      if (featuresLoaded) {
+        // When areas are modified set geometriesChanged with shouldDirty option
+        // so that when changing form page application is saved
+        setValue('geometriesChanged', true, { shouldDirty: true });
+      }
     }, 100);
 
     drawSource.on('addfeature', handleAddFeature);
     drawSource.on('changefeature', handleChangeFeature);
+    drawSource.once('featuresloadstart', () => {
+      setFeaturesLoaded(true);
+    });
 
     return function cleanup() {
+      handleChangeFeature.cancel();
       drawSource.un('addfeature', handleAddFeature);
       drawSource.un('changefeature', handleChangeFeature);
     };
-  }, [drawSource, append, forceUpdate]);
+  }, [drawSource, append, forceUpdate, setValue, featuresLoaded]);
 
   const { tabRefs } = useSelectableTabs(applicationAreas.length, { selectLastTabOnChange: true });
 

@@ -46,6 +46,8 @@ export function getAreaGeometries(areas: JohtoselvitysArea[]) {
  * latest OpenLayers feature coordinates.
  */
 export function convertFormStateToApplicationData(formState: JohtoselvitysFormValues): Application {
+  // eslint-disable-next-line no-param-reassign
+  delete formState.geometriesChanged;
   const data: Application = cloneDeep(formState);
 
   const updatedAreas: ApplicationArea[] = formState.applicationData.areas.map(

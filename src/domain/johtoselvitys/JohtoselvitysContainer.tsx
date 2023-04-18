@@ -122,7 +122,14 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     resolver: yupResolver(validationSchema),
   });
 
-  const { getValues, setValue, handleSubmit, trigger } = formContext;
+  const {
+    getValues,
+    setValue,
+    handleSubmit,
+    trigger,
+    formState: { isDirty },
+    reset,
+  } = formContext;
 
   // If application is created without hanke existing first, get generated hanke data
   // after first save when hankeTunnus is available
@@ -143,6 +150,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
       setValue('id', data.id);
       setValue('alluStatus', data.alluStatus);
       setValue('hankeTunnus', data.hankeTunnus);
+      reset({}, { keepValues: true });
     },
     onSettled() {
       setShowSaveNotification(true);
@@ -186,20 +194,30 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     applicationSendMutation.mutate(id);
   }
 
+  function saveOnPageChange() {
+    // Save application when page is changed
+    // only if something has changed
+    if (isDirty) {
+      saveCableApplication();
+    }
+  }
+
   function saveAndQuit() {
-    saveCableApplication();
+    applicationSaveMutation.mutate(convertFormStateToApplicationData(getValues()), {
+      onSuccess() {
+        navigateToApplicationList();
 
-    navigateToApplicationList();
-
-    setNotification(true, {
-      position: 'top-right',
-      dismissible: true,
-      autoClose: true,
-      autoCloseDuration: 5000,
-      label: t('hakemus:notifications:saveSuccessLabel'),
-      message: t('hakemus:notifications:saveSuccessText'),
-      type: 'success',
-      closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+        setNotification(true, {
+          position: 'top-right',
+          dismissible: true,
+          autoClose: true,
+          autoCloseDuration: 5000,
+          label: t('hakemus:notifications:saveSuccessLabel'),
+          message: t('hakemus:notifications:saveSuccessText'),
+          type: 'success',
+          closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+        });
+      },
     });
   }
 
@@ -302,7 +320,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         heading={t('johtoselvitysForm:pageHeader')}
         subHeading={hankeNameText}
         formSteps={formSteps}
-        onStepChange={saveCableApplication}
+        onStepChange={saveOnPageChange}
         onSubmit={handleSubmit(sendCableApplication)}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {

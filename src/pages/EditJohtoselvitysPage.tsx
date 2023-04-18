@@ -6,8 +6,8 @@ import Container from '../common/components/container/Container';
 import PageMeta from './components/PageMeta';
 import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
 import JohtoselvitysContainer from '../domain/johtoselvitys/JohtoselvitysContainer';
-import { useHankeDataInApplication } from '../domain/application/hooks/useHankeDataInApplication';
 import { useApplication } from '../domain/application/hooks/useApplication';
+import useHanke from '../domain/hanke/hooks/useHanke';
 import ErrorLoadingText from '../common/components/errorLoadingText/ErrorLoadingText';
 
 const EditJohtoselvitysPage: React.FC = () => {
@@ -15,7 +15,7 @@ const EditJohtoselvitysPage: React.FC = () => {
   const { EDIT_JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();
 
   const applicationQueryResult = useApplication(Number(id));
-  const hankeQueryResult = useHankeDataInApplication();
+  const hankeQueryResult = useHanke(applicationQueryResult.data?.hankeTunnus);
 
   if (applicationQueryResult.isLoading || hankeQueryResult?.isLoading) {
     return (

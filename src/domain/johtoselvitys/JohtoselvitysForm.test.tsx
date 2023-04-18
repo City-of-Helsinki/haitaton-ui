@@ -7,6 +7,7 @@ import { waitForLoadingToFinish } from '../../testUtils/helperFunctions';
 import { server } from '../mocks/test-server';
 import { HankeData } from '../types/hanke';
 import hankkeet from '../mocks/data/hankkeet-data';
+import applications from '../mocks/data/hakemukset-data';
 import { JohtoselvitysFormValues } from './types';
 
 afterEach(cleanup);
@@ -336,4 +337,49 @@ test('Save and quit works without hanke existing first', async () => {
 
   expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
   expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-13');
+});
+
+test('Should show error message and not navigate away when save and quit fails', async () => {
+  server.use(
+    rest.put('/api/hakemukset/:id', async (req, res, ctx) => {
+      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    })
+  );
+
+  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
+
+  fillBasicInformation();
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
+
+  expect(screen.queryAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
+  expect(window.location.pathname).toBe('/fi/johtoselvityshakemus');
+});
+
+test('Should not save application between page changes when nothing is changed', async () => {
+  const { user } = render(<JohtoselvitysContainer application={applications[3]} />);
+
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+  expect(screen.queryByText(/hakemus tallennettu/i)).not.toBeInTheDocument();
+
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+  expect(screen.queryByText(/hakemus tallennettu/i)).not.toBeInTheDocument();
+
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+  expect(screen.queryByText(/hakemus tallennettu/i)).not.toBeInTheDocument();
+});
+
+test('Should save existing application between page changes when there is changes', async () => {
+  const { user } = render(<JohtoselvitysContainer application={applications[3]} />);
+
+  fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
+    target: { value: 'Muokataan johtoselvitystä' },
+  });
+
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
 });
