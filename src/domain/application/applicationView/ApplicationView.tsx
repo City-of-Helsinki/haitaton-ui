@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, Button, IconPen, Tab, TabList, TabPanel, Tabs } from 'hds-react';
+import { Accordion, Button, IconPen, IconTrash, Tab, TabList, TabPanel, Tabs } from 'hds-react';
 import { Box } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import Geometry from 'ol/geom/Geometry';
@@ -33,6 +33,7 @@ import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import Link from '../../../common/components/Link/Link';
 import useHankeViewPath from '../../hanke/hooks/useHankeViewPath';
 import DecisionLink from '../components/DecisionLink';
+import { ApplicationCancel } from '../components/ApplicationCancel';
 
 type Props = {
   application: Application;
@@ -107,15 +108,24 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
         </FormSummarySection>
 
         <InformationViewHeaderButtons>
-          {isPending && (
+          {isPending ? (
             <Button
               theme="coat"
               iconLeft={<IconPen aria-hidden="true" />}
               onClick={onEditApplication}
             >
-              {t('hakemus:buttons:modifyApplication')}
+              {t('hakemus:buttons:editApplication')}
             </Button>
-          )}
+          ) : null}
+          {hanke ? (
+            <ApplicationCancel
+              applicationId={id}
+              alluStatus={alluStatus}
+              hankeTunnus={hanke?.hankeTunnus}
+              buttonVariant="danger"
+              buttonIcon={<IconTrash aria-hidden />}
+            />
+          ) : null}
         </InformationViewHeaderButtons>
       </InformationViewHeader>
 

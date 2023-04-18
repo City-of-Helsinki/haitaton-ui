@@ -565,7 +565,7 @@
       "continueToApplication": "Jatka hakemukseen",
       "sendApplication": "Lähetä hakemus",
       "cancelApplication": "Peru hakemus",
-      "modifyApplication": "Muokkaa hakemusta"
+      "editApplication": "Muokkaa hakemusta"
     },
     "errors": {
       "cancelConflict": "Hakemusta ei voida perua, koska se on edennyt käsittelyyn",

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation } from 'react-query';
-import { Button, IconCross } from 'hds-react';
+import { Button } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
 import { AlluStatusStrings } from '../types/application';
@@ -13,9 +13,17 @@ type Props = {
   applicationId: number | null;
   alluStatus: AlluStatusStrings | null;
   hankeTunnus?: string;
+  buttonVariant: 'secondary' | 'danger';
+  buttonIcon: JSX.Element;
 };
 
-export const ApplicationCancel: React.FC<Props> = ({ applicationId, alluStatus, hankeTunnus }) => {
+export const ApplicationCancel: React.FC<Props> = ({
+  applicationId,
+  alluStatus,
+  hankeTunnus,
+  buttonVariant,
+  buttonIcon,
+}) => {
   const { t } = useTranslation();
   const navigateToApplicationList = useNavigateToApplicationList(hankeTunnus);
 
@@ -74,16 +82,12 @@ export const ApplicationCancel: React.FC<Props> = ({ applicationId, alluStatus, 
         isOpen={isConfirmationDialogOpen}
         close={closeConfirmationDialog}
         mainAction={doApplicationCancel}
-        mainBtnLabel={t('hakemus:buttons:cancelApplication')}
+        mainBtnLabel={t('common:confirmationDialog:confirmButton')}
         variant="danger"
         errorMsg={errorMessage}
       />
 
-      <Button
-        variant="secondary"
-        iconLeft={<IconCross aria-hidden />}
-        onClick={openConfirmationDialog}
-      >
+      <Button variant={buttonVariant} iconLeft={buttonIcon} onClick={openConfirmationDialog}>
         {t('hakemus:buttons:cancelApplication')}
       </Button>
     </>
