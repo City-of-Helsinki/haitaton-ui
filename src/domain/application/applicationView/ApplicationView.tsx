@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, IconTrash, Tab, TabList, TabPanel, Tabs } from 'hds-react';
+import { Accordion, Button, IconPen, IconTrash, Tab, TabList, TabPanel, Tabs } from 'hds-react';
 import { Box } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import Geometry from 'ol/geom/Geometry';
@@ -25,7 +25,7 @@ import BasicInformationSummary from '../components/BasicInformationSummary';
 import { getAreaGeometries, getAreaGeometry } from '../../johtoselvitys/utils';
 import { formatSurfaceArea, getTotalSurfaceArea } from '../../map/utils';
 import useLocale from '../../../common/hooks/useLocale';
-import { getAreaDefaultName } from '../utils';
+import { getAreaDefaultName, isApplicationPending } from '../utils';
 import ApplicationDates from '../components/ApplicationDates';
 import ContactsSummary from '../components/ContactsSummary';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
@@ -38,9 +38,10 @@ import { ApplicationCancel } from '../components/ApplicationCancel';
 type Props = {
   application: Application;
   hanke: HankeData | undefined;
+  onEditApplication: () => void;
 };
 
-function ApplicationView({ application, hanke }: Props) {
+function ApplicationView({ application, hanke, onEditApplication }: Props) {
   const { t } = useTranslation();
 
   const locale = useLocale();
@@ -67,6 +68,8 @@ function ApplicationView({ application, hanke }: Props) {
 
   const geometries: Geometry[] = getAreaGeometries(areas);
   const totalSurfaceArea = getTotalSurfaceArea(geometries);
+
+  const isPending = isApplicationPending(alluStatus);
 
   return (
     <InformationViewContainer>
@@ -105,6 +108,15 @@ function ApplicationView({ application, hanke }: Props) {
         </FormSummarySection>
 
         <InformationViewHeaderButtons>
+          {isPending ? (
+            <Button
+              theme="coat"
+              iconLeft={<IconPen aria-hidden="true" />}
+              onClick={onEditApplication}
+            >
+              {t('hakemus:buttons:editApplication')}
+            </Button>
+          ) : null}
           {hanke ? (
             <ApplicationCancel
               applicationId={id}

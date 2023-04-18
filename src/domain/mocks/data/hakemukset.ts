@@ -1,6 +1,6 @@
 import { Application } from '../../application/types/application';
 import hakemuksetData from './hakemukset-data';
-import { canApplicationBeCancelled } from '../../application/utils';
+import { isApplicationPending } from '../../application/utils';
 import ApiError from '../apiError';
 
 let hakemukset: Application[] = [...hakemuksetData];
@@ -41,7 +41,7 @@ export async function remove(id: number) {
   if (!hakemusToRemove) {
     throw new ApiError(`No application with id ${id}`, 404);
   }
-  if (!canApplicationBeCancelled(hakemusToRemove.alluStatus)) {
+  if (!isApplicationPending(hakemusToRemove.alluStatus)) {
     throw new ApiError(`Application can not be cancelled`, 409);
   }
   hakemukset = hakemukset.filter((hakemus) => hakemus.id !== id);

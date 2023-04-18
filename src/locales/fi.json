@@ -244,6 +244,13 @@
         "title": "Haitaton - Luo uusi johtoselvityshakemus"
       }
     },
+    "EDIT_JOHTOSELVITYSHAKEMUS": {
+      "path": "/johtoselvityshakemus/:id/muokkaa",
+      "headerLabel": "Muokkaa johtoselvityshakemusta",
+      "meta": {
+        "title": "Haitaton - Muokkaa johtoselvityshakemusta"
+      }
+    },
     "HAITATON_INFO": {
       "path": "/tietoja",
       "headerLabel": "Tietoja Haitattomasta",
@@ -557,7 +564,8 @@
     "buttons": {
       "continueToApplication": "Jatka hakemukseen",
       "sendApplication": "Lähetä hakemus",
-      "cancelApplication": "Peru hakemus"
+      "cancelApplication": "Peru hakemus",
+      "editApplication": "Muokkaa hakemusta"
     },
     "errors": {
       "cancelConflict": "Hakemusta ei voida perua, koska se on edennyt käsittelyyn",

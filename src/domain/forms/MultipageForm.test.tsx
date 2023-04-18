@@ -1,6 +1,5 @@
 import React from 'react';
 import { StepState, TextInput } from 'hds-react';
-import userEvent from '@testing-library/user-event';
 import MultipageForm from './MultipageForm';
 import { render, screen } from '../../testUtils/render';
 import FormActions from './components/FormActions';
@@ -60,10 +59,9 @@ test('form pages can be navigated', async () => {
     },
   ];
 
-  const user = userEvent.setup();
   const handleSave = jest.fn();
 
-  render(
+  const { user } = render(
     <MultipageForm heading="Test form" formSteps={formSteps} onStepChange={handleSave}>
       {(activeStepIndex, handlePrevious, handleNext) => (
         <FormActions

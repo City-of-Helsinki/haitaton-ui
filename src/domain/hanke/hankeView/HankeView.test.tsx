@@ -1,5 +1,4 @@
 import React from 'react';
-import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { render, screen } from '../../../testUtils/render';
 import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
@@ -36,9 +35,7 @@ test('Draft state notification is not rendered when hanke is not in draft state'
 });
 
 test('Correct information about hanke should be displayed', async () => {
-  const user = userEvent.setup();
-
-  render(<HankeViewContainer hankeTunnus="HAI22-3" />);
+  const { user } = render(<HankeViewContainer hankeTunnus="HAI22-3" />);
 
   await waitForLoadingToFinish();
 
@@ -94,9 +91,7 @@ test('Correct information about hanke should be displayed', async () => {
 });
 
 test('It is possible to delete hanke if it has no active applications', async () => {
-  const user = userEvent.setup();
-
-  render(<HankeViewContainer hankeTunnus="HAI22-3" />);
+  const { user } = render(<HankeViewContainer hankeTunnus="HAI22-3" />);
 
   await waitForLoadingToFinish();
 
@@ -119,9 +114,7 @@ test('It is not possible to delete hanke if it has active applications', () => {
 });
 
 test('Should render correct number of applications if they exist', async () => {
-  const user = userEvent.setup();
-
-  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
+  const { user } = render(<HankeViewContainer hankeTunnus="HAI22-2" />);
 
   await waitForLoadingToFinish();
 
@@ -131,9 +124,7 @@ test('Should render correct number of applications if they exist', async () => {
 });
 
 test('Should show information if no applications exist', async () => {
-  const user = userEvent.setup();
-
-  render(<HankeViewContainer hankeTunnus="HAI22-1" />);
+  const { user } = render(<HankeViewContainer hankeTunnus="HAI22-1" />);
 
   await waitForLoadingToFinish();
 
@@ -143,15 +134,13 @@ test('Should show information if no applications exist', async () => {
 });
 
 test('Should show error notification if loading applications fails', async () => {
-  const user = userEvent.setup();
-
   server.use(
     rest.get('/api/hankkeet/:hankeTunnus/hakemukset', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
     })
   );
 
-  render(<HankeViewContainer hankeTunnus="HAI22-1" />);
+  const { user } = render(<HankeViewContainer hankeTunnus="HAI22-1" />);
 
   await waitForLoadingToFinish();
 
@@ -162,9 +151,7 @@ test('Should show error notification if loading applications fails', async () =>
 });
 
 test('Should navigate to application view when clicking application identifier link', async () => {
-  const user = userEvent.setup();
-
-  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
+  const { user } = render(<HankeViewContainer hankeTunnus="HAI22-2" />);
 
   await waitForLoadingToFinish();
   await user.click(screen.getByRole('tab', { name: /hakemukset/i }));
@@ -175,9 +162,7 @@ test('Should navigate to application view when clicking application identifier l
 });
 
 test('Should navigate to application view when clicking the eye icon', async () => {
-  const user = userEvent.setup();
-
-  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
+  const { user } = render(<HankeViewContainer hankeTunnus="HAI22-2" />);
 
   await waitForLoadingToFinish();
   await user.click(screen.getByRole('tab', { name: /hakemukset/i }));

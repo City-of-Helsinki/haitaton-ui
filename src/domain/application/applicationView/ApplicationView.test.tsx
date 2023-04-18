@@ -1,5 +1,4 @@
 import React from 'react';
-import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { render, screen } from '../../../testUtils/render';
 import ApplicationViewContainer from './ApplicationViewContainer';
@@ -17,9 +16,7 @@ test('Correct information about application should be displayed', async () => {
 });
 
 test('Link back to related hanke should work', async () => {
-  const user = userEvent.setup();
-
-  render(<ApplicationViewContainer id={4} />);
+  const { user } = render(<ApplicationViewContainer id={4} />);
 
   await waitForLoadingToFinish();
   await user.click(screen.getByRole('link', { name: 'Mannerheimintien kaukolämpö (HAI22-3)' }));
@@ -56,10 +53,25 @@ test('Should show error notification if loading application fails', async () => 
   expect(screen.queryByText('Yritä hetken päästä uudelleen.')).toBeInTheDocument();
 });
 
-test('Should be able to cancel application if it is possible', async () => {
-  const user = userEvent.setup();
+test('Should be able to go editing application when editing is possible', async () => {
+  const { user } = render(<ApplicationViewContainer id={4} />);
 
-  render(<ApplicationViewContainer id={4} />);
+  await waitForLoadingToFinish();
+  await user.click(screen.getByRole('button', { name: 'Muokkaa hakemusta' }));
+
+  expect(window.location.pathname).toBe('/fi/johtoselvityshakemus/4/muokkaa');
+});
+
+test('Application edit button should not be displayed when editing is not possible', async () => {
+  render(<ApplicationViewContainer id={3} />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.queryByRole('button', { name: 'Muokkaa hakemusta' })).not.toBeInTheDocument();
+});
+
+test('Should be able to cancel application if it is possible', async () => {
+  const { user } = render(<ApplicationViewContainer id={4} />);
 
   await waitForLoadingToFinish();
 

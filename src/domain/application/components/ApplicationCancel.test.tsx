@@ -1,14 +1,11 @@
 import React from 'react';
-import userEvent from '@testing-library/user-event';
 import { IconCross } from 'hds-react';
 import { render, screen } from '../../../testUtils/render';
 import { ApplicationCancel } from './ApplicationCancel';
 import mockApplications from '../../mocks/data/hakemukset-data';
 
 test('Cancel application when it has not been saved', async () => {
-  const user = userEvent.setup();
-
-  render(
+  const { user } = render(
     <ApplicationCancel
       applicationId={null}
       alluStatus={null}
@@ -28,11 +25,9 @@ test('Cancel application when it has not been saved', async () => {
 });
 
 test('Cancel application when it has been saved, but not sent to Allu', async () => {
-  const user = userEvent.setup();
-
   const application = mockApplications[0];
 
-  render(
+  const { user } = render(
     <ApplicationCancel
       applicationId={application.id}
       alluStatus={application.alluStatus}
@@ -52,11 +47,9 @@ test('Cancel application when it has been saved, but not sent to Allu', async ()
 });
 
 test('Cancel application when it has been saved and sent to Allu but is still pending', async () => {
-  const user = userEvent.setup();
-
   const application = mockApplications[1];
 
-  render(
+  const { user } = render(
     <ApplicationCancel
       applicationId={application.id}
       alluStatus={application.alluStatus}
