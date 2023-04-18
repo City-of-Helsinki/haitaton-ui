@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, Tab, TabList, TabPanel, Tabs } from 'hds-react';
+import { Accordion, IconTrash, Tab, TabList, TabPanel, Tabs } from 'hds-react';
 import { Box } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import Geometry from 'ol/geom/Geometry';
@@ -9,6 +9,7 @@ import {
   InformationViewContainer,
   InformationViewContentContainer,
   InformationViewHeader,
+  InformationViewHeaderButtons,
   InformationViewMainContent,
   InformationViewSidebar,
 } from '../../common/components/hankeInformationView/HankeInformationView';
@@ -32,6 +33,7 @@ import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import Link from '../../../common/components/Link/Link';
 import useHankeViewPath from '../../hanke/hooks/useHankeViewPath';
 import DecisionLink from '../components/DecisionLink';
+import { ApplicationCancel } from '../components/ApplicationCancel';
 
 type Props = {
   application: Application;
@@ -101,6 +103,18 @@ function ApplicationView({ application, hanke }: Props) {
           <SectionItemTitle>{t('hankePortfolio:labels:oikeudet')}:</SectionItemTitle>
           <SectionItemContent />
         </FormSummarySection>
+
+        <InformationViewHeaderButtons>
+          {hanke ? (
+            <ApplicationCancel
+              applicationId={id}
+              alluStatus={alluStatus}
+              hankeTunnus={hanke?.hankeTunnus}
+              buttonVariant="danger"
+              buttonIcon={<IconTrash aria-hidden />}
+            />
+          ) : null}
+        </InformationViewHeaderButtons>
       </InformationViewHeader>
 
       <InformationViewContentContainer>
