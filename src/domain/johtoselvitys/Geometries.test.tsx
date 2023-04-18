@@ -1,5 +1,4 @@
 import React from 'react';
-import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm } from 'react-hook-form';
 import { render, screen } from '../../testUtils/render';
 import { Geometries } from './Geometries';
@@ -17,9 +16,7 @@ function TestComponent() {
 }
 
 test('Areas can be added after start and end dates have been set', async () => {
-  const user = userEvent.setup();
-
-  render(<TestComponent />);
+  const { user } = render(<TestComponent />);
 
   expect(
     screen.queryByText('Valitse työn päivämäärät piirtääksesi selvitettävät alueet kartalle.')

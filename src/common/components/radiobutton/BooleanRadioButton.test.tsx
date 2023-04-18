@@ -1,5 +1,4 @@
 import React from 'react';
-import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm } from 'react-hook-form';
 import { SelectionGroup } from 'hds-react';
 import { render, screen } from '../../../testUtils/render';
@@ -19,9 +18,7 @@ function TestComponent() {
 }
 
 test('Boolean choice works as expected', async () => {
-  const user = userEvent.setup();
-
-  render(<TestComponent />);
+  const { user } = render(<TestComponent />);
 
   expect(screen.getByLabelText('No')).toBeChecked();
 

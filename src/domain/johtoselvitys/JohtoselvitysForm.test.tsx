@@ -1,5 +1,4 @@
 import React from 'react';
-import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { render, cleanup, fireEvent, screen } from '../../testUtils/render';
 import Johtoselvitys from '../../pages/Johtoselvitys';
@@ -195,11 +194,11 @@ function fillContactsInformation() {
 }
 
 test('Cable report application form can be filled and saved and sent to Allu', async () => {
-  const user = userEvent.setup();
-
   const hankeData = hankkeet[1] as HankeData;
 
-  render(<JohtoselvitysContainer hankeData={hankeData} application={application} />);
+  const { user } = render(
+    <JohtoselvitysContainer hankeData={hankeData} application={application} />
+  );
 
   expect(
     screen.queryByText('Aidasmäentien vesihuollon rakentaminen (HAI22-2)')
@@ -244,15 +243,13 @@ test('Cable report application form can be filled and saved and sent to Allu', a
 });
 
 test('Should show error message when saving fails', async () => {
-  const user = userEvent.setup();
-
   server.use(
     rest.post('/api/hakemukset', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
     })
   );
 
-  render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
+  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
 
   await waitForLoadingToFinish();
 
@@ -266,8 +263,6 @@ test('Should show error message when saving fails', async () => {
 });
 
 test('Should show error message when sending fails', async () => {
-  const user = userEvent.setup();
-
   server.use(
     rest.post('/api/hakemukset/:id/send-application', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
@@ -276,7 +271,9 @@ test('Should show error message when sending fails', async () => {
 
   const hankeData = hankkeet[1] as HankeData;
 
-  render(<JohtoselvitysContainer hankeData={hankeData} application={application} />);
+  const { user } = render(
+    <JohtoselvitysContainer hankeData={hankeData} application={application} />
+  );
 
   fillBasicInformation();
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
@@ -290,9 +287,7 @@ test('Should show error message when sending fails', async () => {
 });
 
 test('Form can be saved without hanke existing first', async () => {
-  const user = userEvent.setup();
-
-  render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
+  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
 
   // Fill basic information page
   fillBasicInformation();
@@ -306,9 +301,7 @@ test('Form can be saved without hanke existing first', async () => {
 });
 
 test('Save and quit works', async () => {
-  const user = userEvent.setup();
-
-  render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
+  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
 
   await waitForLoadingToFinish();
 
@@ -328,9 +321,7 @@ test('Save and quit works', async () => {
 });
 
 test('Save and quit works without hanke existing first', async () => {
-  const user = userEvent.setup();
-
-  render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
+  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
 
   // Fill basic information page
   fillBasicInformation();

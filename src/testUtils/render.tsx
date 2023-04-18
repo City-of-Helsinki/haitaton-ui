@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { render, RenderOptions } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import i18n from '../locales/i18nForTests';
@@ -40,7 +41,10 @@ const AllTheProviders = ({ children }: Props) => {
 
 const customRender = (ui: React.ReactElement, options: RenderOptions = {}, route = '/') => {
   window.history.pushState({}, 'Test page', route);
-  return render(ui, { wrapper: AllTheProviders as React.ComponentType, ...options });
+  return {
+    user: userEvent.setup(),
+    ...render(ui, { wrapper: AllTheProviders as React.ComponentType, ...options }),
+  };
 };
 
 // re-export everything

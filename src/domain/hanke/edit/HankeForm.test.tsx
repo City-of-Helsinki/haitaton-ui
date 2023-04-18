@@ -1,5 +1,4 @@
 import React from 'react';
-import userEvent from '@testing-library/user-event';
 import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
@@ -48,26 +47,21 @@ const formData: HankeDataFormState = {
 };
 
 async function setupYhteystiedotPage(jsx: JSX.Element) {
-  const user = userEvent.setup();
   const renderResult = render(jsx);
 
   await waitFor(() => expect(screen.queryByText('Perustiedot')).toBeInTheDocument());
-  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+  await renderResult.user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
   await waitFor(() => expect(screen.queryByText(/hankkeen omistaja/i)).toBeInTheDocument());
 
-  return {
-    user,
-    ...renderResult,
-  };
+  return renderResult;
 }
 
 describe('HankeForm', () => {
   test('suunnitteluVaihde should be required when vaihe is suunnittelu', async () => {
     const handleIsDirtyChange = jest.fn();
     const handleFormClose = jest.fn();
-    const user = userEvent.setup();
 
-    render(
+    const { user } = render(
       <HankeForm
         formData={formData}
         onIsDirtyChange={handleIsDirtyChange}

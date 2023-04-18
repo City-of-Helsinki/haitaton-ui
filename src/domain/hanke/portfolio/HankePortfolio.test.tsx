@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { cleanup } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import HankePortfolioComponent from './HankePortfolioComponent';
 import { render, screen, waitFor } from '../../../testUtils/render';
 import hankeList from '../../mocks/hankeList';
@@ -17,9 +16,7 @@ jest.setTimeout(20000);
 
 describe.only('HankePortfolio', () => {
   test('Changing search text filters correct number of projects', async () => {
-    const user = userEvent.setup();
-
-    render(<HankePortfolioComponent hankkeet={hankeList} />);
+    const { user } = render(<HankePortfolioComponent hankkeet={hankeList} />);
 
     await user.type(screen.getByLabelText('Haku'), 'Mannerheimintie autottomaksi');
     await waitFor(() => {

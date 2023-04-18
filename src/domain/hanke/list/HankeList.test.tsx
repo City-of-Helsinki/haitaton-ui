@@ -1,5 +1,4 @@
 import React from 'react';
-import userEvent from '@testing-library/user-event';
 import { render, cleanup, screen, waitFor } from '../../../testUtils/render';
 import HankeListContainer from './HankeListContainer';
 
@@ -13,9 +12,7 @@ function waitForData() {
 
 describe('HankeLista', () => {
   test('Sorting test', async () => {
-    render(<HankeListContainer />);
-
-    const user = userEvent.setup();
+    const { user } = render(<HankeListContainer />);
 
     await waitForData();
 
@@ -36,9 +33,7 @@ describe('HankeLista', () => {
   });
 
   test('pagination test', async () => {
-    render(<HankeListContainer />);
-
-    const user = userEvent.setup();
+    const { user } = render(<HankeListContainer />);
 
     await waitForData();
 

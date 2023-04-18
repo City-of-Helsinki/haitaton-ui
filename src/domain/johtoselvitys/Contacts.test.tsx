@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
-import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm } from 'react-hook-form';
 import { fireEvent, render, screen } from '../../testUtils/render';
 import { Contacts } from './Contacts';
@@ -23,12 +22,10 @@ function Form({ hanke }: { hanke?: HankeDataDraft }) {
 }
 
 test('Contacts can be filled with hanke contact info', async () => {
-  const user = userEvent.setup();
-
   const hanke = hankkeet[1];
   const hankeOwner: HankeContact = hanke.omistajat![0];
 
-  render(<Form hanke={hanke} />);
+  const { user } = render(<Form hanke={hanke} />);
 
   // Select applicant information to be filled with hanke owner information
   await user.click(screen.getAllByRole('button', { name: /esitäytetyt tiedot/i, exact: false })[0]);

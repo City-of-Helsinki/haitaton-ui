@@ -1,5 +1,4 @@
 import React from 'react';
-import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { render, screen } from '../../../testUtils/render';
 import ApplicationViewContainer from './ApplicationViewContainer';
@@ -17,9 +16,7 @@ test('Correct information about application should be displayed', async () => {
 });
 
 test('Link back to related hanke should work', async () => {
-  const user = userEvent.setup();
-
-  render(<ApplicationViewContainer id={4} />);
+  const { user } = render(<ApplicationViewContainer id={4} />);
 
   await waitForLoadingToFinish();
   await user.click(screen.getByRole('link', { name: 'Mannerheimintien kaukolämpö (HAI22-3)' }));
@@ -57,8 +54,7 @@ test('Should show error notification if loading application fails', async () => 
 });
 
 test('Should be able to go editing application when editing is possible', async () => {
-  const user = userEvent.setup();
-  render(<ApplicationViewContainer id={4} />);
+  const { user } = render(<ApplicationViewContainer id={4} />);
 
   await waitForLoadingToFinish();
   await user.click(screen.getByRole('button', { name: 'Muokkaa hakemusta' }));
@@ -75,9 +71,7 @@ test('Application edit button should not be displayed when editing is not possib
 });
 
 test('Should be able to cancel application if it is possible', async () => {
-  const user = userEvent.setup();
-
-  render(<ApplicationViewContainer id={4} />);
+  const { user } = render(<ApplicationViewContainer id={4} />);
 
   await waitForLoadingToFinish();
 

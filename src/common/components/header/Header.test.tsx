@@ -1,5 +1,4 @@
 import React from 'react';
-import userEvent from '@testing-library/user-event';
 import { render, cleanup, screen } from '../../../testUtils/render';
 import Header from './Header';
 import useUser from '../../../domain/auth/useUser';
@@ -42,8 +41,7 @@ describe('Header', () => {
   });
 
   test('when user changes language it should change the UI language and the url based on the selected language', async () => {
-    const user = userEvent.setup();
-    render(<Header />, undefined, '/fi/julkisethankkeet/kartta');
+    const { user } = render(<Header />, undefined, '/fi/julkisethankkeet/kartta');
 
     await user.click(screen.getAllByRole('button', { name: /suomi/i })[0]);
     await user.click(screen.getAllByText(/english/i)[0]);

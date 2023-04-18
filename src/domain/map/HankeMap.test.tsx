@@ -1,5 +1,4 @@
 import React from 'react';
-import userEvent from '@testing-library/user-event';
 import { render, screen } from '../../testUtils/render';
 import { changeFilterDate } from '../../testUtils/helperFunctions';
 import HankeMap from './HankeMap';
@@ -12,9 +11,7 @@ jest.setTimeout(10000);
 
 describe('HankeMap', () => {
   test('Render test', async () => {
-    render(<HankeMap />);
-
-    const user = userEvent.setup();
+    const { user } = render(<HankeMap />);
 
     expect(screen.getByLabelText('Ortokartta')).not.toBeChecked();
     expect(screen.getByLabelText('Kantakartta')).toBeChecked();
