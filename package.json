@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@axe-core/react": "^4.1.1",
+    "@babel/runtime": "^7.21.0",
     "@chakra-ui/react": "^1.0.1",
     "@chakra-ui/theme-tools": "^1.0.1",
     "@emotion/core": "^10.0.35",
