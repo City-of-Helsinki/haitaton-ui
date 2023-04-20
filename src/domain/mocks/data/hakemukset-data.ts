@@ -149,7 +149,7 @@ const hakemukset: Application[] = [
           {
             email: 'matti@test.com',
             name: 'Matti Meikäläinen',
-            orderer: true,
+            orderer: false,
             phone: '0000000000',
           },
         ],
@@ -223,7 +223,7 @@ const hakemukset: Application[] = [
           {
             email: 'matti@test.com',
             name: 'Matti Meikäläinen',
-            orderer: true,
+            orderer: false,
             phone: '0000000000',
           },
         ],
@@ -320,7 +320,7 @@ const hakemukset: Application[] = [
           {
             email: 'matti@test.com',
             name: 'Matti Meikäläinen',
-            orderer: true,
+            orderer: false,
             phone: '0000000000',
           },
         ],

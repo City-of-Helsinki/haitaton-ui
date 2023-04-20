@@ -221,6 +221,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     });
   }
 
+  const ordererKey = findOrdererKey(getValues('applicationData'));
+
   // Fields that are validated in each page when moving forward in form
   const pageFieldsToValidate: FieldPath<JohtoselvitysFormValues>[][] = useMemo(
     () => [
@@ -229,7 +231,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         'applicationData.name',
         'applicationData.postalAddress',
         'applicationData.workDescription',
-        `applicationData.${findOrdererKey(getValues('applicationData'))}.contacts`,
+        `applicationData.${ordererKey}.contacts`,
         'applicationData.rockExcavation',
         'applicationData.constructionWork',
       ],
@@ -243,7 +245,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         'applicationData.representativeWithContacts',
       ],
     ],
-    [getValues]
+    [ordererKey]
   );
 
   const formSteps = useMemo(() => {
