@@ -24,7 +24,8 @@ import useForceUpdate from '../../common/hooks/useForceUpdate';
 
 function getEmptyContact(): ApplicationContact {
   return {
-    name: '',
+    firstName: '',
+    lastName: '',
     orderer: false,
     email: '',
     phone: '',
@@ -152,8 +153,14 @@ const ContactFields: React.FC<{
     >
       <ResponsiveGrid>
         <TextInput
-          name={`applicationData.${customerType}.contacts.${index}.name`}
-          label={t('form:yhteystiedot:labels:nimi')}
+          name={`applicationData.${customerType}.contacts.${index}.firstName`}
+          label={t('hankeForm:labels:etunimi')}
+          required
+          readOnly={orderer}
+        />
+        <TextInput
+          name={`applicationData.${customerType}.contacts.${index}.lastName`}
+          label={t('hankeForm:labels:sukunimi')}
           required
           readOnly={orderer}
         />

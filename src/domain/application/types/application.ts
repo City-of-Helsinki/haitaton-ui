@@ -13,7 +13,8 @@ export type PostalAddress = {
 };
 
 export type Contact = {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   orderer: boolean;

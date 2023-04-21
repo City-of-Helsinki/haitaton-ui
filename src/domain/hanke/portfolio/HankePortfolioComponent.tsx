@@ -37,6 +37,7 @@ import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotif
 import Container from '../../../common/components/container/Container';
 import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
 import useHankeViewPath from '../hooks/useHankeViewPath';
+import useNavigateToApplicationList from '../hooks/useNavigateToApplicationList';
 
 type CustomAccordionProps = {
   hanke: HankeData;
@@ -45,6 +46,7 @@ type CustomAccordionProps = {
 const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
   const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
   const hankeViewPath = useHankeViewPath(hanke?.hankeTunnus);
+  const navigateToApplications = useNavigateToApplicationList(hanke?.hankeTunnus);
 
   // Handle accordion state with useAccordion hook
   const { isOpen, buttonProps, contentProps } = useAccordion({ initiallyOpen: false });
@@ -197,7 +199,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
           <Button theme="coat" className={styles.showHankeButton} onClick={navigateToHanke}>
             {t('hankePortfolio:showHankeButton')}
           </Button>
-          <Button theme="coat" variant="secondary">
+          <Button theme="coat" variant="secondary" onClick={navigateToApplications}>
             {t('hankePortfolio:showApplicationsButton')}
           </Button>
         </div>
