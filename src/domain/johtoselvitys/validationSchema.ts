@@ -1,6 +1,4 @@
-import { $enum } from 'ts-enum-util';
 import yup from '../../common/utils/yup';
-import { ContactType } from '../application/types/application';
 import isValidBusinessId from '../../common/utils/isValidBusinessId';
 
 const requiredAddressSchema = yup.object().shape({
@@ -16,13 +14,15 @@ const contactSchema = yup
   .nullable()
   .default(null)
   .shape({
-    name: yup.string().max(100).required(),
+    firstName: yup.string().required(),
+    lastName: yup.string().required(),
     email: yup.string().email().max(100).required(),
     phone: yup.string().max(20).required(),
   });
 
-const customerSchema = contactSchema.shape({
-  type: yup.string().oneOf($enum(ContactType).getValues()).nullable().required(),
+const customerSchema = contactSchema.omit(['firstName', 'lastName']).shape({
+  name: yup.string().required(),
+  type: yup.string().nullable().required(),
   registryKey: yup // business id i.e. Y-tunnus
     .string()
     .nullable()
