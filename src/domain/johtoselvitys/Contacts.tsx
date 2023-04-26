@@ -93,41 +93,46 @@ const CustomerFields: React.FC<{ customerType: CustomerType; hankeContacts?: Han
           onChange={handlePreFilledContactChange}
         />
       )}
-      <ResponsiveGrid>
-        <Dropdown
-          id={`applicationData.${customerType}.customer.type`}
-          name={`applicationData.${customerType}.customer.type`}
-          required
-          defaultValue={null}
-          label={t('form:yhteystiedot:labels:tyyppi')}
-          options={$enum(ContactType).map((value) => {
-            return {
-              value,
-              label: t(`form:yhteystiedot:contactType:${value}`),
-            };
-          })}
-        />
-        <TextInput
-          name={`applicationData.${customerType}.customer.name`}
-          label={t('form:yhteystiedot:labels:nimi')}
-          required
-        />
-        <TextInput
-          name={`applicationData.${customerType}.customer.registryKey`}
-          label={t('form:yhteystiedot:labels:ytunnus')}
-          disabled={selectedContactType !== 'COMPANY'}
-        />
-        <TextInput
-          name={`applicationData.${customerType}.customer.email`}
-          label={t('form:yhteystiedot:labels:email')}
-          required
-        />
-        <TextInput
-          name={`applicationData.${customerType}.customer.phone`}
-          label={t('form:yhteystiedot:labels:puhelinnumero')}
-          required
-        />
-      </ResponsiveGrid>
+      <Fieldset
+        heading={t(`form:yhteystiedot:titles:${customerType}`)}
+        style={{ paddingTop: 'var(--spacing-s)' }}
+      >
+        <ResponsiveGrid>
+          <Dropdown
+            id={`applicationData.${customerType}.customer.type`}
+            name={`applicationData.${customerType}.customer.type`}
+            required
+            defaultValue={null}
+            label={t('form:yhteystiedot:labels:tyyppi')}
+            options={$enum(ContactType).map((value) => {
+              return {
+                value,
+                label: t(`form:yhteystiedot:contactType:${value}`),
+              };
+            })}
+          />
+          <TextInput
+            name={`applicationData.${customerType}.customer.name`}
+            label={t('form:yhteystiedot:labels:nimi')}
+            required
+          />
+          <TextInput
+            name={`applicationData.${customerType}.customer.registryKey`}
+            label={t('form:yhteystiedot:labels:ytunnus')}
+            disabled={selectedContactType !== 'COMPANY'}
+          />
+          <TextInput
+            name={`applicationData.${customerType}.customer.email`}
+            label={t('form:yhteystiedot:labels:email')}
+            required
+          />
+          <TextInput
+            name={`applicationData.${customerType}.customer.phone`}
+            label={t('form:yhteystiedot:labels:puhelinnumero')}
+            required
+          />
+        </ResponsiveGrid>
+      </Fieldset>
     </>
   );
 };
@@ -244,14 +249,13 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
         {t('form:requiredInstruction')}
       </Text>
 
-      <Text tag="h2" styleAs="h4" weight="bold" spacingBottom="s">
-        {t('form:yhteystiedot:titles:customerWithContacts')}
+      <Text tag="h3" styleAs="h3" weight="light" spacingBottom="s">
+        {t('form:yhteystiedot:titles:customerWithContactsInfo')}
       </Text>
 
       {/* Hakija */}
       <Contact<CustomerType>
         contactType="customerWithContacts"
-        showContactTitle={false}
         subContactPath="applicationData.customerWithContacts.contacts"
         emptySubContact={getEmptyContact()}
         renderSubContact={(subContactIndex, removeSubContact) => {
@@ -270,7 +274,8 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
       {/* Työn suorittaja */}
       <Accordion
         language={locale}
-        heading={t('form:yhteystiedot:titles:addContractor')}
+        heading={t('form:yhteystiedot:titles:contractorInfo')}
+        headingLevel={3}
         initiallyOpen
       >
         <Contact<CustomerType>
@@ -294,7 +299,8 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
       {/* Rakennuttaja */}
       <Accordion
         language={locale}
-        heading={t('form:yhteystiedot:titles:lisaaRakennuttaja')}
+        heading={t('form:yhteystiedot:titles:propertyDeveloperInfo')}
+        headingLevel={3}
         initiallyOpen={isPropertyDeveloper}
       >
         {isPropertyDeveloper && (
@@ -334,7 +340,8 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
       {/* Asianhoitaja */}
       <Accordion
         language={locale}
-        heading={t('form:yhteystiedot:titles:addRepresentative')}
+        heading={t('form:yhteystiedot:titles:representativeInfo')}
+        headingLevel={3}
         initiallyOpen={isRepresentative}
       >
         {isRepresentative && (

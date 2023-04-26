@@ -51,7 +51,7 @@ async function setupYhteystiedotPage(jsx: JSX.Element) {
 
   await waitFor(() => expect(screen.queryByText('Perustiedot')).toBeInTheDocument());
   await renderResult.user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
-  await waitFor(() => expect(screen.queryByText(/hankkeen omistaja/i)).toBeInTheDocument());
+  await waitFor(() => expect(screen.queryByText(/hankkeen omistajan tiedot/i)).toBeInTheDocument());
 
   return renderResult;
 }
@@ -157,7 +157,7 @@ describe('HankeForm', () => {
       target: { value: 'yhteyshenkilo@mail.com' },
     });
 
-    await user.click(screen.getByText(/lisää rakennuttajia/i));
+    await user.click(screen.getByText(/Rakennuttajan tiedot/i));
     await user.click(screen.getByText(/lisää rakennuttaja/i));
     expect(screen.getAllByText('Rakennuttaja')).toHaveLength(1);
 
