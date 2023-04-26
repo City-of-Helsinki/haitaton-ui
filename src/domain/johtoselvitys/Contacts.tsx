@@ -106,6 +106,7 @@ const CustomerFields: React.FC<{ customerType: CustomerType; hankeContacts?: Han
               label: t(`form:yhteystiedot:contactType:${value}`),
             };
           })}
+          style={{ zIndex: 101 }}
         />
         <TextInput
           name={`applicationData.${customerType}.customer.name`}

@@ -15,6 +15,7 @@ type Props = {
   hankeTunnus?: string;
   buttonVariant: 'secondary' | 'danger';
   buttonIcon: JSX.Element;
+  buttonClassName?: string;
 };
 
 export const ApplicationCancel: React.FC<Props> = ({
@@ -23,6 +24,7 @@ export const ApplicationCancel: React.FC<Props> = ({
   hankeTunnus,
   buttonVariant,
   buttonIcon,
+  buttonClassName,
 }) => {
   const { t } = useTranslation();
   const navigateToApplicationList = useNavigateToApplicationList(hankeTunnus);
@@ -87,7 +89,12 @@ export const ApplicationCancel: React.FC<Props> = ({
         errorMsg={errorMessage}
       />
 
-      <Button variant={buttonVariant} iconLeft={buttonIcon} onClick={openConfirmationDialog}>
+      <Button
+        variant={buttonVariant}
+        iconLeft={buttonIcon}
+        onClick={openConfirmationDialog}
+        className={buttonClassName}
+      >
         {t('hakemus:buttons:cancelApplication')}
       </Button>
     </>

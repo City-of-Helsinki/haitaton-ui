@@ -233,7 +233,7 @@ test('Cable report application form can be filled and saved and sent to Allu', a
   expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
 
-  expect(screen.queryByText('Vaihe 2/4: Alueet')).toBeInTheDocument();
+  expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
 
   // Fill areas page
   fillAreasInformation();
@@ -244,18 +244,19 @@ test('Cable report application form can be filled and saved and sent to Allu', a
   expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
 
-  expect(screen.queryByText('Vaihe 3/4: Yhteystiedot')).toBeInTheDocument();
+  expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
 
   // Fill contacts page
   fillContactsInformation();
 
   // Move to summary page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
   expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
 
-  expect(screen.queryByText('Vaihe 4/4: Yhteenveto')).toBeInTheDocument();
+  expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
 
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
   expect(screen.queryByText(/hakemus lähetetty/i)).toBeInTheDocument();
@@ -301,6 +302,7 @@ test('Should show error message when sending fails', async () => {
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
   fillContactsInformation();
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
 
   expect(screen.queryByText(/lähettäminen epäonnistui/i)).toBeInTheDocument();
@@ -317,7 +319,7 @@ test('Form can be saved without hanke existing first', async () => {
 
   expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
   expect(screen.queryByText('Johtoselvitys (HAI22-12)')).toBeInTheDocument();
-  expect(screen.queryByText('Vaihe 2/4: Alueet')).toBeInTheDocument();
+  expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
 });
 
 test('Save and quit works', async () => {

@@ -29,6 +29,9 @@ import { useGlobalNotification } from '../../common/components/globalNotificatio
 import useApplicationSendNotification from '../application/hooks/useApplicationSendNotification';
 import useHanke from '../hanke/hooks/useHanke';
 import { Application } from '../application/types/application';
+import styles from './Johtoselvitys.module.scss';
+import Attachments from './Attachments';
+import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 
 type Props = {
   hankeData?: HankeData;
@@ -41,6 +44,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
   const { setNotification } = useGlobalNotification();
   const { showSendSuccess, showSendError } = useApplicationSendNotification();
   const queryClient = useQueryClient();
+  const [newAttachments, setNewAttachments] = useState<File[]>([]);
 
   const initialValues: JohtoselvitysFormValues = {
     id: null,
@@ -205,6 +209,15 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     });
   }
 
+  function handleStepChange() {
+    setNewAttachments([]);
+    saveCableApplication();
+  }
+
+  function handleAddAttachments(files: File[]) {
+    setNewAttachments(files);
+  }
+
   // Fields that are validated in each page when moving forward in form
   const pageFieldsToValidate: FieldPath<JohtoselvitysFormValues>[][] = useMemo(
     () => [
@@ -271,6 +284,17 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
           : StepState.disabled,
       },
       {
+        element: <Attachments onAddAttachments={handleAddAttachments} />,
+        label: t('form:headers:liitteetJaLisatiedot'),
+        state: isPageValid<JohtoselvitysFormValues>(
+          validationSchema,
+          pageFieldsToValidate[2],
+          formValues
+        )
+          ? StepState.available
+          : StepState.disabled,
+      },
+      {
         element: <ReviewAndSend />,
         label: t('form:headers:yhteenveto'),
         state: isPageValid<JohtoselvitysFormValues>(
@@ -290,6 +314,18 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     </div>
   );
 
+  const [savingAttachments, setSavingAttachments] = useState(false);
+
+  async function saveAttachments() {
+    setSavingAttachments(true);
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        setSavingAttachments(false);
+        resolve(true);
+      }, 3000);
+    });
+  }
+
   return (
     <FormProvider {...formContext}>
       {/* Notification for saving application */}
@@ -304,12 +340,17 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         heading={t('johtoselvitysForm:pageHeader')}
         subHeading={hankeNameText}
         formSteps={formSteps}
-        onStepChange={saveCableApplication}
+        onStepChange={handleStepChange}
         onSubmit={handleSubmit(sendCableApplication)}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
-          function handleNextPage() {
-            changeFormStep(handleNext, pageFieldsToValidate[activeStepIndex], trigger);
+          async function handleNextPage() {
+            if (newAttachments.length > 0) {
+              await saveAttachments();
+              handleNext();
+            } else {
+              changeFormStep(handleNext, pageFieldsToValidate[activeStepIndex], trigger);
+            }
           }
 
           const firstStep = activeStepIndex === 0;
@@ -320,6 +361,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
               totalSteps={formSteps.length}
               onPrevious={handlePrevious}
               onNext={handleNextPage}
+              nextButtonIsLoading={savingAttachments}
+              nextButtonLoadingText={t('form:buttons:loadingAttachments')}
             >
               <ApplicationCancel
                 applicationId={getValues('id')}
@@ -327,6 +370,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
                 hankeTunnus={hanke?.hankeTunnus}
                 buttonVariant="secondary"
                 buttonIcon={<IconCross aria-hidden />}
+                buttonClassName={styles.cancelButton}
               />
 
               {!firstStep && (
@@ -356,6 +400,23 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
           );
         }}
       </MultipageForm>
+
+      {/* Attachment upload error dialog */}
+      <ConfirmationDialog
+        title={t('form:errors:fileLoadError')}
+        description="Tapahtui virhe"
+        showSecondaryButton={false}
+        showCloseButton
+        isOpen={false}
+        // close={closeAttachmentErrorDialog}
+        // mainAction={closeAttachmentErrorDialog}
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        close={() => {}}
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        mainAction={() => {}}
+        mainBtnLabel={t('common:ariaLabels:closeButtonLabelText')}
+        variant="primary"
+      />
     </FormProvider>
   );
 };
