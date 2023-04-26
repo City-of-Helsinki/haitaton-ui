@@ -411,7 +411,7 @@
       "perustaja": "Perustaja"
     },
     "toolTips": {
-      "tipOpenLabel": "Open instruction",
+      "tipOpenLabel": "Instruction",
       "perustiedot": "Mandatory basic information about the project must be filled in. If all the mandatory information is not filled in, the new project will be saved in Haitaton but will not be able to proceed to the impact assessment. You can continue to fill in information on the project later by opening it via the project list",
       "nimi": "Name that concisely describes the project",
       "onYKTHanke": "Joint municipal worksite – a joint project under the cooperation agreement. In addition to the City of Helsinki’s Urban Environment Division, the parties are Helsinki City Transport (HKL), Helsinki Region Environmental Services (HSY), Helen Ltd, Helen Electricity Network Ltd, Auris Kaasunjakelu Ltd and the communications network operators Cinia Ltd, DNA Plc, Elisa Plc and Telia Finland Plc. The aim of the Shared Public Utility Site (YKT) partnership is to streamline the construction of public spaces in the city and adapt the contracting parties’ individual projects into jointly implemented projects that improve the quality and supply of infrastructure services.",
