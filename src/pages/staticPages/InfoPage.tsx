@@ -51,6 +51,11 @@ const InfoPage: React.FC = () => {
           hankkeiden ympäristössä. Haitattoman kehitystoiveita voi laittaa osoitteeseen:
           haitaton(at)hel.fi
         </Text>
+
+        <Text tag="h2" styleAs="h3">
+          Kuvien tekijätiedot
+        </Text>
+        <Text tag="p">Sakari Kiuru, Helsingin kaupunginmuseo</Text>
       </HdsContainer>
     </Container>
   );
