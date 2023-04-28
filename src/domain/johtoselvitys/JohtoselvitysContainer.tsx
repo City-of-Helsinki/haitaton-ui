@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useMemo, useState } from 'react';
 import { Button, IconCross, IconEnvelope, IconSaveDiskette, StepState } from 'hds-react';
 import { FormProvider, useForm, FieldPath } from 'react-hook-form';
@@ -32,6 +33,8 @@ import { Application } from '../application/types/application';
 import styles from './Johtoselvitys.module.scss';
 import Attachments from './Attachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
+import useAttachments from '../application/hooks/useAttachments';
+import { uploadAttachment } from '../application/attatchments';
 
 type Props = {
   hankeData?: HankeData;
@@ -44,6 +47,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
   const { setNotification } = useGlobalNotification();
   const { showSendSuccess, showSendError } = useApplicationSendNotification();
   const queryClient = useQueryClient();
+  const { data: attachments } = useAttachments(application?.id);
   const [newAttachments, setNewAttachments] = useState<File[]>([]);
 
   const initialValues: JohtoselvitysFormValues = {
@@ -159,12 +163,20 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     onError() {
       showSendError();
     },
-    onSuccess() {
+    async onSuccess() {
       showSendSuccess();
-    },
-    onSettled() {
-      queryClient.invalidateQueries('application', { refetchInactive: true });
+      await queryClient.invalidateQueries('application', { refetchInactive: true });
       navigateToApplicationList();
+    },
+    // onSettled() {
+    // },
+  });
+
+  const attachmentUploadMutation = useMutation(uploadAttachment, {
+    onSuccess() {
+      // TODO: Mitä tapahtuu, jos joku liitteistä feilaa
+      setNewAttachments([]);
+      queryClient.invalidateQueries('attachments', { refetchInactive: true });
     },
   });
 
@@ -210,7 +222,6 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
   }
 
   function handleStepChange() {
-    setNewAttachments([]);
     saveCableApplication();
   }
 
@@ -284,7 +295,13 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
           : StepState.disabled,
       },
       {
-        element: <Attachments onAddAttachments={handleAddAttachments} />,
+        element: (
+          <Attachments
+            existingAttachments={attachments}
+            newAttachments={newAttachments}
+            onAddAttachments={handleAddAttachments}
+          />
+        ),
         label: t('form:headers:liitteetJaLisatiedot'),
         state: isPageValid<JohtoselvitysFormValues>(
           validationSchema,
@@ -306,7 +323,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
           : StepState.disabled,
       },
     ];
-  }, [t, getValues, pageFieldsToValidate, hankeData]);
+  }, [t, getValues, pageFieldsToValidate, hankeData, attachments, newAttachments]);
 
   const hankeNameText = (
     <div style={{ visibility: hanke !== undefined ? 'visible' : 'hidden' }}>
@@ -314,16 +331,22 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     </div>
   );
 
-  const [savingAttachments, setSavingAttachments] = useState(false);
+  function saveAttachments() {
+    if (!application) {
+      return Promise.resolve();
+    }
 
-  async function saveAttachments() {
-    setSavingAttachments(true);
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        setSavingAttachments(false);
-        resolve(true);
-      }, 3000);
-    });
+    const mutations = newAttachments.map((file) =>
+      attachmentUploadMutation.mutateAsync({
+        applicationId: application.id!,
+        attachmentType: 'MUU',
+        file,
+      })
+    );
+
+    // TODO: Tässä voi olla ongelma, jos yksi monesta feilaa
+    // Ajatus oli, että kuitenkin kaikki lähetetään, joka tapauksessa.
+    return Promise.all(mutations);
   }
 
   return (
@@ -345,7 +368,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           async function handleNextPage() {
-            if (newAttachments.length > 0) {
+            if (activeStepIndex === 3 && newAttachments.length > 0) {
               await saveAttachments();
               handleNext();
             } else {
@@ -361,7 +384,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
               totalSteps={formSteps.length}
               onPrevious={handlePrevious}
               onNext={handleNextPage}
-              nextButtonIsLoading={savingAttachments}
+              nextButtonIsLoading={attachmentUploadMutation.isLoading}
               nextButtonLoadingText={t('form:buttons:loadingAttachments')}
             >
               <ApplicationCancel
@@ -407,13 +430,9 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         description="Tapahtui virhe"
         showSecondaryButton={false}
         showCloseButton
-        isOpen={false}
-        // close={closeAttachmentErrorDialog}
-        // mainAction={closeAttachmentErrorDialog}
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        close={() => {}}
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        mainAction={() => {}}
+        isOpen={attachmentUploadMutation.isError}
+        close={attachmentUploadMutation.reset}
+        mainAction={attachmentUploadMutation.reset}
         mainBtnLabel={t('common:ariaLabels:closeButtonLabelText')}
         variant="primary"
       />

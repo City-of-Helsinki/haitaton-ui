@@ -2,33 +2,41 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FileInput, IconTrash } from 'hds-react';
 import { Box } from '@chakra-ui/react';
+import { useQueryClient } from 'react-query';
 import Text from '../../common/components/text/Text';
-import TextArea from '../../common/components/textArea/TextArea';
 import useLocale from '../../common/hooks/useLocale';
 import FileList from '../../common/components/fileList/FileList';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
+import { ApplicationAttachmentMetadata } from '../application/types/application';
+import useAttachmentDelete from '../application/hooks/useAttachmentDelete';
 
 type Props = {
+  existingAttachments: ApplicationAttachmentMetadata[] | undefined;
+  newAttachments: File[];
   onAddAttachments: (files: File[]) => void;
 };
 
-function Attachments({ onAddAttachments }: Props) {
+function Attachments({ existingAttachments, newAttachments, onAddAttachments }: Props) {
+  const queryClient = useQueryClient();
   const { t } = useTranslation();
   const locale = useLocale();
-  const [fileToRemove, setFileToRemove] = useState<File | null>(null);
-
-  const [addedFiles, setAddedFiles] = useState<File[]>([]);
+  const [fileToRemove, setFileToRemove] = useState<ApplicationAttachmentMetadata | null>(null);
+  const attachmentDeleteMutation = useAttachmentDelete();
 
   function handleFilesChange(files: File[]) {
-    setAddedFiles(files);
     onAddAttachments(files);
   }
 
-  function handleFileRemove(file: File) {
+  function handleFileRemove(file: ApplicationAttachmentMetadata) {
     setFileToRemove(file);
   }
 
   function confirmFileRemove() {
+    attachmentDeleteMutation.mutate(fileToRemove?.id, {
+      onSuccess() {
+        queryClient.invalidateQueries('attachments');
+      },
+    });
     setFileToRemove(null);
   }
 
@@ -37,7 +45,7 @@ function Attachments({ onAddAttachments }: Props) {
   }
 
   return (
-    <div>
+    <Box mb="var(--spacing-l)">
       <Text tag="p" spacingBottom="l">
         {t('johtoselvitysForm:liitteet:instructions')}
       </Text>
@@ -46,18 +54,18 @@ function Attachments({ onAddAttachments }: Props) {
         {t('hankePortfolio:tabit:liitteet')}
       </Text>
 
-      {addedFiles.length > 0 && (
+      {existingAttachments && existingAttachments.length > 0 && (
         <Box mb="var(--spacing-l)">
           <Box as="p" className="text-medium" color="var(--color-black-90)" mb="var(--spacing-xs)">
             {t('form:labels:addedFiles')}
           </Box>
-          <FileList files={addedFiles} onRemoveFile={handleFileRemove} />
+          <FileList files={existingAttachments} onRemoveFile={handleFileRemove} />
         </Box>
       )}
 
       <FileInput
         id="cable-report-file-input"
-        accept=".pdf,.jpeg,.png,.dgn,.dwg,.docx,.txt,.gt"
+        accept=".pdf,.jpg,.jpeg,.png,.dgn,.dwg,.docx,.txt,.gt"
         label={t('form:labels:dragAttachments')}
         dragAndDropLabel={t('form:labels:dragAttachments')}
         language={locale}
@@ -65,24 +73,14 @@ function Attachments({ onAddAttachments }: Props) {
         dragAndDrop
         multiple
         onChange={handleFilesChange}
+        defaultValue={newAttachments}
       />
-
-      <Text tag="h2" styleAs="h4" weight="bold" spacingTop="m" spacingBottom="s">
-        {t('form:labels:additionalInfo')}
-      </Text>
-
-      <Box mb="var(--spacing-l)">
-        <TextArea
-          name="applicationData.additionalInfo"
-          label={t('hakemus:labels:applicationAdditionalInfo')}
-        />
-      </Box>
 
       {/* File remove dialog */}
       <ConfirmationDialog
         title={t('form:dialog:titles:removeAttachment')}
         description={t('form:dialog:descriptions:removeAttachment', {
-          fileName: fileToRemove?.name,
+          fileName: fileToRemove?.fileName,
         })}
         isOpen={Boolean(fileToRemove)}
         close={closeRemoveDialog}
@@ -92,7 +90,7 @@ function Attachments({ onAddAttachments }: Props) {
         variant="danger"
         // errorMsg={errorMessage}
       />
-    </div>
+    </Box>
   );
 }
 
