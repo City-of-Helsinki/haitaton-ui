@@ -25,7 +25,8 @@ const hakemukset: Application[] = [
         contacts: [
           {
             email: 'matti@test.com',
-            name: 'Matti Meikäläinen',
+            firstName: 'Matti',
+            lastName: 'Meikäläinen',
             orderer: true,
             phone: '0000000000',
           },
@@ -74,7 +75,8 @@ const hakemukset: Application[] = [
         contacts: [
           {
             email: '',
-            name: '',
+            firstName: '',
+            lastName: '',
             orderer: false,
             phone: '',
           },
@@ -121,7 +123,8 @@ const hakemukset: Application[] = [
         contacts: [
           {
             email: 'matti@test.com',
-            name: 'Matti Meikäläinen',
+            firstName: 'Matti',
+            lastName: 'Meikäläinen',
             orderer: true,
             phone: '0000000000',
           },
@@ -148,7 +151,8 @@ const hakemukset: Application[] = [
         contacts: [
           {
             email: 'matti@test.com',
-            name: 'Matti Meikäläinen',
+            firstName: 'Matti',
+            lastName: 'Meikäläinen',
             orderer: false,
             phone: '0000000000',
           },
@@ -195,7 +199,8 @@ const hakemukset: Application[] = [
         contacts: [
           {
             email: 'matti@test.com',
-            name: 'Matti Meikäläinen',
+            firstName: 'Matti',
+            lastName: 'Meikäläinen',
             orderer: true,
             phone: '0000000000',
           },
@@ -222,7 +227,8 @@ const hakemukset: Application[] = [
         contacts: [
           {
             email: 'matti@test.com',
-            name: 'Matti Meikäläinen',
+            firstName: 'Matti',
+            lastName: 'Meikäläinen',
             orderer: false,
             phone: '0000000000',
           },
@@ -269,7 +275,8 @@ const hakemukset: Application[] = [
         contacts: [
           {
             email: 'matti@test.com',
-            name: 'Matti Meikäläinen',
+            firstName: 'Matti',
+            lastName: 'Meikäläinen',
             orderer: true,
             phone: '0000000000',
           },
@@ -319,7 +326,8 @@ const hakemukset: Application[] = [
         contacts: [
           {
             email: 'matti@test.com',
-            name: 'Matti Meikäläinen',
+            firstName: 'Matti',
+            lastName: 'Meikäläinen',
             orderer: false,
             phone: '0000000000',
           },

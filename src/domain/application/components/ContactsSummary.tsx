@@ -37,7 +37,9 @@ const CustomerSummary: React.FC<{ customer: Customer }> = ({ customer }) => {
 export const ContactSummary: React.FC<{ contact: Contact }> = ({ contact }) => {
   return (
     <div>
-      <p>{contact.name}</p>
+      <p>
+        {contact.firstName} {contact.lastName}
+      </p>
       <p>{contact.email}</p>
       <p>{contact.phone}</p>
     </div>

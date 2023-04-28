@@ -199,15 +199,20 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
       <Text tag="p" styleAs="body-m" spacingBottom="s">
         {t(`form:yhteystiedot:instructions`)}
       </Text>
-      <Text tag="h3" styleAs="h4" weight="bold" spacingBottom="xs">
-        {t(`form:yhteystiedot:titles:omistaja`)}
+      <Text tag="h3" styleAs="h3" weight="light" spacingBottom="xs">
+        {t(`form:yhteystiedot:titles:omistajaInfo`)}
       </Text>
-      <ResponsiveGrid className="formWpr">
-        {CONTACT_FIELDS.map((contactField) => {
-          const fieldName = `${FORMFIELD.OMISTAJAT}.0.${contactField}`;
-          return <ContactField key={contactField} field={contactField} fieldName={fieldName} />;
-        })}
-      </ResponsiveGrid>
+      <Fieldset
+        heading={t(`form:yhteystiedot:titles:omistaja`)}
+        style={{ paddingTop: 'var(--spacing-s)' }}
+      >
+        <ResponsiveGrid className="formWpr">
+          {CONTACT_FIELDS.map((contactField) => {
+            const fieldName = `${FORMFIELD.OMISTAJAT}.0.${contactField}`;
+            return <ContactField key={contactField} field={contactField} fieldName={fieldName} />;
+          })}
+        </ResponsiveGrid>
+      </Fieldset>
       <div className="formWpr">
         <ToggleButton
           id="erillinen-yhteyshenkilo"
@@ -251,7 +256,11 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
         </Fieldset>
       )}
 
-      <Accordion language={locale} heading={t('form:yhteystiedot:titles:lisaaRakennuttajia')}>
+      <Accordion
+        language={locale}
+        headingLevel={3}
+        heading={t('form:yhteystiedot:titles:propertyDeveloperInfo')}
+      >
         {rakennuttajat.map((item, index) => {
           return (
             <Contact<HankeContactTypeKey>
@@ -271,14 +280,19 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
                 );
               }}
             >
-              <ResponsiveGrid>
-                {CONTACT_FIELDS.map((contactField) => {
-                  const fieldName = `${FORMFIELD.RAKENNUTTAJAT}.${index}.${contactField}`;
-                  return (
-                    <ContactField key={contactField} field={contactField} fieldName={fieldName} />
-                  );
-                })}
-              </ResponsiveGrid>
+              <Fieldset
+                heading={t('form:yhteystiedot:titles:rakennuttajat')}
+                style={{ paddingTop: 'var(--spacing-s)' }}
+              >
+                <ResponsiveGrid>
+                  {CONTACT_FIELDS.map((contactField) => {
+                    const fieldName = `${FORMFIELD.RAKENNUTTAJAT}.${index}.${contactField}`;
+                    return (
+                      <ContactField key={contactField} field={contactField} fieldName={fieldName} />
+                    );
+                  })}
+                </ResponsiveGrid>
+              </Fieldset>
             </Contact>
           );
         })}
@@ -292,7 +306,11 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
         </Button>
       </Accordion>
 
-      <Accordion language={locale} heading={t('form:yhteystiedot:titles:lisaaToteuttajia')}>
+      <Accordion
+        language={locale}
+        headingLevel={3}
+        heading={t('form:yhteystiedot:titles:implementerInfo')}
+      >
         {toteuttajat.map((item, index) => {
           return (
             <Contact<HankeContactTypeKey>
@@ -312,14 +330,19 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
                 );
               }}
             >
-              <ResponsiveGrid>
-                {CONTACT_FIELDS.map((contactField) => {
-                  const fieldName = `${FORMFIELD.TOTEUTTAJAT}.${index}.${contactField}`;
-                  return (
-                    <ContactField key={contactField} field={contactField} fieldName={fieldName} />
-                  );
-                })}
-              </ResponsiveGrid>
+              <Fieldset
+                heading={t('form:yhteystiedot:titles:toteuttajat')}
+                style={{ paddingTop: 'var(--spacing-s)' }}
+              >
+                <ResponsiveGrid>
+                  {CONTACT_FIELDS.map((contactField) => {
+                    const fieldName = `${FORMFIELD.TOTEUTTAJAT}.${index}.${contactField}`;
+                    return (
+                      <ContactField key={contactField} field={contactField} fieldName={fieldName} />
+                    );
+                  })}
+                </ResponsiveGrid>
+              </Fieldset>
             </Contact>
           );
         })}
@@ -333,7 +356,11 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
         </Button>
       </Accordion>
 
-      <Accordion language={locale} heading={t('form:yhteystiedot:titles:lisaaMuitaTahoja')}>
+      <Accordion
+        language={locale}
+        headingLevel={3}
+        heading={t('form:yhteystiedot:titles:otherInfo')}
+      >
         {muutTahot.map((item, index) => {
           const fieldPath = `${FORMFIELD.MUUTTAHOT}.${index}`;
 
@@ -355,39 +382,44 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
                 );
               }}
             >
-              <ResponsiveGrid>
-                <TextInput
-                  name={`${fieldPath}.${CONTACT_FORMFIELD.ROOLI}`}
-                  label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.ROOLI}`)}
-                  required
-                  placeholder={t('form:yhteystiedot:placeholders:otherPartyRole')}
-                  helperText={t('form:yhteystiedot:helperTexts:otherPartyRole')}
-                />
-              </ResponsiveGrid>
-              <ResponsiveGrid>
-                <TextInput
-                  name={`${fieldPath}.${CONTACT_FORMFIELD.NIMI}`}
-                  label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.NIMI}`)}
-                  required
-                />
-                <TextInput
-                  name={`${fieldPath}.${CONTACT_FORMFIELD.ORGANISAATIO}`}
-                  label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.ORGANISAATIO}`)}
-                />
-                <TextInput
-                  name={`${fieldPath}.${CONTACT_FORMFIELD.OSASTO}`}
-                  label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.OSASTO}`)}
-                />
-                <TextInput
-                  name={`${fieldPath}.${CONTACT_FORMFIELD.EMAIL}`}
-                  label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.EMAIL}`)}
-                  required
-                />
-                <TextInput
-                  name={`${fieldPath}.${CONTACT_FORMFIELD.PUHELINNUMERO}`}
-                  label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.PUHELINNUMERO}`)}
-                />
-              </ResponsiveGrid>
+              <Fieldset
+                heading={t('form:yhteystiedot:titles:muut')}
+                style={{ paddingTop: 'var(--spacing-s)' }}
+              >
+                <ResponsiveGrid>
+                  <TextInput
+                    name={`${fieldPath}.${CONTACT_FORMFIELD.ROOLI}`}
+                    label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.ROOLI}`)}
+                    required
+                    placeholder={t('form:yhteystiedot:placeholders:otherPartyRole')}
+                    helperText={t('form:yhteystiedot:helperTexts:otherPartyRole')}
+                  />
+                </ResponsiveGrid>
+                <ResponsiveGrid>
+                  <TextInput
+                    name={`${fieldPath}.${CONTACT_FORMFIELD.NIMI}`}
+                    label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.NIMI}`)}
+                    required
+                  />
+                  <TextInput
+                    name={`${fieldPath}.${CONTACT_FORMFIELD.ORGANISAATIO}`}
+                    label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.ORGANISAATIO}`)}
+                  />
+                  <TextInput
+                    name={`${fieldPath}.${CONTACT_FORMFIELD.OSASTO}`}
+                    label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.OSASTO}`)}
+                  />
+                  <TextInput
+                    name={`${fieldPath}.${CONTACT_FORMFIELD.EMAIL}`}
+                    label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.EMAIL}`)}
+                    required
+                  />
+                  <TextInput
+                    name={`${fieldPath}.${CONTACT_FORMFIELD.PUHELINNUMERO}`}
+                    label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.PUHELINNUMERO}`)}
+                  />
+                </ResponsiveGrid>
+              </Fieldset>
             </Contact>
           );
         })}

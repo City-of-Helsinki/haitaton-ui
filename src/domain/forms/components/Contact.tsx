@@ -4,13 +4,11 @@ import { Flex } from '@chakra-ui/react';
 import { Button, IconCross, IconPlusCircle, Tab, TabList, TabPanel, Tabs } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, UseFieldArrayRemove } from 'react-hook-form';
-import Text from '../../../common/components/text/Text';
 import styles from './Contact.module.scss';
 
 interface Props<T> {
   contactType: T;
   index?: number;
-  showContactTitle?: boolean;
   onRemoveContact?: UseFieldArrayRemove;
   renderSubContact?: (subContactIndex: number, remove: UseFieldArrayRemove) => JSX.Element;
   subContactPath: string;
@@ -21,7 +19,6 @@ interface Props<T> {
 const Contact = <T extends unknown>({
   contactType,
   index,
-  showContactTitle = true,
   onRemoveContact,
   renderSubContact,
   subContactPath,
@@ -46,12 +43,7 @@ const Contact = <T extends unknown>({
 
   return (
     <>
-      <Flex justify="space-between" align="center" mb="var(--spacing-s)">
-        {showContactTitle && (
-          <Text tag="h3" styleAs="body-l" weight="bold">
-            {t(`form:yhteystiedot:titles:${contactType}`)}
-          </Text>
-        )}
+      <Flex justify="right" align="center" mb="var(--spacing-s)">
         {onRemoveContact && (
           <Button
             variant="supplementary"

@@ -37,7 +37,8 @@ const application: JohtoselvitysFormValues = {
       contacts: [
         {
           email: '',
-          name: '',
+          firstName: '',
+          lastName: '',
           orderer: true,
           phone: '',
         },
@@ -86,7 +87,8 @@ const application: JohtoselvitysFormValues = {
       contacts: [
         {
           email: '',
-          name: '',
+          firstName: '',
+          lastName: '',
           orderer: false,
           phone: '',
         },
@@ -129,8 +131,11 @@ function fillBasicInformation() {
     target: { value: 'Testataan johtoselvityslomaketta' },
   });
 
-  fireEvent.change(screen.getByLabelText(/Nimi/), {
-    target: { value: 'Matti Meikäläinen' },
+  fireEvent.change(screen.getByLabelText(/etunimi/i), {
+    target: { value: 'Matti' },
+  });
+  fireEvent.change(screen.getByLabelText(/sukunimi/i), {
+    target: { value: 'Meikäläinen' },
   });
   fireEvent.change(screen.getByLabelText(/sähköposti/i), {
     target: { value: 'matti.meikalainen@test.com' },
@@ -153,43 +158,58 @@ function fillContactsInformation() {
   // Fill customer info
   fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
   fireEvent.click(screen.getAllByText(/yritys/i)[0]);
-  fireEvent.change(screen.getAllByLabelText(/Nimi/)[0], {
+  fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.name'), {
     target: { value: 'Yritys Oy' },
   });
-  fireEvent.change(screen.getAllByLabelText(/y-tunnus/i)[0], {
-    target: { value: '2182805-0' },
-  });
-  fireEvent.change(screen.getAllByLabelText(/sähköposti/i)[0], {
+  fireEvent.change(
+    screen.getByTestId('applicationData.customerWithContacts.customer.registryKey'),
+    {
+      target: { value: '2182805-0' },
+    }
+  );
+  fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.email'), {
     target: { value: 'yritys@test.com' },
   });
-  fireEvent.change(screen.getAllByLabelText(/puhelinnumero/i)[0], {
+  fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.phone'), {
     target: { value: '0000000000' },
   });
 
   // Fill contractor info
   fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
   fireEvent.click(screen.getAllByText(/yritys/i)[1]);
-  fireEvent.change(screen.getAllByLabelText(/Nimi/)[2], {
+  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.customer.name'), {
     target: { value: 'Yritys 2 Oy' },
   });
-  fireEvent.change(screen.getAllByLabelText(/y-tunnus/i)[1], {
-    target: { value: '7126070-7' },
-  });
-  fireEvent.change(screen.getAllByLabelText(/sähköposti/i)[2], {
+  fireEvent.change(
+    screen.getByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+    {
+      target: { value: '7126070-7' },
+    }
+  );
+  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.customer.email'), {
     target: { value: 'yritys2@test.com' },
   });
-  fireEvent.change(screen.getAllByLabelText(/puhelinnumero/i)[2], {
+  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.customer.phone'), {
     target: { value: '0000000000' },
   });
 
   // Fill contact of contractor
-  fireEvent.change(screen.getAllByLabelText(/Nimi/)[3], {
-    target: { value: 'Alli Asiakas' },
-  });
-  fireEvent.change(screen.getAllByLabelText(/sähköposti/i)[3], {
+  fireEvent.change(
+    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.firstName'),
+    {
+      target: { value: 'Alli' },
+    }
+  );
+  fireEvent.change(
+    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.lastName'),
+    {
+      target: { value: 'Asiakas' },
+    }
+  );
+  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.email'), {
     target: { value: 'alli.asiakas@test.com' },
   });
-  fireEvent.change(screen.getAllByLabelText(/puhelinnumero/i)[3], {
+  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.phone'), {
     target: { value: '0000000000' },
   });
 }
@@ -387,15 +407,25 @@ test('Should save existing application between page changes when there is change
 test('Should change users own role and its fields correctly', async () => {
   const { user } = render(<JohtoselvitysContainer application={applications[3]} />);
 
-  const name = 'Tauno Työmies';
+  const firstName = 'Tauno';
+  const lastName = 'Työmies';
   const email = 'tauno@test.com';
   const phone = '0401234567';
 
   fireEvent.click(screen.getByRole('button', { name: /rooli/i }));
   fireEvent.click(screen.getByText(/työn suorittaja/i));
-  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.name'), {
-    target: { value: name },
-  });
+  fireEvent.change(
+    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.firstName'),
+    {
+      target: { value: firstName },
+    }
+  );
+  fireEvent.change(
+    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.lastName'),
+    {
+      target: { value: lastName },
+    }
+  );
   fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.email'), {
     target: { value: email },
   });
@@ -404,18 +434,24 @@ test('Should change users own role and its fields correctly', async () => {
   });
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-  expect(screen.getByTestId('applicationData.customerWithContacts.contacts.0.name')).toHaveValue(
-    ''
-  );
+  expect(
+    screen.getByTestId('applicationData.customerWithContacts.contacts.0.firstName')
+  ).toHaveValue('');
+  expect(
+    screen.getByTestId('applicationData.customerWithContacts.contacts.0.lastName')
+  ).toHaveValue('');
   expect(screen.getByTestId('applicationData.customerWithContacts.contacts.0.email')).toHaveValue(
     ''
   );
   expect(screen.getByTestId('applicationData.customerWithContacts.contacts.0.phone')).toHaveValue(
     ''
   );
-  expect(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.name')).toHaveValue(
-    name
-  );
+  expect(
+    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.firstName')
+  ).toHaveValue(firstName);
+  expect(
+    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.lastName')
+  ).toHaveValue(lastName);
   expect(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.email')).toHaveValue(
     email
   );

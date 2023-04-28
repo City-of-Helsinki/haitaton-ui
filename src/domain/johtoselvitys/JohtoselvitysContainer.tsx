@@ -65,7 +65,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         contacts: [
           {
             email: '',
-            name: '',
+            firstName: '',
+            lastName: '',
             orderer: true,
             phone: '',
           },
@@ -92,7 +93,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         contacts: [
           {
             email: '',
-            name: '',
+            firstName: '',
+            lastName: '',
             orderer: false,
             phone: '',
           },

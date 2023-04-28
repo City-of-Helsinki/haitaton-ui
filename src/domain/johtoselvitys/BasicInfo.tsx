@@ -63,7 +63,8 @@ const emptyCustomer: Customer = {
 
 const emptyContact: Contact = {
   email: '',
-  name: '',
+  firstName: '',
+  lastName: '',
   orderer: false,
   phone: '',
 };
@@ -106,10 +107,21 @@ export const BasicHankeInfo: React.FC = () => {
   ]);
 
   useEffect(() => {
-    if (user.data?.profile.name && !getValues(`applicationData.${selectedRole}.contacts.0.name`)) {
-      setValue(`applicationData.${selectedRole}.contacts.0.name`, user.data?.profile.name);
+    const userFirstName = user.data?.profile.given_name;
+    const userLastName = user.data?.profile.family_name;
+    if (userFirstName && !getValues(`applicationData.${selectedRole}.contacts.0.firstName`)) {
+      setValue(`applicationData.${selectedRole}.contacts.0.firstName`, userFirstName);
     }
-  }, [user.data?.profile.name, setValue, selectedRole, getValues]);
+    if (userLastName && !getValues(`applicationData.${selectedRole}.contacts.0.lastName`)) {
+      setValue(`applicationData.${selectedRole}.contacts.0.lastName`, userLastName);
+    }
+  }, [
+    user.data?.profile.given_name,
+    user.data?.profile.family_name,
+    setValue,
+    selectedRole,
+    getValues,
+  ]);
 
   useEffect(() => {
     if (
@@ -282,7 +294,7 @@ export const BasicHankeInfo: React.FC = () => {
         {t('form:labels:omatTiedot')}
       </Text>
 
-      <ResponsiveGrid className={styles.formRow}>
+      <ResponsiveGrid>
         <Select<Option>
           options={roleOptions}
           id="roleInApplication"
@@ -315,8 +327,13 @@ export const BasicHankeInfo: React.FC = () => {
             <React.Fragment key={customerType}>
               <ResponsiveGrid>
                 <TextInput
-                  name={`applicationData.${customerType}.contacts.0.name`}
-                  label={t('form:yhteystiedot:labels:nimi')}
+                  name={`applicationData.${selectedRole}.contacts.0.firstName`}
+                  label={t('hankeForm:labels:etunimi')}
+                  required
+                />
+                <TextInput
+                  name={`applicationData.${selectedRole}.contacts.0.lastName`}
+                  label={t('hankeForm:labels:sukunimi')}
                   required
                 />
               </ResponsiveGrid>

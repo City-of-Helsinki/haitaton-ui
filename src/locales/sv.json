@@ -411,7 +411,7 @@
       "perustaja": "Perustaja"
     },
     "toolTips": {
-      "tipOpenLabel": "Öppna anvisningen",
+      "tipOpenLabel": "Anvisningen",
       "perustiedot": "Obligatoriska grundläggande uppgifter för projektet ska fyllas i. Om inte alla obligatoriska uppgifter är ifyllda sparas det nya projektet i Haitaton, men kan inte gå vidare till konsekvensbedömning. Man kan fortsätta senare och komplettera projektets uppgifter genom att öppna det via projektlistan",
       "nimi": "Ett namn som beskriver projektet koncist",
       "onYKTHanke": "Ett gemensamt kommunaltekniskt byggarbetsplats –  ett samprojekt enligt samarbetsavtalet. Parter är utöver Helsingfors stads stadsmiljösektor också affärsverket Helsingfors stads trafikverk (HST), samkommunen Helsingforsregionens miljötjänster (HRM), Helen Oy, Helen Elnät Ab, Auris Kaasunjakelu Oy samt telenätsoperatörerna Cinia Oy, DNA Oyj, Elisa Oyj och Telia Finland Oyj. Med gemensam kommunalteknisk verksamhet strävar man efter att göra byggande i allmänna områden i städer smidigare och samordna avtalsparternas separata projekt till projekt som genomförs gemensamt för att förbättra infrastrukturtjänsternas kvalitet och tillhandahållande.",
