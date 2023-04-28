@@ -625,9 +625,9 @@
       "actionText": "Luo hakemus"
     },
     "johtotietoselvitys": {
-      "title": "Johtotietoselvitys",
-      "description": "Selvityspyyntö tietyn alueen johtotiedoista. Tarvitaan kaivuilmoituksen liitteenä.",
-      "actionText": "Tee Johtotietoselvitys"
+      "title": "Tee johtoselvityshakemus",
+      "description": "Mikäli teet pelkkää johtoselvitystä yksityiselle alueelle, täytä hakemus.",
+      "actionText": "Tee johtoselvityshakemus"
     },
     "valmistelu": {
       "title": "Valmisteluvaiheessa oleva hanke",
@@ -663,6 +663,11 @@
       "title": "Ohjeet",
       "description": "Tutustu yleisten alueiden hankkeita koskeviin ohjeistuksiin.",
       "actionText": "Tutustu ohjeisiin"
+    },
+    "loginContainer": {
+      "description": "Helsingin kaupungin alueella ennen kaivu-, kairaus- ja louhintatöihin ryhtymistä on haettava ajantasainen johtoselvitys.",
+      "button": "Kirjaudu sisään tehdäksesi hakemus",
+      "imageAltText": "Kalastaman metroasema alueen rakennuskohteen työmaalla. Asema erottuu työmaasta lasiseinäisenä pitkulaisena rakenteena työmaan yläpuolella. Etualalla maa on auki ja vasemmalla kohoavat tulevan kauppakeskuksen rakennukset. Työmaa jatkuu metroaseman takana Kuorekarin salmen rantaan. Aivan oikealla näkyy osa Suvilahden voimalaitosta."
     }
   },
   "hankePortfolio": {
