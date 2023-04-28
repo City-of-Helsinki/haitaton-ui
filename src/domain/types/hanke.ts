@@ -232,6 +232,6 @@ export interface HankeIndexData {
   tila: HANKE_INDEX_STATE_KEY;
 }
 
-type DraftRequiredFields = 'nimi' | 'kuvaus' | 'vaihe' | 'alkuPvm' | 'loppuPvm';
+type DraftRequiredFields = 'nimi' | 'kuvaus' | 'vaihe';
 
 export type HankeDataDraft = PartialExcept<HankeData, DraftRequiredFields>;

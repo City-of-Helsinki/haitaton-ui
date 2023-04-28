@@ -67,8 +67,6 @@ export const fillForm0 = (hankeData: HankeDataDraft) => {
   if (hankeData.tyomaaKatuosoite) {
     cy.get('#tyomaaKatuosoite').type(hankeData.tyomaaKatuosoite);
   }
-  cy.get('#alkuPvm').type(hankeData.alkuPvm);
-  cy.get('#loppuPvm').type(hankeData.loppuPvm);
   cy.get('input[data-testid=nimi]').click();
 
   selectHankeVaihe(
@@ -221,13 +219,13 @@ export const fillForm1 = (hankeData: HankeDataDraft) => {
 
   if (hankeData.alueet && hankeData.alueet[0].haittaAlkuPvm) {
     cy.get('#haittaAlkuPvm').type(hankeData.alueet[0].haittaAlkuPvm);
-  } else {
+  } else if (hankeData.alkuPvm) {
     cy.get('#haittaAlkuPvm').type(hankeData.alkuPvm);
   }
 
   if (hankeData.alueet && hankeData.alueet[0].haittaLoppuPvm) {
     cy.get('#haittaLoppuPvm').type(hankeData.alueet[0].haittaLoppuPvm);
-  } else {
+  } else if (hankeData.loppuPvm) {
     cy.get('#haittaLoppuPvm').type(hankeData.loppuPvm);
   }
 
