@@ -403,3 +403,59 @@ test('Should save existing application between page changes when there is change
 
   expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
 });
+
+test('Should change users own role and its fields correctly', async () => {
+  const { user } = render(<JohtoselvitysContainer application={applications[3]} />);
+
+  const firstName = 'Tauno';
+  const lastName = 'Työmies';
+  const email = 'tauno@test.com';
+  const phone = '0401234567';
+
+  fireEvent.click(screen.getByRole('button', { name: /rooli/i }));
+  fireEvent.click(screen.getByText(/työn suorittaja/i));
+  fireEvent.change(
+    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.firstName'),
+    {
+      target: { value: firstName },
+    }
+  );
+  fireEvent.change(
+    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.lastName'),
+    {
+      target: { value: lastName },
+    }
+  );
+  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.email'), {
+    target: { value: email },
+  });
+  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.phone'), {
+    target: { value: phone },
+  });
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+  expect(
+    screen.getByTestId('applicationData.customerWithContacts.contacts.0.firstName')
+  ).toHaveValue('');
+  expect(
+    screen.getByTestId('applicationData.customerWithContacts.contacts.0.lastName')
+  ).toHaveValue('');
+  expect(screen.getByTestId('applicationData.customerWithContacts.contacts.0.email')).toHaveValue(
+    ''
+  );
+  expect(screen.getByTestId('applicationData.customerWithContacts.contacts.0.phone')).toHaveValue(
+    ''
+  );
+  expect(
+    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.firstName')
+  ).toHaveValue(firstName);
+  expect(
+    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.lastName')
+  ).toHaveValue(lastName);
+  expect(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.email')).toHaveValue(
+    email
+  );
+  expect(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.phone')).toHaveValue(
+    phone
+  );
+});
