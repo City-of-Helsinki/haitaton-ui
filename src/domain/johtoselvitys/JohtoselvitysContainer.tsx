@@ -415,7 +415,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         onSubmit={handleSubmit(sendCableApplication)}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
-          async function handlePageChange(handlerFunction: () => void) {
+          async function handlePageChange(handlerFunction: () => void): Promise<void> {
             try {
               if (activeStepIndex === 3 && newAttachments.length > 0) {
                 await saveAttachments();
@@ -431,9 +431,9 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
           }
 
           async function handleNextPage() {
-            await handlePageChange(() =>
-              changeFormStep(handleNext, pageFieldsToValidate[activeStepIndex], trigger)
-            );
+            await handlePageChange(async () => {
+              await changeFormStep(handleNext, pageFieldsToValidate[activeStepIndex], trigger);
+            });
           }
 
           async function handleSaveAndQuit() {
