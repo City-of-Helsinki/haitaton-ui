@@ -432,7 +432,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
 
           async function handleNextPage() {
             function nextPageHandler() {
-              changeFormStep(handleNext, pageFieldsToValidate[activeStepIndex], trigger).catch();
+              changeFormStep(handleNext, pageFieldsToValidate[activeStepIndex], trigger);
             }
             await handlePageChange(nextPageHandler);
           }
