@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useMemo, useState } from 'react';
 import { Button, IconCross, IconEnvelope, IconSaveDiskette, StepState } from 'hds-react';
 import { FormProvider, useForm, FieldPath } from 'react-hook-form';
@@ -6,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from 'react-query';
 import { merge } from 'lodash';
+import { AxiosError } from 'axios';
+import { Box } from '@chakra-ui/react';
 
 import { JohtoselvitysFormValues } from './types';
 import { BasicHankeInfo } from './BasicInfo';
@@ -33,8 +34,8 @@ import { Application } from '../application/types/application';
 import styles from './Johtoselvitys.module.scss';
 import Attachments from './Attachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
-import useAttachments from '../application/hooks/useAttachments';
 import { uploadAttachment } from '../application/attatchments';
+import useAttachments from '../application/hooks/useAttachments';
 
 type Props = {
   hankeData?: HankeData;
@@ -47,8 +48,11 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
   const { setNotification } = useGlobalNotification();
   const { showSendSuccess, showSendError } = useApplicationSendNotification();
   const queryClient = useQueryClient();
-  const { data: attachments } = useAttachments(application?.id);
+  const { data: existingAttachments, isError: attachmentsLoadError } = useAttachments(
+    application?.id
+  );
   const [newAttachments, setNewAttachments] = useState<File[]>([]);
+  const [attachmentUploadErrors, setAttachmentUploadErrors] = useState<JSX.Element[]>([]);
 
   const initialValues: JohtoselvitysFormValues = {
     id: null,
@@ -168,15 +172,25 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
       await queryClient.invalidateQueries('application', { refetchInactive: true });
       navigateToApplicationList();
     },
-    // onSettled() {
-    // },
   });
 
   const attachmentUploadMutation = useMutation(uploadAttachment, {
+    onMutate() {
+      setAttachmentUploadErrors([]);
+    },
+    onError(error: AxiosError, { file }) {
+      setAttachmentUploadErrors((errors) => {
+        // TODO: Should show different error texts for different kinds of errors,
+        // once those texts have been defined
+        return errors.concat(
+          <Box as="p" key={file.name} mb="var(--spacing-s)">
+            {file.name}: {t('common:error')}
+          </Box>
+        );
+      });
+    },
     onSuccess() {
-      // TODO: Mitä tapahtuu, jos joku liitteistä feilaa
-      setNewAttachments([]);
-      queryClient.invalidateQueries('attachments', { refetchInactive: true });
+      queryClient.invalidateQueries('attachments');
     },
   });
 
@@ -227,6 +241,33 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
 
   function handleAddAttachments(files: File[]) {
     setNewAttachments(files);
+  }
+
+  async function saveAttachments() {
+    if (!application) {
+      return Promise.resolve();
+    }
+
+    const mutations = newAttachments.map((file) =>
+      attachmentUploadMutation.mutateAsync({
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        applicationId: application.id!,
+        attachmentType: 'MUU',
+        file,
+      })
+    );
+
+    const results = await Promise.allSettled(mutations);
+
+    if (results.some((result) => result.status === 'rejected')) {
+      throw new Error('Error uploading attachments');
+    }
+
+    return results;
+  }
+
+  function closeAttachmentUploadErrorDialog() {
+    setAttachmentUploadErrors([]);
   }
 
   // Fields that are validated in each page when moving forward in form
@@ -297,12 +338,13 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
       {
         element: (
           <Attachments
-            existingAttachments={attachments}
+            existingAttachments={existingAttachments}
+            attachmentsLoadError={attachmentsLoadError}
             newAttachments={newAttachments}
             onAddAttachments={handleAddAttachments}
           />
         ),
-        label: t('form:headers:liitteetJaLisatiedot'),
+        label: t('hankePortfolio:tabit:liitteet'),
         state: isPageValid<JohtoselvitysFormValues>(
           validationSchema,
           pageFieldsToValidate[2],
@@ -312,7 +354,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
           : StepState.disabled,
       },
       {
-        element: <ReviewAndSend />,
+        element: <ReviewAndSend attachments={existingAttachments} />,
         label: t('form:headers:yhteenveto'),
         state: isPageValid<JohtoselvitysFormValues>(
           validationSchema,
@@ -323,31 +365,21 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
           : StepState.disabled,
       },
     ];
-  }, [t, getValues, pageFieldsToValidate, hankeData, attachments, newAttachments]);
+  }, [
+    t,
+    getValues,
+    pageFieldsToValidate,
+    hankeData,
+    existingAttachments,
+    attachmentsLoadError,
+    newAttachments,
+  ]);
 
   const hankeNameText = (
     <div style={{ visibility: hanke !== undefined ? 'visible' : 'hidden' }}>
       {`${hanke?.nimi} (${hanke?.hankeTunnus})`}
     </div>
   );
-
-  function saveAttachments() {
-    if (!application) {
-      return Promise.resolve();
-    }
-
-    const mutations = newAttachments.map((file) =>
-      attachmentUploadMutation.mutateAsync({
-        applicationId: application.id!,
-        attachmentType: 'MUU',
-        file,
-      })
-    );
-
-    // TODO: Tässä voi olla ongelma, jos yksi monesta feilaa
-    // Ajatus oli, että kuitenkin kaikki lähetetään, joka tapauksessa.
-    return Promise.all(mutations);
-  }
 
   return (
     <FormProvider {...formContext}>
@@ -367,23 +399,47 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         onSubmit={handleSubmit(sendCableApplication)}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
-          async function handleNextPage() {
-            if (activeStepIndex === 3 && newAttachments.length > 0) {
-              await saveAttachments();
-              handleNext();
-            } else {
-              changeFormStep(handleNext, pageFieldsToValidate[activeStepIndex], trigger);
-            }
+          async function handlePageChange(handlerFunction: () => void) {
+            try {
+              if (activeStepIndex === 3 && newAttachments.length > 0) {
+                await saveAttachments();
+                setNewAttachments([]);
+              }
+              handlerFunction();
+              // eslint-disable-next-line no-empty
+            } catch (error) {}
+          }
+
+          function handlePreviousPage() {
+            handlePageChange(handlePrevious);
+          }
+
+          function handleNextPage() {
+            handlePageChange(() =>
+              changeFormStep(handleNext, pageFieldsToValidate[activeStepIndex], trigger)
+            );
+          }
+
+          function handleSaveAndQuit() {
+            handlePageChange(saveAndQuit);
           }
 
           const firstStep = activeStepIndex === 0;
           const lastStep = activeStepIndex === formSteps.length - 1;
+
+          const saveAndQuitIsLoading =
+            applicationSaveMutation.isLoading || attachmentUploadMutation.isLoading;
+          const saveAndQuitLoadingText = attachmentUploadMutation.isLoading
+            ? t('form:buttons:loadingAttachments')
+            : t('common:buttons:savingText');
           return (
             <FormActions
               activeStepIndex={activeStepIndex}
               totalSteps={formSteps.length}
-              onPrevious={handlePrevious}
+              onPrevious={handlePreviousPage}
               onNext={handleNextPage}
+              previousButtonIsLoading={attachmentUploadMutation.isLoading}
+              previousButtonLoadingText={t('form:buttons:loadingAttachments')}
               nextButtonIsLoading={attachmentUploadMutation.isLoading}
               nextButtonLoadingText={t('form:buttons:loadingAttachments')}
             >
@@ -401,9 +457,9 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
                   variant="secondary"
                   iconLeft={<IconSaveDiskette aria-hidden="true" />}
                   data-testid="save-form-btn"
-                  onClick={saveAndQuit}
-                  isLoading={applicationSaveMutation.isLoading}
-                  loadingText={t('common:buttons:savingText')}
+                  onClick={handleSaveAndQuit}
+                  isLoading={saveAndQuitIsLoading}
+                  loadingText={saveAndQuitLoadingText}
                 >
                   {t('hankeForm:saveDraftButton')}
                 </Button>
@@ -427,12 +483,12 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
       {/* Attachment upload error dialog */}
       <ConfirmationDialog
         title={t('form:errors:fileLoadError')}
-        description="Tapahtui virhe"
+        description={attachmentUploadErrors}
         showSecondaryButton={false}
         showCloseButton
-        isOpen={attachmentUploadMutation.isError}
-        close={attachmentUploadMutation.reset}
-        mainAction={attachmentUploadMutation.reset}
+        isOpen={attachmentUploadErrors.length > 0}
+        close={closeAttachmentUploadErrorDialog}
+        mainAction={closeAttachmentUploadErrorDialog}
         mainBtnLabel={t('common:ariaLabels:closeButtonLabelText')}
         variant="primary"
       />

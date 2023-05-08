@@ -101,6 +101,14 @@
         "removeAttachment": "Haluatko varmasti poistaa liitetiedoston {{fileName}}"
       }
     },
+    "notifications": {
+      "labels": {
+        "attachmentRemoved": "Liitetiedosto poistettu"
+      },
+      "descriptions": {
+        "attachmentRemoved": "Liitetiedosto {{fileName}} poistettu"
+      }
+    },
     "buttons": {
       "loadingAttachments": "Ladataan tiedostoja..."
     },
@@ -519,7 +527,7 @@
       "instructions": "<0>Hakemukselle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hakemukseen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hakemusta. Tarvittaessa voit antaa heille laajemmat käyttöoikeudet Omat hankkeet -näkymässä.</0><0>Hakijan yhteyshenkilö on oletuksena johtoselvityksen tilaaja. Tarvittaessa voit vaihtaa jonkun muista yhteyshenkilöistä tilaajaksi. Huomioithan, että johtoselvityksen tilaaja voi olla vain yksi henkilö.</0>"
     },
     "liitteet": {
-      "instructions": "Lisää hakemukselle liitteet, kuten työsuunnitelma ja mahdolliset lisätiedot hakemuksesta."
+      "instructions": "Lisää hakemukselle liitteet, kuten työsuunnitelma."
     }
   },
   "hakemus": {
