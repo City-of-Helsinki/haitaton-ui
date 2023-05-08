@@ -3,6 +3,7 @@ import { Button, IconCross, IconPhoto } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { Box, Flex } from '@chakra-ui/react';
 import { format } from 'date-fns';
+import { fi } from 'date-fns/locale';
 import { ApplicationAttachmentMetadata } from '../../../domain/application/types/application';
 import { getAttachmentFile } from '../../../domain/application/attatchments';
 import FileDownloadLink from '../fileDownloadLink/FileDownloadLink';
@@ -37,7 +38,8 @@ function FileList({ files, onDeleteFile }: Props) {
               queryFunction={() => getAttachmentFile(fileMetadata.applicationId, fileMetadata.id)}
             />
             <Box as="p" color="var(--color-black-60)" className="text-sm">
-              {t('form:labels:added')} {format(new Date(fileMetadata.createdAt), 'd.M.yyyy kk:mm')}
+              {t('form:labels:added')}{' '}
+              {format(new Date(fileMetadata.createdAt), 'd.M.yyyy kk:mm', { locale: fi })}
             </Box>
             <Button
               iconLeft={<IconCross aria-hidden />}
