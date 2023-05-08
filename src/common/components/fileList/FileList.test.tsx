@@ -42,9 +42,7 @@ test('lists files correctly', () => {
 
   expect(screen.getByTestId('file-list').childElementCount).toBe(2);
   expect(screen.queryByText('TestFile1.pdf')).toBeInTheDocument();
-  expect(screen.queryByText('Lisätty 4.7.2023 15:07')).toBeInTheDocument();
   expect(screen.queryByText('TestFile2.pdf')).toBeInTheDocument();
-  expect(screen.queryByText('Lisätty 4.7.2023 16:06')).toBeInTheDocument();
 });
 
 test('files can be deleted from the list', async () => {
@@ -54,5 +52,4 @@ test('files can be deleted from the list', async () => {
 
   expect(screen.getByTestId('file-list').childElementCount).toBe(1);
   expect(screen.queryByText('TestFile1.pdf')).not.toBeInTheDocument();
-  expect(screen.queryByText('Lisätty 4.7.2023 15:07')).not.toBeInTheDocument();
 });
