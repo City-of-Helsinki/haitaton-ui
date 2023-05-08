@@ -75,6 +75,7 @@ const HankeFormPerustiedot: React.FC<FormProps> = ({ errors, register, formData 
           tooltip={{
             tooltipText: t(`hankeForm:toolTips:${FORMFIELD.KATUOSOITE}`),
             tooltipButtonLabel: t(`hankeForm:toolTips:tipOpenLabel`),
+            tooltipLabel: t(`hankeForm:labels:${FORMFIELD.KATUOSOITE}`),
             placement: 'auto',
           }}
         />
@@ -156,7 +157,10 @@ const HankeFormPerustiedot: React.FC<FormProps> = ({ errors, register, formData 
         <br />
         <h3 className="labelHeader">
           <div>{t('hankeForm:perustiedotForm:ytkHankeHeader')}</div>
-          <Tooltip tooltipLabel={t(`hankeForm:toolTips:tipOpenLabel`)}>
+          <Tooltip
+            buttonLabel={t(`hankeForm:toolTips:tipOpenLabel`)}
+            tooltipLabel={t('hankeForm:perustiedotForm:ytkHankeHeader')}
+          >
             {t(`hankeForm:toolTips:${FORMFIELD.YKT_HANKE}`)}
           </Tooltip>
         </h3>

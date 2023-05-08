@@ -3,7 +3,7 @@ import { Checkbox, Select, SelectionGroup } from 'hds-react';
 import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { isEqual } from 'lodash';
-import { ApplicationType, CustomerType } from '../application/types/application';
+import { ApplicationType, Contact, Customer, CustomerType } from '../application/types/application';
 import styles from './BasicInfo.module.scss';
 import TextInput from '../../common/components/textInput/TextInput';
 import TextArea from '../../common/components/textArea/TextArea';
@@ -48,6 +48,33 @@ export const initialValues: InitialValueTypes = {
     propertyConnectivity: false,
   },
 };
+
+const emptyCustomer: Customer = {
+  type: null,
+  name: '',
+  country: 'FI',
+  email: '',
+  phone: '',
+  registryKey: null,
+  ovt: null,
+  invoicingOperator: null,
+  sapCustomerNumber: null,
+};
+
+const emptyContact: Contact = {
+  email: '',
+  firstName: '',
+  lastName: '',
+  orderer: false,
+  phone: '',
+};
+
+const customerTypes: CustomerType[] = [
+  'customerWithContacts',
+  'contractorWithContacts',
+  'propertyDeveloperWithContacts',
+  'representativeWithContacts',
+];
 
 type Option = { value: CustomerType; label: string };
 
@@ -119,25 +146,10 @@ export const BasicHankeInfo: React.FC = () => {
   ];
 
   function handleRoleChange(role: Option) {
-    const emptyContact = {
-      email: '',
-      name: '',
-      orderer: false,
-      phone: '',
-      postalAddress: { city: '', postalCode: '', streetAddress: { streetName: '' } },
-    };
-
     const previousRoleContacts = getValues(`applicationData.${selectedRole}.contacts`);
-
-    // Remove moved contact from previous selected role contacts
-    setValue(
-      `applicationData.${selectedRole}.contacts`,
-      previousRoleContacts.length > 1 ? previousRoleContacts.slice(1) : []
-    );
+    const contactToMove = previousRoleContacts.slice(0, 1);
 
     let selectedRoleContacts = getValues(`applicationData.${role.value}.contacts`);
-
-    const contactToMove = previousRoleContacts.slice(0, 1);
 
     selectedRoleContacts =
       selectedRoleContacts === null ||
@@ -145,7 +157,19 @@ export const BasicHankeInfo: React.FC = () => {
         ? contactToMove
         : contactToMove.concat(selectedRoleContacts);
 
-    setValue(`applicationData.${role.value}.contacts`, selectedRoleContacts);
+    // Remove moved contact from previous selected role contacts
+    setValue(
+      `applicationData.${selectedRole}.contacts`,
+      previousRoleContacts.length > 1 ? previousRoleContacts.slice(1) : [emptyContact]
+    );
+
+    if (!getValues(`applicationData.${role.value}.customer`)) {
+      setValue(`applicationData.${role.value}.customer`, emptyCustomer);
+    }
+
+    setValue(`applicationData.${role.value}.contacts`, selectedRoleContacts, {
+      shouldDirty: true,
+    });
 
     setSelectedRole(role.value);
   }
@@ -297,31 +321,40 @@ export const BasicHankeInfo: React.FC = () => {
           {t('form:labels:fromHelsinkiProfile')}
         </Box>
       </Text> */}
-      <ResponsiveGrid>
-        <TextInput
-          name={`applicationData.${selectedRole}.contacts.0.firstName`}
-          label={t('hankeForm:labels:etunimi')}
-          required
-        />
-        <TextInput
-          name={`applicationData.${selectedRole}.contacts.0.lastName`}
-          label={t('hankeForm:labels:sukunimi')}
-          required
-        />
-      </ResponsiveGrid>
+      {customerTypes.map((customerType) => {
+        if (customerType === selectedRole) {
+          return (
+            <React.Fragment key={customerType}>
+              <ResponsiveGrid>
+                <TextInput
+                  name={`applicationData.${selectedRole}.contacts.0.firstName`}
+                  label={t('hankeForm:labels:etunimi')}
+                  required
+                />
+                <TextInput
+                  name={`applicationData.${selectedRole}.contacts.0.lastName`}
+                  label={t('hankeForm:labels:sukunimi')}
+                  required
+                />
+              </ResponsiveGrid>
 
-      <ResponsiveGrid className={styles.formRow}>
-        <TextInput
-          name={`applicationData.${selectedRole}.contacts.0.email`}
-          label={t('form:yhteystiedot:labels:email')}
-          required
-        />
-        <TextInput
-          name={`applicationData.${selectedRole}.contacts.0.phone`}
-          label={t('form:yhteystiedot:labels:puhelinnumero')}
-          required
-        />
-      </ResponsiveGrid>
+              <ResponsiveGrid className={styles.formRow}>
+                <TextInput
+                  name={`applicationData.${customerType}.contacts.0.email`}
+                  label={t('form:yhteystiedot:labels:email')}
+                  required
+                />
+                <TextInput
+                  name={`applicationData.${customerType}.contacts.0.phone`}
+                  label={t('form:yhteystiedot:labels:puhelinnumero')}
+                  required
+                />
+              </ResponsiveGrid>
+            </React.Fragment>
+          );
+        }
+        return null;
+      })}
     </div>
   );
 };

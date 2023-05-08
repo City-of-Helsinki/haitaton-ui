@@ -35,10 +35,6 @@ const isContactEmpty = ({ nimi, email, puhelinnumero }: HankeContact | HankeMuuT
  * Filter out empty contacts (temporary solution for sending empty contacts to API).
  */
 export const convertFormStateToHankeData = (hankeData: HankeDataFormState): HankeDataFormState => {
-  const hankeAreas = hankeData[FORMFIELD.HANKEALUEET];
-  const minAreaStartDate = getAreasMinStartDate(hankeAreas);
-  const maxAreaEndDate = getAreasMaxEndDate(hankeAreas);
-
   return {
     ...hankeData,
     [FORMFIELD.HANKEALUEET]: hankeData[FORMFIELD.HANKEALUEET]?.map((alue) => {
@@ -49,8 +45,6 @@ export const convertFormStateToHankeData = (hankeData: HankeDataFormState): Hank
         },
       };
     }),
-    ...(minAreaStartDate && { alkuPvm: minAreaStartDate.toISOString() }),
-    ...(maxAreaEndDate && { loppuPvm: maxAreaEndDate.toISOString() }),
     [FORMFIELD.OMISTAJAT]: hankeData[FORMFIELD.OMISTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
     [FORMFIELD.RAKENNUTTAJAT]:
       hankeData[FORMFIELD.RAKENNUTTAJAT]?.filter((v) => !isContactEmpty(v)) || [],

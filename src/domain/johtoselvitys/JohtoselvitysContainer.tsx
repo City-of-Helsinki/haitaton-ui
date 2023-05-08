@@ -136,7 +136,14 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     resolver: yupResolver(validationSchema),
   });
 
-  const { getValues, setValue, handleSubmit, trigger } = formContext;
+  const {
+    getValues,
+    setValue,
+    handleSubmit,
+    trigger,
+    formState: { isDirty },
+    reset,
+  } = formContext;
 
   // If application is created without hanke existing first, get generated hanke data
   // after first save when hankeTunnus is available
@@ -157,6 +164,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
       setValue('id', data.id);
       setValue('alluStatus', data.alluStatus);
       setValue('hankeTunnus', data.hankeTunnus);
+      reset({}, { keepValues: true });
     },
     onSettled() {
       setShowSaveNotification(true);
@@ -218,25 +226,31 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     applicationSendMutation.mutate(id);
   }
 
-  function saveAndQuit() {
-    saveCableApplication();
-
-    navigateToApplicationList();
-
-    setNotification(true, {
-      position: 'top-right',
-      dismissible: true,
-      autoClose: true,
-      autoCloseDuration: 5000,
-      label: t('hakemus:notifications:saveSuccessLabel'),
-      message: t('hakemus:notifications:saveSuccessText'),
-      type: 'success',
-      closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
-    });
+  function handleStepChange() {
+    // Save application when page is changed
+    // only if something has changed
+    if (isDirty) {
+      saveCableApplication();
+    }
   }
 
-  function handleStepChange() {
-    saveCableApplication();
+  function saveAndQuit() {
+    applicationSaveMutation.mutate(convertFormStateToApplicationData(getValues()), {
+      onSuccess() {
+        navigateToApplicationList();
+
+        setNotification(true, {
+          position: 'top-right',
+          dismissible: true,
+          autoClose: true,
+          autoCloseDuration: 5000,
+          label: t('hakemus:notifications:saveSuccessLabel'),
+          message: t('hakemus:notifications:saveSuccessText'),
+          type: 'success',
+          closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+        });
+      },
+    });
   }
 
   function handleAddAttachments(files: File[]) {
@@ -270,6 +284,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     setAttachmentUploadErrors([]);
   }
 
+  const ordererKey = findOrdererKey(getValues('applicationData'));
+
   // Fields that are validated in each page when moving forward in form
   const pageFieldsToValidate: FieldPath<JohtoselvitysFormValues>[][] = useMemo(
     () => [
@@ -278,7 +294,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         'applicationData.name',
         'applicationData.postalAddress',
         'applicationData.workDescription',
-        `applicationData.${findOrdererKey(getValues('applicationData'))}.contacts`,
+        `applicationData.${ordererKey}.contacts`,
         'applicationData.rockExcavation',
         'applicationData.constructionWork',
       ],
@@ -292,7 +308,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         'applicationData.representativeWithContacts',
       ],
     ],
-    [getValues]
+    [ordererKey]
   );
 
   const formSteps = useMemo(() => {
