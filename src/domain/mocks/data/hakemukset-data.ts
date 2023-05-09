@@ -34,7 +34,6 @@ const hakemukset: Application[] = [
       },
       areas: [
         {
-          name: '',
           geometry: {
             type: 'Polygon',
             crs: {
@@ -284,7 +283,6 @@ const hakemukset: Application[] = [
       },
       areas: [
         {
-          name: 'Kuoppa',
           geometry: {
             coordinates: [
               [

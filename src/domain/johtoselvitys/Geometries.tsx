@@ -5,17 +5,8 @@ import Polygon from 'ol/geom/Polygon';
 import Geometry from 'ol/geom/Geometry';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@chakra-ui/react';
-import {
-  Button,
-  Fieldset,
-  IconAlertCircleFill,
-  IconTrash,
-  Tab,
-  TabList,
-  TabPanel,
-  Tabs,
-} from 'hds-react';
+import { Box, Flex } from '@chakra-ui/react';
+import { Button, Fieldset, IconAlertCircleFill, IconCross } from 'hds-react';
 import { debounce } from 'lodash';
 
 import VectorLayer from '../../common/components/map/layers/VectorLayer';
@@ -36,14 +27,19 @@ import useHighlightArea from '../map/hooks/useHighlightArea';
 import { JohtoselvitysArea, JohtoselvitysFormValues } from './types';
 import AddressSearchContainer from '../map/components/AddressSearch/AddressSearchContainer';
 import useAddressCoordinate from '../map/hooks/useAddressCoordinate';
-import TextInput from '../../common/components/textInput/TextInput';
 import { ApplicationGeometry } from '../application/types/application';
 import useForceUpdate from '../../common/hooks/useForceUpdate';
 import { getAreaDefaultName } from '../application/utils';
+import FeatureHoverBox from '../map/components/FeatureHoverBox/FeatureHoverBox';
+import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
+
+interface AreaToRemove {
+  index: number;
+  areaFeature: Feature<Geometry>;
+}
 
 function getEmptyArea(feature: Feature<Geometry>): JohtoselvitysArea {
   return {
-    name: '',
     geometry: new ApplicationGeometry((feature.getGeometry() as Polygon).getCoordinates()),
     feature,
   };
@@ -116,11 +112,25 @@ export const Geometries: React.FC = () => {
 
   const workTimesSet = startTime && endTime;
 
+  const [areaToRemove, setAreaToRemove] = useState<AreaToRemove | null>(null);
+
   function removeArea(index: number, areaFeature?: Feature<Geometry>) {
-    remove(index);
-    if (areaFeature) {
-      drawSource.removeFeature(areaFeature);
+    if (areaFeature !== undefined) {
+      setAreaToRemove({ index, areaFeature });
     }
+  }
+
+  function confirmRemoveArea() {
+    if (areaToRemove !== null) {
+      const { index, areaFeature } = areaToRemove;
+      remove(index);
+      drawSource.removeFeature(areaFeature);
+      setAreaToRemove(null);
+    }
+  }
+
+  function closeAreaRemoveDialog() {
+    setAreaToRemove(null);
   }
 
   return (
@@ -169,6 +179,13 @@ export const Geometries: React.FC = () => {
 
           <OverviewMapControl />
 
+          <FeatureHoverBox
+            render={(featureWithPixel) => {
+              const areaName = featureWithPixel.feature.get('areaName');
+              return areaName ? <p>{areaName}</p> : null;
+            }}
+          />
+
           <Controls>{workTimesSet && <DrawModule source={drawSource} />}</Controls>
         </Map>
       </div>
@@ -192,48 +209,55 @@ export const Geometries: React.FC = () => {
         </Box>
       )}
 
-      <Tabs>
-        <TabList>
-          {applicationAreas.map((area, index) => {
-            const geometry = area.feature?.getGeometry();
-            const surfaceArea = geometry && `(${formatSurfaceArea(geometry)})`;
-            const name = watch(`applicationData.areas.${index}.name`);
-            // Make sure that area name user entered is max 30 characters
-            // If name is empty, use the default area name
-            const areaName = name.slice(0, 30) || getAreaDefaultName(t, index);
-            return (
-              <Tab key={area.id} onClick={() => higlightArea(area.feature)}>
-                <div ref={tabRefs[index]}>
-                  {areaName}&nbsp;{surfaceArea}
-                </div>
-              </Tab>
-            );
-          })}
-        </TabList>
-        {applicationAreas.map((area, index) => (
-          <TabPanel key={area.id}>
-            <Fieldset
-              heading={t('hakemus:labels:areaInfo')}
-              border
-              className={styles.areaInfoContainer}
-            >
-              <TextInput
-                name={`applicationData.areas.${index}.name`}
-                label={t('form:labels:areaName')}
-                helperText={t('form:helperTexts:areaName')}
-                className={styles.nameInput}
-              />
-              <Button
-                variant="supplementary"
-                iconLeft={<IconTrash aria-hidden="true" />}
-                onClick={() => removeArea(index, area.feature)}
-              >
-                {t('hankeForm:hankkeenAlueForm:removeAreaButton')}
-              </Button>
-            </Fieldset>
-          </TabPanel>
-        ))}
-      </Tabs>
+      <Text tag="h3" styleAs="h4" weight="bold">
+        {t('hakemus:labels:addedAreas')}
+      </Text>
+      <Box as="ul" paddingLeft="var(--spacing-l)">
+        {applicationAreas.map((area, index) => {
+          const geometry = area.feature?.getGeometry();
+          const surfaceArea = geometry && `(${formatSurfaceArea(geometry)})`;
+          const areaName = getAreaDefaultName(t, index, applicationAreas.length);
+
+          area.feature?.set('areaName', areaName);
+
+          return (
+            <li key={area.id}>
+              <Flex alignItems="center">
+                <Box
+                  as="button"
+                  type="button"
+                  textDecoration="underline"
+                  onClick={() => higlightArea(area.feature)}
+                >
+                  <div ref={tabRefs[index]}>
+                    {areaName} {surfaceArea}
+                  </div>
+                </Box>
+                <Button
+                  variant="supplementary"
+                  style={{ color: 'var(--color-error)' }}
+                  iconLeft={<IconCross aria-hidden="true" />}
+                  onClick={() => removeArea(index, area.feature)}
+                >
+                  {t('hankeForm:hankkeenAlueForm:removeAreaButton')}
+                </Button>
+              </Flex>
+            </li>
+          );
+        })}
+      </Box>
+
+      <ConfirmationDialog
+        title={t('hakemus:labels:removeAreaTitle')}
+        description={t('hakemus:labels:removeAreaDescription', {
+          areaName: getAreaDefaultName(t, areaToRemove?.index, applicationAreas.length),
+        })}
+        isOpen={areaToRemove !== null}
+        close={closeAreaRemoveDialog}
+        mainAction={confirmRemoveArea}
+        mainBtnLabel={t('common:confirmationDialog:confirmButton')}
+        variant="danger"
+      />
     </div>
   );
 };

@@ -53,6 +53,10 @@ const PreFilledContactSelect: React.FC<{
     }
   }
 
+  if (preFilledContactOptions.length === 0) {
+    return null;
+  }
+
   return (
     <ResponsiveGrid>
       <Select<PreFilledContactOption>

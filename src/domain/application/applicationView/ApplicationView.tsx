@@ -150,7 +150,7 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
             <TabPanel>
               {/* Areas information panel */}
               {areas.map((area, index) => {
-                const areaName = area.name.length > 0 ? area.name : getAreaDefaultName(t, index);
+                const areaName = getAreaDefaultName(t, index, areas.length);
                 return (
                   <Accordion language={locale} heading={areaName} initiallyOpen key={areaName}>
                     <FormSummarySection style={{ marginBottom: 'auto' }}>
@@ -195,7 +195,7 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
                 <OwnHankeMap hanke={hanke} application={application} />
               </Box>
               {areas.map((area, index) => {
-                const areaName = area.name.length > 0 ? area.name : getAreaDefaultName(t, index);
+                const areaName = getAreaDefaultName(t, index, areas.length);
                 const geometry = getAreaGeometry(area);
                 return (
                   <Box

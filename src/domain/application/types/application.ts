@@ -94,7 +94,7 @@ export class ApplicationGeometry implements PolygonWithCRS {
 }
 
 export type ApplicationArea = {
-  name: string;
+  name?: string;
   geometry: ApplicationGeometry;
 };
 

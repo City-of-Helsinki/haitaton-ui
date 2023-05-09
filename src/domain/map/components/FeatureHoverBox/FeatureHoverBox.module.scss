@@ -1,0 +1,8 @@
+.hoverElement {
+  z-index: 1000;
+  position: absolute;
+  pointer-events: none;
+  color: var(--color-white);
+  background-color: var(--color-black-90);
+  padding: var(--spacing-2-xs) var(--spacing-s);
+}

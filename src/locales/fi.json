@@ -534,7 +534,10 @@
       "applicationState": "Hakemuksen tila",
       "relatedHanke": "Liittyy hankkeeseen",
       "downloadDecision": "Lataa päätös (PDF)",
-      "downloadDecisionShort": "Lataa PDF"
+      "downloadDecisionShort": "Lataa PDF",
+      "addedAreas": "Lisäämäsi työalueet",
+      "removeAreaTitle": "Poista työalue",
+      "removeAreaDescription": "Haluatko varmasti poistaa työalueen {{areaName}}"
     },
     "notifications": {
       "saveSuccessLabel": "Hakemus tallennettu",
