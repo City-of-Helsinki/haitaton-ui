@@ -7,8 +7,14 @@ import { FormSummarySection, SectionTitle } from '../forms/components/FormSummar
 import BasicInformationSummary from '../application/components/BasicInformationSummary';
 import AreaSummary from '../application/components/AreaSummary';
 import ContactsSummary from '../application/components/ContactsSummary';
+import AttachmentSummary from '../application/components/AttachmentSummary';
+import { ApplicationAttachmentMetadata } from '../application/types/application';
 
-export const ReviewAndSend: React.FC = () => {
+type Props = {
+  attachments: ApplicationAttachmentMetadata[] | undefined;
+};
+
+export const ReviewAndSend: React.FC<Props> = ({ attachments }) => {
   const { getValues } = useFormContext<JohtoselvitysFormValues>();
   const { t } = useTranslation();
 
@@ -50,6 +56,11 @@ export const ReviewAndSend: React.FC = () => {
           title={t('form:yhteystiedot:titles:representativeWithContactsPlural')}
         />
       </FormSummarySection>
+
+      <SectionTitle>{t('hankePortfolio:tabit:liitteet')}</SectionTitle>
+      {attachments && attachments.length > 0 ? (
+        <AttachmentSummary attachments={attachments} />
+      ) : null}
     </div>
   );
 };

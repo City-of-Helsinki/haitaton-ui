@@ -98,6 +98,18 @@ export type ApplicationArea = {
   geometry: ApplicationGeometry;
 };
 
+export type AttachmentType = 'MUU' | 'LIIKENNEJARJESTELY' | 'VALTAKIRJA';
+
+export type ApplicationAttachmentMetadata = {
+  id: string;
+  fileName: string;
+  createdByUserId: string;
+  createdAt: string;
+  scanStatus: 'PENDING' | 'FAILED' | 'OK';
+  applicationId: number;
+  attachmentType: AttachmentType;
+};
+
 export type JohtoselvitysData = {
   applicationType: ApplicationType;
   name: string;

@@ -19,6 +19,7 @@ type PropTypes = {
   tooltip?: TooltipProps;
   disabled?: boolean;
   required?: boolean;
+  style?: React.CSSProperties;
 };
 
 const Dropdown: React.FC<PropTypes> = ({
@@ -32,6 +33,7 @@ const Dropdown: React.FC<PropTypes> = ({
   tooltip,
   disabled,
   required,
+  style,
 }) => {
   const { t } = useTranslation();
   const { control } = useFormContext();
@@ -68,6 +70,7 @@ const Dropdown: React.FC<PropTypes> = ({
               required={required}
               disabled={disabled}
               error={getInputErrorText(t, error)}
+              style={style}
             />
           );
         }}

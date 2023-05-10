@@ -7,7 +7,7 @@ import styles from './ConfirmationDialog.module.scss';
 
 type Props = {
   title: string;
-  description: string;
+  description: string | React.ReactNode;
   isOpen: boolean;
   close: () => void;
   mainAction: () => void;
@@ -41,7 +41,7 @@ const ConfirmationDialog: React.FC<Props> = ({
       id="dialog"
       isOpen={isOpen}
       aria-labelledby={title}
-      aria-describedby={description}
+      aria-describedby={typeof description === 'string' ? description : title}
       targetElement={document.getElementById('root') || undefined}
       variant={variant}
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -59,7 +59,11 @@ const ConfirmationDialog: React.FC<Props> = ({
         }
       />
       <Dialog.Content>
-        <p data-testid="dialog-description-test">{description}</p>
+        {typeof description === 'string' ? (
+          <p data-testid="dialog-description-test">{description}</p>
+        ) : (
+          <div data-testid="dialog-description-test">{description}</div>
+        )}
         {errorMsg && (
           <div className={styles.errorMsg}>
             <IconErrorFill />

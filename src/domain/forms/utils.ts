@@ -7,16 +7,16 @@ import { ObjectSchema } from 'yup';
  * @param fieldsToValidate array of form fields that are validated
  * @param trigger react-hook-form trigger function
  */
-export async function changeFormStep<T extends FieldValues>(
+export function changeFormStep<T extends FieldValues>(
   handleStepChange: () => void,
   fieldsToValidate: FieldPath<T>[],
   trigger: UseFormTrigger<T>
 ) {
-  const isValid = await trigger(fieldsToValidate);
-
-  if (isValid) {
-    handleStepChange();
-  }
+  trigger(fieldsToValidate).then((isValid) => {
+    if (isValid) {
+      handleStepChange();
+    }
+  });
 }
 
 export function isPageValid<T extends FieldValues, T2 = T>(
