@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { getAttachments } from '../attatchments';
+import { getAttachments } from '../attachments';
 import { ApplicationAttachmentMetadata } from '../types/application';
 
 export default function useAttachments(id: number | null | undefined) {

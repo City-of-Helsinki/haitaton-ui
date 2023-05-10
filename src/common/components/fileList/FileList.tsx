@@ -5,7 +5,7 @@ import { Box, Flex } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import { fi } from 'date-fns/locale';
 import { ApplicationAttachmentMetadata } from '../../../domain/application/types/application';
-import { getAttachmentFile } from '../../../domain/application/attatchments';
+import { getAttachmentFile } from '../../../domain/application/attachments';
 import FileDownloadLink from '../fileDownloadLink/FileDownloadLink';
 
 type Props = {

@@ -48,6 +48,5 @@ export async function deleteAttachment({
   applicationId: number | null;
   attachmentId: string | undefined;
 }) {
-  const { data } = await api.delete(`/hakemukset/${applicationId}/liitteet/${attachmentId}`);
-  return data;
+  await api.delete(`/hakemukset/${applicationId}/liitteet/${attachmentId}`);
 }

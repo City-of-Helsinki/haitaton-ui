@@ -9,7 +9,7 @@ import useLocale from '../../common/hooks/useLocale';
 import FileList from '../../common/components/fileList/FileList';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import { ApplicationAttachmentMetadata } from '../application/types/application';
-import { deleteAttachment } from '../application/attatchments';
+import { deleteAttachment } from '../application/attachments';
 import { JohtoselvitysFormValues } from './types';
 import ErrorLoadingText from '../../common/components/errorLoadingText/ErrorLoadingText';
 

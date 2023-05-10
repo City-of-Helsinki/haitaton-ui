@@ -34,7 +34,7 @@ import { Application } from '../application/types/application';
 import styles from './Johtoselvitys.module.scss';
 import Attachments from './Attachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
-import { uploadAttachment } from '../application/attatchments';
+import { uploadAttachment } from '../application/attachments';
 import useAttachments from '../application/hooks/useAttachments';
 
 type Props = {
