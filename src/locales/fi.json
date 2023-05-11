@@ -314,6 +314,13 @@
       "meta": {
         "title": "Haitaton - Työohjeet"
       }
+    },
+    "MANUAL": {
+      "path": "/",
+      "headerLabel": "Käyttöohjeet ja tuki",
+      "meta": {
+        "title": "Haitaton - Käyttöohjeet ja tuki"
+      }
     }
   },
   "hanke": {

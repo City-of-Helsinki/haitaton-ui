@@ -15,6 +15,7 @@ export enum ROUTES {
   ACCESSIBILITY = 'ACCESSIBILITY',
   PRIVACY_POLICY = 'PRIVACY_POLICY',
   REFERENCES = 'REFERENCES',
+  MANUAL = 'MANUAL',
 }
 
 export type Route = keyof typeof ROUTES;
