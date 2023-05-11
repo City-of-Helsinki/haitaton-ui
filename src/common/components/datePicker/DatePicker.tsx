@@ -34,14 +34,15 @@ const DatePicker: React.FC<PropTypes> = ({
   locale,
 }) => {
   const { t } = useTranslation();
-  const { control } = useFormContext();
+  const { control, register } = useFormContext();
+  const { ref } = register(name);
 
   return (
     <>
       <Controller
         name={name}
         control={control}
-        render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+        render={({ field: { onChange, value }, fieldState: { error } }) => (
           <div className={styles.datePicker}>
             <div className={styles.tooltip}>
               {!!tooltip && (
@@ -53,15 +54,9 @@ const DatePicker: React.FC<PropTypes> = ({
             <div className={styles.dateInput}>
               <DateInput
                 id={name}
-                name={name}
                 label={label}
                 disabled={disabled}
-                onBlur={onBlur}
                 invalid={Boolean(error)}
-                onChange={(date) => {
-                  const convertedDateString = convertFinnishDate(date);
-                  onChange(toEndOfDayUTCISO(new Date(convertedDateString)));
-                }}
                 value={formatToFinnishDate(value)}
                 maxDate={maxDate}
                 minDate={minDate}
@@ -71,6 +66,11 @@ const DatePicker: React.FC<PropTypes> = ({
                 disableConfirmation
                 helperText={helperText}
                 errorText={getInputErrorText(t, error)}
+                ref={ref}
+                onChange={(date) => {
+                  const convertedDateString = convertFinnishDate(date);
+                  onChange(toEndOfDayUTCISO(new Date(convertedDateString)));
+                }}
               />
             </div>
           </div>

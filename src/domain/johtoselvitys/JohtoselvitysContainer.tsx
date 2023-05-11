@@ -130,7 +130,6 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     mode: 'onTouched',
     reValidateMode: 'onChange',
     criteriaMode: 'all',
-    shouldFocusError: false,
     shouldUnregister: false,
     defaultValues: merge(initialValues, convertApplicationDataToFormState(application)),
     resolver: yupResolver(validationSchema),
