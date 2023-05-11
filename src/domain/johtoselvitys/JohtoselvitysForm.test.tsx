@@ -24,11 +24,11 @@ const application: JohtoselvitysFormValues = {
     name: '',
     customerWithContacts: {
       customer: {
-        type: null,
-        name: '',
-        country: '',
-        email: '',
-        phone: '',
+        type: 'COMPANY',
+        name: 'Test Person',
+        country: 'FI',
+        email: 'test@test.com',
+        phone: '0401234567',
         registryKey: null,
         ovt: null,
         invoicingOperator: null,
@@ -36,11 +36,11 @@ const application: JohtoselvitysFormValues = {
       },
       contacts: [
         {
-          email: '',
-          firstName: '',
-          lastName: '',
+          email: 'test@test.com',
+          firstName: 'Test',
+          lastName: 'Person',
           orderer: true,
-          phone: '',
+          phone: '0401234567',
         },
       ],
     },
@@ -73,11 +73,11 @@ const application: JohtoselvitysFormValues = {
     workDescription: '',
     contractorWithContacts: {
       customer: {
-        type: null,
-        name: '',
+        type: 'COMPANY',
+        name: 'Test Person',
         country: 'FI',
-        email: '',
-        phone: '',
+        email: 'test@test.com',
+        phone: '0401234567',
         registryKey: null,
         ovt: null,
         invoicingOperator: null,
@@ -85,11 +85,11 @@ const application: JohtoselvitysFormValues = {
       },
       contacts: [
         {
-          email: '',
-          firstName: '',
-          lastName: '',
+          email: 'test@test.com',
+          firstName: 'Test',
+          lastName: 'Person',
           orderer: false,
-          phone: '',
+          phone: '0401234567',
         },
       ],
     },
@@ -233,7 +233,7 @@ test('Cable report application form can be filled and saved and sent to Allu', a
   expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
 
-  expect(screen.queryByText('Vaihe 2/4: Alueet')).toBeInTheDocument();
+  expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
 
   // Fill areas page
   fillAreasInformation();
@@ -244,18 +244,15 @@ test('Cable report application form can be filled and saved and sent to Allu', a
   expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
 
-  expect(screen.queryByText('Vaihe 3/4: Yhteystiedot')).toBeInTheDocument();
+  expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
 
   // Fill contacts page
   fillContactsInformation();
 
   // Move to summary page
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  await user.click(screen.getByTestId('hds-stepper-step-4'));
 
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
-  fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
-
-  expect(screen.queryByText('Vaihe 4/4: Yhteenveto')).toBeInTheDocument();
+  expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
 
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
   expect(screen.queryByText(/hakemus lähetetty/i)).toBeInTheDocument();
@@ -300,7 +297,7 @@ test('Should show error message when sending fails', async () => {
   fillAreasInformation();
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
   fillContactsInformation();
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  await user.click(screen.getByTestId('hds-stepper-step-4'));
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
 
   expect(screen.queryByText(/lähettäminen epäonnistui/i)).toBeInTheDocument();
@@ -317,7 +314,7 @@ test('Form can be saved without hanke existing first', async () => {
 
   expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
   expect(screen.queryByText('Johtoselvitys (HAI22-12)')).toBeInTheDocument();
-  expect(screen.queryByText('Vaihe 2/4: Alueet')).toBeInTheDocument();
+  expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
 });
 
 test('Save and quit works', async () => {
@@ -386,7 +383,7 @@ test('Should not save application between page changes when nothing is changed',
 
   expect(screen.queryByText(/hakemus tallennettu/i)).not.toBeInTheDocument();
 
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  await user.click(screen.getByTestId('hds-stepper-step-4'));
 
   expect(screen.queryByText(/hakemus tallennettu/i)).not.toBeInTheDocument();
 });

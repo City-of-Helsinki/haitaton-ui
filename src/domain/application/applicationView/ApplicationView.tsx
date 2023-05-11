@@ -17,6 +17,7 @@ import {
   FormSummarySection,
   SectionItemContent,
   SectionItemTitle,
+  SectionTitle,
 } from '../../forms/components/FormSummarySection';
 import { HankeData } from '../../types/hanke';
 import ApplicationStatusTag from '../components/ApplicationStatusTag';
@@ -34,6 +35,8 @@ import Link from '../../../common/components/Link/Link';
 import useHankeViewPath from '../../hanke/hooks/useHankeViewPath';
 import DecisionLink from '../components/DecisionLink';
 import { ApplicationCancel } from '../components/ApplicationCancel';
+import AttachmentSummary from '../components/AttachmentSummary';
+import useAttachments from '../hooks/useAttachments';
 
 type Props = {
   application: Application;
@@ -62,6 +65,8 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
 
   const applicationId =
     applicationIdentifier || t(`hakemus:applicationTypeDraft:${applicationType}`);
+
+  const { data: attachments } = useAttachments(id);
 
   // Text for the link leading back to hanke view
   const hankeLinkText = `${hanke?.nimi} (${hanke?.hankeTunnus})`;
@@ -165,6 +170,7 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
             </TabPanel>
             <TabPanel>
               {/* Contacts information panel */}
+              <SectionTitle>{t('form:yhteystiedot:header')}</SectionTitle>
               <FormSummarySection>
                 <ContactsSummary
                   customerWithContacts={customerWithContacts}
@@ -184,7 +190,12 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
                 />
               </FormSummarySection>
             </TabPanel>
-            <TabPanel>Liitteet</TabPanel>
+            <TabPanel>
+              <SectionTitle>{t('hankePortfolio:tabit:liitteet')}</SectionTitle>
+              {attachments && attachments.length > 0 ? (
+                <AttachmentSummary attachments={attachments} />
+              ) : null}
+            </TabPanel>
           </Tabs>
         </InformationViewMainContent>
         <InformationViewSidebar>

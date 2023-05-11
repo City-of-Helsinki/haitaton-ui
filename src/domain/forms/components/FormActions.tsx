@@ -8,6 +8,10 @@ interface Props {
   totalSteps: number;
   onPrevious: () => void;
   onNext: () => void;
+  previousButtonIsLoading?: boolean;
+  previousButtonLoadingText?: string;
+  nextButtonIsLoading?: boolean;
+  nextButtonLoadingText?: string;
 }
 
 const FormActions: React.FC<Props> = ({
@@ -16,6 +20,10 @@ const FormActions: React.FC<Props> = ({
   totalSteps,
   onPrevious,
   onNext,
+  previousButtonIsLoading,
+  previousButtonLoadingText,
+  nextButtonIsLoading,
+  nextButtonLoadingText,
 }) => {
   const { t } = useTranslation();
   const firstStep = activeStepIndex === 0;
@@ -24,13 +32,25 @@ const FormActions: React.FC<Props> = ({
   return (
     <div className={styles.actions}>
       {!firstStep && (
-        <Button iconLeft={<IconArrowLeft />} variant="secondary" onClick={onPrevious}>
+        <Button
+          iconLeft={<IconArrowLeft />}
+          variant="secondary"
+          onClick={onPrevious}
+          isLoading={previousButtonIsLoading}
+          loadingText={previousButtonLoadingText}
+        >
           {t('hankeForm:previousButton')}
         </Button>
       )}
       {children}
       {!lastStep && (
-        <Button iconRight={<IconArrowRight />} variant="secondary" onClick={onNext}>
+        <Button
+          iconRight={<IconArrowRight />}
+          variant="secondary"
+          onClick={onNext}
+          isLoading={nextButtonIsLoading}
+          loadingText={nextButtonLoadingText}
+        >
           {t('hankeForm:nextButton')}
         </Button>
       )}

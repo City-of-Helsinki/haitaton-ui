@@ -50,7 +50,8 @@
     },
     "buttons": {
       "savingText": "Tallennetaan",
-      "sendingText": "Lähetetään"
+      "sendingText": "Lähetetään",
+      "remove": "Poista"
     }
   },
   "form": {
@@ -67,7 +68,8 @@
       "dateMax": "Viimeinen mahdollinen päivä on {{max}}"
     },
     "errors": {
-      "areaRequired": "Vähintään yksi alue vaaditaan"
+      "areaRequired": "Vähintään yksi alue vaaditaan",
+      "fileLoadError": "Tiedoston latauksessa tapahtui virhe"
     },
     "headers": {
       "perustiedot": "Perustiedot",
@@ -86,7 +88,30 @@
       "addressInformation": "Osoitetiedot",
       "kokonaisAla": "Alueiden kokonaispinta-ala",
       "areaName": "Alueen nimi",
-      "timespan": "Ajanjakso"
+      "timespan": "Ajanjakso",
+      "dragAttachments": "Raahaa tiedostot tänne",
+      "additionalInfo": "Lisätiedot",
+      "added": "Lisätty",
+      "addedFiles": "Lisätyt liitetiedostot"
+    },
+    "dialog": {
+      "titles": {
+        "removeAttachment": "Poista liitetiedosto?"
+      },
+      "descriptions": {
+        "removeAttachment": "Haluatko varmasti poistaa liitetiedoston {{fileName}}"
+      }
+    },
+    "notifications": {
+      "labels": {
+        "attachmentRemoved": "Liitetiedosto poistettu"
+      },
+      "descriptions": {
+        "attachmentRemoved": "Liitetiedosto {{fileName}} poistettu"
+      }
+    },
+    "buttons": {
+      "loadingAttachments": "Ladataan tiedostoja..."
     },
     "helperTexts": {
       "dateInForm": "Anna muodossa P.K.VVVV",
@@ -504,6 +529,9 @@
     },
     "yhteystiedot": {
       "instructions": "<0>Hakemukselle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hakemukseen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hakemusta. Tarvittaessa voit antaa heille laajemmat käyttöoikeudet Omat hankkeet -näkymässä.</0><0>Hakijan yhteyshenkilö on oletuksena johtoselvityksen tilaaja. Tarvittaessa voit vaihtaa jonkun muista yhteyshenkilöistä tilaajaksi. Huomioithan, että johtoselvityksen tilaaja voi olla vain yksi henkilö.</0>"
+    },
+    "liitteet": {
+      "instructions": "Lisää hakemukselle liitteet, kuten työsuunnitelma."
     }
   },
   "hakemus": {
@@ -537,7 +565,8 @@
       "downloadDecisionShort": "Lataa PDF",
       "addedAreas": "Lisäämäsi työalueet",
       "removeAreaTitle": "Poista työalue",
-      "removeAreaDescription": "Haluatko varmasti poistaa työalueen {{areaName}}"
+      "removeAreaDescription": "Haluatko varmasti poistaa työalueen {{areaName}}",
+      "applicationAdditionalInfo": "Lisätietoja hakemuksesta"
     },
     "notifications": {
       "saveSuccessLabel": "Hakemus tallennettu",
