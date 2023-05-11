@@ -226,7 +226,7 @@ export const Geometries: React.FC = () => {
                 <Box
                   as="button"
                   type="button"
-                  textDecoration="underline"
+                  _hover={{ textDecoration: 'underline' }}
                   onClick={() => higlightArea(area.feature)}
                 >
                   <div ref={tabRefs[index]}>
