@@ -22,7 +22,7 @@ import {
   findOrdererKey,
 } from './utils';
 import { changeFormStep, isPageValid } from '../forms/utils';
-import { saveApplication, sendApplication } from '../application/utils';
+import { isApplicationDraft, saveApplication, sendApplication } from '../application/utils';
 import { HankeContacts, HankeData } from '../types/hanke';
 import { ApplicationCancel } from '../application/components/ApplicationCancel';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
@@ -30,7 +30,7 @@ import useNavigateToApplicationList from '../hanke/hooks/useNavigateToApplicatio
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 import useApplicationSendNotification from '../application/hooks/useApplicationSendNotification';
 import useHanke from '../hanke/hooks/useHanke';
-import { Application } from '../application/types/application';
+import { AlluStatus, Application } from '../application/types/application';
 import styles from './Johtoselvitys.module.scss';
 import Attachments from './Attachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
@@ -443,6 +443,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
 
           const firstStep = activeStepIndex === 0;
           const lastStep = activeStepIndex === formSteps.length - 1;
+          const showSendButton =
+            lastStep && isApplicationDraft(getValues('alluStatus') as AlluStatus | null);
 
           const saveAndQuitIsLoading =
             applicationSaveMutation.isLoading || attachmentUploadMutation.isLoading;
@@ -482,7 +484,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
                 </Button>
               )}
 
-              {lastStep && (
+              {showSendButton && (
                 <Button
                   type="submit"
                   iconLeft={<IconEnvelope aria-hidden="true" />}
