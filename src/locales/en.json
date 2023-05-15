@@ -467,15 +467,8 @@
   },
   "johtoselvitysForm": {
     "pageHeader": "EN:Johtoselvityshakemus",
-    "perustiedot": {
-      "instructions": "EN:<0>Huomioithan, että johtoselvitys on voimassa 1 kuukauden. Johtoselvityksen tulee olla voimassa johtojen maastonäyttöjä tilattaessa sekä Johtoselvitysta tehdessä. Johtoselvitys on tarvittaessa päivitettävä.</0><0>Yleisellä alueella tehtävästä työstä on tehtävä erillinen ilmoitus kaupungille. Mikäli joudut rajoittamaan liikennettä esimerkiksi työkoneiden kuljetuksen vuoksi tai poistamaan pysäköintipaikkoja kadun varresta, tulee sinun tehdä myös aluevuokraushakemus liikennejärjestelysuunnitelmineen.</0>"
-    },
     "alueet": {
-      "instructions": "EN:Voit lisätä selvitettävän alueen piirtämällä sen kartalle. Voit lisätä samalle hakemukselle useampia alueita, mikäli niitä koskeva aikaväli on sama.",
       "giveDates": "EN:Valitse työn päivämäärät piirtääksesi selvitettävät alueet kartalle."
-    },
-    "yhteystiedot": {
-      "instructions": "EN:<0>Hakemukselle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hakemukseen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hakemusta. Tarvittaessa voit antaa heille laajemmat käyttöoikeudet Omat hankkeet -näkymässä.</0><0>Hakijan yhteyshenkilö on oletuksena johtoselvityksen tilaaja. Tarvittaessa voit vaihtaa jonkun muista yhteyshenkilöistä tilaajaksi. Huomioithan, että johtoselvityksen tilaaja voi olla vain yksi henkilö.</0>"
     }
   },
   "hakemus": {

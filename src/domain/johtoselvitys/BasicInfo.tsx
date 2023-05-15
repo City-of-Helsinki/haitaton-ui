@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Checkbox, Select, SelectionGroup } from 'hds-react';
+import { Checkbox, Link, Select, SelectionGroup } from 'hds-react';
 import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { isEqual } from 'lodash';
@@ -177,19 +177,16 @@ export const BasicHankeInfo: React.FC = () => {
   return (
     <div>
       <div className={styles.formInstructions}>
-        <Trans i18nKey="johtoselvitysForm:perustiedot:instructions">
-          <p>
-            Huomioithan, että johtoselvitys on voimassa 1 kuukauden. Johtoselvityksen tulee olla
-            voimassa johtojen maastonäyttöjä tilattaessa sekä Johtoselvitysta tehdessä.
-            Johtoselvitys on tarvittaessa päivitettävä.
-          </p>
-          <p>
-            Yleisellä alueella tehtävästä työstä on tehtävä erillinen ilmoitus kaupungille. Mikäli
-            joudut rajoittamaan liikennettä esimerkiksi työkoneiden kuljetuksen vuoksi tai
-            poistamaan pysäköintipaikkoja kadun varresta, tulee sinun tehdä myös aluevuokraushakemus
-            liikennejärjestelysuunnitelmineen.
-          </p>
-        </Trans>
+        <Trans
+          i18nKey="johtoselvitysForm:perustiedot:instructions"
+          components={{
+            a: (
+              <Link href="https://www.hel.fi" openInNewTab>
+                hel.fi
+              </Link>
+            ),
+          }}
+        />
       </div>
 
       <Text tag="p" spacingBottom="l">
@@ -207,23 +204,12 @@ export const BasicHankeInfo: React.FC = () => {
         required
       />
 
-      <ResponsiveGrid className={styles.formRow}>
-        <TextInput
-          name="applicationData.postalAddress.streetAddress.streetName"
-          label={t('form:yhteystiedot:labels:osoite')}
-          required
-        />
-        <TextInput
-          name="applicationData.postalAddress.postalCode"
-          label={t('form:yhteystiedot:labels:postinumero')}
-          required
-        />
-        <TextInput
-          name="applicationData.postalAddress.city"
-          label={t('form:yhteystiedot:labels:postitoimipaikka')}
-          required
-        />
-      </ResponsiveGrid>
+      <TextInput
+        className={styles.formRow}
+        name="applicationData.postalAddress.streetAddress.streetName"
+        label={t('form:yhteystiedot:labels:osoite')}
+        required
+      />
 
       <SelectionGroup
         label={t('hakemus:labels:tyossaKyse')}

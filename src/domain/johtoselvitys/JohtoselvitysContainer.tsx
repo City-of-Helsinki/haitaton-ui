@@ -112,7 +112,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
           },
         ],
       },
-      postalAddress: null,
+      postalAddress: { streetAddress: { streetName: '' }, city: '', postalCode: '' },
       representativeWithContacts: null,
       invoicingCustomer: null,
       customerReference: null,

@@ -116,12 +116,6 @@ function fillBasicInformation() {
   fireEvent.change(screen.getAllByLabelText(/katuosoite/i)[0], {
     target: { value: 'Mannerheimintie 5' },
   });
-  fireEvent.change(screen.getAllByLabelText(/postinumero/i)[0], {
-    target: { value: '00100' },
-  });
-  fireEvent.change(screen.getAllByLabelText(/postitoimipaikka/i)[0], {
-    target: { value: 'Helsinki' },
-  });
 
   fireEvent.click(screen.getByLabelText(/uuden rakenteen tai johdon rakentamisesta/i));
 

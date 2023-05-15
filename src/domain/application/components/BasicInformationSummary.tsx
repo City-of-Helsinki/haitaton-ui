@@ -57,9 +57,6 @@ const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
       <SectionItemTitle>{t('form:labels:addressInformation')}</SectionItemTitle>
       <SectionItemContent>
         <p>{postalAddress?.streetAddress.streetName}</p>
-        <p>
-          {postalAddress?.postalCode} {postalAddress?.city}
-        </p>
       </SectionItemContent>
       <SectionItemTitle>{t('hakemus:labels:tyossaKyse')}</SectionItemTitle>
       <SectionItemContent>
