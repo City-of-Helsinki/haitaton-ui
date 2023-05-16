@@ -34,15 +34,14 @@ const DatePicker: React.FC<PropTypes> = ({
   locale,
 }) => {
   const { t } = useTranslation();
-  const { control, register } = useFormContext();
-  const { ref } = register(name);
+  const { control } = useFormContext();
 
   return (
     <>
       <Controller
         name={name}
         control={control}
-        render={({ field: { onChange, value }, fieldState: { error } }) => (
+        render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
           <div className={styles.datePicker}>
             <div className={styles.tooltip}>
               {!!tooltip && (

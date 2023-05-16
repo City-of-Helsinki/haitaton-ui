@@ -32,7 +32,7 @@ const TextInput: React.FC<PropTypes> = ({
   className,
 }) => {
   const { t } = useTranslation();
-  const { control, register } = useFormContext();
+  const { control } = useFormContext();
 
   return (
     <Controller
@@ -40,7 +40,7 @@ const TextInput: React.FC<PropTypes> = ({
       control={control}
       defaultValue=""
       shouldUnregister={shouldUnregister}
-      render={({ field: { value }, fieldState: { error } }) => (
+      render={({ field: { value, onBlur, onChange, ref }, fieldState: { error } }) => (
         <HdsTextInput
           id={name}
           className={className}
@@ -54,8 +54,10 @@ const TextInput: React.FC<PropTypes> = ({
           data-testid={name}
           required={required}
           readOnly={readOnly}
+          onBlur={onBlur}
+          onChange={onChange}
+          ref={ref}
           {...tooltip}
-          {...register(name)}
         />
       )}
     />
