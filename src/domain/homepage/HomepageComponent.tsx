@@ -157,9 +157,10 @@ const Homepage: React.FC = () => {
               <Notification
                 label="Auta meitä tekemään Haitattomasta vielä parempi!"
                 type="info"
+                notificationAriaLabel={t('common:components:notification:notification')}
                 autoClose={false}
                 dismissible
-                closeButtonLabelText="Close"
+                closeButtonLabelText={`${t('common:components:notification:closeButtonLabelText')}`}
                 onClose={() => setFeedbackOpen(false)}
               >
                 <p>
@@ -182,7 +183,9 @@ const Homepage: React.FC = () => {
               return (
                 <div className={styles.linkboxContainer} key={item.key}>
                   <Linkbox
-                    linkboxAriaLabel={`Linkbox: ${t(`homepage:${item.key}:actionText`)}`}
+                    linkboxAriaLabel={`${t('common:components:linkbox:linkbox')}: ${t(
+                      `homepage:${item.key}:actionText`
+                    )}`}
                     linkAriaLabel={t(`homepage:${item.key}:actionText`)}
                     href={item.actionLink}
                     heading={t(`homepage:${item.key}:title`)}

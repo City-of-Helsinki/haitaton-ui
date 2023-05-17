@@ -20,6 +20,9 @@
       "confirmButton": "Vahvista"
     },
     "components": {
+      "linkbox": {
+        "linkbox": "Linkkialue"
+      },
       "multiselect": {
         "toggle": "Sulje ja avaa valikko",
         "removeSelected": "Poista valittu",
@@ -33,6 +36,7 @@
         "skipToContentLabel": "Siirry pääsisältöön"
       },
       "notification": {
+        "notification": "Ilmoitus",
         "closeButtonLabelText": "Sulje ilmoitus"
       },
       "errorLoadingInfo": {
