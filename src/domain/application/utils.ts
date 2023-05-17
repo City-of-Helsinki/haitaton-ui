@@ -40,6 +40,10 @@ export function isApplicationPending(alluStatus: AlluStatusStrings | null): bool
   );
 }
 
+export function isApplicationDraft(alluStatus: AlluStatus | null) {
+  return alluStatus === null;
+}
+
 export async function cancelApplication(applicationId: number | null) {
   if (applicationId === null) return null;
 

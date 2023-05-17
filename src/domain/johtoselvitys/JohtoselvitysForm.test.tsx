@@ -455,3 +455,20 @@ test('Should change users own role and its fields correctly', async () => {
     phone
   );
 });
+
+test('Should not show send button when application has moved to pending state', async () => {
+  const { user } = render(<JohtoselvitysContainer application={applications[1]} />);
+
+  await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+
+  expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).not.toBeInTheDocument();
+});
+
+test('Should show send button when application is edited in draft state', async () => {
+  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+
+  await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+
+  expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeInTheDocument();
+});
