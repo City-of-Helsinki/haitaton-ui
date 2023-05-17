@@ -46,7 +46,7 @@ const AreaSummary: React.FC<Props> = ({ formData }) => {
             // eslint-disable-next-line react/no-array-index-key
             <Box marginBottom="var(--spacing-m)" key={index}>
               <Text tag="p" spacingBottom="s">
-                <strong>{area.name || getAreaDefaultName(t, index)}</strong>
+                <strong>{getAreaDefaultName(t, index, areas.length)}</strong>
               </Text>
               <p>
                 {t('form:labels:pintaAla')}: {formatSurfaceArea(geom)}

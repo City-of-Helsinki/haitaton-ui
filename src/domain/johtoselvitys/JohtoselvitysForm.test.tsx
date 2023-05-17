@@ -46,7 +46,6 @@ const application: JohtoselvitysFormValues = {
     },
     areas: [
       {
-        name: '',
         geometry: {
           type: 'Polygon',
           crs: {

@@ -570,6 +570,9 @@
       "relatedHanke": "Liittyy hankkeeseen",
       "downloadDecision": "Lataa päätös (PDF)",
       "downloadDecisionShort": "Lataa PDF",
+      "addedAreas": "Lisäämäsi työalueet",
+      "removeAreaTitle": "Poista työalue",
+      "removeAreaDescription": "Haluatko varmasti poistaa työalueen {{areaName}}",
       "applicationAdditionalInfo": "Lisätietoja hakemuksesta"
     },
     "notifications": {
