@@ -155,7 +155,7 @@ const Homepage: React.FC = () => {
           {isAuthenticated && feedbackOpen && (
             <div className={styles.feedbackInfo}>
               <Notification
-                label="Auta meitä tekemään Haitattomasta vielä parempi!"
+                label={t('homepage:notification:heading')}
                 type="info"
                 notificationAriaLabel={t('common:components:notification:notification')}
                 autoClose={false}
@@ -164,7 +164,7 @@ const Homepage: React.FC = () => {
                 onClose={() => setFeedbackOpen(false)}
               >
                 <p>
-                  Ideoita ja havaintoja voit lähettää osoitteeseen
+                  {t('homepage:notification:text')}
                   <Link href="mailto:haitaton@hel.fi">haitaton@hel.fi</Link>
                 </p>
               </Notification>

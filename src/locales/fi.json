@@ -655,6 +655,10 @@
     "pageSubTitle": "Palvelu yleisille alueille sijoittuvien hankkeiden ja niiden haittojen seurantaan",
     "info": "Haitaton-palvelussa pääset tutustumaan kaikkiin yleisillä alueilla käynnissä oleviin ja tuleviin hankkeisiin sekä antamaan niille palautetta. Voit tarkastella hankkeita kartalla tai listalla. Oletko perustamassa hanketta tai tekemässä hakemuksia?",
     "info_link": "Siirry Haitaton-asiointiin",
+    "notification": {
+      "heading": "Auta meitä tekemään Haitattomasta vielä parempi!",
+      "text": "Ideoita ja havaintoja voit lähettää osoitteeseen"
+    },
     "hanke": {
       "title": "Luo uusi hanke",
       "description": "Luomalla Haitaton-hankkeen pystyt suunnittelemaan etukäteen yleisellä alueella tapahtuvaa työtä sekä tekemään hakemuksia, kuten johtoselvityksiä.",
