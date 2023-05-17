@@ -11,6 +11,11 @@ export interface FeatureWithPixel {
   featurePixel: Pixel;
 }
 
+/**
+ * Find all features that intersect with the pointer when user moves the pointer on the map,
+ * and returns those features along with the map pixel.
+ * Can be used for example to render overlay on top of hovered features.
+ */
 export default function useFeaturesAtPixel() {
   const { map } = useContext(MapContext);
   const [featuresWithPixel, setFeaturesWithPixel] = useState<FeatureWithPixel[]>([]);
