@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Accordion, Button, Fieldset, IconCross, IconPlusCircle } from 'hds-react';
 import { $enum } from 'ts-enum-util';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import {
   ContactType,
@@ -229,22 +229,6 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
 
   return (
     <div>
-      <div className={styles.formInstructions}>
-        <Trans i18nKey="johtoselvitysForm:yhteystiedot:instructions">
-          <p>
-            Hakemukselle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät
-            liittymään hakemukseen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan
-            hakemusta. Tarvittaessa voit antaa heille laajemmat käyttöoikeudet Omat hankkeet
-            -näkymässä.
-          </p>
-          <p>
-            Hakijan yhteyshenkilö on oletuksena johtoselvityksen tilaaja. Tarvittaessa voit vaihtaa
-            jonkun muista yhteyshenkilöistä tilaajaksi. Huomioithan, että johtoselvityksen tilaaja
-            voi olla vain yksi henkilö.
-          </p>
-        </Trans>
-      </div>
-
       <Text tag="p" spacingBottom="l">
         {t('form:requiredInstruction')}
       </Text>

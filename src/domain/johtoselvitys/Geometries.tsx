@@ -135,8 +135,11 @@ export const Geometries: React.FC = () => {
 
   return (
     <div>
+      <Text tag="p" spacingBottom="m">
+        {t('johtoselvitysForm:alueet:instructions1')}
+      </Text>
       <Text tag="p" spacingBottom="s">
-        {t('johtoselvitysForm:alueet:instructions')}
+        {t('johtoselvitysForm:alueet:instructions2')}
       </Text>
       <Text tag="p" spacingBottom="m">
         {t('form:requiredInstruction')}
