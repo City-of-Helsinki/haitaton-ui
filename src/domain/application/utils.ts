@@ -40,6 +40,10 @@ export function isApplicationPending(alluStatus: AlluStatusStrings | null): bool
   );
 }
 
+export function isApplicationDraft(alluStatus: AlluStatus | null) {
+  return alluStatus === null;
+}
+
 export async function cancelApplication(applicationId: number | null) {
   if (applicationId === null) return null;
 
@@ -47,8 +51,8 @@ export async function cancelApplication(applicationId: number | null) {
   return response.data;
 }
 
-export function getAreaDefaultName(t: TFunction, index: number) {
+export function getAreaDefaultName(t: TFunction, index: number | undefined, areasLength: number) {
   const label = t('hakemus:labels:workArea');
-  if (index > 0) return `${label} ${index + 1}`;
+  if (areasLength > 1 && index !== undefined) return `${label} ${index + 1}`;
   return label;
 }

@@ -12,7 +12,7 @@ export function changeFormStep<T extends FieldValues>(
   fieldsToValidate: FieldPath<T>[],
   trigger: UseFormTrigger<T>
 ) {
-  trigger(fieldsToValidate).then((isValid) => {
+  trigger(fieldsToValidate, { shouldFocus: true }).then((isValid) => {
     if (isValid) {
       handleStepChange();
     }

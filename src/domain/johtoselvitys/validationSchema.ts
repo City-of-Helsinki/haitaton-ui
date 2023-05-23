@@ -1,12 +1,10 @@
 import yup from '../../common/utils/yup';
 import isValidBusinessId from '../../common/utils/isValidBusinessId';
 
-const requiredAddressSchema = yup.object().shape({
+const addressSchema = yup.object().shape({
   streetAddress: yup.object().shape({
     streetName: yup.string().nullable().required(),
   }),
-  postalCode: yup.string().nullable().required(),
-  city: yup.string().nullable().required(),
 });
 
 const contactSchema = yup
@@ -46,7 +44,7 @@ const areaSchema = yup.object().shape({
 export const validationSchema = yup.object().shape({
   applicationData: yup.object().shape({
     name: yup.string().required(),
-    postalAddress: requiredAddressSchema,
+    postalAddress: addressSchema,
     workDescription: yup.string().required(),
     rockExcavation: yup.boolean().nullable().required(),
     constructionWork: yup

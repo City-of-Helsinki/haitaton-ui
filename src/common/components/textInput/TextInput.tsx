@@ -40,10 +40,9 @@ const TextInput: React.FC<PropTypes> = ({
       control={control}
       defaultValue=""
       shouldUnregister={shouldUnregister}
-      render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+      render={({ field: { value, onBlur, onChange, ref }, fieldState: { error } }) => (
         <HdsTextInput
           id={name}
-          name={name}
           className={className}
           label={label || t(`hankeForm:labels:${name}`)}
           value={value || ''}
@@ -51,12 +50,13 @@ const TextInput: React.FC<PropTypes> = ({
           placeholder={placeholder}
           errorText={getInputErrorText(t, error)}
           invalid={Boolean(error)}
-          onBlur={onBlur}
-          onChange={onChange}
           disabled={disabled}
           data-testid={name}
           required={required}
           readOnly={readOnly}
+          onBlur={onBlur}
+          onChange={onChange}
+          ref={ref}
           {...tooltip}
         />
       )}

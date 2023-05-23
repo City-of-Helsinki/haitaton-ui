@@ -104,7 +104,7 @@ export const byAllHankeFilters = (hankeFilters: HankeFilters) => (hanke: HankeDa
   hankeHasGeometry(hanke) &&
   hankeIsBetweenDates(hankeFilters)({ startDate: hanke.alkuPvm, endDate: hanke.loppuPvm });
 
-function getStreetName(input: string) {
+export function getStreetName(input: string) {
   const matches = input.match(/^\D+/);
   if (matches) {
     return matches[0].trimEnd();

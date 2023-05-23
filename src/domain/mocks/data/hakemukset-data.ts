@@ -34,7 +34,6 @@ const hakemukset: Application[] = [
       },
       areas: [
         {
-          name: '',
           geometry: {
             type: 'Polygon',
             crs: {
@@ -55,18 +54,18 @@ const hakemukset: Application[] = [
           },
         },
       ],
-      startTime: null,
-      endTime: null,
+      startTime: '2023-07-13T21:59:59.999Z',
+      endTime: '2023-07-13T21:59:59.999Z',
       identificationNumber: 'HAI-123',
       clientApplicationKind: 'HAITATON',
-      workDescription: '',
+      workDescription: 'Kuvaus',
       contractorWithContacts: {
         customer: {
-          type: null,
-          name: '',
+          type: 'COMPANY',
+          name: 'Yritys 2 Oy',
           country: 'FI',
-          email: '',
-          phone: '',
+          email: 'yritys2@test.com',
+          phone: '040123456',
           registryKey: null,
           ovt: null,
           invoicingOperator: null,
@@ -74,11 +73,11 @@ const hakemukset: Application[] = [
         },
         contacts: [
           {
-            email: '',
-            firstName: '',
-            lastName: '',
+            email: 'tauno@test.com',
+            firstName: 'Tauno',
+            lastName: 'Työmies',
             orderer: false,
-            phone: '',
+            phone: '0401234567',
           },
         ],
       },
@@ -96,7 +95,7 @@ const hakemukset: Application[] = [
       maintenanceWork: false,
       emergencyWork: false,
       propertyConnectivity: false,
-      rockExcavation: null,
+      rockExcavation: true,
     },
   },
   {
@@ -130,7 +129,30 @@ const hakemukset: Application[] = [
           },
         ],
       },
-      areas: [],
+      areas: [
+        {
+          name: '',
+          geometry: {
+            coordinates: [
+              [
+                [25496600.4, 6672964.92],
+                [25496623.43, 6672970.52],
+                [25496648.96, 6672941.62],
+                [25496646.75, 6672912.49],
+                [25496623.66, 6672920.17],
+                [25496600.4, 6672964.92],
+              ],
+            ],
+            type: 'Polygon',
+            crs: {
+              type: 'Polygon',
+              properties: {
+                name: '',
+              },
+            },
+          },
+        },
+      ],
       startTime: '2023-07-13T21:59:59.999Z',
       endTime: '2023-09-31T21:59:59.999Z',
       identificationNumber: 'HAI-123',
@@ -267,7 +289,7 @@ const hakemukset: Application[] = [
           country: 'FI',
           email: 'yritys@test.com',
           phone: '0000000000',
-          registryKey: null,
+          registryKey: '1234567-1',
           ovt: null,
           invoicingOperator: null,
           sapCustomerNumber: null,
@@ -284,7 +306,6 @@ const hakemukset: Application[] = [
       },
       areas: [
         {
-          name: 'Kuoppa',
           geometry: {
             coordinates: [
               [
@@ -318,7 +339,7 @@ const hakemukset: Application[] = [
           country: 'FI',
           email: 'yritys2@test.com',
           phone: '0000000000',
-          registryKey: null,
+          registryKey: '1234567-1',
           ovt: null,
           invoicingOperator: null,
           sapCustomerNumber: null,

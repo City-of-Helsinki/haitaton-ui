@@ -44,7 +44,7 @@ export const convertFinnishDate = (date: string) => {
       return '';
     }
 
-    const selectedDate = new Date(`${year}-${month}-${day}`);
+    const selectedDate = new Date(`${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`);
     return selectedDate.toString();
   }
 

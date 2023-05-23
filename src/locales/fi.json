@@ -20,6 +20,9 @@
       "confirmButton": "Vahvista"
     },
     "components": {
+      "linkbox": {
+        "linkbox": "Linkkialue"
+      },
       "multiselect": {
         "toggle": "Sulje ja avaa valikko",
         "removeSelected": "Poista valittu",
@@ -33,6 +36,7 @@
         "skipToContentLabel": "Siirry pääsisältöön"
       },
       "notification": {
+        "notification": "Ilmoitus",
         "closeButtonLabelText": "Sulje ilmoitus"
       },
       "errorLoadingInfo": {
@@ -529,17 +533,15 @@
   "johtoselvitysForm": {
     "pageHeader": "Johtoselvityshakemus",
     "perustiedot": {
-      "instructions": "<0>Huomioithan, että johtoselvitys on voimassa 1 kuukauden. Johtoselvityksen tulee olla voimassa johtojen maastonäyttöjä tilattaessa sekä Johtoselvitysta tehdessä. Johtoselvitys on tarvittaessa päivitettävä.</0><0>Yleisellä alueella tehtävästä työstä on tehtävä erillinen ilmoitus kaupungille. Mikäli joudut rajoittamaan liikennettä esimerkiksi työkoneiden kuljetuksen vuoksi tai poistamaan pysäköintipaikkoja kadun varresta, tulee sinun tehdä myös aluevuokraushakemus liikennejärjestelysuunnitelmineen.</0>"
+      "instructions": "<p>Huomioithan, että johtoselvitys on voimassa 1 kuukauden. Johtoselvityksen tulee olla voimassa johtojen maastonäyttöjä tilattaessa sekä kaivuilmoitusta tehdessä. Johtoselvitys on tarvittaessa päivitettävä.</p><p>Yleisellä alueella tehtävästä työstä on tehtävä erillinen ilmoitus kaupungille. Katso tarkemmat ohjeet: <a>hel.fi</a></p>"
     },
     "alueet": {
-      "instructions": "Voit lisätä selvitettävän alueen piirtämällä sen kartalle. Voit lisätä samalle hakemukselle useampia alueita, mikäli niitä koskeva aikaväli on sama.",
+      "instructions1": "Aloita selvitettävän alueen piirtäminen lisäämällä työn alku- ja loppupäivämäärät, jolloin piirtotyökalut ilmestyvät kartan vasempaan alanurkkaan. Tämän jälkeen voit piirtää selvitettävät alueet kartalle. Voit lisätä samalle hakemukselle useampia alueita, mikäli niitä koskeva aikaväli on sama.",
+      "instructions2": "Piirtämäsi alueet näkyvät listana kartan alapuolella. Listasta pääset myös poistamaan alueita.",
       "giveDates": "Valitse työn päivämäärät piirtääksesi selvitettävät alueet kartalle."
     },
-    "yhteystiedot": {
-      "instructions": "<0>Hakemukselle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hakemukseen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hakemusta. Tarvittaessa voit antaa heille laajemmat käyttöoikeudet Omat hankkeet -näkymässä.</0><0>Hakijan yhteyshenkilö on oletuksena johtoselvityksen tilaaja. Tarvittaessa voit vaihtaa jonkun muista yhteyshenkilöistä tilaajaksi. Huomioithan, että johtoselvityksen tilaaja voi olla vain yksi henkilö.</0>"
-    },
     "liitteet": {
-      "instructions": "Lisää hakemukselle liitteet, kuten työsuunnitelma."
+      "instructions": "Lisää hakemukselle liitteet, kuten työsuunnitelma. Liitteet tallentuvat lomakkeelle sivun alaosan sivunvaihto- ja tallennuspainikkeista."
     }
   },
   "hakemus": {
@@ -571,6 +573,9 @@
       "relatedHanke": "Liittyy hankkeeseen",
       "downloadDecision": "Lataa päätös (PDF)",
       "downloadDecisionShort": "Lataa PDF",
+      "addedAreas": "Lisäämäsi työalueet",
+      "removeAreaTitle": "Poista työalue",
+      "removeAreaDescription": "Haluatko varmasti poistaa työalueen {{areaName}}",
       "applicationAdditionalInfo": "Lisätietoja hakemuksesta"
     },
     "notifications": {
@@ -651,6 +656,10 @@
     "pageSubTitle": "Palvelu yleisille alueille sijoittuvien hankkeiden ja niiden haittojen seurantaan",
     "info": "Haitaton-palvelussa pääset tutustumaan kaikkiin yleisillä alueilla käynnissä oleviin ja tuleviin hankkeisiin sekä antamaan niille palautetta. Voit tarkastella hankkeita kartalla tai listalla. Oletko perustamassa hanketta tai tekemässä hakemuksia?",
     "info_link": "Siirry Haitaton-asiointiin",
+    "notification": {
+      "heading": "Auta meitä tekemään Haitattomasta vielä parempi!",
+      "text": "Ideoita ja havaintoja voit lähettää osoitteeseen"
+    },
     "hanke": {
       "title": "Luo uusi hanke",
       "description": "Luomalla Haitaton-hankkeen pystyt suunnittelemaan etukäteen yleisellä alueella tapahtuvaa työtä sekä tekemään hakemuksia, kuten johtoselvityksiä.",

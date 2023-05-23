@@ -54,13 +54,13 @@ export function convertFormStateToApplicationData(formState: JohtoselvitysFormVa
   const data: Application = cloneDeep(formState);
 
   const updatedAreas: ApplicationArea[] = formState.applicationData.areas.map(
-    function mapToApplicationArea({ name, geometry, feature }): ApplicationArea {
+    function mapToApplicationArea({ geometry, feature }): ApplicationArea {
       const coordinates = feature
         ? (feature.getGeometry() as Polygon).getCoordinates()
         : geometry.coordinates;
 
       return {
-        name,
+        name: '',
         geometry: new ApplicationGeometry(coordinates),
       };
     }
@@ -81,9 +81,8 @@ export function convertApplicationDataToFormState(
   const data = cloneDeep(application);
 
   const updatedAreas: JohtoselvitysArea[] = application.applicationData.areas.map(
-    function mapToJohtoselvitysArea({ name, geometry }): JohtoselvitysArea {
+    function mapToJohtoselvitysArea({ geometry }): JohtoselvitysArea {
       return {
-        name,
         geometry,
         feature: new Feature(new Polygon(geometry.coordinates)),
       };

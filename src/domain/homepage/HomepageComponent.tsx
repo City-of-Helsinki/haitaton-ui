@@ -155,15 +155,16 @@ const Homepage: React.FC = () => {
           {isAuthenticated && feedbackOpen && (
             <div className={styles.feedbackInfo}>
               <Notification
-                label="Auta meitä tekemään Haitattomasta vielä parempi!"
+                label={t('homepage:notification:heading')}
                 type="info"
+                notificationAriaLabel={t('common:components:notification:notification')}
                 autoClose={false}
                 dismissible
-                closeButtonLabelText="Close"
+                closeButtonLabelText={`${t('common:components:notification:closeButtonLabelText')}`}
                 onClose={() => setFeedbackOpen(false)}
               >
                 <p>
-                  Ideoita ja havaintoja voit lähettää osoitteeseen
+                  {t('homepage:notification:text')}
                   <Link href="mailto:haitaton@hel.fi">haitaton@hel.fi</Link>
                 </p>
               </Notification>
@@ -182,7 +183,9 @@ const Homepage: React.FC = () => {
               return (
                 <div className={styles.linkboxContainer} key={item.key}>
                   <Linkbox
-                    linkboxAriaLabel={`Linkbox: ${t(`homepage:${item.key}:actionText`)}`}
+                    linkboxAriaLabel={`${t('common:components:linkbox:linkbox')}: ${t(
+                      `homepage:${item.key}:actionText`
+                    )}`}
                     linkAriaLabel={t(`homepage:${item.key}:actionText`)}
                     href={item.actionLink}
                     heading={t(`homepage:${item.key}:title`)}
