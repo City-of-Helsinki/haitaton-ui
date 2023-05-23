@@ -1,5 +1,6 @@
 .limitedWidthContainer {
   max-width: var(--breakpoint-xl);
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
   padding: 0 var(--spacing-l) 0 var(--spacing-l);
 }

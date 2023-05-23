@@ -6,7 +6,7 @@ import Text from '../../../../common/components/text/Text';
 import { formatToFinnishDate } from '../../../../common/utils/date';
 import { HankeData } from '../../../types/hanke';
 import styles from './HankeSidebar.module.scss';
-import HankeIndexes from './HankeIndexes';
+import HankeIndexes from '../../../hanke/hankeIndexes/HankeIndexes';
 
 type SectionProps = {
   title: string;
@@ -34,7 +34,6 @@ type Props = {
 const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
   const { t } = useTranslation();
 
-  const organisaatioContent = hanke.omistajat[0]?.organisaatioNimi || '-';
   const tyomaaTyyppiContent = hanke.tyomaaTyyppi.length
     ? hanke.tyomaaTyyppi.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')
     : '-';
@@ -81,17 +80,13 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
             content={t(`hanke:vaihe:${hanke.vaihe}`)}
           />
           <SidebarSection
-            title={t('hankeForm:labels.organisaatio')}
-            content={organisaatioContent}
-          />
-          <SidebarSection
             title={t('hankeForm:labels.tyomaaTyyppi')}
             content={tyomaaTyyppiContent}
           />
           <SidebarSection title={t('hankeForm:labels.kuvaus')} content={hanke.kuvaus} />
           <hr />
 
-          <HankeIndexes hankeIndexData={hanke.tormaystarkasteluTulos} />
+          <HankeIndexes hankeIndexData={hanke.tormaystarkasteluTulos} small />
         </DrawerBody>
       </DrawerContent>
     </Drawer>

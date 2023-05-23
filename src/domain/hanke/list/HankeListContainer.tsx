@@ -15,7 +15,7 @@ const HankeListContainer: React.FC = () => {
   const { data, isLoading, isError } = useHankeList();
   if (data) {
     data.sort((a, b) => {
-      return -(a.id - b.id);
+      return a.id - b.id;
     });
   }
 

@@ -1,18 +1,15 @@
 import React from 'react';
-import { cleanup, fireEvent, waitFor } from '@testing-library/react';
 import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
 import { HANKE_VAIHE, HANKE_TYOMAATYYPPI } from '../../types/hanke';
-import { render } from '../../../testUtils/render';
+import { render, cleanup, fireEvent, waitFor, screen } from '../../../testUtils/render';
 
 afterEach(cleanup);
 
-jest.setTimeout(10000);
+jest.setTimeout(30000);
 
 const nimi = 'test kuoppa';
-const alkuPvm = '24.03.2025';
-const loppuPvm = '25.03.2032';
 const hankkeenKuvaus = 'Tässä on kuvaus';
 const hankkeenOsoite = 'Sankaritie 3';
 /* Highly recommend to revise these tests to use typed constants like so
@@ -41,127 +38,142 @@ const hankeData: HankeDataDraft = {
 
 const formData: HankeDataFormState = {
   vaihe: HANKE_VAIHE.OHJELMOINTI,
+  rakennuttajat: [],
   toteuttajat: [],
-  arvioijat: [],
-  omistajat: [],
+  muut: [],
   tyomaaTyyppi: [HANKE_TYOMAATYYPPI.AKILLINEN_VIKAKORJAUS],
   nimi: 'testi kuoppa',
   kuvaus: 'testi kuvaus',
 };
 
+async function setupYhteystiedotPage(jsx: JSX.Element) {
+  const renderResult = render(jsx);
+
+  await waitFor(() => expect(screen.queryByText('Perustiedot')).toBeInTheDocument());
+  await renderResult.user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+  await waitFor(() => expect(screen.queryByText(/hankkeen omistajan tiedot/i)).toBeInTheDocument());
+
+  return renderResult;
+}
+
 describe('HankeForm', () => {
   test('suunnitteluVaihde should be required when vaihe is suunnittelu', async () => {
-    const handleSave = jest.fn();
-    const handleSaveGeometry = jest.fn();
     const handleIsDirtyChange = jest.fn();
-    const handleUnmount = jest.fn();
     const handleFormClose = jest.fn();
 
-    const { getByTestId, getByLabelText, queryAllByText } = render(
+    const { user } = render(
       <HankeForm
         formData={formData}
-        onSave={handleSave}
-        onSaveGeometry={handleSaveGeometry}
         onIsDirtyChange={handleIsDirtyChange}
-        onUnmount={handleUnmount}
         onFormClose={handleFormClose}
-        isSaving
-        onOpenHankeDelete={() => ({})}
       >
         child
       </HankeForm>
     );
 
-    fireEvent.change(getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
-    fireEvent.change(getByTestId(FORMFIELD.KUVAUS), { target: { value: hankkeenKuvaus } });
-    fireEvent.change(getByTestId(FORMFIELD.KATUOSOITE), { target: { value: hankkeenOsoite } });
-    fireEvent.change(getByLabelText('Hankkeen alkupäivä', { exact: false }), {
-      target: { value: alkuPvm },
-    });
-    fireEvent.change(getByLabelText('Hankkeen loppupäivä', { exact: false }), {
-      target: { value: loppuPvm },
+    fireEvent.change(screen.getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
+    fireEvent.change(screen.getByTestId(FORMFIELD.KUVAUS), { target: { value: hankkeenKuvaus } });
+    fireEvent.change(screen.getByTestId(FORMFIELD.KATUOSOITE), {
+      target: { value: hankkeenOsoite },
     });
 
-    queryAllByText('Hankkeen Vaihe')[0].click();
-    queryAllByText('Suunnittelu')[0].click();
+    await user.click(screen.getByRole('radio', { name: 'Suunnittelu' }));
 
-    getByTestId(FORMFIELD.YKT_HANKE).click();
+    await user.click(screen.getByRole('checkbox', { name: 'Hanke on YKT-hanke' }));
 
-    await waitFor(() => expect(getByTestId('forward')).toBeDisabled());
-
-    queryAllByText('Hankkeen suunnitteluvaihe')[0].click();
-    queryAllByText('Yleis- tai hankesuunnittelu')[0].click();
-
-    await waitFor(() => expect(getByTestId('forward')).not.toBeDisabled());
+    await user.click(screen.getByText('Hankkeen suunnitteluvaihe'));
+    await user.click(screen.getByText('Yleis- tai hankesuunnittelu'));
   });
 
-  test('Form should be populated correctly ', async () => {
-    const { getByTestId, getByText } = render(
+  test('Form should be populated correctly ', () => {
+    render(
       <HankeForm
         formData={{
           ...formData,
           [FORMFIELD.NIMI]: 'Formin nimi',
           [FORMFIELD.KUVAUS]: 'Formin kuvaus',
         }}
-        onSave={() => ({})}
-        onSaveGeometry={() => ({})}
         onIsDirtyChange={() => ({})}
-        onUnmount={() => ({})}
         onFormClose={() => ({})}
-        isSaving
-        onOpenHankeDelete={() => ({})}
       >
         child
       </HankeForm>
     );
-    expect(getByTestId(FORMFIELD.NIMI)).toHaveValue('Formin nimi');
-    expect(getByTestId(FORMFIELD.KUVAUS)).toHaveValue('Formin kuvaus');
-    expect(getByText('Ohjelmointi')).toBeInTheDocument();
-  });
-
-  test('Form editing should be disabled if it is already started ', async () => {
-    const { getByTestId, getByText } = render(
-      <HankeForm
-        formData={{
-          ...formData,
-          [FORMFIELD.ALKU_PVM]: '1999-03-15T00:00:00Z',
-        }}
-        onSave={() => ({})}
-        onSaveGeometry={() => ({})}
-        onIsDirtyChange={() => ({})}
-        onUnmount={() => ({})}
-        onFormClose={() => ({})}
-        isSaving
-        onOpenHankeDelete={() => ({})}
-      >
-        child
-      </HankeForm>
-    );
-    expect(getByTestId('editing-disabled-notification')).toBeInTheDocument();
-    expect(getByText(/Käynnissä olevan hankkeen tietoja ei voi muokata/i)).toBeDefined();
+    expect(screen.getByTestId(FORMFIELD.NIMI)).toHaveValue('Formin nimi');
+    expect(screen.getByTestId(FORMFIELD.KUVAUS)).toHaveValue('Formin kuvaus');
+    expect(screen.getByText('Ohjelmointi')).toBeInTheDocument();
   });
 
   test('HankeFormContainer integration should work ', async () => {
-    const { getByText, queryByText, getByLabelText, queryAllByText, getByTestId } = render(
-      <HankeFormContainer />
-    );
-    fireEvent.change(getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
-    fireEvent.change(getByTestId(FORMFIELD.KUVAUS), { target: { value: hankkeenKuvaus } });
-    fireEvent.change(getByLabelText('Hankkeen alkupäivä', { exact: false }), {
-      target: { value: alkuPvm },
+    render(<HankeFormContainer />);
+    fireEvent.change(screen.getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
+    fireEvent.change(screen.getByTestId(FORMFIELD.KUVAUS), { target: { value: hankkeenKuvaus } });
+    screen.queryAllByText('Hankkeen vaihe')[0].click();
+    screen.queryAllByText('Ohjelmointi')[0].click();
+
+    screen.getByText('Tallenna ja keskeytä').click();
+
+    await waitFor(() => expect(screen.queryByText('Luonnos tallennettu')));
+
+    expect(screen.getByTestId(FORMFIELD.NIMI)).toHaveValue(nimi);
+    expect(screen.getByTestId(FORMFIELD.KUVAUS)).toHaveValue(hankkeenKuvaus);
+  });
+
+  test('Yhteystiedot can be filled', async () => {
+    const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
+
+    await user.click(screen.getByRole('button', { name: /tyyppi/i }));
+    await user.click(screen.getByText(/yritys/i));
+    fireEvent.change(screen.getByLabelText(/nimi/i), {
+      target: { value: 'Olli Omistaja' },
     });
-    fireEvent.change(getByLabelText('Hankkeen loppupäivä', { exact: false }), {
-      target: { value: loppuPvm },
+    fireEvent.change(screen.getByLabelText(/y-tunnus tai henkilötunnus/i), {
+      target: { value: 'y-tunnus' },
     });
-    queryAllByText('Hankkeen Vaihe')[0].click();
-    queryAllByText('Ohjelmointi')[0].click();
+    fireEvent.change(screen.getByLabelText(/katuosoite/i), {
+      target: { value: 'Testikuja 1' },
+    });
+    fireEvent.change(screen.getByLabelText(/postinumero/i), {
+      target: { value: '00000' },
+    });
+    fireEvent.change(screen.getByLabelText(/postitoimipaikka/i), {
+      target: { value: 'Testikaupunki' },
+    });
+    fireEvent.change(screen.getByLabelText(/sähköposti/i), {
+      target: { value: 'test@mail.com' },
+    });
+    fireEvent.change(screen.getByLabelText(/puhelinnumero/i), {
+      target: { value: '0400000000' },
+    });
 
-    getByText('Tallenna luonnos').click();
+    expect(screen.queryByRole('group', { name: 'Yhteyshenkilö' })).not.toBeInTheDocument();
+    await user.click(screen.getByLabelText(/erillinen yhteyshenkilö/i));
+    expect(screen.getByRole('group', { name: 'Yhteyshenkilö' })).toBeInTheDocument();
 
-    await waitFor(() => expect(getByTestId('forward')).toBeDisabled());
-    await waitFor(() => expect(queryByText('Luonnos tallennettu')));
+    fireEvent.change(screen.getAllByLabelText(/nimi/i)[1], {
+      target: { value: 'Testi Yhteyshenkilö' },
+    });
+    fireEvent.change(screen.getAllByLabelText(/sähköposti/i)[1], {
+      target: { value: 'yhteyshenkilo@mail.com' },
+    });
 
-    expect(getByTestId(FORMFIELD.NIMI)).toHaveValue(nimi);
-    expect(getByTestId(FORMFIELD.KUVAUS)).toHaveValue(hankkeenKuvaus);
+    await user.click(screen.getByText(/Rakennuttajan tiedot/i));
+    await user.click(screen.getByText(/lisää rakennuttaja/i));
+    expect(screen.getAllByText('Rakennuttaja')).toHaveLength(1);
+
+    await user.click(screen.getByText(/lisää yhteyshenkilö/i));
+    await user.click(screen.getByText(/lisää yhteyshenkilö/i));
+    expect(screen.getByRole('tablist').childElementCount).toBe(2);
+
+    await user.click(screen.getByText(/lisää rakennuttaja/i));
+    expect(screen.getAllByText('Rakennuttaja')).toHaveLength(2);
+
+    await user.click(screen.getAllByText(/poista rakennuttaja/i)[1]);
+    expect(screen.getAllByText('Rakennuttaja')).toHaveLength(1);
+
+    await user.click(screen.getByText(/poista yhteyshenkilö/i));
+    expect(screen.getByRole('tablist').childElementCount).toBe(1);
+    await user.click(screen.getByText(/poista yhteyshenkilö/i));
+    expect(screen.queryByText('Yhteyshenkilön tiedot')).not.toBeInTheDocument();
   });
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Controller, Control, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { Select, Tooltip } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { getInputErrorText } from '../../utils/form';
@@ -11,22 +11,20 @@ type Option = { value: string; label: string };
 type PropTypes = {
   id: string;
   name: string;
-  control: Control;
   rules?: { required: boolean };
   defaultValue: string | null;
   label: string;
   options: Array<Option>;
   invalid?: boolean;
-  errorMsg?: string;
   tooltip?: TooltipProps;
   disabled?: boolean;
   required?: boolean;
+  style?: React.CSSProperties;
 };
 
 const Dropdown: React.FC<PropTypes> = ({
   id,
   name,
-  control,
   rules,
   options,
   defaultValue,
@@ -35,9 +33,11 @@ const Dropdown: React.FC<PropTypes> = ({
   tooltip,
   disabled,
   required,
+  style,
 }) => {
   const { t } = useTranslation();
-  const { errors } = useFormContext();
+  const { control } = useFormContext();
+
   return (
     <div className="dropdownComp">
       {!!tooltip && (
@@ -47,11 +47,9 @@ const Dropdown: React.FC<PropTypes> = ({
       )}
       <Controller
         name={name}
-        id={id}
         control={control}
-        defaultValue={defaultValue}
         rules={rules}
-        render={({ onChange, onBlur, value }) => {
+        render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
           return (
             <Select
               id={id}
@@ -62,19 +60,21 @@ const Dropdown: React.FC<PropTypes> = ({
                   : options.find((o) => o.value === value)
               }
               options={options}
-              invalid={invalid}
-              value={options.find((o) => o.value === value)}
+              invalid={invalid || Boolean(error)}
+              value={options.find((o) => o.value === value) || null}
+              onBlur={onBlur}
               onChange={(option: Option) => {
                 if (option) onChange(option.value);
                 onBlur();
               }}
               required={required}
               disabled={disabled}
+              error={getInputErrorText(t, error)}
+              style={style}
             />
           );
         }}
       />
-      {invalid && <span className="error-text">{getInputErrorText(t, errors, name)}</span>}
     </div>
   );
 };

@@ -13,36 +13,35 @@ type PropTypes = {
   disabled?: boolean;
   selected?: Date;
   locale: 'en' | 'fi' | 'sv' | undefined;
-  dateFormat?: string;
-  defaultValue?: Date | string | null;
   tooltip?: TooltipProps;
   required?: boolean;
   maxDate?: Date;
   minDate?: Date;
+  initialMonth?: Date;
+  helperText?: string;
 };
 
 const DatePicker: React.FC<PropTypes> = ({
   name,
   label,
   disabled,
-  defaultValue,
   tooltip,
   required,
   minDate,
   maxDate,
+  initialMonth,
+  helperText,
   locale,
 }) => {
   const { t } = useTranslation();
-  const { control, errors } = useFormContext();
-  const invalid = !!errors[name];
+  const { control } = useFormContext();
 
   return (
     <>
       <Controller
         name={name}
         control={control}
-        defaultValue={defaultValue}
-        render={({ onChange, value, onBlur }) => (
+        render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
           <div className={styles.datePicker}>
             <div className={styles.tooltip}>
               {!!tooltip && (
@@ -54,24 +53,25 @@ const DatePicker: React.FC<PropTypes> = ({
             <div className={styles.dateInput}>
               <DateInput
                 id={name}
-                name={name}
-                label={`${label} ${required && '*'}`}
+                label={label}
                 disabled={disabled}
-                onBlur={onBlur}
-                onChange={(date: string) => {
-                  const convertedDateString = convertFinnishDate(date);
-                  if (convertedDateString.length > 0) {
-                    onChange(toEndOfDayUTCISO(new Date(convertedDateString)));
-                  }
-                  onBlur();
-                }}
-                value={!value ? undefined : formatToFinnishDate(value)}
+                invalid={Boolean(error)}
+                value={formatToFinnishDate(value)}
                 maxDate={maxDate}
                 minDate={minDate}
+                initialMonth={initialMonth}
                 language={locale}
+                required={required}
+                disableConfirmation
+                helperText={helperText}
+                errorText={getInputErrorText(t, error)}
+                ref={ref}
+                onChange={(date) => {
+                  const convertedDateString = convertFinnishDate(date);
+                  onChange(toEndOfDayUTCISO(new Date(convertedDateString)));
+                }}
               />
             </div>
-            {invalid && <span className="error-text">{getInputErrorText(t, errors, name)}</span>}
           </div>
         )}
       />

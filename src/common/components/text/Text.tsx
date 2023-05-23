@@ -16,7 +16,9 @@ export type StyleAs =
   | 'body-l'
   | 'body-xl';
 
-export type Spacing = '2-xs' | 'xs' | 's' | 'm' | 'l';
+export type Spacing = '3-xs' | '2-xs' | 'xs' | 's' | 'm' | 'l';
+
+type RestProps = Record<string, unknown>;
 
 export type Props = {
   tag: Tag;
@@ -26,6 +28,7 @@ export type Props = {
   spacing?: Spacing;
   spacingBottom?: Spacing;
   spacingTop?: Spacing;
+  className?: string;
 };
 
 const Text = ({
@@ -36,13 +39,14 @@ const Text = ({
   spacing,
   spacingBottom,
   spacingTop,
+  className,
   ...rest
-}: Props) => {
+}: Props & RestProps) => {
   const Component = tag;
 
   return (
     <Component
-      className={clsx({
+      className={clsx(className, {
         [styles[`text--${weight}`]]: weight,
         [styles[`text--${styleAs}`]]: styleAs,
         [styles[`text--spacing-${spacing}`]]: spacing,

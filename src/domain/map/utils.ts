@@ -1,8 +1,12 @@
 import GeoJSON from 'ol/format/GeoJSON';
 import axios from 'axios';
+import Geometry from 'ol/geom/Geometry';
+import { Feature } from 'ol';
+import Polygon from 'ol/geom/Polygon';
 import { HankeGeoJSON } from '../../common/types/hanke';
 import { GeometryData, HankeFilters } from './types';
-import { HankeData } from '../types/hanke';
+import { HankeData, HankeDataDraft, HankeGeometria } from '../types/hanke';
+import { getSurfaceArea } from '../../common/components/map/utils';
 
 export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJSON => {
   const format = new GeoJSON();
@@ -39,7 +43,8 @@ export const formatFeaturesToAlluGeoJSON = (features: GeometryData): unknown => 
   };
 };
 
-export const hankeHasGeometry = (hanke: HankeData) => hanke.geometriat;
+export const hankeHasGeometry = (hanke: HankeData | HankeDataDraft) =>
+  hanke.alueet?.some((alue) => Boolean(alue.geometriat));
 
 export const hankeIsBetweenDates = ({ endDate, startDate }: HankeFilters) => ({
   startDate: comparedStartDate,
@@ -99,7 +104,7 @@ export const byAllHankeFilters = (hankeFilters: HankeFilters) => (hanke: HankeDa
   hankeHasGeometry(hanke) &&
   hankeIsBetweenDates(hankeFilters)({ startDate: hanke.alkuPvm, endDate: hanke.loppuPvm });
 
-function getStreetName(input: string) {
+export function getStreetName(input: string) {
   const matches = input.match(/^\D+/);
   if (matches) {
     return matches[0].trimEnd();
@@ -132,4 +137,45 @@ export function doAddressSearch(searchValue: string, abortController?: AbortCont
   }
 
   return axios.get(url, { signal: abortController?.signal });
+}
+
+/**
+ * Calculate and format a surface area (pinta-ala) for a given geometry
+ * @param geometry OpenLayers Geometry object
+ * @returns surface area in square metres rounded to the nearest integer as string (e.g. 200 m²)
+ */
+export function formatSurfaceArea(geometry: Geometry | undefined) {
+  if (!geometry) {
+    return null;
+  }
+
+  const area = getSurfaceArea(geometry);
+  return `${Math.round(area)} m²`;
+}
+
+/**
+ * Calculate total surface area for array of geometries
+ */
+export function getTotalSurfaceArea(geometries: Geometry[]): number {
+  try {
+    const totalSurfaceArea = geometries.reduce((totalArea, geom) => {
+      return totalArea + Math.round(getSurfaceArea(geom));
+    }, 0);
+    return totalSurfaceArea;
+  } catch (error) {
+    return 0;
+  }
+}
+
+/**
+ * Get OpenLayers Feature from Hanke geometry
+ * @param geometry Hanke area geometry
+ * @returns OpenLayers Feature
+ */
+export function getFeatureFromHankeGeometry(geometry: HankeGeometria) {
+  const feature = new Feature(
+    new Polygon(geometry.featureCollection.features[0]?.geometry.coordinates)
+  );
+
+  return feature;
 }

@@ -7,16 +7,12 @@ import AppRoutes from '../../routes/AppRoutes';
 import Layout from './Layout';
 import { store } from '../../redux/store';
 import theme from './theme';
+import { GlobalNotificationProvider } from '../globalNotification/GlobalNotificationContext';
+import GlobalNotification from '../globalNotification/GlobalNotification';
 import './app.scss';
 import '../../../assets/styles/reset.css';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      cacheTime: 0, // Disable cache
-    },
-  },
-});
+const queryClient = new QueryClient();
 
 const App: React.FC = () => (
   <Router>
@@ -24,7 +20,10 @@ const App: React.FC = () => (
       <QueryClientProvider client={queryClient}>
         <ChakraProvider theme={theme}>
           <Layout>
-            <AppRoutes />
+            <GlobalNotificationProvider>
+              <AppRoutes />
+              <GlobalNotification />
+            </GlobalNotificationProvider>
           </Layout>
         </ChakraProvider>
       </QueryClientProvider>

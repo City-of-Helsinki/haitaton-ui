@@ -4,6 +4,9 @@
 
 .mapContainer {
   position: relative;
+  flex-grow: 1;
+  margin-bottom: var(--spacing-xl);
+  min-height: 300px;
 
   &__inner {
     position: absolute;
@@ -14,19 +17,12 @@
   }
 }
 
-.allyHeader {
-  position: absolute;
-  top: -5000px;
-}
-
 .hiddenTestDiv {
   display: none;
 }
 
 .dateRangeControl {
   position: absolute;
-  bottom: 10rem;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: var(--spacing-xs);
+  top: 4rem;
+  right: 1rem;
 }

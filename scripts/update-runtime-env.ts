@@ -13,10 +13,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || defaultNodeEnv;
 
 const getClientEnvironment = require('../node_modules/react-scripts/config/env.js');
 
-const configurationFile: string = path.join(
-  __dirname,
-  '../public/' + configFile
-);
+const configurationFile: string = path.join(__dirname, '../public/' + configFile);
 
 const start = async () => {
   try {
@@ -24,7 +21,7 @@ const start = async () => {
     fs.writeFile(
       configurationFile,
       'window._env_ = ' + util.inspect(envVariables.raw, false, 2, false),
-      function(err) {
+      function (err) {
         if (err) {
           return console.error(err);
         }

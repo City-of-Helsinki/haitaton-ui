@@ -1,288 +1,118 @@
-import React, { useState } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
-import { Formik, useFormikContext } from 'formik';
-import { Button, Notification } from 'hds-react';
-import { BasicHankeInfo } from './BasicInfo';
+import React, { useMemo, useState } from 'react';
+import { Button, IconCross, IconEnvelope, IconSaveDiskette, StepState } from 'hds-react';
+import { FormProvider, useForm, FieldPath } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation, useQueryClient } from 'react-query';
+import { merge } from 'lodash';
+import { AxiosError } from 'axios';
+import { Box } from '@chakra-ui/react';
 
 import { JohtoselvitysFormValues } from './types';
+import { BasicHankeInfo } from './BasicInfo';
 import { Contacts } from './Contacts';
 import { Geometries } from './Geometries';
 import { ReviewAndSend } from './ReviewAndSend';
-import api from '../api/api';
-import FormPagination from '../forms/components/FormPageIndicator';
+import MultipageForm from '../forms/MultipageForm';
+import FormActions from '../forms/components/FormActions';
+import { validationSchema } from './validationSchema';
+import {
+  convertApplicationDataToFormState,
+  convertFormStateToApplicationData,
+  findOrdererKey,
+} from './utils';
+import { changeFormStep, isPageValid } from '../forms/utils';
+import { isApplicationDraft, saveApplication, sendApplication } from '../application/utils';
+import { HankeContacts, HankeData } from '../types/hanke';
+import { ApplicationCancel } from '../application/components/ApplicationCancel';
+import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
+import useNavigateToApplicationList from '../hanke/hooks/useNavigateToApplicationList';
+import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
+import useApplicationSendNotification from '../application/hooks/useApplicationSendNotification';
+import useHanke from '../hanke/hooks/useHanke';
+import { AlluStatus, Application } from '../application/types/application';
 import styles from './Johtoselvitys.module.scss';
+import Attachments from './Attachments';
+import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
+import { uploadAttachment } from '../application/attachments';
+import useAttachments from '../application/hooks/useAttachments';
 
-interface ButtonProps {
-  nextPath?: string;
-  previousPath?: string;
-}
-
-const NavigationButtons: React.FC<ButtonProps> = ({ nextPath, previousPath }) => {
-  const navigate = useNavigate();
-  const formik = useFormikContext<JohtoselvitysFormValues>();
-  const [saveLoading, setSaveLoading] = useState(false);
-  const [showSaveOK, setShowSaveOK] = useState(false);
-  const [showSaveError, setShowSaveError] = useState(false);
-  const [publishLoading, setPublishLoading] = useState(false);
-  const [showPublishOK, setShowPublishOK] = useState(false);
-  const [showPublishError, setShowPublishError] = useState(false);
-
-  const saveFormState = async () => {
-    setSaveLoading(true);
-    try {
-      if (formik.values.id) {
-        const { data } = await api.put<JohtoselvitysFormValues>(
-          `/hakemukset/${formik.values.id}`,
-          formik.values
-        );
-        formik.setValues(data);
-      } else {
-        const { data } = await api.post<JohtoselvitysFormValues>('/hakemukset', formik.values);
-        formik.setValues(data);
-      }
-      // TODO: HAI-1156
-      // TODO: HAI-1159
-      setShowSaveOK(true);
-    } catch (error) {
-      setShowSaveError(true);
-    }
-    setSaveLoading(false);
-  };
-
-  const sendFormToAllu = async () => {
-    setPublishLoading(true);
-    try {
-      await api.post<unknown>(`/hakemukset/${formik.values.id}/send-application`, {});
-      setShowPublishOK(true);
-    } catch (error) {
-      setShowPublishError(true);
-    }
-    // TODO: HAI-1157
-    // TODO: HAI-1158
-    setPublishLoading(false);
-  };
-
-  return (
-    <div className={styles.navButtonContainer}>
-      {previousPath && (
-        <div className={styles.navPrev}>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              // TODO: HAI-1165
-              // TODO: HAI-1166
-              navigate(`/fi/johtoselvityshakemus${previousPath}`); // TODO: localized links
-            }}
-          >
-            Edellinen
-          </Button>
-        </div>
-      )}
-      {nextPath && (
-        <div className={styles.navNext}>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              // TODO: HAI-1165
-              // TODO: HAI-1166
-              navigate(`/fi/johtoselvityshakemus${nextPath}`); // TODO: localized links
-            }}
-          >
-            Seuraava
-          </Button>
-        </div>
-      )}
-      {!nextPath && ( // Final page reached, provide an action to save
-        <>
-          <div className={styles.navSave}>
-            <Button
-              isLoading={saveLoading}
-              loadingText="Tallennetaan... "
-              onClick={() => {
-                saveFormState();
-              }}
-            >
-              Tallenna hakemus
-            </Button>
-            {showSaveOK && (
-              <Notification
-                key={new Date().toString()}
-                position="top-right"
-                displayAutoCloseProgress={false}
-                autoClose
-                dismissible
-                label="Hakemus tallennettu"
-                type="success"
-                onClose={() => {
-                  setShowPublishOK(false);
-                }}
-                closeButtonLabelText="closebuttonlbl"
-              >
-                Hakemuksen tallentaminen onnistui
-              </Notification>
-            )}
-            {showSaveError && (
-              <Notification
-                key={new Date().toString()}
-                position="top-right"
-                displayAutoCloseProgress={false}
-                autoClose
-                dismissible
-                label="Hakemuksen tallennus epäonnistui"
-                type="error"
-                onClose={() => {
-                  setShowPublishError(false);
-                }}
-                closeButtonLabelText="closebuttonlbl"
-              >
-                Hakemusta ei voitu tallentaa. Tarkista hakemuksen oikea sisältö ja että olet
-                kirjautunut.
-              </Notification>
-            )}
-          </div>
-          <div className={styles.navPublish}>
-            <Button
-              isLoading={publishLoading}
-              loadingText="Lähetetään... "
-              // eslint-disable-next-line no-unneeded-ternary
-              disabled={formik.values.id ? false : true}
-              onClick={() => {
-                sendFormToAllu();
-                // navigate(`/fi/hakemus${nextPath}`); // TODO: localized links
-              }}
-            >
-              Lähetä hakemus
-            </Button>
-            {showPublishOK && (
-              <Notification
-                key={new Date().toString()}
-                position="top-right"
-                displayAutoCloseProgress={false}
-                autoClose
-                dismissible
-                label="Form saved!"
-                type="success"
-                onClose={() => {
-                  setShowPublishOK(false);
-                }}
-                closeButtonLabelText="closebuttonlbl"
-              >
-                Saving your form was successful.
-              </Notification>
-            )}
-            {showPublishError && (
-              <Notification
-                key={new Date().toString()}
-                position="top-right"
-                displayAutoCloseProgress={false}
-                autoClose
-                dismissible
-                label="Hakemuksen lähetys epäonnistui"
-                type="error"
-                onClose={() => {
-                  setShowPublishError(false);
-                }}
-                closeButtonLabelText="closebuttonlbl"
-              >
-                Hakemusta ei voitu lähettää. Tarkista hakemuksen oikea sisältö ja tiedot.
-              </Notification>
-            )}
-          </div>
-        </>
-      )}
-    </div>
-  );
+type Props = {
+  hankeData?: HankeData;
+  application?: Application;
 };
 
-const JohtoselvitysContainer: React.FC = () => {
-  const navigate = useNavigate();
+const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => {
+  let hanke = hankeData;
+  const { t } = useTranslation();
+  const { setNotification } = useGlobalNotification();
+  const { showSendSuccess, showSendError } = useApplicationSendNotification();
+  const queryClient = useQueryClient();
+  const { data: existingAttachments, isError: attachmentsLoadError } = useAttachments(
+    application?.id
+  );
+  const [newAttachments, setNewAttachments] = useState<File[]>([]);
+  const [attachmentUploadErrors, setAttachmentUploadErrors] = useState<JSX.Element[]>([]);
 
   const initialValues: JohtoselvitysFormValues = {
     id: null,
+    alluStatus: null,
     applicationType: 'CABLE_REPORT',
+    hankeTunnus: hanke ? hanke.hankeTunnus : null,
     applicationData: {
+      applicationType: 'CABLE_REPORT',
       name: '',
       customerWithContacts: {
         customer: {
-          type: 'PERSON',
+          type: null,
           name: '',
           country: 'FI',
-          postalAddress: {
-            streetAddress: {
-              streetName: '',
-            },
-            postalCode: '',
-            city: '',
-          },
           email: '',
           phone: '',
-          registryKey: '',
-          ovt: null, // TODO: add to frontend
+          registryKey: null,
+          ovt: null,
           invoicingOperator: null,
           sapCustomerNumber: null,
         },
         contacts: [
           {
             email: '',
-            name: '',
+            firstName: '',
+            lastName: '',
             orderer: true,
             phone: '',
-            postalAddress: { city: '', postalCode: '', streetAddress: { streetName: '' } },
           },
         ],
       },
-      geometry: {
-        type: 'GeometryCollection',
-        crs: {
-          type: 'name',
-          properties: {
-            name: 'EPSG:3879',
-          },
-        },
-        geometries: [],
-      },
-      startTime: 1646267516.878748,
-      endTime: 1646267516.878748,
-      pendingOnClient: true,
+      areas: [],
+      startTime: null,
+      endTime: null,
       identificationNumber: 'HAI-123', // TODO: HAI-1160
       clientApplicationKind: 'HAITATON', // TODO: add to UI
       workDescription: '',
       contractorWithContacts: {
         customer: {
-          type: 'COMPANY',
+          type: null,
           name: '',
           country: 'FI',
-          postalAddress: {
-            streetAddress: {
-              streetName: '',
-            },
-            postalCode: '',
-            city: '',
-          },
           email: '',
           phone: '',
-          registryKey: '',
-          ovt: null, // TODO: add to frontend
+          registryKey: null,
+          ovt: null,
           invoicingOperator: null,
           sapCustomerNumber: null,
         },
         contacts: [
           {
-            name: '',
-            postalAddress: {
-              streetAddress: {
-                streetName: '',
-              },
-              postalCode: '',
-              city: '',
-            },
             email: '',
-            phone: '',
+            firstName: '',
+            lastName: '',
             orderer: false,
+            phone: '',
           },
         ],
       },
-      postalAddress: null,
+      postalAddress: { streetAddress: { streetName: '' }, city: '', postalCode: '' },
       representativeWithContacts: null,
       invoicingCustomer: null,
       customerReference: null,
@@ -292,72 +122,395 @@ const JohtoselvitysContainer: React.FC = () => {
       maintenanceWork: false,
       emergencyWork: false,
       propertyConnectivity: false,
+      rockExcavation: null,
     },
   };
 
-  const formSteps = [
-    {
-      path: '/',
-      element: <BasicHankeInfo />,
-      title: 'Perustiedot',
+  const formContext = useForm<JohtoselvitysFormValues>({
+    mode: 'onTouched',
+    reValidateMode: 'onChange',
+    criteriaMode: 'all',
+    shouldUnregister: false,
+    defaultValues: merge(initialValues, convertApplicationDataToFormState(application)),
+    resolver: yupResolver(validationSchema),
+  });
+
+  const {
+    getValues,
+    setValue,
+    handleSubmit,
+    trigger,
+    formState: { isDirty },
+    reset,
+  } = formContext;
+
+  // If application is created without hanke existing first, get generated hanke data
+  // after first save when hankeTunnus is available
+  const { data: generatedHanke } = useHanke(!hankeData ? getValues('hankeTunnus') : null);
+  if (generatedHanke) {
+    hanke = generatedHanke;
+  }
+
+  const navigateToApplicationList = useNavigateToApplicationList(hanke?.hankeTunnus);
+
+  const [showSaveNotification, setShowSaveNotification] = useState(false);
+
+  const applicationSaveMutation = useMutation(saveApplication, {
+    onMutate() {
+      setShowSaveNotification(false);
     },
-    {
-      path: '/contacts',
-      element: <Contacts />,
-      title: 'Yhteystiedot',
+    onSuccess(data) {
+      setValue('id', data.id);
+      setValue('alluStatus', data.alluStatus);
+      setValue('hankeTunnus', data.hankeTunnus);
+      reset({}, { keepValues: true });
     },
-    {
-      path: '/alueet',
-      element: <Geometries />,
-      title: 'Aluetiedot',
+    onSettled() {
+      setShowSaveNotification(true);
     },
-    {
-      path: '/yhteenveto',
-      element: <ReviewAndSend />,
-      title: 'Yhteenveto',
+  });
+
+  const applicationSendMutation = useMutation(sendApplication, {
+    onError() {
+      showSendError();
     },
-  ];
+    async onSuccess() {
+      showSendSuccess();
+      await queryClient.invalidateQueries('application', { refetchInactive: true });
+      navigateToApplicationList();
+    },
+  });
+
+  const attachmentUploadMutation = useMutation(uploadAttachment, {
+    onMutate() {
+      setAttachmentUploadErrors([]);
+    },
+    onError(error: AxiosError, { file }) {
+      setAttachmentUploadErrors((errors) => {
+        // TODO: Should show different error texts for different kinds of errors,
+        // once those texts have been defined
+        return errors.concat(
+          <Box as="p" key={file.name} mb="var(--spacing-s)">
+            {file.name}: {t('common:error')}
+          </Box>
+        );
+      });
+    },
+    onSuccess() {
+      queryClient.invalidateQueries('attachments');
+    },
+  });
+
+  function saveCableApplication() {
+    const data = convertFormStateToApplicationData(getValues());
+    applicationSaveMutation.mutate(data);
+  }
+
+  async function sendCableApplication() {
+    const data = getValues();
+    let { id } = data;
+    // If for some reason application has not been saved before
+    // sending, meaning id is null, save it before sending
+    if (!id) {
+      try {
+        const responseData = await applicationSaveMutation.mutateAsync(
+          convertFormStateToApplicationData(data)
+        );
+        setShowSaveNotification(false);
+        id = responseData.id as number;
+      } catch (error) {
+        return;
+      }
+    }
+    applicationSendMutation.mutate(id);
+  }
+
+  function handleStepChange() {
+    // Save application when page is changed
+    // only if something has changed
+    if (isDirty) {
+      saveCableApplication();
+    }
+  }
+
+  function saveAndQuit() {
+    applicationSaveMutation.mutate(convertFormStateToApplicationData(getValues()), {
+      onSuccess() {
+        navigateToApplicationList();
+
+        setNotification(true, {
+          position: 'top-right',
+          dismissible: true,
+          autoClose: true,
+          autoCloseDuration: 5000,
+          label: t('hakemus:notifications:saveSuccessLabel'),
+          message: t('hakemus:notifications:saveSuccessText'),
+          type: 'success',
+          closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+        });
+      },
+    });
+  }
+
+  function handleAddAttachments(files: File[]) {
+    setNewAttachments(files);
+  }
+
+  async function saveAttachments() {
+    if (!application) {
+      return Promise.resolve();
+    }
+
+    const mutations = newAttachments.map((file) =>
+      attachmentUploadMutation.mutateAsync({
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        applicationId: application.id!,
+        attachmentType: 'MUU',
+        file,
+      })
+    );
+
+    const results = await Promise.allSettled(mutations);
+
+    if (results.some((result) => result.status === 'rejected')) {
+      throw new Error('Error uploading attachments');
+    }
+
+    return results;
+  }
+
+  function closeAttachmentUploadErrorDialog() {
+    setAttachmentUploadErrors([]);
+  }
+
+  const ordererKey = findOrdererKey(getValues('applicationData'));
+
+  // Fields that are validated in each page when moving forward in form
+  const pageFieldsToValidate: FieldPath<JohtoselvitysFormValues>[][] = useMemo(
+    () => [
+      // Basic information page
+      [
+        'applicationData.name',
+        'applicationData.postalAddress',
+        'applicationData.workDescription',
+        `applicationData.${ordererKey}.contacts`,
+        'applicationData.rockExcavation',
+        'applicationData.constructionWork',
+      ],
+      // Areas page
+      ['applicationData.startTime', 'applicationData.endTime', 'applicationData.areas'],
+      // Contacts page
+      [
+        'applicationData.customerWithContacts',
+        'applicationData.contractorWithContacts',
+        'applicationData.propertyDeveloperWithContacts',
+        'applicationData.representativeWithContacts',
+      ],
+    ],
+    [ordererKey]
+  );
+
+  const formSteps = useMemo(() => {
+    const hankeContacts: HankeContacts | undefined = hankeData
+      ? [hankeData.omistajat, hankeData.rakennuttajat, hankeData.toteuttajat, hankeData.muut]
+      : undefined;
+
+    const formValues = getValues();
+
+    return [
+      {
+        element: <BasicHankeInfo />,
+        label: t('form:headers:perustiedot'),
+        state: StepState.available,
+      },
+      {
+        element: <Geometries />,
+        label: t('form:headers:alueet'),
+        /*
+         * Determine initial state for the form step.
+         * If all the fields in the previous page are valid, step is available,
+         * otherwise it's disabled.
+         */
+        state: isPageValid<JohtoselvitysFormValues>(
+          validationSchema,
+          pageFieldsToValidate[0],
+          formValues
+        )
+          ? StepState.available
+          : StepState.disabled,
+      },
+      {
+        element: <Contacts hankeContacts={hankeContacts} />,
+        label: t('form:headers:yhteystiedot'),
+        state: isPageValid<JohtoselvitysFormValues>(
+          validationSchema,
+          pageFieldsToValidate[1],
+          formValues
+        )
+          ? StepState.available
+          : StepState.disabled,
+      },
+      {
+        element: (
+          <Attachments
+            existingAttachments={existingAttachments}
+            attachmentsLoadError={attachmentsLoadError}
+            newAttachments={newAttachments}
+            onAddAttachments={handleAddAttachments}
+          />
+        ),
+        label: t('hankePortfolio:tabit:liitteet'),
+        state: isPageValid<JohtoselvitysFormValues>(
+          validationSchema,
+          pageFieldsToValidate[2],
+          formValues
+        )
+          ? StepState.available
+          : StepState.disabled,
+      },
+      {
+        element: <ReviewAndSend attachments={existingAttachments} />,
+        label: t('form:headers:yhteenveto'),
+        state: isPageValid<JohtoselvitysFormValues>(
+          validationSchema,
+          pageFieldsToValidate[2],
+          formValues
+        )
+          ? StepState.available
+          : StepState.disabled,
+      },
+    ];
+  }, [
+    t,
+    getValues,
+    pageFieldsToValidate,
+    hankeData,
+    existingAttachments,
+    attachmentsLoadError,
+    newAttachments,
+  ]);
+
+  const hankeNameText = (
+    <div style={{ visibility: hanke !== undefined ? 'visible' : 'hidden' }}>
+      {`${hanke?.nimi} (${hanke?.hankeTunnus})`}
+    </div>
+  );
 
   return (
-    <>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={() => {
-          // TODO: maybe needed for entire form validation prior to last page submit?
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-        }}
+    <FormProvider {...formContext}>
+      {/* Notification for saving application */}
+      {showSaveNotification && (
+        <ApplicationSaveNotification
+          saveSuccess={applicationSaveMutation.isSuccess}
+          onClose={() => setShowSaveNotification(false)}
+        />
+      )}
+
+      <MultipageForm
+        heading={t('johtoselvitysForm:pageHeader')}
+        subHeading={hankeNameText}
+        formSteps={formSteps}
+        onStepChange={handleStepChange}
+        onSubmit={handleSubmit(sendCableApplication)}
       >
-        <Routes>
-          {formSteps.map((formStep, i) => {
-            return (
-              <Route
-                path={formStep.path}
-                element={
-                  <>
-                    <div className={styles.formWrapper}>
-                      <div className={styles.pagination}>
-                        <FormPagination
-                          currentLabel={formStep.title}
-                          formPageLabels={formSteps.map((formPage) => formPage.title)}
-                          onPageChange={(pageIndex) =>
-                            navigate(`/fi/johtoselvityshakemus${formSteps[pageIndex].path}`)
-                          }
-                        />
-                      </div>
-                      <div className={styles.content}>{formStep.element}</div>
-                      <NavigationButtons
-                        nextPath={formSteps[i + 1]?.path}
-                        previousPath={formSteps[i - 1]?.path}
-                      />{' '}
-                    </div>
-                  </>
-                }
+        {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
+          async function handlePageChange(handlerFunction: () => void): Promise<void> {
+            try {
+              if (activeStepIndex === 3 && newAttachments.length > 0) {
+                await saveAttachments();
+                setNewAttachments([]);
+              }
+              handlerFunction();
+              // eslint-disable-next-line no-empty
+            } catch (error) {}
+          }
+
+          async function handlePreviousPage() {
+            await handlePageChange(handlePrevious);
+          }
+
+          async function handleNextPage() {
+            function nextPageHandler() {
+              changeFormStep(handleNext, pageFieldsToValidate[activeStepIndex], trigger);
+            }
+            await handlePageChange(nextPageHandler);
+          }
+
+          async function handleSaveAndQuit() {
+            await handlePageChange(saveAndQuit);
+          }
+
+          const firstStep = activeStepIndex === 0;
+          const lastStep = activeStepIndex === formSteps.length - 1;
+          const showSendButton =
+            lastStep && isApplicationDraft(getValues('alluStatus') as AlluStatus | null);
+
+          const saveAndQuitIsLoading =
+            applicationSaveMutation.isLoading || attachmentUploadMutation.isLoading;
+          const saveAndQuitLoadingText = attachmentUploadMutation.isLoading
+            ? t('form:buttons:loadingAttachments')
+            : t('common:buttons:savingText');
+          return (
+            <FormActions
+              activeStepIndex={activeStepIndex}
+              totalSteps={formSteps.length}
+              onPrevious={handlePreviousPage}
+              onNext={handleNextPage}
+              previousButtonIsLoading={attachmentUploadMutation.isLoading}
+              previousButtonLoadingText={t('form:buttons:loadingAttachments')}
+              nextButtonIsLoading={attachmentUploadMutation.isLoading}
+              nextButtonLoadingText={t('form:buttons:loadingAttachments')}
+            >
+              <ApplicationCancel
+                applicationId={getValues('id')}
+                alluStatus={getValues('alluStatus')}
+                hankeTunnus={hanke?.hankeTunnus}
+                buttonVariant="secondary"
+                buttonIcon={<IconCross aria-hidden />}
+                buttonClassName={styles.cancelButton}
               />
-            );
-          })}
-        </Routes>
-      </Formik>
-    </>
+
+              {!firstStep && (
+                <Button
+                  variant="secondary"
+                  iconLeft={<IconSaveDiskette aria-hidden="true" />}
+                  data-testid="save-form-btn"
+                  onClick={handleSaveAndQuit}
+                  isLoading={saveAndQuitIsLoading}
+                  loadingText={saveAndQuitLoadingText}
+                >
+                  {t('hankeForm:saveDraftButton')}
+                </Button>
+              )}
+
+              {showSendButton && (
+                <Button
+                  type="submit"
+                  iconLeft={<IconEnvelope aria-hidden="true" />}
+                  isLoading={applicationSendMutation.isLoading}
+                  loadingText={t('common:buttons:sendingText')}
+                >
+                  {t('hakemus:buttons:sendApplication')}
+                </Button>
+              )}
+            </FormActions>
+          );
+        }}
+      </MultipageForm>
+
+      {/* Attachment upload error dialog */}
+      <ConfirmationDialog
+        title={t('form:errors:fileLoadError')}
+        description={attachmentUploadErrors}
+        showSecondaryButton={false}
+        showCloseButton
+        isOpen={attachmentUploadErrors.length > 0}
+        close={closeAttachmentUploadErrorDialog}
+        mainAction={closeAttachmentUploadErrorDialog}
+        mainBtnLabel={t('common:ariaLabels:closeButtonLabelText')}
+        variant="primary"
+      />
+    </FormProvider>
   );
 };
 

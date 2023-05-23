@@ -5,6 +5,7 @@ import PageMeta from '../components/PageMeta';
 import { useLocalizedRoutes } from '../../common/hooks/useLocalizedRoutes';
 import Container from '../../common/components/container/Container';
 import Text from '../../common/components/text/Text';
+import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
 
 const PrivacyPolicyPage: React.FC = () => {
   const { PRIVACY_POLICY } = useLocalizedRoutes();
@@ -13,7 +14,7 @@ const PrivacyPolicyPage: React.FC = () => {
   return (
     <Container>
       <PageMeta routeData={PRIVACY_POLICY} />
-      <Text tag="h1" styleAs="h2" spacing="s" weight="bold">
+      <Text tag="h1" styleAs="h2" spacing="s" weight="bold" id={SKIP_TO_ELEMENT_ID} tabIndex={-1}>
         {t('staticPages:privacyPolicy:title')}
       </Text>
 
@@ -24,7 +25,7 @@ const PrivacyPolicyPage: React.FC = () => {
           rel="noreferrer"
           style={{ color: 'var(--color-coat-of-arms)' }}
         >
-          Avaa rekisteriseloste tästä
+          {t('staticPages:privacyPolicy:linkText')}
         </a>
       </HdsContainer>
     </Container>

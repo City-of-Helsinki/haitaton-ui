@@ -1,10 +1,9 @@
 .actions {
   background-color: white;
-  padding: var(--spacing-l);
+  padding-top: var(--spacing-m);
+  padding-bottom: var(--spacing-m);
   display: flex;
-  justify-content: center;
-}
-
-.deleteHankeBtn {
-  color: #c4123e;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--spacing-s);
 }

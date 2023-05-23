@@ -1,43 +1,59 @@
 import React from 'react';
-import { useFormikContext } from 'formik';
-import { Button, IconCross, IconSaveDiskette, IconTrash } from 'hds-react';
+import { Button, IconArrowLeft, IconArrowRight } from 'hds-react';
 import { useTranslation } from 'react-i18next';
-import { HakemusFormValues } from '../../hanke/newForm/types';
 import styles from './FormActions.module.scss';
 
-interface Props extends React.HTMLProps<HTMLDivElement> {
-  onDelete: () => void;
-  onClose: () => void;
-  onSave: () => void;
+interface Props {
+  activeStepIndex: number;
+  totalSteps: number;
+  onPrevious: () => void;
+  onNext: () => void;
+  previousButtonIsLoading?: boolean;
+  previousButtonLoadingText?: string;
+  nextButtonIsLoading?: boolean;
+  nextButtonLoadingText?: string;
 }
 
-const FormActions: React.FC<Props> = ({ onDelete, onClose, onSave }) => {
+const FormActions: React.FC<Props> = ({
+  children,
+  activeStepIndex,
+  totalSteps,
+  onPrevious,
+  onNext,
+  previousButtonIsLoading,
+  previousButtonLoadingText,
+  nextButtonIsLoading,
+  nextButtonLoadingText,
+}) => {
   const { t } = useTranslation();
-  const { values } = useFormikContext<HakemusFormValues>();
+  const firstStep = activeStepIndex === 0;
+  const lastStep = activeStepIndex === totalSteps - 1;
 
   return (
     <div className={styles.actions}>
-      {values.hankeTunnus && (
+      {!firstStep && (
         <Button
-          className={styles.deleteHankeBtn}
-          variant="supplementary"
-          iconLeft={<IconTrash aria-hidden />}
-          onClick={onDelete}
+          iconLeft={<IconArrowLeft />}
+          variant="secondary"
+          onClick={onPrevious}
+          isLoading={previousButtonIsLoading}
+          loadingText={previousButtonLoadingText}
         >
-          {t('hankeList:buttons:delete')}
+          {t('hankeForm:previousButton')}
         </Button>
       )}
-      <Button
-        theme="coat"
-        variant="supplementary"
-        iconLeft={<IconCross aria-hidden="true" />}
-        onClick={onClose}
-      >
-        {t('hankeForm:cancelButton')}
-      </Button>
-      <Button theme="coat" iconLeft={<IconSaveDiskette aria-hidden="true" />} onClick={onSave}>
-        {t('hankeForm:saveDraftButton')}
-      </Button>
+      {children}
+      {!lastStep && (
+        <Button
+          iconRight={<IconArrowRight />}
+          variant="secondary"
+          onClick={onNext}
+          isLoading={nextButtonIsLoading}
+          loadingText={nextButtonLoadingText}
+        >
+          {t('hankeForm:nextButton')}
+        </Button>
+      )}
     </div>
   );
 };

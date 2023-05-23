@@ -5,17 +5,17 @@ export const parseDateString = (_: unknown, originalValue: string) =>
   isDate(originalValue) ? originalValue : parse(originalValue, 'yyyy-MM-dd', new Date());
 
 // eslint-disable-next-line
-const isI18nYupMessage = (errors: any, name: string): boolean => {
-  if (errors && errors[name] && !!errors[name].message?.key && !!errors[name].message?.values) {
+const isI18nYupMessage = (error: any): boolean => {
+  if (error && !!error.message?.key && !!error.message?.values) {
     return true;
   }
 
   // Warn if YUP message is not correct
-  if (process.env.NODE_ENV === 'development' && errors && errors[name]) {
+  if (process.env.NODE_ENV === 'development' && error && error.ref) {
     // eslint-disable-next-line
     console.warn(
-      `YUP translation key is not setup correctly. Fieldname: '${name}'. Message: `,
-      errors[name]
+      `YUP translation key is not setup correctly. Fieldname: '${error.ref.name}'. Message: `,
+      error
     );
   }
   return false;
@@ -24,14 +24,13 @@ const isI18nYupMessage = (errors: any, name: string): boolean => {
 export const getInputErrorText = (
   t: FormatFunction,
   // eslint-disable-next-line
-  errors: any,
-  name: string
+  error: any
 ): string | undefined => {
-  if (isI18nYupMessage(errors, name)) {
-    return t(`form:validations:${errors[name].message.key}`, errors[name].message.values);
+  if (isI18nYupMessage(error)) {
+    return t(`form:validations:${error.message.key}`, error.message.values);
   }
 
-  if (errors && errors[name] && errors[name].message) {
+  if (error && error.message) {
     return t(`form:validations:default`);
   }
 

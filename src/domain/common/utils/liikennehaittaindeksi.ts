@@ -13,7 +13,7 @@ const getColorWithOpacity = (color: LIIKENNEHAITTA_STATUS | null, opacity = 1) =
   }
 };
 
-type TormaysIndex = null | number;
+export type TormaysIndex = null | number;
 
 export enum LIIKENNEHAITTA_STATUS {
   RED = 'RED',

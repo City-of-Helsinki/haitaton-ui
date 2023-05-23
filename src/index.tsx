@@ -14,6 +14,12 @@ Sentry.init({
   environment: process.env.NODE_ENV,
 });
 
+if (window._env_.REACT_APP_MOCK_API === 'use') {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
+  const { worker } = require('./domain/mocks/browser');
+  worker.start();
+}
+
 if (process.env.NODE_ENV !== 'production') {
   import('@axe-core/react').then((axe) => {
     // https://github.com/dequelabs/axe-core-npm/issues/176

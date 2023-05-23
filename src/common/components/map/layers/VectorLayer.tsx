@@ -34,7 +34,7 @@ const VectorLayer: React.FC<Props> = ({ source, className, zIndex = 0, style = u
         map.removeLayer(vectorLayer);
       }
     };
-  }, [map]);
+  }, [map, className, style, layers, source, zIndex]);
 
   return null;
 };

@@ -1,79 +1,134 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import Text from '../../../common/components/text/Text';
+import { Table, Pagination } from 'hds-react';
+import { format } from 'date-fns';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import { HankeDataDraft } from '../../types/hanke';
-
-import Table from './HankeTable';
+import HankeVaiheTag from '../vaiheTag/HankeVaiheTag';
 import './Hankelista.styles.scss';
+import { hankeHasGeometry } from '../../map/utils';
 
 type Props = {
   projectsData: HankeDataDraft[];
 };
 
-const HankeList: React.FC<Props> = ({ projectsData }) => {
-  const { MAP, NEW_HANKE } = useLocalizedRoutes();
+type sortColKey = 'nimi' | 'vaihe' | 'alkuPvm' | 'loppuPvm';
 
-  // eslint-disable-next-line
-  function MyCell(value: any) {
-    const hasGeometry = value.cell.row.original.tilat?.onGeometrioita;
+// Number of items shown on page at once
+const PAGE_SIZE = 8;
+
+const HankeList: React.FC<Props> = ({ projectsData }) => {
+  const { PUBLIC_HANKKEET_MAP } = useLocalizedRoutes();
+  const { t, i18n } = useTranslation();
+  const language = i18n.language as 'fi' | 'sv' | 'en';
+  const [pageIndex, setPageIndex] = useState(0);
+  const [sortedProjects, setSortedProjects] = useState(projectsData.slice());
+  const [projectsOnPage, setProjectsOnPage] = useState(projectsData.slice(0, PAGE_SIZE));
+  const pageCount = Math.ceil(projectsData.length / PAGE_SIZE);
+
+  function getHankeLink(args: HankeDataDraft) {
+    const hasGeometry = hankeHasGeometry(args);
     if (hasGeometry) {
       return (
-        <Link to={`${MAP.path}?hanke=${value.value}`}>{value.cell.row.original.hankeTunnus}</Link>
+        <Link to={`${PUBLIC_HANKKEET_MAP.path}?hanke=${args.hankeTunnus}`}>{args.hankeTunnus}</Link>
       );
     }
-    return value.value;
+    return args.hankeTunnus as string;
   }
-  const { t } = useTranslation();
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: t('hankeList:tableHeader:id'),
-        id: 'id',
-        accessor: 'hankeTunnus',
-        Cell: MyCell,
-      },
-      {
-        Header: t('hankeList:tableHeader:name'),
-        id: 'name',
-        accessor: 'nimi',
-      },
-      {
-        Header: t('hankeList:tableHeader:step'),
-        id: 'step',
-        accessor: 'vaihe',
-      },
-      {
-        Header: t('hankeList:tableHeader:startDate'),
-        id: 'startDate',
-        accessor: (data: HankeDataDraft) => {
-          return data.alkuPvm && Date.parse(data.alkuPvm);
-        },
-      },
-      {
-        Header: t('hankeList:tableHeader:endDate'),
-        id: 'endDate',
-        accessor: (data: HankeDataDraft) => {
-          return data.loppuPvm && Date.parse(data.loppuPvm);
-        },
-      },
-    ],
-    []
-  );
+
+  function updateProjectsOnPage(projects: HankeDataDraft[], index: number) {
+    setProjectsOnPage(projects.slice(index * PAGE_SIZE, index * PAGE_SIZE + PAGE_SIZE));
+  }
+
+  function handlePageChange(e: React.MouseEvent, index: number) {
+    e.preventDefault();
+    setPageIndex(index);
+    updateProjectsOnPage(sortedProjects, index);
+  }
+
+  // Custom sort function for sorting all of the items instead of just
+  // the ones displayed
+  function sort(order: 'asc' | 'desc', colKey: string, handleSort: () => void) {
+    const sortedRows = [...sortedProjects].sort((a, b) => {
+      const aValue = a[colKey as sortColKey];
+      const bValue = b[colKey as sortColKey];
+
+      if (aValue === undefined) {
+        return order === 'asc' ? -1 : 1;
+      }
+      if (bValue === undefined) {
+        return order === 'asc' ? 1 : -1;
+      }
+      if (aValue < bValue) {
+        return order === 'asc' ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return order === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+
+    setSortedProjects(sortedRows);
+    updateProjectsOnPage(sortedRows, pageIndex);
+
+    handleSort();
+  }
 
   return (
     <div className="hankelista">
-      <Text tag="h1" data-testid="HankeListPageHeader" styleAs="h2" spacing="s" weight="bold">
-        {t('hankeList:pageHeader')}
-      </Text>
       <div className="hankelista__inner">
-        <Table columns={columns} data={projectsData || []} />
-        <div className="hankelista__buttonWpr">
-          <Link data-testid="toFormLink" to={NEW_HANKE.path} className="hankelista__hankeLink">
-            {NEW_HANKE.label}
-          </Link>
-        </div>
+        <Table
+          cols={[
+            {
+              headerName: t('hankeList:tableHeader:id'),
+              key: 'hankeTunnus',
+              transform: getHankeLink,
+            },
+            {
+              headerName: t('hankeList:tableHeader:name'),
+              key: 'nimi',
+              isSortable: true,
+            },
+            {
+              headerName: t('hankeList:tableHeader:step'),
+              key: 'vaihe',
+              isSortable: true,
+              transform: (args: HankeDataDraft) => <HankeVaiheTag tagName={args.vaihe} uppercase />,
+            },
+            {
+              headerName: t('hankeList:tableHeader:startDate'),
+              key: 'alkuPvm',
+              transform: (args: HankeDataDraft) =>
+                args.alkuPvm ? format(Date.parse(args.alkuPvm), 'dd.MM.yyyy') : '',
+              isSortable: true,
+              sortIconType: 'other',
+            },
+            {
+              headerName: t('hankeList:tableHeader:endDate'),
+              key: 'loppuPvm',
+              transform: (args: HankeDataDraft) =>
+                args.loppuPvm ? format(Date.parse(args.loppuPvm), 'dd.MM.yyyy') : '',
+              isSortable: true,
+              sortIconType: 'other',
+            },
+          ]}
+          indexKey="hankeTunnus"
+          rows={projectsOnPage}
+          variant="light"
+          onSort={sort}
+        />
+      </div>
+
+      <div className="hankelista__pagination">
+        <Pagination
+          language={language}
+          onChange={handlePageChange}
+          pageHref={() => ''}
+          pageCount={pageCount}
+          pageIndex={pageIndex}
+          paginationAriaLabel={t('hankeList:paginatioAriaLabel')}
+        />
       </div>
     </div>
   );
