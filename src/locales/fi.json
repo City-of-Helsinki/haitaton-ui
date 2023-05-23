@@ -69,7 +69,8 @@
     },
     "errors": {
       "areaRequired": "Vähintään yksi alue vaaditaan",
-      "fileLoadError": "Tiedoston latauksessa tapahtui virhe"
+      "fileLoadError": "Tiedoston latauksessa tapahtui virhe",
+      "selfIntersectingArea": "Alueen reunat eivät saa leikata toisiaan"
     },
     "headers": {
       "perustiedot": "Perustiedot",

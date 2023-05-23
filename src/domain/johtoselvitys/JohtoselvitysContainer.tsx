@@ -299,7 +299,12 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         'applicationData.constructionWork',
       ],
       // Areas page
-      ['applicationData.startTime', 'applicationData.endTime', 'applicationData.areas'],
+      [
+        'applicationData.startTime',
+        'applicationData.endTime',
+        'applicationData.areas',
+        'selfIntersectingPolygon',
+      ],
       // Contacts page
       [
         'applicationData.customerWithContacts',

@@ -41,6 +41,16 @@ import { ApplicationGeometry } from '../application/types/application';
 import useForceUpdate from '../../common/hooks/useForceUpdate';
 import { getAreaDefaultName } from '../application/utils';
 
+function ErrorText({ children }: { children: string }) {
+  return (
+    <Box px="var(--spacing-l)" pb="var(--spacing-xl)" textAlign="center" color="var(--color-error)">
+      <Text tag="p">
+        <IconAlertCircleFill /> {children}
+      </Text>
+    </Box>
+  );
+}
+
 function getEmptyArea(feature: Feature<Geometry>): JohtoselvitysArea {
   return {
     name: '',
@@ -123,6 +133,14 @@ export const Geometries: React.FC = () => {
     }
   }
 
+  function handleSelfIntersectingPolygon(feature: Feature<Geometry> | null) {
+    if (feature) {
+      setValue('selfIntersectingPolygon', true, { shouldValidate: true });
+    } else {
+      setValue('selfIntersectingPolygon', false, { shouldValidate: true });
+    }
+  }
+
   return (
     <div>
       <Text tag="p" spacingBottom="s">
@@ -169,7 +187,14 @@ export const Geometries: React.FC = () => {
 
           <OverviewMapControl />
 
-          <Controls>{workTimesSet && <DrawModule source={drawSource} />}</Controls>
+          <Controls>
+            {workTimesSet && (
+              <DrawModule
+                source={drawSource}
+                onSelfIntersectingPolygon={handleSelfIntersectingPolygon}
+              />
+            )}
+          </Controls>
         </Map>
       </div>
 
@@ -179,17 +204,10 @@ export const Geometries: React.FC = () => {
         </Box>
       )}
 
-      {errors.applicationData?.areas && (
-        <Box
-          px="var(--spacing-l)"
-          pb="var(--spacing-xl)"
-          textAlign="center"
-          color="var(--color-error)"
-        >
-          <Text tag="p">
-            <IconAlertCircleFill /> {t('form:errors:areaRequired')}
-          </Text>
-        </Box>
+      {errors.applicationData?.areas && <ErrorText>{t('form:errors:areaRequired')}</ErrorText>}
+
+      {errors.selfIntersectingPolygon && (
+        <ErrorText>{t('form:errors:selfIntersectingArea')}</ErrorText>
       )}
 
       <Tabs>
