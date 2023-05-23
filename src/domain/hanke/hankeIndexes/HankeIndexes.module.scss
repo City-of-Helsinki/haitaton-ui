@@ -6,7 +6,7 @@
   flex-wrap: wrap;
   gap: var(--spacing-2-xs);
   padding: var(--spacing-m) var(--spacing-m);
-  color: var(--color-black-60);
+  color: var(--color-black-90);
 
   &__titlesContainer {
     flex-grow: 1;
@@ -37,9 +37,9 @@
 }
 
 .indexTitle {
-  padding: 0.4rem 0.2rem 0.4rem 0;
+  padding: 1rem 0;
   display: flex;
-  color: var(--color-black-60);
+  color: var(--color-black-90);
 }
 
 .indexInfo {
