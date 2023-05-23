@@ -173,20 +173,6 @@
       .dateRange {
         display: flex;
       }
-
-      .clearBtn {
-        margin-top: 28px;
-        height: min-content;
-      }
-
-      .dateRangeHelperText {
-        color: #666;
-        display: block;
-        line-height: var(--lineheight-l);
-        font-size: var(--fontsize-body-m);
-        margin-top: var(--spacing-3-xs);
-        white-space: pre-line;
-      }
     }
 
     .clearFiltersButton {
