@@ -72,7 +72,7 @@ jobs:
   #          wait-on: 'http://localhost:3001'
   docker_build_and_push:
     name: Push Docker image to GitHub Packages
-    needs: [build, e2e]
+    needs: [build]
     runs-on: ubuntu-20.04
     steps:
       - name: Check out the repo
