@@ -6,7 +6,7 @@ import Geometry from 'ol/geom/Geometry';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box, Flex } from '@chakra-ui/react';
-import { Button, Fieldset, IconAlertCircleFill, IconCross } from 'hds-react';
+import { Button, Fieldset, IconAlertCircleFill, IconCross, Notification } from 'hds-react';
 import { debounce } from 'lodash';
 
 import VectorLayer from '../../common/components/map/layers/VectorLayer';
@@ -124,6 +124,8 @@ export const Geometries: React.FC = () => {
 
   const [areaToRemove, setAreaToRemove] = useState<AreaToRemove | null>(null);
 
+  const [showSelfIntersectingNotification, setShowSelfIntersectingNotification] = useState(false);
+
   function removeArea(index: number, areaFeature?: Feature<Geometry>) {
     if (areaFeature !== undefined) {
       setAreaToRemove({ index, areaFeature });
@@ -145,9 +147,11 @@ export const Geometries: React.FC = () => {
 
   function handleSelfIntersectingPolygon(feature: Feature<Geometry> | null) {
     if (feature) {
-      setValue('selfIntersectingPolygon', true, { shouldValidate: true });
+      setValue('selfIntersectingPolygon', true);
+      setShowSelfIntersectingNotification(true);
     } else {
       setValue('selfIntersectingPolygon', false, { shouldValidate: true });
+      setShowSelfIntersectingNotification(false);
     }
   }
 
@@ -225,6 +229,19 @@ export const Geometries: React.FC = () => {
       )}
 
       {errors.applicationData?.areas && <ErrorText>{t('form:errors:areaRequired')}</ErrorText>}
+
+      {showSelfIntersectingNotification && !errors.selfIntersectingPolygon && (
+        <Notification
+          type="error"
+          label={t('form:errors:selfIntersectingArea')}
+          notificationAriaLabel={t('common:components:notification:notification')}
+          autoClose={false}
+          dismissible
+          closeButtonLabelText={`${t('common:components:notification:closeButtonLabelText')}`}
+          onClose={() => setShowSelfIntersectingNotification(false)}
+          style={{ marginBottom: 'var(--spacing-s)' }}
+        />
+      )}
 
       {errors.selfIntersectingPolygon && (
         <ErrorText>{t('form:errors:selfIntersectingArea')}</ErrorText>
