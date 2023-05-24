@@ -18,27 +18,34 @@
   gap: var(--spacing-s);
 }
 
-.contentContainerOut {
+.contentContainer {
   flex: 1 1 auto;
 
-  .contentContainerIn {
-    height: 100%;
+  @include respond-above(l) {
+    display: grid;
+    grid-template-columns: 67% 33%;
+  }
 
-    @include respond-above(l) {
-      display: grid;
-      grid-template-columns: 67% 34%;
-      padding-right: 0;
-    }
+  .mainContent {
+    padding-top: var(--spacing-s);
+    padding-bottom: var(--spacing-s);
+    padding-right: var(--spacing-xs);
+  }
 
-    .mainContent {
-      padding-top: var(--spacing-s);
-      padding-bottom: var(--spacing-s);
-      padding-right: var(--spacing-xs);
-    }
+  .sideBar {
+    background-color: var(--color-black-5);
+    padding: var(--spacing-m);
+  }
+}
 
-    .sideBar {
-      background-color: var(--color-black-5);
-      padding: var(--spacing-m);
-    }
+.paddingLeft {
+  padding-left: var(--spacing-m);
+
+  @include respond-above(m) {
+    padding-left: 100px;
+  }
+
+  @include respond-above(xl) {
+    padding-left: 180px;
   }
 }
