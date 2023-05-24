@@ -67,7 +67,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
   }
 
   return (
-    <Card className={styles.hankeCard} border>
+    <Card className={styles.hankeCard} aria-label={hanke.nimi} border>
       <>
         <div
           className={clsx([styles.hankeCardHeader, styles.hankeCardFlexContainer])}
@@ -120,7 +120,9 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               <IconPen aria-hidden />
             </Link>
           </div>
-          <div className={styles.iconWrapper}>{icon}</div>
+          <button type="button" className={styles.iconWrapper}>
+            {icon}
+          </button>
         </div>
         <HankeDraftStateNotification hanke={hanke} className={styles.draftNotification} />
       </>

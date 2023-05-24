@@ -54,6 +54,10 @@
       .iconWrapper {
         flex-grow: 0;
       }
+
+      .iconWrapper:focus {
+        outline: 2px solid var(--color-coat-of-arms);
+      }
     }
 
     .draftNotification {
