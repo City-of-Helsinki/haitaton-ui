@@ -33,7 +33,7 @@ const IndexSection: React.FC<IndexProps> = ({
     <div className={styles.indexContainer}>
       <div className={styles.indexContainer__titlesContainer}>
         <Text
-          tag="h3"
+          tag="p"
           styleAs={mainIndex ? 'body-m' : 'body-s'}
           weight={mainIndex ? 'bold' : 'normal'}
         >
@@ -101,7 +101,7 @@ const HankeIndexes: React.FC<Props> = ({
   return (
     <div className={containerClassName}>
       <div className={styles.indexTitle}>
-        <Text tag="h2" styleAs="h4" weight="bold">
+        <Text tag="h3" styleAs="h6" weight="bold">
           {hankeIndexTitle}
         </Text>
         {displayTooltip && (
