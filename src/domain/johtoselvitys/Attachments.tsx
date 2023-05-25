@@ -91,7 +91,7 @@ function Attachments({
 
       <FileInput
         id="cable-report-file-input"
-        accept=".pdf,.jpg,.jpeg,.png,.dgn,.dwg,.docx,.txt,.gt"
+        accept=".pdf,.jpg,.jpeg,.png,.docx,.txt"
         label={t('form:labels:dragAttachments')}
         dragAndDropLabel={t('form:labels:dragAttachments')}
         language={locale}
