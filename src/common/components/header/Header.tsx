@@ -104,9 +104,9 @@ const Header: React.FC = () => {
             icon={<IconSignout aria-hidden />}
             label={t('authentication:logoutButton')}
             variant="supplementary"
-            onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+            onClick={async (e: React.MouseEvent<HTMLAnchorElement>) => {
               e.preventDefault();
-              authService.logout();
+              await authService.logout();
             }}
             data-testid="logoutLink"
           />
