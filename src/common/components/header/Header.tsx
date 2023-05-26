@@ -9,6 +9,7 @@ import useUser from '../../../domain/auth/useUser';
 import { Language, LANGUAGES } from '../../types/language';
 import { I18NLANGKEY } from '../../../locales/constants';
 import { SKIP_TO_ELEMENT_ID } from '../../constants/constants';
+import { useFeatureFlags } from '../featureFlags/FeatureFlagsContext';
 
 const languageLabels = {
   fi: 'Suomi',
@@ -27,6 +28,7 @@ const Header: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { data: user } = useUser();
   const isAuthenticated = Boolean(user?.profile);
+  const features = useFeatureFlags();
 
   const isMapPath = useMatch({
     path: PUBLIC_HANKKEET.path,
@@ -63,17 +65,25 @@ const Header: React.FC = () => {
     >
       {isAuthenticated && (
         <Navigation.Row ariaLabel={t('common:ariaLabels:topNavigation')}>
-          <Navigation.Item as={NavLink} to={PUBLIC_HANKKEET_MAP.path} active={Boolean(isMapPath)}>
-            {PUBLIC_HANKKEET.label}
-          </Navigation.Item>
-          <Navigation.Item
-            as={NavLink}
-            to={NEW_HANKE.path}
-            active={Boolean(isNewHankePath)}
-            data-testid="hankeLink"
-          >
-            {NEW_HANKE.label}
-          </Navigation.Item>
+          {features.publicHankkeet ? (
+            <Navigation.Item as={NavLink} to={PUBLIC_HANKKEET_MAP.path} active={Boolean(isMapPath)}>
+              {PUBLIC_HANKKEET.label}
+            </Navigation.Item>
+          ) : (
+            <></>
+          )}
+          {features.hanke ? (
+            <Navigation.Item
+              as={NavLink}
+              to={NEW_HANKE.path}
+              active={Boolean(isNewHankePath)}
+              data-testid="hankeLink"
+            >
+              {NEW_HANKE.label}
+            </Navigation.Item>
+          ) : (
+            <></>
+          )}
           <Navigation.Item
             as={NavLink}
             to={HANKEPORTFOLIO.path}

@@ -9,6 +9,7 @@ import i18n from '../locales/i18nForTests';
 import { store } from '../common/redux/store';
 import { GlobalNotificationProvider } from '../common/components/globalNotification/GlobalNotificationContext';
 import GlobalNotification from '../common/components/globalNotification/GlobalNotification';
+import { FeatureFlagsProvider } from '../common/components/featureFlags/FeatureFlagsContext';
 
 type Props = {
   children: React.ReactChildren;
@@ -28,10 +29,12 @@ const AllTheProviders = ({ children }: Props) => {
       <ReduxProvider store={store}>
         <QueryClientProvider client={queryClient}>
           <I18nextProvider i18n={i18n}>
-            <GlobalNotificationProvider>
-              {children}
-              <GlobalNotification />
-            </GlobalNotificationProvider>
+            <FeatureFlagsProvider>
+              <GlobalNotificationProvider>
+                {children}
+                <GlobalNotification />
+              </GlobalNotificationProvider>
+            </FeatureFlagsProvider>
           </I18nextProvider>
         </QueryClientProvider>
       </ReduxProvider>

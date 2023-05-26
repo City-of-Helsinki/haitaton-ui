@@ -9,6 +9,7 @@ import { store } from '../../redux/store';
 import theme from './theme';
 import { GlobalNotificationProvider } from '../globalNotification/GlobalNotificationContext';
 import GlobalNotification from '../globalNotification/GlobalNotification';
+import { FeatureFlagsProvider } from '../featureFlags/FeatureFlagsContext';
 import './app.scss';
 import '../../../assets/styles/reset.css';
 
@@ -19,12 +20,14 @@ const App: React.FC = () => (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <ChakraProvider theme={theme}>
-          <Layout>
-            <GlobalNotificationProvider>
-              <AppRoutes />
-              <GlobalNotification />
-            </GlobalNotificationProvider>
-          </Layout>
+          <FeatureFlagsProvider>
+            <Layout>
+              <GlobalNotificationProvider>
+                <AppRoutes />
+                <GlobalNotification />
+              </GlobalNotificationProvider>
+            </Layout>
+          </FeatureFlagsProvider>
         </ChakraProvider>
       </QueryClientProvider>
     </Provider>
