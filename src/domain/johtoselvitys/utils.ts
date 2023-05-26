@@ -48,6 +48,9 @@ export function getAreaGeometries(areas: JohtoselvitysArea[]) {
 export function convertFormStateToApplicationData(formState: JohtoselvitysFormValues): Application {
   // eslint-disable-next-line no-param-reassign
   delete formState.geometriesChanged;
+  // eslint-disable-next-line no-param-reassign
+  delete formState.selfIntersectingPolygon;
+
   const data: Application = cloneDeep(formState);
 
   const updatedAreas: ApplicationArea[] = formState.applicationData.areas.map(
