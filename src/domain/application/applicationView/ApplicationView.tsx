@@ -37,6 +37,7 @@ import DecisionLink from '../components/DecisionLink';
 import { ApplicationCancel } from '../components/ApplicationCancel';
 import AttachmentSummary from '../components/AttachmentSummary';
 import useAttachments from '../hooks/useAttachments';
+import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
 
 type Props = {
   application: Application;
@@ -108,8 +109,10 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
           <SectionItemContent>
             {hanke && <Link href={hankeViewPath}>{hankeLinkText}</Link>}
           </SectionItemContent>
-          <SectionItemTitle>{t('hankePortfolio:labels:oikeudet')}:</SectionItemTitle>
-          <SectionItemContent />
+          <FeatureFlags flags={['accessRights']}>
+            <SectionItemTitle>{t('hankePortfolio:labels:oikeudet')}:</SectionItemTitle>
+            <SectionItemContent />
+          </FeatureFlags>
         </FormSummarySection>
 
         <InformationViewHeaderButtons>

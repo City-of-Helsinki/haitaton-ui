@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid } from '@chakra-ui/react';
+import { Box, Grid } from '@chakra-ui/react';
 import { Button, Koros, Link, Notification } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -9,78 +9,91 @@ import Text from '../../common/components/text/Text';
 import { useLocalizedRoutes } from '../../common/hooks/useLocalizedRoutes';
 import styles from './Homepage.module.scss';
 import img1 from './HKMS000005_km0000pi1k.webp';
-// import img2 from './HKMS000005_km0000pi1q.webp';
+import img2 from './HKMS000005_km0000pi1q.webp';
 import img3 from './HKMS000005_km003yz2.webp';
-// import img4 from './kartta.png';
+import img4 from './kartta.png';
 import kalasatama from './kalasatama.webp';
 import Linkbox from '../../common/components/Linkbox/Linkbox';
 import useUser from '../auth/useUser';
 import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
+import FeatureFlags from '../../common/components/featureFlags/FeatureFlags';
+import {
+  FeatureFlagsContextProps,
+  useFeatureFlags,
+} from '../../common/components/featureFlags/FeatureFlagsContext';
 
 const Homepage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const {
-    // PUBLIC_HANKKEET_MAP,
-    // PUBLIC_HANKKEET_LIST,
+    PUBLIC_HANKKEET_MAP,
+    PUBLIC_HANKKEET_LIST,
     HANKEPORTFOLIO,
-    // NEW_HANKE,
+    NEW_HANKE,
     JOHTOSELVITYSHAKEMUS,
   } = useLocalizedRoutes();
   const [feedbackOpen, setFeedbackOpen] = useState(true);
   const { data: user } = useUser();
   const isAuthenticated = Boolean(user?.profile);
+  const features = useFeatureFlags();
 
   const loggedInLinks = [
-    // {
-    //   key: 'kartta',
-    //   actionLink: PUBLIC_HANKKEET_MAP.path,
-    //   imgProps: { src: img1, width: 384, height: 245 },
-    //   external: false,
-    // },
-    // {
-    //   key: 'hanke',
-    //   actionLink: NEW_HANKE.path,
-    //   imgProps: { src: img2, width: 384, height: 245 },
-    //   external: false,
-    // },
+    {
+      key: 'kartta',
+      actionLink: PUBLIC_HANKKEET_MAP.path,
+      imgProps: { src: img1, width: 384, height: 245 },
+      external: false,
+      featureFlags: ['publicHankkeet'],
+    },
+    {
+      key: 'hanke',
+      actionLink: NEW_HANKE.path,
+      imgProps: { src: img2, width: 384, height: 245 },
+      external: false,
+      featureFlags: ['hanke'],
+    },
     {
       key: 'johtotietoselvitys',
       actionLink: JOHTOSELVITYSHAKEMUS.path,
       imgProps: { src: img1, width: 384, height: 245 },
       external: false,
+      featureFlags: [],
     },
     {
       key: 'hankesalkku',
       actionLink: HANKEPORTFOLIO.path,
       imgProps: { src: img3, width: 384, height: 245 },
       external: false,
+      featureFlags: [],
     },
     {
       key: 'ohjeet',
       actionLink: t('routes:WORKINSTRUCTIONS:path'),
       imgProps: undefined,
       external: true,
+      featureFlags: [],
     },
   ];
 
-  const loggedOutLinks: never[] = [
-    // {
-    //   key: 'kartta_kirjautumaton',
-    //   actionLink: PUBLIC_HANKKEET_MAP.path,
-    //   imgProps: { src: img4, width: 384, height: 245 },
-    //   external: false,
-    // },
-    // {
-    //   key: 'hankelista',
-    //   actionLink: PUBLIC_HANKKEET_LIST.path,
-    //   imgProps: { src: img1, width: 384, height: 245 },
-    //   external: false,
-    // },
+  const loggedOutLinks = [
+    {
+      key: 'kartta_kirjautumaton',
+      actionLink: PUBLIC_HANKKEET_MAP.path,
+      imgProps: { src: img4, width: 384, height: 245 },
+      external: false,
+      featureFlags: ['publicHankkeet'],
+    },
+    {
+      key: 'hankelista',
+      actionLink: PUBLIC_HANKKEET_LIST.path,
+      imgProps: { src: img1, width: 384, height: 245 },
+      external: false,
+      featureFlags: ['publicHankkeet'],
+    },
   ];
 
   let loginContainer = null;
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !features.publicHankkeet) {
     loginContainer = (
       <div className={styles.loginContainer}>
         <img
@@ -114,7 +127,7 @@ const Homepage: React.FC = () => {
     : t('homepage:pageSubTitle');
 
   return (
-    <div className={clsx({ [styles.bgWhite]: !isAuthenticated })}>
+    <div className={clsx({ [styles.bgWhite]: !isAuthenticated && !features.publicHankkeet })}>
       <div className={styles.heroContainer}>
         <section className={styles.hero}>
           <Text
@@ -134,7 +147,7 @@ const Homepage: React.FC = () => {
         <Koros type="basic" flipHorizontal className={styles.koros} />
       </div>
 
-      {/* {!isAuthenticated && (
+      {!isAuthenticated && features.publicHankkeet && (
         <Box
           pb="var(--spacing-xl)"
           pt="var(--spacing-3-xl)"
@@ -148,7 +161,7 @@ const Homepage: React.FC = () => {
             </p>
           </Container>
         </Box>
-      )} */}
+      )}
 
       <Container>
         <article className={styles.container}>
@@ -181,20 +194,25 @@ const Homepage: React.FC = () => {
           >
             {links.map((item) => {
               return (
-                <div className={styles.linkboxContainer} key={item.key}>
-                  <Linkbox
-                    linkboxAriaLabel={`${t('common:components:linkbox:linkbox')}: ${t(
-                      `homepage:${item.key}:actionText`
-                    )}`}
-                    linkAriaLabel={t(`homepage:${item.key}:actionText`)}
-                    href={item.actionLink}
-                    heading={t(`homepage:${item.key}:title`)}
-                    text={t(`homepage:${item.key}:description`)}
-                    imgProps={item.imgProps}
-                    external={item.external}
-                    openInNewTab={item.external}
-                  />
-                </div>
+                <FeatureFlags
+                  flags={item.featureFlags as (keyof FeatureFlagsContextProps)[]}
+                  key={item.key}
+                >
+                  <div className={styles.linkboxContainer}>
+                    <Linkbox
+                      linkboxAriaLabel={`${t('common:components:linkbox:linkbox')}: ${t(
+                        `homepage:${item.key}:actionText`
+                      )}`}
+                      linkAriaLabel={t(`homepage:${item.key}:actionText`)}
+                      href={item.actionLink}
+                      heading={t(`homepage:${item.key}:title`)}
+                      text={t(`homepage:${item.key}:description`)}
+                      imgProps={item.imgProps}
+                      external={item.external}
+                      openInNewTab={item.external}
+                    />
+                  </div>
+                </FeatureFlags>
               );
             })}
           </Grid>
