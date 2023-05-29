@@ -13,18 +13,18 @@ type Props = {
   applicationId: number | null;
   alluStatus: AlluStatusStrings | null;
   hankeTunnus?: string;
-  buttonVariant: 'secondary' | 'danger';
   buttonIcon: JSX.Element;
-  buttonClassName?: string;
+  saveAndQuitIsLoading?: boolean;
+  saveAndQuitIsLoadingText?: string;
 };
 
 export const ApplicationCancel: React.FC<Props> = ({
   applicationId,
   alluStatus,
   hankeTunnus,
-  buttonVariant,
   buttonIcon,
-  buttonClassName,
+  saveAndQuitIsLoading,
+  saveAndQuitIsLoadingText,
 }) => {
   const { t } = useTranslation();
   const navigateToApplicationList = useNavigateToApplicationList(hankeTunnus);
@@ -90,10 +90,11 @@ export const ApplicationCancel: React.FC<Props> = ({
       />
 
       <Button
-        variant={buttonVariant}
+        variant="danger"
         iconLeft={buttonIcon}
         onClick={openConfirmationDialog}
-        className={buttonClassName}
+        isLoading={saveAndQuitIsLoading}
+        loadingText={saveAndQuitIsLoadingText}
       >
         {t('hakemus:buttons:cancelApplication')}
       </Button>
