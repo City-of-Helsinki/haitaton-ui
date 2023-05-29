@@ -19,6 +19,7 @@ import FullPageMapPage from '../../pages/FullPageMapPage';
 import HankePage from '../../pages/HankePage';
 import ApplicationPage from '../../pages/ApplicationPage';
 import EditJohtoselvitysPage from '../../pages/EditJohtoselvitysPage';
+import NotFoundPage from '../../pages/staticPages/404Page';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
@@ -66,6 +67,7 @@ const LocaleRoutes = () => {
       <Route path={t('routes:ACCESSIBILITY:path')} element={<AccessibilityPage />} />
       <Route path={t('routes:REFERENCES:path')} element={<ReferencesPage />} />
       <Route path={t('routes:PRIVACY_POLICY:path')} element={<PrivacyPolicyPage />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 };
