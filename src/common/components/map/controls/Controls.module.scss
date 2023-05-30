@@ -43,19 +43,20 @@
   position: absolute;
   left: var(--spacing-s);
   bottom: var(--spacing-s);
+  background: var(--color-black-80);
 
   &__button {
     border: 0;
-    color: var(--color-black-80);
+    color: var(--color-white);
 
-    &svgIcon {
+    .drawControl__svgIcon {
       path {
-        stroke: var(--color-black-80);
+        stroke: var(--color-white);
       }
     }
 
     &:hover {
-      background: lightgray;
+      background: var(--color-black-40);
     }
 
     &--active {
