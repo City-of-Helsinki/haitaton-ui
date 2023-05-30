@@ -7,8 +7,8 @@ export enum ACTION {
 }
 
 export enum DRAWTOOLTYPE {
-  POLYGON = 'Polygon',
   SQUARE = 'Square',
+  POLYGON = 'Polygon',
 }
 
 export type SelectedDrawToolType = DRAWTOOLTYPE | null;
