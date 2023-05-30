@@ -1,5 +1,5 @@
 import React from 'react';
-import Container from '../../../../common/components/container/Container';
+import clsx from 'clsx';
 import styles from './HankeInformationView.module.scss';
 
 function InformationViewContainer({ children }: { children: React.ReactNode | React.ReactNode[] }) {
@@ -14,8 +14,11 @@ function InformationViewHeader({
   children: React.ReactNode | React.ReactNode[];
 }) {
   return (
-    <header style={{ backgroundColor }} className={styles.headerContainer}>
-      <Container>{children}</Container>
+    <header
+      style={{ backgroundColor }}
+      className={clsx(styles.headerContainer, styles.paddingLeft)}
+    >
+      {children}
     </header>
   );
 }
@@ -33,11 +36,7 @@ function InformationViewContentContainer({
 }: {
   children: React.ReactNode | React.ReactNode[];
 }) {
-  return (
-    <div className={styles.contentContainerOut}>
-      <Container className={styles.contentContainerIn}>{children}</Container>
-    </div>
-  );
+  return <div className={styles.contentContainer}>{children}</div>;
 }
 
 function InformationViewMainContent({
@@ -45,7 +44,7 @@ function InformationViewMainContent({
 }: {
   children: React.ReactNode | React.ReactNode[];
 }) {
-  return <div className={styles.mainContent}>{children}</div>;
+  return <div className={clsx(styles.mainContent, styles.paddingLeft)}>{children}</div>;
 }
 
 function InformationViewSidebar({ children }: { children: React.ReactNode | React.ReactNode[] }) {

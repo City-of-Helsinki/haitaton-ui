@@ -48,9 +48,6 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
   const { setNotification } = useGlobalNotification();
   const { showSendSuccess, showSendError } = useApplicationSendNotification();
   const queryClient = useQueryClient();
-  const { data: existingAttachments, isError: attachmentsLoadError } = useAttachments(
-    application?.id
-  );
   const [newAttachments, setNewAttachments] = useState<File[]>([]);
   const [attachmentUploadErrors, setAttachmentUploadErrors] = useState<JSX.Element[]>([]);
 
@@ -150,6 +147,10 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
   if (generatedHanke) {
     hanke = generatedHanke;
   }
+
+  const { data: existingAttachments, isError: attachmentsLoadError } = useAttachments(
+    getValues('id')
+  );
 
   const navigateToApplicationList = useNavigateToApplicationList(hanke?.hankeTunnus);
 
@@ -257,14 +258,15 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
   }
 
   async function saveAttachments() {
-    if (!application) {
+    const applicationId = getValues('id');
+
+    if (!applicationId) {
       return Promise.resolve();
     }
 
     const mutations = newAttachments.map((file) =>
       attachmentUploadMutation.mutateAsync({
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        applicationId: application.id!,
+        applicationId,
         attachmentType: 'MUU',
         file,
       })
@@ -298,7 +300,12 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         'applicationData.constructionWork',
       ],
       // Areas page
-      ['applicationData.startTime', 'applicationData.endTime', 'applicationData.areas'],
+      [
+        'applicationData.startTime',
+        'applicationData.endTime',
+        'applicationData.areas',
+        'selfIntersectingPolygon',
+      ],
       // Contacts page
       [
         'applicationData.customerWithContacts',

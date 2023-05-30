@@ -38,6 +38,7 @@ import Container from '../../../common/components/container/Container';
 import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
 import useHankeViewPath from '../hooks/useHankeViewPath';
 import useNavigateToApplicationList from '../hooks/useNavigateToApplicationList';
+import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
 
 type CustomAccordionProps = {
   hanke: HankeData;
@@ -67,7 +68,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
   }
 
   return (
-    <Card className={styles.hankeCard} border>
+    <Card className={styles.hankeCard} aria-label={hanke.nimi} border>
       <>
         <div
           className={clsx([styles.hankeCardHeader, styles.hankeCardFlexContainer])}
@@ -81,21 +82,25 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
               <Text tag="p" styleAs="body-xl" weight="bold">
                 {hanke.nimi}
               </Text>
-              <HankeVaiheTag tagName={hanke.vaihe} />
+              <FeatureFlags flags={['hanke']}>
+                <HankeVaiheTag tagName={hanke.vaihe} />
+              </FeatureFlags>
             </div>
-            <div className={styles.hankeDates}>
-              {hanke.alkuPvm && hanke.loppuPvm ? (
-                <>
-                  <Text tag="p" styleAs="body-m">
-                    {formatToFinnishDate(hanke.alkuPvm)}
-                  </Text>
-                  -
-                  <Text tag="p" styleAs="body-m">
-                    {formatToFinnishDate(hanke.loppuPvm)}
-                  </Text>
-                </>
-              ) : null}
-            </div>
+            <FeatureFlags flags={['hanke']}>
+              <div className={styles.hankeDates}>
+                {hanke.alkuPvm && hanke.loppuPvm ? (
+                  <>
+                    <Text tag="p" styleAs="body-m">
+                      {formatToFinnishDate(hanke.alkuPvm)}
+                    </Text>
+                    -
+                    <Text tag="p" styleAs="body-m">
+                      {formatToFinnishDate(hanke.loppuPvm)}
+                    </Text>
+                  </>
+                ) : null}
+              </div>
+            </FeatureFlags>
           </div>
           <div className={styles.actions}>
             <Link
@@ -108,92 +113,102 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
             >
               <IconEye aria-hidden />
             </Link>
-            <Link
-              to={getEditHankePath({ hankeTunnus: hanke.hankeTunnus })}
-              aria-label={
-                // eslint-disable-next-line
-                t(`routes:${ROUTES.EDIT_HANKE}.meta.title`) +
-                ` ${hanke.nimi} - ${hanke.hankeTunnus} `
-              }
-              data-testid="hankeEditLink"
-            >
-              <IconPen aria-hidden />
-            </Link>
+            <FeatureFlags flags={['hanke']}>
+              <Link
+                to={getEditHankePath({ hankeTunnus: hanke.hankeTunnus })}
+                aria-label={
+                  // eslint-disable-next-line
+                  t(`routes:${ROUTES.EDIT_HANKE}.meta.title`) +
+                  ` ${hanke.nimi} - ${hanke.hankeTunnus} `
+                }
+                data-testid="hankeEditLink"
+              >
+                <IconPen aria-hidden />
+              </Link>
+            </FeatureFlags>
           </div>
-          <div className={styles.iconWrapper}>{icon}</div>
+          <button type="button" className={styles.iconWrapper}>
+            {icon}
+          </button>
         </div>
-        <HankeDraftStateNotification hanke={hanke} className={styles.draftNotification} />
+        <FeatureFlags flags={['hanke']}>
+          <HankeDraftStateNotification hanke={hanke} className={styles.draftNotification} />
+        </FeatureFlags>
       </>
       <div className={styles.hankeCardContent} {...contentProps}>
-        <div>
-          <div className={styles.gridBasicInfo}>
-            <Text tag="h3" styleAs="body-m" weight="bold" className={styles.infoHeader}>
-              {t('hankeForm:labels:kuvaus')}
-            </Text>
-            <Text tag="p" styleAs="body-m" className={styles.infoContent}>
-              {hanke.kuvaus}
-            </Text>
-          </div>
-          <div className={styles.gridBasicInfo}>
-            <Text tag="h3" styleAs="body-m" weight="bold" className={styles.infoHeader}>
-              {t('hankeForm:labels:tyomaaKatuosoite')}
-            </Text>
-            <Text tag="p" styleAs="body-m" className={styles.infoContent}>
-              {hanke.tyomaaKatuosoite}
-            </Text>
-          </div>
-          <div className={styles.gridBasicInfo}>
-            <Text tag="h3" styleAs="body-m" weight="bold" className={styles.infoHeader}>
-              {t('hankeForm:labels:alkuPvm')}
-            </Text>
-            <Text tag="p" styleAs="body-m" className={styles.infoContent}>
-              {formatToFinnishDate(hanke.alkuPvm)}
-            </Text>
-          </div>
-          <div className={styles.gridBasicInfo}>
-            <Text tag="h3" styleAs="body-m" weight="bold" className={styles.infoHeader}>
-              {t('hankeForm:labels:loppuPvm')}
-            </Text>
-            <Text tag="p" styleAs="body-m" className={styles.infoContent}>
-              {formatToFinnishDate(hanke.loppuPvm)}
-            </Text>
-          </div>
-          <div className={styles.gridBasicInfo}>
-            <Text tag="h3" styleAs="body-m" weight="bold" className={styles.infoHeader}>
-              {t('hankeForm:labels:tyomaaTyyppi')}
-            </Text>
-            <Text tag="p" styleAs="body-m" className={styles.infoContent}>
-              {tyomaaTyyppiContent}
-            </Text>
-          </div>
-          <div className={styles.gridBasicInfo}>
-            <Text tag="h3" styleAs="h6" weight="bold" className={styles.infoHeader}>
-              {t('hankeForm:labels:vaihe')}
-            </Text>
-            <Text tag="p" styleAs="body-m" className={styles.infoContent}>
-              {hanke.vaihe !== null && t(`hanke:vaihe:${hanke.vaihe}`)}
-            </Text>
-          </div>
-          <div className={styles.gridBasicInfo}>
-            <Text tag="h3" styleAs="h6" weight="bold" className={styles.infoHeader}>
-              Hankkeen omistaja
-            </Text>
-            <Text tag="p" styleAs="body-m" className={styles.infoContent}>
-              {hanke.omistajat && hanke.omistajat[0]?.nimi}
-            </Text>
-          </div>
-          <div className={styles.gridBasicInfo}>
-            <Text tag="h3" styleAs="h6" weight="bold" className={styles.infoHeader}>
-              {t('hankeForm:labels:rights')}
-            </Text>
-          </div>
-        </div>
-        {isOpen && (
+        <FeatureFlags flags={['hanke']}>
           <div>
-            <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} />
-            <OwnHankeMap hanke={hanke} />
+            <div className={styles.gridBasicInfo}>
+              <Text tag="h3" styleAs="body-m" weight="bold" className={styles.infoHeader}>
+                {t('hankeForm:labels:kuvaus')}
+              </Text>
+              <Text tag="p" styleAs="body-m" className={styles.infoContent}>
+                {hanke.kuvaus}
+              </Text>
+            </div>
+            <div className={styles.gridBasicInfo}>
+              <Text tag="h3" styleAs="body-m" weight="bold" className={styles.infoHeader}>
+                {t('hankeForm:labels:tyomaaKatuosoite')}
+              </Text>
+              <Text tag="p" styleAs="body-m" className={styles.infoContent}>
+                {hanke.tyomaaKatuosoite}
+              </Text>
+            </div>
+            <div className={styles.gridBasicInfo}>
+              <Text tag="h3" styleAs="body-m" weight="bold" className={styles.infoHeader}>
+                {t('hankeForm:labels:alkuPvm')}
+              </Text>
+              <Text tag="p" styleAs="body-m" className={styles.infoContent}>
+                {formatToFinnishDate(hanke.alkuPvm)}
+              </Text>
+            </div>
+            <div className={styles.gridBasicInfo}>
+              <Text tag="h3" styleAs="body-m" weight="bold" className={styles.infoHeader}>
+                {t('hankeForm:labels:loppuPvm')}
+              </Text>
+              <Text tag="p" styleAs="body-m" className={styles.infoContent}>
+                {formatToFinnishDate(hanke.loppuPvm)}
+              </Text>
+            </div>
+            <div className={styles.gridBasicInfo}>
+              <Text tag="h3" styleAs="body-m" weight="bold" className={styles.infoHeader}>
+                {t('hankeForm:labels:tyomaaTyyppi')}
+              </Text>
+              <Text tag="p" styleAs="body-m" className={styles.infoContent}>
+                {tyomaaTyyppiContent}
+              </Text>
+            </div>
+            <div className={styles.gridBasicInfo}>
+              <Text tag="h3" styleAs="h6" weight="bold" className={styles.infoHeader}>
+                {t('hankeForm:labels:vaihe')}
+              </Text>
+              <Text tag="p" styleAs="body-m" className={styles.infoContent}>
+                {hanke.vaihe !== null && t(`hanke:vaihe:${hanke.vaihe}`)}
+              </Text>
+            </div>
+            <div className={styles.gridBasicInfo}>
+              <Text tag="h3" styleAs="h6" weight="bold" className={styles.infoHeader}>
+                Hankkeen omistaja
+              </Text>
+              <Text tag="p" styleAs="body-m" className={styles.infoContent}>
+                {hanke.omistajat && hanke.omistajat[0]?.nimi}
+              </Text>
+            </div>
+            <FeatureFlags flags={['hanke', 'accessRights']}>
+              <div className={styles.gridBasicInfo}>
+                <Text tag="h3" styleAs="h6" weight="bold" className={styles.infoHeader}>
+                  {t('hankeForm:labels:rights')}
+                </Text>
+              </div>
+            </FeatureFlags>
           </div>
-        )}
+          {isOpen && (
+            <div>
+              <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} />
+              <OwnHankeMap hanke={hanke} />
+            </div>
+          )}
+        </FeatureFlags>
 
         <div>
           <Button theme="coat" className={styles.showHankeButton} onClick={navigateToHanke}>
@@ -465,7 +480,7 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
               onChange={(e) => setHankeSearchValue(e.target.value)}
               label={t('hankePortfolio:search')}
             />
-            <div>
+            <FeatureFlags flags={['hanke']}>
               <div className={styles.dateRange}>
                 <DateRangeControl
                   startDate={hankeFilterStartDate}
@@ -474,51 +489,54 @@ const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
                   updateEndDate={setHankeFilterEndDate}
                 />
               </div>
-            </div>
 
-            <Select
-              className={styles.hankeVaihe}
-              multiselect
-              label={t('hankePortfolio:hankevaiheet')}
-              options={hankeVaiheOptions}
-              defaultValue={[]}
-              clearButtonAriaLabel={
-                // eslint-disable-next-line prefer-template
-                t('common:components:multiselect:clear') + ' ' + t('hankePortfolio:hankevaiheet')
-              }
-              // eslint-disable-next-line no-template-curly-in-string
-              selectedItemRemoveButtonAriaLabel="Remove {value}"
-              onChange={updateHankeVaihe}
-              value={
-                selectedHankeVaiheet.map((hankeVaihe) => ({
-                  label: t(`hanke:vaihe:${hankeVaihe}`),
-                  value: hankeVaihe,
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                })) as any
-              }
-            />
+              <Select
+                className={styles.hankeVaihe}
+                multiselect
+                label={t('hankePortfolio:hankevaiheet')}
+                options={hankeVaiheOptions}
+                defaultValue={[]}
+                clearButtonAriaLabel={
+                  // eslint-disable-next-line prefer-template
+                  t('common:components:multiselect:clear') + ' ' + t('hankePortfolio:hankevaiheet')
+                }
+                // eslint-disable-next-line no-template-curly-in-string
+                selectedItemRemoveButtonAriaLabel="Remove {value}"
+                onChange={updateHankeVaihe}
+                value={
+                  selectedHankeVaiheet.map((hankeVaihe) => ({
+                    label: t(`hanke:vaihe:${hankeVaihe}`),
+                    value: hankeVaihe,
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  })) as any
+                }
+              />
 
-            <Select
-              className={styles.hankeTyyppi}
-              multiselect
-              label={t('hankeForm:labels:tyomaaTyyppi')}
-              options={hankeTyyppiOptions}
-              defaultValue={[]}
-              clearButtonAriaLabel={
-                // eslint-disable-next-line prefer-template
-                t('common:components:multiselect:clear') + ' ' + t('hankeForm:labels:tyomaaTyyppi')
-              }
-              // eslint-disable-next-line no-template-curly-in-string
-              selectedItemRemoveButtonAriaLabel="Remove {value}"
-              onChange={updateHankeTyyppi}
-              value={
-                selectedHankeTyypit.map((hankeTyyppi) => ({
-                  label: t(`hanke:tyomaaTyyppi:${hankeTyyppi}`),
-                  value: hankeTyyppi,
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                })) as any
-              }
-            />
+              <Select
+                className={styles.hankeTyyppi}
+                multiselect
+                label={t('hankeForm:labels:tyomaaTyyppi')}
+                options={hankeTyyppiOptions}
+                defaultValue={[]}
+                clearButtonAriaLabel={
+                  // eslint-disable-next-line prefer-template
+                  t('common:components:multiselect:clear') +
+                  ' ' +
+                  t('hankeForm:labels:tyomaaTyyppi')
+                }
+                // eslint-disable-next-line no-template-curly-in-string
+                selectedItemRemoveButtonAriaLabel="Remove {value}"
+                onChange={updateHankeTyyppi}
+                value={
+                  selectedHankeTyypit.map((hankeTyyppi) => ({
+                    label: t(`hanke:tyomaaTyyppi:${hankeTyyppi}`),
+                    value: hankeTyyppi,
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  })) as any
+                }
+              />
+            </FeatureFlags>
+
             <p data-testid="numberOfFilteredRows" style={{ display: 'none' }}>
               {rows.length}
             </p>

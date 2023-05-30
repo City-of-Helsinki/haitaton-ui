@@ -73,7 +73,8 @@
     },
     "errors": {
       "areaRequired": "Vähintään yksi alue vaaditaan",
-      "fileLoadError": "Tiedoston latauksessa tapahtui virhe"
+      "fileLoadError": "Tiedoston latauksessa tapahtui virhe",
+      "selfIntersectingArea": "Alueen reunat eivät saa leikata toisiaan"
     },
     "headers": {
       "perustiedot": "Perustiedot",
@@ -705,7 +706,7 @@
       "actionText": "Lue lisää haitattomasta"
     },
     "ohjeet": {
-      "title": "Ohjeet",
+      "title": "Työohjeet",
       "description": "Tutustu yleisten alueiden hankkeita koskeviin ohjeistuksiin.",
       "actionText": "Tutustu ohjeisiin"
     },
@@ -867,6 +868,12 @@
     "privacyPolicy": {
       "title": "Rekisteriseloste",
       "linkText": "Avaa rekisteriseloste tästä (pdf)"
+    },
+    "404Page": {
+      "title": "Sivua ei löytynyt",
+      "instruction": "Jos kirjoitit sivun osoitteen osoitepalkkiin, tarkista että se on kirjoitettu oikein.",
+      "homePageLink": "Palaa Haitattoman <a>etusivulle.</a>",
+      "supportLink": "Jos seuraamasi linkki ei toimi, voit myös ottaa yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <a>haitatontuki@hel.fi.</a>"
     }
   }
 }

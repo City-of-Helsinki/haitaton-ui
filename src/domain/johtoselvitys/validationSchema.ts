@@ -64,4 +64,5 @@ export const validationSchema = yup.object().shape({
     endTime: yup.date().nullable().required(),
     areas: yup.array(areaSchema).min(1),
   }),
+  selfIntersectingPolygon: yup.boolean().isFalse(),
 });

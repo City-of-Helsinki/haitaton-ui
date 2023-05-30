@@ -5,17 +5,21 @@ import { createRegularPolygon } from 'ol/interaction/Draw';
 import Collection from 'ol/Collection';
 import { Draw, Snap, Modify } from 'ol/interaction';
 import { click } from 'ol/events/condition';
+import Geometry from 'ol/geom/Geometry';
+import Polygon from 'ol/geom/Polygon';
 import { DRAWTOOLTYPE } from './types';
 import MapContext from '../../MapContext';
 import useDrawContext from './useDrawContext';
+import { isPolygonSelfIntersecting } from '../../utils';
 
 type Props = {
   features?: Collection<Feature>;
+  onSelfIntersectingPolygon?: (feature: Feature<Geometry> | null) => void;
 };
 
 type Interaction = Draw | Snap | Modify;
 
-const DrawInteraction: React.FC<Props> = () => {
+const DrawInteraction: React.FC<Props> = ({ onSelfIntersectingPolygon }) => {
   const selection = useRef<null | Select>(null);
   const { map } = useContext(MapContext);
   const { state, actions, source } = useDrawContext();
@@ -58,7 +62,15 @@ const DrawInteraction: React.FC<Props> = () => {
         geometryFunction,
       });
 
-      drawInstance.on('drawend', () => {
+      drawInstance.on('drawend', (event) => {
+        const isSelfIntersecting = isPolygonSelfIntersecting(
+          event.feature.getGeometry() as Polygon
+        );
+
+        if (onSelfIntersectingPolygon && isSelfIntersecting) {
+          onSelfIntersectingPolygon(event.feature);
+        }
+
         clearSelection();
         actions.setSelectedDrawToolType(null);
       });
@@ -73,7 +85,7 @@ const DrawInteraction: React.FC<Props> = () => {
 
       setInstances([drawInstance, snapInstance, modifyInstance]);
     },
-    [map, source, state.selectedDrawtoolType, actions, clearSelection]
+    [map, source, state.selectedDrawtoolType, actions, clearSelection, onSelfIntersectingPolygon]
   );
 
   useEffect(() => {
@@ -81,6 +93,30 @@ const DrawInteraction: React.FC<Props> = () => {
 
     const modifyInstance = new Modify({ source });
     map.addInteraction(modifyInstance);
+
+    modifyInstance.on('modifyend', () => {
+      const selfIntersectingFeature = source
+        .getFeatures()
+        .find((feature) => isPolygonSelfIntersecting(feature.getGeometry() as Polygon));
+
+      if (onSelfIntersectingPolygon) {
+        if (selfIntersectingFeature) {
+          onSelfIntersectingPolygon(selfIntersectingFeature);
+        } else {
+          onSelfIntersectingPolygon(null);
+        }
+      }
+    });
+
+    source.on('removefeature', () => {
+      const selfIntersectingFeature = source
+        .getFeatures()
+        .find((feature) => isPolygonSelfIntersecting(feature.getGeometry() as Polygon));
+
+      if (onSelfIntersectingPolygon && !selfIntersectingFeature) {
+        onSelfIntersectingPolygon(null);
+      }
+    });
 
     selection.current = new Select({
       condition: (mapBrowserEvent) => click(mapBrowserEvent),

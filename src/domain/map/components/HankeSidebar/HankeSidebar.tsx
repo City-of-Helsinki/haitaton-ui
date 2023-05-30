@@ -68,11 +68,11 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
             {hanke.nimi} ({hanke.hankeTunnus})
           </Text>
           {hanke.tyomaaKatuosoite && (
-            <Text tag="h3" styleAs="h5" weight="bold" spacingBottom="2-xs">
+            <Text tag="p" styleAs="h5" weight="bold" spacingBottom="2-xs">
               {hanke.tyomaaKatuosoite}
             </Text>
           )}
-          <Text tag="h3" styleAs="h6" weight="bold" spacingBottom="s">
+          <Text tag="p" styleAs="h6" weight="bold" spacingBottom="s">
             {formatToFinnishDate(hanke.alkuPvm)} - {formatToFinnishDate(hanke.loppuPvm)}
           </Text>
           <SidebarSection
