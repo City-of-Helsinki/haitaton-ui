@@ -130,7 +130,6 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
               applicationId={id}
               alluStatus={alluStatus}
               hankeTunnus={hanke?.hankeTunnus}
-              buttonVariant="danger"
               buttonIcon={<IconTrash aria-hidden />}
             />
           ) : null}

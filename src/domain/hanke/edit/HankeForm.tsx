@@ -186,7 +186,7 @@ const HankeForm: React.FC<Props> = ({ formData, onIsDirtyChange, onFormClose, ch
               >
                 {isNewHanke && (
                   <Button
-                    variant="secondary"
+                    variant="danger"
                     iconLeft={<IconCross aria-hidden />}
                     onClick={() => onFormClose(formValues.hankeTunnus)}
                   >
