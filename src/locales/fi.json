@@ -875,5 +875,13 @@
       "homePageLink": "Palaa Haitattoman <a>etusivulle.</a>",
       "supportLink": "Jos seuraamasi linkki ei toimi, voit myös ottaa yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <a>haitatontuki@hel.fi.</a>"
     }
+  },
+  "serviceWarning": {
+    "label": "",
+    "text": ""
+  },
+  "serviceError": {
+    "label": "",
+    "text": ""
   }
 }

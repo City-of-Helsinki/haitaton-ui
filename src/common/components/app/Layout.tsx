@@ -3,6 +3,7 @@ import Header from '../header/Header';
 import Footer from '../footer/Footer';
 import App from '../../../domain/app/App';
 import styles from './Layout.module.scss';
+import ServiceNotifications from '../serviceNotifications/ServiceNotifications';
 
 type Props = {
   children: React.ReactNode;
@@ -14,6 +15,7 @@ const Layout: React.FC<Props> = ({ children }) => {
       <div className={styles.layoutContainer}>
         <Header />
         <div className={styles.pageContainer} role="main">
+          <ServiceNotifications />
           {children}
         </div>
         <Footer />
