@@ -423,6 +423,7 @@ test('Should change users own role and its fields correctly', async () => {
     target: { value: phone },
   });
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+  await user.click(screen.getByTestId('contractorWithContacts-0'));
 
   expect(
     screen.getByTestId('applicationData.customerWithContacts.contacts.0.firstName')
