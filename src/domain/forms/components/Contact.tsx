@@ -5,6 +5,7 @@ import { Button, IconCross, IconPlusCircle, Tab, TabList, TabPanel, Tabs } from 
 import { useTranslation } from 'react-i18next';
 import { useFieldArray, UseFieldArrayRemove } from 'react-hook-form';
 import styles from './Contact.module.scss';
+import useSelectableTabs from '../../../common/hooks/useSelectableTabs';
 
 interface Props<T> {
   contactType: T;
@@ -40,6 +41,7 @@ const Contact = <T extends unknown>({
   }
 
   const renderSubContacts = subContactFields.length > 0 && renderSubContact;
+  const { tabRefs } = useSelectableTabs(subContactFields.length, { selectLastTabOnChange: true });
 
   return (
     <>
@@ -63,8 +65,13 @@ const Contact = <T extends unknown>({
             {subContactFields.map((subContact, subContactIndex) => {
               return (
                 <Tab key={subContact.id}>
-                  {t('hankePortfolio:labels:yhteyshenkilo')}{' '}
-                  {subContactIndex > 0 && subContactIndex + 1}
+                  <div
+                    data-testid={`${contactType}-${subContactIndex}`}
+                    ref={tabRefs[subContactIndex]}
+                  >
+                    {t('hankePortfolio:labels:yhteyshenkilo')}{' '}
+                    {subContactIndex > 0 && subContactIndex + 1}
+                  </div>
                 </Tab>
               );
             })}
