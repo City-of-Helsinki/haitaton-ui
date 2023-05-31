@@ -12,6 +12,7 @@ const Linkbox: React.FC<LinkboxProps> = ({ onClick, href: to, external, ...rest 
   return (
     <HDSLinkbox
       {...rest}
+      external={external}
       href={!external ? href : to}
       onClick={(event) => {
         if (external) {
