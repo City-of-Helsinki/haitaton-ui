@@ -13,9 +13,11 @@ const Layout: React.FC<Props> = ({ children }) => {
   return (
     <App>
       <div className={styles.layoutContainer}>
-        <Header />
-        <div className={styles.pageContainer} role="main">
+        <div>
+          <Header />
           <ServiceNotifications />
+        </div>
+        <div className={styles.pageContainer} role="main">
           {children}
         </div>
         <Footer />
