@@ -269,6 +269,13 @@
       "meta": {
         "title": "Haitaton - Work instructions"
       }
+    },
+    "MANUAL": {
+      "path": "https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-manual.pdf",
+      "headerLabel": "Manual and support (PDF)",
+      "meta": {
+        "title": "Haitaton - Manual and support"
+      }
     }
   },
   "hanke": {

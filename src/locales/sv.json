@@ -269,6 +269,13 @@
       "meta": {
         "title": "Haitaton Beta - Arbetsanvisningar"
       }
+    },
+    "MANUAL": {
+      "path": " https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-bruksanvisning.pdf",
+      "headerLabel": "Bruksanvisning och support (PDF)",
+      "meta": {
+        "title": "Haitaton - Bruksanvisning och support"
+      }
     }
   },
   "hanke": {
