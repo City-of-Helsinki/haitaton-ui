@@ -61,7 +61,17 @@ export const validationSchema = yup.object().shape({
     propertyDeveloperWithContacts: customerWithContactsSchema.nullable(),
     representativeWithContacts: customerWithContactsSchema.nullable(),
     startTime: yup.date().nullable().required(),
-    endTime: yup.date().nullable().required(),
+    endTime: yup
+      .date()
+      .when('startTime', (startTime: Date, schema: yup.DateSchema) => {
+        try {
+          return startTime ? schema.min(startTime) : schema;
+        } catch (error) {
+          return schema;
+        }
+      })
+      .nullable()
+      .required(),
     areas: yup.array(areaSchema).min(1),
   }),
   selfIntersectingPolygon: yup.boolean().isFalse(),
