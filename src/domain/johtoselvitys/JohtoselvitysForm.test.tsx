@@ -14,6 +14,11 @@ afterEach(cleanup);
 
 jest.setTimeout(40000);
 
+interface DateOptions {
+  start?: string;
+  end?: string;
+}
+
 const application: JohtoselvitysFormValues = {
   id: null,
   alluStatus: null,
@@ -138,12 +143,14 @@ function fillBasicInformation() {
   });
 }
 
-function fillAreasInformation() {
+function fillAreasInformation(options: DateOptions = {}) {
+  const { start = '1.4.2024', end = '1.6.2024' } = options;
+
   fireEvent.change(screen.getByLabelText(/työn arvioitu alkupäivä/i), {
-    target: { value: '1.4.2024' },
+    target: { value: start },
   });
   fireEvent.change(screen.getByLabelText(/työn arvioitu loppupäivä/i), {
-    target: { value: '1.6.2024' },
+    target: { value: end },
   });
 }
 
@@ -466,4 +473,25 @@ test('Should show send button when application is edited in draft state', async 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
   expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeInTheDocument();
+});
+
+test('Should not allow start date be after end date', async () => {
+  const hankeData = hankkeet[1] as HankeData;
+  const { user } = render(
+    <JohtoselvitysContainer hankeData={hankeData} application={application} />
+  );
+
+  // Fill basic information page
+  fillBasicInformation();
+
+  // Move to areas page
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+
+  // Fill areas page with start time after end time
+  fillAreasInformation({ start: '1.6.2024', end: '1.4.2024' });
+
+  // Should not be able to move to next page
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
 });
