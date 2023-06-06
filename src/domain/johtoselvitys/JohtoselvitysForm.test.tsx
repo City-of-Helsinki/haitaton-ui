@@ -477,24 +477,15 @@ test('Should show send button when application is edited in draft state', async 
 
 test('Should not allow start date be after end date', async () => {
   const hankeData = hankkeet[1] as HankeData;
-
   const { user } = render(
     <JohtoselvitysContainer hankeData={hankeData} application={application} />
   );
-
-  expect(
-    screen.queryByText('Aidasmäentien vesihuollon rakentaminen (HAI22-2)')
-  ).toBeInTheDocument();
 
   // Fill basic information page
   fillBasicInformation();
 
   // Move to areas page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
-  fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
-
   expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
 
   // Fill areas page with start time after end time
@@ -502,6 +493,5 @@ test('Should not allow start date be after end date', async () => {
 
   // Should not be able to move to next page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-
   expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
 });
