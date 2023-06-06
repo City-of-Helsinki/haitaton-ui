@@ -402,6 +402,10 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     </div>
   );
 
+  function validateStepChange(changeStep: () => void, stepIndex: number) {
+    return changeFormStep(changeStep, pageFieldsToValidate[stepIndex], trigger);
+  }
+
   return (
     <FormProvider {...formContext}>
       {/* Notification for saving application */}
@@ -418,6 +422,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         formSteps={formSteps}
         onStepChange={handleStepChange}
         onSubmit={handleSubmit(sendCableApplication)}
+        stepChangeValidator={validateStepChange}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           async function handlePageChange(handlerFunction: () => void): Promise<void> {
@@ -436,10 +441,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
           }
 
           async function handleNextPage() {
-            function nextPageHandler() {
-              changeFormStep(handleNext, pageFieldsToValidate[activeStepIndex], trigger);
-            }
-            await handlePageChange(nextPageHandler);
+            await handlePageChange(handleNext);
           }
 
           async function handleSaveAndQuit() {
