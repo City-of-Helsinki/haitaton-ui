@@ -1,4 +1,5 @@
-import { Link, Notification } from 'hds-react';
+import { Box } from '@chakra-ui/react';
+import { Link, LoadingSpinner, Notification } from 'hds-react';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { QueryFunction, QueryKey, useQueryClient } from 'react-query';
@@ -18,6 +19,7 @@ function FileDownloadLink({ linkText, fileName, queryKey, queryFunction, linkIco
   const [fileUrl, setFileUrl] = useState('');
   const linkRef = useRef<HTMLAnchorElement>(null);
   const [errorText, setErrorText] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   async function fetchFile(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
     setErrorText(null);
@@ -26,14 +28,17 @@ function FileDownloadLink({ linkText, fileName, queryKey, queryFunction, linkIco
       setFileUrl(cachedUrl);
     } else {
       event.preventDefault();
+      setLoading(true);
       try {
         const url = await queryClient.fetchQuery(queryKey, queryFunction, {
           staleTime: Infinity,
           cacheTime: Infinity,
         });
         setFileUrl(url);
+        setLoading(false);
         linkRef.current?.click();
       } catch (error) {
+        setLoading(false);
         setErrorText(t('common:error'));
       }
     }
@@ -41,6 +46,14 @@ function FileDownloadLink({ linkText, fileName, queryKey, queryFunction, linkIco
 
   function closeErrorNotification() {
     setErrorText(null);
+  }
+
+  if (loading) {
+    return (
+      <Box display="flex" alignItems="center">
+        <LoadingSpinner small />
+      </Box>
+    );
   }
 
   return (
