@@ -10,7 +10,6 @@ test('Cancel application when it has not been saved', async () => {
       applicationId={null}
       alluStatus={null}
       hankeTunnus="HAI22-2"
-      buttonVariant="secondary"
       buttonIcon={<IconCross />}
     />
   );
@@ -32,7 +31,6 @@ test('Cancel application when it has been saved, but not sent to Allu', async ()
       applicationId={application.id}
       alluStatus={application.alluStatus}
       hankeTunnus="HAI22-2"
-      buttonVariant="secondary"
       buttonIcon={<IconCross />}
     />
   );
@@ -54,7 +52,6 @@ test('Cancel application when it has been saved and sent to Allu but is still pe
       applicationId={application.id}
       alluStatus={application.alluStatus}
       hankeTunnus="HAI22-2"
-      buttonVariant="secondary"
       buttonIcon={<IconCross />}
     />
   );
@@ -76,7 +73,6 @@ test('Canceling application is not possible when it in handling in Allu', () => 
       applicationId={application.id}
       alluStatus={application.alluStatus}
       hankeTunnus="HAI22-2"
-      buttonVariant="secondary"
       buttonIcon={<IconCross />}
     />
   );

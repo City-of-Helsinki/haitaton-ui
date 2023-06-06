@@ -94,16 +94,18 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
           </SectionItemContent>
           <SectionItemTitle>{t('hakemus:labels:applicationState')}:</SectionItemTitle>
           <SectionItemContent>
-            <Box as="span" mr="var(--spacing-2-xs)">
-              <ApplicationStatusTag status={alluStatus} />
+            <Box display="flex">
+              <Box as="span" mr="var(--spacing-2-xs)">
+                <ApplicationStatusTag status={alluStatus} />
+              </Box>
+              {alluStatus === AlluStatus.DECISION && (
+                <DecisionLink
+                  applicationId={id}
+                  linkText={t('hakemus:labels:downloadDecisionShort')}
+                  filename={applicationIdentifier}
+                />
+              )}
             </Box>
-            {alluStatus === AlluStatus.DECISION && (
-              <DecisionLink
-                applicationId={id}
-                linkText={t('hakemus:labels:downloadDecisionShort')}
-                filename={applicationIdentifier}
-              />
-            )}
           </SectionItemContent>
           <SectionItemTitle>{t('hakemus:labels:relatedHanke')}:</SectionItemTitle>
           <SectionItemContent>
@@ -130,7 +132,6 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
               applicationId={id}
               alluStatus={alluStatus}
               hankeTunnus={hanke?.hankeTunnus}
-              buttonVariant="danger"
               buttonIcon={<IconTrash aria-hidden />}
             />
           ) : null}

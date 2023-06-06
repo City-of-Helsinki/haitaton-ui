@@ -181,7 +181,10 @@ export const BasicHankeInfo: React.FC = () => {
           i18nKey="johtoselvitysForm:perustiedot:instructions"
           components={{
             a: (
-              <Link href="https://www.hel.fi" openInNewTab>
+              <Link
+                href="https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/rakentamisvaiheen-ohjeet/kaduilla-ja-puistoissa-tehtavat-tyot"
+                openInNewTab
+              >
                 hel.fi
               </Link>
             ),

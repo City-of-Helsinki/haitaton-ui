@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconSignout, Navigation } from 'hds-react';
+import { IconLinkExternal, IconSignout, Navigation } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useMatch, useLocation, useNavigate } from 'react-router-dom';
 import { $enum } from 'ts-enum-util';
@@ -96,6 +96,7 @@ const Header: React.FC = () => {
             href={t('routes:WORKINSTRUCTIONS:path')}
             target="_blank"
             rel="noreferrer"
+            icon={<IconLinkExternal />}
           >
             {t('routes:WORKINSTRUCTIONS:headerLabel')}
           </Navigation.Item>

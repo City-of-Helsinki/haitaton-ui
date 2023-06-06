@@ -31,7 +31,6 @@ import { useGlobalNotification } from '../../common/components/globalNotificatio
 import useApplicationSendNotification from '../application/hooks/useApplicationSendNotification';
 import useHanke from '../hanke/hooks/useHanke';
 import { AlluStatus, Application } from '../application/types/application';
-import styles from './Johtoselvitys.module.scss';
 import Attachments from './Attachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import { uploadAttachment } from '../application/attachments';
@@ -472,14 +471,14 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
                 applicationId={getValues('id')}
                 alluStatus={getValues('alluStatus')}
                 hankeTunnus={hanke?.hankeTunnus}
-                buttonVariant="secondary"
                 buttonIcon={<IconCross aria-hidden />}
-                buttonClassName={styles.cancelButton}
+                saveAndQuitIsLoading={saveAndQuitIsLoading}
+                saveAndQuitIsLoadingText={saveAndQuitLoadingText}
               />
 
               {!firstStep && (
                 <Button
-                  variant="secondary"
+                  variant="supplementary"
                   iconLeft={<IconSaveDiskette aria-hidden="true" />}
                   data-testid="save-form-btn"
                   onClick={handleSaveAndQuit}
