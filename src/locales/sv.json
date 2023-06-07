@@ -2,9 +2,11 @@
   "authentication": {
     "deviceTimeError": "Du kan inte logga in eftersom klockan i din enhet går mer än 5 minuter fel. Ställ in klockan och försök på nytt.",
     "permissionRequestDenied": "Du måste godkänna de rättigheter vi begärt för att använda denna tjänst. Var god försök logga in på nytt.",
-    "genericError": "Det inträffade ett fel. Försök på nytt.",
+    "genericError": "Det inträffade ett fel att logga in. Försök på nytt.",
     "loginButton": "Logga in",
-    "logoutButton": "Logga ut"
+    "logoutButton": "Logga ut",
+    "homePageLink": "Återgå till Haitatons <a>framsida.</a>",
+    "supportLink": "Du kan också kontakta Haitaton tekniska support på e-postadressen <a>haitatontuki@hel.fi.</a>"
   },
   "common": {
     "increment": "Lägg till",

@@ -2,9 +2,11 @@
   "authentication": {
     "deviceTimeError": "Et voi kirjautua sisään koska laitteesi kello on yli 5 minuuttia väärässä. Säädä kelloa ja kokeile uudestaan.",
     "permissionRequestDenied": "Sinun täytyy hyväksyä pyytämämme oikeudet käyttääksesi tätä palvelua. Ole hyvä ja yritä kirjautua uudelleen.",
-    "genericError": "Tapahtui virhe. Yritä uudestaan.",
+    "genericError": "Kirjautumisessa tapahtui virhe. Yritä uudestaan.",
     "loginButton": "Kirjaudu",
-    "logoutButton": "Kirjaudu ulos"
+    "logoutButton": "Kirjaudu ulos",
+    "homePageLink": "Palaa Haitattoman <a>etusivulle.</a>",
+    "supportLink": "Voit myös ottaa yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <a>haitatontuki@hel.fi.</a>"
   },
   "common": {
     "increment": "Lisää",
