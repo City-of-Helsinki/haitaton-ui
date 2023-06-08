@@ -235,8 +235,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
 
   function saveAndQuit() {
     applicationSaveMutation.mutate(convertFormStateToApplicationData(getValues()), {
-      onSuccess() {
-        navigateToApplicationList();
+      onSuccess(data) {
+        navigateToApplicationList(data.hankeTunnus);
 
         setNotification(true, {
           position: 'top-right',
@@ -443,10 +443,15 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
           }
 
           async function handleSaveAndQuit() {
-            await handlePageChange(saveAndQuit);
+            // Make sure that name for the application exists before saving and quitting
+            const applicationNameValid = await trigger('applicationData.name', {
+              shouldFocus: true,
+            });
+            if (applicationNameValid) {
+              await handlePageChange(saveAndQuit);
+            }
           }
 
-          const firstStep = activeStepIndex === 0;
           const lastStep = activeStepIndex === formSteps.length - 1;
           const showSendButton =
             lastStep && isApplicationDraft(getValues('alluStatus') as AlluStatus | null);
@@ -476,18 +481,16 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
                 saveAndQuitIsLoadingText={saveAndQuitLoadingText}
               />
 
-              {!firstStep && (
-                <Button
-                  variant="supplementary"
-                  iconLeft={<IconSaveDiskette aria-hidden="true" />}
-                  data-testid="save-form-btn"
-                  onClick={handleSaveAndQuit}
-                  isLoading={saveAndQuitIsLoading}
-                  loadingText={saveAndQuitLoadingText}
-                >
-                  {t('hankeForm:saveDraftButton')}
-                </Button>
-              )}
+              <Button
+                variant="supplementary"
+                iconLeft={<IconSaveDiskette aria-hidden="true" />}
+                data-testid="save-form-btn"
+                onClick={handleSaveAndQuit}
+                isLoading={saveAndQuitIsLoading}
+                loadingText={saveAndQuitLoadingText}
+              >
+                {t('hankeForm:saveDraftButton')}
+              </Button>
 
               {showSendButton && (
                 <Button

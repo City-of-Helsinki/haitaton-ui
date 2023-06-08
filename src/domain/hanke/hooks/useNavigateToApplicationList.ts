@@ -12,9 +12,12 @@ export default function useNavigateToApplicationList(hankeTunnus?: string) {
   const getHankeViewPath = useLinkPath(ROUTES.HANKE);
   const { HANKEPORTFOLIO } = useLocalizedRoutes();
 
-  const path = hankeTunnus ? getHankeViewPath({ hankeTunnus }) : HANKEPORTFOLIO.path;
+  function navigateToApplicationList(updatedHankeTunnus?: string | null) {
+    const hankeTunnusToUse = updatedHankeTunnus || hankeTunnus;
+    const path = hankeTunnusToUse
+      ? getHankeViewPath({ hankeTunnus: hankeTunnusToUse })
+      : HANKEPORTFOLIO.path;
 
-  function navigateToApplicationList() {
     navigate(path, { state: { initiallyActiveTab: 4 } });
   }
 

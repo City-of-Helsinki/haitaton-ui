@@ -356,6 +356,27 @@ test('Save and quit works without hanke existing first', async () => {
   expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-13');
 });
 
+test('Should save and quit from the first page with just application name entered', async () => {
+  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
+
+  fireEvent.change(screen.getByLabelText(/työn nimi/i), {
+    target: { value: 'Johtoselvitys testi' },
+  });
+  await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
+
+  expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
+  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-14');
+});
+
+test('Should not save and quit if there is no application name', async () => {
+  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
+
+  await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
+
+  expect(window.location.pathname).toBe('/fi/johtoselvityshakemus');
+  expect(screen.queryByText('Kenttä on pakollinen')).toBeInTheDocument();
+});
+
 test('Should show error message and not navigate away when save and quit fails', async () => {
   server.use(
     rest.put('/api/hakemukset/:id', async (req, res, ctx) => {
