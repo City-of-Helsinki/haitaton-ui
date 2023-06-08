@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FileInput, IconTrash, Notification } from 'hds-react';
 import { Box } from '@chakra-ui/react';
@@ -30,6 +30,8 @@ function Attachments({
   const { t } = useTranslation();
   const locale = useLocale();
   const { getValues } = useFormContext<JohtoselvitysFormValues>();
+
+  const alluStatus = getValues('alluStatus');
 
   const [fileToDelete, setFileToDelete] = useState<ApplicationAttachmentMetadata | null>(null);
   const [showFileDeleteDialog, setShowFileDeleteDialog] = useState(false);
@@ -66,6 +68,10 @@ function Attachments({
     attachmentDeleteMutation.reset();
   }
 
+  const showDeleteButton = useCallback(() => {
+    return alluStatus === null;
+  }, [alluStatus]);
+
   return (
     <Box mb="var(--spacing-l)">
       <Text tag="p" spacingBottom="l">
@@ -84,7 +90,11 @@ function Attachments({
           {attachmentsLoadError ? (
             <ErrorLoadingText />
           ) : (
-            <FileList files={existingAttachments} onDeleteFile={handleFileDelete} />
+            <FileList
+              files={existingAttachments}
+              onDeleteFile={handleFileDelete}
+              showDeleteButton={showDeleteButton}
+            />
           )}
         </Box>
       )}
