@@ -402,6 +402,10 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     </div>
   );
 
+  function validateStepChange(changeStep: () => void, stepIndex: number) {
+    return changeFormStep(changeStep, pageFieldsToValidate[stepIndex], trigger);
+  }
+
   const notificationLabel =
     getValues('alluStatus') === AlluStatus.PENDING
       ? t('form:notifications:labels:editSentApplication')
@@ -427,6 +431,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         formSteps={formSteps}
         onStepChange={handleStepChange}
         onSubmit={handleSubmit(sendCableApplication)}
+        stepChangeValidator={validateStepChange}
         notificationLabel={notificationLabel}
         notificationText={notificationText}
       >
@@ -447,10 +452,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
           }
 
           async function handleNextPage() {
-            function nextPageHandler() {
-              changeFormStep(handleNext, pageFieldsToValidate[activeStepIndex], trigger);
-            }
-            await handlePageChange(nextPageHandler);
+            await handlePageChange(handleNext);
           }
 
           async function handleSaveAndQuit() {

@@ -517,6 +517,30 @@ test('Should not allow start date be after end date', async () => {
   expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
 });
 
+test('Should not allow step change when current step is invalid', async () => {
+  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+
+  // Move to contacts page
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+  // Change registry key to be invalid
+  fireEvent.change(
+    screen.getByTestId('applicationData.customerWithContacts.customer.registryKey'),
+    {
+      target: { value: '1234567-8' },
+    }
+  );
+
+  // Try to move previous, next and basic information page
+  await user.click(screen.getByRole('button', { name: /edellinen/i }));
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  await user.click(screen.getByRole('button', { name: /perustiedot/i }));
+
+  // Expect to still be in the same page
+  expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
+  expect(screen.queryByText('Kentän arvo on virheellinen')).toBeInTheDocument();
+});
+
 test('Should not show inline notification by default', () => {
   render(<JohtoselvitysContainer application={applications[0]} />);
 
