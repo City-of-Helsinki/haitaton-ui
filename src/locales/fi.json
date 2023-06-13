@@ -111,10 +111,12 @@
     },
     "notifications": {
       "labels": {
-        "attachmentRemoved": "Liitetiedosto poistettu"
+        "attachmentRemoved": "Liitetiedosto poistettu",
+        "editSentApplication": "Olet muokkaamassa jo lähetettyä hakemusta."
       },
       "descriptions": {
-        "attachmentRemoved": "Liitetiedosto {{fileName}} poistettu"
+        "attachmentRemoved": "Liitetiedosto {{fileName}} poistettu",
+        "editSentApplication": "Hakemusta voit muokata niin kauan, kun sitä ei vielä ole otettu käsittelyyn. Uusi versio hakemuksesta lähtee viranomaiselle automaattisesti lomakkeen tallennuksen yhteydessä."
       }
     },
     "buttons": {

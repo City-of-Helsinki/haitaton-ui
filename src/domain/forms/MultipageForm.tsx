@@ -1,11 +1,11 @@
 import React, { useReducer } from 'react';
-import { LoadingSpinner, Stepper, StepState } from 'hds-react';
+import { LoadingSpinner, Notification, Stepper, StepState } from 'hds-react';
 import { Box, Flex } from '@chakra-ui/react';
 import styles from './MultipageForm.module.scss';
 import useLocale from '../../common/hooks/useLocale';
 import Text from '../../common/components/text/Text';
 import { createStepReducer } from './formStepReducer';
-import { ACTION_TYPE, StepperStep } from './types';
+import { Action, ACTION_TYPE, StepperStep } from './types';
 import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
 
 // eslint-disable-next-line react/require-default-props
@@ -51,6 +51,13 @@ interface Props {
   /** Function that is called when step is changed */
   onStepChange?: () => void;
   onSubmit?: () => void;
+  /**
+   * Function that is called with a function that changes step and current step index,
+   * and should validate the step and execute the given function if step is valid.
+   */
+  stepChangeValidator?: (changeStep: () => void, stepIndex: number) => void;
+  notificationLabel?: string;
+  notificationText?: string;
 }
 
 /**
@@ -66,6 +73,9 @@ const MultipageForm: React.FC<Props> = ({
   isLoadingText,
   onStepChange,
   onSubmit,
+  stepChangeValidator,
+  notificationLabel,
+  notificationText,
 }) => {
   const locale = useLocale();
 
@@ -76,28 +86,34 @@ const MultipageForm: React.FC<Props> = ({
   };
   const [state, dispatch] = useReducer(stepReducer, initialState);
 
+  function handleStepChange(value: Action) {
+    function changeStep() {
+      dispatch(value);
+      if (onStepChange) {
+        onStepChange();
+      }
+    }
+
+    if (stepChangeValidator) {
+      stepChangeValidator(changeStep, state.activeStepIndex);
+    } else {
+      changeStep();
+    }
+  }
+
   function handleStepClick(
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     stepIndex: number
   ) {
-    if (onStepChange) {
-      onStepChange();
-    }
-    dispatch({ type: ACTION_TYPE.SET_ACTIVE, payload: stepIndex });
+    handleStepChange({ type: ACTION_TYPE.SET_ACTIVE, payload: stepIndex });
   }
 
   function handlePrevious() {
-    if (onStepChange) {
-      onStepChange();
-    }
-    dispatch({ type: ACTION_TYPE.SET_ACTIVE, payload: state.activeStepIndex - 1 });
+    handleStepChange({ type: ACTION_TYPE.SET_ACTIVE, payload: state.activeStepIndex - 1 });
   }
 
   function handleNext() {
-    if (onStepChange) {
-      onStepChange();
-    }
-    dispatch({ type: ACTION_TYPE.COMPLETE_STEP, payload: state.activeStepIndex });
+    handleStepChange({ type: ACTION_TYPE.COMPLETE_STEP, payload: state.activeStepIndex });
   }
 
   return (
@@ -110,6 +126,12 @@ const MultipageForm: React.FC<Props> = ({
         <Text tag="h2" styleAs="h4" spacingBottom="m">
           {subHeading}
         </Text>
+      )}
+
+      {notificationLabel && notificationText && (
+        <Notification dataTestId="form-notification" size="large" label={notificationLabel}>
+          {notificationText}
+        </Notification>
       )}
 
       <div className={styles.stepper}>

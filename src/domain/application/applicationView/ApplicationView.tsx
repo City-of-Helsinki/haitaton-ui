@@ -206,7 +206,7 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
           {hanke && (
             <>
               <Box mb="var(--spacing-s)">
-                <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} />
+                <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} showLink={false} />
                 <OwnHankeMap hanke={hanke} application={application} />
               </Box>
               {areas.map((area, index) => {

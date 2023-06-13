@@ -408,6 +408,19 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     </div>
   );
 
+  function validateStepChange(changeStep: () => void, stepIndex: number) {
+    return changeFormStep(changeStep, pageFieldsToValidate[stepIndex], trigger);
+  }
+
+  const notificationLabel =
+    getValues('alluStatus') === AlluStatus.PENDING
+      ? t('form:notifications:labels:editSentApplication')
+      : undefined;
+  const notificationText =
+    getValues('alluStatus') === AlluStatus.PENDING
+      ? t('form:notifications:descriptions:editSentApplication')
+      : undefined;
+
   return (
     <FormProvider {...formContext}>
       {/* Notification for saving application */}
@@ -426,6 +439,9 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         isLoadingText={t('form:buttons:loadingAttachments')}
         onStepChange={handleStepChange}
         onSubmit={handleSubmit(sendCableApplication)}
+        stepChangeValidator={validateStepChange}
+        notificationLabel={notificationLabel}
+        notificationText={notificationText}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           async function handlePageChange(handlerFunction: () => void): Promise<void> {
@@ -444,10 +460,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
           }
 
           async function handleNextPage() {
-            function nextPageHandler() {
-              changeFormStep(handleNext, pageFieldsToValidate[activeStepIndex], trigger);
-            }
-            await handlePageChange(nextPageHandler);
+            await handlePageChange(handleNext);
           }
 
           async function handleSaveAndQuit() {

@@ -45,6 +45,36 @@ test('renders form heading and labels for form steps', () => {
   expect(screen.getByText('Vaihe 1/2: Title 1')).toBeInTheDocument();
 });
 
+test('renders form notification if texts are given', () => {
+  const formSteps = [
+    {
+      element: <Page1 />,
+      label: 'Title 1',
+      state: StepState.available,
+    },
+    {
+      element: <Page2 />,
+      label: 'Title 2',
+      state: StepState.disabled,
+    },
+  ];
+
+  const handleSave = jest.fn();
+
+  render(
+    <MultipageForm
+      heading="Test form"
+      formSteps={formSteps}
+      onStepChange={handleSave}
+      notificationLabel="Notification label"
+      notificationText="Notification text"
+    />
+  );
+
+  expect(screen.getByText('Notification label')).toBeInTheDocument();
+  expect(screen.getByText('Notification text')).toBeInTheDocument();
+});
+
 test('form pages can be navigated', async () => {
   const formSteps = [
     {
