@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import { Stepper, StepState } from 'hds-react';
+import { Notification, Stepper, StepState } from 'hds-react';
 import styles from './MultipageForm.module.scss';
 import useLocale from '../../common/hooks/useLocale';
 import Text from '../../common/components/text/Text';
@@ -37,6 +37,8 @@ interface Props {
    * and should validate the step and execute the given function if step is valid.
    */
   stepChangeValidator?: (changeStep: () => void, stepIndex: number) => void;
+  notificationLabel?: string;
+  notificationText?: string;
 }
 
 /**
@@ -51,6 +53,8 @@ const MultipageForm: React.FC<Props> = ({
   onStepChange,
   onSubmit,
   stepChangeValidator,
+  notificationLabel,
+  notificationText,
 }) => {
   const locale = useLocale();
 
@@ -101,6 +105,12 @@ const MultipageForm: React.FC<Props> = ({
         <Text tag="h2" styleAs="h4" spacingBottom="m">
           {subHeading}
         </Text>
+      )}
+
+      {notificationLabel && notificationText && (
+        <Notification dataTestId="form-notification" size="large" label={notificationLabel}>
+          {notificationText}
+        </Notification>
       )}
 
       <div className={styles.stepper}>

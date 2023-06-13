@@ -214,7 +214,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
           <Button theme="coat" className={styles.showHankeButton} onClick={navigateToHanke}>
             {t('hankePortfolio:showHankeButton')}
           </Button>
-          <Button theme="coat" variant="secondary" onClick={navigateToApplications}>
+          <Button theme="coat" variant="secondary" onClick={() => navigateToApplications()}>
             {t('hankePortfolio:showApplicationsButton')}
           </Button>
         </div>

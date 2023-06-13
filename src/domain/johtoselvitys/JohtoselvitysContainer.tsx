@@ -235,8 +235,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
 
   function saveAndQuit() {
     applicationSaveMutation.mutate(convertFormStateToApplicationData(getValues()), {
-      onSuccess() {
-        navigateToApplicationList();
+      onSuccess(data) {
+        navigateToApplicationList(data.hankeTunnus);
 
         setNotification(true, {
           position: 'top-right',
@@ -406,6 +406,15 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     return changeFormStep(changeStep, pageFieldsToValidate[stepIndex], trigger);
   }
 
+  const notificationLabel =
+    getValues('alluStatus') === AlluStatus.PENDING
+      ? t('form:notifications:labels:editSentApplication')
+      : undefined;
+  const notificationText =
+    getValues('alluStatus') === AlluStatus.PENDING
+      ? t('form:notifications:descriptions:editSentApplication')
+      : undefined;
+
   return (
     <FormProvider {...formContext}>
       {/* Notification for saving application */}
@@ -423,6 +432,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         onStepChange={handleStepChange}
         onSubmit={handleSubmit(sendCableApplication)}
         stepChangeValidator={validateStepChange}
+        notificationLabel={notificationLabel}
+        notificationText={notificationText}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           async function handlePageChange(handlerFunction: () => void): Promise<void> {
@@ -445,10 +456,15 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
           }
 
           async function handleSaveAndQuit() {
-            await handlePageChange(saveAndQuit);
+            // Make sure that name for the application exists before saving and quitting
+            const applicationNameValid = await trigger('applicationData.name', {
+              shouldFocus: true,
+            });
+            if (applicationNameValid) {
+              await handlePageChange(saveAndQuit);
+            }
           }
 
-          const firstStep = activeStepIndex === 0;
           const lastStep = activeStepIndex === formSteps.length - 1;
           const showSendButton =
             lastStep && isApplicationDraft(getValues('alluStatus') as AlluStatus | null);
@@ -478,18 +494,16 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
                 saveAndQuitIsLoadingText={saveAndQuitLoadingText}
               />
 
-              {!firstStep && (
-                <Button
-                  variant="supplementary"
-                  iconLeft={<IconSaveDiskette aria-hidden="true" />}
-                  data-testid="save-form-btn"
-                  onClick={handleSaveAndQuit}
-                  isLoading={saveAndQuitIsLoading}
-                  loadingText={saveAndQuitLoadingText}
-                >
-                  {t('hankeForm:saveDraftButton')}
-                </Button>
-              )}
+              <Button
+                variant="supplementary"
+                iconLeft={<IconSaveDiskette aria-hidden="true" />}
+                data-testid="save-form-btn"
+                onClick={handleSaveAndQuit}
+                isLoading={saveAndQuitIsLoading}
+                loadingText={saveAndQuitLoadingText}
+              >
+                {t('hankeForm:saveDraftButton')}
+              </Button>
 
               {showSendButton && (
                 <Button

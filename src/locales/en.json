@@ -2,9 +2,11 @@
   "authentication": {
     "deviceTimeError": "You cannot log in because the clock on your device is more than 5 minutes wrong. Adjust your clock and try again.",
     "permissionRequestDenied": "You must accept the requested rights to use this service. Please try to log in again.",
-    "genericError": "An error occurred. Try again.",
+    "genericError": "There was an error logging in. Please try again.",
     "loginButton": "Log in",
-    "logoutButton": "Log out"
+    "logoutButton": "Log out",
+    "homePageLink": "Return to Haitaton <a>front page.</a>",
+    "supportLink": "You can also contact Haitaton technical support at the email address <a>haitatontuki@hel.fi.</a>"
   },
   "common": {
     "increment": "Increment",
@@ -268,6 +270,13 @@
       "headerLabel": "Work instructions",
       "meta": {
         "title": "Haitaton - Work instructions"
+      }
+    },
+    "MANUAL": {
+      "path": "https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-manual.pdf",
+      "headerLabel": "Manual and support (PDF)",
+      "meta": {
+        "title": "Haitaton - Manual and support"
       }
     }
   },
