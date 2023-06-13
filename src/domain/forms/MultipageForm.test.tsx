@@ -128,3 +128,40 @@ test('form pages can be navigated', async () => {
   expect(screen.getByText('Vaihe 1/2: Title 1')).toBeDefined();
   expect(screen.getByText('Page 1')).toBeDefined();
 });
+
+test('displays loading spinner when isLoading', () => {
+  const formSteps = [
+    {
+      element: <Page1 />,
+      label: 'Title 1',
+      state: StepState.available,
+    },
+  ];
+
+  render(<MultipageForm heading="Test form" formSteps={formSteps} isLoading />);
+
+  expect(screen.queryByTestId('multipage-form-loading-spinner')).toBeInTheDocument();
+});
+
+test('displays loading spinner with loading text when isLoading and loading text set', () => {
+  const formSteps = [
+    {
+      element: <Page1 />,
+      label: 'Title 1',
+      state: StepState.available,
+    },
+  ];
+  const loadingText = 'Loading...';
+
+  render(
+    <MultipageForm
+      heading="Test form"
+      formSteps={formSteps}
+      isLoading
+      isLoadingText={loadingText}
+    />
+  );
+
+  expect(screen.queryByTestId('multipage-form-loading-spinner')).toBeInTheDocument();
+  expect(screen.queryByText(loadingText)).toBeInTheDocument();
+});

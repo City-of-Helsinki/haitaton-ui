@@ -1,11 +1,28 @@
 import React, { useReducer } from 'react';
-import { Notification, Stepper, StepState } from 'hds-react';
+import { LoadingSpinner, Notification, Stepper, StepState } from 'hds-react';
+import { Box, Flex } from '@chakra-ui/react';
 import styles from './MultipageForm.module.scss';
 import useLocale from '../../common/hooks/useLocale';
 import Text from '../../common/components/text/Text';
 import { createStepReducer } from './formStepReducer';
 import { Action, ACTION_TYPE, StepperStep } from './types';
 import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
+
+// eslint-disable-next-line react/require-default-props
+function LoadingIndicator({ loadingText }: { loadingText?: string }) {
+  return (
+    <Flex justifyContent="center" alignItems="center" height="130px">
+      <Box mr="var(--spacing-m)">
+        <LoadingSpinner small data-testid="multipage-form-loading-spinner" />
+      </Box>
+      {loadingText ? (
+        <Text tag="p" weight="bold">
+          {loadingText}
+        </Text>
+      ) : null}
+    </Flex>
+  );
+}
 
 interface FormStep extends StepperStep {
   element: React.ReactNode;
@@ -29,6 +46,8 @@ interface Props {
   subHeading?: string | JSX.Element;
   /** Array of form steps to render */
   formSteps: FormStep[];
+  isLoading?: boolean;
+  isLoadingText?: string;
   /** Function that is called when step is changed */
   onStepChange?: () => void;
   onSubmit?: () => void;
@@ -50,6 +69,8 @@ const MultipageForm: React.FC<Props> = ({
   heading,
   subHeading,
   formSteps,
+  isLoading = false,
+  isLoadingText,
   onStepChange,
   onSubmit,
   stepChangeValidator,
@@ -114,13 +135,17 @@ const MultipageForm: React.FC<Props> = ({
       )}
 
       <div className={styles.stepper}>
-        <Stepper
-          steps={state.steps}
-          language={locale}
-          selectedStep={state.activeStepIndex}
-          onStepClick={handleStepClick}
-          stepHeading
-        />
+        {isLoading ? (
+          <LoadingIndicator loadingText={isLoadingText} />
+        ) : (
+          <Stepper
+            steps={state.steps}
+            language={locale}
+            selectedStep={state.activeStepIndex}
+            onStepClick={handleStepClick}
+            stepHeading
+          />
+        )}
       </div>
 
       {formSteps[state.activeStepIndex].element}

@@ -155,6 +155,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
 
   const [showSaveNotification, setShowSaveNotification] = useState(false);
 
+  const [attachmentsUploading, setAttachmentsUploading] = useState(false);
+
   const applicationSaveMutation = useMutation(saveApplication, {
     onMutate() {
       setShowSaveNotification(false);
@@ -257,6 +259,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
   }
 
   async function saveAttachments() {
+    setAttachmentsUploading(true);
+
     const applicationId = getValues('id');
 
     if (!applicationId) {
@@ -272,6 +276,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     );
 
     const results = await Promise.allSettled(mutations);
+
+    setAttachmentsUploading(false);
 
     if (results.some((result) => result.status === 'rejected')) {
       throw new Error('Error uploading attachments');
@@ -429,6 +435,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         heading={t('johtoselvitysForm:pageHeader')}
         subHeading={hankeNameText}
         formSteps={formSteps}
+        isLoading={attachmentsUploading}
+        isLoadingText={t('form:buttons:loadingAttachments')}
         onStepChange={handleStepChange}
         onSubmit={handleSubmit(sendCableApplication)}
         stepChangeValidator={validateStepChange}
