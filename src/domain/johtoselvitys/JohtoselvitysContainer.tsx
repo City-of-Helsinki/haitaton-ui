@@ -402,6 +402,15 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     </div>
   );
 
+  const notificationLabel =
+    getValues('alluStatus') === AlluStatus.PENDING
+      ? t('form:notifications:labels:editSentApplication')
+      : undefined;
+  const notificationText =
+    getValues('alluStatus') === AlluStatus.PENDING
+      ? t('form:notifications:descriptions:editSentApplication')
+      : undefined;
+
   return (
     <FormProvider {...formContext}>
       {/* Notification for saving application */}
@@ -418,6 +427,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         formSteps={formSteps}
         onStepChange={handleStepChange}
         onSubmit={handleSubmit(sendCableApplication)}
+        notificationLabel={notificationLabel}
+        notificationText={notificationText}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           async function handlePageChange(handlerFunction: () => void): Promise<void> {

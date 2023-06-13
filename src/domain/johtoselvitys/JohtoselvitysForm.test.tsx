@@ -516,3 +516,21 @@ test('Should not allow start date be after end date', async () => {
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
   expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
 });
+
+test('Should not show inline notification by default', () => {
+  render(<JohtoselvitysContainer application={applications[0]} />);
+
+  expect(screen.queryByTestId('form-notification')).not.toBeInTheDocument();
+});
+
+test('Should show inline notification when editing a form that is in pending state', () => {
+  render(<JohtoselvitysContainer application={applications[1]} />);
+
+  expect(screen.queryByTestId('form-notification')).toBeInTheDocument();
+  expect(screen.queryByText('Olet muokkaamassa jo lähetettyä hakemusta.')).toBeInTheDocument();
+  expect(
+    screen.queryByText(
+      'Hakemusta voit muokata niin kauan, kun sitä ei vielä ole otettu käsittelyyn. Uusi versio hakemuksesta lähtee viranomaiselle automaattisesti lomakkeen tallennuksen yhteydessä.'
+    )
+  ).toBeInTheDocument();
+});
