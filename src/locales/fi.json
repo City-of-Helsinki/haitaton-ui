@@ -593,7 +593,8 @@
       "sendErrorText": "<0>Hakemus on tallennettu luonnoksena, koska hakemuksen lähettäminen käsittelyyn epäonnistui. Yritä lähettämistä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi.</1></0>",
       "cancelSuccessLabel": "Hakemus peruttiin",
       "cancelSuccessText": "Hakemus peruttiin onnistuneesti",
-      "noApplications": "Hankkeella ei ole lisättyjä hakemuksia"
+      "noApplications": "Hankkeella ei ole lisättyjä hakemuksia",
+      "maxAttachmentsNumberExceeded": "Liitteiden enimmäismäärä ({{maxNumber}} kpl) ylitetty"
     },
     "status": {
       "PENDING_CLIENT": "Näkyy viranomaiselle",

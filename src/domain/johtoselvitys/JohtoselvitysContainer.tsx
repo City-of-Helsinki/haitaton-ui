@@ -136,7 +136,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     setValue,
     handleSubmit,
     trigger,
-    formState: { isDirty },
+    formState: { isDirty, errors: formErrors },
     reset,
   } = formContext;
 
@@ -318,6 +318,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         'applicationData.propertyDeveloperWithContacts',
         'applicationData.representativeWithContacts',
       ],
+      // Attachments page
+      ['attachmentNumber'],
     ],
     [ordererKey]
   );
@@ -446,7 +448,11 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           async function handlePageChange(handlerFunction: () => void): Promise<void> {
             try {
-              if (activeStepIndex === 3 && newAttachments.length > 0) {
+              if (
+                activeStepIndex === 3 &&
+                newAttachments.length > 0 &&
+                !formErrors.attachmentNumber
+              ) {
                 await saveAttachments();
                 setNewAttachments([]);
               }

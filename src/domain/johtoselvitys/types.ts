@@ -14,4 +14,5 @@ export interface JohtoselvitysFormValues extends Application {
   applicationData: JohtoselvitysFormData;
   geometriesChanged?: boolean; // virtualField
   selfIntersectingPolygon?: boolean; // virtualField
+  attachmentNumber?: number; // virtualField
 }
