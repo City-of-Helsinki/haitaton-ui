@@ -10,7 +10,6 @@ const files: ApplicationAttachmentMetadata[] = [
     fileName: 'TestFile1.pdf',
     createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800284',
     createdAt: '2023-07-04T12:07:52.324684Z',
-    scanStatus: 'OK',
     applicationId: 1,
     attachmentType: 'MUU',
   },
@@ -19,7 +18,6 @@ const files: ApplicationAttachmentMetadata[] = [
     fileName: 'TestFile2.pdf',
     createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800284',
     createdAt: '2023-07-04T13:06:28.499551Z',
-    scanStatus: 'OK',
     applicationId: 1,
     attachmentType: 'MUU',
   },
@@ -52,4 +50,21 @@ test('files can be deleted from the list', async () => {
 
   expect(screen.getByTestId('file-list').childElementCount).toBe(1);
   expect(screen.queryByText('TestFile1.pdf')).not.toBeInTheDocument();
+});
+
+test('delete button can be hidden for files', () => {
+  const handleFileDelete = jest.fn();
+
+  render(
+    <FileList
+      files={files}
+      onDeleteFile={handleFileDelete}
+      showDeleteButton={(file) => file.fileName === 'TestFile1.pdf'}
+    />
+  );
+
+  expect(screen.queryByTestId('delete-4f08ce3f-a0de-43c6-8ccc-9fe93822ed18')).toBeInTheDocument();
+  expect(
+    screen.queryByTestId('delete-d8e43d5a-ac40-448b-ad35-92120a7f2377')
+  ).not.toBeInTheDocument();
 });

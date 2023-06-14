@@ -19,7 +19,7 @@ const HankePortfolioContainer: React.FC = () => {
   const { data } = useHankeList();
 
   // Add header to fix Axe "page-has-heading-one"-error
-  return data ? <HankePortfolioComponent hankkeet={data} /> : <h1>Ladataan..</h1>;
+  return data ? <HankePortfolioComponent hankkeet={data} /> : <></>;
 };
 
 export default HankePortfolioContainer;

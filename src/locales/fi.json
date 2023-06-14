@@ -2,9 +2,11 @@
   "authentication": {
     "deviceTimeError": "Et voi kirjautua sisään koska laitteesi kello on yli 5 minuuttia väärässä. Säädä kelloa ja kokeile uudestaan.",
     "permissionRequestDenied": "Sinun täytyy hyväksyä pyytämämme oikeudet käyttääksesi tätä palvelua. Ole hyvä ja yritä kirjautua uudelleen.",
-    "genericError": "Tapahtui virhe. Yritä uudestaan.",
+    "genericError": "Kirjautumisessa tapahtui virhe. Yritä uudestaan.",
     "loginButton": "Kirjaudu",
-    "logoutButton": "Kirjaudu ulos"
+    "logoutButton": "Kirjaudu ulos",
+    "homePageLink": "Palaa Haitattoman <a>etusivulle.</a>",
+    "supportLink": "Voit myös ottaa yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <a>haitatontuki@hel.fi.</a>"
   },
   "common": {
     "increment": "Lisää",
@@ -109,10 +111,12 @@
     },
     "notifications": {
       "labels": {
-        "attachmentRemoved": "Liitetiedosto poistettu"
+        "attachmentRemoved": "Liitetiedosto poistettu",
+        "editSentApplication": "Olet muokkaamassa jo lähetettyä hakemusta."
       },
       "descriptions": {
-        "attachmentRemoved": "Liitetiedosto {{fileName}} poistettu"
+        "attachmentRemoved": "Liitetiedosto {{fileName}} poistettu",
+        "editSentApplication": "Hakemusta voit muokata niin kauan, kun sitä ei vielä ole otettu käsittelyyn. Uusi versio hakemuksesta lähtee viranomaiselle automaattisesti lomakkeen tallennuksen yhteydessä."
       }
     },
     "buttons": {
@@ -321,8 +325,8 @@
       }
     },
     "MANUAL": {
-      "path": "/",
-      "headerLabel": "Käyttöohjeet ja tuki",
+      "path": "https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-asiakasohje.pdf",
+      "headerLabel": "Käyttöohjeet ja tuki (PDF)",
       "meta": {
         "title": "Haitaton - Käyttöohjeet ja tuki"
       }
@@ -589,7 +593,8 @@
       "sendErrorText": "<0>Hakemus on tallennettu luonnoksena, koska hakemuksen lähettäminen käsittelyyn epäonnistui. Yritä lähettämistä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi.</1></0>",
       "cancelSuccessLabel": "Hakemus peruttiin",
       "cancelSuccessText": "Hakemus peruttiin onnistuneesti",
-      "noApplications": "Hankkeella ei ole lisättyjä hakemuksia"
+      "noApplications": "Hankkeella ei ole lisättyjä hakemuksia",
+      "maxAttachmentsNumberExceeded": "Liitteiden enimmäismäärä ({{maxNumber}} kpl) ylitetty"
     },
     "status": {
       "PENDING_CLIENT": "Näkyy viranomaiselle",

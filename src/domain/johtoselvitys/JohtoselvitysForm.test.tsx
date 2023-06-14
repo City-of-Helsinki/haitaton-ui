@@ -356,6 +356,27 @@ test('Save and quit works without hanke existing first', async () => {
   expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-13');
 });
 
+test('Should save and quit from the first page with just application name entered', async () => {
+  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
+
+  fireEvent.change(screen.getByLabelText(/työn nimi/i), {
+    target: { value: 'Johtoselvitys testi' },
+  });
+  await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
+
+  expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
+  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-14');
+});
+
+test('Should not save and quit if there is no application name', async () => {
+  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
+
+  await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
+
+  expect(window.location.pathname).toBe('/fi/johtoselvityshakemus');
+  expect(screen.queryByText('Kenttä on pakollinen')).toBeInTheDocument();
+});
+
 test('Should show error message and not navigate away when save and quit fails', async () => {
   server.use(
     rest.put('/api/hakemukset/:id', async (req, res, ctx) => {
@@ -494,4 +515,46 @@ test('Should not allow start date be after end date', async () => {
   // Should not be able to move to next page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
   expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+});
+
+test('Should not allow step change when current step is invalid', async () => {
+  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+
+  // Move to contacts page
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+  // Change registry key to be invalid
+  fireEvent.change(
+    screen.getByTestId('applicationData.customerWithContacts.customer.registryKey'),
+    {
+      target: { value: '1234567-8' },
+    }
+  );
+
+  // Try to move previous, next and basic information page
+  await user.click(screen.getByRole('button', { name: /edellinen/i }));
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  await user.click(screen.getByRole('button', { name: /perustiedot/i }));
+
+  // Expect to still be in the same page
+  expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
+  expect(screen.queryByText('Kentän arvo on virheellinen')).toBeInTheDocument();
+});
+
+test('Should not show inline notification by default', () => {
+  render(<JohtoselvitysContainer application={applications[0]} />);
+
+  expect(screen.queryByTestId('form-notification')).not.toBeInTheDocument();
+});
+
+test('Should show inline notification when editing a form that is in pending state', () => {
+  render(<JohtoselvitysContainer application={applications[1]} />);
+
+  expect(screen.queryByTestId('form-notification')).toBeInTheDocument();
+  expect(screen.queryByText('Olet muokkaamassa jo lähetettyä hakemusta.')).toBeInTheDocument();
+  expect(
+    screen.queryByText(
+      'Hakemusta voit muokata niin kauan, kun sitä ei vielä ole otettu käsittelyyn. Uusi versio hakemuksesta lähtee viranomaiselle automaattisesti lomakkeen tallennuksen yhteydessä.'
+    )
+  ).toBeInTheDocument();
 });

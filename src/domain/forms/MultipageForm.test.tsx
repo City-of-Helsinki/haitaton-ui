@@ -45,6 +45,36 @@ test('renders form heading and labels for form steps', () => {
   expect(screen.getByText('Vaihe 1/2: Title 1')).toBeInTheDocument();
 });
 
+test('renders form notification if texts are given', () => {
+  const formSteps = [
+    {
+      element: <Page1 />,
+      label: 'Title 1',
+      state: StepState.available,
+    },
+    {
+      element: <Page2 />,
+      label: 'Title 2',
+      state: StepState.disabled,
+    },
+  ];
+
+  const handleSave = jest.fn();
+
+  render(
+    <MultipageForm
+      heading="Test form"
+      formSteps={formSteps}
+      onStepChange={handleSave}
+      notificationLabel="Notification label"
+      notificationText="Notification text"
+    />
+  );
+
+  expect(screen.getByText('Notification label')).toBeInTheDocument();
+  expect(screen.getByText('Notification text')).toBeInTheDocument();
+});
+
 test('form pages can be navigated', async () => {
   const formSteps = [
     {
@@ -97,4 +127,41 @@ test('form pages can be navigated', async () => {
   expect(handleSave).toHaveBeenCalledTimes(4);
   expect(screen.getByText('Vaihe 1/2: Title 1')).toBeDefined();
   expect(screen.getByText('Page 1')).toBeDefined();
+});
+
+test('displays loading spinner when isLoading', () => {
+  const formSteps = [
+    {
+      element: <Page1 />,
+      label: 'Title 1',
+      state: StepState.available,
+    },
+  ];
+
+  render(<MultipageForm heading="Test form" formSteps={formSteps} isLoading />);
+
+  expect(screen.queryByTestId('multipage-form-loading-spinner')).toBeInTheDocument();
+});
+
+test('displays loading spinner with loading text when isLoading and loading text set', () => {
+  const formSteps = [
+    {
+      element: <Page1 />,
+      label: 'Title 1',
+      state: StepState.available,
+    },
+  ];
+  const loadingText = 'Loading...';
+
+  render(
+    <MultipageForm
+      heading="Test form"
+      formSteps={formSteps}
+      isLoading
+      isLoadingText={loadingText}
+    />
+  );
+
+  expect(screen.queryByTestId('multipage-form-loading-spinner')).toBeInTheDocument();
+  expect(screen.queryByText(loadingText)).toBeInTheDocument();
 });

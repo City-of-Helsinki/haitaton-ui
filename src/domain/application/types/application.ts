@@ -105,7 +105,6 @@ export type ApplicationAttachmentMetadata = {
   fileName: string;
   createdByUserId: string;
   createdAt: string;
-  scanStatus: 'PENDING' | 'FAILED' | 'OK';
   applicationId: number;
   attachmentType: AttachmentType;
 };

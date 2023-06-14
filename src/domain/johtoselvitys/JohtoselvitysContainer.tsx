@@ -136,7 +136,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     setValue,
     handleSubmit,
     trigger,
-    formState: { isDirty },
+    formState: { isDirty, errors: formErrors },
     reset,
   } = formContext;
 
@@ -154,6 +154,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
   const navigateToApplicationList = useNavigateToApplicationList(hanke?.hankeTunnus);
 
   const [showSaveNotification, setShowSaveNotification] = useState(false);
+
+  const [attachmentsUploading, setAttachmentsUploading] = useState(false);
 
   const applicationSaveMutation = useMutation(saveApplication, {
     onMutate() {
@@ -235,8 +237,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
 
   function saveAndQuit() {
     applicationSaveMutation.mutate(convertFormStateToApplicationData(getValues()), {
-      onSuccess() {
-        navigateToApplicationList();
+      onSuccess(data) {
+        navigateToApplicationList(data.hankeTunnus);
 
         setNotification(true, {
           position: 'top-right',
@@ -257,6 +259,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
   }
 
   async function saveAttachments() {
+    setAttachmentsUploading(true);
+
     const applicationId = getValues('id');
 
     if (!applicationId) {
@@ -272,6 +276,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     );
 
     const results = await Promise.allSettled(mutations);
+
+    setAttachmentsUploading(false);
 
     if (results.some((result) => result.status === 'rejected')) {
       throw new Error('Error uploading attachments');
@@ -312,6 +318,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         'applicationData.propertyDeveloperWithContacts',
         'applicationData.representativeWithContacts',
       ],
+      // Attachments page
+      ['attachmentNumber'],
     ],
     [ordererKey]
   );
@@ -402,6 +410,19 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     </div>
   );
 
+  function validateStepChange(changeStep: () => void, stepIndex: number) {
+    return changeFormStep(changeStep, pageFieldsToValidate[stepIndex], trigger);
+  }
+
+  const notificationLabel =
+    getValues('alluStatus') === AlluStatus.PENDING
+      ? t('form:notifications:labels:editSentApplication')
+      : undefined;
+  const notificationText =
+    getValues('alluStatus') === AlluStatus.PENDING
+      ? t('form:notifications:descriptions:editSentApplication')
+      : undefined;
+
   return (
     <FormProvider {...formContext}>
       {/* Notification for saving application */}
@@ -416,13 +437,22 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         heading={t('johtoselvitysForm:pageHeader')}
         subHeading={hankeNameText}
         formSteps={formSteps}
+        isLoading={attachmentsUploading}
+        isLoadingText={t('form:buttons:loadingAttachments')}
         onStepChange={handleStepChange}
         onSubmit={handleSubmit(sendCableApplication)}
+        stepChangeValidator={validateStepChange}
+        notificationLabel={notificationLabel}
+        notificationText={notificationText}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           async function handlePageChange(handlerFunction: () => void): Promise<void> {
             try {
-              if (activeStepIndex === 3 && newAttachments.length > 0) {
+              if (
+                activeStepIndex === 3 &&
+                newAttachments.length > 0 &&
+                !formErrors.attachmentNumber
+              ) {
                 await saveAttachments();
                 setNewAttachments([]);
               }
@@ -436,24 +466,25 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
           }
 
           async function handleNextPage() {
-            function nextPageHandler() {
-              changeFormStep(handleNext, pageFieldsToValidate[activeStepIndex], trigger);
-            }
-            await handlePageChange(nextPageHandler);
+            await handlePageChange(handleNext);
           }
 
           async function handleSaveAndQuit() {
-            await handlePageChange(saveAndQuit);
+            // Make sure that name for the application exists before saving and quitting
+            const applicationNameValid = await trigger('applicationData.name', {
+              shouldFocus: true,
+            });
+            if (applicationNameValid) {
+              await handlePageChange(saveAndQuit);
+            }
           }
 
-          const firstStep = activeStepIndex === 0;
           const lastStep = activeStepIndex === formSteps.length - 1;
           const showSendButton =
             lastStep && isApplicationDraft(getValues('alluStatus') as AlluStatus | null);
 
-          const saveAndQuitIsLoading =
-            applicationSaveMutation.isLoading || attachmentUploadMutation.isLoading;
-          const saveAndQuitLoadingText = attachmentUploadMutation.isLoading
+          const saveAndQuitIsLoading = applicationSaveMutation.isLoading || attachmentsUploading;
+          const saveAndQuitLoadingText = attachmentsUploading
             ? t('form:buttons:loadingAttachments')
             : t('common:buttons:savingText');
           return (
@@ -462,9 +493,9 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
               totalSteps={formSteps.length}
               onPrevious={handlePreviousPage}
               onNext={handleNextPage}
-              previousButtonIsLoading={attachmentUploadMutation.isLoading}
+              previousButtonIsLoading={attachmentsUploading}
               previousButtonLoadingText={t('form:buttons:loadingAttachments')}
-              nextButtonIsLoading={attachmentUploadMutation.isLoading}
+              nextButtonIsLoading={attachmentsUploading}
               nextButtonLoadingText={t('form:buttons:loadingAttachments')}
             >
               <ApplicationCancel
@@ -476,18 +507,16 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
                 saveAndQuitIsLoadingText={saveAndQuitLoadingText}
               />
 
-              {!firstStep && (
-                <Button
-                  variant="supplementary"
-                  iconLeft={<IconSaveDiskette aria-hidden="true" />}
-                  data-testid="save-form-btn"
-                  onClick={handleSaveAndQuit}
-                  isLoading={saveAndQuitIsLoading}
-                  loadingText={saveAndQuitLoadingText}
-                >
-                  {t('hankeForm:saveDraftButton')}
-                </Button>
-              )}
+              <Button
+                variant="supplementary"
+                iconLeft={<IconSaveDiskette aria-hidden="true" />}
+                data-testid="save-form-btn"
+                onClick={handleSaveAndQuit}
+                isLoading={saveAndQuitIsLoading}
+                loadingText={saveAndQuitLoadingText}
+              >
+                {t('hankeForm:saveDraftButton')}
+              </Button>
 
               {showSendButton && (
                 <Button

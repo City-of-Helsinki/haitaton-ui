@@ -1,9 +1,10 @@
 import yup from '../../common/utils/yup';
 import isValidBusinessId from '../../common/utils/isValidBusinessId';
+import { MAX_ATTACHMENT_NUMBER } from './constants';
 
 const addressSchema = yup.object().shape({
   streetAddress: yup.object().shape({
-    streetName: yup.string().nullable().required(),
+    streetName: yup.string().trim().nullable().required(),
   }),
 });
 
@@ -12,14 +13,14 @@ const contactSchema = yup
   .nullable()
   .default(null)
   .shape({
-    firstName: yup.string().required(),
-    lastName: yup.string().required(),
-    email: yup.string().email().max(100).required(),
-    phone: yup.string().max(20).required(),
+    firstName: yup.string().trim().required(),
+    lastName: yup.string().trim().required(),
+    email: yup.string().trim().email().max(100).required(),
+    phone: yup.string().trim().max(20).required(),
   });
 
 const customerSchema = contactSchema.omit(['firstName', 'lastName']).shape({
-  name: yup.string().required(),
+  name: yup.string().trim().required(),
   type: yup.string().nullable().required(),
   registryKey: yup // business id i.e. Y-tunnus
     .string()
@@ -43,9 +44,9 @@ const areaSchema = yup.object().shape({
 
 export const validationSchema = yup.object().shape({
   applicationData: yup.object().shape({
-    name: yup.string().required(),
+    name: yup.string().trim().required(),
     postalAddress: addressSchema,
-    workDescription: yup.string().required(),
+    workDescription: yup.string().trim().required(),
     rockExcavation: yup.boolean().nullable().required(),
     constructionWork: yup
       .boolean()
@@ -75,4 +76,5 @@ export const validationSchema = yup.object().shape({
     areas: yup.array(areaSchema).min(1),
   }),
   selfIntersectingPolygon: yup.boolean().isFalse(),
+  attachmentNumber: yup.number().max(MAX_ATTACHMENT_NUMBER),
 });

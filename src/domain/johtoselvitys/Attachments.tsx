@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FileInput, IconTrash, Notification } from 'hds-react';
 import { Box } from '@chakra-ui/react';
@@ -12,6 +12,7 @@ import { ApplicationAttachmentMetadata } from '../application/types/application'
 import { deleteAttachment } from '../application/attachments';
 import { JohtoselvitysFormValues } from './types';
 import ErrorLoadingText from '../../common/components/errorLoadingText/ErrorLoadingText';
+import { MAX_ATTACHMENT_NUMBER } from './constants';
 
 type Props = {
   existingAttachments: ApplicationAttachmentMetadata[] | undefined;
@@ -29,7 +30,13 @@ function Attachments({
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const locale = useLocale();
-  const { getValues } = useFormContext<JohtoselvitysFormValues>();
+  const {
+    getValues,
+    setValue,
+    formState: { errors },
+  } = useFormContext<JohtoselvitysFormValues>();
+
+  const alluStatus = getValues('alluStatus');
 
   const [fileToDelete, setFileToDelete] = useState<ApplicationAttachmentMetadata | null>(null);
   const [showFileDeleteDialog, setShowFileDeleteDialog] = useState(false);
@@ -38,6 +45,13 @@ function Attachments({
       queryClient.invalidateQueries('attachments');
     },
   });
+
+  useEffect(() => {
+    const attachmentNumber =
+      newAttachments.length + (existingAttachments ? existingAttachments.length : 0);
+
+    setValue('attachmentNumber', attachmentNumber, { shouldValidate: true });
+  }, [newAttachments, existingAttachments, setValue]);
 
   function handleFilesChange(files: File[]) {
     onAddAttachments(files);
@@ -66,6 +80,10 @@ function Attachments({
     attachmentDeleteMutation.reset();
   }
 
+  const showDeleteButton = useCallback(() => {
+    return alluStatus === null;
+  }, [alluStatus]);
+
   return (
     <Box mb="var(--spacing-l)">
       <Text tag="p" spacingBottom="l">
@@ -84,7 +102,11 @@ function Attachments({
           {attachmentsLoadError ? (
             <ErrorLoadingText />
           ) : (
-            <FileList files={existingAttachments} onDeleteFile={handleFileDelete} />
+            <FileList
+              files={existingAttachments}
+              onDeleteFile={handleFileDelete}
+              showDeleteButton={showDeleteButton}
+            />
           )}
         </Box>
       )}
@@ -132,6 +154,18 @@ function Attachments({
             fileName: fileToDelete?.fileName,
           })}
         </Notification>
+      )}
+
+      {errors.attachmentNumber && (
+        <Notification
+          position="inline"
+          type="error"
+          label={t('hakemus:notifications:maxAttachmentsNumberExceeded', {
+            maxNumber: MAX_ATTACHMENT_NUMBER,
+          })}
+          notificationAriaLabel={t('common:components:notification:notification')}
+          style={{ marginTop: 'var(--spacing-l)' }}
+        />
       )}
     </Box>
   );

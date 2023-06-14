@@ -295,21 +295,6 @@ export const BasicHankeInfo: React.FC = () => {
         />
       </ResponsiveGrid>
 
-      {/* TODO: Getting the profile information will be done in HAI-1398 */}
-      {/* Until then, user can input name */}
-      {/* <Text tag="p" styleAs="body-m" spacingBottom="xs">
-        <Box as="span" fontWeight={500}>
-          {t('form:yhteystiedot:labels:nimi')} *
-        </Box>
-      </Text>
-      <Text tag="p" styleAs="body-l" spacingBottom="xs">
-        {getValues(`applicationData.${selectedRole}.contacts.0.name`)}
-      </Text> */}
-      {/* <Text tag="p" styleAs="body-m" spacingBottom="s">
-        <Box as="span" color="var(--color-black-60)">
-          {t('form:labels:fromHelsinkiProfile')}
-        </Box>
-      </Text> */}
       {customerTypes.map((customerType) => {
         if (customerType === selectedRole) {
           return (
@@ -319,11 +304,19 @@ export const BasicHankeInfo: React.FC = () => {
                   name={`applicationData.${selectedRole}.contacts.0.firstName`}
                   label={t('hankeForm:labels:etunimi')}
                   required
+                  readOnly={Boolean(user.data?.profile.given_name)}
+                  helperText={
+                    user.data?.profile.given_name ? t('form:labels:fromHelsinkiProfile') : ''
+                  }
                 />
                 <TextInput
                   name={`applicationData.${selectedRole}.contacts.0.lastName`}
                   label={t('hankeForm:labels:sukunimi')}
                   required
+                  readOnly={Boolean(user.data?.profile.family_name)}
+                  helperText={
+                    user.data?.profile.family_name ? t('form:labels:fromHelsinkiProfile') : ''
+                  }
                 />
               </ResponsiveGrid>
 

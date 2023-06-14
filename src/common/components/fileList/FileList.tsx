@@ -11,14 +11,19 @@ import FileDownloadLink from '../fileDownloadLink/FileDownloadLink';
 type Props = {
   files: ApplicationAttachmentMetadata[];
   onDeleteFile: (file: ApplicationAttachmentMetadata) => void;
+  // eslint-disable-next-line react/require-default-props
+  showDeleteButton?: (file: ApplicationAttachmentMetadata) => boolean;
 };
 
-function FileList({ files, onDeleteFile }: Props) {
+function FileList({ files, onDeleteFile, showDeleteButton }: Props) {
   const { t } = useTranslation();
 
   return (
     <ul data-testid="file-list">
       {files.map((fileMetadata) => {
+        const showDeleteButtonForFile =
+          showDeleteButton === undefined || showDeleteButton(fileMetadata);
+
         return (
           <Flex
             as="li"
@@ -41,16 +46,18 @@ function FileList({ files, onDeleteFile }: Props) {
               {t('form:labels:added')}{' '}
               {format(new Date(fileMetadata.createdAt), 'd.M.yyyy kk:mm', { locale: fi })}
             </Box>
-            <Button
-              iconLeft={<IconCross aria-hidden />}
-              variant="supplementary"
-              size="small"
-              style={{ color: 'var(--color-error)' }}
-              onClick={() => onDeleteFile(fileMetadata)}
-              data-testid={`delete-${fileMetadata.id}`}
-            >
-              {t('common:buttons:remove')}
-            </Button>
+            {showDeleteButtonForFile && (
+              <Button
+                iconLeft={<IconCross aria-hidden />}
+                variant="supplementary"
+                size="small"
+                style={{ color: 'var(--color-error)' }}
+                onClick={() => onDeleteFile(fileMetadata)}
+                data-testid={`delete-${fileMetadata.id}`}
+              >
+                {t('common:buttons:remove')}
+              </Button>
+            )}
           </Flex>
         );
       })}

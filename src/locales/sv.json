@@ -2,9 +2,11 @@
   "authentication": {
     "deviceTimeError": "Du kan inte logga in eftersom klockan i din enhet går mer än 5 minuter fel. Ställ in klockan och försök på nytt.",
     "permissionRequestDenied": "Du måste godkänna de rättigheter vi begärt för att använda denna tjänst. Var god försök logga in på nytt.",
-    "genericError": "Det inträffade ett fel. Försök på nytt.",
+    "genericError": "Det inträffade ett fel att logga in. Försök på nytt.",
     "loginButton": "Logga in",
-    "logoutButton": "Logga ut"
+    "logoutButton": "Logga ut",
+    "homePageLink": "Återgå till Haitatons <a>framsida.</a>",
+    "supportLink": "Du kan också kontakta Haitaton tekniska support på e-postadressen <a>haitatontuki@hel.fi.</a>"
   },
   "common": {
     "increment": "Lägg till",
@@ -269,6 +271,13 @@
       "meta": {
         "title": "Haitaton Beta - Arbetsanvisningar"
       }
+    },
+    "MANUAL": {
+      "path": " https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-bruksanvisning.pdf",
+      "headerLabel": "Bruksanvisning och support (PDF)",
+      "meta": {
+        "title": "Haitaton - Bruksanvisning och support"
+      }
     }
   },
   "hanke": {
@@ -499,7 +508,8 @@
       "sendSuccessLabel": "SV:Hakemus lähetetty",
       "sendErrorLabel": "SV:Hakemuksen lähetys epäonnistui",
       "sendSuccessText": "SV:Hakemuksen lähetys onnistui",
-      "sendErrorText": "SV:Hakemusta ei voitu lähettää. Tarkista hakemuksen oikea sisältö ja että olet kirjautunut."
+      "sendErrorText": "SV:Hakemusta ei voitu lähettää. Tarkista hakemuksen oikea sisältö ja että olet kirjautunut.",
+      "maxAttachmentsNumberExceeded": "Maximalt antal bilagor ({{maxNumber}} st) har överskridits"
     },
     "buttons": {
       "continueToApplication": "SV:Jatka hakemukseen",

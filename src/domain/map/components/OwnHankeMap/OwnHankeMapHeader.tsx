@@ -6,7 +6,10 @@ import useLinkPath from '../../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../../common/types/route';
 import styles from './OwnHankeMapHeader.module.scss';
 
-const OwnHankeMapHeader: React.FC<{ hankeTunnus: string }> = ({ hankeTunnus }) => {
+const OwnHankeMapHeader: React.FC<{ hankeTunnus: string; showLink?: boolean }> = ({
+  hankeTunnus,
+  showLink = true,
+}) => {
   const { t } = useTranslation();
   const getFullPageMapPath = useLinkPath(ROUTES.FULL_PAGE_MAP);
 
@@ -18,12 +21,19 @@ const OwnHankeMapHeader: React.FC<{ hankeTunnus: string }> = ({ hankeTunnus }) =
           {t('hankePortfolio:areaLocation')}
         </Text>
       </div>
-      <div>
-        <Link href={getFullPageMapPath({ hankeTunnus })} openInNewTab disableVisitedStyles size="S">
-          {t('hankePortfolio:openMapToNewWindow')}
-        </Link>
-        <IconLinkExternal size="xs" />
-      </div>
+      {showLink && (
+        <div>
+          <Link
+            href={getFullPageMapPath({ hankeTunnus })}
+            openInNewTab
+            disableVisitedStyles
+            size="S"
+          >
+            {t('hankePortfolio:openMapToNewWindow')}
+          </Link>
+          <IconLinkExternal size="xs" />
+        </div>
+      )}
     </header>
   );
 };
