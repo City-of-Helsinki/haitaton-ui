@@ -508,7 +508,8 @@
       "sendSuccessLabel": "EN:Hakemus lähetetty",
       "sendErrorLabel": "EN:Hakemuksen lähetys epäonnistui",
       "sendSuccessText": "EN:Hakemuksen lähetys onnistui",
-      "sendErrorText": "EN:Hakemusta ei voitu lähettää. Tarkista hakemuksen oikea sisältö ja että olet kirjautunut."
+      "sendErrorText": "EN:Hakemusta ei voitu lähettää. Tarkista hakemuksen oikea sisältö ja että olet kirjautunut.",
+      "maxAttachmentsNumberExceeded": "The maximum number of attachments ({{maxNumber}} items) has been exceeded"
     },
     "buttons": {
       "continueToApplication": "EN:Jatka hakemukseen",
