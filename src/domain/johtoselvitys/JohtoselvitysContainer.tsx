@@ -483,9 +483,8 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
           const showSendButton =
             lastStep && isApplicationDraft(getValues('alluStatus') as AlluStatus | null);
 
-          const saveAndQuitIsLoading =
-            applicationSaveMutation.isLoading || attachmentUploadMutation.isLoading;
-          const saveAndQuitLoadingText = attachmentUploadMutation.isLoading
+          const saveAndQuitIsLoading = applicationSaveMutation.isLoading || attachmentsUploading;
+          const saveAndQuitLoadingText = attachmentsUploading
             ? t('form:buttons:loadingAttachments')
             : t('common:buttons:savingText');
           return (
@@ -494,9 +493,9 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
               totalSteps={formSteps.length}
               onPrevious={handlePreviousPage}
               onNext={handleNextPage}
-              previousButtonIsLoading={attachmentUploadMutation.isLoading}
+              previousButtonIsLoading={attachmentsUploading}
               previousButtonLoadingText={t('form:buttons:loadingAttachments')}
-              nextButtonIsLoading={attachmentUploadMutation.isLoading}
+              nextButtonIsLoading={attachmentsUploading}
               nextButtonLoadingText={t('form:buttons:loadingAttachments')}
             >
               <ApplicationCancel
