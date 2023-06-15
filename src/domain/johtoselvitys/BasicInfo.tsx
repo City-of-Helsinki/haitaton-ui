@@ -89,6 +89,8 @@ export const BasicHankeInfo: React.FC = () => {
   const { t } = useTranslation();
   const user = useUser();
 
+  const applicationSent: boolean = getValues('alluStatus') !== null;
+
   const [selectedRole, setSelectedRole] = useState(() =>
     // Set contact key with orderer field true to be the initial selected role.
     findOrdererKey(getValues('applicationData'))
@@ -292,6 +294,7 @@ export const BasicHankeInfo: React.FC = () => {
           onChange={handleRoleChange}
           helper={t('form:labels:roleHelper')}
           required
+          disabled={applicationSent}
         />
       </ResponsiveGrid>
 
@@ -308,6 +311,7 @@ export const BasicHankeInfo: React.FC = () => {
                   helperText={
                     user.data?.profile.given_name ? t('form:labels:fromHelsinkiProfile') : ''
                   }
+                  disabled={applicationSent}
                 />
                 <TextInput
                   name={`applicationData.${selectedRole}.contacts.0.lastName`}
@@ -317,6 +321,7 @@ export const BasicHankeInfo: React.FC = () => {
                   helperText={
                     user.data?.profile.family_name ? t('form:labels:fromHelsinkiProfile') : ''
                   }
+                  disabled={applicationSent}
                 />
               </ResponsiveGrid>
 
@@ -325,11 +330,13 @@ export const BasicHankeInfo: React.FC = () => {
                   name={`applicationData.${customerType}.contacts.0.email`}
                   label={t('form:yhteystiedot:labels:email')}
                   required
+                  disabled={applicationSent}
                 />
                 <TextInput
                   name={`applicationData.${customerType}.contacts.0.phone`}
                   label={t('form:yhteystiedot:labels:puhelinnumero')}
                   required
+                  disabled={applicationSent}
                 />
               </ResponsiveGrid>
             </React.Fragment>
