@@ -146,6 +146,8 @@ export const BasicHankeInfo: React.FC = () => {
   ];
 
   function handleRoleChange(role: Option) {
+    if (role.value === selectedRole) return;
+
     const previousRoleContacts = getValues(`applicationData.${selectedRole}.contacts`);
     const contactToMove = previousRoleContacts.slice(0, 1);
 
