@@ -41,7 +41,7 @@ const DatePicker: React.FC<PropTypes> = ({
       <Controller
         name={name}
         control={control}
-        render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
+        render={({ field: { onChange, onBlur, value, ref }, fieldState: { error } }) => (
           <div className={styles.datePicker}>
             <div className={styles.tooltip}>
               {!!tooltip && (
@@ -66,6 +66,7 @@ const DatePicker: React.FC<PropTypes> = ({
                 helperText={helperText}
                 errorText={getInputErrorText(t, error)}
                 ref={ref}
+                onBlur={onBlur}
                 onChange={(date) => {
                   const convertedDateString = convertFinnishDate(date);
                   onChange(toEndOfDayUTCISO(new Date(convertedDateString)));
