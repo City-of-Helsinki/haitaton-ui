@@ -218,7 +218,7 @@
       }
     },
     "HANKE": {
-      "path": "/hankesalkku/:hankeTunnus",
+      "path": "/projektportfolj/:hankeTunnus",
       "headerLabel": "Projekt",
       "meta": {
         "title": "Haitaton – projektsida"
@@ -281,7 +281,7 @@
       }
     },
     "EDIT_JOHTOSELVITYSHAKEMUS": {
-      "path": "/johtoselvityshakemus/:id/muokkaa",
+      "path": "/ansokan-om-ledningsutredning/:id/redigera",
       "headerLabel": "Ändra ansökan om ledningsutredning",
       "meta": {
         "title": "Haitaton – Ändra ansökan om ledningsutredning"

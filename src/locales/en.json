@@ -218,7 +218,7 @@
       }
     },
     "HANKE": {
-      "path": "/hankesalkku/:hankeTunnus",
+      "path": "/projectportfolio/:hankeTunnus",
       "headerLabel": "Projects",
       "meta": {
         "title": "Haitaton - Project page"
@@ -281,7 +281,7 @@
       }
     },
     "EDIT_JOHTOSELVITYSHAKEMUS": {
-      "path": "/johtoselvityshakemus/:id/muokkaa",
+      "path": "/cable-report-application/:id/edit",
       "headerLabel": "Edit cable report application",
       "meta": {
         "title": "Haitaton - Edit cable report application"
