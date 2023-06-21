@@ -488,6 +488,18 @@ test('Should change users own role and its fields correctly', async () => {
   );
 });
 
+test('Should not change anything if selecting the same role again', async () => {
+  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+
+  fireEvent.click(screen.getByRole('button', { name: /rooli/i }));
+  // Select the role to be Hakija again
+  await user.click(screen.getAllByText(/hakija/i)[1]);
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+  // Check that there isn't another contact added
+  expect(screen.queryByTestId('customerWithContacts-1')).not.toBeInTheDocument();
+});
+
 test('Should not show send button when application has moved to pending state', async () => {
   const { user } = render(<JohtoselvitysContainer application={applications[1]} />);
 
