@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Checkbox, Link, Select, SelectionGroup } from 'hds-react';
+import { Checkbox, Link, Notification, Select, SelectionGroup } from 'hds-react';
 import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { isEqual } from 'lodash';
@@ -284,6 +284,16 @@ export const BasicHankeInfo: React.FC = () => {
       <Text tag="h2" styleAs="h4" weight="bold" spacingBottom="s">
         {t('form:labels:omatTiedot')}
       </Text>
+
+      {applicationSent && (
+        <Notification
+          label={t('hakemus:notifications:sentApplicationPersonalInfoNotification')}
+          size="small"
+          style={{ marginBottom: 'var(--spacing-s)' }}
+        >
+          {t('hakemus:notifications:sentApplicationPersonalInfoNotification')}
+        </Notification>
+      )}
 
       <ResponsiveGrid>
         <Select<Option>

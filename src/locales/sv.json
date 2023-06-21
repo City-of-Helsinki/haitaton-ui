@@ -509,7 +509,8 @@
       "sendErrorLabel": "SV:Hakemuksen lähetys epäonnistui",
       "sendSuccessText": "SV:Hakemuksen lähetys onnistui",
       "sendErrorText": "SV:Hakemusta ei voitu lähettää. Tarkista hakemuksen oikea sisältö ja että olet kirjautunut.",
-      "maxAttachmentsNumberExceeded": "Maximalt antal bilagor ({{maxNumber}} st) har överskridits"
+      "maxAttachmentsNumberExceeded": "Maximalt antal bilagor ({{maxNumber}} st) har överskridits",
+      "sentApplicationPersonalInfoNotification": "Egna upplysningar för den inskickade ansökan kan inte redigeras"
     },
     "buttons": {
       "continueToApplication": "SV:Jatka hakemukseen",
