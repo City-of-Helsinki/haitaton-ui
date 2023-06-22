@@ -411,13 +411,13 @@
       "KOLME": "Långvarig kontinuerlig olägenhet"
     },
     "alue": {
-      "title": "Hankealue {{index}}",
-      "duration": "Hankealueen kesto",
-      "surfaceArea": "Piirroksen pinta-ala",
-      "totalSurfaceArea": "Alueiden kokonaispinta-ala",
-      "totalSurfaceAreaLong": "Hanke-alueiden kokonaispinta-ala",
-      "liikenneverkollinenHaitta": "Hankealueen liikenneverkollinen haitta",
-      "haittaMaarittelyt": "Hankealueen omat haittamäärittelyt"
+      "title": "Projektområde {{index}}",
+      "duration": "Projektområdets varaktighet",
+      "surfaceArea": "Ritningens areal",
+      "totalSurfaceArea": "Områdenas totala areal",
+      "totalSurfaceAreaLong": "Projektområdenas totala areal",
+      "liikenneverkollinenHaitta": "Olägenhet för trafiknätet inom projektområdet",
+      "haittaMaarittelyt": "Projektområdets egna skadedefinitioner"
     }
   },
   "hankeForm": {
@@ -475,7 +475,7 @@
       "omaOrganisaatio": "Lägg till den egna organisationen",
       "insertOmaOrganisaatio": "Skriv in den egna organisationen",
       "rights": "Din användarrätt för projektet",
-      "perustaja": "Perustaja"
+      "perustaja": "Grundare"
     },
     "toolTips": {
       "tipOpenLabel": "Anvisningen",
@@ -638,7 +638,7 @@
     "editHanke": "Redigera projektets uppgifter"
   },
   "hankeIndexes": {
-    "haittaindeksi": "Haittaindeksi",
+    "haittaindeksi": "Invaliditetsindex",
     "haittaindeksit": "Olägenhetsindex",
     "haittaindexTooltip": "Olägenhetsindex beräknas enligt projektets område. Indexen uppdateras när du sparar formulärets uppgifter eller går till nästa sida.",
     "liikennehaittaindeksi": "Trafikolägenhetsindex",
@@ -803,9 +803,9 @@
     "buttons": {
       "edit": "Modifiera projektet",
       "delete": "Radera projektet",
-      "endHanke": "Päätä hanke",
-      "addApplication": "Lisää hakemus",
-      "editRights": "Hallitse käyttöoikeuksia",
+      "endHanke": "Avsluta projektet",
+      "addApplication": "Lägg till ansökan",
+      "editRights": "Hantera användarrättigheter",
       "toFirstPage": "Till listans första sida",
       "toPreviousPage": "Till listans föregående sida",
       "toNextPage": "Till listans följande sida",

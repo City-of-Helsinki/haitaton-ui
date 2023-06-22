@@ -411,13 +411,13 @@
       "KOLME": "Long-term permanent nuisance"
     },
     "alue": {
-      "title": "Hankealue {{index}}",
-      "duration": "Hankealueen kesto",
-      "surfaceArea": "Piirroksen pinta-ala",
-      "totalSurfaceArea": "Alueiden kokonaispinta-ala",
-      "totalSurfaceAreaLong": "Hanke-alueiden kokonaispinta-ala",
-      "liikenneverkollinenHaitta": "Hankealueen liikenneverkollinen haitta",
-      "haittaMaarittelyt": "Hankealueen omat haittamäärittelyt"
+      "title": "Project area {{index}}",
+      "duration": "Project area duration",
+      "surfaceArea": "Area of the drawing",
+      "totalSurfaceArea": "Total area",
+      "totalSurfaceAreaLong": "Total area of project areas",
+      "liikenneverkollinenHaitta": "Transport network nuisance of the project area",
+      "haittaMaarittelyt": "The project area’s own nuisance definitions"
     }
   },
   "hankeForm": {
@@ -475,7 +475,7 @@
       "omaOrganisaatio": "Add your own organisation",
       "insertOmaOrganisaatio": "Enter your own organisation",
       "rights": "Your access rights to the project",
-      "perustaja": "Perustaja"
+      "perustaja": "Established by"
     },
     "toolTips": {
       "tipOpenLabel": "Instruction",
@@ -638,7 +638,7 @@
     "editHanke": "Edit project Information"
   },
   "hankeIndexes": {
-    "haittaindeksi": "Haittaindeksi",
+    "haittaindeksi": "Nuisance index",
     "haittaindeksit": "Nuisance indices",
     "haittaindexTooltip": "Nuisance indices are calculated by project area. The indices are updated when you save the form or go to the next page.",
     "liikennehaittaindeksi": "Traffic nuisance index",
@@ -803,9 +803,9 @@
     "buttons": {
       "edit": "Edit project",
       "delete": "Remove project",
-      "endHanke": "Päätä hanke",
-      "addApplication": "Lisää hakemus",
-      "editRights": "Hallitse käyttöoikeuksia",
+      "endHanke": "End project",
+      "addApplication": "Add application",
+      "editRights": "Manage access rights",
       "toFirstPage": "To the first page of the list",
       "toPreviousPage": "To the previous page of the list",
       "toNextPage": "To the next page of the list",
