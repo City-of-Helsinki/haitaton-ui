@@ -592,7 +592,8 @@
       "cancelSuccessLabel": "Ansökan återtogs",
       "cancelSuccessText": "Ansökan kunde återtas",
       "noApplications": "Inga ansökningar har lagts till projektet",
-      "maxAttachmentsNumberExceeded": "Maximalt antal bilagor ({{maxNumber}} st) har överskridits"
+      "maxAttachmentsNumberExceeded": "Maximalt antal bilagor ({{maxNumber}} st) har överskridits",
+      "sentApplicationPersonalInfoNotification": "Egna upplysningar för den inskickade ansökan kan inte redigeras"
     },
     "status": {
       "PENDING_CLIENT": "Ses av myndigheten",

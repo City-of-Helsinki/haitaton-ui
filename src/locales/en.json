@@ -592,7 +592,8 @@
       "cancelSuccessLabel": "Application cancelled",
       "cancelSuccessText": "The application has been cancelled",
       "noApplications": "No applications have been added to the project",
-      "maxAttachmentsNumberExceeded": "The maximum number of attachments ({{maxNumber}} items) has been exceeded"
+      "maxAttachmentsNumberExceeded": "The maximum number of attachments ({{maxNumber}} items) has been exceeded",
+      "sentApplicationPersonalInfoNotification": "The personal information of the submitted application cannot be edited"
     },
     "status": {
       "PENDING_CLIENT": "Visible to authorities",
