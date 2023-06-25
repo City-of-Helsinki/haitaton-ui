@@ -302,10 +302,10 @@
       }
     },
     "PRIVACY_POLICY": {
-      "path": "/registerbeskrivning",
-      "headerLabel": "Registerbeskrivning",
+      "path": "/integritetpolicy",
+      "headerLabel": "Integritetpolicy",
       "meta": {
-        "title": "Haitaton - Registerbeskrivning"
+        "title": "Haitaton - Integritetpolicy"
       }
     },
     "REFERENCES": {
@@ -323,8 +323,8 @@
       }
     },
     "MANUAL": {
-      "path": " https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-bruksanvisning.pdf",
-      "headerLabel": "Bruksanvisning och support (PDF)",
+      "path": "/bruksanvisning",
+      "headerLabel": "Bruksanvisning och support",
       "meta": {
         "title": "Haitaton - Bruksanvisning och support"
       }
@@ -837,9 +837,11 @@
     "drawPolygonButtonAria": "Rita en polygon på kartan"
   },
   "staticPages": {
-    "info": {
+    "infoPage": {
       "title": "Information om Haitaton",
-      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+      "materials": "Material",
+      "mapMaterials": "Kartmaterial",
+      "imageCopyrights": "Författarinformation till bilderna"
     },
     "references": {
       "title": "Referenser",
@@ -870,8 +872,19 @@
       "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
     },
     "privacyPolicy": {
-      "title": "Registerbeskrivning",
-      "linkText": "Öppna registerbeskrivning här (pdf)"
+      "title": "Integritetpolicy",
+      "linkText": "Kundregister för tillstånds- och uthyrningsärenden inom områdesanvändning (pdf)",
+      "linkUrl": "https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Kymp/Kundregister%20f%C3%B6r%20tillst%C3%A5nds-%20och%20uthyrnings%C3%A4renden%20inom%20omr%C3%A5desanv%C3%A4ndning.pdf",
+      "secondLinkText": "Register över e-tjänster (pdf)",
+      "secondLinkUrl": "https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Keha/Register%20over%20e-tjanster.pdf"
+    },
+    "manualPage": {
+      "title": "Bruksanvisning och support",
+      "linkText": "Öppna anvisining här (pdf)",
+      "supportText": "",
+      "bodyText": "",
+      "contactText": "",
+      "linkUrl": "https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-bruksanvisning.pdf"
     },
     "404Page": {
       "title": "Sidan finns inte",

@@ -14,7 +14,15 @@ const AccessibilityPage: React.FC = () => {
   return (
     <Container>
       <PageMeta routeData={ACCESSIBILITY} />
-      <Text tag="h1" styleAs="h2" spacing="s" weight="bold" id={SKIP_TO_ELEMENT_ID} tabIndex={-1}>
+      <Text
+        tag="h1"
+        styleAs="h1"
+        spacingTop="l"
+        spacingBottom="xl"
+        weight="bold"
+        id={SKIP_TO_ELEMENT_ID}
+        tabIndex={-1}
+      >
         {t('staticPages:accessibility:title')}
       </Text>
       <HdsContainer style={{ padding: '2rem', backgroundColor: 'white' }}>
