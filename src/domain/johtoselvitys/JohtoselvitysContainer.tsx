@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Button, IconCross, IconEnvelope, IconSaveDiskette, StepState } from 'hds-react';
 import { FormProvider, useForm, FieldPath } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +7,6 @@ import { useMutation, useQueryClient } from 'react-query';
 import { merge } from 'lodash';
 import { AxiosError } from 'axios';
 import { Box } from '@chakra-ui/react';
-import { useBeforeUnload } from 'react-router-dom';
 
 import { JohtoselvitysFormValues } from './types';
 import { BasicHankeInfo } from './BasicInfo';
@@ -36,7 +35,6 @@ import Attachments from './Attachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import { uploadAttachment } from '../application/attachments';
 import useAttachments from '../application/hooks/useAttachments';
-import { APPLICATION_ID_STORAGE_KEY } from '../application/constants';
 
 type Props = {
   hankeData?: HankeData;
@@ -141,20 +139,6 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     formState: { isDirty, errors: formErrors },
     reset,
   } = formContext;
-
-  // Setup a callback to save application id to session storage
-  // when the page is about to be unloaded if the application
-  // has been saved (id exists) and user is not editing
-  // previously created application. This is done so that
-  // user can be redirected to editing route if the page is refreshed.
-  useBeforeUnload(
-    useCallback(() => {
-      const applicationId = getValues('id');
-      if (applicationId && !application) {
-        sessionStorage.setItem(APPLICATION_ID_STORAGE_KEY, applicationId.toString());
-      }
-    }, [getValues, application])
-  );
 
   // If application is created without hanke existing first, get generated hanke data
   // after first save when hankeTunnus is available

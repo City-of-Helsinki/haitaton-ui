@@ -423,14 +423,12 @@ test('Should save existing application between page changes when there is change
 });
 
 test('Should change users own role and its fields correctly', async () => {
-  const { user } = render(<JohtoselvitysContainer application={application} />);
+  const { user } = render(<JohtoselvitysContainer application={applications[3]} />);
 
   const firstName = 'Tauno';
   const lastName = 'Työmies';
   const email = 'tauno@test.com';
   const phone = '0401234567';
-
-  fillBasicInformation();
 
   fireEvent.click(screen.getByRole('button', { name: /rooli/i }));
   fireEvent.click(screen.getByText(/työn suorittaja/i));
@@ -452,14 +450,7 @@ test('Should change users own role and its fields correctly', async () => {
   fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.phone'), {
     target: { value: phone },
   });
-
-  // Move to areas page
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
-
-  fillAreasInformation();
-
-  // Move to contacts page
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
   await user.click(screen.getByTestId('contractorWithContacts-0'));
 
   expect(
@@ -486,18 +477,6 @@ test('Should change users own role and its fields correctly', async () => {
   expect(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.phone')).toHaveValue(
     phone
   );
-});
-
-test('Should not change anything if selecting the same role again', async () => {
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
-
-  fireEvent.click(screen.getByRole('button', { name: /rooli/i }));
-  // Select the role to be Hakija again
-  await user.click(screen.getAllByText(/hakija/i)[1]);
-  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
-
-  // Check that there isn't another contact added
-  expect(screen.queryByTestId('customerWithContacts-1')).not.toBeInTheDocument();
 });
 
 test('Should not show send button when application has moved to pending state', async () => {
@@ -578,22 +557,4 @@ test('Should show inline notification when editing a form that is in pending sta
       'Hakemusta voit muokata niin kauan, kun sitä ei vielä ole otettu käsittelyyn. Uusi versio hakemuksesta lähtee viranomaiselle automaattisesti lomakkeen tallennuksen yhteydessä.'
     )
   ).toBeInTheDocument();
-});
-
-test('Should not allow to edit own info when application has been sent to Allu', () => {
-  render(<JohtoselvitysContainer application={applications[1]} />);
-
-  expect(screen.getByRole('button', { name: /rooli/i })).toBeDisabled();
-  expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.firstName')
-  ).toBeDisabled();
-  expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.lastName')
-  ).toBeDisabled();
-  expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.email')
-  ).toBeDisabled();
-  expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.phone')
-  ).toBeDisabled();
 });

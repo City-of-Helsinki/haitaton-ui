@@ -9,7 +9,6 @@ import JohtoselvitysContainer from '../domain/johtoselvitys/JohtoselvitysContain
 import { useApplication } from '../domain/application/hooks/useApplication';
 import useHanke from '../domain/hanke/hooks/useHanke';
 import ErrorLoadingText from '../common/components/errorLoadingText/ErrorLoadingText';
-import { APPLICATION_ID_STORAGE_KEY } from '../domain/application/constants';
 
 const EditJohtoselvitysPage: React.FC = () => {
   const { id } = useParams();
@@ -17,11 +16,6 @@ const EditJohtoselvitysPage: React.FC = () => {
 
   const applicationQueryResult = useApplication(Number(id));
   const hankeQueryResult = useHanke(applicationQueryResult.data?.hankeTunnus);
-
-  const applicationId = sessionStorage.getItem(APPLICATION_ID_STORAGE_KEY);
-  if (applicationId) {
-    sessionStorage.removeItem(APPLICATION_ID_STORAGE_KEY);
-  }
 
   if (applicationQueryResult.isLoading || hankeQueryResult?.isLoading) {
     return (
