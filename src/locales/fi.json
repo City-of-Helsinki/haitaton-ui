@@ -594,7 +594,8 @@
       "cancelSuccessLabel": "Hakemus peruttiin",
       "cancelSuccessText": "Hakemus peruttiin onnistuneesti",
       "noApplications": "Hankkeella ei ole lisättyjä hakemuksia",
-      "maxAttachmentsNumberExceeded": "Liitteiden enimmäismäärä ({{maxNumber}} kpl) ylitetty"
+      "maxAttachmentsNumberExceeded": "Liitteiden enimmäismäärä ({{maxNumber}} kpl) ylitetty",
+      "sentApplicationPersonalInfoNotification": "Lähetetyn hakemuksen omia tietoja ei voi muokata"
     },
     "status": {
       "PENDING_CLIENT": "Näkyy viranomaiselle",

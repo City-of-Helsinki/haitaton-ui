@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Checkbox, Link, Select, SelectionGroup } from 'hds-react';
+import { Checkbox, Link, Notification, Select, SelectionGroup } from 'hds-react';
 import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { isEqual } from 'lodash';
@@ -89,6 +89,8 @@ export const BasicHankeInfo: React.FC = () => {
   const { t } = useTranslation();
   const user = useUser();
 
+  const applicationSent: boolean = getValues('alluStatus') !== null;
+
   const [selectedRole, setSelectedRole] = useState(() =>
     // Set contact key with orderer field true to be the initial selected role.
     findOrdererKey(getValues('applicationData'))
@@ -146,6 +148,8 @@ export const BasicHankeInfo: React.FC = () => {
   ];
 
   function handleRoleChange(role: Option) {
+    if (role.value === selectedRole) return;
+
     const previousRoleContacts = getValues(`applicationData.${selectedRole}.contacts`);
     const contactToMove = previousRoleContacts.slice(0, 1);
 
@@ -283,6 +287,16 @@ export const BasicHankeInfo: React.FC = () => {
         {t('form:labels:omatTiedot')}
       </Text>
 
+      {applicationSent && (
+        <Notification
+          label={t('hakemus:notifications:sentApplicationPersonalInfoNotification')}
+          size="small"
+          style={{ marginBottom: 'var(--spacing-s)' }}
+        >
+          {t('hakemus:notifications:sentApplicationPersonalInfoNotification')}
+        </Notification>
+      )}
+
       <ResponsiveGrid>
         <Select<Option>
           options={roleOptions}
@@ -292,6 +306,7 @@ export const BasicHankeInfo: React.FC = () => {
           onChange={handleRoleChange}
           helper={t('form:labels:roleHelper')}
           required
+          disabled={applicationSent}
         />
       </ResponsiveGrid>
 
@@ -308,6 +323,7 @@ export const BasicHankeInfo: React.FC = () => {
                   helperText={
                     user.data?.profile.given_name ? t('form:labels:fromHelsinkiProfile') : ''
                   }
+                  disabled={applicationSent}
                 />
                 <TextInput
                   name={`applicationData.${selectedRole}.contacts.0.lastName`}
@@ -317,6 +333,7 @@ export const BasicHankeInfo: React.FC = () => {
                   helperText={
                     user.data?.profile.family_name ? t('form:labels:fromHelsinkiProfile') : ''
                   }
+                  disabled={applicationSent}
                 />
               </ResponsiveGrid>
 
@@ -325,11 +342,13 @@ export const BasicHankeInfo: React.FC = () => {
                   name={`applicationData.${customerType}.contacts.0.email`}
                   label={t('form:yhteystiedot:labels:email')}
                   required
+                  disabled={applicationSent}
                 />
                 <TextInput
                   name={`applicationData.${customerType}.contacts.0.phone`}
                   label={t('form:yhteystiedot:labels:puhelinnumero')}
                   required
+                  disabled={applicationSent}
                 />
               </ResponsiveGrid>
             </React.Fragment>
