@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Flex } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link as HDSLink } from 'hds-react';
 import authService from '../authService';
@@ -52,7 +51,6 @@ const AuthError = ({ errorText }: AuthErrorProps) => {
 };
 
 const OidcCallback = () => {
-  const navigate = useNavigate();
   const { t } = useTranslation();
   const [authenticationError, setAuthenticationError] = useState<AuthenticationError | null>(null);
 
@@ -60,7 +58,7 @@ const OidcCallback = () => {
     authService
       .endLogin()
       .then(() => {
-        navigate('/');
+        window.location.pathname = '/';
       })
       .catch((error: Error) => {
         // Handle error caused by device time being more than 5 minutes off
@@ -80,7 +78,7 @@ const OidcCallback = () => {
           setAuthenticationError('unknown');
         }
       });
-  }, [navigate, t]);
+  }, [t]);
 
   return (
     <>
