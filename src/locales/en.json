@@ -881,10 +881,11 @@
     "manualPage": {
       "title": "Manual and support",
       "linkText": "Open the user manual here (pdf)",
-      "supportText": "",
-      "bodyText": "",
-      "contactText": "",
-      "linkUrl": "https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-manual.pdf"
+      "supportText": "Technical support for the Haitaton system: <a>haitatontuki@hel.fi</a>",
+      "bodyText": "You can find the contact information of the Cable Location Service via the link below: <a>https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/cable-location-service</a>",
+      "contactText": "<p>- Email: <a>johtotietopalvelu@hel.fi</a></p><p>- Telephone: 09 310 31940</p>",
+      "linkUrl": "https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-manual.pdf",
+      "cableLocationServiceLink": "https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/cable-location-service"
     },
     "404Page": {
       "title": "Page not found",

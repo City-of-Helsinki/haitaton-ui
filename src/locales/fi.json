@@ -885,10 +885,11 @@
     "manualPage": {
       "title": "Käyttöohjeet ja tuki",
       "linkText": "Avaa käyttöohje tästä (pdf)",
-      "supportText": "<p>Haitaton-järjestelmän tekninen tuki: <a>haitatontuki@hel.fi</a></p>",
-      "bodyText": "<p>Johtotietopalvelun yhteystiedot löytyvät oheisen linkin takaa: <a>hel.fi</a></p>",
-      "contactText": "<p>- sähköpostiosoite <a>johtotietopalvelu@hel.fi</a><p>- puhelin 09 310 31940</li></p>",
-      "linkUrl": "https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-asiakasohje.pdf"
+      "supportText": "Haitaton-järjestelmän tekninen tuki: <a>haitatontuki@hel.fi</a>",
+      "bodyText": "Johtotietopalvelun yhteystiedot löytyvät oheisen linkin takaa: <a>https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/johtotietopalvelu </a>",
+      "contactText": "<p>- sähköpostiosoite: <a>johtotietopalvelu@hel.fi</a></p><p>- puhelin: 09 310 31940</p>",
+      "linkUrl": "https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-asiakasohje.pdf",
+      "cableLocationServiceLink": "https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/johtotietopalvelu "
     },
     "404Page": {
       "title": "Sivua ei löytynyt",

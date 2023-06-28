@@ -59,30 +59,28 @@ const ManualPage: React.FC = () => {
               a: (
                 <Link
                   style={{ color: 'var(--color-coat-of-arms)' }}
-                  href="https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/rakentamisvaiheen-ohjeet/kaduilla-ja-puistoissa-tehtavat-tyot"
+                  href={t('staticPages:manualPage:cableLocationServiceLink')}
                   openInNewTab
                 >
-                  hel.fi
+                  https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/johtotietopalvelu
                 </Link>
               ),
             }}
           />
         </Text>
-        <Text tag="p" spacingBottom="s">
-          <Trans
-            i18nKey="staticPages:manualPage:contactText"
-            components={{
-              a: (
-                <Link
-                  style={{ color: 'var(--color-coat-of-arms)' }}
-                  href="mailto:johtotietopalvelu@hel.fi"
-                >
-                  johtotietopalvelu@hel.fi
-                </Link>
-              ),
-            }}
-          />
-        </Text>
+        <Trans
+          i18nKey="staticPages:manualPage:contactText"
+          components={{
+            a: (
+              <Link
+                style={{ color: 'var(--color-coat-of-arms)' }}
+                href="mailto:johtotietopalvelu@hel.fi"
+              >
+                johtotietopalvelu@hel.fi
+              </Link>
+            ),
+          }}
+        />
       </HdsContainer>
     </Container>
   );
