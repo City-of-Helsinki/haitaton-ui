@@ -840,7 +840,9 @@
   },
   "staticPages": {
     "infoPage": {
-      "title": "Tietoa haitattomasta",
+      "title": "Tietoja Haitattomasta",
+      "releaseInfo": "Julkaisutiedot",
+      "releaseVer1": "Versio JS.01 julkaisu 19.6.2023: Johtoselvityksen tekeminen",
       "materials": "Aineistot",
       "mapMaterials": "Kartta-aineistot",
       "imageCopyrights": "Kuvien tekijätiedot"

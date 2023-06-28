@@ -28,6 +28,12 @@ const InfoPage: React.FC = () => {
 
       <HdsContainer style={{ padding: '2rem', backgroundColor: 'white' }}>
         <Text tag="h2" styleAs="h2" spacingBottom="s">
+          {t('staticPages:infoPage:releaseInfo')}
+        </Text>
+        <ul style={{ paddingLeft: 'var(--spacing-l)', marginBottom: 'var(--spacing-s)' }}>
+          <li>{t('staticPages:infoPage:releaseVer1')}</li>
+        </ul>
+        <Text tag="h2" styleAs="h2" spacingBottom="s">
           {t('staticPages:infoPage:materials')}
         </Text>
         <Text tag="h3" styleAs="h3" spacingBottom="s">
