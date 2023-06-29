@@ -30,50 +30,54 @@ i18n.on('languageChanged', (lng) => {
   document.documentElement.setAttribute('lang', lng);
 });
 
-const warningLabel = window._env_.REACT_APP_WARNING_NOTIFICATION_LABEL;
+const warningLabelFI = window._env_.REACT_APP_WARNING_NOTIFICATION_LABEL;
+const warningLabelSV = window._env_.REACT_APP_WARNING_NOTIFICATION_LABEL_SV;
+const warningLabelEN = window._env_.REACT_APP_WARNING_NOTIFICATION_LABEL_EN;
 const warningTextFI = window._env_.REACT_APP_WARNING_NOTIFICATION_TEXT_FI;
 const warningTextSV = window._env_.REACT_APP_WARNING_NOTIFICATION_TEXT_SV;
 const warningTextEN = window._env_.REACT_APP_WARNING_NOTIFICATION_TEXT_EN;
 
 i18n.addResources('fi', 'serviceWarning', {
-  label: warningLabel,
+  label: warningLabelFI,
   text: warningTextFI,
 });
 
-if (warningLabel && warningTextSV) {
+if (warningLabelSV && warningTextSV) {
   i18n.addResources('sv', 'serviceWarning', {
-    label: warningLabel,
+    label: warningLabelSV,
     text: warningTextSV,
   });
 }
 
-if (warningLabel && warningTextEN) {
+if (warningLabelEN && warningTextEN) {
   i18n.addResources('en', 'serviceWarning', {
-    label: warningLabel,
+    label: warningLabelEN,
     text: warningTextEN,
   });
 }
 
-const errorLabel = window._env_.REACT_APP_ERROR_NOTIFICATION_LABEL;
+const errorLabelFI = window._env_.REACT_APP_ERROR_NOTIFICATION_LABEL;
+const errorLabelSV = window._env_.REACT_APP_ERROR_NOTIFICATION_LABEL_SV;
+const errorLabelEN = window._env_.REACT_APP_ERROR_NOTIFICATION_LABEL_EN;
 const errorTextFI = window._env_.REACT_APP_ERROR_NOTIFICATION_TEXT_FI;
 const errorTextSV = window._env_.REACT_APP_ERROR_NOTIFICATION_TEXT_SV;
 const errorTextEN = window._env_.REACT_APP_ERROR_NOTIFICATION_TEXT_EN;
 
 i18n.addResources('fi', 'serviceError', {
-  label: errorLabel,
+  label: errorLabelFI,
   text: errorTextFI,
 });
 
-if (errorLabel && errorTextSV) {
+if (errorLabelSV && errorTextSV) {
   i18n.addResources('sv', 'serviceError', {
-    label: errorLabel,
+    label: errorLabelSV,
     text: errorTextSV,
   });
 }
 
-if (errorLabel && errorTextEN) {
+if (errorLabelEN && errorTextEN) {
   i18n.addResources('en', 'serviceError', {
-    label: errorLabel,
+    label: errorLabelEN,
     text: errorTextEN,
   });
 }
