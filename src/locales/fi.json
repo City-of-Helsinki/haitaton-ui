@@ -304,10 +304,10 @@
       }
     },
     "PRIVACY_POLICY": {
-      "path": "/rekisteriseloste",
-      "headerLabel": "Rekisteriseloste",
+      "path": "/tietosuojaselosteet",
+      "headerLabel": "Tietosuojaselosteet",
       "meta": {
-        "title": "Haitaton - Rekisteriseloste"
+        "title": "Haitaton - Tietosuojaselosteet"
       }
     },
     "REFERENCES": {
@@ -325,8 +325,8 @@
       }
     },
     "MANUAL": {
-      "path": "https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-asiakasohje.pdf",
-      "headerLabel": "Käyttöohjeet ja tuki (PDF)",
+      "path": "/kaytto-ohjeet",
+      "headerLabel": "Käyttöohjeet ja tuki",
       "meta": {
         "title": "Haitaton - Käyttöohjeet ja tuki"
       }
@@ -839,9 +839,13 @@
     "drawPolygonButtonAria": "Piirrä monikulmio kartalle"
   },
   "staticPages": {
-    "info": {
-      "title": "Tietoja haitattomasta",
-      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+    "infoPage": {
+      "title": "Tietoja Haitattomasta",
+      "releaseInfo": "Julkaisutiedot",
+      "releaseVer1": "Versio JS.01 julkaisu 19.6.2023: Johtoselvityksen tekeminen",
+      "materials": "Aineistot",
+      "mapMaterials": "Kartta-aineistot",
+      "imageCopyrights": "Kuvien tekijätiedot"
     },
     "references": {
       "title": "Lähdeviitteet",
@@ -872,8 +876,20 @@
       "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
     },
     "privacyPolicy": {
-      "title": "Rekisteriseloste",
-      "linkText": "Avaa rekisteriseloste tästä (pdf)"
+      "title": "Tietosuojaselosteet",
+      "linkText": "Alueiden käytön lupa- ja vuokrausasioiden asiakasrekisteri (pdf)",
+      "linkUrl": "https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Kymp/Alueiden%20k%C3%A4yt%C3%B6n%20lupa-%20ja%20vuokrausasioiden%20asiakasrekisteri.pdf",
+      "secondLinkText": "Sähköisten asiakaspalveluiden rekisteri (pdf)",
+      "secondLinkUrl": "https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Keha/Sahkoisten%20asiointipalveluiden%20rekisteri.pdf"
+    },
+    "manualPage": {
+      "title": "Käyttöohjeet ja tuki",
+      "linkText": "Avaa käyttöohje tästä (pdf)",
+      "supportText": "Haitaton-järjestelmän tekninen tuki: <a>haitatontuki@hel.fi</a>",
+      "bodyText": "Johtotietopalvelun yhteystiedot löytyvät oheisen linkin takaa: <a>https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/johtotietopalvelu </a>",
+      "contactText": "<p>- sähköpostiosoite: <a>johtotietopalvelu@hel.fi</a></p><p>- puhelin: 09 310 31940</p>",
+      "linkUrl": "https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-asiakasohje.pdf",
+      "cableLocationServiceLink": "https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/johtotietopalvelu "
     },
     "404Page": {
       "title": "Sivua ei löytynyt",
