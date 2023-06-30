@@ -303,9 +303,9 @@
     },
     "PRIVACY_POLICY": {
       "path": "/privacypolicy",
-      "headerLabel": "Register description",
+      "headerLabel": "Privacy policy",
       "meta": {
-        "title": "Haitaton - Register description"
+        "title": "Haitaton - Privacy policy"
       }
     },
     "REFERENCES": {
@@ -323,8 +323,8 @@
       }
     },
     "MANUAL": {
-      "path": "https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-manual.pdf",
-      "headerLabel": "Manual and support (PDF)",
+      "path": "/manual",
+      "headerLabel": "Manual and support",
       "meta": {
         "title": "Haitaton - Manual and support"
       }
@@ -837,9 +837,11 @@
     "drawPolygonButtonAria": "Draw a polygon on the map"
   },
   "staticPages": {
-    "info": {
+    "infoPage": {
       "title": "About Haitaton",
-      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+      "materials": "Materials",
+      "mapMaterials": "Map materials",
+      "imageCopyrights": "Images author information"
     },
     "references": {
       "title": "References",
@@ -870,8 +872,20 @@
       "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
     },
     "privacyPolicy": {
-      "title": "Register description",
-      "linkText": "Open the register description here (PDF)"
+      "title": "Privacy policy",
+      "linkText": "Alueiden käytön lupa- ja vuokrausasioiden asiakasrekisteri (pdf in Finnish)",
+      "linkUrl": "https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Kymp/Alueiden%20k%C3%A4yt%C3%B6n%20lupa-%20ja%20vuokrausasioiden%20asiakasrekisteri.pdf",
+      "secondLinkText": "Sähköisten asiointipalveluiden rekisteri (pdf in Finnish)",
+      "secondLinkUrl": "https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Keha/Sahkoisten%20asiointipalveluiden%20rekisteri.pdf"
+    },
+    "manualPage": {
+      "title": "Manual and support",
+      "linkText": "Open the user manual here (pdf)",
+      "supportText": "Technical support for the Haitaton system: <a>haitatontuki@hel.fi</a>",
+      "bodyText": "You can find the contact information of the Cable Location Service via the link below: <a>https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/cable-location-service</a>",
+      "contactText": "<p>- Email: <a>johtotietopalvelu@hel.fi</a></p><p>- Telephone: 09 310 31940</p>",
+      "linkUrl": "https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-manual.pdf",
+      "cableLocationServiceLink": "https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/cable-location-service"
     },
     "404Page": {
       "title": "Page not found",
