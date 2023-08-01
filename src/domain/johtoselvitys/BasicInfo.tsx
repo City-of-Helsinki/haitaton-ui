@@ -164,7 +164,10 @@ export const BasicHankeInfo: React.FC = () => {
     // Remove moved contact from previous selected role contacts
     setValue(
       `applicationData.${selectedRole}.contacts`,
-      previousRoleContacts.length > 1 ? previousRoleContacts.slice(1) : [emptyContact]
+      previousRoleContacts.length > 1 ? previousRoleContacts.slice(1) : [emptyContact],
+      {
+        shouldValidate: true,
+      }
     );
 
     if (!getValues(`applicationData.${role.value}.customer`)) {

@@ -33,12 +33,12 @@ const Map: React.FC<Props> = ({
   const [map, setMap] = useState<MapInstance>(null);
   const [layers] = useState({});
 
-  const controls = showAttribution ? [attribution] : [];
-
   useEffect(() => {
     if (mapRef.current == null) {
       return;
     }
+
+    const controls = showAttribution ? [attribution] : [];
 
     const options = {
       view: new ol.View({
@@ -46,7 +46,7 @@ const Map: React.FC<Props> = ({
         zoom,
         minZoom: 5,
         maxZoom: 13,
-        projection,
+        projection: projection || undefined,
       }),
       layers: [],
       controls: defaultControls({
@@ -63,7 +63,7 @@ const Map: React.FC<Props> = ({
 
     // eslint-disable-next-line
     return () => mapObject.setTarget(undefined);
-  }, [center, zoom]);
+  }, [center, zoom, showAttribution]);
 
   useEffect(() => {
     if (!map) return;

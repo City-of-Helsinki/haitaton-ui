@@ -17,10 +17,8 @@ const Ortokartta = () => (
           VERSION: '1.1.1',
           TRANSPARENT: 'false',
         },
-        projection,
-        imageSmoothing: false,
+        projection: projection || undefined,
         hidpi: false,
-        serverType: 'geoserver',
         transition: 0,
         attributions: ['Aineistot &copy; <a href="https://kartta.hel.fi">Helsingin kaupunki</a>'],
       })
