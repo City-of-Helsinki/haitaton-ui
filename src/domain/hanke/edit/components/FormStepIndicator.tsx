@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Circle from '../../../../common/components/icons/Circle';
 import CircleSelected from '../../../../common/components/icons/CircleSelected';
-import HankeIndexes from '../../../map/components/HankeSidebar/HankeIndexes';
+import HankeIndexes from '../../hankeIndexes/HankeIndexes';
 import styles from './FormStepIndicator.module.scss';
 import { HankeDataFormState } from '../types';
 
@@ -12,7 +12,11 @@ type PropTypes = {
   isSaving?: boolean;
 };
 
-const FormStepIndicator: React.FC<React.PropsWithChildren<PropTypes>> = ({ currentFormPage, formData, isSaving }) => {
+const FormStepIndicator: React.FC<React.PropsWithChildren<PropTypes>> = ({
+  currentFormPage,
+  formData,
+  isSaving,
+}) => {
   const { t } = useTranslation();
 
   const formSteps = [

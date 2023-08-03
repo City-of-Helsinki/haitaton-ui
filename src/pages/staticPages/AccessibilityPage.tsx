@@ -1,10 +1,11 @@
 import React from 'react';
-import { Container as HdsContainer } from 'hds-react';
+import { Container as HdsContainer, Link } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import PageMeta from '../components/PageMeta';
 import { useLocalizedRoutes } from '../../common/hooks/useLocalizedRoutes';
 import Container from '../../common/components/container/Container';
 import Text from '../../common/components/text/Text';
+import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
 
 const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { ACCESSIBILITY } = useLocalizedRoutes();
@@ -13,13 +14,21 @@ const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   return (
     <Container>
       <PageMeta routeData={ACCESSIBILITY} />
-      <Text tag="h1" styleAs="h2" spacing="s" weight="bold">
+      <Text
+        tag="h1"
+        styleAs="h1"
+        spacingTop="l"
+        spacingBottom="xl"
+        weight="bold"
+        id={SKIP_TO_ELEMENT_ID}
+        tabIndex={-1}
+      >
         {t('staticPages:accessibility:title')}
       </Text>
       <HdsContainer style={{ padding: '2rem', backgroundColor: 'white' }}>
         <Text tag="p">
-          Tämä seloste on laadittu 10.03.2021. Tämä saavutettavuusseloste koskee Helsingin kaupungin
-          Haitaton-verkkosivustoa. Sivuston osoite on https://haitaton.hel.fi/.
+          Tämä saavutettavuusseloste koskee Helsingin kaupungin Haitaton -verkkosivustoa. Sivuston
+          osoite on https://haitaton.hel.fi/.
         </Text>
 
         <Text tag="h2" styleAs="h3" spacing="m">
@@ -27,7 +36,7 @@ const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
         </Text>
         <Text tag="p">
           Digitaalisten palveluiden saavutettavuudessa Helsingin tavoitteena on pyrkiä vähintään
-          WCAGohjeiston mukaiseen AA- tai sitä parempaan tasoon, mikäli se on kohtuudella
+          WCAG-ohjeiston mukaiseen AA- tai sitä parempaan tasoon, mikäli se on kohtuudella
           mahdollista.
         </Text>
 
@@ -35,42 +44,8 @@ const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
           Vaatimustenmukaisuustilanne
         </Text>
         <Text tag="p">
-          Koska sivusto julkaistaan Helsingin kaupungin työntekijöille testauskäyttöön, kaikkia AA-
-          tason saavutettavuusvaatimuksia ei ole testattu.
-        </Text>
-
-        <Text tag="h2" styleAs="h3" spacing="m">
-          Saavutettavuuden varmistamiseksi tehdyt toimet
-        </Text>
-        <Text tag="p">
-          Sivuston suunnittelussa on huomioitu saavutettavuusstandardit ja sivuston käyttö on
-          pyritty tekemään mahdollisimman yksinkertaiseksi ja jatkumoiltaan ymmärrettäväksi. Tämän
-          lisäksi sivusto käyttää Helsingin Design System-komponentteja ja tyylityksiä, jotka on
-          suunniteltu saavutettaviksi. Sivuston väreissä on käytetty riittävää kontrastia pohjan ja
-          tekstin välillä. Sivuston napit ovat riittävän suuria ja tekstikenttien välistykset ovat
-          riittäviä. Sivuston tekstikoot ovat riittävän suuria.Sivuston skaalaus toimii
-          kohtuullisesti 150% asti (tavoite 200%). Jotta sivustoa voi käyttää esteettömästi,
-          kaikilla napeilla ja linkeillä on Aria-label attribuutti tai kuvaava tekstisisältö, joka
-          kertoo mitä kyseinen nappi/linkki tekee. Nämä sisällöt voi lukea näytönlukuohjelmalla.
-          Sivuston toimivuus on testattu osittain näytönlukuohjelmalla ja sarkain-navigoinilla.
-          Sivuston otsikot ovat rakenteellisia, eli on vain yksi pääotsikko (h1) ja sen jälkeen
-          aliotsikoita. Sivustolle on tehty saavutetavuustestaus Axe-saavutettavuustyökalulla. Axe
-          ajetaan aina, kun koodi siirretään versionhallintaan. Tämä takaa, että myös jatkossa
-          koodin laatu pysyy hyvänä saavutettavuusnäkökulmasta.
-        </Text>
-
-        <Text tag="h2" styleAs="h3" spacing="m">
-          Saavutettavuuden arviointi
-        </Text>
-        <Text tag="p">
-          Saavutettavuuden arvioinnissa on noudatettu Helsingin kaupungin työohjetta ja menetelmiä,
-          jotka pyrkivät varmistamaan sivuston saavutettavuuden kaikissa työvaiheissa.
-        </Text>
-
-        <Text tag="p">
-          Saavutettavuus on tarkistettu käyttäen ohjelmallista saavutettavuustarkistusta sekä
-          sivuston ja sisällön manuaalista tarkistusta. Ohjelmallinen tarkistus on suoritettu
-          käyttäen Axe saavutettavuustyökalua.
+          Tämä verkkosivusto täyttää lain asettamat kriittiset saavutettavuusvaatimukset WCAG 2.1
+          -tason AA mukaisesti seuraavin havaituin puuttein.
         </Text>
 
         <Text tag="h2" styleAs="h3" spacing="m">
@@ -84,33 +59,80 @@ const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
         <Text tag="h2" styleAs="h3" spacing="m">
           Havaitut puutteet
         </Text>
+        <Text tag="p" spacingBottom="xs">
+          Sivuston hakemusten pudotusvalikoihin ei voi kohdistaa ruudunlukijalla (WCAG 2.1: 2.1.1
+          Näppäimistö)
+        </Text>
+        <Text tag="p" spacingBottom="xs">
+          Hakemuksen työalueen voi lisätä vain hiirellä (WCAG 2.1: 2.1.1 Näppäimistö)
+        </Text>
+        <Text tag="p" spacingBottom="xs">
+          Sivustolla on linkkejä, jotka avaavat uuden välilehden varoittamatta (WCAG 2.1: 2.4.4
+          Linkin tarkoitus (kontekstissa))
+        </Text>
+        <Text tag="p" spacingBottom="xs">
+          Omat Hankkeet-sivulla on painikkeita, joilla ei ole saavutettavaa kuvausta ja jotka eivät
+          ilmoita toiminnastaan ruudunlukijalle (WCAG 2.1: 4.1.2 Nimi, rooli, arvo, 4.1.3: Tilasta
+          kertovat viestit)
+        </Text>
+        <Text tag="p" spacingBottom="xs">
+          Omien hankkeiden otsikoiden nimeäminen ruudunlukijalle on epäselvää (WCAG 2.1: 1.3.1
+          Informaatio ja suhteet)
+        </Text>
         <Text tag="p">
-          Kartalla oleva geometriatieto on vain piirron mukaisessa muodossa kartalla ja
-          tekstimuotoista sisältöä ei ole kuvaamaan kartan geometriaa • Kartalla on käytetty
-          perusvärejä, jotka eivät ole täysin erotettavissa, mikäli henkilöllä on vaikeuksia erottaa
-          värejä
+          Sivutuksen vaihtaminen ja lomakkeen avaaminen eivät siirrä kohdistusta sivun/lomakkeen
+          alkuun (WCAG 2.1: 2.4.3 Kohdistusjärjestys)
         </Text>
 
         <Text tag="h2" styleAs="h3" spacing="m">
           Puutteiden korjaus
         </Text>
-        <Text tag="p">Puutteiden korjaustarve arvioidaan asiakkaan testauskäytön aikana.</Text>
+        <Text tag="p">
+          Tarvittavat korjaukset havaittuihin puuteisiin pyritään suorittamaan mahdollisimman
+          nopeasti.
+        </Text>
 
         <Text tag="h2" styleAs="h3" spacing="m">
           Tiedon saanti saavutettavassa muodossa
         </Text>
-        <Text tag="p">
+        <Text tag="p" spacingBottom="xs">
           Mainituista puutteista johtuen saavuttamatta jäävää sisältöä voi pyytää tämän sivuston
-          ylläpitäjältä
+          ylläpitäjältä:
         </Text>
         <Text tag="p">
-          Eva-Lisa Karlsson
+          Helsingin kaupunki
           <br />
           Kaupunkiympäristön toimiala
           <br />
-          Helsingin kaupunki
+          Työpajankatu 8
           <br />
+          PL 58200, 00099 Helsingin kaupunki
         </Text>
+
+        <Text tag="h2" styleAs="h3" spacing="m">
+          Saavutettavuusselosteen laatiminen
+        </Text>
+        <Text tag="p">Tämä seloste on laadittu 22.06.2023.</Text>
+
+        <Text tag="h2" styleAs="h3" spacing="m">
+          Saavutettavuuden arviointi
+        </Text>
+        <Text tag="p" spacingBottom="xs">
+          Saavutettavuuden arvioinnissa on noudatettu Helsingin kaupungin työohjetta ja menetelmiä,
+          jotka pyrkivät varmistamaan sivuston saavutettavuuden kaikissa työvaiheissa.
+        </Text>
+        <Text tag="p" spacingBottom="xs">
+          Saavutettavuus on tarkistettu ulkopuolisen asiantuntijan suorittamana auditointina sekä
+          itsearviona.
+        </Text>
+        <Text tag="p" spacingBottom="xs">
+          Saavutettavuus on tarkistettu käyttäen ohjelmallista saavutettavuustarkistusta sekä
+          sivuston ja sisällön manuaalista tarkistusta.
+        </Text>
+        <Text tag="p" spacingBottom="xs">
+          Arviointityökalujen raportoimat epäkohdat on tarkastettu ja tarvittaessa korjattu.
+        </Text>
+        <Text tag="p">Ulkopuolisen asiantuntija-auditoinnin on suorittanut Unicus Oy.</Text>
 
         <Text tag="h2" styleAs="h3" spacing="m">
           Saavutettavuusselosteen päivittäminen
@@ -125,8 +147,16 @@ const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
           Palaute ja yhteystiedot
         </Text>
         <Text tag="p">
-          Sivuston saavutettavuudesta vastaa Kaupunkiympäristön toimiala Helsingin kaupunki Eva-Lisa
-          Karlsson
+          Sivuston saavutettavuudesta vastaa
+          <br />
+          Helsingin kaupunki
+          <br />
+          Kaupunkiympäristön toimiala
+          <br />
+          Työpajankatu 8
+          <br />
+          PL 58200, 00099 Helsingin kaupunki
+          <br />
         </Text>
 
         <Text tag="h2" styleAs="h3" spacing="m">
@@ -134,8 +164,10 @@ const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
         </Text>
         <Text tag="p">
           Mikäli käyttäjä kokee, etteivät saavutettavuuden vaatimukset kuitenkaan täyty, voi tästä
-          tehdä ilmoituksen sähköpostilla helsinki.palaute@hel.fi tai palautelomakkeella
-          www.hel.fi/palaute.
+          tehdä ilmoituksen sähköpostilla
+          <Link href="mailto:helsinki.palaute@hel.fi">helsinki.palaute@hel.fi</Link>tai
+          palautelomakkeella
+          <Link href="https://www.hel.fi/palaute">www.hel.fi/palaute</Link>.
         </Text>
 
         <Text tag="h2" styleAs="h3" spacing="m">
@@ -143,22 +175,25 @@ const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
         </Text>
         <Text tag="p">
           Mikäli käyttäjä ei koe saavansa sivuston sisältöä saavutettavassa muodossa, voi käyttäjä
-          pyytää näitä tietoja sähköpostilla helsinki.palaute@hel.fi tai palautelomakkeella
-          www.hel.fi/palaute. Tiedusteluun pyritään vastaamaan kohtuullisessa ajassa.
+          pyytää näitä tietoja sähköpostilla
+          <Link href="mailto:helsinki.palaute@hel.fi">helsinki.palaute@hel.fi</Link>tai
+          palautelomakkeella<Link href="https://www.hel.fi/palaute">www.hel.fi/palaute</Link>.
+          Tiedusteluun pyritään vastaamaan kohtuullisessa ajassa.
         </Text>
 
         <Text tag="h2" styleAs="h3" spacing="m">
           Saavutettavuuden oikeussuoja, Täytäntöönpanomenettely
         </Text>
-        <Text tag="p">
+        <Text tag="p" spacingBottom="xs">
           Mikäli henkilö kokee, ettei hänen ilmoitukseensa tai tiedusteluunsa ole vastattu tai
           vastaus ei ole tyydyttävä, voi asiasta tehdä ilmoituksen Etelä-Suomen
           aluehallintovirastoon. Etelä-Suomen aluehallintoviraston sivulla kerrotaan tarkasti, miten
           asia käsitellään.
         </Text>
-        <Text tag="p">
+        <Text tag="p" weight="bold">
           Etelä-Suomen aluehallintovirasto
-          <br />
+        </Text>
+        <Text tag="p">
           Saavutettavuuden valvonnan yksikkö
           <br />
           www.saavutettavuusvaatimukset.fi
@@ -174,9 +209,11 @@ const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
         <Text tag="h2" styleAs="h3" spacing="m">
           Helsingin kaupunki ja saavutettavuus
         </Text>
-        <Text tag="p">
+        <Text tag="p" spacingBottom="xs">
           Kaupunki edistää digitaalisten palveluiden saavutettavuutta yhdenmukaistamalla
           julkaisutyötä ja järjestämällä saavutettavuuteen keskittyvää koulutusta henkilökunnalleen.
+        </Text>
+        <Text tag="p">
           Sivustojen saavutettavuuden tasoa seurataan jatkuvasti sivustoja ylläpidettäessä.
           Havaittuihin puutteisiin reagoidaan välittömästi. Tarvittavat muutokset pyritään
           suorittamaan mahdollisimman nopeasti.
@@ -195,9 +232,7 @@ const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
           Saavutettavuusselosteen hyväksyntä
         </Text>
         <Text tag="p">
-          Tämän selosteen on hyväksynyt 10.03.2021
-          <br />
-          Eva-Lisa Karlsson
+          Tämän selosteen on hyväksynyt 26.6.2023
           <br />
           Kaupunkiympäristön toimiala
           <br />

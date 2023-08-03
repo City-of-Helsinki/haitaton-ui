@@ -58,4 +58,4 @@ const Kantakartta = () => {
   );
 };
 
-export default Kantakartta;
+export default React.memo(Kantakartta);

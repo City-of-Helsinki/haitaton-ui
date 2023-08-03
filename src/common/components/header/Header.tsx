@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconSignout, Navigation } from 'hds-react';
+import { IconLinkExternal, IconSignout, Navigation } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useMatch, useLocation, useNavigate } from 'react-router-dom';
 import { $enum } from 'ts-enum-util';
@@ -8,6 +8,14 @@ import authService from '../../../domain/auth/authService';
 import useUser from '../../../domain/auth/useUser';
 import { Language, LANGUAGES } from '../../types/language';
 import { I18NLANGKEY } from '../../../locales/constants';
+import { SKIP_TO_ELEMENT_ID } from '../../constants/constants';
+import { useFeatureFlags } from '../featureFlags/FeatureFlagsContext';
+
+const languageLabels = {
+  fi: 'Suomi',
+  en: 'English',
+  sv: 'Svenska',
+};
 
 const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
   const {
@@ -20,6 +28,7 @@ const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t, i18n } = useTranslation();
   const { data: user } = useUser();
   const isAuthenticated = Boolean(user?.profile);
+  const features = useFeatureFlags();
 
   const isMapPath = useMatch({
     path: PUBLIC_HANKKEET.path,
@@ -47,26 +56,34 @@ const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   return (
     <Navigation
-      menuToggleAriaLabel={t('common:components:multiselect:toggle')}
+      menuToggleAriaLabel={t('common:ariaLabels:menuToggle')}
       title="Haitaton"
-      skipTo="#"
+      skipTo={`#${SKIP_TO_ELEMENT_ID}`}
       skipToContentLabel={t('common:components:header:skipToContentLabel')}
       titleUrl={HOME.path}
       className="header"
     >
       {isAuthenticated && (
-        <Navigation.Row>
-          <Navigation.Item as={NavLink} to={PUBLIC_HANKKEET_MAP.path} active={Boolean(isMapPath)}>
-            {PUBLIC_HANKKEET.label}
-          </Navigation.Item>
-          <Navigation.Item
-            as={NavLink}
-            to={NEW_HANKE.path}
-            active={Boolean(isNewHankePath)}
-            data-testid="hankeLink"
-          >
-            {NEW_HANKE.label}
-          </Navigation.Item>
+        <Navigation.Row ariaLabel={t('common:ariaLabels:topNavigation')}>
+          {features.publicHankkeet ? (
+            <Navigation.Item as={NavLink} to={PUBLIC_HANKKEET_MAP.path} active={Boolean(isMapPath)}>
+              {PUBLIC_HANKKEET.label}
+            </Navigation.Item>
+          ) : (
+            <></>
+          )}
+          {features.hanke ? (
+            <Navigation.Item
+              as={NavLink}
+              to={NEW_HANKE.path}
+              active={Boolean(isNewHankePath)}
+              data-testid="hankeLink"
+            >
+              {NEW_HANKE.label}
+            </Navigation.Item>
+          ) : (
+            <></>
+          )}
           <Navigation.Item
             as={NavLink}
             to={HANKEPORTFOLIO.path}
@@ -79,6 +96,7 @@ const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
             href={t('routes:WORKINSTRUCTIONS:path')}
             target="_blank"
             rel="noreferrer"
+            icon={<IconLinkExternal />}
           >
             {t('routes:WORKINSTRUCTIONS:headerLabel')}
           </Navigation.Item>
@@ -90,20 +108,26 @@ const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
           onSignIn={authService.login}
           label={t('authentication:loginButton')}
           userName={user?.profile?.name}
+          buttonAriaLabel={t('common:ariaLabels:profileButton')}
         >
           <Navigation.Item
+            href=""
             icon={<IconSignout aria-hidden />}
             label={t('authentication:logoutButton')}
             variant="supplementary"
-            onClick={authService.logout}
+            onClick={async (e: React.MouseEvent<HTMLAnchorElement>) => {
+              e.preventDefault();
+              await authService.logout();
+            }}
             data-testid="logoutLink"
           />
         </Navigation.User>
-        <Navigation.LanguageSelector label={t(`common:languages:${i18n.language}`)}>
+        <Navigation.LanguageSelector label={languageLabels[i18n.language as LANGUAGES]}>
           {$enum(LANGUAGES).map((lang) => (
             <Navigation.Item
               as="a"
-              label={t(`common:languages:${lang}`)}
+              href=""
+              label={languageLabels[lang]}
               onClick={(e: React.MouseEvent) => {
                 e.preventDefault();
                 setLanguage(lang);

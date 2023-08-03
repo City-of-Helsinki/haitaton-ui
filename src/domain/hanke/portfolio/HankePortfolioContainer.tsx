@@ -5,7 +5,11 @@ import { HankeData } from '../../types/hanke';
 import HankePortfolioComponent from './HankePortfolioComponent';
 
 const getHankkeet = async () => {
-  const { data } = await api.get<HankeData[]>(`/hankkeet/`);
+  const { data } = await api.get<HankeData[]>(`/hankkeet/`, {
+    params: {
+      geometry: true,
+    },
+  });
   return data;
 };
 
@@ -15,7 +19,7 @@ const HankePortfolioContainer: React.FC<React.PropsWithChildren<unknown>> = () =
   const { data } = useHankeList();
 
   // Add header to fix Axe "page-has-heading-one"-error
-  return data ? <HankePortfolioComponent hankkeet={data} /> : <h1>Ladataan..</h1>;
+  return data ? <HankePortfolioComponent hankkeet={data} /> : <></>;
 };
 
 export default HankePortfolioContainer;

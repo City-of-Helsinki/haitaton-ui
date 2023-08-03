@@ -1,32 +1,29 @@
-.hankesalkkuContainer {
-  max-width: var(--breakpoint-xl);
-  padding: 0 var(--spacing-l);
-  margin: auto;
+@import 'layout.scss';
 
+.hankesalkkuContainer {
   .contentContainer {
-    padding: var(--spacing-l) var(--spacing-l) var(--spacing-3-xl) var(--spacing-l);
-    background: var(--color-white);
+    padding-top: var(--spacing-l);
+    padding-bottom: var(--spacing-3-xl);
     overflow-x: hidden;
-    min-height: 65vh;
+
+    .notFoundContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: var(--spacing-3-xl);
+      text-align: center;
+    }
 
     .hankeCard {
-      height: 70px;
-      padding: 0 var(--spacing-s);
+      padding: var(--spacing-s);
       margin-top: var(--spacing-xs);
       align-items: center;
-
-      &:hover {
-        background-color: var(--color-black-10);
-      }
     }
 
     .hankeCardHeader {
-      height: 100%;
-      display: flex;
-      flex-direction: row;
-      gap: var(--spacing-s);
-      justify-content: space-between;
-      align-items: center;
+      &:hover {
+        cursor: pointer;
+      }
 
       .link {
         color: var(--color-coat-of-arms);
@@ -34,12 +31,15 @@
 
       .hankeName {
         flex-grow: 1;
+        display: flex;
+        gap: var(--spacing-s);
+        align-items: center;
+        flex-wrap: wrap;
       }
 
       .hankeDates {
         display: flex;
         flex-direction: row;
-        width: 175px;
 
         p {
           margin: 0 5px;
@@ -48,62 +48,74 @@
 
       .actions {
         display: flex;
-        gap: var(--spacing-3-xs);
+        gap: var(--spacing-xs);
       }
 
       .iconWrapper {
         flex-grow: 0;
       }
 
-      .tag {
-        background-color: var(--color-copper);
-        color: var(--color-black);
-        text-transform: uppercase;
+      .iconWrapper:focus {
+        outline: 2px solid var(--color-coat-of-arms);
       }
     }
 
-    .hankeCardContent {
-      border: 2px black solid;
-      border-top: none;
-      padding: 0 var(--spacing-s) var(--spacing-s);
+    .draftNotification {
+      margin-top: var(--spacing-s);
+    }
 
-      .tabs {
-        .tablist {
-          padding-bottom: 0;
-          border-bottom: 1px solid var(--color-black-10);
-        }
+    .hankeCardFlexContainer {
+      display: flex;
+      flex-direction: row;
+      gap: var(--spacing-s);
+      justify-content: space-between;
+      align-items: center;
+      flex: 1 1 auto;
+    }
+
+    .flexWrap {
+      flex-wrap: wrap;
+    }
+
+    .hankeCardContent {
+      margin-top: var(--spacing-l);
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--spacing-xs);
+
+      @include respond-above(l) {
+        grid-template-columns: 5fr 4fr;
+      }
+
+      .showHankeButton {
+        margin-right: var(--spacing-xs);
+      }
+    }
+
+    .pagination {
+      margin-top: var(--spacing-m);
+
+      * {
+        box-sizing: content-box;
       }
     }
   }
 
   .gridBasicInfo {
     display: grid;
-    grid-template-columns: 50% 50%;
-    grid-template-rows: repeat(6, min-content);
-    padding: var(--spacing-s) var(--spacing-s) 0;
-    row-gap: var(--spacing-xs);
+    grid-template-columns: 1fr;
+    margin-bottom: var(--spacing-s);
 
-    .gridDescription {
-      grid-column: 1 / span 2;
+    @include respond-above(s) {
+      grid-template-columns: 1fr 2fr;
     }
 
-    .gridType {
-      grid-column: 1 / span 2;
+    .infoHeader {
+      color: var(--color-black-90);
     }
 
-    .haitatInfo {
-      grid-column: 1 / 2;
-      grid-row: 2 / 2;
-    }
-
-    .haitatIndexes {
-      grid-column: 2 / 2;
-      grid-row: 2 / 2;
-    }
-
-    .haitatTitle {
-      grid-column: 1 / 2;
-      grid-row: 1 / 2;
+    .infoContent {
+      color: var(--color-black-70);
     }
 
     .linkWrapper {
@@ -115,10 +127,6 @@
         padding-left: var(--spacing-xs);
         color: var(--color-coat-of-arms);
       }
-    }
-
-    &:not(:last-child) {
-      border-bottom: 1px solid var(--color-black-10);
     }
   }
 
@@ -150,28 +158,46 @@
     margin-right: var(--spacing-xs);
   }
 
-  .filters {
-    display: grid;
-    grid-template-columns: 48% 48%;
-    column-gap: var(--spacing-xl);
-    row-gap: var(--spacing-s);
+  .headerContainer {
+    background-color: var(--color-summer-light);
+    padding-top: var(--spacing-l);
+    padding-bottom: var(--spacing-l);
 
-    .dateRange {
+    .filters {
+      display: grid;
+      grid-template-columns: 1fr;
+      column-gap: var(--spacing-xl);
+      row-gap: var(--spacing-s);
+      max-width: var(--breakpoint-l);
+
+      @include respond-above(m) {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .dateRange {
+        display: flex;
+      }
+    }
+
+    .clearFiltersButton {
+      width: fit-content;
+      text-decoration: underline;
+      padding-top: var(--spacing-m);
+      padding-bottom: var(--spacing-m);
+
+      &__hidden {
+        visibility: hidden;
+      }
+    }
+
+    .filtersInfoText {
       display: flex;
-    }
+      align-items: center;
+      color: var(--color-black-60);
 
-    .clearBtn {
-      margin-top: 28px;
-      height: min-content;
-    }
-
-    .dateRangeHelperText {
-      color: #666;
-      display: block;
-      line-height: var(--lineheight-l);
-      font-size: var(--fontsize-body-m);
-      margin-top: var(--spacing-3-xs);
-      white-space: pre-line;
+      .icon {
+        padding-right: var(--spacing-3-xs);
+      }
     }
   }
 }

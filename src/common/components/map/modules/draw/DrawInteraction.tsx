@@ -5,17 +5,23 @@ import { createRegularPolygon } from 'ol/interaction/Draw';
 import Collection from 'ol/Collection';
 import { Draw, Snap, Modify } from 'ol/interaction';
 import { click } from 'ol/events/condition';
+import Geometry from 'ol/geom/Geometry';
+import Polygon from 'ol/geom/Polygon';
 import { DRAWTOOLTYPE } from './types';
 import MapContext from '../../MapContext';
 import useDrawContext from './useDrawContext';
+import { isPolygonSelfIntersecting } from '../../utils';
 
 type Props = {
   features?: Collection<Feature>;
+  onSelfIntersectingPolygon?: (feature: Feature<Geometry> | null) => void;
 };
 
 type Interaction = Draw | Snap | Modify;
 
-const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = () => {
+const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
+  onSelfIntersectingPolygon,
+}) => {
   const selection = useRef<null | Select>(null);
   const { map } = useContext(MapContext);
   const { state, actions, source } = useDrawContext();
@@ -24,7 +30,8 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = () => {
   const clearSelection = useCallback(() => {
     if (selection.current) selection.current.getFeatures().clear();
     actions.setSelectedFeature(null);
-  }, [selection]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const removeDrawInteractions = useCallback(() => {
     instances.forEach((i: Interaction) => {
@@ -35,7 +42,7 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = () => {
   const removeAllInteractions = useCallback(() => {
     removeDrawInteractions();
     clearSelection();
-  }, [map, source, instances]);
+  }, [clearSelection, removeDrawInteractions]);
 
   const startDraw = useCallback(
     (type = DRAWTOOLTYPE.POLYGON) => {
@@ -57,7 +64,15 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = () => {
         geometryFunction,
       });
 
-      drawInstance.on('drawend', () => {
+      drawInstance.on('drawend', (event) => {
+        const isSelfIntersecting = isPolygonSelfIntersecting(
+          event.feature.getGeometry() as Polygon
+        );
+
+        if (onSelfIntersectingPolygon && isSelfIntersecting) {
+          onSelfIntersectingPolygon(event.feature);
+        }
+
         clearSelection();
         actions.setSelectedDrawToolType(null);
       });
@@ -72,7 +87,7 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = () => {
 
       setInstances([drawInstance, snapInstance, modifyInstance]);
     },
-    [map, source, state.selectedDrawtoolType]
+    [map, source, state.selectedDrawtoolType, actions, clearSelection, onSelfIntersectingPolygon]
   );
 
   useEffect(() => {
@@ -80,6 +95,30 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = () => {
 
     const modifyInstance = new Modify({ source });
     map.addInteraction(modifyInstance);
+
+    modifyInstance.on('modifyend', () => {
+      const selfIntersectingFeature = source
+        .getFeatures()
+        .find((feature) => isPolygonSelfIntersecting(feature.getGeometry() as Polygon));
+
+      if (onSelfIntersectingPolygon) {
+        if (selfIntersectingFeature) {
+          onSelfIntersectingPolygon(selfIntersectingFeature);
+        } else {
+          onSelfIntersectingPolygon(null);
+        }
+      }
+    });
+
+    source.on('removefeature', () => {
+      const selfIntersectingFeature = source
+        .getFeatures()
+        .find((feature) => isPolygonSelfIntersecting(feature.getGeometry() as Polygon));
+
+      if (onSelfIntersectingPolygon && !selfIntersectingFeature) {
+        onSelfIntersectingPolygon(null);
+      }
+    });
 
     selection.current = new Select({
       condition: (mapBrowserEvent) => click(mapBrowserEvent),
@@ -101,13 +140,23 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = () => {
     source.on('removefeature', () => {
       clearSelection();
     });
-  }, []);
+
+    // eslint-disable-next-line consistent-return
+    return function cleanUp() {
+      map.removeInteraction(modifyInstance);
+      if (selection.current) {
+        map.removeInteraction(selection.current);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, source]);
 
   useEffect(() => {
     removeAllInteractions();
     if (state.selectedDrawtoolType) {
       startDraw(state.selectedDrawtoolType);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.selectedDrawtoolType]);
 
   // Unmount
@@ -116,6 +165,7 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = () => {
 
     // eslint-disable-next-line
     return () => removeAllInteractions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return null;

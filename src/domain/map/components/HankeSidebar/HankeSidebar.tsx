@@ -6,7 +6,7 @@ import Text from '../../../../common/components/text/Text';
 import { formatToFinnishDate } from '../../../../common/utils/date';
 import { HankeData } from '../../../types/hanke';
 import styles from './HankeSidebar.module.scss';
-import HankeIndexes from './HankeIndexes';
+import HankeIndexes from '../../../hanke/hankeIndexes/HankeIndexes';
 
 type SectionProps = {
   title: string;
@@ -34,7 +34,6 @@ type Props = {
 const HankeSidebar: React.FC<React.PropsWithChildren<Props>> = ({ hanke, isOpen, handleClose }) => {
   const { t } = useTranslation();
 
-  const organisaatioContent = hanke.omistajat[0]?.organisaatioNimi || '-';
   const tyomaaTyyppiContent = hanke.tyomaaTyyppi.length
     ? hanke.tyomaaTyyppi.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')
     : '-';
@@ -69,20 +68,16 @@ const HankeSidebar: React.FC<React.PropsWithChildren<Props>> = ({ hanke, isOpen,
             {hanke.nimi} ({hanke.hankeTunnus})
           </Text>
           {hanke.tyomaaKatuosoite && (
-            <Text tag="h3" styleAs="h5" weight="bold" spacingBottom="2-xs">
+            <Text tag="p" styleAs="h5" weight="bold" spacingBottom="2-xs">
               {hanke.tyomaaKatuosoite}
             </Text>
           )}
-          <Text tag="h3" styleAs="h6" weight="bold" spacingBottom="s">
+          <Text tag="p" styleAs="h6" weight="bold" spacingBottom="s">
             {formatToFinnishDate(hanke.alkuPvm)} - {formatToFinnishDate(hanke.loppuPvm)}
           </Text>
           <SidebarSection
             title={t('hankeForm:labels.vaihe')}
             content={t(`hanke:vaihe:${hanke.vaihe}`)}
-          />
-          <SidebarSection
-            title={t('hankeForm:labels.organisaatio')}
-            content={organisaatioContent}
           />
           <SidebarSection
             title={t('hankeForm:labels.tyomaaTyyppi')}
@@ -91,7 +86,7 @@ const HankeSidebar: React.FC<React.PropsWithChildren<Props>> = ({ hanke, isOpen,
           <SidebarSection title={t('hankeForm:labels.kuvaus')} content={hanke.kuvaus} />
           <hr />
 
-          <HankeIndexes hankeIndexData={hanke.tormaystarkasteluTulos} />
+          <HankeIndexes hankeIndexData={hanke.tormaystarkasteluTulos} small />
         </DrawerBody>
       </DrawerContent>
     </Drawer>

@@ -32,7 +32,6 @@ const HankeMap: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   return (
     <div className={styles.mapContainer} id="hankemap">
-      <h1 className={styles.allyHeader}>Karttasivu</h1> {/* For a11y */}
       <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
         <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} />
 

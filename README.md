@@ -43,6 +43,16 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+### `yarn locales:export`
+
+Exports frontend localizations into `locale_export.xlsx` for easier translation. Data is loaded
+from `src/locales/`.
+
+### `yarn locales:import`
+
+Imports frontend localizations from `locale_export.xlsx`. Translations are merged on corresponding translation files
+in `src/locales/`.
+
 ## Environment variables
 
 Scripts generate first environment variables to `public/env-config.js` with
@@ -58,6 +68,26 @@ For docker, the scripts/env.sh is added to the pod. This is run when the pod sta
 the env-config.js file, reading the values of the variables of the pod environment. It only
 processes variables mentioned in `.env`. If there's no value for a variable in the environment, the
 default value from `.env` is used.
+
+### Login method
+
+Haitaton supports either Helsinki AD or Suomi.fi identification for logging in. Currently only just
+one at a time. This is controlled by the `REACT_APP_OIDC_CLIENT_ID` environment variable. To change
+the identification method in the local environment, edit the `.env` -file.
+
+- For Helsinki AD (default):
+  `REACT_APP_OIDC_CLIENT_ID: 'haitaton-admin-ui-dev'`
+- For Suomi.fi:
+  `REACT_APP_OIDC_CLIENT_ID: 'haitaton-ui-dev'`
+
+Then either rebuild the docker container or run `yarn update-runtime-env` as discussed above.
+
+All cloud instances use Helsinki AD identification for now.
+
+## API mocking
+
+`yarn start-msw` runs the app in development mode using MSW (Mock Service Worker)
+to mock API. Definitions can be found in `src/domain/mocks`.
 
 ## Learn More
 

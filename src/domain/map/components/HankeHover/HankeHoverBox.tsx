@@ -38,7 +38,7 @@ const HankeHoverBox: React.FC<React.PropsWithChildren<unknown>> = () => {
   return (
     <div className={styles.hankeHover} style={hoverBoxPosition}>
       {foundHankkeet.map((hanke) => (
-        <div>
+        <div key={hanke.hankeTunnus}>
           <Link
             href={`/?hanke=${hanke.hankeTunnus}`}
             size="M"

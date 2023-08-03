@@ -7,25 +7,27 @@ import AppRoutes from '../../routes/AppRoutes';
 import Layout from './Layout';
 import { store } from '../../redux/store';
 import theme from './theme';
+import { GlobalNotificationProvider } from '../globalNotification/GlobalNotificationContext';
+import GlobalNotification from '../globalNotification/GlobalNotification';
+import { FeatureFlagsProvider } from '../featureFlags/FeatureFlagsContext';
 import './app.scss';
 import '../../../assets/styles/reset.css';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      cacheTime: 0, // Disable cache
-    },
-  },
-});
+const queryClient = new QueryClient();
 
 const App: React.FC<React.PropsWithChildren<unknown>> = () => (
   <Router>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <ChakraProvider theme={theme}>
-          <Layout>
-            <AppRoutes />
-          </Layout>
+          <FeatureFlagsProvider>
+            <Layout>
+              <GlobalNotificationProvider>
+                <AppRoutes />
+                <GlobalNotification />
+              </GlobalNotificationProvider>
+            </Layout>
+          </FeatureFlagsProvider>
         </ChakraProvider>
       </QueryClientProvider>
     </Provider>

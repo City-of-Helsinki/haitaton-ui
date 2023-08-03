@@ -18,7 +18,10 @@ type Props = {
   onClickTileLayer: (key: any) => void; // TODO: improve type definition
 };
 
-const LayerControl: React.FC<React.PropsWithChildren<Props>> = ({ tileLayers, onClickTileLayer }) => {
+const LayerControl: React.FC<React.PropsWithChildren<Props>> = ({
+  tileLayers,
+  onClickTileLayer,
+}) => {
   const { t } = useTranslation();
 
   return (

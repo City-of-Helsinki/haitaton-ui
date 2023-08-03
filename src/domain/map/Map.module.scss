@@ -5,7 +5,8 @@
 .mapContainer {
   position: relative;
   flex-grow: 1;
-  overflow: hidden;
+  margin-bottom: var(--spacing-xl);
+  min-height: 300px;
 
   &__inner {
     position: absolute;
@@ -14,11 +15,6 @@
     bottom: 0;
     right: 0;
   }
-}
-
-.allyHeader {
-  position: absolute;
-  top: -5000px;
 }
 
 .hiddenTestDiv {

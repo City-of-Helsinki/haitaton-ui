@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { IconPen, IconTrash } from 'hds-react';
+import { IconPen } from 'hds-react';
 import clsx from 'clsx';
 import { $enum } from 'ts-enum-util';
 import IconSquare from '../../../icons/Square';
@@ -26,13 +26,7 @@ const getDrawIcon = (drawTool: DRAWTOOLTYPE) => {
 
 const DrawControls: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation();
-  const { state, actions, source } = useDrawContext();
-
-  const handleRemoveFeature = () => {
-    if (source && state.selectedFeature !== null && source.hasFeature(state.selectedFeature)) {
-      source?.removeFeature(state.selectedFeature);
-    }
-  };
+  const { state, actions } = useDrawContext();
 
   const handleClickDrawTool = (drawToolType: DRAWTOOLTYPE) => {
     if (drawToolType === state.selectedDrawtoolType) {
@@ -44,15 +38,6 @@ const DrawControls: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   return (
     <ControlPanel className={styles.drawControl}>
-      {state?.selectedFeature && (
-        <button
-          type="button"
-          className={clsx(styles.drawControl__button)}
-          onClick={handleRemoveFeature}
-        >
-          <IconTrash size="s" aria-hidden="true" />
-        </button>
-      )}
       {$enum(DRAWTOOLTYPE)
         .getValues()
         .map((drawToolType) => (

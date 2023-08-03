@@ -38,6 +38,7 @@
 .container {
   max-width: var(--breakpoint-xl);
   margin-top: var(--spacing-2-xl);
+  margin-bottom: var(--spacing-2-xl);
 
   .feedbackInfo {
     padding-bottom: 2rem;
@@ -46,6 +47,53 @@
   .linkboxContainer {
     > div > div {
       min-height: 230px;
+    }
+  }
+}
+
+.bgWhite {
+  height: 100%;
+  background-color: var(--color-white);
+}
+
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--spacing-l);
+  flex-wrap: wrap;
+
+  @include respond-above(s) {
+    margin-right: -100px;
+    flex-wrap: nowrap;
+  }
+
+  .loginImage {
+    object-fit: contain;
+
+    @include respond-above(s) {
+      max-width: 450px;
+    }
+
+    @include respond-above(m) {
+      max-width: 550px;
+    }
+
+    @include respond-above(xl) {
+      max-width: 768px;
+    }
+  }
+
+  .loginContent {
+    padding: var(--spacing-m);
+    background-color: var(--color-suomenlinna-medium-light);
+    align-self: center;
+    max-width: 465px;
+    position: relative;
+    top: -50px;
+
+    @include respond-above(s) {
+      top: 0;
+      left: -100px;
     }
   }
 }

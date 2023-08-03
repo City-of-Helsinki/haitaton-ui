@@ -15,9 +15,13 @@ const FitSource: React.FC<React.PropsWithChildren<Props>> = ({ source }) => {
   }, [map, source]);
 
   useEffect(() => {
-    source.on('addfeature', () => {
-      fitSource();
-    });
+    setTimeout(fitSource, 0);
+
+    source.on('addfeature', fitSource);
+
+    return function cleanUp() {
+      source.un('addfeature', fitSource);
+    };
   }, [source, fitSource]);
 
   return null;

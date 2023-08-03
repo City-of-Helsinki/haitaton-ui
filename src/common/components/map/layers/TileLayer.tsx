@@ -10,7 +10,12 @@ type Props = {
   zIndex?: number;
 };
 
-const TileLayer: React.FC<React.PropsWithChildren<Props>> = ({ source, minZoom, maxZoom, zIndex = 0 }) => {
+const TileLayer: React.FC<React.PropsWithChildren<Props>> = ({
+  source,
+  minZoom,
+  maxZoom,
+  zIndex = 0,
+}) => {
   const { map } = useContext(MapContext);
 
   useEffect(() => {

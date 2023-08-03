@@ -2,30 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
-import {
-  Button,
-  IconCross,
-  IconPlusCircle,
-  IconSaveDiskette,
-  IconTrash,
-  StepState,
-} from 'hds-react';
+import { Button, IconCross, IconPlusCircle, IconSaveDiskette, StepState } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { FormNotification, HankeDataFormState } from './types';
 import { hankeSchema } from './hankeSchema';
-import Form0 from './HankeForm0';
-import Form1 from './HankeForm1';
-import Form2 from './HankeForm2';
+import HankeFormAlueet from './HankeFormAlueet';
+import HankeFormPerustiedot from './HankeFormPerustiedot';
+import HankeFormYhteystiedot from './HankeFormYhteystiedot';
+import HankeFormHaitat from './HankeFormHaitat';
+import HankeFormSummary from './HankeFormSummary';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
-import { HANKE_SAVETYPE } from '../../types/hanke';
-import { filterEmptyContacts } from './utils';
+import { HankeData, HANKE_SAVETYPE } from '../../types/hanke';
+import { convertFormStateToHankeData } from './utils';
 import api from '../../api/api';
 import MultipageForm from '../../forms/MultipageForm';
 import FormActions from '../../forms/components/FormActions';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
-import HankeHaitatForm from './HankeHaitatForm';
+import ApplicationAddDialog from '../../application/components/ApplicationAddDialog';
 
 async function saveHanke({
   data,
@@ -35,16 +30,14 @@ async function saveHanke({
   saveType?: HANKE_SAVETYPE;
   navigateTo?: string;
 }) {
+  if (!data.alueet?.length) {
+    return data;
+  }
+
   const requestData = {
-    ...filterEmptyContacts(data),
+    ...convertFormStateToHankeData(data),
     saveType,
   };
-
-  if (data.hankeTunnus && data.geometriat) {
-    await api.post(`/hankkeet/${data.hankeTunnus}/geometriat`, {
-      featureCollection: data.geometriat,
-    });
-  }
 
   const response = data.hankeTunnus
     ? await api.put<HankeDataFormState>(`/hankkeet/${data.hankeTunnus}`, requestData)
@@ -57,7 +50,6 @@ type Props = {
   formData: HankeDataFormState;
   onIsDirtyChange: (isDirty: boolean) => void;
   onFormClose: (hankeTunnus?: string) => void;
-  onOpenHankeDelete: () => void;
   children: React.ReactNode;
 };
 
@@ -65,13 +57,13 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   formData,
   onIsDirtyChange,
   onFormClose,
-  onOpenHankeDelete,
   children,
 }) => {
   const { t } = useTranslation();
   const { HANKEPORTFOLIO } = useLocalizedRoutes();
   const navigate = useNavigate();
   const [showNotification, setShowNotification] = useState<FormNotification | null>(null);
+  const [showAddApplicationDialog, setShowAddApplicationDialog] = useState(false);
   const formContext = useForm<HankeDataFormState>({
     mode: 'onTouched',
     reValidateMode: 'onChange',
@@ -86,7 +78,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     register,
     formState: { errors, isDirty, isValid },
     getValues,
-    reset,
+    setValue,
     handleSubmit,
   } = formContext;
 
@@ -105,19 +97,16 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       setShowNotification('error');
     },
     onSuccess(data, { navigateTo }) {
-      setShowNotification('success');
+      setValue('hankeTunnus', data.hankeTunnus);
+      setValue('tormaystarkasteluTulos', data.tormaystarkasteluTulos);
+      if (data.alueet) {
+        setShowNotification('success');
+      }
       if (navigateTo) {
         navigate(navigateTo);
       }
     },
   });
-
-  useEffect(() => {
-    if (hankeMutation.data) {
-      // Update form data with API response
-      reset(hankeMutation.data);
-    }
-  }, [hankeMutation.data, reset]);
 
   function saveDraft() {
     hankeMutation.mutate({ data: getValues() });
@@ -135,29 +124,43 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     });
   }
 
+  function saveAndAddApplication() {
+    hankeMutation.mutate({ data: getValues(), saveType: HANKE_SAVETYPE.SUBMIT });
+    setShowAddApplicationDialog(true);
+  }
+
+  function closeAddApplicationDialog() {
+    setShowAddApplicationDialog(false);
+  }
+
   useEffect(() => {
     onIsDirtyChange(isDirty);
   }, [isDirty, onIsDirtyChange]);
 
   const formSteps = [
     {
-      element: <Form0 errors={errors} register={register} formData={formValues} />,
+      element: <HankeFormPerustiedot errors={errors} register={register} formData={formValues} />,
       label: t('hankeForm:perustiedotForm:header'),
       state: StepState.available,
     },
     {
-      element: <Form1 errors={errors} register={register} formData={formValues} />,
+      element: <HankeFormAlueet errors={errors} register={register} formData={formValues} />,
       label: t('hankeForm:hankkeenAlueForm:header'),
       state: isNewHanke ? StepState.disabled : StepState.available,
     },
     {
-      element: <HankeHaitatForm formData={formValues} />,
+      element: <HankeFormHaitat formData={formValues} />,
       label: t('hankeForm:hankkeenHaitatForm:header'),
       state: isNewHanke ? StepState.disabled : StepState.available,
     },
     {
-      element: <Form2 errors={errors} register={register} formData={formValues} />,
-      label: t('hankeForm:hankkeenYhteystiedotForm:header'),
+      element: <HankeFormYhteystiedot errors={errors} register={register} formData={formValues} />,
+      label: t('form:yhteystiedot:header'),
+      state: isNewHanke ? StepState.disabled : StepState.available,
+    },
+    {
+      element: <HankeFormSummary formData={formValues} />,
+      label: t('hankeForm:hankkeenYhteenvetoForm:header'),
       state: isNewHanke ? StepState.disabled : StepState.available,
     },
   ];
@@ -165,6 +168,11 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   return (
     <FormProvider {...formContext}>
       <FormNotifications showNotification={showNotification} />
+      <ApplicationAddDialog
+        isOpen={showAddApplicationDialog}
+        onClose={closeAddApplicationDialog}
+        hanke={getValues() as HankeData}
+      />
       <div className="hankeForm">
         <MultipageForm
           heading={formHeading}
@@ -178,31 +186,20 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
               <FormActions
                 activeStepIndex={activeStepIndex}
                 totalSteps={formSteps.length}
-                isFormValid={isValid}
                 onPrevious={handlePrevious}
                 onNext={handleNext}
               >
                 {isNewHanke && (
                   <Button
-                    variant="secondary"
+                    variant="danger"
                     iconLeft={<IconCross aria-hidden />}
                     onClick={() => onFormClose(formValues.hankeTunnus)}
                   >
                     {t('hankeForm:cancelButton')}
                   </Button>
                 )}
-                {!isNewHanke && (
-                  <Button
-                    variant="danger"
-                    iconLeft={<IconTrash aria-hidden />}
-                    onClick={onOpenHankeDelete}
-                  >
-                    {t('hankeList:buttons:delete')}
-                  </Button>
-                )}
                 {!lastStep && (
                   <Button
-                    disabled={!isValid}
                     variant="supplementary"
                     iconLeft={<IconSaveDiskette aria-hidden="true" />}
                     onClick={saveDraftAndQuit}
@@ -213,7 +210,12 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
                 )}
                 {lastStep && (
                   <>
-                    <Button variant="secondary" iconLeft={<IconPlusCircle aria-hidden />}>
+                    <Button
+                      variant="secondary"
+                      iconLeft={<IconPlusCircle aria-hidden />}
+                      onClick={saveAndAddApplication}
+                      disabled={!isValid}
+                    >
                       {t('hankeForm:saveAndAddButton')}
                     </Button>
                     <Button

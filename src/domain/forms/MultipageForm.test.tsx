@@ -1,6 +1,5 @@
 import React from 'react';
 import { StepState, TextInput } from 'hds-react';
-import userEvent from '@testing-library/user-event';
 import MultipageForm from './MultipageForm';
 import { render, screen } from '../../testUtils/render';
 import FormActions from './components/FormActions';
@@ -46,6 +45,36 @@ test('renders form heading and labels for form steps', () => {
   expect(screen.getByText('Vaihe 1/2: Title 1')).toBeInTheDocument();
 });
 
+test('renders form notification if texts are given', () => {
+  const formSteps = [
+    {
+      element: <Page1 />,
+      label: 'Title 1',
+      state: StepState.available,
+    },
+    {
+      element: <Page2 />,
+      label: 'Title 2',
+      state: StepState.disabled,
+    },
+  ];
+
+  const handleSave = jest.fn();
+
+  render(
+    <MultipageForm
+      heading="Test form"
+      formSteps={formSteps}
+      onStepChange={handleSave}
+      notificationLabel="Notification label"
+      notificationText="Notification text"
+    />
+  );
+
+  expect(screen.getByText('Notification label')).toBeInTheDocument();
+  expect(screen.getByText('Notification text')).toBeInTheDocument();
+});
+
 test('form pages can be navigated', async () => {
   const formSteps = [
     {
@@ -60,16 +89,14 @@ test('form pages can be navigated', async () => {
     },
   ];
 
-  const user = userEvent.setup();
   const handleSave = jest.fn();
 
-  render(
+  const { user } = render(
     <MultipageForm heading="Test form" formSteps={formSteps} onStepChange={handleSave}>
       {(activeStepIndex, handlePrevious, handleNext) => (
         <FormActions
           activeStepIndex={activeStepIndex}
           totalSteps={formSteps.length}
-          isFormValid
           onPrevious={handlePrevious}
           onNext={handleNext}
         />
@@ -102,35 +129,39 @@ test('form pages can be navigated', async () => {
   expect(screen.getByText('Page 1')).toBeDefined();
 });
 
-test('next button is disabled when form is not valid', () => {
+test('displays loading spinner when isLoading', () => {
   const formSteps = [
     {
       element: <Page1 />,
       label: 'Title 1',
       state: StepState.available,
     },
-    {
-      element: <Page2 />,
-      label: 'Title 2',
-      state: StepState.disabled,
-    },
   ];
 
-  const handleSave = jest.fn();
+  render(<MultipageForm heading="Test form" formSteps={formSteps} isLoading />);
+
+  expect(screen.queryByTestId('multipage-form-loading-spinner')).toBeInTheDocument();
+});
+
+test('displays loading spinner with loading text when isLoading and loading text set', () => {
+  const formSteps = [
+    {
+      element: <Page1 />,
+      label: 'Title 1',
+      state: StepState.available,
+    },
+  ];
+  const loadingText = 'Loading...';
 
   render(
-    <MultipageForm heading="Test form" formSteps={formSteps} onStepChange={handleSave}>
-      {(activeStepIndex, handlePrevious, handleNext) => (
-        <FormActions
-          activeStepIndex={activeStepIndex}
-          totalSteps={formSteps.length}
-          isFormValid={false}
-          onPrevious={handlePrevious}
-          onNext={handleNext}
-        />
-      )}
-    </MultipageForm>
+    <MultipageForm
+      heading="Test form"
+      formSteps={formSteps}
+      isLoading
+      isLoadingText={loadingText}
+    />
   );
 
-  expect(screen.getByRole('button', { name: 'Seuraava' })).toBeDisabled();
+  expect(screen.queryByTestId('multipage-form-loading-spinner')).toBeInTheDocument();
+  expect(screen.queryByText(loadingText)).toBeInTheDocument();
 });

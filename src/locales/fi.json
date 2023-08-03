@@ -2,31 +2,29 @@
   "authentication": {
     "deviceTimeError": "Et voi kirjautua sisään koska laitteesi kello on yli 5 minuuttia väärässä. Säädä kelloa ja kokeile uudestaan.",
     "permissionRequestDenied": "Sinun täytyy hyväksyä pyytämämme oikeudet käyttääksesi tätä palvelua. Ole hyvä ja yritä kirjautua uudelleen.",
-    "genericError": "Tapahtui virhe. Yritä uudestaan.",
+    "genericError": "Kirjautumisessa tapahtui virhe. Yritä uudestaan.",
     "loginButton": "Kirjaudu",
-    "logoutButton": "Kirjaudu ulos"
+    "logoutButton": "Kirjaudu ulos",
+    "homePageLink": "Palaa Haitattoman <a>etusivulle.</a>",
+    "supportLink": "Voit myös ottaa yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <a>haitatontuki@hel.fi.</a>"
   },
   "common": {
     "increment": "Lisää",
+    "yes": "Kyllä",
+    "no": "Ei",
     "confirmationDialog": {
       "interruptDialog": {
         "titleText": "Olet poistumassa lomakkeelta",
         "bodyText": "Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä, vai poistua, jolloin syöttämäsi tiedot poistuvat.",
         "exitButton": "Poistu"
       },
-      "deleteDialog": {
-        "titleText": "Oletko varma että haluat poistaa hankkeen?",
-        "bodyText": "Hankkeen poistaminen on pysyvä toiminto ja hankkeen tietoja ei voi palauttaa poistamisen jälkeen.",
-        "exitButton": "Poista"
-      },
-      "cancelButton": "Peruuta"
-    },
-    "languages": {
-      "fi": "Suomi",
-      "en": "English",
-      "sv": "Svenska"
+      "cancelButton": "Peruuta",
+      "confirmButton": "Vahvista"
     },
     "components": {
+      "linkbox": {
+        "linkbox": "Linkkialue"
+      },
       "multiselect": {
         "toggle": "Sulje ja avaa valikko",
         "removeSelected": "Poista valittu",
@@ -38,9 +36,29 @@
       },
       "header": {
         "skipToContentLabel": "Siirry pääsisältöön"
+      },
+      "notification": {
+        "notification": "Ilmoitus",
+        "closeButtonLabelText": "Sulje ilmoitus"
+      },
+      "errorLoadingInfo": {
+        "textTop": "Virhe tietojen lataamisessa.",
+        "textBottom": "Yritä hetken päästä uudelleen."
       }
     },
-    "error": "Tapahtui virhe. Yritä uudestaan."
+    "error": "Tapahtui virhe. Yritä uudestaan.",
+    "ariaLabels": {
+      "profileButton": "Käyttäjäprofiili",
+      "menuToggle": "Valikko",
+      "closeButtonLabelText": "Sulje",
+      "topNavigation": "Haitaton navigaatio",
+      "footerNavigation": "Haitaton tietosivut"
+    },
+    "buttons": {
+      "savingText": "Tallennetaan",
+      "sendingText": "Lähetetään",
+      "remove": "Poista"
+    }
   },
   "form": {
     "validations": {
@@ -54,6 +72,136 @@
       "stringMax": "Kentän pituus oltava enintään {{max}} merkkiä",
       "dateMin": "Ensimmäinen mahdollinen päivä on {{min}}",
       "dateMax": "Viimeinen mahdollinen päivä on {{max}}"
+    },
+    "errors": {
+      "areaRequired": "Vähintään yksi alue vaaditaan",
+      "fileLoadError": "Tiedoston latauksessa tapahtui virhe",
+      "selfIntersectingArea": "Alueen reunat eivät saa leikata toisiaan"
+    },
+    "headers": {
+      "perustiedot": "Perustiedot",
+      "alueet": "Alueet",
+      "yhteystiedot": "Yhteystiedot",
+      "liitteetJaLisatiedot": "Liitteet ja lisätiedot",
+      "yhteenveto": "Yhteenveto",
+      "hakemusInfo": "Hakemuksen tiedot"
+    },
+    "labels": {
+      "pintaAla": "Pinta-ala",
+      "omatTiedot": "Omat tiedot",
+      "role": "Rooli",
+      "roleHelper": "Pääasiallinen roolisi työssä",
+      "fromHelsinkiProfile": "Haettu Helsinki-profiilin perusteella",
+      "addressInformation": "Osoitetiedot",
+      "kokonaisAla": "Alueiden kokonaispinta-ala",
+      "areaName": "Alueen nimi",
+      "timespan": "Ajanjakso",
+      "dragAttachments": "Raahaa tiedostot tänne",
+      "additionalInfo": "Lisätiedot",
+      "added": "Lisätty",
+      "addedFiles": "Lisätyt liitetiedostot"
+    },
+    "dialog": {
+      "titles": {
+        "removeAttachment": "Poista liitetiedosto?"
+      },
+      "descriptions": {
+        "removeAttachment": "Haluatko varmasti poistaa liitetiedoston {{fileName}}"
+      }
+    },
+    "notifications": {
+      "labels": {
+        "attachmentRemoved": "Liitetiedosto poistettu",
+        "editSentApplication": "Olet muokkaamassa jo lähetettyä hakemusta."
+      },
+      "descriptions": {
+        "attachmentRemoved": "Liitetiedosto {{fileName}} poistettu",
+        "editSentApplication": "Hakemusta voit muokata niin kauan, kun sitä ei vielä ole otettu käsittelyyn. Uusi versio hakemuksesta lähtee viranomaiselle automaattisesti lomakkeen tallennuksen yhteydessä."
+      }
+    },
+    "buttons": {
+      "loadingAttachments": "Ladataan tiedostoja..."
+    },
+    "helperTexts": {
+      "dateInForm": "Anna muodossa P.K.VVVV",
+      "areaName": "Halutessasi voit nimetä alueen"
+    },
+    "requiredInstruction": "Kaikki tähdellä * merkityt kentät ovat pakollisia.",
+    "yhteystiedot": {
+      "header": "Yhteystiedot",
+      "instructions": "Hankkeelle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hankkeeseeen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hanketta ja luomaan hankkeelle hakemuksia.",
+      "titles": {
+        "omistaja": "Hankkeen omistaja",
+        "omistajaInfo": "Hankkeen omistajan tiedot",
+        "rakennuttajat": "Rakennuttaja",
+        "rakennuttajatPlural": "Rakennuttajat",
+        "toteuttajat": "Toteuttaja",
+        "toteuttajatPlural": "Toteuttajat",
+        "muut": "Muu taho",
+        "muutPlural": "Muut tahot",
+        "lisaaRakennuttaja": "Lisää rakennuttaja",
+        "lisaaToteuttaja": "Lisää toteuttaja",
+        "lisaaMuuTaho": "Lisää muu taho",
+        "subContact": "Yhteyshenkilö",
+        "subContacts": "Yhteyshenkilöt",
+        "subContactInformation": "Yhteyshenkilön tiedot",
+        "customerWithContacts": "Hakija",
+        "contractorWithContacts": "Työn suorittaja",
+        "contractorWithContactsPlural": "Työn suorittajat",
+        "propertyDeveloperWithContacts": "Rakennuttaja",
+        "representativeWithContacts": "Asianhoitaja",
+        "representativeWithContactsPlural": "Asianhoitajat",
+        "addContractor": "Lisää työn suorittaja",
+        "addRepresentative": "Lisää asianhoitaja",
+        "customerWithContactsInfo": "Hakijan tiedot",
+        "representativeInfo": "Asianhoitajan tiedot",
+        "contractorInfo": "Työn suorittajan tiedot",
+        "implementerInfo": "Toteuttajan tiedot",
+        "otherInfo": "Muiden tahojen tiedot",
+        "propertyDeveloperInfo": "Rakennuttajan tiedot"
+      },
+      "labels": {
+        "tyyppi": "Tyyppi",
+        "nimi": "Nimi",
+        "ytunnusTaiHetu": "Y-tunnus tai henkilötunnus",
+        "ytunnus": "Y-tunnus",
+        "osoite": "Katuosoite",
+        "postinumero": "Postinumero",
+        "postitoimipaikka": "Postitoimipaikka",
+        "email": "Sähköposti",
+        "puhelinnumero": "Puhelinnumero",
+        "rooli": "Rooli",
+        "osasto": "Osasto",
+        "organisaatioNimi": "Organisaatio",
+        "rakennuttaja": "Rakennuttaja",
+        "erillinenYhteyshenkilo": "Erillinen yhteyshenkilö"
+      },
+      "placeholders": {
+        "otherPartyRole": "Isännöitsijä, konsultti..."
+      },
+      "helperTexts": {
+        "otherPartyRole": "Tahon rooli hankkeessa"
+      },
+      "contactType": {
+        "YKSITYISHENKILO": "Yksityishenkilö",
+        "YRITYS": "Yritys",
+        "YHTEISO": "Yhteisö",
+        "PERSON": "Yksityishenkilö",
+        "COMPANY": "Yritys",
+        "ASSOCIATION": "Yhdistys",
+        "OTHER": "Muu"
+      },
+      "buttons": {
+        "addSubContact": "Lisää yhteyshenkilö",
+        "removeSubContact": "Poista yhteyshenkilö",
+        "remove": {
+          "rakennuttajat": "Poista rakennuttaja",
+          "toteuttajat": "Poista toteuttaja",
+          "muut": "Poista muu taho",
+          "propertyDeveloperWithContacts": "Poista rakennuttaja",
+          "representativeWithContacts": "Poista asianhoitaja"
+        }
+      }
     }
   },
   "routes": {
@@ -68,7 +216,14 @@
       "path": "/hankesalkku",
       "headerLabel": "Omat hankkeet",
       "meta": {
-        "title": "Haitaton - Hankesalkku"
+        "title": "Haitaton - Omat hankkeet"
+      }
+    },
+    "HANKE": {
+      "path": "/hankesalkku/:hankeTunnus",
+      "headerLabel": "Hankkeet",
+      "meta": {
+        "title": "Haitaton - Hankesivu"
       }
     },
     "PUBLIC_HANKKEET": {
@@ -106,18 +261,32 @@
         "title": "Haitaton - Hankkeen muokkaus"
       }
     },
-    "HAKEMUS": {
-      "path": "/hakemus/*",
-      "headerLabel": "Luo uusi hakemus",
+    "FULL_PAGE_MAP": {
+      "path": "/kokosivunkartta/:hankeTunnus",
+      "headerLabel": "Koko sivun kartta",
       "meta": {
-        "title": "Haitaton - Luo uusi hakemus"
+        "title": "Haitaton - Koko sivun kartta"
+      }
+    },
+    "HAKEMUS": {
+      "path": "/hakemus/:id",
+      "headerLabel": "Hakemus",
+      "meta": {
+        "title": "Haitaton - Hakemussivu"
       }
     },
     "JOHTOSELVITYSHAKEMUS": {
-      "path": "/johtoselvityshakemus/*",
+      "path": "/johtoselvityshakemus",
       "headerLabel": "Luo uusi johtoselvityshakemus",
       "meta": {
         "title": "Haitaton - Luo uusi johtoselvityshakemus"
+      }
+    },
+    "EDIT_JOHTOSELVITYSHAKEMUS": {
+      "path": "/johtoselvityshakemus/:id/muokkaa",
+      "headerLabel": "Muokkaa johtoselvityshakemusta",
+      "meta": {
+        "title": "Haitaton - Muokkaa johtoselvityshakemusta"
       }
     },
     "HAITATON_INFO": {
@@ -135,10 +304,10 @@
       }
     },
     "PRIVACY_POLICY": {
-      "path": "/rekisteriseloste",
-      "headerLabel": "Rekisteriseloste",
+      "path": "/tietosuojaselosteet",
+      "headerLabel": "Tietosuojaselosteet",
       "meta": {
-        "title": "Haitaton - Rekisteriseloste"
+        "title": "Haitaton - Tietosuojaselosteet"
       }
     },
     "REFERENCES": {
@@ -149,10 +318,17 @@
       }
     },
     "WORKINSTRUCTIONS": {
-      "path": "https://www.hel.fi/helsinki/fi/asuminen-ja-ymparisto/tontit/luvat/kaduilla-ja-puistoissa-tehtavat-tyot/",
+      "path": "https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/rakentamisvaiheen-ohjeet",
       "headerLabel": "Työohjeet",
       "meta": {
         "title": "Haitaton - Työohjeet"
+      }
+    },
+    "MANUAL": {
+      "path": "/kaytto-ohjeet",
+      "headerLabel": "Käyttöohjeet ja tuki",
+      "meta": {
+        "title": "Haitaton - Käyttöohjeet ja tuki"
       }
     }
   },
@@ -192,7 +368,7 @@
       "KADUN_KUNNOSSAPITO": "Kadun kunnossapito",
       "KIINTEISTOLIITTYMA": "Kiinteistöliittymä",
       "SULKU_TAI_KAIVO": "Sulku tai kaivo",
-      "UUDISRAKENNUS": "Uudisrakennus",
+      "UUDISRAKENNUS": "Uudisrakentaminen",
       "SANEERAUS": "Saneeraus",
       "AKILLINEN_VIKAKORJAUS": "Äkillinen vikakorjaus",
       "VIHERTYO": "Vihertyö",
@@ -235,6 +411,15 @@
       "YKSI": "Satunnainen haitta",
       "KAKSI": "Lyhytaikainen toistuva haitta",
       "KOLME": "Pitkäkestoinen jatkuva haitta"
+    },
+    "alue": {
+      "title": "Hankealue {{index}}",
+      "duration": "Hankealueen kesto",
+      "surfaceArea": "Piirroksen pinta-ala",
+      "totalSurfaceArea": "Alueiden kokonaispinta-ala",
+      "totalSurfaceAreaLong": "Hanke-alueiden kokonaispinta-ala",
+      "liikenneverkollinenHaitta": "Hankealueen liikenneverkollinen haitta",
+      "haittaMaarittelyt": "Hankealueen omat haittamäärittelyt"
     }
   },
   "hankeForm": {
@@ -247,10 +432,12 @@
     "saveButton": "Tallenna",
     "saveAndAddButton": "Tallenna ja lisää hakemuksia",
     "cancelButton": "Peru hanke",
+    "cancelSuccessHeader": "Hanke poistettu",
+    "cancelSuccessText": "Hanke poistettiin onnistuneesti",
+    "activeApplicationsHeader": "Hankkeella on aktiivisia hakemuksia",
+    "activeApplicationsDescription": "Hankkeella on meneillään olevia hankkeita tai hakemuksia, joten sitä ei voi perua tai merkitä valmiiksi. Tarkastele meneillään olevia hakemuksia Hakemukset-välilehdellä.",
     "nextButton": "Seuraava",
     "previousButton": "Edellinen",
-    "addContactButton": "Lisää yhteyshenkilö",
-    "removeContactButton": "Poista yhteyshenkilö",
     "insertFieldError": "Syötä kenttä",
     "savingSuccessHeader": "Luonnos tallennettu",
     "savingSuccessText": "Luonnos on tallennettu Hankelistalle",
@@ -258,20 +445,24 @@
     "savingFailText": "Luonnosta ei saatu tallennettua, koita uudelleen",
     "closeAriaLabel": "Poistu kaavakkeelta tallentamatta",
     "confirmIndexCalculationButton": "Jatka indeksilaskentaan",
+    "cancelDialog": {
+      "titleText": "Peru hanke?",
+      "bodyText": "Haluatko varmasti perua hankkeen? Hanke poistetaan kokonaan järjestelmästä."
+    },
     "labels": {
       "hankeTunnus": "Hankkeen tunnus",
       "nimi": "Hankkeen nimi",
-      "vaihe": "Hankkeen Vaihe",
+      "vaihe": "Hankkeen vaihe",
       "kuvaus": "Hankkeen kuvaus",
       "suunnitteluVaihe": "Hankkeen suunnitteluvaihe",
       "alkuPvm": "Hankkeen alkupäivä",
       "loppuPvm": "Hankkeen loppupäivä",
-      "tyomaaTyyppi": "Työmaan tyyppi",
-      "tyomaaKoko": "Työmaan koko",
-      "haittaAlkuPvm": "Haitan alkupäivämäärä",
-      "haittaLoppuPvm": "Haitan loppupäivämäärä",
-      "kaistaHaitta": "Kaistahaitta",
-      "kaistaPituusHaitta": "Kaistan pituushaitta",
+      "tyomaaTyyppi": "Työn tyyppi",
+      "tyomaaKoko": "Hankkeen koko",
+      "haittaAlkuPvm": "Haittojen alkupäivä",
+      "haittaLoppuPvm": "Haittojen loppupäivä",
+      "kaistaHaitta": "Autoliikenteen kaistahaitta",
+      "kaistaPituusHaitta": "Kaistahaittojen pituus",
       "meluHaitta": "Meluhaitta",
       "polyHaitta": "Pölyhaitta",
       "tarinaHaitta": "Tärinähaitta",
@@ -284,15 +475,12 @@
       "osasto": "Osasto",
       "organisaatio": "Organisaatio",
       "omaOrganisaatio": "Lisää oma organisaatio",
-      "insertOmaOrganisaatio": "Syötä oma organisaatio"
-    },
-    "headers": {
-      "arvioijat": "Arvioijat",
-      "omistajat": "Omistajat",
-      "toteuttajat": "Toteuttajat"
+      "insertOmaOrganisaatio": "Syötä oma organisaatio",
+      "rights": "Käyttöoikeutesi hankkeelle",
+      "perustaja": "Perustaja"
     },
     "toolTips": {
-      "tipOpenLabel": "Avaa ohje",
+      "tipOpenLabel": "Ohje",
       "perustiedot": "Hankkeen pakolliset perustiedot tulee täyttää. Mikäli kaikki pakolliset tiedot eivät ole täytettynä, uusi hanke tallentuu Haitattomaan, muttei voi edetä vaikutusten arviointiin. Hankkeen tietojen täydentämistä voi jatkaa myöhemmin avaamalla se hankelistan kautta",
       "nimi": "Hanketta tiiviisti kuvaava nimi",
       "onYKTHanke": "Yhteinen kunnallistekninen työmaa – yhteistoimintasopimuksen mukainen yhteishanke. Osapuolia ovat Helsingin kaupungin kaupunkiympäristön toimialan lisäksi Helsingin kaupungin liikenne -liikelaitos (HKL), Helsingin seudun ympäristöpalvelut -kuntayhtymä HSY,  Helen Oy, Helen Sähköverkko Oy, Auris Kaasunjakelu Oy sekä viestintäverkko operaattorit Cinia Oy, DNA Oyj, Elisa Oyj ja Telia Finland Oyj. YKT -yhteistoiminnalla pyritään sujuvoittamaan kaupungissa tapahtuvaa yleisten alueiden rakentamista ja sovittamaan sopijaosapuolten erillishankkeet yhteisesti toteutettaviksi, infrapalvelujen laatua ja tarjontaa parantaviksi hankkeiksi.",
@@ -310,14 +498,17 @@
     },
     "perustiedotForm": {
       "header": "Perustiedot",
-      "ytkHankeHeader": "YKT-hanke"
+      "ytkHankeHeader": "YKT-hanke",
+      "instructions": "<1>Hankkeen luonnin kautta pääset lähettämään myös hakemuksia.</1><1><0>HUOM!</0> Mikäli teet pelkkää johtoselvitystä yksityiselle alueelle, <2>täytä hakemus</2>. Yleisten alueiden johtoselvitykset haetaan hankkeen luonnin jälkeen kaivuilmoituksen kautta.</1><1>Lisäämällä hankkeen tiedot, pystyt kopioimaan ne lopuksi tarvitsemiisi hakemuksiin.</1>"
     },
     "hankkeenAlueForm": {
       "header": "Alueet",
-      "instructions": "Hankkeelle voi piirttää useita geometrioita. Geometria alueet vaikuttavat hankkeen liikennehaittaindekseihin.\nPiirtotyökalut löytyvät karttanäkymän vasemmasta alalaidasta. Kynätyökalulla voi piirtää monikulmaisia geometrioita klikkaamalla kohtaan, johon haluat kulman. Neliötyökalulla saat muodostettua neliömäisiä alueita klikkaamalla ensin kartalle ja liikuttamalla hiirtä haluamaasi suuntaan. Uudelleenklikkaus \"sulkee\" neliön piirron.\nGeometriaa voi muokata \"tarttumalla\" geometrian reunasta ja vetämällä. Myös neliömäistä geometriaa voi muokata reunasta tarttumalla.\nVoit poistaa geometrian valitsemalla ensin geometrian klikkaamalla sitä, jolloin vasemman alalaidan piirtotyökaluihin ilmestyy roskakori ikoni, jota klikkaamalla geometrian voi poistaa."
-    },
-    "hankkeenYhteystiedotForm": {
-      "header": "Yhteystiedot"
+      "subHeader": "Hanke-alueet",
+      "area": "Alue",
+      "instructions": "Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 1-5, 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen tärkeimmillä reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein (vihreä = ei haittaa, keltainen = todennäköinen haitta, punainen = merkittävä haitta).",
+      "haitatHeader": "Alueen haitta-arviot",
+      "haitatInstructions": "Anna arvio suurimmista mahdollisista vaikutuksista hankealueella.",
+      "removeAreaButton": "Poista alue"
     },
     "tyomaanTiedotForm": {
       "header": "Hankkeen lisätiedot"
@@ -325,9 +516,123 @@
     "hankkeenHaitatForm": {
       "header": "Haitat"
     },
+    "hankkeenYhteenvetoForm": {
+      "header": "Yhteenveto",
+      "instructions": "Tarkista antamasi tiedot ja tallenna hanke tai tallenna ja siirry lisäämään hakemuksia."
+    },
     "finishedForm": {
       "header": "Lomake on lähetetty onnistuneesti"
+    },
+    "addContactButton": "Lisää yhteyshenkilö",
+    "removeContactButton": "Poista yhteyshenkilö",
+    "headers": {
+      "arvioijat": "Arvioijat",
+      "omistajat": "Omistajat",
+      "toteuttajat": "Toteuttajat"
+    },
+    "hankkeenYhteystiedotForm": {
+      "header": "Yhteystiedot"
     }
+  },
+  "johtoselvitysForm": {
+    "pageHeader": "Johtoselvityshakemus",
+    "perustiedot": {
+      "instructions": "<p>Huomioithan, että johtoselvitys on voimassa 1 kuukauden. Johtoselvityksen tulee olla voimassa johtojen maastonäyttöjä tilattaessa sekä kaivuilmoitusta tehdessä. Johtoselvitys on tarvittaessa päivitettävä.</p><p>Yleisellä alueella tehtävästä työstä on tehtävä erillinen ilmoitus kaupungille. Katso tarkemmat ohjeet: <a>hel.fi</a></p>"
+    },
+    "alueet": {
+      "instructions1": "Aloita selvitettävän alueen piirtäminen lisäämällä työn alku- ja loppupäivämäärät, jolloin piirtotyökalut ilmestyvät kartan vasempaan alanurkkaan. Tämän jälkeen voit piirtää selvitettävät alueet kartalle. Voit lisätä samalle hakemukselle useampia alueita, mikäli niitä koskeva aikaväli on sama.",
+      "instructions2": "Piirtämäsi alueet näkyvät listana kartan alapuolella. Listasta pääset myös poistamaan alueita.",
+      "giveDates": "Valitse työn päivämäärät piirtääksesi selvitettävät alueet kartalle."
+    },
+    "liitteet": {
+      "instructions": "Lisää hakemukselle liitteet, kuten työsuunnitelma. Liitteet tallentuvat lomakkeelle sivun alaosan sivunvaihto- ja tallennuspainikkeista."
+    }
+  },
+  "hakemus": {
+    "labels": {
+      "nimi": "Työn nimi",
+      "tyossaKyse": "Työssä on kyse",
+      "kuvaus": "Työn kuvaus",
+      "constructionWork": "Uuden rakenteen tai johdon rakentamisesta",
+      "maintenanceWork": "Olemassaolevan rakenteen kunnossapitotyöstä",
+      "propertyConnectivity": "Kiinteistöliittymien rakentamisesta",
+      "emergencyWork": "Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi",
+      "applicationType": "Hakemustyyppi",
+      "copyPreviousApplication": "Kopioi aiempi hakemus pohjaksi",
+      "applicationToUseAsBase": "Pohjana käytettävä hakemus",
+      "startDate": "Työn arvioitu alkupäivä",
+      "endDate": "Työn arvioitu loppupäivä",
+      "workArea": "Työalue",
+      "areaInfo": "Alueen tiedot",
+      "checkInfo": "Tarkista antamasi tiedot ja lähetä hakemus.",
+      "preFilledInfo": "Esitäytetyt tiedot",
+      "preFilledInfoHelp": "Valitse nimi hankkeen tiedoista",
+      "cancelTitle": "Oletko varma että haluat perua hakemuksen",
+      "cancelDescription": "Hakemuksen peruminen on pysyvä toiminto ja hakemuksen tietoja ei voi palauttaa perumisen jälkeen.",
+      "rockExcavation": "Louhitaanko työn yhteydessä, esimerkiksi kallioperää?",
+      "rockExcavationShort": "Louhitaanko työn yhteydessä",
+      "areaDuration": "Työalueen kesto",
+      "totalSurfaceArea": "Työ-alueiden kokonaispinta-ala",
+      "applicationState": "Hakemuksen tila",
+      "relatedHanke": "Liittyy hankkeeseen",
+      "downloadDecision": "Lataa päätös (PDF)",
+      "downloadDecisionShort": "Lataa PDF",
+      "addedAreas": "Lisäämäsi työalueet",
+      "removeAreaTitle": "Poista työalue",
+      "removeAreaDescription": "Haluatko varmasti poistaa työalueen {{areaName}}",
+      "applicationAdditionalInfo": "Lisätietoja hakemuksesta"
+    },
+    "notifications": {
+      "saveSuccessLabel": "Hakemus tallennettu",
+      "saveErrorLabel": "Tallentaminen epäonnistui",
+      "saveSuccessText": "Hakemuksen tallentaminen onnistui",
+      "saveErrorText": "<0>Hakemuksen tallentaminen epäonnistui. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>",
+      "sendSuccessLabel": "Hakemus lähetetty",
+      "sendErrorLabel": "Lähettäminen epäonnistui",
+      "sendSuccessText": "Hakemus on lähetetty käsiteltäväksi.",
+      "sendErrorText": "<0>Hakemus on tallennettu luonnoksena, koska hakemuksen lähettäminen käsittelyyn epäonnistui. Yritä lähettämistä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi.</1></0>",
+      "cancelSuccessLabel": "Hakemus peruttiin",
+      "cancelSuccessText": "Hakemus peruttiin onnistuneesti",
+      "noApplications": "Hankkeella ei ole lisättyjä hakemuksia",
+      "maxAttachmentsNumberExceeded": "Liitteiden enimmäismäärä ({{maxNumber}} kpl) ylitetty",
+      "sentApplicationPersonalInfoNotification": "Lähetetyn hakemuksen omia tietoja ei voi muokata"
+    },
+    "status": {
+      "PENDING_CLIENT": "Näkyy viranomaiselle",
+      "PENDING": "Odottaa käsittelyä",
+      "WAITING_INFORMATION": "Täydennyspyyntö",
+      "INFORMATION_RECEIVED": "Täydennetty käsittelyyn",
+      "HANDLING": "Käsittelyssä",
+      "RETURNED_TO_PREPARATION": "Käsittelyssä",
+      "DECISIONMAKING": "Odottaa päätöstä",
+      "DECISION": "Päätös",
+      "OPERATIONAL_CONDITION": "Toiminnallinen kunto hyväksytty",
+      "FINISHED": "Työ valmis hyväksytty",
+      "CANCELLED": "Hakemus peruttu",
+      "ARCHIVED": "Työ arkistoitu",
+      "REPLACED": "Korvattu",
+      "null": "Luonnos"
+    },
+    "buttons": {
+      "continueToApplication": "Jatka hakemukseen",
+      "sendApplication": "Lähetä hakemus",
+      "cancelApplication": "Peru hakemus",
+      "editApplication": "Muokkaa hakemusta"
+    },
+    "errors": {
+      "cancelConflict": "Hakemusta ei voida perua, koska se on edennyt käsittelyyn",
+      "notFound": "Hakemusta ei löytynyt"
+    },
+    "headers": {
+      "pickApplication": "Valitse luotava hakemus"
+    },
+    "applicationTypes": {
+      "CABLE_REPORT": "Johtoselvitys"
+    },
+    "applicationTypeDraft": {
+      "CABLE_REPORT": "JS-luonnos"
+    },
+    "applicationTypeInstruction": "Valitse hakemustyyppi. Osaan hakemuksista voit myös kopioida aiemman hakemuksen pohjaksi. Kaivuilmoituksen kautta pääset tekemään myös johtoselvityksen, mikäli sinulla ei sellaista vielä ole."
   },
   "hankeSidebar": {
     "ariaSidebarContent": "Hankkeen tiedot",
@@ -335,6 +640,7 @@
     "editHanke": "Muokkaa hankkeen tietoja"
   },
   "hankeIndexes": {
+    "haittaindeksi": "Haittaindeksi",
     "haittaindeksit": "Haittaindeksit",
     "haittaindexTooltip": "Haittaindeksit lasketaan hankkeen alueen mukaan. Indeksit päivittyvät, kun tallennat lomakkeen tiedot tai siirryt seuraavalle sivulle.",
     "liikennehaittaindeksi": "Liikennehaittaindeksi",
@@ -351,10 +657,15 @@
   },
   "homepage": {
     "pageTitle": "Tervetuloa Haitaton-palveluun",
-    "pageSubTitle_loggedIn": "Palvelu yleisille alueille sijoittuvien hankkeiden edistämiseen ja haittojen hallintaan",
-    "pageSubTitle": "Palvelu yleisille alueille sijoittuvien hankkeiden ja niiden haittojen seurantaan ",
+    "pageTitle_loggedIn": "Tervetuloa Haitaton-asiointiin",
+    "pageSubTitle_loggedIn": "Asiointijärjestelmä yleisille alueille sijoittuvien hankkeiden edistämiseen ja haittojen hallintaan",
+    "pageSubTitle": "Palvelu yleisille alueille sijoittuvien hankkeiden ja niiden haittojen seurantaan",
     "info": "Haitaton-palvelussa pääset tutustumaan kaikkiin yleisillä alueilla käynnissä oleviin ja tuleviin hankkeisiin sekä antamaan niille palautetta. Voit tarkastella hankkeita kartalla tai listalla. Oletko perustamassa hanketta tai tekemässä hakemuksia?",
     "info_link": "Siirry Haitaton-asiointiin",
+    "notification": {
+      "heading": "Auta meitä tekemään Haitattomasta vielä parempi!",
+      "text": "Ideoita ja havaintoja voit lähettää osoitteeseen"
+    },
     "hanke": {
       "title": "Luo uusi hanke",
       "description": "Luomalla Haitaton-hankkeen pystyt suunnittelemaan etukäteen yleisellä alueella tapahtuvaa työtä sekä tekemään hakemuksia, kuten johtoselvityksiä.",
@@ -366,9 +677,9 @@
       "actionText": "Luo hakemus"
     },
     "johtotietoselvitys": {
-      "title": "Johtotietoselvitys",
-      "description": "Selvityspyyntö tietyn alueen johtotiedoista. Tarvitaan kaivuilmoituksen liitteenä.",
-      "actionText": "Tee Johtotietoselvitys"
+      "title": "Tee johtoselvityshakemus",
+      "description": "Mikäli teet pelkkää johtoselvitystä yksityiselle alueelle, täytä hakemus.",
+      "actionText": "Tee johtoselvityshakemus"
     },
     "valmistelu": {
       "title": "Valmisteluvaiheessa oleva hanke",
@@ -401,29 +712,48 @@
       "actionText": "Lue lisää haitattomasta"
     },
     "ohjeet": {
-      "title": "Ohjeet",
+      "title": "Työohjeet",
       "description": "Tutustu yleisten alueiden hankkeita koskeviin ohjeistuksiin.",
       "actionText": "Tutustu ohjeisiin"
+    },
+    "loginContainer": {
+      "description": "Helsingin kaupungin alueella ennen kaivu-, kairaus- ja louhintatöihin ryhtymistä on haettava ajantasainen johtoselvitys.",
+      "button": "Kirjaudu sisään tehdäksesi hakemus",
+      "imageAltText": "Kalastaman metroasema alueen rakennuskohteen työmaalla. Asema erottuu työmaasta lasiseinäisenä pitkulaisena rakenteena työmaan yläpuolella. Etualalla maa on auki ja vasemmalla kohoavat tulevan kauppakeskuksen rakennukset. Työmaa jatkuu metroaseman takana Kuorekarin salmen rantaan. Aivan oikealla näkyy osa Suvilahden voimalaitosta."
     }
   },
   "hankePortfolio": {
     "filters": "Rajausehdot",
-    "pageHeader": "Hankesalkku",
+    "pageHeader": "Omat hankkeet",
     "search": "Haku",
     "searchHelperText": "Hae hankkeen nimellä tai tunnuksella",
-    "noneFound": "Haulla ei löytynyt yhtään hankkeita.",
-    "noneExist": "Hankesalkussasi ei ole hankkeita.",
+    "searchResults": "{{count}} hakutulos",
+    "searchResults_plural": "{{count}} hakutulosta",
+    "noneFound": "Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta",
+    "noneExist": "Hankesalkussasi ei ole hankkeita",
     "hankevaiheet": "Hankevaiheet",
     "hankevaiheetHelperText": "Valitse hankevaiheet joita haluat tarkastella",
     "startDate": "Ajanjakson alku",
     "endDate": "Ajanjakson loppu",
     "clearDates": "Tyhjennä",
     "timePeriodHelperText": "Aikaväli jolloin haitta on aktiivinen",
-    "hankkeentyyppi": "Hankkeen tyypit",
+    "hankkeentyyppi": "Työn tyyppi",
     "hankkeentyyppiHelperText": "Valitse hankkeen työmaan tyyppi tai tyypit",
+    "areaLocation": "Alueiden sijainti",
+    "openMapToNewWindow": "Avaa kartta uuteen ikkunaan",
+    "showHankeButton": "Näytä hanke",
+    "showApplicationsButton": "Näytä hankkeen hakemukset",
+    "draftStateLabel": "Hanke on luonnostilassa",
+    "draftState": "Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.",
+    "clearFiltersButton": "Tyhjennä hakuehdot",
+    "filtersInfoText": "Hakuehtojen muuttaminen päivittää hankelistan.",
     "tabit": {
       "perustiedot": "Perustiedot",
-      "yhteystiedot": "Yhteystiedot"
+      "alueet": "Alueet",
+      "haittojenHallinta": "Haittojen hallinta",
+      "yhteystiedot": "Yhteystiedot",
+      "liitteet": "Liitteet",
+      "hakemukset": "Hakemukset"
     },
     "labels": {
       "kuvaus": "Hankkeen kuvaus",
@@ -443,10 +773,12 @@
       "nimi": "Nimi",
       "osoite": "Osoite",
       "sposti": "Sähköposti",
-      "puhelin": "Puhelin"
+      "puhelin": "Puhelin",
+      "oikeudet": "Käyttöoikeutesi hankkeelle"
     }
   },
   "publicHankkeet": {
+    "pageHeader": "Hankkeet yleisillä alueilla",
     "buttons": {
       "map": "Kartta",
       "list": "Lista"
@@ -473,6 +805,9 @@
     "buttons": {
       "edit": "Muokkaa hanketta",
       "delete": "Poista hanke",
+      "endHanke": "Päätä hanke",
+      "addApplication": "Lisää hakemus",
+      "editRights": "Hallitse käyttöoikeuksia",
       "toFirstPage": "Listan ensimmäiselle sivulle",
       "toPreviousPage": "Listan edelliselle sivulle",
       "toNextPage": "Listan seuraavalle sivulle",
@@ -504,9 +839,13 @@
     "drawPolygonButtonAria": "Piirrä monikulmio kartalle"
   },
   "staticPages": {
-    "info": {
-      "title": "Tietoja haitattomasta",
-      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+    "infoPage": {
+      "title": "Tietoja Haitattomasta",
+      "releaseInfo": "Julkaisutiedot",
+      "releaseVer1": "Versio JS.01 julkaisu 19.6.2023: Johtoselvityksen tekeminen",
+      "materials": "Aineistot",
+      "mapMaterials": "Kartta-aineistot",
+      "imageCopyrights": "Kuvien tekijätiedot"
     },
     "references": {
       "title": "Lähdeviitteet",
@@ -537,8 +876,34 @@
       "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
     },
     "privacyPolicy": {
-      "title": "Rekisteriseloste",
-      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+      "title": "Tietosuojaselosteet",
+      "linkText": "Alueiden käytön lupa- ja vuokrausasioiden asiakasrekisteri (pdf)",
+      "linkUrl": "https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Kymp/Alueiden%20k%C3%A4yt%C3%B6n%20lupa-%20ja%20vuokrausasioiden%20asiakasrekisteri.pdf",
+      "secondLinkText": "Sähköisten asiakaspalveluiden rekisteri (pdf)",
+      "secondLinkUrl": "https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Keha/Sahkoisten%20asiointipalveluiden%20rekisteri.pdf"
+    },
+    "manualPage": {
+      "title": "Käyttöohjeet ja tuki",
+      "linkText": "Avaa käyttöohje tästä (pdf)",
+      "supportText": "Haitaton-järjestelmän tekninen tuki: <a>haitatontuki@hel.fi</a>",
+      "bodyText": "Johtotietopalvelun yhteystiedot löytyvät oheisen linkin takaa: <a>https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/johtotietopalvelu </a>",
+      "contactText": "<p>- sähköpostiosoite: <a>johtotietopalvelu@hel.fi</a></p><p>- puhelin: 09 310 31940</p>",
+      "linkUrl": "https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-asiakasohje.pdf",
+      "cableLocationServiceLink": "https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/johtotietopalvelu "
+    },
+    "404Page": {
+      "title": "Sivua ei löytynyt",
+      "instruction": "Jos kirjoitit sivun osoitteen osoitepalkkiin, tarkista että se on kirjoitettu oikein.",
+      "homePageLink": "Palaa Haitattoman <a>etusivulle.</a>",
+      "supportLink": "Jos seuraamasi linkki ei toimi, voit myös ottaa yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <a>haitatontuki@hel.fi.</a>"
     }
+  },
+  "serviceWarning": {
+    "label": "",
+    "text": ""
+  },
+  "serviceError": {
+    "label": "",
+    "text": ""
   }
 }

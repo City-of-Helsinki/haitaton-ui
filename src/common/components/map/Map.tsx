@@ -19,6 +19,7 @@ type Props = {
   zoom: number;
   center?: number[];
   mapClassName?: string;
+  showAttribution?: boolean;
 };
 
 const Map: React.FC<React.PropsWithChildren<Props>> = ({
@@ -26,10 +27,13 @@ const Map: React.FC<React.PropsWithChildren<Props>> = ({
   zoom = defaultZoom,
   center = helsinkiCenterCoords,
   mapClassName,
+  showAttribution = true,
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<MapInstance>(null);
   const [layers] = useState({});
+
+  const controls = showAttribution ? [attribution] : [];
 
   useEffect(() => {
     if (mapRef.current == null) {
@@ -49,7 +53,7 @@ const Map: React.FC<React.PropsWithChildren<Props>> = ({
         attribution: false,
         zoom: false,
         rotate: false,
-      }).extend([attribution]),
+      }).extend(controls),
       overlays: [],
     };
 
