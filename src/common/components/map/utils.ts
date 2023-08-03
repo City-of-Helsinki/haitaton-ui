@@ -15,10 +15,10 @@ proj4.defs(
 register(proj4);
 
 export const projection = getProjection('EPSG:3879');
-projection.setExtent([25440000, 6630000, 25571072, 6761072]);
+projection?.setExtent([25440000, 6630000, 25571072, 6761072]);
 
 export function getSurfaceArea(geometry: Geometry) {
-  return getArea(geometry, { projection });
+  return getArea(geometry, { projection: projection || undefined });
 }
 
 /**

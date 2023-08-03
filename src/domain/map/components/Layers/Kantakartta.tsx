@@ -9,11 +9,10 @@ const Kantakartta = () => {
 
   const sourceOptions = {
     url: 'https://kartta.hel.fi/ws/geoserver/avoindata/wms',
-    projection,
+    projection: projection || undefined,
     cacheSize: 1000,
     imageSmoothing: false,
     hidpi: false,
-    serverType: 'geoserver',
     transition: 0,
     attributions: [t('map:attribution')],
   };

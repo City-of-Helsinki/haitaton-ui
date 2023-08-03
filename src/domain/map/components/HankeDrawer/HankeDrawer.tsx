@@ -67,21 +67,21 @@ const HankeDrawer: React.FC<Props> = ({
     };
 
     function handleAddFeature(e: VectorSourceEvent<Geometry>) {
-      if (onAddFeature) {
+      if (onAddFeature && e.feature) {
         onAddFeature(e.feature);
       }
       updateState();
     }
 
     const handleChangeFeature = debounce((e: VectorSourceEvent<Geometry>) => {
-      if (onChangeFeature) {
+      if (onChangeFeature && e.feature) {
         onChangeFeature(e.feature);
       }
       updateState();
     }, 100);
 
     function handleRemoveFeature(e: VectorSourceEvent<Geometry>) {
-      if (onRemoveFeature) {
+      if (onRemoveFeature && e.feature) {
         onRemoveFeature(e.feature);
       }
       updateState();
