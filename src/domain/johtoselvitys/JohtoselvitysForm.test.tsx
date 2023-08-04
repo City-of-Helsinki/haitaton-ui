@@ -165,7 +165,7 @@ function fillContactsInformation() {
     screen.getByTestId('applicationData.customerWithContacts.customer.registryKey'),
     {
       target: { value: '2182805-0' },
-    }
+    },
   );
   fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.email'), {
     target: { value: 'yritys@test.com' },
@@ -184,7 +184,7 @@ function fillContactsInformation() {
     screen.getByTestId('applicationData.contractorWithContacts.customer.registryKey'),
     {
       target: { value: '7126070-7' },
-    }
+    },
   );
   fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.customer.email'), {
     target: { value: 'yritys2@test.com' },
@@ -198,13 +198,13 @@ function fillContactsInformation() {
     screen.getByTestId('applicationData.contractorWithContacts.contacts.0.firstName'),
     {
       target: { value: 'Alli' },
-    }
+    },
   );
   fireEvent.change(
     screen.getByTestId('applicationData.contractorWithContacts.contacts.0.lastName'),
     {
       target: { value: 'Asiakas' },
-    }
+    },
   );
   fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.email'), {
     target: { value: 'alli.asiakas@test.com' },
@@ -218,11 +218,11 @@ test('Cable report application form can be filled and saved and sent to Allu', a
   const hankeData = hankkeet[1] as HankeData;
 
   const { user } = render(
-    <JohtoselvitysContainer hankeData={hankeData} application={application} />
+    <JohtoselvitysContainer hankeData={hankeData} application={application} />,
   );
 
   expect(
-    screen.queryByText('Aidasmäentien vesihuollon rakentaminen (HAI22-2)')
+    screen.queryByText('Aidasmäentien vesihuollon rakentaminen (HAI22-2)'),
   ).toBeInTheDocument();
 
   // Fill basic information page
@@ -264,7 +264,7 @@ test('Should show error message when saving fails', async () => {
   server.use(
     rest.post('/api/hakemukset', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
-    })
+    }),
   );
 
   const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
@@ -284,13 +284,13 @@ test('Should show error message when sending fails', async () => {
   server.use(
     rest.post('/api/hakemukset/:id/send-application', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
-    })
+    }),
   );
 
   const hankeData = hankkeet[1] as HankeData;
 
   const { user } = render(
-    <JohtoselvitysContainer hankeData={hankeData} application={application} />
+    <JohtoselvitysContainer hankeData={hankeData} application={application} />,
   );
 
   fillBasicInformation();
@@ -314,7 +314,7 @@ test('Form can be saved without hanke existing first', async () => {
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
   expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
-  expect(screen.queryByText('Johtoselvitys (HAI22-12)')).toBeInTheDocument();
+  await screen.findByText('Johtoselvitys (HAI22-12)');
   expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
 });
 
@@ -381,7 +381,7 @@ test('Should show error message and not navigate away when save and quit fails',
   server.use(
     rest.put('/api/hakemukset/:id', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
-    })
+    }),
   );
 
   const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
@@ -438,13 +438,13 @@ test('Should change users own role and its fields correctly', async () => {
     screen.getByTestId('applicationData.contractorWithContacts.contacts.0.firstName'),
     {
       target: { value: firstName },
-    }
+    },
   );
   fireEvent.change(
     screen.getByTestId('applicationData.contractorWithContacts.contacts.0.lastName'),
     {
       target: { value: lastName },
-    }
+    },
   );
   fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.email'), {
     target: { value: email },
@@ -463,28 +463,28 @@ test('Should change users own role and its fields correctly', async () => {
   await user.click(screen.getByTestId('contractorWithContacts-0'));
 
   expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.firstName')
+    screen.getByTestId('applicationData.customerWithContacts.contacts.0.firstName'),
   ).toHaveValue('');
   expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.lastName')
+    screen.getByTestId('applicationData.customerWithContacts.contacts.0.lastName'),
   ).toHaveValue('');
   expect(screen.getByTestId('applicationData.customerWithContacts.contacts.0.email')).toHaveValue(
-    ''
+    '',
   );
   expect(screen.getByTestId('applicationData.customerWithContacts.contacts.0.phone')).toHaveValue(
-    ''
+    '',
   );
   expect(
-    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.firstName')
+    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.firstName'),
   ).toHaveValue(firstName);
   expect(
-    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.lastName')
+    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.lastName'),
   ).toHaveValue(lastName);
   expect(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.email')).toHaveValue(
-    email
+    email,
   );
   expect(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.phone')).toHaveValue(
-    phone
+    phone,
   );
 });
 
@@ -520,7 +520,7 @@ test('Should show send button when application is edited in draft state', async 
 test('Should not allow start date be after end date', async () => {
   const hankeData = hankkeet[1] as HankeData;
   const { user } = render(
-    <JohtoselvitysContainer hankeData={hankeData} application={application} />
+    <JohtoselvitysContainer hankeData={hankeData} application={application} />,
   );
 
   // Fill basic information page
@@ -549,7 +549,7 @@ test('Should not allow step change when current step is invalid', async () => {
     screen.getByTestId('applicationData.customerWithContacts.customer.registryKey'),
     {
       target: { value: '1234567-8' },
-    }
+    },
   );
 
   // Try to move previous, next and basic information page
@@ -575,8 +575,8 @@ test('Should show inline notification when editing a form that is in pending sta
   expect(screen.queryByText('Olet muokkaamassa jo lähetettyä hakemusta.')).toBeInTheDocument();
   expect(
     screen.queryByText(
-      'Hakemusta voit muokata niin kauan, kun sitä ei vielä ole otettu käsittelyyn. Uusi versio hakemuksesta lähtee viranomaiselle automaattisesti lomakkeen tallennuksen yhteydessä.'
-    )
+      'Hakemusta voit muokata niin kauan, kun sitä ei vielä ole otettu käsittelyyn. Uusi versio hakemuksesta lähtee viranomaiselle automaattisesti lomakkeen tallennuksen yhteydessä.',
+    ),
   ).toBeInTheDocument();
 });
 
@@ -585,15 +585,15 @@ test('Should not allow to edit own info when application has been sent to Allu',
 
   expect(screen.getByRole('button', { name: /rooli/i })).toBeDisabled();
   expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.firstName')
+    screen.getByTestId('applicationData.customerWithContacts.contacts.0.firstName'),
   ).toBeDisabled();
   expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.lastName')
+    screen.getByTestId('applicationData.customerWithContacts.contacts.0.lastName'),
   ).toBeDisabled();
   expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.email')
+    screen.getByTestId('applicationData.customerWithContacts.contacts.0.email'),
   ).toBeDisabled();
   expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.phone')
+    screen.getByTestId('applicationData.customerWithContacts.contacts.0.phone'),
   ).toBeDisabled();
 });

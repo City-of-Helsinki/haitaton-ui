@@ -66,7 +66,7 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
 
       drawInstance.on('drawend', (event) => {
         const isSelfIntersecting = isPolygonSelfIntersecting(
-          event.feature.getGeometry() as Polygon
+          event.feature.getGeometry() as Polygon,
         );
 
         if (onSelfIntersectingPolygon && isSelfIntersecting) {
@@ -87,7 +87,7 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
 
       setInstances([drawInstance, snapInstance, modifyInstance]);
     },
-    [map, source, state.selectedDrawtoolType, actions, clearSelection, onSelfIntersectingPolygon]
+    [map, source, state.selectedDrawtoolType, actions, clearSelection, onSelfIntersectingPolygon],
   );
 
   useEffect(() => {

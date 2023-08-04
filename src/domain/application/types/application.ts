@@ -77,7 +77,7 @@ export type AlluStatusStrings = keyof typeof AlluStatus;
 type PolygonWithCRS = Polygon & { crs: CRS };
 
 export class ApplicationGeometry implements PolygonWithCRS {
-  type: 'Polygon' = 'Polygon';
+  type = 'Polygon' as const;
 
   crs: CRS = {
     type: 'name',

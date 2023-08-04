@@ -29,18 +29,10 @@ if (process.env.NODE_ENV !== 'production') {
   import('@axe-core/react').then((axe) => {
     // https://github.com/dequelabs/axe-core-npm/issues/176
     axe.default(React, ReactDOM, 1000, {}, undefined);
-    root.render(
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    );
+    root.render(<App />);
   });
 } else {
-  root.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
+  root.render(<App />);
 }
 
 declare global {

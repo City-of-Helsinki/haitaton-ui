@@ -40,7 +40,6 @@ const HankeFormSummary: React.FC<Props> = ({ formData }) => {
         <SectionItemTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionItemTitle>
         <SectionItemContent>
           {formData.alueet?.map((alue, index) => (
-            // eslint-disable-next-line react/no-array-index-key
             <AreaSummary key={index} area={alue} index={index} />
           ))}
         </SectionItemContent>

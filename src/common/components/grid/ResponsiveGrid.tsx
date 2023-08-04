@@ -4,7 +4,6 @@ import styles from './ResponsiveGrid.module.scss';
 
 type Props = {
   children: React.ReactNode;
-  // eslint-disable-next-line react/require-default-props
   className?: string;
 };
 

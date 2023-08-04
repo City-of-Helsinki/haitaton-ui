@@ -93,7 +93,7 @@ export const BasicHankeInfo: React.FC<React.PropsWithChildren<unknown>> = () => 
 
   const [selectedRole, setSelectedRole] = useState(() =>
     // Set contact key with orderer field true to be the initial selected role.
-    findOrdererKey(getValues('applicationData'))
+    findOrdererKey(getValues('applicationData')),
   );
 
   const [
@@ -164,7 +164,7 @@ export const BasicHankeInfo: React.FC<React.PropsWithChildren<unknown>> = () => 
     // Remove moved contact from previous selected role contacts
     setValue(
       `applicationData.${selectedRole}.contacts`,
-      previousRoleContacts.length > 1 ? previousRoleContacts.slice(1) : [emptyContact]
+      previousRoleContacts.length > 1 ? previousRoleContacts.slice(1) : [emptyContact],
     );
 
     if (!getValues(`applicationData.${role.value}.customer`)) {
@@ -265,7 +265,6 @@ export const BasicHankeInfo: React.FC<React.PropsWithChildren<unknown>> = () => 
           name="applicationData.rockExcavation"
           label={t('common:yes')}
           id="excavationYes"
-          // eslint-disable-next-line react/jsx-boolean-value
           value={true}
         />
         <BooleanRadioButton<JohtoselvitysFormValues>

@@ -9,7 +9,6 @@ type Props = {
   fileName: string | null | undefined;
   queryKey: QueryKey;
   queryFunction: QueryFunction<string>;
-  // eslint-disable-next-line react/require-default-props
   linkIcon?: React.ReactNode;
 };
 

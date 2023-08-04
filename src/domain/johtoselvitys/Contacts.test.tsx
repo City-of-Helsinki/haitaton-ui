@@ -8,7 +8,6 @@ import { HankeContact, HankeDataDraft } from '../types/hanke';
 
 jest.setTimeout(10000);
 
-// eslint-disable-next-line react/require-default-props
 function Form({ hanke }: { hanke?: HankeDataDraft }) {
   const methods = useForm({});
 
@@ -34,11 +33,11 @@ test('Contacts can be filled with hanke contact info', async () => {
   expect(screen.getAllByRole('button', { name: /tyyppi/i })[0]).toHaveTextContent('Yritys');
   expect(screen.getAllByRole('textbox', { name: /nimi/i })[0]).toHaveValue(hankeOwner.nimi);
   expect(screen.getAllByRole('textbox', { name: /Y-tunnus/i })[0]).toHaveValue(
-    hankeOwner.ytunnusTaiHetu
+    hankeOwner.ytunnusTaiHetu,
   );
   expect(screen.getAllByRole('textbox', { name: /sähköposti/i })[0]).toHaveValue(hankeOwner.email);
   expect(screen.getAllByRole('textbox', { name: /puhelinnumero/i })[0]).toHaveValue(
-    hankeOwner.puhelinnumero
+    hankeOwner.puhelinnumero,
   );
 });
 

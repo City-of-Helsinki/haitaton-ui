@@ -43,7 +43,6 @@ const AreaSummary: React.FC<Props> = ({ formData }) => {
         {areas.map((area, index) => {
           const geom = getAreaGeometry(area);
           return (
-            // eslint-disable-next-line react/no-array-index-key
             <Box marginBottom="var(--spacing-m)" key={index}>
               <Text tag="p" spacingBottom="s">
                 <strong>{getAreaDefaultName(t, index, areas.length)}</strong>

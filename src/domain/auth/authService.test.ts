@@ -68,7 +68,7 @@ describe('authService', () => {
 
   describe('logout', () => {
     it('should call signoutRedirect from oidc', async () => {
-      const signoutRedirect = jest.spyOn(userManager, 'signoutRedirect');
+      const signoutRedirect = jest.spyOn(userManager, 'signoutRedirect').mockResolvedValue();
 
       await authService.logout();
 
