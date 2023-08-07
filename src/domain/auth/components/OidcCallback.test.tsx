@@ -1,18 +1,21 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import { cleanup, waitFor } from '@testing-library/react';
-import { render } from '../../../testUtils/render';
+import { Routes, Route, MemoryRouter } from 'react-router-dom';
+import { cleanup, render, waitFor } from '@testing-library/react';
+import { I18nextProvider } from 'react-i18next';
 import authService from '../authService';
 import OidcCallback from './OidcCallback';
 import { LOGIN_CALLBACK_PATH } from '../constants';
+import i18n from '../../../locales/i18nForTests';
 
 const getWrapper = () =>
   render(
-    <Routes>
-      <Route path={LOGIN_CALLBACK_PATH} element={<OidcCallback />} />
-    </Routes>,
-    {},
-    LOGIN_CALLBACK_PATH,
+    <MemoryRouter initialEntries={[LOGIN_CALLBACK_PATH]}>
+      <I18nextProvider i18n={i18n}>
+        <Routes>
+          <Route path={LOGIN_CALLBACK_PATH} element={<OidcCallback />} />
+        </Routes>
+      </I18nextProvider>
+    </MemoryRouter>,
   );
 
 describe('<OidcCallback />', () => {

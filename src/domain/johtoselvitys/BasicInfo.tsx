@@ -165,6 +165,9 @@ export const BasicHankeInfo: React.FC<React.PropsWithChildren<unknown>> = () => 
     setValue(
       `applicationData.${selectedRole}.contacts`,
       previousRoleContacts.length > 1 ? previousRoleContacts.slice(1) : [emptyContact],
+      {
+        shouldValidate: true,
+      },
     );
 
     if (!getValues(`applicationData.${role.value}.customer`)) {

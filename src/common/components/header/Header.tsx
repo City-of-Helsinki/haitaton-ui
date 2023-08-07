@@ -7,7 +7,6 @@ import { getMatchingRouteKey, useLocalizedRoutes } from '../../hooks/useLocalize
 import authService from '../../../domain/auth/authService';
 import useUser from '../../../domain/auth/useUser';
 import { Language, LANGUAGES } from '../../types/language';
-import { I18NLANGKEY } from '../../../locales/constants';
 import { SKIP_TO_ELEMENT_ID } from '../../constants/constants';
 import { useFeatureFlags } from '../featureFlags/FeatureFlagsContext';
 
@@ -18,13 +17,8 @@ const languageLabels = {
 };
 
 const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
-  const {
-    HOME,
-    PUBLIC_HANKKEET,
-    PUBLIC_HANKKEET_MAP,
-    HANKEPORTFOLIO,
-    NEW_HANKE,
-  } = useLocalizedRoutes();
+  const { HOME, PUBLIC_HANKKEET, PUBLIC_HANKKEET_MAP, HANKEPORTFOLIO, NEW_HANKE } =
+    useLocalizedRoutes();
   const { t, i18n } = useTranslation();
   const { data: user } = useUser();
   const isAuthenticated = Boolean(user?.profile);
@@ -47,7 +41,6 @@ const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
   const navigate = useNavigate();
 
   async function setLanguage(lang: Language) {
-    localStorage.setItem(I18NLANGKEY, lang);
     const routeKey = getMatchingRouteKey(i18n, i18n.language as Language, location.pathname);
     await i18n.changeLanguage(lang);
     const to = lang + t(`routes:${routeKey}.path`);

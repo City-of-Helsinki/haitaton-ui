@@ -65,10 +65,11 @@ export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
     formState: { errors },
   } = useFormContext<JohtoselvitysFormValues>();
 
-  const { fields: applicationAreas, append, remove } = useFieldArray<
-    JohtoselvitysFormValues,
-    'applicationData.areas'
-  >({
+  const {
+    fields: applicationAreas,
+    append,
+    remove,
+  } = useFieldArray<JohtoselvitysFormValues, 'applicationData.areas'>({
     name: 'applicationData.areas',
   });
 
@@ -80,14 +81,16 @@ export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
   const forceUpdate = useForceUpdate();
 
   const addressCoordinate = useAddressCoordinate(
-    getValues('applicationData.postalAddress.streetAddress.streetName')
+    getValues('applicationData.postalAddress.streetAddress.streetName'),
   );
 
   const [featuresLoaded, setFeaturesLoaded] = useState(false);
 
   useEffect(() => {
     function handleAddFeature(e: VectorSourceEvent<Geometry>) {
-      append(getEmptyArea(e.feature));
+      if (e.feature) {
+        append(getEmptyArea(e.feature));
+      }
     }
 
     const handleChangeFeature = debounce(() => {
