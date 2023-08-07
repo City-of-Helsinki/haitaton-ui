@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Drawer, DrawerBody, DrawerContent } from '@chakra-ui/react';
+import { Drawer, DrawerBody, DrawerContent, DrawerOverlay } from '@chakra-ui/react';
 import { IconCross } from 'hds-react/icons';
 import Text from '../../../../common/components/text/Text';
 import { formatToFinnishDate } from '../../../../common/utils/date';
@@ -51,6 +51,7 @@ const HankeSidebar: React.FC<React.PropsWithChildren<Props>> = ({ hanke, isOpen,
       onClose={handleClose}
       blockScrollOnMount={false}
     >
+      <DrawerOverlay />
       <DrawerContent
         className={styles.hankeSidebar__content}
         aria-label={t('hankeSidebar:ariaSidebarContent')}
