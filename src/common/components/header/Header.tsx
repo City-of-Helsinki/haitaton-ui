@@ -42,6 +42,10 @@ const Header: React.FC = () => {
     end: false,
   });
 
+  const workInstructionsAriaLabel = `${t('routes:WORKINSTRUCTIONS:headerLabel')}. ${t(
+    'common:components:link:openInNewTabAriaLabel'
+  )} ${t('common:components:link:openInExternalDomainAriaLabel')}`;
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -95,6 +99,7 @@ const Header: React.FC = () => {
             target="_blank"
             rel="noreferrer"
             icon={<IconLinkExternal />}
+            aria-label={workInstructionsAriaLabel}
           >
             {t('routes:WORKINSTRUCTIONS:headerLabel')}
           </Navigation.Item>

@@ -33,6 +33,11 @@ const ManualPage: React.FC = () => {
             rel="noreferrer"
             style={{ color: 'var(--color-coat-of-arms)' }}
             openInNewTab
+            external
+            openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
+            openInExternalDomainAriaLabel={t(
+              'common:components:link:openInExternalDomainAriaLabel'
+            )}
           >
             {t('staticPages:manualPage:linkText')}
           </Link>
