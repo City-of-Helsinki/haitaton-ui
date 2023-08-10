@@ -486,11 +486,11 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
           }
 
           async function handleSaveAndQuit() {
-            // Make sure that name for the application exists before saving and quitting
-            const applicationNameValid = await trigger('applicationData.name', {
+            // Make sure that current application page is valid before saving and quitting
+            const applicationPageValid = await trigger(pageFieldsToValidate[activeStepIndex], {
               shouldFocus: true,
             });
-            if (applicationNameValid) {
+            if (applicationPageValid) {
               await handlePageChange(saveAndQuit);
             }
           }
