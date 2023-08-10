@@ -10,7 +10,7 @@ import Polygon from 'ol/geom/Polygon';
 import { DRAWTOOLTYPE } from './types';
 import MapContext from '../../MapContext';
 import useDrawContext from './useDrawContext';
-import { isPolygonSelfIntersecting } from '../../utils';
+import { getSurfaceArea, isPolygonSelfIntersecting } from '../../utils';
 
 type Props = {
   features?: Collection<Feature>;
@@ -24,6 +24,8 @@ const DrawInteraction: React.FC<Props> = ({ onSelfIntersectingPolygon }) => {
   const { map } = useContext(MapContext);
   const { state, actions, source } = useDrawContext();
   const [instances, setInstances] = useState<Interaction[]>([]);
+
+  const drawnFeature = useRef<null | Feature>(null);
 
   const clearSelection = useCallback(() => {
     if (selection.current) selection.current.getFeatures().clear();
@@ -60,6 +62,24 @@ const DrawInteraction: React.FC<Props> = ({ onSelfIntersectingPolygon }) => {
         source,
         type: geometryType,
         geometryFunction,
+        finishCondition() {
+          const geometry = drawnFeature.current?.getGeometry();
+          if (geometry) {
+            const surfaceArea = getSurfaceArea(geometry);
+            // Don't allow drawing to be finished if its
+            // surface area is below 1
+            if (surfaceArea < 1) {
+              return false;
+            }
+          }
+          return true;
+        },
+      });
+
+      drawInstance.on('drawstart', (event) => {
+        event.feature.on('change', (changeEvent) => {
+          drawnFeature.current = changeEvent.target;
+        });
       });
 
       drawInstance.on('drawend', (event) => {

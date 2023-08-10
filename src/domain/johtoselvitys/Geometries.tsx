@@ -87,7 +87,9 @@ export const Geometries: React.FC = () => {
 
   useEffect(() => {
     function handleAddFeature(e: VectorSourceEvent<Geometry>) {
-      append(getEmptyArea(e.feature));
+      if (e.feature) {
+        append(getEmptyArea(e.feature));
+      }
     }
 
     const handleChangeFeature = debounce(() => {

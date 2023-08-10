@@ -15,6 +15,8 @@ customGlobal.fetch = require('jest-fetch-mock');
 
 customGlobal.fetchMock = customGlobal.fetch;
 
+global.ResizeObserver = require('resize-observer-polyfill');
+
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
 afterAll(() => server.close());
 afterEach(() => server.resetHandlers());
