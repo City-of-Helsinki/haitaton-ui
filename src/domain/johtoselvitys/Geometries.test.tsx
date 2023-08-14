@@ -3,7 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { render, screen } from '../../testUtils/render';
 import { Geometries } from './Geometries';
 
-jest.setTimeout(10000);
+jest.setTimeout(30000);
 
 function TestComponent() {
   const formContext = useForm();

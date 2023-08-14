@@ -18,7 +18,8 @@
 
 .controlMenu {
   background: var(--color-white);
-  padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-3-xs);
+  padding: var(--spacing-s) var(--spacing-xs) var(--spacing-xs) var(--spacing-3-xs);
+  border: 2px solid var(--color-black-60) !important;
 
   &__divider {
     margin-top: var(--spacing-xs);
@@ -30,9 +31,10 @@
   position: absolute;
   top: var(--spacing-s);
   right: var(--spacing-s);
+  background: var(--color-black-80);
 
   &__button {
-    padding: var(--spacing-3-xs);
+    padding: var(--spacing-3-xs) var(--spacing-2-xs);
   }
 }
 
