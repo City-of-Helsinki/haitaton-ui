@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconLinkExternal, IconSignout, Navigation } from 'hds-react';
+import { IconLinkExternal, IconSignout, LogoLanguage, Navigation } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useMatch, useLocation, useNavigate } from 'react-router-dom';
 import { $enum } from 'ts-enum-util';
@@ -55,6 +55,7 @@ const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
       skipToContentLabel={t('common:components:header:skipToContentLabel')}
       titleUrl={HOME.path}
       className="header"
+      logoLanguage={i18n.language as LogoLanguage}
     >
       {isAuthenticated && (
         <Navigation.Row ariaLabel={t('common:ariaLabels:topNavigation')}>

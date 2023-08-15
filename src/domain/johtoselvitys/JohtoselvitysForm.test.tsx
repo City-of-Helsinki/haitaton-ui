@@ -326,12 +326,6 @@ test('Save and quit works', async () => {
   // Fill basic information page
   fillBasicInformation();
 
-  // Move to areas page
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
-
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
-
-  fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
   expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
@@ -344,42 +338,24 @@ test('Save and quit works without hanke existing first', async () => {
   // Fill basic information page
   fillBasicInformation();
 
-  // Move to areas page
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
-
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
-
-  fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
   expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
   expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-13');
 });
 
-test('Should save and quit from the first page with just application name entered', async () => {
-  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
-
-  fireEvent.change(screen.getByLabelText(/työn nimi/i), {
-    target: { value: 'Johtoselvitys testi' },
-  });
-  await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
-
-  expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
-  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-14');
-});
-
-test('Should not save and quit if there is no application name', async () => {
+test('Should not save and quit if current form page is not valid', async () => {
   const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
 
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
   expect(window.location.pathname).toBe('/fi/johtoselvityshakemus');
-  expect(screen.queryByText('Kenttä on pakollinen')).toBeInTheDocument();
+  expect(screen.queryAllByText('Kenttä on pakollinen').length).toBeGreaterThan(1);
 });
 
 test('Should show error message and not navigate away when save and quit fails', async () => {
   server.use(
-    rest.put('/api/hakemukset/:id', async (req, res, ctx) => {
+    rest.post('/api/hakemukset/:id', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
     }),
   );
@@ -387,7 +363,6 @@ test('Should show error message and not navigate away when save and quit fails',
   const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
 
   fillBasicInformation();
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
   expect(screen.queryAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
@@ -410,7 +385,7 @@ test('Should not save application between page changes when nothing is changed',
   expect(screen.queryByText(/hakemus tallennettu/i)).not.toBeInTheDocument();
 });
 
-test('Should save existing application between page changes when there is changes', async () => {
+test('Should save existing application between page changes when there are changes', async () => {
   const { user } = render(<JohtoselvitysContainer application={applications[3]} />);
 
   fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {

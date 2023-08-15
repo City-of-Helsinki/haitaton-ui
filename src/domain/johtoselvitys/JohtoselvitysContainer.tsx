@@ -156,7 +156,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
       if (applicationId && !application) {
         sessionStorage.setItem(APPLICATION_ID_STORAGE_KEY, applicationId.toString());
       }
-    }, [getValues, application])
+    }, [getValues, application]),
   );
 
   // If application is created without hanke existing first, get generated hanke data
@@ -167,7 +167,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   }
 
   const { data: existingAttachments, isError: attachmentsLoadError } = useAttachments(
-    getValues('id')
+    getValues('id'),
   );
 
   const navigateToApplicationList = useNavigateToApplicationList(hanke?.hankeTunnus);
@@ -213,7 +213,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         return errors.concat(
           <Box as="p" key={file.name} mb="var(--spacing-s)">
             {file.name}: {t('common:error')}
-          </Box>
+          </Box>,
         );
       });
     },
@@ -235,7 +235,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     if (!id) {
       try {
         const responseData = await applicationSaveMutation.mutateAsync(
-          convertFormStateToApplicationData(data)
+          convertFormStateToApplicationData(data),
         );
         setShowSaveNotification(false);
         id = responseData.id as number;
@@ -291,7 +291,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         applicationId,
         attachmentType: 'MUU',
         file,
-      })
+      }),
     );
 
     const results = await Promise.allSettled(mutations);
@@ -340,7 +340,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
       // Attachments page
       ['attachmentNumber'],
     ],
-    [ordererKey]
+    [ordererKey],
   );
 
   const formSteps = useMemo(() => {
@@ -367,7 +367,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         state: isPageValid<JohtoselvitysFormValues>(
           validationSchema,
           pageFieldsToValidate[0],
-          formValues
+          formValues,
         )
           ? StepState.available
           : StepState.disabled,
@@ -378,7 +378,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         state: isPageValid<JohtoselvitysFormValues>(
           validationSchema,
           pageFieldsToValidate[1],
-          formValues
+          formValues,
         )
           ? StepState.available
           : StepState.disabled,
@@ -396,7 +396,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         state: isPageValid<JohtoselvitysFormValues>(
           validationSchema,
           pageFieldsToValidate[2],
-          formValues
+          formValues,
         )
           ? StepState.available
           : StepState.disabled,
@@ -407,7 +407,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         state: isPageValid<JohtoselvitysFormValues>(
           validationSchema,
           pageFieldsToValidate[2],
-          formValues
+          formValues,
         )
           ? StepState.available
           : StepState.disabled,
@@ -489,11 +489,11 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
           }
 
           async function handleSaveAndQuit() {
-            // Make sure that name for the application exists before saving and quitting
-            const applicationNameValid = await trigger('applicationData.name', {
+            // Make sure that current application page is valid before saving and quitting
+            const applicationPageValid = await trigger(pageFieldsToValidate[activeStepIndex], {
               shouldFocus: true,
             });
-            if (applicationNameValid) {
+            if (applicationPageValid) {
               await handlePageChange(saveAndQuit);
             }
           }
