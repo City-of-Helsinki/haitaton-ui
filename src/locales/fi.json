@@ -22,6 +22,10 @@
       "confirmButton": "Vahvista"
     },
     "components": {
+      "link": {
+        "openInNewTabAriaLabel": "Avautuu uudessa välilehdessä.",
+        "openInExternalDomainAriaLabel": "Siirtyy toiseen sivustoon."
+      },
       "linkbox": {
         "linkbox": "Linkkialue"
       },
