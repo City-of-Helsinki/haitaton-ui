@@ -14,11 +14,7 @@ const toggleMapTileLayer: CaseReducer<ReducerState, PayloadAction<MapTileLayerId
   state,
   action
 ) => {
-  (Object.keys(state.mapTileLayers) as Array<keyof typeof state.mapTileLayers>).forEach(
-    (mapTileLayerKey) => {
-      state.mapTileLayers[mapTileLayerKey].visible = action.payload === mapTileLayerKey;
-    }
-  );
+  state.mapTileLayers[action.payload].visible = !state.mapTileLayers[action.payload].visible;
 };
 
 const updateDrawGeometry: CaseReducer<ReducerState, PayloadAction<HankeGeoJSON>> = (
@@ -54,8 +50,8 @@ const initialState: ReducerState = {
   drawGeometry: null,
   visibleLayers: [],
   mapTileLayers: {
-    [MAPTILES.ORTOKARTTA]: buildTilelayerState(MAPTILES.ORTOKARTTA, false),
     [MAPTILES.KANTAKARTTA]: buildTilelayerState(MAPTILES.KANTAKARTTA, true),
+    [MAPTILES.ORTOKARTTA]: buildTilelayerState(MAPTILES.ORTOKARTTA, false),
   },
   hankeFilters: {
     startDate: `${currentYear}-01-01`,
