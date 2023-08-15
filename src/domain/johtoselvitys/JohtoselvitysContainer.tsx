@@ -283,7 +283,12 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
       return Promise.resolve();
     }
 
-    const mutations = newAttachments.map((file) =>
+    // Filter out attachments that have same names as those that have already been sent
+    const filesToSend = newAttachments.filter((file) =>
+      existingAttachments?.every((attachment) => attachment.fileName !== file.name)
+    );
+
+    const mutations = filesToSend.map((file) =>
       attachmentUploadMutation.mutateAsync({
         applicationId,
         attachmentType: 'MUU',
