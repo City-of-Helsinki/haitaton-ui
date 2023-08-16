@@ -12,32 +12,28 @@ const selectProject: CaseReducer<ReducerState, PayloadAction<string>> = (state, 
 
 const toggleMapTileLayer: CaseReducer<ReducerState, PayloadAction<MapTileLayerId>> = (
   state,
-  action
+  action,
 ) => {
-  (Object.keys(state.mapTileLayers) as Array<keyof typeof state.mapTileLayers>).forEach(
-    (mapTileLayerKey) => {
-      state.mapTileLayers[mapTileLayerKey].visible = action.payload === mapTileLayerKey;
-    }
-  );
+  state.mapTileLayers[action.payload].visible = !state.mapTileLayers[action.payload].visible;
 };
 
 const updateDrawGeometry: CaseReducer<ReducerState, PayloadAction<HankeGeoJSON>> = (
   state,
-  action
+  action,
 ) => {
   state.drawGeometry = action.payload;
 };
 
 const setHankeFilterStartDate: CaseReducer<ReducerState, PayloadAction<string | null>> = (
   state,
-  action
+  action,
 ) => {
   state.hankeFilters.startDate = action.payload;
 };
 
 const setHankeFilterEndDate: CaseReducer<ReducerState, PayloadAction<string | null>> = (
   state,
-  action
+  action,
 ) => {
   state.hankeFilters.endDate = action.payload;
 };
@@ -54,8 +50,8 @@ const initialState: ReducerState = {
   drawGeometry: null,
   visibleLayers: [],
   mapTileLayers: {
-    [MAPTILES.ORTOKARTTA]: buildTilelayerState(MAPTILES.ORTOKARTTA, false),
     [MAPTILES.KANTAKARTTA]: buildTilelayerState(MAPTILES.KANTAKARTTA, true),
+    [MAPTILES.ORTOKARTTA]: buildTilelayerState(MAPTILES.ORTOKARTTA, false),
   },
   hankeFilters: {
     startDate: `${currentYear}-01-01`,

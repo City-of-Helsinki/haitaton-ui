@@ -17,7 +17,7 @@ describe('HankeMap', () => {
     expect(screen.getByLabelText('Kantakartta')).toBeChecked();
     await user.click(screen.getByText('Ortokartta'));
     expect(screen.getByLabelText('Ortokartta')).toBeChecked();
-    expect(screen.getByLabelText('Kantakartta')).not.toBeChecked();
+    expect(screen.getByLabelText('Kantakartta')).toBeChecked();
   });
 
   test('Number of projects displayed on the map can be controlled with dateRangeControl', async () => {

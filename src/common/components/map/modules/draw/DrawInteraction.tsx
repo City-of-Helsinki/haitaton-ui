@@ -26,6 +26,7 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
   const { map } = useContext(MapContext);
   const { state, actions, source } = useDrawContext();
   const [instances, setInstances] = useState<Interaction[]>([]);
+  const modify = useRef<null | Modify>(null);
 
   const drawnFeature = useRef<null | Feature>(null);
 
@@ -99,13 +100,7 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
 
       map.addInteraction(drawInstance);
 
-      const snapInstance = new Snap({ source });
-      map.addInteraction(snapInstance);
-
-      const modifyInstance = new Modify({ source });
-      map.addInteraction(modifyInstance);
-
-      setInstances([drawInstance, snapInstance, modifyInstance]);
+      setInstances([drawInstance]);
     },
     [map, source, state.selectedDrawtoolType, actions, clearSelection, onSelfIntersectingPolygon],
   );
@@ -113,10 +108,10 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
   useEffect(() => {
     if (!map || !source || process.env.NODE_ENV === 'test') return;
 
-    const modifyInstance = new Modify({ source });
-    map.addInteraction(modifyInstance);
+    modify.current = new Modify({ source });
+    map.addInteraction(modify.current);
 
-    modifyInstance.on('modifyend', () => {
+    modify.current.on('modifyend', () => {
       const selfIntersectingFeature = source
         .getFeatures()
         .find((feature) => isPolygonSelfIntersecting(feature.getGeometry() as Polygon));
@@ -131,6 +126,8 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
     });
 
     source.on('removefeature', () => {
+      clearSelection();
+
       const selfIntersectingFeature = source
         .getFeatures()
         .find((feature) => isPolygonSelfIntersecting(feature.getGeometry() as Polygon));
@@ -157,13 +154,11 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
       }
     });
 
-    source.on('removefeature', () => {
-      clearSelection();
-    });
-
     // eslint-disable-next-line consistent-return
     return function cleanUp() {
-      map.removeInteraction(modifyInstance);
+      if (modify.current) {
+        map.removeInteraction(modify.current);
+      }
       if (selection.current) {
         map.removeInteraction(selection.current);
       }
@@ -174,7 +169,11 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
   useEffect(() => {
     removeAllInteractions();
     if (state.selectedDrawtoolType) {
+      // When drawing, deactivate modify interaction
+      modify.current?.setActive(false);
       startDraw(state.selectedDrawtoolType);
+    } else {
+      modify.current?.setActive(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.selectedDrawtoolType]);

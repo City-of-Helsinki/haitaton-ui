@@ -23,6 +23,7 @@ import AddressSearchContainer from './components/AddressSearch/AddressSearchCont
 const HankeMap: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [zoom] = useState(9); // TODO: also take zoom into consideration
   const { mapTileLayers, toggleMapTileLayer } = useMapDataLayers();
+  const ortoLayerOpacity = mapTileLayers.kantakartta.visible ? 0.5 : 1;
   const {
     hankeFilterStartDate,
     hankeFilterEndDate,
@@ -36,8 +37,8 @@ const HankeMap: React.FC<React.PropsWithChildren<unknown>> = () => {
         <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} />
 
         <MapGuide />
-        {mapTileLayers.ortokartta.visible && <Ortokartta />}
         {mapTileLayers.kantakartta.visible && <Kantakartta />}
+        {mapTileLayers.ortokartta.visible && <Ortokartta opacity={ortoLayerOpacity} />}
         <OverviewMapControl />
 
         <HankkeetProvider>
