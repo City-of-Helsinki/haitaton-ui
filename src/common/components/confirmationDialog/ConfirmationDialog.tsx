@@ -9,7 +9,7 @@ import ConfirmationDialogUI from './ConfirmationDialogUI';
 
 import './Dialog.styles.scss';
 
-const ConfirmationDialog: React.FC = () => {
+const ConfirmationDialog: React.FC<React.PropsWithChildren<unknown>> = () => {
   const isDialogOpenVal = useSelector(getIsDialogOpen());
   const redirectUrl = useSelector(getRedirectUrl());
   const dispatch = useDispatch();

@@ -15,7 +15,7 @@ const getWrapper = () =>
           <Route path={LOGIN_CALLBACK_PATH} element={<OidcCallback />} />
         </Routes>
       </I18nextProvider>
-    </MemoryRouter>
+    </MemoryRouter>,
   );
 
 describe('<OidcCallback />', () => {
@@ -30,7 +30,7 @@ describe('<OidcCallback />', () => {
     const { queryByText } = getWrapper();
 
     await waitFor(() =>
-      expect(queryByText('Kirjautumisessa tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument()
+      expect(queryByText('Kirjautumisessa tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument(),
     );
   });
 
@@ -42,9 +42,9 @@ describe('<OidcCallback />', () => {
     await waitFor(() =>
       expect(
         queryByText(
-          'Et voi kirjautua sisään koska laitteesi kello on yli 5 minuuttia väärässä. Säädä kelloa ja kokeile uudestaan.'
-        )
-      ).toBeInTheDocument()
+          'Et voi kirjautua sisään koska laitteesi kello on yli 5 minuuttia väärässä. Säädä kelloa ja kokeile uudestaan.',
+        ),
+      ).toBeInTheDocument(),
     );
   });
 
@@ -52,7 +52,7 @@ describe('<OidcCallback />', () => {
     jest
       .spyOn(authService, 'endLogin')
       .mockRejectedValue(
-        new Error('The resource owner or authorization server denied the request')
+        new Error('The resource owner or authorization server denied the request'),
       );
 
     const { queryByText } = getWrapper();
@@ -60,9 +60,9 @@ describe('<OidcCallback />', () => {
     await waitFor(() =>
       expect(
         queryByText(
-          'Sinun täytyy hyväksyä pyytämämme oikeudet käyttääksesi tätä palvelua. Ole hyvä ja yritä kirjautua uudelleen.'
-        )
-      ).toBeInTheDocument()
+          'Sinun täytyy hyväksyä pyytämämme oikeudet käyttääksesi tätä palvelua. Ole hyvä ja yritä kirjautua uudelleen.',
+        ),
+      ).toBeInTheDocument(),
     );
   });
 

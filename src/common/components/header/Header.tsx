@@ -16,14 +16,9 @@ const languageLabels = {
   sv: 'Svenska',
 };
 
-const Header: React.FC = () => {
-  const {
-    HOME,
-    PUBLIC_HANKKEET,
-    PUBLIC_HANKKEET_MAP,
-    HANKEPORTFOLIO,
-    NEW_HANKE,
-  } = useLocalizedRoutes();
+const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
+  const { HOME, PUBLIC_HANKKEET, PUBLIC_HANKKEET_MAP, HANKEPORTFOLIO, NEW_HANKE } =
+    useLocalizedRoutes();
   const { t, i18n } = useTranslation();
   const { data: user } = useUser();
   const isAuthenticated = Boolean(user?.profile);
@@ -43,7 +38,7 @@ const Header: React.FC = () => {
   });
 
   const workInstructionsAriaLabel = `${t('routes:WORKINSTRUCTIONS:headerLabel')}. ${t(
-    'common:components:link:openInNewTabAriaLabel'
+    'common:components:link:openInNewTabAriaLabel',
   )} ${t('common:components:link:openInExternalDomainAriaLabel')}`;
 
   const location = useLocation();

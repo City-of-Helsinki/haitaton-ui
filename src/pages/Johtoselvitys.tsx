@@ -11,7 +11,7 @@ import useLinkPath from '../common/hooks/useLinkPath';
 import { ROUTES } from '../common/types/route';
 import { APPLICATION_ID_STORAGE_KEY } from '../domain/application/constants';
 
-const Johtoselvitys: React.FC = () => {
+const Johtoselvitys: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();
   const getEditApplicationPath = useLinkPath(ROUTES.EDIT_JOHTOSELVITYSHAKEMUS);
 

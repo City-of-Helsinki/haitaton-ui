@@ -7,7 +7,7 @@ type Props = {
   source: VectorSource;
 };
 
-const CenterProjectOnMap: React.FC<Props> = ({ source }) => {
+const CenterProjectOnMap: React.FC<React.PropsWithChildren<Props>> = ({ source }) => {
   const location = useLocation();
   const { map } = useContext(MapContext);
   const hankeTunnus = new URLSearchParams(location.search).get('hanke');

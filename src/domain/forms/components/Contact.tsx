@@ -1,4 +1,3 @@
-/* eslint-disable react/require-default-props */
 import React from 'react';
 import { Flex } from '@chakra-ui/react';
 import { Button, IconCross, IconPlusCircle, Tab, TabList, TabPanel, Tabs } from 'hds-react';
@@ -17,7 +16,7 @@ interface Props<T> {
   children: React.ReactNode;
 }
 
-const Contact = <T extends unknown>({
+const Contact = <T,>({
   contactType,
   index,
   onRemoveContact,

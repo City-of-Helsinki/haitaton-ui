@@ -30,6 +30,7 @@ function findOrderer(formData: JohtoselvitysFormValues): Contact | null {
 
 type Props = {
   formData: JohtoselvitysFormValues;
+  children?: React.ReactNode;
 };
 
 const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {

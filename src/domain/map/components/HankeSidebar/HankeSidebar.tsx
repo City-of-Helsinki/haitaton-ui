@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Drawer, DrawerBody, DrawerContent } from '@chakra-ui/react';
+import { Drawer, DrawerBody, DrawerContent, DrawerOverlay } from '@chakra-ui/react';
 import { IconCross } from 'hds-react/icons';
 import Text from '../../../../common/components/text/Text';
 import { formatToFinnishDate } from '../../../../common/utils/date';
@@ -13,7 +13,7 @@ type SectionProps = {
   content: string;
 };
 
-const SidebarSection: React.FC<SectionProps> = ({ title, content }) =>
+const SidebarSection: React.FC<React.PropsWithChildren<SectionProps>> = ({ title, content }) =>
   title && title !== '' && content && content !== '' ? (
     <>
       <Text tag="h3" styleAs="h6" weight="bold" spacingBottom="2-xs">
@@ -31,7 +31,7 @@ type Props = {
   handleClose: () => void;
 };
 
-const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
+const HankeSidebar: React.FC<React.PropsWithChildren<Props>> = ({ hanke, isOpen, handleClose }) => {
   const { t } = useTranslation();
 
   const tyomaaTyyppiContent = hanke.tyomaaTyyppi.length
@@ -51,6 +51,7 @@ const HankeSidebar: React.FC<Props> = ({ hanke, isOpen, handleClose }) => {
       onClose={handleClose}
       blockScrollOnMount={false}
     >
+      <DrawerOverlay />
       <DrawerContent
         className={styles.hankeSidebar__content}
         aria-label={t('hankeSidebar:ariaSidebarContent')}

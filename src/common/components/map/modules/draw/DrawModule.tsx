@@ -15,7 +15,10 @@ type Props = {
   onSelfIntersectingPolygon?: (feature: Feature<Geometry> | null) => void;
 };
 
-const DrawModule: React.FC<Props> = ({ source, onSelfIntersectingPolygon }) => (
+const DrawModule: React.FC<React.PropsWithChildren<Props>> = ({
+  source,
+  onSelfIntersectingPolygon,
+}) => (
   <DrawProvider source={source}>
     <DrawIntercation onSelfIntersectingPolygon={onSelfIntersectingPolygon} />
     <DrawControl />

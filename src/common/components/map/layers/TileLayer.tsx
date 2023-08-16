@@ -11,7 +11,7 @@ type Props = {
   opacity?: number;
 };
 
-const TileLayer: React.FC<Props> = ({ source, minZoom, maxZoom, zIndex = 0, opacity = 1 }) => {
+function TileLayer({ source, minZoom, maxZoom, zIndex = 0, opacity = 1 }: Props) {
   const { map } = useContext(MapContext);
 
   useEffect(() => {
@@ -37,6 +37,6 @@ const TileLayer: React.FC<Props> = ({ source, minZoom, maxZoom, zIndex = 0, opac
   }, [map, maxZoom, minZoom, zIndex, source, opacity]);
 
   return null;
-};
+}
 
 export default TileLayer;

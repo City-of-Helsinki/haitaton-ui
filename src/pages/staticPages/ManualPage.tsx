@@ -36,7 +36,7 @@ const ManualPage: React.FC = () => {
             external
             openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
             openInExternalDomainAriaLabel={t(
-              'common:components:link:openInExternalDomainAriaLabel'
+              'common:components:link:openInExternalDomainAriaLabel',
             )}
           >
             {t('staticPages:manualPage:linkText')}

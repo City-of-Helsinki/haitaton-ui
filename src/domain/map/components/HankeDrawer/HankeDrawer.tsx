@@ -33,7 +33,7 @@ type Props = {
   zoom?: number;
 };
 
-const HankeDrawer: React.FC<Props> = ({
+const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
   onAddFeature,
   onChangeFeature,
   onRemoveFeature,

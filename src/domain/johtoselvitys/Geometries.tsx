@@ -59,7 +59,7 @@ function getEmptyArea(feature: Feature<Geometry>): JohtoselvitysArea {
   };
 }
 
-export const Geometries: React.FC = () => {
+export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation();
   const locale = useLocale();
   const {
@@ -69,10 +69,11 @@ export const Geometries: React.FC = () => {
     formState: { errors },
   } = useFormContext<JohtoselvitysFormValues>();
 
-  const { fields: applicationAreas, append, remove } = useFieldArray<
-    JohtoselvitysFormValues,
-    'applicationData.areas'
-  >({
+  const {
+    fields: applicationAreas,
+    append,
+    remove,
+  } = useFieldArray<JohtoselvitysFormValues, 'applicationData.areas'>({
     name: 'applicationData.areas',
   });
 
@@ -84,7 +85,7 @@ export const Geometries: React.FC = () => {
   const forceUpdate = useForceUpdate();
 
   const addressCoordinate = useAddressCoordinate(
-    getValues('applicationData.postalAddress.streetAddress.streetName')
+    getValues('applicationData.postalAddress.streetAddress.streetName'),
   );
 
   const [featuresLoaded, setFeaturesLoaded] = useState(false);

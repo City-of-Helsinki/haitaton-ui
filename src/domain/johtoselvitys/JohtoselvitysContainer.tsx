@@ -43,7 +43,10 @@ type Props = {
   application?: Application;
 };
 
-const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => {
+const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
+  hankeData,
+  application,
+}) => {
   let hanke = hankeData;
   const { t } = useTranslation();
   const { setNotification } = useGlobalNotification();
@@ -153,7 +156,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
       if (applicationId && !application) {
         sessionStorage.setItem(APPLICATION_ID_STORAGE_KEY, applicationId.toString());
       }
-    }, [getValues, application])
+    }, [getValues, application]),
   );
 
   // If application is created without hanke existing first, get generated hanke data
@@ -164,7 +167,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
   }
 
   const { data: existingAttachments, isError: attachmentsLoadError } = useAttachments(
-    getValues('id')
+    getValues('id'),
   );
 
   const navigateToApplicationList = useNavigateToApplicationList(hanke?.hankeTunnus);
@@ -210,7 +213,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         return errors.concat(
           <Box as="p" key={file.name} mb="var(--spacing-s)">
             {file.name}: {t('common:error')}
-          </Box>
+          </Box>,
         );
       });
     },
@@ -232,7 +235,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     if (!id) {
       try {
         const responseData = await applicationSaveMutation.mutateAsync(
-          convertFormStateToApplicationData(data)
+          convertFormStateToApplicationData(data),
         );
         setShowSaveNotification(false);
         id = responseData.id as number;
@@ -288,7 +291,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         applicationId,
         attachmentType: 'MUU',
         file,
-      })
+      }),
     );
 
     const results = await Promise.allSettled(mutations);
@@ -337,7 +340,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
       // Attachments page
       ['attachmentNumber'],
     ],
-    [ordererKey]
+    [ordererKey],
   );
 
   const formSteps = useMemo(() => {
@@ -364,7 +367,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         state: isPageValid<JohtoselvitysFormValues>(
           validationSchema,
           pageFieldsToValidate[0],
-          formValues
+          formValues,
         )
           ? StepState.available
           : StepState.disabled,
@@ -375,7 +378,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         state: isPageValid<JohtoselvitysFormValues>(
           validationSchema,
           pageFieldsToValidate[1],
-          formValues
+          formValues,
         )
           ? StepState.available
           : StepState.disabled,
@@ -393,7 +396,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         state: isPageValid<JohtoselvitysFormValues>(
           validationSchema,
           pageFieldsToValidate[2],
-          formValues
+          formValues,
         )
           ? StepState.available
           : StepState.disabled,
@@ -404,7 +407,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         state: isPageValid<JohtoselvitysFormValues>(
           validationSchema,
           pageFieldsToValidate[2],
-          formValues
+          formValues,
         )
           ? StepState.available
           : StepState.disabled,

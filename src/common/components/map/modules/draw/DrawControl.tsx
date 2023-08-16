@@ -24,7 +24,7 @@ const getDrawIcon = (drawTool: DRAWTOOLTYPE) => {
   }
 };
 
-const DrawControls: React.FC = () => {
+const DrawControls: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation();
   const { state, actions } = useDrawContext();
 

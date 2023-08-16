@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Flex } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link as HDSLink } from 'hds-react';
@@ -53,8 +53,15 @@ const AuthError = ({ errorText }: AuthErrorProps) => {
 const OidcCallback = () => {
   const { t } = useTranslation();
   const [authenticationError, setAuthenticationError] = useState<AuthenticationError | null>(null);
+  const endLoginCalled = useRef(false);
 
   useEffect(() => {
+    if (endLoginCalled.current) {
+      return;
+    }
+
+    endLoginCalled.current = true;
+
     authService
       .endLogin()
       .then(() => {

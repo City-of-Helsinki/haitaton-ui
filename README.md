@@ -1,8 +1,8 @@
-# Haitaton Beta UI
+# Haitaton UI
 
 ## Requirements
 
-- Node 12.x
+- Node 16.x
 - Yarn
 - Git
 - Docker

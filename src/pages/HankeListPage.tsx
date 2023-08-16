@@ -4,7 +4,7 @@ import PageMeta from './components/PageMeta';
 import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
 import HankeListContainer from '../domain/hanke/list/HankeListContainer';
 
-const HankeListPage: React.FC = () => {
+const HankeListPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { PUBLIC_HANKKEET_LIST } = useLocalizedRoutes();
 
   return (

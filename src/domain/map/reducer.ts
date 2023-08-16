@@ -12,28 +12,28 @@ const selectProject: CaseReducer<ReducerState, PayloadAction<string>> = (state, 
 
 const toggleMapTileLayer: CaseReducer<ReducerState, PayloadAction<MapTileLayerId>> = (
   state,
-  action
+  action,
 ) => {
   state.mapTileLayers[action.payload].visible = !state.mapTileLayers[action.payload].visible;
 };
 
 const updateDrawGeometry: CaseReducer<ReducerState, PayloadAction<HankeGeoJSON>> = (
   state,
-  action
+  action,
 ) => {
   state.drawGeometry = action.payload;
 };
 
 const setHankeFilterStartDate: CaseReducer<ReducerState, PayloadAction<string | null>> = (
   state,
-  action
+  action,
 ) => {
   state.hankeFilters.startDate = action.payload;
 };
 
 const setHankeFilterEndDate: CaseReducer<ReducerState, PayloadAction<string | null>> = (
   state,
-  action
+  action,
 ) => {
   state.hankeFilters.endDate = action.payload;
 };

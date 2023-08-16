@@ -7,7 +7,7 @@ import Container from '../../common/components/container/Container';
 import Text from '../../common/components/text/Text';
 import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
 
-const PrivacyPolicyPage: React.FC = () => {
+const PrivacyPolicyPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { PRIVACY_POLICY } = useLocalizedRoutes();
 
   const { t } = useTranslation();

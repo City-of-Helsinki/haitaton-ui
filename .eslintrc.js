@@ -1,5 +1,10 @@
 module.exports = {
-  extends: ['airbnb-typescript-prettier'],
+  root: true,
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react-hooks/recommended',
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: './tsconfig.eslint.json',
@@ -10,7 +15,7 @@ module.exports = {
     ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
     sourceType: 'module', // Allows for the use of imports
   },
-  plugins: ['jest'],
+  plugins: ['jest', '@typescript-eslint', 'react-hooks'],
   env: { 'jest/globals': true },
   rules: {
     'no-use-before-define': 'off',
@@ -21,49 +26,15 @@ module.exports = {
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': 'error',
     'object-curly-spacing': ['warn', 'always'],
-    'react/jsx-indent': [2, 2],
     'react/jsx-props-no-spreading': 'off',
     'import/prefer-default-export': 'off',
     'react-hooks/exhaustive-deps': 'off',
     'no-underscore-dangle': ['error', { allow: ['__typename', '_env_'] }],
-    'jsx-a11y/label-has-associated-control': [
-      'warn',
-      {
-        required: {
-          some: ['nesting', 'id'],
-        },
-      },
-    ],
-    'jsx-a11y/label-has-for': [
-      'warn',
-      {
-        required: {
-          some: ['nesting', 'id'],
-        },
-      },
-    ],
-    'import/no-extraneous-dependencies': [
-      'error',
-      {
-        devDependencies: [
-          '**/setupTests.ts',
-          '**/*.test.tsx',
-          '**/testUtils/*.tsx',
-          '**/*.spec.ts',
-        ],
-      },
-    ],
     'no-param-reassign': [
       'error',
       {
         props: true,
         ignorePropertyModificationsFor: ['state'],
-      },
-    ],
-    'prettier/prettier': [
-      'error',
-      {
-        endOfLine: 'auto',
       },
     ],
   },
@@ -73,11 +44,6 @@ module.exports = {
     },
   },
   overrides: [
-    {
-      files: ['*.js'],
-      parser: 'babel-eslint',
-      rules: {},
-    },
     {
       files: ['**/*.test.tsx', '**/*.test.ts'],
       env: {

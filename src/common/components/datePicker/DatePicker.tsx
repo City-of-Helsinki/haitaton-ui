@@ -21,7 +21,7 @@ type PropTypes = {
   helperText?: string;
 };
 
-const DatePicker: React.FC<PropTypes> = ({
+const DatePicker: React.FC<React.PropsWithChildren<PropTypes>> = ({
   name,
   label,
   disabled,

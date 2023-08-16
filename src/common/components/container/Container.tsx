@@ -7,7 +7,7 @@ type Props = {
   className?: string;
 };
 
-const Container: React.FC<Props> = ({ children, className }) => {
+const Container: React.FC<React.PropsWithChildren<Props>> = ({ children, className }) => {
   return <div className={clsx(styles.limitedWidthContainer, className)}>{children}</div>;
 };
 

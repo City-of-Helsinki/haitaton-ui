@@ -2,6 +2,7 @@ import React from 'react';
 import { IconAlertCircle, Tag } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { AlluStatusStrings, AlluStatus } from '../types/application';
+import styles from './ApplicationStatusTag.module.scss';
 
 /**
  * Get theme for status tag.
@@ -29,11 +30,15 @@ function ApplicationStatusTag({ status }: { status: AlluStatusStrings | null }) 
   // If application is in draft state or waiting information (täydennyspyyntö),
   // display alert icon before status text
   const icon =
-    status === null || status === AlluStatus.WAITING_INFORMATION ? <IconAlertCircle /> : null;
+    status === null || status === AlluStatus.WAITING_INFORMATION ? (
+      <IconAlertCircle style={{ marginRight: 'var(--spacing-2-xs)' }} />
+    ) : null;
 
   return (
     <Tag theme={getTheme(status)} data-testid="application-status-tag">
-      {icon} {statusText}
+      <div className={styles.applicationStatusTag}>
+        {icon} {statusText}
+      </div>
     </Tag>
   );
 }

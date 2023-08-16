@@ -4,7 +4,7 @@ import { Footer, LogoLanguage } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
 
-const HaitatonFooter: React.FC = () => {
+function HaitatonFooter() {
   const { t, i18n } = useTranslation();
   const { MANUAL, HAITATON_INFO, ACCESSIBILITY, PRIVACY_POLICY } = useLocalizedRoutes();
 
@@ -22,6 +22,6 @@ const HaitatonFooter: React.FC = () => {
       <Footer.Base copyrightHolder="Helsingin kaupunki" />
     </Footer>
   );
-};
+}
 
 export default HaitatonFooter;

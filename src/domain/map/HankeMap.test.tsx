@@ -24,6 +24,7 @@ describe('HankeMap', () => {
     const renderedComponent = render(<HankeMap />);
 
     await screen.findByPlaceholderText('Etsi osoitteella');
+    await screen.findByText('Ajanjakson alku');
 
     expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
     changeFilterDate(startDateLabel, renderedComponent, '1.1.2022');

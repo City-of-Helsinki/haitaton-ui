@@ -22,7 +22,7 @@ type PropTypes = {
   style?: React.CSSProperties;
 };
 
-const Dropdown: React.FC<PropTypes> = ({
+const Dropdown: React.FC<React.PropsWithChildren<PropTypes>> = ({
   id,
   name,
   rules,

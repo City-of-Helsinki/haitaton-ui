@@ -78,7 +78,7 @@ const customerTypes: CustomerType[] = [
 
 type Option = { value: CustomerType; label: string };
 
-export const BasicHankeInfo: React.FC = () => {
+export const BasicHankeInfo: React.FC<React.PropsWithChildren<unknown>> = () => {
   const {
     register,
     watch,
@@ -93,7 +93,7 @@ export const BasicHankeInfo: React.FC = () => {
 
   const [selectedRole, setSelectedRole] = useState(() =>
     // Set contact key with orderer field true to be the initial selected role.
-    findOrdererKey(getValues('applicationData'))
+    findOrdererKey(getValues('applicationData')),
   );
 
   const [
@@ -167,7 +167,7 @@ export const BasicHankeInfo: React.FC = () => {
       previousRoleContacts.length > 1 ? previousRoleContacts.slice(1) : [emptyContact],
       {
         shouldValidate: true,
-      }
+      },
     );
 
     if (!getValues(`applicationData.${role.value}.customer`)) {
@@ -268,7 +268,6 @@ export const BasicHankeInfo: React.FC = () => {
           name="applicationData.rockExcavation"
           label={t('common:yes')}
           id="excavationYes"
-          // eslint-disable-next-line react/jsx-boolean-value
           value={true}
         />
         <BooleanRadioButton<JohtoselvitysFormValues>

@@ -12,6 +12,7 @@ import { getAreasMaxEndDate, getAreasMinStartDate } from '../utils';
 
 type Props = {
   formData: HankeDataFormState | HankeDataDraft;
+  children?: React.ReactNode;
 };
 
 const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {

@@ -18,7 +18,7 @@ type sortColKey = 'nimi' | 'vaihe' | 'alkuPvm' | 'loppuPvm';
 // Number of items shown on page at once
 const PAGE_SIZE = 8;
 
-const HankeList: React.FC<Props> = ({ projectsData }) => {
+const HankeList: React.FC<React.PropsWithChildren<Props>> = ({ projectsData }) => {
   const { PUBLIC_HANKKEET_MAP } = useLocalizedRoutes();
   const { t, i18n } = useTranslation();
   const language = i18n.language as 'fi' | 'sv' | 'en';

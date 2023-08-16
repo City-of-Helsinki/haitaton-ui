@@ -21,7 +21,7 @@ type Props = {
 const startPicker = 'startPicker';
 const endPicker = 'endPicker';
 
-const DateRangeControl: React.FC<Props> = ({
+const DateRangeControl: React.FC<React.PropsWithChildren<Props>> = ({
   startDate,
   endDate,
   updateStartDate,

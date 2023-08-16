@@ -7,7 +7,7 @@ import Container from '../../common/components/container/Container';
 import Text from '../../common/components/text/Text';
 import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
 
-const ReferencesPage: React.FC = () => {
+const ReferencesPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { HAITATON_INFO } = useLocalizedRoutes();
   const { t } = useTranslation();
   const referenceKeys = ['HEKAYL', 'HEKAKA', 'OPSTMA', 'HSL', 'MAMILA', 'HEKAKATO'];

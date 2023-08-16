@@ -29,7 +29,7 @@ const findSelected = (options: Option[], defaultValue?: Partial<Option>) =>
       })
     : { label: '', value: null };
 
-const Autocomplete: React.FC<PropTypes> = ({
+const Autocomplete: React.FC<React.PropsWithChildren<PropTypes>> = ({
   id,
   options,
   value,

@@ -11,7 +11,6 @@ import FileDownloadLink from '../fileDownloadLink/FileDownloadLink';
 type Props = {
   files: ApplicationAttachmentMetadata[];
   onDeleteFile: (file: ApplicationAttachmentMetadata) => void;
-  // eslint-disable-next-line react/require-default-props
   showDeleteButton?: (file: ApplicationAttachmentMetadata) => boolean;
 };
 

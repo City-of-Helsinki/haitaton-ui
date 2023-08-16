@@ -7,7 +7,7 @@ import Container from '../../common/components/container/Container';
 import Text from '../../common/components/text/Text';
 import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
 
-const InfoPage: React.FC = () => {
+const InfoPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { HAITATON_INFO } = useLocalizedRoutes();
   const { t } = useTranslation();
 

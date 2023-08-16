@@ -5,7 +5,6 @@ import TileLayer from '../../../../common/components/map/layers/TileLayer';
 import { projection } from '../../../../common/components/map/utils';
 
 type Props = {
-  // eslint-disable-next-line react/require-default-props
   opacity?: number;
 };
 

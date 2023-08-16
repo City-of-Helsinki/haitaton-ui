@@ -22,7 +22,7 @@ import {
   useFeatureFlags,
 } from '../../common/components/featureFlags/FeatureFlagsContext';
 
-const Homepage: React.FC = () => {
+const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const {

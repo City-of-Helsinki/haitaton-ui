@@ -4,7 +4,7 @@ import MapContext from '../../MapContext';
 import { MapInstance } from '../../types';
 import HoverContext from './HoverContext';
 
-const GeometryHover: React.FC = ({ children }) => {
+const GeometryHover: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   const { map } = useContext(MapContext);
   const [hoverPosition, setHoverPosition] = useState([0, 0]);
   const [hoveredHankeTunnukset, setHoveredHankeTunnukset] = useState(['']);

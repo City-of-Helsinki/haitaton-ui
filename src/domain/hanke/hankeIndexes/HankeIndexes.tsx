@@ -18,7 +18,7 @@ type IndexProps = {
   showIndexText?: boolean;
 };
 
-const IndexSection: React.FC<IndexProps> = ({
+const IndexSection: React.FC<React.PropsWithChildren<IndexProps>> = ({
   title,
   content,
   index,
@@ -83,7 +83,7 @@ type Props = {
   small?: boolean;
 };
 
-const HankeIndexes: React.FC<Props> = ({
+const HankeIndexes: React.FC<React.PropsWithChildren<Props>> = ({
   hankeIndexData,
   indexTitle,
   displayTooltip,

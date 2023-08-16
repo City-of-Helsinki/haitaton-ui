@@ -18,7 +18,11 @@ type Props = {
   className?: string;
 };
 
-const AddressSearchContainer: React.FC<Props> = ({ position, zIndex, className }) => {
+const AddressSearchContainer: React.FC<React.PropsWithChildren<Props>> = ({
+  position,
+  zIndex,
+  className,
+}) => {
   const [addressCoordinate, setAddressCoordinate] = useState<Coordinate | undefined>();
   useCenterOnCoordinate(addressCoordinate);
 

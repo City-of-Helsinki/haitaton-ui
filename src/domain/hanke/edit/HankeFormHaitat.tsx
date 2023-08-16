@@ -6,7 +6,7 @@ type Props = {
   formData: HankeDataFormState;
 };
 
-const HankeFormHaitat: React.FC<Props> = ({ formData }) => {
+const HankeFormHaitat: React.FC<React.PropsWithChildren<Props>> = ({ formData }) => {
   return <HankeIndexes hankeIndexData={formData.tormaystarkasteluTulos} />;
 };
 

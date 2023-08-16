@@ -12,9 +12,9 @@ const getHankkeet = async () => {
   return data;
 };
 
-const useHankeList = () => useQuery<HankeData[]>(['project'], getHankkeet);
+const useHankeList = () => useQuery<HankeData[]>(['public-projects'], getHankkeet);
 
-const HankeListContainer: React.FC = () => {
+const HankeListContainer: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { data, isLoading, isError } = useHankeList();
   const { t } = useTranslation();
 

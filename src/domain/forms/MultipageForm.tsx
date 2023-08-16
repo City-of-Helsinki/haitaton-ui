@@ -8,7 +8,6 @@ import { createStepReducer } from './formStepReducer';
 import { Action, ACTION_TYPE, StepperStep } from './types';
 import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
 
-// eslint-disable-next-line react/require-default-props
 function LoadingIndicator({ loadingText }: { loadingText?: string }) {
   return (
     <Flex justifyContent="center" alignItems="center" height="130px">
@@ -39,7 +38,7 @@ interface Props {
   children?: (
     activeStepIndex: number,
     handlePrevious: () => void,
-    handleNext: () => void
+    handleNext: () => void,
   ) => React.ReactNode;
   /** Heading of the form */
   heading: string;
@@ -103,7 +102,7 @@ const MultipageForm: React.FC<Props> = ({
 
   function handleStepClick(
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    stepIndex: number
+    stepIndex: number,
   ) {
     handleStepChange({ type: ACTION_TYPE.SET_ACTIVE, payload: stepIndex });
   }
