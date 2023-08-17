@@ -26,7 +26,7 @@ const customerSchema = contactSchema.omit(['firstName', 'lastName']).shape({
     .string()
     .nullable()
     .when('type', {
-      is: 'COMPANY',
+      is: (value: string) => value === 'COMPANY' || value === 'ASSOCIATION',
       then: (schema) =>
         schema.test('is-business-id', 'Is not valid business id', isValidBusinessId),
       otherwise: (schema) => schema,
