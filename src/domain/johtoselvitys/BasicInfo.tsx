@@ -78,13 +78,14 @@ const customerTypes: CustomerType[] = [
 
 type Option = { value: CustomerType; label: string };
 
-export const BasicHankeInfo: React.FC<React.PropsWithChildren<unknown>> = () => {
+export function BasicInfo() {
   const {
     register,
     watch,
     setValue,
     getValues,
     formState: { errors },
+    trigger,
   } = useFormContext<JohtoselvitysFormValues>();
   const { t } = useTranslation();
   const user = useUser();
@@ -107,6 +108,11 @@ export const BasicHankeInfo: React.FC<React.PropsWithChildren<unknown>> = () => 
     'applicationData.propertyConnectivity',
     'applicationData.emergencyWork',
   ]);
+
+  // Trigger validation for constructionWork field
+  function validateConstructionWork() {
+    trigger('applicationData.constructionWork');
+  }
 
   useEffect(() => {
     const userFirstName = user.data?.profile.given_name;
@@ -228,28 +234,39 @@ export const BasicHankeInfo: React.FC<React.PropsWithChildren<unknown>> = () => 
         errorText={errors?.applicationData?.constructionWork && t('form:validations:required')}
       >
         <Checkbox
-          {...register('applicationData.constructionWork')}
+          {...register('applicationData.constructionWork', {
+            // Trigger validation for applicationData.constructionWork when
+            // running onChange handlers for each of these checkboxes
+            // to keep work is about validation error up to date
+            onChange: validateConstructionWork,
+          })}
           id="applicationData.constructionWork"
           name="applicationData.constructionWork"
           label={t('hakemus:labels:constructionWork')}
           checked={constructionWorkChecked}
         />
         <Checkbox
-          {...register('applicationData.maintenanceWork')}
+          {...register('applicationData.maintenanceWork', {
+            onChange: validateConstructionWork,
+          })}
           id="applicationData.maintenanceWork"
           name="applicationData.maintenanceWork"
           label={t('hakemus:labels:maintenanceWork')}
           checked={maintenanceWorkChecked}
         />
         <Checkbox
-          {...register('applicationData.propertyConnectivity')}
+          {...register('applicationData.propertyConnectivity', {
+            onChange: validateConstructionWork,
+          })}
           id="applicationData.propertyConnectivity"
           name="applicationData.propertyConnectivity"
           label={t('hakemus:labels:propertyConnectivity')}
           checked={propertyConnectivityChecked}
         />
         <Checkbox
-          {...register('applicationData.emergencyWork')}
+          {...register('applicationData.emergencyWork', {
+            onChange: validateConstructionWork,
+          })}
           id="applicationData.emergencyWork"
           name="applicationData.emergencyWork"
           label={t('hakemus:labels:emergencyWork')}
@@ -360,4 +377,4 @@ export const BasicHankeInfo: React.FC<React.PropsWithChildren<unknown>> = () => 
       })}
     </div>
   );
-};
+}
