@@ -50,3 +50,13 @@ export async function deleteAttachment({
 }) {
   await api.delete(`/hakemukset/${applicationId}/liitteet/${attachmentId}`);
 }
+
+// Filter out duplicate files based on file name
+export function removeDuplicateAttachments(
+  files: File[],
+  attachments: ApplicationAttachmentMetadata[] | undefined
+) {
+  return files.filter((file) =>
+    attachments?.every((attachment) => attachment.fileName !== file.name)
+  );
+}
