@@ -10,7 +10,7 @@ import { Box } from '@chakra-ui/react';
 import { useBeforeUnload } from 'react-router-dom';
 
 import { JohtoselvitysFormValues } from './types';
-import { BasicHankeInfo } from './BasicInfo';
+import { BasicInfo } from './BasicInfo';
 import { Contacts } from './Contacts';
 import { Geometries } from './Geometries';
 import { ReviewAndSend } from './ReviewAndSend';
@@ -355,7 +355,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
 
     return [
       {
-        element: <BasicHankeInfo />,
+        element: <BasicInfo />,
         label: t('form:headers:perustiedot'),
         state: StepState.available,
       },
