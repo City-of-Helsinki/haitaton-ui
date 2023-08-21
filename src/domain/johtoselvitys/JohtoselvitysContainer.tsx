@@ -208,11 +208,13 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     },
     onError(error: AxiosError, { file }) {
       setAttachmentUploadErrors((errors) => {
-        // TODO: Should show different error texts for different kinds of errors,
-        // once those texts have been defined
+        const errorMessage =
+          error.response?.status === 400
+            ? t('form:errors:fileLoadBadFileError', { fileName: file.name })
+            : t('form:errors:fileLoadTechnicalError', { fileName: file.name });
         return errors.concat(
           <Box as="p" key={file.name} mb="var(--spacing-s)">
-            {file.name}: {t('common:error')}
+            {errorMessage}
           </Box>,
         );
       });

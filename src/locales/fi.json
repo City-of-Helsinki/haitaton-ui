@@ -80,7 +80,9 @@
     "errors": {
       "areaRequired": "Vähintään yksi alue vaaditaan",
       "fileLoadError": "Tiedoston latauksessa tapahtui virhe",
-      "selfIntersectingArea": "Alueen reunat eivät saa leikata toisiaan"
+      "selfIntersectingArea": "Alueen reunat eivät saa leikata toisiaan",
+      "fileLoadTechnicalError": "Tiedoston ({{fileName}}) lataus epäonnistui, yritä hetken päästä uudelleen.",
+      "fileLoadBadFileError": "Tiedosto ({{fileName}}) on viallinen. Tarkistathan, että tiedostomuoto on oikea eikä sen koko ylitä sallittua maksimikokoa."
     },
     "headers": {
       "perustiedot": "Perustiedot",
