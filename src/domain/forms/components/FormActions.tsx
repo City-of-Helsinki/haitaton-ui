@@ -14,7 +14,7 @@ interface Props {
   nextButtonLoadingText?: string;
 }
 
-const FormActions: React.FC<Props> = ({
+const FormActions: React.FC<React.PropsWithChildren<Props>> = ({
   children,
   activeStepIndex,
   totalSteps,

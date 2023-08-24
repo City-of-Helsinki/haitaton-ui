@@ -17,13 +17,14 @@ describe('HankeMap', () => {
     expect(screen.getByLabelText('Kantakartta')).toBeChecked();
     await user.click(screen.getByText('Ortokartta'));
     expect(screen.getByLabelText('Ortokartta')).toBeChecked();
-    expect(screen.getByLabelText('Kantakartta')).not.toBeChecked();
+    expect(screen.getByLabelText('Kantakartta')).toBeChecked();
   });
 
   test('Number of projects displayed on the map can be controlled with dateRangeControl', async () => {
     const renderedComponent = render(<HankeMap />);
 
     await screen.findByPlaceholderText('Etsi osoitteella');
+    await screen.findByText('Ajanjakson alku');
 
     expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
     changeFilterDate(startDateLabel, renderedComponent, '1.1.2022');

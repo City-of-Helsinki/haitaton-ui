@@ -74,19 +74,25 @@ describe.only('HankePortfolio', () => {
   test('Changing Hanke type filters correct number of projects', async () => {
     const renderedComponent = render(<HankePortfolioComponent hankkeet={hankeList} />);
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
-    renderedComponent.getByRole('button', { name: 'Työn tyyppi' }).click();
-    renderedComponent.getByText('Sähkö').click();
+    await renderedComponent.user.click(
+      renderedComponent.getByRole('button', { name: 'Työn tyyppi' })
+    );
+    await renderedComponent.user.click(renderedComponent.getByText('Sähkö'));
     renderedComponent.getByText('Hankevaiheet').click();
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
     expect(
       screen.queryByText('Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta')
     ).toBeInTheDocument();
-    renderedComponent.getByRole('button', { name: 'Työn tyyppi' }).click();
-    renderedComponent.getByText('Viemäri').click();
+    await renderedComponent.user.click(
+      renderedComponent.getByRole('button', { name: 'Työn tyyppi' })
+    );
+    await renderedComponent.user.click(renderedComponent.getByText('Viemäri'));
     renderedComponent.getByText('Hankevaiheet').click();
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('1');
-    renderedComponent.getByRole('button', { name: 'Työn tyyppi' }).click();
-    renderedComponent.getByText('Sadevesi').click();
+    await renderedComponent.user.click(
+      renderedComponent.getByRole('button', { name: 'Työn tyyppi' })
+    );
+    await renderedComponent.user.click(renderedComponent.getByText('Sadevesi'));
     renderedComponent.getByText('Hankevaiheet').click();
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
   });

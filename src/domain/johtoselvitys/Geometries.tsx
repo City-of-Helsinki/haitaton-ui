@@ -32,6 +32,10 @@ import useForceUpdate from '../../common/hooks/useForceUpdate';
 import { getAreaDefaultName } from '../application/utils';
 import FeatureHoverBox from '../map/components/FeatureHoverBox/FeatureHoverBox';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
+import LayerControl from '../../common/components/map/controls/LayerControl';
+import { MapTileLayerId } from '../map/types';
+import { useMapDataLayers } from '../map/hooks/useMapLayers';
+import Ortokartta from '../map/components/Layers/Ortokartta';
 
 interface AreaToRemove {
   index: number;
@@ -55,7 +59,7 @@ function getEmptyArea(feature: Feature<Geometry>): JohtoselvitysArea {
   };
 }
 
-export const Geometries: React.FC = () => {
+export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation();
   const locale = useLocale();
   const {
@@ -65,10 +69,11 @@ export const Geometries: React.FC = () => {
     formState: { errors },
   } = useFormContext<JohtoselvitysFormValues>();
 
-  const { fields: applicationAreas, append, remove } = useFieldArray<
-    JohtoselvitysFormValues,
-    'applicationData.areas'
-  >({
+  const {
+    fields: applicationAreas,
+    append,
+    remove,
+  } = useFieldArray<JohtoselvitysFormValues, 'applicationData.areas'>({
     name: 'applicationData.areas',
   });
 
@@ -80,10 +85,13 @@ export const Geometries: React.FC = () => {
   const forceUpdate = useForceUpdate();
 
   const addressCoordinate = useAddressCoordinate(
-    getValues('applicationData.postalAddress.streetAddress.streetName')
+    getValues('applicationData.postalAddress.streetAddress.streetName'),
   );
 
   const [featuresLoaded, setFeaturesLoaded] = useState(false);
+
+  const { mapTileLayers, toggleMapTileLayer } = useMapDataLayers();
+  const ortoLayerOpacity = mapTileLayers.kantakartta.visible ? 0.5 : 1;
 
   useEffect(() => {
     function handleAddFeature(e: VectorSourceEvent<Geometry>) {
@@ -196,7 +204,8 @@ export const Geometries: React.FC = () => {
 
       <div className={styles.mapContainer}>
         <Map zoom={9} center={addressCoordinate} mapClassName={styles.mapContainer__inner}>
-          <Kantakartta />
+          {mapTileLayers.kantakartta.visible && <Kantakartta />}
+          {mapTileLayers.ortokartta.visible && <Ortokartta opacity={ortoLayerOpacity} />}
 
           <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} zIndex={101} />
 
@@ -220,6 +229,11 @@ export const Geometries: React.FC = () => {
                 onSelfIntersectingPolygon={handleSelfIntersectingPolygon}
               />
             )}
+
+            <LayerControl
+              tileLayers={Object.values(mapTileLayers)}
+              onClickTileLayer={(id: MapTileLayerId) => toggleMapTileLayer(id)}
+            />
           </Controls>
         </Map>
       </div>

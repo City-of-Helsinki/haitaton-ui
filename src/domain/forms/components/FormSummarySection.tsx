@@ -4,7 +4,7 @@ import React from 'react';
 import Text from '../../../common/components/text/Text';
 import styles from './FormSummarySection.module.scss';
 
-const SectionTitle: React.FC = ({ children }) => {
+const SectionTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <Box mb="var(--spacing-m)">
       <Text tag="h2" styleAs="h3" weight="bold">
@@ -14,7 +14,7 @@ const SectionTitle: React.FC = ({ children }) => {
   );
 };
 
-const SectionItemTitle: React.FC = ({ children }) => {
+const SectionItemTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <Box color="var(--color-black-90)">
       <Text tag="h3" styleAs="body-m" weight="bold">
@@ -24,15 +24,15 @@ const SectionItemTitle: React.FC = ({ children }) => {
   );
 };
 
-const SectionItemContent: React.FC = ({ children }) => {
+const SectionItemContent: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   return <Box color="var(--color-black-60)">{children}</Box>;
 };
 
-const FormSummarySection: React.FC<{ className?: string; style?: React.CSSProperties }> = ({
-  children,
-  className,
-  style,
-}) => {
+const FormSummarySection: React.FC<{
+  children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+}> = ({ children, className, style }) => {
   return (
     <section className={clsx(styles.container, className)} style={style}>
       {children}

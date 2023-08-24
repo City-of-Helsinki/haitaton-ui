@@ -22,7 +22,7 @@ const themes = {
   },
 };
 
-const HankeVaiheTag: React.FC<TagProps> = ({ tagName, uppercase }) => {
+const HankeVaiheTag: React.FC<React.PropsWithChildren<TagProps>> = ({ tagName, uppercase }) => {
   const { t } = useTranslation();
 
   if (tagName === null) {

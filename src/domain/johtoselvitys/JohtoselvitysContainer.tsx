@@ -10,7 +10,7 @@ import { Box } from '@chakra-ui/react';
 import { useBeforeUnload } from 'react-router-dom';
 
 import { JohtoselvitysFormValues } from './types';
-import { BasicHankeInfo } from './BasicInfo';
+import { BasicInfo } from './BasicInfo';
 import { Contacts } from './Contacts';
 import { Geometries } from './Geometries';
 import { ReviewAndSend } from './ReviewAndSend';
@@ -34,7 +34,7 @@ import useHanke from '../hanke/hooks/useHanke';
 import { AlluStatus, Application } from '../application/types/application';
 import Attachments from './Attachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
-import { uploadAttachment } from '../application/attachments';
+import { removeDuplicateAttachments, uploadAttachment } from '../application/attachments';
 import useAttachments from '../application/hooks/useAttachments';
 import { APPLICATION_ID_STORAGE_KEY } from '../application/constants';
 
@@ -43,7 +43,10 @@ type Props = {
   application?: Application;
 };
 
-const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => {
+const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
+  hankeData,
+  application,
+}) => {
   let hanke = hankeData;
   const { t } = useTranslation();
   const { setNotification } = useGlobalNotification();
@@ -153,7 +156,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
       if (applicationId && !application) {
         sessionStorage.setItem(APPLICATION_ID_STORAGE_KEY, applicationId.toString());
       }
-    }, [getValues, application])
+    }, [getValues, application]),
   );
 
   // If application is created without hanke existing first, get generated hanke data
@@ -164,7 +167,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
   }
 
   const { data: existingAttachments, isError: attachmentsLoadError } = useAttachments(
-    getValues('id')
+    getValues('id'),
   );
 
   const navigateToApplicationList = useNavigateToApplicationList(hanke?.hankeTunnus);
@@ -205,12 +208,14 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     },
     onError(error: AxiosError, { file }) {
       setAttachmentUploadErrors((errors) => {
-        // TODO: Should show different error texts for different kinds of errors,
-        // once those texts have been defined
+        const errorMessage =
+          error.response?.status === 400
+            ? t('form:errors:fileLoadBadFileError', { fileName: file.name })
+            : t('form:errors:fileLoadTechnicalError', { fileName: file.name });
         return errors.concat(
           <Box as="p" key={file.name} mb="var(--spacing-s)">
-            {file.name}: {t('common:error')}
-          </Box>
+            {errorMessage}
+          </Box>,
         );
       });
     },
@@ -232,7 +237,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
     if (!id) {
       try {
         const responseData = await applicationSaveMutation.mutateAsync(
-          convertFormStateToApplicationData(data)
+          convertFormStateToApplicationData(data),
         );
         setShowSaveNotification(false);
         id = responseData.id as number;
@@ -283,12 +288,15 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
       return Promise.resolve();
     }
 
-    const mutations = newAttachments.map((file) =>
+    // Filter out attachments that have same names as those that have already been sent
+    const filesToSend = removeDuplicateAttachments(newAttachments, existingAttachments);
+
+    const mutations = filesToSend.map((file) =>
       attachmentUploadMutation.mutateAsync({
         applicationId,
         attachmentType: 'MUU',
         file,
-      })
+      }),
     );
 
     const results = await Promise.allSettled(mutations);
@@ -337,7 +345,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
       // Attachments page
       ['attachmentNumber'],
     ],
-    [ordererKey]
+    [ordererKey],
   );
 
   const formSteps = useMemo(() => {
@@ -349,7 +357,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
 
     return [
       {
-        element: <BasicHankeInfo />,
+        element: <BasicInfo />,
         label: t('form:headers:perustiedot'),
         state: StepState.available,
       },
@@ -364,7 +372,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         state: isPageValid<JohtoselvitysFormValues>(
           validationSchema,
           pageFieldsToValidate[0],
-          formValues
+          formValues,
         )
           ? StepState.available
           : StepState.disabled,
@@ -375,7 +383,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         state: isPageValid<JohtoselvitysFormValues>(
           validationSchema,
           pageFieldsToValidate[1],
-          formValues
+          formValues,
         )
           ? StepState.available
           : StepState.disabled,
@@ -393,7 +401,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         state: isPageValid<JohtoselvitysFormValues>(
           validationSchema,
           pageFieldsToValidate[2],
-          formValues
+          formValues,
         )
           ? StepState.available
           : StepState.disabled,
@@ -404,7 +412,7 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
         state: isPageValid<JohtoselvitysFormValues>(
           validationSchema,
           pageFieldsToValidate[2],
-          formValues
+          formValues,
         )
           ? StepState.available
           : StepState.disabled,
@@ -486,11 +494,11 @@ const JohtoselvitysContainer: React.FC<Props> = ({ hankeData, application }) => 
           }
 
           async function handleSaveAndQuit() {
-            // Make sure that name for the application exists before saving and quitting
-            const applicationNameValid = await trigger('applicationData.name', {
+            // Make sure that current application page is valid before saving and quitting
+            const applicationPageValid = await trigger(pageFieldsToValidate[activeStepIndex], {
               shouldFocus: true,
             });
-            if (applicationNameValid) {
+            if (applicationPageValid) {
               await handlePageChange(saveAndQuit);
             }
           }

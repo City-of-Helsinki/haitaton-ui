@@ -1,5 +1,4 @@
 import { extendTheme } from '@chakra-ui/react';
-import { createBreakpoints } from '@chakra-ui/theme-tools';
 
 /* export const space = {
   ...theme.space,
@@ -17,34 +16,16 @@ import { createBreakpoints } from '@chakra-ui/theme-tools';
   '5xl': '4.5rem',
 }; */
 
-const breakpoints = createBreakpoints({
+const breakpoints = {
   sm: '320px',
   md: '576px',
   lg: '768px',
   xl: '992px',
   xxl: '1248px',
-});
+};
 
 const customTheme = extendTheme({
   breakpoints,
-  components: {
-    Drawer: {
-      variants: {
-        // https://github.com/chakra-ui/chakra-ui/issues/2399
-        alwaysOpen: {
-          // eslint-disable-next-line
-          // @ts-ignore, false positive
-          parts: ['dialog, dialogContainer'],
-          dialog: {
-            pointerEvents: 'auto',
-          },
-          dialogContainer: {
-            pointerEvents: 'none',
-          },
-        },
-      },
-    },
-  },
 });
 
 export default customTheme;

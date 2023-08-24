@@ -7,7 +7,7 @@ import OidcCallback from '../../domain/auth/components/OidcCallback';
 import { LOGIN_CALLBACK_PATH, LOGIN_PATH } from '../../domain/auth/constants';
 import LocaleRoutes from './LocaleRoutes';
 
-const AppRoutes: React.FC = () => {
+const AppRoutes: React.FC<React.PropsWithChildren<unknown>> = () => {
   const currentLocale = useLocale();
 
   return (

@@ -22,6 +22,10 @@
       "confirmButton": "Vahvista"
     },
     "components": {
+      "link": {
+        "openInNewTabAriaLabel": "Avautuu uudessa välilehdessä.",
+        "openInExternalDomainAriaLabel": "Siirtyy toiseen sivustoon."
+      },
       "linkbox": {
         "linkbox": "Linkkialue"
       },
@@ -76,7 +80,9 @@
     "errors": {
       "areaRequired": "Vähintään yksi alue vaaditaan",
       "fileLoadError": "Tiedoston latauksessa tapahtui virhe",
-      "selfIntersectingArea": "Alueen reunat eivät saa leikata toisiaan"
+      "selfIntersectingArea": "Alueen reunat eivät saa leikata toisiaan",
+      "fileLoadTechnicalError": "Tiedoston ({{fileName}}) lataus epäonnistui, yritä hetken päästä uudelleen.",
+      "fileLoadBadFileError": "Tiedosto ({{fileName}}) on viallinen. Tarkistathan, että tiedostomuoto on oikea eikä sen koko ylitä sallittua maksimikokoa."
     },
     "headers": {
       "perustiedot": "Perustiedot",
@@ -318,7 +324,7 @@
       }
     },
     "WORKINSTRUCTIONS": {
-      "path": "https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/rakentamisvaiheen-ohjeet",
+      "path": "https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/tyomaan-luvat-ja-ohjeet",
       "headerLabel": "Työohjeet",
       "meta": {
         "title": "Haitaton - Työohjeet"

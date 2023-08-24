@@ -44,8 +44,8 @@ test('Correct information about hanke should be displayed', async () => {
   expect(screen.getAllByText('HAI22-3').length).toBe(2);
   expect(
     screen.queryByText(
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum'
-    )
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
+    ),
   ).toBeInTheDocument();
   expect(screen.queryByText('Mannerheimintie 6')).toBeInTheDocument();
   expect(screen.queryByText('2.1.2023')).toBeInTheDocument();
@@ -53,7 +53,7 @@ test('Correct information about hanke should be displayed', async () => {
   expect(screen.queryByText('Ohjelmointi')).toBeInTheDocument();
   expect(screen.queryByText('Kaukolämpö')).toBeInTheDocument();
   expect(
-    screen.queryByText('Työmaa ulottuu kadun eri puolille ja/tai usean korttelin mittainen työmaa')
+    screen.queryByText('Työmaa ulottuu kadun eri puolille ja/tai usean korttelin mittainen työmaa'),
   ).toBeInTheDocument();
   expect(screen.queryByText('Ei')).toBeInTheDocument();
   expect(screen.queryByText('11974 m²')).toBeInTheDocument();
@@ -137,7 +137,7 @@ test('Should show error notification if loading applications fails', async () =>
   server.use(
     rest.get('/api/hankkeet/:hankeTunnus/hakemukset', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
-    })
+    }),
   );
 
   const { user } = render(<HankeViewContainer hankeTunnus="HAI22-1" />);

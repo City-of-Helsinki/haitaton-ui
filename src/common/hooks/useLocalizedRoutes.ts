@@ -5,7 +5,7 @@ import { ROUTES, RouteMap } from '../types/route';
 import { Language } from '../types/language';
 
 type GetLocalizationParams = {
-  useTranslationResponse: UseTranslationResponse;
+  useTranslationResponse: UseTranslationResponse<''>;
   route: string;
   name: 'path' | 'headerLabel' | 'meta.title';
 };

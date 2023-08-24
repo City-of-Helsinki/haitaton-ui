@@ -9,7 +9,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const Layout: React.FC<Props> = ({ children }) => {
+const Layout: React.FC<React.PropsWithChildren<Props>> = ({ children }) => {
   return (
     <App>
       <div className={styles.layoutContainer}>

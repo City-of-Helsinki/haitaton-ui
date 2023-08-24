@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconLinkExternal, IconSignout, Navigation } from 'hds-react';
+import { IconLinkExternal, IconSignout, LogoLanguage, Navigation } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useMatch, useLocation, useNavigate } from 'react-router-dom';
 import { $enum } from 'ts-enum-util';
@@ -16,14 +16,9 @@ const languageLabels = {
   sv: 'Svenska',
 };
 
-const Header: React.FC = () => {
-  const {
-    HOME,
-    PUBLIC_HANKKEET,
-    PUBLIC_HANKKEET_MAP,
-    HANKEPORTFOLIO,
-    NEW_HANKE,
-  } = useLocalizedRoutes();
+const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
+  const { HOME, PUBLIC_HANKKEET, PUBLIC_HANKKEET_MAP, HANKEPORTFOLIO, NEW_HANKE } =
+    useLocalizedRoutes();
   const { t, i18n } = useTranslation();
   const { data: user } = useUser();
   const isAuthenticated = Boolean(user?.profile);
@@ -41,6 +36,10 @@ const Header: React.FC = () => {
     path: HANKEPORTFOLIO.path,
     end: false,
   });
+
+  const workInstructionsAriaLabel = `${t('routes:WORKINSTRUCTIONS:headerLabel')}. ${t(
+    'common:components:link:openInNewTabAriaLabel',
+  )} ${t('common:components:link:openInExternalDomainAriaLabel')}`;
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -60,6 +59,7 @@ const Header: React.FC = () => {
       skipToContentLabel={t('common:components:header:skipToContentLabel')}
       titleUrl={HOME.path}
       className="header"
+      logoLanguage={i18n.language as LogoLanguage}
     >
       {isAuthenticated && (
         <Navigation.Row ariaLabel={t('common:ariaLabels:topNavigation')}>
@@ -95,6 +95,7 @@ const Header: React.FC = () => {
             target="_blank"
             rel="noreferrer"
             icon={<IconLinkExternal />}
+            aria-label={workInstructionsAriaLabel}
           >
             {t('routes:WORKINSTRUCTIONS:headerLabel')}
           </Navigation.Item>

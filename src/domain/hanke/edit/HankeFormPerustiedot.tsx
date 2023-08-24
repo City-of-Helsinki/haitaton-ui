@@ -20,7 +20,11 @@ import { getInputErrorText } from '../../../common/utils/form';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import Link from '../../../common/components/Link/Link';
 
-const HankeFormPerustiedot: React.FC<FormProps> = ({ errors, register, formData }) => {
+const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
+  errors,
+  register,
+  formData,
+}) => {
   const { t } = useTranslation();
   const { watch, setValue } = useFormContext();
   const { JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();

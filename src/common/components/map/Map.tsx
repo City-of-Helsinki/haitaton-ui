@@ -22,7 +22,7 @@ type Props = {
   showAttribution?: boolean;
 };
 
-const Map: React.FC<Props> = ({
+const Map: React.FC<React.PropsWithChildren<Props>> = ({
   children,
   zoom = defaultZoom,
   center = helsinkiCenterCoords,

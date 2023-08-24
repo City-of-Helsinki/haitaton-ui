@@ -313,15 +313,17 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onCancelHanke }) =
               </TabPanel>
             )}
             <TabPanel>
-              {isLoading && (
-                <Flex justify="center" mt="var(--spacing-xl)">
-                  <LoadingSpinner />
-                </Flex>
-              )}
-              {applicationsResponse?.applications && (
-                <ApplicationList applications={applicationsResponse.applications} />
-              )}
-              {error && <ErrorLoadingText />}
+              <>
+                {isLoading && (
+                  <Flex justify="center" mt="var(--spacing-xl)">
+                    <LoadingSpinner />
+                  </Flex>
+                )}
+                {applicationsResponse?.applications && (
+                  <ApplicationList applications={applicationsResponse.applications} />
+                )}
+                {error && <ErrorLoadingText />}
+              </>
             </TabPanel>
           </Tabs>
         </InformationViewMainContent>

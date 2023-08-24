@@ -4,7 +4,10 @@ import { render, screen } from '../../../testUtils/render';
 import DatePicker from './DatePicker';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Form: React.FC<{ defaultValues: any }> = ({ children, defaultValues }) => {
+const Form: React.FC<React.PropsWithChildren<{ defaultValues: any }>> = ({
+  children,
+  defaultValues,
+}) => {
   const methods = useForm({ defaultValues });
 
   return (

@@ -20,7 +20,7 @@ const GlobalNotificationContext = createContext<NotificationContextProps | undef
 export function GlobalNotificationProvider({ children }: GlobalNotificationProviderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [notificationOptions, setNotificationOptions] = useState<NotificationOptions | undefined>(
-    undefined
+    undefined,
   );
 
   const setNotification = useCallback((open: boolean, options?: NotificationOptions) => {

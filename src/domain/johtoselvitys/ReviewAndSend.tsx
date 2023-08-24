@@ -14,7 +14,7 @@ type Props = {
   attachments: ApplicationAttachmentMetadata[] | undefined;
 };
 
-export const ReviewAndSend: React.FC<Props> = ({ attachments }) => {
+export const ReviewAndSend: React.FC<React.PropsWithChildren<Props>> = ({ attachments }) => {
   const { getValues } = useFormContext<JohtoselvitysFormValues>();
   const { t } = useTranslation();
 

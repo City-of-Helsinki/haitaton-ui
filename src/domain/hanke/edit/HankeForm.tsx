@@ -53,7 +53,12 @@ type Props = {
   children: React.ReactNode;
 };
 
-const HankeForm: React.FC<Props> = ({ formData, onIsDirtyChange, onFormClose, children }) => {
+const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
+  formData,
+  onIsDirtyChange,
+  onFormClose,
+  children,
+}) => {
   const { t } = useTranslation();
   const { HANKEPORTFOLIO } = useLocalizedRoutes();
   const navigate = useNavigate();

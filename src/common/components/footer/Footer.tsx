@@ -1,15 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Footer } from 'hds-react';
+import { Footer, LogoLanguage } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
 
-const HaitatonFooter: React.FC = () => {
-  const { t } = useTranslation();
+function HaitatonFooter() {
+  const { t, i18n } = useTranslation();
   const { MANUAL, HAITATON_INFO, ACCESSIBILITY, PRIVACY_POLICY } = useLocalizedRoutes();
 
   return (
-    <Footer title="Haitaton">
+    <Footer title="Haitaton" logoLanguage={i18n.language as LogoLanguage}>
       <Footer.Navigation
         variant="minimal"
         navigationAriaLabel={t('common:ariaLabels:footerNavigation')}
@@ -22,6 +22,6 @@ const HaitatonFooter: React.FC = () => {
       <Footer.Base copyrightHolder="Helsingin kaupunki" />
     </Footer>
   );
-};
+}
 
 export default HaitatonFooter;

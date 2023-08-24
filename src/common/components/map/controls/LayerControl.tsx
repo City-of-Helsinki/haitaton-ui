@@ -5,20 +5,23 @@ import { useTranslation } from 'react-i18next';
 import { Checkbox } from 'hds-react';
 import ControlPanel from './ControlPanel';
 import styles from './Controls.module.scss';
+import { MapTileLayerId } from '../../../../domain/map/types';
 
 type TileLayer = {
-  id: string;
+  id: MapTileLayerId;
   visible: boolean;
 };
 
 type Props = {
   tileLayers: TileLayer[];
   // I dont want to import type from domain. Maybe move layers here under common dir?
-  // eslint-disable-next-line
-  onClickTileLayer: (key: any) => void; // TODO: improve type definition
+  onClickTileLayer: (key: MapTileLayerId) => void;
 };
 
-const LayerControl: React.FC<Props> = ({ tileLayers, onClickTileLayer }) => {
+const LayerControl: React.FC<React.PropsWithChildren<Props>> = ({
+  tileLayers,
+  onClickTileLayer,
+}) => {
   const { t } = useTranslation();
 
   return (
@@ -27,10 +30,11 @@ const LayerControl: React.FC<Props> = ({ tileLayers, onClickTileLayer }) => {
         <MenuButton
           aria-label={t('map:controls:ariaLayerMenu')}
           type="button"
+          className={styles.tileLayerControl__button}
           // Disable form submit
           onClick={() => false}
         >
-          <IconLayers aria-hidden />
+          <IconLayers aria-hidden color="white" />
         </MenuButton>
         <MenuList className={styles.controlMenu} aria-hidden id="layer-list" role="menu">
           <MenuGroup>

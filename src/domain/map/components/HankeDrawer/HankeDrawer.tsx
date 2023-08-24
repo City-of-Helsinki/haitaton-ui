@@ -33,7 +33,7 @@ type Props = {
   zoom?: number;
 };
 
-const HankeDrawer: React.FC<Props> = ({
+const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
   onAddFeature,
   onChangeFeature,
   onRemoveFeature,
@@ -43,6 +43,7 @@ const HankeDrawer: React.FC<Props> = ({
   zoom = 9,
 }) => {
   const { mapTileLayers, toggleMapTileLayer, handleUpdateGeometryState } = useMapDataLayers();
+  const ortoLayerOpacity = mapTileLayers.kantakartta.visible ? 0.5 : 1;
   const [drawSource] = useState<VectorSource>(existingDrawSource || new VectorSource());
 
   const featuresLoaded = useRef(false);
@@ -110,7 +111,7 @@ const HankeDrawer: React.FC<Props> = ({
           <OverviewMapControl className={hankeDrawerStyles.overviewMap} />
 
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
-          {mapTileLayers.ortokartta.visible && <Ortokartta />}
+          {mapTileLayers.ortokartta.visible && <Ortokartta opacity={ortoLayerOpacity} />}
           <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
 
           {featuresLoaded.current && <FitSource source={drawSource} />}

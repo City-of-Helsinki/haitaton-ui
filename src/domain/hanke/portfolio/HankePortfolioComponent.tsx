@@ -44,7 +44,7 @@ type CustomAccordionProps = {
   hanke: HankeData;
 };
 
-const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke }) => {
+const CustomAccordion: React.FC<React.PropsWithChildren<CustomAccordionProps>> = ({ hanke }) => {
   const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
   const hankeViewPath = useHankeViewPath(hanke?.hankeTunnus);
   const navigateToApplications = useNavigateToApplicationList(hanke?.hankeTunnus);
@@ -233,7 +233,7 @@ export interface PagedRowsProps {
   data: Array<HankeData>;
 }
 
-const PaginatedPortfolio: React.FC<PagedRowsProps> = ({ data }) => {
+const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({ data }) => {
   const {
     hankeFilterStartDate,
     hankeFilterEndDate,
@@ -614,7 +614,7 @@ type Props = {
   hankkeet: HankeData[];
 };
 
-const HankePortfolio: React.FC<Props> = ({ hankkeet }) => {
+const HankePortfolio: React.FC<React.PropsWithChildren<Props>> = ({ hankkeet }) => {
   return (
     <div className={styles.hankesalkkuContainer}>
       <PaginatedPortfolio data={hankkeet} />

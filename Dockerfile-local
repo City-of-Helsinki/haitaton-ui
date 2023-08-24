@@ -1,5 +1,5 @@
-FROM node:14-alpine as staticbuilder
-ADD --chown=node:node . /builder/
+FROM node:16-alpine as staticbuilder
+COPY . /builder/
 WORKDIR /builder
 RUN yarn && yarn cache clean --force
 RUN REACT_APP_DISABLE_SENTRY=1 yarn build

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Calendar: React.FC = () => {
+const Calendar: React.FC<React.PropsWithChildren<unknown>> = () => {
   return (
     <svg x="0px" y="0px" viewBox="0 0 15.315 15.315" aria-hidden="true">
       <g>

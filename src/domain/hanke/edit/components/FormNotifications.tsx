@@ -7,7 +7,7 @@ type Props = {
   showNotification: FormNotification;
 };
 
-const FormNotifications: React.FC<Props> = ({ showNotification }) => {
+const FormNotifications: React.FC<React.PropsWithChildren<Props>> = ({ showNotification }) => {
   const { t } = useTranslation();
 
   return (

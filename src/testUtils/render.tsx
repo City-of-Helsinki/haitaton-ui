@@ -12,7 +12,7 @@ import GlobalNotification from '../common/components/globalNotification/GlobalNo
 import { FeatureFlagsProvider } from '../common/components/featureFlags/FeatureFlagsContext';
 
 type Props = {
-  children: React.ReactChildren;
+  children: React.ReactNode;
 };
 
 const AllTheProviders = ({ children }: Props) => {
@@ -46,7 +46,10 @@ const customRender = (ui: React.ReactElement, options: RenderOptions = {}, route
   window.history.pushState({}, 'Test page', route);
   return {
     user: userEvent.setup(),
-    ...render(ui, { wrapper: AllTheProviders as React.ComponentType, ...options }),
+    ...render(ui, {
+      wrapper: AllTheProviders as React.ComponentType<React.PropsWithChildren<unknown>>,
+      ...options,
+    }),
   };
 };
 

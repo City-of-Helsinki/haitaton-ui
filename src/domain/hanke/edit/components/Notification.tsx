@@ -7,7 +7,7 @@ type Props = {
   testId?: string;
 };
 
-const NotificationComp: React.FC<Props> = ({
+const NotificationComp: React.FC<React.PropsWithChildren<Props>> = ({
   label,
   typeProps,
   testId = 'notification',

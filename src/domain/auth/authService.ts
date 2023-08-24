@@ -59,9 +59,9 @@ export class AuthService {
     return !!oidcStorage && !!JSON.parse(oidcStorage).access_token;
   }
 
-  public async login(path = '/'): Promise<void> {
+  public async login(): Promise<void> {
     try {
-      return this.userManager.signinRedirect({ data: { path } });
+      return this.userManager.signinRedirect();
     } catch (error) {
       if ((<Error>error).message !== 'Network Error') {
         // eslint-disable-next-line no-console

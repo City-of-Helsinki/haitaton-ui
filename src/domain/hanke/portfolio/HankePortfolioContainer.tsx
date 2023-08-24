@@ -15,7 +15,7 @@ const getHankkeet = async () => {
 
 const useHankeList = () => useQuery<HankeData[]>(['project'], getHankkeet);
 
-const HankePortfolioContainer: React.FC = () => {
+const HankePortfolioContainer: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { data } = useHankeList();
 
   // Add header to fix Axe "page-has-heading-one"-error

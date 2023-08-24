@@ -19,7 +19,7 @@ type PropTypes = {
   className?: string;
 };
 
-const TextInput: React.FC<PropTypes> = ({
+const TextInput: React.FC<React.PropsWithChildren<PropTypes>> = ({
   name,
   label,
   disabled,

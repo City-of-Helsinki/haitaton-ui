@@ -28,7 +28,7 @@ test('Should show error notification if application is not found', async () => {
   server.use(
     rest.get('/api/hakemukset/:id', async (req, res, ctx) => {
       return res(ctx.status(404), ctx.json({ errorMessage: 'Failed for testing purposes' }));
-    })
+    }),
   );
 
   render(<ApplicationViewContainer id={4} />);
@@ -42,7 +42,7 @@ test('Should show error notification if loading application fails', async () => 
   server.use(
     rest.get('/api/hakemukset/:id', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
-    })
+    }),
   );
 
   render(<ApplicationViewContainer id={4} />);
@@ -79,6 +79,7 @@ test('Should be able to cancel application if it is possible', async () => {
   await user.click(screen.getByRole('button', { name: 'Vahvista' }));
 
   expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-3');
+  await screen.findByText('Hakemus peruttiin onnistuneesti');
   expect(screen.queryByText('Hakemus peruttiin onnistuneesti')).toBeInTheDocument();
 });
 

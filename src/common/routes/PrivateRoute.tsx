@@ -6,7 +6,7 @@ type Props = {
   element: JSX.Element;
 };
 
-const PrivateRoute: React.FC<Props> = ({ element }) => {
+const PrivateRoute: React.FC<React.PropsWithChildren<Props>> = ({ element }) => {
   const { data: user } = useUser();
 
   if (!user?.profile) {

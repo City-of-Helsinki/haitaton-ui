@@ -19,7 +19,7 @@ type Props = {
 /**
  * Control with a map acting as an overview map for another defined map
  */
-const OverviewMapControl: React.FC<Props> = ({ className }) => {
+const OverviewMapControl: React.FC<React.PropsWithChildren<Props>> = ({ className }) => {
   const { map } = useContext(MapContext);
 
   useEffect(() => {

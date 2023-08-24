@@ -76,7 +76,9 @@
     "errors": {
       "areaRequired": "Det krävs minst ett område",
       "fileLoadError": "Fel i laddning av fil",
-      "selfIntersectingArea": "Områdets kanter får inte skära varandra"
+      "selfIntersectingArea": "Områdets kanter får inte skära varandra",
+      "fileLoadTechnicalError": "Laddning av filen ({{fileName}}) misslyckades, försök igen om en stund.",
+      "fileLoadBadFileError": "Filen ({{fileName}}) är felaktig. Kontrollera att filen har rätt format och att den inte är större än 100 MB."
     },
     "headers": {
       "perustiedot": "Basdata",
