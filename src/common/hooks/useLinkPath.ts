@@ -34,6 +34,7 @@ const useLinkPath = (route: ROUTES): ((routeParams: RouteParams) => string) => {
     [ROUTES.HANKE]: hankeTunnusReturnFunc,
     [ROUTES.NEW_HANKE]: defaultReturnFunc,
     [ROUTES.EDIT_HANKE]: hankeTunnusReturnFunc,
+    [ROUTES.ACCESS_RIGHTS]: hankeTunnusReturnFunc,
     [ROUTES.PUBLIC_HANKKEET]: defaultReturnFunc,
     [ROUTES.PUBLIC_HANKKEET_MAP]: defaultReturnFunc,
     [ROUTES.PUBLIC_HANKKEET_LIST]: defaultReturnFunc,

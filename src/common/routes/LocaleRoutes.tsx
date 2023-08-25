@@ -21,6 +21,7 @@ import ApplicationPage from '../../pages/ApplicationPage';
 import EditJohtoselvitysPage from '../../pages/EditJohtoselvitysPage';
 import NotFoundPage from '../../pages/staticPages/404Page';
 import ManualPage from '../../pages/staticPages/ManualPage';
+import AccessRightsPage from '../../pages/AccessRightsPage';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
@@ -46,6 +47,10 @@ const LocaleRoutes = () => {
         element={<PrivateRoute element={<HankePortfolioPage />} />}
       />
       <Route path={t('routes:HANKE:path')} element={<PrivateRoute element={<HankePage />} />} />
+      <Route
+        path={t('routes:ACCESS_RIGHTS:path')}
+        element={<PrivateRoute element={<AccessRightsPage />} />}
+      />
       <Route path={t('routes:HAITATON_INFO:path')} element={<InfoPage />} />
       <Route
         path={t('routes:JOHTOSELVITYSHAKEMUS:path')}

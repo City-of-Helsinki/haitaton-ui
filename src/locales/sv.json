@@ -224,6 +224,13 @@
         "title": "Haitaton – projektsida"
       }
     },
+    "ACCESS_RIGHTS": {
+      "path": "/projektportfolj/:hankeTunnus/oikeudet",
+      "headerLabel": "Käyttöoikeudet",
+      "meta": {
+        "title": "Haitaton - Käyttöoikeuksien hallinta"
+      }
+    },
     "PUBLIC_HANKKEET": {
       "path": "/allmannaprojekt",
       "headerLabel": "Projekt på allmänna områden",

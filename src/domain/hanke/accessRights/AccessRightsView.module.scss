@@ -1,0 +1,47 @@
+.mainContent {
+  max-width: var(--container-width-xl);
+  padding-top: var(--spacing-m);
+  padding-right: var(--spacing-m);
+  padding-bottom: var(--spacing-m);
+}
+
+.hankeLink {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2-xs);
+  margin-bottom: var(--spacing-m);
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.infoAccordion {
+  margin-bottom: var(--spacing-xl);
+
+  .infoList {
+    padding-left: var(--spacing-m);
+
+    & > li {
+      margin-bottom: var(--spacing-2-xs);
+
+      &:last-child {
+        margin-bottom: var(--spacing-l);
+      }
+    }
+  }
+}
+
+.searchInput {
+  max-width: 328px;
+  margin-bottom: var(--spacing-m);
+}
+
+.pagination {
+  margin-top: var(--spacing-xs);
+  margin-bottom: var(--spacing-s);
+
+  * {
+    box-sizing: content-box;
+  }
+}

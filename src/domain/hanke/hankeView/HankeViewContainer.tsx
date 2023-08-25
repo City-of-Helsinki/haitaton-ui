@@ -13,12 +13,19 @@ type Props = {
 const HankeViewContainer: React.FC<Props> = ({ hankeTunnus }) => {
   const { data: hankeData } = useHanke(hankeTunnus);
   const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
+  const getEditRightsPath = useLinkPath(ROUTES.ACCESS_RIGHTS);
   const navigate = useNavigate();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   function editHanke() {
     if (hankeTunnus) {
       navigate(getEditHankePath({ hankeTunnus }));
+    }
+  }
+
+  function editRights() {
+    if (hankeTunnus) {
+      navigate(getEditRightsPath({ hankeTunnus }));
     }
   }
 
@@ -37,7 +44,12 @@ const HankeViewContainer: React.FC<Props> = ({ hankeTunnus }) => {
         onClose={handleDeleteDialogClose}
         hankeTunnus={hankeTunnus}
       />
-      <HankeView hankeData={hankeData} onEditHanke={editHanke} onCancelHanke={cancelHanke} />
+      <HankeView
+        hankeData={hankeData}
+        onEditHanke={editHanke}
+        onCancelHanke={cancelHanke}
+        onEditRights={editRights}
+      />
     </>
   );
 };
