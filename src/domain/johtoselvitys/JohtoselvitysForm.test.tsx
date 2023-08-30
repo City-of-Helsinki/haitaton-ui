@@ -572,3 +572,34 @@ test('Should not allow to edit own info when application has been sent to Allu',
     screen.getByTestId('applicationData.customerWithContacts.contacts.0.phone'),
   ).toBeDisabled();
 });
+
+test('Validation error is shown if no work is about checkbox is selected', async () => {
+  const { user } = render(<JohtoselvitysContainer />);
+
+  await user.click(screen.getByLabelText(/uuden rakenteen tai johdon rakentamisesta/i));
+  await user.click(screen.getByLabelText(/uuden rakenteen tai johdon rakentamisesta/i));
+  expect(screen.queryByText('Kenttä on pakollinen')).toBeInTheDocument();
+
+  await user.click(screen.getByLabelText(/olemassaolevan rakenteen kunnossapitotyöstä/i));
+  expect(screen.queryByText('Kenttä on pakollinen')).not.toBeInTheDocument();
+  await user.click(screen.getByLabelText(/olemassaolevan rakenteen kunnossapitotyöstä/i));
+  expect(screen.queryByText('Kenttä on pakollinen')).toBeInTheDocument();
+
+  await user.click(screen.getByLabelText(/kiinteistöliittymien rakentamisesta/i));
+  expect(screen.queryByText('Kenttä on pakollinen')).not.toBeInTheDocument();
+  await user.click(screen.getByLabelText(/kiinteistöliittymien rakentamisesta/i));
+  expect(screen.queryByText('Kenttä on pakollinen')).toBeInTheDocument();
+
+  await user.click(
+    screen.getByLabelText(
+      /kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi/i,
+    ),
+  );
+  expect(screen.queryByText('Kenttä on pakollinen')).not.toBeInTheDocument();
+  await user.click(
+    screen.getByLabelText(
+      /kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi/i,
+    ),
+  );
+  expect(screen.queryByText('Kenttä on pakollinen')).toBeInTheDocument();
+});

@@ -10,7 +10,7 @@ import { Box } from '@chakra-ui/react';
 import { useBeforeUnload } from 'react-router-dom';
 
 import { JohtoselvitysFormValues } from './types';
-import { BasicHankeInfo } from './BasicInfo';
+import { BasicInfo } from './BasicInfo';
 import { Contacts } from './Contacts';
 import { Geometries } from './Geometries';
 import { ReviewAndSend } from './ReviewAndSend';
@@ -34,7 +34,7 @@ import useHanke from '../hanke/hooks/useHanke';
 import { AlluStatus, Application } from '../application/types/application';
 import Attachments from './Attachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
-import { uploadAttachment } from '../application/attachments';
+import { removeDuplicateAttachments, uploadAttachment } from '../application/attachments';
 import useAttachments from '../application/hooks/useAttachments';
 import { APPLICATION_ID_STORAGE_KEY } from '../application/constants';
 
@@ -208,11 +208,13 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     },
     onError(error: AxiosError, { file }) {
       setAttachmentUploadErrors((errors) => {
-        // TODO: Should show different error texts for different kinds of errors,
-        // once those texts have been defined
+        const errorMessage =
+          error.response?.status === 400
+            ? t('form:errors:fileLoadBadFileError', { fileName: file.name })
+            : t('form:errors:fileLoadTechnicalError', { fileName: file.name });
         return errors.concat(
           <Box as="p" key={file.name} mb="var(--spacing-s)">
-            {file.name}: {t('common:error')}
+            {errorMessage}
           </Box>,
         );
       });
@@ -286,7 +288,10 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
       return Promise.resolve();
     }
 
-    const mutations = newAttachments.map((file) =>
+    // Filter out attachments that have same names as those that have already been sent
+    const filesToSend = removeDuplicateAttachments(newAttachments, existingAttachments);
+
+    const mutations = filesToSend.map((file) =>
       attachmentUploadMutation.mutateAsync({
         applicationId,
         attachmentType: 'MUU',
@@ -352,7 +357,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
 
     return [
       {
-        element: <BasicHankeInfo />,
+        element: <BasicInfo />,
         label: t('form:headers:perustiedot'),
         state: StepState.available,
       },

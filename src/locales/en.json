@@ -76,7 +76,9 @@
     "errors": {
       "areaRequired": "At least one area is required",
       "fileLoadError": "Error in loading file",
-      "selfIntersectingArea": "The area borders cannot intersect with each other"
+      "selfIntersectingArea": "The area borders cannot intersect with each other",
+      "fileLoadTechnicalError": "Uploading the file ({{fileName}}) failed. Please try again later.",
+      "fileLoadBadFileError": "There is a problem with the file ({{fileName}}). Please check that the file format is correct and the file size does not exceed 100 MB."
     },
     "headers": {
       "perustiedot": "Basic information",

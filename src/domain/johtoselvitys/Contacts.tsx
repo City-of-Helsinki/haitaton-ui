@@ -63,8 +63,8 @@ const CustomerFields: React.FC<{ customerType: CustomerType; hankeContacts?: Han
   ]);
 
   useEffect(() => {
-    // If setting contact type to other than company, set null to registry key
-    if (selectedContactType !== 'COMPANY') {
+    // If setting contact type to other than company or association, set null to registry key
+    if (selectedContactType === 'PERSON' || selectedContactType === 'OTHER') {
       setValue(`applicationData.${customerType}.customer.registryKey`, null, {
         shouldValidate: true,
       });
@@ -119,7 +119,7 @@ const CustomerFields: React.FC<{ customerType: CustomerType; hankeContacts?: Han
           <TextInput
             name={`applicationData.${customerType}.customer.registryKey`}
             label={t('form:yhteystiedot:labels:ytunnus')}
-            disabled={selectedContactType !== 'COMPANY'}
+            disabled={selectedContactType === 'PERSON' || selectedContactType === 'OTHER'}
           />
           <TextInput
             name={`applicationData.${customerType}.customer.email`}
