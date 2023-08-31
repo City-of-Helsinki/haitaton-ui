@@ -176,4 +176,11 @@ export const handlers = [
     const users = await usersDB.readAll(hankeTunnus as string);
     return res(ctx.status(200), ctx.json({ kayttajat: users }));
   }),
+
+  rest.put(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat`, async (req, res, ctx) => {
+    const { hankeTunnus } = req.params;
+    const { kayttajat } = await req.json();
+    await usersDB.update(hankeTunnus as string, kayttajat);
+    return res(ctx.status(200));
+  }),
 ];

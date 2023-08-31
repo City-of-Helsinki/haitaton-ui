@@ -127,7 +127,8 @@
       }
     },
     "buttons": {
-      "loadingAttachments": "Ladataan tiedostoja..."
+      "loadingAttachments": "Ladataan tiedostoja...",
+      "saveChanges": "Tallenna muutokset"
     },
     "helperTexts": {
       "dateInForm": "Anna muodossa P.K.VVVV",
@@ -850,6 +851,12 @@
     "search": {
       "placeholder": "esim. Matti Meikäläinen",
       "helperText": "Hae nimellä tai roolilla"
+    },
+    "notifications": {
+      "rightsUpdatedSuccessLabel": "Käyttöoikeudet päivitetty",
+      "rightsUpdatedSuccessText": "Käyttöoikeudet on päivitetty onnistuneesti",
+      "rightsUpdatedErrorLabel": "Virhe päivityksessä",
+      "rightsUpdatedErrorText": "<0>Käyttöoikeuksien päivityksessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>"
     }
   },
   "map": {

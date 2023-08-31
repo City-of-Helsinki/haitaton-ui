@@ -1,5 +1,19 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Accordion, IconAngleLeft, Pagination, SearchInput, Select, Table } from 'hds-react';
+import {
+  Accordion,
+  Button,
+  IconAngleLeft,
+  IconSaveDisketteFill,
+  Notification,
+  Pagination,
+  SearchInput,
+  Select,
+  Table,
+  Link as HDSLink,
+} from 'hds-react';
+import { cloneDeep } from 'lodash';
+import { Flex } from '@chakra-ui/react';
+import { useMutation, useQueryClient } from 'react-query';
 import Text from '../../../common/components/text/Text';
 import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
 import {
@@ -22,6 +36,7 @@ import { HankeUser, AccessRightLevel } from '../hankeUsers/hankeUser';
 import { $enum } from 'ts-enum-util';
 import { Link } from 'react-router-dom';
 import useHankeViewPath from '../hooks/useHankeViewPath';
+import { updateHankeUsers } from '../hankeUsers/hankeUsersApi';
 
 type Props = {
   hankeUsers: HankeUser[];
@@ -39,8 +54,12 @@ const EMAIL_KEY = 'sahkoposti';
 const ACCESS_RIGHT_LEVEL_KEY = 'kayttooikeustaso';
 
 function AccessRightsView({ hankeUsers, hankeTunnus, hankeName }: Props) {
+  const queryClient = useQueryClient();
   const { t, i18n } = useTranslation();
   const hankeViewPath = useHankeViewPath(hankeTunnus);
+  const [usersData, setUsersData] = useState<(HankeUser & { modified?: boolean })[]>(hankeUsers);
+  const modifiedUsers = usersData.filter((user) => user.modified);
+  const saveButtonDisabled = modifiedUsers.length === 0;
 
   const columns: Column<HankeUser>[] = useMemo(() => {
     return [{ accessor: NAME_KEY }, { accessor: EMAIL_KEY }, { accessor: ACCESS_RIGHT_LEVEL_KEY }];
@@ -56,12 +75,18 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName }: Props) {
   } = useTable<HankeUser>(
     {
       columns,
-      data: hankeUsers,
+      data: usersData,
     },
     useFilters,
     useSortBy,
     usePagination,
   );
+
+  useEffect(() => {
+    setUsersData(hankeUsers);
+  }, [hankeUsers]);
+
+  const updateUsersMutation = useMutation(updateHankeUsers);
 
   const [usersSearchValue, setUsersSearchValue] = useState('');
 
@@ -94,14 +119,53 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName }: Props) {
   }
 
   function getAccessRightSelect(args: HankeUser) {
+    const isOnlyWithAllRights: boolean =
+      args.kayttooikeustaso === 'KAIKKI_OIKEUDET' &&
+      usersData.filter((user) => user.kayttooikeustaso === 'KAIKKI_OIKEUDET').length === 1;
+    const isDisabled = isOnlyWithAllRights;
+
+    function handleRightsChange(e: AccessRightLevelOption) {
+      setUsersData((prevData) => {
+        const newData = prevData.map((user) => {
+          if (user.id === args.id) {
+            const modifiedUser = cloneDeep(user);
+            modifiedUser.kayttooikeustaso = e.value;
+            modifiedUser.modified = true;
+            return modifiedUser;
+          }
+          return user;
+        });
+        return newData;
+      });
+    }
+
     return (
       <Select<AccessRightLevelOption>
         id="select-access-right"
         aria-labelledby={t('hankeUsers:accessRights')}
         options={accessRightLevelOptions}
         value={accessRightLevelOptions.find((option) => option.value === args.kayttooikeustaso)}
-        required
+        onChange={handleRightsChange}
+        disabled={isDisabled}
       />
+    );
+  }
+
+  function updateUsers() {
+    const users: Pick<HankeUser, 'id' | 'kayttooikeustaso'>[] = modifiedUsers.map((user) => {
+      return {
+        id: user.id,
+        kayttooikeustaso: user.kayttooikeustaso,
+      };
+    });
+    updateUsersMutation.mutate(
+      { hankeTunnus, users },
+      {
+        onSuccess() {
+          console.log('success!');
+          queryClient.invalidateQueries(['hankeUsers', hankeTunnus]);
+        },
+      },
     );
   }
 
@@ -215,6 +279,49 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName }: Props) {
             paginationAriaLabel={t('hankeList:paginatioAriaLabel')}
           />
         </div>
+
+        <Flex justifyContent="flex-end" mb="var(--spacing-l)">
+          <Button
+            onClick={updateUsers}
+            iconLeft={<IconSaveDisketteFill />}
+            disabled={saveButtonDisabled}
+          >
+            {t('form:buttons:saveChanges')}
+          </Button>
+        </Flex>
+
+        {updateUsersMutation.isSuccess && (
+          <Notification
+            position="top-right"
+            dismissible
+            autoClose
+            autoCloseDuration={4000}
+            type="success"
+            label={t('hankeUsers:notifications:rightsUpdatedSuccessLabel')}
+            closeButtonLabelText={t('common:components:notification:closeButtonLabelText')}
+            onClose={() => updateUsersMutation.reset()}
+          >
+            {t('hankeUsers:notifications:rightsUpdatedSuccessText')}
+          </Notification>
+        )}
+        {updateUsersMutation.isError && (
+          <Notification
+            position="top-right"
+            dismissible
+            type="error"
+            label={t('hankeUsers:notifications:rightsUpdatedErrorLabel')}
+            closeButtonLabelText={t('hankeUsers:notifications:rightsUpdatedErrorLabel')}
+            onClose={() => updateUsersMutation.reset()}
+          >
+            <Trans i18nKey="hankeUsers:notifications:rightsUpdatedErrorText">
+              <p>
+                Käyttöoikeuksien päivityksessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota
+                yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa
+                <HDSLink href="mailto:haitatontuki@hel.fi">haitatontuki@hel.fi</HDSLink>.
+              </p>
+            </Trans>
+          </Notification>
+        )}
       </InformationViewMainContent>
     </InformationViewContainer>
   );
