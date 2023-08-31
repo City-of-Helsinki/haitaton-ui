@@ -16,7 +16,7 @@ function Form({
   hanke?: HankeDataDraft;
   application?: JohtoselvitysFormValues;
 }) {
-  const methods = useForm({ defaultValues: application || { applicationData: {} } });
+  const methods = useForm({ defaultValues: application ?? { applicationData: {} } });
 
   const hankeContacts = [hanke?.omistajat, hanke?.rakennuttajat, hanke?.toteuttajat, hanke?.muut];
 
