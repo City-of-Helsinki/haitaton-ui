@@ -126,7 +126,8 @@
       }
     },
     "buttons": {
-      "loadingAttachments": "Ladataan tiedostoja..."
+      "loadingAttachments": "Ladataan tiedostoja...",
+      "fillWithOwnInformation": "Täytä omilla tiedoilla"
     },
     "helperTexts": {
       "dateInForm": "Anna muodossa P.K.VVVV",

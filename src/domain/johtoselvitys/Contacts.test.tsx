@@ -1,15 +1,22 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { fireEvent, render, screen } from '../../testUtils/render';
 import { Contacts } from './Contacts';
 import hankkeet from '../mocks/data/hankkeet-data';
+import applications from '../mocks/data/hakemukset-data';
 import { HankeContact, HankeDataDraft } from '../types/hanke';
+import { JohtoselvitysFormValues } from './types';
 
 jest.setTimeout(10000);
 
-function Form({ hanke }: { hanke?: HankeDataDraft }) {
-  const methods = useForm({});
+function Form({
+  hanke,
+  application,
+}: {
+  hanke?: HankeDataDraft;
+  application?: JohtoselvitysFormValues;
+}) {
+  const methods = useForm({ defaultValues: application ?? { applicationData: {} } });
 
   const hankeContacts = [hanke?.omistajat, hanke?.rakennuttajat, hanke?.toteuttajat, hanke?.muut];
 
@@ -67,4 +74,47 @@ test('Business id field is not disabled if customer type is company or associati
   fireEvent.click(screen.getAllByText(/yhdistys/i)[0]);
 
   expect(screen.getAllByLabelText(/y-tunnus/i)[0]).toBeEnabled();
+});
+
+test('Customer fields can be filled with orderer information', async () => {
+  const application = applications[0];
+  const orderer = application.applicationData.customerWithContacts.contacts[0];
+  const { user } = render(<Form application={application} />);
+
+  await user.click(
+    screen.getByTestId('applicationData.customerWithContacts.customer.fillOwnInfoButton'),
+  );
+
+  expect(screen.getByTestId('applicationData.customerWithContacts.customer.name')).toHaveValue(
+    `${orderer.firstName} ${orderer.lastName}`,
+  );
+  expect(screen.getByTestId('applicationData.customerWithContacts.customer.email')).toHaveValue(
+    orderer.email,
+  );
+  expect(screen.getByTestId('applicationData.customerWithContacts.customer.phone')).toHaveValue(
+    orderer.phone,
+  );
+});
+
+test('Contact fields can be filled with orderer information', async () => {
+  const application = applications[0];
+  const orderer = application.applicationData.customerWithContacts.contacts[0];
+  const { user } = render(<Form application={application} />);
+
+  await user.click(
+    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.fillOwnInfoButton'),
+  );
+
+  expect(
+    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.firstName'),
+  ).toHaveValue(orderer.firstName);
+  expect(
+    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.lastName'),
+  ).toHaveValue(orderer.lastName);
+  expect(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.email')).toHaveValue(
+    orderer.email,
+  );
+  expect(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.phone')).toHaveValue(
+    orderer.phone,
+  );
 });
