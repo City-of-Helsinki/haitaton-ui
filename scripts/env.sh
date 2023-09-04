@@ -37,3 +37,5 @@ do
 done < $ENVDIR/.env
 
 echo "}" >> $TARGETDIR/env-config.js
+
+chmod a+rw $TARGETDIR/env-config.js
