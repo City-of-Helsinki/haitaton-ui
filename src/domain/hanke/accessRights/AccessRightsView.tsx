@@ -93,6 +93,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName }: Props) {
     handleSort();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function getAccessRightSelect(args: HankeUser) {
     return (
       <Select<AccessRightLevelOption>
@@ -195,7 +196,10 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName }: Props) {
             {
               headerName: t('hankeUsers:accessRights'),
               key: ACCESS_RIGHT_LEVEL_KEY,
-              transform: getAccessRightSelect,
+              transform(args: HankeUser) {
+                return t(`hankeUsers:accessRightLevels:${args.kayttooikeustaso}`);
+              },
+              // transform: getAccessRightSelect,
             },
           ]}
           rows={page.map((row) => row.original)}
