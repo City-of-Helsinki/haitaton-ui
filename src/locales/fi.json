@@ -128,7 +128,8 @@
     },
     "buttons": {
       "loadingAttachments": "Ladataan tiedostoja...",
-      "saveChanges": "Tallenna muutokset"
+      "saveChanges": "Tallenna muutokset",
+      "fillWithOwnInformation": "Täytä omilla tiedoilla"
     },
     "helperTexts": {
       "dateInForm": "Anna muodossa P.K.VVVV",

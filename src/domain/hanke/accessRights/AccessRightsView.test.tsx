@@ -1,6 +1,6 @@
 import React from 'react';
 import { rest } from 'msw';
-import { render, cleanup, screen, waitFor } from '../../../testUtils/render';
+import { render, cleanup, screen, waitFor, fireEvent } from '../../../testUtils/render';
 import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import AccessRightsViewContainer from './AccessRightsViewContainer';
 import { server } from '../../mocks/test-server';
@@ -53,10 +53,10 @@ test('Link back to related hanke should work', async () => {
 });
 
 test('Pagination works', async () => {
-  const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+  render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
 
   await waitForLoadingToFinish();
-  await user.click(screen.getByTestId('hds-pagination-next-button'));
+  fireEvent.click(screen.getByTestId('hds-pagination-next-button'));
 
   expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows).toHaveLength(1);
   expect(screen.getByText(users[10].nimi)).toBeInTheDocument();
@@ -64,10 +64,10 @@ test('Pagination works', async () => {
 });
 
 test('Sorting by users name works', async () => {
-  const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+  render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
 
   await waitForLoadingToFinish();
-  await user.click(screen.getByTestId('hds-table-sorting-header-nimi'));
+  fireEvent.click(screen.getByTestId('hds-table-sorting-header-nimi'));
 
   expect(screen.getByTestId('nimi-0')).toHaveTextContent(users[2].nimi);
   expect(screen.getByTestId('nimi-1')).toHaveTextContent(users[9].nimi);
@@ -80,7 +80,7 @@ test('Sorting by users name works', async () => {
   expect(screen.getByTestId('nimi-8')).toHaveTextContent(users[4].nimi);
   expect(screen.getByTestId('nimi-9')).toHaveTextContent(users[1].nimi);
 
-  await user.click(screen.getByTestId('hds-table-sorting-header-nimi'));
+  fireEvent.click(screen.getByTestId('hds-table-sorting-header-nimi'));
 
   expect(screen.getByTestId('nimi-0')).toHaveTextContent(users[3].nimi);
   expect(screen.getByTestId('nimi-1')).toHaveTextContent(users[1].nimi);
@@ -95,10 +95,10 @@ test('Sorting by users name works', async () => {
 });
 
 test('Sorting by users email works', async () => {
-  const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+  render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
 
   await waitForLoadingToFinish();
-  await user.click(screen.getByTestId('hds-table-sorting-header-sahkoposti'));
+  fireEvent.click(screen.getByTestId('hds-table-sorting-header-sahkoposti'));
 
   expect(screen.getByTestId('sahkoposti-0')).toHaveTextContent(users[2].sahkoposti);
   expect(screen.getByTestId('sahkoposti-1')).toHaveTextContent(users[9].sahkoposti);
@@ -111,7 +111,7 @@ test('Sorting by users email works', async () => {
   expect(screen.getByTestId('sahkoposti-8')).toHaveTextContent(users[4].sahkoposti);
   expect(screen.getByTestId('sahkoposti-9')).toHaveTextContent(users[1].sahkoposti);
 
-  await user.click(screen.getByTestId('hds-table-sorting-header-sahkoposti'));
+  fireEvent.click(screen.getByTestId('hds-table-sorting-header-sahkoposti'));
 
   expect(screen.getByTestId('sahkoposti-0')).toHaveTextContent(users[3].sahkoposti);
   expect(screen.getByTestId('sahkoposti-1')).toHaveTextContent(users[1].sahkoposti);
