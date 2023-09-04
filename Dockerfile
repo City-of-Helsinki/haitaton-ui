@@ -10,6 +10,11 @@ COPY --from=staticbuilder ./builder/build /usr/share/nginx/html
 COPY --from=staticbuilder ./builder/nginx/nginx.conf /etc/nginx/nginx.conf
 WORKDIR /usr/share/nginx/html
 
+# Create the environment file so that the user that will run the backend has
+# permission to overwrite the config based on environment variables.
+RUN touch env-config.js
+RUN chmod a+rw env-config.js
+
 # Copy default environment config and setup script
 # Copy package.json so env.sh can read it
 COPY --from=staticbuilder ./builder/scripts/env.sh /opt/env.sh
