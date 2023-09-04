@@ -1,0 +1,49 @@
+import React from 'react';
+import { Flex } from '@chakra-ui/react';
+import { AxiosError } from 'axios';
+import { LoadingSpinner } from 'hds-react';
+import ErrorLoadingText from '../../../common/components/errorLoadingText/ErrorLoadingText';
+import { useHankeUsers } from '../hankeUsers/hooks/useHankeUsers';
+import useHanke from '../hooks/useHanke';
+import AccessRightsView from './AccessRightsView';
+import { useTranslation } from 'react-i18next';
+
+type Props = {
+  hankeTunnus: string;
+};
+
+function AccessRightsViewContainer({ hankeTunnus }: Props) {
+  const { t } = useTranslation();
+  const { data: hankeUsers, isLoading, isError, error } = useHankeUsers(hankeTunnus);
+  const { data: hankeData } = useHanke(hankeTunnus);
+
+  if (isLoading) {
+    return (
+      <Flex justify="center" mt="var(--spacing-xl)">
+        <LoadingSpinner />
+      </Flex>
+    );
+  }
+
+  if (isError && (error as AxiosError).response?.status === 404) {
+    return <ErrorLoadingText>{t('common:dataNotFound')}</ErrorLoadingText>;
+  }
+
+  if (isError) {
+    return <ErrorLoadingText />;
+  }
+
+  if (!hankeUsers || !hankeData) {
+    return null;
+  }
+
+  return (
+    <AccessRightsView
+      hankeUsers={hankeUsers}
+      hankeTunnus={hankeTunnus}
+      hankeName={hankeData?.nimi}
+    />
+  );
+}
+
+export default AccessRightsViewContainer;

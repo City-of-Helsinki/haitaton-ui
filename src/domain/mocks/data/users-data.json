@@ -1,0 +1,90 @@
+[
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "sahkoposti": "matti.meikalainen@test.com",
+    "nimi": "Matti Meikäläinen",
+    "kayttooikeustaso": "KAIKKI_OIKEUDET",
+    "tunnistautunut": true,
+    "hankeTunnus": "HAI22-2"
+  },
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa7",
+    "sahkoposti": "teppo@test.com",
+    "nimi": "Teppo Työmies",
+    "kayttooikeustaso": "KAIKKIEN_MUOKKAUS",
+    "tunnistautunut": false,
+    "hankeTunnus": "HAI22-2"
+  },
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa8",
+    "sahkoposti": "aku@asiakas.com",
+    "nimi": "Aku Asiakas",
+    "kayttooikeustaso": "HANKEMUOKKAUS",
+    "tunnistautunut": true,
+    "hankeTunnus": "HAI22-2"
+  },
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa9",
+    "sahkoposti": "vilja@test.com",
+    "nimi": "Vilja Viljanen",
+    "kayttooikeustaso": "KATSELUOIKEUS",
+    "tunnistautunut": false,
+    "hankeTunnus": "HAI22-2"
+  },
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afb1",
+    "sahkoposti": "tauno@test.com",
+    "nimi": "Tauno Testinen",
+    "kayttooikeustaso": "KATSELUOIKEUS",
+    "tunnistautunut": false,
+    "hankeTunnus": "HAI22-2"
+  },
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afb2",
+    "sahkoposti": "marja@test.com",
+    "nimi": "Marja Marjanen",
+    "kayttooikeustaso": "KATSELUOIKEUS",
+    "tunnistautunut": false,
+    "hankeTunnus": "HAI22-2"
+  },
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afb3",
+    "sahkoposti": "milka@test.com",
+    "nimi": "Milka Marjanen",
+    "kayttooikeustaso": "KATSELUOIKEUS",
+    "tunnistautunut": true,
+    "hankeTunnus": "HAI22-2"
+  },
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afb4",
+    "sahkoposti": "sakari@test.com",
+    "nimi": "Sakari Selkonen",
+    "kayttooikeustaso": "HAKEMUSASIOINTI",
+    "tunnistautunut": true,
+    "hankeTunnus": "HAI22-2"
+  },
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afb5",
+    "sahkoposti": "keijo@test.com",
+    "nimi": "Keijo Keijonen",
+    "kayttooikeustaso": "KATSELUOIKEUS",
+    "tunnistautunut": true,
+    "hankeTunnus": "HAI22-2"
+  },
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afb6",
+    "sahkoposti": "alma@test.com",
+    "nimi": "Alma Testinen",
+    "kayttooikeustaso": "KATSELUOIKEUS",
+    "tunnistautunut": false,
+    "hankeTunnus": "HAI22-2"
+  },
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afb7",
+    "sahkoposti": "taneli@test.com",
+    "nimi": "Taneli Taunonen",
+    "kayttooikeustaso": "KATSELUOIKEUS",
+    "tunnistautunut": false,
+    "hankeTunnus": "HAI22-2"
+  }
+]

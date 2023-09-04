@@ -51,6 +51,7 @@
       }
     },
     "error": "Tapahtui virhe. Yritä uudestaan.",
+    "dataNotFound": "Tietoja ei löytynyt",
     "ariaLabels": {
       "profileButton": "Käyttäjäprofiili",
       "menuToggle": "Valikko",
@@ -231,6 +232,13 @@
       "headerLabel": "Hankkeet",
       "meta": {
         "title": "Haitaton - Hankesivu"
+      }
+    },
+    "ACCESS_RIGHTS": {
+      "path": "/hankesalkku/:hankeTunnus/oikeudet",
+      "headerLabel": "Käyttöoikeudet",
+      "meta": {
+        "title": "Haitaton - Käyttöoikeuksien hallinta"
       }
     },
     "PUBLIC_HANKKEET": {
@@ -819,6 +827,30 @@
       "toPreviousPage": "Listan edelliselle sivulle",
       "toNextPage": "Listan seuraavalle sivulle",
       "toLastPage": "Listan viimeiselle sivulle"
+    }
+  },
+  "hankeUsers": {
+    "accessRights": "Käyttöoikeudet",
+    "manageRights": "Käyttöoikeuksien hallinta",
+    "accessRightLevels": {
+      "KAIKKI_OIKEUDET": "Kaikki oikeudet",
+      "KAIKKIEN_MUOKKAUS": "Hankkeen ja hakemusten muokkaus",
+      "HANKEMUOKKAUS": "Hankemuokkaus",
+      "HAKEMUSASIOINTI": "Hakemusasiointi",
+      "KATSELUOIKEUS": "Katseluoikeus"
+    },
+    "accessRightsInfo": {
+      "heading": "Mitä eri oikeuksilla voi tehdä?",
+      "KAIKKI_OIKEUDET": "<strong>Kaikki oikeudet</strong> mahdollistaa hankkeen ja sen hakemusten sisällön muokkaamisen, kaikkien käyttöoikeuksien muokkaamisen sekä hankkeen poistamisen, kun hankkeella ei ole päätöksen saaneita hakemuksia.",
+      "KAIKKIEN_MUOKKAUS": "<strong>Hankkeen ja hakemusten muokkaus -oikeus</strong> mahdollistaa hankkeen ja sen hakemusten sisällön muokkaamisen ja luonnin sekä muiden käyttöoikeuksien muokkaamisen, paitsi “Kaikki oikeudet”, jolla voi poistaa hankkeen.",
+      "HANKEMUOKKAUS": "<strong>Hankemuokkaus-oikeus</strong> mahdollistaa hankkeen tietojen muokkaamisen, mutta ei käyttöoikeuksien muokkausta. Hakemustietoihin on tällöin katseluoikeudet.",
+      "HAKEMUSASIOINTI": "<strong>Hakemusasiointi-oikeus</strong> mahdollistaa uusien hakemusten luomisen hankkeelle sekä hankkeen hakemusten tietojen muokkaamisen.",
+      "KATSELUOIKEUS": "<strong>Katselu-oikeus</strong> mahdollistaa hankkeen ja sen hakemusten tietojen katselun. Katseluoikeus asetetaan automaattisesti kaikille hankkeelle ja hakemukselle lisätyille henkilöille.",
+      "modifyInfo": "Käyttöoikeutta voi vaihtaa valitsemalla alasvetovalikosta ja klikkaamalla Tallenna-painiketta. Voit myös lähettää henkilölle uuden kutsulinkin Haitattomaan, jos hän ei ole vastaanottanut sitä aiemmin."
+    },
+    "search": {
+      "placeholder": "esim. Matti Meikäläinen",
+      "helperText": "Hae nimellä tai roolilla"
     }
   },
   "map": {

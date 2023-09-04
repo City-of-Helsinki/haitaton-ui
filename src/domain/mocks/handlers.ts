@@ -3,6 +3,7 @@ import { JohtoselvitysFormValues } from '../johtoselvitys/types';
 import { HankeDataDraft } from '../types/hanke';
 import * as hankkeetDB from './data/hankkeet';
 import * as hakemuksetDB from './data/hakemukset';
+import * as usersDB from './data/users';
 import ApiError from './apiError';
 
 const apiUrl = '/api';
@@ -18,7 +19,7 @@ export const handlers = [
         ctx.json({
           errorMessage: 'Hanke not found',
           errorCode: 'HAI1001',
-        })
+        }),
       );
     }
     return res(ctx.status(200), ctx.json(hanke));
@@ -47,7 +48,7 @@ export const handlers = [
         ctx.json({
           errorMessage: 'Hanke not found',
           errorCode: 'HAI1001',
-        })
+        }),
       );
     }
   }),
@@ -64,7 +65,7 @@ export const handlers = [
         ctx.json({
           errorMessage: message,
           errorCode: 'HAI1001',
-        })
+        }),
       );
     }
   }),
@@ -93,7 +94,7 @@ export const handlers = [
         ctx.status(404),
         ctx.json({
           errorMessage: 'Application not found',
-        })
+        }),
       );
     }
     return res(ctx.status(200), ctx.json(hakemus));
@@ -131,7 +132,7 @@ export const handlers = [
         ctx.json({
           errorMessage: 'Hakemus not found',
           errorCode: 'HAI1001',
-        })
+        }),
       );
     }
   }),
@@ -146,7 +147,7 @@ export const handlers = [
         ctx.json({
           errorMessage: 'Hakemus not found',
           errorCode: 'HAI1001',
-        })
+        }),
       );
     }
 
@@ -165,8 +166,14 @@ export const handlers = [
         ctx.json({
           errorMessage: message,
           errorCode: 'HAI1001',
-        })
+        }),
       );
     }
+  }),
+
+  rest.get(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat`, async (req, res, ctx) => {
+    const { hankeTunnus } = req.params;
+    const users = await usersDB.readAll(hankeTunnus as string);
+    return res(ctx.status(200), ctx.json({ kayttajat: users }));
   }),
 ];

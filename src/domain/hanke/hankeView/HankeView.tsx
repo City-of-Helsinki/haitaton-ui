@@ -122,15 +122,18 @@ type Props = {
   hankeData?: HankeData;
   onEditHanke: () => void;
   onCancelHanke: () => void;
+  onEditRights: () => void;
 };
 
-const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onCancelHanke }) => {
+const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onCancelHanke, onEditRights }) => {
   const { t } = useTranslation();
   const location = useLocation();
   const features = useFeatureFlags();
-  const { data: applicationsResponse, isLoading, error } = useApplicationsForHanke(
-    hankeData?.hankeTunnus
-  );
+  const {
+    data: applicationsResponse,
+    isLoading,
+    error,
+  } = useApplicationsForHanke(hankeData?.hankeTunnus);
 
   // Get initially active tab from location state if there is such defined
   const initiallyActiveTab: number | undefined =
@@ -221,7 +224,12 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onCancelHanke }) =
             </Button>
           </FeatureFlags>
           <FeatureFlags flags={['hanke', 'accessRights']}>
-            <Button variant="primary" iconLeft={<IconUser aria-hidden="true" />} theme="coat">
+            <Button
+              onClick={onEditRights}
+              variant="primary"
+              iconLeft={<IconUser aria-hidden="true" />}
+              theme="coat"
+            >
               {t('hankeList:buttons:editRights')}
             </Button>
           </FeatureFlags>

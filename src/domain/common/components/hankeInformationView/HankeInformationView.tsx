@@ -41,10 +41,12 @@ function InformationViewContentContainer({
 
 function InformationViewMainContent({
   children,
+  className,
 }: {
   children: React.ReactNode | React.ReactNode[];
+  className?: string;
 }) {
-  return <div className={clsx(styles.mainContent, styles.paddingLeft)}>{children}</div>;
+  return <div className={clsx(styles.mainContent, styles.paddingLeft, className)}>{children}</div>;
 }
 
 function InformationViewSidebar({ children }: { children: React.ReactNode | React.ReactNode[] }) {
