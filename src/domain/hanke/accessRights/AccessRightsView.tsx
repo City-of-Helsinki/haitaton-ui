@@ -14,14 +14,6 @@ import {
 import { cloneDeep } from 'lodash';
 import { Flex } from '@chakra-ui/react';
 import { useMutation, useQueryClient } from 'react-query';
-import Text from '../../../common/components/text/Text';
-import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
-import {
-  InformationViewContainer,
-  InformationViewHeader,
-  InformationViewMainContent,
-} from '../../common/components/hankeInformationView/HankeInformationView';
-import styles from './AccessRightsView.module.scss';
 import {
   Column,
   useAsyncDebounce,
@@ -31,10 +23,18 @@ import {
   useTable,
 } from 'react-table';
 import { Trans, useTranslation } from 'react-i18next';
-import { Language } from '../../../common/types/language';
-import { HankeUser, AccessRightLevel } from '../hankeUsers/hankeUser';
 import { $enum } from 'ts-enum-util';
 import { Link } from 'react-router-dom';
+import Text from '../../../common/components/text/Text';
+import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
+import {
+  InformationViewContainer,
+  InformationViewHeader,
+  InformationViewMainContent,
+} from '../../common/components/hankeInformationView/HankeInformationView';
+import styles from './AccessRightsView.module.scss';
+import { Language } from '../../../common/types/language';
+import { HankeUser, AccessRightLevel, SignedInUser } from '../hankeUsers/hankeUser';
 import useHankeViewPath from '../hooks/useHankeViewPath';
 import { updateHankeUsers } from '../hankeUsers/hankeUsersApi';
 
@@ -42,6 +42,7 @@ type Props = {
   hankeUsers: HankeUser[];
   hankeTunnus: string;
   hankeName: string;
+  signedInUser?: SignedInUser;
 };
 
 type AccessRightLevelOption = {
@@ -53,7 +54,7 @@ const NAME_KEY = 'nimi';
 const EMAIL_KEY = 'sahkoposti';
 const ACCESS_RIGHT_LEVEL_KEY = 'kayttooikeustaso';
 
-function AccessRightsView({ hankeUsers, hankeTunnus, hankeName }: Props) {
+function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: Props) {
   const queryClient = useQueryClient();
   const { t, i18n } = useTranslation();
   const hankeViewPath = useHankeViewPath(hankeTunnus);
@@ -92,8 +93,8 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName }: Props) {
 
   const accessRightLevelOptions: AccessRightLevelOption[] = $enum(AccessRightLevel)
     .getValues()
-    .map((role) => {
-      return { label: t(`hankeUsers:accessRightLevels:${role}`), value: role };
+    .map((rightLevel) => {
+      return { label: t(`hankeUsers:accessRightLevels:${rightLevel}`), value: rightLevel };
     });
 
   function handleUserSearch(searchTerm: string) {
@@ -122,7 +123,14 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName }: Props) {
     const isOnlyWithAllRights: boolean =
       args.kayttooikeustaso === 'KAIKKI_OIKEUDET' &&
       usersData.filter((user) => user.kayttooikeustaso === 'KAIKKI_OIKEUDET').length === 1;
-    const isDisabled = isOnlyWithAllRights;
+
+    const canEditRights = signedInUser?.kayttooikeudet?.includes('MODIFY_EDIT_PERMISSIONS');
+
+    // Check if this user is the same as the signed in user,
+    // so that user is not able to edit their own rights
+    const isSignedInUser = args.id === signedInUser?.hankeKayttajaId;
+
+    const isDisabled = isOnlyWithAllRights || !canEditRights || isSignedInUser;
 
     function handleRightsChange(e: AccessRightLevelOption) {
       setUsersData((prevData) => {
@@ -141,11 +149,14 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName }: Props) {
 
     return (
       <Select<AccessRightLevelOption>
-        id="select-access-right"
+        id={args.id}
         aria-labelledby={t('hankeUsers:accessRights')}
         options={accessRightLevelOptions}
         value={accessRightLevelOptions.find((option) => option.value === args.kayttooikeustaso)}
         onChange={handleRightsChange}
+        isOptionDisabled={(option) =>
+          option.value === 'KAIKKI_OIKEUDET' && signedInUser?.kayttooikeustaso !== 'KAIKKI_OIKEUDET'
+        }
         disabled={isDisabled}
       />
     );
@@ -162,7 +173,6 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName }: Props) {
       { hankeTunnus, users },
       {
         onSuccess() {
-          console.log('success!');
           queryClient.invalidateQueries(['hankeUsers', hankeTunnus]);
         },
       },
@@ -244,30 +254,32 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName }: Props) {
           onSubmit={handleUserSearch}
         />
 
-        <Table
-          cols={[
-            {
-              headerName: t('form:yhteystiedot:labels:nimi'),
-              key: NAME_KEY,
-              isSortable: true,
-            },
-            {
-              headerName: t('form:yhteystiedot:labels:email'),
-              key: EMAIL_KEY,
-              isSortable: true,
-            },
-            {
-              headerName: t('hankeUsers:accessRights'),
-              key: ACCESS_RIGHT_LEVEL_KEY,
-              transform: getAccessRightSelect,
-            },
-          ]}
-          rows={page.map((row) => row.original)}
-          onSort={handleTableSort}
-          indexKey="id"
-          variant="light"
-          dataTestId="access-right-table"
-        />
+        <div className={styles.table}>
+          <Table
+            cols={[
+              {
+                headerName: t('form:yhteystiedot:labels:nimi'),
+                key: NAME_KEY,
+                isSortable: true,
+              },
+              {
+                headerName: t('form:yhteystiedot:labels:email'),
+                key: EMAIL_KEY,
+                isSortable: true,
+              },
+              {
+                headerName: t('hankeUsers:accessRights'),
+                key: ACCESS_RIGHT_LEVEL_KEY,
+                transform: getAccessRightSelect,
+              },
+            ]}
+            rows={page.map((row) => row.original)}
+            onSort={handleTableSort}
+            indexKey="id"
+            variant="light"
+            dataTestId="access-right-table"
+          />
+        </div>
 
         <div className={styles.pagination}>
           <Pagination

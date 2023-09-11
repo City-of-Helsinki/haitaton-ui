@@ -52,6 +52,7 @@ import {
 } from '../../common/components/hankeInformationView/HankeInformationView';
 import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
 import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
+import { SignedInUser } from '../hankeUsers/hankeUser';
 
 type AreaProps = {
   area: HankeAlue;
@@ -120,12 +121,19 @@ const HankeAreaInfo: React.FC<AreaProps> = ({ area, hankeIndexData, index }) => 
 
 type Props = {
   hankeData?: HankeData;
+  signedInUser?: SignedInUser;
   onEditHanke: () => void;
   onCancelHanke: () => void;
   onEditRights: () => void;
 };
 
-const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onCancelHanke, onEditRights }) => {
+const HankeView: React.FC<Props> = ({
+  hankeData,
+  signedInUser,
+  onEditHanke,
+  onCancelHanke,
+  onEditRights,
+}) => {
   const { t } = useTranslation();
   const location = useLocation();
   const features = useFeatureFlags();
@@ -198,8 +206,11 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onCancelHanke, onE
           {hankeData?.hankeTunnus}
         </Text>
         <FeatureFlags flags={['hanke', 'accessRights']}>
-          <Text tag="p" styleAs="body-s" weight="bold" spacingBottom="l">
-            {t('hankePortfolio:labels:oikeudet')}:
+          <Text tag="p" styleAs="body-s" spacingBottom="l">
+            <strong style={{ marginRight: 'var(--spacing-s)' }}>
+              {t('hankePortfolio:labels:oikeudet')}:
+            </strong>
+            {t(`hankeUsers:accessRightLevels:${signedInUser?.kayttooikeustaso}`)}
           </Text>
         </FeatureFlags>
 

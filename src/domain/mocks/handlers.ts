@@ -5,6 +5,7 @@ import * as hankkeetDB from './data/hankkeet';
 import * as hakemuksetDB from './data/hakemukset';
 import * as usersDB from './data/users';
 import ApiError from './apiError';
+import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 
 const apiUrl = '/api';
 
@@ -182,5 +183,25 @@ export const handlers = [
     const { kayttajat } = await req.json();
     await usersDB.update(hankeTunnus as string, kayttajat);
     return res(ctx.status(200));
+  }),
+
+  rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json<SignedInUser>({
+        hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        kayttooikeustaso: 'KAIKKI_OIKEUDET',
+        kayttooikeudet: [
+          'VIEW',
+          'MODIFY_VIEW_PERMISSIONS',
+          'EDIT',
+          'MODIFY_EDIT_PERMISSIONS',
+          'DELETE',
+          'MODIFY_DELETE_PERMISSIONS',
+          'EDIT_APPLICATIONS',
+          'MODIFY_APPLICATION_PERMISSIONS',
+        ],
+      }),
+    );
   }),
 ];

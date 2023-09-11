@@ -2,11 +2,12 @@ import React from 'react';
 import { Flex } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
 import { LoadingSpinner } from 'hds-react';
+import { useTranslation } from 'react-i18next';
 import ErrorLoadingText from '../../../common/components/errorLoadingText/ErrorLoadingText';
 import { useHankeUsers } from '../hankeUsers/hooks/useHankeUsers';
 import useHanke from '../hooks/useHanke';
 import AccessRightsView from './AccessRightsView';
-import { useTranslation } from 'react-i18next';
+import useSignedInUserRights from '../hankeUsers/hooks/useUserRights';
 
 type Props = {
   hankeTunnus: string;
@@ -16,6 +17,7 @@ function AccessRightsViewContainer({ hankeTunnus }: Props) {
   const { t } = useTranslation();
   const { data: hankeUsers, isLoading, isError, error } = useHankeUsers(hankeTunnus);
   const { data: hankeData } = useHanke(hankeTunnus);
+  const { data: signedInUser } = useSignedInUserRights(hankeTunnus);
 
   if (isLoading) {
     return (
@@ -42,6 +44,7 @@ function AccessRightsViewContainer({ hankeTunnus }: Props) {
       hankeUsers={hankeUsers}
       hankeTunnus={hankeTunnus}
       hankeName={hankeData?.nimi}
+      signedInUser={signedInUser}
     />
   );
 }

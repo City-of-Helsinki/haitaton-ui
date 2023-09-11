@@ -5,8 +5,30 @@ import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import AccessRightsViewContainer from './AccessRightsViewContainer';
 import { server } from '../../mocks/test-server';
 import usersData from '../../mocks/data/users-data.json';
+import { SignedInUser } from '../hankeUsers/hankeUser';
+
+jest.setTimeout(20000);
 
 afterEach(cleanup);
+
+function getSignedInUser(options: Partial<SignedInUser> = {}): SignedInUser {
+  const {
+    hankeKayttajaId = '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+    kayttooikeustaso = 'KAIKKI_OIKEUDET',
+    kayttooikeudet = [
+      'VIEW',
+      'MODIFY_VIEW_PERMISSIONS',
+      'EDIT',
+      'MODIFY_EDIT_PERMISSIONS',
+      'DELETE',
+      'MODIFY_DELETE_PERMISSIONS',
+      'EDIT_APPLICATIONS',
+      'MODIFY_APPLICATION_PERMISSIONS',
+    ],
+  } = options;
+
+  return { hankeKayttajaId, kayttooikeustaso, kayttooikeudet };
+}
 
 const users = [...usersData];
 
@@ -174,4 +196,88 @@ test('Should show error notification if there is technical error', async () => {
 
   expect(screen.queryByText('Virhe tietojen lataamisessa.')).toBeInTheDocument();
   expect(screen.queryByText('Yritä hetken päästä uudelleen.')).toBeInTheDocument();
+});
+
+test('All rights dropdown should be disabled if only one user has all rights', async () => {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
+      return res(ctx.status(200), ctx.json<SignedInUser>(getSignedInUser()));
+    }),
+  );
+
+  render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.getByTestId('kayttooikeustaso-0').querySelector('button')).toBeDisabled();
+});
+
+test('Should be able to edit rights if user has all rights', async () => {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
+      return res(ctx.status(200), ctx.json<SignedInUser>(getSignedInUser()));
+    }),
+  );
+
+  const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  // Save button should be disabled when there are no changes
+  expect(screen.getByRole('button', { name: 'Tallenna muutokset' })).toBeDisabled();
+
+  fireEvent.click(screen.getByRole('button', { name: 'Hankkeen ja hakemusten muokkaus' }));
+  fireEvent.click(screen.getAllByText('Kaikki oikeudet')[2]);
+
+  await user.click(screen.getByRole('button', { name: 'Tallenna muutokset' }));
+
+  expect(screen.queryByText('Käyttöoikeudet päivitetty')).toBeInTheDocument();
+  expect(screen.getByTestId('kayttooikeustaso-1')).toHaveTextContent('Kaikki oikeudet');
+});
+
+test('Should not be able to edit rights if user does not have enough rights', async () => {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>(
+          getSignedInUser({ kayttooikeustaso: 'HANKEMUOKKAUS', kayttooikeudet: ['EDIT', 'VIEW'] }),
+        ),
+      );
+    }),
+  );
+
+  render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.getByTestId('kayttooikeustaso-0').querySelector('button')).toBeDisabled();
+  expect(screen.getByTestId('kayttooikeustaso-1').querySelector('button')).toBeDisabled();
+  expect(screen.getByTestId('kayttooikeustaso-2').querySelector('button')).toBeDisabled();
+  expect(screen.getByTestId('kayttooikeustaso-3').querySelector('button')).toBeDisabled();
+  expect(screen.getByTestId('kayttooikeustaso-4').querySelector('button')).toBeDisabled();
+  expect(screen.getByTestId('kayttooikeustaso-5').querySelector('button')).toBeDisabled();
+  expect(screen.getByTestId('kayttooikeustaso-6').querySelector('button')).toBeDisabled();
+  expect(screen.getByTestId('kayttooikeustaso-7').querySelector('button')).toBeDisabled();
+  expect(screen.getByTestId('kayttooikeustaso-8').querySelector('button')).toBeDisabled();
+  expect(screen.getByTestId('kayttooikeustaso-9').querySelector('button')).toBeDisabled();
+});
+
+test('Should not be able to assign all rights if user does not have all rights', async () => {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>(getSignedInUser({ kayttooikeustaso: 'KAIKKIEN_MUOKKAUS' })),
+      );
+    }),
+  );
+
+  const { container } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  fireEvent.click(screen.getByRole('button', { name: 'Hankemuokkaus' }));
+
+  expect(container.querySelectorAll('li')[5]).toHaveAttribute('disabled');
 });
