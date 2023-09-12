@@ -851,7 +851,7 @@
     },
     "search": {
       "placeholder": "esim. Matti Meikäläinen",
-      "helperText": "Hae nimellä tai roolilla"
+      "helperText": "Hae nimellä"
     },
     "notifications": {
       "rightsUpdatedSuccessLabel": "Käyttöoikeudet päivitetty",
