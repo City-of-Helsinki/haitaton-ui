@@ -163,7 +163,8 @@
       "labels": {
         "tyyppi": "Typ",
         "nimi": "Namn",
-        "ytunnusTaiHetu": "FO-nummer eller personbeteckning",
+        "etunimi": "Förnamn",
+        "sukunimi": "Efternamn",
         "ytunnus": "FO-nummer",
         "osoite": "Gatuadress",
         "postinumero": "Postnummer",

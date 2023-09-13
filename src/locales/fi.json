@@ -172,7 +172,8 @@
       "labels": {
         "tyyppi": "Tyyppi",
         "nimi": "Nimi",
-        "ytunnusTaiHetu": "Y-tunnus tai henkilötunnus",
+        "etunimi": "Etunimi",
+        "sukunimi": "Sukunimi",
         "ytunnus": "Y-tunnus",
         "osoite": "Katuosoite",
         "postinumero": "Postinumero",

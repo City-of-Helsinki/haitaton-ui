@@ -10,35 +10,34 @@ import {
   HANKE_KAISTAPITUUSHAITTA,
   CONTACT_TYYPPI,
 } from '../../types/hanke';
-import { FORMFIELD, CONTACT_FORMFIELD } from './types';
+import { FORMFIELD, CONTACT_FORMFIELD, SUBCONTACT_FORMFIELD } from './types';
 
 const subContactSchema = yup
   .object()
   .nullable()
   .default(null)
   .shape({
-    [CONTACT_FORMFIELD.NIMI]: yup.string().max(100).required(),
-    [CONTACT_FORMFIELD.OSOITE]: yup.string(),
-    [CONTACT_FORMFIELD.POSTINRO]: yup.string(),
-    [CONTACT_FORMFIELD.POSTITOIMIPAIKKA]: yup.string(),
-    [CONTACT_FORMFIELD.EMAIL]: yup.string().email().max(100).required(),
-    [CONTACT_FORMFIELD.PUHELINNUMERO]: yup.string().nullable().default(null).max(20),
+    [SUBCONTACT_FORMFIELD.SUKUNIMI]: yup.string().max(50).required(),
+    [SUBCONTACT_FORMFIELD.ETUNIMI]: yup.string().max(50).required(),
+    [SUBCONTACT_FORMFIELD.EMAIL]: yup.string().email().max(100).required(),
+    [SUBCONTACT_FORMFIELD.PUHELINNUMERO]: yup.string().nullable().default(null).max(20).required(),
   });
 
-const contactSchema = subContactSchema.shape({
-  [CONTACT_FORMFIELD.TYYPPI]: yup.string().oneOf($enum(CONTACT_TYYPPI).getValues()).required(),
-  [CONTACT_FORMFIELD.TUNNUS]: yup.string().required(),
-  [CONTACT_FORMFIELD.ALIKONTAKTIT]: yup.array().ensure().of(subContactSchema),
-});
+const contactSchema = yup
+  .object()
+  .nullable()
+  .default(null)
+  .shape({
+    [CONTACT_FORMFIELD.NIMI]: yup.string().max(100),
+    [CONTACT_FORMFIELD.TYYPPI]: yup.string().oneOf($enum(CONTACT_TYYPPI).getValues()),
+    [CONTACT_FORMFIELD.TUNNUS]: yup.string(),
+    [CONTACT_FORMFIELD.EMAIL]: yup.string().email().max(100),
+    [CONTACT_FORMFIELD.PUHELINNUMERO]: yup.string().nullable().default(null).max(20),
+    [CONTACT_FORMFIELD.ALIKONTAKTIT]: yup.array().ensure().of(subContactSchema),
+  });
 
 const otherPartySchema = contactSchema
-  .omit([
-    CONTACT_FORMFIELD.TYYPPI,
-    CONTACT_FORMFIELD.TUNNUS,
-    CONTACT_FORMFIELD.OSOITE,
-    CONTACT_FORMFIELD.POSTINRO,
-    CONTACT_FORMFIELD.POSTITOIMIPAIKKA,
-  ])
+  .omit([CONTACT_FORMFIELD.TYYPPI, CONTACT_FORMFIELD.TUNNUS])
   .shape({
     [CONTACT_FORMFIELD.ROOLI]: yup.string().required(),
     [CONTACT_FORMFIELD.ORGANISAATIO]: yup.string(),

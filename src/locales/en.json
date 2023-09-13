@@ -163,7 +163,8 @@
       "labels": {
         "tyyppi": "Type",
         "nimi": "Name",
-        "ytunnusTaiHetu": "Business ID or personal identity code",
+        "etunimi": "First name",
+        "sukunimi": "Last name",
         "ytunnus": "Business ID",
         "osoite": "Street address",
         "postinumero": "Postal code",

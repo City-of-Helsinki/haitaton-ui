@@ -76,7 +76,7 @@ const hankeMock: HankeDataDraft = {
       email: 'harri.hanketest@hankekatu.foo',
       puhelinnumero: '12341234',
       tyyppi: 'YKSITYISHENKILO',
-      ytunnusTaiHetu: 'tunnus',
+      ytunnus: 'tunnus',
     },
   ],
 };

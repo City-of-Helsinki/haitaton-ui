@@ -122,58 +122,56 @@ describe('HankeForm', () => {
   test('Yhteystiedot can be filled', async () => {
     const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
 
+    // Hanke owner
     await user.click(screen.getByRole('button', { name: /tyyppi/i }));
     await user.click(screen.getByText(/yritys/i));
-    fireEvent.change(screen.getByLabelText(/nimi/i), {
-      target: { value: 'Olli Omistaja' },
+
+    fireEvent.change(screen.getByTestId('omistajat.0.nimi'), {
+      target: { value: 'Omistaja Yritys' },
     });
-    fireEvent.change(screen.getByLabelText(/y-tunnus tai henkilötunnus/i), {
+    fireEvent.change(screen.getByLabelText(/y-tunnus/i), {
       target: { value: 'y-tunnus' },
     });
-    fireEvent.change(screen.getByLabelText(/katuosoite/i), {
-      target: { value: 'Testikuja 1' },
-    });
-    fireEvent.change(screen.getByLabelText(/postinumero/i), {
-      target: { value: '00000' },
-    });
-    fireEvent.change(screen.getByLabelText(/postitoimipaikka/i), {
-      target: { value: 'Testikaupunki' },
-    });
-    fireEvent.change(screen.getByLabelText(/sähköposti/i), {
+    fireEvent.change(screen.getByTestId('omistajat.0.email'), {
       target: { value: 'test@mail.com' },
     });
-    fireEvent.change(screen.getByLabelText(/puhelinnumero/i), {
-      target: { value: '0400000000' },
+    fireEvent.change(screen.getByTestId('omistajat.0.puhelinnumero'), {
+      target: { value: '0401234567' },
     });
 
-    expect(screen.queryByRole('group', { name: 'Yhteyshenkilö' })).not.toBeInTheDocument();
-    await user.click(screen.getByLabelText(/erillinen yhteyshenkilö/i));
-    expect(screen.getByRole('group', { name: 'Yhteyshenkilö' })).toBeInTheDocument();
-
-    fireEvent.change(screen.getAllByLabelText(/nimi/i)[1], {
-      target: { value: 'Testi Yhteyshenkilö' },
+    // Hanke owner contact person
+    fireEvent.change(screen.getByTestId('omistajat.0.alikontaktit.0.etunimi'), {
+      target: { value: 'Olli' },
     });
-    fireEvent.change(screen.getAllByLabelText(/sähköposti/i)[1], {
-      target: { value: 'yhteyshenkilo@mail.com' },
+    fireEvent.change(screen.getByTestId('omistajat.0.alikontaktit.0.sukunimi'), {
+      target: { value: 'Omistaja' },
+    });
+    fireEvent.change(screen.getByTestId('omistajat.0.alikontaktit.0.email'), {
+      target: { value: 'foo@bar.com' },
+    });
+    fireEvent.change(screen.getByTestId('omistajat.0.alikontaktit.0.puhelinnumero'), {
+      target: { value: '0507654321' },
     });
 
-    await user.click(screen.getByText(/Rakennuttajan tiedot/i));
+    // Rakennuttaja
+    await user.click(screen.getByText(/rakennuttajan tiedot/i));
     await user.click(screen.getByText(/lisää rakennuttaja/i));
     expect(screen.getAllByText('Rakennuttaja')).toHaveLength(1);
 
-    await user.click(screen.getByText(/lisää yhteyshenkilö/i));
-    await user.click(screen.getByText(/lisää yhteyshenkilö/i));
-    expect(screen.getByRole('tablist').childElementCount).toBe(2);
+    await user.click(screen.getAllByText(/lisää yhteyshenkilö/i)[1]);
+    await user.click(screen.getAllByText(/lisää yhteyshenkilö/i)[1]);
+    expect(screen.getAllByRole('tablist')[1].childElementCount).toBe(2); // many contacts can be added
+
+    await user.click(screen.getByText(/poista yhteyshenkilö/i));
+    expect(screen.queryByText(/poista yhteyshenkilö/i)).not.toBeInTheDocument(); // cannot remove last one
 
     await user.click(screen.getByText(/lisää rakennuttaja/i));
     expect(screen.getAllByText('Rakennuttaja')).toHaveLength(2);
-
     await user.click(screen.getAllByText(/poista rakennuttaja/i)[1]);
-    expect(screen.getAllByText('Rakennuttaja')).toHaveLength(1);
+    await user.click(screen.getByText(/poista rakennuttaja/i));
 
-    await user.click(screen.getByText(/poista yhteyshenkilö/i));
-    expect(screen.getByRole('tablist').childElementCount).toBe(1);
-    await user.click(screen.getByText(/poista yhteyshenkilö/i));
-    expect(screen.queryByText('Yhteyshenkilön tiedot')).not.toBeInTheDocument();
+    // Check Other types are present and clickable
+    await user.click(screen.getByText(/toteuttajan tiedot/i));
+    await user.click(screen.getByText(/muiden tahojen tiedot/i));
   });
 });

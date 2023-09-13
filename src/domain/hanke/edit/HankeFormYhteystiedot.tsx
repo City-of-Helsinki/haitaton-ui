@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
-import { Accordion, Button, Fieldset, IconCross, IconPlusCircle, ToggleButton } from 'hds-react';
-import { useFieldArray } from 'react-hook-form';
-import { CONTACT_FORMFIELD, FORMFIELD, FormProps } from './types';
+import { Accordion, Button, Fieldset, IconCross, IconPlusCircle } from 'hds-react';
+import { useFieldArray, useFormContext } from 'react-hook-form';
+import { CONTACT_FORMFIELD, FORMFIELD, FormProps, SUBCONTACT_FORMFIELD } from './types';
 import {
   HankeContact,
   CONTACT_TYYPPI,
@@ -24,32 +24,16 @@ import './HankeForm.styles.scss';
 const CONTACT_FIELDS: Array<keyof HankeContact> = [
   'tyyppi',
   'nimi',
-  'ytunnusTaiHetu',
-  'osoite',
-  'postinumero',
-  'postitoimipaikka',
+  'ytunnus',
   'email',
   'puhelinnumero',
 ];
-const REQUIRED_CONTACT_FIELDS: Array<keyof HankeContact> = [
-  'tyyppi',
-  'nimi',
-  'ytunnusTaiHetu',
-  'email',
-];
-
-function isRequiredContactField(field: keyof HankeContact) {
-  return REQUIRED_CONTACT_FIELDS.includes(field);
-}
 
 function getEmptyContact(): Omit<HankeContact, 'id'> {
   return {
     nimi: '',
     tyyppi: null,
-    ytunnusTaiHetu: '',
-    osoite: '',
-    postinumero: '',
-    postitoimipaikka: '',
+    ytunnus: '',
     email: '',
     puhelinnumero: '',
     alikontaktit: [],
@@ -70,19 +54,18 @@ function getEmptyOtherContact(): HankeMuuTaho {
 
 function getEmptySubContact(): HankeSubContact {
   return {
-    nimi: '',
-    osoite: '',
-    postinumero: '',
-    postitoimipaikka: '',
+    etunimi: '',
+    sukunimi: '',
     email: '',
     puhelinnumero: '',
   };
 }
 
-const SubContactFields: React.FC<{ fieldPath: string; onRemove: () => void }> = ({
-  fieldPath,
-  onRemove,
-}) => {
+const SubContactFields: React.FC<{
+  fieldPath: string;
+  canBeRemoved: boolean;
+  onRemove: () => void;
+}> = ({ fieldPath, canBeRemoved, onRemove }) => {
   const { t } = useTranslation();
 
   return (
@@ -93,53 +76,53 @@ const SubContactFields: React.FC<{ fieldPath: string; onRemove: () => void }> = 
     >
       <ResponsiveGrid>
         <TextInput
-          name={`${fieldPath}.${CONTACT_FORMFIELD.NIMI}`}
-          label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.NIMI}`)}
+          name={`${fieldPath}.${SUBCONTACT_FORMFIELD.ETUNIMI}`}
+          label={t(`form:yhteystiedot:labels:${SUBCONTACT_FORMFIELD.ETUNIMI}`)}
+          required
+        />
+        <TextInput
+          name={`${fieldPath}.${SUBCONTACT_FORMFIELD.SUKUNIMI}`}
+          label={t(`form:yhteystiedot:labels:${SUBCONTACT_FORMFIELD.SUKUNIMI}`)}
           required
         />
       </ResponsiveGrid>
       <ResponsiveGrid>
         <TextInput
-          name={`${fieldPath}.${CONTACT_FORMFIELD.OSOITE}`}
-          label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.OSOITE}`)}
-        />
-        <TextInput
-          name={`${fieldPath}.${CONTACT_FORMFIELD.POSTINRO}`}
-          label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.POSTINRO}`)}
-        />
-        <TextInput
-          name={`${fieldPath}.${CONTACT_FORMFIELD.POSTITOIMIPAIKKA}`}
-          label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.POSTITOIMIPAIKKA}`)}
-        />
-        <TextInput
-          name={`${fieldPath}.${CONTACT_FORMFIELD.EMAIL}`}
-          label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.EMAIL}`)}
+          name={`${fieldPath}.${SUBCONTACT_FORMFIELD.EMAIL}`}
+          label={t(`form:yhteystiedot:labels:${SUBCONTACT_FORMFIELD.EMAIL}`)}
           required
         />
         <TextInput
-          name={`${fieldPath}.${CONTACT_FORMFIELD.PUHELINNUMERO}`}
-          label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.PUHELINNUMERO}`)}
+          name={`${fieldPath}.${SUBCONTACT_FORMFIELD.PUHELINNUMERO}`}
+          label={t(`form:yhteystiedot:labels:${SUBCONTACT_FORMFIELD.PUHELINNUMERO}`)}
+          required
         />
-        <Button
-          variant="supplementary"
-          iconLeft={<IconCross aria-hidden />}
-          onClick={onRemove}
-          style={{ alignSelf: 'end' }}
-        >
-          {t(`form:yhteystiedot:buttons:removeSubContact`)}
-        </Button>
+        {canBeRemoved && (
+          <Button
+            variant="supplementary"
+            iconLeft={<IconCross aria-hidden />}
+            onClick={onRemove}
+            style={{ alignSelf: 'end' }}
+          >
+            {t(`form:yhteystiedot:buttons:removeSubContact`)}
+          </Button>
+        )}
       </ResponsiveGrid>
     </Fieldset>
   );
 };
 
-const ContactField: React.FC<{ field: keyof HankeContact; fieldName: string }> = ({
-  field,
-  fieldName,
-}) => {
+const ContactField: React.FC<{
+  field: keyof HankeContact;
+  fieldName: string;
+  contactType: HankeContactTypeKey;
+}> = ({ field, fieldName, contactType }) => {
   const { t } = useTranslation();
+  const { watch } = useFormContext();
+  const selectedContactType = watch(`${contactType}.0.tyyppi`);
+  const inputDisabled =
+    field === CONTACT_FORMFIELD.TUNNUS && selectedContactType === CONTACT_TYYPPI.YKSITYISHENKILO;
 
-  const isRequired = isRequiredContactField(field);
   const label = t(`form:yhteystiedot:labels:${field}`);
 
   if (field === 'tyyppi') {
@@ -147,7 +130,6 @@ const ContactField: React.FC<{ field: keyof HankeContact; fieldName: string }> =
       <Dropdown
         id={fieldName}
         name={fieldName}
-        required={isRequired}
         defaultValue={null}
         label={label}
         options={$enum(CONTACT_TYYPPI).map((value) => {
@@ -160,15 +142,13 @@ const ContactField: React.FC<{ field: keyof HankeContact; fieldName: string }> =
     );
   }
 
-  return <TextInput name={fieldName} label={label} required={isRequired} />;
+  return <TextInput name={fieldName} label={label} disabled={inputDisabled} />;
 };
 
 const HankeFormYhteystiedot: React.FC<FormProps> = () => {
   useFormPage();
   const { t } = useTranslation();
   const locale = useLocale();
-
-  const [separateContact, setSeparateContact] = useState(false);
 
   const {
     fields: rakennuttajat,
@@ -184,15 +164,15 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
     remove: removeToteuttaja,
   } = useFieldArray({ name: FORMFIELD.TOTEUTTAJAT });
 
-  const { fields: muutTahot, append: appendMuuTaho, remove: removeMuuTaho } = useFieldArray({
+  const {
+    fields: muutTahot,
+    append: appendMuuTaho,
+    remove: removeMuuTaho,
+  } = useFieldArray({
     name: FORMFIELD.MUUTTAHOT,
   });
 
-  function toggleSeparateContact() {
-    setSeparateContact((separateContactValue) => !separateContactValue);
-  }
-
-  const ownerSubContactFieldPath = `${FORMFIELD.OMISTAJAT}.0.${CONTACT_FORMFIELD.ALIKONTAKTIT}.0`;
+  const ownerSubContactFieldPath = `${FORMFIELD.OMISTAJAT}.0.${CONTACT_FORMFIELD.ALIKONTAKTIT}`;
 
   return (
     <div className="form2">
@@ -202,60 +182,45 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
       <Text tag="h3" styleAs="h3" weight="light" spacingBottom="xs">
         {t(`form:yhteystiedot:titles:omistajaInfo`)}
       </Text>
-      <Fieldset
-        heading={t(`form:yhteystiedot:titles:omistaja`)}
-        style={{ paddingTop: 'var(--spacing-s)' }}
+
+      {/* Omistaja */}
+      <Contact<HankeContactTypeKey>
+        contactType={HANKE_CONTACT_TYPE.OMISTAJAT}
+        subContactPath={ownerSubContactFieldPath}
+        emptySubContact={getEmptySubContact()}
+        showInitialEmpty={true}
+        renderSubContact={(subContactIndex, removeSubContact) => {
+          const fieldPath = `${ownerSubContactFieldPath}.${subContactIndex}`;
+          return (
+            <SubContactFields
+              fieldPath={fieldPath}
+              canBeRemoved={subContactIndex > 0}
+              onRemove={() => removeSubContact(subContactIndex)}
+            />
+          );
+        }}
       >
-        <ResponsiveGrid className="formWpr">
-          {CONTACT_FIELDS.map((contactField) => {
-            const fieldName = `${FORMFIELD.OMISTAJAT}.0.${contactField}`;
-            return <ContactField key={contactField} field={contactField} fieldName={fieldName} />;
-          })}
-        </ResponsiveGrid>
-      </Fieldset>
-      <div className="formWpr">
-        <ToggleButton
-          id="erillinen-yhteyshenkilo"
-          label={t('form:yhteystiedot:labels:erillinenYhteyshenkilo')}
-          onChange={toggleSeparateContact}
-          checked={separateContact}
-        />
-      </div>
-      {separateContact && (
-        <Fieldset heading={t('form:yhteystiedot:titles:subContact')} border className="fieldset">
+        <Fieldset
+          heading={t('form:yhteystiedot:titles:omistaja')}
+          style={{ paddingTop: 'var(--spacing-s)' }}
+        >
           <ResponsiveGrid>
-            <TextInput
-              name={`${ownerSubContactFieldPath}.${CONTACT_FORMFIELD.NIMI}`}
-              label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.NIMI}`)}
-              required
-            />
-          </ResponsiveGrid>
-          <ResponsiveGrid>
-            <TextInput
-              name={`${ownerSubContactFieldPath}.${CONTACT_FORMFIELD.OSOITE}`}
-              label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.OSOITE}`)}
-            />
-            <TextInput
-              name={`${ownerSubContactFieldPath}.${CONTACT_FORMFIELD.POSTINRO}`}
-              label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.POSTINRO}`)}
-            />
-            <TextInput
-              name={`${ownerSubContactFieldPath}.${CONTACT_FORMFIELD.POSTITOIMIPAIKKA}`}
-              label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.POSTITOIMIPAIKKA}`)}
-            />
-            <TextInput
-              name={`${ownerSubContactFieldPath}.${CONTACT_FORMFIELD.EMAIL}`}
-              label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.EMAIL}`)}
-              required
-            />
-            <TextInput
-              name={`${ownerSubContactFieldPath}.${CONTACT_FORMFIELD.PUHELINNUMERO}`}
-              label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.PUHELINNUMERO}`)}
-            />
+            {CONTACT_FIELDS.map((contactField) => {
+              const fieldName = `${FORMFIELD.OMISTAJAT}.0.${contactField}`;
+              return (
+                <ContactField
+                  key={contactField}
+                  field={contactField}
+                  fieldName={fieldName}
+                  contactType={HANKE_CONTACT_TYPE.OMISTAJAT}
+                />
+              );
+            })}
           </ResponsiveGrid>
         </Fieldset>
-      )}
+      </Contact>
 
+      {/* Rakennuttaja */}
       <Accordion
         language={locale}
         headingLevel={3}
@@ -275,6 +240,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
                 return (
                   <SubContactFields
                     fieldPath={fieldPath}
+                    canBeRemoved={subContactIndex > 0}
                     onRemove={() => removeSubContact(subContactIndex)}
                   />
                 );
@@ -288,7 +254,12 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
                   {CONTACT_FIELDS.map((contactField) => {
                     const fieldName = `${FORMFIELD.RAKENNUTTAJAT}.${index}.${contactField}`;
                     return (
-                      <ContactField key={contactField} field={contactField} fieldName={fieldName} />
+                      <ContactField
+                        key={contactField}
+                        field={contactField}
+                        fieldName={fieldName}
+                        contactType={HANKE_CONTACT_TYPE.RAKENNUTTAJAT}
+                      />
                     );
                   })}
                 </ResponsiveGrid>
@@ -306,6 +277,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
         </Button>
       </Accordion>
 
+      {/* Toteuttaja */}
       <Accordion
         language={locale}
         headingLevel={3}
@@ -325,6 +297,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
                 return (
                   <SubContactFields
                     fieldPath={fieldPath}
+                    canBeRemoved={subContactIndex > 0}
                     onRemove={() => removeSubContact(subContactIndex)}
                   />
                 );
@@ -338,7 +311,12 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
                   {CONTACT_FIELDS.map((contactField) => {
                     const fieldName = `${FORMFIELD.TOTEUTTAJAT}.${index}.${contactField}`;
                     return (
-                      <ContactField key={contactField} field={contactField} fieldName={fieldName} />
+                      <ContactField
+                        key={contactField}
+                        field={contactField}
+                        fieldName={fieldName}
+                        contactType={HANKE_CONTACT_TYPE.TOTEUTTAJAT}
+                      />
                     );
                   })}
                 </ResponsiveGrid>
@@ -356,6 +334,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
         </Button>
       </Accordion>
 
+      {/* Muut tahot */}
       <Accordion
         language={locale}
         headingLevel={3}
@@ -377,6 +356,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
                 return (
                   <SubContactFields
                     fieldPath={subContactFieldPath}
+                    canBeRemoved={subContactIndex > 0}
                     onRemove={() => removeSubContact(subContactIndex)}
                   />
                 );
