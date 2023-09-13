@@ -1,4 +1,4 @@
-import { HankeDataDraft, HANKE_POLYHAITTA, HANKE_TYOMAAKOKO } from '../../types/hanke';
+import { HankeDataDraft, HANKE_POLYHAITTA } from '../../types/hanke';
 
 const hankkeet: HankeDataDraft[] = [
   {
@@ -36,7 +36,6 @@ const hankkeet: HankeDataDraft[] = [
     loppuPvm: '2024-11-27T00:00:00Z',
     vaihe: 'OHJELMOINTI',
     suunnitteluVaihe: null,
-    tyomaaKoko: HANKE_TYOMAAKOKO.SUPPEA_TAI_PISTE,
     version: 0,
     createdBy: '1',
     createdAt: '2022-11-27T11:43:43.481215Z',
@@ -250,7 +249,6 @@ const hankkeet: HankeDataDraft[] = [
     vaihe: 'OHJELMOINTI',
     suunnitteluVaihe: null,
     tyomaaTyyppi: ['KAUKOLAMPO'],
-    tyomaaKoko: 'LAAJA_TAI_USEA_KORTTELI',
     version: 0,
     createdBy: '1',
     createdAt: '2022-11-27T11:44:22.443735Z',

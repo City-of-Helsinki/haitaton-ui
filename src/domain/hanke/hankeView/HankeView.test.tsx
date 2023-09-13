@@ -52,9 +52,6 @@ test('Correct information about hanke should be displayed', async () => {
   expect(screen.queryByText('24.2.2023')).toBeInTheDocument();
   expect(screen.queryByText('Ohjelmointi')).toBeInTheDocument();
   expect(screen.queryByText('Kaukolämpö')).toBeInTheDocument();
-  expect(
-    screen.queryByText('Työmaa ulottuu kadun eri puolille ja/tai usean korttelin mittainen työmaa'),
-  ).toBeInTheDocument();
   expect(screen.queryByText('Ei')).toBeInTheDocument();
   expect(screen.queryByText('11974 m²')).toBeInTheDocument();
 

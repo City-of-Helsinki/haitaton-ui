@@ -68,7 +68,7 @@ describe('HankeForm', () => {
         onFormClose={handleFormClose}
       >
         child
-      </HankeForm>
+      </HankeForm>,
     );
 
     fireEvent.change(screen.getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
@@ -97,7 +97,7 @@ describe('HankeForm', () => {
         onFormClose={() => ({})}
       >
         child
-      </HankeForm>
+      </HankeForm>,
     );
     expect(screen.getByTestId(FORMFIELD.NIMI)).toHaveValue('Formin nimi');
     expect(screen.getByTestId(FORMFIELD.KUVAUS)).toHaveValue('Formin kuvaus');

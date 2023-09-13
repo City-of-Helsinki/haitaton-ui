@@ -6,12 +6,7 @@ import { useFormContext } from 'react-hook-form';
 import { Box } from '@chakra-ui/react';
 import Dropdown from '../../../common/components/dropdown/Dropdown';
 import TextInput from '../../../common/components/textInput/TextInput';
-import {
-  HANKE_VAIHE,
-  HANKE_SUUNNITTELUVAIHE,
-  HANKE_TYOMAATYYPPI,
-  HANKE_TYOMAAKOKO,
-} from '../../types/hanke';
+import { HANKE_VAIHE, HANKE_SUUNNITTELUVAIHE, HANKE_TYOMAATYYPPI } from '../../types/hanke';
 import { FORMFIELD, FormProps } from './types';
 import { useFormPage } from './hooks/useFormPage';
 import DropdownMultiselect from '../../../common/components/dropdown/DropdownMultiselect';
@@ -32,8 +27,6 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
 
   // Subscribe to vaihe changes
   const hankeVaiheField = watch(FORMFIELD.VAIHE);
-  // Subscribe to tyomaaKoko changes
-  const tyomaaKokoField = watch(FORMFIELD.TYOMAAKOKO);
 
   useEffect(() => {
     if (hankeVaiheField !== HANKE_VAIHE.SUUNNITTELU) {
@@ -120,42 +113,19 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
           disabled={hankeVaiheField !== HANKE_VAIHE.SUUNNITTELU}
         />
       </div>
-      <div className="form3">
-        <div className="dataWpr">
-          <div className="formWpr">
-            <DropdownMultiselect
-              name={FORMFIELD.TYOMAATYYPPI}
-              id={FORMFIELD.TYOMAATYYPPI}
-              options={$enum(HANKE_TYOMAATYYPPI).map((value) => ({
-                value,
-                label: t(`hanke:${FORMFIELD.TYOMAATYYPPI}:${value}`),
-              }))}
-              defaultValue={formData ? (formData[FORMFIELD.TYOMAATYYPPI] as string[]) : []}
-              label={t(`hankeForm:labels:${FORMFIELD.TYOMAATYYPPI}`)}
-              invalid={!!errors[FORMFIELD.TYOMAATYYPPI]}
-              errorMsg={t('hankeForm:insertFieldError')}
-            />
-          </div>
-          <div className="formWpr">
-            <SelectionGroup
-              direction="vertical"
-              label={t(`hankeForm:labels:${FORMFIELD.TYOMAAKOKO}`)}
-            >
-              {$enum(HANKE_TYOMAAKOKO).map((value) => {
-                return (
-                  <RadioButton
-                    {...register(FORMFIELD.TYOMAAKOKO)}
-                    label={t(`hanke:${FORMFIELD.TYOMAAKOKO}:${value}`)}
-                    key={value}
-                    id={value}
-                    value={value}
-                    checked={tyomaaKokoField === value}
-                  />
-                );
-              })}
-            </SelectionGroup>
-          </div>
-        </div>
+      <div className="formWpr">
+        <DropdownMultiselect
+          name={FORMFIELD.TYOMAATYYPPI}
+          id={FORMFIELD.TYOMAATYYPPI}
+          options={$enum(HANKE_TYOMAATYYPPI).map((value) => ({
+            value,
+            label: t(`hanke:${FORMFIELD.TYOMAATYYPPI}:${value}`),
+          }))}
+          defaultValue={formData ? (formData[FORMFIELD.TYOMAATYYPPI] as string[]) : []}
+          label={t(`hankeForm:labels:${FORMFIELD.TYOMAATYYPPI}`)}
+          invalid={!!errors[FORMFIELD.TYOMAATYYPPI]}
+          errorMsg={t('hankeForm:insertFieldError')}
+        />
       </div>
       <div className="formWpr">
         <br />

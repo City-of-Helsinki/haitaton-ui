@@ -351,11 +351,6 @@
       "RAKENNUS_TAI_TOTEUTUS": "Construction planning or implementation planning",
       "TYOMAAN_TAI_HANKKEEN_AIKAINEN": "Early planning of a worksite or project"
     },
-    "tyomaaKoko": {
-      "SUPPEA_TAI_PISTE": "Single, narrow location and/or point-like location",
-      "YLI_10M_TAI_KORTTELI": "Worksite length of more than 10 m and/or worksite the length of an entire block",
-      "LAAJA_TAI_USEA_KORTTELI": "Worksite extends to covering different sides of the street and/or is several blocks long"
-    },
     "tyomaaTyyppi": {
       "VESI": "Water",
       "VIEMARI": "Sewer",
@@ -465,7 +460,6 @@
       "alkuPvm": "Project start date",
       "loppuPvm": "Project end date",
       "tyomaaTyyppi": "Worksite type",
-      "tyomaaKoko": "Worksite size",
       "haittaAlkuPvm": "Start date of the nuisance",
       "haittaLoppuPvm": "End date of the nuisance",
       "kaistaHaitta": "Lane hindrance",
@@ -769,7 +763,6 @@
       "katuosoite": "Street address",
       "avaaKartalla": "Open on a map",
       "hankkeenKesto": "Project duration",
-      "tyomaanKoko": "Worksite size",
       "tyomaanTyyppi": "Worksite type",
       "hankkeenHaitat": "Project nuisances",
       "haitanKesto": "Duration of the nuisance",
