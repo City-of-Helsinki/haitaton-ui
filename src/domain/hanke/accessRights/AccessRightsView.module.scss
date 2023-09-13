@@ -37,6 +37,10 @@
   margin-bottom: var(--spacing-m);
 }
 
+.table > div {
+  overflow-x: initial;
+}
+
 .pagination {
   margin-top: var(--spacing-xs);
   margin-bottom: var(--spacing-s);
