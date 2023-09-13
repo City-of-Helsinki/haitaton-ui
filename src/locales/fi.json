@@ -359,11 +359,6 @@
       "RAKENNUS_TAI_TOTEUTUS": "Rakennus- tai toteutussuunnittelu",
       "TYOMAAN_TAI_HANKKEEN_AIKAINEN": "Työmaan tai hankkeen aikainen suunnittelu"
     },
-    "tyomaaKoko": {
-      "SUPPEA_TAI_PISTE": "Yksittäinen suppea kohde ja/tai pistemäinen työmaa",
-      "YLI_10M_TAI_KORTTELI": "Työmaa-alueen pituus yli 10 m ja/tai korttelin mittainen työmaa",
-      "LAAJA_TAI_USEA_KORTTELI": "Työmaa ulottuu kadun eri puolille ja/tai usean korttelin mittainen työmaa"
-    },
     "tyomaaTyyppi": {
       "VESI": "Vesi",
       "VIEMARI": "Viemäri",
@@ -473,7 +468,6 @@
       "alkuPvm": "Hankkeen alkupäivä",
       "loppuPvm": "Hankkeen loppupäivä",
       "tyomaaTyyppi": "Työn tyyppi",
-      "tyomaaKoko": "Hankkeen koko",
       "haittaAlkuPvm": "Haittojen alkupäivä",
       "haittaLoppuPvm": "Haittojen loppupäivä",
       "kaistaHaitta": "Autoliikenteen kaistahaitta",

@@ -25,7 +25,6 @@ export async function create(data: HankeDataDraft) {
     suunnitteluVaihe: null,
     tyomaaKatuosoite: '',
     tyomaaTyyppi: [],
-    tyomaaKoko: null,
     alueet: [],
     ...data,
   };

@@ -52,13 +52,6 @@ export enum HANKE_TYOMAATYYPPI {
 }
 export type HANKE_TYOMAATYYPPI_KEY = keyof typeof HANKE_TYOMAATYYPPI;
 
-export enum HANKE_TYOMAAKOKO {
-  SUPPEA_TAI_PISTE = 'SUPPEA_TAI_PISTE',
-  YLI_10M_TAI_KORTTELI = 'YLI_10M_TAI_KORTTELI',
-  LAAJA_TAI_USEA_KORTTELI = 'LAAJA_TAI_USEA_KORTTELI',
-}
-export type HANKE_TYOMAAKOKO_KEY = keyof typeof HANKE_TYOMAAKOKO;
-
 export enum HANKE_KAISTAHAITTA {
   YKSI = 'YKSI',
   KAKSI = 'KAKSI',
@@ -205,7 +198,6 @@ export interface HankeData {
   suunnitteluVaihe: HANKE_SUUNNITTELUVAIHE_KEY | null;
   tyomaaKatuosoite: string | null;
   tyomaaTyyppi: HANKE_TYOMAATYYPPI_KEY[];
-  tyomaaKoko: HANKE_TYOMAAKOKO_KEY | null;
   alueet: HankeAlue[];
   liikennehaittaindeksi: LiikenneHaittaIndeksi | null;
   omistajat?: Array<HankeContact>;
