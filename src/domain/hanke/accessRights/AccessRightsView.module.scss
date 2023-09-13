@@ -1,7 +1,18 @@
+@import 'src/assets/styles/layout.scss';
+
+.container {
+  background-color: var(--color-white);
+  height: 100%;
+}
+
+.header {
+  background-color: var(--color-summer-light);
+  padding-top: var(--spacing-2-xl);
+  padding-bottom: var(--spacing-xl);
+}
+
 .mainContent {
-  max-width: var(--container-width-xl);
   padding-top: var(--spacing-m);
-  padding-right: var(--spacing-m);
   padding-bottom: var(--spacing-m);
 }
 
@@ -39,6 +50,16 @@
 
 .table > div {
   overflow-x: initial;
+
+  @include respond-below(m) {
+    display: none;
+  }
+}
+
+.userCards {
+  @include respond-above(m) {
+    display: none;
+  }
 }
 
 .pagination {

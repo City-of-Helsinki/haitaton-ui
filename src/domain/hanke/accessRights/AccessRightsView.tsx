@@ -27,16 +27,13 @@ import { $enum } from 'ts-enum-util';
 import { Link } from 'react-router-dom';
 import Text from '../../../common/components/text/Text';
 import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
-import {
-  InformationViewContainer,
-  InformationViewHeader,
-  InformationViewMainContent,
-} from '../../common/components/hankeInformationView/HankeInformationView';
 import styles from './AccessRightsView.module.scss';
 import { Language } from '../../../common/types/language';
 import { HankeUser, AccessRightLevel, SignedInUser } from '../hankeUsers/hankeUser';
 import useHankeViewPath from '../hooks/useHankeViewPath';
 import { updateHankeUsers } from '../hankeUsers/hankeUsersApi';
+import Container from '../../../common/components/container/Container';
+import UserCard from './UserCard';
 
 type Props = {
   hankeUsers: HankeUser[];
@@ -77,6 +74,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
     {
       columns,
       data: usersData,
+      autoResetFilters: false,
     },
     useFilters,
     useSortBy,
@@ -185,27 +183,29 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
   }
 
   return (
-    <InformationViewContainer>
-      <InformationViewHeader backgroundColor="var(--color-summer-light)">
-        <Link to={hankeViewPath} className={styles.hankeLink}>
-          <IconAngleLeft aria-hidden="true" />
-          <Text tag="h2" styleAs="h3" weight="bold">
-            {hankeName} ({hankeTunnus})
+    <article className={styles.container}>
+      <header className={styles.header}>
+        <Container>
+          <Link to={hankeViewPath} className={styles.hankeLink}>
+            <IconAngleLeft aria-hidden="true" />
+            <Text tag="h2" styleAs="h3" weight="bold">
+              {hankeName} ({hankeTunnus})
+            </Text>
+          </Link>
+          <Text
+            tag="h1"
+            styleAs="h1"
+            weight="bold"
+            spacingBottom="l"
+            id={SKIP_TO_ELEMENT_ID}
+            tabIndex={-1}
+          >
+            {t('hankeUsers:manageRights')}
           </Text>
-        </Link>
-        <Text
-          tag="h1"
-          styleAs="h1"
-          weight="bold"
-          spacingBottom="l"
-          id={SKIP_TO_ELEMENT_ID}
-          tabIndex={-1}
-        >
-          {t('hankeUsers:manageRights')}
-        </Text>
-      </InformationViewHeader>
+        </Container>
+      </header>
 
-      <InformationViewMainContent className={styles.mainContent}>
+      <Container className={styles.mainContent}>
         <Accordion
           className={styles.infoAccordion}
           language={i18n.language as Language}
@@ -285,6 +285,15 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
             dataTestId="access-right-table"
           />
         </div>
+        <div className={styles.userCards}>
+          {page.map((row) => {
+            return (
+              <UserCard key={row.original.id} user={row.original}>
+                {getAccessRightSelect(row.original)}
+              </UserCard>
+            );
+          })}
+        </div>
 
         <div className={styles.pagination}>
           <Pagination
@@ -339,8 +348,8 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
             </Trans>
           </Notification>
         )}
-      </InformationViewMainContent>
-    </InformationViewContainer>
+      </Container>
+    </article>
   );
 }
 

@@ -7,7 +7,7 @@ import { server } from '../../mocks/test-server';
 import usersData from '../../mocks/data/users-data.json';
 import { SignedInUser } from '../hankeUsers/hankeUser';
 
-jest.setTimeout(20000);
+jest.setTimeout(30000);
 
 afterEach(cleanup);
 
@@ -41,26 +41,26 @@ test('Renders correct information', async () => {
     screen.queryByText('Aidasmäentien vesihuollon rakentaminen (HAI22-2)'),
   ).toBeInTheDocument();
   expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows).toHaveLength(10);
-  expect(screen.getByText(users[0].nimi)).toBeInTheDocument();
-  expect(screen.getByText(users[0].sahkoposti)).toBeInTheDocument();
-  expect(screen.getByText(users[1].nimi)).toBeInTheDocument();
-  expect(screen.getByText(users[1].sahkoposti)).toBeInTheDocument();
-  expect(screen.getByText(users[2].nimi)).toBeInTheDocument();
-  expect(screen.getByText(users[2].sahkoposti)).toBeInTheDocument();
-  expect(screen.getByText(users[3].nimi)).toBeInTheDocument();
-  expect(screen.getByText(users[3].sahkoposti)).toBeInTheDocument();
-  expect(screen.getByText(users[4].nimi)).toBeInTheDocument();
-  expect(screen.getByText(users[4].sahkoposti)).toBeInTheDocument();
-  expect(screen.getByText(users[5].nimi)).toBeInTheDocument();
-  expect(screen.getByText(users[5].sahkoposti)).toBeInTheDocument();
-  expect(screen.getByText(users[6].nimi)).toBeInTheDocument();
-  expect(screen.getByText(users[6].sahkoposti)).toBeInTheDocument();
-  expect(screen.getByText(users[7].nimi)).toBeInTheDocument();
-  expect(screen.getByText(users[7].sahkoposti)).toBeInTheDocument();
-  expect(screen.getByText(users[8].nimi)).toBeInTheDocument();
-  expect(screen.getByText(users[8].sahkoposti)).toBeInTheDocument();
-  expect(screen.getByText(users[9].nimi)).toBeInTheDocument();
-  expect(screen.getByText(users[9].sahkoposti)).toBeInTheDocument();
+  expect(screen.getAllByText(users[0].nimi)).toHaveLength(2);
+  expect(screen.getAllByText(users[0].sahkoposti)).toHaveLength(2);
+  expect(screen.getAllByText(users[1].nimi)).toHaveLength(2);
+  expect(screen.getAllByText(users[1].sahkoposti)).toHaveLength(2);
+  expect(screen.getAllByText(users[2].nimi)).toHaveLength(2);
+  expect(screen.getAllByText(users[2].sahkoposti)).toHaveLength(2);
+  expect(screen.getAllByText(users[3].nimi)).toHaveLength(2);
+  expect(screen.getAllByText(users[3].sahkoposti)).toHaveLength(2);
+  expect(screen.getAllByText(users[4].nimi)).toHaveLength(2);
+  expect(screen.getAllByText(users[4].sahkoposti)).toHaveLength(2);
+  expect(screen.getAllByText(users[5].nimi)).toHaveLength(2);
+  expect(screen.getAllByText(users[5].sahkoposti)).toHaveLength(2);
+  expect(screen.getAllByText(users[6].nimi)).toHaveLength(2);
+  expect(screen.getAllByText(users[6].sahkoposti)).toHaveLength(2);
+  expect(screen.getAllByText(users[7].nimi)).toHaveLength(2);
+  expect(screen.getAllByText(users[7].sahkoposti)).toHaveLength(2);
+  expect(screen.getAllByText(users[8].nimi)).toHaveLength(2);
+  expect(screen.getAllByText(users[8].sahkoposti)).toHaveLength(2);
+  expect(screen.getAllByText(users[9].nimi)).toHaveLength(2);
+  expect(screen.getAllByText(users[9].sahkoposti)).toHaveLength(2);
 });
 
 test('Link back to related hanke should work', async () => {
@@ -81,8 +81,8 @@ test('Pagination works', async () => {
   fireEvent.click(screen.getByTestId('hds-pagination-next-button'));
 
   expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows).toHaveLength(1);
-  expect(screen.getByText(users[10].nimi)).toBeInTheDocument();
-  expect(screen.getByText(users[10].sahkoposti)).toBeInTheDocument();
+  expect(screen.getAllByText(users[10].nimi)).toHaveLength(2);
+  expect(screen.getAllByText(users[10].sahkoposti)).toHaveLength(2);
 });
 
 test('Sorting by users name works', async () => {
@@ -156,7 +156,7 @@ test('Filtering works', async () => {
   await waitFor(() =>
     expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows).toHaveLength(1),
   );
-  expect(screen.getByText(users[0].nimi)).toBeInTheDocument();
+  expect(screen.getAllByText(users[0].nimi)).toHaveLength(2);
 
   // Clear the search
   await user.click(screen.getByRole('button', { name: 'Clear' }));
@@ -165,8 +165,8 @@ test('Filtering works', async () => {
   await waitFor(() =>
     expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows).toHaveLength(2),
   );
-  expect(screen.getByText(users[2].nimi)).toBeInTheDocument();
-  expect(screen.getByText(users[7].nimi)).toBeInTheDocument();
+  expect(screen.getAllByText(users[2].nimi)).toHaveLength(2);
+  expect(screen.getAllByText(users[7].nimi)).toHaveLength(2);
 });
 
 test('Should show error notification if information is not found', async () => {
@@ -226,7 +226,7 @@ test('Should be able to edit rights if user has all rights', async () => {
   // Save button should be disabled when there are no changes
   expect(screen.getByRole('button', { name: 'Tallenna muutokset' })).toBeDisabled();
 
-  fireEvent.click(screen.getByRole('button', { name: 'Hankkeen ja hakemusten muokkaus' }));
+  fireEvent.click(screen.getAllByRole('button', { name: 'Hankkeen ja hakemusten muokkaus' })[0]);
   fireEvent.click(screen.getAllByText('Kaikki oikeudet')[2]);
 
   await user.click(screen.getByRole('button', { name: 'Tallenna muutokset' }));
@@ -277,7 +277,7 @@ test('Should not be able to assign all rights if user does not have all rights',
 
   await waitForLoadingToFinish();
 
-  fireEvent.click(screen.getByRole('button', { name: 'Hankemuokkaus' }));
+  fireEvent.click(screen.getAllByRole('button', { name: 'Hankemuokkaus' })[0]);
 
   expect(container.querySelectorAll('li')[5]).toHaveAttribute('disabled');
 });
