@@ -124,11 +124,16 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
 
     const canEditRights = signedInUser?.kayttooikeudet?.includes('MODIFY_EDIT_PERMISSIONS');
 
+    const canEditAllRights =
+      args.kayttooikeustaso === 'KAIKKI_OIKEUDET'
+        ? signedInUser?.kayttooikeustaso === 'KAIKKI_OIKEUDET'
+        : true;
+
     // Check if this user is the same as the signed in user,
     // so that user is not able to edit their own rights
     const isSignedInUser = args.id === signedInUser?.hankeKayttajaId;
 
-    const isDisabled = isOnlyWithAllRights || !canEditRights || isSignedInUser;
+    const isDisabled = isOnlyWithAllRights || !canEditRights || !canEditAllRights || isSignedInUser;
 
     function handleRightsChange(e: AccessRightLevelOption) {
       setUsersData((prevData) => {

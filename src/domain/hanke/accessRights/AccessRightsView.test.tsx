@@ -281,3 +281,20 @@ test('Should not be able to assign all rights if user does not have all rights',
 
   expect(container.querySelectorAll('li')[5]).toHaveAttribute('disabled');
 });
+
+test('Should not be able to remove all rights if user does not have all rights', async () => {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>(getSignedInUser({ kayttooikeustaso: 'KAIKKIEN_MUOKKAUS' })),
+      );
+    }),
+  );
+
+  render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.getByTestId('kayttooikeustaso-3').querySelector('button')).toBeDisabled();
+});
