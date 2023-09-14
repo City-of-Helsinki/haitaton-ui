@@ -35,6 +35,10 @@ import { updateHankeUsers } from '../hankeUsers/hankeUsersApi';
 import Container from '../../../common/components/container/Container';
 import UserCard from './UserCard';
 
+function sortCaseInsensive(rowOneColumn: string, rowTwoColumn: string) {
+  return rowOneColumn.toUpperCase() > rowTwoColumn.toUpperCase() ? 1 : -1;
+}
+
 type Props = {
   hankeUsers: HankeUser[];
   hankeTunnus: string;
@@ -75,6 +79,16 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
       columns,
       data: usersData,
       autoResetFilters: false,
+      sortTypes: {
+        alphanumeric: (row1, row2, columnName) => {
+          const rowOneColumn: string | number = row1.values[columnName];
+          const rowTwoColumn: string | number = row2.values[columnName];
+          if (isNaN(rowOneColumn as number)) {
+            return sortCaseInsensive(rowOneColumn as string, rowTwoColumn as string);
+          }
+          return Number(rowOneColumn) > Number(rowTwoColumn) ? 1 : -1;
+        },
+      },
     },
     useFilters,
     useSortBy,
@@ -182,6 +196,26 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
     );
   }
 
+  const tableCols = [
+    {
+      headerName: t('form:yhteystiedot:labels:nimi'),
+      key: NAME_KEY,
+      isSortable: true,
+      customSortCompareFunction: sortCaseInsensive,
+    },
+    {
+      headerName: t('form:yhteystiedot:labels:email'),
+      key: EMAIL_KEY,
+      isSortable: true,
+      customSortCompareFunction: sortCaseInsensive,
+    },
+    {
+      headerName: t('hankeUsers:accessRights'),
+      key: ACCESS_RIGHT_LEVEL_KEY,
+      transform: getAccessRightSelect,
+    },
+  ];
+
   return (
     <article className={styles.container}>
       <header className={styles.header}>
@@ -261,23 +295,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
 
         <div className={styles.table}>
           <Table
-            cols={[
-              {
-                headerName: t('form:yhteystiedot:labels:nimi'),
-                key: NAME_KEY,
-                isSortable: true,
-              },
-              {
-                headerName: t('form:yhteystiedot:labels:email'),
-                key: EMAIL_KEY,
-                isSortable: true,
-              },
-              {
-                headerName: t('hankeUsers:accessRights'),
-                key: ACCESS_RIGHT_LEVEL_KEY,
-                transform: getAccessRightSelect,
-              },
-            ]}
+            cols={tableCols}
             rows={page.map((row) => row.original)}
             onSort={handleTableSort}
             indexKey="id"
