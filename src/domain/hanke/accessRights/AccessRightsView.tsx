@@ -81,12 +81,9 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
       autoResetFilters: false,
       sortTypes: {
         alphanumeric: (row1, row2, columnName) => {
-          const rowOneColumn: string | number = row1.values[columnName];
-          const rowTwoColumn: string | number = row2.values[columnName];
-          if (isNaN(rowOneColumn as number)) {
-            return sortCaseInsensive(rowOneColumn as string, rowTwoColumn as string);
-          }
-          return Number(rowOneColumn) > Number(rowTwoColumn) ? 1 : -1;
+          const rowOneColumn: string = row1.values[columnName];
+          const rowTwoColumn: string = row2.values[columnName];
+          return sortCaseInsensive(rowOneColumn, rowTwoColumn);
         },
       },
     },
