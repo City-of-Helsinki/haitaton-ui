@@ -35,7 +35,7 @@ import { updateHankeUsers } from '../hankeUsers/hankeUsersApi';
 import Container from '../../../common/components/container/Container';
 import UserCard from './UserCard';
 
-function sortCaseInsensive(rowOneColumn: string, rowTwoColumn: string) {
+function sortCaseInsensitive(rowOneColumn: string, rowTwoColumn: string) {
   const rowOneColUpperCase = rowOneColumn.toUpperCase();
   const rowTwoColUpperCase = rowTwoColumn.toUpperCase();
   if (rowOneColUpperCase === rowTwoColUpperCase) {
@@ -88,7 +88,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
         alphanumeric: (row1, row2, columnName) => {
           const rowOneColumn: string = row1.values[columnName];
           const rowTwoColumn: string = row2.values[columnName];
-          return sortCaseInsensive(rowOneColumn, rowTwoColumn);
+          return sortCaseInsensitive(rowOneColumn, rowTwoColumn);
         },
       },
     },
@@ -203,13 +203,13 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
       headerName: t('form:yhteystiedot:labels:nimi'),
       key: NAME_KEY,
       isSortable: true,
-      customSortCompareFunction: sortCaseInsensive,
+      customSortCompareFunction: sortCaseInsensitive,
     },
     {
       headerName: t('form:yhteystiedot:labels:email'),
       key: EMAIL_KEY,
       isSortable: true,
-      customSortCompareFunction: sortCaseInsensive,
+      customSortCompareFunction: sortCaseInsensitive,
     },
     {
       headerName: t('hankeUsers:accessRights'),
