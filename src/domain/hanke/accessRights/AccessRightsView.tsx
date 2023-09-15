@@ -36,7 +36,12 @@ import Container from '../../../common/components/container/Container';
 import UserCard from './UserCard';
 
 function sortCaseInsensive(rowOneColumn: string, rowTwoColumn: string) {
-  return rowOneColumn.toUpperCase() > rowTwoColumn.toUpperCase() ? 1 : -1;
+  const rowOneColUpperCase = rowOneColumn.toUpperCase();
+  const rowTwoColUpperCase = rowTwoColumn.toUpperCase();
+  if (rowOneColUpperCase === rowTwoColUpperCase) {
+    return 0;
+  }
+  return rowOneColUpperCase > rowTwoColUpperCase ? 1 : -1;
 }
 
 type Props = {
