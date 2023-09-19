@@ -124,7 +124,7 @@ const CustomerFields: React.FC<{
           invoicingOperator: null,
           sapCustomerNumber: null,
         },
-        { shouldValidate: true },
+        { shouldValidate: true, shouldDirty: true },
       );
     }
   }
