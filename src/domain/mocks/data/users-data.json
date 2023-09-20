@@ -86,5 +86,13 @@
     "kayttooikeustaso": "KATSELUOIKEUS",
     "tunnistautunut": false,
     "hankeTunnus": "HAI22-2"
+  },
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66af5",
+    "sahkoposti": "matti@test.com",
+    "nimi": "matti Meikäläinen",
+    "kayttooikeustaso": "KATSELUOIKEUS",
+    "tunnistautunut": true,
+    "hankeTunnus": "HAI22-2"
   }
 ]

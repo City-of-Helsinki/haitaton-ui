@@ -80,7 +80,7 @@ test('Pagination works', async () => {
   await waitForLoadingToFinish();
   fireEvent.click(screen.getByTestId('hds-pagination-next-button'));
 
-  expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows).toHaveLength(1);
+  expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows).toHaveLength(2);
   expect(screen.getAllByText(users[10].nimi)).toHaveLength(2);
   expect(screen.getAllByText(users[10].sahkoposti)).toHaveLength(2);
 });
@@ -96,11 +96,11 @@ test('Sorting by users name works', async () => {
   expect(screen.getByTestId('nimi-2')).toHaveTextContent(users[8].nimi);
   expect(screen.getByTestId('nimi-3')).toHaveTextContent(users[5].nimi);
   expect(screen.getByTestId('nimi-4')).toHaveTextContent(users[0].nimi);
-  expect(screen.getByTestId('nimi-5')).toHaveTextContent(users[6].nimi);
-  expect(screen.getByTestId('nimi-6')).toHaveTextContent(users[7].nimi);
-  expect(screen.getByTestId('nimi-7')).toHaveTextContent(users[10].nimi);
-  expect(screen.getByTestId('nimi-8')).toHaveTextContent(users[4].nimi);
-  expect(screen.getByTestId('nimi-9')).toHaveTextContent(users[1].nimi);
+  expect(screen.getByTestId('nimi-5')).toHaveTextContent(users[11].nimi);
+  expect(screen.getByTestId('nimi-6')).toHaveTextContent(users[6].nimi);
+  expect(screen.getByTestId('nimi-7')).toHaveTextContent(users[7].nimi);
+  expect(screen.getByTestId('nimi-8')).toHaveTextContent(users[10].nimi);
+  expect(screen.getByTestId('nimi-9')).toHaveTextContent(users[4].nimi);
 
   fireEvent.click(screen.getByTestId('hds-table-sorting-header-nimi'));
 
@@ -111,9 +111,9 @@ test('Sorting by users name works', async () => {
   expect(screen.getByTestId('nimi-4')).toHaveTextContent(users[7].nimi);
   expect(screen.getByTestId('nimi-5')).toHaveTextContent(users[6].nimi);
   expect(screen.getByTestId('nimi-6')).toHaveTextContent(users[0].nimi);
-  expect(screen.getByTestId('nimi-7')).toHaveTextContent(users[5].nimi);
-  expect(screen.getByTestId('nimi-8')).toHaveTextContent(users[8].nimi);
-  expect(screen.getByTestId('nimi-9')).toHaveTextContent(users[9].nimi);
+  expect(screen.getByTestId('nimi-7')).toHaveTextContent(users[11].nimi);
+  expect(screen.getByTestId('nimi-8')).toHaveTextContent(users[5].nimi);
+  expect(screen.getByTestId('nimi-9')).toHaveTextContent(users[8].nimi);
 });
 
 test('Sorting by users email works', async () => {
@@ -127,11 +127,11 @@ test('Sorting by users email works', async () => {
   expect(screen.getByTestId('sahkoposti-2')).toHaveTextContent(users[8].sahkoposti);
   expect(screen.getByTestId('sahkoposti-3')).toHaveTextContent(users[5].sahkoposti);
   expect(screen.getByTestId('sahkoposti-4')).toHaveTextContent(users[0].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-5')).toHaveTextContent(users[6].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-6')).toHaveTextContent(users[7].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-7')).toHaveTextContent(users[10].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-8')).toHaveTextContent(users[4].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-9')).toHaveTextContent(users[1].sahkoposti);
+  expect(screen.getByTestId('sahkoposti-5')).toHaveTextContent(users[11].sahkoposti);
+  expect(screen.getByTestId('sahkoposti-6')).toHaveTextContent(users[6].sahkoposti);
+  expect(screen.getByTestId('sahkoposti-7')).toHaveTextContent(users[7].sahkoposti);
+  expect(screen.getByTestId('sahkoposti-8')).toHaveTextContent(users[10].sahkoposti);
+  expect(screen.getByTestId('sahkoposti-9')).toHaveTextContent(users[4].sahkoposti);
 
   fireEvent.click(screen.getByTestId('hds-table-sorting-header-sahkoposti'));
 
@@ -141,10 +141,10 @@ test('Sorting by users email works', async () => {
   expect(screen.getByTestId('sahkoposti-3')).toHaveTextContent(users[10].sahkoposti);
   expect(screen.getByTestId('sahkoposti-4')).toHaveTextContent(users[7].sahkoposti);
   expect(screen.getByTestId('sahkoposti-5')).toHaveTextContent(users[6].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-6')).toHaveTextContent(users[0].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-7')).toHaveTextContent(users[5].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-8')).toHaveTextContent(users[8].sahkoposti);
-  expect(screen.getByTestId('sahkoposti-9')).toHaveTextContent(users[9].sahkoposti);
+  expect(screen.getByTestId('sahkoposti-6')).toHaveTextContent(users[11].sahkoposti);
+  expect(screen.getByTestId('sahkoposti-7')).toHaveTextContent(users[0].sahkoposti);
+  expect(screen.getByTestId('sahkoposti-8')).toHaveTextContent(users[5].sahkoposti);
+  expect(screen.getByTestId('sahkoposti-9')).toHaveTextContent(users[8].sahkoposti);
 });
 
 test('Filtering works', async () => {
@@ -152,13 +152,13 @@ test('Filtering works', async () => {
 
   await waitForLoadingToFinish();
   fireEvent.change(screen.getByRole('combobox', { name: 'Haku' }), {
-    target: { value: 'Matti Meikäläinen' },
+    target: { value: 'Teppo Työmies' },
   });
 
   await waitFor(() =>
     expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows).toHaveLength(1),
   );
-  expect(screen.getAllByText(users[0].nimi)).toHaveLength(2);
+  expect(screen.getAllByText(users[1].nimi)).toHaveLength(2);
 
   // Clear the search
   await user.click(screen.getByRole('button', { name: 'Clear' }));

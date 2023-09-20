@@ -9,6 +9,7 @@ import { HankeData } from '../types/hanke';
 import hankkeet from '../mocks/data/hankkeet-data';
 import applications from '../mocks/data/hakemukset-data';
 import { JohtoselvitysFormValues } from './types';
+import * as applicationApi from '../application/utils';
 
 afterEach(cleanup);
 
@@ -602,4 +603,18 @@ test('Validation error is shown if no work is about checkbox is selected', async
     ),
   );
   expect(screen.queryByText('Kenttä on pakollinen')).toBeInTheDocument();
+});
+
+test('Form is saved when contacts are filled with orderer information', async () => {
+  const saveApplication = jest.spyOn(applicationApi, 'saveApplication');
+  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+  await user.click(
+    screen.getByTestId('applicationData.customerWithContacts.customer.fillOwnInfoButton'),
+  );
+  await user.click(screen.getByRole('button', { name: /edellinen/i }));
+
+  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
+  expect(saveApplication).toHaveBeenCalledTimes(1);
 });
