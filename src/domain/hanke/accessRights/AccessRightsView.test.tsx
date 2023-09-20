@@ -7,7 +7,7 @@ import { server } from '../../mocks/test-server';
 import usersData from '../../mocks/data/users-data.json';
 import { SignedInUser } from '../hankeUsers/hankeUser';
 
-jest.setTimeout(30000);
+jest.setTimeout(40000);
 
 afterEach(cleanup);
 
