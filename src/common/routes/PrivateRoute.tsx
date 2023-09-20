@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import useUser from '../../domain/auth/useUser';
 import { REDIRECT_PATH_KEY } from './constants';
 
@@ -10,6 +10,7 @@ type Props = {
 const PrivateRoute: React.FC<React.PropsWithChildren<Props>> = ({ element }) => {
   const { data: user } = useUser();
   const isAuthenticated = Boolean(user?.profile);
+  const location = useLocation();
 
   useEffect(() => {
     if (isAuthenticated) {

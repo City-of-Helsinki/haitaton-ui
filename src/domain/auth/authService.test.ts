@@ -12,9 +12,6 @@ describe('authService', () => {
 
   afterEach(() => {
     localStorage.clear();
-    // eslint-disable-next-line
-    // @ts-ignore
-    localStorage.setItem.mockClear();
     jest.restoreAllMocks();
   });
 
