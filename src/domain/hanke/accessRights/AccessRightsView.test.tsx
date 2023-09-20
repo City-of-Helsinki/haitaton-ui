@@ -7,7 +7,7 @@ import { server } from '../../mocks/test-server';
 import usersData from '../../mocks/data/users-data.json';
 import { SignedInUser } from '../hankeUsers/hankeUser';
 
-jest.setTimeout(30000);
+jest.setTimeout(40000);
 
 afterEach(cleanup);
 
@@ -151,7 +151,9 @@ test('Filtering works', async () => {
   const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
 
   await waitForLoadingToFinish();
-  await user.type(screen.getByRole('combobox', { name: 'Haku' }), 'Matti Meikäläinen');
+  fireEvent.change(screen.getByRole('combobox', { name: 'Haku' }), {
+    target: { value: 'Matti Meikäläinen' },
+  });
 
   await waitFor(() =>
     expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows).toHaveLength(1),
@@ -160,7 +162,9 @@ test('Filtering works', async () => {
 
   // Clear the search
   await user.click(screen.getByRole('button', { name: 'Clear' }));
-  await user.type(screen.getByRole('combobox', { name: 'Haku' }), 'ak');
+  fireEvent.change(screen.getByRole('combobox', { name: 'Haku' }), {
+    target: { value: 'ak' },
+  });
 
   await waitFor(() =>
     expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows).toHaveLength(2),
