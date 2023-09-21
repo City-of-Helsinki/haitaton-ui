@@ -158,6 +158,10 @@ describe('HankeForm', () => {
     await user.click(screen.getByText(/lisää rakennuttaja/i));
     expect(screen.getAllByText('Rakennuttaja')).toHaveLength(1);
 
+    await user.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+    await user.click(screen.getByText(/yksityishenkilö/i));
+    expect(screen.getAllByLabelText(/y-tunnus/i)[1]).toBeDisabled();
+
     await user.click(screen.getAllByText(/lisää yhteyshenkilö/i)[1]);
     await user.click(screen.getAllByText(/lisää yhteyshenkilö/i)[1]);
     expect(screen.getAllByRole('tablist')[1].childElementCount).toBe(2); // many contacts can be added
