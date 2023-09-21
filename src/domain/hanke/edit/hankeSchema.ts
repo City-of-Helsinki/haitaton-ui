@@ -11,6 +11,7 @@ import {
   CONTACT_TYYPPI,
 } from '../../types/hanke';
 import { FORMFIELD, CONTACT_FORMFIELD, SUBCONTACT_FORMFIELD } from './types';
+import isValidBusinessId from '../../../common/utils/isValidBusinessId';
 
 const subContactSchema = yup
   .object()
@@ -30,7 +31,15 @@ const contactSchema = yup
   .shape({
     [CONTACT_FORMFIELD.NIMI]: yup.string().max(100),
     [CONTACT_FORMFIELD.TYYPPI]: yup.string().oneOf($enum(CONTACT_TYYPPI).getValues()),
-    [CONTACT_FORMFIELD.TUNNUS]: yup.string(),
+    [CONTACT_FORMFIELD.TUNNUS]: yup
+      .string()
+      .nullable()
+      .when('tyyppi', {
+        is: (value: string) => value === CONTACT_TYYPPI.YRITYS || value === CONTACT_TYYPPI.YHTEISO,
+        then: (schema) =>
+          schema.test('is-business-id', 'Is not valid business id', isValidBusinessId),
+        otherwise: (schema) => schema,
+      }),
     [CONTACT_FORMFIELD.EMAIL]: yup.string().email().max(100),
     [CONTACT_FORMFIELD.PUHELINNUMERO]: yup.string().nullable().default(null).max(20),
     [CONTACT_FORMFIELD.ALIKONTAKTIT]: yup.array().ensure().of(subContactSchema),

@@ -66,7 +66,7 @@ const hankkeet: HankeDataDraft[] = [
         id: 1,
         tyyppi: 'YRITYS',
         nimi: 'Yritys Oy',
-        ytunnus: 'y-1234567',
+        ytunnus: '6006332-9',
         email: 'yritys@testi.com',
         puhelinnumero: '0000000000',
         alikontaktit: [
@@ -84,7 +84,7 @@ const hankkeet: HankeDataDraft[] = [
         id: 1,
         tyyppi: 'YRITYS',
         nimi: 'Yritys 2 Oy',
-        ytunnus: 'y-1234567',
+        ytunnus: '6502327-0',
         email: 'yritys2@testi.com',
         puhelinnumero: '1111111111',
         alikontaktit: [
@@ -246,7 +246,7 @@ const hankkeet: HankeDataDraft[] = [
         id: 1,
         tyyppi: 'YRITYS',
         nimi: 'Kauppisen maansiirtofirma KY',
-        ytunnus: 'y-1234567',
+        ytunnus: '5341034-5',
         email: 'toimisto@testi.com',
         puhelinnumero: '0501234567',
         alikontaktit: [

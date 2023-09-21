@@ -82,7 +82,7 @@ test('Correct information about hanke should be displayed', async () => {
   // Data in contacts tab
   expect(screen.queryByText('Yritys')).toBeInTheDocument();
   expect(screen.queryByText('Kauppisen maansiirtofirma KY')).toBeInTheDocument();
-  expect(screen.queryByText('y-1234567')).toBeInTheDocument();
+  expect(screen.queryByText('5341034-5')).toBeInTheDocument();
   expect(screen.queryByText('toimisto@testi.com')).toBeInTheDocument();
   expect(screen.queryByText('0501234567')).toBeInTheDocument();
 });

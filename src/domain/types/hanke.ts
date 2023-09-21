@@ -123,7 +123,7 @@ export interface HankeContact {
   nimi: string;
   email: string;
   puhelinnumero: string;
-  ytunnus: string;
+  ytunnus: string | null;
   alikontaktit?: HankeSubContact[];
 }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
 import { Accordion, Button, Fieldset, IconCross, IconPlusCircle } from 'hds-react';
@@ -116,12 +116,19 @@ const ContactField: React.FC<{
   field: keyof HankeContact;
   fieldName: string;
   contactType: HankeContactTypeKey;
-}> = ({ field, fieldName, contactType }) => {
+  index: number;
+}> = ({ field, fieldName, contactType, index }) => {
   const { t } = useTranslation();
-  const { watch } = useFormContext();
-  const selectedContactType = watch(`${contactType}.0.tyyppi`);
+  const { watch, setValue } = useFormContext();
+  const selectedContactType = watch(`${contactType}.${index}.tyyppi`);
   const inputDisabled =
     field === CONTACT_FORMFIELD.TUNNUS && selectedContactType === CONTACT_TYYPPI.YKSITYISHENKILO;
+
+  useEffect(() => {
+    if (inputDisabled) {
+      setValue(`${contactType}.0.ytunnus`, null);
+    }
+  }, [inputDisabled]);
 
   const label = t(`form:yhteystiedot:labels:${field}`);
 
@@ -213,6 +220,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
                   field={contactField}
                   fieldName={fieldName}
                   contactType={HANKE_CONTACT_TYPE.OMISTAJAT}
+                  index={0}
                 />
               );
             })}
@@ -253,12 +261,14 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
                 <ResponsiveGrid>
                   {CONTACT_FIELDS.map((contactField) => {
                     const fieldName = `${FORMFIELD.RAKENNUTTAJAT}.${index}.${contactField}`;
+                    index;
                     return (
                       <ContactField
                         key={contactField}
                         field={contactField}
                         fieldName={fieldName}
                         contactType={HANKE_CONTACT_TYPE.RAKENNUTTAJAT}
+                        index={index}
                       />
                     );
                   })}
@@ -316,6 +326,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
                         field={contactField}
                         fieldName={fieldName}
                         contactType={HANKE_CONTACT_TYPE.TOTEUTTAJAT}
+                        index={index}
                       />
                     );
                   })}
