@@ -52,6 +52,7 @@ import {
 } from '../../common/components/hankeInformationView/HankeInformationView';
 import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
 import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
+import { SignedInUser } from '../hankeUsers/hankeUser';
 
 type AreaProps = {
   area: HankeAlue;
@@ -120,17 +121,27 @@ const HankeAreaInfo: React.FC<AreaProps> = ({ area, hankeIndexData, index }) => 
 
 type Props = {
   hankeData?: HankeData;
+  signedInUser?: SignedInUser;
   onEditHanke: () => void;
   onCancelHanke: () => void;
+  onEditRights: () => void;
 };
 
-const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onCancelHanke }) => {
+const HankeView: React.FC<Props> = ({
+  hankeData,
+  signedInUser,
+  onEditHanke,
+  onCancelHanke,
+  onEditRights,
+}) => {
   const { t } = useTranslation();
   const location = useLocation();
   const features = useFeatureFlags();
-  const { data: applicationsResponse, isLoading, error } = useApplicationsForHanke(
-    hankeData?.hankeTunnus
-  );
+  const {
+    data: applicationsResponse,
+    isLoading,
+    error,
+  } = useApplicationsForHanke(hankeData?.hankeTunnus);
 
   // Get initially active tab from location state if there is such defined
   const initiallyActiveTab: number | undefined =
@@ -195,8 +206,11 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onCancelHanke }) =
           {hankeData?.hankeTunnus}
         </Text>
         <FeatureFlags flags={['hanke', 'accessRights']}>
-          <Text tag="p" styleAs="body-s" weight="bold" spacingBottom="l">
-            {t('hankePortfolio:labels:oikeudet')}:
+          <Text tag="p" styleAs="body-s" spacingBottom="l">
+            <strong style={{ marginRight: 'var(--spacing-s)' }}>
+              {t('hankePortfolio:labels:oikeudet')}:
+            </strong>
+            {t(`hankeUsers:accessRightLevels:${signedInUser?.kayttooikeustaso}`)}
           </Text>
         </FeatureFlags>
 
@@ -221,7 +235,12 @@ const HankeView: React.FC<Props> = ({ hankeData, onEditHanke, onCancelHanke }) =
             </Button>
           </FeatureFlags>
           <FeatureFlags flags={['hanke', 'accessRights']}>
-            <Button variant="primary" iconLeft={<IconUser aria-hidden="true" />} theme="coat">
+            <Button
+              onClick={onEditRights}
+              variant="primary"
+              iconLeft={<IconUser aria-hidden="true" />}
+              theme="coat"
+            >
               {t('hankeList:buttons:editRights')}
             </Button>
           </FeatureFlags>

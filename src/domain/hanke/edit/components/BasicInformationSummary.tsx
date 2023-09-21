@@ -67,10 +67,6 @@ const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
           {formData.tyomaaTyyppi?.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')}
         </p>
       </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:labels:tyomaaKoko')}</SectionItemTitle>
-      <SectionItemContent>
-        <p>{formData.tyomaaKoko && <>{t(`hanke:tyomaaKoko:${formData.tyomaaKoko}`)}</>}</p>
-      </SectionItemContent>
       <SectionItemTitle>{t('hankeForm:labels:onYKTHanke')}</SectionItemTitle>
       <SectionItemContent>
         <p>{formData.onYKTHanke ? t('common:yes') : t('common:no')}</p>

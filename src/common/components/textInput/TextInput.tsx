@@ -17,6 +17,7 @@ type PropTypes = {
   helperText?: string;
   shouldUnregister?: boolean;
   className?: string;
+  autoComplete?: string;
 };
 
 const TextInput: React.FC<React.PropsWithChildren<PropTypes>> = ({
@@ -30,6 +31,7 @@ const TextInput: React.FC<React.PropsWithChildren<PropTypes>> = ({
   helperText,
   shouldUnregister,
   className,
+  autoComplete,
 }) => {
   const { t } = useTranslation();
   const { control } = useFormContext();
@@ -57,6 +59,7 @@ const TextInput: React.FC<React.PropsWithChildren<PropTypes>> = ({
           onBlur={onBlur}
           onChange={onChange}
           ref={ref}
+          autoComplete={autoComplete}
           {...tooltip}
         />
       )}

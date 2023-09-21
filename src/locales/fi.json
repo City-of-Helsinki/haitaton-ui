@@ -51,6 +51,7 @@
       }
     },
     "error": "Tapahtui virhe. Yritä uudestaan.",
+    "dataNotFound": "Tietoja ei löytynyt",
     "ariaLabels": {
       "profileButton": "Käyttäjäprofiili",
       "menuToggle": "Valikko",
@@ -126,7 +127,9 @@
       }
     },
     "buttons": {
-      "loadingAttachments": "Ladataan tiedostoja..."
+      "loadingAttachments": "Ladataan tiedostoja...",
+      "saveChanges": "Tallenna muutokset",
+      "fillWithOwnInformation": "Täytä omilla tiedoilla"
     },
     "helperTexts": {
       "dateInForm": "Anna muodossa P.K.VVVV",
@@ -230,6 +233,13 @@
       "headerLabel": "Hankkeet",
       "meta": {
         "title": "Haitaton - Hankesivu"
+      }
+    },
+    "ACCESS_RIGHTS": {
+      "path": "/hankesalkku/:hankeTunnus/oikeudet",
+      "headerLabel": "Käyttöoikeudet",
+      "meta": {
+        "title": "Haitaton - Käyttöoikeuksien hallinta"
       }
     },
     "PUBLIC_HANKKEET": {
@@ -350,11 +360,6 @@
       "RAKENNUS_TAI_TOTEUTUS": "Rakennus- tai toteutussuunnittelu",
       "TYOMAAN_TAI_HANKKEEN_AIKAINEN": "Työmaan tai hankkeen aikainen suunnittelu"
     },
-    "tyomaaKoko": {
-      "SUPPEA_TAI_PISTE": "Yksittäinen suppea kohde ja/tai pistemäinen työmaa",
-      "YLI_10M_TAI_KORTTELI": "Työmaa-alueen pituus yli 10 m ja/tai korttelin mittainen työmaa",
-      "LAAJA_TAI_USEA_KORTTELI": "Työmaa ulottuu kadun eri puolille ja/tai usean korttelin mittainen työmaa"
-    },
     "tyomaaTyyppi": {
       "VESI": "Vesi",
       "VIEMARI": "Viemäri",
@@ -464,7 +469,6 @@
       "alkuPvm": "Hankkeen alkupäivä",
       "loppuPvm": "Hankkeen loppupäivä",
       "tyomaaTyyppi": "Työn tyyppi",
-      "tyomaaKoko": "Hankkeen koko",
       "haittaAlkuPvm": "Haittojen alkupäivä",
       "haittaLoppuPvm": "Haittojen loppupäivä",
       "kaistaHaitta": "Autoliikenteen kaistahaitta",
@@ -768,7 +772,6 @@
       "katuosoite": "Katuosoite",
       "avaaKartalla": "Avaa kartalla",
       "hankkeenKesto": "Hankkeen kesto",
-      "tyomaanKoko": "Työmaan koko",
       "tyomaanTyyppi": "Työmaantyyppi",
       "hankkeenHaitat": "Hankkeen haitat",
       "haitanKesto": "Haitan kesto",
@@ -818,6 +821,36 @@
       "toPreviousPage": "Listan edelliselle sivulle",
       "toNextPage": "Listan seuraavalle sivulle",
       "toLastPage": "Listan viimeiselle sivulle"
+    }
+  },
+  "hankeUsers": {
+    "accessRights": "Käyttöoikeudet",
+    "manageRights": "Käyttöoikeuksien hallinta",
+    "accessRightLevels": {
+      "KAIKKI_OIKEUDET": "Kaikki oikeudet",
+      "KAIKKIEN_MUOKKAUS": "Hankkeen ja hakemusten muokkaus",
+      "HANKEMUOKKAUS": "Hankemuokkaus",
+      "HAKEMUSASIOINTI": "Hakemusasiointi",
+      "KATSELUOIKEUS": "Katseluoikeus"
+    },
+    "accessRightsInfo": {
+      "heading": "Mitä eri oikeuksilla voi tehdä?",
+      "KAIKKI_OIKEUDET": "<strong>Kaikki oikeudet</strong> mahdollistaa hankkeen ja sen hakemusten sisällön muokkaamisen, kaikkien käyttöoikeuksien muokkaamisen sekä hankkeen poistamisen, kun hankkeella ei ole päätöksen saaneita hakemuksia.",
+      "KAIKKIEN_MUOKKAUS": "<strong>Hankkeen ja hakemusten muokkaus -oikeus</strong> mahdollistaa hankkeen ja sen hakemusten sisällön muokkaamisen ja luonnin sekä muiden käyttöoikeuksien muokkaamisen, paitsi “Kaikki oikeudet”, jolla voi poistaa hankkeen.",
+      "HANKEMUOKKAUS": "<strong>Hankemuokkaus-oikeus</strong> mahdollistaa hankkeen tietojen muokkaamisen, mutta ei käyttöoikeuksien muokkausta. Hakemustietoihin on tällöin katseluoikeudet.",
+      "HAKEMUSASIOINTI": "<strong>Hakemusasiointi-oikeus</strong> mahdollistaa uusien hakemusten luomisen hankkeelle sekä hankkeen hakemusten tietojen muokkaamisen.",
+      "KATSELUOIKEUS": "<strong>Katselu-oikeus</strong> mahdollistaa hankkeen ja sen hakemusten tietojen katselun. Katseluoikeus asetetaan automaattisesti kaikille hankkeelle ja hakemukselle lisätyille henkilöille.",
+      "modifyInfo": "Käyttöoikeutta voi vaihtaa valitsemalla alasvetovalikosta ja klikkaamalla Tallenna-painiketta. Voit myös lähettää henkilölle uuden kutsulinkin Haitattomaan, jos hän ei ole vastaanottanut sitä aiemmin."
+    },
+    "search": {
+      "placeholder": "esim. Matti Meikäläinen",
+      "helperText": "Hae nimellä"
+    },
+    "notifications": {
+      "rightsUpdatedSuccessLabel": "Käyttöoikeudet päivitetty",
+      "rightsUpdatedSuccessText": "Käyttöoikeudet on päivitetty onnistuneesti",
+      "rightsUpdatedErrorLabel": "Virhe päivityksessä",
+      "rightsUpdatedErrorText": "<0>Käyttöoikeuksien päivityksessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>"
     }
   },
   "map": {

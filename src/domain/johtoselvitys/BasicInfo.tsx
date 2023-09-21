@@ -218,6 +218,7 @@ export function BasicInfo() {
         name="applicationData.name"
         label={t('hakemus:labels:nimi')}
         required
+        autoComplete="on"
       />
 
       <TextInput
@@ -225,6 +226,7 @@ export function BasicInfo() {
         name="applicationData.postalAddress.streetAddress.streetName"
         label={t('form:yhteystiedot:labels:osoite')}
         required
+        autoComplete="street-address"
       />
 
       <SelectionGroup
@@ -362,12 +364,14 @@ export function BasicInfo() {
                   label={t('form:yhteystiedot:labels:email')}
                   required
                   disabled={applicationSent}
+                  autoComplete="email"
                 />
                 <TextInput
                   name={`applicationData.${customerType}.contacts.0.phone`}
                   label={t('form:yhteystiedot:labels:puhelinnumero')}
                   required
                   disabled={applicationSent}
+                  autoComplete="tel"
                 />
               </ResponsiveGrid>
             </React.Fragment>

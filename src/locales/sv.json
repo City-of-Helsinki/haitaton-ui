@@ -226,6 +226,13 @@
         "title": "Haitaton – projektsida"
       }
     },
+    "ACCESS_RIGHTS": {
+      "path": "/projektportfolj/:hankeTunnus/oikeudet",
+      "headerLabel": "Käyttöoikeudet",
+      "meta": {
+        "title": "Haitaton - Käyttöoikeuksien hallinta"
+      }
+    },
     "PUBLIC_HANKKEET": {
       "path": "/allmannaprojekt",
       "headerLabel": "Projekt på allmänna områden",
@@ -344,11 +351,6 @@
       "RAKENNUS_TAI_TOTEUTUS": "Bygg- eller genomförandeplanering",
       "TYOMAAN_TAI_HANKKEEN_AIKAINEN": "Planering under bygg- eller projekttid"
     },
-    "tyomaaKoko": {
-      "SUPPEA_TAI_PISTE": "Enstaka trång plats eller punktformig byggarbetsplats",
-      "YLI_10M_TAI_KORTTELI": "Byggarbetsplatsområdets längd över 10 m och/eller byggarbetsplats i storlek som kvarter",
-      "LAAJA_TAI_USEA_KORTTELI": "Byggplatsen sträcker sig till båda sidor av gatan och/eller över flera kvarter"
-    },
     "tyomaaTyyppi": {
       "VESI": "Vatten",
       "VIEMARI": "Avlopp",
@@ -458,7 +460,6 @@
       "alkuPvm": "Projektets startdatum",
       "loppuPvm": "Projektets slutdatum",
       "tyomaaTyyppi": "Typ av byggarbetsplats",
-      "tyomaaKoko": "Byggarbetsplatsens storlek",
       "haittaAlkuPvm": "Startdatum för olägenhet",
       "haittaLoppuPvm": "Slutdatum för olägenhet",
       "kaistaHaitta": "Filolägenhet",
@@ -762,7 +763,6 @@
       "katuosoite": "Gatuadress",
       "avaaKartalla": "Öppna på karta",
       "hankkeenKesto": "Projektets varaktighet",
-      "tyomaanKoko": "Byggarbetsplatsens storlek",
       "tyomaanTyyppi": "Typ av byggarbetsplats",
       "hankkeenHaitat": "Projektets olägenheter",
       "haitanKesto": "Olägenhetens varaktighet",

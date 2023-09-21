@@ -4,7 +4,6 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/extend-expect';
-import 'jest-localstorage-mock';
 import { GlobalWithFetchMock } from 'jest-fetch-mock';
 import 'jest-canvas-mock';
 import { server } from './domain/mocks/test-server';
