@@ -126,7 +126,9 @@ const ContactField: React.FC<{
 
   useEffect(() => {
     if (inputDisabled) {
-      setValue(`${contactType}.0.ytunnus`, null);
+      setValue(`${contactType}.${index}.ytunnus`, null, {
+        shouldValidate: true,
+      });
     }
   }, [inputDisabled]);
 
@@ -261,7 +263,6 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
                 <ResponsiveGrid>
                   {CONTACT_FIELDS.map((contactField) => {
                     const fieldName = `${FORMFIELD.RAKENNUTTAJAT}.${index}.${contactField}`;
-                    index;
                     return (
                       <ContactField
                         key={contactField}
