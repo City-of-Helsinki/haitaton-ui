@@ -346,6 +346,13 @@
       "meta": {
         "title": "Haitaton - Käyttöohjeet ja tuki"
       }
+    },
+    "IDENTIFY_USER": {
+      "path": "/kutsu",
+      "headerLabel": "Tunnistaudu Haitattomaan",
+      "meta": {
+        "title": "Haitaton - Tunnistaudu Haitattomaan"
+      }
     }
   },
   "hanke": {
@@ -850,7 +857,10 @@
       "rightsUpdatedSuccessLabel": "Käyttöoikeudet päivitetty",
       "rightsUpdatedSuccessText": "Käyttöoikeudet on päivitetty onnistuneesti",
       "rightsUpdatedErrorLabel": "Virhe päivityksessä",
-      "rightsUpdatedErrorText": "<0>Käyttöoikeuksien päivityksessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>"
+      "rightsUpdatedErrorText": "<0>Käyttöoikeuksien päivityksessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>",
+      "userIdentifiedLabel": "Tunnistautuminen onnistui",
+      "userIdentifiedText": "Tunnistautuminen onnistui. Sinut on nyt lisätty hankkeelle.",
+      "userIdentifiedError": "Tunnistautuminen epäonnistui"
     }
   },
   "map": {

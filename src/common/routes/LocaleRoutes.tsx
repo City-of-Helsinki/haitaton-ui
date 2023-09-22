@@ -22,6 +22,7 @@ import EditJohtoselvitysPage from '../../pages/EditJohtoselvitysPage';
 import NotFoundPage from '../../pages/staticPages/404Page';
 import ManualPage from '../../pages/staticPages/ManualPage';
 import AccessRightsPage from '../../pages/AccessRightsPage';
+import UserIdentify from '../../domain/auth/components/UserIdentify';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
@@ -74,6 +75,7 @@ const LocaleRoutes = () => {
       <Route path={t('routes:REFERENCES:path')} element={<ReferencesPage />} />
       <Route path={t('routes:PRIVACY_POLICY:path')} element={<PrivacyPolicyPage />} />
       <Route path={t('routes:MANUAL:path')} element={<ManualPage />} />
+      <Route path={t('routes:IDENTIFY_USER:path')} element={<UserIdentify />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

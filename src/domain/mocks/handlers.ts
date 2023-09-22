@@ -204,4 +204,8 @@ export const handlers = [
       }),
     );
   }),
+
+  rest.post(`${apiUrl}/kayttajat`, async (req, res, ctx) => {
+    return res(ctx.status(204));
+  }),
 ];

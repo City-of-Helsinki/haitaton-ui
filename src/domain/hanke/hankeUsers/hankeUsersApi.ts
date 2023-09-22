@@ -22,3 +22,8 @@ export async function getSignedInUser(hankeTunnus?: string): Promise<SignedInUse
   const { data } = await api.get<SignedInUser>(`hankkeet/${hankeTunnus}/whoami`);
   return data;
 }
+
+export async function identifyUser(id: string) {
+  const { data } = await api.post('kayttajat', { tunniste: id });
+  return data;
+}
