@@ -111,18 +111,19 @@ export type HankeContactTypeKey =
   | HANKE_CONTACT_TYPE.MUUTTAHOT;
 
 export interface HankeSubContact {
-  nimi: string;
-  osoite?: string;
-  postinumero?: string;
-  postitoimipaikka?: string;
+  etunimi: string;
+  sukunimi: string;
   email: string;
   puhelinnumero: string;
 }
 
-export interface HankeContact extends HankeSubContact {
+export interface HankeContact {
   id: number | null;
   tyyppi: keyof typeof CONTACT_TYYPPI | null;
-  ytunnusTaiHetu: string;
+  nimi: string;
+  email: string;
+  puhelinnumero: string;
+  ytunnus: string | null;
   alikontaktit?: HankeSubContact[];
 }
 
@@ -139,7 +140,7 @@ export type HankeMuuTaho = {
 export type HankeContacts = Array<(HankeContact | HankeMuuTaho)[] | undefined>;
 
 export function isHankeContact(contact: HankeContact | HankeMuuTaho): contact is HankeContact {
-  return (contact as HankeContact).ytunnusTaiHetu !== undefined;
+  return (contact as HankeContact).ytunnus !== undefined;
 }
 
 export enum CONTACT_TYYPPI {

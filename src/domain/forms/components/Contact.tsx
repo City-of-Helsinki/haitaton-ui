@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Flex } from '@chakra-ui/react';
 import { Button, IconCross, IconPlusCircle, Tab, TabList, TabPanel, Tabs } from 'hds-react';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,7 @@ interface Props<T> {
   index?: number;
   onRemoveContact?: UseFieldArrayRemove;
   renderSubContact?: (subContactIndex: number, remove: UseFieldArrayRemove) => JSX.Element;
+  showInitialEmpty?: boolean;
   subContactPath: string;
   emptySubContact: unknown;
   children: React.ReactNode;
@@ -21,6 +22,7 @@ const Contact = <T,>({
   index,
   onRemoveContact,
   renderSubContact,
+  showInitialEmpty = false,
   subContactPath,
   emptySubContact,
   children,
@@ -38,6 +40,12 @@ const Contact = <T,>({
   function addSubContact() {
     appendSubContact(emptySubContact);
   }
+
+  useEffect(() => {
+    if (subContactFields.length === 0 && showInitialEmpty) {
+      addSubContact();
+    }
+  }, [subContactFields, showInitialEmpty]);
 
   const renderSubContacts = subContactFields.length > 0 && renderSubContact;
   const { tabRefs } = useSelectableTabs(subContactFields.length, { selectLastTabOnChange: true });

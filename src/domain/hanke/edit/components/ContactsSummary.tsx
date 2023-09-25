@@ -13,11 +13,9 @@ const ContactSummary: React.FC<{ contact: HankeContact | HankeMuuTaho }> = ({ co
       <div style={{ marginBottom: 'var(--spacing-s)' }}>
         <p>{t(`form:yhteystiedot:contactType:${contact.tyyppi}`)}</p>
         <p>{contact.nimi}</p>
-        <p>{contact.ytunnusTaiHetu}</p>
-        {contact.osoite && <p>{contact.osoite}</p>}
-        <p>
-          {contact.postinumero} {contact.postitoimipaikka}
-        </p>
+        <p>{contact.ytunnus}</p>
+        <p>{contact.email}</p>
+        <p>{contact.puhelinnumero}</p>
       </div>
     );
   }
@@ -33,15 +31,16 @@ const ContactSummary: React.FC<{ contact: HankeContact | HankeMuuTaho }> = ({ co
   );
 };
 
-const SubContactSummary: React.FC<{ contact: HankeSubContact }> = ({ contact }) => {
+const SubContactSummary: React.FC<{ contact: HankeSubContact }> = ({
+  contact: { etunimi, sukunimi, email, puhelinnumero },
+}) => {
   return (
     <div>
-      <p>{contact.nimi}</p>
-      <p>{contact.email}</p>
-      {contact.osoite && <p>{contact.osoite}</p>}
       <p>
-        {contact.postinumero} {contact.postitoimipaikka}
+        {etunimi} {sukunimi}
       </p>
+      <p>{email}</p>
+      <p>{puhelinnumero}</p>
     </div>
   );
 };
