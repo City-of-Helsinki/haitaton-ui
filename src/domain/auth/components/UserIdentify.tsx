@@ -31,10 +31,10 @@ function UserIdentify() {
   useEffect(() => {
     if (isAuthenticated && id !== null && !identifyUserCalled.current) {
       mutate(id, {
-        onSuccess() {
+        onSuccess({ hankeNimi, hankeTunnus }) {
           setNotification(true, {
             label: t('hankeUsers:notifications:userIdentifiedLabel'),
-            message: t('hankeUsers:notifications:userIdentifiedText'),
+            message: t('hankeUsers:notifications:userIdentifiedText', { hankeNimi, hankeTunnus }),
             type: 'success',
             dismissible: true,
             closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),

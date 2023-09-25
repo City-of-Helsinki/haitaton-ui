@@ -30,3 +30,9 @@ export type SignedInUser = {
   kayttooikeustaso: keyof typeof AccessRightLevel;
   kayttooikeudet: UserRights;
 };
+
+export type IdentificationResponse = {
+  kayttajaId: string;
+  hankeTunnus: string;
+  hankeNimi: string;
+};

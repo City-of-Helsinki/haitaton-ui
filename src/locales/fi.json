@@ -859,7 +859,7 @@
       "rightsUpdatedErrorLabel": "Virhe päivityksessä",
       "rightsUpdatedErrorText": "<0>Käyttöoikeuksien päivityksessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>",
       "userIdentifiedLabel": "Tunnistautuminen onnistui",
-      "userIdentifiedText": "Tunnistautuminen onnistui. Sinut on nyt lisätty hankkeelle.",
+      "userIdentifiedText": "Tunnistautuminen onnistui. Sinut on nyt lisätty hankkeelle ({{hankeNimi}} {{hankeTunnus}}).",
       "userIdentifiedError": "Tunnistautuminen epäonnistui"
     }
   },
