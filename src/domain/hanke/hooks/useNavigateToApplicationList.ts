@@ -7,7 +7,7 @@ import { ROUTES } from '../../../common/types/route';
  * Returns a function to navigate to hanke view with application list tab initially open.
  * If there is no hankeTunnus, returned function navigates to hanke portfolio as a fallback.
  */
-export default function useNavigateToApplicationList(hankeTunnus?: string) {
+function useNavigateToApplicationList(hankeTunnus?: string) {
   const navigate = useNavigate();
   const getHankeViewPath = useLinkPath(ROUTES.HANKE);
   const { HANKEPORTFOLIO } = useLocalizedRoutes();
@@ -23,3 +23,15 @@ export default function useNavigateToApplicationList(hankeTunnus?: string) {
 
   return navigateToApplicationList;
 }
+
+function useNavigateToHankeList() {
+  const navigate = useNavigate();
+  const { HANKEPORTFOLIO } = useLocalizedRoutes();
+  function navigateToHankeList() {
+    navigate(HANKEPORTFOLIO.path, { state: { initiallyActiveTab: 4 } });
+  }
+
+  return navigateToHankeList;
+}
+
+export { useNavigateToApplicationList, useNavigateToHankeList };

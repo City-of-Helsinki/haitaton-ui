@@ -37,7 +37,7 @@ import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotif
 import Container from '../../../common/components/container/Container';
 import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
 import useHankeViewPath from '../hooks/useHankeViewPath';
-import useNavigateToApplicationList from '../hooks/useNavigateToApplicationList';
+import { useNavigateToApplicationList } from '../hooks/useNavigateToApplicationList';
 import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
 
 type CustomAccordionProps = {
@@ -250,7 +250,7 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
     if (value.length === 0) return tyyppiRows;
     return tyyppiRows.filter((hanke) => {
       const includedTyypit = hanke.values.tyomaaTyyppi.filter((tyyppi: string) =>
-        value.includes(tyyppi)
+        value.includes(tyyppi),
       );
       return includedTyypit.length > 0;
     });
@@ -264,7 +264,7 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
             hankeIsBetweenDates({ startDate: dateStart, endDate: hankeFilterEndDate })({
               startDate: hanke.values.alkuPvm,
               endDate: hanke.values.loppuPvm,
-            })
+            }),
           );
         }
         return dateStartRows.filter((hanke) => dateStart <= hanke.values.loppuPvm);
@@ -279,7 +279,7 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
             hankeIsBetweenDates({ startDate: hankeFilterStartDate, endDate: dateEnd })({
               startDate: hanke.values.alkuPvm,
               endDate: hanke.values.loppuPvm,
-            })
+            }),
           );
         }
         return dateEndRows.filter((hanke) => hanke.values.alkuPvm <= dateEnd);
@@ -352,7 +352,7 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
     useFilters,
     useGlobalFilter,
     useSortBy,
-    usePagination
+    usePagination,
   );
 
   const { t, i18n } = useTranslation();
