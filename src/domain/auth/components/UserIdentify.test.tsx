@@ -14,12 +14,14 @@ import { store } from '../../../common/redux/store';
 import i18n from '../../../locales/i18n';
 import authService from '../authService';
 import { REDIRECT_PATH_KEY } from '../../../common/routes/constants';
+import * as hankeUsersApi from '../../hanke/hankeUsers/hankeUsersApi';
 
 afterEach(() => {
   sessionStorage.clear();
 });
 
-const path = '/fi/kutsu?id=5ArrqPT6kW97QTK7t7ya9PA2';
+const id = '5ArrqPT6kW97QTK7t7ya9PA2';
+const path = `/fi/kutsu?id=${id}`;
 
 const mockUser: Partial<User> = {
   id_token: 'fffff-aaaaaa-11111',
@@ -72,9 +74,15 @@ test('Should save path with query string to session storage and navigate to logi
 test('Should identify user after login', async () => {
   sessionStorage.setItem(REDIRECT_PATH_KEY, path);
   jest.spyOn(authService.userManager, 'getUser').mockResolvedValue(mockUser as User);
+  const identifyUser = jest.spyOn(hankeUsersApi, 'identifyUser');
 
   getWrapper();
 
   await waitFor(() => expect(window.document.title).toBe('Haitaton - Etusivu'));
-  expect(screen.queryByText('Tunnistautuminen onnistui')).toBeInTheDocument();
+  expect(identifyUser).toHaveBeenCalledWith(id);
+  expect(
+    screen.queryByText(
+      'Tunnistautuminen onnistui. Sinut on nyt lisätty hankkeelle (Aidasmäentien vesihuollon rakentaminen HAI22-2).',
+    ),
+  ).toBeInTheDocument();
 });
