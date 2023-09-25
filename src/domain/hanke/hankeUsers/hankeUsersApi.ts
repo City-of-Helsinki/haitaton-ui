@@ -1,5 +1,5 @@
 import api from '../../api/api';
-import { HankeUser, SignedInUser } from './hankeUser';
+import { HankeUser, IdentificationResponse, SignedInUser } from './hankeUser';
 
 export async function getHankeUsers(hankeTunnus: string) {
   const { data } = await api.get<{ kayttajat: HankeUser[] }>(`hankkeet/${hankeTunnus}/kayttajat`);
@@ -20,5 +20,10 @@ export async function updateHankeUsers({
 // Get user id and rights of the signed in user
 export async function getSignedInUser(hankeTunnus?: string): Promise<SignedInUser> {
   const { data } = await api.get<SignedInUser>(`hankkeet/${hankeTunnus}/whoami`);
+  return data;
+}
+
+export async function identifyUser(id: string) {
+  const { data } = await api.post<IdentificationResponse>('kayttajat', { tunniste: id });
   return data;
 }

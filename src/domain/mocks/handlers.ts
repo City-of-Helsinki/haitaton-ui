@@ -5,7 +5,7 @@ import * as hankkeetDB from './data/hankkeet';
 import * as hakemuksetDB from './data/hakemukset';
 import * as usersDB from './data/users';
 import ApiError from './apiError';
-import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
+import { IdentificationResponse, SignedInUser } from '../hanke/hankeUsers/hankeUser';
 
 const apiUrl = '/api';
 
@@ -201,6 +201,17 @@ export const handlers = [
           'EDIT_APPLICATIONS',
           'MODIFY_APPLICATION_PERMISSIONS',
         ],
+      }),
+    );
+  }),
+
+  rest.post(`${apiUrl}/kayttajat`, async (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json<IdentificationResponse>({
+        kayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        hankeTunnus: 'HAI22-2',
+        hankeNimi: 'Aidasmäentien vesihuollon rakentaminen',
       }),
     );
   }),
