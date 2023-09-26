@@ -28,7 +28,7 @@ function useNavigateToHankeList() {
   const navigate = useNavigate();
   const { HANKEPORTFOLIO } = useLocalizedRoutes();
   function navigateToHankeList() {
-    navigate(HANKEPORTFOLIO.path, { state: { initiallyActiveTab: 4 } });
+    navigate(HANKEPORTFOLIO.path);
   }
 
   return navigateToHankeList;
