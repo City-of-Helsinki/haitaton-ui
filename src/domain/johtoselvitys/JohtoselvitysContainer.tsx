@@ -27,7 +27,7 @@ import { isApplicationDraft, saveApplication, sendApplication } from '../applica
 import { HankeContacts, HankeData } from '../types/hanke';
 import { ApplicationCancel } from '../application/components/ApplicationCancel';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
-import useNavigateToApplicationList from '../hanke/hooks/useNavigateToApplicationList';
+import { useNavigateToApplicationList } from '../hanke/hooks/useNavigateToApplicationList';
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 import useApplicationSendNotification from '../application/hooks/useApplicationSendNotification';
 import useHanke from '../hanke/hooks/useHanke';

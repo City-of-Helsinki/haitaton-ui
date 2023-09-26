@@ -143,6 +143,10 @@ export interface Application {
   hankeTunnus: string | null;
 }
 
+export interface ApplicationDeletionResult {
+  hankeDeleted: boolean;
+}
+
 export function isCustomerWithContacts(value: unknown): value is CustomerWithContacts {
   return (value as CustomerWithContacts)?.contacts !== undefined;
 }

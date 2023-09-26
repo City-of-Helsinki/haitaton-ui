@@ -7,7 +7,10 @@ import { AlluStatusStrings } from '../types/application';
 import { isApplicationPending, cancelApplication } from '../utils';
 import ConfirmationDialog from '../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
-import useNavigateToApplicationList from '../../hanke/hooks/useNavigateToApplicationList';
+import {
+  useNavigateToApplicationList,
+  useNavigateToHankeList,
+} from '../../hanke/hooks/useNavigateToApplicationList';
 
 type Props = {
   applicationId: number | null;
@@ -28,6 +31,7 @@ export const ApplicationCancel: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation();
   const navigateToApplicationList = useNavigateToApplicationList(hankeTunnus);
+  const navigateToHankeList = useNavigateToHankeList();
 
   const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -44,7 +48,7 @@ export const ApplicationCancel: React.FC<Props> = ({
       }
       setErrorMessage(message);
     },
-    onSuccess() {
+    onSuccess(data) {
       const closeButtonLabelText = t('common:components:notification:closeButtonLabelText');
       setNotification(true, {
         label: t('hakemus:notifications:cancelSuccessLabel'),
@@ -55,7 +59,7 @@ export const ApplicationCancel: React.FC<Props> = ({
         autoClose: true,
         autoCloseDuration: 7000,
       });
-      navigateToApplicationList();
+      data?.hankeDeleted ? navigateToHankeList() : navigateToApplicationList();
     },
   });
 
