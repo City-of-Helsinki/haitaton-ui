@@ -23,6 +23,7 @@ export type UserRights = Array<
   | 'MODIFY_DELETE_PERMISSIONS'
   | 'EDIT_APPLICATIONS'
   | 'MODIFY_APPLICATION_PERMISSIONS'
+  | 'RESEND_INVITATION'
 >;
 
 export type SignedInUser = {

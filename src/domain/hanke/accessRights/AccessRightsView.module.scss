@@ -50,16 +50,41 @@
 
 .table > div {
   overflow-x: initial;
+  display: none;
 
-  @include respond-below(m) {
-    display: none;
+  @include respond-above(l) {
+    display: block;
   }
 }
 
 .userCards {
-  @include respond-above(m) {
+  @include respond-above(l) {
     display: none;
   }
+}
+
+.accessRightSelect {
+  min-width: auto;
+
+  @include respond-above(m) {
+    min-width: 250px;
+  }
+
+  @include respond-above(l) {
+    min-width: 330px;
+  }
+}
+
+.invitationSendButtonContainer {
+  min-width: auto;
+
+  @include respond-above(xl) {
+    min-width: 300px;
+  }
+}
+
+.invitationSendButton {
+  vertical-align: middle;
 }
 
 .pagination {
