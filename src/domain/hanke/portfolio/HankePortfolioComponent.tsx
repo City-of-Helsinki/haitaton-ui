@@ -39,6 +39,7 @@ import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
 import useHankeViewPath from '../hooks/useHankeViewPath';
 import { useNavigateToApplicationList } from '../hooks/useNavigateToApplicationList';
 import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
+import UserRightsCheck from '../hankeUsers/UserRightsCheck';
 
 type CustomAccordionProps = {
   hanke: HankeData;
@@ -114,17 +115,19 @@ const CustomAccordion: React.FC<React.PropsWithChildren<CustomAccordionProps>> =
               <IconEye aria-hidden />
             </Link>
             <FeatureFlags flags={['hanke']}>
-              <Link
-                to={getEditHankePath({ hankeTunnus: hanke.hankeTunnus })}
-                aria-label={
-                  // eslint-disable-next-line
-                  t(`routes:${ROUTES.EDIT_HANKE}.meta.title`) +
-                  ` ${hanke.nimi} - ${hanke.hankeTunnus} `
-                }
-                data-testid="hankeEditLink"
-              >
-                <IconPen aria-hidden />
-              </Link>
+              <UserRightsCheck requiredRight="EDIT" hankeTunnus={hanke.hankeTunnus}>
+                <Link
+                  to={getEditHankePath({ hankeTunnus: hanke.hankeTunnus })}
+                  aria-label={
+                    // eslint-disable-next-line
+                    t(`routes:${ROUTES.EDIT_HANKE}.meta.title`) +
+                    ` ${hanke.nimi} - ${hanke.hankeTunnus} `
+                  }
+                  data-testid="hankeEditLink"
+                >
+                  <IconPen aria-hidden />
+                </Link>
+              </UserRightsCheck>
             </FeatureFlags>
           </div>
           <button type="button" className={styles.iconWrapper}>

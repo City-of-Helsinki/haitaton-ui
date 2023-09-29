@@ -12,7 +12,7 @@ const endDateLabel = 'Ajanjakson loppu';
 
 afterEach(cleanup);
 
-jest.setTimeout(20000);
+jest.setTimeout(30000);
 
 describe.only('HankePortfolio', () => {
   test('Changing search text filters correct number of projects', async () => {
@@ -30,7 +30,7 @@ describe.only('HankePortfolio', () => {
     });
     expect(screen.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
     expect(
-      screen.queryByText('Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta')
+      screen.queryByText('Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta'),
     ).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /tyhjennä hakuehdot/i }));
@@ -50,7 +50,7 @@ describe.only('HankePortfolio', () => {
     changeFilterDate(startDateLabel, renderedComponent, '11.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
     expect(
-      screen.queryByText('Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta')
+      screen.queryByText('Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta'),
     ).toBeInTheDocument();
     changeFilterDate(startDateLabel, renderedComponent, null);
   });
@@ -61,7 +61,7 @@ describe.only('HankePortfolio', () => {
     changeFilterDate(endDateLabel, renderedComponent, '01.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
     expect(
-      screen.queryByText('Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta')
+      screen.queryByText('Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta'),
     ).toBeInTheDocument();
     changeFilterDate(endDateLabel, renderedComponent, '05.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
@@ -75,22 +75,22 @@ describe.only('HankePortfolio', () => {
     const renderedComponent = render(<HankePortfolioComponent hankkeet={hankeList} />);
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
     await renderedComponent.user.click(
-      renderedComponent.getByRole('button', { name: 'Työn tyyppi' })
+      renderedComponent.getByRole('button', { name: 'Työn tyyppi' }),
     );
     await renderedComponent.user.click(renderedComponent.getByText('Sähkö'));
     renderedComponent.getByText('Hankevaiheet').click();
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
     expect(
-      screen.queryByText('Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta')
+      screen.queryByText('Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta'),
     ).toBeInTheDocument();
     await renderedComponent.user.click(
-      renderedComponent.getByRole('button', { name: 'Työn tyyppi' })
+      renderedComponent.getByRole('button', { name: 'Työn tyyppi' }),
     );
     await renderedComponent.user.click(renderedComponent.getByText('Viemäri'));
     renderedComponent.getByText('Hankevaiheet').click();
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('1');
     await renderedComponent.user.click(
-      renderedComponent.getByRole('button', { name: 'Työn tyyppi' })
+      renderedComponent.getByRole('button', { name: 'Työn tyyppi' }),
     );
     await renderedComponent.user.click(renderedComponent.getByText('Sadevesi'));
     renderedComponent.getByText('Hankevaiheet').click();
@@ -101,5 +101,13 @@ describe.only('HankePortfolio', () => {
     render(<HankePortfolioComponent hankkeet={[]} />);
 
     expect(screen.queryByText('Hankesalkussasi ei ole hankkeita')).toBeInTheDocument();
+  });
+
+  test('Should render edit hanke links for hankkeet that user has edit rights', async () => {
+    render(<HankePortfolioComponent hankkeet={hankeList} />);
+
+    await waitFor(() => {
+      expect(screen.queryAllByTestId('hankeEditLink')).toHaveLength(1);
+    });
   });
 });

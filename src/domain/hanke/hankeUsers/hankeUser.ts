@@ -14,16 +14,18 @@ export type HankeUser = {
   tunnistautunut: boolean;
 };
 
-export type UserRights = Array<
-  | 'VIEW'
-  | 'MODIFY_VIEW_PERMISSIONS'
-  | 'EDIT'
-  | 'MODIFY_EDIT_PERMISSIONS'
-  | 'DELETE'
-  | 'MODIFY_DELETE_PERMISSIONS'
-  | 'EDIT_APPLICATIONS'
-  | 'MODIFY_APPLICATION_PERMISSIONS'
->;
+export enum Rights {
+  VIEW = 'VIEW',
+  MODIFY_VIEW_PERMISSIONS = 'MODIFY_VIEW_PERMISSIONS',
+  EDIT = 'EDIT',
+  MODIFY_EDIT_PERMISSIONS = 'MODIFY_EDIT_PERMISSIONS',
+  DELETE = 'DELETE',
+  MODIFY_DELETE_PERMISSIONS = 'MODIFY_DELETE_PERMISSIONS',
+  EDIT_APPLICATIONS = 'EDIT_APPLICATIONS',
+  MODIFY_APPLICATION_PERMISSIONS = 'MODIFY_APPLICATION_PERMISSIONS',
+}
+
+export type UserRights = Array<keyof typeof Rights>;
 
 export type SignedInUser = {
   hankeKayttajaId: string;

@@ -17,8 +17,8 @@ export async function updateHankeUsers({
   return data;
 }
 
-// Get user id and rights of the signed in user
-export async function getSignedInUser(hankeTunnus?: string): Promise<SignedInUser> {
+// Get user id and rights of the signed in user for a hanke
+export async function getSignedInUserForHanke(hankeTunnus?: string): Promise<SignedInUser> {
   const { data } = await api.get<SignedInUser>(`hankkeet/${hankeTunnus}/whoami`);
   return data;
 }
