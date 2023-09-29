@@ -336,7 +336,7 @@ test('Should send invitation to user when cliking the Lähetä kutsulinkki uudel
   expect(invitationButton).toBeDisabled();
 });
 
-test('Should not send multiple requests when cliking the Lähetä kutsulinkki uudelleen button many times', async () => {
+test('Should not send multiple requests when clicking the Lähetä kutsulinkki uudelleen button many times', async () => {
   const sendInvitation = jest.spyOn(hankeUsersApi, 'resendInvitation');
   const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
 
