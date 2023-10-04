@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Accordion,
   Button,
@@ -10,9 +10,11 @@ import {
   Select,
   Table,
   Link as HDSLink,
+  IconEnvelope,
+  IconCheckCircleFill,
 } from 'hds-react';
 import { cloneDeep } from 'lodash';
-import { Flex } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import { useMutation, useQueryClient } from 'react-query';
 import {
   Column,
@@ -31,7 +33,7 @@ import styles from './AccessRightsView.module.scss';
 import { Language } from '../../../common/types/language';
 import { HankeUser, AccessRightLevel, SignedInUser } from '../hankeUsers/hankeUser';
 import useHankeViewPath from '../hooks/useHankeViewPath';
-import { updateHankeUsers } from '../hankeUsers/hankeUsersApi';
+import { resendInvitation, updateHankeUsers } from '../hankeUsers/hankeUsersApi';
 import Container from '../../../common/components/container/Container';
 import UserCard from './UserCard';
 
@@ -59,6 +61,7 @@ type AccessRightLevelOption = {
 const NAME_KEY = 'nimi';
 const EMAIL_KEY = 'sahkoposti';
 const ACCESS_RIGHT_LEVEL_KEY = 'kayttooikeustaso';
+const USER_IDENTIFIED_KEY = 'tunnistautunut';
 
 function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: Props) {
   const queryClient = useQueryClient();
@@ -69,7 +72,12 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
   const saveButtonDisabled = modifiedUsers.length === 0;
 
   const columns: Column<HankeUser>[] = useMemo(() => {
-    return [{ accessor: NAME_KEY }, { accessor: EMAIL_KEY }, { accessor: ACCESS_RIGHT_LEVEL_KEY }];
+    return [
+      { accessor: NAME_KEY },
+      { accessor: EMAIL_KEY },
+      { accessor: ACCESS_RIGHT_LEVEL_KEY },
+      { accessor: USER_IDENTIFIED_KEY },
+    ];
   }, []);
 
   const {
@@ -102,6 +110,9 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
   }, [hankeUsers]);
 
   const updateUsersMutation = useMutation(updateHankeUsers);
+  const resendInvitationMutation = useMutation(resendInvitation);
+  // List of user ids for tracking which users have been sent the invitation link
+  const linksSentTo = useRef<string[]>([]);
 
   const [usersSearchValue, setUsersSearchValue] = useState('');
 
@@ -177,7 +188,53 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
           option.value === 'KAIKKI_OIKEUDET' && signedInUser?.kayttooikeustaso !== 'KAIKKI_OIKEUDET'
         }
         disabled={isDisabled}
+        className={styles.accessRightSelect}
       />
+    );
+  }
+
+  function getInvitationResendButton(args: HankeUser) {
+    if (args.tunnistautunut) {
+      return (
+        <Flex alignItems="baseline">
+          <IconCheckCircleFill
+            color="var(--color-success)"
+            style={{ marginRight: 'var(--spacing-3-xs)', alignSelf: 'center' }}
+            aria-hidden
+          />
+          <p>{t('hankeUsers:userIdentified')}</p>
+        </Flex>
+      );
+    }
+
+    const linkSent = linksSentTo.current.includes(args.id);
+    const buttonText = linkSent
+      ? t('hankeUsers:buttons:invitationSent')
+      : t('hankeUsers:buttons:resendInvitation');
+    const isButtonLoading =
+      resendInvitationMutation.isLoading && resendInvitationMutation.variables === args.id;
+
+    function sendInvitation() {
+      resendInvitationMutation.mutate(args.id, {
+        onSuccess(data) {
+          linksSentTo.current.push(data);
+        },
+      });
+    }
+
+    return (
+      <div className={styles.invitationSendButtonContainer}>
+        <Button
+          variant="secondary"
+          className={styles.invitationSendButton}
+          iconLeft={<IconEnvelope aria-hidden />}
+          onClick={sendInvitation}
+          disabled={linkSent}
+          isLoading={isButtonLoading}
+        >
+          {buttonText}
+        </Button>
+      </div>
     );
   }
 
@@ -217,6 +274,14 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
       transform: getAccessRightSelect,
     },
   ];
+
+  if (signedInUser?.kayttooikeudet.includes('RESEND_INVITATION')) {
+    tableCols.push({
+      headerName: '',
+      key: USER_IDENTIFIED_KEY,
+      transform: getInvitationResendButton,
+    });
+  }
 
   return (
     <article className={styles.container}>
@@ -309,7 +374,10 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
           {page.map((row) => {
             return (
               <UserCard key={row.original.id} user={row.original}>
-                {getAccessRightSelect(row.original)}
+                <Box marginBottom="var(--spacing-s)">{getAccessRightSelect(row.original)}</Box>
+                {signedInUser?.kayttooikeudet.includes('RESEND_INVITATION')
+                  ? getInvitationResendButton(row.original)
+                  : null}
               </UserCard>
             );
           })}
@@ -356,12 +424,48 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
             dismissible
             type="error"
             label={t('hankeUsers:notifications:rightsUpdatedErrorLabel')}
-            closeButtonLabelText={t('hankeUsers:notifications:rightsUpdatedErrorLabel')}
+            closeButtonLabelText={t('common:components:notification:closeButtonLabelText')}
             onClose={() => updateUsersMutation.reset()}
           >
             <Trans i18nKey="hankeUsers:notifications:rightsUpdatedErrorText">
               <p>
                 Käyttöoikeuksien päivityksessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota
+                yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa
+                <HDSLink href="mailto:haitatontuki@hel.fi">haitatontuki@hel.fi</HDSLink>.
+              </p>
+            </Trans>
+          </Notification>
+        )}
+
+        {resendInvitationMutation.isSuccess && (
+          <Notification
+            position="top-right"
+            dismissible
+            autoClose
+            autoCloseDuration={4000}
+            type="success"
+            label={t('hankeUsers:notifications:invitationSentSuccessLabel')}
+            closeButtonLabelText={t('common:components:notification:closeButtonLabelText')}
+            onClose={() => resendInvitationMutation.reset()}
+          >
+            {t('hankeUsers:notifications:invitationSentSuccessText', {
+              email: hankeUsers.find((user) => user.id === resendInvitationMutation.data)
+                ?.sahkoposti,
+            })}
+          </Notification>
+        )}
+        {resendInvitationMutation.isError && (
+          <Notification
+            position="top-right"
+            dismissible
+            type="error"
+            label={t('hankeUsers:notifications:invitationSentErrorLabel')}
+            closeButtonLabelText={t('common:components:notification:closeButtonLabelText')}
+            onClose={() => resendInvitationMutation.reset()}
+          >
+            <Trans i18nKey="hankeUsers:notifications:invitationSentErrorText">
+              <p>
+                Kutsulinkin lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota
                 yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa
                 <HDSLink href="mailto:haitatontuki@hel.fi">haitatontuki@hel.fi</HDSLink>.
               </p>

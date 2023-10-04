@@ -27,3 +27,8 @@ export async function identifyUser(id: string) {
   const { data } = await api.post<IdentificationResponse>('kayttajat', { tunniste: id });
   return data;
 }
+
+export async function resendInvitation(kayttajaId: string) {
+  await api.post(`kayttajat/${kayttajaId}/kutsu`);
+  return kayttajaId;
+}
