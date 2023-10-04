@@ -54,7 +54,8 @@ const hankkeet: HankeDataDraft[] = [
       tila: 'VOIMASSA',
       perusIndeksi: 3.5,
       pyorailyIndeksi: 3,
-      joukkoliikenneIndeksi: 4,
+      linjaautoIndeksi: 4,
+      raitiovaunuIndeksi: 2,
       liikennehaittaIndeksi: {
         indeksi: 4,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -274,7 +275,8 @@ const hankkeet: HankeDataDraft[] = [
       tila: 'VOIMASSA',
       perusIndeksi: 1.5,
       pyorailyIndeksi: 3.5,
-      joukkoliikenneIndeksi: 2,
+      linjaautoIndeksi: 1,
+      raitiovaunuIndeksi: 2,
       liikennehaittaIndeksi: {
         indeksi: 3,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
