@@ -4,6 +4,7 @@ import { render, screen } from '../../../testUtils/render';
 import ApplicationViewContainer from './ApplicationViewContainer';
 import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import { server } from '../../mocks/test-server';
+import * as applicationApi from '../utils';
 
 test('Correct information about application should be displayed', async () => {
   render(<ApplicationViewContainer id={4} />);
@@ -89,4 +90,28 @@ test('Should not be able to cancel application if it has moved to handling in Al
   await waitForLoadingToFinish();
 
   expect(screen.queryByRole('button', { name: 'Peru hakemus' })).not.toBeInTheDocument();
+});
+
+test('Should not send multiple requests if clicking application cancel confirm button many times', async () => {
+  server.use(
+    rest.delete('/api/hakemukset/:id', async (req, res, ctx) => {
+      return res(ctx.delay(200), ctx.status(200));
+    }),
+  );
+
+  const cancelApplication = jest.spyOn(applicationApi, 'cancelApplication');
+  const { user } = render(<ApplicationViewContainer id={1} />);
+
+  await waitForLoadingToFinish();
+
+  await user.click(screen.getByRole('button', { name: 'Peru hakemus' }));
+  const confirmCancelButton = screen.getByRole('button', { name: 'Vahvista' });
+  await user.click(confirmCancelButton);
+  await user.click(confirmCancelButton);
+  await user.click(confirmCancelButton);
+  await screen.findByText('Hakemus peruttiin onnistuneesti');
+
+  expect(cancelApplication).toHaveBeenCalledTimes(1);
+
+  cancelApplication.mockRestore();
 });

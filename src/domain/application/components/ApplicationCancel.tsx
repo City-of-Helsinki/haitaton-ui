@@ -91,6 +91,7 @@ export const ApplicationCancel: React.FC<Props> = ({
         mainBtnLabel={t('common:confirmationDialog:confirmButton')}
         variant="danger"
         errorMsg={errorMessage}
+        isLoading={applicationCancelMutation.isLoading}
       />
 
       <Button
