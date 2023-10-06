@@ -10,7 +10,7 @@ import { ObjectSchema } from 'yup';
 export function changeFormStep<T extends FieldValues>(
   handleStepChange: () => void,
   fieldsToValidate: FieldPath<T>[],
-  trigger: UseFormTrigger<T>
+  trigger: UseFormTrigger<T>,
 ) {
   trigger(fieldsToValidate, { shouldFocus: true }).then((isValid) => {
     if (isValid) {
@@ -23,7 +23,7 @@ export function isPageValid<T extends FieldValues, T2 = T>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   schema: ObjectSchema<any>,
   pageFieldPaths: FieldPath<T>[],
-  formValues: T2
+  formValues: T2,
 ): boolean {
   let isValid = true;
   for (let i = 0; i < pageFieldPaths.length; i += 1) {
@@ -36,4 +36,26 @@ export function isPageValid<T extends FieldValues, T2 = T>(
     }
   }
   return isValid;
+}
+
+export function getFieldPaths<T extends FieldValues>(
+  node: object | Array<object> | null,
+  pathToNode: FieldPath<T>,
+): FieldPath<T>[] {
+  if (node === null) {
+    return [];
+  }
+
+  let fieldPaths: string[] = [];
+  if (Array.isArray(node)) {
+    node.forEach((obj, index) => {
+      fieldPaths = fieldPaths.concat(
+        Object.keys(obj).map((key) => `${pathToNode}.${index}.${key}`),
+      );
+    });
+  } else {
+    fieldPaths = Object.keys(node).map((key) => `${pathToNode}.${key}`);
+  }
+
+  return fieldPaths as FieldPath<T>[];
 }

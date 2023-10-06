@@ -130,7 +130,7 @@ const ContactField: React.FC<{
         shouldValidate: true,
       });
     }
-  }, [inputDisabled]);
+  }, [inputDisabled, contactType, index, setValue]);
 
   const label = t(`form:yhteystiedot:labels:${field}`);
 
