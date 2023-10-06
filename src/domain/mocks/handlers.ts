@@ -213,6 +213,7 @@ export const handlers = [
           'MODIFY_DELETE_PERMISSIONS',
           'EDIT_APPLICATIONS',
           'MODIFY_APPLICATION_PERMISSIONS',
+          'RESEND_INVITATION',
         ],
       }),
     );
@@ -227,5 +228,9 @@ export const handlers = [
         hankeNimi: 'Aidasmäentien vesihuollon rakentaminen',
       }),
     );
+  }),
+
+  rest.post(`${apiUrl}/kayttajat/:kayttajaId/kutsu`, async (req, res, ctx) => {
+    return res(ctx.delay(), ctx.status(204));
   }),
 ];
