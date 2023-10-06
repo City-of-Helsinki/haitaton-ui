@@ -186,6 +186,19 @@ export const handlers = [
   }),
 
   rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
+    const { hankeTunnus } = req.params;
+
+    if (hankeTunnus === 'SMTGEN2_1') {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>({
+          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          kayttooikeustaso: 'KATSELUOIKEUS',
+          kayttooikeudet: ['VIEW'],
+        }),
+      );
+    }
+
     return res(
       ctx.status(200),
       ctx.json<SignedInUser>({

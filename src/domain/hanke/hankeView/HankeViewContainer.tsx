@@ -5,7 +5,7 @@ import { ROUTES } from '../../../common/types/route';
 import HankeDelete from '../edit/components/HankeDelete';
 import useHanke from '../hooks/useHanke';
 import HankeView from './HankeView';
-import useSignedInUserRights from '../hankeUsers/hooks/useUserRights';
+import useUserRightsForHanke from '../hankeUsers/hooks/useUserRightsForHanke';
 
 type Props = {
   hankeTunnus?: string;
@@ -13,7 +13,7 @@ type Props = {
 
 const HankeViewContainer: React.FC<Props> = ({ hankeTunnus }) => {
   const { data: hankeData } = useHanke(hankeTunnus);
-  const { data: signedInUser } = useSignedInUserRights(hankeTunnus);
+  const { data: signedInUser } = useUserRightsForHanke(hankeTunnus);
   const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
   const getEditRightsPath = useLinkPath(ROUTES.ACCESS_RIGHTS);
   const navigate = useNavigate();
