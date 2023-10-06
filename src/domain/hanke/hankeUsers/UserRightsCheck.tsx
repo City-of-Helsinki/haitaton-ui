@@ -14,7 +14,7 @@ function UserRightsCheck({
   /** User right that is required to render children */
   requiredRight: keyof typeof Rights;
   /** hankeTunnus of the hanke that the right is required for */
-  hankeTunnus: string;
+  hankeTunnus?: string;
   children: React.ReactElement;
 }) {
   const { data: signedInUser } = useUserRightsForHanke(hankeTunnus);

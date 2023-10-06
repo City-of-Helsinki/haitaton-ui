@@ -38,6 +38,7 @@ import { ApplicationCancel } from '../components/ApplicationCancel';
 import AttachmentSummary from '../components/AttachmentSummary';
 import useAttachments from '../hooks/useAttachments';
 import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
+import UserRightsCheck from '../../hanke/hankeUsers/UserRightsCheck';
 
 type Props = {
   application: Application;
@@ -119,21 +120,25 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
 
         <InformationViewHeaderButtons>
           {isPending ? (
-            <Button
-              theme="coat"
-              iconLeft={<IconPen aria-hidden="true" />}
-              onClick={onEditApplication}
-            >
-              {t('hakemus:buttons:editApplication')}
-            </Button>
+            <UserRightsCheck requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
+              <Button
+                theme="coat"
+                iconLeft={<IconPen aria-hidden="true" />}
+                onClick={onEditApplication}
+              >
+                {t('hakemus:buttons:editApplication')}
+              </Button>
+            </UserRightsCheck>
           ) : null}
           {hanke ? (
-            <ApplicationCancel
-              applicationId={id}
-              alluStatus={alluStatus}
-              hankeTunnus={hanke?.hankeTunnus}
-              buttonIcon={<IconTrash aria-hidden />}
-            />
+            <UserRightsCheck requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
+              <ApplicationCancel
+                applicationId={id}
+                alluStatus={alluStatus}
+                hankeTunnus={hanke?.hankeTunnus}
+                buttonIcon={<IconTrash aria-hidden />}
+              />
+            </UserRightsCheck>
           ) : null}
         </InformationViewHeaderButtons>
       </InformationViewHeader>
