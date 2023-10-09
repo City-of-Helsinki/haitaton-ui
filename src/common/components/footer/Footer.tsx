@@ -19,7 +19,7 @@ function HaitatonFooter() {
         <Footer.Item as={Link} to={ACCESSIBILITY.path} label={ACCESSIBILITY.label} />
         <Footer.Item as={Link} to={PRIVACY_POLICY.path} label={PRIVACY_POLICY.label} />
       </Footer.Navigation>
-      <Footer.Base copyrightHolder="Helsingin kaupunki" />
+      <Footer.Base copyrightHolder="Helsingin kaupunki, OpenStreetMap contributors" />
     </Footer>
   );
 }
