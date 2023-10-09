@@ -209,10 +209,14 @@ const ContactFields: React.FC<{
 
   function fillWithOrdererInformation() {
     if (ordererInformation !== undefined) {
-      setValue(`applicationData.${customerType}.contacts.${index}`, {
-        ...ordererInformation,
-        orderer: false,
-      });
+      setValue(
+        `applicationData.${customerType}.contacts.${index}`,
+        {
+          ...ordererInformation,
+          orderer: false,
+        },
+        { shouldValidate: true, shouldDirty: true },
+      );
     }
   }
 
