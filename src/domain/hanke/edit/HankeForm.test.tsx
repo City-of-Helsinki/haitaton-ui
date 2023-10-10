@@ -119,6 +119,23 @@ describe('HankeForm', () => {
     expect(screen.getByTestId(FORMFIELD.KUVAUS)).toHaveValue(hankkeenKuvaus);
   });
 
+  test('Hanke nimi should be limited to 100 characters and not exceed the limit with additional characters', async () => {
+    const { user } = render(<HankeFormContainer />);
+    const initialName = 'b'.repeat(90);
+
+    fireEvent.change(screen.getByRole('textbox', { name: /hankkeen nimi/i }), {
+      target: { value: initialName },
+    });
+
+    await user.type(
+      screen.getByRole('textbox', { name: /hankkeen nimi/i }),
+      'additional_characters',
+    );
+
+    const result = screen.getByRole('textbox', { name: /hankkeen nimi/i });
+    expect(result).toHaveValue(initialName.concat('additional'));
+  });
+
   test('Yhteystiedot can be filled', async () => {
     const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
 

@@ -4,6 +4,22 @@ import { render, screen } from '../../../testUtils/render';
 import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import HankeViewContainer from './HankeViewContainer';
 import { server } from '../../mocks/test-server';
+import { SignedInUser } from '../hankeUsers/hankeUser';
+
+function getViewPermissionForUser() {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>({
+          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          kayttooikeustaso: 'KATSELUOIKEUS',
+          kayttooikeudet: ['VIEW'],
+        }),
+      );
+    }),
+  );
+}
 
 test('Draft state notification is rendered when hanke is in draft state', async () => {
   render(<HankeViewContainer hankeTunnus="HAI22-1" />);
@@ -167,4 +183,32 @@ test('Should navigate to application view when clicking the eye icon', async () 
 
   expect(window.location.pathname).toBe('/fi/hakemus/2');
   expect(screen.queryByText('Mannerheimintien kuopat')).toBeInTheDocument();
+});
+
+test('Should not show edit hanke button if user does not have EDIT permission', async () => {
+  getViewPermissionForUser();
+  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.queryByRole('button', { name: 'Muokkaa hanketta' })).not.toBeInTheDocument();
+});
+
+test('Should not show add application button if user does not have EDIT_APPLICATIONS permission', async () => {
+  getViewPermissionForUser();
+  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.queryByRole('button', { name: 'Lisää hakemus' })).not.toBeInTheDocument();
+});
+
+test('Should not show end hanke and remove hanke buttons if user does not have DELETE permission', async () => {
+  getViewPermissionForUser();
+  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.queryByRole('button', { name: 'Päätä hanke' })).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Peru hanke' })).not.toBeInTheDocument();
 });
