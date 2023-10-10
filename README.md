@@ -82,7 +82,20 @@ the identification method in the local environment, edit the `.env` -file.
 
 Then either rebuild the docker container or run `yarn update-runtime-env` as discussed above.
 
-All cloud instances use Helsinki AD identification for now.
+In the cloud instances, dev uses Helsinki AD identification while others use Suomi.fi.
+
+## Excel for translations
+
+You can export an Excel-file with current translations. This can then be sent to translators.
+
+1. In the repository root, run the export script with `yarn locales:export`.
+2. The translations are written to `locale_export.xlsx`.
+
+After the translations are added to the Excel file, they can be imported back.
+
+1. Place the translated file inside repository root. It needs to named `locale_export.xlsx`.
+2. Run the import script: `yarn locales:import`.
+3. The translations in `/src/locales` are updated.
 
 ## API mocking
 
