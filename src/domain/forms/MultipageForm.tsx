@@ -7,6 +7,7 @@ import Text from '../../common/components/text/Text';
 import { createStepReducer } from './formStepReducer';
 import { Action, ACTION_TYPE, StepperStep } from './types';
 import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
+import useScrollToTop from '../../common/hooks/useScrollToTop';
 
 function LoadingIndicator({ loadingText }: { loadingText?: string }) {
   return (
@@ -77,6 +78,7 @@ const MultipageForm: React.FC<Props> = ({
   notificationText,
 }) => {
   const locale = useLocale();
+  const scrollToTop = useScrollToTop();
 
   const stepReducer = createStepReducer(formSteps.length);
   const initialState = {
@@ -87,6 +89,7 @@ const MultipageForm: React.FC<Props> = ({
 
   function handleStepChange(value: Action) {
     function changeStep() {
+      scrollToTop();
       dispatch(value);
       if (onStepChange) {
         onStepChange();
