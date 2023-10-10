@@ -9,6 +9,7 @@ import { getInputErrorText } from '../../utils/form';
 type PropTypes = {
   name: string;
   label?: string;
+  maxLength?: number | undefined;
   disabled?: boolean;
   required?: boolean;
   readOnly?: boolean;
@@ -23,6 +24,7 @@ type PropTypes = {
 const TextInput: React.FC<React.PropsWithChildren<PropTypes>> = ({
   name,
   label,
+  maxLength = undefined,
   disabled,
   tooltip,
   required,
@@ -48,6 +50,7 @@ const TextInput: React.FC<React.PropsWithChildren<PropTypes>> = ({
           className={className}
           label={label || t(`hankeForm:labels:${name}`)}
           value={value || ''}
+          maxLength={maxLength}
           helperText={helperText}
           placeholder={placeholder}
           errorText={getInputErrorText(t, error)}

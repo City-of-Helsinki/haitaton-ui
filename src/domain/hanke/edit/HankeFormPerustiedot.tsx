@@ -51,7 +51,7 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
         <p>{t('form:requiredInstruction')}</p>
       </Box>
       <div className="formWpr">
-        <TextInput name={FORMFIELD.NIMI} required />
+        <TextInput name={FORMFIELD.NIMI} maxLength={100} required />
       </div>
       <div className="formWpr">
         <TextArea
