@@ -31,13 +31,20 @@ test('Draft state notification is rendered when hanke is in draft state', async 
   expect(draftStateElements[0]).toBeInTheDocument();
 });
 
-test('Add application and End hanke buttons are disabled when hanke is in draft state', async () => {
+test('Add application button is displayed when hanke is in PUBLIC state', async () => {
+  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.queryByRole('button', { name: /lisää hakemus/i })).toBeInTheDocument();
+});
+
+test('Add application button is hidden when hanke is not in PUBLIC state', async () => {
   render(<HankeViewContainer hankeTunnus="HAI22-1" />);
 
   await waitForLoadingToFinish();
 
-  expect(screen.getByRole('button', { name: /lisää hakemus/i })).toBeDisabled();
-  expect(screen.getByRole('button', { name: /päätä hanke/i })).toBeDisabled();
+  expect(screen.queryByRole('button', { name: /lisää hakemus/i })).not.toBeInTheDocument();
 });
 
 test('Draft state notification is not rendered when hanke is not in draft state', async () => {

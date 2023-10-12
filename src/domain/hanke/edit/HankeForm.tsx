@@ -14,7 +14,7 @@ import HankeFormHaitat from './HankeFormHaitat';
 import HankeFormSummary from './HankeFormSummary';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
-import { HankeData, HANKE_SAVETYPE } from '../../types/hanke';
+import { HankeData } from '../../types/hanke';
 import { convertFormStateToHankeData } from './utils';
 import api from '../../api/api';
 import MultipageForm from '../../forms/MultipageForm';
@@ -22,21 +22,9 @@ import FormActions from '../../forms/components/FormActions';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import ApplicationAddDialog from '../../application/components/ApplicationAddDialog';
 
-async function saveHanke({
-  data,
-  saveType = HANKE_SAVETYPE.DRAFT,
-}: {
-  data: HankeDataFormState;
-  saveType?: HANKE_SAVETYPE;
-  navigateTo?: string;
-}) {
-  if (!data.alueet?.length) {
-    return data;
-  }
-
+async function saveHanke({ data }: { data: HankeDataFormState; navigateTo?: string }) {
   const requestData = {
     ...convertFormStateToHankeData(data),
-    saveType,
   };
 
   const response = data.hankeTunnus
@@ -76,7 +64,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const {
     register,
-    formState: { errors, isDirty, isValid },
+    formState: { errors, isDirty },
     getValues,
     setValue,
     handleSubmit,
@@ -85,6 +73,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   const isNewHanke = !formData.hankeTunnus;
 
   const formValues = getValues();
+  const isHankePublic = formValues.status === 'PUBLIC';
   const formHeading = isNewHanke
     ? t('hankeForm:pageHeaderNew')
     : t('hankeForm:pageHeaderEdit', { hankeTunnus: formData.hankeTunnus });
@@ -99,9 +88,8 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     onSuccess(data, { navigateTo }) {
       setValue('hankeTunnus', data.hankeTunnus);
       setValue('tormaystarkasteluTulos', data.tormaystarkasteluTulos);
-      if (data.alueet) {
-        setShowNotification('success');
-      }
+      setValue('status', data.status);
+      setShowNotification('success');
       if (navigateTo) {
         navigate(navigateTo);
       }
@@ -119,13 +107,12 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   function save() {
     hankeMutation.mutate({
       data: getValues(),
-      saveType: HANKE_SAVETYPE.SUBMIT,
       navigateTo: HANKEPORTFOLIO.path,
     });
   }
 
   function saveAndAddApplication() {
-    hankeMutation.mutate({ data: getValues(), saveType: HANKE_SAVETYPE.SUBMIT });
+    hankeMutation.mutate({ data: getValues() });
     setShowAddApplicationDialog(true);
   }
 
@@ -210,14 +197,15 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
                 )}
                 {lastStep && (
                   <>
-                    <Button
-                      variant="secondary"
-                      iconLeft={<IconPlusCircle aria-hidden />}
-                      onClick={saveAndAddApplication}
-                      disabled={!isValid}
-                    >
-                      {t('hankeForm:saveAndAddButton')}
-                    </Button>
+                    {isHankePublic && (
+                      <Button
+                        variant="secondary"
+                        iconLeft={<IconPlusCircle aria-hidden />}
+                        onClick={saveAndAddApplication}
+                      >
+                        {t('hankeForm:saveAndAddButton')}
+                      </Button>
+                    )}
                     <Button
                       variant="primary"
                       iconLeft={<IconSaveDiskette aria-hidden />}

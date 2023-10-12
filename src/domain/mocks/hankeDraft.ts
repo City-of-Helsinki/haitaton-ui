@@ -15,7 +15,7 @@ const hankeDraft: HankeDataDraft = {
   createdAt: '2023-11-27T11:33:17.0875Z',
   modifiedBy: null,
   modifiedAt: null,
-  saveType: 'DRAFT',
+  status: 'DRAFT',
   omistajat: [],
   rakennuttajat: [],
   toteuttajat: [],

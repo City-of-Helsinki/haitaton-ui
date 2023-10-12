@@ -90,13 +90,6 @@ export enum HANKE_TARINAHAITTA {
 }
 export type HANKE_TARINAHAITTA_KEY = keyof typeof HANKE_TARINAHAITTA;
 
-export enum HANKE_SAVETYPE {
-  AUTO = 'AUTO',
-  DRAFT = 'DRAFT',
-  SUBMIT = 'SUBMIT',
-}
-export type HANKE_SAVETYPE_KEY = keyof typeof HANKE_SAVETYPE;
-
 export enum HANKE_CONTACT_TYPE {
   OMISTAJAT = 'omistajat',
   RAKENNUTTAJAT = 'rakennuttajat',
@@ -186,6 +179,14 @@ export enum HANKE_INDEX_STATE {
 
 export type HANKE_INDEX_STATE_KEY = keyof typeof HANKE_INDEX_STATE;
 
+enum HANKE_STATUS {
+  DRAFT = 'DRAFT',
+  PUBLIC = 'PUBLIC',
+  ENDED = 'ENDED',
+}
+
+type HANKE_STATUS_KEY = keyof typeof HANKE_STATUS;
+
 export interface HankeData {
   id: number;
   hankeTunnus: string;
@@ -205,7 +206,7 @@ export interface HankeData {
   toteuttajat: Array<HankeContact>;
   muut: Array<HankeMuuTaho>;
   tormaystarkasteluTulos: HankeIndexData | null;
-  saveType: HANKE_SAVETYPE_KEY;
+  status: HANKE_STATUS_KEY;
   version?: number;
   createdBy?: string;
   createdAt?: string;
