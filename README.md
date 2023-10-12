@@ -1,5 +1,8 @@
 # Haitaton UI
 
+Haitaton is a service owned by the city of Helsinki that supports the management and prediction of the adverse
+effects of projects taking place within the urban area.
+
 ## Requirements
 
 - Node 16.x
@@ -29,7 +32,7 @@ with `scripts/update-runtime-env.ts`, which contains the actual used variables w
 App is not using create-react-app's default `process.env` way to refer of variables
 but `window._env_` object.
 
-### 'yarn e2e'
+### `yarn e2e`
 
 Runs E2E cypress tests
 
