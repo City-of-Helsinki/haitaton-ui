@@ -110,4 +110,14 @@ describe.only('HankePortfolio', () => {
       expect(screen.queryAllByTestId('hankeEditLink')).toHaveLength(1);
     });
   });
+
+  test('Should show draft state notification for hankkeet that are in draft state', async () => {
+    render(<HankePortfolioComponent hankkeet={hankeList} />);
+
+    expect(
+      screen.getAllByText(
+        'Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.',
+      ),
+    ).toHaveLength(1);
+  });
 });
