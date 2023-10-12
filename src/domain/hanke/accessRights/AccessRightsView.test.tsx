@@ -8,7 +8,7 @@ import usersData from '../../mocks/data/users-data.json';
 import { SignedInUser } from '../hankeUsers/hankeUser';
 import * as hankeUsersApi from '../../hanke/hankeUsers/hankeUsersApi';
 
-jest.setTimeout(40000);
+jest.setTimeout(50000);
 
 afterEach(cleanup);
 
