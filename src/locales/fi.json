@@ -462,6 +462,8 @@
     "savingSuccessText": "Luonnos on tallennettu Hankelistalle",
     "savingFailHeader": "Joku meni vikaan",
     "savingFailText": "Luonnosta ei saatu tallennettua, koita uudelleen",
+    "saveAndQuitSuccessHeader": "Hanke tallennettu",
+    "saveAndQuitSuccessText": "Hanke {{name}} ({{hankeTunnus}}) tallennettu omiin hankkeisiin.",
     "closeAriaLabel": "Poistu kaavakkeelta tallentamatta",
     "confirmIndexCalculationButton": "Jatka indeksilaskentaan",
     "cancelDialog": {

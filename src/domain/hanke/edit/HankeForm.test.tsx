@@ -4,6 +4,7 @@ import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
 import { HANKE_VAIHE, HANKE_TYOMAATYYPPI } from '../../types/hanke';
 import { render, cleanup, fireEvent, waitFor, screen } from '../../../testUtils/render';
+import hankkeet from '../../mocks/data/hankkeet-data';
 
 afterEach(cleanup);
 
@@ -35,6 +36,36 @@ const hankeData: HankeDataDraft = {
   ],
 };
 */
+
+function fillBasicInformation(
+  options: {
+    name?: string;
+    description?: string;
+    address?: string;
+    phase?: 'Ohjelmointi' | 'Suunnittelu' | 'Rakentaminen';
+    isYKT?: boolean;
+  } = {},
+) {
+  const {
+    name = nimi,
+    description = hankkeenKuvaus,
+    address = hankkeenOsoite,
+    phase = 'Ohjelmointi',
+    isYKT = false,
+  } = options;
+
+  fireEvent.change(screen.getByLabelText(/hankkeen nimi/i), {
+    target: { value: name },
+  });
+  fireEvent.change(screen.getByLabelText(/hankkeen kuvaus/i), { target: { value: description } });
+  fireEvent.change(screen.getByLabelText(/katuosoite/i), {
+    target: { value: address },
+  });
+  fireEvent.click(screen.getByRole('radio', { name: phase }));
+  if (isYKT) {
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Hanke on YKT-hanke' }));
+  }
+}
 
 const formData: HankeDataFormState = {
   vaihe: HANKE_VAIHE.OHJELMOINTI,
@@ -194,5 +225,38 @@ describe('HankeForm', () => {
     // Check Other types are present and clickable
     await user.click(screen.getByText(/toteuttajan tiedot/i));
     await user.click(screen.getByText(/muiden tahojen tiedot/i));
+  });
+
+  test('Should be able to save and quit', async () => {
+    const { user } = render(<HankeFormContainer />);
+
+    fillBasicInformation();
+
+    await user.click(screen.getByRole('button', { name: 'Tallenna ja keskeytä' }));
+
+    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-13');
+    expect(screen.getByText(`Hanke ${nimi} (HAI22-13) tallennettu omiin hankkeisiin.`));
+  });
+
+  test('Should be able to save hanke in the last page', async () => {
+    const hanke = hankkeet[1];
+
+    const { user } = render(
+      <HankeForm
+        formData={hanke as HankeDataFormState}
+        onIsDirtyChange={() => ({})}
+        onFormClose={() => ({})}
+      >
+        children
+      </HankeForm>,
+    );
+
+    await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+    await user.click(screen.getByRole('button', { name: 'Tallenna' }));
+
+    expect(window.location.pathname).toBe(`/fi/hankesalkku/${hanke.hankeTunnus}`);
+    expect(
+      screen.getByText(`Hanke ${hanke.nimi} (${hanke.hankeTunnus}) tallennettu omiin hankkeisiin.`),
+    );
   });
 });
