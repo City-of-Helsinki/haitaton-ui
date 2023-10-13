@@ -221,7 +221,8 @@ export interface HankeIndexData {
   liikennehaittaIndeksi: LiikenneHaittaIndeksi;
   perusIndeksi: number;
   pyorailyIndeksi: number;
-  joukkoliikenneIndeksi: number;
+  linjaautoIndeksi: number;
+  raitiovaunuIndeksi: number;
   tila: HANKE_INDEX_STATE_KEY;
 }
 
