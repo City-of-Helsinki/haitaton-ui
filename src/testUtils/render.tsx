@@ -44,6 +44,7 @@ const AllTheProviders = ({ children }: Props) => {
 
 const customRender = (ui: React.ReactElement, options: RenderOptions = {}, route = '/') => {
   window.history.pushState({}, 'Test page', route);
+  window.scrollTo = function () {};
   return {
     user: userEvent.setup(),
     ...render(ui, {
