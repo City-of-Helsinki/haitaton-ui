@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Tab, TabList, TabPanel, Tabs } from 'hds-react';
 import { Feature } from 'ol';
@@ -15,6 +15,7 @@ import Text from '../../../common/components/text/Text';
 import useSelectableTabs from '../../../common/hooks/useSelectableTabs';
 import useHighlightArea from '../../map/hooks/useHighlightArea';
 import useAddressCoordinate from '../../map/hooks/useAddressCoordinate';
+import useFieldArrayWithStateUpdate from '../../../common/hooks/useFieldArrayWithStateUpdate';
 
 function getEmptyArea(feature: Feature): Omit<HankeAlueFormState, 'id' | 'geometriat'> {
   return {
@@ -31,8 +32,12 @@ function getEmptyArea(feature: Feature): Omit<HankeAlueFormState, 'id' | 'geomet
 
 const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
   const { t } = useTranslation();
-  const { setValue, trigger } = useFormContext();
-  const { fields: hankeAlueet, append, remove } = useFieldArray({
+  const { setValue, trigger, watch } = useFormContext();
+  const {
+    fields: hankeAlueet,
+    append,
+    remove,
+  } = useFieldArrayWithStateUpdate({
     name: FORMFIELD.HANKEALUEET,
   });
   const [drawSource] = useState<VectorSource>(new VectorSource());
@@ -52,7 +57,7 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
 
       setValue(FORMFIELD.GEOMETRIES_CHANGED, true, { shouldDirty: true });
     },
-    [setValue, append]
+    [setValue, append],
   );
 
   const handleChangeFeature = useCallback(() => {
@@ -100,10 +105,11 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
             const hankeAlue = formData.alueet && formData.alueet[index];
             const hankeGeometry = hankeAlue?.feature?.getGeometry();
             const surfaceArea = hankeGeometry && `(${formatSurfaceArea(hankeGeometry)})`;
+            const name = watch(`${FORMFIELD.HANKEALUEET}.${index}.nimi`);
             return (
               <Tab key={item.id} onClick={() => higlightArea(hankeAlue?.feature)}>
                 <div ref={tabRefs[index]}>
-                  {t('hankeForm:hankkeenAlueForm:area')} {index + 1} {surfaceArea}
+                  {name} {surfaceArea}
                 </div>
               </Tab>
             );

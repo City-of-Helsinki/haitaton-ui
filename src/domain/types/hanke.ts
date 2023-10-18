@@ -169,6 +169,7 @@ export type HankeAlue = {
   meluHaitta: HANKE_MELUHAITTA_KEY | null;
   polyHaitta: HANKE_POLYHAITTA | null;
   tarinaHaitta: HANKE_TARINAHAITTA_KEY | null;
+  nimi?: string | null;
 };
 
 export enum HANKE_INDEX_TYPE {
