@@ -17,6 +17,7 @@ const contactSchema = yup
     lastName: yup.string().trim().required(),
     email: yup.string().trim().email().max(100).required(),
     phone: yup.string().trim().max(20).required(),
+    orderer: yup.boolean(),
   });
 
 const customerSchema = contactSchema.omit(['firstName', 'lastName']).shape({
@@ -31,6 +32,10 @@ const customerSchema = contactSchema.omit(['firstName', 'lastName']).shape({
         schema.test('is-business-id', 'Is not valid business id', isValidBusinessId),
       otherwise: (schema) => schema,
     }),
+  country: yup.string().nullable(),
+  ovt: yup.string().nullable(),
+  invoicingOperator: yup.string().nullable(),
+  sapCustomerNumber: yup.string().nullable(),
 });
 
 const customerWithContactsSchema = yup.object().shape({

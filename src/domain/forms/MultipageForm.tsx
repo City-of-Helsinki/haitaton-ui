@@ -87,6 +87,7 @@ const MultipageForm: React.FC<Props> = ({
 
   function handleStepChange(value: Action) {
     function changeStep() {
+      window.scrollTo(0, 0);
       dispatch(value);
       if (onStepChange) {
         onStepChange();
