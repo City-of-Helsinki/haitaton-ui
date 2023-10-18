@@ -15,7 +15,7 @@ function UserRightsCheck({
   requiredRight: keyof typeof Rights;
   /** hankeTunnus of the hanke that the right is required for */
   hankeTunnus?: string;
-  children: React.ReactElement;
+  children: React.ReactElement | null;
 }) {
   const { data: signedInUser } = useUserRightsForHanke(hankeTunnus);
 
