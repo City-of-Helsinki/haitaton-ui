@@ -22,6 +22,10 @@
       "confirmButton": "Bekräfta"
     },
     "components": {
+      "link": {
+        "openInNewTabAriaLabel": "Öppnas i en ny flik.",
+        "openInExternalDomainAriaLabel": "Går till en annan webbplats."
+      },
       "linkbox": {
         "linkbox": "Länkområde"
       },
@@ -47,6 +51,7 @@
       }
     },
     "error": "Det inträffade ett fel. Försök på nytt.",
+    "dataNotFound": "Inga uppgifter hittades",
     "ariaLabels": {
       "profileButton": "Användarprofil",
       "menuToggle": "Meny",
@@ -113,14 +118,18 @@
     },
     "notifications": {
       "labels": {
-        "attachmentRemoved": "Bilagd fil har raderats"
+        "attachmentRemoved": "Bilagd fil har raderats",
+        "editSentApplication": "Du ändrar i en redan skickad ansökan."
       },
       "descriptions": {
-        "attachmentRemoved": "Bilagd fil {{fileName}} har raderats"
+        "attachmentRemoved": "Bilagd fil {{fileName}} har raderats",
+        "editSentApplication": "Du kan ändra ansökan tills den tas för handläggning. En ny version av ansökan skickas automatiskt till myndigheten när blanketten sparas."
       }
     },
     "buttons": {
-      "loadingAttachments": "Filer laddas…"
+      "loadingAttachments": "Filer laddas…",
+      "saveChanges": "Spara ändringarna",
+      "fillWithOwnInformation": "Fyll i med egna uppgifter"
     },
     "helperTexts": {
       "dateInForm": "Ge i formatet DD.MM.ÅÅÅÅ",
@@ -229,9 +238,9 @@
     },
     "ACCESS_RIGHTS": {
       "path": "/projektportfolj/:hankeTunnus/oikeudet",
-      "headerLabel": "Käyttöoikeudet",
+      "headerLabel": "Användningsrättigheter",
       "meta": {
-        "title": "Haitaton - Käyttöoikeuksien hallinta"
+        "title": "Haitaton – Hantering av användningsrättigheter"
       }
     },
     "PUBLIC_HANKKEET": {
@@ -270,7 +279,7 @@
       }
     },
     "FULL_PAGE_MAP": {
-      "path": "/kokosivunkartta/:hankeTunnus",
+      "path": "/kartaoverhelasidan/:hankeTunnus",
       "headerLabel": "Karta över hela sidan",
       "meta": {
         "title": "Haitaton – Karta över hela sidan"
@@ -337,6 +346,13 @@
       "headerLabel": "Bruksanvisning och support",
       "meta": {
         "title": "Haitaton - Bruksanvisning och support"
+      }
+    },
+    "IDENTIFY_USER": {
+      "path": "/inbjudan",
+      "headerLabel": "Identifiera dig i Haitaton",
+      "meta": {
+        "title": "Haitaton – Identifiera dig i Haitaton"
       }
     }
   },
@@ -814,6 +830,48 @@
       "toLastPage": "Till listans sista sida"
     }
   },
+  "hankeUsers": {
+    "accessRights": "Användningsrättigheter",
+    "manageRights": "Hantering av användningsrättigheter",
+    "accessRightLevels": {
+      "KAIKKI_OIKEUDET": "Alla rättigheter",
+      "KAIKKIEN_MUOKKAUS": "Ändringar i projekt och ansökningar",
+      "HANKEMUOKKAUS": "Ändring i projekt",
+      "HAKEMUSASIOINTI": "Ansökningsärende",
+      "KATSELUOIKEUS": "Visningsrätt"
+    },
+    "accessRightsInfo": {
+      "heading": "Vad kan man göra med olika rättigheter?",
+      "KAIKKI_OIKEUDET": "<strong>Alla rättigheter</strong> ger möjlighet att göra ändringar i projektets och dess ansökningars innehåll, att göra ändringar i alla användningsrättigheter och att ta bort projektet, om projektet inte har ansökningar som beslut fattats om.",
+      "KAIKKIEN_MUOKKAUS": "<strong>Rätt att göra ändringar i projektet och ansökningar</strong> ger möjlighet att ändra och skapa innehåll i projektet och dess ansökningar samt att göra ändringar i andras användningsrättigheter, förutom ”Alla rättigheter”, som ger möjlighet att ta bort projektet.",
+      "HANKEMUOKKAUS": "<strong>Rätt att göra ändringar i projekt</strong> ger möjlighet att ändra uppgifter om projektet, men inte att göra ändringar i användningsrättigheterna. Personen har då visningsrättigheter för ansökningsuppgifterna.",
+      "HAKEMUSASIOINTI": "<strong>Rätt att uträtta ärenden i projekt</strong> ger möjlighet att skapa nya ansökningar för projektet och att ändra uppgifterna i projektets ansökningar.",
+      "KATSELUOIKEUS": "<strong>Visningsrätt</strong> ger möjlighet att se uppgifter om projektet och dess ansökningar. Alla som lagts till i projektet och ansökan får automatiskt visningsrättigheter.",
+      "modifyInfo": "Du kan byta användningsrättighet genom att välja i rullgardinsmenyn och klicka på Spara. Du kan också skicka en ny inbjudningslänk till Haitaton till personen, om hen inte fått den tidigare."
+    },
+    "search": {
+      "placeholder": "t.ex. Matti Meikäläinen",
+      "helperText": "Sök enligt namn"
+    },
+    "notifications": {
+      "rightsUpdatedSuccessLabel": "Användningsrättigheterna har uppdaterats",
+      "rightsUpdatedSuccessText": "Användningsrättigheterna har uppdaterats",
+      "rightsUpdatedErrorLabel": "Ett fel uppstod vid uppdateringen",
+      "rightsUpdatedErrorText": "<0>Ett fel uppstod när användningsrättigheterna skulle uppdateras. Försök igen senare eller kontakta Haitatons tekniska support med e-post till <1>haitatontuki@hel.fi</1>.</0>",
+      "userIdentifiedLabel": "Identifieringen lyckades",
+      "userIdentifiedText": "Identifieringen lyckades. Du har nu lagts till i projektet ({{hankeNimi}} {{hankeTunnus}}).",
+      "userIdentifiedError": "Identifieringen misslyckades",
+      "invitationSentSuccessLabel": "Inbjudningslänken skickades",
+      "invitationSentSuccessText": "Inbjudningslänken skickades till {{email}}.",
+      "invitationSentErrorLabel": "Ett fel uppstod när länken skulle skickas",
+      "invitationSentErrorText": "<0>Ett fel uppstod när inbjudningslänken skulle skickas. Försök igen senare eller kontakta Haitatons tekniska support med e-post till <1>haitatontuki@hel.fi</1>.</0>"
+    },
+    "buttons": {
+      "resendInvitation": "Skicka inbjudningslänken på nytt",
+      "invitationSent": "Inbjudningslänken skickades"
+    },
+    "userIdentified": "Användaren har identifierat sig"
+  },
   "map": {
     "controls": {
       "ariaLayerMenu": "Val av kartlager"
@@ -841,6 +899,8 @@
   "staticPages": {
     "infoPage": {
       "title": "Information om Haitaton",
+      "releaseInfo": "Uppgifter om publicering",
+      "releaseVer1": "Version JS.01 publicerad 19.6.2023: Utförande av ledningsutredning",
       "materials": "Material",
       "mapMaterials": "Kartmaterial",
       "imageCopyrights": "Författarinformation till bilderna"
