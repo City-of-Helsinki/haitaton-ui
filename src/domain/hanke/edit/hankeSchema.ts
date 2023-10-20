@@ -2,7 +2,6 @@ import { $enum } from 'ts-enum-util';
 import yup from '../../../common/utils/yup';
 import {
   HANKE_VAIHE,
-  HANKE_SUUNNITTELUVAIHE,
   HANKE_MELUHAITTA,
   HANKE_POLYHAITTA,
   HANKE_TARINAHAITTA,
@@ -81,13 +80,6 @@ export const hankeSchema = yup.object().shape({
   [FORMFIELD.KUVAUS]: yup.string().required().min(1),
   [FORMFIELD.KATUOSOITE]: yup.string().required(),
   [FORMFIELD.VAIHE]: yup.mixed().oneOf($enum(HANKE_VAIHE).getValues()).required(),
-  [FORMFIELD.SUUNNITTELUVAIHE]: yup
-    .mixed()
-    .nullable()
-    .when([FORMFIELD.VAIHE], {
-      is: HANKE_VAIHE.SUUNNITTELU,
-      then: yup.mixed().oneOf($enum(HANKE_SUUNNITTELUVAIHE).getValues()).required(),
-    }),
   [FORMFIELD.HANKEALUEET]: yup.array().ensure().of(hankeAlueSchema),
   [FORMFIELD.OMISTAJAT]: yup.array().length(1).ensure().of(contactSchema),
   [FORMFIELD.RAKENNUTTAJAT]: yup.array().ensure().of(contactSchema),

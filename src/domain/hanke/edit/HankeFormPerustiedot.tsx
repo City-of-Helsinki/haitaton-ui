@@ -4,9 +4,8 @@ import { Tooltip, TextArea, SelectionGroup, RadioButton } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { useFormContext } from 'react-hook-form';
 import { Box } from '@chakra-ui/react';
-import Dropdown from '../../../common/components/dropdown/Dropdown';
 import TextInput from '../../../common/components/textInput/TextInput';
-import { HANKE_VAIHE, HANKE_SUUNNITTELUVAIHE, HANKE_TYOMAATYYPPI } from '../../types/hanke';
+import { HANKE_VAIHE, HANKE_TYOMAATYYPPI } from '../../types/hanke';
 import { FORMFIELD, FormProps } from './types';
 import { useFormPage } from './hooks/useFormPage';
 import DropdownMultiselect from '../../../common/components/dropdown/DropdownMultiselect';
@@ -25,14 +24,9 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
   const { JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();
   useFormPage();
 
-  // Subscribe to vaihe changes
+  // Subscribe to vaihe changes in order to update the selected radio button
   const hankeVaiheField = watch(FORMFIELD.VAIHE);
-
-  useEffect(() => {
-    if (hankeVaiheField !== HANKE_VAIHE.SUUNNITTELU) {
-      setValue(FORMFIELD.SUUNNITTELUVAIHE, null);
-    }
-  }, [hankeVaiheField, setValue]);
+  useEffect(() => {}, [hankeVaiheField, setValue]);
 
   return (
     <div className="form0">
@@ -97,21 +91,6 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
             );
           })}
         </SelectionGroup>
-      </div>
-      <div className="formWpr">
-        <Dropdown
-          id={FORMFIELD.SUUNNITTELUVAIHE}
-          name={FORMFIELD.SUUNNITTELUVAIHE}
-          options={$enum(HANKE_SUUNNITTELUVAIHE).map((value) => ({
-            value,
-            label: t(`hanke:suunnitteluVaihe:${value}`),
-          }))}
-          defaultValue={formData[FORMFIELD.SUUNNITTELUVAIHE] || null}
-          label={t(`hankeForm:labels:${FORMFIELD.SUUNNITTELUVAIHE}`)}
-          invalid={!!errors[FORMFIELD.SUUNNITTELUVAIHE]}
-          required={hankeVaiheField === HANKE_VAIHE.SUUNNITTELU}
-          disabled={hankeVaiheField !== HANKE_VAIHE.SUUNNITTELU}
-        />
       </div>
       <div className="formWpr">
         <DropdownMultiselect

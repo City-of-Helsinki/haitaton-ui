@@ -362,12 +362,6 @@
       "OHJELMOINTI": "Programmering",
       "RAKENTAMINEN": "Byggande"
     },
-    "suunnitteluVaihe": {
-      "YLEIS_TAI_HANKE": "Översikts- eller projektplanering",
-      "KATUSUUNNITTELU_TAI_ALUEVARAUS": "Gatuplanering eller planering av områdesreservering",
-      "RAKENNUS_TAI_TOTEUTUS": "Bygg- eller genomförandeplanering",
-      "TYOMAAN_TAI_HANKKEEN_AIKAINEN": "Planering under bygg- eller projekttid"
-    },
     "tyomaaTyyppi": {
       "VESI": "Vatten",
       "VIEMARI": "Avlopp",
@@ -473,7 +467,6 @@
       "nimi": "Projektets namn",
       "vaihe": "Projektets Skede",
       "kuvaus": "Beskrivning av projektet",
-      "suunnitteluVaihe": "Projektets planeringsskede",
       "alkuPvm": "Projektets startdatum",
       "loppuPvm": "Projektets slutdatum",
       "tyomaaTyyppi": "Typ av byggarbetsplats",
@@ -504,9 +497,8 @@
       "onYKTHanke": "Ett gemensamt kommunaltekniskt byggarbetsplats –  ett samprojekt enligt samarbetsavtalet. Parter är utöver Helsingfors stads stadsmiljösektor också affärsverket Helsingfors stads trafikverk (HST), samkommunen Helsingforsregionens miljötjänster (HRM), Helen Oy, Helen Elnät Ab, Auris Kaasunjakelu Oy samt telenätsoperatörerna Cinia Oy, DNA Oyj, Elisa Oyj och Telia Finland Oyj. Med gemensam kommunalteknisk verksamhet strävar man efter att göra byggande i allmänna områden i städer smidigare och samordna avtalsparternas separata projekt till projekt som genomförs gemensamt för att förbättra infrastrukturtjänsternas kvalitet och tillhandahållande.",
       "alkuPvm": "Datum då projektets genomförande inleds (Obs! Genomförande på allmänt område, inte till exempel genomförande som sker på tomt)",
       "loppuPvm": "Datum då projektets genomförande avslutas (Obs! Genomförande på allmänt område, inte till exempel genomförande som sker på tomt)",
-      "vaihe": "Beskrivning av hur projektets status framskrider, uppdateras allt efter när projektet framskrider. Programmeringsskedet är inledande projektplanerings- eller förprojekteringsskede. Planeringsskedet har underskeden allt efter planeringsnivåns detaljeringsnivå. Ur tillståndsansökningsprocessens perspektiv är projektet i planeringsskede tills den får genomförandetillstånd från staden. I byggskedet har projektet fått tillstånd från staden. Haitaton hanterar inte skeden gällande tillståndsansökan, byggskede eller projektets skeden gällande färdigställande/upprätthållande/överlåtande.",
+      "vaihe": "Beskrivning av hur projektets status framskrider, uppdateras allt efter när projektet framskrider. Programmeringsskedet är inledande projektplanerings- eller förprojekteringsskede. Ur tillståndsansökningsprocessens perspektiv är projektet i planeringsskede tills den får genomförandetillstånd från staden. I byggskedet har projektet fått tillstånd från staden. Haitaton hanterar inte skeden gällande tillståndsansökan, byggskede eller projektets skeden gällande färdigställande/upprätthållande/överlåtande.",
       "kuvaus": "Beskrivning av projektets viktigaste innehåll och mål. (Obs! Genomförande på allmänt område, inte till exempel genomförande som sker på tomt)",
-      "suunnitteluVaihe": "Underskede som preciserar planeringsskedet och som uppdateras när projektet framskrider.",
       "omistajat": "Projektets ägare ansvarar för hela projektet från dess början ända till dess slut/färdigställande/överlåtelse.",
       "arvioijat": "Projektets analyserare eller bedömare kan vara projektets ägare eller någon annan part som ägaren befullmäktigat (till exempel en extern projekterarkonsult eller entreprenör).",
       "toteuttajat": "Den som ansvarar för projektets genomförande kan vara projektets ägare eller någon annan part som ägaren befullmäktigat (till exempel en extern entreprenör).",
@@ -775,7 +767,6 @@
     "labels": {
       "kuvaus": "Beskrivning av projektet",
       "hankeVaihe": "Projektets skede",
-      "suunnitteluVaihe": "Planeringsskede",
       "katuosoite": "Gatuadress",
       "avaaKartalla": "Öppna på karta",
       "hankkeenKesto": "Projektets varaktighet",

@@ -21,7 +21,6 @@ const hankeData: HankeDataDraft = {
   alkuPvm: '24.03.2025',
   loppuPvm: '25.03.2025',
   vaihe: 'OHJELMOINTI',
-  suunnitteluVaihe: 'KATUSUUNNITTELU_TAI_ALUEVARAUS',
   omistajat: [
     {
       id: null,
@@ -111,9 +110,6 @@ describe('HankeForm', () => {
     await user.click(screen.getByRole('radio', { name: 'Suunnittelu' }));
 
     await user.click(screen.getByRole('checkbox', { name: 'Hanke on YKT-hanke' }));
-
-    await user.click(screen.getByText('Hankkeen suunnitteluvaihe'));
-    await user.click(screen.getByText('Yleis- tai hankesuunnittelu'));
   });
 
   test('Form should be populated correctly ', () => {
