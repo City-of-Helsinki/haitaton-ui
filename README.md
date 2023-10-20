@@ -96,7 +96,7 @@ You can export an Excel-file with current translations. This can then be sent to
 
 After the translations are added to the Excel file, they can be imported back.
 
-1. Place the translated file inside repository root. It needs to named `locale_export.xlsx`.
+1. Place the translated file inside repository root. It needs to be named `locale_export.xlsx`.
 2. Run the import script: `yarn locales:import`.
 3. The translations in `/src/locales` are updated.
 

@@ -22,6 +22,10 @@
       "confirmButton": "Confirm"
     },
     "components": {
+      "link": {
+        "openInNewTabAriaLabel": "Opens in a new tab.",
+        "openInExternalDomainAriaLabel": "Leads to another website."
+      },
       "linkbox": {
         "linkbox": "Link box"
       },
@@ -47,6 +51,7 @@
       }
     },
     "error": "An error occurred. Try again.",
+    "dataNotFound": "No information found",
     "ariaLabels": {
       "profileButton": "User profile",
       "menuToggle": "Menu",
@@ -113,14 +118,18 @@
     },
     "notifications": {
       "labels": {
-        "attachmentRemoved": "Attachment removed"
+        "attachmentRemoved": "Attachment removed",
+        "editSentApplication": "You are about to edit an application that has already been sent."
       },
       "descriptions": {
-        "attachmentRemoved": "Attachment {{fileName}} was removed"
+        "attachmentRemoved": "Attachment {{fileName}} was removed",
+        "editSentApplication": "You can edit the application until it enters processing. The new version of the application is automatically sent to the authorities when the form is saved."
       }
     },
     "buttons": {
-      "loadingAttachments": "Loading attachments..."
+      "loadingAttachments": "Loading attachments...",
+      "saveChanges": "Save changes",
+      "fillWithOwnInformation": "Fill out with your own information"
     },
     "helperTexts": {
       "dateInForm": "Enter in format D.M.YYYY",
@@ -229,9 +238,9 @@
     },
     "ACCESS_RIGHTS": {
       "path": "/projectportfolio/:hankeTunnus/oikeudet",
-      "headerLabel": "Käyttöoikeudet",
+      "headerLabel": "Access rights",
       "meta": {
-        "title": "Haitaton - Käyttöoikeuksien hallinta"
+        "title": "Haitaton - Access rights management"
       }
     },
     "PUBLIC_HANKKEET": {
@@ -270,7 +279,7 @@
       }
     },
     "FULL_PAGE_MAP": {
-      "path": "/kokosivunkartta/:hankeTunnus",
+      "path": "/fullpagemap/:hankeTunnus",
       "headerLabel": "Full-page map",
       "meta": {
         "title": "Haitaton - Full-page map"
@@ -337,6 +346,13 @@
       "headerLabel": "Manual and support",
       "meta": {
         "title": "Haitaton - Manual and support"
+      }
+    },
+    "IDENTIFY_USER": {
+      "path": "/invitation",
+      "headerLabel": "Log in to Haitaton",
+      "meta": {
+        "title": "Haitaton - Log in to Haitaton"
       }
     }
   },
@@ -814,6 +830,48 @@
       "toLastPage": "To the last page of the list"
     }
   },
+  "hankeUsers": {
+    "accessRights": "Access rights",
+    "manageRights": "Access rights management",
+    "accessRightLevels": {
+      "KAIKKI_OIKEUDET": "All rights",
+      "KAIKKIEN_MUOKKAUS": "Project and application editing",
+      "HANKEMUOKKAUS": "Project editing",
+      "HAKEMUSASIOINTI": "Application services",
+      "KATSELUOIKEUS": "Viewing right"
+    },
+    "accessRightsInfo": {
+      "heading": "What can be done with the different rights?",
+      "KAIKKI_OIKEUDET": "<strong>All rights</strong> enables you to edit a project and its application content, edit everyone’s access rights and remove a project if it has no applications that have received a decision.",
+      "KAIKKIEN_MUOKKAUS": "The <strong>project and application editing</strong> right enables you to create and edit a project and the content of its applications and edit others’ access rights, except ‘all rights’, which enables removing a project.",
+      "HANKEMUOKKAUS": "The <strong>project editing</strong> right enables you to edit the information of a project but not access rights. This right enables you to view the application information.",
+      "HAKEMUSASIOINTI": "The <strong>application services</strong> right enables you to create new applications for a project and edit the information of the applications of the project.",
+      "KATSELUOIKEUS": "The <strong>viewing right</strong> enables you to view a project and its information. The viewing right is automatically granted to all persons added to the project and its applications.",
+      "modifyInfo": "You can change access rights by making a selection in the dropdown menu and clicking the ‘Save’ button. You can also send someone a new invitation link to Haitaton if they have not received it before."
+    },
+    "search": {
+      "placeholder": "Example: Matti Meikäläinen",
+      "helperText": "Search by name"
+    },
+    "notifications": {
+      "rightsUpdatedSuccessLabel": "Access rights updated",
+      "rightsUpdatedSuccessText": "Access rights successfully updated",
+      "rightsUpdatedErrorLabel": "Error in the updating process",
+      "rightsUpdatedErrorText": "<0>An error occurred when updating access rights. Please try again later or contact the Haitaton technical support by email <1>haitatontuki@hel.fi</1>.</0>",
+      "userIdentifiedLabel": "Login successful",
+      "userIdentifiedText": "Login successful. You have now been added to the project ({{hankeNimi}} {{hankeTunnus}}).",
+      "userIdentifiedError": "Login failed",
+      "invitationSentSuccessLabel": "Invitation link sent",
+      "invitationSentSuccessText": "Invitation link sent to the address {{email}}.",
+      "invitationSentErrorLabel": "Error when sending the link",
+      "invitationSentErrorText": "<0>An error occurred when sending the invitation link. Please try again later or contact the Haitaton technical support by email <1>haitatontuki@hel.fi</1>.</0>"
+    },
+    "buttons": {
+      "resendInvitation": "Resend the invitation link",
+      "invitationSent": "Invitation link sent"
+    },
+    "userIdentified": "User logged in"
+  },
   "map": {
     "controls": {
       "ariaLayerMenu": "Selecting map levels"
@@ -841,6 +899,8 @@
   "staticPages": {
     "infoPage": {
       "title": "About Haitaton",
+      "releaseInfo": "Publication information",
+      "releaseVer1": "Version JS.01 published on 19 June 2023: Creating a cable report",
       "materials": "Materials",
       "mapMaterials": "Map materials",
       "imageCopyrights": "Images author information"
