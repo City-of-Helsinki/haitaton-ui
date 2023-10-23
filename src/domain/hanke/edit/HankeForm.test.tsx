@@ -87,31 +87,6 @@ async function setupYhteystiedotPage(jsx: JSX.Element) {
 }
 
 describe('HankeForm', () => {
-  test('suunnitteluVaihde should be required when vaihe is suunnittelu', async () => {
-    const handleIsDirtyChange = jest.fn();
-    const handleFormClose = jest.fn();
-
-    const { user } = render(
-      <HankeForm
-        formData={formData}
-        onIsDirtyChange={handleIsDirtyChange}
-        onFormClose={handleFormClose}
-      >
-        child
-      </HankeForm>,
-    );
-
-    fireEvent.change(screen.getByTestId(FORMFIELD.NIMI), { target: { value: nimi } });
-    fireEvent.change(screen.getByTestId(FORMFIELD.KUVAUS), { target: { value: hankkeenKuvaus } });
-    fireEvent.change(screen.getByTestId(FORMFIELD.KATUOSOITE), {
-      target: { value: hankkeenOsoite },
-    });
-
-    await user.click(screen.getByRole('radio', { name: 'Suunnittelu' }));
-
-    await user.click(screen.getByRole('checkbox', { name: 'Hanke on YKT-hanke' }));
-  });
-
   test('Form should be populated correctly ', () => {
     render(
       <HankeForm
