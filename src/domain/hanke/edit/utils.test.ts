@@ -39,4 +39,13 @@ test('Should get correct default area name based on other areas', () => {
   ]);
 
   expect(secondAreaName).toBe('Hankealue 31');
+
+  const thirdAreaName = getAreaDefaultName([
+    getArea('Hankealue 1'),
+    getArea('Hankealue 3'),
+    getArea('Hankealue 7'),
+    getArea('Oma alue 9'),
+  ]);
+
+  expect(thirdAreaName).toBe('Hankealue 8');
 });

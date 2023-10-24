@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Tab, TabList, TabPanel, Tabs } from 'hds-react';
@@ -16,6 +16,8 @@ import useSelectableTabs from '../../../common/hooks/useSelectableTabs';
 import useHighlightArea from '../../map/hooks/useHighlightArea';
 import useAddressCoordinate from '../../map/hooks/useAddressCoordinate';
 import useFieldArrayWithStateUpdate from '../../../common/hooks/useFieldArrayWithStateUpdate';
+import { HankeAlue } from '../../types/hanke';
+import { getAreaDefaultName } from './utils';
 
 function getEmptyArea(feature: Feature): Omit<HankeAlueFormState, 'id' | 'geometriat'> {
   return {
@@ -32,7 +34,7 @@ function getEmptyArea(feature: Feature): Omit<HankeAlueFormState, 'id' | 'geomet
 
 const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
   const { t } = useTranslation();
-  const { setValue, trigger, watch } = useFormContext();
+  const { setValue, trigger, watch, getValues } = useFormContext();
   const {
     fields: hankeAlueet,
     append,
@@ -47,6 +49,18 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
   const { tabRefs } = useSelectableTabs(hankeAlueet.length, { selectLastTabOnChange: true });
 
   const higlightArea = useHighlightArea();
+
+  useEffect(() => {
+    // If there are hanke areas with no name on unmount, set default names for them
+    return function cleanup() {
+      const areas = getValues(FORMFIELD.HANKEALUEET) as HankeAlue[];
+      areas.forEach((area, i) => {
+        if (!area.nimi) {
+          setValue(`${FORMFIELD.HANKEALUEET}.${i}.nimi`, getAreaDefaultName(areas));
+        }
+      });
+    };
+  }, [getValues, setValue]);
 
   const handleAddFeature = useCallback(
     (feature: Feature<Geometry>) => {

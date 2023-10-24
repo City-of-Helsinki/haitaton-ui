@@ -8,7 +8,6 @@ import { formatFeaturesToHankeGeoJSON, getFeatureFromHankeGeometry } from '../..
 import { getSurfaceArea } from '../../../common/components/map/utils';
 import { Application } from '../../application/types/application';
 import { isApplicationPending } from '../../application/utils';
-import { maxBy } from 'lodash';
 
 export function getAreasMinStartDate(areas: HankeAlue[] | undefined) {
   const areaStartDates = areas?.map((alue) => {
