@@ -1,4 +1,4 @@
-import { removeDuplicateAttachments } from './attachments';
+import { removeDuplicateAttachments } from '../../common/components/fileUpload/utils';
 import { ApplicationAttachmentMetadata } from './types/application';
 
 const attachments: ApplicationAttachmentMetadata[] = [
