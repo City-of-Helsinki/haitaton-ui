@@ -125,9 +125,10 @@ export function getAreaDefaultName(areas?: HankeAlueFormState[]) {
   }
 
   const defaultNameRegExp = /^Hankealue \d+$/;
-  const areasWithDefaultName = areas.filter((area) => defaultNameRegExp.test(area.nimi || ''));
-  const areaWithMaxName = maxBy(areasWithDefaultName, (area) => getAreaNumber(area));
-  const maxAreaNumber: number = getAreaNumber(areaWithMaxName);
+  const maxAreaNumber = areas
+    .filter((area) => defaultNameRegExp.test(area.nimi || ''))
+    .map(getAreaNumber)
+    .reduce((a, b) => Math.max(a, b), 0);
 
   return `Hankealue ${maxAreaNumber + 1}`;
 }
