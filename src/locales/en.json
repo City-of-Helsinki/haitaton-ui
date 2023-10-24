@@ -362,12 +362,6 @@
       "OHJELMOINTI": "Programming",
       "RAKENTAMINEN": "Construction"
     },
-    "suunnitteluVaihe": {
-      "YLEIS_TAI_HANKE": "General or project planning",
-      "KATUSUUNNITTELU_TAI_ALUEVARAUS": "Street planning or planning of area reservations",
-      "RAKENNUS_TAI_TOTEUTUS": "Construction planning or implementation planning",
-      "TYOMAAN_TAI_HANKKEEN_AIKAINEN": "Early planning of a worksite or project"
-    },
     "tyomaaTyyppi": {
       "VESI": "Water",
       "VIEMARI": "Sewer",
@@ -473,7 +467,6 @@
       "nimi": "Project name",
       "vaihe": "Project phase",
       "kuvaus": "Project description",
-      "suunnitteluVaihe": "Project planning phase",
       "alkuPvm": "Project start date",
       "loppuPvm": "Project end date",
       "tyomaaTyyppi": "Worksite type",
@@ -504,9 +497,8 @@
       "onYKTHanke": "Joint municipal worksite – a joint project under the cooperation agreement. In addition to the City of Helsinki’s Urban Environment Division, the parties are Helsinki City Transport (HKL), Helsinki Region Environmental Services (HSY), Helen Ltd, Helen Electricity Network Ltd, Auris Kaasunjakelu Ltd and the communications network operators Cinia Ltd, DNA Plc, Elisa Plc and Telia Finland Plc. The aim of the Shared Public Utility Site (YKT) partnership is to streamline the construction of public spaces in the city and adapt the contracting parties’ individual projects into jointly implemented projects that improve the quality and supply of infrastructure services.",
       "alkuPvm": "Start date of project implementation (Note! Implementation in a public area, not, for example, on a plot)",
       "loppuPvm": "End date of project implementation (Note! Implementation in a public area, not, for example, on the side of a plot)",
-      "vaihe": "A description of the progress of the project which will be updated as the project progresses. The programming phase is the initial project planning or pre-planning phase. The planning phase has subphases depending on the level of detail of the planning. In terms of the permit application process, the project is in the planning phase until it receives an execution permit from the city. At the construction phase, the project has received a permit from the city. Haitaton does not cover the permit application, construction or completion/maintenance/handover phases of the project.",
+      "vaihe": "A description of the progress of the project which will be updated as the project progresses. The programming phase is the initial project planning or pre-planning phase. In terms of the permit application process, the project is in the planning phase until it receives an execution permit from the city. At the construction phase, the project has received a permit from the city. Haitaton does not cover the permit application, construction or completion/maintenance/handover phases of the project.",
       "kuvaus": "Description of the main content and objectives of the project. (Note! Implementation in a public area, not, for example, on the side of a plot)",
-      "suunnitteluVaihe": "A subphase refining the planning phase, which will be updated as the project progresses.",
       "omistajat": "The project owner is responsible for the entire project from its beginning to its end/completion/handover.",
       "arvioijat": "The project analyst or assessor may be the project owner or another party authorised by the owner (for example, a project planning consultant or contractor not affiliated with the owner).",
       "toteuttajat": "The person responsible for implementing the project may be the project owner or another party authorised by the owner (for example, a contractor not affiliated with the owner).",
@@ -775,7 +767,6 @@
     "labels": {
       "kuvaus": "Project description",
       "hankeVaihe": "Project phase",
-      "suunnitteluVaihe": "Planning phase",
       "katuosoite": "Street address",
       "avaaKartalla": "Open on a map",
       "hankkeenKesto": "Project duration",

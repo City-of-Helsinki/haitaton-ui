@@ -362,12 +362,6 @@
       "OHJELMOINTI": "Ohjelmointi",
       "RAKENTAMINEN": "Rakentaminen"
     },
-    "suunnitteluVaihe": {
-      "YLEIS_TAI_HANKE": "Yleis- tai hankesuunnittelu",
-      "KATUSUUNNITTELU_TAI_ALUEVARAUS": "Katusuunnittelu tai aluevarauksen suunnittelu",
-      "RAKENNUS_TAI_TOTEUTUS": "Rakennus- tai toteutussuunnittelu",
-      "TYOMAAN_TAI_HANKKEEN_AIKAINEN": "Työmaan tai hankkeen aikainen suunnittelu"
-    },
     "tyomaaTyyppi": {
       "VESI": "Vesi",
       "VIEMARI": "Viemäri",
@@ -475,7 +469,6 @@
       "nimi": "Hankkeen nimi",
       "vaihe": "Hankkeen vaihe",
       "kuvaus": "Hankkeen kuvaus",
-      "suunnitteluVaihe": "Hankkeen suunnitteluvaihe",
       "alkuPvm": "Hankkeen alkupäivä",
       "loppuPvm": "Hankkeen loppupäivä",
       "tyomaaTyyppi": "Työn tyyppi",
@@ -506,9 +499,8 @@
       "onYKTHanke": "Yhteinen kunnallistekninen työmaa – yhteistoimintasopimuksen mukainen yhteishanke. Osapuolia ovat Helsingin kaupungin kaupunkiympäristön toimialan lisäksi Helsingin kaupungin liikenne -liikelaitos (HKL), Helsingin seudun ympäristöpalvelut -kuntayhtymä HSY,  Helen Oy, Helen Sähköverkko Oy, Auris Kaasunjakelu Oy sekä viestintäverkko operaattorit Cinia Oy, DNA Oyj, Elisa Oyj ja Telia Finland Oyj. YKT -yhteistoiminnalla pyritään sujuvoittamaan kaupungissa tapahtuvaa yleisten alueiden rakentamista ja sovittamaan sopijaosapuolten erillishankkeet yhteisesti toteutettaviksi, infrapalvelujen laatua ja tarjontaa parantaviksi hankkeiksi.",
       "alkuPvm": "Hankkeen toteutuksen aloituspäivä (Huom! Yleisellä alueella tapahtuva toteutus, ei esimerkiksi tontin puolella tapahtuva toteutus)",
       "loppuPvm": "Hankkeen toteutuksen lopetuspäivä (Huom! Yleisellä alueella tapahtuva toteutus, ei esimerkiksi tontin puolella tapahtuva toteutus)",
-      "vaihe": "Hankkeen etenemisen tilan kuvaus, jota päivitetään hankkeen edetessä. Ohjelmointivaihe on alustava hankesuunnittelu- tai esisuunnitteluvaihe. Suunnitteluvaiheessa on alavaiheita suunnittelutason tarkkuuden mukaan. Luvanhakuprosessin kannalta hanke on suunnitteluvaiheessa niin kauan, kunnes se saa toteutusluvan kaupungilta. Rakentamisvaiheessa hanke on saanut luvan kaupungilta. Haitaton ei käsittele luvanhaun, rakentamisvaiheen tai hankkeen valmistumisen/ylläpidon/luovutuksen vaiheita.",
+      "vaihe": "Hankkeen etenemisen tilan kuvaus, jota päivitetään hankkeen edetessä. Ohjelmointivaihe on alustava hankesuunnittelu- tai esisuunnitteluvaihe. Luvanhakuprosessin kannalta hanke on suunnitteluvaiheessa niin kauan, kunnes se saa toteutusluvan kaupungilta. Rakentamisvaiheessa hanke on saanut luvan kaupungilta. Haitaton ei käsittele luvanhaun, rakentamisvaiheen tai hankkeen valmistumisen/ylläpidon/luovutuksen vaiheita.",
       "kuvaus": "Hankkeen keskeisen sisällön ja tavoitteiden kuvaus. (Huom! Yleisellä alueella tapahtuva toteutus, ei esimerkiksi tontin puolella tapahtuva toteutus)",
-      "suunnitteluVaihe": "Suunnitteluvaihetta tarkentava alavaihe, jota päivitetään hankkeen edetessä.",
       "omistajat": "Hankkeen omistaja vastaa koko hankkeesta sen alusta aina loppumiseen / valmistumiseen / luovutukseen asti.",
       "arvioijat": "Hankkeen analysoija tai arvioija voi olla hankkeen omistaja tai omistajan valtuuttama muu taho (esimerkiksi omistajatahon ulkopuolinen hankkeen suunnittelijakonsultti tai urakoitsija).",
       "toteuttajat": "Hankkeen toteutuksesta vastaava voi olla hankkeen omistaja tai omistajan valtuuttama muu taho (esimerkiksi omistajatahon ulkopuolinen urakoitsija).",
@@ -779,7 +771,6 @@
     "labels": {
       "kuvaus": "Hankkeen kuvaus",
       "hankeVaihe": "Hankkeen vaihe",
-      "suunnitteluVaihe": "Suunnitteluvaihe",
       "katuosoite": "Katuosoite",
       "avaaKartalla": "Avaa kartalla",
       "hankkeenKesto": "Hankkeen kesto",

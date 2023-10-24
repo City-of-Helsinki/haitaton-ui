@@ -12,7 +12,6 @@ export enum FORMFIELD {
   NIMI = 'nimi',
   KUVAUS = 'kuvaus',
   KATUOSOITE = 'tyomaaKatuosoite',
-  SUUNNITTELUVAIHE = 'suunnitteluVaihe',
   TYOMAATYYPPI = 'tyomaaTyyppi',
   HAITTA_ALKU_PVM = 'haittaAlkuPvm',
   HAITTA_LOPPU_PVM = 'haittaLoppuPvm',

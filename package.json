@@ -13,7 +13,7 @@
     "build-and-serve": "yarn run build && yarn run serve",
     "update-runtime-env": "ts-node -P ./scripts/tsconfig.json --files scripts/update-runtime-env.ts",
     "test": "TEST=true yarn run update-runtime-env && DEBUG_PRINT_LIMIT=50000 react-scripts test",
-    "testCI": "CI=true react-scripts test",
+    "testCI": "TEST=true yarn run update-runtime-env && CI=TRUE DEBUG_PRINT_LIMIT=50000 react-scripts test",
     "eject": "react-scripts eject",
     "type-check": "tsc --pretty --noEmit",
     "format": "prettier --write",
