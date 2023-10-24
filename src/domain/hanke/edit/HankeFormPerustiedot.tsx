@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { Tooltip, TextArea, SelectionGroup, RadioButton } from 'hds-react';
 import { $enum } from 'ts-enum-util';
@@ -20,13 +20,12 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
   formData,
 }) => {
   const { t } = useTranslation();
-  const { watch, setValue } = useFormContext();
+  const { watch } = useFormContext();
   const { JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();
   useFormPage();
 
   // Subscribe to vaihe changes in order to update the selected radio button
   const hankeVaiheField = watch(FORMFIELD.VAIHE);
-  useEffect(() => {}, [hankeVaiheField, setValue]);
 
   return (
     <div className="form0">
