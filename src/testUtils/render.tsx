@@ -42,11 +42,17 @@ const AllTheProviders = ({ children }: Props) => {
   );
 };
 
-const customRender = (ui: React.ReactElement, options: RenderOptions = {}, route = '/') => {
+const customRender = (
+  ui: React.ReactElement,
+  options: RenderOptions = {},
+  route = '/',
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  userEventOptions?: any,
+) => {
   window.history.pushState({}, 'Test page', route);
   window.scrollTo = function () {};
   return {
-    user: userEvent.setup(),
+    user: userEvent.setup(userEventOptions),
     ...render(ui, {
       wrapper: AllTheProviders as React.ComponentType<React.PropsWithChildren<unknown>>,
       ...options,

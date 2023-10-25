@@ -51,7 +51,7 @@
       },
       "fileUpload": {
         "loadingText": "Tallennetaan tiedostoja",
-        "successNotification": "{{successful}}/{{total}} tiedostoa tallennettu"
+        "successNotification": "{{successful}}/{{total}} tiedosto(a) tallennettu"
       }
     },
     "error": "Tapahtui virhe. Yritä uudestaan.",

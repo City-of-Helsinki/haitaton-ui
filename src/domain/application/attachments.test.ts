@@ -47,8 +47,13 @@ test('Should filter out existing attachments', () => {
   ];
 
   expect(removeDuplicateAttachments(files, attachments)).toMatchObject([
-    { name: 'Haitaton_liite_uusi.pdf' },
-    { name: 'Haitaton_liite_uusi_2.jpg' },
+    [{ name: 'Haitaton_liite_uusi.pdf' }, { name: 'Haitaton_liite_uusi_2.jpg' }],
+    [
+      { name: 'Haitaton_liite.png' },
+      { name: 'Haitaton_liite_2.txt' },
+      { name: 'Haitaton_liite_3.jpg' },
+      { name: 'Haitaton_liite_4.pdf' },
+    ],
   ]);
 });
 
@@ -60,14 +65,20 @@ test('Should not filter out anything from only new files', () => {
   ];
 
   expect(removeDuplicateAttachments(files, attachments)).toMatchObject([
-    { name: 'Haitaton_liite_uusi.pdf' },
-    { name: 'Haitaton_liite_uusi_2.jpg' },
-    { name: 'Haitaton_liite_uusi_3.jpg' },
+    [
+      { name: 'Haitaton_liite_uusi.pdf' },
+      { name: 'Haitaton_liite_uusi_2.jpg' },
+      { name: 'Haitaton_liite_uusi_3.jpg' },
+    ],
+    [],
   ]);
 
   expect(removeDuplicateAttachments(files, [])).toMatchObject([
-    { name: 'Haitaton_liite_uusi.pdf' },
-    { name: 'Haitaton_liite_uusi_2.jpg' },
-    { name: 'Haitaton_liite_uusi_3.jpg' },
+    [
+      { name: 'Haitaton_liite_uusi.pdf' },
+      { name: 'Haitaton_liite_uusi_2.jpg' },
+      { name: 'Haitaton_liite_uusi_3.jpg' },
+    ],
+    [],
   ]);
 });

@@ -233,4 +233,8 @@ export const handlers = [
   rest.post(`${apiUrl}/kayttajat/:kayttajaId/kutsu`, async (req, res, ctx) => {
     return res(ctx.delay(), ctx.status(204));
   }),
+
+  rest.post(`${apiUrl}/hakemukset/:id/liitteet`, async (req, res, ctx) => {
+    return res(ctx.delay(), ctx.status(200));
+  }),
 ];

@@ -290,7 +290,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     }
 
     // Filter out attachments that have same names as those that have already been sent
-    const filesToSend = removeDuplicateAttachments(newAttachments, existingAttachments);
+    const [filesToSend] = removeDuplicateAttachments(newAttachments, existingAttachments);
 
     const mutations = filesToSend.map((file) =>
       attachmentUploadMutation.mutateAsync({

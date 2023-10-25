@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { QueryKey, useMutation, useQueryClient } from 'react-query';
+import { useMutation } from 'react-query';
 import { FileInput, IconCheckCircleFill, LoadingSpinner } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { differenceBy } from 'lodash';
@@ -11,14 +11,14 @@ import Text from '../text/Text';
 import styles from './FileUpload.module.scss';
 import { removeDuplicateAttachments } from './utils';
 
-function useDroppedFiles() {
+function useDragAndDropFiles() {
   const ref = useRef<HTMLDivElement>(null);
-  const droppedFiles = useRef<File[]>([]);
+  const files = useRef<File[]>([]);
 
   useEffect(() => {
     function dropHandler(ev: DragEvent) {
       if (ev.dataTransfer) {
-        droppedFiles.current = Array.from(ev.dataTransfer.files);
+        files.current = Array.from(ev.dataTransfer.files);
       }
     }
 
@@ -27,7 +27,7 @@ function useDroppedFiles() {
     }
   }, []);
 
-  return { ref, droppedFiles };
+  return { ref, files };
 }
 
 function SuccessNotification({
@@ -52,48 +52,47 @@ function SuccessNotification({
   );
 }
 
-// TODO: Kutsujen perumisen voisi tehdä omassa
-// subtaskissaan, se on vielä mysteeri miten tehdään
-
 type Props<T extends AttachmentMetadata> = {
-  fileInputId: string;
-  accept: string | undefined;
-  maxSize: number | undefined;
-  dragAndDrop: boolean | undefined;
-  multiple: boolean | undefined;
-  queryKey: QueryKey;
+  /** id of the input element */
+  id: string;
+  /** Label for the input */
+  label?: string;
+  /** A comma-separated list of unique file type specifiers describing file types to allow.  */
+  accept?: string;
+  /** Maximum file size in bytes. */
+  maxSize?: number;
+  /** If true, the file input will have a drag and drop area */
+  dragAndDrop?: boolean;
+  /** A Boolean that indicates that more than one file can be chosen */
+  multiple?: boolean;
   existingAttachments?: T[];
+  /** Function that is given to upload mutation, handling the sending of file to API */
   uploadFunction: (file: File) => Promise<T>;
   onUpload?: (isUploading: boolean) => void;
 };
 
 export default function FileUpload<T extends AttachmentMetadata>({
-  fileInputId,
+  id,
+  label,
   accept,
   maxSize,
   dragAndDrop,
   multiple,
-  queryKey,
   existingAttachments = [],
   uploadFunction,
   onUpload,
 }: Props<T>) {
   const { t } = useTranslation();
   const locale = useLocale();
-  const queryClient = useQueryClient();
   const [newFiles, setNewFiles] = useState<File[]>([]);
   const [invalidFiles, setInvalidFiles] = useState<File[]>([]);
   const uploadMutation = useMutation(uploadFunction, {
     onError(error: AxiosError, file) {
-      // TODO: Invalid files pitäisi ehkä olla array of objects,
-      // joissa olisi virheen syy ja tiedosto,
-      // tai niin, että se on array of strings, joissa jokainen item on se
-      // error teksti
       setInvalidFiles((files) => [...files, file]);
     },
   });
   const [filesUploading, setFilesUploading] = useState(false);
-  const { ref: dropZoneRef, droppedFiles } = useDroppedFiles();
+  const { ref: dropZoneRef, files: dragAndDropFiles } = useDragAndDropFiles();
 
   async function uploadFiles(files: File[]) {
     setFilesUploading(true);
@@ -108,7 +107,6 @@ export default function FileUpload<T extends AttachmentMetadata>({
     await Promise.allSettled(mutations);
 
     setFilesUploading(false);
-    queryClient.invalidateQueries(queryKey);
     if (onUpload) {
       onUpload(false);
     }
@@ -116,19 +114,19 @@ export default function FileUpload<T extends AttachmentMetadata>({
 
   function handleFilesChange(files: File[]) {
     // Filter out attachments that have same names as those that have already been sent
-    const filesToSend = removeDuplicateAttachments(files, existingAttachments);
+    const [filesToUpload] = removeDuplicateAttachments(files, existingAttachments);
 
     // Determine which files haven't passed HDS FileInput validation by comparing
     // files in input element or files dropped into drop zone to files received as
     // argument to this onChange function
-    const inputElem = document.getElementById(fileInputId) as HTMLInputElement;
+    const inputElem = document.getElementById(id) as HTMLInputElement;
     const inputElemFiles = inputElem.files ? Array.from(inputElem.files) : [];
-    const allFiles = inputElemFiles.length > 0 ? inputElemFiles : droppedFiles.current;
-    const invalidFilesArr = differenceBy(allFiles, filesToSend, 'name');
+    const allFiles = inputElemFiles.length > 0 ? inputElemFiles : dragAndDropFiles.current;
+    const invalidFilesArr = differenceBy(allFiles, filesToUpload, 'name');
 
     setNewFiles(allFiles);
     setInvalidFiles(invalidFilesArr);
-    uploadFiles(filesToSend);
+    uploadFiles(filesToUpload);
   }
 
   return (
@@ -143,16 +141,15 @@ export default function FileUpload<T extends AttachmentMetadata>({
           </Flex>
         ) : (
           <FileInput
-            id={fileInputId}
+            id={id}
             accept={accept}
-            label={t('form:labels:dragAttachments')}
+            label={label ?? t('form:labels:dragAttachments')}
             dragAndDropLabel={t('form:labels:dragAttachments')}
             language={locale}
             maxSize={maxSize}
             dragAndDrop={dragAndDrop}
             multiple={multiple}
             onChange={handleFilesChange}
-            defaultValue={[]}
           />
         )}
       </Flex>
