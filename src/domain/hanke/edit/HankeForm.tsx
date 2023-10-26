@@ -14,29 +14,18 @@ import HankeFormHaitat from './HankeFormHaitat';
 import HankeFormSummary from './HankeFormSummary';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
-import { HankeData, HANKE_SAVETYPE } from '../../types/hanke';
+import { HankeData } from '../../types/hanke';
 import { convertFormStateToHankeData } from './utils';
 import api from '../../api/api';
 import MultipageForm from '../../forms/MultipageForm';
 import FormActions from '../../forms/components/FormActions';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import ApplicationAddDialog from '../../application/components/ApplicationAddDialog';
+import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
 
-async function saveHanke({
-  data,
-  saveType = HANKE_SAVETYPE.DRAFT,
-}: {
-  data: HankeDataFormState;
-  saveType?: HANKE_SAVETYPE;
-  navigateTo?: string;
-}) {
-  if (!data.alueet?.length) {
-    return data;
-  }
-
+async function saveHanke(data: HankeDataFormState) {
   const requestData = {
     ...convertFormStateToHankeData(data),
-    saveType,
   };
 
   const response = data.hankeTunnus
@@ -62,6 +51,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   const { t } = useTranslation();
   const { HANKEPORTFOLIO } = useLocalizedRoutes();
   const navigate = useNavigate();
+  const { setNotification } = useGlobalNotification();
   const [showNotification, setShowNotification] = useState<FormNotification | null>(null);
   const [showAddApplicationDialog, setShowAddApplicationDialog] = useState(false);
   const formContext = useForm<HankeDataFormState>({
@@ -76,15 +66,15 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const {
     register,
-    formState: { errors, isDirty, isValid },
+    formState: { errors, isDirty },
     getValues,
     setValue,
-    handleSubmit,
   } = formContext;
 
   const isNewHanke = !formData.hankeTunnus;
 
   const formValues = getValues();
+  const isHankePublic = formValues.status === 'PUBLIC';
   const formHeading = isNewHanke
     ? t('hankeForm:pageHeaderNew')
     : t('hankeForm:pageHeaderEdit', { hankeTunnus: formData.hankeTunnus });
@@ -96,36 +86,41 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     onError() {
       setShowNotification('error');
     },
-    onSuccess(data, { navigateTo }) {
+    onSuccess(data) {
       setValue('hankeTunnus', data.hankeTunnus);
       setValue('tormaystarkasteluTulos', data.tormaystarkasteluTulos);
-      if (data.alueet) {
-        setShowNotification('success');
-      }
-      if (navigateTo) {
-        navigate(navigateTo);
-      }
+      setValue('status', data.status);
+      setShowNotification('success');
     },
   });
 
-  function saveDraft() {
-    hankeMutation.mutate({ data: getValues() });
-  }
-
-  function saveDraftAndQuit() {
-    hankeMutation.mutate({ data: getValues(), navigateTo: HANKEPORTFOLIO.path });
-  }
-
   function save() {
-    hankeMutation.mutate({
-      data: getValues(),
-      saveType: HANKE_SAVETYPE.SUBMIT,
-      navigateTo: HANKEPORTFOLIO.path,
+    hankeMutation.mutate(getValues());
+  }
+
+  function saveAndQuit() {
+    hankeMutation.mutate(getValues(), {
+      onSuccess(data) {
+        setNotification(true, {
+          position: 'top-right',
+          dismissible: true,
+          autoClose: true,
+          autoCloseDuration: 8000,
+          label: t('hankeForm:saveAndQuitSuccessHeader'),
+          message: t('hankeForm:saveAndQuitSuccessText', {
+            name: data.nimi,
+            hankeTunnus: data.hankeTunnus,
+          }),
+          type: 'success',
+          closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+        });
+        navigate(`${HANKEPORTFOLIO.path}/${data.hankeTunnus}`);
+      },
     });
   }
 
   function saveAndAddApplication() {
-    hankeMutation.mutate({ data: getValues(), saveType: HANKE_SAVETYPE.SUBMIT });
+    save();
     setShowAddApplicationDialog(true);
   }
 
@@ -174,12 +169,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
         hanke={getValues() as HankeData}
       />
       <div className="hankeForm">
-        <MultipageForm
-          heading={formHeading}
-          formSteps={formSteps}
-          onStepChange={saveDraft}
-          onSubmit={handleSubmit(save)}
-        >
+        <MultipageForm heading={formHeading} formSteps={formSteps} onStepChange={save}>
           {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
             const lastStep = activeStepIndex === formSteps.length - 1;
             return (
@@ -202,26 +192,31 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
                   <Button
                     variant="supplementary"
                     iconLeft={<IconSaveDiskette aria-hidden="true" />}
-                    onClick={saveDraftAndQuit}
+                    onClick={saveAndQuit}
                     data-testid="save-form-btn"
+                    isLoading={hankeMutation.isLoading}
+                    loadingText={t('common:buttons:savingText')}
                   >
                     {t('hankeForm:saveDraftButton')}
                   </Button>
                 )}
                 {lastStep && (
                   <>
-                    <Button
-                      variant="secondary"
-                      iconLeft={<IconPlusCircle aria-hidden />}
-                      onClick={saveAndAddApplication}
-                      disabled={!isValid}
-                    >
-                      {t('hankeForm:saveAndAddButton')}
-                    </Button>
+                    {isHankePublic && (
+                      <Button
+                        variant="secondary"
+                        iconLeft={<IconPlusCircle aria-hidden />}
+                        onClick={saveAndAddApplication}
+                      >
+                        {t('hankeForm:saveAndAddButton')}
+                      </Button>
+                    )}
                     <Button
                       variant="primary"
                       iconLeft={<IconSaveDiskette aria-hidden />}
-                      type="submit"
+                      onClick={saveAndQuit}
+                      isLoading={hankeMutation.isLoading}
+                      loadingText={t('common:buttons:savingText')}
                     >
                       {t('hankeForm:saveButton')}
                     </Button>

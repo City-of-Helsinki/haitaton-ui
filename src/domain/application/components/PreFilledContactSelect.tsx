@@ -24,7 +24,9 @@ const PreFilledContactSelect: React.FC<{
 
   const preFilledContactOptions: PreFilledContactOption[] = allHankeContacts.flatMap(
     (hankeContacts) =>
-      hankeContacts ? hankeContacts.map((contact) => ({ label: contact.nimi, value: contact })) : []
+      hankeContacts
+        ? hankeContacts.map((contact) => ({ label: contact.nimi, value: contact }))
+        : [],
   );
 
   function handlePreFilledContactChange(option: PreFilledContactOption | undefined) {
@@ -43,7 +45,7 @@ const PreFilledContactSelect: React.FC<{
         country: 'FI',
         email: value.email,
         phone: value.puhelinnumero || '',
-        registryKey: (isHankeContact(value) && value.ytunnusTaiHetu) || null,
+        registryKey: (isHankeContact(value) && value.ytunnus) || null,
         ovt: null,
         invoicingOperator: null,
         sapCustomerNumber: null,

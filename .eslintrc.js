@@ -28,7 +28,7 @@ module.exports = {
     'object-curly-spacing': ['warn', 'always'],
     'react/jsx-props-no-spreading': 'off',
     'import/prefer-default-export': 'off',
-    'react-hooks/exhaustive-deps': 'off',
+    'react-hooks/exhaustive-deps': 'warn',
     'no-underscore-dangle': ['error', { allow: ['__typename', '_env_'] }],
     'no-param-reassign': [
       'error',

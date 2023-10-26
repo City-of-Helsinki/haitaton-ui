@@ -22,12 +22,12 @@ import {
   convertFormStateToApplicationData,
   findOrdererKey,
 } from './utils';
-import { changeFormStep, isPageValid } from '../forms/utils';
+import { changeFormStep, getFieldPaths, isPageValid } from '../forms/utils';
 import { isApplicationDraft, saveApplication, sendApplication } from '../application/utils';
 import { HankeContacts, HankeData } from '../types/hanke';
 import { ApplicationCancel } from '../application/components/ApplicationCancel';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
-import useNavigateToApplicationList from '../hanke/hooks/useNavigateToApplicationList';
+import { useNavigateToApplicationList } from '../hanke/hooks/useNavigateToApplicationList';
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 import useApplicationSendNotification from '../application/hooks/useApplicationSendNotification';
 import useHanke from '../hanke/hooks/useHanke';
@@ -77,11 +77,11 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         },
         contacts: [
           {
-            email: '',
             firstName: '',
             lastName: '',
-            orderer: true,
+            email: '',
             phone: '',
+            orderer: true,
           },
         ],
       },
@@ -105,11 +105,11 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         },
         contacts: [
           {
-            email: '',
             firstName: '',
             lastName: '',
-            orderer: false,
+            email: '',
             phone: '',
+            orderer: false,
           },
         ],
       },
@@ -316,17 +316,28 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
 
   const ordererKey = findOrdererKey(getValues('applicationData'));
 
+  const customer = getValues('applicationData.customerWithContacts.customer');
+  const customersContacts = getValues('applicationData.customerWithContacts.contacts');
+  const contractor = getValues('applicationData.contractorWithContacts.customer');
+  const contractorsContacts = getValues('applicationData.contractorWithContacts.contacts');
+  const propertyDeveloper = getValues('applicationData.propertyDeveloperWithContacts.customer');
+  const propertyDevelopersContacts = getValues(
+    'applicationData.propertyDeveloperWithContacts.contacts',
+  );
+  const representative = getValues('applicationData.representativeWithContacts.customer');
+  const representativesContacts = getValues('applicationData.representativeWithContacts.contacts');
+
   // Fields that are validated in each page when moving forward in form
   const pageFieldsToValidate: FieldPath<JohtoselvitysFormValues>[][] = useMemo(
     () => [
       // Basic information page
       [
         'applicationData.name',
-        'applicationData.postalAddress',
+        'applicationData.postalAddress.streetAddress.streetName',
+        'applicationData.constructionWork',
+        'applicationData.rockExcavation',
         'applicationData.workDescription',
         `applicationData.${ordererKey}.contacts`,
-        'applicationData.rockExcavation',
-        'applicationData.constructionWork',
       ],
       // Areas page
       [
@@ -337,15 +348,53 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
       ],
       // Contacts page
       [
-        'applicationData.customerWithContacts',
-        'applicationData.contractorWithContacts',
-        'applicationData.propertyDeveloperWithContacts',
-        'applicationData.representativeWithContacts',
+        ...getFieldPaths<JohtoselvitysFormValues>(
+          customer,
+          'applicationData.customerWithContacts.customer',
+        ),
+        ...getFieldPaths<JohtoselvitysFormValues>(
+          customersContacts,
+          'applicationData.customerWithContacts.contacts',
+        ),
+        ...getFieldPaths<JohtoselvitysFormValues>(
+          contractor,
+          'applicationData.contractorWithContacts.customer',
+        ),
+        ...getFieldPaths<JohtoselvitysFormValues>(
+          contractorsContacts,
+          'applicationData.contractorWithContacts.contacts',
+        ),
+        ...getFieldPaths<JohtoselvitysFormValues>(
+          propertyDeveloper,
+          'applicationData.propertyDeveloperWithContacts.customer',
+        ),
+        ...getFieldPaths<JohtoselvitysFormValues>(
+          propertyDevelopersContacts,
+          'applicationData.propertyDeveloperWithContacts.contacts',
+        ),
+        ...getFieldPaths<JohtoselvitysFormValues>(
+          representative,
+          'applicationData.representativeWithContacts.customer',
+        ),
+        ...getFieldPaths<JohtoselvitysFormValues>(
+          representativesContacts,
+          'applicationData.representativeWithContacts.contacts',
+        ),
       ],
       // Attachments page
       ['attachmentNumber'],
     ],
-    [ordererKey],
+    [
+      ordererKey,
+      customer,
+      customersContacts,
+      contractor,
+      contractorsContacts,
+      propertyDeveloper,
+      propertyDevelopersContacts,
+      representative,
+      representativesContacts,
+    ],
   );
 
   const formSteps = useMemo(() => {

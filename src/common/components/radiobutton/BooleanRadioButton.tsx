@@ -15,7 +15,7 @@ type Props<T extends FieldValues> = {
  */
 const BooleanRadioButton = <T extends FieldValues>({ name, id, label, value }: Props<T>) => {
   const {
-    field: { onChange, onBlur, value: inputValue },
+    field: { onChange, onBlur, value: inputValue, ref },
   } = useController({ name });
 
   return (
@@ -30,6 +30,7 @@ const BooleanRadioButton = <T extends FieldValues>({ name, id, label, value }: P
       value={value.toString()}
       checked={value === inputValue}
       data-testid={id}
+      ref={ref}
     />
   );
 };

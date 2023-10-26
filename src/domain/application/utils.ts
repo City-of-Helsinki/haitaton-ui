@@ -1,6 +1,11 @@
 import { TFunction } from 'i18next';
 import api from '../api/api';
-import { AlluStatus, AlluStatusStrings, Application } from './types/application';
+import {
+  AlluStatus,
+  AlluStatusStrings,
+  Application,
+  ApplicationDeletionResult,
+} from './types/application';
 
 /**
  * Save application to Haitaton backend
@@ -47,7 +52,7 @@ export function isApplicationDraft(alluStatus: AlluStatus | null) {
 export async function cancelApplication(applicationId: number | null) {
   if (applicationId === null) return null;
 
-  const response = await api.delete<Application>(`/hakemukset/${applicationId}`);
+  const response = await api.delete<ApplicationDeletionResult>(`/hakemukset/${applicationId}`);
   return response.data;
 }
 

@@ -8,14 +8,6 @@ export enum HANKE_VAIHE {
 }
 export type HANKE_VAIHE_KEY = keyof typeof HANKE_VAIHE;
 
-export enum HANKE_SUUNNITTELUVAIHE {
-  YLEIS_TAI_HANKE = 'YLEIS_TAI_HANKE',
-  KATUSUUNNITTELU_TAI_ALUEVARAUS = 'KATUSUUNNITTELU_TAI_ALUEVARAUS',
-  RAKENNUS_TAI_TOTEUTUS = 'RAKENNUS_TAI_TOTEUTUS',
-  TYOMAAN_TAI_HANKKEEN_AIKAINEN = 'TYOMAAN_TAI_HANKKEEN_AIKAINEN',
-}
-export type HANKE_SUUNNITTELUVAIHE_KEY = keyof typeof HANKE_SUUNNITTELUVAIHE;
-
 export enum HANKE_TYOMAATYYPPI {
   VESI = 'VESI',
   VIEMARI = 'VIEMARI',
@@ -23,7 +15,6 @@ export enum HANKE_TYOMAATYYPPI {
   SAHKO = 'SAHKO',
   TIETOLIIKENNE = 'TIETOLIIKENNE',
   LIIKENNEVALO = 'LIIKENNEVALO',
-  YKT = 'YKT',
   ULKOVALAISTUS = 'ULKOVALAISTUS',
   KAAPPITYO = 'KAAPPITYO',
   KAUKOLAMPO = 'KAUKOLAMPO',
@@ -91,13 +82,6 @@ export enum HANKE_TARINAHAITTA {
 }
 export type HANKE_TARINAHAITTA_KEY = keyof typeof HANKE_TARINAHAITTA;
 
-export enum HANKE_SAVETYPE {
-  AUTO = 'AUTO',
-  DRAFT = 'DRAFT',
-  SUBMIT = 'SUBMIT',
-}
-export type HANKE_SAVETYPE_KEY = keyof typeof HANKE_SAVETYPE;
-
 export enum HANKE_CONTACT_TYPE {
   OMISTAJAT = 'omistajat',
   RAKENNUTTAJAT = 'rakennuttajat',
@@ -111,18 +95,19 @@ export type HankeContactTypeKey =
   | HANKE_CONTACT_TYPE.MUUTTAHOT;
 
 export interface HankeSubContact {
-  nimi: string;
-  osoite?: string;
-  postinumero?: string;
-  postitoimipaikka?: string;
+  etunimi: string;
+  sukunimi: string;
   email: string;
   puhelinnumero: string;
 }
 
-export interface HankeContact extends HankeSubContact {
+export interface HankeContact {
   id: number | null;
   tyyppi: keyof typeof CONTACT_TYYPPI | null;
-  ytunnusTaiHetu: string;
+  nimi: string;
+  email: string;
+  puhelinnumero: string;
+  ytunnus: string | null;
   alikontaktit?: HankeSubContact[];
 }
 
@@ -139,7 +124,7 @@ export type HankeMuuTaho = {
 export type HankeContacts = Array<(HankeContact | HankeMuuTaho)[] | undefined>;
 
 export function isHankeContact(contact: HankeContact | HankeMuuTaho): contact is HankeContact {
-  return (contact as HankeContact).ytunnusTaiHetu !== undefined;
+  return (contact as HankeContact).ytunnus !== undefined;
 }
 
 export enum CONTACT_TYYPPI {
@@ -186,6 +171,14 @@ export enum HANKE_INDEX_STATE {
 
 export type HANKE_INDEX_STATE_KEY = keyof typeof HANKE_INDEX_STATE;
 
+enum HANKE_STATUS {
+  DRAFT = 'DRAFT',
+  PUBLIC = 'PUBLIC',
+  ENDED = 'ENDED',
+}
+
+type HANKE_STATUS_KEY = keyof typeof HANKE_STATUS;
+
 export interface HankeData {
   id: number;
   hankeTunnus: string;
@@ -195,7 +188,6 @@ export interface HankeData {
   alkuPvm: string;
   loppuPvm: string;
   vaihe: HANKE_VAIHE_KEY;
-  suunnitteluVaihe: HANKE_SUUNNITTELUVAIHE_KEY | null;
   tyomaaKatuosoite: string | null;
   tyomaaTyyppi: HANKE_TYOMAATYYPPI_KEY[];
   alueet: HankeAlue[];
@@ -205,7 +197,7 @@ export interface HankeData {
   toteuttajat: Array<HankeContact>;
   muut: Array<HankeMuuTaho>;
   tormaystarkasteluTulos: HankeIndexData | null;
-  saveType: HANKE_SAVETYPE_KEY;
+  status: HANKE_STATUS_KEY;
   version?: number;
   createdBy?: string;
   createdAt?: string;
@@ -220,7 +212,8 @@ export interface HankeIndexData {
   liikennehaittaIndeksi: LiikenneHaittaIndeksi;
   perusIndeksi: number;
   pyorailyIndeksi: number;
-  joukkoliikenneIndeksi: number;
+  linjaautoIndeksi: number;
+  raitiovaunuIndeksi: number;
   tila: HANKE_INDEX_STATE_KEY;
 }
 

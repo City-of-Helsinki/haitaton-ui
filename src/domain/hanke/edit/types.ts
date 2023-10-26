@@ -12,7 +12,6 @@ export enum FORMFIELD {
   NIMI = 'nimi',
   KUVAUS = 'kuvaus',
   KATUOSOITE = 'tyomaaKatuosoite',
-  SUUNNITTELUVAIHE = 'suunnitteluVaihe',
   TYOMAATYYPPI = 'tyomaaTyyppi',
   HAITTA_ALKU_PVM = 'haittaAlkuPvm',
   HAITTA_LOPPU_PVM = 'haittaLoppuPvm',
@@ -36,15 +35,20 @@ export enum CONTACT_FORMFIELD {
   TYYPPI = 'tyyppi',
   ROOLI = 'rooli',
   NIMI = 'nimi',
-  TUNNUS = 'ytunnusTaiHetu',
-  OSOITE = 'osoite',
-  POSTINRO = 'postinumero',
-  POSTITOIMIPAIKKA = 'postitoimipaikka',
+  TUNNUS = 'ytunnus',
   EMAIL = 'email',
   PUHELINNUMERO = 'puhelinnumero',
   ORGANISAATIO = 'organisaatioNimi',
   OSASTO = 'osasto',
   ALIKONTAKTIT = 'alikontaktit',
+}
+
+export enum SUBCONTACT_FORMFIELD {
+  ID = 'id',
+  ETUNIMI = 'etunimi',
+  SUKUNIMI = 'sukunimi',
+  EMAIL = 'email',
+  PUHELINNUMERO = 'puhelinnumero',
 }
 
 export interface HankeAlueFormState extends HankeAlue {

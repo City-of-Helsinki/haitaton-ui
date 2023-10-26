@@ -36,7 +36,7 @@ const TextArea: React.FC<Props> = ({
       control={control}
       defaultValue=""
       shouldUnregister={shouldUnregister}
-      render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
+      render={({ field: { onChange, onBlur, value, ref }, fieldState: { error } }) => {
         return (
           <HdsTextArea
             id={name}
@@ -53,6 +53,7 @@ const TextArea: React.FC<Props> = ({
             required={required}
             disabled={disabled}
             errorText={getInputErrorText(t, error)}
+            ref={ref}
           />
         );
       }}

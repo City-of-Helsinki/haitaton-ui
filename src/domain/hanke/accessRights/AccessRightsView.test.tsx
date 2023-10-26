@@ -6,8 +6,9 @@ import AccessRightsViewContainer from './AccessRightsViewContainer';
 import { server } from '../../mocks/test-server';
 import usersData from '../../mocks/data/users-data.json';
 import { SignedInUser } from '../hankeUsers/hankeUser';
+import * as hankeUsersApi from '../../hanke/hankeUsers/hankeUsersApi';
 
-jest.setTimeout(40000);
+jest.setTimeout(50000);
 
 afterEach(cleanup);
 
@@ -301,4 +302,96 @@ test('Should not be able to remove all rights if user does not have all rights',
   await waitForLoadingToFinish();
 
   expect(screen.getByTestId('kayttooikeustaso-3').querySelector('button')).toBeDisabled();
+});
+
+test('Should show Käyttäjä tunnistautunut text for correct users', async () => {
+  render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.getByTestId('tunnistautunut-0')).toHaveTextContent('Käyttäjä tunnistautunut');
+  expect(screen.getByTestId('tunnistautunut-1')).not.toHaveTextContent('Käyttäjä tunnistautunut');
+  expect(screen.getByTestId('tunnistautunut-2')).toHaveTextContent('Käyttäjä tunnistautunut');
+  expect(screen.getByTestId('tunnistautunut-6')).toHaveTextContent('Käyttäjä tunnistautunut');
+  expect(screen.getByTestId('tunnistautunut-7')).toHaveTextContent('Käyttäjä tunnistautunut');
+  expect(screen.getByTestId('tunnistautunut-8')).toHaveTextContent('Käyttäjä tunnistautunut');
+});
+
+test('Should send invitation to user when cliking the Lähetä kutsulinkki uudelleen button', async () => {
+  const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  const invitationButton = screen.getAllByRole('button', {
+    name: 'Lähetä kutsulinkki uudelleen',
+  })[0];
+  await user.click(invitationButton);
+
+  await waitFor(() => {
+    expect(
+      screen.queryByText('Kutsulinkki lähetetty osoitteeseen teppo@test.com.'),
+    ).toBeInTheDocument();
+  });
+  expect(invitationButton).toHaveTextContent('Kutsulinkki lähetetty');
+  expect(invitationButton).toBeDisabled();
+});
+
+test('Should not send multiple requests when clicking the Lähetä kutsulinkki uudelleen button many times', async () => {
+  const sendInvitation = jest.spyOn(hankeUsersApi, 'resendInvitation');
+  const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  const invitationButton = screen.getAllByRole('button', {
+    name: 'Lähetä kutsulinkki uudelleen',
+  })[0];
+  await user.click(invitationButton);
+  await user.click(invitationButton);
+  await user.click(invitationButton);
+
+  expect(sendInvitation).toHaveBeenCalledTimes(1);
+
+  sendInvitation.mockRestore();
+});
+
+test('Should show error notification if sending invitation fails', async () => {
+  server.use(
+    rest.post('/api/kayttajat/:kayttajaId/kutsu', async (req, res, ctx) => {
+      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    }),
+  );
+
+  const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  const invitationButton = screen.getAllByRole('button', {
+    name: 'Lähetä kutsulinkki uudelleen',
+  })[1];
+  await user.click(invitationButton);
+
+  expect(screen.queryByText('Virhe linkin lähettämisessä')).toBeInTheDocument();
+});
+
+test('Should not show invitation buttons if user does not have permission to send invitation', async () => {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>(
+          getSignedInUser({ kayttooikeustaso: 'KATSELUOIKEUS', kayttooikeudet: ['VIEW'] }),
+        ),
+      );
+    }),
+  );
+
+  render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  expect(
+    screen.queryAllByRole('button', {
+      name: 'Lähetä kutsulinkki uudelleen',
+    }),
+  ).toHaveLength(0);
 });

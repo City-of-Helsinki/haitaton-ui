@@ -4,6 +4,22 @@ import { render, screen } from '../../../testUtils/render';
 import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import HankeViewContainer from './HankeViewContainer';
 import { server } from '../../mocks/test-server';
+import { SignedInUser } from '../hankeUsers/hankeUser';
+
+function getViewPermissionForUser() {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>({
+          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          kayttooikeustaso: 'KATSELUOIKEUS',
+          kayttooikeudet: ['VIEW'],
+        }),
+      );
+    }),
+  );
+}
 
 test('Draft state notification is rendered when hanke is in draft state', async () => {
   render(<HankeViewContainer hankeTunnus="HAI22-1" />);
@@ -15,13 +31,20 @@ test('Draft state notification is rendered when hanke is in draft state', async 
   expect(draftStateElements[0]).toBeInTheDocument();
 });
 
-test('Add application and End hanke buttons are disabled when hanke is in draft state', async () => {
+test('Add application button is displayed when hanke is in PUBLIC state', async () => {
+  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.queryByRole('button', { name: /lisää hakemus/i })).toBeInTheDocument();
+});
+
+test('Add application button is hidden when hanke is not in PUBLIC state', async () => {
   render(<HankeViewContainer hankeTunnus="HAI22-1" />);
 
   await waitForLoadingToFinish();
 
-  expect(screen.getByRole('button', { name: /lisää hakemus/i })).toBeDisabled();
-  expect(screen.getByRole('button', { name: /päätä hanke/i })).toBeDisabled();
+  expect(screen.queryByRole('button', { name: /lisää hakemus/i })).not.toBeInTheDocument();
 });
 
 test('Draft state notification is not rendered when hanke is not in draft state', async () => {
@@ -67,7 +90,8 @@ test('Correct information about hanke should be displayed', async () => {
   expect(screen.getAllByText('2.1.2023–24.2.2023').length).toBe(2);
   expect(screen.getByTestId('test-liikennehaittaIndeksi')).toHaveTextContent('3');
   expect(screen.getByTestId('test-pyorailyIndeksi')).toHaveTextContent('3.5');
-  expect(screen.getByTestId('test-joukkoliikenneIndeksi')).toHaveTextContent('2');
+  expect(screen.getByTestId('test-raitiovaunuIndeksi')).toHaveTextContent('2');
+  expect(screen.getByTestId('test-linjaautoIndeksi')).toHaveTextContent('1');
   expect(screen.getByTestId('test-ruuhkautumisIndeksi')).toHaveTextContent('1.5');
   expect(screen.queryByText('11974 m²')).toBeInTheDocument();
   expect(screen.queryByText('Meluhaitta: Satunnainen haitta')).toBeInTheDocument();
@@ -82,9 +106,9 @@ test('Correct information about hanke should be displayed', async () => {
   // Data in contacts tab
   expect(screen.queryByText('Yritys')).toBeInTheDocument();
   expect(screen.queryByText('Kauppisen maansiirtofirma KY')).toBeInTheDocument();
-  expect(screen.queryByText('y-1234567')).toBeInTheDocument();
-  expect(screen.queryByText('Lahdenkatu 3')).toBeInTheDocument();
-  expect(screen.queryByText('42100 Lahti')).toBeInTheDocument();
+  expect(screen.queryByText('5341034-5')).toBeInTheDocument();
+  expect(screen.queryByText('toimisto@testi.com')).toBeInTheDocument();
+  expect(screen.queryByText('0501234567')).toBeInTheDocument();
 });
 
 test('It is possible to delete hanke if it has no active applications', async () => {
@@ -167,4 +191,32 @@ test('Should navigate to application view when clicking the eye icon', async () 
 
   expect(window.location.pathname).toBe('/fi/hakemus/2');
   expect(screen.queryByText('Mannerheimintien kuopat')).toBeInTheDocument();
+});
+
+test('Should not show edit hanke button if user does not have EDIT permission', async () => {
+  getViewPermissionForUser();
+  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.queryByRole('button', { name: 'Muokkaa hanketta' })).not.toBeInTheDocument();
+});
+
+test('Should not show add application button if user does not have EDIT_APPLICATIONS permission', async () => {
+  getViewPermissionForUser();
+  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.queryByRole('button', { name: 'Lisää hakemus' })).not.toBeInTheDocument();
+});
+
+test('Should not show end hanke and remove hanke buttons if user does not have DELETE permission', async () => {
+  getViewPermissionForUser();
+  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.queryByRole('button', { name: 'Päätä hanke' })).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Peru hanke' })).not.toBeInTheDocument();
 });

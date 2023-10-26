@@ -617,4 +617,22 @@ test('Form is saved when contacts are filled with orderer information', async ()
 
   expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
   expect(saveApplication).toHaveBeenCalledTimes(1);
+
+  saveApplication.mockRestore();
+});
+
+test('Form is saved when sub contacts are filled with orderer information', async () => {
+  const saveApplication = jest.spyOn(applicationApi, 'saveApplication');
+  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+  await user.click(
+    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.fillOwnInfoButton'),
+  );
+  await user.click(screen.getByRole('button', { name: /edellinen/i }));
+
+  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
+  expect(saveApplication).toHaveBeenCalledTimes(1);
+
+  saveApplication.mockRestore();
 });

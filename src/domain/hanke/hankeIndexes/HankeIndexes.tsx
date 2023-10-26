@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { LoadingSpinner, Tooltip } from 'hds-react';
@@ -95,7 +94,8 @@ const HankeIndexes: React.FC<React.PropsWithChildren<Props>> = ({
   const hankeIndexTitle = indexTitle || t('hankeIndexes:haittaindeksit');
   const liikennehaittaIndeksi = hankeIndexData?.liikennehaittaIndeksi.indeksi;
   const pyorailyIndeksi = hankeIndexData?.pyorailyIndeksi;
-  const joukkoliikenneIndeksi = hankeIndexData?.joukkoliikenneIndeksi;
+  const raitiovaunuIndeksi = hankeIndexData?.raitiovaunuIndeksi;
+  const linjaautoIndeksi = hankeIndexData?.linjaautoIndeksi;
   const perusIndeksi = hankeIndexData?.perusIndeksi;
 
   return (
@@ -123,7 +123,7 @@ const HankeIndexes: React.FC<React.PropsWithChildren<Props>> = ({
         <IndexSection
           title={t('hankeIndexes:pyorailynPaareitti')}
           content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
-            getDetourNeedByIndex(pyorailyIndeksi)
+            getDetourNeedByIndex(pyorailyIndeksi),
           )}`}
           index={pyorailyIndeksi}
           testId="test-pyorailyIndeksi"
@@ -132,12 +132,23 @@ const HankeIndexes: React.FC<React.PropsWithChildren<Props>> = ({
         />
 
         <IndexSection
-          title={t('hankeIndexes:merkittavatJoukkoliikennereitit')}
+          title={t('hankeIndexes:joukkoliikenneRaitiovaunu')}
           content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
-            getDetourNeedByIndex(joukkoliikenneIndeksi)
+            getDetourNeedByIndex(raitiovaunuIndeksi),
           )}`}
-          index={joukkoliikenneIndeksi}
-          testId="test-joukkoliikenneIndeksi"
+          index={raitiovaunuIndeksi}
+          testId="test-raitiovaunuIndeksi"
+          loading={loading}
+          showIndexText={!small}
+        />
+
+        <IndexSection
+          title={t('hankeIndexes:joukkoliikenneLinjaauto')}
+          content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
+            getDetourNeedByIndex(linjaautoIndeksi),
+          )}`}
+          index={linjaautoIndeksi}
+          testId="test-linjaautoIndeksi"
           loading={loading}
           showIndexText={!small}
         />
@@ -145,7 +156,7 @@ const HankeIndexes: React.FC<React.PropsWithChildren<Props>> = ({
         <IndexSection
           title={t('hankeIndexes:ruuhkautuminen')}
           content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
-            getDetourNeedByIndex(perusIndeksi)
+            getDetourNeedByIndex(perusIndeksi),
           )}`}
           index={perusIndeksi}
           testId="test-ruuhkautumisIndeksi"
