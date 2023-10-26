@@ -6,6 +6,8 @@ import HankePortfolioComponent from './HankePortfolioComponent';
 import { render, screen, waitFor } from '../../../testUtils/render';
 import hankeList from '../../mocks/hankeList';
 import { changeFilterDate } from '../../../testUtils/helperFunctions';
+import { USER_VIEW, userDataByHanke } from '../../mocks/signedInUser';
+import { SignedInUserByHanke } from '../hankeUsers/hankeUser';
 
 const startDateLabel = 'Ajanjakson alku';
 const endDateLabel = 'Ajanjakson loppu';
@@ -16,7 +18,9 @@ jest.setTimeout(30000);
 
 describe.only('HankePortfolio', () => {
   test('Changing search text filters correct number of projects', async () => {
-    const { user } = render(<HankePortfolioComponent hankkeet={hankeList} />);
+    const { user } = render(
+      <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
+    );
 
     await user.type(screen.getByLabelText('Haku'), 'Mannerheimintie autottomaksi');
     await waitFor(() => {
@@ -41,7 +45,9 @@ describe.only('HankePortfolio', () => {
   });
 
   test('Changing filter startDates filters correct number of projects', async () => {
-    const renderedComponent = render(<HankePortfolioComponent hankkeet={hankeList} />);
+    const renderedComponent = render(
+      <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
+    );
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
     changeFilterDate(startDateLabel, renderedComponent, '02.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
@@ -56,7 +62,9 @@ describe.only('HankePortfolio', () => {
   });
 
   test('Changing filter endDates filters correct number of projects', async () => {
-    const renderedComponent = render(<HankePortfolioComponent hankkeet={hankeList} />);
+    const renderedComponent = render(
+      <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
+    );
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
     changeFilterDate(endDateLabel, renderedComponent, '01.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
@@ -72,7 +80,9 @@ describe.only('HankePortfolio', () => {
   });
 
   test('Changing Hanke type filters correct number of projects', async () => {
-    const renderedComponent = render(<HankePortfolioComponent hankkeet={hankeList} />);
+    const renderedComponent = render(
+      <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
+    );
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
     await renderedComponent.user.click(
       renderedComponent.getByRole('button', { name: 'Työn tyyppi' }),
@@ -98,13 +108,19 @@ describe.only('HankePortfolio', () => {
   });
 
   test('Having no projects renders correct text', () => {
-    render(<HankePortfolioComponent hankkeet={[]} />);
+    render(<HankePortfolioComponent hankkeet={[]} signedInUserByHanke={{}} />);
 
     expect(screen.queryByText('Hankesalkussasi ei ole hankkeita')).toBeInTheDocument();
   });
 
   test('Should render edit hanke links for hankkeet that user has edit rights', async () => {
-    render(<HankePortfolioComponent hankkeet={hankeList} />);
+    const hankeTunnusList = hankeList.map((hanke) => hanke.hankeTunnus);
+    const signedUserData: SignedInUserByHanke = {
+      ...userDataByHanke(hankeTunnusList),
+      [hankeTunnusList[0]]: USER_VIEW,
+    };
+
+    render(<HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={signedUserData} />);
 
     await waitFor(() => {
       expect(screen.queryAllByTestId('hankeEditLink')).toHaveLength(1);
@@ -112,7 +128,7 @@ describe.only('HankePortfolio', () => {
   });
 
   test('Should show draft state notification for hankkeet that are in draft state', async () => {
-    render(<HankePortfolioComponent hankkeet={hankeList} />);
+    render(<HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />);
 
     expect(
       screen.getAllByText(
