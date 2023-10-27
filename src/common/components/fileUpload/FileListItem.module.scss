@@ -1,0 +1,33 @@
+@import 'src/assets/styles/layout.scss';
+
+.fileListItem {
+  // display: flex;
+  // align-items: flex-start;
+  background-color: var(--color-info-light);
+  border-bottom: 2px dotted var(--color-coat-of-arms);
+  box-sizing: border-box;
+  max-width: 100%;
+  width: 600px;
+  padding: var(--spacing-s) var(--spacing-2-xs);
+  flex-wrap: wrap;
+
+  // @include respond-above(l) {
+  //   flex-wrap: nowrap;
+  // }
+}
+
+.fileListItemName {
+  // word-break: break-word;
+  hyphens: auto;
+}
+
+.fileListItemDownloadIcon {
+  flex-shrink: 0;
+}
+
+.fileListItemButton {
+  --file-list-item-button-y-offset: calc(-1 * var(--spacing-2-xs) - 2px);
+
+  display: flex;
+  margin: var(--file-list-item-button-y-offset) auto var(--file-list-item-button-y-offset) 0;
+}

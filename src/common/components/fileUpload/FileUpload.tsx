@@ -10,6 +10,8 @@ import { Flex } from '@chakra-ui/react';
 import Text from '../text/Text';
 import styles from './FileUpload.module.scss';
 import { removeDuplicateAttachments } from './utils';
+import FileList from './FileList';
+import { FileDeleteFunction, FileDownLoadFunction } from './types';
 
 function useDragAndDropFiles() {
   const ref = useRef<HTMLDivElement>(null);
@@ -69,6 +71,9 @@ type Props<T extends AttachmentMetadata> = {
   /** Function that is given to upload mutation, handling the sending of file to API */
   uploadFunction: (file: File) => Promise<T>;
   onUpload?: (isUploading: boolean) => void;
+  fileDownLoadFunction?: FileDownLoadFunction;
+  fileDeleteFunction: FileDeleteFunction;
+  onFileDelete?: () => void;
 };
 
 export default function FileUpload<T extends AttachmentMetadata>({
@@ -81,6 +86,9 @@ export default function FileUpload<T extends AttachmentMetadata>({
   existingAttachments = [],
   uploadFunction,
   onUpload,
+  fileDownLoadFunction,
+  fileDeleteFunction,
+  onFileDelete,
 }: Props<T>) {
   const { t } = useTranslation();
   const locale = useLocale();
@@ -160,6 +168,13 @@ export default function FileUpload<T extends AttachmentMetadata>({
           totalCount={newFiles.length}
         />
       )}
+
+      <FileList
+        files={existingAttachments}
+        fileDownLoadFunction={fileDownLoadFunction}
+        fileDeleteFunction={fileDeleteFunction}
+        onFileDelete={onFileDelete}
+      />
     </div>
   );
 }

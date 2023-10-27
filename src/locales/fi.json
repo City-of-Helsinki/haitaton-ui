@@ -110,7 +110,8 @@
       "dragAttachments": "Raahaa tiedostot tänne",
       "additionalInfo": "Lisätiedot",
       "added": "Lisätty",
-      "addedFiles": "Lisätyt liitetiedostot"
+      "addedFiles": "Lisätyt liitetiedostot",
+      "today": "tänään"
     },
     "dialog": {
       "titles": {

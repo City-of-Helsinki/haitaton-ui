@@ -34,6 +34,7 @@ test('Should upload files successfully and loading indicator is displayed', asyn
       accept=".png,.jpg"
       multiple
       uploadFunction={uploadFunction}
+      fileDeleteFunction={() => Promise.resolve()}
     />,
   );
   const fileUpload = screen.getByLabelText(inputLabel);
@@ -60,6 +61,7 @@ test('Should show amount of successful files uploaded correctly when file fails 
       accept=".png"
       multiple
       uploadFunction={uploadFunction}
+      fileDeleteFunction={() => Promise.resolve()}
     />,
     undefined,
     undefined,
@@ -91,6 +93,7 @@ test('Should show amount of successful files uploaded correctly when request fai
       accept=".png,.jpg"
       multiple
       uploadFunction={uploadFunction}
+      fileDeleteFunction={() => Promise.resolve()}
     />,
   );
   const fileUpload = screen.getByLabelText(inputLabel);
@@ -113,6 +116,7 @@ test('Should upload files when user drops them into drag-and-drop area', async (
       multiple
       dragAndDrop
       uploadFunction={uploadFunction}
+      fileDeleteFunction={() => Promise.resolve()}
     />,
   );
   fireEvent.drop(screen.getByText('Raahaa tiedostot tänne'), {
