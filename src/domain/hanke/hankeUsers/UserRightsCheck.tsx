@@ -1,6 +1,7 @@
 import React from 'react';
 import useUserRightsForHanke from './hooks/useUserRightsForHanke';
 import { Rights } from './hankeUser';
+import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
 
 /**
  * Check that user has required rights.
@@ -18,6 +19,11 @@ function UserRightsCheck({
   children: React.ReactElement | null;
 }) {
   const { data: signedInUser } = useUserRightsForHanke(hankeTunnus);
+  const features = useFeatureFlags();
+
+  if (!features.accessRights) {
+    return children;
+  }
 
   if (signedInUser?.kayttooikeudet.includes(requiredRight)) {
     return children;
