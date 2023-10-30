@@ -1,8 +1,10 @@
-import { HankeAlueFormState } from './types';
-import { getAreaDefaultName } from './utils';
+import { Feature } from 'ol';
+import { HankeAlueFormState, HankeDataFormState } from './types';
+import { convertFormStateToHankeData, getAreaDefaultName } from './utils';
 
 function getArea(areaName: string): HankeAlueFormState {
   return {
+    feature: new Feature(),
     nimi: areaName,
     id: null,
     haittaAlkuPvm: '2023-01-12T00:00:00Z',
@@ -12,6 +14,15 @@ function getArea(areaName: string): HankeAlueFormState {
     meluHaitta: null,
     polyHaitta: null,
     tarinaHaitta: null,
+  };
+}
+
+function getHankeData(): HankeDataFormState {
+  return {
+    alueet: [getArea('Hankealue 1')],
+    rakennuttajat: [],
+    toteuttajat: [],
+    muut: [],
   };
 }
 
@@ -48,4 +59,11 @@ test('Should get correct default area name based on other areas', () => {
   ]);
 
   expect(thirdAreaName).toBe('Hankealue 8');
+});
+
+test('Should get area data without feature', () => {
+  const hankeData = convertFormStateToHankeData(getHankeData());
+
+  expect(hankeData.alueet![0].feature).toBeUndefined();
+  expect(hankeData.alueet![0].nimi).toBe('Hankealue 1');
 });
