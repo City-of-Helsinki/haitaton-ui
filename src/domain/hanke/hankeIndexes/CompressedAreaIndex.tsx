@@ -32,7 +32,8 @@ const CompressedAreaIndex: React.FC<Props> = ({ area, haittaIndex, index, classN
     >
       <div>
         <Text tag="p" styleAs="body-m" weight="bold" spacingBottom="2-xs">
-          {t('hanke:alue:title', { index: index + 1 })} ({formatSurfaceArea(areaGeometry)})
+          {area.nimi || t('hanke:alue:title', { index: index + 1 })} (
+          {formatSurfaceArea(areaGeometry)})
         </Text>
         <Text tag="p" styleAs="body-s">
           {areaStartDate}–{areaEndDate}

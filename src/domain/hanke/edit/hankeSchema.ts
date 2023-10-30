@@ -53,6 +53,7 @@ const otherPartySchema = contactSchema
   });
 
 export const hankeAlueSchema = yup.object().shape({
+  [FORMFIELD.NIMI]: yup.string(),
   [FORMFIELD.HAITTA_ALKU_PVM]: yup.date().required(),
   [FORMFIELD.HAITTA_LOPPU_PVM]: yup
     .date()

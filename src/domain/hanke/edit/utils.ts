@@ -59,7 +59,7 @@ export const convertFormStateToHankeData = (hankeData: HankeDataFormState): Hank
  * Add openlayers feature to each hanke area, converting area geometry into openlayers feature.
  */
 export const convertHankeDataToFormState = (
-  hankeData: HankeDataDraft | undefined
+  hankeData: HankeDataDraft | undefined,
 ): HankeDataFormState => ({
   ...hankeData,
   [FORMFIELD.HANKEALUEET]:
@@ -72,6 +72,7 @@ export const convertHankeDataToFormState = (
       return {
         ...alue,
         feature: new Feature(new Polygon(geometry.coordinates)),
+        nimi: alue.nimi !== null && alue.nimi !== '' ? alue.nimi : undefined,
       };
     }),
   omistajat: hankeData?.omistajat ? hankeData.omistajat : [],
@@ -107,4 +108,26 @@ export function calculateTotalSurfaceArea(areas?: HankeAlueFormState[]) {
  */
 export function canHankeBeCancelled(applications: Application[]): boolean {
   return applications.every((application) => isApplicationPending(application.alluStatus));
+}
+
+/**
+ * Get default name for hanke area
+ */
+export function getAreaDefaultName(areas?: HankeAlueFormState[]) {
+  if (areas === undefined) {
+    return undefined;
+  }
+
+  function getAreaNumber(area?: HankeAlueFormState): number {
+    const areaNumber = area?.nimi?.match(/\d+$/);
+    return areaNumber ? Number(areaNumber[0]) : 0;
+  }
+
+  const defaultNameRegExp = /^Hankealue \d+$/;
+  const maxAreaNumber = areas
+    .filter((area) => defaultNameRegExp.test(area.nimi || ''))
+    .map(getAreaNumber)
+    .reduce((a, b) => Math.max(a, b), 0);
+
+  return `Hankealue ${maxAreaNumber + 1}`;
 }

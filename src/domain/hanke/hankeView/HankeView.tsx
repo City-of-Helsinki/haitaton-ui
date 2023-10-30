@@ -70,7 +70,7 @@ const HankeAreaInfo: React.FC<AreaProps> = ({ area, hankeIndexData, index }) => 
   return (
     <Accordion
       language={locale}
-      heading={t('hanke:alue:title', { index: index + 1 })}
+      heading={area.nimi || t('hanke:alue:title', { index: index + 1 })}
       initiallyOpen
       className={styles.hankeAreaContainer}
     >
