@@ -38,8 +38,10 @@ export const convertFormStateToHankeData = (hankeData: HankeDataFormState): Hank
   return {
     ...hankeData,
     [FORMFIELD.HANKEALUEET]: hankeData[FORMFIELD.HANKEALUEET]?.map((alue) => {
+      // eslint-disable-next-line
+      const { feature, ...hankeAlue } = alue; // exclude virtual field 'feature' from API call
       return {
-        ...alue,
+        ...hankeAlue,
         geometriat: {
           featureCollection: formatFeaturesToHankeGeoJSON(alue.feature ? [alue.feature] : []),
         },
