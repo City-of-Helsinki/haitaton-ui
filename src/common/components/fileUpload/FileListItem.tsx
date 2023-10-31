@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { format, isToday } from 'date-fns';
 import { fi } from 'date-fns/locale';
 import { Button, IconCross, IconDocument, IconDownload } from 'hds-react';
@@ -7,58 +7,61 @@ import { AttachmentMetadata } from '../../types/attachment';
 import FileDownloadLink from '../fileDownloadLink/FileDownloadLink';
 import Text from '../text/Text';
 import styles from './FileListItem.module.scss';
-import { FileDownLoadFunction } from './types';
+import { FileDownLoadFunction, ShowDeleteButtonFunction } from './types';
 
 type Props = {
-  fileMetadata: AttachmentMetadata;
+  file: AttachmentMetadata;
   onDeleteFile: (file: AttachmentMetadata) => void;
   fileDownLoadFunction?: FileDownLoadFunction;
   deletingFile?: boolean;
+  showDeleteButtonForFile?: ShowDeleteButtonFunction;
 };
 
 export default function FileListItem({
-  fileMetadata,
+  file,
   onDeleteFile,
   fileDownLoadFunction,
   deletingFile = false,
+  showDeleteButtonForFile,
 }: Props) {
   const { t } = useTranslation();
-  const showDeleteButton = true;
-  const dateAdded = new Date(fileMetadata.createdAt);
+  const dateAdded = new Date(file.createdAt);
   const dateAddedText = isToday(dateAdded)
     ? t('form:labels:today')
     : format(dateAdded, 'd.M.yyyy', { locale: fi });
+  const showDeleteButton = showDeleteButtonForFile === undefined || showDeleteButtonForFile(file);
+
+  function deleteFile() {
+    onDeleteFile(file);
+  }
 
   return (
-    <Flex
-      as="li"
-      tabIndex={-1}
-      className={styles.fileListItem}
-      alignItems="flex-start"
-      gridColumnGap="var(--spacing-xs)"
-      gridRowGap="var(--spacing-2-xs)"
-      mb="var(--spacing-xs)"
-    >
+    <li tabIndex={-1} className={styles.fileListItem}>
       <IconDocument aria-hidden />
-      <Flex wrap="nowrap" flex="1" alignItems="flex-start">
+      <div className={styles.fileListItemNameContainer}>
         {fileDownLoadFunction === undefined ? (
           <Text tag="p" className={styles.fileListItemName}>
-            {fileMetadata.fileName}
+            {file.fileName}
           </Text>
         ) : (
           <>
             <FileDownloadLink
-              linkText={fileMetadata.fileName}
-              fileName={fileMetadata.fileName}
+              linkText={file.fileName}
+              fileName={file.fileName}
               linkTextStyles={styles.fileListItemName}
-              queryKey={['attachmentContent', fileMetadata.id]}
-              queryFunction={() => fileDownLoadFunction(fileMetadata)}
+              queryKey={['attachmentContent', file.id]}
+              queryFunction={() => fileDownLoadFunction(file)}
             />
             <IconDownload aria-hidden className={styles.fileListItemDownloadIcon} />
           </>
         )}
-      </Flex>
-      <Box as="p" color="var(--color-black-60)" className="text-sm">
+      </div>
+      <Box
+        as="p"
+        color="var(--color-black-60)"
+        className="text-sm"
+        marginRight={showDeleteButtonForFile ? 0 : 'var(--spacing-xs)'}
+      >
         {t('form:labels:added')} {dateAddedText}
       </Box>
       {showDeleteButton && (
@@ -68,13 +71,13 @@ export default function FileListItem({
           variant="supplementary"
           size="small"
           theme="black"
-          onClick={() => onDeleteFile(fileMetadata)}
-          data-testid={`delete-${fileMetadata.id}`}
+          onClick={deleteFile}
+          data-testid={`delete-${file.id}`}
           isLoading={deletingFile}
         >
           {t('common:buttons:remove')}
         </Button>
       )}
-    </Flex>
+    </li>
   );
 }

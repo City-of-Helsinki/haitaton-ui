@@ -23,23 +23,21 @@ function FileDownloadLink({
 }: Props) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const [fileUrl, setFileUrl] = useState('');
+  const [fileUrl, setFileUrl] = useState(queryClient.getQueryData<string>(queryKey) ?? '');
   const linkRef = useRef<HTMLAnchorElement>(null);
   const [errorText, setErrorText] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [fileFetched, setFileFetched] = useState(false);
 
   useEffect(() => {
-    if (fileUrl) {
+    if (fileFetched) {
       linkRef.current?.click();
     }
-  }, [fileUrl]);
+  }, [fileFetched]);
 
   async function fetchFile(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
     setErrorText(null);
-    const cachedUrl = queryClient.getQueryData<string>(queryKey);
-    if (cachedUrl) {
-      setFileUrl(cachedUrl);
-    } else {
+    if (!fileUrl) {
       event.preventDefault();
       setLoading(true);
       try {
@@ -49,6 +47,7 @@ function FileDownloadLink({
         });
         setFileUrl(url);
         setLoading(false);
+        setFileFetched(true);
       } catch (error) {
         setLoading(false);
         setErrorText(t('common:error'));

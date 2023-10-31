@@ -1,23 +1,27 @@
 @import 'src/assets/styles/layout.scss';
 
 .fileListItem {
-  // display: flex;
-  // align-items: flex-start;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
   background-color: var(--color-info-light);
   border-bottom: 2px dotted var(--color-coat-of-arms);
-  box-sizing: border-box;
   max-width: 100%;
   width: 600px;
+  row-gap: var(--spacing-2-xs);
+  column-gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
   padding: var(--spacing-s) var(--spacing-2-xs);
-  flex-wrap: wrap;
+}
 
-  // @include respond-above(l) {
-  //   flex-wrap: nowrap;
-  // }
+.fileListItemNameContainer {
+  display: flex;
+  flex-wrap: nowrap;
+  flex: 1;
+  align-items: flex-start;
 }
 
 .fileListItemName {
-  // word-break: break-word;
   hyphens: auto;
 }
 

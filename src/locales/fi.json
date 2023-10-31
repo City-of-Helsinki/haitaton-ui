@@ -51,7 +51,12 @@
       },
       "fileUpload": {
         "loadingText": "Tallennetaan tiedostoja",
-        "successNotification": "{{successful}}/{{total}} tiedosto(a) tallennettu"
+        "successNotification": "{{successful}}/{{total}} tiedosto(a) tallennettu",
+        "deleteError": {
+          "title": "Tiedoston poistamisessa tapahtui virhe",
+          "fileNotFound": "Tiedostoa, jonka yritit poistaa ei löydy (virhe 404). Yritä myöhemmin uudelleen.",
+          "serverError": "Palvelimeen ei saada yhteyttä, eikä valittua tiedostoa saada poistettua. Yritä myöhemmin uudelleen."
+        }
       }
     },
     "error": "Tapahtui virhe. Yritä uudestaan.",
