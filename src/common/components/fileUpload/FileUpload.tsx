@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useMutation } from 'react-query';
 import { Flex } from '@chakra-ui/react';
-import { FileInput, IconCheckCircleFill, LoadingSpinner } from 'hds-react';
+import { FileInput, IconAlertCircleFill, IconCheckCircleFill, LoadingSpinner } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { differenceBy } from 'lodash';
 import { AxiosError } from 'axios';
@@ -34,10 +34,10 @@ function useDragAndDropFiles() {
 
 function SuccessNotification({
   successfulCount,
-  totalCount,
+  newFiles,
 }: {
   successfulCount: number;
-  totalCount: number;
+  newFiles: number;
 }) {
   const { t } = useTranslation();
 
@@ -47,9 +47,32 @@ function SuccessNotification({
       <p>
         {t('common:components:fileUpload:successNotification', {
           successful: successfulCount,
-          total: totalCount,
+          newFiles: newFiles,
         })}
       </p>
+    </Flex>
+  );
+}
+
+function ErrorNotification({ errors, newFiles }: { errors: string[]; newFiles: number }) {
+  const { t } = useTranslation();
+
+  return (
+    <Flex color="var(--color-error)">
+      <IconAlertCircleFill style={{ marginRight: 'var(--spacing-2-xs)' }} />
+      <div>
+        <p>
+          {t('common:components:fileUpload:errorNotification', {
+            errors: errors.length,
+            newFiles: newFiles,
+          })}
+        </p>
+        <ul style={{ listStyle: 'none' }}>
+          {errors.map((error, index) => (
+            <li key={index}>- {error}</li>
+          ))}
+        </ul>
+      </div>
     </Flex>
   );
 }
@@ -95,10 +118,16 @@ export default function FileUpload<T extends AttachmentMetadata>({
   const { t } = useTranslation();
   const locale = useLocale();
   const [newFiles, setNewFiles] = useState<File[]>([]);
-  const [invalidFiles, setInvalidFiles] = useState<File[]>([]);
+  const [fileUploadErrors, setFileUploadErrors] = useState<string[]>([]);
   const uploadMutation = useMutation(uploadFunction, {
     onError(error: AxiosError, file) {
-      setInvalidFiles((files) => [...files, file]);
+      const errorText =
+        error.response?.status === 400
+          ? t('form:errors:fileLoadBadFileError', { fileName: file.name })
+          : t('form:errors:fileLoadTechnicalError', { fileName: file.name });
+      setFileUploadErrors((errors) => {
+        return [...errors, errorText];
+      });
     },
   });
   const [filesUploading, setFilesUploading] = useState(false);
@@ -122,9 +151,12 @@ export default function FileUpload<T extends AttachmentMetadata>({
     }
   }
 
-  function handleFilesChange(files: File[]) {
+  function handleFilesChange(validFiles: File[]) {
     // Filter out attachments that have same names as those that have already been sent
-    const [filesToUpload] = removeDuplicateAttachments(files, existingAttachments);
+    const [filesToUpload, duplicateFiles] = removeDuplicateAttachments(
+      validFiles,
+      existingAttachments,
+    );
 
     // Determine which files haven't passed HDS FileInput validation by comparing
     // files in input element or files dropped into drop zone to files received as
@@ -132,10 +164,15 @@ export default function FileUpload<T extends AttachmentMetadata>({
     const inputElem = document.getElementById(id) as HTMLInputElement;
     const inputElemFiles = inputElem.files ? Array.from(inputElem.files) : [];
     const allFiles = inputElemFiles.length > 0 ? inputElemFiles : dragAndDropFiles.current;
-    const invalidFilesArr = differenceBy(allFiles, filesToUpload, 'name');
 
+    const invalidFiles = differenceBy(allFiles, validFiles, 'name');
+    const errors: string[] = invalidFiles
+      .map((file) => t('form:errors:fileLoadBadFileError', { fileName: file.name }))
+      .concat(
+        duplicateFiles.map((file) => t('form:errors:duplicateFileError', { fileName: file.name })),
+      );
+    setFileUploadErrors(errors);
     setNewFiles(allFiles);
-    setInvalidFiles(invalidFilesArr);
     uploadFiles(filesToUpload);
   }
 
@@ -173,9 +210,13 @@ export default function FileUpload<T extends AttachmentMetadata>({
 
       {!filesUploading && newFiles.length > 0 && (
         <SuccessNotification
-          successfulCount={newFiles.length - invalidFiles.length}
-          totalCount={newFiles.length}
+          successfulCount={newFiles.length - fileUploadErrors.length}
+          newFiles={newFiles.length}
         />
+      )}
+
+      {!filesUploading && fileUploadErrors.length > 0 && (
+        <ErrorNotification errors={fileUploadErrors} newFiles={newFiles.length} />
       )}
 
       <FileList
