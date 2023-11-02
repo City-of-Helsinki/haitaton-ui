@@ -48,6 +48,10 @@
       "errorLoadingInfo": {
         "textTop": "Virhe tietojen lataamisessa.",
         "textBottom": "Yritä hetken päästä uudelleen."
+      },
+      "fileUpload": {
+        "loadingText": "Tallennetaan tiedostoja",
+        "successNotification": "{{successful}}/{{total}} tiedosto(a) tallennettu"
       }
     },
     "error": "Tapahtui virhe. Yritä uudestaan.",

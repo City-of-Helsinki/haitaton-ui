@@ -34,9 +34,10 @@ import useHanke from '../hanke/hooks/useHanke';
 import { AlluStatus, Application } from '../application/types/application';
 import Attachments from './Attachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
-import { removeDuplicateAttachments, uploadAttachment } from '../application/attachments';
+import { uploadAttachment } from '../application/attachments';
 import useAttachments from '../application/hooks/useAttachments';
 import { APPLICATION_ID_STORAGE_KEY } from '../application/constants';
+import { removeDuplicateAttachments } from '../../common/components/fileUpload/utils';
 
 type Props = {
   hankeData?: HankeData;
@@ -289,7 +290,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     }
 
     // Filter out attachments that have same names as those that have already been sent
-    const filesToSend = removeDuplicateAttachments(newAttachments, existingAttachments);
+    const [filesToSend] = removeDuplicateAttachments(newAttachments, existingAttachments);
 
     const mutations = filesToSend.map((file) =>
       attachmentUploadMutation.mutateAsync({

@@ -1,0 +1,16 @@
+.uploadContainer {
+  min-height: 250px;
+  margin-bottom: var(--spacing-s);
+}
+
+.loadingContainer {
+  margin-left: var(--spacing-m);
+
+  .loadingSpinner {
+    margin-right: var(--spacing-s);
+  }
+
+  .loadingText {
+    font-weight: 500;
+  }
+}

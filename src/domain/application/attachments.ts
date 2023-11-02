@@ -4,7 +4,7 @@ import { ApplicationAttachmentMetadata, AttachmentType } from './types/applicati
 // Get attachments metadata related to an application
 export async function getAttachments(applicationId: number | null | undefined) {
   const { data } = await api.get<ApplicationAttachmentMetadata[]>(
-    `/hakemukset/${applicationId}/liitteet`
+    `/hakemukset/${applicationId}/liitteet`,
   );
   return data;
 }
@@ -26,7 +26,7 @@ export async function uploadAttachment({
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-    }
+    },
   );
   return data;
 }
@@ -35,7 +35,7 @@ export async function uploadAttachment({
 export async function getAttachmentFile(applicationId: number, attachmentId: string) {
   const { data } = await api.get<Blob>(
     `/hakemukset/${applicationId}/liitteet/${attachmentId}/content`,
-    { responseType: 'blob' }
+    { responseType: 'blob' },
   );
   return URL.createObjectURL(data);
 }
@@ -49,14 +49,4 @@ export async function deleteAttachment({
   attachmentId: string | undefined;
 }) {
   await api.delete(`/hakemukset/${applicationId}/liitteet/${attachmentId}`);
-}
-
-// Filter out duplicate files based on file name
-export function removeDuplicateAttachments(
-  files: File[],
-  attachments: ApplicationAttachmentMetadata[] | undefined
-) {
-  return files.filter((file) =>
-    attachments?.every((attachment) => attachment.fileName !== file.name)
-  );
 }
