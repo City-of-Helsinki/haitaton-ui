@@ -7,7 +7,12 @@ import { render, screen, waitFor } from '../../../testUtils/render';
 import hankeList from '../../mocks/hankeList';
 import { changeFilterDate } from '../../../testUtils/helperFunctions';
 import { USER_VIEW, userDataByHanke } from '../../mocks/signedInUser';
-import { SignedInUserByHanke } from '../hankeUsers/hankeUser';
+import { AccessRightLevel, SignedInUserByHanke } from '../hankeUsers/hankeUser';
+import { server } from '../../mocks/test-server';
+import { rest } from 'msw';
+import hankkeet from '../../mocks/data/hankkeet-data';
+import { HankeDataDraft } from '../../types/hanke';
+import HankePortfolioContainer from './HankePortfolioContainer';
 
 const startDateLabel = 'Ajanjakson alku';
 const endDateLabel = 'Ajanjakson loppu';
@@ -16,7 +21,23 @@ afterEach(cleanup);
 
 jest.setTimeout(30000);
 
-describe.only('HankePortfolio', () => {
+const initHankkeetResponse = (response: HankeDataDraft[]) => {
+  server.use(
+    rest.get('/api/hankkeet', async (_, res, ctx) => {
+      return res(ctx.status(200), ctx.json<HankeDataDraft[]>(response));
+    }),
+  );
+};
+
+const initSignedInUserResponse = (response: SignedInUserByHanke) => {
+  server.use(
+    rest.get('/api/my-permissions', async (_, res, ctx) => {
+      return res(ctx.status(200), ctx.json<SignedInUserByHanke>(response));
+    }),
+  );
+};
+
+describe('HankePortfolio', () => {
   test('Changing search text filters correct number of projects', async () => {
     const { user } = render(
       <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
@@ -135,5 +156,33 @@ describe.only('HankePortfolio', () => {
         'Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.',
       ),
     ).toHaveLength(1);
+  });
+});
+
+describe('HankePortfolioContainer', () => {
+  const HANKE_TUNNUS = 'HAI22-1';
+
+  test('Should query data and render hanke editable if permitted', async () => {
+    initHankkeetResponse([hankkeet[0]]);
+    initSignedInUserResponse(userDataByHanke([HANKE_TUNNUS], AccessRightLevel.KAIKKI_OIKEUDET));
+
+    render(<HankePortfolioContainer />);
+
+    await waitFor(() => {
+      expect(screen.queryByText(HANKE_TUNNUS)).toBeInTheDocument();
+      expect(screen.getByTestId('hankeEditLink')).toBeInTheDocument();
+    });
+  });
+
+  test('Should query data and render hanke not editable if not permitted', async () => {
+    initHankkeetResponse([hankkeet[0]]);
+    initSignedInUserResponse(userDataByHanke([HANKE_TUNNUS], AccessRightLevel.KATSELUOIKEUS));
+
+    render(<HankePortfolioContainer />);
+
+    await waitFor(() => {
+      expect(screen.queryByText(HANKE_TUNNUS)).toBeInTheDocument();
+      expect(screen.queryAllByTestId('hankeEditLink')).toHaveLength(0);
+    });
   });
 });
