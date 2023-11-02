@@ -35,10 +35,10 @@ function useDragAndDropFiles() {
 function SuccessNotification({
   successfulCount,
   totalCount,
-}: {
+}: Readonly<{
   successfulCount: number;
   totalCount: number;
-}) {
+}>) {
   const { t } = useTranslation();
 
   return (
@@ -91,7 +91,7 @@ export default function FileUpload<T extends AttachmentMetadata>({
   fileDeleteFunction,
   onFileDelete,
   showDeleteButtonForFile,
-}: Props<T>) {
+}: Readonly<Props<T>>) {
   const { t } = useTranslation();
   const locale = useLocale();
   const [newFiles, setNewFiles] = useState<File[]>([]);

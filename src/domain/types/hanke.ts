@@ -8,14 +8,6 @@ export enum HANKE_VAIHE {
 }
 export type HANKE_VAIHE_KEY = keyof typeof HANKE_VAIHE;
 
-export enum HANKE_SUUNNITTELUVAIHE {
-  YLEIS_TAI_HANKE = 'YLEIS_TAI_HANKE',
-  KATUSUUNNITTELU_TAI_ALUEVARAUS = 'KATUSUUNNITTELU_TAI_ALUEVARAUS',
-  RAKENNUS_TAI_TOTEUTUS = 'RAKENNUS_TAI_TOTEUTUS',
-  TYOMAAN_TAI_HANKKEEN_AIKAINEN = 'TYOMAAN_TAI_HANKKEEN_AIKAINEN',
-}
-export type HANKE_SUUNNITTELUVAIHE_KEY = keyof typeof HANKE_SUUNNITTELUVAIHE;
-
 export enum HANKE_TYOMAATYYPPI {
   VESI = 'VESI',
   VIEMARI = 'VIEMARI',
@@ -162,6 +154,7 @@ export type HankeAlue = {
   meluHaitta: HANKE_MELUHAITTA_KEY | null;
   polyHaitta: HANKE_POLYHAITTA | null;
   tarinaHaitta: HANKE_TARINAHAITTA_KEY | null;
+  nimi?: string | null;
 };
 
 export enum HANKE_INDEX_TYPE {
@@ -196,7 +189,6 @@ export interface HankeData {
   alkuPvm: string;
   loppuPvm: string;
   vaihe: HANKE_VAIHE_KEY;
-  suunnitteluVaihe: HANKE_SUUNNITTELUVAIHE_KEY | null;
   tyomaaKatuosoite: string | null;
   tyomaaTyyppi: HANKE_TYOMAATYYPPI_KEY[];
   alueet: HankeAlue[];

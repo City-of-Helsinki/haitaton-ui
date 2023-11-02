@@ -41,3 +41,21 @@ test('Should not render children if user does not have required right', async ()
     expect(screen.queryByText('Children')).not.toBeInTheDocument();
   });
 });
+
+test('Should render children when access right feature is not enabled', async () => {
+  const OLD_ENV = window._env_;
+  window._env_.REACT_APP_FEATURE_ACCESS_RIGHTS = 0;
+
+  render(
+    <UserRightsCheck requiredRight="EDIT" hankeTunnus="HAI22-2">
+      <p>Children</p>
+    </UserRightsCheck>,
+  );
+
+  await waitFor(() => {
+    expect(screen.getByText('Children')).toBeInTheDocument();
+  });
+
+  jest.resetModules();
+  window._env_ = OLD_ENV;
+});
