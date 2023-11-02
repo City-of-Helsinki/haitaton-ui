@@ -14,7 +14,7 @@ async function uploadAttachment({ id, file }: { id: number; file: File }) {
   return data;
 }
 
-function uploadFunction(file: File) {
+function uploadFunction({ file }: { file: File }) {
   return uploadAttachment({
     id: 1,
     file,

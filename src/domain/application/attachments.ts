@@ -14,10 +14,12 @@ export async function uploadAttachment({
   applicationId,
   attachmentType,
   file,
+  abortSignal,
 }: {
   applicationId: number;
   attachmentType: AttachmentType;
   file: File;
+  abortSignal?: AbortSignal;
 }) {
   const { data } = await api.post<ApplicationAttachmentMetadata>(
     `/hakemukset/${applicationId}/liitteet?tyyppi=${attachmentType}`,
@@ -26,6 +28,7 @@ export async function uploadAttachment({
       headers: {
         'Content-Type': 'multipart/form-data',
       },
+      signal: abortSignal,
     },
   );
   return data;
