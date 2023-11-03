@@ -20,12 +20,18 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
   formData,
 }) => {
   const { t } = useTranslation();
-  const { watch } = useFormContext();
+  const { setValue, watch } = useFormContext();
   const { JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();
   useFormPage();
 
   // Subscribe to vaihe changes in order to update the selected radio button
   const hankeVaiheField = watch(FORMFIELD.VAIHE);
+
+  // Allow unselect vaihe, important for draft.
+  const handleVaiheClick = (value: HANKE_VAIHE) => {
+    const newValue = hankeVaiheField === value ? null : value;
+    setValue(FORMFIELD.VAIHE, newValue);
+  };
 
   return (
     <div className="form0">
@@ -54,13 +60,11 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
           invalid={!!errors[FORMFIELD.KUVAUS]}
           {...register(FORMFIELD.KUVAUS)}
           data-testid={FORMFIELD.KUVAUS}
-          required
           errorText={getInputErrorText(t, errors[FORMFIELD.KUVAUS])}
         />
       </div>
       <div className="formWpr formWprShort">
         <TextInput
-          required
           name={FORMFIELD.KATUOSOITE}
           tooltip={{
             tooltipText: t(`hankeForm:toolTips:${FORMFIELD.KATUOSOITE}`),
@@ -74,7 +78,6 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
         <SelectionGroup
           direction="horizontal"
           label={t(`hankeForm:labels:${FORMFIELD.VAIHE}`)}
-          required
           errorText={getInputErrorText(t, errors[FORMFIELD.VAIHE])}
         >
           {$enum(HANKE_VAIHE).map((value) => {
@@ -86,6 +89,7 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
                 value={value}
                 label={t(`hanke:vaihe:${value}`)}
                 checked={hankeVaiheField === value}
+                onClick={() => handleVaiheClick(value)}
               />
             );
           })}
@@ -121,7 +125,6 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
           id={FORMFIELD.YKT_HANKE}
           name={FORMFIELD.YKT_HANKE}
           label={t(`hankeForm:labels:${FORMFIELD.YKT_HANKE}`)}
-          rules={{ required: true }}
         />
       </div>
     </div>
