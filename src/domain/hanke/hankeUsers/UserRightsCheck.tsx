@@ -1,13 +1,13 @@
 import React from 'react';
-import useUserRightsForHanke from './hooks/useUserRightsForHanke';
-import { Rights } from './hankeUser';
+import { Rights, SignedInUser } from './hankeUser';
 import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
+import { usePermissionsForHanke } from './hooks/useUserRightsForHanke';
 
 /**
  * Check that user has required rights.
  * If they have, render children.
  */
-function UserRightsCheck({
+export function CheckRightsByHanke({
   requiredRight,
   hankeTunnus,
   children,
@@ -18,7 +18,7 @@ function UserRightsCheck({
   hankeTunnus?: string;
   children: React.ReactElement | null;
 }) {
-  const { data: signedInUser } = useUserRightsForHanke(hankeTunnus);
+  const { data: signedInUser } = usePermissionsForHanke(hankeTunnus);
   const features = useFeatureFlags();
 
   if (!features.accessRights) {
@@ -32,4 +32,20 @@ function UserRightsCheck({
   return null;
 }
 
-export default UserRightsCheck;
+export function CheckRightsByUser({
+  requiredRight,
+  signedInUser,
+  children,
+}: {
+  requiredRight: keyof typeof Rights;
+  signedInUser: SignedInUser;
+  children: React.ReactElement | null;
+}) {
+  const features = useFeatureFlags();
+
+  if (!features.accessRights) {
+    return children;
+  }
+
+  return signedInUser?.kayttooikeudet?.includes(requiredRight) ? children : null;
+}

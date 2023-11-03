@@ -1,9 +1,9 @@
 import { useQuery } from 'react-query';
-import { SignedInUser } from '../hankeUser';
-import { getSignedInUserForHanke } from '../hankeUsersApi';
+import { SignedInUser, SignedInUserByHanke } from '../hankeUser';
+import { getSignedInUserForHanke, getSignedInUserByHanke } from '../hankeUsersApi';
 import { useFeatureFlags } from '../../../../common/components/featureFlags/FeatureFlagsContext';
 
-export default function useSignedInUserRightsForHanke(hankeTunnus?: string) {
+export function usePermissionsForHanke(hankeTunnus?: string) {
   const features = useFeatureFlags();
 
   return useQuery<SignedInUser>(
@@ -13,4 +13,12 @@ export default function useSignedInUserRightsForHanke(hankeTunnus?: string) {
       enabled: Boolean(hankeTunnus) && features.accessRights,
     },
   );
+}
+
+export function usePermissionsByHanke() {
+  const features = useFeatureFlags();
+
+  return useQuery<SignedInUserByHanke>(['signedInUserByHanke'], () => getSignedInUserByHanke(), {
+    enabled: features.accessRights,
+  });
 }

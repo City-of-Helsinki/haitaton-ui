@@ -6,6 +6,13 @@ import HankePortfolioComponent from './HankePortfolioComponent';
 import { render, screen, waitFor } from '../../../testUtils/render';
 import hankeList from '../../mocks/hankeList';
 import { changeFilterDate } from '../../../testUtils/helperFunctions';
+import { USER_VIEW, userDataByHanke } from '../../mocks/signedInUser';
+import { AccessRightLevel, SignedInUserByHanke } from '../hankeUsers/hankeUser';
+import { server } from '../../mocks/test-server';
+import { rest } from 'msw';
+import hankkeet from '../../mocks/data/hankkeet-data';
+import { HankeDataDraft } from '../../types/hanke';
+import HankePortfolioContainer from './HankePortfolioContainer';
 
 const startDateLabel = 'Ajanjakson alku';
 const endDateLabel = 'Ajanjakson loppu';
@@ -14,9 +21,27 @@ afterEach(cleanup);
 
 jest.setTimeout(30000);
 
-describe.only('HankePortfolio', () => {
+const initHankkeetResponse = (response: HankeDataDraft[]) => {
+  server.use(
+    rest.get('/api/hankkeet', async (_, res, ctx) => {
+      return res(ctx.status(200), ctx.json<HankeDataDraft[]>(response));
+    }),
+  );
+};
+
+const initSignedInUserResponse = (response: SignedInUserByHanke) => {
+  server.use(
+    rest.get('/api/my-permissions', async (_, res, ctx) => {
+      return res(ctx.status(200), ctx.json<SignedInUserByHanke>(response));
+    }),
+  );
+};
+
+describe('HankePortfolio', () => {
   test('Changing search text filters correct number of projects', async () => {
-    const { user } = render(<HankePortfolioComponent hankkeet={hankeList} />);
+    const { user } = render(
+      <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
+    );
 
     await user.type(screen.getByLabelText('Haku'), 'Mannerheimintie autottomaksi');
     await waitFor(() => {
@@ -41,7 +66,9 @@ describe.only('HankePortfolio', () => {
   });
 
   test('Changing filter startDates filters correct number of projects', async () => {
-    const renderedComponent = render(<HankePortfolioComponent hankkeet={hankeList} />);
+    const renderedComponent = render(
+      <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
+    );
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
     changeFilterDate(startDateLabel, renderedComponent, '02.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
@@ -56,7 +83,9 @@ describe.only('HankePortfolio', () => {
   });
 
   test('Changing filter endDates filters correct number of projects', async () => {
-    const renderedComponent = render(<HankePortfolioComponent hankkeet={hankeList} />);
+    const renderedComponent = render(
+      <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
+    );
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
     changeFilterDate(endDateLabel, renderedComponent, '01.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
@@ -72,7 +101,9 @@ describe.only('HankePortfolio', () => {
   });
 
   test('Changing Hanke type filters correct number of projects', async () => {
-    const renderedComponent = render(<HankePortfolioComponent hankkeet={hankeList} />);
+    const renderedComponent = render(
+      <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
+    );
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
     await renderedComponent.user.click(
       renderedComponent.getByRole('button', { name: 'Työn tyyppi' }),
@@ -98,13 +129,19 @@ describe.only('HankePortfolio', () => {
   });
 
   test('Having no projects renders correct text', () => {
-    render(<HankePortfolioComponent hankkeet={[]} />);
+    render(<HankePortfolioComponent hankkeet={[]} signedInUserByHanke={{}} />);
 
     expect(screen.queryByText('Hankesalkussasi ei ole hankkeita')).toBeInTheDocument();
   });
 
   test('Should render edit hanke links for hankkeet that user has edit rights', async () => {
-    render(<HankePortfolioComponent hankkeet={hankeList} />);
+    const hankeTunnusList = hankeList.map((hanke) => hanke.hankeTunnus);
+    const signedUserData: SignedInUserByHanke = {
+      ...userDataByHanke(hankeTunnusList),
+      [hankeTunnusList[0]]: USER_VIEW,
+    };
+
+    render(<HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={signedUserData} />);
 
     await waitFor(() => {
       expect(screen.queryAllByTestId('hankeEditLink')).toHaveLength(1);
@@ -112,12 +149,40 @@ describe.only('HankePortfolio', () => {
   });
 
   test('Should show draft state notification for hankkeet that are in draft state', async () => {
-    render(<HankePortfolioComponent hankkeet={hankeList} />);
+    render(<HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />);
 
     expect(
       screen.getAllByText(
         'Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.',
       ),
     ).toHaveLength(1);
+  });
+});
+
+describe('HankePortfolioContainer', () => {
+  const HANKE_TUNNUS = 'HAI22-1';
+
+  test('Should query data and render hanke editable if permitted', async () => {
+    initHankkeetResponse([hankkeet[0]]);
+    initSignedInUserResponse(userDataByHanke([HANKE_TUNNUS], AccessRightLevel.KAIKKI_OIKEUDET));
+
+    render(<HankePortfolioContainer />);
+
+    await waitFor(() => {
+      expect(screen.queryByText(HANKE_TUNNUS)).toBeInTheDocument();
+      expect(screen.getByTestId('hankeEditLink')).toBeInTheDocument();
+    });
+  });
+
+  test('Should query data and render hanke not editable if not permitted', async () => {
+    initHankkeetResponse([hankkeet[0]]);
+    initSignedInUserResponse(userDataByHanke([HANKE_TUNNUS], AccessRightLevel.KATSELUOIKEUS));
+
+    render(<HankePortfolioContainer />);
+
+    await waitFor(() => {
+      expect(screen.queryByText(HANKE_TUNNUS)).toBeInTheDocument();
+      expect(screen.queryAllByTestId('hankeEditLink')).toHaveLength(0);
+    });
   });
 });

@@ -7,7 +7,7 @@ import ErrorLoadingText from '../../../common/components/errorLoadingText/ErrorL
 import { useHankeUsers } from '../hankeUsers/hooks/useHankeUsers';
 import useHanke from '../hooks/useHanke';
 import AccessRightsView from './AccessRightsView';
-import useUserRightsForHanke from '../hankeUsers/hooks/useUserRightsForHanke';
+import { usePermissionsForHanke } from '../hankeUsers/hooks/useUserRightsForHanke';
 
 type Props = {
   hankeTunnus: string;
@@ -17,7 +17,7 @@ function AccessRightsViewContainer({ hankeTunnus }: Props) {
   const { t } = useTranslation();
   const { data: hankeUsers, isLoading, isError, error } = useHankeUsers(hankeTunnus);
   const { data: hankeData } = useHanke(hankeTunnus);
-  const { data: signedInUser } = useUserRightsForHanke(hankeTunnus);
+  const { data: signedInUser } = usePermissionsForHanke(hankeTunnus);
 
   if (isLoading) {
     return (
