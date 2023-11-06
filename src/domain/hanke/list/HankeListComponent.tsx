@@ -7,6 +7,7 @@ import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import { HankeDataDraft } from '../../types/hanke';
 import HankeVaiheTag from '../vaiheTag/HankeVaiheTag';
 import './Hankelista.styles.scss';
+import { hankeHasGeometry } from '../../map/utils';
 
 type Props = {
   projectsData: HankeDataDraft[];
@@ -17,7 +18,7 @@ type sortColKey = 'nimi' | 'vaihe' | 'alkuPvm' | 'loppuPvm';
 // Number of items shown on page at once
 const PAGE_SIZE = 8;
 
-const HankeList: React.FC<Props> = ({ projectsData }) => {
+const HankeList: React.FC<React.PropsWithChildren<Props>> = ({ projectsData }) => {
   const { PUBLIC_HANKKEET_MAP } = useLocalizedRoutes();
   const { t, i18n } = useTranslation();
   const language = i18n.language as 'fi' | 'sv' | 'en';
@@ -27,7 +28,7 @@ const HankeList: React.FC<Props> = ({ projectsData }) => {
   const pageCount = Math.ceil(projectsData.length / PAGE_SIZE);
 
   function getHankeLink(args: HankeDataDraft) {
-    const hasGeometry = Boolean(args.geometriat);
+    const hasGeometry = hankeHasGeometry(args);
     if (hasGeometry) {
       return (
         <Link to={`${PUBLIC_HANKKEET_MAP.path}?hanke=${args.hankeTunnus}`}>{args.hankeTunnus}</Link>
@@ -53,13 +54,18 @@ const HankeList: React.FC<Props> = ({ projectsData }) => {
       const aValue = a[colKey as sortColKey];
       const bValue = b[colKey as sortColKey];
 
+      if (aValue === undefined) {
+        return order === 'asc' ? -1 : 1;
+      }
+      if (bValue === undefined) {
+        return order === 'asc' ? 1 : -1;
+      }
       if (aValue < bValue) {
         return order === 'asc' ? -1 : 1;
       }
       if (aValue > bValue) {
         return order === 'asc' ? 1 : -1;
       }
-
       return 0;
     });
 
@@ -88,19 +94,21 @@ const HankeList: React.FC<Props> = ({ projectsData }) => {
               headerName: t('hankeList:tableHeader:step'),
               key: 'vaihe',
               isSortable: true,
-              transform: (args: HankeDataDraft) => <HankeVaiheTag tagName={args.vaihe} />,
+              transform: (args: HankeDataDraft) => <HankeVaiheTag tagName={args.vaihe} uppercase />,
             },
             {
               headerName: t('hankeList:tableHeader:startDate'),
               key: 'alkuPvm',
-              transform: (args: HankeDataDraft) => format(Date.parse(args.alkuPvm), 'dd.MM.yyyy'),
+              transform: (args: HankeDataDraft) =>
+                args.alkuPvm ? format(Date.parse(args.alkuPvm), 'dd.MM.yyyy') : '',
               isSortable: true,
               sortIconType: 'other',
             },
             {
               headerName: t('hankeList:tableHeader:endDate'),
               key: 'loppuPvm',
-              transform: (args: HankeDataDraft) => format(Date.parse(args.loppuPvm), 'dd.MM.yyyy'),
+              transform: (args: HankeDataDraft) =>
+                args.loppuPvm ? format(Date.parse(args.loppuPvm), 'dd.MM.yyyy') : '',
               isSortable: true,
               sortIconType: 'other',
             },

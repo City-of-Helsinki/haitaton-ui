@@ -13,15 +13,10 @@ import {
   HANKE_TARINAHAITTA_KEY,
   HANKE_VAIHE,
   HankeDataDraft,
-  HANKE_SUUNNITTELUVAIHE,
   HANKE_VAIHE_KEY,
-  HANKE_SUUNNITTELUVAIHE_KEY,
 } from '../../src/domain/types/hanke';
 
-export const selectHankeVaihe = (
-  vaihe: HANKE_VAIHE_KEY,
-  suunnitteluVaihe?: HANKE_SUUNNITTELUVAIHE_KEY
-) => {
+export const selectHankeVaihe = (vaihe: HANKE_VAIHE_KEY) => {
   cy.get('#vaihe-toggle-button').click();
   switch (vaihe) {
     case HANKE_VAIHE.OHJELMOINTI:
@@ -29,27 +24,6 @@ export const selectHankeVaihe = (
       break;
     case HANKE_VAIHE.SUUNNITTELU:
       cy.get('#vaihe-item-1').click();
-      if (suunnitteluVaihe) {
-        cy.get('#suunnitteluVaihe-toggle-button').click();
-        switch (suunnitteluVaihe) {
-          case HANKE_SUUNNITTELUVAIHE.YLEIS_TAI_HANKE:
-            cy.get('#suunnitteluVaihe-item-0').click();
-            break;
-          case HANKE_SUUNNITTELUVAIHE.KATUSUUNNITTELU_TAI_ALUEVARAUS:
-            cy.get('#suunnitteluVaihe-item-1').click();
-            break;
-          case HANKE_SUUNNITTELUVAIHE.RAKENNUS_TAI_TOTEUTUS:
-            cy.get('#suunnitteluVaihe-item-2').click();
-            break;
-          case HANKE_SUUNNITTELUVAIHE.TYOMAAN_TAI_HANKKEEN_AIKAINEN:
-            cy.get('#suunnitteluVaihe-item-3').click();
-            break;
-          default:
-            break;
-        }
-      } else {
-        throw new Error('Tämä testin vaihe tarvitsee suunnitteluvaiheen');
-      }
       break;
     case HANKE_VAIHE.RAKENTAMINEN:
       cy.get('#vaihe-item-2').click();
@@ -67,14 +41,9 @@ export const fillForm0 = (hankeData: HankeDataDraft) => {
   if (hankeData.tyomaaKatuosoite) {
     cy.get('#tyomaaKatuosoite').type(hankeData.tyomaaKatuosoite);
   }
-  cy.get('#alkuPvm').type(hankeData.alkuPvm);
-  cy.get('#loppuPvm').type(hankeData.loppuPvm);
   cy.get('input[data-testid=nimi]').click();
 
-  selectHankeVaihe(
-    hankeData.vaihe,
-    hankeData.suunnitteluVaihe ? hankeData.suunnitteluVaihe : undefined
-  );
+  selectHankeVaihe(hankeData.vaihe);
 
   if (hankeData.onYKTHanke) {
     cy.get('input[data-testid=onYKTHanke]').click();
@@ -108,11 +77,10 @@ export const waitForToast = () => {
 };
 
 export const fillForm2 = (hankeData: HankeDataDraft) => {
-  if (hankeData.omistajat && hankeData.omistajat[0]) {
-    cy.get('input[data-testid=omistajat-etunimi]').type(hankeData.omistajat[0].etunimi);
-    cy.get('input[data-testid=omistajat-sukunimi]').type(hankeData.omistajat[0].sukunimi);
-    cy.get('input[data-testid=omistajat-email]').type(hankeData.omistajat[0].email);
-    cy.get('input[data-testid=omistajat-puhelinnumero]').type(hankeData.omistajat[0].puhelinnumero);
+  if (hankeData.omistajat) {
+    cy.get('input[data-testid=omistaja.nimi]').type(hankeData.omistajat[0].nimi);
+    cy.get('input[data-testid=omistaja.email]').type(hankeData.omistajat[0].email);
+    cy.get('input[data-testid=omistaja.puhelinnumero]').type(hankeData.omistajat[0].puhelinnumero);
   }
 };
 
@@ -216,38 +184,42 @@ export const selectTarinaHaitta = (tarinaHaitta: HANKE_TARINAHAITTA_KEY) => {
 export const fillForm1 = (hankeData: HankeDataDraft) => {
   cy.get('[data-testid=formStepIndicator]').should('exist');
 
-  if (hankeData.haittaAlkuPvm) {
-    cy.get('#haittaAlkuPvm').type(hankeData.haittaAlkuPvm);
-  } else {
+  cy.get('[data-testid=draw-control-Square]').click();
+
+  cy.get('#ol-map').click(300, 300).click(600, 600);
+
+  if (hankeData.alueet && hankeData.alueet[0].haittaAlkuPvm) {
+    cy.get('#haittaAlkuPvm').type(hankeData.alueet[0].haittaAlkuPvm);
+  } else if (hankeData.alkuPvm) {
     cy.get('#haittaAlkuPvm').type(hankeData.alkuPvm);
   }
 
-  if (hankeData.haittaLoppuPvm) {
-    cy.get('#haittaLoppuPvm').type(hankeData.haittaLoppuPvm);
-  } else {
+  if (hankeData.alueet && hankeData.alueet[0].haittaLoppuPvm) {
+    cy.get('#haittaLoppuPvm').type(hankeData.alueet[0].haittaLoppuPvm);
+  } else if (hankeData.loppuPvm) {
     cy.get('#haittaLoppuPvm').type(hankeData.loppuPvm);
   }
 
   cy.get('[data-testid=formStepIndicator]').click(); // Close datepicker because it is over kaistaHaitta-toggle-button
 
-  if (hankeData.kaistaHaitta) {
-    selectKaistaHaitta(hankeData.kaistaHaitta);
+  if (hankeData.alueet && hankeData.alueet[0].kaistaHaitta) {
+    selectKaistaHaitta(hankeData.alueet[0].kaistaHaitta);
   }
 
-  if (hankeData.kaistaPituusHaitta) {
-    selectKaistanPituusHaitta(hankeData.kaistaPituusHaitta);
+  if (hankeData.alueet && hankeData.alueet[0].kaistaPituusHaitta) {
+    selectKaistanPituusHaitta(hankeData.alueet[0].kaistaPituusHaitta);
   }
 
-  if (hankeData.meluHaitta) {
-    selectMeluHaitta(hankeData.meluHaitta);
+  if (hankeData.alueet && hankeData.alueet[0].meluHaitta) {
+    selectMeluHaitta(hankeData.alueet[0].meluHaitta);
   }
 
-  if (hankeData.polyHaitta) {
-    selectPolyHaitta(hankeData.polyHaitta);
+  if (hankeData.alueet && hankeData.alueet[0].polyHaitta) {
+    selectPolyHaitta(hankeData.alueet[0].polyHaitta);
   }
 
-  if (hankeData.tarinaHaitta) {
-    selectTarinaHaitta(hankeData.tarinaHaitta);
+  if (hankeData.alueet && hankeData.alueet[0].tarinaHaitta) {
+    selectTarinaHaitta(hankeData.alueet[0].tarinaHaitta);
   }
 };
 

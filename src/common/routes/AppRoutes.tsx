@@ -6,9 +6,11 @@ import Login from '../../domain/auth/components/Login';
 import OidcCallback from '../../domain/auth/components/OidcCallback';
 import { LOGIN_CALLBACK_PATH, LOGIN_PATH } from '../../domain/auth/constants';
 import LocaleRoutes from './LocaleRoutes';
+import { REDIRECT_PATH_KEY } from './constants';
 
-const AppRoutes: React.FC = () => {
+const AppRoutes: React.FC<React.PropsWithChildren<unknown>> = () => {
   const currentLocale = useLocale();
+  const redirectPath = sessionStorage.getItem(REDIRECT_PATH_KEY);
 
   return (
     <Routes>
@@ -17,7 +19,10 @@ const AppRoutes: React.FC = () => {
       {Object.values(LANGUAGES).map((locale) => (
         <Route path={`/${locale}/*`} element={<LocaleRoutes />} key={locale} />
       ))}
-      <Route path="*" element={<Navigate to={`/${currentLocale}`} />} />
+      <Route
+        path="*"
+        element={<Navigate to={redirectPath ? redirectPath : `/${currentLocale}`} />}
+      />
     </Routes>
   );
 };

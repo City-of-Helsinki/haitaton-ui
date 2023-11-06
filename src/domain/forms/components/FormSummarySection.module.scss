@@ -1,0 +1,13 @@
+@import 'src/assets/styles/layout.scss';
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: var(--spacing-xl);
+  row-gap: var(--spacing-m);
+  margin-bottom: var(--spacing-2-xl);
+
+  @include respond-above(m) {
+    grid-template-columns: 1.1fr 4fr;
+  }
+}

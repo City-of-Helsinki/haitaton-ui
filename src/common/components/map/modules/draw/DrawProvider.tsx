@@ -9,7 +9,7 @@ type Props = {
   source: VectorSource;
 };
 
-const DrawProvider: React.FC<Props> = ({ children, source }) => {
+const DrawProvider: React.FC<React.PropsWithChildren<Props>> = ({ children, source }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const contextValue = useMemo(
@@ -25,7 +25,7 @@ const DrawProvider: React.FC<Props> = ({ children, source }) => {
         },
       },
     }),
-    [state, source, dispatch]
+    [state, source, dispatch],
   );
 
   return <DrawContext.Provider value={contextValue}>{children}</DrawContext.Provider>;

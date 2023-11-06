@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { Vector as VectorSource } from 'ol/source';
 import { useLocation } from 'react-router-dom';
 import MapContext from '../../../../common/components/map/MapContext';
@@ -9,13 +9,13 @@ type Props = {
   source: VectorSource;
 };
 
-const HighlightFeatureOnMap: React.FC<Props> = ({ source }) => {
+const HighlightFeatureOnMap: React.FC<React.PropsWithChildren<Props>> = ({ source }) => {
   const location = useLocation();
   const { map } = useContext(MapContext);
   const { hoveredHankeTunnukset } = useContext(HoverContext);
   const hankeTunnus = new URLSearchParams(location.search).get('hanke');
 
-  const highlightFeature = () => {
+  const highlightFeature = useCallback(() => {
     source.getFeatures().some((feature) => {
       if (
         hoveredHankeTunnukset.includes(feature.get('hankeTunnus')) ||
@@ -27,21 +27,17 @@ const HighlightFeatureOnMap: React.FC<Props> = ({ source }) => {
       }
       return false;
     });
-  };
+  }, [hankeTunnus, hoveredHankeTunnukset, source]);
 
   useEffect(() => {
-    source.on('featuresAdded', () => {
+    source.on('addfeature', () => {
       highlightFeature();
     });
-  }, [map]);
+  }, [map, source, highlightFeature]);
 
   useEffect(() => {
     highlightFeature();
-  }, [hankeTunnus]);
-
-  useEffect(() => {
-    highlightFeature();
-  }, [hoveredHankeTunnukset]);
+  }, [hankeTunnus, hoveredHankeTunnukset, highlightFeature]);
 
   return null;
 };

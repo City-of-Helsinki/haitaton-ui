@@ -1,4 +1,4 @@
-@import 'layout.scss';
+@import 'src/assets/styles/layout.scss';
 
 .text {
   font-family: 'HelsinkiGrotesk', serif;
@@ -67,6 +67,11 @@
     font-weight: 500;
   }
 
+  &--spacing-3-xs {
+    margin-top: var(--spacing-3-xs);
+    margin-bottom: var(--spacing-3-xs);
+  }
+
   &--spacing-2-xs {
     margin-top: var(--spacing-2-xs);
     margin-bottom: var(--spacing-2-xs);
@@ -92,6 +97,15 @@
     margin-bottom: var(--spacing-l);
   }
 
+  &--spacing-xl {
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  &--spacing-top-3-xs {
+    margin-top: var(--spacing-3-xs);
+  }
+
   &--spacing-top-2-xs {
     margin-top: var(--spacing-2-xs);
   }
@@ -112,6 +126,14 @@
     margin-top: var(--spacing-l);
   }
 
+  &--spacing-top-xl {
+    margin-top: var(--spacing-lx);
+  }
+
+  &--spacing-bottom-3-xs {
+    margin-bottom: var(--spacing-3-xs);
+  }
+
   &--spacing-bottom-2-xs {
     margin-bottom: var(--spacing-2-xs);
   }
@@ -130,5 +152,9 @@
 
   &--spacing-bottom-l {
     margin-bottom: var(--spacing-l);
+  }
+
+  &--spacing-bottom-xl {
+    margin-bottom: var(--spacing-xl);
   }
 }

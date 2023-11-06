@@ -12,9 +12,6 @@ describe('authService', () => {
 
   afterEach(() => {
     localStorage.clear();
-    // eslint-disable-next-line
-    // @ts-ignore
-    localStorage.setItem.mockClear();
     jest.restoreAllMocks();
   });
 
@@ -67,10 +64,10 @@ describe('authService', () => {
   });
 
   describe('logout', () => {
-    it('should call signoutRedirect from oidc', () => {
-      const signoutRedirect = jest.spyOn(userManager, 'signoutRedirect');
+    it('should call signoutRedirect from oidc', async () => {
+      const signoutRedirect = jest.spyOn(userManager, 'signoutRedirect').mockResolvedValue();
 
-      authService.logout();
+      await authService.logout();
 
       expect(signoutRedirect).toHaveBeenCalledTimes(1);
     });

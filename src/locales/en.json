@@ -1,554 +1,961 @@
 {
   "authentication": {
-    "deviceTimeError": "EN:Et voi kirjautua sisään koska laitteesi kello on yli 5 minuuttia väärässä. Säädä kelloa ja kokeile uudestaan.",
-    "permissionRequestDenied": "EN:Sinun täytyy hyväksyä pyytämämme oikeudet käyttääksesi tätä palvelua. Ole hyvä ja yritä kirjautua uudelleen.",
-    "genericError": "EN:Tapahtui virhe. Yritä uudestaan.",
-    "loginButton": "EN:Kirjaudu",
-    "logoutButton": "EN:Kirjaudu ulos"
+    "deviceTimeError": "You cannot log in because the clock on your device is more than 5 minutes wrong. Adjust your clock and try again.",
+    "permissionRequestDenied": "You must accept the requested rights to use this service. Please try to log in again.",
+    "genericError": "There was an error logging in. Please try again.",
+    "loginButton": "Log in",
+    "logoutButton": "Log out",
+    "homePageLink": "Return to Haitaton <a>front page.</a>",
+    "supportLink": "You can also contact Haitaton technical support at the email address <a>haitatontuki@hel.fi.</a>"
   },
   "common": {
     "increment": "Increment",
+    "yes": "Yes",
+    "no": "No",
     "confirmationDialog": {
       "interruptDialog": {
-        "titleText": "EN: Olet poistumassa lomakkeelta",
-        "bodyText": "EN: Lomakkeella on tallentamattomia tietoja. Haluatko jatkaa jatkaa tietojen syöttämistä, vai poistua, jolloin syöttämäsi tiedot poistuvat.",
-        "exitButton": "EN: Poistu"
+        "titleText": "You are about to exit the form",
+        "bodyText": "The form contains unsaved data. Do you want to continue entering data or exit, in which case the data you entered will be deleted?",
+        "exitButton": "Exit"
       },
-      "deleteDialog": {
-        "titleText": "EN: Oletko varma että haluat poistaa hankkeen?",
-        "bodyText": "EN: Hankkeen poistaminen on pysyvä toiminto ja hankkeen tietoja ei voi palauttaa poistamisen jälkeen.",
-        "exitButton": "EN: Poista"
-      },
-      "cancelButton": "EN: Peruuta"
-    },
-    "languages": {
-      "fi": "Suomi",
-      "en": "English",
-      "sv": "Svenska"
+      "cancelButton": "Cancel",
+      "confirmButton": "Confirm"
     },
     "components": {
+      "link": {
+        "openInNewTabAriaLabel": "Opens in a new tab.",
+        "openInExternalDomainAriaLabel": "Leads to another website."
+      },
+      "linkbox": {
+        "linkbox": "Link box"
+      },
       "multiselect": {
-        "toggle": "EN:Sulje ja avaa valikko",
-        "removeSelected": "EN:Poista valittu",
-        "clear": "EN:Tyhjennä kenttä"
+        "toggle": "Close and open the menu",
+        "removeSelected": "Remove selected",
+        "clear": "Clear the field"
       },
       "searchInput": {
-        "placeholder": "EN:Etsi osoitteella",
-        "searchButtonAriaLabel": "EN:Hae"
+        "placeholder": "Search by address",
+        "searchButtonAriaLabel": "Search"
       },
       "header": {
-        "skipToContentLabel": "EN:Siirry pääsisältöön"
+        "skipToContentLabel": "Go to main content"
+      },
+      "notification": {
+        "notification": "Notification",
+        "closeButtonLabelText": "Close notification"
+      },
+      "errorLoadingInfo": {
+        "textTop": "Error loading information.",
+        "textBottom": "Please try again later."
       }
     },
-    "error": "EN: Tapahtui virhe. Yritä uudestaan."
+    "error": "An error occurred. Try again.",
+    "dataNotFound": "No information found",
+    "ariaLabels": {
+      "profileButton": "User profile",
+      "menuToggle": "Menu",
+      "closeButtonLabelText": "Close",
+      "topNavigation": "Haitaton navigation",
+      "footerNavigation": "Haitaton information"
+    },
+    "buttons": {
+      "savingText": "Saving",
+      "sendingText": "Sending",
+      "remove": "Remove"
+    }
   },
   "form": {
     "validations": {
-      "default": "EN:Kentän arvo on virheellinen",
-      "defined": "EN:Kenttä on pakollinen",
-      "notType": "EN:Kentän tyyppi on virheellinen",
-      "typeOf": "EN:Kentän tyyppi on virheellinen",
-      "required": "EN:Kenttä on pakollinen",
-      "email": "EN:Sähköposti on virheellinen",
-      "stringMin": "EN:Kentän pituus oltava vähintään {{min}} merkkiä",
-      "stringMax": "EN:Kentän pituus oltava enintään {{max}} merkkiä",
-      "dateMin": "EN:Ensimmäinen mahdollinen päivä on {{min}}",
-      "dateMax": "EN:Viimeinen mahdollinen päivä on {{max}}"
+      "default": "The field value is invalid",
+      "defined": "This field is required",
+      "notType": "The field type is invalid",
+      "typeOf": "The field type is invalid",
+      "required": "This field is required",
+      "email": "The email is incorrect",
+      "stringMin": "The field length must be at least {{min}} characters",
+      "stringMax": "The field length must not exceed {{max}} characters",
+      "dateMin": "The first possible date is {{min}}",
+      "dateMax": "The last possible date is {{max}}"
+    },
+    "errors": {
+      "areaRequired": "At least one area is required",
+      "fileLoadError": "Error in loading file",
+      "selfIntersectingArea": "The area borders cannot intersect with each other",
+      "fileLoadTechnicalError": "Uploading the file ({{fileName}}) failed. Please try again later.",
+      "fileLoadBadFileError": "There is a problem with the file ({{fileName}}). Please check that the file format is correct and the file size does not exceed 100 MB."
     },
     "headers": {
-      "liitteet": "EN:Liitteet"
+      "perustiedot": "Basic information",
+      "alueet": "Areas",
+      "yhteystiedot": "Contact information",
+      "liitteetJaLisatiedot": "Attachments and additional information",
+      "yhteenveto": "Summary",
+      "hakemusInfo": "Application information"
     },
     "labels": {
-      "selectFile": "EN:Valitse lisättävä tiedosto",
-      "selectFiles": "EN:Valitse lisättävät tiedostot"
+      "pintaAla": "Area",
+      "omatTiedot": "My information",
+      "role": "Role",
+      "roleHelper": "Your main role in the worksite",
+      "fromHelsinkiProfile": "Retrieved from Helsinki profile",
+      "addressInformation": "Address information",
+      "kokonaisAla": "Total area",
+      "areaName": "Area name",
+      "timespan": "Timespan",
+      "dragAttachments": "Drag and drop the files here",
+      "additionalInfo": "Additional information",
+      "added": "Added",
+      "addedFiles": "Attachments added"
+    },
+    "dialog": {
+      "titles": {
+        "removeAttachment": "Remove attachment?"
+      },
+      "descriptions": {
+        "removeAttachment": "Are you sure you want to remove the attachment {{fileName}}"
+      }
+    },
+    "notifications": {
+      "labels": {
+        "attachmentRemoved": "Attachment removed",
+        "editSentApplication": "You are about to edit an application that has already been sent."
+      },
+      "descriptions": {
+        "attachmentRemoved": "Attachment {{fileName}} was removed",
+        "editSentApplication": "You can edit the application until it enters processing. The new version of the application is automatically sent to the authorities when the form is saved."
+      }
+    },
+    "buttons": {
+      "loadingAttachments": "Loading attachments...",
+      "saveChanges": "Save changes",
+      "fillWithOwnInformation": "Fill out with your own information"
+    },
+    "helperTexts": {
+      "dateInForm": "Enter in format D.M.YYYY",
+      "areaName": "If you wish, you can name the area"
+    },
+    "requiredInstruction": "All fields marked with the asterisk * are mandatory.",
+    "yhteystiedot": {
+      "header": "Contact information",
+      "instructions": "The parties added in the project will receive a link by email.They can join the project on Haitaton via the link. After this, they can review the project and add applications to the project.",
+      "titles": {
+        "omistaja": "Project owner",
+        "omistajaInfo": "Project owner information",
+        "rakennuttajat": "Developer",
+        "rakennuttajatPlural": "Developers",
+        "toteuttajat": "Implementer",
+        "toteuttajatPlural": "Implementers",
+        "muut": "Other party",
+        "muutPlural": "Other parties",
+        "lisaaRakennuttaja": "Add developer",
+        "lisaaToteuttaja": "Add implementer",
+        "lisaaMuuTaho": "Add another party",
+        "subContact": "Contact person",
+        "subContacts": "Contact persons",
+        "subContactInformation": "Contact person information",
+        "customerWithContacts": "Applicant",
+        "contractorWithContacts": "Work contractor",
+        "contractorWithContactsPlural": "Work contractors",
+        "propertyDeveloperWithContacts": "Developer",
+        "representativeWithContacts": "Representative",
+        "representativeWithContactsPlural": "Representatives",
+        "addContractor": "Add contractor",
+        "addRepresentative": "Add representative",
+        "customerWithContactsInfo": "Applicant information",
+        "representativeInfo": "Representative’s information",
+        "contractorInfo": "Contractor information",
+        "implementerInfo": "Implementer information",
+        "otherInfo": "Other parties’ information",
+        "propertyDeveloperInfo": "Developer information"
+      },
+      "labels": {
+        "tyyppi": "Type",
+        "nimi": "Name",
+        "etunimi": "First name",
+        "sukunimi": "Last name",
+        "ytunnus": "Business ID",
+        "osoite": "Street address",
+        "postinumero": "Postal code",
+        "postitoimipaikka": "City",
+        "email": "Email",
+        "puhelinnumero": "Phone number",
+        "rooli": "Role",
+        "osasto": "Department",
+        "organisaatioNimi": "Organisation",
+        "rakennuttaja": "Developer",
+        "erillinenYhteyshenkilo": "Separate contact person"
+      },
+      "placeholders": {
+        "otherPartyRole": "Property manager, consultant..."
+      },
+      "helperTexts": {
+        "otherPartyRole": "Party’s role in the project"
+      },
+      "contactType": {
+        "YKSITYISHENKILO": "Private individual",
+        "YRITYS": "Company",
+        "YHTEISO": "Community",
+        "PERSON": "Private individual",
+        "COMPANY": "Company",
+        "ASSOCIATION": "Association",
+        "OTHER": "Other"
+      },
+      "buttons": {
+        "addSubContact": "Add a contact person",
+        "removeSubContact": "Remove contact person",
+        "remove": {
+          "rakennuttajat": "Remove developer",
+          "toteuttajat": "Remove implementer",
+          "muut": "Remove other party",
+          "propertyDeveloperWithContacts": "Remove developer",
+          "representativeWithContacts": "Remove representative"
+        }
+      }
     }
   },
   "routes": {
     "HOME": {
       "path": "/",
-      "headerLabel": "EN::Alkuun",
+      "headerLabel": "Back to the top",
       "meta": {
-        "title": "EN::Haitaton - Etusivu"
+        "title": "Haitaton - Front page"
       }
     },
     "HANKEPORTFOLIO": {
-      "path": "/hankesalkku",
-      "headerLabel": "EN:Omat hankkeet",
+      "path": "/projectportfolio",
+      "headerLabel": "Own projects",
       "meta": {
-        "title": "EN::Haitaton - Hankesalkku"
+        "title": "Haitaton - Project portfolio"
+      }
+    },
+    "HANKE": {
+      "path": "/projectportfolio/:hankeTunnus",
+      "headerLabel": "Projects",
+      "meta": {
+        "title": "Haitaton - Project page"
+      }
+    },
+    "ACCESS_RIGHTS": {
+      "path": "/projectportfolio/:hankeTunnus/oikeudet",
+      "headerLabel": "Access rights",
+      "meta": {
+        "title": "Haitaton - Access rights management"
       }
     },
     "PUBLIC_HANKKEET": {
-      "path": "/julkisethankkeet",
-      "headerLabel": "EN:Hankkeet yleisillä alueilla",
+      "path": "/publicprojects",
+      "headerLabel": "Projects in public areas",
       "meta": {
-        "title": "EN:Haitaton - Hankkeet yleisillä alueilla"
+        "title": "Haitaton - Projects in public areas"
       }
     },
     "PUBLIC_HANKKEET_MAP": {
-      "path": "/julkisethankkeet/kartta",
-      "headerLabel": "EN:Hankkeet yleisillä alueilla",
+      "path": "/publicprojects/map",
+      "headerLabel": "Projects in public areas",
       "meta": {
-        "title": "EN:Haitaton - Hankkeet yleisillä alueilla"
+        "title": "Haitaton - Projects in public areas"
       }
     },
     "PUBLIC_HANKKEET_LIST": {
-      "path": "/julkisethankkeet/hankelista",
-      "headerLabel": "EN:Hankkeet yleisillä alueilla",
+      "path": "/publicprojects/projectlist",
+      "headerLabel": "Projects in public areas",
       "meta": {
-        "title": "EN:Haitaton - Hankelista"
+        "title": "Haitaton - Project list"
       }
     },
     "NEW_HANKE": {
-      "path": "/hanke/new",
-      "headerLabel": "EN:Luo uusi hanke",
+      "path": "/project/new",
+      "headerLabel": "Create a new project",
       "meta": {
-        "title": "EN:Haitaton - Luo uusi hanke"
+        "title": "Haitaton - Create a new project"
       }
     },
     "EDIT_HANKE": {
-      "path": "/hanke/:hankeTunnus/edit",
-      "headerLabel": "EN:Hanke",
+      "path": "/project/:hankeTunnus/edit",
+      "headerLabel": "Project",
       "meta": {
-        "title": "EN:Haitaton - Hankkeen muokkaus"
+        "title": "Haitaton - Editing the project"
+      }
+    },
+    "FULL_PAGE_MAP": {
+      "path": "/fullpagemap/:hankeTunnus",
+      "headerLabel": "Full-page map",
+      "meta": {
+        "title": "Haitaton - Full-page map"
       }
     },
     "HAKEMUS": {
-      "path": "/hakemus/*",
-      "headerLabel": "Luo uusi hakemus",
+      "path": "/application/:id",
+      "headerLabel": "Application",
       "meta": {
-        "title": "Haitaton - Luo uusi hakemus"
+        "title": "Haitaton - Application page"
       }
     },
     "JOHTOSELVITYSHAKEMUS": {
-      "path": "/johtoselvityshakemus/*",
-      "headerLabel": "Luo uusi johtoselvityshakemus",
+      "path": "/cable-report-application",
+      "headerLabel": "Create a cable report application",
       "meta": {
-        "title": "Haitaton - Luo uusi johtoselvityshakemus"
+        "title": "Haitaton - Create a new cable report application"
+      }
+    },
+    "EDIT_JOHTOSELVITYSHAKEMUS": {
+      "path": "/cable-report-application/:id/edit",
+      "headerLabel": "Edit cable report application",
+      "meta": {
+        "title": "Haitaton - Edit cable report application"
       }
     },
     "HAITATON_INFO": {
       "path": "/info",
-      "headerLabel": "EN: Tietoja Haitattomasta",
+      "headerLabel": "About Haitaton",
       "meta": {
-        "title": "EN: Haitaton - Info"
+        "title": "Haitaton - Info"
       }
     },
     "ACCESSIBILITY": {
       "path": "/accessibility",
-      "headerLabel": "EN: Saavutettavuusseloste",
+      "headerLabel": "Accessibility statement",
       "meta": {
-        "title": "EN: Haitaton - Saavutettavuus"
+        "title": "Haitaton - Accessibility"
       }
     },
     "PRIVACY_POLICY": {
       "path": "/privacypolicy",
-      "headerLabel": "EN: Rekisteriseloste",
+      "headerLabel": "Privacy policy",
       "meta": {
-        "title": "EN: Haitaton - Rekisteriseloste"
+        "title": "Haitaton - Privacy policy"
       }
     },
     "REFERENCES": {
       "path": "/references",
-      "headerLabel": "EN: Lähdeviitteet",
+      "headerLabel": "References",
       "meta": {
-        "title": "EN: Haitaton - Lähdeviitteet"
+        "title": "Haitaton - References"
       }
     },
     "WORKINSTRUCTIONS": {
-      "path": "https://www.hel.fi/helsinki/en/housing/plots-land-buildings/permits-for-public-areas/working-on-streets-and-in-parks",
-      "headerLabel": "EN:Työohjeet",
+      "path": "https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/construction-phase-checklist",
+      "headerLabel": "Work instructions",
       "meta": {
-        "title": "EN:Haitaton - Työohjeet"
+        "title": "Haitaton - Work instructions"
+      }
+    },
+    "MANUAL": {
+      "path": "/manual",
+      "headerLabel": "Manual and support",
+      "meta": {
+        "title": "Haitaton - Manual and support"
+      }
+    },
+    "IDENTIFY_USER": {
+      "path": "/invitation",
+      "headerLabel": "Log in to Haitaton",
+      "meta": {
+        "title": "Haitaton - Log in to Haitaton"
       }
     }
   },
   "hanke": {
     "vaihe": {
-      "SUUNNITTELU": "EN:Suunnittelu",
-      "OHJELMOINTI": "EN:Ohjelmointi",
-      "RAKENTAMINEN": "EN:Rakentaminen"
-    },
-    "suunnitteluVaihe": {
-      "YLEIS_TAI_HANKE": "EN:Yleis- tai hankesuunnittelu",
-      "KATUSUUNNITTELU_TAI_ALUEVARAUS": "EN:Katusuunnittelu tai aluevarauksen suunnittelu",
-      "RAKENNUS_TAI_TOTEUTUS": "EN:Rakennus- tai toteutussuunnittelu",
-      "TYOMAAN_TAI_HANKKEEN_AIKAINEN": "EN:Työmaan tai hankkeen aikainen suunnittelu"
-    },
-    "tyomaaKoko": {
-      "SUPPEA_TAI_PISTE": "EN:Yksittäinen suppea kohde ja/tai pistemäinen työmaa",
-      "YLI_10M_TAI_KORTTELI": "EN:Työmaa-alueen pituus yli 10 m ja/tai korttelin mittainen työmaa",
-      "LAAJA_TAI_USEA_KORTTELI": "EN:Työmaa ulottuu kadun eri puolille ja/tai usean korttelin mittainen työmaa"
+      "SUUNNITTELU": "Planning",
+      "OHJELMOINTI": "Programming",
+      "RAKENTAMINEN": "Construction"
     },
     "tyomaaTyyppi": {
-      "VESI": "EN:Vesi",
-      "VIEMARI": "EN:Viemäri",
-      "SADEVESI": "EN:Sadevesi",
-      "SAHKO": "EN:Sähkö",
-      "TIETOLIIKENNE": "EN:Tietoliikenne",
-      "LIIKENNEVALO": "EN:Liikennevalo",
-      "YKT": "EN:YKT",
-      "ULKOVALAISTUS": "EN:Ulkovalaistus",
-      "KAAPPITYO": "EN:Kaappityö",
-      "KAUKOLAMPO": "EN:Kaukolämpö",
-      "KAUKOKYLMA": "EN:Kaukokylmä",
-      "KAASUJOHTO": "EN:Kaasujohto",
-      "KISKOTYO": "EN:Kiskotyö",
-      "MUU": "EN:Muu",
-      "KADUNRAKENNUS": "EN:Kadunrakennus",
-      "KADUN_KUNNOSSAPITO": "EN:Kadun kunnossapito",
-      "KIINTEISTOLIITTYMA": "EN:Kiinteistöliittymä",
-      "SULKU_TAI_KAIVO": "EN:Sulku tai kaivo",
-      "UUDISRAKENNUS": "EN:Uudisrakennus",
-      "SANEERAUS": "EN:Saneeraus",
-      "AKILLINEN_VIKAKORJAUS": "EN:Äkillinen vikakorjaus",
-      "VIHERTYO": "EN:Vihertyö",
-      "RUNKOLINJA": "EN:Runkolinja",
-      "NOSTOTYO": "EN:Nostotyö",
-      "MUUTTO": "EN:Muutto",
-      "PYSAKKITYO": "EN:Pysäkkityö",
-      "KIINTEISTOREMONTTI": "EN:Kiinteistöremontti",
-      "ULKOMAINOS": "EN:Ulkomainos",
-      "KUVAUKSET": "EN:Kuvaukset",
-      "LUMENPUDOTUS": "EN:Lumenpudotus",
-      "YLEISOTILAISUUS": "EN:Yleisötilaisuus",
-      "VAIHTOLAVA": "EN:Vaihtolava"
+      "VESI": "Water",
+      "VIEMARI": "Sewer",
+      "SADEVESI": "Rainwater",
+      "SAHKO": "Electricity",
+      "TIETOLIIKENNE": "Data communications",
+      "LIIKENNEVALO": "Traffic light",
+      "YKT": "Shared Public Utility Site (YKT)",
+      "ULKOVALAISTUS": "Outdoor lighting",
+      "KAAPPITYO": "Cabinetwork",
+      "KAUKOLAMPO": "District heating",
+      "KAUKOKYLMA": "District cooling",
+      "KAASUJOHTO": "Gas pipe",
+      "KISKOTYO": "Rail work",
+      "MUU": "Other",
+      "KADUNRAKENNUS": "Street construction",
+      "KADUN_KUNNOSSAPITO": "Street maintenance",
+      "KIINTEISTOLIITTYMA": "Property intersection",
+      "SULKU_TAI_KAIVO": "Lock or well",
+      "UUDISRAKENNUS": "Newbuilding",
+      "SANEERAUS": "Renovation",
+      "AKILLINEN_VIKAKORJAUS": "Unforeseen repair",
+      "VIHERTYO": "Greenery work",
+      "RUNKOLINJA": "Trunk line",
+      "NOSTOTYO": "Lifting work",
+      "MUUTTO": "Move",
+      "PYSAKKITYO": "Stop work",
+      "KIINTEISTOREMONTTI": "Property renovation",
+      "ULKOMAINOS": "Outdoor advertisement",
+      "KUVAUKSET": "Descriptions",
+      "LUMENPUDOTUS": "Snow removal",
+      "YLEISOTILAISUUS": "Public event",
+      "VAIHTOLAVA": "Swap body"
     },
     "kaistaHaitta": {
-      "YKSI": "EN:Ei vaikuta",
-      "KAKSI": "EN:Vähentää kaistan yhdellä ajosuunnalla",
-      "KOLME": "EN:Vähentää samanaikaisesti kaistan kahdella ajosuunnalla",
-      "NELJA": "EN:Vähentää samanaikaisesti useita kaistoja kahdella ajosuunnalla",
-      "VIISI": "EN:Vähentää samanaikaisesti useita kaistoja liittymän eri suunnilla"
+      "YKSI": "Does not affect",
+      "KAKSI": "Reduces one lane in one direction",
+      "KOLME": "Simultaneously reduces lanes in two directions",
+      "NELJA": "Simultaneously reduces several lanes in two directions",
+      "VIISI": "Simultaneously reduces several lanes in different directions of a junction"
     },
     "kaistaPituusHaitta": {
-      "YKSI": "EN:Ei vaikuta",
-      "KAKSI": "EN:Enintään 10 m",
-      "KOLME": "EN:11-100 m",
-      "NELJA": "EN:101-500 m",
-      "VIISI": "EN:Yli 500 m"
+      "YKSI": "Does not affect",
+      "KAKSI": "Max 10 m",
+      "KOLME": "11–100 m",
+      "NELJA": "101–500 m",
+      "VIISI": "Over 500 m"
     },
     "meluHaitta": {
-      "YKSI": "EN:Satunnainen haitta",
-      "KAKSI": "EN:Lyhytaikainen toistuva haitta",
-      "KOLME": "EN:Pitkäkestoinen jatkuva haitta"
+      "YKSI": "Occasional nuisance",
+      "KAKSI": "Short-term recurring nuisance",
+      "KOLME": "Long-term permanent nuisance"
     },
     "polyHaitta": {
-      "YKSI": "EN:Satunnainen haitta",
-      "KAKSI": "EN:Lyhytaikainen toistuva haitta",
-      "KOLME": "EN:Pitkäkestoinen jatkuva haitta"
+      "YKSI": "Occasional nuisance",
+      "KAKSI": "Short-term recurring nuisance",
+      "KOLME": "Long-term permanent nuisance"
     },
     "tarinaHaitta": {
-      "YKSI": "EN:Satunnainen haitta",
-      "KAKSI": "EN:Lyhytaikainen toistuva haitta",
-      "KOLME": "EN:Pitkäkestoinen jatkuva haitta"
+      "YKSI": "Occasional nuisance",
+      "KAKSI": "Short-term recurring nuisance",
+      "KOLME": "Long-term permanent nuisance"
+    },
+    "alue": {
+      "title": "Project area {{index}}",
+      "duration": "Project area duration",
+      "surfaceArea": "Area of the drawing",
+      "totalSurfaceArea": "Total area",
+      "totalSurfaceAreaLong": "Total area of project areas",
+      "liikenneverkollinenHaitta": "Transport network nuisance of the project area",
+      "haittaMaarittelyt": "The project area’s own nuisance definitions"
     }
   },
   "hankeForm": {
-    "pageHeaderNew": "EN:Uusi hanke",
-    "pageHeaderEdit": "EN:Muokkaa hanketta {{hankeTunnus}}",
+    "pageHeaderNew": "New project",
+    "pageHeaderEdit": "Edit project {{hankeTunnus}}",
     "editingDisabled": {
-      "STARTED": "EN:Käynnissä olevan hankkeen tietoja ei voi muokata."
+      "STARTED": "Information on the ongoing project cannot be edited."
     },
-    "saveDraftButton": "EN:Tallenna ja keskeytä",
-    "saveButton": "EN:Tallenna",
-    "saveAndAddButton": "EN:Tallenna ja lisää hakemuksia",
-    "cancelButton": "EN:Peru hanke",
-    "nextButton": "EN:Seuraava",
-    "previousButton": "EN:Edellinen",
-    "addContactButton": "EN:Lisää yhteyshenkilö",
-    "removeContactButton": "EN:Poista yhteyshenkilö",
-    "insertFieldError": "EN:Syötä kenttä",
-    "savingSuccessHeader": "EN:Luonnos tallennettu",
-    "savingSuccessText": "EN:Luonnos on tallennettu Hankelistalle",
-    "savingFailHeader": "EN:Joku meni vikaan",
-    "savingFailText": "EN:Luonnosta ei saatu tallennettua, koita uudelleen",
-    "closeAriaLabel": "EN:Poistu kaavakkeelta tallentamatta",
-    "confirmIndexCalculationButton": "EN:Jatka indeksilaskentaan",
+    "saveDraftButton": "Save and suspend",
+    "saveButton": "Save",
+    "saveAndAddButton": "Save and add applications",
+    "cancelButton": "Cancel the project",
+    "cancelSuccessHeader": "Project removed",
+    "cancelSuccessText": "The project has been removed",
+    "activeApplicationsHeader": "The project has active applications",
+    "activeApplicationsDescription": "The project involves active work or applications, which is why it cannot be cancelled or marked as complete. Please review the active applications in the Applications tab.",
+    "nextButton": "Next",
+    "previousButton": "Previous",
+    "insertFieldError": "Enter a field",
+    "savingSuccessHeader": "Draft saved",
+    "savingSuccessText": "The draft has been saved in the project list",
+    "savingFailHeader": "Something went wrong",
+    "savingFailText": "Could not save the draft, try again",
+    "closeAriaLabel": "Exit the form without saving",
+    "confirmIndexCalculationButton": "Continue to index calculation",
+    "cancelDialog": {
+      "titleText": "Cancel project?",
+      "bodyText": "Are you sure you want to cancel the project? The project will be completely removed from the system."
+    },
     "labels": {
-      "hankeTunnus": "EN:Hankkeen tunnus",
-      "nimi": "EN:Hankkeen nimi",
-      "vaihe": "EN:Hankkeen Vaihe",
-      "kuvaus": "EN:Hankkeen kuvaus",
-      "suunnitteluVaihe": "EN:Hankkeen suunnitteluvaihe",
-      "alkuPvm": "EN:Hankkeen alkupäivä",
-      "loppuPvm": "EN:Hankkeen loppupäivä",
-      "tyomaaTyyppi": "EN:Työmaan tyyppi",
-      "tyomaaKoko": "EN:Työmaan koko",
-      "haittaAlkuPvm": "EN:Haitan alkupäivämäärä",
-      "haittaLoppuPvm": "EN:Haitan loppupäivämäärä",
-      "kaistaHaitta": "EN:Kaistahaitta",
-      "kaistaPituusHaitta": "EN:Kaistan pituushaitta",
-      "meluHaitta": "EN:Meluhaitta",
-      "polyHaitta": "EN:Pölyhaitta",
-      "tarinaHaitta": "EN:Tärinähaitta",
-      "tyomaaKatuosoite": "EN:Katuosoite",
-      "onYKTHanke": "EN:Hanke on YKT-hanke",
-      "sukunimi": "EN:Sukunimi",
-      "etunimi": "EN:Etunimi",
-      "email": "EN:Sähköposti",
-      "puhelinnumero": "EN:Puhelinnumero",
-      "osasto": "EN:Osasto",
-      "organisaatio": "EN:Organisaatio",
-      "omaOrganisaatio": "EN:Lisää oma organisaatio",
-      "insertOmaOrganisaatio": "EN:Syötä oma organisaatio"
-    },
-    "headers": {
-      "arvioijat": "EN:Arvioijat",
-      "omistajat": "EN:Omistajat",
-      "toteuttajat": "EN:Toteuttajat"
+      "hankeTunnus": "Project identifier",
+      "nimi": "Project name",
+      "vaihe": "Project phase",
+      "kuvaus": "Project description",
+      "alkuPvm": "Project start date",
+      "loppuPvm": "Project end date",
+      "tyomaaTyyppi": "Worksite type",
+      "haittaAlkuPvm": "Start date of the nuisance",
+      "haittaLoppuPvm": "End date of the nuisance",
+      "kaistaHaitta": "Lane hindrance",
+      "kaistaPituusHaitta": "Hindrance affecting lane length",
+      "meluHaitta": "Noise nuisance",
+      "polyHaitta": "Dust nuisance",
+      "tarinaHaitta": "Vibration nuisance",
+      "tyomaaKatuosoite": "Street address",
+      "onYKTHanke": "The project is a Shared Public Utility Site (YKT) project",
+      "sukunimi": "Last name",
+      "etunimi": "First name",
+      "email": "Email",
+      "puhelinnumero": "Phone number",
+      "osasto": "Department",
+      "organisaatio": "Organisation",
+      "omaOrganisaatio": "Add your own organisation",
+      "insertOmaOrganisaatio": "Enter your own organisation",
+      "rights": "Your access rights to the project",
+      "perustaja": "Established by"
     },
     "toolTips": {
-      "tipOpenLabel": "EN:Avaa ohje",
-      "perustiedot": "EN:Hankkeen pakolliset perustiedot tulee täyttää. Mikäli kaikki pakolliset tiedot eivät ole täytettynä, uusi hanke tallentuu Haitattomaan, muttei voi edetä vaikutusten arviointiin. Hankkeen tietojen täydentämistä voi jatkaa myöhemmin avaamalla se hankelistan kautta",
-      "nimi": "EN:Hanketta tiiviisti kuvaava nimi",
-      "onYKTHanke": "EN:Yhteinen kunnallistekninen työmaa – yhteistoimintasopimuksen mukainen yhteishanke. Osapuolia ovat Helsingin kaupungin kaupunkiympäristön toimialan lisäksi Helsingin kaupungin liikenne -liikelaitos (HKL), Helsingin seudun ympäristöpalvelut -kuntayhtymä HSY,  Helen Oy, Helen Sähköverkko Oy, Auris Kaasunjakelu Oy sekä viestintäverkko operaattorit Cinia Oy, DNA Oyj, Elisa Oyj ja Telia Finland Oyj. YKT -yhteistoiminnalla pyritään sujuvoittamaan kaupungissa tapahtuvaa yleisten alueiden rakentamista ja sovittamaan sopijaosapuolten erillishankkeet yhteisesti toteutettaviksi, infrapalvelujen laatua ja tarjontaa parantaviksi hankkeiksi.",
-      "alkuPvm": "EN:Hankkeen toteutuksen aloituspäivä (Huom! Yleisellä alueella tapahtuva toteutus, ei esimerkiksi tontin puolella tapahtuva toteutus)",
-      "loppuPvm": "EN:Hankkeen toteutuksen lopetuspäivä (Huom! Yleisellä alueella tapahtuva toteutus, ei esimerkiksi tontin puolella tapahtuva toteutus)",
-      "vaihe": "EN:Hankkeen etenemisen tilan kuvaus, jota päivitetään hankkeen edetessä. Ohjelmointivaihe on alustava hankesuunnittelu- tai esisuunnitteluvaihe. Suunnitteluvaiheessa on alavaiheita suunnittelutason tarkkuuden mukaan. Luvanhakuprosessin kannalta hanke on suunnitteluvaiheessa niin kauan, kunnes se saa toteutusluvan kaupungilta. Rakentamisvaiheessa hanke on saanut luvan kaupungilta. Haitaton ei käsittele luvanhaun, rakentamisvaiheen tai hankkeen valmistumisen/ylläpidon/luovutuksen vaiheita.",
-      "kuvaus": "EN:Hankkeen keskeisen sisällön ja tavoitteiden kuvaus. (Huom! Yleisellä alueella tapahtuva toteutus, ei esimerkiksi tontin puolella tapahtuva toteutus)",
-      "suunnitteluVaihe": "EN:Suunnitteluvaihetta tarkentava alavaihe, jota päivitetään hankkeen edetessä.",
-      "omistajat": "EN:Hankkeen omistaja vastaa koko hankkeesta sen alusta aina loppumiseen / valmistumiseen / luovutukseen asti.",
-      "arvioijat": "EN:Hankkeen analysoija tai arvioija voi olla hankkeen omistaja tai omistajan valtuuttama muu taho (esimerkiksi omistajatahon ulkopuolinen hankkeen suunnittelijakonsultti tai urakoitsija).",
-      "toteuttajat": "EN:Hankkeen toteutuksesta vastaava voi olla hankkeen omistaja tai omistajan valtuuttama muu taho (esimerkiksi omistajatahon ulkopuolinen urakoitsija).",
-      "tyomaaKatuosoite": "EN:Hankkeen katuosoite/katuosoitteet sekä numero tai numeroväli (esim. Mannerheimintie 5, Hämeentie 3-27) tai muu paikallistava tieto, mikäli katuosoitetta ei ole saatavilla.",
-      "tyomaaTyyppi": "EN:Hankkeen tyypin monivalinta. Hanke voi koostua useista eri hanketyypeistä, eli voit valita useita hanketyyppejä.",
-      "kaistaHaitta": "EN:Todennäköinen haitta pääajoratojen kaistajärjestelyihin"
+      "tipOpenLabel": "Instruction",
+      "perustiedot": "Mandatory basic information about the project must be filled in. If all the mandatory information is not filled in, the new project will be saved in Haitaton but will not be able to proceed to the impact assessment. You can continue to fill in information on the project later by opening it via the project list",
+      "nimi": "Name that concisely describes the project",
+      "onYKTHanke": "Joint municipal worksite – a joint project under the cooperation agreement. In addition to the City of Helsinki’s Urban Environment Division, the parties are Helsinki City Transport (HKL), Helsinki Region Environmental Services (HSY), Helen Ltd, Helen Electricity Network Ltd, Auris Kaasunjakelu Ltd and the communications network operators Cinia Ltd, DNA Plc, Elisa Plc and Telia Finland Plc. The aim of the Shared Public Utility Site (YKT) partnership is to streamline the construction of public spaces in the city and adapt the contracting parties’ individual projects into jointly implemented projects that improve the quality and supply of infrastructure services.",
+      "alkuPvm": "Start date of project implementation (Note! Implementation in a public area, not, for example, on a plot)",
+      "loppuPvm": "End date of project implementation (Note! Implementation in a public area, not, for example, on the side of a plot)",
+      "vaihe": "A description of the progress of the project which will be updated as the project progresses. The programming phase is the initial project planning or pre-planning phase. In terms of the permit application process, the project is in the planning phase until it receives an execution permit from the city. At the construction phase, the project has received a permit from the city. Haitaton does not cover the permit application, construction or completion/maintenance/handover phases of the project.",
+      "kuvaus": "Description of the main content and objectives of the project. (Note! Implementation in a public area, not, for example, on the side of a plot)",
+      "omistajat": "The project owner is responsible for the entire project from its beginning to its end/completion/handover.",
+      "arvioijat": "The project analyst or assessor may be the project owner or another party authorised by the owner (for example, a project planning consultant or contractor not affiliated with the owner).",
+      "toteuttajat": "The person responsible for implementing the project may be the project owner or another party authorised by the owner (for example, a contractor not affiliated with the owner).",
+      "tyomaaKatuosoite": "The street address(es) of the project and the number or range of numbers (e.g. Mannerheimintie 5, Hämeentie 3–27) or other locating information if the street address is not available.",
+      "tyomaaTyyppi": "Multiple selection of project type. A project can consist of several different project types, which means you can select several project types.",
+      "kaistaHaitta": "Likely nuisance to lane arrangements on the main carriageways"
     },
     "perustiedotForm": {
-      "header": "EN:Hankkeen perustiedot",
-      "ytkHankeHeader": "EN:YKT-hanke"
+      "header": "Basic project information",
+      "ytkHankeHeader": "Shared Public Utility Site (YKT) project",
+      "instructions": "<1>You can also send applications via the project creation.</1><1><0>PLEASE NOTE!</0> If you are only working on a cable report for a private area, <2>fill in the application</2>. Cable reports for public areas are applied for after the project has been created, via the excavation notification.</1><1>When you have added the project information, you can copy it to the applications as required.</1>"
     },
     "hankkeenAlueForm": {
-      "header": "EN:Alueet",
-      "instructions": "EN: Hankkeelle voi piirttää useita geometrioita. Geometria alueet vaikuttavat hankkeen liikennehaittaindekseihin.\nPiirtotyökalut löytyvät karttanäkymän vasemmasta alalaidasta. Kynätyökalulla voi piirtää monikulmaisia geometrioita klikkaamalla kohtaan, johon haluat kulman. Neliötyökalulla saat muodostettua neliömäisiä alueita klikkaamalla ensin kartalle ja liikuttamalla hiirtä haluamaasi suuntaan. Uudelleenklikkaus \"sulkee\" neliön piirron.\nGeometriaa voi muokata \"tarttumalla\" geometrian reunasta ja vetämällä. Myös neliömäistä geometriaa voi muokata reunasta tarttumalla.\nVoit poistaa geometrian valitsemalla ensin geometrian klikkaamalla sitä, jolloin vasemman alalaidan piirtotyökaluihin ilmestyy roskakori ikoni, jota klikkaamalla geometrian voi poistaa."
-    },
-    "hankkeenYhteystiedotForm": {
-      "header": "EN:Hankkeen yhteystiedot"
+      "header": "Areas",
+      "subHeader": "Project areas",
+      "area": "Area",
+      "instructions": "Several geometries can be drawn for the project. Geometry areas affect the project’s traffic congestion indices. Drawing tools can be found at the bottom left of the map view. With the pen tool, you can draw polygonal geometries by clicking the point where you want an angle. With the square tool, you can create square areas by first clicking the map and moving the mouse in the direction you want. Clicking it again “closes” the square drawing. A geometry can be edited by “grabbing” the edge of the geometry and dragging. A square geometry can also be shaped by grabbing the edge. lete a geometry, first select the geometry by clicking it; a bin icon will appear in the bottom left drawing tools which you can click to delete the geometry.",
+      "haitatHeader": "Nuisance assessments for the area",
+      "haitatInstructions": "Give an estimate of the most significant impacts in the project area.",
+      "removeAreaButton": "Remove area"
     },
     "tyomaanTiedotForm": {
-      "header": "EN:Hankkeen lisätiedot"
+      "header": "Additional project information"
     },
     "hankkeenHaitatForm": {
-      "header": "EN:Haitat"
+      "header": "Nuisances"
+    },
+    "hankkeenYhteenvetoForm": {
+      "header": "Summary",
+      "instructions": "Please check the information you entered and save the project or save and move to add applications."
     },
     "hankkeenLiitteetForm": {
       "instructions": "EN:Lisää mahdolliset liitteet. Hankkeelle lisättävät liitteet eivät siirry hakemuksille."
     },
     "finishedForm": {
-      "header": "EN:Lomake on lähetetty onnistuneesti"
+      "header": "The form has been successfully submitted"
+    },
+    "addContactButton": "Add a contact person",
+    "removeContactButton": "Remove a contact person",
+    "headers": {
+      "arvioijat": "Assessors",
+      "omistajat": "Owners",
+      "toteuttajat": "Implementers"
+    },
+    "hankkeenYhteystiedotForm": {
+      "header": "Contact details for the project"
     }
   },
+  "johtoselvitysForm": {
+    "pageHeader": "Cable report application",
+    "perustiedot": {
+      "instructions": "<p>Please note that the cable report will be valid for a month. The cable report must be valid when ordering cabling terrain surveys and submitting excavation notifications. If necessary, the cable report must be updated.</p><p>For work to be done in public areas, a separate notification must be submitted to the City. See the more detailed instructions: <a>hel.fi</a></p>"
+    },
+    "alueet": {
+      "instructions1": "Start drawing the report area by adding the start and end dates of the work. The drawing tools will appear in the bottom left corner of the map. You can now draw the report areas on the map. You can add multiple areas to the same application if they are covered by the same timespan.",
+      "instructions2": "The areas you draw are shown as a list under the map. You can also remove areas from the list.",
+      "giveDates": "Select the work dates to draw the work areas on the map."
+    },
+    "liitteet": {
+      "instructions": "Add attachments to the application, such as a work plan. The attachments are saved in the form via the Next and Save buttons at the bottom of the page."
+    }
+  },
+  "hakemus": {
+    "labels": {
+      "nimi": "Work name",
+      "tyossaKyse": "The work involves",
+      "kuvaus": "Work description",
+      "constructionWork": "Constructing a new structure or cabling/piping",
+      "maintenanceWork": "Maintenance on an existing structure",
+      "propertyConnectivity": "Constructing property intersections",
+      "emergencyWork": "The excavation started before the cable report was requested to avoid significant damage",
+      "applicationType": "Application type",
+      "copyPreviousApplication": "Copy a previous application as a template",
+      "applicationToUseAsBase": "Application to be used as a template",
+      "startDate": "Estimated start date for work",
+      "endDate": "Estimated end date for work",
+      "workArea": "Work area",
+      "areaInfo": "Area information",
+      "checkInfo": "Check the information you entered and send the application.",
+      "preFilledInfo": "Pre-filled information",
+      "preFilledInfoHelp": "Select a name from the project information",
+      "cancelTitle": "Are you sure you want to cancel the application?",
+      "cancelDescription": "Cancelling the application is permanent. The application information cannot be restored after cancelling.",
+      "rockExcavation": "Will the work involve excavations, for example into rock?",
+      "rockExcavationShort": "Will the work involve excavation?",
+      "areaDuration": "Work duration in the area",
+      "totalSurfaceArea": "Total working area",
+      "applicationState": "Application state",
+      "relatedHanke": "Related to project",
+      "downloadDecision": "Download decision (PDF)",
+      "downloadDecisionShort": "Download PDF",
+      "addedAreas": "Areas added by you",
+      "removeAreaTitle": "Remove area",
+      "removeAreaDescription": "Are you sure you want to remove the area {{areaName}}",
+      "applicationAdditionalInfo": "Additional information on the application"
+    },
+    "notifications": {
+      "saveSuccessLabel": "Application saved",
+      "saveErrorLabel": "Saving failed",
+      "saveSuccessText": "The application has been saved",
+      "saveErrorText": "<0>Failed to save the application. Please try again later or contact the Haitaton technical support by email <1>haitatontuki@hel.fi</1>.</0>",
+      "sendSuccessLabel": "Application sent",
+      "sendErrorLabel": "Sending failed",
+      "sendSuccessText": "The application was sent for processing.",
+      "sendErrorText": "<0>The application was saved as a draft because sending it failed. Please try again later or contact the Haitaton technical support by email <1>haitatontuki@hel.fi.</1></0>",
+      "cancelSuccessLabel": "Application cancelled",
+      "cancelSuccessText": "The application has been cancelled",
+      "noApplications": "No applications have been added to the project",
+      "maxAttachmentsNumberExceeded": "The maximum number of attachments ({{maxNumber}} items) has been exceeded",
+      "sentApplicationPersonalInfoNotification": "The personal information of the submitted application cannot be edited"
+    },
+    "status": {
+      "PENDING_CLIENT": "Visible to authorities",
+      "PENDING": "Pending",
+      "WAITING_INFORMATION": "Waiting for additional information",
+      "INFORMATION_RECEIVED": "Information received",
+      "HANDLING": "Processing",
+      "RETURNED_TO_PREPARATION": "Returned to preparation",
+      "DECISIONMAKING": "Decision pending",
+      "DECISION": "Decision",
+      "OPERATIONAL_CONDITION": "Operational condition approved",
+      "FINISHED": "Work finished; approved",
+      "CANCELLED": "Application cancelled",
+      "ARCHIVED": "Work archived",
+      "REPLACED": "Replaced",
+      "null": "Draft"
+    },
+    "buttons": {
+      "continueToApplication": "Continue to application",
+      "sendApplication": "Send application",
+      "cancelApplication": "Cancel application",
+      "editApplication": "Edit application"
+    },
+    "errors": {
+      "cancelConflict": "The application cannot be cancelled because it has entered the processing stage",
+      "notFound": "Application not found"
+    },
+    "headers": {
+      "pickApplication": "Select application"
+    },
+    "applicationTypes": {
+      "CABLE_REPORT": "Cable report"
+    },
+    "applicationTypeDraft": {
+      "CABLE_REPORT": "Cable report draft"
+    },
+    "applicationTypeInstruction": "Select application type. For some applications, you can also copy a previous application as a template. Via the excavation report, you can also submit a cable report if you do not have one already."
+  },
   "hankeSidebar": {
-    "ariaSidebarContent": "EN:Hankkeen tiedot",
-    "closeButtonAriaLabel": "EN:Sulje hankevalikko",
-    "editHanke": "EN: Muokkaa hankkeen tietoja"
+    "ariaSidebarContent": "Project information",
+    "closeButtonAriaLabel": "Close project menu",
+    "editHanke": "Edit project Information"
   },
   "hankeIndexes": {
-    "haittaindeksit": "EN:Haittaindeksit",
-    "haittaindexTooltip": "EN:Haittaindeksit lasketaan hankkeen alueen mukaan. Indeksit päivittyvät, kun tallennat lomakkeen tiedot tai siirryt seuraavalle sivulle.",
-    "liikennehaittaindeksi": "EN: Liikennehaittaindeksi",
-    "ruuhkautuminen": "EN: Ruuhkautuminen",
-    "pyorailynPaareitti": "EN: Pyöräilyn pääreitti",
-    "merkittavatJoukkoliikennereitit": "EN: Merkittävät joukkoliikennereitit",
-    "kiertoreittitarve": "EN: Kiertoreittitarve",
+    "haittaindeksi": "Nuisance index",
+    "haittaindeksit": "Nuisance indices",
+    "haittaindexTooltip": "Nuisance indices are calculated by project area. The indices are updated when you save the form or go to the next page.",
+    "liikennehaittaindeksi": "Traffic nuisance index",
+    "ruuhkautuminen": "Congestion",
+    "pyorailynPaareitti": "Main cycling route",
+    "kiertoreittitarve": "Detour need",
     "KIERTOREITTITARPEET": {
-      "TODENNAKOINEN": "EN: todennäköinen",
-      "EI_TARVETTA": "EN: ei tarvetta",
-      "MERKITTAVA": "EN: merkittävä"
+      "TODENNAKOINEN": "likely",
+      "EI_TARVETTA": "no need",
+      "MERKITTAVA": "significant"
     },
-    "indexesNotCalculated": "EN: Haittaindeksejä ei ole laskettu."
+    "indexesNotCalculated": "No nuisance indices have been calculated."
   },
   "homepage": {
-    "pageTitle": "EN: Tervetuloa Haitaton-palveluun",
-    "pageSubTitle_loggedIn": "EN: Palvelu yleisille alueille sijoittuvien hankkeiden edistämiseen ja haittojen hallintaan",
-    "pageSubTitle": "EN: Palvelu yleisille alueille sijoittuvien hankkeiden ja niiden haittojen seurantaan ",
-    "info": "EN: Haitaton-palvelussa pääset tutustumaan kaikkiin yleisillä alueilla käynnissä oleviin ja tuleviin hankkeisiin sekä antamaan niille palautetta. Voit tarkastella hankkeita kartalla tai listalla. Oletko perustamassa hanketta tai tekemässä hakemuksia?",
-    "info_link": "EN: Siirry Haitaton-asiointiin",
+    "pageTitle": "Welcome to the Haitaton service",
+    "pageTitle_loggedIn": "Welcome to Haitaton e-services",
+    "pageSubTitle_loggedIn": "The system is intended for advancing projects taking place in public areas and managing the disturbances caused by them",
+    "pageSubTitle": "Service for monitoring projects and their negative impacts in public areas",
+    "info": "In the Haitaton service, you can learn about and give feedback on all ongoing and upcoming projects in public areas. You can view projects on a map or in a list. Are you starting a project or submitting applications?",
+    "info_link": "Go to the Haitaton service",
+    "notification": {
+      "heading": "Help us improve Haitaton!",
+      "text": "You can send ideas and feedback to the address"
+    },
     "hanke": {
-      "title": "EN: Luo uusi hanke",
-      "description": "EN: Luomalla Haitaton-hankkeen pystyt suunnittelemaan etukäteen yleisellä alueella tapahtuvaa työtä sekä tekemään hakemuksia, kuten johtoselvityksiä.",
-      "actionText": "EN: Luo uusi hanke"
+      "title": "Create a new project",
+      "description": "By creating a Haitaton project, you can plan work in the public domain in advance and make applications such as cabling surveys.",
+      "actionText": "Create a new project"
     },
     "hakemus": {
-      "title": "EN: Hakemus/Työvaihe",
-      "description": "EN: Hakemukset ovat kaivu- tai aluevuokraus-ilmoituksia tai tilapäisiä liikennejärjestelyjä.",
-      "actionText": "EN: Luo hakemus"
+      "title": "Application/Working phase",
+      "description": "The applications are for excavation or land lease notices or temporary traffic arrangements.",
+      "actionText": "Create an application"
     },
     "johtotietoselvitys": {
-      "title": "EN: Johtotietoselvitys",
-      "description": "EN: Selvityspyyntö tietyn alueen johtotiedoista. Tarvitaan kaivuilmoituksen liitteenä.",
-      "actionText": "EN: Tee Johtotietoselvitys"
+      "title": "Cable report",
+      "description": "A request for clarification on cable location information for a specific area. Required as an attachment to the excavation notice.",
+      "actionText": "Submit a cable report"
     },
     "valmistelu": {
-      "title": "EN: Valmisteluvaiheessa oleva hanke",
-      "description": "EN: Pitkän ajanjakson tarkasteluun ja suunnitteluun tarkoitettu hanke, joka ei koostu hakemuksista.",
-      "actionText": "EN: Luo ohjelmointihanke"
+      "title": "Project in the preparatory phase",
+      "description": "A project for long-term review and planning that does not consist of applications.",
+      "actionText": "Create a programming project"
     },
     "hankesalkku": {
-      "title": "EN: Omat hankkeet",
-      "description": "EN: Omista hankkeista löydät aiemmin luomasi hankkeet ja hakemukset.",
-      "actionText": "EN: Avaa omat hankkeet"
+      "title": "Own projects",
+      "description": "In your own projects, you will find the projects and applications that you have previously created.",
+      "actionText": "Open your own projects"
     },
     "hankelista": {
-      "title": "EN: Hankelista",
-      "description": "EN: Tutustu käynnissä oleviin ja tuleviin hankkeisiin listauksena.",
-      "actionText": "EN: Avaa hankelista"
+      "title": "Project list",
+      "description": "View a list of ongoing and upcoming projects.",
+      "actionText": "Open project list"
     },
     "kartta": {
-      "title": "EN: Tutustu hankkeisiin",
-      "description": "EN: Tutustu käynnissä oleviin ja tuleviin hankkeisiin yleisillä alueilla kartalla tai listauksena.",
-      "actionText": "EN: Tutustu hankkeisiin kartalla"
+      "title": "View the projects",
+      "description": "View a map or a list of ongoing and upcoming projects in public areas.",
+      "actionText": "View projects on a map"
     },
     "kartta_kirjautumaton": {
-      "title": "EN: Hankkeet kartalla",
-      "description": "EN: Tutustu käynnissä oleviin ja tuleviin hankkeisiin kartalla",
-      "actionText": "EN: Tutustu hankkeisiin kartalla"
+      "title": "Projects on a map",
+      "description": "View current and future projects on a map",
+      "actionText": "View projects on a map"
     },
     "tietoja_haitattomasta": {
-      "title": "EN: Tietoja Haitattomasta",
-      "description": "EN: Täältä löydät tarkempaa tietoa ilmoitusprosessista, sekä Haitattoman eri toiminnallisuuksista.",
-      "actionText": "EN: Lue lisää haitattomasta"
+      "title": "About Haitaton",
+      "description": "Here, you can find more detailed information on the notification process as well as on the different functionalities of Haitaton.",
+      "actionText": "Read more about Haitaton"
     },
     "ohjeet": {
-      "title": "EN: Ohjeet",
-      "description": "EN: Tutustu yleisten alueiden hankkeita koskeviin ohjeistuksiin.",
-      "actionText": "EN: Tutustu ohjeisiin"
+      "title": "Work instructions",
+      "description": "See the guidelines for projects in public areas.",
+      "actionText": "Read the instructions"
+    },
+    "loginContainer": {
+      "description": "Before starting work in the City of Helsinki that involves digging, excavation or drilling, a valid cable report must be requested.",
+      "button": "Log in to submit an application",
+      "imageAltText": "Kalasatama Metro Station and a worksite. The station is seen as a separate glass-walled oval structure above the worksite. In the front, the earth has been dug open, and to the left, buildings of the upcoming shopping centre rise up. The worksite continues behind the metro station up to the Kuorekari straits. To the right, parts of the Suvilahti Power Plant can be seen."
     }
   },
   "hankePortfolio": {
-    "filters": "EN: Rajausehdot",
-    "pageHeader": "EN:Hankesalkku",
-    "search": "EN: Haku",
-    "searchHelperText": "EN: Hae hankkeen nimellä tai tunnuksella",
-    "noneFound": "EN: Haulla ei löytynyt yhtään hankkeita.",
-    "noneExist": "EN: Hankesalkussasi ei ole hankkeita.",
-    "hankevaiheet": "EN: Hankevaiheet",
-    "hankevaiheetHelperText": "EN: Valitse hankevaiheet joita haluat tarkastella",
-    "startDate": "EN: Ajanjakson alku",
-    "endDate": "EN: Ajanjakson loppu",
-    "clearDates": "EN: Tyhjennä",
-    "timePeriodHelperText": "EN: Aikaväli jolloin haitta on aktiivinen",
-    "hankkeentyyppi": "EN: Hankkeen tyypit",
-    "hankkeentyyppiHelperText": "EN: Valitse hankkeen työmaan tyyppi tai tyypit",
+    "filters": "Limiting search terms",
+    "pageHeader": "Project portfolio",
+    "search": "Search",
+    "searchHelperText": "Search by project name or identifier",
+    "searchResults": "{{count}} result",
+    "searchResults_plural": "{{count}} results",
+    "noneFound": "No projects were found in the search.",
+    "noneExist": "There are no projects in your project portfolio.",
+    "hankevaiheet": "Project phases",
+    "hankevaiheetHelperText": "Select the project phases you want to view",
+    "startDate": "The beginning of the period",
+    "endDate": "The end of the period",
+    "clearDates": "Clear",
+    "timePeriodHelperText": "Interval during which the nuisance is active",
+    "hankkeentyyppi": "Project types",
+    "hankkeentyyppiHelperText": "Select the worksite type(s) for the project",
+    "areaLocation": "Area location(s)",
+    "openMapToNewWindow": "Open the map in a new window",
+    "showHankeButton": "Show project",
+    "showApplicationsButton": "Show project applications",
+    "draftStateLabel": "The project is a draft",
+    "draftState": "The project is in a draft state. You must enter nuisance information on the areas and other mandatory information to publish the project and add permits.",
+    "clearFiltersButton": "Clear filters",
+    "filtersInfoText": "Changing the filters will update the project list.",
     "tabit": {
-      "perustiedot": "EN: Perustiedot",
-      "yhteystiedot": "EN: Yhteystiedot"
+      "perustiedot": "Basic information",
+      "alueet": "Areas",
+      "haittojenHallinta": "Nuisance control",
+      "yhteystiedot": "Contact information",
+      "liitteet": "Attachments",
+      "hakemukset": "Applications"
     },
     "labels": {
-      "kuvaus": "EN: Hankkeen kuvaus",
-      "hankeVaihe": "EN: Hankkeen vaihe",
-      "suunnitteluVaihe": "EN: Suunnitteluvaihe",
-      "katuosoite": "EN: Katuosoite",
-      "avaaKartalla": "EN: Avaa kartalla",
-      "hankkeenKesto": "EN: Hankkeen kesto",
-      "tyomaanKoko": "EN: Työmaan koko",
-      "tyomaanTyyppi": "EN: Työmaantyyppi",
-      "hankkeenHaitat": "EN: Hankkeen haitat",
-      "haitanKesto": "EN: Haitan kesto",
-      "paatoksenHakija": "EN: Päätöksenhakija",
-      "rakennuttaja": "EN: Rakennuttaja",
-      "tyonsuorittaja": "EN: Työnsuorittaja",
-      "yhteyshenkilo": "EN: Yhteyshenkilö",
-      "nimi": "EN: Nimi",
-      "osoite": "EN: Osoite",
-      "sposti": "EN: Sähköposti",
-      "puhelin": "EN: Puhelin"
+      "kuvaus": "Project description",
+      "hankeVaihe": "Project phase",
+      "katuosoite": "Street address",
+      "avaaKartalla": "Open on a map",
+      "hankkeenKesto": "Project duration",
+      "tyomaanTyyppi": "Worksite type",
+      "hankkeenHaitat": "Project nuisances",
+      "haitanKesto": "Duration of the nuisance",
+      "paatoksenHakija": "Applicant",
+      "rakennuttaja": "Constructor",
+      "tyonsuorittaja": "Contractor",
+      "yhteyshenkilo": "Contact person",
+      "nimi": "Name",
+      "osoite": "Address",
+      "sposti": "Email",
+      "puhelin": "Telephone",
+      "oikeudet": "Your access rights to the project"
     }
   },
   "publicHankkeet": {
+    "pageHeader": "Projects in public areas",
     "buttons": {
-      "map": "EN: Kartta",
-      "list": "EN: Lista"
+      "map": "Map",
+      "list": "List"
     }
   },
   "hankeList": {
-    "pageHeader": "EN:Hankelista",
-    "paginationHeader": "EN:Sivu",
-    "paginatioAriaLabel": "EN:Sivutus",
+    "pageHeader": "Project list",
+    "paginationHeader": "Page",
+    "paginatioAriaLabel": "Paging",
     "tableHeader": {
-      "id": "EN:Tunnus",
-      "name": "EN:Nimi",
-      "step": "EN:Vaihe",
-      "startDate": "EN:Aloitus",
-      "endDate": "EN:Lopetus"
+      "id": "Identifier",
+      "name": "Name",
+      "step": "Phase",
+      "startDate": "Start",
+      "endDate": "Finish"
     },
     "sortButtons": {
-      "id": "EN:Lajittele taulukko tunnuksen mukaan",
-      "name": "EN:Lajittele taulukko nimen mukaan",
-      "step": "EN:Lajittele taulukko vaiheen mukaan",
-      "startDate": "EN:Lajittele taulukko aloitus päivämäärän mukaan",
-      "endDate": "EN:Lajittele taulukko lopetus päivämäärän mukaan"
+      "id": "Sort the table by identifier",
+      "name": "Sort the table by name",
+      "step": "Sort the table by phase",
+      "startDate": "Sort the table by start date",
+      "endDate": "Sort the table by end date"
     },
     "buttons": {
-      "edit": "EN:Muokkaa hanketta",
-      "delete": "EN:Poista hanke",
-      "toFirstPage": "EN:Listan ensimmäiselle sivulle",
-      "toPreviousPage": "EN:Listan edelliselle sivulle",
-      "toNextPage": "EN:Listan seuraavalle sivulle",
-      "toLastPage": "EN:Listan viimeiselle sivulle"
+      "edit": "Edit project",
+      "delete": "Remove project",
+      "endHanke": "End project",
+      "addApplication": "Add application",
+      "editRights": "Manage access rights",
+      "toFirstPage": "To the first page of the list",
+      "toPreviousPage": "To the previous page of the list",
+      "toNextPage": "To the next page of the list",
+      "toLastPage": "To the last page of the list"
     }
+  },
+  "hankeUsers": {
+    "accessRights": "Access rights",
+    "manageRights": "Access rights management",
+    "accessRightLevels": {
+      "KAIKKI_OIKEUDET": "All rights",
+      "KAIKKIEN_MUOKKAUS": "Project and application editing",
+      "HANKEMUOKKAUS": "Project editing",
+      "HAKEMUSASIOINTI": "Application services",
+      "KATSELUOIKEUS": "Viewing right"
+    },
+    "accessRightsInfo": {
+      "heading": "What can be done with the different rights?",
+      "KAIKKI_OIKEUDET": "<strong>All rights</strong> enables you to edit a project and its application content, edit everyone’s access rights and remove a project if it has no applications that have received a decision.",
+      "KAIKKIEN_MUOKKAUS": "The <strong>project and application editing</strong> right enables you to create and edit a project and the content of its applications and edit others’ access rights, except ‘all rights’, which enables removing a project.",
+      "HANKEMUOKKAUS": "The <strong>project editing</strong> right enables you to edit the information of a project but not access rights. This right enables you to view the application information.",
+      "HAKEMUSASIOINTI": "The <strong>application services</strong> right enables you to create new applications for a project and edit the information of the applications of the project.",
+      "KATSELUOIKEUS": "The <strong>viewing right</strong> enables you to view a project and its information. The viewing right is automatically granted to all persons added to the project and its applications.",
+      "modifyInfo": "You can change access rights by making a selection in the dropdown menu and clicking the ‘Save’ button. You can also send someone a new invitation link to Haitaton if they have not received it before."
+    },
+    "search": {
+      "placeholder": "Example: Matti Meikäläinen",
+      "helperText": "Search by name"
+    },
+    "notifications": {
+      "rightsUpdatedSuccessLabel": "Access rights updated",
+      "rightsUpdatedSuccessText": "Access rights successfully updated",
+      "rightsUpdatedErrorLabel": "Error in the updating process",
+      "rightsUpdatedErrorText": "<0>An error occurred when updating access rights. Please try again later or contact the Haitaton technical support by email <1>haitatontuki@hel.fi</1>.</0>",
+      "userIdentifiedLabel": "Login successful",
+      "userIdentifiedText": "Login successful. You have now been added to the project ({{hankeNimi}} {{hankeTunnus}}).",
+      "userIdentifiedError": "Login failed",
+      "invitationSentSuccessLabel": "Invitation link sent",
+      "invitationSentSuccessText": "Invitation link sent to the address {{email}}.",
+      "invitationSentErrorLabel": "Error when sending the link",
+      "invitationSentErrorText": "<0>An error occurred when sending the invitation link. Please try again later or contact the Haitaton technical support by email <1>haitatontuki@hel.fi</1>.</0>"
+    },
+    "buttons": {
+      "resendInvitation": "Resend the invitation link",
+      "invitationSent": "Invitation link sent"
+    },
+    "userIdentified": "User logged in"
   },
   "map": {
     "controls": {
-      "ariaLayerMenu": "EN:Kartan tasojen valinta"
+      "ariaLayerMenu": "Selecting map levels"
     },
     "tileLayers": {
-      "ortokartta": "EN: Ortokartta",
-      "kantakartta": "EN: Kantakartta"
+      "ortokartta": "Ortho map",
+      "kantakartta": "Base map"
     },
     "dateRange": {
-      "begin": "EN: Ajanjakson alku",
-      "end": "EN: Ajanjakson loppu"
+      "begin": "The beginning of the period",
+      "end": "The end of the period"
     },
     "guide": {
       "indexColor": {
-        "RED": "EN:Kriittinen",
-        "YELLOW": "EN:Huomioitava",
-        "GREEN": "EN:Ei merkittävä",
-        "BLUE": "EN:Indeksoimaton"
+        "RED": "Critical",
+        "YELLOW": "To be noted",
+        "GREEN": "Not significant",
+        "BLUE": "Unindexed"
       }
     },
-    "attribution": "EN:Aineistot &copy; <a href='https://kartta.hel.fi'>Helsingin kaupunki</a>",
-    "drawSquareButtonAria": "EN:Piirrä neliö kartalle",
-    "drawPolygonButtonAria": "EN:Piirrä monikulmio kartalle"
+    "attribution": "Materials &copy; <a href='https://kartta.hel.fi'>Helsingin kaupunki</a>",
+    "drawSquareButtonAria": "Draw a square on the map",
+    "drawPolygonButtonAria": "Draw a polygon on the map"
   },
   "staticPages": {
-    "info": {
-      "title": "EN: Tietoja haitattomasta",
-      "content": "EN: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+    "infoPage": {
+      "title": "About Haitaton",
+      "releaseInfo": "Publication information",
+      "releaseVer1": "Version JS.01 published on 19 June 2023: Creating a cable report",
+      "materials": "Materials",
+      "mapMaterials": "Map materials",
+      "imageCopyrights": "Images author information"
     },
     "references": {
-      "title": "EN: Lähdeviitteet",
-      "content": "EN: Palvelu käyttää seuraavista lähteistä saatua aineistoa:",
+      "title": "References",
+      "content": "The service uses data from the following sources:",
       "referenceData": {
         "HEKAYL": {
-          "title": "EN: Helsingin kaupungin yleisten alueiden rekisteri 2021"
+          "title": "Register of public areas in the City of Helsinki 2021"
         },
         "HEKAKA": {
-          "title": "EN: Helsingin kaupungin kaupunkimittauspalvelut 2021"
+          "title": "City of Helsinki City Survey Services 2021"
         },
         "OPSTMA": {
-          "title": "EN: OpenStreetMap contributors 2021"
+          "title": "OpenStreetMap contributors 2021"
         },
         "HSL": {
-          "title": "EN: HSL 2021"
+          "title": "HSL 2021"
         },
         "MAMILA": {
-          "title": "EN: Maanmittauslaitos 2021"
+          "title": "National Land Survey of Finland 2021"
         },
         "HEKAKATO": {
-          "title": "EN: Helsingin kaupunki kaupunkiympäristön toimiala 2021"
+          "title": "City of Helsinki Urban Environment Division 2021"
         }
       }
     },
     "accessibility": {
-      "title": "EN: Saavutettavuusseloste",
-      "content": "EN: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+      "title": "Accessibility statement",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
     },
     "privacyPolicy": {
-      "title": "EN: Rekisteriseloste",
-      "content": "EN: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+      "title": "Privacy policy",
+      "linkText": "Alueiden käytön lupa- ja vuokrausasioiden asiakasrekisteri (pdf in Finnish)",
+      "linkUrl": "https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Kymp/Alueiden%20k%C3%A4yt%C3%B6n%20lupa-%20ja%20vuokrausasioiden%20asiakasrekisteri.pdf",
+      "secondLinkText": "Sähköisten asiointipalveluiden rekisteri (pdf in Finnish)",
+      "secondLinkUrl": "https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Keha/Sahkoisten%20asiointipalveluiden%20rekisteri.pdf"
+    },
+    "manualPage": {
+      "title": "Manual and support",
+      "linkText": "Open the user manual here (pdf)",
+      "supportText": "Technical support for the Haitaton system: <a>haitatontuki@hel.fi</a>",
+      "bodyText": "You can find the contact information of the Cable Location Service via the link below: <a>https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/cable-location-service</a>",
+      "contactText": "<p>- Email: <a>johtotietopalvelu@hel.fi</a></p><p>- Telephone: 09 310 31940</p>",
+      "linkUrl": "https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-manual.pdf",
+      "cableLocationServiceLink": "https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/cable-location-service"
+    },
+    "404Page": {
+      "title": "Page not found",
+      "instruction": "If you typed the address in the address bar, please check that it is typed correctly.",
+      "homePageLink": "Return to the Haitaton <a>front page.</a>",
+      "supportLink": "If the link you followed is not working, you can also contact the technical support for Haitaton via the email address <a>haitatontuki@hel.fi</a>."
     }
+  },
+  "serviceWarning": {
+    "label": "",
+    "text": ""
+  },
+  "serviceError": {
+    "label": "",
+    "text": ""
   }
 }

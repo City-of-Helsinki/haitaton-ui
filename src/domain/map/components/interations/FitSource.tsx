@@ -6,7 +6,7 @@ type Props = {
   source: VectorSource;
 };
 
-const FitSource: React.FC<Props> = ({ source }) => {
+const FitSource: React.FC<React.PropsWithChildren<Props>> = ({ source }) => {
   const { map } = useContext(MapContext);
 
   const fitSource = useCallback(() => {
@@ -15,9 +15,13 @@ const FitSource: React.FC<Props> = ({ source }) => {
   }, [map, source]);
 
   useEffect(() => {
-    source.on('addfeature', () => {
-      fitSource();
-    });
+    setTimeout(fitSource, 0);
+
+    source.on('addfeature', fitSource);
+
+    return function cleanUp() {
+      source.un('addfeature', fitSource);
+    };
   }, [source, fitSource]);
 
   return null;

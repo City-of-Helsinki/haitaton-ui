@@ -2,7 +2,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Text from '../../../common/components/text/Text';
 import FileInput from '../../../common/components/fileInput/FileInput';
-import { FORMFIELD } from './types';
 
 const HankeFormLiitteet: React.FC = () => {
   const { t } = useTranslation();
@@ -14,7 +13,7 @@ const HankeFormLiitteet: React.FC = () => {
       </Text>
 
       <FileInput
-        name={FORMFIELD.LIITTEET}
+        name="liitteet"
         accept=".pdf,.jpeg,.png,.dgn,.dwg,.docx"
         multiple
         buttonLabel=""

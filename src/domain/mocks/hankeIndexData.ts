@@ -10,7 +10,8 @@ const hankeIndexData: HankeIndexData = {
   },
   perusIndeksi: 4,
   pyorailyIndeksi: 3,
-  joukkoliikenneIndeksi: 1,
+  linjaautoIndeksi: 2,
+  raitiovaunuIndeksi: 1,
   tila: HANKE_INDEX_STATE.VOIMASSA,
 };
 

@@ -4,7 +4,7 @@ type Props = {
   active?: boolean;
 };
 
-const Circle: React.FC<Props> = ({ active }) => {
+const Circle: React.FC<React.PropsWithChildren<Props>> = ({ active }) => {
   return (
     <svg width="24px" height="25px" viewBox="0 0 24 25" version="1.1" className="circle">
       <g stroke="none" strokeWidth="0" fill="none" fillRule="evenodd">

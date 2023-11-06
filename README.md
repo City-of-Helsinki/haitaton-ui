@@ -1,8 +1,11 @@
-# Haitaton Beta UI
+# Haitaton UI
+
+Haitaton is a service owned by the city of Helsinki that supports the management and prediction of the adverse
+effects of projects taking place within the urban area.
 
 ## Requirements
 
-- Node 12.x
+- Node 16.x
 - Yarn
 - Git
 - Docker
@@ -29,7 +32,7 @@ with `scripts/update-runtime-env.ts`, which contains the actual used variables w
 App is not using create-react-app's default `process.env` way to refer of variables
 but `window._env_` object.
 
-### 'yarn e2e'
+### `yarn e2e`
 
 Runs E2E cypress tests
 
@@ -42,6 +45,16 @@ The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `yarn locales:export`
+
+Exports frontend localizations into `locale_export.xlsx` for easier translation. Data is loaded
+from `src/locales/`.
+
+### `yarn locales:import`
+
+Imports frontend localizations from `locale_export.xlsx`. Translations are merged on corresponding translation files
+in `src/locales/`.
 
 ## Environment variables
 
@@ -58,6 +71,51 @@ For docker, the scripts/env.sh is added to the pod. This is run when the pod sta
 the env-config.js file, reading the values of the variables of the pod environment. It only
 processes variables mentioned in `.env`. If there's no value for a variable in the environment, the
 default value from `.env` is used.
+
+### Login method
+
+Haitaton supports either Helsinki AD or Suomi.fi identification for logging in. Currently only just
+one at a time. This is controlled by the `REACT_APP_OIDC_CLIENT_ID` environment variable. To change
+the identification method in the local environment, edit the `.env` -file.
+
+- For Helsinki AD (default):
+  `REACT_APP_OIDC_CLIENT_ID: 'haitaton-admin-ui-dev'`
+- For Suomi.fi:
+  `REACT_APP_OIDC_CLIENT_ID: 'haitaton-ui-dev'`
+
+Then either rebuild the docker container or run `yarn update-runtime-env` as discussed above.
+
+In the cloud instances, dev uses Helsinki AD identification while others use Suomi.fi.
+
+### Windows Subsystem for Linux (WSL)
+
+If you use WSL as your local development environment and you bump into pre-push validation errors
+in `git push` that other developers (with e.g. Mac) do not have, you could try to set `WSL=true`
+in your local environment, e.g. in `~/.huskyrc` (Husky git hooks automatically loads this file):
+
+```
+export WSL=true
+```
+
+This setting adds `--runInBand` parameter for Jest tests (see https://jestjs.io/docs/cli#--runinband).
+
+## Excel for translations
+
+You can export an Excel-file with current translations. This can then be sent to translators.
+
+1. In the repository root, run the export script with `yarn locales:export`.
+2. The translations are written to `locale_export.xlsx`.
+
+After the translations are added to the Excel file, they can be imported back.
+
+1. Place the translated file inside repository root. It needs to be named `locale_export.xlsx`.
+2. Run the import script: `yarn locales:import`.
+3. The translations in `/src/locales` are updated.
+
+## API mocking
+
+`yarn start-msw` runs the app in development mode using MSW (Mock Service Worker)
+to mock API. Definitions can be found in `src/domain/mocks`.
 
 ## Learn More
 

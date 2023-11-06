@@ -16,13 +16,13 @@ type PropTypes = {
   label: string;
   options: Array<Option>;
   invalid?: boolean;
-  errorMsg?: string;
   tooltip?: TooltipProps;
   disabled?: boolean;
   required?: boolean;
+  style?: React.CSSProperties;
 };
 
-const Dropdown: React.FC<PropTypes> = ({
+const Dropdown: React.FC<React.PropsWithChildren<PropTypes>> = ({
   id,
   name,
   rules,
@@ -33,12 +33,10 @@ const Dropdown: React.FC<PropTypes> = ({
   tooltip,
   disabled,
   required,
+  style,
 }) => {
   const { t } = useTranslation();
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext();
+  const { control } = useFormContext();
 
   return (
     <div className="dropdownComp">
@@ -51,7 +49,7 @@ const Dropdown: React.FC<PropTypes> = ({
         name={name}
         control={control}
         rules={rules}
-        render={({ field: { onChange, onBlur, value } }) => {
+        render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
           return (
             <Select
               id={id}
@@ -62,19 +60,21 @@ const Dropdown: React.FC<PropTypes> = ({
                   : options.find((o) => o.value === value)
               }
               options={options}
-              invalid={invalid}
+              invalid={invalid || Boolean(error)}
               value={options.find((o) => o.value === value) || null}
+              onBlur={onBlur}
               onChange={(option: Option) => {
                 if (option) onChange(option.value);
                 onBlur();
               }}
               required={required}
               disabled={disabled}
+              error={getInputErrorText(t, error)}
+              style={style}
             />
           );
         }}
       />
-      {invalid && <span className="error-text">{getInputErrorText(t, errors, name)}</span>}
     </div>
   );
 };

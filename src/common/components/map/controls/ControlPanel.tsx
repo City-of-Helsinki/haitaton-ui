@@ -7,7 +7,7 @@ type Props = {
   className: string;
 };
 
-const ControlPanel: React.FC<Props> = ({ children, className }) => (
+const ControlPanel: React.FC<React.PropsWithChildren<Props>> = ({ children, className }) => (
   <div className={clsx([styles.controlPanel, className])}>{children}</div>
 );
 

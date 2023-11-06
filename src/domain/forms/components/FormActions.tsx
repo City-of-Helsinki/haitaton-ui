@@ -4,20 +4,26 @@ import { useTranslation } from 'react-i18next';
 import styles from './FormActions.module.scss';
 
 interface Props {
-  isFormValid?: boolean;
   activeStepIndex: number;
   totalSteps: number;
   onPrevious: () => void;
   onNext: () => void;
+  previousButtonIsLoading?: boolean;
+  previousButtonLoadingText?: string;
+  nextButtonIsLoading?: boolean;
+  nextButtonLoadingText?: string;
 }
 
-const FormActions: React.FC<Props> = ({
+const FormActions: React.FC<React.PropsWithChildren<Props>> = ({
   children,
-  isFormValid,
   activeStepIndex,
   totalSteps,
   onPrevious,
   onNext,
+  previousButtonIsLoading,
+  previousButtonLoadingText,
+  nextButtonIsLoading,
+  nextButtonLoadingText,
 }) => {
   const { t } = useTranslation();
   const firstStep = activeStepIndex === 0;
@@ -26,7 +32,13 @@ const FormActions: React.FC<Props> = ({
   return (
     <div className={styles.actions}>
       {!firstStep && (
-        <Button iconLeft={<IconArrowLeft />} variant="secondary" onClick={onPrevious}>
+        <Button
+          iconLeft={<IconArrowLeft />}
+          variant="secondary"
+          onClick={onPrevious}
+          isLoading={previousButtonIsLoading}
+          loadingText={previousButtonLoadingText}
+        >
           {t('hankeForm:previousButton')}
         </Button>
       )}
@@ -36,7 +48,8 @@ const FormActions: React.FC<Props> = ({
           iconRight={<IconArrowRight />}
           variant="secondary"
           onClick={onNext}
-          disabled={!isFormValid}
+          isLoading={nextButtonIsLoading}
+          loadingText={nextButtonLoadingText}
         >
           {t('hankeForm:nextButton')}
         </Button>

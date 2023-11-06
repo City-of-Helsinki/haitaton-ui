@@ -3,7 +3,7 @@ import { SearchInput } from 'hds-react';
 import { uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Coordinate } from 'ol/coordinate';
-import { doAddressSearch } from '../../utils';
+import { doAddressSearch, getStreetName } from '../../utils';
 
 type Props = {
   onAddressSelect: (coordinate: Coordinate | undefined) => void;
@@ -14,7 +14,7 @@ type Address = {
   coordinate: Coordinate;
 };
 
-const AddressSearch: React.FC<Props> = ({ onAddressSelect }) => {
+const AddressSearch: React.FC<React.PropsWithChildren<Props>> = ({ onAddressSelect }) => {
   const { t } = useTranslation();
   const suggestions = useRef([] as Address[]);
   const abortController = useRef(null as AbortController | null);
@@ -30,7 +30,8 @@ const AddressSearch: React.FC<Props> = ({ onAddressSelect }) => {
       const suggestionItems: Address[] = data.features.map((feature: any) => {
         // Use Finnish street name as a label if it seems that user was searching for that,
         // otherwise use Swedish street name
-        let label = feature.properties.katunimi.toLowerCase().includes(searchValue.toLowerCase())
+        const searchedStreetName = getStreetName(searchValue).toLowerCase();
+        let label = feature.properties.katunimi.toLowerCase().includes(searchedStreetName)
           ? feature.properties.katunimi
           : feature.properties.gatan;
 

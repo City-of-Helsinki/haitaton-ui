@@ -4,7 +4,10 @@ import { render, screen } from '../../../testUtils/render';
 import DatePicker from './DatePicker';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Form: React.FC<{ defaultValues: any }> = ({ children, defaultValues }) => {
+const Form: React.FC<React.PropsWithChildren<{ defaultValues: any }>> = ({
+  children,
+  defaultValues,
+}) => {
   const methods = useForm({ defaultValues });
 
   return (
@@ -20,7 +23,7 @@ test('Value should be empty when default value is null', () => {
   render(
     <Form defaultValues={defaultValues}>
       <DatePicker name="dateInput" label="Date input" locale="fi" />
-    </Form>
+    </Form>,
   );
 
   expect(screen.getByLabelText('Date input', { exact: false })).toHaveValue('');
@@ -32,7 +35,7 @@ test('Value should be default value when it is given', () => {
   render(
     <Form defaultValues={defaultValues}>
       <DatePicker name="dateInput" label="Date input" locale="fi" />
-    </Form>
+    </Form>,
   );
 
   expect(screen.getByLabelText('Date input', { exact: false })).toHaveValue('6.11.2023');

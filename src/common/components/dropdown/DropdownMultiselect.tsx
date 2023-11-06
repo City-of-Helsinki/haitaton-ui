@@ -21,7 +21,7 @@ type PropTypes = {
   tooltip?: TooltipProps;
 };
 
-const DropdownMultiselect: React.FC<PropTypes> = ({
+const DropdownMultiselect: React.FC<React.PropsWithChildren<PropTypes>> = ({
   name,
   rules,
   options,
@@ -37,7 +37,11 @@ const DropdownMultiselect: React.FC<PropTypes> = ({
   return (
     <div className="dropdownComp">
       {!!tooltip && (
-        <Tooltip tooltipLabel={t(`hankeForm:toolTips:tipOpenLabel`)} placement={tooltip.placement}>
+        <Tooltip
+          buttonLabel={tooltip.buttonLabel || t(`hankeForm:toolTips:tipOpenLabel`)}
+          tooltipLabel={tooltip.tooltipLabel || t(`hankeForm:toolTips:tipOpenLabel`)}
+          placement={tooltip.placement}
+        >
           {t(`${tooltip.tooltipText}`)}
         </Tooltip>
       )}

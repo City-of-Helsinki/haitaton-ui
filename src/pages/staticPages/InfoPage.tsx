@@ -5,51 +5,47 @@ import PageMeta from '../components/PageMeta';
 import { useLocalizedRoutes } from '../../common/hooks/useLocalizedRoutes';
 import Container from '../../common/components/container/Container';
 import Text from '../../common/components/text/Text';
-import styles from './StaticContent.module.scss';
+import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
 
-const InfoPage: React.FC = () => {
+const InfoPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { HAITATON_INFO } = useLocalizedRoutes();
   const { t } = useTranslation();
 
   return (
     <Container>
       <PageMeta routeData={HAITATON_INFO} />
-      <Text tag="h1" styleAs="h2" spacing="s" weight="bold">
-        {t('staticPages:info:title')}
+      <Text
+        tag="h1"
+        styleAs="h1"
+        spacingTop="l"
+        spacingBottom="xl"
+        weight="bold"
+        id={SKIP_TO_ELEMENT_ID}
+        tabIndex={-1}
+      >
+        {t('staticPages:infoPage:title')}
       </Text>
 
       <HdsContainer style={{ padding: '2rem', backgroundColor: 'white' }}>
-        <Text tag="p" spacing="s">
-          Arviointi perustuu yksittäiselle hankegeometrialle tehtävään kolmen eri alaindeksin
-          kriittisyyden määrittämiseen:
+        <Text tag="h2" styleAs="h2" spacingBottom="s">
+          {t('staticPages:infoPage:releaseInfo')}
         </Text>
-
-        <ol className={styles.orderedList}>
-          <li>
-            Pyöräilyindeksin osalta tunnistetaan pääpyöräilyverkon ja pyöräilyn priorisoitujen
-            reittien olemassaolo;
-          </li>
-          <li>
-            Joukkoliikenneindeksin osalta tunnistetaan raitiotielinjat ja merkittävimmät
-            bussireitit;
-          </li>
-          <li>
-            Perusindeksiin lasketaan hankkeen keston, autoliikennemäärän, liikenteellisen
-            katuluokituksen sekä käyttäjän karkeasti arvioimien kaistavaikutusten pohjalta
-            autoliikenteen merkittävyys (ruuhkautumisherkkyys).
-          </li>
-        </ol>
-
-        <Text tag="p" spacing="s">
-          Suurin alaindeksiluku määrittää koko hankkeen indeksiluvun eli hankkeen kriittisyyden.
-          Yksittäisten hankkeiden liikenneverkollisia yhteisvaikutuksia arvioidaan karttanäkymän
-          avulla. Kartalla yksittäiset hankkeet on rasteroitu niiden saaman indeksiarvon mukaan,
-          mutta kaikkien alaindeksien tuloksia voi myös tarkastella hankekohtaisesti.
-          Kartta-arvioinnin pohjalta käyttäjä voi arvioida eri hankkeiden aikatauluja ja
-          yhteensovitustarpeita erityisesti liikenneverkon osalta, mutta myös muita vaikutuksia
-          hankkeiden ympäristössä. Haitattoman kehitystoiveita voi laittaa osoitteeseen:
-          haitaton(at)hel.fi
+        <ul style={{ paddingLeft: 'var(--spacing-l)', marginBottom: 'var(--spacing-s)' }}>
+          <li>{t('staticPages:infoPage:releaseVer1')}</li>
+        </ul>
+        <Text tag="h2" styleAs="h2" spacingBottom="s">
+          {t('staticPages:infoPage:materials')}
         </Text>
+        <Text tag="h3" styleAs="h3" spacingBottom="s">
+          {t('staticPages:infoPage:mapMaterials')}
+        </Text>
+        <Text tag="p" spacingBottom="s">
+          Copyright Helsingin kaupunki
+        </Text>
+        <Text tag="h3" styleAs="h3" spacingBottom="s">
+          {t('staticPages:infoPage:imageCopyrights')}
+        </Text>
+        <Text tag="p">Sakari Kiuru, Helsingin kaupunginmuseo</Text>
       </HdsContainer>
     </Container>
   );

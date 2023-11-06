@@ -15,6 +15,14 @@ import Johtoselvitys from '../../pages/Johtoselvitys';
 import useUser from '../../domain/auth/useUser';
 import PrivateRoute from './PrivateRoute';
 import MapAndListPage from '../../pages/MapAndListPage';
+import FullPageMapPage from '../../pages/FullPageMapPage';
+import HankePage from '../../pages/HankePage';
+import ApplicationPage from '../../pages/ApplicationPage';
+import EditJohtoselvitysPage from '../../pages/EditJohtoselvitysPage';
+import NotFoundPage from '../../pages/staticPages/404Page';
+import ManualPage from '../../pages/staticPages/ManualPage';
+import AccessRightsPage from '../../pages/AccessRightsPage';
+import UserIdentify from '../../domain/auth/components/UserIdentify';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
@@ -39,11 +47,25 @@ const LocaleRoutes = () => {
         path={t('routes:HANKEPORTFOLIO:path')}
         element={<PrivateRoute element={<HankePortfolioPage />} />}
       />
+      <Route path={t('routes:HANKE:path')} element={<PrivateRoute element={<HankePage />} />} />
+      <Route
+        path={t('routes:ACCESS_RIGHTS:path')}
+        element={<PrivateRoute element={<AccessRightsPage />} />}
+      />
       <Route path={t('routes:HAITATON_INFO:path')} element={<InfoPage />} />
       <Route
         path={t('routes:JOHTOSELVITYSHAKEMUS:path')}
         element={<PrivateRoute element={<Johtoselvitys />} />}
       />
+      <Route
+        path={t('routes:EDIT_JOHTOSELVITYSHAKEMUS:path')}
+        element={<PrivateRoute element={<EditJohtoselvitysPage />} />}
+      />
+      <Route
+        path={t('routes:HAKEMUS:path')}
+        element={<PrivateRoute element={<ApplicationPage />} />}
+      />
+      <Route path={t('routes:FULL_PAGE_MAP:path')} element={<FullPageMapPage />} />
       <Route path={t('routes:PUBLIC_HANKKEET:path')} element={<MapAndListPage />}>
         <Route element={<MapPage />} index />
         <Route path={t('routes:PUBLIC_HANKKEET_MAP:path')} element={<MapPage />} />
@@ -52,6 +74,9 @@ const LocaleRoutes = () => {
       <Route path={t('routes:ACCESSIBILITY:path')} element={<AccessibilityPage />} />
       <Route path={t('routes:REFERENCES:path')} element={<ReferencesPage />} />
       <Route path={t('routes:PRIVACY_POLICY:path')} element={<PrivacyPolicyPage />} />
+      <Route path={t('routes:MANUAL:path')} element={<ManualPage />} />
+      <Route path={t('routes:IDENTIFY_USER:path')} element={<UserIdentify />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 };

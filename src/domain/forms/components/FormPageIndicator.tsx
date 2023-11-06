@@ -12,7 +12,7 @@ type PropTypes = {
   onPageChange: (pageIndex: number) => void;
 };
 
-const FormPagination: React.FC<PropTypes> = ({
+const FormPagination: React.FC<React.PropsWithChildren<PropTypes>> = ({
   formPageLabels,
   currentLabel,
   isFormValid,

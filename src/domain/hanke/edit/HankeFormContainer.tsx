@@ -1,45 +1,25 @@
 import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from 'react-query';
 import { Flex } from '@chakra-ui/react';
 import { LoadingSpinner } from 'hds-react';
 import { useTranslation } from 'react-i18next';
-import { HankeDataDraft } from '../../types/hanke';
 import HankeForm from './HankeForm';
-import { HankeDataFormState } from './types';
 import { convertHankeDataToFormState } from './utils';
 import ConfirmationDialog from '../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
-import api from '../../api/api';
-import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
-
-const getHanke = async (hankeTunnus?: string) => {
-  const { data } = await api.get<HankeDataDraft>(`/hankkeet/${hankeTunnus}`);
-  return data;
-};
-
-const deleteHanke = (hankeTunnus: string) => {
-  return api.delete<HankeDataDraft>(`/hankkeet/${hankeTunnus}`);
-};
-
-const useHanke = (hankeTunnus?: string) =>
-  useQuery<HankeDataDraft>(['hanke', hankeTunnus], () => getHanke(hankeTunnus), {
-    enabled: !!hankeTunnus,
-  });
+import useHanke from '../hooks/useHanke';
+import HankeDelete from './components/HankeDelete';
 
 type Props = {
   hankeTunnus?: string;
 };
 
-const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
+const HankeFormContainer: React.FC<React.PropsWithChildren<Props>> = ({ hankeTunnus }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [interruptDialogOpen, setInterruptDialogOpen] = useState(false);
-  const [deleteErrorMsg, setDeleteErrorMsg] = useState('');
   const [hasFormChanged, setHasFormChanged] = useState(false);
   const [hankeTunnusToDelete, setHankeTunnusToDelete] = useState<string | undefined>();
-
-  const { HANKEPORTFOLIO } = useLocalizedRoutes();
 
   const { data: hankeData, isLoading } = useHanke(hankeTunnus);
   const formData = convertHankeDataToFormState(hankeData);
@@ -52,19 +32,8 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
     setDeleteDialogOpen(true);
   };
 
-  const handleDeleteHanke = (hankeToDelete: HankeDataFormState) => {
-    const id = hankeToDelete.hankeTunnus || hankeTunnusToDelete;
-    if (id) {
-      deleteHanke(id)
-        .then(() => {
-          navigate(HANKEPORTFOLIO.path);
-
-          setDeleteDialogOpen(false);
-        })
-        .catch(() => {
-          setDeleteErrorMsg(t('common:error'));
-        });
-    }
+  const handleDeleteDialogClose = () => {
+    setDeleteDialogOpen(false);
   };
 
   const handleFormClose = useCallback(
@@ -81,7 +50,7 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
         navigate('/');
       }
     },
-    [hasFormChanged, navigate]
+    [hasFormChanged, navigate],
   );
 
   const closeForm = () => {
@@ -102,20 +71,11 @@ const HankeFormContainer: React.FC<Props> = ({ hankeTunnus }) => {
         formData={formData}
         onIsDirtyChange={handleIsDirtyChange}
         onFormClose={handleFormClose}
-        onOpenHankeDelete={openHankeDelete}
       >
-        <ConfirmationDialog
-          title={t('common:confirmationDialog:deleteDialog:titleText')}
-          description={t('common:confirmationDialog:deleteDialog:bodyText')}
+        <HankeDelete
           isOpen={deleteDialogOpen}
-          close={() => {
-            setDeleteDialogOpen(false);
-            setDeleteErrorMsg('');
-          }}
-          mainAction={() => handleDeleteHanke(formData)}
-          mainBtnLabel={t('common:confirmationDialog:deleteDialog:exitButton')}
-          variant="danger"
-          errorMsg={deleteErrorMsg}
+          onClose={handleDeleteDialogClose}
+          hankeTunnus={hankeTunnus || hankeTunnusToDelete}
         />
         <ConfirmationDialog
           title={t('common:confirmationDialog:interruptDialog:titleText')}

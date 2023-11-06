@@ -19,7 +19,7 @@ type Props = {
 /**
  * Control with a map acting as an overview map for another defined map
  */
-const OverviewMapControl: React.FC<Props> = ({ className }) => {
+const OverviewMapControl: React.FC<React.PropsWithChildren<Props>> = ({ className }) => {
   const { map } = useContext(MapContext);
 
   useEffect(() => {
@@ -36,9 +36,8 @@ const OverviewMapControl: React.FC<Props> = ({ className }) => {
           VERSION: '1.1.1',
           TRANSPARENT: 'false',
         },
-        projection,
+        projection: projection || undefined,
         cacheSize: 1000,
-        imageSmoothing: false,
         hidpi: false,
         serverType: 'geoserver',
         transition: 0,
@@ -55,7 +54,7 @@ const OverviewMapControl: React.FC<Props> = ({ className }) => {
         zoom: 3,
         minZoom: 2,
         maxZoom: 6,
-        projection,
+        projection: projection || undefined,
       }),
     });
 

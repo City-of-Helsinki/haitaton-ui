@@ -1,0 +1,97 @@
+@import 'src/assets/styles/layout.scss';
+
+.container {
+  background-color: var(--color-white);
+  height: 100%;
+}
+
+.header {
+  background-color: var(--color-summer-light);
+  padding-top: var(--spacing-2-xl);
+  padding-bottom: var(--spacing-xl);
+}
+
+.mainContent {
+  padding-top: var(--spacing-m);
+  padding-bottom: var(--spacing-m);
+}
+
+.hankeLink {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2-xs);
+  margin-bottom: var(--spacing-m);
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.infoAccordion {
+  margin-bottom: var(--spacing-xl);
+
+  .infoList {
+    padding-left: var(--spacing-m);
+
+    & > li {
+      margin-bottom: var(--spacing-2-xs);
+
+      &:last-child {
+        margin-bottom: var(--spacing-l);
+      }
+    }
+  }
+}
+
+.searchInput {
+  max-width: 328px;
+  margin-bottom: var(--spacing-m);
+}
+
+.table > div {
+  overflow-x: initial;
+  display: none;
+
+  @include respond-above(l) {
+    display: block;
+  }
+}
+
+.userCards {
+  @include respond-above(l) {
+    display: none;
+  }
+}
+
+.accessRightSelect {
+  min-width: auto;
+
+  @include respond-above(m) {
+    min-width: 250px;
+  }
+
+  @include respond-above(l) {
+    min-width: 345px;
+  }
+}
+
+.invitationSendButtonContainer {
+  min-width: auto;
+
+  @include respond-above(xl) {
+    min-width: 300px;
+  }
+}
+
+.invitationSendButton {
+  vertical-align: middle;
+}
+
+.pagination {
+  margin-top: var(--spacing-xs);
+  margin-bottom: var(--spacing-s);
+
+  * {
+    box-sizing: content-box;
+  }
+}

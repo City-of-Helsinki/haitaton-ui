@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
 import App from './common/components/app/App';
@@ -14,24 +15,24 @@ Sentry.init({
   environment: process.env.NODE_ENV,
 });
 
+const container = document.getElementById('root');
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+const root = createRoot(container!);
+
+if (window._env_.REACT_APP_MOCK_API === 'use') {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
+  const { worker } = require('./domain/mocks/browser');
+  worker.start();
+}
+
 if (process.env.NODE_ENV !== 'production') {
   import('@axe-core/react').then((axe) => {
     // https://github.com/dequelabs/axe-core-npm/issues/176
     axe.default(React, ReactDOM, 1000, {}, undefined);
-    ReactDOM.render(
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>,
-      document.getElementById('root')
-    );
+    root.render(<App />);
   });
 } else {
-  ReactDOM.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>,
-    document.getElementById('root')
-  );
+  root.render(<App />);
 }
 
 declare global {

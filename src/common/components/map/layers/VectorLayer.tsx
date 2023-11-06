@@ -11,7 +11,12 @@ type Props = {
   style?: StyleLike;
 };
 
-const VectorLayer: React.FC<Props> = ({ source, className, zIndex = 0, style = undefined }) => {
+const VectorLayer: React.FC<React.PropsWithChildren<Props>> = ({
+  source,
+  className,
+  zIndex = 0,
+  style = undefined,
+}) => {
   const { map, layers } = useContext(MapContext);
 
   useEffect(() => {
@@ -34,7 +39,7 @@ const VectorLayer: React.FC<Props> = ({ source, className, zIndex = 0, style = u
         map.removeLayer(vectorLayer);
       }
     };
-  }, [map]);
+  }, [map, className, style, layers, source, zIndex]);
 
   return null;
 };

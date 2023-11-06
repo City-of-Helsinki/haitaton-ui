@@ -1,0 +1,31 @@
+@import 'src/assets/styles/layout.scss';
+
+.draftStateNotification {
+  margin-bottom: var(--spacing-s);
+  margin-top: var(--spacing-s);
+
+  @include respond-above(m) {
+    padding-right: var(--spacing-l);
+  }
+}
+
+.tabList {
+  margin-bottom: var(--spacing-m);
+}
+
+.hankeAreaContainer {
+  margin-bottom: var(--spacing-m);
+
+  .hankeAreaContent {
+    color: var(--color-black-60);
+  }
+
+  .areaIndexes {
+    margin-bottom: var(--spacing-s);
+  }
+}
+
+.compressedAreaIndex {
+  margin-top: var(--spacing-m);
+  margin-bottom: var(--spacing-m);
+}

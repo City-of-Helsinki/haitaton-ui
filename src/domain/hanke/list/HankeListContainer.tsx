@@ -1,5 +1,8 @@
 import React from 'react';
 import { useQuery } from 'react-query';
+import { useTranslation } from 'react-i18next';
+import { IconAlertCircle, LoadingSpinner } from 'hds-react';
+
 import HankeListComponent from './HankeListComponent';
 import api from '../../api/api';
 import { HankeData } from '../../types/hanke';
@@ -9,26 +12,35 @@ const getHankkeet = async () => {
   return data;
 };
 
-const useHankeList = () => useQuery<HankeData[]>(['project'], getHankkeet);
+const useHankeList = () => useQuery<HankeData[]>(['public-projects'], getHankkeet);
 
-const HankeListContainer: React.FC = () => {
+const HankeListContainer: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { data, isLoading, isError } = useHankeList();
+  const { t } = useTranslation();
+
   if (data) {
     data.sort((a, b) => {
-      return -(a.id - b.id);
+      return a.id - b.id;
     });
   }
 
   if (isLoading) {
-    return <h1>Ladataan</h1>;
+    return <LoadingSpinner small style={{ marginTop: 'var(--spacing-xl)' }} />;
   }
   if (isError) {
-    return <h1>Ladattaessa tapahtui virhe. Voit kokeilla kirjautua ulos ja takaisin uudelleen.</h1>;
+    return (
+      <p style={{ marginTop: 'var(--spacing-xs)' }}>
+        <IconAlertCircle size="xs" style={{ marginRight: 'var(--spacing-xs)' }} />
+        {`${t('common:components:errorLoadingInfo:textTop')} ${t(
+          'common:components:errorLoadingInfo:textBottom',
+        )}`}
+      </p>
+    );
   }
   if (data) {
     return <HankeListComponent projectsData={data} />;
   }
-  return <h1>Ladataan</h1>;
+  return <></>;
 };
 
 export default HankeListContainer;

@@ -8,9 +8,10 @@ type Props = {
   minZoom?: number;
   maxZoom?: number;
   zIndex?: number;
+  opacity?: number;
 };
 
-const TileLayer: React.FC<Props> = ({ source, minZoom, maxZoom, zIndex = 0 }) => {
+function TileLayer({ source, minZoom, maxZoom, zIndex = 0, opacity = 1 }: Props) {
   const { map } = useContext(MapContext);
 
   useEffect(() => {
@@ -21,6 +22,7 @@ const TileLayer: React.FC<Props> = ({ source, minZoom, maxZoom, zIndex = 0 }) =>
       minZoom,
       maxZoom,
       zIndex,
+      opacity,
     });
 
     map.addLayer(tileLayer);
@@ -32,9 +34,9 @@ const TileLayer: React.FC<Props> = ({ source, minZoom, maxZoom, zIndex = 0 }) =>
         map.removeLayer(tileLayer);
       }
     };
-  }, [map, maxZoom, minZoom, zIndex, source]);
+  }, [map, maxZoom, minZoom, zIndex, source, opacity]);
 
   return null;
-};
+}
 
 export default TileLayer;

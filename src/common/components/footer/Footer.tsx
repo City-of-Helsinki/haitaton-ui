@@ -1,22 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Footer } from 'hds-react';
+import { Footer, LogoLanguage } from 'hds-react';
+import { useTranslation } from 'react-i18next';
 import { useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
 
-const HaitatonFooter: React.FC = () => {
-  const { HAITATON_INFO, ACCESSIBILITY, PRIVACY_POLICY, REFERENCES } = useLocalizedRoutes();
+function HaitatonFooter() {
+  const { t, i18n } = useTranslation();
+  const { MANUAL, HAITATON_INFO, ACCESSIBILITY, PRIVACY_POLICY } = useLocalizedRoutes();
 
   return (
-    <Footer title="Haitaton">
-      <Footer.Navigation variant="minimal" navigationAriaLabel="Haitaton tietosivut">
+    <Footer title="Haitaton" logoLanguage={i18n.language as LogoLanguage}>
+      <Footer.Navigation
+        variant="minimal"
+        navigationAriaLabel={t('common:ariaLabels:footerNavigation')}
+      >
+        <Footer.Item as={Link} to={MANUAL.path} label={MANUAL.label} />
         <Footer.Item as={Link} to={HAITATON_INFO.path} label={HAITATON_INFO.label} />
         <Footer.Item as={Link} to={ACCESSIBILITY.path} label={ACCESSIBILITY.label} />
         <Footer.Item as={Link} to={PRIVACY_POLICY.path} label={PRIVACY_POLICY.label} />
-        <Footer.Item as={Link} to={REFERENCES.path} label={REFERENCES.label} />
       </Footer.Navigation>
-      <Footer.Base copyrightHolder="Copyright" copyrightText="All rights reserved" />
+      <Footer.Base copyrightHolder="Helsingin kaupunki, OpenStreetMap contributors" />
     </Footer>
   );
-};
+}
 
 export default HaitatonFooter;

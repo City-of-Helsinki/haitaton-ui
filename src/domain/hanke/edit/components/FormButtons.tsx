@@ -11,7 +11,12 @@ type Props = {
   currentFormPage: number;
 };
 
-const FormButtons: React.FC<Props> = ({ goBack, goForward, saveDraft, currentFormPage }) => {
+const FormButtons: React.FC<React.PropsWithChildren<Props>> = ({
+  goBack,
+  goForward,
+  saveDraft,
+  currentFormPage,
+}) => {
   const { t } = useTranslation();
 
   const {

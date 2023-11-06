@@ -3,7 +3,7 @@ import PageMeta from './components/PageMeta';
 import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
 import Homepage from '../domain/homepage/HomepageComponent';
 
-const HomePage: React.FC = () => {
+const HomePage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { HOME } = useLocalizedRoutes();
 
   return (

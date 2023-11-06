@@ -1,6 +1,8 @@
 import { FieldErrors } from 'react-hook-form';
+import { Feature } from 'ol';
+import Geometry from 'ol/geom/Geometry';
 import { PartialExcept } from '../../../common/types/utils';
-import { HankeData, HankeContactKey, HankeGeometria } from '../../types/hanke';
+import { HankeData, HankeContactTypeKey, HankeAlue } from '../../types/hanke';
 
 export type FormNotification = 'ok' | 'success' | 'error' | null;
 
@@ -10,11 +12,7 @@ export enum FORMFIELD {
   NIMI = 'nimi',
   KUVAUS = 'kuvaus',
   KATUOSOITE = 'tyomaaKatuosoite',
-  SUUNNITTELUVAIHE = 'suunnitteluVaihe',
-  ALKU_PVM = 'alkuPvm',
-  LOPPU_PVM = 'loppuPvm',
   TYOMAATYYPPI = 'tyomaaTyyppi',
-  TYOMAAKOKO = 'tyomaaKoko',
   HAITTA_ALKU_PVM = 'haittaAlkuPvm',
   HAITTA_LOPPU_PVM = 'haittaLoppuPvm',
   KAISTAHAITTA = 'kaistaHaitta',
@@ -23,27 +21,43 @@ export enum FORMFIELD {
   POLYHAITTA = 'polyHaitta',
   TARINAHAITTA = 'tarinaHaitta',
   OMISTAJAT = 'omistajat',
-  ARVIOIJAT = 'arvioijat',
+  RAKENNUTTAJAT = 'rakennuttajat',
   TOTEUTTAJAT = 'toteuttajat',
+  MUUTTAHOT = 'muut',
   YKT_HANKE = 'onYKTHanke',
   GEOMETRIES_CHANGED = 'geometriesChanged',
   GEOMETRIAT = 'geometriat',
-  LIITTEET = 'liitteet',
+  HANKEALUEET = 'alueet',
 }
 
 export enum CONTACT_FORMFIELD {
   ID = 'id',
-  SUKUNIMI = 'sukunimi',
-  ETUNIMI = 'etunimi',
+  TYYPPI = 'tyyppi',
+  ROOLI = 'rooli',
+  NIMI = 'nimi',
+  TUNNUS = 'ytunnus',
   EMAIL = 'email',
   PUHELINNUMERO = 'puhelinnumero',
-  ORGANISAATIO_ID = 'organisaatioId',
-  ORGANISAATIO_NIMI = 'organisaatioNimi',
+  ORGANISAATIO = 'organisaatioNimi',
   OSASTO = 'osasto',
+  ALIKONTAKTIT = 'alikontaktit',
 }
-export interface HankeDataFormState extends PartialExcept<HankeData, HankeContactKey> {
+
+export enum SUBCONTACT_FORMFIELD {
+  ID = 'id',
+  ETUNIMI = 'etunimi',
+  SUKUNIMI = 'sukunimi',
+  EMAIL = 'email',
+  PUHELINNUMERO = 'puhelinnumero',
+}
+
+export interface HankeAlueFormState extends HankeAlue {
+  feature?: Feature<Geometry>; // "virtualField"
+}
+
+export interface HankeDataFormState extends PartialExcept<HankeData, HankeContactTypeKey> {
   geometriesChanged?: boolean; // "virtualField"
-  geometriat?: HankeGeometria | null;
+  alueet?: HankeAlueFormState[];
 }
 
 export interface FormProps {

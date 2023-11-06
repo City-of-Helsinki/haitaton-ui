@@ -21,7 +21,7 @@ type Props = {
 const startPicker = 'startPicker';
 const endPicker = 'endPicker';
 
-const DateRangeControl: React.FC<Props> = ({
+const DateRangeControl: React.FC<React.PropsWithChildren<Props>> = ({
   startDate,
   endDate,
   updateStartDate,
@@ -31,8 +31,8 @@ const DateRangeControl: React.FC<Props> = ({
   const locale = useLocale();
 
   return (
-    <div className={styles.datePicker}>
-      <Grid templateColumns="repeat(9, 1fr)" w="360px">
+    <div className={styles.container}>
+      <Grid templateColumns="repeat(9, 1fr)" maxW="360px">
         <GridItem colSpan={4}>
           <div>
             <DateInput

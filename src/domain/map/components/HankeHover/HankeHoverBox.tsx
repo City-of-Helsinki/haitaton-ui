@@ -7,7 +7,7 @@ import HankkeetContext from '../../HankkeetProviderContext';
 import styles from './HankeHover.module.scss';
 import { HankeData } from '../../../types/hanke';
 
-const HankeHoverBox: React.FC = () => {
+const HankeHoverBox: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { hoveredHankeTunnukset, hoverPosition } = useContext(HoverContext);
   const { hankkeet } = useContext(HankkeetContext);
   const foundHankkeet: HankeData[] = [];
@@ -38,7 +38,7 @@ const HankeHoverBox: React.FC = () => {
   return (
     <div className={styles.hankeHover} style={hoverBoxPosition}>
       {foundHankkeet.map((hanke) => (
-        <div>
+        <div key={hanke.hankeTunnus}>
           <Link
             href={`/?hanke=${hanke.hankeTunnus}`}
             size="M"

@@ -1,0 +1,63 @@
+@import 'src/assets/styles/layout.scss';
+
+.indexContainer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-2-xs);
+  padding: var(--spacing-m) var(--spacing-m);
+  color: var(--color-black-90);
+
+  &__titlesContainer {
+    flex-grow: 1;
+  }
+
+  &__number {
+    text-align: center;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    min-width: auto;
+
+    &--minWidth {
+      @include respond-above(s) {
+        min-width: 90px;
+      }
+    }
+
+    &__description {
+      color: var(--color-black-70);
+      display: none;
+
+      @include respond-above(s) {
+        display: block;
+      }
+    }
+  }
+}
+
+.indexTitle {
+  padding: 1rem 0;
+  display: flex;
+  color: var(--color-black-90);
+}
+
+.indexInfo {
+  padding: 0.4rem 0.2rem 0.4rem 1rem;
+}
+
+.indexTooltip {
+  padding-left: 1rem;
+}
+
+.indexes {
+  .indexContainer:nth-child(odd) {
+    background-color: var(--color-black-5);
+  }
+
+  .indexContainer:first-child {
+    background-color: var(--color-black-10);
+    border-bottom: 1px solid var(--color-black-30);
+    padding: var(--spacing-l) var(--spacing-m);
+  }
+}

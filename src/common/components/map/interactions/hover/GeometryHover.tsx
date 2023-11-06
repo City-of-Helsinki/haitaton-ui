@@ -4,7 +4,7 @@ import MapContext from '../../MapContext';
 import { MapInstance } from '../../types';
 import HoverContext from './HoverContext';
 
-const GeometryHover: React.FC = ({ children }) => {
+const GeometryHover: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   const { map } = useContext(MapContext);
   const [hoverPosition, setHoverPosition] = useState([0, 0]);
   const [hoveredHankeTunnukset, setHoveredHankeTunnukset] = useState(['']);
@@ -24,12 +24,18 @@ const GeometryHover: React.FC = ({ children }) => {
   };
 
   useEffect(() => {
-    if (map) {
-      map.on('pointermove', (evt) => {
-        if (evt.dragging) return;
-        highlightHankeOnPixel(map, evt);
-      });
+    function handlePointerMover(evt: MapBrowserEvent<UIEvent>) {
+      if (evt.dragging) return;
+      highlightHankeOnPixel(map, evt);
     }
+
+    if (map) {
+      map.on('pointermove', handlePointerMover);
+    }
+
+    return function cleanUp() {
+      map?.un('pointermove', handlePointerMover);
+    };
   }, [map]);
 
   return (

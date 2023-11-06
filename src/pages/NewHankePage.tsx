@@ -4,7 +4,7 @@ import PageMeta from './components/PageMeta';
 import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
 import HankeFormContainer from '../domain/hanke/edit/HankeFormContainer';
 
-const NewHankePage: React.FC = () => {
+const NewHankePage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { NEW_HANKE } = useLocalizedRoutes();
 
   return (

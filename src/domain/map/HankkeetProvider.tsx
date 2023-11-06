@@ -15,7 +15,7 @@ const convertArrayToObject = (array: any[], key: string) => {
   }, initialValue);
 };
 
-const HankkeetProvider: React.FC = ({ children }) => {
+const HankkeetProvider: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   const getProjectsWithGeometry = async () => {
     const response = await api.get<HankeData[]>('/public-hankkeet', {
       params: {

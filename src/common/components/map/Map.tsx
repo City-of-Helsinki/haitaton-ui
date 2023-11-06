@@ -19,13 +19,15 @@ type Props = {
   zoom: number;
   center?: number[];
   mapClassName?: string;
+  showAttribution?: boolean;
 };
 
-const Map: React.FC<Props> = ({
+const Map: React.FC<React.PropsWithChildren<Props>> = ({
   children,
   zoom = defaultZoom,
   center = helsinkiCenterCoords,
   mapClassName,
+  showAttribution = true,
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<MapInstance>(null);
@@ -36,20 +38,22 @@ const Map: React.FC<Props> = ({
       return;
     }
 
+    const controls = showAttribution ? [attribution] : [];
+
     const options = {
       view: new ol.View({
         center,
         zoom,
         minZoom: 5,
         maxZoom: 13,
-        projection,
+        projection: projection || undefined,
       }),
       layers: [],
       controls: defaultControls({
         attribution: false,
         zoom: false,
         rotate: false,
-      }).extend([attribution]),
+      }).extend(controls),
       overlays: [],
     };
 
@@ -59,7 +63,7 @@ const Map: React.FC<Props> = ({
 
     // eslint-disable-next-line
     return () => mapObject.setTarget(undefined);
-  }, [center, zoom]);
+  }, [center, zoom, showAttribution]);
 
   useEffect(() => {
     if (!map) return;
