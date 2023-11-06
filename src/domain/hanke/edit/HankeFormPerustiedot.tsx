@@ -79,6 +79,9 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
           direction="horizontal"
           label={t(`hankeForm:labels:${FORMFIELD.VAIHE}`)}
           errorText={getInputErrorText(t, errors[FORMFIELD.VAIHE])}
+          tooltipLabel={t(`hankeForm:labels:${FORMFIELD.VAIHE}`)}
+          tooltipButtonLabel={t(`hankeForm:toolTips:tipOpenLabel`)}
+          tooltipText={t(`hankeForm:toolTips:${FORMFIELD.VAIHE}`)}
         >
           {$enum(HANKE_VAIHE).map((value) => {
             return (
