@@ -156,8 +156,7 @@ export default function FileUpload<T extends AttachmentMetadata>({
       await Promise.resolve();
     } else {
       abortController.current = new AbortController();
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+      for (const file of files) {
         try {
           await uploadMutation.mutateAsync({
             file,
