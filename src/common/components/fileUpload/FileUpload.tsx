@@ -61,7 +61,7 @@ function SuccessNotification({
   );
 }
 
-function ErrorNotification({ errors, newFiles }: { errors: string[]; newFiles: number }) {
+function ErrorNotification({ errors, newFiles }: Readonly<{ errors: string[]; newFiles: number }>) {
   const { t } = useTranslation();
 
   return (
@@ -99,7 +99,7 @@ type Props<T extends AttachmentMetadata> = {
   multiple?: boolean;
   existingAttachments?: T[];
   /** Function that is given to upload mutation, handling the sending of file to API */
-  uploadFunction: (props: { file: File; abortSignal: AbortSignal }) => Promise<T>;
+  uploadFunction: (props: { file: File; abortSignal?: AbortSignal }) => Promise<T>;
   onUpload?: (isUploading: boolean) => void;
   fileDownLoadFunction?: FileDownLoadFunction;
   fileDeleteFunction: FileDeleteFunction;
@@ -128,26 +128,23 @@ export default function FileUpload<T extends AttachmentMetadata>({
   const [fileUploadErrors, setFileUploadErrors] = useState<string[]>([]);
   const uploadMutation = useMutation(uploadFunction, {
     onError(error: AxiosError, { file }) {
-      console.log('onError:', error);
-      // let errorText: string;
+      let errorText: string;
       if (error.code === 'ERR_CANCELED') {
-        // errorText = `Tiedoston (${file.name}) lataus peruttiin.`;
-        setNewFiles((files) => files.filter((prevFile) => prevFile.name !== file.name));
-      }
-      if (error.code !== 'ERR_CANCELED') {
-        const errorText =
+        errorText = t('form:errors:fileUploadCancelled', { fileName: file.name });
+      } else {
+        errorText =
           error.response?.status === 400
             ? t('form:errors:fileLoadBadFileError', { fileName: file.name })
             : t('form:errors:fileLoadTechnicalError', { fileName: file.name });
-        setFileUploadErrors((errors) => {
-          return [...errors, errorText];
-        });
       }
+      setFileUploadErrors((errors) => {
+        return [...errors, errorText];
+      });
     },
   });
   const [filesUploading, setFilesUploading] = useState(false);
   const { ref: dropZoneRef, files: dragAndDropFiles } = useDragAndDropFiles();
-  const abortControllers = useRef<AbortController[]>([]);
+  const abortController = useRef<AbortController>();
 
   async function uploadFiles(files: File[]) {
     setFilesUploading(true);
@@ -155,39 +152,25 @@ export default function FileUpload<T extends AttachmentMetadata>({
       onUpload(true);
     }
 
-    console.log('before');
     if (files.length === 0) {
       await Promise.resolve();
     } else {
-      files.forEach(() => {
-        abortControllers.current.push(new AbortController());
-      });
+      abortController.current = new AbortController();
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        console.log('upload file:', file);
         try {
           await uploadMutation.mutateAsync({
             file,
-            abortSignal: abortControllers.current[i].signal,
+            abortSignal: abortController.current?.signal,
           });
-        } catch (error) {
-          console.log('error happened');
-        }
+          // eslint-disable-next-line no-empty
+        } catch (error) {}
       }
     }
 
-    console.log('after');
-    // const mutations = files.map((file) => {
-    //   return uploadMutation.mutateAsync(file);
-    // });
-
-    // await Promise.allSettled(mutations);
-    abortControllers.current = [];
     setFilesUploading(false);
     if (onUpload) {
-      setTimeout(() => {
-        onUpload(false);
-      }, 50);
+      onUpload(false);
     }
   }
 
@@ -225,9 +208,7 @@ export default function FileUpload<T extends AttachmentMetadata>({
   }
 
   function cancelRequests() {
-    abortControllers.current.forEach((controller) => {
-      controller.abort();
-    });
+    abortController.current?.abort();
   }
 
   return (

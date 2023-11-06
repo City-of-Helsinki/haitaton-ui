@@ -94,7 +94,8 @@
       "selfIntersectingArea": "Alueen reunat eivät saa leikata toisiaan",
       "fileLoadTechnicalError": "Tiedoston ({{fileName}}) lataus epäonnistui, yritä hetken päästä uudelleen.",
       "fileLoadBadFileError": "Tiedosto ({{fileName}}) on viallinen. Tarkistathan, että tiedostomuoto on oikea eikä sen koko ylitä sallittua maksimikokoa.",
-      "duplicateFileError": "Valittu tiedostonimi ({{fileName}}) on jo käytössä. Nimeä tiedosto uudelleen."
+      "duplicateFileError": "Valittu tiedostonimi ({{fileName}}) on jo käytössä. Nimeä tiedosto uudelleen.",
+      "fileUploadCancelled": "Tiedoston ({{fileName}}) lataus peruttiin."
     },
     "headers": {
       "perustiedot": "Perustiedot",

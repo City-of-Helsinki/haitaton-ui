@@ -23,7 +23,7 @@ export default function FileListItem({
   fileDownLoadFunction,
   deletingFile = false,
   showDeleteButtonForFile,
-}: Props) {
+}: Readonly<Props>) {
   const { t } = useTranslation();
   const dateAdded = new Date(file.createdAt);
   const dateAddedText = isToday(dateAdded)
