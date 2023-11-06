@@ -42,10 +42,10 @@ function useDragAndDropFiles() {
 function SuccessNotification({
   successfulCount,
   newFiles,
-}: {
+}: Readonly<{
   successfulCount: number;
   newFiles: number;
-}) {
+}>) {
   const { t } = useTranslation();
 
   return (

@@ -52,7 +52,7 @@ import {
 import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
 import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
 import { SignedInUser } from '../hankeUsers/hankeUser';
-import UserRightsCheck from '../hankeUsers/UserRightsCheck';
+import { CheckRightsByHanke } from '../hankeUsers/UserRightsCheck';
 
 type AreaProps = {
   area: HankeAlue;
@@ -70,7 +70,7 @@ const HankeAreaInfo: React.FC<AreaProps> = ({ area, hankeIndexData, index }) => 
   return (
     <Accordion
       language={locale}
-      heading={t('hanke:alue:title', { index: index + 1 })}
+      heading={area.nimi || t('hanke:alue:title', { index: index + 1 })}
       initiallyOpen
       className={styles.hankeAreaContainer}
     >
@@ -217,7 +217,7 @@ const HankeView: React.FC<Props> = ({
 
         <InformationViewHeaderButtons>
           <FeatureFlags flags={['hanke']}>
-            <UserRightsCheck requiredRight="EDIT" hankeTunnus={hankeData.hankeTunnus}>
+            <CheckRightsByHanke requiredRight="EDIT" hankeTunnus={hankeData.hankeTunnus}>
               <Button
                 onClick={onEditHanke}
                 variant="primary"
@@ -226,8 +226,11 @@ const HankeView: React.FC<Props> = ({
               >
                 {t('hankeList:buttons:edit')}
               </Button>
-            </UserRightsCheck>
-            <UserRightsCheck requiredRight="EDIT_APPLICATIONS" hankeTunnus={hankeData.hankeTunnus}>
+            </CheckRightsByHanke>
+            <CheckRightsByHanke
+              requiredRight="EDIT_APPLICATIONS"
+              hankeTunnus={hankeData.hankeTunnus}
+            >
               {isHankePublic ? (
                 <Button
                   variant="primary"
@@ -238,7 +241,7 @@ const HankeView: React.FC<Props> = ({
                   {t('hankeList:buttons:addApplication')}
                 </Button>
               ) : null}
-            </UserRightsCheck>
+            </CheckRightsByHanke>
           </FeatureFlags>
           <FeatureFlags flags={['hanke', 'accessRights']}>
             <Button
@@ -251,14 +254,14 @@ const HankeView: React.FC<Props> = ({
             </Button>
           </FeatureFlags>
           <FeatureFlags flags={['hanke']}>
-            <UserRightsCheck requiredRight="DELETE" hankeTunnus={hankeData.hankeTunnus}>
+            <CheckRightsByHanke requiredRight="DELETE" hankeTunnus={hankeData.hankeTunnus}>
               <Button variant="primary" iconLeft={<IconCross aria-hidden="true" />} theme="black">
                 {t('hankeList:buttons:endHanke')}
               </Button>
-            </UserRightsCheck>
+            </CheckRightsByHanke>
           </FeatureFlags>
           {!isLoading && isCancelPossible && (
-            <UserRightsCheck requiredRight="DELETE" hankeTunnus={hankeData.hankeTunnus}>
+            <CheckRightsByHanke requiredRight="DELETE" hankeTunnus={hankeData.hankeTunnus}>
               <Button
                 onClick={onCancelHanke}
                 variant="danger"
@@ -266,7 +269,7 @@ const HankeView: React.FC<Props> = ({
               >
                 {t('hankeForm:cancelButton')}
               </Button>
-            </UserRightsCheck>
+            </CheckRightsByHanke>
           )}
         </InformationViewHeaderButtons>
       </InformationViewHeader>

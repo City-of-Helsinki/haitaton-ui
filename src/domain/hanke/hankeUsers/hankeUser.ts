@@ -34,6 +34,10 @@ export type SignedInUser = {
   kayttooikeudet: UserRights;
 };
 
+export type SignedInUserByHanke = {
+  [hankeTunnus: string]: SignedInUser;
+};
+
 export type IdentificationResponse = {
   kayttajaId: string;
   hankeTunnus: string;

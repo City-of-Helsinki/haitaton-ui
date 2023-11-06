@@ -115,7 +115,7 @@ test('Should show amount of successful files uploaded and errors correctly when 
   ).toBeInTheDocument();
 });
 
-test('Should show amount of successful files uploaded and errors correctly when request fails for bad request', async () => {
+test('Should show amount of successful files uploaded and errors correctly when upload request fails for bad request', async () => {
   server.use(
     rest.post('/api/hakemukset/:id/liitteet', async (req, res, ctx) => {
       return res(ctx.status(400), ctx.json({ errorMessage: 'Failed for testing purposes' }));
@@ -151,7 +151,7 @@ test('Should show amount of successful files uploaded and errors correctly when 
   ).toBeInTheDocument();
 });
 
-test('Should show correct error message when request fails for server error', async () => {
+test('Should show correct error message when upload request fails for server error', async () => {
   server.use(
     rest.post('/api/hakemukset/:id/liitteet', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));

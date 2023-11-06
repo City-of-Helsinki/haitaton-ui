@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Button, Fieldset, IconTrash } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { Box, Flex, Spacer } from '@chakra-ui/react';
-import { FORMFIELD } from '../types';
+import { FORMFIELD, HankeDataFormState } from '../types';
 import DatePicker from '../../../../common/components/datePicker/DatePicker';
 import Dropdown from '../../../../common/components/dropdown/Dropdown';
 import useLocale from '../../../../common/hooks/useLocale';
@@ -17,6 +17,8 @@ import {
   HANKE_TARINAHAITTA,
 } from '../../../types/hanke';
 import styles from './Haitat.module.scss';
+import TextInput from '../../../../common/components/textInput/TextInput';
+import { getAreaDefaultName } from '../utils';
 
 type Props = {
   index: number;
@@ -26,13 +28,18 @@ type Props = {
 const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
   const { t } = useTranslation();
   const locale = useLocale();
-  const { getValues, watch, setValue } = useFormContext();
+  const { getValues, watch, setValue } = useFormContext<HankeDataFormState>();
   const formValues: HankeAlue[] = getValues(FORMFIELD.HANKEALUEET);
 
   const watchHankeAlueet: HankeAlue[] = watch(FORMFIELD.HANKEALUEET);
   const haittaAlkuPvm = watchHankeAlueet[index]?.haittaAlkuPvm;
   const haittaLoppuPvm = watchHankeAlueet[index]?.haittaLoppuPvm;
   const minEndDate = haittaAlkuPvm && new Date(haittaAlkuPvm);
+
+  const areaDefaultName = useMemo(
+    () => getAreaDefaultName(getValues(FORMFIELD.HANKEALUEET)),
+    [getValues],
+  );
 
   useEffect(() => {
     if (haittaAlkuPvm && haittaLoppuPvm && haittaAlkuPvm > haittaLoppuPvm) {
@@ -49,6 +56,16 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
       <Box mb="var(--spacing-l)">
         <p>{t('hankeForm:hankkeenAlueForm:haitatInstructions')}</p>
       </Box>
+
+      <div className={`${styles.formRow} ${styles.formRowEven} formWprShort`}>
+        <TextInput
+          name={`${FORMFIELD.HANKEALUEET}.${index}.nimi`}
+          label={t('form:labels:areaName')}
+          helperText={t('form:helperTexts:areaName')}
+          defaultValue={areaDefaultName}
+          maxLength={100}
+        />
+      </div>
 
       <div className={`${styles.formRow} ${styles.formRowEven}`}>
         <DatePicker
