@@ -9,7 +9,6 @@ import {
   HankeDataDraft,
   HankeIndexData,
   HANKE_INDEX_TYPE,
-  HANKE_SUUNNITTELUVAIHE,
 } from '../../src/domain/types/hanke';
 import { createHankeFromUI } from '../utils/formFiller';
 import { validateIndexes } from '../utils/indexValidator';
@@ -68,7 +67,6 @@ const hankeMock: HankeDataDraft = {
   ],
   tyomaaKatuosoite: 'Mannerheimintie 14',
   vaihe: HANKE_VAIHE.SUUNNITTELU,
-  suunnitteluVaihe: HANKE_SUUNNITTELUVAIHE.KATUSUUNNITTELU_TAI_ALUEVARAUS,
   omistajat: [
     {
       id: null, // not used but types require it

@@ -9,7 +9,6 @@ const hankeDraft: HankeDataDraft = {
   alkuPvm: '2023-11-26T00:00:00Z',
   loppuPvm: '2024-11-17T00:00:00Z',
   vaihe: 'OHJELMOINTI',
-  suunnitteluVaihe: null,
   version: 0,
   createdBy: '1',
   createdAt: '2023-11-27T11:33:17.0875Z',

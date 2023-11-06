@@ -13,9 +13,7 @@ const AreaSummary: React.FC<{ area: HankeAlueFormState; index: number }> = ({ ar
   return (
     <div style={{ marginBottom: 'var(--spacing-m)' }}>
       <p style={{ marginBottom: 'var(--spacing-s)' }}>
-        <strong>
-          {t('hankeForm:hankkeenAlueForm:area')} {index + 1}
-        </strong>
+        <strong>{area.nimi || t('hanke:alue:title', { index: index + 1 })}</strong>
       </p>
       <p>
         {t('form:labels:pintaAla')}: {surfaceArea}

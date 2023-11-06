@@ -2,9 +2,10 @@ import React, { useCallback, useEffect } from 'react';
 import { Flex } from '@chakra-ui/react';
 import { Button, IconCross, IconPlusCircle, Tab, TabList, TabPanel, Tabs } from 'hds-react';
 import { useTranslation } from 'react-i18next';
-import { useFieldArray, UseFieldArrayRemove } from 'react-hook-form';
+import { UseFieldArrayRemove } from 'react-hook-form';
 import styles from './Contact.module.scss';
 import useSelectableTabs from '../../../common/hooks/useSelectableTabs';
+import useFieldArrayWithStateUpdate from '../../../common/hooks/useFieldArrayWithStateUpdate';
 
 interface Props<T> {
   contactType: T;
@@ -33,7 +34,7 @@ const Contact = <T,>({
     fields: subContactFields,
     append: appendSubContact,
     remove: removeSubContact,
-  } = useFieldArray({
+  } = useFieldArrayWithStateUpdate({
     name: subContactPath,
   });
 
