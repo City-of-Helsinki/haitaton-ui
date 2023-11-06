@@ -1,0 +1,37 @@
+@import 'src/assets/styles/layout.scss';
+
+.fileListItem {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  background-color: var(--color-info-light);
+  border-bottom: 2px dotted var(--color-coat-of-arms);
+  max-width: 100%;
+  width: 600px;
+  row-gap: var(--spacing-2-xs);
+  column-gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+  padding: var(--spacing-s) var(--spacing-2-xs);
+}
+
+.fileListItemNameContainer {
+  display: flex;
+  flex-wrap: nowrap;
+  flex: 1;
+  align-items: flex-start;
+}
+
+.fileListItemName {
+  hyphens: auto;
+}
+
+.fileListItemDownloadIcon {
+  flex-shrink: 0;
+}
+
+.fileListItemButton {
+  --file-list-item-button-y-offset: calc(-1 * var(--spacing-2-xs) - 2px);
+
+  display: flex;
+  margin: var(--file-list-item-button-y-offset) auto var(--file-list-item-button-y-offset) 0;
+}

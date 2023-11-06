@@ -237,4 +237,8 @@ export const handlers = [
   rest.post(`${apiUrl}/hakemukset/:id/liitteet`, async (req, res, ctx) => {
     return res(ctx.delay(), ctx.status(200));
   }),
+
+  rest.delete(`${apiUrl}/hakemukset/:id/liitteet/:attachmentId`, async (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
 ];
