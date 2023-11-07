@@ -160,6 +160,14 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
   const locale = useLocale();
 
   const {
+    fields: omistajat,
+    append: appendOmistaja,
+    remove: removeOmistaja,
+  } = useFieldArray({
+    name: FORMFIELD.OMISTAJAT,
+  });
+
+  const {
     fields: rakennuttajat,
     append: appendRakennuttaja,
     remove: removeRakennuttaja,
@@ -181,54 +189,69 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
     name: FORMFIELD.MUUTTAHOT,
   });
 
-  const ownerSubContactFieldPath = `${FORMFIELD.OMISTAJAT}.0.${CONTACT_FORMFIELD.ALIKONTAKTIT}`;
-
   return (
     <div className="form2">
       <Text tag="p" styleAs="body-m" spacingBottom="s">
         {t(`form:yhteystiedot:instructions`)}
       </Text>
-      <Text tag="h3" styleAs="h3" weight="light" spacingBottom="xs">
-        {t(`form:yhteystiedot:titles:omistajaInfo`)}
-      </Text>
 
       {/* Omistaja */}
-      <Contact<HankeContactTypeKey>
-        contactType={HANKE_CONTACT_TYPE.OMISTAJAT}
-        subContactPath={ownerSubContactFieldPath}
-        emptySubContact={getEmptySubContact()}
-        showInitialEmpty={true}
-        renderSubContact={(subContactIndex, removeSubContact) => {
-          const fieldPath = `${ownerSubContactFieldPath}.${subContactIndex}`;
-          return (
-            <SubContactFields
-              fieldPath={fieldPath}
-              canBeRemoved={subContactIndex > 0}
-              onRemove={() => removeSubContact(subContactIndex)}
-            />
-          );
-        }}
+      <Accordion
+        language={locale}
+        headingLevel={3}
+        heading={t('form:yhteystiedot:titles:omistajaInfo')}
       >
-        <Fieldset
-          heading={t('form:yhteystiedot:titles:omistaja')}
-          style={{ paddingTop: 'var(--spacing-s)' }}
+        {omistajat.map((item, index) => {
+          return (
+            <Contact<HankeContactTypeKey>
+              key={item.id}
+              contactType={HANKE_CONTACT_TYPE.OMISTAJAT}
+              index={index}
+              onRemoveContact={removeOmistaja}
+              subContactPath={`${HANKE_CONTACT_TYPE.OMISTAJAT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}`}
+              emptySubContact={getEmptySubContact()}
+              renderSubContact={(subContactIndex, removeSubContact) => {
+                const fieldPath = `${HANKE_CONTACT_TYPE.OMISTAJAT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}.${subContactIndex}`;
+                return (
+                  <SubContactFields
+                    fieldPath={fieldPath}
+                    canBeRemoved={subContactIndex > 0}
+                    onRemove={() => removeSubContact(subContactIndex)}
+                  />
+                );
+              }}
+            >
+              <Fieldset
+                heading={t('form:yhteystiedot:titles:omistaja')}
+                style={{ paddingTop: 'var(--spacing-s)' }}
+              >
+                <ResponsiveGrid>
+                  {CONTACT_FIELDS.map((contactField) => {
+                    const fieldName = `${FORMFIELD.OMISTAJAT}.${index}.${contactField}`;
+                    return (
+                      <ContactField
+                        key={contactField}
+                        field={contactField}
+                        fieldName={fieldName}
+                        contactType={HANKE_CONTACT_TYPE.OMISTAJAT}
+                        index={index}
+                      />
+                    );
+                  })}
+                </ResponsiveGrid>
+              </Fieldset>
+            </Contact>
+          );
+        })}
+
+        <Button
+          variant="supplementary"
+          iconLeft={<IconPlusCircle aria-hidden />}
+          onClick={() => appendOmistaja(getEmptyContact())}
         >
-          <ResponsiveGrid>
-            {CONTACT_FIELDS.map((contactField) => {
-              const fieldName = `${FORMFIELD.OMISTAJAT}.0.${contactField}`;
-              return (
-                <ContactField
-                  key={contactField}
-                  field={contactField}
-                  fieldName={fieldName}
-                  contactType={HANKE_CONTACT_TYPE.OMISTAJAT}
-                  index={0}
-                />
-              );
-            })}
-          </ResponsiveGrid>
-        </Fieldset>
-      </Contact>
+          {t('form:yhteystiedot:titles:lisaaOmistaja')}
+        </Button>
+      </Accordion>
 
       {/* Rakennuttaja */}
       <Accordion

@@ -46,6 +46,7 @@ function fillBasicInformation(
 
 const formData: HankeDataFormState = {
   vaihe: HANKE_VAIHE.OHJELMOINTI,
+  omistajat: [],
   rakennuttajat: [],
   toteuttajat: [],
   muut: [],
@@ -141,6 +142,9 @@ describe('HankeForm', () => {
     const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
 
     // Hanke owner
+    await user.click(screen.getByText(/hankkeen omistajan tiedot/i));
+    await user.click(screen.getByText(/lisää omistaja/i));
+
     await user.click(screen.getByRole('button', { name: /tyyppi/i }));
     await user.click(screen.getByText(/yritys/i));
 
@@ -158,6 +162,7 @@ describe('HankeForm', () => {
     });
 
     // Hanke owner contact person
+    await user.click(screen.getByText(/lisää yhteyshenkilö/i));
     fireEvent.change(screen.getByTestId('omistajat.0.alikontaktit.0.etunimi'), {
       target: { value: 'Olli' },
     });

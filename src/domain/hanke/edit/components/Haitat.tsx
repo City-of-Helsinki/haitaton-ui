@@ -72,12 +72,14 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
           name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.HAITTA_ALKU_PVM}`}
           label={t(`hankeForm:labels:${FORMFIELD.HAITTA_ALKU_PVM}`)}
           locale={locale}
+          helperText={t('form:helperTexts:dateInForm')}
         />
         <DatePicker
           name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.HAITTA_LOPPU_PVM}`}
           label={t(`hankeForm:labels:${FORMFIELD.HAITTA_LOPPU_PVM}`)}
           locale={locale}
           minDate={minEndDate || undefined}
+          helperText={t('form:helperTexts:dateInForm')}
         />
         <Spacer />
       </div>

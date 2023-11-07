@@ -98,9 +98,7 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
       </Box>
 
       <Text tag="h3" styleAs="h4" weight="bold">
-        <Box color="var(--color-bus)" mb="var(--spacing-m)">
-          {t('hankeForm:hankkeenAlueForm:subHeader')}
-        </Box>
+        <Box mb="var(--spacing-m)">{t('hankeForm:hankkeenAlueForm:subHeader')}</Box>
       </Text>
 
       <Box mb="var(--spacing-m)">
@@ -113,28 +111,34 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
         />
       </Box>
 
-      <Tabs>
-        <TabList>
-          {hankeAlueet.map((item, index) => {
-            const hankeAlue = formData.alueet && formData.alueet[index];
-            const hankeGeometry = hankeAlue?.feature?.getGeometry();
-            const surfaceArea = hankeGeometry && `(${formatSurfaceArea(hankeGeometry)})`;
-            const name = watch(`${FORMFIELD.HANKEALUEET}.${index}.nimi`);
-            return (
-              <Tab key={item.id} onClick={() => higlightArea(hankeAlue?.feature)}>
-                <div ref={tabRefs[index]}>
-                  {name} {surfaceArea}
-                </div>
-              </Tab>
-            );
-          })}
-        </TabList>
-        {hankeAlueet.map((item, index) => (
-          <TabPanel key={item.id}>
-            <Haitat index={index} onRemoveArea={removeArea} />
-          </TabPanel>
-        ))}
-      </Tabs>
+      {hankeAlueet.length < 1 ? (
+        <Box textAlign="center" mt="var(--spacing-2-xl)" mb="var(--spacing-2-xl)">
+          <p>{t('hankeForm:hankkeenAlueForm:noAlueet')}</p>
+        </Box>
+      ) : (
+        <Tabs>
+          <TabList>
+            {hankeAlueet.map((item, index) => {
+              const hankeAlue = formData.alueet && formData.alueet[index];
+              const hankeGeometry = hankeAlue?.feature?.getGeometry();
+              const surfaceArea = hankeGeometry && `(${formatSurfaceArea(hankeGeometry)})`;
+              const name = watch(`${FORMFIELD.HANKEALUEET}.${index}.nimi`);
+              return (
+                <Tab key={item.id} onClick={() => higlightArea(hankeAlue?.feature)}>
+                  <div ref={tabRefs[index]}>
+                    {name} {surfaceArea}
+                  </div>
+                </Tab>
+              );
+            })}
+          </TabList>
+          {hankeAlueet.map((item, index) => (
+            <TabPanel key={item.id}>
+              <Haitat index={index} onRemoveArea={removeArea} />
+            </TabPanel>
+          ))}
+        </Tabs>
+      )}
     </div>
   );
 };

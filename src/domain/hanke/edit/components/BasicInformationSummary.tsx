@@ -31,8 +31,6 @@ const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
 
   return (
     <FormSummarySection>
-      <SectionItemTitle>{t('hankeForm:labels:perustaja')}</SectionItemTitle>
-      <SectionItemContent />
       <SectionItemTitle>{t('hankeForm:labels:nimi')}</SectionItemTitle>
       <SectionItemContent>
         <p>{formData.nimi}</p>
@@ -41,32 +39,56 @@ const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
       <SectionItemContent>
         <p>{formData.hankeTunnus}</p>
       </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:labels:kuvaus')}</SectionItemTitle>
-      <SectionItemContent>
-        <p>{formData.kuvaus}</p>
-      </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:labels:tyomaaKatuosoite')}</SectionItemTitle>
-      <SectionItemContent>
-        <p>{formData.tyomaaKatuosoite}</p>
-      </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:labels:alkuPvm')}</SectionItemTitle>
-      <SectionItemContent>
-        <p>{startDate}</p>
-      </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:labels:loppuPvm')}</SectionItemTitle>
-      <SectionItemContent>
-        <p>{endDate}</p>
-      </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:labels:vaihe')}</SectionItemTitle>
-      <SectionItemContent>
-        {formData.vaihe !== null && <p>{t(`hanke:vaihe:${formData.vaihe}`)}</p>}
-      </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:labels:tyomaaTyyppi')}</SectionItemTitle>
-      <SectionItemContent>
-        <p>
-          {formData.tyomaaTyyppi?.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')}
-        </p>
-      </SectionItemContent>
+      {formData.kuvaus && (
+        <>
+          <SectionItemTitle>{t('hankeForm:labels:kuvaus')}</SectionItemTitle>
+          <SectionItemContent>
+            <p>{formData.kuvaus}</p>
+          </SectionItemContent>
+        </>
+      )}
+      {formData.tyomaaKatuosoite && (
+        <>
+          <SectionItemTitle>{t('hankeForm:labels:tyomaaKatuosoite')}</SectionItemTitle>
+          <SectionItemContent>
+            <p>{formData.tyomaaKatuosoite}</p>
+          </SectionItemContent>
+        </>
+      )}
+      {formData.alkuPvm && (
+        <>
+          <SectionItemTitle>{t('hankeForm:labels:alkuPvm')}</SectionItemTitle>
+          <SectionItemContent>
+            <p>{startDate}</p>
+          </SectionItemContent>
+        </>
+      )}
+      {formData.loppuPvm && (
+        <>
+          <SectionItemTitle>{t('hankeForm:labels:loppuPvm')}</SectionItemTitle>
+          <SectionItemContent>
+            <p>{endDate}</p>
+          </SectionItemContent>
+        </>
+      )}
+      {formData.vaihe && (
+        <>
+          <SectionItemTitle>{t('hankeForm:labels:vaihe')}</SectionItemTitle>
+          <SectionItemContent>
+            {formData.vaihe !== null && <p>{t(`hanke:vaihe:${formData.vaihe}`)}</p>}
+          </SectionItemContent>
+        </>
+      )}
+      {formData.tyomaaTyyppi && formData.tyomaaTyyppi.length > 0 && (
+        <>
+          <SectionItemTitle>{t('hankeForm:labels:tyomaaTyyppi')}</SectionItemTitle>
+          <SectionItemContent>
+            <p>
+              {formData.tyomaaTyyppi?.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')}
+            </p>
+          </SectionItemContent>
+        </>
+      )}
       <SectionItemTitle>{t('hankeForm:labels:onYKTHanke')}</SectionItemTitle>
       <SectionItemContent>
         <p>{formData.onYKTHanke ? t('common:yes') : t('common:no')}</p>
