@@ -5,7 +5,7 @@ import { useMutation } from 'react-query';
 import { Button, IconCross, IconPlusCircle, IconSaveDiskette, StepState } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { FormNotification, HankeDataFormState } from './types';
+import { FORMFIELD, FormNotification, HankeDataFormState } from './types';
 import { hankeSchema } from './hankeSchema';
 import HankeFormAlueet from './HankeFormAlueet';
 import HankeFormPerustiedot from './HankeFormPerustiedot';
@@ -22,6 +22,7 @@ import FormActions from '../../forms/components/FormActions';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import ApplicationAddDialog from '../../application/components/ApplicationAddDialog';
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
+import { changeFormStep } from '../../forms/utils';
 
 async function saveHanke(data: HankeDataFormState) {
   const requestData = {
@@ -69,6 +70,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     formState: { errors, isDirty },
     getValues,
     setValue,
+    trigger,
   } = formContext;
 
   const isNewHanke = !formData.hankeTunnus;
@@ -170,14 +172,20 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       />
       <div className="hankeForm">
         <MultipageForm heading={formHeading} formSteps={formSteps} onStepChange={save}>
-          {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
-            const lastStep = activeStepIndex === formSteps.length - 1;
+          {function renderFormActions(activeStep, handlePrevious, handleNext) {
+            const lastStep = activeStep === formSteps.length - 1;
+
+            const handleNextPage = () =>
+              activeStep === 0
+                ? changeFormStep(handleNext, [FORMFIELD.NIMI], trigger)
+                : handleNext();
+
             return (
               <FormActions
-                activeStepIndex={activeStepIndex}
+                activeStepIndex={activeStep}
                 totalSteps={formSteps.length}
                 onPrevious={handlePrevious}
-                onNext={handleNext}
+                onNext={handleNextPage}
               >
                 {isNewHanke && (
                   <Button
