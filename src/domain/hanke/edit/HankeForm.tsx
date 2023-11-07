@@ -55,6 +55,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   const { setNotification } = useGlobalNotification();
   const [showNotification, setShowNotification] = useState<FormNotification | null>(null);
   const [showAddApplicationDialog, setShowAddApplicationDialog] = useState(false);
+  const [attachmentsUploading, setAttachmentsUploading] = useState(false);
   const formContext = useForm<HankeDataFormState>({
     mode: 'onTouched',
     reValidateMode: 'onChange',
@@ -133,6 +134,10 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     onIsDirtyChange(isDirty);
   }, [isDirty, onIsDirtyChange]);
 
+  function handleFileUpload(uploading: boolean) {
+    setAttachmentsUploading(uploading);
+  }
+
   const formSteps = [
     {
       element: <HankeFormPerustiedot errors={errors} register={register} formData={formValues} />,
@@ -155,8 +160,8 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       state: isNewHanke ? StepState.disabled : StepState.available,
     },
     {
-      element: <HankeFormLiitteet />,
-      label: t('form:headers:liitteet'),
+      element: <HankeFormLiitteet onFileUpload={handleFileUpload} />,
+      label: t('hankePortfolio:tabit:liitteet'),
       state: isNewHanke ? StepState.disabled : StepState.available,
     },
     {
@@ -175,7 +180,13 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
         hanke={getValues() as HankeData}
       />
       <div className="hankeForm">
-        <MultipageForm heading={formHeading} formSteps={formSteps} onStepChange={save}>
+        <MultipageForm
+          heading={formHeading}
+          formSteps={formSteps}
+          onStepChange={save}
+          isLoading={attachmentsUploading}
+          isLoadingText={t('common:components:fileUpload:loadingText')}
+        >
           {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
             const lastStep = activeStepIndex === formSteps.length - 1;
             return (
