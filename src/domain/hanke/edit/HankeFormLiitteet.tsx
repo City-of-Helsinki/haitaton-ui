@@ -11,6 +11,7 @@ import {
   getAttachmentFile,
   uploadAttachment,
 } from '../hankeAttachments/hankeAttachmentsApi';
+import { AttachmentMetadata } from '../../../common/types/attachment';
 
 type Props = {
   onFileUpload: (uploading: boolean) => void;
@@ -21,15 +22,40 @@ function HankeFormLiitteet({ onFileUpload }: Readonly<Props>) {
   const queryClient = useQueryClient();
   const { getValues } = useFormContext<HankeDataFormState>();
   const hankeTunnus = getValues('hankeTunnus');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: existingAttachments, isError: attachmentsLoadError } =
     useHankeAttachments(hankeTunnus);
+
+  function uploadAttachmentFunction({
+    file,
+    abortSignal,
+  }: {
+    file: File;
+    abortSignal?: AbortSignal;
+  }) {
+    return uploadAttachment({
+      hankeTunnus: hankeTunnus!,
+      file,
+      abortSignal,
+    });
+  }
 
   function handleUpload(uploading: boolean) {
     onFileUpload(uploading);
     if (!uploading) {
       queryClient.invalidateQueries(HANKE_ATTACHMENTS_QUERY_KEY);
     }
+  }
+
+  function downloadFile(file: AttachmentMetadata) {
+    return getAttachmentFile(hankeTunnus!, file.id);
+  }
+
+  function deleteFile(file: AttachmentMetadata) {
+    return deleteAttachment({ hankeTunnus: hankeTunnus!, attachmentId: file.id });
+  }
+
+  function handleFileDelete() {
+    queryClient.invalidateQueries(HANKE_ATTACHMENTS_QUERY_KEY);
   }
 
   return (
@@ -45,19 +71,12 @@ function HankeFormLiitteet({ onFileUpload }: Readonly<Props>) {
         dragAndDrop
         multiple
         existingAttachments={existingAttachments}
-        uploadFunction={({ file, abortSignal }) =>
-          uploadAttachment({
-            hankeTunnus,
-            file,
-            abortSignal,
-          })
-        }
+        existingAttachmentsLoadError={attachmentsLoadError}
+        uploadFunction={uploadAttachmentFunction}
         onUpload={handleUpload}
-        fileDownLoadFunction={(file) => getAttachmentFile(hankeTunnus!, file.id)}
-        fileDeleteFunction={(file) =>
-          deleteAttachment({ hankeTunnus: hankeTunnus!, attachmentId: file?.id })
-        }
-        onFileDelete={() => queryClient.invalidateQueries(HANKE_ATTACHMENTS_QUERY_KEY)}
+        fileDownLoadFunction={downloadFile}
+        fileDeleteFunction={deleteFile}
+        onFileDelete={handleFileDelete}
       />
     </div>
   );

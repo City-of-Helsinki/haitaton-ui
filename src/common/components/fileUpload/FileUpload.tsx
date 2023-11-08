@@ -19,6 +19,7 @@ import styles from './FileUpload.module.scss';
 import { removeDuplicateAttachments } from './utils';
 import FileList from './FileList';
 import { FileDeleteFunction, FileDownLoadFunction, ShowDeleteButtonFunction } from './types';
+import ErrorLoadingText from '../errorLoadingText/ErrorLoadingText';
 
 function useDragAndDropFiles() {
   const ref = useRef<HTMLDivElement>(null);
@@ -98,6 +99,7 @@ type Props<T extends AttachmentMetadata> = {
   /** A Boolean that indicates that more than one file can be chosen */
   multiple?: boolean;
   existingAttachments?: T[];
+  existingAttachmentsLoadError?: boolean;
   /** Function that is given to upload mutation, handling the sending of file to API */
   uploadFunction: (props: { file: File; abortSignal?: AbortSignal }) => Promise<T>;
   onUpload?: (isUploading: boolean) => void;
@@ -115,6 +117,7 @@ export default function FileUpload<T extends AttachmentMetadata>({
   dragAndDrop,
   multiple,
   existingAttachments = [],
+  existingAttachmentsLoadError,
   uploadFunction,
   onUpload,
   fileDownLoadFunction,
@@ -254,13 +257,17 @@ export default function FileUpload<T extends AttachmentMetadata>({
         <ErrorNotification errors={fileUploadErrors} newFiles={newFiles.length} />
       )}
 
-      <FileList
-        files={existingAttachments}
-        fileDownLoadFunction={fileDownLoadFunction}
-        fileDeleteFunction={fileDeleteFunction}
-        onFileDelete={handleFileDelete}
-        showDeleteButtonForFile={showDeleteButtonForFile}
-      />
+      {existingAttachmentsLoadError ? (
+        <ErrorLoadingText />
+      ) : (
+        <FileList
+          files={existingAttachments}
+          fileDownLoadFunction={fileDownLoadFunction}
+          fileDeleteFunction={fileDeleteFunction}
+          onFileDelete={handleFileDelete}
+          showDeleteButtonForFile={showDeleteButtonForFile}
+        />
+      )}
     </div>
   );
 }

@@ -96,6 +96,12 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     },
   });
 
+  const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
+  const saveAndQuitButtonIsLoading = hankeMutation.isLoading || attachmentsUploading;
+  const saveAndQuitButtonLoadingText = attachmentsUploading
+    ? attachmentsUploadingText
+    : t('common:buttons:savingText');
+
   function save() {
     hankeMutation.mutate(getValues());
   }
@@ -185,7 +191,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
           formSteps={formSteps}
           onStepChange={save}
           isLoading={attachmentsUploading}
-          isLoadingText={t('common:components:fileUpload:loadingText')}
+          isLoadingText={attachmentsUploadingText}
         >
           {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
             const lastStep = activeStepIndex === formSteps.length - 1;
@@ -195,24 +201,28 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
                 totalSteps={formSteps.length}
                 onPrevious={handlePrevious}
                 onNext={handleNext}
+                previousButtonIsLoading={attachmentsUploading}
+                previousButtonLoadingText={attachmentsUploadingText}
+                nextButtonIsLoading={attachmentsUploading}
+                nextButtonLoadingText={attachmentsUploadingText}
               >
-                {isNewHanke && (
-                  <Button
-                    variant="danger"
-                    iconLeft={<IconCross aria-hidden />}
-                    onClick={() => onFormClose(formValues.hankeTunnus)}
-                  >
-                    {t('hankeForm:cancelButton')}
-                  </Button>
-                )}
+                <Button
+                  variant="danger"
+                  iconLeft={<IconCross aria-hidden />}
+                  onClick={() => onFormClose(formValues.hankeTunnus)}
+                  isLoading={attachmentsUploading}
+                  loadingText={attachmentsUploadingText}
+                >
+                  {t('hankeForm:cancelButton')}
+                </Button>
                 {!lastStep && (
                   <Button
                     variant="supplementary"
                     iconLeft={<IconSaveDiskette aria-hidden="true" />}
                     onClick={saveAndQuit}
                     data-testid="save-form-btn"
-                    isLoading={hankeMutation.isLoading}
-                    loadingText={t('common:buttons:savingText')}
+                    isLoading={saveAndQuitButtonIsLoading}
+                    loadingText={saveAndQuitButtonLoadingText}
                   >
                     {t('hankeForm:saveDraftButton')}
                   </Button>

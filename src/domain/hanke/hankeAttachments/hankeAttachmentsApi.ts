@@ -13,7 +13,7 @@ export async function uploadAttachment({
   file,
   abortSignal,
 }: {
-  hankeTunnus?: string;
+  hankeTunnus: string;
   file: File;
   abortSignal?: AbortSignal;
 }) {
@@ -44,8 +44,8 @@ export async function deleteAttachment({
   hankeTunnus,
   attachmentId,
 }: {
-  hankeTunnus: string | null;
-  attachmentId: string | undefined;
+  hankeTunnus: string;
+  attachmentId: string;
 }) {
   await api.delete(`/hankkeet/${hankeTunnus}/liitteet/${attachmentId}`);
 }

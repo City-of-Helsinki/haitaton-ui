@@ -12,6 +12,8 @@ import BasicInformationSummary from './components/BasicInformationSummary';
 import ContactsSummary from './components/ContactsSummary';
 import AreaSummary from './components/AreaSummary';
 import { calculateTotalSurfaceArea } from './utils';
+import AttachmentSummary from './components/AttachmentSummary';
+import useHankeAttachments from '../hankeAttachments/useHankeAttachments';
 
 type Props = {
   formData: HankeDataFormState;
@@ -19,8 +21,8 @@ type Props = {
 
 const HankeFormSummary: React.FC<Props> = ({ formData }) => {
   const { t } = useTranslation();
-
   const areasTotalSurfaceArea = calculateTotalSurfaceArea(formData.alueet);
+  const { data: attachments } = useHankeAttachments(formData.hankeTunnus);
 
   return (
     <article>
@@ -72,6 +74,10 @@ const HankeFormSummary: React.FC<Props> = ({ formData }) => {
           />
         )}
       </FormSummarySection>
+      <SectionTitle>{t('hankePortfolio:tabit:liitteet')}</SectionTitle>
+      {attachments !== undefined && formData.hankeTunnus !== undefined && (
+        <AttachmentSummary hankeTunnus={formData.hankeTunnus} attachments={attachments} />
+      )}
     </article>
   );
 };
