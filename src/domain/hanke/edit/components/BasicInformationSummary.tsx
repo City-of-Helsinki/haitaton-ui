@@ -10,6 +10,20 @@ import { HankeDataDraft } from '../../../types/hanke';
 import { FORMFIELD, HankeDataFormState } from '../types';
 import { getAreasMaxEndDate, getAreasMinStartDate } from '../utils';
 
+const SectionData: React.FC<{ title: string; content: string | undefined }> = ({
+  title,
+  content,
+}) => {
+  return (
+    <>
+      <SectionItemTitle>{title}</SectionItemTitle>
+      <SectionItemContent>
+        <p>{content}</p>
+      </SectionItemContent>
+    </>
+  );
+};
+
 type Props = {
   formData: HankeDataFormState | HankeDataDraft;
   children?: React.ReactNode;
@@ -31,68 +45,41 @@ const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
 
   return (
     <FormSummarySection>
-      <SectionItemTitle>{t('hankeForm:labels:nimi')}</SectionItemTitle>
-      <SectionItemContent>
-        <p>{formData.nimi}</p>
-      </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:labels:hankeTunnus')}</SectionItemTitle>
-      <SectionItemContent>
-        <p>{formData.hankeTunnus}</p>
-      </SectionItemContent>
+      <SectionData title={t('hankeForm:labels:nimi')} content={formData.nimi} />
+      <SectionData title={t('hankeForm:labels:hankeTunnus')} content={formData.hankeTunnus} />
       {formData.kuvaus && (
-        <>
-          <SectionItemTitle>{t('hankeForm:labels:kuvaus')}</SectionItemTitle>
-          <SectionItemContent>
-            <p>{formData.kuvaus}</p>
-          </SectionItemContent>
-        </>
+        <SectionData title={t('hankeForm:labels:kuvaus')} content={formData.kuvaus} />
       )}
       {formData.tyomaaKatuosoite && (
-        <>
-          <SectionItemTitle>{t('hankeForm:labels:tyomaaKatuosoite')}</SectionItemTitle>
-          <SectionItemContent>
-            <p>{formData.tyomaaKatuosoite}</p>
-          </SectionItemContent>
-        </>
+        <SectionData
+          title={t('hankeForm:labels:tyomaaKatuosoite')}
+          content={formData.tyomaaKatuosoite}
+        />
       )}
       {formData.alkuPvm && (
-        <>
-          <SectionItemTitle>{t('hankeForm:labels:alkuPvm')}</SectionItemTitle>
-          <SectionItemContent>
-            <p>{startDate}</p>
-          </SectionItemContent>
-        </>
+        <SectionData title={t('hankeForm:labels:alkuPvm')} content={startDate} />
       )}
       {formData.loppuPvm && (
-        <>
-          <SectionItemTitle>{t('hankeForm:labels:loppuPvm')}</SectionItemTitle>
-          <SectionItemContent>
-            <p>{endDate}</p>
-          </SectionItemContent>
-        </>
+        <SectionData title={t('hankeForm:labels:loppuPvm')} content={endDate} />
       )}
       {formData.vaihe && (
-        <>
-          <SectionItemTitle>{t('hankeForm:labels:vaihe')}</SectionItemTitle>
-          <SectionItemContent>
-            {formData.vaihe !== null && <p>{t(`hanke:vaihe:${formData.vaihe}`)}</p>}
-          </SectionItemContent>
-        </>
+        <SectionData
+          title={t('hankeForm:labels:vaihe')}
+          content={t(`hanke:vaihe:${formData.vaihe}`)}
+        />
       )}
       {formData.tyomaaTyyppi && formData.tyomaaTyyppi.length > 0 && (
-        <>
-          <SectionItemTitle>{t('hankeForm:labels:tyomaaTyyppi')}</SectionItemTitle>
-          <SectionItemContent>
-            <p>
-              {formData.tyomaaTyyppi?.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')}
-            </p>
-          </SectionItemContent>
-        </>
+        <SectionData
+          title={t('hankeForm:labels:tyomaaTyyppi')}
+          content={formData.tyomaaTyyppi
+            ?.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`))
+            .join(', ')}
+        />
       )}
-      <SectionItemTitle>{t('hankeForm:labels:onYKTHanke')}</SectionItemTitle>
-      <SectionItemContent>
-        <p>{formData.onYKTHanke ? t('common:yes') : t('common:no')}</p>
-      </SectionItemContent>
+      <SectionData
+        title={t('hankeForm:labels:onYKTHanke')}
+        content={formData.onYKTHanke ? t('common:yes') : t('common:no')}
+      />
       {children}
     </FormSummarySection>
   );
