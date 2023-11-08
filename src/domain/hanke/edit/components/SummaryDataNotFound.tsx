@@ -1,10 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import { IconInfoCircle } from 'hds-react';
-import { useTranslation } from 'react-i18next';
 
-const SummaryDataNotFound = () => {
-  const { t } = useTranslation();
-
+const SummaryDataNotFound: React.FC<{ info: string }> = ({ info }) => {
   return (
     <Box display="flex" alignItems="center" width="max-content" mb="var(--spacing-m)">
       <IconInfoCircle size="s" />
@@ -15,7 +12,7 @@ const SummaryDataNotFound = () => {
           fontWeight: 500,
         }}
       >
-        {t('hankeForm:hankkeenYhteenvetoForm:dataNotFound')}
+        {info}
       </p>
     </Box>
   );

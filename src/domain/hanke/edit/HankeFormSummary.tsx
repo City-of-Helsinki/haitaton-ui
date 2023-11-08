@@ -55,7 +55,7 @@ const HankeFormSummary: React.FC<Props> = ({ formData }) => {
           </SectionItemContent>
         </FormSummarySection>
       ) : (
-        <SummaryDataNotFound />
+        <SummaryDataNotFound info={t('hankeForm:hankkeenYhteenvetoForm:dataNotFound')} />
       )}
 
       <SectionTitle>{t('form:yhteystiedot:header')}</SectionTitle>
@@ -88,7 +88,7 @@ const HankeFormSummary: React.FC<Props> = ({ formData }) => {
           )}
         </FormSummarySection>
       ) : (
-        <SummaryDataNotFound />
+        <SummaryDataNotFound info={t('hankeForm:hankkeenYhteenvetoForm:dataNotFound')} />
       )}
     </article>
   );

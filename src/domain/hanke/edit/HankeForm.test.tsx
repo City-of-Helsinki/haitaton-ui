@@ -209,8 +209,8 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByRole('button', { name: 'Tallenna ja keskeytä' }));
 
-    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-15');
-    expect(screen.getByText(`Hanke ${nimi} (HAI22-15) tallennettu omiin hankkeisiin.`));
+    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-14');
+    expect(screen.getByText(`Hanke ${nimi} (HAI22-14) tallennettu omiin hankkeisiin.`));
   });
 
   test('Should be able to save hanke in the last page', async () => {
@@ -236,9 +236,22 @@ describe('HankeForm', () => {
   });
 
   test('Summary page should handle not filled data gracefully', async () => {
+    const testAlue = {
+      ...hankkeet[1]?.alueet?.[0],
+      kaistaHaitta: null,
+      kaistaPituusHaitta: null,
+      meluHaitta: null,
+      polyHaitta: null,
+      tarinaHaitta: null,
+    };
+    const testHanke = {
+      ...hankkeet[0],
+      alueet: [testAlue],
+    };
+
     const { user } = render(
       <HankeForm
-        formData={hankkeet[11] as HankeDataFormState}
+        formData={testHanke as HankeDataFormState}
         onIsDirtyChange={() => ({})}
         onFormClose={() => ({})}
       >
@@ -248,7 +261,6 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
     await waitFor(() => expect(screen.queryByText(/vaihe 5\/5: yhteenveto/i)).toBeInTheDocument());
-
     expect(screen.queryByText(/meluhaitta: -/i)).toBeInTheDocument();
     expect(screen.queryByText(/pölyhaitta: -/i)).toBeInTheDocument();
     expect(screen.queryByText(/tärinähaitta: -/i)).toBeInTheDocument();

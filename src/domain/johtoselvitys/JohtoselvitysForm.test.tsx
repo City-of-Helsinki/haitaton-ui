@@ -315,7 +315,7 @@ test('Form can be saved without hanke existing first', async () => {
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
   expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
-  await screen.findByText('Johtoselvitys (HAI22-13)');
+  await screen.findByText('Johtoselvitys (HAI22-12)');
   expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
 });
 
@@ -342,7 +342,7 @@ test('Save and quit works without hanke existing first', async () => {
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
   expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
-  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-14');
+  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-13');
 });
 
 test('Should not save and quit if current form page is not valid', async () => {

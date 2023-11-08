@@ -26,9 +26,9 @@ describe('HankeMap', () => {
     await screen.findByPlaceholderText('Etsi osoitteella');
     await screen.findByText('Ajanjakson alku');
 
-    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('3');
+    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
     changeFilterDate(startDateLabel, renderedComponent, '1.1.2022');
-    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('3');
+    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
     changeFilterDate(endDateLabel, renderedComponent, '1.1.2022');
     expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('0');
     changeFilterDate(endDateLabel, renderedComponent, '12.12.2023');
@@ -42,8 +42,8 @@ describe('HankeMap', () => {
     changeFilterDate(startDateLabel, renderedComponent, null);
     expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
     changeFilterDate(endDateLabel, renderedComponent, null);
-    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('3');
+    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
     changeFilterDate(startDateLabel, renderedComponent, '1.1.2022');
-    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('3');
+    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
   });
 });
