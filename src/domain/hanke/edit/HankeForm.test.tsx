@@ -161,8 +161,7 @@ describe('HankeForm', () => {
       target: { value: '0401234567' },
     });
 
-    // Hanke owner contact person
-    await user.click(screen.getByText(/lisää yhteyshenkilö/i));
+    // Hanke owner contact person, should be visible by default
     fireEvent.change(screen.getByTestId('omistajat.0.alikontaktit.0.etunimi'), {
       target: { value: 'Olli' },
     });
@@ -185,7 +184,6 @@ describe('HankeForm', () => {
     await user.click(screen.getByText(/yksityishenkilö/i));
     expect(screen.getAllByLabelText(/y-tunnus/i)[1]).toBeDisabled();
 
-    await user.click(screen.getAllByText(/lisää yhteyshenkilö/i)[1]);
     await user.click(screen.getAllByText(/lisää yhteyshenkilö/i)[1]);
     expect(screen.getAllByRole('tablist')[1].childElementCount).toBe(2); // many contacts can be added
 
