@@ -209,8 +209,8 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByRole('button', { name: 'Tallenna ja keskeytä' }));
 
-    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-14');
-    expect(screen.getByText(`Hanke ${nimi} (HAI22-14) tallennettu omiin hankkeisiin.`));
+    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-15');
+    expect(screen.getByText(`Hanke ${nimi} (HAI22-15) tallennettu omiin hankkeisiin.`));
   });
 
   test('Should be able to save hanke in the last page', async () => {
@@ -233,5 +233,27 @@ describe('HankeForm', () => {
     expect(
       screen.getByText(`Hanke ${hanke.nimi} (${hanke.hankeTunnus}) tallennettu omiin hankkeisiin.`),
     );
+  });
+
+  test('Summary page should handle not filled data gracefully', async () => {
+    const { user } = render(
+      <HankeForm
+        formData={hankkeet[11] as HankeDataFormState}
+        onIsDirtyChange={() => ({})}
+        onFormClose={() => ({})}
+      >
+        children
+      </HankeForm>,
+    );
+
+    await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+    await waitFor(() => expect(screen.queryByText(/vaihe 5\/5: yhteenveto/i)).toBeInTheDocument());
+
+    expect(screen.queryByText(/meluhaitta: -/i)).toBeInTheDocument();
+    expect(screen.queryByText(/pölyhaitta: -/i)).toBeInTheDocument();
+    expect(screen.queryByText(/tärinähaitta: -/i)).toBeInTheDocument();
+    expect(screen.queryByText(/autoliikenteen kaistahaitta: -/i)).toBeInTheDocument();
+    expect(screen.queryByText(/kaistahaittojen pituus: -/i)).toBeInTheDocument();
+    expect(screen.queryByText(/muokkaa hanketta lisätäksesi tietoja/i)).toBeInTheDocument();
   });
 });
