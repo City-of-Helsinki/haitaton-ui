@@ -1,7 +1,8 @@
 import { Box } from '@chakra-ui/react';
 import { IconInfoCircle } from 'hds-react';
 
-const SummaryDataNotFound: React.FC<{ info: string }> = ({ info }) => {
+/** Combine info icon with a text. */
+const InfoBulletin: React.FC<{ info: string }> = ({ info }) => {
   return (
     <Box display="flex" alignItems="center" width="max-content" mb="var(--spacing-m)">
       <IconInfoCircle size="s" />
@@ -18,4 +19,4 @@ const SummaryDataNotFound: React.FC<{ info: string }> = ({ info }) => {
   );
 };
 
-export default SummaryDataNotFound;
+export default InfoBulletin;
