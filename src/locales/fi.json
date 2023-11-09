@@ -51,7 +51,8 @@
       },
       "fileUpload": {
         "loadingText": "Tallennetaan tiedostoja",
-        "successNotification": "{{successful}}/{{total}} tiedosto(a) tallennettu",
+        "successNotification": "{{successful}}/{{newFiles}} tiedosto(a) tallennettu",
+        "errorNotification": "Liitteen tallennus epäonnistui {{errors}}/{{newFiles}} tiedostolle:",
         "deleteError": {
           "title": "Tiedoston poistamisessa tapahtui virhe",
           "fileNotFound": "Tiedostoa, jonka yritit poistaa ei löydy (virhe 404). Yritä myöhemmin uudelleen.",
@@ -92,7 +93,8 @@
       "fileLoadError": "Tiedoston latauksessa tapahtui virhe",
       "selfIntersectingArea": "Alueen reunat eivät saa leikata toisiaan",
       "fileLoadTechnicalError": "Tiedoston ({{fileName}}) lataus epäonnistui, yritä hetken päästä uudelleen.",
-      "fileLoadBadFileError": "Tiedosto ({{fileName}}) on viallinen. Tarkistathan, että tiedostomuoto on oikea eikä sen koko ylitä sallittua maksimikokoa."
+      "fileLoadBadFileError": "Tiedosto ({{fileName}}) on viallinen. Tarkistathan, että tiedostomuoto on oikea eikä sen koko ylitä sallittua maksimikokoa.",
+      "duplicateFileError": "Valittu tiedostonimi ({{fileName}}) on jo käytössä. Nimeä tiedosto uudelleen."
     },
     "headers": {
       "perustiedot": "Perustiedot",
