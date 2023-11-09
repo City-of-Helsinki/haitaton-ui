@@ -280,17 +280,12 @@ test('Should show 404 error message if deleting file fails with status 404', asy
       createdAt: '2023-07-04T12:07:52.324684Z',
     },
   ];
-  const { user } = render(
-    <FileUpload
-      id="test-file-input"
-      label="Choose a file"
-      multiple
-      dragAndDrop
-      uploadFunction={uploadFunction}
-      fileDeleteFunction={(file) => deleteAttachment({ applicationId: 1, attachmentId: file?.id })}
-      existingAttachments={files}
-    />,
-  );
+  const {
+    renderResult: { user },
+  } = getFileUpload({
+    existingAttachments: files,
+    fileDeleteFunction: (file) => deleteAttachment({ applicationId: 1, attachmentId: file?.id }),
+  });
   await user.click(screen.getByRole('button', { name: 'Poista' }));
   const { getByRole: getByRoleInDialog } = within(screen.getByRole('dialog'));
   await user.click(getByRoleInDialog('button', { name: 'Poista' }));
@@ -312,17 +307,12 @@ test('Should show server error message if deleting file fails with server error'
       createdAt: '2023-07-04T12:07:52.324684Z',
     },
   ];
-  const { user } = render(
-    <FileUpload
-      id="test-file-input"
-      label="Choose a file"
-      multiple
-      dragAndDrop
-      uploadFunction={uploadFunction}
-      fileDeleteFunction={(file) => deleteAttachment({ applicationId: 1, attachmentId: file?.id })}
-      existingAttachments={files}
-    />,
-  );
+  const {
+    renderResult: { user },
+  } = getFileUpload({
+    existingAttachments: files,
+    fileDeleteFunction: (file) => deleteAttachment({ applicationId: 1, attachmentId: file?.id }),
+  });
   await user.click(screen.getByRole('button', { name: 'Poista' }));
   const { getByRole: getByRoleInDialog } = within(screen.getByRole('dialog'));
   await user.click(getByRoleInDialog('button', { name: 'Poista' }));
@@ -336,21 +326,13 @@ test('Should show server error message if deleting file fails with server error'
 
 test('Should be able to cancel upload requests', async () => {
   const abortSpy = jest.spyOn(AbortController.prototype, 'abort');
-  const inputLabel = 'Choose a file';
-  const { user } = render(
-    <FileUpload
-      id="test-file-upload"
-      label={inputLabel}
-      accept=".png,.jpg"
-      multiple
-      uploadFunction={uploadFunction}
-      fileDeleteFunction={() => Promise.resolve()}
-    />,
-  );
-  const fileUpload = screen.getByLabelText(inputLabel);
-  user.upload(fileUpload, [
-    new File(['test-a'], 'test-file-a.png', { type: 'image/png' }),
-    new File(['test-b'], 'test-file-b.jpg', { type: 'image/jpg' }),
+  const {
+    renderResult: { user },
+    fileUploadElement,
+  } = getFileUpload({ accept: '.pdf' });
+  user.upload(fileUploadElement, [
+    new File(['test-a'], 'test-file-a.pdf', { type: 'application/pdf' }),
+    new File(['test-b'], 'test-file-b.pdf', { type: 'application/pdf' }),
   ]);
   await waitFor(() => screen.findByText('Tallennetaan tiedostoja'));
   await user.click(screen.getByRole('button', { name: 'Peruuta' }));
