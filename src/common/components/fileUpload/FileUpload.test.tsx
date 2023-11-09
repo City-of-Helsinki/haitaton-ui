@@ -15,11 +15,19 @@ async function uploadAttachment({ id, file }: { id: number; file: File }) {
   return data;
 }
 
-function uploadFunction(file: File) {
+function uploadFunction({ file }: { file: File }) {
   return uploadAttachment({
     id: 1,
     file,
   });
+}
+
+function initFileDeleteResponse(statusCode: number) {
+  server.use(
+    rest.delete('/api/hakemukset/:id/liitteet/:attachmentId', async (req, res, ctx) => {
+      return res(ctx.status(statusCode), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    }),
+  );
 }
 
 interface FileUploadOptions {
@@ -122,7 +130,7 @@ test('Should show amount of successful files uploaded and errors correctly when 
   ).toBeInTheDocument();
 });
 
-test('Should show amount of successful files uploaded and errors correctly when request fails for bad request', async () => {
+test('Should show amount of successful files uploaded and errors correctly when upload request fails for bad request', async () => {
   server.use(
     rest.post('/api/hakemukset/:id/liitteet', async (req, res, ctx) => {
       return res(ctx.status(400), ctx.json({ errorMessage: 'Failed for testing purposes' }));
@@ -150,7 +158,7 @@ test('Should show amount of successful files uploaded and errors correctly when 
   ).toBeInTheDocument();
 });
 
-test('Should show correct error message when request fails for server error', async () => {
+test('Should show correct error message when upload request fails for server error', async () => {
   server.use(
     rest.post('/api/hakemukset/:id/liitteet', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
@@ -260,4 +268,77 @@ test('Should be able to delete file', async () => {
   ).toBeInTheDocument();
   await user.click(getByRoleInDialog('button', { name: 'Poista' }));
   expect(screen.getByText(`Liitetiedosto ${fileNameA} poistettu`)).toBeInTheDocument();
+});
+
+test('Should show 404 error message if deleting file fails with status 404', async () => {
+  initFileDeleteResponse(404);
+  const files: AttachmentMetadata[] = [
+    {
+      id: '4f08ce3f-a0de-43c6-8ccc-9fe93822ed54',
+      fileName: 'TestFile1.jpg',
+      createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800284',
+      createdAt: '2023-07-04T12:07:52.324684Z',
+    },
+  ];
+  const {
+    renderResult: { user },
+  } = getFileUpload({
+    existingAttachments: files,
+    fileDeleteFunction: (file) => deleteAttachment({ applicationId: 1, attachmentId: file?.id }),
+  });
+  await user.click(screen.getByRole('button', { name: 'Poista' }));
+  const { getByRole: getByRoleInDialog } = within(screen.getByRole('dialog'));
+  await user.click(getByRoleInDialog('button', { name: 'Poista' }));
+  const { getByText: getByTextInDialog } = within(screen.getByRole('dialog'));
+  expect(
+    getByTextInDialog(
+      'Tiedostoa, jonka yritit poistaa ei löydy (virhe 404). Yritä myöhemmin uudelleen.',
+    ),
+  ).toBeInTheDocument();
+});
+
+test('Should show server error message if deleting file fails with server error', async () => {
+  initFileDeleteResponse(500);
+  const files: AttachmentMetadata[] = [
+    {
+      id: '4f08ce3f-a0de-43c6-8ccc-9fe93822ed55',
+      fileName: 'TestFile1.png',
+      createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800284',
+      createdAt: '2023-07-04T12:07:52.324684Z',
+    },
+  ];
+  const {
+    renderResult: { user },
+  } = getFileUpload({
+    existingAttachments: files,
+    fileDeleteFunction: (file) => deleteAttachment({ applicationId: 1, attachmentId: file?.id }),
+  });
+  await user.click(screen.getByRole('button', { name: 'Poista' }));
+  const { getByRole: getByRoleInDialog } = within(screen.getByRole('dialog'));
+  await user.click(getByRoleInDialog('button', { name: 'Poista' }));
+  const { getByText: getByTextInDialog } = within(screen.getByRole('dialog'));
+  expect(
+    getByTextInDialog(
+      'Palvelimeen ei saada yhteyttä, eikä valittua tiedostoa saada poistettua. Yritä myöhemmin uudelleen.',
+    ),
+  ).toBeInTheDocument();
+});
+
+test('Should be able to cancel upload requests', async () => {
+  const abortSpy = jest.spyOn(AbortController.prototype, 'abort');
+  const {
+    renderResult: { user },
+    fileUploadElement,
+  } = getFileUpload({ accept: '.pdf' });
+  user.upload(fileUploadElement, [
+    new File(['test-a'], 'test-file-a.pdf', { type: 'application/pdf' }),
+    new File(['test-b'], 'test-file-b.pdf', { type: 'application/pdf' }),
+  ]);
+  await waitFor(() => screen.findByText('Tallennetaan tiedostoja'));
+  await user.click(screen.getByRole('button', { name: 'Peruuta' }));
+  await act(async () => {
+    waitFor(() => expect(screen.queryByText('Tallennetaan tiedostoja')).not.toBeInTheDocument());
+  });
+  expect(abortSpy).toBeCalledTimes(1);
+  abortSpy.mockRestore();
 });

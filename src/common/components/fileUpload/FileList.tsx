@@ -24,7 +24,7 @@ export default function FileList({
   fileDeleteFunction,
   onFileDelete,
   showDeleteButtonForFile,
-}: Props) {
+}: Readonly<Props>) {
   const { t } = useTranslation();
   // Sort files in descending order by their createdAt date
   const sortedFiles = sortBy(files, (file) => new Date(file.createdAt)).reverse();

@@ -1,7 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { useMutation } from 'react-query';
 import { Flex } from '@chakra-ui/react';
-import { FileInput, IconAlertCircleFill, IconCheckCircleFill, LoadingSpinner } from 'hds-react';
+import {
+  Button,
+  FileInput,
+  IconAlertCircleFill,
+  IconCheckCircleFill,
+  IconCross,
+  LoadingSpinner,
+} from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { differenceBy } from 'lodash';
 import { AxiosError } from 'axios';
@@ -54,7 +61,7 @@ function SuccessNotification({
   );
 }
 
-function ErrorNotification({ errors, newFiles }: { errors: string[]; newFiles: number }) {
+function ErrorNotification({ errors, newFiles }: Readonly<{ errors: string[]; newFiles: number }>) {
   const { t } = useTranslation();
 
   return (
@@ -92,7 +99,7 @@ type Props<T extends AttachmentMetadata> = {
   multiple?: boolean;
   existingAttachments?: T[];
   /** Function that is given to upload mutation, handling the sending of file to API */
-  uploadFunction: (file: File) => Promise<T>;
+  uploadFunction: (props: { file: File; abortSignal?: AbortSignal }) => Promise<T>;
   onUpload?: (isUploading: boolean) => void;
   fileDownLoadFunction?: FileDownLoadFunction;
   fileDeleteFunction: FileDeleteFunction;
@@ -120,11 +127,16 @@ export default function FileUpload<T extends AttachmentMetadata>({
   const [newFiles, setNewFiles] = useState<File[]>([]);
   const [fileUploadErrors, setFileUploadErrors] = useState<string[]>([]);
   const uploadMutation = useMutation(uploadFunction, {
-    onError(error: AxiosError, file) {
-      const errorText =
-        error.response?.status === 400
-          ? t('form:errors:fileLoadBadFileError', { fileName: file.name })
-          : t('form:errors:fileLoadTechnicalError', { fileName: file.name });
+    onError(error: AxiosError, { file }) {
+      let errorText: string;
+      if (error.code === 'ERR_CANCELED') {
+        errorText = t('form:errors:fileUploadCancelled', { fileName: file.name });
+      } else {
+        errorText =
+          error.response?.status === 400
+            ? t('form:errors:fileLoadBadFileError', { fileName: file.name })
+            : t('form:errors:fileLoadTechnicalError', { fileName: file.name });
+      }
       setFileUploadErrors((errors) => {
         return [...errors, errorText];
       });
@@ -132,6 +144,7 @@ export default function FileUpload<T extends AttachmentMetadata>({
   });
   const [filesUploading, setFilesUploading] = useState(false);
   const { ref: dropZoneRef, files: dragAndDropFiles } = useDragAndDropFiles();
+  const abortController = useRef<AbortController>();
 
   async function uploadFiles(files: File[]) {
     setFilesUploading(true);
@@ -139,11 +152,20 @@ export default function FileUpload<T extends AttachmentMetadata>({
       onUpload(true);
     }
 
-    const mutations = files.map((file) => {
-      return uploadMutation.mutateAsync(file);
-    });
-
-    await Promise.allSettled(mutations);
+    if (files.length === 0) {
+      await Promise.resolve();
+    } else {
+      abortController.current = new AbortController();
+      for (const file of files) {
+        try {
+          await uploadMutation.mutateAsync({
+            file,
+            abortSignal: abortController.current?.signal,
+          });
+          // eslint-disable-next-line no-empty
+        } catch (error) {}
+      }
+    }
 
     setFilesUploading(false);
     if (onUpload) {
@@ -178,9 +200,14 @@ export default function FileUpload<T extends AttachmentMetadata>({
 
   function handleFileDelete() {
     setNewFiles([]);
+    setFileUploadErrors([]);
     if (onFileDelete) {
       onFileDelete();
     }
+  }
+
+  function cancelRequests() {
+    abortController.current?.abort();
   }
 
   return (
@@ -192,6 +219,14 @@ export default function FileUpload<T extends AttachmentMetadata>({
             <Text tag="p" className={styles.loadingText}>
               {t('common:components:fileUpload:loadingText')}
             </Text>
+            <Button
+              variant="supplementary"
+              iconLeft={<IconCross aria-hidden />}
+              style={{ color: 'var(--color-error)' }}
+              onClick={cancelRequests}
+            >
+              {t('common:confirmationDialog:cancelButton')}
+            </Button>
           </Flex>
         ) : (
           <FileInput
