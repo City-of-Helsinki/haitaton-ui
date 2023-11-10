@@ -487,8 +487,7 @@
       "organisaatio": "Organisation",
       "omaOrganisaatio": "Lägg till den egna organisationen",
       "insertOmaOrganisaatio": "Skriv in den egna organisationen",
-      "rights": "Din användarrätt för projektet",
-      "perustaja": "Grundare"
+      "rights": "Din användarrätt för projektet"
     },
     "toolTips": {
       "tipOpenLabel": "Anvisningen",
