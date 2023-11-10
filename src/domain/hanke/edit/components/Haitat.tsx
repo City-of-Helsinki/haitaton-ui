@@ -72,13 +72,11 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
           name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.HAITTA_ALKU_PVM}`}
           label={t(`hankeForm:labels:${FORMFIELD.HAITTA_ALKU_PVM}`)}
           locale={locale}
-          required
         />
         <DatePicker
           name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.HAITTA_LOPPU_PVM}`}
           label={t(`hankeForm:labels:${FORMFIELD.HAITTA_LOPPU_PVM}`)}
           locale={locale}
-          required
           minDate={minEndDate || undefined}
         />
         <Spacer />
@@ -94,7 +92,6 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
           }))}
           defaultValue={formValues[index][FORMFIELD.MELUHAITTA] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.MELUHAITTA}`)}
-          required
         />
         <Dropdown
           name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.POLYHAITTA}`}
@@ -105,7 +102,6 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
           }))}
           defaultValue={formValues[index][FORMFIELD.POLYHAITTA] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.POLYHAITTA}`)}
-          required
         />
         <Dropdown
           name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.TARINAHAITTA}`}
@@ -116,7 +112,6 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
           }))}
           defaultValue={formValues[index][FORMFIELD.TARINAHAITTA] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.TARINAHAITTA}`)}
-          required
         />
       </div>
 
@@ -130,7 +125,6 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
           }))}
           defaultValue={formValues[index][FORMFIELD.KAISTAHAITTA] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.KAISTAHAITTA}`)}
-          required
         />
         <Dropdown
           name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.KAISTAPITUUSHAITTA}`}
@@ -141,7 +135,6 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
           }))}
           defaultValue={formValues[index][FORMFIELD.KAISTAPITUUSHAITTA] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.KAISTAPITUUSHAITTA}`)}
-          required
         />
       </div>
 

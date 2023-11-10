@@ -69,28 +69,6 @@ function initFileDeleteResponse() {
 const nimi = 'test kuoppa';
 const hankkeenKuvaus = 'Tässä on kuvaus';
 const hankkeenOsoite = 'Sankaritie 3';
-/* Highly recommend to revise these tests to use typed constants like so
-const hankeData: HankeDataDraft = {
-  nimi: 'test kuoppa',
-  kuvaus: 'Tässä on kuvaus',
-  tyomaaKatuosoite: 'Sankaritie 3',
-  alkuPvm: '24.03.2025',
-  loppuPvm: '25.03.2025',
-  vaihe: 'OHJELMOINTI',
-  omistajat: [
-    {
-      id: null,
-      etunimi: 'Matti',
-      email: 'Matti@haitaton.hel.fi',
-      sukunimi: 'Meikäläinen',
-      organisaatioId: null,
-      organisaatioNimi: 'Matin organisaatio',
-      osasto: '',
-      puhelinnumero: '12341234',
-    },
-  ],
-};
-*/
 
 function fillBasicInformation(
   options: {
@@ -177,6 +155,27 @@ describe('HankeForm', () => {
     expect(screen.getByTestId(FORMFIELD.KUVAUS)).toHaveValue(hankkeenKuvaus);
   });
 
+  test('Should not allow next page if hanke name is not set', async () => {
+    const { user } = render(<HankeFormContainer />);
+
+    await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+    expect(screen.queryByText('Vaihe 1/6: Perustiedot')).toBeInTheDocument();
+    expect(screen.queryByText('Kentän pituus oltava vähintään 3 merkkiä')).toBeInTheDocument();
+  });
+
+  test('Should allow next page if hanke name is set', async () => {
+    const { user } = render(<HankeFormContainer />);
+    fireEvent.change(screen.getByRole('textbox', { name: /hankkeen nimi/i }), {
+      target: { value: nimi },
+    });
+
+    await user.click(screen.getByRole('button', { name: /seuraava/i }));
+    await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+    expect(screen.queryByText('Vaihe 3/6: Haitat')).toBeInTheDocument();
+  });
+
   test('Hanke nimi should be limited to 100 characters and not exceed the limit with additional characters', async () => {
     const { user } = render(<HankeFormContainer />);
     const initialName = 'b'.repeat(90);
@@ -261,8 +260,8 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByRole('button', { name: 'Tallenna ja keskeytä' }));
 
-    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-13');
-    expect(screen.getByText(`Hanke ${nimi} (HAI22-13) tallennettu omiin hankkeisiin.`));
+    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-14');
+    expect(screen.getByText(`Hanke ${nimi} (HAI22-14) tallennettu omiin hankkeisiin.`));
   });
 
   test('Should be able to save hanke in the last page', async () => {
