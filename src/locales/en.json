@@ -530,9 +530,6 @@
       "header": "Summary",
       "instructions": "Please check the information you entered and save the project or save and move to add applications."
     },
-    "hankkeenLiitteetForm": {
-      "instructions": "EN:Lisää mahdolliset liitteet. Hankkeelle lisättävät liitteet eivät siirry hakemuksille."
-    },
     "finishedForm": {
       "header": "The form has been successfully submitted"
     },

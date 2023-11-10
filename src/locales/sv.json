@@ -530,9 +530,6 @@
       "header": "Sammanfattning",
       "instructions": "Kontrollera uppgifterna som du gett och spara projektet, eller spara och gå för att lägga till ansökningar."
     },
-    "hankkeenLiitteetForm": {
-      "instructions": "SV:Lisää mahdolliset liitteet. Hankkeelle lisättävät liitteet eivät siirry hakemuksille."
-    },
     "finishedForm": {
       "header": "Sändningen av formuläret lyckades"
     },
