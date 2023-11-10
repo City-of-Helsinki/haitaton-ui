@@ -1,11 +1,11 @@
 import { Box } from '@chakra-ui/react';
-import { IconInfoCircle } from 'hds-react';
+import { IconAlertCircle } from 'hds-react';
 
-/** Combine info icon with a text. */
-const InfoBulletin: React.FC<{ info: string }> = ({ info }) => {
+/** Combine alert icon with a text. */
+const AlertBulletin: React.FC<{ info: string }> = ({ info }) => {
   return (
     <Box display="flex" alignItems="center" width="max-content" mb="var(--spacing-m)">
-      <IconInfoCircle size="s" />
+      <IconAlertCircle size="s" />
       <p
         style={{
           marginLeft: '8px',
@@ -19,4 +19,4 @@ const InfoBulletin: React.FC<{ info: string }> = ({ info }) => {
   );
 };
 
-export default InfoBulletin;
+export default AlertBulletin;

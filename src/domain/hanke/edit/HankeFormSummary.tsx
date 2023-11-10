@@ -12,7 +12,7 @@ import BasicInformationSummary from './components/BasicInformationSummary';
 import ContactsSummary from './components/ContactsSummary';
 import AreaSummary from './components/AreaSummary';
 import { calculateTotalSurfaceArea } from './utils';
-import InfoBulletin from './components/InfoBulletin';
+import AlertBulletin from './components/AlertBulletin';
 
 type Props = {
   formData: HankeDataFormState;
@@ -55,7 +55,7 @@ const HankeFormSummary: React.FC<Props> = ({ formData }) => {
           </SectionItemContent>
         </FormSummarySection>
       ) : (
-        <InfoBulletin info={t('hankeForm:hankkeenYhteenvetoForm:dataNotFound')} />
+        <AlertBulletin info={t('hankeForm:hankkeenYhteenvetoForm:dataNotFound')} />
       )}
 
       <SectionTitle>{t('form:yhteystiedot:header')}</SectionTitle>
@@ -88,7 +88,7 @@ const HankeFormSummary: React.FC<Props> = ({ formData }) => {
           )}
         </FormSummarySection>
       ) : (
-        <InfoBulletin info={t('hankeForm:hankkeenYhteenvetoForm:dataNotFound')} />
+        <AlertBulletin info={t('hankeForm:hankkeenYhteenvetoForm:dataNotFound')} />
       )}
     </article>
   );
