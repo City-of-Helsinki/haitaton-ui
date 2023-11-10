@@ -11,8 +11,12 @@ interface Props<T> {
   contactType: T;
   index?: number;
   onRemoveContact?: UseFieldArrayRemove;
-  renderSubContact?: (subContactIndex: number, remove: UseFieldArrayRemove) => JSX.Element;
   subContactTemplate?: boolean;
+  renderSubContact?: (
+    subContactIndex: number,
+    subContactCount: number,
+    remove: UseFieldArrayRemove,
+  ) => JSX.Element;
   subContactPath: string;
   emptySubContact: unknown;
   children: React.ReactNode;
@@ -88,7 +92,7 @@ const Contact = <T,>({
           {subContactFields.map((subContact, subContactIndex) => {
             return (
               <TabPanel key={subContact.id}>
-                {renderSubContact(subContactIndex, removeSubContact)}
+                {renderSubContact(subContactIndex, subContactFields.length, removeSubContact)}
               </TabPanel>
             );
           })}
