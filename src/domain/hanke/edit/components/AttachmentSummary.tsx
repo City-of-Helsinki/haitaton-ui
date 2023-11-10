@@ -14,7 +14,7 @@ type Props = {
   attachments: HankeAttachmentMetadata[];
 };
 
-function AttachmentSummary({ hankeTunnus, attachments }: Props) {
+function AttachmentSummary({ hankeTunnus, attachments }: Readonly<Props>) {
   const { t } = useTranslation();
 
   function downloadFile(file: AttachmentMetadata) {
