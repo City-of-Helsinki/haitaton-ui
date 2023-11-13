@@ -35,6 +35,7 @@ interface FileUploadOptions {
   dragAndDrop: boolean;
   fileDeleteFunction: FileDeleteFunction;
   existingAttachments: AttachmentMetadata[];
+  maxFilesNumber: number;
 }
 
 function getFileUpload(options: Partial<FileUploadOptions> = {}) {
@@ -43,6 +44,7 @@ function getFileUpload(options: Partial<FileUploadOptions> = {}) {
     dragAndDrop,
     fileDeleteFunction = () => Promise.resolve(),
     existingAttachments = [],
+    maxFilesNumber,
   } = options;
   const inputLabel = 'Choose a file';
   const renderResult = render(
@@ -55,6 +57,7 @@ function getFileUpload(options: Partial<FileUploadOptions> = {}) {
       uploadFunction={uploadFunction}
       fileDeleteFunction={fileDeleteFunction}
       existingAttachments={existingAttachments}
+      maxFilesNumber={maxFilesNumber}
     />,
     undefined,
     undefined,
@@ -62,6 +65,13 @@ function getFileUpload(options: Partial<FileUploadOptions> = {}) {
   );
   const fileUploadElement = screen.getByLabelText(inputLabel);
   return { renderResult, fileUploadElement };
+}
+
+async function waitLoading() {
+  await waitFor(() => screen.findByText('Tallennetaan tiedostoja'));
+  await act(async () => {
+    waitFor(() => expect(screen.queryByText('Tallennetaan tiedostoja')).not.toBeInTheDocument());
+  });
 }
 
 test('Should upload files successfully and loading indicator is displayed', async () => {
@@ -74,10 +84,7 @@ test('Should upload files successfully and loading indicator is displayed', asyn
     new File(['test-b'], 'test-file-b.jpg', { type: 'image/jpg' }),
   ]);
 
-  await waitFor(() => screen.findByText('Tallennetaan tiedostoja'));
-  await act(async () => {
-    waitFor(() => expect(screen.queryByText('Tallennetaan tiedostoja')).not.toBeInTheDocument());
-  });
+  await waitLoading();
   await waitFor(() => {
     expect(screen.queryByText('2/2 tiedosto(a) tallennettu')).toBeInTheDocument();
   });
@@ -110,6 +117,7 @@ test('Should show amount of successful files uploaded and errors correctly when 
     new File(['test-c'], fileNameC, { type: 'image/png' }),
   ]);
 
+  await waitLoading();
   await waitFor(() => {
     expect(screen.queryByText('1/3 tiedosto(a) tallennettu')).toBeInTheDocument();
   });
@@ -287,8 +295,10 @@ test('Should show 404 error message if deleting file fails with status 404', asy
     fileDeleteFunction: (file) => deleteAttachment({ applicationId: 1, attachmentId: file?.id }),
   });
   await user.click(screen.getByRole('button', { name: 'Poista' }));
+  await screen.findByRole('dialog');
   const { getByRole: getByRoleInDialog } = within(screen.getByRole('dialog'));
   await user.click(getByRoleInDialog('button', { name: 'Poista' }));
+  await screen.findByRole('dialog');
   const { getByText: getByTextInDialog } = within(screen.getByRole('dialog'));
   expect(
     getByTextInDialog(
@@ -314,8 +324,10 @@ test('Should show server error message if deleting file fails with server error'
     fileDeleteFunction: (file) => deleteAttachment({ applicationId: 1, attachmentId: file?.id }),
   });
   await user.click(screen.getByRole('button', { name: 'Poista' }));
+  await screen.findByRole('dialog');
   const { getByRole: getByRoleInDialog } = within(screen.getByRole('dialog'));
   await user.click(getByRoleInDialog('button', { name: 'Poista' }));
+  await screen.findByRole('dialog');
   const { getByText: getByTextInDialog } = within(screen.getByRole('dialog'));
   expect(
     getByTextInDialog(
@@ -335,10 +347,59 @@ test('Should be able to cancel upload requests', async () => {
     new File(['test-b'], 'test-file-b.pdf', { type: 'application/pdf' }),
   ]);
   await waitFor(() => screen.findByText('Tallennetaan tiedostoja'));
-  await user.click(screen.getByRole('button', { name: 'Peruuta' }));
   await act(async () => {
-    waitFor(() => expect(screen.queryByText('Tallennetaan tiedostoja')).not.toBeInTheDocument());
+    user.click(screen.getByRole('button', { name: 'Peruuta' }));
   });
+  await waitFor(() =>
+    expect(screen.queryByText('Tallennetaan tiedostoja')).not.toBeInTheDocument(),
+  );
   expect(abortSpy).toBeCalledTimes(1);
   abortSpy.mockRestore();
+});
+
+test('Should show error messages for files that exceed the maximum number of files', async () => {
+  const existingFiles: AttachmentMetadata[] = [
+    {
+      id: '4f08ce3f-a0de-43c6-8ccc-9fe93822ed56',
+      fileName: 'TestFile.jpg',
+      createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800284',
+      createdAt: '2023-07-04T12:07:52.324684Z',
+    },
+  ];
+  const {
+    renderResult: { user },
+    fileUploadElement,
+  } = getFileUpload({
+    existingAttachments: existingFiles,
+    accept: '.pdf',
+    maxFilesNumber: 2,
+  });
+  const fileNameA = 'test-file-a.pdf';
+  const fileNameB = 'test-file-b.pdf';
+  const fileNameC = 'test-file-c.pdf';
+  user.upload(fileUploadElement, [
+    new File(['test-a'], fileNameA, { type: 'application/pdf' }),
+    new File(['test-b'], fileNameB, { type: 'application/pdf' }),
+    new File(['test-b'], fileNameC, { type: 'application/pdf' }),
+  ]);
+
+  await waitLoading();
+  await waitFor(() => {
+    expect(screen.queryByText('1/3 tiedosto(a) tallennettu')).toBeInTheDocument();
+  });
+  expect(
+    screen.queryByText('Liitteen tallennus epäonnistui 2/3 tiedostolle', { exact: false }),
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByText(
+      `Tiedoston (${fileNameB}) lataus epäonnistui, liitteiden enimmäismäärä (2 kpl) ylitetty.`,
+      { exact: false },
+    ),
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByText(
+      `Tiedoston (${fileNameC}) lataus epäonnistui, liitteiden enimmäismäärä (2 kpl) ylitetty.`,
+      { exact: false },
+    ),
+  ).toBeInTheDocument();
 });

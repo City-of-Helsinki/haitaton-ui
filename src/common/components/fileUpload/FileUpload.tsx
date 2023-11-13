@@ -98,6 +98,8 @@ type Props<T extends AttachmentMetadata> = {
   /** A Boolean that indicates that more than one file can be chosen */
   multiple?: boolean;
   existingAttachments?: T[];
+  /** Maximum number of files that can be uploaded */
+  maxFilesNumber?: number;
   /** Function that is given to upload mutation, handling the sending of file to API */
   uploadFunction: (props: { file: File; abortSignal?: AbortSignal }) => Promise<T>;
   onUpload?: (isUploading: boolean) => void;
@@ -115,6 +117,7 @@ export default function FileUpload<T extends AttachmentMetadata>({
   dragAndDrop,
   multiple,
   existingAttachments = [],
+  maxFilesNumber,
   uploadFunction,
   onUpload,
   fileDownLoadFunction,
@@ -175,7 +178,8 @@ export default function FileUpload<T extends AttachmentMetadata>({
 
   function handleFilesChange(validFiles: File[]) {
     // Filter out attachments that have same names as those that have already been sent
-    const [filesToUpload, duplicateFiles] = removeDuplicateAttachments(
+    // eslint-disable-next-line prefer-const
+    let [filesToUpload, duplicateFiles] = removeDuplicateAttachments(
       validFiles,
       existingAttachments,
     );
@@ -188,11 +192,32 @@ export default function FileUpload<T extends AttachmentMetadata>({
     const allFiles = inputElemFiles.length > 0 ? inputElemFiles : dragAndDropFiles.current;
 
     const invalidFiles = differenceBy(allFiles, validFiles, 'name');
-    const errors: string[] = invalidFiles
+    let errors: string[] = invalidFiles
       .map((file) => t('form:errors:fileLoadBadFileError', { fileName: file.name }))
       .concat(
         duplicateFiles.map((file) => t('form:errors:duplicateFileError', { fileName: file.name })),
       );
+
+    // If number of files would exceed the maximum allowed number of files,
+    // filter out the excess files from the files to be uploaded and concat
+    // errors for the excess files to the error messages
+    const filesNumberAfterUpload = existingAttachments.length + filesToUpload.length;
+    if (maxFilesNumber !== undefined && filesNumberAfterUpload > maxFilesNumber) {
+      const excessNumber = filesNumberAfterUpload - maxFilesNumber;
+      const excessFiles = filesToUpload.slice(-excessNumber);
+      filesToUpload = filesToUpload.filter((fileToUpload) =>
+        excessFiles.every((excessFile) => fileToUpload.name !== excessFile.name),
+      );
+      errors = errors.concat(
+        excessFiles.map((file) =>
+          t('hakemus:notifications:maxAttachmentsNumberExceeded', {
+            maxNumber: maxFilesNumber,
+            fileName: file.name,
+          }),
+        ),
+      );
+    }
+
     setFileUploadErrors(errors);
     setNewFiles(allFiles);
     uploadFiles(filesToUpload);

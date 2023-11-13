@@ -570,7 +570,7 @@
       "giveDates": "Valitse työn päivämäärät piirtääksesi selvitettävät alueet kartalle."
     },
     "liitteet": {
-      "instructions": "Lisää hakemukselle liitteet, kuten työsuunnitelma. Liitteet tallentuvat lomakkeelle sivun alaosan sivunvaihto- ja tallennuspainikkeista."
+      "instructions": "Lisää hakemukselle liitteet, kuten työsuunnitelma."
     }
   },
   "hakemus": {
@@ -619,7 +619,7 @@
       "cancelSuccessLabel": "Hakemus peruttiin",
       "cancelSuccessText": "Hakemus peruttiin onnistuneesti",
       "noApplications": "Hankkeella ei ole lisättyjä hakemuksia",
-      "maxAttachmentsNumberExceeded": "Liitteiden enimmäismäärä ({{maxNumber}} kpl) ylitetty",
+      "maxAttachmentsNumberExceeded": "Tiedoston ({{fileName}}) lataus epäonnistui, liitteiden enimmäismäärä ({{maxNumber}} kpl) ylitetty.",
       "sentApplicationPersonalInfoNotification": "Lähetetyn hakemuksen omia tietoja ei voi muokata"
     },
     "status": {
