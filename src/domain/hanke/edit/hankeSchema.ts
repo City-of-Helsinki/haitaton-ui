@@ -41,7 +41,7 @@ const contactSchema = yup
       }),
     [CONTACT_FORMFIELD.EMAIL]: yup.string().email().max(100),
     [CONTACT_FORMFIELD.PUHELINNUMERO]: yup.string().nullable().default(null).max(20),
-    [CONTACT_FORMFIELD.ALIKONTAKTIT]: yup.array().ensure().of(subContactSchema),
+    [CONTACT_FORMFIELD.ALIKONTAKTIT]: yup.array().ensure().of(subContactSchema).required().min(1),
   });
 
 const otherPartySchema = contactSchema
