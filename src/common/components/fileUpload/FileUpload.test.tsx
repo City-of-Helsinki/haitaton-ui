@@ -286,10 +286,15 @@ test('Should show 404 error message if deleting file fails with status 404', asy
     existingAttachments: files,
     fileDeleteFunction: (file) => deleteAttachment({ applicationId: 1, attachmentId: file?.id }),
   });
+  // Delete and wait for confirm dialog
   await user.click(screen.getByRole('button', { name: 'Poista' }));
-  const { getByRole: getByRoleInDialog } = within(screen.getByRole('dialog'));
+  const { getByRole: getByRoleInDialog } = within(await screen.findByRole('dialog'));
+
+  // Confirm delete
   await user.click(getByRoleInDialog('button', { name: 'Poista' }));
-  const { getByText: getByTextInDialog } = within(screen.getByRole('dialog'));
+  const { getByText: getByTextInDialog } = within(await screen.findByRole('dialog'));
+
+  // Wait for error dialog and confirm content
   expect(
     getByTextInDialog(
       'Tiedostoa, jonka yritit poistaa ei löydy (virhe 404). Yritä myöhemmin uudelleen.',
