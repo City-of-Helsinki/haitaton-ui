@@ -94,8 +94,10 @@ const HankeFormSummary: React.FC<Props> = ({ formData }) => {
       )}
 
       <SectionTitle>{t('hankePortfolio:tabit:liitteet')}</SectionTitle>
-      {attachments !== undefined && formData.hankeTunnus !== undefined && (
+      {formData.hankeTunnus !== undefined && attachments !== undefined && attachments.length > 0 ? (
         <AttachmentSummary hankeTunnus={formData.hankeTunnus} attachments={attachments} />
+      ) : (
+        <AlertBulletin info={t('hankeForm:hankkeenYhteenvetoForm:attachmentsNotFound')} />
       )}
     </article>
   );

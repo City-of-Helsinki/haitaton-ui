@@ -551,6 +551,7 @@
     "hankkeenYhteenvetoForm": {
       "header": "Yhteenveto",
       "dataNotFound": "Muokkaa hanketta lisätäksesi tietoja.",
+      "attachmentsNotFound": "Muokkaa hanketta lisätäksesi liitteitä.",
       "instructions": "Tarkista antamasi tiedot ja tallenna hanke tai tallenna ja siirry lisäämään hakemuksia."
     },
     "finishedForm": {
