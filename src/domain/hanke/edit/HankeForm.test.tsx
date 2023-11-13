@@ -144,6 +144,7 @@ describe('HankeForm', () => {
     // Hanke owner
     await user.click(screen.getByText(/hankkeen omistajan tiedot/i));
     await user.click(screen.getByText(/lisää omistaja/i));
+    expect(screen.getAllByRole('tablist')[0].childElementCount).toBe(1); // initially there is one contact
 
     await user.click(screen.getByRole('button', { name: /tyyppi/i }));
     await user.click(screen.getByText(/yritys/i));
