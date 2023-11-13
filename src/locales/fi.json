@@ -154,6 +154,7 @@
       "instructions": "Hankkeelle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hankkeeseeen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hanketta ja luomaan hankkeelle hakemuksia.",
       "titles": {
         "omistaja": "Hankkeen omistaja",
+        "omistajatPlural": "Omistajat",
         "omistajaInfo": "Hankkeen omistajan tiedot",
         "rakennuttajat": "Rakennuttaja",
         "rakennuttajatPlural": "Rakennuttajat",
@@ -161,6 +162,7 @@
         "toteuttajatPlural": "Toteuttajat",
         "muut": "Muu taho",
         "muutPlural": "Muut tahot",
+        "lisaaOmistaja": "Lisää omistaja",
         "lisaaRakennuttaja": "Lisää rakennuttaja",
         "lisaaToteuttaja": "Lisää toteuttaja",
         "lisaaMuuTaho": "Lisää muu taho",
@@ -218,6 +220,7 @@
         "addSubContact": "Lisää yhteyshenkilö",
         "removeSubContact": "Poista yhteyshenkilö",
         "remove": {
+          "omistajat": "Poista omistaja",
           "rakennuttajat": "Poista rakennuttaja",
           "toteuttajat": "Poista toteuttaja",
           "muut": "Poista muu taho",
@@ -531,6 +534,7 @@
       "subHeader": "Hanke-alueet",
       "area": "Alue",
       "instructions": "Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 1-5, 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen tärkeimmillä reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein (vihreä = ei haittaa, keltainen = todennäköinen haitta, punainen = merkittävä haitta).",
+      "noAlueet": "Piirrä alue kartalle merkitäksesi haitta-arviot.",
       "haitatHeader": "Alueen haitta-arviot",
       "haitatInstructions": "Anna arvio suurimmista mahdollisista vaikutuksista hankealueella.",
       "removeAreaButton": "Poista alue"
@@ -546,6 +550,7 @@
     },
     "hankkeenYhteenvetoForm": {
       "header": "Yhteenveto",
+      "dataNotFound": "Muokkaa hanketta lisätäksesi tietoja.",
       "instructions": "Tarkista antamasi tiedot ja tallenna hanke tai tallenna ja siirry lisäämään hakemuksia."
     },
     "finishedForm": {
