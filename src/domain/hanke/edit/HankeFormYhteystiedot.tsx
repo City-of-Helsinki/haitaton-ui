@@ -272,6 +272,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
               subContactPath={`${HANKE_CONTACT_TYPE.RAKENNUTTAJAT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}`}
               subContactTemplate={true}
               emptySubContact={getEmptySubContact()}
+              showInitialEmpty={true}
               renderSubContact={(subContactIndex, subContactCount, removeSubContact) => {
                 const fieldPath = `${HANKE_CONTACT_TYPE.RAKENNUTTAJAT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}.${subContactIndex}`;
                 return (
@@ -332,6 +333,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
               subContactPath={`${HANKE_CONTACT_TYPE.TOTEUTTAJAT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}`}
               subContactTemplate={true}
               emptySubContact={getEmptySubContact()}
+              showInitialEmpty={true}
               renderSubContact={(subContactIndex, subContactCount, removeSubContact) => {
                 const fieldPath = `${HANKE_CONTACT_TYPE.TOTEUTTAJAT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}.${subContactIndex}`;
                 return (
@@ -394,6 +396,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
               subContactPath={`${HANKE_CONTACT_TYPE.MUUTTAHOT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}`}
               subContactTemplate={true}
               emptySubContact={getEmptySubContact()}
+              showInitialEmpty={true}
               renderSubContact={(subContactIndex, subContactCount, removeSubContact) => {
                 const subContactFieldPath = `${HANKE_CONTACT_TYPE.MUUTTAHOT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}.${subContactIndex}`;
                 return (
