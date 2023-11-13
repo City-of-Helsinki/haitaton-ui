@@ -505,8 +505,7 @@
       "organisaatio": "Organisaatio",
       "omaOrganisaatio": "Lisää oma organisaatio",
       "insertOmaOrganisaatio": "Syötä oma organisaatio",
-      "rights": "Käyttöoikeutesi hankkeelle",
-      "perustaja": "Perustaja"
+      "rights": "Käyttöoikeutesi hankkeelle"
     },
     "toolTips": {
       "tipOpenLabel": "Ohje",
