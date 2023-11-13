@@ -12,7 +12,7 @@ interface Props<T> {
   index?: number;
   onRemoveContact?: UseFieldArrayRemove;
   renderSubContact?: (subContactIndex: number, remove: UseFieldArrayRemove) => JSX.Element;
-  showInitialEmpty?: boolean;
+  subContactTemplate?: boolean;
   subContactPath: string;
   emptySubContact: unknown;
   children: React.ReactNode;
@@ -23,7 +23,7 @@ const Contact = <T,>({
   index,
   onRemoveContact,
   renderSubContact,
-  showInitialEmpty = false,
+  subContactTemplate = false,
   subContactPath,
   emptySubContact,
   children,
@@ -43,10 +43,10 @@ const Contact = <T,>({
   }, [appendSubContact, emptySubContact]);
 
   useEffect(() => {
-    if (subContactFields.length === 0 && showInitialEmpty) {
+    if (subContactFields.length === 0 && subContactTemplate) {
       addSubContact();
     }
-  }, [subContactFields, showInitialEmpty, addSubContact]);
+  }, [subContactFields, subContactTemplate, addSubContact]);
 
   const renderSubContacts = subContactFields.length > 0 && renderSubContact;
   const { tabRefs } = useSelectableTabs(subContactFields.length, { selectLastTabOnChange: true });
