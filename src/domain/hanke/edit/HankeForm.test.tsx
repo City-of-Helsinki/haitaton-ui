@@ -235,14 +235,17 @@ describe('HankeForm', () => {
     await user.click(screen.getByText(/rakennuttajan tiedot/i));
     await user.click(screen.getByText(/lisää rakennuttaja/i));
     expect(screen.getAllByText('Rakennuttaja')).toHaveLength(1);
+    expect(screen.getAllByRole('tablist')[1].childElementCount).toBe(1); // initially there is one contact
 
     await user.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
     await user.click(screen.getByText(/yksityishenkilö/i));
     expect(screen.getAllByLabelText(/y-tunnus/i)[1]).toBeDisabled();
 
     await user.click(screen.getAllByText(/lisää yhteyshenkilö/i)[1]);
-    expect(screen.getAllByRole('tablist')[1].childElementCount).toBe(2); // many contacts can be added
+    await user.click(screen.getAllByText(/lisää yhteyshenkilö/i)[1]);
+    expect(screen.getAllByRole('tablist')[1].childElementCount).toBe(3); // many contacts can be added
 
+    await user.click(screen.getByText(/poista yhteyshenkilö/i));
     await user.click(screen.getByText(/poista yhteyshenkilö/i));
     expect(screen.queryByText(/poista yhteyshenkilö/i)).not.toBeInTheDocument(); // cannot remove last one
 
