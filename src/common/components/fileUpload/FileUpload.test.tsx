@@ -313,10 +313,16 @@ test('Should show server error message if deleting file fails with server error'
     existingAttachments: files,
     fileDeleteFunction: (file) => deleteAttachment({ applicationId: 1, attachmentId: file?.id }),
   });
+
+  // Delete and wait for confrim dialog
   await user.click(screen.getByRole('button', { name: 'Poista' }));
-  const { getByRole: getByRoleInDialog } = within(screen.getByRole('dialog'));
+  const { getByRole: getByRoleInDialog } = within(await screen.findByRole('dialog'));
+
+  // Confirm delete
   await user.click(getByRoleInDialog('button', { name: 'Poista' }));
-  const { getByText: getByTextInDialog } = within(screen.getByRole('dialog'));
+
+  // Wait for error dialog and confirm content
+  const { getByText: getByTextInDialog } = within(await screen.findByRole('dialog'));
   expect(
     getByTextInDialog(
       'Palvelimeen ei saada yhteyttä, eikä valittua tiedostoa saada poistettua. Yritä myöhemmin uudelleen.',
