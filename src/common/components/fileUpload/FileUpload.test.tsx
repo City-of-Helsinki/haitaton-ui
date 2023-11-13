@@ -270,8 +270,7 @@ test('Should be able to delete file', async () => {
   expect(screen.getByText(`Liitetiedosto ${fileNameA} poistettu`)).toBeInTheDocument();
 });
 
-test('Should show 404 error message if deleting file fails with status 404', async () => {
-  initFileDeleteResponse(404);
+const deleteAndConfirm = async () => {
   const files: AttachmentMetadata[] = [
     {
       id: '4f08ce3f-a0de-43c6-8ccc-9fe93822ed54',
@@ -286,15 +285,22 @@ test('Should show 404 error message if deleting file fails with status 404', asy
     existingAttachments: files,
     fileDeleteFunction: (file) => deleteAttachment({ applicationId: 1, attachmentId: file?.id }),
   });
+
   // Delete and wait for confirm dialog
   await user.click(screen.getByRole('button', { name: 'Poista' }));
   const { getByRole: getByRoleInDialog } = within(await screen.findByRole('dialog'));
 
   // Confirm delete
   await user.click(getByRoleInDialog('button', { name: 'Poista' }));
-  const { getByText: getByTextInDialog } = within(await screen.findByRole('dialog'));
 
-  // Wait for error dialog and confirm content
+  // Wait for result dialog
+  return within(await screen.findByRole('dialog')).getByText;
+};
+
+test('Should show 404 error message if deleting file fails with status 404', async () => {
+  initFileDeleteResponse(404);
+  const getByTextInDialog = await deleteAndConfirm();
+
   expect(
     getByTextInDialog(
       'Tiedostoa, jonka yritit poistaa ei löydy (virhe 404). Yritä myöhemmin uudelleen.',
@@ -304,30 +310,8 @@ test('Should show 404 error message if deleting file fails with status 404', asy
 
 test('Should show server error message if deleting file fails with server error', async () => {
   initFileDeleteResponse(500);
-  const files: AttachmentMetadata[] = [
-    {
-      id: '4f08ce3f-a0de-43c6-8ccc-9fe93822ed55',
-      fileName: 'TestFile1.png',
-      createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800284',
-      createdAt: '2023-07-04T12:07:52.324684Z',
-    },
-  ];
-  const {
-    renderResult: { user },
-  } = getFileUpload({
-    existingAttachments: files,
-    fileDeleteFunction: (file) => deleteAttachment({ applicationId: 1, attachmentId: file?.id }),
-  });
+  const getByTextInDialog = await deleteAndConfirm();
 
-  // Delete and wait for confrim dialog
-  await user.click(screen.getByRole('button', { name: 'Poista' }));
-  const { getByRole: getByRoleInDialog } = within(await screen.findByRole('dialog'));
-
-  // Confirm delete
-  await user.click(getByRoleInDialog('button', { name: 'Poista' }));
-
-  // Wait for error dialog and confirm content
-  const { getByText: getByTextInDialog } = within(await screen.findByRole('dialog'));
   expect(
     getByTextInDialog(
       'Palvelimeen ei saada yhteyttä, eikä valittua tiedostoa saada poistettua. Yritä myöhemmin uudelleen.',
