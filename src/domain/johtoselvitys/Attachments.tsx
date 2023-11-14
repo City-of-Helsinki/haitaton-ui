@@ -7,7 +7,6 @@ import Text from '../../common/components/text/Text';
 import { ApplicationAttachmentMetadata } from '../application/types/application';
 import { deleteAttachment, getAttachmentFile, uploadAttachment } from '../application/attachments';
 import { JohtoselvitysFormValues } from './types';
-import { MAX_ATTACHMENT_NUMBER } from './constants';
 import FileUpload from '../../common/components/fileUpload/FileUpload';
 
 type Props = {
@@ -50,7 +49,7 @@ function Attachments({ existingAttachments, onFileUpload }: Props) {
         dragAndDrop
         multiple
         existingAttachments={existingAttachments}
-        maxFilesNumber={MAX_ATTACHMENT_NUMBER}
+        maxFilesNumber={20}
         uploadFunction={({ file, abortSignal }) =>
           uploadAttachment({
             applicationId: getValues('id')!,

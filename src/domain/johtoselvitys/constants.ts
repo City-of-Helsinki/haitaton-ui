@@ -1,1 +1,0 @@
-export const MAX_ATTACHMENT_NUMBER = 20;

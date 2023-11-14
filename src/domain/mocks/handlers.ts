@@ -234,6 +234,10 @@ export const handlers = [
     return res(ctx.delay(), ctx.status(204));
   }),
 
+  rest.get(`${apiUrl}/hakemukset/:id/liitteet`, async (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json([]));
+  }),
+
   rest.post(`${apiUrl}/hakemukset/:id/liitteet`, async (req, res, ctx) => {
     return res(ctx.delay(), ctx.status(200));
   }),

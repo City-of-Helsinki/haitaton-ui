@@ -199,15 +199,13 @@ export default function FileUpload<T extends AttachmentMetadata>({
       );
 
     // If number of files would exceed the maximum allowed number of files,
-    // filter out the excess files from the files to be uploaded and concat
-    // errors for the excess files to the error messages
+    // filter out the extra files from the files to be uploaded and concat
+    // errors for the extra files to the error messages
     const filesNumberAfterUpload = existingAttachments.length + filesToUpload.length;
     if (maxFilesNumber !== undefined && filesNumberAfterUpload > maxFilesNumber) {
       const excessNumber = filesNumberAfterUpload - maxFilesNumber;
       const excessFiles = filesToUpload.slice(-excessNumber);
-      filesToUpload = filesToUpload.filter((fileToUpload) =>
-        excessFiles.every((excessFile) => fileToUpload.name !== excessFile.name),
-      );
+      filesToUpload = filesToUpload.slice(0, filesToUpload.length - excessNumber);
       errors = errors.concat(
         excessFiles.map((file) =>
           t('hakemus:notifications:maxAttachmentsNumberExceeded', {
