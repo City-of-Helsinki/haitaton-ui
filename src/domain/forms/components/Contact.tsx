@@ -44,7 +44,8 @@ const Contact = <T,>({
 
   const addSubContact = useCallback(() => {
     appendSubContact(emptySubContact);
-  }, [appendSubContact, emptySubContact]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appendSubContact]);
 
   useEffect(() => {
     if (subContactFields.length === 0 && subContactTemplate) {
