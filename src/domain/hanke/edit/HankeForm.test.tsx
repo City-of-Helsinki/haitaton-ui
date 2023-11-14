@@ -46,6 +46,7 @@ function fillBasicInformation(
 
 const formData: HankeDataFormState = {
   vaihe: HANKE_VAIHE.OHJELMOINTI,
+  omistajat: [],
   rakennuttajat: [],
   toteuttajat: [],
   muut: [],
@@ -141,6 +142,9 @@ describe('HankeForm', () => {
     const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
 
     // Hanke owner
+    await user.click(screen.getByText(/hankkeen omistajan tiedot/i));
+    await user.click(screen.getByText(/lisää omistaja/i));
+
     await user.click(screen.getByRole('button', { name: /tyyppi/i }));
     await user.click(screen.getByText(/yritys/i));
 
@@ -157,7 +161,7 @@ describe('HankeForm', () => {
       target: { value: '0401234567' },
     });
 
-    // Hanke owner contact person
+    // Hanke owner contact person, should be visible by default
     fireEvent.change(screen.getByTestId('omistajat.0.alikontaktit.0.etunimi'), {
       target: { value: 'Olli' },
     });
@@ -180,7 +184,6 @@ describe('HankeForm', () => {
     await user.click(screen.getByText(/yksityishenkilö/i));
     expect(screen.getAllByLabelText(/y-tunnus/i)[1]).toBeDisabled();
 
-    await user.click(screen.getAllByText(/lisää yhteyshenkilö/i)[1]);
     await user.click(screen.getAllByText(/lisää yhteyshenkilö/i)[1]);
     expect(screen.getAllByRole('tablist')[1].childElementCount).toBe(2); // many contacts can be added
 
@@ -228,5 +231,39 @@ describe('HankeForm', () => {
     expect(
       screen.getByText(`Hanke ${hanke.nimi} (${hanke.hankeTunnus}) tallennettu omiin hankkeisiin.`),
     );
+  });
+
+  test('Summary page should handle not filled data gracefully', async () => {
+    const testAlue = {
+      ...hankkeet[1]?.alueet?.[0],
+      kaistaHaitta: null,
+      kaistaPituusHaitta: null,
+      meluHaitta: null,
+      polyHaitta: null,
+      tarinaHaitta: null,
+    };
+    const testHanke = {
+      ...hankkeet[0],
+      alueet: [testAlue],
+    };
+
+    const { user } = render(
+      <HankeForm
+        formData={testHanke as HankeDataFormState}
+        onIsDirtyChange={() => ({})}
+        onFormClose={() => ({})}
+      >
+        children
+      </HankeForm>,
+    );
+
+    await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+    await waitFor(() => expect(screen.queryByText(/vaihe 5\/5: yhteenveto/i)).toBeInTheDocument());
+    expect(screen.queryByText(/meluhaitta: -/i)).toBeInTheDocument();
+    expect(screen.queryByText(/pölyhaitta: -/i)).toBeInTheDocument();
+    expect(screen.queryByText(/tärinähaitta: -/i)).toBeInTheDocument();
+    expect(screen.queryByText(/autoliikenteen kaistahaitta: -/i)).toBeInTheDocument();
+    expect(screen.queryByText(/kaistahaittojen pituus: -/i)).toBeInTheDocument();
+    expect(screen.queryByText(/muokkaa hanketta lisätäksesi tietoja/i)).toBeInTheDocument();
   });
 });

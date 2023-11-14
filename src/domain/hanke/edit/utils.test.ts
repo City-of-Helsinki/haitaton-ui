@@ -20,6 +20,7 @@ function getArea(areaName: string): HankeAlueFormState {
 function getHankeData(): HankeDataFormState {
   return {
     alueet: [getArea('Hankealue 1')],
+    omistajat: [],
     rakennuttajat: [],
     toteuttajat: [],
     muut: [],

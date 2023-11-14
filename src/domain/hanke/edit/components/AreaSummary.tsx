@@ -24,23 +24,25 @@ const AreaSummary: React.FC<{ area: HankeAlueFormState; index: number }> = ({ ar
       </p>
       <p>
         {t(`hankeForm:labels:${FORMFIELD.MELUHAITTA}`)}:{' '}
-        {t(`hanke:${FORMFIELD.MELUHAITTA}:${area.meluHaitta}`)}
+        {area.meluHaitta ? t(`hanke:${FORMFIELD.MELUHAITTA}:${area.meluHaitta}`) : '-'}
       </p>
       <p>
         {t(`hankeForm:labels:${FORMFIELD.POLYHAITTA}`)}:{' '}
-        {t(`hanke:${FORMFIELD.POLYHAITTA}:${area.polyHaitta}`)}
+        {area.polyHaitta ? t(`hanke:${FORMFIELD.POLYHAITTA}:${area.polyHaitta}`) : '-'}
       </p>
       <p>
         {t(`hankeForm:labels:${FORMFIELD.TARINAHAITTA}`)}:{' '}
-        {t(`hanke:${FORMFIELD.TARINAHAITTA}:${area.tarinaHaitta}`)}
+        {area.tarinaHaitta ? t(`hanke:${FORMFIELD.TARINAHAITTA}:${area.tarinaHaitta}`) : '-'}
       </p>
       <p>
         {t(`hankeForm:labels:${FORMFIELD.KAISTAHAITTA}`)}:{' '}
-        {t(`hanke:${FORMFIELD.KAISTAHAITTA}:${area.kaistaHaitta}`)}
+        {area.kaistaHaitta ? t(`hanke:${FORMFIELD.KAISTAHAITTA}:${area.kaistaHaitta}`) : '-'}
       </p>
       <p>
         {t(`hankeForm:labels:${FORMFIELD.KAISTAPITUUSHAITTA}`)}:{' '}
-        {t(`hanke:${FORMFIELD.KAISTAPITUUSHAITTA}:${area.kaistaPituusHaitta}`)}
+        {area.kaistaPituusHaitta
+          ? t(`hanke:${FORMFIELD.KAISTAPITUUSHAITTA}:${area.kaistaPituusHaitta}`)
+          : '-'}
       </p>
     </div>
   );

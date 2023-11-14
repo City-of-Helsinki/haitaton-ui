@@ -487,8 +487,7 @@
       "organisaatio": "Organisation",
       "omaOrganisaatio": "Add your own organisation",
       "insertOmaOrganisaatio": "Enter your own organisation",
-      "rights": "Your access rights to the project",
-      "perustaja": "Established by"
+      "rights": "Your access rights to the project"
     },
     "toolTips": {
       "tipOpenLabel": "Instruction",

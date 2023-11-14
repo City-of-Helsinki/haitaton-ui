@@ -193,7 +193,7 @@ export interface HankeData {
   tyomaaTyyppi: HANKE_TYOMAATYYPPI_KEY[];
   alueet: HankeAlue[];
   liikennehaittaindeksi: LiikenneHaittaIndeksi | null;
-  omistajat?: Array<HankeContact>;
+  omistajat: Array<HankeContact>;
   rakennuttajat: Array<HankeContact>;
   toteuttajat: Array<HankeContact>;
   muut: Array<HankeMuuTaho>;
