@@ -15,7 +15,7 @@ type Props = {
   onFileUpload: (isUploading: boolean) => void;
 };
 
-function Attachments({ existingAttachments, onFileUpload }: Props) {
+function Attachments({ existingAttachments, attachmentsLoadError, onFileUpload }: Props) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const { getValues } = useFormContext<JohtoselvitysFormValues>();
@@ -49,6 +49,7 @@ function Attachments({ existingAttachments, onFileUpload }: Props) {
         dragAndDrop
         multiple
         existingAttachments={existingAttachments}
+        existingAttachmentsLoadError={attachmentsLoadError}
         maxFilesNumber={20}
         uploadFunction={({ file, abortSignal }) =>
           uploadAttachment({
