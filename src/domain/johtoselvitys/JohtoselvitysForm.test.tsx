@@ -10,8 +10,13 @@ import hankkeet from '../mocks/data/hankkeet-data';
 import applications from '../mocks/data/hakemukset-data';
 import { JohtoselvitysFormValues } from './types';
 import * as applicationApi from '../application/utils';
+import * as attachmentApi from '../application/attachments';
 import api from '../api/api';
-import { ApplicationAttachmentMetadata, AttachmentType } from '../application/types/application';
+import {
+  Application,
+  ApplicationAttachmentMetadata,
+  AttachmentType,
+} from '../application/types/application';
 import * as applicationAttachmentsApi from '../application/attachments';
 
 afterEach(cleanup);
@@ -22,6 +27,8 @@ interface DateOptions {
   start?: string;
   end?: string;
 }
+
+const DUMMY_AREAS = applications[0].applicationData.areas;
 
 const application: JohtoselvitysFormValues = {
   id: null,
@@ -53,28 +60,7 @@ const application: JohtoselvitysFormValues = {
         },
       ],
     },
-    areas: [
-      {
-        geometry: {
-          type: 'Polygon',
-          crs: {
-            type: 'name',
-            properties: {
-              name: 'urn:ogc:def:crs:EPSG::3879',
-            },
-          },
-          coordinates: [
-            [
-              [25498583.87, 6679281.28],
-              [25498584.13, 6679314.07],
-              [25498573.17, 6679313.38],
-              [25498571.91, 6679281.46],
-              [25498583.87, 6679281.28],
-            ],
-          ],
-        },
-      },
-    ],
+    areas: DUMMY_AREAS,
     startTime: null,
     endTime: null,
     identificationNumber: 'HAI-123',
@@ -114,6 +100,15 @@ const application: JohtoselvitysFormValues = {
     propertyConnectivity: false,
     rockExcavation: null,
   },
+};
+
+const ATTACHMENT_META: ApplicationAttachmentMetadata = {
+  id: '808d3b46-d813-4b19-b437-2b3873e77cd9',
+  fileName: 'testFile.pdf',
+  createdByUserId: 'testUser',
+  createdAt: '2023-11-14 09:45:40.867232',
+  applicationId: 1,
+  attachmentType: 'LIIKENNEJARJESTELY',
 };
 
 function fillBasicInformation() {
@@ -608,36 +603,32 @@ test('Validation error is shown if no work is about checkbox is selected', async
   expect(screen.queryByText('Kenttä on pakollinen')).toBeInTheDocument();
 });
 
-test('Form is saved when contacts are filled with orderer information', async () => {
+const testFormSaving = async (inputApplication: Application, fillInfoButton: string) => {
   const saveApplication = jest.spyOn(applicationApi, 'saveApplication');
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  const { user } = render(<JohtoselvitysContainer application={inputApplication} />);
 
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
-  await user.click(
-    screen.getByTestId('applicationData.customerWithContacts.customer.fillOwnInfoButton'),
-  );
+  await user.click(screen.getByTestId(fillInfoButton));
   await user.click(screen.getByRole('button', { name: /edellinen/i }));
 
   expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
   expect(saveApplication).toHaveBeenCalledTimes(1);
 
   saveApplication.mockRestore();
+};
+
+test('Form is saved when contacts are filled with orderer information', async () => {
+  await testFormSaving(
+    applications[0],
+    'applicationData.customerWithContacts.customer.fillOwnInfoButton',
+  );
 });
 
 test('Form is saved when sub contacts are filled with orderer information', async () => {
-  const saveApplication = jest.spyOn(applicationApi, 'saveApplication');
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
-
-  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
-  await user.click(
-    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.fillOwnInfoButton'),
+  await testFormSaving(
+    applications[0],
+    'applicationData.contractorWithContacts.contacts.0.fillOwnInfoButton',
   );
-  await user.click(screen.getByRole('button', { name: /edellinen/i }));
-
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
-  expect(saveApplication).toHaveBeenCalledTimes(1);
-
-  saveApplication.mockRestore();
 });
 
 async function uploadAttachmentMock({
@@ -767,4 +758,22 @@ test('Should list existing attachments in the attachments page and in summary pa
   expect(screen.getByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
   expect(screen.getByText(fileNameA)).toBeInTheDocument();
   expect(screen.getByText(fileNameB)).toBeInTheDocument();
+});
+
+test('Summary should show attachments and they are downloadable', async () => {
+  const fetchContentMock = jest
+    .spyOn(attachmentApi, 'getAttachmentFile')
+    .mockImplementation(jest.fn());
+
+  const testApplication = applications[0];
+  initFileGetResponse([ATTACHMENT_META]);
+
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
+
+  await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+  expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+
+  await user.click(screen.getByText(ATTACHMENT_META.fileName));
+
+  expect(fetchContentMock).toHaveBeenCalledWith(testApplication.id, ATTACHMENT_META.id);
 });
