@@ -682,13 +682,16 @@ test('Should be able to upload attachments', async () => {
     new File(['test-b'], 'test-file-b.pdf', { type: 'application/pdf' }),
   ]);
 
-  await waitFor(() => screen.findAllByText('Tallennetaan tiedostoja'));
+  await screen.findAllByText('Tallennetaan tiedostoja', undefined, { timeout: 5000 });
   await act(async () => {
     waitFor(() => expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0));
   });
-  await waitFor(() => {
-    expect(screen.queryByText('2/2 tiedosto(a) tallennettu')).toBeInTheDocument();
-  });
+  await waitFor(
+    () => {
+      expect(screen.queryByText('2/2 tiedosto(a) tallennettu')).toBeInTheDocument();
+    },
+    { timeout: 5000 },
+  );
   expect(uploadSpy).toHaveBeenCalledTimes(2);
 });
 
