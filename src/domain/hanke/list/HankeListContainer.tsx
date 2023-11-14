@@ -32,7 +32,7 @@ const HankeListContainer: React.FC<React.PropsWithChildren<unknown>> = () => {
       <p style={{ marginTop: 'var(--spacing-xs)' }}>
         <IconAlertCircle size="xs" style={{ marginRight: 'var(--spacing-xs)' }} />
         {`${t('common:components:errorLoadingInfo:textTop')} ${t(
-          'common:components:errorLoadingInfo:textBottom'
+          'common:components:errorLoadingInfo:textBottom',
         )}`}
       </p>
     );

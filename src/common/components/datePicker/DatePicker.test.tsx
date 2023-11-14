@@ -23,7 +23,7 @@ test('Value should be empty when default value is null', () => {
   render(
     <Form defaultValues={defaultValues}>
       <DatePicker name="dateInput" label="Date input" locale="fi" />
-    </Form>
+    </Form>,
   );
 
   expect(screen.getByLabelText('Date input', { exact: false })).toHaveValue('');
@@ -35,7 +35,7 @@ test('Value should be default value when it is given', () => {
   render(
     <Form defaultValues={defaultValues}>
       <DatePicker name="dateInput" label="Date input" locale="fi" />
-    </Form>
+    </Form>,
   );
 
   expect(screen.getByLabelText('Date input', { exact: false })).toHaveValue('6.11.2023');

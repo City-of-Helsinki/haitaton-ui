@@ -19,7 +19,7 @@ export function FeatureFlagsProvider({ children }: FeatureFlagsProviderProps) {
       hanke: window._env_.REACT_APP_FEATURE_HANKE === '1',
       accessRights: window._env_.REACT_APP_FEATURE_ACCESS_RIGHTS === '1',
     }),
-    []
+    [],
   );
 
   return <FeatureFlagsContext.Provider value={value}>{children}</FeatureFlagsContext.Provider>;

@@ -53,6 +53,8 @@ import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
 import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
 import { SignedInUser } from '../hankeUsers/hankeUser';
 import { CheckRightsByHanke } from '../hankeUsers/UserRightsCheck';
+import AttachmentSummary from '../edit/components/AttachmentSummary';
+import useHankeAttachments from '../hankeAttachments/useHankeAttachments';
 
 type AreaProps = {
   area: HankeAlue;
@@ -142,6 +144,7 @@ const HankeView: React.FC<Props> = ({
     isLoading,
     error,
   } = useApplicationsForHanke(hankeData?.hankeTunnus);
+  const { data: attachments } = useHankeAttachments(hankeData?.hankeTunnus);
 
   // Get initially active tab from location state if there is such defined
   const initiallyActiveTab: number | undefined =
@@ -183,6 +186,7 @@ const HankeView: React.FC<Props> = ({
       <Tab>{t('hankePortfolio:tabit:alueet')}</Tab>
       <Tab>{t('hankePortfolio:tabit:haittojenHallinta')}</Tab>
       <Tab>{t('hankePortfolio:tabit:yhteystiedot')}</Tab>
+      <Tab>{t('hankePortfolio:tabit:liitteet')}</Tab>
       <Tab>{t('hankePortfolio:tabit:hakemukset')}</Tab>
     </TabList>
   ) : (
@@ -337,6 +341,16 @@ const HankeView: React.FC<Props> = ({
                     />
                   )}
                 </FormSummarySection>
+              </TabPanel>
+            )}
+            {features.hanke && (
+              <TabPanel>
+                {attachments && (
+                  <AttachmentSummary
+                    hankeTunnus={hankeData.hankeTunnus}
+                    attachments={attachments}
+                  />
+                )}
               </TabPanel>
             )}
             <TabPanel>

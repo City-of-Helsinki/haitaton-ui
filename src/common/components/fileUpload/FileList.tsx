@@ -28,7 +28,7 @@ export default function FileList({
   const { t } = useTranslation();
   // Sort files in descending order by their createdAt date
   const sortedFiles = sortBy(files, (file) => new Date(file.createdAt)).reverse();
-  const deleteMutation = useMutation<void, AxiosError, AttachmentMetadata | null, unknown>(
+  const deleteMutation = useMutation<void, AxiosError, AttachmentMetadata, unknown>(
     fileDeleteFunction,
     {
       onSuccess() {
@@ -51,7 +51,9 @@ export default function FileList({
   }
 
   function confirmFileDelete() {
-    deleteMutation.mutate(fileToDelete);
+    if (fileToDelete) {
+      deleteMutation.mutate(fileToDelete);
+    }
     setShowFileDeleteDialog(false);
   }
 
