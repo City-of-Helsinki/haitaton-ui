@@ -11,6 +11,7 @@ import HankeFormAlueet from './HankeFormAlueet';
 import HankeFormPerustiedot from './HankeFormPerustiedot';
 import HankeFormYhteystiedot from './HankeFormYhteystiedot';
 import HankeFormHaitat from './HankeFormHaitat';
+import HankeFormLiitteet from './HankeFormLiitteet';
 import HankeFormSummary from './HankeFormSummary';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
@@ -55,6 +56,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   const { setNotification } = useGlobalNotification();
   const [showNotification, setShowNotification] = useState<FormNotification | null>(null);
   const [showAddApplicationDialog, setShowAddApplicationDialog] = useState(false);
+  const [attachmentsUploading, setAttachmentsUploading] = useState(false);
   const formContext = useForm<HankeDataFormState>({
     mode: 'onTouched',
     reValidateMode: 'onChange',
@@ -96,6 +98,12 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     },
   });
 
+  const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
+  const saveAndQuitButtonIsLoading = hankeMutation.isLoading || attachmentsUploading;
+  const saveAndQuitButtonLoadingText = attachmentsUploading
+    ? attachmentsUploadingText
+    : t('common:buttons:savingText');
+
   function save() {
     hankeMutation.mutate(getValues());
   }
@@ -134,6 +142,10 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     onIsDirtyChange(isDirty);
   }, [isDirty, onIsDirtyChange]);
 
+  function handleFileUpload(uploading: boolean) {
+    setAttachmentsUploading(uploading);
+  }
+
   const formSteps = [
     {
       element: <HankeFormPerustiedot errors={errors} register={register} formData={formValues} />,
@@ -156,6 +168,11 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       state: isNewHanke ? StepState.disabled : StepState.available,
     },
     {
+      element: <HankeFormLiitteet onFileUpload={handleFileUpload} />,
+      label: t('hankePortfolio:tabit:liitteet'),
+      state: isNewHanke ? StepState.disabled : StepState.available,
+    },
+    {
       element: <HankeFormSummary formData={formValues} />,
       label: t('hankeForm:hankkeenYhteenvetoForm:header'),
       state: isNewHanke ? StepState.disabled : StepState.available,
@@ -171,7 +188,13 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
         hanke={getValues() as HankeData}
       />
       <div className="hankeForm">
-        <MultipageForm heading={formHeading} formSteps={formSteps} onStepChange={save}>
+        <MultipageForm
+          heading={formHeading}
+          formSteps={formSteps}
+          onStepChange={save}
+          isLoading={attachmentsUploading}
+          isLoadingText={attachmentsUploadingText}
+        >
           {function renderFormActions(activeStep, handlePrevious, handleNext) {
             const lastStep = activeStep === formSteps.length - 1;
 
@@ -186,24 +209,28 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
                 totalSteps={formSteps.length}
                 onPrevious={handlePrevious}
                 onNext={handleNextPage}
+                previousButtonIsLoading={attachmentsUploading}
+                previousButtonLoadingText={attachmentsUploadingText}
+                nextButtonIsLoading={attachmentsUploading}
+                nextButtonLoadingText={attachmentsUploadingText}
               >
-                {isNewHanke && (
-                  <Button
-                    variant="danger"
-                    iconLeft={<IconCross aria-hidden />}
-                    onClick={() => onFormClose(formValues.hankeTunnus)}
-                  >
-                    {t('hankeForm:cancelButton')}
-                  </Button>
-                )}
+                <Button
+                  variant="danger"
+                  iconLeft={<IconCross aria-hidden />}
+                  onClick={() => onFormClose(formValues.hankeTunnus)}
+                  isLoading={attachmentsUploading}
+                  loadingText={attachmentsUploadingText}
+                >
+                  {t('hankeForm:cancelButton')}
+                </Button>
                 {!lastStep && (
                   <Button
                     variant="supplementary"
                     iconLeft={<IconSaveDiskette aria-hidden="true" />}
                     onClick={saveAndQuit}
                     data-testid="save-form-btn"
-                    isLoading={hankeMutation.isLoading}
-                    loadingText={t('common:buttons:savingText')}
+                    isLoading={saveAndQuitButtonIsLoading}
+                    loadingText={saveAndQuitButtonLoadingText}
                   >
                     {t('hankeForm:saveDraftButton')}
                   </Button>

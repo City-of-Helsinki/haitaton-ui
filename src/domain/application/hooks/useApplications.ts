@@ -9,7 +9,7 @@ async function getApplications() {
 
 async function getApplicationsForHanke(hankeTunnus?: string) {
   const { data } = await api.get<{ applications: Application[] }>(
-    `/hankkeet/${hankeTunnus}/hakemukset`
+    `/hankkeet/${hankeTunnus}/hakemukset`,
   );
   return data;
 }
@@ -22,6 +22,6 @@ export function useApplicationsForHanke(hankeTunnus?: string) {
   return useQuery<{ applications: Application[] }>(
     ['applicationsForHanke', hankeTunnus],
     () => getApplicationsForHanke(hankeTunnus),
-    { enabled: Boolean(hankeTunnus) }
+    { enabled: Boolean(hankeTunnus) },
   );
 }

@@ -60,11 +60,11 @@ test('delete button can be hidden for files', () => {
       files={files}
       onDeleteFile={handleFileDelete}
       showDeleteButton={(file) => file.fileName === 'TestFile1.pdf'}
-    />
+    />,
   );
 
   expect(screen.queryByTestId('delete-4f08ce3f-a0de-43c6-8ccc-9fe93822ed18')).toBeInTheDocument();
   expect(
-    screen.queryByTestId('delete-d8e43d5a-ac40-448b-ad35-92120a7f2377')
+    screen.queryByTestId('delete-d8e43d5a-ac40-448b-ad35-92120a7f2377'),
   ).not.toBeInTheDocument();
 });

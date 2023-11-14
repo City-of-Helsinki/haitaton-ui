@@ -12,6 +12,8 @@ import BasicInformationSummary from './components/BasicInformationSummary';
 import ContactsSummary from './components/ContactsSummary';
 import AreaSummary from './components/AreaSummary';
 import { calculateTotalSurfaceArea } from './utils';
+import AttachmentSummary from './components/AttachmentSummary';
+import useHankeAttachments from '../hankeAttachments/useHankeAttachments';
 import AlertBulletin from './components/AlertBulletin';
 
 type Props = {
@@ -20,8 +22,8 @@ type Props = {
 
 const HankeFormSummary: React.FC<Props> = ({ formData }) => {
   const { t } = useTranslation();
-
   const areasTotalSurfaceArea = calculateTotalSurfaceArea(formData.alueet);
+  const { data: attachments } = useHankeAttachments(formData.hankeTunnus);
 
   const contactAmount: number = [
     formData.omistajat.length,
@@ -89,6 +91,13 @@ const HankeFormSummary: React.FC<Props> = ({ formData }) => {
         </FormSummarySection>
       ) : (
         <AlertBulletin info={t('hankeForm:hankkeenYhteenvetoForm:dataNotFound')} />
+      )}
+
+      <SectionTitle>{t('hankePortfolio:tabit:liitteet')}</SectionTitle>
+      {formData.hankeTunnus !== undefined && attachments !== undefined && attachments.length > 0 ? (
+        <AttachmentSummary hankeTunnus={formData.hankeTunnus} attachments={attachments} />
+      ) : (
+        <AlertBulletin info={t('hankeForm:hankkeenYhteenvetoForm:attachmentsNotFound')} />
       )}
     </article>
   );

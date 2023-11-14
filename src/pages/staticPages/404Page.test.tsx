@@ -10,7 +10,7 @@ test('Should show 404 page with nonexistent url', async () => {
   expect(screen.queryByText('Sivua ei löytynyt')).toBeInTheDocument();
   expect(
     screen.queryByText(
-      'Jos kirjoitit sivun osoitteen osoitepalkkiin, tarkista että se on kirjoitettu oikein.'
-    )
+      'Jos kirjoitit sivun osoitteen osoitepalkkiin, tarkista että se on kirjoitettu oikein.',
+    ),
   ).toBeInTheDocument();
 });

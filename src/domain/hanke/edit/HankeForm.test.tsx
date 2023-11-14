@@ -1,14 +1,70 @@
 import React from 'react';
+import { rest } from 'msw';
 import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
 import { HANKE_VAIHE, HANKE_TYOMAATYYPPI } from '../../types/hanke';
-import { render, cleanup, fireEvent, waitFor, screen } from '../../../testUtils/render';
+import {
+  render,
+  cleanup,
+  fireEvent,
+  waitFor,
+  screen,
+  act,
+  within,
+} from '../../../testUtils/render';
 import hankkeet from '../../mocks/data/hankkeet-data';
+import { server } from '../../mocks/test-server';
+import { HankeAttachmentMetadata } from '../hankeAttachments/types';
+import api from '../../api/api';
+import * as hankeAttachmentsApi from '../hankeAttachments/hankeAttachmentsApi';
 
 afterEach(cleanup);
 
 jest.setTimeout(30000);
+
+async function uploadAttachment({
+  hankeTunnus,
+  file,
+  abortSignal,
+}: {
+  hankeTunnus: string;
+  file: File;
+  abortSignal?: AbortSignal;
+}) {
+  const { data } = await api.post<HankeAttachmentMetadata>(
+    `/hankkeet/${hankeTunnus}/liitteet`,
+    { liite: file },
+    {
+      signal: abortSignal,
+    },
+  );
+  return data;
+}
+
+function initFileGetResponse(response: HankeAttachmentMetadata[]) {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/liitteet', async (req, res, ctx) => {
+      return res(ctx.status(200), ctx.json(response));
+    }),
+  );
+}
+
+function initFileUploadResponse() {
+  server.use(
+    rest.post('/api/hankkeet/:hankeTunnus/liitteet', async (req, res, ctx) => {
+      return res(ctx.delay(), ctx.status(200));
+    }),
+  );
+}
+
+function initFileDeleteResponse() {
+  server.use(
+    rest.delete('/api/hankkeet/:hankeTunnus/liitteet/:attachmentId', async (req, res, ctx) => {
+      return res(ctx.status(200));
+    }),
+  );
+}
 
 const nimi = 'test kuoppa';
 const hankkeenKuvaus = 'Tässä on kuvaus';
@@ -105,7 +161,7 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-    expect(screen.queryByText('Vaihe 1/5: Perustiedot')).toBeInTheDocument();
+    expect(screen.queryByText('Vaihe 1/6: Perustiedot')).toBeInTheDocument();
     expect(screen.queryByText('Kentän pituus oltava vähintään 3 merkkiä')).toBeInTheDocument();
   });
 
@@ -118,7 +174,7 @@ describe('HankeForm', () => {
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-    expect(screen.queryByText('Vaihe 3/5: Haitat')).toBeInTheDocument();
+    expect(screen.queryByText('Vaihe 3/6: Haitat')).toBeInTheDocument();
   });
 
   test('Hanke nimi should be limited to 100 characters and not exceed the limit with additional characters', async () => {
@@ -233,6 +289,115 @@ describe('HankeForm', () => {
     );
   });
 
+  test('Should be able to upload attachments', async () => {
+    jest.spyOn(hankeAttachmentsApi, 'uploadAttachment').mockImplementation(uploadAttachment);
+    initFileGetResponse([]);
+    initFileUploadResponse();
+    const { user } = render(<HankeFormContainer hankeTunnus="HAI22-2" />);
+    await waitFor(() => screen.findByText('Perustiedot'));
+    await user.click(screen.getByRole('button', { name: /liitteet/i }));
+    const fileUpload = screen.getByLabelText('Raahaa tiedostot tänne');
+    user.upload(fileUpload, [
+      new File(['test-a'], 'test-file-a.png', { type: 'image/png' }),
+      new File(['test-b'], 'test-file-b.jpg', { type: 'image/jpg' }),
+    ]);
+
+    await waitFor(() => screen.findAllByText('Tallennetaan tiedostoja'));
+    await act(async () => {
+      waitFor(() => expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0));
+    });
+    await waitFor(() => {
+      expect(screen.queryByText('2/2 tiedosto(a) tallennettu')).toBeInTheDocument();
+    });
+  });
+
+  test('Should be able to delete attachments', async () => {
+    const fileName = 'File1.png';
+    initFileGetResponse([
+      {
+        id: '8a77c842-3d6b-42df-8ed0-7d1493a2c011',
+        fileName,
+        createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800285',
+        createdAt: '2023-10-06T13:51:42.995157Z',
+        hankeTunnus: 'HAI22-2',
+      },
+    ]);
+    initFileDeleteResponse();
+    const { user } = render(<HankeFormContainer hankeTunnus="HAI22-2" />);
+    await waitFor(() => screen.findByText('Perustiedot'));
+    await user.click(screen.getByRole('button', { name: /liitteet/i }));
+
+    const { getAllByRole } = within(screen.getByTestId('file-upload-list'));
+    const fileListItems = getAllByRole('listitem');
+    const fileItem = fileListItems.find((i) => i.innerHTML.includes(fileName));
+    const { getByRole } = within(fileItem!);
+    await user.click(getByRole('button', { name: 'Poista' }));
+    const { getByRole: getByRoleInDialog, getByText: getByTextInDialog } = within(
+      screen.getByRole('dialog'),
+    );
+
+    expect(
+      getByTextInDialog(`Haluatko varmasti poistaa liitetiedoston ${fileName}`),
+    ).toBeInTheDocument();
+    await user.click(getByRoleInDialog('button', { name: 'Poista' }));
+    expect(screen.getByText(`Liitetiedosto ${fileName} poistettu`)).toBeInTheDocument();
+  });
+
+  test('Should list existing attachments in the attachments page and in summary page', async () => {
+    const fileNameA = 'File1.png';
+    const fileNameB = 'File2.pdf';
+    const fileNameC = 'File3.jpg';
+    initFileGetResponse([
+      {
+        id: '8a77c842-3d6b-42df-8ed0-7d1493a2c011',
+        fileName: fileNameA,
+        createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800285',
+        createdAt: new Date().toISOString(),
+        hankeTunnus: 'HAI22-2',
+      },
+      {
+        id: '8a77c842-3d6b-42df-8ed0-7d1493a2c015',
+        fileName: fileNameB,
+        createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800285',
+        createdAt: '2023-11-07T13:51:42.995157Z',
+        hankeTunnus: 'HAI22-2',
+      },
+      {
+        id: '8a77c842-3d6b-42df-8ed0-7d1493a2c016',
+        fileName: fileNameC,
+        createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800285',
+        createdAt: new Date().toISOString(),
+        hankeTunnus: 'HAI22-2',
+      },
+    ]);
+    const { user } = render(<HankeFormContainer hankeTunnus="HAI22-2" />);
+    await waitFor(() => screen.findByText('Perustiedot'));
+    await user.click(screen.getByRole('button', { name: /liitteet/i }));
+
+    const { getAllByRole } = within(screen.getByTestId('file-upload-list'));
+    const fileListItems = getAllByRole('listitem');
+    expect(fileListItems.length).toBe(3);
+
+    const fileItemA = fileListItems.find((i) => i.innerHTML.includes(fileNameA));
+    const { getByText: getByTextInA } = within(fileItemA!);
+    expect(getByTextInA('Lisätty tänään')).toBeInTheDocument();
+
+    const fileItemB = fileListItems.find((i) => i.innerHTML.includes(fileNameB));
+    const { getByText: getByTextInB } = within(fileItemB!);
+    expect(getByTextInB('Lisätty 7.11.2023')).toBeInTheDocument();
+
+    const fileItemC = fileListItems.find((i) => i.innerHTML.includes(fileNameC));
+    const { getByText: getByTextInC } = within(fileItemC!);
+    expect(getByTextInC('Lisätty tänään')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+
+    expect(screen.getByText('Vaihe 6/6: Yhteenveto')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: fileNameA })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: fileNameB })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: fileNameC })).toBeInTheDocument();
+  });
+
   test('Summary page should handle not filled data gracefully', async () => {
     const testAlue = {
       ...hankkeet[1]?.alueet?.[0],
@@ -258,7 +423,7 @@ describe('HankeForm', () => {
     );
 
     await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
-    await waitFor(() => expect(screen.queryByText(/vaihe 5\/5: yhteenveto/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByText(/vaihe 6\/6: yhteenveto/i)).toBeInTheDocument());
     expect(screen.queryByText(/meluhaitta: -/i)).toBeInTheDocument();
     expect(screen.queryByText(/pölyhaitta: -/i)).toBeInTheDocument();
     expect(screen.queryByText(/tärinähaitta: -/i)).toBeInTheDocument();
