@@ -2,7 +2,7 @@ import { Feature } from 'ol';
 import Polygon from 'ol/geom/Polygon';
 import { Polygon as GeoJSONPolygon } from 'geojson';
 import { max, min } from 'date-fns';
-import { HankeDataDraft, HankeContact, HankeMuuTaho, HankeAlue } from '../../types/hanke';
+import { HankeAlue, HankeContact, HankeDataDraft, HankeMuuTaho } from '../../types/hanke';
 import { FORMFIELD, HankeAlueFormState, HankeDataFormState } from './types';
 import { formatFeaturesToHankeGeoJSON, getFeatureFromHankeGeometry } from '../../map/utils';
 import { getSurfaceArea } from '../../../common/components/map/utils';
@@ -112,6 +112,8 @@ export function canHankeBeCancelled(applications: Application[]): boolean {
   return applications.every((application) => isApplicationPending(application.alluStatus));
 }
 
+const defaultNameRegExp = /^Hankealue (\d+)$/;
+
 /**
  * Get default name for hanke area
  */
@@ -121,15 +123,11 @@ export function getAreaDefaultName(areas?: HankeAlueFormState[]) {
   }
 
   function getAreaNumber(area?: HankeAlueFormState): number {
-    const areaNumber = area?.nimi?.match(/\d+$/);
-    return areaNumber ? Number(areaNumber[0]) : 0;
+    const areaNumber = area?.nimi?.match(defaultNameRegExp);
+    return areaNumber ? Number(areaNumber[1]) : 0;
   }
 
-  const defaultNameRegExp = /^Hankealue \d+$/;
-  const maxAreaNumber = areas
-    .filter((area) => defaultNameRegExp.test(area.nimi || ''))
-    .map(getAreaNumber)
-    .reduce((a, b) => Math.max(a, b), 0);
+  const maxAreaNumber = areas.map(getAreaNumber).reduce((a, b) => Math.max(a, b), 0);
 
   return `Hankealue ${maxAreaNumber + 1}`;
 }
