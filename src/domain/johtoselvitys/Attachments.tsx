@@ -15,7 +15,7 @@ type Props = {
   onFileUpload: (isUploading: boolean) => void;
 };
 
-function Attachments({ existingAttachments, attachmentsLoadError, onFileUpload }: Props) {
+function Attachments({ existingAttachments, attachmentsLoadError, onFileUpload }: Readonly<Props>) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const { getValues } = useFormContext<JohtoselvitysFormValues>();
