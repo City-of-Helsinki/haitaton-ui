@@ -39,7 +39,7 @@
     "@popperjs/core": "^2.5.4",
     "@reduxjs/toolkit": "^1.5.0",
     "@sentry/react": "^6.2.0",
-    "@sentry/tracing": "^6.2.0",
+    "@sentry/tracing": "^6.19.7",
     "@turf/helpers": "^6.5.0",
     "@turf/unkink-polygon": "^6.5.0",
     "@types/cypress-axe": "^0.8.0",
