@@ -197,10 +197,9 @@ describe('HankeForm', () => {
   test('Yhteystiedot can be filled', async () => {
     const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
 
-    // Hanke owner
-    await user.click(screen.getByText(/hankkeen omistajan tiedot/i));
-    await user.click(screen.getByText(/lisää omistaja/i));
-    expect(screen.getAllByRole('tablist')[0].childElementCount).toBe(1); // initially there is one contact
+    // Hanke owner (accordion open by default)
+    expect(screen.getAllByRole('tablist')[0].childElementCount).toBe(1); // initially there is one sub-contact
+    expect(screen.queryByText(/poista yhteyshenkilö/i)).not.toBeInTheDocument(); // owner sub-contacts cannot all be removed
 
     await user.click(screen.getByRole('button', { name: /tyyppi/i }));
     await user.click(screen.getByText(/yritys/i));
@@ -236,7 +235,7 @@ describe('HankeForm', () => {
     await user.click(screen.getByText(/rakennuttajan tiedot/i));
     await user.click(screen.getByText(/lisää rakennuttaja/i));
     expect(screen.getAllByText('Rakennuttaja')).toHaveLength(1);
-    expect(screen.getAllByRole('tablist')[1].childElementCount).toBe(1); // initially there is one contact
+    expect(screen.getAllByRole('tablist')).toHaveLength(1); // initially there is no sub-contacts for rakennuttaja ('tablist' is only for owner)
 
     await user.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
     await user.click(screen.getByText(/yksityishenkilö/i));
@@ -244,16 +243,19 @@ describe('HankeForm', () => {
 
     await user.click(screen.getAllByText(/lisää yhteyshenkilö/i)[1]);
     await user.click(screen.getAllByText(/lisää yhteyshenkilö/i)[1]);
-    expect(screen.getAllByRole('tablist')[1].childElementCount).toBe(3); // many contacts can be added
+    expect(screen.getAllByRole('tablist')[1].childElementCount).toBe(2); // many contacts can be added
 
+    expect(screen.queryByText(/poista yhteyshenkilö/i)).toBeInTheDocument(); // first sub-contact can be removed
     await user.click(screen.getByText(/poista yhteyshenkilö/i));
+    expect(screen.queryByText(/poista yhteyshenkilö/i)).toBeInTheDocument(); // second (and last) sub-contact can be removed
     await user.click(screen.getByText(/poista yhteyshenkilö/i));
-    expect(screen.queryByText(/poista yhteyshenkilö/i)).not.toBeInTheDocument(); // cannot remove last one
+    expect(screen.queryByText(/poista yhteyshenkilö/i)).not.toBeInTheDocument(); // all contacts can be removed (except for owner)
 
-    await user.click(screen.getByText(/lisää rakennuttaja/i));
+    await user.click(screen.getByText(/lisää rakennuttaja/i)); // add second rakennuttaja
     expect(screen.getAllByText('Rakennuttaja')).toHaveLength(2);
-    await user.click(screen.getAllByText(/poista rakennuttaja/i)[1]);
-    await user.click(screen.getByText(/poista rakennuttaja/i));
+    await user.click(screen.getAllByText(/poista rakennuttaja/i)[1]); // remove second rakennuttaja
+    await user.click(screen.getByText(/poista rakennuttaja/i)); // remove first (and last) rakennuttajaqq
+    expect(screen.queryByText('Rakennuttaja')).not.toBeInTheDocument();
 
     // Check Other types are present and clickable
     await user.click(screen.getByText(/toteuttajan tiedot/i));
