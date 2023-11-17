@@ -10,7 +10,8 @@ import useFieldArrayWithStateUpdate from '../../../common/hooks/useFieldArrayWit
 interface Props<T> {
   contactType: T;
   index?: number;
-  onRemoveContact?: UseFieldArrayRemove;
+  canBeRemoved?: boolean;
+  onRemove?: UseFieldArrayRemove;
   subContactTemplate?: boolean;
   renderSubContact?: (
     subContactIndex: number,
@@ -25,7 +26,8 @@ interface Props<T> {
 const Contact = <T,>({
   contactType,
   index,
-  onRemoveContact,
+  canBeRemoved = true,
+  onRemove,
   renderSubContact,
   subContactTemplate = false,
   subContactPath,
@@ -59,11 +61,11 @@ const Contact = <T,>({
   return (
     <>
       <Flex justify="right" align="center" mb="var(--spacing-s)">
-        {onRemoveContact && (
+        {canBeRemoved && onRemove && (
           <Button
             variant="supplementary"
             iconLeft={<IconCross aria-hidden />}
-            onClick={() => onRemoveContact(index)}
+            onClick={() => onRemove(index)}
           >
             {t(`form:yhteystiedot:buttons:remove:${contactType}`)}
           </Button>
