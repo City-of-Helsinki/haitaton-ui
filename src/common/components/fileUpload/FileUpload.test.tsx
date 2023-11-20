@@ -33,16 +33,20 @@ function initFileDeleteResponse(statusCode: number) {
 interface FileUploadOptions {
   accept: string;
   dragAndDrop: boolean;
+  upload: (props: { file: File }) => Promise<AttachmentMetadata>;
   fileDeleteFunction: FileDeleteFunction;
   existingAttachments: AttachmentMetadata[];
+  maxFilesNumber: number;
 }
 
 function getFileUpload(options: Partial<FileUploadOptions> = {}) {
   const {
     accept = '.png,.jpg',
     dragAndDrop,
+    upload = uploadFunction,
     fileDeleteFunction = () => Promise.resolve(),
     existingAttachments = [],
+    maxFilesNumber,
   } = options;
   const inputLabel = 'Choose a file';
   const renderResult = render(
@@ -52,9 +56,10 @@ function getFileUpload(options: Partial<FileUploadOptions> = {}) {
       accept={accept}
       multiple
       dragAndDrop={dragAndDrop}
-      uploadFunction={uploadFunction}
+      uploadFunction={upload}
       fileDeleteFunction={fileDeleteFunction}
       existingAttachments={existingAttachments}
+      maxFilesNumber={maxFilesNumber}
     />,
     undefined,
     undefined,
@@ -64,26 +69,33 @@ function getFileUpload(options: Partial<FileUploadOptions> = {}) {
   return { renderResult, fileUploadElement };
 }
 
+async function waitLoading() {
+  await waitFor(() => screen.findByText('Tallennetaan tiedostoja'));
+  await act(async () => {
+    waitFor(() => expect(screen.queryByText('Tallennetaan tiedostoja')).not.toBeInTheDocument());
+  });
+}
+
 test('Should upload files successfully and loading indicator is displayed', async () => {
+  const uploadMock = jest.fn(uploadFunction);
   const {
     renderResult: { user },
     fileUploadElement,
-  } = getFileUpload();
+  } = getFileUpload({ upload: uploadMock });
   user.upload(fileUploadElement, [
     new File(['test-a'], 'test-file-a.png', { type: 'image/png' }),
     new File(['test-b'], 'test-file-b.jpg', { type: 'image/jpg' }),
   ]);
 
-  await waitFor(() => screen.findByText('Tallennetaan tiedostoja'));
-  await act(async () => {
-    waitFor(() => expect(screen.queryByText('Tallennetaan tiedostoja')).not.toBeInTheDocument());
-  });
+  await waitLoading();
   await waitFor(() => {
     expect(screen.queryByText('2/2 tiedosto(a) tallennettu')).toBeInTheDocument();
   });
+  expect(uploadMock).toHaveBeenCalledTimes(2);
 });
 
 test('Should show amount of successful files uploaded and errors correctly when files fails in validation', async () => {
+  const uploadMock = jest.fn(uploadFunction);
   const fileNameA = 'test-file-a.png';
   const fileNameB = 'test-file-b.pdf';
   const fileNameC = 'test-file-c.png';
@@ -103,16 +115,22 @@ test('Should show amount of successful files uploaded and errors correctly when 
   const {
     renderResult: { user },
     fileUploadElement,
-  } = getFileUpload({ accept: '.png', existingAttachments: [existingFileA, existingFileB] });
+  } = getFileUpload({
+    accept: '.png',
+    existingAttachments: [existingFileA, existingFileB],
+    upload: uploadMock,
+  });
   user.upload(fileUploadElement, [
     new File(['test-a'], fileNameA, { type: 'image/png' }),
     new File(['test-b'], fileNameB, { type: 'application/pdf' }),
     new File(['test-c'], fileNameC, { type: 'image/png' }),
   ]);
 
+  await waitLoading();
   await waitFor(() => {
     expect(screen.queryByText('1/3 tiedosto(a) tallennettu')).toBeInTheDocument();
   });
+  expect(uploadMock).toHaveBeenCalledTimes(1);
   expect(
     screen.queryByText('Liitteen tallennus epäonnistui 2/3 tiedostolle', { exact: false }),
   ).toBeInTheDocument();
@@ -187,10 +205,11 @@ test('Should show correct error message when upload request fails for server err
 });
 
 test('Should upload files when user drops them into drag-and-drop area', async () => {
+  const uploadMock = jest.fn(uploadFunction);
   const file = new File(['test-file'], 'test-file-a', { type: 'image/png' });
   const file2 = new File(['test-file'], 'test-file-b', { type: 'image/png' });
   const file3 = new File(['test-file'], 'test-file-c', { type: 'image/png' });
-  getFileUpload({ dragAndDrop: true, accept: '' });
+  getFileUpload({ dragAndDrop: true, accept: '', upload: uploadMock });
   fireEvent.drop(screen.getByText('Raahaa tiedostot tänne'), {
     dataTransfer: {
       files: [file, file2, file3],
@@ -200,6 +219,7 @@ test('Should upload files when user drops them into drag-and-drop area', async (
   await waitFor(() => {
     expect(screen.queryByText('3/3 tiedosto(a) tallennettu')).toBeInTheDocument();
   });
+  expect(uploadMock).toHaveBeenCalledTimes(3);
 });
 
 test('Should list added files', async () => {
@@ -330,10 +350,61 @@ test('Should be able to cancel upload requests', async () => {
     new File(['test-b'], 'test-file-b.pdf', { type: 'application/pdf' }),
   ]);
   await waitFor(() => screen.findByText('Tallennetaan tiedostoja'));
-  await user.click(screen.getByRole('button', { name: 'Peruuta' }));
   await act(async () => {
-    waitFor(() => expect(screen.queryByText('Tallennetaan tiedostoja')).not.toBeInTheDocument());
+    user.click(screen.getByRole('button', { name: 'Peruuta' }));
   });
+  await waitFor(() =>
+    expect(screen.queryByText('Tallennetaan tiedostoja')).not.toBeInTheDocument(),
+  );
   expect(abortSpy).toBeCalledTimes(1);
   abortSpy.mockRestore();
+});
+
+test('Should show error messages for files that exceed the maximum number of files', async () => {
+  const uploadMock = jest.fn(uploadFunction);
+  const {
+    renderResult: { user },
+    fileUploadElement,
+  } = getFileUpload({
+    upload: uploadMock,
+    existingAttachments: [
+      {
+        id: '4f08ce3f-a0de-43c6-8ccc-9fe93822ed56',
+        fileName: 'TestFile.jpg',
+        createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800284',
+        createdAt: '2023-07-04T12:07:52.324684Z',
+      },
+    ],
+    accept: '.pdf',
+    maxFilesNumber: 2,
+  });
+  const fileNameA = 'test-file-a.pdf';
+  const fileNameB = 'test-file-b.pdf';
+  const fileNameC = 'test-file-c.pdf';
+  user.upload(fileUploadElement, [
+    new File(['test-a'], fileNameA, { type: 'application/pdf' }),
+    new File(['test-b'], fileNameB, { type: 'application/pdf' }),
+    new File(['test-b'], fileNameC, { type: 'application/pdf' }),
+  ]);
+
+  await waitLoading();
+  await waitFor(() => {
+    expect(screen.queryByText('1/3 tiedosto(a) tallennettu')).toBeInTheDocument();
+  });
+  expect(uploadMock).toHaveBeenCalledTimes(1);
+  expect(
+    screen.queryByText('Liitteen tallennus epäonnistui 2/3 tiedostolle', { exact: false }),
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByText(
+      `Tiedoston (${fileNameB}) lataus epäonnistui, liitteiden enimmäismäärä (2 kpl) ylitetty.`,
+      { exact: false },
+    ),
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByText(
+      `Tiedoston (${fileNameC}) lataus epäonnistui, liitteiden enimmäismäärä (2 kpl) ylitetty.`,
+      { exact: false },
+    ),
+  ).toBeInTheDocument();
 });

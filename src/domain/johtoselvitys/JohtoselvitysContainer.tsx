@@ -5,8 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from 'react-query';
 import { merge } from 'lodash';
-import { AxiosError } from 'axios';
-import { Box } from '@chakra-ui/react';
 import { useBeforeUnload } from 'react-router-dom';
 
 import { JohtoselvitysFormValues } from './types';
@@ -34,10 +32,8 @@ import useHanke from '../hanke/hooks/useHanke';
 import { AlluStatus, Application } from '../application/types/application';
 import Attachments from './Attachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
-import { uploadAttachment } from '../application/attachments';
 import useAttachments from '../application/hooks/useAttachments';
 import { APPLICATION_ID_STORAGE_KEY } from '../application/constants';
-import { removeDuplicateAttachments } from '../../common/components/fileUpload/utils';
 
 type Props = {
   hankeData?: HankeData;
@@ -53,7 +49,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   const { setNotification } = useGlobalNotification();
   const { showSendSuccess, showSendError } = useApplicationSendNotification();
   const queryClient = useQueryClient();
-  const [newAttachments, setNewAttachments] = useState<File[]>([]);
   const [attachmentUploadErrors, setAttachmentUploadErrors] = useState<JSX.Element[]>([]);
 
   const initialValues: JohtoselvitysFormValues = {
@@ -142,7 +137,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     setValue,
     handleSubmit,
     trigger,
-    formState: { isDirty, errors: formErrors },
+    formState: { isDirty },
     reset,
   } = formContext;
 
@@ -203,28 +198,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     },
   });
 
-  const attachmentUploadMutation = useMutation(uploadAttachment, {
-    onMutate() {
-      setAttachmentUploadErrors([]);
-    },
-    onError(error: AxiosError, { file }) {
-      setAttachmentUploadErrors((errors) => {
-        const errorMessage =
-          error.response?.status === 400
-            ? t('form:errors:fileLoadBadFileError', { fileName: file.name })
-            : t('form:errors:fileLoadTechnicalError', { fileName: file.name });
-        return errors.concat(
-          <Box as="p" key={file.name} mb="var(--spacing-s)">
-            {errorMessage}
-          </Box>,
-        );
-      });
-    },
-    onSuccess() {
-      queryClient.invalidateQueries('attachments');
-    },
-  });
-
   function saveCableApplication() {
     const data = convertFormStateToApplicationData(getValues());
     applicationSaveMutation.mutate(data);
@@ -276,39 +249,8 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     });
   }
 
-  function handleAddAttachments(files: File[]) {
-    setNewAttachments(files);
-  }
-
-  async function saveAttachments() {
-    setAttachmentsUploading(true);
-
-    const applicationId = getValues('id');
-
-    if (!applicationId) {
-      return Promise.resolve();
-    }
-
-    // Filter out attachments that have same names as those that have already been sent
-    const [filesToSend] = removeDuplicateAttachments(newAttachments, existingAttachments);
-
-    const mutations = filesToSend.map((file) =>
-      attachmentUploadMutation.mutateAsync({
-        applicationId,
-        attachmentType: 'MUU',
-        file,
-      }),
-    );
-
-    const results = await Promise.allSettled(mutations);
-
-    setAttachmentsUploading(false);
-
-    if (results.some((result) => result.status === 'rejected')) {
-      throw new Error('Error uploading attachments');
-    }
-
-    return results;
+  function handleAttachmentUpload(isUploading: boolean) {
+    setAttachmentsUploading(isUploading);
   }
 
   function closeAttachmentUploadErrorDialog() {
@@ -382,8 +324,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
           'applicationData.representativeWithContacts.contacts',
         ),
       ],
-      // Attachments page
-      ['attachmentNumber'],
     ],
     [
       ordererKey,
@@ -443,8 +383,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
           <Attachments
             existingAttachments={existingAttachments}
             attachmentsLoadError={attachmentsLoadError}
-            newAttachments={newAttachments}
-            onAddAttachments={handleAddAttachments}
+            onFileUpload={handleAttachmentUpload}
           />
         ),
         label: t('hankePortfolio:tabit:liitteet'),
@@ -468,15 +407,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
           : StepState.disabled,
       },
     ];
-  }, [
-    t,
-    getValues,
-    pageFieldsToValidate,
-    hankeData,
-    existingAttachments,
-    attachmentsLoadError,
-    newAttachments,
-  ]);
+  }, [t, getValues, pageFieldsToValidate, hankeData, existingAttachments, attachmentsLoadError]);
 
   const hankeNameText = (
     <div style={{ visibility: hanke !== undefined ? 'visible' : 'hidden' }}>
@@ -496,6 +427,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     getValues('alluStatus') === AlluStatus.PENDING
       ? t('form:notifications:descriptions:editSentApplication')
       : undefined;
+  const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
 
   return (
     <FormProvider {...formContext}>
@@ -512,7 +444,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         subHeading={hankeNameText}
         formSteps={formSteps}
         isLoading={attachmentsUploading}
-        isLoadingText={t('form:buttons:loadingAttachments')}
+        isLoadingText={attachmentsUploadingText}
         onStepChange={handleStepChange}
         onSubmit={handleSubmit(sendCableApplication)}
         stepChangeValidator={validateStepChange}
@@ -520,36 +452,13 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         notificationText={notificationText}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
-          async function handlePageChange(handlerFunction: () => void): Promise<void> {
-            try {
-              if (
-                activeStepIndex === 3 &&
-                newAttachments.length > 0 &&
-                !formErrors.attachmentNumber
-              ) {
-                await saveAttachments();
-                setNewAttachments([]);
-              }
-              handlerFunction();
-              // eslint-disable-next-line no-empty
-            } catch (error) {}
-          }
-
-          async function handlePreviousPage() {
-            await handlePageChange(handlePrevious);
-          }
-
-          async function handleNextPage() {
-            await handlePageChange(handleNext);
-          }
-
           async function handleSaveAndQuit() {
             // Make sure that current application page is valid before saving and quitting
             const applicationPageValid = await trigger(pageFieldsToValidate[activeStepIndex], {
               shouldFocus: true,
             });
             if (applicationPageValid) {
-              await handlePageChange(saveAndQuit);
+              saveAndQuit();
             }
           }
 
@@ -559,18 +468,18 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
 
           const saveAndQuitIsLoading = applicationSaveMutation.isLoading || attachmentsUploading;
           const saveAndQuitLoadingText = attachmentsUploading
-            ? t('form:buttons:loadingAttachments')
+            ? attachmentsUploadingText
             : t('common:buttons:savingText');
           return (
             <FormActions
               activeStepIndex={activeStepIndex}
               totalSteps={formSteps.length}
-              onPrevious={handlePreviousPage}
-              onNext={handleNextPage}
+              onPrevious={handlePrevious}
+              onNext={handleNext}
               previousButtonIsLoading={attachmentsUploading}
-              previousButtonLoadingText={t('form:buttons:loadingAttachments')}
+              previousButtonLoadingText={attachmentsUploadingText}
               nextButtonIsLoading={attachmentsUploading}
-              nextButtonLoadingText={t('form:buttons:loadingAttachments')}
+              nextButtonLoadingText={attachmentsUploadingText}
             >
               <ApplicationCancel
                 applicationId={getValues('id')}

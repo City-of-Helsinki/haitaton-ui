@@ -554,7 +554,7 @@
       "giveDates": "Select the work dates to draw the work areas on the map."
     },
     "liitteet": {
-      "instructions": "Add attachments to the application, such as a work plan. The attachments are saved in the form via the Next and Save buttons at the bottom of the page."
+      "instructions": "Add attachments to the application, such as a work plan."
     }
   },
   "hakemus": {
