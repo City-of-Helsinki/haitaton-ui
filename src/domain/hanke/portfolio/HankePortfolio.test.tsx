@@ -14,8 +14,9 @@ import hankkeet from '../../mocks/data/hankkeet-data';
 import { HankeDataDraft } from '../../types/hanke';
 import HankePortfolioContainer from './HankePortfolioContainer';
 
-const startDateLabel = 'Ajanjakson alku';
-const endDateLabel = 'Ajanjakson loppu';
+const START_DATE_LABEL = 'Ajanjakson alku';
+const END_DATE_LABEL = 'Ajanjakson loppu';
+const SEARCH_PLACEHOLDER = 'Esim. hankkeen nimi tai tunnus';
 
 afterEach(cleanup);
 
@@ -43,13 +44,16 @@ describe('HankePortfolio', () => {
       <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
     );
 
-    await user.type(screen.getByLabelText('Haku'), 'Mannerheimintie autottomaksi');
+    await user.type(
+      screen.getByPlaceholderText(SEARCH_PLACEHOLDER),
+      'Mannerheimintie autottomaksi',
+    );
     await waitFor(() => {
       expect(screen.getByText('1 hakutulos'));
     });
     expect(screen.getByTestId('numberOfFilteredRows')).toHaveTextContent('1');
 
-    await user.type(screen.getByLabelText('Haku'), 'elielin');
+    await user.type(screen.getByPlaceholderText(SEARCH_PLACEHOLDER), 'elielin');
     await waitFor(() => {
       expect(screen.getByText('0 hakutulosta'));
     });
@@ -70,16 +74,16 @@ describe('HankePortfolio', () => {
       <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
     );
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
-    changeFilterDate(startDateLabel, renderedComponent, '02.10.2022');
+    changeFilterDate(START_DATE_LABEL, renderedComponent, '02.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
-    changeFilterDate(startDateLabel, renderedComponent, '06.10.2022');
+    changeFilterDate(START_DATE_LABEL, renderedComponent, '06.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('1');
-    changeFilterDate(startDateLabel, renderedComponent, '11.10.2022');
+    changeFilterDate(START_DATE_LABEL, renderedComponent, '11.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
     expect(
       screen.queryByText('Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta'),
     ).toBeInTheDocument();
-    changeFilterDate(startDateLabel, renderedComponent, null);
+    changeFilterDate(START_DATE_LABEL, renderedComponent, null);
   });
 
   test('Changing filter endDates filters correct number of projects', async () => {
@@ -87,16 +91,16 @@ describe('HankePortfolio', () => {
       <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
     );
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
-    changeFilterDate(endDateLabel, renderedComponent, '01.10.2022');
+    changeFilterDate(END_DATE_LABEL, renderedComponent, '01.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
     expect(
       screen.queryByText('Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta'),
     ).toBeInTheDocument();
-    changeFilterDate(endDateLabel, renderedComponent, '05.10.2022');
+    changeFilterDate(END_DATE_LABEL, renderedComponent, '05.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
-    changeFilterDate(endDateLabel, renderedComponent, '11.10.2022');
+    changeFilterDate(END_DATE_LABEL, renderedComponent, '11.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
-    changeFilterDate(endDateLabel, renderedComponent, null);
+    changeFilterDate(END_DATE_LABEL, renderedComponent, null);
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
   });
 

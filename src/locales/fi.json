@@ -760,6 +760,7 @@
     "filters": "Rajausehdot",
     "pageHeader": "Omat hankkeet",
     "search": "Haku",
+    "searchPlaceholder": "Esim. hankkeen nimi tai tunnus",
     "searchHelperText": "Hae hankkeen nimellä tai tunnuksella",
     "searchResults": "{{count}} hakutulos",
     "searchResults_plural": "{{count}} hakutulosta",
