@@ -4,7 +4,6 @@ import { Box } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import Geometry from 'ol/geom/Geometry';
 import Text from '../../../common/components/text/Text';
-import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
 import {
   InformationViewContainer,
   InformationViewContentContainer,
@@ -39,6 +38,7 @@ import AttachmentSummary from '../components/AttachmentSummary';
 import useAttachments from '../hooks/useAttachments';
 import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
 import { CheckRightsByHanke } from '../../hanke/hankeUsers/UserRightsCheck';
+import MainHeading from '../../../common/components/mainHeading/MainHeading';
 
 type Props = {
   application: Application;
@@ -81,9 +81,7 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
   return (
     <InformationViewContainer>
       <InformationViewHeader backgroundColor="var(--color-suomenlinna-light)">
-        <Text tag="h1" styleAs="h1" weight="bold" id={SKIP_TO_ELEMENT_ID} tabIndex={-1}>
-          {name}
-        </Text>
+        <MainHeading>{name}</MainHeading>
         <Text tag="h2" styleAs="h3" weight="bold" spacingBottom="l">
           {applicationId}
         </Text>

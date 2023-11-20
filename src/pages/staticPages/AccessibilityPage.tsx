@@ -5,7 +5,7 @@ import PageMeta from '../components/PageMeta';
 import { useLocalizedRoutes } from '../../common/hooks/useLocalizedRoutes';
 import Container from '../../common/components/container/Container';
 import Text from '../../common/components/text/Text';
-import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
+import MainHeading from '../../common/components/mainHeading/MainHeading';
 
 const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { ACCESSIBILITY } = useLocalizedRoutes();
@@ -14,17 +14,9 @@ const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   return (
     <Container>
       <PageMeta routeData={ACCESSIBILITY} />
-      <Text
-        tag="h1"
-        styleAs="h1"
-        spacingTop="l"
-        spacingBottom="xl"
-        weight="bold"
-        id={SKIP_TO_ELEMENT_ID}
-        tabIndex={-1}
-      >
+      <MainHeading spacingTop="l" spacingBottom="xl">
         {t('staticPages:accessibility:title')}
-      </Text>
+      </MainHeading>
       <HdsContainer style={{ padding: '2rem', backgroundColor: 'white' }}>
         <Text tag="p">
           Tämä saavutettavuusseloste koskee Helsingin kaupungin Haitaton -verkkosivustoa. Sivuston
