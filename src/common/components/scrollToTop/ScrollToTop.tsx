@@ -13,5 +13,5 @@ export default function ScrollToTop() {
     ref.current?.focus();
   }, [pathname]);
 
-  return <div ref={ref} tabIndex={-1} />;
+  return <div ref={ref} tabIndex={-1} data-testid="scroll-to-top-div" />;
 }
