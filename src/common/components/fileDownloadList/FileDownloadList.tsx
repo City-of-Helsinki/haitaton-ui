@@ -2,12 +2,15 @@ import { IconDocument } from 'hds-react';
 import FileDownloadLink from '../fileDownloadLink/FileDownloadLink';
 import { AttachmentMetadata } from '../../types/attachment';
 
-type Props = {
-  files: AttachmentMetadata[];
-  fileDownLoadFunction: (file: AttachmentMetadata) => Promise<string>;
+type FileDownloadListProps<T extends AttachmentMetadata> = {
+  files: T[];
+  download: (file: T) => Promise<string>;
 };
 
-export default function FileDownloadList({ files, fileDownLoadFunction }: Readonly<Props>) {
+export default function FileDownloadList<T extends AttachmentMetadata>({
+  files,
+  download,
+}: Readonly<FileDownloadListProps<T>>) {
   return (
     <ul>
       {files.map((file) => (
@@ -17,7 +20,7 @@ export default function FileDownloadList({ files, fileDownLoadFunction }: Readon
             linkText={file.fileName}
             fileName={file.fileName}
             queryKey={['attachmentContent', file.id]}
-            queryFunction={() => fileDownLoadFunction(file)}
+            queryFunction={() => download(file)}
           />
         </li>
       ))}
