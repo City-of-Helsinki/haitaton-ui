@@ -9,7 +9,7 @@ import {
   useAsyncDebounce,
   useSortBy,
 } from 'react-table';
-import { useAccordion, Card, Select, TextInput, Button, Pagination } from 'hds-react';
+import { useAccordion, Card, Select, Button, Pagination, SearchInput } from 'hds-react';
 import {
   IconAngleDown,
   IconAngleUp,
@@ -491,12 +491,13 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
             aria-label={t('hankePortfolio:filters')}
             aria-describedby={t('hankePortfolio:filtersInfoText')}
           >
-            <TextInput
+            <SearchInput
               className={styles.hankeSearch}
-              id="searchHanke"
-              value={hankeSearchValue}
-              onChange={(e) => setHankeSearchValue(e.target.value)}
               label={t('hankePortfolio:search')}
+              placeholder={t('hankePortfolio:searchPlaceholder')}
+              value={hankeSearchValue}
+              onChange={setHankeSearchValue}
+              onSubmit={setHankeSearchValue}
             />
             <FeatureFlags flags={['hanke']}>
               <div className={styles.dateRange}>
