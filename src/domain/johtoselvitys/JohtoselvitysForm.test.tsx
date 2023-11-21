@@ -10,7 +10,6 @@ import hankkeet from '../mocks/data/hankkeet-data';
 import applications from '../mocks/data/hakemukset-data';
 import { JohtoselvitysFormValues } from './types';
 import * as applicationApi from '../application/utils';
-import * as attachmentApi from '../application/attachments';
 import api from '../api/api';
 import {
   Application,
@@ -762,7 +761,7 @@ test('Should list existing attachments in the attachments page and in summary pa
 
 test('Summary should show attachments and they are downloadable', async () => {
   const fetchContentMock = jest
-    .spyOn(attachmentApi, 'getAttachmentFile')
+    .spyOn(applicationAttachmentsApi, 'getAttachmentFile')
     .mockImplementation(jest.fn());
 
   const testApplication = applications[0];
