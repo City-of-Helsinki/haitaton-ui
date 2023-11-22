@@ -40,8 +40,8 @@ import { useNavigateToApplicationList } from '../hooks/useNavigateToApplicationL
 import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
 import { CheckRightsByUser } from '../hankeUsers/UserRightsCheck';
 import { SignedInUser, SignedInUserByHanke } from '../hankeUsers/hankeUser';
-import useFocusToElement from '../../../common/hooks/useFocusToElement';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
+import useFocusToElement from '../../../common/hooks/useFocusToElement';
 
 type CustomAccordionProps = {
   hanke: HankeData;
