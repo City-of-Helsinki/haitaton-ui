@@ -17,8 +17,14 @@ const languageLabels = {
 };
 
 const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
-  const { HOME, PUBLIC_HANKKEET, PUBLIC_HANKKEET_MAP, HANKEPORTFOLIO, NEW_HANKE } =
-    useLocalizedRoutes();
+  const {
+    HOME,
+    PUBLIC_HANKKEET,
+    PUBLIC_HANKKEET_MAP,
+    HANKEPORTFOLIO,
+    NEW_HANKE,
+    JOHTOSELVITYSHAKEMUS,
+  } = useLocalizedRoutes();
   const { t, i18n } = useTranslation();
   const { data: user } = useUser();
   const isAuthenticated = Boolean(user?.profile);
@@ -31,6 +37,10 @@ const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
   const isNewHankePath = useMatch({
     path: NEW_HANKE.path,
     end: false,
+  });
+  const isCableReportApplicationPath = useMatch({
+    path: JOHTOSELVITYSHAKEMUS.path,
+    end: true,
   });
   const isHankePortfolioPath = useMatch({
     path: HANKEPORTFOLIO.path,
@@ -82,6 +92,14 @@ const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
           ) : (
             <></>
           )}
+          <Navigation.Item
+            as={NavLink}
+            to={JOHTOSELVITYSHAKEMUS.path}
+            active={Boolean(isCableReportApplicationPath)}
+            data-testid="cableReportApplicationLink"
+          >
+            {t('homepage:johtotietoselvitys:title')}
+          </Navigation.Item>
           <Navigation.Item
             as={NavLink}
             to={HANKEPORTFOLIO.path}

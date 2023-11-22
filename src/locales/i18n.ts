@@ -14,6 +14,7 @@ i18n
       fi,
       sv,
     },
+    supportedLngs: ['fi', 'sv', 'en'],
     detection: {
       order: ['path', 'localStorage', 'sessionStorage'],
       excludeCacheFor: ['login'],

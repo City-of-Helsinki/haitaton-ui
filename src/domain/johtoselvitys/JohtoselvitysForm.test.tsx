@@ -1,6 +1,6 @@
 import React from 'react';
 import { rest } from 'msw';
-import { render, cleanup, fireEvent, screen } from '../../testUtils/render';
+import { render, cleanup, fireEvent, screen, waitFor, act, within } from '../../testUtils/render';
 import Johtoselvitys from '../../pages/Johtoselvitys';
 import JohtoselvitysContainer from './JohtoselvitysContainer';
 import { waitForLoadingToFinish } from '../../testUtils/helperFunctions';
@@ -10,6 +10,13 @@ import hankkeet from '../mocks/data/hankkeet-data';
 import applications from '../mocks/data/hakemukset-data';
 import { JohtoselvitysFormValues } from './types';
 import * as applicationApi from '../application/utils';
+import api from '../api/api';
+import {
+  Application,
+  ApplicationAttachmentMetadata,
+  AttachmentType,
+} from '../application/types/application';
+import * as applicationAttachmentsApi from '../application/attachments';
 
 afterEach(cleanup);
 
@@ -19,6 +26,8 @@ interface DateOptions {
   start?: string;
   end?: string;
 }
+
+const DUMMY_AREAS = applications[0].applicationData.areas;
 
 const application: JohtoselvitysFormValues = {
   id: null,
@@ -50,28 +59,7 @@ const application: JohtoselvitysFormValues = {
         },
       ],
     },
-    areas: [
-      {
-        geometry: {
-          type: 'Polygon',
-          crs: {
-            type: 'name',
-            properties: {
-              name: 'urn:ogc:def:crs:EPSG::3879',
-            },
-          },
-          coordinates: [
-            [
-              [25498583.87, 6679281.28],
-              [25498584.13, 6679314.07],
-              [25498573.17, 6679313.38],
-              [25498571.91, 6679281.46],
-              [25498583.87, 6679281.28],
-            ],
-          ],
-        },
-      },
-    ],
+    areas: DUMMY_AREAS,
     startTime: null,
     endTime: null,
     identificationNumber: 'HAI-123',
@@ -111,6 +99,15 @@ const application: JohtoselvitysFormValues = {
     propertyConnectivity: false,
     rockExcavation: null,
   },
+};
+
+const ATTACHMENT_META: ApplicationAttachmentMetadata = {
+  id: '808d3b46-d813-4b19-b437-2b3873e77cd9',
+  fileName: 'testFile.pdf',
+  createdByUserId: 'testUser',
+  createdAt: '2023-11-14 09:45:40.867232',
+  applicationId: 1,
+  attachmentType: 'LIIKENNEJARJESTELY',
 };
 
 function fillBasicInformation() {
@@ -605,34 +602,177 @@ test('Validation error is shown if no work is about checkbox is selected', async
   expect(screen.queryByText('Kenttä on pakollinen')).toBeInTheDocument();
 });
 
-test('Form is saved when contacts are filled with orderer information', async () => {
+const testFormSaving = async (inputApplication: Application, fillInfoButton: string) => {
   const saveApplication = jest.spyOn(applicationApi, 'saveApplication');
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  const { user } = render(<JohtoselvitysContainer application={inputApplication} />);
 
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
-  await user.click(
-    screen.getByTestId('applicationData.customerWithContacts.customer.fillOwnInfoButton'),
-  );
+  await user.click(screen.getByTestId(fillInfoButton));
   await user.click(screen.getByRole('button', { name: /edellinen/i }));
 
   expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
   expect(saveApplication).toHaveBeenCalledTimes(1);
 
   saveApplication.mockRestore();
+};
+
+test('Form is saved when contacts are filled with orderer information', async () => {
+  await testFormSaving(
+    applications[0],
+    'applicationData.customerWithContacts.customer.fillOwnInfoButton',
+  );
 });
 
 test('Form is saved when sub contacts are filled with orderer information', async () => {
-  const saveApplication = jest.spyOn(applicationApi, 'saveApplication');
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
-
-  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
-  await user.click(
-    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.fillOwnInfoButton'),
+  await testFormSaving(
+    applications[0],
+    'applicationData.contractorWithContacts.contacts.0.fillOwnInfoButton',
   );
-  await user.click(screen.getByRole('button', { name: /edellinen/i }));
+});
 
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
-  expect(saveApplication).toHaveBeenCalledTimes(1);
+async function uploadAttachmentMock({
+  applicationId,
+  attachmentType,
+  file,
+  abortSignal,
+}: {
+  applicationId: number;
+  attachmentType: AttachmentType;
+  file: File;
+  abortSignal?: AbortSignal;
+}) {
+  const { data } = await api.post<ApplicationAttachmentMetadata>(
+    `/hakemukset/${applicationId}/liitteet?tyyppi=${attachmentType}`,
+    { liite: file },
+    {
+      signal: abortSignal,
+    },
+  );
+  return data;
+}
 
-  saveApplication.mockRestore();
+function initFileGetResponse(response: ApplicationAttachmentMetadata[]) {
+  server.use(
+    rest.get('/api/hakemukset/:id/liitteet', async (req, res, ctx) => {
+      return res(ctx.status(200), ctx.json(response));
+    }),
+  );
+}
+
+test('Should be able to upload attachments', async () => {
+  const uploadSpy = jest
+    .spyOn(applicationAttachmentsApi, 'uploadAttachment')
+    .mockImplementation(uploadAttachmentMock);
+  initFileGetResponse([]);
+  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  await user.click(screen.getByRole('button', { name: /liitteet/i }));
+  const fileUpload = screen.getByLabelText('Raahaa tiedostot tänne');
+  user.upload(fileUpload, [
+    new File(['test-a'], 'test-file-a.pdf', { type: 'application/pdf' }),
+    new File(['test-b'], 'test-file-b.pdf', { type: 'application/pdf' }),
+  ]);
+
+  await screen.findAllByText('Tallennetaan tiedostoja', undefined, { timeout: 5000 });
+  await act(async () => {
+    waitFor(() => expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0));
+  });
+  await waitFor(
+    () => {
+      expect(screen.queryByText('2/2 tiedosto(a) tallennettu')).toBeInTheDocument();
+    },
+    { timeout: 5000 },
+  );
+  expect(uploadSpy).toHaveBeenCalledTimes(2);
+});
+
+test('Should be able to delete attachments', async () => {
+  const fileName = 'test-file-a.png';
+  initFileGetResponse([
+    {
+      id: '8a77c842-3d6b-42df-8ed0-7d1493a2c012',
+      fileName,
+      createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800286',
+      createdAt: '2023-10-05T13:51:42.995157Z',
+      applicationId: 1,
+      attachmentType: 'MUU',
+    },
+  ]);
+  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  await user.click(screen.getByRole('button', { name: /liitteet/i }));
+
+  const { getAllByRole } = within(screen.getByTestId('file-upload-list'));
+  const fileListItems = getAllByRole('listitem');
+  const fileItem = fileListItems.find((i) => i.innerHTML.includes(fileName));
+  const { getByRole } = within(fileItem!);
+  await user.click(getByRole('button', { name: 'Poista' }));
+  const { getByRole: getByRoleInDialog, getByText: getByTextInDialog } = within(
+    await screen.findByRole('dialog'),
+  );
+
+  expect(
+    getByTextInDialog(`Haluatko varmasti poistaa liitetiedoston ${fileName}`),
+  ).toBeInTheDocument();
+  await user.click(getByRoleInDialog('button', { name: 'Poista' }));
+  expect(screen.getByText(`Liitetiedosto ${fileName} poistettu`)).toBeInTheDocument();
+});
+
+test('Should list existing attachments in the attachments page and in summary page', async () => {
+  const fileNameA = 'test-file-a.png';
+  const fileNameB = 'test-file-b.pdf';
+  initFileGetResponse([
+    {
+      id: '8a77c842-3d6b-42df-8ed0-7d1493a2c016',
+      fileName: fileNameA,
+      createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800286',
+      createdAt: new Date().toISOString(),
+      applicationId: 1,
+      attachmentType: 'MUU',
+    },
+    {
+      id: '8a77c842-3d6b-42df-8ed0-7d1493a2c017',
+      fileName: fileNameB,
+      createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800286',
+      createdAt: '2023-10-07T13:51:42.995157Z',
+      applicationId: 1,
+      attachmentType: 'MUU',
+    },
+  ]);
+  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  await user.click(screen.getByRole('button', { name: /liitteet/i }));
+
+  const { getAllByRole } = within(screen.getByTestId('file-upload-list'));
+  const fileListItems = getAllByRole('listitem');
+  expect(fileListItems.length).toBe(2);
+
+  const fileItemA = fileListItems.find((i) => i.innerHTML.includes(fileNameA));
+  const { getByText: getByTextInA } = within(fileItemA!);
+  expect(getByTextInA('Lisätty tänään')).toBeInTheDocument();
+
+  const fileItemB = fileListItems.find((i) => i.innerHTML.includes(fileNameB));
+  const { getByText: getByTextInB } = within(fileItemB!);
+  expect(getByTextInB('Lisätty 7.10.2023')).toBeInTheDocument();
+
+  await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+
+  expect(screen.getByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+  expect(screen.getByText(fileNameA)).toBeInTheDocument();
+  expect(screen.getByText(fileNameB)).toBeInTheDocument();
+});
+
+test('Summary should show attachments and they are downloadable', async () => {
+  const fetchContentMock = jest
+    .spyOn(applicationAttachmentsApi, 'getAttachmentFile')
+    .mockImplementation(jest.fn());
+
+  const testApplication = applications[0];
+  initFileGetResponse([ATTACHMENT_META]);
+
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
+
+  await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+  expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+
+  await user.click(screen.getByText(ATTACHMENT_META.fileName));
+
+  expect(fetchContentMock).toHaveBeenCalledWith(testApplication.id, ATTACHMENT_META.id);
 });

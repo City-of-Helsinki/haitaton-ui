@@ -126,7 +126,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "yarn run type-check && yarn testCI"
+      "pre-push": "yarn run type-check && if test \"$WSL\" = \"true\" ; then yarn testCI --runInBand ; else yarn testCI ; fi"
     }
   },
   "lint-staged": {

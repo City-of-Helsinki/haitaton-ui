@@ -9,7 +9,7 @@ import {
   useAsyncDebounce,
   useSortBy,
 } from 'react-table';
-import { useAccordion, Card, Select, TextInput, Button, Pagination } from 'hds-react';
+import { useAccordion, Card, Select, Button, Pagination, SearchInput } from 'hds-react';
 import {
   IconAngleDown,
   IconAngleUp,
@@ -39,13 +39,18 @@ import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
 import useHankeViewPath from '../hooks/useHankeViewPath';
 import { useNavigateToApplicationList } from '../hooks/useNavigateToApplicationList';
 import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
-import UserRightsCheck from '../hankeUsers/UserRightsCheck';
+import { CheckRightsByUser } from '../hankeUsers/UserRightsCheck';
+import { SignedInUser, SignedInUserByHanke } from '../hankeUsers/hankeUser';
 
 type CustomAccordionProps = {
   hanke: HankeData;
+  signedInUser: SignedInUser;
 };
 
-const CustomAccordion: React.FC<React.PropsWithChildren<CustomAccordionProps>> = ({ hanke }) => {
+const CustomAccordion: React.FC<React.PropsWithChildren<CustomAccordionProps>> = ({
+  hanke,
+  signedInUser,
+}) => {
   const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
   const hankeViewPath = useHankeViewPath(hanke?.hankeTunnus);
   const navigateToApplications = useNavigateToApplicationList(hanke?.hankeTunnus);
@@ -115,7 +120,7 @@ const CustomAccordion: React.FC<React.PropsWithChildren<CustomAccordionProps>> =
               <IconEye aria-hidden />
             </Link>
             <FeatureFlags flags={['hanke']}>
-              <UserRightsCheck requiredRight="EDIT" hankeTunnus={hanke.hankeTunnus}>
+              <CheckRightsByUser requiredRight="EDIT" signedInUser={signedInUser}>
                 <Link
                   to={getEditHankePath({ hankeTunnus: hanke.hankeTunnus })}
                   aria-label={
@@ -127,7 +132,7 @@ const CustomAccordion: React.FC<React.PropsWithChildren<CustomAccordionProps>> =
                 >
                   <IconPen aria-hidden />
                 </Link>
-              </UserRightsCheck>
+              </CheckRightsByUser>
             </FeatureFlags>
           </div>
           <button type="button" className={styles.iconWrapper}>
@@ -233,10 +238,14 @@ export type Column = {
 };
 
 export interface PagedRowsProps {
-  data: Array<HankeData>;
+  hankkeet: Array<HankeData>;
+  signedInUserByHanke: SignedInUserByHanke;
 }
 
-const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({ data }) => {
+const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
+  hankkeet,
+  signedInUserByHanke,
+}) => {
   const {
     hankeFilterStartDate,
     hankeFilterEndDate,
@@ -346,7 +355,7 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
   } = useTable(
     {
       columns,
-      data,
+      data: hankkeet,
       initialState: {
         pageSize: 10,
         sortBy: useMemo(() => [{ id: 'alkuPvm', desc: false }], []),
@@ -476,12 +485,13 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
             aria-label={t('hankePortfolio:filters')}
             aria-describedby={t('hankePortfolio:filtersInfoText')}
           >
-            <TextInput
+            <SearchInput
               className={styles.hankeSearch}
-              id="searchHanke"
-              value={hankeSearchValue}
-              onChange={(e) => setHankeSearchValue(e.target.value)}
               label={t('hankePortfolio:search')}
+              placeholder={t('hankePortfolio:searchPlaceholder')}
+              value={hankeSearchValue}
+              onChange={setHankeSearchValue}
+              onSubmit={setHankeSearchValue}
             />
             <FeatureFlags flags={['hanke']}>
               <div className={styles.dateRange}>
@@ -571,10 +581,12 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
             </Text>
 
             {rows.length > 0 &&
-              page.map((row) => {
+              page.map(({ original: hanke }) => {
+                const { hankeTunnus } = hanke;
+                const signedInUser = signedInUserByHanke[hankeTunnus];
                 return (
-                  <div key={row.original.hankeTunnus}>
-                    <CustomAccordion hanke={row.original} />
+                  <div key={hankeTunnus}>
+                    <CustomAccordion hanke={hanke} signedInUser={signedInUser} />
                   </div>
                 );
               })}
@@ -615,12 +627,16 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
 
 type Props = {
   hankkeet: HankeData[];
+  signedInUserByHanke: SignedInUserByHanke;
 };
 
-const HankePortfolio: React.FC<React.PropsWithChildren<Props>> = ({ hankkeet }) => {
+const HankePortfolio: React.FC<React.PropsWithChildren<Props>> = ({
+  hankkeet,
+  signedInUserByHanke,
+}) => {
   return (
     <div className={styles.hankesalkkuContainer}>
-      <PaginatedPortfolio data={hankkeet} />
+      <PaginatedPortfolio hankkeet={hankkeet} signedInUserByHanke={signedInUserByHanke} />
     </div>
   );
 };

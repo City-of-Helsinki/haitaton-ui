@@ -487,8 +487,7 @@
       "organisaatio": "Organisation",
       "omaOrganisaatio": "Lägg till den egna organisationen",
       "insertOmaOrganisaatio": "Skriv in den egna organisationen",
-      "rights": "Din användarrätt för projektet",
-      "perustaja": "Grundare"
+      "rights": "Din användarrätt för projektet"
     },
     "toolTips": {
       "tipOpenLabel": "Anvisningen",
@@ -555,7 +554,7 @@
       "giveDates": "Välj datum för arbetet, för att sedan rita in områden att utredas, på kartan."
     },
     "liitteet": {
-      "instructions": "Lägg bilagor som arbetsplan till ansökan. Bilagorna sparas på blanketten bland tryckknapparna för sidbyte och att spara i nedre kanten."
+      "instructions": "Lägg bilagor som arbetsplan till ansökan."
     }
   },
   "hakemus": {

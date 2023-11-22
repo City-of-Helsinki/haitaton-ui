@@ -25,7 +25,7 @@ const DrawProvider: React.FC<React.PropsWithChildren<Props>> = ({ children, sour
         },
       },
     }),
-    [state, source, dispatch]
+    [state, source, dispatch],
   );
 
   return <DrawContext.Provider value={contextValue}>{children}</DrawContext.Provider>;
