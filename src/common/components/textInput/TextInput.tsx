@@ -19,6 +19,7 @@ type PropTypes = {
   shouldUnregister?: boolean;
   className?: string;
   autoComplete?: string;
+  defaultValue?: string;
 };
 
 const TextInput: React.FC<React.PropsWithChildren<PropTypes>> = ({
@@ -34,6 +35,7 @@ const TextInput: React.FC<React.PropsWithChildren<PropTypes>> = ({
   shouldUnregister,
   className,
   autoComplete,
+  defaultValue = '',
 }) => {
   const { t } = useTranslation();
   const { control } = useFormContext();
@@ -42,7 +44,7 @@ const TextInput: React.FC<React.PropsWithChildren<PropTypes>> = ({
     <Controller
       name={name}
       control={control}
-      defaultValue=""
+      defaultValue={defaultValue}
       shouldUnregister={shouldUnregister}
       render={({ field: { value, onBlur, onChange, ref }, fieldState: { error } }) => (
         <HdsTextInput

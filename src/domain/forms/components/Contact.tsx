@@ -2,16 +2,17 @@ import React, { useCallback, useEffect } from 'react';
 import { Flex } from '@chakra-ui/react';
 import { Button, IconCross, IconPlusCircle, Tab, TabList, TabPanel, Tabs } from 'hds-react';
 import { useTranslation } from 'react-i18next';
-import { useFieldArray, UseFieldArrayRemove } from 'react-hook-form';
+import { UseFieldArrayRemove } from 'react-hook-form';
 import styles from './Contact.module.scss';
 import useSelectableTabs from '../../../common/hooks/useSelectableTabs';
+import useFieldArrayWithStateUpdate from '../../../common/hooks/useFieldArrayWithStateUpdate';
 
 interface Props<T> {
   contactType: T;
   index?: number;
   onRemoveContact?: UseFieldArrayRemove;
   renderSubContact?: (subContactIndex: number, remove: UseFieldArrayRemove) => JSX.Element;
-  showInitialEmpty?: boolean;
+  subContactTemplate?: boolean;
   subContactPath: string;
   emptySubContact: unknown;
   children: React.ReactNode;
@@ -22,7 +23,7 @@ const Contact = <T,>({
   index,
   onRemoveContact,
   renderSubContact,
-  showInitialEmpty = false,
+  subContactTemplate = false,
   subContactPath,
   emptySubContact,
   children,
@@ -33,7 +34,7 @@ const Contact = <T,>({
     fields: subContactFields,
     append: appendSubContact,
     remove: removeSubContact,
-  } = useFieldArray({
+  } = useFieldArrayWithStateUpdate({
     name: subContactPath,
   });
 
@@ -42,10 +43,10 @@ const Contact = <T,>({
   }, [appendSubContact, emptySubContact]);
 
   useEffect(() => {
-    if (subContactFields.length === 0 && showInitialEmpty) {
+    if (subContactFields.length === 0 && subContactTemplate) {
       addSubContact();
     }
-  }, [subContactFields, showInitialEmpty, addSubContact]);
+  }, [subContactFields, subContactTemplate, addSubContact]);
 
   const renderSubContacts = subContactFields.length > 0 && renderSubContact;
   const { tabRefs } = useSelectableTabs(subContactFields.length, { selectLastTabOnChange: true });

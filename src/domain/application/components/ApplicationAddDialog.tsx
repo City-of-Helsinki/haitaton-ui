@@ -30,7 +30,7 @@ const ApplicationAddDialog: React.FC<Props> = ({ isOpen, onClose, hanke }) => {
   ];
 
   const [selectedApplicationType, setSelectedApplicationType] = useState<ApplicationType | null>(
-    null
+    null,
   );
 
   function handleApplicationTypeChange(value: Option) {

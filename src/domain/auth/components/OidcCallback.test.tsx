@@ -27,11 +27,12 @@ describe('<OidcCallback />', () => {
   it('as a user I want to see an generic error message about failed authentication', async () => {
     jest.spyOn(authService, 'endLogin').mockRejectedValue(new Error('foobar'));
 
-    const { queryByText } = getWrapper();
+    const { queryByText, getByRole } = getWrapper();
 
     await waitFor(() =>
       expect(queryByText('Kirjautumisessa tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument(),
     );
+    expect(getByRole('link', { name: 'etusivulle.' })).toHaveAttribute('href', '/fi/');
   });
 
   it('as a user I want to see an error message about incorrect device time, because only I can fix it', async () => {

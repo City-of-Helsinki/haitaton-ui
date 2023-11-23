@@ -201,7 +201,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
                   <div className={styles.linkboxContainer}>
                     <Linkbox
                       linkboxAriaLabel={`${t('common:components:linkbox:linkbox')}: ${t(
-                        `homepage:${item.key}:actionText`
+                        `homepage:${item.key}:actionText`,
                       )}`}
                       linkAriaLabel={t(`homepage:${item.key}:actionText`)}
                       href={item.actionLink}

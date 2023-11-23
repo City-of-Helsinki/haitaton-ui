@@ -7,7 +7,7 @@ const serverHandlers = handlers.concat(
   // Add this endpoint for tests
   rest.get('https://kartta.hel.fi/ws/geoserver/avoindata/wfs', async (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(addressData));
-  })
+  }),
 );
 
 const server = setupServer(...serverHandlers);

@@ -15,7 +15,7 @@ const isI18nYupMessage = (error: any): boolean => {
     // eslint-disable-next-line
     console.warn(
       `YUP translation key is not setup correctly. Fieldname: '${error.ref.name}'. Message: `,
-      error
+      error,
     );
   }
   return false;
@@ -24,7 +24,7 @@ const isI18nYupMessage = (error: any): boolean => {
 export const getInputErrorText = (
   t: FormatFunction,
   // eslint-disable-next-line
-  error: any
+  error: any,
 ): string | undefined => {
   if (isI18nYupMessage(error)) {
     return t(`form:validations:${error.message.key}`, error.message.values);
