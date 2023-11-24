@@ -35,13 +35,13 @@ import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
 import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotification';
 import Container from '../../../common/components/container/Container';
-import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
 import useHankeViewPath from '../hooks/useHankeViewPath';
 import { useNavigateToApplicationList } from '../hooks/useNavigateToApplicationList';
 import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
 import { CheckRightsByUser } from '../hankeUsers/UserRightsCheck';
 import { SignedInUser, SignedInUserByHanke } from '../hankeUsers/hankeUser';
 import useFocusToElement from '../../../common/hooks/useFocusToElement';
+import MainHeading from '../../../common/components/mainHeading/MainHeading';
 
 type CustomAccordionProps = {
   hanke: HankeData;
@@ -474,17 +474,9 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
     <>
       <div className={styles.headerContainer}>
         <Container>
-          <Text
-            tag="h1"
-            data-testid="HankePortfolioPageHeader"
-            styleAs="h1"
-            spacingBottom="s"
-            weight="bold"
-            id={SKIP_TO_ELEMENT_ID}
-            tabIndex={-1}
-          >
+          <MainHeading data-testid="HankePortfolioPageHeader" spacingBottom="s">
             {t('hankePortfolio:pageHeader')}
-          </Text>
+          </MainHeading>
 
           <div
             className={styles.filters}

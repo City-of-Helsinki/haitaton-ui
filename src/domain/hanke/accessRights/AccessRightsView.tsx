@@ -28,7 +28,6 @@ import { Trans, useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
 import { Link } from 'react-router-dom';
 import Text from '../../../common/components/text/Text';
-import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
 import styles from './AccessRightsView.module.scss';
 import { Language } from '../../../common/types/language';
 import { HankeUser, AccessRightLevel, SignedInUser } from '../hankeUsers/hankeUser';
@@ -36,6 +35,7 @@ import useHankeViewPath from '../hooks/useHankeViewPath';
 import { resendInvitation, updateHankeUsers } from '../hankeUsers/hankeUsersApi';
 import Container from '../../../common/components/container/Container';
 import UserCard from './UserCard';
+import MainHeading from '../../../common/components/mainHeading/MainHeading';
 
 function sortCaseInsensitive(rowOneColumn: string, rowTwoColumn: string) {
   const rowOneColUpperCase = rowOneColumn.toUpperCase();
@@ -293,16 +293,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
               {hankeName} ({hankeTunnus})
             </Text>
           </Link>
-          <Text
-            tag="h1"
-            styleAs="h1"
-            weight="bold"
-            spacingBottom="l"
-            id={SKIP_TO_ELEMENT_ID}
-            tabIndex={-1}
-          >
-            {t('hankeUsers:manageRights')}
-          </Text>
+          <MainHeading spacingBottom="l">{t('hankeUsers:manageRights')}</MainHeading>
         </Container>
       </header>
 

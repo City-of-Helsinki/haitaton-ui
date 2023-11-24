@@ -6,7 +6,7 @@ import useLocale from '../../common/hooks/useLocale';
 import Text from '../../common/components/text/Text';
 import { createStepReducer } from './formStepReducer';
 import { Action, ACTION_TYPE, StepperStep } from './types';
-import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
+import MainHeading from '../../common/components/mainHeading/MainHeading';
 
 function LoadingIndicator({ loadingText }: { loadingText?: string }) {
   return (
@@ -118,9 +118,7 @@ const MultipageForm: React.FC<Props> = ({
 
   return (
     <form className={styles.formContainer} onSubmit={onSubmit}>
-      <Text tag="h1" styleAs="h1" weight="bold" id={SKIP_TO_ELEMENT_ID} tabIndex={-1}>
-        {heading}
-      </Text>
+      <MainHeading>{heading}</MainHeading>
 
       {subHeading && (
         <Text tag="h2" styleAs="h4" spacingBottom="m">
