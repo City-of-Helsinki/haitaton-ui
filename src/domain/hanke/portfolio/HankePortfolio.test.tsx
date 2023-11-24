@@ -3,7 +3,7 @@
 import React from 'react';
 import { cleanup } from '@testing-library/react';
 import HankePortfolioComponent from './HankePortfolioComponent';
-import { render, screen, waitFor } from '../../../testUtils/render';
+import { render, screen, waitFor, within } from '../../../testUtils/render';
 import hankeList from '../../mocks/hankeList';
 import { changeFilterDate } from '../../../testUtils/helperFunctions';
 import { USER_VIEW, userDataByHanke } from '../../mocks/signedInUser';
@@ -17,6 +17,8 @@ import HankePortfolioContainer from './HankePortfolioContainer';
 const START_DATE_LABEL = 'Ajanjakson alku';
 const END_DATE_LABEL = 'Ajanjakson loppu';
 const SEARCH_PLACEHOLDER = 'Esim. hankkeen nimi tai tunnus';
+const EMPTY_HANKE_LIST_TEXT =
+  'Hankelistasi on tyhjä, sillä antamillasi hakuehdoilla ei löytynyt yhtään hanketta tai sinulla ei vielä ole hankkeita.';
 
 afterEach(cleanup);
 
@@ -58,9 +60,7 @@ describe('HankePortfolioComponent', () => {
       expect(screen.getByText('0 hakutulosta'));
     });
     expect(screen.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
-    expect(
-      screen.queryByText('Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta'),
-    ).toBeInTheDocument();
+    expect(screen.queryByText(EMPTY_HANKE_LIST_TEXT)).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /tyhjennä hakuehdot/i }));
     await waitFor(() => {
@@ -80,9 +80,7 @@ describe('HankePortfolioComponent', () => {
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('1');
     changeFilterDate(START_DATE_LABEL, renderedComponent, '11.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
-    expect(
-      screen.queryByText('Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta'),
-    ).toBeInTheDocument();
+    expect(screen.queryByText(EMPTY_HANKE_LIST_TEXT)).toBeInTheDocument();
     changeFilterDate(START_DATE_LABEL, renderedComponent, null);
   });
 
@@ -93,9 +91,7 @@ describe('HankePortfolioComponent', () => {
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
     changeFilterDate(END_DATE_LABEL, renderedComponent, '01.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
-    expect(
-      screen.queryByText('Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta'),
-    ).toBeInTheDocument();
+    expect(screen.queryByText(EMPTY_HANKE_LIST_TEXT)).toBeInTheDocument();
     changeFilterDate(END_DATE_LABEL, renderedComponent, '05.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
     changeFilterDate(END_DATE_LABEL, renderedComponent, '11.10.2022');
@@ -115,9 +111,7 @@ describe('HankePortfolioComponent', () => {
     await renderedComponent.user.click(renderedComponent.getByText('Sähkö'));
     renderedComponent.getByText('Hankevaiheet').click();
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
-    expect(
-      screen.queryByText('Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta'),
-    ).toBeInTheDocument();
+    expect(screen.queryByText(EMPTY_HANKE_LIST_TEXT)).toBeInTheDocument();
     await renderedComponent.user.click(
       renderedComponent.getByRole('button', { name: 'Työn tyyppi' }),
     );
@@ -132,10 +126,14 @@ describe('HankePortfolioComponent', () => {
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
   });
 
-  test('Having no projects renders correct text', () => {
-    render(<HankePortfolioComponent hankkeet={[]} signedInUserByHanke={{}} />);
+  test('Having no projects renders correct text and link to new hanke works', async () => {
+    const { user } = render(<HankePortfolioComponent hankkeet={[]} signedInUserByHanke={{}} />);
 
-    expect(screen.queryByText('Hankesalkussasi ei ole hankkeita')).toBeInTheDocument();
+    expect(screen.queryByText(EMPTY_HANKE_LIST_TEXT)).toBeInTheDocument();
+
+    const { getByRole } = within(screen.getByText('Tarkista hakuehdot', { exact: false }));
+    await user.click(getByRole('link', { name: 'luo uusi hanke' }));
+    expect(window.location.pathname).toBe('/fi/hanke/uusi');
   });
 
   test('Should render edit hanke links for hankkeet that user has edit rights', async () => {

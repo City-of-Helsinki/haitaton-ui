@@ -737,8 +737,6 @@
     "searchHelperText": "Search by project name or identifier",
     "searchResults": "{{count}} result",
     "searchResults_plural": "{{count}} results",
-    "noneFound": "No projects were found in the search.",
-    "noneExist": "There are no projects in your project portfolio.",
     "hankevaiheet": "Project phases",
     "hankevaiheetHelperText": "Select the project phases you want to view",
     "startDate": "The beginning of the period",

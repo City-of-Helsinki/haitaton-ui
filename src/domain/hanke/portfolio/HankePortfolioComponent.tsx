@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import {
   useFilters,
   useTable,
@@ -41,6 +41,8 @@ import { useNavigateToApplicationList } from '../hooks/useNavigateToApplicationL
 import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
 import { CheckRightsByUser } from '../hankeUsers/UserRightsCheck';
 import { SignedInUser, SignedInUserByHanke } from '../hankeUsers/hankeUser';
+import HDSLink from '../../../common/components/Link/Link';
+import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 
 type CustomAccordionProps = {
   hanke: HankeData;
@@ -246,6 +248,8 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
   hankkeet,
   signedInUserByHanke,
 }) => {
+  const { NEW_HANKE } = useLocalizedRoutes();
+
   const {
     hankeFilterStartDate,
     hankeFilterEndDate,
@@ -351,7 +355,6 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
     setFilter,
     setGlobalFilter,
     rows,
-    preFilteredRows,
   } = useTable(
     {
       columns,
@@ -590,19 +593,24 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
                   </div>
                 );
               })}
-            {rows.length === 0 && preFilteredRows.length > 0 && (
+            {rows.length === 0 && (
               <div className={styles.notFoundContainer}>
                 <IconSearch size="l" />
-                <Text tag="p" styleAs="h3" weight="bold" spacingTop="m">
-                  {t('hankePortfolio:noneFound')}
-                </Text>
-              </div>
-            )}
-            {preFilteredRows.length === 0 && (
-              <div className={styles.notFoundContainer}>
-                <Text tag="p" styleAs="h3" weight="bold" spacingTop="m">
-                  {t('hankePortfolio:noneExist')}
-                </Text>
+                <div>
+                  <Trans i18nKey="hankePortfolio:noneFound">
+                    <Text tag="p" spacingTop="m" spacingBottom="s" className="heading-m">
+                      Hankelistasi on tyhjä, sillä antamillasi hakuehdoilla ei löytynyt yhtään
+                      hanketta tai sinulla ei vielä ole hankkeita.
+                    </Text>
+                    <Text tag="p" className="heading-m">
+                      Tarkista hakuehdot tai{' '}
+                      <HDSLink href={NEW_HANKE.path} className="heading-m">
+                        luo uusi hanke
+                      </HDSLink>
+                      .
+                    </Text>
+                  </Trans>
+                </div>
               </div>
             )}
 
