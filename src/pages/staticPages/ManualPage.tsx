@@ -5,7 +5,7 @@ import PageMeta from '../components/PageMeta';
 import { useLocalizedRoutes } from '../../common/hooks/useLocalizedRoutes';
 import Container from '../../common/components/container/Container';
 import Text from '../../common/components/text/Text';
-import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
+import MainHeading from '../../common/components/mainHeading/MainHeading';
 
 const ManualPage: React.FC = () => {
   const { MANUAL } = useLocalizedRoutes();
@@ -14,17 +14,9 @@ const ManualPage: React.FC = () => {
   return (
     <Container>
       <PageMeta routeData={MANUAL} />
-      <Text
-        tag="h1"
-        styleAs="h1"
-        spacingTop="l"
-        spacingBottom="xl"
-        weight="bold"
-        id={SKIP_TO_ELEMENT_ID}
-        tabIndex={-1}
-      >
+      <MainHeading spacingTop="l" spacingBottom="xl">
         {t('staticPages:manualPage:title')}
-      </Text>
+      </MainHeading>
 
       <HdsContainer style={{ padding: '2rem', backgroundColor: 'white' }}>
         <Text tag="p" spacingBottom="s">
