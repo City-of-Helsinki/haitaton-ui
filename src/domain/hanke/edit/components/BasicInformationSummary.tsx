@@ -7,8 +7,7 @@ import {
   SectionItemTitle,
 } from '../../../forms/components/FormSummarySection';
 import { HankeDataDraft } from '../../../types/hanke';
-import { FORMFIELD, HankeDataFormState } from '../types';
-import { getAreasMaxEndDate, getAreasMinStartDate } from '../utils';
+import { HankeDataFormState } from '../types';
 
 const SectionData: React.FC<{ title: string; content: string | undefined }> = ({
   title,
@@ -32,17 +31,6 @@ type Props = {
 const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
   const { t } = useTranslation();
 
-  const hankeAreas = formData[FORMFIELD.HANKEALUEET];
-  const minAreaStartDate = getAreasMinStartDate(hankeAreas);
-  const maxAreaEndDate = getAreasMaxEndDate(hankeAreas);
-  let startDate;
-  let endDate;
-  try {
-    startDate = minAreaStartDate && formatToFinnishDate(minAreaStartDate.toISOString());
-    endDate = maxAreaEndDate && formatToFinnishDate(maxAreaEndDate.toISOString());
-    // eslint-disable-next-line no-empty
-  } catch (error) {}
-
   return (
     <FormSummarySection>
       <SectionData title={t('hankeForm:labels:nimi')} content={formData.nimi} />
@@ -57,10 +45,16 @@ const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
         />
       )}
       {formData.alkuPvm && (
-        <SectionData title={t('hankeForm:labels:alkuPvm')} content={startDate} />
+        <SectionData
+          title={t('hankeForm:labels:alkuPvm')}
+          content={formatToFinnishDate(formData.alkuPvm)}
+        />
       )}
       {formData.loppuPvm && (
-        <SectionData title={t('hankeForm:labels:loppuPvm')} content={endDate} />
+        <SectionData
+          title={t('hankeForm:labels:loppuPvm')}
+          content={formatToFinnishDate(formData.loppuPvm)}
+        />
       )}
       {formData.vaihe && (
         <SectionData
