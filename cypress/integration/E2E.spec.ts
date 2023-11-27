@@ -75,6 +75,14 @@ const hankeMock: HankeDataDraft = {
       puhelinnumero: '12341234',
       tyyppi: 'YKSITYISHENKILO',
       ytunnus: 'tunnus',
+      alikontaktit: [
+        {
+          etunimi: 'Yrjö',
+          sukunimi: 'Yhteys',
+          email: 'yrjo.yhteys@hankekatu.foo',
+          puhelinnumero: '12341234',
+        },
+      ],
     },
   ],
 };

@@ -108,7 +108,7 @@ export interface HankeContact {
   email: string;
   puhelinnumero: string;
   ytunnus: string | null;
-  alikontaktit?: HankeSubContact[];
+  alikontaktit: HankeSubContact[];
 }
 
 export type HankeMuuTaho = {
@@ -118,7 +118,7 @@ export type HankeMuuTaho = {
   osasto: string;
   email: string;
   puhelinnumero?: string;
-  alikontaktit?: HankeSubContact[];
+  alikontaktit: HankeSubContact[];
 };
 
 export type HankeContacts = Array<(HankeContact | HankeMuuTaho)[] | undefined>;
