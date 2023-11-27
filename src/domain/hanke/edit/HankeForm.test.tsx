@@ -254,7 +254,7 @@ describe('HankeForm', () => {
     await user.click(screen.getByText(/lisää rakennuttaja/i)); // add second rakennuttaja
     expect(screen.getAllByText('Rakennuttaja')).toHaveLength(2);
     await user.click(screen.getAllByText(/poista rakennuttaja/i)[1]); // remove second rakennuttaja
-    await user.click(screen.getByText(/poista rakennuttaja/i)); // remove first (and last) rakennuttajaqq
+    await user.click(screen.getByText(/poista rakennuttaja/i)); // remove first (and last) rakennuttaja
     expect(screen.queryByText('Rakennuttaja')).not.toBeInTheDocument();
 
     // Check Other types are present and clickable

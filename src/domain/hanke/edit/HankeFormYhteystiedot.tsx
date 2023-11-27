@@ -270,7 +270,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
         language={locale}
         headingLevel={3}
         heading={t('form:yhteystiedot:titles:propertyDeveloperInfo')}
-        initiallyOpen={Array.isArray(rakennuttajat) && rakennuttajat.length > 0}
+        initiallyOpen={rakennuttajat.length > 0}
       >
         {rakennuttajat.map((item, index) => {
           return (
@@ -328,7 +328,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
         language={locale}
         headingLevel={3}
         heading={t('form:yhteystiedot:titles:implementerInfo')}
-        initiallyOpen={Array.isArray(toteuttajat) && toteuttajat.length > 0}
+        initiallyOpen={toteuttajat.length > 0}
       >
         {toteuttajat.map((item, index) => {
           return (
@@ -386,7 +386,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
         language={locale}
         headingLevel={3}
         heading={t('form:yhteystiedot:titles:otherInfo')}
-        initiallyOpen={Array.isArray(muutTahot) && muutTahot.length > 0}
+        initiallyOpen={muutTahot.length > 0}
       >
         {muutTahot.map((item, index) => {
           const fieldPath = `${FORMFIELD.MUUTTAHOT}.${index}`;
