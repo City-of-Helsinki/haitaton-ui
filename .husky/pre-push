@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+yarn run type-check && if test "$WSL" = "true" ; then yarn testCI --runInBand ; else yarn testCI ; fi
