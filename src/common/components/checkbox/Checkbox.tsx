@@ -26,7 +26,7 @@ const CheckboxComp: React.FC<React.PropsWithChildren<PropTypes>> = (props) => {
           label={label}
           {...field}
           value={field.value ? 'true' : 'false'}
-          checked={field.value ? true : false}
+          checked={field.value ?? false}
           disabled={disabled}
           data-testid={name}
         />
