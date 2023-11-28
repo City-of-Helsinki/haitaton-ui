@@ -189,4 +189,15 @@ describe('HankePortfolioContainer', () => {
       expect(screen.queryAllByTestId('hankeEditLink')).toHaveLength(0);
     });
   });
+
+  test('Should focus on first hanke card header when changing page', async () => {
+    initHankkeetResponse(hankkeet);
+
+    const { user } = render(<HankePortfolioContainer />);
+
+    await screen.findAllByTestId('hanke-card-header');
+    expect(screen.getAllByTestId('hanke-card-header')[0]).not.toHaveFocus();
+    await user.click(screen.getByRole('button', { name: 'Seuraava' }));
+    expect(screen.getAllByTestId('hanke-card-header')[0]).toHaveFocus();
+  });
 });

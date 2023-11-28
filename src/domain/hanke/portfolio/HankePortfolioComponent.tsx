@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { RefObject, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   useFilters,
@@ -41,16 +41,15 @@ import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
 import { CheckRightsByUser } from '../hankeUsers/UserRightsCheck';
 import { SignedInUser, SignedInUserByHanke } from '../hankeUsers/hankeUser';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
+import useFocusToElement from '../../../common/hooks/useFocusToElement';
 
 type CustomAccordionProps = {
   hanke: HankeData;
   signedInUser: SignedInUser;
+  headerRef: RefObject<HTMLDivElement> | null;
 };
 
-const CustomAccordion: React.FC<React.PropsWithChildren<CustomAccordionProps>> = ({
-  hanke,
-  signedInUser,
-}) => {
+const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, headerRef }) => {
   const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
   const hankeViewPath = useHankeViewPath(hanke?.hankeTunnus);
   const navigateToApplications = useNavigateToApplicationList(hanke?.hankeTunnus);
@@ -80,7 +79,12 @@ const CustomAccordion: React.FC<React.PropsWithChildren<CustomAccordionProps>> =
           className={clsx([styles.hankeCardHeader, styles.hankeCardFlexContainer])}
           {...buttonProps}
         >
-          <div className={clsx([styles.hankeCardFlexContainer, styles.flexWrap])}>
+          <div
+            className={clsx([styles.hankeCardFlexContainer, styles.flexWrap])}
+            ref={headerRef}
+            tabIndex={-1}
+            data-testid="hanke-card-header"
+          >
             <Text tag="p" styleAs="body-m">
               {hanke.hankeTunnus}
             </Text>
@@ -459,6 +463,8 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
     setIsFiltered(Boolean(globalFilter) || areFilters);
   }, [setIsFiltered, filters, globalFilter]);
 
+  const firstHankeCardRef = useFocusToElement<HTMLDivElement>(pageIndex);
+
   function handlePageChange(e: React.MouseEvent, index: number) {
     e.preventDefault();
     gotoPage(index);
@@ -573,13 +579,16 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
             </Text>
 
             {rows.length > 0 &&
-              page.map(({ original: hanke }) => {
+              page.map(({ original: hanke }, index) => {
                 const { hankeTunnus } = hanke;
                 const signedInUser = signedInUserByHanke[hankeTunnus];
                 return (
-                  <div key={hankeTunnus}>
-                    <CustomAccordion hanke={hanke} signedInUser={signedInUser} />
-                  </div>
+                  <CustomAccordion
+                    key={hankeTunnus}
+                    hanke={hanke}
+                    signedInUser={signedInUser}
+                    headerRef={index === 0 ? firstHankeCardRef : null}
+                  />
                 );
               })}
             {rows.length === 0 && preFilteredRows.length > 0 && (
