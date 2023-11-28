@@ -159,6 +159,22 @@ describe('HankePortfolioComponent', () => {
       ),
     ).toHaveLength(1);
   });
+
+  test('Should show generated state notification for hankkeet that are generated', async () => {
+    const generatedHanke = {
+      generated: true,
+      ...hankeList[0],
+    };
+    const editedHankeList = [generatedHanke, ...hankeList.slice(1)];
+    const userData = userDataByHanke(editedHankeList.map((h) => h.hankeTunnus));
+
+    render(<HankePortfolioComponent hankkeet={editedHankeList} signedInUserByHanke={userData} />);
+
+    expect(editedHankeList).toHaveLength(2);
+    expect(
+      screen.getAllByText('Tämä hanke on muodostettu johtoselvityksen perusteella.'),
+    ).toHaveLength(1);
+  });
 });
 
 describe('HankePortfolioContainer', () => {

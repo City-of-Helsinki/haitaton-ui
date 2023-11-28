@@ -34,6 +34,7 @@ import { Language } from '../../../common/types/language';
 import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
 import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotification';
+import HankeGeneratedStateNotification from '../edit/components/HankeGeneratedStateNotification';
 import Container from '../../../common/components/container/Container';
 import useHankeViewPath from '../hooks/useHankeViewPath';
 import { useNavigateToApplicationList } from '../hooks/useNavigateToApplicationList';
@@ -146,7 +147,11 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
           </button>
         </div>
         <FeatureFlags flags={['hanke']}>
-          <HankeDraftStateNotification hanke={hanke} className={styles.draftNotification} />
+          <HankeGeneratedStateNotification
+            generated={hanke.generated}
+            className={styles.stateNotification}
+          />
+          <HankeDraftStateNotification hanke={hanke} className={styles.stateNotification} />
         </FeatureFlags>
       </>
       <div className={styles.hankeCardContent} {...contentProps}>

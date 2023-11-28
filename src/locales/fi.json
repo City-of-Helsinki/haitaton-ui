@@ -779,6 +779,8 @@
     "showApplicationsButton": "Näytä hankkeen hakemukset",
     "draftStateLabel": "Hanke on luonnostilassa",
     "draftState": "Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.",
+    "generatedStateLabel": "Hanke muodostettu johtoselvityksen perusteella",
+    "generatedState": "Tämä hanke on muodostettu johtoselvityksen perusteella.",
     "clearFiltersButton": "Tyhjennä hakuehdot",
     "filtersInfoText": "Hakuehtojen muuttaminen päivittää hankelistan.",
     "tabit": {

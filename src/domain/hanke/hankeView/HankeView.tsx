@@ -55,6 +55,7 @@ import { CheckRightsByHanke } from '../hankeUsers/UserRightsCheck';
 import AttachmentSummary from '../edit/components/AttachmentSummary';
 import useHankeAttachments from '../hankeAttachments/useHankeAttachments';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
+import HankeGeneratedStateNotification from '../edit/components/HankeGeneratedStateNotification';
 
 type AreaProps = {
   area: HankeAlue;
@@ -279,9 +280,11 @@ const HankeView: React.FC<Props> = ({
       <InformationViewContentContainer>
         <InformationViewMainContent>
           <FeatureFlags flags={['hanke']}>
-            <div className={styles.draftStateNotification}>
-              <HankeDraftStateNotification hanke={hankeData} />
-            </div>
+            <HankeGeneratedStateNotification
+              generated={hankeData.generated}
+              className={styles.stateNotification}
+            />
+            <HankeDraftStateNotification hanke={hankeData} className={styles.stateNotification} />
           </FeatureFlags>
 
           <Tabs initiallyActiveTab={features.hanke ? initiallyActiveTab : 0}>
