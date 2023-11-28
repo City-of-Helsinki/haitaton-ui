@@ -37,7 +37,6 @@ import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
 import CompressedAreaIndex from '../hankeIndexes/CompressedAreaIndex';
 import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotification';
-import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
 import { useApplicationsForHanke } from '../../application/hooks/useApplications';
 import ApplicationList from '../../application/components/ApplicationList';
 import ErrorLoadingText from '../../../common/components/errorLoadingText/ErrorLoadingText';
@@ -55,6 +54,7 @@ import { SignedInUser } from '../hankeUsers/hankeUser';
 import { CheckRightsByHanke } from '../hankeUsers/UserRightsCheck';
 import AttachmentSummary from '../edit/components/AttachmentSummary';
 import useHankeAttachments from '../hankeAttachments/useHankeAttachments';
+import MainHeading from '../../../common/components/mainHeading/MainHeading';
 
 type AreaProps = {
   area: HankeAlue;
@@ -204,9 +204,7 @@ const HankeView: React.FC<Props> = ({
       />
 
       <InformationViewHeader backgroundColor="var(--color-summer-light)">
-        <Text tag="h1" styleAs="h1" weight="bold" id={SKIP_TO_ELEMENT_ID} tabIndex={-1}>
-          {hankeData?.nimi}
-        </Text>
+        <MainHeading>{hankeData?.nimi}</MainHeading>
         <Text tag="h2" styleAs="h3" weight="bold" spacingBottom="l">
           {hankeData?.hankeTunnus}
         </Text>

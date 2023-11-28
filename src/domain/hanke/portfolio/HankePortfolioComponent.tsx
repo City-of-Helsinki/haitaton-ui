@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { RefObject, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import {
   useFilters,
@@ -35,24 +35,23 @@ import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
 import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotification';
 import Container from '../../../common/components/container/Container';
-import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
 import useHankeViewPath from '../hooks/useHankeViewPath';
 import { useNavigateToApplicationList } from '../hooks/useNavigateToApplicationList';
 import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
 import { CheckRightsByUser } from '../hankeUsers/UserRightsCheck';
 import { SignedInUser, SignedInUserByHanke } from '../hankeUsers/hankeUser';
+import MainHeading from '../../../common/components/mainHeading/MainHeading';
+import useFocusToElement from '../../../common/hooks/useFocusToElement';
 import HDSLink from '../../../common/components/Link/Link';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 
 type CustomAccordionProps = {
   hanke: HankeData;
   signedInUser: SignedInUser;
+  headerRef: RefObject<HTMLDivElement> | null;
 };
 
-const CustomAccordion: React.FC<React.PropsWithChildren<CustomAccordionProps>> = ({
-  hanke,
-  signedInUser,
-}) => {
+const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, headerRef }) => {
   const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
   const hankeViewPath = useHankeViewPath(hanke?.hankeTunnus);
   const navigateToApplications = useNavigateToApplicationList(hanke?.hankeTunnus);
@@ -82,7 +81,12 @@ const CustomAccordion: React.FC<React.PropsWithChildren<CustomAccordionProps>> =
           className={clsx([styles.hankeCardHeader, styles.hankeCardFlexContainer])}
           {...buttonProps}
         >
-          <div className={clsx([styles.hankeCardFlexContainer, styles.flexWrap])}>
+          <div
+            className={clsx([styles.hankeCardFlexContainer, styles.flexWrap])}
+            ref={headerRef}
+            tabIndex={-1}
+            data-testid="hanke-card-header"
+          >
             <Text tag="p" styleAs="body-m">
               {hanke.hankeTunnus}
             </Text>
@@ -462,6 +466,8 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
     setIsFiltered(Boolean(globalFilter) || areFilters);
   }, [setIsFiltered, filters, globalFilter]);
 
+  const firstHankeCardRef = useFocusToElement<HTMLDivElement>(pageIndex);
+
   function handlePageChange(e: React.MouseEvent, index: number) {
     e.preventDefault();
     gotoPage(index);
@@ -471,17 +477,9 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
     <>
       <div className={styles.headerContainer}>
         <Container>
-          <Text
-            tag="h1"
-            data-testid="HankePortfolioPageHeader"
-            styleAs="h1"
-            spacingBottom="s"
-            weight="bold"
-            id={SKIP_TO_ELEMENT_ID}
-            tabIndex={-1}
-          >
+          <MainHeading data-testid="HankePortfolioPageHeader" spacingBottom="s">
             {t('hankePortfolio:pageHeader')}
-          </Text>
+          </MainHeading>
 
           <div
             className={styles.filters}
@@ -584,13 +582,16 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
             </Text>
 
             {rows.length > 0 &&
-              page.map(({ original: hanke }) => {
+              page.map(({ original: hanke }, index) => {
                 const { hankeTunnus } = hanke;
                 const signedInUser = signedInUserByHanke[hankeTunnus];
                 return (
-                  <div key={hankeTunnus}>
-                    <CustomAccordion hanke={hanke} signedInUser={signedInUser} />
-                  </div>
+                  <CustomAccordion
+                    key={hankeTunnus}
+                    hanke={hanke}
+                    signedInUser={signedInUser}
+                    headerRef={index === 0 ? firstHankeCardRef : null}
+                  />
                 );
               })}
             {rows.length === 0 && (

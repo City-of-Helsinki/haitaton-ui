@@ -99,6 +99,11 @@ export WSL=true
 
 This setting adds `--runInBand` parameter for Jest tests (see https://jestjs.io/docs/cli#--runinband).
 
+## Git hooks
+
+There are team-managed git hooks in the `.husky` -directory. To use these, husky must be enabled
+once with `yarn prepare`. The command needs to be done only once.
+
 ## Excel for translations
 
 You can export an Excel-file with current translations. This can then be sent to translators.

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
 import { Accordion, Button, Fieldset, IconCross, IconPlusCircle } from 'hds-react';
@@ -61,11 +61,13 @@ function getEmptySubContact(): HankeSubContact {
   };
 }
 
-const SubContactFields: React.FC<{
+interface SubContactFieldProps {
   fieldPath: string;
-  canBeRemoved: boolean;
+  canBeRemoved?: boolean;
   onRemove: () => void;
-}> = ({ fieldPath, canBeRemoved, onRemove }) => {
+}
+
+const SubContactFields = ({ fieldPath, canBeRemoved = true, onRemove }: SubContactFieldProps) => {
   const { t } = useTranslation();
 
   return (
@@ -78,24 +80,20 @@ const SubContactFields: React.FC<{
         <TextInput
           name={`${fieldPath}.${SUBCONTACT_FORMFIELD.ETUNIMI}`}
           label={t(`form:yhteystiedot:labels:${SUBCONTACT_FORMFIELD.ETUNIMI}`)}
-          required
         />
         <TextInput
           name={`${fieldPath}.${SUBCONTACT_FORMFIELD.SUKUNIMI}`}
           label={t(`form:yhteystiedot:labels:${SUBCONTACT_FORMFIELD.SUKUNIMI}`)}
-          required
         />
       </ResponsiveGrid>
       <ResponsiveGrid>
         <TextInput
           name={`${fieldPath}.${SUBCONTACT_FORMFIELD.EMAIL}`}
           label={t(`form:yhteystiedot:labels:${SUBCONTACT_FORMFIELD.EMAIL}`)}
-          required
         />
         <TextInput
           name={`${fieldPath}.${SUBCONTACT_FORMFIELD.PUHELINNUMERO}`}
           label={t(`form:yhteystiedot:labels:${SUBCONTACT_FORMFIELD.PUHELINNUMERO}`)}
-          required
         />
         {canBeRemoved && (
           <Button
@@ -189,6 +187,17 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
     name: FORMFIELD.MUUTTAHOT,
   });
 
+  const addOmistaja = useCallback(() => {
+    appendOmistaja(getEmptyContact());
+  }, [appendOmistaja]);
+
+  // initialize Omistaja to have at least one contact
+  useEffect(() => {
+    if (omistajat.length === 0) {
+      addOmistaja();
+    }
+  }, [omistajat, addOmistaja]);
+
   return (
     <div className="form2">
       <Text tag="p" styleAs="body-m" spacingBottom="s">
@@ -200,6 +209,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
         language={locale}
         headingLevel={3}
         heading={t('form:yhteystiedot:titles:omistajaInfo')}
+        initiallyOpen={true}
       >
         {omistajat.map((item, index) => {
           return (
@@ -207,16 +217,17 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
               key={item.id}
               contactType={HANKE_CONTACT_TYPE.OMISTAJAT}
               index={index}
-              onRemoveContact={removeOmistaja}
+              canBeRemoved={omistajat.length > 1}
+              onRemove={removeOmistaja}
               subContactPath={`${HANKE_CONTACT_TYPE.OMISTAJAT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}`}
               subContactTemplate={true}
               emptySubContact={getEmptySubContact()}
-              renderSubContact={(subContactIndex, removeSubContact) => {
+              renderSubContact={(subContactIndex, subContactCount, removeSubContact) => {
                 const fieldPath = `${HANKE_CONTACT_TYPE.OMISTAJAT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}.${subContactIndex}`;
                 return (
                   <SubContactFields
                     fieldPath={fieldPath}
-                    canBeRemoved={subContactIndex > 0}
+                    canBeRemoved={subContactCount > 1}
                     onRemove={() => removeSubContact(subContactIndex)}
                   />
                 );
@@ -259,6 +270,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
         language={locale}
         headingLevel={3}
         heading={t('form:yhteystiedot:titles:propertyDeveloperInfo')}
+        initiallyOpen={rakennuttajat.length > 0}
       >
         {rakennuttajat.map((item, index) => {
           return (
@@ -266,16 +278,14 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
               key={item.id}
               contactType={HANKE_CONTACT_TYPE.RAKENNUTTAJAT}
               index={index}
-              onRemoveContact={removeRakennuttaja}
+              onRemove={removeRakennuttaja}
               subContactPath={`${HANKE_CONTACT_TYPE.RAKENNUTTAJAT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}`}
-              subContactTemplate={true}
               emptySubContact={getEmptySubContact()}
-              renderSubContact={(subContactIndex, removeSubContact) => {
+              renderSubContact={(subContactIndex, _, removeSubContact) => {
                 const fieldPath = `${HANKE_CONTACT_TYPE.RAKENNUTTAJAT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}.${subContactIndex}`;
                 return (
                   <SubContactFields
                     fieldPath={fieldPath}
-                    canBeRemoved={subContactIndex > 0}
                     onRemove={() => removeSubContact(subContactIndex)}
                   />
                 );
@@ -318,6 +328,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
         language={locale}
         headingLevel={3}
         heading={t('form:yhteystiedot:titles:implementerInfo')}
+        initiallyOpen={toteuttajat.length > 0}
       >
         {toteuttajat.map((item, index) => {
           return (
@@ -325,16 +336,14 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
               key={item.id}
               contactType={HANKE_CONTACT_TYPE.TOTEUTTAJAT}
               index={index}
-              onRemoveContact={removeToteuttaja}
+              onRemove={removeToteuttaja}
               subContactPath={`${HANKE_CONTACT_TYPE.TOTEUTTAJAT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}`}
-              subContactTemplate={true}
               emptySubContact={getEmptySubContact()}
-              renderSubContact={(subContactIndex, removeSubContact) => {
+              renderSubContact={(subContactIndex, _, removeSubContact) => {
                 const fieldPath = `${HANKE_CONTACT_TYPE.TOTEUTTAJAT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}.${subContactIndex}`;
                 return (
                   <SubContactFields
                     fieldPath={fieldPath}
-                    canBeRemoved={subContactIndex > 0}
                     onRemove={() => removeSubContact(subContactIndex)}
                   />
                 );
@@ -377,6 +386,7 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
         language={locale}
         headingLevel={3}
         heading={t('form:yhteystiedot:titles:otherInfo')}
+        initiallyOpen={muutTahot.length > 0}
       >
         {muutTahot.map((item, index) => {
           const fieldPath = `${FORMFIELD.MUUTTAHOT}.${index}`;
@@ -386,16 +396,14 @@ const HankeFormYhteystiedot: React.FC<FormProps> = () => {
               key={item.id}
               contactType={HANKE_CONTACT_TYPE.MUUTTAHOT}
               index={index}
-              onRemoveContact={removeMuuTaho}
+              onRemove={removeMuuTaho}
               subContactPath={`${HANKE_CONTACT_TYPE.MUUTTAHOT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}`}
-              subContactTemplate={true}
               emptySubContact={getEmptySubContact()}
-              renderSubContact={(subContactIndex, removeSubContact) => {
+              renderSubContact={(subContactIndex, _, removeSubContact) => {
                 const subContactFieldPath = `${HANKE_CONTACT_TYPE.MUUTTAHOT}.${index}.${CONTACT_FORMFIELD.ALIKONTAKTIT}.${subContactIndex}`;
                 return (
                   <SubContactFields
                     fieldPath={subContactFieldPath}
-                    canBeRemoved={subContactIndex > 0}
                     onRemove={() => removeSubContact(subContactIndex)}
                   />
                 );
