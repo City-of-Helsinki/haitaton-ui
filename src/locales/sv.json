@@ -737,8 +737,6 @@
     "searchHelperText": "Sök med projektets namn eller kod",
     "searchResults": "{{count}} sökresultat",
     "searchResults_plural": "{{count}} sökresultat",
-    "noneFound": "Inga projekt hittades med sökningen.",
-    "noneExist": "Det finns inga projekt i din projektportfölj.",
     "hankevaiheet": "Projektskeden",
     "hankevaiheetHelperText": "Välj de projektskeden du vill granska",
     "startDate": "Tidsperiodens början",
