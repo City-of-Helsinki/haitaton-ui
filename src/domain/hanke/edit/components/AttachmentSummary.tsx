@@ -17,13 +17,15 @@ type Props = {
 function AttachmentSummary({ hankeTunnus, attachments }: Readonly<Props>) {
   const { t } = useTranslation();
 
-  const download = (file: AttachmentMetadata) => getAttachmentFile(hankeTunnus, file.id);
+  function downloadFile(file: AttachmentMetadata) {
+    return getAttachmentFile(hankeTunnus, file.id);
+  }
 
   return (
     <FormSummarySection>
       <SectionItemTitle>{t('form:labels:addedFiles')}</SectionItemTitle>
       <SectionItemContent>
-        <FileDownloadList files={attachments} download={download} />
+        <FileDownloadList files={attachments} fileDownLoadFunction={downloadFile} />
       </SectionItemContent>
     </FormSummarySection>
   );

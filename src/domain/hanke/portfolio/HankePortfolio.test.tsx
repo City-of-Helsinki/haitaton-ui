@@ -38,7 +38,7 @@ const initSignedInUserResponse = (response: SignedInUserByHanke) => {
   );
 };
 
-describe('HankePortfolioComponent', () => {
+describe('HankePortfolio', () => {
   test('Changing search text filters correct number of projects', async () => {
     const { user } = render(
       <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
