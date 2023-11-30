@@ -50,7 +50,7 @@ const HankeFormContainer: React.FC<React.PropsWithChildren<Props>> = ({ hankeTun
         navigate('/');
       }
     },
-    [hasFormChanged, navigate]
+    [hasFormChanged, navigate],
   );
 
   const closeForm = () => {

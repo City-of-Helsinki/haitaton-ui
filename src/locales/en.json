@@ -487,8 +487,7 @@
       "organisaatio": "Organisation",
       "omaOrganisaatio": "Add your own organisation",
       "insertOmaOrganisaatio": "Enter your own organisation",
-      "rights": "Your access rights to the project",
-      "perustaja": "Established by"
+      "rights": "Your access rights to the project"
     },
     "toolTips": {
       "tipOpenLabel": "Instruction",
@@ -555,7 +554,7 @@
       "giveDates": "Select the work dates to draw the work areas on the map."
     },
     "liitteet": {
-      "instructions": "Add attachments to the application, such as a work plan. The attachments are saved in the form via the Next and Save buttons at the bottom of the page."
+      "instructions": "Add attachments to the application, such as a work plan."
     }
   },
   "hakemus": {
@@ -738,8 +737,6 @@
     "searchHelperText": "Search by project name or identifier",
     "searchResults": "{{count}} result",
     "searchResults_plural": "{{count}} results",
-    "noneFound": "No projects were found in the search.",
-    "noneExist": "There are no projects in your project portfolio.",
     "hankevaiheet": "Project phases",
     "hankevaiheetHelperText": "Select the project phases you want to view",
     "startDate": "The beginning of the period",

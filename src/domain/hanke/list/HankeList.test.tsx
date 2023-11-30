@@ -18,7 +18,7 @@ describe('HankeLista', () => {
 
     await user.click(screen.getByTestId('hds-table-sorting-header-nimi'));
     expect(screen.getByTestId('nimi-0')).toHaveTextContent(
-      'Aidasmäentien vesihuollon rakentaminen'
+      'Aidasmäentien vesihuollon rakentaminen',
     );
     await user.click(screen.getByTestId('hds-table-sorting-header-vaihe'));
     expect(screen.getByTestId('vaihe-0')).toHaveTextContent(/ohjelmointi/i);

@@ -68,7 +68,7 @@ test('renders form notification if texts are given', () => {
       onStepChange={handleSave}
       notificationLabel="Notification label"
       notificationText="Notification text"
-    />
+    />,
   );
 
   expect(screen.getByText('Notification label')).toBeInTheDocument();
@@ -101,7 +101,7 @@ test('form pages can be navigated', async () => {
           onNext={handleNext}
         />
       )}
-    </MultipageForm>
+    </MultipageForm>,
   );
 
   const stepperStepTwoButton = screen.getByTestId('hds-stepper-step-1');
@@ -159,7 +159,7 @@ test('displays loading spinner with loading text when isLoading and loading text
       formSteps={formSteps}
       isLoading
       isLoadingText={loadingText}
-    />
+    />,
   );
 
   expect(screen.queryByTestId('multipage-form-loading-spinner')).toBeInTheDocument();

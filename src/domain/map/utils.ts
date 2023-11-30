@@ -46,59 +46,58 @@ export const formatFeaturesToAlluGeoJSON = (features: GeometryData): unknown => 
 export const hankeHasGeometry = (hanke: HankeData | HankeDataDraft) =>
   hanke.alueet?.some((alue) => Boolean(alue.geometriat));
 
-export const hankeIsBetweenDates = ({ endDate, startDate }: HankeFilters) => ({
-  startDate: comparedStartDate,
-  endDate: comparedEndDate,
-}: HankeFilters) => {
-  const filterStartDate = startDate ? new Date(startDate) : 0;
-  const filterEndDate = endDate ? new Date(endDate) : 0;
-  // both dates are unset in UI, return all
-  if (filterStartDate === 0 && filterEndDate === 0) return true;
+export const hankeIsBetweenDates =
+  ({ endDate, startDate }: HankeFilters) =>
+  ({ startDate: comparedStartDate, endDate: comparedEndDate }: HankeFilters) => {
+    const filterStartDate = startDate ? new Date(startDate) : 0;
+    const filterEndDate = endDate ? new Date(endDate) : 0;
+    // both dates are unset in UI, return all
+    if (filterStartDate === 0 && filterEndDate === 0) return true;
 
-  const hankeEndDate = comparedEndDate ? new Date(comparedEndDate) : 0;
+    const hankeEndDate = comparedEndDate ? new Date(comparedEndDate) : 0;
 
-  // end date is not set in UI
-  const hankeStartDate = comparedStartDate ? new Date(comparedStartDate) : 0;
-  if (filterEndDate === 0) {
+    // end date is not set in UI
+    const hankeStartDate = comparedStartDate ? new Date(comparedStartDate) : 0;
+    if (filterEndDate === 0) {
+      if (
+        filterStartDate <= hankeStartDate ||
+        (filterStartDate >= hankeStartDate && filterStartDate <= hankeEndDate)
+      )
+        return true;
+    }
+
+    // both dates are set in the UI
     if (
-      filterStartDate <= hankeStartDate ||
-      (filterStartDate >= hankeStartDate && filterStartDate <= hankeEndDate)
+      hankeStartDate <= filterStartDate &&
+      hankeStartDate <= filterEndDate &&
+      hankeEndDate >= filterStartDate &&
+      hankeEndDate <= filterEndDate
     )
       return true;
-  }
+    if (
+      hankeStartDate <= filterStartDate &&
+      hankeStartDate <= filterEndDate &&
+      hankeEndDate >= filterStartDate &&
+      hankeEndDate >= filterEndDate
+    )
+      return true;
+    if (
+      hankeStartDate >= filterStartDate &&
+      hankeStartDate <= filterEndDate &&
+      hankeEndDate >= filterStartDate &&
+      hankeEndDate <= filterEndDate
+    )
+      return true;
+    if (
+      hankeStartDate >= filterStartDate &&
+      hankeStartDate <= filterEndDate &&
+      hankeEndDate >= filterStartDate &&
+      hankeEndDate >= filterEndDate
+    )
+      return true;
 
-  // both dates are set in the UI
-  if (
-    hankeStartDate <= filterStartDate &&
-    hankeStartDate <= filterEndDate &&
-    hankeEndDate >= filterStartDate &&
-    hankeEndDate <= filterEndDate
-  )
-    return true;
-  if (
-    hankeStartDate <= filterStartDate &&
-    hankeStartDate <= filterEndDate &&
-    hankeEndDate >= filterStartDate &&
-    hankeEndDate >= filterEndDate
-  )
-    return true;
-  if (
-    hankeStartDate >= filterStartDate &&
-    hankeStartDate <= filterEndDate &&
-    hankeEndDate >= filterStartDate &&
-    hankeEndDate <= filterEndDate
-  )
-    return true;
-  if (
-    hankeStartDate >= filterStartDate &&
-    hankeStartDate <= filterEndDate &&
-    hankeEndDate >= filterStartDate &&
-    hankeEndDate >= filterEndDate
-  )
-    return true;
-
-  return false;
-};
+    return false;
+  };
 
 export const byAllHankeFilters = (hankeFilters: HankeFilters) => (hanke: HankeData) =>
   hankeHasGeometry(hanke) &&
@@ -174,7 +173,7 @@ export function getTotalSurfaceArea(geometries: Geometry[]): number {
  */
 export function getFeatureFromHankeGeometry(geometry: HankeGeometria) {
   const feature = new Feature(
-    new Polygon(geometry.featureCollection.features[0]?.geometry.coordinates)
+    new Polygon(geometry.featureCollection.features[0]?.geometry.coordinates),
   );
 
   return feature;

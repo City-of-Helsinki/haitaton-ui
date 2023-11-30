@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next';
 import PageMeta from '../components/PageMeta';
 import { useLocalizedRoutes } from '../../common/hooks/useLocalizedRoutes';
 import Container from '../../common/components/container/Container';
-import Text from '../../common/components/text/Text';
-import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
+import MainHeading from '../../common/components/mainHeading/MainHeading';
 
 const PrivacyPolicyPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { PRIVACY_POLICY } = useLocalizedRoutes();
@@ -14,17 +13,9 @@ const PrivacyPolicyPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   return (
     <Container>
       <PageMeta routeData={PRIVACY_POLICY} />
-      <Text
-        tag="h1"
-        styleAs="h1"
-        spacingTop="l"
-        spacingBottom="xl"
-        weight="bold"
-        id={SKIP_TO_ELEMENT_ID}
-        tabIndex={-1}
-      >
+      <MainHeading spacingTop="l" spacingBottom="xl">
         {t('staticPages:privacyPolicy:title')}
-      </Text>
+      </MainHeading>
 
       <HdsContainer style={{ padding: '2rem', backgroundColor: 'white' }}>
         <p style={{ marginBottom: 'var(--spacing-s)' }}>

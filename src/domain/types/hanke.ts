@@ -108,7 +108,7 @@ export interface HankeContact {
   email: string;
   puhelinnumero: string;
   ytunnus: string | null;
-  alikontaktit?: HankeSubContact[];
+  alikontaktit: HankeSubContact[];
 }
 
 export type HankeMuuTaho = {
@@ -118,7 +118,7 @@ export type HankeMuuTaho = {
   osasto: string;
   email: string;
   puhelinnumero?: string;
-  alikontaktit?: HankeSubContact[];
+  alikontaktit: HankeSubContact[];
 };
 
 export type HankeContacts = Array<(HankeContact | HankeMuuTaho)[] | undefined>;
@@ -154,6 +154,7 @@ export type HankeAlue = {
   meluHaitta: HANKE_MELUHAITTA_KEY | null;
   polyHaitta: HANKE_POLYHAITTA | null;
   tarinaHaitta: HANKE_TARINAHAITTA_KEY | null;
+  nimi?: string | null;
 };
 
 export enum HANKE_INDEX_TYPE {
@@ -192,7 +193,7 @@ export interface HankeData {
   tyomaaTyyppi: HANKE_TYOMAATYYPPI_KEY[];
   alueet: HankeAlue[];
   liikennehaittaindeksi: LiikenneHaittaIndeksi | null;
-  omistajat?: Array<HankeContact>;
+  omistajat: Array<HankeContact>;
   rakennuttajat: Array<HankeContact>;
   toteuttajat: Array<HankeContact>;
   muut: Array<HankeMuuTaho>;

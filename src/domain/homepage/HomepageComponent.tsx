@@ -15,12 +15,12 @@ import img4 from './kartta.png';
 import kalasatama from './kalasatama.webp';
 import Linkbox from '../../common/components/Linkbox/Linkbox';
 import useUser from '../auth/useUser';
-import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
 import FeatureFlags from '../../common/components/featureFlags/FeatureFlags';
 import {
   FeatureFlagsContextProps,
   useFeatureFlags,
 } from '../../common/components/featureFlags/FeatureFlagsContext';
+import MainHeading from '../../common/components/mainHeading/MainHeading';
 
 const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation();
@@ -130,16 +130,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
     <div className={clsx({ [styles.bgWhite]: !isAuthenticated && !features.publicHankkeet })}>
       <div className={styles.heroContainer}>
         <section className={styles.hero}>
-          <Text
-            tag="h1"
-            styleAs="h1"
-            spacing="s"
-            weight="bold"
-            id={SKIP_TO_ELEMENT_ID}
-            tabIndex={-1}
-          >
-            {pageTitle}
-          </Text>
+          <MainHeading spacing="s">{pageTitle}</MainHeading>
           <Text tag="h2" styleAs="h3" spacing="s" weight="bold">
             {pageSubtitle}
           </Text>
@@ -201,7 +192,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
                   <div className={styles.linkboxContainer}>
                     <Linkbox
                       linkboxAriaLabel={`${t('common:components:linkbox:linkbox')}: ${t(
-                        `homepage:${item.key}:actionText`
+                        `homepage:${item.key}:actionText`,
                       )}`}
                       linkAriaLabel={t(`homepage:${item.key}:actionText`)}
                       href={item.actionLink}

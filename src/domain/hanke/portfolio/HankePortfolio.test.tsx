@@ -3,35 +3,64 @@
 import React from 'react';
 import { cleanup } from '@testing-library/react';
 import HankePortfolioComponent from './HankePortfolioComponent';
-import { render, screen, waitFor } from '../../../testUtils/render';
+import { render, screen, waitFor, within } from '../../../testUtils/render';
 import hankeList from '../../mocks/hankeList';
 import { changeFilterDate } from '../../../testUtils/helperFunctions';
+import { USER_VIEW, userDataByHanke } from '../../mocks/signedInUser';
+import { AccessRightLevel, SignedInUserByHanke } from '../hankeUsers/hankeUser';
+import { server } from '../../mocks/test-server';
+import { rest } from 'msw';
+import hankkeet from '../../mocks/data/hankkeet-data';
+import { HankeDataDraft } from '../../types/hanke';
+import HankePortfolioContainer from './HankePortfolioContainer';
 
-const startDateLabel = 'Ajanjakson alku';
-const endDateLabel = 'Ajanjakson loppu';
+const START_DATE_LABEL = 'Ajanjakson alku';
+const END_DATE_LABEL = 'Ajanjakson loppu';
+const SEARCH_PLACEHOLDER = 'Esim. hankkeen nimi tai tunnus';
+const EMPTY_HANKE_LIST_TEXT =
+  'Hankelistasi on tyhjä, sillä antamillasi hakuehdoilla ei löytynyt yhtään hanketta tai sinulla ei vielä ole hankkeita.';
 
 afterEach(cleanup);
 
 jest.setTimeout(30000);
 
-describe.only('HankePortfolio', () => {
-  test('Changing search text filters correct number of projects', async () => {
-    const { user } = render(<HankePortfolioComponent hankkeet={hankeList} />);
+const initHankkeetResponse = (response: HankeDataDraft[]) => {
+  server.use(
+    rest.get('/api/hankkeet', async (_, res, ctx) => {
+      return res(ctx.status(200), ctx.json<HankeDataDraft[]>(response));
+    }),
+  );
+};
 
-    await user.type(screen.getByLabelText('Haku'), 'Mannerheimintie autottomaksi');
+const initSignedInUserResponse = (response: SignedInUserByHanke) => {
+  server.use(
+    rest.get('/api/my-permissions', async (_, res, ctx) => {
+      return res(ctx.status(200), ctx.json<SignedInUserByHanke>(response));
+    }),
+  );
+};
+
+describe('HankePortfolioComponent', () => {
+  test('Changing search text filters correct number of projects', async () => {
+    const { user } = render(
+      <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
+    );
+
+    await user.type(
+      screen.getByPlaceholderText(SEARCH_PLACEHOLDER),
+      'Mannerheimintie autottomaksi',
+    );
     await waitFor(() => {
       expect(screen.getByText('1 hakutulos'));
     });
     expect(screen.getByTestId('numberOfFilteredRows')).toHaveTextContent('1');
 
-    await user.type(screen.getByLabelText('Haku'), 'elielin');
+    await user.type(screen.getByPlaceholderText(SEARCH_PLACEHOLDER), 'elielin');
     await waitFor(() => {
       expect(screen.getByText('0 hakutulosta'));
     });
     expect(screen.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
-    expect(
-      screen.queryByText('Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta'),
-    ).toBeInTheDocument();
+    expect(screen.queryByText(EMPTY_HANKE_LIST_TEXT)).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /tyhjennä hakuehdot/i }));
     await waitFor(() => {
@@ -41,38 +70,40 @@ describe.only('HankePortfolio', () => {
   });
 
   test('Changing filter startDates filters correct number of projects', async () => {
-    const renderedComponent = render(<HankePortfolioComponent hankkeet={hankeList} />);
+    const renderedComponent = render(
+      <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
+    );
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
-    changeFilterDate(startDateLabel, renderedComponent, '02.10.2022');
+    changeFilterDate(START_DATE_LABEL, renderedComponent, '02.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
-    changeFilterDate(startDateLabel, renderedComponent, '06.10.2022');
+    changeFilterDate(START_DATE_LABEL, renderedComponent, '06.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('1');
-    changeFilterDate(startDateLabel, renderedComponent, '11.10.2022');
+    changeFilterDate(START_DATE_LABEL, renderedComponent, '11.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
-    expect(
-      screen.queryByText('Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta'),
-    ).toBeInTheDocument();
-    changeFilterDate(startDateLabel, renderedComponent, null);
+    expect(screen.queryByText(EMPTY_HANKE_LIST_TEXT)).toBeInTheDocument();
+    changeFilterDate(START_DATE_LABEL, renderedComponent, null);
   });
 
   test('Changing filter endDates filters correct number of projects', async () => {
-    const renderedComponent = render(<HankePortfolioComponent hankkeet={hankeList} />);
+    const renderedComponent = render(
+      <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
+    );
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
-    changeFilterDate(endDateLabel, renderedComponent, '01.10.2022');
+    changeFilterDate(END_DATE_LABEL, renderedComponent, '01.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
-    expect(
-      screen.queryByText('Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta'),
-    ).toBeInTheDocument();
-    changeFilterDate(endDateLabel, renderedComponent, '05.10.2022');
+    expect(screen.queryByText(EMPTY_HANKE_LIST_TEXT)).toBeInTheDocument();
+    changeFilterDate(END_DATE_LABEL, renderedComponent, '05.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
-    changeFilterDate(endDateLabel, renderedComponent, '11.10.2022');
+    changeFilterDate(END_DATE_LABEL, renderedComponent, '11.10.2022');
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
-    changeFilterDate(endDateLabel, renderedComponent, null);
+    changeFilterDate(END_DATE_LABEL, renderedComponent, null);
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
   });
 
   test('Changing Hanke type filters correct number of projects', async () => {
-    const renderedComponent = render(<HankePortfolioComponent hankkeet={hankeList} />);
+    const renderedComponent = render(
+      <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
+    );
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
     await renderedComponent.user.click(
       renderedComponent.getByRole('button', { name: 'Työn tyyppi' }),
@@ -80,9 +111,7 @@ describe.only('HankePortfolio', () => {
     await renderedComponent.user.click(renderedComponent.getByText('Sähkö'));
     renderedComponent.getByText('Hankevaiheet').click();
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
-    expect(
-      screen.queryByText('Valitsemillasi hakuehdoilla ei löytynyt yhtään hanketta'),
-    ).toBeInTheDocument();
+    expect(screen.queryByText(EMPTY_HANKE_LIST_TEXT)).toBeInTheDocument();
     await renderedComponent.user.click(
       renderedComponent.getByRole('button', { name: 'Työn tyyppi' }),
     );
@@ -97,14 +126,24 @@ describe.only('HankePortfolio', () => {
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
   });
 
-  test('Having no projects renders correct text', () => {
-    render(<HankePortfolioComponent hankkeet={[]} />);
+  test('Having no projects renders correct text and link to new hanke works', async () => {
+    const { user } = render(<HankePortfolioComponent hankkeet={[]} signedInUserByHanke={{}} />);
 
-    expect(screen.queryByText('Hankesalkussasi ei ole hankkeita')).toBeInTheDocument();
+    expect(screen.queryByText(EMPTY_HANKE_LIST_TEXT)).toBeInTheDocument();
+
+    const { getByRole } = within(screen.getByText('Tarkista hakuehdot', { exact: false }));
+    await user.click(getByRole('link', { name: 'luo uusi hanke' }));
+    expect(window.location.pathname).toBe('/fi/hanke/uusi');
   });
 
   test('Should render edit hanke links for hankkeet that user has edit rights', async () => {
-    render(<HankePortfolioComponent hankkeet={hankeList} />);
+    const hankeTunnusList = hankeList.map((hanke) => hanke.hankeTunnus);
+    const signedUserData: SignedInUserByHanke = {
+      ...userDataByHanke(hankeTunnusList),
+      [hankeTunnusList[0]]: USER_VIEW,
+    };
+
+    render(<HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={signedUserData} />);
 
     await waitFor(() => {
       expect(screen.queryAllByTestId('hankeEditLink')).toHaveLength(1);
@@ -112,12 +151,51 @@ describe.only('HankePortfolio', () => {
   });
 
   test('Should show draft state notification for hankkeet that are in draft state', async () => {
-    render(<HankePortfolioComponent hankkeet={hankeList} />);
+    render(<HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />);
 
     expect(
       screen.getAllByText(
         'Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.',
       ),
     ).toHaveLength(1);
+  });
+});
+
+describe('HankePortfolioContainer', () => {
+  const HANKE_TUNNUS = 'HAI22-1';
+
+  test('Should query data and render hanke editable if permitted', async () => {
+    initHankkeetResponse([hankkeet[0]]);
+    initSignedInUserResponse(userDataByHanke([HANKE_TUNNUS], AccessRightLevel.KAIKKI_OIKEUDET));
+
+    render(<HankePortfolioContainer />);
+
+    await waitFor(() => {
+      expect(screen.queryByText(HANKE_TUNNUS)).toBeInTheDocument();
+      expect(screen.getByTestId('hankeEditLink')).toBeInTheDocument();
+    });
+  });
+
+  test('Should query data and render hanke not editable if not permitted', async () => {
+    initHankkeetResponse([hankkeet[0]]);
+    initSignedInUserResponse(userDataByHanke([HANKE_TUNNUS], AccessRightLevel.KATSELUOIKEUS));
+
+    render(<HankePortfolioContainer />);
+
+    await waitFor(() => {
+      expect(screen.queryByText(HANKE_TUNNUS)).toBeInTheDocument();
+      expect(screen.queryAllByTestId('hankeEditLink')).toHaveLength(0);
+    });
+  });
+
+  test('Should focus on first hanke card header when changing page', async () => {
+    initHankkeetResponse(hankkeet);
+
+    const { user } = render(<HankePortfolioContainer />);
+
+    await screen.findAllByTestId('hanke-card-header');
+    expect(screen.getAllByTestId('hanke-card-header')[0]).not.toHaveFocus();
+    await user.click(screen.getByRole('button', { name: 'Seuraava' }));
+    expect(screen.getAllByTestId('hanke-card-header')[0]).toHaveFocus();
   });
 });

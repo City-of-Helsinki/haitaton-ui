@@ -1,5 +1,4 @@
 import React from 'react';
-import { IconDocument } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import {
   FormSummarySection,
@@ -7,6 +6,8 @@ import {
   SectionItemTitle,
 } from '../../forms/components/FormSummarySection';
 import { ApplicationAttachmentMetadata } from '../types/application';
+import FileDownloadList from '../../../common/components/fileDownloadList/FileDownloadList';
+import { getAttachmentFile } from '../attachments';
 
 type Props = {
   attachments: ApplicationAttachmentMetadata[];
@@ -15,16 +16,14 @@ type Props = {
 function AttachmentSummary({ attachments }: Props) {
   const { t } = useTranslation();
 
+  const download = (file: ApplicationAttachmentMetadata) =>
+    getAttachmentFile(file.applicationId, file.id);
+
   return (
     <FormSummarySection>
       <SectionItemTitle>{t('hankePortfolio:tabit:liitteet')}</SectionItemTitle>
       <SectionItemContent>
-        {attachments.map((attachment) => (
-          <p key={attachment.id}>
-            <IconDocument aria-hidden size="xs" style={{ marginRight: 'var(--spacing-3-xs)' }} />
-            {attachment.fileName}
-          </p>
-        ))}
+        <FileDownloadList files={attachments} download={download} />
       </SectionItemContent>
     </FormSummarySection>
   );

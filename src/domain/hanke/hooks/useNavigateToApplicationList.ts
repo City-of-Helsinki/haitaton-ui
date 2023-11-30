@@ -18,7 +18,7 @@ function useNavigateToApplicationList(hankeTunnus?: string) {
       ? getHankeViewPath({ hankeTunnus: hankeTunnusToUse })
       : HANKEPORTFOLIO.path;
 
-    navigate(path, { state: { initiallyActiveTab: 4 } });
+    navigate(path, { state: { initiallyActiveTab: 5 } });
   }
 
   return navigateToApplicationList;

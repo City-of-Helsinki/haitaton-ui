@@ -50,8 +50,6 @@ export function convertFormStateToApplicationData(formState: JohtoselvitysFormVa
   delete formState.geometriesChanged;
   // eslint-disable-next-line no-param-reassign
   delete formState.selfIntersectingPolygon;
-  // eslint-disable-next-line no-param-reassign
-  delete formState.attachmentNumber;
 
   const data: Application = cloneDeep(formState);
 
@@ -65,7 +63,7 @@ export function convertFormStateToApplicationData(formState: JohtoselvitysFormVa
         name: '',
         geometry: new ApplicationGeometry(coordinates),
       };
-    }
+    },
   );
 
   data.applicationData.areas = updatedAreas;
@@ -74,7 +72,7 @@ export function convertFormStateToApplicationData(formState: JohtoselvitysFormVa
 }
 
 export function convertApplicationDataToFormState(
-  application: Application | undefined
+  application: Application | undefined,
 ): JohtoselvitysFormValues | undefined {
   if (application === undefined) {
     return undefined;
@@ -88,7 +86,7 @@ export function convertApplicationDataToFormState(
         geometry,
         feature: new Feature(new Polygon(geometry.coordinates)),
       };
-    }
+    },
   );
 
   data.applicationData.areas = updatedAreas;
