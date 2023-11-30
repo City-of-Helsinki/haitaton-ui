@@ -3,12 +3,20 @@ import { render, cleanup, screen } from '../../../testUtils/render';
 import Header from './Header';
 import useUser from '../../../domain/auth/useUser';
 import i18next from '../../../locales/i18nForTests';
+import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 
 jest.setTimeout(10000);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockedUseUser = useUser as jest.Mock<any>;
 jest.mock('../../../domain/auth/useUser');
+
+type Language = 'Suomi' | 'English' | 'Svenska';
+
+async function changeLanguage(user: UserEvent, lang: Language, newLang: Language) {
+  await user.click(screen.getAllByRole('button', { name: lang })[0]);
+  await user.click(screen.getAllByText(newLang)[0]);
+}
 
 describe('Header', () => {
   beforeEach(() => {
@@ -44,32 +52,26 @@ describe('Header', () => {
   test('when user changes language it should change the UI language and the url based on the selected language', async () => {
     const { user } = render(<Header />, undefined, '/fi/julkisethankkeet/kartta');
 
-    await user.click(screen.getAllByRole('button', { name: /suomi/i })[0]);
-    await user.click(screen.getAllByText(/english/i)[0]);
+    await changeLanguage(user, 'Suomi', 'English');
     expect(i18next.language).toBe('en');
     expect(window.location.pathname).toBe('/en/publicprojects/map');
 
-    await user.click(screen.getAllByRole('button', { name: /english/i })[0]);
-    await user.click(screen.getAllByText(/svenska/i)[0]);
+    await changeLanguage(user, 'English', 'Svenska');
     expect(i18next.language).toBe('sv');
     expect(window.location.pathname).toBe('/sv/allmannaprojekt/karta');
 
-    await user.click(screen.getAllByRole('button', { name: /svenska/i })[0]);
-    await user.click(screen.getAllByText(/suomi/i)[0]);
+    await changeLanguage(user, 'Svenska', 'Suomi');
     expect(i18next.language).toBe('fi');
     expect(window.location.pathname).toBe('/fi/julkisethankkeet/kartta');
   });
 
   test('should navigate to correct url when changing language when url contains hankeTunnus', async () => {
-    await i18next.changeLanguage('fi');
     const { user } = render(<Header />, undefined, '/fi/hankesalkku/HAI23-1');
 
-    await user.click(screen.getAllByRole('button', { name: /suomi/i })[0]);
-    await user.click(screen.getAllByText(/english/i)[0]);
+    await changeLanguage(user, 'Suomi', 'English');
     expect(window.location.pathname).toBe('/en/projectportfolio/HAI23-1');
 
-    await user.click(screen.getAllByRole('button', { name: /english/i })[0]);
-    await user.click(screen.getAllByText(/svenska/i)[0]);
+    await changeLanguage(user, 'English', 'Svenska');
     expect(window.location.pathname).toBe('/sv/projektportfolj/HAI23-1');
   });
 
@@ -77,12 +79,10 @@ describe('Header', () => {
     await i18next.changeLanguage('fi');
     const { user } = render(<Header />, undefined, '/fi/hakemus/1');
 
-    await user.click(screen.getAllByRole('button', { name: /suomi/i })[0]);
-    await user.click(screen.getAllByText(/english/i)[0]);
+    await changeLanguage(user, 'Suomi', 'English');
     expect(window.location.pathname).toBe('/en/application/1');
 
-    await user.click(screen.getAllByRole('button', { name: /english/i })[0]);
-    await user.click(screen.getAllByText(/svenska/i)[0]);
+    await changeLanguage(user, 'English', 'Svenska');
     expect(window.location.pathname).toBe('/sv/ansokan/1');
   });
 });
