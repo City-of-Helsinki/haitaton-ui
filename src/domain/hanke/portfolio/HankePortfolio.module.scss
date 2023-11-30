@@ -12,6 +12,10 @@
       flex-direction: column;
       align-items: center;
       margin: var(--spacing-3-xl) auto;
+
+      .newHankeLink {
+        font-size: var(--fontsize-heading-m) !important;
+      }
     }
 
     .hankeCard {
