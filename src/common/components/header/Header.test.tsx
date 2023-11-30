@@ -59,4 +59,30 @@ describe('Header', () => {
     expect(i18next.language).toBe('fi');
     expect(window.location.pathname).toBe('/fi/julkisethankkeet/kartta');
   });
+
+  test('should navigate to correct url when changing language when url contains hankeTunnus', async () => {
+    await i18next.changeLanguage('fi');
+    const { user } = render(<Header />, undefined, '/fi/hankesalkku/HAI23-1');
+
+    await user.click(screen.getAllByRole('button', { name: /suomi/i })[0]);
+    await user.click(screen.getAllByText(/english/i)[0]);
+    expect(window.location.pathname).toBe('/en/projectportfolio/HAI23-1');
+
+    await user.click(screen.getAllByRole('button', { name: /english/i })[0]);
+    await user.click(screen.getAllByText(/svenska/i)[0]);
+    expect(window.location.pathname).toBe('/sv/projektportfolj/HAI23-1');
+  });
+
+  test('should navigate to correct url when changing language when url contains application id', async () => {
+    await i18next.changeLanguage('fi');
+    const { user } = render(<Header />, undefined, '/fi/hakemus/1');
+
+    await user.click(screen.getAllByRole('button', { name: /suomi/i })[0]);
+    await user.click(screen.getAllByText(/english/i)[0]);
+    expect(window.location.pathname).toBe('/en/application/1');
+
+    await user.click(screen.getAllByRole('button', { name: /english/i })[0]);
+    await user.click(screen.getAllByText(/svenska/i)[0]);
+    expect(window.location.pathname).toBe('/sv/ansokan/1');
+  });
 });
