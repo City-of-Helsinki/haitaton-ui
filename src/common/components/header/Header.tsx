@@ -60,10 +60,10 @@ const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
   const navigate = useNavigate();
 
   function getPathForLanguage(lang: Language, routeKey: string): string {
-    const hankeTunnusMatches = location.pathname.match(HANKETUNNUS_REGEXP);
-    const hankeTunnus = hankeTunnusMatches && hankeTunnusMatches[0];
-    const applicationIdMatches = location.pathname.match(APPLICATION_ID_REGEXP);
-    const applicationId = applicationIdMatches && applicationIdMatches[0];
+    const hankeTunnusMatches = HANKETUNNUS_REGEXP.exec(location.pathname);
+    const hankeTunnus = hankeTunnusMatches?.[0];
+    const applicationIdMatches = APPLICATION_ID_REGEXP.exec(location.pathname);
+    const applicationId = applicationIdMatches?.[0];
 
     let path = lang + t(`routes:${routeKey}.path`);
     if (hankeTunnus) {
