@@ -29,9 +29,9 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
   const { t } = useTranslation();
   const locale = useLocale();
   const { getValues, watch, setValue } = useFormContext<HankeDataFormState>();
-  const formValues: HankeAlue[] = getValues(FORMFIELD.HANKEALUEET);
+  const formValues: HankeAlue[] = getValues(FORMFIELD.HANKEALUEET) as HankeAlue[];
 
-  const watchHankeAlueet: HankeAlue[] = watch(FORMFIELD.HANKEALUEET);
+  const watchHankeAlueet: HankeAlue[] = watch(FORMFIELD.HANKEALUEET) as HankeAlue[];
   const haittaAlkuPvm = watchHankeAlueet[index]?.haittaAlkuPvm;
   const haittaLoppuPvm = watchHankeAlueet[index]?.haittaLoppuPvm;
   const minEndDate = haittaAlkuPvm && new Date(haittaAlkuPvm);
