@@ -57,6 +57,28 @@ test('Draft state notification is not rendered when hanke is not in draft state'
   expect(draftStateElements.length).toBe(0);
 });
 
+test('Generated state notification is rendered when hanke is in generated state', async () => {
+  render(<HankeViewContainer hankeTunnus="HAI22-11" />);
+
+  await waitForLoadingToFinish();
+  const generatedStateElements = screen.queryAllByText(
+    /hanke on muodostettu johtoselvityksen perusteella/i,
+    { exact: false },
+  );
+  expect(generatedStateElements.length).toBe(1);
+});
+
+test('Generated state notification is not rendered when hanke is not generated', async () => {
+  render(<HankeViewContainer hankeTunnus="HAI22-1" />);
+
+  await waitForLoadingToFinish();
+  const generatedStateElements = screen.queryAllByText(
+    /hanke on muodostettu johtoselvityksen perusteella/i,
+    { exact: false },
+  );
+  expect(generatedStateElements.length).toBe(0);
+});
+
 test('Correct information about hanke should be displayed', async () => {
   const { user } = render(<HankeViewContainer hankeTunnus="HAI22-3" />);
 

@@ -245,4 +245,8 @@ export const handlers = [
   rest.delete(`${apiUrl}/hakemukset/:id/liitteet/:attachmentId`, async (req, res, ctx) => {
     return res(ctx.status(200));
   }),
+
+  rest.get(`${apiUrl}/hankkeet/:hankeTunnus/liitteet`, async (_, res, ctx) => {
+    return res(ctx.status(200), ctx.json([]));
+  }),
 ];

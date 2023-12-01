@@ -204,6 +204,7 @@ export interface HankeData {
   createdAt?: string;
   modifiedBy?: null | string;
   modifiedAt?: null | string;
+  generated?: boolean;
 }
 
 export interface HankeIndexData {

@@ -501,6 +501,7 @@ const hankkeet: HankeDataDraft[] = [
     toteuttajat: [],
     muut: [],
     tyomaaTyyppi: [],
+    generated: true,
   },
 ];
 
