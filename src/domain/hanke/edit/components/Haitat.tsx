@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Button, Fieldset, IconTrash } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { Box, Flex, Spacer } from '@chakra-ui/react';
-import { FORMFIELD } from '../types';
+import { FORMFIELD, HankeDataFormState } from '../types';
 import DatePicker from '../../../../common/components/datePicker/DatePicker';
 import Dropdown from '../../../../common/components/dropdown/Dropdown';
 import useLocale from '../../../../common/hooks/useLocale';
@@ -17,6 +17,8 @@ import {
   HANKE_TARINAHAITTA,
 } from '../../../types/hanke';
 import styles from './Haitat.module.scss';
+import TextInput from '../../../../common/components/textInput/TextInput';
+import { getAreaDefaultName } from '../utils';
 
 type Props = {
   index: number;
@@ -26,13 +28,18 @@ type Props = {
 const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
   const { t } = useTranslation();
   const locale = useLocale();
-  const { getValues, watch, setValue } = useFormContext();
-  const formValues: HankeAlue[] = getValues(FORMFIELD.HANKEALUEET);
+  const { getValues, watch, setValue } = useFormContext<HankeDataFormState>();
+  const formValues: HankeAlue[] = getValues(FORMFIELD.HANKEALUEET) as HankeAlue[];
 
-  const watchHankeAlueet: HankeAlue[] = watch(FORMFIELD.HANKEALUEET);
+  const watchHankeAlueet: HankeAlue[] = watch(FORMFIELD.HANKEALUEET) as HankeAlue[];
   const haittaAlkuPvm = watchHankeAlueet[index]?.haittaAlkuPvm;
   const haittaLoppuPvm = watchHankeAlueet[index]?.haittaLoppuPvm;
   const minEndDate = haittaAlkuPvm && new Date(haittaAlkuPvm);
+
+  const areaDefaultName = useMemo(
+    () => getAreaDefaultName(getValues(FORMFIELD.HANKEALUEET)),
+    [getValues],
+  );
 
   useEffect(() => {
     if (haittaAlkuPvm && haittaLoppuPvm && haittaAlkuPvm > haittaLoppuPvm) {
@@ -50,19 +57,29 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
         <p>{t('hankeForm:hankkeenAlueForm:haitatInstructions')}</p>
       </Box>
 
+      <div className={`${styles.formRow} ${styles.formRowEven} formWprShort`}>
+        <TextInput
+          name={`${FORMFIELD.HANKEALUEET}.${index}.nimi`}
+          label={t('form:labels:areaName')}
+          helperText={t('form:helperTexts:areaName')}
+          defaultValue={areaDefaultName}
+          maxLength={100}
+        />
+      </div>
+
       <div className={`${styles.formRow} ${styles.formRowEven}`}>
         <DatePicker
           name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.HAITTA_ALKU_PVM}`}
           label={t(`hankeForm:labels:${FORMFIELD.HAITTA_ALKU_PVM}`)}
           locale={locale}
-          required
+          helperText={t('form:helperTexts:dateInForm')}
         />
         <DatePicker
           name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.HAITTA_LOPPU_PVM}`}
           label={t(`hankeForm:labels:${FORMFIELD.HAITTA_LOPPU_PVM}`)}
           locale={locale}
-          required
           minDate={minEndDate || undefined}
+          helperText={t('form:helperTexts:dateInForm')}
         />
         <Spacer />
       </div>
@@ -77,7 +94,6 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
           }))}
           defaultValue={formValues[index][FORMFIELD.MELUHAITTA] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.MELUHAITTA}`)}
-          required
         />
         <Dropdown
           name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.POLYHAITTA}`}
@@ -88,7 +104,6 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
           }))}
           defaultValue={formValues[index][FORMFIELD.POLYHAITTA] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.POLYHAITTA}`)}
-          required
         />
         <Dropdown
           name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.TARINAHAITTA}`}
@@ -99,7 +114,6 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
           }))}
           defaultValue={formValues[index][FORMFIELD.TARINAHAITTA] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.TARINAHAITTA}`)}
-          required
         />
       </div>
 
@@ -113,7 +127,6 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
           }))}
           defaultValue={formValues[index][FORMFIELD.KAISTAHAITTA] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.KAISTAHAITTA}`)}
-          required
         />
         <Dropdown
           name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.KAISTAPITUUSHAITTA}`}
@@ -124,7 +137,6 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
           }))}
           defaultValue={formValues[index][FORMFIELD.KAISTAPITUUSHAITTA] || ''}
           label={t(`hankeForm:labels:${FORMFIELD.KAISTAPITUUSHAITTA}`)}
-          required
         />
       </div>
 

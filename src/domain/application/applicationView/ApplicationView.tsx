@@ -4,7 +4,6 @@ import { Box } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import Geometry from 'ol/geom/Geometry';
 import Text from '../../../common/components/text/Text';
-import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
 import {
   InformationViewContainer,
   InformationViewContentContainer,
@@ -38,7 +37,8 @@ import { ApplicationCancel } from '../components/ApplicationCancel';
 import AttachmentSummary from '../components/AttachmentSummary';
 import useAttachments from '../hooks/useAttachments';
 import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
-import UserRightsCheck from '../../hanke/hankeUsers/UserRightsCheck';
+import { CheckRightsByHanke } from '../../hanke/hankeUsers/UserRightsCheck';
+import MainHeading from '../../../common/components/mainHeading/MainHeading';
 
 type Props = {
   application: Application;
@@ -81,9 +81,7 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
   return (
     <InformationViewContainer>
       <InformationViewHeader backgroundColor="var(--color-suomenlinna-light)">
-        <Text tag="h1" styleAs="h1" weight="bold" id={SKIP_TO_ELEMENT_ID} tabIndex={-1}>
-          {name}
-        </Text>
+        <MainHeading>{name}</MainHeading>
         <Text tag="h2" styleAs="h3" weight="bold" spacingBottom="l">
           {applicationId}
         </Text>
@@ -120,7 +118,7 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
 
         <InformationViewHeaderButtons>
           {isPending ? (
-            <UserRightsCheck requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
+            <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
               <Button
                 theme="coat"
                 iconLeft={<IconPen aria-hidden="true" />}
@@ -128,17 +126,17 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
               >
                 {t('hakemus:buttons:editApplication')}
               </Button>
-            </UserRightsCheck>
+            </CheckRightsByHanke>
           ) : null}
           {hanke ? (
-            <UserRightsCheck requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
+            <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
               <ApplicationCancel
                 applicationId={id}
                 alluStatus={alluStatus}
                 hankeTunnus={hanke?.hankeTunnus}
                 buttonIcon={<IconTrash aria-hidden />}
               />
-            </UserRightsCheck>
+            </CheckRightsByHanke>
           ) : null}
         </InformationViewHeaderButtons>
       </InformationViewHeader>

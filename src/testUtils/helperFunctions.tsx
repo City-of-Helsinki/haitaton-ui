@@ -3,7 +3,7 @@ import { fireEvent, RenderResult, screen, waitForElementToBeRemoved } from '@tes
 export const changeFilterDate = (
   label: string,
   renderedComponent: RenderResult,
-  value: string | null
+  value: string | null,
 ) => {
   fireEvent.change(renderedComponent.getByLabelText(label, { exact: false }), {
     target: { value },

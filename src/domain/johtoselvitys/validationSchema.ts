@@ -1,6 +1,5 @@
 import yup from '../../common/utils/yup';
 import isValidBusinessId from '../../common/utils/isValidBusinessId';
-import { MAX_ATTACHMENT_NUMBER } from './constants';
 
 const addressSchema = yup.object().shape({
   streetAddress: yup.object().shape({
@@ -81,5 +80,4 @@ export const validationSchema = yup.object().shape({
     areas: yup.array(areaSchema).min(1),
   }),
   selfIntersectingPolygon: yup.boolean().isFalse(),
-  attachmentNumber: yup.number().max(MAX_ATTACHMENT_NUMBER),
 });

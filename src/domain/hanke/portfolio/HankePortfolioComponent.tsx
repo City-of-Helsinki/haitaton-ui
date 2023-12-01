@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { RefObject, useEffect, useMemo, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import {
   useFilters,
   useTable,
@@ -9,7 +9,7 @@ import {
   useAsyncDebounce,
   useSortBy,
 } from 'react-table';
-import { useAccordion, Card, Select, TextInput, Button, Pagination } from 'hds-react';
+import { useAccordion, Card, Select, Button, Pagination, SearchInput } from 'hds-react';
 import {
   IconAngleDown,
   IconAngleUp,
@@ -34,18 +34,25 @@ import { Language } from '../../../common/types/language';
 import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
 import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotification';
+import HankeGeneratedStateNotification from '../edit/components/HankeGeneratedStateNotification';
 import Container from '../../../common/components/container/Container';
-import { SKIP_TO_ELEMENT_ID } from '../../../common/constants/constants';
 import useHankeViewPath from '../hooks/useHankeViewPath';
 import { useNavigateToApplicationList } from '../hooks/useNavigateToApplicationList';
 import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
-import UserRightsCheck from '../hankeUsers/UserRightsCheck';
+import { CheckRightsByUser } from '../hankeUsers/UserRightsCheck';
+import { SignedInUser, SignedInUserByHanke } from '../hankeUsers/hankeUser';
+import MainHeading from '../../../common/components/mainHeading/MainHeading';
+import useFocusToElement from '../../../common/hooks/useFocusToElement';
+import HDSLink from '../../../common/components/Link/Link';
+import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 
 type CustomAccordionProps = {
   hanke: HankeData;
+  signedInUser: SignedInUser;
+  headerRef: RefObject<HTMLDivElement> | null;
 };
 
-const CustomAccordion: React.FC<React.PropsWithChildren<CustomAccordionProps>> = ({ hanke }) => {
+const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, headerRef }) => {
   const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
   const hankeViewPath = useHankeViewPath(hanke?.hankeTunnus);
   const navigateToApplications = useNavigateToApplicationList(hanke?.hankeTunnus);
@@ -75,7 +82,12 @@ const CustomAccordion: React.FC<React.PropsWithChildren<CustomAccordionProps>> =
           className={clsx([styles.hankeCardHeader, styles.hankeCardFlexContainer])}
           {...buttonProps}
         >
-          <div className={clsx([styles.hankeCardFlexContainer, styles.flexWrap])}>
+          <div
+            className={clsx([styles.hankeCardFlexContainer, styles.flexWrap])}
+            ref={headerRef}
+            tabIndex={-1}
+            data-testid="hanke-card-header"
+          >
             <Text tag="p" styleAs="body-m">
               {hanke.hankeTunnus}
             </Text>
@@ -115,7 +127,7 @@ const CustomAccordion: React.FC<React.PropsWithChildren<CustomAccordionProps>> =
               <IconEye aria-hidden />
             </Link>
             <FeatureFlags flags={['hanke']}>
-              <UserRightsCheck requiredRight="EDIT" hankeTunnus={hanke.hankeTunnus}>
+              <CheckRightsByUser requiredRight="EDIT" signedInUser={signedInUser}>
                 <Link
                   to={getEditHankePath({ hankeTunnus: hanke.hankeTunnus })}
                   aria-label={
@@ -127,7 +139,7 @@ const CustomAccordion: React.FC<React.PropsWithChildren<CustomAccordionProps>> =
                 >
                   <IconPen aria-hidden />
                 </Link>
-              </UserRightsCheck>
+              </CheckRightsByUser>
             </FeatureFlags>
           </div>
           <button type="button" className={styles.iconWrapper}>
@@ -135,7 +147,11 @@ const CustomAccordion: React.FC<React.PropsWithChildren<CustomAccordionProps>> =
           </button>
         </div>
         <FeatureFlags flags={['hanke']}>
-          <HankeDraftStateNotification hanke={hanke} className={styles.draftNotification} />
+          <HankeGeneratedStateNotification
+            generated={hanke.generated}
+            className={styles.stateNotification}
+          />
+          <HankeDraftStateNotification hanke={hanke} className={styles.stateNotification} />
         </FeatureFlags>
       </>
       <div className={styles.hankeCardContent} {...contentProps}>
@@ -233,10 +249,16 @@ export type Column = {
 };
 
 export interface PagedRowsProps {
-  data: Array<HankeData>;
+  hankkeet: Array<HankeData>;
+  signedInUserByHanke: SignedInUserByHanke;
 }
 
-const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({ data }) => {
+const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
+  hankkeet,
+  signedInUserByHanke,
+}) => {
+  const { NEW_HANKE } = useLocalizedRoutes();
+
   const {
     hankeFilterStartDate,
     hankeFilterEndDate,
@@ -342,11 +364,10 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
     setFilter,
     setGlobalFilter,
     rows,
-    preFilteredRows,
   } = useTable(
     {
       columns,
-      data,
+      data: hankkeet,
       initialState: {
         pageSize: 10,
         sortBy: useMemo(() => [{ id: 'alkuPvm', desc: false }], []),
@@ -450,6 +471,8 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
     setIsFiltered(Boolean(globalFilter) || areFilters);
   }, [setIsFiltered, filters, globalFilter]);
 
+  const firstHankeCardRef = useFocusToElement<HTMLDivElement>(pageIndex);
+
   function handlePageChange(e: React.MouseEvent, index: number) {
     e.preventDefault();
     gotoPage(index);
@@ -459,29 +482,22 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
     <>
       <div className={styles.headerContainer}>
         <Container>
-          <Text
-            tag="h1"
-            data-testid="HankePortfolioPageHeader"
-            styleAs="h1"
-            spacingBottom="s"
-            weight="bold"
-            id={SKIP_TO_ELEMENT_ID}
-            tabIndex={-1}
-          >
+          <MainHeading data-testid="HankePortfolioPageHeader" spacingBottom="s">
             {t('hankePortfolio:pageHeader')}
-          </Text>
+          </MainHeading>
 
           <div
             className={styles.filters}
             aria-label={t('hankePortfolio:filters')}
             aria-describedby={t('hankePortfolio:filtersInfoText')}
           >
-            <TextInput
+            <SearchInput
               className={styles.hankeSearch}
-              id="searchHanke"
-              value={hankeSearchValue}
-              onChange={(e) => setHankeSearchValue(e.target.value)}
               label={t('hankePortfolio:search')}
+              placeholder={t('hankePortfolio:searchPlaceholder')}
+              value={hankeSearchValue}
+              onChange={setHankeSearchValue}
+              onSubmit={setHankeSearchValue}
             />
             <FeatureFlags flags={['hanke']}>
               <div className={styles.dateRange}>
@@ -571,26 +587,36 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
             </Text>
 
             {rows.length > 0 &&
-              page.map((row) => {
+              page.map(({ original: hanke }, index) => {
+                const { hankeTunnus } = hanke;
+                const signedInUser = signedInUserByHanke[hankeTunnus];
                 return (
-                  <div key={row.original.hankeTunnus}>
-                    <CustomAccordion hanke={row.original} />
-                  </div>
+                  <CustomAccordion
+                    key={hankeTunnus}
+                    hanke={hanke}
+                    signedInUser={signedInUser}
+                    headerRef={index === 0 ? firstHankeCardRef : null}
+                  />
                 );
               })}
-            {rows.length === 0 && preFilteredRows.length > 0 && (
+            {rows.length === 0 && (
               <div className={styles.notFoundContainer}>
                 <IconSearch size="l" />
-                <Text tag="p" styleAs="h3" weight="bold" spacingTop="m">
-                  {t('hankePortfolio:noneFound')}
-                </Text>
-              </div>
-            )}
-            {preFilteredRows.length === 0 && (
-              <div className={styles.notFoundContainer}>
-                <Text tag="p" styleAs="h3" weight="bold" spacingTop="m">
-                  {t('hankePortfolio:noneExist')}
-                </Text>
+                <div>
+                  <Trans i18nKey="hankePortfolio:noneFound">
+                    <Text tag="p" spacingTop="m" spacingBottom="s" className="heading-m">
+                      Hankelistasi on tyhjä, sillä antamillasi hakuehdoilla ei löytynyt yhtään
+                      hanketta tai sinulla ei vielä ole hankkeita.
+                    </Text>
+                    <Text tag="p" className="heading-m">
+                      Tarkista hakuehdot tai{' '}
+                      <HDSLink href={NEW_HANKE.path} className="heading-m">
+                        luo uusi hanke
+                      </HDSLink>
+                      .
+                    </Text>
+                  </Trans>
+                </div>
               </div>
             )}
 
@@ -615,12 +641,16 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
 
 type Props = {
   hankkeet: HankeData[];
+  signedInUserByHanke: SignedInUserByHanke;
 };
 
-const HankePortfolio: React.FC<React.PropsWithChildren<Props>> = ({ hankkeet }) => {
+const HankePortfolio: React.FC<React.PropsWithChildren<Props>> = ({
+  hankkeet,
+  signedInUserByHanke,
+}) => {
   return (
     <div className={styles.hankesalkkuContainer}>
-      <PaginatedPortfolio data={hankkeet} />
+      <PaginatedPortfolio hankkeet={hankkeet} signedInUserByHanke={signedInUserByHanke} />
     </div>
   );
 };

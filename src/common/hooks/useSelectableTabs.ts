@@ -12,7 +12,7 @@ type Options = {
  */
 export default function useSelectableTabs(
   numberOfTabs: number,
-  options: Options = { selectLastTabOnChange: false }
+  options: Options = { selectLastTabOnChange: false },
 ) {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 

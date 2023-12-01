@@ -1,0 +1,18 @@
+.uploadContainer {
+  min-height: 280px;
+  margin-bottom: var(--spacing-s);
+}
+
+.loadingContainer {
+  margin-left: var(--spacing-m);
+  align-items: center;
+  column-gap: var(--spacing-2-xs);
+
+  .loadingSpinner {
+    margin-right: var(--spacing-s);
+  }
+
+  .loadingText {
+    font-weight: 500;
+  }
+}

@@ -1,3 +1,4 @@
+import { AttachmentMetadata } from './../../../common/types/attachment';
 import { Polygon, Position } from 'geojson';
 import { Coordinate } from 'ol/coordinate';
 import { CRS } from '../../../common/types/hanke';
@@ -100,14 +101,10 @@ export type ApplicationArea = {
 
 export type AttachmentType = 'MUU' | 'LIIKENNEJARJESTELY' | 'VALTAKIRJA';
 
-export type ApplicationAttachmentMetadata = {
-  id: string;
-  fileName: string;
-  createdByUserId: string;
-  createdAt: string;
+export interface ApplicationAttachmentMetadata extends AttachmentMetadata {
   applicationId: number;
   attachmentType: AttachmentType;
-};
+}
 
 export type JohtoselvitysData = {
   applicationType: ApplicationType;

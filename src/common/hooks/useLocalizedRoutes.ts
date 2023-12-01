@@ -32,7 +32,7 @@ export const getMatchingRouteKey = (i18n: i18nInstance, language: Language, path
 
   // Find first matching routekey
   const routeKey = Object.keys(res.routes).find((key) =>
-    res.routes[key].path.includes(pathWithoutLocale)
+    res.routes[key].path.includes(pathWithoutLocale),
   );
 
   return routeKey || ROUTES.HOME;
@@ -58,6 +58,6 @@ export const useLocalizedRoutes = (): RouteMap => {
           },
         },
       }),
-      {} as RouteMap
+      {} as RouteMap,
     );
 };

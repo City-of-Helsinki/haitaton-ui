@@ -17,9 +17,9 @@ const HankeLayer = () => {
   const hankkeetFilteredByAll = useMemo(
     () =>
       hankkeet.filter(
-        byAllHankeFilters({ startDate: hankeFilterStartDate, endDate: hankeFilterEndDate })
+        byAllHankeFilters({ startDate: hankeFilterStartDate, endDate: hankeFilterEndDate }),
       ),
-    [hankkeet, hankeFilterStartDate, hankeFilterEndDate]
+    [hankkeet, hankeFilterStartDate, hankeFilterEndDate],
   );
 
   useHankeFeatures(hankeSource.current, hankkeetFilteredByAll);

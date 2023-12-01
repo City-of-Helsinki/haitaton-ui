@@ -30,6 +30,7 @@ describe('Header', () => {
 
     expect(screen.getByText('Hankkeet yleisillä alueilla')).toBeInTheDocument();
     expect(screen.getByText('Luo uusi hanke')).toBeInTheDocument();
+    expect(screen.getByText('Tee johtoselvityshakemus')).toBeInTheDocument();
     expect(screen.getByText('Omat hankkeet')).toBeInTheDocument();
     expect(screen.getByText('Työohjeet')).toBeInTheDocument();
   });

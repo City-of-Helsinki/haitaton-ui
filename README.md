@@ -87,6 +87,23 @@ Then either rebuild the docker container or run `yarn update-runtime-env` as dis
 
 In the cloud instances, dev uses Helsinki AD identification while others use Suomi.fi.
 
+### Windows Subsystem for Linux (WSL)
+
+If you use WSL as your local development environment and you bump into pre-push validation errors
+in `git push` that other developers (with e.g. Mac) do not have, you could try to set `WSL=true`
+in your local environment, e.g. in `~/.huskyrc` (Husky git hooks automatically loads this file):
+
+```
+export WSL=true
+```
+
+This setting adds `--runInBand` parameter for Jest tests (see https://jestjs.io/docs/cli#--runinband).
+
+## Git hooks
+
+There are team-managed git hooks in the `.husky` -directory. To use these, husky must be enabled
+once with `yarn prepare`. The command needs to be done only once.
+
 ## Excel for translations
 
 You can export an Excel-file with current translations. This can then be sent to translators.

@@ -11,7 +11,7 @@ export default function isValidBusinessId(value: string | null | undefined): boo
   const runningNumberArray = Array.from(runningNumber).map((char) => Number(char));
   const sum = zipWith(runningNumberArray, [7, 9, 10, 5, 8, 4, 2], (a, b) => a * b).reduce(
     (previous, current) => previous + current,
-    0
+    0,
   );
   const remainder = sum % 11;
   const check = Number(value[8]);

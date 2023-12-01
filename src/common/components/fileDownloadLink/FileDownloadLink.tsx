@@ -1,6 +1,6 @@
+import React, { useEffect, useRef, useState } from 'react';
 import { Box } from '@chakra-ui/react';
 import { Link, LoadingSpinner, Notification } from 'hds-react';
-import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { QueryFunction, QueryKey, useQueryClient } from 'react-query';
 
@@ -10,22 +10,34 @@ type Props = {
   queryKey: QueryKey;
   queryFunction: QueryFunction<string>;
   linkIcon?: React.ReactNode;
+  linkTextStyles?: string;
 };
 
-function FileDownloadLink({ linkText, fileName, queryKey, queryFunction, linkIcon }: Props) {
+function FileDownloadLink({
+  linkText,
+  fileName,
+  queryKey,
+  queryFunction,
+  linkIcon,
+  linkTextStyles,
+}: Props) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const [fileUrl, setFileUrl] = useState('');
+  const [fileUrl, setFileUrl] = useState(queryClient.getQueryData<string>(queryKey) ?? '');
   const linkRef = useRef<HTMLAnchorElement>(null);
   const [errorText, setErrorText] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [fileFetched, setFileFetched] = useState(false);
+
+  useEffect(() => {
+    if (fileFetched) {
+      linkRef.current?.click();
+    }
+  }, [fileFetched]);
 
   async function fetchFile(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
     setErrorText(null);
-    const cachedUrl = queryClient.getQueryData<string>(queryKey);
-    if (cachedUrl) {
-      setFileUrl(cachedUrl);
-    } else {
+    if (!fileUrl) {
       event.preventDefault();
       setLoading(true);
       try {
@@ -35,7 +47,7 @@ function FileDownloadLink({ linkText, fileName, queryKey, queryFunction, linkIco
         });
         setFileUrl(url);
         setLoading(false);
-        linkRef.current?.click();
+        setFileFetched(true);
       } catch (error) {
         setLoading(false);
         setErrorText(t('common:error'));
@@ -49,7 +61,7 @@ function FileDownloadLink({ linkText, fileName, queryKey, queryFunction, linkIco
 
   if (loading) {
     return (
-      <Box display="flex" alignItems="center">
+      <Box display="flex" alignItems="center" width="max-content">
         <LoadingSpinner small />
       </Box>
     );
@@ -59,7 +71,7 @@ function FileDownloadLink({ linkText, fileName, queryKey, queryFunction, linkIco
     <>
       <Link href={fileUrl} download={fileName} onClick={fetchFile} ref={linkRef}>
         {linkIcon}
-        {linkText}
+        <span className={linkTextStyles}>{linkText}</span>
       </Link>
 
       {errorText && (
