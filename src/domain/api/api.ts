@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig, AxiosError } from 'axios';
+import axios, { AxiosInstance, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { LOCALSTORAGE_OIDC_KEY } from '../auth/constants';
 
 const api: AxiosInstance = axios.create({
@@ -8,7 +8,7 @@ const api: AxiosInstance = axios.create({
 api.defaults.headers.post['Content-Type'] = 'application/json';
 
 api.interceptors.request.use(
-  (config: AxiosRequestConfig) => {
+  (config: InternalAxiosRequestConfig) => {
     const oidcStorage = localStorage.getItem(LOCALSTORAGE_OIDC_KEY);
     if (oidcStorage) {
       const token = JSON.parse(oidcStorage).access_token;
@@ -19,7 +19,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error: AxiosError) => Promise.reject(error)
+  (error: AxiosError) => Promise.reject(error),
 );
 
 api.interceptors.response.use(
@@ -50,7 +50,7 @@ api.interceptors.response.use(
       return Promise.reject(new Error('Request failed. Please try again.'));
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;
