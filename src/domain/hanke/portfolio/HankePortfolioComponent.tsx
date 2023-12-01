@@ -610,7 +610,7 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
                     </Text>
                     <Text tag="p" className="heading-m">
                       Tarkista hakuehdot tai{' '}
-                      <HDSLink href={NEW_HANKE.path} className="heading-m">
+                      <HDSLink href={NEW_HANKE.path} className={styles.newHankeLink}>
                         luo uusi hanke
                       </HDSLink>
                       .
