@@ -58,6 +58,9 @@
           "fileNotFound": "Tiedostoa, jonka yritit poistaa ei löydy (virhe 404). Yritä myöhemmin uudelleen.",
           "serverError": "Palvelimeen ei saada yhteyttä, eikä valittua tiedostoa saada poistettua. Yritä myöhemmin uudelleen."
         }
+      },
+      "footer": {
+        "backToTop": "Takaisin ylös"
       }
     },
     "error": "Tapahtui virhe. Yritä uudestaan.",

@@ -1,6 +1,5 @@
 @import '~hds-core/lib/base.css';
 @import '~hds-core/lib/icons/icon.css';
-@import '~hds-core/lib/icons/all.min.css';
 
 @font-face {
   font-family: HelsinkiGrotesk;
@@ -40,13 +39,8 @@ body {
   width: 100%;
 }
 
-// HDS footer custom theme did not worked
 footer {
-  --footer-background: var(--color-summer) !important;
-  --footer-divider-color: var(--color-summer) !important;
-
-  section {
-    padding-top: var(--spacing-s) !important;
-    padding-bottom: var(--spacing-s) !important;
+  h2 {
+    margin-bottom: var(--spacing-s) !important;
   }
 }

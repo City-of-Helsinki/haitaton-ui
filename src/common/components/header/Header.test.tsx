@@ -38,7 +38,7 @@ describe('Header', () => {
   test('it should display user name', () => {
     render(<Header />);
 
-    expect(screen.getAllByText('Test User')).toHaveLength(2);
+    expect(screen.getByText('Test User')).toBeInTheDocument();
   });
 
   test('when user changes language it should change the UI language and the url based on the selected language', async () => {
