@@ -100,7 +100,7 @@
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/proj4": "^2.5.0",
-    "@typescript-eslint/eslint-plugin": "^6.2.1",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.2.1",
     "cypress-localstorage-commands": "^2.2.3",
     "eslint-import-resolver-typescript": "^3.6.1",
