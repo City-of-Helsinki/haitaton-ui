@@ -4,6 +4,9 @@ import { $enum } from 'ts-enum-util';
 import { ROUTES, RouteMap } from '../types/route';
 import { Language } from '../types/language';
 
+export const APPLICATION_ID_REGEXP = /(?<=\/)(\d+)/;
+export const HANKETUNNUS_REGEXP = /HAI\d{2}-(\d+)/;
+
 type GetLocalizationParams = {
   useTranslationResponse: UseTranslationResponse<''>;
   route: string;
@@ -28,7 +31,10 @@ export const getRouteLocalization = ({
 export const getMatchingRouteKey = (i18n: i18nInstance, language: Language, path: string) => {
   // eslint-disable-next-line
   const res: any = i18n.getDataByLanguage(language);
-  const pathWithoutLocale = path.length > 3 ? path.substring(3) : path;
+  let pathWithoutLocale = path.length > 3 ? path.substring(3) : path;
+  pathWithoutLocale = pathWithoutLocale
+    .replace(APPLICATION_ID_REGEXP, ':id')
+    .replace(HANKETUNNUS_REGEXP, ':hankeTunnus');
 
   // Find first matching routekey
   const routeKey = Object.keys(res.routes).find((key) =>
