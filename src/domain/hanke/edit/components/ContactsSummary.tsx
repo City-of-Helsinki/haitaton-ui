@@ -11,9 +11,7 @@ const ContactSummary: React.FC<{ contact: HankeContact | HankeMuuTaho }> = ({ co
   if (CONTACT_FORMFIELD.TYYPPI in contact) {
     return (
       <div style={{ marginBottom: 'var(--spacing-s)' }}>
-        {contact.tyyppi !== undefined && (
-          <p>{t(`form:yhteystiedot:contactType:${contact.tyyppi}`)}</p>
-        )}
+        {contact.tyyppi !== null && <p>{t(`form:yhteystiedot:contactType:${contact.tyyppi}`)}</p>}
         <p>{contact.nimi}</p>
         <p>{contact.ytunnus}</p>
         <p>{contact.email}</p>

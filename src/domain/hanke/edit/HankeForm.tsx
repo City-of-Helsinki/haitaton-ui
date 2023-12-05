@@ -94,6 +94,8 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       setValue('hankeTunnus', data.hankeTunnus);
       setValue('tormaystarkasteluTulos', data.tormaystarkasteluTulos);
       setValue('status', data.status);
+      setValue('alkuPvm', data.alkuPvm);
+      setValue('loppuPvm', data.loppuPvm);
       setShowNotification('success');
     },
   });

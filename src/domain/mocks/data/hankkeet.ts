@@ -1,4 +1,8 @@
-import { canHankeBeCancelled } from '../../hanke/edit/utils';
+import {
+  canHankeBeCancelled,
+  getAreasMaxEndDate,
+  getAreasMinStartDate,
+} from '../../hanke/edit/utils';
 import { HankeDataDraft } from '../../types/hanke';
 import ApiError from '../apiError';
 import hankkeetData from './hankkeet-data';
@@ -36,7 +40,11 @@ export async function update(hankeTunnus: string, updates: HankeDataDraft) {
   if (!hanke) {
     throw new Error(`No hanke with hankeTunnus ${hankeTunnus}`);
   }
-  hanke = Object.assign(hanke, updates);
+  hanke = Object.assign(hanke, {
+    ...updates,
+    alkuPvm: getAreasMinStartDate(updates.alueet)?.toISOString(),
+    loppuPvm: getAreasMaxEndDate(updates.alueet)?.toISOString(),
+  });
   return hanke;
 }
 
