@@ -58,7 +58,7 @@ const otherPartySchema = contactSchema
 
 export const hankeAlueSchema = yup.object().shape({
   [FORMFIELD.NIMI]: yup.string(),
-  [FORMFIELD.HAITTA_ALKU_PVM]: yup.date(),
+  [FORMFIELD.HAITTA_ALKU_PVM]: yup.date().nullable(),
   [FORMFIELD.HAITTA_LOPPU_PVM]: yup
     .date()
     .when(FORMFIELD.HAITTA_ALKU_PVM, (alkuPvm: Date, schema: yup.DateSchema) => {
@@ -67,7 +67,8 @@ export const hankeAlueSchema = yup.object().shape({
       } catch (error) {
         return schema;
       }
-    }),
+    })
+    .nullable(),
   [FORMFIELD.MELUHAITTA]: yup.mixed().oneOf([...$enum(HANKE_MELUHAITTA).getValues(), null]),
   [FORMFIELD.POLYHAITTA]: yup.mixed().oneOf([...$enum(HANKE_POLYHAITTA).getValues(), null]),
   [FORMFIELD.TARINAHAITTA]: yup.mixed().oneOf([...$enum(HANKE_TARINAHAITTA).getValues(), null]),
@@ -78,7 +79,6 @@ export const hankeAlueSchema = yup.object().shape({
 });
 
 export const hankeSchema = yup.object().shape({
-  hankeTunnus: yup.string().required(),
   [FORMFIELD.NIMI]: yup.string().min(3).required(),
   [FORMFIELD.KUVAUS]: yup.string(),
   [FORMFIELD.KATUOSOITE]: yup.string(),
