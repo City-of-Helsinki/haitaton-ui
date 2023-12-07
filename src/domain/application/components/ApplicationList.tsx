@@ -46,7 +46,7 @@ function ApplicationList({ applications }: Props) {
       },
     },
     useSortBy,
-    usePagination
+    usePagination,
   );
 
   if (rows.length === 0) {

@@ -233,4 +233,20 @@ export const handlers = [
   rest.post(`${apiUrl}/kayttajat/:kayttajaId/kutsu`, async (req, res, ctx) => {
     return res(ctx.delay(), ctx.status(204));
   }),
+
+  rest.get(`${apiUrl}/hakemukset/:id/liitteet`, async (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json([]));
+  }),
+
+  rest.post(`${apiUrl}/hakemukset/:id/liitteet`, async (req, res, ctx) => {
+    return res(ctx.delay(), ctx.status(200));
+  }),
+
+  rest.delete(`${apiUrl}/hakemukset/:id/liitteet/:attachmentId`, async (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
+  rest.get(`${apiUrl}/hankkeet/:hankeTunnus/liitteet`, async (_, res, ctx) => {
+    return res(ctx.status(200), ctx.json([]));
+  }),
 ];

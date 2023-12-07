@@ -7,8 +7,21 @@ import {
   SectionItemTitle,
 } from '../../../forms/components/FormSummarySection';
 import { HankeDataDraft } from '../../../types/hanke';
-import { FORMFIELD, HankeDataFormState } from '../types';
-import { getAreasMaxEndDate, getAreasMinStartDate } from '../utils';
+import { HankeDataFormState } from '../types';
+
+const SectionData: React.FC<{ title: string; content: string | undefined }> = ({
+  title,
+  content,
+}) => {
+  return (
+    <>
+      <SectionItemTitle>{title}</SectionItemTitle>
+      <SectionItemContent>
+        <p>{content}</p>
+      </SectionItemContent>
+    </>
+  );
+};
 
 type Props = {
   formData: HankeDataFormState | HankeDataDraft;
@@ -18,59 +31,49 @@ type Props = {
 const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
   const { t } = useTranslation();
 
-  const hankeAreas = formData[FORMFIELD.HANKEALUEET];
-  const minAreaStartDate = getAreasMinStartDate(hankeAreas);
-  const maxAreaEndDate = getAreasMaxEndDate(hankeAreas);
-  let startDate;
-  let endDate;
-  try {
-    startDate = minAreaStartDate && formatToFinnishDate(minAreaStartDate.toISOString());
-    endDate = maxAreaEndDate && formatToFinnishDate(maxAreaEndDate.toISOString());
-    // eslint-disable-next-line no-empty
-  } catch (error) {}
-
   return (
     <FormSummarySection>
-      <SectionItemTitle>{t('hankeForm:labels:perustaja')}</SectionItemTitle>
-      <SectionItemContent />
-      <SectionItemTitle>{t('hankeForm:labels:nimi')}</SectionItemTitle>
-      <SectionItemContent>
-        <p>{formData.nimi}</p>
-      </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:labels:hankeTunnus')}</SectionItemTitle>
-      <SectionItemContent>
-        <p>{formData.hankeTunnus}</p>
-      </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:labels:kuvaus')}</SectionItemTitle>
-      <SectionItemContent>
-        <p>{formData.kuvaus}</p>
-      </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:labels:tyomaaKatuosoite')}</SectionItemTitle>
-      <SectionItemContent>
-        <p>{formData.tyomaaKatuosoite}</p>
-      </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:labels:alkuPvm')}</SectionItemTitle>
-      <SectionItemContent>
-        <p>{startDate}</p>
-      </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:labels:loppuPvm')}</SectionItemTitle>
-      <SectionItemContent>
-        <p>{endDate}</p>
-      </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:labels:vaihe')}</SectionItemTitle>
-      <SectionItemContent>
-        {formData.vaihe !== null && <p>{t(`hanke:vaihe:${formData.vaihe}`)}</p>}
-      </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:labels:tyomaaTyyppi')}</SectionItemTitle>
-      <SectionItemContent>
-        <p>
-          {formData.tyomaaTyyppi?.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')}
-        </p>
-      </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:labels:onYKTHanke')}</SectionItemTitle>
-      <SectionItemContent>
-        <p>{formData.onYKTHanke ? t('common:yes') : t('common:no')}</p>
-      </SectionItemContent>
+      <SectionData title={t('hankeForm:labels:nimi')} content={formData.nimi} />
+      <SectionData title={t('hankeForm:labels:hankeTunnus')} content={formData.hankeTunnus} />
+      {formData.kuvaus && (
+        <SectionData title={t('hankeForm:labels:kuvaus')} content={formData.kuvaus} />
+      )}
+      {formData.tyomaaKatuosoite && (
+        <SectionData
+          title={t('hankeForm:labels:tyomaaKatuosoite')}
+          content={formData.tyomaaKatuosoite}
+        />
+      )}
+      {formData.alkuPvm && (
+        <SectionData
+          title={t('hankeForm:labels:alkuPvm')}
+          content={formatToFinnishDate(formData.alkuPvm)}
+        />
+      )}
+      {formData.loppuPvm && (
+        <SectionData
+          title={t('hankeForm:labels:loppuPvm')}
+          content={formatToFinnishDate(formData.loppuPvm)}
+        />
+      )}
+      {formData.vaihe && (
+        <SectionData
+          title={t('hankeForm:labels:vaihe')}
+          content={t(`hanke:vaihe:${formData.vaihe}`)}
+        />
+      )}
+      {formData.tyomaaTyyppi && formData.tyomaaTyyppi.length > 0 && (
+        <SectionData
+          title={t('hankeForm:labels:tyomaaTyyppi')}
+          content={formData.tyomaaTyyppi
+            ?.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`))
+            .join(', ')}
+        />
+      )}
+      <SectionData
+        title={t('hankeForm:labels:onYKTHanke')}
+        content={formData.onYKTHanke ? t('common:yes') : t('common:no')}
+      />
       {children}
     </FormSummarySection>
   );

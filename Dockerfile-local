@@ -1,13 +1,25 @@
 FROM node:16-alpine as staticbuilder
-COPY . /builder/
+# Copy files needed for downloading dependencies
+COPY ./package.json /builder/package.json
+COPY ./yarn.lock /builder/yarn.lock
 WORKDIR /builder
+# The sources are not copied yet, so this step is cached between different builds
+# with modified sources, as long as the files above have not changed.
 RUN yarn && yarn cache clean --force
+
+# Copy the sources and build the app.
+# Changes in other files won't invalidate the cached build.
+COPY ./src /builder/src
+COPY ./public /builder/public
+COPY ./tsconfig.json /builder/tsconfig.json
 RUN REACT_APP_DISABLE_SENTRY=1 yarn build
 
 FROM nginx:stable
+# Install mods for nginx that include the Headers More mod, that allows the
+# removal of the Server -header
+RUN apt-get update && apt-get --no-install-recommends install -y nginx-extras && apt-get clean
 EXPOSE 8000
 COPY --from=staticbuilder ./builder/build /usr/share/nginx/html
-COPY --from=staticbuilder ./builder/nginx/nginx.conf /etc/nginx/nginx.conf
 WORKDIR /usr/share/nginx/html
 
 # Copy default environment config and setup script
@@ -17,6 +29,15 @@ COPY .env /opt/.env
 COPY package.json /opt/package.json
 RUN chmod +x /opt/env.sh
 
+#COPY ./nginx/variables.conf /etc/nginx/templates/10-variables.conf.template
+
+# Copy script that injects environment variables to nginx.conf
+COPY ./scripts/nginx-env.sh /opt/nginx-env.sh
+# The script copies /opt/nginx.conf to /etc/nginx/nginx.conf
+# while replacing the environment variables
+COPY ./nginx/nginx.conf /opt/nginx.conf
+RUN chmod +x /opt/nginx-env.sh
+
 ENV REACT_APP_DISABLE_SENTRY=1
 
-CMD ["/bin/bash", "-c", "/opt/env.sh /opt /usr/share/nginx/html && nginx -g \"daemon off;\""]
+CMD ["/bin/bash", "-c", "/opt/env.sh /opt /usr/share/nginx/html && /opt/nginx-env.sh && nginx -g \"daemon off;\""]

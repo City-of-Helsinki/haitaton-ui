@@ -326,7 +326,7 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
         contactType="customerWithContacts"
         subContactPath="applicationData.customerWithContacts.contacts"
         emptySubContact={getEmptyContact()}
-        renderSubContact={(subContactIndex, removeSubContact) => {
+        renderSubContact={(subContactIndex, _subContactCount, removeSubContact) => {
           return (
             <ContactFields
               customerType="customerWithContacts"
@@ -355,7 +355,7 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
           contactType="contractorWithContacts"
           subContactPath="applicationData.contractorWithContacts.contacts"
           emptySubContact={getEmptyContact()}
-          renderSubContact={(subContactIndex, removeSubContact) => {
+          renderSubContact={(subContactIndex, _subContactCount, removeSubContact) => {
             return (
               <ContactFields
                 customerType="contractorWithContacts"
@@ -384,10 +384,10 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
         {isPropertyDeveloper && (
           <Contact<CustomerType>
             contactType="propertyDeveloperWithContacts"
-            onRemoveContact={handleRemovePropertyDeveloper}
+            onRemove={handleRemovePropertyDeveloper}
             subContactPath="applicationData.propertyDeveloperWithContacts.contacts"
             emptySubContact={getEmptyContact()}
-            renderSubContact={(subContactIndex, removeSubContact) => {
+            renderSubContact={(subContactIndex, _subContactCount, removeSubContact) => {
               return (
                 <ContactFields
                   customerType="propertyDeveloperWithContacts"
@@ -427,10 +427,10 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
         {isRepresentative && (
           <Contact<CustomerType>
             contactType="representativeWithContacts"
-            onRemoveContact={handleRemoveRepresentative}
+            onRemove={handleRemoveRepresentative}
             subContactPath="applicationData.representativeWithContacts.contacts"
             emptySubContact={getEmptyContact()}
-            renderSubContact={(subContactIndex, removeSubContact) => {
+            renderSubContact={(subContactIndex, _subContactCount, removeSubContact) => {
               return (
                 <ContactFields
                   customerType="representativeWithContacts"

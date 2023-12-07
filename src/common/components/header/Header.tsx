@@ -3,7 +3,12 @@ import { IconLinkExternal, IconSignout, LogoLanguage, Navigation } from 'hds-rea
 import { useTranslation } from 'react-i18next';
 import { NavLink, useMatch, useLocation, useNavigate } from 'react-router-dom';
 import { $enum } from 'ts-enum-util';
-import { getMatchingRouteKey, useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
+import {
+  getMatchingRouteKey,
+  useLocalizedRoutes,
+  HANKETUNNUS_REGEXP,
+  APPLICATION_ID_REGEXP,
+} from '../../hooks/useLocalizedRoutes';
 import authService from '../../../domain/auth/authService';
 import useUser from '../../../domain/auth/useUser';
 import { Language, LANGUAGES } from '../../types/language';
@@ -17,8 +22,14 @@ const languageLabels = {
 };
 
 const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
-  const { HOME, PUBLIC_HANKKEET, PUBLIC_HANKKEET_MAP, HANKEPORTFOLIO, NEW_HANKE } =
-    useLocalizedRoutes();
+  const {
+    HOME,
+    PUBLIC_HANKKEET,
+    PUBLIC_HANKKEET_MAP,
+    HANKEPORTFOLIO,
+    NEW_HANKE,
+    JOHTOSELVITYSHAKEMUS,
+  } = useLocalizedRoutes();
   const { t, i18n } = useTranslation();
   const { data: user } = useUser();
   const isAuthenticated = Boolean(user?.profile);
@@ -32,6 +43,10 @@ const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
     path: NEW_HANKE.path,
     end: false,
   });
+  const isCableReportApplicationPath = useMatch({
+    path: JOHTOSELVITYSHAKEMUS.path,
+    end: true,
+  });
   const isHankePortfolioPath = useMatch({
     path: HANKEPORTFOLIO.path,
     end: false,
@@ -44,11 +59,27 @@ const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  function getPathForLanguage(lang: Language, routeKey: string): string {
+    const hankeTunnusMatches = HANKETUNNUS_REGEXP.exec(location.pathname);
+    const hankeTunnus = hankeTunnusMatches?.[0];
+    const applicationIdMatches = APPLICATION_ID_REGEXP.exec(location.pathname);
+    const applicationId = applicationIdMatches?.[0];
+
+    let path = lang + t(`routes:${routeKey}.path`);
+    if (hankeTunnus) {
+      path = path.replace(':hankeTunnus', hankeTunnus);
+    }
+    if (applicationId) {
+      path = path.replace(':id', applicationId);
+    }
+    return path;
+  }
+
   async function setLanguage(lang: Language) {
     const routeKey = getMatchingRouteKey(i18n, i18n.language as Language, location.pathname);
     await i18n.changeLanguage(lang);
-    const to = lang + t(`routes:${routeKey}.path`);
-    navigate(to);
+    const path = getPathForLanguage(lang, routeKey);
+    navigate(path);
   }
 
   return (
@@ -82,6 +113,14 @@ const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
           ) : (
             <></>
           )}
+          <Navigation.Item
+            as={NavLink}
+            to={JOHTOSELVITYSHAKEMUS.path}
+            active={Boolean(isCableReportApplicationPath)}
+            data-testid="cableReportApplicationLink"
+          >
+            {t('homepage:johtotietoselvitys:title')}
+          </Navigation.Item>
           <Navigation.Item
             as={NavLink}
             to={HANKEPORTFOLIO.path}

@@ -27,7 +27,7 @@ export default function useHankeFeatures(source: Vector, hankkeet: HankeData[]) 
                 ? hanke.liikennehaittaindeksi.indeksi
                 : null,
             },
-            true
+            true,
           );
         });
         source.addFeatures(hankeFeatures);
