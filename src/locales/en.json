@@ -405,10 +405,10 @@
     },
     "kaistaPituusHaitta": {
       "YKSI": "Does not affect",
-      "KAKSI": "Max 10 m",
-      "KOLME": "11–100 m",
-      "NELJA": "101–500 m",
-      "VIISI": "Over 500 m"
+      "KAKSI": "Less than 10 m",
+      "KOLME": "10–99 m",
+      "NELJA": "100–499 m",
+      "VIISI": "500 m or more"
     },
     "meluHaitta": {
       "YKSI": "Occasional nuisance",

@@ -378,7 +378,7 @@ const HankeView: React.FC<Props> = ({
                 <CompressedAreaIndex
                   key={area.id}
                   area={area}
-                  haittaIndex={tormaystarkasteluTulos?.liikennehaittaIndeksi.indeksi}
+                  haittaIndex={tormaystarkasteluTulos?.liikennehaittaindeksi.indeksi}
                   index={index}
                   className={styles.compressedAreaIndex}
                 />

@@ -92,11 +92,11 @@ const HankeIndexes: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { t } = useTranslation();
   const hankeIndexTitle = indexTitle || t('hankeIndexes:haittaindeksit');
-  const liikennehaittaIndeksi = hankeIndexData?.liikennehaittaIndeksi.indeksi;
-  const pyorailyIndeksi = hankeIndexData?.pyorailyIndeksi;
-  const raitiovaunuIndeksi = hankeIndexData?.raitiovaunuIndeksi;
-  const linjaautoIndeksi = hankeIndexData?.linjaautoIndeksi;
-  const perusIndeksi = hankeIndexData?.perusIndeksi;
+  const liikennehaittaindeksi = hankeIndexData?.liikennehaittaindeksi.indeksi;
+  const pyoraliikenneindeksi = hankeIndexData?.pyoraliikenneindeksi;
+  const raitioliikenneindeksi = hankeIndexData?.raitioliikenneindeksi;
+  const linjaautoliikenneindeksi = hankeIndexData?.linjaautoliikenneindeksi;
+  const autoliikenneindeksi = hankeIndexData?.autoliikenneindeksi;
 
   return (
     <div className={containerClassName}>
@@ -113,8 +113,8 @@ const HankeIndexes: React.FC<React.PropsWithChildren<Props>> = ({
       <div className={styles.indexes}>
         <IndexSection
           title={t('hankeIndexes:liikennehaittaindeksi')}
-          index={liikennehaittaIndeksi}
-          testId="test-liikennehaittaIndeksi"
+          index={liikennehaittaindeksi}
+          testId="test-liikennehaittaindeksi"
           loading={loading}
           mainIndex
           showIndexText={!small}
@@ -123,10 +123,10 @@ const HankeIndexes: React.FC<React.PropsWithChildren<Props>> = ({
         <IndexSection
           title={t('hankeIndexes:pyorailynPaareitti')}
           content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
-            getDetourNeedByIndex(pyorailyIndeksi),
+            getDetourNeedByIndex(pyoraliikenneindeksi),
           )}`}
-          index={pyorailyIndeksi}
-          testId="test-pyorailyIndeksi"
+          index={pyoraliikenneindeksi}
+          testId="test-pyoraliikenneindeksi"
           loading={loading}
           showIndexText={!small}
         />
@@ -134,10 +134,10 @@ const HankeIndexes: React.FC<React.PropsWithChildren<Props>> = ({
         <IndexSection
           title={t('hankeIndexes:joukkoliikenneRaitiovaunu')}
           content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
-            getDetourNeedByIndex(raitiovaunuIndeksi),
+            getDetourNeedByIndex(raitioliikenneindeksi),
           )}`}
-          index={raitiovaunuIndeksi}
-          testId="test-raitiovaunuIndeksi"
+          index={raitioliikenneindeksi}
+          testId="test-raitioliikenneindeksi"
           loading={loading}
           showIndexText={!small}
         />
@@ -145,10 +145,10 @@ const HankeIndexes: React.FC<React.PropsWithChildren<Props>> = ({
         <IndexSection
           title={t('hankeIndexes:joukkoliikenneLinjaauto')}
           content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
-            getDetourNeedByIndex(linjaautoIndeksi),
+            getDetourNeedByIndex(linjaautoliikenneindeksi),
           )}`}
-          index={linjaautoIndeksi}
-          testId="test-linjaautoIndeksi"
+          index={linjaautoliikenneindeksi}
+          testId="test-linjaautoliikenneindeksi"
           loading={loading}
           showIndexText={!small}
         />
@@ -156,10 +156,10 @@ const HankeIndexes: React.FC<React.PropsWithChildren<Props>> = ({
         <IndexSection
           title={t('hankeIndexes:ruuhkautuminen')}
           content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
-            getDetourNeedByIndex(perusIndeksi),
+            getDetourNeedByIndex(autoliikenneindeksi),
           )}`}
-          index={perusIndeksi}
-          testId="test-ruuhkautumisIndeksi"
+          index={autoliikenneindeksi}
+          testId="test-autoliikenneindeksi"
           loading={loading}
           showIndexText={!small}
         />

@@ -67,7 +67,6 @@ const hankeList: HankeData[] = [
     ],
     tyomaaKatuosoite: '',
     tormaystarkasteluTulos: null,
-    liikennehaittaindeksi: null,
   },
   {
     id: 2,
@@ -135,7 +134,6 @@ const hankeList: HankeData[] = [
     ],
     tyomaaKatuosoite: '',
     tormaystarkasteluTulos: null,
-    liikennehaittaindeksi: null,
   },
 ];
 

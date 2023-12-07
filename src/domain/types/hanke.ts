@@ -158,12 +158,12 @@ export type HankeAlue = {
 };
 
 export enum HANKE_INDEX_TYPE {
-  PERUSINDEKSI = 'PERUSINDEKSI',
+  AUTOLIIKENNEINDEKSI = 'AUTOLIIKENNEINDEKSI',
 }
 
-export type LiikenneHaittaIndeksi = {
+export type Liikennehaittaindeksi = {
   indeksi: number;
-  tyyppi: HANKE_INDEX_TYPE.PERUSINDEKSI;
+  tyyppi: HANKE_INDEX_TYPE.AUTOLIIKENNEINDEKSI;
 };
 
 export enum HANKE_INDEX_STATE {
@@ -192,7 +192,6 @@ export interface HankeData {
   tyomaaKatuosoite: string | null;
   tyomaaTyyppi: HANKE_TYOMAATYYPPI_KEY[];
   alueet: HankeAlue[];
-  liikennehaittaindeksi: LiikenneHaittaIndeksi | null;
   omistajat: Array<HankeContact>;
   rakennuttajat: Array<HankeContact>;
   toteuttajat: Array<HankeContact>;
@@ -211,11 +210,11 @@ export interface HankeIndexData {
   hankeTunnus: string;
   hankeId: number;
   hankeGeometriatId: number;
-  liikennehaittaIndeksi: LiikenneHaittaIndeksi;
-  perusIndeksi: number;
-  pyorailyIndeksi: number;
-  linjaautoIndeksi: number;
-  raitiovaunuIndeksi: number;
+  liikennehaittaindeksi: Liikennehaittaindeksi;
+  autoliikenneindeksi: number;
+  pyoraliikenneindeksi: number;
+  linjaautoliikenneindeksi: number;
+  raitioliikenneindeksi: number;
   tila: HANKE_INDEX_STATE_KEY;
 }
 

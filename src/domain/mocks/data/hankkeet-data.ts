@@ -40,21 +40,16 @@ const hankkeet: HankeDataDraft[] = [
     modifiedBy: null,
     modifiedAt: null,
     status: 'PUBLIC',
-    liikennehaittaindeksi: {
-      indeksi: 4.0,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      tyyppi: 'JOUKKOLIIKENNEINDEKSI' as any,
-    },
     tormaystarkasteluTulos: {
       hankeId: 2,
       hankeTunnus: 'HAI22-2',
       hankeGeometriatId: 2,
       tila: 'VOIMASSA',
-      perusIndeksi: 3.5,
-      pyorailyIndeksi: 3,
-      linjaautoIndeksi: 4,
-      raitiovaunuIndeksi: 2,
-      liikennehaittaIndeksi: {
+      autoliikenneindeksi: 3.5,
+      pyoraliikenneindeksi: 3,
+      linjaautoliikenneindeksi: 4,
+      raitioliikenneindeksi: 2,
+      liikennehaittaindeksi: {
         indeksi: 4,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         tyyppi: 'JOUKKOLIIKENNEINDEKSI' as any,
@@ -260,21 +255,16 @@ const hankkeet: HankeDataDraft[] = [
     rakennuttajat: [],
     toteuttajat: [],
     muut: [],
-    liikennehaittaindeksi: {
-      indeksi: 3.0,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      tyyppi: 'JOUKKOLIIKENNEINDEKSI' as any,
-    },
     tormaystarkasteluTulos: {
       hankeId: 3,
       hankeTunnus: 'HAI22-3',
       hankeGeometriatId: 1,
       tila: 'VOIMASSA',
-      perusIndeksi: 1.5,
-      pyorailyIndeksi: 3.5,
-      linjaautoIndeksi: 1,
-      raitiovaunuIndeksi: 2,
-      liikennehaittaIndeksi: {
+      autoliikenneindeksi: 1.5,
+      pyoraliikenneindeksi: 3.5,
+      linjaautoliikenneindeksi: 1,
+      raitioliikenneindeksi: 2,
+      liikennehaittaindeksi: {
         indeksi: 3,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         tyyppi: 'JOUKKOLIIKENNEINDEKSI' as any,

@@ -88,14 +88,14 @@ const hankeMock: HankeDataDraft = {
 };
 
 const hankeMockIndex: Partial<HankeIndexData> = {
-  liikennehaittaIndeksi: {
+  liikennehaittaindeksi: {
     indeksi: 4.8,
-    tyyppi: HANKE_INDEX_TYPE.PERUSINDEKSI,
+    tyyppi: HANKE_INDEX_TYPE.AUTOLIIKENNEINDEKSI,
   },
-  pyorailyIndeksi: 3,
-  raitiovaunuIndeksi: 4,
-  linjaautoIndeksi: 3,
-  perusIndeksi: 4.8,
+  pyoraliikenneindeksi: 3,
+  raitioliikenneindeksi: 4,
+  linjaautoliikenneindeksi: 3,
+  autoliikenneindeksi: 4.8,
 };
 
 context('HankeForm', () => {

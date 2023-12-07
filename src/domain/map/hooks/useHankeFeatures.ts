@@ -23,8 +23,8 @@ export default function useHankeFeatures(source: Vector, hankkeet: HankeData[]) 
         hankeFeatures.forEach((feature) => {
           feature.setProperties(
             {
-              liikennehaittaindeksi: hanke.liikennehaittaindeksi
-                ? hanke.liikennehaittaindeksi.indeksi
+              liikennehaittaindeksi: hanke.tormaystarkasteluTulos
+                ? hanke.tormaystarkasteluTulos.liikennehaittaindeksi.indeksi
                 : null,
             },
             true,
