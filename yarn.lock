@@ -9552,20 +9552,20 @@ hash.js@^1.0.0, hash.js@^1.0.3:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
 
-hds-core@3.1.0, hds-core@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/hds-core/-/hds-core-3.1.0.tgz#7b1112f9e30ce21cd49e8bd4f902ad01c510d5e5"
-  integrity sha512-md+b+2dlTABN3VVTWzbsUyOmXjCzBhzZkH8ANu+H0sSTHXBbEOWFkrdMwwvKSEWNeXoVMf5pHo/NDAURubepMA==
+hds-core@3.2.0, hds-core@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/hds-core/-/hds-core-3.2.0.tgz#d6d06f216129762284dca6134bae50639462460f"
+  integrity sha512-NA10PJzZvsA88CzJdawuLpaEKNDJiAWJh8RwdNGbFv/h9tS6sUiKn9QuLtgzAIvjWtNkyRrIZ0BGC83WVZ1F6g==
 
-hds-design-tokens@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/hds-design-tokens/-/hds-design-tokens-3.1.0.tgz#e363d22860ac4179231a046ea4c5392222b7386a"
-  integrity sha512-QWCTBCe2k5R7glcyR4uVXrLMBGuyIKs2TwYKpPnow0KYkJ9CZoHT1UKPI0VU9Jz+3VXpY4VbEsKiKuRjw0zwMQ==
+hds-design-tokens@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/hds-design-tokens/-/hds-design-tokens-3.2.0.tgz#2652cf6e837ac52ad3139808341ccf15b38aea78"
+  integrity sha512-TF+xuqF4vkbVoL7gWcd5uTJMDYln3fLcJ9JB3Bw53Aj3tqZNHZqgxwQ4LUhgEHNSESiOPbNGxL0GGkIGI1Gv2w==
 
-hds-react@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/hds-react/-/hds-react-3.1.0.tgz#4a8e7bebe5d735bf70f7b12bd33747fdbce86a74"
-  integrity sha512-N6QZe4XP9CYDfmWbVd6khQ0QwrlDAKZnhryr3SBWfI3wsXgRGa1cYAdJQ4+Vh08sXkg55M15bPHJgsi9Mn0fww==
+hds-react@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/hds-react/-/hds-react-3.2.0.tgz#86d243f812e97a88bee63a84a8cd1cd1ec902fc5"
+  integrity sha512-/FJ5XhBBfg/GwlPQSOYCndtcA4PFWJBHDPZ0N5WKGJQAOZLEhIcxByV8QlR1wtbBEBX9lAt8jdAWeItT7VqN4w==
   dependencies:
     "@babel/runtime" "7.17.9"
     "@emotion/styled-base" "^11.0.0"
@@ -9580,7 +9580,7 @@ hds-react@^3.1.0:
     crc-32 "1.2.0"
     date-fns "2.16.1"
     downshift "6.0.6"
-    hds-core "3.1.0"
+    hds-core "3.2.0"
     http-status-typed "^1.0.1"
     jwt-decode "^3.1.2"
     kashe "1.0.4"

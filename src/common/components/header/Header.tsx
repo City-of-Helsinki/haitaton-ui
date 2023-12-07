@@ -1,17 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
-import {
-  IconLinkExternal,
-  IconSignout,
-  Header,
-  IconUser,
-  Link,
-  Logo,
-  logoFi,
-  logoSv,
-  IconEye,
-  Button,
-} from 'hds-react';
+import { IconSignout, Header, IconUser, Link, Logo, logoFi, logoSv, Button } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useMatch, useLocation, useNavigate } from 'react-router-dom';
 import { $enum } from 'ts-enum-util';
@@ -89,40 +76,38 @@ function HaitatonHeader() {
         isPrimary: true,
       }))}
       onDidChangeLanguage={setLanguage}
+      defaultLanguage={i18n.language}
     >
       <Header.SkipLink
         skipTo={`#${SKIP_TO_ELEMENT_ID}`}
         label={t('common:components:header:skipToContentLabel')}
       />
-      {/* // <Navigation
-    //   menuToggleAriaLabel={t('common:ariaLabels:menuToggle')}
-    //   className="header"
-    //   logoLanguage={i18n.language as LogoLanguage}
-    // > */}
-
       <Header.ActionBar
         title="Haitaton"
         titleHref={HOME.path}
         logoHref={HOME.path}
-        frontPageLabel="Haitaton"
-        logo={<Logo src={logoSrc} alt="Helsingin kaupunki" />}
+        frontPageLabel={t('common:components:header:frontPageLabel')}
+        logo={<Logo src={logoSrc} alt={t('common:logoAlt')} />}
+        menuButtonAriaLabel={t('common:ariaLabels:menuToggle')}
       >
         <Header.LanguageSelector />
         <Header.ActionBarItem
           label={getUserMenuLabel()}
           fixedRightPosition
-          icon={<IconUser />}
+          icon={<IconUser aria-hidden />}
           id="action-bar-login"
           closeLabel={t('common:ariaLabels:closeButtonLabelText')}
           onClick={!isAuthenticated ? authService.login : undefined}
         >
-          <Button
-            variant="supplementary"
-            iconLeft={<IconSignout aria-hidden />}
-            onClick={authService.logout}
-          >
-            {t('authentication:logoutButton')}
-          </Button>
+          {isAuthenticated && (
+            <Button
+              variant="supplementary"
+              iconLeft={<IconSignout aria-hidden />}
+              onClick={authService.logout}
+            >
+              {t('authentication:logoutButton')}
+            </Button>
+          )}
         </Header.ActionBarItem>
       </Header.ActionBar>
 
@@ -176,40 +161,3 @@ function HaitatonHeader() {
 }
 
 export default HaitatonHeader;
-
-// <Navigation.Actions>
-//   <Navigation.User
-//     authenticated={isAuthenticated}
-//     onSignIn={authService.login}
-//     label={t('authentication:loginButton')}
-//     userName={user?.profile?.name}
-//     buttonAriaLabel={t('common:ariaLabels:profileButton')}
-//   >
-//     <Navigation.Item
-//       href=""
-//       icon={<IconSignout aria-hidden />}
-//       label={t('authentication:logoutButton')}
-//       variant="supplementary"
-//       onClick={async (e: React.MouseEvent<HTMLAnchorElement>) => {
-//         e.preventDefault();
-//         await authService.logout();
-//       }}
-//       data-testid="logoutLink"
-//     />
-//   </Navigation.User>
-//   <Navigation.LanguageSelector label={languageLabels[i18n.language as LANGUAGES]}>
-//     {$enum(LANGUAGES).map((lang) => (
-//       <Navigation.Item
-//         as="a"
-//         href=""
-//         label={languageLabels[lang]}
-//         onClick={(e: React.MouseEvent) => {
-//           e.preventDefault();
-//           setLanguage(lang);
-//         }}
-//         key={lang}
-//         lang={lang}
-//       />
-//     ))}
-//   </Navigation.LanguageSelector>
-// </Navigation.Actions>

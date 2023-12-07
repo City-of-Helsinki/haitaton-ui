@@ -39,7 +39,8 @@
         "searchButtonAriaLabel": "Hae"
       },
       "header": {
-        "skipToContentLabel": "Siirry pääsisältöön"
+        "skipToContentLabel": "Siirry pääsisältöön",
+        "frontPageLabel": "Etusivu"
       },
       "notification": {
         "notification": "Ilmoitus",
@@ -65,6 +66,7 @@
     },
     "error": "Tapahtui virhe. Yritä uudestaan.",
     "dataNotFound": "Tietoja ei löytynyt",
+    "logoAlt": "Helsingin kaupunki",
     "ariaLabels": {
       "profileButton": "Käyttäjäprofiili",
       "menuToggle": "Valikko",

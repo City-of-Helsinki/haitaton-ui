@@ -24,7 +24,7 @@ function HaitatonFooter() {
         <Footer.Link as={Link} to={PRIVACY_POLICY.path} label={PRIVACY_POLICY.label} />
       </Footer.Navigation>
       <Footer.Base
-        logo={<Logo src={logoSrc} size="medium" alt="Helsingin kaupunki" />}
+        logo={<Logo src={logoSrc} size="medium" alt={t('common:logoAlt')} />}
         logoHref={HOME.path}
         copyrightHolder="Helsingin kaupunki, OpenStreetMap contributors"
         backToTopLabel={t('common:components:footer:backToTop')}
