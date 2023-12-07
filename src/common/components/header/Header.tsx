@@ -2,7 +2,12 @@ import { IconSignout, Header, IconUser, Link, Logo, logoFi, logoSv, Button } fro
 import { useTranslation } from 'react-i18next';
 import { NavLink, useMatch, useLocation, useNavigate } from 'react-router-dom';
 import { $enum } from 'ts-enum-util';
-import { getMatchingRouteKey, useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
+import {
+  getMatchingRouteKey,
+  useLocalizedRoutes,
+  HANKETUNNUS_REGEXP,
+  APPLICATION_ID_REGEXP,
+} from '../../hooks/useLocalizedRoutes';
 import authService from '../../../domain/auth/authService';
 import useUser from '../../../domain/auth/useUser';
 import { Language, LANGUAGES } from '../../types/language';
@@ -54,11 +59,27 @@ function HaitatonHeader() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  function getPathForLanguage(lang: Language, routeKey: string): string {
+    const hankeTunnusMatches = HANKETUNNUS_REGEXP.exec(location.pathname);
+    const hankeTunnus = hankeTunnusMatches?.[0];
+    const applicationIdMatches = APPLICATION_ID_REGEXP.exec(location.pathname);
+    const applicationId = applicationIdMatches?.[0];
+
+    let path = lang + t(`routes:${routeKey}.path`);
+    if (hankeTunnus) {
+      path = path.replace(':hankeTunnus', hankeTunnus);
+    }
+    if (applicationId) {
+      path = path.replace(':id', applicationId);
+    }
+    return path;
+  }
+
   async function setLanguage(lang: string) {
     const routeKey = getMatchingRouteKey(i18n, i18n.language as Language, location.pathname);
     await i18n.changeLanguage(lang);
-    const to = lang + t(`routes:${routeKey}.path`);
-    navigate(to);
+    const path = getPathForLanguage(lang as Language, routeKey);
+    navigate(path);
   }
 
   function getUserMenuLabel() {
