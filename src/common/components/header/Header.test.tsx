@@ -49,6 +49,21 @@ describe('Header', () => {
     expect(screen.getByText('Test User')).toBeInTheDocument();
   });
 
+  test('it should display user email if name is undefined', () => {
+    const email = 'test.user@test.com';
+    mockedUseUser.mockImplementation(() => ({ data: { profile: { email } } }));
+    render(<Header />);
+
+    expect(screen.getByText(email)).toBeInTheDocument();
+  });
+
+  test('it should render login button when user is not logged in', () => {
+    mockedUseUser.mockImplementation(() => ({ data: null }));
+    render(<Header />);
+
+    expect(screen.getByText('Kirjaudu')).toBeInTheDocument();
+  });
+
   test('when user changes language it should change the UI language and the url based on the selected language', async () => {
     const { user } = render(<Header />, undefined, '/fi/julkisethankkeet/kartta');
 
