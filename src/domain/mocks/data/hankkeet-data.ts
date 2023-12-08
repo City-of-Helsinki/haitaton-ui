@@ -52,7 +52,7 @@ const hankkeet: HankeDataDraft[] = [
       liikennehaittaindeksi: {
         indeksi: 4,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        tyyppi: 'JOUKKOLIIKENNEINDEKSI' as any,
+        tyyppi: 'LINJAAUTOLIIKENNEINDEKSI' as any,
       },
     },
     omistajat: [
@@ -265,9 +265,9 @@ const hankkeet: HankeDataDraft[] = [
       linjaautoliikenneindeksi: 1,
       raitioliikenneindeksi: 2,
       liikennehaittaindeksi: {
-        indeksi: 3,
+        indeksi: 3.5,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        tyyppi: 'JOUKKOLIIKENNEINDEKSI' as any,
+        tyyppi: 'PYORALIIKENNEINDEKSI' as any,
       },
     },
     alueet: [
