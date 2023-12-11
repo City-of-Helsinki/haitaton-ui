@@ -136,6 +136,22 @@ describe('HankePortfolioComponent', () => {
     expect(window.location.pathname).toBe('/fi/hanke/uusi');
   });
 
+  test('Having no projects renders correct text without a link to new hanke when Hanke feature is not enabled', async () => {
+    const OLD_ENV = { ...window._env_ };
+    window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_HANKE: 0 };
+
+    render(<HankePortfolioComponent hankkeet={[]} signedInUserByHanke={{}} />);
+
+    await waitFor(() => {
+      expect(screen.queryByText(EMPTY_HANKE_LIST_TEXT)).toBeInTheDocument();
+      expect(screen.queryByText('Tarkista hakuehdot')).not.toBeInTheDocument();
+      expect(screen.queryByText('luo uusi hanke')).not.toBeInTheDocument();
+    });
+
+    jest.resetModules();
+    window._env_ = OLD_ENV;
+  });
+
   test('Should render edit hanke links for hankkeet that user has edit rights', async () => {
     const hankeTunnusList = hankeList.map((hanke) => hanke.hankeTunnus);
     const signedUserData: SignedInUserByHanke = {
