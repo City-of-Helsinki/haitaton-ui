@@ -603,19 +603,20 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
               <div className={styles.notFoundContainer}>
                 <IconSearch size="l" />
                 <div>
-                  <Trans i18nKey="hankePortfolio:noneFound">
-                    <Text tag="p" spacingTop="m" spacingBottom="s" className="heading-m">
-                      Hankelistasi on tyhjä, sillä antamillasi hakuehdoilla ei löytynyt yhtään
-                      hanketta tai sinulla ei vielä ole hankkeita.
-                    </Text>
-                    <Text tag="p" className="heading-m">
-                      Tarkista hakuehdot tai{' '}
-                      <HDSLink href={NEW_HANKE.path} className={styles.newHankeLink}>
-                        luo uusi hanke
-                      </HDSLink>
-                      .
-                    </Text>
-                  </Trans>
+                  <Text tag="p" spacingTop="m" spacingBottom="s" className="heading-m">
+                    {t('hankePortfolio:noneFound')}
+                  </Text>
+                  <FeatureFlags flags={['hanke']}>
+                    <Trans i18nKey="hankePortfolio:checkSearchParameters">
+                      <Text tag="p" className="heading-m">
+                        Tarkista hakuehdot tai{' '}
+                        <HDSLink href={NEW_HANKE.path} className={styles.newHankeLink}>
+                          luo uusi hanke
+                        </HDSLink>
+                        .
+                      </Text>
+                    </Trans>
+                  </FeatureFlags>
                 </div>
               </div>
             )}
