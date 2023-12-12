@@ -397,33 +397,33 @@
       "VAIHTOLAVA": "Swap body"
     },
     "kaistaHaitta": {
-      "YKSI": "Does not affect",
-      "KAKSI": "Reduces one lane in one direction",
-      "KOLME": "Simultaneously reduces lanes in two directions",
-      "NELJA": "Simultaneously reduces several lanes in two directions",
-      "VIISI": "Simultaneously reduces several lanes in different directions of a junction"
+      "EI_VAIKUTA": "Does not affect",
+      "VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA": "Reduces one lane in one direction",
+      "VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA": "Simultaneously reduces lanes in two directions",
+      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_KAHDELLA_AJOSUUNNALLA": "Simultaneously reduces several lanes in two directions",
+      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA": "Simultaneously reduces several lanes in different directions of a junction"
     },
     "kaistaPituusHaitta": {
-      "YKSI": "Does not affect",
-      "KAKSI": "Less than 10 m",
-      "KOLME": "10–99 m",
-      "NELJA": "100–499 m",
-      "VIISI": "500 m or more"
+      "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Does not affect",
+      "KAISTAVAIKUTUSTEN_PITUUS_ALLE_10_METRIA": "Less than 10 m",
+      "KAISTAVAIKUTUSTEN_PITUUS_10_99_METRIA": "10–99 m",
+      "KAISTAVAIKUTUSTEN_PITUUS_100_499_METRIA": "100–499 m",
+      "VIKAISTAVAIKUTUSTEN_PITUUS_500_METRIA_TAI_ENEMMAN": "500 m or more"
     },
     "meluHaitta": {
-      "YKSI": "Occasional nuisance",
-      "KAKSI": "Short-term recurring nuisance",
-      "KOLME": "Long-term permanent nuisance"
+      "SATUNNAINEN_HAITTA": "Occasional nuisance",
+      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Short-term recurring nuisance",
+      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Long-term permanent nuisance"
     },
     "polyHaitta": {
-      "YKSI": "Occasional nuisance",
-      "KAKSI": "Short-term recurring nuisance",
-      "KOLME": "Long-term permanent nuisance"
+      "SATUNNAINEN_HAITTA": "Occasional nuisance",
+      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Short-term recurring nuisance",
+      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Long-term permanent nuisance"
     },
     "tarinaHaitta": {
-      "YKSI": "Occasional nuisance",
-      "KAKSI": "Short-term recurring nuisance",
-      "KOLME": "Long-term permanent nuisance"
+      "SATUNNAINEN_HAITTA": "Occasional nuisance",
+      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Short-term recurring nuisance",
+      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Long-term permanent nuisance"
     },
     "alue": {
       "title": "Project area {{index}}",

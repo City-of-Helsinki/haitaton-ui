@@ -397,33 +397,33 @@
       "VAIHTOLAVA": "Växelflak"
     },
     "kaistaHaitta": {
-      "YKSI": "Påverkar inte",
-      "KAKSI": "Reducerar med en fil i en körriktning",
-      "KOLME": "Reducerar med en fil i två körriktningar samtidigt",
-      "NELJA": "Reducerar med flera filer i två körriktningar samtidigt",
-      "VIISI": "Reducerar samtidigt med flera filer i olika riktningar från korsningen"
+      "EI_VAIKUTA": "Påverkar inte",
+      "VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA": "Reducerar med en fil i en körriktning",
+      "VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA": "Reducerar med en fil i två körriktningar samtidigt",
+      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_KAHDELLA_AJOSUUNNALLA": "Reducerar med flera filer i två körriktningar samtidigt",
+      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA": "Reducerar samtidigt med flera filer i olika riktningar från korsningen"
     },
     "kaistaPituusHaitta": {
-      "YKSI": "Påverkar inte",
-      "KAKSI": "Mindre än 10 m",
-      "KOLME": "10–99 m",
-      "NELJA": "100–499 m",
-      "VIISI": "500 m eller mer"
+      "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Påverkar inte",
+      "KAISTAVAIKUTUSTEN_PITUUS_ALLE_10_METRIA": "Mindre än 10 m",
+      "KAISTAVAIKUTUSTEN_PITUUS_10_99_METRIA": "10–99 m",
+      "KAISTAVAIKUTUSTEN_PITUUS_100_499_METRIA": "100–499 m",
+      "VIKAISTAVAIKUTUSTEN_PITUUS_500_METRIA_TAI_ENEMMAN": "500 m eller mer"
     },
     "meluHaitta": {
-      "YKSI": "Tillfällig olägenhet",
-      "KAKSI": "Kortvarig återkommande olägenhet",
-      "KOLME": "Långvarig kontinuerlig olägenhet"
+      "SATUNNAINEN_HAITTA": "Tillfällig olägenhet",
+      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Kortvarig återkommande olägenhet",
+      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Långvarig kontinuerlig olägenhet"
     },
     "polyHaitta": {
-      "YKSI": "Tillfällig olägenhet",
-      "KAKSI": "Kortvarig återkommande olägenhet",
-      "KOLME": "Långvarig kontinuerlig olägenhet"
+      "SATUNNAINEN_HAITTA": "Tillfällig olägenhet",
+      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Kortvarig återkommande olägenhet",
+      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Långvarig kontinuerlig olägenhet"
     },
     "tarinaHaitta": {
-      "YKSI": "Tillfällig olägenhet",
-      "KAKSI": "Kortvarig återkommande olägenhet",
-      "KOLME": "Långvarig kontinuerlig olägenhet"
+      "SATUNNAINEN_HAITTA": "Tillfällig olägenhet",
+      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Kortvarig återkommande olägenhet",
+      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Långvarig kontinuerlig olägenhet"
     },
     "alue": {
       "title": "Projektområde {{index}}",
