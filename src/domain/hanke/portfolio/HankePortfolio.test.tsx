@@ -230,4 +230,17 @@ describe('HankePortfolioContainer', () => {
     await user.click(screen.getByRole('button', { name: 'Seuraava' }));
     expect(screen.getAllByTestId('hanke-card-header')[0]).toHaveFocus();
   });
+
+  test('Should show error notification if loading hankkeet fails', async () => {
+    server.use(
+      rest.get('/api/hankkeet', async (req, res, ctx) => {
+        return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+      }),
+    );
+
+    render(<HankePortfolioContainer />);
+
+    await screen.findByText('Virhe tietojen lataamisessa.');
+    expect(screen.queryByText('Yritä hetken päästä uudelleen.')).toBeInTheDocument();
+  });
 });
