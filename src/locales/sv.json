@@ -653,8 +653,6 @@
     "haittaindeksit": "Olägenhetsindex",
     "haittaindexTooltip": "Olägenhetsindex beräknas enligt projektets område. Indexen uppdateras när du sparar formulärets uppgifter eller går till nästa sida.",
     "liikennehaittaindeksi": "Trafikolägenhetsindex",
-    "ruuhkautuminen": "Köbildning",
-    "pyorailynPaareitti": "Huvudled för cykeltrafik",
     "kiertoreittitarve": "Behov av omväg",
     "KIERTOREITTITARPEET": {
       "TODENNAKOINEN": "sannolik",

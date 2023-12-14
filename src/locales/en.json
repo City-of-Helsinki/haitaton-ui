@@ -653,8 +653,6 @@
     "haittaindeksit": "Nuisance indices",
     "haittaindexTooltip": "Nuisance indices are calculated by project area. The indices are updated when you save the form or go to the next page.",
     "liikennehaittaindeksi": "Traffic nuisance index",
-    "ruuhkautuminen": "Congestion",
-    "pyorailynPaareitti": "Main cycling route",
     "kiertoreittitarve": "Detour need",
     "KIERTOREITTITARPEET": {
       "TODENNAKOINEN": "likely",

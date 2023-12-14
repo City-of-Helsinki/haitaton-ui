@@ -121,7 +121,7 @@ const HankeIndexes: React.FC<React.PropsWithChildren<Props>> = ({
         />
 
         <IndexSection
-          title={t('hankeIndexes:pyorailynPaareitti')}
+          title={t('hankeIndexes:pyoraliikenne')}
           content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
             getDetourNeedByIndex(pyoraliikenneindeksi),
           )}`}
@@ -132,7 +132,7 @@ const HankeIndexes: React.FC<React.PropsWithChildren<Props>> = ({
         />
 
         <IndexSection
-          title={t('hankeIndexes:joukkoliikenneRaitiovaunu')}
+          title={t('hankeIndexes:raitioliikenne')}
           content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
             getDetourNeedByIndex(raitioliikenneindeksi),
           )}`}
@@ -143,7 +143,7 @@ const HankeIndexes: React.FC<React.PropsWithChildren<Props>> = ({
         />
 
         <IndexSection
-          title={t('hankeIndexes:joukkoliikenneLinjaauto')}
+          title={t('hankeIndexes:linjaautoliikenne')}
           content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
             getDetourNeedByIndex(linjaautoliikenneindeksi),
           )}`}
@@ -154,7 +154,7 @@ const HankeIndexes: React.FC<React.PropsWithChildren<Props>> = ({
         />
 
         <IndexSection
-          title={t('hankeIndexes:ruuhkautuminen')}
+          title={t('hankeIndexes:autoliikenne')}
           content={`${t('hankeIndexes:kiertoreittitarve')}: ${t(
             getDetourNeedByIndex(autoliikenneindeksi),
           )}`}
