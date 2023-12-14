@@ -124,7 +124,7 @@ const hankkeet: HankeDataDraft[] = [
         haittaAlkuPvm: '2023-01-12T00:00:00Z',
         haittaLoppuPvm: '2024-11-27T00:00:00Z',
         kaistaHaitta: 'VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA',
-        kaistaPituusHaitta: 'KAISTAVAIKUTUSTEN_PITUUS_100_499_METRIA',
+        kaistaPituusHaitta: '_100_499_METRIA',
         meluHaitta: 'PITKAKESTOINEN_TOISTUVA_HAITTA',
         polyHaitta: HANKE_POLYHAITTA.PITKAKESTOINEN_TOISTUVA_HAITTA,
         tarinaHaitta: 'SATUNNAINEN_HAITTA',
@@ -181,7 +181,7 @@ const hankkeet: HankeDataDraft[] = [
         polyHaitta: HANKE_POLYHAITTA.PITKAKESTOINEN_TOISTUVA_HAITTA,
         tarinaHaitta: 'SATUNNAINEN_HAITTA',
         kaistaHaitta: 'VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA',
-        kaistaPituusHaitta: 'KAISTAVAIKUTUSTEN_PITUUS_10_99_METRIA',
+        kaistaPituusHaitta: '_10_99_METRIA',
         geometriat: {
           featureCollection: {
             type: 'FeatureCollection',

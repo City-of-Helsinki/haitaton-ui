@@ -113,16 +113,19 @@ export const selectKaistanPituusHaitta = (kaistanPituusHaitta: HANKE_KAISTAPITUU
     case HANKE_KAISTAPITUUSHAITTA.EI_VAIKUTA_KAISTAJARJESTELYIHIN:
       cy.get('#kaistaPituusHaitta-item-0').click();
       break;
-    case HANKE_KAISTAPITUUSHAITTA.KAISTAVAIKUTUSTEN_PITUUS_ALLE_10_METRIA:
+    case HANKE_KAISTAPITUUSHAITTA.ALLE_10_METRIA:
       cy.get('#kaistaPituusHaitta-item-1').click();
       break;
-    case HANKE_KAISTAPITUUSHAITTA.KAISTAVAIKUTUSTEN_PITUUS_10_99_METRIA:
+    // eslint-disable-next-line no-underscore-dangle
+    case HANKE_KAISTAPITUUSHAITTA._10_99_METRIA:
       cy.get('#kaistaPituusHaitta-item-2').click();
       break;
-    case HANKE_KAISTAPITUUSHAITTA.KAISTAVAIKUTUSTEN_PITUUS_100_499_METRIA:
+    // eslint-disable-next-line no-underscore-dangle
+    case HANKE_KAISTAPITUUSHAITTA._100_499_METRIA:
       cy.get('#kaistaPituusHaitta-item-3').click();
       break;
-    case HANKE_KAISTAPITUUSHAITTA.VIKAISTAVAIKUTUSTEN_PITUUS_500_METRIA_TAI_ENEMMAN:
+    // eslint-disable-next-line no-underscore-dangle
+    case HANKE_KAISTAPITUUSHAITTA._500_METRIA_TAI_ENEMMAN:
       cy.get('#kaistaPituusHaitta-item-4').click();
       break;
     default:
