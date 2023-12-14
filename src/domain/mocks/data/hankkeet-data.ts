@@ -40,24 +40,19 @@ const hankkeet: HankeDataDraft[] = [
     modifiedBy: null,
     modifiedAt: null,
     status: 'PUBLIC',
-    liikennehaittaindeksi: {
-      indeksi: 4.0,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      tyyppi: 'JOUKKOLIIKENNEINDEKSI' as any,
-    },
     tormaystarkasteluTulos: {
       hankeId: 2,
       hankeTunnus: 'HAI22-2',
       hankeGeometriatId: 2,
       tila: 'VOIMASSA',
-      perusIndeksi: 3.5,
-      pyorailyIndeksi: 3,
-      linjaautoIndeksi: 4,
-      raitiovaunuIndeksi: 2,
-      liikennehaittaIndeksi: {
+      autoliikenneindeksi: 3.5,
+      pyoraliikenneindeksi: 3,
+      linjaautoliikenneindeksi: 4,
+      raitioliikenneindeksi: 2,
+      liikennehaittaindeksi: {
         indeksi: 4,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        tyyppi: 'JOUKKOLIIKENNEINDEKSI' as any,
+        tyyppi: 'LINJAAUTOLIIKENNEINDEKSI' as any,
       },
     },
     omistajat: [
@@ -128,11 +123,11 @@ const hankkeet: HankeDataDraft[] = [
         hankeId: 2,
         haittaAlkuPvm: '2023-01-12T00:00:00Z',
         haittaLoppuPvm: '2024-11-27T00:00:00Z',
-        kaistaHaitta: 'KOLME',
-        kaistaPituusHaitta: 'NELJA',
-        meluHaitta: 'KOLME',
-        polyHaitta: HANKE_POLYHAITTA.KOLME,
-        tarinaHaitta: 'YKSI',
+        kaistaHaitta: 'VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA',
+        kaistaPituusHaitta: 'PITUUS_100_499_METRIA',
+        meluHaitta: 'PITKAKESTOINEN_TOISTUVA_HAITTA',
+        polyHaitta: HANKE_POLYHAITTA.PITKAKESTOINEN_TOISTUVA_HAITTA,
+        tarinaHaitta: 'SATUNNAINEN_HAITTA',
         geometriat: {
           id: 37,
           version: 0,
@@ -182,11 +177,11 @@ const hankkeet: HankeDataDraft[] = [
         hankeId: 2,
         haittaAlkuPvm: '2023-05-15T20:59:59.999Z',
         haittaLoppuPvm: '2023-09-30T20:59:59.999Z',
-        meluHaitta: 'KAKSI',
-        polyHaitta: HANKE_POLYHAITTA.KOLME,
-        tarinaHaitta: 'YKSI',
-        kaistaHaitta: 'KAKSI',
-        kaistaPituusHaitta: 'KOLME',
+        meluHaitta: 'LYHYTAIKAINEN_TOISTUVA_HAITTA',
+        polyHaitta: HANKE_POLYHAITTA.PITKAKESTOINEN_TOISTUVA_HAITTA,
+        tarinaHaitta: 'SATUNNAINEN_HAITTA',
+        kaistaHaitta: 'VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA',
+        kaistaPituusHaitta: 'PITUUS_10_99_METRIA',
         geometriat: {
           featureCollection: {
             type: 'FeatureCollection',
@@ -260,24 +255,19 @@ const hankkeet: HankeDataDraft[] = [
     rakennuttajat: [],
     toteuttajat: [],
     muut: [],
-    liikennehaittaindeksi: {
-      indeksi: 3.0,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      tyyppi: 'JOUKKOLIIKENNEINDEKSI' as any,
-    },
     tormaystarkasteluTulos: {
       hankeId: 3,
       hankeTunnus: 'HAI22-3',
       hankeGeometriatId: 1,
       tila: 'VOIMASSA',
-      perusIndeksi: 1.5,
-      pyorailyIndeksi: 3.5,
-      linjaautoIndeksi: 1,
-      raitiovaunuIndeksi: 2,
-      liikennehaittaIndeksi: {
-        indeksi: 3,
+      autoliikenneindeksi: 1.5,
+      pyoraliikenneindeksi: 3.5,
+      linjaautoliikenneindeksi: 1,
+      raitioliikenneindeksi: 2,
+      liikennehaittaindeksi: {
+        indeksi: 3.5,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        tyyppi: 'JOUKKOLIIKENNEINDEKSI' as any,
+        tyyppi: 'PYORALIIKENNEINDEKSI' as any,
       },
     },
     alueet: [
@@ -285,11 +275,11 @@ const hankkeet: HankeDataDraft[] = [
         id: 1,
         haittaAlkuPvm: '2023-01-02T21:59:59.999Z',
         haittaLoppuPvm: '2023-02-24T21:59:59.999Z',
-        meluHaitta: 'YKSI',
-        polyHaitta: HANKE_POLYHAITTA.YKSI,
-        tarinaHaitta: 'KAKSI',
-        kaistaHaitta: 'YKSI',
-        kaistaPituusHaitta: 'YKSI',
+        meluHaitta: 'SATUNNAINEN_HAITTA',
+        polyHaitta: HANKE_POLYHAITTA.SATUNNAINEN_HAITTA,
+        tarinaHaitta: 'LYHYTAIKAINEN_TOISTUVA_HAITTA',
+        kaistaHaitta: 'EI_VAIKUTA',
+        kaistaPituusHaitta: 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
         geometriat: {
           featureCollection: {
             type: 'FeatureCollection',

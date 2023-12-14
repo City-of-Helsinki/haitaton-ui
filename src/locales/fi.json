@@ -413,33 +413,33 @@
       "VAIHTOLAVA": "Vaihtolava"
     },
     "kaistaHaitta": {
-      "YKSI": "Ei vaikuta",
-      "KAKSI": "Vähentää kaistan yhdellä ajosuunnalla",
-      "KOLME": "Vähentää samanaikaisesti kaistan kahdella ajosuunnalla",
-      "NELJA": "Vähentää samanaikaisesti useita kaistoja kahdella ajosuunnalla",
-      "VIISI": "Vähentää samanaikaisesti useita kaistoja liittymän eri suunnilla"
+      "EI_VAIKUTA": "Ei vaikuta",
+      "VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA": "Vähentää kaistan yhdellä ajosuunnalla",
+      "VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA": "Vähentää samanaikaisesti kaistan kahdella ajosuunnalla",
+      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_KAHDELLA_AJOSUUNNALLA": "Vähentää samanaikaisesti useita kaistoja kahdella ajosuunnalla",
+      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA": "Vähentää samanaikaisesti useita kaistoja liittymän eri suunnilla"
     },
     "kaistaPituusHaitta": {
-      "YKSI": "Ei vaikuta",
-      "KAKSI": "Enintään 10 m",
-      "KOLME": "11-100 m",
-      "NELJA": "101-500 m",
-      "VIISI": "Yli 500 m"
+      "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Ei vaikuta",
+      "KAISTAVAIKUTUSTEN_PITUUS_ALLE_10_METRIA": "Alle 10 m",
+      "KAISTAVAIKUTUSTEN_PITUUS_10_99_METRIA": "10-99 m",
+      "KAISTAVAIKUTUSTEN_PITUUS_100_499_METRIA": "100-499 m",
+      "VIKAISTAVAIKUTUSTEN_PITUUS_500_METRIA_TAI_ENEMMAN": "500 m tai enemmän"
     },
     "meluHaitta": {
-      "YKSI": "Satunnainen haitta",
-      "KAKSI": "Lyhytaikainen toistuva haitta",
-      "KOLME": "Pitkäkestoinen jatkuva haitta"
+      "SATUNNAINEN_HAITTA": "Satunnainen haitta",
+      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Lyhytaikainen toistuva haitta",
+      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Pitkäkestoinen jatkuva haitta"
     },
     "polyHaitta": {
-      "YKSI": "Satunnainen haitta",
-      "KAKSI": "Lyhytaikainen toistuva haitta",
-      "KOLME": "Pitkäkestoinen jatkuva haitta"
+      "SATUNNAINEN_HAITTA": "Satunnainen haitta",
+      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Lyhytaikainen toistuva haitta",
+      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Pitkäkestoinen jatkuva haitta"
     },
     "tarinaHaitta": {
-      "YKSI": "Satunnainen haitta",
-      "KAKSI": "Lyhytaikainen toistuva haitta",
-      "KOLME": "Pitkäkestoinen jatkuva haitta"
+      "SATUNNAINEN_HAITTA": "Satunnainen haitta",
+      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Lyhytaikainen toistuva haitta",
+      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Pitkäkestoinen jatkuva haitta"
     },
     "alue": {
       "title": "Hankealue {{index}}",
@@ -677,10 +677,10 @@
     "haittaindeksit": "Haittaindeksit",
     "haittaindexTooltip": "Haittaindeksit lasketaan hankkeen alueen mukaan. Indeksit päivittyvät, kun tallennat lomakkeen tiedot tai siirryt seuraavalle sivulle.",
     "liikennehaittaindeksi": "Liikennehaittaindeksi",
-    "ruuhkautuminen": "Ruuhkautuminen",
-    "pyorailynPaareitti": "Pyöräilyn pääreitti",
-    "joukkoliikenneRaitiovaunu": "Joukkoliikenteen merkittävyys: Raitioliikenne",
-    "joukkoliikenneLinjaauto": "Joukkoliikenteen merkittävyys: Linja-autojen paikallisliikenne",
+    "autoliikenne": "Autoliikenteen ruuhkautuminen",
+    "pyoraliikenne": "Pyöräliikenteen merkittävyys",
+    "raitioliikenne": "Joukkoliikenteen merkittävyys: Raitioliikenne",
+    "linjaautoliikenne": "Joukkoliikenteen merkittävyys: Linja-autojen paikallisliikenne",
     "kiertoreittitarve": "Kiertoreittitarve",
     "KIERTOREITTITARPEET": {
       "TODENNAKOINEN": "todennäköinen",
