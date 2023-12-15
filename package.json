@@ -39,7 +39,7 @@
     "@hookform/resolvers": "^2.9.8",
     "@popperjs/core": "^2.5.4",
     "@reduxjs/toolkit": "^1.9.7",
-    "@sentry/react": "^6.19.7",
+    "@sentry/react": "^7.88.0",
     "@sentry/tracing": "^6.19.7",
     "@turf/helpers": "^6.5.0",
     "@turf/unkink-polygon": "^6.5.0",
