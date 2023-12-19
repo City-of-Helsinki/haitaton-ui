@@ -3,14 +3,14 @@ import { rest } from 'msw';
 import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
-import { HANKE_VAIHE, HANKE_TYOMAATYYPPI } from '../../types/hanke';
+import { HANKE_TYOMAATYYPPI, HANKE_VAIHE } from '../../types/hanke';
 import {
-  render,
+  act,
   cleanup,
   fireEvent,
-  waitFor,
+  render,
   screen,
-  act,
+  waitFor,
   within,
 } from '../../../testUtils/render';
 import hankkeet from '../../mocks/data/hankkeet-data';
@@ -109,7 +109,74 @@ const formData: HankeDataFormState = {
   tyomaaTyyppi: [HANKE_TYOMAATYYPPI.AKILLINEN_VIKAKORJAUS],
   nimi: 'testi kuoppa',
   kuvaus: 'testi kuvaus',
+  alueet: [
+    {
+      id: 414,
+      hankeId: 277,
+      haittaAlkuPvm: '2023-12-19T00:00:00Z',
+      haittaLoppuPvm: '2023-12-31T00:00:00Z',
+      geometriat: {
+        id: 508,
+        featureCollection: {
+          type: 'FeatureCollection',
+          crs: {
+            type: 'name',
+            properties: {
+              name: 'urn:ogc:def:crs:EPSG::3879',
+            },
+          },
+          features: [
+            {
+              type: 'Feature',
+              properties: {
+                hankeTunnus: 'HAI23-152',
+              },
+              geometry: {
+                type: 'Polygon',
+                crs: {
+                  type: 'name',
+                  properties: {
+                    name: 'EPSG:3879',
+                  },
+                },
+                coordinates: [
+                  [
+                    [2.549981931e7, 6674214.72],
+                    [2.549981932e7, 6674233.32],
+                    [2.549980072e7, 6674233.32],
+                    [2.549980071e7, 6674214.72],
+                    [2.549981931e7, 6674214.72],
+                  ],
+                ],
+              },
+            },
+          ],
+        },
+        version: 0,
+        createdByUserId: '5f893af3-f7c0-433b-bf50-08f88fbc43a7',
+        createdAt: '2023-12-19T13:34:15.068Z',
+        modifiedByUserId: null,
+        modifiedAt: null,
+      },
+      kaistaHaitta: 'EI_VAIKUTA',
+      kaistaPituusHaitta: 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
+      meluHaitta: 'SATUNNAINEN_HAITTA',
+      polyHaitta: 'SATUNNAINEN_HAITTA',
+      tarinaHaitta: 'SATUNNAINEN_HAITTA',
+      nimi: 'Hankealue 1',
+    },
+  ],
 };
+
+async function setupAlueetPage(jsx: JSX.Element) {
+  const renderResult = render(jsx);
+
+  await waitFor(() => expect(screen.queryByText('Perustiedot')).toBeInTheDocument());
+  await renderResult.user.click(screen.getByRole('button', { name: /alueet/i }));
+  await waitFor(() => expect(screen.queryByText(/Piirrä alue kartalle/i)).toBeInTheDocument());
+
+  return renderResult;
+}
 
 async function setupYhteystiedotPage(jsx: JSX.Element) {
   const renderResult = render(jsx);
@@ -192,6 +259,12 @@ describe('HankeForm', () => {
 
     const result = screen.getByRole('textbox', { name: /hankkeen nimi/i });
     expect(result).toHaveValue(initialName.concat('additional'));
+  });
+
+  test('Hindrance affecting lane lenght dropdown should show correct values', async () => {
+    await setupAlueetPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
+
+    expect(screen.getByTestId('alueet.0.kaistaPituusHaitta')).toHaveValue('PITUUS_10_99_METRIA');
   });
 
   test('Yhteystiedot can be filled', async () => {
