@@ -405,10 +405,10 @@
     },
     "kaistaPituusHaitta": {
       "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Does not affect",
-      "KAISTAVAIKUTUSTEN_PITUUS_ALLE_10_METRIA": "Less than 10 m",
-      "KAISTAVAIKUTUSTEN_PITUUS_10_99_METRIA": "10–99 m",
-      "KAISTAVAIKUTUSTEN_PITUUS_100_499_METRIA": "100–499 m",
-      "VIKAISTAVAIKUTUSTEN_PITUUS_500_METRIA_TAI_ENEMMAN": "500 m or more"
+      "PITUUS_ALLE_10_METRIA": "Less than 10 m",
+      "PITUUS_10_99_METRIA": "10–99 m",
+      "PITUUS_100_499_METRIA": "100–499 m",
+      "PITUUS_500_METRIA_TAI_ENEMMAN": "500 m or more"
     },
     "meluHaitta": {
       "SATUNNAINEN_HAITTA": "Occasional nuisance",
