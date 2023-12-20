@@ -3,14 +3,14 @@ import { rest } from 'msw';
 import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
-import { HANKE_TYOMAATYYPPI, HANKE_VAIHE } from '../../types/hanke';
+import { HANKE_VAIHE, HANKE_TYOMAATYYPPI } from '../../types/hanke';
 import {
-  act,
+  render,
   cleanup,
   fireEvent,
-  render,
-  screen,
   waitFor,
+  screen,
+  act,
   within,
 } from '../../../testUtils/render';
 import hankkeet from '../../mocks/data/hankkeet-data';
@@ -109,73 +109,25 @@ const formData: HankeDataFormState = {
   tyomaaTyyppi: [HANKE_TYOMAATYYPPI.AKILLINEN_VIKAKORJAUS],
   nimi: 'testi kuoppa',
   kuvaus: 'testi kuvaus',
-  alueet: [
-    {
-      id: 414,
-      hankeId: 277,
-      haittaAlkuPvm: '2023-12-19T00:00:00Z',
-      haittaLoppuPvm: '2023-12-31T00:00:00Z',
-      geometriat: {
-        id: 508,
-        featureCollection: {
-          type: 'FeatureCollection',
-          crs: {
-            type: 'name',
-            properties: {
-              name: 'urn:ogc:def:crs:EPSG::3879',
-            },
-          },
-          features: [
-            {
-              type: 'Feature',
-              properties: {
-                hankeTunnus: 'HAI23-152',
-              },
-              geometry: {
-                type: 'Polygon',
-                crs: {
-                  type: 'name',
-                  properties: {
-                    name: 'EPSG:3879',
-                  },
-                },
-                coordinates: [
-                  [
-                    [2.549981931e7, 6674214.72],
-                    [2.549981932e7, 6674233.32],
-                    [2.549980072e7, 6674233.32],
-                    [2.549980071e7, 6674214.72],
-                    [2.549981931e7, 6674214.72],
-                  ],
-                ],
-              },
-            },
-          ],
-        },
-        version: 0,
-        createdByUserId: '5f893af3-f7c0-433b-bf50-08f88fbc43a7',
-        createdAt: '2023-12-19T13:34:15.068Z',
-        modifiedByUserId: null,
-        modifiedAt: null,
-      },
-      kaistaHaitta: 'EI_VAIKUTA',
-      kaistaPituusHaitta: 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
-      meluHaitta: 'SATUNNAINEN_HAITTA',
-      polyHaitta: 'SATUNNAINEN_HAITTA',
-      tarinaHaitta: 'SATUNNAINEN_HAITTA',
-      nimi: 'Hankealue 1',
-    },
-  ],
 };
 
-async function setupAlueetPage(jsx: JSX.Element) {
-  const renderResult = render(jsx);
+async function setupAlueetPage() {
+  const hanke = hankkeet[2];
 
-  await waitFor(() => expect(screen.queryByText('Perustiedot')).toBeInTheDocument());
-  await renderResult.user.click(screen.getByRole('button', { name: /alueet/i }));
-  await waitFor(() => expect(screen.queryByText(/Piirrä alue kartalle/i)).toBeInTheDocument());
+  const { user } = render(
+    <HankeForm
+      formData={hanke as HankeDataFormState}
+      onIsDirtyChange={() => ({})}
+      onFormClose={() => ({})}
+    >
+      <></>
+    </HankeForm>,
+  );
 
-  return renderResult;
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  expect(screen.queryByText('Vaihe 2/6: Alueet')).toBeInTheDocument();
+
+  return { user };
 }
 
 async function setupYhteystiedotPage(jsx: JSX.Element) {
@@ -261,10 +213,25 @@ describe('HankeForm', () => {
     expect(result).toHaveValue(initialName.concat('additional'));
   });
 
-  test('Hindrance affecting lane lenght dropdown should show correct values', async () => {
-    await setupAlueetPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
+  test('Nuisance and hindrance estimates for an area are correct', async () => {
+    await setupAlueetPage();
 
-    expect(screen.getByTestId('alueet.0.kaistaPituusHaitta')).toHaveValue('PITUUS_10_99_METRIA');
+    // Area name
+    expect(screen.getByTestId('alueet.0.nimi')).toHaveValue('Hankealue 1');
+    // Start date of the nuisance
+    expect(screen.getByDisplayValue('2.1.2023')).toBeInTheDocument();
+    // End date of the nuisance
+    expect(screen.getByDisplayValue('24.2.2023')).toBeInTheDocument();
+    // Noise nuisance
+    expect(screen.getByText('Satunnainen haitta')).toBeInTheDocument();
+    // Dust nuisance
+    expect(screen.getByText('Lyhytaikainen toistuva haitta')).toBeInTheDocument();
+    // Vibration nuisance
+    expect(screen.getByText('Pitkäkestoinen jatkuva haitta')).toBeInTheDocument();
+    // Lane hindrance
+    expect(screen.getByText('Vähentää kaistan yhdellä ajosuunnalla')).toBeInTheDocument();
+    // Hindrance affecting lane length
+    expect(screen.getByText('Alle 10 m')).toBeInTheDocument();
   });
 
   test('Yhteystiedot can be filled', async () => {
