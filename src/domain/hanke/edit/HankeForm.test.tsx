@@ -23,6 +23,22 @@ afterEach(cleanup);
 
 jest.setTimeout(30000);
 
+const DUMMY_DATA = 'dummy_file_data';
+
+const TEST_FILES = [
+  new File([DUMMY_DATA], 'file.pdf', { type: 'application/pdf' }),
+  new File([DUMMY_DATA], 'file.jpg', { type: 'image/jpg' }),
+  new File([DUMMY_DATA], 'file.jpeg', { type: 'image/jpeg' }),
+  new File([DUMMY_DATA], 'file.png', { type: 'image/png' }),
+  new File([DUMMY_DATA], 'file.dgn', { type: 'image/vnd.dgn' }),
+  new File([DUMMY_DATA], 'file.dwg', { type: 'image/vnd.dwg' }),
+  new File([DUMMY_DATA], 'file.docx', {
+    type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  }),
+  new File([DUMMY_DATA], 'file.txt', { type: 'text/plain' }),
+  new File([DUMMY_DATA], 'file.gt', { type: 'application/octet-stream' }),
+];
+
 async function uploadAttachment({
   hankeTunnus,
   file,
@@ -302,18 +318,15 @@ describe('HankeForm', () => {
     const { user } = render(<HankeFormContainer hankeTunnus="HAI22-2" />);
     await waitFor(() => screen.findByText('Perustiedot'));
     await user.click(screen.getByRole('button', { name: /liitteet/i }));
-    const fileUpload = screen.getByLabelText('Raahaa tiedostot tänne');
-    user.upload(fileUpload, [
-      new File(['test-a'], 'test-file-a.png', { type: 'image/png' }),
-      new File(['test-b'], 'test-file-b.jpg', { type: 'image/jpg' }),
-    ]);
+
+    user.upload(screen.getByLabelText('Raahaa tiedostot tänne'), TEST_FILES);
 
     await waitFor(() => screen.findAllByText('Tallennetaan tiedostoja'));
     await act(async () => {
       waitFor(() => expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0));
     });
     await waitFor(() => {
-      expect(screen.queryByText('2/2 tiedosto(a) tallennettu')).toBeInTheDocument();
+      expect(screen.queryByText('9/9 tiedosto(a) tallennettu')).toBeInTheDocument();
     });
   });
 
