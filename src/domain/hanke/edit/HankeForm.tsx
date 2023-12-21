@@ -16,26 +16,13 @@ import HankeFormSummary from './HankeFormSummary';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
 import { HankeData } from '../../types/hanke';
-import { convertFormStateToHankeData } from './utils';
-import api from '../../api/api';
 import MultipageForm from '../../forms/MultipageForm';
 import FormActions from '../../forms/components/FormActions';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import ApplicationAddDialog from '../../application/components/ApplicationAddDialog';
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
 import { changeFormStep } from '../../forms/utils';
-
-async function saveHanke(data: HankeDataFormState) {
-  const requestData = {
-    ...convertFormStateToHankeData(data),
-  };
-
-  const response = data.hankeTunnus
-    ? await api.put<HankeDataFormState>(`/hankkeet/${data.hankeTunnus}`, requestData)
-    : await api.post<HankeDataFormState>(`/hankkeet`, requestData);
-
-  return response.data;
-}
+import { updateHanke } from './hankeApi';
 
 type Props = {
   formData: HankeDataFormState;
@@ -73,17 +60,14 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     getValues,
     setValue,
     trigger,
+    watch,
   } = formContext;
-
-  const isNewHanke = !formData.hankeTunnus;
 
   const formValues = getValues();
   const isHankePublic = formValues.status === 'PUBLIC';
-  const formHeading = isNewHanke
-    ? t('hankeForm:pageHeaderNew')
-    : t('hankeForm:pageHeaderEdit', { hankeTunnus: formData.hankeTunnus });
+  const formHeading = `${watch('nimi')} (${formData.hankeTunnus})`;
 
-  const hankeMutation = useMutation(saveHanke, {
+  const hankeMutation = useMutation(updateHanke, {
     onMutate() {
       setShowNotification(null);
     },
@@ -157,27 +141,27 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     {
       element: <HankeFormAlueet errors={errors} register={register} formData={formValues} />,
       label: t('hankeForm:hankkeenAlueForm:header'),
-      state: isNewHanke ? StepState.disabled : StepState.available,
+      state: StepState.available,
     },
     {
       element: <HankeFormHaitat formData={formValues} />,
       label: t('hankeForm:hankkeenHaitatForm:header'),
-      state: isNewHanke ? StepState.disabled : StepState.available,
+      state: StepState.available,
     },
     {
       element: <HankeFormYhteystiedot errors={errors} register={register} formData={formValues} />,
       label: t('form:yhteystiedot:header'),
-      state: isNewHanke ? StepState.disabled : StepState.available,
+      state: StepState.available,
     },
     {
       element: <HankeFormLiitteet onFileUpload={handleFileUpload} />,
       label: t('hankePortfolio:tabit:liitteet'),
-      state: isNewHanke ? StepState.disabled : StepState.available,
+      state: StepState.available,
     },
     {
       element: <HankeFormSummary formData={formValues} />,
       label: t('hankeForm:hankkeenYhteenvetoForm:header'),
-      state: isNewHanke ? StepState.disabled : StepState.available,
+      state: StepState.available,
     },
   ];
 

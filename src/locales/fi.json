@@ -280,13 +280,6 @@
         "title": "Haitaton - Hankelista"
       }
     },
-    "NEW_HANKE": {
-      "path": "/hanke/uusi",
-      "headerLabel": "Luo uusi hanke",
-      "meta": {
-        "title": "Haitaton - Luo uusi hanke"
-      }
-    },
     "EDIT_HANKE": {
       "path": "/hanke/:hankeTunnus/muokkaa",
       "headerLabel": "Hanke",
@@ -500,7 +493,7 @@
       "sukunimi": "Sukunimi",
       "etunimi": "Etunimi",
       "email": "Sähköposti",
-      "puhelinnumero": "Puhelinnumero",
+      "puhelinnumero": "Puhelin",
       "osasto": "Osasto",
       "organisaatio": "Organisaatio",
       "omaOrganisaatio": "Lisää oma organisaatio",
@@ -522,6 +515,9 @@
       "tyomaaKatuosoite": "Hankkeen katuosoite/katuosoitteet sekä numero tai numeroväli (esim. Mannerheimintie 5, Hämeentie 3-27) tai muu paikallistava tieto, mikäli katuosoitetta ei ole saatavilla.",
       "tyomaaTyyppi": "Hankkeen tyypin monivalinta. Hanke voi koostua useista eri hanketyypeistä, eli voit valita useita hanketyyppejä.",
       "kaistaHaitta": "Todennäköinen haitta pääajoratojen kaistajärjestelyihin"
+    },
+    "buttons": {
+      "create": "Luo hanke"
     },
     "perustiedotForm": {
       "header": "Perustiedot",

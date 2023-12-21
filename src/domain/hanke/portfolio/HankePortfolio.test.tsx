@@ -126,14 +126,14 @@ describe('HankePortfolioComponent', () => {
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
   });
 
-  test('Having no projects renders correct text and link to new hanke works', async () => {
+  test('Having no projects renders correct text and new hanke link opens hanke create dialog', async () => {
     const { user } = render(<HankePortfolioComponent hankkeet={[]} signedInUserByHanke={{}} />);
 
     expect(screen.queryByText(EMPTY_HANKE_LIST_TEXT)).toBeInTheDocument();
 
     const { getByRole } = within(screen.getByText('Tarkista hakuehdot', { exact: false }));
     await user.click(getByRole('link', { name: 'luo uusi hanke' }));
-    expect(window.location.pathname).toBe('/fi/hanke/uusi');
+    expect(screen.getByRole('heading', { name: 'Luo uusi hanke' }));
   });
 
   test('Having no projects renders correct text without a link to new hanke when Hanke feature is not enabled', async () => {

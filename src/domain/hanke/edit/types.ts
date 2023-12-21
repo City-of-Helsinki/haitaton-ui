@@ -3,6 +3,8 @@ import { Feature } from 'ol';
 import Geometry from 'ol/geom/Geometry';
 import { PartialExcept } from '../../../common/types/utils';
 import { HankeData, HankeContactTypeKey, HankeAlue } from '../../types/hanke';
+import yup from '../../../common/utils/yup';
+import { newHankeSchema } from './hankeSchema';
 
 export type FormNotification = 'ok' | 'success' | 'error' | null;
 
@@ -77,3 +79,5 @@ export type Organization = {
   nimi: string;
   tunnus: string;
 };
+
+export type NewHankeData = yup.InferType<typeof newHankeSchema>;

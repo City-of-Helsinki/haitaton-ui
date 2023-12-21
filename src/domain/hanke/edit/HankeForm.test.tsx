@@ -263,14 +263,24 @@ describe('HankeForm', () => {
   });
 
   test('Should be able to save and quit', async () => {
-    const { user } = render(<HankeFormContainer />);
+    const hanke = hankkeet[1];
+    const hankeName = hanke.nimi;
 
-    fillBasicInformation();
+    const { user } = render(
+      <HankeForm
+        formData={hanke as HankeDataFormState}
+        onIsDirtyChange={() => ({})}
+        onFormClose={() => ({})}
+      >
+        children
+      </HankeForm>,
+    );
 
+    fillBasicInformation({ name: hankeName });
     await user.click(screen.getByRole('button', { name: 'Tallenna ja keskeytä' }));
 
-    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-14');
-    expect(screen.getByText(`Hanke ${nimi} (HAI22-14) tallennettu omiin hankkeisiin.`));
+    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2');
+    expect(screen.getByText(`Hanke ${hankeName} (HAI22-2) tallennettu omiin hankkeisiin.`));
   });
 
   test('Should be able to save hanke in the last page', async () => {

@@ -264,13 +264,6 @@
         "title": "Haitaton - Project list"
       }
     },
-    "NEW_HANKE": {
-      "path": "/project/new",
-      "headerLabel": "Create a new project",
-      "meta": {
-        "title": "Haitaton - Create a new project"
-      }
-    },
     "EDIT_HANKE": {
       "path": "/project/:hankeTunnus/edit",
       "headerLabel": "Project",

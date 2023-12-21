@@ -4,7 +4,6 @@ import { Route, Routes } from 'react-router-dom';
 import HankeListPage from '../../pages/HankeListPage';
 import MapPage from '../../pages/MapPage';
 import HankePortfolioPage from '../../pages/HankePortfolioPage';
-import NewHankePage from '../../pages/NewHankePage';
 import EditHankePage from '../../pages/EditHankePage';
 import HomePage from '../../pages/HomePage';
 import InfoPage from '../../pages/staticPages/InfoPage';
@@ -35,10 +34,6 @@ const LocaleRoutes = () => {
   return (
     <Routes>
       <Route path={t('routes:HOME:path')} element={<HomePage />} />
-      <Route
-        path={`${t('routes:NEW_HANKE:path')}/`}
-        element={<PrivateRoute element={<NewHankePage />} />}
-      />
       <Route
         path={`${t('routes:EDIT_HANKE:path')}/`}
         element={<PrivateRoute element={<EditHankePage />} />}
