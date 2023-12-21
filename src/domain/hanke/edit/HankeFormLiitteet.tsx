@@ -66,7 +66,7 @@ function HankeFormLiitteet({ onFileUpload }: Readonly<Props>) {
 
       <FileUpload
         id="hanke-file-upload"
-        accept=".pdf,.jpg,.jpeg,.png,.dgn,.dwg,.docx"
+        accept=".pdf,.jpg,.jpeg,.png,.dgn,.dwg,.docx,.txt,.gt"
         maxSize={104857600}
         dragAndDrop
         multiple
