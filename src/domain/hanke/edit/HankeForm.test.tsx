@@ -111,6 +111,25 @@ const formData: HankeDataFormState = {
   kuvaus: 'testi kuvaus',
 };
 
+async function setupAlueetPage() {
+  const hanke = hankkeet[2];
+
+  const { user } = render(
+    <HankeForm
+      formData={hanke as HankeDataFormState}
+      onIsDirtyChange={() => ({})}
+      onFormClose={() => ({})}
+    >
+      <></>
+    </HankeForm>,
+  );
+
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  expect(screen.queryByText('Vaihe 2/6: Alueet')).toBeInTheDocument();
+
+  return { user };
+}
+
 async function setupYhteystiedotPage(jsx: JSX.Element) {
   const renderResult = render(jsx);
 
@@ -192,6 +211,27 @@ describe('HankeForm', () => {
 
     const result = screen.getByRole('textbox', { name: /hankkeen nimi/i });
     expect(result).toHaveValue(initialName.concat('additional'));
+  });
+
+  test('Nuisance and hindrance estimates for an area are correct', async () => {
+    await setupAlueetPage();
+
+    // Area name
+    expect(screen.getByTestId('alueet.0.nimi')).toHaveValue('Hankealue 1');
+    // Start date of the nuisance
+    expect(screen.getByDisplayValue('2.1.2023')).toBeInTheDocument();
+    // End date of the nuisance
+    expect(screen.getByDisplayValue('24.2.2023')).toBeInTheDocument();
+    // Noise nuisance
+    expect(screen.getByText('Satunnainen haitta')).toBeInTheDocument();
+    // Dust nuisance
+    expect(screen.getByText('Lyhytaikainen toistuva haitta')).toBeInTheDocument();
+    // Vibration nuisance
+    expect(screen.getByText('Pitkäkestoinen jatkuva haitta')).toBeInTheDocument();
+    // Lane hindrance
+    expect(screen.getByText('Vähentää kaistan yhdellä ajosuunnalla')).toBeInTheDocument();
+    // Hindrance affecting lane length
+    expect(screen.getByText('Alle 10 m')).toBeInTheDocument();
   });
 
   test('Yhteystiedot can be filled', async () => {

@@ -152,7 +152,7 @@ export type HankeAlue = {
   kaistaHaitta: HANKE_KAISTAHAITTA_KEY | null;
   kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA_KEY | null;
   meluHaitta: HANKE_MELUHAITTA_KEY | null;
-  polyHaitta: HANKE_POLYHAITTA | null;
+  polyHaitta: HANKE_POLYHAITTA_KEY | null;
   tarinaHaitta: HANKE_TARINAHAITTA_KEY | null;
   nimi?: string | null;
 };

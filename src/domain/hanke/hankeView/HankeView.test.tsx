@@ -117,10 +117,12 @@ test('Correct information about hanke should be displayed', async () => {
   expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('1.5');
   expect(screen.queryByText('11974 m²')).toBeInTheDocument();
   expect(screen.queryByText('Meluhaitta: Satunnainen haitta')).toBeInTheDocument();
-  expect(screen.queryByText('Pölyhaitta: Satunnainen haitta')).toBeInTheDocument();
-  expect(screen.queryByText('Tärinähaitta: Lyhytaikainen toistuva haitta')).toBeInTheDocument();
-  expect(screen.queryByText('Autoliikenteen kaistahaitta: Ei vaikuta')).toBeInTheDocument();
-  expect(screen.queryByText('Kaistahaittojen pituus: Ei vaikuta')).toBeInTheDocument();
+  expect(screen.queryByText('Pölyhaitta: Lyhytaikainen toistuva haitta')).toBeInTheDocument();
+  expect(screen.queryByText('Tärinähaitta: Pitkäkestoinen jatkuva haitta')).toBeInTheDocument();
+  expect(
+    screen.queryByText('Autoliikenteen kaistahaitta: Vähentää kaistan yhdellä ajosuunnalla'),
+  ).toBeInTheDocument();
+  expect(screen.queryByText('Kaistahaittojen pituus: Alle 10 m')).toBeInTheDocument();
 
   // Change to contacts tab
   await user.click(screen.getByRole('tab', { name: /yhteystiedot/i }));
