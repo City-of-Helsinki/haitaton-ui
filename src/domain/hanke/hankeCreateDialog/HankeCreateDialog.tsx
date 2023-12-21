@@ -26,7 +26,7 @@ type Props = {
   onClose: () => void;
 };
 
-function HankeCreateDialog({ isOpen, onClose }: Props) {
+function HankeCreateDialog({ isOpen, onClose }: Readonly<Props>) {
   const { t } = useTranslation();
   const user = useUser();
   const navigate = useNavigate();
