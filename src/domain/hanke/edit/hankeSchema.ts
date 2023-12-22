@@ -89,3 +89,11 @@ export const hankeSchema = yup.object().shape({
   [FORMFIELD.TOTEUTTAJAT]: yup.array().ensure().of(contactSchema),
   [FORMFIELD.MUUTTAHOT]: yup.array().ensure().of(otherPartySchema),
 });
+
+export const newHankeSchema = yup.object({
+  nimi: yup.string().min(3).required(),
+  perustaja: yup.object({
+    sahkoposti: yup.string().email().required(),
+    puhelinnumero: yup.string().required(),
+  }),
+});

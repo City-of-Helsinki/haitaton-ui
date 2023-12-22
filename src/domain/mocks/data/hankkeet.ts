@@ -23,20 +23,20 @@ export async function readAll() {
 }
 
 export async function create(data: HankeDataDraft) {
-  const newHanke: HankeDataDraft = {
+  const newHanke: Partial<HankeDataDraft> = {
     id: hankkeet.length + 1,
     hankeTunnus: generateHankeTunnus(),
-    tyomaaKatuosoite: '',
+    nimi: data.nimi,
     tyomaaTyyppi: [],
     alueet: [],
-    ...data,
   };
-  hankkeet.push(newHanke);
+  hankkeet.push(newHanke as HankeDataDraft);
   return newHanke;
 }
 
 export async function update(hankeTunnus: string, updates: HankeDataDraft) {
   let hanke = await read(hankeTunnus);
+  console.log(hankeTunnus, hanke);
   if (!hanke) {
     throw new Error(`No hanke with hankeTunnus ${hankeTunnus}`);
   }

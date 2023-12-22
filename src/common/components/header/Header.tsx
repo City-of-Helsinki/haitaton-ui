@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IconLinkExternal, IconSignout, LogoLanguage, Navigation } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useMatch, useLocation, useNavigate } from 'react-router-dom';
@@ -14,6 +14,7 @@ import useUser from '../../../domain/auth/useUser';
 import { Language, LANGUAGES } from '../../types/language';
 import { SKIP_TO_ELEMENT_ID } from '../../constants/constants';
 import { useFeatureFlags } from '../featureFlags/FeatureFlagsContext';
+import HankeCreateDialog from '../../../domain/hanke/hankeCreateDialog/HankeCreateDialog';
 
 const languageLabels = {
   fi: 'Suomi',
@@ -22,25 +23,16 @@ const languageLabels = {
 };
 
 const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
-  const {
-    HOME,
-    PUBLIC_HANKKEET,
-    PUBLIC_HANKKEET_MAP,
-    HANKEPORTFOLIO,
-    NEW_HANKE,
-    JOHTOSELVITYSHAKEMUS,
-  } = useLocalizedRoutes();
+  const { HOME, PUBLIC_HANKKEET, PUBLIC_HANKKEET_MAP, HANKEPORTFOLIO, JOHTOSELVITYSHAKEMUS } =
+    useLocalizedRoutes();
   const { t, i18n } = useTranslation();
   const { data: user } = useUser();
   const isAuthenticated = Boolean(user?.profile);
   const features = useFeatureFlags();
+  const [showHankeCreateDialog, setShowHankeCreateDialog] = useState(false);
 
   const isMapPath = useMatch({
     path: PUBLIC_HANKKEET.path,
-    end: false,
-  });
-  const isNewHankePath = useMatch({
-    path: NEW_HANKE.path,
     end: false,
   });
   const isCableReportApplicationPath = useMatch({
@@ -82,6 +74,14 @@ const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
     navigate(path);
   }
 
+  function openHankeCreateDialog() {
+    setShowHankeCreateDialog(true);
+  }
+
+  function closeHankeCreateDialog() {
+    setShowHankeCreateDialog(false);
+  }
+
   return (
     <Navigation
       menuToggleAriaLabel={t('common:ariaLabels:menuToggle')}
@@ -104,11 +104,11 @@ const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
           {features.hanke ? (
             <Navigation.Item
               as={NavLink}
-              to={NEW_HANKE.path}
-              active={Boolean(isNewHankePath)}
+              to="#"
+              onClick={openHankeCreateDialog}
               data-testid="hankeLink"
             >
-              {NEW_HANKE.label}
+              {t('homepage:hanke:title')}
             </Navigation.Item>
           ) : (
             <></>
@@ -176,6 +176,7 @@ const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
           ))}
         </Navigation.LanguageSelector>
       </Navigation.Actions>
+      <HankeCreateDialog isOpen={showHankeCreateDialog} onClose={closeHankeCreateDialog} />
     </Navigation>
   );
 };

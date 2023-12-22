@@ -46,8 +46,8 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
           <p>Lisäämällä hankkeen tiedot, pystyt kopioimaan ne lopuksi tarvitsemiisi hakemuksiin.</p>
         </Trans>
       </div>
-      <Box mb="var(--spacing-l)">
-        <p>{t('form:requiredInstruction')}</p>
+      <Box marginBottom="var(--spacing-xs)">
+        <h2 className="heading-m">{t('hankeSidebar:ariaSidebarContent')}</h2>
       </Box>
       <div className="formWpr">
         <TextInput name={FORMFIELD.NIMI} maxLength={100} required />

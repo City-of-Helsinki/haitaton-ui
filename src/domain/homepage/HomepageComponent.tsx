@@ -21,18 +21,15 @@ import {
   useFeatureFlags,
 } from '../../common/components/featureFlags/FeatureFlagsContext';
 import MainHeading from '../../common/components/mainHeading/MainHeading';
+import HankeCreateDialog from '../hanke/hankeCreateDialog/HankeCreateDialog';
 
 const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const {
-    PUBLIC_HANKKEET_MAP,
-    PUBLIC_HANKKEET_LIST,
-    HANKEPORTFOLIO,
-    NEW_HANKE,
-    JOHTOSELVITYSHAKEMUS,
-  } = useLocalizedRoutes();
+  const { PUBLIC_HANKKEET_MAP, PUBLIC_HANKKEET_LIST, HANKEPORTFOLIO, JOHTOSELVITYSHAKEMUS } =
+    useLocalizedRoutes();
   const [feedbackOpen, setFeedbackOpen] = useState(true);
+  const [showHankeCreateDialog, setShowHankeCreateDialog] = useState(false);
   const { data: user } = useUser();
   const isAuthenticated = Boolean(user?.profile);
   const features = useFeatureFlags();
@@ -47,7 +44,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
     },
     {
       key: 'hanke',
-      actionLink: NEW_HANKE.path,
+      actionLink: undefined,
       imgProps: { src: img2, width: 384, height: 245 },
       external: false,
       featureFlags: ['hanke'],
@@ -126,6 +123,14 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
     ? t('homepage:pageSubTitle_loggedIn')
     : t('homepage:pageSubTitle');
 
+  function openHankeCreateDialog() {
+    setShowHankeCreateDialog(true);
+  }
+
+  function closeHankeCreateDialog() {
+    setShowHankeCreateDialog(false);
+  }
+
   return (
     <div className={clsx({ [styles.bgWhite]: !isAuthenticated && !features.publicHankkeet })}>
       <div className={styles.heroContainer}>
@@ -201,6 +206,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
                       imgProps={item.imgProps}
                       external={item.external}
                       openInNewTab={item.external}
+                      onClick={item.key === 'hanke' ? openHankeCreateDialog : undefined}
                     />
                   </div>
                 </FeatureFlags>
@@ -210,6 +216,8 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
 
           {loginContainer}
         </article>
+
+        <HankeCreateDialog isOpen={showHankeCreateDialog} onClose={closeHankeCreateDialog} />
       </Container>
     </div>
   );

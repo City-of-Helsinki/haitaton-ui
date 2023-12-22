@@ -44,7 +44,7 @@ import { SignedInUser, SignedInUserByHanke } from '../hankeUsers/hankeUser';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import useFocusToElement from '../../../common/hooks/useFocusToElement';
 import HDSLink from '../../../common/components/Link/Link';
-import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
+import HankeCreateDialog from '../hankeCreateDialog/HankeCreateDialog';
 
 type CustomAccordionProps = {
   hanke: HankeData;
@@ -257,8 +257,6 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
   hankkeet,
   signedInUserByHanke,
 }) => {
-  const { NEW_HANKE } = useLocalizedRoutes();
-
   const {
     hankeFilterStartDate,
     hankeFilterEndDate,
@@ -472,10 +470,19 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
   }, [setIsFiltered, filters, globalFilter]);
 
   const firstHankeCardRef = useFocusToElement<HTMLDivElement>(pageIndex);
+  const [showHankeCreateDialog, setShowHankeCreateDialog] = useState(false);
 
   function handlePageChange(e: React.MouseEvent, index: number) {
     e.preventDefault();
     gotoPage(index);
+  }
+
+  function openHankeCreateDialog() {
+    setShowHankeCreateDialog(true);
+  }
+
+  function closeHankeCreateDialog() {
+    setShowHankeCreateDialog(false);
   }
 
   return (
@@ -610,7 +617,11 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
                     <Trans i18nKey="hankePortfolio:checkSearchParameters">
                       <Text tag="p" className="heading-m">
                         Tarkista hakuehdot tai{' '}
-                        <HDSLink href={NEW_HANKE.path} className={styles.newHankeLink}>
+                        <HDSLink
+                          href=""
+                          onClick={openHankeCreateDialog}
+                          className={styles.newHankeLink}
+                        >
                           luo uusi hanke
                         </HDSLink>
                         .
@@ -636,6 +647,7 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
           </div>
         </Container>
       </div>
+      <HankeCreateDialog isOpen={showHankeCreateDialog} onClose={closeHankeCreateDialog} />
     </>
   );
 };

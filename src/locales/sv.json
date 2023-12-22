@@ -264,13 +264,6 @@
         "title": "Haitaton - Projektlista"
       }
     },
-    "NEW_HANKE": {
-      "path": "/projekt/ny",
-      "headerLabel": "Skapa nytt projekt",
-      "meta": {
-        "title": "Haitaton - Skapa nytt projekt"
-      }
-    },
     "EDIT_HANKE": {
       "path": "/projekt/:hankeTunnus/redigera",
       "headerLabel": "Projekt",

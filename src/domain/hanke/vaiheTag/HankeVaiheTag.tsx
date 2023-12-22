@@ -25,7 +25,7 @@ const themes = {
 const HankeVaiheTag: React.FC<React.PropsWithChildren<TagProps>> = ({ tagName, uppercase }) => {
   const { t } = useTranslation();
 
-  if (tagName === null) {
+  if (tagName === null || tagName === undefined) {
     return null;
   }
 
