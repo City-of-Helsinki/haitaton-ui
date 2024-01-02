@@ -254,9 +254,6 @@ describe('HankeForm', () => {
     const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
 
     // Hanke owner (accordion open by default)
-    expect(screen.getAllByRole('tablist')[0].childElementCount).toBe(1); // initially there is one sub-contact
-    expect(screen.queryByText(/poista yhteyshenkilö/i)).not.toBeInTheDocument(); // owner sub-contacts cannot all be removed
-
     await user.click(screen.getByRole('button', { name: /tyyppi/i }));
     await user.click(screen.getByText(/yritys/i));
 
@@ -273,39 +270,14 @@ describe('HankeForm', () => {
       target: { value: '0401234567' },
     });
 
-    // Hanke owner contact person, should be visible by default
-    fireEvent.change(screen.getByTestId('omistajat.0.alikontaktit.0.etunimi'), {
-      target: { value: 'Olli' },
-    });
-    fireEvent.change(screen.getByTestId('omistajat.0.alikontaktit.0.sukunimi'), {
-      target: { value: 'Omistaja' },
-    });
-    fireEvent.change(screen.getByTestId('omistajat.0.alikontaktit.0.email'), {
-      target: { value: 'foo@bar.com' },
-    });
-    fireEvent.change(screen.getByTestId('omistajat.0.alikontaktit.0.puhelinnumero'), {
-      target: { value: '0507654321' },
-    });
-
     // Rakennuttaja
     await user.click(screen.getByText(/rakennuttajan tiedot/i));
     await user.click(screen.getByText(/lisää rakennuttaja/i));
     expect(screen.getAllByText('Rakennuttaja')).toHaveLength(1);
-    expect(screen.getAllByRole('tablist')).toHaveLength(1); // initially there is no sub-contacts for rakennuttaja ('tablist' is only for owner)
 
     await user.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
     await user.click(screen.getByText(/yksityishenkilö/i));
     expect(screen.getAllByLabelText(/y-tunnus/i)[1]).toBeDisabled();
-
-    await user.click(screen.getAllByText(/lisää yhteyshenkilö/i)[1]);
-    await user.click(screen.getAllByText(/lisää yhteyshenkilö/i)[1]);
-    expect(screen.getAllByRole('tablist')[1].childElementCount).toBe(2); // many contacts can be added
-
-    expect(screen.queryByText(/poista yhteyshenkilö/i)).toBeInTheDocument(); // first sub-contact can be removed
-    await user.click(screen.getByText(/poista yhteyshenkilö/i));
-    expect(screen.queryByText(/poista yhteyshenkilö/i)).toBeInTheDocument(); // second (and last) sub-contact can be removed
-    await user.click(screen.getByText(/poista yhteyshenkilö/i));
-    expect(screen.queryByText(/poista yhteyshenkilö/i)).not.toBeInTheDocument(); // all contacts can be removed (except for owner)
 
     await user.click(screen.getByText(/lisää rakennuttaja/i)); // add second rakennuttaja
     expect(screen.getAllByText('Rakennuttaja')).toHaveLength(2);
@@ -499,5 +471,67 @@ describe('HankeForm', () => {
     expect(screen.queryByText(/autoliikenteen kaistahaitta: -/i)).toBeInTheDocument();
     expect(screen.queryByText(/kaistahaittojen pituus: -/i)).toBeInTheDocument();
     expect(screen.queryByText(/muokkaa hanketta lisätäksesi tietoja/i)).toBeInTheDocument();
+  });
+});
+
+describe('New contact person form', () => {
+  function fillNewContactPersonForm(
+    options: {
+      etunimi?: string;
+      sukunimi?: string;
+      sahkoposti?: string;
+      puhelinnumero?: string;
+    } = {},
+  ) {
+    const {
+      etunimi = 'Matti',
+      sukunimi = 'Meikäläinen',
+      sahkoposti = 'matti.meikalainen@test.com',
+      puhelinnumero = '0401234567',
+    } = options;
+    fireEvent.change(screen.getByLabelText(/etunimi/i), {
+      target: { value: etunimi },
+    });
+    fireEvent.change(screen.getByLabelText(/sukunimi/i), {
+      target: { value: sukunimi },
+    });
+    fireEvent.change(screen.getAllByLabelText(/sähköposti/i)[1], {
+      target: { value: sahkoposti },
+    });
+    fireEvent.change(screen.getAllByLabelText(/Puhelinnumero/i)[1], {
+      target: { value: puhelinnumero },
+    });
+  }
+
+  test('Should be able to create new user', async () => {
+    const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
+    await user.click(screen.getByRole('button', { name: /lisää uusi yhteyshenkilö/i }));
+    fillNewContactPersonForm();
+    await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+
+    expect(screen.getByText('Yhteyshenkilö tallennettu')).toBeInTheDocument();
+  });
+
+  test('Should not be able to create new user and show validation errors if info is not filled', async () => {
+    const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
+    await user.click(screen.getByRole('button', { name: /lisää uusi yhteyshenkilö/i }));
+    await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+
+    expect(screen.getAllByText('Kenttä on pakollinen')).toHaveLength(4);
+    expect(screen.queryByText('Yhteyshenkilö tallennettu')).not.toBeInTheDocument();
+  });
+
+  test('Should show error notification if creating new user fails', async () => {
+    server.use(
+      rest.post('/api/hankkeet/:hankeTunnus/kayttajat', async (req, res, ctx) => {
+        return res(ctx.status(500));
+      }),
+    );
+    const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
+    await user.click(screen.getByRole('button', { name: /lisää uusi yhteyshenkilö/i }));
+    fillNewContactPersonForm();
+    await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+
+    expect(screen.getByText('Yhteyshenkilön tallennus epäonnistui')).toBeInTheDocument();
   });
 });

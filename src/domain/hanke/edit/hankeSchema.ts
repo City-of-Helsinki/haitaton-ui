@@ -9,19 +9,15 @@ import {
   HANKE_KAISTAPITUUSHAITTA,
   CONTACT_TYYPPI,
 } from '../../types/hanke';
-import { FORMFIELD, CONTACT_FORMFIELD, SUBCONTACT_FORMFIELD } from './types';
+import { FORMFIELD, CONTACT_FORMFIELD, CONTACT_PERSON_FORMFIELD } from './types';
 import isValidBusinessId from '../../../common/utils/isValidBusinessId';
 
-const subContactSchema = yup
-  .object()
-  .nullable()
-  .default(null)
-  .shape({
-    [SUBCONTACT_FORMFIELD.SUKUNIMI]: yup.string().max(50),
-    [SUBCONTACT_FORMFIELD.ETUNIMI]: yup.string().max(50),
-    [SUBCONTACT_FORMFIELD.EMAIL]: yup.string().email().max(100),
-    [SUBCONTACT_FORMFIELD.PUHELINNUMERO]: yup.string().nullable().default(null).max(20),
-  });
+export const contactPersonSchema = yup.object({
+  [CONTACT_PERSON_FORMFIELD.ETUNIMI]: yup.string().max(50).required(),
+  [CONTACT_PERSON_FORMFIELD.SUKUNIMI]: yup.string().max(50).required(),
+  [CONTACT_PERSON_FORMFIELD.EMAIL]: yup.string().email().max(100).required(),
+  [CONTACT_PERSON_FORMFIELD.PUHELINNUMERO]: yup.string().max(20).required(),
+});
 
 const contactSchema = yup
   .object()
@@ -45,7 +41,6 @@ const contactSchema = yup
       }),
     [CONTACT_FORMFIELD.EMAIL]: yup.string().email().max(100),
     [CONTACT_FORMFIELD.PUHELINNUMERO]: yup.string().nullable().default(null).max(20),
-    [CONTACT_FORMFIELD.ALIKONTAKTIT]: yup.array().ensure().of(subContactSchema),
   });
 
 const otherPartySchema = contactSchema

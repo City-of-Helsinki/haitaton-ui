@@ -5,10 +5,15 @@ import styles from './ResponsiveGrid.module.scss';
 type Props = {
   children: React.ReactNode;
   className?: string;
+  maxColumns?: 2 | 3;
 };
 
-function ResponsiveGrid({ className, children }: Props) {
-  return <div className={clsx([styles.container, className])}>{children}</div>;
+function ResponsiveGrid({ className, maxColumns = 3, children }: Props) {
+  return (
+    <div className={clsx([styles.container, className, styles[`maxColumns--${maxColumns}`]])}>
+      {children}
+    </div>
+  );
 }
 
 export default ResponsiveGrid;
