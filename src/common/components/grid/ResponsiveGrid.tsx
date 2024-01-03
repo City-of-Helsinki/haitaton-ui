@@ -8,7 +8,7 @@ type Props = {
   maxColumns?: 2 | 3;
 };
 
-function ResponsiveGrid({ className, maxColumns = 3, children }: Props) {
+function ResponsiveGrid({ className, maxColumns = 3, children }: Readonly<Props>) {
   return (
     <div className={clsx([styles.container, className, styles[`maxColumns--${maxColumns}`]])}>
       {children}
