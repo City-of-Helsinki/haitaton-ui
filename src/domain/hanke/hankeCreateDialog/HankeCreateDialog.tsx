@@ -94,7 +94,12 @@ function HankeCreateDialog({ isOpen, onClose }: Readonly<Props>) {
               />
             </Box>
             <Box marginBottom="var(--spacing-s)" maxWidth={328}>
-              <TextInput name="perustaja.sahkoposti" label={t('hankeForm:labels:email')} required />
+              <TextInput
+                name="perustaja.sahkoposti"
+                label={t('hankeForm:labels:email')}
+                required
+                defaultValue={user.data?.profile.email}
+              />
             </Box>
             <Box maxWidth={328}>
               <TextInput

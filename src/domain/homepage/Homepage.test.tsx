@@ -6,6 +6,7 @@ import { server } from '../mocks/test-server';
 import Homepage from './HomepageComponent';
 
 const userName = 'Test User';
+const userEmail = 'test.user@mail.com';
 const mockUser: Partial<User> = {
   id_token: 'fffff-aaaaaa-11111',
   access_token: '.GbutWVN1x7RSAP5bU2a-tXdVPuof_9pBNd_Ozw',
@@ -16,6 +17,7 @@ const mockUser: Partial<User> = {
     exp: 0,
     iat: 0,
     name: userName,
+    email: userEmail,
   },
 };
 
@@ -56,7 +58,7 @@ describe('Create new hanke from dialog', () => {
     await user.click(screen.getByRole('button', { name: /luo hanke/i }));
 
     expect(screen.getByText(/kentän pituus oltava vähintään 3 merkkiä/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/kenttä on pakollinen/i)).toHaveLength(2);
+    expect(screen.getAllByText(/kenttä on pakollinen/i)).toHaveLength(1);
     expect(window.location.pathname).toBe('/');
   });
 
@@ -72,5 +74,11 @@ describe('Create new hanke from dialog', () => {
 
     expect(screen.getByText('Tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument();
     expect(window.location.pathname).toBe('/');
+  });
+
+  test('Email should be pre-filled', async () => {
+    await openHankeCreateDialog();
+
+    expect(screen.getByLabelText(/sähköposti/i)).toHaveValue(userEmail);
   });
 });
