@@ -4,6 +4,7 @@ import { VectorSourceEvent } from 'ol/source/Vector';
 import { Feature } from 'ol';
 import Geometry from 'ol/geom/Geometry';
 import { Coordinate } from 'ol/coordinate';
+import { FeatureLike } from 'ol/Feature';
 import { debounce } from 'lodash';
 import Map from '../../../../common/components/map/Map';
 import Controls from '../../../../common/components/map/controls/Controls';
@@ -67,23 +68,23 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
       handleUpdateGeometryState(drawGeometry);
     };
 
-    function handleAddFeature(e: VectorSourceEvent<Geometry>) {
+    function handleAddFeature(e: VectorSourceEvent<FeatureLike>) {
       if (onAddFeature && e.feature) {
-        onAddFeature(e.feature);
+        onAddFeature(e.feature as Feature<Geometry>);
       }
       updateState();
     }
 
-    const handleChangeFeature = debounce((e: VectorSourceEvent<Geometry>) => {
+    const handleChangeFeature = debounce((e: VectorSourceEvent<FeatureLike>) => {
       if (onChangeFeature && e.feature) {
-        onChangeFeature(e.feature);
+        onChangeFeature(e.feature as Feature<Geometry>);
       }
       updateState();
     }, 100);
 
-    function handleRemoveFeature(e: VectorSourceEvent<Geometry>) {
+    function handleRemoveFeature(e: VectorSourceEvent<FeatureLike>) {
       if (onRemoveFeature && e.feature) {
-        onRemoveFeature(e.feature);
+        onRemoveFeature(e.feature as Feature<Geometry>);
       }
       updateState();
     }

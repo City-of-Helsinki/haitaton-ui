@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { Vector } from 'ol/source';
 import GeoJSON from 'ol/format/GeoJSON';
+import { Feature } from 'ol';
+import { Geometry } from 'ol/geom';
 import { HankeData } from '../../types/hanke';
 
 /**
@@ -18,7 +20,7 @@ export default function useHankeFeatures(source: Vector, hankkeet: HankeData[]) 
             return [];
           }
           return new GeoJSON().readFeatures(alue.geometriat.featureCollection);
-        });
+        }) as Feature<Geometry>[];
 
         hankeFeatures.forEach((feature) => {
           feature.setProperties(
