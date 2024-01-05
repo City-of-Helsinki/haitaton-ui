@@ -54,7 +54,7 @@
     "@types/react-table": "^7.7.12",
     "@types/turf": "^3.5.32",
     "@types/yup": "^0.29.10",
-    "axios": "^1.6.2",
+    "axios": "^1.6.4",
     "clsx": "^2.0.0",
     "cypress": "^6.0.0",
     "cypress-axe": "^0.12.2",
