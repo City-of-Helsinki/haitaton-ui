@@ -191,6 +191,14 @@ describe('HankePortfolioComponent', () => {
       screen.getAllByText('Tämä hanke on muodostettu johtoselvityksen perusteella.'),
     ).toHaveLength(1);
   });
+
+  test('Should show user permission info for hankkeet', () => {
+    const userData = userDataByHanke(hankeList.map((hanke) => hanke.hankeTunnus));
+
+    render(<HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={userData} />);
+
+    expect(screen.getAllByText(/kaikki oikeudet/i)).toHaveLength(2);
+  });
 });
 
 describe('HankePortfolioContainer', () => {

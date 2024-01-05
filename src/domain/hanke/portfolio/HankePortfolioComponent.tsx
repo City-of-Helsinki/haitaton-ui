@@ -218,6 +218,11 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
                 <Text tag="h3" styleAs="h6" weight="bold" className={styles.infoHeader}>
                   {t('hankeForm:labels:rights')}
                 </Text>
+                {signedInUser !== undefined && (
+                  <Text tag="p" styleAs="body-m" className={styles.infoContent}>
+                    {t(`hankeUsers:accessRightLevels:${signedInUser.kayttooikeustaso}`)}
+                  </Text>
+                )}
               </div>
             </FeatureFlags>
           </div>
