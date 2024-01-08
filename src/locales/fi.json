@@ -218,7 +218,9 @@
       },
       "buttons": {
         "addSubContact": "Lisää yhteyshenkilö",
+        "addNewContactPerson": "Lisää uusi yhteyshenkilö",
         "removeSubContact": "Poista yhteyshenkilö",
+        "saveAndAddContactPerson": "Tallenna ja lisää yhteyshenkilö",
         "remove": {
           "omistajat": "Poista omistaja",
           "rakennuttajat": "Poista rakennuttaja",
@@ -226,6 +228,16 @@
           "muut": "Poista muu taho",
           "propertyDeveloperWithContacts": "Poista rakennuttaja",
           "representativeWithContacts": "Poista asianhoitaja"
+        }
+      },
+      "notifications": {
+        "labels": {
+          "contactPersonSaved": "Yhteyshenkilö tallennettu",
+          "contactPersonSaveError": "Yhteyshenkilön tallennus epäonnistui"
+        },
+        "descriptions": {
+          "contactPersonSaved": "Yhteyshenkilön tiedot tallennettu ja lisätty hankkelle onnistuneesti.",
+          "contactPersonSaveError": "Yhteyshenkilön tietojen tallennus epäonnistui. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman teknisen tukeen."
         }
       }
     }
@@ -493,7 +505,7 @@
       "sukunimi": "Sukunimi",
       "etunimi": "Etunimi",
       "email": "Sähköposti",
-      "puhelinnumero": "Puhelin",
+      "puhelinnumero": "Puhelinnumero",
       "osasto": "Osasto",
       "organisaatio": "Organisaatio",
       "omaOrganisaatio": "Lisää oma organisaatio",

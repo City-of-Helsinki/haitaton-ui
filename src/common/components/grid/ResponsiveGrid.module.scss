@@ -5,7 +5,15 @@
   grid-template-columns: 1fr;
   grid-gap: var(--spacing-s);
   margin-bottom: var(--spacing-s);
+}
 
+.maxColumns--2 {
+  @include respond-above(m) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.maxColumns--3 {
   @include respond-above(m) {
     grid-template-columns: repeat(2, 1fr);
   }
