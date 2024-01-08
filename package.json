@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@axe-core/react": "^4.7.3",
-    "@babel/runtime": "^7.23.5",
+    "@babel/runtime": "^7.23.7",
     "@chakra-ui/react": "^2.8.0",
     "@chakra-ui/theme-tools": "^2.1.0",
     "@emotion/core": "^11.0.0",
