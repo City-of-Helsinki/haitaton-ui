@@ -33,10 +33,20 @@ function InformationViewHeaderButtons({
 
 function InformationViewContentContainer({
   children,
+  hideSideBar = false,
 }: {
   children: React.ReactNode | React.ReactNode[];
+  hideSideBar?: boolean;
 }) {
-  return <div className={styles.contentContainer}>{children}</div>;
+  return (
+    <div
+      className={clsx(styles.contentContainer, {
+        [styles.contentContainer__hideSideBar]: hideSideBar,
+      })}
+    >
+      {children}
+    </div>
+  );
 }
 
 function InformationViewMainContent({
@@ -49,8 +59,18 @@ function InformationViewMainContent({
   return <div className={clsx(styles.mainContent, styles.paddingLeft, className)}>{children}</div>;
 }
 
-function InformationViewSidebar({ children }: { children: React.ReactNode | React.ReactNode[] }) {
-  return <div className={styles.sideBar}>{children}</div>;
+function InformationViewSidebar({
+  children,
+  testId,
+}: {
+  children: React.ReactNode | React.ReactNode[];
+  testId?: string;
+}) {
+  return (
+    <div className={styles.sideBar} data-testid={testId}>
+      {children}
+    </div>
+  );
 }
 
 export {

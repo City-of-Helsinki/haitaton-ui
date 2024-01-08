@@ -221,16 +221,18 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
               </div>
             </FeatureFlags>
           </div>
-          {isOpen && (
-            <div>
-              <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} />
-              <OwnHankeMap hanke={hanke} />
-            </div>
-          )}
+          <div>
+            {hanke.alueet?.length > 0 && isOpen && (
+              <div data-testid="hanke-map">
+                <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} />
+                <OwnHankeMap hanke={hanke} />
+              </div>
+            )}
+          </div>
         </FeatureFlags>
 
-        <div>
-          <Button theme="coat" className={styles.showHankeButton} onClick={navigateToHanke}>
+        <div className={styles.hankeCardButtons}>
+          <Button theme="coat" onClick={navigateToHanke}>
             {t('hankePortfolio:showHankeButton')}
           </Button>
           <Button theme="coat" variant="secondary" onClick={() => navigateToApplications()}>

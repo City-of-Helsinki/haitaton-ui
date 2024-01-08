@@ -26,6 +26,16 @@
     grid-template-columns: 67% 33%;
   }
 
+  &__hideSideBar {
+    @include respond-above(l) {
+      display: initial;
+    }
+
+    .sideBar {
+      display: none;
+    }
+  }
+
   .mainContent {
     padding-top: var(--spacing-s);
     padding-bottom: var(--spacing-s);
