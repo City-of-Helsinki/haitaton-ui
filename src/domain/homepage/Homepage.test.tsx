@@ -55,10 +55,11 @@ describe('Create new hanke from dialog', () => {
 
   test('Should show validation errors and not create hanke if information is missing', async () => {
     const user = await openHankeCreateDialog();
+    await user.clear(screen.getByLabelText(/sähköposti/i));
     await user.click(screen.getByRole('button', { name: /luo hanke/i }));
 
     expect(screen.getByText(/kentän pituus oltava vähintään 3 merkkiä/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/kenttä on pakollinen/i)).toHaveLength(1);
+    expect(screen.getAllByText(/kenttä on pakollinen/i)).toHaveLength(2);
     expect(window.location.pathname).toBe('/');
   });
 
