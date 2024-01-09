@@ -169,11 +169,7 @@ describe('HankePortfolioComponent', () => {
   test('Should show draft state notification for hankkeet that are in draft state', async () => {
     render(<HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />);
 
-    expect(
-      screen.getAllByText(
-        'Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.',
-      ),
-    ).toHaveLength(1);
+    expect(screen.getAllByText('Luonnos')).toHaveLength(1);
   });
 
   test('Should show generated state notification for hankkeet that are generated', async () => {
