@@ -10,6 +10,8 @@ export type HankeUser = {
   id: string;
   sahkoposti: string;
   nimi: string;
+  etunimi: string;
+  sukunimi: string;
   kayttooikeustaso: keyof typeof AccessRightLevel;
   tunnistautunut: boolean;
 };

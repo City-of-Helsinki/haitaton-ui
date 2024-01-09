@@ -36,7 +36,6 @@ export async function create(data: HankeDataDraft) {
 
 export async function update(hankeTunnus: string, updates: HankeDataDraft) {
   let hanke = await read(hankeTunnus);
-  console.log(hankeTunnus, hanke);
   if (!hanke) {
     throw new Error(`No hanke with hankeTunnus ${hankeTunnus}`);
   }

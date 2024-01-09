@@ -169,11 +169,7 @@ describe('HankePortfolioComponent', () => {
   test('Should show draft state notification for hankkeet that are in draft state', async () => {
     render(<HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />);
 
-    expect(
-      screen.getAllByText(
-        'Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.',
-      ),
-    ).toHaveLength(1);
+    expect(screen.getAllByText('Luonnos')).toHaveLength(1);
   });
 
   test('Should show generated state notification for hankkeet that are generated', async () => {
@@ -190,6 +186,14 @@ describe('HankePortfolioComponent', () => {
     expect(
       screen.getAllByText('Tämä hanke on muodostettu johtoselvityksen perusteella.'),
     ).toHaveLength(1);
+  });
+
+  test('Should show user permission info for hankkeet', () => {
+    const userData = userDataByHanke(hankeList.map((hanke) => hanke.hankeTunnus));
+
+    render(<HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={userData} />);
+
+    expect(screen.getAllByText(/kaikki oikeudet/i)).toHaveLength(2);
   });
 
   test('Should show map only if there are hanke areas', async () => {

@@ -9,8 +9,9 @@ import {
   useAsyncDebounce,
   useSortBy,
 } from 'react-table';
-import { useAccordion, Card, Select, Button, Pagination, SearchInput } from 'hds-react';
+import { useAccordion, Card, Select, Button, Pagination, SearchInput, Tag } from 'hds-react';
 import {
+  IconAlertCircle,
   IconAngleDown,
   IconAngleUp,
   IconEye,
@@ -20,6 +21,7 @@ import {
 } from 'hds-react/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
+import { Flex } from '@chakra-ui/react';
 import Text from '../../../common/components/text/Text';
 import { HankeData, HANKE_TYOMAATYYPPI, HANKE_VAIHE } from '../../types/hanke';
 import styles from './HankePortfolio.module.scss';
@@ -33,7 +35,6 @@ import HankeVaiheTag from '../vaiheTag/HankeVaiheTag';
 import { Language } from '../../../common/types/language';
 import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
-import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotification';
 import HankeGeneratedStateNotification from '../edit/components/HankeGeneratedStateNotification';
 import Container from '../../../common/components/container/Container';
 import useHankeViewPath from '../hooks/useHankeViewPath';
@@ -96,6 +97,14 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
                 {hanke.nimi}
               </Text>
               <FeatureFlags flags={['hanke']}>
+                {hanke.status === 'DRAFT' && (
+                  <Tag>
+                    <Flex alignItems="center">
+                      <IconAlertCircle style={{ marginRight: 'var(--spacing-2-xs)' }} />
+                      {t('hakemus:status:null')}
+                    </Flex>
+                  </Tag>
+                )}
                 <HankeVaiheTag tagName={hanke.vaihe} />
               </FeatureFlags>
             </div>
@@ -151,7 +160,6 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
             generated={hanke.generated}
             className={styles.stateNotification}
           />
-          <HankeDraftStateNotification hanke={hanke} className={styles.stateNotification} />
         </FeatureFlags>
       </>
       <div className={styles.hankeCardContent} {...contentProps}>
@@ -218,6 +226,11 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
                 <Text tag="h3" styleAs="h6" weight="bold" className={styles.infoHeader}>
                   {t('hankeForm:labels:rights')}
                 </Text>
+                {signedInUser !== undefined && (
+                  <Text tag="p" styleAs="body-m" className={styles.infoContent}>
+                    {t(`hankeUsers:accessRightLevels:${signedInUser.kayttooikeustaso}`)}
+                  </Text>
+                )}
               </div>
             </FeatureFlags>
           </div>
