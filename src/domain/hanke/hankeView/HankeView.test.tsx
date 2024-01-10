@@ -244,3 +244,19 @@ test('Should not show end hanke and remove hanke buttons if user does not have D
   expect(screen.queryByRole('button', { name: 'Päätä hanke' })).not.toBeInTheDocument();
   expect(screen.queryByRole('button', { name: 'Peru hanke' })).not.toBeInTheDocument();
 });
+
+test('Should show map if there are hanke areas', async () => {
+  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.getByTestId('hanke-map')).toBeInTheDocument();
+});
+
+test('Should not show map if there are no hanke areas', async () => {
+  render(<HankeViewContainer hankeTunnus="HAI22-5" />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.queryByTestId('hanke-map')).not.toBeInTheDocument();
+});

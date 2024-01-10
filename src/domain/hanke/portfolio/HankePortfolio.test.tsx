@@ -195,6 +195,21 @@ describe('HankePortfolioComponent', () => {
 
     expect(screen.getAllByText(/kaikki oikeudet/i)).toHaveLength(2);
   });
+
+  test('Should show map only if there are hanke areas', async () => {
+    const hankeWithoutArea = {
+      ...hankeList[1],
+      alueet: [],
+    };
+    const editedHankeList = [hankeList[0], hankeWithoutArea];
+    const { user } = render(
+      <HankePortfolioComponent hankkeet={editedHankeList} signedInUserByHanke={{}} />,
+    );
+    await user.click(screen.getByText(editedHankeList[0].nimi));
+    await user.click(screen.getByText(editedHankeList[1].nimi));
+
+    expect(screen.getAllByTestId('hanke-map')).toHaveLength(1);
+  });
 });
 
 describe('HankePortfolioContainer', () => {
