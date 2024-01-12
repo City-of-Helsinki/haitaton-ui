@@ -694,7 +694,7 @@ test('Should be able to delete attachments', async () => {
       id: '8a77c842-3d6b-42df-8ed0-7d1493a2c012',
       fileName,
       contentType: 'image/png',
-      size: 1234,
+      size: 7654321,
       createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800286',
       createdAt: '2023-10-05T13:51:42.995157Z',
       applicationId: 1,
