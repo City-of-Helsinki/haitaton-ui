@@ -104,7 +104,7 @@ test('Should show amount of successful files uploaded and errors correctly when 
     id: '4f08ce3f-a0de-43c6-8ccc-9fe93822ed18',
     fileName: fileNameA,
     contentType: 'image/png',
-    size: 100,
+    size: 1234567,
     createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800284',
     createdAt: '2023-07-04T12:07:52.324684Z',
   };
@@ -112,7 +112,7 @@ test('Should show amount of successful files uploaded and errors correctly when 
     id: '4f08ce3f-a0de-43c6-8ccc-9fe93822ed20',
     fileName: fileNameD,
     contentType: 'image/png',
-    size: 100,
+    size: 2345678,
     createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800284',
     createdAt: '2023-07-04T12:08:52.324684Z',
   };
@@ -268,7 +268,7 @@ test('Should be able to delete file', async () => {
     id: '4f08ce3f-a0de-43c6-8ccc-9fe93822ed54',
     fileName: fileNameA,
     contentType: 'image/jpg',
-    size: 100,
+    size: 345678,
     createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800284',
     createdAt: '2023-07-04T12:07:52.324684Z',
   };
@@ -277,7 +277,7 @@ test('Should be able to delete file', async () => {
     id: 'd8e43d5a-ac40-448b-ad35-92120a7f2367',
     fileName: fileNameB,
     contentType: 'application/pdf',
-    size: 100,
+    size: 4567890,
     createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800284',
     createdAt: '2023-09-06T12:09:55.324684Z',
   };

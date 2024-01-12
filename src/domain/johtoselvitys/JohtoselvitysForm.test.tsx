@@ -105,7 +105,7 @@ const ATTACHMENT_META: ApplicationAttachmentMetadata = {
   id: '808d3b46-d813-4b19-b437-2b3873e77cd9',
   fileName: 'testFile.pdf',
   contentType: 'application/pdf',
-  size: 1234,
+  size: 5678901,
   createdByUserId: 'testUser',
   createdAt: '2023-11-14 09:45:40.867232',
   applicationId: 1,
