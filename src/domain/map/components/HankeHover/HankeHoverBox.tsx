@@ -46,10 +46,12 @@ const HankeHoverBox: React.FC<React.PropsWithChildren<unknown>> = () => {
           >
             {`${hanke.nimi} (${hanke.hankeTunnus})`}
           </Link>
-          <p>
-            {format(new Date(hanke.alkuPvm), 'dd.MM.yyyy')} -{' '}
-            {format(new Date(hanke.loppuPvm), 'dd.MM.yyyy')}
-          </p>
+          {hanke.alkuPvm && hanke.loppuPvm && (
+            <p>
+              {format(new Date(hanke.alkuPvm), 'dd.MM.yyyy')} -{' '}
+              {format(new Date(hanke.loppuPvm), 'dd.MM.yyyy')}
+            </p>
+          )}
         </div>
       ))}
     </div>

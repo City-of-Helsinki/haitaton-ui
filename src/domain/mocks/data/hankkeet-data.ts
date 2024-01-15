@@ -128,8 +128,8 @@ const hankkeet: HankeDataDraft[] = [
       {
         id: 1,
         hankeId: 2,
-        haittaAlkuPvm: '2023-01-12T00:00:00Z',
-        haittaLoppuPvm: '2024-11-27T00:00:00Z',
+        haittaAlkuPvm: new Date('2023-01-12T00:00:00Z'),
+        haittaLoppuPvm: new Date('2024-11-27T00:00:00Z'),
         kaistaHaitta: HANKE_KAISTAHAITTA.VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA,
         kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA.PITUUS_100_499_METRIA,
         meluHaitta: HANKE_MELUHAITTA.PITKAKESTOINEN_TOISTUVA_HAITTA,
@@ -182,8 +182,8 @@ const hankkeet: HankeDataDraft[] = [
       {
         id: 2,
         hankeId: 2,
-        haittaAlkuPvm: '2023-05-15T20:59:59.999Z',
-        haittaLoppuPvm: '2023-09-30T20:59:59.999Z',
+        haittaAlkuPvm: new Date('2023-05-15T20:59:59.999Z'),
+        haittaLoppuPvm: new Date('2023-09-30T20:59:59.999Z'),
         meluHaitta: HANKE_MELUHAITTA.LYHYTAIKAINEN_TOISTUVA_HAITTA,
         polyHaitta: HANKE_POLYHAITTA.PITKAKESTOINEN_TOISTUVA_HAITTA,
         tarinaHaitta: HANKE_TARINAHAITTA.SATUNNAINEN_HAITTA,
@@ -280,8 +280,8 @@ const hankkeet: HankeDataDraft[] = [
     alueet: [
       {
         id: 1,
-        haittaAlkuPvm: '2023-01-02T21:59:59.999Z',
-        haittaLoppuPvm: '2023-02-24T21:59:59.999Z',
+        haittaAlkuPvm: new Date('2023-01-02T21:59:59.999Z'),
+        haittaLoppuPvm: new Date('2023-02-24T21:59:59.999Z'),
         meluHaitta: HANKE_MELUHAITTA.SATUNNAINEN_HAITTA,
         polyHaitta: HANKE_POLYHAITTA.LYHYTAIKAINEN_TOISTUVA_HAITTA,
         tarinaHaitta: HANKE_TARINAHAITTA.PITKAKESTOINEN_TOISTUVA_HAITTA,

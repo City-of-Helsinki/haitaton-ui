@@ -62,8 +62,6 @@ const application: JohtoselvitysFormValues = {
     areas: DUMMY_AREAS,
     startTime: null,
     endTime: null,
-    identificationNumber: 'HAI-123',
-    clientApplicationKind: 'HAITATON',
     workDescription: '',
     contractorWithContacts: {
       customer: {
@@ -89,9 +87,6 @@ const application: JohtoselvitysFormValues = {
     },
     postalAddress: null,
     representativeWithContacts: null,
-    invoicingCustomer: null,
-    customerReference: null,
-    area: null,
     propertyDeveloperWithContacts: null,
     constructionWork: false,
     maintenanceWork: false,

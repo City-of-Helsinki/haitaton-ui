@@ -127,8 +127,8 @@ export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const higlightArea = useHighlightArea();
 
-  const startTime: string | null = watch('applicationData.startTime');
-  const endTime: string | null = watch('applicationData.endTime');
+  const startTime = watch('applicationData.startTime');
+  const endTime = watch('applicationData.endTime');
   const minEndDate = startTime ? new Date(startTime) : undefined;
 
   const workTimesSet = startTime && endTime;

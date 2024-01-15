@@ -102,13 +102,13 @@ export interface HankeSubContact {
 }
 
 export interface HankeContact {
-  id: number | null;
+  id?: number | null;
   tyyppi: keyof typeof CONTACT_TYYPPI | null;
   nimi: string;
   email: string;
   puhelinnumero: string;
   ytunnus: string | null;
-  alikontaktit: HankeSubContact[];
+  alikontaktit?: HankeSubContact[];
 }
 
 export type HankeMuuTaho = {
@@ -118,7 +118,7 @@ export type HankeMuuTaho = {
   osasto: string;
   email: string;
   puhelinnumero?: string;
-  alikontaktit: HankeSubContact[];
+  alikontaktit?: HankeSubContact[];
 };
 
 export type HankeContacts = Array<(HankeContact | HankeMuuTaho)[] | undefined>;
@@ -147,8 +147,8 @@ export type HankeAlue = {
   id: number | null;
   hankeId?: number;
   geometriat?: HankeGeometria;
-  haittaAlkuPvm: string | null;
-  haittaLoppuPvm: string | null;
+  haittaAlkuPvm: Date | null;
+  haittaLoppuPvm: Date | null;
   kaistaHaitta: HANKE_KAISTAHAITTA_KEY | null;
   kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA_KEY | null;
   meluHaitta: HANKE_MELUHAITTA_KEY | null;
@@ -178,17 +178,17 @@ enum HANKE_STATUS {
   ENDED = 'ENDED',
 }
 
-type HANKE_STATUS_KEY = keyof typeof HANKE_STATUS;
+export type HANKE_STATUS_KEY = keyof typeof HANKE_STATUS;
 
 export interface HankeData {
   id: number;
   hankeTunnus: string;
-  onYKTHanke: boolean;
+  onYKTHanke: boolean | null;
   nimi: string;
-  kuvaus: string;
-  alkuPvm: string;
-  loppuPvm: string;
-  vaihe: HANKE_VAIHE_KEY;
+  kuvaus: string | null;
+  alkuPvm: string | null;
+  loppuPvm: string | null;
+  vaihe: HANKE_VAIHE_KEY | null;
   tyomaaKatuosoite: string | null;
   tyomaaTyyppi: HANKE_TYOMAATYYPPI_KEY[];
   alueet: HankeAlue[];
