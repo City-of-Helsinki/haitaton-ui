@@ -1,4 +1,4 @@
-import { IconDocument } from 'hds-react';
+import { IconDocument, IconPhoto } from 'hds-react';
 import FileDownloadLink from '../fileDownloadLink/FileDownloadLink';
 import { AttachmentMetadata } from '../../types/attachment';
 
@@ -15,7 +15,11 @@ export default function FileDownloadList<T extends AttachmentMetadata>({
     <ul>
       {files.map((file) => (
         <li key={file.id} style={{ listStyle: 'none' }}>
-          <IconDocument aria-hidden size="xs" style={{ marginRight: 'var(--spacing-3-xs)' }} />
+          {file.contentType.includes('image') ? (
+            <IconPhoto aria-hidden size="xs" style={{ marginRight: 'var(--spacing-3-xs)' }} />
+          ) : (
+            <IconDocument aria-hidden size="xs" style={{ marginRight: 'var(--spacing-3-xs)' }} />
+          )}
           <FileDownloadLink
             linkText={file.fileName}
             fileName={file.fileName}

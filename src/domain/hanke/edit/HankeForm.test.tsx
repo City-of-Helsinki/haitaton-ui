@@ -358,6 +358,8 @@ describe('HankeForm', () => {
       {
         id: '8a77c842-3d6b-42df-8ed0-7d1493a2c011',
         fileName,
+        contentType: 'image/png',
+        size: 123,
         createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800285',
         createdAt: '2023-10-06T13:51:42.995157Z',
         hankeTunnus: 'HAI22-2',
@@ -392,6 +394,8 @@ describe('HankeForm', () => {
       {
         id: '8a77c842-3d6b-42df-8ed0-7d1493a2c011',
         fileName: fileNameA,
+        contentType: 'image/png',
+        size: 123,
         createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800285',
         createdAt: new Date().toISOString(),
         hankeTunnus: 'HAI22-2',
@@ -399,6 +403,8 @@ describe('HankeForm', () => {
       {
         id: '8a77c842-3d6b-42df-8ed0-7d1493a2c015',
         fileName: fileNameB,
+        contentType: 'application/pdf',
+        size: 123456,
         createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800285',
         createdAt: '2023-11-07T13:51:42.995157Z',
         hankeTunnus: 'HAI22-2',
@@ -406,6 +412,8 @@ describe('HankeForm', () => {
       {
         id: '8a77c842-3d6b-42df-8ed0-7d1493a2c016',
         fileName: fileNameC,
+        contentType: 'image/jpeg',
+        size: 123456789,
         createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800285',
         createdAt: new Date().toISOString(),
         hankeTunnus: 'HAI22-2',
@@ -422,14 +430,17 @@ describe('HankeForm', () => {
     const fileItemA = fileListItems.find((i) => i.innerHTML.includes(fileNameA));
     const { getByText: getByTextInA } = within(fileItemA!);
     expect(getByTextInA('Lisätty tänään')).toBeInTheDocument();
+    expect(getByTextInA('(123 B)')).toBeInTheDocument();
 
     const fileItemB = fileListItems.find((i) => i.innerHTML.includes(fileNameB));
     const { getByText: getByTextInB } = within(fileItemB!);
     expect(getByTextInB('Lisätty 7.11.2023')).toBeInTheDocument();
+    expect(getByTextInB('(121 KB)')).toBeInTheDocument();
 
     const fileItemC = fileListItems.find((i) => i.innerHTML.includes(fileNameC));
     const { getByText: getByTextInC } = within(fileItemC!);
     expect(getByTextInC('Lisätty tänään')).toBeInTheDocument();
+    expect(getByTextInC('(117.7 MB)')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
