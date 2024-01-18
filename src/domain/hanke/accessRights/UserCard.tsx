@@ -10,7 +10,7 @@ type Props = {
   headingIcon?: React.ReactNode;
 };
 
-function UserCard({ user, children, headingIcon }: Props) {
+function UserCard({ user, children, headingIcon }: Readonly<Props>) {
   return (
     <Card border style={{ marginBottom: 'var(--spacing-m)' }}>
       <Flex marginBottom="var(--spacing-s)">
