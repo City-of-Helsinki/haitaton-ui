@@ -41,7 +41,7 @@ test('Contacts can be filled with hanke contact info', async () => {
   expect(screen.getAllByRole('textbox', { name: /nimi/i })[0]).toHaveValue(hankeOwner.nimi);
   expect(screen.getAllByRole('textbox', { name: /Y-tunnus/i })[0]).toHaveValue(hankeOwner.ytunnus);
   expect(screen.getAllByRole('textbox', { name: /sähköposti/i })[0]).toHaveValue(hankeOwner.email);
-  expect(screen.getAllByRole('textbox', { name: /puhelinnumero/i })[0]).toHaveValue(
+  expect(screen.getAllByRole('textbox', { name: /puhelin/i })[0]).toHaveValue(
     hankeOwner.puhelinnumero,
   );
 });

@@ -498,7 +498,7 @@ describe('New contact person form', () => {
     fireEvent.change(screen.getAllByLabelText(/sähköposti/i)[1], {
       target: { value: sahkoposti },
     });
-    fireEvent.change(screen.getAllByLabelText(/Puhelinnumero/i)[1], {
+    fireEvent.change(screen.getAllByLabelText(/puhelin/i)[1], {
       target: { value: puhelinnumero },
     });
   }

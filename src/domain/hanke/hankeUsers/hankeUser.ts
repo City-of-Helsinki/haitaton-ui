@@ -9,9 +9,9 @@ export enum AccessRightLevel {
 export type HankeUser = {
   id: string;
   sahkoposti: string;
-  nimi: string;
   etunimi: string;
   sukunimi: string;
+  puhelinnumero: string;
   kayttooikeustaso: keyof typeof AccessRightLevel;
   tunnistautunut: boolean;
 };

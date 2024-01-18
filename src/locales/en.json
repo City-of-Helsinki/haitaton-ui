@@ -811,7 +811,6 @@
   },
   "hankeUsers": {
     "accessRights": "Access rights",
-    "manageRights": "Access rights management",
     "accessRightLevels": {
       "KAIKKI_OIKEUDET": "All rights",
       "KAIKKIEN_MUOKKAUS": "Project and application editing",
