@@ -115,6 +115,7 @@ function HaitatonHeader() {
         <Header.ActionBarItem
           label={getUserMenuLabel()}
           fixedRightPosition
+          preventButtonResize
           icon={<IconUser aria-hidden />}
           id="action-bar-login"
           closeLabel={t('common:ariaLabels:closeButtonLabelText')}
