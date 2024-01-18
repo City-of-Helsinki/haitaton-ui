@@ -277,7 +277,7 @@ const HankeView: React.FC<Props> = ({
         </InformationViewHeaderButtons>
       </InformationViewHeader>
 
-      <InformationViewContentContainer>
+      <InformationViewContentContainer hideSideBar={alueet === undefined || alueet?.length === 0}>
         <InformationViewMainContent>
           <FeatureFlags flags={['hanke']}>
             <HankeGeneratedStateNotification
@@ -370,21 +370,23 @@ const HankeView: React.FC<Props> = ({
           </Tabs>
         </InformationViewMainContent>
         <FeatureFlags flags={['hanke']}>
-          <InformationViewSidebar>
-            <OwnHankeMapHeader hankeTunnus={hankeData.hankeTunnus} />
-            <OwnHankeMap hanke={hankeData} />
-            {alueet?.map((area, index) => {
-              return (
-                <CompressedAreaIndex
-                  key={area.id}
-                  area={area}
-                  haittaIndex={tormaystarkasteluTulos?.liikennehaittaIndeksi.indeksi}
-                  index={index}
-                  className={styles.compressedAreaIndex}
-                />
-              );
-            })}
-          </InformationViewSidebar>
+          {alueet?.length > 0 && (
+            <InformationViewSidebar testId="hanke-map">
+              <OwnHankeMapHeader hankeTunnus={hankeData.hankeTunnus} />
+              <OwnHankeMap hanke={hankeData} />
+              {alueet?.map((area, index) => {
+                return (
+                  <CompressedAreaIndex
+                    key={area.id}
+                    area={area}
+                    haittaIndex={tormaystarkasteluTulos?.liikennehaittaindeksi?.indeksi}
+                    index={index}
+                    className={styles.compressedAreaIndex}
+                  />
+                );
+              })}
+            </InformationViewSidebar>
+          )}
         </FeatureFlags>
       </InformationViewContentContainer>
     </InformationViewContainer>

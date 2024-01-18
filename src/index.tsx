@@ -2,13 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import * as Sentry from '@sentry/react';
-import { Integrations } from '@sentry/tracing';
+import { BrowserTracing } from '@sentry/browser';
 import App from './common/components/app/App';
 import './locales/i18n';
 
 Sentry.init({
   dsn: window._env_.REACT_APP_SENTRY_DSN,
-  integrations: [new Integrations.BrowserTracing()],
+  integrations: [new BrowserTracing()],
   tracesSampleRate:
     // no traces if not in prod or test
     window._env_.REACT_APP_DISABLE_SENTRY === '1' ? 0.0 : 1.0,

@@ -23,6 +23,22 @@ afterEach(cleanup);
 
 jest.setTimeout(30000);
 
+const DUMMY_DATA = 'dummy_file_data';
+
+const TEST_FILES = [
+  new File([DUMMY_DATA], 'file.pdf', { type: 'application/pdf' }),
+  new File([DUMMY_DATA], 'file.jpg', { type: 'image/jpg' }),
+  new File([DUMMY_DATA], 'file.jpeg', { type: 'image/jpeg' }),
+  new File([DUMMY_DATA], 'file.png', { type: 'image/png' }),
+  new File([DUMMY_DATA], 'file.dgn', { type: 'image/vnd.dgn' }),
+  new File([DUMMY_DATA], 'file.dwg', { type: 'image/vnd.dwg' }),
+  new File([DUMMY_DATA], 'file.docx', {
+    type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  }),
+  new File([DUMMY_DATA], 'file.txt', { type: 'text/plain' }),
+  new File([DUMMY_DATA], 'file.gt', { type: 'application/octet-stream' }),
+];
+
 async function uploadAttachment({
   hankeTunnus,
   file,
@@ -111,6 +127,25 @@ const formData: HankeDataFormState = {
   kuvaus: 'testi kuvaus',
 };
 
+async function setupAlueetPage() {
+  const hanke = hankkeet[2];
+
+  const { user } = render(
+    <HankeForm
+      formData={hanke as HankeDataFormState}
+      onIsDirtyChange={() => ({})}
+      onFormClose={() => ({})}
+    >
+      <></>
+    </HankeForm>,
+  );
+
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  expect(screen.queryByText('Vaihe 2/6: Alueet')).toBeInTheDocument();
+
+  return { user };
+}
+
 async function setupYhteystiedotPage(jsx: JSX.Element) {
   const renderResult = render(jsx);
 
@@ -194,13 +229,31 @@ describe('HankeForm', () => {
     expect(result).toHaveValue(initialName.concat('additional'));
   });
 
+  test('Nuisance and hindrance estimates for an area are correct', async () => {
+    await setupAlueetPage();
+
+    // Area name
+    expect(screen.getByTestId('alueet.0.nimi')).toHaveValue('Hankealue 1');
+    // Start date of the nuisance
+    expect(screen.getByDisplayValue('2.1.2023')).toBeInTheDocument();
+    // End date of the nuisance
+    expect(screen.getByDisplayValue('24.2.2023')).toBeInTheDocument();
+    // Noise nuisance
+    expect(screen.getByText('Satunnainen haitta')).toBeInTheDocument();
+    // Dust nuisance
+    expect(screen.getByText('Lyhytaikainen toistuva haitta')).toBeInTheDocument();
+    // Vibration nuisance
+    expect(screen.getByText('Pitkäkestoinen jatkuva haitta')).toBeInTheDocument();
+    // Lane hindrance
+    expect(screen.getByText('Vähentää kaistan yhdellä ajosuunnalla')).toBeInTheDocument();
+    // Hindrance affecting lane length
+    expect(screen.getByText('Alle 10 m')).toBeInTheDocument();
+  });
+
   test('Yhteystiedot can be filled', async () => {
     const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
 
     // Hanke owner (accordion open by default)
-    expect(screen.getAllByRole('tablist')[0].childElementCount).toBe(1); // initially there is one sub-contact
-    expect(screen.queryByText(/poista yhteyshenkilö/i)).not.toBeInTheDocument(); // owner sub-contacts cannot all be removed
-
     await user.click(screen.getByRole('button', { name: /tyyppi/i }));
     await user.click(screen.getByText(/yritys/i));
 
@@ -217,39 +270,14 @@ describe('HankeForm', () => {
       target: { value: '0401234567' },
     });
 
-    // Hanke owner contact person, should be visible by default
-    fireEvent.change(screen.getByTestId('omistajat.0.alikontaktit.0.etunimi'), {
-      target: { value: 'Olli' },
-    });
-    fireEvent.change(screen.getByTestId('omistajat.0.alikontaktit.0.sukunimi'), {
-      target: { value: 'Omistaja' },
-    });
-    fireEvent.change(screen.getByTestId('omistajat.0.alikontaktit.0.email'), {
-      target: { value: 'foo@bar.com' },
-    });
-    fireEvent.change(screen.getByTestId('omistajat.0.alikontaktit.0.puhelinnumero'), {
-      target: { value: '0507654321' },
-    });
-
     // Rakennuttaja
     await user.click(screen.getByText(/rakennuttajan tiedot/i));
     await user.click(screen.getByText(/lisää rakennuttaja/i));
     expect(screen.getAllByText('Rakennuttaja')).toHaveLength(1);
-    expect(screen.getAllByRole('tablist')).toHaveLength(1); // initially there is no sub-contacts for rakennuttaja ('tablist' is only for owner)
 
     await user.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
     await user.click(screen.getByText(/yksityishenkilö/i));
     expect(screen.getAllByLabelText(/y-tunnus/i)[1]).toBeDisabled();
-
-    await user.click(screen.getAllByText(/lisää yhteyshenkilö/i)[1]);
-    await user.click(screen.getAllByText(/lisää yhteyshenkilö/i)[1]);
-    expect(screen.getAllByRole('tablist')[1].childElementCount).toBe(2); // many contacts can be added
-
-    expect(screen.queryByText(/poista yhteyshenkilö/i)).toBeInTheDocument(); // first sub-contact can be removed
-    await user.click(screen.getByText(/poista yhteyshenkilö/i));
-    expect(screen.queryByText(/poista yhteyshenkilö/i)).toBeInTheDocument(); // second (and last) sub-contact can be removed
-    await user.click(screen.getByText(/poista yhteyshenkilö/i));
-    expect(screen.queryByText(/poista yhteyshenkilö/i)).not.toBeInTheDocument(); // all contacts can be removed (except for owner)
 
     await user.click(screen.getByText(/lisää rakennuttaja/i)); // add second rakennuttaja
     expect(screen.getAllByText('Rakennuttaja')).toHaveLength(2);
@@ -263,14 +291,24 @@ describe('HankeForm', () => {
   });
 
   test('Should be able to save and quit', async () => {
-    const { user } = render(<HankeFormContainer />);
+    const hanke = hankkeet[1];
+    const hankeName = hanke.nimi;
 
-    fillBasicInformation();
+    const { user } = render(
+      <HankeForm
+        formData={hanke as HankeDataFormState}
+        onIsDirtyChange={() => ({})}
+        onFormClose={() => ({})}
+      >
+        children
+      </HankeForm>,
+    );
 
+    fillBasicInformation({ name: hankeName });
     await user.click(screen.getByRole('button', { name: 'Tallenna ja keskeytä' }));
 
-    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-14');
-    expect(screen.getByText(`Hanke ${nimi} (HAI22-14) tallennettu omiin hankkeisiin.`));
+    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2');
+    expect(screen.getByText(`Hanke ${hankeName} (HAI22-2) tallennettu omiin hankkeisiin.`));
   });
 
   test('Should be able to save hanke in the last page', async () => {
@@ -302,18 +340,15 @@ describe('HankeForm', () => {
     const { user } = render(<HankeFormContainer hankeTunnus="HAI22-2" />);
     await waitFor(() => screen.findByText('Perustiedot'));
     await user.click(screen.getByRole('button', { name: /liitteet/i }));
-    const fileUpload = screen.getByLabelText('Raahaa tiedostot tänne');
-    user.upload(fileUpload, [
-      new File(['test-a'], 'test-file-a.png', { type: 'image/png' }),
-      new File(['test-b'], 'test-file-b.jpg', { type: 'image/jpg' }),
-    ]);
+
+    user.upload(screen.getByLabelText('Raahaa tiedostot tänne'), TEST_FILES);
 
     await waitFor(() => screen.findAllByText('Tallennetaan tiedostoja'));
     await act(async () => {
       waitFor(() => expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0));
     });
     await waitFor(() => {
-      expect(screen.queryByText('2/2 tiedosto(a) tallennettu')).toBeInTheDocument();
+      expect(screen.queryByText('9/9 tiedosto(a) tallennettu')).toBeInTheDocument();
     });
   });
 
@@ -323,6 +358,8 @@ describe('HankeForm', () => {
       {
         id: '8a77c842-3d6b-42df-8ed0-7d1493a2c011',
         fileName,
+        contentType: 'image/png',
+        size: 123,
         createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800285',
         createdAt: '2023-10-06T13:51:42.995157Z',
         hankeTunnus: 'HAI22-2',
@@ -357,6 +394,8 @@ describe('HankeForm', () => {
       {
         id: '8a77c842-3d6b-42df-8ed0-7d1493a2c011',
         fileName: fileNameA,
+        contentType: 'image/png',
+        size: 123,
         createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800285',
         createdAt: new Date().toISOString(),
         hankeTunnus: 'HAI22-2',
@@ -364,6 +403,8 @@ describe('HankeForm', () => {
       {
         id: '8a77c842-3d6b-42df-8ed0-7d1493a2c015',
         fileName: fileNameB,
+        contentType: 'application/pdf',
+        size: 123456,
         createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800285',
         createdAt: '2023-11-07T13:51:42.995157Z',
         hankeTunnus: 'HAI22-2',
@@ -371,6 +412,8 @@ describe('HankeForm', () => {
       {
         id: '8a77c842-3d6b-42df-8ed0-7d1493a2c016',
         fileName: fileNameC,
+        contentType: 'image/jpeg',
+        size: 123456789,
         createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800285',
         createdAt: new Date().toISOString(),
         hankeTunnus: 'HAI22-2',
@@ -387,14 +430,17 @@ describe('HankeForm', () => {
     const fileItemA = fileListItems.find((i) => i.innerHTML.includes(fileNameA));
     const { getByText: getByTextInA } = within(fileItemA!);
     expect(getByTextInA('Lisätty tänään')).toBeInTheDocument();
+    expect(getByTextInA('(123 B)')).toBeInTheDocument();
 
     const fileItemB = fileListItems.find((i) => i.innerHTML.includes(fileNameB));
     const { getByText: getByTextInB } = within(fileItemB!);
     expect(getByTextInB('Lisätty 7.11.2023')).toBeInTheDocument();
+    expect(getByTextInB('(121 KB)')).toBeInTheDocument();
 
     const fileItemC = fileListItems.find((i) => i.innerHTML.includes(fileNameC));
     const { getByText: getByTextInC } = within(fileItemC!);
     expect(getByTextInC('Lisätty tänään')).toBeInTheDocument();
+    expect(getByTextInC('(117.7 MB)')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
@@ -436,5 +482,67 @@ describe('HankeForm', () => {
     expect(screen.queryByText(/autoliikenteen kaistahaitta: -/i)).toBeInTheDocument();
     expect(screen.queryByText(/kaistahaittojen pituus: -/i)).toBeInTheDocument();
     expect(screen.queryByText(/muokkaa hanketta lisätäksesi tietoja/i)).toBeInTheDocument();
+  });
+});
+
+describe('New contact person form', () => {
+  function fillNewContactPersonForm(
+    options: {
+      etunimi?: string;
+      sukunimi?: string;
+      sahkoposti?: string;
+      puhelinnumero?: string;
+    } = {},
+  ) {
+    const {
+      etunimi = 'Matti',
+      sukunimi = 'Meikäläinen',
+      sahkoposti = 'matti.meikalainen@test.com',
+      puhelinnumero = '0401234567',
+    } = options;
+    fireEvent.change(screen.getByLabelText(/etunimi/i), {
+      target: { value: etunimi },
+    });
+    fireEvent.change(screen.getByLabelText(/sukunimi/i), {
+      target: { value: sukunimi },
+    });
+    fireEvent.change(screen.getAllByLabelText(/sähköposti/i)[1], {
+      target: { value: sahkoposti },
+    });
+    fireEvent.change(screen.getAllByLabelText(/Puhelinnumero/i)[1], {
+      target: { value: puhelinnumero },
+    });
+  }
+
+  test('Should be able to create new user', async () => {
+    const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
+    await user.click(screen.getByRole('button', { name: /lisää uusi yhteyshenkilö/i }));
+    fillNewContactPersonForm();
+    await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+
+    expect(screen.getByText('Yhteyshenkilö tallennettu')).toBeInTheDocument();
+  });
+
+  test('Should not be able to create new user and show validation errors if info is not filled', async () => {
+    const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
+    await user.click(screen.getByRole('button', { name: /lisää uusi yhteyshenkilö/i }));
+    await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+
+    expect(screen.getAllByText('Kenttä on pakollinen')).toHaveLength(4);
+    expect(screen.queryByText('Yhteyshenkilö tallennettu')).not.toBeInTheDocument();
+  });
+
+  test('Should show error notification if creating new user fails', async () => {
+    server.use(
+      rest.post('/api/hankkeet/:hankeTunnus/kayttajat', async (req, res, ctx) => {
+        return res(ctx.status(500));
+      }),
+    );
+    const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
+    await user.click(screen.getByRole('button', { name: /lisää uusi yhteyshenkilö/i }));
+    fillNewContactPersonForm();
+    await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+
+    expect(screen.getByText('Yhteyshenkilön tallennus epäonnistui')).toBeInTheDocument();
   });
 });

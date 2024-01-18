@@ -3,6 +3,8 @@ import { Feature } from 'ol';
 import Geometry from 'ol/geom/Geometry';
 import { PartialExcept } from '../../../common/types/utils';
 import { HankeData, HankeContactTypeKey, HankeAlue } from '../../types/hanke';
+import yup from '../../../common/utils/yup';
+import { contactPersonSchema, newHankeSchema } from './hankeSchema';
 
 export type FormNotification = 'ok' | 'success' | 'error' | null;
 
@@ -43,11 +45,10 @@ export enum CONTACT_FORMFIELD {
   ALIKONTAKTIT = 'alikontaktit',
 }
 
-export enum SUBCONTACT_FORMFIELD {
-  ID = 'id',
+export enum CONTACT_PERSON_FORMFIELD {
   ETUNIMI = 'etunimi',
   SUKUNIMI = 'sukunimi',
-  EMAIL = 'email',
+  EMAIL = 'sahkoposti',
   PUHELINNUMERO = 'puhelinnumero',
 }
 
@@ -77,3 +78,7 @@ export type Organization = {
   nimi: string;
   tunnus: string;
 };
+
+export type NewHankeData = yup.InferType<typeof newHankeSchema>;
+
+export type ContactPerson = yup.InferType<typeof contactPersonSchema>;

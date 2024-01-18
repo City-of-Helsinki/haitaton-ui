@@ -1,0 +1,33 @@
+.newContactPersonForm {
+  &__in {
+    animation: 400ms transitionin linear;
+  }
+
+  &__out {
+    animation: 410ms transitionout linear;
+  }
+
+  @keyframes transitionin {
+    from {
+      max-height: 0;
+      opacity: 0;
+    }
+
+    to {
+      max-height: 600px;
+      opacity: 1;
+    }
+  }
+
+  @keyframes transitionout {
+    from {
+      max-height: 600px;
+      opacity: 1;
+    }
+
+    to {
+      max-height: 0;
+      opacity: 0;
+    }
+  }
+}

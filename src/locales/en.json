@@ -264,13 +264,6 @@
         "title": "Haitaton - Project list"
       }
     },
-    "NEW_HANKE": {
-      "path": "/project/new",
-      "headerLabel": "Create a new project",
-      "meta": {
-        "title": "Haitaton - Create a new project"
-      }
-    },
     "EDIT_HANKE": {
       "path": "/project/:hankeTunnus/edit",
       "headerLabel": "Project",
@@ -397,33 +390,33 @@
       "VAIHTOLAVA": "Swap body"
     },
     "kaistaHaitta": {
-      "YKSI": "Does not affect",
-      "KAKSI": "Reduces one lane in one direction",
-      "KOLME": "Simultaneously reduces lanes in two directions",
-      "NELJA": "Simultaneously reduces several lanes in two directions",
-      "VIISI": "Simultaneously reduces several lanes in different directions of a junction"
+      "EI_VAIKUTA": "Does not affect",
+      "VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA": "Reduces one lane in one direction",
+      "VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA": "Simultaneously reduces lanes in two directions",
+      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_KAHDELLA_AJOSUUNNALLA": "Simultaneously reduces several lanes in two directions",
+      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA": "Simultaneously reduces several lanes in different directions of a junction"
     },
     "kaistaPituusHaitta": {
-      "YKSI": "Does not affect",
-      "KAKSI": "Max 10 m",
-      "KOLME": "11–100 m",
-      "NELJA": "101–500 m",
-      "VIISI": "Over 500 m"
+      "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Does not affect",
+      "PITUUS_ALLE_10_METRIA": "Less than 10 m",
+      "PITUUS_10_99_METRIA": "10–99 m",
+      "PITUUS_100_499_METRIA": "100–499 m",
+      "PITUUS_500_METRIA_TAI_ENEMMAN": "500 m or more"
     },
     "meluHaitta": {
-      "YKSI": "Occasional nuisance",
-      "KAKSI": "Short-term recurring nuisance",
-      "KOLME": "Long-term permanent nuisance"
+      "SATUNNAINEN_HAITTA": "Occasional nuisance",
+      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Short-term recurring nuisance",
+      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Long-term permanent nuisance"
     },
     "polyHaitta": {
-      "YKSI": "Occasional nuisance",
-      "KAKSI": "Short-term recurring nuisance",
-      "KOLME": "Long-term permanent nuisance"
+      "SATUNNAINEN_HAITTA": "Occasional nuisance",
+      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Short-term recurring nuisance",
+      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Long-term permanent nuisance"
     },
     "tarinaHaitta": {
-      "YKSI": "Occasional nuisance",
-      "KAKSI": "Short-term recurring nuisance",
-      "KOLME": "Long-term permanent nuisance"
+      "SATUNNAINEN_HAITTA": "Occasional nuisance",
+      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Short-term recurring nuisance",
+      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Long-term permanent nuisance"
     },
     "alue": {
       "title": "Project area {{index}}",
@@ -653,8 +646,6 @@
     "haittaindeksit": "Nuisance indices",
     "haittaindexTooltip": "Nuisance indices are calculated by project area. The indices are updated when you save the form or go to the next page.",
     "liikennehaittaindeksi": "Traffic nuisance index",
-    "ruuhkautuminen": "Congestion",
-    "pyorailynPaareitti": "Main cycling route",
     "kiertoreittitarve": "Detour need",
     "KIERTOREITTITARPEET": {
       "TODENNAKOINEN": "likely",

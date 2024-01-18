@@ -22,8 +22,8 @@ import { getAreaDefaultName } from './utils';
 function getEmptyArea(feature: Feature): Omit<HankeAlueFormState, 'id' | 'geometriat'> {
   return {
     feature,
-    haittaAlkuPvm: '',
-    haittaLoppuPvm: '',
+    haittaAlkuPvm: null,
+    haittaLoppuPvm: null,
     meluHaitta: null,
     polyHaitta: null,
     tarinaHaitta: null,

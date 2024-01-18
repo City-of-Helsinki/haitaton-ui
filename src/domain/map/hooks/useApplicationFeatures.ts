@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { Vector } from 'ol/source';
 import GeoJSON from 'ol/format/GeoJSON';
+import { Feature } from 'ol';
+import { Geometry } from 'ol/geom';
 import { ApplicationArea } from '../../application/types/application';
 
 /**
@@ -11,7 +13,7 @@ export default function useApplicationFeatures(source: Vector, areas?: Applicati
     if (areas && areas.length > 0) {
       const applicationFeatures = areas.flatMap((area) => {
         return new GeoJSON().readFeatures(area.geometry);
-      });
+      }) as Feature<Geometry>[];
       source.addFeatures(applicationFeatures);
     }
 

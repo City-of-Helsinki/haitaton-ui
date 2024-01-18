@@ -1,4 +1,4 @@
-FROM node:16-alpine as staticbuilder
+FROM node:20-alpine as staticbuilder
 COPY . /builder/
 WORKDIR /builder
 RUN yarn && yarn cache clean --force

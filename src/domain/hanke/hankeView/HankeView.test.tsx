@@ -110,17 +110,19 @@ test('Correct information about hanke should be displayed', async () => {
   // Data in areas tab
   expect(screen.queryByText('Hankealue 1')).toBeInTheDocument();
   expect(screen.getAllByText('2.1.2023–24.2.2023').length).toBe(2);
-  expect(screen.getByTestId('test-liikennehaittaIndeksi')).toHaveTextContent('3');
-  expect(screen.getByTestId('test-pyorailyIndeksi')).toHaveTextContent('3.5');
-  expect(screen.getByTestId('test-raitiovaunuIndeksi')).toHaveTextContent('2');
-  expect(screen.getByTestId('test-linjaautoIndeksi')).toHaveTextContent('1');
-  expect(screen.getByTestId('test-ruuhkautumisIndeksi')).toHaveTextContent('1.5');
+  expect(screen.getByTestId('test-liikennehaittaindeksi')).toHaveTextContent('3');
+  expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3.5');
+  expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('2');
+  expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('1');
+  expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('1.5');
   expect(screen.queryByText('11974 m²')).toBeInTheDocument();
   expect(screen.queryByText('Meluhaitta: Satunnainen haitta')).toBeInTheDocument();
-  expect(screen.queryByText('Pölyhaitta: Satunnainen haitta')).toBeInTheDocument();
-  expect(screen.queryByText('Tärinähaitta: Lyhytaikainen toistuva haitta')).toBeInTheDocument();
-  expect(screen.queryByText('Autoliikenteen kaistahaitta: Ei vaikuta')).toBeInTheDocument();
-  expect(screen.queryByText('Kaistahaittojen pituus: Ei vaikuta')).toBeInTheDocument();
+  expect(screen.queryByText('Pölyhaitta: Lyhytaikainen toistuva haitta')).toBeInTheDocument();
+  expect(screen.queryByText('Tärinähaitta: Pitkäkestoinen jatkuva haitta')).toBeInTheDocument();
+  expect(
+    screen.queryByText('Autoliikenteen kaistahaitta: Vähentää kaistan yhdellä ajosuunnalla'),
+  ).toBeInTheDocument();
+  expect(screen.queryByText('Kaistahaittojen pituus: Alle 10 m')).toBeInTheDocument();
 
   // Change to contacts tab
   await user.click(screen.getByRole('tab', { name: /yhteystiedot/i }));
@@ -241,4 +243,20 @@ test('Should not show end hanke and remove hanke buttons if user does not have D
 
   expect(screen.queryByRole('button', { name: 'Päätä hanke' })).not.toBeInTheDocument();
   expect(screen.queryByRole('button', { name: 'Peru hanke' })).not.toBeInTheDocument();
+});
+
+test('Should show map if there are hanke areas', async () => {
+  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.getByTestId('hanke-map')).toBeInTheDocument();
+});
+
+test('Should not show map if there are no hanke areas', async () => {
+  render(<HankeViewContainer hankeTunnus="HAI22-5" />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.queryByTestId('hanke-map')).not.toBeInTheDocument();
 });

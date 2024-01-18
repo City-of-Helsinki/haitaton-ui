@@ -1,0 +1,12 @@
+.fieldset {
+  max-width: 740px;
+  margin-bottom: var(--spacing-s);
+  padding-top: var(--spacing-xs);
+}
+
+.formButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-s);
+  margin-top: var(--spacing-m);
+}
