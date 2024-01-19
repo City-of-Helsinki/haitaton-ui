@@ -140,7 +140,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
             {pageSubtitle}
           </Text>
         </section>
-        <Koros type="basic" flipHorizontal className={styles.koros} />
+        <Koros type="basic" flipVertical className={styles.koros} />
       </div>
 
       {!isAuthenticated && features.publicHankkeet && (

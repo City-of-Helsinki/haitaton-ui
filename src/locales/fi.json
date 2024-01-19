@@ -39,7 +39,8 @@
         "searchButtonAriaLabel": "Hae"
       },
       "header": {
-        "skipToContentLabel": "Siirry pääsisältöön"
+        "skipToContentLabel": "Siirry pääsisältöön",
+        "frontPageLabel": "Etusivu"
       },
       "notification": {
         "notification": "Ilmoitus",
@@ -58,10 +59,14 @@
           "fileNotFound": "Tiedostoa, jonka yritit poistaa ei löydy (virhe 404). Yritä myöhemmin uudelleen.",
           "serverError": "Palvelimeen ei saada yhteyttä, eikä valittua tiedostoa saada poistettua. Yritä myöhemmin uudelleen."
         }
+      },
+      "footer": {
+        "backToTop": "Takaisin ylös"
       }
     },
     "error": "Tapahtui virhe. Yritä uudestaan.",
     "dataNotFound": "Tietoja ei löytynyt",
+    "logoAlt": "Helsingin kaupunki",
     "ariaLabels": {
       "profileButton": "Käyttäjäprofiili",
       "menuToggle": "Valikko",
