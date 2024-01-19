@@ -8,7 +8,6 @@ yup.setLocale({
     required: { key: 'required', values: {} },
     defined: { key: 'defined', values: {} },
     notType: { key: 'notType', values: {} },
-    typeOf: { key: 'typeOf', values: {} },
   },
   string: {
     min: ({ min }: { min: number }) => ({ key: 'stringMin', values: { min } }),
@@ -16,11 +15,11 @@ yup.setLocale({
     email: { key: 'email', values: {} },
   },
   date: {
-    min: ({ min }: { min: string }) => ({
+    min: ({ min }: { min: string | Date }) => ({
       key: 'dateMin',
       values: { min: formatToFinnishDate(min) },
     }),
-    max: ({ max }: { max: string }) => ({
+    max: ({ max }: { max: string | Date }) => ({
       key: 'dateMax',
       values: { max: formatToFinnishDate(max) },
     }),

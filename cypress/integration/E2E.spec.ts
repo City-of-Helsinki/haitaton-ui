@@ -56,8 +56,8 @@ const hankeMock: HankeDataDraft = {
         modifiedByUserId: null,
         modifiedAt: '2022-01-19T13:01:26.024Z',
       },
-      haittaAlkuPvm: '10.01.2030', // the dates are the same as hankeStart and end on purpose
-      haittaLoppuPvm: '11.01.2032',
+      haittaAlkuPvm: new Date('10.01.2030'), // the dates are the same as hankeStart and end on purpose
+      haittaLoppuPvm: new Date('11.01.2032'),
       kaistaHaitta:
         HANKE_KAISTAHAITTA.VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA,
       kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA.PITUUS_500_METRIA_TAI_ENEMMAN,

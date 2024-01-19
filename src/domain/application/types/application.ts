@@ -9,8 +9,8 @@ export type PostalAddress = {
   streetAddress: {
     streetName: string;
   };
-  postalCode: string;
-  city: string;
+  postalCode?: string;
+  city?: string;
 };
 
 export type Contact = {
@@ -112,16 +112,11 @@ export type JohtoselvitysData = {
   customerWithContacts: CustomerWithContacts;
   contractorWithContacts: CustomerWithContacts;
   areas: ApplicationArea[];
-  startTime: string | null;
-  endTime: string | null;
-  identificationNumber: string; // asiointitunnus
-  clientApplicationKind: string;
+  startTime: Date | null;
+  endTime: Date | null;
   workDescription: string;
   postalAddress: PostalAddress | null;
   representativeWithContacts: CustomerWithContacts | null;
-  invoicingCustomer: null;
-  customerReference: null;
-  area: null;
   propertyDeveloperWithContacts: CustomerWithContacts | null;
   constructionWork: boolean;
   maintenanceWork: boolean;

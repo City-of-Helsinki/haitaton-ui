@@ -5,8 +5,8 @@ function ApplicationDates({
   startTime,
   endTime,
 }: {
-  startTime: string | null;
-  endTime: string | null;
+  startTime: Date | null;
+  endTime: Date | null;
 }) {
   if (startTime === null || endTime === null) {
     return <div />;

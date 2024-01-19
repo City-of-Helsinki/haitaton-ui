@@ -37,13 +37,17 @@ export const fillForm0 = (hankeData: HankeDataDraft) => {
   cy.get('[data-testid=formStepIndicator]').should('exist');
 
   cy.get('input[data-testid=nimi]').type(hankeData.nimi);
-  cy.get('textarea[data-testid=kuvaus]').type(hankeData.kuvaus);
+  if (hankeData.kuvaus) {
+    cy.get('textarea[data-testid=kuvaus]').type(hankeData.kuvaus);
+  }
   if (hankeData.tyomaaKatuosoite) {
     cy.get('#tyomaaKatuosoite').type(hankeData.tyomaaKatuosoite);
   }
   cy.get('input[data-testid=nimi]').click();
 
-  selectHankeVaihe(hankeData.vaihe);
+  if (hankeData.vaihe) {
+    selectHankeVaihe(hankeData.vaihe);
+  }
 
   if (hankeData.onYKTHanke) {
     cy.get('input[data-testid=onYKTHanke]').click();
@@ -188,15 +192,11 @@ export const fillForm1 = (hankeData: HankeDataDraft) => {
 
   cy.get('#ol-map').click(300, 300).click(600, 600);
 
-  if (hankeData.alueet && hankeData.alueet[0].haittaAlkuPvm) {
-    cy.get('#haittaAlkuPvm').type(hankeData.alueet[0].haittaAlkuPvm);
-  } else if (hankeData.alkuPvm) {
+  if (hankeData.alkuPvm) {
     cy.get('#haittaAlkuPvm').type(hankeData.alkuPvm);
   }
 
-  if (hankeData.alueet && hankeData.alueet[0].haittaLoppuPvm) {
-    cy.get('#haittaLoppuPvm').type(hankeData.alueet[0].haittaLoppuPvm);
-  } else if (hankeData.loppuPvm) {
+  if (hankeData.loppuPvm) {
     cy.get('#haittaLoppuPvm').type(hankeData.loppuPvm);
   }
 
