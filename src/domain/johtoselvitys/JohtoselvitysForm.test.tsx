@@ -133,7 +133,7 @@ function fillBasicInformation() {
   fireEvent.change(screen.getByLabelText(/sähköposti/i), {
     target: { value: 'matti.meikalainen@test.com' },
   });
-  fireEvent.change(screen.getByLabelText(/puhelinnumero/i), {
+  fireEvent.change(screen.getByLabelText(/puhelin/i), {
     target: { value: '0000000000' },
   });
 }

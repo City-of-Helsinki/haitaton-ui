@@ -16,19 +16,12 @@
   padding-bottom: var(--spacing-m);
 }
 
-.hankeLink {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2-xs);
-  margin-bottom: var(--spacing-m);
-
-  &:hover {
-    text-decoration: underline;
-  }
+.breadcrumb > nav {
+  margin: 0 !important;
 }
 
 .infoAccordion {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-m);
 
   .infoList {
     padding-left: var(--spacing-m);
@@ -49,30 +42,22 @@
 }
 
 .table > div {
-  overflow-x: initial;
   display: none;
 
-  @include respond-above(l) {
+  @include respond-above(m) {
     display: block;
   }
 }
 
 .userCards {
-  @include respond-above(l) {
+  @include respond-above(m) {
     display: none;
   }
 }
 
-.accessRightSelect {
-  min-width: auto;
-
-  @include respond-above(m) {
-    min-width: 250px;
-  }
-
-  @include respond-above(l) {
-    min-width: 345px;
-  }
+.userIcon {
+  align-self: center;
+  margin-right: var(--spacing-xs);
 }
 
 .invitationSendButtonContainer {

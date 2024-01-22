@@ -811,7 +811,6 @@
   },
   "hankeUsers": {
     "accessRights": "Användningsrättigheter",
-    "manageRights": "Hantering av användningsrättigheter",
     "accessRightLevels": {
       "KAIKKI_OIKEUDET": "Alla rättigheter",
       "KAIKKIEN_MUOKKAUS": "Ändringar i projekt och ansökningar",

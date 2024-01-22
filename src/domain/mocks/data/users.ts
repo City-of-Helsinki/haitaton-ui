@@ -11,9 +11,9 @@ export async function readAll(hankeTunnus: string): Promise<HankeUser[]> {
     .map((user) => ({
       id: user.id,
       sahkoposti: user.sahkoposti,
-      nimi: user.nimi,
       etunimi: user.etunimi,
       sukunimi: user.sukunimi,
+      puhelinnumero: user.puhelinnumero,
       kayttooikeustaso: user.kayttooikeustaso as AccessRightLevel,
       tunnistautunut: user.tunnistautunut,
     }));
@@ -25,7 +25,7 @@ export async function create(hankeTunnus: string, user: ContactPerson) {
     etunimi: user.etunimi,
     sukunimi: user.sukunimi,
     sahkoposti: user.sahkoposti,
-    nimi: `${user.etunimi} ${user.sukunimi}`,
+    puhelinnumero: user.puhelinnumero,
     kayttooikeustaso: AccessRightLevel.KATSELUOIKEUS,
     tunnistautunut: false,
   };

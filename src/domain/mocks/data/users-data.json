@@ -2,9 +2,9 @@
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     "sahkoposti": "matti.meikalainen@test.com",
-    "nimi": "Matti Meikäläinen",
     "etunimi": "Matti",
     "sukunimi": "Meikäläinen",
+    "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KAIKKI_OIKEUDET",
     "tunnistautunut": true,
     "hankeTunnus": "HAI22-2"
@@ -12,9 +12,9 @@
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afa7",
     "sahkoposti": "teppo@test.com",
-    "nimi": "Teppo Työmies",
     "etunimi": "Teppo",
     "sukunimi": "Työmies",
+    "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KAIKKIEN_MUOKKAUS",
     "tunnistautunut": false,
     "hankeTunnus": "HAI22-2"
@@ -22,9 +22,9 @@
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afa8",
     "sahkoposti": "aku@asiakas.com",
-    "nimi": "Aku Asiakas",
     "etunimi": "Aku",
     "sukunimi": "Asiakas",
+    "puhelinnumero": "0401234567",
     "kayttooikeustaso": "HANKEMUOKKAUS",
     "tunnistautunut": true,
     "hankeTunnus": "HAI22-2"
@@ -32,9 +32,9 @@
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afa9",
     "sahkoposti": "vilja@test.com",
-    "nimi": "Vilja Viljanen",
     "etunimi": "Vilja",
     "sukunimi": "Viljanen",
+    "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KAIKKI_OIKEUDET",
     "tunnistautunut": false,
     "hankeTunnus": "HAI22-2"
@@ -42,9 +42,9 @@
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afb1",
     "sahkoposti": "tauno@test.com",
-    "nimi": "Tauno Testinen",
     "etunimi": "Tauno",
     "sukunimi": "Testinen",
+    "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
     "tunnistautunut": false,
     "hankeTunnus": "HAI22-2"
@@ -52,9 +52,9 @@
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afb2",
     "sahkoposti": "marja@test.com",
-    "nimi": "Marja Marjanen",
     "etunimi": "Marja",
     "sukunimi": "Marjanen",
+    "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
     "tunnistautunut": false,
     "hankeTunnus": "HAI22-2"
@@ -62,9 +62,9 @@
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afb3",
     "sahkoposti": "milka@test.com",
-    "nimi": "Milka Marjanen",
     "etunimi": "Milka",
     "sukunimi": "Marjanen",
+    "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
     "tunnistautunut": true,
     "hankeTunnus": "HAI22-2"
@@ -72,9 +72,9 @@
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afb4",
     "sahkoposti": "sakari@test.com",
-    "nimi": "Sakari Selkonen",
     "etunimi": "Sakari",
     "sukunimi": "Selkonen",
+    "puhelinnumero": "0401234567",
     "kayttooikeustaso": "HAKEMUSASIOINTI",
     "tunnistautunut": true,
     "hankeTunnus": "HAI22-2"
@@ -82,9 +82,9 @@
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afb5",
     "sahkoposti": "keijo@test.com",
-    "nimi": "Keijo Keijonen",
     "etunimi": "Keijo",
     "sukunimi": "Keijonen",
+    "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
     "tunnistautunut": true,
     "hankeTunnus": "HAI22-2"
@@ -92,9 +92,9 @@
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afb6",
     "sahkoposti": "alma@test.com",
-    "nimi": "Alma Testinen",
     "etunimi": "Alma",
     "sukunimi": "Testinen",
+    "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
     "tunnistautunut": false,
     "hankeTunnus": "HAI22-2"
@@ -102,9 +102,9 @@
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afb7",
     "sahkoposti": "taneli@test.com",
-    "nimi": "Taneli Taunonen",
     "etunimi": "Taneli",
     "sukunimi": "Taunonen",
+    "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
     "tunnistautunut": false,
     "hankeTunnus": "HAI22-2"
@@ -112,9 +112,9 @@
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66af5",
     "sahkoposti": "matti@test.com",
-    "nimi": "matti Meikäläinen",
     "etunimi": "matti",
     "sukunimi": "Meikäläinen",
+    "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
     "tunnistautunut": true,
     "hankeTunnus": "HAI22-2"

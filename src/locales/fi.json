@@ -199,7 +199,7 @@
         "postinumero": "Postinumero",
         "postitoimipaikka": "Postitoimipaikka",
         "email": "Sähköposti",
-        "puhelinnumero": "Puhelinnumero",
+        "puhelinnumero": "Puhelin",
         "rooli": "Rooli",
         "osasto": "Osasto",
         "organisaatioNimi": "Organisaatio",
@@ -860,11 +860,16 @@
       "toPreviousPage": "Listan edelliselle sivulle",
       "toNextPage": "Listan seuraavalle sivulle",
       "toLastPage": "Listan viimeiselle sivulle"
+    },
+    "breadcrumb": {
+      "ariaLabel": "Hankkeen navigaatio"
     }
   },
   "hankeUsers": {
     "accessRights": "Käyttöoikeudet",
-    "manageRights": "Käyttöoikeuksien hallinta",
+    "users": "Käyttäjät",
+    "accessRight": "Käyttöoikeus",
+    "userManagementTitle": "Käyttäjähallinta",
     "accessRightLevels": {
       "KAIKKI_OIKEUDET": "Kaikki oikeudet",
       "KAIKKIEN_MUOKKAUS": "Hankkeen ja hakemusten muokkaus",
@@ -901,6 +906,11 @@
     "buttons": {
       "resendInvitation": "Lähetä kutsulinkki uudelleen",
       "invitationSent": "Kutsulinkki lähetetty"
+    },
+    "labels": {
+      "ownInformation": "Omat käyttäjätietosi",
+      "userIdentified": "Kirjautunut hankkeelle tunnistautuneena",
+      "userMenu": "Käyttäjävalikko"
     },
     "userIdentified": "Käyttäjä tunnistautunut"
   },
