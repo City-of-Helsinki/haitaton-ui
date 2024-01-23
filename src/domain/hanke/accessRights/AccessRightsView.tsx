@@ -42,19 +42,25 @@ function UserIcon({
 
   if (user.id === signedInUser?.hankeKayttajaId) {
     return (
-      <IconUser className={styles.userIcon} aria-label={t('hankeUsers:labels:ownInformation')} />
+      <IconUser
+        className={styles.userIcon}
+        ariaHidden={false}
+        ariaLabel={t('hankeUsers:labels:ownInformation')}
+      />
     );
   } else {
     return user.tunnistautunut ? (
       <IconCheckCircleFill
         color="var(--color-success)"
         className={styles.userIcon}
-        aria-label={t('hankeUsers:labels:userIdentified')}
+        ariaHidden={false}
+        ariaLabel={t('hankeUsers:labels:userIdentified')}
       />
     ) : (
       <IconClock
         className={styles.userIcon}
-        aria-label={t('hankeUsers:notifications:invitationSentSuccessLabel')}
+        ariaHidden={false}
+        ariaLabel={t('hankeUsers:notifications:invitationSentSuccessLabel')}
       />
     );
   }
@@ -200,7 +206,8 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
               <IconMenuDots
                 style={{ display: 'block' }}
                 color="var(--color-bus)"
-                aria-label={t('hankeUsers:labels:userMenu')}
+                ariaHidden={false}
+                ariaLabel={t('hankeUsers:labels:userMenu')}
               />
             )}
           </Box>
