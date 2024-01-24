@@ -23,15 +23,14 @@ export async function readAll() {
 }
 
 export async function create(data: HankeDataDraft) {
-  const newHanke: HankeDataDraft = {
+  const newHanke: Partial<HankeDataDraft> = {
     id: hankkeet.length + 1,
     hankeTunnus: generateHankeTunnus(),
-    tyomaaKatuosoite: '',
+    nimi: data.nimi,
     tyomaaTyyppi: [],
     alueet: [],
-    ...data,
   };
-  hankkeet.push(newHanke);
+  hankkeet.push(newHanke as HankeDataDraft);
   return newHanke;
 }
 
@@ -44,6 +43,21 @@ export async function update(hankeTunnus: string, updates: HankeDataDraft) {
     ...updates,
     alkuPvm: getAreasMinStartDate(updates.alueet)?.toISOString(),
     loppuPvm: getAreasMaxEndDate(updates.alueet)?.toISOString(),
+    tormaystarkasteluTulos: {
+      hankeId: 3,
+      hankeTunnus: 'HAI22-3',
+      hankeGeometriatId: 1,
+      tila: 'VOIMASSA',
+      autoliikenneindeksi: 1.5,
+      pyoraliikenneindeksi: 3.5,
+      linjaautoliikenneindeksi: 1,
+      raitioliikenneindeksi: 2,
+      liikennehaittaindeksi: {
+        indeksi: 3.5,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        tyyppi: 'PYORALIIKENNEINDEKSI' as any,
+      },
+    },
   });
   return hanke;
 }

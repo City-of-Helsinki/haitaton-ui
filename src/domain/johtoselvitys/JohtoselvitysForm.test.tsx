@@ -62,8 +62,6 @@ const application: JohtoselvitysFormValues = {
     areas: DUMMY_AREAS,
     startTime: null,
     endTime: null,
-    identificationNumber: 'HAI-123',
-    clientApplicationKind: 'HAITATON',
     workDescription: '',
     contractorWithContacts: {
       customer: {
@@ -89,9 +87,6 @@ const application: JohtoselvitysFormValues = {
     },
     postalAddress: null,
     representativeWithContacts: null,
-    invoicingCustomer: null,
-    customerReference: null,
-    area: null,
     propertyDeveloperWithContacts: null,
     constructionWork: false,
     maintenanceWork: false,
@@ -104,6 +99,8 @@ const application: JohtoselvitysFormValues = {
 const ATTACHMENT_META: ApplicationAttachmentMetadata = {
   id: '808d3b46-d813-4b19-b437-2b3873e77cd9',
   fileName: 'testFile.pdf',
+  contentType: 'application/pdf',
+  size: 5678901,
   createdByUserId: 'testUser',
   createdAt: '2023-11-14 09:45:40.867232',
   applicationId: 1,
@@ -136,7 +133,7 @@ function fillBasicInformation() {
   fireEvent.change(screen.getByLabelText(/sähköposti/i), {
     target: { value: 'matti.meikalainen@test.com' },
   });
-  fireEvent.change(screen.getByLabelText(/puhelinnumero/i), {
+  fireEvent.change(screen.getByLabelText(/puhelin/i), {
     target: { value: '0000000000' },
   });
 }
@@ -691,6 +688,8 @@ test('Should be able to delete attachments', async () => {
     {
       id: '8a77c842-3d6b-42df-8ed0-7d1493a2c012',
       fileName,
+      contentType: 'image/png',
+      size: 7654321,
       createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800286',
       createdAt: '2023-10-05T13:51:42.995157Z',
       applicationId: 1,
@@ -723,6 +722,8 @@ test('Should list existing attachments in the attachments page and in summary pa
     {
       id: '8a77c842-3d6b-42df-8ed0-7d1493a2c016',
       fileName: fileNameA,
+      contentType: 'image/png',
+      size: 123456,
       createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800286',
       createdAt: new Date().toISOString(),
       applicationId: 1,
@@ -731,6 +732,8 @@ test('Should list existing attachments in the attachments page and in summary pa
     {
       id: '8a77c842-3d6b-42df-8ed0-7d1493a2c017',
       fileName: fileNameB,
+      contentType: 'application/pdf',
+      size: 123456789,
       createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800286',
       createdAt: '2023-10-07T13:51:42.995157Z',
       applicationId: 1,
@@ -747,10 +750,12 @@ test('Should list existing attachments in the attachments page and in summary pa
   const fileItemA = fileListItems.find((i) => i.innerHTML.includes(fileNameA));
   const { getByText: getByTextInA } = within(fileItemA!);
   expect(getByTextInA('Lisätty tänään')).toBeInTheDocument();
+  expect(getByTextInA('(121 KB)')).toBeInTheDocument();
 
   const fileItemB = fileListItems.find((i) => i.innerHTML.includes(fileNameB));
   const { getByText: getByTextInB } = within(fileItemB!);
   expect(getByTextInB('Lisätty 7.10.2023')).toBeInTheDocument();
+  expect(getByTextInB('(117.7 MB)')).toBeInTheDocument();
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 

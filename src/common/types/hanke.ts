@@ -6,7 +6,7 @@ export interface HankeGeoJSONProperties {
 export interface CRS {
   type: string;
   properties: {
-    name: string;
+    name?: string;
   };
 }
 

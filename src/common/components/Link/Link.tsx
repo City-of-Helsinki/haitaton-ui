@@ -1,11 +1,10 @@
-import React from 'react';
 import { useHref, useLinkClickHandler } from 'react-router-dom';
-import { Link as HDSLink, LinkProps } from 'hds-react';
+import { Link as HDSLink, LinkProps } from 'hds-react/components/Link';
 
 /*
  * Wrapper for HDS Link component that works with React Router
  */
-function Link({ onClick, href: to, external, ...rest }: LinkProps) {
+function Link({ onClick, href: to, external, children, ...rest }: Readonly<LinkProps>) {
   const href = useHref(to || '');
   const handleClick = useLinkClickHandler(to || '');
 
@@ -23,7 +22,9 @@ function Link({ onClick, href: to, external, ...rest }: LinkProps) {
           handleClick(event);
         }
       }}
-    />
+    >
+      {children}
+    </HDSLink>
   );
 }
 

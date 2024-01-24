@@ -126,14 +126,14 @@ describe('HankePortfolioComponent', () => {
     expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
   });
 
-  test('Having no projects renders correct text and link to new hanke works', async () => {
+  test('Having no projects renders correct text and new hanke link opens hanke create dialog', async () => {
     const { user } = render(<HankePortfolioComponent hankkeet={[]} signedInUserByHanke={{}} />);
 
     expect(screen.queryByText(EMPTY_HANKE_LIST_TEXT)).toBeInTheDocument();
 
     const { getByRole } = within(screen.getByText('Tarkista hakuehdot', { exact: false }));
     await user.click(getByRole('link', { name: 'luo uusi hanke' }));
-    expect(window.location.pathname).toBe('/fi/hanke/uusi');
+    expect(screen.getByRole('heading', { name: 'Luo uusi hanke' }));
   });
 
   test('Having no projects renders correct text without a link to new hanke when Hanke feature is not enabled', async () => {
@@ -169,11 +169,7 @@ describe('HankePortfolioComponent', () => {
   test('Should show draft state notification for hankkeet that are in draft state', async () => {
     render(<HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />);
 
-    expect(
-      screen.getAllByText(
-        'Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.',
-      ),
-    ).toHaveLength(1);
+    expect(screen.getAllByText('Luonnos')).toHaveLength(1);
   });
 
   test('Should show generated state notification for hankkeet that are generated', async () => {
@@ -190,6 +186,29 @@ describe('HankePortfolioComponent', () => {
     expect(
       screen.getAllByText('Tämä hanke on muodostettu johtoselvityksen perusteella.'),
     ).toHaveLength(1);
+  });
+
+  test('Should show user permission info for hankkeet', () => {
+    const userData = userDataByHanke(hankeList.map((hanke) => hanke.hankeTunnus));
+
+    render(<HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={userData} />);
+
+    expect(screen.getAllByText(/kaikki oikeudet/i)).toHaveLength(2);
+  });
+
+  test('Should show map only if there are hanke areas', async () => {
+    const hankeWithoutArea = {
+      ...hankeList[1],
+      alueet: [],
+    };
+    const editedHankeList = [hankeList[0], hankeWithoutArea];
+    const { user } = render(
+      <HankePortfolioComponent hankkeet={editedHankeList} signedInUserByHanke={{}} />,
+    );
+    await user.click(screen.getByText(editedHankeList[0].nimi));
+    await user.click(screen.getByText(editedHankeList[1].nimi));
+
+    expect(screen.getAllByTestId('hanke-map')).toHaveLength(1);
   });
 });
 
@@ -229,5 +248,18 @@ describe('HankePortfolioContainer', () => {
     expect(screen.getAllByTestId('hanke-card-header')[0]).not.toHaveFocus();
     await user.click(screen.getByRole('button', { name: 'Seuraava' }));
     expect(screen.getAllByTestId('hanke-card-header')[0]).toHaveFocus();
+  });
+
+  test('Should show error notification if loading hankkeet fails', async () => {
+    server.use(
+      rest.get('/api/hankkeet', async (req, res, ctx) => {
+        return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+      }),
+    );
+
+    render(<HankePortfolioContainer />);
+
+    await screen.findByText('Virhe tietojen lataamisessa.');
+    expect(screen.queryByText('Yritä hetken päästä uudelleen.')).toBeInTheDocument();
   });
 });

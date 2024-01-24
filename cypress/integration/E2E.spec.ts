@@ -56,13 +56,14 @@ const hankeMock: HankeDataDraft = {
         modifiedByUserId: null,
         modifiedAt: '2022-01-19T13:01:26.024Z',
       },
-      haittaAlkuPvm: '10.01.2030', // the dates are the same as hankeStart and end on purpose
-      haittaLoppuPvm: '11.01.2032',
-      kaistaHaitta: HANKE_KAISTAHAITTA.VIISI,
-      kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA.VIISI,
-      meluHaitta: HANKE_MELUHAITTA.KOLME,
-      polyHaitta: HANKE_POLYHAITTA.KOLME,
-      tarinaHaitta: HANKE_TARINAHAITTA.KOLME,
+      haittaAlkuPvm: new Date('10.01.2030'), // the dates are the same as hankeStart and end on purpose
+      haittaLoppuPvm: new Date('11.01.2032'),
+      kaistaHaitta:
+        HANKE_KAISTAHAITTA.VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA,
+      kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA.PITUUS_500_METRIA_TAI_ENEMMAN,
+      meluHaitta: HANKE_MELUHAITTA.PITKAKESTOINEN_TOISTUVA_HAITTA,
+      polyHaitta: HANKE_POLYHAITTA.PITKAKESTOINEN_TOISTUVA_HAITTA,
+      tarinaHaitta: HANKE_TARINAHAITTA.PITKAKESTOINEN_TOISTUVA_HAITTA,
     },
   ],
   tyomaaKatuosoite: 'Mannerheimintie 14',
@@ -88,14 +89,14 @@ const hankeMock: HankeDataDraft = {
 };
 
 const hankeMockIndex: Partial<HankeIndexData> = {
-  liikennehaittaIndeksi: {
+  liikennehaittaindeksi: {
     indeksi: 4.8,
-    tyyppi: HANKE_INDEX_TYPE.PERUSINDEKSI,
+    tyyppi: HANKE_INDEX_TYPE.AUTOLIIKENNEINDEKSI,
   },
-  pyorailyIndeksi: 3,
-  raitiovaunuIndeksi: 4,
-  linjaautoIndeksi: 3,
-  perusIndeksi: 4.8,
+  pyoraliikenneindeksi: 3,
+  raitioliikenneindeksi: 4,
+  linjaautoliikenneindeksi: 3,
+  autoliikenneindeksi: 4.8,
 };
 
 context('HankeForm', () => {

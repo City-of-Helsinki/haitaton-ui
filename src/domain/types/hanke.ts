@@ -44,41 +44,41 @@ export enum HANKE_TYOMAATYYPPI {
 export type HANKE_TYOMAATYYPPI_KEY = keyof typeof HANKE_TYOMAATYYPPI;
 
 export enum HANKE_KAISTAHAITTA {
-  YKSI = 'YKSI',
-  KAKSI = 'KAKSI',
-  KOLME = 'KOLME',
-  NELJA = 'NELJA',
-  VIISI = 'VIISI',
+  EI_VAIKUTA = 'EI_VAIKUTA',
+  VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA = 'VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA',
+  VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA = 'VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA',
+  VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_KAHDELLA_AJOSUUNNALLA = 'VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_KAHDELLA_AJOSUUNNALLA',
+  VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA = 'VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA',
 }
 export type HANKE_KAISTAHAITTA_KEY = keyof typeof HANKE_KAISTAHAITTA;
 
 export enum HANKE_KAISTAPITUUSHAITTA {
-  YKSI = 'YKSI',
-  KAKSI = 'KAKSI',
-  KOLME = 'KOLME',
-  NELJA = 'NELJA',
-  VIISI = 'VIISI',
+  EI_VAIKUTA_KAISTAJARJESTELYIHIN = 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
+  PITUUS_ALLE_10_METRIA = 'PITUUS_ALLE_10_METRIA',
+  PITUUS_10_99_METRIA = 'PITUUS_10_99_METRIA',
+  PITUUS_100_499_METRIA = 'PITUUS_100_499_METRIA',
+  PITUUS_500_METRIA_TAI_ENEMMAN = 'PITUUS_500_METRIA_TAI_ENEMMAN',
 }
 export type HANKE_KAISTAPITUUSHAITTA_KEY = keyof typeof HANKE_KAISTAPITUUSHAITTA;
 
 export enum HANKE_MELUHAITTA {
-  YKSI = 'YKSI',
-  KAKSI = 'KAKSI',
-  KOLME = 'KOLME',
+  SATUNNAINEN_HAITTA = 'SATUNNAINEN_HAITTA',
+  LYHYTAIKAINEN_TOISTUVA_HAITTA = 'LYHYTAIKAINEN_TOISTUVA_HAITTA',
+  PITKAKESTOINEN_TOISTUVA_HAITTA = 'PITKAKESTOINEN_TOISTUVA_HAITTA',
 }
 export type HANKE_MELUHAITTA_KEY = keyof typeof HANKE_MELUHAITTA;
 
 export enum HANKE_POLYHAITTA {
-  YKSI = 'YKSI',
-  KAKSI = 'KAKSI',
-  KOLME = 'KOLME',
+  SATUNNAINEN_HAITTA = 'SATUNNAINEN_HAITTA',
+  LYHYTAIKAINEN_TOISTUVA_HAITTA = 'LYHYTAIKAINEN_TOISTUVA_HAITTA',
+  PITKAKESTOINEN_TOISTUVA_HAITTA = 'PITKAKESTOINEN_TOISTUVA_HAITTA',
 }
 export type HANKE_POLYHAITTA_KEY = keyof typeof HANKE_POLYHAITTA;
 
 export enum HANKE_TARINAHAITTA {
-  YKSI = 'YKSI',
-  KAKSI = 'KAKSI',
-  KOLME = 'KOLME',
+  SATUNNAINEN_HAITTA = 'SATUNNAINEN_HAITTA',
+  LYHYTAIKAINEN_TOISTUVA_HAITTA = 'LYHYTAIKAINEN_TOISTUVA_HAITTA',
+  PITKAKESTOINEN_TOISTUVA_HAITTA = 'PITKAKESTOINEN_TOISTUVA_HAITTA',
 }
 export type HANKE_TARINAHAITTA_KEY = keyof typeof HANKE_TARINAHAITTA;
 
@@ -102,13 +102,13 @@ export interface HankeSubContact {
 }
 
 export interface HankeContact {
-  id: number | null;
+  id?: number | null;
   tyyppi: keyof typeof CONTACT_TYYPPI | null;
   nimi: string;
   email: string;
   puhelinnumero: string;
   ytunnus: string | null;
-  alikontaktit: HankeSubContact[];
+  alikontaktit?: HankeSubContact[];
 }
 
 export type HankeMuuTaho = {
@@ -118,7 +118,7 @@ export type HankeMuuTaho = {
   osasto: string;
   email: string;
   puhelinnumero?: string;
-  alikontaktit: HankeSubContact[];
+  alikontaktit?: HankeSubContact[];
 };
 
 export type HankeContacts = Array<(HankeContact | HankeMuuTaho)[] | undefined>;
@@ -147,23 +147,23 @@ export type HankeAlue = {
   id: number | null;
   hankeId?: number;
   geometriat?: HankeGeometria;
-  haittaAlkuPvm: string;
-  haittaLoppuPvm: string;
+  haittaAlkuPvm: Date | null;
+  haittaLoppuPvm: Date | null;
   kaistaHaitta: HANKE_KAISTAHAITTA_KEY | null;
   kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA_KEY | null;
   meluHaitta: HANKE_MELUHAITTA_KEY | null;
-  polyHaitta: HANKE_POLYHAITTA | null;
+  polyHaitta: HANKE_POLYHAITTA_KEY | null;
   tarinaHaitta: HANKE_TARINAHAITTA_KEY | null;
   nimi?: string | null;
 };
 
 export enum HANKE_INDEX_TYPE {
-  PERUSINDEKSI = 'PERUSINDEKSI',
+  AUTOLIIKENNEINDEKSI = 'AUTOLIIKENNEINDEKSI',
 }
 
-export type LiikenneHaittaIndeksi = {
+export type Liikennehaittaindeksi = {
   indeksi: number;
-  tyyppi: HANKE_INDEX_TYPE.PERUSINDEKSI;
+  tyyppi: HANKE_INDEX_TYPE.AUTOLIIKENNEINDEKSI;
 };
 
 export enum HANKE_INDEX_STATE {
@@ -178,21 +178,20 @@ enum HANKE_STATUS {
   ENDED = 'ENDED',
 }
 
-type HANKE_STATUS_KEY = keyof typeof HANKE_STATUS;
+export type HANKE_STATUS_KEY = keyof typeof HANKE_STATUS;
 
 export interface HankeData {
   id: number;
   hankeTunnus: string;
-  onYKTHanke: boolean;
+  onYKTHanke: boolean | null;
   nimi: string;
-  kuvaus: string;
-  alkuPvm: string;
-  loppuPvm: string;
-  vaihe: HANKE_VAIHE_KEY;
+  kuvaus: string | null;
+  alkuPvm: string | null;
+  loppuPvm: string | null;
+  vaihe: HANKE_VAIHE_KEY | null;
   tyomaaKatuosoite: string | null;
   tyomaaTyyppi: HANKE_TYOMAATYYPPI_KEY[];
   alueet: HankeAlue[];
-  liikennehaittaindeksi: LiikenneHaittaIndeksi | null;
   omistajat: Array<HankeContact>;
   rakennuttajat: Array<HankeContact>;
   toteuttajat: Array<HankeContact>;
@@ -211,11 +210,11 @@ export interface HankeIndexData {
   hankeTunnus: string;
   hankeId: number;
   hankeGeometriatId: number;
-  liikennehaittaIndeksi: LiikenneHaittaIndeksi;
-  perusIndeksi: number;
-  pyorailyIndeksi: number;
-  linjaautoIndeksi: number;
-  raitiovaunuIndeksi: number;
+  liikennehaittaindeksi: Liikennehaittaindeksi;
+  autoliikenneindeksi: number;
+  pyoraliikenneindeksi: number;
+  linjaautoliikenneindeksi: number;
+  raitioliikenneindeksi: number;
   tila: HANKE_INDEX_STATE_KEY;
 }
 

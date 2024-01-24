@@ -54,10 +54,10 @@ const HankeList: React.FC<React.PropsWithChildren<Props>> = ({ projectsData }) =
       const aValue = a[colKey as sortColKey];
       const bValue = b[colKey as sortColKey];
 
-      if (aValue === undefined) {
+      if (aValue === undefined || aValue === null) {
         return order === 'asc' ? -1 : 1;
       }
-      if (bValue === undefined) {
+      if (bValue === undefined || bValue === null) {
         return order === 'asc' ? 1 : -1;
       }
       if (aValue < bValue) {

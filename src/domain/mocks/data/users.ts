@@ -1,5 +1,7 @@
+import { faker } from '@faker-js/faker';
 import usersData from './users-data.json';
 import { AccessRightLevel, HankeUser } from '../../hanke/hankeUsers/hankeUser';
+import { ContactPerson } from '../../hanke/edit/types';
 
 let users = [...usersData];
 
@@ -9,10 +11,26 @@ export async function readAll(hankeTunnus: string): Promise<HankeUser[]> {
     .map((user) => ({
       id: user.id,
       sahkoposti: user.sahkoposti,
-      nimi: user.nimi,
+      etunimi: user.etunimi,
+      sukunimi: user.sukunimi,
+      puhelinnumero: user.puhelinnumero,
       kayttooikeustaso: user.kayttooikeustaso as AccessRightLevel,
       tunnistautunut: user.tunnistautunut,
     }));
+}
+
+export async function create(hankeTunnus: string, user: ContactPerson) {
+  const newUser: HankeUser = {
+    id: faker.string.uuid(),
+    etunimi: user.etunimi,
+    sukunimi: user.sukunimi,
+    sahkoposti: user.sahkoposti,
+    puhelinnumero: user.puhelinnumero,
+    kayttooikeustaso: AccessRightLevel.KATSELUOIKEUS,
+    tunnistautunut: false,
+  };
+  users.push({ ...newUser, hankeTunnus });
+  return newUser;
 }
 
 export async function update(hankeTunnus: string, modifiedUsers: HankeUser[]) {

@@ -22,6 +22,7 @@ export async function create(data: Application) {
   const newHakemus: Application = {
     ...data,
     id: hakemukset.length + 1,
+    alluStatus: null,
   };
   hakemukset.push(newHakemus);
   return newHakemus;

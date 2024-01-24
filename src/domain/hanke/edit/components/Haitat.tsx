@@ -79,6 +79,7 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
           label={t(`hankeForm:labels:${FORMFIELD.HAITTA_LOPPU_PVM}`)}
           locale={locale}
           minDate={minEndDate || undefined}
+          initialMonth={minEndDate || undefined}
           helperText={t('form:helperTexts:dateInForm')}
         />
         <Spacer />

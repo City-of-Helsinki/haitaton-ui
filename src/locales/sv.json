@@ -264,13 +264,6 @@
         "title": "Haitaton - Projektlista"
       }
     },
-    "NEW_HANKE": {
-      "path": "/projekt/ny",
-      "headerLabel": "Skapa nytt projekt",
-      "meta": {
-        "title": "Haitaton - Skapa nytt projekt"
-      }
-    },
     "EDIT_HANKE": {
       "path": "/projekt/:hankeTunnus/redigera",
       "headerLabel": "Projekt",
@@ -397,33 +390,33 @@
       "VAIHTOLAVA": "Växelflak"
     },
     "kaistaHaitta": {
-      "YKSI": "Påverkar inte",
-      "KAKSI": "Reducerar med en fil i en körriktning",
-      "KOLME": "Reducerar med en fil i två körriktningar samtidigt",
-      "NELJA": "Reducerar med flera filer i två körriktningar samtidigt",
-      "VIISI": "Reducerar samtidigt med flera filer i olika riktningar från korsningen"
+      "EI_VAIKUTA": "Påverkar inte",
+      "VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA": "Reducerar med en fil i en körriktning",
+      "VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA": "Reducerar med en fil i två körriktningar samtidigt",
+      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_KAHDELLA_AJOSUUNNALLA": "Reducerar med flera filer i två körriktningar samtidigt",
+      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA": "Reducerar samtidigt med flera filer i olika riktningar från korsningen"
     },
     "kaistaPituusHaitta": {
-      "YKSI": "Påverkar inte",
-      "KAKSI": "Högst 10 m",
-      "KOLME": "11–100 m",
-      "NELJA": "101–500 m",
-      "VIISI": "Mer än 500 m"
+      "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Påverkar inte",
+      "PITUUS_ALLE_10_METRIA": "Mindre än 10 m",
+      "PITUUS_10_99_METRIA": "10–99 m",
+      "PITUUS_100_499_METRIA": "100–499 m",
+      "PITUUS_500_METRIA_TAI_ENEMMAN": "500 m eller mer"
     },
     "meluHaitta": {
-      "YKSI": "Tillfällig olägenhet",
-      "KAKSI": "Kortvarig återkommande olägenhet",
-      "KOLME": "Långvarig kontinuerlig olägenhet"
+      "SATUNNAINEN_HAITTA": "Tillfällig olägenhet",
+      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Kortvarig återkommande olägenhet",
+      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Långvarig kontinuerlig olägenhet"
     },
     "polyHaitta": {
-      "YKSI": "Tillfällig olägenhet",
-      "KAKSI": "Kortvarig återkommande olägenhet",
-      "KOLME": "Långvarig kontinuerlig olägenhet"
+      "SATUNNAINEN_HAITTA": "Tillfällig olägenhet",
+      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Kortvarig återkommande olägenhet",
+      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Långvarig kontinuerlig olägenhet"
     },
     "tarinaHaitta": {
-      "YKSI": "Tillfällig olägenhet",
-      "KAKSI": "Kortvarig återkommande olägenhet",
-      "KOLME": "Långvarig kontinuerlig olägenhet"
+      "SATUNNAINEN_HAITTA": "Tillfällig olägenhet",
+      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Kortvarig återkommande olägenhet",
+      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Långvarig kontinuerlig olägenhet"
     },
     "alue": {
       "title": "Projektområde {{index}}",
@@ -653,8 +646,6 @@
     "haittaindeksit": "Olägenhetsindex",
     "haittaindexTooltip": "Olägenhetsindex beräknas enligt projektets område. Indexen uppdateras när du sparar formulärets uppgifter eller går till nästa sida.",
     "liikennehaittaindeksi": "Trafikolägenhetsindex",
-    "ruuhkautuminen": "Köbildning",
-    "pyorailynPaareitti": "Huvudled för cykeltrafik",
     "kiertoreittitarve": "Behov av omväg",
     "KIERTOREITTITARPEET": {
       "TODENNAKOINEN": "sannolik",
@@ -820,7 +811,6 @@
   },
   "hankeUsers": {
     "accessRights": "Användningsrättigheter",
-    "manageRights": "Hantering av användningsrättigheter",
     "accessRightLevels": {
       "KAIKKI_OIKEUDET": "Alla rättigheter",
       "KAIKKIEN_MUOKKAUS": "Ändringar i projekt och ansökningar",

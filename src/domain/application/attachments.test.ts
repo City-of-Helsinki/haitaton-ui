@@ -5,6 +5,8 @@ const attachments: ApplicationAttachmentMetadata[] = [
   {
     id: '5842de6c-9521-4053-92b7-ae1370ab7e93',
     fileName: 'Haitaton_liite.png',
+    contentType: 'image/png',
+    size: 123456789,
     createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800284',
     createdAt: '2023-08-15T08:40:05.948818Z',
     applicationId: 1,
@@ -13,6 +15,8 @@ const attachments: ApplicationAttachmentMetadata[] = [
   {
     id: '4a61945e-a43f-4ee5-8239-1329b4809954',
     fileName: 'Haitaton_liite_2.txt',
+    contentType: 'text/plain',
+    size: 1024,
     createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800284',
     createdAt: '2023-08-15T08:40:06.004338Z',
     applicationId: 1,
@@ -21,6 +25,8 @@ const attachments: ApplicationAttachmentMetadata[] = [
   {
     id: 'cfeba660-d415-4557-84f9-818eb64a3483',
     fileName: 'Haitaton_liite_3.jpg',
+    contentType: 'image/jpeg',
+    size: 1048576,
     createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800284',
     createdAt: '2023-08-15T12:32:17.923746Z',
     applicationId: 1,
@@ -29,6 +35,8 @@ const attachments: ApplicationAttachmentMetadata[] = [
   {
     id: '58584665-5ed3-478b-95ab-c140c52e3408',
     fileName: 'Haitaton_liite_4.pdf',
+    contentType: 'application/pdf',
+    size: 52428800,
     createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800284',
     createdAt: '2023-08-15T12:32:32.746984Z',
     applicationId: 1,

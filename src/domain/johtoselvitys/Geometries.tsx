@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { Box, Flex } from '@chakra-ui/react';
 import { Button, Fieldset, IconAlertCircleFill, IconCross, Notification } from 'hds-react';
 import { debounce } from 'lodash';
+import { FeatureLike } from 'ol/Feature';
 
 import VectorLayer from '../../common/components/map/layers/VectorLayer';
 import Map from '../../common/components/map/Map';
@@ -94,9 +95,9 @@ export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
   const ortoLayerOpacity = mapTileLayers.kantakartta.visible ? 0.5 : 1;
 
   useEffect(() => {
-    function handleAddFeature(e: VectorSourceEvent<Geometry>) {
+    function handleAddFeature(e: VectorSourceEvent<FeatureLike>) {
       if (e.feature) {
-        append(getEmptyArea(e.feature));
+        append(getEmptyArea(e.feature as Feature<Geometry>));
       }
     }
 
@@ -126,8 +127,8 @@ export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const higlightArea = useHighlightArea();
 
-  const startTime: string | null = watch('applicationData.startTime');
-  const endTime: string | null = watch('applicationData.endTime');
+  const startTime = watch('applicationData.startTime');
+  const endTime = watch('applicationData.endTime');
   const minEndDate = startTime ? new Date(startTime) : undefined;
 
   const workTimesSet = startTime && endTime;

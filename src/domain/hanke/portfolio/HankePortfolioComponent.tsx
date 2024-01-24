@@ -9,8 +9,9 @@ import {
   useAsyncDebounce,
   useSortBy,
 } from 'react-table';
-import { useAccordion, Card, Select, Button, Pagination, SearchInput } from 'hds-react';
+import { useAccordion, Card, Select, Button, Pagination, SearchInput, Tag } from 'hds-react';
 import {
+  IconAlertCircle,
   IconAngleDown,
   IconAngleUp,
   IconEye,
@@ -20,6 +21,7 @@ import {
 } from 'hds-react/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
+import { Flex } from '@chakra-ui/react';
 import Text from '../../../common/components/text/Text';
 import { HankeData, HANKE_TYOMAATYYPPI, HANKE_VAIHE } from '../../types/hanke';
 import styles from './HankePortfolio.module.scss';
@@ -33,7 +35,6 @@ import HankeVaiheTag from '../vaiheTag/HankeVaiheTag';
 import { Language } from '../../../common/types/language';
 import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
-import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotification';
 import HankeGeneratedStateNotification from '../edit/components/HankeGeneratedStateNotification';
 import Container from '../../../common/components/container/Container';
 import useHankeViewPath from '../hooks/useHankeViewPath';
@@ -44,7 +45,7 @@ import { SignedInUser, SignedInUserByHanke } from '../hankeUsers/hankeUser';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import useFocusToElement from '../../../common/hooks/useFocusToElement';
 import HDSLink from '../../../common/components/Link/Link';
-import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
+import HankeCreateDialog from '../hankeCreateDialog/HankeCreateDialog';
 
 type CustomAccordionProps = {
   hanke: HankeData;
@@ -96,6 +97,14 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
                 {hanke.nimi}
               </Text>
               <FeatureFlags flags={['hanke']}>
+                {hanke.status === 'DRAFT' && (
+                  <Tag>
+                    <Flex alignItems="center">
+                      <IconAlertCircle style={{ marginRight: 'var(--spacing-2-xs)' }} />
+                      {t('hakemus:status:null')}
+                    </Flex>
+                  </Tag>
+                )}
                 <HankeVaiheTag tagName={hanke.vaihe} />
               </FeatureFlags>
             </div>
@@ -151,7 +160,6 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
             generated={hanke.generated}
             className={styles.stateNotification}
           />
-          <HankeDraftStateNotification hanke={hanke} className={styles.stateNotification} />
         </FeatureFlags>
       </>
       <div className={styles.hankeCardContent} {...contentProps}>
@@ -218,19 +226,26 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
                 <Text tag="h3" styleAs="h6" weight="bold" className={styles.infoHeader}>
                   {t('hankeForm:labels:rights')}
                 </Text>
+                {signedInUser !== undefined && (
+                  <Text tag="p" styleAs="body-m" className={styles.infoContent}>
+                    {t(`hankeUsers:accessRightLevels:${signedInUser.kayttooikeustaso}`)}
+                  </Text>
+                )}
               </div>
             </FeatureFlags>
           </div>
-          {isOpen && (
-            <div>
-              <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} />
-              <OwnHankeMap hanke={hanke} />
-            </div>
-          )}
+          <div>
+            {hanke.alueet?.length > 0 && isOpen && (
+              <div data-testid="hanke-map">
+                <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} />
+                <OwnHankeMap hanke={hanke} />
+              </div>
+            )}
+          </div>
         </FeatureFlags>
 
-        <div>
-          <Button theme="coat" className={styles.showHankeButton} onClick={navigateToHanke}>
+        <div className={styles.hankeCardButtons}>
+          <Button theme="coat" onClick={navigateToHanke}>
             {t('hankePortfolio:showHankeButton')}
           </Button>
           <Button theme="coat" variant="secondary" onClick={() => navigateToApplications()}>
@@ -257,8 +272,6 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
   hankkeet,
   signedInUserByHanke,
 }) => {
-  const { NEW_HANKE } = useLocalizedRoutes();
-
   const {
     hankeFilterStartDate,
     hankeFilterEndDate,
@@ -472,10 +485,19 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
   }, [setIsFiltered, filters, globalFilter]);
 
   const firstHankeCardRef = useFocusToElement<HTMLDivElement>(pageIndex);
+  const [showHankeCreateDialog, setShowHankeCreateDialog] = useState(false);
 
   function handlePageChange(e: React.MouseEvent, index: number) {
     e.preventDefault();
     gotoPage(index);
+  }
+
+  function openHankeCreateDialog() {
+    setShowHankeCreateDialog(true);
+  }
+
+  function closeHankeCreateDialog() {
+    setShowHankeCreateDialog(false);
   }
 
   return (
@@ -610,7 +632,11 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
                     <Trans i18nKey="hankePortfolio:checkSearchParameters">
                       <Text tag="p" className="heading-m">
                         Tarkista hakuehdot tai{' '}
-                        <HDSLink href={NEW_HANKE.path} className={styles.newHankeLink}>
+                        <HDSLink
+                          href=""
+                          onClick={openHankeCreateDialog}
+                          className={styles.newHankeLink}
+                        >
                           luo uusi hanke
                         </HDSLink>
                         .
@@ -636,6 +662,7 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
           </div>
         </Container>
       </div>
+      <HankeCreateDialog isOpen={showHankeCreateDialog} onClose={closeHankeCreateDialog} />
     </>
   );
 };

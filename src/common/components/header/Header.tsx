@@ -1,5 +1,5 @@
-import React from 'react';
-import { IconLinkExternal, IconSignout, LogoLanguage, Navigation } from 'hds-react';
+import { useState } from 'react';
+import { IconSignout, Header, IconUser, Link, Logo, logoFi, logoSv, Button } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useMatch, useLocation, useNavigate } from 'react-router-dom';
 import { $enum } from 'ts-enum-util';
@@ -14,6 +14,7 @@ import useUser from '../../../domain/auth/useUser';
 import { Language, LANGUAGES } from '../../types/language';
 import { SKIP_TO_ELEMENT_ID } from '../../constants/constants';
 import { useFeatureFlags } from '../featureFlags/FeatureFlagsContext';
+import HankeCreateDialog from '../../../domain/hanke/hankeCreateDialog/HankeCreateDialog';
 
 const languageLabels = {
   fi: 'Suomi',
@@ -21,26 +22,18 @@ const languageLabels = {
   sv: 'Svenska',
 };
 
-const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
-  const {
-    HOME,
-    PUBLIC_HANKKEET,
-    PUBLIC_HANKKEET_MAP,
-    HANKEPORTFOLIO,
-    NEW_HANKE,
-    JOHTOSELVITYSHAKEMUS,
-  } = useLocalizedRoutes();
+function HaitatonHeader() {
+  const { HOME, PUBLIC_HANKKEET, PUBLIC_HANKKEET_MAP, HANKEPORTFOLIO, JOHTOSELVITYSHAKEMUS } =
+    useLocalizedRoutes();
   const { t, i18n } = useTranslation();
   const { data: user } = useUser();
   const isAuthenticated = Boolean(user?.profile);
   const features = useFeatureFlags();
+  const logoSrc = i18n.language === 'sv' ? logoSv : logoFi;
+  const [showHankeCreateDialog, setShowHankeCreateDialog] = useState(false);
 
   const isMapPath = useMatch({
     path: PUBLIC_HANKKEET.path,
-    end: false,
-  });
-  const isNewHankePath = useMatch({
-    path: NEW_HANKE.path,
     end: false,
   });
   const isCableReportApplicationPath = useMatch({
@@ -75,109 +68,120 @@ const Header: React.FC<React.PropsWithChildren<unknown>> = () => {
     return path;
   }
 
-  async function setLanguage(lang: Language) {
+  async function setLanguage(lang: string) {
     const routeKey = getMatchingRouteKey(i18n, i18n.language as Language, location.pathname);
     await i18n.changeLanguage(lang);
-    const path = getPathForLanguage(lang, routeKey);
+    const path = getPathForLanguage(lang as Language, routeKey);
     navigate(path);
   }
 
+  function getUserMenuLabel() {
+    if (isAuthenticated) {
+      return user?.profile.name ?? user?.profile.email;
+    }
+    return t('authentication:loginButton');
+  }
+
+  function openHankeCreateDialog() {
+    setShowHankeCreateDialog(true);
+  }
+
+  function closeHankeCreateDialog() {
+    setShowHankeCreateDialog(false);
+  }
+
   return (
-    <Navigation
-      menuToggleAriaLabel={t('common:ariaLabels:menuToggle')}
-      title="Haitaton"
-      skipTo={`#${SKIP_TO_ELEMENT_ID}`}
-      skipToContentLabel={t('common:components:header:skipToContentLabel')}
-      titleUrl={HOME.path}
-      className="header"
-      logoLanguage={i18n.language as LogoLanguage}
+    <Header
+      languages={$enum(LANGUAGES).map((lang) => ({
+        label: languageLabels[lang],
+        value: lang,
+        isPrimary: true,
+      }))}
+      onDidChangeLanguage={setLanguage}
+      defaultLanguage={i18n.language}
     >
-      {isAuthenticated && (
-        <Navigation.Row ariaLabel={t('common:ariaLabels:topNavigation')}>
-          {features.publicHankkeet ? (
-            <Navigation.Item as={NavLink} to={PUBLIC_HANKKEET_MAP.path} active={Boolean(isMapPath)}>
-              {PUBLIC_HANKKEET.label}
-            </Navigation.Item>
-          ) : (
-            <></>
-          )}
-          {features.hanke ? (
-            <Navigation.Item
-              as={NavLink}
-              to={NEW_HANKE.path}
-              active={Boolean(isNewHankePath)}
-              data-testid="hankeLink"
+      <Header.SkipLink
+        skipTo={`#${SKIP_TO_ELEMENT_ID}`}
+        label={t('common:components:header:skipToContentLabel')}
+      />
+      <Header.ActionBar
+        title="Haitaton"
+        titleHref={HOME.path}
+        logoHref={HOME.path}
+        frontPageLabel={t('common:components:header:frontPageLabel')}
+        logo={<Logo src={logoSrc} alt={t('common:logoAlt')} />}
+        menuButtonAriaLabel={t('common:ariaLabels:menuToggle')}
+      >
+        <Header.LanguageSelector />
+        <Header.ActionBarItem
+          label={getUserMenuLabel()}
+          fixedRightPosition
+          preventButtonResize
+          icon={<IconUser aria-hidden />}
+          id="action-bar-login"
+          closeLabel={t('common:ariaLabels:closeButtonLabelText')}
+          onClick={!isAuthenticated ? authService.login : undefined}
+        >
+          {isAuthenticated && (
+            <Button
+              variant="supplementary"
+              iconLeft={<IconSignout aria-hidden />}
+              onClick={authService.logout}
             >
-              {NEW_HANKE.label}
-            </Navigation.Item>
-          ) : (
-            <></>
+              {t('authentication:logoutButton')}
+            </Button>
           )}
-          <Navigation.Item
+        </Header.ActionBarItem>
+      </Header.ActionBar>
+
+      {isAuthenticated && (
+        <Header.NavigationMenu>
+          {features.publicHankkeet && (
+            <Header.Link
+              label={PUBLIC_HANKKEET.label}
+              as={NavLink}
+              to={PUBLIC_HANKKEET_MAP.path}
+              active={Boolean(isMapPath)}
+            />
+          )}
+          {features.hanke && (
+            <Header.Link
+              label={t('homepage:hanke:title')}
+              as={NavLink}
+              to="#"
+              onClick={openHankeCreateDialog}
+              data-testid="hankeLink"
+            />
+          )}
+          <Header.Link
+            label={t('homepage:johtotietoselvitys:title')}
             as={NavLink}
             to={JOHTOSELVITYSHAKEMUS.path}
             active={Boolean(isCableReportApplicationPath)}
             data-testid="cableReportApplicationLink"
-          >
-            {t('homepage:johtotietoselvitys:title')}
-          </Navigation.Item>
-          <Navigation.Item
+          />
+          <Header.Link
+            label={HANKEPORTFOLIO.label}
             as={NavLink}
             to={HANKEPORTFOLIO.path}
             active={Boolean(isHankePortfolioPath)}
             data-testid="hankeListLink"
-          >
-            {HANKEPORTFOLIO.label}
-          </Navigation.Item>
-          <Navigation.Item
+          />
+          <Header.Link
+            label={t('routes:WORKINSTRUCTIONS:headerLabel')}
+            as={Link}
             href={t('routes:WORKINSTRUCTIONS:path')}
-            target="_blank"
-            rel="noreferrer"
-            icon={<IconLinkExternal />}
+            external
+            openInNewTab
             aria-label={workInstructionsAriaLabel}
           >
             {t('routes:WORKINSTRUCTIONS:headerLabel')}
-          </Navigation.Item>
-        </Navigation.Row>
+          </Header.Link>
+        </Header.NavigationMenu>
       )}
-      <Navigation.Actions>
-        <Navigation.User
-          authenticated={isAuthenticated}
-          onSignIn={authService.login}
-          label={t('authentication:loginButton')}
-          userName={user?.profile?.name}
-          buttonAriaLabel={t('common:ariaLabels:profileButton')}
-        >
-          <Navigation.Item
-            href=""
-            icon={<IconSignout aria-hidden />}
-            label={t('authentication:logoutButton')}
-            variant="supplementary"
-            onClick={async (e: React.MouseEvent<HTMLAnchorElement>) => {
-              e.preventDefault();
-              await authService.logout();
-            }}
-            data-testid="logoutLink"
-          />
-        </Navigation.User>
-        <Navigation.LanguageSelector label={languageLabels[i18n.language as LANGUAGES]}>
-          {$enum(LANGUAGES).map((lang) => (
-            <Navigation.Item
-              as="a"
-              href=""
-              label={languageLabels[lang]}
-              onClick={(e: React.MouseEvent) => {
-                e.preventDefault();
-                setLanguage(lang);
-              }}
-              key={lang}
-              lang={lang}
-            />
-          ))}
-        </Navigation.LanguageSelector>
-      </Navigation.Actions>
-    </Navigation>
+      <HankeCreateDialog isOpen={showHankeCreateDialog} onClose={closeHankeCreateDialog} />
+    </Header>
   );
-};
+}
 
-export default Header;
+export default HaitatonHeader;

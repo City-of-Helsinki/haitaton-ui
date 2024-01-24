@@ -4,14 +4,14 @@ const hankeIndexData: HankeIndexData = {
   hankeTunnus: 'HAI21-35',
   hankeId: 62,
   hankeGeometriatId: 52,
-  liikennehaittaIndeksi: {
+  liikennehaittaindeksi: {
     indeksi: 4,
-    tyyppi: HANKE_INDEX_TYPE.PERUSINDEKSI,
+    tyyppi: HANKE_INDEX_TYPE.AUTOLIIKENNEINDEKSI,
   },
-  perusIndeksi: 4,
-  pyorailyIndeksi: 3,
-  linjaautoIndeksi: 2,
-  raitiovaunuIndeksi: 1,
+  autoliikenneindeksi: 4,
+  pyoraliikenneindeksi: 3,
+  linjaautoliikenneindeksi: 2,
+  raitioliikenneindeksi: 1,
   tila: HANKE_INDEX_STATE.VOIMASSA,
 };
 

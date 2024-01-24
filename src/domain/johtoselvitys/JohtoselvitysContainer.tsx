@@ -84,8 +84,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
       areas: [],
       startTime: null,
       endTime: null,
-      identificationNumber: 'HAI-123', // TODO: HAI-1160
-      clientApplicationKind: 'HAITATON', // TODO: add to UI
       workDescription: '',
       contractorWithContacts: {
         customer: {
@@ -111,9 +109,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
       },
       postalAddress: { streetAddress: { streetName: '' }, city: '', postalCode: '' },
       representativeWithContacts: null,
-      invoicingCustomer: null,
-      customerReference: null,
-      area: null,
       propertyDeveloperWithContacts: null,
       constructionWork: false,
       maintenanceWork: false,

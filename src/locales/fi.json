@@ -39,7 +39,8 @@
         "searchButtonAriaLabel": "Hae"
       },
       "header": {
-        "skipToContentLabel": "Siirry pääsisältöön"
+        "skipToContentLabel": "Siirry pääsisältöön",
+        "frontPageLabel": "Etusivu"
       },
       "notification": {
         "notification": "Ilmoitus",
@@ -58,10 +59,14 @@
           "fileNotFound": "Tiedostoa, jonka yritit poistaa ei löydy (virhe 404). Yritä myöhemmin uudelleen.",
           "serverError": "Palvelimeen ei saada yhteyttä, eikä valittua tiedostoa saada poistettua. Yritä myöhemmin uudelleen."
         }
+      },
+      "footer": {
+        "backToTop": "Takaisin ylös"
       }
     },
     "error": "Tapahtui virhe. Yritä uudestaan.",
     "dataNotFound": "Tietoja ei löytynyt",
+    "logoAlt": "Helsingin kaupunki",
     "ariaLabels": {
       "profileButton": "Käyttäjäprofiili",
       "menuToggle": "Valikko",
@@ -194,7 +199,7 @@
         "postinumero": "Postinumero",
         "postitoimipaikka": "Postitoimipaikka",
         "email": "Sähköposti",
-        "puhelinnumero": "Puhelinnumero",
+        "puhelinnumero": "Puhelin",
         "rooli": "Rooli",
         "osasto": "Osasto",
         "organisaatioNimi": "Organisaatio",
@@ -218,7 +223,9 @@
       },
       "buttons": {
         "addSubContact": "Lisää yhteyshenkilö",
+        "addNewContactPerson": "Lisää uusi yhteyshenkilö",
         "removeSubContact": "Poista yhteyshenkilö",
+        "saveAndAddContactPerson": "Tallenna ja lisää yhteyshenkilö",
         "remove": {
           "omistajat": "Poista omistaja",
           "rakennuttajat": "Poista rakennuttaja",
@@ -226,6 +233,16 @@
           "muut": "Poista muu taho",
           "propertyDeveloperWithContacts": "Poista rakennuttaja",
           "representativeWithContacts": "Poista asianhoitaja"
+        }
+      },
+      "notifications": {
+        "labels": {
+          "contactPersonSaved": "Yhteyshenkilö tallennettu",
+          "contactPersonSaveError": "Yhteyshenkilön tallennus epäonnistui"
+        },
+        "descriptions": {
+          "contactPersonSaved": "Yhteyshenkilön tiedot tallennettu ja lisätty hankkelle onnistuneesti.",
+          "contactPersonSaveError": "Yhteyshenkilön tietojen tallennus epäonnistui. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman teknisen tukeen."
         }
       }
     }
@@ -278,13 +295,6 @@
       "headerLabel": "Hankkeet yleisillä alueilla",
       "meta": {
         "title": "Haitaton - Hankelista"
-      }
-    },
-    "NEW_HANKE": {
-      "path": "/hanke/uusi",
-      "headerLabel": "Luo uusi hanke",
-      "meta": {
-        "title": "Haitaton - Luo uusi hanke"
       }
     },
     "EDIT_HANKE": {
@@ -413,33 +423,33 @@
       "VAIHTOLAVA": "Vaihtolava"
     },
     "kaistaHaitta": {
-      "YKSI": "Ei vaikuta",
-      "KAKSI": "Vähentää kaistan yhdellä ajosuunnalla",
-      "KOLME": "Vähentää samanaikaisesti kaistan kahdella ajosuunnalla",
-      "NELJA": "Vähentää samanaikaisesti useita kaistoja kahdella ajosuunnalla",
-      "VIISI": "Vähentää samanaikaisesti useita kaistoja liittymän eri suunnilla"
+      "EI_VAIKUTA": "Ei vaikuta",
+      "VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA": "Vähentää kaistan yhdellä ajosuunnalla",
+      "VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA": "Vähentää samanaikaisesti kaistan kahdella ajosuunnalla",
+      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_KAHDELLA_AJOSUUNNALLA": "Vähentää samanaikaisesti useita kaistoja kahdella ajosuunnalla",
+      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA": "Vähentää samanaikaisesti useita kaistoja liittymän eri suunnilla"
     },
     "kaistaPituusHaitta": {
-      "YKSI": "Ei vaikuta",
-      "KAKSI": "Enintään 10 m",
-      "KOLME": "11-100 m",
-      "NELJA": "101-500 m",
-      "VIISI": "Yli 500 m"
+      "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Ei vaikuta",
+      "PITUUS_ALLE_10_METRIA": "Alle 10 m",
+      "PITUUS_10_99_METRIA": "10-99 m",
+      "PITUUS_100_499_METRIA": "100-499 m",
+      "PITUUS_500_METRIA_TAI_ENEMMAN": "500 m tai enemmän"
     },
     "meluHaitta": {
-      "YKSI": "Satunnainen haitta",
-      "KAKSI": "Lyhytaikainen toistuva haitta",
-      "KOLME": "Pitkäkestoinen jatkuva haitta"
+      "SATUNNAINEN_HAITTA": "Satunnainen haitta",
+      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Lyhytaikainen toistuva haitta",
+      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Pitkäkestoinen jatkuva haitta"
     },
     "polyHaitta": {
-      "YKSI": "Satunnainen haitta",
-      "KAKSI": "Lyhytaikainen toistuva haitta",
-      "KOLME": "Pitkäkestoinen jatkuva haitta"
+      "SATUNNAINEN_HAITTA": "Satunnainen haitta",
+      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Lyhytaikainen toistuva haitta",
+      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Pitkäkestoinen jatkuva haitta"
     },
     "tarinaHaitta": {
-      "YKSI": "Satunnainen haitta",
-      "KAKSI": "Lyhytaikainen toistuva haitta",
-      "KOLME": "Pitkäkestoinen jatkuva haitta"
+      "SATUNNAINEN_HAITTA": "Satunnainen haitta",
+      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Lyhytaikainen toistuva haitta",
+      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Pitkäkestoinen jatkuva haitta"
     },
     "alue": {
       "title": "Hankealue {{index}}",
@@ -522,6 +532,9 @@
       "tyomaaKatuosoite": "Hankkeen katuosoite/katuosoitteet sekä numero tai numeroväli (esim. Mannerheimintie 5, Hämeentie 3-27) tai muu paikallistava tieto, mikäli katuosoitetta ei ole saatavilla.",
       "tyomaaTyyppi": "Hankkeen tyypin monivalinta. Hanke voi koostua useista eri hanketyypeistä, eli voit valita useita hanketyyppejä.",
       "kaistaHaitta": "Todennäköinen haitta pääajoratojen kaistajärjestelyihin"
+    },
+    "buttons": {
+      "create": "Luo hanke"
     },
     "perustiedotForm": {
       "header": "Perustiedot",
@@ -677,10 +690,10 @@
     "haittaindeksit": "Haittaindeksit",
     "haittaindexTooltip": "Haittaindeksit lasketaan hankkeen alueen mukaan. Indeksit päivittyvät, kun tallennat lomakkeen tiedot tai siirryt seuraavalle sivulle.",
     "liikennehaittaindeksi": "Liikennehaittaindeksi",
-    "ruuhkautuminen": "Ruuhkautuminen",
-    "pyorailynPaareitti": "Pyöräilyn pääreitti",
-    "joukkoliikenneRaitiovaunu": "Joukkoliikenteen merkittävyys: Raitioliikenne",
-    "joukkoliikenneLinjaauto": "Joukkoliikenteen merkittävyys: Linja-autojen paikallisliikenne",
+    "autoliikenne": "Autoliikenteen ruuhkautuminen",
+    "pyoraliikenne": "Pyöräliikenteen merkittävyys",
+    "raitioliikenne": "Joukkoliikenteen merkittävyys: Raitioliikenne",
+    "linjaautoliikenne": "Joukkoliikenteen merkittävyys: Linja-autojen paikallisliikenne",
     "kiertoreittitarve": "Kiertoreittitarve",
     "KIERTOREITTITARPEET": {
       "TODENNAKOINEN": "todennäköinen",
@@ -847,11 +860,16 @@
       "toPreviousPage": "Listan edelliselle sivulle",
       "toNextPage": "Listan seuraavalle sivulle",
       "toLastPage": "Listan viimeiselle sivulle"
+    },
+    "breadcrumb": {
+      "ariaLabel": "Hankkeen navigaatio"
     }
   },
   "hankeUsers": {
     "accessRights": "Käyttöoikeudet",
-    "manageRights": "Käyttöoikeuksien hallinta",
+    "users": "Käyttäjät",
+    "accessRight": "Käyttöoikeus",
+    "userManagementTitle": "Käyttäjähallinta",
     "accessRightLevels": {
       "KAIKKI_OIKEUDET": "Kaikki oikeudet",
       "KAIKKIEN_MUOKKAUS": "Hankkeen ja hakemusten muokkaus",
@@ -888,6 +906,11 @@
     "buttons": {
       "resendInvitation": "Lähetä kutsulinkki uudelleen",
       "invitationSent": "Kutsulinkki lähetetty"
+    },
+    "labels": {
+      "ownInformation": "Omat käyttäjätietosi",
+      "userIdentified": "Kirjautunut hankkeelle tunnistautuneena",
+      "userMenu": "Käyttäjävalikko"
     },
     "userIdentified": "Käyttäjä tunnistautunut"
   },

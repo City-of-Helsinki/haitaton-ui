@@ -9,18 +9,24 @@ import { getSurfaceArea } from '../../../common/components/map/utils';
 import { Application } from '../../application/types/application';
 import { isApplicationPending } from '../../application/utils';
 
+function mapToAreaDates(areas: HankeAlue[] | undefined, key: 'haittaAlkuPvm' | 'haittaLoppuPvm') {
+  return areas?.reduce((result: Date[], area) => {
+    const areaTime = area[key];
+    if (areaTime) {
+      result.push(new Date(areaTime));
+    }
+    return result;
+  }, []);
+}
+
 export function getAreasMinStartDate(areas: HankeAlue[] | undefined) {
-  const areaStartDates = areas?.map((alue) => {
-    return new Date(alue.haittaAlkuPvm);
-  });
+  const areaStartDates = mapToAreaDates(areas, 'haittaAlkuPvm');
   const minAreaStartDate = areaStartDates && min(areaStartDates);
   return minAreaStartDate;
 }
 
 export function getAreasMaxEndDate(areas: HankeAlue[] | undefined) {
-  const areaEndDates = areas?.map((alue) => {
-    return new Date(alue.haittaLoppuPvm);
-  });
+  const areaEndDates = mapToAreaDates(areas, 'haittaLoppuPvm');
   const maxAreaEndDate = areaEndDates && max(areaEndDates);
   return maxAreaEndDate;
 }

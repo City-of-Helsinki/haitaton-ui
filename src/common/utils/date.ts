@@ -19,7 +19,7 @@ export const toStartOfDayUTCISO = (date: Date) => {
   }
 };
 
-export const formatToFinnishDate = (date: string) => {
+export const formatToFinnishDate = (date: string | Date | null) => {
   if (!date) {
     return undefined;
   }

@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import { format, isToday } from 'date-fns';
 import { fi } from 'date-fns/locale';
-import { Button, IconCross, IconDocument, IconDownload } from 'hds-react';
+import { Button, formatBytes, IconCross, IconDocument, IconDownload, IconPhoto } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { AttachmentMetadata } from '../../types/attachment';
 import FileDownloadLink from '../fileDownloadLink/FileDownloadLink';
@@ -25,6 +25,7 @@ export default function FileListItem({
   showDeleteButtonForFile,
 }: Readonly<Props>) {
   const { t } = useTranslation();
+  const sizeText = formatBytes(file.size);
   const dateAdded = new Date(file.createdAt);
   const dateAddedText = isToday(dateAdded)
     ? t('form:labels:today')
@@ -37,7 +38,11 @@ export default function FileListItem({
 
   return (
     <li tabIndex={-1} className={styles.fileListItem}>
-      <IconDocument aria-hidden />
+      {file.contentType.includes('image') ? (
+        <IconPhoto aria-hidden />
+      ) : (
+        <IconDocument aria-hidden />
+      )}
       <div className={styles.fileListItemNameContainer}>
         {fileDownLoadFunction === undefined ? (
           <Text tag="p" className={styles.fileListItemName}>
@@ -56,6 +61,9 @@ export default function FileListItem({
           </>
         )}
       </div>
+      <Box as="p" className="text-sm">
+        ({sizeText})
+      </Box>
       <Box
         as="p"
         color="var(--color-black-60)"
