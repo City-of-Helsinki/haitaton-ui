@@ -276,6 +276,13 @@
         "title": "Haitaton - Käyttöoikeuksien hallinta"
       }
     },
+    "EDIT_USER": {
+      "path": "/hankesalkku/:hankeTunnus/kayttajat/:id",
+      "headerLabel": "Käyttäjätietojen muokkaus",
+      "meta": {
+        "title": "Haitaton - Käyttäjätietojen muokkaus"
+      }
+    },
     "PUBLIC_HANKKEET": {
       "path": "/julkisethankkeet",
       "headerLabel": "Hankkeet yleisillä alueilla",
@@ -870,6 +877,8 @@
     "users": "Käyttäjät",
     "accessRight": "Käyttöoikeus",
     "userManagementTitle": "Käyttäjähallinta",
+    "userEditTitle": "Käyttäjätietojen muokkaus",
+    "userInfoTitle": "Käyttäjätiedot",
     "accessRightLevels": {
       "KAIKKI_OIKEUDET": "Kaikki oikeudet",
       "KAIKKIEN_MUOKKAUS": "Hankkeen ja hakemusten muokkaus",
@@ -905,11 +914,14 @@
     },
     "buttons": {
       "resendInvitation": "Lähetä kutsulinkki uudelleen",
-      "invitationSent": "Kutsulinkki lähetetty"
+      "invitationSent": "Kutsulinkki lähetetty",
+      "edit": "Muokkaa tietoja"
     },
     "labels": {
       "ownInformation": "Omat käyttäjätietosi",
       "userIdentified": "Kirjautunut hankkeelle tunnistautuneena",
+      "userIdentifiedLong": "Käyttäjä on kirjautunut hankkeelle tunnistautuneena",
+      "invitationSent": "Kutsulinkki Haitattomaan lähetetty",
       "userMenu": "Käyttäjävalikko"
     },
     "userIdentified": "Käyttäjä tunnistautunut"

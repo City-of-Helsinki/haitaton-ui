@@ -1,0 +1,23 @@
+.container {
+  background-color: var(--color-white);
+  height: 100%;
+}
+
+.header {
+  background-color: var(--color-summer-light);
+  padding-top: var(--spacing-2-xl);
+  padding-bottom: var(--spacing-xl);
+}
+
+.mainContent {
+  padding-top: var(--spacing-m);
+  padding-bottom: var(--spacing-m);
+}
+
+.breadcrumb > nav {
+  margin: 0 !important;
+}
+
+.formContainer {
+  max-width: 664px;
+}

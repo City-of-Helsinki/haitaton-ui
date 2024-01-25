@@ -243,6 +243,13 @@
         "title": "Haitaton - Access rights management"
       }
     },
+    "EDIT_USER": {
+      "path": "/hankesalkku/:hankeTunnus/kayttajat/:id",
+      "headerLabel": "Käyttäjätietojen muokkaus",
+      "meta": {
+        "title": "Haitaton - Käyttäjätietojen muokkaus"
+      }
+    },
     "PUBLIC_HANKKEET": {
       "path": "/publicprojects",
       "headerLabel": "Projects in public areas",

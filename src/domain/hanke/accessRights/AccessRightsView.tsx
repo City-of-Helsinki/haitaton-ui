@@ -1,11 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
-  Accordion,
-  Notification,
   Pagination,
   SearchInput,
   Table,
-  Link as HDSLink,
   IconEnvelope,
   IconCheckCircleFill,
   Breadcrumb,
@@ -13,9 +10,10 @@ import {
   IconClock,
   IconMenuDots,
   LoadingSpinner,
+  IconPen,
+  Button,
 } from 'hds-react';
-import { Box, Flex, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
-import { useMutation } from 'react-query';
+import { Box, Flex, Grid, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import {
   Column,
   useAsyncDebounce,
@@ -24,15 +22,23 @@ import {
   useSortBy,
   useTable,
 } from 'react-table';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './AccessRightsView.module.scss';
 import { Language } from '../../../common/types/language';
 import { HankeUser, SignedInUser } from '../hankeUsers/hankeUser';
 import useHankeViewPath from '../hooks/useHankeViewPath';
-import { resendInvitation } from '../hankeUsers/hankeUsersApi';
 import Container from '../../../common/components/container/Container';
 import UserCard from './UserCard';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
+import useLinkPath from '../../../common/hooks/useLinkPath';
+import { ROUTES } from '../../../common/types/route';
+import AccessRightsInfo from './AccessRightsInfo';
+import useResendInvitation from '../hankeUsers/hooks/useResendInvitation';
+import {
+  InvitationErrorNotification,
+  InvitationSuccessNotification,
+} from '../hankeUsers/InvitationNotification';
 
 function UserIcon({
   user,
@@ -95,9 +101,11 @@ type Props = {
 
 function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: Readonly<Props>) {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const hankeViewPath = useHankeViewPath(hankeTunnus);
-  const [usersData, setUsersData] = useState<(HankeUserWithWholeName & { modified?: boolean })[]>(
-    () => hankeUsers.map(addWholeName),
+  const getEditUserPath = useLinkPath(ROUTES.EDIT_USER);
+  const [usersData, setUsersData] = useState<HankeUserWithWholeName[]>(() =>
+    hankeUsers.map(addWholeName),
   );
 
   const columns: Column<HankeUserWithWholeName>[] = useMemo(() => {
@@ -138,9 +146,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
     setUsersData(hankeUsers.map(addWholeName));
   }, [hankeUsers]);
 
-  const resendInvitationMutation = useMutation(resendInvitation);
-  // List of user ids for tracking which users have been sent the invitation link
-  const linksSentTo = useRef<string[]>([]);
+  const { resendInvitationMutation, linksSentTo, sendInvitation } = useResendInvitation();
 
   const [usersSearchValue, setUsersSearchValue] = useState('');
 
@@ -166,6 +172,17 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
     handleSort();
   }
 
+  function navigateToEditUserView(id: string) {
+    navigate(getEditUserPath({ hankeTunnus, id }));
+  }
+
+  function canEditUser(user: HankeUser) {
+    return (
+      user.id === signedInUser?.hankeKayttajaId ||
+      signedInUser?.kayttooikeudet.includes('MODIFY_USER')
+    );
+  }
+
   function getUserName(args: HankeUserWithWholeName) {
     return (
       <Flex>
@@ -179,48 +196,48 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
     return t(`hankeUsers:accessRightLevels:${args.kayttooikeustaso}`);
   }
 
-  function getInvitationMenu(args: HankeUser) {
-    if (args.tunnistautunut) {
-      return <></>;
-    }
-
+  function getActionButtons(args: HankeUser) {
     const linkSent = linksSentTo.current.includes(args.id);
     const isSending =
       resendInvitationMutation.isLoading && resendInvitationMutation.variables === args.id;
 
-    function sendInvitation() {
-      resendInvitationMutation.mutate(args.id, {
-        onSuccess(data) {
-          linksSentTo.current.push(data);
-        },
-      });
-    }
-
     return (
-      <Menu>
-        <MenuButton>
-          <Box height="16px">
-            {isSending ? (
-              <LoadingSpinner small />
-            ) : (
-              <IconMenuDots
-                style={{ display: 'block' }}
-                color="var(--color-bus)"
-                ariaHidden={false}
-                ariaLabel={t('hankeUsers:labels:userMenu')}
-              />
-            )}
-          </Box>
-        </MenuButton>
-        <MenuList>
-          <MenuItem onClick={sendInvitation} isDisabled={linkSent}>
-            <Flex alignItems="center" gap="var(--spacing-2-xs)" color="var(--color-bus)">
-              <IconEnvelope size="xs" />
-              {t('hankeUsers:buttons:resendInvitation')}
-            </Flex>
-          </MenuItem>
-        </MenuList>
-      </Menu>
+      <Grid gridTemplateColumns="25px 25px" gap="var(--spacing-s)" justifyContent="flex-end">
+        {canEditUser(args) ? (
+          <Link to={getEditUserPath({ hankeTunnus, id: args.id })}>
+            <IconPen
+              style={{ display: 'block' }}
+              color="var(--color-bus)"
+              ariaHidden={false}
+              ariaLabel={t('hankeUsers:buttons:edit')}
+            />
+          </Link>
+        ) : null}
+        {!args.tunnistautunut && signedInUser?.kayttooikeudet.includes('RESEND_INVITATION') ? (
+          <Menu>
+            <MenuButton>
+              {isSending ? (
+                <LoadingSpinner small />
+              ) : (
+                <IconMenuDots
+                  style={{ display: 'block' }}
+                  color="var(--color-bus)"
+                  ariaHidden={false}
+                  ariaLabel={t('hankeUsers:labels:userMenu')}
+                />
+              )}
+            </MenuButton>
+            <MenuList>
+              <MenuItem onClick={() => sendInvitation(args)} isDisabled={linkSent}>
+                <Flex alignItems="center" gap="var(--spacing-2-xs)" color="var(--color-bus)">
+                  <IconEnvelope size="xs" />
+                  {t('hankeUsers:buttons:resendInvitation')}
+                </Flex>
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        ) : null}
+      </Grid>
     );
   }
 
@@ -249,16 +266,13 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
       isSortable: true,
       transform: getAccessRightLabel,
     },
-  ];
-
-  if (signedInUser?.kayttooikeudet.includes('RESEND_INVITATION')) {
-    tableCols.push({
+    {
       headerName: null,
-      key: 'invitationMenu',
+      key: 'actionButtons',
       isSortable: false,
-      transform: getInvitationMenu,
-    });
-  }
+      transform: getActionButtons,
+    },
+  ];
 
   return (
     <article className={styles.container}>
@@ -281,48 +295,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
       </header>
 
       <Container className={styles.mainContent}>
-        <Accordion
-          className={styles.infoAccordion}
-          language={i18n.language as Language}
-          heading={t('hankeUsers:accessRightsInfo:heading')}
-        >
-          <ul className={styles.infoList}>
-            <li>
-              <Trans i18nKey="hankeUsers:accessRightsInfo:KAIKKI_OIKEUDET">
-                <strong>Kaikki oikeudet</strong> mahdollistaa hankkeen ja sen hakemusten sisällön
-                muokkaamisen, kaikkien käyttöoikeuksien muokkaamisen sekä hankkeen poistamisen, kun
-                hankkeella ei ole päätöksen saaneita hakemuksia.
-              </Trans>
-            </li>
-            <li>
-              <Trans i18nKey="hankeUsers:accessRightsInfo:KAIKKIEN_MUOKKAUS">
-                <strong>Hankkeen ja hakemusten muokkaus -oikeus</strong> mahdollistaa hankkeen ja
-                sen hakemusten sisällön muokkaamisen ja luonnin sekä muiden käyttöoikeuksien
-                muokkaamisen, paitsi “Kaikki oikeudet”, jolla voi poistaa hankkeen.
-              </Trans>
-            </li>
-            <li>
-              <Trans i18nKey="hankeUsers:accessRightsInfo:HANKEMUOKKAUS">
-                <strong>Hankemuokkaus-oikeus</strong> mahdollistaa hankkeen tietojen muokkaamisen,
-                mutta ei käyttöoikeuksien muokkausta. Hakemustietoihin on tällöin katseluoikeudet.
-              </Trans>
-            </li>
-            <li>
-              <Trans i18nKey="hankeUsers:accessRightsInfo:HAKEMUSASIOINTI">
-                <strong>Hakemusasiointi-oikeus</strong> mahdollistaa uusien hakemusten luomisen
-                hankkeelle sekä hankkeen hakemusten tietojen muokkaamisen.
-              </Trans>
-            </li>
-            <li>
-              <Trans i18nKey="hankeUsers:accessRightsInfo:KATSELUOIKEUS">
-                <strong>Katselu-oikeus</strong> mahdollistaa hankkeen ja sen hakemusten tietojen
-                katselun. Katseluoikeus asetetaan automaattisesti kaikille hankkeelle ja
-                hakemukselle lisätyille henkilöille.
-              </Trans>
-            </li>
-          </ul>
-          <p>{t('hankeUsers:accessRightsInfo:modifyInfo')}</p>
-        </Accordion>
+        <AccessRightsInfo />
 
         <Box marginBottom="var(--spacing-l)">
           <h2 className="heading-l">{t('hankeUsers:users')}</h2>
@@ -356,10 +329,21 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
                 user={row.original}
                 headingIcon={<UserIcon user={row.original} signedInUser={signedInUser} />}
               >
-                <Box marginBottom="var(--spacing-s)">
+                <Box marginBottom="var(--spacing-m)">
                   <strong>{t('hankeUsers:accessRight')}:</strong>{' '}
                   {getAccessRightLabel(row.original)}
                 </Box>
+                <Flex>
+                  {canEditUser(row.original) && (
+                    <Button
+                      iconLeft={<IconPen />}
+                      variant="secondary"
+                      onClick={() => navigateToEditUserView(row.original.id)}
+                    >
+                      {t('hankeUsers:buttons:edit')}
+                    </Button>
+                  )}
+                </Flex>
               </UserCard>
             );
           })}
@@ -377,39 +361,15 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
         </div>
 
         {resendInvitationMutation.isSuccess && (
-          <Notification
-            position="top-right"
-            dismissible
-            autoClose
-            autoCloseDuration={4000}
-            type="success"
-            label={t('hankeUsers:notifications:invitationSentSuccessLabel')}
-            closeButtonLabelText={t('common:components:notification:closeButtonLabelText')}
-            onClose={() => resendInvitationMutation.reset()}
-          >
+          <InvitationSuccessNotification onClose={() => resendInvitationMutation.reset()}>
             {t('hankeUsers:notifications:invitationSentSuccessText', {
               email: hankeUsers.find((user) => user.id === resendInvitationMutation.data)
                 ?.sahkoposti,
             })}
-          </Notification>
+          </InvitationSuccessNotification>
         )}
         {resendInvitationMutation.isError && (
-          <Notification
-            position="top-right"
-            dismissible
-            type="error"
-            label={t('hankeUsers:notifications:invitationSentErrorLabel')}
-            closeButtonLabelText={t('common:components:notification:closeButtonLabelText')}
-            onClose={() => resendInvitationMutation.reset()}
-          >
-            <Trans i18nKey="hankeUsers:notifications:invitationSentErrorText">
-              <p>
-                Kutsulinkin lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota
-                yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa
-                <HDSLink href="mailto:haitatontuki@hel.fi">haitatontuki@hel.fi</HDSLink>.
-              </p>
-            </Trans>
-          </Notification>
+          <InvitationErrorNotification onClose={() => resendInvitationMutation.reset()} />
         )}
       </Container>
     </article>
