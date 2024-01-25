@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from '../../testUtils/render';
 import { Contacts } from './Contacts';
 import hankkeet from '../mocks/data/hankkeet-data';
 import applications from '../mocks/data/hakemukset-data';
-import { HankeContact, HankeDataDraft } from '../types/hanke';
+import { HankeYhteystieto, HankeDataDraft } from '../types/hanke';
 import { JohtoselvitysFormValues } from './types';
 
 jest.setTimeout(10000);
@@ -29,7 +29,7 @@ function Form({
 
 test('Contacts can be filled with hanke contact info', async () => {
   const hanke = hankkeet[1];
-  const hankeOwner: HankeContact = hanke.omistajat![0];
+  const hankeOwner: HankeYhteystieto = hanke.omistajat![0];
 
   const { user } = render(<Form hanke={hanke} />);
 

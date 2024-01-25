@@ -94,21 +94,22 @@ export type HankeContactTypeKey =
   | HANKE_CONTACT_TYPE.TOTEUTTAJAT
   | HANKE_CONTACT_TYPE.MUUTTAHOT;
 
-export interface HankeSubContact {
+export interface HankeYhteyshenkilo {
+  id?: string | null;
   etunimi: string;
   sukunimi: string;
-  email: string;
+  sahkoposti: string;
   puhelinnumero: string;
 }
 
-export interface HankeContact {
+export interface HankeYhteystieto {
   id?: number | null;
   tyyppi: keyof typeof CONTACT_TYYPPI | null;
   nimi: string;
   email: string;
   puhelinnumero: string;
   ytunnus: string | null;
-  alikontaktit?: HankeSubContact[];
+  yhteyshenkilot?: HankeYhteyshenkilo[];
 }
 
 export type HankeMuuTaho = {
@@ -118,13 +119,15 @@ export type HankeMuuTaho = {
   osasto: string;
   email: string;
   puhelinnumero?: string;
-  alikontaktit?: HankeSubContact[];
+  yhteyshenkilot?: HankeYhteyshenkilo[];
 };
 
-export type HankeContacts = Array<(HankeContact | HankeMuuTaho)[] | undefined>;
+export type HankeContacts = Array<(HankeYhteystieto | HankeMuuTaho)[] | undefined>;
 
-export function isHankeContact(contact: HankeContact | HankeMuuTaho): contact is HankeContact {
-  return (contact as HankeContact).ytunnus !== undefined;
+export function isHankeContact(
+  contact: HankeYhteystieto | HankeMuuTaho,
+): contact is HankeYhteystieto {
+  return (contact as HankeYhteystieto).ytunnus !== undefined;
 }
 
 export enum CONTACT_TYYPPI {
@@ -192,9 +195,9 @@ export interface HankeData {
   tyomaaKatuosoite: string | null;
   tyomaaTyyppi: HANKE_TYOMAATYYPPI_KEY[];
   alueet: HankeAlue[];
-  omistajat: Array<HankeContact>;
-  rakennuttajat: Array<HankeContact>;
-  toteuttajat: Array<HankeContact>;
+  omistajat: Array<HankeYhteystieto>;
+  rakennuttajat: Array<HankeYhteystieto>;
+  toteuttajat: Array<HankeYhteystieto>;
   muut: Array<HankeMuuTaho>;
   tormaystarkasteluTulos: HankeIndexData | null;
   status: HANKE_STATUS_KEY;

@@ -42,7 +42,7 @@ export enum CONTACT_FORMFIELD {
   PUHELINNUMERO = 'puhelinnumero',
   ORGANISAATIO = 'organisaatioNimi',
   OSASTO = 'osasto',
-  ALIKONTAKTIT = 'alikontaktit',
+  YHTEYSHENKILOT = 'yhteyshenkilot',
 }
 
 export enum CONTACT_PERSON_FORMFIELD {
