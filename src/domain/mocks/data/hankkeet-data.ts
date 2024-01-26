@@ -70,11 +70,12 @@ const hankkeet: HankeDataDraft[] = [
         ytunnus: '6006332-9',
         email: 'yritys@testi.com',
         puhelinnumero: '0000000000',
-        alikontaktit: [
+        yhteyshenkilot: [
           {
+            id: '129fd4d0-4a00-4c43-8c02-2e32c31dd1f9',
             etunimi: 'Esa',
             sukunimi: 'Kauppinen',
-            email: 'esa.kauppinen@maansiirtofirma.com',
+            sahkoposti: 'esa.kauppinen@maansiirtofirma.com',
             puhelinnumero: '0000000000',
           },
         ],
@@ -88,17 +89,19 @@ const hankkeet: HankeDataDraft[] = [
         ytunnus: '6502327-0',
         email: 'yritys2@testi.com',
         puhelinnumero: '1111111111',
-        alikontaktit: [
+        yhteyshenkilot: [
           {
+            id: 'ef9856fc-6b8b-4fff-b5f6-3522af2f4554',
             etunimi: 'Matti',
             sukunimi: 'Meikäläinen',
-            email: 'matti.meikalainen@testi.com',
+            sahkoposti: 'matti.meikalainen@testi.com',
             puhelinnumero: '1111111111',
           },
           {
+            id: '129fd4d0-4a00-4c43-8c02-2e32c31dd1f9',
             etunimi: 'Esa',
             sukunimi: 'Kauppinen',
-            email: 'esa.kauppinen@maansiirtofirma.com',
+            sahkoposti: 'esa.kauppinen@maansiirtofirma.com',
             puhelinnumero: '1111111111',
           },
         ],
@@ -113,11 +116,12 @@ const hankkeet: HankeDataDraft[] = [
         puhelinnumero: '2222222222',
         organisaatioNimi: 'Organisaatio',
         osasto: '',
-        alikontaktit: [
+        yhteyshenkilot: [
           {
+            id: '197a6051-6043-4c3d-9889-95e263d17f76',
             etunimi: 'Matti',
             sukunimi: 'Meikäläinen',
-            email: 'matti.meikalainen@testi.com',
+            sahkoposti: 'matti.meikalainen@testi.com',
             puhelinnumero: '2222222222',
           },
         ],
@@ -249,11 +253,12 @@ const hankkeet: HankeDataDraft[] = [
         ytunnus: '5341034-5',
         email: 'toimisto@testi.com',
         puhelinnumero: '0501234567',
-        alikontaktit: [
+        yhteyshenkilot: [
           {
+            id: '129fd4d0-4a00-4c43-8c02-2e32c31dd1f9',
             etunimi: 'Esa',
             sukunimi: 'Kauppinen',
-            email: 'esa.kauppinen@maansiirtofirma.com',
+            sahkoposti: 'esa.kauppinen@maansiirtofirma.com',
             puhelinnumero: '0507654321',
           },
         ],

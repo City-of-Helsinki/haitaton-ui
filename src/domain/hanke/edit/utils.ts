@@ -2,7 +2,7 @@ import { Feature } from 'ol';
 import Polygon from 'ol/geom/Polygon';
 import { Polygon as GeoJSONPolygon } from 'geojson';
 import { max, min } from 'date-fns';
-import { HankeAlue, HankeContact, HankeDataDraft, HankeMuuTaho } from '../../types/hanke';
+import { HankeAlue, HankeYhteystieto, HankeDataDraft, HankeMuuTaho } from '../../types/hanke';
 import { FORMFIELD, HankeAlueFormState, HankeDataFormState } from './types';
 import { formatFeaturesToHankeGeoJSON, getFeatureFromHankeGeometry } from '../../map/utils';
 import { getSurfaceArea } from '../../../common/components/map/utils';
@@ -31,7 +31,7 @@ export function getAreasMaxEndDate(areas: HankeAlue[] | undefined) {
   return maxAreaEndDate;
 }
 
-const isContactEmpty = ({ nimi, email, puhelinnumero }: HankeContact | HankeMuuTaho) =>
+const isContactEmpty = ({ nimi, email, puhelinnumero }: HankeYhteystieto | HankeMuuTaho) =>
   nimi === '' && email === '' && puhelinnumero === '';
 
 /**

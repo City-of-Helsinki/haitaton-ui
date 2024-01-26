@@ -5,7 +5,7 @@ import { Accordion, Button, Fieldset, IconPlusCircle } from 'hds-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { CONTACT_FORMFIELD, FORMFIELD, FormProps } from './types';
 import {
-  HankeContact,
+  HankeYhteystieto,
   CONTACT_TYYPPI,
   HANKE_CONTACT_TYPE,
   HankeContactTypeKey,
@@ -20,7 +20,7 @@ import ResponsiveGrid from '../../../common/components/grid/ResponsiveGrid';
 import './HankeForm.styles.scss';
 import FormContact from '../../forms/components/FormContact';
 
-const CONTACT_FIELDS: Array<keyof HankeContact> = [
+const CONTACT_FIELDS: Array<keyof HankeYhteystieto> = [
   'tyyppi',
   'nimi',
   'ytunnus',
@@ -28,14 +28,14 @@ const CONTACT_FIELDS: Array<keyof HankeContact> = [
   'puhelinnumero',
 ];
 
-function getEmptyContact(): Omit<HankeContact, 'id'> {
+function getEmptyContact(): Omit<HankeYhteystieto, 'id'> {
   return {
     nimi: '',
     tyyppi: null,
     ytunnus: '',
     email: '',
     puhelinnumero: '',
-    alikontaktit: [],
+    yhteyshenkilot: [],
   };
 }
 
@@ -47,12 +47,12 @@ function getEmptyOtherContact(): HankeMuuTaho {
     osasto: '',
     email: '',
     puhelinnumero: '',
-    alikontaktit: [],
+    yhteyshenkilot: [],
   };
 }
 
 const ContactField: React.FC<{
-  field: keyof HankeContact;
+  field: keyof HankeYhteystieto;
   fieldName: string;
   contactType: HankeContactTypeKey;
   index: number;
