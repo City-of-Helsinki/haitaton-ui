@@ -36,7 +36,7 @@
     "@emotion/core": "^11.0.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@hookform/resolvers": "^2.9.8",
+    "@hookform/resolvers": "^3.3.4",
     "@popperjs/core": "^2.11.8",
     "@reduxjs/toolkit": "^2.0.1",
     "@sentry/react": "^7.92.0",
