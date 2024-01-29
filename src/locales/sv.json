@@ -243,6 +243,13 @@
         "title": "Haitaton – Hantering av användningsrättigheter"
       }
     },
+    "EDIT_USER": {
+      "path": "/hankesalkku/:hankeTunnus/kayttajat/:id",
+      "headerLabel": "Käyttäjätietojen muokkaus",
+      "meta": {
+        "title": "Haitaton - Käyttäjätietojen muokkaus"
+      }
+    },
     "PUBLIC_HANKKEET": {
       "path": "/allmannaprojekt",
       "headerLabel": "Projekt på allmänna områden",

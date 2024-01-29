@@ -20,22 +20,6 @@
   margin: 0 !important;
 }
 
-.infoAccordion {
-  margin-bottom: var(--spacing-m);
-
-  .infoList {
-    padding-left: var(--spacing-m);
-
-    & > li {
-      margin-bottom: var(--spacing-2-xs);
-
-      &:last-child {
-        margin-bottom: var(--spacing-l);
-      }
-    }
-  }
-}
-
 .searchInput {
   max-width: 328px;
   margin-bottom: var(--spacing-m);

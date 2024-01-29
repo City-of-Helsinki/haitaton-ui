@@ -5,18 +5,24 @@ import { ContactPerson } from '../../hanke/edit/types';
 
 let users = [...usersData];
 
+function mapToHankeUser(user: (typeof users)[0]): HankeUser {
+  return {
+    id: user.id,
+    sahkoposti: user.sahkoposti,
+    etunimi: user.etunimi,
+    sukunimi: user.sukunimi,
+    puhelinnumero: user.puhelinnumero,
+    kayttooikeustaso: user.kayttooikeustaso as AccessRightLevel,
+    tunnistautunut: user.tunnistautunut,
+  };
+}
+
+export async function read(id: string): Promise<HankeUser | undefined> {
+  return users.map(mapToHankeUser).find((user) => user.id === id);
+}
+
 export async function readAll(hankeTunnus: string): Promise<HankeUser[]> {
-  return users
-    .filter((user) => user.hankeTunnus === hankeTunnus)
-    .map((user) => ({
-      id: user.id,
-      sahkoposti: user.sahkoposti,
-      etunimi: user.etunimi,
-      sukunimi: user.sukunimi,
-      puhelinnumero: user.puhelinnumero,
-      kayttooikeustaso: user.kayttooikeustaso as AccessRightLevel,
-      tunnistautunut: user.tunnistautunut,
-    }));
+  return users.filter((user) => user.hankeTunnus === hankeTunnus).map(mapToHankeUser);
 }
 
 export async function create(hankeTunnus: string, user: ContactPerson) {

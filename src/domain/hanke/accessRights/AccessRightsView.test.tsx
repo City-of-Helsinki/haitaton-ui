@@ -23,6 +23,7 @@ function getSignedInUser(options: Partial<SignedInUser> = {}): SignedInUser {
       'MODIFY_DELETE_PERMISSIONS',
       'EDIT_APPLICATIONS',
       'MODIFY_APPLICATION_PERMISSIONS',
+      'MODIFY_USER',
     ],
   } = options;
 
@@ -281,4 +282,46 @@ test('Should not show invitation menus if user does not have permission to send 
       name: 'Käyttäjävalikko',
     }),
   ).toHaveLength(0);
+});
+
+test('Should navigate to edit user view when clicking edit link', async () => {
+  const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+  await user.click(screen.getAllByRole('img', { name: 'Muokkaa tietoja' })[1]);
+
+  expect(window.location.pathname).toBe(
+    '/fi/hankesalkku/HAI22-2/kayttajat/3fa85f64-5717-4562-b3fc-2c963f66afa7',
+  );
+});
+
+test('Should navigate to edit user view when clicking edit button in user card', async () => {
+  const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+  await user.click(screen.getAllByRole('button', { name: 'Muokkaa tietoja' })[1]);
+
+  expect(window.location.pathname).toBe(
+    '/fi/hankesalkku/HAI22-2/kayttajat/3fa85f64-5717-4562-b3fc-2c963f66afa7',
+  );
+});
+
+test('Should show edit links or buttons only for self if user does not have edit permission', async () => {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>(
+          getSignedInUser({ kayttooikeustaso: 'KATSELUOIKEUS', kayttooikeudet: ['VIEW'] }),
+        ),
+      );
+    }),
+  );
+
+  render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.getAllByRole('img', { name: 'Muokkaa tietoja' })).toHaveLength(1);
+  expect(screen.getAllByRole('button', { name: 'Muokkaa tietoja' })).toHaveLength(1);
 });

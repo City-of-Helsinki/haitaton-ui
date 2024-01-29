@@ -11,6 +11,7 @@ export function usePermissionsForHanke(hankeTunnus?: string) {
     () => getSignedInUserForHanke(hankeTunnus),
     {
       enabled: Boolean(hankeTunnus) && features.accessRights,
+      staleTime: 30000,
     },
   );
 }

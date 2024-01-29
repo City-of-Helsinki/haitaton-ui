@@ -253,7 +253,7 @@ const HankeView: React.FC<Props> = ({
               iconLeft={<IconUser aria-hidden="true" />}
               theme="coat"
             >
-              {t('hankeList:buttons:editRights')}
+              {t('hankeUsers:userManagementTitle')}
             </Button>
           </FeatureFlags>
           <FeatureFlags flags={['hanke']}>

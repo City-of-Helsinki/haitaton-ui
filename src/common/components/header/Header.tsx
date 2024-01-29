@@ -8,6 +8,7 @@ import {
   useLocalizedRoutes,
   HANKETUNNUS_REGEXP,
   APPLICATION_ID_REGEXP,
+  USER_ID_REGEXP,
 } from '../../hooks/useLocalizedRoutes';
 import authService from '../../../domain/auth/authService';
 import useUser from '../../../domain/auth/useUser';
@@ -57,10 +58,15 @@ function HaitatonHeader() {
     const hankeTunnus = hankeTunnusMatches?.[0];
     const applicationIdMatches = APPLICATION_ID_REGEXP.exec(location.pathname);
     const applicationId = applicationIdMatches?.[0];
+    const userIdMatches = USER_ID_REGEXP.exec(location.pathname);
+    const userId = userIdMatches?.[0];
 
     let path = lang + t(`routes:${routeKey}.path`);
     if (hankeTunnus) {
       path = path.replace(':hankeTunnus', hankeTunnus);
+    }
+    if (userId) {
+      path = path.replace(':id', userId);
     }
     if (applicationId) {
       path = path.replace(':id', applicationId);

@@ -13,7 +13,12 @@ export async function createHankeUser({
   return data;
 }
 
-export async function getHankeUsers(hankeTunnus: string) {
+export async function getUser(id?: string) {
+  const { data } = await api.get<HankeUser>(`/kayttajat/${id}`);
+  return data;
+}
+
+export async function getHankeUsers(hankeTunnus?: string) {
   const { data } = await api.get<{ kayttajat: HankeUser[] }>(`hankkeet/${hankeTunnus}/kayttajat`);
   return data.kayttajat;
 }

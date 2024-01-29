@@ -6,6 +6,7 @@ import { Language } from '../types/language';
 
 export const APPLICATION_ID_REGEXP = /(?<=\/)(\d+)/;
 export const HANKETUNNUS_REGEXP = /HAI\d{2}-(\d+)/;
+export const USER_ID_REGEXP = /(?<=\/)(.{8}-.{4}-.{4}-.{4}-.{12})/;
 
 type GetLocalizationParams = {
   useTranslationResponse: UseTranslationResponse<''>;
@@ -33,6 +34,7 @@ export const getMatchingRouteKey = (i18n: i18nInstance, language: Language, path
   const res: any = i18n.getDataByLanguage(language);
   let pathWithoutLocale = path.length > 3 ? path.substring(3) : path;
   pathWithoutLocale = pathWithoutLocale
+    .replace(USER_ID_REGEXP, ':id')
     .replace(APPLICATION_ID_REGEXP, ':id')
     .replace(HANKETUNNUS_REGEXP, ':hankeTunnus');
 

@@ -222,9 +222,16 @@ export const handlers = [
           'EDIT_APPLICATIONS',
           'MODIFY_APPLICATION_PERMISSIONS',
           'RESEND_INVITATION',
+          'MODIFY_USER',
         ],
       }),
     );
+  }),
+
+  rest.get(`${apiUrl}/kayttajat/:id`, async (req, res, ctx) => {
+    const { id } = req.params;
+    const user = await usersDB.read(id as string);
+    return res(ctx.status(200), ctx.json(user));
   }),
 
   rest.post(`${apiUrl}/kayttajat`, async (req, res, ctx) => {

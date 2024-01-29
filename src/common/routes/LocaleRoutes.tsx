@@ -22,6 +22,7 @@ import NotFoundPage from '../../pages/staticPages/404Page';
 import ManualPage from '../../pages/staticPages/ManualPage';
 import AccessRightsPage from '../../pages/AccessRightsPage';
 import UserIdentify from '../../domain/auth/components/UserIdentify';
+import EditUserPage from '../../pages/EditUserPage';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
@@ -46,6 +47,10 @@ const LocaleRoutes = () => {
       <Route
         path={t('routes:ACCESS_RIGHTS:path')}
         element={<PrivateRoute element={<AccessRightsPage />} />}
+      />
+      <Route
+        path={t('routes:EDIT_USER:path')}
+        element={<PrivateRoute element={<EditUserPage />} />}
       />
       <Route path={t('routes:HAITATON_INFO:path')} element={<InfoPage />} />
       <Route
