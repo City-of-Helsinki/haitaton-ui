@@ -72,13 +72,17 @@ function UserIcon({
   }
 }
 
+function sort(rowOneColumn: string, rowTwoColumn: string) {
+  if (rowOneColumn === rowTwoColumn) {
+    return 0;
+  }
+  return rowOneColumn > rowTwoColumn ? 1 : -1;
+}
+
 function sortCaseInsensitive(rowOneColumn: string, rowTwoColumn: string) {
   const rowOneColUpperCase = rowOneColumn.toUpperCase();
   const rowTwoColUpperCase = rowTwoColumn.toUpperCase();
-  if (rowOneColUpperCase === rowTwoColUpperCase) {
-    return 0;
-  }
-  return rowOneColUpperCase > rowTwoColUpperCase ? 1 : -1;
+  return sort(rowOneColUpperCase, rowTwoColUpperCase);
 }
 
 type HankeUserWithWholeName = HankeUser & { nimi: string };
@@ -138,9 +142,13 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
           return sortCaseInsensitive(rowOneColumn, rowTwoColumn);
         },
         array: (row1, row2, columnName) => {
-          const rowOneColumn: string[] = row1.values[columnName];
-          const rowTwoColumn: string[] = row2.values[columnName];
-          return sortCaseInsensitive(rowOneColumn.sort().join(' '), rowTwoColumn.sort().join(' '));
+          const rowOneColumnSorted: string[] = row1.values[columnName].toSorted(
+            (a: string, b: string) => sort(a, b),
+          );
+          const rowTwoColumnSorted: string[] = row2.values[columnName].toSorted(
+            (a: string, b: string) => sort(a, b),
+          );
+          return sort(rowOneColumnSorted.join(' '), rowTwoColumnSorted.join(' '));
         },
       },
     },
@@ -202,8 +210,8 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
   function getUserRoles(args: HankeUser) {
     return (
       <div>
-        {args.roolit.map((role, i) => (
-          <div key={i}>{t(`hankeUsers:roleLabels:${role}`)}</div>
+        {args.roolit.map((role) => (
+          <div>{t(`hankeUsers:roleLabels:${role}`)}</div>
         ))}
       </div>
     );
