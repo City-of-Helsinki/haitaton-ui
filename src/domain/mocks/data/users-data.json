@@ -6,6 +6,7 @@
     "sukunimi": "Meikäläinen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KAIKKI_OIKEUDET",
+    "roolit": [],
     "tunnistautunut": true,
     "hankeTunnus": "HAI22-2"
   },
@@ -16,6 +17,7 @@
     "sukunimi": "Työmies",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KAIKKIEN_MUOKKAUS",
+    "roolit": ["OMISTAJA"],
     "tunnistautunut": false,
     "hankeTunnus": "HAI22-2"
   },
@@ -26,6 +28,7 @@
     "sukunimi": "Asiakas",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "HANKEMUOKKAUS",
+    "roolit": ["MUU"],
     "tunnistautunut": true,
     "hankeTunnus": "HAI22-2"
   },
@@ -36,6 +39,7 @@
     "sukunimi": "Viljanen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KAIKKI_OIKEUDET",
+    "roolit": ["OMISTAJA"],
     "tunnistautunut": false,
     "hankeTunnus": "HAI22-2"
   },
@@ -46,6 +50,7 @@
     "sukunimi": "Testinen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
+    "roolit": ["TOTEUTTAJA"],
     "tunnistautunut": false,
     "hankeTunnus": "HAI22-2"
   },
@@ -56,6 +61,7 @@
     "sukunimi": "Marjanen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
+    "roolit": ["MUU"],
     "tunnistautunut": false,
     "hankeTunnus": "HAI22-2"
   },
@@ -66,6 +72,7 @@
     "sukunimi": "Marjanen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
+    "roolit": ["MUU"],
     "tunnistautunut": true,
     "hankeTunnus": "HAI22-2"
   },
@@ -76,6 +83,7 @@
     "sukunimi": "Selkonen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "HAKEMUSASIOINTI",
+    "roolit": ["RAKENNUTTAJA", "TOTEUTTAJA"],
     "tunnistautunut": true,
     "hankeTunnus": "HAI22-2"
   },
@@ -86,6 +94,7 @@
     "sukunimi": "Keijonen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
+    "roolit": ["MUU"],
     "tunnistautunut": true,
     "hankeTunnus": "HAI22-2"
   },
@@ -96,6 +105,7 @@
     "sukunimi": "Testinen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
+    "roolit": ["RAKENNUTTAJA"],
     "tunnistautunut": false,
     "hankeTunnus": "HAI22-2"
   },
@@ -106,6 +116,7 @@
     "sukunimi": "Taunonen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
+    "roolit": [],
     "tunnistautunut": false,
     "hankeTunnus": "HAI22-2"
   },
@@ -116,6 +127,7 @@
     "sukunimi": "Meikäläinen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
+    "roolit": [],
     "tunnistautunut": true,
     "hankeTunnus": "HAI22-2"
   }

@@ -88,6 +88,7 @@ function addWholeName(user: HankeUser): HankeUserWithWholeName {
 }
 
 const NAME_KEY = 'nimi';
+const ROLES_KEY = 'roolit';
 const EMAIL_KEY = 'sahkoposti';
 const PHONE_KEY = 'puhelinnumero';
 const ACCESS_RIGHT_LEVEL_KEY = 'kayttooikeustaso';
@@ -111,6 +112,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
   const columns: Column<HankeUserWithWholeName>[] = useMemo(() => {
     return [
       { accessor: NAME_KEY },
+      { accessor: ROLES_KEY, sortType: 'array' },
       { accessor: EMAIL_KEY },
       { accessor: PHONE_KEY },
       { accessor: ACCESS_RIGHT_LEVEL_KEY },
@@ -134,6 +136,11 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
           const rowOneColumn: string = row1.values[columnName];
           const rowTwoColumn: string = row2.values[columnName];
           return sortCaseInsensitive(rowOneColumn, rowTwoColumn);
+        },
+        array: (row1, row2, columnName) => {
+          const rowOneColumn: string[] = row1.values[columnName];
+          const rowTwoColumn: string[] = row2.values[columnName];
+          return sortCaseInsensitive(rowOneColumn.sort().join(' '), rowTwoColumn.sort().join(' '));
         },
       },
     },
@@ -189,6 +196,16 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
         <UserIcon user={args} signedInUser={signedInUser} />
         <p>{args.nimi}</p>
       </Flex>
+    );
+  }
+
+  function getUserRoles(args: HankeUser) {
+    return (
+      <div>
+        {args.roolit.map((role, i) => (
+          <div key={i}>{t(`hankeUsers:roleLabels:${role}`)}</div>
+        ))}
+      </div>
     );
   }
 
@@ -248,6 +265,12 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
       isSortable: true,
       customSortCompareFunction: sortCaseInsensitive,
       transform: getUserName,
+    },
+    {
+      headerName: t('hankeUsers:role'),
+      key: ROLES_KEY,
+      isSortable: true,
+      transform: getUserRoles,
     },
     {
       headerName: t('form:yhteystiedot:labels:email'),

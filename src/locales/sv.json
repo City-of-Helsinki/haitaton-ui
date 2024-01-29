@@ -817,7 +817,14 @@
     }
   },
   "hankeUsers": {
+    "role": "Roll i projektet",
     "accessRights": "Användningsrättigheter",
+    "roleLabels": {
+      "OMISTAJA": "Ägare",
+      "RAKENNUTTAJA": "Byggaktör",
+      "TOTEUTTAJA": "Genomförare",
+      "MUU": "Annan"
+    },
     "accessRightLevels": {
       "KAIKKI_OIKEUDET": "Alla rättigheter",
       "KAIKKIEN_MUOKKAUS": "Ändringar i projekt och ansökningar",

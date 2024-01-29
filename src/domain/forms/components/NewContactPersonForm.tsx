@@ -6,8 +6,8 @@ import { Button, Fieldset, IconCheck, IconCross } from 'hds-react';
 import ResponsiveGrid from '../../../common/components/grid/ResponsiveGrid';
 import TextInput from '../../../common/components/textInput/TextInput';
 import { createHankeUser } from '../../hanke/hankeUsers/hankeUsersApi';
-import { contactPersonSchema } from '../../hanke/edit/hankeSchema';
-import { ContactPerson, CONTACT_PERSON_FORMFIELD } from '../../hanke/edit/types';
+import { yhteyshenkiloSchema } from '../../hanke/edit/hankeSchema';
+import { Yhteyshenkilo, YHTEYSHENKILO_FORMFIELD } from '../../hanke/edit/types';
 import styles from './NewContactPersonForm.module.scss';
 import { HankeUser } from '../../hanke/hankeUsers/hankeUser';
 
@@ -21,9 +21,9 @@ type Props = {
 
 function NewContactPersonForm({ hankeTunnus, onContactPersonAdded, onClose }: Readonly<Props>) {
   const { t } = useTranslation();
-  const formContext = useForm<ContactPerson>({
+  const formContext = useForm<Yhteyshenkilo>({
     mode: 'onTouched',
-    resolver: yupResolver(contactPersonSchema),
+    resolver: yupResolver(yhteyshenkiloSchema),
   });
   const { getValues, trigger } = formContext;
   const { mutate } = useMutation(createHankeUser);
@@ -63,24 +63,24 @@ function NewContactPersonForm({ hankeTunnus, onContactPersonAdded, onClose }: Re
       >
         <ResponsiveGrid maxColumns={2}>
           <TextInput
-            name={CONTACT_PERSON_FORMFIELD.ETUNIMI}
+            name={YHTEYSHENKILO_FORMFIELD.ETUNIMI}
             label={t('hankeForm:labels:etunimi')}
             required
           />
           <TextInput
-            name={CONTACT_PERSON_FORMFIELD.SUKUNIMI}
+            name={YHTEYSHENKILO_FORMFIELD.SUKUNIMI}
             label={t('hankeForm:labels:sukunimi')}
             required
           />
         </ResponsiveGrid>
         <ResponsiveGrid maxColumns={2}>
           <TextInput
-            name={CONTACT_PERSON_FORMFIELD.EMAIL}
+            name={YHTEYSHENKILO_FORMFIELD.EMAIL}
             label={t('hankeForm:labels:email')}
             required
           />
           <TextInput
-            name={CONTACT_PERSON_FORMFIELD.PUHELINNUMERO}
+            name={YHTEYSHENKILO_FORMFIELD.PUHELINNUMERO}
             label={t('hankeForm:labels:puhelinnumero')}
             required
           />

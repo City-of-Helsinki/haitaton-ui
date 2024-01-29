@@ -1,13 +1,13 @@
 import api from '../../api/api';
 import { HankeUser, IdentificationResponse, SignedInUser, SignedInUserByHanke } from './hankeUser';
-import { ContactPerson } from '../edit/types';
+import { Yhteyshenkilo } from '../edit/types';
 
 export async function createHankeUser({
   hankeTunnus,
   user,
 }: {
   hankeTunnus: string;
-  user: ContactPerson;
+  user: Yhteyshenkilo;
 }) {
   const { data } = await api.post<HankeUser>(`hankkeet/${hankeTunnus}/kayttajat`, user);
   return data;

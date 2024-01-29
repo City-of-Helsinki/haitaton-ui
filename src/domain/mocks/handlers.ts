@@ -6,7 +6,7 @@ import * as hakemuksetDB from './data/hakemukset';
 import * as usersDB from './data/users';
 import ApiError from './apiError';
 import { IdentificationResponse, SignedInUser } from '../hanke/hankeUsers/hankeUser';
-import { ContactPerson } from '../hanke/edit/types';
+import { Yhteyshenkilo } from '../hanke/edit/types';
 
 const apiUrl = '/api';
 
@@ -181,7 +181,7 @@ export const handlers = [
 
   rest.post(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat`, async (req, res, ctx) => {
     const { hankeTunnus } = req.params;
-    const user: ContactPerson = await req.json();
+    const user: Yhteyshenkilo = await req.json();
     const createdUser = await usersDB.create(hankeTunnus as string, user);
     return res(ctx.status(200), ctx.json(createdUser));
   }),
