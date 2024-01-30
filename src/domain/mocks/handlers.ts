@@ -193,7 +193,7 @@ export const handlers = [
     return res(ctx.status(200));
   }),
 
-  rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
+  rest.get(`${apiUrl}/hankkeet/:hankeTunnus/whoami`, async (req, res, ctx) => {
     const { hankeTunnus } = req.params;
 
     if (hankeTunnus === 'SMTGEN2_1') {
@@ -263,5 +263,12 @@ export const handlers = [
 
   rest.get(`${apiUrl}/hankkeet/:hankeTunnus/liitteet`, async (_, res, ctx) => {
     return res(ctx.status(200), ctx.json([]));
+  }),
+
+  rest.get(`${apiUrl}/profiili/verified-name`, async (_, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({ firstName: 'Testi Tauno Tahvo', lastName: 'Testinen', givenName: 'Testi' }),
+    );
   }),
 ];

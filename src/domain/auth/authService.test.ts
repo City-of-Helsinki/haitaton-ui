@@ -17,12 +17,15 @@ describe('authService', () => {
 
   describe('getUser', () => {
     it('should resolve to the user value which has been resolved from getUser', async () => {
-      expect.assertions(1);
+      expect.assertions(4);
       jest.spyOn(userManager, 'getUser').mockResolvedValueOnce(mockUser);
 
       const user = await authService.getUser();
 
-      expect(user).toBe(mockUser);
+      expect(user?.id_token).toBe(mockUser.id_token);
+      expect(user?.session_state).toBe(mockUser.session_state);
+      expect(user?.access_token).toBe(mockUser.access_token);
+      expect(user?.profile.name).toBe('Testi Testinen');
     });
   });
 
