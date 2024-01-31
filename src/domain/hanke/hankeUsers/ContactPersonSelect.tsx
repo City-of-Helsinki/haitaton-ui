@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { IconUser } from 'hds-react';
 import { HankeUser } from './hankeUser';
 import { HankeYhteyshenkilo } from '../../types/hanke';
 import { mapHankeUserToHankeYhteyshenkilo } from './utils';
@@ -28,6 +29,7 @@ function ContactPersonSelect({
       name={name}
       label={t('form:yhteystiedot:titles:subContacts')}
       helperText={t('form:yhteystiedot:helperTexts:yhteyshenkilo')}
+      icon={<IconUser />}
       mapValueToLabel={mapUserToLabel}
       defaultValue={defaultValue?.map((value: HankeYhteyshenkilo) => ({
         value,

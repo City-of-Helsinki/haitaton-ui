@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Combobox, Tooltip } from 'hds-react';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +20,7 @@ type PropTypes<T> = {
   invalid?: boolean;
   errorMsg?: string;
   tooltip?: TooltipProps;
+  icon?: ReactNode;
   mapValueToLabel: (value: T | null) => string;
 };
 
@@ -32,6 +34,7 @@ function DropdownMultiselect<T>({
   errorMsg,
   tooltip,
   helperText,
+  icon,
   mapValueToLabel,
 }: Readonly<PropTypes<T>>) {
   const { t } = useTranslation();
@@ -71,6 +74,7 @@ function DropdownMultiselect<T>({
               selectedItemRemoveButtonAriaLabel={t('common:components:multiselect:removeSelected')}
               clearButtonAriaLabel={t('common:components:multiselect:clear')}
               multiselect
+              icon={icon}
             />
           );
         }}
