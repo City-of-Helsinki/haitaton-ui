@@ -18,6 +18,7 @@ import { server } from '../../mocks/test-server';
 import { HankeAttachmentMetadata } from '../hankeAttachments/types';
 import api from '../../api/api';
 import * as hankeAttachmentsApi from '../hankeAttachments/hankeAttachmentsApi';
+import { HankeUser } from '../hankeUsers/hankeUser';
 
 afterEach(cleanup);
 
@@ -485,7 +486,7 @@ describe('HankeForm', () => {
   });
 });
 
-describe('New contact person form', () => {
+describe('New contact person form and contact person dropdown', () => {
   function fillNewContactPersonForm(
     options: {
       etunimi?: string;
@@ -506,21 +507,30 @@ describe('New contact person form', () => {
     fireEvent.change(screen.getByLabelText(/sukunimi/i), {
       target: { value: sukunimi },
     });
-    fireEvent.change(screen.getAllByLabelText(/sähköposti/i)[1], {
+    fireEvent.change(screen.getAllByRole('textbox', { name: /sähköposti/i })[1], {
       target: { value: sahkoposti },
     });
-    fireEvent.change(screen.getAllByLabelText(/puhelin/i)[1], {
+    fireEvent.change(screen.getAllByRole('textbox', { name: /puhelin/i })[1], {
       target: { value: puhelinnumero },
     });
   }
 
-  test('Should be able to create new user', async () => {
+  test('Should be able to create new user and new user is added to dropdown', async () => {
+    const newUser = {
+      etunimi: 'Martti',
+      sukunimi: 'Mielikäinen',
+      sahkoposti: 'martti@test.com',
+      puhelinnumero: '0000000000',
+    };
     const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
     await user.click(screen.getByRole('button', { name: /lisää uusi yhteyshenkilö/i }));
-    fillNewContactPersonForm();
+    fillNewContactPersonForm(newUser);
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
 
     expect(screen.getByText('Yhteyshenkilö tallennettu')).toBeInTheDocument();
+    expect(
+      screen.getByText(`${newUser.etunimi} ${newUser.sukunimi} (${newUser.sahkoposti})`),
+    ).toBeInTheDocument();
   });
 
   test('Should not be able to create new user and show validation errors if info is not filled', async () => {
@@ -544,5 +554,47 @@ describe('New contact person form', () => {
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
 
     expect(screen.getByText('Yhteyshenkilön tallennus epäonnistui')).toBeInTheDocument();
+  });
+
+  test('Should show all hanke users in the contact person dropdown', async () => {
+    const hankeUsers: HankeUser[] = [
+      {
+        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        sahkoposti: 'matti.meikalainen@test.com',
+        etunimi: 'Matti',
+        sukunimi: 'Meikäläinen',
+        puhelinnumero: '0401234567',
+        kayttooikeustaso: 'KAIKKI_OIKEUDET',
+        tunnistautunut: true,
+      },
+      {
+        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
+        sahkoposti: 'teppo@test.com',
+        etunimi: 'Teppo',
+        sukunimi: 'Työmies',
+        puhelinnumero: '0401234567',
+        kayttooikeustaso: 'KAIKKIEN_MUOKKAUS',
+        tunnistautunut: false,
+      },
+    ];
+    server.use(
+      rest.get('/api/hankkeet/:hankeTunnus/kayttajat', async (req, res, ctx) => {
+        return res(
+          ctx.status(200),
+          ctx.json<{ kayttajat: HankeUser[] }>({
+            kayttajat: hankeUsers,
+          }),
+        );
+      }),
+    );
+
+    const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
+    await user.click(screen.getByRole('button', { name: 'Yhteyshenkilöt: Sulje ja avaa valikko' }));
+
+    hankeUsers.forEach((hankeUser) => {
+      expect(
+        screen.getByText(`${hankeUser.etunimi} ${hankeUser.sukunimi} (${hankeUser.sahkoposti})`),
+      ).toBeInTheDocument();
+    });
   });
 });
