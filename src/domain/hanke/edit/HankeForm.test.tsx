@@ -565,6 +565,7 @@ describe('New contact person form and contact person dropdown', () => {
         sukunimi: 'Meikäläinen',
         puhelinnumero: '0401234567',
         kayttooikeustaso: 'KAIKKI_OIKEUDET',
+        roolit: [],
         tunnistautunut: true,
       },
       {
@@ -574,6 +575,7 @@ describe('New contact person form and contact person dropdown', () => {
         sukunimi: 'Työmies',
         puhelinnumero: '0401234567',
         kayttooikeustaso: 'KAIKKIEN_MUOKKAUS',
+        roolit: [],
         tunnistautunut: false,
       },
     ];
