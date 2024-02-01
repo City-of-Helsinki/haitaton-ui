@@ -113,6 +113,27 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
     hankeUsers.map(addWholeName),
   );
 
+  const userRoleSortOrder = ['OMISTAJA', 'RAKENNUTTAJA', 'TOTEUTTAJA', 'MUU'];
+
+  const userRoleSorter = (a: string, b: string) => {
+    const indexA = userRoleSortOrder.indexOf(a);
+    const indexB = userRoleSortOrder.indexOf(b);
+
+    if (indexA === -1 && indexB === -1) {
+      // If both elements are not in sortOrder, maintain their original order
+      return 0;
+    } else if (indexA === -1) {
+      // If only 'a' is not in sortOrder, 'a' comes after 'b'
+      return 1;
+    } else if (indexB === -1) {
+      // If only 'b' is not in sortOrder, 'a' comes before 'b'
+      return -1;
+    } else {
+      // Compare based on their indices in sortOrder
+      return indexA - indexB;
+    }
+  };
+
   const columns: Column<HankeUserWithWholeName>[] = useMemo(() => {
     return [
       { accessor: NAME_KEY },
@@ -142,13 +163,9 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
           return sortCaseInsensitive(rowOneColumn, rowTwoColumn);
         },
         array: (row1, row2, columnName) => {
-          const rowOneColumnSorted: string[] = row1.values[columnName].toSorted(
-            (a: string, b: string) => sort(a, b),
-          );
-          const rowTwoColumnSorted: string[] = row2.values[columnName].toSorted(
-            (a: string, b: string) => sort(a, b),
-          );
-          return sort(rowOneColumnSorted.join(' '), rowTwoColumnSorted.join(' '));
+          const rowOneColumnSorted: string[] = row1.values[columnName].toSorted(userRoleSorter);
+          const rowTwoColumnSorted: string[] = row2.values[columnName].toSorted(userRoleSorter);
+          return sort(rowOneColumnSorted.join(', '), rowTwoColumnSorted.join(', '));
         },
       },
     },
@@ -208,7 +225,10 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
   }
 
   function getUserRolesLabel(args: HankeUser) {
-    return args.roolit.map((role) => t(`hankeUsers:roleLabels:${role}`)).join(', ');
+    return args.roolit
+      .sort(userRoleSorter)
+      .map((role) => t(`hankeUsers:roleLabels:${role}`))
+      .join(', ');
   }
 
   function getUserRoles(args: HankeUser) {

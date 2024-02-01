@@ -6,7 +6,7 @@
     "sukunimi": "Meikäläinen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KAIKKI_OIKEUDET",
-    "roolit": [],
+    "roolit": ["MUU", "RAKENNUTTAJA"],
     "tunnistautunut": true,
     "hankeTunnus": "HAI22-2"
   },
@@ -39,7 +39,7 @@
     "sukunimi": "Viljanen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KAIKKI_OIKEUDET",
-    "roolit": ["OMISTAJA"],
+    "roolit": ["TOTEUTTAJA", "OMISTAJA"],
     "tunnistautunut": false,
     "hankeTunnus": "HAI22-2"
   },

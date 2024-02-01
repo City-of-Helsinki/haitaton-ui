@@ -44,7 +44,7 @@ test('Renders correct information', async () => {
   expect(screen.getAllByText(`${users[0].etunimi} ${users[0].sukunimi}`)).toHaveLength(2);
   expect(screen.getAllByText(users[0].sahkoposti)).toHaveLength(2);
   expect(screen.getByTestId('puhelinnumero-0')).toHaveTextContent('0401234567');
-  expect(screen.getByTestId('roolit-0')).toHaveTextContent('');
+  expect(screen.getByTestId('roolit-0')).toHaveTextContent('Rakennuttaja, Muu');
   expect(screen.getAllByText(`${users[1].etunimi} ${users[1].sukunimi}`)).toHaveLength(2);
   expect(screen.getAllByText(users[1].sahkoposti)).toHaveLength(2);
   expect(screen.getByTestId('roolit-1')).toHaveTextContent('Omistaja');
@@ -61,7 +61,7 @@ test('Renders correct information', async () => {
   expect(screen.getAllByText(`${users[6].etunimi} ${users[6].sukunimi}`)).toHaveLength(2);
   expect(screen.getAllByText(users[6].sahkoposti)).toHaveLength(2);
   expect(screen.getAllByText(`${users[7].etunimi} ${users[7].sukunimi}`)).toHaveLength(2);
-  expect(screen.getByTestId('roolit-7')).toHaveTextContent('RakennuttajaToteuttaja');
+  expect(screen.getByTestId('roolit-7')).toHaveTextContent('Rakennuttaja, Toteuttaja');
   expect(screen.getAllByText(users[7].sahkoposti)).toHaveLength(2);
   expect(screen.getAllByText(`${users[8].etunimi} ${users[8].sukunimi}`)).toHaveLength(2);
   expect(screen.getAllByText(users[8].sahkoposti)).toHaveLength(2);
@@ -120,27 +120,27 @@ test('Sorting by users role works', async () => {
 
   expect(screen.getByTestId('roolit-0')).toHaveTextContent('');
   expect(screen.getByTestId('roolit-1')).toHaveTextContent('');
-  expect(screen.getByTestId('roolit-2')).toHaveTextContent('');
+  expect(screen.getByTestId('roolit-2')).toHaveTextContent('Muu');
   expect(screen.getByTestId('roolit-3')).toHaveTextContent('Muu');
   expect(screen.getByTestId('roolit-4')).toHaveTextContent('Muu');
   expect(screen.getByTestId('roolit-5')).toHaveTextContent('Muu');
-  expect(screen.getByTestId('roolit-6')).toHaveTextContent('Muu');
+  expect(screen.getByTestId('roolit-6')).toHaveTextContent('Omistaja');
   expect(screen.getByTestId('roolit-7')).toHaveTextContent('Omistaja');
-  expect(screen.getByTestId('roolit-8')).toHaveTextContent('Omistaja');
+  expect(screen.getByTestId('roolit-8')).toHaveTextContent('Rakennuttaja');
   expect(screen.getByTestId('roolit-9')).toHaveTextContent('Rakennuttaja');
 
   fireEvent.click(screen.getByTestId('hds-table-sorting-header-roolit'));
 
   expect(screen.getByTestId('roolit-0')).toHaveTextContent('Toteuttaja');
-  expect(screen.getByTestId('roolit-1')).toHaveTextContent('RakennuttajaToteuttaja');
+  expect(screen.getByTestId('roolit-1')).toHaveTextContent('Rakennuttaja, Toteuttaja');
   expect(screen.getByTestId('roolit-2')).toHaveTextContent('Rakennuttaja');
-  expect(screen.getByTestId('roolit-3')).toHaveTextContent('Omistaja');
+  expect(screen.getByTestId('roolit-3')).toHaveTextContent('Rakennuttaja');
   expect(screen.getByTestId('roolit-4')).toHaveTextContent('Omistaja');
-  expect(screen.getByTestId('roolit-5')).toHaveTextContent('Muu');
+  expect(screen.getByTestId('roolit-5')).toHaveTextContent('Omistaja');
   expect(screen.getByTestId('roolit-6')).toHaveTextContent('Muu');
   expect(screen.getByTestId('roolit-7')).toHaveTextContent('Muu');
   expect(screen.getByTestId('roolit-8')).toHaveTextContent('Muu');
-  expect(screen.getByTestId('roolit-9')).toHaveTextContent('');
+  expect(screen.getByTestId('roolit-9')).toHaveTextContent('Muu');
 });
 
 test('Sorting by users email works', async () => {
