@@ -2,7 +2,13 @@ import { FieldErrors } from 'react-hook-form';
 import { Feature } from 'ol';
 import Geometry from 'ol/geom/Geometry';
 import { PartialExcept } from '../../../common/types/utils';
-import { HankeData, HankeContactTypeKey, HankeAlue } from '../../types/hanke';
+import {
+  HankeData,
+  HankeContactTypeKey,
+  HankeAlue,
+  HankeYhteystieto,
+  HankeMuuTaho,
+} from '../../types/hanke';
 import yup from '../../../common/utils/yup';
 import { contactPersonSchema, newHankeSchema } from './hankeSchema';
 
@@ -68,16 +74,21 @@ export interface FormProps {
   register: any;
 }
 
-export type SaveFormArguments = {
-  data: HankeDataFormState;
-  currentFormPage: number;
-};
+export interface HankePostYhteystieto extends Omit<HankeYhteystieto, 'yhteyshenkilot'> {
+  yhteyshenkilot: string[];
+}
 
-export type Organization = {
-  id: number;
-  nimi: string;
-  tunnus: string;
-};
+export interface HankePostMuuTaho extends Omit<HankeMuuTaho, 'yhteyshenkilot'> {
+  yhteyshenkilot: string[];
+}
+
+export interface HankePostData
+  extends Omit<HankeDataFormState, 'omistajat' | 'rakennuttajat' | 'toteuttajat' | 'muut'> {
+  omistajat: HankePostYhteystieto[];
+  rakennuttajat: HankePostYhteystieto[];
+  toteuttajat: HankePostYhteystieto[];
+  muut: HankePostMuuTaho[];
+}
 
 export type NewHankeData = yup.InferType<typeof newHankeSchema>;
 

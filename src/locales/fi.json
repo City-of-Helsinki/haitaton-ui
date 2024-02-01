@@ -210,7 +210,8 @@
         "otherPartyRole": "Isännöitsijä, konsultti..."
       },
       "helperTexts": {
-        "otherPartyRole": "Tahon rooli hankkeessa"
+        "otherPartyRole": "Tahon rooli hankkeessa",
+        "yhteyshenkilo": "Valitsemillesi yhteyshenkilöille lähetetään kutsu hankkeelle sähköpostilla. Yhteyshenkilöt näkyvät kaikille hanketta katseleville tahoille."
       },
       "contactType": {
         "YKSITYISHENKILO": "Yksityishenkilö",

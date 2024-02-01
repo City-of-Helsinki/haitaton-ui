@@ -95,7 +95,7 @@ export type HankeContactTypeKey =
   | HANKE_CONTACT_TYPE.MUUTTAHOT;
 
 export interface HankeYhteyshenkilo {
-  id?: string | null;
+  id: string;
   etunimi: string;
   sukunimi: string;
   sahkoposti: string;

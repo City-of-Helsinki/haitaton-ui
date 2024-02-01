@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid } from '@chakra-ui/react';
+import { Box, Grid } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { SectionItemContent, SectionItemTitle } from '../../../forms/components/FormSummarySection';
 import { HankeYhteystieto, HankeMuuTaho, HankeYhteyshenkilo } from '../../../types/hanke';
@@ -57,7 +57,7 @@ const ContactsSummary: React.FC<{
       <SectionItemContent>
         {contacts.map((contact) => {
           return (
-            <React.Fragment key={contact.email}>
+            <Box key={contact.email} marginBottom="var(--spacing-m)">
               <ContactSummary contact={contact} />
               {contact.yhteyshenkilot && contact.yhteyshenkilot?.length > 0 && (
                 <>
@@ -72,13 +72,18 @@ const ContactsSummary: React.FC<{
                   >
                     {contact.yhteyshenkilot?.map((yhteyshenkilo) => {
                       return (
-                        <SubContactSummary key={yhteyshenkilo.sahkoposti} contact={yhteyshenkilo} />
+                        yhteyshenkilo && (
+                          <SubContactSummary
+                            key={yhteyshenkilo.sahkoposti}
+                            contact={yhteyshenkilo}
+                          />
+                        )
                       );
                     })}
                   </Grid>
                 </>
               )}
-            </React.Fragment>
+            </Box>
           );
         })}
       </SectionItemContent>

@@ -3,7 +3,14 @@ import Polygon from 'ol/geom/Polygon';
 import { Polygon as GeoJSONPolygon } from 'geojson';
 import { max, min } from 'date-fns';
 import { HankeAlue, HankeYhteystieto, HankeDataDraft, HankeMuuTaho } from '../../types/hanke';
-import { FORMFIELD, HankeAlueFormState, HankeDataFormState } from './types';
+import {
+  FORMFIELD,
+  HankeAlueFormState,
+  HankeDataFormState,
+  HankePostData,
+  HankePostMuuTaho,
+  HankePostYhteystieto,
+} from './types';
 import { formatFeaturesToHankeGeoJSON, getFeatureFromHankeGeometry } from '../../map/utils';
 import { getSurfaceArea } from '../../../common/components/map/utils';
 import { Application } from '../../application/types/application';
@@ -34,13 +41,23 @@ export function getAreasMaxEndDate(areas: HankeAlue[] | undefined) {
 const isContactEmpty = ({ nimi, email, puhelinnumero }: HankeYhteystieto | HankeMuuTaho) =>
   nimi === '' && email === '' && puhelinnumero === '';
 
+function mapContactPersonToId(
+  contact: HankeYhteystieto | HankeMuuTaho,
+): HankePostYhteystieto | HankePostMuuTaho {
+  const yhteyshenkilot = contact.yhteyshenkilot;
+  return {
+    ...contact,
+    yhteyshenkilot: yhteyshenkilot ? yhteyshenkilot.map((person) => person.id) : [],
+  };
+}
+
 /**
  * Make sure that hanke data to be sent to API matches requirements.
  * Convert openlayers features in areas to HankeGeoJSON.
  * Add alkuPvm and loppuPvm based on area dates.
  * Filter out empty contacts (temporary solution for sending empty contacts to API).
  */
-export const convertFormStateToHankeData = (hankeData: HankeDataFormState): HankeDataFormState => {
+export const convertFormStateToHankeData = (hankeData: HankeDataFormState): HankePostData => {
   return {
     ...hankeData,
     [FORMFIELD.HANKEALUEET]: hankeData[FORMFIELD.HANKEALUEET]?.map((alue) => {
@@ -53,12 +70,18 @@ export const convertFormStateToHankeData = (hankeData: HankeDataFormState): Hank
         },
       };
     }),
-    [FORMFIELD.OMISTAJAT]: hankeData[FORMFIELD.OMISTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
-    [FORMFIELD.RAKENNUTTAJAT]:
-      hankeData[FORMFIELD.RAKENNUTTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
-    [FORMFIELD.TOTEUTTAJAT]:
-      hankeData[FORMFIELD.TOTEUTTAJAT]?.filter((v) => !isContactEmpty(v)) || [],
-    [FORMFIELD.MUUTTAHOT]: hankeData[FORMFIELD.MUUTTAHOT]?.filter((v) => !isContactEmpty(v)) || [],
+    [FORMFIELD.OMISTAJAT]: hankeData[FORMFIELD.OMISTAJAT]
+      ?.filter((v) => !isContactEmpty(v))
+      .map(mapContactPersonToId) as HankePostYhteystieto[],
+    [FORMFIELD.RAKENNUTTAJAT]: hankeData[FORMFIELD.RAKENNUTTAJAT]
+      ?.filter((v) => !isContactEmpty(v))
+      .map(mapContactPersonToId) as HankePostYhteystieto[],
+    [FORMFIELD.TOTEUTTAJAT]: hankeData[FORMFIELD.TOTEUTTAJAT]
+      ?.filter((v) => !isContactEmpty(v))
+      .map(mapContactPersonToId) as HankePostYhteystieto[],
+    [FORMFIELD.MUUTTAHOT]: hankeData[FORMFIELD.MUUTTAHOT]
+      ?.filter((v) => !isContactEmpty(v))
+      .map(mapContactPersonToId) as HankePostMuuTaho[],
   };
 };
 
