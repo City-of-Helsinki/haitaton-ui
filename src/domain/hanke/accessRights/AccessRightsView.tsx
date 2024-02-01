@@ -207,14 +207,12 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
     );
   }
 
+  function getUserRolesLabel(args: HankeUser) {
+    return args.roolit.map((role) => t(`hankeUsers:roleLabels:${role}`)).join(', ');
+  }
+
   function getUserRoles(args: HankeUser) {
-    return (
-      <div>
-        {args.roolit.map((role) => (
-          <div>{t(`hankeUsers:roleLabels:${role}`)}</div>
-        ))}
-      </div>
-    );
+    return <p>{getUserRolesLabel(args)}</p>;
   }
 
   function getAccessRightLabel(args: HankeUser) {
@@ -361,8 +359,13 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
                 headingIcon={<UserIcon user={row.original} signedInUser={signedInUser} />}
               >
                 <Box marginBottom="var(--spacing-m)">
-                  <strong>{t('hankeUsers:accessRight')}:</strong>{' '}
-                  {getAccessRightLabel(row.original)}
+                  <p>
+                    <strong>{t('hankeUsers:role')}:</strong> {getUserRolesLabel(row.original)}
+                  </p>
+                  <p>
+                    <strong>{t('hankeUsers:accessRight')}:</strong>{' '}
+                    {getAccessRightLabel(row.original)}
+                  </p>
                 </Box>
                 <Flex>
                   {canEditUser(row.original) && (
