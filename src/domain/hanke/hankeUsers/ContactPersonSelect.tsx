@@ -30,6 +30,7 @@ function ContactPersonSelect({
       label={t('form:yhteystiedot:titles:subContacts')}
       helperText={t('form:yhteystiedot:helperTexts:yhteyshenkilo')}
       icon={<IconUser />}
+      clearable={false}
       mapValueToLabel={mapUserToLabel}
       defaultValue={defaultValue?.map((value: HankeYhteyshenkilo) => ({
         value,

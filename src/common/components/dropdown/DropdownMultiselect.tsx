@@ -21,6 +21,7 @@ type PropTypes<T> = {
   errorMsg?: string;
   tooltip?: TooltipProps;
   icon?: ReactNode;
+  clearable?: boolean;
   mapValueToLabel: (value: T | null) => string;
 };
 
@@ -35,6 +36,7 @@ function DropdownMultiselect<T>({
   tooltip,
   helperText,
   icon,
+  clearable,
   mapValueToLabel,
 }: Readonly<PropTypes<T>>) {
   const { t } = useTranslation();
@@ -75,6 +77,7 @@ function DropdownMultiselect<T>({
               clearButtonAriaLabel={t('common:components:multiselect:clear')}
               multiselect
               icon={icon}
+              clearable={clearable}
             />
           );
         }}
