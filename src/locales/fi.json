@@ -271,10 +271,10 @@
       }
     },
     "ACCESS_RIGHTS": {
-      "path": "/hankesalkku/:hankeTunnus/oikeudet",
-      "headerLabel": "Käyttöoikeudet",
+      "path": "/hankesalkku/:hankeTunnus/kayttajat",
+      "headerLabel": "Käyttäjähallinta",
       "meta": {
-        "title": "Haitaton - Käyttöoikeuksien hallinta"
+        "title": "Haitaton - Käyttäjähallinta"
       }
     },
     "EDIT_USER": {
@@ -908,10 +908,10 @@
       "helperText": "Hae nimellä"
     },
     "notifications": {
-      "rightsUpdatedSuccessLabel": "Käyttöoikeudet päivitetty",
-      "rightsUpdatedSuccessText": "Käyttöoikeudet on päivitetty onnistuneesti",
-      "rightsUpdatedErrorLabel": "Virhe päivityksessä",
-      "rightsUpdatedErrorText": "<0>Käyttöoikeuksien päivityksessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>",
+      "userUpdatedSuccessLabel": "Käyttäjätiedot päivitetty",
+      "userUpdatedSuccessText": "Käyttäjätiedot päivitetty onnistuneesti",
+      "userUpdatedErrorLabel": "Virhe päivityksessä",
+      "userUpdatedErrorText": "<0>Käyttäjätietojen päivityksessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>",
       "userIdentifiedLabel": "Tunnistautuminen onnistui",
       "userIdentifiedText": "Tunnistautuminen onnistui. Sinut on nyt lisätty hankkeelle ({{hankeNimi}} {{hankeTunnus}}).",
       "userIdentifiedError": "Tunnistautuminen epäonnistui",

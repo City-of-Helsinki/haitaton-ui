@@ -34,6 +34,17 @@ export async function updateHankeUsers({
   return data;
 }
 
+export async function updateSelf({
+  hankeTunnus,
+  user,
+}: {
+  hankeTunnus: string;
+  user: Pick<HankeUser, 'sahkoposti' | 'puhelinnumero'>;
+}) {
+  const { data } = await api.put<HankeUser>(`hankkeet/${hankeTunnus}/kayttajat/self`, user);
+  return data;
+}
+
 // Get user id and rights of the signed in user for a hanke
 export async function getSignedInUserForHanke(hankeTunnus?: string): Promise<SignedInUser> {
   const { data } = await api.get<SignedInUser>(`hankkeet/${hankeTunnus}/whoami`);

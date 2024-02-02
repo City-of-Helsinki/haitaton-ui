@@ -237,14 +237,14 @@
       }
     },
     "ACCESS_RIGHTS": {
-      "path": "/projectportfolio/:hankeTunnus/oikeudet",
-      "headerLabel": "Access rights",
+      "path": "/projectportfolio/:hankeTunnus/kayttajat",
+      "headerLabel": "Käyttäjähallinta",
       "meta": {
-        "title": "Haitaton - Access rights management"
+        "title": "Haitaton - Käyttäjähallinta"
       }
     },
     "EDIT_USER": {
-      "path": "/hankesalkku/:hankeTunnus/kayttajat/:id",
+      "path": "/projectportfolio/:hankeTunnus/kayttajat/:id",
       "headerLabel": "Käyttäjätietojen muokkaus",
       "meta": {
         "title": "Haitaton - Käyttäjätietojen muokkaus"
@@ -846,10 +846,10 @@
       "helperText": "Search by name"
     },
     "notifications": {
-      "rightsUpdatedSuccessLabel": "Access rights updated",
-      "rightsUpdatedSuccessText": "Access rights successfully updated",
-      "rightsUpdatedErrorLabel": "Error in the updating process",
-      "rightsUpdatedErrorText": "<0>An error occurred when updating access rights. Please try again later or contact the Haitaton technical support by email <1>haitatontuki@hel.fi</1>.</0>",
+      "userUpdatedSuccessLabel": "User information updated",
+      "userUpdatedSuccessText": "User information successfully updated",
+      "userUpdatedErrorLabel": "Error in the updating process",
+      "userUpdatedErrorText": "<0>An error occurred when updating user information. Please try again later or contact the Haitaton technical support by email <1>haitatontuki@hel.fi</1>.</0>",
       "userIdentifiedLabel": "Login successful",
       "userIdentifiedText": "Login successful. You have now been added to the project ({{hankeNimi}} {{hankeTunnus}}).",
       "userIdentifiedError": "Login failed",
