@@ -874,12 +874,19 @@
     }
   },
   "hankeUsers": {
+    "role": "Rooli hankkeessa",
     "accessRights": "Käyttöoikeudet",
     "users": "Käyttäjät",
     "accessRight": "Käyttöoikeus",
     "userManagementTitle": "Käyttäjähallinta",
     "userEditTitle": "Käyttäjätietojen muokkaus",
     "userInfoTitle": "Käyttäjätiedot",
+    "roleLabels": {
+      "OMISTAJA": "Omistaja",
+      "RAKENNUTTAJA": "Rakennuttaja",
+      "TOTEUTTAJA": "Toteuttaja",
+      "MUU": "Muu"
+    },
     "accessRightLevels": {
       "KAIKKI_OIKEUDET": "Kaikki oikeudet",
       "KAIKKIEN_MUOKKAUS": "Hankkeen ja hakemusten muokkaus",

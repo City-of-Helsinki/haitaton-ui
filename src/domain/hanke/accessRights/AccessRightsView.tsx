@@ -72,13 +72,17 @@ function UserIcon({
   }
 }
 
+function sort(rowOneColumn: string, rowTwoColumn: string) {
+  if (rowOneColumn === rowTwoColumn) {
+    return 0;
+  }
+  return rowOneColumn > rowTwoColumn ? 1 : -1;
+}
+
 function sortCaseInsensitive(rowOneColumn: string, rowTwoColumn: string) {
   const rowOneColUpperCase = rowOneColumn.toUpperCase();
   const rowTwoColUpperCase = rowTwoColumn.toUpperCase();
-  if (rowOneColUpperCase === rowTwoColUpperCase) {
-    return 0;
-  }
-  return rowOneColUpperCase > rowTwoColUpperCase ? 1 : -1;
+  return sort(rowOneColUpperCase, rowTwoColUpperCase);
 }
 
 type HankeUserWithWholeName = HankeUser & { nimi: string };
@@ -88,6 +92,7 @@ function addWholeName(user: HankeUser): HankeUserWithWholeName {
 }
 
 const NAME_KEY = 'nimi';
+const ROLES_KEY = 'roolit';
 const EMAIL_KEY = 'sahkoposti';
 const PHONE_KEY = 'puhelinnumero';
 const ACCESS_RIGHT_LEVEL_KEY = 'kayttooikeustaso';
@@ -108,9 +113,31 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
     hankeUsers.map(addWholeName),
   );
 
+  const userRoleSortOrder = ['OMISTAJA', 'RAKENNUTTAJA', 'TOTEUTTAJA', 'MUU'];
+
+  const userRoleSorter = (a: string, b: string) => {
+    const indexA = userRoleSortOrder.indexOf(a);
+    const indexB = userRoleSortOrder.indexOf(b);
+
+    if (indexA === -1 && indexB === -1) {
+      // If both elements are not in sortOrder, maintain their original order
+      return 0;
+    } else if (indexA === -1) {
+      // If only 'a' is not in sortOrder, 'a' comes after 'b'
+      return 1;
+    } else if (indexB === -1) {
+      // If only 'b' is not in sortOrder, 'a' comes before 'b'
+      return -1;
+    } else {
+      // Compare based on their indices in sortOrder
+      return indexA - indexB;
+    }
+  };
+
   const columns: Column<HankeUserWithWholeName>[] = useMemo(() => {
     return [
       { accessor: NAME_KEY },
+      { accessor: ROLES_KEY, sortType: 'array' },
       { accessor: EMAIL_KEY },
       { accessor: PHONE_KEY },
       { accessor: ACCESS_RIGHT_LEVEL_KEY },
@@ -134,6 +161,11 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
           const rowOneColumn: string = row1.values[columnName];
           const rowTwoColumn: string = row2.values[columnName];
           return sortCaseInsensitive(rowOneColumn, rowTwoColumn);
+        },
+        array: (row1, row2, columnName) => {
+          const rowOneColumnSorted: string[] = row1.values[columnName].toSorted(userRoleSorter);
+          const rowTwoColumnSorted: string[] = row2.values[columnName].toSorted(userRoleSorter);
+          return sort(rowOneColumnSorted.join(', '), rowTwoColumnSorted.join(', '));
         },
       },
     },
@@ -192,6 +224,17 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
     );
   }
 
+  function getUserRolesLabel(args: HankeUser) {
+    return args.roolit
+      .sort(userRoleSorter)
+      .map((role) => t(`hankeUsers:roleLabels:${role}`))
+      .join(', ');
+  }
+
+  function getUserRoles(args: HankeUser) {
+    return <p>{getUserRolesLabel(args)}</p>;
+  }
+
   function getAccessRightLabel(args: HankeUser) {
     return t(`hankeUsers:accessRightLevels:${args.kayttooikeustaso}`);
   }
@@ -248,6 +291,12 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
       isSortable: true,
       customSortCompareFunction: sortCaseInsensitive,
       transform: getUserName,
+    },
+    {
+      headerName: t('hankeUsers:role'),
+      key: ROLES_KEY,
+      isSortable: true,
+      transform: getUserRoles,
     },
     {
       headerName: t('form:yhteystiedot:labels:email'),
@@ -330,8 +379,13 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
                 headingIcon={<UserIcon user={row.original} signedInUser={signedInUser} />}
               >
                 <Box marginBottom="var(--spacing-m)">
-                  <strong>{t('hankeUsers:accessRight')}:</strong>{' '}
-                  {getAccessRightLabel(row.original)}
+                  <p>
+                    <strong>{t('hankeUsers:role')}:</strong> {getUserRolesLabel(row.original)}
+                  </p>
+                  <p>
+                    <strong>{t('hankeUsers:accessRight')}:</strong>{' '}
+                    {getAccessRightLabel(row.original)}
+                  </p>
                 </Box>
                 <Flex>
                   {canEditUser(row.original) && (

@@ -10,7 +10,7 @@ import {
   HankeMuuTaho,
 } from '../../types/hanke';
 import yup from '../../../common/utils/yup';
-import { contactPersonSchema, newHankeSchema } from './hankeSchema';
+import { yhteyshenkiloSchema, newHankeSchema } from './hankeSchema';
 
 export type FormNotification = 'ok' | 'success' | 'error' | null;
 
@@ -51,7 +51,7 @@ export enum CONTACT_FORMFIELD {
   YHTEYSHENKILOT = 'yhteyshenkilot',
 }
 
-export enum CONTACT_PERSON_FORMFIELD {
+export enum YHTEYSHENKILO_FORMFIELD {
   ETUNIMI = 'etunimi',
   SUKUNIMI = 'sukunimi',
   EMAIL = 'sahkoposti',
@@ -92,4 +92,4 @@ export interface HankePostData
 
 export type NewHankeData = yup.InferType<typeof newHankeSchema>;
 
-export type ContactPerson = yup.InferType<typeof contactPersonSchema>;
+export type Yhteyshenkilo = yup.InferType<typeof yhteyshenkiloSchema>;
