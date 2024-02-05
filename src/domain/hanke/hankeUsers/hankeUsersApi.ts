@@ -1,5 +1,11 @@
 import api from '../../api/api';
-import { HankeUser, IdentificationResponse, SignedInUser, SignedInUserByHanke } from './hankeUser';
+import {
+  HankeUser,
+  HankeUserSelf,
+  IdentificationResponse,
+  SignedInUser,
+  SignedInUserByHanke,
+} from './hankeUser';
 import { Yhteyshenkilo } from '../edit/types';
 
 export async function createHankeUser({
@@ -31,6 +37,17 @@ export async function updateHankeUsers({
   users: Pick<HankeUser, 'id' | 'kayttooikeustaso'>[];
 }) {
   const { data } = await api.put(`hankkeet/${hankeTunnus}/kayttajat`, { kayttajat: users });
+  return data;
+}
+
+export async function updateSelf({
+  hankeTunnus,
+  user,
+}: {
+  hankeTunnus: string;
+  user: HankeUserSelf;
+}) {
+  const { data } = await api.put<HankeUser>(`hankkeet/${hankeTunnus}/kayttajat/self`, user);
   return data;
 }
 

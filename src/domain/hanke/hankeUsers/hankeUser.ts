@@ -17,6 +17,8 @@ export type HankeUser = {
   tunnistautunut: boolean;
 };
 
+export type HankeUserSelf = Pick<HankeUser, 'sahkoposti' | 'puhelinnumero'>;
+
 export enum Rights {
   VIEW = 'VIEW',
   MODIFY_VIEW_PERMISSIONS = 'MODIFY_VIEW_PERMISSIONS',

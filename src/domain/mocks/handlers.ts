@@ -5,7 +5,7 @@ import * as hankkeetDB from './data/hankkeet';
 import * as hakemuksetDB from './data/hakemukset';
 import * as usersDB from './data/users';
 import ApiError from './apiError';
-import { IdentificationResponse, SignedInUser } from '../hanke/hankeUsers/hankeUser';
+import { HankeUserSelf, IdentificationResponse, SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import { Yhteyshenkilo } from '../hanke/edit/types';
 
 const apiUrl = '/api';
@@ -191,6 +191,17 @@ export const handlers = [
     const { kayttajat } = await req.json();
     await usersDB.update(hankeTunnus as string, kayttajat);
     return res(ctx.status(200));
+  }),
+
+  rest.put(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat/self`, async (req, res, ctx) => {
+    const { hankeTunnus } = req.params;
+    const { sahkoposti, puhelinnumero }: HankeUserSelf = await req.json();
+    const user = await usersDB.updateSelf(hankeTunnus as string, {
+      sahkoposti,
+      puhelinnumero,
+      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+    });
+    return res(ctx.status(200), ctx.json(user));
   }),
 
   rest.get(`${apiUrl}/hankkeet/:hankeTunnus/whoami`, async (req, res, ctx) => {

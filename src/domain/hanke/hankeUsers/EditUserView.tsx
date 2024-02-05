@@ -1,5 +1,18 @@
-import { useTranslation } from 'react-i18next';
-import { Breadcrumb, Button, IconCheckCircleFill, IconClock, IconEnvelope } from 'hds-react';
+import { Trans, useTranslation } from 'react-i18next';
+import {
+  Breadcrumb,
+  Button,
+  IconCheckCircleFill,
+  IconClock,
+  IconCross,
+  IconEnvelope,
+  IconSaveDisketteFill,
+  Link,
+  Notification,
+} from 'hds-react';
+import { useMutation, useQueryClient } from 'react-query';
+import { useNavigate } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
 import Container from '../../../common/components/container/Container';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import { AccessRightLevel, HankeUser, SignedInUser } from './hankeUser';
@@ -19,6 +32,12 @@ import {
   InvitationErrorNotification,
   InvitationSuccessNotification,
 } from './InvitationNotification';
+import { updateSelf } from './hankeUsersApi';
+import yup from '../../../common/utils/yup';
+import { yhteyshenkiloSchema } from '../edit/hankeSchema';
+import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
+import Text from '../../../common/components/text/Text';
+import { userRoleSorter } from './utils';
 
 type Props = {
   user: HankeUser;
@@ -35,13 +54,23 @@ type AccessRightLevelOption = {
 
 function EditUserView({
   user,
-  user: { id, etunimi, sukunimi, sahkoposti, puhelinnumero, tunnistautunut, kayttooikeustaso },
+  user: {
+    id,
+    etunimi,
+    sukunimi,
+    sahkoposti,
+    puhelinnumero,
+    tunnistautunut,
+    kayttooikeustaso,
+    roolit,
+  },
   hankeUsers,
   signedInUser,
   hankeTunnus,
   hankeName,
 }: Readonly<Props>) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const hankeViewPath = useHankeViewPath(hankeTunnus);
   const getHankeUsersPath = useLinkPath(ROUTES.ACCESS_RIGHTS);
   const formContext = useForm({
@@ -53,11 +82,22 @@ function EditUserView({
       puhelinnumero,
       kayttooikeustaso,
     },
+    resolver: yupResolver(
+      yhteyshenkiloSchema.shape({ kayttooikeustaso: yup.mixed<keyof typeof AccessRightLevel>() }),
+    ),
   });
+  const { getValues, handleSubmit } = formContext;
 
+  const queryClient = useQueryClient();
+  const updateSelfMutation = useMutation(updateSelf);
   const { resendInvitationMutation, linksSentTo, sendInvitation } = useResendInvitation();
+  const { setNotification } = useGlobalNotification();
 
   const userFullName = `${etunimi} ${sukunimi}`;
+  const userRoles = roolit
+    .toSorted(userRoleSorter)
+    .map((role) => t(`hankeUsers:roleLabels:${role}`))
+    .join(', ');
 
   // Options for the dropdown
   const accessRightLevelOptions: AccessRightLevelOption[] = $enum(AccessRightLevel)
@@ -85,6 +125,45 @@ function EditUserView({
   const isDropdownDisabled =
     isOnlyWithAllRights || !canEditRights || !canEditAllRights || isSignedInUser;
 
+  function navigateToHankeUsersView() {
+    navigate(getHankeUsersPath({ hankeTunnus }));
+  }
+
+  function handleSuccess(data: HankeUser) {
+    queryClient.setQueryData(['hankeUser', data.id], data);
+    queryClient.invalidateQueries(['hankeUsers', hankeTunnus]);
+    setNotification(true, {
+      label: t('hankeUsers:notifications:userUpdatedSuccessLabel'),
+      message: t('hankeUsers:notifications:userUpdatedSuccessText'),
+      type: 'success',
+      dismissible: true,
+      closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+      autoClose: true,
+      autoCloseDuration: 7000,
+    });
+    navigateToHankeUsersView();
+  }
+
+  function editUser() {
+    if (isSignedInUser) {
+      updateSelfMutation.mutate(
+        {
+          hankeTunnus,
+          user: { sahkoposti: getValues('sahkoposti'), puhelinnumero: getValues('puhelinnumero') },
+        },
+        {
+          onSuccess: handleSuccess,
+        },
+      );
+    }
+  }
+
+  function closeUpdateUserErrorNotification() {
+    if (isSignedInUser) {
+      updateSelfMutation.reset();
+    }
+  }
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -105,9 +184,15 @@ function EditUserView({
               ]}
             />
           </div>
-          <MainHeading spacingBottom="l">
+          <MainHeading spacingBottom="m">
             {t('hankeUsers:userEditTitle')}: {userFullName}
           </MainHeading>
+          <Text tag="p" styleAs="body-s" spacingBottom="s">
+            <Box as="strong" marginRight="var(--spacing-s)">
+              {t('hankeUsers:role')}:
+            </Box>
+            {userRoles}
+          </Text>
           <Flex gap="var(--spacing-2-xs)" color="var(--color-black-60)">
             {tunnistautunut ? (
               <>
@@ -145,10 +230,20 @@ function EditUserView({
         </Box>
 
         <FormProvider {...formContext}>
-          <form className={styles.formContainer}>
+          <form onSubmit={handleSubmit(editUser)} className={styles.formContainer}>
             <ResponsiveGrid maxColumns={2}>
-              <TextInput name="etunimi" label={t('hankeForm:labels:etunimi')} required />
-              <TextInput name="sukunimi" label={t('hankeForm:labels:sukunimi')} required />
+              <TextInput
+                name="etunimi"
+                label={t('hankeForm:labels:etunimi')}
+                required
+                readOnly={isSignedInUser}
+              />
+              <TextInput
+                name="sukunimi"
+                label={t('hankeForm:labels:sukunimi')}
+                required
+                readOnly={isSignedInUser}
+              />
             </ResponsiveGrid>
             <ResponsiveGrid maxColumns={2}>
               <TextInput name="sahkoposti" label={t('hankeForm:labels:email')} required />
@@ -158,7 +253,7 @@ function EditUserView({
                 required
               />
             </ResponsiveGrid>
-            <ResponsiveGrid maxColumns={2} className={styles.accessRightSelect}>
+            <ResponsiveGrid maxColumns={2}>
               <Dropdown
                 id={id}
                 name="kayttooikeustaso"
@@ -171,9 +266,49 @@ function EditUserView({
                 }
               />
             </ResponsiveGrid>
+
+            <Flex
+              marginTop="var(--spacing-xl)"
+              marginBottom="var(--spacing-xl)"
+              gap="var(--spacing-s)"
+            >
+              <Button
+                iconLeft={<IconSaveDisketteFill />}
+                isLoading={updateSelfMutation.isLoading}
+                type="submit"
+              >
+                {t('form:buttons:saveChanges')}
+              </Button>
+              <Button
+                iconLeft={<IconCross />}
+                variant="secondary"
+                onClick={navigateToHankeUsersView}
+              >
+                {t('common:confirmationDialog:cancelButton')}
+              </Button>
+            </Flex>
           </form>
         </FormProvider>
       </Container>
+
+      {updateSelfMutation.isError && (
+        <Notification
+          position="top-right"
+          dismissible
+          type="error"
+          label={t('hankeUsers:notifications:userUpdatedErrorLabel')}
+          closeButtonLabelText={t('common:components:notification:closeButtonLabelText')}
+          onClose={closeUpdateUserErrorNotification}
+        >
+          <Trans i18nKey="hankeUsers:notifications:userUpdatedErrorText">
+            <p>
+              Käyttäjätietojen päivityksessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota
+              yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa
+              <Link href="mailto:haitatontuki@hel.fi">haitatontuki@hel.fi</Link>.
+            </p>
+          </Trans>
+        </Notification>
+      )}
 
       {resendInvitationMutation.isSuccess && (
         <InvitationSuccessNotification onClose={() => resendInvitationMutation.reset()}>
