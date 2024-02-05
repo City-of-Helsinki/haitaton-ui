@@ -126,7 +126,7 @@ function EditUserView({
     isOnlyWithAllRights || !canEditRights || !canEditAllRights || isSignedInUser;
 
   function navigateToHankeUsersView() {
-    navigate('..', { relative: 'path' });
+    navigate(getHankeUsersPath({ hankeTunnus }));
   }
 
   function handleSuccess(data: HankeUser) {

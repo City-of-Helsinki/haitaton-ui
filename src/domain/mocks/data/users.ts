@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import usersData from './users-data.json';
-import { AccessRightLevel, HankeUser } from '../../hanke/hankeUsers/hankeUser';
+import { AccessRightLevel, HankeUser, HankeUserSelf } from '../../hanke/hankeUsers/hankeUser';
 import { Yhteyshenkilo } from '../../hanke/edit/types';
 
 let users = [...usersData];
@@ -55,4 +55,23 @@ export async function update(hankeTunnus: string, modifiedUsers: HankeUser[]) {
       }
       return user;
     });
+}
+
+export async function updateSelf(
+  hankeTunnus: string,
+  modifiedUser: HankeUserSelf & { id: string },
+) {
+  users = users
+    .filter((user) => user.hankeTunnus === hankeTunnus)
+    .map((user) => {
+      if (modifiedUser.id === user.id) {
+        return {
+          ...user,
+          sahkoposti: modifiedUser.sahkoposti,
+          puhelinnumero: modifiedUser.puhelinnumero,
+        };
+      }
+      return user;
+    });
+  return users.find((user) => user.id === modifiedUser.id);
 }
