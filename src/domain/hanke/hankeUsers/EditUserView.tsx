@@ -95,7 +95,7 @@ function EditUserView({
 
   const userFullName = `${etunimi} ${sukunimi}`;
   const userRoles = roolit
-    .sort(userRoleSorter)
+    .toSorted(userRoleSorter)
     .map((role) => t(`hankeUsers:roleLabels:${role}`))
     .join(', ');
 
