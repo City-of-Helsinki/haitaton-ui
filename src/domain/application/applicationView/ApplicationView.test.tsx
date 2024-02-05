@@ -56,18 +56,18 @@ test('Should show error notification if loading application fails', async () => 
 });
 
 test('Should be able to go editing application when editing is possible', async () => {
-  const { user } = render(<ApplicationViewContainer id={4} />);
+  const { user } = render(<ApplicationViewContainer id={1} />);
 
   await waitFor(() => screen.findByRole('button', { name: 'Muokkaa hakemusta' }), {
     timeout: 4000,
   });
   await user.click(screen.getByRole('button', { name: 'Muokkaa hakemusta' }));
 
-  expect(window.location.pathname).toBe('/fi/johtoselvityshakemus/4/muokkaa');
+  expect(window.location.pathname).toBe('/fi/johtoselvityshakemus/1/muokkaa');
 });
 
 test('Application edit button should not be displayed when editing is not possible', async () => {
-  render(<ApplicationViewContainer id={3} />);
+  render(<ApplicationViewContainer id={2} />);
 
   await waitForLoadingToFinish();
 

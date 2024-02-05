@@ -25,7 +25,7 @@ import BasicInformationSummary from '../components/BasicInformationSummary';
 import { getAreaGeometries, getAreaGeometry } from '../../johtoselvitys/utils';
 import { formatSurfaceArea, getTotalSurfaceArea } from '../../map/utils';
 import useLocale from '../../../common/hooks/useLocale';
-import { getAreaDefaultName, isApplicationPending } from '../utils';
+import { getAreaDefaultName, isApplicationSent } from '../utils';
 import ApplicationDates from '../components/ApplicationDates';
 import ContactsSummary from '../components/ContactsSummary';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
@@ -76,7 +76,7 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
   const geometries: Geometry[] = getAreaGeometries(areas);
   const totalSurfaceArea = getTotalSurfaceArea(geometries);
 
-  const isPending = isApplicationPending(alluStatus);
+  const isSent = isApplicationSent(alluStatus);
 
   return (
     <InformationViewContainer>
@@ -117,7 +117,7 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
         </FormSummarySection>
 
         <InformationViewHeaderButtons>
-          {isPending ? (
+          {!isSent ? (
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
               <Button
                 theme="coat"
@@ -161,7 +161,7 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
             </TabPanel>
             <TabPanel>
               {/* Areas information panel */}
-              {areas.map((area, index) => {
+              {areas.map((_, index) => {
                 const areaName = getAreaDefaultName(t, index, areas.length);
                 return (
                   <Accordion language={locale} heading={areaName} initiallyOpen key={areaName}>

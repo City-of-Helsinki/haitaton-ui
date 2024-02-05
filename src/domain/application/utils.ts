@@ -34,6 +34,13 @@ export async function sendApplication(applicationId: number) {
 }
 
 /**
+ * Check if application is sent to Allu
+ */
+export function isApplicationSent(alluStatus: AlluStatusStrings | null): boolean {
+  return alluStatus !== null;
+}
+
+/**
  * Check if application is pending or in draft state, meaning it's not
  * yet being handled in Allu
  */
