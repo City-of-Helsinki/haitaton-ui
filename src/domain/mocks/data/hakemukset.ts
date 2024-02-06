@@ -1,4 +1,4 @@
-import { Application } from '../../application/types/application';
+import { Application, HankkeenHakemus } from '../../application/types/application';
 import hakemuksetData from './hakemukset-data';
 import { isApplicationPending } from '../../application/utils';
 import ApiError from '../apiError';
@@ -13,9 +13,25 @@ export async function readAll() {
   return hakemukset;
 }
 
-export async function readAllForHanke(hankeTunnus: string) {
+export async function readAllForHanke(hankeTunnus: string): Promise<HankkeenHakemus[]> {
   const applications = await readAll();
-  return applications.filter((application) => application.hankeTunnus === hankeTunnus);
+  return applications
+    .filter((application) => application.hankeTunnus === hankeTunnus)
+    .map((application) => {
+      return {
+        id: application.id,
+        alluid: application.alluid,
+        alluStatus: application.alluStatus,
+        applicationIdentifier: application.applicationIdentifier,
+        applicationType: application.applicationType,
+        applicationData: {
+          name: application.applicationData.name,
+          startTime: application.applicationData.startTime,
+          endTime: application.applicationData.endTime,
+          pendingOnClient: isApplicationPending(application.alluStatus),
+        },
+      };
+    });
 }
 
 export async function create(data: Application) {

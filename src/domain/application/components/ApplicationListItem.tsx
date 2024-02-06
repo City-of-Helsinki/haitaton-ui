@@ -3,7 +3,7 @@ import { Card, IconEye } from 'hds-react';
 import { Box, Flex, Grid } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { AlluStatus, Application } from '../types/application';
+import { AlluStatus, HankkeenHakemus } from '../types/application';
 import styles from './ApplicationListItem.module.scss';
 import Text from '../../../common/components/text/Text';
 import ApplicationStatusTag from './ApplicationStatusTag';
@@ -12,14 +12,14 @@ import { ROUTES } from '../../../common/types/route';
 import ApplicationDates from './ApplicationDates';
 import DecisionLink from './DecisionLink';
 
-type Props = { application: Application };
+type Props = { application: HankkeenHakemus };
 
 function ApplicationListItem({ application }: Props) {
   const { t } = useTranslation();
   const getApplicationPathView = useLinkPath(ROUTES.HAKEMUS);
 
-  const { applicationData, alluStatus, applicationIdentifier, id } = application;
-  const { name, applicationType, startTime, endTime } = applicationData;
+  const { applicationData, alluStatus, applicationIdentifier, id, applicationType } = application;
+  const { name, startTime, endTime } = applicationData;
 
   const applicationId =
     applicationIdentifier || t(`hakemus:applicationTypeDraft:${applicationType}`);

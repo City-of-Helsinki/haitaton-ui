@@ -3,19 +3,19 @@ import { Box } from '@chakra-ui/react';
 import { useTable, Column, usePagination, useSortBy } from 'react-table';
 import { Pagination } from 'hds-react';
 import { useTranslation } from 'react-i18next';
-import { Application } from '../types/application';
+import { HankkeenHakemus } from '../types/application';
 import ApplicationListItem from './ApplicationListItem';
 import { Language } from '../../../common/types/language';
 import styles from './ApplicationList.module.scss';
 
 type Props = {
-  applications: Application[];
+  applications: HankkeenHakemus[];
 };
 
 function ApplicationList({ applications }: Props) {
   const { t, i18n } = useTranslation();
 
-  const columns: Column<Application>[] = React.useMemo(() => {
+  const columns: Column<HankkeenHakemus>[] = React.useMemo(() => {
     return [
       {
         id: 'name',
@@ -36,7 +36,7 @@ function ApplicationList({ applications }: Props) {
     pageCount,
     state: { pageIndex },
     rows,
-  } = useTable<Application>(
+  } = useTable<HankkeenHakemus>(
     {
       columns,
       data: applications,
