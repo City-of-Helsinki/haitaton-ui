@@ -85,7 +85,6 @@
     "react-router-dom": "^6.13.0",
     "react-scripts": "^5.0.1",
     "react-table": "^7.8.0",
-    "redux-thunk": "^2.3.0",
     "sass": "^1.69.7",
     "stream": "npm:stream-browserify",
     "stream-browserify": "^3.0.0",
