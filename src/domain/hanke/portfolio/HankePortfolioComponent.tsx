@@ -151,7 +151,13 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
               </CheckRightsByUser>
             </FeatureFlags>
           </div>
-          <button type="button" className={styles.iconWrapper}>
+          <button
+            type="button"
+            className={styles.iconWrapper}
+            aria-label={t('hankePortfolio:ariaLabels:expandHankeCard')}
+            aria-controls="hanke-card-content"
+            aria-expanded={buttonProps['aria-expanded']}
+          >
             {icon}
           </button>
         </div>
@@ -162,7 +168,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
           />
         </FeatureFlags>
       </>
-      <div className={styles.hankeCardContent} {...contentProps}>
+      <div className={styles.hankeCardContent} {...contentProps} id="hanke-card-content">
         <FeatureFlags flags={['hanke']}>
           <div>
             <div className={styles.gridBasicInfo}>

@@ -831,6 +831,9 @@
       "sposti": "Sähköposti",
       "puhelin": "Puhelin",
       "oikeudet": "Käyttöoikeutesi hankkeelle"
+    },
+    "ariaLabels": {
+      "expandHankeCard": "Laajenna hankkeen tiedot"
     }
   },
   "publicHankkeet": {
