@@ -5,8 +5,8 @@ import * as hankkeetDB from './data/hankkeet';
 import * as hakemuksetDB from './data/hakemukset';
 import * as usersDB from './data/users';
 import ApiError from './apiError';
-import { HankeUserSelf, IdentificationResponse, SignedInUser } from '../hanke/hankeUsers/hankeUser';
-import { Yhteyshenkilo } from '../hanke/edit/types';
+import { IdentificationResponse, SignedInUser } from '../hanke/hankeUsers/hankeUser';
+import { Yhteyshenkilo, YhteyshenkiloWithoutName } from '../hanke/edit/types';
 
 const apiUrl = '/api';
 
@@ -195,7 +195,7 @@ export const handlers = [
 
   rest.put(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat/self`, async (req, res, ctx) => {
     const { hankeTunnus } = req.params;
-    const reqBody: HankeUserSelf = await req.json();
+    const reqBody: YhteyshenkiloWithoutName = await req.json();
     const user = await usersDB.update(
       hankeTunnus as string,
       '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -206,7 +206,7 @@ export const handlers = [
 
   rest.put(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat/:userId`, async (req, res, ctx) => {
     const { hankeTunnus, userId } = req.params;
-    const reqBody: Yhteyshenkilo = await req.json();
+    const reqBody: Yhteyshenkilo | YhteyshenkiloWithoutName = await req.json();
     try {
       const updatedUser = await usersDB.update(hankeTunnus as string, userId as string, reqBody);
       return res(ctx.status(200), ctx.json(updatedUser));

@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import usersData from './users-data.json';
-import { AccessRightLevel, HankeUser, HankeUserSelf } from '../../hanke/hankeUsers/hankeUser';
-import { Yhteyshenkilo } from '../../hanke/edit/types';
+import { AccessRightLevel, HankeUser } from '../../hanke/hankeUsers/hankeUser';
+import { Yhteyshenkilo, YhteyshenkiloWithoutName } from '../../hanke/edit/types';
 import ApiError from '../apiError';
 
 let users = [...usersData];
@@ -67,7 +67,7 @@ export async function updatePermissions(
 export async function update(
   hankeTunnus: string,
   userId: string,
-  updates: Yhteyshenkilo | HankeUserSelf,
+  updates: Yhteyshenkilo | YhteyshenkiloWithoutName,
 ) {
   const userToUpdate = await readFromHanke(hankeTunnus, userId);
   if (!userToUpdate) {

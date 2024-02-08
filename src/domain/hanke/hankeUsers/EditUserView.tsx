@@ -167,15 +167,18 @@ function EditUserView({
       );
     } else {
       try {
+        const updates = tunnistautunut
+          ? { sahkoposti: data.sahkoposti, puhelinnumero: data.puhelinnumero }
+          : {
+              etunimi: data.etunimi,
+              sukunimi: data.sukunimi,
+              sahkoposti: data.sahkoposti,
+              puhelinnumero: data.puhelinnumero,
+            };
         const updatedUser = await updateUserMutation.mutateAsync({
           hankeTunnus,
           userId: id,
-          user: {
-            etunimi: data.etunimi,
-            sukunimi: data.sukunimi,
-            sahkoposti: data.sahkoposti,
-            puhelinnumero: data.puhelinnumero,
-          },
+          user: updates,
         });
         if (data.kayttooikeustaso !== kayttooikeustaso) {
           await updatePermissionMutation.mutateAsync({
