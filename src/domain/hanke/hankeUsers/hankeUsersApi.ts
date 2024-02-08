@@ -29,14 +29,28 @@ export async function getHankeUsers(hankeTunnus?: string) {
   return data.kayttajat;
 }
 
-export async function updateHankeUsers({
+// Update permissions of the listed users
+export async function updateHankeUsersPermissions({
   hankeTunnus,
   users,
 }: {
   hankeTunnus: string;
   users: Pick<HankeUser, 'id' | 'kayttooikeustaso'>[];
 }) {
-  const { data } = await api.put(`hankkeet/${hankeTunnus}/kayttajat`, { kayttajat: users });
+  await api.put(`hankkeet/${hankeTunnus}/kayttajat`, { kayttajat: users });
+}
+
+// Update the contact information of a user
+export async function updateHankeUser({
+  hankeTunnus,
+  userId,
+  user,
+}: {
+  hankeTunnus: string;
+  userId: string;
+  user: Yhteyshenkilo;
+}) {
+  const { data } = await api.put<HankeUser>(`hankkeet/${hankeTunnus}/kayttajat/${userId}`, user);
   return data;
 }
 

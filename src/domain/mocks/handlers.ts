@@ -189,19 +189,37 @@ export const handlers = [
   rest.put(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat`, async (req, res, ctx) => {
     const { hankeTunnus } = req.params;
     const { kayttajat } = await req.json();
-    await usersDB.update(hankeTunnus as string, kayttajat);
-    return res(ctx.status(200));
+    await usersDB.updatePermissions(hankeTunnus as string, kayttajat);
+    return res(ctx.status(204));
   }),
 
   rest.put(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat/self`, async (req, res, ctx) => {
     const { hankeTunnus } = req.params;
-    const { sahkoposti, puhelinnumero }: HankeUserSelf = await req.json();
-    const user = await usersDB.updateSelf(hankeTunnus as string, {
-      sahkoposti,
-      puhelinnumero,
-      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    });
+    const reqBody: HankeUserSelf = await req.json();
+    const user = await usersDB.update(
+      hankeTunnus as string,
+      '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+      reqBody,
+    );
     return res(ctx.status(200), ctx.json(user));
+  }),
+
+  rest.put(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat/:userId`, async (req, res, ctx) => {
+    const { hankeTunnus, userId } = req.params;
+    const reqBody: Yhteyshenkilo = await req.json();
+    try {
+      const updatedUser = await usersDB.update(hankeTunnus as string, userId as string, reqBody);
+      return res(ctx.status(200), ctx.json(updatedUser));
+    } catch (error) {
+      const { status, message } = error as ApiError;
+      return res(
+        ctx.status(status),
+        ctx.json({
+          errorMessage: message,
+          errorCode: 'HAI1001',
+        }),
+      );
+    }
   }),
 
   rest.get(`${apiUrl}/hankkeet/:hankeTunnus/whoami`, async (req, res, ctx) => {
