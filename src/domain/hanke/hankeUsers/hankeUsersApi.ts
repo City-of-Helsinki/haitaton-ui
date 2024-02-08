@@ -1,12 +1,6 @@
 import api from '../../api/api';
-import {
-  HankeUser,
-  HankeUserSelf,
-  IdentificationResponse,
-  SignedInUser,
-  SignedInUserByHanke,
-} from './hankeUser';
-import { Yhteyshenkilo } from '../edit/types';
+import { HankeUser, IdentificationResponse, SignedInUser, SignedInUserByHanke } from './hankeUser';
+import { Yhteyshenkilo, YhteyshenkiloWithoutName } from '../edit/types';
 
 export async function createHankeUser({
   hankeTunnus,
@@ -29,14 +23,28 @@ export async function getHankeUsers(hankeTunnus?: string) {
   return data.kayttajat;
 }
 
-export async function updateHankeUsers({
+// Update permissions of the listed users
+export async function updateHankeUsersPermissions({
   hankeTunnus,
   users,
 }: {
   hankeTunnus: string;
   users: Pick<HankeUser, 'id' | 'kayttooikeustaso'>[];
 }) {
-  const { data } = await api.put(`hankkeet/${hankeTunnus}/kayttajat`, { kayttajat: users });
+  await api.put(`hankkeet/${hankeTunnus}/kayttajat`, { kayttajat: users });
+}
+
+// Update the contact information of a user
+export async function updateHankeUser({
+  hankeTunnus,
+  userId,
+  user,
+}: {
+  hankeTunnus: string;
+  userId: string;
+  user: Yhteyshenkilo | YhteyshenkiloWithoutName;
+}) {
+  const { data } = await api.put<HankeUser>(`hankkeet/${hankeTunnus}/kayttajat/${userId}`, user);
   return data;
 }
 
@@ -45,7 +53,7 @@ export async function updateSelf({
   user,
 }: {
   hankeTunnus: string;
-  user: HankeUserSelf;
+  user: YhteyshenkiloWithoutName;
 }) {
   const { data } = await api.put<HankeUser>(`hankkeet/${hankeTunnus}/kayttajat/self`, user);
   return data;

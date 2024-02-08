@@ -93,3 +93,7 @@ export interface HankePostData
 export type NewHankeData = yup.InferType<typeof newHankeSchema>;
 
 export type Yhteyshenkilo = yup.InferType<typeof yhteyshenkiloSchema>;
+export type YhteyshenkiloWithoutName = Pick<
+  Yhteyshenkilo,
+  YHTEYSHENKILO_FORMFIELD.EMAIL | YHTEYSHENKILO_FORMFIELD.PUHELINNUMERO
+>;

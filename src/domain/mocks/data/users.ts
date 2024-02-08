@@ -1,7 +1,8 @@
 import { faker } from '@faker-js/faker';
 import usersData from './users-data.json';
-import { AccessRightLevel, HankeUser, HankeUserSelf } from '../../hanke/hankeUsers/hankeUser';
-import { Yhteyshenkilo } from '../../hanke/edit/types';
+import { AccessRightLevel, HankeUser } from '../../hanke/hankeUsers/hankeUser';
+import { Yhteyshenkilo, YhteyshenkiloWithoutName } from '../../hanke/edit/types';
+import ApiError from '../apiError';
 
 let users = [...usersData];
 
@@ -26,6 +27,10 @@ export async function readAll(hankeTunnus: string): Promise<HankeUser[]> {
   return users.filter((user) => user.hankeTunnus === hankeTunnus).map(mapToHankeUser);
 }
 
+async function readFromHanke(hankeTunnus: string, id: string): Promise<HankeUser | undefined> {
+  return (await readAll(hankeTunnus)).find((user) => user.id === id);
+}
+
 export async function create(hankeTunnus: string, user: Yhteyshenkilo) {
   const newUser: HankeUser = {
     id: faker.string.uuid(),
@@ -41,7 +46,10 @@ export async function create(hankeTunnus: string, user: Yhteyshenkilo) {
   return newUser;
 }
 
-export async function update(hankeTunnus: string, modifiedUsers: HankeUser[]) {
+export async function updatePermissions(
+  hankeTunnus: string,
+  modifiedUsers: Pick<HankeUser, 'id' | 'kayttooikeustaso'>[],
+) {
   users = users
     .filter((user) => user.hankeTunnus === hankeTunnus)
     .map((user) => {
@@ -50,28 +58,24 @@ export async function update(hankeTunnus: string, modifiedUsers: HankeUser[]) {
         return {
           ...user,
           kayttooikeustaso: modifiedUser.kayttooikeustaso as AccessRightLevel,
-          roolit: modifiedUser.roolit,
         };
       }
       return user;
     });
 }
 
-export async function updateSelf(
+export async function update(
   hankeTunnus: string,
-  modifiedUser: HankeUserSelf & { id: string },
+  userId: string,
+  updates: Yhteyshenkilo | YhteyshenkiloWithoutName,
 ) {
-  users = users
-    .filter((user) => user.hankeTunnus === hankeTunnus)
-    .map((user) => {
-      if (modifiedUser.id === user.id) {
-        return {
-          ...user,
-          sahkoposti: modifiedUser.sahkoposti,
-          puhelinnumero: modifiedUser.puhelinnumero,
-        };
-      }
-      return user;
-    });
-  return users.find((user) => user.id === modifiedUser.id);
+  const userToUpdate = await readFromHanke(hankeTunnus, userId);
+  if (!userToUpdate) {
+    throw new ApiError('User not found', 404);
+  }
+  const updatedUser = Object.assign(userToUpdate, updates);
+  users = users.map((user) => {
+    return user.id === updatedUser?.id ? { ...updatedUser, hankeTunnus } : user;
+  });
+  return updatedUser;
 }

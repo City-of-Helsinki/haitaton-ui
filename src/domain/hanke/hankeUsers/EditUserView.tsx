@@ -32,7 +32,7 @@ import {
   InvitationErrorNotification,
   InvitationSuccessNotification,
 } from './InvitationNotification';
-import { updateSelf } from './hankeUsersApi';
+import { updateHankeUser, updateHankeUsersPermissions, updateSelf } from './hankeUsersApi';
 import yup from '../../../common/utils/yup';
 import { yhteyshenkiloSchema } from '../edit/hankeSchema';
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
@@ -51,6 +51,10 @@ type AccessRightLevelOption = {
   label: string;
   value: keyof typeof AccessRightLevel;
 };
+
+const editUserSchema = yhteyshenkiloSchema.shape({
+  kayttooikeustaso: yup.mixed<keyof typeof AccessRightLevel>().defined().required(),
+});
 
 function EditUserView({
   user,
@@ -82,14 +86,14 @@ function EditUserView({
       puhelinnumero,
       kayttooikeustaso,
     },
-    resolver: yupResolver(
-      yhteyshenkiloSchema.shape({ kayttooikeustaso: yup.mixed<keyof typeof AccessRightLevel>() }),
-    ),
+    resolver: yupResolver(editUserSchema),
   });
-  const { getValues, handleSubmit } = formContext;
+  const { handleSubmit } = formContext;
 
   const queryClient = useQueryClient();
   const updateSelfMutation = useMutation(updateSelf);
+  const updateUserMutation = useMutation(updateHankeUser);
+  const updatePermissionMutation = useMutation(updateHankeUsersPermissions);
   const { resendInvitationMutation, linksSentTo, sendInvitation } = useResendInvitation();
   const { setNotification } = useGlobalNotification();
 
@@ -125,13 +129,19 @@ function EditUserView({
   const isDropdownDisabled =
     isOnlyWithAllRights || !canEditRights || !canEditAllRights || isSignedInUser;
 
+  const saveButtonIsLoading =
+    updateSelfMutation.isLoading ||
+    updateUserMutation.isLoading ||
+    updatePermissionMutation.isLoading;
+  const showUpdatedUserErrorNotification =
+    updateSelfMutation.isError || updateUserMutation.isError || updatePermissionMutation.isError;
+
   function navigateToHankeUsersView() {
     navigate(getHankeUsersPath({ hankeTunnus }));
   }
 
   function handleSuccess(data: HankeUser) {
     queryClient.setQueryData(['hankeUser', data.id], data);
-    queryClient.invalidateQueries(['hankeUsers', hankeTunnus]);
     setNotification(true, {
       label: t('hankeUsers:notifications:userUpdatedSuccessLabel'),
       message: t('hankeUsers:notifications:userUpdatedSuccessText'),
@@ -144,23 +154,51 @@ function EditUserView({
     navigateToHankeUsersView();
   }
 
-  function editUser() {
+  async function editUser(data: yup.InferType<typeof editUserSchema>) {
     if (isSignedInUser) {
       updateSelfMutation.mutate(
         {
           hankeTunnus,
-          user: { sahkoposti: getValues('sahkoposti'), puhelinnumero: getValues('puhelinnumero') },
+          user: { sahkoposti: data.sahkoposti, puhelinnumero: data.puhelinnumero },
         },
         {
           onSuccess: handleSuccess,
         },
       );
+    } else {
+      try {
+        const updates = tunnistautunut
+          ? { sahkoposti: data.sahkoposti, puhelinnumero: data.puhelinnumero }
+          : {
+              etunimi: data.etunimi,
+              sukunimi: data.sukunimi,
+              sahkoposti: data.sahkoposti,
+              puhelinnumero: data.puhelinnumero,
+            };
+        const updatedUser = await updateUserMutation.mutateAsync({
+          hankeTunnus,
+          userId: id,
+          user: updates,
+        });
+        if (data.kayttooikeustaso !== kayttooikeustaso) {
+          await updatePermissionMutation.mutateAsync({
+            hankeTunnus,
+            users: [{ id, kayttooikeustaso: data.kayttooikeustaso }],
+          });
+          updatedUser.kayttooikeustaso = data.kayttooikeustaso;
+        }
+        handleSuccess(updatedUser);
+        // eslint-disable-next-line no-empty
+      } catch (e) {}
     }
   }
 
   function closeUpdateUserErrorNotification() {
     if (isSignedInUser) {
       updateSelfMutation.reset();
+    } else {
+      updateUserMutation.reset();
+      updatePermissionMutation.reset();
     }
   }
 
@@ -236,13 +274,13 @@ function EditUserView({
                 name="etunimi"
                 label={t('hankeForm:labels:etunimi')}
                 required
-                readOnly={isSignedInUser}
+                readOnly={tunnistautunut}
               />
               <TextInput
                 name="sukunimi"
                 label={t('hankeForm:labels:sukunimi')}
                 required
-                readOnly={isSignedInUser}
+                readOnly={tunnistautunut}
               />
             </ResponsiveGrid>
             <ResponsiveGrid maxColumns={2}>
@@ -259,6 +297,7 @@ function EditUserView({
                 name="kayttooikeustaso"
                 label={t('hankeUsers:accessRights')}
                 options={accessRightLevelOptions}
+                required
                 disabled={isDropdownDisabled}
                 isOptionDisabled={(option) =>
                   option.value === 'KAIKKI_OIKEUDET' &&
@@ -274,7 +313,7 @@ function EditUserView({
             >
               <Button
                 iconLeft={<IconSaveDisketteFill />}
-                isLoading={updateSelfMutation.isLoading}
+                isLoading={saveButtonIsLoading}
                 type="submit"
               >
                 {t('form:buttons:saveChanges')}
@@ -291,7 +330,7 @@ function EditUserView({
         </FormProvider>
       </Container>
 
-      {updateSelfMutation.isError && (
+      {showUpdatedUserErrorNotification && (
         <Notification
           position="top-right"
           dismissible
