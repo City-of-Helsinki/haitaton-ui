@@ -8,7 +8,7 @@ import { SignedInUser } from '../hankeUsers/hankeUser';
 
 function getViewPermissionForUser() {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
       return res(
         ctx.status(200),
         ctx.json<SignedInUser>({
@@ -100,7 +100,7 @@ test('Correct information about hanke should be displayed', async () => {
   expect(screen.queryByText('Ei')).toBeInTheDocument();
   expect(screen.queryByText('11974 m²')).toBeInTheDocument();
 
-  // Data in side bar
+  // Data in sidebar
   expect(screen.queryByText('Hankealue 1 (11974 m²)')).toBeInTheDocument();
   expect(screen.queryByText('2.1.2023–24.2.2023')).toBeInTheDocument();
 
@@ -180,7 +180,7 @@ test('Should show information if no applications exist', async () => {
 
 test('Should show error notification if loading applications fails', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/hakemukset', async (req, res, ctx) => {
+    rest.get('/api/hankkeet/:hankeTunnus/hakemukset', async (_, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
     }),
   );

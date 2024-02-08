@@ -1,4 +1,4 @@
-import { AttachmentMetadata } from './../../../common/types/attachment';
+import { AttachmentMetadata } from '../../../common/types/attachment';
 import { Polygon, Position } from 'geojson';
 import { Coordinate } from 'ol/coordinate';
 import { CRS } from '../../../common/types/hanke';
@@ -133,6 +133,20 @@ export interface Application {
   applicationData: JohtoselvitysData;
   applicationIdentifier?: string | null;
   hankeTunnus: string | null;
+}
+
+export interface HankkeenHakemus {
+  id: number | null;
+  alluid?: number | null;
+  alluStatus: AlluStatusStrings | null;
+  applicationIdentifier?: string | null;
+  applicationType: ApplicationType;
+  applicationData: {
+    name: string;
+    startTime: Date | null;
+    endTime: Date | null;
+    pendingOnClient: boolean;
+  };
 }
 
 export interface ApplicationDeletionResult {

@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
 import api from '../../api/api';
-import { Application } from '../types/application';
+import { Application, HankkeenHakemus } from '../types/application';
 
 async function getApplications() {
   const { data } = await api.get<Application[]>(`/hakemukset`);
@@ -8,7 +8,7 @@ async function getApplications() {
 }
 
 async function getApplicationsForHanke(hankeTunnus?: string) {
-  const { data } = await api.get<{ applications: Application[] }>(
+  const { data } = await api.get<{ applications: HankkeenHakemus[] }>(
     `/hankkeet/${hankeTunnus}/hakemukset`,
   );
   return data;
@@ -19,7 +19,7 @@ export function useApplications() {
 }
 
 export function useApplicationsForHanke(hankeTunnus?: string) {
-  return useQuery<{ applications: Application[] }>(
+  return useQuery<{ applications: HankkeenHakemus[] }>(
     ['applicationsForHanke', hankeTunnus],
     () => getApplicationsForHanke(hankeTunnus),
     { enabled: Boolean(hankeTunnus) },
