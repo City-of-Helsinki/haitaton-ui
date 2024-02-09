@@ -83,7 +83,7 @@ function HaitatonHeader() {
 
   function getUserMenuLabel() {
     if (isAuthenticated) {
-      return user?.profile.name ?? user?.profile.email;
+      return user?.profile.name ?? (user?.profile.email as string);
     }
     return t('authentication:loginButton');
   }

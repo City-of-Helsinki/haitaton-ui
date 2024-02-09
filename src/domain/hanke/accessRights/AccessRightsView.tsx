@@ -267,7 +267,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
       transform: getAccessRightLabel,
     },
     {
-      headerName: null,
+      headerName: '',
       key: 'actionButtons',
       isSortable: false,
       transform: getActionButtons,
