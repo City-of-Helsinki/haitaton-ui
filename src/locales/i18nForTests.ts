@@ -21,5 +21,5 @@ instance.init({
 
 export default instance;
 
-const t = i18next.t.bind(instance);
+const { t } = instance;
 export { t };
