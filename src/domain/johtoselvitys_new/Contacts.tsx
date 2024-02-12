@@ -256,7 +256,6 @@ const ContactFields: React.FC<{
           readOnly={orderer}
           autoComplete="email"
         />
-        <TextInput name={`foo`} label="Bar" required />
         <TextInput
           name={`applicationData.${customerType}.contacts.${index}.phone`}
           label={t('form:yhteystiedot:labels:puhelinnumero')}
