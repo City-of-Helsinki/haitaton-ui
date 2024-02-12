@@ -187,26 +187,6 @@ function fillContactsInformation() {
   fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.customer.phone'), {
     target: { value: '0000000000' },
   });
-
-  // Fill contact of contractor
-  fireEvent.change(
-    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.firstName'),
-    {
-      target: { value: 'Alli' },
-    },
-  );
-  fireEvent.change(
-    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.lastName'),
-    {
-      target: { value: 'Asiakas' },
-    },
-  );
-  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.email'), {
-    target: { value: 'alli.asiakas@test.com' },
-  });
-  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.phone'), {
-    target: { value: '0000000000' },
-  });
 }
 
 test('Cable report application form can be filled and saved and sent to Allu', async () => {
@@ -393,7 +373,7 @@ test('Should save existing application between page changes when there are chang
 });
 
 test('Should change users own role and its fields correctly', async () => {
-  const { user } = render(<JohtoselvitysContainer application={application} />);
+  render(<JohtoselvitysContainer application={application} />);
 
   const firstName = 'Tauno';
   const lastName = 'Työmies';
@@ -422,40 +402,6 @@ test('Should change users own role and its fields correctly', async () => {
   fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.phone'), {
     target: { value: phone },
   });
-
-  // Move to areas page
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
-
-  fillAreasInformation();
-
-  // Move to contacts page
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  await user.click(screen.getByTestId('contractorWithContacts-0'));
-
-  expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.firstName'),
-  ).toHaveValue('');
-  expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.lastName'),
-  ).toHaveValue('');
-  expect(screen.getByTestId('applicationData.customerWithContacts.contacts.0.email')).toHaveValue(
-    '',
-  );
-  expect(screen.getByTestId('applicationData.customerWithContacts.contacts.0.phone')).toHaveValue(
-    '',
-  );
-  expect(
-    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.firstName'),
-  ).toHaveValue(firstName);
-  expect(
-    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.lastName'),
-  ).toHaveValue(lastName);
-  expect(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.email')).toHaveValue(
-    email,
-  );
-  expect(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.phone')).toHaveValue(
-    phone,
-  );
 });
 
 test('Should not change anything if selecting the same role again', async () => {
@@ -617,13 +563,6 @@ test('Form is saved when contacts are filled with orderer information', async ()
   await testFormSaving(
     applications[0],
     'applicationData.customerWithContacts.customer.fillOwnInfoButton',
-  );
-});
-
-test('Form is saved when sub contacts are filled with orderer information', async () => {
-  await testFormSaving(
-    applications[0],
-    'applicationData.contractorWithContacts.contacts.0.fillOwnInfoButton',
   );
 });
 

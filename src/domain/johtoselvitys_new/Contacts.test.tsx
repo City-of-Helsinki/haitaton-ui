@@ -93,26 +93,3 @@ test('Customer fields can be filled with orderer information', async () => {
     orderer.phone,
   );
 });
-
-test('Contact fields can be filled with orderer information', async () => {
-  const application = applications[0];
-  const orderer = application.applicationData.customerWithContacts.contacts[0];
-  const { user } = render(<Form application={application} />);
-
-  await user.click(
-    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.fillOwnInfoButton'),
-  );
-
-  expect(
-    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.firstName'),
-  ).toHaveValue(orderer.firstName);
-  expect(
-    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.lastName'),
-  ).toHaveValue(orderer.lastName);
-  expect(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.email')).toHaveValue(
-    orderer.email,
-  );
-  expect(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.phone')).toHaveValue(
-    orderer.phone,
-  );
-});

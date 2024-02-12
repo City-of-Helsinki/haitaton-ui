@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Accordion, Button, Fieldset, IconCross, IconPlusCircle } from 'hds-react';
+import { Accordion, Button, Fieldset, IconPlusCircle } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
@@ -14,7 +14,6 @@ import styles from './Contacts.module.scss';
 import Text from '../../common/components/text/Text';
 import ResponsiveGrid from '../../common/components/grid/ResponsiveGrid';
 import TextInput from '../../common/components/textInput/TextInput';
-import Contact from '../forms/components/Contact';
 import useLocale from '../../common/hooks/useLocale';
 import Dropdown from '../../common/components/dropdown/Dropdown';
 import { HankeContacts } from '../types/hanke';
@@ -22,6 +21,7 @@ import PreFilledContactSelect from '../application/components/PreFilledContactSe
 import { JohtoselvitysFormValues } from './types';
 import useForceUpdate from '../../common/hooks/useForceUpdate';
 import { findOrdererKey } from './utils';
+import FormContact from '../forms/components/FormContact';
 
 function getEmptyContact(): ApplicationContact {
   return {
@@ -193,91 +193,6 @@ const CustomerFields: React.FC<{
   );
 };
 
-// Yhteyshenkilö
-const ContactFields: React.FC<{
-  customerType: CustomerType;
-  index: number;
-  ordererInformation?: ApplicationContact;
-  onRemove: () => void;
-}> = ({ customerType, index, ordererInformation, onRemove }) => {
-  const { t } = useTranslation();
-  const { getValues, setValue } = useFormContext<JohtoselvitysFormValues>();
-
-  const orderer = getValues(`applicationData.${customerType}.contacts.${index}.orderer`);
-  const contactsLength: number = getValues().applicationData[customerType]?.contacts.length || 0;
-  const showRemoveContactButton = !orderer && contactsLength > 1;
-
-  function fillWithOrdererInformation() {
-    if (ordererInformation !== undefined) {
-      setValue(
-        `applicationData.${customerType}.contacts.${index}`,
-        {
-          ...ordererInformation,
-          orderer: false,
-        },
-        { shouldValidate: true, shouldDirty: true },
-      );
-    }
-  }
-
-  return (
-    <Fieldset
-      heading={t('form:yhteystiedot:titles:subContactInformation')}
-      border
-      className={styles.fieldset}
-    >
-      <ResponsiveGrid>
-        <TextInput
-          name={`applicationData.${customerType}.contacts.${index}.firstName`}
-          label={t('hankeForm:labels:etunimi')}
-          required
-          readOnly={orderer}
-          autoComplete="given-name"
-        />
-        <TextInput
-          name={`applicationData.${customerType}.contacts.${index}.lastName`}
-          label={t('hankeForm:labels:sukunimi')}
-          required
-          readOnly={orderer}
-          autoComplete="family-name"
-        />
-        {!orderer && (
-          <FillOwnInformationButton
-            onClick={fillWithOrdererInformation}
-            testId={`applicationData.${customerType}.contacts.${index}.fillOwnInfoButton`}
-          />
-        )}
-      </ResponsiveGrid>
-      <ResponsiveGrid>
-        <TextInput
-          name={`applicationData.${customerType}.contacts.${index}.email`}
-          label={t('form:yhteystiedot:labels:email')}
-          required
-          readOnly={orderer}
-          autoComplete="email"
-        />
-        <TextInput
-          name={`applicationData.${customerType}.contacts.${index}.phone`}
-          label={t('form:yhteystiedot:labels:puhelinnumero')}
-          required
-          readOnly={orderer}
-          autoComplete="tel"
-        />
-        {showRemoveContactButton && (
-          <Button
-            variant="supplementary"
-            iconLeft={<IconCross aria-hidden="true" />}
-            onClick={onRemove}
-            style={{ alignSelf: 'end' }}
-          >
-            {t(`form:yhteystiedot:buttons:removeSubContact`)}
-          </Button>
-        )}
-      </ResponsiveGrid>
-    </Fieldset>
-  );
-};
-
 export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeContacts }) => {
   const { t } = useTranslation();
   const locale = useLocale();
@@ -286,6 +201,7 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
   const ordererInformation: ApplicationContact | undefined = getValues().applicationData[
     ordererKey
   ]?.contacts.find((contact) => contact.orderer);
+  const hankeTunnus = getValues('hankeTunnus');
 
   const [propertyDeveloper, representative] = watch([
     'applicationData.propertyDeveloperWithContacts',
@@ -322,27 +238,13 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
       </Text>
 
       {/* Hakija */}
-      <Contact<CustomerType>
-        contactType="customerWithContacts"
-        subContactPath="applicationData.customerWithContacts.contacts"
-        emptySubContact={getEmptyContact()}
-        renderSubContact={(subContactIndex, _subContactCount, removeSubContact) => {
-          return (
-            <ContactFields
-              customerType="customerWithContacts"
-              index={subContactIndex}
-              ordererInformation={ordererInformation}
-              onRemove={() => removeSubContact(subContactIndex)}
-            />
-          );
-        }}
-      >
+      <FormContact<CustomerType> contactType="customerWithContacts" hankeTunnus={hankeTunnus!}>
         <CustomerFields
           customerType="customerWithContacts"
           hankeContacts={hankeContacts}
           ordererInformation={ordererInformation}
         />
-      </Contact>
+      </FormContact>
 
       {/* Työn suorittaja */}
       <Accordion
@@ -351,27 +253,13 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
         headingLevel={3}
         initiallyOpen
       >
-        <Contact<CustomerType>
-          contactType="contractorWithContacts"
-          subContactPath="applicationData.contractorWithContacts.contacts"
-          emptySubContact={getEmptyContact()}
-          renderSubContact={(subContactIndex, _subContactCount, removeSubContact) => {
-            return (
-              <ContactFields
-                customerType="contractorWithContacts"
-                index={subContactIndex}
-                ordererInformation={ordererInformation}
-                onRemove={() => removeSubContact(subContactIndex)}
-              />
-            );
-          }}
-        >
+        <FormContact<CustomerType> contactType="contractorWithContacts" hankeTunnus={hankeTunnus!}>
           <CustomerFields
             customerType="contractorWithContacts"
             hankeContacts={hankeContacts}
             ordererInformation={ordererInformation}
           />
-        </Contact>
+        </FormContact>
       </Accordion>
 
       {/* Rakennuttaja */}
@@ -382,28 +270,17 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
         initiallyOpen={isPropertyDeveloper}
       >
         {isPropertyDeveloper && (
-          <Contact<CustomerType>
+          <FormContact<CustomerType>
             contactType="propertyDeveloperWithContacts"
+            hankeTunnus={hankeTunnus!}
             onRemove={handleRemovePropertyDeveloper}
-            subContactPath="applicationData.propertyDeveloperWithContacts.contacts"
-            emptySubContact={getEmptyContact()}
-            renderSubContact={(subContactIndex, _subContactCount, removeSubContact) => {
-              return (
-                <ContactFields
-                  customerType="propertyDeveloperWithContacts"
-                  index={subContactIndex}
-                  ordererInformation={ordererInformation}
-                  onRemove={() => removeSubContact(subContactIndex)}
-                />
-              );
-            }}
           >
             <CustomerFields
               customerType="propertyDeveloperWithContacts"
               hankeContacts={hankeContacts}
               ordererInformation={ordererInformation}
             />
-          </Contact>
+          </FormContact>
         )}
 
         {!isPropertyDeveloper && (
@@ -425,28 +302,17 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
         initiallyOpen={isRepresentative}
       >
         {isRepresentative && (
-          <Contact<CustomerType>
+          <FormContact<CustomerType>
             contactType="representativeWithContacts"
+            hankeTunnus={hankeTunnus!}
             onRemove={handleRemoveRepresentative}
-            subContactPath="applicationData.representativeWithContacts.contacts"
-            emptySubContact={getEmptyContact()}
-            renderSubContact={(subContactIndex, _subContactCount, removeSubContact) => {
-              return (
-                <ContactFields
-                  customerType="representativeWithContacts"
-                  index={subContactIndex}
-                  ordererInformation={ordererInformation}
-                  onRemove={() => removeSubContact(subContactIndex)}
-                />
-              );
-            }}
           >
             <CustomerFields
               customerType="representativeWithContacts"
               hankeContacts={hankeContacts}
               ordererInformation={ordererInformation}
             />
-          </Contact>
+          </FormContact>
         )}
 
         {!isRepresentative && (
