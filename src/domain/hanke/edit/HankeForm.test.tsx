@@ -19,6 +19,7 @@ import { HankeAttachmentMetadata } from '../hankeAttachments/types';
 import api from '../../api/api';
 import * as hankeAttachmentsApi from '../hankeAttachments/hankeAttachmentsApi';
 import { HankeUser } from '../hankeUsers/hankeUser';
+import { fillNewContactPersonForm } from '../../forms/components/testUtils';
 
 afterEach(cleanup);
 
@@ -487,34 +488,6 @@ describe('HankeForm', () => {
 });
 
 describe('New contact person form and contact person dropdown', () => {
-  function fillNewContactPersonForm(
-    options: {
-      etunimi?: string;
-      sukunimi?: string;
-      sahkoposti?: string;
-      puhelinnumero?: string;
-    } = {},
-  ) {
-    const {
-      etunimi = 'Matti',
-      sukunimi = 'Meikäläinen',
-      sahkoposti = 'matti.meikalainen@test.com',
-      puhelinnumero = '0401234567',
-    } = options;
-    fireEvent.change(screen.getByLabelText(/etunimi/i), {
-      target: { value: etunimi },
-    });
-    fireEvent.change(screen.getByLabelText(/sukunimi/i), {
-      target: { value: sukunimi },
-    });
-    fireEvent.change(screen.getAllByRole('textbox', { name: /sähköposti/i })[1], {
-      target: { value: sahkoposti },
-    });
-    fireEvent.change(screen.getAllByRole('textbox', { name: /puhelin/i })[1], {
-      target: { value: puhelinnumero },
-    });
-  }
-
   test('Should be able to create new user and new user is added to dropdown', async () => {
     const newUser = {
       etunimi: 'Martti',

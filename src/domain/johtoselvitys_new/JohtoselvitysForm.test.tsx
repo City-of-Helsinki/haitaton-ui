@@ -17,6 +17,7 @@ import {
   AttachmentType,
 } from '../application/types/application';
 import * as applicationAttachmentsApi from '../application/attachments';
+import { fillNewContactPersonForm } from '../forms/components/testUtils';
 
 afterEach(cleanup);
 
@@ -719,4 +720,22 @@ test('Summary should show attachments and they are downloadable', async () => {
   await user.click(screen.getByText(ATTACHMENT_META.fileName));
 
   expect(fetchContentMock).toHaveBeenCalledWith(testApplication.id, ATTACHMENT_META.id);
+});
+
+test('Should be able to create new user', async () => {
+  const newUser = {
+    etunimi: 'Marja',
+    sukunimi: 'Meikäkäinen',
+    sahkoposti: 'marja@test.com',
+    puhelinnumero: '0000000000',
+  };
+  const testApplication = applications[0];
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+  expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
+  await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
+  fillNewContactPersonForm(newUser);
+  await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+
+  expect(screen.getByText('Yhteyshenkilö tallennettu')).toBeInTheDocument();
 });
