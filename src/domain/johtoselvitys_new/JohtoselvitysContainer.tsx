@@ -255,15 +255,9 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   const ordererKey = findOrdererKey(getValues('applicationData'));
 
   const customer = getValues('applicationData.customerWithContacts.customer');
-  const customersContacts = getValues('applicationData.customerWithContacts.contacts');
   const contractor = getValues('applicationData.contractorWithContacts.customer');
-  const contractorsContacts = getValues('applicationData.contractorWithContacts.contacts');
   const propertyDeveloper = getValues('applicationData.propertyDeveloperWithContacts.customer');
-  const propertyDevelopersContacts = getValues(
-    'applicationData.propertyDeveloperWithContacts.contacts',
-  );
   const representative = getValues('applicationData.representativeWithContacts.customer');
-  const representativesContacts = getValues('applicationData.representativeWithContacts.contacts');
 
   // Fields that are validated in each page when moving forward in form
   const pageFieldsToValidate: FieldPath<JohtoselvitysFormValues>[][] = useMemo(
@@ -291,46 +285,20 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
           'applicationData.customerWithContacts.customer',
         ),
         ...getFieldPaths<JohtoselvitysFormValues>(
-          customersContacts,
-          'applicationData.customerWithContacts.contacts',
-        ),
-        ...getFieldPaths<JohtoselvitysFormValues>(
           contractor,
           'applicationData.contractorWithContacts.customer',
-        ),
-        ...getFieldPaths<JohtoselvitysFormValues>(
-          contractorsContacts,
-          'applicationData.contractorWithContacts.contacts',
         ),
         ...getFieldPaths<JohtoselvitysFormValues>(
           propertyDeveloper,
           'applicationData.propertyDeveloperWithContacts.customer',
         ),
         ...getFieldPaths<JohtoselvitysFormValues>(
-          propertyDevelopersContacts,
-          'applicationData.propertyDeveloperWithContacts.contacts',
-        ),
-        ...getFieldPaths<JohtoselvitysFormValues>(
           representative,
           'applicationData.representativeWithContacts.customer',
         ),
-        ...getFieldPaths<JohtoselvitysFormValues>(
-          representativesContacts,
-          'applicationData.representativeWithContacts.contacts',
-        ),
       ],
     ],
-    [
-      ordererKey,
-      customer,
-      customersContacts,
-      contractor,
-      contractorsContacts,
-      propertyDeveloper,
-      propertyDevelopersContacts,
-      representative,
-      representativesContacts,
-    ],
+    [ordererKey, customer, contractor, propertyDeveloper, representative],
   );
 
   const formSteps = useMemo(() => {
