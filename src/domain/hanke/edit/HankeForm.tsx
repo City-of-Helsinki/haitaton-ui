@@ -62,7 +62,6 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     setValue,
     trigger,
     watch,
-    reset,
   } = formContext;
 
   const formValues = getValues();
@@ -83,7 +82,6 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       setValue('alkuPvm', data.alkuPvm);
       setValue('loppuPvm', data.loppuPvm);
       setValue('alueet', data.alueet?.map(convertHankeAlueToFormState));
-      reset(undefined, { keepDirtyValues: true });
       setShowNotification('success');
     },
   });
