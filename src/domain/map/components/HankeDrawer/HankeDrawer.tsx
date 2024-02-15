@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Vector as VectorSource } from 'ol/source';
 import { VectorSourceEvent } from 'ol/source/Vector';
 import { Feature } from 'ol';
@@ -47,11 +47,10 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
   const ortoLayerOpacity = mapTileLayers.kantakartta.visible ? 0.5 : 1;
   const [drawSource] = useState<VectorSource>(existingDrawSource || new VectorSource());
 
-  const featuresLoaded = useRef(false);
-
-  // Draw existing features once if any
+  // Draw existing features
   useEffect(() => {
-    if (features && features.length > 0 && !featuresLoaded.current) {
+    if (features && features.length > 0) {
+      drawSource.clear();
       features.forEach((feature) => {
         if (feature) {
           drawSource.addFeature(feature);
@@ -59,7 +58,6 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
       });
       drawSource.dispatchEvent('featuresAdded');
     }
-    featuresLoaded.current = true;
   }, [features, drawSource]);
 
   useEffect(() => {
@@ -115,7 +113,7 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
           {mapTileLayers.ortokartta.visible && <Ortokartta opacity={ortoLayerOpacity} />}
           <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
 
-          {featuresLoaded.current && <FitSource source={drawSource} />}
+          <FitSource source={drawSource} />
 
           <Controls>
             <DrawModule source={drawSource} />

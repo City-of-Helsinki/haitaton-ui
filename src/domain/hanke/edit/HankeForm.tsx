@@ -23,6 +23,7 @@ import ApplicationAddDialog from '../../application/components/ApplicationAddDia
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
 import { changeFormStep } from '../../forms/utils';
 import { updateHanke } from './hankeApi';
+import { convertHankeAlueToFormState } from './utils';
 
 type Props = {
   formData: HankeDataFormState;
@@ -61,6 +62,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     setValue,
     trigger,
     watch,
+    reset,
   } = formContext;
 
   const formValues = getValues();
@@ -80,6 +82,8 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       setValue('status', data.status);
       setValue('alkuPvm', data.alkuPvm);
       setValue('loppuPvm', data.loppuPvm);
+      setValue('alueet', data.alueet?.map(convertHankeAlueToFormState));
+      reset(undefined, { keepDirtyValues: true });
       setShowNotification('success');
     },
   });
@@ -132,6 +136,12 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     setAttachmentsUploading(uploading);
   }
 
+  function handleStepChange() {
+    if (isDirty) {
+      save();
+    }
+  }
+
   const formSteps = [
     {
       element: <HankeFormPerustiedot errors={errors} register={register} formData={formValues} />,
@@ -177,7 +187,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
         <MultipageForm
           heading={formHeading}
           formSteps={formSteps}
-          onStepChange={save}
+          onStepChange={handleStepChange}
           isLoading={attachmentsUploading}
           isLoadingText={attachmentsUploadingText}
         >
