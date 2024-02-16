@@ -123,7 +123,7 @@ export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
     };
   }, [drawSource, append, forceUpdate, setValue, featuresLoaded]);
 
-  const { tabRefs } = useSelectableTabs(applicationAreas.length, { selectLastTabOnChange: true });
+  const { tabRefs } = useSelectableTabs(applicationAreas, { selectLastTabOnChange: true });
 
   const higlightArea = useHighlightArea();
 

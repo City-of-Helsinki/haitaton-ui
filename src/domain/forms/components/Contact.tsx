@@ -56,7 +56,7 @@ const Contact = <T,>({
   }, [subContactFields, subContactTemplate, addSubContact]);
 
   const renderSubContacts = subContactFields.length > 0 && renderSubContact;
-  const { tabRefs } = useSelectableTabs(subContactFields.length, { selectLastTabOnChange: true });
+  const { tabRefs } = useSelectableTabs(subContactFields, { selectLastTabOnChange: true });
 
   return (
     <>

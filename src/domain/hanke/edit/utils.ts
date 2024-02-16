@@ -66,6 +66,7 @@ export const convertFormStateToHankeData = (hankeData: HankeDataFormState): Hank
       return {
         ...hankeAlue,
         geometriat: {
+          ...hankeAlue.geometriat,
           featureCollection: formatFeaturesToHankeGeoJSON(alue.feature ? [alue.feature] : []),
         },
       };
@@ -85,27 +86,28 @@ export const convertFormStateToHankeData = (hankeData: HankeDataFormState): Hank
   };
 };
 
+export function convertHankeAlueToFormState(alue: HankeAlue) {
+  const geometry = alue.geometriat?.featureCollection.features[0]?.geometry as GeoJSONPolygon;
+  if (!geometry) {
+    return alue;
+  }
+  return {
+    ...alue,
+    feature: new Feature(new Polygon(geometry.coordinates)),
+    nimi: alue.nimi !== null && alue.nimi !== '' ? alue.nimi : undefined,
+  };
+}
+
 /**
  * Make sure that hanke data coming from API has everything the form needs.
  * Add openlayers feature to each hanke area, converting area geometry into openlayers feature.
  */
 export const convertHankeDataToFormState = (
-  hankeData: HankeDataDraft | undefined,
+  hankeData: HankeDataDraft | HankeDataFormState | undefined,
 ): HankeDataFormState => ({
   ...hankeData,
   [FORMFIELD.HANKEALUEET]:
-    hankeData &&
-    hankeData[FORMFIELD.HANKEALUEET]?.map((alue) => {
-      const geometry = alue.geometriat?.featureCollection.features[0]?.geometry as GeoJSONPolygon;
-      if (!geometry) {
-        return alue;
-      }
-      return {
-        ...alue,
-        feature: new Feature(new Polygon(geometry.coordinates)),
-        nimi: alue.nimi !== null && alue.nimi !== '' ? alue.nimi : undefined,
-      };
-    }),
+    hankeData && hankeData[FORMFIELD.HANKEALUEET]?.map(convertHankeAlueToFormState),
   omistajat: hankeData?.omistajat ? hankeData.omistajat : [],
   rakennuttajat: hankeData?.rakennuttajat ? hankeData.rakennuttajat : [],
   toteuttajat: hankeData?.toteuttajat ? hankeData.toteuttajat : [],
