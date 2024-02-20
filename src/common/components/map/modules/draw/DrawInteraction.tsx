@@ -11,6 +11,7 @@ import { DRAWTOOLTYPE } from './types';
 import MapContext from '../../MapContext';
 import useDrawContext from './useDrawContext';
 import { getSurfaceArea, isPolygonSelfIntersecting } from '../../utils';
+import { styleFunction } from '../../../../../domain/map/utils/geometryStyle';
 
 type Props = {
   features?: Collection<Feature>;
@@ -80,12 +81,15 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
       });
 
       drawInstance.on('drawstart', (event) => {
+        selection.current?.setActive(false);
         event.feature.on('change', (changeEvent) => {
           drawnFeature.current = changeEvent.target;
         });
       });
 
       drawInstance.on('drawend', (event) => {
+        selection.current?.setActive(true);
+
         const isSelfIntersecting = isPolygonSelfIntersecting(
           event.feature.getGeometry() as Polygon,
         );
@@ -145,10 +149,11 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
 
     selection.current.on('select', (e) => {
       const features = e.target.getFeatures();
-      const feature = features.getArray()[0];
+      const feature: Feature<Geometry> = features.getArray()[0];
 
       if (feature) {
         actions.setSelectedFeature(feature);
+        feature.setStyle(styleFunction(feature, undefined, true));
       } else {
         clearSelection();
       }

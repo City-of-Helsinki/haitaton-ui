@@ -315,7 +315,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         state: StepState.available,
       },
       {
-        element: <Geometries />,
+        element: <Geometries hankeData={hankeData} />,
         label: t('form:headers:alueet'),
         /*
          * Determine initial state for the form step.

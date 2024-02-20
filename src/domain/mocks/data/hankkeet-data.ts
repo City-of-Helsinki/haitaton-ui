@@ -139,6 +139,7 @@ const hankkeet: HankeDataDraft[] = [
         meluHaitta: HANKE_MELUHAITTA.PITKAKESTOINEN_TOISTUVA_HAITTA,
         polyHaitta: HANKE_POLYHAITTA.PITKAKESTOINEN_TOISTUVA_HAITTA,
         tarinaHaitta: HANKE_TARINAHAITTA.SATUNNAINEN_HAITTA,
+        nimi: 'Hankealue 1',
         geometriat: {
           id: 37,
           version: 0,
@@ -193,6 +194,7 @@ const hankkeet: HankeDataDraft[] = [
         tarinaHaitta: HANKE_TARINAHAITTA.SATUNNAINEN_HAITTA,
         kaistaHaitta: HANKE_KAISTAHAITTA.VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA,
         kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA.PITUUS_10_99_METRIA,
+        nimi: 'Hankealue 2',
         geometriat: {
           featureCollection: {
             type: 'FeatureCollection',
