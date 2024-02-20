@@ -225,7 +225,7 @@ export function Geometries({ hankeData }: Readonly<Props>) {
               endDate={endTime?.toString()}
             />
           )}
-          <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
+          <VectorLayer source={drawSource} zIndex={101} className="drawLayer" />
 
           <FitSource source={drawSource} />
 

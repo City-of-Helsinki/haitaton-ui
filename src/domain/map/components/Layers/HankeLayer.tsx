@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useRef, useMemo, useContext } from 'react';
 import { Vector as VectorSource } from 'ol/source';
+import { FeatureLike } from 'ol/Feature';
 import VectorLayer from '../../../../common/components/map/layers/VectorLayer';
 import { byAllHankeFilters } from '../../utils';
 import { styleFunction } from '../../utils/geometryStyle';
@@ -13,6 +15,8 @@ type Props = {
   hankeData?: HankeData[];
   startDate?: string | null;
   endDate?: string | null;
+  centerOnMap?: boolean;
+  highlightFeatures?: boolean;
 };
 
 const currentYear = new Date().getFullYear();
@@ -21,6 +25,8 @@ function HankeLayer({
   hankeData,
   startDate = `${currentYear}-01-01`,
   endDate = `${currentYear + 1}-12-31`,
+  centerOnMap = false,
+  highlightFeatures = false,
 }: Readonly<Props>) {
   const { hankkeet: hankkeetFromContext } = useContext(HankkeetContext);
   const hankeSource = useRef(new VectorSource());
@@ -38,8 +44,8 @@ function HankeLayer({
       <div style={{ display: 'none' }} data-testid="countOfFilteredHankkeet">
         {hankkeetFilteredByAll.length}
       </div>
-      <CenterProjectOnMap source={hankeSource.current} />
-      <HighlightFeatureOnMap source={hankeSource.current} />
+      {centerOnMap && <CenterProjectOnMap source={hankeSource.current} />}
+      {highlightFeatures && <HighlightFeatureOnMap source={hankeSource.current} />}
 
       <VectorLayer
         source={hankeSource.current}
