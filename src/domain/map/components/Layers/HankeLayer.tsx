@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useRef, useMemo, useContext } from 'react';
 import { Vector as VectorSource } from 'ol/source';
-import { FeatureLike } from 'ol/Feature';
 import VectorLayer from '../../../../common/components/map/layers/VectorLayer';
 import { byAllHankeFilters } from '../../utils';
 import { styleFunction } from '../../utils/geometryStyle';
