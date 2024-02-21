@@ -7,7 +7,7 @@ import {
   LIIKENNEHAITTA_STATUS,
 } from '../../common/utils/liikennehaittaindeksi';
 
-const opacity = 0.45;
+const opacity = 0.65;
 const opacityHL = 0.75;
 
 const stroke = new Stroke({ color: 'black', width: 1 });

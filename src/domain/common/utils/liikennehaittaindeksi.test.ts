@@ -1,6 +1,6 @@
 import { getStatusByIndex, getColorByStatus, LIIKENNEHAITTA_STATUS } from './liikennehaittaindeksi';
 
-const INDEX_BLUE = `rgba(36, 114, 198, 1)`;
+const INDEX_BLUE = `rgba(0, 98, 185, 1)`;
 const INDEX_GREEN = `rgba(0, 146, 70, 1)`;
 const INDEX_YELLOW = `rgba(255, 218, 7, 1)`;
 const INDEX_RED = 'rgba(196, 18, 62, 1)';
