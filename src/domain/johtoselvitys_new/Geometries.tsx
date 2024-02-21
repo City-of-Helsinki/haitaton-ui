@@ -218,8 +218,8 @@ export function Geometries({ hankeData }: Readonly<Props>) {
 
           <HankeLayer
             hankeData={hankeData && [hankeData]}
-            startDate={startTime?.toString() || hankeData?.alkuPvm}
-            endDate={endTime?.toString() || hankeData?.loppuPvm}
+            startDate={startTime?.toString() ?? hankeData?.alkuPvm}
+            endDate={endTime?.toString() ?? hankeData?.loppuPvm}
           />
           <VectorLayer source={drawSource} zIndex={101} className="drawLayer" />
 
