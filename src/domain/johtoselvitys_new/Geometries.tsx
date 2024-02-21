@@ -143,8 +143,6 @@ export function Geometries({ hankeData }: Readonly<Props>) {
 
   const [showSelfIntersectingNotification, setShowSelfIntersectingNotification] = useState(false);
 
-  const showHankeLayer = workTimesSet;
-
   function removeArea(index: number, areaFeature?: Feature<Geometry>) {
     if (areaFeature !== undefined) {
       setAreaToRemove({ index, areaFeature });
@@ -218,13 +216,11 @@ export function Geometries({ hankeData }: Readonly<Props>) {
 
           <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} zIndex={101} />
 
-          {showHankeLayer && (
-            <HankeLayer
-              hankeData={hankeData && [hankeData]}
-              startDate={startTime?.toString()}
-              endDate={endTime?.toString()}
-            />
-          )}
+          <HankeLayer
+            hankeData={hankeData && [hankeData]}
+            startDate={startTime?.toString() || hankeData?.alkuPvm}
+            endDate={endTime?.toString() || hankeData?.loppuPvm}
+          />
           <VectorLayer source={drawSource} zIndex={101} className="drawLayer" />
 
           <FitSource source={drawSource} />
