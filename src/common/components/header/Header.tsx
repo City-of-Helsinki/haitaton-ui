@@ -16,6 +16,7 @@ import { Language, LANGUAGES } from '../../types/language';
 import { SKIP_TO_ELEMENT_ID } from '../../constants/constants';
 import { useFeatureFlags } from '../featureFlags/FeatureFlagsContext';
 import HankeCreateDialog from '../../../domain/hanke/hankeCreateDialog/HankeCreateDialog';
+import JohtoselvitysCreateDialog from '../../../domain/johtoselvitys_new/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
 
 const languageLabels = {
   fi: 'Suomi',
@@ -32,6 +33,7 @@ function HaitatonHeader() {
   const features = useFeatureFlags();
   const logoSrc = i18n.language === 'sv' ? logoSv : logoFi;
   const [showHankeCreateDialog, setShowHankeCreateDialog] = useState(false);
+  const [showJohtoselvitysCreateDialog, setShowJohtoselvitysCreateDialog] = useState(false);
 
   const isMapPath = useMatch({
     path: PUBLIC_HANKKEET.path,
@@ -94,6 +96,14 @@ function HaitatonHeader() {
 
   function closeHankeCreateDialog() {
     setShowHankeCreateDialog(false);
+  }
+
+  function openJohtoselvitysCreateDialog() {
+    setShowJohtoselvitysCreateDialog(true);
+  }
+
+  function closeJohtoselvitysCreateDialog() {
+    setShowJohtoselvitysCreateDialog(false);
   }
 
   return (
@@ -162,7 +172,8 @@ function HaitatonHeader() {
           <Header.Link
             label={t('homepage:johtotietoselvitys:title')}
             as={NavLink}
-            to={JOHTOSELVITYSHAKEMUS.path}
+            to="#"
+            onClick={openJohtoselvitysCreateDialog}
             active={Boolean(isCableReportApplicationPath)}
             data-testid="cableReportApplicationLink"
           />
@@ -186,6 +197,10 @@ function HaitatonHeader() {
         </Header.NavigationMenu>
       )}
       <HankeCreateDialog isOpen={showHankeCreateDialog} onClose={closeHankeCreateDialog} />
+      <JohtoselvitysCreateDialog
+        isOpen={showJohtoselvitysCreateDialog}
+        onClose={closeJohtoselvitysCreateDialog}
+      />
     </Header>
   );
 }

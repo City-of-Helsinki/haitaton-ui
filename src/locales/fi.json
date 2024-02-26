@@ -589,6 +589,7 @@
     }
   },
   "johtoselvitysForm": {
+    "createNewJohtoselvitys": "Tee uusi johtoselvitys",
     "pageHeader": "Johtoselvityshakemus",
     "perustiedot": {
       "instructions": "<p>Huomioithan, että johtoselvitys on voimassa 1 kuukauden. Johtoselvityksen tulee olla voimassa johtojen maastonäyttöjä tilattaessa sekä kaivuilmoitusta tehdessä. Johtoselvitys on tarvittaessa päivitettävä.</p><p>Yleisellä alueella tehtävästä työstä on tehtävä erillinen ilmoitus kaupungille. Katso tarkemmat ohjeet: <a>hel.fi</a></p>"
@@ -634,7 +635,8 @@
       "addedAreas": "Lisäämäsi työalueet",
       "removeAreaTitle": "Poista työalue",
       "removeAreaDescription": "Haluatko varmasti poistaa työalueen {{areaName}}",
-      "applicationAdditionalInfo": "Lisätietoja hakemuksesta"
+      "applicationAdditionalInfo": "Lisätietoja hakemuksesta",
+      "applicationInfo": "Hakemuksen tiedot"
     },
     "notifications": {
       "saveSuccessLabel": "Hakemus tallennettu",

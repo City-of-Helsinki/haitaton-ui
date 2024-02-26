@@ -22,14 +22,15 @@ import {
 } from '../../common/components/featureFlags/FeatureFlagsContext';
 import MainHeading from '../../common/components/mainHeading/MainHeading';
 import HankeCreateDialog from '../hanke/hankeCreateDialog/HankeCreateDialog';
+import JohtoselvitysCreateDialog from '../johtoselvitys_new/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
 
 const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { PUBLIC_HANKKEET_MAP, PUBLIC_HANKKEET_LIST, HANKEPORTFOLIO, JOHTOSELVITYSHAKEMUS } =
-    useLocalizedRoutes();
+  const { PUBLIC_HANKKEET_MAP, PUBLIC_HANKKEET_LIST, HANKEPORTFOLIO } = useLocalizedRoutes();
   const [feedbackOpen, setFeedbackOpen] = useState(true);
   const [showHankeCreateDialog, setShowHankeCreateDialog] = useState(false);
+  const [showJohtoselvitysCreateDialog, setShowJohtoselvitysCreateDialog] = useState(false);
   const { data: user } = useUser();
   const isAuthenticated = Boolean(user?.profile);
   const features = useFeatureFlags();
@@ -51,7 +52,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
     },
     {
       key: 'johtotietoselvitys',
-      actionLink: JOHTOSELVITYSHAKEMUS.path,
+      actionLink: undefined,
       imgProps: { src: img1, width: 384, height: 245 },
       external: false,
       featureFlags: [],
@@ -131,6 +132,24 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
     setShowHankeCreateDialog(false);
   }
 
+  function openJohtoselvitysCreateDialog() {
+    setShowJohtoselvitysCreateDialog(true);
+  }
+
+  function closeJohtoselvitysCreateDialog() {
+    setShowJohtoselvitysCreateDialog(false);
+  }
+
+  function handleLinkBoxClick(key: string) {
+    if (key === 'hanke') {
+      return openHankeCreateDialog;
+    }
+    if (key === 'johtotietoselvitys') {
+      return openJohtoselvitysCreateDialog;
+    }
+    return undefined;
+  }
+
   return (
     <div className={clsx({ [styles.bgWhite]: !isAuthenticated && !features.publicHankkeet })}>
       <div className={styles.heroContainer}>
@@ -206,7 +225,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
                       imgProps={item.imgProps}
                       external={item.external}
                       openInNewTab={item.external}
-                      onClick={item.key === 'hanke' ? openHankeCreateDialog : undefined}
+                      onClick={handleLinkBoxClick(item.key)}
                     />
                   </div>
                 </FeatureFlags>
@@ -218,6 +237,10 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
         </article>
 
         <HankeCreateDialog isOpen={showHankeCreateDialog} onClose={closeHankeCreateDialog} />
+        <JohtoselvitysCreateDialog
+          isOpen={showJohtoselvitysCreateDialog}
+          onClose={closeJohtoselvitysCreateDialog}
+        />
       </Container>
     </div>
   );

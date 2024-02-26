@@ -2,6 +2,8 @@ import { AttachmentMetadata } from '../../../common/types/attachment';
 import { Polygon, Position } from 'geojson';
 import { Coordinate } from 'ol/coordinate';
 import { CRS } from '../../../common/types/hanke';
+import yup from '../../../common/utils/yup';
+import { newJohtoselvitysSchema } from '../../johtoselvitys_new/validationSchema';
 
 export type ApplicationType = 'CABLE_REPORT';
 
@@ -124,6 +126,8 @@ export type JohtoselvitysData = {
   propertyConnectivity: boolean;
   rockExcavation: boolean | null;
 };
+
+export type NewJohtoselvitysData = yup.InferType<typeof newJohtoselvitysSchema>;
 
 export interface Application {
   id: number | null;
