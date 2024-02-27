@@ -5,7 +5,16 @@ import {
   AlluStatusStrings,
   Application,
   ApplicationDeletionResult,
+  NewJohtoselvitysData,
 } from './types/application';
+
+/**
+ * Create new johtoselvitys without hanke being created first
+ */
+export async function createJohtoselvitys(data: NewJohtoselvitysData) {
+  const response = await api.post<Application>('johtoselvityshakemus', data);
+  return response.data;
+}
 
 /**
  * Save application to Haitaton backend

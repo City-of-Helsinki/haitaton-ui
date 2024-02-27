@@ -6,11 +6,11 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { yupResolver } from '@hookform/resolvers/yup';
 import TextInput from '../../../common/components/textInput/TextInput';
-import { newHankeSchema } from '../edit/hankeSchema';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
-import { createHanke } from '../edit/hankeApi';
-import { NewHankeData } from '../edit/types';
+import { NewJohtoselvitysData } from '../../application/types/application';
+import { newJohtoselvitysSchema } from '../validationSchema';
+import { createJohtoselvitys } from '../../application/utils';
 import OwnInformationFields from '../../forms/components/OwnInformationFields';
 
 type Props = {
@@ -18,17 +18,17 @@ type Props = {
   onClose: () => void;
 };
 
-function HankeCreateDialog({ isOpen, onClose }: Readonly<Props>) {
+function JohtoselvitysCreateDialog({ isOpen, onClose }: Readonly<Props>) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
-  const formContext = useForm<NewHankeData>({
+  const getEditJohtoselvitysPath = useLinkPath(ROUTES.EDIT_JOHTOSELVITYSHAKEMUS);
+  const formContext = useForm<NewJohtoselvitysData>({
     mode: 'onTouched',
-    resolver: yupResolver(newHankeSchema),
+    resolver: yupResolver(newJohtoselvitysSchema),
   });
-  const { getValues, trigger, reset: resetForm } = formContext;
-  const { mutate, reset: resetMutation, isLoading, isError } = useMutation(createHanke);
-  const dialogTitle = t('homepage:hanke:title');
+  const { handleSubmit, reset: resetForm } = formContext;
+  const { mutate, reset: resetMutation, isLoading, isError } = useMutation(createJohtoselvitys);
+  const dialogTitle = t('johtoselvitysForm:createNewJohtoselvitys');
 
   function handleClose() {
     resetForm();
@@ -36,17 +36,12 @@ function HankeCreateDialog({ isOpen, onClose }: Readonly<Props>) {
     onClose();
   }
 
-  async function submitForm() {
-    const isFormValid = await trigger(undefined, { shouldFocus: true });
-    if (!isFormValid) {
-      return;
-    }
-
-    mutate(getValues(), {
-      onSuccess({ hankeTunnus }) {
+  async function submitForm(data: NewJohtoselvitysData) {
+    mutate(data, {
+      onSuccess({ id }) {
         handleClose();
-        if (hankeTunnus) {
-          navigate(getEditHankePath({ hankeTunnus }));
+        if (id) {
+          navigate(getEditJohtoselvitysPath({ id: id.toString() }));
         }
       },
     });
@@ -54,7 +49,7 @@ function HankeCreateDialog({ isOpen, onClose }: Readonly<Props>) {
 
   return (
     <Dialog
-      id="hanke-create"
+      id="johtoselvitys-create"
       isOpen={isOpen}
       aria-labelledby={dialogTitle}
       variant="primary"
@@ -62,17 +57,20 @@ function HankeCreateDialog({ isOpen, onClose }: Readonly<Props>) {
       closeButtonLabelText={t('common:ariaLabels:closeButtonLabelText')}
     >
       <Dialog.Header
-        id="hanke-create-title"
+        id="johtoselvitys-create-title"
         title={dialogTitle}
-        iconLeft={<IconInfoCircle aria-hidden="true" />}
+        iconLeft={<IconInfoCircle />}
       />
       <FormProvider {...formContext}>
-        <form>
+        <form onSubmit={handleSubmit(submitForm)}>
           <Dialog.Content>
-            <Box marginBottom="var(--spacing-m)">
-              <TextInput name="nimi" maxLength={100} required />
-            </Box>
             <OwnInformationFields />
+            <Box marginTop="var(--spacing-m)" marginBottom="var(--spacing-s)">
+              <h3 className="heading-s">{t('hakemus:labels:applicationInfo')}</h3>
+            </Box>
+            <Box marginBottom="var(--spacing-2-xs)">
+              <TextInput name="nimi" label={t('hakemus:labels:nimi')} maxLength={100} required />
+            </Box>
 
             {isError && (
               <Box marginTop="var(--spacing-m)">
@@ -82,8 +80,8 @@ function HankeCreateDialog({ isOpen, onClose }: Readonly<Props>) {
           </Dialog.Content>
 
           <Dialog.ActionButtons>
-            <Button onClick={submitForm} iconLeft={<IconCheck />} isLoading={isLoading}>
-              {t('hankeForm:buttons:create')}
+            <Button type="submit" iconLeft={<IconCheck />} isLoading={isLoading}>
+              {t('homepage:hakemus:actionText')}
             </Button>
             <Button variant="secondary" onClick={handleClose} iconLeft={<IconCross />}>
               {t('common:confirmationDialog:cancelButton')}
@@ -95,4 +93,4 @@ function HankeCreateDialog({ isOpen, onClose }: Readonly<Props>) {
   );
 }
 
-export default HankeCreateDialog;
+export default JohtoselvitysCreateDialog;

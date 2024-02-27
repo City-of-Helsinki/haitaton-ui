@@ -7,6 +7,8 @@ import * as usersDB from './data/users';
 import ApiError from './apiError';
 import { IdentificationResponse, SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import { Yhteyshenkilo, YhteyshenkiloWithoutName } from '../hanke/edit/types';
+import { NewJohtoselvitysData } from '../application/types/application';
+import { defaultJohtoselvitysData } from './data/defaultJohtoselvitysData';
 
 const apiUrl = '/api';
 
@@ -119,6 +121,29 @@ export const handlers = [
     });
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const hakemus = await hakemuksetDB.create({ ...reqBody, hankeTunnus: hanke.hankeTunnus! });
+    return res(ctx.status(200), ctx.json(hakemus));
+  }),
+
+  rest.post(`${apiUrl}/johtoselvityshakemus`, async (req, res, ctx) => {
+    const { nimi }: NewJohtoselvitysData = await req.json();
+    const hanke = await hankkeetDB.create({
+      nimi: nimi,
+      alkuPvm: null,
+      loppuPvm: null,
+      vaihe: null,
+      kuvaus: null,
+      generated: true,
+    });
+    const hakemus = await hakemuksetDB.create({
+      applicationData: {
+        name: nimi,
+        ...defaultJohtoselvitysData,
+      },
+      id: null,
+      alluStatus: null,
+      applicationType: 'CABLE_REPORT',
+      hankeTunnus: hanke.hankeTunnus!,
+    });
     return res(ctx.status(200), ctx.json(hakemus));
   }),
 
