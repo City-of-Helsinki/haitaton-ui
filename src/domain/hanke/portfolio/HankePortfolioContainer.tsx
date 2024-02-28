@@ -1,5 +1,7 @@
 import React from 'react';
 import { useQuery } from 'react-query';
+import { Flex } from '@chakra-ui/react';
+import { LoadingSpinner } from 'hds-react';
 import api from '../../api/api';
 import { HankeData } from '../../types/hanke';
 import HankePortfolioComponent from './HankePortfolioComponent';
@@ -18,9 +20,17 @@ const getHankkeet = async () => {
 const useHankeList = () => useQuery<HankeData[]>(['project'], getHankkeet);
 
 const HankePortfolioContainer: React.FC<React.PropsWithChildren<unknown>> = () => {
-  const { data: hankkeet, isError } = useHankeList();
+  const { data: hankkeet, isError, isLoading } = useHankeList();
   const { data: signedInUserByHanke } = usePermissionsByHanke();
   const userData = signedInUserByHanke ?? {};
+
+  if (isLoading) {
+    return (
+      <Flex justify="center" mt="var(--spacing-xl)">
+        <LoadingSpinner />
+      </Flex>
+    );
+  }
 
   if (isError) {
     return <ErrorLoadingText />;
