@@ -8,6 +8,7 @@ import HankkeetContext from '../../HankkeetProviderContext';
 import HighlightFeatureOnMap from '../interations/HighlightFeatureOnMap';
 import useHankeFeatures from '../../hooks/useHankeFeatures';
 import { HankeData } from '../../../types/hanke';
+import { toStartOfDayUTCISO } from '../../../../common/utils/date';
 
 type Props = {
   hankeData?: HankeData[];
@@ -31,7 +32,13 @@ function HankeLayer({
   const hankkeet = hankeData || hankkeetFromContext;
 
   const hankkeetFilteredByAll = useMemo(
-    () => hankkeet.filter(byAllHankeFilters({ startDate, endDate })),
+    () =>
+      hankkeet.filter(
+        byAllHankeFilters({
+          startDate: startDate && toStartOfDayUTCISO(new Date(startDate)),
+          endDate,
+        }),
+      ),
     [hankkeet, startDate, endDate],
   );
 
