@@ -256,6 +256,8 @@ test('Cable report application form can be filled and saved and sent to Allu', a
 });
 
 test('Should show error message when saving fails', async () => {
+  const OLD_ENV = { ...window._env_ };
+  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: 0 };
   server.use(
     rest.post('/api/hakemukset', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
@@ -273,6 +275,9 @@ test('Should show error message when saving fails', async () => {
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
   expect(screen.queryAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
+
+  jest.resetModules();
+  window._env_ = OLD_ENV;
 });
 
 test('Should show error message when sending fails', async () => {
@@ -300,6 +305,8 @@ test('Should show error message when sending fails', async () => {
 });
 
 test('Form can be saved without hanke existing first', async () => {
+  const OLD_ENV = { ...window._env_ };
+  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: 0 };
   const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
 
   // Fill basic information page
@@ -311,9 +318,14 @@ test('Form can be saved without hanke existing first', async () => {
   expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
   await screen.findByText('Johtoselvitys (HAI22-12)');
   expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+
+  jest.resetModules();
+  window._env_ = OLD_ENV;
 });
 
 test('Save and quit works', async () => {
+  const OLD_ENV = { ...window._env_ };
+  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: 0 };
   const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
 
   await waitForLoadingToFinish();
@@ -325,9 +337,14 @@ test('Save and quit works', async () => {
 
   expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
   expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2');
+
+  jest.resetModules();
+  window._env_ = OLD_ENV;
 });
 
 test('Save and quit works without hanke existing first', async () => {
+  const OLD_ENV = { ...window._env_ };
+  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: 0 };
   const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
 
   // Fill basic information page
@@ -337,6 +354,9 @@ test('Save and quit works without hanke existing first', async () => {
 
   expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
   expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-13');
+
+  jest.resetModules();
+  window._env_ = OLD_ENV;
 });
 
 test('Should not save and quit if current form page is not valid', async () => {
@@ -349,6 +369,8 @@ test('Should not save and quit if current form page is not valid', async () => {
 });
 
 test('Should show error message and not navigate away when save and quit fails', async () => {
+  const OLD_ENV = { ...window._env_ };
+  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: 0 };
   server.use(
     rest.post('/api/hakemukset/:id', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
@@ -362,6 +384,9 @@ test('Should show error message and not navigate away when save and quit fails',
 
   expect(screen.queryAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
   expect(window.location.pathname).toBe('/fi/johtoselvityshakemus');
+
+  jest.resetModules();
+  window._env_ = OLD_ENV;
 });
 
 test('Should not save application between page changes when nothing is changed', async () => {
