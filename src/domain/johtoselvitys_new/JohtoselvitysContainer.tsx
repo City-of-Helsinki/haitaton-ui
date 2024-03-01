@@ -15,14 +15,10 @@ import { ReviewAndSend } from './ReviewAndSend';
 import MultipageForm from '../forms/MultipageForm';
 import FormActions from '../forms/components/FormActions';
 import { validationSchema } from './validationSchema';
-import {
-  convertApplicationDataToFormState,
-  convertFormStateToApplicationData,
-  findOrdererKey,
-} from './utils';
+import { convertApplicationDataToFormState, convertFormStateToApplicationData } from './utils';
 import { changeFormStep, getFieldPaths, isPageValid } from '../forms/utils';
 import { isApplicationDraft, saveApplication, sendApplication } from '../application/utils';
-import { HankeContacts, HankeData } from '../types/hanke';
+import { HankeData } from '../types/hanke';
 import { ApplicationCancel } from '../application/components/ApplicationCancel';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
 import { useNavigateToApplicationList } from '../hanke/hooks/useNavigateToApplicationList';
@@ -77,7 +73,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
             lastName: '',
             email: '',
             phone: '',
-            orderer: true,
+            orderer: false,
           },
         ],
       },
@@ -252,8 +248,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     setAttachmentUploadErrors([]);
   }
 
-  const ordererKey = findOrdererKey(getValues('applicationData'));
-
   const customer = getValues('applicationData.customerWithContacts.customer');
   const contractor = getValues('applicationData.contractorWithContacts.customer');
   const propertyDeveloper = getValues('applicationData.propertyDeveloperWithContacts.customer');
@@ -269,7 +263,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         'applicationData.constructionWork',
         'applicationData.rockExcavation',
         'applicationData.workDescription',
-        `applicationData.${ordererKey}.contacts`,
       ],
       // Areas page
       [
@@ -298,14 +291,10 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         ),
       ],
     ],
-    [ordererKey, customer, contractor, propertyDeveloper, representative],
+    [customer, contractor, propertyDeveloper, representative],
   );
 
   const formSteps = useMemo(() => {
-    const hankeContacts: HankeContacts | undefined = hankeData
-      ? [hankeData.omistajat, hankeData.rakennuttajat, hankeData.toteuttajat, hankeData.muut]
-      : undefined;
-
     const formValues = getValues();
 
     return [
@@ -331,7 +320,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
           : StepState.disabled,
       },
       {
-        element: <Contacts hankeContacts={hankeContacts} />,
+        element: <Contacts />,
         label: t('form:headers:yhteystiedot'),
         state: isPageValid<JohtoselvitysFormValues>(
           validationSchema,
@@ -454,7 +443,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
               />
 
               <Button
-                variant="supplementary"
+                variant="secondary"
                 iconLeft={<IconSaveDiskette aria-hidden="true" />}
                 data-testid="save-form-btn"
                 onClick={handleSaveAndQuit}

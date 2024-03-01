@@ -19,7 +19,7 @@ const contactSchema = yup
     lastName: yup.string().trim().required(),
     email: yup.string().trim().email().max(100).required(),
     phone: yup.string().trim().max(20).required(),
-    orderer: yup.boolean().required(),
+    orderer: yup.boolean().defined(),
   })
   .nullable()
   .required();

@@ -27,7 +27,8 @@ import JohtoselvitysCreateDialog from '../johtoselvitys_new/johtoselvitysCreateD
 const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { PUBLIC_HANKKEET_MAP, PUBLIC_HANKKEET_LIST, HANKEPORTFOLIO } = useLocalizedRoutes();
+  const { PUBLIC_HANKKEET_MAP, PUBLIC_HANKKEET_LIST, HANKEPORTFOLIO, JOHTOSELVITYSHAKEMUS } =
+    useLocalizedRoutes();
   const [feedbackOpen, setFeedbackOpen] = useState(true);
   const [showHankeCreateDialog, setShowHankeCreateDialog] = useState(false);
   const [showJohtoselvitysCreateDialog, setShowJohtoselvitysCreateDialog] = useState(false);
@@ -52,7 +53,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
     },
     {
       key: 'johtotietoselvitys',
-      actionLink: undefined,
+      actionLink: features.accessRights ? undefined : JOHTOSELVITYSHAKEMUS.path,
       imgProps: { src: img1, width: 384, height: 245 },
       external: false,
       featureFlags: [],
@@ -144,7 +145,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
     if (key === 'hanke') {
       return openHankeCreateDialog;
     }
-    if (key === 'johtotietoselvitys') {
+    if (key === 'johtotietoselvitys' && features.accessRights) {
       return openJohtoselvitysCreateDialog;
     }
     return undefined;

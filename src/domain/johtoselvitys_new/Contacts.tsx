@@ -8,19 +8,13 @@ import {
   CustomerType,
   Contact as ApplicationContact,
   CustomerWithContacts,
-  Customer,
 } from '../application/types/application';
-import styles from './Contacts.module.scss';
 import Text from '../../common/components/text/Text';
 import ResponsiveGrid from '../../common/components/grid/ResponsiveGrid';
 import TextInput from '../../common/components/textInput/TextInput';
 import useLocale from '../../common/hooks/useLocale';
 import Dropdown from '../../common/components/dropdown/Dropdown';
-import { HankeContacts } from '../types/hanke';
-import PreFilledContactSelect from '../application/components/PreFilledContactSelect';
 import { JohtoselvitysFormValues } from './types';
-import useForceUpdate from '../../common/hooks/useForceUpdate';
-import { findOrdererKey } from './utils';
 import FormContact from '../forms/components/FormContact';
 
 function getEmptyContact(): ApplicationContact {
@@ -50,36 +44,11 @@ function getEmptyCustomerWithContacts(): CustomerWithContacts {
   };
 }
 
-function FillOwnInformationButton({
-  onClick,
-  testId,
-}: {
-  onClick: (event: React.MouseEvent) => void;
-  testId: string;
-}) {
-  const { t } = useTranslation();
-
-  return (
-    <Button
-      className={styles.fillOwnInfoButton}
-      variant="supplementary"
-      iconLeft
-      onClick={onClick}
-      data-testid={testId}
-    >
-      {t('form:buttons:fillWithOwnInformation')}
-    </Button>
-  );
-}
-
 const CustomerFields: React.FC<{
   customerType: CustomerType;
-  hankeContacts?: HankeContacts;
-  ordererInformation?: ApplicationContact;
-}> = ({ customerType, hankeContacts, ordererInformation }) => {
+}> = ({ customerType }) => {
   const { t } = useTranslation();
   const { watch, setValue } = useFormContext<JohtoselvitysFormValues>();
-  const forceUpdate = useForceUpdate();
 
   const [selectedContactType, registryKey] = watch([
     `applicationData.${customerType}.customer.type`,
@@ -104,103 +73,62 @@ const CustomerFields: React.FC<{
     }
   }, [registryKey, customerType, setValue]);
 
-  function handlePreFilledContactChange(customer: Customer) {
-    setValue(`applicationData.${customerType}.customer`, customer, { shouldValidate: true });
-    forceUpdate();
-  }
-
-  function fillWithOrdererInformation() {
-    if (ordererInformation !== undefined) {
-      setValue(
-        `applicationData.${customerType}.customer`,
-        {
-          type: 'PERSON',
-          name: `${ordererInformation.firstName} ${ordererInformation.lastName}`,
-          email: ordererInformation.email,
-          phone: ordererInformation.phone,
-          country: 'FI',
-          registryKey: null,
-          ovt: null,
-          invoicingOperator: null,
-          sapCustomerNumber: null,
-        },
-        { shouldValidate: true, shouldDirty: true },
-      );
-    }
-  }
-
   return (
-    <>
-      {hankeContacts && (
-        <PreFilledContactSelect
-          allHankeContacts={hankeContacts}
-          onChange={handlePreFilledContactChange}
+    <Fieldset
+      heading={t(`form:yhteystiedot:titles:${customerType}`)}
+      style={{ paddingTop: 'var(--spacing-s)' }}
+    >
+      <ResponsiveGrid>
+        <Dropdown
+          id={`applicationData.${customerType}.customer.type`}
+          name={`applicationData.${customerType}.customer.type`}
+          required
+          defaultValue={null}
+          label={t('form:yhteystiedot:labels:tyyppi')}
+          options={$enum(ContactType).map((value) => {
+            return {
+              value,
+              label: t(`form:yhteystiedot:contactType:${value}`),
+            };
+          })}
         />
-      )}
-      <Fieldset
-        heading={t(`form:yhteystiedot:titles:${customerType}`)}
-        style={{ paddingTop: 'var(--spacing-s)' }}
-      >
-        <ResponsiveGrid>
-          <Dropdown
-            id={`applicationData.${customerType}.customer.type`}
-            name={`applicationData.${customerType}.customer.type`}
-            required
-            defaultValue={null}
-            label={t('form:yhteystiedot:labels:tyyppi')}
-            options={$enum(ContactType).map((value) => {
-              return {
-                value,
-                label: t(`form:yhteystiedot:contactType:${value}`),
-              };
-            })}
-          />
-          <FillOwnInformationButton
-            onClick={fillWithOrdererInformation}
-            testId={`applicationData.${customerType}.customer.fillOwnInfoButton`}
-          />
-        </ResponsiveGrid>
-        <ResponsiveGrid>
-          <TextInput
-            name={`applicationData.${customerType}.customer.name`}
-            label={t('form:yhteystiedot:labels:nimi')}
-            required
-            autoComplete={selectedContactType === 'PERSON' ? 'name' : 'organization'}
-          />
-          <TextInput
-            name={`applicationData.${customerType}.customer.registryKey`}
-            label={t('form:yhteystiedot:labels:ytunnus')}
-            disabled={selectedContactType === 'PERSON' || selectedContactType === 'OTHER'}
-            autoComplete="on"
-          />
-        </ResponsiveGrid>
-        <ResponsiveGrid>
-          <TextInput
-            name={`applicationData.${customerType}.customer.email`}
-            label={t('form:yhteystiedot:labels:email')}
-            required
-            autoComplete="email"
-          />
-          <TextInput
-            name={`applicationData.${customerType}.customer.phone`}
-            label={t('form:yhteystiedot:labels:puhelinnumero')}
-            required
-            autoComplete="tel"
-          />
-        </ResponsiveGrid>
-      </Fieldset>
-    </>
+      </ResponsiveGrid>
+      <ResponsiveGrid>
+        <TextInput
+          name={`applicationData.${customerType}.customer.name`}
+          label={t('form:yhteystiedot:labels:nimi')}
+          required
+          autoComplete={selectedContactType === 'PERSON' ? 'name' : 'organization'}
+        />
+        <TextInput
+          name={`applicationData.${customerType}.customer.registryKey`}
+          label={t('form:yhteystiedot:labels:ytunnus')}
+          disabled={selectedContactType === 'PERSON' || selectedContactType === 'OTHER'}
+          autoComplete="on"
+        />
+      </ResponsiveGrid>
+      <ResponsiveGrid>
+        <TextInput
+          name={`applicationData.${customerType}.customer.email`}
+          label={t('form:yhteystiedot:labels:email')}
+          required
+          autoComplete="email"
+        />
+        <TextInput
+          name={`applicationData.${customerType}.customer.phone`}
+          label={t('form:yhteystiedot:labels:puhelinnumero')}
+          required
+          autoComplete="tel"
+        />
+      </ResponsiveGrid>
+    </Fieldset>
   );
 };
 
-export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeContacts }) => {
+export function Contacts() {
   const { t } = useTranslation();
   const locale = useLocale();
   const { watch, setValue, getValues } = useFormContext<JohtoselvitysFormValues>();
-  const ordererKey = findOrdererKey(getValues('applicationData'));
-  const ordererInformation: ApplicationContact | undefined = getValues().applicationData[
-    ordererKey
-  ]?.contacts.find((contact) => contact.orderer);
   const hankeTunnus = getValues('hankeTunnus');
 
   const [propertyDeveloper, representative] = watch([
@@ -239,11 +167,7 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
 
       {/* Hakija */}
       <FormContact<CustomerType> contactType="customerWithContacts" hankeTunnus={hankeTunnus!}>
-        <CustomerFields
-          customerType="customerWithContacts"
-          hankeContacts={hankeContacts}
-          ordererInformation={ordererInformation}
-        />
+        <CustomerFields customerType="customerWithContacts" />
       </FormContact>
 
       {/* Työn suorittaja */}
@@ -254,11 +178,7 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
         initiallyOpen
       >
         <FormContact<CustomerType> contactType="contractorWithContacts" hankeTunnus={hankeTunnus!}>
-          <CustomerFields
-            customerType="contractorWithContacts"
-            hankeContacts={hankeContacts}
-            ordererInformation={ordererInformation}
-          />
+          <CustomerFields customerType="contractorWithContacts" />
         </FormContact>
       </Accordion>
 
@@ -275,11 +195,7 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
             hankeTunnus={hankeTunnus!}
             onRemove={handleRemovePropertyDeveloper}
           >
-            <CustomerFields
-              customerType="propertyDeveloperWithContacts"
-              hankeContacts={hankeContacts}
-              ordererInformation={ordererInformation}
-            />
+            <CustomerFields customerType="propertyDeveloperWithContacts" />
           </FormContact>
         )}
 
@@ -307,11 +223,7 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
             hankeTunnus={hankeTunnus!}
             onRemove={handleRemoveRepresentative}
           >
-            <CustomerFields
-              customerType="representativeWithContacts"
-              hankeContacts={hankeContacts}
-              ordererInformation={ordererInformation}
-            />
+            <CustomerFields customerType="representativeWithContacts" />
           </FormContact>
         )}
 
@@ -327,4 +239,4 @@ export const Contacts: React.FC<{ hankeContacts?: HankeContacts }> = ({ hankeCon
       </Accordion>
     </div>
   );
-};
+}

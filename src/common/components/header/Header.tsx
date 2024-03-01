@@ -172,8 +172,8 @@ function HaitatonHeader() {
           <Header.Link
             label={t('homepage:johtotietoselvitys:title')}
             as={NavLink}
-            to="#"
-            onClick={openJohtoselvitysCreateDialog}
+            to={features.accessRights ? '#' : JOHTOSELVITYSHAKEMUS.path}
+            onClick={features.accessRights ? openJohtoselvitysCreateDialog : undefined}
             active={Boolean(isCableReportApplicationPath)}
             data-testid="cableReportApplicationLink"
           />

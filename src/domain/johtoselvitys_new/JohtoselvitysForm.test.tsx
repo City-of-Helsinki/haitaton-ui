@@ -9,13 +9,8 @@ import { HankeData } from '../types/hanke';
 import hankkeet from '../mocks/data/hankkeet-data';
 import applications from '../mocks/data/hakemukset-data';
 import { JohtoselvitysFormValues } from './types';
-import * as applicationApi from '../application/utils';
 import api from '../api/api';
-import {
-  Application,
-  ApplicationAttachmentMetadata,
-  AttachmentType,
-} from '../application/types/application';
+import { ApplicationAttachmentMetadata, AttachmentType } from '../application/types/application';
 import * as applicationAttachmentsApi from '../application/attachments';
 import { fillNewContactPersonForm } from '../forms/components/testUtils';
 
@@ -123,19 +118,6 @@ function fillBasicInformation() {
 
   fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
     target: { value: 'Testataan johtoselvityslomaketta' },
-  });
-
-  fireEvent.change(screen.getByLabelText(/etunimi/i), {
-    target: { value: 'Matti' },
-  });
-  fireEvent.change(screen.getByLabelText(/sukunimi/i), {
-    target: { value: 'Meikäläinen' },
-  });
-  fireEvent.change(screen.getByLabelText(/sähköposti/i), {
-    target: { value: 'matti.meikalainen@test.com' },
-  });
-  fireEvent.change(screen.getByLabelText(/puhelin/i), {
-    target: { value: '0000000000' },
   });
 }
 
@@ -373,50 +355,6 @@ test('Should save existing application between page changes when there are chang
   expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
 });
 
-test('Should change users own role and its fields correctly', async () => {
-  render(<JohtoselvitysContainer application={application} />);
-
-  const firstName = 'Tauno';
-  const lastName = 'Työmies';
-  const email = 'tauno@test.com';
-  const phone = '0401234567';
-
-  fillBasicInformation();
-
-  fireEvent.click(screen.getByRole('button', { name: /rooli/i }));
-  fireEvent.click(screen.getByText(/työn suorittaja/i));
-  fireEvent.change(
-    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.firstName'),
-    {
-      target: { value: firstName },
-    },
-  );
-  fireEvent.change(
-    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.lastName'),
-    {
-      target: { value: lastName },
-    },
-  );
-  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.email'), {
-    target: { value: email },
-  });
-  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.phone'), {
-    target: { value: phone },
-  });
-});
-
-test('Should not change anything if selecting the same role again', async () => {
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
-
-  fireEvent.click(screen.getByRole('button', { name: /rooli/i }));
-  // Select the role to be Hakija again
-  await user.click(screen.getAllByText(/hakija/i)[1]);
-  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
-
-  // Check that there isn't another contact added
-  expect(screen.queryByTestId('customerWithContacts-1')).not.toBeInTheDocument();
-});
-
 test('Should not show send button when application has moved to pending state', async () => {
   const { user } = render(<JohtoselvitysContainer application={applications[1]} />);
 
@@ -497,24 +435,6 @@ test('Should show inline notification when editing a form that is in pending sta
   ).toBeInTheDocument();
 });
 
-test('Should not allow to edit own info when application has been sent to Allu', () => {
-  render(<JohtoselvitysContainer application={applications[1]} />);
-
-  expect(screen.getByRole('button', { name: /rooli/i })).toBeDisabled();
-  expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.firstName'),
-  ).toBeDisabled();
-  expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.lastName'),
-  ).toBeDisabled();
-  expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.email'),
-  ).toBeDisabled();
-  expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.phone'),
-  ).toBeDisabled();
-});
-
 test('Validation error is shown if no work is about checkbox is selected', async () => {
   const { user } = render(<JohtoselvitysContainer />);
 
@@ -544,27 +464,6 @@ test('Validation error is shown if no work is about checkbox is selected', async
     ),
   );
   expect(screen.queryByText('Kenttä on pakollinen')).toBeInTheDocument();
-});
-
-const testFormSaving = async (inputApplication: Application, fillInfoButton: string) => {
-  const saveApplication = jest.spyOn(applicationApi, 'saveApplication');
-  const { user } = render(<JohtoselvitysContainer application={inputApplication} />);
-
-  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
-  await user.click(screen.getByTestId(fillInfoButton));
-  await user.click(screen.getByRole('button', { name: /edellinen/i }));
-
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
-  expect(saveApplication).toHaveBeenCalledTimes(1);
-
-  saveApplication.mockRestore();
-};
-
-test('Form is saved when contacts are filled with orderer information', async () => {
-  await testFormSaving(
-    applications[0],
-    'applicationData.customerWithContacts.customer.fillOwnInfoButton',
-  );
 });
 
 async function uploadAttachmentMock({
