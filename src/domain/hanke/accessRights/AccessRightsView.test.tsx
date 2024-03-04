@@ -246,7 +246,7 @@ test('Should show correct icons for users', async () => {
   ).toBeInTheDocument();
   expect(
     screen.getByRole('cell', {
-      name: 'Kutsulinkki lähetetty Teppo Työmies',
+      name: 'Kutsulinkki lähetetty 15.1.2024 Teppo Työmies',
     }),
   ).toBeInTheDocument();
 });

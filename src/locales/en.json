@@ -859,8 +859,10 @@
       "invitationSentErrorText": "<0>An error occurred when sending the invitation link. Please try again later or contact the Haitaton technical support by email <1>haitatontuki@hel.fi</1>.</0>"
     },
     "buttons": {
-      "resendInvitation": "Resend the invitation link",
-      "invitationSent": "Invitation link sent"
+      "resendInvitation": "Resend the invitation link"
+    },
+    "labels": {
+      "invitationSent": "Invitation link sent {{date}}"
     },
     "userIdentified": "User logged in"
   },

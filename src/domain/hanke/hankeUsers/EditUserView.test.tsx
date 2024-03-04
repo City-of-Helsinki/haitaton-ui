@@ -65,7 +65,7 @@ test('Should show status text of invitation send to user and Invitation send but
   render(<EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afa7" hankeTunnus="HAI22-2" />);
   await waitForLoadingToFinish();
 
-  expect(screen.getByText('Kutsulinkki Haitattomaan lähetetty')).toBeInTheDocument();
+  expect(screen.getByText('Kutsulinkki Haitattomaan lähetetty 15.1.2024')).toBeInTheDocument();
   expect(screen.getByRole('button', { name: 'Lähetä kutsulinkki uudelleen' })).toBeInTheDocument();
 });
 

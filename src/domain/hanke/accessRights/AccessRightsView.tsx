@@ -13,7 +13,7 @@ import {
   IconPen,
   Button,
 } from 'hds-react';
-import { Box, Flex, Grid, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
+import { Box, Flex, Grid, Menu, MenuButton, MenuItem, MenuList, Tooltip } from '@chakra-ui/react';
 import {
   Column,
   useAsyncDebounce,
@@ -40,6 +40,7 @@ import {
   InvitationSuccessNotification,
 } from '../hankeUsers/InvitationNotification';
 import { userRoleSorter } from '../hankeUsers/utils';
+import { formatToFinnishDate } from '../../../common/utils/date';
 
 function UserIcon({
   user,
@@ -49,26 +50,44 @@ function UserIcon({
 
   if (user.id === signedInUser?.hankeKayttajaId) {
     return (
-      <IconUser
-        className={styles.userIcon}
-        ariaHidden={false}
-        ariaLabel={t('hankeUsers:labels:ownInformation')}
-      />
+      <Tooltip label={t('hankeUsers:labels:ownInformation')}>
+        <Flex>
+          <IconUser
+            className={styles.userIcon}
+            ariaHidden={false}
+            ariaLabel={t('hankeUsers:labels:ownInformation')}
+          />
+        </Flex>
+      </Tooltip>
     );
   } else {
     return user.tunnistautunut ? (
-      <IconCheckCircleFill
-        color="var(--color-success)"
-        className={styles.userIcon}
-        ariaHidden={false}
-        ariaLabel={t('hankeUsers:labels:userIdentified')}
-      />
+      <Tooltip label={t('hankeUsers:labels:userIdentified')}>
+        <Flex>
+          <IconCheckCircleFill
+            color="var(--color-success)"
+            className={styles.userIcon}
+            ariaHidden={false}
+            ariaLabel={t('hankeUsers:labels:userIdentified')}
+          />
+        </Flex>
+      </Tooltip>
     ) : (
-      <IconClock
-        className={styles.userIcon}
-        ariaHidden={false}
-        ariaLabel={t('hankeUsers:notifications:invitationSentSuccessLabel')}
-      />
+      <Tooltip
+        label={t('hankeUsers:labels:invitationSent', {
+          date: formatToFinnishDate(user.kutsuttu),
+        })}
+      >
+        <Flex>
+          <IconClock
+            className={styles.userIcon}
+            ariaHidden={false}
+            ariaLabel={t('hankeUsers:labels:invitationSent', {
+              date: formatToFinnishDate(user.kutsuttu),
+            })}
+          />
+        </Flex>
+      </Tooltip>
     );
   }
 }

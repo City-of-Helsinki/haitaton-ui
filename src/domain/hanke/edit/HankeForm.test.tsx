@@ -540,6 +540,7 @@ describe('New contact person form and contact person dropdown', () => {
         kayttooikeustaso: 'KAIKKI_OIKEUDET',
         roolit: [],
         tunnistautunut: true,
+        kutsuttu: null,
       },
       {
         id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
@@ -550,6 +551,7 @@ describe('New contact person form and contact person dropdown', () => {
         kayttooikeustaso: 'KAIKKIEN_MUOKKAUS',
         roolit: [],
         tunnistautunut: false,
+        kutsuttu: '2024-02-15T19:59:59.999Z',
       },
     ];
     server.use(
