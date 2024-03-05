@@ -15,6 +15,7 @@ export type HankeUser = {
   kayttooikeustaso: keyof typeof AccessRightLevel;
   roolit: string[];
   tunnistautunut: boolean;
+  kutsuttu: string | null;
 };
 
 export enum Rights {

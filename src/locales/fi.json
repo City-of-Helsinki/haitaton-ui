@@ -927,14 +927,14 @@
     },
     "buttons": {
       "resendInvitation": "Lähetä kutsulinkki uudelleen",
-      "invitationSent": "Kutsulinkki lähetetty",
       "edit": "Muokkaa tietoja"
     },
     "labels": {
       "ownInformation": "Omat käyttäjätietosi",
       "userIdentified": "Kirjautunut hankkeelle tunnistautuneena",
       "userIdentifiedLong": "Käyttäjä on kirjautunut hankkeelle tunnistautuneena",
-      "invitationSent": "Kutsulinkki Haitattomaan lähetetty",
+      "invitationSent": "Kutsulinkki lähetetty {{date}}",
+      "invitationSentLong": "Kutsulinkki Haitattomaan lähetetty {{date}}",
       "userMenu": "Käyttäjävalikko"
     },
     "userIdentified": "Käyttäjä tunnistautunut"

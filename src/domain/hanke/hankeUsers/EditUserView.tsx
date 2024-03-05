@@ -38,6 +38,7 @@ import { yhteyshenkiloSchema } from '../edit/hankeSchema';
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
 import Text from '../../../common/components/text/Text';
 import { userRoleSorter } from './utils';
+import { formatToFinnishDate } from '../../../common/utils/date';
 
 type Props = {
   user: HankeUser;
@@ -67,6 +68,7 @@ function EditUserView({
     tunnistautunut,
     kayttooikeustaso,
     roolit,
+    kutsuttu,
   },
   hankeUsers,
   signedInUser,
@@ -240,7 +242,11 @@ function EditUserView({
             ) : (
               <>
                 <IconClock />
-                <p>{t('hankeUsers:labels:invitationSent')}</p>
+                <p>
+                  {t('hankeUsers:labels:invitationSentLong', {
+                    date: formatToFinnishDate(kutsuttu),
+                  })}
+                </p>
               </>
             )}
           </Flex>

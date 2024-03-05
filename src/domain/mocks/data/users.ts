@@ -16,6 +16,7 @@ function mapToHankeUser(user: (typeof users)[0]): HankeUser {
     kayttooikeustaso: user.kayttooikeustaso as AccessRightLevel,
     roolit: user.roolit,
     tunnistautunut: user.tunnistautunut,
+    kutsuttu: user.kutsuttu,
   };
 }
 
@@ -41,6 +42,7 @@ export async function create(hankeTunnus: string, user: Yhteyshenkilo) {
     kayttooikeustaso: AccessRightLevel.KATSELUOIKEUS,
     roolit: [],
     tunnistautunut: false,
+    kutsuttu: new Date().toISOString(),
   };
   users.push({ ...newUser, hankeTunnus });
   return newUser;

@@ -859,8 +859,10 @@
       "invitationSentErrorText": "<0>Ett fel uppstod när inbjudningslänken skulle skickas. Försök igen senare eller kontakta Haitatons tekniska support med e-post till <1>haitatontuki@hel.fi</1>.</0>"
     },
     "buttons": {
-      "resendInvitation": "Skicka inbjudningslänken på nytt",
-      "invitationSent": "Inbjudningslänken skickades"
+      "resendInvitation": "Skicka inbjudningslänken på nytt"
+    },
+    "labels": {
+      "invitationSent": "Inbjudningslänken skickades {{date}}"
     },
     "userIdentified": "Användaren har identifierat sig"
   },
