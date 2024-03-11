@@ -747,8 +747,6 @@
     "openMapToNewWindow": "Open the map in a new window",
     "showHankeButton": "Show project",
     "showApplicationsButton": "Show project applications",
-    "draftStateLabel": "The project is a draft",
-    "draftState": "The project is in a draft state. You must enter nuisance information on the areas and other mandatory information to publish the project and add permits.",
     "clearFiltersButton": "Clear filters",
     "filtersInfoText": "Changing the filters will update the project list.",
     "tabit": {

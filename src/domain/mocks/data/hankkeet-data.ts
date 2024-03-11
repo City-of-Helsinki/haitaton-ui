@@ -29,6 +29,7 @@ const hankkeet: HankeDataDraft[] = [
     toteuttajat: [],
     muut: [],
     tyomaaTyyppi: [],
+    alueet: [],
   },
   {
     id: 2,
@@ -294,6 +295,7 @@ const hankkeet: HankeDataDraft[] = [
         tarinaHaitta: HANKE_TARINAHAITTA.PITKAKESTOINEN_TOISTUVA_HAITTA,
         kaistaHaitta: HANKE_KAISTAHAITTA.VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA,
         kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA.PITUUS_ALLE_10_METRIA,
+        nimi: 'Hankealue 1',
         geometriat: {
           featureCollection: {
             type: 'FeatureCollection',
@@ -351,6 +353,7 @@ const hankkeet: HankeDataDraft[] = [
     toteuttajat: [],
     muut: [],
     tyomaaTyyppi: [],
+    alueet: [],
   },
   {
     id: 5,
@@ -373,6 +376,7 @@ const hankkeet: HankeDataDraft[] = [
     toteuttajat: [],
     muut: [],
     tyomaaTyyppi: [],
+    alueet: [],
   },
   {
     id: 6,
@@ -395,6 +399,7 @@ const hankkeet: HankeDataDraft[] = [
     toteuttajat: [],
     muut: [],
     tyomaaTyyppi: [],
+    alueet: [],
   },
   {
     id: 7,
@@ -417,6 +422,7 @@ const hankkeet: HankeDataDraft[] = [
     toteuttajat: [],
     muut: [],
     tyomaaTyyppi: [],
+    alueet: [],
   },
   {
     id: 8,
@@ -439,6 +445,7 @@ const hankkeet: HankeDataDraft[] = [
     toteuttajat: [],
     muut: [],
     tyomaaTyyppi: [],
+    alueet: [],
   },
   {
     id: 9,
@@ -461,6 +468,7 @@ const hankkeet: HankeDataDraft[] = [
     toteuttajat: [],
     muut: [],
     tyomaaTyyppi: [],
+    alueet: [],
   },
   {
     id: 10,
@@ -483,6 +491,7 @@ const hankkeet: HankeDataDraft[] = [
     toteuttajat: [],
     muut: [],
     tyomaaTyyppi: [],
+    alueet: [],
   },
   {
     id: 11,
@@ -506,6 +515,7 @@ const hankkeet: HankeDataDraft[] = [
     muut: [],
     tyomaaTyyppi: [],
     generated: true,
+    alueet: [],
   },
 ];
 

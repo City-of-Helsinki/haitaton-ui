@@ -1,7 +1,11 @@
-import { Notification } from 'hds-react';
 import React from 'react';
+import { Notification } from 'hds-react';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@chakra-ui/react';
+import { uniq } from 'lodash';
 import { HankeData } from '../../../types/hanke';
+import { useValidationErrors } from '../../../forms/hooks/useValidationErrors';
+import { Message, hankePublicSchema } from '../hankePublicSchema';
 
 type Props = {
   /** Hanke data */
@@ -11,20 +15,32 @@ type Props = {
 };
 
 /**
- * Show hanke draft state notification if it's status is DRAFT
+ * Show hanke draft state notification if there are required fields missing
  */
-const HankeDraftStateNotification: React.FC<Props> = ({ hanke, className }) => {
+const HankeDraftStateNotification: React.FC<Readonly<Props>> = ({ hanke, className }) => {
   const { t } = useTranslation();
+  const hankePublicErrors = useValidationErrors(hankePublicSchema, hanke);
+  const errorPages = uniq(
+    hankePublicErrors.map((error) => (error.message as unknown as Message).values.page),
+  );
 
-  if (hanke.status === 'DRAFT') {
+  if (errorPages.length > 0) {
     return (
       <Notification
-        size="small"
-        label={t('hankePortfolio:draftStateLabel')}
+        label={t('hankePortfolio:draftState:labels:insufficientPhases')}
         className={className}
         type="alert"
+        dataTestId="hankeDraftStateNotification"
       >
-        {t('hankePortfolio:draftState')}
+        <Box as="ul" marginLeft="var(--spacing-m)">
+          {errorPages.map((page) => {
+            return (
+              <li key={page} aria-label={t(`hankePortfolio:tabit:${page}`)}>
+                {t(`hankePortfolio:tabit:${page}`)}
+              </li>
+            );
+          })}
+        </Box>
       </Notification>
     );
   }

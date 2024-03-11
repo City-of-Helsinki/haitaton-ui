@@ -1,6 +1,5 @@
-import React from 'react';
 import { rest } from 'msw';
-import { render, screen } from '../../../testUtils/render';
+import { render, screen, within } from '../../../testUtils/render';
 import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import HankeViewContainer from './HankeViewContainer';
 import { server } from '../../mocks/test-server';
@@ -26,9 +25,27 @@ test('Draft state notification is rendered when hanke is in draft state', async 
 
   await waitForLoadingToFinish();
 
-  const draftStateElements = screen.queryAllByText(/hanke on luonnostilassa/i, { exact: false });
+  const draftStateElement = screen.getByTestId('hankeDraftStateNotification');
+  const { getByRole } = within(draftStateElement);
 
-  expect(draftStateElements[0]).toBeInTheDocument();
+  expect(draftStateElement).toBeInTheDocument();
+  expect(getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
+  expect(getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
+  expect(getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
+});
+
+test('Draft state notification only shows form pages with missing information', async () => {
+  render(<HankeViewContainer hankeTunnus="HAI22-4" />);
+
+  await waitForLoadingToFinish();
+
+  const draftStateElement = screen.getByTestId('hankeDraftStateNotification');
+  const { queryByRole, getByRole } = within(draftStateElement);
+
+  expect(draftStateElement).toBeInTheDocument();
+  expect(queryByRole('listitem', { name: /perustiedot/i })).not.toBeInTheDocument();
+  expect(getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
+  expect(getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
 });
 
 test('Add application button is displayed when hanke is in PUBLIC state', async () => {
@@ -52,9 +69,9 @@ test('Draft state notification is not rendered when hanke is not in draft state'
 
   await waitForLoadingToFinish();
 
-  const draftStateElements = screen.queryAllByText(/hanke on luonnostilassa/i, { exact: false });
+  const draftStateElement = screen.queryByText(/hanke on luonnostilassa/i, { exact: false });
 
-  expect(draftStateElements.length).toBe(0);
+  expect(draftStateElement).not.toBeInTheDocument();
 });
 
 test('Generated state notification is rendered when hanke is in generated state', async () => {
