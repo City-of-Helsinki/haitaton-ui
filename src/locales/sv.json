@@ -747,8 +747,6 @@
     "openMapToNewWindow": "Öppna kartan i ett nytt fönster",
     "showHankeButton": "Visa projekt",
     "showApplicationsButton": "Visa projektets ansökningar",
-    "draftStateLabel": "Projektet är i utkastfasen",
-    "draftState": "Projektet är i utkastfasen. Uppgifter om områdenas olägenheter och övriga obligatoriska uppgifter ska fyllas i för att publicera projektet och lägga till tillstånd.",
     "clearFiltersButton": "Töm sökuppgifter",
     "filtersInfoText": "Ändring av sökvillkoren uppdaterar projektlistan.",
     "tabit": {

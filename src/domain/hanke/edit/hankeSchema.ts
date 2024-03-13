@@ -76,7 +76,7 @@ export const hankeSchema: yup.ObjectSchema<HankeDataFormState> = yup.object().sh
   [FORMFIELD.KATUOSOITE]: yup.string().nullable(),
   [FORMFIELD.VAIHE]: yup.mixed<HANKE_VAIHE_KEY>().nullable(),
   [FORMFIELD.HANKEALUEET]: yup.array(hankeAlueSchema),
-  [FORMFIELD.OMISTAJAT]: yup.array(contactSchema).defined().length(1),
+  [FORMFIELD.OMISTAJAT]: yup.array(contactSchema).defined(),
   [FORMFIELD.RAKENNUTTAJAT]: yup.array(contactSchema).defined(),
   [FORMFIELD.TOTEUTTAJAT]: yup.array(contactSchema).defined(),
   [FORMFIELD.MUUTTAHOT]: yup.array(otherPartySchema).defined(),

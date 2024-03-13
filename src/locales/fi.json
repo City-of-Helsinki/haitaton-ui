@@ -801,8 +801,6 @@
     "openMapToNewWindow": "Avaa kartta uuteen ikkunaan",
     "showHankeButton": "Näytä hanke",
     "showApplicationsButton": "Näytä hankkeen hakemukset",
-    "draftStateLabel": "Hanke on luonnostilassa",
-    "draftState": "Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.",
     "generatedStateLabel": "Hanke muodostettu johtoselvityksen perusteella",
     "generatedState": "Tämä hanke on muodostettu johtoselvityksen perusteella.",
     "clearFiltersButton": "Tyhjennä hakuehdot",
@@ -836,6 +834,11 @@
     },
     "ariaLabels": {
       "expandHankeCard": "Laajenna hankkeen tiedot"
+    },
+    "draftState": {
+      "labels": {
+        "insufficientPhases": "Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavissa vaiheissa on puuttuvia tietoja:"
+      }
     }
   },
   "publicHankkeet": {
