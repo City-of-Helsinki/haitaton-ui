@@ -20,6 +20,10 @@ function mapToHankeUser(user: (typeof users)[0]): HankeUser {
   };
 }
 
+export async function reset() {
+  users = [...usersData];
+}
+
 export async function read(id: string): Promise<HankeUser | undefined> {
   return users.map(mapToHankeUser).find((user) => user.id === id);
 }
@@ -80,4 +84,12 @@ export async function update(
     return user.id === updatedUser?.id ? { ...updatedUser, hankeTunnus } : user;
   });
   return updatedUser;
+}
+
+export async function remove(userId: string) {
+  const userToRemove = await read(userId);
+  if (!userToRemove) {
+    throw new ApiError(`No user with id ${userId}`, 404);
+  }
+  users = users.filter((user) => user.id !== userToRemove.id);
 }

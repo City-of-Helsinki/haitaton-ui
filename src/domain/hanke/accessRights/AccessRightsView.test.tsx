@@ -4,7 +4,10 @@ import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import AccessRightsViewContainer from './AccessRightsViewContainer';
 import { server } from '../../mocks/test-server';
 import usersData from '../../mocks/data/users-data.json';
-import { SignedInUser } from '../hankeUsers/hankeUser';
+import { HankeUser, SignedInUser } from '../hankeUsers/hankeUser';
+import AccessRightsView from './AccessRightsView';
+import { USER_ALL } from '../../mocks/signedInUser';
+import { reset } from '../../mocks/data/users';
 
 jest.setTimeout(50000);
 
@@ -361,4 +364,129 @@ test('Should show edit links or buttons only for self if user does not have edit
 
   expect(screen.getAllByRole('img', { name: 'Muokkaa tietoja' })).toHaveLength(1);
   expect(screen.getAllByRole('button', { name: 'Muokkaa tietoja' })).toHaveLength(1);
+});
+
+test('Should not show delete user buttons if user does not have permissions', async () => {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>(
+          getSignedInUser({ kayttooikeustaso: 'KATSELUOIKEUS', kayttooikeudet: ['VIEW'] }),
+        ),
+      );
+    }),
+  );
+
+  render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.queryAllByRole('img', { name: 'Poista käyttäjä' })).toHaveLength(0);
+  expect(screen.queryAllByRole('button', { name: 'Poista käyttäjä' })).toHaveLength(0);
+});
+
+test('Should not show delete user button for user who is the only with all permissions', async () => {
+  render(
+    <AccessRightsView
+      hankeTunnus="HAI22-2"
+      hankeName="Aidasmäentien vesihuollon rakentaminen"
+      hankeUsers={users.slice(0, 2) as HankeUser[]}
+      signedInUser={USER_ALL}
+    />,
+  );
+
+  expect(screen.queryAllByRole('button', { name: 'Poista käyttäjä' })).toHaveLength(2);
+});
+
+test('Should not be able to delete user who is the only yhteyshenkilö of the omistaja', async () => {
+  const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+  await user.click(screen.getAllByRole('button', { name: 'Poista käyttäjä' })[4]);
+
+  await screen.findByText('Käyttäjää ei voi poistaa');
+  expect(
+    screen.getByText(
+      'Käyttäjä on hankkeen omistajan ainut yhteyshenkilö eikä käyttäjää voida siksi poistaa',
+      { exact: false },
+    ),
+  ).toBeInTheDocument();
+});
+
+test('Should not be able to delete user who has sent hakemuksia', async () => {
+  const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+  await user.click(screen.getAllByRole('button', { name: 'Poista käyttäjä' })[1]);
+
+  await screen.findByText('Käyttäjää ei voi poistaa');
+  expect(
+    screen.getByText(
+      'Käyttäjää ei voida poistaa, sillä hänet on lisätty seuraaville hakemuksille: JS2300001 Odottaa käsittelyä, JS2300002 Käsittelyssä.',
+      { exact: false },
+    ),
+  ).toBeInTheDocument();
+});
+
+test('Should not be able to delete user who has sent hakemuksia, which are pending', async () => {
+  const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+  await user.click(screen.getAllByRole('button', { name: 'Poista käyttäjä' })[2]);
+
+  await screen.findByText('Käyttäjää ei voi poistaa');
+  expect(
+    screen.getByText(
+      'Käyttäjää ei voida poistaa, sillä hänet on lisätty seuraaville hakemuksille: JS2300001 Odottaa käsittelyä, JS2300003 Odottaa käsittelyä. Voit perua hakemuksen ja tehdä uuden.',
+    ),
+  ).toBeInTheDocument();
+});
+
+test('Should be able to delete user who has draft hakemuksia, but should notify about it', async () => {
+  const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+  await user.click(screen.getAllByRole('button', { name: 'Poista käyttäjä' })[3]);
+
+  await screen.findByText('Poista käyttäjä hankkeelta');
+  expect(
+    screen.getByText(
+      'Käyttäjä on lisätty luonnos-tilassa oleville hakemuksille: Hakemus 4, Hakemus 5. Käyttäjän poistaminen poistaa hänen tietonsa myös hakemukselta. Tarkista tarvittaessa, että hakemuksen kaikki pakolliset yhteystiedot on täytetty. Haluatko varmasti poistaa käyttäjän?',
+    ),
+  ).toBeInTheDocument();
+
+  await screen.findByRole('button', { name: 'Poista' });
+  await user.click(screen.getByRole('button', { name: 'Poista' }));
+
+  expect(screen.getByText('Käyttäjä poistettu')).toBeInTheDocument();
+
+  await reset();
+});
+
+test('User should be able to delete themselves', async () => {
+  const { user } = render(
+    <AccessRightsView
+      hankeTunnus="HAI22-2"
+      hankeName="Aidasmäentien vesihuollon rakentaminen"
+      hankeUsers={users.slice(0, 5) as HankeUser[]}
+      signedInUser={{ ...USER_ALL, hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6' }}
+    />,
+  );
+
+  await user.click(screen.getAllByRole('button', { name: 'Poista käyttäjä' })[0]);
+
+  await screen.findByText('Poista käyttäjä hankkeelta');
+  expect(
+    screen.getByText(
+      'Käyttäjän yhteystiedot poistetaan kaikista hankkeen rooleista. Haluatko varmasti poistaa käyttäjän?',
+    ),
+  ).toBeInTheDocument();
+
+  await screen.findByRole('button', { name: 'Poista' });
+  await user.click(screen.getByRole('button', { name: 'Poista' }));
+
+  expect(location.pathname).toBe('/fi/hankesalkku');
+
+  await reset();
 });

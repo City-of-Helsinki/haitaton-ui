@@ -1,4 +1,4 @@
-import { HankeUser } from './hankeUser';
+import { HankeUser, SignedInUser } from './hankeUser';
 import { HankeYhteyshenkilo } from '../../types/hanke';
 
 export function mapHankeUserToHankeYhteyshenkilo({
@@ -37,3 +37,15 @@ export const userRoleSorter = (a: string, b: string) => {
     return indexA - indexB;
   }
 };
+
+export function showUserDeleteButton(
+  user: HankeUser,
+  hankeUsers?: HankeUser[],
+  signedInUser?: SignedInUser,
+) {
+  const isOnlyWithAllRights =
+    user.kayttooikeustaso === 'KAIKKI_OIKEUDET' &&
+    hankeUsers?.filter((hankeUser) => hankeUser.kayttooikeustaso === 'KAIKKI_OIKEUDET').length ===
+      1;
+  return Boolean(signedInUser?.kayttooikeudet.includes('DELETE_USER') && !isOnlyWithAllRights);
+}

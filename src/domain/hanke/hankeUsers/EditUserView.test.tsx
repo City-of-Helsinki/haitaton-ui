@@ -3,7 +3,7 @@ import { server } from '../../mocks/test-server';
 import { fireEvent, render, screen } from '../../../testUtils/render';
 import EditUserContainer from './EditUserContainer';
 import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
-import { readAll } from '../../mocks/data/users';
+import { readAll, reset } from '../../mocks/data/users';
 import { USER_EDIT_HANKE } from '../../mocks/signedInUser';
 import * as hankeUsersApi from './hankeUsersApi';
 
@@ -69,7 +69,7 @@ test('Should show status text of invitation send to user and Invitation send but
   expect(screen.getByRole('button', { name: 'Lähetä kutsulinkki uudelleen' })).toBeInTheDocument();
 });
 
-test('Permissions dropdown should be disabled if only one user has all rights', async () => {
+test('Permissions dropdown should be disabled and delete button should be hidden if only one user has all rights', async () => {
   const hankeTunnus = 'HAI22-2';
   const users = (await readAll(hankeTunnus)).slice(1, 4);
   server.use(
@@ -82,6 +82,7 @@ test('Permissions dropdown should be disabled if only one user has all rights', 
   await waitForLoadingToFinish();
 
   expect(screen.getByRole('button', { name: /käyttöoikeudet/i })).toBeDisabled();
+  expect(screen.queryByRole('button', { name: /poista käyttäjä/i })).not.toBeInTheDocument();
 });
 
 test('Permissions dropdown should be disabled if editing own information', async () => {
@@ -91,7 +92,7 @@ test('Permissions dropdown should be disabled if editing own information', async
   expect(screen.getByRole('button', { name: /käyttöoikeudet/i })).toBeDisabled();
 });
 
-test('Permissions dropdown should be disabled if user does not have enough rights', async () => {
+test('Permissions dropdown should be disabled and delete button should be hidden if user does not have enough rights', async () => {
   server.use(
     rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
       return res(ctx.status(200), ctx.json(USER_EDIT_HANKE));
@@ -102,6 +103,7 @@ test('Permissions dropdown should be disabled if user does not have enough right
   await waitForLoadingToFinish();
 
   expect(screen.getByRole('button', { name: /käyttöoikeudet/i })).toBeDisabled();
+  expect(screen.queryByRole('button', { name: /poista käyttäjä/i })).not.toBeInTheDocument();
 });
 
 test('Should be able to edit own information', async () => {
@@ -234,4 +236,53 @@ test('Should show error notification if editing users permission fails', async (
   await user.click(screen.getByRole('button', { name: /tallenna muutokset/i }));
 
   expect(screen.getByText('Virhe päivityksessä')).toBeInTheDocument();
+});
+
+test('Should be able to delete user and return to user management page', async () => {
+  const { user } = render(
+    <EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afb4" hankeTunnus="HAI22-2" />,
+  );
+  await waitForLoadingToFinish();
+  await user.click(screen.getByRole('button', { name: /poista käyttäjä/i }));
+  await screen.findByText('Poista käyttäjä hankkeelta');
+  await screen.findByRole('button', { name: 'Poista' });
+  await user.click(screen.getByRole('button', { name: 'Poista' }));
+
+  expect(location.pathname).toBe('/fi/hankesalkku/HAI22-2/kayttajat');
+  expect(screen.getByText('Käyttäjä poistettu')).toBeInTheDocument();
+
+  await reset();
+});
+
+test('Should show error notification if user delete info request fails', async () => {
+  server.use(
+    rest.get('/api/kayttajat/:id/deleteInfo', async (req, res, ctx) => {
+      return res(ctx.status(500));
+    }),
+  );
+  const { user } = render(
+    <EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afa6" hankeTunnus="HAI22-2" />,
+  );
+  await waitForLoadingToFinish();
+  await user.click(screen.getByRole('button', { name: /poista käyttäjä/i }));
+
+  expect(screen.getAllByText(/tapahtui virhe/i)[0]).toBeInTheDocument();
+});
+
+test('Should show error notification if deleting user fails', async () => {
+  server.use(
+    rest.delete('/api/kayttajat/:id', async (req, res, ctx) => {
+      return res(ctx.status(500));
+    }),
+  );
+  const { user } = render(
+    <EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afa6" hankeTunnus="HAI22-2" />,
+  );
+  await waitForLoadingToFinish();
+  await user.click(screen.getByRole('button', { name: /poista käyttäjä/i }));
+  await screen.findByText('Poista käyttäjä hankkeelta');
+  await screen.findByRole('button', { name: 'Poista' });
+  await user.click(screen.getByRole('button', { name: 'Poista' }));
+
+  expect(screen.getByText(/tapahtui virhe/i)).toBeInTheDocument();
 });

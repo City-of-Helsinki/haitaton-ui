@@ -923,11 +923,14 @@
       "invitationSentSuccessLabel": "Kutsulinkki lähetetty",
       "invitationSentSuccessText": "Kutsulinkki lähetetty osoitteeseen {{email}}.",
       "invitationSentErrorLabel": "Virhe linkin lähettämisessä",
-      "invitationSentErrorText": "<0>Kutsulinkin lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>"
+      "invitationSentErrorText": "<0>Kutsulinkin lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>",
+      "userDeletedLabel": "Käyttäjä poistettu",
+      "userDeletedText": "Käyttäjä poistettiin onnistuneesti"
     },
     "buttons": {
       "resendInvitation": "Lähetä kutsulinkki uudelleen",
-      "edit": "Muokkaa tietoja"
+      "edit": "Muokkaa tietoja",
+      "delete": "Poista käyttäjä"
     },
     "labels": {
       "ownInformation": "Omat käyttäjätietosi",
@@ -936,6 +939,19 @@
       "invitationSent": "Kutsulinkki lähetetty {{date}}",
       "invitationSentLong": "Kutsulinkki Haitattomaan lähetetty {{date}}",
       "userMenu": "Käyttäjävalikko"
+    },
+    "deleteDialog": {
+      "title": {
+        "canDelete": "Poista käyttäjä hankkeelta",
+        "cannotDelete": "Käyttäjää ei voi poistaa"
+      },
+      "content": {
+        "onlyOmistajanYhteyshenkilo": "Käyttäjä on hankkeen omistajan ainut yhteyshenkilö eikä käyttäjää voida siksi poistaa. Lisää ensin hankkeen omistajalle toinen yhteyshenkilö ja palaa sitten poistamaan haluamasi käyttäjä.",
+        "activeHakemuksetPending": "Käyttäjää ei voida poistaa, sillä hänet on lisätty seuraaville hakemuksille: {{hakemukset}}. Voit perua hakemuksen ja tehdä uuden.",
+        "activeHakemuksetHandling": "Käyttäjää ei voida poistaa, sillä hänet on lisätty seuraaville hakemuksille: {{hakemukset}}. Poista käyttäjä hakemukselta tekemällä hakemukseen muutosilmoitus, jossa korvaat käyttäjän toisella. Sen jälkeen voit poistaa käyttäjän käyttäjähallinnassa.",
+        "draftHakemukset": "Käyttäjä on lisätty luonnos-tilassa oleville hakemuksille: {{hakemukset}}. Käyttäjän poistaminen poistaa hänen tietonsa myös hakemukselta. Tarkista tarvittaessa, että hakemuksen kaikki pakolliset yhteystiedot on täytetty. Haluatko varmasti poistaa käyttäjän?",
+        "confirmText": "Käyttäjän yhteystiedot poistetaan kaikista hankkeen rooleista. Haluatko varmasti poistaa käyttäjän?"
+      }
     },
     "userIdentified": "Käyttäjä tunnistautunut"
   },
