@@ -29,7 +29,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@axe-core/react": "^4.7.3",
+    "@axe-core/react": "^4.8.5",
     "@babel/runtime": "^7.23.5",
     "@chakra-ui/react": "^2.8.2",
     "@chakra-ui/theme-tools": "^2.1.2",
