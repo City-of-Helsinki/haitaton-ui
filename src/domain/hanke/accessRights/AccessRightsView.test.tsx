@@ -50,7 +50,7 @@ test('Renders correct information', async () => {
   expect(screen.getByTestId('roolit-0')).toHaveTextContent('Rakennuttaja, Muu');
   expect(screen.getAllByText(`${users[1].etunimi} ${users[1].sukunimi}`)).toHaveLength(2);
   expect(screen.getAllByText(users[1].sahkoposti)).toHaveLength(2);
-  expect(screen.getByTestId('roolit-1')).toHaveTextContent('Omistaja');
+  expect(screen.getByTestId('roolit-1')).toHaveTextContent('Rakennuttaja');
   expect(screen.getAllByText(`${users[2].etunimi} ${users[2].sukunimi}`)).toHaveLength(2);
   expect(screen.getAllByText(users[2].sahkoposti)).toHaveLength(2);
   expect(screen.getByTestId('roolit-2')).toHaveTextContent('Muu');
@@ -58,7 +58,7 @@ test('Renders correct information', async () => {
   expect(screen.getAllByText(users[3].sahkoposti)).toHaveLength(2);
   expect(screen.getAllByText(`${users[4].etunimi} ${users[4].sukunimi}`)).toHaveLength(2);
   expect(screen.getAllByText(users[4].sahkoposti)).toHaveLength(2);
-  expect(screen.getByTestId('roolit-4')).toHaveTextContent('Toteuttaja');
+  expect(screen.getByTestId('roolit-4')).toHaveTextContent('Omistaja');
   expect(screen.getAllByText(`${users[5].etunimi} ${users[5].sukunimi}`)).toHaveLength(2);
   expect(screen.getAllByText(users[5].sahkoposti)).toHaveLength(2);
   expect(screen.getAllByText(`${users[6].etunimi} ${users[6].sukunimi}`)).toHaveLength(2);
@@ -128,7 +128,7 @@ test('Sorting by users role works', async () => {
   expect(screen.getByTestId('roolit-4')).toHaveTextContent('Muu');
   expect(screen.getByTestId('roolit-5')).toHaveTextContent('Muu');
   expect(screen.getByTestId('roolit-6')).toHaveTextContent('Omistaja');
-  expect(screen.getByTestId('roolit-7')).toHaveTextContent('Omistaja');
+  expect(screen.getByTestId('roolit-7')).toHaveTextContent('Rakennuttaja');
   expect(screen.getByTestId('roolit-8')).toHaveTextContent('Rakennuttaja');
   expect(screen.getByTestId('roolit-9')).toHaveTextContent('Rakennuttaja');
 
@@ -136,9 +136,9 @@ test('Sorting by users role works', async () => {
 
   expect(screen.getByTestId('roolit-0')).toHaveTextContent('Toteuttaja');
   expect(screen.getByTestId('roolit-1')).toHaveTextContent('Rakennuttaja, Toteuttaja');
-  expect(screen.getByTestId('roolit-2')).toHaveTextContent('Rakennuttaja');
+  expect(screen.getByTestId('roolit-2')).toHaveTextContent('Rakennuttaja, Muu');
   expect(screen.getByTestId('roolit-3')).toHaveTextContent('Rakennuttaja');
-  expect(screen.getByTestId('roolit-4')).toHaveTextContent('Omistaja');
+  expect(screen.getByTestId('roolit-4')).toHaveTextContent('Rakennuttaja');
   expect(screen.getByTestId('roolit-5')).toHaveTextContent('Omistaja');
   expect(screen.getByTestId('roolit-6')).toHaveTextContent('Muu');
   expect(screen.getByTestId('roolit-7')).toHaveTextContent('Muu');

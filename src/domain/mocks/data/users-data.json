@@ -22,7 +22,7 @@
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KAIKKIEN_MUOKKAUS",
     "roolit": [
-      "OMISTAJA"
+      "RAKENNUTTAJA"
     ],
     "tunnistautunut": false,
     "hankeTunnus": "HAI22-2",
@@ -50,8 +50,7 @@
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KAIKKI_OIKEUDET",
     "roolit": [
-      "TOTEUTTAJA",
-      "OMISTAJA"
+      "TOTEUTTAJA"
     ],
     "tunnistautunut": false,
     "hankeTunnus": "HAI22-2",
@@ -65,7 +64,7 @@
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
     "roolit": [
-      "TOTEUTTAJA"
+      "OMISTAJA"
     ],
     "tunnistautunut": false,
     "hankeTunnus": "HAI22-2",
