@@ -7,7 +7,7 @@ import * as usersDB from './data/users';
 import ApiError from './apiError';
 import { IdentificationResponse, SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import { Yhteyshenkilo, YhteyshenkiloWithoutName } from '../hanke/edit/types';
-import { NewJohtoselvitysData } from '../application/types/application';
+import { JohtoselvitysUpdateData, NewJohtoselvitysData } from '../application/types/application';
 import { defaultJohtoselvitysData } from './data/defaultJohtoselvitysData';
 
 const apiUrl = '/api';
@@ -149,7 +149,7 @@ export const handlers = [
 
   rest.put(`${apiUrl}/hakemukset/:id`, async (req, res, ctx) => {
     const { id } = req.params;
-    const reqBody: JohtoselvitysFormValues = await req.json();
+    const reqBody: JohtoselvitysUpdateData = await req.json();
     try {
       const hakemus = await hakemuksetDB.update(Number(id as string), reqBody);
       return res(ctx.status(200), ctx.json(hakemus));

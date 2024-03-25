@@ -17,6 +17,7 @@ import {
   AttachmentType,
 } from '../application/types/application';
 import * as applicationAttachmentsApi from '../application/attachments';
+import { cloneDeep } from 'lodash';
 
 afterEach(cleanup);
 
@@ -484,7 +485,12 @@ test('Should change users own role and its fields correctly', async () => {
 });
 
 test('Should not change anything if selecting the same role again', async () => {
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  const testApplication = cloneDeep(applications[0]);
+  testApplication.applicationData.customerWithContacts =
+    application.applicationData.customerWithContacts;
+  testApplication.applicationData.contractorWithContacts =
+    application.applicationData.contractorWithContacts;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
 
   fireEvent.click(screen.getByRole('button', { name: /rooli/i }));
   // Select the role to be Hakija again
@@ -496,7 +502,12 @@ test('Should not change anything if selecting the same role again', async () => 
 });
 
 test('Should not show send button when application has moved to pending state', async () => {
-  const { user } = render(<JohtoselvitysContainer application={applications[1]} />);
+  const testApplication = cloneDeep(applications[1]);
+  testApplication.applicationData.customerWithContacts =
+    application.applicationData.customerWithContacts;
+  testApplication.applicationData.contractorWithContacts =
+    application.applicationData.contractorWithContacts;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
@@ -505,7 +516,12 @@ test('Should not show send button when application has moved to pending state', 
 });
 
 test('Should show send button when application is edited in draft state', async () => {
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  const testApplication = cloneDeep(applications[0]);
+  testApplication.applicationData.customerWithContacts =
+    application.applicationData.customerWithContacts;
+  testApplication.applicationData.contractorWithContacts =
+    application.applicationData.contractorWithContacts;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
@@ -686,7 +702,12 @@ test('Should be able to upload attachments', async () => {
     .spyOn(applicationAttachmentsApi, 'uploadAttachment')
     .mockImplementation(uploadAttachmentMock);
   initFileGetResponse([]);
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  const testApplication = cloneDeep(applications[0]);
+  testApplication.applicationData.customerWithContacts =
+    application.applicationData.customerWithContacts;
+  testApplication.applicationData.contractorWithContacts =
+    application.applicationData.contractorWithContacts;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
   const fileUpload = screen.getByLabelText('Raahaa tiedostot tänne');
   user.upload(fileUpload, [
@@ -721,7 +742,12 @@ test('Should be able to delete attachments', async () => {
       attachmentType: 'MUU',
     },
   ]);
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  const testApplication = cloneDeep(applications[0]);
+  testApplication.applicationData.customerWithContacts =
+    application.applicationData.customerWithContacts;
+  testApplication.applicationData.contractorWithContacts =
+    application.applicationData.contractorWithContacts;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
   const { getAllByRole } = within(screen.getByTestId('file-upload-list'));
@@ -765,7 +791,12 @@ test('Should list existing attachments in the attachments page and in summary pa
       attachmentType: 'MUU',
     },
   ]);
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  const testApplication = cloneDeep(applications[0]);
+  testApplication.applicationData.customerWithContacts =
+    application.applicationData.customerWithContacts;
+  testApplication.applicationData.contractorWithContacts =
+    application.applicationData.contractorWithContacts;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
   const { getAllByRole } = within(screen.getByTestId('file-upload-list'));
@@ -794,7 +825,11 @@ test('Summary should show attachments and they are downloadable', async () => {
     .spyOn(applicationAttachmentsApi, 'getAttachmentFile')
     .mockImplementation(jest.fn());
 
-  const testApplication = applications[0];
+  const testApplication = cloneDeep(applications[0]);
+  testApplication.applicationData.customerWithContacts =
+    application.applicationData.customerWithContacts;
+  testApplication.applicationData.contractorWithContacts =
+    application.applicationData.contractorWithContacts;
   initFileGetResponse([ATTACHMENT_META]);
 
   const { user } = render(<JohtoselvitysContainer application={testApplication} />);

@@ -16,11 +16,12 @@ export type PostalAddress = {
 };
 
 export type Contact = {
+  hankekayttajaId?: string;
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
-  orderer: boolean;
+  orderer?: boolean;
 };
 
 export enum ContactType {
@@ -37,15 +38,16 @@ export type CustomerType =
   | 'representativeWithContacts';
 
 export type Customer = {
+  yhteystietoId?: string | null;
   type: keyof typeof ContactType | null;
   name: string;
-  country: string;
+  country?: string;
   email: string;
   phone: string;
   registryKey: string | null;
-  ovt: string | null;
-  invoicingOperator: string | null;
-  sapCustomerNumber: string | null;
+  ovt?: string | null;
+  invoicingOperator?: string | null;
+  sapCustomerNumber?: string | null;
 };
 
 export type CustomerWithContacts = {
@@ -108,11 +110,11 @@ export interface ApplicationAttachmentMetadata extends AttachmentMetadata {
   attachmentType: AttachmentType;
 }
 
-export type JohtoselvitysData = {
+export interface JohtoselvitysData {
   applicationType: ApplicationType;
   name: string;
-  customerWithContacts: CustomerWithContacts;
-  contractorWithContacts: CustomerWithContacts;
+  customerWithContacts: CustomerWithContacts | null;
+  contractorWithContacts: CustomerWithContacts | null;
   areas: ApplicationArea[];
   startTime: Date | null;
   endTime: Date | null;
@@ -125,7 +127,7 @@ export type JohtoselvitysData = {
   emergencyWork: boolean;
   propertyConnectivity: boolean;
   rockExcavation: boolean | null;
-};
+}
 
 export type NewJohtoselvitysData = yup.InferType<typeof newJohtoselvitysSchema>;
 
@@ -159,4 +161,42 @@ export interface ApplicationDeletionResult {
 
 export function isCustomerWithContacts(value: unknown): value is CustomerWithContacts {
   return (value as CustomerWithContacts)?.contacts !== undefined;
+}
+
+export interface ApplicationUpdateContact {
+  hankekayttajaId?: string;
+}
+
+function mapYhteyshenkiloToHankekayttajaId(contactPerson: Contact): ApplicationUpdateContact {
+  return { hankekayttajaId: contactPerson.hankekayttajaId };
+}
+export class ApplicationUpdateCustomerWithContacts {
+  customer: Customer;
+  contacts: ApplicationUpdateContact[];
+
+  static Create(customerWithContacts: CustomerWithContacts | null) {
+    if (customerWithContacts === null || customerWithContacts.customer.type === null) {
+      return null;
+    }
+    return new ApplicationUpdateCustomerWithContacts(customerWithContacts);
+  }
+
+  constructor({ customer, contacts }: CustomerWithContacts) {
+    this.customer = customer;
+    this.contacts = contacts?.map(mapYhteyshenkiloToHankekayttajaId) || [];
+  }
+}
+
+export interface JohtoselvitysUpdateData
+  extends Omit<
+    JohtoselvitysData,
+    | 'customerWithContacts'
+    | 'contractorWithContacts'
+    | 'representativeWithContacts'
+    | 'propertyDeveloperWithContacts'
+  > {
+  customerWithContacts: ApplicationUpdateCustomerWithContacts | null;
+  contractorWithContacts: ApplicationUpdateCustomerWithContacts | null;
+  representativeWithContacts: ApplicationUpdateCustomerWithContacts | null;
+  propertyDeveloperWithContacts: ApplicationUpdateCustomerWithContacts | null;
 }

@@ -10,6 +10,7 @@ import {
   HANKE_CONTACT_TYPE,
   HankeContactTypeKey,
   HankeMuuTaho,
+  HankeYhteyshenkilo,
 } from '../../types/hanke';
 import Text from '../../../common/components/text/Text';
 import { useFormPage } from './hooks/useFormPage';
@@ -48,6 +49,10 @@ function getEmptyOtherContact(): HankeMuuTaho {
   };
 }
 
+function mapHankeYhteyshenkiloToLabel(yhteyshenkilo: HankeYhteyshenkilo) {
+  return `${yhteyshenkilo.etunimi} ${yhteyshenkilo.sukunimi} (${yhteyshenkilo.sahkoposti})`;
+}
+
 const ContactFields: React.FC<
   Readonly<{
     contactType: HankeContactTypeKey;
@@ -56,7 +61,7 @@ const ContactFields: React.FC<
   }>
 > = ({ contactType, index, hankeUsers }) => {
   const { t } = useTranslation();
-  const { watch, setValue, getValues } = useFormContext();
+  const { watch, setValue } = useFormContext();
   const selectedContactType = watch(`${contactType}.${index}.tyyppi`);
   const registryKeyInputDisabled = selectedContactType === CONTACT_TYYPPI.YKSITYISHENKILO;
 
@@ -107,8 +112,9 @@ const ContactFields: React.FC<
       </ResponsiveGrid>
       <ContactPersonSelect
         name={`${contactType}.${index}.${CONTACT_FORMFIELD.YHTEYSHENKILOT}`}
-        defaultValue={getValues(`${contactType}.${index}.${CONTACT_FORMFIELD.YHTEYSHENKILOT}`)}
         hankeUsers={hankeUsers}
+        mapHankeUserToValue={mapHankeUserToHankeYhteyshenkilo}
+        mapValueToLabel={mapHankeYhteyshenkiloToLabel}
       />
     </>
   );
@@ -368,10 +374,9 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ formData }) => {
                 </ResponsiveGrid>
                 <ContactPersonSelect
                   name={`${fieldPath}.${CONTACT_FORMFIELD.YHTEYSHENKILOT}`}
-                  defaultValue={getValues(
-                    `${FORMFIELD.MUUTTAHOT}.${index}.${CONTACT_FORMFIELD.YHTEYSHENKILOT}`,
-                  )}
                   hankeUsers={hankeUsers}
+                  mapHankeUserToValue={mapHankeUserToHankeYhteyshenkilo}
+                  mapValueToLabel={mapHankeYhteyshenkiloToLabel}
                 />
               </Fieldset>
             </FormContact>

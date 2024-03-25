@@ -52,6 +52,7 @@ const Dropdown: React.FC<React.PropsWithChildren<PropTypes>> = ({
         name={name}
         control={control}
         rules={rules}
+        defaultValue={defaultValue}
         render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
           return (
             <Select

@@ -22,7 +22,8 @@ type PropTypes<T> = {
   tooltip?: TooltipProps;
   icon?: ReactNode;
   clearable?: boolean;
-  mapValueToLabel: (value: T | null) => string;
+  mapValueToLabel: (value: T) => string;
+  transformValue?: (value: T) => T;
 };
 
 function DropdownMultiselect<T>({
@@ -38,6 +39,7 @@ function DropdownMultiselect<T>({
   icon,
   clearable,
   mapValueToLabel,
+  transformValue,
 }: Readonly<PropTypes<T>>) {
   const { t } = useTranslation();
   const { control } = useFormContext();
@@ -68,7 +70,7 @@ function DropdownMultiselect<T>({
               invalid={invalid}
               defaultValue={defaultValue}
               value={value?.map((v: T) => ({
-                value: v,
+                value: transformValue ? transformValue(v) : v,
                 label: mapValueToLabel(v),
               }))}
               onChange={(option: Option<T>[]) => onChange(option.map((o) => o.value))}

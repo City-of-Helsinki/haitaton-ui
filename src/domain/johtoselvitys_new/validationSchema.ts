@@ -19,12 +19,12 @@ const contactSchema = yup
     lastName: yup.string().trim().required(),
     email: yup.string().trim().email().max(100).required(),
     phone: yup.string().trim().max(20).required(),
-    orderer: yup.boolean().defined(),
   })
   .nullable()
   .required();
 
-const customerSchema = contactSchema.omit(['firstName', 'lastName', 'orderer']).shape({
+const customerSchema = contactSchema.omit(['firstName', 'lastName']).shape({
+  yhteystietoId: yup.string().nullable(),
   name: yup.string().trim().required(),
   type: yup.mixed<ContactType>().nullable().required(),
   registryKey: yup // business id i.e. Y-tunnus
@@ -37,15 +37,14 @@ const customerSchema = contactSchema.omit(['firstName', 'lastName', 'orderer']).
         schema.test('is-business-id', 'Is not valid business id', isValidBusinessId),
       otherwise: (schema) => schema,
     }),
-  country: yup.string().defined(),
-  ovt: yup.string().defined().nullable(),
-  invoicingOperator: yup.string().defined().nullable(),
-  sapCustomerNumber: yup.string().defined().nullable(),
 });
 
 const customerWithContactsSchema = yup.object({
-  customer: customerSchema.required(),
-  contacts: yup.array(contactSchema).defined(),
+  customer: customerSchema,
+  contacts: yup
+    .array(contactSchema)
+    .transform((value) => (value === null ? [] : value))
+    .defined(),
 });
 
 const areaSchema = yup.object({

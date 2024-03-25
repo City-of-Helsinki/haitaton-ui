@@ -76,7 +76,7 @@ test('Business id field is not disabled if customer type is company or associati
 
 test('Customer fields can be filled with orderer information', async () => {
   const application = applications[0];
-  const orderer = application.applicationData.customerWithContacts.contacts[0];
+  const orderer = application.applicationData.customerWithContacts?.contacts[0];
   const { user } = render(<Form application={application} />);
 
   await user.click(
@@ -84,19 +84,19 @@ test('Customer fields can be filled with orderer information', async () => {
   );
 
   expect(screen.getByTestId('applicationData.customerWithContacts.customer.name')).toHaveValue(
-    `${orderer.firstName} ${orderer.lastName}`,
+    `${orderer!.firstName} ${orderer!.lastName}`,
   );
   expect(screen.getByTestId('applicationData.customerWithContacts.customer.email')).toHaveValue(
-    orderer.email,
+    orderer!.email,
   );
   expect(screen.getByTestId('applicationData.customerWithContacts.customer.phone')).toHaveValue(
-    orderer.phone,
+    orderer!.phone,
   );
 });
 
 test('Contact fields can be filled with orderer information', async () => {
   const application = applications[0];
-  const orderer = application.applicationData.customerWithContacts.contacts[0];
+  const orderer = application.applicationData.customerWithContacts?.contacts[0];
   const { user } = render(<Form application={application} />);
 
   await user.click(
@@ -105,14 +105,14 @@ test('Contact fields can be filled with orderer information', async () => {
 
   expect(
     screen.getByTestId('applicationData.contractorWithContacts.contacts.0.firstName'),
-  ).toHaveValue(orderer.firstName);
+  ).toHaveValue(orderer!.firstName);
   expect(
     screen.getByTestId('applicationData.contractorWithContacts.contacts.0.lastName'),
-  ).toHaveValue(orderer.lastName);
+  ).toHaveValue(orderer!.lastName);
   expect(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.email')).toHaveValue(
-    orderer.email,
+    orderer!.email,
   );
   expect(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.phone')).toHaveValue(
-    orderer.phone,
+    orderer!.phone,
   );
 });

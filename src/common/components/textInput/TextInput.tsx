@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { TextInput as HdsTextInput } from 'hds-react';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +18,7 @@ type PropTypes = {
   helperText?: string;
   shouldUnregister?: boolean;
   className?: string;
+  style?: CSSProperties;
   autoComplete?: string;
   defaultValue?: string;
 };
@@ -34,6 +35,7 @@ const TextInput: React.FC<React.PropsWithChildren<PropTypes>> = ({
   helperText,
   shouldUnregister,
   className,
+  style,
   autoComplete,
   defaultValue = '',
 }) => {
@@ -50,6 +52,7 @@ const TextInput: React.FC<React.PropsWithChildren<PropTypes>> = ({
         <HdsTextInput
           id={name}
           className={className}
+          style={style}
           label={label || t(`hankeForm:labels:${name}`)}
           value={value || ''}
           maxLength={maxLength}
