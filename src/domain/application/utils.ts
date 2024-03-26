@@ -34,6 +34,20 @@ export async function saveApplication(data: Application) {
   return response.data;
 }
 
+export async function saveHakemus({
+  data,
+  convertFormStateToUpdateData,
+}: {
+  data: Application;
+  convertFormStateToUpdateData: (data: Application) => unknown;
+}) {
+  const response = data.id
+    ? await api.put<Application>(`/hakemukset/${data.id}`, convertFormStateToUpdateData(data))
+    : await api.post<Application>('/hakemukset', data);
+
+  return response.data;
+}
+
 /**
  * Send application to Allu
  */

@@ -1,4 +1,8 @@
-import { Application, HankkeenHakemus } from '../../application/types/application';
+import {
+  Application,
+  HankkeenHakemus,
+  JohtoselvitysUpdateData,
+} from '../../application/types/application';
 import hakemuksetData from './hakemukset-data';
 import { isApplicationPending } from '../../application/utils';
 import ApiError from '../apiError';
@@ -44,12 +48,12 @@ export async function create(data: Application) {
   return newHakemus;
 }
 
-export async function update(id: number, updates: Application) {
-  let hakemus = await read(id);
+export async function update(id: number, updates: JohtoselvitysUpdateData) {
+  const hakemus = await read(id);
   if (!hakemus) {
     throw new Error(`No application with id ${id}`);
   }
-  hakemus = Object.assign(hakemus, updates);
+  hakemus.applicationData = Object.assign(hakemus.applicationData, updates);
   return hakemus;
 }
 

@@ -3,10 +3,11 @@ import { Accordion, Button, Fieldset, IconPlusCircle } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
+import { useQueryClient } from 'react-query';
 import {
+  Contact,
   ContactType,
   CustomerType,
-  Contact as ApplicationContact,
   CustomerWithContacts,
 } from '../application/types/application';
 import Text from '../../common/components/text/Text';
@@ -16,37 +17,44 @@ import useLocale from '../../common/hooks/useLocale';
 import Dropdown from '../../common/components/dropdown/Dropdown';
 import { JohtoselvitysFormValues } from './types';
 import FormContact from '../forms/components/FormContact';
-
-function getEmptyContact(): ApplicationContact {
-  return {
-    firstName: '',
-    lastName: '',
-    orderer: false,
-    email: '',
-    phone: '',
-  };
-}
+import ContactPersonSelect from '../hanke/hankeUsers/ContactPersonSelect';
+import { HankeUser } from '../hanke/hankeUsers/hankeUser';
+import { useHankeUsers } from '../hanke/hankeUsers/hooks/useHankeUsers';
 
 function getEmptyCustomerWithContacts(): CustomerWithContacts {
   return {
     customer: {
+      yhteystietoId: null,
       type: null,
       name: '',
-      country: 'FI',
       email: '',
       phone: '',
       registryKey: null,
-      ovt: null,
-      invoicingOperator: null,
-      sapCustomerNumber: null,
     },
-    contacts: [getEmptyContact()],
+    contacts: [],
+  };
+}
+
+function mapHankeUserToContact({
+  id,
+  etunimi,
+  sukunimi,
+  puhelinnumero,
+  sahkoposti,
+}: HankeUser): Contact {
+  return {
+    hankekayttajaId: id,
+    firstName: etunimi,
+    lastName: sukunimi,
+    phone: puhelinnumero,
+    email: sahkoposti,
   };
 }
 
 const CustomerFields: React.FC<{
   customerType: CustomerType;
-}> = ({ customerType }) => {
+  hankeUsers?: HankeUser[];
+}> = ({ customerType, hankeUsers }) => {
   const { t } = useTranslation();
   const { watch, setValue } = useFormContext<JohtoselvitysFormValues>();
 
@@ -73,11 +81,25 @@ const CustomerFields: React.FC<{
     }
   }, [registryKey, customerType, setValue]);
 
+  function mapContactToLabel(contact: Contact) {
+    return `${contact.firstName} ${contact.lastName} (${contact.email})`;
+  }
+
+  function removeOrdererFromContact(contact: Contact): Contact {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { orderer, ...rest } = contact;
+    return rest;
+  }
+
   return (
     <Fieldset
       heading={t(`form:yhteystiedot:titles:${customerType}`)}
       style={{ paddingTop: 'var(--spacing-s)' }}
     >
+      <TextInput
+        name={`applicationData.${customerType}.customer.yhteystietoId`}
+        style={{ display: 'none' }}
+      />
       <ResponsiveGrid>
         <Dropdown
           id={`applicationData.${customerType}.customer.type`}
@@ -121,6 +143,13 @@ const CustomerFields: React.FC<{
           autoComplete="tel"
         />
       </ResponsiveGrid>
+      <ContactPersonSelect
+        name={`applicationData.${customerType}.contacts`}
+        hankeUsers={hankeUsers}
+        mapHankeUserToValue={mapHankeUserToContact}
+        mapValueToLabel={mapContactToLabel}
+        transformValue={(value) => removeOrdererFromContact(value)}
+      />
     </Fieldset>
   );
 };
@@ -130,6 +159,8 @@ export function Contacts() {
   const locale = useLocale();
   const { watch, setValue, getValues } = useFormContext<JohtoselvitysFormValues>();
   const hankeTunnus = getValues('hankeTunnus');
+  const { data: hankeUsers } = useHankeUsers(hankeTunnus);
+  const queryClient = useQueryClient();
 
   const [propertyDeveloper, representative] = watch([
     'applicationData.propertyDeveloperWithContacts',
@@ -155,6 +186,17 @@ export function Contacts() {
     ? () => removeCustomerWithContacts('representativeWithContacts')
     : undefined;
 
+  function addYhteyshenkiloForYhteystieto(customerType: CustomerType, contactPerson: HankeUser) {
+    setValue(
+      `applicationData.${customerType}.contacts`,
+      getValues(`applicationData.${customerType}.contacts`)?.concat(
+        mapHankeUserToContact(contactPerson),
+      ),
+      { shouldDirty: true },
+    );
+    queryClient.invalidateQueries(['hankeUsers', hankeTunnus]);
+  }
+
   return (
     <div>
       <Text tag="p" spacingBottom="l">
@@ -166,8 +208,14 @@ export function Contacts() {
       </Text>
 
       {/* Hakija */}
-      <FormContact<CustomerType> contactType="customerWithContacts" hankeTunnus={hankeTunnus!}>
-        <CustomerFields customerType="customerWithContacts" />
+      <FormContact<CustomerType>
+        contactType="customerWithContacts"
+        hankeTunnus={hankeTunnus!}
+        onContactPersonAdded={(user) =>
+          addYhteyshenkiloForYhteystieto('customerWithContacts', user)
+        }
+      >
+        <CustomerFields customerType="customerWithContacts" hankeUsers={hankeUsers} />
       </FormContact>
 
       {/* Työn suorittaja */}
@@ -177,8 +225,14 @@ export function Contacts() {
         headingLevel={3}
         initiallyOpen
       >
-        <FormContact<CustomerType> contactType="contractorWithContacts" hankeTunnus={hankeTunnus!}>
-          <CustomerFields customerType="contractorWithContacts" />
+        <FormContact<CustomerType>
+          contactType="contractorWithContacts"
+          hankeTunnus={hankeTunnus!}
+          onContactPersonAdded={(user) =>
+            addYhteyshenkiloForYhteystieto('contractorWithContacts', user)
+          }
+        >
+          <CustomerFields customerType="contractorWithContacts" hankeUsers={hankeUsers} />
         </FormContact>
       </Accordion>
 
@@ -194,8 +248,11 @@ export function Contacts() {
             contactType="propertyDeveloperWithContacts"
             hankeTunnus={hankeTunnus!}
             onRemove={handleRemovePropertyDeveloper}
+            onContactPersonAdded={(user) =>
+              addYhteyshenkiloForYhteystieto('propertyDeveloperWithContacts', user)
+            }
           >
-            <CustomerFields customerType="propertyDeveloperWithContacts" />
+            <CustomerFields customerType="propertyDeveloperWithContacts" hankeUsers={hankeUsers} />
           </FormContact>
         )}
 
@@ -222,8 +279,11 @@ export function Contacts() {
             contactType="representativeWithContacts"
             hankeTunnus={hankeTunnus!}
             onRemove={handleRemoveRepresentative}
+            onContactPersonAdded={(user) =>
+              addYhteyshenkiloForYhteystieto('representativeWithContacts', user)
+            }
           >
-            <CustomerFields customerType="representativeWithContacts" />
+            <CustomerFields customerType="representativeWithContacts" hankeUsers={hankeUsers} />
           </FormContact>
         )}
 

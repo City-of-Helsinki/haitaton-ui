@@ -24,11 +24,12 @@ const hakemukset: Application[] = [
         },
         contacts: [
           {
-            email: 'matti@test.com',
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
             orderer: true,
-            phone: '0000000000',
+            phone: '0401234567',
           },
         ],
       },
@@ -71,9 +72,10 @@ const hakemukset: Application[] = [
         },
         contacts: [
           {
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb1',
             email: 'tauno@test.com',
             firstName: 'Tauno',
-            lastName: 'Työmies',
+            lastName: 'Testinen',
             orderer: false,
             phone: '0401234567',
           },
@@ -116,11 +118,12 @@ const hakemukset: Application[] = [
         },
         contacts: [
           {
-            email: 'matti@test.com',
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
             orderer: true,
-            phone: '0000000000',
+            phone: '0401234567',
           },
         ],
       },
@@ -210,11 +213,12 @@ const hakemukset: Application[] = [
         },
         contacts: [
           {
-            email: 'matti@test.com',
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
             orderer: true,
-            phone: '0000000000',
+            phone: '0401234567',
           },
         ],
       },
@@ -236,11 +240,12 @@ const hakemukset: Application[] = [
         },
         contacts: [
           {
-            email: 'matti@test.com',
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: false,
-            phone: '0000000000',
+            orderer: true,
+            phone: '0401234567',
           },
         ],
       },
@@ -281,11 +286,12 @@ const hakemukset: Application[] = [
         },
         contacts: [
           {
-            email: 'matti@test.com',
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
             orderer: true,
-            phone: '0000000000',
+            phone: '0401234567',
           },
         ],
       },
@@ -329,11 +335,12 @@ const hakemukset: Application[] = [
         },
         contacts: [
           {
-            email: 'matti@test.com',
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: false,
-            phone: '0000000000',
+            orderer: true,
+            phone: '0401234567',
           },
         ],
       },

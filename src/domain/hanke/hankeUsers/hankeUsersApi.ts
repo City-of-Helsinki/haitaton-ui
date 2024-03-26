@@ -18,7 +18,7 @@ export async function getUser(id?: string) {
   return data;
 }
 
-export async function getHankeUsers(hankeTunnus?: string) {
+export async function getHankeUsers(hankeTunnus?: string | null) {
   const { data } = await api.get<{ kayttajat: HankeUser[] }>(`hankkeet/${hankeTunnus}/kayttajat`);
   return data.kayttajat;
 }

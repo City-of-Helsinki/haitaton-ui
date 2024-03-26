@@ -262,20 +262,6 @@ test('Should show error message when sending fails', async () => {
   expect(screen.queryByText(/lähettäminen epäonnistui/i)).toBeInTheDocument();
 });
 
-test('Form can be saved without hanke existing first', async () => {
-  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
-
-  // Fill basic information page
-  fillBasicInformation();
-
-  // Move to areas page
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
-
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
-  await screen.findByText('Johtoselvitys (HAI22-12)');
-  expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
-});
-
 test('Save and quit works', async () => {
   const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
 
@@ -290,18 +276,6 @@ test('Save and quit works', async () => {
   expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2');
 });
 
-test('Save and quit works without hanke existing first', async () => {
-  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
-
-  // Fill basic information page
-  fillBasicInformation();
-
-  await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
-
-  expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
-  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-13');
-});
-
 test('Should not save and quit if current form page is not valid', async () => {
   const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
 
@@ -313,17 +287,18 @@ test('Should not save and quit if current form page is not valid', async () => {
 
 test('Should show error message and not navigate away when save and quit fails', async () => {
   server.use(
-    rest.post('/api/hakemukset/:id', async (req, res, ctx) => {
+    rest.post('/api/hakemukset', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
     }),
   );
 
-  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
+  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
+  await waitForLoadingToFinish();
 
   fillBasicInformation();
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
-  expect(screen.queryAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
+  expect(screen.getAllByText(/tallentaminen epäonnistui/i).length).toBe(2);
   expect(window.location.pathname).toBe('/fi/johtoselvityshakemus');
 });
 
@@ -621,7 +596,7 @@ test('Summary should show attachments and they are downloadable', async () => {
   expect(fetchContentMock).toHaveBeenCalledWith(testApplication.id, ATTACHMENT_META.id);
 });
 
-test('Should be able to create new user', async () => {
+test('Should be able to create new user and new user is added to dropdown', async () => {
   const newUser = {
     etunimi: 'Marja',
     sukunimi: 'Meikäkäinen',
@@ -637,4 +612,7 @@ test('Should be able to create new user', async () => {
   await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
 
   expect(screen.getByText('Yhteyshenkilö tallennettu')).toBeInTheDocument();
+  expect(
+    screen.getByText(`${newUser.etunimi} ${newUser.sukunimi} (${newUser.sahkoposti})`),
+  ).toBeInTheDocument();
 });

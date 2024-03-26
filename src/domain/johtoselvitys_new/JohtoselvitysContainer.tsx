@@ -15,9 +15,12 @@ import { ReviewAndSend } from './ReviewAndSend';
 import MultipageForm from '../forms/MultipageForm';
 import FormActions from '../forms/components/FormActions';
 import { validationSchema } from './validationSchema';
-import { convertApplicationDataToFormState, convertFormStateToApplicationData } from './utils';
-import { changeFormStep, getFieldPaths, isPageValid } from '../forms/utils';
-import { isApplicationDraft, saveApplication, sendApplication } from '../application/utils';
+import {
+  convertApplicationDataToFormState,
+  convertFormStateToJohtoselvitysUpdateData,
+} from './utils';
+import { changeFormStep, isPageValid } from '../forms/utils';
+import { isApplicationDraft, saveHakemus, sendApplication } from '../application/utils';
 import { HankeData } from '../types/hanke';
 import { ApplicationCancel } from '../application/components/ApplicationCancel';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
@@ -55,54 +58,12 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     applicationData: {
       applicationType: 'CABLE_REPORT',
       name: '',
-      customerWithContacts: {
-        customer: {
-          type: null,
-          name: '',
-          country: 'FI',
-          email: '',
-          phone: '',
-          registryKey: null,
-          ovt: null,
-          invoicingOperator: null,
-          sapCustomerNumber: null,
-        },
-        contacts: [
-          {
-            firstName: '',
-            lastName: '',
-            email: '',
-            phone: '',
-            orderer: false,
-          },
-        ],
-      },
+      customerWithContacts: null,
       areas: [],
       startTime: null,
       endTime: null,
       workDescription: '',
-      contractorWithContacts: {
-        customer: {
-          type: null,
-          name: '',
-          country: 'FI',
-          email: '',
-          phone: '',
-          registryKey: null,
-          ovt: null,
-          invoicingOperator: null,
-          sapCustomerNumber: null,
-        },
-        contacts: [
-          {
-            firstName: '',
-            lastName: '',
-            email: '',
-            phone: '',
-            orderer: false,
-          },
-        ],
-      },
+      contractorWithContacts: null,
       postalAddress: { streetAddress: { streetName: '' }, city: '', postalCode: '' },
       representativeWithContacts: null,
       propertyDeveloperWithContacts: null,
@@ -163,14 +124,48 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
 
   const [attachmentsUploading, setAttachmentsUploading] = useState(false);
 
-  const applicationSaveMutation = useMutation(saveApplication, {
+  const applicationSaveMutation = useMutation(saveHakemus, {
     onMutate() {
       setShowSaveNotification(false);
     },
-    onSuccess(data) {
-      setValue('id', data.id);
-      setValue('alluStatus', data.alluStatus);
-      setValue('hankeTunnus', data.hankeTunnus);
+    onSuccess({
+      id,
+      alluStatus,
+      hankeTunnus,
+      applicationData: {
+        customerWithContacts,
+        contractorWithContacts,
+        propertyDeveloperWithContacts,
+        representativeWithContacts,
+      },
+    }) {
+      setValue('id', id);
+      setValue('alluStatus', alluStatus);
+      setValue('hankeTunnus', hankeTunnus);
+      if (customerWithContacts !== null) {
+        setValue(
+          'applicationData.customerWithContacts.customer.yhteystietoId',
+          customerWithContacts.customer.yhteystietoId,
+        );
+      }
+      if (contractorWithContacts !== null) {
+        setValue(
+          'applicationData.contractorWithContacts.customer.yhteystietoId',
+          contractorWithContacts.customer.yhteystietoId,
+        );
+      }
+      if (propertyDeveloperWithContacts !== null) {
+        setValue(
+          'applicationData.propertyDeveloperWithContacts.customer.yhteystietoId',
+          propertyDeveloperWithContacts.customer.yhteystietoId,
+        );
+      }
+      if (representativeWithContacts !== null) {
+        setValue(
+          'applicationData.representativeWithContacts.customer.yhteystietoId',
+          representativeWithContacts.customer.yhteystietoId,
+        );
+      }
       reset({}, { keepValues: true });
     },
     onSettled() {
@@ -190,8 +185,11 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   });
 
   function saveCableApplication() {
-    const data = convertFormStateToApplicationData(getValues());
-    applicationSaveMutation.mutate(data);
+    const data = getValues();
+    applicationSaveMutation.mutate({
+      data,
+      convertFormStateToUpdateData: convertFormStateToJohtoselvitysUpdateData,
+    });
   }
 
   async function sendCableApplication() {
@@ -201,9 +199,10 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     // sending, meaning id is null, save it before sending
     if (!id) {
       try {
-        const responseData = await applicationSaveMutation.mutateAsync(
-          convertFormStateToApplicationData(data),
-        );
+        const responseData = await applicationSaveMutation.mutateAsync({
+          data,
+          convertFormStateToUpdateData: convertFormStateToJohtoselvitysUpdateData,
+        });
         setShowSaveNotification(false);
         id = responseData.id as number;
       } catch (error) {
@@ -222,22 +221,28 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   }
 
   function saveAndQuit() {
-    applicationSaveMutation.mutate(convertFormStateToApplicationData(getValues()), {
-      onSuccess(data) {
-        navigateToApplicationList(data.hankeTunnus);
-
-        setNotification(true, {
-          position: 'top-right',
-          dismissible: true,
-          autoClose: true,
-          autoCloseDuration: 5000,
-          label: t('hakemus:notifications:saveSuccessLabel'),
-          message: t('hakemus:notifications:saveSuccessText'),
-          type: 'success',
-          closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
-        });
+    applicationSaveMutation.mutate(
+      {
+        data: getValues(),
+        convertFormStateToUpdateData: convertFormStateToJohtoselvitysUpdateData,
       },
-    });
+      {
+        onSuccess(data) {
+          navigateToApplicationList(data.hankeTunnus);
+
+          setNotification(true, {
+            position: 'top-right',
+            dismissible: true,
+            autoClose: true,
+            autoCloseDuration: 5000,
+            label: t('hakemus:notifications:saveSuccessLabel'),
+            message: t('hakemus:notifications:saveSuccessText'),
+            type: 'success',
+            closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+          });
+        },
+      },
+    );
   }
 
   function handleAttachmentUpload(isUploading: boolean) {
@@ -247,11 +252,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   function closeAttachmentUploadErrorDialog() {
     setAttachmentUploadErrors([]);
   }
-
-  const customer = getValues('applicationData.customerWithContacts.customer');
-  const contractor = getValues('applicationData.contractorWithContacts.customer');
-  const propertyDeveloper = getValues('applicationData.propertyDeveloperWithContacts.customer');
-  const representative = getValues('applicationData.representativeWithContacts.customer');
 
   // Fields that are validated in each page when moving forward in form
   const pageFieldsToValidate: FieldPath<JohtoselvitysFormValues>[][] = useMemo(
@@ -273,25 +273,13 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
       ],
       // Contacts page
       [
-        ...getFieldPaths<JohtoselvitysFormValues>(
-          customer,
-          'applicationData.customerWithContacts.customer',
-        ),
-        ...getFieldPaths<JohtoselvitysFormValues>(
-          contractor,
-          'applicationData.contractorWithContacts.customer',
-        ),
-        ...getFieldPaths<JohtoselvitysFormValues>(
-          propertyDeveloper,
-          'applicationData.propertyDeveloperWithContacts.customer',
-        ),
-        ...getFieldPaths<JohtoselvitysFormValues>(
-          representative,
-          'applicationData.representativeWithContacts.customer',
-        ),
+        'applicationData.customerWithContacts',
+        'applicationData.contractorWithContacts',
+        'applicationData.propertyDeveloperWithContacts',
+        'applicationData.representativeWithContacts',
       ],
     ],
-    [customer, contractor, propertyDeveloper, representative],
+    [],
   );
 
   const formSteps = useMemo(() => {
