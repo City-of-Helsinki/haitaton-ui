@@ -5,7 +5,7 @@ import * as hankkeetDB from './data/hankkeet';
 import * as hakemuksetDB from './data/hakemukset';
 import * as usersDB from './data/users';
 import ApiError from './apiError';
-import { IdentificationResponse, SignedInUser } from '../hanke/hankeUsers/hankeUser';
+import { DeleteInfo, IdentificationResponse, SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import { Yhteyshenkilo, YhteyshenkiloWithoutName } from '../hanke/edit/types';
 import { JohtoselvitysUpdateData, NewJohtoselvitysData } from '../application/types/application';
 import { defaultJohtoselvitysData } from './data/defaultJohtoselvitysData';
@@ -277,6 +277,7 @@ export const handlers = [
           'MODIFY_APPLICATION_PERMISSIONS',
           'RESEND_INVITATION',
           'MODIFY_USER',
+          'DELETE_USER',
         ],
       }),
     );
@@ -301,6 +302,89 @@ export const handlers = [
 
   rest.post(`${apiUrl}/kayttajat/:kayttajaId/kutsu`, async (req, res, ctx) => {
     return res(ctx.delay(), ctx.status(204));
+  }),
+
+  rest.get(`${apiUrl}/kayttajat/:id/deleteInfo`, async (req, res, ctx) => {
+    const { id } = req.params;
+    if (id === '3fa85f64-5717-4562-b3fc-2c963f66afa7') {
+      return res(
+        ctx.delay(),
+        ctx.status(200),
+        ctx.json<DeleteInfo>({
+          activeHakemukset: [
+            { nimi: 'Hakemus 1', alluStatus: 'PENDING', applicationIdentifier: 'JS2300001' },
+            { nimi: 'Hakemus 2', alluStatus: 'HANDLING', applicationIdentifier: 'JS2300002' },
+          ],
+          draftHakemukset: [],
+          onlyOmistajanYhteyshenkilo: false,
+        }),
+      );
+    }
+    if (id === '3fa85f64-5717-4562-b3fc-2c963f66afa8') {
+      return res(
+        ctx.delay(),
+        ctx.status(200),
+        ctx.json<DeleteInfo>({
+          activeHakemukset: [
+            { nimi: 'Hakemus 1', alluStatus: 'PENDING', applicationIdentifier: 'JS2300001' },
+            { nimi: 'Hakemus 3', alluStatus: 'PENDING', applicationIdentifier: 'JS2300003' },
+          ],
+          draftHakemukset: [],
+          onlyOmistajanYhteyshenkilo: false,
+        }),
+      );
+    }
+    if (id === '3fa85f64-5717-4562-b3fc-2c963f66afa9') {
+      return res(
+        ctx.delay(),
+        ctx.status(200),
+        ctx.json<DeleteInfo>({
+          activeHakemukset: [],
+          draftHakemukset: [
+            { nimi: 'Hakemus 4', alluStatus: null, applicationIdentifier: 'JS2300004' },
+            { nimi: 'Hakemus 5', alluStatus: null, applicationIdentifier: 'JS2300005' },
+          ],
+          onlyOmistajanYhteyshenkilo: false,
+        }),
+      );
+    }
+    if (id === '3fa85f64-5717-4562-b3fc-2c963f66afb1') {
+      return res(
+        ctx.delay(),
+        ctx.status(200),
+        ctx.json<DeleteInfo>({
+          activeHakemukset: [],
+          draftHakemukset: [],
+          onlyOmistajanYhteyshenkilo: true,
+        }),
+      );
+    }
+    return res(
+      ctx.delay(),
+      ctx.status(200),
+      ctx.json<DeleteInfo>({
+        activeHakemukset: [],
+        draftHakemukset: [],
+        onlyOmistajanYhteyshenkilo: false,
+      }),
+    );
+  }),
+
+  rest.delete(`${apiUrl}/kayttajat/:id`, async (req, res, ctx) => {
+    const { id } = req.params;
+    try {
+      await usersDB.remove(id as string);
+      return res(ctx.status(204));
+    } catch (error) {
+      const { status, message } = error as ApiError;
+      return res(
+        ctx.status(status),
+        ctx.json({
+          errorMessage: message,
+          errorCode: 'HAI1001',
+        }),
+      );
+    }
   }),
 
   rest.get(`${apiUrl}/hakemukset/:id/liitteet`, async (req, res, ctx) => {

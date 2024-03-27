@@ -12,6 +12,7 @@ import {
   LoadingSpinner,
   IconPen,
   Button,
+  IconTrash,
 } from 'hds-react';
 import { Box, Flex, Grid, Menu, MenuButton, MenuItem, MenuList, Tooltip } from '@chakra-ui/react';
 import {
@@ -24,6 +25,7 @@ import {
 } from 'react-table';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
 import styles from './AccessRightsView.module.scss';
 import { Language } from '../../../common/types/language';
 import { HankeUser, SignedInUser } from '../hankeUsers/hankeUser';
@@ -39,8 +41,14 @@ import {
   InvitationErrorNotification,
   InvitationSuccessNotification,
 } from '../hankeUsers/InvitationNotification';
-import { userRoleSorter } from '../hankeUsers/utils';
+import { showUserDeleteButton, userRoleSorter } from '../hankeUsers/utils';
 import { formatToFinnishDate } from '../../../common/utils/date';
+import { useUserDelete } from '../hankeUsers/hooks/useUserDelete';
+import UserDeleteDialog from '../hankeUsers/UserDeleteDialog';
+import UserDeleteNotification from '../hankeUsers/UserDeleteNotification';
+import UserDeleteInfoErrorNotification from '../hankeUsers/UserDeleteInfoErrorNotification';
+import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
+import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
 
 function UserIcon({
   user,
@@ -127,11 +135,20 @@ type Props = {
 function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: Readonly<Props>) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const { HANKEPORTFOLIO } = useLocalizedRoutes();
+  const queryClient = useQueryClient();
   const hankeViewPath = useHankeViewPath(hankeTunnus);
   const getEditUserPath = useLinkPath(ROUTES.EDIT_USER);
+  const { setNotification } = useGlobalNotification();
   const [usersData, setUsersData] = useState<HankeUserWithWholeName[]>(() =>
     hankeUsers.map(addWholeName),
   );
+
+  const { deleteInfoQueryResult, userToDelete, setDeletedUser, resetUserToDelete } =
+    useUserDelete();
+  const [showUserDeleteNotification, setShowUserDeleteNotification] = useState(false);
+  const [showUserDeleteInfoErrorNotification, setShowUserDeleteInfoErrorNotification] =
+    useState(false);
 
   const columns: Column<HankeUserWithWholeName>[] = useMemo(() => {
     return [
@@ -177,6 +194,12 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
     setUsersData(hankeUsers.map(addWholeName));
   }, [hankeUsers]);
 
+  useEffect(() => {
+    if (deleteInfoQueryResult.isError) {
+      setShowUserDeleteInfoErrorNotification(true);
+    }
+  }, [deleteInfoQueryResult.isError]);
+
   const { resendInvitationMutation, linksSentTo, sendInvitation } = useResendInvitation();
 
   const [usersSearchValue, setUsersSearchValue] = useState('');
@@ -214,6 +237,26 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
     );
   }
 
+  function handleUserDeleted(user: HankeUser) {
+    queryClient.invalidateQueries(['hankeUsers', hankeTunnus]);
+    setShowUserDeleteNotification(true);
+    resetUserToDelete();
+    if (user.id === signedInUser?.hankeKayttajaId) {
+      // If user deletes themselves from hanke, show notification
+      // and navigate to hanke list
+      setNotification(true, {
+        label: t('hankeUsers:notifications:userDeletedLabel'),
+        message: t('hankeUsers:notifications:userDeletedText'),
+        type: 'success',
+        dismissible: true,
+        closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+        autoClose: true,
+        autoCloseDuration: 4000,
+      });
+      navigate(HANKEPORTFOLIO.path);
+    }
+  }
+
   function getUserName(args: HankeUserWithWholeName) {
     return (
       <Flex>
@@ -244,7 +287,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
       resendInvitationMutation.isLoading && resendInvitationMutation.variables === args.id;
 
     return (
-      <Grid gridTemplateColumns="25px 25px" gap="var(--spacing-s)" justifyContent="flex-end">
+      <Grid gridTemplateColumns="1fr 1fr 1fr" gap="var(--spacing-s)" justifyContent="flex-end">
         {canEditUser(args) ? (
           <Link to={getEditUserPath({ hankeTunnus, id: args.id })}>
             <IconPen
@@ -255,9 +298,22 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
             />
           </Link>
         ) : null}
+        {showUserDeleteButton(args, hankeUsers, signedInUser) ? (
+          <button aria-label={t('hankeUsers:buttons:delete')} onClick={() => setDeletedUser(args)}>
+            {deleteInfoQueryResult.isLoading && args.id === userToDelete?.id ? (
+              <LoadingSpinner small />
+            ) : (
+              <IconTrash
+                style={{ display: 'block' }}
+                color="var(--color-error)"
+                ariaHidden={false}
+              />
+            )}
+          </button>
+        ) : null}
         {!args.tunnistautunut && signedInUser?.kayttooikeudet.includes('RESEND_INVITATION') ? (
           <Menu>
-            <MenuButton>
+            <MenuButton as="button">
               {isSending ? (
                 <LoadingSpinner small />
               ) : (
@@ -386,7 +442,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
                     {getAccessRightLabel(row.original)}
                   </p>
                 </Box>
-                <Flex>
+                <Flex flexWrap="wrap" gap="var(--spacing-s)">
                   {canEditUser(row.original) && (
                     <Button
                       iconLeft={<IconPen />}
@@ -394,6 +450,18 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
                       onClick={() => navigateToEditUserView(row.original.id)}
                     >
                       {t('hankeUsers:buttons:edit')}
+                    </Button>
+                  )}
+                  {showUserDeleteButton(row.original, hankeUsers, signedInUser) && (
+                    <Button
+                      iconLeft={<IconTrash />}
+                      variant="danger"
+                      isLoading={
+                        deleteInfoQueryResult.isLoading && row.original.id === userToDelete?.id
+                      }
+                      onClick={() => setDeletedUser(row.original)}
+                    >
+                      {t('hankeUsers:buttons:delete')}
                     </Button>
                   )}
                 </Flex>
@@ -423,6 +491,29 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
         )}
         {resendInvitationMutation.isError && (
           <InvitationErrorNotification onClose={() => resendInvitationMutation.reset()} />
+        )}
+
+        {deleteInfoQueryResult.data && (
+          <UserDeleteDialog
+            isOpen={deleteInfoQueryResult.isSuccess}
+            onClose={resetUserToDelete}
+            onDelete={(user) => handleUserDeleted(user)}
+            deleteInfo={deleteInfoQueryResult.data}
+            userToDelete={userToDelete}
+          />
+        )}
+
+        {showUserDeleteNotification && (
+          <UserDeleteNotification onClose={() => setShowUserDeleteNotification(false)} />
+        )}
+
+        {showUserDeleteInfoErrorNotification && (
+          <UserDeleteInfoErrorNotification
+            onClose={() => {
+              setShowUserDeleteInfoErrorNotification(false);
+              resetUserToDelete();
+            }}
+          />
         )}
       </Container>
     </article>

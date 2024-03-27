@@ -1,5 +1,11 @@
 import api from '../../api/api';
-import { HankeUser, IdentificationResponse, SignedInUser, SignedInUserByHanke } from './hankeUser';
+import {
+  DeleteInfo,
+  HankeUser,
+  IdentificationResponse,
+  SignedInUser,
+  SignedInUserByHanke,
+} from './hankeUser';
 import { Yhteyshenkilo, YhteyshenkiloWithoutName } from '../edit/types';
 
 export async function createHankeUser({
@@ -78,4 +84,13 @@ export async function identifyUser(id: string) {
 export async function resendInvitation(kayttajaId: string) {
   await api.post(`kayttajat/${kayttajaId}/kutsu`);
   return kayttajaId;
+}
+
+export async function getUserDeleteInfo(kayttajaId?: string | null) {
+  const { data } = await api.get<DeleteInfo>(`kayttajat/${kayttajaId}/deleteInfo`);
+  return data;
+}
+
+export async function deleteUser(kayttajaId?: string) {
+  await api.delete(`kayttajat/${kayttajaId}`);
 }
