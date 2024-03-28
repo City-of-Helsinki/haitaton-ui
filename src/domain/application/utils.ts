@@ -57,6 +57,14 @@ export async function sendApplication(applicationId: number) {
 }
 
 /**
+ * Send application to Allu
+ */
+export async function sendApplicationNew(applicationId: number) {
+  const response = await api.post<Application>(`/hakemukset/${applicationId}/laheta`, {});
+  return response.data;
+}
+
+/**
  * Check if application is sent to Allu
  */
 export function isApplicationSent(alluStatus: AlluStatusStrings | null): boolean {

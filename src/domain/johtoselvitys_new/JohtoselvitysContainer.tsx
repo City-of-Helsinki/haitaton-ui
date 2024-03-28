@@ -6,8 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from 'react-query';
 import { merge } from 'lodash';
 import { useBeforeUnload } from 'react-router-dom';
-
-import { JohtoselvitysFormValues } from './types';
+import { JohtoselvitysFormData, JohtoselvitysFormValues } from './types';
 import { BasicInfo } from './BasicInfo';
 import { Contacts } from './Contacts';
 import { Geometries } from './Geometries';
@@ -20,7 +19,7 @@ import {
   convertFormStateToJohtoselvitysUpdateData,
 } from './utils';
 import { changeFormStep, isPageValid } from '../forms/utils';
-import { isApplicationDraft, saveHakemus, sendApplication } from '../application/utils';
+import { isApplicationDraft, saveHakemus, sendApplicationNew } from '../application/utils';
 import { HankeData } from '../types/hanke';
 import { ApplicationCancel } from '../application/components/ApplicationCancel';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
@@ -33,11 +32,28 @@ import Attachments from './Attachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import useAttachments from '../application/hooks/useAttachments';
 import { APPLICATION_ID_STORAGE_KEY } from '../application/constants';
+import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
+import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 
 type Props = {
   hankeData?: HankeData;
   application?: Application;
 };
+
+function isContactIn(signedInUser?: SignedInUser, application?: JohtoselvitysFormData) {
+  if (signedInUser && application) {
+    const found = [
+      application.customerWithContacts,
+      application.contractorWithContacts,
+      application.propertyDeveloperWithContacts,
+      application.representativeWithContacts,
+    ]
+      .flatMap((customer) => customer?.contacts)
+      .find((contact) => contact?.hankekayttajaId === signedInUser.hankeKayttajaId);
+    return found !== undefined;
+  }
+  return false;
+}
 
 const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   hankeData,
@@ -49,6 +65,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   const { showSendSuccess, showSendError } = useApplicationSendNotification();
   const queryClient = useQueryClient();
   const [attachmentUploadErrors, setAttachmentUploadErrors] = useState<JSX.Element[]>([]);
+  const { data: signedInUser } = usePermissionsForHanke(hanke?.hankeTunnus);
 
   const initialValues: JohtoselvitysFormValues = {
     id: null,
@@ -173,7 +190,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     },
   });
 
-  const applicationSendMutation = useMutation(sendApplication, {
+  const applicationSendMutation = useMutation(sendApplicationNew, {
     onError() {
       showSendError();
     },
@@ -404,7 +421,9 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
 
           const lastStep = activeStepIndex === formSteps.length - 1;
           const showSendButton =
-            lastStep && isApplicationDraft(getValues('alluStatus') as AlluStatus | null);
+            lastStep &&
+            isApplicationDraft(getValues('alluStatus') as AlluStatus | null) &&
+            isContactIn(signedInUser, getValues('applicationData'));
 
           const saveAndQuitIsLoading = applicationSaveMutation.isLoading || attachmentsUploading;
           const saveAndQuitLoadingText = attachmentsUploading
