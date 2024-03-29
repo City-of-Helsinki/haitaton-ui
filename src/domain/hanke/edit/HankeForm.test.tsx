@@ -273,7 +273,6 @@ describe('HankeForm', () => {
     });
 
     // Rakennuttaja
-    await user.click(screen.getByText(/rakennuttajan tiedot/i));
     await user.click(screen.getByText(/lisää rakennuttaja/i));
     expect(screen.getAllByText('Rakennuttaja')).toHaveLength(1);
 
@@ -282,7 +281,7 @@ describe('HankeForm', () => {
     expect(screen.getAllByLabelText(/y-tunnus/i)[1]).toBeDisabled();
 
     await user.click(screen.getByText(/lisää rakennuttaja/i)); // add second rakennuttaja
-    expect(screen.getAllByText('Rakennuttaja')).toHaveLength(2);
+    expect(screen.getAllByText(/(^rakennuttaja$)|(^rakennuttaja \d$)/i)).toHaveLength(2);
     await user.click(screen.getAllByText(/poista rakennuttaja/i)[1]); // remove second rakennuttaja
     await user.click(screen.getByText(/poista rakennuttaja/i)); // remove first (and last) rakennuttaja
     expect(screen.queryByText('Rakennuttaja')).not.toBeInTheDocument();
@@ -484,6 +483,86 @@ describe('HankeForm', () => {
     expect(screen.queryByText(/autoliikenteen kaistahaitta: -/i)).toBeInTheDocument();
     expect(screen.queryByText(/kaistahaittojen pituus: -/i)).toBeInTheDocument();
     expect(screen.queryByText(/muokkaa hanketta lisätäksesi tietoja/i)).toBeInTheDocument();
+  });
+
+  test('Should show missing fields for hanke to be public in each page of the form', async () => {
+    const testHanke = {
+      ...hankkeet[0],
+      kuvaus: '',
+      vaihe: null,
+    };
+
+    const { user } = render(
+      <HankeForm
+        formData={testHanke as HankeDataFormState}
+        onIsDirtyChange={() => {}}
+        onFormClose={() => {}}
+      >
+        children
+      </HankeForm>,
+    );
+
+    const draftStateText =
+      'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavat kentät tällä sivulla vaaditaan hankeen julkaisemiseksi:';
+
+    await screen.findByText(draftStateText);
+    expect(screen.getByRole('link', { name: /hankkeen kuvaus/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /katuosoite/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /hankkeen vaihe/i })).toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText(/hankkeen kuvaus/i), {
+      target: { value: 'Kuvaus' },
+    });
+    fireEvent.change(screen.getByLabelText(/katuosoite/i), {
+      target: { value: 'Katu 1' },
+    });
+    await user.click(screen.getByRole('radio', { name: 'Ohjelmointi' }));
+
+    expect(screen.queryByText(draftStateText)).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+    expect(screen.queryByText(draftStateText)).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /hanke-alueet: hankealueen piirtäminen/i }),
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+    expect(screen.queryByText(draftStateText)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /hankkeen omistaja: nimi/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /hankkeen omistaja: sähköposti/i }),
+    ).toBeInTheDocument();
+  });
+
+  test('Should show pages that have missing information for hanke to be public in summary page', async () => {
+    const testHanke = {
+      ...hankkeet[0],
+      kuvaus: '',
+      vaihe: null,
+    };
+
+    const { user } = render(
+      <HankeForm
+        formData={testHanke as HankeDataFormState}
+        onIsDirtyChange={() => {}}
+        onFormClose={() => {}}
+      >
+        children
+      </HankeForm>,
+    );
+
+    await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+
+    expect(
+      screen.getByText(
+        'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavissa vaiheissa on puuttuvia tietoja:',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
+    expect(screen.getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
+    expect(screen.getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
   });
 });
 

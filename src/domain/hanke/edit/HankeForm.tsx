@@ -24,6 +24,14 @@ import { useGlobalNotification } from '../../../common/components/globalNotifica
 import { changeFormStep } from '../../forms/utils';
 import { updateHanke } from './hankeApi';
 import { convertHankeAlueToFormState } from './utils';
+import {
+  hankeAlueetPublicSchema,
+  hankePerustiedotPublicSchema,
+  hankeYhteystiedotPublicSchema,
+} from './hankePublicSchema';
+import { useValidationErrors } from '../../forms/hooks/useValidationErrors';
+import HankeDraftStateNotification from './components/HankeDraftStateNotification';
+import HankeFormMissingFieldsNotification from './components/MissingFieldsNotification';
 
 type Props = {
   formData: HankeDataFormState;
@@ -65,8 +73,32 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   } = formContext;
 
   const formValues = getValues();
+  const watchFormValues = watch();
+  const [
+    nimi,
+    kuvaus,
+    tyomaaKatuosoite,
+    vaihe,
+    alueet,
+    omistajat,
+    rakennuttajat,
+    toteuttajat,
+    muut,
+  ] = watch([
+    'nimi',
+    'kuvaus',
+    'tyomaaKatuosoite',
+    'vaihe',
+    'alueet',
+    'omistajat',
+    'rakennuttajat',
+    'toteuttajat',
+    'muut',
+  ]);
   const isHankePublic = formValues.status === 'PUBLIC';
   const formHeading = `${watch('nimi')} (${formData.hankeTunnus})`;
+
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
 
   const hankeMutation = useMutation(updateHanke, {
     onMutate() {
@@ -134,7 +166,8 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     setAttachmentsUploading(uploading);
   }
 
-  function handleStepChange() {
+  function handleStepChange(stepIndex: number) {
+    setActiveStepIndex(stepIndex);
     if (isDirty) {
       save();
     }
@@ -144,12 +177,18 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     {
       element: <HankeFormPerustiedot errors={errors} register={register} formData={formValues} />,
       label: t('hankeForm:perustiedotForm:header'),
-      state: StepState.available,
+      state: hankePerustiedotPublicSchema.isValidSync(formData)
+        ? StepState.available
+        : StepState.attention,
+      validationSchema: hankePerustiedotPublicSchema,
     },
     {
       element: <HankeFormAlueet errors={errors} register={register} formData={formValues} />,
       label: t('hankeForm:hankkeenAlueForm:header'),
-      state: StepState.available,
+      state: hankeAlueetPublicSchema.isValidSync(formData)
+        ? StepState.available
+        : StepState.attention,
+      validationSchema: hankeAlueetPublicSchema,
     },
     {
       element: <HankeFormHaitat formData={formValues} />,
@@ -159,7 +198,10 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     {
       element: <HankeFormYhteystiedot errors={errors} register={register} formData={formValues} />,
       label: t('form:yhteystiedot:header'),
-      state: StepState.available,
+      state: hankeYhteystiedotPublicSchema.isValidSync(formData)
+        ? StepState.available
+        : StepState.attention,
+      validationSchema: hankeYhteystiedotPublicSchema,
     },
     {
       element: <HankeFormLiitteet onFileUpload={handleFileUpload} />,
@@ -172,6 +214,32 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       state: StepState.available,
     },
   ];
+
+  const perustiedotErrors = useValidationErrors(hankePerustiedotPublicSchema, {
+    nimi,
+    kuvaus,
+    tyomaaKatuosoite,
+    vaihe,
+  });
+  const alueetErrors = useValidationErrors(hankeAlueetPublicSchema, { alueet });
+  const yhteystiedotErrors = useValidationErrors(hankeYhteystiedotPublicSchema, {
+    omistajat,
+    rakennuttajat,
+    toteuttajat,
+    muut,
+  });
+  const formErrorsByPage = [perustiedotErrors, alueetErrors, [], yhteystiedotErrors, [], []];
+
+  const formErrorsNotification =
+    (activeStepIndex === 5 && (
+      <HankeDraftStateNotification hanke={watchFormValues as HankeData} />
+    )) ||
+    (formErrorsByPage[activeStepIndex].length > 0 && (
+      <HankeFormMissingFieldsNotification
+        formErrors={formErrorsByPage[activeStepIndex]}
+        getValues={getValues}
+      />
+    ));
 
   return (
     <FormProvider {...formContext}>
@@ -188,6 +256,8 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
           onStepChange={handleStepChange}
           isLoading={attachmentsUploading}
           isLoadingText={attachmentsUploadingText}
+          formErrorsNotification={formErrorsNotification}
+          formData={watchFormValues}
         >
           {function renderFormActions(activeStep, handlePrevious, handleNext) {
             const lastStep = activeStep === formSteps.length - 1;
