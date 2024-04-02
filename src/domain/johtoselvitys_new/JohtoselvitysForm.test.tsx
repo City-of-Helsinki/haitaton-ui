@@ -13,6 +13,7 @@ import api from '../api/api';
 import { ApplicationAttachmentMetadata, AttachmentType } from '../application/types/application';
 import * as applicationAttachmentsApi from '../application/attachments';
 import { fillNewContactPersonForm } from '../forms/components/testUtils';
+import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 
 afterEach(cleanup);
 
@@ -47,6 +48,7 @@ const application: JohtoselvitysFormValues = {
       },
       contacts: [
         {
+          hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           email: 'test@test.com',
           firstName: 'Test',
           lastName: 'Person',
@@ -73,6 +75,7 @@ const application: JohtoselvitysFormValues = {
       },
       contacts: [
         {
+          hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           email: 'test@test.com',
           firstName: 'Test',
           lastName: 'Person',
@@ -173,6 +176,19 @@ function fillContactsInformation() {
 }
 
 test('Cable report application form can be filled and saved and sent to Allu', async () => {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>({
+          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          kayttooikeustaso: 'KATSELUOIKEUS',
+          kayttooikeudet: ['VIEW'],
+        }),
+      );
+    }),
+  );
+
   const hankeData = hankkeet[1] as HankeData;
 
   const { user } = render(
@@ -240,7 +256,17 @@ test('Should show error message when saving fails', async () => {
 
 test('Should show error message when sending fails', async () => {
   server.use(
-    rest.post('/api/hakemukset/:id/send-application', async (req, res, ctx) => {
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>({
+          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          kayttooikeustaso: 'KATSELUOIKEUS',
+          kayttooikeudet: ['VIEW'],
+        }),
+      );
+    }),
+    rest.post('/api/hakemukset/:id/laheta', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
     }),
   );
@@ -251,12 +277,27 @@ test('Should show error message when sending fails', async () => {
     <JohtoselvitysContainer hankeData={hankeData} application={application} />,
   );
 
+  // Fill basic information page
   fillBasicInformation();
+
+  // Move to areas page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+
+  // Fill areas page
   fillAreasInformation();
+
+  // Move to contacts page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
+
+  // Fill contacts page
   fillContactsInformation();
+
+  // Move to summary page
   await user.click(screen.getByTestId('hds-stepper-step-4'));
+  expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
 
   expect(screen.queryByText(/lähettäminen epäonnistui/i)).toBeInTheDocument();
@@ -331,6 +372,19 @@ test('Should save existing application between page changes when there are chang
 });
 
 test('Should not show send button when application has moved to pending state', async () => {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>({
+          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          kayttooikeustaso: 'KATSELUOIKEUS',
+          kayttooikeudet: ['VIEW'],
+        }),
+      );
+    }),
+  );
+
   const { user } = render(<JohtoselvitysContainer application={applications[1]} />);
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
@@ -339,8 +393,45 @@ test('Should not show send button when application has moved to pending state', 
   expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).not.toBeInTheDocument();
 });
 
-test('Should show send button when application is edited in draft state', async () => {
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+test('Should not show send button when user is not a contact person', async () => {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>({
+          hankeKayttajaId: 'not-a-contact-person-id',
+          kayttooikeustaso: 'KATSELUOIKEUS',
+          kayttooikeudet: ['VIEW'],
+        }),
+      );
+    }),
+  );
+
+  const { user } = render(<JohtoselvitysContainer application={applications[1]} />);
+
+  await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+
+  expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).not.toBeInTheDocument();
+});
+
+test('Should show send button when application is edited in draft state and user is a contact person', async () => {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>({
+          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          kayttooikeustaso: 'KATSELUOIKEUS',
+          kayttooikeudet: ['VIEW'],
+        }),
+      );
+    }),
+  );
+
+  const { user } = render(
+    <JohtoselvitysContainer hankeData={hankkeet[1] as HankeData} application={applications[0]} />,
+  );
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 

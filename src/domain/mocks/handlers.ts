@@ -144,6 +144,12 @@ export const handlers = [
       applicationType: 'CABLE_REPORT',
       hankeTunnus: hanke.hankeTunnus!,
     });
+    await usersDB.create(hanke.hankeTunnus!, {
+      etunimi: 'Testi',
+      sukunimi: 'Testinen',
+      sahkoposti: 'testi@test.com',
+      puhelinnumero: '0401234500',
+    });
     return res(ctx.status(200), ctx.json(hakemus));
   }),
 
@@ -165,6 +171,23 @@ export const handlers = [
   }),
 
   rest.post(`${apiUrl}/hakemukset/:id/send-application`, async (req, res, ctx) => {
+    const { id } = req.params;
+    const hakemus = await hakemuksetDB.read(Number(id));
+
+    if (!hakemus) {
+      return res(
+        ctx.status(404),
+        ctx.json({
+          errorMessage: 'Hakemus not found',
+          errorCode: 'HAI1001',
+        }),
+      );
+    }
+
+    return res(ctx.status(200), ctx.json(hakemus));
+  }),
+
+  rest.post(`${apiUrl}/hakemukset/:id/laheta`, async (req, res, ctx) => {
     const { id } = req.params;
     const hakemus = await hakemuksetDB.read(Number(id));
 
@@ -261,10 +284,12 @@ export const handlers = [
       );
     }
 
+    const currentUser = await usersDB.readCurrent();
+
     return res(
       ctx.status(200),
       ctx.json<SignedInUser>({
-        hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        hankeKayttajaId: currentUser?.id || '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         kayttooikeustaso: 'KAIKKI_OIKEUDET',
         kayttooikeudet: [
           'VIEW',

@@ -32,6 +32,10 @@ export async function readAll(hankeTunnus: string): Promise<HankeUser[]> {
   return users.filter((user) => user.hankeTunnus === hankeTunnus).map(mapToHankeUser);
 }
 
+export async function readCurrent(): Promise<HankeUser | undefined> {
+  return users.map(mapToHankeUser).find((user) => user.sahkoposti === 'testi@test.com');
+}
+
 async function readFromHanke(hankeTunnus: string, id: string): Promise<HankeUser | undefined> {
   return (await readAll(hankeTunnus)).find((user) => user.id === id);
 }
