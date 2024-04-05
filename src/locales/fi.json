@@ -554,6 +554,7 @@
       "subHeader": "Hanke-alueet",
       "area": "Alue",
       "instructions": "Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 1-5, 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen tärkeimmillä reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein (vihreä = ei haittaa, keltainen = todennäköinen haitta, punainen = merkittävä haitta).",
+      "instructions2": "Voit muokata jo piirrettyä aluetta tarttumalla sen reunasta kiinni ja vetämällä pisteen haluamaasi kohtaan.",
       "noAlueet": "Piirrä alue kartalle merkitäksesi haitta-arviot.",
       "haitatHeader": "Alueen haitta-arviot",
       "haitatInstructions": "Anna arvio suurimmista mahdollisista vaikutuksista hankealueella.",
@@ -597,6 +598,7 @@
     "alueet": {
       "instructions1": "Aloita selvitettävän alueen piirtäminen lisäämällä työn alku- ja loppupäivämäärät, jolloin piirtotyökalut ilmestyvät kartan vasempaan alanurkkaan. Tämän jälkeen voit piirtää selvitettävät alueet kartalle. Voit lisätä samalle hakemukselle useampia alueita, mikäli niitä koskeva aikaväli on sama.",
       "instructions2": "Piirtämäsi alueet näkyvät listana kartan alapuolella. Listasta pääset myös poistamaan alueita.",
+      "instructions3": "Voit muokata jo piirrettyä aluetta tarttumalla sen reunasta kiinni ja vetämällä pisteen haluamaasi kohtaan.",
       "giveDates": "Valitse työn päivämäärät piirtääksesi selvitettävät alueet kartalle."
     },
     "liitteet": {

@@ -180,6 +180,9 @@ export function Geometries({ hankeData }: Readonly<Props>) {
       <Text tag="p" spacingBottom="s">
         {t('johtoselvitysForm:alueet:instructions2')}
       </Text>
+      <Text tag="p" spacingBottom="s">
+        {t('johtoselvitysForm:alueet:instructions3')}
+      </Text>
       <Text tag="p" spacingBottom="m">
         {t('form:requiredInstruction')}
       </Text>
