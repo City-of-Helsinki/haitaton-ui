@@ -6,6 +6,7 @@ import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import { readAll, reset } from '../../mocks/data/users';
 import { USER_EDIT_HANKE } from '../../mocks/signedInUser';
 import * as hankeUsersApi from './hankeUsersApi';
+import React from 'react';
 
 jest.setTimeout(10000);
 
@@ -285,4 +286,36 @@ test('Should show error notification if deleting user fails', async () => {
   await user.click(screen.getByRole('button', { name: 'Poista' }));
 
   expect(screen.getByText(/tapahtui virhe/i)).toBeInTheDocument();
+});
+
+test('Should not be able to select hanke editing access rights if the feature is not enabled', async () => {
+  const OLD_ENV = { ...window._env_ };
+  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_HANKE: '0' };
+
+  render(<EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afb4" hankeTunnus="HAI22-2" />);
+  await waitForLoadingToFinish();
+
+  fireEvent.click(screen.getByRole('button', { name: /käyttöoikeudet/i }));
+
+  expect(screen.queryByText('Hankkeen ja hakemusten muokkaus')).not.toBeInTheDocument();
+  expect(screen.queryByText('Hankemuokkaus')).not.toBeInTheDocument();
+
+  jest.resetModules();
+  window._env_ = OLD_ENV;
+});
+
+test('Should be able to select hanke editing access rights if the feature is enabled', async () => {
+  const OLD_ENV = { ...window._env_ };
+  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_HANKE: '1' };
+
+  render(<EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afb4" hankeTunnus="HAI22-2" />);
+  await waitForLoadingToFinish();
+
+  fireEvent.click(screen.getByRole('button', { name: /käyttöoikeudet/i }));
+
+  expect(screen.queryByText('Hankkeen ja hakemusten muokkaus')).toBeInTheDocument();
+  expect(screen.queryByText('Hankemuokkaus')).toBeInTheDocument();
+
+  jest.resetModules();
+  window._env_ = OLD_ENV;
 });
