@@ -599,6 +599,9 @@
       "instructions2": "Piirtämäsi alueet näkyvät listana kartan alapuolella. Listasta pääset myös poistamaan alueita.",
       "giveDates": "Valitse työn päivämäärät piirtääksesi selvitettävät alueet kartalle."
     },
+    "yhteystiedot": {
+      "instructions": "Lisää osallistuvien tahojen tiedot ja yhteyshenkilöt. Hakemuksen tekijän tulee olla ainakin yhden tahon yhteyshenkilönä. Hakemukseen lisätyille yhteystiedoille lähetetään sähköpostikutsu hankkeelle katseluoikeuksin. Voit muuttaa osallistujien käyttöoikeuksia ja tietoja myöhemmin hankkeen käyttäjähallinnasta."
+    },
     "liitteet": {
       "instructions": "Lisää hakemukselle liitteet, kuten työsuunnitelma."
     }

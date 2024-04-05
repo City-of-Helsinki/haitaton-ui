@@ -199,6 +199,9 @@ export function Contacts() {
 
   return (
     <div>
+      <Text tag="p" spacingBottom="s">
+        {t('johtoselvitysForm:yhteystiedot:instructions')}
+      </Text>
       <Text tag="p" spacingBottom="l">
         {t('form:requiredInstruction')}
       </Text>
