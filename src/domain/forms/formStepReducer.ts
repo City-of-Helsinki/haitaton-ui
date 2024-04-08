@@ -51,12 +51,12 @@ export function createStepReducer(totalSteps: number) {
                 label: step.label,
               };
             }
-            if (index === state.activeStepIndex) {
+            if (index === state.activeStepIndex && index !== totalSteps - 1) {
               return {
                 ...step,
-                state: !step.validationSchema
-                  ? StepState.available
-                  : step.validationSchema.isValidSync(action.payload.formData)
+                state:
+                  !step.validationSchema ||
+                  step.validationSchema.isValidSync(action.payload.formData)
                     ? StepState.completed
                     : StepState.attention,
                 label: step.label,
