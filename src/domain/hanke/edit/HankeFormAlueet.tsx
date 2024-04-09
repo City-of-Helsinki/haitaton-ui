@@ -100,6 +100,9 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
       <Box mb="var(--spacing-m)">
         <p>{t('hankeForm:hankkeenAlueForm:instructions')}</p>
       </Box>
+      <Box mb="var(--spacing-m)">
+        <p>{t('hankeForm:hankkeenAlueForm:instructions2')}</p>
+      </Box>
 
       <Text tag="h3" styleAs="h4" weight="bold">
         <Box mb="var(--spacing-m)">{t('hankeForm:hankkeenAlueForm:subHeader')}</Box>
