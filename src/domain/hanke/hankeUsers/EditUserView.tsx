@@ -45,6 +45,7 @@ import UserDeleteDialog from './UserDeleteDialog';
 import UserDeleteInfoErrorNotification from './UserDeleteInfoErrorNotification';
 import { useEffect, useState } from 'react';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
+import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
 
 type Props = {
   user: HankeUser;
@@ -86,6 +87,7 @@ function EditUserView({
   const { HANKEPORTFOLIO } = useLocalizedRoutes();
   const hankeViewPath = useHankeViewPath(hankeTunnus);
   const getHankeUsersPath = useLinkPath(ROUTES.ACCESS_RIGHTS);
+  const features = useFeatureFlags();
   const formContext = useForm({
     mode: 'onTouched',
     defaultValues: {
@@ -127,6 +129,10 @@ function EditUserView({
   // Options for the dropdown
   const accessRightLevelOptions: AccessRightLevelOption[] = $enum(AccessRightLevel)
     .getValues()
+    .filter(
+      (rightLevel) =>
+        features.hanke || (rightLevel !== 'KAIKKIEN_MUOKKAUS' && rightLevel !== 'HANKEMUOKKAUS'),
+    )
     .map((rightLevel) => {
       return { label: t(`hankeUsers:accessRightLevels:${rightLevel}`), value: rightLevel };
     });
