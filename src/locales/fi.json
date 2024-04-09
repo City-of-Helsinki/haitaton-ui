@@ -91,7 +91,8 @@
       "stringMin": "Kentän pituus oltava vähintään {{min}} merkkiä",
       "stringMax": "Kentän pituus oltava enintään {{max}} merkkiä",
       "dateMin": "Ensimmäinen mahdollinen päivä on {{min}}",
-      "dateMax": "Viimeinen mahdollinen päivä on {{max}}"
+      "dateMax": "Viimeinen mahdollinen päivä on {{max}}",
+      "yhteyshenkilotMin": "Vähintään yksi yhteyshenkilö tulee olla asetettuna"
     },
     "errors": {
       "areaRequired": "Vähintään yksi alue vaaditaan",

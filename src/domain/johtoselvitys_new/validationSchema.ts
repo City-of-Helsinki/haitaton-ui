@@ -44,7 +44,8 @@ const customerWithContactsSchema = yup.object({
   contacts: yup
     .array(contactSchema)
     .transform((value) => (value === null ? [] : value))
-    .defined(),
+    .defined()
+    .min(1, ({ min }) => ({ key: 'yhteyshenkilotMin', values: { min } })),
 });
 
 const areaSchema = yup.object({

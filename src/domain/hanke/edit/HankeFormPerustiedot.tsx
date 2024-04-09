@@ -134,7 +134,6 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
           }
           label={t(`hankeForm:labels:${FORMFIELD.TYOMAATYYPPI}`)}
           mapValueToLabel={(value) => t(`hanke:${FORMFIELD.TYOMAATYYPPI}:${value}`)}
-          invalid={!!errors[FORMFIELD.TYOMAATYYPPI]}
           errorMsg={t('hankeForm:insertFieldError')}
         />
       </div>
