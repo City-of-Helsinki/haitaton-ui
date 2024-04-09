@@ -14,6 +14,7 @@ import { ApplicationAttachmentMetadata, AttachmentType } from '../application/ty
 import * as applicationAttachmentsApi from '../application/attachments';
 import { fillNewContactPersonForm } from '../forms/components/testUtils';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
+import { cloneDeep } from 'lodash';
 
 afterEach(cleanup);
 
@@ -706,4 +707,28 @@ test('Should be able to create new user and new user is added to dropdown', asyn
   expect(
     screen.getByText(`${newUser.etunimi} ${newUser.sukunimi} (${newUser.sahkoposti})`),
   ).toBeInTheDocument();
+});
+
+test('Should show validation error if there are no yhteyshenkilo set for yhteystieto', async () => {
+  const testApplication = cloneDeep(applications[0]);
+  testApplication.applicationData.customerWithContacts = null;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
+
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+  expect(screen.getByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
+  expect(
+    screen.getByText(/vähintään yksi yhteyshenkilö tulee olla asetettuna/i),
+  ).toBeInTheDocument();
+
+  await user.click(
+    screen.getAllByRole('button', { name: /yhteyshenkilöt: sulje ja avaa valikko/i })[0],
+  );
+  await user.click(screen.getByText('Matti Meikäläinen (matti.meikalainen@test.com)'));
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+  expect(
+    screen.queryByText(/vähintään yksi yhteyshenkilö tulee olla asetettuna/i),
+  ).not.toBeInTheDocument();
 });

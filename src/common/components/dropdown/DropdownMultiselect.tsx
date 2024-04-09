@@ -4,6 +4,7 @@ import { Combobox, Tooltip } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 
 import { TooltipProps } from '../../types/tooltip';
+import { getInputErrorText } from '../../utils/form';
 
 import './dropDown.styles.scss';
 
@@ -17,7 +18,6 @@ type PropTypes<T> = {
   label: string;
   helperText?: string;
   options: Array<Option<T>>;
-  invalid?: boolean;
   errorMsg?: string;
   tooltip?: TooltipProps;
   icon?: ReactNode;
@@ -32,7 +32,6 @@ function DropdownMultiselect<T>({
   options,
   defaultValue,
   label,
-  invalid,
   errorMsg,
   tooltip,
   helperText,
@@ -61,13 +60,13 @@ function DropdownMultiselect<T>({
         control={control}
         defaultValue={defaultValue}
         rules={rules}
-        render={({ field: { onChange, value } }) => {
+        render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
           return (
             <Combobox<Option<T>>
               options={options}
               label={label}
               helper={helperText}
-              invalid={invalid}
+              invalid={Boolean(error)}
               defaultValue={defaultValue}
               value={value?.map((v: T) => ({
                 value: transformValue ? transformValue(v) : v,
@@ -80,11 +79,12 @@ function DropdownMultiselect<T>({
               multiselect
               icon={icon}
               clearable={clearable}
+              onBlur={onBlur}
+              error={errorMsg ?? getInputErrorText(t, error)}
             />
           );
         }}
       />
-      {invalid && <span className="error-text">{errorMsg}</span>}
     </div>
   );
 }
