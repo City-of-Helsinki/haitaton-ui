@@ -9,6 +9,10 @@ import { useTranslation } from 'react-i18next';
 function ServiceNotifications() {
   const { t } = useTranslation();
 
+  const infoLabel = t('serviceInfo:label');
+  const infoText = t('serviceInfo:text');
+  const [infoOpen, setInfoOpen] = useState(Boolean(infoLabel));
+
   const warningLabel = t('serviceWarning:label');
   const warningText = t('serviceWarning:text');
   const [warningOpen, setWarningOpen] = useState(Boolean(warningLabel));
@@ -19,6 +23,20 @@ function ServiceNotifications() {
 
   return (
     <>
+      {infoOpen && (
+        <Notification
+          label={infoLabel}
+          type="info"
+          notificationAriaLabel={t('common:components:notification:notification')}
+          autoClose={false}
+          dismissible
+          closeButtonLabelText={`${t('common:components:notification:closeButtonLabelText')}`}
+          onClose={() => setInfoOpen(false)}
+        >
+          {infoText}
+        </Notification>
+      )}
+
       {warningOpen && (
         <Notification
           label={warningLabel}

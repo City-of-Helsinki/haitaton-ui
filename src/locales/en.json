@@ -948,6 +948,10 @@
       "supportLink": "If the link you followed is not working, you can also contact the technical support for Haitaton via the email address <a>haitatontuki@hel.fi</a>."
     }
   },
+  "serviceInfo": {
+    "label": "",
+    "text": ""
+  },
   "serviceWarning": {
     "label": "",
     "text": ""
