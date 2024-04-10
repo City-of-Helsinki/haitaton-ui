@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
  * in Haitaton service
  */
 function ServiceNotifications() {
+  console.log(useTranslation());
   const { t } = useTranslation();
 
   const infoLabel = t('serviceInfo:label');
