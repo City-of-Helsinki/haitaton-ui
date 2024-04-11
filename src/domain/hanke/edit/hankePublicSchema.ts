@@ -8,7 +8,6 @@ import {
   HANKE_POLYHAITTA_KEY,
   HANKE_TARINAHAITTA_KEY,
   HANKE_VAIHE_KEY,
-  HankeGeometria,
 } from '../../types/hanke';
 import { CONTACT_FORMFIELD, FORMFIELD } from './types';
 
@@ -53,8 +52,6 @@ const hankeAlueSchema = yup.object({
   [FORMFIELD.KAISTAPITUUSHAITTA]: yup
     .mixed<HANKE_KAISTAPITUUSHAITTA_KEY>()
     .required(getMessage(HANKE_PAGES.ALUEET)),
-  [FORMFIELD.NIMI]: yup.string().required(getMessage(HANKE_PAGES.ALUEET)),
-  [FORMFIELD.GEOMETRIAT]: yup.mixed<HankeGeometria>().required(getMessage(HANKE_PAGES.ALUEET)),
 });
 
 const yhteystietoSchema = yup.object({
@@ -90,3 +87,19 @@ export const hankePublicSchema = yup.object({
   [FORMFIELD.TOTEUTTAJAT]: yup.array(yhteystietoSchema),
   [FORMFIELD.MUUTTAHOT]: yup.array(yhteystietoSchema.omit([CONTACT_FORMFIELD.TUNNUS])),
 });
+
+export const hankePerustiedotPublicSchema = hankePublicSchema.pick([
+  FORMFIELD.NIMI,
+  FORMFIELD.KUVAUS,
+  FORMFIELD.KATUOSOITE,
+  FORMFIELD.VAIHE,
+]);
+
+export const hankeAlueetPublicSchema = hankePublicSchema.pick([FORMFIELD.HANKEALUEET]);
+
+export const hankeYhteystiedotPublicSchema = hankePublicSchema.pick([
+  FORMFIELD.OMISTAJAT,
+  FORMFIELD.RAKENNUTTAJAT,
+  FORMFIELD.TOTEUTTAJAT,
+  FORMFIELD.MUUTTAHOT,
+]);

@@ -211,7 +211,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ formData }) => {
               }
             >
               <Fieldset
-                heading={t('form:yhteystiedot:titles:omistaja')}
+                heading={t('form:yhteystiedot:titles:omistaja', { count: index + 1 })}
                 style={{ paddingTop: 'var(--spacing-s)' }}
               >
                 <ContactFields
@@ -238,7 +238,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ formData }) => {
         language={locale}
         headingLevel={3}
         heading={t('form:yhteystiedot:titles:propertyDeveloperInfo')}
-        initiallyOpen={rakennuttajat.length > 0}
+        initiallyOpen={true}
       >
         {rakennuttajat.map((item, index) => {
           return (
@@ -253,7 +253,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ formData }) => {
               }
             >
               <Fieldset
-                heading={t('form:yhteystiedot:titles:rakennuttajat')}
+                heading={t('form:yhteystiedot:titles:rakennuttajat', { count: index + 1 })}
                 style={{ paddingTop: 'var(--spacing-s)' }}
               >
                 <ContactFields
@@ -280,7 +280,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ formData }) => {
         language={locale}
         headingLevel={3}
         heading={t('form:yhteystiedot:titles:implementerInfo')}
-        initiallyOpen={toteuttajat.length > 0}
+        initiallyOpen={true}
       >
         {toteuttajat.map((item, index) => {
           return (
@@ -295,7 +295,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ formData }) => {
               }
             >
               <Fieldset
-                heading={t('form:yhteystiedot:titles:toteuttajat')}
+                heading={t('form:yhteystiedot:titles:toteuttajat', { count: index + 1 })}
                 style={{ paddingTop: 'var(--spacing-s)' }}
               >
                 <ContactFields
@@ -322,7 +322,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ formData }) => {
         language={locale}
         headingLevel={3}
         heading={t('form:yhteystiedot:titles:otherInfo')}
-        initiallyOpen={muutTahot.length > 0}
+        initiallyOpen={true}
       >
         {muutTahot.map((item, index) => {
           const fieldPath = `${FORMFIELD.MUUTTAHOT}.${index}`;
@@ -339,7 +339,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ formData }) => {
               }
             >
               <Fieldset
-                heading={t('form:yhteystiedot:titles:muut')}
+                heading={t('form:yhteystiedot:titles:muut', { count: index + 1 })}
                 style={{ paddingTop: 'var(--spacing-s)' }}
               >
                 <ResponsiveGrid>

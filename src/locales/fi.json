@@ -160,13 +160,17 @@
       "instructions": "Hankkeelle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hankkeeseeen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hanketta ja luomaan hankkeelle hakemuksia.",
       "titles": {
         "omistaja": "Hankkeen omistaja",
+        "omistaja_other": "Hankkeen omistaja {{count}}",
         "omistajatPlural": "Omistajat",
         "omistajaInfo": "Hankkeen omistajan tiedot",
         "rakennuttajat": "Rakennuttaja",
+        "rakennuttajat_other": "Rakennuttaja {{count}}",
         "rakennuttajatPlural": "Rakennuttajat",
         "toteuttajat": "Toteuttaja",
+        "toteuttajat_other": "Toteuttaja {{count}}",
         "toteuttajatPlural": "Toteuttajat",
         "muut": "Muu taho",
+        "muut_other": "Muu taho {{count}}",
         "muutPlural": "Muut tahot",
         "lisaaOmistaja": "Lisää omistaja",
         "lisaaRakennuttaja": "Lisää rakennuttaja",
@@ -526,6 +530,42 @@
       "insertOmaOrganisaatio": "Syötä oma organisaatio",
       "rights": "Käyttöoikeutesi hankkeelle"
     },
+    "missingFields": {
+      "nimi": "$t(hankeForm:labels:nimi)",
+      "vaihe": "$t(hankeForm:labels:vaihe)",
+      "kuvaus": "$t(hankeForm:labels:kuvaus)",
+      "tyomaaKatuosoite": "$t(hankeForm:labels:tyomaaKatuosoite)",
+      "alueet": {
+        "empty": "$t(hankeForm:hankkeenAlueForm:subHeader): Hankealueen piirtäminen",
+        "haittaAlkuPvm": "{{alueName}}: $t(hankeForm:labels:haittaAlkuPvm)",
+        "haittaLoppuPvm": "{{alueName}}: $t(hankeForm:labels:haittaLoppuPvm)",
+        "kaistaHaitta": "{{alueName}}: $t(hankeForm:labels:kaistaHaitta)",
+        "kaistaPituusHaitta": "{{alueName}}: $t(hankeForm:labels:kaistaPituusHaitta)",
+        "meluHaitta": "{{alueName}}: $t(hankeForm:labels:meluHaitta)",
+        "polyHaitta": "{{alueName}}: $t(hankeForm:labels:polyHaitta)",
+        "tarinaHaitta": "{{alueName}}: $t(hankeForm:labels:tarinaHaitta)"
+      },
+      "omistajat": {
+        "nimi": "$t(form:yhteystiedot:titles:omistaja): $t(form:yhteystiedot:labels:nimi)",
+        "email": "$t(form:yhteystiedot:titles:omistaja): $t(form:yhteystiedot:labels:email)",
+        "ytunnus": "$t(form:yhteystiedot:titles:omistaja): $t(form:yhteystiedot:labels:ytunnus)"
+      },
+      "toteuttajat": {
+        "nimi": "$t(form:yhteystiedot:titles:toteuttajat): $t(form:yhteystiedot:labels:nimi)",
+        "email": "$t(form:yhteystiedot:titles:toteuttajat): $t(form:yhteystiedot:labels:email)",
+        "ytunnus": "$t(form:yhteystiedot:titles:toteuttajat): $t(form:yhteystiedot:labels:ytunnus)"
+      },
+      "rakennuttajat": {
+        "nimi": "$t(form:yhteystiedot:titles:rakennuttajat): $t(form:yhteystiedot:labels:nimi)",
+        "email": "$t(form:yhteystiedot:titles:rakennuttajat): $t(form:yhteystiedot:labels:email)",
+        "ytunnus": "$t(form:yhteystiedot:titles:rakennuttajat): $t(form:yhteystiedot:labels:ytunnus)"
+      },
+      "muut": {
+        "nimi": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:nimi)",
+        "email": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:email)",
+        "ytunnus": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:ytunnus)"
+      }
+    },
     "toolTips": {
       "tipOpenLabel": "Ohje",
       "perustiedot": "Hankkeen pakolliset perustiedot tulee täyttää. Mikäli kaikki pakolliset tiedot eivät ole täytettynä, uusi hanke tallentuu Haitattomaan, muttei voi edetä vaikutusten arviointiin. Hankkeen tietojen täydentämistä voi jatkaa myöhemmin avaamalla se hankelistan kautta",
@@ -843,7 +883,9 @@
     },
     "draftState": {
       "labels": {
-        "insufficientPhases": "Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavissa vaiheissa on puuttuvia tietoja:"
+        "draft": "Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia.",
+        "insufficientPhases": "$t(hankePortfolio:draftState:labels:draft) Seuraavissa vaiheissa on puuttuvia tietoja:",
+        "missingFields": "$t(hankePortfolio:draftState:labels:draft) Seuraavat kentät tällä sivulla vaaditaan hankeen julkaisemiseksi:"
       }
     }
   },
