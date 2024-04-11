@@ -948,6 +948,10 @@
       "supportLink": "Om länken du följer inte fungerar, kan du också kontakta Haitatons tekniska support med e-post till <a>haitatontuki@hel.fi.</a>"
     }
   },
+  "serviceInfo": {
+    "label": "",
+    "text": ""
+  },
   "serviceWarning": {
     "label": "",
     "text": ""

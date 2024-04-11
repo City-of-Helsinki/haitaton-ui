@@ -1090,6 +1090,10 @@
       "supportLink": "Jos seuraamasi linkki ei toimi, voit myös ottaa yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <a>haitatontuki@hel.fi.</a>"
     }
   },
+  "serviceInfo": {
+    "label": "",
+    "text": ""
+  },
   "serviceWarning": {
     "label": "",
     "text": ""

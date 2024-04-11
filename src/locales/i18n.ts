@@ -32,6 +32,32 @@ i18n.on('languageChanged', (lng) => {
   document.documentElement.setAttribute('lang', lng);
 });
 
+const infoLabelFI = window._env_.REACT_APP_INFO_NOTIFICATION_LABEL;
+const infoLabelSV = window._env_.REACT_APP_INFO_NOTIFICATION_LABEL_SV;
+const infoLabelEN = window._env_.REACT_APP_INFO_NOTIFICATION_LABEL_EN;
+const infoTextFI = window._env_.REACT_APP_INFO_NOTIFICATION_TEXT_FI;
+const infoTextSV = window._env_.REACT_APP_INFO_NOTIFICATION_TEXT_SV;
+const infoTextEN = window._env_.REACT_APP_INFO_NOTIFICATION_TEXT_EN;
+
+i18n.addResources('fi', 'serviceInfo', {
+  label: infoLabelFI,
+  text: infoTextFI,
+});
+
+if (infoLabelSV && infoTextSV) {
+  i18n.addResources('sv', 'serviceInfo', {
+    label: infoLabelSV,
+    text: infoTextSV,
+  });
+}
+
+if (infoLabelEN && infoTextEN) {
+  i18n.addResources('en', 'serviceInfo', {
+    label: infoLabelEN,
+    text: infoTextEN,
+  });
+}
+
 const warningLabelFI = window._env_.REACT_APP_WARNING_NOTIFICATION_LABEL;
 const warningLabelSV = window._env_.REACT_APP_WARNING_NOTIFICATION_LABEL_SV;
 const warningLabelEN = window._env_.REACT_APP_WARNING_NOTIFICATION_LABEL_EN;
