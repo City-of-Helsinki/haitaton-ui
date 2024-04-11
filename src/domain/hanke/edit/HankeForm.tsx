@@ -177,17 +177,13 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     {
       element: <HankeFormPerustiedot errors={errors} register={register} formData={formValues} />,
       label: t('hankeForm:perustiedotForm:header'),
-      state: hankePerustiedotPublicSchema.isValidSync(formData)
-        ? StepState.available
-        : StepState.attention,
+      state: StepState.available,
       validationSchema: hankePerustiedotPublicSchema,
     },
     {
       element: <HankeFormAlueet errors={errors} register={register} formData={formValues} />,
       label: t('hankeForm:hankkeenAlueForm:header'),
-      state: hankeAlueetPublicSchema.isValidSync(formData)
-        ? StepState.available
-        : StepState.attention,
+      state: StepState.available,
       validationSchema: hankeAlueetPublicSchema,
     },
     {
@@ -198,9 +194,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     {
       element: <HankeFormYhteystiedot errors={errors} register={register} formData={formValues} />,
       label: t('form:yhteystiedot:header'),
-      state: hankeYhteystiedotPublicSchema.isValidSync(formData)
-        ? StepState.available
-        : StepState.attention,
+      state: StepState.available,
       validationSchema: hankeYhteystiedotPublicSchema,
     },
     {

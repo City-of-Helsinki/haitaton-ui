@@ -21,19 +21,13 @@ export function createStepReducer(totalSteps: number) {
                   step.validationSchema.isValidSync(action.payload.formData)
                     ? StepState.completed
                     : StepState.attention,
-                label: step.label,
               };
             }
             if (index === action.payload.stepIndex + 1) {
               // next step
               return {
                 ...step,
-                state:
-                  !step.validationSchema ||
-                  step.validationSchema.isValidSync(action.payload.formData)
-                    ? StepState.available
-                    : StepState.attention,
-                label: step.label,
+                state: StepState.available,
               };
             }
             return step;
@@ -48,7 +42,6 @@ export function createStepReducer(totalSteps: number) {
               return {
                 ...step,
                 state: StepState.available,
-                label: step.label,
               };
             }
             if (index === state.activeStepIndex && index !== totalSteps - 1) {
@@ -59,7 +52,6 @@ export function createStepReducer(totalSteps: number) {
                   step.validationSchema.isValidSync(action.payload.formData)
                     ? StepState.completed
                     : StepState.attention,
-                label: step.label,
               };
             }
             return step;
