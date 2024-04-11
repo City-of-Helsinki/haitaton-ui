@@ -25,6 +25,7 @@ import { HankeUser } from '../hankeUsers/hankeUser';
 import { useQueryClient } from 'react-query';
 import ContactPersonSelect from '../hankeUsers/ContactPersonSelect';
 import { mapHankeUserToHankeYhteyshenkilo } from '../hankeUsers/utils';
+import { Box } from '@chakra-ui/react';
 
 function getEmptyContact(): Omit<HankeYhteystieto, 'id'> {
   return {
@@ -74,8 +75,8 @@ const ContactFields: React.FC<
   }, [registryKeyInputDisabled, contactType, index, setValue]);
 
   return (
-    <>
-      <ResponsiveGrid>
+    <Box maxWidth="var(--container-width-m)">
+      <ResponsiveGrid maxColumns={2}>
         <Dropdown
           id={`${contactType}.${index}.${CONTACT_FORMFIELD.TYYPPI}`}
           name={`${contactType}.${index}.${CONTACT_FORMFIELD.TYYPPI}`}
@@ -89,7 +90,7 @@ const ContactFields: React.FC<
           })}
         />
       </ResponsiveGrid>
-      <ResponsiveGrid>
+      <ResponsiveGrid maxColumns={2}>
         <TextInput
           name={`${contactType}.${index}.${CONTACT_FORMFIELD.NIMI}`}
           label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.NIMI}`)}
@@ -100,7 +101,7 @@ const ContactFields: React.FC<
           disabled={registryKeyInputDisabled}
         />
       </ResponsiveGrid>
-      <ResponsiveGrid>
+      <ResponsiveGrid maxColumns={2}>
         <TextInput
           name={`${contactType}.${index}.${CONTACT_FORMFIELD.EMAIL}`}
           label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.EMAIL}`)}
@@ -116,7 +117,7 @@ const ContactFields: React.FC<
         mapHankeUserToValue={mapHankeUserToHankeYhteyshenkilo}
         mapValueToLabel={mapHankeYhteyshenkiloToLabel}
       />
-    </>
+    </Box>
   );
 };
 
@@ -212,7 +213,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ formData }) => {
             >
               <Fieldset
                 heading={t('form:yhteystiedot:titles:omistaja', { count: index + 1 })}
-                style={{ paddingTop: 'var(--spacing-s)' }}
+                style={{ paddingTop: 'var(--spacing-s)', minInlineSize: 'auto' }}
               >
                 <ContactFields
                   contactType={HANKE_CONTACT_TYPE.OMISTAJAT}
@@ -254,7 +255,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ formData }) => {
             >
               <Fieldset
                 heading={t('form:yhteystiedot:titles:rakennuttajat', { count: index + 1 })}
-                style={{ paddingTop: 'var(--spacing-s)' }}
+                style={{ paddingTop: 'var(--spacing-s)', minInlineSize: 'auto' }}
               >
                 <ContactFields
                   contactType={HANKE_CONTACT_TYPE.RAKENNUTTAJAT}
@@ -296,7 +297,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ formData }) => {
             >
               <Fieldset
                 heading={t('form:yhteystiedot:titles:toteuttajat', { count: index + 1 })}
-                style={{ paddingTop: 'var(--spacing-s)' }}
+                style={{ paddingTop: 'var(--spacing-s)', minInlineSize: 'auto' }}
               >
                 <ContactFields
                   contactType={HANKE_CONTACT_TYPE.TOTEUTTAJAT}
@@ -340,7 +341,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ formData }) => {
             >
               <Fieldset
                 heading={t('form:yhteystiedot:titles:muut', { count: index + 1 })}
-                style={{ paddingTop: 'var(--spacing-s)' }}
+                style={{ paddingTop: 'var(--spacing-s)', minInlineSize: 'auto' }}
               >
                 <ResponsiveGrid>
                   <TextInput

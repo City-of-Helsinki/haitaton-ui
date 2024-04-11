@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
-import { Button, Fieldset, IconCheck, IconCross } from 'hds-react';
+import { Button, Fieldset, IconCheck, IconCross, Notification } from 'hds-react';
 import ResponsiveGrid from '../../../common/components/grid/ResponsiveGrid';
 import TextInput from '../../../common/components/textInput/TextInput';
 import { createHankeUser } from '../../hanke/hankeUsers/hankeUsersApi';
@@ -61,6 +61,15 @@ function NewContactPersonForm({ hankeTunnus, onContactPersonAdded, onClose }: Re
         border
         className={styles.fieldset}
       >
+        <Notification
+          type="info"
+          position="inline"
+          label={t('form:yhteystiedot:notifications:descriptions:contactPersonInfo')}
+          size="small"
+          className={styles.infoNotification}
+        >
+          {t('form:yhteystiedot:notifications:descriptions:contactPersonInfo')}
+        </Notification>
         <ResponsiveGrid maxColumns={2}>
           <TextInput
             name={YHTEYSHENKILO_FORMFIELD.ETUNIMI}

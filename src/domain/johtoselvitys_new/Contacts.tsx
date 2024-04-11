@@ -94,13 +94,17 @@ const CustomerFields: React.FC<{
   return (
     <Fieldset
       heading={t(`form:yhteystiedot:titles:${customerType}`)}
-      style={{ paddingTop: 'var(--spacing-s)' }}
+      style={{
+        paddingTop: 'var(--spacing-s)',
+        maxWidth: 'var(--container-width-m)',
+        minInlineSize: 'auto',
+      }}
     >
       <TextInput
         name={`applicationData.${customerType}.customer.yhteystietoId`}
         style={{ display: 'none' }}
       />
-      <ResponsiveGrid>
+      <ResponsiveGrid maxColumns={2}>
         <Dropdown
           id={`applicationData.${customerType}.customer.type`}
           name={`applicationData.${customerType}.customer.type`}
@@ -115,7 +119,7 @@ const CustomerFields: React.FC<{
           })}
         />
       </ResponsiveGrid>
-      <ResponsiveGrid>
+      <ResponsiveGrid maxColumns={2}>
         <TextInput
           name={`applicationData.${customerType}.customer.name`}
           label={t('form:yhteystiedot:labels:nimi')}
@@ -129,7 +133,7 @@ const CustomerFields: React.FC<{
           autoComplete="on"
         />
       </ResponsiveGrid>
-      <ResponsiveGrid>
+      <ResponsiveGrid maxColumns={2}>
         <TextInput
           name={`applicationData.${customerType}.customer.email`}
           label={t('form:yhteystiedot:labels:email')}
@@ -149,6 +153,11 @@ const CustomerFields: React.FC<{
         mapHankeUserToValue={mapHankeUserToContact}
         mapValueToLabel={mapContactToLabel}
         transformValue={(value) => removeOrdererFromContact(value)}
+        tooltip={{
+          tooltipButtonLabel: t('hankeForm:toolTips:tipOpenLabel'),
+          tooltipLabel: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
+          tooltipText: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
+        }}
       />
     </Fieldset>
   );
