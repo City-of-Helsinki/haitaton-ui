@@ -250,7 +250,7 @@
         "descriptions": {
           "contactPersonSaved": "Yhteyshenkilön tiedot tallennettu ja lisätty hankkelle onnistuneesti.",
           "contactPersonSaveError": "Yhteyshenkilön tietojen tallennus epäonnistui. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman teknisen tukeen.",
-          "contactPersonInfo": "Lisäämisellesi yhteyshenkilöille lähetetään kutsu hankkeelle sähköpostilla. Yhteystiedot näkyvät muille tähän hankkeeseen lisätyille henkilöille."
+          "contactPersonInfo": "Lisäämillesi yhteyshenkilöille lähetetään kutsu hankkeelle sähköpostilla. Yhteystiedot näkyvät muille tähän hankkeeseen lisätyille henkilöille."
         }
       },
       "tooltips": {
