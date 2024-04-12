@@ -1,7 +1,11 @@
 .fieldset {
-  max-width: 740px;
+  max-width: var(--container-width-m);
   margin-bottom: var(--spacing-s);
   padding-top: var(--spacing-xs);
+}
+
+.infoNotification {
+  margin-bottom: var(--spacing-m);
 }
 
 .formButtons {

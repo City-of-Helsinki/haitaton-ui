@@ -212,11 +212,12 @@
         "erillinenYhteyshenkilo": "Erillinen yhteyshenkilö"
       },
       "placeholders": {
-        "otherPartyRole": "Isännöitsijä, konsultti..."
+        "otherPartyRole": "Isännöitsijä, konsultti...",
+        "yhteyshenkilo": "Esim. Matti Meikäläinen tai matti.meikalainen@yritys.fi"
       },
       "helperTexts": {
         "otherPartyRole": "Tahon rooli hankkeessa",
-        "yhteyshenkilo": "Valitsemillesi yhteyshenkilöille lähetetään kutsu hankkeelle sähköpostilla. Yhteyshenkilöt näkyvät kaikille hanketta katseleville tahoille."
+        "yhteyshenkilo": " Voit etsiä jo lisättyä henkilöä kirjoittamalla tai valitsemalla pudotusvalikosta, tai lisätä uuden yhteyshenkilön alta."
       },
       "contactType": {
         "YKSITYISHENKILO": "Yksityishenkilö",
@@ -248,8 +249,12 @@
         },
         "descriptions": {
           "contactPersonSaved": "Yhteyshenkilön tiedot tallennettu ja lisätty hankkelle onnistuneesti.",
-          "contactPersonSaveError": "Yhteyshenkilön tietojen tallennus epäonnistui. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman teknisen tukeen."
+          "contactPersonSaveError": "Yhteyshenkilön tietojen tallennus epäonnistui. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman teknisen tukeen.",
+          "contactPersonInfo": "Lisäämillesi yhteyshenkilöille lähetetään kutsu hankkeelle sähköpostilla. Yhteystiedot näkyvät muille tähän hankkeeseen lisätyille henkilöille."
         }
+      },
+      "tooltips": {
+        "hakemusYhteyshenkilo": "Lisäämillesi yhteyshenkilöille lähetetään kutsu hakemukselle sähköpostitse."
       }
     }
   },

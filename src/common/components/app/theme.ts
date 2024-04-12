@@ -17,11 +17,12 @@ import { extendTheme } from '@chakra-ui/react';
 }; */
 
 const breakpoints = {
-  sm: '320px',
-  md: '576px',
-  lg: '768px',
-  xl: '992px',
-  xxl: '1248px',
+  base: '0px',
+  xs: '320px',
+  sm: '576px',
+  md: '768px',
+  lg: '992px',
+  xl: '1248px',
 };
 
 const customTheme = extendTheme({
