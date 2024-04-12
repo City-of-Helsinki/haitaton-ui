@@ -1033,8 +1033,10 @@
   "staticPages": {
     "infoPage": {
       "title": "Tietoja Haitattomasta",
-      "releaseInfo": "Julkaisutiedot",
-      "releaseVer1": "Versio JS.01 julkaisu 19.6.2023: Johtoselvityksen tekeminen",
+      "releaseInfo": "Julkaisutiedot ja päivityshistoria",
+      "releaseVer1": "Haitaton julkaistu 6/2023: Johtoselvityksen tekeminen",
+      "releaseVer2": "Päivitys 5/2024: Käyttöoikeudet ja niiden jakaminen",
+      "releaseAdditionalInfo": "Listan päivitysten lisäksi teemme jatkuvasti pieniä parannuksia ja päivityksiä palveluumme.",
       "materials": "Aineistot",
       "mapMaterials": "Kartta-aineistot",
       "imageCopyrights": "Kuvien tekijätiedot"
