@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import { Button, Dialog, IconInfoCircleFill, Select, ToggleButton } from 'hds-react';
+import { Button, Dialog, IconInfoCircleFill, Select } from 'hds-react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,8 @@ import Text from '../../../common/components/text/Text';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import { ApplicationType } from '../types/application';
 import { HankeData } from '../../types/hanke';
+import useLinkPath from '../../../common/hooks/useLinkPath';
+import { ROUTES } from '../../../common/types/route';
 
 type Props = {
   isOpen: boolean;
@@ -23,10 +25,15 @@ const ApplicationAddDialog: React.FC<Props> = ({ isOpen, onClose, hanke }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();
+  const getKaivuilmoitusPath = useLinkPath(ROUTES.KAIVUILMOITUSHAKEMUS);
 
   const dialogTitle = t('hakemus:headers:pickApplication');
   const applicationTypeOptions: Option[] = [
     { label: t('hakemus:applicationTypes:CABLE_REPORT'), value: 'CABLE_REPORT' },
+    {
+      label: t('hakemus:applicationTypes:EXCAVATION_NOTIFICATION'),
+      value: 'EXCAVATION_NOTIFICATION',
+    },
   ];
 
   const [selectedApplicationType, setSelectedApplicationType] = useState<ApplicationType | null>(
@@ -40,14 +47,10 @@ const ApplicationAddDialog: React.FC<Props> = ({ isOpen, onClose, hanke }) => {
   function continueToApplication() {
     if (selectedApplicationType === 'CABLE_REPORT') {
       navigate(`${JOHTOSELVITYSHAKEMUS.path}?hanke=${hanke.hankeTunnus}`);
+    } else if (selectedApplicationType === 'EXCAVATION_NOTIFICATION') {
+      navigate(getKaivuilmoitusPath({ hankeTunnus: hanke.hankeTunnus }));
     }
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  function toggleUsePreviousApplication() {}
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  function handlePreviousApplicationChange() {}
 
   return (
     <Dialog
@@ -65,48 +68,24 @@ const ApplicationAddDialog: React.FC<Props> = ({ isOpen, onClose, hanke }) => {
       />
 
       <Dialog.Content>
-        <Text tag="p" spacingBottom="l">
+        <Text tag="p" spacingBottom="s">
           {t('hakemus:applicationTypeInstruction')}
         </Text>
 
-        <Box marginBottom="var(--spacing-l)">
+        <Box marginBottom="var(--spacing-s)">
           <Select<Option>
             id="select-application-type"
             label={t('hakemus:labels:applicationType')}
             defaultValue={null}
             options={applicationTypeOptions}
             onChange={handleApplicationTypeChange}
-            required
-          />
-        </Box>
-
-        {/* TODO: Selecting previous application as a
-        base for new one will be implemented later */}
-        <Box marginBottom="var(--spacing-l)">
-          <ToggleButton
-            checked={false}
-            id="toggle-use-previous-application"
-            label={t('hakemus:labels:copyPreviousApplication')}
-            onChange={toggleUsePreviousApplication}
-            disabled
-          />
-        </Box>
-
-        <Box marginBottom="var(--spacing-m)">
-          <Select
-            id="select-previous-application"
-            label={t('hakemus:labels:applicationToUseAsBase')}
-            defaultValue={null}
-            options={[]}
-            onChange={handlePreviousApplicationChange}
-            disabled
           />
         </Box>
       </Dialog.Content>
 
       <Dialog.ActionButtons>
         <Button onClick={continueToApplication} disabled={!selectedApplicationType}>
-          {t('hakemus:buttons:continueToApplication')}
+          {t('hakemus:buttons:createApplication')}
         </Button>
         <Button variant="secondary" onClick={onClose}>
           {t('common:confirmationDialog:cancelButton')}

@@ -12,6 +12,7 @@ import useHanke from '../domain/hanke/hooks/useHanke';
 import ErrorLoadingText from '../common/components/errorLoadingText/ErrorLoadingText';
 import { APPLICATION_ID_STORAGE_KEY } from '../domain/application/constants';
 import { useFeatureFlags } from '../common/components/featureFlags/FeatureFlagsContext';
+import { Application, JohtoselvitysData } from '../domain/application/types/application';
 
 const EditJohtoselvitysPage: React.FC = () => {
   const { id } = useParams();
@@ -44,12 +45,12 @@ const EditJohtoselvitysPage: React.FC = () => {
       {features.accessRights ? (
         <JohtoselvitysContainerNew
           hankeData={hankeQueryResult?.data}
-          application={applicationQueryResult.data}
+          application={applicationQueryResult.data as Application<JohtoselvitysData>}
         />
       ) : (
         <JohtoselvitysContainer
           hankeData={hankeQueryResult?.data}
-          application={applicationQueryResult.data}
+          application={applicationQueryResult.data as Application<JohtoselvitysData>}
         />
       )}
     </Container>

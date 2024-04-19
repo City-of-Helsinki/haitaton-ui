@@ -306,6 +306,20 @@
         "title": "Haitaton – Ändra ansökan om ledningsutredning"
       }
     },
+    "KAIVUILMOITUSHAKEMUS": {
+      "path": "/hankesalkku/:hankeTunnus/kaivuilmoitus",
+      "headerLabel": "Luo uusi kaivuilmoitushakemus",
+      "meta": {
+        "title": "Haitaton - Luo uusi kaivuilmoitushakemus"
+      }
+    },
+    "EDIT_KAIVUILMOITUSHAKEMUS": {
+      "path": "/kaivuilmoitus/:id/muokkaa",
+      "headerLabel": "Muokkaa kaivuilmoitushakemusta",
+      "meta": {
+        "title": "Haitaton - Muokkaa kaivuilmoitushakemusta"
+      }
+    },
     "HAITATON_INFO": {
       "path": "/info",
       "headerLabel": "Information om Haitaton",
@@ -623,7 +637,6 @@
       "null": "Utkast"
     },
     "buttons": {
-      "continueToApplication": "Fortsätt till ansökan",
       "sendApplication": "Skicka ansökan",
       "cancelApplication": "Återta ansökan",
       "editApplication": "Ändra i ansökan"

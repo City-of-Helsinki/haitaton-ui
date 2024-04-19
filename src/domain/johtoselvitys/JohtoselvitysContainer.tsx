@@ -29,7 +29,7 @@ import { useNavigateToApplicationList } from '../hanke/hooks/useNavigateToApplic
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 import useApplicationSendNotification from '../application/hooks/useApplicationSendNotification';
 import useHanke from '../hanke/hooks/useHanke';
-import { AlluStatus, Application } from '../application/types/application';
+import { AlluStatus, Application, JohtoselvitysData } from '../application/types/application';
 import Attachments from './Attachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import useAttachments from '../application/hooks/useAttachments';
@@ -37,7 +37,7 @@ import { APPLICATION_ID_STORAGE_KEY } from '../application/constants';
 
 type Props = {
   hankeData?: HankeData;
-  application?: Application;
+  application?: Application<JohtoselvitysData>;
 };
 
 const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({

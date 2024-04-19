@@ -34,16 +34,16 @@ export async function saveApplication(data: Application) {
   return response.data;
 }
 
-export async function saveHakemus({
+export async function saveHakemus<T>({
   data,
   convertFormStateToUpdateData,
 }: {
-  data: Application;
-  convertFormStateToUpdateData: (data: Application) => unknown;
+  data: Application<T>;
+  convertFormStateToUpdateData: (data: Application<T>) => unknown;
 }) {
   const response = data.id
-    ? await api.put<Application>(`/hakemukset/${data.id}`, convertFormStateToUpdateData(data))
-    : await api.post<Application>('/hakemukset', data);
+    ? await api.put<Application<T>>(`/hakemukset/${data.id}`, convertFormStateToUpdateData(data))
+    : await api.post<Application<T>>('/hakemukset', data);
 
   return response.data;
 }

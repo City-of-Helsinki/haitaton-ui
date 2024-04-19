@@ -9,9 +9,10 @@ type PropTypes = {
   defaultValue?: string;
   label: string;
   disabled?: boolean;
+  className?: string;
 };
 const CheckboxComp: React.FC<React.PropsWithChildren<PropTypes>> = (props) => {
-  const { name, id, rules, defaultValue, label, disabled } = props;
+  const { name, id, rules, defaultValue, label, disabled, className } = props;
   const { control } = useFormContext();
 
   return (
@@ -22,6 +23,7 @@ const CheckboxComp: React.FC<React.PropsWithChildren<PropTypes>> = (props) => {
       defaultValue={defaultValue}
       render={({ field }) => (
         <Checkbox
+          className={className}
           id={id}
           label={label}
           {...field}

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { LoadingSpinner } from 'hds-react';
@@ -9,18 +8,20 @@ import ErrorLoadingText from '../../../common/components/errorLoadingText/ErrorL
 import useHanke from '../../hanke/hooks/useHanke';
 import { useApplication } from '../hooks/useApplication';
 import useLinkPath from '../../../common/hooks/useLinkPath';
-import { ROUTES } from '../../../common/types/route';
+import { HAKEMUS_ROUTES } from '../../../common/types/route';
 
 type Props = {
   id: number;
 };
 
-function ApplicationViewContainer({ id }: Props) {
+function ApplicationViewContainer({ id }: Readonly<Props>) {
   const { t } = useTranslation();
   const { data: application, isLoading, isError, error } = useApplication(id);
   const { data: hanke } = useHanke(application?.hankeTunnus);
   const navigate = useNavigate();
-  const getEditApplicationPath = useLinkPath(ROUTES.EDIT_JOHTOSELVITYSHAKEMUS);
+  const getEditApplicationPath = useLinkPath(
+    HAKEMUS_ROUTES[application?.applicationType ?? 'CABLE_REPORT'],
+  );
 
   function editApplication() {
     if (application?.id) {

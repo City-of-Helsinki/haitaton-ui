@@ -134,13 +134,13 @@ const MultipageForm: React.FC<Props> = ({
 
   return (
     <form className={styles.formContainer} onSubmit={onSubmit}>
-      <MainHeading>{heading}</MainHeading>
-
       {subHeading && (
-        <Text tag="h2" styleAs="h4" spacingBottom="m">
+        <Text tag="h2" styleAs="h4" spacingBottom="s">
           {subHeading}
         </Text>
       )}
+
+      <MainHeading>{heading}</MainHeading>
 
       {notificationLabel && notificationText && (
         <Notification dataTestId="form-notification" size="large" label={notificationLabel}>

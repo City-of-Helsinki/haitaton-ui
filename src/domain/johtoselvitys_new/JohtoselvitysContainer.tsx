@@ -27,7 +27,7 @@ import { useNavigateToApplicationList } from '../hanke/hooks/useNavigateToApplic
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 import useApplicationSendNotification from '../application/hooks/useApplicationSendNotification';
 import useHanke from '../hanke/hooks/useHanke';
-import { AlluStatus, Application } from '../application/types/application';
+import { AlluStatus, Application, JohtoselvitysData } from '../application/types/application';
 import Attachments from './Attachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import useAttachments from '../application/hooks/useAttachments';
@@ -37,7 +37,7 @@ import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 
 type Props = {
   hankeData?: HankeData;
-  application?: Application;
+  application?: Application<JohtoselvitysData>;
 };
 
 function isContactIn(signedInUser?: SignedInUser, application?: JohtoselvitysFormData) {
@@ -141,7 +141,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
 
   const [attachmentsUploading, setAttachmentsUploading] = useState(false);
 
-  const applicationSaveMutation = useMutation(saveHakemus, {
+  const applicationSaveMutation = useMutation(saveHakemus<JohtoselvitysData>, {
     onMutate() {
       setShowSaveNotification(false);
     },
