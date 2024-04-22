@@ -19,7 +19,7 @@ import {
   convertFormStateToJohtoselvitysUpdateData,
 } from './utils';
 import { changeFormStep, isPageValid } from '../forms/utils';
-import { isApplicationDraft, saveHakemus, sendApplicationNew } from '../application/utils';
+import { isApplicationDraft, sendApplicationNew } from '../application/utils';
 import { HankeData } from '../types/hanke';
 import { ApplicationCancel } from '../application/components/ApplicationCancel';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
@@ -27,13 +27,20 @@ import { useNavigateToApplicationList } from '../hanke/hooks/useNavigateToApplic
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 import useApplicationSendNotification from '../application/hooks/useApplicationSendNotification';
 import useHanke from '../hanke/hooks/useHanke';
-import { AlluStatus, Application, JohtoselvitysData } from '../application/types/application';
+import {
+  AlluStatus,
+  Application,
+  JohtoselvitysCreateData,
+  JohtoselvitysData,
+  JohtoselvitysUpdateData,
+} from '../application/types/application';
 import Attachments from './Attachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import useAttachments from '../application/hooks/useAttachments';
 import { APPLICATION_ID_STORAGE_KEY } from '../application/constants';
 import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
+import useSaveApplication from '../application/hooks/useSaveApplication';
 
 type Props = {
   hankeData?: HankeData;
@@ -137,18 +144,19 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
 
   const navigateToApplicationList = useNavigateToApplicationList(hanke?.hankeTunnus);
 
-  const [showSaveNotification, setShowSaveNotification] = useState(false);
-
   const [attachmentsUploading, setAttachmentsUploading] = useState(false);
 
-  const applicationSaveMutation = useMutation(saveHakemus<JohtoselvitysData>, {
-    onMutate() {
-      setShowSaveNotification(false);
+  const {
+    applicationCreateMutation,
+    applicationUpdateMutation,
+    showSaveNotification,
+    setShowSaveNotification,
+  } = useSaveApplication<JohtoselvitysData, JohtoselvitysCreateData, JohtoselvitysUpdateData>({
+    onCreateSuccess({ id }) {
+      setValue('id', id);
+      reset({}, { keepValues: true });
     },
-    onSuccess({
-      id,
-      alluStatus,
-      hankeTunnus,
+    onUpdateSuccess({
       applicationData: {
         customerWithContacts,
         contractorWithContacts,
@@ -156,9 +164,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         representativeWithContacts,
       },
     }) {
-      setValue('id', id);
-      setValue('alluStatus', alluStatus);
-      setValue('hankeTunnus', hankeTunnus);
       if (customerWithContacts !== null) {
         setValue(
           'applicationData.customerWithContacts.customer.yhteystietoId',
@@ -185,9 +190,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
       }
       reset({}, { keepValues: true });
     },
-    onSettled() {
-      setShowSaveNotification(true);
-    },
   });
 
   const applicationSendMutation = useMutation(sendApplicationNew, {
@@ -201,32 +203,35 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     },
   });
 
-  function saveCableApplication() {
-    const data = getValues();
-    applicationSaveMutation.mutate({
-      data,
-      convertFormStateToUpdateData: convertFormStateToJohtoselvitysUpdateData,
-    });
+  function saveCableApplication(handleSuccess?: (data: Application<JohtoselvitysData>) => void) {
+    const formData = getValues();
+    if (!formData.id) {
+      applicationCreateMutation.mutate(
+        {
+          applicationType: formData.applicationType,
+          hankeTunnus: hanke!.hankeTunnus,
+          name: formData.applicationData.name,
+          postalAddress: formData.applicationData.postalAddress,
+          workDescription: formData.applicationData.workDescription,
+          constructionWork: formData.applicationData.constructionWork,
+          maintenanceWork: formData.applicationData.maintenanceWork,
+          emergencyWork: formData.applicationData.emergencyWork,
+          propertyConnectivity: formData.applicationData.propertyConnectivity,
+          rockExcavation: formData.applicationData.rockExcavation,
+        },
+        { onSuccess: handleSuccess },
+      );
+    } else {
+      applicationUpdateMutation.mutate(
+        { id: formData.id, data: convertFormStateToJohtoselvitysUpdateData(formData) },
+        { onSuccess: handleSuccess },
+      );
+    }
   }
 
   async function sendCableApplication() {
     const data = getValues();
-    let { id } = data;
-    // If for some reason application has not been saved before
-    // sending, meaning id is null, save it before sending
-    if (!id) {
-      try {
-        const responseData = await applicationSaveMutation.mutateAsync({
-          data,
-          convertFormStateToUpdateData: convertFormStateToJohtoselvitysUpdateData,
-        });
-        setShowSaveNotification(false);
-        id = responseData.id as number;
-      } catch (error) {
-        return;
-      }
-    }
-    applicationSendMutation.mutate(id);
+    applicationSendMutation.mutate(data.id!);
   }
 
   function handleStepChange() {
@@ -238,28 +243,20 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   }
 
   function saveAndQuit() {
-    applicationSaveMutation.mutate(
-      {
-        data: getValues(),
-        convertFormStateToUpdateData: convertFormStateToJohtoselvitysUpdateData,
-      },
-      {
-        onSuccess(data) {
-          navigateToApplicationList(data.hankeTunnus);
-
-          setNotification(true, {
-            position: 'top-right',
-            dismissible: true,
-            autoClose: true,
-            autoCloseDuration: 5000,
-            label: t('hakemus:notifications:saveSuccessLabel'),
-            message: t('hakemus:notifications:saveSuccessText'),
-            type: 'success',
-            closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
-          });
-        },
-      },
-    );
+    function handleSuccess(data: Application<JohtoselvitysData>) {
+      navigateToApplicationList(data.hankeTunnus);
+      setNotification(true, {
+        position: 'top-right',
+        dismissible: true,
+        autoClose: true,
+        autoCloseDuration: 5000,
+        label: t('hakemus:notifications:saveSuccessLabel'),
+        message: t('hakemus:notifications:saveSuccessText'),
+        type: 'success',
+        closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+      });
+    }
+    saveCableApplication(handleSuccess);
   }
 
   function handleAttachmentUpload(isUploading: boolean) {
@@ -388,11 +385,17 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
 
   return (
     <FormProvider {...formContext}>
-      {/* Notification for saving application */}
-      {showSaveNotification && (
+      {/* Notifications for saving application */}
+      {showSaveNotification === 'create' && (
         <ApplicationSaveNotification
-          saveSuccess={applicationSaveMutation.isSuccess}
-          onClose={() => setShowSaveNotification(false)}
+          saveSuccess={applicationCreateMutation.isSuccess}
+          onClose={() => setShowSaveNotification(null)}
+        />
+      )}
+      {showSaveNotification === 'update' && (
+        <ApplicationSaveNotification
+          saveSuccess={applicationUpdateMutation.isSuccess}
+          onClose={() => setShowSaveNotification(null)}
         />
       )}
 
@@ -425,7 +428,10 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
             isApplicationDraft(getValues('alluStatus') as AlluStatus | null) &&
             isContactIn(signedInUser, getValues('applicationData'));
 
-          const saveAndQuitIsLoading = applicationSaveMutation.isLoading || attachmentsUploading;
+          const saveAndQuitIsLoading =
+            applicationCreateMutation.isLoading ||
+            applicationUpdateMutation.isLoading ||
+            attachmentsUploading;
           const saveAndQuitLoadingText = attachmentsUploading
             ? attachmentsUploadingText
             : t('common:buttons:savingText');

@@ -209,9 +209,57 @@ export class ApplicationUpdateCustomerWithContacts {
   }
 }
 
+export interface JohtoselvitysCreateData
+  extends Pick<
+    JohtoselvitysData,
+    | 'applicationType'
+    | 'name'
+    | 'postalAddress'
+    | 'workDescription'
+    | 'constructionWork'
+    | 'maintenanceWork'
+    | 'emergencyWork'
+    | 'propertyConnectivity'
+    | 'rockExcavation'
+  > {
+  hankeTunnus: string;
+}
+
 export interface JohtoselvitysUpdateData
   extends Omit<
     JohtoselvitysData,
+    | 'customerWithContacts'
+    | 'contractorWithContacts'
+    | 'representativeWithContacts'
+    | 'propertyDeveloperWithContacts'
+  > {
+  customerWithContacts: ApplicationUpdateCustomerWithContacts | null;
+  contractorWithContacts: ApplicationUpdateCustomerWithContacts | null;
+  representativeWithContacts: ApplicationUpdateCustomerWithContacts | null;
+  propertyDeveloperWithContacts: ApplicationUpdateCustomerWithContacts | null;
+}
+
+export interface KaivuilmoitusCreateData
+  extends Pick<
+    KaivuilmoitusData,
+    | 'applicationType'
+    | 'name'
+    | 'workDescription'
+    | 'constructionWork'
+    | 'maintenanceWork'
+    | 'emergencyWork'
+    | 'rockExcavation'
+    | 'cableReportDone'
+    | 'requiredCompetence'
+    | 'cableReports'
+    | 'placementContracts'
+  > {
+  hankeTunnus: string;
+}
+
+export interface KaivuilmoitusUpdateData
+  extends Omit<
+    KaivuilmoitusData,
     | 'customerWithContacts'
     | 'contractorWithContacts'
     | 'representativeWithContacts'

@@ -34,17 +34,25 @@ export async function saveApplication(data: Application) {
   return response.data;
 }
 
-export async function saveHakemus<T>({
-  data,
-  convertFormStateToUpdateData,
-}: {
-  data: Application<T>;
-  convertFormStateToUpdateData: (data: Application<T>) => unknown;
-}) {
-  const response = data.id
-    ? await api.put<Application<T>>(`/hakemukset/${data.id}`, convertFormStateToUpdateData(data))
-    : await api.post<Application<T>>('/hakemukset', data);
+/**
+ * Create new application
+ */
+export async function createApplication<ApplicationData, CreateData>(data: CreateData) {
+  const response = await api.post<Application<ApplicationData>>('/hakemukset', data);
+  return response.data;
+}
 
+/**
+ * Update application
+ */
+export async function updateApplication<ApplicationData, UpdateData>({
+  id,
+  data,
+}: {
+  id: number;
+  data: UpdateData;
+}) {
+  const response = await api.put<Application<ApplicationData>>(`/hakemukset/${id}`, data);
   return response.data;
 }
 

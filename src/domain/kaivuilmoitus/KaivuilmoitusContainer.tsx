@@ -1,5 +1,7 @@
 import { FormProvider, useForm } from 'react-hook-form';
+import { merge } from 'lodash';
 import { Button, IconCross, IconSaveDiskette, StepState } from 'hds-react';
+import { yupResolver } from '@hookform/resolvers/yup';
 import MultipageForm from '../forms/MultipageForm';
 import BasicInfo from './BasicInfo';
 import { HankeData } from '../types/hanke';
@@ -7,15 +9,19 @@ import { useTranslation } from 'react-i18next';
 import FormActions from '../forms/components/FormActions';
 import { ApplicationCancel } from '../application/components/ApplicationCancel';
 import { KaivuilmoitusFormValues } from './types';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { validationSchema } from './validationSchema';
 import { useApplicationsForHanke } from '../application/hooks/useApplications';
-import { useMutation } from 'react-query';
-import { saveHakemus } from '../application/utils';
-import { Application, KaivuilmoitusData } from '../application/types/application';
+import {
+  Application,
+  KaivuilmoitusCreateData,
+  KaivuilmoitusData,
+  KaivuilmoitusUpdateData,
+} from '../application/types/application';
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 import { useNavigateToApplicationList } from '../hanke/hooks/useNavigateToApplicationList';
-import { merge } from 'lodash';
+import { convertFormStateToKaivuilmoitusUpdateData } from './utils';
+import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
+import useSaveApplication from '../application/hooks/useSaveApplication';
 
 type Props = {
   hankeData: HankeData;
@@ -46,7 +52,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       constructionWork: false,
       maintenanceWork: false,
       emergencyWork: false,
-      rockExcavation: null,
+      rockExcavation: false,
       cableReportDone: false,
       cableReports: [],
       placementContracts: [],
@@ -67,21 +73,55 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   });
   const { getValues, setValue, reset, trigger } = formContext;
 
-  const applicationSaveMutation = useMutation(saveHakemus<KaivuilmoitusData>, {
-    onSuccess({ id }) {
+  const {
+    applicationCreateMutation,
+    applicationUpdateMutation,
+    showSaveNotification,
+    setShowSaveNotification,
+  } = useSaveApplication<KaivuilmoitusData, KaivuilmoitusCreateData, KaivuilmoitusUpdateData>({
+    onCreateSuccess({ id }) {
       setValue('id', id);
       reset({}, { keepValues: true });
     },
+    onUpdateSuccess() {
+      reset({}, { keepValues: true });
+    },
   });
-  const saving = applicationSaveMutation.isLoading;
+
+  const saving = applicationCreateMutation.isLoading || applicationUpdateMutation.isLoading;
   const savingText = t('common:buttons:savingText');
 
-  function saveAndQuit() {
+  function saveApplication(handleSuccess?: (data: Application<KaivuilmoitusData>) => void) {
     const formData = getValues();
+    if (!formData.id) {
+      applicationCreateMutation.mutate(
+        {
+          applicationType: formData.applicationType,
+          hankeTunnus: hankeData.hankeTunnus,
+          name: formData.applicationData.name,
+          workDescription: formData.applicationData.workDescription,
+          constructionWork: formData.applicationData.constructionWork,
+          maintenanceWork: formData.applicationData.maintenanceWork,
+          emergencyWork: formData.applicationData.emergencyWork,
+          rockExcavation: formData.applicationData.rockExcavation,
+          cableReportDone: formData.applicationData.cableReportDone,
+          cableReports: formData.applicationData.cableReports,
+          placementContracts: formData.applicationData.placementContracts,
+          requiredCompetence: formData.applicationData.requiredCompetence,
+        },
+        { onSuccess: handleSuccess },
+      );
+    } else {
+      applicationUpdateMutation.mutate(
+        { id: formData.id, data: convertFormStateToKaivuilmoitusUpdateData(formData) },
+        { onSuccess: handleSuccess },
+      );
+    }
+  }
 
+  function saveAndQuit() {
     function handleSuccess(data: Application<KaivuilmoitusData>) {
       navigateToApplicationList(data.hankeTunnus);
-
       setNotification(true, {
         position: 'top-right',
         dismissible: true,
@@ -93,16 +133,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
       });
     }
-
-    applicationSaveMutation.mutate(
-      {
-        data: formData,
-        convertFormStateToUpdateData: (data) => data,
-      },
-      {
-        onSuccess: handleSuccess,
-      },
-    );
+    saveApplication(handleSuccess);
   }
 
   const formSteps = [
@@ -160,6 +191,19 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
           );
         }}
       </MultipageForm>
+
+      {showSaveNotification === 'create' && (
+        <ApplicationSaveNotification
+          saveSuccess={applicationCreateMutation.isSuccess}
+          onClose={() => setShowSaveNotification(null)}
+        />
+      )}
+      {showSaveNotification === 'update' && (
+        <ApplicationSaveNotification
+          saveSuccess={applicationUpdateMutation.isSuccess}
+          onClose={() => setShowSaveNotification(null)}
+        />
+      )}
     </FormProvider>
   );
 }

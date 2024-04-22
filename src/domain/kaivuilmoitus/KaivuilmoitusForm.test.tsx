@@ -3,6 +3,8 @@ import { cleanup, fireEvent, render, screen } from '../../testUtils/render';
 import KaivuilmoitusContainer from './KaivuilmoitusContainer';
 import { HankeData } from '../types/hanke';
 import hankkeet from '../mocks/data/hankkeet-data';
+import { server } from '../mocks/test-server';
+import { rest } from 'msw';
 
 afterEach(cleanup);
 
@@ -58,7 +60,7 @@ test('Should be able fill perustiedot and save form', async () => {
   await fillBasicInformation(user);
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
+  expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
   expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2');
 });
 
@@ -70,4 +72,19 @@ test('Should not be able to save form if work name is missing', async () => {
 
   expect(screen.getByText('Vaihe 1/1: Perustiedot')).toBeInTheDocument();
   expect(screen.queryAllByText('Kenttä on pakollinen').length).toBe(1);
+});
+
+test('Should show error message if saving fails', async () => {
+  server.use(
+    rest.post('/api/hakemukset', async (req, res, ctx) => {
+      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    }),
+  );
+  const hankeData = hankkeet[1] as HankeData;
+  const { user } = render(<KaivuilmoitusContainer hankeData={hankeData} />);
+  await fillBasicInformation(user);
+  await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
+
+  expect(screen.getByText('Vaihe 1/1: Perustiedot')).toBeInTheDocument();
+  expect(screen.getAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
 });

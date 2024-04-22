@@ -7,7 +7,12 @@ import * as usersDB from './data/users';
 import ApiError from './apiError';
 import { DeleteInfo, IdentificationResponse, SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import { Yhteyshenkilo, YhteyshenkiloWithoutName } from '../hanke/edit/types';
-import { JohtoselvitysUpdateData, NewJohtoselvitysData } from '../application/types/application';
+import {
+  JohtoselvitysCreateData,
+  JohtoselvitysUpdateData,
+  KaivuilmoitusCreateData,
+  NewJohtoselvitysData,
+} from '../application/types/application';
 import { defaultJohtoselvitysData } from './data/defaultJohtoselvitysData';
 
 const apiUrl = '/api';
@@ -105,7 +110,7 @@ export const handlers = [
   }),
 
   rest.post(`${apiUrl}/hakemukset`, async (req, res, ctx) => {
-    const reqBody: JohtoselvitysFormValues = await req.json();
+    const reqBody: JohtoselvitysCreateData | KaivuilmoitusCreateData = await req.json();
     const hakemus = await hakemuksetDB.create(reqBody);
     return res(ctx.status(200), ctx.json(hakemus));
   }),
@@ -119,8 +124,10 @@ export const handlers = [
       vaihe: 'SUUNNITTELU',
       kuvaus: '',
     });
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const hakemus = await hakemuksetDB.create({ ...reqBody, hankeTunnus: hanke.hankeTunnus! });
+    const hakemus = await hakemuksetDB.createJohtoselvitys({
+      ...reqBody,
+      hankeTunnus: hanke.hankeTunnus!,
+    });
     return res(ctx.status(200), ctx.json(hakemus));
   }),
 
@@ -134,7 +141,7 @@ export const handlers = [
       kuvaus: null,
       generated: true,
     });
-    const hakemus = await hakemuksetDB.create({
+    const hakemus = await hakemuksetDB.createJohtoselvitys({
       applicationData: {
         name: nimi,
         ...defaultJohtoselvitysData,
