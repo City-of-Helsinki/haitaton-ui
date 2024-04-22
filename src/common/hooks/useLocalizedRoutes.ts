@@ -9,7 +9,7 @@ export const HANKETUNNUS_REGEXP = /HAI\d{2}-(\d+)/;
 export const USER_ID_REGEXP = /(?<=\/)(.{8}-.{4}-.{4}-.{4}-.{12})/;
 
 type GetLocalizationParams = {
-  useTranslationResponse: UseTranslationResponse<''>;
+  useTranslationResponse: UseTranslationResponse<'', undefined>;
   route: string;
   name: 'path' | 'headerLabel' | 'meta.title';
 };
