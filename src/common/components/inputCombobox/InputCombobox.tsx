@@ -35,7 +35,9 @@ export default function InputCombobox({
   const { setValue, getValues } = useFormContext();
   const [rendered, setRendered] = useState(false);
   const [valid, setValid] = useState(true);
-  const [comboboxOptions, setOptions] = useState(options.map((option) => ({ label: option })));
+  const [comboboxOptions, setComboboxOptions] = useState(
+    options.map((option) => ({ label: option })),
+  );
   const inputElement = document.getElementById(`${id}-input`) as HTMLInputElement | null;
 
   useEffect(() => {
@@ -51,7 +53,9 @@ export default function InputCombobox({
         if (inputValue) {
           const inputValid = pattern?.test(inputValue) ?? true;
           if (inputValid) {
-            setOptions((prevOptions) => uniqBy(prevOptions.concat({ label: inputValue }), 'label'));
+            setComboboxOptions((prevOptions) =>
+              uniqBy(prevOptions.concat({ label: inputValue }), 'label'),
+            );
             setValue(name, getValues(name)?.concat(inputValue));
           }
           setValid(inputValid);
