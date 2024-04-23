@@ -738,8 +738,7 @@
     "buttons": {
       "sendApplication": "Skicka ansökan",
       "cancelApplication": "Återta ansökan",
-      "editApplication": "Ändra i ansökan",
-      "continueToApplication": "Fortsätt till ansökan"
+      "editApplication": "Ändra i ansökan"
     },
     "errors": {
       "cancelConflict": "Ansökan kan inte återtas emedan den gått vidare till handläggning",
@@ -754,7 +753,7 @@
     "applicationTypeDraft": {
       "CABLE_REPORT": "JS utkast"
     },
-    "applicationTypeInstruction": "Välj typ av ansökan. Vissa tidigare ansökningar kan kopieras till underlag för ansökan. Du kan vid anmälan om grävning även lämna en begäran om ledningsutredning, om du inte ännu har en sådan."
+    "applicationTypeInstruction": "Välj typ av ansökan. Du kan vid anmälan om grävning även lämna en begäran om ledningsutredning, om du inte ännu har en sådan."
   },
   "hankeSidebar": {
     "ariaSidebarContent": "Projektets uppgifter",

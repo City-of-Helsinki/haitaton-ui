@@ -738,8 +738,7 @@
     "buttons": {
       "sendApplication": "Send application",
       "cancelApplication": "Cancel application",
-      "editApplication": "Edit application",
-      "continueToApplication": "Continue to application"
+      "editApplication": "Edit application"
     },
     "errors": {
       "cancelConflict": "The application cannot be cancelled because it has entered the processing stage",
@@ -754,7 +753,7 @@
     "applicationTypeDraft": {
       "CABLE_REPORT": "Cable report draft"
     },
-    "applicationTypeInstruction": "Select application type. For some applications, you can also copy a previous application as a template. Via the excavation report, you can also submit a cable report if you do not have one already."
+    "applicationTypeInstruction": "Select application type. Via the excavation report, you can also submit a cable report if you do not have one already."
   },
   "hankeSidebar": {
     "ariaSidebarContent": "Project information",
