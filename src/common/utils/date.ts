@@ -1,6 +1,6 @@
-import endOfDay from 'date-fns/endOfDay';
-import startOfDay from 'date-fns/startOfDay';
-import format from 'date-fns/format';
+import { endOfDay } from 'date-fns/endOfDay';
+import { startOfDay } from 'date-fns/startOfDay';
+import { format } from 'date-fns/format';
 import { fi } from 'date-fns/locale';
 
 export const toEndOfDayUTCISO = (date: Date) => {
