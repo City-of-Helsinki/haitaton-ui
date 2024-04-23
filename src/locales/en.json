@@ -39,7 +39,8 @@
         "searchButtonAriaLabel": "Search"
       },
       "header": {
-        "skipToContentLabel": "Go to main content"
+        "skipToContentLabel": "Go to main content",
+        "frontPageLabel": "Home page"
       },
       "notification": {
         "notification": "Notification",
@@ -48,10 +49,24 @@
       "errorLoadingInfo": {
         "textTop": "Error loading information.",
         "textBottom": "Please try again later."
+      },
+      "fileUpload": {
+        "loadingText": "Saving files",
+        "successNotification": "{{successful}}/{{newFiles}} file(s) saved",
+        "errorNotification": "Saving attachment failed {{errors}}/{{newFiles}} for file:",
+        "deleteError": {
+          "title": "An error occurred in deleting the file",
+          "fileNotFound": "The file you tried to remove was not found (Error 404). Try again later.",
+          "serverError": "The server cannot be reached and the selected file cannot be deleted. Try again later."
+        }
+      },
+      "footer": {
+        "backToTop": "Back to top"
       }
     },
     "error": "An error occurred. Try again.",
     "dataNotFound": "No information found",
+    "logoAlt": "City of Helsinki",
     "ariaLabels": {
       "profileButton": "User profile",
       "menuToggle": "Menu",
@@ -76,14 +91,17 @@
       "stringMin": "The field length must be at least {{min}} characters",
       "stringMax": "The field length must not exceed {{max}} characters",
       "dateMin": "The first possible date is {{min}}",
-      "dateMax": "The last possible date is {{max}}"
+      "dateMax": "The last possible date is {{max}}",
+      "yhteyshenkilotMin": "At least one contact person must be set"
     },
     "errors": {
       "areaRequired": "At least one area is required",
       "fileLoadError": "Error in loading file",
       "selfIntersectingArea": "The area borders cannot intersect with each other",
       "fileLoadTechnicalError": "Uploading the file ({{fileName}}) failed. Please try again later.",
-      "fileLoadBadFileError": "There is a problem with the file ({{fileName}}). Please check that the file format is correct and the file size does not exceed 100 MB."
+      "fileLoadBadFileError": "There is a problem with the file ({{fileName}}). Please check that the file format is correct and the file size does not exceed 100 MB.",
+      "duplicateFileError": "Selected file name ({{fileName}}) already exists. Rename the file.",
+      "fileUploadCancelled": "File ({{fileName}}) upload cancelled."
     },
     "headers": {
       "perustiedot": "Basic information",
@@ -106,7 +124,8 @@
       "dragAttachments": "Drag and drop the files here",
       "additionalInfo": "Additional information",
       "added": "Added",
-      "addedFiles": "Attachments added"
+      "addedFiles": "Attachments added",
+      "today": "today"
     },
     "dialog": {
       "titles": {
@@ -141,13 +160,19 @@
       "instructions": "The parties added in the project will receive a link by email.They can join the project on Haitaton via the link. After this, they can review the project and add applications to the project.",
       "titles": {
         "omistaja": "Project owner",
+        "omistaja_other": "Project owner {{count}}",
+        "omistajatPlural": "Owners",
         "omistajaInfo": "Project owner information",
         "rakennuttajat": "Developer",
+        "rakennuttajat_other": "Developer {{count}}",
         "rakennuttajatPlural": "Developers",
         "toteuttajat": "Implementer",
+        "toteuttajat_other": "Implementer {{count}}",
         "toteuttajatPlural": "Implementers",
         "muut": "Other party",
+        "muut_other": "Other party {{count}}",
         "muutPlural": "Other parties",
+        "lisaaOmistaja": "Add owner",
         "lisaaRakennuttaja": "Add developer",
         "lisaaToteuttaja": "Add implementer",
         "lisaaMuuTaho": "Add another party",
@@ -187,10 +212,12 @@
         "erillinenYhteyshenkilo": "Separate contact person"
       },
       "placeholders": {
-        "otherPartyRole": "Property manager, consultant..."
+        "otherPartyRole": "Property manager, consultant...",
+        "yhteyshenkilo": "E.g. John Doe or john.doe@company.com"
       },
       "helperTexts": {
-        "otherPartyRole": "Party’s role in the project"
+        "otherPartyRole": "Party’s role in the project",
+        "yhteyshenkilo": " You can search an added person by typing or using the drop-down menu, or you can add a new contact below."
       },
       "contactType": {
         "YKSITYISHENKILO": "Private individual",
@@ -203,14 +230,31 @@
       },
       "buttons": {
         "addSubContact": "Add a contact person",
+        "addNewContactPerson": "Add a new contact person",
         "removeSubContact": "Remove contact person",
+        "saveAndAddContactPerson": "Save and add contact person",
         "remove": {
+          "omistajat": "Delete owner",
           "rakennuttajat": "Remove developer",
           "toteuttajat": "Remove implementer",
           "muut": "Remove other party",
           "propertyDeveloperWithContacts": "Remove developer",
           "representativeWithContacts": "Remove representative"
         }
+      },
+      "notifications": {
+        "labels": {
+          "contactPersonSaved": "Contact person saved",
+          "contactPersonSaveError": "Saving contact person failed"
+        },
+        "descriptions": {
+          "contactPersonSaved": "Contact person details successfully saved and added to project.",
+          "contactPersonSaveError": "Saving contact person details failed. Try again later or contact Haitaton technical support.",
+          "contactPersonInfo": "The contacts you add will receive an invitation to the project via email. Their contact information will be visible to other individuals added to this project."
+        }
+      },
+      "tooltips": {
+        "hakemusYhteyshenkilo": "The contacts you add will receive an invitation to the application via email."
       }
     }
   },
@@ -238,16 +282,16 @@
     },
     "ACCESS_RIGHTS": {
       "path": "/projectportfolio/:hankeTunnus/kayttajat",
-      "headerLabel": "Käyttäjähallinta",
+      "headerLabel": "User management",
       "meta": {
-        "title": "Haitaton - Käyttäjähallinta"
+        "title": "Haitaton – User management"
       }
     },
     "EDIT_USER": {
       "path": "/projectportfolio/:hankeTunnus/kayttajat/:id",
-      "headerLabel": "Käyttäjätietojen muokkaus",
+      "headerLabel": "Edit user information",
       "meta": {
-        "title": "Haitaton - Käyttäjätietojen muokkaus"
+        "title": "Haitaton – Edit user information"
       }
     },
     "PUBLIC_HANKKEET": {
@@ -470,6 +514,8 @@
     "savingSuccessText": "The draft has been saved in the project list",
     "savingFailHeader": "Something went wrong",
     "savingFailText": "Could not save the draft, try again",
+    "saveAndQuitSuccessHeader": "Project saved",
+    "saveAndQuitSuccessText": "Project {{name}} ({{project ID}}) saved to your projects.",
     "closeAriaLabel": "Exit the form without saving",
     "confirmIndexCalculationButton": "Continue to index calculation",
     "cancelDialog": {
@@ -503,6 +549,42 @@
       "insertOmaOrganisaatio": "Enter your own organisation",
       "rights": "Your access rights to the project"
     },
+    "missingFields": {
+      "nimi": "$t(hankeForm:labels:nimi)",
+      "vaihe": "$t(hankeForm:labels:vaihe)",
+      "kuvaus": "$t(hankeForm:labels:kuvaus)",
+      "tyomaaKatuosoite": "$t(hankeForm:labels:tyomaaKatuosoite)",
+      "alueet": {
+        "empty": "$t(hankeForm:hankkeenAlueForm:subHeader): Drawing project area",
+        "haittaAlkuPvm": "{{alueName}}: $t(hankeForm:labels:haittaAlkuPvm)",
+        "haittaLoppuPvm": "{{alueName}}: $t(hankeForm:labels:haittaLoppuPvm)",
+        "kaistaHaitta": "{{alueName}}: $t(hankeForm:labels:kaistaHaitta)",
+        "kaistaPituusHaitta": "{{alueName}}: $t(hankeForm:labels:kaistaPituusHaitta)",
+        "meluHaitta": "{{alueName}}: $t(hankeForm:labels:meluHaitta)",
+        "polyHaitta": "{{alueName}}: $t(hankeForm:labels:polyHaitta)",
+        "tarinaHaitta": "{{alueName}}: $t(hankeForm:labels:tarinaHaitta)"
+      },
+      "omistajat": {
+        "nimi": "$t(form:yhteystiedot:titles:omistaja): $t(form:yhteystiedot:labels:nimi)",
+        "email": "$t(form:yhteystiedot:titles:omistaja): $t(form:yhteystiedot:labels:email)",
+        "ytunnus": "$t(form:yhteystiedot:titles:omistaja): $t(form:yhteystiedot:labels:ytunnus)"
+      },
+      "toteuttajat": {
+        "nimi": "$t(form:yhteystiedot:titles:toteuttajat): $t(form:yhteystiedot:labels:nimi)",
+        "email": "$t(form:yhteystiedot:titles:toteuttajat): $t(form:yhteystiedot:labels:email)",
+        "ytunnus": "$t(form:yhteystiedot:titles:toteuttajat): $t(form:yhteystiedot:labels:ytunnus)"
+      },
+      "rakennuttajat": {
+        "nimi": "$t(form:yhteystiedot:titles:rakennuttajat): $t(form:yhteystiedot:labels:nimi)",
+        "email": "$t(form:yhteystiedot:titles:rakennuttajat): $t(form:yhteystiedot:labels:email)",
+        "ytunnus": "$t(form:yhteystiedot:titles:rakennuttajat): $t(form:yhteystiedot:labels:ytunnus)"
+      },
+      "muut": {
+        "nimi": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:nimi)",
+        "email": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:email)",
+        "ytunnus": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:ytunnus)"
+      }
+    },
     "toolTips": {
       "tipOpenLabel": "Instruction",
       "perustiedot": "Mandatory basic information about the project must be filled in. If all the mandatory information is not filled in, the new project will be saved in Haitaton but will not be able to proceed to the impact assessment. You can continue to fill in information on the project later by opening it via the project list",
@@ -519,6 +601,9 @@
       "tyomaaTyyppi": "Multiple selection of project type. A project can consist of several different project types, which means you can select several project types.",
       "kaistaHaitta": "Likely nuisance to lane arrangements on the main carriageways"
     },
+    "buttons": {
+      "create": "Create project"
+    },
     "perustiedotForm": {
       "header": "Basic project information",
       "ytkHankeHeader": "Shared Public Utility Site (YKT) project",
@@ -529,6 +614,8 @@
       "subHeader": "Project areas",
       "area": "Area",
       "instructions": "Several geometries can be drawn for the project. Geometry areas affect the project’s traffic congestion indices. Drawing tools can be found at the bottom left of the map view. With the pen tool, you can draw polygonal geometries by clicking the point where you want an angle. With the square tool, you can create square areas by first clicking the map and moving the mouse in the direction you want. Clicking it again “closes” the square drawing. A geometry can be edited by “grabbing” the edge of the geometry and dragging. A square geometry can also be shaped by grabbing the edge. lete a geometry, first select the geometry by clicking it; a bin icon will appear in the bottom left drawing tools which you can click to delete the geometry.",
+      "instructions2": "You can edit an already drawn area by grabbing its edge and dragging the point to the desired location.",
+      "noAlueet": "Draw the area on the map to mark the hazard assessments.",
       "haitatHeader": "Nuisance assessments for the area",
       "haitatInstructions": "Give an estimate of the most significant impacts in the project area.",
       "removeAreaButton": "Remove area"
@@ -539,8 +626,13 @@
     "hankkeenHaitatForm": {
       "header": "Nuisances"
     },
+    "hankkeenLiitteetForm": {
+      "instructions": "Add attachments. Attachments added to the project will not be transferred to the applications."
+    },
     "hankkeenYhteenvetoForm": {
       "header": "Summary",
+      "dataNotFound": "Edit project to add information.",
+      "attachmentsNotFound": "Edit project to add attachments.",
       "instructions": "Please check the information you entered and save the project or save and move to add applications."
     },
     "finishedForm": {
@@ -558,6 +650,7 @@
     }
   },
   "johtoselvitysForm": {
+    "createNewJohtoselvitys": "Create a new cable report",
     "pageHeader": "Cable report application",
     "perustiedot": {
       "instructions": "<p>Please note that the cable report will be valid for a month. The cable report must be valid when ordering cabling terrain surveys and submitting excavation notifications. If necessary, the cable report must be updated.</p><p>For work to be done in public areas, a separate notification must be submitted to the City. See the more detailed instructions: <a>hel.fi</a></p>"
@@ -565,11 +658,16 @@
     "alueet": {
       "instructions1": "Start drawing the report area by adding the start and end dates of the work. The drawing tools will appear in the bottom left corner of the map. You can now draw the report areas on the map. You can add multiple areas to the same application if they are covered by the same timespan.",
       "instructions2": "The areas you draw are shown as a list under the map. You can also remove areas from the list.",
+      "instructions3": "You can edit an already drawn area by grabbing its edge and dragging the point to the desired location.",
       "giveDates": "Select the work dates to draw the work areas on the map."
     },
+    "yhteystiedot": {},
     "liitteet": {
       "instructions": "Add attachments to the application, such as a work plan."
     }
+  },
+  "kaivuilmoitusForm": {
+    "perustiedot": {}
   },
   "hakemus": {
     "labels": {
@@ -603,7 +701,8 @@
       "addedAreas": "Areas added by you",
       "removeAreaTitle": "Remove area",
       "removeAreaDescription": "Are you sure you want to remove the area {{areaName}}",
-      "applicationAdditionalInfo": "Additional information on the application"
+      "applicationAdditionalInfo": "Additional information on the application",
+      "applicationInfo": "Application information"
     },
     "notifications": {
       "saveSuccessLabel": "Application saved",
@@ -639,7 +738,8 @@
     "buttons": {
       "sendApplication": "Send application",
       "cancelApplication": "Cancel application",
-      "editApplication": "Edit application"
+      "editApplication": "Edit application",
+      "continueToApplication": "Continue to application"
     },
     "errors": {
       "cancelConflict": "The application cannot be cancelled because it has entered the processing stage",
@@ -666,6 +766,10 @@
     "haittaindeksit": "Nuisance indices",
     "haittaindexTooltip": "Nuisance indices are calculated by project area. The indices are updated when you save the form or go to the next page.",
     "liikennehaittaindeksi": "Traffic nuisance index",
+    "autoliikenne": "Congestion of motor traffic",
+    "pyoraliikenne": "Significance of cycling",
+    "raitioliikenne": "Significance of public transport: Rail transport",
+    "linjaautoliikenne": "Significance of public transport: Local bus transport",
     "kiertoreittitarve": "Detour need",
     "KIERTOREITTITARPEET": {
       "TODENNAKOINEN": "likely",
@@ -745,9 +849,12 @@
     "filters": "Limiting search terms",
     "pageHeader": "Project portfolio",
     "search": "Search",
+    "searchPlaceholder": "E.g. project name or logo",
     "searchHelperText": "Search by project name or identifier",
     "searchResults_one": "{{count}} result",
     "searchResults_other": "{{count}} results",
+    "noneFound": "Your project list is empty because no projects matched the search criteria you provided or you do not yet have any projects.",
+    "checkSearchParameters": "<0>Check the search criteria or <2>create a new project</2>.</0>",
     "hankevaiheet": "Project phases",
     "hankevaiheetHelperText": "Select the project phases you want to view",
     "startDate": "The beginning of the period",
@@ -760,6 +867,8 @@
     "openMapToNewWindow": "Open the map in a new window",
     "showHankeButton": "Show project",
     "showApplicationsButton": "Show project applications",
+    "generatedStateLabel": "Project generated based on cable report",
+    "generatedState": "This project was generated based on a cable report.",
     "clearFiltersButton": "Clear filters",
     "filtersInfoText": "Changing the filters will update the project list.",
     "tabit": {
@@ -788,6 +897,16 @@
       "sposti": "Email",
       "puhelin": "Telephone",
       "oikeudet": "Your access rights to the project"
+    },
+    "ariaLabels": {
+      "expandHankeCard": "Expand project information"
+    },
+    "draftState": {
+      "labels": {
+        "draft": "The project is in a draft state. Its visibility to other projects is limited and applications cannot be added to it.",
+        "insufficientPhases": "$t(hankePortfolio:draftState:labels:draft) The following stages contain missing information:",
+        "missingFields": "$t(hankePortfolio:draftState:labels:draft) The following fields on this page are mandatory to publish the project:"
+      }
     }
   },
   "publicHankkeet": {
@@ -825,11 +944,19 @@
       "toPreviousPage": "To the previous page of the list",
       "toNextPage": "To the next page of the list",
       "toLastPage": "To the last page of the list"
+    },
+    "breadcrumb": {
+      "ariaLabel": "Project navigation"
     }
   },
   "hankeUsers": {
     "role": "Role in project",
     "accessRights": "Access rights",
+    "users": "Users",
+    "accessRight": "Access right",
+    "userManagementTitle": "User management",
+    "userEditTitle": "Edit user information",
+    "userInfoTitle": "User information",
     "roleLabels": {
       "OMISTAJA": "Owner",
       "RAKENNUTTAJA": "Developer",
@@ -867,13 +994,34 @@
       "invitationSentSuccessLabel": "Invitation link sent",
       "invitationSentSuccessText": "Invitation link sent to the address {{email}}.",
       "invitationSentErrorLabel": "Error when sending the link",
-      "invitationSentErrorText": "<0>An error occurred when sending the invitation link. Please try again later or contact the Haitaton technical support by email <1>haitatontuki@hel.fi</1>.</0>"
+      "invitationSentErrorText": "<0>An error occurred when sending the invitation link. Please try again later or contact the Haitaton technical support by email <1>haitatontuki@hel.fi</1>.</0>",
+      "userDeletedLabel": "User deleted",
+      "userDeletedText": "User deleted successfully"
     },
     "buttons": {
-      "resendInvitation": "Resend the invitation link"
+      "resendInvitation": "Resend the invitation link",
+      "edit": "Edit information",
+      "delete": "Delete user"
     },
     "labels": {
-      "invitationSent": "Invitation link sent {{date}}"
+      "ownInformation": "Your user information",
+      "userIdentified": "Logged into the project while identified",
+      "userIdentifiedLong": "The user has logged into the project while identified",
+      "invitationSent": "Invitation link sent {{date}}",
+      "userMenu": "User menu"
+    },
+    "deleteDialog": {
+      "title": {
+        "canDelete": "Delete user from project",
+        "cannotDelete": "User cannot be deleted"
+      },
+      "content": {
+        "onlyOmistajanYhteyshenkilo": "The user is the project owner's only contact person and therefore cannot be deleted. First add another contact person for the project owner and then return to delete the user of your choice.",
+        "activeHakemuksetPending": "The user cannot be deleted because they have been added to the following applications: {{applications}}. You can cancel the application and create a new one.",
+        "activeHakemuksetHandling": "The user cannot be deleted because they have been added to the following applications: {{applications}}. Delete the user from the application by making a notification about a change to the application, replacing the user with another. After that, you can delete the user via user management.",
+        "draftHakemukset": "The user has been added to applications in a draft state: {{applications}}. Deleting the user will delete their information from the application as well. If necessary, check that all the mandatory contact details for the application have been entered. Are you sure you want to delete the user?",
+        "confirmText": "The user's contact information will be deleted for all project roles. Are you sure you want to delete the user?"
+      }
     },
     "userIdentified": "User logged in"
   },
@@ -906,6 +1054,8 @@
       "title": "About Haitaton",
       "releaseInfo": "Publication information",
       "releaseVer1": "Version JS.01 published on 19 June 2023: Creating a cable report",
+      "releaseVer2": "5/2024: Access rights and their allocation",
+      "releaseAdditionalInfo": "In addition to updating the list, we continuously make minor improvements and updates to our service.",
       "materials": "Materials",
       "mapMaterials": "Map materials",
       "imageCopyrights": "Images author information"

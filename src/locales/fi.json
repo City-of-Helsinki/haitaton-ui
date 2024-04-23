@@ -753,7 +753,8 @@
       "sendApplication": "Lähetä hakemus",
       "cancelApplication": "Peru hakemus",
       "editApplication": "Muokkaa hakemusta",
-      "deletePlacementContract": "Poista sijoitussopimustunnus {{id}}"
+      "deletePlacementContract": "Poista sijoitussopimustunnus {{id}}",
+      "continueToApplication": "Jatka hakemukseen"
     },
     "errors": {
       "cancelConflict": "Hakemusta ei voida perua, koska se on edennyt käsittelyyn",
@@ -772,7 +773,7 @@
       "CABLE_REPORT": "JS-luonnos",
       "EXCAVATION_NOTIFICATION": "KP-luonnos"
     },
-    "applicationTypeInstruction": "Valitse hakemustyyppi. Kaivuilmoituksen kautta pääset tekemään myös johtoselvityksen, mikäli sinulla ei sellaista vielä ole."
+    "applicationTypeInstruction": "Valitse hakemustyyppi. Osaan hakemuksista voit myös kopioida aiemman hakemuksen pohjaksi. Kaivuilmoituksen kautta pääset tekemään myös johtoselvityksen, mikäli sinulla ei sellaista vielä ole."
   },
   "hankeSidebar": {
     "ariaSidebarContent": "Hankkeen tiedot",
