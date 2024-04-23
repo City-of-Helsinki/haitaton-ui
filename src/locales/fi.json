@@ -350,6 +350,20 @@
         "title": "Haitaton - Muokkaa johtoselvityshakemusta"
       }
     },
+    "KAIVUILMOITUSHAKEMUS": {
+      "path": "/hankesalkku/:hankeTunnus/kaivuilmoitus",
+      "headerLabel": "Luo uusi kaivuilmoitushakemus",
+      "meta": {
+        "title": "Haitaton - Luo uusi kaivuilmoitushakemus"
+      }
+    },
+    "EDIT_KAIVUILMOITUSHAKEMUS": {
+      "path": "/kaivuilmoitus/:id/muokkaa",
+      "headerLabel": "Muokkaa kaivuilmoitushakemusta",
+      "meta": {
+        "title": "Haitaton - Muokkaa kaivuilmoitushakemusta"
+      }
+    },
     "HAITATON_INFO": {
       "path": "/tietoja",
       "headerLabel": "Tietoja Haitattomasta",
@@ -654,6 +668,13 @@
       "instructions": "Lisää hakemukselle liitteet, kuten työsuunnitelma."
     }
   },
+  "kaivuilmoitusForm": {
+    "pageHeader": "Kaivuilmoitus",
+    "requiredInstruction": "Kaikki tähdellä * merkityt kentät ovat hakemuksen lähettämisen kannalta pakollisia.",
+    "perustiedot": {
+      "instructions": "<p>Helsingin kaupungin kaduilla, jalankulku- tai pyöräteillä, toreilla tai puistoissa tehtävistä kaivu-, kairaus- ja louhintatöistä on tehtävä kaivuilmoitus. Kaivuilmoituksen jättämisen yhteydessä pyydetään viranomaiselta automaattisesti myös johtoselvitys, mikäli aiemmin tehdyn johtoselvityksen tunnusta ei ole liitetty hakemukseen.</p><p>Hakemukseen liittyy olennaisena osana käyttäjän täyttämä haittojenhallintasuunnitelma, jonka toteutumista viranomainen seuraa työn aikana. Ilmoituksen liitteeksi laaditaan tilapäisen liikennejärjestelyn suunnitelma, mikäli työ vaikuttaa jalankulkuun pyöräliikenteeseen tai moottoriajoneuvoliikenteeseen tai pysäköintipaikkoja varataan muuhun käyttöön siirtokehotuskyltillä.</p><p>Kaivutyö tulee ilmoittaa talvikaudella (1.12.–14.5.) toiminnalliseen kuntoon ja kaikissa tapauksissa valmiiksi, jotta työ voidaan valvoa ja laskutus katkaista tai päättää.</p><p>$t(kaivuilmoitusForm:requiredInstruction) Työn nimi vaaditaan lomakkeen tallentamiseen.</p>"
+    }
+  },
   "hakemus": {
     "labels": {
       "nimi": "Työn nimi",
@@ -687,7 +708,14 @@
       "removeAreaTitle": "Poista työalue",
       "removeAreaDescription": "Haluatko varmasti poistaa työalueen {{areaName}}",
       "applicationAdditionalInfo": "Lisätietoja hakemuksesta",
-      "applicationInfo": "Hakemuksen tiedot"
+      "applicationInfo": "Hakemuksen tiedot",
+      "cableReports": "Tehtyjen johtoselvitysten tunnukset",
+      "cableReportsHelp": "Valitse listasta tai kirjoita muu tunnus",
+      "placementContractsTitle": "Sijoitussopimukset",
+      "placementContracts": "Sijoitussopimustunnus",
+      "placementContractsHelp": "Anna sijoitussopimustunnus ja paina Lisää",
+      "requiredCompetenceTitle": "Työhön vaadittava pätevyys",
+      "requiredCompetence": "Työstä vastaavana tai asianhoitajana vakuutan, että työmaalla oleskeltaessa tai työskenneltäessä on paikalla aina ainakin yksi henkilö, jolla on voimassa Pääkaupunkiseudun katutyöt -koulutuksella saatu pätevyys (PKS-katutyökortti). Vastaan myös siitä, että kaivutyöstä vastaavalla on voimassa oleva Tieturva 1, Tieturva 2 tai PKS-katutyökortti. *"
     },
     "notifications": {
       "saveSuccessLabel": "Hakemus tallennettu",
@@ -721,25 +749,30 @@
       "null": "Luonnos"
     },
     "buttons": {
-      "continueToApplication": "Jatka hakemukseen",
+      "createApplication": "Luo hakemus",
       "sendApplication": "Lähetä hakemus",
       "cancelApplication": "Peru hakemus",
-      "editApplication": "Muokkaa hakemusta"
+      "editApplication": "Muokkaa hakemusta",
+      "deletePlacementContract": "Poista sijoitussopimustunnus {{id}}"
     },
     "errors": {
       "cancelConflict": "Hakemusta ei voida perua, koska se on edennyt käsittelyyn",
-      "notFound": "Hakemusta ei löytynyt"
+      "notFound": "Hakemusta ei löytynyt",
+      "placementContract": "Tunnuksen tulee olla muotoa SLXXXXXXX",
+      "cableReport": "Tunnuksen tulee olla muotoa JSXXXXXXX"
     },
     "headers": {
       "pickApplication": "Valitse luotava hakemus"
     },
     "applicationTypes": {
-      "CABLE_REPORT": "Johtoselvitys"
+      "CABLE_REPORT": "Johtoselvitys",
+      "EXCAVATION_NOTIFICATION": "Kaivuilmoitus"
     },
     "applicationTypeDraft": {
-      "CABLE_REPORT": "JS-luonnos"
+      "CABLE_REPORT": "JS-luonnos",
+      "EXCAVATION_NOTIFICATION": "KP-luonnos"
     },
-    "applicationTypeInstruction": "Valitse hakemustyyppi. Osaan hakemuksista voit myös kopioida aiemman hakemuksen pohjaksi. Kaivuilmoituksen kautta pääset tekemään myös johtoselvityksen, mikäli sinulla ei sellaista vielä ole."
+    "applicationTypeInstruction": "Valitse hakemustyyppi. Kaivuilmoituksen kautta pääset tekemään myös johtoselvityksen, mikäli sinulla ei sellaista vielä ole."
   },
   "hankeSidebar": {
     "ariaSidebarContent": "Hankkeen tiedot",

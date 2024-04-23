@@ -306,6 +306,20 @@
         "title": "Haitaton - Edit cable report application"
       }
     },
+    "KAIVUILMOITUSHAKEMUS": {
+      "path": "/hankesalkku/:hankeTunnus/kaivuilmoitus",
+      "headerLabel": "Luo uusi kaivuilmoitushakemus",
+      "meta": {
+        "title": "Haitaton - Luo uusi kaivuilmoitushakemus"
+      }
+    },
+    "EDIT_KAIVUILMOITUSHAKEMUS": {
+      "path": "/kaivuilmoitus/:id/muokkaa",
+      "headerLabel": "Muokkaa kaivuilmoitushakemusta",
+      "meta": {
+        "title": "Haitaton - Muokkaa kaivuilmoitushakemusta"
+      }
+    },
     "HAITATON_INFO": {
       "path": "/info",
       "headerLabel": "About Haitaton",
@@ -623,7 +637,6 @@
       "null": "Draft"
     },
     "buttons": {
-      "continueToApplication": "Continue to application",
       "sendApplication": "Send application",
       "cancelApplication": "Cancel application",
       "editApplication": "Edit application"

@@ -1,6 +1,12 @@
+@import 'src/assets/styles/layout.scss';
+
 .limitedWidthContainer {
   max-width: var(--breakpoint-xl);
   margin-left: auto;
   margin-right: auto;
-  padding: 0 var(--spacing-l) 0 var(--spacing-l);
+  padding: 0 var(--spacing-s) 0 var(--spacing-s);
+
+  @include respond-above(s) {
+    padding: 0 var(--spacing-l) 0 var(--spacing-l);
+  }
 }

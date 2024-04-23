@@ -89,7 +89,7 @@ export function convertFormStateToJohtoselvitysUpdateData(
 }
 
 export function convertApplicationDataToFormState(
-  application: Application | undefined,
+  application: Application<JohtoselvitysData> | undefined,
 ): JohtoselvitysFormValues | undefined {
   if (application === undefined) {
     return undefined;

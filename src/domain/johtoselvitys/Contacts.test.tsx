@@ -6,6 +6,7 @@ import hankkeet from '../mocks/data/hankkeet-data';
 import applications from '../mocks/data/hakemukset-data';
 import { HankeYhteystieto, HankeDataDraft } from '../types/hanke';
 import { JohtoselvitysFormValues } from './types';
+import { Application, JohtoselvitysData } from '../application/types/application';
 
 jest.setTimeout(10000);
 
@@ -75,7 +76,7 @@ test('Business id field is not disabled if customer type is company or associati
 });
 
 test('Customer fields can be filled with orderer information', async () => {
-  const application = applications[0];
+  const application = applications[0] as Application<JohtoselvitysData>;
   const orderer = application.applicationData.customerWithContacts?.contacts[0];
   const { user } = render(<Form application={application} />);
 
@@ -95,7 +96,7 @@ test('Customer fields can be filled with orderer information', async () => {
 });
 
 test('Contact fields can be filled with orderer information', async () => {
-  const application = applications[0];
+  const application = applications[0] as Application<JohtoselvitysData>;
   const orderer = application.applicationData.customerWithContacts?.contacts[0];
   const { user } = render(<Form application={application} />);
 

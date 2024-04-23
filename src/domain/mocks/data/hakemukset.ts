@@ -1,7 +1,12 @@
 import {
   Application,
   HankkeenHakemus,
+  JohtoselvitysCreateData,
+  JohtoselvitysData,
   JohtoselvitysUpdateData,
+  KaivuilmoitusCreateData,
+  KaivuilmoitusData,
+  KaivuilmoitusUpdateData,
 } from '../../application/types/application';
 import hakemuksetData from './hakemukset-data';
 import { isApplicationPending } from '../../application/utils';
@@ -38,7 +43,7 @@ export async function readAllForHanke(hankeTunnus: string): Promise<HankkeenHake
     });
 }
 
-export async function create(data: Application) {
+export async function createJohtoselvitys(data: Application) {
   const newHakemus: Application = {
     ...data,
     id: hakemukset.length + 1,
@@ -46,6 +51,48 @@ export async function create(data: Application) {
   };
   hakemukset.push(newHakemus);
   return newHakemus;
+}
+
+export async function create(data: JohtoselvitysCreateData | KaivuilmoitusCreateData) {
+  const { hankeTunnus, ...updateData } = data;
+  const restData = {
+    areas: [],
+    startTime: null,
+    endTime: null,
+    customerWithContacts: null,
+    contractorWithContacts: null,
+    propertyDeveloperWithContacts: null,
+    representativeWithContacts: null,
+  };
+  if (updateData.applicationType === 'CABLE_REPORT') {
+    const newHakemus: Application<JohtoselvitysData> = {
+      id: hakemukset.length + 1,
+      alluStatus: null,
+      hankeTunnus,
+      applicationType: updateData.applicationType,
+      applicationData: {
+        ...(updateData as JohtoselvitysUpdateData),
+        ...restData,
+      },
+    };
+    hakemukset.push(newHakemus);
+    return newHakemus;
+  } else if (updateData.applicationType === 'EXCAVATION_NOTIFICATION') {
+    const newHakemus: Application<KaivuilmoitusData> = {
+      id: hakemukset.length + 1,
+      alluStatus: null,
+      hankeTunnus,
+      applicationType: updateData.applicationType,
+      applicationData: {
+        ...(updateData as KaivuilmoitusUpdateData),
+        ...restData,
+      },
+    };
+    hakemukset.push(newHakemus);
+    return newHakemus;
+  } else {
+    throw new Error(`Invalid application type ${updateData.applicationType}`);
+  }
 }
 
 export async function update(id: number, updates: JohtoselvitysUpdateData) {

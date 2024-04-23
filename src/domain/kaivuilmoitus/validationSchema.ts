@@ -1,23 +1,13 @@
 import yup from '../../common/utils/yup';
-import { JohtoselvitysFormValues } from './types';
 import { AlluStatus } from '../application/types/application';
 import {
   applicationTypeSchema,
   areaSchema,
   customerWithContactsSchema,
 } from '../application/yupSchemas';
+import { KaivuilmoitusFormValues } from './types';
 
-const addressSchema = yup
-  .object({
-    streetAddress: yup.object({
-      streetName: yup.string().trim().nullable().required(),
-    }),
-    postalCode: yup.string(),
-    city: yup.string(),
-  })
-  .nullable();
-
-export const validationSchema: yup.ObjectSchema<JohtoselvitysFormValues> = yup.object({
+export const validationSchema: yup.ObjectSchema<KaivuilmoitusFormValues> = yup.object({
   id: yup.number().defined().nullable(),
   alluid: yup.number().nullable(),
   alluStatus: yup.mixed<AlluStatus>().defined().nullable(),
@@ -27,19 +17,19 @@ export const validationSchema: yup.ObjectSchema<JohtoselvitysFormValues> = yup.o
   applicationData: yup.object({
     applicationType: applicationTypeSchema,
     name: yup.string().trim().required(),
-    postalAddress: addressSchema,
     workDescription: yup.string().trim().required(),
     rockExcavation: yup.boolean().nullable().required(),
     constructionWork: yup
       .boolean()
       .defined()
-      .when(['maintenanceWork', 'emergencyWork', 'propertyConnectivity'], {
+      .when(['maintenanceWork', 'emergencyWork'], {
         is: false,
         then: (schema) => schema.isTrue(),
       }),
     maintenanceWork: yup.boolean().defined(),
     emergencyWork: yup.boolean().defined(),
-    propertyConnectivity: yup.boolean().defined(),
+    cableReportDone: yup.boolean().required(),
+    requiredCompetence: yup.boolean().required(),
     contractorWithContacts: customerWithContactsSchema,
     customerWithContacts: customerWithContactsSchema,
     propertyDeveloperWithContacts: customerWithContactsSchema.nullable(),
@@ -60,12 +50,4 @@ export const validationSchema: yup.ObjectSchema<JohtoselvitysFormValues> = yup.o
   }),
   selfIntersectingPolygon: yup.boolean().isFalse(),
   geometriesChanged: yup.boolean(),
-});
-
-export const newJohtoselvitysSchema = yup.object({
-  nimi: yup.string().trim().required(),
-  perustaja: yup.object({
-    sahkoposti: yup.string().email().required(),
-    puhelinnumero: yup.string().required(),
-  }),
 });

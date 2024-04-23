@@ -48,6 +48,8 @@ const useLinkPath = (route: ROUTES): ((routeParams: RouteParams) => string) => {
     [ROUTES.HAKEMUS]: applicationIdReturnFunc,
     [ROUTES.JOHTOSELVITYSHAKEMUS]: defaultReturnFunc,
     [ROUTES.EDIT_JOHTOSELVITYSHAKEMUS]: applicationIdReturnFunc,
+    [ROUTES.KAIVUILMOITUSHAKEMUS]: hankeTunnusReturnFunc,
+    [ROUTES.EDIT_KAIVUILMOITUSHAKEMUS]: applicationIdReturnFunc,
     [ROUTES.HAITATON_INFO]: defaultReturnFunc,
     [ROUTES.ACCESSIBILITY]: defaultReturnFunc,
     [ROUTES.PRIVACY_POLICY]: defaultReturnFunc,

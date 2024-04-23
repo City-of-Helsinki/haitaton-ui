@@ -23,6 +23,8 @@ import ManualPage from '../../pages/staticPages/ManualPage';
 import AccessRightsPage from '../../pages/AccessRightsPage';
 import UserIdentify from '../../domain/auth/components/UserIdentify';
 import EditUserPage from '../../pages/EditUserPage';
+import NewKaivuilmoitusPage from '../../pages/NewKaivuilmoitusPage';
+import EditKaivuilmoitusPage from '../../pages/EditKaivuilmoitusPage';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
@@ -60,6 +62,14 @@ const LocaleRoutes = () => {
       <Route
         path={t('routes:EDIT_JOHTOSELVITYSHAKEMUS:path')}
         element={<PrivateRoute element={<EditJohtoselvitysPage />} />}
+      />
+      <Route
+        path={t('routes:KAIVUILMOITUSHAKEMUS:path')}
+        element={<PrivateRoute element={<NewKaivuilmoitusPage />} />}
+      />
+      <Route
+        path={t('routes:EDIT_KAIVUILMOITUSHAKEMUS:path')}
+        element={<PrivateRoute element={<EditKaivuilmoitusPage />} />}
       />
       <Route
         path={t('routes:HAKEMUS:path')}

@@ -10,7 +10,12 @@ import hankkeet from '../mocks/data/hankkeet-data';
 import applications from '../mocks/data/hakemukset-data';
 import { JohtoselvitysFormValues } from './types';
 import api from '../api/api';
-import { ApplicationAttachmentMetadata, AttachmentType } from '../application/types/application';
+import {
+  Application,
+  ApplicationAttachmentMetadata,
+  AttachmentType,
+  JohtoselvitysData,
+} from '../application/types/application';
 import * as applicationAttachmentsApi from '../application/attachments';
 import { fillNewContactPersonForm } from '../forms/components/testUtils';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
@@ -345,7 +350,9 @@ test('Should show error message and not navigate away when save and quit fails',
 });
 
 test('Should not save application between page changes when nothing is changed', async () => {
-  const { user } = render(<JohtoselvitysContainer application={applications[3]} />);
+  const { user } = render(
+    <JohtoselvitysContainer application={applications[3] as Application<JohtoselvitysData>} />,
+  );
 
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
@@ -361,7 +368,9 @@ test('Should not save application between page changes when nothing is changed',
 });
 
 test('Should save existing application between page changes when there are changes', async () => {
-  const { user } = render(<JohtoselvitysContainer application={applications[3]} />);
+  const { user } = render(
+    <JohtoselvitysContainer application={applications[3] as Application<JohtoselvitysData>} />,
+  );
 
   fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
     target: { value: 'Muokataan johtoselvitystä' },
@@ -386,7 +395,9 @@ test('Should not show send button when application has moved to pending state', 
     }),
   );
 
-  const { user } = render(<JohtoselvitysContainer application={applications[1]} />);
+  const { user } = render(
+    <JohtoselvitysContainer application={applications[1] as Application<JohtoselvitysData>} />,
+  );
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
@@ -408,7 +419,9 @@ test('Should not show send button when user is not a contact person', async () =
     }),
   );
 
-  const { user } = render(<JohtoselvitysContainer application={applications[1]} />);
+  const { user } = render(
+    <JohtoselvitysContainer application={applications[1] as Application<JohtoselvitysData>} />,
+  );
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
@@ -431,7 +444,10 @@ test('Should show send button when application is edited in draft state and user
   );
 
   const { user } = render(
-    <JohtoselvitysContainer hankeData={hankkeet[1] as HankeData} application={applications[0]} />,
+    <JohtoselvitysContainer
+      hankeData={hankkeet[1] as HankeData}
+      application={applications[0] as Application<JohtoselvitysData>}
+    />,
   );
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
@@ -461,7 +477,9 @@ test('Should not allow start date be after end date', async () => {
 });
 
 test('Should not allow step change when current step is invalid', async () => {
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  const { user } = render(
+    <JohtoselvitysContainer application={applications[0] as Application<JohtoselvitysData>} />,
+  );
 
   // Move to contacts page
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
@@ -485,13 +503,17 @@ test('Should not allow step change when current step is invalid', async () => {
 });
 
 test('Should not show inline notification by default', () => {
-  render(<JohtoselvitysContainer application={applications[0]} />);
+  render(
+    <JohtoselvitysContainer application={applications[0] as Application<JohtoselvitysData>} />,
+  );
 
   expect(screen.queryByTestId('form-notification')).not.toBeInTheDocument();
 });
 
 test('Should show inline notification when editing a form that is in pending state', () => {
-  render(<JohtoselvitysContainer application={applications[1]} />);
+  render(
+    <JohtoselvitysContainer application={applications[1] as Application<JohtoselvitysData>} />,
+  );
 
   expect(screen.queryByTestId('form-notification')).toBeInTheDocument();
   expect(screen.queryByText('Olet muokkaamassa jo lähetettyä hakemusta.')).toBeInTheDocument();
@@ -567,7 +589,9 @@ test('Should be able to upload attachments', async () => {
     .spyOn(applicationAttachmentsApi, 'uploadAttachment')
     .mockImplementation(uploadAttachmentMock);
   initFileGetResponse([]);
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  const { user } = render(
+    <JohtoselvitysContainer application={applications[0] as Application<JohtoselvitysData>} />,
+  );
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
   const fileUpload = screen.getByLabelText('Raahaa tiedostot tänne');
   user.upload(fileUpload, [
@@ -602,7 +626,9 @@ test('Should be able to delete attachments', async () => {
       attachmentType: 'MUU',
     },
   ]);
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  const { user } = render(
+    <JohtoselvitysContainer application={applications[0] as Application<JohtoselvitysData>} />,
+  );
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
   const { getAllByRole } = within(screen.getByTestId('file-upload-list'));
@@ -646,7 +672,9 @@ test('Should list existing attachments in the attachments page and in summary pa
       attachmentType: 'MUU',
     },
   ]);
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  const { user } = render(
+    <JohtoselvitysContainer application={applications[0] as Application<JohtoselvitysData>} />,
+  );
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
   const { getAllByRole } = within(screen.getByTestId('file-upload-list'));
@@ -675,7 +703,7 @@ test('Summary should show attachments and they are downloadable', async () => {
     .spyOn(applicationAttachmentsApi, 'getAttachmentFile')
     .mockImplementation(jest.fn());
 
-  const testApplication = applications[0];
+  const testApplication = applications[0] as Application<JohtoselvitysData>;
   initFileGetResponse([ATTACHMENT_META]);
 
   const { user } = render(<JohtoselvitysContainer application={testApplication} />);
@@ -695,7 +723,7 @@ test('Should be able to create new user and new user is added to dropdown', asyn
     sahkoposti: 'marja@test.com',
     puhelinnumero: '0000000000',
   };
-  const testApplication = applications[0];
+  const testApplication = applications[0] as Application<JohtoselvitysData>;
   const { user } = render(<JohtoselvitysContainer application={testApplication} />);
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
   expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
@@ -710,7 +738,7 @@ test('Should be able to create new user and new user is added to dropdown', asyn
 });
 
 test('Should show validation error if there are no yhteyshenkilo set for yhteystieto', async () => {
-  const testApplication = cloneDeep(applications[0]);
+  const testApplication = cloneDeep(applications[0]) as Application<JohtoselvitysData>;
   testApplication.applicationData.customerWithContacts = null;
   const { user } = render(<JohtoselvitysContainer application={testApplication} />);
 
