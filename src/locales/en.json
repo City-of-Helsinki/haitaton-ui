@@ -1007,6 +1007,7 @@
       "userIdentified": "Logged into the project while identified",
       "userIdentifiedLong": "The user has logged into the project while identified",
       "invitationSent": "Invitation link sent {{date}}",
+      "invitationSentLong": "Invitation link for Haitaton sent {{date}}",
       "userMenu": "User menu"
     },
     "deleteDialog": {

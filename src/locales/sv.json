@@ -1007,6 +1007,7 @@
       "userIdentified": "Inloggad på projektet efter identifiering",
       "userIdentifiedLong": "Användaren har loggat in på projektet efter identifiering",
       "invitationSent": "Inbjudningslänken skickades {{date}}",
+      "invitationSentLong": "Inbjudningslänken till Haitaton skickats {{date}}",
       "userMenu": "Användarmeny"
     },
     "deleteDialog": {
