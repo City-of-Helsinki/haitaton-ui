@@ -22,6 +22,9 @@ import NotFoundPage from '../../pages/staticPages/404Page';
 import ManualPage from '../../pages/staticPages/ManualPage';
 import AccessRightsPage from '../../pages/AccessRightsPage';
 import UserIdentify from '../../domain/auth/components/UserIdentify';
+import EditUserPage from '../../pages/EditUserPage';
+import NewKaivuilmoitusPage from '../../pages/NewKaivuilmoitusPage';
+import EditKaivuilmoitusPage from '../../pages/EditKaivuilmoitusPage';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
@@ -47,6 +50,10 @@ const LocaleRoutes = () => {
         path={t('routes:ACCESS_RIGHTS:path')}
         element={<PrivateRoute element={<AccessRightsPage />} />}
       />
+      <Route
+        path={t('routes:EDIT_USER:path')}
+        element={<PrivateRoute element={<EditUserPage />} />}
+      />
       <Route path={t('routes:HAITATON_INFO:path')} element={<InfoPage />} />
       <Route
         path={t('routes:JOHTOSELVITYSHAKEMUS:path')}
@@ -55,6 +62,14 @@ const LocaleRoutes = () => {
       <Route
         path={t('routes:EDIT_JOHTOSELVITYSHAKEMUS:path')}
         element={<PrivateRoute element={<EditJohtoselvitysPage />} />}
+      />
+      <Route
+        path={t('routes:KAIVUILMOITUSHAKEMUS:path')}
+        element={<PrivateRoute element={<NewKaivuilmoitusPage />} />}
+      />
+      <Route
+        path={t('routes:EDIT_KAIVUILMOITUSHAKEMUS:path')}
+        element={<PrivateRoute element={<EditKaivuilmoitusPage />} />}
       />
       <Route
         path={t('routes:HAKEMUS:path')}

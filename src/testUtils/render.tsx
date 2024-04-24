@@ -20,6 +20,7 @@ const AllTheProviders = ({ children }: Props) => {
     defaultOptions: {
       queries: {
         retryDelay: 0,
+        retry: false,
       },
     },
   });

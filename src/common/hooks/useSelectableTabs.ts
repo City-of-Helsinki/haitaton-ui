@@ -11,10 +11,12 @@ type Options = {
  * to set active index to select a tab.
  */
 export default function useSelectableTabs(
-  numberOfTabs: number,
+  collection: unknown[],
   options: Options = { selectLastTabOnChange: false },
 ) {
+  const numberOfTabs = collection.length;
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [stateUpdate, setStateUpdate] = useState(0);
 
   const tabRefs = useMemo(() => {
     return new Array(numberOfTabs).fill(0).map(() => React.createRef<HTMLDivElement>());
@@ -24,7 +26,13 @@ export default function useSelectableTabs(
     if (tabRefs.length > 0) {
       tabRefs[selectedTabIndex]?.current?.click();
     }
-  }, [tabRefs, selectedTabIndex]);
+  }, [tabRefs, selectedTabIndex, stateUpdate]);
+
+  useEffect(() => {
+    if (options.selectLastTabOnChange) {
+      setStateUpdate((current) => current + 1);
+    }
+  }, [collection, options.selectLastTabOnChange]);
 
   // When number of tabs changes,
   // select the last one

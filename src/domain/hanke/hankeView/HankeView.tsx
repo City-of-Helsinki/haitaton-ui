@@ -209,7 +209,7 @@ const HankeView: React.FC<Props> = ({
         <Text tag="h2" styleAs="h3" weight="bold" spacingBottom="l">
           {hankeData?.hankeTunnus}
         </Text>
-        <FeatureFlags flags={['hanke', 'accessRights']}>
+        <FeatureFlags flags={['accessRights']}>
           <Text tag="p" styleAs="body-s" spacingBottom="l">
             <strong style={{ marginRight: 'var(--spacing-s)' }}>
               {t('hankePortfolio:labels:oikeudet')}:
@@ -246,14 +246,14 @@ const HankeView: React.FC<Props> = ({
               ) : null}
             </CheckRightsByHanke>
           </FeatureFlags>
-          <FeatureFlags flags={['hanke', 'accessRights']}>
+          <FeatureFlags flags={['accessRights']}>
             <Button
               onClick={onEditRights}
               variant="primary"
               iconLeft={<IconUser aria-hidden="true" />}
               theme="coat"
             >
-              {t('hankeList:buttons:editRights')}
+              {t('hankeUsers:userManagementTitle')}
             </Button>
           </FeatureFlags>
           <FeatureFlags flags={['hanke']}>

@@ -5,7 +5,16 @@ import {
   AlluStatusStrings,
   Application,
   ApplicationDeletionResult,
+  NewJohtoselvitysData,
 } from './types/application';
+
+/**
+ * Create new johtoselvitys without hanke being created first
+ */
+export async function createJohtoselvitys(data: NewJohtoselvitysData) {
+  const response = await api.post<Application>('johtoselvityshakemus', data);
+  return response.data;
+}
 
 /**
  * Save application to Haitaton backend
@@ -26,11 +35,48 @@ export async function saveApplication(data: Application) {
 }
 
 /**
+ * Create new application
+ */
+export async function createApplication<ApplicationData, CreateData>(data: CreateData) {
+  const response = await api.post<Application<ApplicationData>>('/hakemukset', data);
+  return response.data;
+}
+
+/**
+ * Update application
+ */
+export async function updateApplication<ApplicationData, UpdateData>({
+  id,
+  data,
+}: {
+  id: number;
+  data: UpdateData;
+}) {
+  const response = await api.put<Application<ApplicationData>>(`/hakemukset/${id}`, data);
+  return response.data;
+}
+
+/**
  * Send application to Allu
  */
 export async function sendApplication(applicationId: number) {
   const response = await api.post<Application>(`/hakemukset/${applicationId}/send-application`, {});
   return response.data;
+}
+
+/**
+ * Send application to Allu
+ */
+export async function sendApplicationNew(applicationId: number) {
+  const response = await api.post<Application>(`/hakemukset/${applicationId}/laheta`, {});
+  return response.data;
+}
+
+/**
+ * Check if application is sent to Allu
+ */
+export function isApplicationSent(alluStatus: AlluStatusStrings | null): boolean {
+  return alluStatus !== null;
 }
 
 /**

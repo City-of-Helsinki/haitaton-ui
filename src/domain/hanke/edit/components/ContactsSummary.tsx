@@ -1,11 +1,11 @@
 import React from 'react';
-import { Grid } from '@chakra-ui/react';
+import { Box, Grid } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { SectionItemContent, SectionItemTitle } from '../../../forms/components/FormSummarySection';
-import { HankeContact, HankeMuuTaho, HankeSubContact } from '../../../types/hanke';
+import { HankeYhteystieto, HankeMuuTaho, HankeYhteyshenkilo } from '../../../types/hanke';
 import { CONTACT_FORMFIELD } from '../types';
 
-const ContactSummary: React.FC<{ contact: HankeContact | HankeMuuTaho }> = ({ contact }) => {
+const ContactSummary: React.FC<{ contact: HankeYhteystieto | HankeMuuTaho }> = ({ contact }) => {
   const { t } = useTranslation();
 
   if (CONTACT_FORMFIELD.TYYPPI in contact) {
@@ -31,24 +31,24 @@ const ContactSummary: React.FC<{ contact: HankeContact | HankeMuuTaho }> = ({ co
   );
 };
 
-const SubContactSummary: React.FC<{ contact: HankeSubContact }> = ({
-  contact: { etunimi, sukunimi, email, puhelinnumero },
+const SubContactSummary: React.FC<{ contact: HankeYhteyshenkilo }> = ({
+  contact: { etunimi, sukunimi, sahkoposti, puhelinnumero },
 }) => {
   return (
     <div>
       <p>
         {etunimi} {sukunimi}
       </p>
-      <p>{email}</p>
+      <p>{sahkoposti}</p>
       <p>{puhelinnumero}</p>
     </div>
   );
 };
 
-const ContactsSummary: React.FC<{ contacts: HankeContact[] | HankeMuuTaho[]; title: string }> = ({
-  contacts,
-  title,
-}) => {
+const ContactsSummary: React.FC<{
+  contacts: HankeYhteystieto[] | HankeMuuTaho[];
+  title: string;
+}> = ({ contacts, title }) => {
   const { t } = useTranslation();
 
   return (
@@ -57,9 +57,9 @@ const ContactsSummary: React.FC<{ contacts: HankeContact[] | HankeMuuTaho[]; tit
       <SectionItemContent>
         {contacts.map((contact) => {
           return (
-            <React.Fragment key={contact.email}>
+            <Box key={contact.email} marginBottom="var(--spacing-m)">
               <ContactSummary contact={contact} />
-              {contact.alikontaktit && contact.alikontaktit?.length > 0 && (
+              {contact.yhteyshenkilot && contact.yhteyshenkilot?.length > 0 && (
                 <>
                   <h3 style={{ marginBottom: 'var(--spacing-xs)' }}>
                     <strong>{t('form:yhteystiedot:titles:subContacts')}</strong>
@@ -70,13 +70,20 @@ const ContactsSummary: React.FC<{ contacts: HankeContact[] | HankeMuuTaho[]; tit
                     justifyContent="start"
                     alignItems="start"
                   >
-                    {contact.alikontaktit?.map((alikontakti) => {
-                      return <SubContactSummary key={alikontakti.email} contact={alikontakti} />;
+                    {contact.yhteyshenkilot?.map((yhteyshenkilo) => {
+                      return (
+                        yhteyshenkilo && (
+                          <SubContactSummary
+                            key={yhteyshenkilo.sahkoposti}
+                            contact={yhteyshenkilo}
+                          />
+                        )
+                      );
                     })}
                   </Grid>
                 </>
               )}
-            </React.Fragment>
+            </Box>
           );
         })}
       </SectionItemContent>

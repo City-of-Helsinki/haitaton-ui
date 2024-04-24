@@ -10,12 +10,12 @@ test('Continue to application button should be disabled if application type is n
   function handleClose() {}
   const { user } = render(<ApplicationAddDialog hanke={hanke} isOpen onClose={handleClose} />);
 
-  expect(screen.getByRole('button', { name: /jatka hakemukseen/i })).toBeDisabled();
+  expect(screen.getByRole('button', { name: /luo hakemus/i })).toBeDisabled();
 
   await user.click(screen.getByRole('button', { name: /hakemustyyppi/i }));
   await user.click(screen.getByText(/johtoselvitys/i));
 
-  expect(screen.getByRole('button', { name: /jatka hakemukseen/i })).not.toBeDisabled();
+  expect(screen.getByRole('button', { name: /luo hakemus/i })).not.toBeDisabled();
 });
 
 test('Navigates to cable application correctly', async () => {
@@ -26,7 +26,7 @@ test('Navigates to cable application correctly', async () => {
 
   await user.click(screen.getByRole('button', { name: /hakemustyyppi/i }));
   await user.click(screen.getByText(/johtoselvitys/i));
-  await user.click(screen.getByRole('button', { name: /jatka hakemukseen/i }));
+  await user.click(screen.getByRole('button', { name: /luo hakemus/i }));
 
   expect(window.location.pathname).toBe('/fi/johtoselvityshakemus');
   expect(window.location.search).toBe('?hanke=HAI22-1');

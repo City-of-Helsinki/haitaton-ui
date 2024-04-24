@@ -1,3 +1,5 @@
+import { AlluStatusStrings } from '../../application/types/application';
+
 export enum AccessRightLevel {
   KAIKKI_OIKEUDET = 'KAIKKI_OIKEUDET',
   KAIKKIEN_MUOKKAUS = 'KAIKKIEN_MUOKKAUS',
@@ -13,7 +15,9 @@ export type HankeUser = {
   sukunimi: string;
   puhelinnumero: string;
   kayttooikeustaso: keyof typeof AccessRightLevel;
+  roolit: string[];
   tunnistautunut: boolean;
+  kutsuttu: string | null;
 };
 
 export enum Rights {
@@ -26,6 +30,8 @@ export enum Rights {
   EDIT_APPLICATIONS = 'EDIT_APPLICATIONS',
   MODIFY_APPLICATION_PERMISSIONS = 'MODIFY_APPLICATION_PERMISSIONS',
   RESEND_INVITATION = 'RESEND_INVITATION',
+  MODIFY_USER = 'MODIFY_USER',
+  DELETE_USER = 'DELETE_USER',
 }
 
 export type UserRights = Array<keyof typeof Rights>;
@@ -44,4 +50,16 @@ export type IdentificationResponse = {
   kayttajaId: string;
   hankeTunnus: string;
   hankeNimi: string;
+};
+
+type HakemusInfo = {
+  nimi: string;
+  applicationIdentifier: string;
+  alluStatus: AlluStatusStrings | null;
+};
+
+export type DeleteInfo = {
+  activeHakemukset: HakemusInfo[];
+  draftHakemukset: HakemusInfo[];
+  onlyOmistajanYhteyshenkilo: boolean;
 };

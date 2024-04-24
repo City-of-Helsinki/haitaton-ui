@@ -4,7 +4,7 @@ WORKDIR /builder
 RUN yarn && yarn cache clean --force
 RUN REACT_APP_DISABLE_SENTRY=0 yarn build
 
-FROM nginx:stable
+FROM nginx:1.22.1
 # Install mods for nginx that include the Headers More mod, that allows the
 # removal of the Server -header
 RUN apt-get update && apt-get --no-install-recommends install -y nginx-extras && apt-get clean

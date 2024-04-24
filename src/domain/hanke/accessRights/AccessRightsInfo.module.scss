@@ -1,0 +1,15 @@
+.infoAccordion {
+  margin-bottom: var(--spacing-l);
+
+  .infoList {
+    padding-left: var(--spacing-m);
+
+    & > li {
+      margin-bottom: var(--spacing-2-xs);
+
+      &:last-child {
+        margin-bottom: var(--spacing-l);
+      }
+    }
+  }
+}

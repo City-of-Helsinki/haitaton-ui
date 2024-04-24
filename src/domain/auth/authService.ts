@@ -1,5 +1,6 @@
-import { UserManager, User, UserManagerSettings, Log, WebStorageStateStore } from 'oidc-client';
-import { LOGIN_CALLBACK_PATH, LOCALSTORAGE_OIDC_KEY } from './constants';
+import { Log, User, UserManager, UserManagerSettings, WebStorageStateStore } from 'oidc-client';
+import { LOCALSTORAGE_OIDC_KEY, LOGIN_CALLBACK_PATH } from './constants';
+import { getProfiiliNimi } from './profiiliApi';
 
 const { origin } = window.location;
 
@@ -48,8 +49,21 @@ export class AuthService {
     }); */
   }
 
-  public getUser(): Promise<User | null> {
-    return this.userManager.getUser();
+  public async getUser(): Promise<User | null> {
+    const user = await this.userManager.getUser();
+    if (user) {
+      const profiiliNimi = await getProfiiliNimi();
+      return {
+        ...user,
+        profile: {
+          ...user.profile,
+          name: profiiliNimi.givenName + ' ' + profiiliNimi.lastName,
+        },
+        toStorageString: () => JSON.stringify(user),
+      };
+    } else {
+      return null;
+    }
   }
 
   // eslint-disable-next-line
@@ -72,13 +86,11 @@ export class AuthService {
   }
 
   public async endLogin(): Promise<User> {
-    const user = await this.userManager.signinCallback();
-
-    return user;
+    return await this.userManager.signinCallback();
   }
 
   public async logout(): Promise<void> {
-    this.userManager.clearStaleState();
+    await this.userManager.clearStaleState();
     await this.userManager.signoutRedirect();
   }
 }

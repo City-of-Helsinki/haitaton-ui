@@ -91,7 +91,8 @@
       "stringMin": "Kentän pituus oltava vähintään {{min}} merkkiä",
       "stringMax": "Kentän pituus oltava enintään {{max}} merkkiä",
       "dateMin": "Ensimmäinen mahdollinen päivä on {{min}}",
-      "dateMax": "Viimeinen mahdollinen päivä on {{max}}"
+      "dateMax": "Viimeinen mahdollinen päivä on {{max}}",
+      "yhteyshenkilotMin": "Vähintään yksi yhteyshenkilö tulee olla asetettuna"
     },
     "errors": {
       "areaRequired": "Vähintään yksi alue vaaditaan",
@@ -159,13 +160,17 @@
       "instructions": "Hankkeelle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hankkeeseeen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hanketta ja luomaan hankkeelle hakemuksia.",
       "titles": {
         "omistaja": "Hankkeen omistaja",
+        "omistaja_other": "Hankkeen omistaja {{count}}",
         "omistajatPlural": "Omistajat",
         "omistajaInfo": "Hankkeen omistajan tiedot",
         "rakennuttajat": "Rakennuttaja",
+        "rakennuttajat_other": "Rakennuttaja {{count}}",
         "rakennuttajatPlural": "Rakennuttajat",
         "toteuttajat": "Toteuttaja",
+        "toteuttajat_other": "Toteuttaja {{count}}",
         "toteuttajatPlural": "Toteuttajat",
         "muut": "Muu taho",
+        "muut_other": "Muu taho {{count}}",
         "muutPlural": "Muut tahot",
         "lisaaOmistaja": "Lisää omistaja",
         "lisaaRakennuttaja": "Lisää rakennuttaja",
@@ -207,10 +212,12 @@
         "erillinenYhteyshenkilo": "Erillinen yhteyshenkilö"
       },
       "placeholders": {
-        "otherPartyRole": "Isännöitsijä, konsultti..."
+        "otherPartyRole": "Isännöitsijä, konsultti...",
+        "yhteyshenkilo": "Esim. Matti Meikäläinen tai matti.meikalainen@yritys.fi"
       },
       "helperTexts": {
-        "otherPartyRole": "Tahon rooli hankkeessa"
+        "otherPartyRole": "Tahon rooli hankkeessa",
+        "yhteyshenkilo": " Voit etsiä jo lisättyä henkilöä kirjoittamalla tai valitsemalla pudotusvalikosta, tai lisätä uuden yhteyshenkilön alta."
       },
       "contactType": {
         "YKSITYISHENKILO": "Yksityishenkilö",
@@ -242,8 +249,12 @@
         },
         "descriptions": {
           "contactPersonSaved": "Yhteyshenkilön tiedot tallennettu ja lisätty hankkelle onnistuneesti.",
-          "contactPersonSaveError": "Yhteyshenkilön tietojen tallennus epäonnistui. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman teknisen tukeen."
+          "contactPersonSaveError": "Yhteyshenkilön tietojen tallennus epäonnistui. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman teknisen tukeen.",
+          "contactPersonInfo": "Lisäämillesi yhteyshenkilöille lähetetään kutsu hankkeelle sähköpostilla. Yhteystiedot näkyvät muille tähän hankkeeseen lisätyille henkilöille."
         }
+      },
+      "tooltips": {
+        "hakemusYhteyshenkilo": "Lisäämillesi yhteyshenkilöille lähetetään kutsu hakemukselle sähköpostitse."
       }
     }
   },
@@ -270,10 +281,17 @@
       }
     },
     "ACCESS_RIGHTS": {
-      "path": "/hankesalkku/:hankeTunnus/oikeudet",
-      "headerLabel": "Käyttöoikeudet",
+      "path": "/hankesalkku/:hankeTunnus/kayttajat",
+      "headerLabel": "Käyttäjähallinta",
       "meta": {
-        "title": "Haitaton - Käyttöoikeuksien hallinta"
+        "title": "Haitaton - Käyttäjähallinta"
+      }
+    },
+    "EDIT_USER": {
+      "path": "/hankesalkku/:hankeTunnus/kayttajat/:id",
+      "headerLabel": "Käyttäjätietojen muokkaus",
+      "meta": {
+        "title": "Haitaton - Käyttäjätietojen muokkaus"
       }
     },
     "PUBLIC_HANKKEET": {
@@ -330,6 +348,20 @@
       "headerLabel": "Muokkaa johtoselvityshakemusta",
       "meta": {
         "title": "Haitaton - Muokkaa johtoselvityshakemusta"
+      }
+    },
+    "KAIVUILMOITUSHAKEMUS": {
+      "path": "/hankesalkku/:hankeTunnus/kaivuilmoitus",
+      "headerLabel": "Luo uusi kaivuilmoitushakemus",
+      "meta": {
+        "title": "Haitaton - Luo uusi kaivuilmoitushakemus"
+      }
+    },
+    "EDIT_KAIVUILMOITUSHAKEMUS": {
+      "path": "/kaivuilmoitus/:id/muokkaa",
+      "headerLabel": "Muokkaa kaivuilmoitushakemusta",
+      "meta": {
+        "title": "Haitaton - Muokkaa kaivuilmoitushakemusta"
       }
     },
     "HAITATON_INFO": {
@@ -517,6 +549,42 @@
       "insertOmaOrganisaatio": "Syötä oma organisaatio",
       "rights": "Käyttöoikeutesi hankkeelle"
     },
+    "missingFields": {
+      "nimi": "$t(hankeForm:labels:nimi)",
+      "vaihe": "$t(hankeForm:labels:vaihe)",
+      "kuvaus": "$t(hankeForm:labels:kuvaus)",
+      "tyomaaKatuosoite": "$t(hankeForm:labels:tyomaaKatuosoite)",
+      "alueet": {
+        "empty": "$t(hankeForm:hankkeenAlueForm:subHeader): Hankealueen piirtäminen",
+        "haittaAlkuPvm": "{{alueName}}: $t(hankeForm:labels:haittaAlkuPvm)",
+        "haittaLoppuPvm": "{{alueName}}: $t(hankeForm:labels:haittaLoppuPvm)",
+        "kaistaHaitta": "{{alueName}}: $t(hankeForm:labels:kaistaHaitta)",
+        "kaistaPituusHaitta": "{{alueName}}: $t(hankeForm:labels:kaistaPituusHaitta)",
+        "meluHaitta": "{{alueName}}: $t(hankeForm:labels:meluHaitta)",
+        "polyHaitta": "{{alueName}}: $t(hankeForm:labels:polyHaitta)",
+        "tarinaHaitta": "{{alueName}}: $t(hankeForm:labels:tarinaHaitta)"
+      },
+      "omistajat": {
+        "nimi": "$t(form:yhteystiedot:titles:omistaja): $t(form:yhteystiedot:labels:nimi)",
+        "email": "$t(form:yhteystiedot:titles:omistaja): $t(form:yhteystiedot:labels:email)",
+        "ytunnus": "$t(form:yhteystiedot:titles:omistaja): $t(form:yhteystiedot:labels:ytunnus)"
+      },
+      "toteuttajat": {
+        "nimi": "$t(form:yhteystiedot:titles:toteuttajat): $t(form:yhteystiedot:labels:nimi)",
+        "email": "$t(form:yhteystiedot:titles:toteuttajat): $t(form:yhteystiedot:labels:email)",
+        "ytunnus": "$t(form:yhteystiedot:titles:toteuttajat): $t(form:yhteystiedot:labels:ytunnus)"
+      },
+      "rakennuttajat": {
+        "nimi": "$t(form:yhteystiedot:titles:rakennuttajat): $t(form:yhteystiedot:labels:nimi)",
+        "email": "$t(form:yhteystiedot:titles:rakennuttajat): $t(form:yhteystiedot:labels:email)",
+        "ytunnus": "$t(form:yhteystiedot:titles:rakennuttajat): $t(form:yhteystiedot:labels:ytunnus)"
+      },
+      "muut": {
+        "nimi": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:nimi)",
+        "email": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:email)",
+        "ytunnus": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:ytunnus)"
+      }
+    },
     "toolTips": {
       "tipOpenLabel": "Ohje",
       "perustiedot": "Hankkeen pakolliset perustiedot tulee täyttää. Mikäli kaikki pakolliset tiedot eivät ole täytettynä, uusi hanke tallentuu Haitattomaan, muttei voi edetä vaikutusten arviointiin. Hankkeen tietojen täydentämistä voi jatkaa myöhemmin avaamalla se hankelistan kautta",
@@ -546,6 +614,7 @@
       "subHeader": "Hanke-alueet",
       "area": "Alue",
       "instructions": "Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 1-5, 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen tärkeimmillä reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein (vihreä = ei haittaa, keltainen = todennäköinen haitta, punainen = merkittävä haitta).",
+      "instructions2": "Voit muokata jo piirrettyä aluetta tarttumalla sen reunasta kiinni ja vetämällä pisteen haluamaasi kohtaan.",
       "noAlueet": "Piirrä alue kartalle merkitäksesi haitta-arviot.",
       "haitatHeader": "Alueen haitta-arviot",
       "haitatInstructions": "Anna arvio suurimmista mahdollisista vaikutuksista hankealueella.",
@@ -581,6 +650,7 @@
     }
   },
   "johtoselvitysForm": {
+    "createNewJohtoselvitys": "Tee uusi johtoselvitys",
     "pageHeader": "Johtoselvityshakemus",
     "perustiedot": {
       "instructions": "<p>Huomioithan, että johtoselvitys on voimassa 1 kuukauden. Johtoselvityksen tulee olla voimassa johtojen maastonäyttöjä tilattaessa sekä kaivuilmoitusta tehdessä. Johtoselvitys on tarvittaessa päivitettävä.</p><p>Yleisellä alueella tehtävästä työstä on tehtävä erillinen ilmoitus kaupungille. Katso tarkemmat ohjeet: <a>hel.fi</a></p>"
@@ -588,10 +658,21 @@
     "alueet": {
       "instructions1": "Aloita selvitettävän alueen piirtäminen lisäämällä työn alku- ja loppupäivämäärät, jolloin piirtotyökalut ilmestyvät kartan vasempaan alanurkkaan. Tämän jälkeen voit piirtää selvitettävät alueet kartalle. Voit lisätä samalle hakemukselle useampia alueita, mikäli niitä koskeva aikaväli on sama.",
       "instructions2": "Piirtämäsi alueet näkyvät listana kartan alapuolella. Listasta pääset myös poistamaan alueita.",
+      "instructions3": "Voit muokata jo piirrettyä aluetta tarttumalla sen reunasta kiinni ja vetämällä pisteen haluamaasi kohtaan.",
       "giveDates": "Valitse työn päivämäärät piirtääksesi selvitettävät alueet kartalle."
+    },
+    "yhteystiedot": {
+      "instructions": "Lisää osallistuvien tahojen tiedot ja yhteyshenkilöt. Hakemuksen tekijän tulee olla ainakin yhden tahon yhteyshenkilönä. Hakemukseen lisätyille yhteystiedoille lähetetään sähköpostikutsu hankkeelle katseluoikeuksin. Voit muuttaa osallistujien käyttöoikeuksia ja tietoja myöhemmin hankkeen käyttäjähallinnasta."
     },
     "liitteet": {
       "instructions": "Lisää hakemukselle liitteet, kuten työsuunnitelma."
+    }
+  },
+  "kaivuilmoitusForm": {
+    "pageHeader": "Kaivuilmoitus",
+    "requiredInstruction": "Kaikki tähdellä * merkityt kentät ovat hakemuksen lähettämisen kannalta pakollisia.",
+    "perustiedot": {
+      "instructions": "<p>Helsingin kaupungin kaduilla, jalankulku- tai pyöräteillä, toreilla tai puistoissa tehtävistä kaivu-, kairaus- ja louhintatöistä on tehtävä kaivuilmoitus. Kaivuilmoituksen jättämisen yhteydessä pyydetään viranomaiselta automaattisesti myös johtoselvitys, mikäli aiemmin tehdyn johtoselvityksen tunnusta ei ole liitetty hakemukseen.</p><p>Hakemukseen liittyy olennaisena osana käyttäjän täyttämä haittojenhallintasuunnitelma, jonka toteutumista viranomainen seuraa työn aikana. Ilmoituksen liitteeksi laaditaan tilapäisen liikennejärjestelyn suunnitelma, mikäli työ vaikuttaa jalankulkuun pyöräliikenteeseen tai moottoriajoneuvoliikenteeseen tai pysäköintipaikkoja varataan muuhun käyttöön siirtokehotuskyltillä.</p><p>Kaivutyö tulee ilmoittaa talvikaudella (1.12.–14.5.) toiminnalliseen kuntoon ja kaikissa tapauksissa valmiiksi, jotta työ voidaan valvoa ja laskutus katkaista tai päättää.</p><p>$t(kaivuilmoitusForm:requiredInstruction) Työn nimi vaaditaan lomakkeen tallentamiseen.</p>"
     }
   },
   "hakemus": {
@@ -626,7 +707,15 @@
       "addedAreas": "Lisäämäsi työalueet",
       "removeAreaTitle": "Poista työalue",
       "removeAreaDescription": "Haluatko varmasti poistaa työalueen {{areaName}}",
-      "applicationAdditionalInfo": "Lisätietoja hakemuksesta"
+      "applicationAdditionalInfo": "Lisätietoja hakemuksesta",
+      "applicationInfo": "Hakemuksen tiedot",
+      "cableReports": "Tehtyjen johtoselvitysten tunnukset",
+      "cableReportsHelp": "Valitse listasta tai kirjoita muu tunnus",
+      "placementContractsTitle": "Sijoitussopimukset",
+      "placementContracts": "Sijoitussopimustunnus",
+      "placementContractsHelp": "Anna sijoitussopimustunnus ja paina Lisää",
+      "requiredCompetenceTitle": "Työhön vaadittava pätevyys",
+      "requiredCompetence": "Työstä vastaavana tai asianhoitajana vakuutan, että työmaalla oleskeltaessa tai työskenneltäessä on paikalla aina ainakin yksi henkilö, jolla on voimassa Pääkaupunkiseudun katutyöt -koulutuksella saatu pätevyys (PKS-katutyökortti). Vastaan myös siitä, että kaivutyöstä vastaavalla on voimassa oleva Tieturva 1, Tieturva 2 tai PKS-katutyökortti. *"
     },
     "notifications": {
       "saveSuccessLabel": "Hakemus tallennettu",
@@ -660,25 +749,30 @@
       "null": "Luonnos"
     },
     "buttons": {
-      "continueToApplication": "Jatka hakemukseen",
+      "createApplication": "Luo hakemus",
       "sendApplication": "Lähetä hakemus",
       "cancelApplication": "Peru hakemus",
-      "editApplication": "Muokkaa hakemusta"
+      "editApplication": "Muokkaa hakemusta",
+      "deletePlacementContract": "Poista sijoitussopimustunnus {{id}}"
     },
     "errors": {
       "cancelConflict": "Hakemusta ei voida perua, koska se on edennyt käsittelyyn",
-      "notFound": "Hakemusta ei löytynyt"
+      "notFound": "Hakemusta ei löytynyt",
+      "placementContract": "Tunnuksen tulee olla muotoa SLXXXXXXX",
+      "cableReport": "Tunnuksen tulee olla muotoa JSXXXXXXX"
     },
     "headers": {
       "pickApplication": "Valitse luotava hakemus"
     },
     "applicationTypes": {
-      "CABLE_REPORT": "Johtoselvitys"
+      "CABLE_REPORT": "Johtoselvitys",
+      "EXCAVATION_NOTIFICATION": "Kaivuilmoitus"
     },
     "applicationTypeDraft": {
-      "CABLE_REPORT": "JS-luonnos"
+      "CABLE_REPORT": "JS-luonnos",
+      "EXCAVATION_NOTIFICATION": "KP-luonnos"
     },
-    "applicationTypeInstruction": "Valitse hakemustyyppi. Osaan hakemuksista voit myös kopioida aiemman hakemuksen pohjaksi. Kaivuilmoituksen kautta pääset tekemään myös johtoselvityksen, mikäli sinulla ei sellaista vielä ole."
+    "applicationTypeInstruction": "Valitse hakemustyyppi. Kaivuilmoituksen kautta pääset tekemään myös johtoselvityksen, mikäli sinulla ei sellaista vielä ole."
   },
   "hankeSidebar": {
     "ariaSidebarContent": "Hankkeen tiedot",
@@ -775,8 +869,8 @@
     "search": "Haku",
     "searchPlaceholder": "Esim. hankkeen nimi tai tunnus",
     "searchHelperText": "Hae hankkeen nimellä tai tunnuksella",
-    "searchResults": "{{count}} hakutulos",
-    "searchResults_plural": "{{count}} hakutulosta",
+    "searchResults_one": "{{count}} hakutulos",
+    "searchResults_other": "{{count}} hakutulosta",
     "noneFound": "Hankelistasi on tyhjä, sillä antamillasi hakuehdoilla ei löytynyt yhtään hanketta tai sinulla ei vielä ole hankkeita.",
     "checkSearchParameters": "<0>Tarkista hakuehdot tai <2>luo uusi hanke</2>.</0>",
     "hankevaiheet": "Hankevaiheet",
@@ -791,8 +885,6 @@
     "openMapToNewWindow": "Avaa kartta uuteen ikkunaan",
     "showHankeButton": "Näytä hanke",
     "showApplicationsButton": "Näytä hankkeen hakemukset",
-    "draftStateLabel": "Hanke on luonnostilassa",
-    "draftState": "Hanke on luonnostilassa. Alueiden haittatiedot ja muut pakolliset tiedot on täytettävä hankkeen julkaisemiseksi ja lupien lisäämiseksi.",
     "generatedStateLabel": "Hanke muodostettu johtoselvityksen perusteella",
     "generatedState": "Tämä hanke on muodostettu johtoselvityksen perusteella.",
     "clearFiltersButton": "Tyhjennä hakuehdot",
@@ -823,6 +915,16 @@
       "sposti": "Sähköposti",
       "puhelin": "Puhelin",
       "oikeudet": "Käyttöoikeutesi hankkeelle"
+    },
+    "ariaLabels": {
+      "expandHankeCard": "Laajenna hankkeen tiedot"
+    },
+    "draftState": {
+      "labels": {
+        "draft": "Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia.",
+        "insufficientPhases": "$t(hankePortfolio:draftState:labels:draft) Seuraavissa vaiheissa on puuttuvia tietoja:",
+        "missingFields": "$t(hankePortfolio:draftState:labels:draft) Seuraavat kentät tällä sivulla vaaditaan hankeen julkaisemiseksi:"
+      }
     }
   },
   "publicHankkeet": {
@@ -866,10 +968,19 @@
     }
   },
   "hankeUsers": {
+    "role": "Rooli hankkeessa",
     "accessRights": "Käyttöoikeudet",
     "users": "Käyttäjät",
     "accessRight": "Käyttöoikeus",
     "userManagementTitle": "Käyttäjähallinta",
+    "userEditTitle": "Käyttäjätietojen muokkaus",
+    "userInfoTitle": "Käyttäjätiedot",
+    "roleLabels": {
+      "OMISTAJA": "Omistaja",
+      "RAKENNUTTAJA": "Rakennuttaja",
+      "TOTEUTTAJA": "Toteuttaja",
+      "MUU": "Muu"
+    },
     "accessRightLevels": {
       "KAIKKI_OIKEUDET": "Kaikki oikeudet",
       "KAIKKIEN_MUOKKAUS": "Hankkeen ja hakemusten muokkaus",
@@ -891,26 +1002,45 @@
       "helperText": "Hae nimellä"
     },
     "notifications": {
-      "rightsUpdatedSuccessLabel": "Käyttöoikeudet päivitetty",
-      "rightsUpdatedSuccessText": "Käyttöoikeudet on päivitetty onnistuneesti",
-      "rightsUpdatedErrorLabel": "Virhe päivityksessä",
-      "rightsUpdatedErrorText": "<0>Käyttöoikeuksien päivityksessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>",
+      "userUpdatedSuccessLabel": "Käyttäjätiedot päivitetty",
+      "userUpdatedSuccessText": "Käyttäjätiedot päivitetty onnistuneesti",
+      "userUpdatedErrorLabel": "Virhe päivityksessä",
+      "userUpdatedErrorText": "<0>Käyttäjätietojen päivityksessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>",
       "userIdentifiedLabel": "Tunnistautuminen onnistui",
       "userIdentifiedText": "Tunnistautuminen onnistui. Sinut on nyt lisätty hankkeelle ({{hankeNimi}} {{hankeTunnus}}).",
       "userIdentifiedError": "Tunnistautuminen epäonnistui",
       "invitationSentSuccessLabel": "Kutsulinkki lähetetty",
       "invitationSentSuccessText": "Kutsulinkki lähetetty osoitteeseen {{email}}.",
       "invitationSentErrorLabel": "Virhe linkin lähettämisessä",
-      "invitationSentErrorText": "<0>Kutsulinkin lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>"
+      "invitationSentErrorText": "<0>Kutsulinkin lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>",
+      "userDeletedLabel": "Käyttäjä poistettu",
+      "userDeletedText": "Käyttäjä poistettiin onnistuneesti"
     },
     "buttons": {
       "resendInvitation": "Lähetä kutsulinkki uudelleen",
-      "invitationSent": "Kutsulinkki lähetetty"
+      "edit": "Muokkaa tietoja",
+      "delete": "Poista käyttäjä"
     },
     "labels": {
       "ownInformation": "Omat käyttäjätietosi",
       "userIdentified": "Kirjautunut hankkeelle tunnistautuneena",
+      "userIdentifiedLong": "Käyttäjä on kirjautunut hankkeelle tunnistautuneena",
+      "invitationSent": "Kutsulinkki lähetetty {{date}}",
+      "invitationSentLong": "Kutsulinkki Haitattomaan lähetetty {{date}}",
       "userMenu": "Käyttäjävalikko"
+    },
+    "deleteDialog": {
+      "title": {
+        "canDelete": "Poista käyttäjä hankkeelta",
+        "cannotDelete": "Käyttäjää ei voi poistaa"
+      },
+      "content": {
+        "onlyOmistajanYhteyshenkilo": "Käyttäjä on hankkeen omistajan ainut yhteyshenkilö eikä käyttäjää voida siksi poistaa. Lisää ensin hankkeen omistajalle toinen yhteyshenkilö ja palaa sitten poistamaan haluamasi käyttäjä.",
+        "activeHakemuksetPending": "Käyttäjää ei voida poistaa, sillä hänet on lisätty seuraaville hakemuksille: {{hakemukset}}. Voit perua hakemuksen ja tehdä uuden.",
+        "activeHakemuksetHandling": "Käyttäjää ei voida poistaa, sillä hänet on lisätty seuraaville hakemuksille: {{hakemukset}}. Poista käyttäjä hakemukselta tekemällä hakemukseen muutosilmoitus, jossa korvaat käyttäjän toisella. Sen jälkeen voit poistaa käyttäjän käyttäjähallinnassa.",
+        "draftHakemukset": "Käyttäjä on lisätty luonnos-tilassa oleville hakemuksille: {{hakemukset}}. Käyttäjän poistaminen poistaa hänen tietonsa myös hakemukselta. Tarkista tarvittaessa, että hakemuksen kaikki pakolliset yhteystiedot on täytetty. Haluatko varmasti poistaa käyttäjän?",
+        "confirmText": "Käyttäjän yhteystiedot poistetaan kaikista hankkeen rooleista. Haluatko varmasti poistaa käyttäjän?"
+      }
     },
     "userIdentified": "Käyttäjä tunnistautunut"
   },
@@ -941,8 +1071,10 @@
   "staticPages": {
     "infoPage": {
       "title": "Tietoja Haitattomasta",
-      "releaseInfo": "Julkaisutiedot",
-      "releaseVer1": "Versio JS.01 julkaisu 19.6.2023: Johtoselvityksen tekeminen",
+      "releaseInfo": "Julkaisutiedot ja päivityshistoria",
+      "releaseVer1": "6/2023: Johtoselvityksen tekeminen",
+      "releaseVer2": "5/2024: Käyttöoikeudet ja niiden jakaminen",
+      "releaseAdditionalInfo": "Listan päivitysten lisäksi teemme jatkuvasti pieniä parannuksia ja päivityksiä palveluumme.",
       "materials": "Aineistot",
       "mapMaterials": "Kartta-aineistot",
       "imageCopyrights": "Kuvien tekijätiedot"
@@ -998,6 +1130,10 @@
       "supportLink": "Jos seuraamasi linkki ei toimi, voit myös ottaa yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <a>haitatontuki@hel.fi.</a>"
     }
   },
+  "serviceInfo": {
+    "label": "",
+    "text": ""
+  },
   "serviceWarning": {
     "label": "",
     "text": ""
@@ -1005,5 +1141,11 @@
   "serviceError": {
     "label": "",
     "text": ""
+  },
+  "serviceMaintenance": {
+    "label": "Huoltokatko Haitattomassa",
+    "text": "",
+    "imageLabel": "Kuva: Lille Santanen",
+    "imageAltText": "Piirretty kuva rakennustyömaasta"
   }
 }

@@ -12,12 +12,14 @@ type PropTypes = {
   id: string;
   name: string;
   rules?: { required: boolean };
-  defaultValue: string | null;
+  defaultValue?: string | null;
   label: string;
   options: Array<Option>;
   invalid?: boolean;
   tooltip?: TooltipProps;
   disabled?: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  isOptionDisabled?: (option: any) => boolean;
   required?: boolean;
   style?: React.CSSProperties;
 };
@@ -32,6 +34,7 @@ const Dropdown: React.FC<React.PropsWithChildren<PropTypes>> = ({
   invalid,
   tooltip,
   disabled,
+  isOptionDisabled,
   required,
   style,
 }) => {
@@ -49,6 +52,7 @@ const Dropdown: React.FC<React.PropsWithChildren<PropTypes>> = ({
         name={name}
         control={control}
         rules={rules}
+        defaultValue={defaultValue}
         render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
           return (
             <Select
@@ -69,6 +73,7 @@ const Dropdown: React.FC<React.PropsWithChildren<PropTypes>> = ({
               }}
               required={required}
               disabled={disabled}
+              isOptionDisabled={isOptionDisabled}
               error={getInputErrorText(t, error)}
               style={style}
             />

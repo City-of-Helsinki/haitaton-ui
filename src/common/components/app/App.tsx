@@ -13,27 +13,37 @@ import { FeatureFlagsProvider } from '../featureFlags/FeatureFlagsContext';
 import ScrollToTop from '../scrollToTop/ScrollToTop';
 import './app.scss';
 import '../../../assets/styles/reset.css';
+import MaintenancePage from '../../../pages/staticPages/MaintenancePage';
 
 const queryClient = new QueryClient();
 
-const App: React.FC<React.PropsWithChildren<unknown>> = () => (
-  <Router>
-    <ScrollToTop />
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <ChakraProvider theme={theme}>
-          <FeatureFlagsProvider>
-            <Layout>
-              <GlobalNotificationProvider>
-                <AppRoutes />
-                <GlobalNotification />
-              </GlobalNotificationProvider>
-            </Layout>
-          </FeatureFlagsProvider>
-        </ChakraProvider>
-      </QueryClientProvider>
-    </Provider>
-  </Router>
-);
+function App() {
+  // If there is a maintenance text defined in the environment variables,
+  // render the maintenance page instead of the normal app
+  const maintenance = Boolean(window._env_.REACT_APP_MAINTENANCE_TEXT_FI);
+  if (maintenance) {
+    return <MaintenancePage />;
+  }
+
+  return (
+    <Router>
+      <ScrollToTop />
+      <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <ChakraProvider theme={theme}>
+            <FeatureFlagsProvider>
+              <Layout>
+                <GlobalNotificationProvider>
+                  <AppRoutes />
+                  <GlobalNotification />
+                </GlobalNotificationProvider>
+              </Layout>
+            </FeatureFlagsProvider>
+          </ChakraProvider>
+        </QueryClientProvider>
+      </Provider>
+    </Router>
+  );
+}
 
 export default App;

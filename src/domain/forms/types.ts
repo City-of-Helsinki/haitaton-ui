@@ -1,4 +1,5 @@
 import { StepState } from 'hds-react';
+import { AnyObject, ObjectSchema } from 'yup';
 
 export enum ACTION_TYPE {
   COMPLETE_STEP = 'completeStep',
@@ -8,6 +9,7 @@ export enum ACTION_TYPE {
 export interface StepperStep {
   label: string;
   state: StepState;
+  validationSchema?: ObjectSchema<AnyObject>;
 }
 
 export interface State {
@@ -17,5 +19,5 @@ export interface State {
 
 export interface Action {
   type: ACTION_TYPE;
-  payload: number;
+  payload: { stepIndex: number; formData?: unknown };
 }

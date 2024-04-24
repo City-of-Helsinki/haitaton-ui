@@ -2,9 +2,15 @@ import { FieldErrors } from 'react-hook-form';
 import { Feature } from 'ol';
 import Geometry from 'ol/geom/Geometry';
 import { PartialExcept } from '../../../common/types/utils';
-import { HankeData, HankeContactTypeKey, HankeAlue } from '../../types/hanke';
+import {
+  HankeData,
+  HankeContactTypeKey,
+  HankeAlue,
+  HankeYhteystieto,
+  HankeMuuTaho,
+} from '../../types/hanke';
 import yup from '../../../common/utils/yup';
-import { contactPersonSchema, newHankeSchema } from './hankeSchema';
+import { yhteyshenkiloSchema, newHankeSchema } from './hankeSchema';
 
 export type FormNotification = 'ok' | 'success' | 'error' | null;
 
@@ -42,10 +48,10 @@ export enum CONTACT_FORMFIELD {
   PUHELINNUMERO = 'puhelinnumero',
   ORGANISAATIO = 'organisaatioNimi',
   OSASTO = 'osasto',
-  ALIKONTAKTIT = 'alikontaktit',
+  YHTEYSHENKILOT = 'yhteyshenkilot',
 }
 
-export enum CONTACT_PERSON_FORMFIELD {
+export enum YHTEYSHENKILO_FORMFIELD {
   ETUNIMI = 'etunimi',
   SUKUNIMI = 'sukunimi',
   EMAIL = 'sahkoposti',
@@ -68,17 +74,26 @@ export interface FormProps {
   register: any;
 }
 
-export type SaveFormArguments = {
-  data: HankeDataFormState;
-  currentFormPage: number;
-};
+export interface HankePostYhteystieto extends Omit<HankeYhteystieto, 'yhteyshenkilot'> {
+  yhteyshenkilot: string[];
+}
 
-export type Organization = {
-  id: number;
-  nimi: string;
-  tunnus: string;
-};
+export interface HankePostMuuTaho extends Omit<HankeMuuTaho, 'yhteyshenkilot'> {
+  yhteyshenkilot: string[];
+}
+
+export interface HankePostData
+  extends Omit<HankeDataFormState, 'omistajat' | 'rakennuttajat' | 'toteuttajat' | 'muut'> {
+  omistajat: HankePostYhteystieto[];
+  rakennuttajat: HankePostYhteystieto[];
+  toteuttajat: HankePostYhteystieto[];
+  muut: HankePostMuuTaho[];
+}
 
 export type NewHankeData = yup.InferType<typeof newHankeSchema>;
 
-export type ContactPerson = yup.InferType<typeof contactPersonSchema>;
+export type Yhteyshenkilo = yup.InferType<typeof yhteyshenkiloSchema>;
+export type YhteyshenkiloWithoutName = Pick<
+  Yhteyshenkilo,
+  YHTEYSHENKILO_FORMFIELD.EMAIL | YHTEYSHENKILO_FORMFIELD.PUHELINNUMERO
+>;

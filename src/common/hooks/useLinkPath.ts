@@ -27,6 +27,12 @@ const useLinkPath = (route: ROUTES): ((routeParams: RouteParams) => string) => {
     };
   }
 
+  function hankeUserReturnFunc() {
+    return function replaceParam({ hankeTunnus, id }: RouteParams) {
+      return path.replace(':hankeTunnus', hankeTunnus).replace(':id', id);
+    };
+  }
+
   // https://github.com/UselessPickles/ts-enum-util/blob/master/docs/EnumValueVisitor.md#basic-usage-examples
   return $enum.visitValue(route).with({
     [ROUTES.HOME]: defaultReturnFunc,
@@ -34,6 +40,7 @@ const useLinkPath = (route: ROUTES): ((routeParams: RouteParams) => string) => {
     [ROUTES.HANKE]: hankeTunnusReturnFunc,
     [ROUTES.EDIT_HANKE]: hankeTunnusReturnFunc,
     [ROUTES.ACCESS_RIGHTS]: hankeTunnusReturnFunc,
+    [ROUTES.EDIT_USER]: hankeUserReturnFunc,
     [ROUTES.PUBLIC_HANKKEET]: defaultReturnFunc,
     [ROUTES.PUBLIC_HANKKEET_MAP]: defaultReturnFunc,
     [ROUTES.PUBLIC_HANKKEET_LIST]: defaultReturnFunc,
@@ -41,6 +48,8 @@ const useLinkPath = (route: ROUTES): ((routeParams: RouteParams) => string) => {
     [ROUTES.HAKEMUS]: applicationIdReturnFunc,
     [ROUTES.JOHTOSELVITYSHAKEMUS]: defaultReturnFunc,
     [ROUTES.EDIT_JOHTOSELVITYSHAKEMUS]: applicationIdReturnFunc,
+    [ROUTES.KAIVUILMOITUSHAKEMUS]: hankeTunnusReturnFunc,
+    [ROUTES.EDIT_KAIVUILMOITUSHAKEMUS]: applicationIdReturnFunc,
     [ROUTES.HAITATON_INFO]: defaultReturnFunc,
     [ROUTES.ACCESSIBILITY]: defaultReturnFunc,
     [ROUTES.PRIVACY_POLICY]: defaultReturnFunc,

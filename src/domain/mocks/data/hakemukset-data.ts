@@ -1,6 +1,11 @@
-import { Application, AlluStatus } from '../../application/types/application';
+import {
+  Application,
+  AlluStatus,
+  JohtoselvitysData,
+  KaivuilmoitusData,
+} from '../../application/types/application';
 
-const hakemukset: Application[] = [
+const hakemukset: Application<JohtoselvitysData | KaivuilmoitusData>[] = [
   {
     id: 1,
     alluStatus: null,
@@ -24,11 +29,12 @@ const hakemukset: Application[] = [
         },
         contacts: [
           {
-            email: 'matti@test.com',
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
             orderer: true,
-            phone: '0000000000',
+            phone: '0401234567',
           },
         ],
       },
@@ -71,9 +77,10 @@ const hakemukset: Application[] = [
         },
         contacts: [
           {
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb1',
             email: 'tauno@test.com',
             firstName: 'Tauno',
-            lastName: 'Työmies',
+            lastName: 'Testinen',
             orderer: false,
             phone: '0401234567',
           },
@@ -92,7 +99,7 @@ const hakemukset: Application[] = [
       propertyConnectivity: false,
       rockExcavation: true,
     },
-  },
+  } as Application<JohtoselvitysData>,
   {
     id: 2,
     alluStatus: AlluStatus.PENDING,
@@ -116,11 +123,12 @@ const hakemukset: Application[] = [
         },
         contacts: [
           {
-            email: 'matti@test.com',
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
             orderer: true,
-            phone: '0000000000',
+            phone: '0401234567',
           },
         ],
       },
@@ -186,7 +194,7 @@ const hakemukset: Application[] = [
       propertyConnectivity: false,
       rockExcavation: false,
     },
-  },
+  } as Application<JohtoselvitysData>,
   {
     id: 3,
     alluStatus: AlluStatus.HANDLING,
@@ -210,11 +218,12 @@ const hakemukset: Application[] = [
         },
         contacts: [
           {
-            email: 'matti@test.com',
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
             orderer: true,
-            phone: '0000000000',
+            phone: '0401234567',
           },
         ],
       },
@@ -236,11 +245,12 @@ const hakemukset: Application[] = [
         },
         contacts: [
           {
-            email: 'matti@test.com',
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: false,
-            phone: '0000000000',
+            orderer: true,
+            phone: '0401234567',
           },
         ],
       },
@@ -257,7 +267,7 @@ const hakemukset: Application[] = [
       propertyConnectivity: true,
       rockExcavation: true,
     },
-  },
+  } as Application<JohtoselvitysData>,
   {
     id: 4,
     alluStatus: AlluStatus.PENDING,
@@ -281,11 +291,12 @@ const hakemukset: Application[] = [
         },
         contacts: [
           {
-            email: 'matti@test.com',
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
             orderer: true,
-            phone: '0000000000',
+            phone: '0401234567',
           },
         ],
       },
@@ -329,11 +340,12 @@ const hakemukset: Application[] = [
         },
         contacts: [
           {
-            email: 'matti@test.com',
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            email: 'matti.meikalainen@test.com',
             firstName: 'Matti',
             lastName: 'Meikäläinen',
-            orderer: false,
-            phone: '0000000000',
+            orderer: true,
+            phone: '0401234567',
           },
         ],
       },
@@ -350,7 +362,35 @@ const hakemukset: Application[] = [
       propertyConnectivity: false,
       rockExcavation: true,
     },
-  },
+  } as Application<JohtoselvitysData>,
+  {
+    id: 5,
+    alluStatus: null,
+    applicationType: 'EXCAVATION_NOTIFICATION',
+    hankeTunnus: 'HAI22-2',
+    applicationIdentifier: null,
+    applicationData: {
+      applicationType: 'EXCAVATION_NOTIFICATION',
+      name: 'Mannerheimintien laajennetut kaivuut',
+      startTime: null,
+      endTime: null,
+      workDescription: 'Kaivetaan Mannerheimintiellä',
+      constructionWork: true,
+      maintenanceWork: false,
+      emergencyWork: false,
+      propertyConnectivity: false,
+      rockExcavation: false,
+      cableReportDone: false,
+      requiredCompetence: true,
+      cableReports: ['JS2300002'],
+      placementContracts: ['SL1234567'],
+      areas: [],
+      customerWithContacts: null,
+      contractorWithContacts: null,
+      representativeWithContacts: null,
+      propertyDeveloperWithContacts: null,
+    },
+  } as Application<KaivuilmoitusData>,
 ];
 
 export default hakemukset;

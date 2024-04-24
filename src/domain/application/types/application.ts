@@ -1,9 +1,11 @@
-import { AttachmentMetadata } from './../../../common/types/attachment';
+import { AttachmentMetadata } from '../../../common/types/attachment';
 import { Polygon, Position } from 'geojson';
 import { Coordinate } from 'ol/coordinate';
 import { CRS } from '../../../common/types/hanke';
+import yup from '../../../common/utils/yup';
+import { newJohtoselvitysSchema } from '../../johtoselvitys_new/validationSchema';
 
-export type ApplicationType = 'CABLE_REPORT';
+export type ApplicationType = 'CABLE_REPORT' | 'EXCAVATION_NOTIFICATION';
 
 export type PostalAddress = {
   streetAddress: {
@@ -14,11 +16,12 @@ export type PostalAddress = {
 };
 
 export type Contact = {
+  hankekayttajaId?: string;
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
-  orderer: boolean;
+  orderer?: boolean;
 };
 
 export enum ContactType {
@@ -35,15 +38,16 @@ export type CustomerType =
   | 'representativeWithContacts';
 
 export type Customer = {
+  yhteystietoId?: string | null;
   type: keyof typeof ContactType | null;
   name: string;
-  country: string;
+  country?: string;
   email: string;
   phone: string;
   registryKey: string | null;
-  ovt: string | null;
-  invoicingOperator: string | null;
-  sapCustomerNumber: string | null;
+  ovt?: string | null;
+  invoicingOperator?: string | null;
+  sapCustomerNumber?: string | null;
 };
 
 export type CustomerWithContacts = {
@@ -106,11 +110,11 @@ export interface ApplicationAttachmentMetadata extends AttachmentMetadata {
   attachmentType: AttachmentType;
 }
 
-export type JohtoselvitysData = {
+export interface JohtoselvitysData {
   applicationType: ApplicationType;
   name: string;
-  customerWithContacts: CustomerWithContacts;
-  contractorWithContacts: CustomerWithContacts;
+  customerWithContacts: CustomerWithContacts | null;
+  contractorWithContacts: CustomerWithContacts | null;
   areas: ApplicationArea[];
   startTime: Date | null;
   endTime: Date | null;
@@ -123,16 +127,54 @@ export type JohtoselvitysData = {
   emergencyWork: boolean;
   propertyConnectivity: boolean;
   rockExcavation: boolean | null;
-};
+}
 
-export interface Application {
+export interface KaivuilmoitusData {
+  applicationType: ApplicationType;
+  name: string;
+  workDescription: string;
+  constructionWork: boolean;
+  maintenanceWork: boolean;
+  emergencyWork: boolean;
+  rockExcavation: boolean | null;
+  cableReportDone: boolean;
+  cableReports?: string[];
+  placementContracts?: string[];
+  requiredCompetence: boolean;
+  areas: ApplicationArea[];
+  startTime: Date | null;
+  endTime: Date | null;
+  customerWithContacts: CustomerWithContacts | null;
+  contractorWithContacts: CustomerWithContacts | null;
+  representativeWithContacts: CustomerWithContacts | null;
+  propertyDeveloperWithContacts: CustomerWithContacts | null;
+  additionalInfo?: string;
+}
+
+export type NewJohtoselvitysData = yup.InferType<typeof newJohtoselvitysSchema>;
+
+export interface Application<T = JohtoselvitysData | KaivuilmoitusData> {
   id: number | null;
   alluid?: number | null;
   alluStatus: AlluStatusStrings | null;
   applicationType: ApplicationType;
-  applicationData: JohtoselvitysData;
+  applicationData: T;
   applicationIdentifier?: string | null;
   hankeTunnus: string | null;
+}
+
+export interface HankkeenHakemus {
+  id: number | null;
+  alluid?: number | null;
+  alluStatus: AlluStatusStrings | null;
+  applicationIdentifier?: string | null;
+  applicationType: ApplicationType;
+  applicationData: {
+    name: string;
+    startTime: Date | null;
+    endTime: Date | null;
+    pendingOnClient: boolean;
+  };
 }
 
 export interface ApplicationDeletionResult {
@@ -141,4 +183,90 @@ export interface ApplicationDeletionResult {
 
 export function isCustomerWithContacts(value: unknown): value is CustomerWithContacts {
   return (value as CustomerWithContacts)?.contacts !== undefined;
+}
+
+export interface ApplicationUpdateContact {
+  hankekayttajaId?: string;
+}
+
+function mapYhteyshenkiloToHankekayttajaId(contactPerson: Contact): ApplicationUpdateContact {
+  return { hankekayttajaId: contactPerson.hankekayttajaId };
+}
+export class ApplicationUpdateCustomerWithContacts {
+  customer: Customer;
+  contacts: ApplicationUpdateContact[];
+
+  static Create(customerWithContacts: CustomerWithContacts | null) {
+    if (customerWithContacts === null || customerWithContacts.customer.type === null) {
+      return null;
+    }
+    return new ApplicationUpdateCustomerWithContacts(customerWithContacts);
+  }
+
+  constructor({ customer, contacts }: CustomerWithContacts) {
+    this.customer = customer;
+    this.contacts = contacts?.map(mapYhteyshenkiloToHankekayttajaId) || [];
+  }
+}
+
+export interface JohtoselvitysCreateData
+  extends Pick<
+    JohtoselvitysData,
+    | 'applicationType'
+    | 'name'
+    | 'postalAddress'
+    | 'workDescription'
+    | 'constructionWork'
+    | 'maintenanceWork'
+    | 'emergencyWork'
+    | 'propertyConnectivity'
+    | 'rockExcavation'
+  > {
+  hankeTunnus: string;
+}
+
+export interface JohtoselvitysUpdateData
+  extends Omit<
+    JohtoselvitysData,
+    | 'customerWithContacts'
+    | 'contractorWithContacts'
+    | 'representativeWithContacts'
+    | 'propertyDeveloperWithContacts'
+  > {
+  customerWithContacts: ApplicationUpdateCustomerWithContacts | null;
+  contractorWithContacts: ApplicationUpdateCustomerWithContacts | null;
+  representativeWithContacts: ApplicationUpdateCustomerWithContacts | null;
+  propertyDeveloperWithContacts: ApplicationUpdateCustomerWithContacts | null;
+}
+
+export interface KaivuilmoitusCreateData
+  extends Pick<
+    KaivuilmoitusData,
+    | 'applicationType'
+    | 'name'
+    | 'workDescription'
+    | 'constructionWork'
+    | 'maintenanceWork'
+    | 'emergencyWork'
+    | 'rockExcavation'
+    | 'cableReportDone'
+    | 'requiredCompetence'
+    | 'cableReports'
+    | 'placementContracts'
+  > {
+  hankeTunnus: string;
+}
+
+export interface KaivuilmoitusUpdateData
+  extends Omit<
+    KaivuilmoitusData,
+    | 'customerWithContacts'
+    | 'contractorWithContacts'
+    | 'representativeWithContacts'
+    | 'propertyDeveloperWithContacts'
+  > {
+  customerWithContacts: ApplicationUpdateCustomerWithContacts | null;
+  contractorWithContacts: ApplicationUpdateCustomerWithContacts | null;
+  representativeWithContacts: ApplicationUpdateCustomerWithContacts | null;
+  propertyDeveloperWithContacts: ApplicationUpdateCustomerWithContacts | null;
 }

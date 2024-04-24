@@ -5,7 +5,7 @@ import ResponsiveGrid from '../../../common/components/grid/ResponsiveGrid';
 import { ContactType, Customer } from '../types/application';
 import {
   CONTACT_TYYPPI,
-  HankeContact,
+  HankeYhteystieto,
   HankeContacts,
   HankeMuuTaho,
   isHankeContact,
@@ -13,7 +13,7 @@ import {
 
 type PreFilledContactOption = {
   label: string;
-  value: HankeContact | HankeMuuTaho;
+  value: HankeYhteystieto | HankeMuuTaho;
 };
 
 const PreFilledContactSelect: React.FC<{

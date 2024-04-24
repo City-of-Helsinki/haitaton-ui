@@ -1,31 +1,67 @@
 import api from '../../api/api';
-import { HankeUser, IdentificationResponse, SignedInUser, SignedInUserByHanke } from './hankeUser';
-import { ContactPerson } from '../edit/types';
+import {
+  DeleteInfo,
+  HankeUser,
+  IdentificationResponse,
+  SignedInUser,
+  SignedInUserByHanke,
+} from './hankeUser';
+import { Yhteyshenkilo, YhteyshenkiloWithoutName } from '../edit/types';
 
 export async function createHankeUser({
   hankeTunnus,
   user,
 }: {
   hankeTunnus: string;
-  user: ContactPerson;
+  user: Yhteyshenkilo;
 }) {
   const { data } = await api.post<HankeUser>(`hankkeet/${hankeTunnus}/kayttajat`, user);
   return data;
 }
 
-export async function getHankeUsers(hankeTunnus: string) {
+export async function getUser(id?: string) {
+  const { data } = await api.get<HankeUser>(`/kayttajat/${id}`);
+  return data;
+}
+
+export async function getHankeUsers(hankeTunnus?: string | null) {
   const { data } = await api.get<{ kayttajat: HankeUser[] }>(`hankkeet/${hankeTunnus}/kayttajat`);
   return data.kayttajat;
 }
 
-export async function updateHankeUsers({
+// Update permissions of the listed users
+export async function updateHankeUsersPermissions({
   hankeTunnus,
   users,
 }: {
   hankeTunnus: string;
   users: Pick<HankeUser, 'id' | 'kayttooikeustaso'>[];
 }) {
-  const { data } = await api.put(`hankkeet/${hankeTunnus}/kayttajat`, { kayttajat: users });
+  await api.put(`hankkeet/${hankeTunnus}/kayttajat`, { kayttajat: users });
+}
+
+// Update the contact information of a user
+export async function updateHankeUser({
+  hankeTunnus,
+  userId,
+  user,
+}: {
+  hankeTunnus: string;
+  userId: string;
+  user: Yhteyshenkilo | YhteyshenkiloWithoutName;
+}) {
+  const { data } = await api.put<HankeUser>(`hankkeet/${hankeTunnus}/kayttajat/${userId}`, user);
+  return data;
+}
+
+export async function updateSelf({
+  hankeTunnus,
+  user,
+}: {
+  hankeTunnus: string;
+  user: YhteyshenkiloWithoutName;
+}) {
+  const { data } = await api.put<HankeUser>(`hankkeet/${hankeTunnus}/kayttajat/self`, user);
   return data;
 }
 
@@ -48,4 +84,13 @@ export async function identifyUser(id: string) {
 export async function resendInvitation(kayttajaId: string) {
   await api.post(`kayttajat/${kayttajaId}/kutsu`);
   return kayttajaId;
+}
+
+export async function getUserDeleteInfo(kayttajaId?: string | null) {
+  const { data } = await api.get<DeleteInfo>(`kayttajat/${kayttajaId}/deleteInfo`);
+  return data;
+}
+
+export async function deleteUser(kayttajaId?: string) {
+  await api.delete(`kayttajat/${kayttajaId}`);
 }

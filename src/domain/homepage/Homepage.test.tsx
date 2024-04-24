@@ -83,3 +83,65 @@ describe('Create new hanke from dialog', () => {
     expect(screen.getByLabelText(/sähköposti/i)).toHaveValue(userEmail);
   });
 });
+
+describe('Create johtoselvitys from dialog', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  async function openJohtoselvitysCreateDialog() {
+    jest.spyOn(authService.userManager, 'getUser').mockResolvedValue(mockUser as User);
+    const { user } = render(<Homepage />);
+    await screen.findByRole('heading', {
+      name: 'Auta meitä tekemään Haitattomasta vielä parempi!',
+    });
+    await user.click(screen.getByText('Tee johtoselvityshakemus'));
+    return user;
+  }
+
+  function fillInformation() {
+    const email = 'test@mail.com';
+    const phone = '0401234567';
+    const hankeName = 'Johtoselvitys';
+    fireEvent.change(screen.getByLabelText(/sähköposti/i), { target: { value: email } });
+    fireEvent.change(screen.getByLabelText(/puhelin/i), { target: { value: phone } });
+    fireEvent.change(screen.getByLabelText(/työn nimi/i), { target: { value: hankeName } });
+  }
+
+  test('Should be able to create new johtoselvitys from dialog', async () => {
+    const user = await openJohtoselvitysCreateDialog();
+    fillInformation();
+    await user.click(screen.getByRole('button', { name: /luo hakemus/i }));
+
+    expect(window.location.pathname).toBe('/fi/johtoselvityshakemus/6/muokkaa');
+  });
+
+  test('Should show validation errors and not create johtoselvitys if information is missing', async () => {
+    const user = await openJohtoselvitysCreateDialog();
+    await user.clear(screen.getByLabelText(/sähköposti/i));
+    await user.click(screen.getByRole('button', { name: /luo hakemus/i }));
+
+    expect(screen.getAllByText(/kenttä on pakollinen/i)).toHaveLength(3);
+    expect(window.location.pathname).toBe('/');
+  });
+
+  test('Should show error notification if creating johtoselvitys fails', async () => {
+    server.use(
+      rest.post('/api/johtoselvityshakemus', async (req, res, ctx) => {
+        return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+      }),
+    );
+    const user = await openJohtoselvitysCreateDialog();
+    fillInformation();
+    await user.click(screen.getByRole('button', { name: /luo hakemus/i }));
+
+    expect(screen.getByText('Tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument();
+    expect(window.location.pathname).toBe('/');
+  });
+
+  test('Email should be pre-filled', async () => {
+    await openJohtoselvitysCreateDialog();
+
+    expect(screen.getByLabelText(/sähköposti/i)).toHaveValue(userEmail);
+  });
+});

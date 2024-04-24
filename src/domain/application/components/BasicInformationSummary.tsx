@@ -8,12 +8,13 @@ import {
 } from '../../forms/components/FormSummarySection';
 import { JohtoselvitysFormValues } from '../../johtoselvitys/types';
 import { ContactSummary } from './ContactsSummary';
-import { Contact } from '../types/application';
+import { Application, Contact, JohtoselvitysData } from '../types/application';
+import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
 
 function findOrderer(formData: JohtoselvitysFormValues): Contact | null {
   const customerWithContacts = find(formData.applicationData, (value) => {
     if (typeof value === 'object' && value !== null && 'contacts' in value) {
-      return value.contacts[0]?.orderer;
+      return value.contacts[0]?.orderer || false;
     }
     return false;
   });
@@ -29,25 +30,28 @@ function findOrderer(formData: JohtoselvitysFormValues): Contact | null {
 }
 
 type Props = {
-  formData: JohtoselvitysFormValues;
+  formData: Application;
   children?: React.ReactNode;
 };
 
 const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
   const { t } = useTranslation();
+  const features = useFeatureFlags();
 
   const {
     name,
-    postalAddress,
     workDescription,
     constructionWork,
     maintenanceWork,
     emergencyWork,
-    propertyConnectivity,
     rockExcavation,
   } = formData.applicationData;
 
-  const orderer = findOrderer(formData);
+  const { postalAddress, propertyConnectivity } = (
+    formData as unknown as Application<JohtoselvitysData>
+  ).applicationData;
+
+  const orderer = findOrderer(formData as unknown as Application<JohtoselvitysData>);
 
   return (
     <FormSummarySection>
@@ -76,8 +80,12 @@ const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
       <SectionItemContent>
         <p style={{ whiteSpace: 'pre-wrap' }}>{workDescription}</p>
       </SectionItemContent>
-      <SectionItemTitle>{t('form:labels:omatTiedot')}</SectionItemTitle>
-      <SectionItemContent>{orderer && <ContactSummary contact={orderer} />}</SectionItemContent>
+      {!features.accessRights && (
+        <>
+          <SectionItemTitle>{t('form:labels:omatTiedot')}</SectionItemTitle>
+          <SectionItemContent>{orderer && <ContactSummary contact={orderer} />}</SectionItemContent>
+        </>
+      )}
       {children}
     </FormSummarySection>
   );

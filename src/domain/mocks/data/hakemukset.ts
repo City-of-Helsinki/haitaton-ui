@@ -1,4 +1,13 @@
-import { Application } from '../../application/types/application';
+import {
+  Application,
+  HankkeenHakemus,
+  JohtoselvitysCreateData,
+  JohtoselvitysData,
+  JohtoselvitysUpdateData,
+  KaivuilmoitusCreateData,
+  KaivuilmoitusData,
+  KaivuilmoitusUpdateData,
+} from '../../application/types/application';
 import hakemuksetData from './hakemukset-data';
 import { isApplicationPending } from '../../application/utils';
 import ApiError from '../apiError';
@@ -13,12 +22,28 @@ export async function readAll() {
   return hakemukset;
 }
 
-export async function readAllForHanke(hankeTunnus: string) {
+export async function readAllForHanke(hankeTunnus: string): Promise<HankkeenHakemus[]> {
   const applications = await readAll();
-  return applications.filter((application) => application.hankeTunnus === hankeTunnus);
+  return applications
+    .filter((application) => application.hankeTunnus === hankeTunnus)
+    .map((application) => {
+      return {
+        id: application.id,
+        alluid: application.alluid,
+        alluStatus: application.alluStatus,
+        applicationIdentifier: application.applicationIdentifier,
+        applicationType: application.applicationType,
+        applicationData: {
+          name: application.applicationData.name,
+          startTime: application.applicationData.startTime,
+          endTime: application.applicationData.endTime,
+          pendingOnClient: isApplicationPending(application.alluStatus),
+        },
+      };
+    });
 }
 
-export async function create(data: Application) {
+export async function createJohtoselvitys(data: Application) {
   const newHakemus: Application = {
     ...data,
     id: hakemukset.length + 1,
@@ -28,12 +53,54 @@ export async function create(data: Application) {
   return newHakemus;
 }
 
-export async function update(id: number, updates: Application) {
-  let hakemus = await read(id);
+export async function create(data: JohtoselvitysCreateData | KaivuilmoitusCreateData) {
+  const { hankeTunnus, ...updateData } = data;
+  const restData = {
+    areas: [],
+    startTime: null,
+    endTime: null,
+    customerWithContacts: null,
+    contractorWithContacts: null,
+    propertyDeveloperWithContacts: null,
+    representativeWithContacts: null,
+  };
+  if (updateData.applicationType === 'CABLE_REPORT') {
+    const newHakemus: Application<JohtoselvitysData> = {
+      id: hakemukset.length + 1,
+      alluStatus: null,
+      hankeTunnus,
+      applicationType: updateData.applicationType,
+      applicationData: {
+        ...(updateData as JohtoselvitysUpdateData),
+        ...restData,
+      },
+    };
+    hakemukset.push(newHakemus);
+    return newHakemus;
+  } else if (updateData.applicationType === 'EXCAVATION_NOTIFICATION') {
+    const newHakemus: Application<KaivuilmoitusData> = {
+      id: hakemukset.length + 1,
+      alluStatus: null,
+      hankeTunnus,
+      applicationType: updateData.applicationType,
+      applicationData: {
+        ...(updateData as KaivuilmoitusUpdateData),
+        ...restData,
+      },
+    };
+    hakemukset.push(newHakemus);
+    return newHakemus;
+  } else {
+    throw new Error(`Invalid application type ${updateData.applicationType}`);
+  }
+}
+
+export async function update(id: number, updates: JohtoselvitysUpdateData) {
+  const hakemus = await read(id);
   if (!hakemus) {
     throw new Error(`No application with id ${id}`);
   }
-  hakemus = Object.assign(hakemus, updates);
+  hakemus.applicationData = Object.assign(hakemus.applicationData, updates);
   return hakemus;
 }
 

@@ -123,7 +123,7 @@ export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
     };
   }, [drawSource, append, forceUpdate, setValue, featuresLoaded]);
 
-  const { tabRefs } = useSelectableTabs(applicationAreas.length, { selectLastTabOnChange: true });
+  const { tabRefs } = useSelectableTabs(applicationAreas, { selectLastTabOnChange: true });
 
   const higlightArea = useHighlightArea();
 
@@ -173,6 +173,9 @@ export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
       </Text>
       <Text tag="p" spacingBottom="s">
         {t('johtoselvitysForm:alueet:instructions2')}
+      </Text>
+      <Text tag="p" spacingBottom="s">
+        {t('johtoselvitysForm:alueet:instructions3')}
       </Text>
       <Text tag="p" spacingBottom="m">
         {t('form:requiredInstruction')}

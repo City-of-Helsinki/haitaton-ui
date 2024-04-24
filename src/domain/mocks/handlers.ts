@@ -5,8 +5,15 @@ import * as hankkeetDB from './data/hankkeet';
 import * as hakemuksetDB from './data/hakemukset';
 import * as usersDB from './data/users';
 import ApiError from './apiError';
-import { IdentificationResponse, SignedInUser } from '../hanke/hankeUsers/hankeUser';
-import { ContactPerson } from '../hanke/edit/types';
+import { DeleteInfo, IdentificationResponse, SignedInUser } from '../hanke/hankeUsers/hankeUser';
+import { Yhteyshenkilo, YhteyshenkiloWithoutName } from '../hanke/edit/types';
+import {
+  JohtoselvitysCreateData,
+  JohtoselvitysUpdateData,
+  KaivuilmoitusCreateData,
+  NewJohtoselvitysData,
+} from '../application/types/application';
+import { defaultJohtoselvitysData } from './data/defaultJohtoselvitysData';
 
 const apiUrl = '/api';
 
@@ -103,7 +110,7 @@ export const handlers = [
   }),
 
   rest.post(`${apiUrl}/hakemukset`, async (req, res, ctx) => {
-    const reqBody: JohtoselvitysFormValues = await req.json();
+    const reqBody: JohtoselvitysCreateData | KaivuilmoitusCreateData = await req.json();
     const hakemus = await hakemuksetDB.create(reqBody);
     return res(ctx.status(200), ctx.json(hakemus));
   }),
@@ -117,14 +124,45 @@ export const handlers = [
       vaihe: 'SUUNNITTELU',
       kuvaus: '',
     });
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const hakemus = await hakemuksetDB.create({ ...reqBody, hankeTunnus: hanke.hankeTunnus! });
+    const hakemus = await hakemuksetDB.createJohtoselvitys({
+      ...reqBody,
+      hankeTunnus: hanke.hankeTunnus!,
+    });
+    return res(ctx.status(200), ctx.json(hakemus));
+  }),
+
+  rest.post(`${apiUrl}/johtoselvityshakemus`, async (req, res, ctx) => {
+    const { nimi }: NewJohtoselvitysData = await req.json();
+    const hanke = await hankkeetDB.create({
+      nimi: nimi,
+      alkuPvm: null,
+      loppuPvm: null,
+      vaihe: null,
+      kuvaus: null,
+      generated: true,
+    });
+    const hakemus = await hakemuksetDB.createJohtoselvitys({
+      applicationData: {
+        name: nimi,
+        ...defaultJohtoselvitysData,
+      },
+      id: null,
+      alluStatus: null,
+      applicationType: 'CABLE_REPORT',
+      hankeTunnus: hanke.hankeTunnus!,
+    });
+    await usersDB.create(hanke.hankeTunnus!, {
+      etunimi: 'Testi',
+      sukunimi: 'Testinen',
+      sahkoposti: 'testi@test.com',
+      puhelinnumero: '0401234500',
+    });
     return res(ctx.status(200), ctx.json(hakemus));
   }),
 
   rest.put(`${apiUrl}/hakemukset/:id`, async (req, res, ctx) => {
     const { id } = req.params;
-    const reqBody: JohtoselvitysFormValues = await req.json();
+    const reqBody: JohtoselvitysUpdateData = await req.json();
     try {
       const hakemus = await hakemuksetDB.update(Number(id as string), reqBody);
       return res(ctx.status(200), ctx.json(hakemus));
@@ -140,6 +178,23 @@ export const handlers = [
   }),
 
   rest.post(`${apiUrl}/hakemukset/:id/send-application`, async (req, res, ctx) => {
+    const { id } = req.params;
+    const hakemus = await hakemuksetDB.read(Number(id));
+
+    if (!hakemus) {
+      return res(
+        ctx.status(404),
+        ctx.json({
+          errorMessage: 'Hakemus not found',
+          errorCode: 'HAI1001',
+        }),
+      );
+    }
+
+    return res(ctx.status(200), ctx.json(hakemus));
+  }),
+
+  rest.post(`${apiUrl}/hakemukset/:id/laheta`, async (req, res, ctx) => {
     const { id } = req.params;
     const hakemus = await hakemuksetDB.read(Number(id));
 
@@ -181,7 +236,7 @@ export const handlers = [
 
   rest.post(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat`, async (req, res, ctx) => {
     const { hankeTunnus } = req.params;
-    const user: ContactPerson = await req.json();
+    const user: Yhteyshenkilo = await req.json();
     const createdUser = await usersDB.create(hankeTunnus as string, user);
     return res(ctx.status(200), ctx.json(createdUser));
   }),
@@ -189,11 +244,40 @@ export const handlers = [
   rest.put(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat`, async (req, res, ctx) => {
     const { hankeTunnus } = req.params;
     const { kayttajat } = await req.json();
-    await usersDB.update(hankeTunnus as string, kayttajat);
-    return res(ctx.status(200));
+    await usersDB.updatePermissions(hankeTunnus as string, kayttajat);
+    return res(ctx.status(204));
   }),
 
-  rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
+  rest.put(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat/self`, async (req, res, ctx) => {
+    const { hankeTunnus } = req.params;
+    const reqBody: YhteyshenkiloWithoutName = await req.json();
+    const user = await usersDB.update(
+      hankeTunnus as string,
+      '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+      reqBody,
+    );
+    return res(ctx.status(200), ctx.json(user));
+  }),
+
+  rest.put(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat/:userId`, async (req, res, ctx) => {
+    const { hankeTunnus, userId } = req.params;
+    const reqBody: Yhteyshenkilo | YhteyshenkiloWithoutName = await req.json();
+    try {
+      const updatedUser = await usersDB.update(hankeTunnus as string, userId as string, reqBody);
+      return res(ctx.status(200), ctx.json(updatedUser));
+    } catch (error) {
+      const { status, message } = error as ApiError;
+      return res(
+        ctx.status(status),
+        ctx.json({
+          errorMessage: message,
+          errorCode: 'HAI1001',
+        }),
+      );
+    }
+  }),
+
+  rest.get(`${apiUrl}/hankkeet/:hankeTunnus/whoami`, async (req, res, ctx) => {
     const { hankeTunnus } = req.params;
 
     if (hankeTunnus === 'SMTGEN2_1') {
@@ -207,10 +291,12 @@ export const handlers = [
       );
     }
 
+    const currentUser = await usersDB.readCurrent();
+
     return res(
       ctx.status(200),
       ctx.json<SignedInUser>({
-        hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        hankeKayttajaId: currentUser?.id ?? '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         kayttooikeustaso: 'KAIKKI_OIKEUDET',
         kayttooikeudet: [
           'VIEW',
@@ -222,9 +308,17 @@ export const handlers = [
           'EDIT_APPLICATIONS',
           'MODIFY_APPLICATION_PERMISSIONS',
           'RESEND_INVITATION',
+          'MODIFY_USER',
+          'DELETE_USER',
         ],
       }),
     );
+  }),
+
+  rest.get(`${apiUrl}/kayttajat/:id`, async (req, res, ctx) => {
+    const { id } = req.params;
+    const user = await usersDB.read(id as string);
+    return res(ctx.status(200), ctx.json(user));
   }),
 
   rest.post(`${apiUrl}/kayttajat`, async (req, res, ctx) => {
@@ -242,6 +336,89 @@ export const handlers = [
     return res(ctx.delay(), ctx.status(204));
   }),
 
+  rest.get(`${apiUrl}/kayttajat/:id/deleteInfo`, async (req, res, ctx) => {
+    const { id } = req.params;
+    if (id === '3fa85f64-5717-4562-b3fc-2c963f66afa7') {
+      return res(
+        ctx.delay(),
+        ctx.status(200),
+        ctx.json<DeleteInfo>({
+          activeHakemukset: [
+            { nimi: 'Hakemus 1', alluStatus: 'PENDING', applicationIdentifier: 'JS2300001' },
+            { nimi: 'Hakemus 2', alluStatus: 'HANDLING', applicationIdentifier: 'JS2300002' },
+          ],
+          draftHakemukset: [],
+          onlyOmistajanYhteyshenkilo: false,
+        }),
+      );
+    }
+    if (id === '3fa85f64-5717-4562-b3fc-2c963f66afa8') {
+      return res(
+        ctx.delay(),
+        ctx.status(200),
+        ctx.json<DeleteInfo>({
+          activeHakemukset: [
+            { nimi: 'Hakemus 1', alluStatus: 'PENDING', applicationIdentifier: 'JS2300001' },
+            { nimi: 'Hakemus 3', alluStatus: 'PENDING', applicationIdentifier: 'JS2300003' },
+          ],
+          draftHakemukset: [],
+          onlyOmistajanYhteyshenkilo: false,
+        }),
+      );
+    }
+    if (id === '3fa85f64-5717-4562-b3fc-2c963f66afa9') {
+      return res(
+        ctx.delay(),
+        ctx.status(200),
+        ctx.json<DeleteInfo>({
+          activeHakemukset: [],
+          draftHakemukset: [
+            { nimi: 'Hakemus 4', alluStatus: null, applicationIdentifier: 'JS2300004' },
+            { nimi: 'Hakemus 5', alluStatus: null, applicationIdentifier: 'JS2300005' },
+          ],
+          onlyOmistajanYhteyshenkilo: false,
+        }),
+      );
+    }
+    if (id === '3fa85f64-5717-4562-b3fc-2c963f66afb1') {
+      return res(
+        ctx.delay(),
+        ctx.status(200),
+        ctx.json<DeleteInfo>({
+          activeHakemukset: [],
+          draftHakemukset: [],
+          onlyOmistajanYhteyshenkilo: true,
+        }),
+      );
+    }
+    return res(
+      ctx.delay(),
+      ctx.status(200),
+      ctx.json<DeleteInfo>({
+        activeHakemukset: [],
+        draftHakemukset: [],
+        onlyOmistajanYhteyshenkilo: false,
+      }),
+    );
+  }),
+
+  rest.delete(`${apiUrl}/kayttajat/:id`, async (req, res, ctx) => {
+    const { id } = req.params;
+    try {
+      await usersDB.remove(id as string);
+      return res(ctx.status(204));
+    } catch (error) {
+      const { status, message } = error as ApiError;
+      return res(
+        ctx.status(status),
+        ctx.json({
+          errorMessage: message,
+          errorCode: 'HAI1001',
+        }),
+      );
+    }
+  }),
+
   rest.get(`${apiUrl}/hakemukset/:id/liitteet`, async (req, res, ctx) => {
     return res(ctx.status(200), ctx.json([]));
   }),
@@ -256,5 +433,12 @@ export const handlers = [
 
   rest.get(`${apiUrl}/hankkeet/:hankeTunnus/liitteet`, async (_, res, ctx) => {
     return res(ctx.status(200), ctx.json([]));
+  }),
+
+  rest.get(`${apiUrl}/profiili/verified-name`, async (_, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({ firstName: 'Testi Tauno Tahvo', lastName: 'Testinen', givenName: 'Testi' }),
+    );
   }),
 ];

@@ -8,6 +8,7 @@ import {
   useLocalizedRoutes,
   HANKETUNNUS_REGEXP,
   APPLICATION_ID_REGEXP,
+  USER_ID_REGEXP,
 } from '../../hooks/useLocalizedRoutes';
 import authService from '../../../domain/auth/authService';
 import useUser from '../../../domain/auth/useUser';
@@ -15,6 +16,7 @@ import { Language, LANGUAGES } from '../../types/language';
 import { SKIP_TO_ELEMENT_ID } from '../../constants/constants';
 import { useFeatureFlags } from '../featureFlags/FeatureFlagsContext';
 import HankeCreateDialog from '../../../domain/hanke/hankeCreateDialog/HankeCreateDialog';
+import JohtoselvitysCreateDialog from '../../../domain/johtoselvitys_new/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
 
 const languageLabels = {
   fi: 'Suomi',
@@ -31,6 +33,7 @@ function HaitatonHeader() {
   const features = useFeatureFlags();
   const logoSrc = i18n.language === 'sv' ? logoSv : logoFi;
   const [showHankeCreateDialog, setShowHankeCreateDialog] = useState(false);
+  const [showJohtoselvitysCreateDialog, setShowJohtoselvitysCreateDialog] = useState(false);
 
   const isMapPath = useMatch({
     path: PUBLIC_HANKKEET.path,
@@ -57,10 +60,15 @@ function HaitatonHeader() {
     const hankeTunnus = hankeTunnusMatches?.[0];
     const applicationIdMatches = APPLICATION_ID_REGEXP.exec(location.pathname);
     const applicationId = applicationIdMatches?.[0];
+    const userIdMatches = USER_ID_REGEXP.exec(location.pathname);
+    const userId = userIdMatches?.[0];
 
     let path = lang + t(`routes:${routeKey}.path`);
     if (hankeTunnus) {
       path = path.replace(':hankeTunnus', hankeTunnus);
+    }
+    if (userId) {
+      path = path.replace(':id', userId);
     }
     if (applicationId) {
       path = path.replace(':id', applicationId);
@@ -77,7 +85,7 @@ function HaitatonHeader() {
 
   function getUserMenuLabel() {
     if (isAuthenticated) {
-      return user?.profile.name ?? user?.profile.email;
+      return user?.profile.name ?? (user?.profile.email as string);
     }
     return t('authentication:loginButton');
   }
@@ -88,6 +96,14 @@ function HaitatonHeader() {
 
   function closeHankeCreateDialog() {
     setShowHankeCreateDialog(false);
+  }
+
+  function openJohtoselvitysCreateDialog() {
+    setShowJohtoselvitysCreateDialog(true);
+  }
+
+  function closeJohtoselvitysCreateDialog() {
+    setShowJohtoselvitysCreateDialog(false);
   }
 
   return (
@@ -156,7 +172,8 @@ function HaitatonHeader() {
           <Header.Link
             label={t('homepage:johtotietoselvitys:title')}
             as={NavLink}
-            to={JOHTOSELVITYSHAKEMUS.path}
+            to={features.accessRights ? '#' : JOHTOSELVITYSHAKEMUS.path}
+            onClick={features.accessRights ? openJohtoselvitysCreateDialog : undefined}
             active={Boolean(isCableReportApplicationPath)}
             data-testid="cableReportApplicationLink"
           />
@@ -180,6 +197,10 @@ function HaitatonHeader() {
         </Header.NavigationMenu>
       )}
       <HankeCreateDialog isOpen={showHankeCreateDialog} onClose={closeHankeCreateDialog} />
+      <JohtoselvitysCreateDialog
+        isOpen={showJohtoselvitysCreateDialog}
+        onClose={closeJohtoselvitysCreateDialog}
+      />
     </Header>
   );
 }

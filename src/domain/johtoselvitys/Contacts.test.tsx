@@ -4,8 +4,9 @@ import { fireEvent, render, screen } from '../../testUtils/render';
 import { Contacts } from './Contacts';
 import hankkeet from '../mocks/data/hankkeet-data';
 import applications from '../mocks/data/hakemukset-data';
-import { HankeContact, HankeDataDraft } from '../types/hanke';
+import { HankeYhteystieto, HankeDataDraft } from '../types/hanke';
 import { JohtoselvitysFormValues } from './types';
+import { Application, JohtoselvitysData } from '../application/types/application';
 
 jest.setTimeout(10000);
 
@@ -29,7 +30,7 @@ function Form({
 
 test('Contacts can be filled with hanke contact info', async () => {
   const hanke = hankkeet[1];
-  const hankeOwner: HankeContact = hanke.omistajat![0];
+  const hankeOwner: HankeYhteystieto = hanke.omistajat![0];
 
   const { user } = render(<Form hanke={hanke} />);
 
@@ -75,8 +76,8 @@ test('Business id field is not disabled if customer type is company or associati
 });
 
 test('Customer fields can be filled with orderer information', async () => {
-  const application = applications[0];
-  const orderer = application.applicationData.customerWithContacts.contacts[0];
+  const application = applications[0] as Application<JohtoselvitysData>;
+  const orderer = application.applicationData.customerWithContacts?.contacts[0];
   const { user } = render(<Form application={application} />);
 
   await user.click(
@@ -84,19 +85,19 @@ test('Customer fields can be filled with orderer information', async () => {
   );
 
   expect(screen.getByTestId('applicationData.customerWithContacts.customer.name')).toHaveValue(
-    `${orderer.firstName} ${orderer.lastName}`,
+    `${orderer!.firstName} ${orderer!.lastName}`,
   );
   expect(screen.getByTestId('applicationData.customerWithContacts.customer.email')).toHaveValue(
-    orderer.email,
+    orderer!.email,
   );
   expect(screen.getByTestId('applicationData.customerWithContacts.customer.phone')).toHaveValue(
-    orderer.phone,
+    orderer!.phone,
   );
 });
 
 test('Contact fields can be filled with orderer information', async () => {
-  const application = applications[0];
-  const orderer = application.applicationData.customerWithContacts.contacts[0];
+  const application = applications[0] as Application<JohtoselvitysData>;
+  const orderer = application.applicationData.customerWithContacts?.contacts[0];
   const { user } = render(<Form application={application} />);
 
   await user.click(
@@ -105,14 +106,14 @@ test('Contact fields can be filled with orderer information', async () => {
 
   expect(
     screen.getByTestId('applicationData.contractorWithContacts.contacts.0.firstName'),
-  ).toHaveValue(orderer.firstName);
+  ).toHaveValue(orderer!.firstName);
   expect(
     screen.getByTestId('applicationData.contractorWithContacts.contacts.0.lastName'),
-  ).toHaveValue(orderer.lastName);
+  ).toHaveValue(orderer!.lastName);
   expect(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.email')).toHaveValue(
-    orderer.email,
+    orderer!.email,
   );
   expect(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.phone')).toHaveValue(
-    orderer.phone,
+    orderer!.phone,
   );
 });

@@ -6,8 +6,13 @@
     "sukunimi": "Meikäläinen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KAIKKI_OIKEUDET",
+    "roolit": [
+      "MUU",
+      "RAKENNUTTAJA"
+    ],
     "tunnistautunut": true,
-    "hankeTunnus": "HAI22-2"
+    "hankeTunnus": "HAI22-2",
+    "kutsuttu": null
   },
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afa7",
@@ -16,8 +21,12 @@
     "sukunimi": "Työmies",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KAIKKIEN_MUOKKAUS",
+    "roolit": [
+      "RAKENNUTTAJA"
+    ],
     "tunnistautunut": false,
-    "hankeTunnus": "HAI22-2"
+    "hankeTunnus": "HAI22-2",
+    "kutsuttu": "2024-01-15T19:59:59.999Z"
   },
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afa8",
@@ -26,8 +35,12 @@
     "sukunimi": "Asiakas",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "HANKEMUOKKAUS",
+    "roolit": [
+      "MUU"
+    ],
     "tunnistautunut": true,
-    "hankeTunnus": "HAI22-2"
+    "hankeTunnus": "HAI22-2",
+    "kutsuttu": null
   },
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afa9",
@@ -36,8 +49,12 @@
     "sukunimi": "Viljanen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KAIKKI_OIKEUDET",
+    "roolit": [
+      "TOTEUTTAJA"
+    ],
     "tunnistautunut": false,
-    "hankeTunnus": "HAI22-2"
+    "hankeTunnus": "HAI22-2",
+    "kutsuttu": "2024-01-16T19:59:59.999Z"
   },
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afb1",
@@ -46,8 +63,12 @@
     "sukunimi": "Testinen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
+    "roolit": [
+      "OMISTAJA"
+    ],
     "tunnistautunut": false,
-    "hankeTunnus": "HAI22-2"
+    "hankeTunnus": "HAI22-2",
+    "kutsuttu": "2024-01-17T19:59:59.999Z"
   },
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afb2",
@@ -56,8 +77,12 @@
     "sukunimi": "Marjanen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
+    "roolit": [
+      "MUU"
+    ],
     "tunnistautunut": false,
-    "hankeTunnus": "HAI22-2"
+    "hankeTunnus": "HAI22-2",
+    "kutsuttu": "2024-01-15T19:59:59.999Z"
   },
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afb3",
@@ -66,8 +91,12 @@
     "sukunimi": "Marjanen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
+    "roolit": [
+      "MUU"
+    ],
     "tunnistautunut": true,
-    "hankeTunnus": "HAI22-2"
+    "hankeTunnus": "HAI22-2",
+    "kutsuttu": null
   },
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afb4",
@@ -76,8 +105,13 @@
     "sukunimi": "Selkonen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "HAKEMUSASIOINTI",
+    "roolit": [
+      "RAKENNUTTAJA",
+      "TOTEUTTAJA"
+    ],
     "tunnistautunut": true,
-    "hankeTunnus": "HAI22-2"
+    "hankeTunnus": "HAI22-2",
+    "kutsuttu": null
   },
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afb5",
@@ -86,8 +120,12 @@
     "sukunimi": "Keijonen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
+    "roolit": [
+      "MUU"
+    ],
     "tunnistautunut": true,
-    "hankeTunnus": "HAI22-2"
+    "hankeTunnus": "HAI22-2",
+    "kutsuttu": null
   },
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afb6",
@@ -96,8 +134,12 @@
     "sukunimi": "Testinen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
+    "roolit": [
+      "RAKENNUTTAJA"
+    ],
     "tunnistautunut": false,
-    "hankeTunnus": "HAI22-2"
+    "hankeTunnus": "HAI22-2",
+    "kutsuttu": "2024-01-15T19:59:59.999Z"
   },
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66afb7",
@@ -106,8 +148,10 @@
     "sukunimi": "Taunonen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
+    "roolit": [],
     "tunnistautunut": false,
-    "hankeTunnus": "HAI22-2"
+    "hankeTunnus": "HAI22-2",
+    "kutsuttu": "2024-02-15T19:59:59.999Z"
   },
   {
     "id": "3fa85f64-5717-4562-b3fc-2c963f66af5",
@@ -116,7 +160,9 @@
     "sukunimi": "Meikäläinen",
     "puhelinnumero": "0401234567",
     "kayttooikeustaso": "KATSELUOIKEUS",
+    "roolit": [],
     "tunnistautunut": true,
-    "hankeTunnus": "HAI22-2"
+    "hankeTunnus": "HAI22-2",
+    "kutsuttu": null
   }
 ]

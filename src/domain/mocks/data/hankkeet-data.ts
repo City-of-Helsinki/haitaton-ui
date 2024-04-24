@@ -29,6 +29,7 @@ const hankkeet: HankeDataDraft[] = [
     toteuttajat: [],
     muut: [],
     tyomaaTyyppi: [],
+    alueet: [],
   },
   {
     id: 2,
@@ -70,11 +71,12 @@ const hankkeet: HankeDataDraft[] = [
         ytunnus: '6006332-9',
         email: 'yritys@testi.com',
         puhelinnumero: '0000000000',
-        alikontaktit: [
+        yhteyshenkilot: [
           {
+            id: '129fd4d0-4a00-4c43-8c02-2e32c31dd1f9',
             etunimi: 'Esa',
             sukunimi: 'Kauppinen',
-            email: 'esa.kauppinen@maansiirtofirma.com',
+            sahkoposti: 'esa.kauppinen@maansiirtofirma.com',
             puhelinnumero: '0000000000',
           },
         ],
@@ -88,17 +90,19 @@ const hankkeet: HankeDataDraft[] = [
         ytunnus: '6502327-0',
         email: 'yritys2@testi.com',
         puhelinnumero: '1111111111',
-        alikontaktit: [
+        yhteyshenkilot: [
           {
+            id: 'ef9856fc-6b8b-4fff-b5f6-3522af2f4554',
             etunimi: 'Matti',
             sukunimi: 'Meikäläinen',
-            email: 'matti.meikalainen@testi.com',
+            sahkoposti: 'matti.meikalainen@testi.com',
             puhelinnumero: '1111111111',
           },
           {
+            id: '129fd4d0-4a00-4c43-8c02-2e32c31dd1f9',
             etunimi: 'Esa',
             sukunimi: 'Kauppinen',
-            email: 'esa.kauppinen@maansiirtofirma.com',
+            sahkoposti: 'esa.kauppinen@maansiirtofirma.com',
             puhelinnumero: '1111111111',
           },
         ],
@@ -113,11 +117,12 @@ const hankkeet: HankeDataDraft[] = [
         puhelinnumero: '2222222222',
         organisaatioNimi: 'Organisaatio',
         osasto: '',
-        alikontaktit: [
+        yhteyshenkilot: [
           {
+            id: '197a6051-6043-4c3d-9889-95e263d17f76',
             etunimi: 'Matti',
             sukunimi: 'Meikäläinen',
-            email: 'matti.meikalainen@testi.com',
+            sahkoposti: 'matti.meikalainen@testi.com',
             puhelinnumero: '2222222222',
           },
         ],
@@ -135,6 +140,7 @@ const hankkeet: HankeDataDraft[] = [
         meluHaitta: HANKE_MELUHAITTA.PITKAKESTOINEN_TOISTUVA_HAITTA,
         polyHaitta: HANKE_POLYHAITTA.PITKAKESTOINEN_TOISTUVA_HAITTA,
         tarinaHaitta: HANKE_TARINAHAITTA.SATUNNAINEN_HAITTA,
+        nimi: 'Hankealue 1',
         geometriat: {
           id: 37,
           version: 0,
@@ -189,6 +195,7 @@ const hankkeet: HankeDataDraft[] = [
         tarinaHaitta: HANKE_TARINAHAITTA.SATUNNAINEN_HAITTA,
         kaistaHaitta: HANKE_KAISTAHAITTA.VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA,
         kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA.PITUUS_10_99_METRIA,
+        nimi: 'Hankealue 2',
         geometriat: {
           featureCollection: {
             type: 'FeatureCollection',
@@ -249,11 +256,12 @@ const hankkeet: HankeDataDraft[] = [
         ytunnus: '5341034-5',
         email: 'toimisto@testi.com',
         puhelinnumero: '0501234567',
-        alikontaktit: [
+        yhteyshenkilot: [
           {
+            id: '129fd4d0-4a00-4c43-8c02-2e32c31dd1f9',
             etunimi: 'Esa',
             sukunimi: 'Kauppinen',
-            email: 'esa.kauppinen@maansiirtofirma.com',
+            sahkoposti: 'esa.kauppinen@maansiirtofirma.com',
             puhelinnumero: '0507654321',
           },
         ],
@@ -287,6 +295,7 @@ const hankkeet: HankeDataDraft[] = [
         tarinaHaitta: HANKE_TARINAHAITTA.PITKAKESTOINEN_TOISTUVA_HAITTA,
         kaistaHaitta: HANKE_KAISTAHAITTA.VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA,
         kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA.PITUUS_ALLE_10_METRIA,
+        nimi: 'Hankealue 1',
         geometriat: {
           featureCollection: {
             type: 'FeatureCollection',
@@ -344,6 +353,7 @@ const hankkeet: HankeDataDraft[] = [
     toteuttajat: [],
     muut: [],
     tyomaaTyyppi: [],
+    alueet: [],
   },
   {
     id: 5,
@@ -366,6 +376,7 @@ const hankkeet: HankeDataDraft[] = [
     toteuttajat: [],
     muut: [],
     tyomaaTyyppi: [],
+    alueet: [],
   },
   {
     id: 6,
@@ -388,6 +399,7 @@ const hankkeet: HankeDataDraft[] = [
     toteuttajat: [],
     muut: [],
     tyomaaTyyppi: [],
+    alueet: [],
   },
   {
     id: 7,
@@ -410,6 +422,7 @@ const hankkeet: HankeDataDraft[] = [
     toteuttajat: [],
     muut: [],
     tyomaaTyyppi: [],
+    alueet: [],
   },
   {
     id: 8,
@@ -432,6 +445,7 @@ const hankkeet: HankeDataDraft[] = [
     toteuttajat: [],
     muut: [],
     tyomaaTyyppi: [],
+    alueet: [],
   },
   {
     id: 9,
@@ -454,6 +468,7 @@ const hankkeet: HankeDataDraft[] = [
     toteuttajat: [],
     muut: [],
     tyomaaTyyppi: [],
+    alueet: [],
   },
   {
     id: 10,
@@ -476,6 +491,7 @@ const hankkeet: HankeDataDraft[] = [
     toteuttajat: [],
     muut: [],
     tyomaaTyyppi: [],
+    alueet: [],
   },
   {
     id: 11,
@@ -499,6 +515,7 @@ const hankkeet: HankeDataDraft[] = [
     muut: [],
     tyomaaTyyppi: [],
     generated: true,
+    alueet: [],
   },
 ];
 

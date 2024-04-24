@@ -8,7 +8,7 @@ import Geometry from 'ol/geom/Geometry';
 import { Box } from '@chakra-ui/react';
 import HankeDrawer from '../../map/components/HankeDrawer/HankeDrawer';
 import { useFormPage } from './hooks/useFormPage';
-import { FORMFIELD, FormProps, HankeAlueFormState } from './types';
+import { FORMFIELD, FormProps, HankeAlueFormState, HankeDataFormState } from './types';
 import { formatSurfaceArea } from '../../map/utils';
 import Haitat from './components/Haitat';
 import Text from '../../../common/components/text/Text';
@@ -19,7 +19,7 @@ import useFieldArrayWithStateUpdate from '../../../common/hooks/useFieldArrayWit
 import { HankeAlue } from '../../types/hanke';
 import { getAreaDefaultName } from './utils';
 
-function getEmptyArea(feature: Feature): Omit<HankeAlueFormState, 'id' | 'geometriat'> {
+function getEmptyArea(feature: Feature): Omit<HankeAlueFormState, 'geometriat'> {
   return {
     feature,
     haittaAlkuPvm: null,
@@ -29,24 +29,27 @@ function getEmptyArea(feature: Feature): Omit<HankeAlueFormState, 'id' | 'geomet
     tarinaHaitta: null,
     kaistaHaitta: null,
     kaistaPituusHaitta: null,
+    id: null,
   };
 }
 
 const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
   const { t } = useTranslation();
-  const { setValue, trigger, watch, getValues } = useFormContext();
+  const { setValue, trigger, watch, getValues } = useFormContext<HankeDataFormState>();
   const {
     fields: hankeAlueet,
     append,
     remove,
-  } = useFieldArrayWithStateUpdate({
+  } = useFieldArrayWithStateUpdate<HankeDataFormState, 'alueet'>({
     name: FORMFIELD.HANKEALUEET,
   });
   const [drawSource] = useState<VectorSource>(new VectorSource());
   const addressCoordinate = useAddressCoordinate(formData.tyomaaKatuosoite);
   useFormPage();
 
-  const { tabRefs } = useSelectableTabs(hankeAlueet.length, { selectLastTabOnChange: true });
+  const { tabRefs } = useSelectableTabs(hankeAlueet, {
+    selectLastTabOnChange: true,
+  });
 
   const higlightArea = useHighlightArea();
 
@@ -79,7 +82,8 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
     // geometriesChanged field in order to update
     // surface area calculation for the changed area
     trigger(FORMFIELD.GEOMETRIES_CHANGED);
-  }, [trigger]);
+    setValue(FORMFIELD.GEOMETRIES_CHANGED, true, { shouldDirty: true });
+  }, [trigger, setValue]);
 
   function removeArea(index: number) {
     remove(index);
@@ -89,12 +93,15 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
     }
   }
 
-  const features = useMemo(() => formData.alueet?.map((alue) => alue.feature), [formData.alueet]);
+  const features = useMemo(() => hankeAlueet.map((alue) => alue.feature), [hankeAlueet]);
 
   return (
     <div>
       <Box mb="var(--spacing-m)">
         <p>{t('hankeForm:hankkeenAlueForm:instructions')}</p>
+      </Box>
+      <Box mb="var(--spacing-m)">
+        <p>{t('hankeForm:hankkeenAlueForm:instructions2')}</p>
       </Box>
 
       <Text tag="h3" styleAs="h4" weight="bold">
@@ -118,13 +125,12 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
       ) : (
         <Tabs>
           <TabList>
-            {hankeAlueet.map((item, index) => {
-              const hankeAlue = formData.alueet && formData.alueet[index];
-              const hankeGeometry = hankeAlue?.feature?.getGeometry();
+            {hankeAlueet.map((alue, index) => {
+              const hankeGeometry = alue.feature?.getGeometry();
               const surfaceArea = hankeGeometry && `(${formatSurfaceArea(hankeGeometry)})`;
               const name = watch(`${FORMFIELD.HANKEALUEET}.${index}.nimi`);
               return (
-                <Tab key={item.id} onClick={() => higlightArea(hankeAlue?.feature)}>
+                <Tab key={alue.id} onClick={() => higlightArea(alue.feature)}>
                   <div ref={tabRefs[index]}>
                     {name} {surfaceArea}
                   </div>

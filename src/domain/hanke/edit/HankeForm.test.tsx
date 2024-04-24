@@ -18,6 +18,8 @@ import { server } from '../../mocks/test-server';
 import { HankeAttachmentMetadata } from '../hankeAttachments/types';
 import api from '../../api/api';
 import * as hankeAttachmentsApi from '../hankeAttachments/hankeAttachmentsApi';
+import { HankeUser } from '../hankeUsers/hankeUser';
+import { fillNewContactPersonForm } from '../../forms/components/testUtils';
 
 afterEach(cleanup);
 
@@ -271,7 +273,6 @@ describe('HankeForm', () => {
     });
 
     // Rakennuttaja
-    await user.click(screen.getByText(/rakennuttajan tiedot/i));
     await user.click(screen.getByText(/lisää rakennuttaja/i));
     expect(screen.getAllByText('Rakennuttaja')).toHaveLength(1);
 
@@ -280,7 +281,7 @@ describe('HankeForm', () => {
     expect(screen.getAllByLabelText(/y-tunnus/i)[1]).toBeDisabled();
 
     await user.click(screen.getByText(/lisää rakennuttaja/i)); // add second rakennuttaja
-    expect(screen.getAllByText('Rakennuttaja')).toHaveLength(2);
+    expect(screen.getAllByText(/(^rakennuttaja$)|(^rakennuttaja \d$)/i)).toHaveLength(2);
     await user.click(screen.getAllByText(/poista rakennuttaja/i)[1]); // remove second rakennuttaja
     await user.click(screen.getByText(/poista rakennuttaja/i)); // remove first (and last) rakennuttaja
     expect(screen.queryByText('Rakennuttaja')).not.toBeInTheDocument();
@@ -483,44 +484,105 @@ describe('HankeForm', () => {
     expect(screen.queryByText(/kaistahaittojen pituus: -/i)).toBeInTheDocument();
     expect(screen.queryByText(/muokkaa hanketta lisätäksesi tietoja/i)).toBeInTheDocument();
   });
+
+  test('Should show missing fields for hanke to be public in each page of the form', async () => {
+    const testHanke = {
+      ...hankkeet[0],
+      kuvaus: '',
+      vaihe: null,
+    };
+
+    const { user } = render(
+      <HankeForm
+        formData={testHanke as HankeDataFormState}
+        onIsDirtyChange={() => {}}
+        onFormClose={() => {}}
+      >
+        children
+      </HankeForm>,
+    );
+
+    const draftStateText =
+      'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavat kentät tällä sivulla vaaditaan hankeen julkaisemiseksi:';
+
+    await screen.findByText(draftStateText);
+    expect(screen.getByRole('link', { name: /hankkeen kuvaus/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /katuosoite/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /hankkeen vaihe/i })).toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText(/hankkeen kuvaus/i), {
+      target: { value: 'Kuvaus' },
+    });
+    fireEvent.change(screen.getByLabelText(/katuosoite/i), {
+      target: { value: 'Katu 1' },
+    });
+    await user.click(screen.getByRole('radio', { name: 'Ohjelmointi' }));
+
+    expect(screen.queryByText(draftStateText)).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+    expect(screen.queryByText(draftStateText)).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /hanke-alueet: hankealueen piirtäminen/i }),
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+    expect(screen.queryByText(draftStateText)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /hankkeen omistaja: nimi/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /hankkeen omistaja: sähköposti/i }),
+    ).toBeInTheDocument();
+  });
+
+  test('Should show pages that have missing information for hanke to be public in summary page', async () => {
+    const testHanke = {
+      ...hankkeet[0],
+      kuvaus: '',
+      vaihe: null,
+    };
+
+    const { user } = render(
+      <HankeForm
+        formData={testHanke as HankeDataFormState}
+        onIsDirtyChange={() => {}}
+        onFormClose={() => {}}
+      >
+        children
+      </HankeForm>,
+    );
+
+    await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+
+    expect(
+      screen.getByText(
+        'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavissa vaiheissa on puuttuvia tietoja:',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
+    expect(screen.getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
+    expect(screen.getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
+  });
 });
 
-describe('New contact person form', () => {
-  function fillNewContactPersonForm(
-    options: {
-      etunimi?: string;
-      sukunimi?: string;
-      sahkoposti?: string;
-      puhelinnumero?: string;
-    } = {},
-  ) {
-    const {
-      etunimi = 'Matti',
-      sukunimi = 'Meikäläinen',
-      sahkoposti = 'matti.meikalainen@test.com',
-      puhelinnumero = '0401234567',
-    } = options;
-    fireEvent.change(screen.getByLabelText(/etunimi/i), {
-      target: { value: etunimi },
-    });
-    fireEvent.change(screen.getByLabelText(/sukunimi/i), {
-      target: { value: sukunimi },
-    });
-    fireEvent.change(screen.getAllByLabelText(/sähköposti/i)[1], {
-      target: { value: sahkoposti },
-    });
-    fireEvent.change(screen.getAllByLabelText(/puhelin/i)[1], {
-      target: { value: puhelinnumero },
-    });
-  }
-
-  test('Should be able to create new user', async () => {
+describe('New contact person form and contact person dropdown', () => {
+  test('Should be able to create new user and new user is added to dropdown', async () => {
+    const newUser = {
+      etunimi: 'Martti',
+      sukunimi: 'Mielikäinen',
+      sahkoposti: 'martti@test.com',
+      puhelinnumero: '0000000000',
+    };
     const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
     await user.click(screen.getByRole('button', { name: /lisää uusi yhteyshenkilö/i }));
-    fillNewContactPersonForm();
+    fillNewContactPersonForm(newUser);
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
 
     expect(screen.getByText('Yhteyshenkilö tallennettu')).toBeInTheDocument();
+    expect(
+      screen.getByText(`${newUser.etunimi} ${newUser.sukunimi} (${newUser.sahkoposti})`),
+    ).toBeInTheDocument();
   });
 
   test('Should not be able to create new user and show validation errors if info is not filled', async () => {
@@ -544,5 +606,51 @@ describe('New contact person form', () => {
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
 
     expect(screen.getByText('Yhteyshenkilön tallennus epäonnistui')).toBeInTheDocument();
+  });
+
+  test('Should show all hanke users in the contact person dropdown', async () => {
+    const hankeUsers: HankeUser[] = [
+      {
+        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        sahkoposti: 'matti.meikalainen@test.com',
+        etunimi: 'Matti',
+        sukunimi: 'Meikäläinen',
+        puhelinnumero: '0401234567',
+        kayttooikeustaso: 'KAIKKI_OIKEUDET',
+        roolit: [],
+        tunnistautunut: true,
+        kutsuttu: null,
+      },
+      {
+        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
+        sahkoposti: 'teppo@test.com',
+        etunimi: 'Teppo',
+        sukunimi: 'Työmies',
+        puhelinnumero: '0401234567',
+        kayttooikeustaso: 'KAIKKIEN_MUOKKAUS',
+        roolit: [],
+        tunnistautunut: false,
+        kutsuttu: '2024-02-15T19:59:59.999Z',
+      },
+    ];
+    server.use(
+      rest.get('/api/hankkeet/:hankeTunnus/kayttajat', async (req, res, ctx) => {
+        return res(
+          ctx.status(200),
+          ctx.json<{ kayttajat: HankeUser[] }>({
+            kayttajat: hankeUsers,
+          }),
+        );
+      }),
+    );
+
+    const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
+    await user.click(screen.getByRole('button', { name: 'Yhteyshenkilöt: Sulje ja avaa valikko' }));
+
+    hankeUsers.forEach((hankeUser) => {
+      expect(
+        screen.getByText(`${hankeUser.etunimi} ${hankeUser.sukunimi} (${hankeUser.sahkoposti})`),
+      ).toBeInTheDocument();
+    });
   });
 });

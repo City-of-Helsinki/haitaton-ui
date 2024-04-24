@@ -15,8 +15,10 @@ import {
   Application,
   ApplicationAttachmentMetadata,
   AttachmentType,
+  JohtoselvitysData,
 } from '../application/types/application';
 import * as applicationAttachmentsApi from '../application/attachments';
+import { cloneDeep } from 'lodash';
 
 afterEach(cleanup);
 
@@ -256,6 +258,8 @@ test('Cable report application form can be filled and saved and sent to Allu', a
 });
 
 test('Should show error message when saving fails', async () => {
+  const OLD_ENV = { ...window._env_ };
+  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: 0 };
   server.use(
     rest.post('/api/hakemukset', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
@@ -273,6 +277,9 @@ test('Should show error message when saving fails', async () => {
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
   expect(screen.queryAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
+
+  jest.resetModules();
+  window._env_ = OLD_ENV;
 });
 
 test('Should show error message when sending fails', async () => {
@@ -300,6 +307,8 @@ test('Should show error message when sending fails', async () => {
 });
 
 test('Form can be saved without hanke existing first', async () => {
+  const OLD_ENV = { ...window._env_ };
+  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: 0 };
   const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
 
   // Fill basic information page
@@ -311,9 +320,14 @@ test('Form can be saved without hanke existing first', async () => {
   expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
   await screen.findByText('Johtoselvitys (HAI22-12)');
   expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+
+  jest.resetModules();
+  window._env_ = OLD_ENV;
 });
 
 test('Save and quit works', async () => {
+  const OLD_ENV = { ...window._env_ };
+  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: 0 };
   const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
 
   await waitForLoadingToFinish();
@@ -325,9 +339,14 @@ test('Save and quit works', async () => {
 
   expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
   expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2');
+
+  jest.resetModules();
+  window._env_ = OLD_ENV;
 });
 
 test('Save and quit works without hanke existing first', async () => {
+  const OLD_ENV = { ...window._env_ };
+  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: 0 };
   const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
 
   // Fill basic information page
@@ -337,6 +356,9 @@ test('Save and quit works without hanke existing first', async () => {
 
   expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
   expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-13');
+
+  jest.resetModules();
+  window._env_ = OLD_ENV;
 });
 
 test('Should not save and quit if current form page is not valid', async () => {
@@ -349,6 +371,8 @@ test('Should not save and quit if current form page is not valid', async () => {
 });
 
 test('Should show error message and not navigate away when save and quit fails', async () => {
+  const OLD_ENV = { ...window._env_ };
+  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: 0 };
   server.use(
     rest.post('/api/hakemukset/:id', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
@@ -362,10 +386,15 @@ test('Should show error message and not navigate away when save and quit fails',
 
   expect(screen.queryAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
   expect(window.location.pathname).toBe('/fi/johtoselvityshakemus');
+
+  jest.resetModules();
+  window._env_ = OLD_ENV;
 });
 
 test('Should not save application between page changes when nothing is changed', async () => {
-  const { user } = render(<JohtoselvitysContainer application={applications[3]} />);
+  const { user } = render(
+    <JohtoselvitysContainer application={applications[3] as Application<JohtoselvitysData>} />,
+  );
 
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
@@ -381,7 +410,9 @@ test('Should not save application between page changes when nothing is changed',
 });
 
 test('Should save existing application between page changes when there are changes', async () => {
-  const { user } = render(<JohtoselvitysContainer application={applications[3]} />);
+  const { user } = render(
+    <JohtoselvitysContainer application={applications[3] as Application<JohtoselvitysData>} />,
+  );
 
   fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
     target: { value: 'Muokataan johtoselvitystä' },
@@ -459,7 +490,12 @@ test('Should change users own role and its fields correctly', async () => {
 });
 
 test('Should not change anything if selecting the same role again', async () => {
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  const testApplication = cloneDeep(applications[0]) as Application<JohtoselvitysData>;
+  testApplication.applicationData.customerWithContacts =
+    application.applicationData.customerWithContacts;
+  testApplication.applicationData.contractorWithContacts =
+    application.applicationData.contractorWithContacts;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
 
   fireEvent.click(screen.getByRole('button', { name: /rooli/i }));
   // Select the role to be Hakija again
@@ -471,7 +507,12 @@ test('Should not change anything if selecting the same role again', async () => 
 });
 
 test('Should not show send button when application has moved to pending state', async () => {
-  const { user } = render(<JohtoselvitysContainer application={applications[1]} />);
+  const testApplication = cloneDeep(applications[1]) as Application<JohtoselvitysData>;
+  testApplication.applicationData.customerWithContacts =
+    application.applicationData.customerWithContacts;
+  testApplication.applicationData.contractorWithContacts =
+    application.applicationData.contractorWithContacts;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
@@ -480,7 +521,12 @@ test('Should not show send button when application has moved to pending state', 
 });
 
 test('Should show send button when application is edited in draft state', async () => {
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  const testApplication = cloneDeep(applications[0]) as Application<JohtoselvitysData>;
+  testApplication.applicationData.customerWithContacts =
+    application.applicationData.customerWithContacts;
+  testApplication.applicationData.contractorWithContacts =
+    application.applicationData.contractorWithContacts;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
@@ -509,7 +555,9 @@ test('Should not allow start date be after end date', async () => {
 });
 
 test('Should not allow step change when current step is invalid', async () => {
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  const { user } = render(
+    <JohtoselvitysContainer application={applications[0] as Application<JohtoselvitysData>} />,
+  );
 
   // Move to contacts page
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
@@ -533,13 +581,17 @@ test('Should not allow step change when current step is invalid', async () => {
 });
 
 test('Should not show inline notification by default', () => {
-  render(<JohtoselvitysContainer application={applications[0]} />);
+  render(
+    <JohtoselvitysContainer application={applications[0] as Application<JohtoselvitysData>} />,
+  );
 
   expect(screen.queryByTestId('form-notification')).not.toBeInTheDocument();
 });
 
 test('Should show inline notification when editing a form that is in pending state', () => {
-  render(<JohtoselvitysContainer application={applications[1]} />);
+  render(
+    <JohtoselvitysContainer application={applications[1] as Application<JohtoselvitysData>} />,
+  );
 
   expect(screen.queryByTestId('form-notification')).toBeInTheDocument();
   expect(screen.queryByText('Olet muokkaamassa jo lähetettyä hakemusta.')).toBeInTheDocument();
@@ -551,7 +603,9 @@ test('Should show inline notification when editing a form that is in pending sta
 });
 
 test('Should not allow to edit own info when application has been sent to Allu', () => {
-  render(<JohtoselvitysContainer application={applications[1]} />);
+  render(
+    <JohtoselvitysContainer application={applications[1] as Application<JohtoselvitysData>} />,
+  );
 
   expect(screen.getByRole('button', { name: /rooli/i })).toBeDisabled();
   expect(
@@ -599,7 +653,10 @@ test('Validation error is shown if no work is about checkbox is selected', async
   expect(screen.queryByText('Kenttä on pakollinen')).toBeInTheDocument();
 });
 
-const testFormSaving = async (inputApplication: Application, fillInfoButton: string) => {
+const testFormSaving = async (
+  inputApplication: Application<JohtoselvitysData>,
+  fillInfoButton: string,
+) => {
   const saveApplication = jest.spyOn(applicationApi, 'saveApplication');
   const { user } = render(<JohtoselvitysContainer application={inputApplication} />);
 
@@ -615,14 +672,14 @@ const testFormSaving = async (inputApplication: Application, fillInfoButton: str
 
 test('Form is saved when contacts are filled with orderer information', async () => {
   await testFormSaving(
-    applications[0],
+    applications[0] as Application<JohtoselvitysData>,
     'applicationData.customerWithContacts.customer.fillOwnInfoButton',
   );
 });
 
 test('Form is saved when sub contacts are filled with orderer information', async () => {
   await testFormSaving(
-    applications[0],
+    applications[0] as Application<JohtoselvitysData>,
     'applicationData.contractorWithContacts.contacts.0.fillOwnInfoButton',
   );
 });
@@ -661,7 +718,12 @@ test('Should be able to upload attachments', async () => {
     .spyOn(applicationAttachmentsApi, 'uploadAttachment')
     .mockImplementation(uploadAttachmentMock);
   initFileGetResponse([]);
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  const testApplication = cloneDeep(applications[0]) as Application<JohtoselvitysData>;
+  testApplication.applicationData.customerWithContacts =
+    application.applicationData.customerWithContacts;
+  testApplication.applicationData.contractorWithContacts =
+    application.applicationData.contractorWithContacts;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
   const fileUpload = screen.getByLabelText('Raahaa tiedostot tänne');
   user.upload(fileUpload, [
@@ -696,7 +758,12 @@ test('Should be able to delete attachments', async () => {
       attachmentType: 'MUU',
     },
   ]);
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  const testApplication = cloneDeep(applications[0]) as Application<JohtoselvitysData>;
+  testApplication.applicationData.customerWithContacts =
+    application.applicationData.customerWithContacts;
+  testApplication.applicationData.contractorWithContacts =
+    application.applicationData.contractorWithContacts;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
   const { getAllByRole } = within(screen.getByTestId('file-upload-list'));
@@ -740,7 +807,12 @@ test('Should list existing attachments in the attachments page and in summary pa
       attachmentType: 'MUU',
     },
   ]);
-  const { user } = render(<JohtoselvitysContainer application={applications[0]} />);
+  const testApplication = cloneDeep(applications[0]) as Application<JohtoselvitysData>;
+  testApplication.applicationData.customerWithContacts =
+    application.applicationData.customerWithContacts;
+  testApplication.applicationData.contractorWithContacts =
+    application.applicationData.contractorWithContacts;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
   const { getAllByRole } = within(screen.getByTestId('file-upload-list'));
@@ -769,7 +841,11 @@ test('Summary should show attachments and they are downloadable', async () => {
     .spyOn(applicationAttachmentsApi, 'getAttachmentFile')
     .mockImplementation(jest.fn());
 
-  const testApplication = applications[0];
+  const testApplication = cloneDeep(applications[0]) as Application<JohtoselvitysData>;
+  testApplication.applicationData.customerWithContacts =
+    application.applicationData.customerWithContacts;
+  testApplication.applicationData.contractorWithContacts =
+    application.applicationData.contractorWithContacts;
   initFileGetResponse([ATTACHMENT_META]);
 
   const { user } = render(<JohtoselvitysContainer application={testApplication} />);

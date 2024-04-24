@@ -1,13 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import {
-  Button,
-  Dialog,
-  TextInput as HDSTextInput,
-  IconCheck,
-  IconCross,
-  IconInfoCircle,
-  Notification,
-} from 'hds-react';
+import { Button, Dialog, IconCheck, IconCross, IconInfoCircle, Notification } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -15,11 +7,11 @@ import { useMutation } from 'react-query';
 import { yupResolver } from '@hookform/resolvers/yup';
 import TextInput from '../../../common/components/textInput/TextInput';
 import { newHankeSchema } from '../edit/hankeSchema';
-import useUser from '../../auth/useUser';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
 import { createHanke } from '../edit/hankeApi';
 import { NewHankeData } from '../edit/types';
+import OwnInformationFields from '../../forms/components/OwnInformationFields';
 
 type Props = {
   isOpen: boolean;
@@ -28,7 +20,6 @@ type Props = {
 
 function HankeCreateDialog({ isOpen, onClose }: Readonly<Props>) {
   const { t } = useTranslation();
-  const user = useUser();
   const navigate = useNavigate();
   const getEditHankePath = useLinkPath(ROUTES.EDIT_HANKE);
   const formContext = useForm<NewHankeData>({
@@ -81,33 +72,7 @@ function HankeCreateDialog({ isOpen, onClose }: Readonly<Props>) {
             <Box marginBottom="var(--spacing-m)">
               <TextInput name="nimi" maxLength={100} required />
             </Box>
-            <Box marginBottom="var(--spacing-s)">
-              <h3 className="heading-s">{t('form:labels:omatTiedot')}</h3>
-            </Box>
-            <Box marginBottom="var(--spacing-m)">
-              <HDSTextInput
-                id="user-name"
-                label={t('form:yhteystiedot:labels:nimi')}
-                value={`${user.data?.profile?.name}`}
-                helperText={t('form:labels:fromHelsinkiProfile')}
-                readOnly
-              />
-            </Box>
-            <Box marginBottom="var(--spacing-s)" maxWidth={328}>
-              <TextInput
-                name="perustaja.sahkoposti"
-                label={t('hankeForm:labels:email')}
-                required
-                defaultValue={user.data?.profile.email}
-              />
-            </Box>
-            <Box maxWidth={328}>
-              <TextInput
-                name="perustaja.puhelinnumero"
-                label={t('hankeForm:labels:puhelinnumero')}
-                required
-              />
-            </Box>
+            <OwnInformationFields />
 
             {isError && (
               <Box marginTop="var(--spacing-m)">

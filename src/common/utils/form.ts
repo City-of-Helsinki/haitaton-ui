@@ -1,4 +1,4 @@
-import { FormatFunction } from 'i18next';
+import { TFunction } from 'i18next';
 import { parse, isDate } from 'date-fns';
 
 export const parseDateString = (_: unknown, originalValue: string) =>
@@ -22,12 +22,12 @@ const isI18nYupMessage = (error: any): boolean => {
 };
 
 export const getInputErrorText = (
-  t: FormatFunction,
+  t: TFunction<string>,
   // eslint-disable-next-line
   error: any,
 ): string | undefined => {
   if (isI18nYupMessage(error)) {
-    return t(`form:validations:${error.message.key}`, error.message.values);
+    return t(`form:validations:${error.message.key}`, error.message.values) as string;
   }
 
   if (error && error.message) {

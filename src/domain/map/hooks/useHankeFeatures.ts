@@ -19,19 +19,24 @@ export default function useHankeFeatures(source: Vector, hankkeet: HankeData[]) 
           if (!alue.geometriat) {
             return [];
           }
-          return new GeoJSON().readFeatures(alue.geometriat.featureCollection);
-        }) as Feature<Geometry>[];
 
-        hankeFeatures.forEach((feature) => {
+          const feature = new GeoJSON().readFeatures(
+            alue.geometriat.featureCollection,
+          )[0] as Feature<Geometry>;
+
           feature.setProperties(
             {
               liikennehaittaindeksi: hanke.tormaystarkasteluTulos
                 ? hanke.tormaystarkasteluTulos.liikennehaittaindeksi.indeksi
                 : null,
+              areaName: alue.nimi,
             },
             true,
           );
+
+          return feature;
         });
+
         source.addFeatures(hankeFeatures);
       }
     });

@@ -11,19 +11,14 @@ import {
   HankeIndexData,
 } from './../../types/hanke';
 import { CONTACT_TYYPPI } from '../../types/hanke';
-import {
-  FORMFIELD,
-  CONTACT_FORMFIELD,
-  CONTACT_PERSON_FORMFIELD,
-  HankeDataFormState,
-} from './types';
+import { FORMFIELD, CONTACT_FORMFIELD, YHTEYSHENKILO_FORMFIELD, HankeDataFormState } from './types';
 import isValidBusinessId from '../../../common/utils/isValidBusinessId';
 
-export const contactPersonSchema = yup.object({
-  [CONTACT_PERSON_FORMFIELD.ETUNIMI]: yup.string().max(50).required(),
-  [CONTACT_PERSON_FORMFIELD.SUKUNIMI]: yup.string().max(50).required(),
-  [CONTACT_PERSON_FORMFIELD.EMAIL]: yup.string().email().max(100).required(),
-  [CONTACT_PERSON_FORMFIELD.PUHELINNUMERO]: yup.string().max(20).required(),
+export const yhteyshenkiloSchema = yup.object({
+  [YHTEYSHENKILO_FORMFIELD.ETUNIMI]: yup.string().max(50).required(),
+  [YHTEYSHENKILO_FORMFIELD.SUKUNIMI]: yup.string().max(50).required(),
+  [YHTEYSHENKILO_FORMFIELD.EMAIL]: yup.string().email().max(100).required(),
+  [YHTEYSHENKILO_FORMFIELD.PUHELINNUMERO]: yup.string().max(20).required(),
 });
 
 const contactSchema = yup.object({
@@ -81,7 +76,7 @@ export const hankeSchema: yup.ObjectSchema<HankeDataFormState> = yup.object().sh
   [FORMFIELD.KATUOSOITE]: yup.string().nullable(),
   [FORMFIELD.VAIHE]: yup.mixed<HANKE_VAIHE_KEY>().nullable(),
   [FORMFIELD.HANKEALUEET]: yup.array(hankeAlueSchema),
-  [FORMFIELD.OMISTAJAT]: yup.array(contactSchema).defined().length(1),
+  [FORMFIELD.OMISTAJAT]: yup.array(contactSchema).defined(),
   [FORMFIELD.RAKENNUTTAJAT]: yup.array(contactSchema).defined(),
   [FORMFIELD.TOTEUTTAJAT]: yup.array(contactSchema).defined(),
   [FORMFIELD.MUUTTAHOT]: yup.array(otherPartySchema).defined(),

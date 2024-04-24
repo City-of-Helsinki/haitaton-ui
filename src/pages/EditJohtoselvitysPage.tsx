@@ -6,14 +6,18 @@ import Container from '../common/components/container/Container';
 import PageMeta from './components/PageMeta';
 import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
 import JohtoselvitysContainer from '../domain/johtoselvitys/JohtoselvitysContainer';
+import JohtoselvitysContainerNew from '../domain/johtoselvitys_new/JohtoselvitysContainer';
 import { useApplication } from '../domain/application/hooks/useApplication';
 import useHanke from '../domain/hanke/hooks/useHanke';
 import ErrorLoadingText from '../common/components/errorLoadingText/ErrorLoadingText';
 import { APPLICATION_ID_STORAGE_KEY } from '../domain/application/constants';
+import { useFeatureFlags } from '../common/components/featureFlags/FeatureFlagsContext';
+import { Application, JohtoselvitysData } from '../domain/application/types/application';
 
 const EditJohtoselvitysPage: React.FC = () => {
   const { id } = useParams();
   const { EDIT_JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();
+  const features = useFeatureFlags();
 
   const applicationQueryResult = useApplication(Number(id));
   const hankeQueryResult = useHanke(applicationQueryResult.data?.hankeTunnus);
@@ -38,10 +42,17 @@ const EditJohtoselvitysPage: React.FC = () => {
   return (
     <Container>
       <PageMeta routeData={EDIT_JOHTOSELVITYSHAKEMUS} />
-      <JohtoselvitysContainer
-        hankeData={hankeQueryResult?.data}
-        application={applicationQueryResult.data}
-      />
+      {features.accessRights ? (
+        <JohtoselvitysContainerNew
+          hankeData={hankeQueryResult?.data}
+          application={applicationQueryResult.data as Application<JohtoselvitysData>}
+        />
+      ) : (
+        <JohtoselvitysContainer
+          hankeData={hankeQueryResult?.data}
+          application={applicationQueryResult.data as Application<JohtoselvitysData>}
+        />
+      )}
     </Container>
   );
 };

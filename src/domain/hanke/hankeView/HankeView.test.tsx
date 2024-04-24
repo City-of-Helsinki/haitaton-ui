@@ -1,6 +1,5 @@
-import React from 'react';
 import { rest } from 'msw';
-import { render, screen } from '../../../testUtils/render';
+import { render, screen, within } from '../../../testUtils/render';
 import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import HankeViewContainer from './HankeViewContainer';
 import { server } from '../../mocks/test-server';
@@ -8,7 +7,7 @@ import { SignedInUser } from '../hankeUsers/hankeUser';
 
 function getViewPermissionForUser() {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
       return res(
         ctx.status(200),
         ctx.json<SignedInUser>({
@@ -26,9 +25,27 @@ test('Draft state notification is rendered when hanke is in draft state', async 
 
   await waitForLoadingToFinish();
 
-  const draftStateElements = screen.queryAllByText(/hanke on luonnostilassa/i, { exact: false });
+  const draftStateElement = screen.getByTestId('hankeDraftStateNotification');
+  const { getByRole } = within(draftStateElement);
 
-  expect(draftStateElements[0]).toBeInTheDocument();
+  expect(draftStateElement).toBeInTheDocument();
+  expect(getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
+  expect(getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
+  expect(getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
+});
+
+test('Draft state notification only shows form pages with missing information', async () => {
+  render(<HankeViewContainer hankeTunnus="HAI22-4" />);
+
+  await waitForLoadingToFinish();
+
+  const draftStateElement = screen.getByTestId('hankeDraftStateNotification');
+  const { queryByRole, getByRole } = within(draftStateElement);
+
+  expect(draftStateElement).toBeInTheDocument();
+  expect(queryByRole('listitem', { name: /perustiedot/i })).not.toBeInTheDocument();
+  expect(getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
+  expect(getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
 });
 
 test('Add application button is displayed when hanke is in PUBLIC state', async () => {
@@ -52,9 +69,9 @@ test('Draft state notification is not rendered when hanke is not in draft state'
 
   await waitForLoadingToFinish();
 
-  const draftStateElements = screen.queryAllByText(/hanke on luonnostilassa/i, { exact: false });
+  const draftStateElement = screen.queryByText(/hanke on luonnostilassa/i, { exact: false });
 
-  expect(draftStateElements.length).toBe(0);
+  expect(draftStateElement).not.toBeInTheDocument();
 });
 
 test('Generated state notification is rendered when hanke is in generated state', async () => {
@@ -100,7 +117,7 @@ test('Correct information about hanke should be displayed', async () => {
   expect(screen.queryByText('Ei')).toBeInTheDocument();
   expect(screen.queryByText('11974 m²')).toBeInTheDocument();
 
-  // Data in side bar
+  // Data in sidebar
   expect(screen.queryByText('Hankealue 1 (11974 m²)')).toBeInTheDocument();
   expect(screen.queryByText('2.1.2023–24.2.2023')).toBeInTheDocument();
 
@@ -165,7 +182,7 @@ test('Should render correct number of applications if they exist', async () => {
 
   await user.click(screen.getByRole('tab', { name: /hakemukset/i }));
 
-  expect(screen.getAllByTestId('application-card')).toHaveLength(3);
+  expect(screen.getAllByTestId('application-card')).toHaveLength(4);
 });
 
 test('Should show information if no applications exist', async () => {
@@ -180,7 +197,7 @@ test('Should show information if no applications exist', async () => {
 
 test('Should show error notification if loading applications fails', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/hakemukset', async (req, res, ctx) => {
+    rest.get('/api/hankkeet/:hankeTunnus/hakemukset', async (_, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
     }),
   );
@@ -259,4 +276,26 @@ test('Should not show map if there are no hanke areas', async () => {
   await waitForLoadingToFinish();
 
   expect(screen.queryByTestId('hanke-map')).not.toBeInTheDocument();
+});
+
+test('Should not show user management button if access rights feature is not enabled', async () => {
+  const OLD_ENV = { ...window._env_ };
+  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: '0' };
+  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
+  await waitForLoadingToFinish();
+
+  expect(screen.queryByRole('button', { name: 'Käyttäjähallinta' })).not.toBeInTheDocument();
+  jest.resetModules();
+  window._env_ = OLD_ENV;
+});
+
+test('Should show user management button if access rights feature is enabled', async () => {
+  const OLD_ENV = { ...window._env_ };
+  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: '1' };
+  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
+  await waitForLoadingToFinish();
+
+  expect(screen.queryByRole('button', { name: 'Käyttäjähallinta' })).toBeInTheDocument();
+  jest.resetModules();
+  window._env_ = OLD_ENV;
 });

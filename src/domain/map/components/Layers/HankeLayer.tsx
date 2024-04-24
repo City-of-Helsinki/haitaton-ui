@@ -1,25 +1,45 @@
-import React, { useRef, useMemo, useContext } from 'react';
+import { useRef, useMemo, useContext } from 'react';
 import { Vector as VectorSource } from 'ol/source';
 import VectorLayer from '../../../../common/components/map/layers/VectorLayer';
 import { byAllHankeFilters } from '../../utils';
-import { useDateRangeFilter } from '../../hooks/useDateRangeFilter';
 import { styleFunction } from '../../utils/geometryStyle';
 import CenterProjectOnMap from '../interations/CenterProjectOnMap';
 import HankkeetContext from '../../HankkeetProviderContext';
 import HighlightFeatureOnMap from '../interations/HighlightFeatureOnMap';
 import useHankeFeatures from '../../hooks/useHankeFeatures';
+import { HankeData } from '../../../types/hanke';
+import { toStartOfDayUTCISO } from '../../../../common/utils/date';
 
-const HankeLayer = () => {
-  const { hankkeet } = useContext(HankkeetContext);
+type Props = {
+  hankeData?: HankeData[];
+  startDate?: string | null;
+  endDate?: string | null;
+  centerOnMap?: boolean;
+  highlightFeatures?: boolean;
+};
+
+const currentYear = new Date().getFullYear();
+
+function HankeLayer({
+  hankeData,
+  startDate = `${currentYear}-01-01`,
+  endDate = `${currentYear + 1}-12-31`,
+  centerOnMap = false,
+  highlightFeatures = false,
+}: Readonly<Props>) {
+  const { hankkeet: hankkeetFromContext } = useContext(HankkeetContext);
   const hankeSource = useRef(new VectorSource());
-  const { hankeFilterStartDate, hankeFilterEndDate } = useDateRangeFilter();
+  const hankkeet = hankeData || hankkeetFromContext;
 
   const hankkeetFilteredByAll = useMemo(
     () =>
       hankkeet.filter(
-        byAllHankeFilters({ startDate: hankeFilterStartDate, endDate: hankeFilterEndDate }),
+        byAllHankeFilters({
+          startDate: startDate && toStartOfDayUTCISO(new Date(startDate)),
+          endDate,
+        }),
       ),
-    [hankkeet, hankeFilterStartDate, hankeFilterEndDate],
+    [hankkeet, startDate, endDate],
   );
 
   useHankeFeatures(hankeSource.current, hankkeetFilteredByAll);
@@ -29,8 +49,8 @@ const HankeLayer = () => {
       <div style={{ display: 'none' }} data-testid="countOfFilteredHankkeet">
         {hankkeetFilteredByAll.length}
       </div>
-      <CenterProjectOnMap source={hankeSource.current} />
-      <HighlightFeatureOnMap source={hankeSource.current} />
+      {centerOnMap && <CenterProjectOnMap source={hankeSource.current} />}
+      {highlightFeatures && <HighlightFeatureOnMap source={hankeSource.current} />}
 
       <VectorLayer
         source={hankeSource.current}
@@ -40,6 +60,6 @@ const HankeLayer = () => {
       />
     </>
   );
-};
+}
 
 export default HankeLayer;

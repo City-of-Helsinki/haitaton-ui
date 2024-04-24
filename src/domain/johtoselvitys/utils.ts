@@ -45,13 +45,15 @@ export function getAreaGeometries(areas: JohtoselvitysArea[]) {
  * Make sure that each areas geometry coordinates are updated to
  * latest OpenLayers feature coordinates.
  */
-export function convertFormStateToApplicationData(formState: JohtoselvitysFormValues): Application {
+export function convertFormStateToApplicationData(
+  formState: JohtoselvitysFormValues,
+): Application<JohtoselvitysData> {
   // eslint-disable-next-line no-param-reassign
   delete formState.geometriesChanged;
   // eslint-disable-next-line no-param-reassign
   delete formState.selfIntersectingPolygon;
 
-  const data: Application = cloneDeep(formState);
+  const data: Application<JohtoselvitysData> = cloneDeep(formState);
 
   const updatedAreas: ApplicationArea[] = formState.applicationData.areas.map(
     function mapToApplicationArea({ geometry, feature }): ApplicationArea {
@@ -72,7 +74,7 @@ export function convertFormStateToApplicationData(formState: JohtoselvitysFormVa
 }
 
 export function convertApplicationDataToFormState(
-  application: Application | undefined,
+  application: Application<JohtoselvitysData> | undefined,
 ): JohtoselvitysFormValues | undefined {
   if (application === undefined) {
     return undefined;

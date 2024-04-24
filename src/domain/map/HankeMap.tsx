@@ -46,7 +46,12 @@ const HankeMap: React.FC<React.PropsWithChildren<unknown>> = () => {
           <FeatureClick />
           <GeometryHover>
             <HankeHoverBox />
-            <HankeLayer />
+            <HankeLayer
+              startDate={hankeFilterStartDate}
+              endDate={hankeFilterEndDate}
+              centerOnMap
+              highlightFeatures
+            />
           </GeometryHover>
         </HankkeetProvider>
 

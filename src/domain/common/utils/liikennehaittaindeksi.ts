@@ -9,7 +9,7 @@ const getColorWithOpacity = (color: LIIKENNEHAITTA_STATUS | null, opacity = 1) =
     case 'GREEN':
       return `rgba(0, 146, 70, ${opacity})`;
     default:
-      return `rgba(36, 114, 198, ${opacity})`;
+      return `rgba(0, 98, 185, ${opacity})`;
   }
 };
 

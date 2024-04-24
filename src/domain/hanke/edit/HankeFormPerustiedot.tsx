@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { Tooltip, TextArea, SelectionGroup, RadioButton } from 'hds-react';
 import { $enum } from 'ts-enum-util';
@@ -11,17 +11,21 @@ import { useFormPage } from './hooks/useFormPage';
 import DropdownMultiselect from '../../../common/components/dropdown/DropdownMultiselect';
 import Checkbox from '../../../common/components/checkbox/Checkbox';
 import { getInputErrorText } from '../../../common/utils/form';
-import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import Link from '../../../common/components/Link/Link';
+import JohtoselvitysCreateDialog from '../../johtoselvitys_new/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
+import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
+import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
 
 const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
   errors,
   register,
   formData,
 }) => {
+  const { JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();
+  const features = useFeatureFlags();
   const { t } = useTranslation();
   const { setValue, watch } = useFormContext();
-  const { JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();
+  const [showJohtoselvitysCreateDialog, setShowJohtoselvitysCreateDialog] = useState(false);
   useFormPage();
 
   // Subscribe to vaihe changes in order to update the selected radio button
@@ -33,6 +37,14 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
     setValue(FORMFIELD.VAIHE, newValue);
   };
 
+  function openJohtoselvitysCreateDialog() {
+    setShowJohtoselvitysCreateDialog(true);
+  }
+
+  function closeJohtoselvitysCreateDialog() {
+    setShowJohtoselvitysCreateDialog(false);
+  }
+
   return (
     <div className="form0">
       <div className="formInstructions">
@@ -40,8 +52,14 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
           <p>Hankkeen luonnin kautta pääset lähettämään myös hakemuksia.</p>
           <p>
             <strong>HUOM!</strong> Mikäli teet pelkkää johtoselvitystä yksityiselle alueelle,
-            <Link href={JOHTOSELVITYSHAKEMUS.path}>täytä hakemus</Link>. Yleisten alueiden
-            johtoselvitykset haetaan hankkeen luonnin jälkeen kaivuilmoituksen kautta.
+            <Link
+              href={features.accessRights ? '#' : JOHTOSELVITYSHAKEMUS.path}
+              onClick={features.accessRights ? openJohtoselvitysCreateDialog : undefined}
+            >
+              täytä hakemus
+            </Link>
+            . Yleisten alueiden johtoselvitykset haetaan hankkeen luonnin jälkeen kaivuilmoituksen
+            kautta.
           </p>
           <p>Lisäämällä hankkeen tiedot, pystyt kopioimaan ne lopuksi tarvitsemiisi hakemuksiin.</p>
         </Trans>
@@ -106,9 +124,16 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
             value,
             label: t(`hanke:${FORMFIELD.TYOMAATYYPPI}:${value}`),
           }))}
-          defaultValue={formData ? (formData[FORMFIELD.TYOMAATYYPPI] as string[]) : []}
+          defaultValue={
+            formData
+              ? formData[FORMFIELD.TYOMAATYYPPI]?.map((value) => ({
+                  value,
+                  label: t(`hanke:${FORMFIELD.TYOMAATYYPPI}:${value}`),
+                }))
+              : []
+          }
           label={t(`hankeForm:labels:${FORMFIELD.TYOMAATYYPPI}`)}
-          invalid={!!errors[FORMFIELD.TYOMAATYYPPI]}
+          mapValueToLabel={(value) => t(`hanke:${FORMFIELD.TYOMAATYYPPI}:${value}`)}
           errorMsg={t('hankeForm:insertFieldError')}
         />
       </div>
@@ -130,6 +155,11 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
           label={t(`hankeForm:labels:${FORMFIELD.YKT_HANKE}`)}
         />
       </div>
+
+      <JohtoselvitysCreateDialog
+        isOpen={showJohtoselvitysCreateDialog}
+        onClose={closeJohtoselvitysCreateDialog}
+      />
     </div>
   );
 };

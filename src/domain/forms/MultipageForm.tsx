@@ -1,6 +1,7 @@
 import React, { useReducer } from 'react';
 import { LoadingSpinner, Notification, Stepper, StepState } from 'hds-react';
 import { Box, Flex } from '@chakra-ui/react';
+import { AnyObject, ObjectSchema } from 'yup';
 import styles from './MultipageForm.module.scss';
 import useLocale from '../../common/hooks/useLocale';
 import Text from '../../common/components/text/Text';
@@ -27,6 +28,7 @@ interface FormStep extends StepperStep {
   element: React.ReactNode;
   label: string;
   state: StepState;
+  validationSchema?: ObjectSchema<AnyObject>;
 }
 
 interface Props {
@@ -48,7 +50,7 @@ interface Props {
   isLoading?: boolean;
   isLoadingText?: string;
   /** Function that is called when step is changed */
-  onStepChange?: () => void;
+  onStepChange?: (stepIndex: number) => void;
   onSubmit?: () => void;
   /**
    * Function that is called with a function that changes step and current step index,
@@ -57,6 +59,8 @@ interface Props {
   stepChangeValidator?: (changeStep: () => void, stepIndex: number) => void;
   notificationLabel?: string;
   notificationText?: string;
+  formErrorsNotification?: React.ReactNode;
+  formData?: unknown;
 }
 
 /**
@@ -75,6 +79,8 @@ const MultipageForm: React.FC<Props> = ({
   stepChangeValidator,
   notificationLabel,
   notificationText,
+  formErrorsNotification,
+  formData,
 }) => {
   const locale = useLocale();
 
@@ -90,7 +96,11 @@ const MultipageForm: React.FC<Props> = ({
       window.scrollTo(0, 0);
       dispatch(value);
       if (onStepChange) {
-        onStepChange();
+        onStepChange(
+          value.type === ACTION_TYPE.COMPLETE_STEP
+            ? value.payload.stepIndex + 1
+            : value.payload.stepIndex,
+        );
       }
     }
 
@@ -105,32 +115,40 @@ const MultipageForm: React.FC<Props> = ({
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     stepIndex: number,
   ) {
-    handleStepChange({ type: ACTION_TYPE.SET_ACTIVE, payload: stepIndex });
+    handleStepChange({ type: ACTION_TYPE.SET_ACTIVE, payload: { stepIndex, formData } });
   }
 
   function handlePrevious() {
-    handleStepChange({ type: ACTION_TYPE.SET_ACTIVE, payload: state.activeStepIndex - 1 });
+    handleStepChange({
+      type: ACTION_TYPE.SET_ACTIVE,
+      payload: { stepIndex: state.activeStepIndex - 1, formData },
+    });
   }
 
   function handleNext() {
-    handleStepChange({ type: ACTION_TYPE.COMPLETE_STEP, payload: state.activeStepIndex });
+    handleStepChange({
+      type: ACTION_TYPE.COMPLETE_STEP,
+      payload: { stepIndex: state.activeStepIndex, formData },
+    });
   }
 
   return (
     <form className={styles.formContainer} onSubmit={onSubmit}>
-      <MainHeading>{heading}</MainHeading>
-
       {subHeading && (
-        <Text tag="h2" styleAs="h4" spacingBottom="m">
+        <Text tag="h2" styleAs="h4" spacingBottom="s">
           {subHeading}
         </Text>
       )}
+
+      <MainHeading>{heading}</MainHeading>
 
       {notificationLabel && notificationText && (
         <Notification dataTestId="form-notification" size="large" label={notificationLabel}>
           {notificationText}
         </Notification>
       )}
+
+      {formErrorsNotification}
 
       <div className={styles.stepper}>
         {isLoading ? (
