@@ -110,4 +110,20 @@ if (errorLabelEN && errorTextEN) {
   });
 }
 
+const maintenanceTextFI = window._env_.REACT_APP_MAINTENANCE_TEXT_FI;
+const maintenanceTextSV = window._env_.REACT_APP_MAINTENANCE_TEXT_SV;
+const maintenanceTextEN = window._env_.REACT_APP_MAINTENANCE_TEXT_EN;
+
+i18n.addResources('fi', 'serviceMaintenance', {
+  text: maintenanceTextFI,
+});
+
+i18n.addResources('sv', 'serviceMaintenance', {
+  text: maintenanceTextSV,
+});
+
+i18n.addResources('en', 'serviceMaintenance', {
+  text: maintenanceTextEN,
+});
+
 export default i18n;

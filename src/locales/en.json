@@ -972,5 +972,8 @@
   "serviceError": {
     "label": "",
     "text": ""
+  },
+  "serviceMaintenance": {
+    "text": ""
   }
 }
