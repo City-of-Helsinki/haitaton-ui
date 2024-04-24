@@ -3,7 +3,7 @@ import { Footer, Logo, logoFi, logoSv } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
 
-function HaitatonFooter() {
+function HaitatonFooter({ backgroundColor = 'var(--color-summer)' }: { backgroundColor?: string }) {
   const { t, i18n } = useTranslation();
   const { MANUAL, HAITATON_INFO, ACCESSIBILITY, PRIVACY_POLICY } = useLocalizedRoutes();
   const { HOME } = useLocalizedRoutes();
@@ -13,7 +13,7 @@ function HaitatonFooter() {
     <Footer
       title="Haitaton"
       theme={{
-        '--footer-background': 'var(--color-summer)',
+        '--footer-background': backgroundColor,
         '--footer-divider-color': 'var(--color-black-90)',
       }}
     >

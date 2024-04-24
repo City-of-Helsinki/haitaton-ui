@@ -1141,5 +1141,11 @@
   "serviceError": {
     "label": "",
     "text": ""
+  },
+  "serviceMaintenance": {
+    "label": "Huoltokatko Haitattomassa",
+    "text": "",
+    "imageLabel": "Kuva: Lille Santanen",
+    "imageAltText": "Piirretty kuva rakennustyömaasta"
   }
 }
