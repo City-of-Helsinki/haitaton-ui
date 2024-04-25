@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Notification } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 
+enum NotificationType {
+  INFO = 'info',
+  WARNING = 'warning',
+  ERROR = 'error',
+}
+
+const NOTIFICATION_CLOSED = 'notification-closed';
+
 /**
- * Notifications to display for warning or error
+ * Notifications to display for info, warning or error
  * in Haitaton service
  */
 function ServiceNotifications() {
@@ -11,15 +19,38 @@ function ServiceNotifications() {
 
   const infoLabel = t('serviceInfo:label');
   const infoText = t('serviceInfo:text');
-  const [infoOpen, setInfoOpen] = useState(Boolean(infoLabel));
+  const infoClosed = Boolean(
+    sessionStorage.getItem(`${NotificationType.INFO}-${NOTIFICATION_CLOSED}`),
+  );
+  const [infoOpen, setInfoOpen] = useState(Boolean(infoLabel) && !infoClosed);
 
   const warningLabel = t('serviceWarning:label');
   const warningText = t('serviceWarning:text');
-  const [warningOpen, setWarningOpen] = useState(Boolean(warningLabel));
+  const warningClosed = Boolean(
+    sessionStorage.getItem(`${NotificationType.WARNING}-${NOTIFICATION_CLOSED}`),
+  );
+  const [warningOpen, setWarningOpen] = useState(Boolean(warningLabel && !warningClosed));
 
   const errorLabel = t('serviceError:label');
   const errorText = t('serviceError:text');
-  const [errorOpen, setErrorOpen] = useState(Boolean(errorLabel));
+  const errorClosed = Boolean(
+    sessionStorage.getItem(`${NotificationType.ERROR}-${NOTIFICATION_CLOSED}`),
+  );
+  const [errorOpen, setErrorOpen] = useState(Boolean(errorLabel) && !errorClosed);
+
+  // Close notification and set correspoding value
+  // to session storage, so that notification is not
+  // shown again on page refresh
+  function closeNotification(notificationType: NotificationType) {
+    sessionStorage.setItem(`${notificationType}-${NOTIFICATION_CLOSED}`, 'true');
+    if (notificationType === NotificationType.INFO) {
+      setInfoOpen(false);
+    } else if (notificationType === NotificationType.WARNING) {
+      setWarningOpen(false);
+    } else if (notificationType === NotificationType.ERROR) {
+      setErrorOpen(false);
+    }
+  }
 
   return (
     <>
@@ -31,7 +62,7 @@ function ServiceNotifications() {
           autoClose={false}
           dismissible
           closeButtonLabelText={`${t('common:components:notification:closeButtonLabelText')}`}
-          onClose={() => setInfoOpen(false)}
+          onClose={() => closeNotification(NotificationType.INFO)}
         >
           {infoText}
         </Notification>
@@ -45,7 +76,7 @@ function ServiceNotifications() {
           autoClose={false}
           dismissible
           closeButtonLabelText={`${t('common:components:notification:closeButtonLabelText')}`}
-          onClose={() => setWarningOpen(false)}
+          onClose={() => closeNotification(NotificationType.WARNING)}
         >
           {warningText}
         </Notification>
@@ -59,7 +90,7 @@ function ServiceNotifications() {
           autoClose={false}
           dismissible
           closeButtonLabelText={`${t('common:components:notification:closeButtonLabelText')}`}
-          onClose={() => setErrorOpen(false)}
+          onClose={() => closeNotification(NotificationType.ERROR)}
         >
           {errorText}
         </Notification>
