@@ -760,3 +760,30 @@ test('Should show validation error if there are no yhteyshenkilo set for yhteyst
     screen.queryByText(/vähintään yksi yhteyshenkilö tulee olla asetettuna/i),
   ).not.toBeInTheDocument();
 });
+
+test('Should remove validation error if yhteyshenkilo is created for yhteystieto', async () => {
+  const testApplication = cloneDeep(applications[0]) as Application<JohtoselvitysData>;
+  testApplication.applicationData.customerWithContacts = null;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
+
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+  await user.click(screen.getAllByLabelText(/yhteyshenkilöt/i)[0]);
+  await user.tab();
+
+  expect(
+    screen.getByText(/vähintään yksi yhteyshenkilö tulee olla asetettuna/i),
+  ).toBeInTheDocument();
+
+  await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
+  fillNewContactPersonForm({
+    etunimi: 'Matti',
+    sukunimi: 'Meikäläinen',
+    sahkoposti: 'matti@test.com',
+    puhelinnumero: '0000000000',
+  });
+  await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+
+  expect(
+    screen.queryByText(/vähintään yksi yhteyshenkilö tulee olla asetettuna/i),
+  ).not.toBeInTheDocument();
+});
