@@ -219,11 +219,15 @@ export function Geometries({ hankeData }: Readonly<Props>) {
 
           <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} zIndex={101} />
 
-          <HankeLayer
-            hankeData={hankeData && [hankeData]}
-            startDate={startTime?.toString() ?? hankeData?.alkuPvm}
-            endDate={endTime?.toString() ?? hankeData?.loppuPvm}
-          />
+          {/* Don't show hanke areas when hanke is generated */}
+          {!hankeData?.generated && (
+            <HankeLayer
+              hankeData={hankeData && [hankeData]}
+              startDate={startTime?.toString() ?? hankeData?.alkuPvm}
+              endDate={endTime?.toString() ?? hankeData?.loppuPvm}
+            />
+          )}
+
           <VectorLayer source={drawSource} zIndex={101} className="drawLayer" />
 
           <FitSource source={drawSource} />
