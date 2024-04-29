@@ -373,14 +373,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     return changeFormStep(changeStep, pageFieldsToValidate[stepIndex], trigger);
   }
 
-  const notificationLabel =
-    getValues('alluStatus') === AlluStatus.PENDING
-      ? t('form:notifications:labels:editSentApplication')
-      : undefined;
-  const notificationText =
-    getValues('alluStatus') === AlluStatus.PENDING
-      ? t('form:notifications:descriptions:editSentApplication')
-      : undefined;
   const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
 
   return (
@@ -408,8 +400,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         onStepChange={handleStepChange}
         onSubmit={handleSubmit(sendCableApplication)}
         stepChangeValidator={validateStepChange}
-        notificationLabel={notificationLabel}
-        notificationText={notificationText}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {
