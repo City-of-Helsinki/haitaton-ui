@@ -196,12 +196,11 @@ export function Contacts() {
     : undefined;
 
   function addYhteyshenkiloForYhteystieto(customerType: CustomerType, contactPerson: HankeUser) {
+    const previousContacts = getValues(`applicationData.${customerType}.contacts`) || [];
     setValue(
       `applicationData.${customerType}.contacts`,
-      getValues(`applicationData.${customerType}.contacts`)?.concat(
-        mapHankeUserToContact(contactPerson),
-      ),
-      { shouldDirty: true },
+      previousContacts.concat(mapHankeUserToContact(contactPerson)),
+      { shouldDirty: true, shouldValidate: true },
     );
     queryClient.invalidateQueries(['hankeUsers', hankeTunnus]);
   }
