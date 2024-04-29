@@ -12,6 +12,8 @@ RUN yarn && yarn cache clean --force
 COPY ./src /builder/src
 COPY ./public /builder/public
 COPY ./tsconfig.json /builder/tsconfig.json
+COPY ./tsconfig.eslint.json /builder/tsconfig.eslint.json
+COPY ./.eslintrc.js /builder/.eslintrc.js
 RUN REACT_APP_DISABLE_SENTRY=1 yarn build
 
 FROM nginx:1.22.1
