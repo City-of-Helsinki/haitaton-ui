@@ -9,7 +9,7 @@ type Props = {
   title: string;
   description: string | React.ReactNode;
   isOpen: boolean;
-  close: () => void;
+  close?: () => void;
   mainAction: () => void;
   mainBtnLabel: string;
   mainBtnIcon?: React.ReactElement;
@@ -18,6 +18,7 @@ type Props = {
   showCloseButton?: boolean;
   showSecondaryButton?: boolean;
   isLoading?: boolean;
+  headerIcon?: React.ReactNode;
 };
 
 const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
@@ -33,6 +34,12 @@ const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
   showCloseButton = false,
   showSecondaryButton = true,
   isLoading = false,
+  headerIcon = (
+    <IconAlertCircleFill
+      aria-hidden="true"
+      color={variant === 'primary' ? 'var(--color-bus)' : 'var(--color-brick)'}
+    />
+  ),
 }) => {
   const { t } = useTranslation();
 
@@ -48,16 +55,7 @@ const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
       close={showCloseButton ? (close as any) : undefined}
       closeButtonLabelText={t('common:ariaLabels:closeButtonLabelText')}
     >
-      <Dialog.Header
-        id="dialog-title"
-        title={title}
-        iconLeft={
-          <IconAlertCircleFill
-            aria-hidden="true"
-            color={variant === 'primary' ? 'var(--color-bus)' : 'var(--color-brick)'}
-          />
-        }
-      />
+      <Dialog.Header id="dialog-title" title={title} iconLeft={headerIcon} />
       <Dialog.Content>
         {typeof description === 'string' ? (
           <p data-testid="dialog-description-test">{description}</p>

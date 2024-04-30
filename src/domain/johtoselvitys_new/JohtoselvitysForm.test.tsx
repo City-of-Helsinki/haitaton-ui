@@ -1,4 +1,3 @@
-import React from 'react';
 import { rest } from 'msw';
 import { render, cleanup, fireEvent, screen, waitFor, act, within } from '../../testUtils/render';
 import Johtoselvitys from '../../pages/Johtoselvitys';
@@ -500,28 +499,6 @@ test('Should not allow step change when current step is invalid', async () => {
   // Expect to still be in the same page
   expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
   expect(screen.queryByText('Kentän arvo on virheellinen')).toBeInTheDocument();
-});
-
-test('Should not show inline notification by default', () => {
-  render(
-    <JohtoselvitysContainer application={applications[0] as Application<JohtoselvitysData>} />,
-  );
-
-  expect(screen.queryByTestId('form-notification')).not.toBeInTheDocument();
-});
-
-test('Should show inline notification when editing a form that is in pending state', () => {
-  render(
-    <JohtoselvitysContainer application={applications[1] as Application<JohtoselvitysData>} />,
-  );
-
-  expect(screen.queryByTestId('form-notification')).toBeInTheDocument();
-  expect(screen.queryByText('Olet muokkaamassa jo lähetettyä hakemusta.')).toBeInTheDocument();
-  expect(
-    screen.queryByText(
-      'Hakemusta voit muokata niin kauan, kun sitä ei vielä ole otettu käsittelyyn. Uusi versio hakemuksesta lähtee viranomaiselle automaattisesti lomakkeen tallennuksen yhteydessä.',
-    ),
-  ).toBeInTheDocument();
 });
 
 test('Validation error is shown if no work is about checkbox is selected', async () => {

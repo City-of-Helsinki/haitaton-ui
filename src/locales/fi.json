@@ -732,6 +732,11 @@
       "maxAttachmentsNumberExceeded": "Tiedoston ({{fileName}}) lataus epäonnistui, liitteiden enimmäismäärä ({{maxNumber}} kpl) ylitetty.",
       "sentApplicationPersonalInfoNotification": "Lähetetyn hakemuksen omia tietoja ei voi muokata"
     },
+    "sentDialog": {
+      "title": "Hakemus lähetetty",
+      "description": "Hakemus on lähetetty, eikä sitä voi enää muokata. Tarkastele hakemuksen tietoja hakemussivulla.",
+      "button": "Siirry hakemussivulle"
+    },
     "status": {
       "PENDING_CLIENT": "Näkyy viranomaiselle",
       "PENDING": "Odottaa käsittelyä",
