@@ -26,4 +26,12 @@ yup.setLocale({
   },
 });
 
+yup.addMethod(
+  yup.string,
+  'phone',
+  function isValidPhoneNumber(message: yup.Message = { key: 'phone', values: {} }) {
+    return this.matches(/^(\+?)(\d+)$/, { message: () => message, excludeEmptyString: true });
+  },
+);
+
 export default yup;

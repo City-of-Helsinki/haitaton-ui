@@ -66,6 +66,6 @@ export const newJohtoselvitysSchema = yup.object({
   nimi: yup.string().trim().required(),
   perustaja: yup.object({
     sahkoposti: yup.string().email().required(),
-    puhelinnumero: yup.string().required(),
+    puhelinnumero: yup.string().phone().max(20).required(),
   }),
 });

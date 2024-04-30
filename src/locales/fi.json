@@ -88,6 +88,7 @@
       "typeOf": "Kentän tyyppi on virheellinen",
       "required": "Kenttä on pakollinen",
       "email": "Sähköposti on virheellinen",
+      "phone": "Puhelinnumero on virheellinen",
       "stringMin": "Kentän pituus oltava vähintään {{min}} merkkiä",
       "stringMax": "Kentän pituus oltava enintään {{max}} merkkiä",
       "dateMin": "Ensimmäinen mahdollinen päivä on {{min}}",
