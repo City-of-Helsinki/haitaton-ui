@@ -18,7 +18,7 @@ export const yhteyshenkiloSchema = yup.object({
   [YHTEYSHENKILO_FORMFIELD.ETUNIMI]: yup.string().max(50).required(),
   [YHTEYSHENKILO_FORMFIELD.SUKUNIMI]: yup.string().max(50).required(),
   [YHTEYSHENKILO_FORMFIELD.EMAIL]: yup.string().email().max(100).required(),
-  [YHTEYSHENKILO_FORMFIELD.PUHELINNUMERO]: yup.string().max(20).required(),
+  [YHTEYSHENKILO_FORMFIELD.PUHELINNUMERO]: yup.string().phone().max(20).required(),
 });
 
 const contactSchema = yup.object({
@@ -35,7 +35,7 @@ const contactSchema = yup.object({
       otherwise: (schema) => schema,
     }),
   [CONTACT_FORMFIELD.EMAIL]: yup.string().email().defined().max(100),
-  [CONTACT_FORMFIELD.PUHELINNUMERO]: yup.string().defined().max(20),
+  [CONTACT_FORMFIELD.PUHELINNUMERO]: yup.string().phone().defined().max(20),
   id: yup.number(),
 });
 
@@ -101,6 +101,6 @@ export const newHankeSchema = yup.object({
   nimi: yup.string().min(3).required(),
   perustaja: yup.object({
     sahkoposti: yup.string().email().required(),
-    puhelinnumero: yup.string().required(),
+    puhelinnumero: yup.string().phone().required(),
   }),
 });

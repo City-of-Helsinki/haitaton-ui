@@ -4,17 +4,17 @@ import isValidBusinessId from '../../common/utils/isValidBusinessId';
 
 const contactSchema = yup
   .object({
-    firstName: yup.string().trim().required(),
-    lastName: yup.string().trim().required(),
+    firstName: yup.string().trim().max(50).required(),
+    lastName: yup.string().trim().max(50).required(),
     email: yup.string().trim().email().max(100).required(),
-    phone: yup.string().trim().max(20).required(),
+    phone: yup.string().phone().trim().max(20).required(),
   })
   .nullable()
   .required();
 
 const customerSchema = contactSchema.omit(['firstName', 'lastName']).shape({
   yhteystietoId: yup.string().nullable(),
-  name: yup.string().trim().required(),
+  name: yup.string().trim().max(100).required(),
   type: yup.mixed<ContactType>().nullable().required(),
   registryKey: yup // business id i.e. Y-tunnus
     .string()

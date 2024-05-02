@@ -99,10 +99,8 @@ describe('Create johtoselvitys from dialog', () => {
     return user;
   }
 
-  function fillInformation() {
-    const email = 'test@mail.com';
-    const phone = '0401234567';
-    const hankeName = 'Johtoselvitys';
+  function fillInformation(options: { email?: string; phone?: string; hankeName?: string } = {}) {
+    const { email = 'test@mail.com', phone = '0401234567', hankeName = 'Johtoselvitys' } = options;
     fireEvent.change(screen.getByLabelText(/sähköposti/i), { target: { value: email } });
     fireEvent.change(screen.getByLabelText(/puhelin/i), { target: { value: phone } });
     fireEvent.change(screen.getByLabelText(/työn nimi/i), { target: { value: hankeName } });
@@ -143,5 +141,13 @@ describe('Create johtoselvitys from dialog', () => {
     await openJohtoselvitysCreateDialog();
 
     expect(screen.getByLabelText(/sähköposti/i)).toHaveValue(userEmail);
+  });
+
+  test('Should show error notification if phone number is not valid', async () => {
+    const user = await openJohtoselvitysCreateDialog();
+    fillInformation({ phone: '123kj456' });
+    await user.click(screen.getByRole('button', { name: /luo hakemus/i }));
+
+    expect(screen.getByText('Puhelinnumero on virheellinen')).toBeInTheDocument();
   });
 });
