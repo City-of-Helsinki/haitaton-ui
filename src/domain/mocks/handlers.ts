@@ -333,7 +333,9 @@ export const handlers = [
   }),
 
   rest.post(`${apiUrl}/kayttajat/:kayttajaId/kutsu`, async (req, res, ctx) => {
-    return res(ctx.delay(), ctx.status(204));
+    const { kayttajaId } = req.params;
+    const user = await usersDB.resendInvitation(kayttajaId as string);
+    return res(ctx.delay(), ctx.json(user), ctx.status(200));
   }),
 
   rest.get(`${apiUrl}/kayttajat/:id/deleteInfo`, async (req, res, ctx) => {
