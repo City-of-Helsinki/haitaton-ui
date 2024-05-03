@@ -97,3 +97,12 @@ export async function remove(userId: string) {
   }
   users = users.filter((user) => user.id !== userToRemove.id);
 }
+
+export async function resendInvitation(userId: string) {
+  const user = await read(userId);
+  if (!user) {
+    throw new ApiError(`No user with id ${userId}`, 404);
+  }
+  user.kutsuttu = new Date().toISOString();
+  return user;
+}

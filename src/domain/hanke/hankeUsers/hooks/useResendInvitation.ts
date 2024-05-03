@@ -1,9 +1,10 @@
 import { useRef } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { resendInvitation } from '../hankeUsersApi';
 import { HankeUser } from '../hankeUser';
 
 export default function useResendInvitation() {
+  const queryClient = useQueryClient();
   const resendInvitationMutation = useMutation(resendInvitation);
 
   // List of user ids for tracking which users have been sent the invitation link
@@ -12,7 +13,8 @@ export default function useResendInvitation() {
   function sendInvitation(user: HankeUser) {
     resendInvitationMutation.mutate(user.id, {
       onSuccess(data) {
-        linksSentTo.current.push(data);
+        linksSentTo.current.push(data.id);
+        queryClient.setQueryData(['hankeUser', data.id], data);
       },
     });
   }

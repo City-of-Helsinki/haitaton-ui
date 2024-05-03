@@ -484,7 +484,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
         {resendInvitationMutation.isSuccess && (
           <InvitationSuccessNotification onClose={() => resendInvitationMutation.reset()}>
             {t('hankeUsers:notifications:invitationSentSuccessText', {
-              email: hankeUsers.find((user) => user.id === resendInvitationMutation.data)
+              email: hankeUsers.find((user) => user.id === resendInvitationMutation.data.id)
                 ?.sahkoposti,
             })}
           </InvitationSuccessNotification>

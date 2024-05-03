@@ -81,9 +81,12 @@ export async function identifyUser(id: string) {
   return data;
 }
 
+/**
+ * Resend invitation to hanke to a user
+ */
 export async function resendInvitation(kayttajaId: string) {
-  await api.post(`kayttajat/${kayttajaId}/kutsu`);
-  return kayttajaId;
+  const { data } = await api.post<HankeUser>(`kayttajat/${kayttajaId}/kutsu`);
+  return data;
 }
 
 export async function getUserDeleteInfo(kayttajaId?: string | null) {
