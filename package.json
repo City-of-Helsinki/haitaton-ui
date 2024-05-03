@@ -41,7 +41,7 @@
     "@reduxjs/toolkit": "^2.1.0",
     "@sentry/react": "^7.92.0",
     "@turf/helpers": "^6.5.0",
-    "@turf/unkink-polygon": "^6.5.0",
+    "@turf/kinks": "^6.5.0",
     "@types/cypress-axe": "^0.8.0",
     "@types/geojson": "^7946.0.13",
     "@types/jest": "^29.5.12",

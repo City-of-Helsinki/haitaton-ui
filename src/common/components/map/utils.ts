@@ -5,7 +5,7 @@ import { getArea } from 'ol/sphere';
 import Geometry from 'ol/geom/Geometry';
 import Polygon from 'ol/geom/Polygon';
 import { polygon } from '@turf/helpers';
-import unkinkPolygon from '@turf/unkink-polygon';
+import kinks from '@turf/kinks';
 
 // https://dev.hel.fi/maps
 proj4.defs(
@@ -27,8 +27,8 @@ export function getSurfaceArea(geometry: Geometry) {
 export function isPolygonSelfIntersecting(polygonToCheck: Polygon): boolean {
   try {
     const turfPolygon = polygon(polygonToCheck.getCoordinates());
-    const unkinkedPolygon = unkinkPolygon(turfPolygon);
-    return unkinkedPolygon.features.length > 1;
+    const selfIntersectionPoints = kinks(turfPolygon);
+    return selfIntersectionPoints.features.length > 0;
   } catch (error) {
     return false;
   }
