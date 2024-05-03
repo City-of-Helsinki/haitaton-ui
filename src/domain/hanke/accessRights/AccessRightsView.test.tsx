@@ -203,6 +203,20 @@ test('Filtering works', async () => {
   expect(screen.getAllByText(`${users[7].etunimi} ${users[7].sukunimi}`)).toHaveLength(2);
 });
 
+test('Should show not found text if filtering has no results', async () => {
+  render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+
+  await waitForLoadingToFinish();
+  fireEvent.change(screen.getByRole('combobox', { name: 'Haku' }), {
+    target: { value: 'natti' },
+  });
+
+  await waitFor(() =>
+    expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows).toHaveLength(0),
+  );
+  expect(screen.getByText('Haulla ei löytynyt yhtään henkilöä')).toBeInTheDocument();
+});
+
 test('Should show error notification if information is not found', async () => {
   server.use(
     rest.get('/api/hankkeet/:hankeTunnus/kayttajat', async (req, res, ctx) => {
