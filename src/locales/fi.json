@@ -731,7 +731,8 @@
       "cancelSuccessText": "Hakemus peruttiin onnistuneesti",
       "noApplications": "Hankkeella ei ole lisättyjä hakemuksia",
       "maxAttachmentsNumberExceeded": "Tiedoston ({{fileName}}) lataus epäonnistui, liitteiden enimmäismäärä ({{maxNumber}} kpl) ylitetty.",
-      "sentApplicationPersonalInfoNotification": "Lähetetyn hakemuksen omia tietoja ei voi muokata"
+      "sentApplicationPersonalInfoNotification": "Lähetetyn hakemuksen omia tietoja ei voi muokata",
+      "sendApplicationDisabled": "Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö."
     },
     "sentDialog": {
       "title": "Hakemus lähetetty",
