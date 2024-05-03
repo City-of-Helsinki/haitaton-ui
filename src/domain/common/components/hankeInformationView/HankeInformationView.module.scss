@@ -16,6 +16,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-s);
+  margin-right: var(--spacing-xs);
 }
 
 .contentContainer {
@@ -51,11 +52,11 @@
 .paddingLeft {
   padding-left: var(--spacing-m);
 
-  @include respond-above(m) {
-    padding-left: 100px;
+  @include respond-above(l) {
+    padding-left: 80px;
   }
 
   @include respond-above(xl) {
-    padding-left: 180px;
+    padding-left: 150px;
   }
 }

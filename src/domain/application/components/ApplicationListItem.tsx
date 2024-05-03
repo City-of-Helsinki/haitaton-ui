@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, IconEye } from 'hds-react';
 import { Box, Flex, Grid } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +13,7 @@ import DecisionLink from './DecisionLink';
 
 type Props = { application: HankkeenHakemus };
 
-function ApplicationListItem({ application }: Props) {
+function ApplicationListItem({ application }: Readonly<Props>) {
   const { t } = useTranslation();
   const getApplicationPathView = useLinkPath(ROUTES.HAKEMUS);
 
@@ -27,15 +26,22 @@ function ApplicationListItem({ application }: Props) {
   const applicationViewPath = getApplicationPathView({ id: (id as number).toString() });
 
   return (
-    <Card border className={styles.applicationCard} data-testid="application-card">
+    <Card
+      theme={{
+        '--padding-horizontal': 'var(--spacing-s)',
+        '--padding-vertical': 'var(--spacing-m)',
+      }}
+      border
+      className={styles.applicationCard}
+      data-testid="application-card"
+    >
       <Flex>
         <div className={styles.applicationInfoRow}>
-          <Flex mr="var(--spacing-s)" flexWrap="wrap">
+          <Flex flexWrap="wrap">
             <Box mr="var(--spacing-s)">
               <Link
                 to={applicationViewPath}
                 aria-label={
-                  // eslint-disable-next-line
                   t(`routes:${ROUTES.HAKEMUS}.meta.title`) + ` ${name}` + ` ${applicationId}`
                 }
                 data-testid={`applicationViewLinkIdentifier-${id}`}
@@ -58,20 +64,17 @@ function ApplicationListItem({ application }: Props) {
             )}
           </Grid>
         </div>
-        <Box flex="0 0 60px">
-          <Link
-            to={applicationViewPath}
-            aria-label={
-              // eslint-disable-next-line
-              t(`routes:${ROUTES.HAKEMUS}.meta.title`) + ` ${name}`
-            }
-            data-testid={`applicationViewLink-${id}`}
-          >
-            <IconEye aria-hidden="true" />
-          </Link>
-        </Box>
+        <Link
+          to={applicationViewPath}
+          aria-label={t(`routes:${ROUTES.HAKEMUS}.meta.title`) + ` ${name}`}
+          data-testid={`applicationViewLink-${id}`}
+        >
+          <IconEye aria-hidden="true" />
+        </Link>
       </Flex>
-      <p>{t(`hakemus:applicationTypes:${applicationType}`)}</p>
+      <Box as="p" color="var(--color-black-70)">
+        {t(`hakemus:applicationTypes:${applicationType}`)}
+      </Box>
     </Card>
   );
 }
