@@ -437,7 +437,7 @@ test('Should show and disable send button and show notification when user is not
   expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeDisabled();
   expect(
     screen.queryByText(
-      'Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö',
+      'Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö.',
     ),
   ).toBeInTheDocument();
 });
