@@ -14,11 +14,11 @@
   margin-bottom: var(--spacing-2-xs);
 
   @include respond-above(s) {
-    grid-template-columns: 300px 1fr;
+    grid-template-columns: 2fr 1fr;
   }
 
   @include respond-above(m) {
-    grid-template-columns: 300px 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr;
   }
 }
 
