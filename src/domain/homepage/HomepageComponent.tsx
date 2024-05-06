@@ -24,12 +24,16 @@ import MainHeading from '../../common/components/mainHeading/MainHeading';
 import HankeCreateDialog from '../hanke/hankeCreateDialog/HankeCreateDialog';
 import JohtoselvitysCreateDialog from '../johtoselvitys_new/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
 
+const FEEDBACK_NOTIFICATION_CLOSED = 'feedback-notification-closed';
+
 const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { PUBLIC_HANKKEET_MAP, PUBLIC_HANKKEET_LIST, HANKEPORTFOLIO, JOHTOSELVITYSHAKEMUS } =
     useLocalizedRoutes();
-  const [feedbackOpen, setFeedbackOpen] = useState(true);
+  const [feedbackOpen, setFeedbackOpen] = useState(
+    !sessionStorage.getItem(FEEDBACK_NOTIFICATION_CLOSED),
+  );
   const [showHankeCreateDialog, setShowHankeCreateDialog] = useState(false);
   const [showJohtoselvitysCreateDialog, setShowJohtoselvitysCreateDialog] = useState(false);
   const { data: user } = useUser();
@@ -190,7 +194,10 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
                 autoClose={false}
                 dismissible
                 closeButtonLabelText={`${t('common:components:notification:closeButtonLabelText')}`}
-                onClose={() => setFeedbackOpen(false)}
+                onClose={() => {
+                  setFeedbackOpen(false);
+                  sessionStorage.setItem(FEEDBACK_NOTIFICATION_CLOSED, 'true');
+                }}
               >
                 <p>
                   {t('homepage:notification:text')}
