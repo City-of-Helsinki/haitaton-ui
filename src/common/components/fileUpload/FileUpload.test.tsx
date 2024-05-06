@@ -372,7 +372,7 @@ test('Should be able to cancel upload requests', async () => {
   await waitFor(() =>
     expect(screen.queryByText('Tallennetaan tiedostoja')).not.toBeInTheDocument(),
   );
-  expect(abortSpy).toBeCalledTimes(1);
+  expect(abortSpy).toHaveBeenCalledTimes(1);
   abortSpy.mockRestore();
 });
 
