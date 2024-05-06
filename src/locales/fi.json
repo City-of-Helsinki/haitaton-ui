@@ -1020,7 +1020,8 @@
       "invitationSentErrorLabel": "Virhe linkin lähettämisessä",
       "invitationSentErrorText": "<0>Kutsulinkin lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>",
       "userDeletedLabel": "Käyttäjä poistettu",
-      "userDeletedText": "Käyttäjä poistettiin onnistuneesti"
+      "userDeletedText": "Käyttäjä poistettiin onnistuneesti",
+      "usersNotFound": "Haulla ei löytynyt yhtään henkilöä"
     },
     "buttons": {
       "resendInvitation": "Lähetä kutsulinkki uudelleen",
