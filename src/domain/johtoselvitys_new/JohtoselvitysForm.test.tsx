@@ -402,9 +402,14 @@ test('Should not show send button when application has moved to pending state', 
 
   expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
   expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).not.toBeInTheDocument();
+  expect(
+    screen.queryByText(
+      'Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö',
+    ),
+  ).not.toBeInTheDocument();
 });
 
-test('Should not show send button when user is not a contact person', async () => {
+test('Should show and disable send button and show notification when user is not a contact person', async () => {
   server.use(
     rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
       return res(
@@ -419,16 +424,25 @@ test('Should not show send button when user is not a contact person', async () =
   );
 
   const { user } = render(
-    <JohtoselvitysContainer application={applications[1] as Application<JohtoselvitysData>} />,
+    <JohtoselvitysContainer
+      hankeData={hankkeet[1] as HankeData}
+      application={applications[0] as Application<JohtoselvitysData>}
+    />,
   );
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
   expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
-  expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeDisabled();
+  expect(
+    screen.queryByText(
+      'Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö.',
+    ),
+  ).toBeInTheDocument();
 });
 
-test('Should show send button when application is edited in draft state and user is a contact person', async () => {
+test('Should show and enable button when application is edited in draft state and user is a contact person', async () => {
   server.use(
     rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
       return res(
@@ -452,6 +466,12 @@ test('Should show send button when application is edited in draft state and user
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
   expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeEnabled();
+  expect(
+    screen.queryByText(
+      'Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö',
+    ),
+  ).not.toBeInTheDocument();
 });
 
 test('Should not allow start date be after end date', async () => {
