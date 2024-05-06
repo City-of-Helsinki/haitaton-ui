@@ -1,5 +1,5 @@
-import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { cloneDeep } from 'lodash';
 import { render, screen } from '../../testUtils/render';
 import { Geometries } from './Geometries';
 import hankkeet from '../mocks/data/hankkeet-data';
@@ -54,4 +54,17 @@ test('Hanke areas are visible if work start and end dates are between hanke star
   );
 
   expect(screen.getByTestId('countOfFilteredHankkeet')).toHaveTextContent('0');
+});
+
+test('Hanke areas are not visible if hanke is generated', async () => {
+  const testHanke = cloneDeep(hankkeet[1]);
+  testHanke.generated = true;
+  const { user } = render(<TestComponent hankeData={testHanke as HankeData} />);
+  await user.type(screen.getByRole('textbox', { name: 'Työn arvioitu alkupäivä *' }), '27.11.2024');
+  await user.type(
+    screen.getByRole('textbox', { name: 'Työn arvioitu loppupäivä *' }),
+    '27.11.2024',
+  );
+
+  expect(screen.queryByTestId('countOfFilteredHankkeet')).not.toBeInTheDocument();
 });

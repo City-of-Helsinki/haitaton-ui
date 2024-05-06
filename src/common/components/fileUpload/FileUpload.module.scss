@@ -1,6 +1,11 @@
 .uploadContainer {
-  min-height: 280px;
+  min-height: 250px;
   margin-bottom: var(--spacing-s);
+
+  // Hide the info text that no files are selected
+  [class*='info-text'] {
+    display: none !important;
+  }
 }
 
 .loadingContainer {

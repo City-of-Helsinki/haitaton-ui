@@ -251,9 +251,11 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
         </FeatureFlags>
 
         <div className={styles.hankeCardButtons}>
-          <Button theme="coat" onClick={navigateToHanke}>
-            {t('hankePortfolio:showHankeButton')}
-          </Button>
+          <FeatureFlags flags={['hanke']}>
+            <Button theme="coat" onClick={navigateToHanke}>
+              {t('hankePortfolio:showHankeButton')}
+            </Button>
+          </FeatureFlags>
           <Button theme="coat" variant="secondary" onClick={() => navigateToApplications()}>
             {t('hankePortfolio:showApplicationsButton')}
           </Button>

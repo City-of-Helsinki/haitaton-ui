@@ -49,6 +49,7 @@ import UserDeleteNotification from '../hankeUsers/UserDeleteNotification';
 import UserDeleteInfoErrorNotification from '../hankeUsers/UserDeleteInfoErrorNotification';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
+import Text from '../../../common/components/text/Text';
 
 function UserIcon({
   user,
@@ -468,6 +469,11 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
               </UserCard>
             );
           })}
+          {page.length === 0 && (
+            <Text tag="p" spacingTop="m" spacingBottom="s" className="heading-m">
+              {t('hankeUsers:notifications:usersNotFound')}
+            </Text>
+          )}
         </div>
 
         <div className={styles.pagination}>
@@ -484,7 +490,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
         {resendInvitationMutation.isSuccess && (
           <InvitationSuccessNotification onClose={() => resendInvitationMutation.reset()}>
             {t('hankeUsers:notifications:invitationSentSuccessText', {
-              email: hankeUsers.find((user) => user.id === resendInvitationMutation.data)
+              email: hankeUsers.find((user) => user.id === resendInvitationMutation.data.id)
                 ?.sahkoposti,
             })}
           </InvitationSuccessNotification>

@@ -88,6 +88,7 @@
       "typeOf": "Kentän tyyppi on virheellinen",
       "required": "Kenttä on pakollinen",
       "email": "Sähköposti on virheellinen",
+      "phone": "Puhelinnumero on virheellinen",
       "stringMin": "Kentän pituus oltava vähintään {{min}} merkkiä",
       "stringMax": "Kentän pituus oltava enintään {{max}} merkkiä",
       "dateMin": "Ensimmäinen mahdollinen päivä on {{min}}",
@@ -730,7 +731,13 @@
       "cancelSuccessText": "Hakemus peruttiin onnistuneesti",
       "noApplications": "Hankkeella ei ole lisättyjä hakemuksia",
       "maxAttachmentsNumberExceeded": "Tiedoston ({{fileName}}) lataus epäonnistui, liitteiden enimmäismäärä ({{maxNumber}} kpl) ylitetty.",
-      "sentApplicationPersonalInfoNotification": "Lähetetyn hakemuksen omia tietoja ei voi muokata"
+      "sentApplicationPersonalInfoNotification": "Lähetetyn hakemuksen omia tietoja ei voi muokata",
+      "sendApplicationDisabled": "Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö."
+    },
+    "sentDialog": {
+      "title": "Hakemus lähetetty",
+      "description": "Hakemus on lähetetty, eikä sitä voi enää muokata. Tarkastele hakemuksen tietoja hakemussivulla.",
+      "button": "Siirry hakemussivulle"
     },
     "status": {
       "PENDING_CLIENT": "Näkyy viranomaiselle",
@@ -1014,7 +1021,8 @@
       "invitationSentErrorLabel": "Virhe linkin lähettämisessä",
       "invitationSentErrorText": "<0>Kutsulinkin lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>",
       "userDeletedLabel": "Käyttäjä poistettu",
-      "userDeletedText": "Käyttäjä poistettiin onnistuneesti"
+      "userDeletedText": "Käyttäjä poistettiin onnistuneesti",
+      "usersNotFound": "Haulla ei löytynyt yhtään henkilöä"
     },
     "buttons": {
       "resendInvitation": "Lähetä kutsulinkki uudelleen",

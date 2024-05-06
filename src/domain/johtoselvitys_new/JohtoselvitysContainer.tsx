@@ -1,5 +1,12 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Button, IconCross, IconEnvelope, IconSaveDiskette, StepState } from 'hds-react';
+import {
+  Button,
+  IconCross,
+  IconEnvelope,
+  IconSaveDiskette,
+  Notification,
+  StepState,
+} from 'hds-react';
 import { FormProvider, useForm, FieldPath } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -117,7 +124,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     reset,
   } = formContext;
 
-  // Setup a callback to save application id to session storage
+  // Set up a callback to save application id to session storage
   // when the page is about to be unloaded if the application
   // has been saved (id exists) and user is not editing
   // previously created application. This is done so that
@@ -373,14 +380,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     return changeFormStep(changeStep, pageFieldsToValidate[stepIndex], trigger);
   }
 
-  const notificationLabel =
-    getValues('alluStatus') === AlluStatus.PENDING
-      ? t('form:notifications:labels:editSentApplication')
-      : undefined;
-  const notificationText =
-    getValues('alluStatus') === AlluStatus.PENDING
-      ? t('form:notifications:descriptions:editSentApplication')
-      : undefined;
   const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
 
   return (
@@ -408,8 +407,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         onStepChange={handleStepChange}
         onSubmit={handleSubmit(sendCableApplication)}
         stepChangeValidator={validateStepChange}
-        notificationLabel={notificationLabel}
-        notificationText={notificationText}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {
@@ -423,10 +420,10 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
           }
 
           const lastStep = activeStepIndex === formSteps.length - 1;
-          const showSendButton =
-            lastStep &&
-            isApplicationDraft(getValues('alluStatus') as AlluStatus | null) &&
-            isContactIn(signedInUser, getValues('applicationData'));
+          const isDraft = isApplicationDraft(getValues('alluStatus') as AlluStatus | null);
+          const isContact = isContactIn(signedInUser, getValues('applicationData'));
+          const showSendButton = lastStep && isDraft;
+          const disableSendButton = showSendButton && !isContact;
 
           const saveAndQuitIsLoading =
             applicationCreateMutation.isLoading ||
@@ -465,16 +462,21 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
               >
                 {t('hankeForm:saveDraftButton')}
               </Button>
-
               {showSendButton && (
                 <Button
                   type="submit"
                   iconLeft={<IconEnvelope aria-hidden="true" />}
                   isLoading={applicationSendMutation.isLoading}
                   loadingText={t('common:buttons:sendingText')}
+                  disabled={disableSendButton}
                 >
                   {t('hakemus:buttons:sendApplication')}
                 </Button>
+              )}
+              {disableSendButton && (
+                <Notification size="small" style={{ marginTop: 'var(--spacing-xs)' }} type="info">
+                  {t('hakemus:notifications:sendApplicationDisabled')}
+                </Notification>
               )}
             </FormActions>
           );

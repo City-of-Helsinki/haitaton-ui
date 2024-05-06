@@ -1,4 +1,3 @@
-import React from 'react';
 import { rest } from 'msw';
 import { render, cleanup, fireEvent, screen, waitFor, act, within } from '../../testUtils/render';
 import Johtoselvitys from '../../pages/Johtoselvitys';
@@ -403,9 +402,14 @@ test('Should not show send button when application has moved to pending state', 
 
   expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
   expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).not.toBeInTheDocument();
+  expect(
+    screen.queryByText(
+      'Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö',
+    ),
+  ).not.toBeInTheDocument();
 });
 
-test('Should not show send button when user is not a contact person', async () => {
+test('Should show and disable send button and show notification when user is not a contact person', async () => {
   server.use(
     rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
       return res(
@@ -420,16 +424,25 @@ test('Should not show send button when user is not a contact person', async () =
   );
 
   const { user } = render(
-    <JohtoselvitysContainer application={applications[1] as Application<JohtoselvitysData>} />,
+    <JohtoselvitysContainer
+      hankeData={hankkeet[1] as HankeData}
+      application={applications[0] as Application<JohtoselvitysData>}
+    />,
   );
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
   expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
-  expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeDisabled();
+  expect(
+    screen.queryByText(
+      'Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö.',
+    ),
+  ).toBeInTheDocument();
 });
 
-test('Should show send button when application is edited in draft state and user is a contact person', async () => {
+test('Should show and enable button when application is edited in draft state and user is a contact person', async () => {
   server.use(
     rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
       return res(
@@ -453,6 +466,12 @@ test('Should show send button when application is edited in draft state and user
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
   expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeEnabled();
+  expect(
+    screen.queryByText(
+      'Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö',
+    ),
+  ).not.toBeInTheDocument();
 });
 
 test('Should not allow start date be after end date', async () => {
@@ -500,28 +519,6 @@ test('Should not allow step change when current step is invalid', async () => {
   // Expect to still be in the same page
   expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
   expect(screen.queryByText('Kentän arvo on virheellinen')).toBeInTheDocument();
-});
-
-test('Should not show inline notification by default', () => {
-  render(
-    <JohtoselvitysContainer application={applications[0] as Application<JohtoselvitysData>} />,
-  );
-
-  expect(screen.queryByTestId('form-notification')).not.toBeInTheDocument();
-});
-
-test('Should show inline notification when editing a form that is in pending state', () => {
-  render(
-    <JohtoselvitysContainer application={applications[1] as Application<JohtoselvitysData>} />,
-  );
-
-  expect(screen.queryByTestId('form-notification')).toBeInTheDocument();
-  expect(screen.queryByText('Olet muokkaamassa jo lähetettyä hakemusta.')).toBeInTheDocument();
-  expect(
-    screen.queryByText(
-      'Hakemusta voit muokata niin kauan, kun sitä ei vielä ole otettu käsittelyyn. Uusi versio hakemuksesta lähtee viranomaiselle automaattisesti lomakkeen tallennuksen yhteydessä.',
-    ),
-  ).toBeInTheDocument();
 });
 
 test('Validation error is shown if no work is about checkbox is selected', async () => {
@@ -755,6 +752,33 @@ test('Should show validation error if there are no yhteyshenkilo set for yhteyst
   );
   await user.click(screen.getByText('Matti Meikäläinen (matti.meikalainen@test.com)'));
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+  expect(
+    screen.queryByText(/vähintään yksi yhteyshenkilö tulee olla asetettuna/i),
+  ).not.toBeInTheDocument();
+});
+
+test('Should remove validation error if yhteyshenkilo is created for yhteystieto', async () => {
+  const testApplication = cloneDeep(applications[0]) as Application<JohtoselvitysData>;
+  testApplication.applicationData.customerWithContacts = null;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
+
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+  await user.click(screen.getAllByLabelText(/yhteyshenkilöt/i)[0]);
+  await user.tab();
+
+  expect(
+    screen.getByText(/vähintään yksi yhteyshenkilö tulee olla asetettuna/i),
+  ).toBeInTheDocument();
+
+  await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
+  fillNewContactPersonForm({
+    etunimi: 'Matti',
+    sukunimi: 'Meikäläinen',
+    sahkoposti: 'matti@test.com',
+    puhelinnumero: '0000000000',
+  });
+  await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
 
   expect(
     screen.queryByText(/vähintään yksi yhteyshenkilö tulee olla asetettuna/i),

@@ -6,7 +6,7 @@ import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import { readAll, reset } from '../../mocks/data/users';
 import { USER_EDIT_HANKE } from '../../mocks/signedInUser';
 import * as hankeUsersApi from './hankeUsersApi';
-import React from 'react';
+import { formatToFinnishDate } from '../../../common/utils/date';
 
 jest.setTimeout(10000);
 
@@ -68,6 +68,21 @@ test('Should show status text of invitation send to user and Invitation send but
 
   expect(screen.getByText('Kutsulinkki Haitattomaan lähetetty 15.1.2024')).toBeInTheDocument();
   expect(screen.getByRole('button', { name: 'Lähetä kutsulinkki uudelleen' })).toBeInTheDocument();
+});
+
+test('Should update user invitation sent date when resending invitation', async () => {
+  const today = new Date().toISOString();
+  const { user } = render(
+    <EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afa7" hankeTunnus="HAI22-2" />,
+  );
+  await waitForLoadingToFinish();
+
+  expect(screen.getByText('Kutsulinkki Haitattomaan lähetetty 15.1.2024')).toBeInTheDocument();
+
+  await user.click(screen.getByRole('button', { name: 'Lähetä kutsulinkki uudelleen' }));
+  await waitForLoadingToFinish();
+
+  expect(screen.getByText(`Kutsulinkki Haitattomaan lähetetty ${formatToFinnishDate(today)}`));
 });
 
 test('Permissions dropdown should be disabled and delete button should be hidden if only one user has all rights', async () => {
