@@ -85,16 +85,16 @@ test('Should update user invitation sent date when resending invitation', async 
   expect(screen.getByText(`Kutsulinkki Haitattomaan lähetetty ${formatToFinnishDate(today)}`));
 });
 
-test('Permissions dropdown should be disabled and delete button should be hidden if only one user has all rights', async () => {
+test('Permissions dropdown should be disabled and delete button should be hidden if only one user is identified and has all rights', async () => {
   const hankeTunnus = 'HAI22-2';
-  const users = (await readAll(hankeTunnus)).slice(1, 4);
+  const users = (await readAll(hankeTunnus)).slice(0, 4);
   server.use(
     rest.get('/api/hankkeet/:hankeTunnus/kayttajat', async (req, res, ctx) => {
       return res(ctx.status(200), ctx.json({ kayttajat: users }));
     }),
   );
 
-  render(<EditUserContainer id={users[2].id} hankeTunnus={hankeTunnus} />);
+  render(<EditUserContainer id={users[0].id} hankeTunnus={hankeTunnus} />);
   await waitForLoadingToFinish();
 
   expect(screen.getByRole('button', { name: /käyttöoikeudet/i })).toBeDisabled();
@@ -277,7 +277,7 @@ test('Should show error notification if user delete info request fails', async (
     }),
   );
   const { user } = render(
-    <EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afa6" hankeTunnus="HAI22-2" />,
+    <EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afa7" hankeTunnus="HAI22-2" />,
   );
   await waitForLoadingToFinish();
   await user.click(screen.getByRole('button', { name: /poista käyttäjä/i }));
@@ -292,7 +292,7 @@ test('Should show error notification if deleting user fails', async () => {
     }),
   );
   const { user } = render(
-    <EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afa6" hankeTunnus="HAI22-2" />,
+    <EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afb6" hankeTunnus="HAI22-2" />,
   );
   await waitForLoadingToFinish();
   await user.click(screen.getByRole('button', { name: /poista käyttäjä/i }));
