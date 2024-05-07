@@ -784,3 +784,31 @@ test('Should remove validation error if yhteyshenkilo is created for yhteystieto
     screen.queryByText(/vähintään yksi yhteyshenkilö tulee olla asetettuna/i),
   ).not.toBeInTheDocument();
 });
+
+test('Work name should be limited to 100 characters', async () => {
+  const { user } = render(<JohtoselvitysContainer />);
+  const initialName = 'a'.repeat(99);
+
+  fireEvent.change(screen.getByLabelText(/työn nimi/i), {
+    target: {
+      value: initialName,
+    },
+  });
+  await user.type(screen.getByLabelText(/työn nimi/i), 'bbb');
+
+  expect(screen.getByLabelText(/työn nimi/i)).toHaveValue(initialName.concat('b'));
+});
+
+test('Work description should be limited to 2000 characters', async () => {
+  const { user } = render(<JohtoselvitysContainer />);
+  const initialDescription = 'a'.repeat(1999);
+
+  fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
+    target: {
+      value: initialDescription,
+    },
+  });
+  await user.type(screen.getByLabelText(/työn kuvaus/i), 'bbb');
+
+  expect(screen.getByLabelText(/työn kuvaus/i)).toHaveValue(initialDescription.concat('b'));
+});

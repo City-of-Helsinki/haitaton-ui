@@ -14,6 +14,7 @@ type Props = {
   shouldUnregister?: boolean;
   className?: string;
   testId?: string;
+  maxLength?: number | undefined;
 };
 
 const TextArea: React.FC<Props> = ({
@@ -26,6 +27,7 @@ const TextArea: React.FC<Props> = ({
   shouldUnregister,
   className,
   testId,
+  maxLength,
 }) => {
   const { t } = useTranslation();
   const { control } = useFormContext();
@@ -54,6 +56,7 @@ const TextArea: React.FC<Props> = ({
             disabled={disabled}
             errorText={getInputErrorText(t, error)}
             ref={ref}
+            maxLength={maxLength}
           />
         );
       }}
