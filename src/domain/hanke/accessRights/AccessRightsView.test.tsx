@@ -8,6 +8,7 @@ import { HankeUser, SignedInUser } from '../hankeUsers/hankeUser';
 import AccessRightsView from './AccessRightsView';
 import { USER_ALL } from '../../mocks/signedInUser';
 import { reset } from '../../mocks/data/users';
+import { cloneDeep } from 'lodash';
 
 jest.setTimeout(50000);
 
@@ -417,7 +418,7 @@ test('Should not be able to delete user who is the only yhteyshenkilö of the om
   const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
 
   await waitForLoadingToFinish();
-  await user.click(screen.getAllByRole('button', { name: 'Poista käyttäjä' })[4]);
+  await user.click(screen.getAllByRole('button', { name: 'Poista käyttäjä' })[3]);
 
   await screen.findByText('Käyttäjää ei voi poistaa');
   expect(
@@ -432,7 +433,7 @@ test('Should not be able to delete user who has sent hakemuksia', async () => {
   const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
 
   await waitForLoadingToFinish();
-  await user.click(screen.getAllByRole('button', { name: 'Poista käyttäjä' })[1]);
+  await user.click(screen.getAllByRole('button', { name: 'Poista käyttäjä' })[0]);
 
   await screen.findByText('Käyttäjää ei voi poistaa');
   expect(
@@ -447,7 +448,7 @@ test('Should not be able to delete user who has sent hakemuksia, which are pendi
   const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
 
   await waitForLoadingToFinish();
-  await user.click(screen.getAllByRole('button', { name: 'Poista käyttäjä' })[2]);
+  await user.click(screen.getAllByRole('button', { name: 'Poista käyttäjä' })[1]);
 
   await screen.findByText('Käyttäjää ei voi poistaa');
   expect(
@@ -461,7 +462,7 @@ test('Should be able to delete user who has draft hakemuksia, but should notify 
   const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
 
   await waitForLoadingToFinish();
-  await user.click(screen.getAllByRole('button', { name: 'Poista käyttäjä' })[3]);
+  await user.click(screen.getAllByRole('button', { name: 'Poista käyttäjä' })[2]);
 
   await screen.findByText('Poista käyttäjä hankkeelta');
   expect(
@@ -479,11 +480,13 @@ test('Should be able to delete user who has draft hakemuksia, but should notify 
 });
 
 test('User should be able to delete themselves', async () => {
+  const hankeUsers = cloneDeep(users).slice(0, 5) as HankeUser[];
+  hankeUsers[3].tunnistautunut = true;
   const { user } = render(
     <AccessRightsView
       hankeTunnus="HAI22-2"
       hankeName="Aidasmäentien vesihuollon rakentaminen"
-      hankeUsers={users.slice(0, 5) as HankeUser[]}
+      hankeUsers={hankeUsers}
       signedInUser={{ ...USER_ALL, hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6' }}
     />,
   );
