@@ -67,6 +67,7 @@ export function BasicInfo() {
         label={t('hakemus:labels:nimi')}
         required
         autoComplete="on"
+        maxLength={100}
       />
 
       <TextInput
@@ -150,6 +151,7 @@ export function BasicInfo() {
         name="applicationData.workDescription"
         label={t('hakemus:labels:kuvaus')}
         required
+        maxLength={2000}
       />
     </div>
   );
