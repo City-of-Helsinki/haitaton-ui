@@ -14,7 +14,7 @@ import {
 import { formatFeaturesToHankeGeoJSON, getFeatureFromHankeGeometry } from '../../map/utils';
 import { getSurfaceArea } from '../../../common/components/map/utils';
 import { HankkeenHakemus } from '../../application/types/application';
-import { isApplicationPending } from '../../application/utils';
+import { isApplicationCancelled, isApplicationPending } from '../../application/utils';
 
 function mapToAreaDates(areas: HankeAlue[] | undefined, key: 'haittaAlkuPvm' | 'haittaLoppuPvm') {
   return areas?.reduce((result: Date[], area) => {
@@ -140,7 +140,11 @@ export function calculateTotalSurfaceArea(areas?: HankeAlueFormState[]) {
  * Check if it is possible to cancel hanke
  */
 export function canHankeBeCancelled(applications: HankkeenHakemus[]): boolean {
-  return applications.every((application) => isApplicationPending(application.alluStatus));
+  return applications.every(
+    (application) =>
+      isApplicationPending(application.alluStatus) ||
+      isApplicationCancelled(application.alluStatus),
+  );
 }
 
 const defaultNameRegExp = /^Hankealue (\d+)$/;
