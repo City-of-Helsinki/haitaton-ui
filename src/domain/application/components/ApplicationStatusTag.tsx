@@ -1,41 +1,51 @@
-import React from 'react';
-import { IconAlertCircle, Tag } from 'hds-react';
+import { IconAlertCircle, IconCheckCircle, Tag } from 'hds-react';
 import { useTranslation } from 'react-i18next';
+import clsx from 'clsx';
 import { AlluStatusStrings, AlluStatus } from '../types/application';
 import styles from './ApplicationStatusTag.module.scss';
 
-/**
- * Get theme for status tag.
- * Grey background if there is no Allu status (meaning it's draft)
- * or status is replaced (korvattu),
- * green background with white text if status is decision (päätös)
- * and yellow backround otherwise.
- */
-function getTheme(status: AlluStatusStrings | null) {
-  if (status === null || status === AlluStatus.REPLACED) {
-    return undefined;
-  }
-
-  if (status === AlluStatus.DECISION) {
-    return { '--tag-background': 'var(--color-success)', '--tag-color': 'var(--color-white)' };
-  }
-
-  return { '--tag-background': 'var(--color-alert)' };
-}
-
-function ApplicationStatusTag({ status }: { status: AlluStatusStrings | null }) {
+function ApplicationStatusTag({ status }: Readonly<{ status: AlluStatusStrings | null }>) {
   const { t } = useTranslation();
 
   const statusText = t(`hakemus:status:${status}`);
-  // If application is in draft state or waiting information (täydennyspyyntö),
-  // display alert icon before status text
-  const icon =
-    status === null || status === AlluStatus.WAITING_INFORMATION ? (
-      <IconAlertCircle style={{ marginRight: 'var(--spacing-2-xs)' }} />
-    ) : null;
+
+  // If application is in draft state or waiting information (täydennyspyyntö)
+  // or finished (valmis) display icon before status text
+  let icon = null;
+  if (status === null || status === AlluStatus.WAITING_INFORMATION) {
+    icon = <IconAlertCircle style={{ marginRight: 'var(--spacing-2-xs)' }} />;
+  }
+  if (status === AlluStatus.FINISHED) {
+    icon = <IconCheckCircle style={{ marginRight: 'var(--spacing-2-xs)' }} />;
+  }
+
+  /*
+   * Determine background color for status tag.
+   * Grey (default) background if there is no Allu status (meaning it's draft)
+   * or status is replaced (korvattu) or cancelled (peruttu) or archived (arkistoitu),
+   * green background with white text if status is decision (päätös) or finished (työ valmis)
+   * or operational condition (toiminnallinen kunto),
+   * and yellow background otherwise.
+   */
+  const bgDefault =
+    status === null ||
+    status === AlluStatus.REPLACED ||
+    status === AlluStatus.CANCELLED ||
+    status === AlluStatus.ARCHIVED;
+  const bgGreen =
+    status === AlluStatus.DECISION ||
+    status === AlluStatus.FINISHED ||
+    status === AlluStatus.OPERATIONAL_CONDITION;
+  const bgYellow = !bgDefault && !bgGreen;
 
   return (
-    <Tag theme={getTheme(status)} data-testid="application-status-tag">
+    <Tag
+      className={clsx({
+        [styles.bgYellow]: bgYellow,
+        [styles.bgGreen]: bgGreen,
+      })}
+      data-testid="application-status-tag"
+    >
       <div className={styles.applicationStatusTag}>
         {icon} {statusText}
       </div>
