@@ -133,9 +133,9 @@ test('Correct information about hanke should be displayed', async () => {
   expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('1');
   expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('1.5');
   expect(screen.queryByText('11974 m²')).toBeInTheDocument();
-  expect(screen.queryByText('Meluhaitta: Satunnainen haitta')).toBeInTheDocument();
-  expect(screen.queryByText('Pölyhaitta: Lyhytaikainen toistuva haitta')).toBeInTheDocument();
-  expect(screen.queryByText('Tärinähaitta: Pitkäkestoinen jatkuva haitta')).toBeInTheDocument();
+  expect(screen.queryByText('Meluhaitta: 1: Satunnainen meluhaitta')).toBeInTheDocument();
+  expect(screen.queryByText('Pölyhaitta: 3: Toistuva pölyhaitta')).toBeInTheDocument();
+  expect(screen.queryByText('Tärinähaitta: 5: Jatkuva tärinähaitta')).toBeInTheDocument();
   expect(
     screen.queryByText('Autoliikenteen kaistahaitta: Vähentää kaistan yhdellä ajosuunnalla'),
   ).toBeInTheDocument();

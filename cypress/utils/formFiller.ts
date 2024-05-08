@@ -137,14 +137,17 @@ export const selectKaistanPituusHaitta = (kaistanPituusHaitta: HANKE_KAISTAPITUU
 export const selectMeluHaitta = (meluHaitta: HANKE_MELUHAITTA_KEY) => {
   cy.get('#meluHaitta-toggle-button').click();
   switch (meluHaitta) {
-    case HANKE_MELUHAITTA.SATUNNAINEN_HAITTA:
+    case HANKE_MELUHAITTA.EI_MELUHAITTAA:
       cy.get('#meluHaitta-item-0').click();
       break;
-    case HANKE_MELUHAITTA.LYHYTAIKAINEN_TOISTUVA_HAITTA:
+    case HANKE_MELUHAITTA.SATUNNAINEN_MELUHAITTA:
       cy.get('#meluHaitta-item-1').click();
       break;
-    case HANKE_MELUHAITTA.PITKAKESTOINEN_TOISTUVA_HAITTA:
+    case HANKE_MELUHAITTA.TOISTUVA_MELUHAITTA:
       cy.get('#meluHaitta-item-2').click();
+      break;
+    case HANKE_MELUHAITTA.JATKUVA_MELUHAITTA:
+      cy.get('#meluHaitta-item-3').click();
       break;
     default:
       break;
@@ -154,14 +157,17 @@ export const selectMeluHaitta = (meluHaitta: HANKE_MELUHAITTA_KEY) => {
 export const selectPolyHaitta = (polyHaitta: HANKE_POLYHAITTA_KEY) => {
   cy.get('#polyHaitta-toggle-button').click();
   switch (polyHaitta) {
-    case HANKE_POLYHAITTA.SATUNNAINEN_HAITTA:
+    case HANKE_POLYHAITTA.EI_POLYHAITTAA:
       cy.get('#polyHaitta-item-0').click();
       break;
-    case HANKE_POLYHAITTA.LYHYTAIKAINEN_TOISTUVA_HAITTA:
+    case HANKE_POLYHAITTA.SATUNNAINEN_POLYHAITTA:
       cy.get('#polyHaitta-item-1').click();
       break;
-    case HANKE_POLYHAITTA.PITKAKESTOINEN_TOISTUVA_HAITTA:
+    case HANKE_POLYHAITTA.TOISTUVA_POLYHAITTA:
       cy.get('#polyHaitta-item-2').click();
+      break;
+    case HANKE_POLYHAITTA.JATKUVA_POLYHAITTA:
+      cy.get('#polyHaitta-item-3').click();
       break;
     default:
       break;
@@ -171,14 +177,17 @@ export const selectPolyHaitta = (polyHaitta: HANKE_POLYHAITTA_KEY) => {
 export const selectTarinaHaitta = (tarinaHaitta: HANKE_TARINAHAITTA_KEY) => {
   cy.get('#tarinaHaitta-toggle-button').click();
   switch (tarinaHaitta) {
-    case HANKE_TARINAHAITTA.SATUNNAINEN_HAITTA:
+    case HANKE_TARINAHAITTA.EI_TARINAHAITTAA:
       cy.get('#tarinaHaitta-item-0').click();
       break;
-    case HANKE_TARINAHAITTA.LYHYTAIKAINEN_TOISTUVA_HAITTA:
+    case HANKE_TARINAHAITTA.SATUNNAINEN_TARINAHAITTA:
       cy.get('#tarinaHaitta-item-1').click();
       break;
-    case HANKE_TARINAHAITTA.PITKAKESTOINEN_TOISTUVA_HAITTA:
+    case HANKE_TARINAHAITTA.TOISTUVA_TARINAHAITTA:
       cy.get('#tarinaHaitta-item-2').click();
+      break;
+    case HANKE_TARINAHAITTA.JATKUVA_TARINAHAITTA:
+      cy.get('#tarinaHaitta-item-3').click();
       break;
     default:
       break;

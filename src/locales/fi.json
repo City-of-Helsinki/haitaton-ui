@@ -470,19 +470,22 @@
       "PITUUS_500_METRIA_TAI_ENEMMAN": "500 m tai enemmän"
     },
     "meluHaitta": {
-      "SATUNNAINEN_HAITTA": "Satunnainen haitta",
-      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Lyhytaikainen toistuva haitta",
-      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Pitkäkestoinen jatkuva haitta"
+      "EI_MELUHAITTAA": "0: Ei meluhaittaa",
+      "SATUNNAINEN_MELUHAITTA": "1: Satunnainen meluhaitta",
+      "TOISTUVA_MELUHAITTA": "3: Toistuva meluhaitta",
+      "JATKUVA_MELUHAITTA": "5: Jatkuva meluhaitta"
     },
     "polyHaitta": {
-      "SATUNNAINEN_HAITTA": "Satunnainen haitta",
-      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Lyhytaikainen toistuva haitta",
-      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Pitkäkestoinen jatkuva haitta"
+      "EI_POLYHAITTAA": "0: Ei pölyhaittaa",
+      "SATUNNAINEN_POLYHAITTA": "1: Satunnainen pölyhaitta",
+      "TOISTUVA_POLYHAITTA": "3: Toistuva pölyhaitta",
+      "JATKUVA_POLYHAITTA": "5: Jatkuva pölyhaitta"
     },
     "tarinaHaitta": {
-      "SATUNNAINEN_HAITTA": "Satunnainen haitta",
-      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Lyhytaikainen toistuva haitta",
-      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Pitkäkestoinen jatkuva haitta"
+      "EI_TARINAHAITTAA": "0: Ei tärinähaittaa",
+      "SATUNNAINEN_TARINAHAITTA": "1: Satunnainen tärinähaitta",
+      "TOISTUVA_TARINAHAITTA": "3: Toistuva tärinähaitta",
+      "JATKUVA_TARINAHAITTA": "5: Jatkuva tärinähaitta"
     },
     "alue": {
       "title": "Hankealue {{index}}",

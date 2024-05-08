@@ -241,11 +241,11 @@ describe('HankeForm', () => {
     // End date of the nuisance
     expect(screen.getByDisplayValue('24.2.2023')).toBeInTheDocument();
     // Noise nuisance
-    expect(screen.getByText('Satunnainen haitta')).toBeInTheDocument();
+    expect(screen.getByText('1: Satunnainen meluhaitta')).toBeInTheDocument();
     // Dust nuisance
-    expect(screen.getByText('Lyhytaikainen toistuva haitta')).toBeInTheDocument();
+    expect(screen.getByText('3: Toistuva pölyhaitta')).toBeInTheDocument();
     // Vibration nuisance
-    expect(screen.getByText('Pitkäkestoinen jatkuva haitta')).toBeInTheDocument();
+    expect(screen.getByText('5: Jatkuva tärinähaitta')).toBeInTheDocument();
     // Lane hindrance
     expect(screen.getByText('Vähentää kaistan yhdellä ajosuunnalla')).toBeInTheDocument();
     // Hindrance affecting lane length
