@@ -70,7 +70,7 @@ test('Should not be able to save form if work name is missing', async () => {
   await fillBasicInformation(user, { name: '' });
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
-  expect(screen.getByText('Vaihe 1/1: Perustiedot')).toBeInTheDocument();
+  expect(screen.getByText('Vaihe 1/2: Perustiedot')).toBeInTheDocument();
   expect(screen.queryAllByText('Kenttä on pakollinen').length).toBe(1);
 });
 
@@ -85,6 +85,6 @@ test('Should show error message if saving fails', async () => {
   await fillBasicInformation(user);
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
-  expect(screen.getByText('Vaihe 1/1: Perustiedot')).toBeInTheDocument();
+  expect(screen.getByText('Vaihe 1/2: Perustiedot')).toBeInTheDocument();
   expect(screen.getAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
 });

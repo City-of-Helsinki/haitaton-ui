@@ -129,7 +129,7 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
           })}
           id="applicationData.emergencyWork"
           name="applicationData.emergencyWork"
-          label={t('hakemus:labels:emergencyWork')}
+          label={t('hakemus:labels:emergencyWorkKaivuilmoitus')}
           checked={emergencyWorkChecked}
         />
       </SelectionGroup>

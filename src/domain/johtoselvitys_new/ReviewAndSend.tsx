@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { JohtoselvitysFormValues } from './types';
 import { FormSummarySection, SectionTitle } from '../forms/components/FormSummarySection';
-import BasicInformationSummary from '../application/components/BasicInformationSummary';
+import BasicInformationSummary from '../application/components/summary/JohtoselvitysBasicInformationSummary';
 import AreaSummary from '../application/components/AreaSummary';
 import ContactsSummary from '../application/components/ContactsSummary';
 import AttachmentSummary from '../application/components/AttachmentSummary';

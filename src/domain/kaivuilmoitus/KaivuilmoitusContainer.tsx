@@ -4,6 +4,7 @@ import { Button, IconCross, IconSaveDiskette, StepState } from 'hds-react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import MultipageForm from '../forms/MultipageForm';
 import BasicInfo from './BasicInfo';
+import ReviewAndSend from './ReviewAndSend';
 import { HankeData } from '../types/hanke';
 import { useTranslation } from 'react-i18next';
 import FormActions from '../forms/components/FormActions';
@@ -140,6 +141,11 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     {
       element: <BasicInfo johtoselvitysIds={johtoselvitysIds} />,
       label: t('form:headers:perustiedot'),
+      state: StepState.available,
+    },
+    {
+      element: <ReviewAndSend />,
+      label: t('form:headers:yhteenveto'),
       state: StepState.available,
     },
   ];

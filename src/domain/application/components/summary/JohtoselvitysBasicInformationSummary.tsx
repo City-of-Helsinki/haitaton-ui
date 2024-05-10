@@ -5,11 +5,11 @@ import {
   FormSummarySection,
   SectionItemContent,
   SectionItemTitle,
-} from '../../forms/components/FormSummarySection';
-import { JohtoselvitysFormValues } from '../../johtoselvitys/types';
-import { ContactSummary } from './ContactsSummary';
-import { Application, Contact, JohtoselvitysData } from '../types/application';
-import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
+} from '../../../forms/components/FormSummarySection';
+import { JohtoselvitysFormValues } from '../../../johtoselvitys/types';
+import { ContactSummary } from '../ContactsSummary';
+import { Application, Contact, JohtoselvitysData } from '../../types/application';
+import { useFeatureFlags } from '../../../../common/components/featureFlags/FeatureFlagsContext';
 
 function findOrderer(formData: JohtoselvitysFormValues): Contact | null {
   const customerWithContacts = find(formData.applicationData, (value) => {
@@ -30,7 +30,7 @@ function findOrderer(formData: JohtoselvitysFormValues): Contact | null {
 }
 
 type Props = {
-  formData: Application;
+  formData: Application<JohtoselvitysData>;
   children?: React.ReactNode;
 };
 
@@ -45,11 +45,9 @@ const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
     maintenanceWork,
     emergencyWork,
     rockExcavation,
+    postalAddress,
+    propertyConnectivity,
   } = formData.applicationData;
-
-  const { postalAddress, propertyConnectivity } = (
-    formData as unknown as Application<JohtoselvitysData>
-  ).applicationData;
 
   const orderer = findOrderer(formData as unknown as Application<JohtoselvitysData>);
 
