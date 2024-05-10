@@ -196,7 +196,7 @@ export const handlers = [
 
   rest.post(`${apiUrl}/hakemukset/:id/laheta`, async (req, res, ctx) => {
     const { id } = req.params;
-    const hakemus = await hakemuksetDB.read(Number(id));
+    const hakemus = await hakemuksetDB.sendHakemus(Number(id));
 
     if (!hakemus) {
       return res(

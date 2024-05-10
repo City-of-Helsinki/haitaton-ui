@@ -114,3 +114,12 @@ export async function remove(id: number) {
   }
   hakemukset = hakemukset.filter((hakemus) => hakemus.id !== id);
 }
+
+export async function sendHakemus(id: number) {
+  const hakemus = await read(id);
+  if (!hakemus) {
+    throw new ApiError(`No application with id ${id}`, 404);
+  }
+  hakemus.alluStatus = 'PENDING';
+  return hakemus;
+}
