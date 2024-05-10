@@ -191,11 +191,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       label: t('form:headers:yhteenveto'),
       state: StepState.available,
     },
-    {
-      element: <ReviewAndSend />,
-      label: t('form:headers:yhteenveto'),
-      state: StepState.available,
-    },
   ];
 
   const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
