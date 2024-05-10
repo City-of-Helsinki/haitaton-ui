@@ -4,10 +4,10 @@
 }
 
 .bgYellow {
-  background-color: var(--color-alert);
+  background-color: var(--color-alert) !important;
 }
 
 .bgGreen {
-  background-color: var(--color-success);
-  color: var(--color-white);
+  background-color: var(--color-success) !important;
+  color: var(--color-white) !important;
 }
