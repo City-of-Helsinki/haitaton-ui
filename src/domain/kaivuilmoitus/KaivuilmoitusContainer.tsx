@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import FormActions from '../forms/components/FormActions';
 import { ApplicationCancel } from '../application/components/ApplicationCancel';
 import { KaivuilmoitusFormValues } from './types';
-import { validationSchema } from './validationSchema';
+import { validationSchema, perustiedotSchema } from './validationSchema';
 import { useApplicationsForHanke } from '../application/hooks/useApplications';
 import {
   Application,
@@ -72,7 +72,15 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     defaultValues: merge(initialValues, application),
     resolver: yupResolver(validationSchema),
   });
-  const { getValues, setValue, reset, trigger } = formContext;
+  const {
+    getValues,
+    setValue,
+    reset,
+    trigger,
+    watch,
+    formState: { isDirty },
+  } = formContext;
+  const watchFormValues = watch();
 
   const {
     applicationCreateMutation,
@@ -120,6 +128,12 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     }
   }
 
+  function handleStepChange() {
+    if (isDirty) {
+      saveApplication();
+    }
+  }
+
   function saveAndQuit() {
     function handleSuccess(data: Application<KaivuilmoitusData>) {
       navigateToApplicationList(data.hankeTunnus);
@@ -142,6 +156,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       element: <BasicInfo johtoselvitysIds={johtoselvitysIds} />,
       label: t('form:headers:perustiedot'),
       state: StepState.available,
+      validationSchema: perustiedotSchema,
     },
     {
       element: <ReviewAndSend />,
@@ -156,6 +171,8 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         heading={t('kaivuilmoitusForm:pageHeader')}
         subHeading={`${hankeData.nimi} (${hankeData.hankeTunnus})`}
         formSteps={formSteps}
+        formData={watchFormValues}
+        onStepChange={handleStepChange}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {
