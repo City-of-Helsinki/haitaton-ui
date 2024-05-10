@@ -90,6 +90,31 @@ test('Cancel application when it has been saved and sent to Allu but is still pe
   expect(screen.queryByText('Hakemus peruttiin onnistuneesti')).toBeInTheDocument();
 });
 
+test('Cancel application when it has already been cancelled', async () => {
+  server.use(
+    rest.delete('/api/hakemukset/:id', async (req, res, ctx) => {
+      return res(ctx.status(200), ctx.json({ hankeDeleted: false }));
+    }),
+  );
+  const application = mockApplications[5];
+  const { user } = render(
+    <ApplicationCancel
+      applicationId={application.id}
+      alluStatus={application.alluStatus}
+      hankeTunnus="HAI22-2"
+      buttonIcon={<IconCross />}
+    />,
+  );
+
+  await user.click(screen.getByRole('button', { name: 'Peru hakemus' }));
+
+  // Click confirm button in the confirmation dialog
+  await user.click(screen.getByRole('button', { name: 'Vahvista' }));
+
+  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2');
+  expect(screen.queryByText('Hakemus peruttiin onnistuneesti')).toBeInTheDocument();
+});
+
 test('Canceling application is not possible when it in handling in Allu', () => {
   const application = mockApplications[2];
 

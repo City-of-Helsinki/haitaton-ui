@@ -175,6 +175,23 @@ test('It is not possible to delete hanke if it has active applications', () => {
   expect(screen.queryByRole('button', { name: /peru hanke/i })).not.toBeInTheDocument();
 });
 
+test('It is possible to delete hanke if it has only cancelled applications', async () => {
+  const { user } = render(<HankeViewContainer hankeTunnus="HAI22-4" />);
+
+  await waitForLoadingToFinish();
+
+  const cancelHankeButton = screen.getByRole('button', { name: /peru hanke/i });
+
+  expect(cancelHankeButton).toBeInTheDocument();
+
+  await user.click(cancelHankeButton);
+
+  await user.click(screen.getByRole('button', { name: /vahvista/i }));
+
+  expect(window.location.pathname).toBe('/fi/hankesalkku');
+  expect(screen.queryByText('Hanke poistettiin onnistuneesti')).toBeInTheDocument();
+});
+
 test('Should render correct number of applications if they exist', async () => {
   const { user } = render(<HankeViewContainer hankeTunnus="HAI22-2" />);
 
