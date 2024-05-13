@@ -12,7 +12,7 @@ function isCustomerEmpty(customer?: Customer) {
 
   if (
     customer.name === '' &&
-    customer.registryKey === '' &&
+    !customer.registryKey &&
     customer.email === '' &&
     customer.phone === ''
   ) {
@@ -47,12 +47,12 @@ export const ContactSummary: React.FC<{ contact: Contact }> = ({ contact }) => {
 };
 
 const ContactsSummary: React.FC<{
-  customerWithContacts: CustomerWithContacts | null;
+  customerWithContacts?: CustomerWithContacts | null;
   title: string;
 }> = ({ customerWithContacts, title }) => {
   const { t } = useTranslation();
 
-  if (customerWithContacts === null || isCustomerEmpty(customerWithContacts.customer)) {
+  if (!customerWithContacts || isCustomerEmpty(customerWithContacts.customer)) {
     return null;
   }
 

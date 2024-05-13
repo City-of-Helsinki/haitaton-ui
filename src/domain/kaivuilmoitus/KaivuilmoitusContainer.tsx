@@ -4,13 +4,19 @@ import { Button, IconCross, IconSaveDiskette, StepState } from 'hds-react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import MultipageForm from '../forms/MultipageForm';
 import BasicInfo from './BasicInfo';
+import Contacts from './Contacts';
 import ReviewAndSend from './ReviewAndSend';
 import { HankeData } from '../types/hanke';
 import { useTranslation } from 'react-i18next';
 import FormActions from '../forms/components/FormActions';
 import { ApplicationCancel } from '../application/components/ApplicationCancel';
 import { KaivuilmoitusFormValues } from './types';
-import { validationSchema, perustiedotSchema, liitteetSchema } from './validationSchema';
+import {
+  validationSchema,
+  perustiedotSchema,
+  yhteystiedotSchema,
+  liitteetSchema,
+} from './validationSchema';
 import { useApplicationsForHanke } from '../application/hooks/useApplications';
 import {
   Application,
@@ -66,10 +72,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       areas: [],
       startTime: null,
       endTime: null,
-      customerWithContacts: null,
-      contractorWithContacts: null,
-      representativeWithContacts: null,
-      propertyDeveloperWithContacts: null,
     },
   };
   const formContext = useForm<KaivuilmoitusFormValues>({
@@ -103,7 +105,38 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       setValue('id', id);
       reset({}, { keepValues: true });
     },
-    onUpdateSuccess() {
+    onUpdateSuccess({
+      applicationData: {
+        customerWithContacts,
+        contractorWithContacts,
+        propertyDeveloperWithContacts,
+        representativeWithContacts,
+      },
+    }) {
+      if (customerWithContacts) {
+        setValue(
+          'applicationData.customerWithContacts.customer.yhteystietoId',
+          customerWithContacts.customer.yhteystietoId,
+        );
+      }
+      if (contractorWithContacts) {
+        setValue(
+          'applicationData.contractorWithContacts.customer.yhteystietoId',
+          contractorWithContacts.customer.yhteystietoId,
+        );
+      }
+      if (propertyDeveloperWithContacts) {
+        setValue(
+          'applicationData.propertyDeveloperWithContacts.customer.yhteystietoId',
+          propertyDeveloperWithContacts.customer.yhteystietoId,
+        );
+      }
+      if (representativeWithContacts) {
+        setValue(
+          'applicationData.representativeWithContacts.customer.yhteystietoId',
+          representativeWithContacts.customer.yhteystietoId,
+        );
+      }
       reset({}, { keepValues: true });
     },
   });
@@ -173,6 +206,12 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       label: t('form:headers:perustiedot'),
       state: StepState.available,
       validationSchema: perustiedotSchema,
+    },
+    {
+      element: <Contacts />,
+      label: t('form:headers:yhteystiedot'),
+      state: StepState.available,
+      validationSchema: yhteystiedotSchema,
     },
     {
       element: (

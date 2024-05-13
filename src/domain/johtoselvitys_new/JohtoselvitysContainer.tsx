@@ -15,7 +15,7 @@ import { merge } from 'lodash';
 import { useBeforeUnload } from 'react-router-dom';
 import { JohtoselvitysFormData, JohtoselvitysFormValues } from './types';
 import { BasicInfo } from './BasicInfo';
-import { Contacts } from './Contacts';
+import Contacts from '../application/components/ApplicationContacts';
 import { Geometries } from './Geometries';
 import { ReviewAndSend } from './ReviewAndSend';
 import MultipageForm from '../forms/MultipageForm';

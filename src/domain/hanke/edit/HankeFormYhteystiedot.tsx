@@ -75,7 +75,7 @@ const ContactFields: React.FC<
   }, [registryKeyInputDisabled, contactType, index, setValue]);
 
   return (
-    <Box maxWidth="var(--container-width-m)">
+    <Box maxWidth="var(--width-form-2-col)">
       <ResponsiveGrid maxColumns={2}>
         <Dropdown
           id={`${contactType}.${index}.${CONTACT_FORMFIELD.TYYPPI}`}
