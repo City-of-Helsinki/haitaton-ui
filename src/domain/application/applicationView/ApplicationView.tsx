@@ -1,4 +1,3 @@
-import React from 'react';
 import { Accordion, Button, IconPen, IconTrash, Tab, TabList, TabPanel, Tabs } from 'hds-react';
 import { Box } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
@@ -20,8 +19,14 @@ import {
 } from '../../forms/components/FormSummarySection';
 import { HankeData } from '../../types/hanke';
 import ApplicationStatusTag from '../components/ApplicationStatusTag';
-import { AlluStatus, Application } from '../types/application';
-import BasicInformationSummary from '../components/BasicInformationSummary';
+import {
+  AlluStatus,
+  Application,
+  JohtoselvitysData,
+  KaivuilmoitusData,
+} from '../types/application';
+import JohtoselvitysBasicInformationSummary from '../components/summary/JohtoselvitysBasicInformationSummary';
+import KaivuilmoitusBasicInformationSummary from '../components/summary/KaivuilmoitusBasicInformationSummary';
 import { getAreaGeometries, getAreaGeometry } from '../../johtoselvitys/utils';
 import { formatSurfaceArea, getTotalSurfaceArea } from '../../map/utils';
 import useLocale from '../../../common/hooks/useLocale';
@@ -46,7 +51,7 @@ type Props = {
   onEditApplication: () => void;
 };
 
-function ApplicationView({ application, hanke, onEditApplication }: Props) {
+function ApplicationView({ application, hanke, onEditApplication }: Readonly<Props>) {
   const { t } = useTranslation();
 
   const locale = useLocale();
@@ -152,12 +157,26 @@ function ApplicationView({ application, hanke, onEditApplication }: Props) {
             </TabList>
             <TabPanel>
               {/* Basic information panel */}
-              <BasicInformationSummary formData={application}>
-                <SectionItemTitle>{t('hakemus:labels:totalSurfaceArea')}</SectionItemTitle>
-                <SectionItemContent>
-                  {totalSurfaceArea > 0 && <p>{totalSurfaceArea} m²</p>}
-                </SectionItemContent>
-              </BasicInformationSummary>
+              {applicationType === 'CABLE_REPORT' && (
+                <JohtoselvitysBasicInformationSummary
+                  formData={application as Application<JohtoselvitysData>}
+                >
+                  <SectionItemTitle>{t('hakemus:labels:totalSurfaceArea')}</SectionItemTitle>
+                  <SectionItemContent>
+                    {totalSurfaceArea > 0 && <p>{totalSurfaceArea} m²</p>}
+                  </SectionItemContent>
+                </JohtoselvitysBasicInformationSummary>
+              )}
+              {applicationType === 'EXCAVATION_NOTIFICATION' && (
+                <KaivuilmoitusBasicInformationSummary
+                  formData={application as Application<KaivuilmoitusData>}
+                >
+                  <SectionItemTitle>{t('hakemus:labels:totalSurfaceArea')}</SectionItemTitle>
+                  <SectionItemContent>
+                    {totalSurfaceArea > 0 && <p>{totalSurfaceArea} m²</p>}
+                  </SectionItemContent>
+                </KaivuilmoitusBasicInformationSummary>
+              )}
             </TabPanel>
             <TabPanel>
               {/* Areas information panel */}
