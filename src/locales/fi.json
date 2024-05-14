@@ -780,8 +780,8 @@
       "EXCAVATION_NOTIFICATION": "Kaivuilmoitus"
     },
     "applicationTypeDraft": {
-      "CABLE_REPORT": "JS-luonnos",
-      "EXCAVATION_NOTIFICATION": "KP-luonnos"
+      "CABLE_REPORT": "Luonnos",
+      "EXCAVATION_NOTIFICATION": "Luonnos"
     },
     "applicationTypeInstruction": "Valitse hakemustyyppi. Kaivuilmoituksen kautta pääset tekemään myös johtoselvityksen, mikäli sinulla ei sellaista vielä ole."
   },
