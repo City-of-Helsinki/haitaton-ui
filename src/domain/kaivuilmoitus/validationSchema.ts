@@ -40,6 +40,7 @@ const applicationDataSchema = yup.object({
     .nullable()
     .required(),
   areas: yup.array(areaSchema).min(1).required(),
+  additionalInfo: yup.string().max(2000).nullable(),
 });
 
 export const validationSchema: yup.ObjectSchema<KaivuilmoitusFormValues> = yup.object({
@@ -64,4 +65,8 @@ export const perustiedotSchema = yup.object({
     'emergencyWork',
     'requiredCompetence',
   ]),
+});
+
+export const liitteetSchema = yup.object({
+  applicationData: applicationDataSchema.pick(['additionalInfo']),
 });

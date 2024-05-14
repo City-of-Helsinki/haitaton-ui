@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import FormActions from '../forms/components/FormActions';
 import { ApplicationCancel } from '../application/components/ApplicationCancel';
 import { KaivuilmoitusFormValues } from './types';
-import { validationSchema, perustiedotSchema } from './validationSchema';
+import { validationSchema, perustiedotSchema, liitteetSchema } from './validationSchema';
 import { useApplicationsForHanke } from '../application/hooks/useApplications';
 import {
   Application,
@@ -23,6 +23,9 @@ import { useNavigateToApplicationList } from '../hanke/hooks/useNavigateToApplic
 import { convertFormStateToKaivuilmoitusUpdateData } from './utils';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
 import useSaveApplication from '../application/hooks/useSaveApplication';
+import React, { useState } from 'react';
+import Attachments from './Attachments';
+import useAttachments from '../application/hooks/useAttachments';
 
 type Props = {
   hankeData: HankeData;
@@ -81,6 +84,12 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     formState: { isDirty },
   } = formContext;
   const watchFormValues = watch();
+
+  const { data: existingAttachments, isError: attachmentsLoadError } = useAttachments(
+    getValues('id'),
+  );
+
+  const [attachmentsUploading, setAttachmentsUploading] = useState(false);
 
   const {
     applicationCreateMutation,
@@ -151,6 +160,10 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     saveApplication(handleSuccess);
   }
 
+  function handleAttachmentUpload(isUploading: boolean) {
+    setAttachmentsUploading(isUploading);
+  }
+
   const formSteps = [
     {
       element: <BasicInfo johtoselvitysIds={johtoselvitysIds} />,
@@ -159,11 +172,25 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       validationSchema: perustiedotSchema,
     },
     {
-      element: <ReviewAndSend />,
+      element: (
+        <Attachments
+          existingAttachments={existingAttachments}
+          attachmentsLoadError={attachmentsLoadError}
+          onFileUpload={handleAttachmentUpload}
+        />
+      ),
+      label: t('form:headers:liitteetJaLisatiedot'),
+      state: StepState.available,
+      validationSchema: liitteetSchema,
+    },
+    {
+      element: <ReviewAndSend attachments={existingAttachments} />,
       label: t('form:headers:yhteenveto'),
       state: StepState.available,
     },
   ];
+
+  const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
 
   return (
     <FormProvider {...formContext}>
@@ -173,6 +200,8 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         formSteps={formSteps}
         formData={watchFormValues}
         onStepChange={handleStepChange}
+        isLoading={attachmentsUploading}
+        isLoadingText={attachmentsUploadingText}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {

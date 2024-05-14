@@ -148,7 +148,7 @@ export interface KaivuilmoitusData {
   contractorWithContacts: CustomerWithContacts | null;
   representativeWithContacts: CustomerWithContacts | null;
   propertyDeveloperWithContacts: CustomerWithContacts | null;
-  additionalInfo?: string;
+  additionalInfo?: string | null;
 }
 
 export type NewJohtoselvitysData = yup.InferType<typeof newJohtoselvitysSchema>;

@@ -44,6 +44,7 @@ import useAttachments from '../hooks/useAttachments';
 import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
 import { CheckRightsByHanke } from '../../hanke/hankeUsers/UserRightsCheck';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
+import KaivuilmoitusAttachmentSummary from '../components/summary/KaivuilmoitusAttachmentSummary';
 
 type Props = {
   application: Application;
@@ -217,8 +218,19 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
               </FormSummarySection>
             </TabPanel>
             <TabPanel>
-              <SectionTitle>{t('hankePortfolio:tabit:liitteet')}</SectionTitle>
-              {attachments && attachments.length > 0 ? (
+              {applicationType === 'EXCAVATION_NOTIFICATION' ? (
+                <SectionTitle>{t('form:headers:liitteetJaLisatiedot')}</SectionTitle>
+              ) : (
+                <SectionTitle>{t('hankePortfolio:tabit:liitteet')}</SectionTitle>
+              )}
+              {applicationType === 'EXCAVATION_NOTIFICATION' &&
+              attachments &&
+              attachments.length > 0 ? (
+                <KaivuilmoitusAttachmentSummary
+                  formData={application as Application<KaivuilmoitusData>}
+                  attachments={attachments}
+                />
+              ) : attachments && attachments.length > 0 ? (
                 <AttachmentSummary attachments={attachments} />
               ) : null}
             </TabPanel>

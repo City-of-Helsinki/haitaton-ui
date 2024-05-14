@@ -8,7 +8,7 @@
     "start": "REACT_APP_DISABLE_SENTRY=1 yarn run update-runtime-env && PORT=3001 react-scripts start",
     "start-msw": "REACT_APP_MOCK_API=use yarn start",
     "build": "react-scripts build",
-    "serve": "ws --spa index.html -d build -p 3001'",
+    "serve": "ws --spa index.html -d build -p 3001",
     "serve-local": "ws --spa index.html -d build -p 3001 --rewrite '/api/(.*) -> http://localhost:3000/$1' --rewrite '/auth/(.*) -> http://localhost:3030/auth/$1'",
     "build-and-serve": "yarn run build && yarn run serve",
     "update-runtime-env": "ts-node -P ./scripts/tsconfig.json --files scripts/update-runtime-env.ts",
