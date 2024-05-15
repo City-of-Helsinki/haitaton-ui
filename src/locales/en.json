@@ -661,7 +661,9 @@
       "instructions3": "You can edit an already drawn area by grabbing its edge and dragging the point to the desired location.",
       "giveDates": "Select the work dates to draw the work areas on the map."
     },
-    "yhteystiedot": {},
+    "yhteystiedot": {
+      "instructions": "Please add the details and contact persons of participating parties. The person submitting the application must be at least one party's contact person. The participating parties included on the application will be sent an email invitation to the project and granted viewing rights. You can edit the participating parties’ access rights and details later in the project’s user management."
+    },
     "liitteet": {
       "instructions": "Add attachments to the application, such as a work plan."
     }
@@ -717,7 +719,8 @@
       "cancelSuccessText": "The application has been cancelled",
       "noApplications": "No applications have been added to the project",
       "maxAttachmentsNumberExceeded": "The maximum number of attachments ({{maxNumber}} items) has been exceeded",
-      "sentApplicationPersonalInfoNotification": "The personal information of the submitted application cannot be edited"
+      "sentApplicationPersonalInfoNotification": "The personal information of the submitted application cannot be edited",
+      "sendApplicationDisabled": "The application can only be submitted by the person designated as the contact person for the application."
     },
     "status": {
       "PENDING_CLIENT": "Visible to authorities",
@@ -751,7 +754,8 @@
       "CABLE_REPORT": "Cable report"
     },
     "applicationTypeDraft": {
-      "CABLE_REPORT": "Cable report draft"
+      "CABLE_REPORT": "Draft",
+      "EXCAVATION_NOTIFICATION": "Draft"
     },
     "applicationTypeInstruction": "Select application type. Via the excavation report, you can also submit a cable report if you do not have one already."
   },
@@ -995,7 +999,8 @@
       "invitationSentErrorLabel": "Error when sending the link",
       "invitationSentErrorText": "<0>An error occurred when sending the invitation link. Please try again later or contact the Haitaton technical support by email <1>haitatontuki@hel.fi</1>.</0>",
       "userDeletedLabel": "User deleted",
-      "userDeletedText": "User deleted successfully"
+      "userDeletedText": "User deleted successfully",
+      "usersNotFound": "No persons found for your search"
     },
     "buttons": {
       "resendInvitation": "Resend the invitation link",
