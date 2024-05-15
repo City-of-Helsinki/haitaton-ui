@@ -9,10 +9,10 @@ export type ApplicationType = 'CABLE_REPORT' | 'EXCAVATION_NOTIFICATION';
 
 export type PostalAddress = {
   streetAddress: {
-    streetName?: string;
+    streetName?: string | null;
   };
-  postalCode?: string;
-  city?: string;
+  postalCode?: string | null;
+  city?: string | null;
 };
 
 export type Contact = {
@@ -56,16 +56,16 @@ export type CustomerWithContacts = {
 };
 
 // Laskutusasiakas
-type InvoicingCustomer = {
+export type InvoicingCustomer = {
   type: keyof typeof ContactType | null;
   name: string;
   registryKey: string;
-  ovt?: string;
-  invoicingOperator?: string;
-  customerReference?: string;
+  ovt?: string | null;
+  invoicingOperator?: string | null;
+  customerReference?: string | null;
   postalAddress: PostalAddress;
-  email?: string;
-  phone?: string;
+  email?: string | null;
+  phone?: string | null;
 };
 
 export enum AlluStatus {

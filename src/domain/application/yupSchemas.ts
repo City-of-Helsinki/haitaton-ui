@@ -39,30 +39,37 @@ export const customerWithContactsSchema = yup.object({
     .min(1, ({ min }) => ({ key: 'yhteyshenkilotMin', values: { min } })),
 });
 
+const postalAddressSchema = yup.object({
+  streetAddress: yup.object({
+    streetName: yup.string().nullable(),
+  }),
+  postalCode: yup.string().nullable(),
+  city: yup.string().nullable(),
+});
+
+const requiredPostalAddressSchema = yup.object({
+  streetAddress: yup.object({
+    streetName: yup.string().required(),
+  }),
+  postalCode: yup.string().required(),
+  city: yup.string().required(),
+});
+
 export const invoicingCustomerSchema = yup.object({
   name: yup.string().trim().max(100).required(),
-  type: yup.mixed<ContactType>().nullable().required(),
+  type: yup.mixed<ContactType>().required(),
   registryKey: registryKeySchema.required(),
-  postalAddress: yup
-    .object({
-      streetAddress: yup.object({
-        streetName: yup.string().when(['ovt', 'invoicingOperator'], {
-          is: (ovt: string, invoicingOperator: string) => {
-            return !ovt && !invoicingOperator;
-          },
-          then: (schema) => schema.required(),
-          otherwise: (schema) => schema,
-        }),
-      }),
-      postalCode: yup.string().required(),
-      city: yup.string(),
-    })
-    .required(),
-  email: yup.string().trim().email().max(100),
-  phone: yup.string().phone().trim().max(20),
-  ovt: yup.string(),
-  invoicingOperator: yup.string(),
-  customerReference: yup.string(),
+  postalAddress: postalAddressSchema.when(['ovt', 'invoicingOperator', 'customerReference'], {
+    is: (ovt: string, invoicingOperator: string, customerReference: string) =>
+      !ovt || !invoicingOperator || !customerReference,
+    then: () => requiredPostalAddressSchema,
+    otherwise: (schema) => schema,
+  }),
+  email: yup.string().nullable().trim().email().max(100),
+  phone: yup.string().nullable().phone().trim().max(20),
+  ovt: yup.string().min(12).nullable(),
+  invoicingOperator: yup.string().nullable(),
+  customerReference: yup.string().nullable(),
 });
 
 export const areaSchema = yup.object({

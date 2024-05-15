@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { FormSummarySection, SectionTitle } from '../forms/components/FormSummarySection';
 import { KaivuilmoitusFormValues } from './types';
 import BasicInformationSummary from '../application/components/summary/KaivuilmoitusBasicInformationSummary';
-import ContactsSummary from '../application/components/ContactsSummary';
+import ContactsSummary from '../application/components/summary/ContactsSummary';
+import InvoicingCustomerSummary from '../application/components/summary/InvoicingCustomerSummary';
 import AttachmentSummary from '../application/components/summary/KaivuilmoitusAttachmentSummary';
 import { ApplicationAttachmentMetadata } from '../application/types/application';
 
@@ -22,6 +23,7 @@ export const ReviewAndSend: React.FC<React.PropsWithChildren<Props>> = ({ attach
     contractorWithContacts,
     propertyDeveloperWithContacts,
     representativeWithContacts,
+    invoicingCustomer,
   } = getValues('applicationData');
 
   return (
@@ -51,6 +53,7 @@ export const ReviewAndSend: React.FC<React.PropsWithChildren<Props>> = ({ attach
           customerWithContacts={representativeWithContacts}
           title={t('form:yhteystiedot:titles:representativeWithContactsPlural')}
         />
+        <InvoicingCustomerSummary invoicingCustomer={invoicingCustomer} />
       </FormSummarySection>
 
       <SectionTitle>{t('form:headers:liitteetJaLisatiedot')}</SectionTitle>

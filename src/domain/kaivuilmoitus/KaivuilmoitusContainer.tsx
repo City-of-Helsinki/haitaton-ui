@@ -1,10 +1,12 @@
-import { FormProvider, useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { merge } from 'lodash';
 import { Button, IconCross, IconSaveDiskette, StepState } from 'hds-react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import MultipageForm from '../forms/MultipageForm';
 import BasicInfo from './BasicInfo';
 import Contacts from './Contacts';
+import Attachments from './Attachments';
 import ReviewAndSend from './ReviewAndSend';
 import { HankeData } from '../types/hanke';
 import { useTranslation } from 'react-i18next';
@@ -26,13 +28,15 @@ import {
 } from '../application/types/application';
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 import { useNavigateToApplicationList } from '../hanke/hooks/useNavigateToApplicationList';
-import { convertFormStateToKaivuilmoitusUpdateData } from './utils';
+import {
+  convertApplicationDataToFormState,
+  convertFormStateToKaivuilmoitusUpdateData,
+} from './utils';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
 import useSaveApplication from '../application/hooks/useSaveApplication';
-import React, { useState } from 'react';
-import Attachments from './Attachments';
 import useAttachments from '../application/hooks/useAttachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
+import { changeFormStep } from '../forms/utils';
 
 type Props = {
   hankeData: HankeData;
@@ -72,11 +76,13 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       areas: [],
       startTime: null,
       endTime: null,
+      representativeWithContacts: null,
+      propertyDeveloperWithContacts: null,
     },
   };
   const formContext = useForm<KaivuilmoitusFormValues>({
     mode: 'onTouched',
-    defaultValues: merge(initialValues, application),
+    defaultValues: merge(initialValues, convertApplicationDataToFormState(application)),
     resolver: yupResolver(validationSchema),
   });
   const {
@@ -200,6 +206,19 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     setAttachmentUploadErrors([]);
   }
 
+  const pageFieldsToValidate: FieldPath<KaivuilmoitusFormValues>[][] = [
+    // Basic information page
+    ['applicationData.name'],
+    // Contacts page
+    [
+      'applicationData.customerWithContacts.customer.registryKey',
+      'applicationData.contractorWithContacts.customer.registryKey',
+      'applicationData.propertyDeveloperWithContacts.customer.registryKey',
+      'applicationData.representativeWithContacts.customer.registryKey',
+      'applicationData.invoicingCustomer.registryKey',
+    ],
+  ];
+
   const formSteps = [
     {
       element: <BasicInfo johtoselvitysIds={johtoselvitysIds} />,
@@ -234,6 +253,10 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
 
   const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
 
+  function validateStepChange(changeStep: () => void, stepIndex: number) {
+    return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger);
+  }
+
   return (
     <FormProvider {...formContext}>
       <MultipageForm
@@ -244,6 +267,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         onStepChange={handleStepChange}
         isLoading={attachmentsUploading}
         isLoadingText={attachmentsUploadingText}
+        stepChangeValidator={validateStepChange}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {

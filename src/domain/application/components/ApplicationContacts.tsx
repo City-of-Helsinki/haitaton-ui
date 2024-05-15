@@ -25,7 +25,7 @@ function getEmptyCustomerWithContacts(): CustomerWithContacts {
   return {
     customer: {
       yhteystietoId: null,
-      type: null,
+      type: ContactType.COMPANY,
       name: '',
       email: '',
       phone: '',
@@ -109,7 +109,7 @@ const CustomerFields: React.FC<{
           id={`applicationData.${customerType}.customer.type`}
           name={`applicationData.${customerType}.customer.type`}
           required
-          defaultValue={null}
+          defaultValue={ContactType.COMPANY}
           label={t('form:yhteystiedot:labels:tyyppi')}
           options={$enum(ContactType).map((value) => {
             return {

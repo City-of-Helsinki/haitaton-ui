@@ -7,7 +7,7 @@ import {
   SectionItemTitle,
 } from '../../../forms/components/FormSummarySection';
 import { JohtoselvitysFormValues } from '../../../johtoselvitys/types';
-import { ContactSummary } from '../ContactsSummary';
+import { ContactSummary } from './ContactsSummary';
 import { Application, Contact, JohtoselvitysData } from '../../types/application';
 import { useFeatureFlags } from '../../../../common/components/featureFlags/FeatureFlagsContext';
 

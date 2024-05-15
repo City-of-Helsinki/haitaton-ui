@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Box } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
@@ -11,73 +12,89 @@ import { KaivuilmoitusFormValues } from './types';
 
 export default function Contacts() {
   const { t } = useTranslation();
-  const { watch } = useFormContext<KaivuilmoitusFormValues>();
+  const { watch, resetField, trigger } = useFormContext<KaivuilmoitusFormValues>();
 
-  const [selectedContactType, ovt, invoicingOperator] = watch([
+  const [selectedContactType, ovt, invoicingOperator, customerReference] = watch([
     'applicationData.invoicingCustomer.type',
-    'applicationData.invoicingCustomer.registryKey',
     'applicationData.invoicingCustomer.ovt',
     'applicationData.invoicingCustomer.invoicingOperator',
+    'applicationData.invoicingCustomer.customerReference',
   ]);
 
-  const invoicingCustomerDisabled =
-    selectedContactType === 'PERSON' || selectedContactType === 'OTHER';
+  const ovtDisabled = selectedContactType === 'PERSON' || selectedContactType === 'OTHER';
 
-  const postalAddressRequired = !ovt && !invoicingOperator;
+  const postalAddressRequired = !ovt || !invoicingOperator || !customerReference;
+
+  useEffect(() => {
+    if (selectedContactType === 'PERSON' || selectedContactType === 'OTHER') {
+      resetField('applicationData.invoicingCustomer.ovt', { defaultValue: '' });
+      resetField('applicationData.invoicingCustomer.invoicingOperator', { defaultValue: '' });
+      resetField('applicationData.invoicingCustomer.customerReference', { defaultValue: '' });
+    }
+  }, [selectedContactType, resetField]);
+
+  useEffect(() => {
+    if (!postalAddressRequired) {
+      trigger([
+        'applicationData.invoicingCustomer.postalAddress.streetAddress.streetName',
+        'applicationData.invoicingCustomer.postalAddress.postalCode',
+        'applicationData.invoicingCustomer.postalAddress.city',
+      ]);
+    }
+  }, [postalAddressRequired, trigger]);
 
   return (
     <>
       <ApplicationContacts />
+
       <Box marginTop="var(--spacing-l)" marginBottom="var(--spacing-l)" minInlineSize="auto">
-        <h3 className="heading-m">Laskutustiedot</h3>
-        <Box maxWidth="740px">
-          <ResponsiveGrid maxColumns={2}>
-            <Dropdown
-              id="applicationData.invoicingCustomer.type"
-              name="applicationData.invoicingCustomer.type"
-              required
-              defaultValue="PERSON"
-              label={t('form:yhteystiedot:labels:tyyppi')}
-              options={$enum(ContactType).map((value) => {
-                return {
-                  value,
-                  label: t(`form:yhteystiedot:contactType:${value}`),
-                };
-              })}
-            />
-          </ResponsiveGrid>
+        <Box marginBottom="var(--spacing-l)">
+          <h3 className="heading-m">{t('form:yhteystiedot:titles:invoicingCustomerInfo')}</h3>
         </Box>
-        <Box maxWidth="740px">
-          <ResponsiveGrid maxColumns={2}>
-            <TextInput
-              name="applicationData.invoicingCustomer.name"
-              label={t('form:yhteystiedot:labels:nimi')}
-              required
-              autoComplete={selectedContactType === 'PERSON' ? 'name' : 'organization'}
-            />
-            <TextInput
-              name="applicationData.invoicingCustomer.registryKey"
-              label="Y-tunnus tai henkilötunnus"
-              required
-              autoComplete="on"
-            />
-          </ResponsiveGrid>
-        </Box>
+        <ResponsiveGrid>
+          <Dropdown
+            id="applicationData.invoicingCustomer.type"
+            name="applicationData.invoicingCustomer.type"
+            required
+            defaultValue={ContactType.COMPANY}
+            label={t('form:yhteystiedot:labels:tyyppi')}
+            options={$enum(ContactType).map((value) => {
+              return {
+                value,
+                label: t(`form:yhteystiedot:contactType:${value}`),
+              };
+            })}
+          />
+        </ResponsiveGrid>
+        <ResponsiveGrid>
+          <TextInput
+            name="applicationData.invoicingCustomer.name"
+            label={t('form:yhteystiedot:labels:nimi')}
+            required
+            autoComplete={selectedContactType === 'PERSON' ? 'name' : 'organization'}
+          />
+          <TextInput
+            name="applicationData.invoicingCustomer.registryKey"
+            label={t('form:yhteystiedot:labels:yTunnusTaiHetu')}
+            required
+            autoComplete="on"
+          />
+        </ResponsiveGrid>
         <ResponsiveGrid>
           <TextInput
             name="applicationData.invoicingCustomer.ovt"
-            label="OVT-tunnus"
-            disabled={invoicingCustomerDisabled}
+            label={t('form:yhteystiedot:labels:ovt')}
+            disabled={ovtDisabled}
           />
           <TextInput
             name="applicationData.invoicingCustomer.invoicingOperator"
-            label="Välittäjän tunnus"
-            disabled={invoicingCustomerDisabled}
+            label={t('form:yhteystiedot:labels:invoicingOperator')}
+            disabled={ovtDisabled}
           />
           <TextInput
             name="applicationData.invoicingCustomer.customerReference"
-            label="Asiakkaan viite"
-            disabled={invoicingCustomerDisabled}
+            label={t('form:yhteystiedot:labels:customerReference')}
+            disabled={ovtDisabled}
           />
         </ResponsiveGrid>
         <ResponsiveGrid>
@@ -97,7 +114,7 @@ export default function Contacts() {
             required={postalAddressRequired}
           />
         </ResponsiveGrid>
-        <ResponsiveGrid maxColumns={2}>
+        <ResponsiveGrid>
           <TextInput
             name="applicationData.invoicingCustomer.email"
             label={t('form:yhteystiedot:labels:email')}
