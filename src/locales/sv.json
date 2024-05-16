@@ -469,19 +469,22 @@
       "PITUUS_500_METRIA_TAI_ENEMMAN": "500 m eller mer"
     },
     "meluHaitta": {
-      "SATUNNAINEN_HAITTA": "Tillfällig olägenhet",
-      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Kortvarig återkommande olägenhet",
-      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Långvarig kontinuerlig olägenhet"
+      "EI_MELUHAITTAA": "0: Inga bullerstörning",
+      "SATUNNAINEN_MELUHAITTA": "1: Tillfällig bullerstörning",
+      "TOISTUVA_MELUHAITTA": "3: Återkommande bullerstörning",
+      "JATKUVA_MELUHAITTA": "5: Kontinuerling bullerstörning"
     },
     "polyHaitta": {
-      "SATUNNAINEN_HAITTA": "Tillfällig olägenhet",
-      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Kortvarig återkommande olägenhet",
-      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Långvarig kontinuerlig olägenhet"
+      "EI_POLYHAITTAA": "0: Inga dammolägenhet",
+      "SATUNNAINEN_POLYHAITTA": "1: Tillfällig dammolägenhet",
+      "TOISTUVA_POLYHAITTA": "3: Återkommande dammolägenhet",
+      "JATKUVA_POLYHAITTA": "5: Kontinuerling dammolägenhet"
     },
     "tarinaHaitta": {
-      "SATUNNAINEN_HAITTA": "Tillfällig olägenhet",
-      "LYHYTAIKAINEN_TOISTUVA_HAITTA": "Kortvarig återkommande olägenhet",
-      "PITKAKESTOINEN_TOISTUVA_HAITTA": "Långvarig kontinuerlig olägenhet"
+      "EI_TARINAHAITTAA": "0: Inga vibrationsstörning",
+      "SATUNNAINEN_TARINAHAITTA": "1: Tillfällig vibrationsstörning",
+      "TOISTUVA_TARINAHAITTA": "3: Återkommande vibrationsstörning",
+      "JATKUVA_TARINAHAITTA": "5: Kontinuerling vibrationsstörning"
     },
     "alue": {
       "title": "Projektområde {{index}}",
