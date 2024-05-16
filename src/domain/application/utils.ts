@@ -91,6 +91,13 @@ export function isApplicationPending(alluStatus: AlluStatusStrings | null): bool
   );
 }
 
+/**
+ * Check if application is in cancelled state
+ */
+export function isApplicationCancelled(alluStatus: AlluStatusStrings | null): boolean {
+  return alluStatus === AlluStatus.CANCELLED;
+}
+
 export function isApplicationDraft(alluStatus: AlluStatus | null) {
   return alluStatus === null;
 }

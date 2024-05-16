@@ -15,13 +15,19 @@ async function fillBasicInformation(
   options: {
     name?: string;
     description?: string;
-    placementContract?: string;
+    existingCableReport?: string;
+    cableReports?: string[];
+    placementContracts?: string[];
+    requiredCompetence?: boolean;
   } = {},
 ) {
   const {
     name = 'Kaivuilmoitus',
     description = 'Testataan kaivuilmoituslomaketta',
-    placementContract = 'SL0000001',
+    existingCableReport = 'JS2300001',
+    cableReports = ['JS2300003'],
+    placementContracts = ['SL0000001'],
+    requiredCompetence = true,
   } = options;
 
   fireEvent.change(screen.getByLabelText(/työn nimi/i), {
@@ -34,24 +40,34 @@ async function fillBasicInformation(
 
   fireEvent.click(screen.getByLabelText(/uuden rakenteen tai johdon rakentamisesta/i));
 
-  await screen.findAllByLabelText(/tehtyjen johtoselvitysten tunnukset/i);
-  fireEvent.click(
-    screen.getByRole('button', {
-      name: 'Tehtyjen johtoselvitysten tunnukset: Sulje ja avaa valikko',
-    }),
-  );
-  fireEvent.click(screen.getByText(/JS2300001/));
-  fireEvent.change(screen.getByRole('combobox'), {
-    target: { value: 'JS2300003' },
-  });
-  await user.keyboard('{Enter}');
+  if (existingCableReport) {
+    await screen.findAllByLabelText(/tehtyjen johtoselvitysten tunnukset/i);
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: 'Tehtyjen johtoselvitysten tunnukset: Sulje ja avaa valikko',
+      }),
+    );
+    fireEvent.click(screen.getByText(existingCableReport));
+  }
 
-  fireEvent.change(screen.getByLabelText(/sijoitussopimustunnus/i), {
-    target: { value: placementContract },
-  });
-  fireEvent.click(screen.getByRole('button', { name: /lisää/i }));
+  for (const cableReport of cableReports) {
+    fireEvent.change(screen.getByRole('combobox'), {
+      target: { value: cableReport },
+    });
+    await user.keyboard('{Enter}');
+  }
 
-  fireEvent.click(screen.getByRole('checkbox', { name: /työstä vastaavana/i }));
+  for (const placementContract of placementContracts) {
+    fireEvent.change(screen.getByLabelText('Sijoitussopimustunnus'), {
+      target: { value: placementContract },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /lisää/i }));
+  }
+
+  if (requiredCompetence) {
+    // Check 'Työhön vaadittava pätevyys' checkbox
+    fireEvent.click(screen.getByRole('checkbox', { name: /työstä vastaavana/i }));
+  }
 }
 
 test('Should be able fill perustiedot and save form', async () => {
@@ -70,7 +86,7 @@ test('Should not be able to save form if work name is missing', async () => {
   await fillBasicInformation(user, { name: '' });
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
-  expect(screen.getByText('Vaihe 1/1: Perustiedot')).toBeInTheDocument();
+  expect(screen.getByText('Vaihe 1/2: Perustiedot')).toBeInTheDocument();
   expect(screen.queryAllByText('Kenttä on pakollinen').length).toBe(1);
 });
 
@@ -85,6 +101,33 @@ test('Should show error message if saving fails', async () => {
   await fillBasicInformation(user);
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
-  expect(screen.getByText('Vaihe 1/1: Perustiedot')).toBeInTheDocument();
+  expect(screen.getByText('Vaihe 1/2: Perustiedot')).toBeInTheDocument();
   expect(screen.getAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
+});
+
+test('Should show filled information in summary page', async () => {
+  const name = 'Kaivuilmoitus testi';
+  const description = 'Testataan yhteenvetosivua';
+  const existingCableReport = 'JS2300001';
+  const cableReports = ['JS2300002', 'JS2300003', 'JS2300004'];
+  const placementContracts = ['SL0000001', 'SL0000002'];
+  const hankeData = hankkeet[1] as HankeData;
+  const { user } = render(<KaivuilmoitusContainer hankeData={hankeData} />);
+  await fillBasicInformation(user, {
+    name,
+    description,
+    existingCableReport,
+    cableReports,
+    placementContracts,
+  });
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+  expect(screen.getByText('Vaihe 2/2: Yhteenveto')).toBeInTheDocument();
+  expect(screen.getByText(name)).toBeInTheDocument();
+  expect(screen.getByText(description)).toBeInTheDocument();
+  expect(
+    screen.getByText(`${existingCableReport}, ${cableReports.join(', ')}`),
+  ).toBeInTheDocument();
+  expect(screen.getByText(placementContracts.join(', '))).toBeInTheDocument();
+  expect(screen.getByText('Kyllä')).toBeInTheDocument();
 });

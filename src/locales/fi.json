@@ -674,6 +674,9 @@
     "requiredInstruction": "Kaikki tähdellä * merkityt kentät ovat hakemuksen lähettämisen kannalta pakollisia.",
     "perustiedot": {
       "instructions": "<p>Helsingin kaupungin kaduilla, jalankulku- tai pyöräteillä, toreilla tai puistoissa tehtävistä kaivu-, kairaus- ja louhintatöistä on tehtävä kaivuilmoitus. Kaivuilmoituksen jättämisen yhteydessä pyydetään viranomaiselta automaattisesti myös johtoselvitys, mikäli aiemmin tehdyn johtoselvityksen tunnusta ei ole liitetty hakemukseen.</p><p>Hakemukseen liittyy olennaisena osana käyttäjän täyttämä haittojenhallintasuunnitelma, jonka toteutumista viranomainen seuraa työn aikana. Ilmoituksen liitteeksi laaditaan tilapäisen liikennejärjestelyn suunnitelma, mikäli työ vaikuttaa jalankulkuun pyöräliikenteeseen tai moottoriajoneuvoliikenteeseen tai pysäköintipaikkoja varataan muuhun käyttöön siirtokehotuskyltillä.</p><p>Kaivutyö tulee ilmoittaa talvikaudella (1.12.–14.5.) toiminnalliseen kuntoon ja kaikissa tapauksissa valmiiksi, jotta työ voidaan valvoa ja laskutus katkaista tai päättää.</p><p>$t(kaivuilmoitusForm:requiredInstruction) Työn nimi vaaditaan lomakkeen tallentamiseen.</p>"
+    },
+    "yhteenveto": {
+      "instructions": "Tarkista antamasi tiedot ja lähetä ilmoitus käsittelyyn."
     }
   },
   "hakemus": {
@@ -685,6 +688,7 @@
       "maintenanceWork": "Olemassaolevan rakenteen kunnossapitotyöstä",
       "propertyConnectivity": "Kiinteistöliittymien rakentamisesta",
       "emergencyWork": "Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi",
+      "emergencyWorkKaivuilmoitus": "Kaivutyö on aloitettu ennen kaivuilmoituksen tekemistä merkittävien vahinkojen välttämiseksi",
       "applicationType": "Hakemustyyppi",
       "copyPreviousApplication": "Kopioi aiempi hakemus pohjaksi",
       "applicationToUseAsBase": "Pohjana käytettävä hakemus",
@@ -776,8 +780,8 @@
       "EXCAVATION_NOTIFICATION": "Kaivuilmoitus"
     },
     "applicationTypeDraft": {
-      "CABLE_REPORT": "JS-luonnos",
-      "EXCAVATION_NOTIFICATION": "KP-luonnos"
+      "CABLE_REPORT": "Luonnos",
+      "EXCAVATION_NOTIFICATION": "Luonnos"
     },
     "applicationTypeInstruction": "Valitse hakemustyyppi. Kaivuilmoituksen kautta pääset tekemään myös johtoselvityksen, mikäli sinulla ei sellaista vielä ole."
   },

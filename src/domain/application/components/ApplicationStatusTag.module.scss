@@ -2,3 +2,12 @@
   display: flex;
   align-items: center;
 }
+
+.bgYellow {
+  background-color: var(--color-alert) !important;
+}
+
+.bgGreen {
+  background-color: var(--color-success) !important;
+  color: var(--color-white) !important;
+}

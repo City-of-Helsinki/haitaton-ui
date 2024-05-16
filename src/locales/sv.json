@@ -220,10 +220,10 @@
         "yhteyshenkilo": " Du kan söka personer som redan lagts till genom att skriva eller välja ut en rullgardinsmeny eller lägga till via ny kontaktperson."
       },
       "contactType": {
-        "YKSITYISHENKILO": "Privatperon",
+        "YKSITYISHENKILO": "Privatperson",
         "YRITYS": "Företag",
         "YHTEISO": "Samfund",
-        "PERSON": "Privatperon",
+        "PERSON": "Privatperson",
         "COMPANY": "Företag",
         "ASSOCIATION": "Förening",
         "OTHER": "Annat"
@@ -661,7 +661,9 @@
       "instructions3": "Du kan ändra ett redan ritat område genom att hålla fast vid kanten och dra punkten till önskad position.",
       "giveDates": "Välj datum för arbetet, för att sedan rita in områden att utredas, på kartan."
     },
-    "yhteystiedot": {},
+    "yhteystiedot": {
+      "instructions": "Lägg till uppgifter om och kontaktpersoner för de aktörer som deltar. Den som fyller i ansökan ska vara kontaktperson för minst en aktör. Till de kontaktpersoner som anges på ansökan skickas en e-postinbjudan till projektet med granskningsrätt. Du kan senare redigera deltagarnas användarrättigheter och uppgifter via projektets användarhantering."
+    },
     "liitteet": {
       "instructions": "Lägg bilagor som arbetsplan till ansökan."
     }
@@ -717,7 +719,8 @@
       "cancelSuccessText": "Ansökan kunde återtas",
       "noApplications": "Inga ansökningar har lagts till projektet",
       "maxAttachmentsNumberExceeded": "Maximalt antal bilagor ({{maxNumber}} st) har överskridits",
-      "sentApplicationPersonalInfoNotification": "Egna upplysningar för den inskickade ansökan kan inte redigeras"
+      "sentApplicationPersonalInfoNotification": "Egna upplysningar för den inskickade ansökan kan inte redigeras",
+      "sendApplicationDisabled": "Ansökan kan endast skickas av den person som är kontaktperson för ansökan."
     },
     "status": {
       "PENDING_CLIENT": "Ses av myndigheten",
@@ -751,7 +754,8 @@
       "CABLE_REPORT": "Ledningsutredning"
     },
     "applicationTypeDraft": {
-      "CABLE_REPORT": "JS utkast"
+      "CABLE_REPORT": "Utkast",
+      "EXCAVATION_NOTIFICATION": "Utkast"
     },
     "applicationTypeInstruction": "Välj typ av ansökan. Du kan vid anmälan om grävning även lämna en begäran om ledningsutredning, om du inte ännu har en sådan."
   },
@@ -995,7 +999,8 @@
       "invitationSentErrorLabel": "Ett fel uppstod när länken skulle skickas",
       "invitationSentErrorText": "<0>Ett fel uppstod när inbjudningslänken skulle skickas. Försök igen senare eller kontakta Haitatons tekniska support med e-post till <1>haitatontuki@hel.fi</1>.</0>",
       "userDeletedLabel": "Användare raderad",
-      "userDeletedText": "Det gick att radera användaren"
+      "userDeletedText": "Det gick att radera användaren",
+      "usersNotFound": "Sökningen gav inga resultat"
     },
     "buttons": {
       "resendInvitation": "Skicka inbjudningslänken på nytt",

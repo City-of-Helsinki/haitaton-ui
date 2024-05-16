@@ -43,9 +43,12 @@ export function showUserDeleteButton(
   hankeUsers?: HankeUser[],
   signedInUser?: SignedInUser,
 ) {
+  // Check if user is the only identified user with all rights
+  const usersWithAllRights = hankeUsers?.filter(
+    (hankeUser) => hankeUser.kayttooikeustaso === 'KAIKKI_OIKEUDET' && hankeUser.tunnistautunut,
+  );
   const isOnlyWithAllRights =
-    user.kayttooikeustaso === 'KAIKKI_OIKEUDET' &&
-    hankeUsers?.filter((hankeUser) => hankeUser.kayttooikeustaso === 'KAIKKI_OIKEUDET').length ===
-      1;
+    usersWithAllRights?.length === 1 && usersWithAllRights[0].id === user.id;
+
   return Boolean(signedInUser?.kayttooikeudet.includes('DELETE_USER') && !isOnlyWithAllRights);
 }

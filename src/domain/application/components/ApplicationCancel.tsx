@@ -4,7 +4,7 @@ import { Button } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
 import { AlluStatusStrings } from '../types/application';
-import { isApplicationPending, cancelApplication } from '../utils';
+import { isApplicationPending, cancelApplication, isApplicationCancelled } from '../utils';
 import ConfirmationDialog from '../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
 import {
@@ -36,7 +36,7 @@ export const ApplicationCancel: React.FC<Props> = ({
   const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const isCancelPossible = isApplicationPending(alluStatus);
+  const isCancelPossible = isApplicationPending(alluStatus) || isApplicationCancelled(alluStatus);
 
   const { setNotification } = useGlobalNotification();
 
