@@ -37,27 +37,25 @@ function AttachmentSummary({ formData, attachments }: Props) {
       <SectionItemTitle>
         {t('kaivuilmoitusForm:liitteetJaLisatiedot:trafficArrangementPlan')}
       </SectionItemTitle>
-      {trafficArrangementPlans && trafficArrangementPlans.length > 0 && (
-        <SectionItemContent>
+      <SectionItemContent>
+        {trafficArrangementPlans && trafficArrangementPlans.length > 0 && (
           <FileDownloadList files={trafficArrangementPlans} download={download} />
-        </SectionItemContent>
-      )}
+        )}
+      </SectionItemContent>
 
       <SectionItemTitle>{t('kaivuilmoitusForm:liitteetJaLisatiedot:mandate')}</SectionItemTitle>
-      {mandates && mandates.length > 0 && (
-        <SectionItemContent>
-          <FileDownloadList files={mandates} />
-        </SectionItemContent>
-      )}
+      <SectionItemContent>
+        {mandates && mandates.length > 0 && <FileDownloadList files={mandates} />}
+      </SectionItemContent>
 
       <SectionItemTitle>
         {t('kaivuilmoitusForm:liitteetJaLisatiedot:otherAttachments')}
       </SectionItemTitle>
-      {otherAttachments && otherAttachments.length > 0 && (
-        <SectionItemContent>
+      <SectionItemContent>
+        {otherAttachments && otherAttachments.length > 0 && (
           <FileDownloadList files={otherAttachments} download={download} />
-        </SectionItemContent>
-      )}
+        )}
+      </SectionItemContent>
 
       <SectionItemTitle>
         {t('kaivuilmoitusForm:liitteetJaLisatiedot:additionalInformation')}

@@ -682,6 +682,7 @@
       "instructions": "<p>Lisää tilapäisiä liikennejärjestelyitä koskevat suunnitelmat ja muut mahdolliset liitteet. Tilapäisiä liikennejärjestelyitä koskeva suunnitelma on pakollinen. Tarvittaessa katso <a>Helsingin kaupungin tyyppikuvat</a>.</p><p>Mikäli valtuutusta täyttämiseen tai työn suorittamiseen ei ole tehty kirjautumisen yhteydessä, tulee liitteeksi lisätä valtakirja pdf:nä.</p><p>Kaikki tähdellä * merkityt kentät ovat hakemuksen lähettämisen kannalta pakollisia.</p>",
       "trafficArrangementPlan": "Tilapäisiä liikennejärjestelyitä koskevat suunnitelmat",
       "mandate": "Valtakirja",
+      "mandateCheck": "Tarkista valtakirja",
       "mandateInfo": "Tietosuojasyistä hakemukselle lisättyä valtakirjaa ei enää tallennuksen jälkeen pääse katselemaan. Tarkistathan ennen lisäämistä, että kyseinen valtakirja on oikea.",
       "otherAttachments": "Muut liitteet",
       "additionalInformation": "Lisätiedot"

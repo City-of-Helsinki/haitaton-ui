@@ -223,9 +223,7 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
               ) : (
                 <SectionTitle>{t('hankePortfolio:tabit:liitteet')}</SectionTitle>
               )}
-              {applicationType === 'EXCAVATION_NOTIFICATION' &&
-              attachments &&
-              attachments.length > 0 ? (
+              {applicationType === 'EXCAVATION_NOTIFICATION' ? (
                 <KaivuilmoitusAttachmentSummary
                   formData={application as Application<KaivuilmoitusData>}
                   attachments={attachments}

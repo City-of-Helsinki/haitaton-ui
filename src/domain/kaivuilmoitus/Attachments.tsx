@@ -89,7 +89,7 @@ function Attachments({ existingAttachments, attachmentsLoadError, onFileUpload }
       <Notification
         size="small"
         type="info"
-        label="Mandate info"
+        label={t('kaivuilmoitusForm:liitteetJaLisatiedot:mandateCheck')}
         style={{ marginTop: 'var(--spacing-s)', marginBottom: 'var(--spacing-s)' }}
       >
         {t('kaivuilmoitusForm:liitteetJaLisatiedot:mandateInfo')}

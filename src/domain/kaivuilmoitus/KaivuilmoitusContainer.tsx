@@ -26,6 +26,7 @@ import useSaveApplication from '../application/hooks/useSaveApplication';
 import React, { useState } from 'react';
 import Attachments from './Attachments';
 import useAttachments from '../application/hooks/useAttachments';
+import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 
 type Props = {
   hankeData: HankeData;
@@ -36,6 +37,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   const { t } = useTranslation();
   const { setNotification } = useGlobalNotification();
   const navigateToApplicationList = useNavigateToApplicationList(hankeData.hankeTunnus);
+  const [attachmentUploadErrors, setAttachmentUploadErrors] = useState<JSX.Element[]>([]);
   const { data: hankkeenHakemukset } = useApplicationsForHanke(hankeData.hankeTunnus);
   const johtoselvitysIds = hankkeenHakemukset?.applications
     .filter(
@@ -106,9 +108,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     },
   });
 
-  const saving = applicationCreateMutation.isLoading || applicationUpdateMutation.isLoading;
-  const savingText = t('common:buttons:savingText');
-
   function saveApplication(handleSuccess?: (data: Application<KaivuilmoitusData>) => void) {
     const formData = getValues();
     if (!formData.id) {
@@ -164,6 +163,10 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     setAttachmentsUploading(isUploading);
   }
 
+  function closeAttachmentUploadErrorDialog() {
+    setAttachmentUploadErrors([]);
+  }
+
   const formSteps = [
     {
       element: <BasicInfo johtoselvitysIds={johtoselvitysIds} />,
@@ -214,28 +217,40 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
             }
           }
 
+          const saveAndQuitIsLoading =
+            applicationCreateMutation.isLoading ||
+            applicationUpdateMutation.isLoading ||
+            attachmentsUploading;
+          const saveAndQuitLoadingText = attachmentsUploading
+            ? attachmentsUploadingText
+            : t('common:buttons:savingText');
+
           return (
             <FormActions
               activeStepIndex={activeStepIndex}
               totalSteps={formSteps.length}
               onPrevious={handlePrevious}
               onNext={handleNext}
+              previousButtonIsLoading={attachmentsUploading}
+              previousButtonLoadingText={attachmentsUploadingText}
+              nextButtonIsLoading={attachmentsUploading}
+              nextButtonLoadingText={attachmentsUploadingText}
             >
               <ApplicationCancel
                 applicationId={getValues('id')}
                 alluStatus={getValues('alluStatus')}
                 hankeTunnus={hankeData.hankeTunnus}
                 buttonIcon={<IconCross />}
-                saveAndQuitIsLoading={saving}
-                saveAndQuitIsLoadingText={savingText}
+                saveAndQuitIsLoading={saveAndQuitIsLoading}
+                saveAndQuitIsLoadingText={saveAndQuitLoadingText}
               />
 
               <Button
                 variant="secondary"
                 onClick={handleSaveAndQuit}
                 iconLeft={<IconSaveDiskette />}
-                isLoading={saving}
-                loadingText={savingText}
+                isLoading={saveAndQuitIsLoading}
+                loadingText={saveAndQuitLoadingText}
               >
                 {t('hankeForm:saveDraftButton')}
               </Button>
@@ -256,6 +271,19 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
           onClose={() => setShowSaveNotification(null)}
         />
       )}
+
+      {/* Attachment upload error dialog */}
+      <ConfirmationDialog
+        title={t('form:errors:fileLoadError')}
+        description={attachmentUploadErrors}
+        showSecondaryButton={false}
+        showCloseButton
+        isOpen={attachmentUploadErrors.length > 0}
+        close={closeAttachmentUploadErrorDialog}
+        mainAction={closeAttachmentUploadErrorDialog}
+        mainBtnLabel={t('common:ariaLabels:closeButtonLabelText')}
+        variant="primary"
+      />
     </FormProvider>
   );
 }
