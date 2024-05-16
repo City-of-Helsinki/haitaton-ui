@@ -218,7 +218,7 @@ export default function ApplicationContacts() {
         {t('form:yhteystiedot:titles:customerWithContactsInfo')}
       </Text>
 
-      {/* Hakija */}
+      {/* Työstä vastaava */}
       <FormContact<CustomerType>
         contactType="customerWithContacts"
         hankeTunnus={hankeTunnus!}

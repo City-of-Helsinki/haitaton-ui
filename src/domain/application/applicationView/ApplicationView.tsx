@@ -206,15 +206,15 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
                 />
                 <ContactsSummary
                   customerWithContacts={contractorWithContacts}
-                  title={t('form:yhteystiedot:titles:contractorWithContactsPlural')}
+                  title={t('form:yhteystiedot:titles:contractorWithContacts')}
                 />
                 <ContactsSummary
                   customerWithContacts={propertyDeveloperWithContacts}
-                  title={t('form:yhteystiedot:titles:rakennuttajatPlural')}
+                  title={t('form:yhteystiedot:titles:rakennuttajat')}
                 />
                 <ContactsSummary
                   customerWithContacts={representativeWithContacts}
-                  title={t('form:yhteystiedot:titles:representativeWithContactsPlural')}
+                  title={t('form:yhteystiedot:titles:representativeWithContacts')}
                 />
                 {applicationType === 'EXCAVATION_NOTIFICATION' && (
                   <InvoicingCustomerSummary

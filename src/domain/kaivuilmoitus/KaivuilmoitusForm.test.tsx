@@ -256,7 +256,7 @@ test('Should not be able to save form if work name is missing', async () => {
   await fillBasicInformation(user, { name: '' });
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
-  expect(screen.getByText('Vaihe 1/3: Perustiedot')).toBeInTheDocument();
+  expect(screen.getByText('Vaihe 1/4: Perustiedot')).toBeInTheDocument();
   expect(screen.queryAllByText('Kenttä on pakollinen').length).toBe(1);
 });
 
@@ -271,11 +271,44 @@ test('Should show error message if saving fails', async () => {
   await fillBasicInformation(user);
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
-  expect(screen.getByText('Vaihe 1/3: Perustiedot')).toBeInTheDocument();
+  expect(screen.getByText('Vaihe 1/4: Perustiedot')).toBeInTheDocument();
   expect(screen.getAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
 });
 
 test('Should be able to fill form pages and show filled information in summary page', async () => {
+  initApplicationAttachmentGetResponse([
+    {
+      id: '8a77c842-3d6b-42df-8ed0-7d1493a2c015',
+      fileName: 'liikennejärjestelyt.pdf',
+      contentType: 'application/pdf',
+      size: 123456789,
+      createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800286',
+      createdAt: '2023-12-01T13:51:42.995157Z',
+      applicationId: 1,
+      attachmentType: 'LIIKENNEJARJESTELY',
+    },
+    {
+      id: '8a77c842-3d6b-42df-8ed0-7d1493a2c016',
+      fileName: 'valtakirja.pdf',
+      contentType: 'application/pdf',
+      size: 123456789,
+      createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800286',
+      createdAt: new Date().toISOString(),
+      applicationId: 1,
+      attachmentType: 'VALTAKIRJA',
+    },
+    {
+      id: '8a77c842-3d6b-42df-8ed0-7d1493a2c017',
+      fileName: 'muu.png',
+      contentType: 'image/png',
+      size: 123456,
+      createdByUserId: 'b9a58f4c-f5fe-11ec-997f-0a580a800286',
+      createdAt: '2023-10-07T13:51:42.995157Z',
+      applicationId: 1,
+      attachmentType: 'MUU',
+    },
+  ]);
+
   const name = 'Kaivuilmoitus testi';
   const description = 'Testataan yhteenvetosivua';
   const existingCableReport = 'JS2300001';
