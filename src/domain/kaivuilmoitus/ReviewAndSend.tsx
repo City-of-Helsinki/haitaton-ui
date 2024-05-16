@@ -4,8 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { SectionTitle } from '../forms/components/FormSummarySection';
 import { KaivuilmoitusFormValues } from './types';
 import BasicInformationSummary from '../application/components/summary/KaivuilmoitusBasicInformationSummary';
+import AttachmentSummary from '../application/components/summary/KaivuilmoitusAttachmentSummary';
+import React from 'react';
+import { ApplicationAttachmentMetadata } from '../application/types/application';
 
-export default function ReviewAndSend() {
+type Props = {
+  attachments: ApplicationAttachmentMetadata[] | undefined;
+};
+
+export const ReviewAndSend: React.FC<React.PropsWithChildren<Props>> = ({ attachments }) => {
   const { getValues } = useFormContext<KaivuilmoitusFormValues>();
   const { t } = useTranslation();
 
@@ -15,8 +22,13 @@ export default function ReviewAndSend() {
         <p>{t('kaivuilmoitusForm:yhteenveto:instructions')}</p>
       </Box>
 
-      <SectionTitle>{t('hankeForm:perustiedotForm:header')}</SectionTitle>
+      <SectionTitle>{t('form:headers:perustiedot')}</SectionTitle>
       <BasicInformationSummary formData={getValues()} />
+
+      <SectionTitle>{t('form:headers:liitteetJaLisatiedot')}</SectionTitle>
+      <AttachmentSummary formData={getValues()} attachments={attachments} />
     </div>
   );
-}
+};
+
+export default ReviewAndSend;

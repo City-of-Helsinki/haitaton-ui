@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import FormActions from '../forms/components/FormActions';
 import { ApplicationCancel } from '../application/components/ApplicationCancel';
 import { KaivuilmoitusFormValues } from './types';
-import { validationSchema, perustiedotSchema } from './validationSchema';
+import { validationSchema, perustiedotSchema, liitteetSchema } from './validationSchema';
 import { useApplicationsForHanke } from '../application/hooks/useApplications';
 import {
   Application,
@@ -23,6 +23,10 @@ import { useNavigateToApplicationList } from '../hanke/hooks/useNavigateToApplic
 import { convertFormStateToKaivuilmoitusUpdateData } from './utils';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
 import useSaveApplication from '../application/hooks/useSaveApplication';
+import React, { useState } from 'react';
+import Attachments from './Attachments';
+import useAttachments from '../application/hooks/useAttachments';
+import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 
 type Props = {
   hankeData: HankeData;
@@ -33,6 +37,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   const { t } = useTranslation();
   const { setNotification } = useGlobalNotification();
   const navigateToApplicationList = useNavigateToApplicationList(hankeData.hankeTunnus);
+  const [attachmentUploadErrors, setAttachmentUploadErrors] = useState<JSX.Element[]>([]);
   const { data: hankkeenHakemukset } = useApplicationsForHanke(hankeData.hankeTunnus);
   const johtoselvitysIds = hankkeenHakemukset?.applications
     .filter(
@@ -82,6 +87,12 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   } = formContext;
   const watchFormValues = watch();
 
+  const { data: existingAttachments, isError: attachmentsLoadError } = useAttachments(
+    getValues('id'),
+  );
+
+  const [attachmentsUploading, setAttachmentsUploading] = useState(false);
+
   const {
     applicationCreateMutation,
     applicationUpdateMutation,
@@ -96,9 +107,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       reset({}, { keepValues: true });
     },
   });
-
-  const saving = applicationCreateMutation.isLoading || applicationUpdateMutation.isLoading;
-  const savingText = t('common:buttons:savingText');
 
   function saveApplication(handleSuccess?: (data: Application<KaivuilmoitusData>) => void) {
     const formData = getValues();
@@ -151,6 +159,14 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     saveApplication(handleSuccess);
   }
 
+  function handleAttachmentUpload(isUploading: boolean) {
+    setAttachmentsUploading(isUploading);
+  }
+
+  function closeAttachmentUploadErrorDialog() {
+    setAttachmentUploadErrors([]);
+  }
+
   const formSteps = [
     {
       element: <BasicInfo johtoselvitysIds={johtoselvitysIds} />,
@@ -159,11 +175,25 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       validationSchema: perustiedotSchema,
     },
     {
-      element: <ReviewAndSend />,
+      element: (
+        <Attachments
+          existingAttachments={existingAttachments}
+          attachmentsLoadError={attachmentsLoadError}
+          onFileUpload={handleAttachmentUpload}
+        />
+      ),
+      label: t('form:headers:liitteetJaLisatiedot'),
+      state: StepState.available,
+      validationSchema: liitteetSchema,
+    },
+    {
+      element: <ReviewAndSend attachments={existingAttachments} />,
       label: t('form:headers:yhteenveto'),
       state: StepState.available,
     },
   ];
+
+  const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
 
   return (
     <FormProvider {...formContext}>
@@ -173,6 +203,8 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         formSteps={formSteps}
         formData={watchFormValues}
         onStepChange={handleStepChange}
+        isLoading={attachmentsUploading}
+        isLoadingText={attachmentsUploadingText}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {
@@ -185,28 +217,40 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
             }
           }
 
+          const saveAndQuitIsLoading =
+            applicationCreateMutation.isLoading ||
+            applicationUpdateMutation.isLoading ||
+            attachmentsUploading;
+          const saveAndQuitLoadingText = attachmentsUploading
+            ? attachmentsUploadingText
+            : t('common:buttons:savingText');
+
           return (
             <FormActions
               activeStepIndex={activeStepIndex}
               totalSteps={formSteps.length}
               onPrevious={handlePrevious}
               onNext={handleNext}
+              previousButtonIsLoading={attachmentsUploading}
+              previousButtonLoadingText={attachmentsUploadingText}
+              nextButtonIsLoading={attachmentsUploading}
+              nextButtonLoadingText={attachmentsUploadingText}
             >
               <ApplicationCancel
                 applicationId={getValues('id')}
                 alluStatus={getValues('alluStatus')}
                 hankeTunnus={hankeData.hankeTunnus}
                 buttonIcon={<IconCross />}
-                saveAndQuitIsLoading={saving}
-                saveAndQuitIsLoadingText={savingText}
+                saveAndQuitIsLoading={saveAndQuitIsLoading}
+                saveAndQuitIsLoadingText={saveAndQuitLoadingText}
               />
 
               <Button
                 variant="secondary"
                 onClick={handleSaveAndQuit}
                 iconLeft={<IconSaveDiskette />}
-                isLoading={saving}
-                loadingText={savingText}
+                isLoading={saveAndQuitIsLoading}
+                loadingText={saveAndQuitLoadingText}
               >
                 {t('hankeForm:saveDraftButton')}
               </Button>
@@ -227,6 +271,19 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
           onClose={() => setShowSaveNotification(null)}
         />
       )}
+
+      {/* Attachment upload error dialog */}
+      <ConfirmationDialog
+        title={t('form:errors:fileLoadError')}
+        description={attachmentUploadErrors}
+        showSecondaryButton={false}
+        showCloseButton
+        isOpen={attachmentUploadErrors.length > 0}
+        close={closeAttachmentUploadErrorDialog}
+        mainAction={closeAttachmentUploadErrorDialog}
+        mainBtnLabel={t('common:ariaLabels:closeButtonLabelText')}
+        variant="primary"
+      />
     </FormProvider>
   );
 }
