@@ -287,12 +287,12 @@ test('Should show map if there are hanke areas', async () => {
   expect(screen.getByTestId('hanke-map')).toBeInTheDocument();
 });
 
-test('Should not show map if there are no hanke areas', async () => {
+test('Should show map placeholder text if there are no hanke areas', async () => {
   render(<HankeViewContainer hankeTunnus="HAI22-5" />);
 
   await waitForLoadingToFinish();
 
-  expect(screen.queryByTestId('hanke-map')).not.toBeInTheDocument();
+  expect(screen.getByText('Hankealueita ei ole määritelty')).toBeInTheDocument();
 });
 
 test('Should not show user management button if access rights feature is not enabled', async () => {
