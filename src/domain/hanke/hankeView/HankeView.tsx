@@ -56,6 +56,7 @@ import AttachmentSummary from '../edit/components/AttachmentSummary';
 import useHankeAttachments from '../hankeAttachments/useHankeAttachments';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import HankeGeneratedStateNotification from '../edit/components/HankeGeneratedStateNotification';
+import MapPlaceholder from '../../map/components/MapPlaceholder/MapPlaceholder';
 
 type AreaProps = {
   area: HankeAlue;
@@ -277,7 +278,7 @@ const HankeView: React.FC<Props> = ({
         </InformationViewHeaderButtons>
       </InformationViewHeader>
 
-      <InformationViewContentContainer hideSideBar={alueet === undefined || alueet?.length === 0}>
+      <InformationViewContentContainer hideSideBar={!features.hanke}>
         <InformationViewMainContent>
           <FeatureFlags flags={['hanke']}>
             <HankeGeneratedStateNotification
@@ -369,10 +370,10 @@ const HankeView: React.FC<Props> = ({
             </TabPanel>
           </Tabs>
         </InformationViewMainContent>
-        <FeatureFlags flags={['hanke']}>
-          {alueet?.length > 0 && (
-            <InformationViewSidebar testId="hanke-map">
-              <OwnHankeMapHeader hankeTunnus={hankeData.hankeTunnus} />
+        <InformationViewSidebar testId="hanke-map">
+          <OwnHankeMapHeader hankeTunnus={hankeData.hankeTunnus} showLink={alueet.length > 0} />
+          {alueet?.length > 0 ? (
+            <>
               <OwnHankeMap hanke={hankeData} />
               {alueet?.map((area, index) => {
                 return (
@@ -385,9 +386,11 @@ const HankeView: React.FC<Props> = ({
                   />
                 );
               })}
-            </InformationViewSidebar>
+            </>
+          ) : (
+            <MapPlaceholder />
           )}
-        </FeatureFlags>
+        </InformationViewSidebar>
       </InformationViewContentContainer>
     </InformationViewContainer>
   );

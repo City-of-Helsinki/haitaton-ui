@@ -46,6 +46,7 @@ import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import useFocusToElement from '../../../common/hooks/useFocusToElement';
 import HDSLink from '../../../common/components/Link/Link';
 import HankeCreateDialog from '../hankeCreateDialog/HankeCreateDialog';
+import MapPlaceholder from '../../map/components/MapPlaceholder/MapPlaceholder';
 
 type CustomAccordionProps = {
   hanke: HankeData;
@@ -241,12 +242,19 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
             </FeatureFlags>
           </div>
           <div>
-            {hanke.alueet?.length > 0 && isOpen && (
-              <div data-testid="hanke-map">
-                <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} />
-                <OwnHankeMap hanke={hanke} />
-              </div>
-            )}
+            <FeatureFlags flags={['hanke']}>
+              <OwnHankeMapHeader
+                hankeTunnus={hanke.hankeTunnus}
+                showLink={hanke.alueet?.length > 0}
+              />
+              {hanke.alueet?.length > 0 && isOpen ? (
+                <div data-testid="hanke-map">
+                  <OwnHankeMap hanke={hanke} />
+                </div>
+              ) : (
+                <MapPlaceholder />
+              )}
+            </FeatureFlags>
           </div>
         </FeatureFlags>
 

@@ -907,6 +907,7 @@
     "hankkeentyyppiHelperText": "Valitse hankkeen työmaan tyyppi tai tyypit",
     "areaLocation": "Alueiden sijainti",
     "openMapToNewWindow": "Avaa kartta uuteen ikkunaan",
+    "noAreas": "Hankealueita ei ole määritelty",
     "showHankeButton": "Näytä hanke",
     "showApplicationsButton": "Näytä hankkeen hakemukset",
     "generatedStateLabel": "Hanke muodostettu johtoselvityksen perusteella",

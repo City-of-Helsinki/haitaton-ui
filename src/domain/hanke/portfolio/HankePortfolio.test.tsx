@@ -209,6 +209,7 @@ describe('HankePortfolioComponent', () => {
     await user.click(screen.getByText(editedHankeList[1].nimi));
 
     expect(screen.getAllByTestId('hanke-map')).toHaveLength(1);
+    expect(screen.getAllByText('Hankealueita ei ole määritelty')).toHaveLength(1);
   });
 });
 
