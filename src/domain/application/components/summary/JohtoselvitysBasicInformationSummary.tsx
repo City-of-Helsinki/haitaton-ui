@@ -9,7 +9,6 @@ import {
 import { JohtoselvitysFormValues } from '../../../johtoselvitys/types';
 import { ContactSummary } from './ContactsSummary';
 import { Application, Contact, JohtoselvitysData } from '../../types/application';
-import { useFeatureFlags } from '../../../../common/components/featureFlags/FeatureFlagsContext';
 
 function findOrderer(formData: JohtoselvitysFormValues): Contact | null {
   const customerWithContacts = find(formData.applicationData, (value) => {
@@ -19,14 +18,11 @@ function findOrderer(formData: JohtoselvitysFormValues): Contact | null {
     return false;
   });
 
-  const contact =
-    typeof customerWithContacts === 'object' &&
+  return typeof customerWithContacts === 'object' &&
     customerWithContacts !== null &&
     'contacts' in customerWithContacts
-      ? customerWithContacts.contacts[0]
-      : null;
-
-  return contact;
+    ? customerWithContacts.contacts[0]
+    : null;
 }
 
 type Props = {
@@ -36,7 +32,6 @@ type Props = {
 
 const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
   const { t } = useTranslation();
-  const features = useFeatureFlags();
 
   const {
     name,
@@ -78,12 +73,6 @@ const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
       <SectionItemContent>
         <p style={{ whiteSpace: 'pre-wrap' }}>{workDescription}</p>
       </SectionItemContent>
-      {!features.accessRights && (
-        <>
-          <SectionItemTitle>{t('form:labels:omatTiedot')}</SectionItemTitle>
-          <SectionItemContent>{orderer && <ContactSummary contact={orderer} />}</SectionItemContent>
-        </>
-      )}
       {children}
     </FormSummarySection>
   );

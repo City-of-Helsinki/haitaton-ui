@@ -16,7 +16,7 @@ import { Language, LANGUAGES } from '../../types/language';
 import { SKIP_TO_ELEMENT_ID } from '../../constants/constants';
 import { useFeatureFlags } from '../featureFlags/FeatureFlagsContext';
 import HankeCreateDialog from '../../../domain/hanke/hankeCreateDialog/HankeCreateDialog';
-import JohtoselvitysCreateDialog from '../../../domain/johtoselvitys_new/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
+import JohtoselvitysCreateDialog from '../../../domain/johtoselvitys/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
 
 const languageLabels = {
   fi: 'Suomi',
@@ -172,8 +172,8 @@ function HaitatonHeader() {
           <Header.Link
             label={t('homepage:johtotietoselvitys:title')}
             as={NavLink}
-            to={features.accessRights ? '#' : JOHTOSELVITYSHAKEMUS.path}
-            onClick={features.accessRights ? openJohtoselvitysCreateDialog : undefined}
+            to="#"
+            onClick={openJohtoselvitysCreateDialog}
             active={Boolean(isCableReportApplicationPath)}
             data-testid="cableReportApplicationLink"
           />

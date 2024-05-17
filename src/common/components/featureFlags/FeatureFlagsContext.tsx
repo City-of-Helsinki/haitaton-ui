@@ -7,7 +7,6 @@ type FeatureFlagsProviderProps = {
 export type FeatureFlagsContextProps = {
   publicHankkeet: boolean;
   hanke: boolean;
-  accessRights: boolean;
 };
 
 const FeatureFlagsContext = createContext<FeatureFlagsContextProps | undefined>(undefined);
@@ -17,7 +16,6 @@ export function FeatureFlagsProvider({ children }: FeatureFlagsProviderProps) {
     () => ({
       publicHankkeet: window._env_.REACT_APP_FEATURE_PUBLIC_HANKKEET === '1',
       hanke: window._env_.REACT_APP_FEATURE_HANKE === '1',
-      accessRights: window._env_.REACT_APP_FEATURE_ACCESS_RIGHTS === '1',
     }),
     [],
   );

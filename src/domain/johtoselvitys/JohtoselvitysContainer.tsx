@@ -1,13 +1,19 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Button, IconCross, IconEnvelope, IconSaveDiskette, StepState } from 'hds-react';
+import {
+  Button,
+  IconCross,
+  IconEnvelope,
+  IconSaveDiskette,
+  Notification,
+  StepState,
+} from 'hds-react';
 import { FormProvider, useForm, FieldPath } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from 'react-query';
 import { merge } from 'lodash';
 import { useBeforeUnload } from 'react-router-dom';
-
-import { JohtoselvitysFormValues } from './types';
+import { JohtoselvitysFormData, JohtoselvitysFormValues } from './types';
 import { BasicInfo } from './BasicInfo';
 import { Contacts } from './Contacts';
 import { Geometries } from './Geometries';
@@ -17,28 +23,51 @@ import FormActions from '../forms/components/FormActions';
 import { validationSchema } from './validationSchema';
 import {
   convertApplicationDataToFormState,
-  convertFormStateToApplicationData,
-  findOrdererKey,
+  convertFormStateToJohtoselvitysUpdateData,
 } from './utils';
-import { changeFormStep, getFieldPaths, isPageValid } from '../forms/utils';
-import { isApplicationDraft, saveApplication, sendApplication } from '../application/utils';
-import { HankeContacts, HankeData } from '../types/hanke';
+import { changeFormStep, isPageValid } from '../forms/utils';
+import { isApplicationDraft, sendApplicationNew } from '../application/utils';
+import { HankeData } from '../types/hanke';
 import { ApplicationCancel } from '../application/components/ApplicationCancel';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
 import { useNavigateToApplicationList } from '../hanke/hooks/useNavigateToApplicationList';
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 import useApplicationSendNotification from '../application/hooks/useApplicationSendNotification';
 import useHanke from '../hanke/hooks/useHanke';
-import { AlluStatus, Application, JohtoselvitysData } from '../application/types/application';
+import {
+  AlluStatus,
+  Application,
+  JohtoselvitysCreateData,
+  JohtoselvitysData,
+  JohtoselvitysUpdateData,
+} from '../application/types/application';
 import Attachments from './Attachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import useAttachments from '../application/hooks/useAttachments';
 import { APPLICATION_ID_STORAGE_KEY } from '../application/constants';
+import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
+import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
+import useSaveApplication from '../application/hooks/useSaveApplication';
 
 type Props = {
   hankeData?: HankeData;
   application?: Application<JohtoselvitysData>;
 };
+
+function isContactIn(signedInUser?: SignedInUser, application?: JohtoselvitysFormData) {
+  if (signedInUser && application) {
+    const found = [
+      application.customerWithContacts,
+      application.contractorWithContacts,
+      application.propertyDeveloperWithContacts,
+      application.representativeWithContacts,
+    ]
+      .flatMap((customer) => customer?.contacts)
+      .find((contact) => contact?.hankekayttajaId === signedInUser.hankeKayttajaId);
+    return found !== undefined;
+  }
+  return false;
+}
 
 const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   hankeData,
@@ -50,6 +79,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   const { showSendSuccess, showSendError } = useApplicationSendNotification();
   const queryClient = useQueryClient();
   const [attachmentUploadErrors, setAttachmentUploadErrors] = useState<JSX.Element[]>([]);
+  const { data: signedInUser } = usePermissionsForHanke(hanke?.hankeTunnus);
 
   const initialValues: JohtoselvitysFormValues = {
     id: null,
@@ -59,54 +89,12 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     applicationData: {
       applicationType: 'CABLE_REPORT',
       name: '',
-      customerWithContacts: {
-        customer: {
-          type: null,
-          name: '',
-          country: 'FI',
-          email: '',
-          phone: '',
-          registryKey: null,
-          ovt: null,
-          invoicingOperator: null,
-          sapCustomerNumber: null,
-        },
-        contacts: [
-          {
-            firstName: '',
-            lastName: '',
-            email: '',
-            phone: '',
-            orderer: true,
-          },
-        ],
-      },
+      customerWithContacts: null,
       areas: [],
       startTime: null,
       endTime: null,
       workDescription: '',
-      contractorWithContacts: {
-        customer: {
-          type: null,
-          name: '',
-          country: 'FI',
-          email: '',
-          phone: '',
-          registryKey: null,
-          ovt: null,
-          invoicingOperator: null,
-          sapCustomerNumber: null,
-        },
-        contacts: [
-          {
-            firstName: '',
-            lastName: '',
-            email: '',
-            phone: '',
-            orderer: false,
-          },
-        ],
-      },
+      contractorWithContacts: null,
       postalAddress: { streetAddress: { streetName: '' }, city: '', postalCode: '' },
       representativeWithContacts: null,
       propertyDeveloperWithContacts: null,
@@ -136,7 +124,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     reset,
   } = formContext;
 
-  // Setup a callback to save application id to session storage
+  // Set up a callback to save application id to session storage
   // when the page is about to be unloaded if the application
   // has been saved (id exists) and user is not editing
   // previously created application. This is done so that
@@ -163,26 +151,55 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
 
   const navigateToApplicationList = useNavigateToApplicationList(hanke?.hankeTunnus);
 
-  const [showSaveNotification, setShowSaveNotification] = useState(false);
-
   const [attachmentsUploading, setAttachmentsUploading] = useState(false);
 
-  const applicationSaveMutation = useMutation(saveApplication, {
-    onMutate() {
-      setShowSaveNotification(false);
-    },
-    onSuccess(data) {
-      setValue('id', data.id);
-      setValue('alluStatus', data.alluStatus);
-      setValue('hankeTunnus', data.hankeTunnus);
+  const {
+    applicationCreateMutation,
+    applicationUpdateMutation,
+    showSaveNotification,
+    setShowSaveNotification,
+  } = useSaveApplication<JohtoselvitysData, JohtoselvitysCreateData, JohtoselvitysUpdateData>({
+    onCreateSuccess({ id }) {
+      setValue('id', id);
       reset({}, { keepValues: true });
     },
-    onSettled() {
-      setShowSaveNotification(true);
+    onUpdateSuccess({
+      applicationData: {
+        customerWithContacts,
+        contractorWithContacts,
+        propertyDeveloperWithContacts,
+        representativeWithContacts,
+      },
+    }) {
+      if (customerWithContacts !== null) {
+        setValue(
+          'applicationData.customerWithContacts.customer.yhteystietoId',
+          customerWithContacts.customer.yhteystietoId,
+        );
+      }
+      if (contractorWithContacts !== null) {
+        setValue(
+          'applicationData.contractorWithContacts.customer.yhteystietoId',
+          contractorWithContacts.customer.yhteystietoId,
+        );
+      }
+      if (propertyDeveloperWithContacts !== null) {
+        setValue(
+          'applicationData.propertyDeveloperWithContacts.customer.yhteystietoId',
+          propertyDeveloperWithContacts.customer.yhteystietoId,
+        );
+      }
+      if (representativeWithContacts !== null) {
+        setValue(
+          'applicationData.representativeWithContacts.customer.yhteystietoId',
+          representativeWithContacts.customer.yhteystietoId,
+        );
+      }
+      reset({}, { keepValues: true });
     },
   });
 
-  const applicationSendMutation = useMutation(sendApplication, {
+  const applicationSendMutation = useMutation(sendApplicationNew, {
     onError() {
       showSendError();
     },
@@ -193,28 +210,35 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     },
   });
 
-  function saveCableApplication() {
-    const data = convertFormStateToApplicationData(getValues());
-    applicationSaveMutation.mutate(data);
+  function saveCableApplication(handleSuccess?: (data: Application<JohtoselvitysData>) => void) {
+    const formData = getValues();
+    if (!formData.id) {
+      applicationCreateMutation.mutate(
+        {
+          applicationType: formData.applicationType,
+          hankeTunnus: hanke!.hankeTunnus,
+          name: formData.applicationData.name,
+          postalAddress: formData.applicationData.postalAddress,
+          workDescription: formData.applicationData.workDescription,
+          constructionWork: formData.applicationData.constructionWork,
+          maintenanceWork: formData.applicationData.maintenanceWork,
+          emergencyWork: formData.applicationData.emergencyWork,
+          propertyConnectivity: formData.applicationData.propertyConnectivity,
+          rockExcavation: formData.applicationData.rockExcavation,
+        },
+        { onSuccess: handleSuccess },
+      );
+    } else {
+      applicationUpdateMutation.mutate(
+        { id: formData.id, data: convertFormStateToJohtoselvitysUpdateData(formData) },
+        { onSuccess: handleSuccess },
+      );
+    }
   }
 
   async function sendCableApplication() {
     const data = getValues();
-    let { id } = data;
-    // If for some reason application has not been saved before
-    // sending, meaning id is null, save it before sending
-    if (!id) {
-      try {
-        const responseData = await applicationSaveMutation.mutateAsync(
-          convertFormStateToApplicationData(data),
-        );
-        setShowSaveNotification(false);
-        id = responseData.id as number;
-      } catch (error) {
-        return;
-      }
-    }
-    applicationSendMutation.mutate(id);
+    applicationSendMutation.mutate(data.id!);
   }
 
   function handleStepChange() {
@@ -226,22 +250,20 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   }
 
   function saveAndQuit() {
-    applicationSaveMutation.mutate(convertFormStateToApplicationData(getValues()), {
-      onSuccess(data) {
-        navigateToApplicationList(data.hankeTunnus);
-
-        setNotification(true, {
-          position: 'top-right',
-          dismissible: true,
-          autoClose: true,
-          autoCloseDuration: 5000,
-          label: t('hakemus:notifications:saveSuccessLabel'),
-          message: t('hakemus:notifications:saveSuccessText'),
-          type: 'success',
-          closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
-        });
-      },
-    });
+    function handleSuccess(data: Application<JohtoselvitysData>) {
+      navigateToApplicationList(data.hankeTunnus);
+      setNotification(true, {
+        position: 'top-right',
+        dismissible: true,
+        autoClose: true,
+        autoCloseDuration: 5000,
+        label: t('hakemus:notifications:saveSuccessLabel'),
+        message: t('hakemus:notifications:saveSuccessText'),
+        type: 'success',
+        closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+      });
+    }
+    saveCableApplication(handleSuccess);
   }
 
   function handleAttachmentUpload(isUploading: boolean) {
@@ -251,19 +273,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   function closeAttachmentUploadErrorDialog() {
     setAttachmentUploadErrors([]);
   }
-
-  const ordererKey = findOrdererKey(getValues('applicationData'));
-
-  const customer = getValues('applicationData.customerWithContacts.customer');
-  const customersContacts = getValues('applicationData.customerWithContacts.contacts');
-  const contractor = getValues('applicationData.contractorWithContacts.customer');
-  const contractorsContacts = getValues('applicationData.contractorWithContacts.contacts');
-  const propertyDeveloper = getValues('applicationData.propertyDeveloperWithContacts.customer');
-  const propertyDevelopersContacts = getValues(
-    'applicationData.propertyDeveloperWithContacts.contacts',
-  );
-  const representative = getValues('applicationData.representativeWithContacts.customer');
-  const representativesContacts = getValues('applicationData.representativeWithContacts.contacts');
 
   // Fields that are validated in each page when moving forward in form
   const pageFieldsToValidate: FieldPath<JohtoselvitysFormValues>[][] = useMemo(
@@ -275,7 +284,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         'applicationData.constructionWork',
         'applicationData.rockExcavation',
         'applicationData.workDescription',
-        `applicationData.${ordererKey}.contacts`,
       ],
       // Areas page
       [
@@ -286,58 +294,16 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
       ],
       // Contacts page
       [
-        ...getFieldPaths<JohtoselvitysFormValues>(
-          customer,
-          'applicationData.customerWithContacts.customer',
-        ),
-        ...getFieldPaths<JohtoselvitysFormValues>(
-          customersContacts,
-          'applicationData.customerWithContacts.contacts',
-        ),
-        ...getFieldPaths<JohtoselvitysFormValues>(
-          contractor,
-          'applicationData.contractorWithContacts.customer',
-        ),
-        ...getFieldPaths<JohtoselvitysFormValues>(
-          contractorsContacts,
-          'applicationData.contractorWithContacts.contacts',
-        ),
-        ...getFieldPaths<JohtoselvitysFormValues>(
-          propertyDeveloper,
-          'applicationData.propertyDeveloperWithContacts.customer',
-        ),
-        ...getFieldPaths<JohtoselvitysFormValues>(
-          propertyDevelopersContacts,
-          'applicationData.propertyDeveloperWithContacts.contacts',
-        ),
-        ...getFieldPaths<JohtoselvitysFormValues>(
-          representative,
-          'applicationData.representativeWithContacts.customer',
-        ),
-        ...getFieldPaths<JohtoselvitysFormValues>(
-          representativesContacts,
-          'applicationData.representativeWithContacts.contacts',
-        ),
+        'applicationData.customerWithContacts',
+        'applicationData.contractorWithContacts',
+        'applicationData.propertyDeveloperWithContacts',
+        'applicationData.representativeWithContacts',
       ],
     ],
-    [
-      ordererKey,
-      customer,
-      customersContacts,
-      contractor,
-      contractorsContacts,
-      propertyDeveloper,
-      propertyDevelopersContacts,
-      representative,
-      representativesContacts,
-    ],
+    [],
   );
 
   const formSteps = useMemo(() => {
-    const hankeContacts: HankeContacts | undefined = hankeData
-      ? [hankeData.omistajat, hankeData.rakennuttajat, hankeData.toteuttajat, hankeData.muut]
-      : undefined;
-
     const formValues = getValues();
 
     return [
@@ -347,7 +313,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         state: StepState.available,
       },
       {
-        element: <Geometries />,
+        element: <Geometries hankeData={hankeData} />,
         label: t('form:headers:alueet'),
         /*
          * Determine initial state for the form step.
@@ -363,7 +329,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
           : StepState.disabled,
       },
       {
-        element: <Contacts hankeContacts={hankeContacts} />,
+        element: <Contacts />,
         label: t('form:headers:yhteystiedot'),
         state: isPageValid<JohtoselvitysFormValues>(
           validationSchema,
@@ -414,23 +380,21 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     return changeFormStep(changeStep, pageFieldsToValidate[stepIndex], trigger);
   }
 
-  const notificationLabel =
-    getValues('alluStatus') === AlluStatus.PENDING
-      ? t('form:notifications:labels:editSentApplication')
-      : undefined;
-  const notificationText =
-    getValues('alluStatus') === AlluStatus.PENDING
-      ? t('form:notifications:descriptions:editSentApplication')
-      : undefined;
   const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
 
   return (
     <FormProvider {...formContext}>
-      {/* Notification for saving application */}
-      {showSaveNotification && (
+      {/* Notifications for saving application */}
+      {showSaveNotification === 'create' && (
         <ApplicationSaveNotification
-          saveSuccess={applicationSaveMutation.isSuccess}
-          onClose={() => setShowSaveNotification(false)}
+          saveSuccess={applicationCreateMutation.isSuccess}
+          onClose={() => setShowSaveNotification(null)}
+        />
+      )}
+      {showSaveNotification === 'update' && (
+        <ApplicationSaveNotification
+          saveSuccess={applicationUpdateMutation.isSuccess}
+          onClose={() => setShowSaveNotification(null)}
         />
       )}
 
@@ -443,8 +407,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         onStepChange={handleStepChange}
         onSubmit={handleSubmit(sendCableApplication)}
         stepChangeValidator={validateStepChange}
-        notificationLabel={notificationLabel}
-        notificationText={notificationText}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {
@@ -458,10 +420,15 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
           }
 
           const lastStep = activeStepIndex === formSteps.length - 1;
-          const showSendButton =
-            lastStep && isApplicationDraft(getValues('alluStatus') as AlluStatus | null);
+          const isDraft = isApplicationDraft(getValues('alluStatus') as AlluStatus | null);
+          const isContact = isContactIn(signedInUser, getValues('applicationData'));
+          const showSendButton = lastStep && isDraft;
+          const disableSendButton = showSendButton && !isContact;
 
-          const saveAndQuitIsLoading = applicationSaveMutation.isLoading || attachmentsUploading;
+          const saveAndQuitIsLoading =
+            applicationCreateMutation.isLoading ||
+            applicationUpdateMutation.isLoading ||
+            attachmentsUploading;
           const saveAndQuitLoadingText = attachmentsUploading
             ? attachmentsUploadingText
             : t('common:buttons:savingText');
@@ -486,7 +453,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
               />
 
               <Button
-                variant="supplementary"
+                variant="secondary"
                 iconLeft={<IconSaveDiskette aria-hidden="true" />}
                 data-testid="save-form-btn"
                 onClick={handleSaveAndQuit}
@@ -495,16 +462,21 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
               >
                 {t('hankeForm:saveDraftButton')}
               </Button>
-
               {showSendButton && (
                 <Button
                   type="submit"
                   iconLeft={<IconEnvelope aria-hidden="true" />}
                   isLoading={applicationSendMutation.isLoading}
                   loadingText={t('common:buttons:sendingText')}
+                  disabled={disableSendButton}
                 >
                   {t('hakemus:buttons:sendApplication')}
                 </Button>
+              )}
+              {disableSendButton && (
+                <Notification size="small" style={{ marginTop: 'var(--spacing-xs)' }} type="info">
+                  {t('hakemus:notifications:sendApplicationDisabled')}
+                </Notification>
               )}
             </FormActions>
           );

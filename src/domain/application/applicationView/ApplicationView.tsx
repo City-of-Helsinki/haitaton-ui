@@ -41,7 +41,6 @@ import DecisionLink from '../components/DecisionLink';
 import { ApplicationCancel } from '../components/ApplicationCancel';
 import AttachmentSummary from '../components/summary/AttachmentSummary';
 import useAttachments from '../hooks/useAttachments';
-import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
 import { CheckRightsByHanke } from '../../hanke/hankeUsers/UserRightsCheck';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import KaivuilmoitusAttachmentSummary from '../components/summary/KaivuilmoitusAttachmentSummary';
@@ -117,10 +116,8 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
           <SectionItemContent>
             {hanke && <Link href={hankeViewPath}>{hankeLinkText}</Link>}
           </SectionItemContent>
-          <FeatureFlags flags={['accessRights']}>
-            <SectionItemTitle>{t('hankePortfolio:labels:oikeudet')}:</SectionItemTitle>
-            <SectionItemContent />
-          </FeatureFlags>
+          <SectionItemTitle>{t('hankePortfolio:labels:oikeudet')}:</SectionItemTitle>
+          <SectionItemContent />
         </FormSummarySection>
 
         <InformationViewHeaderButtons>

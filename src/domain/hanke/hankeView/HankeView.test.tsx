@@ -295,24 +295,9 @@ test('Should show map placeholder text if there are no hanke areas', async () =>
   expect(screen.getByText('Hankealueita ei ole määritelty')).toBeInTheDocument();
 });
 
-test('Should not show user management button if access rights feature is not enabled', async () => {
-  const OLD_ENV = { ...window._env_ };
-  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: '0' };
-  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
-  await waitForLoadingToFinish();
-
-  expect(screen.queryByRole('button', { name: 'Käyttäjähallinta' })).not.toBeInTheDocument();
-  jest.resetModules();
-  window._env_ = OLD_ENV;
-});
-
-test('Should show user management button if access rights feature is enabled', async () => {
-  const OLD_ENV = { ...window._env_ };
-  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: '1' };
+test('Should show user management button', async () => {
   render(<HankeViewContainer hankeTunnus="HAI22-2" />);
   await waitForLoadingToFinish();
 
   expect(screen.queryByRole('button', { name: 'Käyttäjähallinta' })).toBeInTheDocument();
-  jest.resetModules();
-  window._env_ = OLD_ENV;
 });
