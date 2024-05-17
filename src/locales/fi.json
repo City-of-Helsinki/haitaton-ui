@@ -180,7 +180,7 @@
         "subContact": "Yhteyshenkilö",
         "subContacts": "Yhteyshenkilöt",
         "subContactInformation": "Yhteyshenkilön tiedot",
-        "customerWithContacts": "Hakija",
+        "customerWithContacts": "Työstä vastaava",
         "contractorWithContacts": "Työn suorittaja",
         "contractorWithContactsPlural": "Työn suorittajat",
         "propertyDeveloperWithContacts": "Rakennuttaja",
@@ -188,12 +188,13 @@
         "representativeWithContactsPlural": "Asianhoitajat",
         "addContractor": "Lisää työn suorittaja",
         "addRepresentative": "Lisää asianhoitaja",
-        "customerWithContactsInfo": "Hakijan tiedot",
+        "customerWithContactsInfo": "Työstä vastaavan tiedot",
         "representativeInfo": "Asianhoitajan tiedot",
         "contractorInfo": "Työn suorittajan tiedot",
         "implementerInfo": "Toteuttajan tiedot",
         "otherInfo": "Muiden tahojen tiedot",
-        "propertyDeveloperInfo": "Rakennuttajan tiedot"
+        "propertyDeveloperInfo": "Rakennuttajan tiedot",
+        "invoicingCustomerInfo": "Laskutustiedot"
       },
       "labels": {
         "tyyppi": "Tyyppi",
@@ -201,6 +202,7 @@
         "etunimi": "Etunimi",
         "sukunimi": "Sukunimi",
         "ytunnus": "Y-tunnus",
+        "yTunnusTaiHetu": "Y-tunnus tai henkilötunnus",
         "osoite": "Katuosoite",
         "postinumero": "Postinumero",
         "postitoimipaikka": "Postitoimipaikka",
@@ -210,7 +212,10 @@
         "osasto": "Osasto",
         "organisaatioNimi": "Organisaatio",
         "rakennuttaja": "Rakennuttaja",
-        "erillinenYhteyshenkilo": "Erillinen yhteyshenkilö"
+        "erillinenYhteyshenkilo": "Erillinen yhteyshenkilö",
+        "ovt": "OVT-tunnus",
+        "invoicingOperator": "Välittäjän tunnus",
+        "customerReference": "Asiakkaan viite"
       },
       "placeholders": {
         "otherPartyRole": "Isännöitsijä, konsultti...",

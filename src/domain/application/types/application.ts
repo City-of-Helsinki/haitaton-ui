@@ -9,10 +9,10 @@ export type ApplicationType = 'CABLE_REPORT' | 'EXCAVATION_NOTIFICATION';
 
 export type PostalAddress = {
   streetAddress: {
-    streetName: string;
+    streetName?: string | null;
   };
-  postalCode?: string;
-  city?: string;
+  postalCode?: string | null;
+  city?: string | null;
 };
 
 export type Contact = {
@@ -53,6 +53,19 @@ export type Customer = {
 export type CustomerWithContacts = {
   customer: Customer;
   contacts: Contact[];
+};
+
+// Laskutusasiakas
+export type InvoicingCustomer = {
+  type: keyof typeof ContactType | null;
+  name: string;
+  registryKey: string;
+  ovt?: string | null;
+  invoicingOperator?: string | null;
+  customerReference?: string | null;
+  postalAddress: PostalAddress;
+  email?: string | null;
+  phone?: string | null;
 };
 
 export enum AlluStatus {
@@ -144,10 +157,11 @@ export interface KaivuilmoitusData {
   areas: ApplicationArea[];
   startTime: Date | null;
   endTime: Date | null;
-  customerWithContacts: CustomerWithContacts | null;
-  contractorWithContacts: CustomerWithContacts | null;
-  representativeWithContacts: CustomerWithContacts | null;
-  propertyDeveloperWithContacts: CustomerWithContacts | null;
+  customerWithContacts?: CustomerWithContacts | null;
+  contractorWithContacts?: CustomerWithContacts | null;
+  representativeWithContacts?: CustomerWithContacts | null;
+  propertyDeveloperWithContacts?: CustomerWithContacts | null;
+  invoicingCustomer?: InvoicingCustomer | null;
   additionalInfo?: string | null;
 }
 
@@ -265,8 +279,8 @@ export interface KaivuilmoitusUpdateData
     | 'representativeWithContacts'
     | 'propertyDeveloperWithContacts'
   > {
-  customerWithContacts: ApplicationUpdateCustomerWithContacts | null;
-  contractorWithContacts: ApplicationUpdateCustomerWithContacts | null;
-  representativeWithContacts: ApplicationUpdateCustomerWithContacts | null;
-  propertyDeveloperWithContacts: ApplicationUpdateCustomerWithContacts | null;
+  customerWithContacts?: ApplicationUpdateCustomerWithContacts | null;
+  contractorWithContacts?: ApplicationUpdateCustomerWithContacts | null;
+  representativeWithContacts?: ApplicationUpdateCustomerWithContacts | null;
+  propertyDeveloperWithContacts?: ApplicationUpdateCustomerWithContacts | null;
 }

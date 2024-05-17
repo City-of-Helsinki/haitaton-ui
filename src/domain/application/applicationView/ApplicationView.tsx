@@ -32,19 +32,20 @@ import { formatSurfaceArea, getTotalSurfaceArea } from '../../map/utils';
 import useLocale from '../../../common/hooks/useLocale';
 import { getAreaDefaultName, isApplicationSent } from '../utils';
 import ApplicationDates from '../components/ApplicationDates';
-import ContactsSummary from '../components/ContactsSummary';
+import ContactsSummary from '../components/summary/ContactsSummary';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
 import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import Link from '../../../common/components/Link/Link';
 import useHankeViewPath from '../../hanke/hooks/useHankeViewPath';
 import DecisionLink from '../components/DecisionLink';
 import { ApplicationCancel } from '../components/ApplicationCancel';
-import AttachmentSummary from '../components/AttachmentSummary';
+import AttachmentSummary from '../components/summary/AttachmentSummary';
 import useAttachments from '../hooks/useAttachments';
 import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
 import { CheckRightsByHanke } from '../../hanke/hankeUsers/UserRightsCheck';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import KaivuilmoitusAttachmentSummary from '../components/summary/KaivuilmoitusAttachmentSummary';
+import InvoicingCustomerSummary from '../components/summary/InvoicingCustomerSummary';
 
 type Props = {
   application: Application;
@@ -205,16 +206,21 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
                 />
                 <ContactsSummary
                   customerWithContacts={contractorWithContacts}
-                  title={t('form:yhteystiedot:titles:contractorWithContactsPlural')}
+                  title={t('form:yhteystiedot:titles:contractorWithContacts')}
                 />
                 <ContactsSummary
                   customerWithContacts={propertyDeveloperWithContacts}
-                  title={t('form:yhteystiedot:titles:rakennuttajatPlural')}
+                  title={t('form:yhteystiedot:titles:rakennuttajat')}
                 />
                 <ContactsSummary
                   customerWithContacts={representativeWithContacts}
-                  title={t('form:yhteystiedot:titles:representativeWithContactsPlural')}
+                  title={t('form:yhteystiedot:titles:representativeWithContacts')}
                 />
+                {applicationType === 'EXCAVATION_NOTIFICATION' && (
+                  <InvoicingCustomerSummary
+                    invoicingCustomer={(applicationData as KaivuilmoitusData).invoicingCustomer}
+                  />
+                )}
               </FormSummarySection>
             </TabPanel>
             <TabPanel>

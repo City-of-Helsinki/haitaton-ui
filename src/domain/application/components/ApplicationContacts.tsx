@@ -5,27 +5,27 @@ import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
 import {
+  Application,
   Contact,
   ContactType,
   CustomerType,
   CustomerWithContacts,
-} from '../application/types/application';
-import Text from '../../common/components/text/Text';
-import ResponsiveGrid from '../../common/components/grid/ResponsiveGrid';
-import TextInput from '../../common/components/textInput/TextInput';
-import useLocale from '../../common/hooks/useLocale';
-import Dropdown from '../../common/components/dropdown/Dropdown';
-import { JohtoselvitysFormValues } from './types';
-import FormContact from '../forms/components/FormContact';
-import ContactPersonSelect from '../hanke/hankeUsers/ContactPersonSelect';
-import { HankeUser } from '../hanke/hankeUsers/hankeUser';
-import { useHankeUsers } from '../hanke/hankeUsers/hooks/useHankeUsers';
+} from '../types/application';
+import Text from '../../../common/components/text/Text';
+import ResponsiveGrid from '../../../common/components/grid/ResponsiveGrid';
+import TextInput from '../../../common/components/textInput/TextInput';
+import useLocale from '../../../common/hooks/useLocale';
+import Dropdown from '../../../common/components/dropdown/Dropdown';
+import FormContact from '../../forms/components/FormContact';
+import ContactPersonSelect from '../../hanke/hankeUsers/ContactPersonSelect';
+import { HankeUser } from '../../hanke/hankeUsers/hankeUser';
+import { useHankeUsers } from '../../hanke/hankeUsers/hooks/useHankeUsers';
 
 function getEmptyCustomerWithContacts(): CustomerWithContacts {
   return {
     customer: {
       yhteystietoId: null,
-      type: null,
+      type: ContactType.COMPANY,
       name: '',
       email: '',
       phone: '',
@@ -56,7 +56,7 @@ const CustomerFields: React.FC<{
   hankeUsers?: HankeUser[];
 }> = ({ customerType, hankeUsers }) => {
   const { t } = useTranslation();
-  const { watch, setValue } = useFormContext<JohtoselvitysFormValues>();
+  const { watch, setValue } = useFormContext<Application>();
 
   const [selectedContactType, registryKey] = watch([
     `applicationData.${customerType}.customer.type`,
@@ -96,7 +96,7 @@ const CustomerFields: React.FC<{
       heading={t(`form:yhteystiedot:titles:${customerType}`)}
       style={{
         paddingTop: 'var(--spacing-s)',
-        maxWidth: 'var(--container-width-m)',
+        maxWidth: 'var(--width-form-2-col)',
         minInlineSize: 'auto',
       }}
     >
@@ -109,7 +109,7 @@ const CustomerFields: React.FC<{
           id={`applicationData.${customerType}.customer.type`}
           name={`applicationData.${customerType}.customer.type`}
           required
-          defaultValue={null}
+          defaultValue={ContactType.COMPANY}
           label={t('form:yhteystiedot:labels:tyyppi')}
           options={$enum(ContactType).map((value) => {
             return {
@@ -163,10 +163,10 @@ const CustomerFields: React.FC<{
   );
 };
 
-export function Contacts() {
+export default function ApplicationContacts() {
   const { t } = useTranslation();
   const locale = useLocale();
-  const { watch, setValue, getValues } = useFormContext<JohtoselvitysFormValues>();
+  const { watch, setValue, getValues } = useFormContext<Application>();
   const hankeTunnus = getValues('hankeTunnus');
   const { data: hankeUsers } = useHankeUsers(hankeTunnus);
   const queryClient = useQueryClient();
@@ -218,7 +218,7 @@ export function Contacts() {
         {t('form:yhteystiedot:titles:customerWithContactsInfo')}
       </Text>
 
-      {/* Hakija */}
+      {/* Työstä vastaava */}
       <FormContact<CustomerType>
         contactType="customerWithContacts"
         hankeTunnus={hankeTunnus!}

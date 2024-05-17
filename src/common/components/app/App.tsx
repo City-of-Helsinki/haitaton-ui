@@ -13,6 +13,7 @@ import { FeatureFlagsProvider } from '../featureFlags/FeatureFlagsContext';
 import ScrollToTop from '../scrollToTop/ScrollToTop';
 import './app.scss';
 import '../../../assets/styles/reset.css';
+import '../../../assets/styles/variables.css';
 import MaintenancePage from '../../../pages/staticPages/MaintenancePage';
 
 const queryClient = new QueryClient();

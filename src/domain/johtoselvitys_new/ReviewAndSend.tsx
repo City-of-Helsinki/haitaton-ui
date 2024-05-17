@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { JohtoselvitysFormValues } from './types';
 import { FormSummarySection, SectionTitle } from '../forms/components/FormSummarySection';
 import BasicInformationSummary from '../application/components/summary/JohtoselvitysBasicInformationSummary';
-import AreaSummary from '../application/components/AreaSummary';
-import ContactsSummary from '../application/components/ContactsSummary';
-import AttachmentSummary from '../application/components/AttachmentSummary';
+import AreaSummary from '../application/components/summary/AreaSummary';
+import ContactsSummary from '../application/components/summary/ContactsSummary';
+import AttachmentSummary from '../application/components/summary/AttachmentSummary';
 import { ApplicationAttachmentMetadata } from '../application/types/application';
 
 type Props = {
@@ -45,15 +45,15 @@ export const ReviewAndSend: React.FC<React.PropsWithChildren<Props>> = ({ attach
         />
         <ContactsSummary
           customerWithContacts={contractorWithContacts}
-          title={t('form:yhteystiedot:titles:contractorWithContactsPlural')}
+          title={t('form:yhteystiedot:titles:contractorWithContacts')}
         />
         <ContactsSummary
           customerWithContacts={propertyDeveloperWithContacts}
-          title={t('form:yhteystiedot:titles:rakennuttajatPlural')}
+          title={t('form:yhteystiedot:titles:rakennuttajat')}
         />
         <ContactsSummary
           customerWithContacts={representativeWithContacts}
-          title={t('form:yhteystiedot:titles:representativeWithContactsPlural')}
+          title={t('form:yhteystiedot:titles:representativeWithContacts')}
         />
       </FormSummarySection>
 

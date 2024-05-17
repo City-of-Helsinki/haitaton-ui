@@ -4,10 +4,10 @@ import {
   FormSummarySection,
   SectionItemContent,
   SectionItemTitle,
-} from '../../forms/components/FormSummarySection';
-import { ApplicationAttachmentMetadata } from '../types/application';
-import FileDownloadList from '../../../common/components/fileDownloadList/FileDownloadList';
-import { getAttachmentFile } from '../attachments';
+} from '../../../forms/components/FormSummarySection';
+import { ApplicationAttachmentMetadata } from '../../types/application';
+import FileDownloadList from '../../../../common/components/fileDownloadList/FileDownloadList';
+import { getAttachmentFile } from '../../attachments';
 
 type Props = {
   attachments: ApplicationAttachmentMetadata[];

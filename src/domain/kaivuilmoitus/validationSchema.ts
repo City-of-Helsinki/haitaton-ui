@@ -4,6 +4,7 @@ import {
   applicationTypeSchema,
   areaSchema,
   customerWithContactsSchema,
+  invoicingCustomerSchema,
 } from '../application/yupSchemas';
 import { KaivuilmoitusFormValues } from './types';
 
@@ -27,6 +28,7 @@ const applicationDataSchema = yup.object({
   customerWithContacts: customerWithContactsSchema,
   propertyDeveloperWithContacts: customerWithContactsSchema.nullable(),
   representativeWithContacts: customerWithContactsSchema.nullable(),
+  invoicingCustomer: invoicingCustomerSchema,
   startTime: yup.date().nullable().required(),
   endTime: yup
     .date()
@@ -64,6 +66,16 @@ export const perustiedotSchema = yup.object({
     'maintenanceWork',
     'emergencyWork',
     'requiredCompetence',
+  ]),
+});
+
+export const yhteystiedotSchema = yup.object({
+  applicationData: applicationDataSchema.pick([
+    'customerWithContacts',
+    'contractorWithContacts',
+    'propertyDeveloperWithContacts',
+    'representativeWithContacts',
+    'invoicingCustomer',
   ]),
 });
 
