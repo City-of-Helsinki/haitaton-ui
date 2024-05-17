@@ -1,6 +1,6 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { fireEvent, render, screen } from '../../testUtils/render';
-import { Contacts } from './Contacts';
+import Contacts from '../application/components/ApplicationContacts';
 import { JohtoselvitysFormValues } from './types';
 
 jest.setTimeout(10000);

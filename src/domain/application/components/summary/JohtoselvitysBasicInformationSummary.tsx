@@ -1,29 +1,11 @@
 import React from 'react';
-import { find } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import {
   FormSummarySection,
   SectionItemContent,
   SectionItemTitle,
 } from '../../../forms/components/FormSummarySection';
-import { JohtoselvitysFormValues } from '../../../johtoselvitys/types';
-import { ContactSummary } from './ContactsSummary';
-import { Application, Contact, JohtoselvitysData } from '../../types/application';
-
-function findOrderer(formData: JohtoselvitysFormValues): Contact | null {
-  const customerWithContacts = find(formData.applicationData, (value) => {
-    if (typeof value === 'object' && value !== null && 'contacts' in value) {
-      return value.contacts[0]?.orderer || false;
-    }
-    return false;
-  });
-
-  return typeof customerWithContacts === 'object' &&
-    customerWithContacts !== null &&
-    'contacts' in customerWithContacts
-    ? customerWithContacts.contacts[0]
-    : null;
-}
+import { Application, JohtoselvitysData } from '../../types/application';
 
 type Props = {
   formData: Application<JohtoselvitysData>;
@@ -43,8 +25,6 @@ const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
     postalAddress,
     propertyConnectivity,
   } = formData.applicationData;
-
-  const orderer = findOrderer(formData as unknown as Application<JohtoselvitysData>);
 
   return (
     <FormSummarySection>
