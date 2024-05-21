@@ -1,5 +1,5 @@
 .haitatContainer {
-  padding: var(--spacing-m);
+  padding: var(--spacing-xs);
   margin-top: var(--spacing-xs);
 }
 
@@ -24,4 +24,9 @@
   & > div:last-child {
     flex: 1 1 250px;
   }
+}
+
+.formRowReverse {
+  flex-direction: row-reverse;
+  align-items: flex-start;
 }

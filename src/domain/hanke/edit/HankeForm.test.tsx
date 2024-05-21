@@ -20,6 +20,7 @@ import api from '../../api/api';
 import * as hankeAttachmentsApi from '../hankeAttachments/hankeAttachmentsApi';
 import { HankeUser } from '../hankeUsers/hankeUser';
 import { fillNewContactPersonForm } from '../../forms/components/testUtils';
+import { cloneDeep } from 'lodash';
 
 afterEach(cleanup);
 
@@ -129,15 +130,9 @@ const formData: HankeDataFormState = {
   kuvaus: 'testi kuvaus',
 };
 
-async function setupAlueetPage() {
-  const hanke = hankkeet[2];
-
+async function setupAlueetPage(hanke: HankeDataFormState = hankkeet[2] as HankeDataFormState) {
   const { user } = render(
-    <HankeForm
-      formData={hanke as HankeDataFormState}
-      onIsDirtyChange={() => ({})}
-      onFormClose={() => ({})}
-    >
+    <HankeForm formData={hanke} onIsDirtyChange={() => ({})} onFormClose={() => ({})}>
       <></>
     </HankeForm>,
   );
@@ -563,6 +558,23 @@ describe('HankeForm', () => {
     expect(screen.getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
     expect(screen.getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
     expect(screen.getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
+  });
+
+  test('Should show confirmation dialog when deleting hanke area', async () => {
+    const hanke = cloneDeep(hankkeet[3] as HankeDataFormState);
+    hanke.alueet = hankkeet[2].alueet;
+    const { user } = await setupAlueetPage(hanke);
+
+    await user.click(screen.getByRole('button', { name: 'Poista alue' }));
+
+    const { getByRole, getByText } = within(screen.getByRole('dialog'));
+    expect(getByText('Haluatko varmasti poistaa hankealueen Hankealue 1?')).toBeInTheDocument();
+    expect(getByRole('button', { name: 'Poista' })).toBeInTheDocument();
+    expect(getByRole('button', { name: 'Peruuta' })).toBeInTheDocument();
+
+    await user.click(getByRole('button', { name: 'Poista' }));
+
+    expect(screen.queryByText(/hankealue 1/i)).not.toBeInTheDocument();
   });
 });
 
