@@ -6,17 +6,14 @@ import Container from '../common/components/container/Container';
 import PageMeta from './components/PageMeta';
 import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
 import JohtoselvitysContainer from '../domain/johtoselvitys/JohtoselvitysContainer';
-import JohtoselvitysContainerNew from '../domain/johtoselvitys_new/JohtoselvitysContainer';
 import { useHankeDataInApplication } from '../domain/application/hooks/useHankeDataInApplication';
 import useLinkPath from '../common/hooks/useLinkPath';
 import { ROUTES } from '../common/types/route';
 import { APPLICATION_ID_STORAGE_KEY } from '../domain/application/constants';
-import { useFeatureFlags } from '../common/components/featureFlags/FeatureFlagsContext';
 
-const Johtoselvitys: React.FC<React.PropsWithChildren<unknown>> = () => {
+const Johtoselvitys: React.FC<React.PropsWithChildren> = () => {
   const { JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();
   const getEditApplicationPath = useLinkPath(ROUTES.EDIT_JOHTOSELVITYSHAKEMUS);
-  const features = useFeatureFlags();
 
   const result = useHankeDataInApplication();
 
@@ -38,11 +35,7 @@ const Johtoselvitys: React.FC<React.PropsWithChildren<unknown>> = () => {
   return (
     <Container>
       <PageMeta routeData={JOHTOSELVITYSHAKEMUS} />
-      {features.accessRights ? (
-        <JohtoselvitysContainerNew hankeData={result?.data} />
-      ) : (
-        <JohtoselvitysContainer hankeData={result?.data} />
-      )}
+      <JohtoselvitysContainer hankeData={result?.data} />
     </Container>
   );
 };

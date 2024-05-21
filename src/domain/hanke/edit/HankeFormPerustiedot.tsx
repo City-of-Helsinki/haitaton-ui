@@ -12,17 +12,13 @@ import DropdownMultiselect from '../../../common/components/dropdown/DropdownMul
 import Checkbox from '../../../common/components/checkbox/Checkbox';
 import { getInputErrorText } from '../../../common/utils/form';
 import Link from '../../../common/components/Link/Link';
-import JohtoselvitysCreateDialog from '../../johtoselvitys_new/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
-import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
-import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
+import JohtoselvitysCreateDialog from '../../johtoselvitys/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
 
 const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
   errors,
   register,
   formData,
 }) => {
-  const { JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();
-  const features = useFeatureFlags();
   const { t } = useTranslation();
   const { setValue, watch } = useFormContext();
   const [showJohtoselvitysCreateDialog, setShowJohtoselvitysCreateDialog] = useState(false);
@@ -52,10 +48,7 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
           <p>Hankkeen luonnin kautta pääset lähettämään myös hakemuksia.</p>
           <p>
             <strong>HUOM!</strong> Mikäli teet pelkkää johtoselvitystä yksityiselle alueelle,
-            <Link
-              href={features.accessRights ? '#' : JOHTOSELVITYSHAKEMUS.path}
-              onClick={features.accessRights ? openJohtoselvitysCreateDialog : undefined}
-            >
+            <Link href="#" onClick={openJohtoselvitysCreateDialog}>
               täytä hakemus
             </Link>
             . Yleisten alueiden johtoselvitykset haetaan hankkeen luonnin jälkeen kaivuilmoituksen

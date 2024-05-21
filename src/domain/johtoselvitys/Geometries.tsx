@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Feature } from 'ol';
 import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
 import Polygon from 'ol/geom/Polygon';
@@ -37,6 +37,8 @@ import LayerControl from '../../common/components/map/controls/LayerControl';
 import { MapTileLayerId } from '../map/types';
 import { useMapDataLayers } from '../map/hooks/useMapLayers';
 import Ortokartta from '../map/components/Layers/Ortokartta';
+import { HankeData } from '../types/hanke';
+import HankeLayer from '../map/components/Layers/HankeLayer';
 
 interface AreaToRemove {
   index: number;
@@ -60,7 +62,11 @@ function getEmptyArea(feature: Feature<Geometry>): JohtoselvitysArea {
   };
 }
 
-export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
+type Props = {
+  hankeData?: HankeData;
+};
+
+export function Geometries({ hankeData }: Readonly<Props>) {
   const { t } = useTranslation();
   const locale = useLocale();
   const {
@@ -213,7 +219,16 @@ export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
 
           <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} zIndex={101} />
 
-          <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
+          {/* Don't show hanke areas when hanke is generated */}
+          {!hankeData?.generated && (
+            <HankeLayer
+              hankeData={hankeData && [hankeData]}
+              startDate={startTime?.toString() ?? hankeData?.alkuPvm}
+              endDate={endTime?.toString() ?? hankeData?.loppuPvm}
+            />
+          )}
+
+          <VectorLayer source={drawSource} zIndex={101} className="drawLayer" />
 
           <FitSource source={drawSource} />
 
@@ -318,5 +333,5 @@ export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
       />
     </div>
   );
-};
+}
 export default Geometries;

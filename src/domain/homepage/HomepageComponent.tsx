@@ -22,15 +22,14 @@ import {
 } from '../../common/components/featureFlags/FeatureFlagsContext';
 import MainHeading from '../../common/components/mainHeading/MainHeading';
 import HankeCreateDialog from '../hanke/hankeCreateDialog/HankeCreateDialog';
-import JohtoselvitysCreateDialog from '../johtoselvitys_new/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
+import JohtoselvitysCreateDialog from '../johtoselvitys/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
 
 const FEEDBACK_NOTIFICATION_CLOSED = 'feedback-notification-closed';
 
 const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { PUBLIC_HANKKEET_MAP, PUBLIC_HANKKEET_LIST, HANKEPORTFOLIO, JOHTOSELVITYSHAKEMUS } =
-    useLocalizedRoutes();
+  const { PUBLIC_HANKKEET_MAP, PUBLIC_HANKKEET_LIST, HANKEPORTFOLIO } = useLocalizedRoutes();
   const [feedbackOpen, setFeedbackOpen] = useState(
     !sessionStorage.getItem(FEEDBACK_NOTIFICATION_CLOSED),
   );
@@ -57,7 +56,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
     },
     {
       key: 'johtotietoselvitys',
-      actionLink: features.accessRights ? undefined : JOHTOSELVITYSHAKEMUS.path,
+      actionLink: undefined,
       imgProps: { src: img1, width: 384, height: 245 },
       external: false,
       featureFlags: [],
@@ -149,7 +148,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
     if (key === 'hanke') {
       return openHankeCreateDialog;
     }
-    if (key === 'johtotietoselvitys' && features.accessRights) {
+    if (key === 'johtotietoselvitys') {
       return openJohtoselvitysCreateDialog;
     }
     return undefined;

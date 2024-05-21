@@ -1,33 +1,11 @@
 import React from 'react';
-import { find } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import {
   FormSummarySection,
   SectionItemContent,
   SectionItemTitle,
 } from '../../../forms/components/FormSummarySection';
-import { JohtoselvitysFormValues } from '../../../johtoselvitys/types';
-import { ContactSummary } from './ContactsSummary';
-import { Application, Contact, JohtoselvitysData } from '../../types/application';
-import { useFeatureFlags } from '../../../../common/components/featureFlags/FeatureFlagsContext';
-
-function findOrderer(formData: JohtoselvitysFormValues): Contact | null {
-  const customerWithContacts = find(formData.applicationData, (value) => {
-    if (typeof value === 'object' && value !== null && 'contacts' in value) {
-      return value.contacts[0]?.orderer || false;
-    }
-    return false;
-  });
-
-  const contact =
-    typeof customerWithContacts === 'object' &&
-    customerWithContacts !== null &&
-    'contacts' in customerWithContacts
-      ? customerWithContacts.contacts[0]
-      : null;
-
-  return contact;
-}
+import { Application, JohtoselvitysData } from '../../types/application';
 
 type Props = {
   formData: Application<JohtoselvitysData>;
@@ -36,7 +14,6 @@ type Props = {
 
 const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
   const { t } = useTranslation();
-  const features = useFeatureFlags();
 
   const {
     name,
@@ -48,8 +25,6 @@ const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
     postalAddress,
     propertyConnectivity,
   } = formData.applicationData;
-
-  const orderer = findOrderer(formData as unknown as Application<JohtoselvitysData>);
 
   return (
     <FormSummarySection>
@@ -78,12 +53,6 @@ const BasicInformationSummary: React.FC<Props> = ({ formData, children }) => {
       <SectionItemContent>
         <p style={{ whiteSpace: 'pre-wrap' }}>{workDescription}</p>
       </SectionItemContent>
-      {!features.accessRights && (
-        <>
-          <SectionItemTitle>{t('form:labels:omatTiedot')}</SectionItemTitle>
-          <SectionItemContent>{orderer && <ContactSummary contact={orderer} />}</SectionItemContent>
-        </>
-      )}
       {children}
     </FormSummarySection>
   );

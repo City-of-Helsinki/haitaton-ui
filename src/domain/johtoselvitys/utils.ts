@@ -6,9 +6,11 @@ import {
   Application,
   ApplicationArea,
   ApplicationGeometry,
+  ApplicationUpdateCustomerWithContacts,
   CustomerType,
   isCustomerWithContacts,
   JohtoselvitysData,
+  JohtoselvitysUpdateData,
 } from '../application/types/application';
 import { JohtoselvitysArea, JohtoselvitysFormValues } from './types';
 
@@ -45,15 +47,15 @@ export function getAreaGeometries(areas: JohtoselvitysArea[]) {
  * Make sure that each areas geometry coordinates are updated to
  * latest OpenLayers feature coordinates.
  */
-export function convertFormStateToApplicationData(
+export function convertFormStateToJohtoselvitysUpdateData(
   formState: JohtoselvitysFormValues,
-): Application<JohtoselvitysData> {
+): JohtoselvitysUpdateData {
   // eslint-disable-next-line no-param-reassign
   delete formState.geometriesChanged;
   // eslint-disable-next-line no-param-reassign
   delete formState.selfIntersectingPolygon;
 
-  const data: Application<JohtoselvitysData> = cloneDeep(formState);
+  const applicationData: JohtoselvitysUpdateData = cloneDeep(formState.applicationData);
 
   const updatedAreas: ApplicationArea[] = formState.applicationData.areas.map(
     function mapToApplicationArea({ geometry, feature }): ApplicationArea {
@@ -68,9 +70,22 @@ export function convertFormStateToApplicationData(
     },
   );
 
-  data.applicationData.areas = updatedAreas;
+  applicationData.areas = updatedAreas;
 
-  return data;
+  applicationData.customerWithContacts = ApplicationUpdateCustomerWithContacts.Create(
+    formState.applicationData.customerWithContacts,
+  );
+  applicationData.contractorWithContacts = ApplicationUpdateCustomerWithContacts.Create(
+    formState.applicationData.contractorWithContacts,
+  );
+  applicationData.propertyDeveloperWithContacts = ApplicationUpdateCustomerWithContacts.Create(
+    formState.applicationData.propertyDeveloperWithContacts,
+  );
+  applicationData.representativeWithContacts = ApplicationUpdateCustomerWithContacts.Create(
+    formState.applicationData.representativeWithContacts,
+  );
+
+  return applicationData;
 }
 
 export function convertApplicationDataToFormState(

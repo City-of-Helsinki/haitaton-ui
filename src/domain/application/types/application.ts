@@ -3,7 +3,7 @@ import { Polygon, Position } from 'geojson';
 import { Coordinate } from 'ol/coordinate';
 import { CRS } from '../../../common/types/hanke';
 import yup from '../../../common/utils/yup';
-import { newJohtoselvitysSchema } from '../../johtoselvitys_new/validationSchema';
+import { newJohtoselvitysSchema } from '../../johtoselvitys/validationSchema';
 
 export type ApplicationType = 'CABLE_REPORT' | 'EXCAVATION_NOTIFICATION';
 
