@@ -164,7 +164,7 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
       <ConfirmationDialog
         title={t('hankeForm:labels:removeAreaTitle')}
         description={t('hankeForm:labels:removeAreaDescription', {
-          areaName: getValues(`${FORMFIELD.HANKEALUEET}.${index}.nimi`) || '',
+          areaName: getValues(`${FORMFIELD.HANKEALUEET}.${index}.nimi`) ?? '',
         })}
         isOpen={areaToRemove !== null}
         close={closeAreaRemoveDialog}
