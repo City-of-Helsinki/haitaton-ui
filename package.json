@@ -109,7 +109,7 @@
     "husky": "^8.0.3",
     "jest-canvas-mock": "^2.5.2",
     "jest-environment-jsdom": "^29.7.0",
-    "lint-staged": "^15.2.0",
+    "lint-staged": "^15.2.4",
     "prettier": "^3.2.5",
     "prettier-eslint": "^16.3.0",
     "resize-observer-polyfill": "^1.5.1",
