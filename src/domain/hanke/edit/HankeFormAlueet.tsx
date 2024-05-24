@@ -33,7 +33,7 @@ function getEmptyArea(feature: Feature): Omit<HankeAlueFormState, 'geometriat'> 
   };
 }
 
-const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
+const HankeFormAlueet: React.FC<FormProps> = ({ hanke }) => {
   const { t } = useTranslation();
   const { setValue, trigger, watch, getValues } = useFormContext<HankeDataFormState>();
   const {
@@ -44,7 +44,7 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
     name: FORMFIELD.HANKEALUEET,
   });
   const [drawSource] = useState<VectorSource>(new VectorSource());
-  const addressCoordinate = useAddressCoordinate(formData.tyomaaKatuosoite);
+  const addressCoordinate = useAddressCoordinate(hanke.tyomaaKatuosoite);
   useFormPage();
 
   const { tabRefs } = useSelectableTabs(hankeAlueet, {
@@ -87,7 +87,7 @@ const HankeFormAlueet: React.FC<FormProps> = ({ formData }) => {
 
   function removeArea(index: number) {
     remove(index);
-    const featureToRemove = formData.alueet && formData.alueet[index].feature;
+    const featureToRemove = hanke.alueet && hanke.alueet[index].feature;
     if (featureToRemove) {
       drawSource.removeFeature(featureToRemove);
     }

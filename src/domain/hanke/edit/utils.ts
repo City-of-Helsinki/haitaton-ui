@@ -2,7 +2,15 @@ import { Feature } from 'ol';
 import Polygon from 'ol/geom/Polygon';
 import { Polygon as GeoJSONPolygon } from 'geojson';
 import { max, min } from 'date-fns';
-import { HankeAlue, HankeYhteystieto, HankeDataDraft, HankeMuuTaho } from '../../types/hanke';
+import {
+  HankeAlue,
+  HankeYhteystieto,
+  HankeDataDraft,
+  HankeMuuTaho,
+  HankeIndexData,
+  HAITTOJENHALLINTATYYPPI,
+  HANKE_INDEX_TYPE,
+} from '../../types/hanke';
 import {
   FORMFIELD,
   HankeAlueFormState,
@@ -165,4 +173,32 @@ export function getAreaDefaultName(areas?: HankeAlueFormState[]) {
   const maxAreaNumber = areas.map(getAreaNumber).reduce((a, b) => Math.max(a, b), 0);
 
   return `Hankealue ${maxAreaNumber + 1}`;
+}
+
+/**
+ * Sorts HAITTOJENHALLINTATYYPPI based on given tormaystarkasteluTulos.
+ * For example, if tormaystarkasteluTulos has {autoliikenneindeksi: 1.0, pyoraliiikenneindeksi: 1.3, linjaautoliikenneindeksi: 0.0, raitioliikenneindeksi: 0.0},
+ * the result will be [PYORALIIKENNE, AUTOLIIKENNE, LINJAAUTOLIIKENNE, RAITIOLIIKENNE].
+ */
+export function sortedLiikenneHaittojenhallintatyyppi(
+  tormaystarkasteluTulos: HankeIndexData,
+): HAITTOJENHALLINTATYYPPI[] {
+  const sortedIndices = Object.values(HANKE_INDEX_TYPE)
+    .map((key) => ({
+      type: key.toUpperCase().replace('INDEKSI', '') as HAITTOJENHALLINTATYYPPI,
+      value: tormaystarkasteluTulos[key.toLowerCase() as keyof HankeIndexData] as number,
+    }))
+    .sort((a, b): number => {
+      const diff = b.value - a.value;
+      if (diff === 0) {
+        return a.type.localeCompare(b.type);
+      }
+      return diff;
+    })
+    .map((item) => item.type);
+  return Object.values(HAITTOJENHALLINTATYYPPI)
+    .filter(
+      (type) => type !== HAITTOJENHALLINTATYYPPI.YLEINEN && type !== HAITTOJENHALLINTATYYPPI.MUUT,
+    )
+    .sort((a, b): number => sortedIndices.indexOf(a) - sortedIndices.indexOf(b));
 }

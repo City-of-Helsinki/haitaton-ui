@@ -626,8 +626,8 @@
     "tyomaanTiedotForm": {
       "header": "Additional project information"
     },
-    "hankkeenHaitatForm": {
-      "header": "Nuisances"
+    "haittojenHallintaForm": {
+      "header": "Nuisance control"
     },
     "hankkeenLiitteetForm": {
       "instructions": "Add attachments. Attachments added to the project will not be transferred to the applications."

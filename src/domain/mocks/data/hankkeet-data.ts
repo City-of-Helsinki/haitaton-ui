@@ -5,6 +5,7 @@ import {
   HANKE_KAISTAPITUUSHAITTA,
   HANKE_MELUHAITTA,
   HANKE_TARINAHAITTA,
+  HANKE_INDEX_TYPE,
 } from '../../types/hanke';
 
 const hankkeet: HankeDataDraft[] = [
@@ -49,10 +50,6 @@ const hankkeet: HankeDataDraft[] = [
     modifiedAt: null,
     status: 'PUBLIC',
     tormaystarkasteluTulos: {
-      hankeId: 2,
-      hankeTunnus: 'HAI22-2',
-      hankeGeometriatId: 2,
-      tila: 'VOIMASSA',
       autoliikenneindeksi: 3.5,
       pyoraliikenneindeksi: 3,
       linjaautoliikenneindeksi: 4,
@@ -271,10 +268,6 @@ const hankkeet: HankeDataDraft[] = [
     toteuttajat: [],
     muut: [],
     tormaystarkasteluTulos: {
-      hankeId: 3,
-      hankeTunnus: 'HAI22-3',
-      hankeGeometriatId: 1,
-      tila: 'VOIMASSA',
       autoliikenneindeksi: 1.5,
       pyoraliikenneindeksi: 3.5,
       linjaautoliikenneindeksi: 1,
@@ -327,6 +320,24 @@ const hankkeet: HankeDataDraft[] = [
               },
             },
           },
+        },
+        tormaystarkasteluTulos: {
+          autoliikenneindeksi: 1.5,
+          pyoraliikenneindeksi: 3.5,
+          linjaautoliikenneindeksi: 1,
+          raitioliikenneindeksi: 2,
+          liikennehaittaindeksi: {
+            indeksi: 3.5,
+            tyyppi: HANKE_INDEX_TYPE.PYORALIIKENNEINDEKSI,
+          },
+        },
+        haittojenhallintasuunnitelma: {
+          YLEINEN: 'Yleisten haittojen hallintasuunnitelma',
+          PYORALIIKENNE: 'Pyöräliikenteelle koituvien haittojen hallintasuunnitelma',
+          AUTOLIIKENNE: 'Autoliikenteelle koituvien haittojen hallintasuunnitelma',
+          LINJAAUTOLIIKENNE: 'Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma',
+          RAITIOLIIKENNE: 'Raitioliikenteelle koituvien haittojen hallintasuunnitelma',
+          MUUT: 'Muiden haittojen hallintasuunnitelma',
         },
       },
     ],

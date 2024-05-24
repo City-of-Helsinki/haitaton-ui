@@ -121,13 +121,13 @@ const ContactFields: React.FC<
   );
 };
 
-const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ formData }) => {
+const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
   useFormPage();
   const queryClient = useQueryClient();
   const { getValues, setValue } = useFormContext<HankeDataFormState>();
   const { t } = useTranslation();
   const locale = useLocale();
-  const { data: hankeUsers } = useHankeUsers(formData.hankeTunnus);
+  const { data: hankeUsers } = useHankeUsers(hanke.hankeTunnus);
 
   const {
     fields: omistajat,
@@ -182,7 +182,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ formData }) => {
       ),
     );
 
-    queryClient.invalidateQueries(['hankeUsers', formData.hankeTunnus]);
+    queryClient.invalidateQueries(['hankeUsers', hanke.hankeTunnus]);
   }
 
   return (
@@ -203,7 +203,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ formData }) => {
             <FormContact<HankeContactTypeKey>
               key={item.id}
               contactType={HANKE_CONTACT_TYPE.OMISTAJAT}
-              hankeTunnus={formData.hankeTunnus!}
+              hankeTunnus={hanke.hankeTunnus!}
               index={index}
               canBeRemoved={omistajat.length > 1}
               onRemove={removeOmistaja}
@@ -246,7 +246,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ formData }) => {
             <FormContact<HankeContactTypeKey>
               key={item.id}
               contactType={HANKE_CONTACT_TYPE.RAKENNUTTAJAT}
-              hankeTunnus={formData.hankeTunnus!}
+              hankeTunnus={hanke.hankeTunnus!}
               index={index}
               onRemove={removeRakennuttaja}
               onContactPersonAdded={(user) =>
@@ -288,7 +288,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ formData }) => {
             <FormContact<HankeContactTypeKey>
               key={item.id}
               contactType={HANKE_CONTACT_TYPE.TOTEUTTAJAT}
-              hankeTunnus={formData.hankeTunnus!}
+              hankeTunnus={hanke.hankeTunnus!}
               index={index}
               onRemove={removeToteuttaja}
               onContactPersonAdded={(user) =>
@@ -332,7 +332,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ formData }) => {
             <FormContact<HankeContactTypeKey>
               key={item.id}
               contactType={HANKE_CONTACT_TYPE.MUUTTAHOT}
-              hankeTunnus={formData.hankeTunnus!}
+              hankeTunnus={hanke.hankeTunnus!}
               index={index}
               onRemove={removeMuuTaho}
               onContactPersonAdded={(user) =>

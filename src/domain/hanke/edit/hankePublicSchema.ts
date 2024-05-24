@@ -19,7 +19,7 @@ enum ERROR_KEYS {
 enum HANKE_PAGES {
   PERUSTIEDOT = 'perustiedot',
   ALUEET = 'alueet',
-  HAITTOJENHALLINTA = 'haittojenHallinta',
+  HAITTOJEN_HALLINTA = 'haittojenHallinta',
   YHTEYSTIEDOT = 'yhteystiedot',
 }
 
@@ -54,6 +54,12 @@ const hankeAlueSchema = yup.object({
     .required(getMessage(HANKE_PAGES.ALUEET)),
 });
 
+const haittojenhallintasuunnitelmaSchema = yup.object({
+  [FORMFIELD.YLEISTEN_HAITTOJEN_HALLINTASUUNNITELMA]: yup
+    .string()
+    .required(getMessage(HANKE_PAGES.HAITTOJEN_HALLINTA)),
+});
+
 const yhteystietoSchema = yup.object({
   [CONTACT_FORMFIELD.NIMI]: yup.string().required(getMessage(HANKE_PAGES.YHTEYSTIEDOT)),
   [CONTACT_FORMFIELD.EMAIL]: yup.string().email().required(getMessage(HANKE_PAGES.YHTEYSTIEDOT)),
@@ -80,6 +86,7 @@ export const hankePublicSchema = yup.object({
   [FORMFIELD.HANKEALUEET]: yup
     .array(hankeAlueSchema)
     .min(1, getMessage(HANKE_PAGES.ALUEET, ERROR_KEYS.MIN)),
+  [FORMFIELD.HAITTOJENHALLINTASUUNNITELMA]: yup.array(haittojenhallintasuunnitelmaSchema),
   [FORMFIELD.OMISTAJAT]: yup
     .array(yhteystietoSchema)
     .min(1, getMessage(HANKE_PAGES.YHTEYSTIEDOT, ERROR_KEYS.MIN)),
@@ -96,6 +103,10 @@ export const hankePerustiedotPublicSchema = hankePublicSchema.pick([
 ]);
 
 export const hankeAlueetPublicSchema = hankePublicSchema.pick([FORMFIELD.HANKEALUEET]);
+
+export const hankkeenHaittojenHallintaPublicSchema = hankePublicSchema.pick([
+  FORMFIELD.HAITTOJENHALLINTASUUNNITELMA,
+]);
 
 export const hankeYhteystiedotPublicSchema = hankePublicSchema.pick([
   FORMFIELD.OMISTAJAT,

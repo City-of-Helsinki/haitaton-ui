@@ -558,7 +558,15 @@
       "insertOmaOrganisaatio": "Syötä oma organisaatio",
       "rights": "Käyttöoikeutesi hankkeelle",
       "removeAreaTitle": "Poista alue",
-      "removeAreaDescription": "Haluatko varmasti poistaa hankealueen {{areaName}}?"
+      "removeAreaDescription": "Haluatko varmasti poistaa hankealueen {{areaName}}?",
+      "haittojenhallintasuunnitelma": {
+        "YLEINEN": "Toimet hankealueen haittojen hallintaan",
+        "PYORALIIKENNE": "Toimet hankealueen haittojen hallintaan",
+        "AUTOLIIKENNE": "Toimet hankealueen haittojen hallintaan",
+        "LINJAAUTOLIIKENNE": "Toimet hankealueen haittojen hallintaan",
+        "RAITIOLIIKENNE": "Toimet hankealueen haittojen hallintaan",
+        "MUUT": "Toimet hankealueen haittojen hallintaan"
+      }
     },
     "missingFields": {
       "nimi": "$t(hankeForm:labels:nimi)",
@@ -622,7 +630,7 @@
     },
     "hankkeenAlueForm": {
       "header": "Alueet",
-      "subHeader": "Hanke-alueet",
+      "subHeader": "Hankealueet",
       "area": "Alue",
       "instructions": "Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 1-5, 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen tärkeimmillä reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein (vihreä = ei haittaa, keltainen = todennäköinen haitta, punainen = merkittävä haitta).",
       "instructions2": "Voit muokata jo piirrettyä aluetta tarttumalla sen reunasta kiinni ja vetämällä pisteen haluamaasi kohtaan.",
@@ -634,8 +642,25 @@
     "tyomaanTiedotForm": {
       "header": "Hankkeen lisätiedot"
     },
-    "hankkeenHaitatForm": {
-      "header": "Haitat"
+    "haittojenHallintaForm": {
+      "header": "Haittojen hallinta",
+      "subHeaderNoAlueet": "Hankealueet",
+      "subHeaderAlueet": "Alueiden sijainti",
+      "instructions": "Hankkeesi saattaa aiheuttaa eri kulkumuodoille ja paikallisille toiminnoille haittoja. Haitaton laskee automaattisesti hankealueittain haitan merkittävyyden arvon erikseen pyöräliikenteelle, raitioliikenteelle, linja-autojen paikallisliikenteelle sekä autoliikenteelle. Liikennehaittaindeksi kuvaa hankealueen pahimman tilanteen em. kulkumuotojen osalta. Haittoja kuvataan jokaiselle kulkumuodolle määritellyllä asteikolla numeroin ja värein (0/harmaa = ei tunnistettu, 1-2/vihreä = ei merkittävää haittaa, 3/keltainen = todennäköinen haitta, 4-5/punainen = merkittävä haitta). Muut kuin em. kulkumuotoja koskevat tulokset esitetään pelkästään numeroin (0-5).",
+      "noAlueet": "Lisää hankealueita täyttääksesi tietoja",
+      "nuisanceControlPlanSubHeader": "Haittojenhallintasuunnitelma",
+      "instructionsPlan": "Kerro haittojenhallintasuunnitelmassa, millä toimenpiteillä hallitset hankealueita koskevat haitat. Muistathan käydä läpi kaikki hankealueet.",
+      "subHeaderPlan": "Tarkista aina nämä toimenpiteet",
+      "instructionsGeneral": "<0><0>Varmista jalankulun turvallisuus ja esteettömyys</0><1>Varmista kulkuyhteydet kiinteistöihin</1><2>Tee yhteensovitus muiden hankkeiden ja töiden sekä niiden kiertoreittien kanssa</2><3>Ilmoita aina katujen sulkemisesta liikenteeltä Pelastuslaitokselle ja Poliisille</3><4>Tarkista aina, onko hankkeesi tai työsi erikoiskuljetusten reitillä</4><5>Tarkista vaikutukset olevaan liikennevalo-ohjaukseen (kaistajärjestelyt, ilmaisimet, valojen toimivuus)</5><6>Poikkeavat työajat</6></0>",
+      "helperText": "Hankealueella tehtävät tai sovitut toimet haittojen hallitsemiseksi tai estämiseksi.",
+      "subHeaderTrafficNuisanceIndex": "Hankkeellesi lasketun liikennehaittaindeksin perusteella seuraaviin vaatimuksiin tulee kiinnittää erityistä huomiota.",
+      "nuisanceType": {
+        "PYORALIIKENNE": "Pyöräliikenteen merkittävyys",
+        "AUTOLIIKENNE": "Autoliikenteen ruuhkautuminen",
+        "LINJAAUTOLIIKENNE": "Joukkoliikenteen merkittävyys: Linja-autojen paikallisliikenne",
+        "RAITIOLIIKENNE": "Joukkoliikenteen merkittävyys: Raitioliikenne",
+        "MUUT": "Muut haittojenhallintatoimet"
+      }
     },
     "hankkeenLiitteetForm": {
       "instructions": "Lisää mahdolliset liitteet. Hankkeelle lisättävät liitteet eivät siirry hakemuksille."

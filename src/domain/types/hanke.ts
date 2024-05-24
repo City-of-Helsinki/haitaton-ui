@@ -85,6 +85,16 @@ export enum HANKE_TARINAHAITTA {
 }
 export type HANKE_TARINAHAITTA_KEY = keyof typeof HANKE_TARINAHAITTA;
 
+export enum HAITTOJENHALLINTATYYPPI {
+  YLEINEN = 'YLEINEN',
+  PYORALIIKENNE = 'PYORALIIKENNE',
+  AUTOLIIKENNE = 'AUTOLIIKENNE',
+  RAITIOLIIKENNE = 'RAITIOLIIKENNE',
+  LINJAAUTOLIIKENNE = 'LINJAAUTOLIIKENNE',
+  MUUT = 'MUUT',
+}
+export type HAITTOJENHALLINTATYYPPI_KEY = keyof typeof HAITTOJENHALLINTATYYPPI;
+
 export enum HANKE_CONTACT_TYPE {
   OMISTAJAT = 'omistajat',
   RAKENNUTTAJAT = 'rakennuttajat',
@@ -149,6 +159,10 @@ export type HankeGeometria = {
   modifiedByUserId?: string | null;
 };
 
+export type HankkeenHaittojenhallintasuunnitelma = {
+  [key in HAITTOJENHALLINTATYYPPI_KEY]?: string;
+};
+
 export type HankeAlue = {
   id: number | null;
   hankeId?: number;
@@ -161,15 +175,20 @@ export type HankeAlue = {
   polyHaitta: HANKE_POLYHAITTA_KEY | null;
   tarinaHaitta: HANKE_TARINAHAITTA_KEY | null;
   nimi?: string | null;
+  tormaystarkasteluTulos?: HankeIndexData | null;
+  haittojenhallintasuunnitelma?: HankkeenHaittojenhallintasuunnitelma;
 };
 
 export enum HANKE_INDEX_TYPE {
   AUTOLIIKENNEINDEKSI = 'AUTOLIIKENNEINDEKSI',
+  PYORALIIKENNEINDEKSI = 'PYORALIIKENNEINDEKSI',
+  LINJAAUTOLIIKENNEINDEKSI = 'LINJAAUTOLIIKENNEINDEKSI',
+  RAITIOLIIKENNEINDEKSI = 'RAITIOLIIKENNEINDEKSI',
 }
 
 export type Liikennehaittaindeksi = {
   indeksi: number;
-  tyyppi: HANKE_INDEX_TYPE.AUTOLIIKENNEINDEKSI;
+  tyyppi: HANKE_INDEX_TYPE;
 };
 
 export enum HANKE_INDEX_STATE {
@@ -213,15 +232,11 @@ export interface HankeData {
 }
 
 export interface HankeIndexData {
-  hankeTunnus: string;
-  hankeId: number;
-  hankeGeometriatId: number;
   liikennehaittaindeksi: Liikennehaittaindeksi;
   autoliikenneindeksi: number;
   pyoraliikenneindeksi: number;
   linjaautoliikenneindeksi: number;
   raitioliikenneindeksi: number;
-  tila: HANKE_INDEX_STATE_KEY;
 }
 
 type DraftRequiredFields = 'nimi' | 'kuvaus' | 'vaihe';
