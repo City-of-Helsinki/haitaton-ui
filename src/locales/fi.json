@@ -556,7 +556,9 @@
       "organisaatio": "Organisaatio",
       "omaOrganisaatio": "Lisää oma organisaatio",
       "insertOmaOrganisaatio": "Syötä oma organisaatio",
-      "rights": "Käyttöoikeutesi hankkeelle"
+      "rights": "Käyttöoikeutesi hankkeelle",
+      "removeAreaTitle": "Poista alue",
+      "removeAreaDescription": "Haluatko varmasti poistaa hankealueen {{areaName}}?"
     },
     "missingFields": {
       "nimi": "$t(hankeForm:labels:nimi)",
