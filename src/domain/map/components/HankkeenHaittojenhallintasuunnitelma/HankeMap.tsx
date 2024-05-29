@@ -4,7 +4,7 @@ import Map from '../../../../common/components/map/Map';
 import Kantakartta from '../Layers/Kantakartta';
 import OverviewMapControl from '../../../../common/components/map/controls/OverviewMapControl';
 import { HankeData } from '../../../types/hanke';
-import styles from './HankealueMap.module.scss';
+import styles from './HankeMap.module.scss';
 import VectorLayer from '../../../../common/components/map/layers/VectorLayer';
 import FitSource from '../interations/FitSource';
 import AddressSearchContainer from '../AddressSearch/AddressSearchContainer';
