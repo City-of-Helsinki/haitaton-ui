@@ -8,6 +8,7 @@ import { server } from '../mocks/test-server';
 import {
   Application,
   ApplicationAttachmentMetadata,
+  KaivuilmoitusAlue,
   KaivuilmoitusData,
 } from '../application/types/application';
 import * as applicationAttachmentsApi from '../application/attachments';
@@ -17,6 +18,7 @@ import {
   uploadApplicationAttachmentMock,
 } from '../../testUtils/helperFunctions';
 import { ContactType, Customer, InvoicingCustomer } from '../application/types/application';
+import { cloneDeep } from 'lodash';
 
 afterEach(cleanup);
 
@@ -80,6 +82,17 @@ async function fillBasicInformation(
     // Check 'Työhön vaadittava pätevyys' checkbox
     fireEvent.click(screen.getByRole('checkbox', { name: /työstä vastaavana/i }));
   }
+}
+
+function fillAreasInformation(options: { start?: string; end?: string } = {}) {
+  const { start = '1.4.2025', end = '1.6.2025' } = options;
+
+  fireEvent.change(screen.getByLabelText(/työn alkupäivämäärä/i), {
+    target: { value: start },
+  });
+  fireEvent.change(screen.getByLabelText(/työn loppupäivämäärä/i), {
+    target: { value: end },
+  });
 }
 
 async function fillAttachments(
@@ -256,7 +269,7 @@ test('Should not be able to save form if work name is missing', async () => {
   await fillBasicInformation(user, { name: '' });
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
-  expect(screen.getByText('Vaihe 1/4: Perustiedot')).toBeInTheDocument();
+  expect(screen.getByText('Vaihe 1/5: Perustiedot')).toBeInTheDocument();
   expect(screen.queryAllByText('Kenttä on pakollinen').length).toBe(1);
 });
 
@@ -271,7 +284,7 @@ test('Should show error message if saving fails', async () => {
   await fillBasicInformation(user);
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
-  expect(screen.getByText('Vaihe 1/4: Perustiedot')).toBeInTheDocument();
+  expect(screen.getByText('Vaihe 1/5: Perustiedot')).toBeInTheDocument();
   expect(screen.getAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
 });
 
@@ -316,6 +329,9 @@ test('Should be able to fill form pages and show filled information in summary p
   const placementContracts = ['SL0000001', 'SL0000002'];
   const hankeData = hankkeet[1] as HankeData;
 
+  const startDate = '12.1.2023';
+  const endDate = '12.11.2024';
+
   const customer = {
     type: ContactType.COMPANY,
     name: 'Yritys Oy',
@@ -348,7 +364,34 @@ test('Should be able to fill form pages and show filled information in summary p
     phone: '0000000002',
   };
 
-  const { user } = render(<KaivuilmoitusContainer hankeData={hankeData} />);
+  const application: Application<KaivuilmoitusData> = {
+    id: 1,
+    hankeTunnus: 'HAI22-2',
+    alluStatus: null,
+    applicationType: 'EXCAVATION_NOTIFICATION',
+    applicationData: {
+      applicationType: 'EXCAVATION_NOTIFICATION',
+      name: '',
+      workDescription: '',
+      constructionWork: false,
+      maintenanceWork: false,
+      emergencyWork: false,
+      rockExcavation: false,
+      cableReportDone: false,
+      cableReports: [],
+      placementContracts: [],
+      requiredCompetence: false,
+      areas: applications[4].applicationData.areas as KaivuilmoitusAlue[],
+      startTime: null,
+      endTime: null,
+      representativeWithContacts: null,
+      propertyDeveloperWithContacts: null,
+    },
+  };
+
+  const { user } = render(
+    <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
+  );
   await fillBasicInformation(user, {
     name,
     description,
@@ -362,12 +405,17 @@ test('Should be able to fill form pages and show filled information in summary p
   expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
 
-  expect(screen.getByText('Vaihe 2/4: Yhteystiedot')).toBeInTheDocument();
+  expect(screen.getByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+
+  fillAreasInformation({ start: startDate, end: endDate });
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+  expect(screen.getByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
 
   fillContactsInformation({ customer, contractor, invoicingCustomer });
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-  expect(screen.getByText('Vaihe 3/4: Liitteet ja lisätiedot')).toBeInTheDocument();
+  expect(screen.getByText('Vaihe 4/5: Liitteet ja lisätiedot')).toBeInTheDocument();
 
   await fillAttachments(user, {
     trafficArrangementPlanFiles: [
@@ -379,7 +427,7 @@ test('Should be able to fill form pages and show filled information in summary p
   });
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-  expect(screen.getByText('Vaihe 4/4: Yhteenveto')).toBeInTheDocument();
+  expect(screen.getByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
   // Basic information
   expect(screen.getByText(name)).toBeInTheDocument();
   expect(screen.getByText(description)).toBeInTheDocument();
@@ -388,6 +436,23 @@ test('Should be able to fill form pages and show filled information in summary p
   ).toBeInTheDocument();
   expect(screen.getByText(placementContracts.join(', '))).toBeInTheDocument();
   expect(screen.getByText('Kyllä')).toBeInTheDocument();
+
+  // Areas information
+  expect(screen.getByText(startDate)).toBeInTheDocument();
+  expect(screen.getByText(endDate)).toBeInTheDocument();
+  expect(screen.getByText('Työalue 1 (158 m²)')).toBeInTheDocument();
+  expect(screen.getByText('Työalue 2 (30 m²)')).toBeInTheDocument();
+  expect(screen.getByText('Pinta-ala: 188 m²')).toBeInTheDocument();
+  expect(screen.getByText('Katuosoite: Aidasmäentie 5')).toBeInTheDocument();
+  expect(screen.getByText('Työn tarkoitus: Vesi, Viemäri')).toBeInTheDocument();
+  expect(screen.getByText('Meluhaitta: 3: Toistuva meluhaitta')).toBeInTheDocument();
+  expect(screen.getByText('Pölyhaitta: 5: Jatkuva pölyhaitta')).toBeInTheDocument();
+  expect(screen.getByText('Tärinähaitta: 1: Satunnainen tärinähaitta')).toBeInTheDocument();
+  expect(
+    screen.getByText('Autoliikenteen kaistahaitta: Vähentää kaistan yhdellä ajosuunnalla'),
+  ).toBeInTheDocument();
+  expect(screen.getByText('Kaistahaittojen pituus: 10-99 m')).toBeInTheDocument();
+  expect(screen.getByText('Lisätietoja alueesta: -')).toBeInTheDocument();
 
   // Contacts information
   expect(screen.getByText(customer.name)).toBeInTheDocument();
@@ -427,7 +492,7 @@ test('Should disable OVT fields if invoicing customer type is not COMPANY or ASS
   const hankeData = hankkeet[1] as HankeData;
   const { user } = render(<KaivuilmoitusContainer hankeData={hankeData} />);
   await fillBasicInformation(user);
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
   fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
   fireEvent.click(screen.getByText(/yksityishenkilö/i));
@@ -441,7 +506,7 @@ test('Postal address fields should be required if OVT fields are empty', async (
   const hankeData = hankkeet[1] as HankeData;
   const { user } = render(<KaivuilmoitusContainer hankeData={hankeData} />);
   await fillBasicInformation(user);
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
   expect(
     screen.getByTestId('applicationData.invoicingCustomer.postalAddress.streetAddress.streetName'),
@@ -647,4 +712,48 @@ test('Should list existing attachments in the attachments page', async () => {
       }
     }
   });
+});
+
+test('Should be able to remove work areas', async () => {
+  const hankeData = hankkeet[1] as HankeData;
+  const application = cloneDeep(applications[4] as Application<KaivuilmoitusData>);
+  const { user } = render(
+    <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
+  );
+  await user.click(screen.getByRole('button', { name: /alueet/i }));
+
+  await user.click(screen.getByRole('button', { name: /poista työalue 1/i }));
+
+  const { getByRole, getByText } = within(await screen.findByRole('dialog'));
+  expect(getByText('Haluatko varmasti poistaa työalueen Työalue 1?')).toBeInTheDocument();
+  await user.click(getByRole('button', { name: /vahvista/i }));
+
+  expect(screen.queryByText('Työalue 1')).not.toBeInTheDocument();
+
+  await user.click(screen.getByRole('button', { name: /poista työalue/i }));
+  const { getByRole: getByRoleInDialogTwo, getByText: getByTextInDialogTwo } = within(
+    await screen.findByRole('dialog'),
+  );
+  expect(getByTextInDialogTwo('Haluatko varmasti poistaa työalueen Työalue?')).toBeInTheDocument();
+  await user.click(getByRoleInDialogTwo('button', { name: /vahvista/i }));
+
+  expect(screen.queryByText('Työalue')).not.toBeInTheDocument();
+  // Whole hanke area tab should be removed if all areas are removed
+  expect(screen.queryByText('Hankealue 2')).not.toBeInTheDocument();
+});
+
+test('Should highlight selected work area', async () => {
+  const hankeData = hankkeet[1] as HankeData;
+  const application = cloneDeep(applications[4] as Application<KaivuilmoitusData>);
+  const { user } = render(
+    <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
+  );
+  await user.click(screen.getByRole('button', { name: /alueet/i }));
+
+  const workAreaOne = screen.getByRole('button', { name: 'Työalue 1' });
+  const workAreaTwo = screen.getByRole('button', { name: 'Työalue 2' });
+
+  await user.click(workAreaTwo);
+  expect(workAreaOne).not.toHaveClass('selected');
+  expect(workAreaTwo).toHaveClass('selected');
 });

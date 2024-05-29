@@ -72,15 +72,17 @@ export const invoicingCustomerSchema = yup.object({
   customerReference: yup.string().nullable(),
 });
 
-export const areaSchema = yup.object({
-  geometry: yup.object({
-    type: yup.mixed<'Polygon'>().required(),
-    crs: yup.object({
-      type: yup.string().required(),
-      properties: yup.object({ name: yup.string() }),
-    }),
-    coordinates: yup.array().required(),
+export const geometrySchema = yup.object({
+  type: yup.mixed<'Polygon'>().required(),
+  crs: yup.object({
+    type: yup.string().required(),
+    properties: yup.object({ name: yup.string() }),
   }),
+  coordinates: yup.array().required(),
+});
+
+export const areaSchema = yup.object({
+  geometry: geometrySchema,
 });
 
 export const applicationTypeSchema = yup.mixed<ApplicationType>().defined().required();

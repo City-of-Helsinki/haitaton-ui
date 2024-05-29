@@ -11,6 +11,7 @@ import Controls from '../../../../common/components/map/controls/Controls';
 import LayerControl from '../../../../common/components/map/controls/LayerControl';
 import VectorLayer from '../../../../common/components/map/layers/VectorLayer';
 import DrawModule from '../../../../common/components/map/modules/draw/DrawModule';
+import DrawProvider from '../../../../common/components/map/modules/draw/DrawProvider';
 
 import Kantakartta from '../Layers/Kantakartta';
 import Ortokartta from '../Layers/Ortokartta';
@@ -116,7 +117,9 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
           <FitSource source={drawSource} />
 
           <Controls>
-            <DrawModule source={drawSource} />
+            <DrawProvider source={drawSource}>
+              <DrawModule />
+            </DrawProvider>
             <LayerControl
               tileLayers={Object.values(mapTileLayers)}
               onClickTileLayer={(id: MapTileLayerId) => toggleMapTileLayer(id)}

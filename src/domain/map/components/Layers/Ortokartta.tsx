@@ -13,7 +13,6 @@ function Ortokartta({ opacity }: Props) {
 
   return (
     <TileLayer
-      zIndex={2}
       source={
         new TileWMS({
           url: 'https://kartta.hel.fi/ws/geoserver/avoindata/wms',

@@ -1,12 +1,40 @@
 import yup from '../../common/utils/yup';
-import { AlluStatus } from '../application/types/application';
+import { AlluStatus, TormaystarkasteluTulos } from '../application/types/application';
 import {
   applicationTypeSchema,
-  areaSchema,
   customerWithContactsSchema,
+  geometrySchema,
   invoicingCustomerSchema,
 } from '../application/yupSchemas';
 import { KaivuilmoitusFormValues } from './types';
+import {
+  HANKE_KAISTAHAITTA_KEY,
+  HANKE_KAISTAPITUUSHAITTA_KEY,
+  HANKE_MELUHAITTA_KEY,
+  HANKE_POLYHAITTA_KEY,
+  HANKE_TARINAHAITTA_KEY,
+  HANKE_TYOMAATYYPPI_KEY,
+} from './../types/hanke';
+
+const tyoalueSchema = yup.object({
+  geometry: geometrySchema.required(),
+  area: yup.number().required(),
+  tormaystarkasteluTulos: yup.mixed<TormaystarkasteluTulos>().nullable(),
+});
+
+const kaivuilmoitusAlueSchema = yup.object({
+  name: yup.string().required(),
+  hankealueId: yup.number().required(),
+  tyoalueet: yup.array(tyoalueSchema).defined(),
+  katuosoite: yup.string().required(),
+  tyonTarkoitukset: yup.array(yup.mixed<HANKE_TYOMAATYYPPI_KEY>().defined()).min(1).required(),
+  meluhaitta: yup.mixed<HANKE_MELUHAITTA_KEY>().required(),
+  polyhaitta: yup.mixed<HANKE_POLYHAITTA_KEY>().required(),
+  tarinahaitta: yup.mixed<HANKE_TARINAHAITTA_KEY>().required(),
+  kaistahaitta: yup.mixed<HANKE_KAISTAHAITTA_KEY>().required(),
+  kaistahaittojenPituus: yup.mixed<HANKE_KAISTAPITUUSHAITTA_KEY>().required(),
+  lisatiedot: yup.string(),
+});
 
 const applicationDataSchema = yup.object({
   applicationType: applicationTypeSchema,
@@ -41,7 +69,7 @@ const applicationDataSchema = yup.object({
     })
     .nullable()
     .required(),
-  areas: yup.array(areaSchema).min(1).required(),
+  areas: yup.array(kaivuilmoitusAlueSchema).min(1).required(),
   additionalInfo: yup.string().max(2000).nullable(),
 });
 
@@ -67,6 +95,10 @@ export const perustiedotSchema = yup.object({
     'emergencyWork',
     'requiredCompetence',
   ]),
+});
+
+export const alueetSchema = yup.object({
+  applicationData: applicationDataSchema.pick(['areas']),
 });
 
 export const yhteystiedotSchema = yup.object({

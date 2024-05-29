@@ -704,8 +704,8 @@
       "downloadDecision": "Ladda ned beslut (PDF)",
       "downloadDecisionShort": "Ladda ned PDF",
       "addedAreas": "Arbetsområden du lagt till",
-      "removeAreaTitle": "Ta bort arbetsområde",
-      "removeAreaDescription": "Är du säker på att du vill ta bort arbetsområdet {{areaName}}",
+      "removeAreaTitle": "Ta bort arbetsområde?",
+      "removeAreaDescription": "Är du säker på att du vill ta bort arbetsområdet {{areaName}}?",
       "applicationAdditionalInfo": "Mer information om ansökan",
       "applicationInfo": "Ansökans uppgifter"
     },

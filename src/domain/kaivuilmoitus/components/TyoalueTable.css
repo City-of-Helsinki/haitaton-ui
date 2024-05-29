@@ -1,0 +1,13 @@
+table#tyoalueet-table {
+  td {
+    background-color: unset !important;
+  }
+
+  tr:has(td):has(.selected) {
+    background-color: var(--color-coat-of-arms-medium-light) !important;
+  }
+
+  tr:nth-of-type(even):has(td):not(:has(.selected)) {
+    background-color: var(--color-black-10) !important;
+  }
+}

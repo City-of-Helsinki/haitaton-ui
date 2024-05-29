@@ -18,6 +18,7 @@ import {
   perustiedotSchema,
   yhteystiedotSchema,
   liitteetSchema,
+  alueetSchema,
 } from './validationSchema';
 import { useApplicationsForHanke } from '../application/hooks/useApplications';
 import {
@@ -37,6 +38,7 @@ import useSaveApplication from '../application/hooks/useSaveApplication';
 import useAttachments from '../application/hooks/useAttachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import { changeFormStep } from '../forms/utils';
+import Areas from './Areas';
 
 type Props = {
   hankeData: HankeData;
@@ -209,6 +211,8 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   const pageFieldsToValidate: FieldPath<KaivuilmoitusFormValues>[][] = [
     // Basic information page
     ['applicationData.name'],
+    // Areas page
+    [],
     // Contacts page
     [
       'applicationData.customerWithContacts.customer.registryKey',
@@ -225,6 +229,12 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       label: t('form:headers:perustiedot'),
       state: StepState.available,
       validationSchema: perustiedotSchema,
+    },
+    {
+      element: <Areas hankeData={hankeData} />,
+      label: t('form:headers:alueet'),
+      state: StepState.available,
+      validationSchema: alueetSchema,
     },
     {
       element: <Contacts />,

@@ -20,7 +20,6 @@ const Kantakartta = () => {
   return (
     <>
       <TileLayer
-        zIndex={2}
         minZoom={9}
         source={
           new TileWMS({
@@ -37,7 +36,6 @@ const Kantakartta = () => {
         }
       />
       <TileLayer
-        zIndex={2}
         maxZoom={9}
         source={
           new TileWMS({

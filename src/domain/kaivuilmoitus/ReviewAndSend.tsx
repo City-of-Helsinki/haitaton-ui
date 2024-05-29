@@ -9,6 +9,7 @@ import ContactsSummary from '../application/components/summary/ContactsSummary';
 import InvoicingCustomerSummary from '../application/components/summary/InvoicingCustomerSummary';
 import AttachmentSummary from '../application/components/summary/KaivuilmoitusAttachmentSummary';
 import { ApplicationAttachmentMetadata } from '../application/types/application';
+import AreaSummary from './components/AreaSummary';
 
 type Props = {
   attachments: ApplicationAttachmentMetadata[] | undefined;
@@ -34,6 +35,9 @@ export const ReviewAndSend: React.FC<React.PropsWithChildren<Props>> = ({ attach
 
       <SectionTitle>{t('form:headers:perustiedot')}</SectionTitle>
       <BasicInformationSummary formData={getValues()} />
+
+      <SectionTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionTitle>
+      <AreaSummary formData={getValues()} />
 
       <SectionTitle>{t('form:yhteystiedot:header')}</SectionTitle>
       <FormSummarySection>

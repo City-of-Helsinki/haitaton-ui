@@ -9,7 +9,11 @@ import { styleFunction } from '../../utils/geometryStyle';
 import FitSource from '../interations/FitSource';
 import useHankeFeatures from '../../hooks/useHankeFeatures';
 import styles from './OwnHankeMap.module.scss';
-import { Application } from '../../../application/types/application';
+import {
+  Application,
+  ApplicationArea,
+  KaivuilmoitusAlue,
+} from '../../../application/types/application';
 import useApplicationFeatures from '../../hooks/useApplicationFeatures';
 
 type Props = {
@@ -21,8 +25,14 @@ const OwnHankeMap: React.FC<Props> = ({ hanke, application }) => {
   const hankeSource = useRef(new VectorSource());
   useHankeFeatures(hankeSource.current, [hanke]);
 
+  const tyoalueet = application
+    ? application.applicationType === 'CABLE_REPORT'
+      ? (application.applicationData.areas as ApplicationArea[])
+      : (application.applicationData.areas as KaivuilmoitusAlue[]).flatMap((area) => area.tyoalueet)
+    : [];
+
   const applicationSource = useRef(new VectorSource());
-  useApplicationFeatures(applicationSource.current, application?.applicationData.areas);
+  useApplicationFeatures(applicationSource.current, tyoalueet);
 
   return (
     <div className={styles.mapContainer}>

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { JohtoselvitysFormValues } from './types';
 import { FormSummarySection, SectionTitle } from '../forms/components/FormSummarySection';
 import BasicInformationSummary from '../application/components/summary/JohtoselvitysBasicInformationSummary';
-import AreaSummary from '../application/components/summary/AreaSummary';
+import AreaSummary from './components/AreaSummary';
 import ContactsSummary from '../application/components/summary/ContactsSummary';
 import AttachmentSummary from '../application/components/summary/AttachmentSummary';
 import { ApplicationAttachmentMetadata } from '../application/types/application';

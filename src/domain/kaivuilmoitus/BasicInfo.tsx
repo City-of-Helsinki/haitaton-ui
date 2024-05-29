@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import { Checkbox as HDSCheckbox, SelectionGroup } from 'hds-react';
 import TextInput from '../../common/components/textInput/TextInput';
 import TextArea from '../../common/components/textArea/TextArea';
-import styles from './BasicInfo.module.scss';
+import styles from './Kaivuilmoitus.module.scss';
 import { KaivuilmoitusFormValues } from './types';
 import Checkbox from '../../common/components/checkbox/Checkbox';
 import TagInput from '../../common/components/tagInput/TagInput';
