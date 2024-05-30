@@ -212,7 +212,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     // Basic information page
     ['applicationData.name'],
     // Areas page
-    [],
+    ['selfIntersectingPolygon'],
     // Contacts page
     [
       'applicationData.customerWithContacts.customer.registryKey',
