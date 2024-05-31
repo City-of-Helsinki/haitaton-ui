@@ -213,12 +213,14 @@ export default function Areas({ hankeData }: Readonly<Props>) {
           showDrawControls={Boolean(workTimesSet)}
           onAddArea={handleAddArea}
         >
-          <HankeLayer
-            hankeData={hankeData && [hankeData]}
-            startDate={startTime?.toString() ?? hankeData?.alkuPvm}
-            endDate={endTime?.toString() ?? hankeData?.loppuPvm}
-            fitSource
-          />
+          {startTime && endTime ? (
+            <HankeLayer
+              hankeData={hankeData && [hankeData]}
+              startDate={startTime?.toString()}
+              endDate={endTime?.toString()}
+              fitSource
+            />
+          ) : null}
         </ApplicationMap>
 
         {!workTimesSet && (

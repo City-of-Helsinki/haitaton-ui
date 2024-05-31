@@ -153,7 +153,6 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
 
       if (feature) {
         actions.setSelectedFeature(feature);
-        feature.setStyle(styleFunction(feature, undefined, true));
       } else {
         clearSelection();
       }
