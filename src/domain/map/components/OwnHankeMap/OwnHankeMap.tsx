@@ -25,11 +25,15 @@ const OwnHankeMap: React.FC<Props> = ({ hanke, application }) => {
   const hankeSource = useRef(new VectorSource());
   useHankeFeatures(hankeSource.current, [hanke]);
 
-  const tyoalueet = application
-    ? application.applicationType === 'CABLE_REPORT'
-      ? (application.applicationData.areas as ApplicationArea[])
-      : (application.applicationData.areas as KaivuilmoitusAlue[]).flatMap((area) => area.tyoalueet)
-    : [];
+  let tyoalueet: ApplicationArea[] = [];
+  if (application) {
+    tyoalueet =
+      application.applicationType === 'CABLE_REPORT'
+        ? (application.applicationData.areas as ApplicationArea[])
+        : (application.applicationData.areas as KaivuilmoitusAlue[]).flatMap(
+            (area) => area.tyoalueet,
+          );
+  }
 
   const applicationSource = useRef(new VectorSource());
   useApplicationFeatures(applicationSource.current, tyoalueet);

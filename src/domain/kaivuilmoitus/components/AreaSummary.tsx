@@ -14,7 +14,7 @@ import { getAreaGeometry } from '../../johtoselvitys/utils';
 import { getAreaDefaultName } from '../../application/utils';
 import { KaivuilmoitusAlue } from '../../application/types/application';
 
-function AreaDetail({ area }: { area: KaivuilmoitusAlue }) {
+function AreaDetail({ area }: Readonly<{ area: KaivuilmoitusAlue }>) {
   const { t } = useTranslation();
   const totalSurfaceArea = getTotalSurfaceArea(
     area.tyoalueet.map((alue) => alue.openlayersFeature!.getGeometry()!),
@@ -31,9 +31,9 @@ function AreaDetail({ area }: { area: KaivuilmoitusAlue }) {
         {area.tyoalueet.map((tyoalue, index) => {
           const geom = getAreaGeometry(tyoalue);
           return (
-            <li style={{ listStyle: 'none' }}>
+            <Box as="li" key={index} listStyleType="none">
               {getAreaDefaultName(t, index, area.tyoalueet.length)} ({formatSurfaceArea(geom)})
-            </li>
+            </Box>
           );
         })}
       </Box>
