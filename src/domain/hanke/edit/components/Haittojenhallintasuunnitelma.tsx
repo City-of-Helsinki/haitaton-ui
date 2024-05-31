@@ -29,7 +29,7 @@ const Haittojenhallintasuunnitelma: React.FC<Props> = ({ hanke, index }) => {
 
   return (
     <div>
-      <Box mt="var(--spacing-m)" mb="var(--spacing-xs)" fontWeight="bold">
+      <Box as="h4" mt="var(--spacing-m)" mb="var(--spacing-xs)" fontWeight="bold">
         {t('hankeForm:haittojenHallintaForm:subHeaderPlan')}
       </Box>
       <Box mb="var(--spacing-m)" ml="var(--spacing-l)">
@@ -61,15 +61,15 @@ const Haittojenhallintasuunnitelma: React.FC<Props> = ({ hanke, index }) => {
           helperText={t('hankeForm:haittojenHallintaForm:helperText')}
         />
       </div>
-      <Box mb="var(--spacing-m)">
+      <Box as="p" mb="var(--spacing-m)">
         {t('hankeForm:haittojenHallintaForm:subHeaderTrafficNuisanceIndex')}
       </Box>
       {haittojenhallintatyypit.map((haitta) => (
         <div key={haitta} className="formWpr">
-          <Box className="nuisanceType">
+          <Box as="h4" className="nuisanceType">
             {t(`hankeForm:haittojenHallintaForm:nuisanceType:${haitta}`)}
           </Box>
-          <Box mb="var(--spacing-m)">
+          <Box mt="var(--spacing-m)" mb="var(--spacing-m)">
             <HankealueMap
               hankealue={hankealue}
               center={addressCoordinate}
@@ -88,7 +88,7 @@ const Haittojenhallintasuunnitelma: React.FC<Props> = ({ hanke, index }) => {
         </div>
       ))}
       <div key={HAITTOJENHALLINTATYYPPI.MUUT} className="formWpr">
-        <Box className="nuisanceType">
+        <Box as="h4" className="nuisanceType">
           {t(`hankeForm:haittojenHallintaForm:nuisanceType:${HAITTOJENHALLINTATYYPPI.MUUT}`)}
         </Box>
         <Box mt="var(--spacing-m)">

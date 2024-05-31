@@ -181,8 +181,14 @@ export function getAreaDefaultName(areas?: HankeAlueFormState[]) {
  * the result will be [PYORALIIKENNE, AUTOLIIKENNE, LINJAAUTOLIIKENNE, RAITIOLIIKENNE].
  */
 export function sortedLiikenneHaittojenhallintatyyppi(
-  tormaystarkasteluTulos: HankeIndexData,
+  tormaystarkasteluTulos: HankeIndexData | undefined,
 ): HAITTOJENHALLINTATYYPPI[] {
+  const defaultOrder = Object.values(HAITTOJENHALLINTATYYPPI).filter(
+    (type) => type !== HAITTOJENHALLINTATYYPPI.YLEINEN && type !== HAITTOJENHALLINTATYYPPI.MUUT,
+  );
+  if (!tormaystarkasteluTulos) {
+    return defaultOrder;
+  }
   const sortedIndices = Object.values(HANKE_INDEX_TYPE)
     .map((key) => ({
       type: key.toUpperCase().replace('INDEKSI', '') as HAITTOJENHALLINTATYYPPI,
@@ -191,14 +197,10 @@ export function sortedLiikenneHaittojenhallintatyyppi(
     .sort((a, b): number => {
       const diff = b.value - a.value;
       if (diff === 0) {
-        return a.type.localeCompare(b.type);
+        return defaultOrder.indexOf(a.type) - defaultOrder.indexOf(b.type);
       }
       return diff;
     })
     .map((item) => item.type);
-  return Object.values(HAITTOJENHALLINTATYYPPI)
-    .filter(
-      (type) => type !== HAITTOJENHALLINTATYYPPI.YLEINEN && type !== HAITTOJENHALLINTATYYPPI.MUUT,
-    )
-    .sort((a, b): number => sortedIndices.indexOf(a) - sortedIndices.indexOf(b));
+  return defaultOrder.sort((a, b): number => sortedIndices.indexOf(a) - sortedIndices.indexOf(b));
 }

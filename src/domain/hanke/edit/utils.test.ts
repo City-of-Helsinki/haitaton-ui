@@ -78,7 +78,7 @@ test('Should sort nuisance types correctly', () => {
   const tormaysTarkastelunTulos: HankeIndexData = {
     autoliikenneindeksi: 1.0,
     pyoraliikenneindeksi: 3.0,
-    linjaautoliikenneindeksi: 0.0,
+    linjaautoliikenneindeksi: 1.0,
     raitioliikenneindeksi: 0.0,
     liikennehaittaindeksi: {
       indeksi: 3.0,
@@ -93,5 +93,18 @@ test('Should sort nuisance types correctly', () => {
     HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE,
     HAITTOJENHALLINTATYYPPI.LINJAAUTOLIIKENNE,
     HAITTOJENHALLINTATYYPPI.RAITIOLIIKENNE,
+  ]);
+});
+
+test('Should sort nuisance types in default order if tormaysTarkastelunTulos is undefined', () => {
+  const tormaysTarkastelunTulos: HankeIndexData | undefined = undefined;
+
+  const sorted = sortedLiikenneHaittojenhallintatyyppi(tormaysTarkastelunTulos);
+
+  expect(sorted).toEqual([
+    HAITTOJENHALLINTATYYPPI.PYORALIIKENNE,
+    HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE,
+    HAITTOJENHALLINTATYYPPI.RAITIOLIIKENNE,
+    HAITTOJENHALLINTATYYPPI.LINJAAUTOLIIKENNE,
   ]);
 });

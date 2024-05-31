@@ -5,7 +5,6 @@ import { Box } from '@chakra-ui/react';
 import Text from '../../../common/components/text/Text';
 import { Tab, TabList, TabPanel, Tabs } from 'hds-react';
 import useFieldArrayWithStateUpdate from '../../../common/hooks/useFieldArrayWithStateUpdate';
-import { useFormContext } from 'react-hook-form';
 import useSelectableTabs from '../../../common/hooks/useSelectableTabs';
 import useHighlightArea from '../../map/hooks/useHighlightArea';
 import Haittojenhallintasuunnitelma from './components/Haittojenhallintasuunnitelma';
@@ -16,11 +15,10 @@ import useAddressCoordinate from '../../map/hooks/useAddressCoordinate';
 
 const HankeFormHaittojenHallinta: React.FC<FormProps> = ({ hanke }) => {
   const { t } = useTranslation();
-  const { watch } = useFormContext<HankeDataFormState>();
-  const { fields: hankeAlueet } = useFieldArrayWithStateUpdate<HankeDataFormState, 'alueet'>({
+  const { fields: hankealueet } = useFieldArrayWithStateUpdate<HankeDataFormState, 'alueet'>({
     name: FORMFIELD.HANKEALUEET,
   });
-  const { tabRefs } = useSelectableTabs(hankeAlueet, {
+  const { tabRefs } = useSelectableTabs(hankealueet, {
     selectLastTabOnChange: true,
   });
   const [drawSource] = useState<VectorSource>(new VectorSource());
@@ -36,7 +34,7 @@ const HankeFormHaittojenHallinta: React.FC<FormProps> = ({ hanke }) => {
         {t('form:requiredInstruction')}
       </Text>
 
-      {hankeAlueet.length < 1 ? (
+      {hankealueet.length < 1 ? (
         <Text tag="h3" styleAs="h4" weight="bold">
           <Box mb="var(--spacing-m)">{t('hankeForm:haittojenHallintaForm:subHeaderNoAlueet')}</Box>
         </Text>
@@ -50,7 +48,7 @@ const HankeFormHaittojenHallinta: React.FC<FormProps> = ({ hanke }) => {
         <HankeMap hanke={hanke as HankeData} center={addressCoordinate} drawSource={drawSource} />
       </Box>
 
-      {hankeAlueet.length < 1 ? (
+      {hankealueet.length < 1 ? (
         <Box textAlign="center" mt="var(--spacing-2-xl)" mb="var(--spacing-2-xl)">
           <p>{t('hankeForm:haittojenHallintaForm:subHeaderAlueet')}</p>
         </Box>
@@ -66,8 +64,8 @@ const HankeFormHaittojenHallinta: React.FC<FormProps> = ({ hanke }) => {
           </Box>
           <Tabs>
             <TabList>
-              {hankeAlueet.map((alue, index) => {
-                const name = watch(`${FORMFIELD.HANKEALUEET}.${index}.nimi`);
+              {hankealueet.map((alue, index) => {
+                const name = hankealueet[index].nimi;
                 return (
                   <Tab key={alue.id} onClick={() => higlightArea(alue.feature)}>
                     <div ref={tabRefs[index]}>{name}</div>
@@ -75,7 +73,7 @@ const HankeFormHaittojenHallinta: React.FC<FormProps> = ({ hanke }) => {
                 );
               })}
             </TabList>
-            {hankeAlueet.map((item, index) => (
+            {hankealueet.map((item, index) => (
               <TabPanel key={item.id}>
                 <Haittojenhallintasuunnitelma hanke={hanke as HankeData} index={index} />
               </TabPanel>
