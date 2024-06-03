@@ -148,12 +148,11 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
     map.addInteraction(selection.current);
 
     selection.current.on('select', (e) => {
-      const features = e.target.getFeatures();
-      const feature: Feature<Geometry> = features.getArray()[0];
+      const features = e.selected;
+      const feature: Feature<Geometry> = features[0];
 
       if (feature) {
         actions.setSelectedFeature(feature);
-        feature.setStyle(styleFunction(feature, undefined, true));
       } else {
         clearSelection();
       }
@@ -182,6 +181,16 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.selectedDrawtoolType]);
+
+  useEffect(() => {
+    // When selected feature changes, clear selection and push new selected feature
+    // to select collection, so that it is highlighted
+    selection.current?.getFeatures().clear();
+    if (state.selectedFeature) {
+      selection.current?.getFeatures().push(state.selectedFeature);
+      state.selectedFeature.setStyle(styleFunction(state.selectedFeature, undefined, true));
+    }
+  }, [state.selectedFeature, clearSelection]);
 
   // Unmount
   useEffect(() => {

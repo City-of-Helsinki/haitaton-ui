@@ -9,6 +9,7 @@ import HighlightFeatureOnMap from '../interations/HighlightFeatureOnMap';
 import useHankeFeatures from '../../hooks/useHankeFeatures';
 import { HankeData } from '../../../types/hanke';
 import { toStartOfDayUTCISO } from '../../../../common/utils/date';
+import FitSource from '../interations/FitSource';
 
 type Props = {
   hankeData?: HankeData[];
@@ -16,6 +17,7 @@ type Props = {
   endDate?: string | null;
   centerOnMap?: boolean;
   highlightFeatures?: boolean;
+  fitSource?: boolean;
 };
 
 const currentYear = new Date().getFullYear();
@@ -26,6 +28,7 @@ function HankeLayer({
   endDate = `${currentYear + 1}-12-31`,
   centerOnMap = false,
   highlightFeatures = false,
+  fitSource = false,
 }: Readonly<Props>) {
   const { hankkeet: hankkeetFromContext } = useContext(HankkeetContext);
   const hankeSource = useRef(new VectorSource());
@@ -51,10 +54,11 @@ function HankeLayer({
       </div>
       {centerOnMap && <CenterProjectOnMap source={hankeSource.current} />}
       {highlightFeatures && <HighlightFeatureOnMap source={hankeSource.current} />}
+      {fitSource && <FitSource source={hankeSource.current} fitOnce />}
 
       <VectorLayer
         source={hankeSource.current}
-        zIndex={100}
+        zIndex={1}
         className="hankeGeometryLayer"
         style={styleFunction}
       />

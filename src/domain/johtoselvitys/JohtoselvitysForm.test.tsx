@@ -11,6 +11,7 @@ import { JohtoselvitysFormValues } from './types';
 import api from '../api/api';
 import {
   Application,
+  ApplicationArea,
   ApplicationAttachmentMetadata,
   AttachmentType,
   JohtoselvitysData,
@@ -62,7 +63,7 @@ const application: JohtoselvitysFormValues = {
         },
       ],
     },
-    areas: DUMMY_AREAS,
+    areas: DUMMY_AREAS as ApplicationArea[],
     startTime: null,
     endTime: null,
     workDescription: '',

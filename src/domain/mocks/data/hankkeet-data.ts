@@ -125,7 +125,7 @@ const hankkeet: HankeDataDraft[] = [
         ],
       },
     ],
-    tyomaaTyyppi: [],
+    tyomaaTyyppi: ['VESI', 'VIEMARI'],
     alueet: [
       {
         id: 1,

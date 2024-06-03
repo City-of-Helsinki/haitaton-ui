@@ -22,7 +22,9 @@ import ApplicationStatusTag from '../components/ApplicationStatusTag';
 import {
   AlluStatus,
   Application,
+  ApplicationArea,
   JohtoselvitysData,
+  KaivuilmoitusAlue,
   KaivuilmoitusData,
 } from '../types/application';
 import JohtoselvitysBasicInformationSummary from '../components/summary/JohtoselvitysBasicInformationSummary';
@@ -70,6 +72,10 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
     propertyDeveloperWithContacts,
     representativeWithContacts,
   } = applicationData;
+  const tyoalueet =
+    applicationType === 'CABLE_REPORT'
+      ? (areas as ApplicationArea[])
+      : (areas as KaivuilmoitusAlue[]).flatMap((area) => area.tyoalueet);
 
   const applicationId =
     applicationIdentifier || t(`hakemus:applicationTypeDraft:${applicationType}`);
@@ -79,7 +85,7 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
   // Text for the link leading back to hanke view
   const hankeLinkText = `${hanke?.nimi} (${hanke?.hankeTunnus})`;
 
-  const geometries: Geometry[] = getAreaGeometries(areas);
+  const geometries: Geometry[] = getAreaGeometries(tyoalueet);
   const totalSurfaceArea = getTotalSurfaceArea(geometries);
 
   const isSent = isApplicationSent(alluStatus);
@@ -179,8 +185,8 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
             </TabPanel>
             <TabPanel>
               {/* Areas information panel */}
-              {areas.map((_, index) => {
-                const areaName = getAreaDefaultName(t, index, areas.length);
+              {tyoalueet.map((_, index) => {
+                const areaName = getAreaDefaultName(t, index, tyoalueet.length);
                 return (
                   <Accordion language={locale} heading={areaName} initiallyOpen key={areaName}>
                     <FormSummarySection style={{ marginBottom: 'auto' }}>
@@ -244,9 +250,9 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
                 <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} showLink={false} />
                 <OwnHankeMap hanke={hanke} application={application} />
               </Box>
-              {areas.map((area, index) => {
-                const areaName = getAreaDefaultName(t, index, areas.length);
-                const geometry = getAreaGeometry(area);
+              {tyoalueet.map((alue, index) => {
+                const areaName = getAreaDefaultName(t, index, tyoalueet.length);
+                const geometry = getAreaGeometry(alue);
                 return (
                   <Box
                     padding="var(--spacing-s)"

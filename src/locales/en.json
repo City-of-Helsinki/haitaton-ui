@@ -704,8 +704,8 @@
       "downloadDecision": "Download decision (PDF)",
       "downloadDecisionShort": "Download PDF",
       "addedAreas": "Areas added by you",
-      "removeAreaTitle": "Remove area",
-      "removeAreaDescription": "Are you sure you want to remove the area {{areaName}}",
+      "removeAreaTitle": "Remove area?",
+      "removeAreaDescription": "Are you sure you want to remove the area {{areaName}}?",
       "applicationAdditionalInfo": "Additional information on the application",
       "applicationInfo": "Application information"
     },

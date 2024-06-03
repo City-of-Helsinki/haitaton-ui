@@ -6,13 +6,13 @@ import {
   FormSummarySection,
   SectionItemContent,
   SectionItemTitle,
-} from '../../../forms/components/FormSummarySection';
-import { JohtoselvitysFormValues } from '../../../johtoselvitys/types';
-import Text from '../../../../common/components/text/Text';
-import { formatSurfaceArea, getTotalSurfaceArea } from '../../../map/utils';
-import { formatToFinnishDate } from '../../../../common/utils/date';
-import { getAreaGeometries, getAreaGeometry } from '../../../johtoselvitys/utils';
-import { getAreaDefaultName } from '../../utils';
+} from '../../forms/components/FormSummarySection';
+import { JohtoselvitysFormValues } from '../types';
+import Text from '../../../common/components/text/Text';
+import { formatSurfaceArea, getTotalSurfaceArea } from '../../map/utils';
+import { formatToFinnishDate } from '../../../common/utils/date';
+import { getAreaGeometries, getAreaGeometry } from '../utils';
+import { getAreaDefaultName } from '../../application/utils';
 
 type Props = {
   formData: JohtoselvitysFormValues;

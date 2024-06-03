@@ -4,6 +4,18 @@ import { Coordinate } from 'ol/coordinate';
 import { CRS } from '../../../common/types/hanke';
 import yup from '../../../common/utils/yup';
 import { newJohtoselvitysSchema } from '../../johtoselvitys/validationSchema';
+import {
+  HANKE_KAISTAHAITTA_KEY,
+  HANKE_KAISTAPITUUSHAITTA_KEY,
+  HANKE_MELUHAITTA_KEY,
+  HANKE_POLYHAITTA_KEY,
+  HANKE_TARINAHAITTA_KEY,
+  HANKE_TYOMAATYYPPI_KEY,
+  Liikennehaittaindeksi,
+} from '../../types/hanke';
+import { Feature } from 'ol';
+import { Geometry, Polygon as OlPolygon } from 'ol/geom';
+import { getSurfaceArea } from '../../../common/components/map/utils';
 
 export type ApplicationType = 'CABLE_REPORT' | 'EXCAVATION_NOTIFICATION';
 
@@ -116,6 +128,41 @@ export type ApplicationArea = {
   geometry: ApplicationGeometry;
 };
 
+export type TormaystarkasteluTulos = {
+  autoliikenneindeksi: number;
+  pyoraliikenneindeksi: number;
+  linjaautoliikenneindeks: number;
+  raitioliikenneindeksi: number;
+  liikennehaittaindeksi: Liikennehaittaindeksi;
+};
+
+export class Tyoalue {
+  geometry: ApplicationGeometry;
+  area: number;
+  tormaystarkasteluTulos?: TormaystarkasteluTulos | null;
+  openlayersFeature?: Feature<Geometry>;
+
+  constructor(feature: Feature<Geometry>) {
+    this.geometry = new ApplicationGeometry((feature.getGeometry() as OlPolygon).getCoordinates());
+    this.area = getSurfaceArea(feature.getGeometry()!);
+    this.openlayersFeature = feature;
+  }
+}
+
+export type KaivuilmoitusAlue = {
+  name: string;
+  hankealueId: number;
+  tyoalueet: Tyoalue[];
+  katuosoite: string;
+  tyonTarkoitukset: HANKE_TYOMAATYYPPI_KEY[] | null;
+  meluhaitta: HANKE_MELUHAITTA_KEY | null;
+  polyhaitta: HANKE_POLYHAITTA_KEY | null;
+  tarinahaitta: HANKE_TARINAHAITTA_KEY | null;
+  kaistahaitta: HANKE_KAISTAHAITTA_KEY | null;
+  kaistahaittojenPituus: HANKE_KAISTAPITUUSHAITTA_KEY | null;
+  lisatiedot?: string;
+};
+
 export type AttachmentType = 'MUU' | 'LIIKENNEJARJESTELY' | 'VALTAKIRJA';
 
 export interface ApplicationAttachmentMetadata extends AttachmentMetadata {
@@ -154,7 +201,7 @@ export interface KaivuilmoitusData {
   cableReports?: string[];
   placementContracts?: string[];
   requiredCompetence: boolean;
-  areas: ApplicationArea[];
+  areas: KaivuilmoitusAlue[];
   startTime: Date | null;
   endTime: Date | null;
   customerWithContacts?: CustomerWithContacts | null;

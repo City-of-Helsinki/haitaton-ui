@@ -7,7 +7,7 @@ import { ApplicationAttachmentMetadata } from '../application/types/application'
 import { deleteAttachment, getAttachmentFile, uploadAttachment } from '../application/attachments';
 import { KaivuilmoitusFormValues } from './types';
 import FileUpload from '../../common/components/fileUpload/FileUpload';
-import styles from './BasicInfo.module.scss';
+import styles from './Kaivuilmoitus.module.scss';
 import { Link, Notification } from 'hds-react';
 import TextArea from '../../common/components/textArea/TextArea';
 

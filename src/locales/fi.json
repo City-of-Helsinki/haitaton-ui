@@ -559,6 +559,7 @@
       "rights": "Käyttöoikeutesi hankkeelle",
       "removeAreaTitle": "Poista alue",
       "removeAreaDescription": "Haluatko varmasti poistaa hankealueen {{areaName}}?",
+      "hankeAlue": "Hankealue",
       "haittojenhallintasuunnitelma": {
         "YLEINEN": "Toimet hankealueen haittojen hallintaan",
         "PYORALIIKENNE": "Toimet hankealueen haittojen hallintaan",
@@ -710,6 +711,12 @@
     "perustiedot": {
       "instructions": "<p>Helsingin kaupungin kaduilla, jalankulku- tai pyöräteillä, toreilla tai puistoissa tehtävistä kaivu-, kairaus- ja louhintatöistä on tehtävä kaivuilmoitus. Kaivuilmoituksen jättämisen yhteydessä pyydetään viranomaiselta automaattisesti myös johtoselvitys, mikäli aiemmin tehdyn johtoselvityksen tunnusta ei ole liitetty hakemukseen.</p><p>Hakemukseen liittyy olennaisena osana käyttäjän täyttämä haittojenhallintasuunnitelma, jonka toteutumista viranomainen seuraa työn aikana. Ilmoituksen liitteeksi laaditaan tilapäisen liikennejärjestelyn suunnitelma, mikäli työ vaikuttaa jalankulkuun pyöräliikenteeseen tai moottoriajoneuvoliikenteeseen tai pysäköintipaikkoja varataan muuhun käyttöön siirtokehotuskyltillä.</p><p>Kaivutyö tulee ilmoittaa talvikaudella (1.12.–14.5.) toiminnalliseen kuntoon ja kaikissa tapauksissa valmiiksi, jotta työ voidaan valvoa ja laskutus katkaista tai päättää.</p><p>$t(kaivuilmoitusForm:requiredInstruction) Työn nimi vaaditaan lomakkeen tallentamiseen.</p>"
     },
+    "alueet": {
+      "instructions": "<p>Aloita hakemuksen työalueiden piirtäminen lisäämällä työn alku- ja loppupäivämäärät, jolloin hankealueesi ilmestyvät näkyviin. HUOM! Työn ajankohdan tulee sijoittua hankealueen aikavälille.</p><p>Voit muokata jo piirrettyä aluetta tarttumalla sen reunasta kiinni ja vetämällä pisteen haluamaasi kohtaan.</p><p>Jos haluat piirtää hankealueiden sisälle pienempiä työalueita, aktivoi piirtotyökalut kartan päältä. Huomioi, että työalueet tulee piirtää kokonaan hankealueiden sisälle.</p><p>Jos haluat käyttää koko hankealuetta työalueena, valitse hankealue kartalta aktiviiseksi ja hanketietolaatikosta \"Käytä työalueena\".</p><p>Voit lisätä samalle hakemukselle useampia alueita mikäli niiden aikaväli on sama. Jos haluat ilmoittaa useamman alueen eri aikaväleillä, tulee sinun tehdä erillinen hakemus.</p><p>$t(kaivuilmoitusForm:requiredInstruction)</p>",
+      "areaInformationHeading": "Kaivuilmoitus työalueille",
+      "startDate": "Työn alkupäivämäärä",
+      "endDate": "Työn loppupäivämäärä"
+    },
     "liitteetJaLisatiedot": {
       "instructions": "<p>Lisää tilapäisiä liikennejärjestelyitä koskevat suunnitelmat ja muut mahdolliset liitteet. Tilapäisiä liikennejärjestelyitä koskeva suunnitelma on pakollinen. Tarvittaessa katso <a>Helsingin kaupungin tyyppikuvat</a>.</p><p>Mikäli valtuutusta täyttämiseen tai työn suorittamiseen ei ole tehty kirjautumisen yhteydessä, tulee liitteeksi lisätä valtakirja pdf:nä.</p><p>Kaikki tähdellä * merkityt kentät ovat hakemuksen lähettämisen kannalta pakollisia.</p>",
       "trafficArrangementPlan": "Tilapäisiä liikennejärjestelyitä koskevat suunnitelmat",
@@ -739,6 +746,8 @@
       "startDate": "Työn arvioitu alkupäivä",
       "endDate": "Työn arvioitu loppupäivä",
       "workArea": "Työalue",
+      "workAreaPlural": "Työalueet",
+      "areaAdditionalInfo": "Lisätietoja alueesta",
       "areaInfo": "Alueen tiedot",
       "checkInfo": "Tarkista antamasi tiedot ja lähetä hakemus.",
       "preFilledInfo": "Esitäytetyt tiedot",
@@ -748,14 +757,15 @@
       "rockExcavation": "Louhitaanko työn yhteydessä, esimerkiksi kallioperää?",
       "rockExcavationShort": "Louhitaanko työn yhteydessä",
       "areaDuration": "Työalueen kesto",
-      "totalSurfaceArea": "Työ-alueiden kokonaispinta-ala",
+      "totalSurfaceArea": "Työalueiden kokonaispinta-ala",
+      "totalSurfaceAreaLong": "Piirrettyjen työalueiden yhteenlaskettu kokonaispinta-ala:",
       "applicationState": "Hakemuksen tila",
       "relatedHanke": "Liittyy hankkeeseen",
       "downloadDecision": "Lataa päätös (PDF)",
       "downloadDecisionShort": "Lataa PDF",
       "addedAreas": "Lisäämäsi työalueet",
-      "removeAreaTitle": "Poista työalue",
-      "removeAreaDescription": "Haluatko varmasti poistaa työalueen {{areaName}}",
+      "removeAreaTitle": "Poista työalue?",
+      "removeAreaDescription": "Haluatko varmasti poistaa työalueen {{areaName}}?",
       "applicationAdditionalInfo": "Lisätietoja hakemuksesta",
       "applicationInfo": "Hakemuksen tiedot",
       "cableReports": "Tehtyjen johtoselvitysten tunnukset",
@@ -765,7 +775,8 @@
       "placementContractsHelp": "Anna sijoitussopimustunnus ja paina Lisää",
       "requiredCompetenceTitle": "Työhön vaadittava pätevyys",
       "requiredCompetence": "Työstä vastaavana tai asianhoitajana vakuutan, että työmaalla oleskeltaessa tai työskenneltäessä on paikalla aina ainakin yksi henkilö, jolla on voimassa Pääkaupunkiseudun katutyöt -koulutuksella saatu pätevyys (PKS-katutyökortti). Vastaan myös siitä, että kaivutyöstä vastaavalla on voimassa oleva Tieturva 1, Tieturva 2 tai PKS-katutyökortti. *",
-      "additionalInformation": "Lisätietoja hakemuksesta"
+      "additionalInformation": "Lisätietoja hakemuksesta",
+      "tyonTarkoitus": "Työn tarkoitus"
     },
     "notifications": {
       "saveSuccessLabel": "Hakemus tallennettu",
@@ -787,6 +798,11 @@
       "title": "Hakemus lähetetty",
       "description": "Hakemus on lähetetty, eikä sitä voi enää muokata. Tarkastele hakemuksen tietoja hakemussivulla.",
       "button": "Siirry hakemussivulle"
+    },
+    "areaSelectionDialog": {
+      "title": "Valitse työalueen hankealue",
+      "instructions": "Työalue sijoittuu useamman hankealueen alueelle. Valitse hankealue, jolle työalue lisätään.",
+      "cancelButton": "Peruuta ja poista työalue"
     },
     "status": {
       "PENDING_CLIENT": "Näkyy viranomaiselle",
@@ -1121,6 +1137,9 @@
         "GREEN": "Ei merkittävä",
         "BLUE": "Indeksoimaton"
       }
+    },
+    "tooltips": {
+      "areaDates": "Antamasi aikaväli vaikuttaa karttanäkymään. Kartalle saat näkyviin ainoastaan annetun aikavälin hankkeet ja työt. Oletuksena näet tämän hankkeen ja siihen liittyvien töiden alueet. Muut alueet saat esiin kartan tasovalikosta."
     },
     "attribution": "Aineistot &copy; <a href='https://kartta.hel.fi'>Helsingin kaupunki</a>",
     "drawSquareButtonAria": "Piirrä neliö kartalle",

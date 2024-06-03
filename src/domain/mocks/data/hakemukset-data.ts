@@ -371,10 +371,10 @@ const hakemukset: Application<JohtoselvitysData | KaivuilmoitusData>[] = [
     applicationIdentifier: null,
     applicationData: {
       applicationType: 'EXCAVATION_NOTIFICATION',
-      name: 'Mannerheimintien laajennetut kaivuut',
-      startTime: null,
-      endTime: null,
-      workDescription: 'Kaivetaan Mannerheimintiellä',
+      name: 'Aidasmäentien laajennetut kaivuut',
+      startTime: new Date('2023-01-12T00:00:00Z'),
+      endTime: new Date('2024-11-12T00:00:00Z'),
+      workDescription: 'Kaivetaan Aidasmäentiellä',
       constructionWork: true,
       maintenanceWork: false,
       emergencyWork: false,
@@ -384,7 +384,64 @@ const hakemukset: Application<JohtoselvitysData | KaivuilmoitusData>[] = [
       requiredCompetence: true,
       cableReports: ['JS2300002'],
       placementContracts: ['SL1234567'],
-      areas: [],
+      areas: [
+        {
+          name: 'Hankealue 2',
+          hankealueId: 2,
+          tyoalueet: [
+            {
+              geometry: {
+                type: 'Polygon',
+                crs: {
+                  type: 'name',
+                  properties: {
+                    name: 'urn:ogc:def:crs:EPSG::3879',
+                  },
+                },
+                coordinates: [
+                  [
+                    [25498585.50387858, 6679353.862125141],
+                    [25498588.30930639, 6679372.671835153],
+                    [25498578.30073113, 6679371.404998987],
+                    [25498577.10224065, 6679355.728613365],
+                    [25498585.50387858, 6679353.862125141],
+                  ],
+                ],
+              },
+              area: 158.4294946899533,
+            },
+            {
+              geometry: {
+                type: 'Polygon',
+                crs: {
+                  type: 'name',
+                  properties: {
+                    name: 'urn:ogc:def:crs:EPSG::3879',
+                  },
+                },
+                coordinates: [
+                  [
+                    [25498581.440262634, 6679345.526261961],
+                    [25498582.233686976, 6679350.99321805],
+                    [25498576.766730886, 6679351.786642391],
+                    [25498575.973306544, 6679346.319686302],
+                    [25498581.440262634, 6679345.526261961],
+                  ],
+                ],
+              },
+              area: 30.345726208334995,
+            },
+          ],
+          katuosoite: 'Aidasmäentie 5',
+          tyonTarkoitukset: ['VESI', 'VIEMARI'],
+          meluhaitta: 'TOISTUVA_MELUHAITTA',
+          polyhaitta: 'JATKUVA_POLYHAITTA',
+          tarinahaitta: 'SATUNNAINEN_TARINAHAITTA',
+          kaistahaitta: 'VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA',
+          kaistahaittojenPituus: 'PITUUS_10_99_METRIA',
+          lisatiedot: '',
+        },
+      ],
       customerWithContacts: null,
       contractorWithContacts: null,
       representativeWithContacts: null,
