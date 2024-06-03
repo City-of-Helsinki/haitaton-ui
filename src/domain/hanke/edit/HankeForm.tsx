@@ -10,7 +10,7 @@ import { hankeSchema } from './hankeSchema';
 import HankeFormAlueet from './HankeFormAlueet';
 import HankeFormPerustiedot from './HankeFormPerustiedot';
 import HankeFormYhteystiedot from './HankeFormYhteystiedot';
-import HankeFormHaitat from './HankeFormHaitat';
+import HankeFormHaittojenHallinta from './HankeFormHaittojenHallinta';
 import HankeFormLiitteet from './HankeFormLiitteet';
 import HankeFormSummary from './HankeFormSummary';
 import FormNotifications from './components/FormNotifications';
@@ -28,6 +28,7 @@ import {
   hankeAlueetPublicSchema,
   hankePerustiedotPublicSchema,
   hankeYhteystiedotPublicSchema,
+  hankkeenHaittojenHallintaPublicSchema,
 } from './hankePublicSchema';
 import { useValidationErrors } from '../../forms/hooks/useValidationErrors';
 import HankeDraftStateNotification from './components/HankeDraftStateNotification';
@@ -175,24 +176,27 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const formSteps = [
     {
-      element: <HankeFormPerustiedot errors={errors} register={register} formData={formValues} />,
+      element: <HankeFormPerustiedot errors={errors} register={register} hanke={formValues} />,
       label: t('hankeForm:perustiedotForm:header'),
       state: StepState.available,
       validationSchema: hankePerustiedotPublicSchema,
     },
     {
-      element: <HankeFormAlueet errors={errors} register={register} formData={formValues} />,
+      element: <HankeFormAlueet errors={errors} register={register} hanke={formValues} />,
       label: t('hankeForm:hankkeenAlueForm:header'),
       state: StepState.available,
       validationSchema: hankeAlueetPublicSchema,
     },
     {
-      element: <HankeFormHaitat formData={formValues} />,
-      label: t('hankeForm:hankkeenHaitatForm:header'),
+      element: (
+        <HankeFormHaittojenHallinta errors={errors} register={register} hanke={formValues} />
+      ),
+      label: t('hankeForm:haittojenHallintaForm:header'),
       state: StepState.available,
+      validationSchema: hankkeenHaittojenHallintaPublicSchema,
     },
     {
-      element: <HankeFormYhteystiedot errors={errors} register={register} formData={formValues} />,
+      element: <HankeFormYhteystiedot errors={errors} register={register} hanke={formValues} />,
       label: t('form:yhteystiedot:header'),
       state: StepState.available,
       validationSchema: hankeYhteystiedotPublicSchema,

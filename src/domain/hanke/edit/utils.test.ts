@@ -1,6 +1,11 @@
 import { Feature } from 'ol';
 import { HankeAlueFormState, HankeDataFormState } from './types';
-import { convertFormStateToHankeData, getAreaDefaultName } from './utils';
+import {
+  convertFormStateToHankeData,
+  getAreaDefaultName,
+  sortedLiikenneHaittojenhallintatyyppi,
+} from './utils';
+import { HAITTOJENHALLINTATYYPPI, HANKE_INDEX_TYPE, HankeIndexData } from '../../types/hanke';
 
 function getArea(areaName: string): HankeAlueFormState {
   return {
@@ -67,4 +72,39 @@ test('Should get area data without feature', () => {
 
   expect(hankeData.alueet![0].feature).toBeUndefined();
   expect(hankeData.alueet![0].nimi).toBe('Hankealue 1');
+});
+
+test('Should sort nuisance types correctly', () => {
+  const tormaysTarkastelunTulos: HankeIndexData = {
+    autoliikenneindeksi: 1.0,
+    pyoraliikenneindeksi: 3.0,
+    linjaautoliikenneindeksi: 1.0,
+    raitioliikenneindeksi: 0.0,
+    liikennehaittaindeksi: {
+      indeksi: 3.0,
+      tyyppi: HANKE_INDEX_TYPE.PYORALIIKENNEINDEKSI,
+    },
+  };
+
+  const sorted = sortedLiikenneHaittojenhallintatyyppi(tormaysTarkastelunTulos);
+
+  expect(sorted).toEqual([
+    HAITTOJENHALLINTATYYPPI.PYORALIIKENNE,
+    HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE,
+    HAITTOJENHALLINTATYYPPI.LINJAAUTOLIIKENNE,
+    HAITTOJENHALLINTATYYPPI.RAITIOLIIKENNE,
+  ]);
+});
+
+test('Should sort nuisance types in default order if tormaysTarkastelunTulos is undefined', () => {
+  const tormaysTarkastelunTulos: HankeIndexData | undefined = undefined;
+
+  const sorted = sortedLiikenneHaittojenhallintatyyppi(tormaysTarkastelunTulos);
+
+  expect(sorted).toEqual([
+    HAITTOJENHALLINTATYYPPI.PYORALIIKENNE,
+    HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE,
+    HAITTOJENHALLINTATYYPPI.RAITIOLIIKENNE,
+    HAITTOJENHALLINTATYYPPI.LINJAAUTOLIIKENNE,
+  ]);
 });

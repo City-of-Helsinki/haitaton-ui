@@ -17,7 +17,7 @@ import JohtoselvitysCreateDialog from '../../johtoselvitys/johtoselvitysCreateDi
 const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
   errors,
   register,
-  formData,
+  hanke,
 }) => {
   const { t } = useTranslation();
   const { setValue, watch } = useFormContext();
@@ -67,7 +67,7 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
         <TextArea
           id={FORMFIELD.KUVAUS}
           label={t(`hankeForm:labels:${FORMFIELD.KUVAUS}`)}
-          defaultValue={formData[FORMFIELD.KUVAUS] || ''}
+          defaultValue={hanke[FORMFIELD.KUVAUS] || ''}
           invalid={!!errors[FORMFIELD.KUVAUS]}
           {...register(FORMFIELD.KUVAUS)}
           data-testid={FORMFIELD.KUVAUS}
@@ -118,8 +118,8 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
             label: t(`hanke:${FORMFIELD.TYOMAATYYPPI}:${value}`),
           }))}
           defaultValue={
-            formData
-              ? formData[FORMFIELD.TYOMAATYYPPI]?.map((value) => ({
+            hanke
+              ? hanke[FORMFIELD.TYOMAATYYPPI]?.map((value) => ({
                   value,
                   label: t(`hanke:${FORMFIELD.TYOMAATYYPPI}:${value}`),
                 }))

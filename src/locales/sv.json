@@ -626,8 +626,8 @@
     "tyomaanTiedotForm": {
       "header": "Projektets tilläggsuppgifter"
     },
-    "hankkeenHaitatForm": {
-      "header": "Olägenheter"
+    "haittojenHallintaForm": {
+      "header": "Hantering av olägenheter"
     },
     "hankkeenLiitteetForm": {
       "instructions": "Lägg till eventuella bilagor. De bilagor som fogas till projektet överförs inte till ansökningarna."

@@ -137,4 +137,13 @@
     padding: var(--spacing-s);
     margin-bottom: var(--spacing-s);
   }
+
+  .nuisanceType {
+    background: #e6e6e6;
+    padding-top: var(--spacing-l);
+    padding-bottom: var(--spacing-l);
+    padding-left: var(--spacing-m);
+    font-weight: bold;
+    font-size: var(--fontsize-body-l);
+  }
 }
