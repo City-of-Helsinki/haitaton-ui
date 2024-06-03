@@ -356,8 +356,10 @@ describe('HankeForm', () => {
     const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
 
     // Hanke owner (accordion open by default)
+    // Yritys should be default contact type
+    expect(screen.getByText(/yritys/i)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /tyyppi/i }));
-    await user.click(screen.getByText(/yritys/i));
+    await user.click(screen.getByText(/yhteisö/i));
 
     fireEvent.change(screen.getByTestId('omistajat.0.nimi'), {
       target: { value: 'Omistaja Yritys' },

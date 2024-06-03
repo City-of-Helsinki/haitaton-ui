@@ -30,7 +30,7 @@ import { Box } from '@chakra-ui/react';
 function getEmptyContact(): Omit<HankeYhteystieto, 'id'> {
   return {
     nimi: '',
-    tyyppi: null,
+    tyyppi: CONTACT_TYYPPI.YRITYS,
     ytunnus: '',
     email: '',
     puhelinnumero: '',
@@ -80,7 +80,7 @@ const ContactFields: React.FC<
         <Dropdown
           id={`${contactType}.${index}.${CONTACT_FORMFIELD.TYYPPI}`}
           name={`${contactType}.${index}.${CONTACT_FORMFIELD.TYYPPI}`}
-          defaultValue={null}
+          defaultValue={CONTACT_TYYPPI.YRITYS}
           label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.TYYPPI}`)}
           options={$enum(CONTACT_TYYPPI).map((value) => {
             return {
