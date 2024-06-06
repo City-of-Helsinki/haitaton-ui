@@ -13,7 +13,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from 'react-query';
 import { merge } from 'lodash';
 import { useBeforeUnload } from 'react-router-dom';
-import { JohtoselvitysFormData, JohtoselvitysFormValues } from './types';
+import { JohtoselvitysFormValues } from './types';
 import { BasicInfo } from './BasicInfo';
 import Contacts from '../application/components/ApplicationContacts';
 import { Geometries } from './Geometries';
@@ -26,7 +26,7 @@ import {
   convertFormStateToJohtoselvitysUpdateData,
 } from './utils';
 import { changeFormStep, isPageValid } from '../forms/utils';
-import { isApplicationDraft, sendApplicationNew } from '../application/utils';
+import { isApplicationDraft, isContactIn, sendApplication } from '../application/utils';
 import { HankeData } from '../types/hanke';
 import { ApplicationCancel } from '../application/components/ApplicationCancel';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
@@ -46,28 +46,12 @@ import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/Co
 import useAttachments from '../application/hooks/useAttachments';
 import { APPLICATION_ID_STORAGE_KEY } from '../application/constants';
 import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
-import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import useSaveApplication from '../application/hooks/useSaveApplication';
 
 type Props = {
   hankeData?: HankeData;
   application?: Application<JohtoselvitysData>;
 };
-
-function isContactIn(signedInUser?: SignedInUser, application?: JohtoselvitysFormData) {
-  if (signedInUser && application) {
-    const found = [
-      application.customerWithContacts,
-      application.contractorWithContacts,
-      application.propertyDeveloperWithContacts,
-      application.representativeWithContacts,
-    ]
-      .flatMap((customer) => customer?.contacts)
-      .find((contact) => contact?.hankekayttajaId === signedInUser.hankeKayttajaId);
-    return found !== undefined;
-  }
-  return false;
-}
 
 const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   hankeData,
@@ -199,7 +183,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     },
   });
 
-  const applicationSendMutation = useMutation(sendApplicationNew, {
+  const applicationSendMutation = useMutation(sendApplication, {
     onError() {
       showSendError();
     },
@@ -474,7 +458,12 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
                 </Button>
               )}
               {disableSendButton && (
-                <Notification size="small" style={{ marginTop: 'var(--spacing-xs)' }} type="info">
+                <Notification
+                  size="small"
+                  style={{ marginTop: 'var(--spacing-xs)' }}
+                  type="info"
+                  label={t('hakemus:notifications:sendApplicationDisabled')}
+                >
                   {t('hakemus:notifications:sendApplicationDisabled')}
                 </Notification>
               )}

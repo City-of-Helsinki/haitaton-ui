@@ -33,7 +33,11 @@ export async function readAll(hankeTunnus: string): Promise<HankeUser[]> {
 }
 
 export async function readCurrent(): Promise<HankeUser | undefined> {
-  return users.map(mapToHankeUser).find((user) => user.sahkoposti === 'testi@test.com');
+  const currentUser = users
+    .map(mapToHankeUser)
+    .find((user) => user.sahkoposti === 'matti.meikalainen@test.com');
+  console.log('currentUser', currentUser);
+  return currentUser;
 }
 
 async function readFromHanke(hankeTunnus: string, id: string): Promise<HankeUser | undefined> {

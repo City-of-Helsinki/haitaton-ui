@@ -5,7 +5,13 @@ import * as hankkeetDB from './data/hankkeet';
 import * as hakemuksetDB from './data/hakemukset';
 import * as usersDB from './data/users';
 import ApiError from './apiError';
-import { DeleteInfo, IdentificationResponse, SignedInUser } from '../hanke/hankeUsers/hankeUser';
+import {
+  AccessRightLevel,
+  DeleteInfo,
+  IdentificationResponse,
+  SignedInUser,
+  SignedInUserByHanke,
+} from '../hanke/hankeUsers/hankeUser';
 import { Yhteyshenkilo, YhteyshenkiloWithoutName } from '../hanke/edit/types';
 import {
   JohtoselvitysCreateData,
@@ -14,6 +20,7 @@ import {
   NewJohtoselvitysData,
 } from '../application/types/application';
 import { defaultJohtoselvitysData } from './data/defaultJohtoselvitysData';
+import { signedInUsers, userDataByHanke } from './signedInUser';
 
 const apiUrl = '/api';
 
@@ -21,6 +28,7 @@ export const handlers = [
   // Private hankkeet endpoints miss handling of user at this point
   rest.get(`${apiUrl}/hankkeet/:hankeTunnus`, async (req, res, ctx) => {
     const { hankeTunnus } = req.params;
+    console.log(`GET ${apiUrl}/hankkeet/${hankeTunnus}`);
     const hanke = await hankkeetDB.read(hankeTunnus as string);
     if (!hanke) {
       return res(
@@ -34,13 +42,15 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(hanke));
   }),
 
-  rest.get(`${apiUrl}/hankkeet`, async (req, res, ctx) => {
+  rest.get(`${apiUrl}/hankkeet`, async (_, res, ctx) => {
+    console.log(`GET ${apiUrl}/hankkeet`);
     const hankkeet = await hankkeetDB.readAll();
     return res(ctx.status(200), ctx.json(hankkeet));
   }),
 
   rest.post(`${apiUrl}/hankkeet`, async (req, res, ctx) => {
     const reqBody: HankeDataDraft = await req.json();
+    console.log(`POST ${apiUrl}/hankkeet`, reqBody);
     const hanke = await hankkeetDB.create(reqBody);
     return res(ctx.status(200), ctx.json(hanke));
   }),
@@ -48,6 +58,7 @@ export const handlers = [
   rest.put(`${apiUrl}/hankkeet/:hankeTunnus`, async (req, res, ctx) => {
     const { hankeTunnus } = req.params;
     const reqBody: HankeDataDraft = await req.json();
+    console.log(`PUT ${apiUrl}/hankkeet/${hankeTunnus}`, reqBody);
     try {
       const hanke = await hankkeetDB.update(hankeTunnus as string, reqBody);
       return res(ctx.status(200), ctx.json(hanke));
@@ -64,6 +75,7 @@ export const handlers = [
 
   rest.delete(`${apiUrl}/hankkeet/:hankeTunnus`, async (req, res, ctx) => {
     const { hankeTunnus } = req.params;
+    console.log(`DELETE ${apiUrl}/hankkeet/${hankeTunnus}/hakemukset`);
     try {
       const hanke = await hankkeetDB.remove(hankeTunnus as string);
       return res(ctx.status(200), ctx.json(hanke));
@@ -81,22 +93,26 @@ export const handlers = [
 
   rest.get(`${apiUrl}/hankkeet/:hankeTunnus/hakemukset`, async (req, res, ctx) => {
     const { hankeTunnus } = req.params;
+    console.log(`GET ${apiUrl}/hankkeet/${hankeTunnus}/hakemukset`);
     const hakemukset = await hakemuksetDB.readAllForHanke(hankeTunnus as string);
     return res(ctx.status(200), ctx.json({ applications: hakemukset }));
   }),
 
-  rest.get(`${apiUrl}/public-hankkeet`, async (req, res, ctx) => {
+  rest.get(`${apiUrl}/public-hankkeet`, async (_, res, ctx) => {
+    console.log(`GET ${apiUrl}/public-hankkeet`);
     const hankkeet = await hankkeetDB.readAll();
     return res(ctx.status(200), ctx.json(hankkeet));
   }),
 
-  rest.get(`${apiUrl}/hakemukset`, async (req, res, ctx) => {
+  rest.get(`${apiUrl}/hakemukset`, async (_, res, ctx) => {
+    console.log(`GET ${apiUrl}/hakemukset`);
     const hakemukset = await hakemuksetDB.readAll();
     return res(ctx.status(200), ctx.json(hakemukset));
   }),
 
   rest.get(`${apiUrl}/hakemukset/:id`, async (req, res, ctx) => {
     const { id } = req.params;
+    console.log(`GET ${apiUrl}/hakemukset/${id}`);
     const hakemus = await hakemuksetDB.read(Number(id as string));
     if (!hakemus) {
       return res(
@@ -111,12 +127,14 @@ export const handlers = [
 
   rest.post(`${apiUrl}/hakemukset`, async (req, res, ctx) => {
     const reqBody: JohtoselvitysCreateData | KaivuilmoitusCreateData = await req.json();
+    console.log(`POST ${apiUrl}/hakemukset`, reqBody);
     const hakemus = await hakemuksetDB.create(reqBody);
     return res(ctx.status(200), ctx.json(hakemus));
   }),
 
   rest.post(`${apiUrl}/hakemukset/johtoselvitys`, async (req, res, ctx) => {
     const reqBody: JohtoselvitysFormValues = await req.json();
+    console.log(`POST ${apiUrl}/hakemukset/johtoselvitys`, reqBody);
     const hanke = await hankkeetDB.create({
       nimi: reqBody.applicationData.name,
       alkuPvm: '',
@@ -132,9 +150,10 @@ export const handlers = [
   }),
 
   rest.post(`${apiUrl}/johtoselvityshakemus`, async (req, res, ctx) => {
-    const { nimi }: NewJohtoselvitysData = await req.json();
+    const reqBody: NewJohtoselvitysData = await req.json();
+    console.log(`POST ${apiUrl}/johtoselvityshakemus`, reqBody);
     const hanke = await hankkeetDB.create({
-      nimi: nimi,
+      nimi: reqBody.nimi,
       alkuPvm: null,
       loppuPvm: null,
       vaihe: null,
@@ -143,7 +162,7 @@ export const handlers = [
     });
     const hakemus = await hakemuksetDB.createJohtoselvitys({
       applicationData: {
-        name: nimi,
+        name: reqBody.nimi,
         ...defaultJohtoselvitysData,
       },
       id: null,
@@ -163,6 +182,7 @@ export const handlers = [
   rest.put(`${apiUrl}/hakemukset/:id`, async (req, res, ctx) => {
     const { id } = req.params;
     const reqBody: JohtoselvitysUpdateData = await req.json();
+    console.log(`PUT ${apiUrl}/hakemukset/${id}`, reqBody);
     try {
       const hakemus = await hakemuksetDB.update(Number(id as string), reqBody);
       return res(ctx.status(200), ctx.json(hakemus));
@@ -179,6 +199,7 @@ export const handlers = [
 
   rest.post(`${apiUrl}/hakemukset/:id/send-application`, async (req, res, ctx) => {
     const { id } = req.params;
+    console.log(`POST ${apiUrl}/hakemukset/${id}/send-application`);
     const hakemus = await hakemuksetDB.read(Number(id));
 
     if (!hakemus) {
@@ -196,6 +217,7 @@ export const handlers = [
 
   rest.post(`${apiUrl}/hakemukset/:id/laheta`, async (req, res, ctx) => {
     const { id } = req.params;
+    console.log(`POST ${apiUrl}/hakemukset/${id}/laheta`);
     const hakemus = await hakemuksetDB.sendHakemus(Number(id));
 
     if (!hakemus) {
@@ -213,6 +235,7 @@ export const handlers = [
 
   rest.delete(`${apiUrl}/hakemukset/:id`, async (req, res, ctx) => {
     const { id } = req.params;
+    console.log(`DELETE ${apiUrl}/hakemukset/${id}`);
     try {
       await hakemuksetDB.remove(Number(id));
       return res(ctx.status(200), ctx.json(null));
@@ -230,6 +253,7 @@ export const handlers = [
 
   rest.get(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat`, async (req, res, ctx) => {
     const { hankeTunnus } = req.params;
+    console.log(`GET ${apiUrl}/hankkeet/${hankeTunnus}/kayttajat`);
     const users = await usersDB.readAll(hankeTunnus as string);
     return res(ctx.status(200), ctx.json({ kayttajat: users }));
   }),
@@ -237,6 +261,7 @@ export const handlers = [
   rest.post(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat`, async (req, res, ctx) => {
     const { hankeTunnus } = req.params;
     const user: Yhteyshenkilo = await req.json();
+    console.log(`POST ${apiUrl}/hankkeet/${hankeTunnus}/kayttajat`, user);
     const createdUser = await usersDB.create(hankeTunnus as string, user);
     return res(ctx.status(200), ctx.json(createdUser));
   }),
@@ -244,6 +269,7 @@ export const handlers = [
   rest.put(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat`, async (req, res, ctx) => {
     const { hankeTunnus } = req.params;
     const { kayttajat } = await req.json();
+    console.log(`PUT ${apiUrl}/hankkeet/${hankeTunnus}/kayttajat`, kayttajat);
     await usersDB.updatePermissions(hankeTunnus as string, kayttajat);
     return res(ctx.status(204));
   }),
@@ -251,6 +277,7 @@ export const handlers = [
   rest.put(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat/self`, async (req, res, ctx) => {
     const { hankeTunnus } = req.params;
     const reqBody: YhteyshenkiloWithoutName = await req.json();
+    console.log(`PUT ${apiUrl}/hankkeet/${hankeTunnus}/kayttajat/self`, reqBody);
     const user = await usersDB.update(
       hankeTunnus as string,
       '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -262,6 +289,7 @@ export const handlers = [
   rest.put(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat/:userId`, async (req, res, ctx) => {
     const { hankeTunnus, userId } = req.params;
     const reqBody: Yhteyshenkilo | YhteyshenkiloWithoutName = await req.json();
+    console.log(`PUT ${apiUrl}/hankkeet/${hankeTunnus}/kayttajat/${userId}`, reqBody);
     try {
       const updatedUser = await usersDB.update(hankeTunnus as string, userId as string, reqBody);
       return res(ctx.status(200), ctx.json(updatedUser));
@@ -279,7 +307,7 @@ export const handlers = [
 
   rest.get(`${apiUrl}/hankkeet/:hankeTunnus/whoami`, async (req, res, ctx) => {
     const { hankeTunnus } = req.params;
-
+    console.log(`GET ${apiUrl}/hankkeet/${hankeTunnus}/whoami`);
     if (hankeTunnus === 'SMTGEN2_1') {
       return res(
         ctx.status(200),
@@ -292,36 +320,37 @@ export const handlers = [
     }
 
     const currentUser = await usersDB.readCurrent();
+    const user = signedInUsers.find((u) => u.hankeKayttajaId === currentUser?.id) ?? {
+      hankeKayttajaId: currentUser?.id ?? '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+      kayttooikeustaso: 'KAIKKI_OIKEUDET',
+      kayttooikeudet: [
+        'VIEW',
+        'MODIFY_VIEW_PERMISSIONS',
+        'EDIT',
+        'MODIFY_EDIT_PERMISSIONS',
+        'DELETE',
+        'MODIFY_DELETE_PERMISSIONS',
+        'EDIT_APPLICATIONS',
+        'MODIFY_APPLICATION_PERMISSIONS',
+        'RESEND_INVITATION',
+        'MODIFY_USER',
+        'DELETE_USER',
+      ],
+    };
+    console.log('user', user);
 
-    return res(
-      ctx.status(200),
-      ctx.json<SignedInUser>({
-        hankeKayttajaId: currentUser?.id ?? '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        kayttooikeustaso: 'KAIKKI_OIKEUDET',
-        kayttooikeudet: [
-          'VIEW',
-          'MODIFY_VIEW_PERMISSIONS',
-          'EDIT',
-          'MODIFY_EDIT_PERMISSIONS',
-          'DELETE',
-          'MODIFY_DELETE_PERMISSIONS',
-          'EDIT_APPLICATIONS',
-          'MODIFY_APPLICATION_PERMISSIONS',
-          'RESEND_INVITATION',
-          'MODIFY_USER',
-          'DELETE_USER',
-        ],
-      }),
-    );
+    return res(ctx.status(200), ctx.json<SignedInUser>(user));
   }),
 
   rest.get(`${apiUrl}/kayttajat/:id`, async (req, res, ctx) => {
     const { id } = req.params;
+    console.log(`GET ${apiUrl}/kayttajat/${id}`);
     const user = await usersDB.read(id as string);
     return res(ctx.status(200), ctx.json(user));
   }),
 
-  rest.post(`${apiUrl}/kayttajat`, async (req, res, ctx) => {
+  rest.post(`${apiUrl}/kayttajat`, async (_, res, ctx) => {
+    console.log(`POST ${apiUrl}/kayttajat`);
     return res(
       ctx.status(200),
       ctx.json<IdentificationResponse>({
@@ -334,12 +363,14 @@ export const handlers = [
 
   rest.post(`${apiUrl}/kayttajat/:kayttajaId/kutsu`, async (req, res, ctx) => {
     const { kayttajaId } = req.params;
+    console.log(`POST ${apiUrl}/kayttajat/${kayttajaId}/kutsu`);
     const user = await usersDB.resendInvitation(kayttajaId as string);
     return res(ctx.delay(), ctx.json(user), ctx.status(200));
   }),
 
   rest.get(`${apiUrl}/kayttajat/:id/deleteInfo`, async (req, res, ctx) => {
     const { id } = req.params;
+    console.log(`GET ${apiUrl}/kayttajat/${id}/deleteInfo`);
     if (id === '3fa85f64-5717-4562-b3fc-2c963f66afa7') {
       return res(
         ctx.delay(),
@@ -406,6 +437,7 @@ export const handlers = [
 
   rest.delete(`${apiUrl}/kayttajat/:id`, async (req, res, ctx) => {
     const { id } = req.params;
+    console.log(`DELETE ${apiUrl}/kayttajat/${id}`);
     try {
       await usersDB.remove(id as string);
       return res(ctx.status(204));
@@ -422,25 +454,42 @@ export const handlers = [
   }),
 
   rest.get(`${apiUrl}/hakemukset/:id/liitteet`, async (req, res, ctx) => {
+    const { id } = req.params;
+    console.log(`GET ${apiUrl}/hakemukset/${id}/liitteet`);
     return res(ctx.status(200), ctx.json([]));
   }),
 
   rest.post(`${apiUrl}/hakemukset/:id/liitteet`, async (req, res, ctx) => {
+    const { id } = req.params;
+    console.log(`POST ${apiUrl}/hakemukset/${id}/liitteet`);
     return res(ctx.delay(), ctx.status(200));
   }),
 
   rest.delete(`${apiUrl}/hakemukset/:id/liitteet/:attachmentId`, async (req, res, ctx) => {
+    const { id, attachmentId } = req.params;
+    console.log(`DELETE ${apiUrl}/hakemukset/${id}/liitteet/${attachmentId}`);
     return res(ctx.status(200));
   }),
 
-  rest.get(`${apiUrl}/hankkeet/:hankeTunnus/liitteet`, async (_, res, ctx) => {
+  rest.get(`${apiUrl}/hankkeet/:hankeTunnus/liitteet`, async (req, res, ctx) => {
+    const { hankeTunnus } = req.params;
+    console.log(`GET ${apiUrl}/hankkeet/${hankeTunnus}/liitteet`);
     return res(ctx.status(200), ctx.json([]));
   }),
 
   rest.get(`${apiUrl}/profiili/verified-name`, async (_, res, ctx) => {
+    console.log(`GET ${apiUrl}/profiili/verified-name`);
     return res(
       ctx.status(200),
       ctx.json({ firstName: 'Testi Tauno Tahvo', lastName: 'Testinen', givenName: 'Testi' }),
+    );
+  }),
+
+  rest.get(`${apiUrl}/my-permissions`, async (_, res, ctx) => {
+    console.log(`GET ${apiUrl}/my-permissions`);
+    return res(
+      ctx.status(200),
+      ctx.json<SignedInUserByHanke>(userDataByHanke(['HAI22-2'], AccessRightLevel.HAKEMUSASIOINTI)),
     );
   }),
 ];

@@ -94,9 +94,53 @@ test('Should not be able to cancel application if it has moved to handling in Al
   expect(screen.queryByRole('button', { name: 'Peru hakemus' })).not.toBeInTheDocument();
 });
 
-test('Should not show Edit application and Cancel application buttons if user does not have EDIT_APPLICATIONS permission', async () => {
+test('Should be able to send application if it is not already sent', async () => {
+  const { user } = render(<ApplicationViewContainer id={1} />);
+
+  await waitFor(() => screen.findByRole('button', { name: 'Lähetä hakemus' }), { timeout: 4000 });
+  const sendButton = screen.getByRole('button', { name: 'Lähetä hakemus' });
+  expect(sendButton).toBeEnabled();
+  await user.click(sendButton);
+
+  await screen.findByText('Hakemus lähetetty');
+  expect(screen.queryByText('Hakemus lähetetty')).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Lähetä hakemus' })).not.toBeInTheDocument();
+});
+
+test('Should not be able to send application if it has moved to handling in Allu', async () => {
+  render(<ApplicationViewContainer id={3} />);
+
+  await waitForLoadingToFinish();
+
+  expect(screen.queryByRole('button', { name: 'Lähetä hakemus' })).not.toBeInTheDocument();
+});
+
+test('Should disable Send button if user is not a contact person on application', async () => {
   server.use(
     rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
+      const { hankeTunnus } = req.params;
+      console.log(`GET /api/hankkeet/${hankeTunnus}/whoami`);
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>({
+          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb4',
+          kayttooikeustaso: 'HAKEMUSASIOINTI',
+          kayttooikeudet: ['EDIT_APPLICATIONS'],
+        }),
+      );
+    }),
+  );
+
+  render(<ApplicationViewContainer id={1} />);
+
+  await waitFor(() => screen.findByRole('button', { name: 'Lähetä hakemus' }));
+  const sendButton = await waitFor(() => screen.getByRole('button', { name: 'Lähetä hakemus' }));
+  expect(sendButton).toBeDisabled();
+});
+
+test('Should not show Edit, Cancel or Send buttons if user does not have correct permission', async () => {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
       return res(
         ctx.status(200),
         ctx.json<SignedInUser>({
@@ -108,12 +152,13 @@ test('Should not show Edit application and Cancel application buttons if user do
     }),
   );
 
-  render(<ApplicationViewContainer id={4} />);
+  render(<ApplicationViewContainer id={1} />);
 
   await waitForLoadingToFinish();
 
   expect(screen.queryByRole('button', { name: 'Muokkaa hakemusta' })).not.toBeInTheDocument();
   expect(screen.queryByRole('button', { name: 'Peru hakemus' })).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Lähetä hakemus' })).not.toBeInTheDocument();
 });
 
 test('Should not send multiple requests if clicking application cancel confirm button many times', async () => {
@@ -139,4 +184,28 @@ test('Should not send multiple requests if clicking application cancel confirm b
   expect(cancelApplication).toHaveBeenCalledTimes(1);
 
   cancelApplication.mockRestore();
+});
+
+test('Should not send multiple requests if clicking Send button many times', async () => {
+  server.use(
+    rest.post('/api/hakemukset/:id/laheta', async (_, res, ctx) => {
+      return res(ctx.delay(200), ctx.status(200));
+    }),
+  );
+
+  const sendApplication = jest.spyOn(applicationApi, 'sendApplication');
+  const { user } = render(<ApplicationViewContainer id={1} />);
+
+  await waitForLoadingToFinish();
+  await waitFor(() => screen.findByRole('button', { name: 'Lähetä hakemus' }));
+
+  const sendButton = await waitFor(() => screen.getByRole('button', { name: 'Lähetä hakemus' }));
+  await user.click(sendButton);
+  await user.click(sendButton);
+  await user.click(sendButton);
+  await screen.findByText('Hakemus on lähetetty käsiteltäväksi.');
+
+  expect(sendApplication).toHaveBeenCalledTimes(1);
+
+  sendApplication.mockRestore();
 });

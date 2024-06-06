@@ -1,4 +1,15 @@
-import { Accordion, Button, IconPen, IconTrash, Tab, TabList, TabPanel, Tabs } from 'hds-react';
+import {
+  Accordion,
+  Button,
+  IconEnvelope,
+  IconPen,
+  IconTrash,
+  Notification,
+  Tab,
+  TabList,
+  TabPanel,
+  Tabs,
+} from 'hds-react';
 import { Box } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import Geometry from 'ol/geom/Geometry';
@@ -32,7 +43,7 @@ import KaivuilmoitusBasicInformationSummary from '../components/summary/Kaivuilm
 import { getAreaGeometries, getAreaGeometry } from '../../johtoselvitys/utils';
 import { formatSurfaceArea, getTotalSurfaceArea } from '../../map/utils';
 import useLocale from '../../../common/hooks/useLocale';
-import { getAreaDefaultName, isApplicationSent } from '../utils';
+import { getAreaDefaultName, isApplicationSent, isContactIn, sendApplication } from '../utils';
 import ApplicationDates from '../components/ApplicationDates';
 import ContactsSummary from '../components/summary/ContactsSummary';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
@@ -47,6 +58,10 @@ import { CheckRightsByHanke } from '../../hanke/hankeUsers/UserRightsCheck';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import KaivuilmoitusAttachmentSummary from '../components/summary/KaivuilmoitusAttachmentSummary';
 import InvoicingCustomerSummary from '../components/summary/InvoicingCustomerSummary';
+import { usePermissionsForHanke } from '../../hanke/hankeUsers/hooks/useUserRightsForHanke';
+import React from 'react';
+import { useMutation, useQueryClient } from 'react-query';
+import useApplicationSendNotification from '../hooks/useApplicationSendNotification';
 
 type Props = {
   application: Application;
@@ -89,6 +104,27 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
   const totalSurfaceArea = getTotalSurfaceArea(geometries);
 
   const isSent = isApplicationSent(alluStatus);
+
+  const { data: signedInUser } = usePermissionsForHanke(hanke?.hankeTunnus);
+  const isContact = isContactIn(signedInUser, applicationData);
+  const showSendButton = !isSent;
+  const disableSendButton = showSendButton && !isContact;
+  const { showSendSuccess, showSendError } = useApplicationSendNotification(
+    'hakemus:notifications:sendErrorTextNoSave',
+  );
+  const queryClient = useQueryClient();
+  const applicationSendMutation = useMutation(sendApplication, {
+    onError() {
+      showSendError();
+    },
+    async onSuccess() {
+      showSendSuccess();
+      await queryClient.invalidateQueries('application', { refetchInactive: true });
+    },
+  });
+  async function onSendApplication() {
+    applicationSendMutation.mutate(id as number);
+  }
 
   return (
     <InformationViewContainer>
@@ -148,6 +184,32 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
               />
             </CheckRightsByHanke>
           ) : null}
+          {showSendButton && (
+            <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
+              <Button
+                theme="coat"
+                iconLeft={<IconEnvelope aria-hidden="true" />}
+                onClick={onSendApplication}
+                isLoading={applicationSendMutation.isLoading}
+                loadingText={t('common:buttons:sendingText')}
+                disabled={disableSendButton}
+              >
+                {t('hakemus:buttons:sendApplication')}
+              </Button>
+            </CheckRightsByHanke>
+          )}
+          {disableSendButton && (
+            <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
+              <Notification
+                size="small"
+                style={{ marginTop: 'var(--spacing-xs)' }}
+                type="info"
+                label={t('hakemus:notifications:sendApplicationDisabled')}
+              >
+                {t('hakemus:notifications:sendApplicationDisabled')}
+              </Notification>
+            </CheckRightsByHanke>
+          )}
         </InformationViewHeaderButtons>
       </InformationViewHeader>
 

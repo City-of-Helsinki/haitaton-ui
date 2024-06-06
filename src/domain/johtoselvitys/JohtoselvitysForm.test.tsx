@@ -437,10 +437,10 @@ test('Should show and disable send button and show notification when user is not
   expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeInTheDocument();
   expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeDisabled();
   expect(
-    screen.queryByText(
+    screen.queryAllByText(
       'Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö.',
     ),
-  ).toBeInTheDocument();
+  ).toHaveLength(2);
 });
 
 test('Should show and enable button when application is edited in draft state and user is a contact person', async () => {
