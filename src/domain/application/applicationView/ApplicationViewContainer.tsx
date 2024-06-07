@@ -9,6 +9,7 @@ import useHanke from '../../hanke/hooks/useHanke';
 import { useApplication } from '../hooks/useApplication';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { HAKEMUS_ROUTES } from '../../../common/types/route';
+import { usePermissionsForHanke } from '../../hanke/hankeUsers/hooks/useUserRightsForHanke';
 
 type Props = {
   id: number;
@@ -18,6 +19,7 @@ function ApplicationViewContainer({ id }: Readonly<Props>) {
   const { t } = useTranslation();
   const { data: application, isLoading, isError, error } = useApplication(id);
   const { data: hanke } = useHanke(application?.hankeTunnus);
+  const { data: signedInUser } = usePermissionsForHanke(application?.hankeTunnus ?? undefined);
   const navigate = useNavigate();
   const getEditApplicationPath = useLinkPath(
     HAKEMUS_ROUTES[application?.applicationType ?? 'CABLE_REPORT'],
@@ -50,7 +52,12 @@ function ApplicationViewContainer({ id }: Readonly<Props>) {
   }
 
   return (
-    <ApplicationView application={application} hanke={hanke} onEditApplication={editApplication} />
+    <ApplicationView
+      application={application}
+      hanke={hanke}
+      signedInUser={signedInUser}
+      onEditApplication={editApplication}
+    />
   );
 }
 

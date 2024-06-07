@@ -159,7 +159,9 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
             {hanke && <Link href={hankeViewPath}>{hankeLinkText}</Link>}
           </SectionItemContent>
           <SectionItemTitle>{t('hankePortfolio:labels:oikeudet')}:</SectionItemTitle>
-          <SectionItemContent />
+          <SectionItemContent>
+            {t(`hankeUsers:accessRightLevels:${signedInUser?.kayttooikeustaso}`)}
+          </SectionItemContent>
         </FormSummarySection>
 
         <InformationViewHeaderButtons>
