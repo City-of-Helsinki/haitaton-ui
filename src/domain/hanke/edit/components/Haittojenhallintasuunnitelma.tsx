@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Box } from '@chakra-ui/react';
 import { FORMFIELD, HankeDataFormState } from '../types';
-import { HAITTOJENHALLINTATYYPPI, HankeData, HankeIndexData } from '../../../types/hanke';
+import { HAITTOJENHALLINTATYYPPI, HankeData } from '../../../types/hanke';
 import TextArea from '../../../../common/components/textArea/TextArea';
 import { sortedLiikenneHaittojenhallintatyyppi } from '../utils';
 import useFieldArrayWithStateUpdate from '../../../../common/hooks/useFieldArrayWithStateUpdate';
 import HankealueMap from '../../../map/components/HankkeenHaittojenhallintasuunnitelma/HankealueMap';
 import VectorSource from 'ol/source/Vector';
 import useAddressCoordinate from '../../../map/hooks/useAddressCoordinate';
+import { HaittaIndexData } from '../../../common/haittaIndexes/types';
 
 type Props = {
   hanke: HankeData;
@@ -22,7 +23,7 @@ const Haittojenhallintasuunnitelma: React.FC<Props> = ({ hanke, index }) => {
   });
   const hankealue = hankealueet[index];
   const haittojenhallintatyypit = sortedLiikenneHaittojenhallintatyyppi(
-    hankealue.tormaystarkasteluTulos as HankeIndexData,
+    hankealue.tormaystarkasteluTulos as HaittaIndexData,
   );
   const [drawSource] = useState<VectorSource>(new VectorSource());
   const addressCoordinate = useAddressCoordinate(hanke.tyomaaKatuosoite);

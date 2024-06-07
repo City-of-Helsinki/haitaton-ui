@@ -1,3 +1,4 @@
+import { HAITTA_INDEX_TYPE } from '../../common/haittaIndexes/types';
 import {
   HankeDataDraft,
   HANKE_POLYHAITTA,
@@ -5,7 +6,6 @@ import {
   HANKE_KAISTAPITUUSHAITTA,
   HANKE_MELUHAITTA,
   HANKE_TARINAHAITTA,
-  HANKE_INDEX_TYPE,
 } from '../../types/hanke';
 
 const hankkeet: HankeDataDraft[] = [
@@ -328,7 +328,7 @@ const hankkeet: HankeDataDraft[] = [
           raitioliikenneindeksi: 2,
           liikennehaittaindeksi: {
             indeksi: 3.5,
-            tyyppi: HANKE_INDEX_TYPE.PYORALIIKENNEINDEKSI,
+            tyyppi: HAITTA_INDEX_TYPE.PYORALIIKENNEINDEKSI,
           },
         },
         haittojenhallintasuunnitelma: {

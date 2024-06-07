@@ -24,17 +24,18 @@ import ConfirmationDialog from '../../../../common/components/HDSConfirmationDia
 type Props = {
   index: number;
   onRemoveArea: (index: number) => void;
+  onChangeArea: (hankeAlue: HankeAlue) => void;
 };
 
-const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
+const Haitat: React.FC<Props> = ({ index, onRemoveArea, onChangeArea }) => {
   const { t } = useTranslation();
   const locale = useLocale();
   const { getValues, watch, setValue } = useFormContext<HankeDataFormState>();
   const formValues: HankeAlue[] = getValues(FORMFIELD.HANKEALUEET) as HankeAlue[];
 
-  const watchHankeAlueet: HankeAlue[] = watch(FORMFIELD.HANKEALUEET) as HankeAlue[];
-  const haittaAlkuPvm = watchHankeAlueet[index]?.haittaAlkuPvm;
-  const haittaLoppuPvm = watchHankeAlueet[index]?.haittaLoppuPvm;
+  const watchHankeAlue = watch(`${FORMFIELD.HANKEALUEET}.${index}`) as HankeAlue;
+  const haittaAlkuPvm = watchHankeAlue.haittaAlkuPvm;
+  const haittaLoppuPvm = watchHankeAlue.haittaLoppuPvm;
   const minEndDate = haittaAlkuPvm && new Date(haittaAlkuPvm);
 
   const [areaToRemove, setAreaToRemove] = useState<number | null>(null);
@@ -59,6 +60,10 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
 
   function closeAreaRemoveDialog() {
     setAreaToRemove(null);
+  }
+
+  function handleNuisancesChange() {
+    onChangeArea(watchHankeAlue);
   }
 
   return (
@@ -93,6 +98,7 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
             label={t(`hankeForm:labels:${FORMFIELD.HAITTA_ALKU_PVM}`)}
             locale={locale}
             helperText={t('form:helperTexts:dateInForm')}
+            onValueChange={handleNuisancesChange}
           />
           <DatePicker
             name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.HAITTA_LOPPU_PVM}`}
@@ -101,6 +107,7 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
             minDate={minEndDate || undefined}
             initialMonth={minEndDate || undefined}
             helperText={t('form:helperTexts:dateInForm')}
+            onValueChange={handleNuisancesChange}
           />
           <Spacer />
         </div>
@@ -115,6 +122,7 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
             }))}
             defaultValue={formValues[index][FORMFIELD.MELUHAITTA] || ''}
             label={t(`hankeForm:labels:${FORMFIELD.MELUHAITTA}`)}
+            onValueChange={handleNuisancesChange}
           />
           <Dropdown
             name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.POLYHAITTA}`}
@@ -125,6 +133,7 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
             }))}
             defaultValue={formValues[index][FORMFIELD.POLYHAITTA] || ''}
             label={t(`hankeForm:labels:${FORMFIELD.POLYHAITTA}`)}
+            onValueChange={handleNuisancesChange}
           />
           <Dropdown
             name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.TARINAHAITTA}`}
@@ -135,6 +144,7 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
             }))}
             defaultValue={formValues[index][FORMFIELD.TARINAHAITTA] || ''}
             label={t(`hankeForm:labels:${FORMFIELD.TARINAHAITTA}`)}
+            onValueChange={handleNuisancesChange}
           />
         </div>
 
@@ -148,6 +158,7 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
             }))}
             defaultValue={formValues[index][FORMFIELD.KAISTAHAITTA] || ''}
             label={t(`hankeForm:labels:${FORMFIELD.KAISTAHAITTA}`)}
+            onValueChange={handleNuisancesChange}
           />
           <Dropdown
             name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.KAISTAPITUUSHAITTA}`}
@@ -158,6 +169,7 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea }) => {
             }))}
             defaultValue={formValues[index][FORMFIELD.KAISTAPITUUSHAITTA] || ''}
             label={t(`hankeForm:labels:${FORMFIELD.KAISTAPITUUSHAITTA}`)}
+            onValueChange={handleNuisancesChange}
           />
         </div>
       </Fieldset>

@@ -7,9 +7,7 @@ import {
   HankeYhteystieto,
   HankeDataDraft,
   HankeMuuTaho,
-  HankeIndexData,
   HAITTOJENHALLINTATYYPPI,
-  HANKE_INDEX_TYPE,
 } from '../../types/hanke';
 import {
   FORMFIELD,
@@ -23,6 +21,7 @@ import { formatFeaturesToHankeGeoJSON, getFeatureFromHankeGeometry } from '../..
 import { getSurfaceArea } from '../../../common/components/map/utils';
 import { HankkeenHakemus } from '../../application/types/application';
 import { isApplicationCancelled, isApplicationPending } from '../../application/utils';
+import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../../common/haittaIndexes/types';
 
 function mapToAreaDates(areas: HankeAlue[] | undefined, key: 'haittaAlkuPvm' | 'haittaLoppuPvm') {
   return areas?.reduce((result: Date[], area) => {
@@ -181,7 +180,7 @@ export function getAreaDefaultName(areas?: HankeAlueFormState[]) {
  * the result will be [PYORALIIKENNE, AUTOLIIKENNE, LINJAAUTOLIIKENNE, RAITIOLIIKENNE].
  */
 export function sortedLiikenneHaittojenhallintatyyppi(
-  tormaystarkasteluTulos: HankeIndexData | undefined,
+  tormaystarkasteluTulos: HaittaIndexData | undefined,
 ): HAITTOJENHALLINTATYYPPI[] {
   const defaultOrder = Object.values(HAITTOJENHALLINTATYYPPI).filter(
     (type) => type !== HAITTOJENHALLINTATYYPPI.YLEINEN && type !== HAITTOJENHALLINTATYYPPI.MUUT,
@@ -189,10 +188,10 @@ export function sortedLiikenneHaittojenhallintatyyppi(
   if (!tormaystarkasteluTulos) {
     return defaultOrder;
   }
-  const sortedIndices = Object.values(HANKE_INDEX_TYPE)
+  const sortedIndices = Object.values(HAITTA_INDEX_TYPE)
     .map((key) => ({
       type: key.toUpperCase().replace('INDEKSI', '') as HAITTOJENHALLINTATYYPPI,
-      value: tormaystarkasteluTulos[key.toLowerCase() as keyof HankeIndexData] as number,
+      value: tormaystarkasteluTulos[key.toLowerCase() as keyof HaittaIndexData] as number,
     }))
     .sort((a, b): number => {
       const diff = b.value - a.value;

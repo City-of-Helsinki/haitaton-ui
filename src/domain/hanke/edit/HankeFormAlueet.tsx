@@ -6,10 +6,11 @@ import { Feature } from 'ol';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
 import { Box } from '@chakra-ui/react';
+import { isEqual } from 'lodash';
 import HankeDrawer from '../../map/components/HankeDrawer/HankeDrawer';
 import { useFormPage } from './hooks/useFormPage';
 import { FORMFIELD, FormProps, HankeAlueFormState, HankeDataFormState } from './types';
-import { formatSurfaceArea } from '../../map/utils';
+import { formatFeaturesToHankeGeoJSON, formatSurfaceArea } from '../../map/utils';
 import Haitat from './components/Haitat';
 import Text from '../../../common/components/text/Text';
 import useSelectableTabs from '../../../common/hooks/useSelectableTabs';
@@ -18,6 +19,8 @@ import useAddressCoordinate from '../../map/hooks/useAddressCoordinate';
 import useFieldArrayWithStateUpdate from '../../../common/hooks/useFieldArrayWithStateUpdate';
 import { HankeAlue } from '../../types/hanke';
 import { getAreaDefaultName } from './utils';
+import useHaittaIndexes from '../hooks/useHaittaIndexes';
+import HaittaIndexes from '../../common/haittaIndexes/HaittaIndexes';
 
 function getEmptyArea(feature: Feature): Omit<HankeAlueFormState, 'geometriat'> {
   return {
@@ -43,9 +46,11 @@ const HankeFormAlueet: React.FC<FormProps> = ({ hanke }) => {
   } = useFieldArrayWithStateUpdate<HankeDataFormState, 'alueet'>({
     name: FORMFIELD.HANKEALUEET,
   });
+  const watchHankeAlueet = watch('alueet');
   const [drawSource] = useState<VectorSource>(new VectorSource());
   const addressCoordinate = useAddressCoordinate(hanke.tyomaaKatuosoite);
   useFormPage();
+  const haittaIndexesMutation = useHaittaIndexes();
 
   const { tabRefs } = useSelectableTabs(hankeAlueet, {
     selectLastTabOnChange: true,
@@ -65,6 +70,47 @@ const HankeFormAlueet: React.FC<FormProps> = ({ hanke }) => {
     };
   }, [getValues, setValue]);
 
+  const calculateHaittaIndexes = useCallback(
+    (hankeAlue: HankeAlueFormState) => {
+      const hankeAlueIndex = watchHankeAlueet?.indexOf(hankeAlue);
+
+      if (
+        hankeAlue.feature &&
+        hankeAlue.haittaAlkuPvm &&
+        hankeAlue.haittaLoppuPvm &&
+        hankeAlue.meluHaitta &&
+        hankeAlue.polyHaitta &&
+        hankeAlue.tarinaHaitta &&
+        hankeAlue.kaistaHaitta &&
+        hankeAlue.kaistaPituusHaitta
+      ) {
+        haittaIndexesMutation.mutate(
+          {
+            geometriat: {
+              ...hankeAlue.geometriat,
+              featureCollection: formatFeaturesToHankeGeoJSON([hankeAlue.feature]),
+            },
+            haittaAlkuPvm: hankeAlue.haittaAlkuPvm,
+            haittaLoppuPvm: hankeAlue.haittaLoppuPvm,
+            kaistaHaitta: hankeAlue.kaistaHaitta,
+            kaistaPituusHaitta: hankeAlue.kaistaPituusHaitta,
+          },
+          {
+            onSuccess(data) {
+              hankeAlue.feature?.setProperties({
+                liikennehaittaindeksi: data.liikennehaittaindeksi.indeksi,
+              });
+              if (hankeAlueIndex) {
+                setValue(`alueet.${hankeAlueIndex}.tormaystarkasteluTulos`, data);
+              }
+            },
+          },
+        );
+      }
+    },
+    [setValue, haittaIndexesMutation, watchHankeAlueet],
+  );
+
   const handleAddFeature = useCallback(
     (feature: Feature<Geometry>) => {
       const geom = feature.getGeometry();
@@ -77,13 +123,20 @@ const HankeFormAlueet: React.FC<FormProps> = ({ hanke }) => {
     [setValue, append],
   );
 
-  const handleChangeFeature = useCallback(() => {
-    // When changing feature, trigger validation on
-    // geometriesChanged field in order to update
-    // surface area calculation for the changed area
-    trigger(FORMFIELD.GEOMETRIES_CHANGED);
-    setValue(FORMFIELD.GEOMETRIES_CHANGED, true, { shouldDirty: true });
-  }, [trigger, setValue]);
+  const handleChangeFeature = useCallback(
+    (feature: Feature<Geometry>) => {
+      const alue = watchHankeAlueet?.find((value) => isEqual(value.feature, feature));
+      if (alue) {
+        calculateHaittaIndexes(alue);
+      }
+      // When changing feature, trigger validation on
+      // geometriesChanged field in order to update
+      // surface area calculation for the changed area
+      trigger(FORMFIELD.GEOMETRIES_CHANGED);
+      setValue(FORMFIELD.GEOMETRIES_CHANGED, true, { shouldDirty: true });
+    },
+    [trigger, setValue, watchHankeAlueet, calculateHaittaIndexes],
+  );
 
   function removeArea(index: number) {
     remove(index);
@@ -93,7 +146,23 @@ const HankeFormAlueet: React.FC<FormProps> = ({ hanke }) => {
     }
   }
 
-  const features = useMemo(() => hankeAlueet.map((alue) => alue.feature), [hankeAlueet]);
+  const features = useMemo(
+    () =>
+      hankeAlueet.map((hankeAlue) => {
+        const { feature, tormaystarkasteluTulos, nimi } = hankeAlue;
+        feature?.setProperties(
+          {
+            liikennehaittaindeksi: tormaystarkasteluTulos
+              ? tormaystarkasteluTulos.liikennehaittaindeksi.indeksi
+              : null,
+            areaName: nimi,
+          },
+          true,
+        );
+        return feature;
+      }),
+    [hankeAlueet],
+  );
 
   return (
     <div>
@@ -140,7 +209,21 @@ const HankeFormAlueet: React.FC<FormProps> = ({ hanke }) => {
           </TabList>
           {hankeAlueet.map((item, index) => (
             <TabPanel key={item.id}>
-              <Haitat index={index} onRemoveArea={removeArea} />
+              <Box mb="var(--spacing-m)">
+                <Haitat
+                  index={index}
+                  onRemoveArea={removeArea}
+                  onChangeArea={(hankeAlue) => calculateHaittaIndexes(hankeAlue)}
+                />
+              </Box>
+              <Box mb="var(--spacing-m)">
+                <HaittaIndexes
+                  heading={`${t('hanke:alue:liikennehaittaIndeksit')} (0-5)`}
+                  haittaIndexData={
+                    watchHankeAlueet && watchHankeAlueet[index].tormaystarkasteluTulos
+                  }
+                />
+              </Box>
             </TabPanel>
           ))}
         </Tabs>

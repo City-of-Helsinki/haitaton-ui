@@ -1,5 +1,6 @@
 import { PartialExcept } from '../../common/types/utils';
 import { HankeGeoJSON } from '../../common/types/hanke';
+import { HaittaIndexData } from '../common/haittaIndexes/types';
 
 export enum HANKE_VAIHE {
   OHJELMOINTI = 'OHJELMOINTI',
@@ -175,27 +176,9 @@ export type HankeAlue = {
   polyHaitta: HANKE_POLYHAITTA_KEY | null;
   tarinaHaitta: HANKE_TARINAHAITTA_KEY | null;
   nimi?: string | null;
-  tormaystarkasteluTulos?: HankeIndexData | null;
+  tormaystarkasteluTulos?: HaittaIndexData | null;
   haittojenhallintasuunnitelma?: HankkeenHaittojenhallintasuunnitelma;
 };
-
-export enum HANKE_INDEX_TYPE {
-  AUTOLIIKENNEINDEKSI = 'AUTOLIIKENNEINDEKSI',
-  PYORALIIKENNEINDEKSI = 'PYORALIIKENNEINDEKSI',
-  LINJAAUTOLIIKENNEINDEKSI = 'LINJAAUTOLIIKENNEINDEKSI',
-  RAITIOLIIKENNEINDEKSI = 'RAITIOLIIKENNEINDEKSI',
-}
-
-export type Liikennehaittaindeksi = {
-  indeksi: number;
-  tyyppi: HANKE_INDEX_TYPE;
-};
-
-export enum HANKE_INDEX_STATE {
-  VOIMASSA = 'VOIMASSA',
-}
-
-export type HANKE_INDEX_STATE_KEY = keyof typeof HANKE_INDEX_STATE;
 
 enum HANKE_STATUS {
   DRAFT = 'DRAFT',
@@ -221,7 +204,7 @@ export interface HankeData {
   rakennuttajat: Array<HankeYhteystieto>;
   toteuttajat: Array<HankeYhteystieto>;
   muut: Array<HankeMuuTaho>;
-  tormaystarkasteluTulos: HankeIndexData | null;
+  tormaystarkasteluTulos: HaittaIndexData | null;
   status: HANKE_STATUS_KEY;
   version?: number;
   createdBy?: string;
@@ -229,14 +212,6 @@ export interface HankeData {
   modifiedBy?: null | string;
   modifiedAt?: null | string;
   generated?: boolean;
-}
-
-export interface HankeIndexData {
-  liikennehaittaindeksi: Liikennehaittaindeksi;
-  autoliikenneindeksi: number;
-  pyoraliikenneindeksi: number;
-  linjaautoliikenneindeksi: number;
-  raitioliikenneindeksi: number;
 }
 
 type DraftRequiredFields = 'nimi' | 'kuvaus' | 'vaihe';

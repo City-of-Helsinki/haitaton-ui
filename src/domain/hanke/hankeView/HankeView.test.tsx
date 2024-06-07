@@ -127,7 +127,6 @@ test('Correct information about hanke should be displayed', async () => {
   // Data in areas tab
   expect(screen.queryByText('Hankealue 1')).toBeInTheDocument();
   expect(screen.getAllByText('2.1.2023–24.2.2023').length).toBe(2);
-  expect(screen.getByTestId('test-liikennehaittaindeksi')).toHaveTextContent('3');
   expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3.5');
   expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('2');
   expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('1');

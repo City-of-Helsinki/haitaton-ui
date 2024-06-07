@@ -1,9 +1,9 @@
-import { HankeIndexData, HANKE_INDEX_TYPE } from '../types/hanke';
+import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../common/haittaIndexes/types';
 
-const hankeIndexData: HankeIndexData = {
+const hankeIndexData: HaittaIndexData = {
   liikennehaittaindeksi: {
     indeksi: 4,
-    tyyppi: HANKE_INDEX_TYPE.AUTOLIIKENNEINDEKSI,
+    tyyppi: HAITTA_INDEX_TYPE.AUTOLIIKENNEINDEKSI,
   },
   autoliikenneindeksi: 4,
   pyoraliikenneindeksi: 3,

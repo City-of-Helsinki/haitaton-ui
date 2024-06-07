@@ -24,6 +24,7 @@ import { MapTileLayerId } from '../../types';
 import AddressSearchContainer from '../AddressSearch/AddressSearchContainer';
 import OverviewMapControl from '../../../../common/components/map/controls/OverviewMapControl';
 import FitSource from '../interations/FitSource';
+import { styleFunction } from '../../utils/geometryStyle';
 
 type Props = {
   features: Array<Feature | undefined> | undefined;
@@ -93,6 +94,7 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
     drawSource.on('removefeature', handleRemoveFeature);
 
     return function cleanUp() {
+      handleChangeFeature.cancel();
       drawSource.un('addfeature', handleAddFeature);
       drawSource.un('changefeature', handleChangeFeature);
       drawSource.un('removefeature', handleRemoveFeature);
@@ -105,14 +107,24 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
         className={`${styles.mapContainer} ${styles.borders}`}
         style={{ width: '100%', height: 500 }}
       >
-        <Map zoom={zoom} center={center} mapClassName={styles.mapContainer__inner}>
+        <Map
+          zoom={zoom}
+          center={center}
+          mapClassName={styles.mapContainer__inner}
+          showAttribution={false}
+        >
           <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} zIndex={1000} />
 
           <OverviewMapControl className={hankeDrawerStyles.overviewMap} />
 
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
           {mapTileLayers.ortokartta.visible && <Ortokartta opacity={ortoLayerOpacity} />}
-          <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
+          <VectorLayer
+            source={drawSource}
+            zIndex={100}
+            className="drawLayer"
+            style={styleFunction}
+          />
 
           <FitSource source={drawSource} />
 

@@ -8,11 +8,11 @@ import {
   HANKE_TARINAHAITTA_KEY,
   HANKE_TYOMAATYYPPI_KEY,
   HANKE_VAIHE_KEY,
-  HankeIndexData,
 } from './../../types/hanke';
 import { CONTACT_TYYPPI } from '../../types/hanke';
 import { FORMFIELD, CONTACT_FORMFIELD, YHTEYSHENKILO_FORMFIELD, HankeDataFormState } from './types';
 import isValidBusinessId from '../../../common/utils/isValidBusinessId';
+import { HaittaIndexData } from '../../common/haittaIndexes/types';
 
 export const yhteyshenkiloSchema = yup.object({
   [YHTEYSHENKILO_FORMFIELD.ETUNIMI]: yup.string().max(50).required(),
@@ -87,7 +87,7 @@ export const hankeSchema: yup.ObjectSchema<HankeDataFormState> = yup.object().sh
   alkuPvm: yup.string().nullable(),
   loppuPvm: yup.string().nullable(),
   tyomaaTyyppi: yup.mixed<HANKE_TYOMAATYYPPI_KEY[]>(),
-  tormaystarkasteluTulos: yup.mixed<HankeIndexData>().nullable(),
+  tormaystarkasteluTulos: yup.mixed<HaittaIndexData>().nullable(),
   status: yup.mixed<HANKE_STATUS_KEY>(),
   version: yup.number(),
   createdBy: yup.string(),

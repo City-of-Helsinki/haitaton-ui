@@ -5,7 +5,8 @@ import {
   getAreaDefaultName,
   sortedLiikenneHaittojenhallintatyyppi,
 } from './utils';
-import { HAITTOJENHALLINTATYYPPI, HANKE_INDEX_TYPE, HankeIndexData } from '../../types/hanke';
+import { HAITTOJENHALLINTATYYPPI } from '../../types/hanke';
+import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../../common/haittaIndexes/types';
 
 function getArea(areaName: string): HankeAlueFormState {
   return {
@@ -75,14 +76,14 @@ test('Should get area data without feature', () => {
 });
 
 test('Should sort nuisance types correctly', () => {
-  const tormaysTarkastelunTulos: HankeIndexData = {
+  const tormaysTarkastelunTulos: HaittaIndexData = {
     autoliikenneindeksi: 1.0,
     pyoraliikenneindeksi: 3.0,
     linjaautoliikenneindeksi: 1.0,
     raitioliikenneindeksi: 0.0,
     liikennehaittaindeksi: {
       indeksi: 3.0,
-      tyyppi: HANKE_INDEX_TYPE.PYORALIIKENNEINDEKSI,
+      tyyppi: HAITTA_INDEX_TYPE.PYORALIIKENNEINDEKSI,
     },
   };
 
@@ -97,7 +98,7 @@ test('Should sort nuisance types correctly', () => {
 });
 
 test('Should sort nuisance types in default order if tormaysTarkastelunTulos is undefined', () => {
-  const tormaysTarkastelunTulos: HankeIndexData | undefined = undefined;
+  const tormaysTarkastelunTulos: HaittaIndexData | undefined = undefined;
 
   const sorted = sortedLiikenneHaittojenhallintatyyppi(tormaysTarkastelunTulos);
 

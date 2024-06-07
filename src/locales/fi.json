@@ -78,6 +78,10 @@
       "savingText": "Tallennetaan",
       "sendingText": "Lähetetään",
       "remove": "Poista"
+    },
+    "haittaIndex": {
+      "fillHaitat": "Täytä alueen haitta-arviot nähdäksesi haittaindeksit",
+      "haittaIndexNumber": "Haittaindeksiluku:"
     }
   },
   "form": {
@@ -499,7 +503,8 @@
       "totalSurfaceArea": "Alueiden kokonaispinta-ala",
       "totalSurfaceAreaLong": "Hanke-alueiden kokonaispinta-ala",
       "liikenneverkollinenHaitta": "Hankealueen liikenneverkollinen haitta",
-      "haittaMaarittelyt": "Hankealueen omat haittamäärittelyt"
+      "haittaMaarittelyt": "Hankealueen omat haittamäärittelyt",
+      "liikennehaittaIndeksit": "Hankealueen liikennehaittaindeksit"
     }
   },
   "hankeForm": {
