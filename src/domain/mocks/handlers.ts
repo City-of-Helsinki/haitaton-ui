@@ -5,13 +5,7 @@ import * as hankkeetDB from './data/hankkeet';
 import * as hakemuksetDB from './data/hakemukset';
 import * as usersDB from './data/users';
 import ApiError from './apiError';
-import {
-  AccessRightLevel,
-  DeleteInfo,
-  IdentificationResponse,
-  SignedInUser,
-  SignedInUserByHanke,
-} from '../hanke/hankeUsers/hankeUser';
+import { DeleteInfo, IdentificationResponse, SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import { Yhteyshenkilo, YhteyshenkiloWithoutName } from '../hanke/edit/types';
 import {
   JohtoselvitysCreateData,
@@ -20,7 +14,6 @@ import {
   NewJohtoselvitysData,
 } from '../application/types/application';
 import { defaultJohtoselvitysData } from './data/defaultJohtoselvitysData';
-import { signedInUsers, userDataByHanke } from './signedInUser';
 
 const apiUrl = '/api';
 
@@ -282,25 +275,27 @@ export const handlers = [
     }
 
     const currentUser = await usersDB.readCurrent();
-    const user = signedInUsers.find((u) => u.hankeKayttajaId === currentUser?.id) ?? {
-      hankeKayttajaId: currentUser?.id ?? '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      kayttooikeustaso: 'KAIKKI_OIKEUDET',
-      kayttooikeudet: [
-        'VIEW',
-        'MODIFY_VIEW_PERMISSIONS',
-        'EDIT',
-        'MODIFY_EDIT_PERMISSIONS',
-        'DELETE',
-        'MODIFY_DELETE_PERMISSIONS',
-        'EDIT_APPLICATIONS',
-        'MODIFY_APPLICATION_PERMISSIONS',
-        'RESEND_INVITATION',
-        'MODIFY_USER',
-        'DELETE_USER',
-      ],
-    };
 
-    return res(ctx.status(200), ctx.json<SignedInUser>(user));
+    return res(
+      ctx.status(200),
+      ctx.json<SignedInUser>({
+        hankeKayttajaId: currentUser?.id ?? '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        kayttooikeustaso: 'KAIKKI_OIKEUDET',
+        kayttooikeudet: [
+          'VIEW',
+          'MODIFY_VIEW_PERMISSIONS',
+          'EDIT',
+          'MODIFY_EDIT_PERMISSIONS',
+          'DELETE',
+          'MODIFY_DELETE_PERMISSIONS',
+          'EDIT_APPLICATIONS',
+          'MODIFY_APPLICATION_PERMISSIONS',
+          'RESEND_INVITATION',
+          'MODIFY_USER',
+          'DELETE_USER',
+        ],
+      }),
+    );
   }),
 
   rest.get(`${apiUrl}/kayttajat/:id`, async (req, res, ctx) => {
@@ -409,15 +404,15 @@ export const handlers = [
     }
   }),
 
-  rest.get(`${apiUrl}/hakemukset/:id/liitteet`, async (req, res, ctx) => {
+  rest.get(`${apiUrl}/hakemukset/:id/liitteet`, async (_, res, ctx) => {
     return res(ctx.status(200), ctx.json([]));
   }),
 
-  rest.post(`${apiUrl}/hakemukset/:id/liitteet`, async (req, res, ctx) => {
+  rest.post(`${apiUrl}/hakemukset/:id/liitteet`, async (_, res, ctx) => {
     return res(ctx.delay(), ctx.status(200));
   }),
 
-  rest.delete(`${apiUrl}/hakemukset/:id/liitteet/:attachmentId`, async (req, res, ctx) => {
+  rest.delete(`${apiUrl}/hakemukset/:id/liitteet/:attachmentId`, async (_, res, ctx) => {
     return res(ctx.status(200));
   }),
 
@@ -429,14 +424,6 @@ export const handlers = [
     return res(
       ctx.status(200),
       ctx.json({ firstName: 'Testi Tauno Tahvo', lastName: 'Testinen', givenName: 'Testi' }),
-    );
-  }),
-
-  rest.get(`${apiUrl}/my-permissions`, async (_, res, ctx) => {
-    console.log(`GET ${apiUrl}/my-permissions`);
-    return res(
-      ctx.status(200),
-      ctx.json<SignedInUserByHanke>(userDataByHanke(['HAI22-2'], AccessRightLevel.HAKEMUSASIOINTI)),
     );
   }),
 ];
