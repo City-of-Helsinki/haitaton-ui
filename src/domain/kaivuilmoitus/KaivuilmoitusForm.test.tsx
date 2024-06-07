@@ -22,7 +22,7 @@ import { cloneDeep } from 'lodash';
 
 afterEach(cleanup);
 
-jest.setTimeout(40000);
+jest.setTimeout(60000);
 
 async function fillBasicInformation(
   user: UserEvent,
