@@ -6,6 +6,8 @@ import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import { server } from '../../mocks/test-server';
 import { SignedInUser } from '../../hanke/hankeUsers/hankeUser';
 import * as applicationApi from '../utils';
+import hakemukset from '../../mocks/data/hakemukset-data';
+import { cloneDeep } from 'lodash';
 
 test('Correct information about application should be displayed', async () => {
   render(<ApplicationViewContainer id={4} />);
@@ -28,7 +30,7 @@ test('Link back to related hanke should work', async () => {
 
 test('Should show error notification if application is not found', async () => {
   server.use(
-    rest.get('/api/hakemukset/:id', async (req, res, ctx) => {
+    rest.get('/api/hakemukset/:id', async (_, res, ctx) => {
       return res(ctx.status(404), ctx.json({ errorMessage: 'Failed for testing purposes' }));
     }),
   );
@@ -42,7 +44,7 @@ test('Should show error notification if application is not found', async () => {
 
 test('Should show error notification if loading application fails', async () => {
   server.use(
-    rest.get('/api/hakemukset/:id', async (req, res, ctx) => {
+    rest.get('/api/hakemukset/:id', async (_, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
     }),
   );
@@ -95,6 +97,17 @@ test('Should not be able to cancel application if it has moved to handling in Al
 });
 
 test('Should be able to send application if it is not already sent', async () => {
+  const hakemus = cloneDeep(hakemukset[0]);
+  server.use(
+    rest.get(`/api/hakemukset/:id`, async (_, res, ctx) => {
+      return res(ctx.status(200), ctx.json(hakemus));
+    }),
+    rest.post(`/api/hakemukset/:id/laheta`, async (_, res, ctx) => {
+      hakemus.alluStatus = 'PENDING';
+      return res(ctx.status(200), ctx.json(hakemus));
+    }),
+  );
+
   const { user } = render(<ApplicationViewContainer id={1} />);
 
   await waitFor(() => screen.findByRole('button', { name: 'Lähetä hakemus' }), { timeout: 4000 });
@@ -117,9 +130,7 @@ test('Should not be able to send application if it has moved to handling in Allu
 
 test('Should disable Send button if user is not a contact person on application', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
-      const { hankeTunnus } = req.params;
-      console.log(`GET /api/hankkeet/${hankeTunnus}/whoami`);
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
       return res(
         ctx.status(200),
         ctx.json<SignedInUser>({
@@ -163,7 +174,7 @@ test('Should not show Edit, Cancel or Send buttons if user does not have correct
 
 test('Should not send multiple requests if clicking application cancel confirm button many times', async () => {
   server.use(
-    rest.delete('/api/hakemukset/:id', async (req, res, ctx) => {
+    rest.delete('/api/hakemukset/:id', async (_, res, ctx) => {
       return res(ctx.delay(200), ctx.status(200));
     }),
   );

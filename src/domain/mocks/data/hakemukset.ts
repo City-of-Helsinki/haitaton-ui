@@ -11,6 +11,7 @@ import {
 import hakemuksetData from './hakemukset-data';
 import { isApplicationPending } from '../../application/utils';
 import ApiError from '../apiError';
+import { cloneDeep } from 'lodash';
 
 let hakemukset: Application[] = [...hakemuksetData];
 
@@ -120,6 +121,7 @@ export async function sendHakemus(id: number) {
   if (!hakemus) {
     throw new ApiError(`No application with id ${id}`, 404);
   }
-  hakemus.alluStatus = 'PENDING';
-  return hakemus;
+  const updatedHakemus = cloneDeep(hakemus);
+  updatedHakemus.alluStatus = 'PENDING';
+  return updatedHakemus;
 }

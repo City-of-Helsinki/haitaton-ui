@@ -5,7 +5,7 @@ import {
   KaivuilmoitusData,
 } from '../../application/types/application';
 
-const hakemukset: Application<JohtoselvitysData | KaivuilmoitusData>[] = [
+const hakemukset: Application[] = [
   {
     id: 1,
     alluStatus: null,
