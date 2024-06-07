@@ -48,6 +48,22 @@ test('Should show correct page title', async () => {
   ).toBeInTheDocument();
 });
 
+test('Should show user role if the user has one in the project', async () => {
+  render(<EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afa6" hankeTunnus="HAI22-2" />);
+  await waitForLoadingToFinish();
+
+  expect(screen.getByText('Rooli hankkeessa:')).toBeInTheDocument();
+  expect(screen.getByText('Rakennuttaja, Muu')).toBeInTheDocument();
+});
+
+test('Should not show user role if the user has no role in the project', async () => {
+  render(<EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66af5" hankeTunnus="HAI22-2" />);
+  await waitForLoadingToFinish();
+
+  expect(screen.queryByText('Rooli hankkeessa:')).not.toBeInTheDocument();
+  expect(screen.queryByText('Rakennuttaja, Muu')).not.toBeInTheDocument();
+});
+
 test('For identified user should show status text of user identified and should not be able to edit name', async () => {
   render(<EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afa6" hankeTunnus="HAI22-2" />);
   await waitForLoadingToFinish();
