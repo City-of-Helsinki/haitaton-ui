@@ -3,7 +3,7 @@ import { IconAngleDown, IconAngleUp, useAccordion } from 'hds-react';
 
 type Props = {
   heading: React.ReactNode;
-  headingLevel?: number;
+  headingType?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
   headingBorderBottom?: boolean;
   headingBackgroundColor?: string;
   headingElement?: React.ReactNode;
@@ -15,7 +15,7 @@ type Props = {
 
 export default function CustomAccordion({
   heading,
-  headingLevel = 2,
+  headingType = 'h2',
   headingBorderBottom = true,
   headingBackgroundColor,
   headingElement,
@@ -34,8 +34,6 @@ export default function CustomAccordion({
   return (
     <div className={className}>
       <Box
-        role="heading"
-        aria-level={headingLevel}
         padding="var(--spacing-s)"
         backgroundColor={headingBackgroundColor}
         borderBottom={headingBorderBottom ? '1px solid var(--color-black-30)' : undefined}
@@ -53,7 +51,11 @@ export default function CustomAccordion({
             alignItems="center"
             flexWrap={{ base: 'wrap', sm: 'nowrap' }}
           >
-            <Box className={headingSize === 'm' ? 'heading-s' : 'heading-xs'} textAlign="start">
+            <Box
+              as={headingType}
+              className={headingSize === 'm' ? 'heading-s' : 'heading-xs'}
+              textAlign="start"
+            >
               {heading}
             </Box>
             {headingElement}

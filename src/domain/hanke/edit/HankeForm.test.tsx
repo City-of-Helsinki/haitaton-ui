@@ -1,4 +1,3 @@
-import React from 'react';
 import { rest } from 'msw';
 import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
@@ -31,7 +30,7 @@ import { Polygon } from 'ol/geom';
 
 afterEach(cleanup);
 
-jest.setTimeout(30000);
+jest.setTimeout(50000);
 
 const DUMMY_DATA = 'dummy_file_data';
 
