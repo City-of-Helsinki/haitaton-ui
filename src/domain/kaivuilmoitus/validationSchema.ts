@@ -1,5 +1,5 @@
 import yup from '../../common/utils/yup';
-import { AlluStatus, TormaystarkasteluTulos } from '../application/types/application';
+import { AlluStatus } from '../application/types/application';
 import {
   applicationTypeSchema,
   customerWithContactsSchema,
@@ -15,11 +15,12 @@ import {
   HANKE_TARINAHAITTA_KEY,
   HANKE_TYOMAATYYPPI_KEY,
 } from './../types/hanke';
+import { HaittaIndexData } from '../common/haittaIndexes/types';
 
 const tyoalueSchema = yup.object({
   geometry: geometrySchema.required(),
   area: yup.number().required(),
-  tormaystarkasteluTulos: yup.mixed<TormaystarkasteluTulos>().nullable(),
+  tormaystarkasteluTulos: yup.mixed<HaittaIndexData>().nullable(),
 });
 
 const kaivuilmoitusAlueSchema = yup.object({

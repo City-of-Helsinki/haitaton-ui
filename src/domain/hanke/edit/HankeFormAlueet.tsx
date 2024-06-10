@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Tab, TabList, TabPanel, Tabs } from 'hds-react';
@@ -14,13 +14,13 @@ import { formatFeaturesToHankeGeoJSON, formatSurfaceArea } from '../../map/utils
 import Haitat from './components/Haitat';
 import Text from '../../../common/components/text/Text';
 import useSelectableTabs from '../../../common/hooks/useSelectableTabs';
-import useHighlightArea from '../../map/hooks/useHighlightArea';
 import useAddressCoordinate from '../../map/hooks/useAddressCoordinate';
 import useFieldArrayWithStateUpdate from '../../../common/hooks/useFieldArrayWithStateUpdate';
 import { HankeAlue } from '../../types/hanke';
 import { getAreaDefaultName } from './utils';
 import useHaittaIndexes from '../hooks/useHaittaIndexes';
 import HaittaIndexes from '../../common/haittaIndexes/HaittaIndexes';
+import useDrawContext from '../../../common/components/map/modules/draw/useDrawContext';
 
 function getEmptyArea(feature: Feature): Omit<HankeAlueFormState, 'geometriat'> {
   return {
@@ -36,7 +36,10 @@ function getEmptyArea(feature: Feature): Omit<HankeAlueFormState, 'geometriat'> 
   };
 }
 
-const HankeFormAlueet: React.FC<FormProps> = ({ hanke }) => {
+const HankeFormAlueet: React.FC<FormProps & { drawSource: VectorSource }> = ({
+  hanke,
+  drawSource,
+}) => {
   const { t } = useTranslation();
   const { setValue, trigger, watch, getValues } = useFormContext<HankeDataFormState>();
   const {
@@ -47,7 +50,6 @@ const HankeFormAlueet: React.FC<FormProps> = ({ hanke }) => {
     name: FORMFIELD.HANKEALUEET,
   });
   const watchHankeAlueet = watch('alueet');
-  const [drawSource] = useState<VectorSource>(new VectorSource());
   const addressCoordinate = useAddressCoordinate(hanke.tyomaaKatuosoite);
   useFormPage();
   const haittaIndexesMutation = useHaittaIndexes();
@@ -56,7 +58,9 @@ const HankeFormAlueet: React.FC<FormProps> = ({ hanke }) => {
     selectLastTabOnChange: true,
   });
 
-  const higlightArea = useHighlightArea();
+  const {
+    actions: { setSelectedFeature },
+  } = useDrawContext();
 
   useEffect(() => {
     // If there are hanke areas with no name on unmount, set default names for them
@@ -100,7 +104,7 @@ const HankeFormAlueet: React.FC<FormProps> = ({ hanke }) => {
               hankeAlue.feature?.setProperties({
                 liikennehaittaindeksi: data.liikennehaittaindeksi.indeksi,
               });
-              if (hankeAlueIndex) {
+              if (hankeAlueIndex !== undefined) {
                 setValue(`alueet.${hankeAlueIndex}.tormaystarkasteluTulos`, data);
               }
             },
@@ -199,7 +203,7 @@ const HankeFormAlueet: React.FC<FormProps> = ({ hanke }) => {
               const surfaceArea = hankeGeometry && `(${formatSurfaceArea(hankeGeometry)})`;
               const name = watch(`${FORMFIELD.HANKEALUEET}.${index}.nimi`);
               return (
-                <Tab key={alue.id} onClick={() => higlightArea(alue.feature)}>
+                <Tab key={alue.id} onClick={() => setSelectedFeature(alue.feature!)}>
                   <div ref={tabRefs[index]}>
                     {name} {surfaceArea}
                   </div>

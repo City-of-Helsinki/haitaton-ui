@@ -5,6 +5,7 @@ import { useMutation } from 'react-query';
 import { Button, IconCross, IconPlusCircle, IconSaveDiskette, StepState } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import VectorSource from 'ol/source/Vector';
 import { FORMFIELD, FormNotification, HankeDataFormState } from './types';
 import { hankeSchema } from './hankeSchema';
 import HankeFormAlueet from './HankeFormAlueet';
@@ -33,6 +34,7 @@ import {
 import { useValidationErrors } from '../../forms/hooks/useValidationErrors';
 import HankeDraftStateNotification from './components/HankeDraftStateNotification';
 import HankeFormMissingFieldsNotification from './components/MissingFieldsNotification';
+import DrawProvider from '../../../common/components/map/modules/draw/DrawProvider';
 
 type Props = {
   formData: HankeDataFormState;
@@ -125,6 +127,8 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     ? attachmentsUploadingText
     : t('common:buttons:savingText');
 
+  const [drawSource] = useState<VectorSource>(new VectorSource());
+
   function save() {
     hankeMutation.mutate(getValues());
   }
@@ -182,7 +186,16 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       validationSchema: hankePerustiedotPublicSchema,
     },
     {
-      element: <HankeFormAlueet errors={errors} register={register} hanke={formValues} />,
+      element: (
+        <DrawProvider source={drawSource}>
+          <HankeFormAlueet
+            errors={errors}
+            register={register}
+            hanke={formValues}
+            drawSource={drawSource}
+          />
+        </DrawProvider>
+      ),
       label: t('hankeForm:hankkeenAlueForm:header'),
       state: StepState.available,
       validationSchema: hankeAlueetPublicSchema,

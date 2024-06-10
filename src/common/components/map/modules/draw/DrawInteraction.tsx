@@ -190,6 +190,17 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
       selection.current?.getFeatures().push(state.selectedFeature);
       state.selectedFeature.setStyle(styleFunction(state.selectedFeature, undefined, true));
     }
+
+    // Update selected feature style when propery of selected feature changes
+    // (for example when nuisance index changes)
+    function handlePropertyChange() {
+      state.selectedFeature?.setStyle(styleFunction(state.selectedFeature, undefined, true));
+    }
+    state.selectedFeature?.on('propertychange', handlePropertyChange);
+
+    return function cleanUp() {
+      state.selectedFeature?.un('propertychange', handlePropertyChange);
+    };
   }, [state.selectedFeature, clearSelection]);
 
   // Unmount
