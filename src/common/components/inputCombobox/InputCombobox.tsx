@@ -14,6 +14,7 @@ type Props = {
   className?: string;
   pattern?: RegExp;
   errorText?: string;
+  uppercase?: boolean;
 };
 
 /**
@@ -30,6 +31,7 @@ export default function InputCombobox({
   className,
   pattern,
   errorText,
+  uppercase,
 }: Readonly<Props>) {
   const { t } = useTranslation();
   const { setValue, getValues } = useFormContext();
@@ -49,14 +51,17 @@ export default function InputCombobox({
     // when user types to the text input and hits Enter
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
-        const inputValue = (event.target as HTMLInputElement | null)?.value;
+        let inputValue = (event.target as HTMLInputElement | null)?.value;
+        if (uppercase) {
+          inputValue = inputValue?.toUpperCase();
+        }
         if (inputValue) {
           const inputValid = pattern?.test(inputValue) ?? true;
           if (inputValid) {
             setComboboxOptions((prevOptions) =>
-              uniqBy(prevOptions.concat({ label: inputValue }), 'label'),
+              uniqBy(prevOptions.concat({ label: inputValue! }), 'label'),
             );
-            setValue(name, getValues(name)?.concat(inputValue));
+            setValue(name, getValues(name)?.concat(inputValue), { shouldDirty: true });
           }
           setValid(inputValid);
         }
@@ -68,7 +73,7 @@ export default function InputCombobox({
     return function cleanup() {
       inputElement?.removeEventListener('keydown', handleKeyDown);
     };
-  }, [inputElement, rendered, getValues, setValue, name, pattern]);
+  }, [inputElement, rendered, getValues, setValue, name, pattern, uppercase]);
 
   return (
     <Controller
