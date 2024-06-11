@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
 type Options = {
   selectLastTabOnChange: boolean;
@@ -36,7 +36,7 @@ export default function useSelectableTabs(
 
   // When number of tabs changes,
   // select the last one
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (options.selectLastTabOnChange) {
       setSelectedTabIndex(numberOfTabs - 1);
     }

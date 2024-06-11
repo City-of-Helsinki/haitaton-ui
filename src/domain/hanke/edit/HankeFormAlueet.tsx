@@ -54,13 +54,22 @@ const HankeFormAlueet: React.FC<FormProps & { drawSource: VectorSource }> = ({
   useFormPage();
   const haittaIndexesMutation = useHaittaIndexes();
 
-  const { tabRefs } = useSelectableTabs(hankeAlueet, {
+  const { tabRefs, setSelectedTabIndex } = useSelectableTabs(hankeAlueet, {
     selectLastTabOnChange: true,
   });
 
   const {
+    state: { selectedFeature },
     actions: { setSelectedFeature },
   } = useDrawContext();
+
+  // When selected feature changes, update selected tab index
+  useEffect(() => {
+    const index = hankeAlueet.findIndex((alue) => isEqual(alue.feature, selectedFeature));
+    if (index !== -1) {
+      setSelectedTabIndex(index);
+    }
+  }, [selectedFeature, hankeAlueet, setSelectedTabIndex]);
 
   useEffect(() => {
     // If there are hanke areas with no name on unmount, set default names for them
