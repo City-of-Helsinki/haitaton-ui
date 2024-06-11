@@ -17,6 +17,7 @@ test('Correct information about application should be displayed', async () => {
   expect(screen.getAllByText('Mannerheimintien kairaukset').length).toBe(2);
   expect(screen.queryByText('JS2300003')).toBeInTheDocument();
   expect(screen.queryByText('Odottaa käsittelyä')).toBeInTheDocument();
+  expect(screen.queryByText('Kaikki oikeudet')).toBeInTheDocument();
 });
 
 test('Link back to related hanke should work', async () => {
