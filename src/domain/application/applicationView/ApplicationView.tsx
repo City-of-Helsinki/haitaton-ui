@@ -58,18 +58,19 @@ import { CheckRightsByHanke } from '../../hanke/hankeUsers/UserRightsCheck';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import KaivuilmoitusAttachmentSummary from '../components/summary/KaivuilmoitusAttachmentSummary';
 import InvoicingCustomerSummary from '../components/summary/InvoicingCustomerSummary';
-import { usePermissionsForHanke } from '../../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import React from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import useApplicationSendNotification from '../hooks/useApplicationSendNotification';
+import { SignedInUser } from '../../hanke/hankeUsers/hankeUser';
 
 type Props = {
   application: Application;
   hanke: HankeData | undefined;
+  signedInUser: SignedInUser | undefined;
   onEditApplication: () => void;
 };
 
-function ApplicationView({ application, hanke, onEditApplication }: Readonly<Props>) {
+function ApplicationView({ application, hanke, signedInUser, onEditApplication }: Readonly<Props>) {
   const { t } = useTranslation();
 
   const locale = useLocale();
@@ -105,7 +106,6 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
 
   const isSent = isApplicationSent(alluStatus);
 
-  const { data: signedInUser } = usePermissionsForHanke(hanke?.hankeTunnus);
   const isContact = isContactIn(signedInUser, applicationData);
   const showSendButton = !isSent;
   const disableSendButton = showSendButton && !isContact;
