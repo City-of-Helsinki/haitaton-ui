@@ -6,7 +6,9 @@ import { useGlobalNotification } from '../../../common/components/globalNotifica
 /**
  * Returns functions for showing success and error notifications for sending application
  */
-export default function useApplicationSendNotification() {
+export default function useApplicationSendNotification(
+  errorMessageKey: string = 'hakemus:notifications:sendErrorText',
+) {
   const { t } = useTranslation();
   const { setNotification } = useGlobalNotification();
 
@@ -25,7 +27,7 @@ export default function useApplicationSendNotification() {
 
   function showSendError() {
     const sendErrorMessage = (
-      <Trans i18nKey="hakemus:notifications:sendErrorText">
+      <Trans i18nKey={errorMessageKey}>
         <p>
           Hakemus on tallennettu luonnoksena, koska hakemuksen lähettäminen käsittelyyn epäonnistui.
           Yritä lähettämistä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen
@@ -40,7 +42,7 @@ export default function useApplicationSendNotification() {
       dismissible: true,
       label: t('hakemus:notifications:sendErrorLabel'),
       message: sendErrorMessage,
-      type: 'alert',
+      type: 'error',
       closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
     });
   }

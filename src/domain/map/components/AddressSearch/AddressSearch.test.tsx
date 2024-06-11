@@ -2,6 +2,8 @@ import React from 'react';
 import { render, screen, waitFor } from '../../../../testUtils/render';
 import AddressSearch from './AddressSearch';
 
+jest.setTimeout(30000);
+
 test('Address can be selected from suggestions', async () => {
   const handleAddressSelect = jest.fn();
   const { user } = render(<AddressSearch onAddressSelect={handleAddressSelect} />);

@@ -5,32 +5,17 @@ import {
   AlluStatusStrings,
   Application,
   ApplicationDeletionResult,
+  JohtoselvitysData,
+  KaivuilmoitusData,
   NewJohtoselvitysData,
 } from './types/application';
+import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 
 /**
  * Create new johtoselvitys without hanke being created first
  */
 export async function createJohtoselvitys(data: NewJohtoselvitysData) {
   const response = await api.post<Application>('johtoselvityshakemus', data);
-  return response.data;
-}
-
-/**
- * Save application to Haitaton backend
- */
-export async function saveApplication(data: Application) {
-  // If there is no hankeTunnus when creating new cable report application
-  // call /hakemukset/luo-hanke endpoint, so that hanke is generated in the backend
-  const postUrl: string =
-    data.hankeTunnus === null && data.applicationType === 'CABLE_REPORT'
-      ? '/hakemukset/johtoselvitys'
-      : '/hakemukset';
-
-  const response = data.id
-    ? await api.put<Application>(`/hakemukset/${data.id}`, data)
-    : await api.post<Application>(postUrl, data);
-
   return response.data;
 }
 
@@ -60,14 +45,6 @@ export async function updateApplication<ApplicationData, UpdateData>({
  * Send application to Allu
  */
 export async function sendApplication(applicationId: number) {
-  const response = await api.post<Application>(`/hakemukset/${applicationId}/send-application`, {});
-  return response.data;
-}
-
-/**
- * Send application to Allu
- */
-export async function sendApplicationNew(applicationId: number) {
   const response = await api.post<Application>(`/hakemukset/${applicationId}/laheta`, {});
   return response.data;
 }
@@ -113,4 +90,25 @@ export function getAreaDefaultName(t: TFunction, index: number | undefined, area
   const label = t('hakemus:labels:workArea');
   if (areasLength > 1 && index !== undefined) return `${label} ${index + 1}`;
   return label;
+}
+
+/**
+ * Check if the user is a contact person in an application.
+ */
+export function isContactIn(
+  signedInUser?: SignedInUser,
+  applicationData?: JohtoselvitysData | KaivuilmoitusData,
+) {
+  if (signedInUser && applicationData) {
+    const found = [
+      applicationData.customerWithContacts,
+      applicationData.contractorWithContacts,
+      applicationData.propertyDeveloperWithContacts,
+      applicationData.representativeWithContacts,
+    ]
+      .flatMap((customer) => customer?.contacts)
+      .find((contact) => contact?.hankekayttajaId === signedInUser.hankeKayttajaId);
+    return found !== undefined;
+  }
+  return false;
 }
