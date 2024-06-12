@@ -9,18 +9,11 @@ import {
   HANKE_TARINAHAITTA_KEY,
   HANKE_VAIHE_KEY,
 } from '../../types/hanke';
-import { CONTACT_FORMFIELD, FORMFIELD } from './types';
+import { CONTACT_FORMFIELD, FORMFIELD, HANKE_PAGES } from './types';
 
 enum ERROR_KEYS {
   REQUIRED = 'required',
   MIN = 'min',
-}
-
-enum HANKE_PAGES {
-  PERUSTIEDOT = 'perustiedot',
-  ALUEET = 'alueet',
-  HAITTOJEN_HALLINTA = 'haittojenHallinta',
-  YHTEYSTIEDOT = 'yhteystiedot',
 }
 
 export type Message = {
@@ -69,11 +62,7 @@ const yhteystietoSchema = yup.object({
     .when('tyyppi', {
       is: (value: string) => value === CONTACT_TYYPPI.YRITYS || value === CONTACT_TYYPPI.YHTEISO,
       then: (schema) =>
-        schema.test(
-          'is-business-id',
-          getMessage(CONTACT_FORMFIELD.TUNNUS, HANKE_PAGES.YHTEYSTIEDOT),
-          isValidBusinessId,
-        ),
+        schema.test('is-business-id', getMessage(HANKE_PAGES.YHTEYSTIEDOT), isValidBusinessId),
       otherwise: (schema) => schema,
     }),
 });
