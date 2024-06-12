@@ -1,6 +1,3 @@
-/// <reference types="cypress" />
-
-import React from 'react';
 import { cleanup } from '@testing-library/react';
 import HankePortfolioComponent from './HankePortfolioComponent';
 import { render, screen, waitFor, within } from '../../../testUtils/render';

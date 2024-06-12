@@ -34,10 +34,6 @@ steps:
       CI=true yarn test
     displayName: 'Yarn run tests'
 
-  #  - script: |
-  #      CI=true yarn test-cypress-headless
-  #    displayName: 'Yarn run cypress (e2e) tests'
-
   - task: Docker@2
     displayName: Build and push Haitaton ui image to docker hub
     inputs:
@@ -63,7 +59,3 @@ steps:
         # Write your commands here
 
         sleep 50
-
-#  - script: |
-#      CI=true yarn test-cypress-test-env
-#    displayName: 'Yarn run cypress (e2e) tests against test environment'

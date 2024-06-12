@@ -32,10 +32,6 @@ with `scripts/update-runtime-env.ts`, which contains the actual used variables w
 App is not using create-react-app's default `process.env` way to refer of variables
 but `window._env_` object.
 
-### `yarn e2e`
-
-Runs E2E cypress tests
-
 ### `yarn build`
 
 Builds the app for production to the `build` folder.<br />

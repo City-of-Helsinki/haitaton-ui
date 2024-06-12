@@ -28,6 +28,3 @@ steps:
   - script: |
       CI=true yarn test
     displayName: 'Yarn run tests'
-#  - script: |
-#      CI=true yarn test-cypress-headless
-#    displayName: 'Yarn run cypress (e2e) tests'
