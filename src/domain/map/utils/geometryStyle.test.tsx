@@ -4,6 +4,7 @@ describe('styleFunction', () => {
   it.each([
     [null, STYLES.BLUE],
     [undefined, STYLES.BLUE],
+    [0, STYLES.GREY],
     [0.9, STYLES.GREEN],
     [1, STYLES.GREEN],
     [2, STYLES.GREEN],

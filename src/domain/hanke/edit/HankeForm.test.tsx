@@ -1,4 +1,3 @@
-import React from 'react';
 import { rest } from 'msw';
 import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
@@ -26,10 +25,12 @@ import * as hankeAttachmentsApi from '../hankeAttachments/hankeAttachmentsApi';
 import { HankeUser } from '../hankeUsers/hankeUser';
 import { fillNewContactPersonForm } from '../../forms/components/testUtils';
 import { cloneDeep } from 'lodash';
+import { Feature } from 'ol';
+import { Polygon } from 'ol/geom';
 
 afterEach(cleanup);
 
-jest.setTimeout(30000);
+jest.setTimeout(50000);
 
 const DUMMY_DATA = 'dummy_file_data';
 
@@ -689,6 +690,78 @@ describe('HankeForm', () => {
     await user.click(getByRole('button', { name: 'Poista' }));
 
     expect(screen.queryByText(/hankealue 1/i)).not.toBeInTheDocument();
+  });
+
+  async function setupHaittaIndexUpdateTest(
+    nuisanceResponse = {
+      autoliikenneindeksi: 2.5,
+      pyoraliikenneindeksi: 4,
+      linjaautoliikenneindeksi: 2,
+      raitioliikenneindeksi: 3,
+      liikennehaittaindeksi: {
+        indeksi: 4,
+        tyyppi: 'PYORALIIKENNEINDEKSI',
+      },
+    },
+  ) {
+    server.use(
+      rest.post('/api/haittaindeksit', async (_, res, ctx) => {
+        return res(ctx.status(200), ctx.json(nuisanceResponse));
+      }),
+    );
+
+    const hanke = cloneDeep(hankkeet[2] as HankeDataFormState);
+    const feature = new Feature(
+      new Polygon([
+        [
+          [25496559.78, 6672988.05],
+          [25496681.62, 6672825.27],
+          [25496727.94, 6672856.74],
+          [25496595.92, 6673029.09],
+          [25496549.25, 6673005.46],
+          [25496559.78, 6672988.05],
+        ],
+      ]),
+    );
+    hanke.alueet = hanke.alueet?.map((alue) => ({
+      ...alue,
+      feature,
+    }));
+    const { user } = await setupAlueetPage(hanke);
+    await user.click(
+      screen.getByRole('button', { name: 'Hankealueen liikennehaittaindeksit (0-5)' }),
+    );
+    return { user, feature };
+  }
+
+  test('Should show correct haitta indexes for hanke area and updated indexes when updating nuisances', async () => {
+    const { user } = await setupHaittaIndexUpdateTest();
+
+    expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3.5');
+    expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('1.5');
+    expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('1');
+    expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('2');
+
+    await user.click(screen.getByRole('button', { name: 'Kaistahaittojen pituus' }));
+    await user.click(screen.getByText('10-99 m'));
+
+    expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('4');
+    expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('2.5');
+    expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('2');
+    expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('3');
+  });
+
+  test('Should show updated haitta indexes when modifying hanke area', async () => {
+    const { feature } = await setupHaittaIndexUpdateTest();
+
+    feature.changed();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('4');
+      expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('2.5');
+      expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('2');
+      expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('3');
+    });
   });
 });
 

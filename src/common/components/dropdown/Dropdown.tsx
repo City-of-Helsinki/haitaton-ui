@@ -22,6 +22,7 @@ type PropTypes = {
   isOptionDisabled?: (option: any) => boolean;
   required?: boolean;
   style?: React.CSSProperties;
+  onValueChange?: (value: string) => void;
 };
 
 const Dropdown: React.FC<React.PropsWithChildren<PropTypes>> = ({
@@ -37,6 +38,7 @@ const Dropdown: React.FC<React.PropsWithChildren<PropTypes>> = ({
   isOptionDisabled,
   required,
   style,
+  onValueChange,
 }) => {
   const { t } = useTranslation();
   const { control } = useFormContext();
@@ -68,7 +70,10 @@ const Dropdown: React.FC<React.PropsWithChildren<PropTypes>> = ({
               value={options.find((o) => o.value === value) || null}
               onBlur={onBlur}
               onChange={(option: Option) => {
-                if (option) onChange(option.value);
+                if (option) {
+                  onChange(option.value);
+                  onValueChange && onValueChange(option.value);
+                }
                 onBlur();
               }}
               required={required}

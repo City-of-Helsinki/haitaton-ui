@@ -1,3 +1,4 @@
+import { HAITTA_INDEX_TYPE } from '../../common/haittaIndexes/types';
 import {
   HankeDataDraft,
   HANKE_POLYHAITTA,
@@ -5,7 +6,6 @@ import {
   HANKE_KAISTAPITUUSHAITTA,
   HANKE_MELUHAITTA,
   HANKE_TARINAHAITTA,
-  HANKE_INDEX_TYPE,
 } from '../../types/hanke';
 
 const hankkeet: HankeDataDraft[] = [
@@ -138,6 +138,17 @@ const hankkeet: HankeDataDraft[] = [
         polyHaitta: HANKE_POLYHAITTA.JATKUVA_POLYHAITTA,
         tarinaHaitta: HANKE_TARINAHAITTA.SATUNNAINEN_TARINAHAITTA,
         nimi: 'Hankealue 1',
+        tormaystarkasteluTulos: {
+          autoliikenneindeksi: 3.5,
+          pyoraliikenneindeksi: 3,
+          linjaautoliikenneindeksi: 4,
+          raitioliikenneindeksi: 2,
+          liikennehaittaindeksi: {
+            indeksi: 4,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            tyyppi: 'LINJAAUTOLIIKENNEINDEKSI' as any,
+          },
+        },
         geometriat: {
           id: 37,
           version: 0,
@@ -193,6 +204,17 @@ const hankkeet: HankeDataDraft[] = [
         kaistaHaitta: HANKE_KAISTAHAITTA.VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA,
         kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA.PITUUS_10_99_METRIA,
         nimi: 'Hankealue 2',
+        tormaystarkasteluTulos: {
+          autoliikenneindeksi: 2.5,
+          pyoraliikenneindeksi: 2,
+          linjaautoliikenneindeksi: 3,
+          raitioliikenneindeksi: 2,
+          liikennehaittaindeksi: {
+            indeksi: 3,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            tyyppi: 'LINJAAUTOLIIKENNEINDEKSI' as any,
+          },
+        },
         geometriat: {
           featureCollection: {
             type: 'FeatureCollection',
@@ -328,7 +350,7 @@ const hankkeet: HankeDataDraft[] = [
           raitioliikenneindeksi: 2,
           liikennehaittaindeksi: {
             indeksi: 3.5,
-            tyyppi: HANKE_INDEX_TYPE.PYORALIIKENNEINDEKSI,
+            tyyppi: HAITTA_INDEX_TYPE.PYORALIIKENNEINDEKSI,
           },
         },
         haittojenhallintasuunnitelma: {

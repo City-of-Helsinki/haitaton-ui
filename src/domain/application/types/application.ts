@@ -11,11 +11,11 @@ import {
   HANKE_POLYHAITTA_KEY,
   HANKE_TARINAHAITTA_KEY,
   HANKE_TYOMAATYYPPI_KEY,
-  Liikennehaittaindeksi,
 } from '../../types/hanke';
 import { Feature } from 'ol';
 import { Geometry, Polygon as OlPolygon } from 'ol/geom';
 import { getSurfaceArea } from '../../../common/components/map/utils';
+import { HaittaIndexData } from '../../common/haittaIndexes/types';
 
 export type ApplicationType = 'CABLE_REPORT' | 'EXCAVATION_NOTIFICATION';
 
@@ -128,18 +128,10 @@ export type ApplicationArea = {
   geometry: ApplicationGeometry;
 };
 
-export type TormaystarkasteluTulos = {
-  autoliikenneindeksi: number;
-  pyoraliikenneindeksi: number;
-  linjaautoliikenneindeks: number;
-  raitioliikenneindeksi: number;
-  liikennehaittaindeksi: Liikennehaittaindeksi;
-};
-
 export class Tyoalue {
   geometry: ApplicationGeometry;
   area: number;
-  tormaystarkasteluTulos?: TormaystarkasteluTulos | null;
+  tormaystarkasteluTulos?: HaittaIndexData | null;
   openlayersFeature?: Feature<Geometry>;
 
   constructor(feature: Feature<Geometry>) {

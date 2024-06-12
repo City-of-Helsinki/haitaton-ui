@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { Flex } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
 import Text from '../../../common/components/text/Text';
-import { HankeAlue, HankeData, HankeIndexData } from '../../types/hanke';
+import { HankeAlue, HankeData } from '../../types/hanke';
 import styles from './HankeView.module.scss';
 import BasicInformationSummary from '../edit/components/BasicInformationSummary';
 import {
@@ -27,7 +27,6 @@ import {
 } from '../../forms/components/FormSummarySection';
 import { calculateTotalSurfaceArea, canHankeBeCancelled } from '../edit/utils';
 import ContactsSummary from '../edit/components/ContactsSummary';
-import HankeIndexes from '../hankeIndexes/HankeIndexes';
 import { FORMFIELD } from '../edit/types';
 import useLocale from '../../../common/hooks/useLocale';
 import { formatToFinnishDate } from '../../../common/utils/date';
@@ -57,14 +56,14 @@ import useHankeAttachments from '../hankeAttachments/useHankeAttachments';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import HankeGeneratedStateNotification from '../edit/components/HankeGeneratedStateNotification';
 import MapPlaceholder from '../../map/components/MapPlaceholder/MapPlaceholder';
+import HaittaIndexes from '../../common/haittaIndexes/HaittaIndexes';
 
 type AreaProps = {
   area: HankeAlue;
-  hankeIndexData: HankeIndexData | null | undefined;
   index: number;
 };
 
-const HankeAreaInfo: React.FC<AreaProps> = ({ area, hankeIndexData, index }) => {
+const HankeAreaInfo: React.FC<AreaProps> = ({ area, index }) => {
   const { t } = useTranslation();
   const locale = useLocale();
 
@@ -88,10 +87,11 @@ const HankeAreaInfo: React.FC<AreaProps> = ({ area, hankeIndexData, index }) => 
           <SectionItemContent>{formatSurfaceArea(areaGeometry)}</SectionItemContent>
         </FormSummarySection>
 
-        <HankeIndexes
-          hankeIndexData={hankeIndexData}
-          indexTitle={t('hanke:alue:liikenneverkollinenHaitta')}
-          containerClassName={styles.areaIndexes}
+        <HaittaIndexes
+          heading={`${t('hanke:alue:liikennehaittaIndeksit')} (0-5)`}
+          haittaIndexData={area.tormaystarkasteluTulos}
+          className={styles.areaIndexes}
+          initiallyOpen
         />
 
         <Text tag="h2" styleAs="h4" weight="bold" spacingBottom="xs">
@@ -178,8 +178,7 @@ const HankeView: React.FC<Props> = ({
 
   const areasTotalSurfaceArea = calculateTotalSurfaceArea(hankeData.alueet);
 
-  const { omistajat, rakennuttajat, toteuttajat, muut, tormaystarkasteluTulos, alueet, status } =
-    hankeData;
+  const { omistajat, rakennuttajat, toteuttajat, muut, alueet, status } = hankeData;
   const isHankePublic = status === 'PUBLIC';
 
   const tabList = features.hanke ? (
@@ -299,14 +298,7 @@ const HankeView: React.FC<Props> = ({
             {features.hanke && (
               <TabPanel>
                 {alueet?.map((area, index) => {
-                  return (
-                    <HankeAreaInfo
-                      key={area.id}
-                      area={area}
-                      hankeIndexData={tormaystarkasteluTulos}
-                      index={index}
-                    />
-                  );
+                  return <HankeAreaInfo key={area.id} area={area} index={index} />;
                 })}
               </TabPanel>
             )}
@@ -376,7 +368,7 @@ const HankeView: React.FC<Props> = ({
                   <CompressedAreaIndex
                     key={area.id}
                     area={area}
-                    haittaIndex={tormaystarkasteluTulos?.liikennehaittaindeksi?.indeksi}
+                    haittaIndex={area.tormaystarkasteluTulos?.liikennehaittaindeksi?.indeksi}
                     index={index}
                     className={styles.compressedAreaIndex}
                   />

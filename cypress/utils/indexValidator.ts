@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
-import { HankeIndexData } from '../../src/domain/types/hanke';
+import { HaittaIndexData } from '../../src/domain/common/haittaIndexes/types';
 
-export const validateIndexes = (hankeIndexData: Partial<HankeIndexData>) => {
+export const validateIndexes = (hankeIndexData: Partial<HaittaIndexData>) => {
   if (hankeIndexData.liikennehaittaindeksi && hankeIndexData.liikennehaittaindeksi.indeksi) {
     cy.get('[data-testid=test-liikennehaittaindeksi]').should('not.be.empty');
     cy.get('[data-testid=test-liikennehaittaindeksi]').contains(

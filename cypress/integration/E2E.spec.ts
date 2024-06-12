@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../../src/domain/common/haittaIndexes/types';
 import {
   HANKE_KAISTAHAITTA,
   HANKE_KAISTAPITUUSHAITTA,
@@ -7,8 +8,6 @@ import {
   HANKE_TARINAHAITTA,
   HANKE_VAIHE,
   HankeDataDraft,
-  HankeIndexData,
-  HANKE_INDEX_TYPE,
 } from '../../src/domain/types/hanke';
 import { createHankeFromUI } from '../utils/formFiller';
 import { validateIndexes } from '../utils/indexValidator';
@@ -89,10 +88,10 @@ const hankeMock: HankeDataDraft = {
   ],
 };
 
-const hankeMockIndex: Partial<HankeIndexData> = {
+const hankeMockIndex: Partial<HaittaIndexData> = {
   liikennehaittaindeksi: {
     indeksi: 4.8,
-    tyyppi: HANKE_INDEX_TYPE.AUTOLIIKENNEINDEKSI,
+    tyyppi: HAITTA_INDEX_TYPE.AUTOLIIKENNEINDEKSI,
   },
   pyoraliikenneindeksi: 3,
   raitioliikenneindeksi: 4,
