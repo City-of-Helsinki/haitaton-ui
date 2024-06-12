@@ -769,7 +769,7 @@
       "applicationAdditionalInfo": "Lisätietoja hakemuksesta",
       "applicationInfo": "Hakemuksen tiedot",
       "cableReports": "Tehtyjen johtoselvitysten tunnukset",
-      "cableReportsHelp": "Valitse listasta tai kirjoita muu tunnus",
+      "cableReportsHelp": "Valitse listasta tai kirjoita muu tunnus ja paina Enter lisätäksesi",
       "placementContractsTitle": "Sijoitussopimukset",
       "placementContracts": "Sijoitussopimustunnus",
       "placementContractsHelp": "Anna sijoitussopimustunnus ja paina Lisää",

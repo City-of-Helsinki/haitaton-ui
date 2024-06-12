@@ -2,6 +2,7 @@ import { Box } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { Checkbox as HDSCheckbox, SelectionGroup } from 'hds-react';
+import { uniq } from 'lodash';
 import TextInput from '../../common/components/textInput/TextInput';
 import TextArea from '../../common/components/textArea/TextArea';
 import styles from './Kaivuilmoitus.module.scss';
@@ -21,6 +22,7 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
     trigger,
     watch,
     setValue,
+    getValues,
     formState: { errors },
   } = useFormContext<KaivuilmoitusFormValues>();
 
@@ -46,7 +48,11 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
   }
 
   function handlePlacementContractsChange(updatedContracts: string[]) {
-    setValue('applicationData.placementContracts', updatedContracts);
+    setValue(
+      'applicationData.placementContracts',
+      updatedContracts.map((value) => value.toUpperCase()),
+      { shouldDirty: true },
+    );
   }
 
   return (
@@ -138,12 +144,14 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
         <InputCombobox
           id="applicationData.cableReports"
           name="applicationData.cableReports"
-          options={johtoselvitysIds}
+          options={uniq(johtoselvitysIds.concat(getValues('applicationData.cableReports') ?? []))}
           label={t('hakemus:labels:cableReports')}
           helperText={t('hakemus:labels:cableReportsHelp')}
           className={styles.formRow}
-          pattern={/^JS\d{7}$/}
+          pattern={/^[jJ][sS]\d{7}$/}
           errorText={t('hakemus:errors:cableReport')}
+          placeholder="JSXXXXXXX"
+          uppercase
         />
       )}
 
@@ -156,7 +164,7 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
         label={t('hakemus:labels:placementContracts')}
         tags={placementContracts ?? []}
         tagDeleteButtonAriaLabel={getTagDeleteButtonAriaLabel}
-        pattern="^SL\d{7}$"
+        pattern="^[sS][lL]\d{7}$"
         placeholder="SLXXXXXXX"
         helperText={t('hakemus:labels:placementContractsHelp')}
         errorText={t('hakemus:errors:placementContract')}
