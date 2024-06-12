@@ -78,7 +78,11 @@ const HankeList: React.FC<React.PropsWithChildren<Props>> = ({ projectsData }) =
   return (
     <div className="hankelista">
       <div className="hankelista__inner">
+        <p className="visually-hidden" aria-hidden="true" id="description">
+          {t('hankeList:listDescription')}
+        </p>
         <Table
+          aria-describedby="description"
           cols={[
             {
               headerName: t('hankeList:tableHeader:id'),
