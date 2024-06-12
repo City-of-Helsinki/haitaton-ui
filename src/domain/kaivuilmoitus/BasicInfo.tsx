@@ -148,7 +148,7 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
           label={t('hakemus:labels:cableReports')}
           helperText={t('hakemus:labels:cableReportsHelp')}
           className={styles.formRow}
-          pattern={/^JS\d{7}$/i}
+          pattern={/^[jJ][sS]\d{7}$/}
           errorText={t('hakemus:errors:cableReport')}
           placeholder="JSXXXXXXX"
           uppercase
