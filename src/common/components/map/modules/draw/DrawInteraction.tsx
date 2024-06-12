@@ -45,8 +45,7 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
 
   const removeAllInteractions = useCallback(() => {
     removeDrawInteractions();
-    clearSelection();
-  }, [clearSelection, removeDrawInteractions]);
+  }, [removeDrawInteractions]);
 
   const startDraw = useCallback(
     (type = DRAWTOOLTYPE.POLYGON) => {
@@ -143,9 +142,15 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
 
     selection.current = new Select({
       condition: (mapBrowserEvent) => click(mapBrowserEvent),
+      style: (feature) => styleFunction(feature, undefined, true),
     });
 
     map.addInteraction(selection.current);
+    // When adding new select interaction, push selected feature to select collection
+    // from state if it exists
+    if (state.selectedFeature) {
+      selection.current.getFeatures().push(state.selectedFeature);
+    }
 
     selection.current.on('select', (e) => {
       const features = e.selected;
@@ -188,20 +193,8 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
     selection.current?.getFeatures().clear();
     if (state.selectedFeature) {
       selection.current?.getFeatures().push(state.selectedFeature);
-      state.selectedFeature.setStyle(styleFunction(state.selectedFeature, undefined, true));
     }
-
-    // Update selected feature style when propery of selected feature changes
-    // (for example when nuisance index changes)
-    function handlePropertyChange() {
-      state.selectedFeature?.setStyle(styleFunction(state.selectedFeature, undefined, true));
-    }
-    state.selectedFeature?.on('propertychange', handlePropertyChange);
-
-    return function cleanUp() {
-      state.selectedFeature?.un('propertychange', handlePropertyChange);
-    };
-  }, [state.selectedFeature, clearSelection]);
+  }, [state.selectedFeature]);
 
   // Unmount
   useEffect(() => {
