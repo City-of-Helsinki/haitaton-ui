@@ -42,6 +42,8 @@ const CompressedAreaIndex: React.FC<Props> = ({ area, haittaIndex, index, classN
       <HaittaIndexNumber
         index={haittaIndex}
         testId="hankeIndexes:compressed:liikennehaittaindeksi"
+        tooltipContent={t('common:haittaIndex:haittaIndexSelite')}
+        showTooltip
       />
     </Flex>
   );
