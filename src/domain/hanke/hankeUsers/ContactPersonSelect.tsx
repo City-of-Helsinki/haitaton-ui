@@ -10,6 +10,7 @@ function ContactPersonSelect<T>({
   name,
   hankeUsers,
   tooltip,
+  required,
   mapHankeUserToValue,
   mapValueToLabel,
   transformValue,
@@ -17,6 +18,7 @@ function ContactPersonSelect<T>({
   name: string;
   hankeUsers?: HankeUser[];
   tooltip?: TooltipProps;
+  required?: boolean;
   mapHankeUserToValue: (user: HankeUser) => T;
   mapValueToLabel: (value: T) => string;
   transformValue?: (value: T) => T;
@@ -38,6 +40,7 @@ function ContactPersonSelect<T>({
       mapValueToLabel={mapValueToLabel}
       transformValue={transformValue}
       defaultValue={[]}
+      required={required}
       options={
         hankeUsers?.map((hankeUser) => ({
           value: mapHankeUserToValue(hankeUser),

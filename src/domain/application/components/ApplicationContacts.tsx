@@ -153,6 +153,7 @@ const CustomerFields: React.FC<{
         mapHankeUserToValue={mapHankeUserToContact}
         mapValueToLabel={mapContactToLabel}
         transformValue={(value) => removeOrdererFromContact(value)}
+        required
         tooltip={{
           tooltipButtonLabel: t('hankeForm:toolTips:tipOpenLabel'),
           tooltipLabel: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),

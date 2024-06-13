@@ -21,6 +21,7 @@ type PropTypes<T> = {
   icon?: ReactNode;
   clearable?: boolean;
   placeholder?: string;
+  required?: boolean;
   mapValueToLabel: (value: T) => string;
   transformValue?: (value: T) => T;
 };
@@ -37,6 +38,7 @@ function DropdownMultiselect<T>({
   icon,
   clearable,
   placeholder,
+  required,
   mapValueToLabel,
   transformValue,
 }: Readonly<PropTypes<T>>) {
@@ -74,6 +76,7 @@ function DropdownMultiselect<T>({
             tooltipButtonLabel={tooltip?.tooltipButtonLabel}
             tooltipLabel={tooltip?.tooltipLabel}
             tooltipText={tooltip?.tooltipText}
+            required={required}
           />
         );
       }}

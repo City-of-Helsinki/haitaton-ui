@@ -65,7 +65,11 @@ export const invoicingCustomerSchema = yup.object({
   }),
   email: yup.string().nullable().trim().email().max(100),
   phone: yup.string().nullable().phone().trim().max(20),
-  ovt: yup.string().min(12).nullable(),
+  ovt: yup
+    .string()
+    .nullable()
+    .transform((value: string, originalValue: string) => (originalValue === '' ? null : value))
+    .min(12),
   invoicingOperator: yup.string().nullable(),
   customerReference: yup.string().nullable(),
 });
