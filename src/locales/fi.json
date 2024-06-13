@@ -1044,7 +1044,8 @@
     },
     "breadcrumb": {
       "ariaLabel": "Hankkeen navigaatio"
-    }
+    },
+    "listDescription": "Voit käyttää taulukon otsikkopainikkeita taulukon järjestämiseen"
   },
   "hankeUsers": {
     "role": "Rooli hankkeessa",
