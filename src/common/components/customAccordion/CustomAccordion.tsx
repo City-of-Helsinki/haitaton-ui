@@ -1,5 +1,6 @@
 import { Box, Flex, Grid } from '@chakra-ui/react';
 import { IconAngleDown, IconAngleUp, useAccordion } from 'hds-react';
+import React from 'react';
 
 type Props = {
   heading: React.ReactNode;

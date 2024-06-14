@@ -96,7 +96,7 @@ const HankeIndexes: React.FC<React.PropsWithChildren<Props>> = ({
   const pyoraliikenneindeksi = hankeIndexData?.pyoraliikenneindeksi;
   const raitioliikenneindeksi = hankeIndexData?.raitioliikenneindeksi;
   const linjaautoliikenneindeksi = hankeIndexData?.linjaautoliikenneindeksi;
-  const autoliikenneindeksi = hankeIndexData?.autoliikenneindeksi;
+  const autoliikenneindeksi = hankeIndexData?.autoliikenne?.indeksi;
 
   return (
     <div className={containerClassName}>

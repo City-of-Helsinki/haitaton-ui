@@ -177,21 +177,40 @@ export function getAreaDefaultName(areas?: HankeAlueFormState[]) {
 /**
  * Sorts HAITTOJENHALLINTATYYPPI based on given tormaystarkasteluTulos.
  * For example, if tormaystarkasteluTulos has {autoliikenneindeksi: 1.0, pyoraliiikenneindeksi: 1.3, linjaautoliikenneindeksi: 0.0, raitioliikenneindeksi: 0.0},
- * the result will be [PYORALIIKENNE, AUTOLIIKENNE, LINJAAUTOLIIKENNE, RAITIOLIIKENNE].
+ * the result will be [[PYORALIIKENNE, 1.3], [AUTOLIIKENNE, 1.0], [LINJAAUTOLIIKENNE, 0.0], [RAITIOLIIKENNE, 0.0]].
  */
 export function sortedLiikenneHaittojenhallintatyyppi(
   tormaystarkasteluTulos: HaittaIndexData | undefined,
-): HAITTOJENHALLINTATYYPPI[] {
+): [string, number][] {
   const defaultOrder = Object.values(HAITTOJENHALLINTATYYPPI).filter(
     (type) => type !== HAITTOJENHALLINTATYYPPI.YLEINEN && type !== HAITTOJENHALLINTATYYPPI.MUUT,
   );
   if (!tormaystarkasteluTulos) {
-    return defaultOrder;
+    return Object.entries(
+      defaultOrder.reduce(
+        (acc, type) => {
+          return { ...acc, [type]: 0 };
+        },
+        {} as Record<HAITTOJENHALLINTATYYPPI, number>,
+      ),
+    );
   }
+
+  function keyOfIndexType(key: HAITTA_INDEX_TYPE): keyof HaittaIndexData {
+    if (key === HAITTA_INDEX_TYPE.AUTOLIIKENNEINDEKSI) {
+      return 'autoliikenne';
+    }
+    return key.toLowerCase() as keyof HaittaIndexData;
+  }
+
+  function value(v: number | { indeksi: number }): number {
+    return typeof v === 'number' ? v : v.indeksi;
+  }
+
   const sortedIndices = Object.values(HAITTA_INDEX_TYPE)
     .map((key) => ({
       type: key.toUpperCase().replace('INDEKSI', '') as HAITTOJENHALLINTATYYPPI,
-      value: tormaystarkasteluTulos[key.toLowerCase() as keyof HaittaIndexData] as number,
+      value: value(tormaystarkasteluTulos[keyOfIndexType(key)]),
     }))
     .sort((a, b): number => {
       const diff = b.value - a.value;
@@ -199,7 +218,14 @@ export function sortedLiikenneHaittojenhallintatyyppi(
         return defaultOrder.indexOf(a.type) - defaultOrder.indexOf(b.type);
       }
       return diff;
-    })
-    .map((item) => item.type);
-  return defaultOrder.sort((a, b): number => sortedIndices.indexOf(a) - sortedIndices.indexOf(b));
+    });
+
+  return Object.entries(
+    sortedIndices.reduce(
+      (acc, item) => {
+        return { ...acc, [item.type]: item.value };
+      },
+      {} as Record<HAITTOJENHALLINTATYYPPI, number>,
+    ),
+  );
 }

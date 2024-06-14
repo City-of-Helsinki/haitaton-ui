@@ -675,6 +675,13 @@
         "LINJAAUTOLIIKENNE": "Joukkoliikenteen merkittävyys: Linja-autojen paikallisliikenne",
         "RAITIOLIIKENNE": "Joukkoliikenteen merkittävyys: Raitioliikenne",
         "MUUT": "Muut haittojenhallintatoimet"
+      },
+      "carTrafficNuisanceType": {
+        "katuluokka": "Katuluokka",
+        "liikennemaara": "Autoliikenteen määrä",
+        "kaistahaitta": "Vaikutus autoliikenteen kaistamääriin",
+        "kaistapituushaitta": "Autoliikenteen kaistavaikutusten pituus",
+        "haitanKesto": "Hankkeen kesto"
       }
     },
     "hankkeenLiitteetForm": {
