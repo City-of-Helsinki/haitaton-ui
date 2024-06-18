@@ -48,7 +48,7 @@ function AreaList({
 
         return (
           <li key={area.id}>
-            <Flex alignItems="center">
+            <Flex alignItems="center" direction={{ base: 'column', sm: 'row' }}>
               <Box
                 as="button"
                 type="button"

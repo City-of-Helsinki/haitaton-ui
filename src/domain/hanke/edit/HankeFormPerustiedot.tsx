@@ -87,7 +87,6 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
       </div>
       <div className="formWpr">
         <SelectionGroup
-          direction="horizontal"
           label={t(`hankeForm:labels:${FORMFIELD.VAIHE}`)}
           errorText={getInputErrorText(t, errors[FORMFIELD.VAIHE])}
           tooltipLabel={t(`hankeForm:labels:${FORMFIELD.VAIHE}`)}
