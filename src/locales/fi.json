@@ -81,7 +81,8 @@
     },
     "haittaIndex": {
       "fillHaitat": "Täytä alueen haitta-arviot nähdäksesi haittaindeksit",
-      "haittaIndexNumber": "Haittaindeksiluku:"
+      "haittaIndexNumber": "Haittaindeksiluku:",
+      "haittaIndexSelite": "Aluekohtainen haittaindeksi (0–5)"
     }
   },
   "form": {

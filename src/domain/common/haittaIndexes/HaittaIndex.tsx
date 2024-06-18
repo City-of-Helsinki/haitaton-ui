@@ -7,9 +7,15 @@ type Props = {
   index?: number;
   tooltipContent?: React.ReactNode;
   testId?: string;
+  showTooltip?: boolean;
 };
 
-export default function HaittaIndex({ index, tooltipContent, testId }: Readonly<Props>) {
+export default function HaittaIndex({
+  index,
+  tooltipContent,
+  testId,
+  showTooltip = false,
+}: Readonly<Props>) {
   const { t } = useTranslation();
 
   return (
@@ -20,7 +26,12 @@ export default function HaittaIndex({ index, tooltipContent, testId }: Readonly<
         </Box>
         {tooltipContent ? <HaittaIndexTooltip>{tooltipContent}</HaittaIndexTooltip> : null}
       </Flex>
-      <HaittaIndexNumber index={index} testId={testId} />
+      <HaittaIndexNumber
+        index={index}
+        testId={testId}
+        tooltipContent={tooltipContent}
+        showTooltip={showTooltip}
+      />
     </Flex>
   );
 }
