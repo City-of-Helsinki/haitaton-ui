@@ -9,6 +9,7 @@ type Props = {
   headingBackgroundColor?: string;
   headingElement?: React.ReactNode;
   headingSize?: 'm' | 's';
+  strong?: boolean;
   initiallyOpen?: boolean;
   className?: string;
   children?: React.ReactNode;
@@ -21,6 +22,7 @@ export default function CustomAccordion({
   headingBackgroundColor,
   headingElement,
   headingSize = 'm',
+  strong = false,
   initiallyOpen = false,
   children,
   className,
@@ -57,7 +59,7 @@ export default function CustomAccordion({
               className={headingSize === 'm' ? 'heading-s' : 'heading-xs'}
               textAlign="start"
             >
-              {heading}
+              {strong ? <strong>{heading}</strong> : heading}
             </Box>
             {headingElement}
           </Flex>

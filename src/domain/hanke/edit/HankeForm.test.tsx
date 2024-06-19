@@ -270,6 +270,24 @@ describe('HankeForm', () => {
     expect(screen.getByText('Alle 10 m')).toBeInTheDocument();
   });
 
+  test('Car traffic nuisance categories are shown correctly on area page', async () => {
+    const { user } = await setupAlueetPage();
+
+    await user.click(screen.getByRole('button', { name: /hankealueen liikennehaittaindeksit/i }));
+    await user.click(screen.getAllByRole('button', { name: /haittaindeksi/i })[1]);
+
+    expect(screen.getByText('Katuluokka')).toBeVisible();
+    expect(screen.getByTestId('test-katuluokka')).toHaveTextContent('3');
+    expect(screen.getByText('Autoliikenteen määrä')).toBeVisible();
+    expect(screen.getByTestId('test-liikennemaara')).toHaveTextContent('3');
+    expect(screen.getByText('Vaikutus autoliikenteen kaistamääriin')).toBeVisible();
+    expect(screen.getByTestId('test-kaistahaitta')).toHaveTextContent('3');
+    expect(screen.getByText('Autoliikenteen kaistavaikutusten pituus')).toBeVisible();
+    expect(screen.getByTestId('test-kaistapituushaitta')).toHaveTextContent('3');
+    expect(screen.getByText('Hankkeen kesto')).toBeVisible();
+    expect(screen.getByTestId('test-haitanKesto')).toHaveTextContent('3');
+  });
+
   test('Nuisance control plan is shown correctly', async () => {
     await setupHaittojenHallintaPage();
 
@@ -289,7 +307,7 @@ describe('HankeForm', () => {
     expect(screen.getByText('Muiden haittojen hallintasuunnitelma')).toBeInTheDocument();
   });
 
-  test('Car traffic nuisance categories are shown correctly', async () => {
+  test('Car traffic nuisance categories are shown correctly on nuisance control plan page', async () => {
     const { user } = await setupHaittojenHallintaPage();
 
     await user.click(screen.getByRole('button', { name: /haittaindeksi/i }));

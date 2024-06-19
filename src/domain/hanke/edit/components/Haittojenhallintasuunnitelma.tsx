@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Box, Flex, Grid, HStack } from '@chakra-ui/react';
+import { Box, HStack } from '@chakra-ui/react';
 import { FORMFIELD, HankeDataFormState } from '../types';
 import { HAITTOJENHALLINTATYYPPI, HankeData } from '../../../types/hanke';
 import TextArea from '../../../../common/components/textArea/TextArea';
@@ -12,37 +12,7 @@ import useAddressCoordinate from '../../../map/hooks/useAddressCoordinate';
 import { HaittaIndexData } from '../../../common/haittaIndexes/types';
 import CustomAccordion from '../../../../common/components/customAccordion/CustomAccordion';
 import HaittaIndex from '../../../common/haittaIndexes/HaittaIndex';
-
-function HaittaSection({
-  heading,
-  index,
-  oddEven = 'even',
-  testId,
-}: Readonly<{
-  heading: string;
-  index?: number;
-  oddEven?: 'odd' | 'even';
-  testId?: string;
-}>) {
-  return (
-    <Grid
-      templateColumns="1fr 24px"
-      gap="var(--spacing-xs)"
-      paddingX="var(--spacing-s)"
-      paddingY="var(--spacing-xs)"
-      background={oddEven === 'odd' ? 'var(--color-black-5)' : 'var(--color-black-10)'}
-    >
-      <Flex
-        justifyContent="space-between"
-        alignItems="center"
-        flexWrap={{ base: 'wrap', sm: 'nowrap' }}
-      >
-        <Box as="p">{heading}</Box>
-        <HaittaIndex index={index} testId={testId} />
-      </Flex>
-    </Grid>
-  );
-}
+import { HaittaSubSection } from '../../../common/haittaIndexes/HaittaSubSection';
 
 function HaittaIndexHeading({ index }: Readonly<{ index: number | undefined }>) {
   const { t } = useTranslation();
@@ -126,25 +96,25 @@ const Haittojenhallintasuunnitelma: React.FC<Props> = ({ hanke, index }) => {
               heading={<HaittaIndexHeading index={indeksi} />}
               headingBorderBottom={false}
             >
-              <HaittaSection
+              <HaittaSubSection
                 heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:katuluokka`)}
                 index={tormaystarkasteluTulos?.autoliikenne.katuluokka}
                 oddEven="odd"
                 testId="test-katuluokka"
               />
-              <HaittaSection
+              <HaittaSubSection
                 heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:liikennemaara`)}
                 index={tormaystarkasteluTulos?.autoliikenne.liikennemaara}
                 oddEven="even"
                 testId="test-liikennemaara"
               />
-              <HaittaSection
+              <HaittaSubSection
                 heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistahaitta`)}
                 index={tormaystarkasteluTulos?.autoliikenne.kaistahaitta}
                 oddEven="odd"
                 testId="test-kaistahaitta"
               />
-              <HaittaSection
+              <HaittaSubSection
                 heading={t(
                   `hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistapituushaitta`,
                 )}
@@ -152,7 +122,7 @@ const Haittojenhallintasuunnitelma: React.FC<Props> = ({ hanke, index }) => {
                 oddEven="even"
                 testId="test-kaistapituushaitta"
               />
-              <HaittaSection
+              <HaittaSubSection
                 heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:haitanKesto`)}
                 index={tormaystarkasteluTulos?.autoliikenne.haitanKesto}
                 oddEven="odd"

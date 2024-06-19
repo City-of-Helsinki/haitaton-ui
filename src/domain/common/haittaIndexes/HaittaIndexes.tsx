@@ -3,6 +3,9 @@ import { useTranslation } from 'react-i18next';
 import CustomAccordion from '../../../common/components/customAccordion/CustomAccordion';
 import { HaittaIndexData } from './types';
 import { HaittaSection } from './HaittaSection';
+import React from 'react';
+import { HaittaSubSection } from './HaittaSubSection';
+import HaittaIndex from './HaittaIndex';
 
 type Props = {
   heading: string;
@@ -33,11 +36,50 @@ export default function HaittaIndexes({
             index={haittaIndexData?.pyoraliikenneindeksi}
             testId="test-pyoraliikenneindeksi"
           />
-          <HaittaSection
+          <CustomAccordion
             heading={t('hankeIndexes:autoliikenne')}
-            index={haittaIndexData?.autoliikenne?.indeksi}
-            testId="test-autoliikenneindeksi"
-          />
+            headingElement={
+              <HaittaIndex
+                index={haittaIndexData?.autoliikenne?.indeksi}
+                testId="test-autoliikenneindeksi"
+              />
+            }
+            headingSize="s"
+            strong
+          >
+            <HaittaSubSection
+              heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:katuluokka`)}
+              index={haittaIndexData?.autoliikenne.katuluokka}
+              oddEven="odd"
+              testId="test-katuluokka"
+            />
+            <HaittaSubSection
+              heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:liikennemaara`)}
+              index={haittaIndexData?.autoliikenne.liikennemaara}
+              oddEven="even"
+              testId="test-liikennemaara"
+            />
+            <HaittaSubSection
+              heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistahaitta`)}
+              index={haittaIndexData?.autoliikenne.kaistahaitta}
+              oddEven="odd"
+              testId="test-kaistahaitta"
+            />
+            <HaittaSubSection
+              heading={t(
+                `hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistapituushaitta`,
+              )}
+              index={haittaIndexData?.autoliikenne.kaistapituushaitta}
+              oddEven="even"
+              testId="test-kaistapituushaitta"
+            />
+            <HaittaSubSection
+              heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:haitanKesto`)}
+              index={haittaIndexData?.autoliikenne.haitanKesto}
+              oddEven="odd"
+              testId="test-haitanKesto"
+            />
+          </CustomAccordion>
           <HaittaSection
             heading={t('hankeIndexes:linjaautoliikenne')}
             index={haittaIndexData?.linjaautoliikenneindeksi}
