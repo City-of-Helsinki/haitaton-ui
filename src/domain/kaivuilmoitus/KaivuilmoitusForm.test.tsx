@@ -19,6 +19,7 @@ import {
 } from '../../testUtils/helperFunctions';
 import { ContactType, Customer, InvoicingCustomer } from '../application/types/application';
 import { cloneDeep } from 'lodash';
+import { fillNewContactPersonForm } from '../forms/components/testUtils';
 
 afterEach(cleanup);
 
@@ -485,6 +486,31 @@ test('Should be able to fill form pages and show filled information in summary p
   expect(screen.getByText('muu.png')).toBeInTheDocument();
   expect(
     screen.getByText('Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),
+  ).toBeInTheDocument();
+});
+
+test('Should show validation error if the new user has an existing email address', async () => {
+  const hankeData = hankkeet[1] as HankeData;
+  const newUser = {
+    etunimi: 'Marja',
+    sukunimi: 'Meikäkäinen',
+    sahkoposti: 'marja.meikalainen@test.com',
+    puhelinnumero: '0000000000',
+  };
+  const { user } = render(<KaivuilmoitusContainer hankeData={hankeData} />);
+  await fillBasicInformation(user);
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+  await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
+  fillNewContactPersonForm(newUser);
+  await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+  await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
+  fillNewContactPersonForm(newUser);
+  await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+  expect(
+    screen.getByText(
+      /valitsemasi sähköpostiosoite löytyy jo hankkeen käyttäjähallinnasta. lisää yhteyshenkilö pudotusvalikosta./i,
+    ),
   ).toBeInTheDocument();
 });
 

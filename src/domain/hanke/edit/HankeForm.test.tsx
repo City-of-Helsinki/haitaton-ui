@@ -819,6 +819,29 @@ describe('New contact person form and contact person dropdown', () => {
     expect(screen.queryByText('Yhteyshenkilö tallennettu')).not.toBeInTheDocument();
   });
 
+  test('Should not be able to create new user and show validation error if the new user has an existing email address', async () => {
+    const newUser = {
+      etunimi: 'Martti',
+      sukunimi: 'Mielikäinen',
+      sahkoposti: 'martti.mielikainen@test.com',
+      puhelinnumero: '0000000000',
+    };
+    const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
+    await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
+    fillNewContactPersonForm(newUser);
+    await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+    await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
+    fillNewContactPersonForm(newUser);
+    await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+
+    expect(
+      screen.getByText(
+        'Valitsemasi sähköpostiosoite löytyy jo hankkeen käyttäjähallinnasta. Lisää yhteyshenkilö pudotusvalikosta.',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.queryByText('Yhteyshenkilö tallennettu')).not.toBeInTheDocument();
+  });
+
   test('Should show error notification if creating new user fails', async () => {
     server.use(
       rest.post('/api/hankkeet/:hankeTunnus/kayttajat', async (req, res, ctx) => {

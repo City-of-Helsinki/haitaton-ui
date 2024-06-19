@@ -222,6 +222,7 @@ export default function ApplicationContacts() {
       <FormContact<CustomerType>
         contactType="customerWithContacts"
         hankeTunnus={hankeTunnus!}
+        hankeUsers={hankeUsers}
         onContactPersonAdded={(user) =>
           addYhteyshenkiloForYhteystieto('customerWithContacts', user)
         }
@@ -239,6 +240,7 @@ export default function ApplicationContacts() {
         <FormContact<CustomerType>
           contactType="contractorWithContacts"
           hankeTunnus={hankeTunnus!}
+          hankeUsers={hankeUsers}
           onContactPersonAdded={(user) =>
             addYhteyshenkiloForYhteystieto('contractorWithContacts', user)
           }
@@ -258,6 +260,7 @@ export default function ApplicationContacts() {
           <FormContact<CustomerType>
             contactType="propertyDeveloperWithContacts"
             hankeTunnus={hankeTunnus!}
+            hankeUsers={hankeUsers}
             onRemove={handleRemovePropertyDeveloper}
             onContactPersonAdded={(user) =>
               addYhteyshenkiloForYhteystieto('propertyDeveloperWithContacts', user)
@@ -289,6 +292,7 @@ export default function ApplicationContacts() {
           <FormContact<CustomerType>
             contactType="representativeWithContacts"
             hankeTunnus={hankeTunnus!}
+            hankeUsers={hankeUsers}
             onRemove={handleRemoveRepresentative}
             onContactPersonAdded={(user) =>
               addYhteyshenkiloForYhteystieto('representativeWithContacts', user)

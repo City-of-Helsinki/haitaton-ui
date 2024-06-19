@@ -206,6 +206,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
               key={item.id}
               contactType={HANKE_CONTACT_TYPE.OMISTAJAT}
               hankeTunnus={hanke.hankeTunnus!}
+              hankeUsers={hankeUsers}
               index={index}
               canBeRemoved={omistajat.length > 1}
               onRemove={removeOmistaja}
@@ -249,6 +250,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
               key={item.id}
               contactType={HANKE_CONTACT_TYPE.RAKENNUTTAJAT}
               hankeTunnus={hanke.hankeTunnus!}
+              hankeUsers={hankeUsers}
               index={index}
               onRemove={removeRakennuttaja}
               onContactPersonAdded={(user) =>
@@ -291,6 +293,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
               key={item.id}
               contactType={HANKE_CONTACT_TYPE.TOTEUTTAJAT}
               hankeTunnus={hanke.hankeTunnus!}
+              hankeUsers={hankeUsers}
               index={index}
               onRemove={removeToteuttaja}
               onContactPersonAdded={(user) =>
@@ -335,6 +338,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
               key={item.id}
               contactType={HANKE_CONTACT_TYPE.MUUTTAHOT}
               hankeTunnus={hanke.hankeTunnus!}
+              hankeUsers={hankeUsers}
               index={index}
               onRemove={removeMuuTaho}
               onContactPersonAdded={(user) =>
