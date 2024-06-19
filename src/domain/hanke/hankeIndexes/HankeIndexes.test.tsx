@@ -1,4 +1,3 @@
-import React from 'react';
 import { cleanup } from '@testing-library/react';
 import HankeIndexes from './HankeIndexes';
 import { render } from '../../../testUtils/render';

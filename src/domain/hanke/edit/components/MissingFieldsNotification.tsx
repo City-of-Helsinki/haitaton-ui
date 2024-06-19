@@ -5,13 +5,17 @@ import { Link, Notification } from 'hds-react';
 import { Box } from '@chakra-ui/react';
 import { HankeDataFormState } from '../types';
 
+type Props = {
+  formErrors: ValidationError[];
+  getValues: UseFormGetValues<HankeDataFormState>;
+  notificationLabelKey?: string;
+};
+
 export default function HankeFormMissingFieldsNotification({
   formErrors,
   getValues,
-}: {
-  formErrors: ValidationError[];
-  getValues: UseFormGetValues<HankeDataFormState>;
-}) {
+  notificationLabelKey = 'hankePortfolio:draftState:labels:missingFields',
+}: Readonly<Props>) {
   const { t } = useTranslation();
 
   function mapToErrorListItem(error: ValidationError) {
@@ -24,13 +28,18 @@ export default function HankeFormMissingFieldsNotification({
       pathParts[0] = 'alueet.empty';
     }
 
-    const linkText =
-      pathParts.length === 1
-        ? t(`hankeForm:missingFields:${pathParts[0]}`)
-        : t(`hankeForm:missingFields:${pathParts[0]}:${pathParts[2]}`, {
-            count: Number(pathParts[1]) + 1,
-            alueName: getValues(`alueet.${pathParts[1]}.nimi` as FieldPath<HankeDataFormState>),
-          });
+    const langKey = pathParts.reduce((acc, part, index) => {
+      if (index === 1) {
+        // Exclude the index from the lang key
+        return acc;
+      }
+      return `${acc}:${part}`;
+    }, 'hankeForm:missingFields');
+
+    const linkText = t(langKey, {
+      count: Number(pathParts[1]) + 1,
+      alueName: getValues(`alueet.${pathParts[1]}.nimi` as FieldPath<HankeDataFormState>),
+    });
 
     return (
       <li key={errorPath}>
@@ -42,7 +51,7 @@ export default function HankeFormMissingFieldsNotification({
   }
 
   return (
-    <Notification label={t('hankePortfolio:draftState:labels:missingFields')} type="alert">
+    <Notification label={t(notificationLabelKey)} type="alert">
       <Box as="ul" marginLeft="var(--spacing-m)">
         {formErrors.map(mapToErrorListItem)}
       </Box>

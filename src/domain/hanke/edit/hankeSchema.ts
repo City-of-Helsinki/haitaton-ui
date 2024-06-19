@@ -1,5 +1,6 @@
 import yup from '../../../common/utils/yup';
 import {
+  HAITTOJENHALLINTATYYPPI,
   HANKE_KAISTAHAITTA_KEY,
   HANKE_KAISTAPITUUSHAITTA_KEY,
   HANKE_MELUHAITTA_KEY,
@@ -10,8 +11,13 @@ import {
   HANKE_VAIHE_KEY,
 } from './../../types/hanke';
 import { CONTACT_TYYPPI } from '../../types/hanke';
-import { FORMFIELD, CONTACT_FORMFIELD, YHTEYSHENKILO_FORMFIELD, HankeDataFormState } from './types';
-import isValidBusinessId from '../../../common/utils/isValidBusinessId';
+import {
+  FORMFIELD,
+  CONTACT_FORMFIELD,
+  YHTEYSHENKILO_FORMFIELD,
+  HankeDataFormState,
+  HANKE_PAGES,
+} from './types';
 import { HaittaIndexData } from '../../common/haittaIndexes/types';
 
 export const yhteyshenkiloSchema = yup.object({
@@ -21,8 +27,12 @@ export const yhteyshenkiloSchema = yup.object({
   [YHTEYSHENKILO_FORMFIELD.PUHELINNUMERO]: yup.string().phone().max(20).required(),
 });
 
-const contactSchema = yup.object({
-  [CONTACT_FORMFIELD.NIMI]: yup.string().defined().max(100),
+const yhteystietoSchema = yup.object({
+  [CONTACT_FORMFIELD.NIMI]: yup
+    .string()
+    .required()
+    .max(100)
+    .meta({ pageName: HANKE_PAGES.YHTEYSTIEDOT }),
   [CONTACT_FORMFIELD.TYYPPI]: yup.mixed<keyof typeof CONTACT_TYYPPI>().defined().nullable(),
   [CONTACT_FORMFIELD.TUNNUS]: yup
     .string()
@@ -30,16 +40,20 @@ const contactSchema = yup.object({
     .nullable()
     .when('tyyppi', {
       is: (value: string) => value === CONTACT_TYYPPI.YRITYS || value === CONTACT_TYYPPI.YHTEISO,
-      then: (schema) =>
-        schema.test('is-business-id', 'Is not valid business id', isValidBusinessId),
-      otherwise: (schema) => schema,
-    }),
-  [CONTACT_FORMFIELD.EMAIL]: yup.string().email().defined().max(100),
+      then: (schema) => schema.businessId().required(),
+    })
+    .meta({ pageName: HANKE_PAGES.YHTEYSTIEDOT }),
+  [CONTACT_FORMFIELD.EMAIL]: yup
+    .string()
+    .email()
+    .required()
+    .max(100)
+    .meta({ pageName: HANKE_PAGES.YHTEYSTIEDOT }),
   [CONTACT_FORMFIELD.PUHELINNUMERO]: yup.string().phone().defined().max(20),
   id: yup.number(),
 });
 
-const otherPartySchema = contactSchema
+const muuYhteystietoSchema = yhteystietoSchema
   .omit([CONTACT_FORMFIELD.TYYPPI, CONTACT_FORMFIELD.TUNNUS])
   .shape({
     [CONTACT_FORMFIELD.NIMI]: yup.string().defined().max(100),
@@ -48,12 +62,25 @@ const otherPartySchema = contactSchema
     [CONTACT_FORMFIELD.OSASTO]: yup.string().defined(),
   });
 
-export const hankeAlueSchema = yup.object({
+const haittojenhallintaTyyppiSchema = yup
+  .string()
+  .required()
+  .meta({ pageName: HANKE_PAGES.HAITTOJEN_HALLINTA });
+
+const haittojenhallintaSchema = yup.object({
+  [HAITTOJENHALLINTATYYPPI.YLEINEN]: haittojenhallintaTyyppiSchema,
+  [HAITTOJENHALLINTATYYPPI.PYORALIIKENNE]: haittojenhallintaTyyppiSchema,
+  [HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE]: haittojenhallintaTyyppiSchema,
+  [HAITTOJENHALLINTATYYPPI.RAITIOLIIKENNE]: haittojenhallintaTyyppiSchema,
+  [HAITTOJENHALLINTATYYPPI.LINJAAUTOLIIKENNE]: haittojenhallintaTyyppiSchema,
+  [HAITTOJENHALLINTATYYPPI.MUUT]: haittojenhallintaTyyppiSchema,
+});
+
+export const hankeAlueetSchema = yup.object({
   [FORMFIELD.NIMI]: yup.string().nullable(),
-  [FORMFIELD.HAITTA_ALKU_PVM]: yup.date().defined().nullable(),
+  [FORMFIELD.HAITTA_ALKU_PVM]: yup.date().required().meta({ pageName: HANKE_PAGES.ALUEET }),
   [FORMFIELD.HAITTA_LOPPU_PVM]: yup
     .date()
-    .defined()
     .when(FORMFIELD.HAITTA_ALKU_PVM, (alkuPvm: Date[], schema: yup.DateSchema) => {
       try {
         return alkuPvm ? schema.min(alkuPvm) : schema;
@@ -61,25 +88,52 @@ export const hankeAlueSchema = yup.object({
         return schema;
       }
     })
-    .nullable(),
-  [FORMFIELD.MELUHAITTA]: yup.mixed<HANKE_MELUHAITTA_KEY>().defined().nullable(),
-  [FORMFIELD.POLYHAITTA]: yup.mixed<HANKE_POLYHAITTA_KEY>().defined().nullable(),
-  [FORMFIELD.TARINAHAITTA]: yup.mixed<HANKE_TARINAHAITTA_KEY>().defined().nullable(),
-  [FORMFIELD.KAISTAHAITTA]: yup.mixed<HANKE_KAISTAHAITTA_KEY>().defined().nullable(),
-  [FORMFIELD.KAISTAPITUUSHAITTA]: yup.mixed<HANKE_KAISTAPITUUSHAITTA_KEY>().defined().nullable(),
+    .required()
+    .meta({ pageName: HANKE_PAGES.ALUEET }),
+  [FORMFIELD.MELUHAITTA]: yup
+    .mixed<HANKE_MELUHAITTA_KEY>()
+    .required()
+    .meta({ pageName: HANKE_PAGES.ALUEET }),
+  [FORMFIELD.POLYHAITTA]: yup
+    .mixed<HANKE_POLYHAITTA_KEY>()
+    .required()
+    .meta({ pageName: HANKE_PAGES.ALUEET }),
+  [FORMFIELD.TARINAHAITTA]: yup
+    .mixed<HANKE_TARINAHAITTA_KEY>()
+    .required()
+    .meta({ pageName: HANKE_PAGES.ALUEET }),
+  [FORMFIELD.KAISTAHAITTA]: yup
+    .mixed<HANKE_KAISTAHAITTA_KEY>()
+    .required()
+    .meta({ pageName: HANKE_PAGES.ALUEET }),
+  [FORMFIELD.KAISTAPITUUSHAITTA]: yup
+    .mixed<HANKE_KAISTAPITUUSHAITTA_KEY>()
+    .required()
+    .meta({ pageName: HANKE_PAGES.ALUEET }),
+  [FORMFIELD.HAITTOJENHALLINTASUUNNITELMA]: haittojenhallintaSchema,
   id: yup.number().defined().nullable(),
 });
 
 export const hankeSchema: yup.ObjectSchema<HankeDataFormState> = yup.object().shape({
-  [FORMFIELD.NIMI]: yup.string().min(3).defined().required(),
-  [FORMFIELD.KUVAUS]: yup.string().nullable(),
-  [FORMFIELD.KATUOSOITE]: yup.string().nullable(),
-  [FORMFIELD.VAIHE]: yup.mixed<HANKE_VAIHE_KEY>().nullable(),
-  [FORMFIELD.HANKEALUEET]: yup.array(hankeAlueSchema),
-  [FORMFIELD.OMISTAJAT]: yup.array(contactSchema).defined(),
-  [FORMFIELD.RAKENNUTTAJAT]: yup.array(contactSchema).defined(),
-  [FORMFIELD.TOTEUTTAJAT]: yup.array(contactSchema).defined(),
-  [FORMFIELD.MUUTTAHOT]: yup.array(otherPartySchema).defined(),
+  [FORMFIELD.NIMI]: yup.string().required().min(3).meta({ pageName: HANKE_PAGES.PERUSTIEDOT }),
+  [FORMFIELD.KUVAUS]: yup.string().required().meta({ pageName: HANKE_PAGES.PERUSTIEDOT }),
+  [FORMFIELD.KATUOSOITE]: yup.string().required().meta({ pageName: HANKE_PAGES.PERUSTIEDOT }),
+  [FORMFIELD.VAIHE]: yup
+    .mixed<HANKE_VAIHE_KEY>()
+    .required()
+    .meta({ pageName: HANKE_PAGES.PERUSTIEDOT }),
+  [FORMFIELD.HANKEALUEET]: yup
+    .array(hankeAlueetSchema)
+    .min(1)
+    .meta({ pageName: [HANKE_PAGES.ALUEET, HANKE_PAGES.HAITTOJEN_HALLINTA] }),
+  [FORMFIELD.OMISTAJAT]: yup
+    .array(yhteystietoSchema)
+    .defined()
+    .min(1)
+    .meta({ pageName: HANKE_PAGES.YHTEYSTIEDOT }),
+  [FORMFIELD.RAKENNUTTAJAT]: yup.array(yhteystietoSchema).defined(),
+  [FORMFIELD.TOTEUTTAJAT]: yup.array(yhteystietoSchema).defined(),
+  [FORMFIELD.MUUTTAHOT]: yup.array(muuYhteystietoSchema).defined(),
   geometriesChanged: yup.boolean(),
   id: yup.number(),
   hankeTunnus: yup.string(),
@@ -96,6 +150,32 @@ export const hankeSchema: yup.ObjectSchema<HankeDataFormState> = yup.object().sh
   modifiedAt: yup.string(),
   generated: yup.boolean(),
 });
+
+export const hankePerustiedotPublicSchema = hankeSchema.pick([
+  FORMFIELD.NIMI,
+  FORMFIELD.KUVAUS,
+  FORMFIELD.KATUOSOITE,
+  FORMFIELD.VAIHE,
+]);
+
+export const hankeAlueetPublicSchema = yup.object({
+  [FORMFIELD.HANKEALUEET]: yup
+    .array(hankeAlueetSchema.omit([FORMFIELD.HAITTOJENHALLINTASUUNNITELMA]))
+    .min(1),
+});
+
+export const haittojenhallintaPublicSchema = yup.object({
+  [FORMFIELD.HANKEALUEET]: yup
+    .array(hankeAlueetSchema.pick([FORMFIELD.HAITTOJENHALLINTASUUNNITELMA]))
+    .min(1),
+});
+
+export const hankeYhteystiedotPublicSchema = hankeSchema.pick([
+  FORMFIELD.OMISTAJAT,
+  FORMFIELD.RAKENNUTTAJAT,
+  FORMFIELD.TOTEUTTAJAT,
+  FORMFIELD.MUUTTAHOT,
+]);
 
 export const newHankeSchema = yup.object({
   nimi: yup.string().min(3).required(),

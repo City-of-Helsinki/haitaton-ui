@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import { formatToFinnishDate } from './date';
+import isValidBusinessId from '../../common/utils/isValidBusinessId';
 
 // https://github.com/jquense/yup/blob/master/src/locale.ts
 yup.setLocale({
@@ -31,6 +32,14 @@ yup.addMethod(
   'phone',
   function isValidPhoneNumber(message: yup.Message = { key: 'phone', values: {} }) {
     return this.matches(/^(\+?)(\d+)$/, { message: () => message, excludeEmptyString: true });
+  },
+);
+
+yup.addMethod(
+  yup.string,
+  'businessId',
+  function validBusinessId(message: yup.Message = { key: 'default', values: {} }) {
+    return this.test('is-business-id', message, isValidBusinessId);
   },
 );
 

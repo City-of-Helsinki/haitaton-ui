@@ -1,4 +1,3 @@
-import React from 'react';
 import AppRoutes from '../../common/routes/AppRoutes';
 import { render, screen } from '../../testUtils/render';
 

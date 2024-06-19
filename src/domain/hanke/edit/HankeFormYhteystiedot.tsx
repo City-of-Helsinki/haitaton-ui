@@ -13,7 +13,6 @@ import {
   HankeYhteyshenkilo,
 } from '../../types/hanke';
 import Text from '../../../common/components/text/Text';
-import { useFormPage } from './hooks/useFormPage';
 import TextInput from '../../../common/components/textInput/TextInput';
 import useLocale from '../../../common/hooks/useLocale';
 import Dropdown from '../../../common/components/dropdown/Dropdown';
@@ -88,23 +87,27 @@ const ContactFields: React.FC<
               label: t(`form:yhteystiedot:contactType:${value}`),
             };
           })}
+          required
         />
       </ResponsiveGrid>
       <ResponsiveGrid maxColumns={2}>
         <TextInput
           name={`${contactType}.${index}.${CONTACT_FORMFIELD.NIMI}`}
           label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.NIMI}`)}
+          required
         />
         <TextInput
           name={`${contactType}.${index}.${CONTACT_FORMFIELD.TUNNUS}`}
           label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.TUNNUS}`)}
           disabled={registryKeyInputDisabled}
+          required={!registryKeyInputDisabled}
         />
       </ResponsiveGrid>
       <ResponsiveGrid maxColumns={2}>
         <TextInput
           name={`${contactType}.${index}.${CONTACT_FORMFIELD.EMAIL}`}
           label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.EMAIL}`)}
+          required
         />
         <TextInput
           name={`${contactType}.${index}.${CONTACT_FORMFIELD.PUHELINNUMERO}`}
@@ -122,7 +125,6 @@ const ContactFields: React.FC<
 };
 
 const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
-  useFormPage();
   const queryClient = useQueryClient();
   const { getValues, setValue } = useFormContext<HankeDataFormState>();
   const { t } = useTranslation();
@@ -160,7 +162,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
   });
 
   const addOmistaja = useCallback(() => {
-    appendOmistaja(getEmptyContact());
+    appendOmistaja(getEmptyContact(), { shouldFocus: false });
   }, [appendOmistaja]);
 
   // initialize Omistaja to have at least one contact

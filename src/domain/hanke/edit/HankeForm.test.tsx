@@ -217,7 +217,7 @@ describe('HankeForm', () => {
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
     expect(screen.queryByText('Vaihe 1/6: Perustiedot')).toBeInTheDocument();
-    expect(screen.queryByText('Kentän pituus oltava vähintään 3 merkkiä')).toBeInTheDocument();
+    expect(screen.queryByText('Kenttä on pakollinen')).toBeInTheDocument();
   });
 
   test('Should allow next page if hanke name is set', async () => {
@@ -290,7 +290,7 @@ describe('HankeForm', () => {
   });
 
   test('Nuisance control plan is updated correctly', async () => {
-    const { user } = await setupHaittojenHallintaPage(hankkeet[2] as HankeDataFormState);
+    const { user } = await setupHaittojenHallintaPage(cloneDeep(hankkeet[2]) as HankeDataFormState);
     let haittojenhallintasuunnitelma: HankkeenHaittojenhallintasuunnitelma;
     server.use(
       rest.put('/api/hankkeet/:hankeTunnus', async (req, res, ctx) => {
@@ -395,7 +395,7 @@ describe('HankeForm', () => {
   });
 
   test('Should be able to save and quit', async () => {
-    const hanke = hankkeet[1];
+    const hanke = cloneDeep(hankkeet[1]);
     const hankeName = hanke.nimi;
 
     const { user } = render(
@@ -416,7 +416,7 @@ describe('HankeForm', () => {
   });
 
   test('Should be able to save hanke in the last page', async () => {
-    const hanke = hankkeet[1];
+    const hanke = cloneDeep(hankkeet[2]);
 
     const { user } = render(
       <HankeForm
@@ -441,7 +441,7 @@ describe('HankeForm', () => {
     jest.spyOn(hankeAttachmentsApi, 'uploadAttachment').mockImplementation(uploadAttachment);
     initFileGetResponse([]);
     initFileUploadResponse();
-    const { user } = render(<HankeFormContainer hankeTunnus="HAI22-2" />);
+    const { user } = render(<HankeFormContainer hankeTunnus="HAI22-1" />);
     await waitFor(() => screen.findByText('Perustiedot'));
     await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
@@ -470,12 +470,12 @@ describe('HankeForm', () => {
       },
     ]);
     initFileDeleteResponse();
-    const { user } = render(<HankeFormContainer hankeTunnus="HAI22-2" />);
+    const { user } = render(<HankeFormContainer hankeTunnus="HAI22-1" />);
     await waitFor(() => screen.findByText('Perustiedot'));
     await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
-    const { getAllByRole } = within(screen.getByTestId('file-upload-list'));
-    const fileListItems = getAllByRole('listitem');
+    const { findAllByRole } = within(screen.getByTestId('file-upload-list'));
+    const fileListItems = await findAllByRole('listitem');
     const fileItem = fileListItems.find((i) => i.innerHTML.includes(fileName));
     const { getByRole } = within(fileItem!);
     await user.click(getByRole('button', { name: 'Poista' }));
@@ -523,12 +523,12 @@ describe('HankeForm', () => {
         hankeTunnus: 'HAI22-2',
       },
     ]);
-    const { user } = render(<HankeFormContainer hankeTunnus="HAI22-2" />);
+    const { user } = render(<HankeFormContainer hankeTunnus="HAI22-1" />);
     await waitFor(() => screen.findByText('Perustiedot'));
     await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
-    const { getAllByRole } = within(screen.getByTestId('file-upload-list'));
-    const fileListItems = getAllByRole('listitem');
+    const { findAllByRole } = within(screen.getByTestId('file-upload-list'));
+    const fileListItems = await findAllByRole('listitem');
     expect(fileListItems.length).toBe(3);
 
     const fileItemA = fileListItems.find((i) => i.innerHTML.includes(fileNameA));
@@ -631,16 +631,20 @@ describe('HankeForm', () => {
     ).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
-    /*
-        expect(screen.queryByText(draftStateText)).toBeInTheDocument();
-        expect(
-          screen.getByRole('link', { name: /hankealueet: hankealueen piirtäminen/i }),
-        ).toBeInTheDocument();
-    */
+
+    expect(
+      screen.queryByText(
+        'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavat tiedot lomakkeella vaaditaan haittojenhallinnan täyttämiseen:',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /hankealueet: hankealueen piirtäminen/i }),
+    ).toBeInTheDocument();
+
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
     expect(screen.queryByText(draftStateText)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /hankkeen omistaja: nimi/i })).toBeInTheDocument();
+    await screen.findByRole('link', { name: /hankkeen omistaja: nimi/i });
     expect(
       screen.getByRole('link', { name: /hankkeen omistaja: sähköposti/i }),
     ).toBeInTheDocument();
@@ -665,14 +669,36 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
-    expect(
-      screen.getByText(
-        'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavissa vaiheissa on puuttuvia tietoja:',
-      ),
-    ).toBeInTheDocument();
+    await screen.findByText(
+      'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavissa vaiheissa on puuttuvia tietoja:',
+    );
     expect(screen.getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
     expect(screen.getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
     expect(screen.getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
+  });
+
+  test('Should not be able to move to another step if modifying public hanke and leaving missing information', async () => {
+    const testHanke = cloneDeep(hankkeet[1]);
+
+    const { user } = render(
+      <HankeForm
+        formData={testHanke as HankeDataFormState}
+        onIsDirtyChange={() => {}}
+        onFormClose={() => {}}
+      >
+        children
+      </HankeForm>,
+    );
+
+    fireEvent.change(screen.getByLabelText(/hankkeen kuvaus/i), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByLabelText(/katuosoite/i), {
+      target: { value: '' },
+    });
+    await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+    expect(screen.queryByText('Vaihe 1/6: Perustiedot')).toBeInTheDocument();
   });
 
   test('Should show confirmation dialog when deleting hanke area', async () => {
@@ -742,7 +768,7 @@ describe('HankeForm', () => {
     expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('1');
     expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('2');
 
-    await user.click(screen.getByRole('button', { name: 'Kaistahaittojen pituus' }));
+    await user.click(screen.getByRole('button', { name: 'Kaistahaittojen pituus *' }));
     await user.click(screen.getByText('10-99 m'));
 
     expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('4');

@@ -138,6 +138,14 @@ const hankkeet: HankeDataDraft[] = [
         polyHaitta: HANKE_POLYHAITTA.JATKUVA_POLYHAITTA,
         tarinaHaitta: HANKE_TARINAHAITTA.SATUNNAINEN_TARINAHAITTA,
         nimi: 'Hankealue 1',
+        haittojenhallintasuunnitelma: {
+          YLEINEN: 'Yleisten haittojen hallintasuunnitelma',
+          PYORALIIKENNE: 'Pyöräliikenteelle koituvien haittojen hallintasuunnitelma',
+          AUTOLIIKENNE: 'Autoliikenteelle koituvien haittojen hallintasuunnitelma',
+          LINJAAUTOLIIKENNE: 'Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma',
+          RAITIOLIIKENNE: 'Raitioliikenteelle koituvien haittojen hallintasuunnitelma',
+          MUUT: 'Muiden haittojen hallintasuunnitelma',
+        },
         tormaystarkasteluTulos: {
           autoliikenneindeksi: 3.5,
           pyoraliikenneindeksi: 3,
@@ -204,6 +212,14 @@ const hankkeet: HankeDataDraft[] = [
         kaistaHaitta: HANKE_KAISTAHAITTA.VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA,
         kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA.PITUUS_10_99_METRIA,
         nimi: 'Hankealue 2',
+        haittojenhallintasuunnitelma: {
+          YLEINEN: 'Yleisten haittojen hallintasuunnitelma',
+          PYORALIIKENNE: 'Pyöräliikenteelle koituvien haittojen hallintasuunnitelma',
+          AUTOLIIKENNE: 'Autoliikenteelle koituvien haittojen hallintasuunnitelma',
+          LINJAAUTOLIIKENNE: 'Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma',
+          RAITIOLIIKENNE: 'Raitioliikenteelle koituvien haittojen hallintasuunnitelma',
+          MUUT: 'Muiden haittojen hallintasuunnitelma',
+        },
         tormaystarkasteluTulos: {
           autoliikenneindeksi: 2.5,
           pyoraliikenneindeksi: 2,

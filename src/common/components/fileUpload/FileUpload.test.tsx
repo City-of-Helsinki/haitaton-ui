@@ -1,4 +1,3 @@
-import React from 'react';
 import { rest } from 'msw';
 import { act, fireEvent, render, screen, waitFor, within } from '../../../testUtils/render';
 import api from '../../../domain/api/api';

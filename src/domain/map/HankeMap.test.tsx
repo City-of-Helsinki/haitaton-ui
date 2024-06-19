@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen } from '../../testUtils/render';
 import { changeFilterDate } from '../../testUtils/helperFunctions';
 import HankeMap from './HankeMap';
