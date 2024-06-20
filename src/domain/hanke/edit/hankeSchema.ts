@@ -23,7 +23,7 @@ import { HaittaIndexData } from '../../common/haittaIndexes/types';
 export const yhteyshenkiloSchema = yup.object({
   [YHTEYSHENKILO_FORMFIELD.ETUNIMI]: yup.string().max(50).required(),
   [YHTEYSHENKILO_FORMFIELD.SUKUNIMI]: yup.string().max(50).required(),
-  [YHTEYSHENKILO_FORMFIELD.EMAIL]: yup.string().email().max(100).required(),
+  [YHTEYSHENKILO_FORMFIELD.EMAIL]: yup.string().email().max(100).uniqueEmail().required(),
   [YHTEYSHENKILO_FORMFIELD.PUHELINNUMERO]: yup.string().phone().max(20).required(),
 });
 
