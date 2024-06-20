@@ -30,7 +30,7 @@ function NewContactPersonForm({
   const formContext = useForm<Yhteyshenkilo>({
     mode: 'onTouched',
     resolver: yupResolver(yhteyshenkiloSchema),
-    context: { hankeUsers },
+    context: { hankeUsers: hankeUsers, errorMessageKey: 'emailAlreadyUsedInContacts' },
   });
   const { getValues, trigger } = formContext;
   const { mutate } = useMutation(createHankeUser);

@@ -99,7 +99,8 @@
       "dateMin": "Ensimmäinen mahdollinen päivä on {{min}}",
       "dateMax": "Viimeinen mahdollinen päivä on {{max}}",
       "yhteyshenkilotMin": "Vähintään yksi yhteyshenkilö tulee olla asetettuna",
-      "emailNotUnique": "Valitsemasi sähköpostiosoite löytyy jo hankkeen käyttäjähallinnasta. Lisää yhteyshenkilö pudotusvalikosta."
+      "emailAlreadyUsedInContacts": "Valitsemasi sähköpostiosoite löytyy jo hankkeen käyttäjähallinnasta. Lisää yhteyshenkilö pudotusvalikosta.",
+      "emailAlreadyUsedInUserManagement": "Valitsemasi sähköpostiosoite löytyy jo toiselta käyttäjältä."
     },
     "errors": {
       "areaRequired": "Vähintään yksi alue vaaditaan",

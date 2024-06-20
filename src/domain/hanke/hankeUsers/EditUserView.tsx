@@ -98,6 +98,11 @@ function EditUserView({
       kayttooikeustaso,
     },
     resolver: yupResolver(editUserSchema),
+    context: {
+      hankeUsers: hankeUsers,
+      currentUser: user,
+      errorMessageKey: 'emailAlreadyUsedInUserManagement',
+    },
   });
   const { handleSubmit } = formContext;
 
