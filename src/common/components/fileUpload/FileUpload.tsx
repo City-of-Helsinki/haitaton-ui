@@ -240,7 +240,7 @@ export default function FileUpload<T extends AttachmentMetadata>({
     <div>
       <Flex alignItems="center" className={styles.uploadContainer} ref={dropZoneRef}>
         {filesUploading ? (
-          <Flex className={styles.loadingContainer}>
+          <Flex className={styles.loadingContainer} direction={{ base: 'column', sm: 'row' }}>
             <LoadingSpinner small className={styles.loadingSpinner} />
             <Text tag="p" className={styles.loadingText}>
               {t('common:components:fileUpload:loadingText')}
