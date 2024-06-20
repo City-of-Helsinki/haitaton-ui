@@ -12,6 +12,7 @@ import { getMatchingRouteKey } from '../../common/hooks/useLocalizedRoutes';
 import useLocale from '../../common/hooks/useLocale';
 import styles from './MaintenancePage.module.scss';
 import maintenanceImage from '../../assets/images/1_Kivinokka-Kalasaatama00001.png';
+import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
 
 const languageLabels = {
   fi: 'Suomi',
@@ -25,7 +26,9 @@ function MaintenanceView() {
   return (
     <article className={styles.maintenanceContent}>
       <div>
-        <h1 className={styles.maintenanceHeading}>{t('serviceMaintenance:label')}</h1>
+        <h1 id={SKIP_TO_ELEMENT_ID} className={styles.maintenanceHeading}>
+          {t('serviceMaintenance:label')}
+        </h1>
         <p className={styles.maintenanceText}>{t('serviceMaintenance:text')}</p>
       </div>
       <div className={styles.maintenanceContent__imageContainer}>
@@ -78,6 +81,10 @@ function MaintenanceHeader() {
       onDidChangeLanguage={setLanguage}
       defaultLanguage={i18n.language}
     >
+      <Header.SkipLink
+        skipTo={`#${SKIP_TO_ELEMENT_ID}`}
+        label={t('common:components:header:skipToContentLabel')}
+      />
       <Header.ActionBar
         title="Haitaton"
         titleHref="/"
