@@ -5,6 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import Link from '../../common/components/Link/Link';
 import Text from '../../common/components/text/Text';
 import { useLocalizedRoutes } from '../../common/hooks/useLocalizedRoutes';
+import MainHeading from '../../common/components/mainHeading/MainHeading';
 
 function NotFoundPage() {
   const { t } = useTranslation();
@@ -21,9 +22,9 @@ function NotFoundPage() {
       mt="var(--spacing-3-xl)"
       px="var(--spacing-s)"
     >
-      <Text tag="h1" styleAs="h1" weight="bold" spacingBottom="l">
+      <MainHeading spacingTop="l" spacingBottom="l">
         {t('staticPages:404Page:title')}
-      </Text>
+      </MainHeading>
       <Text tag="p" spacingBottom="m">
         {t('staticPages:404Page:instruction')}
       </Text>
