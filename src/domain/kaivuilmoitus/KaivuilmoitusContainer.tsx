@@ -28,7 +28,6 @@ import {
   KaivuilmoitusUpdateData,
 } from '../application/types/application';
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
-import { useNavigateToApplicationList } from '../hanke/hooks/useNavigateToApplicationList';
 import {
   convertApplicationDataToFormState,
   convertFormStateToKaivuilmoitusUpdateData,
@@ -39,6 +38,7 @@ import useAttachments from '../application/hooks/useAttachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import { changeFormStep } from '../forms/utils';
 import Areas from './Areas';
+import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
 
 type Props = {
   hankeData: HankeData;
@@ -48,7 +48,7 @@ type Props = {
 export default function KaivuilmoitusContainer({ hankeData, application }: Readonly<Props>) {
   const { t } = useTranslation();
   const { setNotification } = useGlobalNotification();
-  const navigateToApplicationList = useNavigateToApplicationList(hankeData.hankeTunnus);
+  const navigateToApplicationView = useNavigateToApplicationView();
   const [attachmentUploadErrors, setAttachmentUploadErrors] = useState<JSX.Element[]>([]);
   const { data: hankkeenHakemukset } = useApplicationsForHanke(hankeData.hankeTunnus);
   const johtoselvitysIds = hankkeenHakemukset?.applications
@@ -185,7 +185,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
 
   function saveAndQuit() {
     function handleSuccess(data: Application<KaivuilmoitusData>) {
-      navigateToApplicationList(data.hankeTunnus);
+      navigateToApplicationView(data.id?.toString());
       setNotification(true, {
         position: 'top-right',
         dismissible: true,

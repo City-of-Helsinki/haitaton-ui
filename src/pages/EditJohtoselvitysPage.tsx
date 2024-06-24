@@ -20,7 +20,7 @@ const EditJohtoselvitysPage: React.FC = () => {
   const { id } = useParams();
   const { EDIT_JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();
   const { t } = useTranslation();
-  const navigateToApplicationView = useNavigateToApplicationView(id);
+  const navigateToApplicationView = useNavigateToApplicationView();
   const [showApplicationSentDialog, setShowApplicationSentDialog] = useState(false);
 
   const applicationQueryResult = useApplication(Number(id));
@@ -60,7 +60,7 @@ const EditJohtoselvitysPage: React.FC = () => {
         isOpen={showApplicationSentDialog}
         title={t('hakemus:sentDialog:title')}
         description={t('hakemus:sentDialog:description')}
-        mainAction={navigateToApplicationView}
+        mainAction={() => navigateToApplicationView(id)}
         mainBtnLabel={t('hakemus:sentDialog:button')}
         variant="primary"
         showSecondaryButton={false}

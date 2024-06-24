@@ -30,7 +30,6 @@ import { isApplicationDraft, isContactIn, sendApplication } from '../application
 import { HankeData } from '../types/hanke';
 import { ApplicationCancel } from '../application/components/ApplicationCancel';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
-import { useNavigateToApplicationList } from '../hanke/hooks/useNavigateToApplicationList';
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 import useApplicationSendNotification from '../application/hooks/useApplicationSendNotification';
 import useHanke from '../hanke/hooks/useHanke';
@@ -47,6 +46,7 @@ import useAttachments from '../application/hooks/useAttachments';
 import { APPLICATION_ID_STORAGE_KEY } from '../application/constants';
 import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import useSaveApplication from '../application/hooks/useSaveApplication';
+import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
 
 type Props = {
   hankeData?: HankeData;
@@ -133,7 +133,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     getValues('id'),
   );
 
-  const navigateToApplicationList = useNavigateToApplicationList(hanke?.hankeTunnus);
+  const navigateToApplicationView = useNavigateToApplicationView();
 
   const [attachmentsUploading, setAttachmentsUploading] = useState(false);
 
@@ -187,10 +187,10 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     onError() {
       showSendError();
     },
-    async onSuccess() {
+    async onSuccess(data) {
       showSendSuccess();
       await queryClient.invalidateQueries('application', { refetchInactive: true });
-      navigateToApplicationList();
+      navigateToApplicationView(data.id?.toString());
     },
   });
 
@@ -235,7 +235,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
 
   function saveAndQuit() {
     function handleSuccess(data: Application<JohtoselvitysData>) {
-      navigateToApplicationList(data.hankeTunnus);
+      navigateToApplicationView(data.id?.toString());
       setNotification(true, {
         position: 'top-right',
         dismissible: true,
