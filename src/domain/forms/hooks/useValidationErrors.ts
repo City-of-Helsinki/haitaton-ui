@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnyObject, ObjectSchema, ValidationError } from 'yup';
-import { cloneDeep, isEqual } from 'lodash';
+import { cloneDeep, isEqual, uniqBy } from 'lodash';
 
 /**
  * Validates input data and returns validation errors if validation fails
@@ -18,7 +18,7 @@ export function useValidationErrors<T>(schema: ObjectSchema<AnyObject>, data: T)
           setValidationErrors([]);
         })
         .catch((error: ValidationError) => {
-          setValidationErrors(error.inner);
+          setValidationErrors(uniqBy(error.inner, 'path'));
         });
     }
   }, [schema, data]);

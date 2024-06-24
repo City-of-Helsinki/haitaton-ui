@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, cleanup, screen, waitFor } from '../../../testUtils/render';
 import HankeListContainer from './HankeListContainer';
 

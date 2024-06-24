@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen } from '../../../testUtils/render';
 import ApplicationAddDialog from './ApplicationAddDialog';
 import hankkeetData from '../../mocks/data/hankkeet-data';

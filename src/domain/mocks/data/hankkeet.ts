@@ -39,10 +39,16 @@ export async function update(hankeTunnus: string, updates: HankeDataDraft) {
   if (!hanke) {
     throw new Error(`No hanke with hankeTunnus ${hankeTunnus}`);
   }
+  let alkuPvm, loppuPvm;
+  try {
+    alkuPvm = getAreasMinStartDate(updates.alueet)?.toISOString();
+    loppuPvm = getAreasMaxEndDate(updates.alueet)?.toISOString();
+    // eslint-disable-next-line no-empty
+  } catch (error) {}
   hanke = Object.assign(hanke, {
     ...updates,
-    alkuPvm: getAreasMinStartDate(updates.alueet)?.toISOString(),
-    loppuPvm: getAreasMaxEndDate(updates.alueet)?.toISOString(),
+    alkuPvm: alkuPvm,
+    loppuPvm: loppuPvm,
     tormaystarkasteluTulos: {
       hankeId: 3,
       hankeTunnus: 'HAI22-3',

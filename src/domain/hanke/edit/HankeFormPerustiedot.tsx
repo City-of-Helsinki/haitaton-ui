@@ -7,7 +7,6 @@ import { Box } from '@chakra-ui/react';
 import TextInput from '../../../common/components/textInput/TextInput';
 import { HANKE_VAIHE, HANKE_TYOMAATYYPPI } from '../../types/hanke';
 import { FORMFIELD, FormProps } from './types';
-import { useFormPage } from './hooks/useFormPage';
 import DropdownMultiselect from '../../../common/components/dropdown/DropdownMultiselect';
 import Checkbox from '../../../common/components/checkbox/Checkbox';
 import { getInputErrorText } from '../../../common/utils/form';
@@ -22,7 +21,6 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
   const { t } = useTranslation();
   const { setValue, watch } = useFormContext();
   const [showJohtoselvitysCreateDialog, setShowJohtoselvitysCreateDialog] = useState(false);
-  useFormPage();
 
   // Subscribe to vaihe changes in order to update the selected radio button
   const hankeVaiheField = watch(FORMFIELD.VAIHE);
@@ -72,6 +70,7 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
           {...register(FORMFIELD.KUVAUS)}
           data-testid={FORMFIELD.KUVAUS}
           errorText={getInputErrorText(t, errors[FORMFIELD.KUVAUS])}
+          required
         />
       </div>
       <div className="formWpr formWprShort">
@@ -83,6 +82,7 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
             tooltipLabel: t(`hankeForm:labels:${FORMFIELD.KATUOSOITE}`),
             placement: 'auto',
           }}
+          required
         />
       </div>
       <div className="formWpr">
@@ -92,6 +92,7 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
           tooltipLabel={t(`hankeForm:labels:${FORMFIELD.VAIHE}`)}
           tooltipButtonLabel={t(`hankeForm:toolTips:tipOpenLabel`)}
           tooltipText={t(`hankeForm:toolTips:${FORMFIELD.VAIHE}`)}
+          required
         >
           {$enum(HANKE_VAIHE).map((value) => {
             return (

@@ -1,4 +1,3 @@
-import React from 'react';
 import { rest } from 'msw';
 import { render, screen, waitFor } from '../../../testUtils/render';
 import ApplicationViewContainer from './ApplicationViewContainer';

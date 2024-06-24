@@ -8,7 +8,6 @@ import Geometry from 'ol/geom/Geometry';
 import { Box } from '@chakra-ui/react';
 import { isEqual } from 'lodash';
 import HankeDrawer from '../../map/components/HankeDrawer/HankeDrawer';
-import { useFormPage } from './hooks/useFormPage';
 import { FORMFIELD, FormProps, HankeAlueFormState, HankeDataFormState } from './types';
 import { formatFeaturesToHankeGeoJSON, formatSurfaceArea } from '../../map/utils';
 import Haitat from './components/Haitat';
@@ -51,7 +50,6 @@ const HankeFormAlueet: React.FC<FormProps & { drawSource: VectorSource }> = ({
   });
   const watchHankeAlueet = watch('alueet');
   const addressCoordinate = useAddressCoordinate(hanke.tyomaaKatuosoite);
-  useFormPage();
   const haittaIndexesMutation = useHaittaIndexes();
 
   const { tabRefs, setSelectedTabIndex } = useSelectableTabs(hankeAlueet, {

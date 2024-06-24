@@ -588,7 +588,15 @@
         "kaistaPituusHaitta": "{{alueName}}: $t(hankeForm:labels:kaistaPituusHaitta)",
         "meluHaitta": "{{alueName}}: $t(hankeForm:labels:meluHaitta)",
         "polyHaitta": "{{alueName}}: $t(hankeForm:labels:polyHaitta)",
-        "tarinaHaitta": "{{alueName}}: $t(hankeForm:labels:tarinaHaitta)"
+        "tarinaHaitta": "{{alueName}}: $t(hankeForm:labels:tarinaHaitta)",
+        "haittojenhallintasuunnitelma": {
+          "YLEINEN": "{{alueName}}: $t(hankeForm:labels:haittojenhallintasuunnitelma.YLEINEN)",
+          "PYORALIIKENNE": "{{alueName}}: $t(hankeForm:haittojenHallintaForm:nuisanceType.PYORALIIKENNE): $t(hankeForm:labels:haittojenhallintasuunnitelma.PYORALIIKENNE)",
+          "AUTOLIIKENNE": "{{alueName}}: $t(hankeForm:haittojenHallintaForm:nuisanceType.AUTOLIIKENNE): $t(hankeForm:labels:haittojenhallintasuunnitelma.AUTOLIIKENNE)",
+          "LINJAAUTOLIIKENNE": "{{alueName}}: $t(hankeForm:haittojenHallintaForm:nuisanceType.LINJAAUTOLIIKENNE): $t(hankeForm:labels:haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE)",
+          "RAITIOLIIKENNE": "{{alueName}}: $t(hankeForm:haittojenHallintaForm:nuisanceType.RAITIOLIIKENNE): $t(hankeForm:labels:haittojenhallintasuunnitelma.RAITIOLIIKENNE)",
+          "MUUT": "{{alueName}}: $t(hankeForm:haittojenHallintaForm:nuisanceType.MUUT): $t(hankeForm:labels:haittojenhallintasuunnitelma.MUUT)"
+        }
       },
       "omistajat": {
         "nimi": "$t(form:yhteystiedot:titles:omistaja): $t(form:yhteystiedot:labels:nimi)",
@@ -1003,7 +1011,8 @@
       "labels": {
         "draft": "Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia.",
         "insufficientPhases": "$t(hankePortfolio:draftState:labels:draft) Seuraavissa vaiheissa on puuttuvia tietoja:",
-        "missingFields": "$t(hankePortfolio:draftState:labels:draft) Seuraavat kentät tällä sivulla vaaditaan hankeen julkaisemiseksi:"
+        "missingFields": "$t(hankePortfolio:draftState:labels:draft) Seuraavat kentät tällä sivulla vaaditaan hankeen julkaisemiseksi:",
+        "missingInformationForHaittojenhallinta": "$t(hankePortfolio:draftState:labels:draft) Seuraavat tiedot lomakkeella vaaditaan haittojenhallinnan täyttämiseen:"
       }
     }
   },

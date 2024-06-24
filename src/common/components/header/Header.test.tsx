@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, cleanup, screen } from '../../../testUtils/render';
 import Header from './Header';
 import useUser from '../../../domain/auth/useUser';

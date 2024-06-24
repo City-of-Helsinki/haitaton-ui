@@ -1,4 +1,3 @@
-import React from 'react';
 import { rest } from 'msw';
 import { IconCross } from 'hds-react';
 import { render, screen } from '../../../testUtils/render';

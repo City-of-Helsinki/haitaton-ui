@@ -1,4 +1,3 @@
-import React from 'react';
 import { waitFor } from '@testing-library/react';
 import HomePage from './HomePage';
 import { render } from '../testUtils/render';

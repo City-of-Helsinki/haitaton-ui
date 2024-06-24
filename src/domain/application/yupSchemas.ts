@@ -1,6 +1,5 @@
 import yup from '../../common/utils/yup';
 import { ApplicationType, ContactType } from './types/application';
-import isValidBusinessId from '../../common/utils/isValidBusinessId';
 
 const contactSchema = yup
   .object({
@@ -19,8 +18,7 @@ const registryKeySchema = yup
   .nullable()
   .when('type', {
     is: (value: string) => value === 'COMPANY' || value === 'ASSOCIATION',
-    then: (schema) => schema.test('is-business-id', 'Is not valid business id', isValidBusinessId),
-    otherwise: (schema) => schema,
+    then: (schema) => schema.businessId(),
   });
 
 const customerSchema = contactSchema.omit(['firstName', 'lastName']).shape({
