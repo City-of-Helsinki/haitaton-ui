@@ -5,6 +5,8 @@ import HankeViewContainer from './HankeViewContainer';
 import { server } from '../../mocks/test-server';
 import { SignedInUser } from '../hankeUsers/hankeUser';
 
+jest.setTimeout(20000);
+
 function getViewPermissionForUser() {
   server.use(
     rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
@@ -130,7 +132,7 @@ test('Correct information about hanke should be displayed', async () => {
   expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3.5');
   expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('2');
   expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('1');
-  expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('1.5');
+  expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
   expect(screen.queryByText('11974 m²')).toBeInTheDocument();
   expect(screen.queryByText('Meluhaitta: 1: Satunnainen meluhaitta')).toBeInTheDocument();
   expect(screen.queryByText('Pölyhaitta: 3: Toistuva pölyhaitta')).toBeInTheDocument();
@@ -139,6 +141,17 @@ test('Correct information about hanke should be displayed', async () => {
     screen.queryByText('Autoliikenteen kaistahaitta: Vähentää kaistan yhdellä ajosuunnalla'),
   ).toBeInTheDocument();
   expect(screen.queryByText('Kaistahaittojen pituus: Alle 10 m')).toBeInTheDocument();
+  await user.click(screen.getAllByRole('button', { name: /haittaindeksi/i })[1]);
+  expect(screen.getByText('Katuluokka')).toBeVisible();
+  expect(screen.getByTestId('test-katuluokka')).toHaveTextContent('3');
+  expect(screen.getByText('Autoliikenteen määrä')).toBeVisible();
+  expect(screen.getByTestId('test-liikennemaara')).toHaveTextContent('3');
+  expect(screen.getByText('Vaikutus autoliikenteen kaistamääriin')).toBeVisible();
+  expect(screen.getByTestId('test-kaistahaitta')).toHaveTextContent('3');
+  expect(screen.getByText('Autoliikenteen kaistavaikutusten pituus')).toBeVisible();
+  expect(screen.getByTestId('test-kaistapituushaitta')).toHaveTextContent('3');
+  expect(screen.getByText('Hankkeen kesto')).toBeVisible();
+  expect(screen.getByTestId('test-haitanKesto')).toHaveTextContent('3');
 
   // Change to contacts tab
   await user.click(screen.getByRole('tab', { name: /yhteystiedot/i }));

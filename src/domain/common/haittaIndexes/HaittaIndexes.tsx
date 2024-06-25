@@ -1,34 +1,11 @@
-import { Flex, Grid } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import CustomAccordion from '../../../common/components/customAccordion/CustomAccordion';
-import HaittaIndex from './HaittaIndex';
 import { HaittaIndexData } from './types';
-
-function HaittaSection({
-  heading,
-  index,
-  testId,
-}: Readonly<{ heading: string; index?: number; testId?: string }>) {
-  return (
-    <Grid
-      templateColumns="1fr 24px"
-      gap="var(--spacing-xs)"
-      padding="var(--spacing-s)"
-      borderBottom="1px solid var(--color-black-30)"
-    >
-      <Flex
-        justifyContent="space-between"
-        alignItems="center"
-        flexWrap={{ base: 'wrap', sm: 'nowrap' }}
-      >
-        <p className="heading-xs">
-          <strong>{heading}</strong>
-        </p>
-        <HaittaIndex index={index} testId={testId} />
-      </Flex>
-    </Grid>
-  );
-}
+import { HaittaSection } from './HaittaSection';
+import React from 'react';
+import { HaittaSubSection } from './HaittaSubSection';
+import HaittaIndex from './HaittaIndex';
 
 type Props = {
   heading: string;
@@ -59,11 +36,45 @@ export default function HaittaIndexes({
             index={haittaIndexData?.pyoraliikenneindeksi}
             testId="test-pyoraliikenneindeksi"
           />
-          <HaittaSection
+          <CustomAccordion
             heading={t('hankeIndexes:autoliikenne')}
-            index={haittaIndexData?.autoliikenneindeksi}
-            testId="test-autoliikenneindeksi"
-          />
+            headingElement={
+              <HaittaIndex
+                index={haittaIndexData?.autoliikenne?.indeksi}
+                testId="test-autoliikenneindeksi"
+              />
+            }
+            headingSize="s"
+            strong
+          >
+            <HaittaSubSection
+              heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:katuluokka`)}
+              index={haittaIndexData?.autoliikenne.katuluokka}
+              testId="test-katuluokka"
+            />
+            <HaittaSubSection
+              heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:liikennemaara`)}
+              index={haittaIndexData?.autoliikenne.liikennemaara}
+              testId="test-liikennemaara"
+            />
+            <HaittaSubSection
+              heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistahaitta`)}
+              index={haittaIndexData?.autoliikenne.kaistahaitta}
+              testId="test-kaistahaitta"
+            />
+            <HaittaSubSection
+              heading={t(
+                `hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistapituushaitta`,
+              )}
+              index={haittaIndexData?.autoliikenne.kaistapituushaitta}
+              testId="test-kaistapituushaitta"
+            />
+            <HaittaSubSection
+              heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:haitanKesto`)}
+              index={haittaIndexData?.autoliikenne.haitanKesto}
+              testId="test-haitanKesto"
+            />
+          </CustomAccordion>
           <HaittaSection
             heading={t('hankeIndexes:linjaautoliikenne')}
             index={haittaIndexData?.linjaautoliikenneindeksi}

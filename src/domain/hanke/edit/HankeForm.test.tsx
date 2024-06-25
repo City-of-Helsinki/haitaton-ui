@@ -270,6 +270,24 @@ describe('HankeForm', () => {
     expect(screen.getByText('Alle 10 m')).toBeInTheDocument();
   });
 
+  test('Car traffic nuisance categories are shown correctly on area page', async () => {
+    const { user } = await setupAlueetPage();
+
+    await user.click(screen.getByRole('button', { name: /hankealueen liikennehaittaindeksit/i }));
+    await user.click(screen.getAllByRole('button', { name: /haittaindeksi/i })[1]);
+
+    expect(screen.getByText('Katuluokka')).toBeVisible();
+    expect(screen.getByTestId('test-katuluokka')).toHaveTextContent('3');
+    expect(screen.getByText('Autoliikenteen määrä')).toBeVisible();
+    expect(screen.getByTestId('test-liikennemaara')).toHaveTextContent('3');
+    expect(screen.getByText('Vaikutus autoliikenteen kaistamääriin')).toBeVisible();
+    expect(screen.getByTestId('test-kaistahaitta')).toHaveTextContent('3');
+    expect(screen.getByText('Autoliikenteen kaistavaikutusten pituus')).toBeVisible();
+    expect(screen.getByTestId('test-kaistapituushaitta')).toHaveTextContent('3');
+    expect(screen.getByText('Hankkeen kesto')).toBeVisible();
+    expect(screen.getByTestId('test-haitanKesto')).toHaveTextContent('3');
+  });
+
   test('Nuisance control plan is shown correctly', async () => {
     await setupHaittojenHallintaPage();
 
@@ -289,8 +307,25 @@ describe('HankeForm', () => {
     expect(screen.getByText('Muiden haittojen hallintasuunnitelma')).toBeInTheDocument();
   });
 
+  test('Car traffic nuisance categories are shown correctly on nuisance control plan page', async () => {
+    const { user } = await setupHaittojenHallintaPage();
+
+    await user.click(screen.getByRole('button', { name: /haittaindeksi/i }));
+
+    expect(screen.getByText('Katuluokka')).toBeVisible();
+    expect(screen.getByTestId('test-katuluokka')).toHaveTextContent('3');
+    expect(screen.getByText('Autoliikenteen määrä')).toBeVisible();
+    expect(screen.getByTestId('test-liikennemaara')).toHaveTextContent('3');
+    expect(screen.getByText('Vaikutus autoliikenteen kaistamääriin')).toBeVisible();
+    expect(screen.getByTestId('test-kaistahaitta')).toHaveTextContent('3');
+    expect(screen.getByText('Autoliikenteen kaistavaikutusten pituus')).toBeVisible();
+    expect(screen.getByTestId('test-kaistapituushaitta')).toHaveTextContent('3');
+    expect(screen.getByText('Hankkeen kesto')).toBeVisible();
+    expect(screen.getByTestId('test-haitanKesto')).toHaveTextContent('3');
+  });
+
   test('Nuisance control plan is updated correctly', async () => {
-    const { user } = await setupHaittojenHallintaPage(cloneDeep(hankkeet[2]) as HankeDataFormState);
+    const { user } = await setupHaittojenHallintaPage();
     let haittojenhallintasuunnitelma: HankkeenHaittojenhallintasuunnitelma;
     server.use(
       rest.put('/api/hankkeet/:hankeTunnus', async (req, res, ctx) => {
@@ -720,7 +755,14 @@ describe('HankeForm', () => {
 
   async function setupHaittaIndexUpdateTest(
     nuisanceResponse = {
-      autoliikenneindeksi: 2.5,
+      autoliikenne: {
+        indeksi: 2.5,
+        haitanKesto: 3,
+        katuluokka: 3,
+        liikennemaara: 3,
+        kaistahaitta: 1,
+        kaistapituushaitta: 1,
+      },
       pyoraliikenneindeksi: 4,
       linjaautoliikenneindeksi: 2,
       raitioliikenneindeksi: 3,
@@ -764,7 +806,7 @@ describe('HankeForm', () => {
     const { user } = await setupHaittaIndexUpdateTest();
 
     expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3.5');
-    expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('1.5');
+    expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
     expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('1');
     expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('2');
 
