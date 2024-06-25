@@ -99,19 +99,16 @@ const Haittojenhallintasuunnitelma: React.FC<Props> = ({ hanke, index }) => {
               <HaittaSubSection
                 heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:katuluokka`)}
                 index={tormaystarkasteluTulos?.autoliikenne.katuluokka}
-                oddEven="odd"
                 testId="test-katuluokka"
               />
               <HaittaSubSection
                 heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:liikennemaara`)}
                 index={tormaystarkasteluTulos?.autoliikenne.liikennemaara}
-                oddEven="even"
                 testId="test-liikennemaara"
               />
               <HaittaSubSection
                 heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistahaitta`)}
                 index={tormaystarkasteluTulos?.autoliikenne.kaistahaitta}
-                oddEven="odd"
                 testId="test-kaistahaitta"
               />
               <HaittaSubSection
@@ -119,13 +116,11 @@ const Haittojenhallintasuunnitelma: React.FC<Props> = ({ hanke, index }) => {
                   `hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistapituushaitta`,
                 )}
                 index={tormaystarkasteluTulos?.autoliikenne.kaistapituushaitta}
-                oddEven="even"
                 testId="test-kaistapituushaitta"
               />
               <HaittaSubSection
                 heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:haitanKesto`)}
                 index={tormaystarkasteluTulos?.autoliikenne.haitanKesto}
-                oddEven="odd"
                 testId="test-haitanKesto"
               />
             </CustomAccordion>

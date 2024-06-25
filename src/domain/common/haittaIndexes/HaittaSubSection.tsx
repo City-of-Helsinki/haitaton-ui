@@ -5,12 +5,10 @@ import React from 'react';
 export function HaittaSubSection({
   heading,
   index,
-  oddEven = 'even',
   testId,
 }: Readonly<{
   heading: string;
   index?: number;
-  oddEven?: 'odd' | 'even';
   testId?: string;
 }>) {
   return (
@@ -19,7 +17,8 @@ export function HaittaSubSection({
       gap="var(--spacing-xs)"
       paddingX="var(--spacing-s)"
       paddingY="var(--spacing-xs)"
-      background={oddEven === 'odd' ? 'var(--color-black-5)' : 'var(--color-black-10)'}
+      _odd={{ backgroundColor: 'var(--color-black-5)' }}
+      _even={{ backgroundColor: 'var(--color-black-10)' }}
     >
       <Flex
         justifyContent="space-between"
@@ -27,7 +26,7 @@ export function HaittaSubSection({
         flexWrap={{ base: 'wrap', sm: 'nowrap' }}
       >
         <Box as="p">{heading}</Box>
-        <HaittaIndex index={index} testId={testId} />
+        <HaittaIndex index={index} showLabel={false} testId={testId} />
       </Flex>
     </Grid>
   );

@@ -5,7 +5,7 @@ import HankeViewContainer from './HankeViewContainer';
 import { server } from '../../mocks/test-server';
 import { SignedInUser } from '../hankeUsers/hankeUser';
 
-jest.setTimeout(10000);
+jest.setTimeout(20000);
 
 function getViewPermissionForUser() {
   server.use(

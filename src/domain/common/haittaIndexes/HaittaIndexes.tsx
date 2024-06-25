@@ -50,19 +50,16 @@ export default function HaittaIndexes({
             <HaittaSubSection
               heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:katuluokka`)}
               index={haittaIndexData?.autoliikenne.katuluokka}
-              oddEven="odd"
               testId="test-katuluokka"
             />
             <HaittaSubSection
               heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:liikennemaara`)}
               index={haittaIndexData?.autoliikenne.liikennemaara}
-              oddEven="even"
               testId="test-liikennemaara"
             />
             <HaittaSubSection
               heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistahaitta`)}
               index={haittaIndexData?.autoliikenne.kaistahaitta}
-              oddEven="odd"
               testId="test-kaistahaitta"
             />
             <HaittaSubSection
@@ -70,13 +67,11 @@ export default function HaittaIndexes({
                 `hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistapituushaitta`,
               )}
               index={haittaIndexData?.autoliikenne.kaistapituushaitta}
-              oddEven="even"
               testId="test-kaistapituushaitta"
             />
             <HaittaSubSection
               heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:haitanKesto`)}
               index={haittaIndexData?.autoliikenne.haitanKesto}
-              oddEven="odd"
               testId="test-haitanKesto"
             />
           </CustomAccordion>
