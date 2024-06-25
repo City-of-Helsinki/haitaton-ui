@@ -2,8 +2,11 @@ import { Link } from 'react-router-dom';
 import { Footer, Logo, logoFi, logoSv } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedRoutes } from '../../hooks/useLocalizedRoutes';
+import styles from './Footer.module.scss';
 
-function HaitatonFooter({ backgroundColor = 'var(--color-summer)' }: { backgroundColor?: string }) {
+function HaitatonFooter({
+  backgroundColor = 'var(--color-summer)',
+}: Readonly<{ backgroundColor?: string }>) {
   const { t, i18n } = useTranslation();
   const { MANUAL, HAITATON_INFO, ACCESSIBILITY, PRIVACY_POLICY } = useLocalizedRoutes();
   const { HOME } = useLocalizedRoutes();
@@ -16,6 +19,7 @@ function HaitatonFooter({ backgroundColor = 'var(--color-summer)' }: { backgroun
         '--footer-background': backgroundColor,
         '--footer-divider-color': 'var(--color-black-90)',
       }}
+      className={styles.footer}
     >
       <Footer.Navigation ariaLabel={t('common:ariaLabels:footerNavigation')}>
         <Footer.Link as={Link} to={MANUAL.path} label={MANUAL.label} />

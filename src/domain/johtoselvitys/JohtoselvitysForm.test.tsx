@@ -237,7 +237,7 @@ test('Cable report application form can be filled and saved and sent to Allu', a
 
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
   expect(screen.queryByText(/hakemus lähetetty/i)).toBeInTheDocument();
-  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2');
+  expect(window.location.pathname).toBe('/fi/hakemus/7');
 });
 
 test('Should show error message when saving fails', async () => {
@@ -320,7 +320,7 @@ test('Save and quit works', async () => {
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
   expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
-  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2');
+  expect(window.location.pathname).toBe('/fi/hakemus/9');
 });
 
 test('Should not save and quit if current form page is not valid', async () => {
