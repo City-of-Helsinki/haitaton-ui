@@ -11,6 +11,7 @@ import Transition from '../../../common/components/transition/Transition';
 interface Props<T> {
   contactType: T;
   hankeTunnus: string;
+  hankeUsers: HankeUser[] | undefined;
   index?: number;
   canBeRemoved?: boolean;
   onRemove?: UseFieldArrayRemove;
@@ -21,6 +22,7 @@ interface Props<T> {
 const FormContact = <T,>({
   contactType,
   hankeTunnus,
+  hankeUsers,
   index,
   canBeRemoved = true,
   onRemove,
@@ -79,6 +81,7 @@ const FormContact = <T,>({
       >
         <NewContactPersonForm
           hankeTunnus={hankeTunnus}
+          hankeUsers={hankeUsers}
           onContactPersonAdded={onContactPersonAdded}
           onClose={closeNewContactForm}
         />

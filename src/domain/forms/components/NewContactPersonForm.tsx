@@ -15,15 +15,22 @@ export type ContactPersonAddedNotification = 'success' | 'error' | null;
 
 type Props = {
   hankeTunnus: string;
+  hankeUsers: HankeUser[] | undefined;
   onContactPersonAdded?: (newHankeUser: HankeUser) => void;
   onClose: (notification: ContactPersonAddedNotification) => void;
 };
 
-function NewContactPersonForm({ hankeTunnus, onContactPersonAdded, onClose }: Readonly<Props>) {
+function NewContactPersonForm({
+  hankeTunnus,
+  hankeUsers,
+  onContactPersonAdded,
+  onClose,
+}: Readonly<Props>) {
   const { t } = useTranslation();
   const formContext = useForm<Yhteyshenkilo>({
     mode: 'onTouched',
     resolver: yupResolver(yhteyshenkiloSchema),
+    context: { hankeUsers: hankeUsers, errorMessageKey: 'emailAlreadyUsedInContacts' },
   });
   const { getValues, trigger } = formContext;
   const { mutate } = useMutation(createHankeUser);

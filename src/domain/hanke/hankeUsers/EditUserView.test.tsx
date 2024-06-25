@@ -145,7 +145,7 @@ test('Should be able to edit own information', async () => {
     <EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afa6" hankeTunnus={hankeTunnus} />,
   );
   await waitForLoadingToFinish();
-  const sahkoposti = 'matti@test.com';
+  const sahkoposti = 'matti.meikalainen@test.com';
   const puhelinnumero = '0000000000';
   fillUserInformation({ sahkoposti, puhelinnumero });
   await user.click(screen.getByRole('button', { name: /tallenna muutokset/i }));
@@ -171,6 +171,23 @@ test('Should not be able to save changes if form is not valid', async () => {
 
   expect(screen.getByText('Sähköposti on virheellinen')).toBeInTheDocument();
   expect(screen.getByText('Kenttä on pakollinen')).toBeInTheDocument();
+  expect(updateSelf).not.toHaveBeenCalled();
+
+  updateSelf.mockRestore();
+});
+
+test('Should not be able to save changes if email address is already in use', async () => {
+  const updateSelf = jest.spyOn(hankeUsersApi, 'updateSelf');
+  const { user } = render(
+    <EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afa6" hankeTunnus="HAI22-2" />,
+  );
+  await waitForLoadingToFinish();
+  fillUserInformation({ sahkoposti: 'teppo@test.com', puhelinnumero: '123456' });
+  await user.click(screen.getByRole('button', { name: /tallenna muutokset/i }));
+
+  expect(
+    screen.getByText('Valitsemasi sähköpostiosoite löytyy jo toiselta käyttäjältä.'),
+  ).toBeInTheDocument();
   expect(updateSelf).not.toHaveBeenCalled();
 
   updateSelf.mockRestore();

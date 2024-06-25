@@ -718,7 +718,7 @@ test('Should be able to create new user and new user is added to dropdown', asyn
   const newUser = {
     etunimi: 'Marja',
     sukunimi: 'Meikäkäinen',
-    sahkoposti: 'marja@test.com',
+    sahkoposti: 'marja.meikalainen@test.com',
     puhelinnumero: '0000000000',
   };
   const testApplication = applications[0] as Application<JohtoselvitysData>;
@@ -732,6 +732,27 @@ test('Should be able to create new user and new user is added to dropdown', asyn
   expect(screen.getByText('Yhteyshenkilö tallennettu')).toBeInTheDocument();
   expect(
     screen.getByText(`${newUser.etunimi} ${newUser.sukunimi} (${newUser.sahkoposti})`),
+  ).toBeInTheDocument();
+});
+
+test('Should show validation error if the new user has an existing email address', async () => {
+  const newUser = {
+    etunimi: 'Marja',
+    sukunimi: 'Meikäkäinen',
+    sahkoposti: 'matti.meikalainen@test.com',
+    puhelinnumero: '0000000000',
+  };
+  const testApplication = applications[0] as Application<JohtoselvitysData>;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+  expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
+  await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
+  fillNewContactPersonForm(newUser);
+  await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+  expect(
+    screen.getByText(
+      /valitsemasi sähköpostiosoite löytyy jo hankkeen käyttäjähallinnasta. lisää yhteyshenkilö pudotusvalikosta./i,
+    ),
   ).toBeInTheDocument();
 });
 
@@ -775,8 +796,8 @@ test('Should remove validation error if yhteyshenkilo is created for yhteystieto
   await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
   fillNewContactPersonForm({
     etunimi: 'Matti',
-    sukunimi: 'Meikäläinen',
-    sahkoposti: 'matti@test.com',
+    sukunimi: 'Kymäläinen',
+    sahkoposti: 'matti.kymalainen@test.com',
     puhelinnumero: '0000000000',
   });
   await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
