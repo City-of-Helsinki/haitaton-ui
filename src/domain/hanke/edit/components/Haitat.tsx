@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Fieldset, IconCross, IconTrash } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { Spacer } from '@chakra-ui/react';
+import { debounce } from 'lodash';
 import { FORMFIELD, HankeDataFormState } from '../types';
 import DatePicker from '../../../../common/components/datePicker/DatePicker';
 import Dropdown from '../../../../common/components/dropdown/Dropdown';
@@ -62,9 +63,13 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea, onChangeArea }) => {
     setAreaToRemove(null);
   }
 
-  function handleNuisancesChange() {
-    onChangeArea(watchHankeAlue);
-  }
+  const handleNuisancesChange = debounce(
+    () => {
+      onChangeArea(watchHankeAlue);
+    },
+    300,
+    { leading: true, trailing: false },
+  );
 
   return (
     <>
