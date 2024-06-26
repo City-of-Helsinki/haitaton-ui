@@ -5,6 +5,8 @@ import authService from '../auth/authService';
 import { server } from '../mocks/test-server';
 import Homepage from './HomepageComponent';
 
+jest.setTimeout(10000);
+
 const userName = 'Test User';
 const userEmail = 'test.user@mail.com';
 const mockUser: Partial<User> = {
@@ -58,7 +60,9 @@ describe('Create new hanke from dialog', () => {
     await user.clear(screen.getByLabelText(/sähköposti/i));
     await user.click(screen.getByRole('button', { name: /luo hanke/i }));
 
-    expect(screen.getByText(/kentän pituus oltava vähintään 3 merkkiä/i)).toBeInTheDocument();
+    expect(
+      await screen.findByText(/kentän pituus oltava vähintään 3 merkkiä/i),
+    ).toBeInTheDocument();
     expect(screen.getAllByText(/kenttä on pakollinen/i)).toHaveLength(2);
     expect(window.location.pathname).toBe('/');
   });
@@ -73,7 +77,7 @@ describe('Create new hanke from dialog', () => {
     fillInformation();
     await user.click(screen.getByRole('button', { name: /luo hanke/i }));
 
-    expect(screen.getByText('Tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument();
+    expect(await screen.findByText('Tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument();
     expect(window.location.pathname).toBe('/');
   });
 

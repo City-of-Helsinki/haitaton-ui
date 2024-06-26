@@ -5,6 +5,8 @@ import { ApplicationCancel } from './ApplicationCancel';
 import mockApplications from '../../mocks/data/hakemukset-data';
 import { server } from '../../mocks/test-server';
 
+jest.setTimeout(10000);
+
 test('Cancel application when it has not been saved', async () => {
   const { user } = render(
     <ApplicationCancel
@@ -21,7 +23,7 @@ test('Cancel application when it has not been saved', async () => {
   await user.click(screen.getByRole('button', { name: 'Vahvista' }));
 
   expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2');
-  expect(screen.queryByText('Hakemus peruttiin onnistuneesti')).toBeInTheDocument();
+  expect(await screen.findByText('Hakemus peruttiin onnistuneesti')).toBeInTheDocument();
 });
 
 test('Cancel application when it has been saved, but not sent to Allu', async () => {

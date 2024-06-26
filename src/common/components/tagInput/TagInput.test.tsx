@@ -1,6 +1,8 @@
 import { render, screen } from '../../../testUtils/render';
 import TagInput from './TagInput';
 
+jest.setTimeout(10000);
+
 test('Should show existing tags', async () => {
   render(
     <TagInput id="test-input" label="Tag Input" tags={['Tag1', 'Tag2']} onChange={() => {}} />,

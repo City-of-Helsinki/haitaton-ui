@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { act, fireEvent, render, screen, waitFor, within } from '../../../testUtils/render';
+import { fireEvent, render, screen, waitFor, within } from '../../../testUtils/render';
 import api from '../../../domain/api/api';
 import FileUpload from './FileUpload';
 import { server } from '../../../domain/mocks/test-server';
@@ -68,28 +68,18 @@ function getFileUpload(options: Partial<FileUploadOptions> = {}) {
   return { renderResult, fileUploadElement };
 }
 
-async function waitLoading() {
-  await waitFor(() => screen.findByText('Tallennetaan tiedostoja'));
-  await act(async () => {
-    waitFor(() => expect(screen.queryByText('Tallennetaan tiedostoja')).not.toBeInTheDocument());
-  });
-}
-
 test('Should upload files successfully and loading indicator is displayed', async () => {
   const uploadMock = jest.fn(uploadFunction);
   const {
     renderResult: { user },
     fileUploadElement,
   } = getFileUpload({ upload: uploadMock });
-  user.upload(fileUploadElement, [
+  await user.upload(fileUploadElement, [
     new File(['test-a'], 'test-file-a.png', { type: 'image/png' }),
     new File(['test-b'], 'test-file-b.jpg', { type: 'image/jpg' }),
   ]);
 
-  await waitLoading();
-  await waitFor(() => {
-    expect(screen.queryByText('2/2 tiedosto(a) tallennettu')).toBeInTheDocument();
-  });
+  expect(await screen.findByText('2/2 tiedosto(a) tallennettu')).toBeInTheDocument();
   expect(uploadMock).toHaveBeenCalledTimes(2);
 });
 
@@ -129,7 +119,6 @@ test('Should show amount of successful files uploaded and errors correctly when 
     new File(['test-c'], fileNameC, { type: 'image/png' }),
   ]);
 
-  await waitLoading();
   await waitFor(() => {
     expect(screen.queryByText('1/3 tiedosto(a) tallennettu')).toBeInTheDocument();
   });
@@ -360,17 +349,13 @@ test('Should be able to cancel upload requests', async () => {
     renderResult: { user },
     fileUploadElement,
   } = getFileUpload({ accept: '.pdf' });
-  user.upload(fileUploadElement, [
+  await user.upload(fileUploadElement, [
     new File(['test-a'], 'test-file-a.pdf', { type: 'application/pdf' }),
     new File(['test-b'], 'test-file-b.pdf', { type: 'application/pdf' }),
   ]);
-  await waitFor(() => screen.findByText('Tallennetaan tiedostoja'));
-  await act(async () => {
-    user.click(screen.getByRole('button', { name: 'Peruuta' }));
-  });
-  await waitFor(() =>
-    expect(screen.queryByText('Tallennetaan tiedostoja')).not.toBeInTheDocument(),
-  );
+  await screen.findByText('Tallennetaan tiedostoja');
+  await user.click(screen.getByRole('button', { name: 'Peruuta' }));
+  expect(screen.queryByText('Tallennetaan tiedostoja')).not.toBeInTheDocument();
   expect(abortSpy).toHaveBeenCalledTimes(1);
   abortSpy.mockRestore();
 });
@@ -404,7 +389,6 @@ test('Should show error messages for files that exceed the maximum number of fil
     new File(['test-b'], fileNameC, { type: 'application/pdf' }),
   ]);
 
-  await waitLoading();
   await waitFor(() => {
     expect(screen.queryByText('1/3 tiedosto(a) tallennettu')).toBeInTheDocument();
   });

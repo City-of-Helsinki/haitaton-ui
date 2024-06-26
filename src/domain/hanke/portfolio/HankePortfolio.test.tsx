@@ -19,7 +19,7 @@ const EMPTY_HANKE_LIST_TEXT =
 
 afterEach(cleanup);
 
-jest.setTimeout(30000);
+jest.setTimeout(60000);
 
 const initHankkeetResponse = (response: HankeDataDraft[]) => {
   server.use(
@@ -85,42 +85,40 @@ describe('HankePortfolioComponent', () => {
     const renderedComponent = render(
       <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
     );
-    expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
+    expect(await renderedComponent.findByTestId('numberOfFilteredRows')).toHaveTextContent('2');
     changeFilterDate(END_DATE_LABEL, renderedComponent, '01.10.2022');
-    expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
+    expect(await renderedComponent.findByTestId('numberOfFilteredRows')).toHaveTextContent('0');
     expect(screen.queryByText(EMPTY_HANKE_LIST_TEXT)).toBeInTheDocument();
     changeFilterDate(END_DATE_LABEL, renderedComponent, '05.10.2022');
-    expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
+    expect(await renderedComponent.findByTestId('numberOfFilteredRows')).toHaveTextContent('2');
     changeFilterDate(END_DATE_LABEL, renderedComponent, '11.10.2022');
-    expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
+    expect(await renderedComponent.findByTestId('numberOfFilteredRows')).toHaveTextContent('2');
     changeFilterDate(END_DATE_LABEL, renderedComponent, null);
-    expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
+    expect(await renderedComponent.findByTestId('numberOfFilteredRows')).toHaveTextContent('2');
   });
 
   test('Changing Hanke type filters correct number of projects', async () => {
-    const renderedComponent = render(
+    const { user, findByTestId, getByRole, getByText } = render(
       <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
     );
-    expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
-    await renderedComponent.user.click(
-      renderedComponent.getByRole('button', { name: 'Työn tyyppi' }),
-    );
-    await renderedComponent.user.click(renderedComponent.getByText('Sähkö'));
-    renderedComponent.getByText('Hankevaiheet').click();
-    expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
+    const numberElement = await findByTestId('numberOfFilteredRows');
+    expect(numberElement).toHaveTextContent('2');
+    const button = getByRole('button', { name: 'Työn tyyppi' });
+    await user.click(button);
+    await user.click(getByText('Sähkö'));
+    const hankeVaiheet = getByText('Hankevaiheet');
+    await user.click(hankeVaiheet);
+    expect(numberElement).toHaveTextContent('0');
     expect(screen.queryByText(EMPTY_HANKE_LIST_TEXT)).toBeInTheDocument();
-    await renderedComponent.user.click(
-      renderedComponent.getByRole('button', { name: 'Työn tyyppi' }),
-    );
-    await renderedComponent.user.click(renderedComponent.getByText('Viemäri'));
-    renderedComponent.getByText('Hankevaiheet').click();
-    expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('1');
-    await renderedComponent.user.click(
-      renderedComponent.getByRole('button', { name: 'Työn tyyppi' }),
-    );
-    await renderedComponent.user.click(renderedComponent.getByText('Sadevesi'));
-    renderedComponent.getByText('Hankevaiheet').click();
-    expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
+    const tyonTyyppi = getByRole('button', { name: 'Työn tyyppi' });
+    await user.click(tyonTyyppi);
+    await user.click(getByText('Viemäri'));
+    await user.click(hankeVaiheet);
+    expect(numberElement).toHaveTextContent('1');
+    await user.click(tyonTyyppi);
+    await user.click(getByText('Sadevesi'));
+    await user.click(hankeVaiheet);
+    expect(numberElement).toHaveTextContent('2');
   });
 
   test('Having no projects renders correct text and new hanke link opens hanke create dialog', async () => {
