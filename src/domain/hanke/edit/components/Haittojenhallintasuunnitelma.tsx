@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Box, HStack } from '@chakra-ui/react';
+import { $enum } from 'ts-enum-util';
 import { FORMFIELD, HankeDataFormState } from '../types';
-import { HAITTOJENHALLINTATYYPPI, HankeData } from '../../../types/hanke';
+import {
+  HAITTOJENHALLINTATYYPPI,
+  HANKE_MELUHAITTA,
+  HANKE_POLYHAITTA,
+  HANKE_TARINAHAITTA,
+  HankeData,
+} from '../../../types/hanke';
 import TextArea from '../../../../common/components/textArea/TextArea';
 import { sortedLiikenneHaittojenhallintatyyppi } from '../utils';
 import useFieldArrayWithStateUpdate from '../../../../common/hooks/useFieldArrayWithStateUpdate';
@@ -13,6 +20,14 @@ import { HaittaIndexData } from '../../../common/haittaIndexes/types';
 import CustomAccordion from '../../../../common/components/customAccordion/CustomAccordion';
 import HaittaIndex from '../../../common/haittaIndexes/HaittaIndex';
 import { HaittaSubSection } from '../../../common/haittaIndexes/HaittaSubSection';
+import HaittaIndexNumber from '../../../common/haittaIndexes/HaittaIndexNumber';
+import styles from './Haittojenhallintasuunnitelma.module.scss';
+
+function mapNuisanceEnumIndexToNuisanceIndex(index: number): number {
+  if (index === 2) return 3;
+  if (index === 3) return 5;
+  return index;
+}
 
 function HaittaIndexHeading({ index }: Readonly<{ index: number | undefined }>) {
   const { t } = useTranslation();
@@ -41,6 +56,15 @@ const Haittojenhallintasuunnitelma: React.FC<Props> = ({ hanke, index }) => {
   const haittojenhallintatyypit = sortedLiikenneHaittojenhallintatyyppi(tormaystarkasteluTulos);
   const [drawSource] = useState<VectorSource>(new VectorSource());
   const addressCoordinate = useAddressCoordinate(hanke.tyomaaKatuosoite);
+  const meluhaittaIndex = mapNuisanceEnumIndexToNuisanceIndex(
+    $enum(HANKE_MELUHAITTA).indexOfKey(hankealue.meluHaitta!),
+  );
+  const polyhaittaIndex = mapNuisanceEnumIndexToNuisanceIndex(
+    $enum(HANKE_POLYHAITTA).indexOfKey(hankealue.polyHaitta!),
+  );
+  const tarinaHaittaIndex = mapNuisanceEnumIndexToNuisanceIndex(
+    $enum(HANKE_TARINAHAITTA).indexOfKey(hankealue.tarinaHaitta!),
+  );
 
   return (
     <div>
@@ -91,7 +115,7 @@ const Haittojenhallintasuunnitelma: React.FC<Props> = ({ hanke, index }) => {
               drawSource={drawSource}
             />
           </Box>
-          {haitta === HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE && (
+          {haitta === HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE ? (
             <CustomAccordion
               heading={<HaittaIndexHeading index={indeksi} />}
               headingBorderBottom={false}
@@ -124,6 +148,8 @@ const Haittojenhallintasuunnitelma: React.FC<Props> = ({ hanke, index }) => {
                 testId="test-haitanKesto"
               />
             </CustomAccordion>
+          ) : (
+            <HaittaIndexHeading index={indeksi} />
           )}
           <Box mt="var(--spacing-m)">
             <TextArea
@@ -140,6 +166,44 @@ const Haittojenhallintasuunnitelma: React.FC<Props> = ({ hanke, index }) => {
         <Box as="h4" className="nuisanceType">
           {t(`hankeForm:haittojenHallintaForm:nuisanceType:${HAITTOJENHALLINTATYYPPI.MUUT}`)}
         </Box>
+        <HaittaSubSection
+          heading={t(`hankeForm:labels:meluHaittaShort`)}
+          haittaIndex={
+            <HaittaIndexNumber
+              index={meluhaittaIndex}
+              showColorByIndex={false}
+              testId="test-meluhaitta"
+            />
+          }
+          className={styles.muutHaittojenHallintaToimetSubSection}
+        />
+        <HaittaSubSection
+          heading={t(`hankeForm:labels:polyHaittaShort`)}
+          haittaIndex={
+            <HaittaIndexNumber
+              index={polyhaittaIndex}
+              showColorByIndex={false}
+              testId="test-polyhaitta"
+            />
+          }
+          className={styles.muutHaittojenHallintaToimetSubSection}
+        />
+        <HaittaSubSection
+          heading={t(`hankeForm:labels:tarinaHaittaShort`)}
+          haittaIndex={
+            <HaittaIndexNumber
+              index={tarinaHaittaIndex}
+              showColorByIndex={false}
+              testId="test-tarinahaitta"
+            />
+          }
+          className={styles.muutHaittojenHallintaToimetSubSection}
+        />
+        <HaittaSubSection
+          heading={t(`hankeForm:labels:checkSurrounding`)}
+          haittaIndex={null}
+          className={styles.muutHaittojenHallintaToimetSubSection}
+        />
         <Box mt="var(--spacing-m)">
           <TextArea
             name={`${FORMFIELD.HANKEALUEET}.${index}.haittojenhallintasuunnitelma.${HAITTOJENHALLINTATYYPPI.MUUT}`}

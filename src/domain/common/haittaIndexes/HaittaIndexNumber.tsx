@@ -14,6 +14,7 @@ type Props = {
   testId?: string;
   tooltipContent?: React.ReactNode;
   showTooltip?: boolean;
+  showColorByIndex?: boolean;
 };
 
 const HaittaIndexNumber: React.FC<Props> = ({
@@ -21,6 +22,7 @@ const HaittaIndexNumber: React.FC<Props> = ({
   testId,
   tooltipContent,
   showTooltip = false,
+  showColorByIndex = true,
 }) => {
   const { t } = useTranslation();
 
@@ -29,12 +31,17 @@ const HaittaIndexNumber: React.FC<Props> = ({
   return (
     <Box display="flex" alignItems="center" flexDirection="row" gap="8px">
       <Box
-        backgroundColor={getColorByStatus(status)}
+        backgroundColor={
+          showColorByIndex ? getColorByStatus(status) : 'var(--color-coat-of-arms-light)'
+        }
         color={
-          status === LIIKENNEHAITTA_STATUS.YELLOW || status === LIIKENNEHAITTA_STATUS.GREY
+          status === LIIKENNEHAITTA_STATUS.YELLOW ||
+          status === LIIKENNEHAITTA_STATUS.GREY ||
+          !showColorByIndex
             ? 'black'
             : 'white'
         }
+        border={showColorByIndex ? 'none' : '1px solid var(--color-black)'}
         width="40px"
         fontSize="var(--fontsize-body-m)"
         textAlign="center"
