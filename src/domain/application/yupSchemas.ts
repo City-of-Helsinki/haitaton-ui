@@ -1,5 +1,5 @@
 import yup from '../../common/utils/yup';
-import { ApplicationType, ContactType } from './types/application';
+import { ApplicationType, ContactType, PostalAddress } from './types/application';
 
 const contactSchema = yup
   .object({
@@ -53,26 +53,48 @@ const requiredPostalAddressSchema = yup.object({
   city: yup.string().required(),
 });
 
-export const invoicingCustomerSchema = yup.object({
-  name: yup.string().trim().max(100).required(),
-  type: yup.mixed<ContactType>().required(),
-  registryKey: registryKeySchema.required(),
-  postalAddress: postalAddressSchema.when(['ovt', 'invoicingOperator', 'customerReference'], {
-    is: (ovt: string, invoicingOperator: string, customerReference: string) =>
-      !ovt || !invoicingOperator || !customerReference,
-    then: () => requiredPostalAddressSchema,
-    otherwise: (schema) => schema,
-  }),
-  email: yup.string().nullable().trim().email().max(100),
-  phone: yup.string().nullable().phone().trim().max(20),
-  ovt: yup
-    .string()
-    .nullable()
-    .transform((value: string, originalValue: string) => (originalValue === '' ? null : value))
-    .min(12),
-  invoicingOperator: yup.string().nullable(),
-  customerReference: yup.string().nullable(),
-});
+function ovtRequired(postalAddress: PostalAddress, type: ContactType) {
+  return (
+    (type === 'COMPANY' || type === 'ASSOCIATION') &&
+    (!postalAddress?.streetAddress.streetName || !postalAddress?.postalCode || !postalAddress?.city)
+  );
+}
+
+export const invoicingCustomerSchema = yup.object().shape(
+  {
+    name: yup.string().trim().max(100).required(),
+    type: yup.mixed<ContactType>().required(),
+    registryKey: registryKeySchema.required(),
+    postalAddress: postalAddressSchema.when(['ovt', 'invoicingOperator'], {
+      is: (ovt: string, invoicingOperator: string) => !ovt || !invoicingOperator,
+      then: () => requiredPostalAddressSchema,
+      otherwise: (schema) => schema,
+    }),
+    email: yup.string().nullable().trim().email().max(100),
+    phone: yup.string().nullable().phone().trim().max(20),
+    ovt: yup
+      .string()
+      .nullable()
+      .transform((value: string, originalValue: string) => (originalValue === '' ? null : value))
+      .min(12)
+      .when(['postalAddress', 'type'], {
+        is: ovtRequired,
+        then: (schema) => schema.required(),
+      }),
+    invoicingOperator: yup
+      .string()
+      .nullable()
+      .when(['postalAddress', 'type'], {
+        is: ovtRequired,
+        then: (schema) => schema.required(),
+      }),
+    customerReference: yup.string().nullable(),
+  },
+  [
+    ['ovt', 'postalAddress'],
+    ['invoicingOperator', 'postalAddress'],
+  ],
+);
 
 export const geometrySchema = yup.object({
   type: yup.mixed<'Polygon'>().required(),

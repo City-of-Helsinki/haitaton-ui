@@ -14,16 +14,19 @@ export default function Contacts() {
   const { t } = useTranslation();
   const { watch, resetField, trigger } = useFormContext<KaivuilmoitusFormValues>();
 
-  const [selectedContactType, ovt, invoicingOperator, customerReference] = watch([
+  const [selectedContactType, ovt, invoicingOperator, streetName, postalCode, city] = watch([
     'applicationData.invoicingCustomer.type',
     'applicationData.invoicingCustomer.ovt',
     'applicationData.invoicingCustomer.invoicingOperator',
-    'applicationData.invoicingCustomer.customerReference',
+    'applicationData.invoicingCustomer.postalAddress.streetAddress.streetName',
+    'applicationData.invoicingCustomer.postalAddress.postalCode',
+    'applicationData.invoicingCustomer.postalAddress.city',
   ]);
 
   const ovtDisabled = selectedContactType === 'PERSON' || selectedContactType === 'OTHER';
 
-  const postalAddressRequired = !ovt || !invoicingOperator || !customerReference;
+  const postalAddressRequired = !ovt || !invoicingOperator;
+  const ovtRequired = !ovtDisabled && (!streetName || !postalCode || !city);
 
   useEffect(() => {
     if (selectedContactType === 'PERSON' || selectedContactType === 'OTHER') {
@@ -42,6 +45,15 @@ export default function Contacts() {
       ]);
     }
   }, [postalAddressRequired, trigger]);
+
+  useEffect(() => {
+    if (!ovtRequired) {
+      trigger([
+        'applicationData.invoicingCustomer.ovt',
+        'applicationData.invoicingCustomer.invoicingOperator',
+      ]);
+    }
+  }, [ovtRequired, trigger]);
 
   return (
     <>
@@ -85,16 +97,17 @@ export default function Contacts() {
             name="applicationData.invoicingCustomer.ovt"
             label={t('form:yhteystiedot:labels:ovt')}
             disabled={ovtDisabled}
+            required={ovtRequired}
           />
           <TextInput
             name="applicationData.invoicingCustomer.invoicingOperator"
             label={t('form:yhteystiedot:labels:invoicingOperator')}
             disabled={ovtDisabled}
+            required={ovtRequired}
           />
           <TextInput
             name="applicationData.invoicingCustomer.customerReference"
             label={t('form:yhteystiedot:labels:customerReference')}
-            disabled={ovtDisabled}
           />
         </ResponsiveGrid>
         <ResponsiveGrid>

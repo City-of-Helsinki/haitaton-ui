@@ -525,7 +525,6 @@ test('Should disable OVT fields if invoicing customer type is not COMPANY or ASS
 
   expect(screen.getByTestId('applicationData.invoicingCustomer.ovt')).toBeDisabled();
   expect(screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator')).toBeDisabled();
-  expect(screen.getByTestId('applicationData.invoicingCustomer.customerReference')).toBeDisabled();
 });
 
 test('Postal address fields should be required if OVT fields are empty', async () => {
@@ -548,9 +547,6 @@ test('Postal address fields should be required if OVT fields are empty', async (
   fireEvent.change(screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator'), {
     target: { value: '12345' },
   });
-  fireEvent.change(screen.getByTestId('applicationData.invoicingCustomer.customerReference'), {
-    target: { value: '6789' },
-  });
 
   expect(
     screen.getByTestId('applicationData.invoicingCustomer.postalAddress.streetAddress.streetName'),
@@ -560,6 +556,37 @@ test('Postal address fields should be required if OVT fields are empty', async (
   ).not.toBeRequired();
   expect(
     screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city'),
+  ).not.toBeRequired();
+});
+
+test('OVT fields should be required if postal address fields are empty', async () => {
+  const hankeData = hankkeet[1] as HankeData;
+  const { user } = render(<KaivuilmoitusContainer hankeData={hankeData} />);
+  await fillBasicInformation(user);
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+  expect(screen.getByTestId('applicationData.invoicingCustomer.ovt')).toBeRequired();
+  expect(screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator')).toBeRequired();
+
+  fireEvent.change(
+    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.streetAddress.streetName'),
+    {
+      target: { value: 'Katu 1' },
+    },
+  );
+  fireEvent.change(
+    screen.getByTestId('applicationData.invoicingCustomer.postalAddress.postalCode'),
+    {
+      target: { value: '00100' },
+    },
+  );
+  fireEvent.change(screen.getByTestId('applicationData.invoicingCustomer.postalAddress.city'), {
+    target: { value: 'Helsinki' },
+  });
+
+  expect(screen.getByTestId('applicationData.invoicingCustomer.ovt')).not.toBeRequired();
+  expect(
+    screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator'),
   ).not.toBeRequired();
 });
 
