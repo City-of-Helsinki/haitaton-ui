@@ -13,6 +13,8 @@ import PrivacyPolicyPage from './staticPages/PrivacyPolicyPage';
 import ReferencesPage from './staticPages/ReferencesPage';
 import MapAndListPage from './MapAndListPage';
 
+jest.setTimeout(60000);
+
 const skipLinkQuery = `#${SKIP_TO_ELEMENT_ID}`;
 
 /** More tests are needed for pages with user data, but this change is

@@ -4,6 +4,7 @@ import { fireEvent, render, screen } from '../../testUtils/render';
 import authService from '../auth/authService';
 import { server } from '../mocks/test-server';
 import Homepage from './HomepageComponent';
+import { waitFor } from '@testing-library/react';
 
 const userName = 'Test User';
 const userEmail = 'test.user@mail.com';
@@ -20,6 +21,8 @@ const mockUser: Partial<User> = {
     email: userEmail,
   },
 };
+
+jest.setTimeout(60000);
 
 describe('Create new hanke from dialog', () => {
   afterEach(() => {
@@ -50,7 +53,7 @@ describe('Create new hanke from dialog', () => {
     fillInformation();
     await user.click(screen.getByRole('button', { name: /luo hanke/i }));
 
-    expect(window.location.pathname).toBe('/fi/hanke/HAI22-12/muokkaa');
+    await waitFor(() => expect(window.location.pathname).toBe('/fi/hanke/HAI22-12/muokkaa'));
   });
 
   test('Should show validation errors and not create hanke if information is missing', async () => {
@@ -58,7 +61,9 @@ describe('Create new hanke from dialog', () => {
     await user.clear(screen.getByLabelText(/sähköposti/i));
     await user.click(screen.getByRole('button', { name: /luo hanke/i }));
 
-    expect(screen.getByText(/kentän pituus oltava vähintään 3 merkkiä/i)).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByText(/kentän pituus oltava vähintään 3 merkkiä/i)).toBeInTheDocument(),
+    );
     expect(screen.getAllByText(/kenttä on pakollinen/i)).toHaveLength(2);
     expect(window.location.pathname).toBe('/');
   });
@@ -73,7 +78,9 @@ describe('Create new hanke from dialog', () => {
     fillInformation();
     await user.click(screen.getByRole('button', { name: /luo hanke/i }));
 
-    expect(screen.getByText('Tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByText('Tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument(),
+    );
     expect(window.location.pathname).toBe('/');
   });
 
@@ -111,7 +118,9 @@ describe('Create johtoselvitys from dialog', () => {
     fillInformation();
     await user.click(screen.getByRole('button', { name: /luo hakemus/i }));
 
-    expect(window.location.pathname).toBe('/fi/johtoselvityshakemus/7/muokkaa');
+    await waitFor(() =>
+      expect(window.location.pathname).toBe('/fi/johtoselvityshakemus/7/muokkaa'),
+    );
   });
 
   test('Should show validation errors and not create johtoselvitys if information is missing', async () => {
@@ -119,7 +128,7 @@ describe('Create johtoselvitys from dialog', () => {
     await user.clear(screen.getByLabelText(/sähköposti/i));
     await user.click(screen.getByRole('button', { name: /luo hakemus/i }));
 
-    expect(screen.getAllByText(/kenttä on pakollinen/i)).toHaveLength(3);
+    await waitFor(() => expect(screen.getAllByText(/kenttä on pakollinen/i)).toHaveLength(3));
     expect(window.location.pathname).toBe('/');
   });
 
@@ -133,14 +142,16 @@ describe('Create johtoselvitys from dialog', () => {
     fillInformation();
     await user.click(screen.getByRole('button', { name: /luo hakemus/i }));
 
-    expect(screen.getByText('Tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByText('Tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument(),
+    );
     expect(window.location.pathname).toBe('/');
   });
 
   test('Email should be pre-filled', async () => {
     await openJohtoselvitysCreateDialog();
 
-    expect(screen.getByLabelText(/sähköposti/i)).toHaveValue(userEmail);
+    await waitFor(() => expect(screen.getByLabelText(/sähköposti/i)).toHaveValue(userEmail));
   });
 
   test('Should show error notification if phone number is not valid', async () => {

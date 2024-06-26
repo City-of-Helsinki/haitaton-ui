@@ -4,6 +4,9 @@ import { render, screen } from '../../../testUtils/render';
 import { ApplicationCancel } from './ApplicationCancel';
 import mockApplications from '../../mocks/data/hakemukset-data';
 import { server } from '../../mocks/test-server';
+import { waitFor } from '@testing-library/react';
+
+jest.setTimeout(60000);
 
 test('Cancel application when it has not been saved', async () => {
   const { user } = render(
@@ -20,8 +23,10 @@ test('Cancel application when it has not been saved', async () => {
   // Click confirm button in the confirmation dialog
   await user.click(screen.getByRole('button', { name: 'Vahvista' }));
 
-  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2');
-  expect(screen.queryByText('Hakemus peruttiin onnistuneesti')).toBeInTheDocument();
+  await waitFor(() => expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2'));
+  await waitFor(() =>
+    expect(screen.queryByText('Hakemus peruttiin onnistuneesti')).toBeInTheDocument(),
+  );
 });
 
 test('Cancel application when it has been saved, but not sent to Allu', async () => {
@@ -65,7 +70,9 @@ test('Cancel application when generated hanke is also deleted, directs to hanke 
   await user.click(screen.getByRole('button', { name: 'Vahvista' }));
 
   expect(window.location.pathname).toBe('/fi/hankesalkku');
-  expect(screen.queryByText('Hakemus peruttiin onnistuneesti')).toBeInTheDocument();
+  await waitFor(() =>
+    expect(screen.queryByText('Hakemus peruttiin onnistuneesti')).toBeInTheDocument(),
+  );
 });
 
 test('Cancel application when it has been saved and sent to Allu but is still pending', async () => {

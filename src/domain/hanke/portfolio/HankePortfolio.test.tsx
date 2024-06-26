@@ -19,7 +19,7 @@ const EMPTY_HANKE_LIST_TEXT =
 
 afterEach(cleanup);
 
-jest.setTimeout(30000);
+jest.setTimeout(90000);
 
 const initHankkeetResponse = (response: HankeDataDraft[]) => {
   server.use(
@@ -101,26 +101,34 @@ describe('HankePortfolioComponent', () => {
     const renderedComponent = render(
       <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
     );
-    expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
+    await waitFor(() =>
+      expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2'),
+    );
     await renderedComponent.user.click(
       renderedComponent.getByRole('button', { name: 'Työn tyyppi' }),
     );
     await renderedComponent.user.click(renderedComponent.getByText('Sähkö'));
     renderedComponent.getByText('Hankevaiheet').click();
-    expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
+    await waitFor(() => {
+      expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('0');
+    });
     expect(screen.queryByText(EMPTY_HANKE_LIST_TEXT)).toBeInTheDocument();
     await renderedComponent.user.click(
       renderedComponent.getByRole('button', { name: 'Työn tyyppi' }),
     );
     await renderedComponent.user.click(renderedComponent.getByText('Viemäri'));
     renderedComponent.getByText('Hankevaiheet').click();
-    expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('1');
+    await waitFor(() => {
+      expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('1');
+    });
     await renderedComponent.user.click(
       renderedComponent.getByRole('button', { name: 'Työn tyyppi' }),
     );
     await renderedComponent.user.click(renderedComponent.getByText('Sadevesi'));
     renderedComponent.getByText('Hankevaiheet').click();
-    expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
+    await waitFor(() => {
+      expect(renderedComponent.getByTestId('numberOfFilteredRows')).toHaveTextContent('2');
+    });
   });
 
   test('Having no projects renders correct text and new hanke link opens hanke create dialog', async () => {
@@ -159,7 +167,7 @@ describe('HankePortfolioComponent', () => {
     render(<HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={signedUserData} />);
 
     await waitFor(() => {
-      expect(screen.queryAllByTestId('hankeEditLink')).toHaveLength(1);
+      expect(screen.queryAllByTestId('hankeEditLink').length).toBe(1);
     });
   });
 

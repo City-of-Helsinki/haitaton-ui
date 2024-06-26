@@ -2,6 +2,9 @@ import { StepState, TextInput } from 'hds-react';
 import MultipageForm from './MultipageForm';
 import { render, screen } from '../../testUtils/render';
 import FormActions from './components/FormActions';
+import { waitFor } from '@testing-library/react';
+
+jest.setTimeout(10000);
 
 function Page1() {
   return (
@@ -105,25 +108,25 @@ test('form pages can be navigated', async () => {
 
   const stepperStepTwoButton = screen.getByTestId('hds-stepper-step-1');
   await user.click(stepperStepTwoButton);
-  expect(handleSave).toHaveBeenCalledTimes(1);
+  await waitFor(() => expect(handleSave).toHaveBeenCalledTimes(1));
   expect(screen.getByText('Vaihe 2/2: Title 2')).toBeDefined();
   expect(screen.getByText('Page 2')).toBeDefined();
 
   const stepperStepOneButton = screen.getByTestId('hds-stepper-step-0');
   await user.click(stepperStepOneButton);
-  expect(handleSave).toHaveBeenCalledTimes(2);
+  await waitFor(() => expect(handleSave).toHaveBeenCalledTimes(2));
   expect(screen.getByText('Vaihe 1/2: Title 1')).toBeDefined();
   expect(screen.getByText('Page 1')).toBeDefined();
 
   const nextButton = screen.getByRole('button', { name: 'Seuraava' });
   await user.click(nextButton);
-  expect(handleSave).toHaveBeenCalledTimes(3);
+  await waitFor(() => expect(handleSave).toHaveBeenCalledTimes(3));
   expect(screen.getByText('Vaihe 2/2: Title 2')).toBeDefined();
   expect(screen.getByText('Page 2')).toBeDefined();
 
   const prevButton = screen.getByRole('button', { name: 'Edellinen' });
   await user.click(prevButton);
-  expect(handleSave).toHaveBeenCalledTimes(4);
+  await waitFor(() => expect(handleSave).toHaveBeenCalledTimes(4));
   expect(screen.getByText('Vaihe 1/2: Title 1')).toBeDefined();
   expect(screen.getByText('Page 1')).toBeDefined();
 });

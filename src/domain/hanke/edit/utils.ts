@@ -209,7 +209,11 @@ export function sortedLiikenneHaittojenhallintatyyppi(
 
   const sortedIndices = Object.values(HAITTA_INDEX_TYPE)
     .map((key) => ({
-      type: key.toUpperCase().replace('INDEKSI', '') as HAITTOJENHALLINTATYYPPI,
+      type: key.toUpperCase().replace('INDEKSI', '') as
+        | HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE
+        | HAITTOJENHALLINTATYYPPI.LINJAAUTOLIIKENNE
+        | HAITTOJENHALLINTATYYPPI.RAITIOLIIKENNE
+        | HAITTOJENHALLINTATYYPPI.PYORALIIKENNE,
       value: value(tormaystarkasteluTulos[keyOfIndexType(key)]),
     }))
     .sort((a, b): number => {

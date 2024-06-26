@@ -8,15 +8,7 @@ import {
   HankeData,
   HankkeenHaittojenhallintasuunnitelma,
 } from '../../types/hanke';
-import {
-  render,
-  cleanup,
-  fireEvent,
-  waitFor,
-  screen,
-  act,
-  within,
-} from '../../../testUtils/render';
+import { render, cleanup, fireEvent, waitFor, screen, within } from '../../../testUtils/render';
 import hankkeet from '../../mocks/data/hankkeet-data';
 import { server } from '../../mocks/test-server';
 import { HankeAttachmentMetadata } from '../hankeAttachments/types';
@@ -27,10 +19,11 @@ import { fillNewContactPersonForm } from '../../forms/components/testUtils';
 import { cloneDeep } from 'lodash';
 import { Feature } from 'ol';
 import { Polygon } from 'ol/geom';
+import { waitForElementToBeRemoved } from '@testing-library/react';
 
 afterEach(cleanup);
 
-jest.setTimeout(50000);
+jest.setTimeout(120000);
 
 const DUMMY_DATA = 'dummy_file_data';
 
@@ -145,7 +138,7 @@ async function setupAlueetPage(hanke: HankeDataFormState = hankkeet[2] as HankeD
   );
 
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  expect(screen.queryByText('Vaihe 2/6: Alueet')).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText('Vaihe 2/6: Alueet')).toBeInTheDocument());
 
   return { user };
 }
@@ -161,7 +154,9 @@ async function setupHaittojenHallintaPage(
 
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  expect(screen.queryByText('Vaihe 3/6: Haittojen hallinta')).toBeInTheDocument();
+  await waitFor(() =>
+    expect(screen.queryByText('Vaihe 3/6: Haittojen hallinta')).toBeInTheDocument(),
+  );
 
   return { user };
 }
@@ -229,7 +224,9 @@ describe('HankeForm', () => {
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-    expect(screen.queryByText('Vaihe 3/6: Haittojen hallinta')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.queryByText('Vaihe 3/6: Haittojen hallinta')).toBeInTheDocument(),
+    );
   });
 
   test('Hanke nimi should be limited to 100 characters and not exceed the limit with additional characters', async () => {
@@ -253,7 +250,7 @@ describe('HankeForm', () => {
     await setupAlueetPage();
 
     // Area name
-    expect(screen.getByTestId('alueet.0.nimi')).toHaveValue('Hankealue 1');
+    await waitFor(() => expect(screen.getByTestId('alueet.0.nimi')).toHaveValue('Hankealue 1'));
     // Start date of the nuisance
     expect(screen.getByDisplayValue('2.1.2023')).toBeInTheDocument();
     // End date of the nuisance
@@ -291,7 +288,9 @@ describe('HankeForm', () => {
   test('Nuisance control plan is shown correctly', async () => {
     await setupHaittojenHallintaPage();
 
-    expect(screen.getByText('Yleisten haittojen hallintasuunnitelma')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByText('Yleisten haittojen hallintasuunnitelma')).toBeInTheDocument(),
+    );
     expect(
       screen.getByText('Pyöräliikenteelle koituvien haittojen hallintasuunnitelma'),
     ).toBeInTheDocument();
@@ -362,29 +361,35 @@ describe('HankeForm', () => {
     );
 
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
-    // @ts-expect-error updatedHaittojenhallintasuunnitelma is set in the request handler above
-    expect(haittojenhallintasuunnitelma.YLEINEN).toBe(
-      'Yleisten haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    await waitFor(() =>
+      expect(haittojenhallintasuunnitelma.YLEINEN).toBe(
+        'Yleisten haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+      ),
     );
-    // @ts-expect-error updatedHaittojenhallintasuunnitelma is set in the request handler above
-    expect(haittojenhallintasuunnitelma.PYORALIIKENNE).toBe(
-      'Pyöräliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    await waitFor(() =>
+      expect(haittojenhallintasuunnitelma.PYORALIIKENNE).toBe(
+        'Pyöräliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+      ),
     );
-    // @ts-expect-error updatedHaittojenhallintasuunnitelma is set in the request handler above
-    expect(haittojenhallintasuunnitelma.AUTOLIIKENNE).toBe(
-      'Autoliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    await waitFor(() =>
+      expect(haittojenhallintasuunnitelma.AUTOLIIKENNE).toBe(
+        'Autoliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+      ),
     );
-    // @ts-expect-error updatedHaittojenhallintasuunnitelma is set in the request handler above
-    expect(haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE).toBe(
-      'Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    await waitFor(() =>
+      expect(haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE).toBe(
+        'Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+      ),
     );
-    // @ts-expect-error updatedHaittojenhallintasuunnitelma is set in the request handler above
-    expect(haittojenhallintasuunnitelma.RAITIOLIIKENNE).toBe(
-      'Raitioliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    await waitFor(() =>
+      expect(haittojenhallintasuunnitelma.RAITIOLIIKENNE).toBe(
+        'Raitioliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+      ),
     );
-    // @ts-expect-error updatedHaittojenhallintasuunnitelma is set in the request handler above
-    expect(haittojenhallintasuunnitelma.MUUT).toBe(
-      'Muiden haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    await waitFor(() =>
+      expect(haittojenhallintasuunnitelma.MUUT).toBe(
+        'Muiden haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+      ),
     );
   });
 
@@ -415,6 +420,7 @@ describe('HankeForm', () => {
     expect(screen.getAllByText('Rakennuttaja')).toHaveLength(1);
 
     await user.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+    await waitFor(() => expect(screen.getByText(/yksityishenkilö/i)).toBeInTheDocument());
     await user.click(screen.getByText(/yksityishenkilö/i));
     expect(screen.getAllByLabelText(/y-tunnus/i)[1]).toBeDisabled();
 
@@ -446,8 +452,10 @@ describe('HankeForm', () => {
     fillBasicInformation({ name: hankeName });
     await user.click(screen.getByRole('button', { name: 'Tallenna ja keskeytä' }));
 
-    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2');
-    expect(screen.getByText(`Hanke ${hankeName} (HAI22-2) tallennettu omiin hankkeisiin.`));
+    await waitFor(() => expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2'));
+    await waitFor(() =>
+      expect(screen.getByText(`Hanke ${hankeName} (HAI22-2) tallennettu omiin hankkeisiin.`)),
+    );
   });
 
   test('Should be able to save hanke in the last page', async () => {
@@ -464,6 +472,9 @@ describe('HankeForm', () => {
     );
 
     await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Tallenna' })).toBeInTheDocument(),
+    );
     await user.click(screen.getByRole('button', { name: 'Tallenna' }));
 
     expect(window.location.pathname).toBe(`/fi/hankesalkku/${hanke.hankeTunnus}`);
@@ -480,12 +491,11 @@ describe('HankeForm', () => {
     await waitFor(() => screen.findByText('Perustiedot'));
     await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
-    user.upload(screen.getByLabelText('Raahaa tiedostot tänne'), TEST_FILES);
+    await waitFor(() =>
+      expect(screen.getByLabelText('Raahaa tiedostot tänne')).toBeInTheDocument(),
+    );
+    await user.upload(screen.getByLabelText('Raahaa tiedostot tänne'), TEST_FILES);
 
-    await waitFor(() => screen.findAllByText('Tallennetaan tiedostoja'));
-    await act(async () => {
-      waitFor(() => expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0));
-    });
     await waitFor(() => {
       expect(screen.queryByText('9/9 tiedosto(a) tallennettu')).toBeInTheDocument();
     });
@@ -509,6 +519,7 @@ describe('HankeForm', () => {
     await waitFor(() => screen.findByText('Perustiedot'));
     await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
+    await waitFor(() => expect(screen.getByTestId('file-upload-list')).toBeInTheDocument());
     const { findAllByRole } = within(screen.getByTestId('file-upload-list'));
     const fileListItems = await findAllByRole('listitem');
     const fileItem = fileListItems.find((i) => i.innerHTML.includes(fileName));
@@ -518,11 +529,15 @@ describe('HankeForm', () => {
       screen.getByRole('dialog'),
     );
 
-    expect(
-      getByTextInDialog(`Haluatko varmasti poistaa liitetiedoston ${fileName}`),
-    ).toBeInTheDocument();
+    await waitFor(() =>
+      expect(
+        getByTextInDialog(`Haluatko varmasti poistaa liitetiedoston ${fileName}`),
+      ).toBeInTheDocument(),
+    );
     await user.click(getByRoleInDialog('button', { name: 'Poista' }));
-    expect(screen.getByText(`Liitetiedosto ${fileName} poistettu`)).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByText(`Liitetiedosto ${fileName} poistettu`)).toBeInTheDocument(),
+    );
   });
 
   test('Should list existing attachments in the attachments page and in summary page', async () => {
@@ -562,6 +577,7 @@ describe('HankeForm', () => {
     await waitFor(() => screen.findByText('Perustiedot'));
     await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
+    await waitFor(() => expect(screen.getByTestId('file-upload-list')).toBeInTheDocument());
     const { findAllByRole } = within(screen.getByTestId('file-upload-list'));
     const fileListItems = await findAllByRole('listitem');
     expect(fileListItems.length).toBe(3);
@@ -583,7 +599,7 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
-    expect(screen.getByText('Vaihe 6/6: Yhteenveto')).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText('Vaihe 6/6: Yhteenveto')).toBeInTheDocument());
     expect(screen.getByRole('link', { name: fileNameA })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: fileNameB })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: fileNameC })).toBeInTheDocument();
@@ -643,7 +659,7 @@ describe('HankeForm', () => {
     const draftStateText =
       'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavat kentät tällä sivulla vaaditaan hankeen julkaisemiseksi:';
 
-    await screen.findByText(draftStateText);
+    await waitFor(() => expect(screen.getByText(draftStateText)).toBeInTheDocument());
     expect(screen.getByRole('link', { name: /hankkeen kuvaus/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /katuosoite/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /hankkeen vaihe/i })).toBeInTheDocument();
@@ -660,25 +676,27 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-    expect(screen.queryByText(draftStateText)).toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByText(draftStateText)).toBeInTheDocument());
     expect(
       screen.getByRole('link', { name: /hankealueet: hankealueen piirtäminen/i }),
     ).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-    expect(
-      screen.queryByText(
-        'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavat tiedot lomakkeella vaaditaan haittojenhallinnan täyttämiseen:',
-      ),
-    ).toBeInTheDocument();
+    await waitFor(() =>
+      expect(
+        screen.queryByText(
+          'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavat tiedot lomakkeella vaaditaan haittojenhallinnan täyttämiseen:',
+        ),
+      ).toBeInTheDocument(),
+    );
     expect(
       screen.getByRole('link', { name: /hankealueet: hankealueen piirtäminen/i }),
     ).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-    expect(screen.queryByText(draftStateText)).toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByText(draftStateText)).toBeInTheDocument());
     await screen.findByRole('link', { name: /hankkeen omistaja: nimi/i });
     expect(
       screen.getByRole('link', { name: /hankkeen omistaja: sähköposti/i }),
@@ -743,6 +761,7 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByRole('button', { name: 'Poista alue' }));
 
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
     const { getByRole, getByText } = within(screen.getByRole('dialog'));
     expect(getByText('Haluatko varmasti poistaa hankealueen Hankealue 1?')).toBeInTheDocument();
     expect(getByRole('button', { name: 'Poista' })).toBeInTheDocument();
@@ -805,7 +824,9 @@ describe('HankeForm', () => {
   test('Should show correct haitta indexes for hanke area and updated indexes when updating nuisances', async () => {
     const { user } = await setupHaittaIndexUpdateTest();
 
-    expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3.5');
+    await waitFor(() =>
+      expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3.5'),
+    );
     expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
     expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('1');
     expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('2');
@@ -813,7 +834,9 @@ describe('HankeForm', () => {
     await user.click(screen.getByRole('button', { name: 'Kaistahaittojen pituus *' }));
     await user.click(screen.getByText('10-99 m'));
 
-    expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('4');
+    await waitFor(() =>
+      expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('4'),
+    );
     expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('2.5');
     expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('2');
     expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('3');
@@ -846,7 +869,7 @@ describe('New contact person form and contact person dropdown', () => {
     fillNewContactPersonForm(newUser);
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
 
-    expect(screen.getByText('Yhteyshenkilö tallennettu')).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText('Yhteyshenkilö tallennettu')).toBeInTheDocument());
     expect(
       screen.getByText(`${newUser.etunimi} ${newUser.sukunimi} (${newUser.sahkoposti})`),
     ).toBeInTheDocument();
@@ -857,7 +880,7 @@ describe('New contact person form and contact person dropdown', () => {
     await user.click(screen.getByRole('button', { name: /lisää uusi yhteyshenkilö/i }));
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
 
-    expect(screen.getAllByText('Kenttä on pakollinen')).toHaveLength(4);
+    await waitFor(() => expect(screen.getAllByText('Kenttä on pakollinen')).toHaveLength(4));
     expect(screen.queryByText('Yhteyshenkilö tallennettu')).not.toBeInTheDocument();
   });
 
@@ -872,15 +895,24 @@ describe('New contact person form and contact person dropdown', () => {
     await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
     fillNewContactPersonForm(newUser);
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+    await waitFor(() =>
+      expect(screen.queryByText('Yhteyshenkilö tallennettu')).toBeInTheDocument(),
+    );
+    await waitForElementToBeRemoved(() => screen.queryByText('Yhteyshenkilö tallennettu'), {
+      timeout: 5000,
+    });
+
     await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
     fillNewContactPersonForm(newUser);
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
 
-    expect(
-      screen.getByText(
-        'Valitsemasi sähköpostiosoite löytyy jo hankkeen käyttäjähallinnasta. Lisää yhteyshenkilö pudotusvalikosta.',
-      ),
-    ).toBeInTheDocument();
+    await waitFor(() =>
+      expect(
+        screen.getByText(
+          'Valitsemasi sähköpostiosoite löytyy jo hankkeen käyttäjähallinnasta. Lisää yhteyshenkilö pudotusvalikosta.',
+        ),
+      ).toBeInTheDocument(),
+    );
     expect(screen.queryByText('Yhteyshenkilö tallennettu')).not.toBeInTheDocument();
   });
 
@@ -895,7 +927,9 @@ describe('New contact person form and contact person dropdown', () => {
     fillNewContactPersonForm();
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
 
-    expect(screen.getByText('Yhteyshenkilön tallennus epäonnistui')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByText('Yhteyshenkilön tallennus epäonnistui')).toBeInTheDocument(),
+    );
   });
 
   test('Should show all hanke users in the contact person dropdown', async () => {

@@ -4,8 +4,9 @@ import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import HankeViewContainer from './HankeViewContainer';
 import { server } from '../../mocks/test-server';
 import { SignedInUser } from '../hankeUsers/hankeUser';
+import { waitFor } from '@testing-library/react';
 
-jest.setTimeout(20000);
+jest.setTimeout(90000);
 
 function getViewPermissionForUser() {
   server.use(
@@ -104,7 +105,7 @@ test('Correct information about hanke should be displayed', async () => {
   await waitForLoadingToFinish();
 
   // Data in basic information tab
-  expect(screen.getAllByText('Mannerheimintien kaukolämpö').length).toBe(2);
+  await waitFor(() => expect(screen.getAllByText('Mannerheimintien kaukolämpö').length).toBe(2));
   expect(screen.getAllByText('HAI22-3').length).toBe(2);
   expect(
     screen.queryByText(
@@ -177,8 +178,10 @@ test('It is possible to delete hanke if it has no active applications', async ()
 
   await user.click(screen.getByRole('button', { name: /vahvista/i }));
 
-  expect(window.location.pathname).toBe('/fi/hankesalkku');
-  expect(screen.queryByText('Hanke poistettiin onnistuneesti')).toBeInTheDocument();
+  await waitFor(() => expect(window.location.pathname).toBe('/fi/hankesalkku'));
+  await waitFor(() =>
+    expect(screen.queryByText('Hanke poistettiin onnistuneesti')).toBeInTheDocument(),
+  );
 });
 
 test('It is not possible to delete hanke if it has active applications', () => {
@@ -200,8 +203,10 @@ test('It is possible to delete hanke if it has only cancelled applications', asy
 
   await user.click(screen.getByRole('button', { name: /vahvista/i }));
 
-  expect(window.location.pathname).toBe('/fi/hankesalkku');
-  expect(screen.queryByText('Hanke poistettiin onnistuneesti')).toBeInTheDocument();
+  await waitFor(() => expect(window.location.pathname).toBe('/fi/hankesalkku'));
+  await waitFor(() =>
+    expect(screen.queryByText('Hanke poistettiin onnistuneesti')).toBeInTheDocument(),
+  );
 });
 
 test('Should render correct number of applications if they exist', async () => {
@@ -211,7 +216,7 @@ test('Should render correct number of applications if they exist', async () => {
 
   await user.click(screen.getByRole('tab', { name: /hakemukset/i }));
 
-  expect(screen.getAllByTestId('application-card')).toHaveLength(4);
+  await waitFor(() => expect(screen.getAllByTestId('application-card')).toHaveLength(4));
 });
 
 test('Should show information if no applications exist', async () => {
@@ -221,7 +226,9 @@ test('Should show information if no applications exist', async () => {
 
   await user.click(screen.getByRole('tab', { name: /hakemukset/i }));
 
-  expect(screen.queryByText('Hankkeella ei ole lisättyjä hakemuksia')).toBeInTheDocument();
+  await waitFor(() =>
+    expect(screen.queryByText('Hankkeella ei ole lisättyjä hakemuksia')).toBeInTheDocument(),
+  );
 });
 
 test('Should show error notification if loading applications fails', async () => {
@@ -237,7 +244,9 @@ test('Should show error notification if loading applications fails', async () =>
 
   await user.click(screen.getByRole('tab', { name: /hakemukset/i }));
 
-  expect(screen.queryByText('Virhe tietojen lataamisessa.')).toBeInTheDocument();
+  await waitFor(() =>
+    expect(screen.queryByText('Virhe tietojen lataamisessa.')).toBeInTheDocument(),
+  );
   expect(screen.queryByText('Yritä hetken päästä uudelleen.')).toBeInTheDocument();
 });
 

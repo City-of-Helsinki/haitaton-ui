@@ -2,6 +2,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { SelectionGroup } from 'hds-react';
 import { render, screen } from '../../../testUtils/render';
 import BooleanRadioButton from './BooleanRadioButton';
+import { waitFor } from '@testing-library/react';
 
 function TestComponent() {
   const formContext = useForm({ defaultValues: { selection: false } });
@@ -22,8 +23,8 @@ test('Boolean choice works as expected', async () => {
   expect(screen.getByLabelText('No')).toBeChecked();
 
   await user.click(screen.getByLabelText('Yes'));
-  expect(screen.getByLabelText('Yes')).toBeChecked();
+  await waitFor(() => expect(screen.getByLabelText('Yes')).toBeChecked());
 
   await user.click(screen.getByLabelText('No'));
-  expect(screen.getByLabelText('No')).toBeChecked();
+  await waitFor(() => expect(screen.getByLabelText('No')).toBeChecked());
 });

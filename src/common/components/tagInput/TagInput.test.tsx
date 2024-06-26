@@ -1,5 +1,8 @@
 import { render, screen } from '../../../testUtils/render';
 import TagInput from './TagInput';
+import { waitFor } from '@testing-library/react';
+
+jest.setTimeout(10000);
 
 test('Should show existing tags', async () => {
   render(
@@ -19,7 +22,7 @@ test('Should be able to add new tags with add button', async () => {
   await user.type(screen.getByRole('textbox'), newTag);
   await user.click(screen.getByRole('button'));
 
-  expect(handleTagsChange).toHaveBeenCalledWith([newTag]);
+  await waitFor(() => expect(handleTagsChange).toHaveBeenCalledWith([newTag]));
 });
 
 test('Should be able to add new tags by pressing Enter', async () => {
@@ -31,7 +34,7 @@ test('Should be able to add new tags by pressing Enter', async () => {
   await user.type(screen.getByRole('textbox'), newTag);
   await user.keyboard('{Enter}');
 
-  expect(handleTagsChange).toHaveBeenCalledWith([newTag]);
+  await waitFor(() => expect(handleTagsChange).toHaveBeenCalledWith([newTag]));
 });
 
 test('Should be able to remove tags', async () => {

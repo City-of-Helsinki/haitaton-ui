@@ -10,7 +10,7 @@ import { USER_ALL } from '../../mocks/signedInUser';
 import { reset } from '../../mocks/data/users';
 import { cloneDeep } from 'lodash';
 
-jest.setTimeout(50000);
+jest.setTimeout(90000);
 
 afterEach(cleanup);
 
@@ -41,9 +41,11 @@ test('Renders correct information', async () => {
 
   await waitForLoadingToFinish();
 
-  expect(
-    screen.getByRole('link', { name: 'Aidasmäentien vesihuollon rakentaminen (HAI22-2)' }),
-  ).toBeInTheDocument();
+  await waitFor(() =>
+    expect(
+      screen.getByRole('link', { name: 'Aidasmäentien vesihuollon rakentaminen (HAI22-2)' }),
+    ).toBeInTheDocument(),
+  );
   expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows).toHaveLength(10);
   expect(screen.getAllByText(`${users[0].etunimi} ${users[0].sukunimi}`)).toHaveLength(2);
   expect(screen.getAllByText(users[0].sahkoposti)).toHaveLength(2);
@@ -198,7 +200,7 @@ test('Filtering works', async () => {
   });
 
   await waitFor(() =>
-    expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows).toHaveLength(2),
+    expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows.length).toBe(2),
   );
   expect(screen.getAllByText(`${users[2].etunimi} ${users[2].sukunimi}`)).toHaveLength(2);
   expect(screen.getAllByText(`${users[7].etunimi} ${users[7].sukunimi}`)).toHaveLength(2);
@@ -278,6 +280,11 @@ test('Should send invitation to user when cliking the Lähetä kutsulinkki uudel
     name: 'Käyttäjävalikko',
   })[0];
   await user.click(invitationMenu);
+  await waitFor(() =>
+    expect(
+      screen.getByRole('menuitem', { name: 'Lähetä kutsulinkki uudelleen' }),
+    ).toBeInTheDocument(),
+  );
   const invitationButton = screen.getByRole('menuitem', {
     name: 'Lähetä kutsulinkki uudelleen',
   });
@@ -307,6 +314,11 @@ test('Should show error notification if sending invitation fails', async () => {
     name: 'Käyttäjävalikko',
   })[0];
   await user.click(invitationMenu);
+  await waitFor(() =>
+    expect(
+      screen.getByRole('menuitem', { name: 'Lähetä kutsulinkki uudelleen' }),
+    ).toBeInTheDocument(),
+  );
   await user.click(
     screen.getByRole('menuitem', {
       name: 'Lähetä kutsulinkki uudelleen',

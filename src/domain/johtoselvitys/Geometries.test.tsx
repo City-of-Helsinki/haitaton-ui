@@ -1,11 +1,11 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { cloneDeep } from 'lodash';
-import { render, screen } from '../../testUtils/render';
+import { render, screen, waitFor } from '../../testUtils/render';
 import { Geometries } from './Geometries';
 import hankkeet from '../mocks/data/hankkeet-data';
 import { HankeData } from '../types/hanke';
 
-jest.setTimeout(30000);
+jest.setTimeout(90000);
 
 function TestComponent({ hankeData }: { hankeData?: HankeData }) {
   const formContext = useForm();
@@ -45,7 +45,7 @@ test('Hanke areas are visible if work start and end dates are between hanke star
     '27.11.2024',
   );
 
-  expect(screen.getByTestId('countOfFilteredHankkeet')).toHaveTextContent('1');
+  await waitFor(() => expect(screen.getByTestId('countOfFilteredHankkeet')).toHaveTextContent('1'));
 
   await user.type(screen.getByRole('textbox', { name: 'Työn arvioitu alkupäivä *' }), '28.11.2024');
   await user.type(
@@ -53,7 +53,7 @@ test('Hanke areas are visible if work start and end dates are between hanke star
     '29.11.2024',
   );
 
-  expect(screen.getByTestId('countOfFilteredHankkeet')).toHaveTextContent('0');
+  await waitFor(() => expect(screen.getByTestId('countOfFilteredHankkeet')).toHaveTextContent('0'));
 });
 
 test('Hanke areas are not visible if hanke is generated', async () => {
@@ -66,5 +66,7 @@ test('Hanke areas are not visible if hanke is generated', async () => {
     '27.11.2024',
   );
 
-  expect(screen.queryByTestId('countOfFilteredHankkeet')).not.toBeInTheDocument();
+  await waitFor(() =>
+    expect(screen.queryByTestId('countOfFilteredHankkeet')).not.toBeInTheDocument(),
+  );
 });

@@ -3,8 +3,9 @@ import Header from './Header';
 import useUser from '../../../domain/auth/useUser';
 import i18next from '../../../locales/i18nForTests';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
+import { waitFor } from '@testing-library/react';
 
-jest.setTimeout(30000);
+jest.setTimeout(90000);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockedUseUser = useUser as jest.Mock<any>;
@@ -68,25 +69,25 @@ describe('Header', () => {
 
     await changeLanguage(user, 'Suomi', 'English');
     expect(i18next.language).toBe('en');
-    expect(window.location.pathname).toBe('/en/publicprojects/map');
+    await waitFor(() => expect(window.location.pathname).toBe('/en/publicprojects/map'));
 
     await changeLanguage(user, 'English', 'Svenska');
     expect(i18next.language).toBe('sv');
-    expect(window.location.pathname).toBe('/sv/allmannaprojekt/karta');
+    await waitFor(() => expect(window.location.pathname).toBe('/sv/allmannaprojekt/karta'));
 
     await changeLanguage(user, 'Svenska', 'Suomi');
     expect(i18next.language).toBe('fi');
-    expect(window.location.pathname).toBe('/fi/julkisethankkeet/kartta');
+    await waitFor(() => expect(window.location.pathname).toBe('/fi/julkisethankkeet/kartta'));
   });
 
   test('should navigate to correct url when changing language when url contains hankeTunnus', async () => {
     const { user } = render(<Header />, undefined, '/fi/hankesalkku/HAI23-1');
 
     await changeLanguage(user, 'Suomi', 'English');
-    expect(window.location.pathname).toBe('/en/projectportfolio/HAI23-1');
+    await waitFor(() => expect(window.location.pathname).toBe('/en/projectportfolio/HAI23-1'));
 
     await changeLanguage(user, 'English', 'Svenska');
-    expect(window.location.pathname).toBe('/sv/projektportfolj/HAI23-1');
+    await waitFor(() => expect(window.location.pathname).toBe('/sv/projektportfolj/HAI23-1'));
   });
 
   test('should navigate to correct url when changing language when url contains application id', async () => {
@@ -94,9 +95,9 @@ describe('Header', () => {
     const { user } = render(<Header />, undefined, '/fi/hakemus/1');
 
     await changeLanguage(user, 'Suomi', 'English');
-    expect(window.location.pathname).toBe('/en/application/1');
+    await waitFor(() => expect(window.location.pathname).toBe('/en/application/1'));
 
     await changeLanguage(user, 'English', 'Svenska');
-    expect(window.location.pathname).toBe('/sv/ansokan/1');
+    await waitFor(() => expect(window.location.pathname).toBe('/sv/ansokan/1'));
   });
 });

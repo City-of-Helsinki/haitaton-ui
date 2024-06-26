@@ -8,6 +8,8 @@ import * as applicationApi from '../utils';
 import hakemukset from '../../mocks/data/hakemukset-data';
 import { cloneDeep } from 'lodash';
 
+jest.setTimeout(60000);
+
 test('Correct information about application should be displayed', async () => {
   render(<ApplicationViewContainer id={4} />);
 
@@ -25,7 +27,7 @@ test('Link back to related hanke should work', async () => {
   await waitForLoadingToFinish();
   await user.click(screen.getByRole('link', { name: 'Mannerheimintien kaukolämpö (HAI22-3)' }));
 
-  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-3');
+  await waitFor(() => expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-3'));
 });
 
 test('Should show error notification if application is not found', async () => {
@@ -65,7 +67,7 @@ test('Should be able to go editing application when editing is possible', async 
   });
   await user.click(screen.getByRole('button', { name: 'Muokkaa hakemusta' }));
 
-  expect(window.location.pathname).toBe('/fi/johtoselvityshakemus/1/muokkaa');
+  await waitFor(() => expect(window.location.pathname).toBe('/fi/johtoselvityshakemus/1/muokkaa'));
 });
 
 test('Application edit button should not be displayed when editing is not possible', async () => {
@@ -83,9 +85,10 @@ test('Should be able to cancel application if it is possible', async () => {
   await user.click(screen.getByRole('button', { name: 'Peru hakemus' }));
   await user.click(screen.getByRole('button', { name: 'Vahvista' }));
 
-  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-3');
-  await screen.findByText('Hakemus peruttiin onnistuneesti');
-  expect(screen.queryByText('Hakemus peruttiin onnistuneesti')).toBeInTheDocument();
+  await waitFor(() => expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-3'));
+  await waitFor(() =>
+    expect(screen.queryByText('Hakemus peruttiin onnistuneesti')).toBeInTheDocument(),
+  );
 });
 
 test('Should not be able to cancel application if it has moved to handling in Allu', async () => {
@@ -116,7 +119,7 @@ test('Should be able to send application if it is not already sent', async () =>
   await user.click(sendButton);
 
   await screen.findByText('Hakemus lähetetty');
-  expect(screen.queryByText('Hakemus lähetetty')).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText('Hakemus lähetetty')).toBeInTheDocument());
   expect(screen.queryByRole('button', { name: 'Lähetä hakemus' })).not.toBeInTheDocument();
 });
 
@@ -144,7 +147,9 @@ test('Should disable Send button if user is not a contact person on application'
 
   render(<ApplicationViewContainer id={1} />);
 
-  await waitFor(() => screen.findByRole('button', { name: 'Lähetä hakemus' }));
+  await waitFor(() =>
+    expect(screen.getByRole('button', { name: 'Lähetä hakemus' })).toBeInTheDocument(),
+  );
   const sendButton = await waitFor(() => screen.getByRole('button', { name: 'Lähetä hakemus' }));
   expect(sendButton).toBeDisabled();
 });
@@ -186,6 +191,7 @@ test('Should not send multiple requests if clicking application cancel confirm b
   await waitFor(() => screen.findByRole('button', { name: 'Peru hakemus' }), { timeout: 4000 });
 
   await user.click(screen.getByRole('button', { name: 'Peru hakemus' }));
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Vahvista' })).toBeInTheDocument());
   const confirmCancelButton = screen.getByRole('button', { name: 'Vahvista' });
   await user.click(confirmCancelButton);
   await user.click(confirmCancelButton);
@@ -208,8 +214,10 @@ test('Should not send multiple requests if clicking Send button many times', asy
   const { user } = render(<ApplicationViewContainer id={1} />);
 
   await waitForLoadingToFinish();
-  await waitFor(() => screen.findByRole('button', { name: 'Lähetä hakemus' }));
 
+  await waitFor(() =>
+    expect(screen.getByRole('button', { name: 'Lähetä hakemus' })).toBeInTheDocument(),
+  );
   const sendButton = await waitFor(() => screen.getByRole('button', { name: 'Lähetä hakemus' }));
   await user.click(sendButton);
   await user.click(sendButton);

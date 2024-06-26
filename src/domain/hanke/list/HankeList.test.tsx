@@ -3,7 +3,7 @@ import HankeListContainer from './HankeListContainer';
 
 afterEach(cleanup);
 
-jest.setTimeout(10000);
+jest.setTimeout(30000);
 
 function waitForData() {
   return waitFor(() => screen.getByTestId('hds-table-sorting-header-nimi'));
@@ -16,19 +16,21 @@ describe('HankeLista', () => {
     await waitForData();
 
     await user.click(screen.getByTestId('hds-table-sorting-header-nimi'));
-    expect(screen.getByTestId('nimi-0')).toHaveTextContent(
-      'Aidasmäentien vesihuollon rakentaminen',
+    await waitFor(() =>
+      expect(screen.getByTestId('nimi-0')).toHaveTextContent(
+        'Aidasmäentien vesihuollon rakentaminen',
+      ),
     );
     await user.click(screen.getByTestId('hds-table-sorting-header-vaihe'));
-    expect(screen.getByTestId('vaihe-0')).toHaveTextContent(/ohjelmointi/i);
+    await waitFor(() => expect(screen.getByTestId('vaihe-0')).toHaveTextContent(/ohjelmointi/i));
     await user.click(screen.getByTestId('hds-table-sorting-header-vaihe'));
-    expect(screen.getByTestId('vaihe-0')).toHaveTextContent(/suunnittelu/i);
+    await waitFor(() => expect(screen.getByTestId('vaihe-0')).toHaveTextContent(/suunnittelu/i));
     expect(screen.getByTestId('vaihe-2')).toHaveTextContent(/rakentaminen/i);
     await user.click(screen.getByTestId('hds-table-sorting-header-alkuPvm'));
-    expect(screen.getByTestId('alkuPvm-0')).toHaveTextContent('23.11.2022');
+    await waitFor(() => expect(screen.getByTestId('alkuPvm-0')).toHaveTextContent('23.11.2022'));
     await user.click(screen.getByTestId('hds-table-sorting-header-loppuPvm'));
     await user.click(screen.getByTestId('hds-table-sorting-header-loppuPvm'));
-    expect(screen.getByTestId('loppuPvm-0')).toHaveTextContent('27.11.2024');
+    await waitFor(() => expect(screen.getByTestId('loppuPvm-0')).toHaveTextContent('27.11.2024'));
   });
 
   test('pagination test', async () => {

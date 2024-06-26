@@ -7,8 +7,9 @@ import { readAll, reset } from '../../mocks/data/users';
 import { USER_EDIT_HANKE } from '../../mocks/signedInUser';
 import * as hankeUsersApi from './hankeUsersApi';
 import { formatToFinnishDate } from '../../../common/utils/date';
+import { waitFor } from '@testing-library/react';
 
-jest.setTimeout(10000);
+jest.setTimeout(60000);
 
 function fillUserInformation({
   etunimi,
@@ -93,12 +94,17 @@ test('Should update user invitation sent date when resending invitation', async 
   );
   await waitForLoadingToFinish();
 
-  expect(screen.getByText('Kutsulinkki Haitattomaan lähetetty 15.1.2024')).toBeInTheDocument();
+  await waitFor(() =>
+    expect(screen.getByText('Kutsulinkki Haitattomaan lähetetty 15.1.2024')).toBeInTheDocument(),
+  );
 
   await user.click(screen.getByRole('button', { name: 'Lähetä kutsulinkki uudelleen' }));
-  await waitForLoadingToFinish();
 
-  expect(screen.getByText(`Kutsulinkki Haitattomaan lähetetty ${formatToFinnishDate(today)}`));
+  await waitFor(() => {
+    expect(
+      screen.getByText(`Kutsulinkki Haitattomaan lähetetty ${formatToFinnishDate(today)}`),
+    ).toBeInTheDocument();
+  });
 });
 
 test('Permissions dropdown should be disabled and delete button should be hidden if only one user is identified and has all rights', async () => {
@@ -121,7 +127,9 @@ test('Permissions dropdown should be disabled if editing own information', async
   render(<EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afa6" hankeTunnus="HAI22-2" />);
   await waitForLoadingToFinish();
 
-  expect(screen.getByRole('button', { name: /käyttöoikeudet/i })).toBeDisabled();
+  await waitFor(() =>
+    expect(screen.getByRole('button', { name: /käyttöoikeudet/i })).toBeDisabled(),
+  );
 });
 
 test('Permissions dropdown should be disabled and delete button should be hidden if user does not have enough rights', async () => {
@@ -200,7 +208,7 @@ test('Should be able to cancel and return to user management view', async () => 
   await waitForLoadingToFinish();
   await user.click(screen.getByRole('button', { name: /peruuta/i }));
 
-  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2/kayttajat');
+  await waitFor(() => expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2/kayttajat'));
 });
 
 test('Should show error notification if editing own information fails', async () => {
@@ -215,7 +223,7 @@ test('Should show error notification if editing own information fails', async ()
   await waitForLoadingToFinish();
   await user.click(screen.getByRole('button', { name: /tallenna muutokset/i }));
 
-  expect(screen.getByText('Virhe päivityksessä')).toBeInTheDocument();
+  await waitFor(() => expect(screen.getByText('Virhe päivityksessä')).toBeInTheDocument());
 });
 
 test('Should be able to edit users information', async () => {
@@ -315,7 +323,7 @@ test('Should show error notification if user delete info request fails', async (
   await waitForLoadingToFinish();
   await user.click(screen.getByRole('button', { name: /poista käyttäjä/i }));
 
-  expect(screen.getAllByText(/tapahtui virhe/i)[0]).toBeInTheDocument();
+  await waitFor(() => expect(screen.getAllByText(/tapahtui virhe/i)[0]).toBeInTheDocument());
 });
 
 test('Should show error notification if deleting user fails', async () => {

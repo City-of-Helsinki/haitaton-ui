@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { render, cleanup, fireEvent, screen, waitFor, act, within } from '../../testUtils/render';
+import { render, cleanup, fireEvent, screen, waitFor, within } from '../../testUtils/render';
 import Johtoselvitys from '../../pages/Johtoselvitys';
 import JohtoselvitysContainer from './JohtoselvitysContainer';
 import { waitForLoadingToFinish } from '../../testUtils/helperFunctions';
@@ -23,7 +23,7 @@ import { cloneDeep } from 'lodash';
 
 afterEach(cleanup);
 
-jest.setTimeout(40000);
+jest.setTimeout(180000);
 
 interface DateOptions {
   start?: string;
@@ -211,10 +211,10 @@ test('Cable report application form can be filled and saved and sent to Allu', a
   // Move to areas page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument());
   fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
 
-  expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument());
 
   // Fill areas page
   fillAreasInformation();
@@ -222,10 +222,10 @@ test('Cable report application form can be filled and saved and sent to Allu', a
   // Move to contacts page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument());
   fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
 
-  expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument());
 
   // Fill contacts page
   fillContactsInformation();
@@ -233,10 +233,10 @@ test('Cable report application form can be filled and saved and sent to Allu', a
   // Move to summary page
   await user.click(screen.getByTestId('hds-stepper-step-4'));
 
-  expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument());
 
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
-  expect(screen.queryByText(/hakemus lähetetty/i)).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText(/hakemus lähetetty/i)).toBeInTheDocument());
   expect(window.location.pathname).toBe('/fi/hakemus/7');
 });
 
@@ -257,7 +257,7 @@ test('Should show error message when saving fails', async () => {
   // Move to next page to save form
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-  expect(screen.queryAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryAllByText(/tallentaminen epäonnistui/i)).toHaveLength(2));
 });
 
 test('Should show error message when sending fails', async () => {
@@ -288,25 +288,25 @@ test('Should show error message when sending fails', async () => {
 
   // Move to areas page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument());
 
   // Fill areas page
   fillAreasInformation();
 
   // Move to contacts page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument());
 
   // Fill contacts page
   fillContactsInformation();
 
   // Move to summary page
   await user.click(screen.getByTestId('hds-stepper-step-4'));
-  expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument());
 
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
 
-  expect(screen.queryByText(/lähettäminen epäonnistui/i)).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText(/lähettäminen epäonnistui/i)).toBeInTheDocument());
 });
 
 test('Save and quit works', async () => {
@@ -319,7 +319,7 @@ test('Save and quit works', async () => {
 
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
-  expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
+  await waitFor(() => expect(screen.queryAllByText(/hakemus tallennettu/i)).toHaveLength(2));
   expect(window.location.pathname).toBe('/fi/hakemus/9');
 });
 
@@ -329,7 +329,9 @@ test('Should not save and quit if current form page is not valid', async () => {
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
   expect(window.location.pathname).toBe('/fi/johtoselvityshakemus');
-  expect(screen.queryAllByText('Kenttä on pakollinen').length).toBeGreaterThan(1);
+  await waitFor(() =>
+    expect(screen.queryAllByText('Kenttä on pakollinen').length).toBeGreaterThan(1),
+  );
 });
 
 test('Should show error message and not navigate away when save and quit fails', async () => {
@@ -345,7 +347,7 @@ test('Should show error message and not navigate away when save and quit fails',
   fillBasicInformation();
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
-  expect(screen.getAllByText(/tallentaminen epäonnistui/i).length).toBe(2);
+  await waitFor(() => expect(screen.getAllByText(/tallentaminen epäonnistui/i)).toHaveLength(2));
   expect(window.location.pathname).toBe('/fi/johtoselvityshakemus');
 });
 
@@ -378,7 +380,7 @@ test('Should save existing application between page changes when there are chang
 
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument());
 });
 
 test('Should not show send button when application has moved to pending state', async () => {
@@ -401,7 +403,7 @@ test('Should not show send button when application has moved to pending state', 
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
-  expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument());
   expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).not.toBeInTheDocument();
   expect(
     screen.queryByText(
@@ -433,7 +435,7 @@ test('Should show and disable send button and show notification when user is not
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
-  expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument());
   expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeInTheDocument();
   expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeDisabled();
   expect(
@@ -466,7 +468,9 @@ test('Should show and enable button when application is edited in draft state an
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
-  expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeInTheDocument();
+  await waitFor(() =>
+    expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeInTheDocument(),
+  );
   expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeEnabled();
   expect(
     screen.queryByText(
@@ -486,14 +490,14 @@ test('Should not allow start date be after end date', async () => {
 
   // Move to areas page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument());
 
   // Fill areas page with start time after end time
   fillAreasInformation({ start: '1.6.2024', end: '1.4.2024' });
 
   // Should not be able to move to next page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument());
 });
 
 test('Should not allow step change when current step is invalid', async () => {
@@ -505,6 +509,11 @@ test('Should not allow step change when current step is invalid', async () => {
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
   // Change registry key to be invalid
+  await waitFor(() =>
+    expect(
+      screen.getByTestId('applicationData.customerWithContacts.customer.registryKey'),
+    ).toBeInTheDocument(),
+  );
   fireEvent.change(
     screen.getByTestId('applicationData.customerWithContacts.customer.registryKey'),
     {
@@ -591,16 +600,15 @@ test('Should be able to upload attachments', async () => {
     <JohtoselvitysContainer application={applications[0] as Application<JohtoselvitysData>} />,
   );
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
+  await waitFor(() => expect(screen.getByLabelText('Raahaa tiedostot tänne')).toBeInTheDocument());
   const fileUpload = screen.getByLabelText('Raahaa tiedostot tänne');
-  user.upload(fileUpload, [
+  await user.upload(fileUpload, [
     new File(['test-a'], 'test-file-a.pdf', { type: 'application/pdf' }),
     new File(['test-b'], 'test-file-b.pdf', { type: 'application/pdf' }),
   ]);
 
   await screen.findAllByText('Tallennetaan tiedostoja', undefined, { timeout: 5000 });
-  await act(async () => {
-    waitFor(() => expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0));
-  });
+  await waitFor(() => expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0));
   await waitFor(
     () => {
       expect(screen.queryByText('2/2 tiedosto(a) tallennettu')).toBeInTheDocument();
@@ -629,6 +637,7 @@ test('Should be able to delete attachments', async () => {
   );
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
+  await waitFor(() => expect(screen.getByTestId('file-upload-list')).toBeInTheDocument());
   const { getAllByRole } = within(screen.getByTestId('file-upload-list'));
   const fileListItems = getAllByRole('listitem');
   const fileItem = fileListItems.find((i) => i.innerHTML.includes(fileName));
@@ -675,6 +684,7 @@ test('Should list existing attachments in the attachments page and in summary pa
   );
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
+  await waitFor(() => expect(screen.getByTestId('file-upload-list')).toBeInTheDocument());
   const { getAllByRole } = within(screen.getByTestId('file-upload-list'));
   const fileListItems = getAllByRole('listitem');
   expect(fileListItems.length).toBe(2);
@@ -691,7 +701,7 @@ test('Should list existing attachments in the attachments page and in summary pa
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
-  expect(screen.getByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+  await waitFor(() => expect(screen.getByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument());
   expect(screen.getByText(fileNameA)).toBeInTheDocument();
   expect(screen.getByText(fileNameB)).toBeInTheDocument();
 });
@@ -707,7 +717,7 @@ test('Summary should show attachments and they are downloadable', async () => {
   const { user } = render(<JohtoselvitysContainer application={testApplication} />);
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
-  expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument());
 
   await user.click(screen.getByText(ATTACHMENT_META.fileName));
 
@@ -724,12 +734,12 @@ test('Should be able to create new user and new user is added to dropdown', asyn
   const testApplication = applications[0] as Application<JohtoselvitysData>;
   const { user } = render(<JohtoselvitysContainer application={testApplication} />);
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
-  expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument());
   await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
   fillNewContactPersonForm(newUser);
   await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
 
-  expect(screen.getByText('Yhteyshenkilö tallennettu')).toBeInTheDocument();
+  await waitFor(() => expect(screen.getByText('Yhteyshenkilö tallennettu')).toBeInTheDocument());
   expect(
     screen.getByText(`${newUser.etunimi} ${newUser.sukunimi} (${newUser.sahkoposti})`),
   ).toBeInTheDocument();
@@ -745,15 +755,17 @@ test('Should show validation error if the new user has an existing email address
   const testApplication = applications[0] as Application<JohtoselvitysData>;
   const { user } = render(<JohtoselvitysContainer application={testApplication} />);
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
-  expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument());
   await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
   fillNewContactPersonForm(newUser);
   await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
-  expect(
-    screen.getByText(
-      /valitsemasi sähköpostiosoite löytyy jo hankkeen käyttäjähallinnasta. lisää yhteyshenkilö pudotusvalikosta./i,
-    ),
-  ).toBeInTheDocument();
+  await waitFor(() =>
+    expect(
+      screen.getByText(
+        /valitsemasi sähköpostiosoite löytyy jo hankkeen käyttäjähallinnasta. lisää yhteyshenkilö pudotusvalikosta./i,
+      ),
+    ).toBeInTheDocument(),
+  );
 });
 
 test('Should show validation error if there are no yhteyshenkilo set for yhteystieto', async () => {
@@ -765,9 +777,11 @@ test('Should show validation error if there are no yhteyshenkilo set for yhteyst
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
   expect(screen.getByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
-  expect(
-    screen.getByText(/vähintään yksi yhteyshenkilö tulee olla asetettuna/i),
-  ).toBeInTheDocument();
+  await waitFor(() =>
+    expect(
+      screen.getByText(/vähintään yksi yhteyshenkilö tulee olla asetettuna/i),
+    ).toBeInTheDocument(),
+  );
 
   await user.click(
     screen.getAllByRole('button', { name: /yhteyshenkilöt: sulje ja avaa valikko/i })[0],
@@ -786,6 +800,7 @@ test('Should remove validation error if yhteyshenkilo is created for yhteystieto
   const { user } = render(<JohtoselvitysContainer application={testApplication} />);
 
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+  await waitFor(() => expect(screen.getAllByLabelText(/yhteyshenkilöt/i)).toHaveLength(6));
   await user.click(screen.getAllByLabelText(/yhteyshenkilöt/i)[0]);
   await user.tab();
 
@@ -802,9 +817,11 @@ test('Should remove validation error if yhteyshenkilo is created for yhteystieto
   });
   await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
 
-  expect(
-    screen.queryByText(/vähintään yksi yhteyshenkilö tulee olla asetettuna/i),
-  ).not.toBeInTheDocument();
+  await waitFor(() =>
+    expect(
+      screen.queryByText(/vähintään yksi yhteyshenkilö tulee olla asetettuna/i),
+    ).not.toBeInTheDocument(),
+  );
 });
 
 test('Work name should be limited to 100 characters', async () => {

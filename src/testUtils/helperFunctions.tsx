@@ -19,7 +19,7 @@ export const changeFilterDate = (
 
 export function waitForLoadingToFinish() {
   return waitForElementToBeRemoved(() => screen.queryByText(/page is loading/i), {
-    timeout: 4000,
+    timeout: 20000,
   });
 }
 

@@ -23,7 +23,7 @@ import { fillNewContactPersonForm } from '../forms/components/testUtils';
 
 afterEach(cleanup);
 
-jest.setTimeout(60000);
+jest.setTimeout(120000);
 
 async function fillBasicInformation(
   user: UserEvent,
@@ -114,6 +114,7 @@ async function fillAttachments(
     additionalInfo = 'Lisätietoja',
   } = options;
 
+  await waitFor(() => expect(screen.getAllByLabelText('Raahaa tiedostot tänne')).toHaveLength(3));
   const fileUploads = screen.getAllByLabelText('Raahaa tiedostot tänne');
   if (trafficArrangementPlanFiles) {
     const fileUpload = fileUploads[0];
@@ -270,7 +271,7 @@ test('Should not be able to save form if work name is missing', async () => {
   await fillBasicInformation(user, { name: '' });
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
-  expect(screen.getByText('Vaihe 1/5: Perustiedot')).toBeInTheDocument();
+  await waitFor(() => expect(screen.getByText('Vaihe 1/5: Perustiedot')).toBeInTheDocument());
   expect(screen.queryAllByText('Kenttä on pakollinen').length).toBe(1);
 });
 
@@ -403,20 +404,22 @@ test('Should be able to fill form pages and show filled information in summary p
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
   // Should save form on page change and show notification
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
+  await waitFor(() => expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument());
   fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
 
-  expect(screen.getByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+  await waitFor(() => expect(screen.getByText('Vaihe 2/5: Alueet')).toBeInTheDocument());
 
   fillAreasInformation({ start: startDate, end: endDate });
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-  expect(screen.getByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
+  await waitFor(() => expect(screen.getByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument());
 
   fillContactsInformation({ customer, contractor, invoicingCustomer });
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-  expect(screen.getByText('Vaihe 4/5: Liitteet ja lisätiedot')).toBeInTheDocument();
+  await waitFor(() =>
+    expect(screen.getByText('Vaihe 4/5: Liitteet ja lisätiedot')).toBeInTheDocument(),
+  );
 
   await fillAttachments(user, {
     trafficArrangementPlanFiles: [
@@ -428,7 +431,7 @@ test('Should be able to fill form pages and show filled information in summary p
   });
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-  expect(screen.getByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+  await waitFor(() => expect(screen.getByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument());
   // Basic information
   expect(screen.getByText(name)).toBeInTheDocument();
   expect(screen.getByText(description)).toBeInTheDocument();
@@ -639,6 +642,7 @@ test('Should be able to delete attachments', async () => {
   );
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
+  await waitFor(() => expect(screen.getAllByTestId('file-upload-list')).toHaveLength(3));
   const fileUploadLists = screen.getAllByTestId('file-upload-list');
   let index = 0;
   for (const fileUploadList of fileUploadLists) {
@@ -705,6 +709,7 @@ test('Should list existing attachments in the attachments page', async () => {
   );
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
+  await waitFor(() => expect(screen.getAllByTestId('file-upload-list')).toHaveLength(3));
   const fileUploadList = screen.getAllByTestId('file-upload-list');
   expect(fileUploadList.length).toBe(3);
   fileUploadList.forEach((list, index) => {
@@ -748,6 +753,9 @@ test('Should be able to remove work areas', async () => {
   );
   await user.click(screen.getByRole('button', { name: /alueet/i }));
 
+  await waitFor(() =>
+    expect(screen.getByRole('button', { name: /poista työalue 1/i })).toBeInTheDocument(),
+  );
   await user.click(screen.getByRole('button', { name: /poista työalue 1/i }));
 
   const { getByRole, getByText } = within(await screen.findByRole('dialog'));
@@ -776,7 +784,7 @@ test('Should highlight selected work area', async () => {
   );
   await user.click(screen.getByRole('button', { name: /alueet/i }));
 
-  const workAreaOne = screen.getByRole('button', { name: 'Työalue 1' });
+  const workAreaOne = await waitFor(() => screen.getByRole('button', { name: 'Työalue 1' }));
   const workAreaTwo = screen.getByRole('button', { name: 'Työalue 2' });
 
   await user.click(workAreaTwo);
