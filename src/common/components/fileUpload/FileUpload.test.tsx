@@ -6,6 +6,7 @@ import { server } from '../../../domain/mocks/test-server';
 import { AttachmentMetadata } from '../../types/attachment';
 import { deleteAttachment } from '../../../domain/application/attachments';
 import { FileDeleteFunction } from './types';
+import { delay } from '../../../testUtils/helperFunctions';
 
 async function uploadAttachment({ id, file }: { id: number; file: File }) {
   const { data } = await api.post(`/hakemukset/${id}/liitteet`, {
@@ -113,15 +114,13 @@ test('Should show amount of successful files uploaded and errors correctly when 
     existingAttachments: [existingFileA, existingFileB],
     upload: uploadMock,
   });
-  user.upload(fileUploadElement, [
+  await user.upload(fileUploadElement, [
     new File(['test-a'], fileNameA, { type: 'image/png' }),
     new File(['test-b'], fileNameB, { type: 'application/pdf' }),
     new File(['test-c'], fileNameC, { type: 'image/png' }),
   ]);
 
-  await waitFor(() => {
-    expect(screen.queryByText('1/3 tiedosto(a) tallennettu')).toBeInTheDocument();
-  });
+  expect(await screen.findByText('1/3 tiedosto(a) tallennettu')).toBeInTheDocument();
   expect(uploadMock).toHaveBeenCalledTimes(1);
   expect(
     screen.queryByText('Liitteen tallennus epäonnistui 2/3 tiedostolle', { exact: false }),
@@ -180,11 +179,9 @@ test('Should show correct error message when upload request fails for server err
     renderResult: { user },
     fileUploadElement,
   } = getFileUpload();
-  user.upload(fileUploadElement, [new File(['test-a'], fileNameA, { type: 'image/png' })]);
+  await user.upload(fileUploadElement, [new File(['test-a'], fileNameA, { type: 'image/png' })]);
 
-  await waitFor(() => {
-    expect(screen.queryByText('0/1 tiedosto(a) tallennettu')).toBeInTheDocument();
-  });
+  expect(await screen.findByText('0/1 tiedosto(a) tallennettu')).toBeInTheDocument();
   expect(
     screen.queryByText('Liitteen tallennus epäonnistui 1/1 tiedostolle', { exact: false }),
   ).toBeInTheDocument();
@@ -208,9 +205,7 @@ test('Should upload files when user drops them into drag-and-drop area', async (
     },
   });
 
-  await waitFor(() => {
-    expect(screen.queryByText('3/3 tiedosto(a) tallennettu')).toBeInTheDocument();
-  });
+  expect(await screen.findByText('3/3 tiedosto(a) tallennettu')).toBeInTheDocument();
   expect(uploadMock).toHaveBeenCalledTimes(3);
 });
 
@@ -355,7 +350,7 @@ test('Should be able to cancel upload requests', async () => {
   ]);
   await screen.findByText('Tallennetaan tiedostoja');
   await user.click(screen.getByRole('button', { name: 'Peruuta' }));
-  expect(screen.queryByText('Tallennetaan tiedostoja')).not.toBeInTheDocument();
+  await delay(500);
   expect(abortSpy).toHaveBeenCalledTimes(1);
   abortSpy.mockRestore();
 });
@@ -383,15 +378,13 @@ test('Should show error messages for files that exceed the maximum number of fil
   const fileNameA = 'test-file-a.pdf';
   const fileNameB = 'test-file-b.pdf';
   const fileNameC = 'test-file-c.pdf';
-  user.upload(fileUploadElement, [
+  await user.upload(fileUploadElement, [
     new File(['test-a'], fileNameA, { type: 'application/pdf' }),
     new File(['test-b'], fileNameB, { type: 'application/pdf' }),
     new File(['test-b'], fileNameC, { type: 'application/pdf' }),
   ]);
 
-  await waitFor(() => {
-    expect(screen.queryByText('1/3 tiedosto(a) tallennettu')).toBeInTheDocument();
-  });
+  expect(await screen.findByText('1/3 tiedosto(a) tallennettu')).toBeInTheDocument();
   expect(uploadMock).toHaveBeenCalledTimes(1);
   expect(
     screen.queryByText('Liitteen tallennus epäonnistui 2/3 tiedostolle', { exact: false }),

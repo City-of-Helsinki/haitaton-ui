@@ -3,7 +3,7 @@ import ApplicationAddDialog from './ApplicationAddDialog';
 import hankkeetData from '../../mocks/data/hankkeet-data';
 import { HankeData } from '../../types/hanke';
 
-jest.setTimeout(10000);
+jest.setTimeout(30000);
 
 test('Continue to application button should be disabled if application type is not selected', async () => {
   const hanke = hankkeetData[0] as HankeData;

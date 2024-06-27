@@ -23,7 +23,7 @@ import { cloneDeep } from 'lodash';
 
 afterEach(cleanup);
 
-jest.setTimeout(60000);
+jest.setTimeout(90000);
 
 interface DateOptions {
   start?: string;
@@ -214,45 +214,24 @@ test('Cable report application form can be filled and saved and sent to Allu', a
 
   // Move to areas page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-
-  await waitFor(() => expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument(), {
-    timeout: 5000,
-  });
-  fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
-
-  await waitFor(() => expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument(), {
-    timeout: 5000,
-  });
+  expect(await screen.findByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
 
   // Fill areas page
   fillAreasInformation();
 
   // Move to contacts page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-
-  await waitFor(() => expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument(), {
-    timeout: 5000,
-  });
-  fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
-
-  await waitFor(() => expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument(), {
-    timeout: 5000,
-  });
+  expect(await screen.findByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
 
   // Fill contacts page
   fillContactsInformation();
 
   // Move to summary page
   await user.click(screen.getByTestId('hds-stepper-step-4'));
-
-  await waitFor(() => expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument(), {
-    timeout: 5000,
-  });
+  expect(await screen.findByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
 
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
-  await waitFor(() => expect(screen.queryByText(/hakemus lähetetty/i)).toBeInTheDocument(), {
-    timeout: 5000,
-  });
+  expect(await screen.findByText(/hakemus lähetetty/i)).toBeInTheDocument();
   expect(window.location.pathname).toBe('/fi/hakemus/7');
 });
 

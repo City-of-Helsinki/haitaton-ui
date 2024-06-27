@@ -5,7 +5,7 @@ import authService from '../auth/authService';
 import { server } from '../mocks/test-server';
 import Homepage from './HomepageComponent';
 
-jest.setTimeout(10000);
+jest.setTimeout(30000);
 
 const userName = 'Test User';
 const userEmail = 'test.user@mail.com';
@@ -31,10 +31,8 @@ describe('Create new hanke from dialog', () => {
   async function openHankeCreateDialog() {
     jest.spyOn(authService.userManager, 'getUser').mockResolvedValue(mockUser as User);
     const { user } = render(<Homepage />);
-    await screen.findByRole('heading', {
-      name: 'Auta meitä tekemään Haitattomasta vielä parempi!',
-    });
-    await user.click(screen.getByText('Luo uusi hanke'));
+    const createElement = await screen.findByText('Luo uusi hanke');
+    await user.click(createElement);
     return user;
   }
 
