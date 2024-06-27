@@ -23,8 +23,6 @@ import { cloneDeep } from 'lodash';
 
 afterEach(cleanup);
 
-jest.setTimeout(90000);
-
 interface DateOptions {
   start?: string;
   end?: string;

@@ -3,8 +3,6 @@ import HankeListContainer from './HankeListContainer';
 
 afterEach(cleanup);
 
-jest.setTimeout(30000);
-
 function waitForData() {
   return waitFor(() => screen.getByTestId('hds-table-sorting-header-nimi'));
 }

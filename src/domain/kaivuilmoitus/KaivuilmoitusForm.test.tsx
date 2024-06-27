@@ -23,8 +23,6 @@ import { fillNewContactPersonForm } from '../forms/components/testUtils';
 
 afterEach(cleanup);
 
-jest.setTimeout(90000);
-
 async function fillBasicInformation(
   user: UserEvent,
   options: {

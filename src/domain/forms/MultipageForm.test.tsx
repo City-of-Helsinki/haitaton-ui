@@ -3,8 +3,6 @@ import MultipageForm from './MultipageForm';
 import { render, screen } from '../../testUtils/render';
 import FormActions from './components/FormActions';
 
-jest.setTimeout(10000);
-
 function Page1() {
   return (
     <div>

@@ -8,8 +8,6 @@ import * as applicationApi from '../utils';
 import hakemukset from '../../mocks/data/hakemukset-data';
 import { cloneDeep } from 'lodash';
 
-jest.setTimeout(60000);
-
 test('Correct information about application should be displayed', async () => {
   render(<ApplicationViewContainer id={4} />);
   await waitForLoadingToFinish();
@@ -127,6 +125,7 @@ test('Should not be able to send application if it has moved to handling in Allu
 });
 
 test('Should disable Send button if user is not a contact person on application', async () => {
+  server.resetHandlers();
   server.use(
     rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
       return res(
@@ -184,6 +183,7 @@ test('Should not send multiple requests if clicking application cancel confirm b
 
   await user.click(screen.getByRole('button', { name: 'Peru hakemus' }));
   const confirmCancelButton = screen.getByRole('button', { name: 'Vahvista' });
+  await user.click(confirmCancelButton);
   await user.click(confirmCancelButton);
   await user.click(confirmCancelButton);
   await screen.findByText('Hakemus peruttiin onnistuneesti');

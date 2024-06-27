@@ -5,8 +5,6 @@ import { ApplicationCancel } from './ApplicationCancel';
 import mockApplications from '../../mocks/data/hakemukset-data';
 import { server } from '../../mocks/test-server';
 
-jest.setTimeout(10000);
-
 test('Cancel application when it has not been saved', async () => {
   const { user } = render(
     <ApplicationCancel

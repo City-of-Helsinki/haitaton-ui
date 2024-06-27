@@ -23,8 +23,6 @@ import { waitForElementToBeRemoved } from '@testing-library/react';
 
 afterEach(cleanup);
 
-jest.setTimeout(50000);
-
 const DUMMY_DATA = 'dummy_file_data';
 
 const TEST_FILES = [

@@ -8,8 +8,6 @@ import { USER_EDIT_HANKE } from '../../mocks/signedInUser';
 import * as hankeUsersApi from './hankeUsersApi';
 import { formatToFinnishDate } from '../../../common/utils/date';
 
-jest.setTimeout(30000);
-
 function fillUserInformation({
   etunimi,
   sukunimi,

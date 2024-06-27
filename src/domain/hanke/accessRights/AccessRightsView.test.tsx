@@ -10,8 +10,6 @@ import { USER_ALL } from '../../mocks/signedInUser';
 import { reset } from '../../mocks/data/users';
 import { cloneDeep } from 'lodash';
 
-jest.setTimeout(90000);
-
 afterEach(cleanup);
 
 function getSignedInUser(options: Partial<SignedInUser> = {}): SignedInUser {

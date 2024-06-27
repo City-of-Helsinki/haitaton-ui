@@ -5,8 +5,6 @@ import authService from '../auth/authService';
 import { server } from '../mocks/test-server';
 import Homepage from './HomepageComponent';
 
-jest.setTimeout(30000);
-
 const userName = 'Test User';
 const userEmail = 'test.user@mail.com';
 const mockUser: Partial<User> = {

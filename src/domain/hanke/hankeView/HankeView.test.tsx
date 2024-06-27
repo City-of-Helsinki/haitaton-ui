@@ -5,8 +5,6 @@ import HankeViewContainer from './HankeViewContainer';
 import { server } from '../../mocks/test-server';
 import { SignedInUser } from '../hankeUsers/hankeUser';
 
-jest.setTimeout(60000);
-
 function getViewPermissionForUser() {
   server.use(
     rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {

@@ -6,8 +6,6 @@ const startDateLabel = 'Ajanjakson alku';
 const endDateLabel = 'Ajanjakson loppu';
 const countOfFilteredHankkeet = 'countOfFilteredHankkeet';
 
-jest.setTimeout(10000);
-
 describe('HankeMap', () => {
   test('Render test', async () => {
     const { user } = render(<HankeMap />);

@@ -19,8 +19,6 @@ const EMPTY_HANKE_LIST_TEXT =
 
 afterEach(cleanup);
 
-jest.setTimeout(60000);
-
 const initHankkeetResponse = (response: HankeDataDraft[]) => {
   server.use(
     rest.get('/api/hankkeet', async (_, res, ctx) => {
