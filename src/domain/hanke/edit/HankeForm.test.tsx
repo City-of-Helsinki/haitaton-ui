@@ -872,6 +872,7 @@ describe('New contact person form and contact person dropdown', () => {
     await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
     fillNewContactPersonForm(newUser);
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+    fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
     await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
     fillNewContactPersonForm(newUser);
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));

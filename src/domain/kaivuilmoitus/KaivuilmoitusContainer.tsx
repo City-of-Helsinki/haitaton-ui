@@ -220,6 +220,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       'applicationData.propertyDeveloperWithContacts.customer.registryKey',
       'applicationData.representativeWithContacts.customer.registryKey',
       'applicationData.invoicingCustomer.registryKey',
+      'applicationData.invoicingCustomer.ovt',
     ],
   ];
 
