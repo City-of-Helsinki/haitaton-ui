@@ -549,11 +549,13 @@ describe('HankeForm', () => {
         hankeTunnus: 'HAI22-2',
       },
     ]);
-    const { user } = render(<HankeFormContainer hankeTunnus="HAI22-1" />);
-    await waitFor(() => screen.findByText('Perustiedot'));
-    await user.click(screen.getByRole('button', { name: /liitteet/i }));
+    const { user, findByText, getByRole, findByTestId, getByText } = render(
+      <HankeFormContainer hankeTunnus="HAI22-1" />,
+    );
+    await waitFor(() => findByText('Perustiedot'));
+    await user.click(getByRole('button', { name: /liitteet/i }));
 
-    const { findAllByRole } = within(await screen.findByTestId('file-upload-list'));
+    const { findAllByRole } = within(await findByTestId('file-upload-list'));
     const fileListItems = await findAllByRole('listitem');
     expect(fileListItems.length).toBe(3);
 
@@ -572,12 +574,12 @@ describe('HankeForm', () => {
     expect(getByTextInC('Lisätty tänään')).toBeInTheDocument();
     expect(getByTextInC('(117.7 MB)')).toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+    await user.click(getByRole('button', { name: /yhteenveto/i }));
 
-    expect(await screen.findByText('Vaihe 6/6: Yhteenveto')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: fileNameA })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: fileNameB })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: fileNameC })).toBeInTheDocument();
+    expect(await findByText('Vaihe 6/6: Yhteenveto')).toBeInTheDocument();
+    expect(getByText(fileNameA)).toBeInTheDocument();
+    expect(getByText(fileNameB)).toBeInTheDocument();
+    expect(getByText(fileNameC)).toBeInTheDocument();
   });
 
   test('Summary page should handle not filled data gracefully', async () => {

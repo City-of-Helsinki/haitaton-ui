@@ -179,48 +179,44 @@ test('Sorting by users email works', async () => {
 });
 
 test('Search by full name works', async () => {
-  const { user, queryByText, findAllByText, findByRole } = render(
-    <AccessRightsViewContainer hankeTunnus="HAI22-2" />,
-  );
-  await waitForLoadingToFinish(queryByText);
+  const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+  await waitForLoadingToFinish();
 
-  const searchInput = await findByRole('combobox', { name: 'Haku' });
+  const searchInput = await screen.findByRole('combobox', { name: 'Haku' });
   fireEvent.change(searchInput, {
     target: { value: 'Teppo Työmies' },
   });
   await delay(500);
 
-  let table = (await findByRole('table')) as HTMLTableElement;
+  let table = (await screen.findByRole('table')) as HTMLTableElement;
   expect(table.tBodies[0].rows).toHaveLength(1);
-  const names = await findAllByText(`${users[1].etunimi} ${users[1].sukunimi}`);
+  const names = await screen.findAllByText(`${users[1].etunimi} ${users[1].sukunimi}`);
   expect(names).toHaveLength(2);
 
   // Clear the search
-  const clearButton = await findByRole('button', { name: 'Clear' });
+  const clearButton = await screen.findByRole('button', { name: 'Clear' });
   await user.click(clearButton);
   await delay(500);
 
-  table = (await findByRole('table')) as HTMLTableElement;
+  table = (await screen.findByRole('table')) as HTMLTableElement;
   expect(table.tBodies[0].rows).toHaveLength(10);
 });
 
 test('Search by partial text works', async () => {
-  const { queryByText, findByRole, findAllByText } = render(
-    <AccessRightsViewContainer hankeTunnus="HAI22-2" />,
-  );
-  await waitForLoadingToFinish(queryByText);
+  render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+  await waitForLoadingToFinish();
 
-  const searchInput = await findByRole('combobox', { name: 'Haku' });
+  const searchInput = await screen.findByRole('combobox', { name: 'Haku' });
   fireEvent.change(searchInput, {
     target: { value: 'ak' },
   });
   await delay(500);
 
-  const table = (await findByRole('table')) as HTMLTableElement;
+  const table = (await screen.findByRole('table')) as HTMLTableElement;
   expect(table.tBodies[0].rows).toHaveLength(2);
-  let names = await findAllByText(`${users[2].etunimi} ${users[2].sukunimi}`);
+  let names = await screen.findAllByText(`${users[2].etunimi} ${users[2].sukunimi}`);
   expect(names).toHaveLength(2);
-  names = await findAllByText(`${users[7].etunimi} ${users[7].sukunimi}`);
+  names = await screen.findAllByText(`${users[7].etunimi} ${users[7].sukunimi}`);
   expect(names).toHaveLength(2);
 });
 
@@ -269,34 +265,34 @@ test('Should show error notification if there is technical error', async () => {
 });
 
 test('Should show correct icons for users', async () => {
-  const { queryByText, findByRole } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
-  await waitForLoadingToFinish(queryByText);
+  render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+  await waitForLoadingToFinish();
 
-  let cell = await findByRole('cell', { name: 'Omat käyttäjätietosi Matti Meikäläinen' });
+  let cell = await screen.findByRole('cell', { name: 'Omat käyttäjätietosi Matti Meikäläinen' });
   expect(cell).toBeInTheDocument();
-  cell = await findByRole('cell', { name: 'Kirjautunut hankkeelle tunnistautuneena Aku Asiakas' });
+  cell = await screen.findByRole('cell', {
+    name: 'Kirjautunut hankkeelle tunnistautuneena Aku Asiakas',
+  });
   expect(cell).toBeInTheDocument();
-  cell = await findByRole('cell', { name: 'Kutsulinkki lähetetty 15.1.2024 Teppo Työmies' });
+  cell = await screen.findByRole('cell', { name: 'Kutsulinkki lähetetty 15.1.2024 Teppo Työmies' });
   expect(cell).toBeInTheDocument();
 });
 
 test('Should send invitation to user when cliking the Lähetä kutsulinkki uudelleen button', async () => {
-  const { user, queryByText, findAllByRole, findByRole, findByText } = render(
-    <AccessRightsViewContainer hankeTunnus="HAI22-2" />,
-  );
-  await waitForLoadingToFinish(queryByText);
+  const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+  await waitForLoadingToFinish();
 
-  const invitationMenus = await findAllByRole('button', {
+  const invitationMenus = await screen.findAllByRole('button', {
     name: 'Käyttäjävalikko',
   });
   const invitationMenu = invitationMenus[0];
   await user.click(invitationMenu);
-  const invitationButton = await findByRole('menuitem', {
+  const invitationButton = await screen.findByRole('menuitem', {
     name: 'Lähetä kutsulinkki uudelleen',
   });
   await user.click(invitationButton);
 
-  const message = await findByText('Kutsulinkki lähetetty osoitteeseen teppo@test.com.');
+  const message = await screen.findByText('Kutsulinkki lähetetty osoitteeseen teppo@test.com.');
   expect(message).toBeInTheDocument();
 
   await user.click(invitationMenu);
@@ -310,20 +306,20 @@ test('Should show error notification if sending invitation fails', async () => {
     }),
   );
 
-  const { user, queryByText, findAllByRole, findByRole, findByText } = render(
-    <AccessRightsViewContainer hankeTunnus="HAI22-2" />,
-  );
-  await waitForLoadingToFinish(queryByText);
+  const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
+  await waitForLoadingToFinish();
 
-  const invitationMenus = await findAllByRole('button', {
+  const invitationMenus = await screen.findAllByRole('button', {
     name: 'Käyttäjävalikko',
   });
   const invitationMenu = invitationMenus[0];
   await user.click(invitationMenu);
-  const invitationButton = await findByRole('menuitem', { name: 'Lähetä kutsulinkki uudelleen' });
+  const invitationButton = await screen.findByRole('menuitem', {
+    name: 'Lähetä kutsulinkki uudelleen',
+  });
   await user.click(invitationButton);
 
-  const message = await findByText('Virhe linkin lähettämisessä');
+  const message = await screen.findByText('Virhe linkin lähettämisessä');
   expect(message).toBeInTheDocument();
 });
 

@@ -35,9 +35,6 @@ async function fillBasicInformation(
     placementContracts?: string[];
     requiredCompetence?: boolean;
   } = {},
-  getByLabelText: (
-    text: string | RegExp,
-  ) => Element | Node | Window | Document = screen.getByLabelText,
 ) {
   const {
     name = 'Kaivuilmoitus',
@@ -48,15 +45,15 @@ async function fillBasicInformation(
     requiredCompetence = true,
   } = options;
 
-  fireEvent.change(getByLabelText(/työn nimi/i), {
+  fireEvent.change(screen.getByLabelText(/työn nimi/i), {
     target: { value: name },
   });
 
-  fireEvent.change(getByLabelText(/työn kuvaus/i), {
+  fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
     target: { value: description },
   });
 
-  fireEvent.click(getByLabelText(/uuden rakenteen tai johdon rakentamisesta/i));
+  fireEvent.click(screen.getByLabelText(/uuden rakenteen tai johdon rakentamisesta/i));
 
   if (existingCableReport) {
     await screen.findAllByLabelText(/tehtyjen johtoselvitysten tunnukset/i);

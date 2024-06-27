@@ -152,7 +152,7 @@ test('Should show amount of successful files uploaded and errors correctly when 
     renderResult: { user },
     fileUploadElement,
   } = getFileUpload();
-  user.upload(fileUploadElement, [new File(['test-a'], fileNameA, { type: 'image/png' })]);
+  await user.upload(fileUploadElement, [new File(['test-a'], fileNameA, { type: 'image/png' })]);
 
   await waitFor(() => {
     expect(screen.queryByText('0/1 tiedosto(a) tallennettu')).toBeInTheDocument();

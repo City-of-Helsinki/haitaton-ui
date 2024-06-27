@@ -98,25 +98,25 @@ describe('HankePortfolioComponent', () => {
   });
 
   test('Changing Hanke type filters correct number of projects', async () => {
-    const { user, findByTestId, getByRole, getByText } = render(
+    const { user } = render(
       <HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />,
     );
-    const numberElement = await findByTestId('numberOfFilteredRows');
+    const numberElement = await screen.findByTestId('numberOfFilteredRows');
     expect(numberElement).toHaveTextContent('2');
-    const button = getByRole('button', { name: 'Työn tyyppi' });
+    const button = screen.getByRole('button', { name: 'Työn tyyppi' });
     await user.click(button);
-    await user.click(getByText('Sähkö'));
-    const hankeVaiheet = getByText('Hankevaiheet');
+    await user.click(screen.getByText('Sähkö'));
+    const hankeVaiheet = screen.getByText('Hankevaiheet');
     await user.click(hankeVaiheet);
     expect(numberElement).toHaveTextContent('0');
     expect(screen.queryByText(EMPTY_HANKE_LIST_TEXT)).toBeInTheDocument();
-    const tyonTyyppi = getByRole('button', { name: 'Työn tyyppi' });
+    const tyonTyyppi = screen.getByRole('button', { name: 'Työn tyyppi' });
     await user.click(tyonTyyppi);
-    await user.click(getByText('Viemäri'));
+    await user.click(screen.getByText('Viemäri'));
     await user.click(hankeVaiheet);
     expect(numberElement).toHaveTextContent('1');
     await user.click(tyonTyyppi);
-    await user.click(getByText('Sadevesi'));
+    await user.click(screen.getByText('Sadevesi'));
     await user.click(hankeVaiheet);
     expect(numberElement).toHaveTextContent('2');
   });

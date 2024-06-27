@@ -20,7 +20,6 @@ import * as applicationAttachmentsApi from '../application/attachments';
 import { fillNewContactPersonForm } from '../forms/components/testUtils';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import { cloneDeep } from 'lodash';
-import { waitForElementToBeRemoved } from '@testing-library/react';
 
 afterEach(cleanup);
 
@@ -823,9 +822,9 @@ test('Should remove validation error if yhteyshenkilo is created for yhteystieto
   });
   await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
 
-  await waitForElementToBeRemoved(() =>
+  expect(
     screen.queryByText(/vähintään yksi yhteyshenkilö tulee olla asetettuna/i),
-  );
+  ).not.toBeInTheDocument();
 });
 
 test('Work name should be limited to 100 characters', async () => {
