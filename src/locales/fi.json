@@ -616,6 +616,7 @@
         "ytunnus": "$t(form:yhteystiedot:titles:rakennuttajat): $t(form:yhteystiedot:labels:ytunnus)"
       },
       "muut": {
+        "rooli": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:rooli)",
         "nimi": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:nimi)",
         "email": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:email)",
         "ytunnus": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:ytunnus)"

@@ -355,12 +355,14 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
                     label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.ROOLI}`)}
                     placeholder={t('form:yhteystiedot:placeholders:otherPartyRole')}
                     helperText={t('form:yhteystiedot:helperTexts:otherPartyRole')}
+                    required
                   />
                 </ResponsiveGrid>
                 <ResponsiveGrid>
                   <TextInput
                     name={`${fieldPath}.${CONTACT_FORMFIELD.NIMI}`}
                     label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.NIMI}`)}
+                    required
                   />
                   <TextInput
                     name={`${fieldPath}.${CONTACT_FORMFIELD.ORGANISAATIO}`}
@@ -373,6 +375,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
                   <TextInput
                     name={`${fieldPath}.${CONTACT_FORMFIELD.EMAIL}`}
                     label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.EMAIL}`)}
+                    required
                   />
                   <TextInput
                     name={`${fieldPath}.${CONTACT_FORMFIELD.PUHELINNUMERO}`}

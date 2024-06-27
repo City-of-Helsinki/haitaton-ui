@@ -56,8 +56,7 @@ const yhteystietoSchema = yup.object({
 const muuYhteystietoSchema = yhteystietoSchema
   .omit([CONTACT_FORMFIELD.TYYPPI, CONTACT_FORMFIELD.TUNNUS])
   .shape({
-    [CONTACT_FORMFIELD.NIMI]: yup.string().defined().max(100),
-    [CONTACT_FORMFIELD.ROOLI]: yup.string().defined(),
+    [CONTACT_FORMFIELD.ROOLI]: yup.string().required().meta({ pageName: HANKE_PAGES.YHTEYSTIEDOT }),
     [CONTACT_FORMFIELD.ORGANISAATIO]: yup.string().defined(),
     [CONTACT_FORMFIELD.OSASTO]: yup.string().defined(),
   });
