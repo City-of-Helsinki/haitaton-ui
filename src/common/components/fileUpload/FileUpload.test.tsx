@@ -6,7 +6,6 @@ import { server } from '../../../domain/mocks/test-server';
 import { AttachmentMetadata } from '../../types/attachment';
 import { deleteAttachment } from '../../../domain/application/attachments';
 import { FileDeleteFunction } from './types';
-import { delay } from '../../../testUtils/helperFunctions';
 
 async function uploadAttachment({ id, file }: { id: number; file: File }) {
   const { data } = await api.post(`/hakemukset/${id}/liitteet`, {
@@ -350,8 +349,9 @@ test('Should be able to cancel upload requests', async () => {
   ]);
   await screen.findByText('Tallennetaan tiedostoja');
   await user.click(screen.getByRole('button', { name: 'Peruuta' }));
-  await delay(500);
-  expect(abortSpy).toHaveBeenCalledTimes(1);
+  await waitFor(() => {
+    expect(abortSpy).toHaveBeenCalledTimes(1);
+  });
   abortSpy.mockRestore();
 });
 
