@@ -66,7 +66,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
   const locale = useLocale();
   const [multipleHankeAreaSpanningFeature, setMultipleHankeAreaSpanningFeature] =
     useState<Feature<Geometry> | null>(null);
-  const { getValues, setValue, watch } = useFormContext<KaivuilmoitusFormValues>();
+  const { getValues, setValue, watch, trigger } = useFormContext<KaivuilmoitusFormValues>();
   const {
     fields: applicationAreas,
     append,
@@ -143,6 +143,16 @@ export default function Areas({ hankeData }: Readonly<Props>) {
     setMultipleHankeAreaSpanningFeature(null);
   }
 
+  // Trigger validation for startTime field
+  function validateStartTime() {
+    trigger('applicationData.startTime');
+  }
+
+  // Trigger validation for endTime field
+  function validateEndTime() {
+    trigger('applicationData.endTime');
+  }
+
   return (
     <DrawProvider source={drawSource}>
       <div>
@@ -194,6 +204,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
               maxDate={maxDate}
               initialMonth={minStartDate}
               helperText={t('form:helperTexts:dateInForm')}
+              onValueChange={validateStartTime}
             />
             <DatePicker
               name="applicationData.endTime"
@@ -204,6 +215,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
               maxDate={maxDate}
               initialMonth={minEndDate}
               helperText={t('form:helperTexts:dateInForm')}
+              onValueChange={validateEndTime}
             />
           </ResponsiveGrid>
         </Fieldset>
@@ -213,14 +225,12 @@ export default function Areas({ hankeData }: Readonly<Props>) {
           showDrawControls={Boolean(workTimesSet)}
           onAddArea={handleAddArea}
         >
-          {startTime && endTime ? (
-            <HankeLayer
-              hankeData={hankeData && [hankeData]}
-              startDate={startTime?.toString()}
-              endDate={endTime?.toString()}
-              fitSource
-            />
-          ) : null}
+          <HankeLayer
+            hankeData={hankeData && [hankeData]}
+            startDate={startTime?.toString()}
+            endDate={endTime?.toString()}
+            fitSource
+          />
         </ApplicationMap>
 
         {!workTimesSet && (
