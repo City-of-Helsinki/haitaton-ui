@@ -409,7 +409,7 @@ export const handlers = [
   }),
 
   rest.post(`${apiUrl}/hakemukset/:id/liitteet`, async (_, res, ctx) => {
-    return res(ctx.delay(), ctx.status(200));
+    return res(ctx.delay(500), ctx.status(200));
   }),
 
   rest.delete(`${apiUrl}/hakemukset/:id/liitteet/:attachmentId`, async (_, res, ctx) => {

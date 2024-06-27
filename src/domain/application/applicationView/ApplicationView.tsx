@@ -58,7 +58,7 @@ import { CheckRightsByHanke } from '../../hanke/hankeUsers/UserRightsCheck';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import KaivuilmoitusAttachmentSummary from '../components/summary/KaivuilmoitusAttachmentSummary';
 import InvoicingCustomerSummary from '../components/summary/InvoicingCustomerSummary';
-import React from 'react';
+import React, { useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import useApplicationSendNotification from '../hooks/useApplicationSendNotification';
 import { SignedInUser } from '../../hanke/hankeUsers/hankeUser';
@@ -72,11 +72,9 @@ type Props = {
 
 function ApplicationView({ application, hanke, signedInUser, onEditApplication }: Readonly<Props>) {
   const { t } = useTranslation();
-
+  const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const locale = useLocale();
-
   const hankeViewPath = useHankeViewPath(application.hankeTunnus);
-
   const { applicationData, applicationIdentifier, applicationType, alluStatus, id } = application;
   const {
     name,
@@ -123,6 +121,7 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
     },
   });
   async function onSendApplication() {
+    setIsSendButtonDisabled(true);
     applicationSendMutation.mutate(id as number);
   }
 
@@ -192,9 +191,9 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
                 theme="coat"
                 iconLeft={<IconEnvelope aria-hidden="true" />}
                 onClick={onSendApplication}
-                isLoading={applicationSendMutation.isLoading}
+                isLoading={applicationSendMutation.isLoading || isSendButtonDisabled}
                 loadingText={t('common:buttons:sendingText')}
-                disabled={disableSendButton}
+                disabled={disableSendButton || isSendButtonDisabled}
               >
                 {t('hakemus:buttons:sendApplication')}
               </Button>

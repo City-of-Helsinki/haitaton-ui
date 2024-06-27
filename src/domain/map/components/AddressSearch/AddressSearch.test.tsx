@@ -21,7 +21,7 @@ test('Swedish address labels are returned when search term is in Swedish', async
   const { user } = render(<AddressSearch onAddressSelect={handleAddressSelect} />);
 
   const searchInput = screen.getByPlaceholderText('Etsi osoitteella');
-  user.type(searchInput, 'elielplatsen');
+  await user.type(searchInput, 'elielplatsen');
 
   await waitFor(() => expect(screen.getByText('Elielplatsen 1')).toBeInTheDocument(), {
     timeout: 30000,
@@ -37,13 +37,12 @@ test('Finnish address labels are returned when search term is in Finnish', async
   const { user } = render(<AddressSearch onAddressSelect={handleAddressSelect} />);
 
   const searchInput = screen.getByPlaceholderText('Etsi osoitteella');
-  user.type(searchInput, 'elielinaukio');
+  await user.type(searchInput, 'elielinaukio');
 
   await waitFor(() => expect(screen.getByText('Elielinaukio 1')).toBeInTheDocument(), {
     timeout: 30000,
   });
 
-  expect(screen.getByText('Elielinaukio 1')).toBeInTheDocument();
   expect(screen.getByText('Elielinaukio 2')).toBeInTheDocument();
   expect(screen.getByText('Elielinaukio 3')).toBeInTheDocument();
   expect(screen.getByText('Elielinaukio 5')).toBeInTheDocument();
@@ -54,11 +53,12 @@ test('Finnish address labels are returned when search term is incomplete and can
   const { user } = render(<AddressSearch onAddressSelect={handleAddressSelect} />);
 
   const searchInput = screen.getByPlaceholderText('Etsi osoitteella');
-  user.type(searchInput, 'eliel');
+  await user.type(searchInput, 'eliel');
 
-  await waitFor(() => screen.getByText('Elielinaukio 1'));
+  await waitFor(() => expect(screen.getByText('Elielinaukio 1')).toBeInTheDocument(), {
+    timeout: 30000,
+  });
 
-  expect(screen.getByText('Elielinaukio 1')).toBeInTheDocument();
   expect(screen.getByText('Elielinaukio 2')).toBeInTheDocument();
   expect(screen.getByText('Elielinaukio 3')).toBeInTheDocument();
   expect(screen.getByText('Elielinaukio 5')).toBeInTheDocument();
@@ -69,13 +69,12 @@ test('Finnish address labels are returned when search term is in Finnish and has
   const { user } = render(<AddressSearch onAddressSelect={handleAddressSelect} />);
 
   const searchInput = screen.getByPlaceholderText('Etsi osoitteella');
-  user.type(searchInput, 'elielinaukio ');
+  await user.type(searchInput, 'elielinaukio ');
 
   await waitFor(() => expect(screen.getByText('Elielinaukio 1')).toBeInTheDocument(), {
     timeout: 30000,
   });
 
-  expect(screen.getByText('Elielinaukio 1')).toBeInTheDocument();
   expect(screen.getByText('Elielinaukio 2')).toBeInTheDocument();
   expect(screen.getByText('Elielinaukio 3')).toBeInTheDocument();
   expect(screen.getByText('Elielinaukio 5')).toBeInTheDocument();
@@ -86,7 +85,7 @@ test('Finnish address label is returned when search term is in Finnish and has s
   const { user } = render(<AddressSearch onAddressSelect={handleAddressSelect} />);
 
   const searchInput = screen.getByPlaceholderText('Etsi osoitteella');
-  user.type(searchInput, 'Elielinaukio 3');
+  await user.type(searchInput, 'Elielinaukio 3');
 
   await waitFor(() => expect(screen.getByText('Elielinaukio 3')).toBeInTheDocument(), {
     timeout: 30000,

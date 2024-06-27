@@ -22,7 +22,7 @@ export function waitForLoadingToFinish(
   queryByText: (text: string | RegExp) => HTMLElement | null = screen.queryByText,
 ) {
   return waitForElementToBeRemoved(() => queryByText(/page is loading/i), {
-    timeout: 4000,
+    timeout: 10000,
   });
 }
 

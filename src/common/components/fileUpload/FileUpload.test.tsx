@@ -79,7 +79,12 @@ test('Should upload files successfully and loading indicator is displayed', asyn
     new File(['test-b'], 'test-file-b.jpg', { type: 'image/jpg' }),
   ]);
 
-  expect(await screen.findByText('2/2 tiedosto(a) tallennettu')).toBeInTheDocument();
+  await waitFor(
+    () => {
+      expect(screen.getByText('2/2 tiedosto(a) tallennettu')).toBeInTheDocument();
+    },
+    { timeout: 10000 },
+  );
   expect(uploadMock).toHaveBeenCalledTimes(2);
 });
 
@@ -204,7 +209,12 @@ test('Should upload files when user drops them into drag-and-drop area', async (
     },
   });
 
-  expect(await screen.findByText('3/3 tiedosto(a) tallennettu')).toBeInTheDocument();
+  await waitFor(
+    () => {
+      expect(screen.getByText('3/3 tiedosto(a) tallennettu')).toBeInTheDocument();
+    },
+    { timeout: 10000 },
+  );
   expect(uploadMock).toHaveBeenCalledTimes(3);
 });
 

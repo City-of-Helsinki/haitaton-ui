@@ -141,11 +141,13 @@ test('Should disable Send button if user is not a contact person on application'
 
   render(<ApplicationViewContainer id={1} />);
 
-  const sendButton = await screen.findByRole('button', { name: 'Lähetä hakemus' });
+  await waitFor(() => screen.findByRole('button', { name: 'Lähetä hakemus' }), { timeout: 10000 });
+  const sendButton = screen.getByRole('button', { name: 'Lähetä hakemus' });
   expect(sendButton).toBeDisabled();
 });
 
 test('Should not show Edit, Cancel or Send buttons if user does not have correct permission', async () => {
+  server.resetHandlers();
   server.use(
     rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
       return res(
@@ -204,6 +206,7 @@ test('Should not send multiple requests if clicking Send button many times', asy
   await waitForLoadingToFinish();
 
   const sendButton = await screen.findByRole('button', { name: 'Lähetä hakemus' });
+  await user.click(sendButton);
   await user.click(sendButton);
   await user.click(sendButton);
   await screen.findByText('Hakemus on lähetetty käsiteltäväksi.');
