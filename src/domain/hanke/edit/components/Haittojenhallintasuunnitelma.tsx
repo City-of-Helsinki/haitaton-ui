@@ -20,7 +20,6 @@ import { HaittaIndexData } from '../../../common/haittaIndexes/types';
 import CustomAccordion from '../../../../common/components/customAccordion/CustomAccordion';
 import HaittaIndex from '../../../common/haittaIndexes/HaittaIndex';
 import { HaittaSubSection } from '../../../common/haittaIndexes/HaittaSubSection';
-import HaittaIndexNumber from '../../../common/haittaIndexes/HaittaIndexNumber';
 import styles from './Haittojenhallintasuunnitelma.module.scss';
 
 function mapNuisanceEnumIndexToNuisanceIndex(index: number): number {
@@ -29,14 +28,17 @@ function mapNuisanceEnumIndexToNuisanceIndex(index: number): number {
   return index;
 }
 
-function HaittaIndexHeading({ index }: Readonly<{ index: number | undefined }>) {
+function HaittaIndexHeading({
+  index,
+  testId,
+}: Readonly<{ index: number | undefined; testId?: string }>) {
   const { t } = useTranslation();
   return (
     <HStack spacing="12px">
       <Box as="h4" className="heading-s">
         {t(`hankeIndexes:haittaindeksi`)}
       </Box>
-      <HaittaIndex index={index} showLabel={false} />
+      <HaittaIndex index={index} showLabel={false} testId={testId} />
     </HStack>
   );
 }
@@ -117,7 +119,7 @@ const Haittojenhallintasuunnitelma: React.FC<Props> = ({ hanke, index }) => {
           </Box>
           {haitta === HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE ? (
             <CustomAccordion
-              heading={<HaittaIndexHeading index={indeksi} />}
+              heading={<HaittaIndexHeading index={indeksi} testId="test-AUTOLIIKENNE" />}
               headingBorderBottom={false}
             >
               <HaittaSubSection
@@ -149,7 +151,7 @@ const Haittojenhallintasuunnitelma: React.FC<Props> = ({ hanke, index }) => {
               />
             </CustomAccordion>
           ) : (
-            <HaittaIndexHeading index={indeksi} />
+            <HaittaIndexHeading index={indeksi} testId={`test-${haitta}`} />
           )}
           <Box mt="var(--spacing-m)">
             <TextArea
@@ -168,40 +170,28 @@ const Haittojenhallintasuunnitelma: React.FC<Props> = ({ hanke, index }) => {
         </Box>
         <HaittaSubSection
           heading={t(`hankeForm:labels:meluHaittaShort`)}
-          haittaIndex={
-            <HaittaIndexNumber
-              index={meluhaittaIndex}
-              showColorByIndex={false}
-              testId="test-meluhaitta"
-            />
-          }
+          index={meluhaittaIndex}
+          showColorByIndex={false}
           className={styles.muutHaittojenHallintaToimetSubSection}
+          testId="test-meluHaitta"
         />
         <HaittaSubSection
           heading={t(`hankeForm:labels:polyHaittaShort`)}
-          haittaIndex={
-            <HaittaIndexNumber
-              index={polyhaittaIndex}
-              showColorByIndex={false}
-              testId="test-polyhaitta"
-            />
-          }
+          index={polyhaittaIndex}
+          showColorByIndex={false}
           className={styles.muutHaittojenHallintaToimetSubSection}
+          testId="test-polyHaitta"
         />
         <HaittaSubSection
           heading={t(`hankeForm:labels:tarinaHaittaShort`)}
-          haittaIndex={
-            <HaittaIndexNumber
-              index={tarinaHaittaIndex}
-              showColorByIndex={false}
-              testId="test-tarinahaitta"
-            />
-          }
+          index={tarinaHaittaIndex}
+          showColorByIndex={false}
           className={styles.muutHaittojenHallintaToimetSubSection}
+          testId="test-tarinaHaitta"
         />
         <HaittaSubSection
           heading={t(`hankeForm:labels:checkSurrounding`)}
-          haittaIndex={null}
+          showIndex={false}
           className={styles.muutHaittojenHallintaToimetSubSection}
         />
         <Box mt="var(--spacing-m)">

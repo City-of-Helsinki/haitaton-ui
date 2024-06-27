@@ -10,6 +10,7 @@ type Props = {
   tooltipContent?: React.ReactNode;
   testId?: string;
   showTooltip?: boolean;
+  showColorByIndex?: boolean;
 };
 
 export default function HaittaIndex({
@@ -18,6 +19,7 @@ export default function HaittaIndex({
   tooltipContent,
   testId,
   showTooltip = false,
+  showColorByIndex,
 }: Readonly<Props>) {
   const { t } = useTranslation();
 
@@ -36,6 +38,7 @@ export default function HaittaIndex({
         testId={testId}
         tooltipContent={tooltipContent}
         showTooltip={showTooltip}
+        showColorByIndex={showColorByIndex}
       />
     </Flex>
   );

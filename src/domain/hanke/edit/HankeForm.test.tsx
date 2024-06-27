@@ -295,16 +295,23 @@ describe('HankeForm', () => {
     expect(
       screen.getByText('Pyöräliikenteelle koituvien haittojen hallintasuunnitelma'),
     ).toBeInTheDocument();
+    expect(screen.getByTestId('test-PYORALIIKENNE')).toHaveTextContent('3.5');
     expect(
       screen.getByText('Autoliikenteelle koituvien haittojen hallintasuunnitelma'),
     ).toBeInTheDocument();
+    expect(screen.getByTestId('test-AUTOLIIKENNE')).toHaveTextContent('3');
     expect(
       screen.getByText('Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma'),
     ).toBeInTheDocument();
+    expect(screen.getByTestId('test-LINJAAUTOLIIKENNE')).toHaveTextContent('1');
     expect(
       screen.getByText('Raitioliikenteelle koituvien haittojen hallintasuunnitelma'),
     ).toBeInTheDocument();
+    expect(screen.getByTestId('test-RAITIOLIIKENNE')).toHaveTextContent('2');
     expect(screen.getByText('Muiden haittojen hallintasuunnitelma')).toBeInTheDocument();
+    expect(screen.getByTestId('test-meluHaitta')).toHaveTextContent('1');
+    expect(screen.getByTestId('test-polyHaitta')).toHaveTextContent('3');
+    expect(screen.getByTestId('test-tarinaHaitta')).toHaveTextContent('5');
   });
 
   test('Car traffic nuisance categories are shown correctly on nuisance control plan page', async () => {
