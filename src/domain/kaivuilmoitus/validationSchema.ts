@@ -37,42 +37,55 @@ const kaivuilmoitusAlueSchema = yup.object({
   lisatiedot: yup.string(),
 });
 
-const applicationDataSchema = yup.object({
-  applicationType: applicationTypeSchema,
-  name: yup.string().trim().required(),
-  workDescription: yup.string().trim().required(),
-  rockExcavation: yup.boolean().nullable().required(),
-  constructionWork: yup
-    .boolean()
-    .defined()
-    .when(['maintenanceWork', 'emergencyWork'], {
-      is: false,
-      then: (schema) => schema.isTrue(),
-    }),
-  maintenanceWork: yup.boolean().defined(),
-  emergencyWork: yup.boolean().defined(),
-  cableReportDone: yup.boolean().required(),
-  requiredCompetence: yup.boolean().required(),
-  contractorWithContacts: customerWithContactsSchema,
-  customerWithContacts: customerWithContactsSchema,
-  propertyDeveloperWithContacts: customerWithContactsSchema.nullable(),
-  representativeWithContacts: customerWithContactsSchema.nullable(),
-  invoicingCustomer: invoicingCustomerSchema,
-  startTime: yup.date().nullable().required(),
-  endTime: yup
-    .date()
-    .when('startTime', (startTime: Date[], schema: yup.DateSchema) => {
-      try {
-        return startTime ? schema.min(startTime) : schema;
-      } catch (error) {
-        return schema;
-      }
-    })
-    .nullable()
-    .required(),
-  areas: yup.array(kaivuilmoitusAlueSchema).min(1).required(),
-  additionalInfo: yup.string().max(2000).nullable(),
-});
+const applicationDataSchema = yup.object().shape(
+  {
+    applicationType: applicationTypeSchema,
+    name: yup.string().trim().required(),
+    workDescription: yup.string().trim().required(),
+    rockExcavation: yup.boolean().nullable().required(),
+    constructionWork: yup
+      .boolean()
+      .defined()
+      .when(['maintenanceWork', 'emergencyWork'], {
+        is: false,
+        then: (schema) => schema.isTrue(),
+      }),
+    maintenanceWork: yup.boolean().defined(),
+    emergencyWork: yup.boolean().defined(),
+    cableReportDone: yup.boolean().required(),
+    requiredCompetence: yup.boolean().required(),
+    contractorWithContacts: customerWithContactsSchema,
+    customerWithContacts: customerWithContactsSchema,
+    propertyDeveloperWithContacts: customerWithContactsSchema.nullable(),
+    representativeWithContacts: customerWithContactsSchema.nullable(),
+    invoicingCustomer: invoicingCustomerSchema,
+    startTime: yup
+      .date()
+      .when('endTime', (endTime: Date[], schema: yup.DateSchema) => {
+        try {
+          return endTime ? schema.max(endTime[0]) : schema;
+        } catch (error) {
+          return schema;
+        }
+      })
+      .nullable()
+      .required(),
+    endTime: yup
+      .date()
+      .when('startTime', (startTime: Date[], schema: yup.DateSchema) => {
+        try {
+          return startTime ? schema.min(startTime) : schema;
+        } catch (error) {
+          return schema;
+        }
+      })
+      .nullable()
+      .required(),
+    areas: yup.array(kaivuilmoitusAlueSchema).min(1).required(),
+    additionalInfo: yup.string().max(2000).nullable(),
+  },
+  [['startTime', 'endTime']],
+);
 
 export const validationSchema: yup.ObjectSchema<KaivuilmoitusFormValues> = yup.object({
   id: yup.number().defined().nullable(),
