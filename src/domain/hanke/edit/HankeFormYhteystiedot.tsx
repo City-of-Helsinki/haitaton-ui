@@ -22,7 +22,6 @@ import FormContact from '../../forms/components/FormContact';
 import { useHankeUsers } from '../hankeUsers/hooks/useHankeUsers';
 import { HankeUser } from '../hankeUsers/hankeUser';
 import { useQueryClient } from 'react-query';
-import ContactPersonSelect from '../hankeUsers/ContactPersonSelect';
 import { mapHankeUserToHankeYhteyshenkilo } from '../hankeUsers/utils';
 import { Box } from '@chakra-ui/react';
 
@@ -59,7 +58,7 @@ const ContactFields: React.FC<
     index: number;
     hankeUsers?: HankeUser[];
   }>
-> = ({ contactType, index, hankeUsers }) => {
+> = ({ contactType, index }) => {
   const { t } = useTranslation();
   const { watch, setValue } = useFormContext();
   const selectedContactType = watch(`${contactType}.${index}.tyyppi`);
@@ -114,12 +113,6 @@ const ContactFields: React.FC<
           label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.PUHELINNUMERO}`)}
         />
       </ResponsiveGrid>
-      <ContactPersonSelect
-        name={`${contactType}.${index}.${CONTACT_FORMFIELD.YHTEYSHENKILOT}`}
-        hankeUsers={hankeUsers}
-        mapHankeUserToValue={mapHankeUserToHankeYhteyshenkilo}
-        mapValueToLabel={mapHankeYhteyshenkiloToLabel}
-      />
     </Box>
   );
 };
@@ -184,7 +177,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
       ),
     );
 
-    queryClient.invalidateQueries(['hankeUsers', hanke.hankeTunnus]);
+    void queryClient.invalidateQueries(['hankeUsers', hanke.hankeTunnus]);
   }
 
   return (
@@ -202,11 +195,14 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
       >
         {omistajat.map((item, index) => {
           return (
-            <FormContact<HankeContactTypeKey>
+            <FormContact<HankeContactTypeKey, HankeYhteyshenkilo>
+              name={`${HANKE_CONTACT_TYPE.OMISTAJAT}.${index}.${CONTACT_FORMFIELD.YHTEYSHENKILOT}`}
               key={item.id}
               contactType={HANKE_CONTACT_TYPE.OMISTAJAT}
               hankeTunnus={hanke.hankeTunnus!}
               hankeUsers={hankeUsers}
+              mapHankeUserToValue={mapHankeUserToHankeYhteyshenkilo}
+              mapValueToLabel={mapHankeYhteyshenkiloToLabel}
               index={index}
               canBeRemoved={omistajat.length > 1}
               onRemove={removeOmistaja}
@@ -246,11 +242,14 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
       >
         {rakennuttajat.map((item, index) => {
           return (
-            <FormContact<HankeContactTypeKey>
+            <FormContact<HankeContactTypeKey, HankeYhteyshenkilo>
+              name={`${HANKE_CONTACT_TYPE.RAKENNUTTAJAT}.${index}.${CONTACT_FORMFIELD.YHTEYSHENKILOT}`}
               key={item.id}
               contactType={HANKE_CONTACT_TYPE.RAKENNUTTAJAT}
               hankeTunnus={hanke.hankeTunnus!}
               hankeUsers={hankeUsers}
+              mapHankeUserToValue={mapHankeUserToHankeYhteyshenkilo}
+              mapValueToLabel={mapHankeYhteyshenkiloToLabel}
               index={index}
               onRemove={removeRakennuttaja}
               onContactPersonAdded={(user) =>
@@ -289,11 +288,14 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
       >
         {toteuttajat.map((item, index) => {
           return (
-            <FormContact<HankeContactTypeKey>
+            <FormContact<HankeContactTypeKey, HankeYhteyshenkilo>
+              name={`${HANKE_CONTACT_TYPE.TOTEUTTAJAT}.${index}.${CONTACT_FORMFIELD.YHTEYSHENKILOT}`}
               key={item.id}
               contactType={HANKE_CONTACT_TYPE.TOTEUTTAJAT}
               hankeTunnus={hanke.hankeTunnus!}
               hankeUsers={hankeUsers}
+              mapHankeUserToValue={mapHankeUserToHankeYhteyshenkilo}
+              mapValueToLabel={mapHankeYhteyshenkiloToLabel}
               index={index}
               onRemove={removeToteuttaja}
               onContactPersonAdded={(user) =>
@@ -334,11 +336,14 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
           const fieldPath = `${FORMFIELD.MUUTTAHOT}.${index}`;
 
           return (
-            <FormContact<HankeContactTypeKey>
+            <FormContact<HankeContactTypeKey, HankeYhteyshenkilo>
+              name={`${HANKE_CONTACT_TYPE.MUUTTAHOT}.${index}.${CONTACT_FORMFIELD.YHTEYSHENKILOT}`}
               key={item.id}
               contactType={HANKE_CONTACT_TYPE.MUUTTAHOT}
               hankeTunnus={hanke.hankeTunnus!}
               hankeUsers={hankeUsers}
+              mapHankeUserToValue={mapHankeUserToHankeYhteyshenkilo}
+              mapValueToLabel={mapHankeYhteyshenkiloToLabel}
               index={index}
               onRemove={removeMuuTaho}
               onContactPersonAdded={(user) =>
@@ -382,12 +387,6 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
                     label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.PUHELINNUMERO}`)}
                   />
                 </ResponsiveGrid>
-                <ContactPersonSelect
-                  name={`${fieldPath}.${CONTACT_FORMFIELD.YHTEYSHENKILOT}`}
-                  hankeUsers={hankeUsers}
-                  mapHankeUserToValue={mapHankeUserToHankeYhteyshenkilo}
-                  mapValueToLabel={mapHankeYhteyshenkiloToLabel}
-                />
               </Fieldset>
             </FormContact>
           );

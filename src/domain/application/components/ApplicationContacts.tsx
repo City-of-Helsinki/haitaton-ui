@@ -17,9 +17,9 @@ import TextInput from '../../../common/components/textInput/TextInput';
 import useLocale from '../../../common/hooks/useLocale';
 import Dropdown from '../../../common/components/dropdown/Dropdown';
 import FormContact from '../../forms/components/FormContact';
-import ContactPersonSelect from '../../hanke/hankeUsers/ContactPersonSelect';
 import { HankeUser } from '../../hanke/hankeUsers/hankeUser';
 import { useHankeUsers } from '../../hanke/hankeUsers/hooks/useHankeUsers';
+import { mapHankeUserToContact } from '../../hanke/hankeUsers/utils';
 
 function getEmptyCustomerWithContacts(): CustomerWithContacts {
   return {
@@ -35,26 +35,10 @@ function getEmptyCustomerWithContacts(): CustomerWithContacts {
   };
 }
 
-function mapHankeUserToContact({
-  id,
-  etunimi,
-  sukunimi,
-  puhelinnumero,
-  sahkoposti,
-}: HankeUser): Contact {
-  return {
-    hankekayttajaId: id,
-    firstName: etunimi,
-    lastName: sukunimi,
-    phone: puhelinnumero,
-    email: sahkoposti,
-  };
-}
-
 const CustomerFields: React.FC<{
   customerType: CustomerType;
   hankeUsers?: HankeUser[];
-}> = ({ customerType, hankeUsers }) => {
+}> = ({ customerType }) => {
   const { t } = useTranslation();
   const { watch, setValue } = useFormContext<Application>();
 
@@ -80,16 +64,6 @@ const CustomerFields: React.FC<{
       });
     }
   }, [registryKey, customerType, setValue]);
-
-  function mapContactToLabel(contact: Contact) {
-    return `${contact.firstName} ${contact.lastName} (${contact.email})`;
-  }
-
-  function removeOrdererFromContact(contact: Contact): Contact {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { orderer, ...rest } = contact;
-    return rest;
-  }
 
   return (
     <Fieldset
@@ -147,19 +121,6 @@ const CustomerFields: React.FC<{
           autoComplete="tel"
         />
       </ResponsiveGrid>
-      <ContactPersonSelect
-        name={`applicationData.${customerType}.contacts`}
-        hankeUsers={hankeUsers}
-        mapHankeUserToValue={mapHankeUserToContact}
-        mapValueToLabel={mapContactToLabel}
-        transformValue={(value) => removeOrdererFromContact(value)}
-        required
-        tooltip={{
-          tooltipButtonLabel: t('hankeForm:toolTips:tipOpenLabel'),
-          tooltipLabel: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
-          tooltipText: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
-        }}
-      />
     </Fieldset>
   );
 };
@@ -203,7 +164,17 @@ export default function ApplicationContacts() {
       previousContacts.concat(mapHankeUserToContact(contactPerson)),
       { shouldDirty: true, shouldValidate: true },
     );
-    queryClient.invalidateQueries(['hankeUsers', hankeTunnus]);
+    void queryClient.invalidateQueries(['hankeUsers', hankeTunnus]);
+  }
+
+  function mapContactToLabel(contact: Contact) {
+    return `${contact.firstName} ${contact.lastName} (${contact.email})`;
+  }
+
+  function removeOrdererFromContact(contact: Contact): Contact {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { orderer, ...rest } = contact;
+    return rest;
   }
 
   return (
@@ -220,13 +191,23 @@ export default function ApplicationContacts() {
       </Text>
 
       {/* Työstä vastaava */}
-      <FormContact<CustomerType>
+      <FormContact<CustomerType, Contact>
+        name={`applicationData.customerWithContacts.contacts`}
         contactType="customerWithContacts"
         hankeTunnus={hankeTunnus!}
         hankeUsers={hankeUsers}
+        mapHankeUserToValue={mapHankeUserToContact}
+        mapValueToLabel={mapContactToLabel}
+        transformValue={(value) => removeOrdererFromContact(value)}
         onContactPersonAdded={(user) =>
           addYhteyshenkiloForYhteystieto('customerWithContacts', user)
         }
+        required
+        tooltip={{
+          tooltipButtonLabel: t('hankeForm:toolTips:tipOpenLabel'),
+          tooltipLabel: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
+          tooltipText: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
+        }}
       >
         <CustomerFields customerType="customerWithContacts" hankeUsers={hankeUsers} />
       </FormContact>
@@ -238,13 +219,23 @@ export default function ApplicationContacts() {
         headingLevel={3}
         initiallyOpen
       >
-        <FormContact<CustomerType>
+        <FormContact<CustomerType, Contact>
+          name={`applicationData.contractorWithContacts.contacts`}
           contactType="contractorWithContacts"
           hankeTunnus={hankeTunnus!}
           hankeUsers={hankeUsers}
+          mapHankeUserToValue={mapHankeUserToContact}
+          mapValueToLabel={mapContactToLabel}
+          transformValue={(value) => removeOrdererFromContact(value)}
           onContactPersonAdded={(user) =>
             addYhteyshenkiloForYhteystieto('contractorWithContacts', user)
           }
+          required
+          tooltip={{
+            tooltipButtonLabel: t('hankeForm:toolTips:tipOpenLabel'),
+            tooltipLabel: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
+            tooltipText: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
+          }}
         >
           <CustomerFields customerType="contractorWithContacts" hankeUsers={hankeUsers} />
         </FormContact>
@@ -258,14 +249,24 @@ export default function ApplicationContacts() {
         initiallyOpen={isPropertyDeveloper}
       >
         {isPropertyDeveloper && (
-          <FormContact<CustomerType>
+          <FormContact<CustomerType, Contact>
+            name={`applicationData.propertyDeveloperWithContacts.contacts`}
             contactType="propertyDeveloperWithContacts"
             hankeTunnus={hankeTunnus!}
             hankeUsers={hankeUsers}
+            mapHankeUserToValue={mapHankeUserToContact}
+            mapValueToLabel={mapContactToLabel}
+            transformValue={(value) => removeOrdererFromContact(value)}
             onRemove={handleRemovePropertyDeveloper}
             onContactPersonAdded={(user) =>
               addYhteyshenkiloForYhteystieto('propertyDeveloperWithContacts', user)
             }
+            required
+            tooltip={{
+              tooltipButtonLabel: t('hankeForm:toolTips:tipOpenLabel'),
+              tooltipLabel: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
+              tooltipText: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
+            }}
           >
             <CustomerFields customerType="propertyDeveloperWithContacts" hankeUsers={hankeUsers} />
           </FormContact>
@@ -290,14 +291,24 @@ export default function ApplicationContacts() {
         initiallyOpen={isRepresentative}
       >
         {isRepresentative && (
-          <FormContact<CustomerType>
+          <FormContact<CustomerType, Contact>
+            name={`applicationData.representativeWithContacts.contacts`}
             contactType="representativeWithContacts"
             hankeTunnus={hankeTunnus!}
             hankeUsers={hankeUsers}
+            mapHankeUserToValue={mapHankeUserToContact}
+            mapValueToLabel={mapContactToLabel}
+            transformValue={(value) => removeOrdererFromContact(value)}
             onRemove={handleRemoveRepresentative}
             onContactPersonAdded={(user) =>
               addYhteyshenkiloForYhteystieto('representativeWithContacts', user)
             }
+            required
+            tooltip={{
+              tooltipButtonLabel: t('hankeForm:toolTips:tipOpenLabel'),
+              tooltipLabel: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
+              tooltipText: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
+            }}
           >
             <CustomerFields customerType="representativeWithContacts" hankeUsers={hankeUsers} />
           </FormContact>
