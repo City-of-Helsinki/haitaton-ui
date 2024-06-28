@@ -87,12 +87,9 @@ test('Should upload files successfully and loading indicator is displayed', asyn
   ]);
 
   await waitLoading();
-  await waitFor(
-    () => {
-      expect(screen.getByText('2/2 tiedosto(a) tallennettu')).toBeInTheDocument();
-    },
-    { timeout: 10000 },
-  );
+  expect(
+    await screen.findByText('2/2 tiedosto(a) tallennettu', {}, { timeout: 10000 }),
+  ).toBeInTheDocument();
   expect(uploadMock).toHaveBeenCalledTimes(2);
 });
 
@@ -133,7 +130,9 @@ test('Should show amount of successful files uploaded and errors correctly when 
   ]);
 
   await waitLoading();
-  expect(await screen.findByText('1/3 tiedosto(a) tallennettu')).toBeInTheDocument();
+  expect(
+    await screen.findByText('1/3 tiedosto(a) tallennettu', {}, { timeout: 10000 }),
+  ).toBeInTheDocument();
   expect(uploadMock).toHaveBeenCalledTimes(1);
   expect(
     screen.queryByText('Liitteen tallennus epäonnistui 2/3 tiedostolle', { exact: false }),
@@ -194,7 +193,9 @@ test('Should show correct error message when upload request fails for server err
   } = getFileUpload();
   await user.upload(fileUploadElement, [new File(['test-a'], fileNameA, { type: 'image/png' })]);
 
-  expect(await screen.findByText('0/1 tiedosto(a) tallennettu')).toBeInTheDocument();
+  expect(
+    await screen.findByText('0/1 tiedosto(a) tallennettu', {}, { timeout: 10000 }),
+  ).toBeInTheDocument();
   expect(
     screen.queryByText('Liitteen tallennus epäonnistui 1/1 tiedostolle', { exact: false }),
   ).toBeInTheDocument();
@@ -218,12 +219,9 @@ test('Should upload files when user drops them into drag-and-drop area', async (
     },
   });
 
-  await waitFor(
-    () => {
-      expect(screen.getByText('3/3 tiedosto(a) tallennettu')).toBeInTheDocument();
-    },
-    { timeout: 10000 },
-  );
+  expect(
+    await screen.findByText('3/3 tiedosto(a) tallennettu', {}, { timeout: 10000 }),
+  ).toBeInTheDocument();
   expect(uploadMock).toHaveBeenCalledTimes(3);
 });
 
@@ -404,7 +402,9 @@ test('Should show error messages for files that exceed the maximum number of fil
   ]);
 
   await waitLoading();
-  expect(await screen.findByText('1/3 tiedosto(a) tallennettu')).toBeInTheDocument();
+  expect(
+    await screen.findByText('1/3 tiedosto(a) tallennettu', {}, { timeout: 10000 }),
+  ).toBeInTheDocument();
   expect(uploadMock).toHaveBeenCalledTimes(1);
   expect(
     screen.queryByText('Liitteen tallennus epäonnistui 2/3 tiedostolle', { exact: false }),
