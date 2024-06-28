@@ -6,10 +6,16 @@ export function HaittaSubSection({
   heading,
   index,
   testId,
+  showIndex = true,
+  showColorByIndex,
+  className,
 }: Readonly<{
   heading: string;
   index?: number;
   testId?: string;
+  showIndex?: boolean;
+  showColorByIndex?: boolean;
+  className?: string;
 }>) {
   return (
     <Grid
@@ -19,6 +25,7 @@ export function HaittaSubSection({
       paddingY="var(--spacing-xs)"
       _odd={{ backgroundColor: 'var(--color-black-5)' }}
       _even={{ backgroundColor: 'var(--color-black-10)' }}
+      className={className}
     >
       <Flex
         justifyContent="space-between"
@@ -26,7 +33,14 @@ export function HaittaSubSection({
         flexWrap={{ base: 'wrap', sm: 'nowrap' }}
       >
         <Box as="p">{heading}</Box>
-        <HaittaIndex index={index} showLabel={false} testId={testId} />
+        {showIndex && (
+          <HaittaIndex
+            index={index}
+            showLabel={false}
+            testId={testId}
+            showColorByIndex={showColorByIndex}
+          />
+        )}
       </Flex>
     </Grid>
   );
