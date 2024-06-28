@@ -48,6 +48,7 @@ export const ApplicationCancel: React.FC<Props> = ({
         message = t('hakemus:errors:cancelConflict');
       }
       setErrorMessage(message);
+      setIsButtonDisabled(false);
     },
     onSuccess(data) {
       const closeButtonLabelText = t('common:components:notification:closeButtonLabelText');
@@ -60,6 +61,7 @@ export const ApplicationCancel: React.FC<Props> = ({
         autoClose: true,
         autoCloseDuration: 7000,
       });
+      setIsButtonDisabled(false);
       data?.hankeDeleted ? navigateToHankeList() : navigateToApplicationList();
     },
   });

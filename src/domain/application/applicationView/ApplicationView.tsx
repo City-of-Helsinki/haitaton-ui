@@ -114,9 +114,11 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
   const applicationSendMutation = useMutation(sendApplication, {
     onError() {
       showSendError();
+      setIsSendButtonDisabled(false);
     },
     async onSuccess() {
       showSendSuccess();
+      setIsSendButtonDisabled(false);
       await queryClient.invalidateQueries('application', { refetchInactive: true });
     },
   });
