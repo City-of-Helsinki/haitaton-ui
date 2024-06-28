@@ -4,8 +4,6 @@ import useUser from '../../../domain/auth/useUser';
 import i18next from '../../../locales/i18nForTests';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 
-jest.setTimeout(30000);
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockedUseUser = useUser as jest.Mock<any>;
 jest.mock('../../../domain/auth/useUser');

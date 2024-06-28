@@ -5,8 +5,6 @@ import { Geometries } from './Geometries';
 import hankkeet from '../mocks/data/hankkeet-data';
 import { HankeData } from '../types/hanke';
 
-jest.setTimeout(30000);
-
 function TestComponent({ hankeData }: { hankeData?: HankeData }) {
   const formContext = useForm();
 

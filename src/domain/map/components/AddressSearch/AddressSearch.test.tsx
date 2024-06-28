@@ -1,7 +1,5 @@
-import { render, screen, waitFor } from '../../../../testUtils/render';
+import { render, screen } from '../../../../testUtils/render';
 import AddressSearch from './AddressSearch';
-
-jest.setTimeout(30000);
 
 test('Address can be selected from suggestions', async () => {
   const handleAddressSelect = jest.fn();
@@ -10,7 +8,7 @@ test('Address can be selected from suggestions', async () => {
   const searchInput = screen.getByPlaceholderText('Etsi osoitteella');
   await user.type(searchInput, 'elielinaukio');
 
-  await waitFor(() => screen.getByText('Elielinaukio 3'));
+  expect(await screen.findByText('Elielinaukio 3', {}, { timeout: 30000 })).toBeInTheDocument();
   await user.click(screen.getByText('Elielinaukio 3'));
 
   expect(handleAddressSelect).toHaveBeenCalledWith([25496700, 6673224]);
@@ -21,11 +19,9 @@ test('Swedish address labels are returned when search term is in Swedish', async
   const { user } = render(<AddressSearch onAddressSelect={handleAddressSelect} />);
 
   const searchInput = screen.getByPlaceholderText('Etsi osoitteella');
-  user.type(searchInput, 'elielplatsen');
+  await user.type(searchInput, 'elielplatsen');
 
-  await waitFor(() => screen.getByText('Elielplatsen 1'));
-
-  expect(screen.getByText('Elielplatsen 1')).toBeInTheDocument();
+  expect(await screen.findByText('Elielplatsen 1', {}, { timeout: 30000 })).toBeInTheDocument();
   expect(screen.getByText('Elielplatsen 2')).toBeInTheDocument();
   expect(screen.getByText('Elielplatsen 3')).toBeInTheDocument();
   expect(screen.getByText('Elielplatsen 5')).toBeInTheDocument();
@@ -36,11 +32,9 @@ test('Finnish address labels are returned when search term is in Finnish', async
   const { user } = render(<AddressSearch onAddressSelect={handleAddressSelect} />);
 
   const searchInput = screen.getByPlaceholderText('Etsi osoitteella');
-  user.type(searchInput, 'elielinaukio');
+  await user.type(searchInput, 'elielinaukio');
 
-  await waitFor(() => screen.getByText('Elielinaukio 1'));
-
-  expect(screen.getByText('Elielinaukio 1')).toBeInTheDocument();
+  expect(await screen.findByText('Elielinaukio 1', {}, { timeout: 30000 })).toBeInTheDocument();
   expect(screen.getByText('Elielinaukio 2')).toBeInTheDocument();
   expect(screen.getByText('Elielinaukio 3')).toBeInTheDocument();
   expect(screen.getByText('Elielinaukio 5')).toBeInTheDocument();
@@ -51,11 +45,9 @@ test('Finnish address labels are returned when search term is incomplete and can
   const { user } = render(<AddressSearch onAddressSelect={handleAddressSelect} />);
 
   const searchInput = screen.getByPlaceholderText('Etsi osoitteella');
-  user.type(searchInput, 'eliel');
+  await user.type(searchInput, 'eliel');
 
-  await waitFor(() => screen.getByText('Elielinaukio 1'));
-
-  expect(screen.getByText('Elielinaukio 1')).toBeInTheDocument();
+  expect(await screen.findByText('Elielinaukio 1', {}, { timeout: 30000 })).toBeInTheDocument();
   expect(screen.getByText('Elielinaukio 2')).toBeInTheDocument();
   expect(screen.getByText('Elielinaukio 3')).toBeInTheDocument();
   expect(screen.getByText('Elielinaukio 5')).toBeInTheDocument();
@@ -66,11 +58,9 @@ test('Finnish address labels are returned when search term is in Finnish and has
   const { user } = render(<AddressSearch onAddressSelect={handleAddressSelect} />);
 
   const searchInput = screen.getByPlaceholderText('Etsi osoitteella');
-  user.type(searchInput, 'elielinaukio ');
+  await user.type(searchInput, 'elielinaukio ');
 
-  await waitFor(() => screen.getByText('Elielinaukio 1'));
-
-  expect(screen.getByText('Elielinaukio 1')).toBeInTheDocument();
+  expect(await screen.findByText('Elielinaukio 1', {}, { timeout: 30000 })).toBeInTheDocument();
   expect(screen.getByText('Elielinaukio 2')).toBeInTheDocument();
   expect(screen.getByText('Elielinaukio 3')).toBeInTheDocument();
   expect(screen.getByText('Elielinaukio 5')).toBeInTheDocument();
@@ -81,9 +71,7 @@ test('Finnish address label is returned when search term is in Finnish and has s
   const { user } = render(<AddressSearch onAddressSelect={handleAddressSelect} />);
 
   const searchInput = screen.getByPlaceholderText('Etsi osoitteella');
-  user.type(searchInput, 'Elielinaukio 3');
+  await user.type(searchInput, 'Elielinaukio 3');
 
-  await waitFor(() => screen.getByText('Elielinaukio 3'));
-
-  expect(screen.getByText('Elielinaukio 3')).toBeInTheDocument();
+  expect(await screen.findByText('Elielinaukio 3', {}, { timeout: 30000 })).toBeInTheDocument();
 });

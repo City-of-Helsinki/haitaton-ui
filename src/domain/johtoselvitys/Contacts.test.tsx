@@ -3,8 +3,6 @@ import { fireEvent, render, screen } from '../../testUtils/render';
 import Contacts from '../application/components/ApplicationContacts';
 import { JohtoselvitysFormValues } from './types';
 
-jest.setTimeout(10000);
-
 function Form({ application }: { application?: JohtoselvitysFormValues }) {
   const methods = useForm({ defaultValues: application ?? { applicationData: {} } });
 

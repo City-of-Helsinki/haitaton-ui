@@ -8,8 +8,6 @@ import { USER_EDIT_HANKE } from '../../mocks/signedInUser';
 import * as hankeUsersApi from './hankeUsersApi';
 import { formatToFinnishDate } from '../../../common/utils/date';
 
-jest.setTimeout(10000);
-
 function fillUserInformation({
   etunimi,
   sukunimi,
@@ -98,7 +96,9 @@ test('Should update user invitation sent date when resending invitation', async 
   await user.click(screen.getByRole('button', { name: 'Lähetä kutsulinkki uudelleen' }));
   await waitForLoadingToFinish();
 
-  expect(screen.getByText(`Kutsulinkki Haitattomaan lähetetty ${formatToFinnishDate(today)}`));
+  expect(
+    await screen.findByText(`Kutsulinkki Haitattomaan lähetetty ${formatToFinnishDate(today)}`),
+  ).toBeInTheDocument();
 });
 
 test('Permissions dropdown should be disabled and delete button should be hidden if only one user is identified and has all rights', async () => {
@@ -315,7 +315,8 @@ test('Should show error notification if user delete info request fails', async (
   await waitForLoadingToFinish();
   await user.click(screen.getByRole('button', { name: /poista käyttäjä/i }));
 
-  expect(screen.getAllByText(/tapahtui virhe/i)[0]).toBeInTheDocument();
+  const errors = await screen.findAllByText(/tapahtui virhe/i);
+  expect(errors[0]).toBeInTheDocument();
 });
 
 test('Should show error notification if deleting user fails', async () => {

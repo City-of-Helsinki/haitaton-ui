@@ -1,4 +1,4 @@
-import { fireEvent, RenderResult, screen, waitForElementToBeRemoved } from '@testing-library/react';
+import { fireEvent, RenderResult, waitForElementToBeRemoved } from '@testing-library/react';
 import {
   ApplicationAttachmentMetadata,
   AttachmentType,
@@ -6,6 +6,7 @@ import {
 import api from '../domain/api/api';
 import { server } from '../domain/mocks/test-server';
 import { rest } from 'msw';
+import { screen } from './render';
 
 export const changeFilterDate = (
   label: string,
@@ -19,7 +20,7 @@ export const changeFilterDate = (
 
 export function waitForLoadingToFinish() {
   return waitForElementToBeRemoved(() => screen.queryByText(/page is loading/i), {
-    timeout: 4000,
+    timeout: 10000,
   });
 }
 
