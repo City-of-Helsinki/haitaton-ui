@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 import { render, cleanup, screen, waitFor, fireEvent } from '../../../testUtils/render';
-import { delay, waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
+import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import AccessRightsViewContainer from './AccessRightsViewContainer';
 import { server } from '../../mocks/test-server';
 import usersData from '../../mocks/data/users-data.json';
@@ -184,20 +184,22 @@ test('Search by full name works', async () => {
   fireEvent.change(searchInput, {
     target: { value: 'Teppo Työmies' },
   });
-  await delay(500);
 
   let table = (await screen.findByRole('table')) as HTMLTableElement;
-  expect(table.tBodies[0].rows).toHaveLength(1);
+  await waitFor(() => {
+    expect(table.querySelectorAll('tbody tr')).toHaveLength(1);
+  });
   const names = await screen.findAllByText(`${users[1].etunimi} ${users[1].sukunimi}`);
   expect(names).toHaveLength(2);
 
   // Clear the search
   const clearButton = await screen.findByRole('button', { name: 'Clear' });
   await user.click(clearButton);
-  await delay(500);
 
   table = (await screen.findByRole('table')) as HTMLTableElement;
-  expect(table.tBodies[0].rows).toHaveLength(10);
+  await waitFor(() => {
+    expect(table.querySelectorAll('tbody tr')).toHaveLength(10);
+  });
 });
 
 test('Search by partial text works', async () => {
@@ -208,10 +210,11 @@ test('Search by partial text works', async () => {
   fireEvent.change(searchInput, {
     target: { value: 'ak' },
   });
-  await delay(500);
 
   const table = (await screen.findByRole('table')) as HTMLTableElement;
-  expect(table.tBodies[0].rows).toHaveLength(2);
+  await waitFor(() => {
+    expect(table.querySelectorAll('tbody tr')).toHaveLength(2);
+  });
   let names = await screen.findAllByText(`${users[2].etunimi} ${users[2].sukunimi}`);
   expect(names).toHaveLength(2);
   names = await screen.findAllByText(`${users[7].etunimi} ${users[7].sukunimi}`);
@@ -225,11 +228,11 @@ test('Should show not found text if filtering has no results', async () => {
   fireEvent.change(screen.getByRole('combobox', { name: 'Haku' }), {
     target: { value: 'natti' },
   });
-  await delay(500);
 
-  await waitFor(() =>
-    expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows).toHaveLength(0),
-  );
+  const table = (await screen.findByRole('table')) as HTMLTableElement;
+  await waitFor(() => {
+    expect(table.querySelectorAll('tbody tr')).toHaveLength(0);
+  });
   expect(screen.getByText('Haulla ei löytynyt yhtään henkilöä')).toBeInTheDocument();
 });
 
@@ -266,14 +269,21 @@ test('Should show correct icons for users', async () => {
   render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
   await waitForLoadingToFinish();
 
-  let cell = await screen.findByRole('cell', { name: 'Omat käyttäjätietosi Matti Meikäläinen' });
-  expect(cell).toBeInTheDocument();
-  cell = await screen.findByRole('cell', {
-    name: 'Kirjautunut hankkeelle tunnistautuneena Aku Asiakas',
-  });
-  expect(cell).toBeInTheDocument();
-  cell = await screen.findByRole('cell', { name: 'Kutsulinkki lähetetty 15.1.2024 Teppo Työmies' });
-  expect(cell).toBeInTheDocument();
+  expect(
+    screen.getByRole('cell', {
+      name: 'Omat käyttäjätietosi Matti Meikäläinen',
+    }),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole('cell', {
+      name: 'Kirjautunut hankkeelle tunnistautuneena Aku Asiakas',
+    }),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole('cell', {
+      name: 'Kutsulinkki lähetetty 15.1.2024 Teppo Työmies',
+    }),
+  ).toBeInTheDocument();
 });
 
 test('Should send invitation to user when cliking the Lähetä kutsulinkki uudelleen button', async () => {

@@ -199,13 +199,13 @@ test('Cable report application form can be filled and saved and sent to Allu', a
     <JohtoselvitysContainer hankeData={hankeData} application={application} />,
   );
 
-  await waitFor(
-    () =>
-      expect(
-        screen.queryByText('Aidasmäentien vesihuollon rakentaminen (HAI22-2)'),
-      ).toBeInTheDocument(),
-    { timeout: 5000 },
-  );
+  expect(
+    await screen.findByText(
+      'Aidasmäentien vesihuollon rakentaminen (HAI22-2)',
+      {},
+      { timeout: 5000 },
+    ),
+  ).toBeInTheDocument();
 
   // Fill basic information page
   fillBasicInformation();

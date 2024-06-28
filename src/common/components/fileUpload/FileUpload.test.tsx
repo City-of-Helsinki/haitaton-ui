@@ -6,6 +6,7 @@ import { server } from '../../../domain/mocks/test-server';
 import { AttachmentMetadata } from '../../types/attachment';
 import { deleteAttachment } from '../../../domain/application/attachments';
 import { FileDeleteFunction } from './types';
+import { waitForElementToBeRemoved } from '@testing-library/react';
 
 async function uploadAttachment({ id, file }: { id: number; file: File }) {
   const { data } = await api.post(`/hakemukset/${id}/liitteet`, {
@@ -68,6 +69,12 @@ function getFileUpload(options: Partial<FileUploadOptions> = {}) {
   return { renderResult, fileUploadElement };
 }
 
+async function waitLoading() {
+  await waitForElementToBeRemoved(() => screen.queryByText('Tallennetaan tiedostoja'), {
+    timeout: 10000,
+  });
+}
+
 test('Should upload files successfully and loading indicator is displayed', async () => {
   const uploadMock = jest.fn(uploadFunction);
   const {
@@ -79,6 +86,7 @@ test('Should upload files successfully and loading indicator is displayed', asyn
     new File(['test-b'], 'test-file-b.jpg', { type: 'image/jpg' }),
   ]);
 
+  await waitLoading();
   await waitFor(
     () => {
       expect(screen.getByText('2/2 tiedosto(a) tallennettu')).toBeInTheDocument();
@@ -124,6 +132,7 @@ test('Should show amount of successful files uploaded and errors correctly when 
     new File(['test-c'], fileNameC, { type: 'image/png' }),
   ]);
 
+  await waitLoading();
   expect(await screen.findByText('1/3 tiedosto(a) tallennettu')).toBeInTheDocument();
   expect(uploadMock).toHaveBeenCalledTimes(1);
   expect(
@@ -394,6 +403,7 @@ test('Should show error messages for files that exceed the maximum number of fil
     new File(['test-b'], fileNameC, { type: 'application/pdf' }),
   ]);
 
+  await waitLoading();
   expect(await screen.findByText('1/3 tiedosto(a) tallennettu')).toBeInTheDocument();
   expect(uploadMock).toHaveBeenCalledTimes(1);
   expect(

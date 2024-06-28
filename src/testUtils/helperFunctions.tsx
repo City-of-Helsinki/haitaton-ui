@@ -18,10 +18,8 @@ export const changeFilterDate = (
   });
 };
 
-export function waitForLoadingToFinish(
-  queryByText: (text: string | RegExp) => HTMLElement | null = screen.queryByText,
-) {
-  return waitForElementToBeRemoved(() => queryByText(/page is loading/i), {
+export function waitForLoadingToFinish() {
+  return waitForElementToBeRemoved(() => screen.queryByText(/page is loading/i), {
     timeout: 10000,
   });
 }
@@ -53,8 +51,4 @@ export function initApplicationAttachmentGetResponse(response: ApplicationAttach
       return res(ctx.status(200), ctx.json(response));
     }),
   );
-}
-
-export async function delay(ms: number) {
-  await new Promise((resolve) => setTimeout(resolve, ms));
 }

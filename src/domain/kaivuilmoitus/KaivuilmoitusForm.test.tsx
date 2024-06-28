@@ -722,16 +722,16 @@ test('Should list existing attachments in the attachments page', async () => {
     },
   ]);
   const hankeData = hankkeet[1] as HankeData;
-  const { user, findByRole, findAllByTestId } = render(
+  const { user } = render(
     <KaivuilmoitusContainer
       hankeData={hankeData}
       application={applications[4] as Application<KaivuilmoitusData>}
     />,
   );
-  const button = await findByRole('button', { name: /liitteet/i });
+  const button = await screen.findByRole('button', { name: /liitteet/i });
   await user.click(button);
 
-  const fileUploadList = await findAllByTestId('file-upload-list');
+  const fileUploadList = await screen.findAllByTestId('file-upload-list');
   expect(fileUploadList.length).toBe(3);
   fileUploadList.forEach((list, index) => {
     const { getAllByRole } = within(list);
@@ -769,22 +769,22 @@ test('Should list existing attachments in the attachments page', async () => {
 test('Should be able to remove work areas', async () => {
   const hankeData = hankkeet[1] as HankeData;
   const application = cloneDeep(applications[4] as Application<KaivuilmoitusData>);
-  const { user, findByRole } = render(
+  const { user } = render(
     <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
   );
-  await user.click(await findByRole('button', { name: /alueet/i }));
+  await user.click(await screen.findByRole('button', { name: /alueet/i }));
 
-  await user.click(await findByRole('button', { name: /poista työalue 1/i }));
+  await user.click(await screen.findByRole('button', { name: /poista työalue 1/i }));
 
-  const { getByRole, getByText } = within(await findByRole('dialog'));
+  const { getByRole, getByText } = within(await screen.findByRole('dialog'));
   expect(getByText('Haluatko varmasti poistaa työalueen Työalue 1?')).toBeInTheDocument();
   await user.click(getByRole('button', { name: /vahvista/i }));
 
   expect(screen.queryByText('Työalue 1')).not.toBeInTheDocument();
 
-  await user.click(await findByRole('button', { name: /poista työalue/i }));
+  await user.click(await screen.findByRole('button', { name: /poista työalue/i }));
   const { getByRole: getByRoleInDialogTwo, getByText: getByTextInDialogTwo } = within(
-    await findByRole('dialog'),
+    await screen.findByRole('dialog'),
   );
   expect(getByTextInDialogTwo('Haluatko varmasti poistaa työalueen Työalue?')).toBeInTheDocument();
   await user.click(getByRoleInDialogTwo('button', { name: /vahvista/i }));
@@ -797,13 +797,13 @@ test('Should be able to remove work areas', async () => {
 test('Should highlight selected work area', async () => {
   const hankeData = hankkeet[1] as HankeData;
   const application = cloneDeep(applications[4] as Application<KaivuilmoitusData>);
-  const { user, findByRole } = render(
+  const { user } = render(
     <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
   );
-  await user.click(await findByRole('button', { name: /alueet/i }));
+  await user.click(await screen.findByRole('button', { name: /alueet/i }));
 
-  const workAreaOne = await findByRole('button', { name: 'Työalue 1' });
-  const workAreaTwo = await findByRole('button', { name: 'Työalue 2' });
+  const workAreaOne = await screen.findByRole('button', { name: 'Työalue 1' });
+  const workAreaTwo = await screen.findByRole('button', { name: 'Työalue 2' });
 
   await user.click(workAreaTwo);
   expect(workAreaOne).not.toHaveClass('selected');

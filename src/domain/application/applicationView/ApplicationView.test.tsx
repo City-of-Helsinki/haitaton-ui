@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { render, screen, waitFor } from '../../../testUtils/render';
+import { render, screen } from '../../../testUtils/render';
 import ApplicationViewContainer from './ApplicationViewContainer';
 import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import { server } from '../../mocks/test-server';
@@ -57,9 +57,7 @@ test('Should show error notification if loading application fails', async () => 
 test('Should be able to go editing application when editing is possible', async () => {
   const { user } = render(<ApplicationViewContainer id={1} />);
 
-  await waitFor(() => screen.findByRole('button', { name: 'Muokkaa hakemusta' }), {
-    timeout: 10000,
-  });
+  await screen.findByRole('button', { name: 'Muokkaa hakemusta' }, { timeout: 10000 });
   await user.click(screen.getByRole('button', { name: 'Muokkaa hakemusta' }));
 
   expect(window.location.pathname).toBe('/fi/johtoselvityshakemus/1/muokkaa');
@@ -76,7 +74,7 @@ test('Should be able to cancel application if it is possible', async () => {
   const { user } = render(<ApplicationViewContainer id={4} />);
   await waitForLoadingToFinish();
 
-  await waitFor(() => screen.findByRole('button', { name: 'Peru hakemus' }), { timeout: 10000 });
+  await screen.findByRole('button', { name: 'Peru hakemus' }, { timeout: 10000 });
   await user.click(screen.getByRole('button', { name: 'Peru hakemus' }));
   await user.click(screen.getByRole('button', { name: 'Vahvista' }));
 
@@ -141,7 +139,7 @@ test('Should disable Send button if user is not a contact person on application'
 
   render(<ApplicationViewContainer id={1} />);
 
-  await waitFor(() => screen.findByRole('button', { name: 'Lähetä hakemus' }), { timeout: 10000 });
+  await screen.findByRole('button', { name: 'Lähetä hakemus' }, { timeout: 10000 });
   const sendButton = screen.getByRole('button', { name: 'Lähetä hakemus' });
   expect(sendButton).toBeDisabled();
 });
