@@ -61,7 +61,6 @@ export const ApplicationCancel: React.FC<Props> = ({
         autoClose: true,
         autoCloseDuration: 7000,
       });
-      setIsButtonDisabled(false);
       data?.hankeDeleted ? navigateToHankeList() : navigateToApplicationList();
     },
   });
