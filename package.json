@@ -37,7 +37,7 @@
     "@reduxjs/toolkit": "^2.1.0",
     "@sentry/react": "^8.1.0",
     "@turf/boolean-intersects": "^6.5.0",
-    "@turf/helpers": "^6.5.0",
+    "@turf/helpers": "^7.0.0",
     "@turf/kinks": "^6.5.0",
     "@types/geojson": "^7946.0.13",
     "@types/jest": "^29.5.12",
