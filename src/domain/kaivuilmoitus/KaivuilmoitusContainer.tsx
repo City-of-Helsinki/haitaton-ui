@@ -1,7 +1,14 @@
 import { useState } from 'react';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { merge } from 'lodash';
-import { Button, IconCross, IconSaveDiskette, StepState } from 'hds-react';
+import {
+  Button,
+  IconCross,
+  IconEnvelope,
+  IconSaveDiskette,
+  Notification,
+  StepState,
+} from 'hds-react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import MultipageForm from '../forms/MultipageForm';
 import BasicInfo from './BasicInfo';
@@ -22,6 +29,7 @@ import {
 } from './validationSchema';
 import { useApplicationsForHanke } from '../application/hooks/useApplications';
 import {
+  AlluStatus,
   Application,
   KaivuilmoitusCreateData,
   KaivuilmoitusData,
@@ -39,6 +47,9 @@ import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/Co
 import { changeFormStep } from '../forms/utils';
 import Areas from './Areas';
 import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
+import { isApplicationDraft, isContactIn } from '../application/utils';
+import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
+import useSendApplication from '../application/hooks/useSendApplication';
 
 type Props = {
   hankeData: HankeData;
@@ -51,6 +62,12 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   const navigateToApplicationView = useNavigateToApplicationView();
   const [attachmentUploadErrors, setAttachmentUploadErrors] = useState<JSX.Element[]>([]);
   const { data: hankkeenHakemukset } = useApplicationsForHanke(hankeData.hankeTunnus);
+  const { data: signedInUser } = usePermissionsForHanke(hankeData.hankeTunnus);
+  const applicationSendMutation = useSendApplication({
+    onSuccess(data) {
+      navigateToApplicationView(data.id?.toString());
+    },
+  });
   const johtoselvitysIds = hankkeenHakemukset?.applications
     .filter(
       (hakemus) =>
@@ -93,7 +110,8 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     reset,
     trigger,
     watch,
-    formState: { isDirty },
+    handleSubmit,
+    formState: { isDirty, isValid },
   } = formContext;
   const watchFormValues = watch();
 
@@ -175,6 +193,11 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         { onSuccess: handleSuccess },
       );
     }
+  }
+
+  async function sendApplication() {
+    const data = getValues();
+    applicationSendMutation.mutate(data.id!);
   }
 
   function handleStepChange() {
@@ -279,6 +302,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         isLoading={attachmentsUploading}
         isLoadingText={attachmentsUploadingText}
         stepChangeValidator={validateStepChange}
+        onSubmit={handleSubmit(sendApplication)}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {
@@ -298,6 +322,12 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
           const saveAndQuitLoadingText = attachmentsUploading
             ? attachmentsUploadingText
             : t('common:buttons:savingText');
+
+          const lastStep = activeStepIndex === formSteps.length - 1;
+          const isDraft = isApplicationDraft(getValues('alluStatus') as AlluStatus | null);
+          const isContact = isContactIn(signedInUser, getValues('applicationData'));
+          const showSendButton = lastStep && isDraft && isValid;
+          const disableSendButton = showSendButton && !isContact;
 
           return (
             <FormActions
@@ -328,6 +358,28 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
               >
                 {t('hankeForm:saveDraftButton')}
               </Button>
+
+              {showSendButton && (
+                <Button
+                  type="submit"
+                  iconLeft={<IconEnvelope />}
+                  isLoading={applicationSendMutation.isLoading}
+                  loadingText={t('common:buttons:sendingText')}
+                  disabled={disableSendButton}
+                >
+                  {t('hakemus:buttons:sendApplication')}
+                </Button>
+              )}
+              {disableSendButton && (
+                <Notification
+                  size="small"
+                  style={{ marginTop: 'var(--spacing-xs)' }}
+                  type="info"
+                  label={t('hakemus:notifications:sendApplicationDisabled')}
+                >
+                  {t('hakemus:notifications:sendApplicationDisabled')}
+                </Notification>
+              )}
             </FormActions>
           );
         }}

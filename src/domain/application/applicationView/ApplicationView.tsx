@@ -43,7 +43,7 @@ import KaivuilmoitusBasicInformationSummary from '../components/summary/Kaivuilm
 import { getAreaGeometries, getAreaGeometry } from '../../johtoselvitys/utils';
 import { formatSurfaceArea, getTotalSurfaceArea } from '../../map/utils';
 import useLocale from '../../../common/hooks/useLocale';
-import { getAreaDefaultName, isApplicationSent, isContactIn, sendApplication } from '../utils';
+import { getAreaDefaultName, isApplicationSent, isContactIn } from '../utils';
 import ApplicationDates from '../components/ApplicationDates';
 import ContactsSummary from '../components/summary/ContactsSummary';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
@@ -58,10 +58,16 @@ import { CheckRightsByHanke } from '../../hanke/hankeUsers/UserRightsCheck';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import KaivuilmoitusAttachmentSummary from '../components/summary/KaivuilmoitusAttachmentSummary';
 import InvoicingCustomerSummary from '../components/summary/InvoicingCustomerSummary';
-import React, { useState } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
-import useApplicationSendNotification from '../hooks/useApplicationSendNotification';
+import { useState } from 'react';
 import { SignedInUser } from '../../hanke/hankeUsers/hankeUser';
+import useSendApplication from '../hooks/useSendApplication';
+import { validationSchema as johtoselvitysValidationSchema } from '../../johtoselvitys/validationSchema';
+import { validationSchema as kaivuilmoitusValidationSchema } from '../../kaivuilmoitus/validationSchema';
+
+const validationSchemas = {
+  CABLE_REPORT: johtoselvitysValidationSchema,
+  EXCAVATION_NOTIFICATION: kaivuilmoitusValidationSchema,
+};
 
 type Props = {
   application: Application;
@@ -104,23 +110,14 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
 
   const isSent = isApplicationSent(alluStatus);
 
+  const validationSchema = validationSchemas[applicationType];
+  const isValid = validationSchema.isValidSync(application);
   const isContact = isContactIn(signedInUser, applicationData);
-  const showSendButton = !isSent;
+  const showSendButton = !isSent && isValid;
   const disableSendButton = showSendButton && !isContact;
-  const { showSendSuccess, showSendError } = useApplicationSendNotification(
-    'hakemus:notifications:sendErrorTextNoSave',
-  );
-  const queryClient = useQueryClient();
-  const applicationSendMutation = useMutation(sendApplication, {
-    onError() {
-      showSendError();
-      setIsSendButtonDisabled(false);
-    },
-    async onSuccess() {
-      showSendSuccess();
-      await queryClient.invalidateQueries('application', { refetchInactive: true });
-    },
-  });
+
+  const applicationSendMutation = useSendApplication();
+
   async function onSendApplication() {
     setIsSendButtonDisabled(true);
     applicationSendMutation.mutate(id as number);
