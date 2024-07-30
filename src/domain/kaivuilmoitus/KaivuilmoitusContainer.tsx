@@ -107,7 +107,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   const {
     getValues,
     setValue,
-    reset,
     trigger,
     watch,
     handleSubmit,
@@ -129,7 +128,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   } = useSaveApplication<KaivuilmoitusData, KaivuilmoitusCreateData, KaivuilmoitusUpdateData>({
     onCreateSuccess({ id }) {
       setValue('id', id);
-      reset({}, { keepValues: true });
     },
     onUpdateSuccess({
       applicationData: {
@@ -163,7 +161,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
           representativeWithContacts.customer.yhteystietoId,
         );
       }
-      reset({}, { keepValues: true });
     },
   });
 
