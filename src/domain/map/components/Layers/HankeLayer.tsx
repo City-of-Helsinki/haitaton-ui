@@ -1,7 +1,7 @@
 import { useRef, useMemo, useContext } from 'react';
 import { Vector as VectorSource } from 'ol/source';
 import VectorLayer from '../../../../common/components/map/layers/VectorLayer';
-import { byAllHankeFilters } from '../../utils';
+import { hankeIsBetweenDates } from '../../utils';
 import { styleFunction } from '../../utils/geometryStyle';
 import CenterProjectOnMap from '../interations/CenterProjectOnMap';
 import HankkeetContext from '../../HankkeetProviderContext';
@@ -34,23 +34,29 @@ function HankeLayer({
   const hankeSource = useRef(new VectorSource());
   const hankkeet = hankeData || hankkeetFromContext;
 
-  const hankkeetFilteredByAll = useMemo(
+  const hankkeetFilteredByDates = useMemo(
     () =>
-      hankkeet.filter(
-        byAllHankeFilters({
-          startDate: startDate && toStartOfDayUTCISO(new Date(startDate)),
-          endDate,
-        }),
-      ),
+      hankkeet.map((hanke) => ({
+        ...hanke,
+        alueet: hanke.alueet.filter((alue) =>
+          hankeIsBetweenDates({
+            startDate: startDate && toStartOfDayUTCISO(new Date(startDate)),
+            endDate,
+          })({
+            startDate: alue.haittaAlkuPvm?.toString() || null,
+            endDate: alue.haittaLoppuPvm?.toString() || null,
+          }),
+        ),
+      })),
     [hankkeet, startDate, endDate],
   );
 
-  useHankeFeatures(hankeSource.current, hankkeetFilteredByAll);
+  useHankeFeatures(hankeSource.current, hankkeetFilteredByDates);
 
   return (
     <>
-      <div style={{ display: 'none' }} data-testid="countOfFilteredHankkeet">
-        {hankkeetFilteredByAll.length}
+      <div style={{ display: 'none' }} data-testid="countOfFilteredHankeAlueet">
+        {hankkeetFilteredByDates.flatMap((hanke) => hanke.alueet).length}
       </div>
       {centerOnMap && <CenterProjectOnMap source={hankeSource.current} />}
       {highlightFeatures && <HighlightFeatureOnMap source={hankeSource.current} />}

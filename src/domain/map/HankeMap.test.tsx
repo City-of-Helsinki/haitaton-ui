@@ -4,7 +4,7 @@ import HankeMap from './HankeMap';
 
 const startDateLabel = 'Ajanjakson alku';
 const endDateLabel = 'Ajanjakson loppu';
-const countOfFilteredHankkeet = 'countOfFilteredHankkeet';
+const countOfFilteredHankeAlueet = 'countOfFilteredHankeAlueet';
 
 describe('HankeMap', () => {
   test('Render test', async () => {
@@ -24,22 +24,22 @@ describe('HankeMap', () => {
     await screen.findByText('Ajanjakson alku');
 
     changeFilterDate(startDateLabel, renderedComponent, '1.1.2022');
-    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
+    expect(renderedComponent.getByTestId(countOfFilteredHankeAlueet)).toHaveTextContent('3');
     changeFilterDate(endDateLabel, renderedComponent, '1.1.2022');
-    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('0');
+    expect(renderedComponent.getByTestId(countOfFilteredHankeAlueet)).toHaveTextContent('0');
     changeFilterDate(endDateLabel, renderedComponent, '12.12.2023');
-    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
+    expect(renderedComponent.getByTestId(countOfFilteredHankeAlueet)).toHaveTextContent('3');
     changeFilterDate(startDateLabel, renderedComponent, '28.2.2023');
-    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('1');
+    expect(renderedComponent.getByTestId(countOfFilteredHankeAlueet)).toHaveTextContent('2');
     changeFilterDate(startDateLabel, renderedComponent, '1');
-    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
+    expect(renderedComponent.getByTestId(countOfFilteredHankeAlueet)).toHaveTextContent('3');
     changeFilterDate(startDateLabel, renderedComponent, '1.1');
-    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
+    expect(renderedComponent.getByTestId(countOfFilteredHankeAlueet)).toHaveTextContent('3');
     changeFilterDate(startDateLabel, renderedComponent, null);
-    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
+    expect(renderedComponent.getByTestId(countOfFilteredHankeAlueet)).toHaveTextContent('3');
     changeFilterDate(endDateLabel, renderedComponent, null);
-    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
+    expect(renderedComponent.getByTestId(countOfFilteredHankeAlueet)).toHaveTextContent('3');
     changeFilterDate(startDateLabel, renderedComponent, '1.1.2022');
-    expect(renderedComponent.getByTestId(countOfFilteredHankkeet)).toHaveTextContent('2');
+    expect(renderedComponent.getByTestId(countOfFilteredHankeAlueet)).toHaveTextContent('3');
   });
 });
