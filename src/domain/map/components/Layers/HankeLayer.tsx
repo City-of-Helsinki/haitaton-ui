@@ -43,8 +43,8 @@ function HankeLayer({
             startDate: startDate && toStartOfDayUTCISO(new Date(startDate)),
             endDate,
           })({
-            startDate: alue.haittaAlkuPvm?.toString() || null,
-            endDate: alue.haittaLoppuPvm?.toString() || null,
+            startDate: alue.haittaAlkuPvm?.toString() ?? null,
+            endDate: alue.haittaLoppuPvm?.toString() ?? null,
           }),
         ),
       })),
