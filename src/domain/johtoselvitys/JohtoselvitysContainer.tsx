@@ -10,7 +10,6 @@ import {
 import { FormProvider, useForm, FieldPath } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation, useQueryClient } from 'react-query';
 import { merge } from 'lodash';
 import { useBeforeUnload } from 'react-router-dom';
 import { JohtoselvitysFormValues } from './types';
@@ -26,12 +25,11 @@ import {
   convertFormStateToJohtoselvitysUpdateData,
 } from './utils';
 import { changeFormStep, isPageValid } from '../forms/utils';
-import { isApplicationDraft, isContactIn, sendApplication } from '../application/utils';
+import { isApplicationDraft, isContactIn } from '../application/utils';
 import { HankeData } from '../types/hanke';
 import { ApplicationCancel } from '../application/components/ApplicationCancel';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
-import useApplicationSendNotification from '../application/hooks/useApplicationSendNotification';
 import useHanke from '../hanke/hooks/useHanke';
 import {
   AlluStatus,
@@ -47,6 +45,7 @@ import { APPLICATION_ID_STORAGE_KEY } from '../application/constants';
 import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import useSaveApplication from '../application/hooks/useSaveApplication';
 import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
+import useSendApplication from '../application/hooks/useSendApplication';
 
 type Props = {
   hankeData?: HankeData;
@@ -60,8 +59,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
   let hanke = hankeData;
   const { t } = useTranslation();
   const { setNotification } = useGlobalNotification();
-  const { showSendSuccess, showSendError } = useApplicationSendNotification();
-  const queryClient = useQueryClient();
   const [attachmentUploadErrors, setAttachmentUploadErrors] = useState<JSX.Element[]>([]);
   const { data: signedInUser } = usePermissionsForHanke(hanke?.hankeTunnus);
 
@@ -183,13 +180,8 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     },
   });
 
-  const applicationSendMutation = useMutation(sendApplication, {
-    onError() {
-      showSendError();
-    },
-    async onSuccess(data) {
-      showSendSuccess();
-      await queryClient.invalidateQueries('application', { refetchInactive: true });
+  const applicationSendMutation = useSendApplication({
+    onSuccess(data) {
       navigateToApplicationView(data.id?.toString());
     },
   });

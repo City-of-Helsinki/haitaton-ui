@@ -20,6 +20,7 @@ import {
 import { ContactType, Customer, InvoicingCustomer } from '../application/types/application';
 import { cloneDeep } from 'lodash';
 import { fillNewContactPersonForm } from '../forms/components/testUtils';
+import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 
 afterEach(cleanup);
 
@@ -259,7 +260,7 @@ test('Should be able fill perustiedot and save form', async () => {
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
   expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
-  expect(window.location.pathname).toBe('/fi/hakemus/7');
+  expect(window.location.pathname).toBe('/fi/hakemus/8');
 });
 
 test('Should not be able to save form if work name is missing', async () => {
@@ -808,4 +809,64 @@ test('Should highlight selected work area', async () => {
   await user.click(workAreaTwo);
   expect(workAreaOne).not.toHaveClass('selected');
   expect(workAreaTwo).toHaveClass('selected');
+});
+
+test('Should be able to send application', async () => {
+  const hankeData = hankkeet[1] as HankeData;
+  const application = cloneDeep(applications[6] as Application<KaivuilmoitusData>);
+  const { user } = render(
+    <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
+  );
+  await user.click(await screen.findByRole('button', { name: /yhteenveto/i }));
+  await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
+
+  expect(await screen.findByText(/hakemus lähetetty/i)).toBeInTheDocument();
+});
+
+test('Should show error message when sending fails', async () => {
+  server.use(
+    rest.post('/api/hakemukset/:id/laheta', async (req, res, ctx) => {
+      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    }),
+  );
+
+  const hankeData = hankkeet[1] as HankeData;
+  const application = cloneDeep(applications[6] as Application<KaivuilmoitusData>);
+  const { user } = render(
+    <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
+  );
+  await user.click(await screen.findByRole('button', { name: /yhteenveto/i }));
+  await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
+
+  expect(await screen.findByText(/lähettäminen epäonnistui/i)).toBeInTheDocument();
+});
+
+test('Should show and disable send button and show notification when user is not a contact person', async () => {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>({
+          hankeKayttajaId: 'not-a-contact-person-id',
+          kayttooikeustaso: 'KATSELUOIKEUS',
+          kayttooikeudet: ['VIEW'],
+        }),
+      );
+    }),
+  );
+
+  const hankeData = hankkeet[1] as HankeData;
+  const application = cloneDeep(applications[6] as Application<KaivuilmoitusData>);
+  const { user } = render(
+    <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
+  );
+  await user.click(await screen.findByRole('button', { name: /yhteenveto/i }));
+
+  expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeDisabled();
+  expect(
+    screen.queryAllByText(
+      'Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö.',
+    ),
+  ).toHaveLength(2);
 });
