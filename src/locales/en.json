@@ -78,6 +78,10 @@
       "savingText": "Saving",
       "sendingText": "Sending",
       "remove": "Remove"
+    },
+    "haittaIndex": {
+      "fillHaitat": "Fill in the nuisance assessments for the area to see the nuisance indexes",
+      "haittaIndexNumber": "Nuisance index number:"
     }
   },
   "form": {
@@ -88,6 +92,7 @@
       "typeOf": "The field type is invalid",
       "required": "This field is required",
       "email": "The email is incorrect",
+      "phone": "Invalid telephone number",
       "stringMin": "The field length must be at least {{min}} characters",
       "stringMax": "The field length must not exceed {{max}} characters",
       "dateMin": "The first possible date is {{min}}",
@@ -192,7 +197,8 @@
         "contractorInfo": "Contractor information",
         "implementerInfo": "Implementer information",
         "otherInfo": "Other parties’ information",
-        "propertyDeveloperInfo": "Developer information"
+        "propertyDeveloperInfo": "Developer information",
+        "invoicingCustomerInfo": "Invoicing information"
       },
       "labels": {
         "tyyppi": "Type",
@@ -200,6 +206,7 @@
         "etunimi": "First name",
         "sukunimi": "Last name",
         "ytunnus": "Business ID",
+        "yTunnusTaiHetu": "Business ID or personal identity code",
         "osoite": "Street address",
         "postinumero": "Postal code",
         "postitoimipaikka": "City",
@@ -209,7 +216,10 @@
         "osasto": "Department",
         "organisaatioNimi": "Organisation",
         "rakennuttaja": "Developer",
-        "erillinenYhteyshenkilo": "Separate contact person"
+        "erillinenYhteyshenkilo": "Separate contact person",
+        "ovt": "EDI identifier",
+        "invoicingOperator": "Operator code",
+        "customerReference": "Client reference"
       },
       "placeholders": {
         "otherPartyRole": "Property manager, consultant...",
@@ -352,16 +362,16 @@
     },
     "KAIVUILMOITUSHAKEMUS": {
       "path": "/hankesalkku/:hankeTunnus/kaivuilmoitus",
-      "headerLabel": "Luo uusi kaivuilmoitushakemus",
+      "headerLabel": "Create a new excavation notification application",
       "meta": {
-        "title": "Haitaton - Luo uusi kaivuilmoitushakemus"
+        "title": "Haitaton – Create a new excavation notification application"
       }
     },
     "EDIT_KAIVUILMOITUSHAKEMUS": {
       "path": "/kaivuilmoitus/:id/muokkaa",
-      "headerLabel": "Muokkaa kaivuilmoitushakemusta",
+      "headerLabel": "Edit the excavation notification application",
       "meta": {
-        "title": "Haitaton - Muokkaa kaivuilmoitushakemusta"
+        "title": "Haitaton – Edit the excavation notification application"
       }
     },
     "HAITATON_INFO": {
@@ -493,7 +503,8 @@
       "totalSurfaceArea": "Total area",
       "totalSurfaceAreaLong": "Total area of project areas",
       "liikenneverkollinenHaitta": "Transport network nuisance of the project area",
-      "haittaMaarittelyt": "The project area’s own nuisance definitions"
+      "haittaMaarittelyt": "The project area’s own nuisance definitions",
+      "liikennehaittaIndeksit": "Project area traffic nuisance indexes"
     }
   },
   "hankeForm": {
@@ -550,7 +561,18 @@
       "organisaatio": "Organisation",
       "omaOrganisaatio": "Add your own organisation",
       "insertOmaOrganisaatio": "Enter your own organisation",
-      "rights": "Your access rights to the project"
+      "rights": "Your access rights to the project",
+      "removeAreaTitle": "Remove area",
+      "removeAreaDescription": "Are you sure you want to remove the project area {{areaName}}?",
+      "hankeAlue": "Project area",
+      "haittojenhallintasuunnitelma": {
+        "YLEINEN": "Measures for managing nuisances in the project area",
+        "PYORALIIKENNE": "Measures for managing nuisances in the project area",
+        "AUTOLIIKENNE": "Measures for managing nuisances in the project area",
+        "LINJAAUTOLIIKENNE": "Measures for managing nuisances in the project area",
+        "RAITIOLIIKENNE": "Measures for managing nuisances in the project area",
+        "MUUT": "Measures for managing nuisances in the project area"
+      }
     },
     "missingFields": {
       "nimi": "$t(hankeForm:labels:nimi)",
@@ -565,7 +587,8 @@
         "kaistaPituusHaitta": "{{alueName}}: $t(hankeForm:labels:kaistaPituusHaitta)",
         "meluHaitta": "{{alueName}}: $t(hankeForm:labels:meluHaitta)",
         "polyHaitta": "{{alueName}}: $t(hankeForm:labels:polyHaitta)",
-        "tarinaHaitta": "{{alueName}}: $t(hankeForm:labels:tarinaHaitta)"
+        "tarinaHaitta": "{{alueName}}: $t(hankeForm:labels:tarinaHaitta)",
+        "haittojenhallintasuunnitelma": {}
       },
       "omistajat": {
         "nimi": "$t(form:yhteystiedot:titles:omistaja): $t(form:yhteystiedot:labels:nimi)",
@@ -627,7 +650,25 @@
       "header": "Additional project information"
     },
     "haittojenHallintaForm": {
-      "header": "Nuisance control"
+      "header": "Nuisance control",
+      "subHeaderNoAlueet": "Project areas",
+      "subHeaderAlueet": "Area locations",
+      "instructions": "Your project may hinder different modes of transport and local operations. Haitaton automatically calculates a significance value for each nuisance by project area separately for bicycle traffic, tram traffic, local bus traffic and car traffic. The traffic nuisance index describes the worst situation in the project area in terms of the aforementioned modes of transport. The disturbances are represented with a scale determined for each mode of transport and colours (0/grey = not identified, 1–2/green = no significant nuisance, 3/yellow = probable nuisance, 4–5/red = significant nuisance). Results not concerning the aforementioned modes of transport are represented with numbers alone (0–5).",
+      "noAlueet": "Add project areas to fill in information",
+      "nuisanceControlPlanSubHeader": "Nuisance management plan",
+      "instructionsPlan": "Detail in the nuisance management plan which measures you will take to mitigate disturbances concerning the project areas. Be sure to go through all project areas.",
+      "subHeaderPlan": "Always check these measures",
+      "instructionsGeneral": "<0><0>Ensure the safety and accessibility of pedestrian traffic</0><1>Ensure transport connections to the properties</1><2>Carry out coordination with other projects and their alternate routes</2><3>Always notify the Rescue Department and the police when streets are closed from traffic</3><4>Always check whether your project or work is on a special transport route</4><5>Check the impacts on the existing traffic light controls (lane arrangements, indicators, the functionality of the lights)</5><6>Exceptional working hours</6></0>",
+      "helperText": "Nuisance management or prevention measures that are to be carried out or have been agreed upon in the project area.",
+      "subHeaderTrafficNuisanceIndex": "Based on the traffic nuisance index calculated for your project, special attention must be paid to the following requirements.",
+      "nuisanceType": {
+        "PYORALIIKENNE": "Significance of cycling traffic",
+        "AUTOLIIKENNE": "Congestion of motor traffic",
+        "LINJAAUTOLIIKENNE": "Significance of public transport: Local bus transport",
+        "RAITIOLIIKENNE": "Significance of public transport: Tram transport",
+        "MUUT": "Other nuisance management measures"
+      },
+      "carTrafficNuisanceType": {}
     },
     "hankkeenLiitteetForm": {
       "instructions": "Add attachments. Attachments added to the project will not be transferred to the applications."
@@ -672,7 +713,29 @@
     }
   },
   "kaivuilmoitusForm": {
-    "perustiedot": {}
+    "pageHeader": "Excavation notification",
+    "requiredInstruction": "Filling out all fields marked with the asterisk * is required for submitting the application.",
+    "perustiedot": {
+      "instructions": "<p>Any excavation, drilling or quarrying works carried out on streets, on pedestrian or cycling routes, on market squares or in parks in Helsinki require submitting an excavation notification. When an excavation notification is submitted, the authority is also automatically requested for a cable report if the identifier of a previously issued cable report is not attached to the application.</p><p>An essential part of the application is a nuisance management plan filled out by the user, the implementation of which will be monitored by the authority during the work. A temporary traffic arrangement plan is created as an attachment to the notification if the work affects pedestrian, cycling or motor vehicle traffic, or parking spaces are reserved for other use with a moving request sign.</p><p>The excavation work must be reported as operational in the winter season (1 December–14 May) and complete in all cases so that the work can be supervised and invoicing can be suspended or ended.</p><p>$t(kaivuilmoitusForm:requiredInstruction) The name of the work is required for saving the form.</p>"
+    },
+    "alueet": {
+      "instructions": "<p>Start drawing the work areas of the application by entering start and end dates for the work, whereby your project areas will be displayed. PLEASE NOTE! The work must be scheduled within the timespan for the project area.</p><p>You can edit a previously drawn area by grabbing its edge and dragging the point to the desired location.</p><p>If you want to draw smaller work areas within the project areas, activate the drawing tools on top of the map. Please note that the work areas must be drawn entirely within the project areas.</p><p>If you want to use the entire project area as a work area, activate the project area on the map and select ‘Use as work area’.</p><p>You can add several areas to the same application if they have the same timespan. If you want to enter several areas with different timespans, you must submit a separate application.</p><p>$t(kaivuilmoitusForm:requiredInstruction)</p>",
+      "areaInformationHeading": "Excavation notification for work areas",
+      "startDate": "Work start date",
+      "endDate": "Work end date"
+    },
+    "liitteetJaLisatiedot": {
+      "instructions": "<p>Add plans for temporary traffic arrangements and any other attachments. A plan for temporary traffic arrangements is obligatory. If necessary, see <a>the City of Helsinki’s standard solution images</a>.</p><p>If filling out the form or carrying out the work have not been authorised in the login process, a PDF-format power of attorney must be provided as an attachment.</p><p>All fields marked with the asterisk * are necessary for submitting the application.</p>",
+      "trafficArrangementPlan": "Plans for temporary traffic arrangements",
+      "mandate": "Power of attorney",
+      "mandateCheck": "Check the power of attorney",
+      "mandateInfo": "For data protection reasons, a power of attorney added to the application cannot be viewed after saving. Please verify that you have the correct power of attorney before attaching it to the application.",
+      "otherAttachments": "Other attachments",
+      "additionalInformation": "Further information"
+    },
+    "yhteenveto": {
+      "instructions": "Check the information you entered and submit the notification for processing."
+    }
   },
   "hakemus": {
     "labels": {
@@ -683,22 +746,26 @@
       "maintenanceWork": "Maintenance on an existing structure",
       "propertyConnectivity": "Constructing property intersections",
       "emergencyWork": "The excavation started before the cable report was requested to avoid significant damage",
+      "emergencyWorkKaivuilmoitus": "The excavation work started before the excavation notification was requested to avoid significant damage",
       "applicationType": "Application type",
       "copyPreviousApplication": "Copy a previous application as a template",
       "applicationToUseAsBase": "Application to be used as a template",
       "startDate": "Estimated start date for work",
       "endDate": "Estimated end date for work",
       "workArea": "Work area",
+      "workAreaPlural": "Work areas",
+      "areaAdditionalInfo": "Further information about the area",
       "areaInfo": "Area information",
       "checkInfo": "Check the information you entered and send the application.",
       "preFilledInfo": "Pre-filled information",
       "preFilledInfoHelp": "Select a name from the project information",
       "cancelTitle": "Are you sure you want to cancel the application?",
       "cancelDescription": "Cancelling the application is permanent. The application information cannot be restored after cancelling.",
-      "rockExcavation": "Will the work involve excavations, for example into rock?",
-      "rockExcavationShort": "Will the work involve excavation?",
+      "rockExcavation": "Will the work involve rock excavations, for example into bedrock?",
+      "rockExcavationShort": "Will the work involve rock excavation?",
       "areaDuration": "Work duration in the area",
       "totalSurfaceArea": "Total working area",
+      "totalSurfaceAreaLong": "Combined total area of the work areas drawn:",
       "applicationState": "Application state",
       "relatedHanke": "Related to project",
       "downloadDecision": "Download decision (PDF)",
@@ -707,7 +774,16 @@
       "removeAreaTitle": "Remove area?",
       "removeAreaDescription": "Are you sure you want to remove the area {{areaName}}?",
       "applicationAdditionalInfo": "Additional information on the application",
-      "applicationInfo": "Application information"
+      "applicationInfo": "Application information",
+      "cableReports": "Identifiers of previous cable reports",
+      "cableReportsHelp": "Select one from the list or enter another identifier and press ‘Enter’ to add it",
+      "placementContractsTitle": "Placement agreements",
+      "placementContracts": "Placement agreement identifier",
+      "placementContractsHelp": "Enter the placement agreement identifier and press ‘Add’",
+      "requiredCompetenceTitle": "Qualification required for the work",
+      "requiredCompetence": "As the person in charge of the work or a representative, I affirm that there will always be at least one person with a valid roadwork qualification for the Helsinki metropolitan area (PKS) street work card present when the worksite is being used. I will also be responsible for ensuring that the person in charge of the excavation work has a valid roadwork safety 1, roadwork safety 2 or roadwork training for the Helsinki metropolitan area (PKS) street work card. *",
+      "additionalInformation": "Additional information on the application",
+      "tyonTarkoitus": "Purpose of the work"
     },
     "notifications": {
       "saveSuccessLabel": "Application saved",
@@ -718,12 +794,23 @@
       "sendErrorLabel": "Sending failed",
       "sendSuccessText": "The application was sent for processing.",
       "sendErrorText": "<0>The application was saved as a draft because sending it failed. Please try again later or contact the Haitaton technical support by email <1>haitatontuki@hel.fi.</1></0>",
+      "sendErrorTextNoSave": "<0>Failed to submit the application for processing. Please try again later or contact the Haitaton technical support by email <1>haitatontuki@hel.fi.</1></0>",
       "cancelSuccessLabel": "Application cancelled",
       "cancelSuccessText": "The application has been cancelled",
       "noApplications": "No applications have been added to the project",
       "maxAttachmentsNumberExceeded": "The maximum number of attachments ({{maxNumber}} items) has been exceeded",
       "sentApplicationPersonalInfoNotification": "The personal information of the submitted application cannot be edited",
       "sendApplicationDisabled": "The application can only be submitted by the person designated as the contact person for the application."
+    },
+    "sentDialog": {
+      "title": "Application sent",
+      "description": "The application has been sent and can no longer be edited. You can view the information of the application on the application page.",
+      "button": "Go to the application page"
+    },
+    "areaSelectionDialog": {
+      "title": "Choose a project area for the work area",
+      "instructions": "The work area is located within several project areas. Choose the project area into which the work area will be added.",
+      "cancelButton": "Cancel and remove the work area"
     },
     "status": {
       "PENDING_CLIENT": "Visible to authorities",
@@ -742,19 +829,24 @@
       "null": "Draft"
     },
     "buttons": {
+      "createApplication": "Create an application",
       "sendApplication": "Send application",
       "cancelApplication": "Cancel application",
-      "editApplication": "Edit application"
+      "editApplication": "Edit application",
+      "deletePlacementContract": "Remove placement agreement identifier {{id}}"
     },
     "errors": {
       "cancelConflict": "The application cannot be cancelled because it has entered the processing stage",
-      "notFound": "Application not found"
+      "notFound": "Application not found",
+      "placementContract": "The identifier must be in the format of SLXXXXXXX",
+      "cableReport": "The identifier must be in the format of JSXXXXXXX"
     },
     "headers": {
       "pickApplication": "Select application"
     },
     "applicationTypes": {
-      "CABLE_REPORT": "Cable report"
+      "CABLE_REPORT": "Cable report",
+      "EXCAVATION_NOTIFICATION": "Excavation notification"
     },
     "applicationTypeDraft": {
       "CABLE_REPORT": "Draft",
@@ -871,6 +963,7 @@
     "hankkeentyyppiHelperText": "Select the worksite type(s) for the project",
     "areaLocation": "Area location(s)",
     "openMapToNewWindow": "Open the map in a new window",
+    "noAreas": "No project areas determined",
     "showHankeButton": "Show project",
     "showApplicationsButton": "Show project applications",
     "generatedStateLabel": "Project generated based on cable report",
@@ -953,7 +1046,8 @@
     },
     "breadcrumb": {
       "ariaLabel": "Project navigation"
-    }
+    },
+    "listDescription": "You can use the header buttons of the table to arrange the table"
   },
   "hankeUsers": {
     "role": "Role in project",
@@ -1053,6 +1147,9 @@
         "BLUE": "Unindexed"
       }
     },
+    "tooltips": {
+      "areaDates": "The timespan you enter will affect the map view. Only projects and works taking place within the determined timespan will be shown on the map. By default, you will see this project and its related work areas. You can use the level menu of the map to display other areas."
+    },
     "attribution": "Materials &copy; <a href='https://kartta.hel.fi'>Helsingin kaupunki</a>",
     "drawSquareButtonAria": "Draw a square on the map",
     "drawPolygonButtonAria": "Draw a polygon on the map"
@@ -1093,8 +1190,7 @@
       }
     },
     "accessibility": {
-      "title": "Accessibility statement",
-      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+      "title": "Accessibility statement"
     },
     "privacyPolicy": {
       "title": "Privacy policy",
@@ -1132,6 +1228,9 @@
     "text": ""
   },
   "serviceMaintenance": {
-    "text": ""
+    "label": "Service break in Haitaton",
+    "text": "",
+    "imageLabel": "Image by: Lille Santanen",
+    "imageAltText": "An illustration of a construction site"
   }
 }
