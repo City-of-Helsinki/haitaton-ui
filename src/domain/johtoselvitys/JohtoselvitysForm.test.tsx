@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { render, cleanup, fireEvent, screen, waitFor, act, within } from '../../testUtils/render';
+import { render, cleanup, fireEvent, screen, waitFor, within } from '../../testUtils/render';
 import Johtoselvitys from '../../pages/Johtoselvitys';
 import JohtoselvitysContainer from './JohtoselvitysContainer';
 import { waitForLoadingToFinish } from '../../testUtils/helperFunctions';
@@ -20,6 +20,7 @@ import * as applicationAttachmentsApi from '../application/attachments';
 import { fillNewContactPersonForm } from '../forms/components/testUtils';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import { cloneDeep } from 'lodash';
+import { waitForElementToBeRemoved } from '@testing-library/react';
 
 afterEach(cleanup);
 
@@ -594,8 +595,8 @@ test('Should be able to upload attachments', async () => {
   ]);
 
   await screen.findAllByText('Tallennetaan tiedostoja', undefined, { timeout: 5000 });
-  await act(async () => {
-    waitFor(() => expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0));
+  await waitForElementToBeRemoved(() => screen.queryAllByText(/Tallennetaan tiedostoja/i), {
+    timeout: 10000,
   });
   await waitFor(
     () => {
