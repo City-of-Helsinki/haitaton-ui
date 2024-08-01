@@ -217,7 +217,7 @@
       },
       "helperTexts": {
         "otherPartyRole": "Party’s role in the project",
-        "yhteyshenkilo": " You can search an added person by typing or using the drop-down menu, or you can add a new contact below."
+        "yhteyshenkilo": "You can search an added person by typing or using the drop-down menu, or you can add a new contact."
       },
       "contactType": {
         "YKSITYISHENKILO": "Private individual",

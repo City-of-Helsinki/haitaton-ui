@@ -118,7 +118,6 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
     },
     async onSuccess() {
       showSendSuccess();
-      setIsSendButtonDisabled(false);
       await queryClient.invalidateQueries('application', { refetchInactive: true });
     },
   });
@@ -193,7 +192,7 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
                 theme="coat"
                 iconLeft={<IconEnvelope aria-hidden="true" />}
                 onClick={onSendApplication}
-                isLoading={applicationSendMutation.isLoading || isSendButtonDisabled}
+                isLoading={applicationSendMutation.isLoading}
                 loadingText={t('common:buttons:sendingText')}
                 disabled={disableSendButton || isSendButtonDisabled}
               >

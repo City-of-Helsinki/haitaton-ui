@@ -1,5 +1,6 @@
 import { HankeUser, SignedInUser } from './hankeUser';
 import { HankeYhteyshenkilo } from '../../types/hanke';
+import { Contact } from '../../application/types/application';
 
 export function mapHankeUserToHankeYhteyshenkilo({
   id,
@@ -14,6 +15,22 @@ export function mapHankeUserToHankeYhteyshenkilo({
     sukunimi,
     sahkoposti,
     puhelinnumero,
+  };
+}
+
+export function mapHankeUserToContact({
+  id,
+  etunimi,
+  sukunimi,
+  sahkoposti,
+  puhelinnumero,
+}: HankeUser): Contact {
+  return {
+    hankekayttajaId: id,
+    firstName: etunimi,
+    lastName: sukunimi,
+    email: sahkoposti,
+    phone: puhelinnumero,
   };
 }
 
