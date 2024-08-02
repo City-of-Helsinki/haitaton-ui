@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
-import { Checkbox as HDSCheckbox, SelectionGroup } from 'hds-react';
+import { Checkbox as HDSCheckbox, Fieldset, SelectionGroup, ToggleButton } from 'hds-react';
 import { uniq } from 'lodash';
 import TextInput from '../../common/components/textInput/TextInput';
 import TextArea from '../../common/components/textArea/TextArea';
@@ -10,6 +10,9 @@ import { KaivuilmoitusFormValues } from './types';
 import Checkbox from '../../common/components/checkbox/Checkbox';
 import TagInput from '../../common/components/tagInput/TagInput';
 import InputCombobox from '../../common/components/inputCombobox/InputCombobox';
+import { useEffect, useState } from 'react';
+import { getInputErrorText } from '../../common/utils/form';
+import BooleanRadioButton from '../../common/components/radiobutton/BooleanRadioButton';
 
 type Props = {
   johtoselvitysIds?: string[];
@@ -30,13 +33,23 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
     constructionWorkChecked,
     maintenanceWorkChecked,
     emergencyWorkChecked,
+    createCableReportNotChecked,
     placementContracts,
   ] = watch([
     'applicationData.constructionWork',
     'applicationData.maintenanceWork',
     'applicationData.emergencyWork',
+    'applicationData.cableReportDone',
     'applicationData.placementContracts',
   ]);
+
+  const [showNewCableReportSection, setShowNewCableReportSection] = useState(
+    !createCableReportNotChecked,
+  );
+
+  useEffect(() => {
+    setShowNewCableReportSection(!createCableReportNotChecked);
+  }, [createCableReportNotChecked]);
 
   // Trigger validation for constructionWork field
   function validateConstructionWork() {
@@ -45,6 +58,19 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
 
   function getTagDeleteButtonAriaLabel(tag: string) {
     return t('hakemus:buttons:deletePlacementContract', { id: tag });
+  }
+
+  function handleCreateCableReportChange() {
+    const newValue = !createCableReportNotChecked;
+    setValue('applicationData.cableReportDone', newValue, {
+      shouldDirty: true,
+    });
+    if (!newValue) {
+      setValue('applicationData.rockExcavation', false, { shouldDirty: true });
+    } else {
+      setValue('applicationData.rockExcavation', null, { shouldDirty: true });
+    }
+    setShowNewCableReportSection(newValue);
   }
 
   function handlePlacementContractsChange(updatedContracts: string[]) {
@@ -140,6 +166,44 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
         />
       </SelectionGroup>
 
+      <Box as="h3" className="heading-s" marginBottom="var(--spacing-s)">
+        {t('hakemus:labels:cableReportTitle')}
+      </Box>
+      <Box as="div" marginBottom="var(--spacing-s)">
+        <ToggleButton
+          {...register('applicationData.cableReportDone')}
+          id="applicationData.createCablereport"
+          label={t('hakemus:labels:createCableReport')}
+          checked={!createCableReportNotChecked}
+          onChange={handleCreateCableReportChange}
+        />
+      </Box>
+      {showNewCableReportSection && (
+        <Box as="div" marginBottom="var(--spacing-s)">
+          <Fieldset heading={t('hakemus:labels:newCableReport')} border>
+            <SelectionGroup
+              label={t('hakemus:labels:rockExcavation')}
+              direction="horizontal"
+              required
+              className={styles.formRow}
+              errorText={getInputErrorText(t, errors?.applicationData?.rockExcavation)}
+            >
+              <BooleanRadioButton<KaivuilmoitusFormValues>
+                name="applicationData.rockExcavation"
+                label={t('common:yes')}
+                id="rockExcavationYes"
+                value={true}
+              />
+              <BooleanRadioButton<KaivuilmoitusFormValues>
+                name="applicationData.rockExcavation"
+                label={t('common:no')}
+                id="rockExcavationNo"
+                value={false}
+              />
+            </SelectionGroup>
+          </Fieldset>
+        </Box>
+      )}
       {johtoselvitysIds !== undefined && (
         <InputCombobox
           id="applicationData.cableReports"

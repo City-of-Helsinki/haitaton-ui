@@ -29,6 +29,8 @@ async function fillBasicInformation(
   options: {
     name?: string;
     description?: string;
+    cableReportDone?: boolean;
+    rockExcavation?: boolean;
     existingCableReport?: string;
     cableReports?: string[];
     placementContracts?: string[];
@@ -38,6 +40,8 @@ async function fillBasicInformation(
   const {
     name = 'Kaivuilmoitus',
     description = 'Testataan kaivuilmoituslomaketta',
+    cableReportDone = true,
+    rockExcavation = null,
     existingCableReport = 'JS2300001',
     cableReports = ['JS2300003'],
     placementContracts = ['SL0000001'],
@@ -53,6 +57,15 @@ async function fillBasicInformation(
   });
 
   fireEvent.click(screen.getByLabelText(/uuden rakenteen tai johdon rakentamisesta/i));
+
+  if (cableReportDone) {
+    fireEvent.click(screen.getByLabelText(/hae uusi johtoselvitys/i));
+    if (rockExcavation === true) {
+      fireEvent.click(screen.getByLabelText(/kyllä/i));
+    } else if (rockExcavation === false) {
+      fireEvent.click(screen.getByLabelText(/ei/i));
+    }
+  }
 
   if (existingCableReport) {
     await screen.findAllByLabelText(/tehtyjen johtoselvitysten tunnukset/i);
@@ -324,6 +337,8 @@ test('Should be able to fill form pages and show filled information in summary p
 
   const name = 'Kaivuilmoitus testi';
   const description = 'Testataan yhteenvetosivua';
+  const cableReportDone = false;
+  const rockExcavation = true;
   const existingCableReport = 'JS2300001';
   const cableReports = ['JS2300002', 'JS2300003', 'JS2300004'];
   const placementContracts = ['SL0000001', 'SL0000002'];
@@ -395,6 +410,8 @@ test('Should be able to fill form pages and show filled information in summary p
   await fillBasicInformation(user, {
     name,
     description,
+    cableReportDone,
+    rockExcavation,
     existingCableReport,
     cableReports,
     placementContracts,
@@ -431,6 +448,9 @@ test('Should be able to fill form pages and show filled information in summary p
   // Basic information
   expect(screen.getByText(name)).toBeInTheDocument();
   expect(screen.getByText(description)).toBeInTheDocument();
+  expect(
+    screen.getByText('Louhitaanko työn yhteydessä, esimerkiksi kallioperää?: Ei'),
+  ).toBeInTheDocument();
   expect(
     screen.getByText(`${existingCableReport}, ${cableReports.join(', ')}`),
   ).toBeInTheDocument();
