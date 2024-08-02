@@ -32,7 +32,6 @@ export default function Contacts() {
     if (selectedContactType === 'PERSON' || selectedContactType === 'OTHER') {
       resetField('applicationData.invoicingCustomer.ovt', { defaultValue: '' });
       resetField('applicationData.invoicingCustomer.invoicingOperator', { defaultValue: '' });
-      resetField('applicationData.invoicingCustomer.customerReference', { defaultValue: '' });
     }
   }, [selectedContactType, resetField]);
 
