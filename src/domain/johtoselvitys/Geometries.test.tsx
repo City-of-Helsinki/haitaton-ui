@@ -43,7 +43,7 @@ test('Hanke areas are visible if work start and end dates are between hanke star
     '27.11.2024',
   );
 
-  expect(screen.getByTestId('countOfFilteredHankkeet')).toHaveTextContent('1');
+  expect(screen.getByTestId('countOfFilteredHankeAlueet')).toHaveTextContent('1');
 
   await user.type(screen.getByRole('textbox', { name: 'Työn arvioitu alkupäivä *' }), '28.11.2024');
   await user.type(
@@ -51,7 +51,7 @@ test('Hanke areas are visible if work start and end dates are between hanke star
     '29.11.2024',
   );
 
-  expect(screen.getByTestId('countOfFilteredHankkeet')).toHaveTextContent('0');
+  expect(screen.getByTestId('countOfFilteredHankeAlueet')).toHaveTextContent('0');
 });
 
 test('Hanke areas are not visible if hanke is generated', async () => {
@@ -64,5 +64,5 @@ test('Hanke areas are not visible if hanke is generated', async () => {
     '27.11.2024',
   );
 
-  expect(screen.queryByTestId('countOfFilteredHankkeet')).not.toBeInTheDocument();
+  expect(screen.queryByTestId('countOfFilteredHankeAlueet')).not.toBeInTheDocument();
 });
