@@ -1,7 +1,7 @@
 import React from 'react';
 import { waitFor } from '@testing-library/react';
 import HomePage from './HomePage';
-import { render, screen } from '../testUtils/render';
+import { render } from '../testUtils/render';
 import { SKIP_TO_ELEMENT_ID } from '../common/constants/constants';
 import AccessRightsViewContainer from '../domain/hanke/accessRights/AccessRightsViewContainer';
 import { waitForLoadingToFinish } from '../testUtils/helperFunctions';
@@ -32,7 +32,6 @@ describe('There should be a skip link in the page', () => {
   });
   test('HomePage', async () => {
     const { container } = render(<HomePage />);
-    screen.debug();
     await waitFor(() => expect(container.querySelector(skipLinkQuery)).toBeInTheDocument());
   });
   test('Map and list page', async () => {

@@ -151,7 +151,6 @@ test('Should show amount of successful files uploaded and errors correctly when 
       { exact: false },
     ),
   ).toBeInTheDocument();
-  screen.debug();
   expect(
     screen.queryByText(`Pienin sallittu tiedostokoko on 1 B.`, { exact: false }),
   ).toBeInTheDocument();
