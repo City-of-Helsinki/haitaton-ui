@@ -10,7 +10,6 @@ import { KaivuilmoitusFormValues } from './types';
 import Checkbox from '../../common/components/checkbox/Checkbox';
 import TagInput from '../../common/components/tagInput/TagInput';
 import InputCombobox from '../../common/components/inputCombobox/InputCombobox';
-import { useEffect, useState } from 'react';
 import { getInputErrorText } from '../../common/utils/form';
 import BooleanRadioButton from '../../common/components/radiobutton/BooleanRadioButton';
 
@@ -43,14 +42,6 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
     'applicationData.placementContracts',
   ]);
 
-  const [showNewCableReportSection, setShowNewCableReportSection] = useState(
-    !createCableReportNotChecked,
-  );
-
-  useEffect(() => {
-    setShowNewCableReportSection(!createCableReportNotChecked);
-  }, [createCableReportNotChecked]);
-
   // Trigger validation for constructionWork field
   function validateConstructionWork() {
     trigger('applicationData.constructionWork');
@@ -70,7 +61,6 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
     } else {
       setValue('applicationData.rockExcavation', null, { shouldDirty: true });
     }
-    setShowNewCableReportSection(newValue);
   }
 
   function handlePlacementContractsChange(updatedContracts: string[]) {
@@ -178,7 +168,7 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
           onChange={handleCreateCableReportChange}
         />
       </Box>
-      {showNewCableReportSection && (
+      {!createCableReportNotChecked && (
         <Box as="div" marginBottom="var(--spacing-s)">
           <Fieldset heading={t('hakemus:labels:newCableReport')} border>
             <SelectionGroup
