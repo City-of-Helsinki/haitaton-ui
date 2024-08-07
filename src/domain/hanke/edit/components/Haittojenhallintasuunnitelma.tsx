@@ -21,6 +21,7 @@ import CustomAccordion from '../../../../common/components/customAccordion/Custo
 import HaittaIndex from '../../../common/haittaIndexes/HaittaIndex';
 import { HaittaSubSection } from '../../../common/haittaIndexes/HaittaSubSection';
 import styles from './Haittojenhallintasuunnitelma.module.scss';
+import ProcedureTips from '../../../common/haittaIndexes/ProcedureTips';
 
 function mapNuisanceEnumIndexToNuisanceIndex(index: number): number {
   if (index === 2) return 3;
@@ -48,7 +49,7 @@ type Props = {
   index: number;
 };
 
-const Haittojenhallintasuunnitelma: React.FC<Props> = ({ hanke, index }) => {
+const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index }) => {
   const { t } = useTranslation();
   const { fields: hankealueet } = useFieldArrayWithStateUpdate<HankeDataFormState, 'alueet'>({
     name: FORMFIELD.HANKEALUEET,
@@ -153,6 +154,9 @@ const Haittojenhallintasuunnitelma: React.FC<Props> = ({ hanke, index }) => {
           ) : (
             <HaittaIndexHeading index={indeksi} testId={`test-${haitta}`} />
           )}
+          <Box mt="var(--spacing-s)">
+            <ProcedureTips haittojenhallintaTyyppi={haitta} haittaIndex={indeksi} />
+          </Box>
           <Box mt="var(--spacing-m)">
             <TextArea
               name={`${FORMFIELD.HANKEALUEET}.${index}.haittojenhallintasuunnitelma.${haitta}`}
@@ -194,6 +198,9 @@ const Haittojenhallintasuunnitelma: React.FC<Props> = ({ hanke, index }) => {
           showIndex={false}
           className={styles.muutHaittojenHallintaToimetSubSection}
         />
+        <Box mt="var(--spacing-s)">
+          <ProcedureTips haittojenhallintaTyyppi="MUUT" haittaIndex={0} />
+        </Box>
         <Box mt="var(--spacing-m)">
           <TextArea
             name={`${FORMFIELD.HANKEALUEET}.${index}.haittojenhallintasuunnitelma.${HAITTOJENHALLINTATYYPPI.MUUT}`}
