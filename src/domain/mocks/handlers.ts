@@ -426,4 +426,8 @@ export const handlers = [
       ctx.json({ firstName: 'Testi Tauno Tahvo', lastName: 'Testinen', givenName: 'Testi' }),
     );
   }),
+
+  rest.get('/api/banners', async (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({}));
+  }),
 ];

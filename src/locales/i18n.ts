@@ -4,6 +4,7 @@ import { initReactI18next } from 'react-i18next';
 import en from './en.json';
 import fi from './fi.json';
 import sv from './sv.json';
+import { BannerType, fetchBanners } from './banners';
 
 i18n
   .use(initReactI18next)
@@ -32,83 +33,34 @@ i18n.on('languageChanged', (lng) => {
   document.documentElement.setAttribute('lang', lng);
 });
 
-const infoLabelFI = window._env_.REACT_APP_INFO_NOTIFICATION_LABEL;
-const infoLabelSV = window._env_.REACT_APP_INFO_NOTIFICATION_LABEL_SV;
-const infoLabelEN = window._env_.REACT_APP_INFO_NOTIFICATION_LABEL_EN;
-const infoTextFI = window._env_.REACT_APP_INFO_NOTIFICATION_TEXT_FI;
-const infoTextSV = window._env_.REACT_APP_INFO_NOTIFICATION_TEXT_SV;
-const infoTextEN = window._env_.REACT_APP_INFO_NOTIFICATION_TEXT_EN;
+export const loadBanners = async () => {
+  try {
+    const banners = await fetchBanners();
 
-i18n.addResources('fi', 'serviceInfo', {
-  label: infoLabelFI,
-  text: infoTextFI,
-});
+    if (banners[BannerType.INFO]) {
+      const { label, text } = banners[BannerType.INFO];
+      i18n.addResources('fi', 'serviceInfo', { label: label.fi, text: text.fi });
+      i18n.addResources('sv', 'serviceInfo', { label: label.sv, text: text.sv });
+      i18n.addResources('en', 'serviceInfo', { label: label.en, text: text.en });
+    }
 
-if (infoLabelSV && infoTextSV) {
-  i18n.addResources('sv', 'serviceInfo', {
-    label: infoLabelSV,
-    text: infoTextSV,
-  });
-}
+    if (banners[BannerType.WARNING]) {
+      const { label, text } = banners[BannerType.WARNING];
+      i18n.addResources('fi', 'serviceWarning', { label: label.fi, text: text.fi });
+      i18n.addResources('sv', 'serviceWarning', { label: label.sv, text: text.sv });
+      i18n.addResources('en', 'serviceWarning', { label: label.en, text: text.en });
+    }
 
-if (infoLabelEN && infoTextEN) {
-  i18n.addResources('en', 'serviceInfo', {
-    label: infoLabelEN,
-    text: infoTextEN,
-  });
-}
-
-const warningLabelFI = window._env_.REACT_APP_WARNING_NOTIFICATION_LABEL;
-const warningLabelSV = window._env_.REACT_APP_WARNING_NOTIFICATION_LABEL_SV;
-const warningLabelEN = window._env_.REACT_APP_WARNING_NOTIFICATION_LABEL_EN;
-const warningTextFI = window._env_.REACT_APP_WARNING_NOTIFICATION_TEXT_FI;
-const warningTextSV = window._env_.REACT_APP_WARNING_NOTIFICATION_TEXT_SV;
-const warningTextEN = window._env_.REACT_APP_WARNING_NOTIFICATION_TEXT_EN;
-
-i18n.addResources('fi', 'serviceWarning', {
-  label: warningLabelFI,
-  text: warningTextFI,
-});
-
-if (warningLabelSV && warningTextSV) {
-  i18n.addResources('sv', 'serviceWarning', {
-    label: warningLabelSV,
-    text: warningTextSV,
-  });
-}
-
-if (warningLabelEN && warningTextEN) {
-  i18n.addResources('en', 'serviceWarning', {
-    label: warningLabelEN,
-    text: warningTextEN,
-  });
-}
-
-const errorLabelFI = window._env_.REACT_APP_ERROR_NOTIFICATION_LABEL;
-const errorLabelSV = window._env_.REACT_APP_ERROR_NOTIFICATION_LABEL_SV;
-const errorLabelEN = window._env_.REACT_APP_ERROR_NOTIFICATION_LABEL_EN;
-const errorTextFI = window._env_.REACT_APP_ERROR_NOTIFICATION_TEXT_FI;
-const errorTextSV = window._env_.REACT_APP_ERROR_NOTIFICATION_TEXT_SV;
-const errorTextEN = window._env_.REACT_APP_ERROR_NOTIFICATION_TEXT_EN;
-
-i18n.addResources('fi', 'serviceError', {
-  label: errorLabelFI,
-  text: errorTextFI,
-});
-
-if (errorLabelSV && errorTextSV) {
-  i18n.addResources('sv', 'serviceError', {
-    label: errorLabelSV,
-    text: errorTextSV,
-  });
-}
-
-if (errorLabelEN && errorTextEN) {
-  i18n.addResources('en', 'serviceError', {
-    label: errorLabelEN,
-    text: errorTextEN,
-  });
-}
+    if (banners[BannerType.ERROR]) {
+      const { label, text } = banners[BannerType.ERROR];
+      i18n.addResources('fi', 'serviceError', { label: label.fi, text: text.fi });
+      i18n.addResources('sv', 'serviceError', { label: label.sv, text: text.sv });
+      i18n.addResources('en', 'serviceError', { label: label.en, text: text.en });
+    }
+  } catch (error) {
+    console.error('Failed to load banner resources:', error);
+  }
+};
 
 const maintenanceTextFI = window._env_.REACT_APP_MAINTENANCE_TEXT_FI;
 const maintenanceTextSV = window._env_.REACT_APP_MAINTENANCE_TEXT_SV;
