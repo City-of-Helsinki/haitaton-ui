@@ -113,6 +113,10 @@ After the translations are added to the Excel file, they can be imported back.
 2. Run the import script: `yarn locales:import`.
 3. The translations in `/src/locales` are updated.
 
+**NOTICE: If there are any `[TRANSLATION_PENDING]` texts, it means that a previously translated
+text has a minor change and needs a new or additional translation.
+This information needs to be passed alongside the Excel file to translators.**
+
 ## API mocking
 
 `yarn start-msw` runs the app in development mode using MSW (Mock Service Worker)

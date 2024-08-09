@@ -30,8 +30,11 @@ const HankeFormHaittojenHallinta: React.FC<FormProps> = ({ hanke }) => {
       <Box mb="var(--spacing-m)">
         <p>{t('hankeForm:haittojenHallintaForm:instructions')}</p>
       </Box>
+      <Box mb="var(--spacing-m)">
+        <p>{t('hankeForm:haittojenHallintaForm:instructions2')}</p>
+      </Box>
       <Text tag="p" spacingBottom="m">
-        {t('form:requiredInstruction')}
+        {t('form:requiredForPublicationInstruction')}
       </Text>
 
       {hankealueet.length < 1 ? (
