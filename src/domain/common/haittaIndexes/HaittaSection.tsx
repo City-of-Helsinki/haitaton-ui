@@ -6,7 +6,14 @@ export function HaittaSection({
   index,
   testId,
   border = true,
-}: Readonly<{ heading: string; index?: number; testId?: string; border?: boolean }>) {
+  tooltipContent,
+}: Readonly<{
+  heading: string;
+  index?: number;
+  testId?: string;
+  border?: boolean;
+  tooltipContent?: React.ReactNode;
+}>) {
   return (
     <Grid
       templateColumns="1fr 24px"
@@ -22,7 +29,7 @@ export function HaittaSection({
         <p className="heading-xs">
           <strong>{heading}</strong>
         </p>
-        <HaittaIndex index={index} testId={testId} />
+        <HaittaIndex index={index} testId={testId} tooltipContent={tooltipContent} />
       </Flex>
     </Grid>
   );

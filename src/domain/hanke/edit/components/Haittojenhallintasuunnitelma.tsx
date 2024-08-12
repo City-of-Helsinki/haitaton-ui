@@ -22,6 +22,7 @@ import HaittaIndex from '../../../common/haittaIndexes/HaittaIndex';
 import { HaittaSubSection } from '../../../common/haittaIndexes/HaittaSubSection';
 import styles from './Haittojenhallintasuunnitelma.module.scss';
 import ProcedureTips from '../../../common/haittaIndexes/ProcedureTips';
+import HaittaTooltipContent from '../../../common/haittaIndexes/HaittaTooltipContent';
 
 function mapNuisanceEnumIndexToNuisanceIndex(index: number): number {
   if (index === 2) return 3;
@@ -31,15 +32,32 @@ function mapNuisanceEnumIndexToNuisanceIndex(index: number): number {
 
 function HaittaIndexHeading({
   index,
+  haittojenhallintaTyyppi,
+  showTooltipHeading = true,
   testId,
-}: Readonly<{ index: number | undefined; testId?: string }>) {
+}: Readonly<{
+  index: number | undefined;
+  haittojenhallintaTyyppi: string;
+  showTooltipHeading?: boolean;
+  testId?: string;
+}>) {
   const { t } = useTranslation();
   return (
     <HStack spacing="12px">
       <Box as="h4" className="heading-s">
         {t(`hankeIndexes:haittaindeksi`)}
       </Box>
-      <HaittaIndex index={index} showLabel={false} testId={testId} />
+      <HaittaIndex
+        index={index}
+        showLabel={false}
+        testId={testId}
+        tooltipContent={
+          <HaittaTooltipContent
+            translationKey={`hankeIndexes:tooltips:${haittojenhallintaTyyppi}`}
+            showHeading={showTooltipHeading}
+          />
+        }
+      />
     </HStack>
   );
 }
@@ -120,23 +138,39 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
           </Box>
           {haitta === HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE ? (
             <CustomAccordion
-              heading={<HaittaIndexHeading index={indeksi} testId="test-AUTOLIIKENNE" />}
+              heading={
+                <HaittaIndexHeading
+                  index={indeksi}
+                  haittojenhallintaTyyppi={haitta}
+                  showTooltipHeading={false}
+                  testId="test-AUTOLIIKENNE"
+                />
+              }
               headingBorderBottom={false}
             >
               <HaittaSubSection
                 heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:katuluokka`)}
                 index={tormaystarkasteluTulos?.autoliikenne.katuluokka}
                 testId="test-katuluokka"
+                tooltipContent={
+                  <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoKatuluokka" />
+                }
               />
               <HaittaSubSection
                 heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:liikennemaara`)}
                 index={tormaystarkasteluTulos?.autoliikenne.liikennemaara}
                 testId="test-liikennemaara"
+                tooltipContent={
+                  <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoliikenneMaara" />
+                }
               />
               <HaittaSubSection
                 heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistahaitta`)}
                 index={tormaystarkasteluTulos?.autoliikenne.kaistahaitta}
                 testId="test-kaistahaitta"
+                tooltipContent={
+                  <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoKaistaHaitta" />
+                }
               />
               <HaittaSubSection
                 heading={t(
@@ -144,15 +178,25 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
                 )}
                 index={tormaystarkasteluTulos?.autoliikenne.kaistapituushaitta}
                 testId="test-kaistapituushaitta"
+                tooltipContent={
+                  <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoKaistaPituusHaitta" />
+                }
               />
               <HaittaSubSection
                 heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:haitanKesto`)}
                 index={tormaystarkasteluTulos?.autoliikenne.haitanKesto}
                 testId="test-haitanKesto"
+                tooltipContent={
+                  <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoHankkeenKesto" />
+                }
               />
             </CustomAccordion>
           ) : (
-            <HaittaIndexHeading index={indeksi} testId={`test-${haitta}`} />
+            <HaittaIndexHeading
+              index={indeksi}
+              haittojenhallintaTyyppi={haitta}
+              testId={`test-${haitta}`}
+            />
           )}
           <Box mt="var(--spacing-s)">
             <ProcedureTips haittojenhallintaTyyppi={haitta} haittaIndex={indeksi} />
@@ -178,6 +222,9 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
           showColorByIndex={false}
           className={styles.muutHaittojenHallintaToimetSubSection}
           testId="test-meluHaitta"
+          tooltipContent={
+            <HaittaTooltipContent translationKey="hankeIndexes:tooltips:MUUT:meluHaitta" />
+          }
         />
         <HaittaSubSection
           heading={t(`hankeForm:labels:polyHaittaShort`)}
@@ -185,6 +232,9 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
           showColorByIndex={false}
           className={styles.muutHaittojenHallintaToimetSubSection}
           testId="test-polyHaitta"
+          tooltipContent={
+            <HaittaTooltipContent translationKey="hankeIndexes:tooltips:MUUT:polyHaitta" />
+          }
         />
         <HaittaSubSection
           heading={t(`hankeForm:labels:tarinaHaittaShort`)}
@@ -192,6 +242,9 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
           showColorByIndex={false}
           className={styles.muutHaittojenHallintaToimetSubSection}
           testId="test-tarinaHaitta"
+          tooltipContent={
+            <HaittaTooltipContent translationKey="hankeIndexes:tooltips:MUUT:tarinaHaitta" />
+          }
         />
         <HaittaSubSection
           heading={t(`hankeForm:labels:checkSurrounding`)}

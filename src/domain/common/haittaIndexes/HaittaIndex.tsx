@@ -25,21 +25,21 @@ export default function HaittaIndex({
 
   return (
     <Flex flexDirection="column" alignItems="center">
-      <Flex alignItems="center" gap="var(--spacing-3-xs)">
-        {showLabel ? (
-          <Box as="p" fontSize="var(--fontsize-body-s)" gap="var(--spacing-2-xs)">
-            {t('hankeIndexes:haittaindeksi')}
-          </Box>
-        ) : null}
+      {showLabel ? (
+        <Box as="p" fontSize="var(--fontsize-body-s)" mb="var(--spacing-3-xs)">
+          {t('hankeIndexes:haittaindeksi')}
+        </Box>
+      ) : null}
+      <Flex alignItems="flex-start" gap="var(--spacing-3-xs)">
+        <HaittaIndexNumber
+          index={index}
+          testId={testId}
+          tooltipContent={tooltipContent}
+          showTooltip={showTooltip}
+          showColorByIndex={showColorByIndex}
+        />
         {tooltipContent ? <HaittaIndexTooltip>{tooltipContent}</HaittaIndexTooltip> : null}
       </Flex>
-      <HaittaIndexNumber
-        index={index}
-        testId={testId}
-        tooltipContent={tooltipContent}
-        showTooltip={showTooltip}
-        showColorByIndex={showColorByIndex}
-      />
     </Flex>
   );
 }
