@@ -3,7 +3,8 @@ import { Vector } from 'ol/source';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Feature } from 'ol';
 import { Geometry } from 'ol/geom';
-import { HankeAlue } from '../../types/hanke';
+import { HAITTOJENHALLINTATYYPPI, HankeAlue } from '../../types/hanke';
+import { HaittaIndexData } from '../../common/haittaIndexes/types';
 
 /**
  * Add feature from hanke area to map
@@ -12,28 +13,40 @@ import { HankeAlue } from '../../types/hanke';
 export default function useHankealueFeature(
   source: Vector,
   hankealue: HankeAlue,
-  indeksi: number | null,
+  tyyppi: HAITTOJENHALLINTATYYPPI | undefined | null,
 ) {
-  console.log(indeksi);
   useEffect(() => {
     source.clear();
+
+    const indeksi = (tulos: HaittaIndexData | null | undefined) => {
+      if (!tulos) return null;
+      switch (tyyppi) {
+        case HAITTOJENHALLINTATYYPPI.PYORALIIKENNE:
+          return tulos.pyoraliikenneindeksi;
+        case HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE:
+          return tulos.autoliikenne.indeksi;
+        case HAITTOJENHALLINTATYYPPI.RAITIOLIIKENNE:
+          return tulos.raitioliikenneindeksi;
+        case HAITTOJENHALLINTATYYPPI.LINJAAUTOLIIKENNE:
+          return tulos.linjaautoliikenneindeksi;
+        default:
+          return null;
+      }
+    };
+
     if (hankealue.geometriat) {
       const feature = new GeoJSON().readFeatures(
         hankealue.geometriat.featureCollection,
       )[0] as Feature<Geometry>;
       feature.setProperties(
         {
-          // this does not work as it should:
-          liikennehaittaindeksi: indeksi,
-          // this works as it should:
-          //liikennehaittaindeksi: 3,
+          liikennehaittaindeksi: indeksi(hankealue.tormaystarkasteluTulos),
           areaName: hankealue.nimi,
         },
         true,
       );
-      console.log('feature', feature);
       source.addFeature(feature);
       source.dispatchEvent('featuresAdded');
     }
-  }, [source, hankealue, indeksi]);
+  }, [source, hankealue, tyyppi]);
 }

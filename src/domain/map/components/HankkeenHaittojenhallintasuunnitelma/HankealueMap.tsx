@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import VectorSource from 'ol/source/Vector';
 import Map from '../../../../common/components/map/Map';
 import Kantakartta from '../Layers/Kantakartta';
@@ -17,26 +17,6 @@ import { MapTileLayerId } from '../../types';
 import { Coordinate } from 'ol/coordinate';
 import { useMapDataLayers } from '../../hooks/useMapLayers';
 import { styleFunction } from '../../utils/geometryStyle';
-import { HaittaIndexData } from '../../../common/haittaIndexes/types';
-
-const liikennehaittaindeksi = (
-  tulos: HaittaIndexData | null | undefined,
-  tyyppi: HAITTOJENHALLINTATYYPPI,
-) => {
-  if (!tulos) return null;
-  switch (tyyppi) {
-    case HAITTOJENHALLINTATYYPPI.PYORALIIKENNE:
-      return tulos.pyoraliikenneindeksi;
-    case HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE:
-      return tulos.autoliikenne.indeksi;
-    case HAITTOJENHALLINTATYYPPI.RAITIOLIIKENNE:
-      return tulos.raitioliikenneindeksi;
-    case HAITTOJENHALLINTATYYPPI.LINJAAUTOLIIKENNE:
-      return tulos.linjaautoliikenneindeksi;
-    default:
-      return null;
-  }
-};
 
 type Props = {
   hankealue: HankeAlue;
@@ -55,9 +35,8 @@ const HankealueMap: React.FC<Props> = ({
 }) => {
   const { mapTileLayers, toggleMapTileLayer } = useMapDataLayers();
   const ortoLayerOpacity = mapTileLayers.kantakartta.visible ? 0.5 : 1;
-  const [drawSource] = useState<VectorSource>(existingDrawSource || new VectorSource());
-  const indeksi = liikennehaittaindeksi(hankealue.tormaystarkasteluTulos, tyyppi);
-  useHankealueFeature(drawSource, hankealue, indeksi);
+  const drawSource = existingDrawSource || new VectorSource();
+  useHankealueFeature(drawSource, hankealue, tyyppi);
 
   return (
     <>
