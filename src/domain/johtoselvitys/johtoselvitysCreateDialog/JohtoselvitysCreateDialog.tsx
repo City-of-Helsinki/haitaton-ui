@@ -69,7 +69,13 @@ function JohtoselvitysCreateDialog({ isOpen, onClose }: Readonly<Props>) {
               <h3 className="heading-s">{t('hakemus:labels:applicationInfo')}</h3>
             </Box>
             <Box marginBottom="var(--spacing-2-xs)">
-              <TextInput name="nimi" label={t('hakemus:labels:nimi')} maxLength={100} required />
+              <TextInput
+                name="nimi"
+                label={t('hakemus:labels:nimi')}
+                maxLength={100}
+                required
+                helperText={t('hakemus:labels:nimiHelperText')}
+              />
             </Box>
 
             {isError && (

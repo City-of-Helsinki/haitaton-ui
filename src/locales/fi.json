@@ -163,6 +163,7 @@
       "areaName": "Halutessasi voit nimetä alueen"
     },
     "requiredInstruction": "Kaikki tähdellä * merkityt kentät ovat pakollisia.",
+    "requiredForPublicationInstruction": "Tähdellä * merkityt kentät vaaditaan hankkeen julkaisemiseksi.",
     "yhteystiedot": {
       "header": "Yhteystiedot",
       "instructions": "Hankkeelle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hankkeeseeen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hanketta ja luomaan hankkeelle hakemuksia.",
@@ -654,8 +655,9 @@
       "header": "Alueet",
       "subHeader": "Hankealueet",
       "area": "Alue",
-      "instructions": "Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 1-5, 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen tärkeimmillä reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein (vihreä = ei haittaa, keltainen = todennäköinen haitta, punainen = merkittävä haitta).",
-      "instructions2": "Voit muokata jo piirrettyä aluetta tarttumalla sen reunasta kiinni ja vetämällä pisteen haluamaasi kohtaan.",
+      "instructions": "Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 0-5, 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein (vihreä = ei haittaa, keltainen = todennäköinen haitta, punainen = merkittävä haitta).",
+      "instructions2": "Kartan vasemmassa reunassa olevilla kulkumuotovalitsimilla voit tarkastella hanke- ja työalueiden haittaindeksejä tietylle kulkumuodolle. Kaikki kulkumuodot ovat oletuksena aktiivisina, voit vaihtaa näkyvien kulkumuotojen määrää klikkaamalla ikoneja. Kartalla näkyy valittujen kulkumuotojen kriittisin indeksiväri.",
+      "instructions3": "Voit muokata jo piirrettyä aluetta tarttumalla sen reunasta kiinni ja vetämällä pisteen haluamaasi kohtaan.",
       "noAlueet": "Piirrä alue kartalle merkitäksesi haitta-arviot.",
       "haitatHeader": "Alueen haitta-arviot",
       "haitatInstructions": "Anna arvio suurimmista mahdollisista vaikutuksista hankealueella.",
@@ -669,6 +671,7 @@
       "subHeaderNoAlueet": "Hankealueet",
       "subHeaderAlueet": "Alueiden sijainti",
       "instructions": "Hankkeesi saattaa aiheuttaa eri kulkumuodoille ja paikallisille toiminnoille haittoja. Haitaton laskee automaattisesti hankealueittain haitan merkittävyyden arvon erikseen pyöräliikenteelle, raitioliikenteelle, linja-autojen paikallisliikenteelle sekä autoliikenteelle. Liikennehaittaindeksi kuvaa hankealueen pahimman tilanteen em. kulkumuotojen osalta. Haittoja kuvataan jokaiselle kulkumuodolle määritellyllä asteikolla numeroin ja värein (0/harmaa = ei tunnistettu, 1-2/vihreä = ei merkittävää haittaa, 3/keltainen = todennäköinen haitta, 4-5/punainen = merkittävä haitta). Muut kuin em. kulkumuotoja koskevat tulokset esitetään pelkästään numeroin (0-5).",
+      "instructions2": "Kartan vasemmassa reunassa olevilla kulkumuotovalitsimilla voit tarkastella hanke- ja työalueiden haittaindeksejä tietylle kulkumuodolle. Kaikki kulkumuodot ovat oletuksena aktiivisina, voit vaihtaa näkyvien kulkumuotojen määrää klikkaamalla ikoneja. Kartalla näkyy valittujen kulkumuotojen kriittisin indeksiväri.",
       "noAlueet": "Lisää hankealueita täyttääksesi tietoja",
       "nuisanceControlPlanSubHeader": "Haittojenhallintasuunnitelma",
       "instructionsPlan": "Kerro haittojenhallintasuunnitelmassa, millä toimenpiteillä hallitset hankealueita koskevat haitat. Muistathan käydä läpi kaikki hankealueet.",
@@ -1023,7 +1026,7 @@
       "instructions": "<p>Helsingin kaupungin kaduilla, jalankulku- tai pyöräteillä, toreilla tai puistoissa tehtävistä kaivu-, kairaus- ja louhintatöistä on tehtävä kaivuilmoitus. Kaivuilmoituksen jättämisen yhteydessä pyydetään viranomaiselta automaattisesti myös johtoselvitys, mikäli aiemmin tehdyn johtoselvityksen tunnusta ei ole liitetty hakemukseen.</p><p>Hakemukseen liittyy olennaisena osana käyttäjän täyttämä haittojenhallintasuunnitelma, jonka toteutumista viranomainen seuraa työn aikana. Ilmoituksen liitteeksi laaditaan tilapäisen liikennejärjestelyn suunnitelma, mikäli työ vaikuttaa jalankulkuun pyöräliikenteeseen tai moottoriajoneuvoliikenteeseen tai pysäköintipaikkoja varataan muuhun käyttöön siirtokehotuskyltillä.</p><p>Kaivutyö tulee ilmoittaa talvikaudella (1.12.–14.5.) toiminnalliseen kuntoon ja kaikissa tapauksissa valmiiksi, jotta työ voidaan valvoa ja laskutus katkaista tai päättää.</p><p>$t(kaivuilmoitusForm:requiredInstruction) Työn nimi vaaditaan lomakkeen tallentamiseen.</p>"
     },
     "alueet": {
-      "instructions": "<p>Aloita hakemuksen työalueiden piirtäminen lisäämällä työn alku- ja loppupäivämäärät, jolloin hankealueesi ilmestyvät näkyviin. HUOM! Työn ajankohdan tulee sijoittua hankealueen aikavälille.</p><p>Voit muokata jo piirrettyä aluetta tarttumalla sen reunasta kiinni ja vetämällä pisteen haluamaasi kohtaan.</p><p>Jos haluat piirtää hankealueiden sisälle pienempiä työalueita, aktivoi piirtotyökalut kartan päältä. Huomioi, että työalueet tulee piirtää kokonaan hankealueiden sisälle.</p><p>Jos haluat käyttää koko hankealuetta työalueena, valitse hankealue kartalta aktiviiseksi ja hanketietolaatikosta \"Käytä työalueena\".</p><p>Voit lisätä samalle hakemukselle useampia alueita mikäli niiden aikaväli on sama. Jos haluat ilmoittaa useamman alueen eri aikaväleillä, tulee sinun tehdä erillinen hakemus.</p><p>$t(kaivuilmoitusForm:requiredInstruction)</p>",
+      "instructions": "<p>Aloita hakemuksen työalueiden piirtäminen lisäämällä työn alku- ja loppupäivämäärät, jolloin hankealueesi ilmestyvät näkyviin. HUOM! Työn ajankohdan tulee sijoittua hankealueen aikavälille.</p><p>Voit muokata jo piirrettyä aluetta tarttumalla sen reunasta kiinni ja vetämällä pisteen haluamaasi kohtaan.</p><p>Jos haluat piirtää hankealueiden sisälle pienempiä työalueita, aktivoi piirtotyökalut kartan päältä. Huomioi, että työalueet tulee piirtää kokonaan hankealueiden sisälle.</p><p>Jos haluat käyttää koko hankealuetta työalueena, valitse hankealue kartalta aktiviiseksi ja hanketietolaatikosta \"Käytä työalueena\".</p><p>Voit lisätä samalle hakemukselle useampia alueita mikäli niiden aikaväli on sama. Jos haluat ilmoittaa useamman alueen eri aikaväleillä, tulee sinun tehdä erillinen hakemus.</p><p>Kartan vasemmassa reunassa olevilla kulkumuotovalitsimilla voit tarkastella hanke- ja työalueiden haittaindeksejä tietylle kulkumuodolle. Kaikki kulkumuodot ovat oletuksena aktiivisina, voit vaihtaa näkyvien kulkumuotojen määrää klikkaamalla ikoneja. Kartalla näkyy valittujen kulkumuotojen kriittisin indeksiväri.</p><p>$t(kaivuilmoitusForm:requiredInstruction)</p>",
       "areaInformationHeading": "Kaivuilmoitus työalueille",
       "startDate": "Työn alkupäivämäärä",
       "endDate": "Työn loppupäivämäärä"
@@ -1044,6 +1047,7 @@
   "hakemus": {
     "labels": {
       "nimi": "Työn nimi",
+      "nimiHelperText": "Johtoselvityksestä luodaan myös hanke, jonka nimeksi tulee tässä ilmoittamasi työn nimi.",
       "tyossaKyse": "Työssä on kyse",
       "kuvaus": "Työn kuvaus",
       "constructionWork": "Uuden rakenteen tai johdon rakentamisesta",
