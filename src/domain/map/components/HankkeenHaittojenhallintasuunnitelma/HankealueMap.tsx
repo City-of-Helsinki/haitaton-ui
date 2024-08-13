@@ -3,7 +3,7 @@ import VectorSource from 'ol/source/Vector';
 import Map from '../../../../common/components/map/Map';
 import Kantakartta from '../Layers/Kantakartta';
 import OverviewMapControl from '../../../../common/components/map/controls/OverviewMapControl';
-import { HAITTOJENHALLINTATYYPPI, HankeAlue } from '../../../types/hanke';
+import { HankeAlue } from '../../../types/hanke';
 import styles from './HankealueMap.module.scss';
 import VectorLayer from '../../../../common/components/map/layers/VectorLayer';
 import FitSource from '../interations/FitSource';
@@ -20,7 +20,7 @@ import { styleFunction } from '../../utils/geometryStyle';
 
 type Props = {
   hankealue: HankeAlue;
-  tyyppi: HAITTOJENHALLINTATYYPPI;
+  index: number;
   center?: Coordinate;
   drawSource?: VectorSource;
   zoom?: number;
@@ -28,7 +28,7 @@ type Props = {
 
 const HankealueMap: React.FC<Props> = ({
   hankealue,
-  tyyppi,
+  index,
   center,
   drawSource: existingDrawSource,
   zoom = 9,
@@ -36,7 +36,7 @@ const HankealueMap: React.FC<Props> = ({
   const { mapTileLayers, toggleMapTileLayer } = useMapDataLayers();
   const ortoLayerOpacity = mapTileLayers.kantakartta.visible ? 0.5 : 1;
   const drawSource = existingDrawSource || new VectorSource();
-  useHankealueFeature(drawSource, hankealue, tyyppi);
+  useHankealueFeature(drawSource, hankealue, index);
 
   return (
     <>

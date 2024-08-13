@@ -110,11 +110,7 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
             {t(`hankeForm:haittojenHallintaForm:nuisanceType:${haitta}`)}
           </Box>
           <Box mt="var(--spacing-m)" mb="var(--spacing-m)">
-            <HankealueMap
-              hankealue={hankealue}
-              tyyppi={haitta as HAITTOJENHALLINTATYYPPI}
-              center={addressCoordinate}
-            />
+            <HankealueMap hankealue={hankealue} index={indeksi} center={addressCoordinate} />
           </Box>
           {haitta === HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE ? (
             <CustomAccordion
