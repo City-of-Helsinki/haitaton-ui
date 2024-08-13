@@ -9,7 +9,12 @@ import { HankeAlue } from '../../types/hanke';
  * Add feature from hanke area to map
  * and add liikennehaittaindeksi as property
  */
-export default function useHankealueFeature(source: Vector, hankealue: HankeAlue) {
+export default function useHankealueFeature(
+  source: Vector,
+  hankealue: HankeAlue,
+  indeksi: number | null,
+) {
+  console.log(indeksi);
   useEffect(() => {
     source.clear();
     if (hankealue.geometriat) {
@@ -18,15 +23,17 @@ export default function useHankealueFeature(source: Vector, hankealue: HankeAlue
       )[0] as Feature<Geometry>;
       feature.setProperties(
         {
-          liikennehaittaindeksi: hankealue.tormaystarkasteluTulos
-            ? hankealue.tormaystarkasteluTulos.liikennehaittaindeksi.indeksi
-            : null,
+          // this does not work as it should:
+          liikennehaittaindeksi: indeksi,
+          // this works as it should:
+          //liikennehaittaindeksi: 3,
           areaName: hankealue.nimi,
         },
         true,
       );
+      console.log('feature', feature);
       source.addFeature(feature);
       source.dispatchEvent('featuresAdded');
     }
-  }, [source, hankealue]);
+  }, [source, hankealue, indeksi]);
 }

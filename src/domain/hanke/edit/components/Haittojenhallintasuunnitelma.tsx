@@ -114,6 +114,7 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
           <Box mt="var(--spacing-m)" mb="var(--spacing-m)">
             <HankealueMap
               hankealue={hankealue}
+              tyyppi={haitta as HAITTOJENHALLINTATYYPPI}
               center={addressCoordinate}
               drawSource={drawSource}
             />
