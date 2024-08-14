@@ -18,9 +18,9 @@ function read_locales() {
 }
 
 function write_locales(result: ResultMap) {
-  fs.writeFileSync(file_fi, JSON.stringify(flatToDeep(result, 'fi'), null, 2));
-  fs.writeFileSync(file_sv, JSON.stringify(flatToDeep(result, 'sv'), null, 2));
-  fs.writeFileSync(file_en, JSON.stringify(flatToDeep(result, 'en'), null, 2));
+  fs.writeFileSync(file_fi, JSON.stringify(flatToDeep(result, 'fi'), null, 2) + '\n');
+  fs.writeFileSync(file_sv, JSON.stringify(flatToDeep(result, 'sv'), null, 2) + '\n');
+  fs.writeFileSync(file_en, JSON.stringify(flatToDeep(result, 'en'), null, 2) + '\n');
 }
 
 function run() {
