@@ -9,6 +9,7 @@ export function HaittaSubSection({
   showIndex = true,
   showColorByIndex,
   className,
+  tooltipContent,
 }: Readonly<{
   heading: string;
   index?: number;
@@ -16,6 +17,7 @@ export function HaittaSubSection({
   showIndex?: boolean;
   showColorByIndex?: boolean;
   className?: string;
+  tooltipContent?: React.ReactNode;
 }>) {
   return (
     <Grid
@@ -39,6 +41,7 @@ export function HaittaSubSection({
             showLabel={false}
             testId={testId}
             showColorByIndex={showColorByIndex}
+            tooltipContent={tooltipContent}
           />
         )}
       </Flex>
