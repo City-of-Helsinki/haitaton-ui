@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
-import { LOCALSTORAGE_OIDC_KEY } from '../auth/constants';
+import { getUserReferenceFromStorage } from 'hds-react';
 
 const api: AxiosInstance = axios.create({
   baseURL: '/api',
@@ -9,13 +9,10 @@ api.defaults.headers.post['Content-Type'] = 'application/json';
 
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const oidcStorage = localStorage.getItem(LOCALSTORAGE_OIDC_KEY);
-    if (oidcStorage) {
-      const token = JSON.parse(oidcStorage).access_token;
-      if (config.headers) {
-        // eslint-disable-next-line no-param-reassign
-        config.headers.Authorization = `Bearer ${token}`;
-      }
+    const token = getUserReferenceFromStorage();
+    if (config.headers && token) {
+      // eslint-disable-next-line no-param-reassign
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },

@@ -11,7 +11,6 @@ import AccessibilityPage from '../../pages/staticPages/AccessibilityPage';
 import ReferencesPage from '../../pages/staticPages/ReferencesPage';
 import PrivacyPolicyPage from '../../pages/staticPages/PrivacyPolicyPage';
 import Johtoselvitys from '../../pages/Johtoselvitys';
-import useUser from '../../domain/auth/useUser';
 import PrivateRoute from './PrivateRoute';
 import MapAndListPage from '../../pages/MapAndListPage';
 import FullPageMapPage from '../../pages/FullPageMapPage';
@@ -28,11 +27,6 @@ import EditKaivuilmoitusPage from '../../pages/EditKaivuilmoitusPage';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
-  const { isLoading } = useUser();
-
-  if (isLoading) {
-    return null;
-  }
 
   return (
     <Routes>

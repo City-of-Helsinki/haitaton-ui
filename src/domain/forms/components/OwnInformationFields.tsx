@@ -17,7 +17,7 @@ function OwnInformationFields() {
         <HDSTextInput
           id="user-name"
           label={t('form:yhteystiedot:labels:nimi')}
-          value={`${user.data?.profile?.name}`}
+          value={`${user?.profile?.name}`}
           helperText={t('form:labels:fromHelsinkiProfile')}
           readOnly
         />
@@ -27,7 +27,7 @@ function OwnInformationFields() {
           name="perustaja.sahkoposti"
           label={t('hankeForm:labels:email')}
           required
-          defaultValue={user.data?.profile.email}
+          defaultValue={user?.profile.email}
         />
       </Box>
       <Box maxWidth={328}>

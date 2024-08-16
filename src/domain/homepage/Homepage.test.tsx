@@ -1,25 +1,17 @@
 import { rest } from 'msw';
-import { User } from 'oidc-client';
-import { fireEvent, render, screen } from '../../testUtils/render';
-import authService from '../auth/authService';
+import { I18nextProvider } from 'react-i18next';
+import { fireEvent, screen } from '../../testUtils/render';
 import { server } from '../mocks/test-server';
 import Homepage from './HomepageComponent';
+import { renderWithLoginProvider } from '../auth/testUtils/renderWithLoginProvider';
+import i18n from '../../locales/i18nForTests';
+import { BrowserRouter } from 'react-router-dom';
+import { FeatureFlagsProvider } from '../../common/components/featureFlags/FeatureFlagsContext';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
-const userName = 'Test User';
 const userEmail = 'test.user@mail.com';
-const mockUser: Partial<User> = {
-  id_token: 'fffff-aaaaaa-11111',
-  access_token: '.GbutWVN1x7RSAP5bU2a-tXdVPuof_9pBNd_Ozw',
-  profile: {
-    iss: '',
-    sub: '',
-    aud: '',
-    exp: 0,
-    iat: 0,
-    name: userName,
-    email: userEmail,
-  },
-};
+
+const queryClient = new QueryClient();
 
 describe('Create new hanke from dialog', () => {
   afterEach(() => {
@@ -27,8 +19,22 @@ describe('Create new hanke from dialog', () => {
   });
 
   async function openHankeCreateDialog() {
-    jest.spyOn(authService.userManager, 'getUser').mockResolvedValue(mockUser as User);
-    const { user } = render(<Homepage />);
+    const { user } = renderWithLoginProvider({
+      state: 'VALID_SESSION',
+      returnUser: true,
+      placeUserToStorage: true,
+      children: (
+        <I18nextProvider i18n={i18n}>
+          <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+              <FeatureFlagsProvider>
+                <Homepage />
+              </FeatureFlagsProvider>
+            </BrowserRouter>
+          </QueryClientProvider>
+        </I18nextProvider>
+      ),
+    });
     const createElement = await screen.findByText('Luo uusi hanke');
     await user.click(createElement);
     return user;
@@ -90,8 +96,22 @@ describe('Create johtoselvitys from dialog', () => {
   });
 
   async function openJohtoselvitysCreateDialog() {
-    jest.spyOn(authService.userManager, 'getUser').mockResolvedValue(mockUser as User);
-    const { user } = render(<Homepage />);
+    const { user } = renderWithLoginProvider({
+      state: 'VALID_SESSION',
+      returnUser: true,
+      placeUserToStorage: true,
+      children: (
+        <I18nextProvider i18n={i18n}>
+          <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+              <FeatureFlagsProvider>
+                <Homepage />
+              </FeatureFlagsProvider>
+            </BrowserRouter>
+          </QueryClientProvider>
+        </I18nextProvider>
+      ),
+    });
     await screen.findByRole('heading', {
       name: 'Auta meitä tekemään Haitattomasta vielä parempi!',
     });
