@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Box, HStack } from '@chakra-ui/react';
 import { $enum } from 'ts-enum-util';
@@ -14,7 +14,6 @@ import TextArea from '../../../../common/components/textArea/TextArea';
 import { sortedLiikenneHaittojenhallintatyyppi } from '../utils';
 import useFieldArrayWithStateUpdate from '../../../../common/hooks/useFieldArrayWithStateUpdate';
 import HankealueMap from '../../../map/components/HankkeenHaittojenhallintasuunnitelma/HankealueMap';
-import VectorSource from 'ol/source/Vector';
 import useAddressCoordinate from '../../../map/hooks/useAddressCoordinate';
 import { HaittaIndexData } from '../../../common/haittaIndexes/types';
 import CustomAccordion from '../../../../common/components/customAccordion/CustomAccordion';
@@ -75,7 +74,6 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
   const hankealue = hankealueet[index];
   const tormaystarkasteluTulos = hankealue.tormaystarkasteluTulos as HaittaIndexData;
   const haittojenhallintatyypit = sortedLiikenneHaittojenhallintatyyppi(tormaystarkasteluTulos);
-  const [drawSource] = useState<VectorSource>(new VectorSource());
   const addressCoordinate = useAddressCoordinate(hanke.tyomaaKatuosoite);
   const meluhaittaIndex = mapNuisanceEnumIndexToNuisanceIndex(
     $enum(HANKE_MELUHAITTA).indexOfKey(hankealue.meluHaitta!),
@@ -130,11 +128,7 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
             {t(`hankeForm:haittojenHallintaForm:nuisanceType:${haitta}`)}
           </Box>
           <Box mt="var(--spacing-m)" mb="var(--spacing-m)">
-            <HankealueMap
-              hankealue={hankealue}
-              center={addressCoordinate}
-              drawSource={drawSource}
-            />
+            <HankealueMap hankealue={hankealue} index={indeksi} center={addressCoordinate} />
           </Box>
           {haitta === HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE ? (
             <CustomAccordion
