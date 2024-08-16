@@ -97,7 +97,9 @@
       "stringMax": "Fältets längd ska vara högst {{max}} tecken",
       "dateMin": "Första möjliga dag är {{min}}",
       "dateMax": "Sista möjliga dag är {{max}}",
-      "yhteyshenkilotMin": "Minst en kontaktperson ska vara inställd"
+      "yhteyshenkilotMin": "Minst en kontaktperson ska vara inställd",
+      "emailAlreadyUsedInContacts": "Den e-postadress du valt finns redan i projektets användarhantering. Lägg till en kontakt från rullgardinsmeyn.",
+      "emailAlreadyUsedInUserManagement": "Den e-postadress du valt finss redan hos en annan användare."
     },
     "errors": {
       "areaRequired": "Det krävs minst ett område",
@@ -184,7 +186,7 @@
         "subContact": "Kontaktperson",
         "subContacts": "Kontaktpersoner",
         "subContactInformation": "Uppgifter för kontaktperson",
-        "customerWithContacts": "Sökande",
+        "customerWithContacts": "Ansvarig för arbetet",
         "contractorWithContacts": "Den som utför arbetet",
         "contractorWithContactsPlural": "De som utför arbetet",
         "propertyDeveloperWithContacts": "Byggaktör",
@@ -192,7 +194,7 @@
         "representativeWithContactsPlural": "Sakförare",
         "addContractor": "Lägg till en som utför arbetet",
         "addRepresentative": "Lägg till en sakförare",
-        "customerWithContactsInfo": "Upplysningar för sökanden",
+        "customerWithContactsInfo": "Uppgifter om den som ansvarar för arbetet",
         "representativeInfo": "Upplysningar för sakföraren",
         "contractorInfo": "Upplysningar för den som utför arbetet",
         "implementerInfo": "Upplysningar för genomföraren",
@@ -549,8 +551,11 @@
       "kaistaHaitta": "Filolägenhet",
       "kaistaPituusHaitta": "Längdolägenhet för fil",
       "meluHaitta": "Bullerstörning",
+      "meluHaittaShort": "Buller",
       "polyHaitta": "Dammolägenhet",
+      "polyHaittaShort": "Damm",
       "tarinaHaitta": "Vibrationsstörning",
+      "tarinaHaittaShort": "Vibration",
       "tyomaaKatuosoite": "Gatuadress",
       "onYKTHanke": "Projektet är ett gemensamt kommunaltekniskt arbete",
       "sukunimi": "Efternamn",
@@ -740,6 +745,7 @@
   "hakemus": {
     "labels": {
       "nimi": "Arbetets namn",
+      "nimiHelperText": "Ledningsutredningen utvecklas till ett projekt och det namnges enlingt det arbete du anger här.",
       "tyossaKyse": "Arbetet gäller",
       "kuvaus": "Arbetsbeskrivning",
       "constructionWork": "Av bygge av en ny konstruktion eller ledning",

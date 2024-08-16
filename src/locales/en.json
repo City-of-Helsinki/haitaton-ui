@@ -97,7 +97,9 @@
       "stringMax": "The field length must not exceed {{max}} characters",
       "dateMin": "The first possible date is {{min}}",
       "dateMax": "The last possible date is {{max}}",
-      "yhteyshenkilotMin": "At least one contact person must be set"
+      "yhteyshenkilotMin": "At least one contact person must be set",
+      "emailAlreadyUsedInContacts": "The e-mail address you selected can already be found in the user management of the project. Add contact from the drop-down menu.",
+      "emailAlreadyUsedInUserManagement": "The e-mail address you selected is already found by another user."
     },
     "errors": {
       "areaRequired": "At least one area is required",
@@ -184,7 +186,7 @@
         "subContact": "Contact person",
         "subContacts": "Contact persons",
         "subContactInformation": "Contact person information",
-        "customerWithContacts": "Applicant",
+        "customerWithContacts": "Responsible for the work",
         "contractorWithContacts": "Work contractor",
         "contractorWithContactsPlural": "Work contractors",
         "propertyDeveloperWithContacts": "Developer",
@@ -192,7 +194,7 @@
         "representativeWithContactsPlural": "Representatives",
         "addContractor": "Add contractor",
         "addRepresentative": "Add representative",
-        "customerWithContactsInfo": "Applicant information",
+        "customerWithContactsInfo": "Information on the person responsible for the work",
         "representativeInfo": "Representative’s information",
         "contractorInfo": "Contractor information",
         "implementerInfo": "Implementer information",
@@ -549,8 +551,11 @@
       "kaistaHaitta": "Lane hindrance",
       "kaistaPituusHaitta": "Hindrance affecting lane length",
       "meluHaitta": "Noise nuisance",
+      "meluHaittaShort": "Noise",
       "polyHaitta": "Dust nuisance",
+      "polyHaittaShort": "Dust",
       "tarinaHaitta": "Vibration nuisance",
+      "tarinaHaittaShort": "Vibration",
       "tyomaaKatuosoite": "Street address",
       "onYKTHanke": "The project is a Shared Public Utility Site (YKT) project",
       "sukunimi": "Last name",
@@ -740,6 +745,7 @@
   "hakemus": {
     "labels": {
       "nimi": "Work name",
+      "nimiHelperText": "A project is created from the cable report and it will be named in accordance with the work you indicate herein.",
       "tyossaKyse": "The work involves",
       "kuvaus": "Work description",
       "constructionWork": "Constructing a new structure or cabling/piping",
