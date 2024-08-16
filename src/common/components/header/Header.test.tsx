@@ -7,7 +7,6 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { renderWithLoginProvider } from '../../../domain/auth/testUtils/renderWithLoginProvider';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
-import i18n from '../../../locales/i18nForTests';
 import { FeatureFlagsProvider } from '../featureFlags/FeatureFlagsContext';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,7 +29,7 @@ function getWrapper(loggedIn: boolean, route = '/') {
     returnUser: true,
     placeUserToStorage: loggedIn,
     children: (
-      <I18nextProvider i18n={i18n}>
+      <I18nextProvider i18n={i18next}>
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
             <FeatureFlagsProvider>

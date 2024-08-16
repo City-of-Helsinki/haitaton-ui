@@ -39,7 +39,7 @@ export function renderWithLoginProvider({
   children,
 }: RenderWithLoginProviderProps) {
   let beacon: Beacon;
-  const handleError = new OidcClientError('Handlecallback failed', errorType || 'SIGNIN_ERROR');
+  const handleError = new OidcClientError('Handlecallback failed', errorType ?? 'SIGNIN_ERROR');
   const helperModule: ConnectedModule = {
     namespace: 'helper',
     connect: (targetBeacon) => {
