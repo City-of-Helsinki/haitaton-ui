@@ -283,18 +283,32 @@ describe('HankeForm', () => {
     await setupHaittojenHallintaPage();
 
     expect(screen.getByText('Yleisten haittojen hallintasuunnitelma')).toBeInTheDocument();
+    expect(screen.getByTestId('alueet.0.haittojenhallintasuunnitelma.YLEINEN')).toBeRequired();
     expect(
       screen.getByText('Pyöräliikenteelle koituvien haittojen hallintasuunnitelma'),
     ).toBeInTheDocument();
     expect(screen.getByTestId('test-PYORALIIKENNE')).toHaveTextContent('3.5');
     expect(
+      screen.getByTestId('alueet.0.haittojenhallintasuunnitelma.PYORALIIKENNE'),
+    ).toBeRequired();
+    expect(
       screen.getByText('Autoliikenteelle koituvien haittojen hallintasuunnitelma'),
     ).toBeInTheDocument();
     expect(screen.getByTestId('test-AUTOLIIKENNE')).toHaveTextContent('3');
+    expect(screen.getByTestId('alueet.0.haittojenhallintasuunnitelma.AUTOLIIKENNE')).toBeRequired();
     expect(
-      screen.getByText('Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+      screen.getByText('Joukkoliikenteen merkittävyys: Linja-autojen paikallisliikenne'),
     ).toBeInTheDocument();
-    expect(screen.getByTestId('test-LINJAAUTOLIIKENNE')).toHaveTextContent('1');
+    expect(
+      screen.getByText(
+        'Haitaton ei löytänyt tätä kohderyhmää alueelta. Voit tarvittaessa lisätä toimet haittojen hallintaan.',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Lisää toimet haittojen hallintaan')).toBeInTheDocument();
+    expect(screen.queryByTestId('test-LINJAAUTOLIIKENNE')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('alueet.0.haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE'),
+    ).not.toBeInTheDocument();
     expect(
       screen.getByText('Raitioliikenteelle koituvien haittojen hallintasuunnitelma'),
     ).toBeInTheDocument();
@@ -322,6 +336,21 @@ describe('HankeForm', () => {
     expect(screen.getByTestId('test-haitanKesto')).toHaveTextContent('3');
   });
 
+  test('Non-detected nuisance field is shown correctly on nuisance control plan page', async () => {
+    const { user } = await setupHaittojenHallintaPage();
+
+    await user.click(screen.getByRole('button', { name: /lisää toimet haittojen hallintaan/i }));
+
+    screen.debug(undefined, 300000);
+    expect(screen.getByTestId('test-LINJAAUTOLIIKENNE')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('alueet.0.haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId('alueet.0.haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE'),
+    ).not.toBeRequired();
+  });
+
   test('Nuisance control plan is updated correctly', async () => {
     const { user } = await setupHaittojenHallintaPage();
     let haittojenhallintasuunnitelma: HankkeenHaittojenhallintasuunnitelma;
@@ -347,10 +376,6 @@ describe('HankeForm', () => {
       updatedHaittojenhallintasuunnitelma,
     );
     await user.type(
-      screen.getByTestId('alueet.0.haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE'),
-      updatedHaittojenhallintasuunnitelma,
-    );
-    await user.type(
       screen.getByTestId('alueet.0.haittojenhallintasuunnitelma.RAITIOLIIKENNE'),
       updatedHaittojenhallintasuunnitelma,
     );
@@ -373,9 +398,7 @@ describe('HankeForm', () => {
       'Autoliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
     );
     // @ts-expect-error updatedHaittojenhallintasuunnitelma is set in the request handler above
-    expect(haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE).toBe(
-      'Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
-    );
+    expect(haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE).toBe('');
     // @ts-expect-error updatedHaittojenhallintasuunnitelma is set in the request handler above
     expect(haittojenhallintasuunnitelma.RAITIOLIIKENNE).toBe(
       'Raitioliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
@@ -803,7 +826,7 @@ describe('HankeForm', () => {
 
     expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3.5');
     expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
-    expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('1');
+    expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('0');
     expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('2');
 
     await user.click(screen.getByRole('button', { name: 'Kaistahaittojen pituus *' }));
