@@ -144,7 +144,7 @@ function fillContactsInformation() {
   // Fill customer info
   fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
   fireEvent.click(screen.getAllByText(/yritys/i)[0]);
-  fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.name'), {
+  fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[0], {
     target: { value: 'Yritys Oy' },
   });
   fireEvent.change(
@@ -163,7 +163,7 @@ function fillContactsInformation() {
   // Fill contractor info
   fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
   fireEvent.click(screen.getAllByText(/yritys/i)[1]);
-  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.customer.name'), {
+  fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[1], {
     target: { value: 'Yritys 2 Oy' },
   });
   fireEvent.change(
