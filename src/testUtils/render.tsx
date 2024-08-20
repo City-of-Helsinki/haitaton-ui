@@ -54,7 +54,6 @@ const customRender = (
   userEventOptions?: any,
 ) => {
   window.history.pushState({}, 'Test page', route);
-  window.scrollTo = function () {};
   return {
     user: userEvent.setup(userEventOptions),
     ...render(ui, {

@@ -13,8 +13,10 @@ api.interceptors.request.use(
     if (config.headers && token) {
       // eslint-disable-next-line no-param-reassign
       config.headers.Authorization = `Bearer ${token}`;
+      return config;
+    } else {
+      return Promise.reject();
     }
-    return config;
   },
   (error: AxiosError) => Promise.reject(error),
 );

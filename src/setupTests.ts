@@ -6,6 +6,7 @@ import '@testing-library/jest-dom';
 import { GlobalWithFetchMock } from 'jest-fetch-mock';
 import 'jest-canvas-mock';
 import { server } from './domain/mocks/test-server';
+import api from './domain/api/api';
 
 const customGlobal: GlobalWithFetchMock = global as unknown as GlobalWithFetchMock;
 
@@ -14,6 +15,10 @@ customGlobal.fetch = require('jest-fetch-mock');
 customGlobal.fetchMock = customGlobal.fetch;
 
 global.ResizeObserver = require('resize-observer-polyfill');
+
+window.scrollTo = function () {};
+
+api.interceptors.request.clear();
 
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
 beforeEach(() => server.resetHandlers());
