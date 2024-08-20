@@ -6,6 +6,7 @@ import EditUserView from './EditUserView';
 import useHanke from '../hooks/useHanke';
 import { usePermissionsForHanke } from './hooks/useUserRightsForHanke';
 import { useHankeUsers } from './hooks/useHankeUsers';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   hankeTunnus?: string;
@@ -17,11 +18,15 @@ function EditUserContainer({ hankeTunnus, id }: Readonly<Props>) {
   const { data: hanke, isError: hankeLoadError } = useHanke(hankeTunnus);
   const { data: signedInUser } = usePermissionsForHanke(hankeTunnus);
   const { data: hankeUsers } = useHankeUsers(hankeTunnus);
+  const { t } = useTranslation();
 
   if (isLoading) {
     return (
       <Flex justify="center" mt="var(--spacing-xl)">
-        <LoadingSpinner />
+        <LoadingSpinner
+          loadingText={t('common:components:loadingSpinner:loadingText')}
+          loadingFinishedText={t('common:components:loadingSpinner:loadingFinishedText')}
+        />
       </Flex>
     );
   }

@@ -25,7 +25,14 @@ const HankeListContainer: React.FC<React.PropsWithChildren<unknown>> = () => {
   }
 
   if (isLoading) {
-    return <LoadingSpinner small style={{ marginTop: 'var(--spacing-xl)' }} />;
+    return (
+      <LoadingSpinner
+        loadingText={t('common:components:loadingSpinner:loadingText')}
+        loadingFinishedText={t('common:components:loadingSpinner:loadingFinishedText')}
+        small
+        style={{ marginTop: 'var(--spacing-xl)' }}
+      />
+    );
   }
   if (isError) {
     return (

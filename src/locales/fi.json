@@ -62,6 +62,10 @@
       },
       "footer": {
         "backToTop": "Takaisin ylös"
+      },
+      "loadingSpinner": {
+        "loadingText": "Ladataan",
+        "loadingFinishedText": "Lataus on valmis"
       }
     },
     "error": "Tapahtui virhe. Yritä uudestaan.",
@@ -319,7 +323,7 @@
       "path": "/julkisethankkeet/kartta",
       "headerLabel": "Hankkeet yleisillä alueilla",
       "meta": {
-        "title": "Haitaton - Hankkeet yleisillä alueilla"
+        "title": "Haitaton - Hankkeet yleisillä alueilla kartalla"
       }
     },
     "PUBLIC_HANKKEET_LIST": {
@@ -1344,6 +1348,15 @@
       "step": "Lajittele taulukko vaiheen mukaan",
       "startDate": "Lajittele taulukko aloitus päivämäärän mukaan",
       "endDate": "Lajittele taulukko lopetus päivämäärän mukaan"
+    },
+    "sortLabels": {
+      "sorted": "Taulukko järjestetty",
+      "nimi": "Hankkeen nimi",
+      "vaihe": "Hankkeen vaihe",
+      "alkuPvm": "Hankkeen alkupäivä",
+      "loppuPvm": "Hankkeen loppupäivä",
+      "asc": "nouseva",
+      "desc": "laskeva"
     },
     "buttons": {
       "edit": "Muokkaa hanketta",

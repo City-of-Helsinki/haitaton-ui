@@ -62,7 +62,11 @@ function FileDownloadLink({
   if (loading) {
     return (
       <Box display="flex" alignItems="center" width="max-content">
-        <LoadingSpinner small />
+        <LoadingSpinner
+          loadingText={t('common:components:loadingSpinner:loadingText')}
+          loadingFinishedText={t('common:components:loadingSpinner:loadingFinishedText')}
+          small
+        />
       </Box>
     );
   }

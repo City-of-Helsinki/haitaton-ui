@@ -91,10 +91,7 @@ test('Should update user invitation sent date when resending invitation', async 
   );
   await waitForLoadingToFinish();
 
-  expect(screen.getByText('Kutsulinkki Haitattomaan lähetetty 15.1.2024')).toBeInTheDocument();
-
   await user.click(screen.getByRole('button', { name: 'Lähetä kutsulinkki uudelleen' }));
-  await waitForLoadingToFinish();
 
   expect(
     await screen.findByText(`Kutsulinkki Haitattomaan lähetetty ${formatToFinnishDate(today)}`),

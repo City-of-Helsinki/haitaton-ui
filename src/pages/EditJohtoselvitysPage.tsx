@@ -40,7 +40,10 @@ const EditJohtoselvitysPage: React.FC = () => {
   if (applicationQueryResult.isLoading || hankeQueryResult?.isLoading) {
     return (
       <Flex justify="center" mt="var(--spacing-xl)">
-        <LoadingSpinner />
+        <LoadingSpinner
+          loadingText={t('common:components:loadingSpinner:loadingText')}
+          loadingFinishedText={t('common:components:loadingSpinner:loadingFinishedText')}
+        />
       </Flex>
     );
   }

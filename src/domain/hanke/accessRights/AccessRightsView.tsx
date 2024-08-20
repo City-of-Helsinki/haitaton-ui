@@ -302,7 +302,11 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
         {showUserDeleteButton(args, hankeUsers, signedInUser) ? (
           <button aria-label={t('hankeUsers:buttons:delete')} onClick={() => setDeletedUser(args)}>
             {deleteInfoQueryResult.isLoading && args.id === userToDelete?.id ? (
-              <LoadingSpinner small />
+              <LoadingSpinner
+                loadingText={t('common:components:loadingSpinner:loadingText')}
+                loadingFinishedText={t('common:components:loadingSpinner:loadingFinishedText')}
+                small
+              />
             ) : (
               <IconTrash
                 style={{ display: 'block' }}

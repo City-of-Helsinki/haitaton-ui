@@ -62,6 +62,10 @@
       },
       "footer": {
         "backToTop": "Back to top"
+      },
+      "loadingSpinner": {
+        "loadingText": "Loading",
+        "loadingFinishedText": "Loading is finished"
       }
     },
     "error": "An error occurred. Try again.",
@@ -315,7 +319,7 @@
       "path": "/publicprojects/map",
       "headerLabel": "Projects in public areas",
       "meta": {
-        "title": "Haitaton - Projects in public areas"
+        "title": "Haitaton - Projects in public areas on a map"
       }
     },
     "PUBLIC_HANKKEET_LIST": {
@@ -1032,6 +1036,15 @@
       "step": "Sort the table by phase",
       "startDate": "Sort the table by start date",
       "endDate": "Sort the table by end date"
+    },
+    "sortLabels": {
+      "sorted": "The table was ordered",
+      "nimi": "Project name",
+      "vaihe": "Project phase",
+      "alkuPvm": "Project start date",
+      "loppuPvm": "Project end date",
+      "asc": "ascending",
+      "desc": "descending"
     },
     "buttons": {
       "edit": "Edit project",

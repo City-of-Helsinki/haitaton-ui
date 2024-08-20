@@ -171,7 +171,10 @@ const HankeView: React.FC<Props> = ({
   if (!hankeData) {
     return (
       <Flex justify="center" mt="var(--spacing-xl)">
-        <LoadingSpinner />
+        <LoadingSpinner
+          loadingText={t('common:components:loadingSpinner:loadingText')}
+          loadingFinishedText={t('common:components:loadingSpinner:loadingFinishedText')}
+        />
       </Flex>
     );
   }

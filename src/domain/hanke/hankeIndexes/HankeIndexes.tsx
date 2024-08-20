@@ -49,7 +49,13 @@ const IndexSection: React.FC<React.PropsWithChildren<IndexProps>> = ({
           [styles['indexContainer__number--minWidth']]: showIndexText,
         })}
       >
-        {loading && <LoadingSpinner small />}
+        {loading && (
+          <LoadingSpinner
+            loadingText={t('common:components:loadingSpinner:loadingText')}
+            loadingFinishedText={t('common:components:loadingSpinner:loadingFinishedText')}
+            small
+          />
+        )}
         {!loading && (
           <>
             {showIndexText && !mainIndex && (

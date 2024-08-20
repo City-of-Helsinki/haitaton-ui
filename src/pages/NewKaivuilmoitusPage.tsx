@@ -6,15 +6,20 @@ import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
 import { useHankeDataInApplication } from '../domain/application/hooks/useHankeDataInApplication';
 import KaivuilmoitusContainer from '../domain/kaivuilmoitus/KaivuilmoitusContainer';
 import ErrorLoadingText from '../common/components/errorLoadingText/ErrorLoadingText';
+import { useTranslation } from 'react-i18next';
 
 const NewKaivuilmoitusPage = () => {
   const { KAIVUILMOITUSHAKEMUS } = useLocalizedRoutes();
   const result = useHankeDataInApplication();
+  const { t } = useTranslation();
 
   if (result?.isLoading) {
     return (
       <Flex justify="center" mt="var(--spacing-xl)">
-        <LoadingSpinner />
+        <LoadingSpinner
+          loadingText={t('common:components:loadingSpinner:loadingText')}
+          loadingFinishedText={t('common:components:loadingSpinner:loadingFinishedText')}
+        />
       </Flex>
     );
   }

@@ -8,12 +8,20 @@ import Text from '../../common/components/text/Text';
 import { createStepReducer } from './formStepReducer';
 import { Action, ACTION_TYPE, StepperStep } from './types';
 import MainHeading from '../../common/components/mainHeading/MainHeading';
+import { useTranslation } from 'react-i18next';
 
 function LoadingIndicator({ loadingText }: { loadingText?: string }) {
+  const { t } = useTranslation();
+
   return (
     <Flex justifyContent="center" alignItems="center" height="130px">
       <Box mr="var(--spacing-m)">
-        <LoadingSpinner small data-testid="multipage-form-loading-spinner" />
+        <LoadingSpinner
+          loadingText={t('common:components:loadingSpinner:loadingText')}
+          loadingFinishedText={t('common:components:loadingSpinner:loadingFinishedText')}
+          small
+          data-testid="multipage-form-loading-spinner"
+        />
       </Box>
       {loadingText ? (
         <Text tag="p" weight="bold">

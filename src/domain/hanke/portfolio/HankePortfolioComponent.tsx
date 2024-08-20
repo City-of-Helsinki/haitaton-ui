@@ -620,9 +620,11 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
       <div className={styles.contentContainer}>
         <Container>
           <div>
-            <Text tag="p" styleAs="h3" weight="bold" spacingBottom="m">
-              {t('hankePortfolio:searchResults', { count: rows.length })}
-            </Text>
+            <div role="status" aria-live="polite" aria-atomic="true" aria-relevant="text">
+              <Text tag="p" styleAs="h3" weight="bold" spacingBottom="m">
+                {t('hankePortfolio:searchResults', { count: rows.length })}
+              </Text>
+            </div>
 
             {rows.length > 0 &&
               page.map(({ original: hanke }, index) => {

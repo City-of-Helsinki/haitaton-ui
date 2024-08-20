@@ -10,10 +10,12 @@ import { useHankeDataInApplication } from '../domain/application/hooks/useHankeD
 import useLinkPath from '../common/hooks/useLinkPath';
 import { ROUTES } from '../common/types/route';
 import { APPLICATION_ID_STORAGE_KEY } from '../domain/application/constants';
+import { useTranslation } from 'react-i18next';
 
 const Johtoselvitys: React.FC<React.PropsWithChildren> = () => {
   const { JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();
   const getEditApplicationPath = useLinkPath(ROUTES.EDIT_JOHTOSELVITYSHAKEMUS);
+  const { t } = useTranslation();
 
   const result = useHankeDataInApplication();
 
@@ -27,7 +29,10 @@ const Johtoselvitys: React.FC<React.PropsWithChildren> = () => {
   if (result?.isLoading) {
     return (
       <Flex justify="center" mt="var(--spacing-xl)">
-        <LoadingSpinner />
+        <LoadingSpinner
+          loadingText={t('common:components:loadingSpinner:loadingText')}
+          loadingFinishedText={t('common:components:loadingSpinner:loadingFinishedText')}
+        />
       </Flex>
     );
   }

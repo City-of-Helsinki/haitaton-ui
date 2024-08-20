@@ -15,6 +15,7 @@ import './app.scss';
 import '../../../assets/styles/reset.css';
 import '../../../assets/styles/variables.css';
 import MaintenancePage from '../../../pages/staticPages/MaintenancePage';
+import AccessibleNavigationAnnouncer from '../NavigationAnnouncer';
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
+      <AccessibleNavigationAnnouncer />
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
           <ChakraProvider theme={theme}>
