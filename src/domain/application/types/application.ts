@@ -206,6 +206,29 @@ export interface KaivuilmoitusData {
 
 export type NewJohtoselvitysData = yup.InferType<typeof newJohtoselvitysSchema>;
 
+export enum PaatosTyyppi {
+  PAATOS = 'PAATOS',
+  TOIMINNALLINEN_KUNTO = 'TOIMINNALLINEN_KUNTO',
+  TYO_VALMIS = 'TYO_VALMIS',
+}
+
+export enum PaatosTila {
+  NYKYINEN = 'NYKYINEN',
+  KORVATTU = 'KORVATTU',
+}
+
+export interface Paatos {
+  id: string;
+  hakemusId: number;
+  hakemustunnus: string;
+  tyyppi: PaatosTyyppi;
+  tila: PaatosTila;
+  nimi: string;
+  alkupaiva: Date;
+  loppupaiva: Date;
+  size: number;
+}
+
 export interface Application<T = JohtoselvitysData | KaivuilmoitusData> {
   id: number | null;
   alluid?: number | null;
@@ -214,6 +237,7 @@ export interface Application<T = JohtoselvitysData | KaivuilmoitusData> {
   applicationData: T;
   applicationIdentifier?: string | null;
   hankeTunnus: string | null;
+  paatokset?: { [key: string]: Paatos[] };
 }
 
 export interface HankkeenHakemus {
@@ -228,6 +252,7 @@ export interface HankkeenHakemus {
     endTime: Date | null;
     pendingOnClient: boolean;
   };
+  paatokset?: { [key: string]: Paatos[] };
 }
 
 export interface ApplicationDeletionResult {

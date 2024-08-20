@@ -43,7 +43,13 @@ import KaivuilmoitusBasicInformationSummary from '../components/summary/Kaivuilm
 import { getAreaGeometries, getAreaGeometry } from '../../johtoselvitys/utils';
 import { formatSurfaceArea, getTotalSurfaceArea } from '../../map/utils';
 import useLocale from '../../../common/hooks/useLocale';
-import { getAreaDefaultName, isApplicationSent, isContactIn } from '../utils';
+import {
+  getAreaDefaultName,
+  getCurrentDecisions,
+  getDecisionFilename,
+  isApplicationSent,
+  isContactIn,
+} from '../utils';
 import ApplicationDates from '../components/ApplicationDates';
 import ContactsSummary from '../components/summary/ContactsSummary';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
@@ -81,7 +87,8 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
   const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const locale = useLocale();
   const hankeViewPath = useHankeViewPath(application.hankeTunnus);
-  const { applicationData, applicationIdentifier, applicationType, alluStatus, id } = application;
+  const { applicationData, applicationIdentifier, applicationType, alluStatus, id, paatokset } =
+    application;
   const {
     name,
     areas,
@@ -96,7 +103,7 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
     applicationType === 'CABLE_REPORT'
       ? (areas as ApplicationArea[])
       : (areas as KaivuilmoitusAlue[]).flatMap((area) => area.tyoalueet);
-
+  const currentDecisions = getCurrentDecisions(paatokset);
   const applicationId =
     applicationIdentifier || t(`hakemus:applicationTypeDraft:${applicationType}`);
 
@@ -138,17 +145,20 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
           </SectionItemContent>
           <SectionItemTitle>{t('hakemus:labels:applicationState')}:</SectionItemTitle>
           <SectionItemContent>
-            <Box display="flex">
-              <Box as="span" mr="var(--spacing-2-xs)">
+            <Box>
+              <Box mb="var(--spacing-2-xs)">
                 <ApplicationStatusTag status={alluStatus} />
               </Box>
-              {alluStatus === AlluStatus.DECISION && (
-                <DecisionLink
-                  applicationId={id}
-                  linkText={t('hakemus:labels:downloadDecisionShort')}
-                  filename={applicationIdentifier}
-                />
-              )}
+              {alluStatus === AlluStatus.DECISION &&
+                currentDecisions.map((paatos) => (
+                  <Box key={paatos.tyyppi} mt="var(--spacing-2-xs)">
+                    <DecisionLink
+                      id={paatos.id}
+                      linkText={t(`hakemus:labels:downloadDecision:${paatos.tyyppi}`)}
+                      filename={getDecisionFilename(paatos)}
+                    />
+                  </Box>
+                ))}
             </Box>
           </SectionItemContent>
           <SectionItemTitle>{t('hakemus:labels:relatedHanke')}:</SectionItemTitle>

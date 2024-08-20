@@ -317,7 +317,7 @@ test('Save and quit works', async () => {
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
   expect(await screen.findAllByText(/hakemus tallennettu/i)).toHaveLength(2);
-  expect(window.location.pathname).toBe('/fi/hakemus/10');
+  expect(window.location.pathname).toBe('/fi/hakemus/11');
 });
 
 test('Should not save and quit if current form page is not valid', async () => {
