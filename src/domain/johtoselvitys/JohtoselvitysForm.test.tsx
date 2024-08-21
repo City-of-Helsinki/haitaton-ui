@@ -231,7 +231,7 @@ test('Cable report application form can be filled and saved and sent to Allu', a
 
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
   expect(await screen.findByText(/hakemus lähetetty/i)).toBeInTheDocument();
-  expect(window.location.pathname).toBe('/fi/hakemus/8');
+  expect(window.location.pathname).toBe('/fi/hakemus/9');
 });
 
 test('Should show error message when saving fails', async () => {
