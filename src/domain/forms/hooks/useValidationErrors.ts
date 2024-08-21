@@ -8,12 +8,11 @@ import { cloneDeep, isEqual, uniqBy } from 'lodash';
 export function useValidationErrors<T>(schema: ObjectSchema<AnyObject>, data: T) {
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
   const ref = useRef<T | null>(null);
-
   useEffect(() => {
     if (!isEqual(ref.current, data)) {
       ref.current = cloneDeep(data);
       schema
-        .validate(data, { abortEarly: false })
+        .validate(data, { abortEarly: false, context: { hanke: data } })
         .then(() => {
           setValidationErrors([]);
         })
@@ -22,6 +21,5 @@ export function useValidationErrors<T>(schema: ObjectSchema<AnyObject>, data: T)
         });
     }
   }, [schema, data]);
-
   return validationErrors;
 }
