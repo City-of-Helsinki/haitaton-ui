@@ -19,6 +19,7 @@ type PropTypes = {
   minDate?: Date;
   initialMonth?: Date;
   helperText?: string;
+  onValueChange?: (value: string) => void;
 };
 
 const DatePicker: React.FC<React.PropsWithChildren<PropTypes>> = ({
@@ -32,6 +33,7 @@ const DatePicker: React.FC<React.PropsWithChildren<PropTypes>> = ({
   initialMonth,
   helperText,
   locale,
+  onValueChange,
 }) => {
   const { t } = useTranslation();
   const { control } = useFormContext();
@@ -70,7 +72,11 @@ const DatePicker: React.FC<React.PropsWithChildren<PropTypes>> = ({
                 onChange={(date) => {
                   const convertedDateString = convertFinnishDate(date);
                   onChange(toEndOfDayUTCISO(new Date(convertedDateString)));
+                  onValueChange && onValueChange(date);
                 }}
+                crossOrigin={false}
+                onPointerEnterCapture={() => {}}
+                onPointerLeaveCapture={() => {}}
               />
             </div>
           </div>

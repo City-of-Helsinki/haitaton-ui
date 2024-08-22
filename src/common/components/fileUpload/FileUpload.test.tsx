@@ -1,12 +1,12 @@
-import React from 'react';
 import { rest } from 'msw';
-import { act, fireEvent, render, screen, waitFor, within } from '../../../testUtils/render';
+import { fireEvent, render, screen, waitFor, within } from '../../../testUtils/render';
 import api from '../../../domain/api/api';
 import FileUpload from './FileUpload';
 import { server } from '../../../domain/mocks/test-server';
 import { AttachmentMetadata } from '../../types/attachment';
 import { deleteAttachment } from '../../../domain/application/attachments';
 import { FileDeleteFunction } from './types';
+import { waitForElementToBeRemoved } from '@testing-library/react';
 
 async function uploadAttachment({ id, file }: { id: number; file: File }) {
   const { data } = await api.post(`/hakemukset/${id}/liitteet`, {
@@ -70,9 +70,8 @@ function getFileUpload(options: Partial<FileUploadOptions> = {}) {
 }
 
 async function waitLoading() {
-  await waitFor(() => screen.findByText('Tallennetaan tiedostoja'));
-  await act(async () => {
-    waitFor(() => expect(screen.queryByText('Tallennetaan tiedostoja')).not.toBeInTheDocument());
+  await waitForElementToBeRemoved(() => screen.queryByText('Tallennetaan tiedostoja'), {
+    timeout: 10000,
   });
 }
 
@@ -82,15 +81,15 @@ test('Should upload files successfully and loading indicator is displayed', asyn
     renderResult: { user },
     fileUploadElement,
   } = getFileUpload({ upload: uploadMock });
-  user.upload(fileUploadElement, [
+  await user.upload(fileUploadElement, [
     new File(['test-a'], 'test-file-a.png', { type: 'image/png' }),
     new File(['test-b'], 'test-file-b.jpg', { type: 'image/jpg' }),
   ]);
 
   await waitLoading();
-  await waitFor(() => {
-    expect(screen.queryByText('2/2 tiedosto(a) tallennettu')).toBeInTheDocument();
-  });
+  expect(
+    await screen.findByText('2/2 tiedosto(a) tallennettu', {}, { timeout: 10000 }),
+  ).toBeInTheDocument();
   expect(uploadMock).toHaveBeenCalledTimes(2);
 });
 
@@ -100,6 +99,7 @@ test('Should show amount of successful files uploaded and errors correctly when 
   const fileNameB = 'test-file-b.pdf';
   const fileNameC = 'test-file-c.png';
   const fileNameD = 'test-file-d.png';
+  const fileNameE = 'test-file-e.png';
   const existingFileA: AttachmentMetadata = {
     id: '4f08ce3f-a0de-43c6-8ccc-9fe93822ed18',
     fileName: fileNameA,
@@ -124,19 +124,20 @@ test('Should show amount of successful files uploaded and errors correctly when 
     existingAttachments: [existingFileA, existingFileB],
     upload: uploadMock,
   });
-  user.upload(fileUploadElement, [
+  await user.upload(fileUploadElement, [
     new File(['test-a'], fileNameA, { type: 'image/png' }),
     new File(['test-b'], fileNameB, { type: 'application/pdf' }),
     new File(['test-c'], fileNameC, { type: 'image/png' }),
+    new File([], fileNameE, { type: 'image/png' }),
   ]);
 
   await waitLoading();
-  await waitFor(() => {
-    expect(screen.queryByText('1/3 tiedosto(a) tallennettu')).toBeInTheDocument();
-  });
+  expect(
+    await screen.findByText('1/4 tiedosto(a) tallennettu', {}, { timeout: 10000 }),
+  ).toBeInTheDocument();
   expect(uploadMock).toHaveBeenCalledTimes(1);
   expect(
-    screen.queryByText('Liitteen tallennus epäonnistui 2/3 tiedostolle', { exact: false }),
+    screen.queryByText('Liitteen tallennus epäonnistui 3/4 tiedostolle', { exact: false }),
   ).toBeInTheDocument();
   expect(
     screen.queryByText(
@@ -149,6 +150,9 @@ test('Should show amount of successful files uploaded and errors correctly when 
       `Valittu tiedostonimi (${fileNameA}) on jo käytössä. Nimeä tiedosto uudelleen.`,
       { exact: false },
     ),
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByText(`Pienin sallittu tiedostokoko on 1 B.`, { exact: false }),
   ).toBeInTheDocument();
 });
 
@@ -164,7 +168,7 @@ test('Should show amount of successful files uploaded and errors correctly when 
     renderResult: { user },
     fileUploadElement,
   } = getFileUpload();
-  user.upload(fileUploadElement, [new File(['test-a'], fileNameA, { type: 'image/png' })]);
+  await user.upload(fileUploadElement, [new File(['test-a'], fileNameA, { type: 'image/png' })]);
 
   await waitFor(() => {
     expect(screen.queryByText('0/1 tiedosto(a) tallennettu')).toBeInTheDocument();
@@ -192,11 +196,11 @@ test('Should show correct error message when upload request fails for server err
     renderResult: { user },
     fileUploadElement,
   } = getFileUpload();
-  user.upload(fileUploadElement, [new File(['test-a'], fileNameA, { type: 'image/png' })]);
+  await user.upload(fileUploadElement, [new File(['test-a'], fileNameA, { type: 'image/png' })]);
 
-  await waitFor(() => {
-    expect(screen.queryByText('0/1 tiedosto(a) tallennettu')).toBeInTheDocument();
-  });
+  expect(
+    await screen.findByText('0/1 tiedosto(a) tallennettu', {}, { timeout: 10000 }),
+  ).toBeInTheDocument();
   expect(
     screen.queryByText('Liitteen tallennus epäonnistui 1/1 tiedostolle', { exact: false }),
   ).toBeInTheDocument();
@@ -220,9 +224,9 @@ test('Should upload files when user drops them into drag-and-drop area', async (
     },
   });
 
-  await waitFor(() => {
-    expect(screen.queryByText('3/3 tiedosto(a) tallennettu')).toBeInTheDocument();
-  });
+  expect(
+    await screen.findByText('3/3 tiedosto(a) tallennettu', {}, { timeout: 10000 }),
+  ).toBeInTheDocument();
   expect(uploadMock).toHaveBeenCalledTimes(3);
 });
 
@@ -361,18 +365,15 @@ test('Should be able to cancel upload requests', async () => {
     renderResult: { user },
     fileUploadElement,
   } = getFileUpload({ accept: '.pdf' });
-  user.upload(fileUploadElement, [
+  await user.upload(fileUploadElement, [
     new File(['test-a'], 'test-file-a.pdf', { type: 'application/pdf' }),
     new File(['test-b'], 'test-file-b.pdf', { type: 'application/pdf' }),
   ]);
-  await waitFor(() => screen.findByText('Tallennetaan tiedostoja'));
-  await act(async () => {
-    user.click(screen.getByRole('button', { name: 'Peruuta' }));
+  await screen.findByText('Tallennetaan tiedostoja');
+  await user.click(screen.getByRole('button', { name: 'Peruuta' }));
+  await waitFor(() => {
+    expect(abortSpy).toHaveBeenCalledTimes(1);
   });
-  await waitFor(() =>
-    expect(screen.queryByText('Tallennetaan tiedostoja')).not.toBeInTheDocument(),
-  );
-  expect(abortSpy).toHaveBeenCalledTimes(1);
   abortSpy.mockRestore();
 });
 
@@ -399,16 +400,16 @@ test('Should show error messages for files that exceed the maximum number of fil
   const fileNameA = 'test-file-a.pdf';
   const fileNameB = 'test-file-b.pdf';
   const fileNameC = 'test-file-c.pdf';
-  user.upload(fileUploadElement, [
+  await user.upload(fileUploadElement, [
     new File(['test-a'], fileNameA, { type: 'application/pdf' }),
     new File(['test-b'], fileNameB, { type: 'application/pdf' }),
     new File(['test-b'], fileNameC, { type: 'application/pdf' }),
   ]);
 
   await waitLoading();
-  await waitFor(() => {
-    expect(screen.queryByText('1/3 tiedosto(a) tallennettu')).toBeInTheDocument();
-  });
+  expect(
+    await screen.findByText('1/3 tiedosto(a) tallennettu', {}, { timeout: 10000 }),
+  ).toBeInTheDocument();
   expect(uploadMock).toHaveBeenCalledTimes(1);
   expect(
     screen.queryByText('Liitteen tallennus epäonnistui 2/3 tiedostolle', { exact: false }),

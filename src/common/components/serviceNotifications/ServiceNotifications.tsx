@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Notification } from 'hds-react';
 import { useTranslation } from 'react-i18next';
+import { loadBanners } from '../../../locales/i18n';
 
 enum NotificationType {
   INFO = 'info',
@@ -16,27 +17,51 @@ const NOTIFICATION_CLOSED = 'notification-closed';
  */
 function ServiceNotifications() {
   const { t } = useTranslation();
+  const [bannersLoaded, setBannersLoaded] = useState(false);
+  useEffect(() => {
+    let ignore = false;
+    loadBanners().then(() => {
+      if (!ignore) {
+        setBannersLoaded(true);
+      }
+    });
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const infoLabel = t('serviceInfo:label');
   const infoText = t('serviceInfo:text');
   const infoClosed = Boolean(
     sessionStorage.getItem(`${NotificationType.INFO}-${NOTIFICATION_CLOSED}`),
   );
-  const [infoOpen, setInfoOpen] = useState(Boolean(infoLabel) && !infoClosed);
+  const [infoOpen, setInfoOpen] = useState(false);
 
   const warningLabel = t('serviceWarning:label');
   const warningText = t('serviceWarning:text');
   const warningClosed = Boolean(
     sessionStorage.getItem(`${NotificationType.WARNING}-${NOTIFICATION_CLOSED}`),
   );
-  const [warningOpen, setWarningOpen] = useState(Boolean(warningLabel && !warningClosed));
+  const [warningOpen, setWarningOpen] = useState(false);
 
   const errorLabel = t('serviceError:label');
   const errorText = t('serviceError:text');
   const errorClosed = Boolean(
     sessionStorage.getItem(`${NotificationType.ERROR}-${NOTIFICATION_CLOSED}`),
   );
-  const [errorOpen, setErrorOpen] = useState(Boolean(errorLabel) && !errorClosed);
+  const [errorOpen, setErrorOpen] = useState(false);
+
+  useEffect(() => {
+    if (bannersLoaded) {
+      setInfoOpen(Boolean(infoLabel) && !infoClosed);
+      setWarningOpen(Boolean(warningLabel) && !warningClosed);
+      setErrorOpen(Boolean(errorLabel) && !errorClosed);
+    }
+  }, [bannersLoaded, infoLabel, infoClosed, warningLabel, warningClosed, errorLabel, errorClosed]);
+
+  if (!bannersLoaded) {
+    return null;
+  }
 
   // Close notification and set correspoding value
   // to session storage, so that notification is not

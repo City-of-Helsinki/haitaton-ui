@@ -21,6 +21,8 @@ export default function BasicInformationSummary({ formData, children }: Readonly
     constructionWork,
     maintenanceWork,
     emergencyWork,
+    cableReportDone,
+    rockExcavation,
     cableReports,
     placementContracts,
     requiredCompetence,
@@ -42,6 +44,17 @@ export default function BasicInformationSummary({ formData, children }: Readonly
         {maintenanceWork && <p>{t('hakemus:labels:maintenanceWork')}</p>}
         {emergencyWork && <p>{t('hakemus:labels:emergencyWorkKaivuilmoitus')}</p>}
       </SectionItemContent>
+      {!cableReportDone && (
+        <>
+          <SectionItemTitle>{t('hakemus:labels:newCableReport')}</SectionItemTitle>
+          <SectionItemContent>
+            <p>
+              {t('hakemus:labels:rockExcavation')}:{' '}
+              {rockExcavation ? t('common:yes') : t('common:no')}
+            </p>
+          </SectionItemContent>
+        </>
+      )}
       <SectionItemTitle>{t('hakemus:labels:cableReports')}</SectionItemTitle>
       <SectionItemContent>
         <p>{cableReports?.join(', ')}</p>

@@ -44,9 +44,6 @@ const HankeSidebar: React.FC<React.PropsWithChildren<Props>> = ({ hanke, isOpen,
       placement="left"
       isOpen={isOpen}
       size="md"
-      // https://github.com/chakra-ui/chakra-ui/issues/2893
-      // Temporary ixed with global css in app.scss
-      trapFocus={false}
       useInert={false}
       onClose={handleClose}
       blockScrollOnMount={false}

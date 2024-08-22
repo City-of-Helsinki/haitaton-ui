@@ -1,16 +1,16 @@
-import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { cloneDeep } from 'lodash';
 import { render, screen } from '../../testUtils/render';
 import { Geometries } from './Geometries';
+import hankkeet from '../mocks/data/hankkeet-data';
+import { HankeData } from '../types/hanke';
 
-jest.setTimeout(30000);
-
-function TestComponent() {
+function TestComponent({ hankeData }: { hankeData?: HankeData }) {
   const formContext = useForm();
 
   return (
     <FormProvider {...formContext}>
-      <Geometries />
+      <Geometries hankeData={hankeData} />
     </FormProvider>
   );
 }
@@ -32,4 +32,37 @@ test('Areas can be added after start and end dates have been set', async () => {
   ).not.toBeInTheDocument();
   expect(screen.queryByTestId('draw-control-Square')).toBeInTheDocument();
   expect(screen.queryByTestId('draw-control-Polygon')).toBeInTheDocument();
+});
+
+test('Hanke areas are visible if work start and end dates are between hanke start and end dates', async () => {
+  const testHanke = hankkeet[1];
+  const { user } = render(<TestComponent hankeData={testHanke as HankeData} />);
+  await user.type(screen.getByRole('textbox', { name: 'Työn arvioitu alkupäivä *' }), '27.11.2024');
+  await user.type(
+    screen.getByRole('textbox', { name: 'Työn arvioitu loppupäivä *' }),
+    '27.11.2024',
+  );
+
+  expect(screen.getByTestId('countOfFilteredHankeAlueet')).toHaveTextContent('1');
+
+  await user.type(screen.getByRole('textbox', { name: 'Työn arvioitu alkupäivä *' }), '28.11.2024');
+  await user.type(
+    screen.getByRole('textbox', { name: 'Työn arvioitu loppupäivä *' }),
+    '29.11.2024',
+  );
+
+  expect(screen.getByTestId('countOfFilteredHankeAlueet')).toHaveTextContent('0');
+});
+
+test('Hanke areas are not visible if hanke is generated', async () => {
+  const testHanke = cloneDeep(hankkeet[1]);
+  testHanke.generated = true;
+  const { user } = render(<TestComponent hankeData={testHanke as HankeData} />);
+  await user.type(screen.getByRole('textbox', { name: 'Työn arvioitu alkupäivä *' }), '27.11.2024');
+  await user.type(
+    screen.getByRole('textbox', { name: 'Työn arvioitu loppupäivä *' }),
+    '27.11.2024',
+  );
+
+  expect(screen.queryByTestId('countOfFilteredHankeAlueet')).not.toBeInTheDocument();
 });

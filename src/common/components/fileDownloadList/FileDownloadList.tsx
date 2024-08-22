@@ -4,7 +4,7 @@ import { AttachmentMetadata } from '../../types/attachment';
 
 type FileDownloadListProps<T extends AttachmentMetadata> = {
   files: T[];
-  download: (file: T) => Promise<string>;
+  download?: (file: T) => Promise<string>;
 };
 
 export default function FileDownloadList<T extends AttachmentMetadata>({
@@ -20,12 +20,16 @@ export default function FileDownloadList<T extends AttachmentMetadata>({
           ) : (
             <IconDocument aria-hidden size="xs" style={{ marginRight: 'var(--spacing-3-xs)' }} />
           )}
-          <FileDownloadLink
-            linkText={file.fileName}
-            fileName={file.fileName}
-            queryKey={['attachmentContent', file.id]}
-            queryFunction={() => download(file)}
-          />
+          {download === undefined ? (
+            <>{file.fileName}</>
+          ) : (
+            <FileDownloadLink
+              linkText={file.fileName}
+              fileName={file.fileName}
+              queryKey={['attachmentContent', file.id]}
+              queryFunction={() => download(file)}
+            />
+          )}
         </li>
       ))}
     </ul>

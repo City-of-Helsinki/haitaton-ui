@@ -1,6 +1,5 @@
-import React from 'react';
 import { rest } from 'msw';
-import { render, cleanup, fireEvent, screen, waitFor, act, within } from '../../testUtils/render';
+import { render, cleanup, fireEvent, screen, waitFor, within } from '../../testUtils/render';
 import Johtoselvitys from '../../pages/Johtoselvitys';
 import JohtoselvitysContainer from './JohtoselvitysContainer';
 import { waitForLoadingToFinish } from '../../testUtils/helperFunctions';
@@ -9,20 +8,21 @@ import { HankeData } from '../types/hanke';
 import hankkeet from '../mocks/data/hankkeet-data';
 import applications from '../mocks/data/hakemukset-data';
 import { JohtoselvitysFormValues } from './types';
-import * as applicationApi from '../application/utils';
 import api from '../api/api';
 import {
   Application,
+  ApplicationArea,
   ApplicationAttachmentMetadata,
   AttachmentType,
   JohtoselvitysData,
 } from '../application/types/application';
 import * as applicationAttachmentsApi from '../application/attachments';
+import { fillNewContactPersonForm } from '../forms/components/testUtils';
+import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import { cloneDeep } from 'lodash';
+import { waitForElementToBeRemoved } from '@testing-library/react';
 
 afterEach(cleanup);
-
-jest.setTimeout(40000);
 
 interface DateOptions {
   start?: string;
@@ -53,6 +53,7 @@ const application: JohtoselvitysFormValues = {
       },
       contacts: [
         {
+          hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           email: 'test@test.com',
           firstName: 'Test',
           lastName: 'Person',
@@ -61,7 +62,7 @@ const application: JohtoselvitysFormValues = {
         },
       ],
     },
-    areas: DUMMY_AREAS,
+    areas: DUMMY_AREAS as ApplicationArea[],
     startTime: null,
     endTime: null,
     workDescription: '',
@@ -79,6 +80,7 @@ const application: JohtoselvitysFormValues = {
       },
       contacts: [
         {
+          hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           email: 'test@test.com',
           firstName: 'Test',
           lastName: 'Person',
@@ -124,19 +126,6 @@ function fillBasicInformation() {
 
   fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
     target: { value: 'Testataan johtoselvityslomaketta' },
-  });
-
-  fireEvent.change(screen.getByLabelText(/etunimi/i), {
-    target: { value: 'Matti' },
-  });
-  fireEvent.change(screen.getByLabelText(/sukunimi/i), {
-    target: { value: 'Meikäläinen' },
-  });
-  fireEvent.change(screen.getByLabelText(/sähköposti/i), {
-    target: { value: 'matti.meikalainen@test.com' },
-  });
-  fireEvent.change(screen.getByLabelText(/puhelin/i), {
-    target: { value: '0000000000' },
   });
 }
 
@@ -189,29 +178,22 @@ function fillContactsInformation() {
   fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.customer.phone'), {
     target: { value: '0000000000' },
   });
-
-  // Fill contact of contractor
-  fireEvent.change(
-    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.firstName'),
-    {
-      target: { value: 'Alli' },
-    },
-  );
-  fireEvent.change(
-    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.lastName'),
-    {
-      target: { value: 'Asiakas' },
-    },
-  );
-  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.email'), {
-    target: { value: 'alli.asiakas@test.com' },
-  });
-  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.phone'), {
-    target: { value: '0000000000' },
-  });
 }
 
 test('Cable report application form can be filled and saved and sent to Allu', async () => {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>({
+          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          kayttooikeustaso: 'KATSELUOIKEUS',
+          kayttooikeudet: ['VIEW'],
+        }),
+      );
+    }),
+  );
+
   const hankeData = hankkeet[1] as HankeData;
 
   const { user } = render(
@@ -219,7 +201,11 @@ test('Cable report application form can be filled and saved and sent to Allu', a
   );
 
   expect(
-    screen.queryByText('Aidasmäentien vesihuollon rakentaminen (HAI22-2)'),
+    await screen.findByText(
+      'Aidasmäentien vesihuollon rakentaminen (HAI22-2)',
+      {},
+      { timeout: 5000 },
+    ),
   ).toBeInTheDocument();
 
   // Fill basic information page
@@ -227,39 +213,28 @@ test('Cable report application form can be filled and saved and sent to Allu', a
 
   // Move to areas page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
-  fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
-
-  expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
 
   // Fill areas page
   fillAreasInformation();
 
   // Move to contacts page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
-  fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
-
-  expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
 
   // Fill contacts page
   fillContactsInformation();
 
   // Move to summary page
   await user.click(screen.getByTestId('hds-stepper-step-4'));
-
-  expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
 
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
-  expect(screen.queryByText(/hakemus lähetetty/i)).toBeInTheDocument();
-  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2');
+  expect(await screen.findByText(/hakemus lähetetty/i)).toBeInTheDocument();
+  expect(window.location.pathname).toBe('/fi/hakemus/8');
 });
 
 test('Should show error message when saving fails', async () => {
-  const OLD_ENV = { ...window._env_ };
-  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: 0 };
   server.use(
     rest.post('/api/hakemukset', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
@@ -276,15 +251,25 @@ test('Should show error message when saving fails', async () => {
   // Move to next page to save form
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-  expect(screen.queryAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
-
-  jest.resetModules();
-  window._env_ = OLD_ENV;
+  await waitFor(
+    () => expect(screen.queryAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument(),
+    { timeout: 5000 },
+  );
 });
 
 test('Should show error message when sending fails', async () => {
   server.use(
-    rest.post('/api/hakemukset/:id/send-application', async (req, res, ctx) => {
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>({
+          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          kayttooikeustaso: 'KATSELUOIKEUS',
+          kayttooikeudet: ['VIEW'],
+        }),
+      );
+    }),
+    rest.post('/api/hakemukset/:id/laheta', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
     }),
   );
@@ -295,39 +280,33 @@ test('Should show error message when sending fails', async () => {
     <JohtoselvitysContainer hankeData={hankeData} application={application} />,
   );
 
-  fillBasicInformation();
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  fillAreasInformation();
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  fillContactsInformation();
-  await user.click(screen.getByTestId('hds-stepper-step-4'));
-  await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
-
-  expect(screen.queryByText(/lähettäminen epäonnistui/i)).toBeInTheDocument();
-});
-
-test('Form can be saved without hanke existing first', async () => {
-  const OLD_ENV = { ...window._env_ };
-  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: 0 };
-  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
-
   // Fill basic information page
   fillBasicInformation();
 
   // Move to areas page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  expect(await screen.findByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
 
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
-  await screen.findByText('Johtoselvitys (HAI22-12)');
-  expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+  // Fill areas page
+  fillAreasInformation();
 
-  jest.resetModules();
-  window._env_ = OLD_ENV;
+  // Move to contacts page
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  expect(await screen.findByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
+
+  // Fill contacts page
+  fillContactsInformation();
+
+  // Move to summary page
+  await user.click(screen.getByTestId('hds-stepper-step-4'));
+  expect(await screen.findByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+
+  await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
+
+  expect(await screen.findByText(/lähettäminen epäonnistui/i)).toBeInTheDocument();
 });
 
 test('Save and quit works', async () => {
-  const OLD_ENV = { ...window._env_ };
-  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: 0 };
   const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
 
   await waitForLoadingToFinish();
@@ -337,28 +316,8 @@ test('Save and quit works', async () => {
 
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
-  expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
-  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2');
-
-  jest.resetModules();
-  window._env_ = OLD_ENV;
-});
-
-test('Save and quit works without hanke existing first', async () => {
-  const OLD_ENV = { ...window._env_ };
-  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: 0 };
-  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
-
-  // Fill basic information page
-  fillBasicInformation();
-
-  await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
-
-  expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
-  expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-13');
-
-  jest.resetModules();
-  window._env_ = OLD_ENV;
+  expect(await screen.findAllByText(/hakemus tallennettu/i)).toHaveLength(2);
+  expect(window.location.pathname).toBe('/fi/hakemus/10');
 });
 
 test('Should not save and quit if current form page is not valid', async () => {
@@ -367,28 +326,24 @@ test('Should not save and quit if current form page is not valid', async () => {
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
   expect(window.location.pathname).toBe('/fi/johtoselvityshakemus');
-  expect(screen.queryAllByText('Kenttä on pakollinen').length).toBeGreaterThan(1);
+  expect(await screen.findAllByText('Kenttä on pakollinen')).toHaveLength(5);
 });
 
 test('Should show error message and not navigate away when save and quit fails', async () => {
-  const OLD_ENV = { ...window._env_ };
-  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: 0 };
   server.use(
-    rest.post('/api/hakemukset/:id', async (req, res, ctx) => {
+    rest.post('/api/hakemukset', async (req, res, ctx) => {
       return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
     }),
   );
 
-  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus');
+  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
+  await waitForLoadingToFinish();
 
   fillBasicInformation();
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
-  expect(screen.queryAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
+  expect(await screen.findAllByText(/tallentaminen epäonnistui/i)).toHaveLength(2);
   expect(window.location.pathname).toBe('/fi/johtoselvityshakemus');
-
-  jest.resetModules();
-  window._env_ = OLD_ENV;
 });
 
 test('Should not save application between page changes when nothing is changed', async () => {
@@ -420,117 +375,101 @@ test('Should save existing application between page changes when there are chang
 
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
-});
-
-test('Should change users own role and its fields correctly', async () => {
-  const { user } = render(<JohtoselvitysContainer application={application} />);
-
-  const firstName = 'Tauno';
-  const lastName = 'Työmies';
-  const email = 'tauno@test.com';
-  const phone = '0401234567';
-
-  fillBasicInformation();
-
-  fireEvent.click(screen.getByRole('button', { name: /rooli/i }));
-  fireEvent.click(screen.getByText(/työn suorittaja/i));
-  fireEvent.change(
-    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.firstName'),
-    {
-      target: { value: firstName },
-    },
-  );
-  fireEvent.change(
-    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.lastName'),
-    {
-      target: { value: lastName },
-    },
-  );
-  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.email'), {
-    target: { value: email },
-  });
-  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.phone'), {
-    target: { value: phone },
-  });
-
-  // Move to areas page
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
-
-  fillAreasInformation();
-
-  // Move to contacts page
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  await user.click(screen.getByTestId('contractorWithContacts-0'));
-
-  expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.firstName'),
-  ).toHaveValue('');
-  expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.lastName'),
-  ).toHaveValue('');
-  expect(screen.getByTestId('applicationData.customerWithContacts.contacts.0.email')).toHaveValue(
-    '',
-  );
-  expect(screen.getByTestId('applicationData.customerWithContacts.contacts.0.phone')).toHaveValue(
-    '',
-  );
-  expect(
-    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.firstName'),
-  ).toHaveValue(firstName);
-  expect(
-    screen.getByTestId('applicationData.contractorWithContacts.contacts.0.lastName'),
-  ).toHaveValue(lastName);
-  expect(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.email')).toHaveValue(
-    email,
-  );
-  expect(screen.getByTestId('applicationData.contractorWithContacts.contacts.0.phone')).toHaveValue(
-    phone,
-  );
-});
-
-test('Should not change anything if selecting the same role again', async () => {
-  const testApplication = cloneDeep(applications[0]) as Application<JohtoselvitysData>;
-  testApplication.applicationData.customerWithContacts =
-    application.applicationData.customerWithContacts;
-  testApplication.applicationData.contractorWithContacts =
-    application.applicationData.contractorWithContacts;
-  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
-
-  fireEvent.click(screen.getByRole('button', { name: /rooli/i }));
-  // Select the role to be Hakija again
-  await user.click(screen.getAllByText(/hakija/i)[1]);
-  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
-
-  // Check that there isn't another contact added
-  expect(screen.queryByTestId('customerWithContacts-1')).not.toBeInTheDocument();
+  expect(await screen.findByText(/hakemus tallennettu/i)).toBeInTheDocument();
 });
 
 test('Should not show send button when application has moved to pending state', async () => {
-  const testApplication = cloneDeep(applications[1]) as Application<JohtoselvitysData>;
-  testApplication.applicationData.customerWithContacts =
-    application.applicationData.customerWithContacts;
-  testApplication.applicationData.contractorWithContacts =
-    application.applicationData.contractorWithContacts;
-  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>({
+          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          kayttooikeustaso: 'KATSELUOIKEUS',
+          kayttooikeudet: ['VIEW'],
+        }),
+      );
+    }),
+  );
+
+  const { user } = render(
+    <JohtoselvitysContainer application={applications[1] as Application<JohtoselvitysData>} />,
+  );
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
-  expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
   expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).not.toBeInTheDocument();
+  expect(
+    screen.queryByText(
+      'Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö',
+    ),
+  ).not.toBeInTheDocument();
 });
 
-test('Should show send button when application is edited in draft state', async () => {
-  const testApplication = cloneDeep(applications[0]) as Application<JohtoselvitysData>;
-  testApplication.applicationData.customerWithContacts =
-    application.applicationData.customerWithContacts;
-  testApplication.applicationData.contractorWithContacts =
-    application.applicationData.contractorWithContacts;
-  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
+test('Should show and disable send button and show notification when user is not a contact person', async () => {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>({
+          hankeKayttajaId: 'not-a-contact-person-id',
+          kayttooikeustaso: 'KATSELUOIKEUS',
+          kayttooikeudet: ['VIEW'],
+        }),
+      );
+    }),
+  );
+
+  const { user } = render(
+    <JohtoselvitysContainer
+      hankeData={hankkeet[1] as HankeData}
+      application={applications[0] as Application<JohtoselvitysData>}
+    />,
+  );
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
+  expect(await screen.findByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
   expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeDisabled();
+  expect(
+    screen.queryAllByText(
+      'Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö.',
+    ),
+  ).toHaveLength(2);
+});
+
+test('Should show and enable button when application is edited in draft state and user is a contact person', async () => {
+  server.use(
+    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json<SignedInUser>({
+          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          kayttooikeustaso: 'KATSELUOIKEUS',
+          kayttooikeudet: ['VIEW'],
+        }),
+      );
+    }),
+  );
+
+  const { user } = render(
+    <JohtoselvitysContainer
+      hankeData={hankkeet[1] as HankeData}
+      application={applications[0] as Application<JohtoselvitysData>}
+    />,
+  );
+
+  await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+
+  expect(await screen.findByRole('button', { name: /lähetä hakemus/i })).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: /lähetä hakemus/i })).toBeEnabled();
+  expect(
+    screen.queryByText(
+      'Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö',
+    ),
+  ).not.toBeInTheDocument();
 });
 
 test('Should not allow start date be after end date', async () => {
@@ -544,14 +483,14 @@ test('Should not allow start date be after end date', async () => {
 
   // Move to areas page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
 
   // Fill areas page with start time after end time
   fillAreasInformation({ start: '1.6.2024', end: '1.4.2024' });
 
   // Should not be able to move to next page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  expect(screen.queryByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
 });
 
 test('Should not allow step change when current step is invalid', async () => {
@@ -564,7 +503,7 @@ test('Should not allow step change when current step is invalid', async () => {
 
   // Change registry key to be invalid
   fireEvent.change(
-    screen.getByTestId('applicationData.customerWithContacts.customer.registryKey'),
+    await screen.findByTestId('applicationData.customerWithContacts.customer.registryKey'),
     {
       target: { value: '1234567-8' },
     },
@@ -576,50 +515,8 @@ test('Should not allow step change when current step is invalid', async () => {
   await user.click(screen.getByRole('button', { name: /perustiedot/i }));
 
   // Expect to still be in the same page
-  expect(screen.queryByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
   expect(screen.queryByText('Kentän arvo on virheellinen')).toBeInTheDocument();
-});
-
-test('Should not show inline notification by default', () => {
-  render(
-    <JohtoselvitysContainer application={applications[0] as Application<JohtoselvitysData>} />,
-  );
-
-  expect(screen.queryByTestId('form-notification')).not.toBeInTheDocument();
-});
-
-test('Should show inline notification when editing a form that is in pending state', () => {
-  render(
-    <JohtoselvitysContainer application={applications[1] as Application<JohtoselvitysData>} />,
-  );
-
-  expect(screen.queryByTestId('form-notification')).toBeInTheDocument();
-  expect(screen.queryByText('Olet muokkaamassa jo lähetettyä hakemusta.')).toBeInTheDocument();
-  expect(
-    screen.queryByText(
-      'Hakemusta voit muokata niin kauan, kun sitä ei vielä ole otettu käsittelyyn. Uusi versio hakemuksesta lähtee viranomaiselle automaattisesti lomakkeen tallennuksen yhteydessä.',
-    ),
-  ).toBeInTheDocument();
-});
-
-test('Should not allow to edit own info when application has been sent to Allu', () => {
-  render(
-    <JohtoselvitysContainer application={applications[1] as Application<JohtoselvitysData>} />,
-  );
-
-  expect(screen.getByRole('button', { name: /rooli/i })).toBeDisabled();
-  expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.firstName'),
-  ).toBeDisabled();
-  expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.lastName'),
-  ).toBeDisabled();
-  expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.email'),
-  ).toBeDisabled();
-  expect(
-    screen.getByTestId('applicationData.customerWithContacts.contacts.0.phone'),
-  ).toBeDisabled();
 });
 
 test('Validation error is shown if no work is about checkbox is selected', async () => {
@@ -632,12 +529,12 @@ test('Validation error is shown if no work is about checkbox is selected', async
   await user.click(screen.getByLabelText(/olemassaolevan rakenteen kunnossapitotyöstä/i));
   expect(screen.queryByText('Kenttä on pakollinen')).not.toBeInTheDocument();
   await user.click(screen.getByLabelText(/olemassaolevan rakenteen kunnossapitotyöstä/i));
-  expect(screen.queryByText('Kenttä on pakollinen')).toBeInTheDocument();
+  expect(await screen.findByText('Kenttä on pakollinen')).toBeInTheDocument();
 
   await user.click(screen.getByLabelText(/kiinteistöliittymien rakentamisesta/i));
   expect(screen.queryByText('Kenttä on pakollinen')).not.toBeInTheDocument();
   await user.click(screen.getByLabelText(/kiinteistöliittymien rakentamisesta/i));
-  expect(screen.queryByText('Kenttä on pakollinen')).toBeInTheDocument();
+  expect(await screen.findByText('Kenttä on pakollinen')).toBeInTheDocument();
 
   await user.click(
     screen.getByLabelText(
@@ -651,37 +548,6 @@ test('Validation error is shown if no work is about checkbox is selected', async
     ),
   );
   expect(screen.queryByText('Kenttä on pakollinen')).toBeInTheDocument();
-});
-
-const testFormSaving = async (
-  inputApplication: Application<JohtoselvitysData>,
-  fillInfoButton: string,
-) => {
-  const saveApplication = jest.spyOn(applicationApi, 'saveApplication');
-  const { user } = render(<JohtoselvitysContainer application={inputApplication} />);
-
-  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
-  await user.click(screen.getByTestId(fillInfoButton));
-  await user.click(screen.getByRole('button', { name: /edellinen/i }));
-
-  expect(screen.queryByText(/hakemus tallennettu/i)).toBeInTheDocument();
-  expect(saveApplication).toHaveBeenCalledTimes(1);
-
-  saveApplication.mockRestore();
-};
-
-test('Form is saved when contacts are filled with orderer information', async () => {
-  await testFormSaving(
-    applications[0] as Application<JohtoselvitysData>,
-    'applicationData.customerWithContacts.customer.fillOwnInfoButton',
-  );
-});
-
-test('Form is saved when sub contacts are filled with orderer information', async () => {
-  await testFormSaving(
-    applications[0] as Application<JohtoselvitysData>,
-    'applicationData.contractorWithContacts.contacts.0.fillOwnInfoButton',
-  );
 });
 
 async function uploadAttachmentMock({
@@ -718,22 +584,18 @@ test('Should be able to upload attachments', async () => {
     .spyOn(applicationAttachmentsApi, 'uploadAttachment')
     .mockImplementation(uploadAttachmentMock);
   initFileGetResponse([]);
-  const testApplication = cloneDeep(applications[0]) as Application<JohtoselvitysData>;
-  testApplication.applicationData.customerWithContacts =
-    application.applicationData.customerWithContacts;
-  testApplication.applicationData.contractorWithContacts =
-    application.applicationData.contractorWithContacts;
-  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
+  const { user } = render(
+    <JohtoselvitysContainer application={applications[0] as Application<JohtoselvitysData>} />,
+  );
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
-  const fileUpload = screen.getByLabelText('Raahaa tiedostot tänne');
-  user.upload(fileUpload, [
+  const fileUpload = await screen.findByLabelText('Raahaa tiedostot tänne');
+  await user.upload(fileUpload, [
     new File(['test-a'], 'test-file-a.pdf', { type: 'application/pdf' }),
     new File(['test-b'], 'test-file-b.pdf', { type: 'application/pdf' }),
   ]);
 
-  await screen.findAllByText('Tallennetaan tiedostoja', undefined, { timeout: 5000 });
-  await act(async () => {
-    waitFor(() => expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0));
+  await waitForElementToBeRemoved(() => screen.queryAllByText(/Tallennetaan tiedostoja/i), {
+    timeout: 10000,
   });
   await waitFor(
     () => {
@@ -758,15 +620,12 @@ test('Should be able to delete attachments', async () => {
       attachmentType: 'MUU',
     },
   ]);
-  const testApplication = cloneDeep(applications[0]) as Application<JohtoselvitysData>;
-  testApplication.applicationData.customerWithContacts =
-    application.applicationData.customerWithContacts;
-  testApplication.applicationData.contractorWithContacts =
-    application.applicationData.contractorWithContacts;
-  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
+  const { user } = render(
+    <JohtoselvitysContainer application={applications[0] as Application<JohtoselvitysData>} />,
+  );
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
-  const { getAllByRole } = within(screen.getByTestId('file-upload-list'));
+  const { getAllByRole } = within(await screen.findByTestId('file-upload-list'));
   const fileListItems = getAllByRole('listitem');
   const fileItem = fileListItems.find((i) => i.innerHTML.includes(fileName));
   const { getByRole } = within(fileItem!);
@@ -807,15 +666,12 @@ test('Should list existing attachments in the attachments page and in summary pa
       attachmentType: 'MUU',
     },
   ]);
-  const testApplication = cloneDeep(applications[0]) as Application<JohtoselvitysData>;
-  testApplication.applicationData.customerWithContacts =
-    application.applicationData.customerWithContacts;
-  testApplication.applicationData.contractorWithContacts =
-    application.applicationData.contractorWithContacts;
-  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
+  const { user } = render(
+    <JohtoselvitysContainer application={applications[0] as Application<JohtoselvitysData>} />,
+  );
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
-  const { getAllByRole } = within(screen.getByTestId('file-upload-list'));
+  const { getAllByRole } = within(await screen.findByTestId('file-upload-list'));
   const fileListItems = getAllByRole('listitem');
   expect(fileListItems.length).toBe(2);
 
@@ -831,7 +687,7 @@ test('Should list existing attachments in the attachments page and in summary pa
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
-  expect(screen.getByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
   expect(screen.getByText(fileNameA)).toBeInTheDocument();
   expect(screen.getByText(fileNameB)).toBeInTheDocument();
 });
@@ -841,19 +697,137 @@ test('Summary should show attachments and they are downloadable', async () => {
     .spyOn(applicationAttachmentsApi, 'getAttachmentFile')
     .mockImplementation(jest.fn());
 
-  const testApplication = cloneDeep(applications[0]) as Application<JohtoselvitysData>;
-  testApplication.applicationData.customerWithContacts =
-    application.applicationData.customerWithContacts;
-  testApplication.applicationData.contractorWithContacts =
-    application.applicationData.contractorWithContacts;
+  const testApplication = applications[0] as Application<JohtoselvitysData>;
   initFileGetResponse([ATTACHMENT_META]);
 
   const { user } = render(<JohtoselvitysContainer application={testApplication} />);
 
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
-  expect(screen.queryByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
 
   await user.click(screen.getByText(ATTACHMENT_META.fileName));
 
   expect(fetchContentMock).toHaveBeenCalledWith(testApplication.id, ATTACHMENT_META.id);
+});
+
+test('Should be able to create new user and new user is added to dropdown', async () => {
+  const newUser = {
+    etunimi: 'Marja',
+    sukunimi: 'Meikäkäinen',
+    sahkoposti: 'marja.meikalainen@test.com',
+    puhelinnumero: '0000000000',
+  };
+  const testApplication = applications[0] as Application<JohtoselvitysData>;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+  expect(await screen.findByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
+  await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
+  fillNewContactPersonForm(newUser);
+  await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+
+  expect(await screen.findByText('Yhteyshenkilö tallennettu')).toBeInTheDocument();
+  expect(
+    screen.getByText(`${newUser.etunimi} ${newUser.sukunimi} (${newUser.sahkoposti})`),
+  ).toBeInTheDocument();
+});
+
+test('Should show validation error if the new user has an existing email address', async () => {
+  const newUser = {
+    etunimi: 'Marja',
+    sukunimi: 'Meikäkäinen',
+    sahkoposti: 'matti.meikalainen@test.com',
+    puhelinnumero: '0000000000',
+  };
+  const testApplication = applications[0] as Application<JohtoselvitysData>;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+  expect(await screen.findByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
+  await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
+  fillNewContactPersonForm(newUser);
+  await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+  expect(
+    await screen.findByText(
+      /valitsemasi sähköpostiosoite löytyy jo hankkeen käyttäjähallinnasta. lisää yhteyshenkilö pudotusvalikosta./i,
+    ),
+  ).toBeInTheDocument();
+});
+
+test('Should show validation error if there are no yhteyshenkilo set for yhteystieto', async () => {
+  const testApplication = cloneDeep(applications[0]) as Application<JohtoselvitysData>;
+  testApplication.applicationData.customerWithContacts = null;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
+
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+  expect(await screen.findByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
+  expect(
+    await screen.findByText(/vähintään yksi yhteyshenkilö tulee olla asetettuna/i),
+  ).toBeInTheDocument();
+
+  await user.click(
+    screen.getAllByRole('button', { name: /yhteyshenkilöt: sulje ja avaa valikko/i })[0],
+  );
+  await user.click(screen.getByText('Matti Meikäläinen (matti.meikalainen@test.com)'));
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+  expect(
+    screen.queryByText(/vähintään yksi yhteyshenkilö tulee olla asetettuna/i),
+  ).not.toBeInTheDocument();
+});
+
+test('Should remove validation error if yhteyshenkilo is created for yhteystieto', async () => {
+  const testApplication = cloneDeep(applications[0]) as Application<JohtoselvitysData>;
+  testApplication.applicationData.customerWithContacts = null;
+  const { user } = render(<JohtoselvitysContainer application={testApplication} />);
+
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+  const contactButtons = await screen.findAllByLabelText(/yhteyshenkilöt/i);
+  await user.click(contactButtons[0]);
+  await user.tab();
+
+  expect(
+    await screen.findByText(/vähintään yksi yhteyshenkilö tulee olla asetettuna/i),
+  ).toBeInTheDocument();
+
+  await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
+  fillNewContactPersonForm({
+    etunimi: 'Matti',
+    sukunimi: 'Kymäläinen',
+    sahkoposti: 'matti.kymalainen@test.com',
+    puhelinnumero: '0000000000',
+  });
+  await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+
+  expect(
+    screen.queryByText(/vähintään yksi yhteyshenkilö tulee olla asetettuna/i),
+  ).not.toBeInTheDocument();
+});
+
+test('Work name should be limited to 100 characters', async () => {
+  const { user } = render(<JohtoselvitysContainer />);
+  const initialName = 'a'.repeat(99);
+
+  fireEvent.change(screen.getByLabelText(/työn nimi/i), {
+    target: {
+      value: initialName,
+    },
+  });
+  await user.type(screen.getByLabelText(/työn nimi/i), 'bbb');
+
+  expect(screen.getByLabelText(/työn nimi/i)).toHaveValue(initialName.concat('b'));
+});
+
+test('Work description should be limited to 2000 characters', async () => {
+  const { user } = render(<JohtoselvitysContainer />);
+  const initialDescription = 'a'.repeat(1999);
+
+  fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
+    target: {
+      value: initialDescription,
+    },
+  });
+  await user.type(screen.getByLabelText(/työn kuvaus/i), 'bbb');
+
+  expect(screen.getByLabelText(/työn kuvaus/i)).toHaveValue(initialDescription.concat('b'));
 });

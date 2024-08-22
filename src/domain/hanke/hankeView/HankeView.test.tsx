@@ -127,19 +127,29 @@ test('Correct information about hanke should be displayed', async () => {
   // Data in areas tab
   expect(screen.queryByText('Hankealue 1')).toBeInTheDocument();
   expect(screen.getAllByText('2.1.2023–24.2.2023').length).toBe(2);
-  expect(screen.getByTestId('test-liikennehaittaindeksi')).toHaveTextContent('3');
   expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3.5');
   expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('2');
   expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('1');
-  expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('1.5');
+  expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
   expect(screen.queryByText('11974 m²')).toBeInTheDocument();
-  expect(screen.queryByText('Meluhaitta: Satunnainen haitta')).toBeInTheDocument();
-  expect(screen.queryByText('Pölyhaitta: Lyhytaikainen toistuva haitta')).toBeInTheDocument();
-  expect(screen.queryByText('Tärinähaitta: Pitkäkestoinen jatkuva haitta')).toBeInTheDocument();
+  expect(screen.queryByText('Meluhaitta: 1: Satunnainen meluhaitta')).toBeInTheDocument();
+  expect(screen.queryByText('Pölyhaitta: 3: Toistuva pölyhaitta')).toBeInTheDocument();
+  expect(screen.queryByText('Tärinähaitta: 5: Jatkuva tärinähaitta')).toBeInTheDocument();
   expect(
     screen.queryByText('Autoliikenteen kaistahaitta: Vähentää kaistan yhdellä ajosuunnalla'),
   ).toBeInTheDocument();
   expect(screen.queryByText('Kaistahaittojen pituus: Alle 10 m')).toBeInTheDocument();
+  await user.click(screen.getAllByRole('button', { name: /haittaindeksi/i })[1]);
+  expect(screen.getByText('Katuluokka')).toBeVisible();
+  expect(screen.getByTestId('test-katuluokka')).toHaveTextContent('3');
+  expect(screen.getByText('Autoliikenteen määrä')).toBeVisible();
+  expect(screen.getByTestId('test-liikennemaara')).toHaveTextContent('3');
+  expect(screen.getByText('Vaikutus autoliikenteen kaistamääriin')).toBeVisible();
+  expect(screen.getByTestId('test-kaistahaitta')).toHaveTextContent('3');
+  expect(screen.getByText('Autoliikenteen kaistavaikutusten pituus')).toBeVisible();
+  expect(screen.getByTestId('test-kaistapituushaitta')).toHaveTextContent('3');
+  expect(screen.getByText('Hankkeen kesto')).toBeVisible();
+  expect(screen.getByTestId('test-haitanKesto')).toHaveTextContent('3');
 
   // Change to contacts tab
   await user.click(screen.getByRole('tab', { name: /yhteystiedot/i }));
@@ -199,7 +209,7 @@ test('Should render correct number of applications if they exist', async () => {
 
   await user.click(screen.getByRole('tab', { name: /hakemukset/i }));
 
-  expect(screen.getAllByTestId('application-card')).toHaveLength(4);
+  expect(screen.getAllByTestId('application-card')).toHaveLength(5);
 });
 
 test('Should show information if no applications exist', async () => {
@@ -287,32 +297,17 @@ test('Should show map if there are hanke areas', async () => {
   expect(screen.getByTestId('hanke-map')).toBeInTheDocument();
 });
 
-test('Should not show map if there are no hanke areas', async () => {
+test('Should show map placeholder text if there are no hanke areas', async () => {
   render(<HankeViewContainer hankeTunnus="HAI22-5" />);
 
   await waitForLoadingToFinish();
 
-  expect(screen.queryByTestId('hanke-map')).not.toBeInTheDocument();
+  expect(screen.getByText('Hankealueita ei ole määritelty')).toBeInTheDocument();
 });
 
-test('Should not show user management button if access rights feature is not enabled', async () => {
-  const OLD_ENV = { ...window._env_ };
-  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: '0' };
-  render(<HankeViewContainer hankeTunnus="HAI22-2" />);
-  await waitForLoadingToFinish();
-
-  expect(screen.queryByRole('button', { name: 'Käyttäjähallinta' })).not.toBeInTheDocument();
-  jest.resetModules();
-  window._env_ = OLD_ENV;
-});
-
-test('Should show user management button if access rights feature is enabled', async () => {
-  const OLD_ENV = { ...window._env_ };
-  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: '1' };
+test('Should show user management button', async () => {
   render(<HankeViewContainer hankeTunnus="HAI22-2" />);
   await waitForLoadingToFinish();
 
   expect(screen.queryByRole('button', { name: 'Käyttäjähallinta' })).toBeInTheDocument();
-  jest.resetModules();
-  window._env_ = OLD_ENV;
 });

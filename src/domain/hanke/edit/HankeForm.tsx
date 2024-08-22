@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
 import { Button, IconCross, IconPlusCircle, IconSaveDiskette, StepState } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { FORMFIELD, FormNotification, HankeDataFormState } from './types';
-import { hankeSchema } from './hankeSchema';
+import VectorSource from 'ol/source/Vector';
+import { FormNotification, HankeDataFormState } from './types';
+import {
+  hankeSchema,
+  hankePerustiedotPublicSchema,
+  hankeAlueetPublicSchema,
+  haittojenhallintaPublicSchema,
+  hankeYhteystiedotPublicSchema,
+} from './hankeSchema';
 import HankeFormAlueet from './HankeFormAlueet';
 import HankeFormPerustiedot from './HankeFormPerustiedot';
 import HankeFormYhteystiedot from './HankeFormYhteystiedot';
-import HankeFormHaitat from './HankeFormHaitat';
+import HankeFormHaittojenHallinta from './HankeFormHaittojenHallinta';
 import HankeFormLiitteet from './HankeFormLiitteet';
 import HankeFormSummary from './HankeFormSummary';
 import FormNotifications from './components/FormNotifications';
@@ -21,17 +28,13 @@ import FormActions from '../../forms/components/FormActions';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import ApplicationAddDialog from '../../application/components/ApplicationAddDialog';
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
-import { changeFormStep } from '../../forms/utils';
+import { changeFormStep, getFieldPaths } from '../../forms/utils';
 import { updateHanke } from './hankeApi';
 import { convertHankeAlueToFormState } from './utils';
-import {
-  hankeAlueetPublicSchema,
-  hankePerustiedotPublicSchema,
-  hankeYhteystiedotPublicSchema,
-} from './hankePublicSchema';
 import { useValidationErrors } from '../../forms/hooks/useValidationErrors';
 import HankeDraftStateNotification from './components/HankeDraftStateNotification';
 import HankeFormMissingFieldsNotification from './components/MissingFieldsNotification';
+import DrawProvider from '../../../common/components/map/modules/draw/DrawProvider';
 
 type Props = {
   formData: HankeDataFormState;
@@ -124,6 +127,8 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     ? attachmentsUploadingText
     : t('common:buttons:savingText');
 
+  const [drawSource] = useState<VectorSource>(new VectorSource());
+
   function save() {
     hankeMutation.mutate(getValues());
   }
@@ -175,24 +180,36 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const formSteps = [
     {
-      element: <HankeFormPerustiedot errors={errors} register={register} formData={formValues} />,
+      element: <HankeFormPerustiedot errors={errors} register={register} hanke={formValues} />,
       label: t('hankeForm:perustiedotForm:header'),
       state: StepState.available,
       validationSchema: hankePerustiedotPublicSchema,
     },
     {
-      element: <HankeFormAlueet errors={errors} register={register} formData={formValues} />,
+      element: (
+        <DrawProvider source={drawSource}>
+          <HankeFormAlueet
+            errors={errors}
+            register={register}
+            hanke={formValues}
+            drawSource={drawSource}
+          />
+        </DrawProvider>
+      ),
       label: t('hankeForm:hankkeenAlueForm:header'),
       state: StepState.available,
       validationSchema: hankeAlueetPublicSchema,
     },
     {
-      element: <HankeFormHaitat formData={formValues} />,
-      label: t('hankeForm:hankkeenHaitatForm:header'),
+      element: (
+        <HankeFormHaittojenHallinta errors={errors} register={register} hanke={formValues} />
+      ),
+      label: t('hankeForm:haittojenHallintaForm:header'),
       state: StepState.available,
+      validationSchema: haittojenhallintaPublicSchema,
     },
     {
-      element: <HankeFormYhteystiedot errors={errors} register={register} formData={formValues} />,
+      element: <HankeFormYhteystiedot errors={errors} register={register} hanke={formValues} />,
       label: t('form:yhteystiedot:header'),
       state: StepState.available,
       validationSchema: hankeYhteystiedotPublicSchema,
@@ -216,13 +233,23 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     vaihe,
   });
   const alueetErrors = useValidationErrors(hankeAlueetPublicSchema, { alueet });
+  const haittojenHallintaErrors = useValidationErrors(haittojenhallintaPublicSchema, {
+    alueet,
+  });
   const yhteystiedotErrors = useValidationErrors(hankeYhteystiedotPublicSchema, {
     omistajat,
     rakennuttajat,
     toteuttajat,
     muut,
   });
-  const formErrorsByPage = [perustiedotErrors, alueetErrors, [], yhteystiedotErrors, [], []];
+  const formErrorsByPage = [
+    perustiedotErrors,
+    alueetErrors,
+    haittojenHallintaErrors,
+    yhteystiedotErrors,
+    [],
+    [],
+  ];
 
   const formErrorsNotification =
     (activeStepIndex === 5 && (
@@ -232,8 +259,44 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       <HankeFormMissingFieldsNotification
         formErrors={formErrorsByPage[activeStepIndex]}
         getValues={getValues}
+        notificationLabelKey={
+          activeStepIndex === 2 &&
+          haittojenHallintaErrors.length === 1 &&
+          haittojenHallintaErrors[0].path === 'alueet'
+            ? 'hankePortfolio:draftState:labels:missingInformationForHaittojenhallinta'
+            : undefined
+        }
       />
     ));
+
+  // Fields to validate when changing step.
+  // When hanke is public, validate all fields required for public hanke in each step,
+  // otherwise validate only hanke name in the first step.
+  const pageFieldsToValidate: FieldPath<HankeDataFormState>[][] = isHankePublic
+    ? [
+        // Basic information page
+        Object.keys(
+          hankePerustiedotPublicSchema.describe().fields,
+        ) as FieldPath<HankeDataFormState>[],
+        // Areas page
+        // Only get the nuisance fields from alueet
+        getFieldPaths<HankeDataFormState>(getValues('alueet')!, 'alueet').filter((path) =>
+          /haitta/i.test(path),
+        ),
+        // Haittojen hallinta page
+        Object.keys(
+          haittojenhallintaPublicSchema.describe().fields,
+        ) as FieldPath<HankeDataFormState>[],
+        // Contacts page
+        Object.keys(
+          hankeYhteystiedotPublicSchema.describe().fields,
+        ) as FieldPath<HankeDataFormState>[],
+      ]
+    : [['nimi']];
+
+  function validateStepChange(changeStep: () => void, stepIndex: number) {
+    return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger);
+  }
 
   return (
     <FormProvider {...formContext}>
@@ -252,21 +315,17 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
           isLoadingText={attachmentsUploadingText}
           formErrorsNotification={formErrorsNotification}
           formData={watchFormValues}
+          stepChangeValidator={validateStepChange}
         >
           {function renderFormActions(activeStep, handlePrevious, handleNext) {
             const lastStep = activeStep === formSteps.length - 1;
-
-            const handleNextPage = () =>
-              activeStep === 0
-                ? changeFormStep(handleNext, [FORMFIELD.NIMI], trigger)
-                : handleNext();
 
             return (
               <FormActions
                 activeStepIndex={activeStep}
                 totalSteps={formSteps.length}
                 onPrevious={handlePrevious}
-                onNext={handleNextPage}
+                onNext={handleNext}
                 previousButtonIsLoading={attachmentsUploading}
                 previousButtonLoadingText={attachmentsUploadingText}
                 nextButtonIsLoading={attachmentsUploading}

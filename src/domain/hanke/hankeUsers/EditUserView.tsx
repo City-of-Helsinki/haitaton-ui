@@ -98,6 +98,11 @@ function EditUserView({
       kayttooikeustaso,
     },
     resolver: yupResolver(editUserSchema),
+    context: {
+      hankeUsers: hankeUsers,
+      currentUser: user,
+      errorMessageKey: 'emailAlreadyUsedInUserManagement',
+    },
   });
   const { handleSubmit } = formContext;
 
@@ -269,12 +274,14 @@ function EditUserView({
           <MainHeading spacingBottom="m">
             {t('hankeUsers:userEditTitle')}: {userFullName}
           </MainHeading>
-          <Text tag="p" styleAs="body-s" spacingBottom="s">
-            <Box as="strong" marginRight="var(--spacing-s)">
-              {t('hankeUsers:role')}:
-            </Box>
-            {userRoles}
-          </Text>
+          {roolit.length > 0 && (
+            <Text tag="p" styleAs="body-s" spacingBottom="s">
+              <Box as="strong" marginRight="var(--spacing-s)">
+                {t('hankeUsers:role')}:
+              </Box>
+              {userRoles}
+            </Text>
+          )}
           <Flex gap="var(--spacing-2-xs)" color="var(--color-black-60)">
             {tunnistautunut ? (
               <>

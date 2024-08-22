@@ -4,9 +4,10 @@ import MapContext from '../../../../common/components/map/MapContext';
 
 type Props = {
   source: VectorSource;
+  fitOnce?: boolean;
 };
 
-const FitSource: React.FC<React.PropsWithChildren<Props>> = ({ source }) => {
+const FitSource: React.FC<React.PropsWithChildren<Props>> = ({ source, fitOnce = false }) => {
   const { map } = useContext(MapContext);
 
   const fitSource = useCallback(() => {
@@ -17,12 +18,14 @@ const FitSource: React.FC<React.PropsWithChildren<Props>> = ({ source }) => {
   useEffect(() => {
     setTimeout(fitSource, 0);
 
-    source.on('addfeature', fitSource);
+    if (!fitOnce) {
+      source.on('addfeature', fitSource);
+    }
 
     return function cleanUp() {
       source.un('addfeature', fitSource);
     };
-  }, [source, fitSource]);
+  }, [source, fitSource, fitOnce]);
 
   return null;
 };

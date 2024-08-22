@@ -1,10 +1,7 @@
-import React from 'react';
 import { render, cleanup, screen, waitFor } from '../../../testUtils/render';
 import HankeListContainer from './HankeListContainer';
 
 afterEach(cleanup);
-
-jest.setTimeout(10000);
 
 function waitForData() {
   return waitFor(() => screen.getByTestId('hds-table-sorting-header-nimi'));

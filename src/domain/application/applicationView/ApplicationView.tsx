@@ -1,4 +1,15 @@
-import { Accordion, Button, IconPen, IconTrash, Tab, TabList, TabPanel, Tabs } from 'hds-react';
+import {
+  Accordion,
+  Button,
+  IconEnvelope,
+  IconPen,
+  IconTrash,
+  Notification,
+  Tab,
+  TabList,
+  TabPanel,
+  Tabs,
+} from 'hds-react';
 import { Box } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import Geometry from 'ol/geom/Geometry';
@@ -22,7 +33,9 @@ import ApplicationStatusTag from '../components/ApplicationStatusTag';
 import {
   AlluStatus,
   Application,
+  ApplicationArea,
   JohtoselvitysData,
+  KaivuilmoitusAlue,
   KaivuilmoitusData,
 } from '../types/application';
 import JohtoselvitysBasicInformationSummary from '../components/summary/JohtoselvitysBasicInformationSummary';
@@ -30,34 +43,44 @@ import KaivuilmoitusBasicInformationSummary from '../components/summary/Kaivuilm
 import { getAreaGeometries, getAreaGeometry } from '../../johtoselvitys/utils';
 import { formatSurfaceArea, getTotalSurfaceArea } from '../../map/utils';
 import useLocale from '../../../common/hooks/useLocale';
-import { getAreaDefaultName, isApplicationSent } from '../utils';
+import { getAreaDefaultName, isApplicationSent, isContactIn } from '../utils';
 import ApplicationDates from '../components/ApplicationDates';
-import ContactsSummary from '../components/ContactsSummary';
+import ContactsSummary from '../components/summary/ContactsSummary';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
 import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import Link from '../../../common/components/Link/Link';
 import useHankeViewPath from '../../hanke/hooks/useHankeViewPath';
 import DecisionLink from '../components/DecisionLink';
 import { ApplicationCancel } from '../components/ApplicationCancel';
-import AttachmentSummary from '../components/AttachmentSummary';
+import AttachmentSummary from '../components/summary/AttachmentSummary';
 import useAttachments from '../hooks/useAttachments';
-import FeatureFlags from '../../../common/components/featureFlags/FeatureFlags';
 import { CheckRightsByHanke } from '../../hanke/hankeUsers/UserRightsCheck';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
+import KaivuilmoitusAttachmentSummary from '../components/summary/KaivuilmoitusAttachmentSummary';
+import InvoicingCustomerSummary from '../components/summary/InvoicingCustomerSummary';
+import { useState } from 'react';
+import { SignedInUser } from '../../hanke/hankeUsers/hankeUser';
+import useSendApplication from '../hooks/useSendApplication';
+import { validationSchema as johtoselvitysValidationSchema } from '../../johtoselvitys/validationSchema';
+import { validationSchema as kaivuilmoitusValidationSchema } from '../../kaivuilmoitus/validationSchema';
+
+const validationSchemas = {
+  CABLE_REPORT: johtoselvitysValidationSchema,
+  EXCAVATION_NOTIFICATION: kaivuilmoitusValidationSchema,
+};
 
 type Props = {
   application: Application;
   hanke: HankeData | undefined;
+  signedInUser: SignedInUser | undefined;
   onEditApplication: () => void;
 };
 
-function ApplicationView({ application, hanke, onEditApplication }: Readonly<Props>) {
+function ApplicationView({ application, hanke, signedInUser, onEditApplication }: Readonly<Props>) {
   const { t } = useTranslation();
-
+  const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const locale = useLocale();
-
   const hankeViewPath = useHankeViewPath(application.hankeTunnus);
-
   const { applicationData, applicationIdentifier, applicationType, alluStatus, id } = application;
   const {
     name,
@@ -69,6 +92,10 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
     propertyDeveloperWithContacts,
     representativeWithContacts,
   } = applicationData;
+  const tyoalueet =
+    applicationType === 'CABLE_REPORT'
+      ? (areas as ApplicationArea[])
+      : (areas as KaivuilmoitusAlue[]).flatMap((area) => area.tyoalueet);
 
   const applicationId =
     applicationIdentifier || t(`hakemus:applicationTypeDraft:${applicationType}`);
@@ -78,10 +105,23 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
   // Text for the link leading back to hanke view
   const hankeLinkText = `${hanke?.nimi} (${hanke?.hankeTunnus})`;
 
-  const geometries: Geometry[] = getAreaGeometries(areas);
+  const geometries: Geometry[] = getAreaGeometries(tyoalueet);
   const totalSurfaceArea = getTotalSurfaceArea(geometries);
 
   const isSent = isApplicationSent(alluStatus);
+
+  const validationSchema = validationSchemas[applicationType];
+  const isValid = validationSchema.isValidSync(application);
+  const isContact = isContactIn(signedInUser, applicationData);
+  const showSendButton = !isSent && isValid;
+  const disableSendButton = showSendButton && !isContact;
+
+  const applicationSendMutation = useSendApplication();
+
+  async function onSendApplication() {
+    setIsSendButtonDisabled(true);
+    applicationSendMutation.mutate(id as number);
+  }
 
   return (
     <InformationViewContainer>
@@ -115,10 +155,10 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
           <SectionItemContent>
             {hanke && <Link href={hankeViewPath}>{hankeLinkText}</Link>}
           </SectionItemContent>
-          <FeatureFlags flags={['accessRights']}>
-            <SectionItemTitle>{t('hankePortfolio:labels:oikeudet')}:</SectionItemTitle>
-            <SectionItemContent />
-          </FeatureFlags>
+          <SectionItemTitle>{t('hankePortfolio:labels:oikeudet')}:</SectionItemTitle>
+          <SectionItemContent>
+            {t(`hankeUsers:accessRightLevels:${signedInUser?.kayttooikeustaso}`)}
+          </SectionItemContent>
         </FormSummarySection>
 
         <InformationViewHeaderButtons>
@@ -143,6 +183,32 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
               />
             </CheckRightsByHanke>
           ) : null}
+          {showSendButton && (
+            <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
+              <Button
+                theme="coat"
+                iconLeft={<IconEnvelope aria-hidden="true" />}
+                onClick={onSendApplication}
+                isLoading={applicationSendMutation.isLoading}
+                loadingText={t('common:buttons:sendingText')}
+                disabled={disableSendButton || isSendButtonDisabled}
+              >
+                {t('hakemus:buttons:sendApplication')}
+              </Button>
+            </CheckRightsByHanke>
+          )}
+          {disableSendButton && (
+            <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
+              <Notification
+                size="small"
+                style={{ marginTop: 'var(--spacing-xs)' }}
+                type="info"
+                label={t('hakemus:notifications:sendApplicationDisabled')}
+              >
+                {t('hakemus:notifications:sendApplicationDisabled')}
+              </Notification>
+            </CheckRightsByHanke>
+          )}
         </InformationViewHeaderButtons>
       </InformationViewHeader>
 
@@ -180,8 +246,8 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
             </TabPanel>
             <TabPanel>
               {/* Areas information panel */}
-              {areas.map((_, index) => {
-                const areaName = getAreaDefaultName(t, index, areas.length);
+              {tyoalueet.map((_, index) => {
+                const areaName = getAreaDefaultName(t, index, tyoalueet.length);
                 return (
                   <Accordion language={locale} heading={areaName} initiallyOpen key={areaName}>
                     <FormSummarySection style={{ marginBottom: 'auto' }}>
@@ -204,21 +270,35 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
                 />
                 <ContactsSummary
                   customerWithContacts={contractorWithContacts}
-                  title={t('form:yhteystiedot:titles:contractorWithContactsPlural')}
+                  title={t('form:yhteystiedot:titles:contractorWithContacts')}
                 />
                 <ContactsSummary
                   customerWithContacts={propertyDeveloperWithContacts}
-                  title={t('form:yhteystiedot:titles:rakennuttajatPlural')}
+                  title={t('form:yhteystiedot:titles:rakennuttajat')}
                 />
                 <ContactsSummary
                   customerWithContacts={representativeWithContacts}
-                  title={t('form:yhteystiedot:titles:representativeWithContactsPlural')}
+                  title={t('form:yhteystiedot:titles:representativeWithContacts')}
                 />
+                {applicationType === 'EXCAVATION_NOTIFICATION' && (
+                  <InvoicingCustomerSummary
+                    invoicingCustomer={(applicationData as KaivuilmoitusData).invoicingCustomer}
+                  />
+                )}
               </FormSummarySection>
             </TabPanel>
             <TabPanel>
-              <SectionTitle>{t('hankePortfolio:tabit:liitteet')}</SectionTitle>
-              {attachments && attachments.length > 0 ? (
+              {applicationType === 'EXCAVATION_NOTIFICATION' ? (
+                <SectionTitle>{t('form:headers:liitteetJaLisatiedot')}</SectionTitle>
+              ) : (
+                <SectionTitle>{t('hankePortfolio:tabit:liitteet')}</SectionTitle>
+              )}
+              {applicationType === 'EXCAVATION_NOTIFICATION' ? (
+                <KaivuilmoitusAttachmentSummary
+                  formData={application as Application<KaivuilmoitusData>}
+                  attachments={attachments}
+                />
+              ) : attachments && attachments.length > 0 ? (
                 <AttachmentSummary attachments={attachments} />
               ) : null}
             </TabPanel>
@@ -231,9 +311,9 @@ function ApplicationView({ application, hanke, onEditApplication }: Readonly<Pro
                 <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} showLink={false} />
                 <OwnHankeMap hanke={hanke} application={application} />
               </Box>
-              {areas.map((area, index) => {
-                const areaName = getAreaDefaultName(t, index, areas.length);
-                const geometry = getAreaGeometry(area);
+              {tyoalueet.map((alue, index) => {
+                const areaName = getAreaDefaultName(t, index, tyoalueet.length);
+                const geometry = getAreaGeometry(alue);
                 return (
                   <Box
                     padding="var(--spacing-s)"

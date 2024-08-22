@@ -29,10 +29,8 @@ describe('Create new hanke from dialog', () => {
   async function openHankeCreateDialog() {
     jest.spyOn(authService.userManager, 'getUser').mockResolvedValue(mockUser as User);
     const { user } = render(<Homepage />);
-    await screen.findByRole('heading', {
-      name: 'Auta meitä tekemään Haitattomasta vielä parempi!',
-    });
-    await user.click(screen.getByText('Luo uusi hanke'));
+    const createElement = await screen.findByText('Luo uusi hanke');
+    await user.click(createElement);
     return user;
   }
 
@@ -58,7 +56,9 @@ describe('Create new hanke from dialog', () => {
     await user.clear(screen.getByLabelText(/sähköposti/i));
     await user.click(screen.getByRole('button', { name: /luo hanke/i }));
 
-    expect(screen.getByText(/kentän pituus oltava vähintään 3 merkkiä/i)).toBeInTheDocument();
+    expect(
+      await screen.findByText(/kentän pituus oltava vähintään 3 merkkiä/i),
+    ).toBeInTheDocument();
     expect(screen.getAllByText(/kenttä on pakollinen/i)).toHaveLength(2);
     expect(window.location.pathname).toBe('/');
   });
@@ -73,7 +73,7 @@ describe('Create new hanke from dialog', () => {
     fillInformation();
     await user.click(screen.getByRole('button', { name: /luo hanke/i }));
 
-    expect(screen.getByText('Tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument();
+    expect(await screen.findByText('Tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument();
     expect(window.location.pathname).toBe('/');
   });
 
@@ -111,7 +111,7 @@ describe('Create johtoselvitys from dialog', () => {
     fillInformation();
     await user.click(screen.getByRole('button', { name: /luo hakemus/i }));
 
-    expect(window.location.pathname).toBe('/fi/johtoselvityshakemus/7/muokkaa');
+    expect(window.location.pathname).toBe('/fi/johtoselvityshakemus/8/muokkaa');
   });
 
   test('Should show validation errors and not create johtoselvitys if information is missing', async () => {

@@ -3,9 +3,18 @@ import { Notification } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@chakra-ui/react';
 import { uniq } from 'lodash';
+import { $enum } from 'ts-enum-util';
+import { SchemaDescription, reach } from 'yup';
 import { HankeData } from '../../../types/hanke';
 import { useValidationErrors } from '../../../forms/hooks/useValidationErrors';
-import { Message, hankePublicSchema } from '../hankePublicSchema';
+import { HANKE_PAGES } from '../types';
+import { hankeSchema } from '../hankeSchema';
+
+const pageOrder = $enum(HANKE_PAGES).getValues();
+
+function sortPages(a: string, b: string) {
+  return pageOrder.indexOf(a as HANKE_PAGES) - pageOrder.indexOf(b as HANKE_PAGES);
+}
 
 type Props = {
   /** Hanke data */
@@ -19,10 +28,13 @@ type Props = {
  */
 const HankeDraftStateNotification: React.FC<Readonly<Props>> = ({ hanke, className }) => {
   const { t } = useTranslation();
-  const hankePublicErrors = useValidationErrors(hankePublicSchema, hanke);
-  const errorPages = uniq(
-    hankePublicErrors.map((error) => (error.message as unknown as Message).values.page),
+  const hankePublicErrors = useValidationErrors(hankeSchema, hanke);
+  const schemasWithErrors = hankePublicErrors.map(
+    (error) => reach(hankeSchema, error.path as string).describe() as SchemaDescription,
   );
+  const errorPages = uniq(
+    schemasWithErrors.flatMap((error) => error.meta?.pageName || []),
+  ).toSorted(sortPages);
 
   if (errorPages.length > 0) {
     return (

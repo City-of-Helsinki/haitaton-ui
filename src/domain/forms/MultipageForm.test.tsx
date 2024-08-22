@@ -1,4 +1,3 @@
-import React from 'react';
 import { StepState, TextInput } from 'hds-react';
 import MultipageForm from './MultipageForm';
 import { render, screen } from '../../testUtils/render';

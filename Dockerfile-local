@@ -1,4 +1,4 @@
-FROM node:20-alpine as staticbuilder
+FROM public.ecr.aws/docker/library/node:20-alpine as staticbuilder
 # Copy files needed for downloading dependencies
 COPY ./package.json /builder/package.json
 COPY ./yarn.lock /builder/yarn.lock
@@ -16,7 +16,7 @@ COPY ./tsconfig.eslint.json /builder/tsconfig.eslint.json
 COPY ./.eslintrc.js /builder/.eslintrc.js
 RUN REACT_APP_DISABLE_SENTRY=1 yarn build
 
-FROM nginx:1.22.1
+FROM public.ecr.aws/docker/library/nginx:1.22.1
 # Install mods for nginx that include the Headers More mod, that allows the
 # removal of the Server -header
 RUN apt-get update && apt-get --no-install-recommends install -y nginx-extras && apt-get clean

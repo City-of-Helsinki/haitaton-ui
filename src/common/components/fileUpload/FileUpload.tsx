@@ -92,6 +92,8 @@ type Props<T extends AttachmentMetadata> = {
   label?: string;
   /** A comma-separated list of unique file type specifiers describing file types to allow.  */
   accept?: string;
+  /** Minimum file size in bytes. */
+  minSize?: number;
   /** Maximum file size in bytes. */
   maxSize?: number;
   /** If true, the file input will have a drag and drop area */
@@ -115,6 +117,7 @@ export default function FileUpload<T extends AttachmentMetadata>({
   id,
   label,
   accept,
+  minSize = 1,
   maxSize,
   dragAndDrop,
   multiple,
@@ -240,7 +243,7 @@ export default function FileUpload<T extends AttachmentMetadata>({
     <div>
       <Flex alignItems="center" className={styles.uploadContainer} ref={dropZoneRef}>
         {filesUploading ? (
-          <Flex className={styles.loadingContainer}>
+          <Flex className={styles.loadingContainer} direction={{ base: 'column', sm: 'row' }}>
             <LoadingSpinner small className={styles.loadingSpinner} />
             <Text tag="p" className={styles.loadingText}>
               {t('common:components:fileUpload:loadingText')}
@@ -262,6 +265,7 @@ export default function FileUpload<T extends AttachmentMetadata>({
             dragAndDropLabel={t('form:labels:dragAttachments')}
             language={locale}
             maxSize={maxSize}
+            minSize={minSize}
             dragAndDrop={dragAndDrop}
             multiple={multiple}
             onChange={handleFilesChange}

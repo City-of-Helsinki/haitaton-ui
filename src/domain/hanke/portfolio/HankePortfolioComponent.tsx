@@ -46,6 +46,7 @@ import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import useFocusToElement from '../../../common/hooks/useFocusToElement';
 import HDSLink from '../../../common/components/Link/Link';
 import HankeCreateDialog from '../hankeCreateDialog/HankeCreateDialog';
+import MapPlaceholder from '../../map/components/MapPlaceholder/MapPlaceholder';
 
 type CustomAccordionProps = {
   hanke: HankeData;
@@ -227,7 +228,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
                 {hanke.omistajat && hanke.omistajat[0]?.nimi}
               </Text>
             </div>
-            <FeatureFlags flags={['hanke', 'accessRights']}>
+            <FeatureFlags flags={['hanke']}>
               <div className={styles.gridBasicInfo}>
                 <Text tag="h3" styleAs="h6" weight="bold" className={styles.infoHeader}>
                   {t('hankeForm:labels:rights')}
@@ -241,12 +242,19 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
             </FeatureFlags>
           </div>
           <div>
-            {hanke.alueet?.length > 0 && isOpen && (
-              <div data-testid="hanke-map">
-                <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} />
-                <OwnHankeMap hanke={hanke} />
-              </div>
-            )}
+            <FeatureFlags flags={['hanke']}>
+              <OwnHankeMapHeader
+                hankeTunnus={hanke.hankeTunnus}
+                showLink={hanke.alueet?.length > 0}
+              />
+              {hanke.alueet?.length > 0 && isOpen ? (
+                <div data-testid="hanke-map">
+                  <OwnHankeMap hanke={hanke} />
+                </div>
+              ) : (
+                <MapPlaceholder />
+              )}
+            </FeatureFlags>
           </div>
         </FeatureFlags>
 
@@ -287,12 +295,12 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
     setHankeFilterEndDate,
   } = usePortfolioFilter();
 
-  const filterVaihe = (vaiheRows: Row[], id: string[], value: string[]) => {
+  const filterVaihe = (vaiheRows: Row[], _id: string[], value: string[]) => {
     if (value.length === 0) return vaiheRows;
     return vaiheRows.filter((hanke) => value.includes(hanke.values.vaihe));
   };
 
-  const filterTyyppi = (tyyppiRows: Row[], id: string[], value: string[]) => {
+  const filterTyyppi = (tyyppiRows: Row[], _id: string[], value: string[]) => {
     if (value.length === 0) return tyyppiRows;
     return tyyppiRows.filter((hanke) => {
       const includedTyypit = hanke.values.tyomaaTyyppi.filter((tyyppi: string) =>
@@ -303,7 +311,7 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
   };
 
   const columns: Column[] = React.useMemo(() => {
-    const dateStartFilter = (dateStartRows: Row[], id: string[], dateStart: string) => {
+    const dateStartFilter = (dateStartRows: Row[], _id: string[], dateStart: string) => {
       if (dateStart) {
         if (hankeFilterEndDate) {
           return dateStartRows.filter((hanke) =>
@@ -318,7 +326,7 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
       return dateStartRows;
     };
 
-    const dateEndFilter = (dateEndRows: Row[], id: string[], dateEnd: string) => {
+    const dateEndFilter = (dateEndRows: Row[], _id: string[], dateEnd: string) => {
       if (dateEnd) {
         if (hankeFilterStartDate) {
           return dateEndRows.filter((hanke) =>

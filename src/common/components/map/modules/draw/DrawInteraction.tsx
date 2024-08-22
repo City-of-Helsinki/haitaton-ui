@@ -45,8 +45,7 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
 
   const removeAllInteractions = useCallback(() => {
     removeDrawInteractions();
-    clearSelection();
-  }, [clearSelection, removeDrawInteractions]);
+  }, [removeDrawInteractions]);
 
   const startDraw = useCallback(
     (type = DRAWTOOLTYPE.POLYGON) => {
@@ -143,17 +142,22 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
 
     selection.current = new Select({
       condition: (mapBrowserEvent) => click(mapBrowserEvent),
+      style: (feature) => styleFunction(feature, undefined, true),
     });
 
     map.addInteraction(selection.current);
+    // When adding new select interaction, push selected feature to select collection
+    // from state if it exists
+    if (state.selectedFeature) {
+      selection.current.getFeatures().push(state.selectedFeature);
+    }
 
     selection.current.on('select', (e) => {
-      const features = e.target.getFeatures();
-      const feature: Feature<Geometry> = features.getArray()[0];
+      const features = e.selected;
+      const feature: Feature<Geometry> = features[0];
 
       if (feature) {
         actions.setSelectedFeature(feature);
-        feature.setStyle(styleFunction(feature, undefined, true));
       } else {
         clearSelection();
       }
@@ -182,6 +186,15 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.selectedDrawtoolType]);
+
+  useEffect(() => {
+    // When selected feature changes, clear selection and push new selected feature
+    // to select collection, so that it is highlighted
+    selection.current?.getFeatures().clear();
+    if (state.selectedFeature) {
+      selection.current?.getFeatures().push(state.selectedFeature);
+    }
+  }, [state.selectedFeature]);
 
   // Unmount
   useEffect(() => {

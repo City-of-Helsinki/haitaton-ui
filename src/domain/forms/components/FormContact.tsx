@@ -1,37 +1,59 @@
 import React, { useState } from 'react';
-import { Flex } from '@chakra-ui/react';
-import { Button, IconAngleDown, IconAngleUp, IconCross, Notification } from 'hds-react';
+import { Box, Flex } from '@chakra-ui/react';
+import { Button, IconCross, IconPlusCircle, Notification } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { UseFieldArrayRemove } from 'react-hook-form';
 import NewContactPersonForm, { ContactPersonAddedNotification } from './NewContactPersonForm';
 import { HankeUser } from '../../hanke/hankeUsers/hankeUser';
 import styles from './FormContact.module.scss';
 import Transition from '../../../common/components/transition/Transition';
+import ResponsiveGrid from '../../../common/components/grid/ResponsiveGrid';
+import ContactPersonSelect from '../../hanke/hankeUsers/ContactPersonSelect';
 
-interface Props<T> {
+/**
+ * Form component for adding and removing contact persons (yhteyshenkilö) for a contact (yhteystieto)
+ */
+interface Props<T, R> {
+  name: string;
   contactType: T;
   hankeTunnus: string;
+  hankeUsers: HankeUser[] | undefined;
+  mapHankeUserToValue: ({ id, etunimi, sukunimi, sahkoposti, puhelinnumero }: HankeUser) => R;
+  mapValueToLabel: (value: R) => string;
+  transformValue?: (value: R) => R;
   index?: number;
   canBeRemoved?: boolean;
   onRemove?: UseFieldArrayRemove;
   onContactPersonAdded?: (newHankeUser: HankeUser) => void;
+  required?: boolean;
+  tooltip?: {
+    tooltipButtonLabel: string;
+    tooltipLabel: string;
+    tooltipText: string;
+  };
   children: React.ReactNode;
 }
 
-const FormContact = <T,>({
+const FormContact = <T, R>({
+  name,
   contactType,
   hankeTunnus,
+  hankeUsers,
+  mapHankeUserToValue,
+  mapValueToLabel,
+  transformValue,
   index,
   canBeRemoved = true,
   onRemove,
   onContactPersonAdded,
+  required,
+  tooltip,
   children,
-}: Readonly<Props<T>>) => {
+}: Readonly<Props<T, R>>) => {
   const { t } = useTranslation();
   const [showNewContactPersonForm, setShowNewContactPersonForm] = useState(false);
   const [showContactPersonAddedNotification, setShowContactPersonAddedNotification] =
     useState<ContactPersonAddedNotification>(null);
-  const addContactPersonIcon = !showNewContactPersonForm ? <IconAngleDown /> : <IconAngleUp />;
 
   function toggleNewContactForm() {
     setShowNewContactPersonForm((formOpen) => !formOpen);
@@ -62,14 +84,31 @@ const FormContact = <T,>({
 
       {children}
 
-      <Button
-        variant="supplementary"
-        iconLeft={addContactPersonIcon}
-        onClick={toggleNewContactForm}
-        style={{ marginBottom: 'var(--spacing-s)' }}
-      >
-        {t(`form:yhteystiedot:buttons:addNewContactPerson`)}
-      </Button>
+      <Box maxWidth="var(--width-form-3-col)">
+        <ResponsiveGrid maxColumns={3}>
+          <Box style={{ gridColumn: 'span 2' }}>
+            <ContactPersonSelect<R>
+              name={name}
+              hankeUsers={hankeUsers}
+              mapHankeUserToValue={mapHankeUserToValue}
+              mapValueToLabel={mapValueToLabel}
+              transformValue={transformValue}
+              required={required}
+              tooltip={tooltip}
+            />
+          </Box>
+          <Box display="flex" alignItems="center" justifyContent="start" mb="var(--spacing-m)">
+            <Button
+              variant="secondary"
+              iconLeft={<IconPlusCircle aria-hidden />}
+              onClick={toggleNewContactForm}
+              disabled={showNewContactPersonForm}
+            >
+              {t(`form:yhteystiedot:buttons:addNewContactPerson`)}
+            </Button>
+          </Box>
+        </ResponsiveGrid>
+      </Box>
 
       <Transition
         showChildren={showNewContactPersonForm}
@@ -79,6 +118,7 @@ const FormContact = <T,>({
       >
         <NewContactPersonForm
           hankeTunnus={hankeTunnus}
+          hankeUsers={hankeUsers}
           onContactPersonAdded={onContactPersonAdded}
           onClose={closeNewContactForm}
         />

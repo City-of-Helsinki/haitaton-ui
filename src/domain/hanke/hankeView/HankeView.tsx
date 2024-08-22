@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { Flex } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
 import Text from '../../../common/components/text/Text';
-import { HankeAlue, HankeData, HankeIndexData } from '../../types/hanke';
+import { HankeAlue, HankeData } from '../../types/hanke';
 import styles from './HankeView.module.scss';
 import BasicInformationSummary from '../edit/components/BasicInformationSummary';
 import {
@@ -27,7 +27,6 @@ import {
 } from '../../forms/components/FormSummarySection';
 import { calculateTotalSurfaceArea, canHankeBeCancelled } from '../edit/utils';
 import ContactsSummary from '../edit/components/ContactsSummary';
-import HankeIndexes from '../hankeIndexes/HankeIndexes';
 import { FORMFIELD } from '../edit/types';
 import useLocale from '../../../common/hooks/useLocale';
 import { formatToFinnishDate } from '../../../common/utils/date';
@@ -56,14 +55,15 @@ import AttachmentSummary from '../edit/components/AttachmentSummary';
 import useHankeAttachments from '../hankeAttachments/useHankeAttachments';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import HankeGeneratedStateNotification from '../edit/components/HankeGeneratedStateNotification';
+import MapPlaceholder from '../../map/components/MapPlaceholder/MapPlaceholder';
+import HaittaIndexes from '../../common/haittaIndexes/HaittaIndexes';
 
 type AreaProps = {
   area: HankeAlue;
-  hankeIndexData: HankeIndexData | null | undefined;
   index: number;
 };
 
-const HankeAreaInfo: React.FC<AreaProps> = ({ area, hankeIndexData, index }) => {
+const HankeAreaInfo: React.FC<AreaProps> = ({ area, index }) => {
   const { t } = useTranslation();
   const locale = useLocale();
 
@@ -87,10 +87,11 @@ const HankeAreaInfo: React.FC<AreaProps> = ({ area, hankeIndexData, index }) => 
           <SectionItemContent>{formatSurfaceArea(areaGeometry)}</SectionItemContent>
         </FormSummarySection>
 
-        <HankeIndexes
-          hankeIndexData={hankeIndexData}
-          indexTitle={t('hanke:alue:liikenneverkollinenHaitta')}
-          containerClassName={styles.areaIndexes}
+        <HaittaIndexes
+          heading={`${t('hanke:alue:liikennehaittaIndeksit')} (0-5)`}
+          haittaIndexData={area.tormaystarkasteluTulos}
+          className={styles.areaIndexes}
+          initiallyOpen
         />
 
         <Text tag="h2" styleAs="h4" weight="bold" spacingBottom="xs">
@@ -177,8 +178,7 @@ const HankeView: React.FC<Props> = ({
 
   const areasTotalSurfaceArea = calculateTotalSurfaceArea(hankeData.alueet);
 
-  const { omistajat, rakennuttajat, toteuttajat, muut, tormaystarkasteluTulos, alueet, status } =
-    hankeData;
+  const { omistajat, rakennuttajat, toteuttajat, muut, alueet, status } = hankeData;
   const isHankePublic = status === 'PUBLIC';
 
   const tabList = features.hanke ? (
@@ -209,14 +209,12 @@ const HankeView: React.FC<Props> = ({
         <Text tag="h2" styleAs="h3" weight="bold" spacingBottom="l">
           {hankeData?.hankeTunnus}
         </Text>
-        <FeatureFlags flags={['accessRights']}>
-          <Text tag="p" styleAs="body-s" spacingBottom="l">
-            <strong style={{ marginRight: 'var(--spacing-s)' }}>
-              {t('hankePortfolio:labels:oikeudet')}:
-            </strong>
-            {t(`hankeUsers:accessRightLevels:${signedInUser?.kayttooikeustaso}`)}
-          </Text>
-        </FeatureFlags>
+        <Text tag="p" styleAs="body-s" spacingBottom="l">
+          <strong style={{ marginRight: 'var(--spacing-s)' }}>
+            {t('hankePortfolio:labels:oikeudet')}:
+          </strong>
+          {t(`hankeUsers:accessRightLevels:${signedInUser?.kayttooikeustaso}`)}
+        </Text>
 
         <InformationViewHeaderButtons>
           <FeatureFlags flags={['hanke']}>
@@ -246,16 +244,14 @@ const HankeView: React.FC<Props> = ({
               ) : null}
             </CheckRightsByHanke>
           </FeatureFlags>
-          <FeatureFlags flags={['accessRights']}>
-            <Button
-              onClick={onEditRights}
-              variant="primary"
-              iconLeft={<IconUser aria-hidden="true" />}
-              theme="coat"
-            >
-              {t('hankeUsers:userManagementTitle')}
-            </Button>
-          </FeatureFlags>
+          <Button
+            onClick={onEditRights}
+            variant="primary"
+            iconLeft={<IconUser aria-hidden="true" />}
+            theme="coat"
+          >
+            {t('hankeUsers:userManagementTitle')}
+          </Button>
           <FeatureFlags flags={['hanke']}>
             <CheckRightsByHanke requiredRight="DELETE" hankeTunnus={hankeData.hankeTunnus}>
               <Button variant="primary" iconLeft={<IconCross aria-hidden="true" />} theme="black">
@@ -277,7 +273,7 @@ const HankeView: React.FC<Props> = ({
         </InformationViewHeaderButtons>
       </InformationViewHeader>
 
-      <InformationViewContentContainer hideSideBar={alueet === undefined || alueet?.length === 0}>
+      <InformationViewContentContainer hideSideBar={!features.hanke}>
         <InformationViewMainContent>
           <FeatureFlags flags={['hanke']}>
             <HankeGeneratedStateNotification
@@ -302,14 +298,7 @@ const HankeView: React.FC<Props> = ({
             {features.hanke && (
               <TabPanel>
                 {alueet?.map((area, index) => {
-                  return (
-                    <HankeAreaInfo
-                      key={area.id}
-                      area={area}
-                      hankeIndexData={tormaystarkasteluTulos}
-                      index={index}
-                    />
-                  );
+                  return <HankeAreaInfo key={area.id} area={area} index={index} />;
                 })}
               </TabPanel>
             )}
@@ -369,25 +358,27 @@ const HankeView: React.FC<Props> = ({
             </TabPanel>
           </Tabs>
         </InformationViewMainContent>
-        <FeatureFlags flags={['hanke']}>
-          {alueet?.length > 0 && (
-            <InformationViewSidebar testId="hanke-map">
-              <OwnHankeMapHeader hankeTunnus={hankeData.hankeTunnus} />
+        <InformationViewSidebar testId="hanke-map">
+          <OwnHankeMapHeader hankeTunnus={hankeData.hankeTunnus} showLink={alueet.length > 0} />
+          {alueet?.length > 0 ? (
+            <>
               <OwnHankeMap hanke={hankeData} />
               {alueet?.map((area, index) => {
                 return (
                   <CompressedAreaIndex
                     key={area.id}
                     area={area}
-                    haittaIndex={tormaystarkasteluTulos?.liikennehaittaindeksi?.indeksi}
+                    haittaIndex={area.tormaystarkasteluTulos?.liikennehaittaindeksi?.indeksi}
                     index={index}
                     className={styles.compressedAreaIndex}
                   />
                 );
               })}
-            </InformationViewSidebar>
+            </>
+          ) : (
+            <MapPlaceholder />
           )}
-        </FeatureFlags>
+        </InformationViewSidebar>
       </InformationViewContentContainer>
     </InformationViewContainer>
   );

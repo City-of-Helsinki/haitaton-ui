@@ -1,42 +1,79 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Feature } from 'ol';
-import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
+import VectorSource from 'ol/source/Vector';
 import Polygon from 'ol/geom/Polygon';
 import Geometry from 'ol/geom/Geometry';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { FieldArrayWithId, useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box, Flex } from '@chakra-ui/react';
-import { Button, Fieldset, IconAlertCircleFill, IconCross, Notification } from 'hds-react';
-import { debounce } from 'lodash';
-import { FeatureLike } from 'ol/Feature';
+import { Button, Fieldset, IconAlertCircleFill, IconCross } from 'hds-react';
 
-import VectorLayer from '../../common/components/map/layers/VectorLayer';
-import Map from '../../common/components/map/Map';
-import FitSource from '../map/components/interations/FitSource';
-import Kantakartta from '../map/components/Layers/Kantakartta';
-import styles from './Geometries.module.scss';
-import Controls from '../../common/components/map/controls/Controls';
-import DrawModule from '../../common/components/map/modules/draw/DrawModule';
 import { formatSurfaceArea } from '../map/utils';
 import Text from '../../common/components/text/Text';
 import ResponsiveGrid from '../../common/components/grid/ResponsiveGrid';
 import DatePicker from '../../common/components/datePicker/DatePicker';
 import useLocale from '../../common/hooks/useLocale';
-import OverviewMapControl from '../../common/components/map/controls/OverviewMapControl';
 import useSelectableTabs from '../../common/hooks/useSelectableTabs';
-import useHighlightArea from '../map/hooks/useHighlightArea';
 import { JohtoselvitysArea, JohtoselvitysFormValues } from './types';
-import AddressSearchContainer from '../map/components/AddressSearch/AddressSearchContainer';
-import useAddressCoordinate from '../map/hooks/useAddressCoordinate';
 import { ApplicationGeometry } from '../application/types/application';
-import useForceUpdate from '../../common/hooks/useForceUpdate';
 import { getAreaDefaultName } from '../application/utils';
-import FeatureHoverBox from '../map/components/FeatureHoverBox/FeatureHoverBox';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
-import LayerControl from '../../common/components/map/controls/LayerControl';
-import { MapTileLayerId } from '../map/types';
-import { useMapDataLayers } from '../map/hooks/useMapLayers';
-import Ortokartta from '../map/components/Layers/Ortokartta';
+import { HankeData } from '../types/hanke';
+import HankeLayer from '../map/components/Layers/HankeLayer';
+import DrawProvider from '../../common/components/map/modules/draw/DrawProvider';
+import useDrawContext from '../../common/components/map/modules/draw/useDrawContext';
+import ApplicationMap from '../application/components/ApplicationMap';
+
+function AreaList({
+  applicationAreas,
+  onRemoveArea,
+}: Readonly<{
+  applicationAreas: FieldArrayWithId<JohtoselvitysFormValues, 'applicationData.areas', 'id'>[];
+  onRemoveArea: (index: number, feature?: Feature<Geometry>) => void;
+}>) {
+  const { t } = useTranslation();
+  const {
+    actions: { setSelectedFeature },
+  } = useDrawContext();
+  const { tabRefs } = useSelectableTabs(applicationAreas, { selectLastTabOnChange: true });
+
+  return (
+    <Box as="ul" paddingLeft="var(--spacing-l)">
+      {applicationAreas.map((area, index) => {
+        const geometry = area.feature?.getGeometry();
+        const surfaceArea = geometry && `(${formatSurfaceArea(geometry)})`;
+        const areaName = getAreaDefaultName(t, index, applicationAreas.length);
+
+        area.feature?.set('areaName', areaName);
+
+        return (
+          <li key={area.id}>
+            <Flex alignItems="center" direction={{ base: 'column', sm: 'row' }}>
+              <Box
+                as="button"
+                type="button"
+                _hover={{ textDecoration: 'underline' }}
+                onClick={() => setSelectedFeature(area.feature!)}
+              >
+                <div ref={tabRefs[index]}>
+                  {areaName} {surfaceArea}
+                </div>
+              </Box>
+              <Button
+                variant="supplementary"
+                style={{ color: 'var(--color-error)' }}
+                iconLeft={<IconCross aria-hidden="true" />}
+                onClick={() => onRemoveArea(index, area.feature)}
+              >
+                {t('hankeForm:hankkeenAlueForm:removeAreaButton')}
+              </Button>
+            </Flex>
+          </li>
+        );
+      })}
+    </Box>
+  );
+}
 
 interface AreaToRemove {
   index: number;
@@ -60,13 +97,15 @@ function getEmptyArea(feature: Feature<Geometry>): JohtoselvitysArea {
   };
 }
 
-export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
+type Props = {
+  hankeData?: HankeData;
+};
+
+export function Geometries({ hankeData }: Readonly<Props>) {
   const { t } = useTranslation();
   const locale = useLocale();
   const {
     watch,
-    getValues,
-    setValue,
     formState: { errors },
   } = useFormContext<JohtoselvitysFormValues>();
 
@@ -83,50 +122,6 @@ export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
     return new VectorSource({ features });
   });
 
-  const forceUpdate = useForceUpdate();
-
-  const addressCoordinate = useAddressCoordinate(
-    getValues('applicationData.postalAddress.streetAddress.streetName'),
-  );
-
-  const [featuresLoaded, setFeaturesLoaded] = useState(false);
-
-  const { mapTileLayers, toggleMapTileLayer } = useMapDataLayers();
-  const ortoLayerOpacity = mapTileLayers.kantakartta.visible ? 0.5 : 1;
-
-  useEffect(() => {
-    function handleAddFeature(e: VectorSourceEvent<FeatureLike>) {
-      if (e.feature) {
-        append(getEmptyArea(e.feature as Feature<Geometry>));
-      }
-    }
-
-    const handleChangeFeature = debounce(() => {
-      forceUpdate();
-      if (featuresLoaded) {
-        // When areas are modified set geometriesChanged with shouldDirty option
-        // so that when changing form page application is saved
-        setValue('geometriesChanged', true, { shouldDirty: true });
-      }
-    }, 100);
-
-    drawSource.on('addfeature', handleAddFeature);
-    drawSource.on('changefeature', handleChangeFeature);
-    drawSource.once('featuresloadstart', () => {
-      setFeaturesLoaded(true);
-    });
-
-    return function cleanup() {
-      handleChangeFeature.cancel();
-      drawSource.un('addfeature', handleAddFeature);
-      drawSource.un('changefeature', handleChangeFeature);
-    };
-  }, [drawSource, append, forceUpdate, setValue, featuresLoaded]);
-
-  const { tabRefs } = useSelectableTabs(applicationAreas, { selectLastTabOnChange: true });
-
-  const higlightArea = useHighlightArea();
-
   const startTime = watch('applicationData.startTime');
   const endTime = watch('applicationData.endTime');
   const minEndDate = startTime ? new Date(startTime) : undefined;
@@ -135,7 +130,9 @@ export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const [areaToRemove, setAreaToRemove] = useState<AreaToRemove | null>(null);
 
-  const [showSelfIntersectingNotification, setShowSelfIntersectingNotification] = useState(false);
+  function handleAddArea(feature: Feature<Geometry>) {
+    append(getEmptyArea(feature));
+  }
 
   function removeArea(index: number, areaFeature?: Feature<Geometry>) {
     if (areaFeature !== undefined) {
@@ -154,16 +151,6 @@ export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   function closeAreaRemoveDialog() {
     setAreaToRemove(null);
-  }
-
-  function handleSelfIntersectingPolygon(feature: Feature<Geometry> | null) {
-    if (feature) {
-      setValue('selfIntersectingPolygon', true);
-      setShowSelfIntersectingNotification(true);
-    } else {
-      setValue('selfIntersectingPolygon', false, { shouldValidate: true });
-      setShowSelfIntersectingNotification(false);
-    }
   }
 
   return (
@@ -206,104 +193,36 @@ export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
         </ResponsiveGrid>
       </Fieldset>
 
-      <div className={styles.mapContainer}>
-        <Map zoom={9} center={addressCoordinate} mapClassName={styles.mapContainer__inner}>
-          {mapTileLayers.kantakartta.visible && <Kantakartta />}
-          {mapTileLayers.ortokartta.visible && <Ortokartta opacity={ortoLayerOpacity} />}
-
-          <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} zIndex={101} />
-
-          <VectorLayer source={drawSource} zIndex={100} className="drawLayer" />
-
-          <FitSource source={drawSource} />
-
-          <OverviewMapControl />
-
-          <FeatureHoverBox
-            render={(featureWithPixel) => {
-              const areaName = featureWithPixel.feature.get('areaName');
-              return areaName ? <p>{areaName}</p> : null;
-            }}
-          />
-
-          <Controls>
-            {workTimesSet && (
-              <DrawModule
-                source={drawSource}
-                onSelfIntersectingPolygon={handleSelfIntersectingPolygon}
-              />
-            )}
-
-            <LayerControl
-              tileLayers={Object.values(mapTileLayers)}
-              onClickTileLayer={(id: MapTileLayerId) => toggleMapTileLayer(id)}
+      <DrawProvider source={drawSource}>
+        <ApplicationMap
+          drawSource={drawSource}
+          showDrawControls={Boolean(workTimesSet)}
+          onAddArea={handleAddArea}
+        >
+          {/* Don't show hanke areas when hanke is generated */}
+          {!hankeData?.generated && (
+            <HankeLayer
+              hankeData={hankeData && [hankeData]}
+              startDate={startTime?.toString() ?? hankeData?.alkuPvm}
+              endDate={endTime?.toString() ?? hankeData?.loppuPvm}
+              fitSource
             />
-          </Controls>
-        </Map>
-      </div>
+          )}
+        </ApplicationMap>
 
-      {!workTimesSet && (
-        <Box px="var(--spacing-l)" py="var(--spacing-2-xl)" textAlign="center">
-          <Text tag="p">{t('johtoselvitysForm:alueet:giveDates')}</Text>
-        </Box>
-      )}
+        {!workTimesSet && (
+          <Box px="var(--spacing-l)" py="var(--spacing-2-xl)" textAlign="center">
+            <Text tag="p">{t('johtoselvitysForm:alueet:giveDates')}</Text>
+          </Box>
+        )}
 
-      {errors.applicationData?.areas && <ErrorText>{t('form:errors:areaRequired')}</ErrorText>}
+        {errors.applicationData?.areas && <ErrorText>{t('form:errors:areaRequired')}</ErrorText>}
 
-      {showSelfIntersectingNotification && !errors.selfIntersectingPolygon && (
-        <Notification
-          type="error"
-          label={t('form:errors:selfIntersectingArea')}
-          notificationAriaLabel={t('common:components:notification:notification')}
-          autoClose={false}
-          dismissible
-          closeButtonLabelText={`${t('common:components:notification:closeButtonLabelText')}`}
-          onClose={() => setShowSelfIntersectingNotification(false)}
-          style={{ marginBottom: 'var(--spacing-s)' }}
-        />
-      )}
-
-      {errors.selfIntersectingPolygon && (
-        <ErrorText>{t('form:errors:selfIntersectingArea')}</ErrorText>
-      )}
-
-      <Text tag="h3" styleAs="h4" weight="bold">
-        {t('hakemus:labels:addedAreas')}
-      </Text>
-      <Box as="ul" paddingLeft="var(--spacing-l)">
-        {applicationAreas.map((area, index) => {
-          const geometry = area.feature?.getGeometry();
-          const surfaceArea = geometry && `(${formatSurfaceArea(geometry)})`;
-          const areaName = getAreaDefaultName(t, index, applicationAreas.length);
-
-          area.feature?.set('areaName', areaName);
-
-          return (
-            <li key={area.id}>
-              <Flex alignItems="center">
-                <Box
-                  as="button"
-                  type="button"
-                  _hover={{ textDecoration: 'underline' }}
-                  onClick={() => higlightArea(area.feature)}
-                >
-                  <div ref={tabRefs[index]}>
-                    {areaName} {surfaceArea}
-                  </div>
-                </Box>
-                <Button
-                  variant="supplementary"
-                  style={{ color: 'var(--color-error)' }}
-                  iconLeft={<IconCross aria-hidden="true" />}
-                  onClick={() => removeArea(index, area.feature)}
-                >
-                  {t('hankeForm:hankkeenAlueForm:removeAreaButton')}
-                </Button>
-              </Flex>
-            </li>
-          );
-        })}
-      </Box>
+        <Text tag="h3" styleAs="h4" weight="bold">
+          {t('hakemus:labels:addedAreas')}
+        </Text>
+        <AreaList applicationAreas={applicationAreas} onRemoveArea={removeArea} />
+      </DrawProvider>
 
       <ConfirmationDialog
         title={t('hakemus:labels:removeAreaTitle')}
@@ -318,5 +237,5 @@ export const Geometries: React.FC<React.PropsWithChildren<unknown>> = () => {
       />
     </div>
   );
-};
+}
 export default Geometries;

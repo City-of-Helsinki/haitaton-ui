@@ -32,10 +32,6 @@ with `scripts/update-runtime-env.ts`, which contains the actual used variables w
 App is not using create-react-app's default `process.env` way to refer of variables
 but `window._env_` object.
 
-### `yarn e2e`
-
-Runs E2E cypress tests
-
 ### `yarn build`
 
 Builds the app for production to the `build` folder.<br />
@@ -116,6 +112,10 @@ After the translations are added to the Excel file, they can be imported back.
 1. Place the translated file inside repository root. It needs to be named `locale_export.xlsx`.
 2. Run the import script: `yarn locales:import`.
 3. The translations in `/src/locales` are updated.
+
+**NOTICE: If there are any `[TRANSLATION_PENDING]` texts, it means that a previously translated
+text has a minor change and needs a new or additional translation.
+This information needs to be passed alongside the Excel file to translators.**
 
 ## API mocking
 

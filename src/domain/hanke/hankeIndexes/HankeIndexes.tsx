@@ -4,8 +4,8 @@ import { LoadingSpinner, Tooltip } from 'hds-react';
 import clsx from 'clsx';
 import Text from '../../../common/components/text/Text';
 import styles from './HankeIndexes.module.scss';
-import { HankeIndexData } from '../../types/hanke';
-import HaittaIndexNumber from './HaittaIndexNumber';
+import HaittaIndexNumber from '../../common/haittaIndexes/HaittaIndexNumber';
+import { HaittaIndexData } from '../../common/haittaIndexes/types';
 
 type IndexProps = {
   title: string;
@@ -74,7 +74,7 @@ const getDetourNeedByIndex = (index: IndexProps['index'] | undefined) => {
 };
 
 type Props = {
-  hankeIndexData: HankeIndexData | null | undefined;
+  hankeIndexData: HaittaIndexData | null | undefined;
   indexTitle?: string;
   displayTooltip?: boolean;
   loading?: boolean;
@@ -96,7 +96,7 @@ const HankeIndexes: React.FC<React.PropsWithChildren<Props>> = ({
   const pyoraliikenneindeksi = hankeIndexData?.pyoraliikenneindeksi;
   const raitioliikenneindeksi = hankeIndexData?.raitioliikenneindeksi;
   const linjaautoliikenneindeksi = hankeIndexData?.linjaautoliikenneindeksi;
-  const autoliikenneindeksi = hankeIndexData?.autoliikenneindeksi;
+  const autoliikenneindeksi = hankeIndexData?.autoliikenne?.indeksi;
 
   return (
     <div className={containerClassName}>

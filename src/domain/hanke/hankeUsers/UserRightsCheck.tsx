@@ -1,6 +1,5 @@
 import React from 'react';
 import { Rights, SignedInUser } from './hankeUser';
-import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
 import { usePermissionsForHanke } from './hooks/useUserRightsForHanke';
 
 /**
@@ -19,11 +18,6 @@ export function CheckRightsByHanke({
   children: React.ReactElement | null;
 }) {
   const { data: signedInUser } = usePermissionsForHanke(hankeTunnus);
-  const features = useFeatureFlags();
-
-  if (!features.accessRights) {
-    return children;
-  }
 
   if (signedInUser?.kayttooikeudet.includes(requiredRight)) {
     return children;
@@ -41,11 +35,5 @@ export function CheckRightsByUser({
   signedInUser: SignedInUser;
   children: React.ReactElement | null;
 }) {
-  const features = useFeatureFlags();
-
-  if (!features.accessRights) {
-    return children;
-  }
-
   return signedInUser?.kayttooikeudet?.includes(requiredRight) ? children : null;
 }

@@ -1,5 +1,6 @@
 import { PartialExcept } from '../../common/types/utils';
 import { HankeGeoJSON } from '../../common/types/hanke';
+import { HaittaIndexData } from '../common/haittaIndexes/types';
 
 export enum HANKE_VAIHE {
   OHJELMOINTI = 'OHJELMOINTI',
@@ -62,25 +63,38 @@ export enum HANKE_KAISTAPITUUSHAITTA {
 export type HANKE_KAISTAPITUUSHAITTA_KEY = keyof typeof HANKE_KAISTAPITUUSHAITTA;
 
 export enum HANKE_MELUHAITTA {
-  SATUNNAINEN_HAITTA = 'SATUNNAINEN_HAITTA',
-  LYHYTAIKAINEN_TOISTUVA_HAITTA = 'LYHYTAIKAINEN_TOISTUVA_HAITTA',
-  PITKAKESTOINEN_TOISTUVA_HAITTA = 'PITKAKESTOINEN_TOISTUVA_HAITTA',
+  EI_MELUHAITTAA = 'EI_MELUHAITTAA',
+  SATUNNAINEN_MELUHAITTA = 'SATUNNAINEN_MELUHAITTA',
+  TOISTUVA_MELUHAITTA = 'TOISTUVA_MELUHAITTA',
+  JATKUVA_MELUHAITTA = 'JATKUVA_MELUHAITTA',
 }
 export type HANKE_MELUHAITTA_KEY = keyof typeof HANKE_MELUHAITTA;
 
 export enum HANKE_POLYHAITTA {
-  SATUNNAINEN_HAITTA = 'SATUNNAINEN_HAITTA',
-  LYHYTAIKAINEN_TOISTUVA_HAITTA = 'LYHYTAIKAINEN_TOISTUVA_HAITTA',
-  PITKAKESTOINEN_TOISTUVA_HAITTA = 'PITKAKESTOINEN_TOISTUVA_HAITTA',
+  EI_POLYHAITTAA = 'EI_POLYHAITTAA',
+  SATUNNAINEN_POLYHAITTA = 'SATUNNAINEN_POLYHAITTA',
+  TOISTUVA_POLYHAITTA = 'TOISTUVA_POLYHAITTA',
+  JATKUVA_POLYHAITTA = 'JATKUVA_POLYHAITTA',
 }
 export type HANKE_POLYHAITTA_KEY = keyof typeof HANKE_POLYHAITTA;
 
 export enum HANKE_TARINAHAITTA {
-  SATUNNAINEN_HAITTA = 'SATUNNAINEN_HAITTA',
-  LYHYTAIKAINEN_TOISTUVA_HAITTA = 'LYHYTAIKAINEN_TOISTUVA_HAITTA',
-  PITKAKESTOINEN_TOISTUVA_HAITTA = 'PITKAKESTOINEN_TOISTUVA_HAITTA',
+  EI_TARINAHAITTAA = 'EI_TARINAHAITTAA',
+  SATUNNAINEN_TARINAHAITTA = 'SATUNNAINEN_TARINAHAITTA',
+  TOISTUVA_TARINAHAITTA = 'TOISTUVA_TARINAHAITTA',
+  JATKUVA_TARINAHAITTA = 'JATKUVA_TARINAHAITTA',
 }
 export type HANKE_TARINAHAITTA_KEY = keyof typeof HANKE_TARINAHAITTA;
+
+export enum HAITTOJENHALLINTATYYPPI {
+  YLEINEN = 'YLEINEN',
+  PYORALIIKENNE = 'PYORALIIKENNE',
+  AUTOLIIKENNE = 'AUTOLIIKENNE',
+  RAITIOLIIKENNE = 'RAITIOLIIKENNE',
+  LINJAAUTOLIIKENNE = 'LINJAAUTOLIIKENNE',
+  MUUT = 'MUUT',
+}
+export type HAITTOJENHALLINTATYYPPI_KEY = keyof typeof HAITTOJENHALLINTATYYPPI;
 
 export enum HANKE_CONTACT_TYPE {
   OMISTAJAT = 'omistajat',
@@ -146,6 +160,10 @@ export type HankeGeometria = {
   modifiedByUserId?: string | null;
 };
 
+export type HankkeenHaittojenhallintasuunnitelma = {
+  [key in HAITTOJENHALLINTATYYPPI_KEY]?: string;
+};
+
 export type HankeAlue = {
   id: number | null;
   hankeId?: number;
@@ -158,22 +176,9 @@ export type HankeAlue = {
   polyHaitta: HANKE_POLYHAITTA_KEY | null;
   tarinaHaitta: HANKE_TARINAHAITTA_KEY | null;
   nimi?: string | null;
+  tormaystarkasteluTulos?: HaittaIndexData | null;
+  haittojenhallintasuunnitelma?: HankkeenHaittojenhallintasuunnitelma;
 };
-
-export enum HANKE_INDEX_TYPE {
-  AUTOLIIKENNEINDEKSI = 'AUTOLIIKENNEINDEKSI',
-}
-
-export type Liikennehaittaindeksi = {
-  indeksi: number;
-  tyyppi: HANKE_INDEX_TYPE.AUTOLIIKENNEINDEKSI;
-};
-
-export enum HANKE_INDEX_STATE {
-  VOIMASSA = 'VOIMASSA',
-}
-
-export type HANKE_INDEX_STATE_KEY = keyof typeof HANKE_INDEX_STATE;
 
 enum HANKE_STATUS {
   DRAFT = 'DRAFT',
@@ -199,7 +204,7 @@ export interface HankeData {
   rakennuttajat: Array<HankeYhteystieto>;
   toteuttajat: Array<HankeYhteystieto>;
   muut: Array<HankeMuuTaho>;
-  tormaystarkasteluTulos: HankeIndexData | null;
+  tormaystarkasteluTulos: HaittaIndexData | null;
   status: HANKE_STATUS_KEY;
   version?: number;
   createdBy?: string;
@@ -207,18 +212,6 @@ export interface HankeData {
   modifiedBy?: null | string;
   modifiedAt?: null | string;
   generated?: boolean;
-}
-
-export interface HankeIndexData {
-  hankeTunnus: string;
-  hankeId: number;
-  hankeGeometriatId: number;
-  liikennehaittaindeksi: Liikennehaittaindeksi;
-  autoliikenneindeksi: number;
-  pyoraliikenneindeksi: number;
-  linjaautoliikenneindeksi: number;
-  raitioliikenneindeksi: number;
-  tila: HANKE_INDEX_STATE_KEY;
 }
 
 type DraftRequiredFields = 'nimi' | 'kuvaus' | 'vaihe';

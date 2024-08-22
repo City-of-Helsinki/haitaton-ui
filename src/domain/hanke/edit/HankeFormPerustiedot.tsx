@@ -7,26 +7,20 @@ import { Box } from '@chakra-ui/react';
 import TextInput from '../../../common/components/textInput/TextInput';
 import { HANKE_VAIHE, HANKE_TYOMAATYYPPI } from '../../types/hanke';
 import { FORMFIELD, FormProps } from './types';
-import { useFormPage } from './hooks/useFormPage';
 import DropdownMultiselect from '../../../common/components/dropdown/DropdownMultiselect';
 import Checkbox from '../../../common/components/checkbox/Checkbox';
 import { getInputErrorText } from '../../../common/utils/form';
 import Link from '../../../common/components/Link/Link';
-import JohtoselvitysCreateDialog from '../../johtoselvitys_new/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
-import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
-import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
+import JohtoselvitysCreateDialog from '../../johtoselvitys/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
 
 const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
   errors,
   register,
-  formData,
+  hanke,
 }) => {
-  const { JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();
-  const features = useFeatureFlags();
   const { t } = useTranslation();
   const { setValue, watch } = useFormContext();
   const [showJohtoselvitysCreateDialog, setShowJohtoselvitysCreateDialog] = useState(false);
-  useFormPage();
 
   // Subscribe to vaihe changes in order to update the selected radio button
   const hankeVaiheField = watch(FORMFIELD.VAIHE);
@@ -52,10 +46,7 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
           <p>Hankkeen luonnin kautta pääset lähettämään myös hakemuksia.</p>
           <p>
             <strong>HUOM!</strong> Mikäli teet pelkkää johtoselvitystä yksityiselle alueelle,
-            <Link
-              href={features.accessRights ? '#' : JOHTOSELVITYSHAKEMUS.path}
-              onClick={features.accessRights ? openJohtoselvitysCreateDialog : undefined}
-            >
+            <Link href="#" onClick={openJohtoselvitysCreateDialog}>
               täytä hakemus
             </Link>
             . Yleisten alueiden johtoselvitykset haetaan hankkeen luonnin jälkeen kaivuilmoituksen
@@ -74,11 +65,12 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
         <TextArea
           id={FORMFIELD.KUVAUS}
           label={t(`hankeForm:labels:${FORMFIELD.KUVAUS}`)}
-          defaultValue={formData[FORMFIELD.KUVAUS] || ''}
+          defaultValue={hanke[FORMFIELD.KUVAUS] || ''}
           invalid={!!errors[FORMFIELD.KUVAUS]}
           {...register(FORMFIELD.KUVAUS)}
           data-testid={FORMFIELD.KUVAUS}
           errorText={getInputErrorText(t, errors[FORMFIELD.KUVAUS])}
+          required
         />
       </div>
       <div className="formWpr formWprShort">
@@ -90,16 +82,17 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
             tooltipLabel: t(`hankeForm:labels:${FORMFIELD.KATUOSOITE}`),
             placement: 'auto',
           }}
+          required
         />
       </div>
       <div className="formWpr">
         <SelectionGroup
-          direction="horizontal"
           label={t(`hankeForm:labels:${FORMFIELD.VAIHE}`)}
           errorText={getInputErrorText(t, errors[FORMFIELD.VAIHE])}
           tooltipLabel={t(`hankeForm:labels:${FORMFIELD.VAIHE}`)}
           tooltipButtonLabel={t(`hankeForm:toolTips:tipOpenLabel`)}
           tooltipText={t(`hankeForm:toolTips:${FORMFIELD.VAIHE}`)}
+          required
         >
           {$enum(HANKE_VAIHE).map((value) => {
             return (
@@ -125,8 +118,8 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
             label: t(`hanke:${FORMFIELD.TYOMAATYYPPI}:${value}`),
           }))}
           defaultValue={
-            formData
-              ? formData[FORMFIELD.TYOMAATYYPPI]?.map((value) => ({
+            hanke
+              ? hanke[FORMFIELD.TYOMAATYYPPI]?.map((value) => ({
                   value,
                   label: t(`hanke:${FORMFIELD.TYOMAATYYPPI}:${value}`),
                 }))

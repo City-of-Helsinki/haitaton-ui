@@ -43,6 +43,29 @@ const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { t } = useTranslation();
 
+  const mainButton = (
+    <Button
+      onClick={mainAction}
+      data-testid="dialog-button-test"
+      variant={variant}
+      iconLeft={mainBtnIcon}
+      isLoading={isLoading}
+    >
+      {mainBtnLabel}
+    </Button>
+  );
+
+  const secondaryButton = showSecondaryButton && (
+    <Button
+      variant="secondary"
+      onClick={close}
+      theme={variant === 'danger' ? 'black' : 'default'}
+      data-testid="dialog-cancel-test"
+    >
+      {t('common:confirmationDialog:cancelButton')}
+    </Button>
+  );
+
   return (
     <Dialog
       id="dialog"
@@ -70,24 +93,16 @@ const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
         )}
       </Dialog.Content>
       <Dialog.ActionButtons>
-        <Button
-          onClick={mainAction}
-          data-testid="dialog-button-test"
-          variant={variant}
-          iconLeft={mainBtnIcon}
-          isLoading={isLoading}
-        >
-          {mainBtnLabel}
-        </Button>
-        {showSecondaryButton && (
-          <Button
-            variant="secondary"
-            onClick={close}
-            theme={variant === 'danger' ? 'black' : 'default'}
-            data-testid="dialog-cancel-test"
-          >
-            {t('common:confirmationDialog:cancelButton')}
-          </Button>
+        {variant === 'danger' ? (
+          <>
+            {secondaryButton}
+            {mainButton}
+          </>
+        ) : (
+          <>
+            {mainButton}
+            {secondaryButton}
+          </>
         )}
       </Dialog.ActionButtons>
     </Dialog>

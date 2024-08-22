@@ -36,6 +36,8 @@ export enum FORMFIELD {
   GEOMETRIES_CHANGED = 'geometriesChanged',
   GEOMETRIAT = 'geometriat',
   HANKEALUEET = 'alueet',
+  HAITTOJENHALLINTASUUNNITELMA = 'haittojenhallintasuunnitelma',
+  YLEISTEN_HAITTOJEN_HALLINTASUUNNITELMA = 'yleistenHaittojenHallintasuunnitelma',
 }
 
 export enum CONTACT_FORMFIELD {
@@ -68,7 +70,7 @@ export interface HankeDataFormState extends PartialExcept<HankeData, HankeContac
 }
 
 export interface FormProps {
-  formData: HankeDataFormState;
+  hanke: HankeDataFormState;
   errors: FieldErrors;
   // eslint-disable-next-line
   register: any;
@@ -97,3 +99,10 @@ export type YhteyshenkiloWithoutName = Pick<
   Yhteyshenkilo,
   YHTEYSHENKILO_FORMFIELD.EMAIL | YHTEYSHENKILO_FORMFIELD.PUHELINNUMERO
 >;
+
+export enum HANKE_PAGES {
+  PERUSTIEDOT = 'perustiedot',
+  ALUEET = 'alueet',
+  HAITTOJEN_HALLINTA = 'haittojenHallinta',
+  YHTEYSTIEDOT = 'yhteystiedot',
+}

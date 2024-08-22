@@ -7,12 +7,10 @@ import Container from '../common/components/container/Container';
 import PageMeta from './components/PageMeta';
 import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
 import JohtoselvitysContainer from '../domain/johtoselvitys/JohtoselvitysContainer';
-import JohtoselvitysContainerNew from '../domain/johtoselvitys_new/JohtoselvitysContainer';
 import { useApplication } from '../domain/application/hooks/useApplication';
 import useHanke from '../domain/hanke/hooks/useHanke';
 import ErrorLoadingText from '../common/components/errorLoadingText/ErrorLoadingText';
 import { APPLICATION_ID_STORAGE_KEY } from '../domain/application/constants';
-import { useFeatureFlags } from '../common/components/featureFlags/FeatureFlagsContext';
 import { Application, JohtoselvitysData } from '../domain/application/types/application';
 import { isApplicationSent } from '../domain/application/utils';
 import ConfirmationDialog from '../common/components/HDSConfirmationDialog/ConfirmationDialog';
@@ -21,9 +19,8 @@ import useNavigateToApplicationView from '../domain/application/hooks/useNavigat
 const EditJohtoselvitysPage: React.FC = () => {
   const { id } = useParams();
   const { EDIT_JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();
-  const features = useFeatureFlags();
   const { t } = useTranslation();
-  const navigateToApplicationView = useNavigateToApplicationView(id);
+  const navigateToApplicationView = useNavigateToApplicationView();
   const [showApplicationSentDialog, setShowApplicationSentDialog] = useState(false);
 
   const applicationQueryResult = useApplication(Number(id));
@@ -55,23 +52,15 @@ const EditJohtoselvitysPage: React.FC = () => {
   return (
     <Container>
       <PageMeta routeData={EDIT_JOHTOSELVITYSHAKEMUS} />
-      {features.accessRights ? (
-        <JohtoselvitysContainerNew
-          hankeData={hankeQueryResult?.data}
-          application={applicationQueryResult.data as Application<JohtoselvitysData>}
-        />
-      ) : (
-        <JohtoselvitysContainer
-          hankeData={hankeQueryResult?.data}
-          application={applicationQueryResult.data as Application<JohtoselvitysData>}
-        />
-      )}
-
+      <JohtoselvitysContainer
+        hankeData={hankeQueryResult?.data}
+        application={applicationQueryResult.data as Application<JohtoselvitysData>}
+      />
       <ConfirmationDialog
         isOpen={showApplicationSentDialog}
         title={t('hakemus:sentDialog:title')}
         description={t('hakemus:sentDialog:description')}
-        mainAction={navigateToApplicationView}
+        mainAction={() => navigateToApplicationView(id)}
         mainBtnLabel={t('hakemus:sentDialog:button')}
         variant="primary"
         showSecondaryButton={false}

@@ -1,18 +1,21 @@
-import { HankeIndexData, HANKE_INDEX_TYPE, HANKE_INDEX_STATE } from '../types/hanke';
+import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../common/haittaIndexes/types';
 
-const hankeIndexData: HankeIndexData = {
-  hankeTunnus: 'HAI21-35',
-  hankeId: 62,
-  hankeGeometriatId: 52,
+const hankeIndexData: HaittaIndexData = {
   liikennehaittaindeksi: {
     indeksi: 4,
-    tyyppi: HANKE_INDEX_TYPE.AUTOLIIKENNEINDEKSI,
+    tyyppi: HAITTA_INDEX_TYPE.AUTOLIIKENNEINDEKSI,
   },
-  autoliikenneindeksi: 4,
+  autoliikenne: {
+    indeksi: 4,
+    haitanKesto: 1,
+    katuluokka: 4,
+    liikennemaara: 4,
+    kaistahaitta: 4,
+    kaistapituushaitta: 4,
+  },
   pyoraliikenneindeksi: 3,
   linjaautoliikenneindeksi: 2,
   raitioliikenneindeksi: 1,
-  tila: HANKE_INDEX_STATE.VOIMASSA,
 };
 
 export default hankeIndexData;

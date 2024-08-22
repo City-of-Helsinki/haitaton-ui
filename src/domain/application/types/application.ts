@@ -3,16 +3,28 @@ import { Polygon, Position } from 'geojson';
 import { Coordinate } from 'ol/coordinate';
 import { CRS } from '../../../common/types/hanke';
 import yup from '../../../common/utils/yup';
-import { newJohtoselvitysSchema } from '../../johtoselvitys_new/validationSchema';
+import { newJohtoselvitysSchema } from '../../johtoselvitys/validationSchema';
+import {
+  HANKE_KAISTAHAITTA_KEY,
+  HANKE_KAISTAPITUUSHAITTA_KEY,
+  HANKE_MELUHAITTA_KEY,
+  HANKE_POLYHAITTA_KEY,
+  HANKE_TARINAHAITTA_KEY,
+  HANKE_TYOMAATYYPPI_KEY,
+} from '../../types/hanke';
+import { Feature } from 'ol';
+import { Geometry, Polygon as OlPolygon } from 'ol/geom';
+import { getSurfaceArea } from '../../../common/components/map/utils';
+import { HaittaIndexData } from '../../common/haittaIndexes/types';
 
 export type ApplicationType = 'CABLE_REPORT' | 'EXCAVATION_NOTIFICATION';
 
 export type PostalAddress = {
   streetAddress: {
-    streetName: string;
+    streetName?: string | null;
   };
-  postalCode?: string;
-  city?: string;
+  postalCode?: string | null;
+  city?: string | null;
 };
 
 export type Contact = {
@@ -53,6 +65,19 @@ export type Customer = {
 export type CustomerWithContacts = {
   customer: Customer;
   contacts: Contact[];
+};
+
+// Laskutusasiakas
+export type InvoicingCustomer = {
+  type: keyof typeof ContactType | null;
+  name: string;
+  registryKey: string;
+  ovt?: string | null;
+  invoicingOperator?: string | null;
+  customerReference?: string | null;
+  postalAddress: PostalAddress;
+  email?: string | null;
+  phone?: string | null;
 };
 
 export enum AlluStatus {
@@ -103,6 +128,33 @@ export type ApplicationArea = {
   geometry: ApplicationGeometry;
 };
 
+export class Tyoalue {
+  geometry: ApplicationGeometry;
+  area: number;
+  tormaystarkasteluTulos?: HaittaIndexData | null;
+  openlayersFeature?: Feature<Geometry>;
+
+  constructor(feature: Feature<Geometry>) {
+    this.geometry = new ApplicationGeometry((feature.getGeometry() as OlPolygon).getCoordinates());
+    this.area = getSurfaceArea(feature.getGeometry()!);
+    this.openlayersFeature = feature;
+  }
+}
+
+export type KaivuilmoitusAlue = {
+  name: string;
+  hankealueId: number;
+  tyoalueet: Tyoalue[];
+  katuosoite: string;
+  tyonTarkoitukset: HANKE_TYOMAATYYPPI_KEY[] | null;
+  meluhaitta: HANKE_MELUHAITTA_KEY | null;
+  polyhaitta: HANKE_POLYHAITTA_KEY | null;
+  tarinahaitta: HANKE_TARINAHAITTA_KEY | null;
+  kaistahaitta: HANKE_KAISTAHAITTA_KEY | null;
+  kaistahaittojenPituus: HANKE_KAISTAPITUUSHAITTA_KEY | null;
+  lisatiedot?: string;
+};
+
 export type AttachmentType = 'MUU' | 'LIIKENNEJARJESTELY' | 'VALTAKIRJA';
 
 export interface ApplicationAttachmentMetadata extends AttachmentMetadata {
@@ -141,14 +193,15 @@ export interface KaivuilmoitusData {
   cableReports?: string[];
   placementContracts?: string[];
   requiredCompetence: boolean;
-  areas: ApplicationArea[];
+  areas: KaivuilmoitusAlue[];
   startTime: Date | null;
   endTime: Date | null;
-  customerWithContacts: CustomerWithContacts | null;
-  contractorWithContacts: CustomerWithContacts | null;
-  representativeWithContacts: CustomerWithContacts | null;
-  propertyDeveloperWithContacts: CustomerWithContacts | null;
-  additionalInfo?: string;
+  customerWithContacts?: CustomerWithContacts | null;
+  contractorWithContacts?: CustomerWithContacts | null;
+  representativeWithContacts?: CustomerWithContacts | null;
+  propertyDeveloperWithContacts?: CustomerWithContacts | null;
+  invoicingCustomer?: InvoicingCustomer | null;
+  additionalInfo?: string | null;
 }
 
 export type NewJohtoselvitysData = yup.InferType<typeof newJohtoselvitysSchema>;
@@ -265,8 +318,8 @@ export interface KaivuilmoitusUpdateData
     | 'representativeWithContacts'
     | 'propertyDeveloperWithContacts'
   > {
-  customerWithContacts: ApplicationUpdateCustomerWithContacts | null;
-  contractorWithContacts: ApplicationUpdateCustomerWithContacts | null;
-  representativeWithContacts: ApplicationUpdateCustomerWithContacts | null;
-  propertyDeveloperWithContacts: ApplicationUpdateCustomerWithContacts | null;
+  customerWithContacts?: ApplicationUpdateCustomerWithContacts | null;
+  contractorWithContacts?: ApplicationUpdateCustomerWithContacts | null;
+  representativeWithContacts?: ApplicationUpdateCustomerWithContacts | null;
+  propertyDeveloperWithContacts?: ApplicationUpdateCustomerWithContacts | null;
 }

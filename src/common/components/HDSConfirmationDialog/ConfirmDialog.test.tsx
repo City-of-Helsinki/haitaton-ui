@@ -1,6 +1,3 @@
-/// <reference types="cypress" />
-
-import React from 'react';
 import { render } from '../../../testUtils/render';
 import ConfirmationDialog from './ConfirmationDialog';
 
@@ -23,11 +20,11 @@ describe('confirmationDialog', () => {
         mainAction={handleMainAction}
         mainBtnLabel={buttonText}
         variant={variant}
-      />
+      />,
     );
 
     expect(renderedDialog.getByTestId('dialog-description-test')).toHaveTextContent(
-      descriptionText
+      descriptionText,
     );
     expect(renderedDialog.getByTestId('dialog-button-test')).toHaveTextContent(buttonText);
     renderedDialog.getByTestId('dialog-button-test').click();

@@ -16,10 +16,12 @@ customGlobal.fetchMock = customGlobal.fetch;
 global.ResizeObserver = require('resize-observer-polyfill');
 
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
+beforeEach(() => server.resetHandlers());
 afterAll(() => server.close());
-afterEach(() => server.resetHandlers());
 
 jest.mock('./domain/auth/constants', () => {
   jest.requireActual('../public/test-env-config');
   return jest.requireActual('./domain/auth/constants');
 });
+
+jest.setTimeout(240000);

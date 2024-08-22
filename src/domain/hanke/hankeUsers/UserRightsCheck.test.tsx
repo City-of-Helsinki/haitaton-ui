@@ -1,4 +1,3 @@
-import React from 'react';
 import { rest } from 'msw';
 import { render, screen, waitFor } from '../../../testUtils/render';
 import { server } from '../../mocks/test-server';
@@ -43,23 +42,6 @@ describe('CheckRightsByHanke', () => {
       expect(screen.queryByText('Children')).not.toBeInTheDocument();
     });
   });
-
-  test('Should render children when access right feature is not enabled', async () => {
-    const OLD_ENV = { ...window._env_ };
-    window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: 0 };
-
-    render(
-      <CheckRightsByHanke requiredRight="EDIT" hankeTunnus="HAI22-2">
-        <p>Children</p>
-      </CheckRightsByHanke>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('Children')).toBeInTheDocument();
-    });
-    jest.resetModules();
-    window._env_ = OLD_ENV;
-  });
 });
 
 describe('CheckRightsByUser', () => {
@@ -88,22 +70,5 @@ describe('CheckRightsByUser', () => {
     await waitFor(() => {
       expect(screen.queryByText('Children')).not.toBeInTheDocument();
     });
-  });
-
-  test('Should render children if feature not enabled regardless of permission', async () => {
-    const OLD_ENV = { ...window._env_ };
-    window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_ACCESS_RIGHTS: 0 };
-
-    render(
-      <CheckRightsByUser requiredRight="EDIT" signedInUser={VIEW_RIGHT_USER}>
-        <p>Children</p>
-      </CheckRightsByUser>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('Children')).toBeInTheDocument();
-    });
-    jest.resetModules();
-    window._env_ = OLD_ENV;
   });
 });

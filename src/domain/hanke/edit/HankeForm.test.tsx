@@ -1,18 +1,14 @@
-import React from 'react';
 import { rest } from 'msw';
 import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
-import { HANKE_VAIHE, HANKE_TYOMAATYYPPI } from '../../types/hanke';
 import {
-  render,
-  cleanup,
-  fireEvent,
-  waitFor,
-  screen,
-  act,
-  within,
-} from '../../../testUtils/render';
+  HANKE_VAIHE,
+  HANKE_TYOMAATYYPPI,
+  HankeData,
+  HankkeenHaittojenhallintasuunnitelma,
+} from '../../types/hanke';
+import { render, cleanup, fireEvent, waitFor, screen, within } from '../../../testUtils/render';
 import hankkeet from '../../mocks/data/hankkeet-data';
 import { server } from '../../mocks/test-server';
 import { HankeAttachmentMetadata } from '../hankeAttachments/types';
@@ -20,10 +16,12 @@ import api from '../../api/api';
 import * as hankeAttachmentsApi from '../hankeAttachments/hankeAttachmentsApi';
 import { HankeUser } from '../hankeUsers/hankeUser';
 import { fillNewContactPersonForm } from '../../forms/components/testUtils';
+import { cloneDeep } from 'lodash';
+import { Feature } from 'ol';
+import { Polygon } from 'ol/geom';
+import { waitForElementToBeRemoved } from '@testing-library/react';
 
 afterEach(cleanup);
-
-jest.setTimeout(30000);
 
 const DUMMY_DATA = 'dummy_file_data';
 
@@ -87,6 +85,7 @@ function initFileDeleteResponse() {
 const nimi = 'test kuoppa';
 const hankkeenKuvaus = 'Tässä on kuvaus';
 const hankkeenOsoite = 'Sankaritie 3';
+const updatedHaittojenhallintasuunnitelma = ', johon on lisätty tekstiä.';
 
 function fillBasicInformation(
   options: {
@@ -129,21 +128,31 @@ const formData: HankeDataFormState = {
   kuvaus: 'testi kuvaus',
 };
 
-async function setupAlueetPage() {
-  const hanke = hankkeet[2];
-
+async function setupAlueetPage(hanke: HankeDataFormState = hankkeet[2] as HankeDataFormState) {
   const { user } = render(
-    <HankeForm
-      formData={hanke as HankeDataFormState}
-      onIsDirtyChange={() => ({})}
-      onFormClose={() => ({})}
-    >
+    <HankeForm formData={hanke} onIsDirtyChange={() => ({})} onFormClose={() => ({})}>
       <></>
     </HankeForm>,
   );
 
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  expect(screen.queryByText('Vaihe 2/6: Alueet')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 2/6: Alueet')).toBeInTheDocument();
+
+  return { user };
+}
+
+async function setupHaittojenHallintaPage(
+  hanke: HankeDataFormState = hankkeet[2] as HankeDataFormState,
+) {
+  const { user } = render(
+    <HankeForm formData={hanke} onIsDirtyChange={() => ({})} onFormClose={() => ({})}>
+      <></>
+    </HankeForm>,
+  );
+
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  expect(await screen.findByText('Vaihe 3/6: Haittojen hallinta')).toBeInTheDocument();
 
   return { user };
 }
@@ -199,7 +208,7 @@ describe('HankeForm', () => {
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
     expect(screen.queryByText('Vaihe 1/6: Perustiedot')).toBeInTheDocument();
-    expect(screen.queryByText('Kentän pituus oltava vähintään 3 merkkiä')).toBeInTheDocument();
+    expect(screen.queryByText('Kenttä on pakollinen')).toBeInTheDocument();
   });
 
   test('Should allow next page if hanke name is set', async () => {
@@ -211,7 +220,7 @@ describe('HankeForm', () => {
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-    expect(screen.queryByText('Vaihe 3/6: Haitat')).toBeInTheDocument();
+    expect(await screen.findByText('Vaihe 3/6: Haittojen hallinta')).toBeInTheDocument();
   });
 
   test('Hanke nimi should be limited to 100 characters and not exceed the limit with additional characters', async () => {
@@ -241,23 +250,150 @@ describe('HankeForm', () => {
     // End date of the nuisance
     expect(screen.getByDisplayValue('24.2.2023')).toBeInTheDocument();
     // Noise nuisance
-    expect(screen.getByText('Satunnainen haitta')).toBeInTheDocument();
+    expect(screen.getByText('1: Satunnainen meluhaitta')).toBeInTheDocument();
     // Dust nuisance
-    expect(screen.getByText('Lyhytaikainen toistuva haitta')).toBeInTheDocument();
+    expect(screen.getByText('3: Toistuva pölyhaitta')).toBeInTheDocument();
     // Vibration nuisance
-    expect(screen.getByText('Pitkäkestoinen jatkuva haitta')).toBeInTheDocument();
+    expect(screen.getByText('5: Jatkuva tärinähaitta')).toBeInTheDocument();
     // Lane hindrance
     expect(screen.getByText('Vähentää kaistan yhdellä ajosuunnalla')).toBeInTheDocument();
     // Hindrance affecting lane length
     expect(screen.getByText('Alle 10 m')).toBeInTheDocument();
   });
 
+  test('Car traffic nuisance categories are shown correctly on area page', async () => {
+    const { user } = await setupAlueetPage();
+
+    await user.click(screen.getByRole('button', { name: /hankealueen liikennehaittaindeksit/i }));
+    await user.click(screen.getAllByRole('button', { name: /haittaindeksi/i })[1]);
+
+    expect(screen.getByText('Katuluokka')).toBeVisible();
+    expect(screen.getByTestId('test-katuluokka')).toHaveTextContent('3');
+    expect(screen.getByText('Autoliikenteen määrä')).toBeVisible();
+    expect(screen.getByTestId('test-liikennemaara')).toHaveTextContent('3');
+    expect(screen.getByText('Vaikutus autoliikenteen kaistamääriin')).toBeVisible();
+    expect(screen.getByTestId('test-kaistahaitta')).toHaveTextContent('3');
+    expect(screen.getByText('Autoliikenteen kaistavaikutusten pituus')).toBeVisible();
+    expect(screen.getByTestId('test-kaistapituushaitta')).toHaveTextContent('3');
+    expect(screen.getByText('Hankkeen kesto')).toBeVisible();
+    expect(screen.getByTestId('test-haitanKesto')).toHaveTextContent('3');
+  });
+
+  test('Nuisance control plan is shown correctly', async () => {
+    await setupHaittojenHallintaPage();
+
+    expect(screen.getByText('Yleisten haittojen hallintasuunnitelma')).toBeInTheDocument();
+    expect(
+      screen.getByText('Pyöräliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('test-PYORALIIKENNE')).toHaveTextContent('3.5');
+    expect(
+      screen.getByText('Autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('test-AUTOLIIKENNE')).toHaveTextContent('3');
+    expect(
+      screen.getByText('Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('test-LINJAAUTOLIIKENNE')).toHaveTextContent('1');
+    expect(
+      screen.getByText('Raitioliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('test-RAITIOLIIKENNE')).toHaveTextContent('2');
+    expect(screen.getByText('Muiden haittojen hallintasuunnitelma')).toBeInTheDocument();
+    expect(screen.getByTestId('test-meluHaitta')).toHaveTextContent('1');
+    expect(screen.getByTestId('test-polyHaitta')).toHaveTextContent('3');
+    expect(screen.getByTestId('test-tarinaHaitta')).toHaveTextContent('5');
+  });
+
+  test('Car traffic nuisance categories are shown correctly on nuisance control plan page', async () => {
+    const { user } = await setupHaittojenHallintaPage();
+
+    await user.click(screen.getByRole('button', { name: /haittaindeksi/i }));
+
+    expect(screen.getByText('Katuluokka')).toBeVisible();
+    expect(screen.getByTestId('test-katuluokka')).toHaveTextContent('3');
+    expect(screen.getByText('Autoliikenteen määrä')).toBeVisible();
+    expect(screen.getByTestId('test-liikennemaara')).toHaveTextContent('3');
+    expect(screen.getByText('Vaikutus autoliikenteen kaistamääriin')).toBeVisible();
+    expect(screen.getByTestId('test-kaistahaitta')).toHaveTextContent('3');
+    expect(screen.getByText('Autoliikenteen kaistavaikutusten pituus')).toBeVisible();
+    expect(screen.getByTestId('test-kaistapituushaitta')).toHaveTextContent('3');
+    expect(screen.getByText('Hankkeen kesto')).toBeVisible();
+    expect(screen.getByTestId('test-haitanKesto')).toHaveTextContent('3');
+  });
+
+  test('Nuisance control plan is updated correctly', async () => {
+    const { user } = await setupHaittojenHallintaPage();
+    let haittojenhallintasuunnitelma: HankkeenHaittojenhallintasuunnitelma;
+    server.use(
+      rest.put('/api/hankkeet/:hankeTunnus', async (req, res, ctx) => {
+        const hankeData = await req.json<HankeData>();
+        haittojenhallintasuunnitelma = hankeData.alueet[0]
+          .haittojenhallintasuunnitelma as HankkeenHaittojenhallintasuunnitelma;
+        return res(ctx.status(200), ctx.json<HankeData>(hankeData));
+      }),
+    );
+
+    await user.type(
+      screen.getByTestId('alueet.0.haittojenhallintasuunnitelma.YLEINEN'),
+      updatedHaittojenhallintasuunnitelma,
+    );
+    await user.type(
+      screen.getByTestId('alueet.0.haittojenhallintasuunnitelma.PYORALIIKENNE'),
+      updatedHaittojenhallintasuunnitelma,
+    );
+    await user.type(
+      screen.getByTestId('alueet.0.haittojenhallintasuunnitelma.AUTOLIIKENNE'),
+      updatedHaittojenhallintasuunnitelma,
+    );
+    await user.type(
+      screen.getByTestId('alueet.0.haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE'),
+      updatedHaittojenhallintasuunnitelma,
+    );
+    await user.type(
+      screen.getByTestId('alueet.0.haittojenhallintasuunnitelma.RAITIOLIIKENNE'),
+      updatedHaittojenhallintasuunnitelma,
+    );
+    await user.type(
+      screen.getByTestId('alueet.0.haittojenhallintasuunnitelma.MUUT'),
+      updatedHaittojenhallintasuunnitelma,
+    );
+
+    await user.click(screen.getByRole('button', { name: /seuraava/i }));
+    // @ts-expect-error updatedHaittojenhallintasuunnitelma is set in the request handler above
+    expect(haittojenhallintasuunnitelma.YLEINEN).toBe(
+      'Yleisten haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    );
+    // @ts-expect-error updatedHaittojenhallintasuunnitelma is set in the request handler above
+    expect(haittojenhallintasuunnitelma.PYORALIIKENNE).toBe(
+      'Pyöräliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    );
+    // @ts-expect-error updatedHaittojenhallintasuunnitelma is set in the request handler above
+    expect(haittojenhallintasuunnitelma.AUTOLIIKENNE).toBe(
+      'Autoliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    );
+    // @ts-expect-error updatedHaittojenhallintasuunnitelma is set in the request handler above
+    expect(haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE).toBe(
+      'Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    );
+    // @ts-expect-error updatedHaittojenhallintasuunnitelma is set in the request handler above
+    expect(haittojenhallintasuunnitelma.RAITIOLIIKENNE).toBe(
+      'Raitioliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    );
+    // @ts-expect-error updatedHaittojenhallintasuunnitelma is set in the request handler above
+    expect(haittojenhallintasuunnitelma.MUUT).toBe(
+      'Muiden haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    );
+  });
+
   test('Yhteystiedot can be filled', async () => {
     const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
 
     // Hanke owner (accordion open by default)
+    // Yritys should be default contact type
+    expect(screen.getByText(/yritys/i)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /tyyppi/i }));
-    await user.click(screen.getByText(/yritys/i));
+    await user.click(screen.getByText(/yhteisö/i));
 
     fireEvent.change(screen.getByTestId('omistajat.0.nimi'), {
       target: { value: 'Omistaja Yritys' },
@@ -292,7 +428,7 @@ describe('HankeForm', () => {
   });
 
   test('Should be able to save and quit', async () => {
-    const hanke = hankkeet[1];
+    const hanke = cloneDeep(hankkeet[1]);
     const hankeName = hanke.nimi;
 
     const { user } = render(
@@ -313,7 +449,7 @@ describe('HankeForm', () => {
   });
 
   test('Should be able to save hanke in the last page', async () => {
-    const hanke = hankkeet[1];
+    const hanke = cloneDeep(hankkeet[2]);
 
     const { user } = render(
       <HankeForm
@@ -325,12 +461,14 @@ describe('HankeForm', () => {
       </HankeForm>,
     );
 
-    await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
-    await user.click(screen.getByRole('button', { name: 'Tallenna' }));
+    await user.click(await screen.findByRole('button', { name: /yhteenveto/i }));
+    await user.click(await screen.findByRole('button', { name: 'Tallenna' }));
 
     expect(window.location.pathname).toBe(`/fi/hankesalkku/${hanke.hankeTunnus}`);
     expect(
-      screen.getByText(`Hanke ${hanke.nimi} (${hanke.hankeTunnus}) tallennettu omiin hankkeisiin.`),
+      await screen.findByText(
+        `Hanke ${hanke.nimi} (${hanke.hankeTunnus}) tallennettu omiin hankkeisiin.`,
+      ),
     );
   });
 
@@ -338,19 +476,15 @@ describe('HankeForm', () => {
     jest.spyOn(hankeAttachmentsApi, 'uploadAttachment').mockImplementation(uploadAttachment);
     initFileGetResponse([]);
     initFileUploadResponse();
-    const { user } = render(<HankeFormContainer hankeTunnus="HAI22-2" />);
-    await waitFor(() => screen.findByText('Perustiedot'));
+    const { user } = render(<HankeFormContainer hankeTunnus="HAI22-1" />);
+    await screen.findByText('Perustiedot');
     await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
-    user.upload(screen.getByLabelText('Raahaa tiedostot tänne'), TEST_FILES);
+    await user.upload(await screen.findByLabelText('Raahaa tiedostot tänne'), TEST_FILES);
 
-    await waitFor(() => screen.findAllByText('Tallennetaan tiedostoja'));
-    await act(async () => {
-      waitFor(() => expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0));
-    });
-    await waitFor(() => {
-      expect(screen.queryByText('9/9 tiedosto(a) tallennettu')).toBeInTheDocument();
-    });
+    await screen.findAllByText('Tallennetaan tiedostoja');
+    await waitForElementToBeRemoved(() => screen.queryAllByText('Tallennetaan tiedostoja'));
+    expect(await screen.findByText('9/9 tiedosto(a) tallennettu')).toBeInTheDocument();
   });
 
   test('Should be able to delete attachments', async () => {
@@ -367,12 +501,12 @@ describe('HankeForm', () => {
       },
     ]);
     initFileDeleteResponse();
-    const { user } = render(<HankeFormContainer hankeTunnus="HAI22-2" />);
+    const { user } = render(<HankeFormContainer hankeTunnus="HAI22-1" />);
     await waitFor(() => screen.findByText('Perustiedot'));
     await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
-    const { getAllByRole } = within(screen.getByTestId('file-upload-list'));
-    const fileListItems = getAllByRole('listitem');
+    const { findAllByRole } = within(await screen.findByTestId('file-upload-list'));
+    const fileListItems = await findAllByRole('listitem');
     const fileItem = fileListItems.find((i) => i.innerHTML.includes(fileName));
     const { getByRole } = within(fileItem!);
     await user.click(getByRole('button', { name: 'Poista' }));
@@ -420,12 +554,12 @@ describe('HankeForm', () => {
         hankeTunnus: 'HAI22-2',
       },
     ]);
-    const { user } = render(<HankeFormContainer hankeTunnus="HAI22-2" />);
+    const { user } = render(<HankeFormContainer hankeTunnus="HAI22-1" />);
     await waitFor(() => screen.findByText('Perustiedot'));
     await user.click(screen.getByRole('button', { name: /liitteet/i }));
 
-    const { getAllByRole } = within(screen.getByTestId('file-upload-list'));
-    const fileListItems = getAllByRole('listitem');
+    const { findAllByRole } = within(await screen.findByTestId('file-upload-list'));
+    const fileListItems = await findAllByRole('listitem');
     expect(fileListItems.length).toBe(3);
 
     const fileItemA = fileListItems.find((i) => i.innerHTML.includes(fileNameA));
@@ -445,10 +579,10 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
-    expect(screen.getByText('Vaihe 6/6: Yhteenveto')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: fileNameA })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: fileNameB })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: fileNameC })).toBeInTheDocument();
+    expect(await screen.findByText('Vaihe 6/6: Yhteenveto')).toBeInTheDocument();
+    expect(screen.getByText(fileNameA)).toBeInTheDocument();
+    expect(screen.getByText(fileNameB)).toBeInTheDocument();
+    expect(screen.getByText(fileNameC)).toBeInTheDocument();
   });
 
   test('Summary page should handle not filled data gracefully', async () => {
@@ -522,15 +656,26 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-    expect(screen.queryByText(draftStateText)).toBeInTheDocument();
+    expect(await screen.findByText(draftStateText)).toBeInTheDocument();
     expect(
-      screen.getByRole('link', { name: /hanke-alueet: hankealueen piirtäminen/i }),
+      screen.getByRole('link', { name: /hankealueet: hankealueen piirtäminen/i }),
     ).toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+    await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-    expect(screen.queryByText(draftStateText)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /hankkeen omistaja: nimi/i })).toBeInTheDocument();
+    expect(
+      await screen.findByText(
+        'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavat tiedot lomakkeella vaaditaan haittojenhallinnan täyttämiseen:',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /hankealueet: hankealueen piirtäminen/i }),
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+    expect(await screen.findByText(draftStateText)).toBeInTheDocument();
+    await screen.findByRole('link', { name: /hankkeen omistaja: nimi/i });
     expect(
       screen.getByRole('link', { name: /hankkeen omistaja: sähköposti/i }),
     ).toBeInTheDocument();
@@ -555,14 +700,132 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
-    expect(
-      screen.getByText(
-        'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavissa vaiheissa on puuttuvia tietoja:',
-      ),
-    ).toBeInTheDocument();
+    await screen.findByText(
+      'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavissa vaiheissa on puuttuvia tietoja:',
+    );
     expect(screen.getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
     expect(screen.getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
     expect(screen.getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
+  });
+
+  test('Should not be able to move to another step if modifying public hanke and leaving missing information', async () => {
+    const testHanke = cloneDeep(hankkeet[1]);
+
+    const { user } = render(
+      <HankeForm
+        formData={testHanke as HankeDataFormState}
+        onIsDirtyChange={() => {}}
+        onFormClose={() => {}}
+      >
+        children
+      </HankeForm>,
+    );
+
+    fireEvent.change(screen.getByLabelText(/hankkeen kuvaus/i), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByLabelText(/katuosoite/i), {
+      target: { value: '' },
+    });
+    await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+    expect(screen.queryByText('Vaihe 1/6: Perustiedot')).toBeInTheDocument();
+  });
+
+  test('Should show confirmation dialog when deleting hanke area', async () => {
+    const hanke = cloneDeep(hankkeet[3] as HankeDataFormState);
+    hanke.alueet = hankkeet[2].alueet;
+    const { user } = await setupAlueetPage(hanke);
+
+    await user.click(screen.getByRole('button', { name: 'Poista alue' }));
+
+    const { getByRole, getByText } = within(screen.getByRole('dialog'));
+    expect(getByText('Haluatko varmasti poistaa hankealueen Hankealue 1?')).toBeInTheDocument();
+    expect(getByRole('button', { name: 'Poista' })).toBeInTheDocument();
+    expect(getByRole('button', { name: 'Peruuta' })).toBeInTheDocument();
+
+    await user.click(getByRole('button', { name: 'Poista' }));
+
+    expect(screen.queryByText(/hankealue 1/i)).not.toBeInTheDocument();
+  });
+
+  async function setupHaittaIndexUpdateTest(
+    nuisanceResponse = {
+      autoliikenne: {
+        indeksi: 2.5,
+        haitanKesto: 3,
+        katuluokka: 3,
+        liikennemaara: 3,
+        kaistahaitta: 1,
+        kaistapituushaitta: 1,
+      },
+      pyoraliikenneindeksi: 4,
+      linjaautoliikenneindeksi: 2,
+      raitioliikenneindeksi: 3,
+      liikennehaittaindeksi: {
+        indeksi: 4,
+        tyyppi: 'PYORALIIKENNEINDEKSI',
+      },
+    },
+  ) {
+    server.use(
+      rest.post('/api/haittaindeksit', async (_, res, ctx) => {
+        return res(ctx.status(200), ctx.json(nuisanceResponse));
+      }),
+    );
+
+    const hanke = cloneDeep(hankkeet[2] as HankeDataFormState);
+    const feature = new Feature(
+      new Polygon([
+        [
+          [25496559.78, 6672988.05],
+          [25496681.62, 6672825.27],
+          [25496727.94, 6672856.74],
+          [25496595.92, 6673029.09],
+          [25496549.25, 6673005.46],
+          [25496559.78, 6672988.05],
+        ],
+      ]),
+    );
+    hanke.alueet = hanke.alueet?.map((alue) => ({
+      ...alue,
+      feature,
+    }));
+    const { user } = await setupAlueetPage(hanke);
+    await user.click(
+      screen.getByRole('button', { name: 'Hankealueen liikennehaittaindeksit (0-5)' }),
+    );
+    return { user, feature };
+  }
+
+  test('Should show correct haitta indexes for hanke area and updated indexes when updating nuisances', async () => {
+    const { user } = await setupHaittaIndexUpdateTest();
+
+    expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3.5');
+    expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
+    expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('1');
+    expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('2');
+
+    await user.click(screen.getByRole('button', { name: 'Kaistahaittojen pituus *' }));
+    await user.click(screen.getByText('10-99 m'));
+
+    expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('4');
+    expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('2.5');
+    expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('2');
+    expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('3');
+  });
+
+  test('Should show updated haitta indexes when modifying hanke area', async () => {
+    const { feature } = await setupHaittaIndexUpdateTest();
+
+    feature.changed();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('4');
+      expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('2.5');
+      expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('2');
+      expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('3');
+    });
   });
 });
 
@@ -579,7 +842,7 @@ describe('New contact person form and contact person dropdown', () => {
     fillNewContactPersonForm(newUser);
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
 
-    expect(screen.getByText('Yhteyshenkilö tallennettu')).toBeInTheDocument();
+    expect(await screen.findByText('Yhteyshenkilö tallennettu')).toBeInTheDocument();
     expect(
       screen.getByText(`${newUser.etunimi} ${newUser.sukunimi} (${newUser.sahkoposti})`),
     ).toBeInTheDocument();
@@ -590,7 +853,31 @@ describe('New contact person form and contact person dropdown', () => {
     await user.click(screen.getByRole('button', { name: /lisää uusi yhteyshenkilö/i }));
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
 
-    expect(screen.getAllByText('Kenttä on pakollinen')).toHaveLength(4);
+    expect(await screen.findAllByText('Kenttä on pakollinen')).toHaveLength(4);
+    expect(screen.queryByText('Yhteyshenkilö tallennettu')).not.toBeInTheDocument();
+  });
+
+  test('Should not be able to create new user and show validation error if the new user has an existing email address', async () => {
+    const newUser = {
+      etunimi: 'Martti',
+      sukunimi: 'Mielikäinen',
+      sahkoposti: 'martti.mielikainen@test.com',
+      puhelinnumero: '0000000000',
+    };
+    const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
+    await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
+    fillNewContactPersonForm(newUser);
+    await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+    fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
+    await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
+    fillNewContactPersonForm(newUser);
+    await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
+
+    expect(
+      await screen.findByText(
+        'Valitsemasi sähköpostiosoite löytyy jo hankkeen käyttäjähallinnasta. Lisää yhteyshenkilö pudotusvalikosta.',
+      ),
+    ).toBeInTheDocument();
     expect(screen.queryByText('Yhteyshenkilö tallennettu')).not.toBeInTheDocument();
   });
 
@@ -605,7 +892,7 @@ describe('New contact person form and contact person dropdown', () => {
     fillNewContactPersonForm();
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
 
-    expect(screen.getByText('Yhteyshenkilön tallennus epäonnistui')).toBeInTheDocument();
+    expect(await screen.findByText('Yhteyshenkilön tallennus epäonnistui')).toBeInTheDocument();
   });
 
   test('Should show all hanke users in the contact person dropdown', async () => {

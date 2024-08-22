@@ -34,7 +34,7 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(hanke));
   }),
 
-  rest.get(`${apiUrl}/hankkeet`, async (req, res, ctx) => {
+  rest.get(`${apiUrl}/hankkeet`, async (_, res, ctx) => {
     const hankkeet = await hankkeetDB.readAll();
     return res(ctx.status(200), ctx.json(hankkeet));
   }),
@@ -85,12 +85,12 @@ export const handlers = [
     return res(ctx.status(200), ctx.json({ applications: hakemukset }));
   }),
 
-  rest.get(`${apiUrl}/public-hankkeet`, async (req, res, ctx) => {
+  rest.get(`${apiUrl}/public-hankkeet`, async (_, res, ctx) => {
     const hankkeet = await hankkeetDB.readAll();
     return res(ctx.status(200), ctx.json(hankkeet));
   }),
 
-  rest.get(`${apiUrl}/hakemukset`, async (req, res, ctx) => {
+  rest.get(`${apiUrl}/hakemukset`, async (_, res, ctx) => {
     const hakemukset = await hakemuksetDB.readAll();
     return res(ctx.status(200), ctx.json(hakemukset));
   }),
@@ -175,23 +175,6 @@ export const handlers = [
         }),
       );
     }
-  }),
-
-  rest.post(`${apiUrl}/hakemukset/:id/send-application`, async (req, res, ctx) => {
-    const { id } = req.params;
-    const hakemus = await hakemuksetDB.read(Number(id));
-
-    if (!hakemus) {
-      return res(
-        ctx.status(404),
-        ctx.json({
-          errorMessage: 'Hakemus not found',
-          errorCode: 'HAI1001',
-        }),
-      );
-    }
-
-    return res(ctx.status(200), ctx.json(hakemus));
   }),
 
   rest.post(`${apiUrl}/hakemukset/:id/laheta`, async (req, res, ctx) => {
@@ -321,7 +304,7 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(user));
   }),
 
-  rest.post(`${apiUrl}/kayttajat`, async (req, res, ctx) => {
+  rest.post(`${apiUrl}/kayttajat`, async (_, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json<IdentificationResponse>({
@@ -421,15 +404,15 @@ export const handlers = [
     }
   }),
 
-  rest.get(`${apiUrl}/hakemukset/:id/liitteet`, async (req, res, ctx) => {
+  rest.get(`${apiUrl}/hakemukset/:id/liitteet`, async (_, res, ctx) => {
     return res(ctx.status(200), ctx.json([]));
   }),
 
-  rest.post(`${apiUrl}/hakemukset/:id/liitteet`, async (req, res, ctx) => {
-    return res(ctx.delay(), ctx.status(200));
+  rest.post(`${apiUrl}/hakemukset/:id/liitteet`, async (_, res, ctx) => {
+    return res(ctx.delay(500), ctx.status(200));
   }),
 
-  rest.delete(`${apiUrl}/hakemukset/:id/liitteet/:attachmentId`, async (req, res, ctx) => {
+  rest.delete(`${apiUrl}/hakemukset/:id/liitteet/:attachmentId`, async (_, res, ctx) => {
     return res(ctx.status(200));
   }),
 
@@ -442,5 +425,9 @@ export const handlers = [
       ctx.status(200),
       ctx.json({ firstName: 'Testi Tauno Tahvo', lastName: 'Testinen', givenName: 'Testi' }),
     );
+  }),
+
+  rest.get('/api/banners', async (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({}));
   }),
 ];

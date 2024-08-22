@@ -35,6 +35,7 @@ export const ApplicationCancel: React.FC<Props> = ({
 
   const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const isCancelPossible = isApplicationPending(alluStatus) || isApplicationCancelled(alluStatus);
 
@@ -47,6 +48,7 @@ export const ApplicationCancel: React.FC<Props> = ({
         message = t('hakemus:errors:cancelConflict');
       }
       setErrorMessage(message);
+      setIsButtonDisabled(false);
     },
     onSuccess(data) {
       const closeButtonLabelText = t('common:components:notification:closeButtonLabelText');
@@ -64,6 +66,7 @@ export const ApplicationCancel: React.FC<Props> = ({
   });
 
   function doApplicationCancel() {
+    setIsButtonDisabled(true);
     applicationCancelMutation.mutate(applicationId);
   }
 
@@ -91,15 +94,16 @@ export const ApplicationCancel: React.FC<Props> = ({
         mainBtnLabel={t('common:confirmationDialog:confirmButton')}
         variant="danger"
         errorMsg={errorMessage}
-        isLoading={applicationCancelMutation.isLoading}
+        isLoading={applicationCancelMutation.isLoading || isButtonDisabled}
       />
 
       <Button
         variant="danger"
         iconLeft={buttonIcon}
         onClick={openConfirmationDialog}
-        isLoading={saveAndQuitIsLoading}
+        isLoading={saveAndQuitIsLoading || isButtonDisabled}
         loadingText={saveAndQuitIsLoadingText}
+        disabled={isButtonDisabled}
       >
         {t('hakemus:buttons:cancelApplication')}
       </Button>

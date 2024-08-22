@@ -1,28 +1,55 @@
-import { FormProvider, useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { merge } from 'lodash';
-import { Button, IconCross, IconSaveDiskette, StepState } from 'hds-react';
+import {
+  Button,
+  IconCross,
+  IconEnvelope,
+  IconSaveDiskette,
+  Notification,
+  StepState,
+} from 'hds-react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import MultipageForm from '../forms/MultipageForm';
 import BasicInfo from './BasicInfo';
+import Contacts from './Contacts';
+import Attachments from './Attachments';
 import ReviewAndSend from './ReviewAndSend';
 import { HankeData } from '../types/hanke';
 import { useTranslation } from 'react-i18next';
 import FormActions from '../forms/components/FormActions';
 import { ApplicationCancel } from '../application/components/ApplicationCancel';
 import { KaivuilmoitusFormValues } from './types';
-import { validationSchema, perustiedotSchema } from './validationSchema';
+import {
+  validationSchema,
+  perustiedotSchema,
+  yhteystiedotSchema,
+  liitteetSchema,
+  alueetSchema,
+} from './validationSchema';
 import { useApplicationsForHanke } from '../application/hooks/useApplications';
 import {
+  AlluStatus,
   Application,
   KaivuilmoitusCreateData,
   KaivuilmoitusData,
   KaivuilmoitusUpdateData,
 } from '../application/types/application';
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
-import { useNavigateToApplicationList } from '../hanke/hooks/useNavigateToApplicationList';
-import { convertFormStateToKaivuilmoitusUpdateData } from './utils';
+import {
+  convertApplicationDataToFormState,
+  convertFormStateToKaivuilmoitusUpdateData,
+} from './utils';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
 import useSaveApplication from '../application/hooks/useSaveApplication';
+import useAttachments from '../application/hooks/useAttachments';
+import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
+import { changeFormStep } from '../forms/utils';
+import Areas from './Areas';
+import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
+import { isApplicationDraft, isContactIn } from '../application/utils';
+import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
+import useSendApplication from '../application/hooks/useSendApplication';
 
 type Props = {
   hankeData: HankeData;
@@ -32,8 +59,15 @@ type Props = {
 export default function KaivuilmoitusContainer({ hankeData, application }: Readonly<Props>) {
   const { t } = useTranslation();
   const { setNotification } = useGlobalNotification();
-  const navigateToApplicationList = useNavigateToApplicationList(hankeData.hankeTunnus);
+  const navigateToApplicationView = useNavigateToApplicationView();
+  const [attachmentUploadErrors, setAttachmentUploadErrors] = useState<JSX.Element[]>([]);
   const { data: hankkeenHakemukset } = useApplicationsForHanke(hankeData.hankeTunnus);
+  const { data: signedInUser } = usePermissionsForHanke(hankeData.hankeTunnus);
+  const applicationSendMutation = useSendApplication({
+    onSuccess(data) {
+      navigateToApplicationView(data.id?.toString());
+    },
+  });
   const johtoselvitysIds = hankkeenHakemukset?.applications
     .filter(
       (hakemus) =>
@@ -61,26 +95,30 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       areas: [],
       startTime: null,
       endTime: null,
-      customerWithContacts: null,
-      contractorWithContacts: null,
       representativeWithContacts: null,
       propertyDeveloperWithContacts: null,
     },
   };
   const formContext = useForm<KaivuilmoitusFormValues>({
     mode: 'onTouched',
-    defaultValues: merge(initialValues, application),
+    defaultValues: merge(initialValues, convertApplicationDataToFormState(application)),
     resolver: yupResolver(validationSchema),
   });
   const {
     getValues,
     setValue,
-    reset,
     trigger,
     watch,
-    formState: { isDirty },
+    handleSubmit,
+    formState: { isDirty, isValid },
   } = formContext;
   const watchFormValues = watch();
+
+  const { data: existingAttachments, isError: attachmentsLoadError } = useAttachments(
+    getValues('id'),
+  );
+
+  const [attachmentsUploading, setAttachmentsUploading] = useState(false);
 
   const {
     applicationCreateMutation,
@@ -90,15 +128,41 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   } = useSaveApplication<KaivuilmoitusData, KaivuilmoitusCreateData, KaivuilmoitusUpdateData>({
     onCreateSuccess({ id }) {
       setValue('id', id);
-      reset({}, { keepValues: true });
     },
-    onUpdateSuccess() {
-      reset({}, { keepValues: true });
+    onUpdateSuccess({
+      applicationData: {
+        customerWithContacts,
+        contractorWithContacts,
+        propertyDeveloperWithContacts,
+        representativeWithContacts,
+      },
+    }) {
+      if (customerWithContacts) {
+        setValue(
+          'applicationData.customerWithContacts.customer.yhteystietoId',
+          customerWithContacts.customer.yhteystietoId,
+        );
+      }
+      if (contractorWithContacts) {
+        setValue(
+          'applicationData.contractorWithContacts.customer.yhteystietoId',
+          contractorWithContacts.customer.yhteystietoId,
+        );
+      }
+      if (propertyDeveloperWithContacts) {
+        setValue(
+          'applicationData.propertyDeveloperWithContacts.customer.yhteystietoId',
+          propertyDeveloperWithContacts.customer.yhteystietoId,
+        );
+      }
+      if (representativeWithContacts) {
+        setValue(
+          'applicationData.representativeWithContacts.customer.yhteystietoId',
+          representativeWithContacts.customer.yhteystietoId,
+        );
+      }
     },
   });
-
-  const saving = applicationCreateMutation.isLoading || applicationUpdateMutation.isLoading;
-  const savingText = t('common:buttons:savingText');
 
   function saveApplication(handleSuccess?: (data: Application<KaivuilmoitusData>) => void) {
     const formData = getValues();
@@ -128,6 +192,11 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     }
   }
 
+  async function sendApplication() {
+    const data = getValues();
+    applicationSendMutation.mutate(data.id!);
+  }
+
   function handleStepChange() {
     if (isDirty) {
       saveApplication();
@@ -136,7 +205,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
 
   function saveAndQuit() {
     function handleSuccess(data: Application<KaivuilmoitusData>) {
-      navigateToApplicationList(data.hankeTunnus);
+      navigateToApplicationView(data.id?.toString());
       setNotification(true, {
         position: 'top-right',
         dismissible: true,
@@ -151,6 +220,30 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     saveApplication(handleSuccess);
   }
 
+  function handleAttachmentUpload(isUploading: boolean) {
+    setAttachmentsUploading(isUploading);
+  }
+
+  function closeAttachmentUploadErrorDialog() {
+    setAttachmentUploadErrors([]);
+  }
+
+  const pageFieldsToValidate: FieldPath<KaivuilmoitusFormValues>[][] = [
+    // Basic information page
+    ['applicationData.name'],
+    // Areas page
+    ['selfIntersectingPolygon'],
+    // Contacts page
+    [
+      'applicationData.customerWithContacts.customer.registryKey',
+      'applicationData.contractorWithContacts.customer.registryKey',
+      'applicationData.propertyDeveloperWithContacts.customer.registryKey',
+      'applicationData.representativeWithContacts.customer.registryKey',
+      'applicationData.invoicingCustomer.registryKey',
+      'applicationData.invoicingCustomer.ovt',
+    ],
+  ];
+
   const formSteps = [
     {
       element: <BasicInfo johtoselvitysIds={johtoselvitysIds} />,
@@ -159,11 +252,41 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       validationSchema: perustiedotSchema,
     },
     {
-      element: <ReviewAndSend />,
+      element: <Areas hankeData={hankeData} />,
+      label: t('form:headers:alueet'),
+      state: StepState.available,
+      validationSchema: alueetSchema,
+    },
+    {
+      element: <Contacts />,
+      label: t('form:headers:yhteystiedot'),
+      state: StepState.available,
+      validationSchema: yhteystiedotSchema,
+    },
+    {
+      element: (
+        <Attachments
+          existingAttachments={existingAttachments}
+          attachmentsLoadError={attachmentsLoadError}
+          onFileUpload={handleAttachmentUpload}
+        />
+      ),
+      label: t('form:headers:liitteetJaLisatiedot'),
+      state: StepState.available,
+      validationSchema: liitteetSchema,
+    },
+    {
+      element: <ReviewAndSend attachments={existingAttachments} />,
       label: t('form:headers:yhteenveto'),
       state: StepState.available,
     },
   ];
+
+  const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
+
+  function validateStepChange(changeStep: () => void, stepIndex: number) {
+    return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger);
+  }
 
   return (
     <FormProvider {...formContext}>
@@ -173,6 +296,10 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         formSteps={formSteps}
         formData={watchFormValues}
         onStepChange={handleStepChange}
+        isLoading={attachmentsUploading}
+        isLoadingText={attachmentsUploadingText}
+        stepChangeValidator={validateStepChange}
+        onSubmit={handleSubmit(sendApplication)}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {
@@ -185,31 +312,71 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
             }
           }
 
+          const saveAndQuitIsLoading =
+            applicationCreateMutation.isLoading ||
+            applicationUpdateMutation.isLoading ||
+            attachmentsUploading;
+          const saveAndQuitLoadingText = attachmentsUploading
+            ? attachmentsUploadingText
+            : t('common:buttons:savingText');
+
+          const lastStep = activeStepIndex === formSteps.length - 1;
+          const isDraft = isApplicationDraft(getValues('alluStatus') as AlluStatus | null);
+          const isContact = isContactIn(signedInUser, getValues('applicationData'));
+          const showSendButton = lastStep && isDraft && isValid;
+          const disableSendButton = showSendButton && !isContact;
+
           return (
             <FormActions
               activeStepIndex={activeStepIndex}
               totalSteps={formSteps.length}
               onPrevious={handlePrevious}
               onNext={handleNext}
+              previousButtonIsLoading={attachmentsUploading}
+              previousButtonLoadingText={attachmentsUploadingText}
+              nextButtonIsLoading={attachmentsUploading}
+              nextButtonLoadingText={attachmentsUploadingText}
             >
               <ApplicationCancel
                 applicationId={getValues('id')}
                 alluStatus={getValues('alluStatus')}
                 hankeTunnus={hankeData.hankeTunnus}
                 buttonIcon={<IconCross />}
-                saveAndQuitIsLoading={saving}
-                saveAndQuitIsLoadingText={savingText}
+                saveAndQuitIsLoading={saveAndQuitIsLoading}
+                saveAndQuitIsLoadingText={saveAndQuitLoadingText}
               />
 
               <Button
                 variant="secondary"
                 onClick={handleSaveAndQuit}
                 iconLeft={<IconSaveDiskette />}
-                isLoading={saving}
-                loadingText={savingText}
+                isLoading={saveAndQuitIsLoading}
+                loadingText={saveAndQuitLoadingText}
               >
                 {t('hankeForm:saveDraftButton')}
               </Button>
+
+              {showSendButton && (
+                <Button
+                  type="submit"
+                  iconLeft={<IconEnvelope />}
+                  isLoading={applicationSendMutation.isLoading}
+                  loadingText={t('common:buttons:sendingText')}
+                  disabled={disableSendButton}
+                >
+                  {t('hakemus:buttons:sendApplication')}
+                </Button>
+              )}
+              {disableSendButton && (
+                <Notification
+                  size="small"
+                  style={{ marginTop: 'var(--spacing-xs)' }}
+                  type="info"
+                  label={t('hakemus:notifications:sendApplicationDisabled')}
+                >
+                  {t('hakemus:notifications:sendApplicationDisabled')}
+                </Notification>
+              )}
             </FormActions>
           );
         }}
@@ -227,6 +394,19 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
           onClose={() => setShowSaveNotification(null)}
         />
       )}
+
+      {/* Attachment upload error dialog */}
+      <ConfirmationDialog
+        title={t('form:errors:fileLoadError')}
+        description={attachmentUploadErrors}
+        showSecondaryButton={false}
+        showCloseButton
+        isOpen={attachmentUploadErrors.length > 0}
+        close={closeAttachmentUploadErrorDialog}
+        mainAction={closeAttachmentUploadErrorDialog}
+        mainBtnLabel={t('common:ariaLabels:closeButtonLabelText')}
+        variant="primary"
+      />
     </FormProvider>
   );
 }

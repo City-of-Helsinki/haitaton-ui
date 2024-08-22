@@ -1,5 +1,7 @@
 import * as yup from 'yup';
 import { formatToFinnishDate } from './date';
+import isValidBusinessId from '../../common/utils/isValidBusinessId';
+import { HankeUser } from '../../domain/hanke/hankeUsers/hankeUser';
 
 // https://github.com/jquense/yup/blob/master/src/locale.ts
 yup.setLocale({
@@ -33,5 +35,36 @@ yup.addMethod(
     return this.matches(/^(\+?)(\d+)$/, { message: () => message, excludeEmptyString: true });
   },
 );
+
+yup.addMethod(
+  yup.string,
+  'businessId',
+  function validBusinessId(message: yup.Message = { key: 'default', values: {} }) {
+    return this.test('is-business-id', message, isValidBusinessId);
+  },
+);
+
+yup.addMethod(yup.string, 'uniqueEmail', function isUniqueEmail() {
+  return this.test('uniqueEmail', 'Email already exists', function (value) {
+    const context = this.options.context;
+    if (!context) {
+      return true;
+    }
+    const { hankeUsers, currentUser, errorMessageKey } = context as {
+      hankeUsers: HankeUser[];
+      currentUser?: HankeUser;
+      errorMessageKey: string;
+    };
+    if (!hankeUsers) {
+      return true;
+    }
+    const isUnique =
+      !hankeUsers.some((user) => user.sahkoposti === value) || currentUser?.sahkoposti === value;
+    return (
+      isUnique ||
+      this.createError({ path: this.path, message: { key: errorMessageKey, values: {} } })
+    );
+  });
+});
 
 export default yup;

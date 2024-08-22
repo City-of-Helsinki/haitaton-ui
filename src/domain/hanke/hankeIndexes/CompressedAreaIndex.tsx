@@ -2,7 +2,7 @@ import React from 'react';
 import { Flex } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import Text from '../../../common/components/text/Text';
-import HaittaIndexNumber from './HaittaIndexNumber';
+import HaittaIndexNumber from '../../common/haittaIndexes/HaittaIndexNumber';
 import { HankeAlue } from '../../types/hanke';
 import { formatToFinnishDate } from '../../../common/utils/date';
 import { formatSurfaceArea, getFeatureFromHankeGeometry } from '../../map/utils';
@@ -42,6 +42,8 @@ const CompressedAreaIndex: React.FC<Props> = ({ area, haittaIndex, index, classN
       <HaittaIndexNumber
         index={haittaIndex}
         testId="hankeIndexes:compressed:liikennehaittaindeksi"
+        tooltipContent={t('common:haittaIndex:haittaIndexSelite')}
+        showTooltip
       />
     </Flex>
   );
