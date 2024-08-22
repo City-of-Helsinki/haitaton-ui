@@ -8,24 +8,18 @@ import { getInputErrorText } from '../../utils/form';
 import styles from './SearchInput.module.scss';
 
 type Props = {
-  name: string;
   id: string;
+  name: string;
 };
 
 export default function SearchInput<T>({
-  name,
   id,
+  name,
   ...searchInputProps
 }: Readonly<Props & SearchInputProps<T>>) {
   const { t } = useTranslation();
   const inputClassName = `search-input-${id}`;
-  const [inputElement] = useState(
-    () => document.querySelector(`.${inputClassName} input`) as HTMLInputElement | null,
-  );
-  console.log('inputElement', inputElement);
-  // const inputElement = document.querySelector(
-  //   `.${inputClassName} input`,
-  // ) as HTMLInputElement | null;
+  const [inputElement, setInputElement] = useState<HTMLInputElement | null>(null);
   const {
     field,
     fieldState: { error },
@@ -33,15 +27,17 @@ export default function SearchInput<T>({
   const errorText = getInputErrorText(t, error);
 
   useEffect(() => {
+    setInputElement(document.querySelector(`.${inputClassName} input`) as HTMLInputElement);
+  }, [inputClassName]);
+
+  useEffect(() => {
     if (inputElement) {
-      console.log('Adding event listener');
       inputElement.addEventListener('blur', field.onBlur);
       field.ref(inputElement);
     }
 
     return function cleanup() {
       if (inputElement) {
-        console.log('Removing event listener');
         inputElement.removeEventListener('blur', field.onBlur);
       }
     };
@@ -62,7 +58,7 @@ export default function SearchInput<T>({
       {errorText !== undefined && (
         <Notification
           type="error"
-          label={t('form:validations:defined')}
+          label={t('form:validations:default')}
           size="small"
           className={styles.errorNotification}
         >
@@ -71,44 +67,4 @@ export default function SearchInput<T>({
       )}
     </Box>
   );
-  // return (
-  //   <Controller
-  //     name={name}
-  //     render={({ field, fieldState: { error } }) => {
-  //       // Pitäisikö laittaa useEffectiin, että voisi removeEventListenerin?
-  //       // Pitäisi varmaan käyttää useControlleria, jotta voisi tehdä sen.
-  //       if (inputElement && !inputRegistered.current) {
-  //         inputElement.addEventListener('blur', field.onBlur);
-  //         field.ref(inputElement);
-  //         inputRegistered.current = true;
-  //       }
-
-  //       const errorText = getInputErrorText(t, error);
-
-  //       return (
-  //         <Box>
-  //           <HDSSearchInput
-  //             {...searchInputProps}
-  //             onChange={field.onChange}
-  //             value={field.value}
-  //             clearButtonAriaLabel={t('common:components:multiselect:clear')}
-  //             className={clsx(inputClassName, {
-  //               [styles.searchInputInvalid]: errorText !== undefined,
-  //             })}
-  //           />
-  //           {errorText !== undefined && (
-  //             <Notification
-  //               type="error"
-  //               label={t('form:validations:defined')}
-  //               size="small"
-  //               className={styles.errorNotification}
-  //             >
-  //               {errorText}
-  //             </Notification>
-  //           )}
-  //         </Box>
-  //       );
-  //     }}
-  //   />
-  // );
 }

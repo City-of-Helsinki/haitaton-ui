@@ -897,10 +897,10 @@ test('Should be able to fill user email and phone by selecting existing user in 
   const { user } = render(
     <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
   );
-  await user.click(await screen.findByRole('button', { name: /yhteistiedot/i }));
+  await user.click(await screen.findByRole('button', { name: /yhteystiedot/i }));
   await user.type(screen.getAllByRole('combobox', { name: /nimi/i })[0], 'matti');
-  await screen.findByText('Matti Meikäläinen (matti.meikalainen@test.com)');
-  await user.click(screen.getByText('Matti Meikäläinen (matti.meikalainen@test.com)'));
+  await screen.findByText('Matti Meikäläinen');
+  await user.click(screen.getByText('Matti Meikäläinen'));
 
   expect(screen.getByTestId('applicationData.customerWithContacts.customer.email')).toHaveValue(
     'matti.meikalainen@test.com',
