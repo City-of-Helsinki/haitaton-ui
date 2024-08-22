@@ -23,6 +23,7 @@ import HankeLayer from '../map/components/Layers/HankeLayer';
 import DrawProvider from '../../common/components/map/modules/draw/DrawProvider';
 import useDrawContext from '../../common/components/map/modules/draw/useDrawContext';
 import ApplicationMap from '../application/components/ApplicationMap';
+import useAddressCoordinate from '../map/hooks/useAddressCoordinate';
 
 function AreaList({
   applicationAreas,
@@ -106,6 +107,7 @@ export function Geometries({ hankeData }: Readonly<Props>) {
   const locale = useLocale();
   const {
     watch,
+    getValues,
     formState: { errors },
   } = useFormContext<JohtoselvitysFormValues>();
 
@@ -129,6 +131,10 @@ export function Geometries({ hankeData }: Readonly<Props>) {
   const workTimesSet = startTime && endTime;
 
   const [areaToRemove, setAreaToRemove] = useState<AreaToRemove | null>(null);
+
+  const addressCoordinate = useAddressCoordinate(
+    getValues('applicationData.postalAddress.streetAddress.streetName'),
+  );
 
   function handleAddArea(feature: Feature<Geometry>) {
     append(getEmptyArea(feature));
@@ -198,6 +204,7 @@ export function Geometries({ hankeData }: Readonly<Props>) {
           drawSource={drawSource}
           showDrawControls={Boolean(workTimesSet)}
           onAddArea={handleAddArea}
+          mapCenter={addressCoordinate}
         >
           {/* Don't show hanke areas when hanke is generated */}
           {!hankeData?.generated && (
