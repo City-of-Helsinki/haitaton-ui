@@ -2,16 +2,18 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from 'react-query';
 import { Navigate, useLocation, useSearchParams } from 'react-router-dom';
+import { LoadingSpinner, useOidcClient } from 'hds-react';
+import { Flex } from '@chakra-ui/react';
 import ErrorLoadingText from '../../../common/components/errorLoadingText/ErrorLoadingText';
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
 import useLocale from '../../../common/hooks/useLocale';
 import { REDIRECT_PATH_KEY } from '../../../common/routes/constants';
 import { identifyUser } from '../../hanke/hankeUsers/hankeUsersApi';
-import useUser from '../useUser';
+import useIsAuthenticated from '../useIsAuthenticated';
 
 function UserIdentify() {
-  const { data: user } = useUser();
-  const isAuthenticated = Boolean(user?.profile);
+  const { login } = useOidcClient();
+  const isAuthenticated = useIsAuthenticated();
   const locale = useLocale();
   const { t } = useTranslation();
   const location = useLocation();
@@ -20,7 +22,7 @@ function UserIdentify() {
   const { setNotification } = useGlobalNotification();
   const identifyUserCalled = useRef(false);
 
-  const { mutate, isSuccess, isError } = useMutation(identifyUser);
+  const { mutate, isSuccess, isError, isLoading } = useMutation(identifyUser, { retry: 2 });
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -48,12 +50,21 @@ function UserIdentify() {
     }
   }, [isAuthenticated, id, mutate, setNotification, t]);
 
+  if (isLoading) {
+    return (
+      <Flex justify="center" mt="var(--spacing-xl)">
+        <LoadingSpinner />
+      </Flex>
+    );
+  }
+
   if (isError) {
     return <ErrorLoadingText>{t('hankeUsers:notifications:userIdentifiedError')}</ErrorLoadingText>;
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" />;
+    login();
+    return null;
   }
 
   if (isSuccess) {

@@ -1,19 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { Flex } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Link as HDSLink } from 'hds-react';
-import authService from '../authService';
+import { Link as HDSLink, LoginCallbackHandler, OidcClientError } from 'hds-react';
 import Text from '../../../common/components/text/Text';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import Link from '../../../common/components/Link/Link';
 
-type AuthenticationError = 'deviceTimeError' | 'permissionDeniedByUserError' | 'unknown';
+type AuthenticationError = 'permissionDeniedByUserError' | 'unknown';
 
 type AuthErrorProps = {
   errorText: string;
 };
 
-const AuthError = ({ errorText }: AuthErrorProps) => {
+const AuthError = ({ errorText }: Readonly<AuthErrorProps>) => {
   const { HOME } = useLocalizedRoutes();
 
   return (
@@ -53,52 +52,30 @@ const AuthError = ({ errorText }: AuthErrorProps) => {
 const OidcCallback = () => {
   const { t } = useTranslation();
   const [authenticationError, setAuthenticationError] = useState<AuthenticationError | null>(null);
-  const endLoginCalled = useRef(false);
 
-  useEffect(() => {
-    if (endLoginCalled.current) {
-      return;
+  function onSuccess() {
+    window.location.pathname = '/';
+  }
+
+  function onError(error?: OidcClientError) {
+    if (error?.isSignInError) {
+      setAuthenticationError('permissionDeniedByUserError');
+    } else {
+      setAuthenticationError('unknown');
     }
-
-    endLoginCalled.current = true;
-
-    authService
-      .endLogin()
-      .then(() => {
-        window.location.pathname = '/';
-      })
-      .catch((error: Error) => {
-        // Handle error caused by device time being more than 5 minutes off
-        if (
-          error.message.includes('iat is in the future') ||
-          error.message.includes('exp is in the past')
-        ) {
-          setAuthenticationError('deviceTimeError');
-        } else if (
-          // Handle error caused by end user choosing Deny in Tunnistamo's
-          // permission request
-          error.message === 'The resource owner or authorization server denied the request'
-        ) {
-          setAuthenticationError('permissionDeniedByUserError');
-        } else {
-          // Give user a generic error
-          setAuthenticationError('unknown');
-        }
-      });
-  }, [t]);
+  }
 
   return (
-    <>
-      {authenticationError === 'deviceTimeError' && (
-        <AuthError errorText={t('authentication:deviceTimeError')} />
-      )}
-      {authenticationError === 'permissionDeniedByUserError' && (
-        <AuthError errorText={t('authentication:permissionRequestDenied')} />
-      )}
-      {authenticationError === 'unknown' && (
-        <AuthError errorText={t('authentication:genericError')} />
-      )}
-    </>
+    <LoginCallbackHandler onSuccess={onSuccess} onError={onError}>
+      <>
+        {authenticationError === 'permissionDeniedByUserError' && (
+          <AuthError errorText={t('authentication:permissionRequestDenied')} />
+        )}
+        {authenticationError === 'unknown' && (
+          <AuthError errorText={t('authentication:genericError')} />
+        )}
+      </>
+    </LoginCallbackHandler>
   );
 };
 

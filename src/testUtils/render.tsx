@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { render, RenderOptions } from '@testing-library/react';
@@ -10,12 +9,14 @@ import { store } from '../common/redux/store';
 import { GlobalNotificationProvider } from '../common/components/globalNotification/GlobalNotificationContext';
 import GlobalNotification from '../common/components/globalNotification/GlobalNotification';
 import { FeatureFlagsProvider } from '../common/components/featureFlags/FeatureFlagsContext';
+import { LoginProvider } from 'hds-react';
+import { loginProviderProps } from '../domain/auth/loginProviderProps';
 
 type Props = {
   children: React.ReactNode;
 };
 
-const AllTheProviders = ({ children }: Props) => {
+const AllTheProviders = ({ children }: Readonly<Props>) => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -26,20 +27,22 @@ const AllTheProviders = ({ children }: Props) => {
   });
 
   return (
-    <BrowserRouter>
-      <ReduxProvider store={store}>
-        <QueryClientProvider client={queryClient}>
-          <I18nextProvider i18n={i18n}>
-            <FeatureFlagsProvider>
-              <GlobalNotificationProvider>
-                {children}
-                <GlobalNotification />
-              </GlobalNotificationProvider>
-            </FeatureFlagsProvider>
-          </I18nextProvider>
-        </QueryClientProvider>
-      </ReduxProvider>
-    </BrowserRouter>
+    <LoginProvider {...loginProviderProps}>
+      <BrowserRouter>
+        <ReduxProvider store={store}>
+          <QueryClientProvider client={queryClient}>
+            <I18nextProvider i18n={i18n}>
+              <FeatureFlagsProvider>
+                <GlobalNotificationProvider>
+                  {children}
+                  <GlobalNotification />
+                </GlobalNotificationProvider>
+              </FeatureFlagsProvider>
+            </I18nextProvider>
+          </QueryClientProvider>
+        </ReduxProvider>
+      </BrowserRouter>
+    </LoginProvider>
   );
 };
 
@@ -51,11 +54,10 @@ const customRender = (
   userEventOptions?: any,
 ) => {
   window.history.pushState({}, 'Test page', route);
-  window.scrollTo = function () {};
   return {
     user: userEvent.setup(userEventOptions),
     ...render(ui, {
-      wrapper: AllTheProviders as React.ComponentType<React.PropsWithChildren<unknown>>,
+      wrapper: AllTheProviders,
       ...options,
     }),
   };

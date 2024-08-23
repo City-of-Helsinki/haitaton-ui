@@ -14,7 +14,6 @@ import img3 from './HKMS000005_km003yz2.webp';
 import img4 from './kartta.png';
 import kalasatama from './kalasatama.webp';
 import Linkbox from '../../common/components/Linkbox/Linkbox';
-import useUser from '../auth/useUser';
 import FeatureFlags from '../../common/components/featureFlags/FeatureFlags';
 import {
   FeatureFlagsContextProps,
@@ -23,6 +22,7 @@ import {
 import MainHeading from '../../common/components/mainHeading/MainHeading';
 import HankeCreateDialog from '../hanke/hankeCreateDialog/HankeCreateDialog';
 import JohtoselvitysCreateDialog from '../johtoselvitys/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
+import useIsAuthenticated from '../auth/useIsAuthenticated';
 
 const FEEDBACK_NOTIFICATION_CLOSED = 'feedback-notification-closed';
 
@@ -35,8 +35,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
   );
   const [showHankeCreateDialog, setShowHankeCreateDialog] = useState(false);
   const [showJohtoselvitysCreateDialog, setShowJohtoselvitysCreateDialog] = useState(false);
-  const { data: user } = useUser();
-  const isAuthenticated = Boolean(user?.profile);
+  const isAuthenticated = useIsAuthenticated();
   const features = useFeatureFlags();
 
   const loggedInLinks = [

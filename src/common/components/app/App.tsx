@@ -1,8 +1,8 @@
-import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ChakraProvider } from '@chakra-ui/react';
+import { LoginProvider } from 'hds-react';
 import AppRoutes from '../../routes/AppRoutes';
 import Layout from './Layout';
 import { store } from '../../redux/store';
@@ -15,6 +15,7 @@ import './app.scss';
 import '../../../assets/styles/reset.css';
 import '../../../assets/styles/variables.css';
 import MaintenancePage from '../../../pages/staticPages/MaintenancePage';
+import { loginProviderProps } from '../../../domain/auth/loginProviderProps';
 
 const queryClient = new QueryClient();
 
@@ -27,23 +28,25 @@ function App() {
   }
 
   return (
-    <Router>
-      <ScrollToTop />
-      <Provider store={store}>
+    <Provider store={store}>
+      <LoginProvider {...loginProviderProps}>
         <QueryClientProvider client={queryClient}>
           <ChakraProvider theme={theme}>
             <FeatureFlagsProvider>
-              <Layout>
-                <GlobalNotificationProvider>
-                  <AppRoutes />
-                  <GlobalNotification />
-                </GlobalNotificationProvider>
-              </Layout>
+              <Router>
+                <ScrollToTop />
+                <Layout>
+                  <GlobalNotificationProvider>
+                    <AppRoutes />
+                    <GlobalNotification />
+                  </GlobalNotificationProvider>
+                </Layout>
+              </Router>
             </FeatureFlagsProvider>
           </ChakraProvider>
         </QueryClientProvider>
-      </Provider>
-    </Router>
+      </LoginProvider>
+    </Provider>
   );
 }
 
