@@ -3,11 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { Box, Flex } from '@chakra-ui/react';
 import SearchInput from '../../../common/components/searchInput/SearchInput';
 import { HankeUser } from './hankeUser';
-import { CustomerType } from '../../application/types/application';
 
 type Props = {
   fieldName: string;
-  customerType: CustomerType;
+  id: string;
   onUserSelect: (user: HankeUser) => void;
   hankeUsers?: HankeUser[];
   required?: boolean;
@@ -15,7 +14,7 @@ type Props = {
 
 export default function UserSearchInput({
   fieldName,
-  customerType,
+  id,
   onUserSelect,
   hankeUsers,
   required,
@@ -45,7 +44,7 @@ export default function UserSearchInput({
   return (
     <SearchInput
       name={fieldName}
-      id={customerType}
+      id={id}
       label={
         <Flex alignItems="flex-end">
           {t('form:yhteystiedot:labels:nimi')}

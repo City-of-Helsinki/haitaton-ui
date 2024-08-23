@@ -106,7 +106,7 @@ const CustomerFields: React.FC<{
       <ResponsiveGrid maxColumns={2}>
         <UserSearchInput
           fieldName={`applicationData.${customerType}.customer.name`}
-          customerType={customerType}
+          id={customerType}
           required
           hankeUsers={hankeUsers}
           onUserSelect={handleUserSelect}
