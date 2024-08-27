@@ -1,13 +1,13 @@
 import React from 'react';
 import { Flex } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
-import { LoadingSpinner } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import ErrorLoadingText from '../../../common/components/errorLoadingText/ErrorLoadingText';
 import { useHankeUsers } from '../hankeUsers/hooks/useHankeUsers';
 import useHanke from '../hooks/useHanke';
 import AccessRightsView from './AccessRightsView';
 import { usePermissionsForHanke } from '../hankeUsers/hooks/useUserRightsForHanke';
+import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
 
 type Props = {
   hankeTunnus: string;

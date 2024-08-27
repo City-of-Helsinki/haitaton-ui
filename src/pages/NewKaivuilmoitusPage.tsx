@@ -1,11 +1,11 @@
 import { Flex } from '@chakra-ui/react';
-import { LoadingSpinner } from 'hds-react';
 import Container from '../common/components/container/Container';
 import PageMeta from './components/PageMeta';
 import { useLocalizedRoutes } from '../common/hooks/useLocalizedRoutes';
 import { useHankeDataInApplication } from '../domain/application/hooks/useHankeDataInApplication';
 import KaivuilmoitusContainer from '../domain/kaivuilmoitus/KaivuilmoitusContainer';
 import ErrorLoadingText from '../common/components/errorLoadingText/ErrorLoadingText';
+import LoadingSpinner from '../common/components/spinner/LoadingSpinner';
 
 const NewKaivuilmoitusPage = () => {
   const { KAIVUILMOITUSHAKEMUS } = useLocalizedRoutes();

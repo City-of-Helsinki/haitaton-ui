@@ -26,6 +26,7 @@ const HankeList: React.FC<React.PropsWithChildren<Props>> = ({ projectsData }) =
   const [sortedProjects, setSortedProjects] = useState(projectsData.slice());
   const [projectsOnPage, setProjectsOnPage] = useState(projectsData.slice(0, PAGE_SIZE));
   const pageCount = Math.ceil(projectsData.length / PAGE_SIZE);
+  const [sortedBy, setSortedBy] = useState('');
 
   function getHankeLink(args: HankeDataDraft) {
     const hasGeometry = hankeHasGeometry(args);
@@ -69,6 +70,20 @@ const HankeList: React.FC<React.PropsWithChildren<Props>> = ({ projectsData }) =
       return 0;
     });
 
+    // Announce table sorting for screen readers
+    setTimeout(
+      () =>
+        setSortedBy(
+          t(`hankeList:sortLabels:sorted`) +
+            `: ` +
+            t(`hankeList:sortLabels:${colKey}`) +
+            ', ' +
+            t(`hankeList:sortLabels:${order}`),
+        ),
+      500,
+    );
+    setTimeout(() => setSortedBy(''), 1000);
+
     setSortedProjects(sortedRows);
     updateProjectsOnPage(sortedRows, pageIndex);
 
@@ -77,10 +92,20 @@ const HankeList: React.FC<React.PropsWithChildren<Props>> = ({ projectsData }) =
 
   return (
     <div className="hankelista">
+      <div
+        className="visually-hidden"
+        role="alert"
+        aria-live="polite"
+        aria-atomic="true"
+        aria-relevant="additions"
+      >
+        {sortedBy}
+      </div>
       <div className="hankelista__inner">
         <p className="visually-hidden" aria-hidden="true" id="description">
           {t('hankeList:listDescription')}
         </p>
+
         <Table
           aria-describedby="description"
           cols={[

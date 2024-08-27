@@ -15,6 +15,7 @@ import './app.scss';
 import '../../../assets/styles/reset.css';
 import '../../../assets/styles/variables.css';
 import MaintenancePage from '../../../pages/staticPages/MaintenancePage';
+import AccessibleNavigationAnnouncer from '../NavigationAnnouncer';
 import { loginProviderProps } from '../../../domain/auth/loginProviderProps';
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ function App() {
             <FeatureFlagsProvider>
               <Router>
                 <ScrollToTop />
+                <AccessibleNavigationAnnouncer />
                 <Layout>
                   <GlobalNotificationProvider>
                     <AppRoutes />

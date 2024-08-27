@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import { LoadingSpinner, Notification, Stepper, StepState } from 'hds-react';
+import { Notification, Stepper, StepState } from 'hds-react';
 import { Box, Flex } from '@chakra-ui/react';
 import { AnyObject, ObjectSchema } from 'yup';
 import styles from './MultipageForm.module.scss';
@@ -8,6 +8,7 @@ import Text from '../../common/components/text/Text';
 import { createStepReducer } from './formStepReducer';
 import { Action, ACTION_TYPE, StepperStep } from './types';
 import MainHeading from '../../common/components/mainHeading/MainHeading';
+import LoadingSpinner from '../../common/components/spinner/LoadingSpinner';
 
 function LoadingIndicator({ loadingText }: { loadingText?: string }) {
   return (

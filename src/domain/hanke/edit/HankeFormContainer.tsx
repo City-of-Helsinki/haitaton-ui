@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Flex } from '@chakra-ui/react';
-import { LoadingSpinner } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import HankeForm from './HankeForm';
 import { convertHankeDataToFormState } from './utils';
 import ConfirmationDialog from '../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import useHanke from '../hooks/useHanke';
 import HankeDelete from './components/HankeDelete';
+import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
 
 type Props = {
   hankeTunnus?: string;

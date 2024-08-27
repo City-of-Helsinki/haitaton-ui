@@ -1,11 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { LoadingSpinner, Tooltip } from 'hds-react';
+import { Tooltip } from 'hds-react';
 import clsx from 'clsx';
 import Text from '../../../common/components/text/Text';
 import styles from './HankeIndexes.module.scss';
 import HaittaIndexNumber from '../../common/haittaIndexes/HaittaIndexNumber';
 import { HaittaIndexData } from '../../common/haittaIndexes/types';
+import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
 
 type IndexProps = {
   title: string;
