@@ -64,6 +64,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     shouldUnregister: false,
     defaultValues: formData,
     resolver: yupResolver(hankeSchema),
+    context: { hanke: formData },
   });
 
   const {

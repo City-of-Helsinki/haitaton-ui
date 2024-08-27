@@ -1,5 +1,6 @@
 import yup from '../../../common/utils/yup';
 import {
+  CONTACT_TYYPPI,
   HAITTOJENHALLINTATYYPPI,
   HANKE_KAISTAHAITTA_KEY,
   HANKE_KAISTAPITUUSHAITTA_KEY,
@@ -9,14 +10,13 @@ import {
   HANKE_TARINAHAITTA_KEY,
   HANKE_TYOMAATYYPPI_KEY,
   HANKE_VAIHE_KEY,
-} from './../../types/hanke';
-import { CONTACT_TYYPPI } from '../../types/hanke';
+} from '../../types/hanke';
 import {
-  FORMFIELD,
   CONTACT_FORMFIELD,
-  YHTEYSHENKILO_FORMFIELD,
-  HankeDataFormState,
+  FORMFIELD,
   HANKE_PAGES,
+  HankeDataFormState,
+  YHTEYSHENKILO_FORMFIELD,
 } from './types';
 import { HaittaIndexData } from '../../common/haittaIndexes/types';
 
@@ -61,18 +61,31 @@ const muuYhteystietoSchema = yhteystietoSchema
     [CONTACT_FORMFIELD.OSASTO]: yup.string().defined(),
   });
 
-const haittojenhallintaTyyppiSchema = yup
-  .string()
-  .required()
-  .meta({ pageName: HANKE_PAGES.HAITTOJEN_HALLINTA });
-
 const haittojenhallintaSchema = yup.object({
-  [HAITTOJENHALLINTATYYPPI.YLEINEN]: haittojenhallintaTyyppiSchema,
-  [HAITTOJENHALLINTATYYPPI.PYORALIIKENNE]: haittojenhallintaTyyppiSchema,
-  [HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE]: haittojenhallintaTyyppiSchema,
-  [HAITTOJENHALLINTATYYPPI.RAITIOLIIKENNE]: haittojenhallintaTyyppiSchema,
-  [HAITTOJENHALLINTATYYPPI.LINJAAUTOLIIKENNE]: haittojenhallintaTyyppiSchema,
-  [HAITTOJENHALLINTATYYPPI.MUUT]: haittojenhallintaTyyppiSchema,
+  [HAITTOJENHALLINTATYYPPI.YLEINEN]: yup
+    .string()
+    .required()
+    .meta({ pageName: HANKE_PAGES.HAITTOJEN_HALLINTA }),
+  [HAITTOJENHALLINTATYYPPI.PYORALIIKENNE]: yup
+    .string()
+    .detectedTrafficNuisance(HAITTOJENHALLINTATYYPPI.PYORALIIKENNE)
+    .meta({ pageName: HANKE_PAGES.HAITTOJEN_HALLINTA }),
+  [HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE]: yup
+    .string()
+    .detectedTrafficNuisance(HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE)
+    .meta({ pageName: HANKE_PAGES.HAITTOJEN_HALLINTA }),
+  [HAITTOJENHALLINTATYYPPI.RAITIOLIIKENNE]: yup
+    .string()
+    .detectedTrafficNuisance(HAITTOJENHALLINTATYYPPI.RAITIOLIIKENNE)
+    .meta({ pageName: HANKE_PAGES.HAITTOJEN_HALLINTA }),
+  [HAITTOJENHALLINTATYYPPI.LINJAAUTOLIIKENNE]: yup
+    .string()
+    .detectedTrafficNuisance(HAITTOJENHALLINTATYYPPI.LINJAAUTOLIIKENNE)
+    .meta({ pageName: HANKE_PAGES.HAITTOJEN_HALLINTA }),
+  [HAITTOJENHALLINTATYYPPI.MUUT]: yup
+    .string()
+    .required()
+    .meta({ pageName: HANKE_PAGES.HAITTOJEN_HALLINTA }),
 });
 
 export const hankeAlueetSchema = yup.object({

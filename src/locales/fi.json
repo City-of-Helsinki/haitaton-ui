@@ -683,6 +683,8 @@
       "instructionsGeneral": "<0><0>Varmista jalankulun turvallisuus ja esteettömyys</0><1>Varmista kulkuyhteydet kiinteistöihin</1><2>Tee yhteensovitus muiden hankkeiden ja töiden sekä niiden kiertoreittien kanssa</2><3>Ilmoita aina katujen sulkemisesta liikenteeltä Pelastuslaitokselle ja Poliisille</3><4>Tarkista aina, onko hankkeesi tai työsi erikoiskuljetusten reitillä</4><5>Tarkista vaikutukset olevaan liikennevalo-ohjaukseen (kaistajärjestelyt, ilmaisimet, valojen toimivuus)</5><6>Poikkeavat työajat</6></0>",
       "helperText": "Hankealueella tehtävät tai sovitut toimet haittojen hallitsemiseksi tai estämiseksi.",
       "subHeaderTrafficNuisanceIndex": "Hankkeellesi lasketun liikennehaittaindeksin perusteella seuraaviin vaatimuksiin tulee kiinnittää erityistä huomiota.",
+      "noNuisanceDetected": "Haitaton ei löytänyt tätä kohderyhmää alueelta. Voit tarvittaessa lisätä toimet haittojen hallintaan.",
+      "addControlPlan": "Lisää toimet haittojen hallintaan",
       "nuisanceType": {
         "PYORALIIKENNE": "Pyöräliikenteen merkittävyys",
         "AUTOLIIKENNE": "Autoliikenteen ruuhkautuminen",
