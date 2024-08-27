@@ -151,6 +151,36 @@ test('Correct information about hanke should be displayed', async () => {
   expect(screen.getByText('Hankkeen kesto')).toBeVisible();
   expect(screen.getByTestId('test-haitanKesto')).toHaveTextContent('3');
 
+  // Change to haittojenhallinta tab
+  await user.click(screen.getByRole('tab', { name: /haittojen hallinta/i }));
+
+  // Data in haittojenhallinta tab
+  expect(screen.queryByText('Toimet haittojen hallintaan')).toBeInTheDocument();
+  expect(screen.getByText('Yleisten haittojen hallintasuunnitelma')).toBeInTheDocument();
+  expect(screen.getByText('Pyöräliikenteen merkittävyys')).toBeInTheDocument();
+  expect(
+    screen.getByText('Pyöräliikenteelle koituvien haittojen hallintasuunnitelma'),
+  ).toBeInTheDocument();
+  expect(screen.getByText('Autoliikenteen ruuhkautuminen')).toBeInTheDocument();
+  expect(
+    screen.getByText('Autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText('Joukkoliikenteen merkittävyys: Linja-autojen paikallisliikenne'),
+  ).toBeInTheDocument();
+  // bus traffic has no nuisance control plan text
+  expect(screen.getByText('Joukkoliikenteen merkittävyys: Raitioliikenne')).toBeInTheDocument();
+  expect(
+    screen.getByText('Raitioliikenteelle koituvien haittojen hallintasuunnitelma'),
+  ).toBeInTheDocument();
+  expect(screen.getByText('Muut haittojenhallintatoimet')).toBeInTheDocument();
+  expect(screen.getByText('Muiden haittojen hallintasuunnitelma')).toBeInTheDocument();
+  // nuisance indexes are also shown
+  expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3.5');
+  expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('2');
+  expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('0');
+  expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
+
   // Change to contacts tab
   await user.click(screen.getByRole('tab', { name: /yhteystiedot/i }));
 
