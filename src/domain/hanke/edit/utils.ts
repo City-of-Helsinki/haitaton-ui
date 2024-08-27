@@ -181,19 +181,12 @@ export function getAreaDefaultName(areas?: HankeAlueFormState[]) {
  */
 export function sortedLiikenneHaittojenhallintatyyppi(
   tormaystarkasteluTulos: HaittaIndexData | undefined,
-): [string, number][] {
+): [HAITTOJENHALLINTATYYPPI, number][] {
   const defaultOrder = Object.values(HAITTOJENHALLINTATYYPPI).filter(
     (type) => type !== HAITTOJENHALLINTATYYPPI.YLEINEN && type !== HAITTOJENHALLINTATYYPPI.MUUT,
   );
   if (!tormaystarkasteluTulos) {
-    return Object.entries(
-      defaultOrder.reduce(
-        (acc, type) => {
-          return { ...acc, [type]: 0 };
-        },
-        {} as Record<HAITTOJENHALLINTATYYPPI, number>,
-      ),
-    );
+    return defaultOrder.map((type) => [type, 0] as [HAITTOJENHALLINTATYYPPI, number]);
   }
 
   function keyOfIndexType(key: HAITTA_INDEX_TYPE): keyof HaittaIndexData {
@@ -220,12 +213,5 @@ export function sortedLiikenneHaittojenhallintatyyppi(
       return diff;
     });
 
-  return Object.entries(
-    sortedIndices.reduce(
-      (acc, item) => {
-        return { ...acc, [item.type]: item.value };
-      },
-      {} as Record<HAITTOJENHALLINTATYYPPI, number>,
-    ),
-  );
+  return sortedIndices.map((item) => [item.type, item.value] as [HAITTOJENHALLINTATYYPPI, number]);
 }
