@@ -31,7 +31,6 @@ import {
 import { HankeData } from '../../types/hanke';
 import ApplicationStatusTag from '../components/ApplicationStatusTag';
 import {
-  AlluStatus,
   Application,
   ApplicationArea,
   JohtoselvitysData,
@@ -122,10 +121,6 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
   const isContact = isContactIn(signedInUser, applicationData);
   const showSendButton = !isSent && isValid;
   const disableSendButton = showSendButton && !isContact;
-  const showDecisionLinks =
-    alluStatus === AlluStatus.DECISION ||
-    alluStatus === AlluStatus.OPERATIONAL_CONDITION ||
-    alluStatus === AlluStatus.FINISHED;
 
   const applicationSendMutation = useSendApplication();
 
@@ -153,16 +148,15 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
               <Box mb="var(--spacing-2-xs)">
                 <ApplicationStatusTag status={alluStatus} />
               </Box>
-              {showDecisionLinks &&
-                currentDecisions.map((paatos) => (
-                  <Box key={paatos.tyyppi} mt="var(--spacing-2-xs)">
-                    <DecisionLink
-                      id={paatos.id}
-                      linkText={t(`hakemus:labels:downloadDecision:${paatos.tyyppi}`)}
-                      filename={getDecisionFilename(paatos)}
-                    />
-                  </Box>
-                ))}
+              {currentDecisions.map((paatos) => (
+                <Box key={paatos.tyyppi} mt="var(--spacing-2-xs)">
+                  <DecisionLink
+                    id={paatos.id}
+                    linkText={t(`hakemus:labels:downloadDecision:${paatos.tyyppi}`)}
+                    filename={getDecisionFilename(paatos)}
+                  />
+                </Box>
+              ))}
             </Box>
           </SectionItemContent>
           <SectionItemTitle>{t('hakemus:labels:relatedHanke')}:</SectionItemTitle>

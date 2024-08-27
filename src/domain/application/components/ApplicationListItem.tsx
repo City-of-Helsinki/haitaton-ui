@@ -2,7 +2,7 @@ import { Card, IconEye } from 'hds-react';
 import { Box, Flex, Grid } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { AlluStatus, HankkeenHakemus } from '../types/application';
+import { HankkeenHakemus } from '../types/application';
 import styles from './ApplicationListItem.module.scss';
 import Text from '../../../common/components/text/Text';
 import ApplicationStatusTag from './ApplicationStatusTag';
@@ -28,10 +28,6 @@ function ApplicationListItem({ application }: Readonly<Props>) {
   const applicationViewPath = getApplicationPathView({ id: (id as number).toString() });
 
   const currentDecisions = getCurrentDecisions(paatokset);
-  const showDecisionLinks =
-    alluStatus === AlluStatus.DECISION ||
-    alluStatus === AlluStatus.OPERATIONAL_CONDITION ||
-    alluStatus === AlluStatus.FINISHED;
 
   return (
     <Card
@@ -63,16 +59,15 @@ function ApplicationListItem({ application }: Readonly<Props>) {
           <ApplicationDates startTime={startTime} endTime={endTime} />
           <Grid alignItems="start" templateColumns="auto 1fr" columnGap="var(--spacing-xs)">
             <ApplicationStatusTag status={alluStatus} />
-            {showDecisionLinks &&
-              currentDecisions.map((paatos) => (
-                <Box as="span" key={paatos.tyyppi}>
-                  <DecisionLink
-                    id={paatos.id}
-                    linkText={t(`hakemus:labels:downloadDecision:${paatos.tyyppi}`)}
-                    filename={getDecisionFilename(paatos)}
-                  />
-                </Box>
-              ))}
+            {currentDecisions.map((paatos) => (
+              <Box as="span" key={paatos.tyyppi}>
+                <DecisionLink
+                  id={paatos.id}
+                  linkText={t(`hakemus:labels:downloadDecision:${paatos.tyyppi}`)}
+                  filename={getDecisionFilename(paatos)}
+                />
+              </Box>
+            ))}
           </Grid>
         </div>
         <Link
