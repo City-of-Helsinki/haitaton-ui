@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IconSignout, Header, IconUser, Link, Logo, logoFi, logoSv, Button } from 'hds-react';
+import { Header, IconUser, Link, Logo, logoFi, logoSv } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useMatch, useLocation, useNavigate } from 'react-router-dom';
 import { $enum } from 'ts-enum-util';
@@ -10,13 +10,13 @@ import {
   APPLICATION_ID_REGEXP,
   USER_ID_REGEXP,
 } from '../../hooks/useLocalizedRoutes';
-import authService from '../../../domain/auth/authService';
 import useUser from '../../../domain/auth/useUser';
 import { Language, LANGUAGES } from '../../types/language';
 import { SKIP_TO_ELEMENT_ID } from '../../constants/constants';
 import { useFeatureFlags } from '../featureFlags/FeatureFlagsContext';
 import HankeCreateDialog from '../../../domain/hanke/hankeCreateDialog/HankeCreateDialog';
 import JohtoselvitysCreateDialog from '../../../domain/johtoselvitys/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
+import useIsAuthenticated from '../../../domain/auth/useIsAuthenticated';
 
 const languageLabels = {
   fi: 'Suomi',
@@ -28,8 +28,8 @@ function HaitatonHeader() {
   const { HOME, PUBLIC_HANKKEET, PUBLIC_HANKKEET_MAP, HANKEPORTFOLIO, JOHTOSELVITYSHAKEMUS } =
     useLocalizedRoutes();
   const { t, i18n } = useTranslation();
-  const { data: user } = useUser();
-  const isAuthenticated = Boolean(user?.profile);
+  const user = useUser();
+  const isAuthenticated = useIsAuthenticated();
   const features = useFeatureFlags();
   const logoSrc = i18n.language === 'sv' ? logoSv : logoFi;
   const [showHankeCreateDialog, setShowHankeCreateDialog] = useState(false);
@@ -84,10 +84,7 @@ function HaitatonHeader() {
   }
 
   function getUserMenuLabel() {
-    if (isAuthenticated) {
-      return user?.profile.name ?? (user?.profile.email as string);
-    }
-    return t('authentication:loginButton');
+    return user?.profile.name ?? (user?.profile.email as string);
   }
 
   function openHankeCreateDialog() {
@@ -129,25 +126,34 @@ function HaitatonHeader() {
         menuButtonAriaLabel={t('common:ariaLabels:menuToggle')}
       >
         <Header.LanguageSelector />
-        <Header.ActionBarItem
-          label={getUserMenuLabel()}
+        {isAuthenticated && (
+          <Header.ActionBarItem
+            label={getUserMenuLabel()}
+            fixedRightPosition
+            preventButtonResize
+            icon={<IconUser />}
+            id="action-bar-user-menu"
+            closeLabel={t('common:ariaLabels:closeButtonLabelText')}
+          >
+            <Header.LogoutSubmenuButton
+              id="log-out-button"
+              label={t('authentication:logoutButton')}
+              errorLabel={t('authentication:logoutError')}
+              errorText={t('authentication:logoutError')}
+              errorCloseAriaLabel={t('common:ariaLabels:closeButtonLabelText')}
+              loggingOutText={t('authentication:loggingOut')}
+            />
+          </Header.ActionBarItem>
+        )}
+        <Header.LoginButton
+          id="login-button"
+          label={t('authentication:loginButton')}
+          errorLabel={t('authentication:loggingInErrorLabel')}
+          errorText={t('authentication:genericError')}
+          errorCloseAriaLabel={t('common:ariaLabels:closeButtonLabelText')}
+          loggingInText={t('authentication:loggingIn')}
           fixedRightPosition
-          preventButtonResize
-          icon={<IconUser aria-hidden />}
-          id="action-bar-login"
-          closeLabel={t('common:ariaLabels:closeButtonLabelText')}
-          onClick={!isAuthenticated ? authService.login : undefined}
-        >
-          {isAuthenticated && (
-            <Button
-              variant="supplementary"
-              iconLeft={<IconSignout aria-hidden />}
-              onClick={authService.logout}
-            >
-              {t('authentication:logoutButton')}
-            </Button>
-          )}
-        </Header.ActionBarItem>
+        />
       </Header.ActionBar>
 
       {isAuthenticated && (

@@ -7,6 +7,7 @@ import { debounce } from 'lodash';
 import { Feature } from 'ol';
 import { Geometry } from 'ol/geom';
 import { FeatureLike } from 'ol/Feature';
+import { Coordinate } from 'ol/coordinate';
 import Map from '../../../common/components/map/Map';
 import Kantakartta from '../../map/components/Layers/Kantakartta';
 import Ortokartta from '../../map/components/Layers/Ortokartta';
@@ -21,10 +22,12 @@ import { MapTileLayerId } from '../../map/types';
 import styles from './ApplicationMap.module.scss';
 import useForceUpdate from '../../../common/hooks/useForceUpdate';
 import FeatureHoverBox from '../../map/components/FeatureHoverBox/FeatureHoverBox';
+import FitSource from '../../map/components/interations/FitSource';
 
 type Props = {
   drawSource: VectorSource;
   showDrawControls: boolean;
+  mapCenter?: Coordinate;
   onAddArea?: (feature: Feature<Geometry>) => void;
   onChangeArea?: (feature: Feature<Geometry>) => void;
   children?: React.ReactNode;
@@ -33,6 +36,7 @@ type Props = {
 export default function ApplicationMap({
   drawSource,
   showDrawControls,
+  mapCenter,
   onAddArea,
   onChangeArea,
   children,
@@ -88,7 +92,7 @@ export default function ApplicationMap({
   return (
     <div>
       <div className={styles.mapContainer}>
-        <Map zoom={9} mapClassName={styles.mapContainer__inner}>
+        <Map zoom={9} center={mapCenter} mapClassName={styles.mapContainer__inner}>
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
           {mapTileLayers.ortokartta.visible && <Ortokartta opacity={ortoLayerOpacity} />}
 
@@ -99,6 +103,8 @@ export default function ApplicationMap({
           <VectorLayer source={drawSource} zIndex={2} className="drawLayer" />
 
           <OverviewMapControl />
+
+          <FitSource source={drawSource} fitOnce />
 
           <FeatureHoverBox
             render={(featureWithPixel) => {

@@ -6,7 +6,11 @@
     "loginButton": "Kirjaudu",
     "logoutButton": "Kirjaudu ulos",
     "homePageLink": "Palaa Haitattoman <a>etusivulle.</a>",
-    "supportLink": "Voit myös ottaa yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <a>haitatontuki@hel.fi.</a>"
+    "supportLink": "Voit myös ottaa yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <a>haitatontuki@hel.fi.</a>",
+    "loggingIn": "Kirjaudutaan sisään...",
+    "loggingOut": "Kirjaudutaan ulos...",
+    "loggingInErrorLabel": "Kirjautumisessa tapahtui virhe",
+    "logoutError": "Uloskirjautumisessa tapahtui virhe"
   },
   "common": {
     "increment": "Lisää",
@@ -477,7 +481,7 @@
       "VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA": "Vähentää kaistan yhdellä ajosuunnalla",
       "VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA": "Vähentää samanaikaisesti kaistan kahdella ajosuunnalla",
       "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_KAHDELLA_AJOSUUNNALLA": "Vähentää samanaikaisesti useita kaistoja kahdella ajosuunnalla",
-      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA": "Vähentää samanaikaisesti useita kaistoja liittymän eri suunnilla"
+      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA": "Vähentää samanaikaisesti useita kaistoja liittymien eri suunnilla"
     },
     "kaistaPituusHaitta": {
       "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Ei vaikuta",
@@ -683,6 +687,8 @@
       "instructionsGeneral": "<0><0>Varmista jalankulun turvallisuus ja esteettömyys</0><1>Varmista kulkuyhteydet kiinteistöihin</1><2>Tee yhteensovitus muiden hankkeiden ja töiden sekä niiden kiertoreittien kanssa</2><3>Ilmoita aina katujen sulkemisesta liikenteeltä Pelastuslaitokselle ja Poliisille</3><4>Tarkista aina, onko hankkeesi tai työsi erikoiskuljetusten reitillä</4><5>Tarkista vaikutukset olevaan liikennevalo-ohjaukseen (kaistajärjestelyt, ilmaisimet, valojen toimivuus)</5><6>Poikkeavat työajat</6></0>",
       "helperText": "Hankealueella tehtävät tai sovitut toimet haittojen hallitsemiseksi tai estämiseksi.",
       "subHeaderTrafficNuisanceIndex": "Hankkeellesi lasketun liikennehaittaindeksin perusteella seuraaviin vaatimuksiin tulee kiinnittää erityistä huomiota.",
+      "noNuisanceDetected": "Haitaton ei löytänyt tätä kohderyhmää alueelta. Voit tarvittaessa lisätä toimet haittojen hallintaan.",
+      "addControlPlan": "Lisää toimet haittojen hallintaan",
       "nuisanceType": {
         "PYORALIIKENNE": "Pyöräliikenteen merkittävyys",
         "AUTOLIIKENNE": "Autoliikenteen ruuhkautuminen",
@@ -1189,7 +1195,23 @@
       "EI_TARVETTA": "ei tarvetta",
       "MERKITTAVA": "merkittävä"
     },
-    "indexesNotCalculated": "Haittaindeksejä ei ole laskettu."
+    "indexesNotCalculated": "Haittaindeksejä ei ole laskettu.",
+    "tooltips": {
+      "PYORALIIKENNE": "<ul><li>0: Ei tunnistettua pyöräliikenteen reittiä</li><li>2: Muut pyöräliikenteen yhteydet</li><li>3: Muut pyöräliikenteen reitit (tai reitin/yhteyden luokitustieto puuttuu pyöräliikenteen tausta-aineistosta)</li><li>5: Pyöräliikenteen pääreitti tai pääreitin osana toimiva katu</li></ul>",
+      "AUTOLIIKENNE": "Autoliikenteelle lasketaan painotettu haittaindeksi (0-5) siihen sisältyvien osa-alueiden mukaan.",
+      "autoKatuluokka": "<ul><li>0: Ei tunnistettua katuluokkaa</li><li>1: Asuntokatu, huoltoväylä tai vähäliikenteinen katu</li><li>2: Kantakaupungin asuntokatu, huoltoväylä tai vähäliikenteinen katu</li><li>3: Paikallinen kokoojakatu</li><li>4: Alueellinen kokoojakatu</li><li>5: Pääkatu tai moottoriväylä</li></ul>",
+      "autoliikenneMaara": "<ul><li>0: Ei tunnistettua autoliikennettä</li><li>1: Alle 500 autoa arkivuorokaudessa</li><li>2: 500 - 1 499 autoa arkivuorokaudessa</li><li>3: 1 500 - 4 999 autoa arkivuorokaudessa</li><li>4: 5 000 - 9 999 autoa arkivuorokaudessa</li><li>5: 10 000 tai enemmän autoja arkivuorokaudessa</li></ul>",
+      "autoKaistaHaitta": "<ul><li>1: Ei vaikuta kaistajärjestelyihin</li><li>2: $t(hanke:kaistaHaitta:VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA)</li><li>3: $t(hanke:kaistaHaitta:VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA)</li><li>4: $t(hanke:kaistaHaitta:VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_KAHDELLA_AJOSUUNNALLA)</li><li>5: $t(hanke:kaistaHaitta:VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA)</li></ul>",
+      "autoKaistaPituusHaitta": "<ul><li>1: Ei vaikuta kaistajärjestelyihin</li><li>2: Kaistavaikutusten pituus alle 10 m</li><li>3: Kaistavaikutusten pituus 10-99 m</li><li>4: Kaistavaikutusten pituus 100-499 m</li><li>5: Kaistavaikutusten pituus 500 m tai enemmän</li></ul>",
+      "autoHankkeenKesto": "<ul><li>1: Hankkeen kesto alle 2 viikkoa</li><li>3: Hankkeen kesto 2 viikkoa - 3 kuukautta</li><li>5: Hankkeen kesto yli 3 kuukautta</li></ul>",
+      "LINJAAUTOLIIKENNE": "<ul><li>0: Ei linja-autojen paikallisliikennettä</li><li>2: Linja-autojen paikallisliikennettä muulloin, kuin ruuhka-aikana</li><li>3: Linja-autojen paikallisliikenteen linjojen vuoromäärä enintään 10 ruuhkatunnissa</li><li>4: Linja-autojen paikallisliikenteen runkolinja tai vuoromäärä enintään 20 ruuhkatunnissa</li><li>5: Kamppi-Rautatientori -alue, Mannerheimintie, Kaisaniemenkatu, Hämeentie tai linja-autojen paikallisliikenteen linjojen vuoromäärä yli 20 ruuhkatunnissa</li></ul>",
+      "RAITIOLIIKENNE": "<ul><li>0: Ei tunnistettuja raitiotiekiskoja</li><li>3: Raitiotieverkon rataosa, joilla ei ole säännöllistä linjaliikennettä</li><li>5: Raitiotieverkon rataosa, jolla on säännöllistä linjaliikennettä</li></ul>",
+      "MUUT": {
+        "meluHaitta": "<ul><li>$t(hanke:meluHaitta:EI_MELUHAITTAA)</li><li>$t(hanke:meluHaitta:SATUNNAINEN_MELUHAITTA)</li><li>$t(hanke:meluHaitta:TOISTUVA_MELUHAITTA)</li><li>$t(hanke:meluHaitta:JATKUVA_MELUHAITTA)</li></ul>",
+        "polyHaitta": "<ul><li>$t(hanke:polyHaitta:EI_POLYHAITTAA)</li><li>$t(hanke:polyHaitta:SATUNNAINEN_POLYHAITTA)</li><li>$t(hanke:polyHaitta:TOISTUVA_POLYHAITTA)</li><li>$t(hanke:polyHaitta:JATKUVA_POLYHAITTA)</li></ul>",
+        "tarinaHaitta": "<ul><li>$t(hanke:tarinaHaitta:EI_TARINAHAITTAA)</li><li>$t(hanke:tarinaHaitta:SATUNNAINEN_TARINAHAITTA)</li><li>$t(hanke:tarinaHaitta:TOISTUVA_TARINAHAITTA)</li><li>$t(hanke:tarinaHaitta:JATKUVA_TARINAHAITTA)</li></ul>"
+      }
+    }
   },
   "homepage": {
     "pageTitle": "Tervetuloa Haitaton-palveluun",

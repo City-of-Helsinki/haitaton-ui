@@ -77,7 +77,7 @@ const HankeAreaInfo: React.FC<AreaProps> = ({ area, index }) => {
       initiallyOpen
       className={styles.hankeAreaContainer}
     >
-      <div className={styles.hankeAreaContent}>
+      <div>
         <FormSummarySection>
           <SectionItemTitle>{t('hanke:alue:duration')}</SectionItemTitle>
           <SectionItemContent>

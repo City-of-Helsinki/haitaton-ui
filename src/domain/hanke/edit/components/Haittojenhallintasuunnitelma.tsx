@@ -9,12 +9,12 @@ import {
   HANKE_POLYHAITTA,
   HANKE_TARINAHAITTA,
   HankeData,
+  HankkeenHaittojenhallintasuunnitelma,
 } from '../../../types/hanke';
 import TextArea from '../../../../common/components/textArea/TextArea';
 import { sortedLiikenneHaittojenhallintatyyppi } from '../utils';
 import useFieldArrayWithStateUpdate from '../../../../common/hooks/useFieldArrayWithStateUpdate';
 import HankealueMap from '../../../map/components/HankkeenHaittojenhallintasuunnitelma/HankealueMap';
-import VectorSource from 'ol/source/Vector';
 import useAddressCoordinate from '../../../map/hooks/useAddressCoordinate';
 import { HaittaIndexData } from '../../../common/haittaIndexes/types';
 import CustomAccordion from '../../../../common/components/customAccordion/CustomAccordion';
@@ -22,6 +22,8 @@ import HaittaIndex from '../../../common/haittaIndexes/HaittaIndex';
 import { HaittaSubSection } from '../../../common/haittaIndexes/HaittaSubSection';
 import styles from './Haittojenhallintasuunnitelma.module.scss';
 import ProcedureTips from '../../../common/haittaIndexes/ProcedureTips';
+import HaittaTooltipContent from '../../../common/haittaIndexes/HaittaTooltipContent';
+import { Button, IconPlusCircle } from 'hds-react';
 
 function mapNuisanceEnumIndexToNuisanceIndex(index: number): number {
   if (index === 2) return 3;
@@ -29,17 +31,49 @@ function mapNuisanceEnumIndexToNuisanceIndex(index: number): number {
   return index;
 }
 
+/**
+ * Nuisance control plan section for a traffic type should be visible if its index > 0,
+ * or if it has some content.
+ */
+function shouldBeVisible(
+  type: HAITTOJENHALLINTATYYPPI,
+  index: number,
+  haittojenhallintasuunnitelma?: HankkeenHaittojenhallintasuunnitelma,
+): boolean {
+  return (
+    index > 0 ||
+    (haittojenhallintasuunnitelma ? (haittojenhallintasuunnitelma[type]?.length ?? 0) > 0 : false)
+  );
+}
+
 function HaittaIndexHeading({
   index,
+  haittojenhallintaTyyppi,
+  showTooltipHeading = true,
   testId,
-}: Readonly<{ index: number | undefined; testId?: string }>) {
+}: Readonly<{
+  index: number | undefined;
+  haittojenhallintaTyyppi: string;
+  showTooltipHeading?: boolean;
+  testId?: string;
+}>) {
   const { t } = useTranslation();
   return (
     <HStack spacing="12px">
       <Box as="h4" className="heading-s">
         {t(`hankeIndexes:haittaindeksi`)}
       </Box>
-      <HaittaIndex index={index} showLabel={false} testId={testId} />
+      <HaittaIndex
+        index={index}
+        showLabel={false}
+        testId={testId}
+        tooltipContent={
+          <HaittaTooltipContent
+            translationKey={`hankeIndexes:tooltips:${haittojenhallintaTyyppi}`}
+            showHeading={showTooltipHeading}
+          />
+        }
+      />
     </HStack>
   );
 }
@@ -56,8 +90,9 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
   });
   const hankealue = hankealueet[index];
   const tormaystarkasteluTulos = hankealue.tormaystarkasteluTulos as HaittaIndexData;
+  const haittojenhallintasuunnitelma = hankealue.haittojenhallintasuunnitelma;
   const haittojenhallintatyypit = sortedLiikenneHaittojenhallintatyyppi(tormaystarkasteluTulos);
-  const [drawSource] = useState<VectorSource>(new VectorSource());
+  const liikennehaittatyypit = haittojenhallintatyypit.map(([tyyppi]) => tyyppi);
   const addressCoordinate = useAddressCoordinate(hanke.tyomaaKatuosoite);
   const meluhaittaIndex = mapNuisanceEnumIndexToNuisanceIndex(
     $enum(HANKE_MELUHAITTA).indexOfKey(hankealue.meluHaitta!),
@@ -68,7 +103,18 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
   const tarinaHaittaIndex = mapNuisanceEnumIndexToNuisanceIndex(
     $enum(HANKE_TARINAHAITTA).indexOfKey(hankealue.tarinaHaitta!),
   );
-
+  const initialVisibility = liikennehaittatyypit.reduce(
+    (acc, type) => {
+      const found = haittojenhallintatyypit.find((value) => value[0] === type);
+      return {
+        ...acc,
+        [type]: shouldBeVisible(type, found ? found[1] : 0, haittojenhallintasuunnitelma),
+      };
+    },
+    {} as Record<HAITTOJENHALLINTATYYPPI, boolean>,
+  );
+  const [isVisible, setVisible] =
+    useState<Record<HAITTOJENHALLINTATYYPPI, boolean>>(initialVisibility);
   return (
     <div>
       <Box as="h4" mt="var(--spacing-m)" mb="var(--spacing-xs)" fontWeight="bold">
@@ -111,61 +157,100 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
           <Box as="h4" className="nuisanceType">
             {t(`hankeForm:haittojenHallintaForm:nuisanceType:${haitta}`)}
           </Box>
-          <Box mt="var(--spacing-m)" mb="var(--spacing-m)">
-            <HankealueMap
-              hankealue={hankealue}
-              center={addressCoordinate}
-              drawSource={drawSource}
-            />
-          </Box>
-          {haitta === HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE ? (
-            <CustomAccordion
-              heading={<HaittaIndexHeading index={indeksi} testId="test-AUTOLIIKENNE" />}
-              headingBorderBottom={false}
-            >
-              <HaittaSubSection
-                heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:katuluokka`)}
-                index={tormaystarkasteluTulos?.autoliikenne.katuluokka}
-                testId="test-katuluokka"
-              />
-              <HaittaSubSection
-                heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:liikennemaara`)}
-                index={tormaystarkasteluTulos?.autoliikenne.liikennemaara}
-                testId="test-liikennemaara"
-              />
-              <HaittaSubSection
-                heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistahaitta`)}
-                index={tormaystarkasteluTulos?.autoliikenne.kaistahaitta}
-                testId="test-kaistahaitta"
-              />
-              <HaittaSubSection
-                heading={t(
-                  `hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistapituushaitta`,
-                )}
-                index={tormaystarkasteluTulos?.autoliikenne.kaistapituushaitta}
-                testId="test-kaistapituushaitta"
-              />
-              <HaittaSubSection
-                heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:haitanKesto`)}
-                index={tormaystarkasteluTulos?.autoliikenne.haitanKesto}
-                testId="test-haitanKesto"
-              />
-            </CustomAccordion>
+          {isVisible[haitta] ? (
+            <div>
+              <Box mt="var(--spacing-m)" mb="var(--spacing-m)">
+                <HankealueMap hankealue={hankealue} index={indeksi} center={addressCoordinate} />
+              </Box>
+              {haitta === HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE ? (
+                <CustomAccordion
+                  heading={
+                    <HaittaIndexHeading
+                      index={indeksi}
+                      haittojenhallintaTyyppi={haitta}
+                      showTooltipHeading={false}
+                      testId="test-AUTOLIIKENNE"
+                    />
+                  }
+                  headingBorderBottom={false}
+                >
+                  <HaittaSubSection
+                    heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:katuluokka`)}
+                    index={tormaystarkasteluTulos?.autoliikenne.katuluokka}
+                    testId="test-katuluokka"
+                    tooltipContent={
+                      <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoKatuluokka" />
+                    }
+                  />
+                  <HaittaSubSection
+                    heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:liikennemaara`)}
+                    index={tormaystarkasteluTulos?.autoliikenne.liikennemaara}
+                    testId="test-liikennemaara"
+                    tooltipContent={
+                      <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoliikenneMaara" />
+                    }
+                  />
+                  <HaittaSubSection
+                    heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistahaitta`)}
+                    index={tormaystarkasteluTulos?.autoliikenne.kaistahaitta}
+                    testId="test-kaistahaitta"
+                    tooltipContent={
+                      <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoKaistaHaitta" />
+                    }
+                  />
+                  <HaittaSubSection
+                    heading={t(
+                      `hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistapituushaitta`,
+                    )}
+                    index={tormaystarkasteluTulos?.autoliikenne.kaistapituushaitta}
+                    testId="test-kaistapituushaitta"
+                    tooltipContent={
+                      <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoKaistaPituusHaitta" />
+                    }
+                  />
+                  <HaittaSubSection
+                    heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:haitanKesto`)}
+                    index={tormaystarkasteluTulos?.autoliikenne.haitanKesto}
+                    testId="test-haitanKesto"
+                    tooltipContent={
+                      <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoHankkeenKesto" />
+                    }
+                  />
+                </CustomAccordion>
+              ) : (
+                <HaittaIndexHeading
+                  index={indeksi}
+                  haittojenhallintaTyyppi={haitta}
+                  testId={`test-${haitta}`}
+                />
+              )}
+              <Box mt="var(--spacing-s)">
+                <ProcedureTips haittojenhallintaTyyppi={haitta} haittaIndex={indeksi} />
+              </Box>
+              <Box mt="var(--spacing-m)">
+                <TextArea
+                  name={`${FORMFIELD.HANKEALUEET}.${index}.haittojenhallintasuunnitelma.${haitta}`}
+                  label={t(`hankeForm:labels:haittojenhallintasuunnitelma:${haitta}`)}
+                  testId={`${FORMFIELD.HANKEALUEET}.${index}.haittojenhallintasuunnitelma.${haitta}`}
+                  required={indeksi > 0}
+                  helperText={t('hankeForm:haittojenHallintaForm:helperText')}
+                />
+              </Box>
+            </div>
           ) : (
-            <HaittaIndexHeading index={indeksi} testId={`test-${haitta}`} />
+            <div>
+              <Box mt="var(--spacing-m)" ml="var(--spacing-m)">
+                {t('hankeForm:haittojenHallintaForm:noNuisanceDetected')}
+              </Box>
+              <Button
+                variant="supplementary"
+                iconLeft={<IconPlusCircle aria-hidden />}
+                onClick={() => setVisible((state) => ({ ...state, [haitta]: true }))}
+              >
+                {t('hankeForm:haittojenHallintaForm:addControlPlan')}
+              </Button>
+            </div>
           )}
-          <Box mt="var(--spacing-s)">
-            <ProcedureTips haittojenhallintaTyyppi={haitta} haittaIndex={indeksi} />
-          </Box>
-          <Box mt="var(--spacing-m)">
-            <TextArea
-              name={`${FORMFIELD.HANKEALUEET}.${index}.haittojenhallintasuunnitelma.${haitta}`}
-              label={t(`hankeForm:labels:haittojenhallintasuunnitelma:${haitta}`)}
-              testId={`${FORMFIELD.HANKEALUEET}.${index}.haittojenhallintasuunnitelma.${haitta}`}
-              required={true}
-              helperText={t('hankeForm:haittojenHallintaForm:helperText')}
-            />
-          </Box>
         </div>
       ))}
       <div key={HAITTOJENHALLINTATYYPPI.MUUT} className="formWpr">
@@ -178,6 +263,9 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
           showColorByIndex={false}
           className={styles.muutHaittojenHallintaToimetSubSection}
           testId="test-meluHaitta"
+          tooltipContent={
+            <HaittaTooltipContent translationKey="hankeIndexes:tooltips:MUUT:meluHaitta" />
+          }
         />
         <HaittaSubSection
           heading={t(`hankeForm:labels:polyHaittaShort`)}
@@ -185,6 +273,9 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
           showColorByIndex={false}
           className={styles.muutHaittojenHallintaToimetSubSection}
           testId="test-polyHaitta"
+          tooltipContent={
+            <HaittaTooltipContent translationKey="hankeIndexes:tooltips:MUUT:polyHaitta" />
+          }
         />
         <HaittaSubSection
           heading={t(`hankeForm:labels:tarinaHaittaShort`)}
@@ -192,6 +283,9 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
           showColorByIndex={false}
           className={styles.muutHaittojenHallintaToimetSubSection}
           testId="test-tarinaHaitta"
+          tooltipContent={
+            <HaittaTooltipContent translationKey="hankeIndexes:tooltips:MUUT:tarinaHaitta" />
+          }
         />
         <HaittaSubSection
           heading={t(`hankeForm:labels:checkSurrounding`)}

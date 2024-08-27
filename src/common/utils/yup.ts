@@ -2,6 +2,8 @@ import * as yup from 'yup';
 import { formatToFinnishDate } from './date';
 import isValidBusinessId from '../../common/utils/isValidBusinessId';
 import { HankeUser } from '../../domain/hanke/hankeUsers/hankeUser';
+import { HAITTOJENHALLINTATYYPPI } from '../../domain/types/hanke';
+import { HankeDataFormState } from '../../domain/hanke/edit/types';
 
 // https://github.com/jquense/yup/blob/master/src/locale.ts
 yup.setLocale({
@@ -66,5 +68,75 @@ yup.addMethod(yup.string, 'uniqueEmail', function isUniqueEmail() {
     );
   });
 });
+
+yup.addMethod(
+  yup.string,
+  'detectedTrafficNuisance',
+  function isDetectedNuisance(type: HAITTOJENHALLINTATYYPPI) {
+    return this.test(
+      'detectedTrafficNuisance',
+      'Traffic nuisance is not detected',
+      function (value) {
+        const context = this.options.context;
+        if (!context) {
+          return true;
+        }
+        const { hanke } = context as {
+          hanke: HankeDataFormState;
+        };
+        // Retrieve the correct area from hanke
+        const hankeAlueet = hanke.alueet;
+        const pathSegments: string[] = this.path.split('.');
+        const hankeAluePathSegment = pathSegments.length > 0 ? pathSegments[0] : '';
+        const match = hankeAluePathSegment.match(/\[(\d+)]/);
+        let hankeAlueIndex = 0;
+        if (match) {
+          hankeAlueIndex = parseInt(match[1], 10);
+        }
+        if (!hankeAlueet || isNaN(hankeAlueIndex) || !hankeAlueet[hankeAlueIndex]) {
+          return true;
+        }
+        const hankeAlue = hankeAlueet[hankeAlueIndex];
+
+        const tormaystarkasteluTulos = hankeAlue?.tormaystarkasteluTulos;
+        if (!tormaystarkasteluTulos) {
+          return true;
+        }
+
+        const index = (() => {
+          switch (type) {
+            case HAITTOJENHALLINTATYYPPI.PYORALIIKENNE:
+              return tormaystarkasteluTulos.pyoraliikenneindeksi;
+            case HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE:
+              return tormaystarkasteluTulos.autoliikenne.indeksi;
+            case HAITTOJENHALLINTATYYPPI.RAITIOLIIKENNE:
+              return tormaystarkasteluTulos.raitioliikenneindeksi;
+            case HAITTOJENHALLINTATYYPPI.LINJAAUTOLIIKENNE:
+              return tormaystarkasteluTulos.linjaautoliikenneindeksi;
+            default:
+              return 0;
+          }
+        })();
+
+        // If index > 0, the field is required
+        if (index > 0) {
+          if (!value) {
+            return this.createError({
+              path: this.path,
+              message: {
+                key: 'required',
+                values: {},
+              },
+            });
+          }
+          return true;
+        }
+
+        // If index is 0, the field is not required
+        return true;
+      },
+    );
+  },
+);
 
 export default yup;
