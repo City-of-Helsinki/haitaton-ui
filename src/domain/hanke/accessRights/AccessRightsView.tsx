@@ -9,7 +9,6 @@ import {
   IconUser,
   IconClock,
   IconMenuDots,
-  LoadingSpinner,
   IconPen,
   Button,
   IconTrash,
@@ -50,6 +49,7 @@ import UserDeleteInfoErrorNotification from '../hankeUsers/UserDeleteInfoErrorNo
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
 import Text from '../../../common/components/text/Text';
+import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
 
 function UserIcon({
   user,
@@ -302,11 +302,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
         {showUserDeleteButton(args, hankeUsers, signedInUser) ? (
           <button aria-label={t('hankeUsers:buttons:delete')} onClick={() => setDeletedUser(args)}>
             {deleteInfoQueryResult.isLoading && args.id === userToDelete?.id ? (
-              <LoadingSpinner
-                loadingText={t('common:components:loadingSpinner:loadingText')}
-                loadingFinishedText={t('common:components:loadingSpinner:loadingFinishedText')}
-                small
-              />
+              <LoadingSpinner small />
             ) : (
               <IconTrash
                 style={{ display: 'block' }}

@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
-import { LoadingSpinner } from 'hds-react';
 import { Flex } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import ApplicationView from './ApplicationView';
@@ -10,6 +9,7 @@ import { useApplication } from '../hooks/useApplication';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { HAKEMUS_ROUTES } from '../../../common/types/route';
 import { usePermissionsForHanke } from '../../hanke/hankeUsers/hooks/useUserRightsForHanke';
+import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
 
 type Props = {
   id: number;
@@ -34,10 +34,7 @@ function ApplicationViewContainer({ id }: Readonly<Props>) {
   if (isLoading) {
     return (
       <Flex justify="center" mt="var(--spacing-xl)">
-        <LoadingSpinner
-          loadingText={t('common:components:loadingSpinner:loadingText')}
-          loadingFinishedText={t('common:components:loadingSpinner:loadingFinishedText')}
-        />
+        <LoadingSpinner />
       </Flex>
     );
   }

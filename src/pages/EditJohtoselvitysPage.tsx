@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Flex } from '@chakra-ui/react';
-import { IconInfoCircle, LoadingSpinner } from 'hds-react';
+import { IconInfoCircle } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import Container from '../common/components/container/Container';
 import PageMeta from './components/PageMeta';
@@ -15,6 +15,7 @@ import { Application, JohtoselvitysData } from '../domain/application/types/appl
 import { isApplicationSent } from '../domain/application/utils';
 import ConfirmationDialog from '../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import useNavigateToApplicationView from '../domain/application/hooks/useNavigateToApplicationView';
+import LoadingSpinner from '../common/components/spinner/LoadingSpinner';
 
 const EditJohtoselvitysPage: React.FC = () => {
   const { id } = useParams();
@@ -40,10 +41,7 @@ const EditJohtoselvitysPage: React.FC = () => {
   if (applicationQueryResult.isLoading || hankeQueryResult?.isLoading) {
     return (
       <Flex justify="center" mt="var(--spacing-xl)">
-        <LoadingSpinner
-          loadingText={t('common:components:loadingSpinner:loadingText')}
-          loadingFinishedText={t('common:components:loadingSpinner:loadingFinishedText')}
-        />
+        <LoadingSpinner />
       </Flex>
     );
   }

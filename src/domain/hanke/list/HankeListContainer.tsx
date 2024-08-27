@@ -1,11 +1,12 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 import { useTranslation } from 'react-i18next';
-import { IconAlertCircle, LoadingSpinner } from 'hds-react';
+import { IconAlertCircle } from 'hds-react';
 
 import HankeListComponent from './HankeListComponent';
 import api from '../../api/api';
 import { HankeData } from '../../types/hanke';
+import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
 
 const getHankkeet = async () => {
   const { data } = await api.get<HankeData[]>(`/public-hankkeet`);
@@ -25,14 +26,7 @@ const HankeListContainer: React.FC<React.PropsWithChildren<unknown>> = () => {
   }
 
   if (isLoading) {
-    return (
-      <LoadingSpinner
-        loadingText={t('common:components:loadingSpinner:loadingText')}
-        loadingFinishedText={t('common:components:loadingSpinner:loadingFinishedText')}
-        small
-        style={{ marginTop: 'var(--spacing-xl)' }}
-      />
-    );
+    return <LoadingSpinner small style={{ marginTop: 'var(--spacing-xl)' }} />;
   }
   if (isError) {
     return (

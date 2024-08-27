@@ -7,7 +7,6 @@ import {
   IconPlusCircle,
   IconTrash,
   IconUser,
-  LoadingSpinner,
   Tab,
   TabList,
   TabPanel,
@@ -57,6 +56,7 @@ import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import HankeGeneratedStateNotification from '../edit/components/HankeGeneratedStateNotification';
 import MapPlaceholder from '../../map/components/MapPlaceholder/MapPlaceholder';
 import HaittaIndexes from '../../common/haittaIndexes/HaittaIndexes';
+import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
 
 type AreaProps = {
   area: HankeAlue;
@@ -171,10 +171,7 @@ const HankeView: React.FC<Props> = ({
   if (!hankeData) {
     return (
       <Flex justify="center" mt="var(--spacing-xl)">
-        <LoadingSpinner
-          loadingText={t('common:components:loadingSpinner:loadingText')}
-          loadingFinishedText={t('common:components:loadingSpinner:loadingFinishedText')}
-        />
+        <LoadingSpinner />
       </Flex>
     );
   }
