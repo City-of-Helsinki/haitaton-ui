@@ -28,6 +28,10 @@ function ApplicationListItem({ application }: Readonly<Props>) {
   const applicationViewPath = getApplicationPathView({ id: (id as number).toString() });
 
   const currentDecisions = getCurrentDecisions(paatokset);
+  const showDecisionLinks =
+    alluStatus === AlluStatus.DECISION ||
+    alluStatus === AlluStatus.OPERATIONAL_CONDITION ||
+    alluStatus === AlluStatus.FINISHED;
 
   return (
     <Card
@@ -59,7 +63,7 @@ function ApplicationListItem({ application }: Readonly<Props>) {
           <ApplicationDates startTime={startTime} endTime={endTime} />
           <Grid alignItems="start" templateColumns="auto 1fr" columnGap="var(--spacing-xs)">
             <ApplicationStatusTag status={alluStatus} />
-            {alluStatus === AlluStatus.DECISION &&
+            {showDecisionLinks &&
               currentDecisions.map((paatos) => (
                 <Box as="span" key={paatos.tyyppi}>
                   <DecisionLink

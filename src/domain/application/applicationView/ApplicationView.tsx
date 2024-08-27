@@ -122,6 +122,10 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
   const isContact = isContactIn(signedInUser, applicationData);
   const showSendButton = !isSent && isValid;
   const disableSendButton = showSendButton && !isContact;
+  const showDecisionLinks =
+    alluStatus === AlluStatus.DECISION ||
+    alluStatus === AlluStatus.OPERATIONAL_CONDITION ||
+    alluStatus === AlluStatus.FINISHED;
 
   const applicationSendMutation = useSendApplication();
 
@@ -149,7 +153,7 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
               <Box mb="var(--spacing-2-xs)">
                 <ApplicationStatusTag status={alluStatus} />
               </Box>
-              {alluStatus === AlluStatus.DECISION &&
+              {showDecisionLinks &&
                 currentDecisions.map((paatos) => (
                   <Box key={paatos.tyyppi} mt="var(--spacing-2-xs)">
                     <DecisionLink
