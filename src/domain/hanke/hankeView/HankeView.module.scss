@@ -21,6 +21,21 @@
   }
 }
 
+.haittojenhallintasuunnitelmaContainer {
+  margin-bottom: var(--spacing-m);
+
+  .odd {
+    padding: var(--spacing-s);
+    margin-bottom: 0;
+  }
+
+  .even {
+    padding: var(--spacing-s);
+    margin-bottom: 0;
+    background-color: var(--color-black-10);
+  }
+}
+
 .compressedAreaIndex {
   margin-top: var(--spacing-m);
   margin-bottom: var(--spacing-m);

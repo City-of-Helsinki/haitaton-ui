@@ -13,7 +13,7 @@ import {
   Tabs,
 } from 'hds-react';
 import { useTranslation } from 'react-i18next';
-import { Flex } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
 import Text from '../../../common/components/text/Text';
 import { HankeAlue, HankeData } from '../../types/hanke';
@@ -57,6 +57,8 @@ import HankeGeneratedStateNotification from '../edit/components/HankeGeneratedSt
 import MapPlaceholder from '../../map/components/MapPlaceholder/MapPlaceholder';
 import HaittaIndexes from '../../common/haittaIndexes/HaittaIndexes';
 import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
+import HaittaIndex from '../../common/haittaIndexes/HaittaIndex';
+import HaittaTooltipContent from '../../common/haittaIndexes/HaittaTooltipContent';
 
 type AreaProps = {
   area: HankeAlue;
@@ -118,6 +120,136 @@ const HankeAreaInfo: React.FC<AreaProps> = ({ area, index }) => {
           {t(`hankeForm:labels:${FORMFIELD.KAISTAPITUUSHAITTA}`)}:{' '}
           {t(`hanke:${FORMFIELD.KAISTAPITUUSHAITTA}:${area.kaistaPituusHaitta}`)}
         </Text>
+      </div>
+    </Accordion>
+  );
+};
+
+const HaittojenhallintasuunnitelmaInfo: React.FC<AreaProps> = ({ area, index }) => {
+  const { t } = useTranslation();
+  const locale = useLocale();
+
+  return (
+    <Accordion
+      language={locale}
+      heading={area.nimi || t('hanke:alue:title', { index: index + 1 })}
+      initiallyOpen
+      className={styles.haittojenhallintasuunnitelmaContainer}
+    >
+      <div>
+        <FormSummarySection className={styles.odd}>
+          <SectionItemTitle>
+            {t('hankeForm:haittojenHallintaForm:nuisanceType:YLEINEN')}
+          </SectionItemTitle>
+          <SectionItemContent>
+            <Box pr="calc(var(--spacing-l) * 3)">
+              <Text tag="p" styleAs="body-s">
+                {area.haittojenhallintasuunnitelma?.YLEINEN || ''}
+              </Text>
+            </Box>
+          </SectionItemContent>
+        </FormSummarySection>
+
+        <FormSummarySection className={styles.even}>
+          <SectionItemTitle>
+            {t('hankeForm:haittojenHallintaForm:nuisanceType:PYORALIIKENNE')}
+          </SectionItemTitle>
+          <SectionItemContent>
+            <Flex alignItems="flex-start" justifyContent="space-between">
+              <Text tag="p" styleAs="body-s">
+                {area.haittojenhallintasuunnitelma?.PYORALIIKENNE || ''}
+              </Text>
+              <Box pl="var(--spacing-s)">
+                <HaittaIndex
+                  index={area.tormaystarkasteluTulos?.pyoraliikenneindeksi}
+                  testId="test-pyoraliikenneindeksi"
+                  tooltipContent={
+                    <HaittaTooltipContent translationKey="hankeIndexes:tooltips:PYORALIIKENNE" />
+                  }
+                />
+              </Box>
+            </Flex>
+          </SectionItemContent>
+        </FormSummarySection>
+
+        <FormSummarySection className={styles.odd}>
+          <SectionItemTitle>
+            {t('hankeForm:haittojenHallintaForm:nuisanceType:AUTOLIIKENNE')}
+          </SectionItemTitle>
+          <SectionItemContent>
+            <Flex alignItems="flex-start" justifyContent="space-between">
+              <Text tag="p" styleAs="body-s">
+                {area.haittojenhallintasuunnitelma?.AUTOLIIKENNE || ''}
+              </Text>
+              <Box pl="var(--spacing-s)">
+                <HaittaIndex
+                  index={area.tormaystarkasteluTulos?.autoliikenne.indeksi}
+                  testId="test-autoliikenneindeksi"
+                  tooltipContent={
+                    <HaittaTooltipContent translationKey="hankeIndexes:tooltips:AUTOLIIKENNE" />
+                  }
+                />
+              </Box>
+            </Flex>
+          </SectionItemContent>
+        </FormSummarySection>
+
+        <FormSummarySection className={styles.even}>
+          <SectionItemTitle>
+            {t('hankeForm:haittojenHallintaForm:nuisanceType:LINJAAUTOLIIKENNE')}
+          </SectionItemTitle>
+          <SectionItemContent>
+            <Flex alignItems="flex-start" justifyContent="space-between">
+              <Text tag="p" styleAs="body-s">
+                {area.haittojenhallintasuunnitelma?.LINJAAUTOLIIKENNE || ''}
+              </Text>
+              <Box pl="var(--spacing-s)">
+                <HaittaIndex
+                  index={area.tormaystarkasteluTulos?.linjaautoliikenneindeksi}
+                  testId="test-linjaautoliikenneindeksi"
+                  tooltipContent={
+                    <HaittaTooltipContent translationKey="hankeIndexes:tooltips:LINJAAUTOLIIKENNE" />
+                  }
+                />
+              </Box>
+            </Flex>
+          </SectionItemContent>
+        </FormSummarySection>
+
+        <FormSummarySection className={styles.odd}>
+          <SectionItemTitle>
+            {t('hankeForm:haittojenHallintaForm:nuisanceType:RAITIOLIIKENNE')}
+          </SectionItemTitle>
+          <SectionItemContent>
+            <Flex alignItems="flex-start" justifyContent="space-between">
+              <Text tag="p" styleAs="body-s">
+                {area.haittojenhallintasuunnitelma?.RAITIOLIIKENNE || ''}
+              </Text>
+              <Box pl="var(--spacing-s)">
+                <HaittaIndex
+                  index={area.tormaystarkasteluTulos?.raitioliikenneindeksi}
+                  testId="test-raitioliikenneindeksi"
+                  tooltipContent={
+                    <HaittaTooltipContent translationKey="hankeIndexes:tooltips:RAITIOLIIKENNE" />
+                  }
+                />
+              </Box>
+            </Flex>
+          </SectionItemContent>
+        </FormSummarySection>
+
+        <FormSummarySection className={styles.even}>
+          <SectionItemTitle>
+            {t('hankeForm:haittojenHallintaForm:nuisanceType:MUUT')}
+          </SectionItemTitle>
+          <SectionItemContent>
+            <Box pr="calc(var(--spacing-l) * 3)">
+              <Text tag="p" styleAs="body-s">
+                {area.haittojenhallintasuunnitelma?.MUUT || ''}
+              </Text>
+            </Box>
+          </SectionItemContent>
+        </FormSummarySection>
       </div>
     </Accordion>
   );
@@ -302,7 +434,15 @@ const HankeView: React.FC<Props> = ({
                 })}
               </TabPanel>
             )}
-            {features.hanke && <TabPanel>Haittojen hallinta</TabPanel>}
+            {features.hanke && (
+              <TabPanel>
+                {alueet?.map((area, index) => {
+                  return (
+                    <HaittojenhallintasuunnitelmaInfo key={area.id} area={area} index={index} />
+                  );
+                })}
+              </TabPanel>
+            )}
             {features.hanke && (
               <TabPanel>
                 <FormSummarySection>

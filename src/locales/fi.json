@@ -690,6 +690,7 @@
       "noNuisanceDetected": "Haitaton ei löytänyt tätä kohderyhmää alueelta. Voit tarvittaessa lisätä toimet haittojen hallintaan.",
       "addControlPlan": "Lisää toimet haittojen hallintaan",
       "nuisanceType": {
+        "YLEINEN": "Toimet haittojen hallintaan",
         "PYORALIIKENNE": "Pyöräliikenteen merkittävyys",
         "AUTOLIIKENNE": "Autoliikenteen ruuhkautuminen",
         "LINJAAUTOLIIKENNE": "Joukkoliikenteen merkittävyys: Linja-autojen paikallisliikenne",

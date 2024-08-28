@@ -163,6 +163,13 @@ async function setupYhteystiedotPage(jsx: JSX.Element) {
   await waitFor(() => expect(screen.queryByText('Perustiedot')).toBeInTheDocument());
   await renderResult.user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
   await waitFor(() => expect(screen.queryByText(/hankkeen omistajan tiedot/i)).toBeInTheDocument());
+  await waitFor(
+    () =>
+      expect(
+        screen.queryByRole('button', { name: /lisää uusi yhteyshenkilö/i }),
+      ).toBeInTheDocument(),
+    { timeout: 5000 },
+  );
 
   return renderResult;
 }
@@ -888,11 +895,11 @@ describe('New contact person form and contact person dropdown', () => {
       puhelinnumero: '0000000000',
     };
     const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
-    await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
+    await user.click(screen.getByRole('button', { name: /lisää uusi yhteyshenkilö/i }));
     fillNewContactPersonForm(newUser);
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
     fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
-    await user.click(screen.getAllByRole('button', { name: /lisää uusi yhteyshenkilö/i })[0]);
+    await user.click(screen.getByRole('button', { name: /lisää uusi yhteyshenkilö/i }));
     fillNewContactPersonForm(newUser);
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
 
