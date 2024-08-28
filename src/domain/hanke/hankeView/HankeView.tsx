@@ -143,11 +143,9 @@ const HaittojenhallintasuunnitelmaInfo: React.FC<AreaProps> = ({ area, index }) 
           </SectionItemTitle>
           <SectionItemContent>
             <Box pr="calc(var(--spacing-l) * 3)">
-              <Flex alignItems="flex-start" justifyContent="space-between">
-                <Text tag="p" styleAs="body-s">
-                  {area.haittojenhallintasuunnitelma?.YLEINEN || ''}
-                </Text>
-              </Flex>
+              <Text tag="p" styleAs="body-s">
+                {area.haittojenhallintasuunnitelma?.YLEINEN || ''}
+              </Text>
             </Box>
           </SectionItemContent>
         </FormSummarySection>
@@ -246,11 +244,9 @@ const HaittojenhallintasuunnitelmaInfo: React.FC<AreaProps> = ({ area, index }) 
           </SectionItemTitle>
           <SectionItemContent>
             <Box pr="calc(var(--spacing-l) * 3)">
-              <Flex alignItems="flex-start" justifyContent="space-between">
-                <Text tag="p" styleAs="body-s">
-                  {area.haittojenhallintasuunnitelma?.MUUT || ''}
-                </Text>
-              </Flex>
+              <Text tag="p" styleAs="body-s">
+                {area.haittojenhallintasuunnitelma?.MUUT || ''}
+              </Text>
             </Box>
           </SectionItemContent>
         </FormSummarySection>

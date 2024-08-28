@@ -660,6 +660,145 @@ const hakemukset: Application[] = [
       },
     },
   } as Application<KaivuilmoitusData>,
+  {
+    id: 8,
+    alluStatus: 'DECISION',
+    applicationType: 'EXCAVATION_NOTIFICATION',
+    hankeTunnus: 'HAI22-2',
+    applicationIdentifier: 'KP2300001',
+    applicationData: {
+      applicationType: 'EXCAVATION_NOTIFICATION',
+      name: 'Aidasmäentien toiset kaivuut',
+      startTime: new Date('2023-01-12T00:00:00Z'),
+      endTime: new Date('2024-11-12T00:00:00Z'),
+      workDescription: 'Kaivetaan Aidasmäentiellä',
+      constructionWork: true,
+      maintenanceWork: false,
+      emergencyWork: false,
+      propertyConnectivity: false,
+      rockExcavation: false,
+      cableReportDone: false,
+      requiredCompetence: true,
+      cableReports: ['JS2300002'],
+      placementContracts: ['SL1234567'],
+      areas: [
+        {
+          name: 'Hankealue 2',
+          hankealueId: 2,
+          tyoalueet: [
+            {
+              geometry: {
+                type: 'Polygon',
+                crs: {
+                  type: 'name',
+                  properties: {
+                    name: 'urn:ogc:def:crs:EPSG::3879',
+                  },
+                },
+                coordinates: [
+                  [
+                    [25498585.50387858, 6679353.862125141],
+                    [25498588.30930639, 6679372.671835153],
+                    [25498578.30073113, 6679371.404998987],
+                    [25498577.10224065, 6679355.728613365],
+                    [25498585.50387858, 6679353.862125141],
+                  ],
+                ],
+              },
+              area: 158.4294946899533,
+            },
+            {
+              geometry: {
+                type: 'Polygon',
+                crs: {
+                  type: 'name',
+                  properties: {
+                    name: 'urn:ogc:def:crs:EPSG::3879',
+                  },
+                },
+                coordinates: [
+                  [
+                    [25498581.440262634, 6679345.526261961],
+                    [25498582.233686976, 6679350.99321805],
+                    [25498576.766730886, 6679351.786642391],
+                    [25498575.973306544, 6679346.319686302],
+                    [25498581.440262634, 6679345.526261961],
+                  ],
+                ],
+              },
+              area: 30.345726208334995,
+            },
+          ],
+          katuosoite: 'Aidasmäentie 5',
+          tyonTarkoitukset: ['VESI'],
+          meluhaitta: 'TOISTUVA_MELUHAITTA',
+          polyhaitta: 'JATKUVA_POLYHAITTA',
+          tarinahaitta: 'SATUNNAINEN_TARINAHAITTA',
+          kaistahaitta: 'VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA',
+          kaistahaittojenPituus: 'PITUUS_10_99_METRIA',
+          lisatiedot: '',
+        },
+      ],
+      customerWithContacts: {
+        customer: {
+          type: 'COMPANY',
+          name: 'Yritys Oy',
+          country: 'FI',
+          email: 'yritys@test.com',
+          phone: '0000000000',
+          registryKey: '1164243-9',
+          ovt: null,
+          invoicingOperator: null,
+          sapCustomerNumber: null,
+        },
+        contacts: [
+          {
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            email: 'matti.meikalainen@test.com',
+            firstName: 'Matti',
+            lastName: 'Meikäläinen',
+            orderer: true,
+            phone: '0401234567',
+          },
+        ],
+      },
+      contractorWithContacts: {
+        customer: {
+          type: 'COMPANY',
+          name: 'Yritys 2 Oy',
+          country: 'FI',
+          email: 'yritys2@test.com',
+          phone: '040123456',
+          registryKey: null,
+          ovt: null,
+          invoicingOperator: null,
+          sapCustomerNumber: null,
+        },
+        contacts: [
+          {
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb1',
+            email: 'tauno@test.com',
+            firstName: 'Tauno',
+            lastName: 'Testinen',
+            orderer: false,
+            phone: '0401234567',
+          },
+        ],
+      },
+      representativeWithContacts: null,
+      propertyDeveloperWithContacts: null,
+      invoicingCustomer: {
+        type: 'COMPANY',
+        name: 'Laskutus Oy',
+        registryKey: '1234567-1',
+        postalAddress: {
+          streetAddress: { streetName: 'Laskutuskuja 1' },
+          postalCode: '00100',
+          city: 'Helsinki',
+        },
+      },
+    },
+  } as Application<KaivuilmoitusData>,
 ];
 
 export default hakemukset;

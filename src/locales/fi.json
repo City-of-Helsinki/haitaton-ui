@@ -516,17 +516,7 @@
       "totalSurfaceAreaLong": "Hanke-alueiden kokonaispinta-ala",
       "liikenneverkollinenHaitta": "Hankealueen liikenneverkollinen haitta",
       "haittaMaarittelyt": "Hankealueen omat haittamäärittelyt",
-      "liikennehaittaIndeksit": "Hankealueen liikennehaittaindeksit",
-      "haittojenhallintasuunnitelma": {
-        "yleinen": "Toimet haittojen hallintaan",
-        "PYORALIIKENNE": "Pyöräliikenteen merkittävyys",
-        "AUTOLIIKENNE": "Autoliikenteen ruuhkautuminen",
-        "LINJAAUTOLIIKENNE": "Toimet hankealueen haittojen hallintaan",
-        "RAITIOLIIKENNE": "Toimet hankealueen haittojen hallintaan",
-        "JALANKULKULIIKENNE": "Toimet hankealueen haittojen hallintaan",
-        "JULKINENLIIKENNE": "Toimet hankealueen haittojen hallintaan",
-        "MUU": "Toimet hankealueen haittojen hallintaan"
-      }
+      "liikennehaittaIndeksit": "Hankealueen liikennehaittaindeksit"
     }
   },
   "hankeForm": {
