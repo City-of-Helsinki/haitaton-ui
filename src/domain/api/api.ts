@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
-import { getUserReferenceFromStorage } from 'hds-react';
+import { getApiTokenFromStorage } from 'hds-react';
 
 const api: AxiosInstance = axios.create({
   baseURL: '/api',
@@ -9,7 +9,7 @@ api.defaults.headers.post['Content-Type'] = 'application/json';
 
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = getUserReferenceFromStorage();
+    const token = getApiTokenFromStorage(window._env_.REACT_APP_OIDC_AUDIENCE_BACKEND);
     if (config.headers && token) {
       // eslint-disable-next-line no-param-reassign
       config.headers.Authorization = `Bearer ${token}`;

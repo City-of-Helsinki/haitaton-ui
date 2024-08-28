@@ -11,6 +11,13 @@ export const loginProviderProps: LoginProviderProps = {
     redirect_uri: `${origin}${LOGIN_CALLBACK_PATH}`,
     post_logout_redirect_uri: `${origin}${LOGOUT_PATH}`,
   },
-  apiTokensClientSettings: { url: window._env_.REACT_APP_OIDC_API_TOKENS_URL },
+  apiTokensClientSettings: {
+    url: window._env_.REACT_APP_OIDC_API_TOKENS_URL,
+    queryProps: {
+      grantType: 'urn:ietf:params:oauth:grant-type:uma-ticket',
+      permission: '#access',
+    },
+    audiences: [window._env_.REACT_APP_OIDC_AUDIENCE_BACKEND],
+  },
   sessionPollerSettings: { pollIntervalInMs: 60000 },
 };
