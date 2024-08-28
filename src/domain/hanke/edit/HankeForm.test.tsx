@@ -425,7 +425,7 @@ describe('HankeForm', () => {
     await user.click(screen.getByRole('button', { name: /tyyppi/i }));
     await user.click(screen.getByText(/yhteisö/i));
 
-    fireEvent.change(screen.getByTestId('omistajat.0.nimi'), {
+    fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[0], {
       target: { value: 'Omistaja Yritys' },
     });
     fireEvent.change(screen.getByLabelText(/y-tunnus/i), {
@@ -969,5 +969,62 @@ describe('New contact person form and contact person dropdown', () => {
         screen.getByText(`${hankeUser.etunimi} ${hankeUser.sukunimi} (${hankeUser.sahkoposti})`),
       ).toBeInTheDocument();
     });
+  });
+});
+
+describe('Selecting user in user name search input', () => {
+  test('Should fill email and phone number when selecting existing user in user name search input', async () => {
+    const hankeUsers: HankeUser[] = [
+      {
+        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        sahkoposti: 'matti.meikalainen@test.com',
+        etunimi: 'Matti',
+        sukunimi: 'Meikäläinen',
+        puhelinnumero: '0401234567',
+        kayttooikeustaso: 'KAIKKI_OIKEUDET',
+        roolit: [],
+        tunnistautunut: true,
+        kutsuttu: null,
+      },
+      {
+        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
+        sahkoposti: 'marja@test.com',
+        etunimi: 'Marja',
+        sukunimi: 'Marjanen',
+        puhelinnumero: '0405554567',
+        kayttooikeustaso: 'KAIKKIEN_MUOKKAUS',
+        roolit: [],
+        tunnistautunut: true,
+        kutsuttu: null,
+      },
+    ];
+    server.use(
+      rest.get('/api/hankkeet/:hankeTunnus/kayttajat', async (req, res, ctx) => {
+        return res(
+          ctx.status(200),
+          ctx.json<{ kayttajat: HankeUser[] }>({
+            kayttajat: hankeUsers,
+          }),
+        );
+      }),
+    );
+    const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-3" />);
+    const omistajaNameInput = screen.getAllByRole('combobox', { name: /nimi/i })[0];
+    await user.clear(omistajaNameInput);
+    await user.type(omistajaNameInput, 'marja');
+    await screen.findByText('Marja Marjanen');
+    await user.click(screen.getByText('Marja Marjanen'));
+
+    expect(screen.getByTestId('omistajat.0.email')).toHaveValue('marja@test.com');
+    expect(screen.getByTestId('omistajat.0.puhelinnumero')).toHaveValue('0405554567');
+
+    await user.click(screen.getByRole('button', { name: /lisää muu taho/i }));
+    const muuTahoNameInput = screen.getAllByRole('combobox', { name: /nimi/i })[1];
+    await user.type(muuTahoNameInput, 'matti');
+    await screen.findByText('Matti Meikäläinen');
+    await user.click(screen.getByText('Matti Meikäläinen'));
+
+    expect(screen.getByTestId('muut.0.email')).toHaveValue('matti.meikalainen@test.com');
+    expect(screen.getByTestId('muut.0.puhelinnumero')).toHaveValue('0401234567');
   });
 });
