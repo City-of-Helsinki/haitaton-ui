@@ -8,6 +8,9 @@ declare module 'yup' {
     uniqueEmail(): this;
     detectedTrafficNuisance(type: HAITTOJENHALLINTATYYPPI): this;
   }
+  interface DateSchema {
+    validOperationalConditionDate(): this;
+  }
   interface CustomSchemaMetadata {
     pageName?: string | string[];
   }

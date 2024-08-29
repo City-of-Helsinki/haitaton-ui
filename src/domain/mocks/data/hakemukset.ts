@@ -125,3 +125,13 @@ export async function sendHakemus(id: number) {
   updatedHakemus.alluStatus = 'PENDING';
   return updatedHakemus;
 }
+
+export async function reportOperationalCondition(id: number) {
+  const hakemus = await read(id);
+  if (!hakemus) {
+    throw new ApiError(`No application with id ${id}`, 404);
+  }
+  const updatedHakemus = cloneDeep(hakemus);
+  updatedHakemus.alluStatus = 'OPERATIONAL_CONDITION';
+  return updatedHakemus;
+}

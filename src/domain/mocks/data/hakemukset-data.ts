@@ -860,6 +860,15 @@ const hakemukset: Application[] = [
         },
       ],
     },
+    ilmoitukset: {
+      TOIMINNALLINEN_KUNTO: [
+        {
+          type: 'TOIMINNALLINEN_KUNTO',
+          dateReported: new Date('2024-08-01'),
+          reportedAt: new Date('2024-08-01T15:15:15Z'),
+        },
+      ],
+    },
   } as Application<KaivuilmoitusData>,
 ];
 

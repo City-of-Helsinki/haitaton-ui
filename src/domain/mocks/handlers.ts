@@ -194,6 +194,23 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(hakemus));
   }),
 
+  rest.post(`${apiUrl}/hakemukset/:id/toiminnallinen-kunto`, async (req, res, ctx) => {
+    const { id } = req.params;
+    const hakemus = await hakemuksetDB.reportOperationalCondition(Number(id));
+
+    if (!hakemus) {
+      return res(
+        ctx.status(404),
+        ctx.json({
+          errorMessage: 'Hakemus not found',
+          errorCode: 'HAI1001',
+        }),
+      );
+    }
+
+    return res(ctx.status(200));
+  }),
+
   rest.delete(`${apiUrl}/hakemukset/:id`, async (req, res, ctx) => {
     const { id } = req.params;
     try {

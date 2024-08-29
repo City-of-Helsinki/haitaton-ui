@@ -16,6 +16,7 @@ import { Feature } from 'ol';
 import { Geometry, Polygon as OlPolygon } from 'ol/geom';
 import { getSurfaceArea } from '../../../common/components/map/utils';
 import { HaittaIndexData } from '../../common/haittaIndexes/types';
+import { reportOperationalConditionSchema } from '../../kaivuilmoitus/validationSchema';
 
 export type ApplicationType = 'CABLE_REPORT' | 'EXCAVATION_NOTIFICATION';
 
@@ -229,6 +230,14 @@ export interface Paatos {
   size: number;
 }
 
+export type IlmoitusType = 'TOIMINNALLINEN_KUNTO' | 'TYO_VALMIS';
+
+export interface Ilmoitus {
+  type: IlmoitusType;
+  dateReported: Date;
+  reportedAt: Date;
+}
+
 export interface Application<T = JohtoselvitysData | KaivuilmoitusData> {
   id: number | null;
   alluid?: number | null;
@@ -238,6 +247,7 @@ export interface Application<T = JohtoselvitysData | KaivuilmoitusData> {
   applicationIdentifier?: string | null;
   hankeTunnus: string | null;
   paatokset?: { [key: string]: Paatos[] };
+  ilmoitukset?: { [key in IlmoitusType]?: Ilmoitus[] } | null;
 }
 
 export interface HankkeenHakemus {
@@ -348,3 +358,5 @@ export interface KaivuilmoitusUpdateData
   representativeWithContacts?: ApplicationUpdateCustomerWithContacts | null;
   propertyDeveloperWithContacts?: ApplicationUpdateCustomerWithContacts | null;
 }
+
+export type ReportOperationalConditionData = yup.InferType<typeof reportOperationalConditionSchema>;

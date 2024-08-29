@@ -7,6 +7,8 @@ import { SignedInUser } from '../../hanke/hankeUsers/hankeUser';
 import * as applicationApi from '../utils';
 import hakemukset from '../../mocks/data/hakemukset-data';
 import { cloneDeep } from 'lodash';
+import { format } from 'date-fns/format';
+import { fi } from 'date-fns/locale';
 
 describe('Cable report application view', () => {
   test('Correct information about application should be displayed', async () => {
@@ -216,7 +218,7 @@ describe('Cable report application view', () => {
   });
 });
 
-describe('Excavation notification application view', () => {
+describe('Excavation announcement application view', () => {
   test('Shows decision links if decisions are available', async () => {
     render(<ApplicationViewContainer id={8} />);
     await waitForLoadingToFinish();
@@ -224,5 +226,186 @@ describe('Excavation notification application view', () => {
     expect(screen.getByText('Lataa päätös (PDF)')).toBeInTheDocument();
     expect(screen.getByText('Lataa toiminnallinen kunto (PDF)')).toBeInTheDocument();
     expect(screen.getByText('Lataa työ valmis (PDF)')).toBeInTheDocument();
+  });
+
+  describe('Report excavation announcement in operational condition', () => {
+    const setup = async (id: number = 8) => {
+      const { user } = render(<ApplicationViewContainer id={id} />);
+      await waitForLoadingToFinish();
+      return user;
+    };
+
+    const validDate = '28.8.2024';
+
+    const tomorrow = () => {
+      const date = new Date();
+      date.setDate(date.getDate() + 1);
+      return format(date, 'd.M.yyyy', { locale: fi });
+    };
+
+    const dayBeforeStartDate = () => {
+      const date = new Date(2023, 0, 11);
+      return format(date, 'd.M.yyyy', { locale: fi });
+    };
+
+    describe('Report in operational condition button', () => {
+      test('Shows the button when application can be reported being in operational condition', async () => {
+        await setup();
+        const button = await screen.findByRole('button', {
+          name: 'Ilmoita toiminnalliseen kuntoon',
+        });
+        expect(button).toBeEnabled();
+      });
+
+      test('Does not show the button when application cannot be reported being in operational condition', async () => {
+        await setup(7);
+        expect(
+          screen.queryByRole('button', { name: 'Ilmoita toiminnalliseen kuntoon' }),
+        ).not.toBeInTheDocument();
+      });
+    });
+
+    describe('Report in operational condition confirmation dialog', () => {
+      test('Shows previous operational condition reports in confirmation dialog', async () => {
+        const user = await setup();
+
+        const button = await screen.findByRole('button', {
+          name: 'Ilmoita toiminnalliseen kuntoon',
+        });
+        await user.click(button);
+
+        // confirmation dialog should be shown
+        expect(await screen.findByText('Ilmoita toiminnalliseen kuntoon?')).toBeInTheDocument();
+        expect(
+          screen.getByText('Työ on aiemmin ilmoitettu toiminnalliseen kuntoon seuraavasti', {
+            exact: false,
+          }),
+        ).toBeInTheDocument();
+        expect(screen.getByText('1.8.2024 18:15 päivämäärälle 1.8.2024')).toBeInTheDocument();
+      });
+
+      test('Confirm button is disabled until a valid date is entered', async () => {
+        const user = await setup();
+
+        const button = await screen.findByRole('button', {
+          name: 'Ilmoita toiminnalliseen kuntoon',
+        });
+        await user.click(button);
+
+        // confirmation dialog should be shown
+        expect(await screen.findByText('Ilmoita toiminnalliseen kuntoon?')).toBeInTheDocument();
+        // confirmation button should be disabled until a valid date is entered
+        const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
+        expect(confirmButton).toBeDisabled();
+        const dateInput = screen.getByRole('textbox', { name: /päivämäärä/i });
+        await user.type(dateInput, validDate);
+        await user.tab();
+        expect(confirmButton).toBeEnabled();
+      });
+
+      test('Does not accept a date in the future', async () => {
+        const user = await setup();
+
+        const button = await screen.findByRole('button', {
+          name: 'Ilmoita toiminnalliseen kuntoon',
+        });
+        await user.click(button);
+        expect(await screen.findByText('Ilmoita toiminnalliseen kuntoon?')).toBeInTheDocument();
+
+        const date = tomorrow();
+        const dateInput = screen.getByRole('textbox', { name: /päivämäärä/i });
+        await user.type(dateInput, date);
+        await user.tab();
+
+        // validation error should be shown
+        expect(
+          await screen.findByText('Päivämäärä ei voi olla tulevaisuudessa'),
+        ).toBeInTheDocument();
+        // confirmation button should be disabled
+        expect(screen.getByRole('button', { name: 'Vahvista' })).toBeDisabled();
+      });
+
+      test('Does not accept a date in before start date', async () => {
+        const user = await setup();
+
+        const button = await screen.findByRole('button', {
+          name: 'Ilmoita toiminnalliseen kuntoon',
+        });
+        await user.click(button);
+        expect(await screen.findByText('Ilmoita toiminnalliseen kuntoon?')).toBeInTheDocument();
+
+        const date = dayBeforeStartDate();
+        const dateInput = screen.getByRole('textbox', { name: /päivämäärä/i });
+        await user.type(dateInput, date);
+        await user.tab();
+
+        // validation error should be shown
+        screen.debug(undefined, 100000);
+        expect(
+          await screen.findByText(
+            'Päivämäärä ei voi olla ennen hakemuksen töiden alkamispäivää (12.1.2023)',
+          ),
+        ).toBeInTheDocument();
+        // confirmation button should be disabled
+        expect(screen.getByRole('button', { name: 'Vahvista' })).toBeDisabled();
+      });
+
+      test('Confirms the report', async () => {
+        const user = await setup();
+
+        const button = await screen.findByRole('button', {
+          name: 'Ilmoita toiminnalliseen kuntoon',
+        });
+        await user.click(button);
+
+        expect(await screen.findByText('Ilmoita toiminnalliseen kuntoon?')).toBeInTheDocument();
+        const dateInput = screen.getByRole('textbox', { name: /päivämäärä/i });
+        await user.type(dateInput, validDate);
+        await user.tab();
+        const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
+        await user.click(confirmButton);
+
+        expect(await screen.findByText('Ilmoitus lähetetty')).toBeInTheDocument();
+      });
+
+      test('Cancels the report', async () => {
+        const user = await setup();
+
+        const button = await screen.findByRole('button', {
+          name: 'Ilmoita toiminnalliseen kuntoon',
+        });
+        await user.click(button);
+
+        expect(await screen.findByText('Ilmoita toiminnalliseen kuntoon?')).toBeInTheDocument();
+        const cancelButton = screen.getByRole('button', { name: 'Peruuta' });
+        await user.click(cancelButton);
+
+        // confirmation dialog should be closed
+        expect(screen.queryByText('Ilmoita toiminnalliseen kuntoon?')).not.toBeInTheDocument();
+      });
+
+      test('Shows error message if confirmation fails', async () => {
+        server.use(
+          rest.post('/api/hakemukset/:id/toiminnallinen-kunto', async (_, res, ctx) => {
+            return res(ctx.delay(200), ctx.status(500));
+          }),
+        );
+        const user = await setup();
+        const button = await screen.findByRole('button', {
+          name: 'Ilmoita toiminnalliseen kuntoon',
+        });
+        await user.click(button);
+
+        const dateInput = screen.getByRole('textbox', { name: /päivämäärä/i });
+        await user.type(dateInput, validDate);
+        await user.tab();
+
+        const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
+        await user.click(confirmButton);
+
+        expect(await screen.findByText('Ilmoituksen lähettäminen epäonnistui')).toBeInTheDocument();
+        expect(screen.queryByText('Ilmoitus lähetetty')).not.toBeInTheDocument();
+      });
+    });
   });
 });
