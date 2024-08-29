@@ -190,7 +190,7 @@ function fillContactsInformation(
   // Fill customer info
   fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
   fireEvent.click(screen.getAllByText(/yritys/i)[0]);
-  fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.name'), {
+  fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[0], {
     target: { value: customer.name },
   });
   fireEvent.change(
@@ -209,7 +209,7 @@ function fillContactsInformation(
   // Fill contractor info
   fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
   fireEvent.click(screen.getAllByText(/yritys/i)[1]);
-  fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.customer.name'), {
+  fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[1], {
     target: { value: contractor.name },
   });
   fireEvent.change(
@@ -889,4 +889,23 @@ test('Should show and disable send button and show notification when user is not
       'Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö.',
     ),
   ).toHaveLength(2);
+});
+
+test('Should be able to fill user email and phone by selecting existing user in user name search input', async () => {
+  const hankeData = hankkeet[1] as HankeData;
+  const application = applications[4] as Application<KaivuilmoitusData>;
+  const { user } = render(
+    <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
+  );
+  await user.click(await screen.findByRole('button', { name: /yhteystiedot/i }));
+  await user.type(screen.getAllByRole('combobox', { name: /nimi/i })[0], 'matti');
+  await screen.findByText('Matti Meikäläinen');
+  await user.click(screen.getByText('Matti Meikäläinen'));
+
+  expect(screen.getByTestId('applicationData.customerWithContacts.customer.email')).toHaveValue(
+    'matti.meikalainen@test.com',
+  );
+  expect(screen.getByTestId('applicationData.customerWithContacts.customer.phone')).toHaveValue(
+    '0401234567',
+  );
 });

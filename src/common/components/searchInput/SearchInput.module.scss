@@ -1,0 +1,11 @@
+.searchInputInvalid > div {
+  border-color: var(--color-error) !important;
+}
+
+.errorNotification {
+  margin-top: var(--spacing-2-xs);
+
+  & div {
+    font-size: var(--fontsize-body-m) !important;
+  }
+}
