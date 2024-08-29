@@ -2,7 +2,7 @@ import { Card, IconEye } from 'hds-react';
 import { Box, Flex, Grid } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { AlluStatus, HankkeenHakemus } from '../types/application';
+import { HankkeenHakemus } from '../types/application';
 import styles from './ApplicationListItem.module.scss';
 import Text from '../../../common/components/text/Text';
 import ApplicationStatusTag from './ApplicationStatusTag';
@@ -10,6 +10,7 @@ import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
 import ApplicationDates from './ApplicationDates';
 import DecisionLink from './DecisionLink';
+import { getCurrentDecisions, getDecisionFilename } from '../utils';
 
 type Props = { application: HankkeenHakemus };
 
@@ -17,13 +18,16 @@ function ApplicationListItem({ application }: Readonly<Props>) {
   const { t } = useTranslation();
   const getApplicationPathView = useLinkPath(ROUTES.HAKEMUS);
 
-  const { applicationData, alluStatus, applicationIdentifier, id, applicationType } = application;
+  const { applicationData, alluStatus, applicationIdentifier, id, applicationType, paatokset } =
+    application;
   const { name, startTime, endTime } = applicationData;
 
   const applicationId =
     applicationIdentifier || t(`hakemus:applicationTypeDraft:${applicationType}`);
 
   const applicationViewPath = getApplicationPathView({ id: (id as number).toString() });
+
+  const currentDecisions = getCurrentDecisions(paatokset);
 
   return (
     <Card
@@ -55,13 +59,15 @@ function ApplicationListItem({ application }: Readonly<Props>) {
           <ApplicationDates startTime={startTime} endTime={endTime} />
           <Grid alignItems="start" templateColumns="auto 1fr" columnGap="var(--spacing-xs)">
             <ApplicationStatusTag status={alluStatus} />
-            {alluStatus === AlluStatus.DECISION && (
-              <DecisionLink
-                applicationId={id}
-                linkText={t('hakemus:labels:downloadDecision')}
-                filename={applicationIdentifier}
-              />
-            )}
+            {currentDecisions.map((paatos) => (
+              <Box as="span" key={paatos.tyyppi}>
+                <DecisionLink
+                  id={paatos.id}
+                  linkText={t(`hakemus:labels:downloadDecision:${paatos.tyyppi}`)}
+                  filename={getDecisionFilename(paatos)}
+                />
+              </Box>
+            ))}
           </Grid>
         </div>
         <Link

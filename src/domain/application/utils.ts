@@ -8,6 +8,9 @@ import {
   JohtoselvitysData,
   KaivuilmoitusData,
   NewJohtoselvitysData,
+  Paatos,
+  PaatosTila,
+  PaatosTyyppi,
 } from './types/application';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 
@@ -111,4 +114,23 @@ export function isContactIn(
     return found !== undefined;
   }
   return false;
+}
+
+export function getCurrentDecisions(paatokset?: { [key: string]: Paatos[] }): Paatos[] {
+  if (!paatokset) {
+    return [];
+  }
+  const allDecisions = Object.values(paatokset).flat();
+  const order = {
+    [PaatosTyyppi.TYO_VALMIS]: 1,
+    [PaatosTyyppi.TOIMINNALLINEN_KUNTO]: 2,
+    [PaatosTyyppi.PAATOS]: 3,
+  };
+  const currentOrders = allDecisions.filter((paatos) => paatos.tila === PaatosTila.NYKYINEN);
+  currentOrders.sort((a, b) => order[a.tyyppi] - order[b.tyyppi]);
+  return currentOrders;
+}
+
+export function getDecisionFilename(paatos: Paatos): string {
+  return `${paatos.hakemustunnus}-${paatos.tyyppi.toLowerCase().replace('_', '-')}.pdf`;
 }
