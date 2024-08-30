@@ -17,6 +17,7 @@ import { Box, VisuallyHiddenInput } from '@chakra-ui/react';
 import useApplicationReportOperationalConditionNotification from '../hooks/useApplicationReportOperationalConditionNotification';
 import { format } from 'date-fns/format';
 import { fi } from 'date-fns/locale';
+import { useApplication } from '../../application/hooks/useApplication';
 
 const Instructions = ({ previousReports }: { previousReports: Ilmoitus[] }) => {
   const { t } = useTranslation();
@@ -25,19 +26,26 @@ const Instructions = ({ previousReports }: { previousReports: Ilmoitus[] }) => {
   const previousReportsList =
     previousReports.length > 0 ? (
       <ul>
-        {previousReports.map((report) => {
-          const reportedAt = format(new Date(report.reportedAt), 'd.M.yyyy HH:mm', { locale: fi });
-          const dateReported = format(new Date(report.dateReported), 'd.M.yyyy', { locale: fi });
+        {previousReports
+          .sort(
+            (a: Ilmoitus, b: Ilmoitus) =>
+              new Date(b.reportedAt).getTime() - new Date(a.reportedAt).getTime(),
+          )
+          .map((report) => {
+            const reportedAt = format(new Date(report.reportedAt), 'd.M.yyyy HH:mm', {
+              locale: fi,
+            });
+            const dateReported = format(new Date(report.dateReported), 'd.M.yyyy', { locale: fi });
 
-          return (
-            <li key={report.reportedAt.toString()}>
-              {t('hakemus:operationalConditionDialog:previouslyReportedAt', {
-                reportedAt,
-                dateReported,
-              })}
-            </li>
-          );
-        })}
+            return (
+              <li key={report.reportedAt.toString()}>
+                {t('hakemus:operationalConditionDialog:previouslyReportedAt', {
+                  reportedAt,
+                  dateReported,
+                })}
+              </li>
+            );
+          })}
       </ul>
     ) : null;
 
@@ -57,16 +65,17 @@ const Instructions = ({ previousReports }: { previousReports: Ilmoitus[] }) => {
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  application: Application;
+  applicationId: number;
 };
 
 const ApplicationReportOperationalConditionDialog: React.FC<Props> = ({
   isOpen,
   onClose,
-  application,
+  applicationId,
 }) => {
   const { t } = useTranslation();
   const locale = useLocale();
+  const { data: application, refetch } = useApplication(applicationId);
   const formContext = useForm<ReportOperationalConditionData>({
     mode: 'onTouched',
     resolver: yupResolver(reportOperationalConditionSchema),
@@ -87,14 +96,18 @@ const ApplicationReportOperationalConditionDialog: React.FC<Props> = ({
   const { showReportOperationalConditionSuccess, showReportOperationalConditionError } =
     useApplicationReportOperationalConditionNotification();
   const dialogTitle = t('hakemus:operationalConditionDialog:title');
-  const { id, applicationData, ilmoitukset } = application;
+  const { id, applicationData, ilmoitukset } = application as Application;
   const previousReports = ilmoitukset?.TOIMINNALLINEN_KUNTO ?? ([] as Ilmoitus[]);
   const startDate = applicationData.startTime as Date;
   const today = new Date();
 
   useEffect(() => {
-    formContext.setValue('applicationId', id as number);
-  }, [formContext, id]);
+    if (isOpen) {
+      refetch().then(() => {
+        formContext.setValue('applicationId', applicationId);
+      });
+    }
+  }, [isOpen, refetch, formContext, applicationId]);
 
   function handleClose() {
     resetForm();
@@ -110,6 +123,7 @@ const ApplicationReportOperationalConditionDialog: React.FC<Props> = ({
       },
       onError() {
         showReportOperationalConditionError();
+        handleClose();
       },
     });
   }

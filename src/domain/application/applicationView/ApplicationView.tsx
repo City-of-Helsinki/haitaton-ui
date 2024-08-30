@@ -371,7 +371,7 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
         <ApplicationReportOperationalConditionDialog
           isOpen={showReportOperationalConditionDialog}
           onClose={closeReportOperationalConditionDialog}
-          application={application}
+          applicationId={application.id as number}
         />
       )}
     </InformationViewContainer>
