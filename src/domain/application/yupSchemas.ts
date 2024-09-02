@@ -12,7 +12,7 @@ const contactSchema = yup
   .required();
 
 // business id i.e. Y-tunnus
-const registryKeySchema = yup
+export const registryKeySchema = yup
   .string()
   .defined()
   .nullable()
@@ -21,7 +21,7 @@ const registryKeySchema = yup
     then: (schema) => schema.businessId(),
   });
 
-const customerSchema = contactSchema.omit(['firstName', 'lastName']).shape({
+export const customerSchema = contactSchema.omit(['firstName', 'lastName']).shape({
   yhteystietoId: yup.string().nullable(),
   name: yup.string().trim().max(100).required(),
   type: yup.mixed<ContactType>().nullable().required(),

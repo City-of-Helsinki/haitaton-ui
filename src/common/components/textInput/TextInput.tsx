@@ -20,7 +20,7 @@ type PropTypes = {
   className?: string;
   style?: CSSProperties;
   autoComplete?: string;
-  defaultValue?: string;
+  defaultValue?: string | null;
 };
 
 const TextInput: React.FC<React.PropsWithChildren<PropTypes>> = ({
@@ -65,7 +65,7 @@ const TextInput: React.FC<React.PropsWithChildren<PropTypes>> = ({
           required={required}
           readOnly={readOnly}
           onBlur={onBlur}
-          onChange={onChange}
+          onChange={(event) => onChange(defaultValue !== null ? event : event.target.value || null)}
           ref={ref}
           autoComplete={autoComplete}
           {...tooltip}

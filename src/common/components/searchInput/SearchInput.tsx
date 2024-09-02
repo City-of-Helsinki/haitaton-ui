@@ -10,11 +10,13 @@ import styles from './SearchInput.module.scss';
 type Props = {
   id: string;
   name: string;
+  defaultValue?: string;
 };
 
 export default function SearchInput<T>({
   id,
   name,
+  defaultValue = '',
   ...searchInputProps
 }: Readonly<Props & SearchInputProps<T>>) {
   const { t } = useTranslation();
@@ -23,7 +25,7 @@ export default function SearchInput<T>({
   const {
     field,
     fieldState: { error },
-  } = useController({ name });
+  } = useController({ name, defaultValue });
   const errorText = getInputErrorText(t, error);
 
   useEffect(() => {
@@ -49,7 +51,7 @@ export default function SearchInput<T>({
       <HDSSearchInput
         {...searchInputProps}
         onChange={field.onChange}
-        value={field.value}
+        value={field.value || ''}
         clearButtonAriaLabel={t('common:components:multiselect:clear')}
         className={clsx(inputClassName, {
           [styles.searchInputInvalid]: errorText !== undefined,

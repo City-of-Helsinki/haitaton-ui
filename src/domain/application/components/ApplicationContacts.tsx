@@ -41,12 +41,13 @@ const CustomerFields: React.FC<{
   hankeUsers?: HankeUser[];
 }> = ({ customerType, hankeUsers }) => {
   const { t } = useTranslation();
-  const { watch, setValue } = useFormContext<Application>();
+  const { watch, setValue, getValues } = useFormContext<Application>();
 
-  const [selectedContactType, registryKey] = watch([
-    `applicationData.${customerType}.customer.type`,
-    `applicationData.${customerType}.customer.registryKey`,
-  ]);
+  const applicationType = getValues('applicationData.applicationType');
+
+  const selectedContactType = watch(`applicationData.${customerType}.customer.type`);
+  const registryKeyInputDisabled =
+    selectedContactType === 'PERSON' || selectedContactType === 'OTHER';
 
   useEffect(() => {
     // If setting contact type to other than company or association, set null to registry key
@@ -56,15 +57,6 @@ const CustomerFields: React.FC<{
       });
     }
   }, [selectedContactType, customerType, setValue]);
-
-  useEffect(() => {
-    // When emptying registry key field, set its value to null
-    if (registryKey === '') {
-      setValue(`applicationData.${customerType}.customer.registryKey`, null, {
-        shouldValidate: true,
-      });
-    }
-  }, [registryKey, customerType, setValue]);
 
   function handleUserSelect(user: HankeUser) {
     setValue(`applicationData.${customerType}.customer.email`, user.sahkoposti, {
@@ -114,8 +106,10 @@ const CustomerFields: React.FC<{
         <TextInput
           name={`applicationData.${customerType}.customer.registryKey`}
           label={t('form:yhteystiedot:labels:ytunnus')}
-          disabled={selectedContactType === 'PERSON' || selectedContactType === 'OTHER'}
+          disabled={registryKeyInputDisabled}
           autoComplete="on"
+          defaultValue={null}
+          required={applicationType === 'EXCAVATION_NOTIFICATION' && !registryKeyInputDisabled}
         />
       </ResponsiveGrid>
       <ResponsiveGrid maxColumns={2}>

@@ -1,10 +1,12 @@
 import yup from '../../common/utils/yup';
-import { AlluStatus } from '../application/types/application';
+import { AlluStatus, ContactType } from '../application/types/application';
 import {
   applicationTypeSchema,
+  customerSchema,
   customerWithContactsSchema,
   geometrySchema,
   invoicingCustomerSchema,
+  registryKeySchema,
 } from '../application/yupSchemas';
 import { KaivuilmoitusFormValues } from './types';
 import {
@@ -37,12 +39,27 @@ const kaivuilmoitusAlueSchema = yup.object({
   lisatiedot: yup.string(),
 });
 
+const customerWithContactsSchemaForKaivuilmoitus = customerWithContactsSchema
+  .omit(['customer'])
+  .shape({
+    customer: customerSchema.omit(['registryKey']).shape({
+      registryKey: registryKeySchema.when('type', {
+        is: (value: string) => value === ContactType.COMPANY || value === ContactType.ASSOCIATION,
+        then: (schema) => schema.required(),
+      }),
+    }),
+  });
+
 const applicationDataSchema = yup.object().shape(
   {
     applicationType: applicationTypeSchema,
     name: yup.string().trim().required(),
     workDescription: yup.string().trim().required(),
-    rockExcavation: yup.boolean().nullable().required(),
+    rockExcavation: yup
+      .boolean()
+      .defined()
+      .nullable()
+      .when(['cableReportDone'], { is: false, then: (schema) => schema.required() }),
     constructionWork: yup
       .boolean()
       .defined()
@@ -53,11 +70,18 @@ const applicationDataSchema = yup.object().shape(
     maintenanceWork: yup.boolean().defined(),
     emergencyWork: yup.boolean().defined(),
     cableReportDone: yup.boolean().required(),
+    cableReports: yup
+      .array()
+      .of(yup.string().required())
+      .when(['cableReportDone'], {
+        is: true,
+        then: (schema) => schema.min(1),
+      }),
     requiredCompetence: yup.boolean().required(),
-    contractorWithContacts: customerWithContactsSchema,
-    customerWithContacts: customerWithContactsSchema,
-    propertyDeveloperWithContacts: customerWithContactsSchema.nullable(),
-    representativeWithContacts: customerWithContactsSchema.nullable(),
+    contractorWithContacts: customerWithContactsSchemaForKaivuilmoitus,
+    customerWithContacts: customerWithContactsSchemaForKaivuilmoitus,
+    propertyDeveloperWithContacts: customerWithContactsSchemaForKaivuilmoitus.nullable(),
+    representativeWithContacts: customerWithContactsSchemaForKaivuilmoitus.nullable(),
     invoicingCustomer: invoicingCustomerSchema,
     startTime: yup
       .date()
@@ -108,6 +132,7 @@ export const perustiedotSchema = yup.object({
     'maintenanceWork',
     'emergencyWork',
     'requiredCompetence',
+    'cableReports',
   ]),
 });
 
