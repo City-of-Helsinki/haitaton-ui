@@ -34,6 +34,7 @@ export default function SearchInput<T>({
     if (inputElement) {
       inputElement.addEventListener('blur', field.onBlur);
       field.ref(inputElement);
+      inputElement.setAttribute('id', name);
     }
 
     return function cleanup() {

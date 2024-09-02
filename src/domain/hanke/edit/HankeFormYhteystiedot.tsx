@@ -24,6 +24,7 @@ import { HankeUser } from '../hankeUsers/hankeUser';
 import { useQueryClient } from 'react-query';
 import { mapHankeUserToHankeYhteyshenkilo } from '../hankeUsers/utils';
 import { Box } from '@chakra-ui/react';
+import UserSearchInput from '../hankeUsers/UserSearchInput';
 
 function getEmptyContact(): Omit<HankeYhteystieto, 'id'> {
   return {
@@ -58,7 +59,7 @@ const ContactFields: React.FC<
     index: number;
     hankeUsers?: HankeUser[];
   }>
-> = ({ contactType, index }) => {
+> = ({ contactType, index, hankeUsers }) => {
   const { t } = useTranslation();
   const { watch, setValue } = useFormContext();
   const selectedContactType = watch(`${contactType}.${index}.tyyppi`);
@@ -71,6 +72,15 @@ const ContactFields: React.FC<
       });
     }
   }, [registryKeyInputDisabled, contactType, index, setValue]);
+
+  function handleUserSelect(user: HankeUser) {
+    setValue(`${contactType}.${index}.${CONTACT_FORMFIELD.EMAIL}`, user.sahkoposti, {
+      shouldValidate: true,
+    });
+    setValue(`${contactType}.${index}.${CONTACT_FORMFIELD.PUHELINNUMERO}`, user.puhelinnumero, {
+      shouldValidate: true,
+    });
+  }
 
   return (
     <Box maxWidth="var(--width-form-2-col)">
@@ -90,10 +100,12 @@ const ContactFields: React.FC<
         />
       </ResponsiveGrid>
       <ResponsiveGrid maxColumns={2}>
-        <TextInput
-          name={`${contactType}.${index}.${CONTACT_FORMFIELD.NIMI}`}
-          label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.NIMI}`)}
+        <UserSearchInput
+          fieldName={`${contactType}.${index}.${CONTACT_FORMFIELD.NIMI}`}
+          id={`${contactType}-${index}`}
           required
+          hankeUsers={hankeUsers}
+          onUserSelect={handleUserSelect}
         />
         <TextInput
           name={`${contactType}.${index}.${CONTACT_FORMFIELD.TUNNUS}`}
@@ -178,6 +190,19 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
     );
 
     void queryClient.invalidateQueries(['hankeUsers', hanke.hankeTunnus]);
+  }
+
+  function handleMuuTahoUserSelect(user: HankeUser, index: number) {
+    setValue(`${FORMFIELD.MUUTTAHOT}.${index}.${CONTACT_FORMFIELD.EMAIL}`, user.sahkoposti, {
+      shouldValidate: true,
+    });
+    setValue(
+      `${FORMFIELD.MUUTTAHOT}.${index}.${CONTACT_FORMFIELD.PUHELINNUMERO}`,
+      user.puhelinnumero,
+      {
+        shouldValidate: true,
+      },
+    );
   }
 
   return (
@@ -364,10 +389,12 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
                   />
                 </ResponsiveGrid>
                 <ResponsiveGrid>
-                  <TextInput
-                    name={`${fieldPath}.${CONTACT_FORMFIELD.NIMI}`}
-                    label={t(`form:yhteystiedot:labels:${CONTACT_FORMFIELD.NIMI}`)}
+                  <UserSearchInput
+                    fieldName={`${fieldPath}.${CONTACT_FORMFIELD.NIMI}`}
+                    id={`${HANKE_CONTACT_TYPE.MUUTTAHOT}-${index}`}
                     required
+                    hankeUsers={hankeUsers}
+                    onUserSelect={(user) => handleMuuTahoUserSelect(user, index)}
                   />
                   <TextInput
                     name={`${fieldPath}.${CONTACT_FORMFIELD.ORGANISAATIO}`}
