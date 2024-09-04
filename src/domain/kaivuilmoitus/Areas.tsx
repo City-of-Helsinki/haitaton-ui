@@ -121,7 +121,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
     const hankeAlueetContainingNewArea = hankeData.alueet.filter((alue) =>
       alue.geometriat
         ? booleanIntersects(alue.geometriat.featureCollection.features[0], newAreaPolygon)
-        : [],
+        : false,
     );
 
     if (hankeAlueetContainingNewArea.length === 0) {
