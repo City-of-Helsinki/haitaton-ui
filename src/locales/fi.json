@@ -1177,7 +1177,11 @@
       "CABLE_REPORT": "Luonnos",
       "EXCAVATION_NOTIFICATION": "Luonnos"
     },
-    "applicationTypeInstruction": "Valitse hakemustyyppi. Kaivuilmoituksen kautta pääset tekemään myös johtoselvityksen, mikäli sinulla ei sellaista vielä ole."
+    "applicationTypeInstruction": "Valitse hakemustyyppi. Kaivuilmoituksen kautta pääset tekemään myös johtoselvityksen, mikäli sinulla ei sellaista vielä ole.",
+    "addApplicationTypes": {
+      "CABLE_REPORT": "$t(hakemus:applicationTypes:CABLE_REPORT)",
+      "EXCAVATION_NOTIFICATION": "$t(hakemus:applicationTypes:EXCAVATION_NOTIFICATION) (ja johtoselvitys)"
+    }
   },
   "hankeSidebar": {
     "ariaSidebarContent": "Hankkeen tiedot",
