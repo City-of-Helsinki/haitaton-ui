@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import useUser from '../../domain/auth/useUser';
+import { useLocation } from 'react-router-dom';
 import { REDIRECT_PATH_KEY } from './constants';
+import { useOidcClient } from 'hds-react';
+import useIsAuthenticated from '../../domain/auth/useIsAuthenticated';
 
 type Props = {
   element: JSX.Element;
 };
 
 const PrivateRoute: React.FC<React.PropsWithChildren<Props>> = ({ element }) => {
-  const { data: user } = useUser();
-  const isAuthenticated = Boolean(user?.profile);
+  const { login } = useOidcClient();
+  const isAuthenticated = useIsAuthenticated();
   const location = useLocation();
 
   useEffect(() => {
@@ -23,7 +24,8 @@ const PrivateRoute: React.FC<React.PropsWithChildren<Props>> = ({ element }) => 
     // save URL path to session storage and navigate to login,
     // so that user can be redirected to that route after login
     sessionStorage.setItem(REDIRECT_PATH_KEY, location.pathname);
-    return <Navigate to="/login" />;
+    login();
+    return null;
   }
 
   return element;

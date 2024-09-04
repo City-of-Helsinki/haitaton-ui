@@ -16,12 +16,23 @@
 .hankeAreaContainer {
   margin-bottom: var(--spacing-m);
 
-  .hankeAreaContent {
-    color: var(--color-black-60);
-  }
-
   .areaIndexes {
     margin-bottom: var(--spacing-s);
+  }
+}
+
+.haittojenhallintasuunnitelmaContainer {
+  margin-bottom: var(--spacing-m);
+
+  .odd {
+    padding: var(--spacing-s);
+    margin-bottom: 0;
+  }
+
+  .even {
+    padding: var(--spacing-s);
+    margin-bottom: 0;
+    background-color: var(--color-black-10);
   }
 }
 

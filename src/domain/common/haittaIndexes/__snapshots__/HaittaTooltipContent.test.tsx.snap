@@ -1,0 +1,106 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should show correct tooltip for hankeIndexes:tooltips:AUTOLIIKENNE 1`] = `
+<div>
+  <h5
+    class="css-in3yi3"
+  >
+    Haittaindeksit
+    :
+  </h5>
+  Autoliikenteelle lasketaan painotettu haittaindeksi (0-5) siihen sisältyvien osa-alueiden mukaan.
+</div>
+`;
+
+exports[`Should show correct tooltip for hankeIndexes:tooltips:LINJAAUTOLIIKENNE 1`] = `
+<div>
+  <h5
+    class="css-in3yi3"
+  >
+    Haittaindeksit
+    :
+  </h5>
+  <ul
+    class="css-155za0w"
+  >
+    <li>
+      0: Ei linja-autojen paikallisliikennettä
+    </li>
+    <li>
+      2: Linja-autojen paikallisliikennettä muulloin, kuin ruuhka-aikana
+    </li>
+    <li>
+      3: Linja-autojen paikallisliikenteen linjojen vuoromäärä enintään 10 ruuhkatunnissa
+    </li>
+    <li>
+      4: Linja-autojen paikallisliikenteen runkolinja tai vuoromäärä enintään 20 ruuhkatunnissa
+    </li>
+    <li>
+      5: Kamppi-Rautatientori -alue, Mannerheimintie, Kaisaniemenkatu, Hämeentie tai linja-autojen paikallisliikenteen linjojen vuoromäärä yli 20 ruuhkatunnissa
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`Should show correct tooltip for hankeIndexes:tooltips:MUUT 1`] = `
+<div>
+  <h5
+    class="css-in3yi3"
+  >
+    Haittaindeksit
+    :
+  </h5>
+  key 'tooltips.MUUT (fi)' returned an object instead of string.
+</div>
+`;
+
+exports[`Should show correct tooltip for hankeIndexes:tooltips:PYORALIIKENNE 1`] = `
+<div>
+  <h5
+    class="css-in3yi3"
+  >
+    Haittaindeksit
+    :
+  </h5>
+  <ul
+    class="css-155za0w"
+  >
+    <li>
+      0: Ei tunnistettua pyöräliikenteen reittiä
+    </li>
+    <li>
+      2: Muut pyöräliikenteen yhteydet
+    </li>
+    <li>
+      3: Muut pyöräliikenteen reitit (tai reitin/yhteyden luokitustieto puuttuu pyöräliikenteen tausta-aineistosta)
+    </li>
+    <li>
+      5: Pyöräliikenteen pääreitti tai pääreitin osana toimiva katu
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`Should show correct tooltip for hankeIndexes:tooltips:RAITIOLIIKENNE 1`] = `
+<div>
+  <h5
+    class="css-in3yi3"
+  >
+    Haittaindeksit
+    :
+  </h5>
+  <ul
+    class="css-155za0w"
+  >
+    <li>
+      0: Ei tunnistettuja raitiotiekiskoja
+    </li>
+    <li>
+      3: Raitiotieverkon rataosa, joilla ei ole säännöllistä linjaliikennettä
+    </li>
+    <li>
+      5: Raitiotieverkon rataosa, jolla on säännöllistä linjaliikennettä
+    </li>
+  </ul>
+</div>
+`;

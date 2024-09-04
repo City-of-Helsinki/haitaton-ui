@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Box } from '@chakra-ui/react';
-import { Link, LoadingSpinner, Notification } from 'hds-react';
+import { Link, Notification } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { QueryFunction, QueryKey, useQueryClient } from 'react-query';
+import LoadingSpinner from '../spinner/LoadingSpinner';
 
 type Props = {
   linkText: string;

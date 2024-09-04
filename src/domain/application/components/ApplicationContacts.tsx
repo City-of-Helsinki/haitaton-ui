@@ -20,6 +20,7 @@ import FormContact from '../../forms/components/FormContact';
 import { HankeUser } from '../../hanke/hankeUsers/hankeUser';
 import { useHankeUsers } from '../../hanke/hankeUsers/hooks/useHankeUsers';
 import { mapHankeUserToContact } from '../../hanke/hankeUsers/utils';
+import UserSearchInput from '../../hanke/hankeUsers/UserSearchInput';
 
 function getEmptyCustomerWithContacts(): CustomerWithContacts {
   return {
@@ -38,7 +39,7 @@ function getEmptyCustomerWithContacts(): CustomerWithContacts {
 const CustomerFields: React.FC<{
   customerType: CustomerType;
   hankeUsers?: HankeUser[];
-}> = ({ customerType }) => {
+}> = ({ customerType, hankeUsers }) => {
   const { t } = useTranslation();
   const { watch, setValue } = useFormContext<Application>();
 
@@ -64,6 +65,15 @@ const CustomerFields: React.FC<{
       });
     }
   }, [registryKey, customerType, setValue]);
+
+  function handleUserSelect(user: HankeUser) {
+    setValue(`applicationData.${customerType}.customer.email`, user.sahkoposti, {
+      shouldValidate: true,
+    });
+    setValue(`applicationData.${customerType}.customer.phone`, user.puhelinnumero, {
+      shouldValidate: true,
+    });
+  }
 
   return (
     <Fieldset
@@ -94,11 +104,12 @@ const CustomerFields: React.FC<{
         />
       </ResponsiveGrid>
       <ResponsiveGrid maxColumns={2}>
-        <TextInput
-          name={`applicationData.${customerType}.customer.name`}
-          label={t('form:yhteystiedot:labels:nimi')}
+        <UserSearchInput
+          fieldName={`applicationData.${customerType}.customer.name`}
+          id={customerType}
           required
-          autoComplete={selectedContactType === 'PERSON' ? 'name' : 'organization'}
+          hankeUsers={hankeUsers}
+          onUserSelect={handleUserSelect}
         />
         <TextInput
           name={`applicationData.${customerType}.customer.registryKey`}

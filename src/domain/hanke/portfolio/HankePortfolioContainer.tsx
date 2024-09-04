@@ -1,12 +1,12 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 import { Flex } from '@chakra-ui/react';
-import { LoadingSpinner } from 'hds-react';
 import api from '../../api/api';
 import { HankeData } from '../../types/hanke';
 import HankePortfolioComponent from './HankePortfolioComponent';
 import { usePermissionsByHanke } from '../hankeUsers/hooks/useUserRightsForHanke';
 import ErrorLoadingText from '../../../common/components/errorLoadingText/ErrorLoadingText';
+import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
 
 const getHankkeet = async () => {
   const { data } = await api.get<HankeData[]>(`/hankkeet`, {

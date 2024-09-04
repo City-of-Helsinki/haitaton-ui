@@ -1,5 +1,5 @@
 import React from 'react';
-import { LoadingSpinner } from 'hds-react';
+import LoadingSpinner from './LoadingSpinner';
 import { Modal, ModalOverlay, useDisclosure } from '@chakra-ui/react';
 
 import styles from './Styles.module.scss';

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Flex } from '@chakra-ui/react';
-import { LoadingSpinner } from 'hds-react';
 import { Navigate } from 'react-router-dom';
 import Container from '../common/components/container/Container';
 import PageMeta from './components/PageMeta';
@@ -10,6 +9,7 @@ import { useHankeDataInApplication } from '../domain/application/hooks/useHankeD
 import useLinkPath from '../common/hooks/useLinkPath';
 import { ROUTES } from '../common/types/route';
 import { APPLICATION_ID_STORAGE_KEY } from '../domain/application/constants';
+import LoadingSpinner from '../common/components/spinner/LoadingSpinner';
 
 const Johtoselvitys: React.FC<React.PropsWithChildren> = () => {
   const { JOHTOSELVITYSHAKEMUS } = useLocalizedRoutes();

@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import CustomAccordion from '../../../common/components/customAccordion/CustomAccordion';
 import { HaittaIndexData } from './types';
 import { HaittaSection } from './HaittaSection';
-import React from 'react';
 import { HaittaSubSection } from './HaittaSubSection';
 import HaittaIndex from './HaittaIndex';
+import HaittaTooltipContent from './HaittaTooltipContent';
 
 type Props = {
   heading: string;
@@ -35,6 +35,9 @@ export default function HaittaIndexes({
             heading={t('hankeIndexes:pyoraliikenne')}
             index={haittaIndexData?.pyoraliikenneindeksi}
             testId="test-pyoraliikenneindeksi"
+            tooltipContent={
+              <HaittaTooltipContent translationKey="hankeIndexes:tooltips:PYORALIIKENNE" />
+            }
           />
           <CustomAccordion
             heading={t('hankeIndexes:autoliikenne')}
@@ -42,6 +45,12 @@ export default function HaittaIndexes({
               <HaittaIndex
                 index={haittaIndexData?.autoliikenne?.indeksi}
                 testId="test-autoliikenneindeksi"
+                tooltipContent={
+                  <HaittaTooltipContent
+                    translationKey="hankeIndexes:tooltips:AUTOLIIKENNE"
+                    showHeading={false}
+                  />
+                }
               />
             }
             headingSize="s"
@@ -51,16 +60,25 @@ export default function HaittaIndexes({
               heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:katuluokka`)}
               index={haittaIndexData?.autoliikenne.katuluokka}
               testId="test-katuluokka"
+              tooltipContent={
+                <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoKatuluokka" />
+              }
             />
             <HaittaSubSection
               heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:liikennemaara`)}
               index={haittaIndexData?.autoliikenne.liikennemaara}
               testId="test-liikennemaara"
+              tooltipContent={
+                <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoliikenneMaara" />
+              }
             />
             <HaittaSubSection
               heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistahaitta`)}
               index={haittaIndexData?.autoliikenne.kaistahaitta}
               testId="test-kaistahaitta"
+              tooltipContent={
+                <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoKaistaHaitta" />
+              }
             />
             <HaittaSubSection
               heading={t(
@@ -68,22 +86,34 @@ export default function HaittaIndexes({
               )}
               index={haittaIndexData?.autoliikenne.kaistapituushaitta}
               testId="test-kaistapituushaitta"
+              tooltipContent={
+                <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoKaistaPituusHaitta" />
+              }
             />
             <HaittaSubSection
               heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:haitanKesto`)}
               index={haittaIndexData?.autoliikenne.haitanKesto}
               testId="test-haitanKesto"
+              tooltipContent={
+                <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoHankkeenKesto" />
+              }
             />
           </CustomAccordion>
           <HaittaSection
             heading={t('hankeIndexes:linjaautoliikenne')}
             index={haittaIndexData?.linjaautoliikenneindeksi}
             testId="test-linjaautoliikenneindeksi"
+            tooltipContent={
+              <HaittaTooltipContent translationKey="hankeIndexes:tooltips:LINJAAUTOLIIKENNE" />
+            }
           />
           <HaittaSection
             heading={t('hankeIndexes:raitioliikenne')}
             index={haittaIndexData?.raitioliikenneindeksi}
             testId="test-raitioliikenneindeksi"
+            tooltipContent={
+              <HaittaTooltipContent translationKey="hankeIndexes:tooltips:RAITIOLIIKENNE" />
+            }
           />
         </>
       ) : (

@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
 import { Flex } from '@chakra-ui/react';
-import { LoadingSpinner } from 'hds-react';
 import Container from '../common/components/container/Container';
 import PageMeta from './components/PageMeta';
 import KaivuilmoitusContainer from '../domain/kaivuilmoitus/KaivuilmoitusContainer';
@@ -9,6 +8,7 @@ import { useApplication } from '../domain/application/hooks/useApplication';
 import useHanke from '../domain/hanke/hooks/useHanke';
 import ErrorLoadingText from '../common/components/errorLoadingText/ErrorLoadingText';
 import { Application, KaivuilmoitusData } from '../domain/application/types/application';
+import LoadingSpinner from '../common/components/spinner/LoadingSpinner';
 
 const EditKaivuilmoitusPage = () => {
   const { EDIT_KAIVUILMOITUSHAKEMUS } = useLocalizedRoutes();

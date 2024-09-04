@@ -9,7 +9,6 @@ import {
   IconUser,
   IconClock,
   IconMenuDots,
-  LoadingSpinner,
   IconPen,
   Button,
   IconTrash,
@@ -50,6 +49,7 @@ import UserDeleteInfoErrorNotification from '../hankeUsers/UserDeleteInfoErrorNo
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
 import Text from '../../../common/components/text/Text';
+import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
 
 function UserIcon({
   user,

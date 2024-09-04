@@ -14,7 +14,7 @@ import {
   HANKE_POLYHAITTA_KEY,
   HANKE_TARINAHAITTA_KEY,
   HANKE_TYOMAATYYPPI_KEY,
-} from './../types/hanke';
+} from '../types/hanke';
 import { HaittaIndexData } from '../common/haittaIndexes/types';
 
 const tyoalueSchema = yup.object({

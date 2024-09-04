@@ -397,7 +397,7 @@ const hankkeet: HankeDataDraft[] = [
             kaistapituushaitta: 3,
           },
           pyoraliikenneindeksi: 3.5,
-          linjaautoliikenneindeksi: 1,
+          linjaautoliikenneindeksi: 0,
           raitioliikenneindeksi: 2,
           liikennehaittaindeksi: {
             indeksi: 3.5,
@@ -408,7 +408,7 @@ const hankkeet: HankeDataDraft[] = [
           YLEINEN: 'Yleisten haittojen hallintasuunnitelma',
           PYORALIIKENNE: 'Pyöräliikenteelle koituvien haittojen hallintasuunnitelma',
           AUTOLIIKENNE: 'Autoliikenteelle koituvien haittojen hallintasuunnitelma',
-          LINJAAUTOLIIKENNE: 'Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma',
+          LINJAAUTOLIIKENNE: '',
           RAITIOLIIKENNE: 'Raitioliikenteelle koituvien haittojen hallintasuunnitelma',
           MUUT: 'Muiden haittojen hallintasuunnitelma',
         },
