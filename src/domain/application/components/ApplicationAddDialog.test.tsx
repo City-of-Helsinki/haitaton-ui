@@ -30,3 +30,15 @@ test('Navigates to cable application correctly', async () => {
   expect(window.location.pathname).toBe('/fi/johtoselvityshakemus');
   expect(window.location.search).toBe('?hanke=HAI22-1');
 });
+
+test('Application type labels are correct', async () => {
+  const hanke = hankkeetData[0] as HankeData;
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  function handleClose() {}
+  const { user } = render(<ApplicationAddDialog hanke={hanke} isOpen onClose={handleClose} />);
+
+  await user.click(screen.getByRole('button', { name: /hakemustyyppi/i }));
+
+  expect(screen.getByText('Johtoselvitys')).toBeInTheDocument();
+  expect(screen.getByText('Kaivuilmoitus (ja johtoselvitys)')).toBeInTheDocument();
+});
