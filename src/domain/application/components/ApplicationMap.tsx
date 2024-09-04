@@ -8,6 +8,7 @@ import { Feature } from 'ol';
 import { Geometry } from 'ol/geom';
 import { FeatureLike } from 'ol/Feature';
 import { Coordinate } from 'ol/coordinate';
+import { Box } from '@chakra-ui/react';
 import Map from '../../../common/components/map/Map';
 import Kantakartta from '../../map/components/Layers/Kantakartta';
 import Ortokartta from '../../map/components/Layers/Ortokartta';
@@ -21,8 +22,9 @@ import { useMapDataLayers } from '../../map/hooks/useMapLayers';
 import { MapTileLayerId } from '../../map/types';
 import styles from './ApplicationMap.module.scss';
 import useForceUpdate from '../../../common/hooks/useForceUpdate';
-import FeatureHoverBox from '../../map/components/FeatureHoverBox/FeatureHoverBox';
+import FeatureInfoOverlay from '../../map/components/FeatureInfoOverlay/FeatureInfoOverlay';
 import FitSource from '../../map/components/interations/FitSource';
+import { formatToFinnishDate } from '../../../common/utils/date';
 
 type Props = {
   drawSource: VectorSource;
@@ -106,10 +108,23 @@ export default function ApplicationMap({
 
           <FitSource source={drawSource} fitOnce />
 
-          <FeatureHoverBox
-            render={(featureWithPixel) => {
-              const areaName = featureWithPixel.feature.get('areaName');
-              return areaName ? <p>{areaName}</p> : null;
+          <FeatureInfoOverlay
+            render={(feature) => {
+              const areaName = feature?.get('areaName');
+              const hankeName = feature?.get('hankeName');
+              const startDate = feature?.get('startDate');
+              const endDate = feature?.get('endDate');
+              return (
+                <div>
+                  {hankeName && <p>{hankeName}</p>}
+                  {areaName && <h4 className="heading-xxs">{areaName}</h4>}
+                  {startDate && endDate && (
+                    <Box as="p" fontSize="var(--fontsize-body-s)">
+                      {formatToFinnishDate(startDate)}–{formatToFinnishDate(endDate)}
+                    </Box>
+                  )}
+                </div>
+              );
             }}
           />
 

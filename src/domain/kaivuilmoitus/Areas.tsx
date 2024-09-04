@@ -119,7 +119,9 @@ export default function Areas({ hankeData }: Readonly<Props>) {
     const newAreaPolygon = polygon((feature.getGeometry() as Polygon).getCoordinates());
     // Check if the new tyoalue intersects with any of the existing hanke areas
     const hankeAlueetContainingNewArea = hankeData.alueet.filter((alue) =>
-      booleanIntersects(alue.geometriat?.featureCollection.features[0], newAreaPolygon),
+      alue.geometriat
+        ? booleanIntersects(alue.geometriat.featureCollection.features[0], newAreaPolygon)
+        : [],
     );
 
     if (hankeAlueetContainingNewArea.length === 0) {
@@ -270,6 +272,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
                   alueIndex={index}
                   drawSource={drawSource}
                   hankeAlueName={alue.name}
+                  hankeName={hankeData.nimi}
                   onRemoveLastArea={() => remove(index)}
                 />
 
