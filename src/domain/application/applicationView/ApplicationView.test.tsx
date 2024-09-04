@@ -266,6 +266,11 @@ describe('Excavation announcement application view', () => {
     });
 
     describe('Report in operational condition confirmation dialog', () => {
+      afterEach(() => {
+        jest.restoreAllMocks();
+        jest.clearAllMocks();
+      });
+
       test('Shows previous operational condition reports in confirmation dialog', async () => {
         const user = await setup();
 
@@ -281,7 +286,10 @@ describe('Excavation announcement application view', () => {
             exact: false,
           }),
         ).toBeInTheDocument();
-        expect(screen.getByText('1.8.2024 18:15 päivämäärälle 1.8.2024')).toBeInTheDocument();
+        const reportedDate = new Date('2024-08-01T15:15:00.000Z');
+        expect(
+          screen.getByText(`1.8.2024 ${format(reportedDate, 'HH:mm')} päivämäärälle 1.8.2024`),
+        ).toBeInTheDocument();
       });
 
       test('Confirm button is disabled until a valid date is entered', async () => {
@@ -351,6 +359,7 @@ describe('Excavation announcement application view', () => {
       });
 
       test('Confirms the report', async () => {
+        const sendApplication = jest.spyOn(applicationApi, 'reportOperationalCondition');
         const user = await setup();
 
         const button = await screen.findByRole('button', {
@@ -366,6 +375,9 @@ describe('Excavation announcement application view', () => {
         await user.click(confirmButton);
 
         expect(await screen.findByText('Ilmoitus lähetetty')).toBeInTheDocument();
+        expect(sendApplication).toHaveBeenCalledTimes(1);
+        const reportedDate = sendApplication.mock.lastCall?.[0].date as Date;
+        expect(format(reportedDate, 'd.M.yyyy')).toBe(validDate);
       });
 
       test('Cancels the report', async () => {
