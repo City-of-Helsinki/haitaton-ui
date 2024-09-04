@@ -631,7 +631,7 @@ const hakemukset: Application[] = [
           country: 'FI',
           email: 'yritys2@test.com',
           phone: '040123456',
-          registryKey: null,
+          registryKey: '1234567-1',
           ovt: null,
           invoicingOperator: null,
           sapCustomerNumber: null,

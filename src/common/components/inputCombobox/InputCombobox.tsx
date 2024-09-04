@@ -15,6 +15,7 @@ type Props = {
   pattern?: RegExp;
   errorText?: string;
   uppercase?: boolean;
+  required?: boolean;
 };
 
 /**
@@ -32,6 +33,7 @@ export default function InputCombobox({
   pattern,
   errorText,
   uppercase,
+  required,
 }: Readonly<Props>) {
   const { t } = useTranslation();
   const { setValue, getValues } = useFormContext();
@@ -96,6 +98,7 @@ export default function InputCombobox({
             clearButtonAriaLabel={t('common:components:multiselect:clear')}
             invalid={!valid}
             error={errorText}
+            required={required}
           />
         );
       }}

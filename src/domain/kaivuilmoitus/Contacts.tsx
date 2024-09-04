@@ -89,6 +89,7 @@ export default function Contacts() {
             label={t('form:yhteystiedot:labels:yTunnusTaiHetu')}
             required
             autoComplete="on"
+            defaultValue={null}
           />
         </ResponsiveGrid>
         <ResponsiveGrid>
@@ -97,12 +98,14 @@ export default function Contacts() {
             label={t('form:yhteystiedot:labels:ovt')}
             disabled={ovtDisabled}
             required={ovtRequired}
+            defaultValue={null}
           />
           <TextInput
             name="applicationData.invoicingCustomer.invoicingOperator"
             label={t('form:yhteystiedot:labels:invoicingOperator')}
             disabled={ovtDisabled}
             required={ovtRequired}
+            defaultValue={null}
           />
           <TextInput
             name="applicationData.invoicingCustomer.customerReference"

@@ -206,6 +206,7 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
           errorText={t('hakemus:errors:cableReport')}
           placeholder="JSXXXXXXX"
           uppercase
+          required={createCableReportNotChecked}
         />
       )}
 

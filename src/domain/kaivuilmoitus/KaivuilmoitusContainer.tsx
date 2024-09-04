@@ -110,7 +110,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     trigger,
     watch,
     handleSubmit,
-    formState: { isDirty, isValid },
+    formState: { isDirty, isValid, errors },
   } = formContext;
   const watchFormValues = watch();
 
@@ -285,7 +285,9 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
 
   function validateStepChange(changeStep: () => void, stepIndex: number) {
-    return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger);
+    return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger, errors, [
+      'required',
+    ]);
   }
 
   return (
