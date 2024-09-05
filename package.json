@@ -22,7 +22,7 @@
     "lint:css": "stylelint 'src/**/*.scss'",
     "locales:export": "ts-node -P ./scripts/tsconfig.json ./scripts/translate-json-to-excel.ts",
     "locales:import": "ts-node -P ./scripts/tsconfig.json ./scripts/translate-excel-to-json.ts",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "dependencies": {
     "@axe-core/react": "^4.8.5",
