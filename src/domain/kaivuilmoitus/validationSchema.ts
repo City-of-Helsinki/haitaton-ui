@@ -119,7 +119,7 @@ export const validationSchema: yup.ObjectSchema<KaivuilmoitusFormValues> = yup.o
   applicationIdentifier: yup.string().nullable(),
   hankeTunnus: yup.string().defined().nullable(),
   applicationData: applicationDataSchema,
-  ilmoitukset: yup.object().nullable().notRequired(),
+  valmistumisilmoitukset: yup.object().nullable().notRequired(),
   selfIntersectingPolygon: yup.boolean().isFalse(),
   geometriesChanged: yup.boolean(),
 });

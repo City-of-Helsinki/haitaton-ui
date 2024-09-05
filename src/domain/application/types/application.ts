@@ -230,10 +230,10 @@ export interface Paatos {
   size: number;
 }
 
-export type IlmoitusType = 'TOIMINNALLINEN_KUNTO' | 'TYO_VALMIS';
+export type ValmistumisilmoitusType = 'TOIMINNALLINEN_KUNTO' | 'TYO_VALMIS';
 
-export interface Ilmoitus {
-  type: IlmoitusType;
+export interface Valmistumisilmoitus {
+  type: ValmistumisilmoitusType;
   dateReported: Date;
   reportedAt: Date;
 }
@@ -247,7 +247,7 @@ export interface Application<T = JohtoselvitysData | KaivuilmoitusData> {
   applicationIdentifier?: string | null;
   hankeTunnus: string | null;
   paatokset?: { [key: string]: Paatos[] };
-  ilmoitukset?: { [key in IlmoitusType]?: Ilmoitus[] } | null;
+  valmistumisilmoitukset?: { [key in ValmistumisilmoitusType]?: Valmistumisilmoitus[] } | null;
 }
 
 export interface HankkeenHakemus {

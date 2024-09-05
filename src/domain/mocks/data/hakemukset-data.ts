@@ -860,7 +860,7 @@ const hakemukset: Application[] = [
         },
       ],
     },
-    ilmoitukset: {
+    valmistumisilmoitukset: {
       TOIMINNALLINEN_KUNTO: [
         {
           type: 'TOIMINNALLINEN_KUNTO',

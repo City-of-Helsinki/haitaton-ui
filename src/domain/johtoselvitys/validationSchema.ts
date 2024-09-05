@@ -58,7 +58,7 @@ export const validationSchema: yup.ObjectSchema<JohtoselvitysFormValues> = yup.o
       .required(),
     areas: yup.array(areaSchema).min(1).required(),
   }),
-  ilmoitukset: yup.object().nullable().notRequired(),
+  valmistumisilmoitukset: yup.object().nullable().notRequired(),
   selfIntersectingPolygon: yup.boolean().isFalse(),
   geometriesChanged: yup.boolean(),
 });

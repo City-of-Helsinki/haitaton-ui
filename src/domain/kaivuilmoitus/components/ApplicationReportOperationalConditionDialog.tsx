@@ -4,7 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import DatePicker from '../../../common/components/datePicker/DatePicker';
 import {
   Application,
-  Ilmoitus,
+  Valmistumisilmoitus,
   ReportOperationalConditionData,
 } from '../../application/types/application';
 import useLocale from '../../../common/hooks/useLocale';
@@ -19,7 +19,7 @@ import { format } from 'date-fns/format';
 import { fi } from 'date-fns/locale';
 import { useApplication } from '../../application/hooks/useApplication';
 
-const Instructions = ({ previousReports }: { previousReports: Ilmoitus[] }) => {
+const Instructions = ({ previousReports }: { previousReports: Valmistumisilmoitus[] }) => {
   const { t } = useTranslation();
 
   // Generate the list of dates
@@ -28,7 +28,7 @@ const Instructions = ({ previousReports }: { previousReports: Ilmoitus[] }) => {
       <ul>
         {previousReports
           .sort(
-            (a: Ilmoitus, b: Ilmoitus) =>
+            (a: Valmistumisilmoitus, b: Valmistumisilmoitus) =>
               new Date(b.reportedAt).getTime() - new Date(a.reportedAt).getTime(),
           )
           .map((report) => {
@@ -91,9 +91,10 @@ const ApplicationReportOperationalConditionDialog: React.FC<Props> = ({
   const { showReportOperationalConditionSuccess, showReportOperationalConditionError } =
     useApplicationReportOperationalConditionNotification();
   const dialogTitle = t('hakemus:operationalConditionDialog:title');
-  const { id, applicationData, ilmoitukset } = application as Application;
-  const previousReports = ilmoitukset?.TOIMINNALLINEN_KUNTO ?? ([] as Ilmoitus[]);
-  const startDate = applicationData.startTime as Date;
+  const { id, applicationData, valmistumisilmoitukset } = application as Application;
+  const previousReports =
+    valmistumisilmoitukset?.TOIMINNALLINEN_KUNTO ?? ([] as Valmistumisilmoitus[]);
+  const startDate = new Date(applicationData.startTime?.toString() ?? 0);
   const today = new Date();
 
   useEffect(() => {
