@@ -648,7 +648,7 @@
       "header": "Areas",
       "subHeader": "Project areas",
       "area": "Area",
-      "instructions": "Several geometries can be drawn for the project. [TRANSLATION_PENDING]",
+      "instructions": "[TRANSLATION_PENDING]Several geometries can be drawn for the project. Geometry areas affect the project’s traffic congestion indices. Drawing tools can be found at the bottom left of the map view. With the pen tool, you can draw polygonal geometries by clicking the point where you want an angle. With the square tool, you can create square areas by first clicking the map and moving the mouse in the direction you want. Clicking it again “closes” the square drawing. A geometry can be edited by “grabbing” the edge of the geometry and dragging. A square geometry can also be shaped by grabbing the edge. lete a geometry, first select the geometry by clicking it; a bin icon will appear in the bottom left drawing tools which you can click to delete the geometry.",
       "instructions3": "You can edit an already drawn area by grabbing its edge and dragging the point to the desired location.",
       "noAlueet": "Draw the area on the map to mark the hazard assessments.",
       "haitatHeader": "Nuisance assessments for the area",

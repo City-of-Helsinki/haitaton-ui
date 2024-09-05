@@ -644,7 +644,7 @@
       "header": "Områden",
       "subHeader": "Projektområden",
       "area": "Område",
-      "instructions": "Flera geometrier kan ritas för projektet. [TRANSLATION_PENDING]",
+      "instructions": "[TRANSLATION_PENDING]Flera geometrier kan ritas för projektet. De geometriska områdena påverkar projektets trafikstörningsindex. Ritverktygen återfinns i kartvyns vänstra nedre kant. Med pennverktyget kan man rita polygoner genom att klicka på punkten där du vill ha ett hörn. Med rektangelverktyget kan du skapa rektangulära områden genom att först klicka på kartan och röra musen i önskad riktning. Ett nytt klick avslutar ritning av kvadraten. En polygon kan modifieras genom att ”greppa” i kanten och dra. Även en rektangulär figur kan modifieras genom att greppa i kanten. an radera en geometrisk figur genom att först välja den med ett klick, så att det bland ritverktygen i den vänstra nedre kanten kommer fram en papperskorg. Med ett klick på papperskorgen raderas figuren.",
       "instructions3": "Du kan ändra ett redan ritat område genom att hålla fast vid kanten och dra punkten till önskad position.",
       "noAlueet": "Rita området på kartan för att markera bedömningarna av olägenheter.",
       "haitatHeader": "Bedömning av ett områdes olägenheter",
