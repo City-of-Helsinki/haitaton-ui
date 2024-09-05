@@ -30,6 +30,9 @@ export default function useHankeFeatures(source: Vector, hankkeet: HankeData[]) 
                 ? alue.tormaystarkasteluTulos.liikennehaittaindeksi.indeksi
                 : null,
               areaName: alue.nimi,
+              hankeName: hanke.nimi,
+              startDate: alue.haittaAlkuPvm,
+              endDate: alue.haittaLoppuPvm,
             },
             true,
           );

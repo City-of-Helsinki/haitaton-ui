@@ -4,7 +4,6 @@ import Select from 'ol/interaction/Select';
 import { createRegularPolygon } from 'ol/interaction/Draw';
 import Collection from 'ol/Collection';
 import { Draw, Snap, Modify } from 'ol/interaction';
-import { click } from 'ol/events/condition';
 import Geometry from 'ol/geom/Geometry';
 import Polygon from 'ol/geom/Polygon';
 import { DRAWTOOLTYPE } from './types';
@@ -141,7 +140,6 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
     });
 
     selection.current = new Select({
-      condition: (mapBrowserEvent) => click(mapBrowserEvent),
       style: (feature) => styleFunction(feature, undefined, true),
     });
 
@@ -156,7 +154,7 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
       const features = e.selected;
       const feature: Feature<Geometry> = features[0];
 
-      if (feature) {
+      if (feature && feature.getGeometry() instanceof Polygon) {
         actions.setSelectedFeature(feature);
       } else {
         clearSelection();

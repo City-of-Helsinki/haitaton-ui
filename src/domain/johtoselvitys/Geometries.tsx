@@ -27,9 +27,11 @@ import useAddressCoordinate from '../map/hooks/useAddressCoordinate';
 
 function AreaList({
   applicationAreas,
+  hankeName,
   onRemoveArea,
 }: Readonly<{
   applicationAreas: FieldArrayWithId<JohtoselvitysFormValues, 'applicationData.areas', 'id'>[];
+  hankeName?: string;
   onRemoveArea: (index: number, feature?: Feature<Geometry>) => void;
 }>) {
   const { t } = useTranslation();
@@ -37,6 +39,7 @@ function AreaList({
     actions: { setSelectedFeature },
   } = useDrawContext();
   const { tabRefs } = useSelectableTabs(applicationAreas, { selectLastTabOnChange: true });
+  const { getValues } = useFormContext<JohtoselvitysFormValues>();
 
   return (
     <Box as="ul" paddingLeft="var(--spacing-l)">
@@ -45,7 +48,12 @@ function AreaList({
         const surfaceArea = geometry && `(${formatSurfaceArea(geometry)})`;
         const areaName = getAreaDefaultName(t, index, applicationAreas.length);
 
-        area.feature?.set('areaName', areaName);
+        area.feature?.setProperties({
+          areaName,
+          hankeName,
+          endDate: getValues('applicationData.endTime'),
+          startDate: getValues('applicationData.startTime'),
+        });
 
         return (
           <li key={area.id}>
@@ -228,7 +236,11 @@ export function Geometries({ hankeData }: Readonly<Props>) {
         <Text tag="h3" styleAs="h4" weight="bold">
           {t('hakemus:labels:addedAreas')}
         </Text>
-        <AreaList applicationAreas={applicationAreas} onRemoveArea={removeArea} />
+        <AreaList
+          applicationAreas={applicationAreas}
+          hankeName={hankeData?.nimi}
+          onRemoveArea={removeArea}
+        />
       </DrawProvider>
 
       <ConfirmationDialog
