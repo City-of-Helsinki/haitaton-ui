@@ -39,6 +39,8 @@ export default function useApplicationReportOperationalConditionNotification(
     setNotification(true, {
       position: 'top-right',
       dismissible: true,
+      autoClose: true,
+      autoCloseDuration: 8000,
       label: t('hakemus:notifications:reportOperationalConditionErrorLabel'),
       message: errorMessage,
       type: 'error',

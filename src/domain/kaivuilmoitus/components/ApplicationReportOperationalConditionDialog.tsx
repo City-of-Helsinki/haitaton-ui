@@ -1,4 +1,4 @@
-import { Button, Dialog, IconCheck, IconInfoCircleFill, Notification } from 'hds-react';
+import { Button, Dialog, IconCheck, IconInfoCircleFill } from 'hds-react';
 import React, { useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import DatePicker from '../../../common/components/datePicker/DatePicker';
@@ -87,12 +87,7 @@ const ApplicationReportOperationalConditionDialog: React.FC<Props> = ({
   });
   const { handleSubmit, reset: resetForm, formState } = formContext;
   const isConsifmButtonEnabled = formState.isValid;
-  const {
-    mutate,
-    reset: resetMutation,
-    isLoading,
-    isError,
-  } = useMutation(reportOperationalCondition);
+  const { mutate, reset: resetMutation, isLoading } = useMutation(reportOperationalCondition);
   const { showReportOperationalConditionSuccess, showReportOperationalConditionError } =
     useApplicationReportOperationalConditionNotification();
   const dialogTitle = t('hakemus:operationalConditionDialog:title');
@@ -162,11 +157,6 @@ const ApplicationReportOperationalConditionDialog: React.FC<Props> = ({
               helperText={t('form:helperTexts:dateInForm')}
               required
             />
-            {isError && (
-              <Box marginTop="var(--spacing-m)">
-                <Notification label={t('form:validations:required')} type="error" />
-              </Box>
-            )}
           </Dialog.Content>
 
           <Dialog.ActionButtons>
