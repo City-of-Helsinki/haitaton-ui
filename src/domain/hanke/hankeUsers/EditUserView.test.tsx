@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { server } from '../../mocks/test-server';
 import { fireEvent, render, screen } from '../../../testUtils/render';
 import EditUserContainer from './EditUserContainer';
@@ -102,8 +102,8 @@ test('Permissions dropdown should be disabled and delete button should be hidden
   const hankeTunnus = 'HAI22-2';
   const users = (await readAll(hankeTunnus)).slice(0, 4);
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/kayttajat', async (req, res, ctx) => {
-      return res(ctx.status(200), ctx.json({ kayttajat: users }));
+    http.get('/api/hankkeet/:hankeTunnus/kayttajat', async () => {
+      return HttpResponse.json({ kayttajat: users });
     }),
   );
 
@@ -123,8 +123,8 @@ test('Permissions dropdown should be disabled if editing own information', async
 
 test('Permissions dropdown should be disabled and delete button should be hidden if user does not have enough rights', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
-      return res(ctx.status(200), ctx.json(USER_EDIT_HANKE));
+    http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+      return HttpResponse.json(USER_EDIT_HANKE);
     }),
   );
 
@@ -202,8 +202,8 @@ test('Should be able to cancel and return to user management view', async () => 
 
 test('Should show error notification if editing own information fails', async () => {
   server.use(
-    rest.put('/api/hankkeet/:hankeTunnus/kayttajat/self', async (req, res, ctx) => {
-      return res(ctx.status(500));
+    http.put('/api/hankkeet/:hankeTunnus/kayttajat/self', async () => {
+      return new HttpResponse(null, { status: 500 });
     }),
   );
   const { user } = render(
@@ -254,8 +254,8 @@ test('Should be able to edit users information', async () => {
 
 test('Should show error notification if editing users information fails', async () => {
   server.use(
-    rest.put('/api/hankkeet/:hankeTunnus/kayttajat/:userId', async (req, res, ctx) => {
-      return res(ctx.status(500));
+    http.put('/api/hankkeet/:hankeTunnus/kayttajat/:userId', async () => {
+      return new HttpResponse(null, { status: 500 });
     }),
   );
   const { user } = render(
@@ -269,8 +269,8 @@ test('Should show error notification if editing users information fails', async 
 
 test('Should show error notification if editing users permission fails', async () => {
   server.use(
-    rest.put('/api/hankkeet/:hankeTunnus/kayttajat', async (req, res, ctx) => {
-      return res(ctx.status(500));
+    http.put('/api/hankkeet/:hankeTunnus/kayttajat', async () => {
+      return new HttpResponse(null, { status: 500 });
     }),
   );
   const { user } = render(
@@ -302,8 +302,8 @@ test('Should be able to delete user and return to user management page', async (
 
 test('Should show error notification if user delete info request fails', async () => {
   server.use(
-    rest.get('/api/kayttajat/:id/deleteInfo', async (req, res, ctx) => {
-      return res(ctx.status(500));
+    http.get('/api/kayttajat/:id/deleteInfo', async () => {
+      return new HttpResponse(null, { status: 500 });
     }),
   );
   const { user } = render(
@@ -318,8 +318,8 @@ test('Should show error notification if user delete info request fails', async (
 
 test('Should show error notification if deleting user fails', async () => {
   server.use(
-    rest.delete('/api/kayttajat/:id', async (req, res, ctx) => {
-      return res(ctx.status(500));
+    http.delete('/api/kayttajat/:id', async () => {
+      return new HttpResponse(null, { status: 500 });
     }),
   );
   const { user } = render(

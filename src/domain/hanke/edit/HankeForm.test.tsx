@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse, delay } from 'msw';
 import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
@@ -20,6 +20,7 @@ import { cloneDeep } from 'lodash';
 import { Feature } from 'ol';
 import { Polygon } from 'ol/geom';
 import { waitForElementToBeRemoved } from '@testing-library/react';
+import { PathParams } from 'msw/lib/core/utils/matching/matchRequestUrl';
 
 afterEach(cleanup);
 
@@ -60,24 +61,25 @@ async function uploadAttachment({
 
 function initFileGetResponse(response: HankeAttachmentMetadata[]) {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/liitteet', async (req, res, ctx) => {
-      return res(ctx.status(200), ctx.json(response));
+    http.get('/api/hankkeet/:hankeTunnus/liitteet', async () => {
+      return HttpResponse.json(response);
     }),
   );
 }
 
 function initFileUploadResponse() {
   server.use(
-    rest.post('/api/hankkeet/:hankeTunnus/liitteet', async (req, res, ctx) => {
-      return res(ctx.delay(), ctx.status(200));
+    http.post('/api/hankkeet/:hankeTunnus/liitteet', async () => {
+      await delay();
+      return new HttpResponse();
     }),
   );
 }
 
 function initFileDeleteResponse() {
   server.use(
-    rest.delete('/api/hankkeet/:hankeTunnus/liitteet/:attachmentId', async (req, res, ctx) => {
-      return res(ctx.status(200));
+    http.delete('/api/hankkeet/:hankeTunnus/liitteet/:attachmentId', async () => {
+      return new HttpResponse();
     }),
   );
 }
@@ -362,11 +364,11 @@ describe('HankeForm', () => {
     const { user } = await setupHaittojenHallintaPage();
     let haittojenhallintasuunnitelma: HankkeenHaittojenhallintasuunnitelma;
     server.use(
-      rest.put('/api/hankkeet/:hankeTunnus', async (req, res, ctx) => {
-        const hankeData = await req.json<HankeData>();
+      http.put<PathParams, HankeData>('/api/hankkeet/:hankeTunnus', async ({ request }) => {
+        const hankeData = await request.json();
         haittojenhallintasuunnitelma = hankeData.alueet[0]
           .haittojenhallintasuunnitelma as HankkeenHaittojenhallintasuunnitelma;
-        return res(ctx.status(200), ctx.json<HankeData>(hankeData));
+        return HttpResponse.json<HankeData>(hankeData);
       }),
     );
 
@@ -799,8 +801,8 @@ describe('HankeForm', () => {
     },
   ) {
     server.use(
-      rest.post('/api/haittaindeksit', async (_, res, ctx) => {
-        return res(ctx.status(200), ctx.json(nuisanceResponse));
+      http.post('/api/haittaindeksit', async () => {
+        return HttpResponse.json(nuisanceResponse);
       }),
     );
 
@@ -913,8 +915,8 @@ describe('New contact person form and contact person dropdown', () => {
 
   test('Should show error notification if creating new user fails', async () => {
     server.use(
-      rest.post('/api/hankkeet/:hankeTunnus/kayttajat', async (req, res, ctx) => {
-        return res(ctx.status(500));
+      http.post('/api/hankkeet/:hankeTunnus/kayttajat', async () => {
+        return new HttpResponse(null, { status: 500 });
       }),
     );
     const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
@@ -951,13 +953,8 @@ describe('New contact person form and contact person dropdown', () => {
       },
     ];
     server.use(
-      rest.get('/api/hankkeet/:hankeTunnus/kayttajat', async (req, res, ctx) => {
-        return res(
-          ctx.status(200),
-          ctx.json<{ kayttajat: HankeUser[] }>({
-            kayttajat: hankeUsers,
-          }),
-        );
+      http.get('/api/hankkeet/:hankeTunnus/kayttajat', async () => {
+        return HttpResponse.json<{ kayttajat: HankeUser[] }>({ kayttajat: hankeUsers });
       }),
     );
 
@@ -999,13 +996,8 @@ describe('Selecting user in user name search input', () => {
       },
     ];
     server.use(
-      rest.get('/api/hankkeet/:hankeTunnus/kayttajat', async (req, res, ctx) => {
-        return res(
-          ctx.status(200),
-          ctx.json<{ kayttajat: HankeUser[] }>({
-            kayttajat: hankeUsers,
-          }),
-        );
+      http.get('/api/hankkeet/:hankeTunnus/kayttajat', async () => {
+        return HttpResponse.json<{ kayttajat: HankeUser[] }>({ kayttajat: hankeUsers });
       }),
     );
     const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-3" />);

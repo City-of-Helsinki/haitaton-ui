@@ -6,7 +6,7 @@ import { changeFilterDate } from '../../../testUtils/helperFunctions';
 import { USER_VIEW, userDataByHanke } from '../../mocks/signedInUser';
 import { AccessRightLevel, SignedInUserByHanke } from '../hankeUsers/hankeUser';
 import { server } from '../../mocks/test-server';
-import { rest } from 'msw';
+import { http, HttpResponse, PathParams } from 'msw';
 import hankkeet from '../../mocks/data/hankkeet-data';
 import { HankeDataDraft } from '../../types/hanke';
 import HankePortfolioContainer from './HankePortfolioContainer';
@@ -21,16 +21,16 @@ afterEach(cleanup);
 
 const initHankkeetResponse = (response: HankeDataDraft[]) => {
   server.use(
-    rest.get('/api/hankkeet', async (_, res, ctx) => {
-      return res(ctx.status(200), ctx.json<HankeDataDraft[]>(response));
+    http.get<PathParams, null, HankeDataDraft[]>('/api/hankkeet', async () => {
+      return HttpResponse.json(response);
     }),
   );
 };
 
 const initSignedInUserResponse = (response: SignedInUserByHanke) => {
   server.use(
-    rest.get('/api/my-permissions', async (_, res, ctx) => {
-      return res(ctx.status(200), ctx.json<SignedInUserByHanke>(response));
+    http.get('/api/my-permissions', async () => {
+      return HttpResponse.json(response);
     }),
   );
 };
@@ -235,6 +235,7 @@ describe('HankePortfolioContainer', () => {
 
   test('Should focus on first hanke card header when changing page', async () => {
     initHankkeetResponse(hankkeet);
+    initSignedInUserResponse(userDataByHanke([HANKE_TUNNUS], AccessRightLevel.KATSELUOIKEUS));
 
     const { user } = render(<HankePortfolioContainer />);
 
@@ -246,10 +247,11 @@ describe('HankePortfolioContainer', () => {
 
   test('Should show error notification if loading hankkeet fails', async () => {
     server.use(
-      rest.get('/api/hankkeet', async (req, res, ctx) => {
-        return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+      http.get('/api/hankkeet', async () => {
+        return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
       }),
     );
+    initSignedInUserResponse(userDataByHanke([HANKE_TUNNUS], AccessRightLevel.KATSELUOIKEUS));
 
     render(<HankePortfolioContainer />);
 

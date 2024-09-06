@@ -3,7 +3,7 @@ import { fireEvent, render, screen, waitFor } from '../../../testUtils/render';
 import ServiceNotifications from './ServiceNotifications';
 import { BannerType } from '../../../locales/banners';
 import { server } from '../../../domain/mocks/test-server';
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import i18n from '../../../locales/i18n';
 import { I18nextProvider } from 'react-i18next';
 
@@ -39,13 +39,8 @@ describe('ServiceNotifications', () => {
     'renders %s notification and handles close action',
     async (bannerType) => {
       server.use(
-        rest.get('/api/banners', async (_, res, ctx) => {
-          return res(
-            ctx.status(200),
-            ctx.json({
-              [bannerType]: BANNERS[bannerType],
-            }),
-          );
+        http.get('/api/banners', async () => {
+          return HttpResponse.json({ [bannerType]: BANNERS[bannerType] });
         }),
       );
 
@@ -70,8 +65,8 @@ describe('ServiceNotifications', () => {
 
   test('sessionStorage prevents rendering closed notifications', async () => {
     server.use(
-      rest.get('/api/banners', async (_, res, ctx) => {
-        return res(ctx.status(200), ctx.json(BANNERS));
+      http.get('/api/banners', async () => {
+        return HttpResponse.json(BANNERS);
       }),
     );
 

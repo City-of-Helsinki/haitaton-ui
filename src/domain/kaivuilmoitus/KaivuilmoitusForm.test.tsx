@@ -1,5 +1,5 @@
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '../../testUtils/render';
 import KaivuilmoitusContainer from './KaivuilmoitusContainer';
 import { HankeData } from '../types/hanke';
@@ -289,8 +289,8 @@ test('Should not be able to save form if work name is missing', async () => {
 
 test('Should show error message if saving fails', async () => {
   server.use(
-    rest.post('/api/hakemukset', async (req, res, ctx) => {
-      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    http.post('/api/hakemukset', async () => {
+      return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
     }),
   );
   const hankeData = hankkeet[1] as HankeData;
@@ -893,8 +893,8 @@ test('Should be able to send application', async () => {
 
 test('Should show error message when sending fails', async () => {
   server.use(
-    rest.post('/api/hakemukset/:id/laheta', async (req, res, ctx) => {
-      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    http.post('/api/hakemukset/:id/laheta', async () => {
+      return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
     }),
   );
 
@@ -911,15 +911,12 @@ test('Should show error message when sending fails', async () => {
 
 test('Should show and disable send button and show notification when user is not a contact person', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json<SignedInUser>({
-          hankeKayttajaId: 'not-a-contact-person-id',
-          kayttooikeustaso: 'KATSELUOIKEUS',
-          kayttooikeudet: ['VIEW'],
-        }),
-      );
+    http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+      return HttpResponse.json<SignedInUser>({
+        hankeKayttajaId: 'not-a-contact-person-id',
+        kayttooikeustaso: 'KATSELUOIKEUS',
+        kayttooikeudet: ['VIEW'],
+      });
     }),
   );
 
