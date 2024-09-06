@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { fireEvent, render, screen, waitFor, within } from '../../../testUtils/render';
 import api from '../../../domain/api/api';
 import FileUpload from './FileUpload';
@@ -24,8 +24,11 @@ function uploadFunction({ file }: { file: File }) {
 
 function initFileDeleteResponse(statusCode: number) {
   server.use(
-    rest.delete('/api/hakemukset/:id/liitteet/:attachmentId', async (req, res, ctx) => {
-      return res(ctx.status(statusCode), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    http.delete('/api/hakemukset/:id/liitteet/:attachmentId', async () => {
+      return HttpResponse.json(
+        { errorMessage: 'Failed for testing purposes' },
+        { status: statusCode },
+      );
     }),
   );
 }
@@ -158,8 +161,8 @@ test('Should show amount of successful files uploaded and errors correctly when 
 
 test('Should show amount of successful files uploaded and errors correctly when upload request fails for bad request', async () => {
   server.use(
-    rest.post('/api/hakemukset/:id/liitteet', async (req, res, ctx) => {
-      return res(ctx.status(400), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    http.post('/api/hakemukset/:id/liitteet', async () => {
+      return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 400 });
     }),
   );
 
@@ -186,8 +189,8 @@ test('Should show amount of successful files uploaded and errors correctly when 
 
 test('Should show correct error message when upload request fails for server error', async () => {
   server.use(
-    rest.post('/api/hakemukset/:id/liitteet', async (req, res, ctx) => {
-      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    http.post('/api/hakemukset/:id/liitteet', async () => {
+      return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
     }),
   );
 

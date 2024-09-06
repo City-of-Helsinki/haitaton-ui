@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { render, cleanup, screen, waitFor, fireEvent } from '../../../testUtils/render';
 import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import AccessRightsViewContainer from './AccessRightsViewContainer';
@@ -238,8 +238,8 @@ test('Should show not found text if filtering has no results', async () => {
 
 test('Should show error notification if information is not found', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/kayttajat', async (req, res, ctx) => {
-      return res(ctx.status(404), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    http.get('/api/hankkeet/:hankeTunnus/kayttajat', async () => {
+      return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 404 });
     }),
   );
 
@@ -252,8 +252,8 @@ test('Should show error notification if information is not found', async () => {
 
 test('Should show error notification if there is technical error', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/kayttajat', async (req, res, ctx) => {
-      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    http.get('/api/hankkeet/:hankeTunnus/kayttajat', async () => {
+      return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
     }),
   );
 
@@ -309,8 +309,8 @@ test('Should send invitation to user when cliking the Lähetä kutsulinkki uudel
 
 test('Should show error notification if sending invitation fails', async () => {
   server.use(
-    rest.post('/api/kayttajat/:kayttajaId/kutsu', async (req, res, ctx) => {
-      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    http.post('/api/kayttajat/:kayttajaId/kutsu', async () => {
+      return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
     }),
   );
 
@@ -333,12 +333,9 @@ test('Should show error notification if sending invitation fails', async () => {
 
 test('Should not show invitation menus if user does not have permission to send invitation', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json<SignedInUser>(
-          getSignedInUser({ kayttooikeustaso: 'KATSELUOIKEUS', kayttooikeudet: ['VIEW'] }),
-        ),
+    http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+      return HttpResponse.json<SignedInUser>(
+        getSignedInUser({ kayttooikeustaso: 'KATSELUOIKEUS', kayttooikeudet: ['VIEW'] }),
       );
     }),
   );
@@ -378,12 +375,9 @@ test('Should navigate to edit user view when clicking edit button in user card',
 
 test('Should show edit links or buttons only for self if user does not have edit permission', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json<SignedInUser>(
-          getSignedInUser({ kayttooikeustaso: 'KATSELUOIKEUS', kayttooikeudet: ['VIEW'] }),
-        ),
+    http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+      return HttpResponse.json<SignedInUser>(
+        getSignedInUser({ kayttooikeustaso: 'KATSELUOIKEUS', kayttooikeudet: ['VIEW'] }),
       );
     }),
   );
@@ -398,12 +392,9 @@ test('Should show edit links or buttons only for self if user does not have edit
 
 test('Should not show delete user buttons if user does not have permissions', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (req, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json<SignedInUser>(
-          getSignedInUser({ kayttooikeustaso: 'KATSELUOIKEUS', kayttooikeudet: ['VIEW'] }),
-        ),
+    http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+      return HttpResponse.json<SignedInUser>(
+        getSignedInUser({ kayttooikeustaso: 'KATSELUOIKEUS', kayttooikeudet: ['VIEW'] }),
       );
     }),
   );

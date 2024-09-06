@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { render, cleanup, fireEvent, screen, waitFor, within } from '../../testUtils/render';
 import Johtoselvitys from '../../pages/Johtoselvitys';
 import JohtoselvitysContainer from './JohtoselvitysContainer';
@@ -182,15 +182,12 @@ function fillContactsInformation() {
 
 test('Cable report application form can be filled and saved and sent to Allu', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json<SignedInUser>({
-          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          kayttooikeustaso: 'KATSELUOIKEUS',
-          kayttooikeudet: ['VIEW'],
-        }),
-      );
+    http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+      return HttpResponse.json<SignedInUser>({
+        hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        kayttooikeustaso: 'KATSELUOIKEUS',
+        kayttooikeudet: ['VIEW'],
+      });
     }),
   );
 
@@ -236,8 +233,8 @@ test('Cable report application form can be filled and saved and sent to Allu', a
 
 test('Should show error message when saving fails', async () => {
   server.use(
-    rest.post('/api/hakemukset', async (req, res, ctx) => {
-      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    http.post('/api/hakemukset', async () => {
+      return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
     }),
   );
 
@@ -259,18 +256,15 @@ test('Should show error message when saving fails', async () => {
 
 test('Should show error message when sending fails', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json<SignedInUser>({
-          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          kayttooikeustaso: 'KATSELUOIKEUS',
-          kayttooikeudet: ['VIEW'],
-        }),
-      );
+    http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+      return HttpResponse.json<SignedInUser>({
+        hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        kayttooikeustaso: 'KATSELUOIKEUS',
+        kayttooikeudet: ['VIEW'],
+      });
     }),
-    rest.post('/api/hakemukset/:id/laheta', async (req, res, ctx) => {
-      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    http.post('/api/hakemukset/:id/laheta', async () => {
+      return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
     }),
   );
 
@@ -331,8 +325,8 @@ test('Should not save and quit if current form page is not valid', async () => {
 
 test('Should show error message and not navigate away when save and quit fails', async () => {
   server.use(
-    rest.post('/api/hakemukset', async (req, res, ctx) => {
-      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    http.post('/api/hakemukset', async () => {
+      return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
     }),
   );
 
@@ -380,15 +374,12 @@ test('Should save existing application between page changes when there are chang
 
 test('Should not show send button when application has moved to pending state', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json<SignedInUser>({
-          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          kayttooikeustaso: 'KATSELUOIKEUS',
-          kayttooikeudet: ['VIEW'],
-        }),
-      );
+    http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+      return HttpResponse.json<SignedInUser>({
+        hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        kayttooikeustaso: 'KATSELUOIKEUS',
+        kayttooikeudet: ['VIEW'],
+      });
     }),
   );
 
@@ -409,15 +400,12 @@ test('Should not show send button when application has moved to pending state', 
 
 test('Should show and disable send button and show notification when user is not a contact person', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json<SignedInUser>({
-          hankeKayttajaId: 'not-a-contact-person-id',
-          kayttooikeustaso: 'KATSELUOIKEUS',
-          kayttooikeudet: ['VIEW'],
-        }),
-      );
+    http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+      return HttpResponse.json<SignedInUser>({
+        hankeKayttajaId: 'not-a-contact-person-id',
+        kayttooikeustaso: 'KATSELUOIKEUS',
+        kayttooikeudet: ['VIEW'],
+      });
     }),
   );
 
@@ -442,15 +430,12 @@ test('Should show and disable send button and show notification when user is not
 
 test('Should show and enable button when application is edited in draft state and user is a contact person', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json<SignedInUser>({
-          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          kayttooikeustaso: 'KATSELUOIKEUS',
-          kayttooikeudet: ['VIEW'],
-        }),
-      );
+    http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+      return HttpResponse.json<SignedInUser>({
+        hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        kayttooikeustaso: 'KATSELUOIKEUS',
+        kayttooikeudet: ['VIEW'],
+      });
     }),
   );
 
@@ -573,8 +558,8 @@ async function uploadAttachmentMock({
 
 function initFileGetResponse(response: ApplicationAttachmentMetadata[]) {
   server.use(
-    rest.get('/api/hakemukset/:id/liitteet', async (req, res, ctx) => {
-      return res(ctx.status(200), ctx.json(response));
+    http.get('/api/hakemukset/:id/liitteet', async () => {
+      return HttpResponse.json(response);
     }),
   );
 }

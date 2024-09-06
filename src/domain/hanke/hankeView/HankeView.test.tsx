@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { render, screen, within } from '../../../testUtils/render';
 import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import HankeViewContainer from './HankeViewContainer';
@@ -7,15 +7,12 @@ import { SignedInUser } from '../hankeUsers/hankeUser';
 
 function getViewPermissionForUser() {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json<SignedInUser>({
-          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          kayttooikeustaso: 'KATSELUOIKEUS',
-          kayttooikeudet: ['VIEW'],
-        }),
-      );
+    http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+      return HttpResponse.json<SignedInUser>({
+        hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        kayttooikeustaso: 'KATSELUOIKEUS',
+        kayttooikeudet: ['VIEW'],
+      });
     }),
   );
 }
@@ -254,8 +251,8 @@ test('Should show information if no applications exist', async () => {
 
 test('Should show error notification if loading applications fails', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/hakemukset', async (_, res, ctx) => {
-      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    http.get('/api/hankkeet/:hankeTunnus/hakemukset', async () => {
+      return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
     }),
   );
 

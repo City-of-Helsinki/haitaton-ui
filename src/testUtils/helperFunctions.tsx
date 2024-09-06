@@ -5,7 +5,7 @@ import {
 } from '../domain/application/types/application';
 import api from '../domain/api/api';
 import { server } from '../domain/mocks/test-server';
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { screen } from './render';
 
 export const changeFilterDate = (
@@ -47,8 +47,8 @@ export async function uploadApplicationAttachmentMock({
 
 export function initApplicationAttachmentGetResponse(response: ApplicationAttachmentMetadata[]) {
   server.use(
-    rest.get('/api/hakemukset/:id/liitteet', async (req, res, ctx) => {
-      return res(ctx.status(200), ctx.json(response));
+    http.get('/api/hakemukset/:id/liitteet', async () => {
+      return HttpResponse.json(response);
     }),
   );
 }

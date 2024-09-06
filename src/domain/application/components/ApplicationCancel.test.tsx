@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { IconCross } from 'hds-react';
 import { render, screen } from '../../../testUtils/render';
 import { ApplicationCancel } from './ApplicationCancel';
@@ -47,8 +47,8 @@ test('Cancel application when it has been saved, but not sent to Allu', async ()
 
 test('Cancel application when generated hanke is also deleted, directs to hanke list', async () => {
   server.use(
-    rest.delete('/api/hakemukset/:id', async (req, res, ctx) => {
-      return res(ctx.status(200), ctx.json({ hankeDeleted: true }));
+    http.delete('/api/hakemukset/:id', async () => {
+      return HttpResponse.json({ hankeDeleted: true });
     }),
   );
   const application = mockApplications[0];
@@ -91,8 +91,8 @@ test('Cancel application when it has been saved and sent to Allu but is still pe
 
 test('Cancel application when it has already been cancelled', async () => {
   server.use(
-    rest.delete('/api/hakemukset/:id', async (req, res, ctx) => {
-      return res(ctx.status(200), ctx.json({ hankeDeleted: false }));
+    http.delete('/api/hakemukset/:id', async () => {
+      return HttpResponse.json({ hankeDeleted: false });
     }),
   );
   const application = mockApplications[5];

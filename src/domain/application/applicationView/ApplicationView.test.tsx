@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse, delay } from 'msw';
 import { render, screen } from '../../../testUtils/render';
 import ApplicationViewContainer from './ApplicationViewContainer';
 import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
@@ -32,8 +32,8 @@ describe('Cable report application view', () => {
 
   test('Should show error notification if application is not found', async () => {
     server.use(
-      rest.get('/api/hakemukset/:id', async (_, res, ctx) => {
-        return res(ctx.status(404), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+      http.get('/api/hakemukset/:id', async () => {
+        return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 404 });
       }),
     );
 
@@ -45,8 +45,8 @@ describe('Cable report application view', () => {
 
   test('Should show error notification if loading application fails', async () => {
     server.use(
-      rest.get('/api/hakemukset/:id', async (_, res, ctx) => {
-        return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+      http.get('/api/hakemukset/:id', async () => {
+        return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
       }),
     );
 
@@ -96,12 +96,12 @@ describe('Cable report application view', () => {
   test('Should be able to send application if it is not already sent', async () => {
     const hakemus = cloneDeep(hakemukset[0]);
     server.use(
-      rest.get(`/api/hakemukset/:id`, async (_, res, ctx) => {
-        return res(ctx.status(200), ctx.json(hakemus));
+      http.get(`/api/hakemukset/:id`, async () => {
+        return HttpResponse.json(hakemus);
       }),
-      rest.post(`/api/hakemukset/:id/laheta`, async (_, res, ctx) => {
+      http.post(`/api/hakemukset/:id/laheta`, async () => {
         hakemus.alluStatus = 'PENDING';
-        return res(ctx.status(200), ctx.json(hakemus));
+        return HttpResponse.json(hakemus);
       }),
     );
 
@@ -128,15 +128,12 @@ describe('Cable report application view', () => {
   test('Should disable Send button if user is not a contact person on application', async () => {
     server.resetHandlers();
     server.use(
-      rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
-        return res(
-          ctx.status(200),
-          ctx.json<SignedInUser>({
-            hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb4',
-            kayttooikeustaso: 'HAKEMUSASIOINTI',
-            kayttooikeudet: ['EDIT_APPLICATIONS'],
-          }),
-        );
+      http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+        return HttpResponse.json<SignedInUser>({
+          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb4',
+          kayttooikeustaso: 'HAKEMUSASIOINTI',
+          kayttooikeudet: ['EDIT_APPLICATIONS'],
+        });
       }),
     );
 
@@ -150,15 +147,12 @@ describe('Cable report application view', () => {
   test('Should not show Edit, Cancel or Send buttons if user does not have correct permission', async () => {
     server.resetHandlers();
     server.use(
-      rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
-        return res(
-          ctx.status(200),
-          ctx.json<SignedInUser>({
-            hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            kayttooikeustaso: 'KATSELUOIKEUS',
-            kayttooikeudet: ['VIEW'],
-          }),
-        );
+      http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+        return HttpResponse.json<SignedInUser>({
+          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          kayttooikeustaso: 'KATSELUOIKEUS',
+          kayttooikeudet: ['VIEW'],
+        });
       }),
     );
 
@@ -173,8 +167,9 @@ describe('Cable report application view', () => {
 
   test('Should not send multiple requests if clicking application cancel confirm button many times', async () => {
     server.use(
-      rest.delete('/api/hakemukset/:id', async (_, res, ctx) => {
-        return res(ctx.delay(200), ctx.status(200));
+      http.delete('/api/hakemukset/:id', async () => {
+        await delay(200);
+        return new HttpResponse();
       }),
     );
 
@@ -198,8 +193,9 @@ describe('Cable report application view', () => {
 
   test('Should not send multiple requests if clicking Send button many times', async () => {
     server.use(
-      rest.post('/api/hakemukset/:id/laheta', async (_, res, ctx) => {
-        return res(ctx.delay(200), ctx.status(200));
+      http.post('/api/hakemukset/:id/laheta', async () => {
+        await delay(200);
+        return new HttpResponse();
       }),
     );
     const sendApplication = jest.spyOn(applicationApi, 'sendApplication');
@@ -398,8 +394,9 @@ describe('Excavation announcement application view', () => {
 
       test('Shows error message if confirmation fails', async () => {
         server.use(
-          rest.post('/api/hakemukset/:id/toiminnallinen-kunto', async (_, res, ctx) => {
-            return res(ctx.delay(200), ctx.status(500));
+          http.post('/api/hakemukset/:id/toiminnallinen-kunto', async () => {
+            await delay(200);
+            return new HttpResponse(null, { status: 500 });
           }),
         );
         const user = await setup();
