@@ -56,7 +56,7 @@
     "hds-core": "^3.9.0",
     "hds-design-tokens": "^3.9.0",
     "hds-react": "^3.9.0",
-    "http-proxy-middleware": "^1.0.6",
+    "http-proxy-middleware": "^3.0.2",
     "i18next": "^23.14.0",
     "i18next-browser-languagedetector": "^7.2.0",
     "immer": "^10.1.1",
