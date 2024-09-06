@@ -3,7 +3,6 @@ import { HankeDataDraft } from '../types/hanke';
 import * as hankkeetDB from './data/hankkeet';
 import * as hakemuksetDB from './data/hakemukset';
 import * as usersDB from './data/users';
-import ApiError from './apiError';
 import {
   DeleteInfo,
   HankeUser,
@@ -158,17 +157,7 @@ export const handlers = [
     return HttpResponse.json(hakemus);
   }),
 
-  http.post(`${apiUrl}/hakemukset/:id/toiminnallinen-kunto`, async ({ params }) => {
-    const { id } = params;
-    const hakemus = await hakemuksetDB.reportOperationalCondition(Number(id));
-
-    if (!hakemus) {
-      return HttpResponse.json(
-        { errorMessage: 'Hakemus not found', errorCode: 'HAI1001' },
-        { status: 404 },
-      );
-    }
-
+  http.post(`${apiUrl}/hakemukset/:id/toiminnallinen-kunto`, async () => {
     return new HttpResponse();
   }),
 
@@ -322,13 +311,8 @@ export const handlers = [
 
   http.delete(`${apiUrl}/kayttajat/:id`, async ({ params }) => {
     const { id } = params;
-    try {
-      await usersDB.remove(id as string);
-      return new HttpResponse(null, { status: 204 });
-    } catch (error) {
-      const { status, message } = error as ApiError;
-      return HttpResponse.json({ errorMessage: message, errorCode: 'HAI1001' }, { status: status });
-    }
+    await usersDB.remove(id as string);
+    return new HttpResponse(null, { status: 204 });
   }),
 
   http.get(`${apiUrl}/hakemukset/:id/liitteet`, async () => {
