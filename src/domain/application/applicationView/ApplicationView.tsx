@@ -1,6 +1,7 @@
 import {
   Accordion,
   Button,
+  IconCheck,
   IconEnvelope,
   IconPen,
   IconTrash,
@@ -46,6 +47,7 @@ import {
   getAreaDefaultName,
   getCurrentDecisions,
   getDecisionFilename,
+  isApplicationReportableInOperationalCondition,
   isApplicationSent,
   isContactIn,
 } from '../utils';
@@ -68,6 +70,7 @@ import { SignedInUser } from '../../hanke/hankeUsers/hankeUser';
 import useSendApplication from '../hooks/useSendApplication';
 import { validationSchema as johtoselvitysValidationSchema } from '../../johtoselvitys/validationSchema';
 import { validationSchema as kaivuilmoitusValidationSchema } from '../../kaivuilmoitus/validationSchema';
+import ApplicationReportOperationalConditionDialog from '../../kaivuilmoitus/components/ApplicationReportOperationalConditionDialog';
 
 const validationSchemas = {
   CABLE_REPORT: johtoselvitysValidationSchema,
@@ -84,6 +87,8 @@ type Props = {
 function ApplicationView({ application, hanke, signedInUser, onEditApplication }: Readonly<Props>) {
   const { t } = useTranslation();
   const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
+  const [showReportOperationalConditionDialog, setShowReportOperationalConditionDialog] =
+    useState(false);
   const locale = useLocale();
   const hankeViewPath = useHankeViewPath(application.hankeTunnus);
   const { applicationData, applicationIdentifier, applicationType, alluStatus, id, paatokset } =
@@ -121,12 +126,23 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
   const isContact = isContactIn(signedInUser, applicationData);
   const showSendButton = !isSent && isValid;
   const disableSendButton = showSendButton && !isContact;
-
+  const showReportOperationalConditionButton = isApplicationReportableInOperationalCondition(
+    applicationType,
+    alluStatus,
+  );
   const applicationSendMutation = useSendApplication();
 
   async function onSendApplication() {
     setIsSendButtonDisabled(true);
     applicationSendMutation.mutate(id as number);
+  }
+
+  function openReportOperationalConditionDialog() {
+    setShowReportOperationalConditionDialog(true);
+  }
+
+  function closeReportOperationalConditionDialog() {
+    setShowReportOperationalConditionDialog(false);
   }
 
   return (
@@ -215,6 +231,17 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
               >
                 {t('hakemus:notifications:sendApplicationDisabled')}
               </Notification>
+            </CheckRightsByHanke>
+          )}
+          {showReportOperationalConditionButton && (
+            <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
+              <Button
+                theme="coat"
+                iconLeft={<IconCheck aria-hidden="true" />}
+                onClick={openReportOperationalConditionDialog}
+              >
+                {t('hakemus:buttons:reportOperationalCondition')}
+              </Button>
             </CheckRightsByHanke>
           )}
         </InformationViewHeaderButtons>
@@ -340,6 +367,13 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
           )}
         </InformationViewSidebar>
       </InformationViewContentContainer>
+      {applicationType === 'EXCAVATION_NOTIFICATION' && (
+        <ApplicationReportOperationalConditionDialog
+          isOpen={showReportOperationalConditionDialog}
+          onClose={closeReportOperationalConditionDialog}
+          applicationId={application.id as number}
+        />
+      )}
     </InformationViewContainer>
   );
 }

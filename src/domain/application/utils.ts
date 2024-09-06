@@ -5,12 +5,14 @@ import {
   AlluStatusStrings,
   Application,
   ApplicationDeletionResult,
+  ApplicationType,
   JohtoselvitysData,
   KaivuilmoitusData,
   NewJohtoselvitysData,
   Paatos,
   PaatosTila,
   PaatosTyyppi,
+  ReportOperationalConditionData,
 } from './types/application';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 
@@ -53,6 +55,15 @@ export async function sendApplication(applicationId: number) {
 }
 
 /**
+ * Report application in operational condition
+ */
+export async function reportOperationalCondition(data: ReportOperationalConditionData) {
+  await api.post<Application>(`/hakemukset/${data.applicationId}/toiminnallinen-kunto`, {
+    date: data.date,
+  });
+}
+
+/**
  * Check if application is sent to Allu
  */
 export function isApplicationSent(alluStatus: AlluStatusStrings | null): boolean {
@@ -80,6 +91,21 @@ export function isApplicationCancelled(alluStatus: AlluStatusStrings | null): bo
 
 export function isApplicationDraft(alluStatus: AlluStatus | null) {
   return alluStatus === null;
+}
+
+export function isApplicationReportableInOperationalCondition(
+  applicationType: ApplicationType,
+  alluStatus: AlluStatusStrings | null,
+) {
+  return (
+    applicationType === 'EXCAVATION_NOTIFICATION' &&
+    (alluStatus === AlluStatus.PENDING ||
+      alluStatus === AlluStatus.HANDLING ||
+      alluStatus === AlluStatus.INFORMATION_RECEIVED ||
+      alluStatus === AlluStatus.RETURNED_TO_PREPARATION ||
+      alluStatus === AlluStatus.DECISIONMAKING ||
+      alluStatus === AlluStatus.DECISION)
+  );
 }
 
 export async function cancelApplication(applicationId: number | null) {
