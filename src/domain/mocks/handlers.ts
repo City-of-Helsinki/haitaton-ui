@@ -1,5 +1,4 @@
 import { http, HttpResponse, delay } from 'msw';
-import { JohtoselvitysFormValues } from '../johtoselvitys/types';
 import { HankeDataDraft } from '../types/hanke';
 import * as hankkeetDB from './data/hankkeet';
 import * as hakemuksetDB from './data/hakemukset';
@@ -34,28 +33,14 @@ type BackendError = {
 
 export const handlers = [
   // Private hankkeet endpoints miss handling of user at this point
-  http.get<PathParams, undefined, HankeDataDraft | BackendError>(
+  http.get<PathParams, undefined, HankeDataDraft>(
     `${apiUrl}/hankkeet/:hankeTunnus`,
     async ({ params }) => {
       const { hankeTunnus } = params;
       const hanke = await hankkeetDB.read(hankeTunnus as string);
-      if (!hanke) {
-        return HttpResponse.json(
-          {
-            errorMessage: 'Hanke not found',
-            errorCode: 'HAI1001',
-          },
-          { status: 404 },
-        );
-      }
       return HttpResponse.json(hanke);
     },
   ),
-
-  http.get<PathParams, undefined, HankeDataDraft[]>(`${apiUrl}/hankkeet`, async () => {
-    const hankkeet = await hankkeetDB.readAll();
-    return HttpResponse.json(hankkeet);
-  }),
 
   http.post<PathParams, HankeDataDraft, Partial<HankeDataDraft>>(
     `${apiUrl}/hankkeet`,
@@ -73,7 +58,7 @@ export const handlers = [
       const reqBody: HankeDataDraft = await request.json();
       try {
         const hanke = await hankkeetDB.update(hankeTunnus as string, reqBody);
-        return HttpResponse.json(hanke);
+        return HttpResponse.json(hanke, { status: 200 });
       } catch (error) {
         return HttpResponse.json(
           {
@@ -86,23 +71,12 @@ export const handlers = [
     },
   ),
 
-  http.delete<PathParams, undefined, HankeDataDraft | BackendError>(
+  http.delete<PathParams, undefined, HankeDataDraft>(
     `${apiUrl}/hankkeet/:hankeTunnus`,
     async ({ params }) => {
       const { hankeTunnus } = params;
-      try {
-        const hanke = await hankkeetDB.remove(hankeTunnus as string);
-        return HttpResponse.json(hanke);
-      } catch (error) {
-        const { status, message } = error as ApiError;
-        return HttpResponse.json(
-          {
-            errorMessage: message,
-            errorCode: 'HAI1001',
-          },
-          { status: status },
-        );
-      }
+      const hanke = await hankkeetDB.remove(hankeTunnus as string);
+      return HttpResponse.json(hanke);
     },
   ),
 
@@ -120,17 +94,9 @@ export const handlers = [
     return HttpResponse.json(hankkeet);
   }),
 
-  http.get<PathParams, undefined, Application[]>(`${apiUrl}/hakemukset`, async () => {
-    const hakemukset = await hakemuksetDB.readAll();
-    return HttpResponse.json(hakemukset);
-  }),
-
   http.get(`${apiUrl}/hakemukset/:id`, async ({ params }) => {
     const { id } = params;
     const hakemus = await hakemuksetDB.read(Number(id as string));
-    if (!hakemus) {
-      return HttpResponse.json({ errorMessage: 'Application not found' }, { status: 404 });
-    }
     return HttpResponse.json(hakemus);
   }),
 
@@ -143,25 +109,6 @@ export const handlers = [
     const hakemus = await hakemuksetDB.create(reqBody);
     return HttpResponse.json(hakemus);
   }),
-
-  http.post<PathParams, JohtoselvitysFormValues, Application>(
-    `${apiUrl}/hakemukset/johtoselvitys`,
-    async ({ request }) => {
-      const reqBody: JohtoselvitysFormValues = await request.json();
-      const hanke = await hankkeetDB.create({
-        nimi: reqBody.applicationData.name,
-        alkuPvm: '',
-        loppuPvm: '',
-        vaihe: 'SUUNNITTELU',
-        kuvaus: '',
-      });
-      const hakemus = await hakemuksetDB.createJohtoselvitys({
-        ...reqBody,
-        hankeTunnus: hanke.hankeTunnus!,
-      });
-      return HttpResponse.json(hakemus);
-    },
-  ),
 
   http.post<PathParams, NewJohtoselvitysData, Application>(
     `${apiUrl}/johtoselvityshakemus`,
@@ -195,34 +142,19 @@ export const handlers = [
     },
   ),
 
-  http.put<PathParams, JohtoselvitysUpdateData, Application | BackendError>(
+  http.put<PathParams, JohtoselvitysUpdateData, Application>(
     `${apiUrl}/hakemukset/:id`,
     async ({ params, request }) => {
       const { id } = params;
       const reqBody: JohtoselvitysUpdateData = await request.json();
-      try {
-        const hakemus = await hakemuksetDB.update(Number(id as string), reqBody);
-        return HttpResponse.json(hakemus);
-      } catch (error) {
-        return HttpResponse.json(
-          { errorMessage: 'Hakemus not found', errorCode: 'HAI1001' },
-          { status: 404 },
-        );
-      }
+      const hakemus = await hakemuksetDB.update(Number(id as string), reqBody);
+      return HttpResponse.json(hakemus);
     },
   ),
 
   http.post(`${apiUrl}/hakemukset/:id/laheta`, async ({ params }) => {
     const { id } = params;
     const hakemus = await hakemuksetDB.sendHakemus(Number(id));
-
-    if (!hakemus) {
-      return HttpResponse.json(
-        { errorMessage: 'Hakemus not found', errorCode: 'HAI1001' },
-        { status: 404 },
-      );
-    }
-
     return HttpResponse.json(hakemus);
   }),
 
@@ -242,13 +174,8 @@ export const handlers = [
 
   http.delete(`${apiUrl}/hakemukset/:id`, async ({ params }) => {
     const { id } = params;
-    try {
-      await hakemuksetDB.remove(Number(id));
-      return HttpResponse.json(null);
-    } catch (error) {
-      const { status, message } = error as ApiError;
-      return HttpResponse.json({ errorMessage: message, errorCode: 'HAI1001' }, { status: status });
-    }
+    await hakemuksetDB.remove(Number(id));
+    return HttpResponse.json(null);
   }),
 
   http.get(`${apiUrl}/hankkeet/:hankeTunnus/kayttajat`, async ({ params }) => {
@@ -296,34 +223,15 @@ export const handlers = [
     async ({ params, request }) => {
       const { hankeTunnus, userId } = params;
       const reqBody: Yhteyshenkilo | YhteyshenkiloWithoutName = await request.json();
-      try {
-        const updatedUser = await usersDB.update(hankeTunnus as string, userId as string, reqBody);
-        return HttpResponse.json(updatedUser);
-      } catch (error) {
-        const { status, message } = error as ApiError;
-        return HttpResponse.json(
-          { errorMessage: message, errorCode: 'HAI1001' },
-          { status: status },
-        );
-      }
+      const updatedUser = await usersDB.update(hankeTunnus as string, userId as string, reqBody);
+      return HttpResponse.json(updatedUser);
     },
   ),
 
   http.get<PathParams, undefined, SignedInUser>(
     `${apiUrl}/hankkeet/:hankeTunnus/whoami`,
-    async ({ params }) => {
-      const { hankeTunnus } = params;
-
-      if (hankeTunnus === 'SMTGEN2_1') {
-        return HttpResponse.json({
-          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          kayttooikeustaso: 'KATSELUOIKEUS',
-          kayttooikeudet: ['VIEW'],
-        });
-      }
-
+    async () => {
       const currentUser = await usersDB.readCurrent();
-
       return HttpResponse.json({
         hankeKayttajaId: currentUser?.id ?? '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         kayttooikeustaso: 'KAIKKI_OIKEUDET',
@@ -446,9 +354,5 @@ export const handlers = [
       lastName: 'Testinen',
       givenName: 'Testi',
     });
-  }),
-
-  http.get('/api/banners', async () => {
-    return HttpResponse.json({});
   }),
 ];
