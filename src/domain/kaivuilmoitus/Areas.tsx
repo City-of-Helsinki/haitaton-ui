@@ -37,6 +37,7 @@ import { getTotalSurfaceArea } from '../map/utils';
 import TyoalueTable from './components/TyoalueTable';
 import AreaSelectDialog from './components/AreaSelectDialog';
 import booleanContains from '@turf/boolean-contains';
+import { getAreaDefaultName } from '../application/utils';
 
 function getEmptyArea(
   hankeData: HankeData,
@@ -85,9 +86,16 @@ export default function Areas({ hankeData }: Readonly<Props>) {
 
   const [drawSource] = useState<VectorSource>(() => {
     const features = applicationAreas.flatMap((area) =>
-      area.tyoalueet.flatMap((tyoalue) => {
+      area.tyoalueet.flatMap((tyoalue, index) => {
         if (tyoalue.openlayersFeature) {
-          tyoalue.openlayersFeature.set('relatedHankeAreaName', area.name);
+          const areaName = getAreaDefaultName(t, index, area.tyoalueet.length);
+          tyoalue.openlayersFeature?.setProperties({
+            areaName,
+            hankeName: hankeData.nimi,
+            relatedHankeAreaName: area.name,
+            startDate: getValues('applicationData.startTime'),
+            endDate: getValues('applicationData.endTime'),
+          });
           return tyoalue.openlayersFeature;
         }
         return [];
@@ -109,7 +117,18 @@ export default function Areas({ hankeData }: Readonly<Props>) {
 
   function addTyoAlueToHankeArea(hankeArea: HankeAlue, feature: Feature<Geometry>) {
     const existingArea = applicationAreas.find((alue) => alue.hankealueId === hankeArea.id);
-    feature.set('relatedHankeAreaName', hankeArea.nimi);
+    const areaName = getAreaDefaultName(
+      t,
+      existingArea?.tyoalueet.length || 0,
+      existingArea?.tyoalueet.length || 0,
+    );
+    feature.setProperties({
+      areaName,
+      hankeName: hankeData.nimi,
+      startDate: getValues('applicationData.startTime'),
+      endDate: getValues('applicationData.endTime'),
+      relatedHankeAreaName: hankeArea.nimi,
+    });
     if (!existingArea) {
       append(getEmptyArea(hankeData, hankeArea, feature));
     } else {
@@ -285,7 +304,6 @@ export default function Areas({ hankeData }: Readonly<Props>) {
                   alueIndex={index}
                   drawSource={drawSource}
                   hankeAlueName={alue.name}
-                  hankeName={hankeData.nimi}
                   onRemoveLastArea={() => remove(index)}
                 />
 
