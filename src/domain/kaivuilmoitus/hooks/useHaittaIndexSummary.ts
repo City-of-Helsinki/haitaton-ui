@@ -7,7 +7,7 @@ import {
 } from '../../types/hanke';
 import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../../common/haittaIndexes/types';
 
-function calculateLiikennehaittaindeksienYhteenveto(
+export function calculateLiikennehaittaindeksienYhteenveto(
   haittaindeksit: HaittaIndexData[],
 ): HaittaIndexData {
   return haittaindeksit.reduce(
@@ -18,7 +18,10 @@ function calculateLiikennehaittaindeksienYhteenveto(
             acc.liikennehaittaindeksi.indeksi,
             haittaindeksi.liikennehaittaindeksi.indeksi,
           ),
-          tyyppi: HAITTA_INDEX_TYPE.PYORALIIKENNEINDEKSI,
+          tyyppi:
+            acc.liikennehaittaindeksi.indeksi > haittaindeksi.liikennehaittaindeksi.indeksi
+              ? acc.liikennehaittaindeksi.tyyppi
+              : haittaindeksi.liikennehaittaindeksi.tyyppi,
         },
         pyoraliikenneindeksi: Math.max(
           acc.pyoraliikenneindeksi,
