@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { Fieldset, Notification, Tab, TabList, TabPanel, Tabs, Tooltip } from 'hds-react';
@@ -33,11 +33,14 @@ import Dropdown from '../../common/components/dropdown/Dropdown';
 import DropdownMultiselect from '../../common/components/dropdown/DropdownMultiselect';
 import TextArea from '../../common/components/textArea/TextArea';
 import DrawProvider from '../../common/components/map/modules/draw/DrawProvider';
-import { getTotalSurfaceArea } from '../map/utils';
+import { formatFeaturesToHankeGeoJSON, getTotalSurfaceArea } from '../map/utils';
 import TyoalueTable from './components/TyoalueTable';
 import AreaSelectDialog from './components/AreaSelectDialog';
 import booleanContains from '@turf/boolean-contains';
 import { getAreaDefaultName } from '../application/utils';
+import HaittaIndexes from '../common/haittaIndexes/HaittaIndexes';
+import { useHaittaIndexSummary } from '../hanke/hooks/useHaittaIndexes';
+import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../common/haittaIndexes/types';
 
 function getEmptyArea(
   hankeData: HankeData,
@@ -115,6 +118,50 @@ export default function Areas({ hankeData }: Readonly<Props>) {
   const maxDate = hankeData.loppuPvm ? new Date(hankeData.loppuPvm) : undefined;
   const workTimesSet = startTime && endTime;
 
+  const haittaIndexSummaryMutation = useHaittaIndexSummary();
+  const [liikennehaittaindeksienYhteenveto, setLiikennehaittaindeksienYhteenveto] =
+    useState<HaittaIndexData>(() => {
+      return {
+        liikennehaittaindeksi: {
+          indeksi: 0,
+          tyyppi: HAITTA_INDEX_TYPE.PYORALIIKENNEINDEKSI,
+        },
+        pyoraliikenneindeksi: 0,
+        autoliikenne: {
+          indeksi: 0,
+          haitanKesto: 0,
+          katuluokka: 0,
+          liikennemaara: 0,
+          kaistahaitta: 0,
+          kaistapituushaitta: 0,
+        },
+        linjaautoliikenneindeksi: 0,
+        raitioliikenneindeksi: 0,
+      };
+    });
+  const calculateHaittaIndexes = useCallback(
+    (kaivuilmoitusAlue: KaivuilmoitusAlue) => {
+      const requests = kaivuilmoitusAlue.tyoalueet.map((tyoalue) => {
+        return {
+          geometriat: {
+            featureCollection: formatFeaturesToHankeGeoJSON([tyoalue.openlayersFeature!]),
+          },
+          haittaAlkuPvm: startTime ?? new Date(),
+          haittaLoppuPvm: endTime ?? new Date(),
+          kaistaHaitta: kaivuilmoitusAlue.kaistahaitta ?? 'EI_VAIKUTA',
+          kaistaPituusHaitta:
+            kaivuilmoitusAlue.kaistahaittojenPituus ?? 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
+        };
+      });
+      haittaIndexSummaryMutation.mutate(requests, {
+        onSuccess(data) {
+          setLiikennehaittaindeksienYhteenveto(data);
+        },
+      });
+    },
+    [startTime, endTime, haittaIndexSummaryMutation],
+  );
+
   function addTyoAlueToHankeArea(hankeArea: HankeAlue, feature: Feature<Geometry>) {
     const existingArea = applicationAreas.find((alue) => alue.hankealueId === hankeArea.id);
     const areaName = getAreaDefaultName(
@@ -130,7 +177,9 @@ export default function Areas({ hankeData }: Readonly<Props>) {
       relatedHankeAreaName: hankeArea.nimi,
     });
     if (!existingArea) {
-      append(getEmptyArea(hankeData, hankeArea, feature));
+      const emptyArea = getEmptyArea(hankeData, hankeArea, feature);
+      append(emptyArea);
+      calculateHaittaIndexes(emptyArea);
     } else {
       const existingAreaIndex = applicationAreas.indexOf(existingArea);
       setValue(
@@ -140,6 +189,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
         ),
       );
       setSelectedTabIndex(existingAreaIndex);
+      calculateHaittaIndexes(existingArea);
     }
   }
 
@@ -378,6 +428,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
                         label: t(`hanke:kaistaHaitta:${value}`),
                       }))}
                       label={t('hankeForm:labels:kaistaHaitta')}
+                      onValueChange={() => calculateHaittaIndexes(alue)}
                       required
                     />
                     <Dropdown
@@ -388,6 +439,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
                         label: t(`hanke:kaistaPituusHaitta:${value}`),
                       }))}
                       label={t(`hankeForm:labels:kaistaPituusHaitta`)}
+                      onValueChange={() => calculateHaittaIndexes(alue)}
                       required
                     />
                   </Grid>
@@ -397,6 +449,13 @@ export default function Areas({ hankeData }: Readonly<Props>) {
                     label={t('hakemus:labels:areaAdditionalInfo')}
                   />
                 </Fieldset>
+
+                <Box mb="var(--spacing-m)">
+                  <HaittaIndexes
+                    heading={`${t('hanke:alue:liikennehaittaIndeksit')} (0-5)`}
+                    haittaIndexData={liikennehaittaindeksienYhteenveto}
+                  />
+                </Box>
               </TabPanel>
             );
           })}
