@@ -450,7 +450,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
                   />
                 </Fieldset>
 
-                <Box mb="var(--spacing-m)">
+                <Box mb="var(--spacing-m)" mt="var(--spacing-m)">
                   <HaittaIndexes
                     heading={`${t('hanke:alue:liikennehaittaIndeksit')} (0-5)`}
                     haittaIndexData={liikennehaittaindeksienYhteenveto}
