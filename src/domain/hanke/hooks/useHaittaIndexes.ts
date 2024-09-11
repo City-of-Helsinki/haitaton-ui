@@ -6,9 +6,8 @@ import {
   HankeGeometria,
 } from '../../types/hanke';
 import { HaittaIndexData } from '../../common/haittaIndexes/types';
-import { calculateLiikennehaittaindeksienYhteenveto } from '../../map/utils';
 
-type TormaystarkasteluRequest = {
+type HankeAlueData = {
   geometriat: HankeGeometria;
   haittaAlkuPvm: Date;
   haittaLoppuPvm: Date;
@@ -17,30 +16,13 @@ type TormaystarkasteluRequest = {
 };
 
 /**
- * Request haittaindeksit for an area
+ * Request haittaindeksit for hanke area
  */
-async function calculateHaittaindeksit(data: TormaystarkasteluRequest) {
+async function calculateHaittaIndexes(data: HankeAlueData) {
   const { data: response } = await api.post<HaittaIndexData>('/haittaindeksit', data);
   return response;
 }
 
-/**
- * Request haittaindeksit for multiple areas and calculate summary for them
- */
-async function calculateHaittaindeksityhteenveto(data: TormaystarkasteluRequest[]) {
-  const haittaindeksit = await Promise.all(
-    data.map(async (d) => {
-      const { data: response } = await api.post<HaittaIndexData>('/haittaindeksit', d);
-      return response;
-    }),
-  );
-  return calculateLiikennehaittaindeksienYhteenveto(haittaindeksit);
-}
-
 export default function useHaittaIndexes() {
-  return useMutation(calculateHaittaindeksit);
-}
-
-export function useHaittaIndexSummary() {
-  return useMutation(calculateHaittaindeksityhteenveto);
+  return useMutation(calculateHaittaIndexes);
 }

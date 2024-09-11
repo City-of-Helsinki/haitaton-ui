@@ -39,7 +39,7 @@ import AreaSelectDialog from './components/AreaSelectDialog';
 import booleanContains from '@turf/boolean-contains';
 import { getAreaDefaultName } from '../application/utils';
 import HaittaIndexes from '../common/haittaIndexes/HaittaIndexes';
-import { useHaittaIndexSummary } from '../hanke/hooks/useHaittaIndexes';
+import useHaittaIndexSummary from './hooks/useHaittaIndexSummary';
 import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../common/haittaIndexes/types';
 
 function getEmptyArea(

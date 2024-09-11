@@ -7,7 +7,6 @@ import { HankeGeoJSON } from '../../common/types/hanke';
 import { GeometryData, HankeFilters } from './types';
 import { HankeData, HankeDataDraft, HankeGeometria } from '../types/hanke';
 import { getSurfaceArea } from '../../common/components/map/utils';
-import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../common/haittaIndexes/types';
 
 export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJSON => {
   const format = new GeoJSON();
@@ -178,71 +177,4 @@ export function getFeatureFromHankeGeometry(geometry: HankeGeometria) {
   );
 
   return feature;
-}
-
-export function calculateLiikennehaittaindeksienYhteenveto(
-  haittaindeksit: HaittaIndexData[],
-): HaittaIndexData {
-  return haittaindeksit.reduce(
-    (acc, haittaindeksi) => {
-      return {
-        liikennehaittaindeksi: {
-          indeksi: Math.max(
-            acc.liikennehaittaindeksi.indeksi,
-            haittaindeksi.liikennehaittaindeksi.indeksi,
-          ),
-          tyyppi: HAITTA_INDEX_TYPE.PYORALIIKENNEINDEKSI,
-        },
-        pyoraliikenneindeksi: Math.max(
-          acc.pyoraliikenneindeksi,
-          haittaindeksi.pyoraliikenneindeksi,
-        ),
-        autoliikenne: {
-          indeksi: Math.max(acc.autoliikenne.indeksi, haittaindeksi.autoliikenne.indeksi),
-          haitanKesto: Math.max(
-            acc.autoliikenne.haitanKesto,
-            haittaindeksi.autoliikenne.haitanKesto,
-          ),
-          katuluokka: Math.max(acc.autoliikenne.katuluokka, haittaindeksi.autoliikenne.katuluokka),
-          liikennemaara: Math.max(
-            acc.autoliikenne.liikennemaara,
-            haittaindeksi.autoliikenne.liikennemaara,
-          ),
-          kaistahaitta: Math.max(
-            acc.autoliikenne.kaistahaitta,
-            haittaindeksi.autoliikenne.kaistahaitta,
-          ),
-          kaistapituushaitta: Math.max(
-            acc.autoliikenne.kaistapituushaitta,
-            haittaindeksi.autoliikenne.kaistapituushaitta,
-          ),
-        },
-        linjaautoliikenneindeksi: Math.max(
-          acc.linjaautoliikenneindeksi,
-          haittaindeksi.linjaautoliikenneindeksi,
-        ),
-        raitioliikenneindeksi: Math.max(
-          acc.raitioliikenneindeksi,
-          haittaindeksi.raitioliikenneindeksi,
-        ),
-      };
-    },
-    {
-      liikennehaittaindeksi: {
-        indeksi: 0,
-        tyyppi: HAITTA_INDEX_TYPE.PYORALIIKENNEINDEKSI,
-      },
-      pyoraliikenneindeksi: 0,
-      autoliikenne: {
-        indeksi: 0,
-        haitanKesto: 0,
-        katuluokka: 0,
-        liikennemaara: 0,
-        kaistahaitta: 0,
-        kaistapituushaitta: 0,
-      },
-      linjaautoliikenneindeksi: 0,
-      raitioliikenneindeksi: 0,
-    },
-  );
 }
