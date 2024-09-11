@@ -41,6 +41,7 @@ import { getAreaDefaultName } from '../application/utils';
 import HaittaIndexes from '../common/haittaIndexes/HaittaIndexes';
 import useHaittaIndexSummary from './hooks/useHaittaIndexSummary';
 import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../common/haittaIndexes/types';
+import booleanIntersects from "@turf/boolean-intersects";
 
 function getEmptyArea(
   hankeData: HankeData,
@@ -214,6 +215,19 @@ export default function Areas({ hankeData }: Readonly<Props>) {
     }
   }
 
+  function handleChangeArea(feature: Feature<Geometry>) {
+    const changedFeature = polygon((feature.getGeometry() as Polygon).getCoordinates());
+    const changedApplicationArea = applicationAreas.find((alue) => {
+      const changedTyoalue = alue.tyoalueet.find((tyoalue) =>
+        booleanIntersects(tyoalue.geometry, changedFeature),
+      );
+      return !!changedTyoalue;
+    });
+    if (changedApplicationArea) {
+      calculateHaittaIndexes(changedApplicationArea);
+    }
+  }
+
   function handleAreaSelectDialogClose() {
     if (multipleHankeAreaSpanningFeature) {
       drawSource.removeFeature(multipleHankeAreaSpanningFeature);
@@ -313,6 +327,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
           drawSource={drawSource}
           showDrawControls={Boolean(workTimesSet)}
           onAddArea={handleAddArea}
+          onChangeArea={handleChangeArea}
           restrictDrawingToHankeAreas
         >
           <HankeLayer
