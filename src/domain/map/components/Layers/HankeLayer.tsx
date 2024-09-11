@@ -32,6 +32,7 @@ function HankeLayer({
 }: Readonly<Props>) {
   const { hankkeet: hankkeetFromContext } = useContext(HankkeetContext);
   const hankeSource = useRef(new VectorSource());
+  hankeSource.current.set('sourceName', 'hankeSource');
   const hankkeet = hankeData || hankkeetFromContext;
 
   const hankkeetFilteredByDates = useMemo(

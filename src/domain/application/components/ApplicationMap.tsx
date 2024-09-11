@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { Notification } from 'hds-react';
 import { debounce } from 'lodash';
-import { Feature } from 'ol';
-import { Geometry } from 'ol/geom';
+import { Feature, Map as OlMap, MapBrowserEvent } from 'ol';
+import { Geometry, Point, Polygon } from 'ol/geom';
 import { FeatureLike } from 'ol/Feature';
 import { Coordinate } from 'ol/coordinate';
 import { Box } from '@chakra-ui/react';
+import { Layer } from 'ol/layer';
+import { ModifyEvent } from 'ol/interaction/Modify';
+import { createEditingStyle } from 'ol/style/Style';
+import { polygon as turfPolygon, point as turfPoint } from '@turf/helpers';
 import Map from '../../../common/components/map/Map';
 import Kantakartta from '../../map/components/Layers/Kantakartta';
 import Ortokartta from '../../map/components/Layers/Ortokartta';
@@ -25,6 +29,7 @@ import useForceUpdate from '../../../common/hooks/useForceUpdate';
 import FeatureInfoOverlay from '../../map/components/FeatureInfoOverlay/FeatureInfoOverlay';
 import FitSource from '../../map/components/interations/FitSource';
 import { formatToFinnishDate } from '../../../common/utils/date';
+import isFeatureWithinFeatures from '../../map/utils/isFeatureWithinFeatures';
 
 type Props = {
   drawSource: VectorSource;
@@ -33,12 +38,14 @@ type Props = {
   onAddArea?: (feature: Feature<Geometry>) => void;
   onChangeArea?: (feature: Feature<Geometry>) => void;
   children?: React.ReactNode;
+  restrictDrawingToHankeAreas?: boolean;
 };
 
 export default function ApplicationMap({
   drawSource,
   showDrawControls,
   mapCenter,
+  restrictDrawingToHankeAreas = false,
   onAddArea,
   onChangeArea,
   children,
@@ -91,6 +98,88 @@ export default function ApplicationMap({
     setValue('selfIntersectingPolygon', Boolean(feature), { shouldValidate: true });
   }
 
+  const hankeLayerFilter = useCallback((layer: Layer) => {
+    return layer.getSource()?.get('sourceName') === 'hankeSource';
+  }, []);
+
+  const drawCondition = useCallback(
+    (event: MapBrowserEvent<UIEvent>) => {
+      const hankeFeaturesAtPixel = event.map.getFeaturesAtPixel(event.pixel, {
+        layerFilter: hankeLayerFilter,
+      });
+      return isFeatureWithinFeatures(turfPoint(event.coordinate), hankeFeaturesAtPixel);
+    },
+    [hankeLayerFilter],
+  );
+
+  const drawFinishCondition = useCallback(
+    (event: MapBrowserEvent<UIEvent>, feature: Feature) => {
+      const hankeFeaturesAtPixel = event.map.getFeaturesAtPixel(event.pixel, {
+        layerFilter: hankeLayerFilter,
+      });
+      return isFeatureWithinFeatures(
+        turfPolygon((feature.getGeometry() as Polygon).getCoordinates()),
+        hankeFeaturesAtPixel,
+      );
+    },
+    [hankeLayerFilter],
+  );
+
+  const drawStyleFunction = useCallback(
+    (map: OlMap, feature: FeatureLike) => {
+      const point =
+        feature.getGeometry()?.getType() === 'Point' ? (feature.getGeometry() as Point) : null;
+      const pointPixel = point ? map.getPixelFromCoordinate(point.getCoordinates()) : null;
+      const hankeFeaturesAtPixel = pointPixel
+        ? map.getFeaturesAtPixel(pointPixel, {
+            layerFilter: hankeLayerFilter,
+          })
+        : null;
+      if (
+        hankeFeaturesAtPixel &&
+        point &&
+        !isFeatureWithinFeatures(turfPoint(point.getCoordinates()), hankeFeaturesAtPixel)
+      ) {
+        // If cursor is not on top of hanke feature, return undefined so that
+        // no point geometry is dispayed for current cursor position
+        return undefined;
+      }
+      // Return default style
+      const editingStyles = createEditingStyle();
+      const geometry = feature.getGeometry();
+      return geometry ? editingStyles[geometry.getType()] : [];
+    },
+    [hankeLayerFilter],
+  );
+
+  const handleModifyEnd = useCallback(
+    (event: ModifyEvent, originalFeature: Feature | null, modifiedFeature: Feature) => {
+      const hankeFeaturesAtPixel = event.mapBrowserEvent.map
+        .getFeaturesAtPixel(event.mapBrowserEvent.pixel, {
+          layerFilter: hankeLayerFilter,
+        })
+        .filter((hankeAreaFeature) => {
+          const relatedHankeAreaName = modifiedFeature.get('relatedHankeAreaName');
+          if (relatedHankeAreaName) {
+            return hankeAreaFeature.get('areaName') === relatedHankeAreaName;
+          }
+          return true;
+        });
+
+      if (
+        !isFeatureWithinFeatures(
+          turfPolygon((modifiedFeature.getGeometry() as Polygon).getCoordinates()),
+          hankeFeaturesAtPixel,
+        ) &&
+        originalFeature
+      ) {
+        // If mofified feature is going over hanke feature, revert back to original geometry
+        modifiedFeature.setGeometry(originalFeature.getGeometry());
+      }
+    },
+    [hankeLayerFilter],
+  );
+
   return (
     <div>
       <div className={styles.mapContainer}>
@@ -130,7 +219,13 @@ export default function ApplicationMap({
 
           <Controls>
             {showDrawControls && (
-              <DrawModule onSelfIntersectingPolygon={handleSelfIntersectingPolygon} />
+              <DrawModule
+                onSelfIntersectingPolygon={handleSelfIntersectingPolygon}
+                drawCondition={restrictDrawingToHankeAreas ? drawCondition : undefined}
+                drawFinishCondition={restrictDrawingToHankeAreas ? drawFinishCondition : undefined}
+                drawStyleFunction={restrictDrawingToHankeAreas ? drawStyleFunction : undefined}
+                handleModifyEnd={restrictDrawingToHankeAreas ? handleModifyEnd : undefined}
+              />
             )}
             <LayerControl
               tileLayers={Object.values(mapTileLayers)}

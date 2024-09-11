@@ -6,7 +6,6 @@ import { Box, Flex, Grid } from '@chakra-ui/react';
 import { Feature } from 'ol';
 import { Geometry, Polygon } from 'ol/geom';
 import VectorSource from 'ol/source/Vector';
-import booleanIntersects from '@turf/boolean-intersects';
 import { polygon } from '@turf/helpers';
 import { $enum } from 'ts-enum-util';
 import Text from '../../common/components/text/Text';
@@ -37,6 +36,7 @@ import DrawProvider from '../../common/components/map/modules/draw/DrawProvider'
 import { getTotalSurfaceArea } from '../map/utils';
 import TyoalueTable from './components/TyoalueTable';
 import AreaSelectDialog from './components/AreaSelectDialog';
+import booleanContains from '@turf/boolean-contains';
 
 function getEmptyArea(
   hankeData: HankeData,
@@ -66,6 +66,8 @@ export default function Areas({ hankeData }: Readonly<Props>) {
   const locale = useLocale();
   const [multipleHankeAreaSpanningFeature, setMultipleHankeAreaSpanningFeature] =
     useState<Feature<Geometry> | null>(null);
+  const [hankeAreasContainingNewArea, setHankeAreasContainingNewArea] = useState<HankeAlue[]>([]);
+
   const { getValues, setValue, watch, trigger } = useFormContext<KaivuilmoitusFormValues>();
   const {
     fields: applicationAreas,
@@ -82,9 +84,15 @@ export default function Areas({ hankeData }: Readonly<Props>) {
   );
 
   const [drawSource] = useState<VectorSource>(() => {
-    const features = applicationAreas
-      .flatMap((area) => area.tyoalueet)
-      .flatMap((area) => (area.openlayersFeature ? area.openlayersFeature : []));
+    const features = applicationAreas.flatMap((area) =>
+      area.tyoalueet.flatMap((tyoalue) => {
+        if (tyoalue.openlayersFeature) {
+          tyoalue.openlayersFeature.set('relatedHankeAreaName', area.name);
+          return tyoalue.openlayersFeature;
+        }
+        return [];
+      }),
+    );
     return new VectorSource({ features });
   });
 
@@ -101,6 +109,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
 
   function addTyoAlueToHankeArea(hankeArea: HankeAlue, feature: Feature<Geometry>) {
     const existingArea = applicationAreas.find((alue) => alue.hankealueId === hankeArea.id);
+    feature.set('relatedHankeAreaName', hankeArea.nimi);
     if (!existingArea) {
       append(getEmptyArea(hankeData, hankeArea, feature));
     } else {
@@ -117,18 +126,21 @@ export default function Areas({ hankeData }: Readonly<Props>) {
 
   function handleAddArea(feature: Feature<Geometry>) {
     const newAreaPolygon = polygon((feature.getGeometry() as Polygon).getCoordinates());
-    // Check if the new tyoalue intersects with any of the existing hanke areas
-    const hankeAlueetContainingNewArea = hankeData.alueet.filter((alue) =>
-      alue.geometriat
-        ? booleanIntersects(alue.geometriat.featureCollection.features[0], newAreaPolygon)
-        : false,
-    );
+    // Check if the new tyoalue is contained in any of the existing hanke areas
+    const hankeAlueetContainingNewArea = hankeData.alueet.filter((alue) => {
+      const hankeAlueFeature = alue.geometriat?.featureCollection.features[0];
+      return hankeAlueFeature && booleanContains(hankeAlueFeature, newAreaPolygon);
+    });
+    setHankeAreasContainingNewArea(hankeAlueetContainingNewArea);
 
     if (hankeAlueetContainingNewArea.length === 0) {
+      // If the new tyoalue does not intersect with any hanke area, remove it
       drawSource.removeFeature(feature);
     } else if (hankeAlueetContainingNewArea.length === 1) {
+      // If the new tyoalue is contained in exactly one hanke area, add it to that
       addTyoAlueToHankeArea(hankeAlueetContainingNewArea[0], feature);
     } else {
+      // New työalue is contained in multiple hanke areas, open dialog for user to select one
       setMultipleHankeAreaSpanningFeature(feature);
     }
   }
@@ -232,6 +244,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
           drawSource={drawSource}
           showDrawControls={Boolean(workTimesSet)}
           onAddArea={handleAddArea}
+          restrictDrawingToHankeAreas
         >
           <HankeLayer
             hankeData={hankeData && [hankeData]}
@@ -373,7 +386,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
 
         <AreaSelectDialog
           isOpen={Boolean(multipleHankeAreaSpanningFeature)}
-          hankeAreas={hankeData.alueet}
+          hankeAreas={hankeAreasContainingNewArea}
           onClose={handleAreaSelectDialogClose}
           onConfirm={handleAreaSelectConfirm}
         />
