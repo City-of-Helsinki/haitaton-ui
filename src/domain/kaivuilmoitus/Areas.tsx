@@ -341,7 +341,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
           <TabList>
             {applicationAreas.map((alue, index) => {
               return (
-                <Tab key={alue.id}>
+                <Tab key={alue.id} onClick={() => calculateHaittaIndexes(alue)}>
                   <div ref={tabRefs[index]}>{alue.name}</div>
                 </Tab>
               );
