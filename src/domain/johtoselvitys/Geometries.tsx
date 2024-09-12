@@ -213,6 +213,7 @@ export function Geometries({ hankeData }: Readonly<Props>) {
           showDrawControls={Boolean(workTimesSet)}
           onAddArea={handleAddArea}
           mapCenter={addressCoordinate}
+          restrictDrawingToHankeAreas={!hankeData?.generated}
         >
           {/* Don't show hanke areas when hanke is generated */}
           {!hankeData?.generated && (

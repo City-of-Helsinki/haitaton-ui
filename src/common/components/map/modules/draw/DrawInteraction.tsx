@@ -1,26 +1,42 @@
 import React, { useEffect, useContext, useRef, useState, useCallback } from 'react';
-import Feature from 'ol/Feature';
+import Feature, { FeatureLike } from 'ol/Feature';
 import Select from 'ol/interaction/Select';
-import { createRegularPolygon } from 'ol/interaction/Draw';
+import { createBox } from 'ol/interaction/Draw';
 import Collection from 'ol/Collection';
 import { Draw, Snap, Modify } from 'ol/interaction';
+import { Condition } from 'ol/events/condition';
 import Geometry from 'ol/geom/Geometry';
 import Polygon from 'ol/geom/Polygon';
+import Style from 'ol/style/Style';
+import { ModifyEvent } from 'ol/interaction/Modify';
 import { DRAWTOOLTYPE } from './types';
 import MapContext from '../../MapContext';
 import useDrawContext from './useDrawContext';
 import { getSurfaceArea, isPolygonSelfIntersecting } from '../../utils';
 import { styleFunction } from '../../../../../domain/map/utils/geometryStyle';
+import { Map, MapBrowserEvent } from 'ol';
 
 type Props = {
   features?: Collection<Feature>;
   onSelfIntersectingPolygon?: (feature: Feature<Geometry> | null) => void;
+  drawCondition?: Condition;
+  drawFinishCondition?: (event: MapBrowserEvent<UIEvent>, feature: Feature) => boolean;
+  drawStyleFunction?: (map: Map, feature: FeatureLike) => Style | Style[];
+  handleModifyEnd?: (
+    event: ModifyEvent,
+    originalFeature: Feature | null,
+    modifiedFeature: Feature,
+  ) => void;
 };
 
 type Interaction = Draw | Snap | Modify;
 
 const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
   onSelfIntersectingPolygon,
+  drawCondition,
+  drawFinishCondition,
+  drawStyleFunction,
+  handleModifyEnd,
 }) => {
   const selection = useRef<null | Select>(null);
   const { map } = useContext(MapContext);
@@ -29,6 +45,7 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
   const modify = useRef<null | Modify>(null);
 
   const drawnFeature = useRef<null | Feature>(null);
+  const originalModifiedFeature = useRef<null | Feature>(null);
 
   const clearSelection = useCallback(() => {
     if (selection.current) selection.current.getFeatures().clear();
@@ -56,7 +73,7 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let geometryType: any = type;
       if (type === DRAWTOOLTYPE.SQUARE) {
-        geometryFunction = createRegularPolygon(4);
+        geometryFunction = createBox();
         geometryType = 'Circle';
       }
 
@@ -64,7 +81,17 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
         source,
         type: geometryType,
         geometryFunction,
-        finishCondition() {
+        condition: drawCondition,
+        style: drawStyleFunction ? (feature) => drawStyleFunction(map, feature) : undefined,
+        finishCondition(event) {
+          if (
+            drawnFeature.current &&
+            drawFinishCondition &&
+            !drawFinishCondition(event, drawnFeature.current)
+          ) {
+            return false;
+          }
+
           const geometry = drawnFeature.current?.getGeometry();
           if (geometry) {
             const surfaceArea = getSurfaceArea(geometry);
@@ -104,7 +131,17 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
 
       setInstances([drawInstance]);
     },
-    [map, source, state.selectedDrawtoolType, actions, clearSelection, onSelfIntersectingPolygon],
+    [
+      map,
+      source,
+      state.selectedDrawtoolType,
+      actions,
+      clearSelection,
+      onSelfIntersectingPolygon,
+      drawCondition,
+      drawFinishCondition,
+      drawStyleFunction,
+    ],
   );
 
   useEffect(() => {
@@ -113,7 +150,13 @@ const DrawInteraction: React.FC<React.PropsWithChildren<Props>> = ({
     modify.current = new Modify({ source });
     map.addInteraction(modify.current);
 
-    modify.current.on('modifyend', () => {
+    modify.current.on('modifystart', (event) => {
+      originalModifiedFeature.current = event.features.getArray()[0].clone();
+    });
+
+    modify.current.on('modifyend', (event) => {
+      handleModifyEnd?.(event, originalModifiedFeature.current, event.features.getArray()[0]);
+
       const selfIntersectingFeature = source
         .getFeatures()
         .find((feature) => isPolygonSelfIntersecting(feature.getGeometry() as Polygon));

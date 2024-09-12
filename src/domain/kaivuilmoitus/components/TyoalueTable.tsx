@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box, Flex } from '@chakra-ui/react';
 import { IconLocation, IconTrash, Table } from 'hds-react';
@@ -18,7 +18,6 @@ type Props = {
   alueIndex: number;
   drawSource: VectorSource;
   hankeAlueName: string;
-  hankeName: string;
   onRemoveLastArea?: () => void;
 };
 
@@ -34,7 +33,6 @@ export default function TyoalueTable({
   alueIndex,
   drawSource,
   hankeAlueName,
-  hankeName,
   onRemoveLastArea,
 }: Readonly<Props>) {
   const { t } = useTranslation();
@@ -42,7 +40,6 @@ export default function TyoalueTable({
     state: { selectedFeature },
     actions: { setSelectedFeature },
   } = useDrawContext();
-  const { getValues } = useFormContext<KaivuilmoitusFormValues>();
   const { fields: tyoalueet, remove } = useFieldArray<
     KaivuilmoitusFormValues,
     `applicationData.areas.${number}.tyoalueet`
@@ -53,12 +50,7 @@ export default function TyoalueTable({
 
   const tableRows: TableData[] = tyoalueet.map((alue, index) => {
     const areaName = getAreaDefaultName(t, index, tyoalueet.length);
-    alue.openlayersFeature?.setProperties({
-      areaName,
-      hankeName,
-      startDate: getValues('applicationData.startTime'),
-      endDate: getValues('applicationData.endTime'),
-    });
+    alue.openlayersFeature?.set('areaName', areaName);
     return {
       id: alue.id,
       nimi: areaName,
