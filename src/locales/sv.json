@@ -317,7 +317,7 @@
       "path": "/allmannaprojekt/karta",
       "headerLabel": "Projekt på allmänna områden",
       "meta": {
-        "title": "Haitaton - Projekt på allmänna områden"
+        "title": "Haitaton - Projekt på allmänna områden [TRANSLATION_PENDING]"
       }
     },
     "PUBLIC_HANKKEET_LIST": {
@@ -471,7 +471,7 @@
       "VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA": "Reducerar med en fil i en körriktning",
       "VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA": "Reducerar med en fil i två körriktningar samtidigt",
       "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_KAHDELLA_AJOSUUNNALLA": "Reducerar med flera filer i två körriktningar samtidigt",
-      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA": "Reducerar samtidigt med flera filer i olika riktningar från korsningen"
+      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA": "Reducerar samtidigt med flera filer i olika riktningar från korsningen[TRANSLATION_PENDING]"
     },
     "kaistaPituusHaitta": {
       "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Påverkar inte",
@@ -644,7 +644,7 @@
       "header": "Områden",
       "subHeader": "Projektområden",
       "area": "Område",
-      "instructions": "Flera geometrier kan ritas för projektet. De geometriska områdena påverkar projektets trafikstörningsindex. Ritverktygen återfinns i kartvyns vänstra nedre kant. Med pennverktyget kan man rita polygoner genom att klicka på punkten där du vill ha ett hörn. Med rektangelverktyget kan du skapa rektangulära områden genom att först klicka på kartan och röra musen i önskad riktning. Ett nytt klick avslutar ritning av kvadraten. En polygon kan modifieras genom att ”greppa” i kanten och dra. Även en rektangulär figur kan modifieras genom att greppa i kanten. an radera en geometrisk figur genom att först välja den med ett klick, så att det bland ritverktygen i den vänstra nedre kanten kommer fram en papperskorg. Med ett klick på papperskorgen raderas figuren.",
+      "instructions": "[TRANSLATION_PENDING]Flera geometrier kan ritas för projektet. De geometriska områdena påverkar projektets trafikstörningsindex. Ritverktygen återfinns i kartvyns vänstra nedre kant. Med pennverktyget kan man rita polygoner genom att klicka på punkten där du vill ha ett hörn. Med rektangelverktyget kan du skapa rektangulära områden genom att först klicka på kartan och röra musen i önskad riktning. Ett nytt klick avslutar ritning av kvadraten. En polygon kan modifieras genom att ”greppa” i kanten och dra. Även en rektangulär figur kan modifieras genom att greppa i kanten. an radera en geometrisk figur genom att först välja den med ett klick, så att det bland ritverktygen i den vänstra nedre kanten kommer fram en papperskorg. Med ett klick på papperskorgen raderas figuren.",
       "instructions3": "Du kan ändra ett redan ritat område genom att hålla fast vid kanten och dra punkten till önskad position.",
       "noAlueet": "Rita området på kartan för att markera bedömningarna av olägenheter.",
       "haitatHeader": "Bedömning av ett områdes olägenheter",
