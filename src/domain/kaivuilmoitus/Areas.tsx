@@ -126,42 +126,50 @@ export default function Areas({ hankeData }: Readonly<Props>) {
   const workTimesSet = startTime && endTime;
 
   const refreshHaittaIndexes = useCallback(
-    (kaivuilmoitusalueIndex: number, tyoalue?: Tyoalue) => {
+    (kaivuilmoitusalueIndex?: number, tyoalue?: Tyoalue) => {
       const applicationData = getValues('applicationData');
       const kaivuilmoitusalueet = applicationData.areas;
-      const kaivuilmoitusalue = kaivuilmoitusalueet[kaivuilmoitusalueIndex];
-      const calculateHaittaIndexesForTyoalue = (
-        ka: KaivuilmoitusAlue,
-        ta: Tyoalue,
-        tyoalueIndex: number,
-      ) => {
-        const request = {
-          geometriat: {
-            featureCollection: formatFeaturesToHankeGeoJSON([ta.openlayersFeature!]),
-          },
-          haittaAlkuPvm: applicationData.startTime ?? new Date(),
-          haittaLoppuPvm: applicationData.endTime ?? new Date(),
-          kaistaHaitta: ka.kaistahaitta ?? 'EI_VAIKUTA',
-          kaistaPituusHaitta: ka.kaistahaittojenPituus ?? 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
-        };
-        calculateHaittaIndexes(request).then((data) => {
-          if (kaivuilmoitusalueIndex !== -1 && tyoalueIndex !== -1) {
-            setValue(
-              `applicationData.areas.${kaivuilmoitusalueIndex}.tyoalueet.${tyoalueIndex}.tormaystarkasteluTulos`,
-              data,
-            );
-          }
-        });
-      };
-
-      if (tyoalue === undefined) {
-        // calculate for all work areas
-        kaivuilmoitusalue.tyoalueet.forEach((ta, index) => {
-          calculateHaittaIndexesForTyoalue(kaivuilmoitusalue, ta, index);
+      if (kaivuilmoitusalueIndex === undefined) {
+        // calculate for all areas
+        kaivuilmoitusalueet.forEach((_, index) => {
+          refreshHaittaIndexes(index);
         });
       } else {
-        const tyoalueIndex = kaivuilmoitusalue.tyoalueet.indexOf(tyoalue);
-        calculateHaittaIndexesForTyoalue(kaivuilmoitusalue, tyoalue, tyoalueIndex);
+        const kaivuilmoitusalue = kaivuilmoitusalueet[kaivuilmoitusalueIndex];
+        const calculateHaittaIndexesForTyoalue = (
+          ka: KaivuilmoitusAlue,
+          ta: Tyoalue,
+          tyoalueIndex: number,
+        ) => {
+          const request = {
+            geometriat: {
+              featureCollection: formatFeaturesToHankeGeoJSON([ta.openlayersFeature!]),
+            },
+            haittaAlkuPvm: applicationData.startTime ?? new Date(),
+            haittaLoppuPvm: applicationData.endTime ?? new Date(),
+            kaistaHaitta: ka.kaistahaitta ?? 'EI_VAIKUTA',
+            kaistaPituusHaitta: ka.kaistahaittojenPituus ?? 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
+          };
+          calculateHaittaIndexes(request).then((data) => {
+            if (kaivuilmoitusalueIndex !== -1 && tyoalueIndex !== -1) {
+              setValue(
+                `applicationData.areas.${kaivuilmoitusalueIndex}.tyoalueet.${tyoalueIndex}.tormaystarkasteluTulos`,
+                data,
+              );
+            }
+          });
+        };
+
+        if (tyoalue === undefined) {
+          // calculate for all work areas
+          kaivuilmoitusalue.tyoalueet.forEach((ta, index) => {
+            calculateHaittaIndexesForTyoalue(kaivuilmoitusalue, ta, index);
+          });
+        } else {
+          // calculate for single work area
+          const tyoalueIndex = kaivuilmoitusalue.tyoalueet.indexOf(tyoalue);
+          calculateHaittaIndexesForTyoalue(kaivuilmoitusalue, tyoalue, tyoalueIndex);
+        }
       }
     },
     [getValues, setValue],
@@ -253,14 +261,18 @@ export default function Areas({ hankeData }: Readonly<Props>) {
     setMultipleHankeAreaSpanningFeature(null);
   }
 
-  // Trigger validation for startTime field
-  function validateStartTime() {
-    trigger('applicationData.startTime');
+  function handleStartTimeChange() {
+    // Trigger validation for startTime field
+    trigger('applicationData.startTime').then(() => {
+      refreshHaittaIndexes();
+    });
   }
 
-  // Trigger validation for endTime field
-  function validateEndTime() {
-    trigger('applicationData.endTime');
+  function handleEndTimeChange() {
+    // Trigger validation for endTime field
+    trigger('applicationData.endTime').then(() => {
+      refreshHaittaIndexes();
+    });
   }
 
   return (
@@ -320,7 +332,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
               maxDate={maxDate}
               initialMonth={minStartDate}
               helperText={t('form:helperTexts:dateInForm')}
-              onValueChange={validateStartTime}
+              onValueChange={handleStartTimeChange}
             />
             <DatePicker
               name="applicationData.endTime"
@@ -331,7 +343,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
               maxDate={maxDate}
               initialMonth={minEndDate}
               helperText={t('form:helperTexts:dateInForm')}
-              onValueChange={validateEndTime}
+              onValueChange={handleEndTimeChange}
             />
           </ResponsiveGrid>
         </Fieldset>
