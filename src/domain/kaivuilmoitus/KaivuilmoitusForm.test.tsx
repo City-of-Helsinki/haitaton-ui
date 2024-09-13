@@ -307,6 +307,23 @@ test('Should show error message if saving fails', async () => {
 });
 
 test('Should be able to fill form pages and show filled information in summary page', async () => {
+  initHaittaindeksitPostResponse({
+    autoliikenne: {
+      indeksi: 1.4,
+      haitanKesto: 5,
+      katuluokka: 1,
+      liikennemaara: 1,
+      kaistahaitta: 1,
+      kaistapituushaitta: 1,
+    },
+    pyoraliikenneindeksi: 0.0,
+    linjaautoliikenneindeksi: 0.0,
+    raitioliikenneindeksi: 0.0,
+    liikennehaittaindeksi: {
+      indeksi: 1.4,
+      tyyppi: HAITTA_INDEX_TYPE.AUTOLIIKENNEINDEKSI,
+    },
+  });
   initApplicationAttachmentGetResponse([
     {
       id: '8a77c842-3d6b-42df-8ed0-7d1493a2c015',
