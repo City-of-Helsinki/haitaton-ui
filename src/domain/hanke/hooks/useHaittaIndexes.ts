@@ -18,7 +18,7 @@ type HankeAlueData = {
 /**
  * Request haittaindeksit for hanke area
  */
-async function calculateHaittaIndexes(data: HankeAlueData) {
+export async function calculateHaittaIndexes(data: HankeAlueData) {
   const { data: response } = await api.post<HaittaIndexData>('/haittaindeksit', data);
   return response;
 }

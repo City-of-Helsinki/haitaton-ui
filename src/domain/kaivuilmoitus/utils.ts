@@ -78,10 +78,6 @@ export function convertApplicationDataToFormState(
 export function calculateLiikennehaittaindeksienYhteenveto(
   kaivuilmoitusalue: KaivuilmoitusAlue,
 ): HaittaIndexData {
-  console.log(
-    'calculating liikennehaittaindeksienYhteenveto for kaivuilmoitusalue',
-    kaivuilmoitusalue,
-  );
   const emptyHaittaIndexData: HaittaIndexData = {
     liikennehaittaindeksi: {
       indeksi: 0,
@@ -99,7 +95,6 @@ export function calculateLiikennehaittaindeksienYhteenveto(
     linjaautoliikenneindeksi: 0,
     raitioliikenneindeksi: 0,
   };
-
   const summary = kaivuilmoitusalue.tyoalueet
     .map((tyoalue) => tyoalue.tormaystarkasteluTulos ?? emptyHaittaIndexData)
     .reduce((acc, haittaindeksi) => {
@@ -151,6 +146,5 @@ export function calculateLiikennehaittaindeksienYhteenveto(
         ),
       };
     }, emptyHaittaIndexData);
-  console.log('calculated liikennehaittaindeksienYhteenveto', summary);
   return summary;
 }

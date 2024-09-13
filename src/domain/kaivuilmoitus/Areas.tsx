@@ -39,8 +39,8 @@ import AreaSelectDialog from './components/AreaSelectDialog';
 import booleanContains from '@turf/boolean-contains';
 import { getAreaDefaultName } from '../application/utils';
 import HaittaIndexes from '../common/haittaIndexes/HaittaIndexes';
-import booleanIntersects from "@turf/boolean-intersects";
-import useHaittaIndexes from '../hanke/hooks/useHaittaIndexes';
+import booleanIntersects from '@turf/boolean-intersects';
+import { calculateHaittaIndexes } from '../hanke/hooks/useHaittaIndexes';
 import useFieldArrayWithStateUpdate from '../../common/hooks/useFieldArrayWithStateUpdate';
 import { calculateLiikennehaittaindeksienYhteenveto } from './utils';
 
@@ -87,6 +87,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
     name: 'applicationData.areas',
   });
   const wathcApplicationAreas = watch('applicationData.areas');
+
   const totalSurfaceArea = getTotalSurfaceArea(
     wathcApplicationAreas
       .flatMap((area) => area.tyoalueet)
@@ -124,67 +125,51 @@ export default function Areas({ hankeData }: Readonly<Props>) {
   const maxDate = hankeData.loppuPvm ? new Date(hankeData.loppuPvm) : undefined;
   const workTimesSet = startTime && endTime;
 
-  const haittaIndexesMutation = useHaittaIndexes();
-  const calculateHaittaIndexes = useCallback(
-    (kaivuilmoitusalue: KaivuilmoitusAlue, tyoalue?: Tyoalue) => {
+  const refreshHaittaIndexes = useCallback(
+    (kaivuilmoitusalueIndex: number, tyoalue?: Tyoalue) => {
+      const applicationData = getValues('applicationData');
+      const kaivuilmoitusalueet = applicationData.areas;
+      const kaivuilmoitusalue = kaivuilmoitusalueet[kaivuilmoitusalueIndex];
       const calculateHaittaIndexesForTyoalue = (
         ka: KaivuilmoitusAlue,
         ta: Tyoalue,
-        tyoalueIndex?: number,
+        tyoalueIndex: number,
       ) => {
         const request = {
           geometriat: {
             featureCollection: formatFeaturesToHankeGeoJSON([ta.openlayersFeature!]),
           },
-          haittaAlkuPvm: startTime ?? new Date(),
-          haittaLoppuPvm: endTime ?? new Date(),
+          haittaAlkuPvm: applicationData.startTime ?? new Date(),
+          haittaLoppuPvm: applicationData.endTime ?? new Date(),
           kaistaHaitta: ka.kaistahaitta ?? 'EI_VAIKUTA',
           kaistaPituusHaitta: ka.kaistahaittojenPituus ?? 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
         };
-        const kaivuilmoitusalueIndex = wathcApplicationAreas?.indexOf(ka);
-        haittaIndexesMutation.mutate(request, {
-          onSuccess(data) {
-            if (kaivuilmoitusalueIndex !== undefined && tyoalueIndex !== undefined) {
-              console.log(
-                'setting haitta indexes for kaivuilmoitusalue',
-                ka,
-                'tyoalue',
-                ta,
-                'data',
-                data,
-              );
-              setValue(
-                `applicationData.areas.${kaivuilmoitusalueIndex}.tyoalueet.${tyoalueIndex}.tormaystarkasteluTulos`,
-                data,
-              );
-            }
-          },
+        calculateHaittaIndexes(request).then((data) => {
+          if (kaivuilmoitusalueIndex !== -1 && tyoalueIndex !== -1) {
+            setValue(
+              `applicationData.areas.${kaivuilmoitusalueIndex}.tyoalueet.${tyoalueIndex}.tormaystarkasteluTulos`,
+              data,
+            );
+          }
         });
       };
+
       if (tyoalue === undefined) {
         // calculate for all work areas
-        console.log('calculate for all work areas in kaivuilmoitusalue', kaivuilmoitusalue);
         kaivuilmoitusalue.tyoalueet.forEach((ta, index) => {
           calculateHaittaIndexesForTyoalue(kaivuilmoitusalue, ta, index);
         });
       } else {
-        console.log(
-          'calculate for single work area in kaivuilmoitusalue',
-          kaivuilmoitusalue,
-          tyoalue,
-        );
-        calculateHaittaIndexesForTyoalue(
-          kaivuilmoitusalue,
-          tyoalue,
-          kaivuilmoitusalue.tyoalueet.indexOf(tyoalue),
-        );
+        const tyoalueIndex = kaivuilmoitusalue.tyoalueet.indexOf(tyoalue);
+        calculateHaittaIndexesForTyoalue(kaivuilmoitusalue, tyoalue, tyoalueIndex);
       }
     },
-    [startTime, endTime, wathcApplicationAreas, setValue, haittaIndexesMutation],
+    [getValues, setValue],
   );
 
   function addTyoAlueToHankeArea(hankeArea: HankeAlue, feature: Feature<Geometry>) {
-    const existingArea = applicationAreas.find((alue) => alue.hankealueId === hankeArea.id);
+    const areas = getValues('applicationData.areas');
+    const existingArea = areas.find((alue) => alue.hankealueId === hankeArea.id);
     const areaName = getAreaDefaultName(
       t,
       existingArea?.tyoalueet.length || 0,
@@ -200,16 +185,16 @@ export default function Areas({ hankeData }: Readonly<Props>) {
     if (!existingArea) {
       const [emptyArea, newTyoalue] = getEmptyArea(hankeData, hankeArea, feature);
       append(emptyArea);
-      calculateHaittaIndexes(emptyArea, newTyoalue);
+      refreshHaittaIndexes(areas.length, newTyoalue);
     } else {
-      const existingAreaIndex = applicationAreas.indexOf(existingArea);
+      const existingAreaIndex = areas.indexOf(existingArea);
       const newTyoalue = new Tyoalue(feature);
       setValue(
         `applicationData.areas.${existingAreaIndex}.tyoalueet`,
-        getValues(`applicationData.areas.${existingAreaIndex}.tyoalueet`).concat(newTyoalue),
+        areas[existingAreaIndex].tyoalueet.concat(newTyoalue),
       );
       setSelectedTabIndex(existingAreaIndex);
-      calculateHaittaIndexes(existingArea, newTyoalue);
+      refreshHaittaIndexes(existingAreaIndex, newTyoalue);
     }
   }
 
@@ -243,15 +228,17 @@ export default function Areas({ hankeData }: Readonly<Props>) {
       return !!changedTyoalue;
     });
     if (changedApplicationArea) {
-      console.log('changedApplicationArea', changedApplicationArea);
       const changedTyoalue = changedApplicationArea.tyoalueet.find((tyoalue) =>
         booleanIntersects(tyoalue.geometry, changedFeature),
       );
       if (changedTyoalue) {
-        console.log('changedTyoalue', changedTyoalue);
-        calculateHaittaIndexes(changedApplicationArea, changedTyoalue);
+        refreshHaittaIndexes(applicationAreas.indexOf(changedApplicationArea), changedTyoalue);
       }
     }
+  }
+
+  function handleRemoveArea(kaivuilmoitusalueIndex: number) {
+    refreshHaittaIndexes(kaivuilmoitusalueIndex);
   }
 
   function handleAreaSelectDialogClose() {
@@ -395,6 +382,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
                   alueIndex={index}
                   drawSource={drawSource}
                   hankeAlueName={alue.name}
+                  onRemoveArea={() => handleRemoveArea(index)}
                   onRemoveLastArea={() => remove(index)}
                 />
 
@@ -469,7 +457,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
                         label: t(`hanke:kaistaHaitta:${value}`),
                       }))}
                       label={t('hankeForm:labels:kaistaHaitta')}
-                      onValueChange={() => calculateHaittaIndexes(alue)}
+                      onValueChange={() => refreshHaittaIndexes(index)}
                       required
                     />
                     <Dropdown
@@ -480,7 +468,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
                         label: t(`hanke:kaistaPituusHaitta:${value}`),
                       }))}
                       label={t(`hankeForm:labels:kaistaPituusHaitta`)}
-                      onValueChange={() => calculateHaittaIndexes(alue)}
+                      onValueChange={() => refreshHaittaIndexes(index)}
                       required
                     />
                   </Grid>

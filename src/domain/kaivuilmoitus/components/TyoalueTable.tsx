@@ -18,6 +18,7 @@ type Props = {
   alueIndex: number;
   drawSource: VectorSource;
   hankeAlueName: string;
+  onRemoveArea?: () => void;
   onRemoveLastArea?: () => void;
 };
 
@@ -33,6 +34,7 @@ export default function TyoalueTable({
   alueIndex,
   drawSource,
   hankeAlueName,
+  onRemoveArea,
   onRemoveLastArea,
 }: Readonly<Props>) {
   const { t } = useTranslation();
@@ -112,6 +114,9 @@ export default function TyoalueTable({
       remove(areaToRemove.index);
       drawSource.removeFeature(areaToRemove.feature!);
       setAreaToRemove(null);
+      if (tyoalueet.length > 1 && onRemoveArea) {
+        onRemoveArea();
+      }
     }
     if (tyoalueet.length === 1 && onRemoveLastArea) {
       onRemoveLastArea();
