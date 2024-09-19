@@ -21,6 +21,7 @@ import { HankeUser } from '../../hanke/hankeUsers/hankeUser';
 import { useHankeUsers } from '../../hanke/hankeUsers/hooks/useHankeUsers';
 import { mapHankeUserToContact } from '../../hanke/hankeUsers/utils';
 import UserSearchInput from '../../hanke/hankeUsers/UserSearchInput';
+import { TFunction } from 'i18next';
 
 function getEmptyCustomerWithContacts(): CustomerWithContacts {
   return {
@@ -36,6 +37,37 @@ function getEmptyCustomerWithContacts(): CustomerWithContacts {
   };
 }
 
+function isRegistryKeyInputEnabled(
+  customerType: string,
+  selectedContactType: string | null,
+  applicationType: string,
+) {
+  return (
+    selectedContactType === 'COMPANY' ||
+    selectedContactType === 'ASSOCIATION' ||
+    (applicationType === 'EXCAVATION_NOTIFICATION' && customerType === 'customerWithContacts')
+  );
+}
+
+function getRegistryKeyLabel(
+  t: TFunction<'translation', undefined>,
+  customerType: string,
+  selectedContactType: string | null,
+  applicationType: string,
+) {
+  if (selectedContactType === 'COMPANY' || selectedContactType === 'ASSOCIATION') {
+    return t('form:yhteystiedot:labels:ytunnus');
+  }
+  if (applicationType === 'EXCAVATION_NOTIFICATION' && customerType === 'customerWithContacts') {
+    if (selectedContactType === 'PERSON') {
+      return t('form:yhteystiedot:labels:henkilotunnus');
+    } else {
+      return t('form:yhteystiedot:labels:muuTunnus');
+    }
+  }
+  return t('form:yhteystiedot:labels:ytunnus');
+}
+
 const CustomerFields: React.FC<{
   customerType: CustomerType;
   hankeUsers?: HankeUser[];
@@ -44,19 +76,22 @@ const CustomerFields: React.FC<{
   const { watch, setValue, getValues } = useFormContext<Application>();
 
   const applicationType = getValues('applicationData.applicationType');
-
   const selectedContactType = watch(`applicationData.${customerType}.customer.type`);
-  const registryKeyInputDisabled =
-    selectedContactType === 'PERSON' || selectedContactType === 'OTHER';
+  const registryKeyInputEnabled = isRegistryKeyInputEnabled(
+    customerType,
+    selectedContactType,
+    applicationType,
+  );
+  const registryKeyInputDisabled = !registryKeyInputEnabled;
 
   useEffect(() => {
-    // If setting contact type to other than company or association, set null to registry key
-    if (selectedContactType === 'PERSON' || selectedContactType === 'OTHER') {
+    // If setting contact type disables the registry key, set it to null
+    if (!isRegistryKeyInputEnabled(customerType, selectedContactType, applicationType)) {
       setValue(`applicationData.${customerType}.customer.registryKey`, null, {
         shouldValidate: true,
       });
     }
-  }, [selectedContactType, customerType, setValue]);
+  }, [selectedContactType, customerType, applicationType, setValue]);
 
   function handleUserSelect(user: HankeUser) {
     setValue(`applicationData.${customerType}.customer.email`, user.sahkoposti, {
@@ -105,7 +140,7 @@ const CustomerFields: React.FC<{
         />
         <TextInput
           name={`applicationData.${customerType}.customer.registryKey`}
-          label={t('form:yhteystiedot:labels:ytunnus')}
+          label={getRegistryKeyLabel(t, customerType, selectedContactType, applicationType)}
           disabled={registryKeyInputDisabled}
           autoComplete="on"
           defaultValue={null}
