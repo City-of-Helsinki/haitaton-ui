@@ -203,16 +203,19 @@ export default function ApplicationMap({
               const hankeName = feature?.get('hankeName');
               const startDate = feature?.get('startDate');
               const endDate = feature?.get('endDate');
+              if (!areaName || !hankeName) {
+                return null;
+              }
               return (
-                <div>
+                <>
                   {hankeName && <p>{hankeName}</p>}
-                  {areaName && <h4 className="heading-xxs">{areaName}</h4>}
+                  {<h4 className="heading-xxs">{areaName}</h4>}
                   {startDate && endDate && (
                     <Box as="p" fontSize="var(--fontsize-body-s)">
                       {formatToFinnishDate(startDate)}–{formatToFinnishDate(endDate)}
                     </Box>
                   )}
-                </div>
+                </>
               );
             }}
           />

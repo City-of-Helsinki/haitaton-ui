@@ -1,7 +1,8 @@
-import { useMutation, useQueryClient } from 'react-query';
+import { useQueryClient } from 'react-query';
 import { sendApplication } from '../utils';
 import useApplicationSendNotification from './useApplicationSendNotification';
 import { Application } from '../types/application';
+import useDebouncedMutation from '../../../common/hooks/useDebouncedMutation';
 
 type Options = {
   onSuccess: (data: Application) => void;
@@ -12,7 +13,7 @@ export default function useSendApplication(options?: Options) {
   const queryClient = useQueryClient();
   const { showSendSuccess, showSendError } = useApplicationSendNotification();
 
-  return useMutation(sendApplication, {
+  return useDebouncedMutation(sendApplication, {
     onError() {
       showSendError();
     },

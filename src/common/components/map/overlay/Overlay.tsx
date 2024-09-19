@@ -21,14 +21,18 @@ export default function MapOverlay({ position, children }: Readonly<Props>) {
       position,
     });
 
-    map.addOverlay(overlay);
+    if (children) {
+      map.addOverlay(overlay);
+    } else {
+      map.removeOverlay(overlay);
+    }
 
     return function cleanup() {
       if (map) {
         map.removeOverlay(overlay);
       }
     };
-  }, [map, position]);
+  }, [map, position, children]);
 
   return (
     <Box
