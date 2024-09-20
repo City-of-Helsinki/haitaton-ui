@@ -970,7 +970,6 @@ test('Should show changed traffic nuisance index summary when kaistahaitta chang
 
   const kaistahaittaSelection = await screen.findByText('Vähentää kaistan yhdellä ajosuunnalla');
   await user.click(kaistahaittaSelection);
-  screen.debug(undefined, 100000);
   await user.click(await screen.findByText('Ei vaikuta'));
 
   const accordionHeader = await screen.findByRole('button', {
