@@ -3,7 +3,6 @@ import { Button, Dialog, IconCheck, IconCross, IconInfoCircle, Notification } fr
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useMutation } from 'react-query';
 import { yupResolver } from '@hookform/resolvers/yup';
 import TextInput from '../../../common/components/textInput/TextInput';
 import { newHankeSchema } from '../edit/hankeSchema';
@@ -12,6 +11,7 @@ import { ROUTES } from '../../../common/types/route';
 import { createHanke } from '../edit/hankeApi';
 import { NewHankeData } from '../edit/types';
 import OwnInformationFields from '../../forms/components/OwnInformationFields';
+import useDebouncedMutation from '../../../common/hooks/useDebouncedMutation';
 
 type Props = {
   isOpen: boolean;
@@ -27,7 +27,20 @@ function HankeCreateDialog({ isOpen, onClose }: Readonly<Props>) {
     resolver: yupResolver(newHankeSchema),
   });
   const { getValues, trigger, reset: resetForm } = formContext;
-  const { mutate, reset: resetMutation, isLoading, isError } = useMutation(createHanke);
+  const {
+    mutate,
+    reset: resetMutation,
+    isLoading,
+    isError,
+  } = useDebouncedMutation(createHanke, {
+    onSuccess({ hankeTunnus }) {
+      resetForm();
+      onClose();
+      if (hankeTunnus) {
+        navigate(getEditHankePath({ hankeTunnus }));
+      }
+    },
+  });
   const dialogTitle = t('homepage:hanke:title');
 
   function handleClose() {
@@ -42,14 +55,7 @@ function HankeCreateDialog({ isOpen, onClose }: Readonly<Props>) {
       return;
     }
 
-    mutate(getValues(), {
-      onSuccess({ hankeTunnus }) {
-        handleClose();
-        if (hankeTunnus) {
-          navigate(getEditHankePath({ hankeTunnus }));
-        }
-      },
-    });
+    mutate(getValues());
   }
 
   return (

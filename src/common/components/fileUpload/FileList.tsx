@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { IconTrash, Notification } from 'hds-react';
 import { Box } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { useMutation } from 'react-query';
 import { AttachmentMetadata } from '../../types/attachment';
 import ConfirmationDialog from '../HDSConfirmationDialog/ConfirmationDialog';
 import FileListItem from './FileListItem';
 import { FileDeleteFunction, FileDownLoadFunction, ShowDeleteButtonFunction } from './types';
 import { AxiosError } from 'axios';
 import { sortBy } from 'lodash';
+import useDebouncedMutation from '../../hooks/useDebouncedMutation';
 
 type Props = {
   files: AttachmentMetadata[];
@@ -28,7 +28,7 @@ export default function FileList({
   const { t } = useTranslation();
   // Sort files in descending order by their createdAt date
   const sortedFiles = sortBy(files, (file) => new Date(file.createdAt)).reverse();
-  const deleteMutation = useMutation<void, AxiosError, AttachmentMetadata, unknown>(
+  const deleteMutation = useDebouncedMutation<void, AxiosError, AttachmentMetadata, unknown>(
     fileDeleteFunction,
     {
       onSuccess() {

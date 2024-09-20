@@ -3,7 +3,6 @@ import { Button, Dialog, IconCheck, IconCross, IconInfoCircle, Notification } fr
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useMutation } from 'react-query';
 import { yupResolver } from '@hookform/resolvers/yup';
 import TextInput from '../../../common/components/textInput/TextInput';
 import useLinkPath from '../../../common/hooks/useLinkPath';
@@ -12,6 +11,7 @@ import { NewJohtoselvitysData } from '../../application/types/application';
 import { newJohtoselvitysSchema } from '../validationSchema';
 import { createJohtoselvitys } from '../../application/utils';
 import OwnInformationFields from '../../forms/components/OwnInformationFields';
+import useDebouncedMutation from '../../../common/hooks/useDebouncedMutation';
 
 type Props = {
   isOpen: boolean;
@@ -27,7 +27,20 @@ function JohtoselvitysCreateDialog({ isOpen, onClose }: Readonly<Props>) {
     resolver: yupResolver(newJohtoselvitysSchema),
   });
   const { handleSubmit, reset: resetForm } = formContext;
-  const { mutate, reset: resetMutation, isLoading, isError } = useMutation(createJohtoselvitys);
+  const {
+    mutate,
+    reset: resetMutation,
+    isLoading,
+    isError,
+  } = useDebouncedMutation(createJohtoselvitys, {
+    onSuccess({ id }) {
+      resetForm();
+      onClose();
+      if (id) {
+        navigate(getEditJohtoselvitysPath({ id: id.toString() }));
+      }
+    },
+  });
   const dialogTitle = t('johtoselvitysForm:createNewJohtoselvitys');
 
   function handleClose() {
@@ -37,14 +50,7 @@ function JohtoselvitysCreateDialog({ isOpen, onClose }: Readonly<Props>) {
   }
 
   async function submitForm(data: NewJohtoselvitysData) {
-    mutate(data, {
-      onSuccess({ id }) {
-        handleClose();
-        if (id) {
-          navigate(getEditJohtoselvitysPath({ id: id.toString() }));
-        }
-      },
-    });
+    mutate(data);
   }
 
   return (

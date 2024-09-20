@@ -41,6 +41,11 @@ export const handlers = [
     },
   ),
 
+  http.get<PathParams, undefined, HankeDataDraft[]>(`${apiUrl}/hankkeet`, async () => {
+    const hankkeet = await hankkeetDB.readAll();
+    return HttpResponse.json(hankkeet);
+  }),
+
   http.post<PathParams, HankeDataDraft, Partial<HankeDataDraft>>(
     `${apiUrl}/hankkeet`,
     async ({ request }) => {

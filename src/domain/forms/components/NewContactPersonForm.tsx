@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation } from 'react-query';
 import { Button, Fieldset, IconCheck, IconCross, Notification } from 'hds-react';
 import ResponsiveGrid from '../../../common/components/grid/ResponsiveGrid';
 import TextInput from '../../../common/components/textInput/TextInput';
@@ -10,6 +9,7 @@ import { yhteyshenkiloSchema } from '../../hanke/edit/hankeSchema';
 import { Yhteyshenkilo, YHTEYSHENKILO_FORMFIELD } from '../../hanke/edit/types';
 import styles from './NewContactPersonForm.module.scss';
 import { HankeUser } from '../../hanke/hankeUsers/hankeUser';
+import useDebouncedMutation from '../../../common/hooks/useDebouncedMutation';
 
 export type ContactPersonAddedNotification = 'success' | 'error' | null;
 
@@ -33,7 +33,7 @@ function NewContactPersonForm({
     context: { hankeUsers: hankeUsers, errorMessageKey: 'emailAlreadyUsedInContacts' },
   });
   const { getValues, trigger } = formContext;
-  const { mutate } = useMutation(createHankeUser);
+  const { mutate, isLoading } = useDebouncedMutation(createHankeUser);
 
   async function saveContact() {
     const isFormValid = await trigger(undefined, { shouldFocus: true });
@@ -102,7 +102,7 @@ function NewContactPersonForm({
           />
         </ResponsiveGrid>
         <div className={styles.formButtons}>
-          <Button iconLeft={<IconCheck />} onClick={saveContact}>
+          <Button iconLeft={<IconCheck />} onClick={saveContact} isLoading={isLoading}>
             {t('form:yhteystiedot:buttons:saveAndAddContactPerson')}
           </Button>
           <Button iconLeft={<IconCross />} variant="secondary" onClick={cancelContactAdd}>

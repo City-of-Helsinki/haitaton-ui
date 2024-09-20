@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useMutation } from 'react-query';
 import { Button } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
@@ -11,6 +10,7 @@ import {
   useNavigateToApplicationList,
   useNavigateToHankeList,
 } from '../../hanke/hooks/useNavigateToApplicationList';
+import useDebouncedMutation from '../../../common/hooks/useDebouncedMutation';
 
 type Props = {
   applicationId: number | null;
@@ -41,7 +41,7 @@ export const ApplicationCancel: React.FC<Props> = ({
 
   const { setNotification } = useGlobalNotification();
 
-  const applicationCancelMutation = useMutation(cancelApplication, {
+  const applicationCancelMutation = useDebouncedMutation(cancelApplication, {
     onError(error: AxiosError) {
       let message = t('common:error');
       if (error.response?.status === 409) {
