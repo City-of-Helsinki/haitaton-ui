@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useMutation } from 'react-query';
 import { createApplication, updateApplication } from '../utils';
 import { Application, JohtoselvitysData, KaivuilmoitusData } from '../types/application';
 import useDebouncedMutation from '../../../common/hooks/useDebouncedMutation';
@@ -34,15 +33,18 @@ export default function useSaveApplication<
     },
   );
 
-  const applicationUpdateMutation = useMutation(updateApplication<ApplicationData, UpdateData>, {
-    onMutate() {
-      setShowSaveNotification(null);
+  const applicationUpdateMutation = useDebouncedMutation(
+    updateApplication<ApplicationData, UpdateData>,
+    {
+      onMutate() {
+        setShowSaveNotification(null);
+      },
+      onSuccess: onUpdateSuccess,
+      onSettled() {
+        setShowSaveNotification('update');
+      },
     },
-    onSuccess: onUpdateSuccess,
-    onSettled() {
-      setShowSaveNotification('update');
-    },
-  });
+  );
 
   return {
     applicationCreateMutation,
