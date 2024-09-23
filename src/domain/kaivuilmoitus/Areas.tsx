@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { Fieldset, Notification, Tab, TabList, TabPanel, Tabs, Tooltip } from 'hds-react';
@@ -39,8 +39,7 @@ import AreaSelectDialog from './components/AreaSelectDialog';
 import booleanContains from '@turf/boolean-contains';
 import { getAreaDefaultName } from '../application/utils';
 import HaittaIndexes from '../common/haittaIndexes/HaittaIndexes';
-import booleanIntersects from '@turf/boolean-intersects';
-import { calculateHaittaIndexes } from '../hanke/hooks/useHaittaIndexes';
+import useHaittaIndexes from '../hanke/hooks/useHaittaIndexes';
 import useFieldArrayWithStateUpdate from '../../common/hooks/useFieldArrayWithStateUpdate';
 import { calculateLiikennehaittaindeksienYhteenveto } from './utils';
 
@@ -87,6 +86,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
     name: 'applicationData.areas',
   });
   const wathcApplicationAreas = watch('applicationData.areas');
+  const haittaIndexesMutation = useHaittaIndexes();
 
   const totalSurfaceArea = getTotalSurfaceArea(
     wathcApplicationAreas
@@ -150,13 +150,15 @@ export default function Areas({ hankeData }: Readonly<Props>) {
             kaistaHaitta: ka.kaistahaitta ?? 'EI_VAIKUTA',
             kaistaPituusHaitta: ka.kaistahaittojenPituus ?? 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
           };
-          calculateHaittaIndexes(request).then((data) => {
-            if (kaivuilmoitusalueIndex !== -1 && tyoalueIndex !== -1) {
-              setValue(
-                `applicationData.areas.${kaivuilmoitusalueIndex}.tyoalueet.${tyoalueIndex}.tormaystarkasteluTulos`,
-                data,
-              );
-            }
+          haittaIndexesMutation.mutate(request, {
+            onSuccess(data) {
+              if (kaivuilmoitusalueIndex !== -1 && tyoalueIndex !== -1) {
+                setValue(
+                  `applicationData.areas.${kaivuilmoitusalueIndex}.tyoalueet.${tyoalueIndex}.tormaystarkasteluTulos`,
+                  data,
+                );
+              }
+            },
           });
         };
 
@@ -172,7 +174,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
         }
       }
     },
-    [getValues, setValue],
+    [getValues, setValue, haittaIndexesMutation],
   );
 
   function addTyoAlueToHankeArea(hankeArea: HankeAlue, feature: Feature<Geometry>) {
@@ -228,19 +230,20 @@ export default function Areas({ hankeData }: Readonly<Props>) {
   }
 
   function handleChangeArea(feature: Feature<Geometry>) {
-    const changedFeature = polygon((feature.getGeometry() as Polygon).getCoordinates());
-    const changedApplicationArea = applicationAreas.find((alue) => {
-      const changedTyoalue = alue.tyoalueet.find((tyoalue) =>
-        booleanIntersects(tyoalue.geometry, changedFeature),
+    const changedApplicationArea = wathcApplicationAreas.find((alue) => {
+      const changedTyoalue = alue.tyoalueet.find(
+        (tyoalue) =>
+          tyoalue.openlayersFeature?.get('relatedHankeAreaName') ===
+          feature.get('relatedHankeAreaName'),
       );
       return !!changedTyoalue;
     });
     if (changedApplicationArea) {
-      const changedTyoalue = changedApplicationArea.tyoalueet.find((tyoalue) =>
-        booleanIntersects(tyoalue.geometry, changedFeature),
-      );
+      const changedTyoalue = changedApplicationArea.tyoalueet.find((tyoalue) => {
+        return tyoalue.openlayersFeature?.get('areaName') === feature.get('areaName');
+      });
       if (changedTyoalue) {
-        refreshHaittaIndexes(applicationAreas.indexOf(changedApplicationArea), changedTyoalue);
+        refreshHaittaIndexes(wathcApplicationAreas.indexOf(changedApplicationArea), changedTyoalue);
       }
     }
   }
