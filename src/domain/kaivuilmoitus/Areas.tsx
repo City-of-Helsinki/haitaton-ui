@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import { Fieldset, Notification, Tab, TabList, TabPanel, Tabs, Tooltip } from 'hds-react';
 import { Box, Flex, Grid } from '@chakra-ui/react';
 import { Feature } from 'ol';
@@ -40,7 +40,6 @@ import booleanContains from '@turf/boolean-contains';
 import { getAreaDefaultName } from '../application/utils';
 import HaittaIndexes from '../common/haittaIndexes/HaittaIndexes';
 import useHaittaIndexes from '../hanke/hooks/useHaittaIndexes';
-import useFieldArrayWithStateUpdate from '../../common/hooks/useFieldArrayWithStateUpdate';
 import { calculateLiikennehaittaindeksienYhteenveto } from './utils';
 
 function getEmptyArea(
@@ -82,7 +81,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
     fields: applicationAreas,
     append,
     remove,
-  } = useFieldArrayWithStateUpdate<KaivuilmoitusFormValues, 'applicationData.areas'>({
+  } = useFieldArray<KaivuilmoitusFormValues, 'applicationData.areas'>({
     name: 'applicationData.areas',
   });
   const wathcApplicationAreas = watch('applicationData.areas');
