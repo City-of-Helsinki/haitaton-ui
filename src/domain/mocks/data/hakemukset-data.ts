@@ -1,10 +1,11 @@
 import {
-  Application,
   AlluStatus,
+  Application,
+  HankkeenHakemus,
   JohtoselvitysData,
   KaivuilmoitusData,
-  HankkeenHakemus,
 } from '../../application/types/application';
+import { HAITTA_INDEX_TYPE } from '../../common/haittaIndexes/types';
 
 const hakemukset: Application[] = [
   {
@@ -410,6 +411,23 @@ const hakemukset: Application[] = [
                 ],
               },
               area: 158.4294946899533,
+              tormaystarkasteluTulos: {
+                liikennehaittaindeksi: {
+                  indeksi: 3,
+                  tyyppi: HAITTA_INDEX_TYPE.PYORALIIKENNEINDEKSI,
+                },
+                pyoraliikenneindeksi: 3,
+                autoliikenne: {
+                  indeksi: 1,
+                  haitanKesto: 1,
+                  katuluokka: 1,
+                  liikennemaara: 1,
+                  kaistahaitta: 1,
+                  kaistapituushaitta: 1,
+                },
+                linjaautoliikenneindeksi: 1,
+                raitioliikenneindeksi: 1,
+              },
             },
             {
               geometry: {
@@ -431,6 +449,23 @@ const hakemukset: Application[] = [
                 ],
               },
               area: 30.345726208334995,
+              tormaystarkasteluTulos: {
+                liikennehaittaindeksi: {
+                  indeksi: 5,
+                  tyyppi: HAITTA_INDEX_TYPE.RAITIOLIIKENNEINDEKSI,
+                },
+                pyoraliikenneindeksi: 1,
+                autoliikenne: {
+                  indeksi: 3,
+                  haitanKesto: 3,
+                  katuluokka: 3,
+                  liikennemaara: 3,
+                  kaistahaitta: 3,
+                  kaistapituushaitta: 3,
+                },
+                linjaautoliikenneindeksi: 4,
+                raitioliikenneindeksi: 5,
+              },
             },
           ],
           katuosoite: 'Aidasmäentie 5',

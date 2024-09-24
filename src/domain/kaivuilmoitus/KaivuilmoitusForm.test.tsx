@@ -8,6 +8,9 @@ import { server } from '../mocks/test-server';
 import {
   Application,
   ApplicationAttachmentMetadata,
+  ContactType,
+  Customer,
+  InvoicingCustomer,
   KaivuilmoitusAlue,
   KaivuilmoitusData,
 } from '../application/types/application';
@@ -15,13 +18,14 @@ import * as applicationAttachmentsApi from '../application/attachments';
 import applications from '../mocks/data/hakemukset-data';
 import {
   initApplicationAttachmentGetResponse,
+  initHaittaindeksitPostResponse,
   uploadApplicationAttachmentMock,
 } from '../../testUtils/helperFunctions';
-import { ContactType, Customer, InvoicingCustomer } from '../application/types/application';
 import { cloneDeep } from 'lodash';
 import { fillNewContactPersonForm } from '../forms/components/testUtils';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import * as applicationApi from '../application/utils';
+import { HAITTA_INDEX_TYPE } from '../common/haittaIndexes/types';
 
 afterEach(cleanup);
 
@@ -303,6 +307,23 @@ test('Should show error message if saving fails', async () => {
 });
 
 test('Should be able to fill form pages and show filled information in summary page', async () => {
+  initHaittaindeksitPostResponse({
+    autoliikenne: {
+      indeksi: 1.4,
+      haitanKesto: 5,
+      katuluokka: 1,
+      liikennemaara: 1,
+      kaistahaitta: 1,
+      kaistapituushaitta: 1,
+    },
+    pyoraliikenneindeksi: 0.0,
+    linjaautoliikenneindeksi: 0.0,
+    raitioliikenneindeksi: 0.0,
+    liikennehaittaindeksi: {
+      indeksi: 1.4,
+      tyyppi: HAITTA_INDEX_TYPE.AUTOLIIKENNEINDEKSI,
+    },
+  });
   initApplicationAttachmentGetResponse([
     {
       id: '8a77c842-3d6b-42df-8ed0-7d1493a2c015',
@@ -836,6 +857,23 @@ test('Should list existing attachments in the attachments page', async () => {
 });
 
 test('Should be able to remove work areas', async () => {
+  initHaittaindeksitPostResponse({
+    autoliikenne: {
+      indeksi: 1.4,
+      haitanKesto: 5,
+      katuluokka: 1,
+      liikennemaara: 1,
+      kaistahaitta: 1,
+      kaistapituushaitta: 1,
+    },
+    pyoraliikenneindeksi: 0.0,
+    linjaautoliikenneindeksi: 0.0,
+    raitioliikenneindeksi: 0.0,
+    liikennehaittaindeksi: {
+      indeksi: 1.4,
+      tyyppi: HAITTA_INDEX_TYPE.AUTOLIIKENNEINDEKSI,
+    },
+  });
   const hankeData = hankkeet[1] as HankeData;
   const application = cloneDeep(applications[4] as Application<KaivuilmoitusData>);
   const { user } = render(
@@ -877,6 +915,79 @@ test('Should highlight selected work area', async () => {
   await user.click(workAreaTwo);
   expect(workAreaOne).not.toHaveClass('selected');
   expect(workAreaTwo).toHaveClass('selected');
+});
+
+test('Should show initial traffic nuisance index summary', async () => {
+  const hankeData = hankkeet[1] as HankeData;
+  const application = cloneDeep(applications[4] as Application<KaivuilmoitusData>);
+  const { user } = render(
+    <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
+  );
+  await user.click(await screen.findByRole('button', { name: /alueet/i }));
+
+  const accordionHeader = await screen.findByRole('button', {
+    name: 'Työalueiden liikennehaittaindeksien yhteenveto (0-5)',
+  });
+  await user.click(accordionHeader);
+  expect(await screen.findByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('4');
+  expect(await screen.findByTestId('test-raitioliikenneindeksi')).toHaveTextContent('5');
+
+  const carTrafficAccordion = await screen.findByText('Autoliikenteen ruuhkautuminen');
+  await user.click(carTrafficAccordion);
+  expect(await screen.findByTestId('test-katuluokka')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-liikennemaara')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-kaistahaitta')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-kaistapituushaitta')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-haitanKesto')).toHaveTextContent('3');
+});
+
+test('Should show changed traffic nuisance index summary when kaistahaitta changes', async () => {
+  initHaittaindeksitPostResponse({
+    autoliikenne: {
+      indeksi: 3.0,
+      haitanKesto: 3,
+      katuluokka: 3,
+      liikennemaara: 3,
+      kaistahaitta: 1,
+      kaistapituushaitta: 3,
+    },
+    pyoraliikenneindeksi: 3.0,
+    linjaautoliikenneindeksi: 4.0,
+    raitioliikenneindeksi: 5.0,
+    liikennehaittaindeksi: {
+      indeksi: 5.0,
+      tyyppi: HAITTA_INDEX_TYPE.RAITIOLIIKENNEINDEKSI,
+    },
+  });
+  const hankeData = hankkeet[1] as HankeData;
+  const application = cloneDeep(applications[4] as Application<KaivuilmoitusData>);
+  const { user } = render(
+    <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
+  );
+  await user.click(await screen.findByRole('button', { name: /alueet/i }));
+
+  const kaistahaittaSelection = await screen.findByText('Vähentää kaistan yhdellä ajosuunnalla');
+  await user.click(kaistahaittaSelection);
+  await user.click(await screen.findByText('Ei vaikuta'));
+
+  const accordionHeader = await screen.findByRole('button', {
+    name: 'Työalueiden liikennehaittaindeksien yhteenveto (0-5)',
+  });
+  await user.click(accordionHeader);
+  expect(await screen.findByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('4');
+  expect(await screen.findByTestId('test-raitioliikenneindeksi')).toHaveTextContent('5');
+
+  const carTrafficAccordion = await screen.findByText('Autoliikenteen ruuhkautuminen');
+  await user.click(carTrafficAccordion);
+  expect(await screen.findByTestId('test-katuluokka')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-liikennemaara')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-kaistahaitta')).toHaveTextContent('1');
+  expect(await screen.findByTestId('test-kaistapituushaitta')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-haitanKesto')).toHaveTextContent('3');
 });
 
 test('Should be able to send application', async () => {

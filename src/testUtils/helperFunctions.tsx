@@ -7,6 +7,7 @@ import api from '../domain/api/api';
 import { server } from '../domain/mocks/test-server';
 import { http, HttpResponse } from 'msw';
 import { screen } from './render';
+import { HaittaIndexData } from '../domain/common/haittaIndexes/types';
 
 export const changeFilterDate = (
   label: string,
@@ -48,6 +49,14 @@ export async function uploadApplicationAttachmentMock({
 export function initApplicationAttachmentGetResponse(response: ApplicationAttachmentMetadata[]) {
   server.use(
     http.get('/api/hakemukset/:id/liitteet', async () => {
+      return HttpResponse.json(response);
+    }),
+  );
+}
+
+export function initHaittaindeksitPostResponse(response: HaittaIndexData) {
+  server.use(
+    http.post('/api/haittaindeksit', async () => {
       return HttpResponse.json(response);
     }),
   );
