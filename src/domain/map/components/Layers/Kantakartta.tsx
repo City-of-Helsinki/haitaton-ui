@@ -18,40 +18,21 @@ const Kantakartta = () => {
   };
 
   return (
-    <>
-      <TileLayer
-        minZoom={9}
-        source={
-          new TileWMS({
-            ...sourceOptions,
-            params: {
-              LAYERS: 'Kantakartta',
-              FORMAT: 'image/jpeg',
-              WIDTH: 256,
-              HEIGHT: 256,
-              VERSION: '1.1.1',
-              TRANSPARENT: 'false',
-            },
-          })
-        }
-      />
-      <TileLayer
-        maxZoom={9}
-        source={
-          new TileWMS({
-            ...sourceOptions,
-            params: {
-              LAYERS: 'Opaskartta_Helsinki',
-              FORMAT: 'image/jpeg',
-              WIDTH: 256,
-              HEIGHT: 256,
-              VERSION: '1.1.1',
-              TRANSPARENT: 'false',
-            },
-          })
-        }
-      />
-    </>
+    <TileLayer
+      source={
+        new TileWMS({
+          ...sourceOptions,
+          params: {
+            LAYERS: 'Karttasarja',
+            FORMAT: 'image/png',
+            WIDTH: 256,
+            HEIGHT: 256,
+            VERSION: '1.1.1',
+            TRANSPARENT: 'false',
+          },
+        })
+      }
+    />
   );
 };
 
