@@ -7,7 +7,9 @@ import {
   ApplicationDeletionResult,
   ApplicationType,
   JohtoselvitysData,
+  JohtoselvitysUpdateData,
   KaivuilmoitusData,
+  KaivuilmoitusUpdateData,
   NewJohtoselvitysData,
   Paatos,
   PaatosTila,
@@ -15,6 +17,8 @@ import {
   ReportOperationalConditionData,
 } from './types/application';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
+import { HIDDEN_FIELD_VALUE } from './constants';
+import { cloneDeep } from 'lodash';
 
 /**
  * Create new johtoselvitys without hanke being created first
@@ -159,4 +163,50 @@ export function getCurrentDecisions(paatokset?: { [key: string]: Paatos[] }): Pa
 
 export function getDecisionFilename(paatos: Paatos): string {
   return `${paatos.hakemustunnus}-${paatos.tyyppi.toLowerCase().replace('_', '-')}.pdf`;
+}
+
+export function modifyDataBeforeSend<T extends JohtoselvitysUpdateData | KaivuilmoitusUpdateData>(
+  applicationData: T,
+): T {
+  if (applicationData.applicationType === 'CABLE_REPORT') {
+    return applicationData;
+  }
+  if (
+    applicationData.customerWithContacts?.customer?.type === 'PERSON' ||
+    applicationData.customerWithContacts?.customer?.type === 'OTHER'
+  ) {
+    const modifiedApplicationData = cloneDeep<T>(applicationData);
+    if (
+      modifiedApplicationData?.customerWithContacts?.customer.registryKey === HIDDEN_FIELD_VALUE
+    ) {
+      modifiedApplicationData.customerWithContacts.customer.registryKey = null;
+      modifiedApplicationData.customerWithContacts.customer.registryKeyHidden = true;
+    } else if (modifiedApplicationData?.customerWithContacts?.customer.registryKey === '') {
+      modifiedApplicationData.customerWithContacts.customer.registryKey = null;
+      modifiedApplicationData.customerWithContacts.customer.registryKeyHidden = false;
+    }
+    return modifiedApplicationData;
+  }
+  return applicationData;
+}
+
+export function modifyDataAfterReceive<T extends JohtoselvitysData | KaivuilmoitusData>(
+  application: Application<T>,
+): Application<T> {
+  if (application.applicationType === 'CABLE_REPORT') {
+    return application;
+  }
+  if (
+    (application.applicationData.customerWithContacts?.customer?.type === 'PERSON' ||
+      application.applicationData.customerWithContacts?.customer?.type === 'OTHER') &&
+    application.applicationData.customerWithContacts?.customer?.registryKeyHidden
+  ) {
+    const modifiedApplicationData = cloneDeep<T>(application.applicationData);
+    modifiedApplicationData.customerWithContacts!.customer.registryKey = HIDDEN_FIELD_VALUE;
+    return {
+      ...application,
+      applicationData: modifiedApplicationData,
+    };
+  }
+  return application;
 }

@@ -1,5 +1,12 @@
-import { getCurrentDecisions, getDecisionFilename } from './utils';
+import {
+  getCurrentDecisions,
+  getDecisionFilename,
+  modifyDataAfterReceive,
+  modifyDataBeforeSend,
+} from './utils';
 import hakemukset from '../mocks/data/hakemukset-data';
+import { ContactType } from './types/application';
+import { HIDDEN_FIELD_VALUE } from './constants';
 
 describe('getCurrentDecisions', () => {
   test('returns all current decisions in correct order ', () => {
@@ -56,4 +63,116 @@ describe('getDecisionFilename', () => {
     );
     expect(getDecisionFilename(currentDecisions[2])).toEqual('KP2400001-2-paatos.pdf');
   });
+});
+
+describe('modifyDataBeforeSend', () => {
+  test('does not change cable report application data', () => {
+    const applicationData = hakemukset[0].applicationData;
+
+    const modifiedApplicationData = modifyDataBeforeSend(applicationData);
+
+    expect(modifiedApplicationData).toEqual(applicationData);
+  });
+
+  test('does not change excavation notification application data if customer type is not PERSON or OTHER', () => {
+    const applicationData = hakemukset[6].applicationData;
+
+    const modifiedApplicationData = modifyDataBeforeSend(applicationData);
+
+    expect(modifiedApplicationData).toEqual(applicationData);
+  });
+
+  test.each([[ContactType.PERSON], [ContactType.OTHER]])(
+    'nullifies registry key for customer if it is hidden',
+    (contactType) => {
+      const applicationData = {
+        ...hakemukset[7].applicationData,
+        customerWithContacts: {
+          ...hakemukset[7].applicationData.customerWithContacts!,
+          customer: {
+            ...hakemukset[7].applicationData.customerWithContacts!.customer,
+            type: contactType,
+            registryKey: HIDDEN_FIELD_VALUE,
+          },
+        },
+      };
+
+      const modifiedApplicationData = modifyDataBeforeSend(applicationData);
+
+      expect(modifiedApplicationData.customerWithContacts?.customer?.registryKey).toEqual(null);
+      expect(modifiedApplicationData.customerWithContacts?.customer?.registryKeyHidden).toEqual(
+        true,
+      );
+    },
+  );
+
+  test.each([[ContactType.PERSON], [ContactType.OTHER]])(
+    'does not change registry key for customer if it is not hidden',
+    (contactType) => {
+      const applicationData = {
+        ...hakemukset[7].applicationData,
+        customerWithContacts: {
+          ...hakemukset[7].applicationData.customerWithContacts!,
+          customer: {
+            ...hakemukset[7].applicationData.customerWithContacts!.customer,
+            type: contactType,
+            registryKey: '210495-170S',
+            registryKeyHidden: false,
+          },
+        },
+      };
+
+      const modifiedApplicationData = modifyDataBeforeSend(applicationData);
+
+      expect(modifiedApplicationData).toEqual(applicationData);
+    },
+  );
+});
+
+describe('modifyDataAfterReceive', () => {
+  test('does not change cable report application data', () => {
+    const application = hakemukset[0];
+
+    const modifiedApplication = modifyDataAfterReceive(application);
+
+    expect(modifiedApplication).toEqual(application);
+  });
+
+  test('does not change excavation notification application data if customer type is not PERSON or OTHER', () => {
+    const application = hakemukset[6];
+
+    const modifiedApplication = modifyDataAfterReceive(application);
+
+    expect(modifiedApplication).toEqual(application);
+  });
+
+  test.each([[ContactType.PERSON], [ContactType.OTHER]])(
+    'masks registry key for customer if it is hidden',
+    (contactType) => {
+      const application = {
+        ...hakemukset[7],
+        applicationData: {
+          ...hakemukset[7].applicationData,
+          customerWithContacts: {
+            ...hakemukset[7].applicationData.customerWithContacts!,
+            customer: {
+              ...hakemukset[7].applicationData.customerWithContacts!.customer,
+              type: contactType,
+              registryKey: null,
+              registryKeyHidden: true,
+            },
+          },
+        },
+      };
+
+      const modifiedApplication = modifyDataAfterReceive(application);
+
+      expect(
+        modifiedApplication.applicationData.customerWithContacts?.customer?.registryKey,
+      ).toEqual(HIDDEN_FIELD_VALUE);
+      expect(
+        modifiedApplication.applicationData.customerWithContacts?.customer?.registryKeyHidden,
+      ).toEqual(true);
+    },
+  );
 });

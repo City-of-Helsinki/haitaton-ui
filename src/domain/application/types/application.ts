@@ -58,6 +58,7 @@ export type Customer = {
   email: string;
   phone: string;
   registryKey: string | null;
+  registryKeyHidden: boolean;
   ovt?: string | null;
   invoicingOperator?: string | null;
   sapCustomerNumber?: string | null;

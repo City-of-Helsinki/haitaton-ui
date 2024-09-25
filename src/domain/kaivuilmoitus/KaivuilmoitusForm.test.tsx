@@ -373,6 +373,7 @@ test('Should be able to fill form pages and show filled information in summary p
     type: ContactType.COMPANY,
     name: 'Yritys Oy',
     registryKey: '2182805-0',
+    registryKeyHidden: false,
     email: 'yritys1@test.com',
     phone: '0000000000',
   };
@@ -380,6 +381,7 @@ test('Should be able to fill form pages and show filled information in summary p
     type: ContactType.COMPANY,
     name: 'Yritys 2 Oy',
     registryKey: '7126070-7',
+    registryKeyHidden: false,
     email: 'yritys2@test.com',
     phone: '0000000001',
   };
@@ -387,6 +389,7 @@ test('Should be able to fill form pages and show filled information in summary p
     type: ContactType.COMPANY,
     name: 'Yritys 3 Oy',
     registryKey: '1234567-1',
+    registryKeyHidden: false,
     ovt: '123456789012',
     invoicingOperator: '12345',
     customerReference: '6789',

@@ -1,14 +1,27 @@
 import { useState } from 'react';
-import { createApplication, updateApplication } from '../utils';
-import { Application, JohtoselvitysData, KaivuilmoitusData } from '../types/application';
+import {
+  createApplication,
+  modifyDataAfterReceive,
+  modifyDataBeforeSend,
+  updateApplication,
+} from '../utils';
+import {
+  Application,
+  JohtoselvitysCreateData,
+  JohtoselvitysData,
+  JohtoselvitysUpdateData,
+  KaivuilmoitusCreateData,
+  KaivuilmoitusData,
+  KaivuilmoitusUpdateData,
+} from '../types/application';
 import useDebouncedMutation from '../../../common/hooks/useDebouncedMutation';
 
 type SuccessFunction<ApplicationData> = (data: Application<ApplicationData>) => void;
 
 export default function useSaveApplication<
   ApplicationData extends JohtoselvitysData | KaivuilmoitusData,
-  CreateData,
-  UpdateData,
+  CreateData extends JohtoselvitysCreateData | KaivuilmoitusCreateData,
+  UpdateData extends JohtoselvitysUpdateData | KaivuilmoitusUpdateData,
 >({
   onCreateSuccess,
   onUpdateSuccess,
@@ -34,12 +47,19 @@ export default function useSaveApplication<
   );
 
   const applicationUpdateMutation = useDebouncedMutation(
-    updateApplication<ApplicationData, UpdateData>,
+    (data: { id: number; data: UpdateData }) =>
+      updateApplication<ApplicationData, UpdateData>({
+        id: data.id,
+        data: modifyDataBeforeSend(data.data),
+      }),
     {
       onMutate() {
         setShowSaveNotification(null);
       },
-      onSuccess: onUpdateSuccess,
+      onSuccess(application: Application<ApplicationData>) {
+        const modifiedData = modifyDataAfterReceive(application);
+        onUpdateSuccess(modifiedData);
+      },
       onSettled() {
         setShowSaveNotification('update');
       },

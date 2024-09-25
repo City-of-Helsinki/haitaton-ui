@@ -46,6 +46,7 @@ const PreFilledContactSelect: React.FC<{
         email: value.email,
         phone: value.puhelinnumero || '',
         registryKey: (isHankeContact(value) && value.ytunnus) || null,
+        registryKeyHidden: false,
         ovt: null,
         invoicingOperator: null,
         sapCustomerNumber: null,
