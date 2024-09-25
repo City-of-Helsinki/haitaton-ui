@@ -1,5 +1,5 @@
 import yup from '../../common/utils/yup';
-import { AlluStatus, ContactType } from '../application/types/application';
+import { AlluStatus } from '../application/types/application';
 import {
   applicationTypeSchema,
   customerSchema,
@@ -51,10 +51,7 @@ const customerWithContactsSchemaForKaivuilmoitus = customerWithContactsSchema
   .omit(['customer'])
   .shape({
     customer: customerSchema.omit(['registryKey']).shape({
-      registryKey: registryKeySchema.when('type', {
-        is: (value: string) => value === ContactType.COMPANY || value === ContactType.ASSOCIATION,
-        then: (schema) => schema.required(),
-      }),
+      registryKey: registryKeySchema.required(),
     }),
   });
 
