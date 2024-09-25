@@ -7,6 +7,7 @@ import { HankeDataFormState } from '../../domain/hanke/edit/types';
 import { Application } from '../../domain/application/types/application';
 import { format } from 'date-fns/format';
 import { fi } from 'date-fns/locale';
+import isValidPersonalId from './isValidPersonalId';
 
 // https://github.com/jquense/yup/blob/master/src/locale.ts
 yup.setLocale({
@@ -46,6 +47,14 @@ yup.addMethod(
   'businessId',
   function validBusinessId(message: yup.Message = { key: 'default', values: {} }) {
     return this.test('is-business-id', message, isValidBusinessId);
+  },
+);
+
+yup.addMethod(
+  yup.string,
+  'personalId',
+  function validPersonalId(message: yup.Message = { key: 'default', values: {} }) {
+    return this.test('is-personal-id', message, isValidPersonalId);
   },
 );
 
