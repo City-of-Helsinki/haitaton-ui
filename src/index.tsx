@@ -11,24 +11,26 @@ import {
   useNavigationType,
 } from 'react-router-dom';
 
-Sentry.init({
-  dsn: window._env_.REACT_APP_SENTRY_DSN,
-  integrations: [
-    Sentry.browserTracingIntegration(),
-    Sentry.reactRouterV6BrowserTracingIntegration({
-      useEffect,
-      useLocation,
-      useNavigationType,
-      createRoutesFromChildren,
-      matchRoutes,
-    }),
-    Sentry.captureConsoleIntegration(),
-  ],
-  tracesSampleRate:
-    // no traces if not in prod or test
-    window._env_.REACT_APP_DISABLE_SENTRY === '1' ? 0.0 : 1.0,
-  environment: process.env.NODE_ENV,
-});
+if (window._env_.REACT_APP_DISABLE_SENTRY !== '1') {
+  Sentry.init({
+    dsn: window._env_.REACT_APP_SENTRY_DSN,
+    integrations: [
+      Sentry.browserTracingIntegration(),
+      Sentry.reactRouterV6BrowserTracingIntegration({
+        useEffect,
+        useLocation,
+        useNavigationType,
+        createRoutesFromChildren,
+        matchRoutes,
+      }),
+      Sentry.captureConsoleIntegration(),
+    ],
+    tracesSampleRate:
+      // no traces if not in prod or test
+      window._env_.REACT_APP_DISABLE_SENTRY === '1' ? 0.0 : 1.0,
+    environment: process.env.NODE_ENV,
+  });
+}
 
 const container = document.getElementById('root');
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
