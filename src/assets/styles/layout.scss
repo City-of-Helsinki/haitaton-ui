@@ -1,7 +1,7 @@
 @import '~hds-design-tokens';
-//
-//  MEDIA QUERIES
-//––––––––––––––––––––––––––––––––––––––––––––––––––
+
+// MEDIA QUERIES
+// ––––––––––––––––––––––––––––––––––––––––––––––––––
 // A map of breakpoints.
 $breakpoints: (
   xs: $breakpoint-xs,
@@ -10,9 +10,9 @@ $breakpoints: (
   l: $breakpoint-l,
   xl: $breakpoint-xl,
 );
-//
+
 //  RESPOND ABOVE
-//––––––––––––––––––––––––––––––––––––––––––––––––––
+// ––––––––––––––––––––––––––––––––––––––––––––––––––
 // @include respond-above(sm) {}
 
 @mixin respond-above($breakpoint) {
@@ -20,10 +20,9 @@ $breakpoints: (
 
   @if map-has-key($breakpoints, $breakpoint) {
     // Get the breakpoint value.
-
     $breakpoint-value: map-get($breakpoints, $breakpoint);
-    // Write the media query.
 
+    // Write the media query.
     @media (min-width: $breakpoint-value) {
       @content;
     }
@@ -45,10 +44,9 @@ $breakpoints: (
 
   @if map-has-key($breakpoints, $breakpoint) {
     // Get the breakpoint value.
-
     $breakpoint-value: map-get($breakpoints, $breakpoint);
-    // Write the media query.
 
+    // Write the media query.
     @media (max-width: $breakpoint-value) {
       @content;
     }

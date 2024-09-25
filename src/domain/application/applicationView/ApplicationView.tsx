@@ -71,6 +71,146 @@ import useSendApplication from '../hooks/useSendApplication';
 import { validationSchema as johtoselvitysValidationSchema } from '../../johtoselvitys/validationSchema';
 import { validationSchema as kaivuilmoitusValidationSchema } from '../../kaivuilmoitus/validationSchema';
 import ApplicationReportOperationalConditionDialog from '../../kaivuilmoitus/components/ApplicationReportOperationalConditionDialog';
+import { formatToFinnishDate } from '../../../common/utils/date';
+import HaittaIndexes from '../../common/haittaIndexes/HaittaIndexes';
+import { calculateLiikennehaittaindeksienYhteenveto } from '../../kaivuilmoitus/utils';
+import styles from './ApplicationView.module.scss';
+
+function TyoalueetList({ tyoalueet }: { tyoalueet: ApplicationArea[] }) {
+  const { t } = useTranslation();
+
+  return (
+    <ul>
+      {tyoalueet.map((tyoalue, tyoalueIndex) => {
+        const geom = getAreaGeometry(tyoalue);
+        return (
+          <Box
+            as="li"
+            key={tyoalueIndex}
+            listStyleType="none"
+            marginBottom="var(--spacing-s)"
+            _last={{ marginBottom: '0px' }}
+          >
+            <Box as="p" marginBottom="var(--spacing-xs)">
+              <strong>{getAreaDefaultName(t, tyoalueIndex, tyoalueet.length)}</strong>
+            </Box>
+            <p>
+              {t('form:labels:pintaAla')}: {formatSurfaceArea(geom)}
+            </p>
+          </Box>
+        );
+      })}
+    </ul>
+  );
+}
+
+function JohtoselvitysAreasInfo({
+  tyoalueet,
+  startTime,
+  endTime,
+}: {
+  tyoalueet: ApplicationArea[];
+  startTime: Date | null;
+  endTime: Date | null;
+}) {
+  const { t } = useTranslation();
+  const locale = useLocale();
+
+  return tyoalueet.map((_, index) => {
+    const areaName = getAreaDefaultName(t, index, tyoalueet.length);
+    return (
+      <Accordion
+        language={locale}
+        heading={areaName}
+        initiallyOpen
+        key={areaName}
+        className={styles.applicationAreaContainer}
+      >
+        <FormSummarySection style={{ marginBottom: 'auto' }}>
+          <SectionItemTitle>{t('hakemus:labels:areaDuration')}</SectionItemTitle>
+          <SectionItemContent>
+            <ApplicationDates startTime={startTime} endTime={endTime} />
+          </SectionItemContent>
+        </FormSummarySection>
+      </Accordion>
+    );
+  });
+}
+
+function KaivuilmoitusAreasInfo({ areas }: { areas: KaivuilmoitusAlue[] | null }) {
+  const { t } = useTranslation();
+  const locale = useLocale();
+
+  if (!areas) {
+    return null;
+  }
+
+  return areas.map((alue) => {
+    const { tyoalueet } = alue;
+    const geometries: Geometry[] = getAreaGeometries(tyoalueet);
+    const totalSurfaceArea = getTotalSurfaceArea(geometries);
+    return (
+      <Accordion
+        language={locale}
+        heading={alue.name}
+        initiallyOpen
+        key={alue.hankealueId}
+        className={styles.applicationAreaContainer}
+      >
+        <FormSummarySection style={{ marginBottom: 'var(--spacing-l)' }}>
+          <SectionItemTitle>{t('form:yhteystiedot:labels:osoite')}</SectionItemTitle>
+          <SectionItemContent>{alue.katuosoite}</SectionItemContent>
+          <SectionItemTitle>{t('hakemus:labels:tyonTarkoitus')}</SectionItemTitle>
+          <SectionItemContent>
+            {alue.tyonTarkoitukset?.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')}
+          </SectionItemContent>
+          <SectionItemTitle>{t('form:headers:alueet')}</SectionItemTitle>
+          <SectionItemContent>
+            <TyoalueetList tyoalueet={tyoalueet} />
+          </SectionItemContent>
+          <SectionItemTitle>{t('form:labels:kokonaisAla')}</SectionItemTitle>
+          <SectionItemContent>{totalSurfaceArea} m²</SectionItemContent>
+        </FormSummarySection>
+        <Box marginBottom="var(--spacing-l)">
+          <HaittaIndexes
+            heading={`${t('kaivuilmoitusForm:alueet:liikennehaittaindeksienYhteenveto')} (0-5)`}
+            haittaIndexData={calculateLiikennehaittaindeksienYhteenveto(alue)}
+            initiallyOpen
+          />
+        </Box>
+        <Box as="h2" className="heading-xxs" marginBottom="var(--spacing-m)">
+          {t('kaivuilmoitusForm:alueet:areaNuisanceDefinitions')}
+        </Box>
+        <FormSummarySection style={{ marginBottom: 'var(--spacing-s)' }}>
+          <SectionItemTitle>{t('hankeForm:labels:meluHaitta')}</SectionItemTitle>
+          <SectionItemContent>
+            {alue.meluhaitta ? t(`hanke:meluHaitta:${alue.meluhaitta}`) : '-'}
+          </SectionItemContent>
+          <SectionItemTitle>{t('hankeForm:labels:polyHaitta')}</SectionItemTitle>
+          <SectionItemContent>
+            {alue.polyhaitta ? t(`hanke:polyHaitta:${alue.polyhaitta}`) : '-'}
+          </SectionItemContent>
+          <SectionItemTitle>{t('hankeForm:labels:tarinaHaitta')}</SectionItemTitle>
+          <SectionItemContent>
+            {alue.tarinahaitta ? t(`hanke:tarinaHaitta:${alue.tarinahaitta}`) : '-'}
+          </SectionItemContent>
+          <SectionItemTitle>{t('hankeForm:labels:kaistaHaitta')}</SectionItemTitle>
+          <SectionItemContent>
+            {alue.kaistahaitta ? t(`hanke:kaistaHaitta:${alue.kaistahaitta}`) : '-'}
+          </SectionItemContent>
+          <SectionItemTitle>{t('hankeForm:labels:kaistaPituusHaitta')}</SectionItemTitle>
+          <SectionItemContent>
+            {alue.kaistahaittojenPituus
+              ? t(`hanke:kaistaPituusHaitta:${alue.kaistahaittojenPituus}`)
+              : '-'}
+          </SectionItemContent>
+          <SectionItemTitle>{t('hakemus:labels:areaAdditionalInfo')}</SectionItemTitle>
+          <SectionItemContent>{alue.lisatiedot ? alue.lisatiedot : '-'}</SectionItemContent>
+        </FormSummarySection>
+      </Accordion>
+    );
+  });
+}
 
 const validationSchemas = {
   CABLE_REPORT: johtoselvitysValidationSchema,
@@ -89,7 +229,6 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
   const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const [showReportOperationalConditionDialog, setShowReportOperationalConditionDialog] =
     useState(false);
-  const locale = useLocale();
   const hankeViewPath = useHankeViewPath(application.hankeTunnus);
   const { applicationData, applicationIdentifier, applicationType, alluStatus, id, paatokset } =
     application;
@@ -107,6 +246,8 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
     applicationType === 'CABLE_REPORT'
       ? (areas as ApplicationArea[])
       : (areas as KaivuilmoitusAlue[]).flatMap((area) => area.tyoalueet);
+  const kaivuilmoitusAlueet =
+    applicationType === 'EXCAVATION_NOTIFICATION' ? (areas as KaivuilmoitusAlue[]) : null;
   const currentDecisions = getCurrentDecisions(paatokset);
   const applicationId =
     applicationIdentifier || t(`hakemus:applicationTypeDraft:${applicationType}`);
@@ -281,19 +422,26 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
             </TabPanel>
             <TabPanel>
               {/* Areas information panel */}
-              {tyoalueet.map((_, index) => {
-                const areaName = getAreaDefaultName(t, index, tyoalueet.length);
-                return (
-                  <Accordion language={locale} heading={areaName} initiallyOpen key={areaName}>
-                    <FormSummarySection style={{ marginBottom: 'auto' }}>
-                      <SectionItemTitle>{t('hakemus:labels:areaDuration')}</SectionItemTitle>
-                      <SectionItemContent>
-                        <ApplicationDates startTime={startTime} endTime={endTime} />
-                      </SectionItemContent>
-                    </FormSummarySection>
-                  </Accordion>
-                );
-              })}
+              <FormSummarySection style={{ marginBottom: 'var(--spacing-m)' }}>
+                <SectionItemTitle>{t('kaivuilmoitusForm:alueet:startDate')}</SectionItemTitle>
+                <SectionItemContent>
+                  {startTime && <p>{formatToFinnishDate(startTime)}</p>}
+                </SectionItemContent>
+                <SectionItemTitle>{t('kaivuilmoitusForm:alueet:endDate')}</SectionItemTitle>
+                <SectionItemContent>
+                  {endTime && <p>{formatToFinnishDate(endTime)}</p>}
+                </SectionItemContent>
+              </FormSummarySection>
+              {applicationType === 'CABLE_REPORT' && (
+                <JohtoselvitysAreasInfo
+                  tyoalueet={tyoalueet}
+                  startTime={startTime}
+                  endTime={endTime}
+                />
+              )}
+              {applicationType === 'EXCAVATION_NOTIFICATION' && (
+                <KaivuilmoitusAreasInfo areas={kaivuilmoitusAlueet} />
+              )}
             </TabPanel>
             <TabPanel>
               {/* Contacts information panel */}

@@ -1,7 +1,7 @@
-@import 'src/assets/styles/layout.scss';
+@import 'src/assets/styles/layout';
 
 .text {
-  font-family: 'HelsinkiGrotesk', serif;
+  font-family: HelsinkiGrotesk, serif;
 
   &--h1 {
     font-size: var(--fontsize-heading-xl);

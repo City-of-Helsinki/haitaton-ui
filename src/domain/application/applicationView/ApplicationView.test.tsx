@@ -224,6 +224,15 @@ describe('Excavation announcement application view', () => {
     expect(screen.getByText('Lataa työ valmis (PDF)')).toBeInTheDocument();
   });
 
+  test('Shows correct information in areas tab', async () => {
+    const { user } = render(<ApplicationViewContainer id={5} />);
+    await waitForLoadingToFinish();
+    await user.click(screen.getByRole('tab', { name: /alueet/i }));
+    const areaTab = screen.getByRole('tabpanel', { name: /alueet/i });
+
+    expect(areaTab).toMatchSnapshot();
+  });
+
   describe('Report excavation announcement in operational condition', () => {
     const setup = async (id: number = 8) => {
       const { user } = render(<ApplicationViewContainer id={id} />);
