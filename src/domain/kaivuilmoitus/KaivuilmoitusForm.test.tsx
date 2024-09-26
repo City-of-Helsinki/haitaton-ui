@@ -1096,7 +1096,7 @@ describe('Registry key', () => {
       fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
 
-      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(1);
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
       expect(screen.getByText('Henkilötunnus')).toBeInTheDocument();
     });
 
@@ -1109,7 +1109,7 @@ describe('Registry key', () => {
       fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Yritys')[0]);
 
-      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
       expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
     });
 
@@ -1122,7 +1122,7 @@ describe('Registry key', () => {
       fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Yhdistys')[0]);
 
-      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
       expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
     });
 
@@ -1135,7 +1135,7 @@ describe('Registry key', () => {
       fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Muu')[0]);
 
-      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(1);
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
       expect(
         screen.getByText('Y-tunnus, henkilötunnus tai muu yksilöivä tunnus'),
       ).toBeInTheDocument();
@@ -1263,7 +1263,7 @@ describe('Registry key', () => {
       fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
       fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
 
-      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
       expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
     });
 
@@ -1276,7 +1276,7 @@ describe('Registry key', () => {
       fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
       fireEvent.click(screen.getAllByText('Yritys')[1]);
 
-      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
       expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
     });
 
@@ -1289,7 +1289,7 @@ describe('Registry key', () => {
       fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
       fireEvent.click(screen.getAllByText('Yhdistys')[0]);
 
-      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
       expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
     });
 
@@ -1302,7 +1302,7 @@ describe('Registry key', () => {
       fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
       fireEvent.click(screen.getAllByText('Muu')[0]);
 
-      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
       expect(
         screen.queryByText('Y-tunnus, henkilötunnus tai muu yksilöivä tunnus'),
       ).not.toBeInTheDocument();
