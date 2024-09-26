@@ -142,6 +142,14 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
           'applicationData.customerWithContacts.customer.yhteystietoId',
           customerWithContacts.customer.yhteystietoId,
         );
+        setValue(
+          'applicationData.customerWithContacts.customer.registryKey',
+          customerWithContacts.customer.registryKey,
+        );
+        setValue(
+          'applicationData.customerWithContacts.customer.registryKeyHidden',
+          customerWithContacts.customer.registryKeyHidden,
+        );
       }
       if (contractorWithContacts) {
         setValue(

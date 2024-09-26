@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Accordion, Button, Fieldset, IconPlusCircle } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { useTranslation } from 'react-i18next';
@@ -76,32 +76,62 @@ const CustomerFields: React.FC<{
 
   const applicationType = getValues('applicationData.applicationType');
   const selectedContactType = watch(`applicationData.${customerType}.customer.type`);
+  const registryKey = watch(`applicationData.${customerType}.customer.registryKey`);
+  const registryKeyHidden = watch(`applicationData.${customerType}.customer.registryKeyHidden`);
   const registryKeyInputEnabled = isRegistryKeyInputEnabled(
     customerType,
     selectedContactType,
     applicationType,
   );
-  const isMounted = useRef(false);
+  const isMountedForSelectedContactType = useRef(false);
+  const isMountedForRegistryKey = useRef(false);
+  const [isRegistryKeyHiddenNotificationShown, setIsRegistryKeyHiddenNotificationShown] =
+    useState(false);
 
   useEffect(() => {
-    // If setting contact type disables the registry key or contact type is changed (after mount), clear the registry key
     if (
       !isRegistryKeyInputEnabled(customerType, selectedContactType, applicationType) ||
-      isMounted.current
+      isMountedForSelectedContactType.current
     ) {
+      // if setting contact type disables the registry key or contact type is changed (after mount), clear the registry key
       setValue(`applicationData.${customerType}.customer.registryKey`, null, {
         shouldValidate: true,
       });
+
+      // set registry key hidden to false when changing the contact type
+      setValue(`applicationData.${customerType}.customer.registryKeyHidden`, false, {
+        shouldValidate: false,
+      });
+
+      setIsRegistryKeyHiddenNotificationShown(false);
     }
 
-    // always set registry key hidden to false when changing the contact type
-    setValue(`applicationData.${customerType}.customer.registryKeyHidden`, false, {
-      shouldValidate: true,
-    });
+    // mark the component as mounted
+    isMountedForSelectedContactType.current = true;
+  }, [selectedContactType, customerType, applicationType, setValue]);
+
+  useEffect(() => {
+    if (isMountedForRegistryKey.current) {
+      // set registry key hidden to false when changing the registry key
+      setValue(`applicationData.${customerType}.customer.registryKeyHidden`, false, {
+        shouldValidate: true,
+      });
+
+      setIsRegistryKeyHiddenNotificationShown(false);
+    }
 
     // mark the component as mounted
-    isMounted.current = true;
-  }, [selectedContactType, customerType, applicationType, setValue]);
+    isMountedForRegistryKey.current = true;
+  }, [customerType, registryKey, setValue]);
+
+  useEffect(() => {
+    // show notification if registry key is hidden
+    if (registryKeyHidden) {
+      setIsRegistryKeyHiddenNotificationShown(true);
+    } else {
+      setIsRegistryKeyHiddenNotificationShown(false);
+    }
+  }, [registryKeyHidden]);
 
   function handleUserSelect(user: HankeUser) {
     setValue(`applicationData.${customerType}.customer.email`, user.sahkoposti, {
@@ -155,6 +185,11 @@ const CustomerFields: React.FC<{
           autoComplete="on"
           defaultValue={null}
           required={applicationType === 'EXCAVATION_NOTIFICATION' && registryKeyInputEnabled}
+          helperText={
+            isRegistryKeyHiddenNotificationShown
+              ? t('form:yhteystiedot:helperTexts:registryKey')
+              : ''
+          }
         />
       </ResponsiveGrid>
       <ResponsiveGrid maxColumns={2}>

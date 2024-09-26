@@ -243,7 +243,8 @@
       },
       "helperTexts": {
         "otherPartyRole": "Tahon rooli hankkeessa",
-        "yhteyshenkilo": "Voit etsiä jo lisättyä henkilöä kirjoittamalla tai valitsemalla pudotusvalikosta, tai lisätä uuden yhteyshenkilön."
+        "yhteyshenkilo": "Voit etsiä jo lisättyä henkilöä kirjoittamalla tai valitsemalla pudotusvalikosta, tai lisätä uuden yhteyshenkilön.",
+        "registryKey": "Tunnus on piilotettu tietosuojasyistä. Voit halutessasi tallentaa uuden tunnuksen korvaamalla ******** tekstin uudella tunnuksella."
       },
       "contactType": {
         "YKSITYISHENKILO": "Yksityishenkilö",
