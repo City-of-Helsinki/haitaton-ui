@@ -649,6 +649,7 @@ test('OVT and registryKey fields should be send as null if they are left empyty'
         type: 'COMPANY',
         name: '',
         registryKey: '1234567-1',
+        registryKeyHidden: false,
         ovt: '123456789012',
         postalAddress: {
           streetAddress: { streetName: 'Laskutuskuja 1' },

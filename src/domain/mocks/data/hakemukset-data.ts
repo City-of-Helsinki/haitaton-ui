@@ -700,6 +700,7 @@ const hakemukset: Application[] = [
         type: 'COMPANY',
         name: 'Laskutus Oy',
         registryKey: '1234567-1',
+        registryKeyHidden: false,
         postalAddress: {
           streetAddress: { streetName: 'Laskutuskuja 1' },
           postalCode: '00100',
@@ -841,6 +842,7 @@ const hakemukset: Application[] = [
         type: 'COMPANY',
         name: 'Laskutus Oy',
         registryKey: '1234567-1',
+        registryKeyHidden: false,
         postalAddress: {
           streetAddress: { streetName: 'Laskutuskuja 1' },
           postalCode: '00100',

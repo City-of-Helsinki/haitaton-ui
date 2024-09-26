@@ -74,6 +74,7 @@ export const invoicingCustomerSchema = yup.object().shape(
     name: yup.string().trim().max(100).required(),
     type: yup.mixed<ContactType>().required(),
     registryKey: registryKeySchema.required(),
+    registryKeyHidden: yup.boolean().required(),
     postalAddress: postalAddressSchema.when(['ovt', 'invoicingOperator'], {
       is: (ovt: string, invoicingOperator: string) => !ovt || !invoicingOperator,
       then: () => requiredPostalAddressSchema,

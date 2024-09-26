@@ -73,7 +73,8 @@ export type CustomerWithContacts = {
 export type InvoicingCustomer = {
   type: keyof typeof ContactType | null;
   name: string;
-  registryKey: string;
+  registryKey: string | null;
+  registryKeyHidden: boolean;
   ovt?: string | null;
   invoicingOperator?: string | null;
   customerReference?: string | null;
