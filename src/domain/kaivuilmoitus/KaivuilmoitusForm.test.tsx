@@ -1177,6 +1177,38 @@ describe('Show correct registry key label', () => {
         await screen.findByTestId('applicationData.customerWithContacts.customer.registryKey'),
       ).toBeRequired();
     });
+
+    test('Should show info text for hidden registry key', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer
+          hankeData={hankeData}
+          application={{
+            ...testApplication,
+            applicationData: {
+              ...testApplication.applicationData,
+              customerWithContacts: {
+                customer: {
+                  type: 'PERSON',
+                  name: 'Testi Testinen',
+                  registryKey: null,
+                  registryKeyHidden: true,
+                  email: 'testi@testi.fi',
+                  phone: '0401234567',
+                },
+                contacts: [],
+              },
+            },
+          }}
+        />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      expect(
+        await screen.findByText(
+          'Tunnus on piilotettu tietosuojasyistä. Voit halutessasi tallentaa uuden tunnuksen korvaamalla ******** tekstin uudella tunnuksella.',
+        ),
+      ).toBeInTheDocument();
+    });
   });
 
   describe('Contractor', () => {
