@@ -30,7 +30,7 @@
     "@hookform/resolvers": "^3.3.4",
     "@popperjs/core": "^2.11.8",
     "@reduxjs/toolkit": "^2.1.0",
-    "@sentry/react": "^8.1.0",
+    "@sentry/react": "^8.32.0",
     "@turf/boolean-contains": "^7.1.0",
     "@turf/center": "^7.1.0",
     "@turf/helpers": "^7.1.0",
