@@ -9,6 +9,19 @@ import { ContactType } from '../application/types/application';
 import TextInput from '../../common/components/textInput/TextInput';
 import { useFormContext } from 'react-hook-form';
 import { KaivuilmoitusFormValues } from './types';
+import { TFunction } from 'i18next';
+
+function getInvoicingRegistryKeyLabel(
+  t: TFunction<'translation', undefined>,
+  selectedContactType: string | null,
+) {
+  if (selectedContactType === 'PERSON') {
+    return t('form:yhteystiedot:labels:henkilotunnus');
+  } else if (selectedContactType === 'OTHER') {
+    return t('form:yhteystiedot:labels:muuTunnus');
+  }
+  return t('form:yhteystiedot:labels:ytunnus');
+}
 
 export default function Contacts() {
   const { t } = useTranslation();
@@ -86,7 +99,7 @@ export default function Contacts() {
           />
           <TextInput
             name="applicationData.invoicingCustomer.registryKey"
-            label={t('form:yhteystiedot:labels:yTunnusTaiHetu')}
+            label={getInvoicingRegistryKeyLabel(t, selectedContactType)}
             required
             autoComplete="on"
             defaultValue={null}
