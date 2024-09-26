@@ -385,7 +385,6 @@ describe('Excavation announcement application view', () => {
         await user.tab();
 
         // validation error should be shown
-        screen.debug(undefined, 100000);
         expect(
           await screen.findByText(
             'Päivämäärä ei voi olla ennen hakemuksen töiden alkamispäivää (12.1.2023)',
