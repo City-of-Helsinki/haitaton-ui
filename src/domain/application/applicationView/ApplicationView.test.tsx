@@ -1,5 +1,5 @@
 import { http, HttpResponse, delay } from 'msw';
-import { render, screen } from '../../../testUtils/render';
+import { render, screen, within } from '../../../testUtils/render';
 import ApplicationViewContainer from './ApplicationViewContainer';
 import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import { server } from '../../mocks/test-server';
@@ -228,9 +228,26 @@ describe('Excavation announcement application view', () => {
     const { user } = render(<ApplicationViewContainer id={5} />);
     await waitForLoadingToFinish();
     await user.click(screen.getByRole('tab', { name: /alueet/i }));
-    const areaTab = screen.getByRole('tabpanel', { name: /alueet/i });
+    const { queryByText } = within(screen.getByRole('tabpanel', { name: /alueet/i }));
 
-    expect(areaTab).toMatchSnapshot();
+    expect(queryByText('12.1.2023')).toBeInTheDocument();
+    expect(queryByText('12.11.2024')).toBeInTheDocument();
+    expect(queryByText('Aidasmäentie 5')).toBeInTheDocument();
+    expect(queryByText('Vesi, Viemäri')).toBeInTheDocument();
+    expect(queryByText('Työalue 1')).toBeInTheDocument();
+    expect(queryByText('Pinta-ala: 158 m²')).toBeInTheDocument();
+    expect(queryByText('Työalue 2')).toBeInTheDocument();
+    expect(queryByText('Pinta-ala: 30 m²')).toBeInTheDocument();
+    expect(queryByText('188 m²')).toBeInTheDocument();
+    expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3');
+    expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
+    expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('4');
+    expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('5');
+    expect(queryByText('3: Toistuva meluhaitta')).toBeInTheDocument();
+    expect(queryByText('5: Jatkuva pölyhaitta')).toBeInTheDocument();
+    expect(queryByText('1: Satunnainen tärinähaitta')).toBeInTheDocument();
+    expect(queryByText('Vähentää kaistan yhdellä ajosuunnalla')).toBeInTheDocument();
+    expect(queryByText('10-99 m')).toBeInTheDocument();
   });
 
   describe('Report excavation announcement in operational condition', () => {
