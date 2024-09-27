@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Grid } from '@chakra-ui/react';
-import { Button, Koros, Link, Notification } from 'hds-react';
+import { Koros, Link, LoginButton, Notification, useOidcClient } from 'hds-react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import Container from '../../common/components/container/Container';
 import Text from '../../common/components/text/Text';
@@ -28,7 +27,7 @@ const FEEDBACK_NOTIFICATION_CLOSED = 'feedback-notification-closed';
 
 const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const { login } = useOidcClient();
   const { PUBLIC_HANKKEET_MAP, PUBLIC_HANKKEET_LIST, HANKEPORTFOLIO } = useLocalizedRoutes();
   const [feedbackOpen, setFeedbackOpen] = useState(
     !sessionStorage.getItem(FEEDBACK_NOTIFICATION_CLOSED),
@@ -111,9 +110,15 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
           <p className="text-lg" style={{ marginBottom: 'var(--spacing-2-xl)' }}>
             {t('homepage:loginContainer:description')}
           </p>
-          <Button variant="secondary" theme="black" onClick={() => navigate('/login')}>
+          <LoginButton
+            variant="secondary"
+            theme="black"
+            loggingInText={t('authentication:loggingIn')}
+            errorText={t('authentication:loggingInErrorLabel')}
+            spinnerColor="var(--color-coat-of-arms)"
+          >
             {t('homepage:loginContainer:button')}
-          </Button>
+          </LoginButton>
         </div>
       </div>
     );
@@ -175,7 +180,9 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
           <Container>
             <p>
               {t('homepage:info')}
-              <Link href="/login">{t('homepage:info_link')}</Link>
+              <Link href="#" onClick={() => login()}>
+                {t('homepage:info_link')}
+              </Link>
             </p>
           </Container>
         </Box>
