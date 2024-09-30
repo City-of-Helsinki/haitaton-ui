@@ -243,9 +243,9 @@ describe('Excavation announcement application view', () => {
     expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
     expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('4');
     expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('5');
-    expect(queryByText('3: Toistuva meluhaitta')).toBeInTheDocument();
-    expect(queryByText('5: Jatkuva pölyhaitta')).toBeInTheDocument();
-    expect(queryByText('1: Satunnainen tärinähaitta')).toBeInTheDocument();
+    expect(queryByText('Toistuva meluhaitta')).toBeInTheDocument();
+    expect(queryByText('Jatkuva pölyhaitta')).toBeInTheDocument();
+    expect(queryByText('Satunnainen tärinähaitta')).toBeInTheDocument();
     expect(queryByText('Vähentää kaistan yhdellä ajosuunnalla')).toBeInTheDocument();
     expect(queryByText('10-99 m')).toBeInTheDocument();
   });

@@ -493,22 +493,22 @@
       "PITUUS_500_METRIA_TAI_ENEMMAN": "500 m tai enemmän"
     },
     "meluHaitta": {
-      "EI_MELUHAITTAA": "0: Ei meluhaittaa",
-      "SATUNNAINEN_MELUHAITTA": "1: Satunnainen meluhaitta",
-      "TOISTUVA_MELUHAITTA": "3: Toistuva meluhaitta",
-      "JATKUVA_MELUHAITTA": "5: Jatkuva meluhaitta"
+      "EI_MELUHAITTAA": "Ei meluhaittaa",
+      "SATUNNAINEN_MELUHAITTA": "Satunnainen meluhaitta",
+      "TOISTUVA_MELUHAITTA": "Toistuva meluhaitta",
+      "JATKUVA_MELUHAITTA": "Jatkuva meluhaitta"
     },
     "polyHaitta": {
-      "EI_POLYHAITTAA": "0: Ei pölyhaittaa",
-      "SATUNNAINEN_POLYHAITTA": "1: Satunnainen pölyhaitta",
-      "TOISTUVA_POLYHAITTA": "3: Toistuva pölyhaitta",
-      "JATKUVA_POLYHAITTA": "5: Jatkuva pölyhaitta"
+      "EI_POLYHAITTAA": "Ei pölyhaittaa",
+      "SATUNNAINEN_POLYHAITTA": "Satunnainen pölyhaitta",
+      "TOISTUVA_POLYHAITTA": "Toistuva pölyhaitta",
+      "JATKUVA_POLYHAITTA": "Jatkuva pölyhaitta"
     },
     "tarinaHaitta": {
-      "EI_TARINAHAITTAA": "0: Ei tärinähaittaa",
-      "SATUNNAINEN_TARINAHAITTA": "1: Satunnainen tärinähaitta",
-      "TOISTUVA_TARINAHAITTA": "3: Toistuva tärinähaitta",
-      "JATKUVA_TARINAHAITTA": "5: Jatkuva tärinähaitta"
+      "EI_TARINAHAITTAA": "Ei tärinähaittaa",
+      "SATUNNAINEN_TARINAHAITTA": "Satunnainen tärinähaitta",
+      "TOISTUVA_TARINAHAITTA": "Toistuva tärinähaitta",
+      "JATKUVA_TARINAHAITTA": "Jatkuva tärinähaitta"
     },
     "alue": {
       "title": "Hankealue {{index}}",
@@ -1231,9 +1231,9 @@
       "LINJAAUTOLIIKENNE": "<ul><li>0: Ei linja-autojen paikallisliikennettä</li><li>2: Linja-autojen paikallisliikennettä muulloin, kuin ruuhka-aikana</li><li>3: Linja-autojen paikallisliikenteen linjojen vuoromäärä enintään 10 ruuhkatunnissa</li><li>4: Linja-autojen paikallisliikenteen runkolinja tai vuoromäärä enintään 20 ruuhkatunnissa</li><li>5: Kamppi-Rautatientori -alue, Mannerheimintie, Kaisaniemenkatu, Hämeentie tai linja-autojen paikallisliikenteen linjojen vuoromäärä yli 20 ruuhkatunnissa</li></ul>",
       "RAITIOLIIKENNE": "<ul><li>0: Ei tunnistettuja raitiotiekiskoja</li><li>3: Raitiotieverkon rataosa, joilla ei ole säännöllistä linjaliikennettä</li><li>5: Raitiotieverkon rataosa, jolla on säännöllistä linjaliikennettä</li></ul>",
       "MUUT": {
-        "meluHaitta": "<ul><li>$t(hanke:meluHaitta:EI_MELUHAITTAA)</li><li>$t(hanke:meluHaitta:SATUNNAINEN_MELUHAITTA)</li><li>$t(hanke:meluHaitta:TOISTUVA_MELUHAITTA)</li><li>$t(hanke:meluHaitta:JATKUVA_MELUHAITTA)</li></ul>",
-        "polyHaitta": "<ul><li>$t(hanke:polyHaitta:EI_POLYHAITTAA)</li><li>$t(hanke:polyHaitta:SATUNNAINEN_POLYHAITTA)</li><li>$t(hanke:polyHaitta:TOISTUVA_POLYHAITTA)</li><li>$t(hanke:polyHaitta:JATKUVA_POLYHAITTA)</li></ul>",
-        "tarinaHaitta": "<ul><li>$t(hanke:tarinaHaitta:EI_TARINAHAITTAA)</li><li>$t(hanke:tarinaHaitta:SATUNNAINEN_TARINAHAITTA)</li><li>$t(hanke:tarinaHaitta:TOISTUVA_TARINAHAITTA)</li><li>$t(hanke:tarinaHaitta:JATKUVA_TARINAHAITTA)</li></ul>"
+        "meluHaitta": "<ul><li>0: $t(hanke:meluHaitta:EI_MELUHAITTAA)</li><li>1: $t(hanke:meluHaitta:SATUNNAINEN_MELUHAITTA)</li><li>3: $t(hanke:meluHaitta:TOISTUVA_MELUHAITTA)</li><li>5: $t(hanke:meluHaitta:JATKUVA_MELUHAITTA)</li></ul>",
+        "polyHaitta": "<ul><li>0: $t(hanke:polyHaitta:EI_POLYHAITTAA)</li><li>1: $t(hanke:polyHaitta:SATUNNAINEN_POLYHAITTA)</li><li>3: $t(hanke:polyHaitta:TOISTUVA_POLYHAITTA)</li><li>5: $t(hanke:polyHaitta:JATKUVA_POLYHAITTA)</li></ul>",
+        "tarinaHaitta": "<ul><li>0: $t(hanke:tarinaHaitta:EI_TARINAHAITTAA)</li><li>1: $t(hanke:tarinaHaitta:SATUNNAINEN_TARINAHAITTA)</li><li>3: $t(hanke:tarinaHaitta:TOISTUVA_TARINAHAITTA)</li><li>5: $t(hanke:tarinaHaitta:JATKUVA_TARINAHAITTA)</li></ul>"
       }
     }
   },

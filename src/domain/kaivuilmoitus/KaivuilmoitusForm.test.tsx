@@ -487,9 +487,9 @@ test('Should be able to fill form pages and show filled information in summary p
   expect(screen.getByText('Pinta-ala: 188 m²')).toBeInTheDocument();
   expect(screen.getByText('Katuosoite: Aidasmäentie 5')).toBeInTheDocument();
   expect(screen.getByText('Työn tarkoitus: Vesi, Viemäri')).toBeInTheDocument();
-  expect(screen.getByText('Meluhaitta: 3: Toistuva meluhaitta')).toBeInTheDocument();
-  expect(screen.getByText('Pölyhaitta: 5: Jatkuva pölyhaitta')).toBeInTheDocument();
-  expect(screen.getByText('Tärinähaitta: 1: Satunnainen tärinähaitta')).toBeInTheDocument();
+  expect(screen.getByText('Meluhaitta: Toistuva meluhaitta')).toBeInTheDocument();
+  expect(screen.getByText('Pölyhaitta: Jatkuva pölyhaitta')).toBeInTheDocument();
+  expect(screen.getByText('Tärinähaitta: Satunnainen tärinähaitta')).toBeInTheDocument();
   expect(
     screen.getByText('Autoliikenteen kaistahaitta: Vähentää kaistan yhdellä ajosuunnalla'),
   ).toBeInTheDocument();
