@@ -75,6 +75,37 @@ import { formatToFinnishDate } from '../../../common/utils/date';
 import HaittaIndexes from '../../common/haittaIndexes/HaittaIndexes';
 import { calculateLiikennehaittaindeksienYhteenveto } from '../../kaivuilmoitus/utils';
 import styles from './ApplicationView.module.scss';
+import CustomAccordion from '../../../common/components/customAccordion/CustomAccordion';
+
+function SidebarTyoalueet({
+  tyoalueet,
+  startTime,
+  endTime,
+}: {
+  tyoalueet: ApplicationArea[];
+  startTime: Date | null;
+  endTime: Date | null;
+}) {
+  const { t } = useTranslation();
+
+  return tyoalueet.map((tyoalue, index) => {
+    const areaName = getAreaDefaultName(t, index, tyoalueet.length);
+    const geometry = getAreaGeometry(tyoalue);
+    return (
+      <Box
+        key={areaName}
+        padding="var(--spacing-s)"
+        paddingRight="var(--spacing-m)"
+        _notLast={{ borderBottom: '1px solid var(--color-black-30)' }}
+      >
+        <Text tag="p" styleAs="body-m" weight="bold" spacingBottom="2-xs">
+          {areaName} ({formatSurfaceArea(geometry)})
+        </Text>
+        <ApplicationDates startTime={startTime} endTime={endTime} />
+      </Box>
+    );
+  });
+}
 
 function TyoalueetList({ tyoalueet }: { tyoalueet: ApplicationArea[] }) {
   const { t } = useTranslation();
@@ -487,30 +518,46 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
             </TabPanel>
           </Tabs>
         </InformationViewMainContent>
-        <InformationViewSidebar>
+        <InformationViewSidebar testId="application-view-sidebar">
           {hanke && (
             <>
               <Box mb="var(--spacing-s)">
                 <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} showLink={false} />
                 <OwnHankeMap hanke={hanke} application={application} />
               </Box>
-              {tyoalueet.map((alue, index) => {
-                const areaName = getAreaDefaultName(t, index, tyoalueet.length);
-                const geometry = getAreaGeometry(alue);
-                return (
-                  <Box
-                    padding="var(--spacing-s)"
-                    paddingRight="var(--spacing-m)"
-                    borderBottom="1px solid var(--color-black-30)"
-                    key={areaName}
-                  >
-                    <Text tag="p" styleAs="body-m" weight="bold" spacingBottom="2-xs">
-                      {areaName} ({formatSurfaceArea(geometry)})
-                    </Text>
-                    <ApplicationDates startTime={startTime} endTime={endTime} />
-                  </Box>
-                );
-              })}
+              {applicationType === 'CABLE_REPORT' && (
+                <SidebarTyoalueet tyoalueet={tyoalueet} startTime={startTime} endTime={endTime} />
+              )}
+              {applicationType === 'EXCAVATION_NOTIFICATION' &&
+                kaivuilmoitusAlueet?.map((kaivuilmoitusAlue) => {
+                  const hankeAlue = hanke.alueet.find(
+                    (alue) => alue.id === kaivuilmoitusAlue.hankealueId,
+                  );
+                  return (
+                    <CustomAccordion
+                      key={kaivuilmoitusAlue.hankealueId}
+                      accordionBorderBottom
+                      headingSize="s"
+                      heading={kaivuilmoitusAlue.name}
+                      subHeading={
+                        <Box marginTop="var(--spacing-2-xs)">
+                          <ApplicationDates
+                            startTime={hankeAlue?.haittaAlkuPvm ?? null}
+                            endTime={hankeAlue?.haittaLoppuPvm ?? null}
+                          />
+                        </Box>
+                      }
+                    >
+                      <Box marginLeft="var(--spacing-s)">
+                        <SidebarTyoalueet
+                          tyoalueet={kaivuilmoitusAlue.tyoalueet}
+                          startTime={startTime}
+                          endTime={endTime}
+                        />
+                      </Box>
+                    </CustomAccordion>
+                  );
+                })}
             </>
           )}
         </InformationViewSidebar>
