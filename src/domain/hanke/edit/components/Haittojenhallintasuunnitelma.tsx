@@ -183,7 +183,9 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
                     }
                   />
                   <HaittaSubSection
-                    heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:liikennemaara`)}
+                    heading={t(
+                      `hankeForm:haittojenHallintaForm:carTrafficNuisanceType:liikennemaara`,
+                    )}
                     index={tormaystarkasteluTulos?.autoliikenne.liikennemaara}
                     testId="test-liikennemaara"
                     tooltipContent={
@@ -191,7 +193,9 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
                     }
                   />
                   <HaittaSubSection
-                    heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistahaitta`)}
+                    heading={t(
+                      `hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistahaitta`,
+                    )}
                     index={tormaystarkasteluTulos?.autoliikenne.kaistahaitta}
                     testId="test-kaistahaitta"
                     tooltipContent={
@@ -209,7 +213,9 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
                     }
                   />
                   <HaittaSubSection
-                    heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:haitanKesto`)}
+                    heading={t(
+                      `hankeForm:haittojenHallintaForm:carTrafficNuisanceType:haitanKesto`,
+                    )}
                     index={tormaystarkasteluTulos?.autoliikenne.haitanKesto}
                     testId="test-haitanKesto"
                     tooltipContent={

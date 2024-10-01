@@ -485,22 +485,22 @@
       "PITUUS_500_METRIA_TAI_ENEMMAN": "500 m or more"
     },
     "meluHaitta": {
-      "EI_MELUHAITTAA": "0: No noise nuisance",
-      "SATUNNAINEN_MELUHAITTA": "1: Occasional noise nuisance",
-      "TOISTUVA_MELUHAITTA": "3: Recurring noise nuisance",
-      "JATKUVA_MELUHAITTA": "5: Permanent noise nuisance"
+      "EI_MELUHAITTAA": "No noise nuisance",
+      "SATUNNAINEN_MELUHAITTA": "Occasional noise nuisance",
+      "TOISTUVA_MELUHAITTA": "Recurring noise nuisance",
+      "JATKUVA_MELUHAITTA": "Permanent noise nuisance"
     },
     "polyHaitta": {
-      "EI_POLYHAITTAA": "0: No dust nuisance",
-      "SATUNNAINEN_POLYHAITTA": "1: Occasional dust nuisance",
-      "TOISTUVA_POLYHAITTA": "3: Recurring noise nuisance",
-      "JATKUVA_POLYHAITTA": "5: Permanent noise nuisance"
+      "EI_POLYHAITTAA": "No dust nuisance",
+      "SATUNNAINEN_POLYHAITTA": "Occasional dust nuisance",
+      "TOISTUVA_POLYHAITTA": "Recurring dust nuisance",
+      "JATKUVA_POLYHAITTA": "Permanent dust nuisance"
     },
     "tarinaHaitta": {
-      "EI_TARINAHAITTAA": "0: No vibration nuisance",
-      "SATUNNAINEN_TARINAHAITTA": "1: Occasional vibration nuisance",
-      "TOISTUVA_TARINAHAITTA": "3: Recurring vibration nuisance",
-      "JATKUVA_TARINAHAITTA": "5: Permanent vibration nuisance"
+      "EI_TARINAHAITTAA": "No vibration nuisance",
+      "SATUNNAINEN_TARINAHAITTA": "Occasional vibration nuisance",
+      "TOISTUVA_TARINAHAITTA": "Recurring vibration nuisance",
+      "JATKUVA_TARINAHAITTA": "Permanent vibration nuisance"
     },
     "alue": {
       "title": "Project area {{index}}",

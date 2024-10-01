@@ -1,12 +1,22 @@
 {
-  "extends": "stylelint-config-standard",
+  "extends": "stylelint-config-standard-scss",
   "rules": {
     "at-rule-no-unknown": [
       true,
       {
-        "ignoreAtRules": ["function", "if", "each", "include", "mixin", "warn"]
+        "ignoreAtRules": [
+          "function",
+          "if",
+          "each",
+          "include",
+          "mixin",
+          "warn"
+        ]
       }
-    ]
+    ],
+    "selector-class-pattern": null,
+    "declaration-block-no-redundant-longhand-properties": null,
+    "scss/no-global-function-names": null
   },
   "ignoreFiles": "**/reset.css"
 }

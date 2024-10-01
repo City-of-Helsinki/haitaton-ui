@@ -25,7 +25,7 @@ const SectionItemTitle: React.FC<{ children: React.ReactNode }> = ({ children })
 };
 
 const SectionItemContent: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
-  return <Box color="var(--color-black-60)">{children}</Box>;
+  return <Box color="var(--color-black-70)">{children}</Box>;
 };
 
 const FormSummarySection: React.FC<{
