@@ -6,6 +6,7 @@ import { useFormContext } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
 import {
   Application,
+  ApplicationType,
   Contact,
   ContactType,
   CustomerType,
@@ -38,9 +39,9 @@ function getEmptyCustomerWithContacts(): CustomerWithContacts {
 }
 
 function isRegistryKeyInputEnabled(
-  customerType: string,
-  selectedContactType: string | null,
-  applicationType: string,
+  customerType: CustomerType,
+  selectedContactType: keyof typeof ContactType | null,
+  applicationType: ApplicationType,
 ) {
   return (
     selectedContactType === 'COMPANY' ||
@@ -51,9 +52,9 @@ function isRegistryKeyInputEnabled(
 
 function getRegistryKeyLabel(
   t: TFunction<'translation', undefined>,
-  customerType: string,
-  selectedContactType: string | null,
-  applicationType: string,
+  customerType: CustomerType,
+  selectedContactType: keyof typeof ContactType | null,
+  applicationType: ApplicationType,
 ) {
   if (selectedContactType === 'COMPANY' || selectedContactType === 'ASSOCIATION') {
     return t('form:yhteystiedot:labels:ytunnus');
