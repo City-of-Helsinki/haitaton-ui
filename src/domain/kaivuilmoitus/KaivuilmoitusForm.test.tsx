@@ -26,6 +26,7 @@ import { fillNewContactPersonForm } from '../forms/components/testUtils';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import * as applicationApi from '../application/utils';
 import { HAITTA_INDEX_TYPE } from '../common/haittaIndexes/types';
+import { HIDDEN_FIELD_VALUE } from '../application/constants';
 
 afterEach(cleanup);
 
@@ -1190,7 +1191,7 @@ describe('Show correct registry key label', () => {
                 customer: {
                   type: 'PERSON',
                   name: 'Testi Testinen',
-                  registryKey: null,
+                  registryKey: HIDDEN_FIELD_VALUE,
                   registryKeyHidden: true,
                   email: 'testi@testi.fi',
                   phone: '0401234567',
@@ -1208,6 +1209,46 @@ describe('Show correct registry key label', () => {
           'Tunnus on piilotettu tietosuojasyistä. Voit halutessasi tallentaa uuden tunnuksen korvaamalla ******** tekstin uudella tunnuksella.',
         ),
       ).toBeInTheDocument();
+    });
+
+    test('Should be able to revert back to hidden registry key', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer
+          hankeData={hankeData}
+          application={{
+            ...testApplication,
+            applicationData: {
+              ...testApplication.applicationData,
+              customerWithContacts: {
+                customer: {
+                  type: 'PERSON',
+                  name: 'Testi Testinen',
+                  registryKey: HIDDEN_FIELD_VALUE,
+                  registryKeyHidden: true,
+                  email: 'testi@testi.fi',
+                  phone: '0401234567',
+                },
+                contacts: [],
+              },
+            },
+          }}
+        />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      await user.type(screen.getAllByRole('textbox', { name: /henkilötunnus/i })[0], 'invalid');
+      await user.click(document.body);
+
+      expect(await screen.findByText('Kentän arvo on virheellinen')).toBeInTheDocument();
+
+      await user.clear(screen.getAllByRole('textbox', { name: /henkilötunnus/i })[0]);
+      await user.type(
+        screen.getAllByRole('textbox', { name: /henkilötunnus/i })[0],
+        HIDDEN_FIELD_VALUE,
+      );
+      await user.click(document.body);
+
+      expect(screen.queryByText('Kentän arvo on virheellinen')).not.toBeInTheDocument();
     });
   });
 

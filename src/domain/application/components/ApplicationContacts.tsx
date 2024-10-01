@@ -23,6 +23,7 @@ import { useHankeUsers } from '../../hanke/hankeUsers/hooks/useHankeUsers';
 import { mapHankeUserToContact } from '../../hanke/hankeUsers/utils';
 import UserSearchInput from '../../hanke/hankeUsers/UserSearchInput';
 import { TFunction } from 'i18next';
+import { HIDDEN_FIELD_VALUE } from '../constants';
 
 function getEmptyCustomerWithContacts(): CustomerWithContacts {
   return {
@@ -83,55 +84,44 @@ const CustomerFields: React.FC<{
     selectedContactType,
     applicationType,
   );
-  const isMountedForSelectedContactType = useRef(false);
-  const isMountedForRegistryKey = useRef(false);
-  const [isRegistryKeyHiddenNotificationShown, setIsRegistryKeyHiddenNotificationShown] =
-    useState(false);
+  const isMounted = useRef(false);
+  const [originalRegistryKeyIsHidden, setOriginalRegistryKeyIsHidden] = useState(false);
 
   useEffect(() => {
-    if (
-      !isRegistryKeyInputEnabled(customerType, selectedContactType, applicationType) ||
-      isMountedForSelectedContactType.current
-    ) {
-      // if setting contact type disables the registry key or contact type is changed (after mount), clear the registry key
+    // set a flag to mark the original registry key as hidden value in order to be able to revert back to it
+    if (registryKey === HIDDEN_FIELD_VALUE) {
+      setOriginalRegistryKeyIsHidden(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      // clear the registry key when changing the contact type after mount
       setValue(`applicationData.${customerType}.customer.registryKey`, null, {
         shouldValidate: true,
       });
-
-      // set registry key hidden to false when changing the contact type
-      setValue(`applicationData.${customerType}.customer.registryKeyHidden`, false, {
-        shouldValidate: false,
-      });
-
-      setIsRegistryKeyHiddenNotificationShown(false);
+      setOriginalRegistryKeyIsHidden(false);
     }
-
-    // mark the component as mounted
-    isMountedForSelectedContactType.current = true;
   }, [selectedContactType, customerType, applicationType, setValue]);
 
   useEffect(() => {
-    if (isMountedForRegistryKey.current) {
-      // set registry key hidden to false when changing the registry key
-      setValue(`applicationData.${customerType}.customer.registryKeyHidden`, false, {
-        shouldValidate: true,
-      });
-
-      setIsRegistryKeyHiddenNotificationShown(false);
+    if (isMounted.current) {
+      if (originalRegistryKeyIsHidden && registryKey === HIDDEN_FIELD_VALUE) {
+        // set registry key hidden to true when changing the registry key back to the hidden value
+        setValue(`applicationData.${customerType}.customer.registryKeyHidden`, true, {
+          shouldValidate: true,
+        });
+      } else {
+        // set registry key hidden to false when changing the registry key after mount
+        setValue(`applicationData.${customerType}.customer.registryKeyHidden`, false, {
+          shouldValidate: true,
+        });
+      }
     }
 
     // mark the component as mounted
-    isMountedForRegistryKey.current = true;
+    isMounted.current = true;
   }, [customerType, registryKey, setValue]);
-
-  useEffect(() => {
-    // show notification if registry key is hidden
-    if (registryKeyHidden) {
-      setIsRegistryKeyHiddenNotificationShown(true);
-    } else {
-      setIsRegistryKeyHiddenNotificationShown(false);
-    }
-  }, [registryKeyHidden]);
 
   function handleUserSelect(user: HankeUser) {
     setValue(`applicationData.${customerType}.customer.email`, user.sahkoposti, {
@@ -185,11 +175,7 @@ const CustomerFields: React.FC<{
           autoComplete="on"
           defaultValue={null}
           required={applicationType === 'EXCAVATION_NOTIFICATION' && registryKeyInputEnabled}
-          helperText={
-            isRegistryKeyHiddenNotificationShown
-              ? t('form:yhteystiedot:helperTexts:registryKey')
-              : ''
-          }
+          helperText={registryKeyHidden ? t('form:yhteystiedot:helperTexts:registryKey') : ''}
         />
       </ResponsiveGrid>
       <ResponsiveGrid maxColumns={2}>
