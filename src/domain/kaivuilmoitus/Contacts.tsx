@@ -10,6 +10,7 @@ import TextInput from '../../common/components/textInput/TextInput';
 import { useFormContext } from 'react-hook-form';
 import { KaivuilmoitusFormValues } from './types';
 import { TFunction } from 'i18next';
+import { HIDDEN_FIELD_VALUE } from '../application/constants';
 
 function getInvoicingRegistryKeyLabel(
   t: TFunction<'translation', undefined>,
@@ -52,10 +53,15 @@ export default function Contacts() {
   const postalAddressRequired = !ovt || !invoicingOperator;
   const ovtRequired = !ovtDisabled && (!streetName || !postalCode || !city);
 
-  const isMountedForSelectedContactType = useRef(false);
-  const isMountedForRegistryKey = useRef(false);
-  const [isRegistryKeyHiddenNotificationShown, setIsRegistryKeyHiddenNotificationShown] =
-    useState(false);
+  const isMounted = useRef(false);
+  const [originalRegistryKeyIsHidden, setOriginalRegistryKeyIsHidden] = useState(false);
+
+  useEffect(() => {
+    // set a flag to mark the original registry key as hidden value in order to be able to revert back to it
+    if (registryKey === HIDDEN_FIELD_VALUE) {
+      setOriginalRegistryKeyIsHidden(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (selectedContactType === 'PERSON' || selectedContactType === 'OTHER') {
@@ -63,40 +69,31 @@ export default function Contacts() {
       resetField('applicationData.invoicingCustomer.invoicingOperator', { defaultValue: '' });
     }
 
-    if (isMountedForSelectedContactType.current) {
+    if (isMounted.current) {
       // if the contact type is changed (after mount), clear the registry key
       resetField('applicationData.invoicingCustomer.registryKey', { defaultValue: '' });
-
-      // set registry key hidden to false when changing the contact type
-      setValue('applicationData.invoicingCustomer.registryKeyHidden', false);
-
-      setIsRegistryKeyHiddenNotificationShown(false);
+      setOriginalRegistryKeyIsHidden(false);
     }
-
-    // mark the component as mounted
-    isMountedForSelectedContactType.current = true;
   }, [selectedContactType, setValue, resetField]);
 
   useEffect(() => {
-    if (isMountedForRegistryKey.current) {
-      // set registry key hidden to false when changing the registry key
-      setValue('applicationData.invoicingCustomer.registryKeyHidden', false);
-
-      setIsRegistryKeyHiddenNotificationShown(false);
+    if (isMounted.current) {
+      if (originalRegistryKeyIsHidden && registryKey === HIDDEN_FIELD_VALUE) {
+        // set registry key hidden to true when changing the registry key back to the hidden value
+        setValue('applicationData.invoicingCustomer.registryKeyHidden', true, {
+          shouldValidate: true,
+        });
+      } else {
+        // set registry key hidden to false when changing the registry key
+        setValue('applicationData.invoicingCustomer.registryKeyHidden', false, {
+          shouldValidate: true,
+        });
+      }
     }
 
     // mark the component as mounted
-    isMountedForRegistryKey.current = true;
+    isMounted.current = true;
   }, [registryKey, setValue]);
-
-  useEffect(() => {
-    // show notification if registry key is hidden
-    if (registryKeyHidden) {
-      setIsRegistryKeyHiddenNotificationShown(true);
-    } else {
-      setIsRegistryKeyHiddenNotificationShown(false);
-    }
-  }, [registryKeyHidden]);
 
   useEffect(() => {
     if (!postalAddressRequired) {
@@ -153,11 +150,7 @@ export default function Contacts() {
             required
             autoComplete="on"
             defaultValue={null}
-            helperText={
-              isRegistryKeyHiddenNotificationShown
-                ? t('form:yhteystiedot:helperTexts:registryKey')
-                : ''
-            }
+            helperText={registryKeyHidden ? t('form:yhteystiedot:helperTexts:registryKey') : ''}
           />
         </ResponsiveGrid>
         <ResponsiveGrid>
