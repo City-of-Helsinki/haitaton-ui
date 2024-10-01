@@ -221,7 +221,7 @@ describe('Cable report application view', () => {
   });
 });
 
-describe('Excavation announcement application view', () => {
+describe('Excavation notification application view', () => {
   test('Shows decision links if decisions are available', async () => {
     render(<ApplicationViewContainer id={8} />);
     await waitForLoadingToFinish();
@@ -265,7 +265,7 @@ describe('Excavation announcement application view', () => {
     expect(sidebar).toMatchSnapshot();
   });
 
-  describe('Report excavation announcement in operational condition', () => {
+  describe('Report excavation notification in operational condition', () => {
     const setup = async (id: number = 8) => {
       const { user } = render(<ApplicationViewContainer id={id} />);
       await waitForLoadingToFinish();
@@ -385,7 +385,6 @@ describe('Excavation announcement application view', () => {
         await user.tab();
 
         // validation error should be shown
-        screen.debug(undefined, 100000);
         expect(
           await screen.findByText(
             'Päivämäärä ei voi olla ennen hakemuksen töiden alkamispäivää (12.1.2023)',
@@ -443,6 +442,198 @@ describe('Excavation announcement application view', () => {
         const user = await setup();
         const button = await screen.findByRole('button', {
           name: 'Ilmoita toiminnalliseen kuntoon',
+        });
+        await user.click(button);
+
+        const dateInput = screen.getByRole('textbox', { name: /päivämäärä/i });
+        await user.type(dateInput, validDate);
+        await user.tab();
+
+        const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
+        await user.click(confirmButton);
+
+        expect(await screen.findByText('Ilmoituksen lähettäminen epäonnistui')).toBeInTheDocument();
+        expect(screen.queryByText('Ilmoitus lähetetty')).not.toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Report excavation notification work finished', () => {
+    const setup = async (id: number = 8) => {
+      const { user } = render(<ApplicationViewContainer id={id} />);
+      await waitForLoadingToFinish();
+      return user;
+    };
+
+    const validDate = '28.8.2024';
+
+    const tomorrow = () => {
+      const date = new Date();
+      date.setDate(date.getDate() + 1);
+      return format(date, 'd.M.yyyy', { locale: fi });
+    };
+
+    const dayBeforeStartDate = () => {
+      const date = new Date(2023, 0, 11);
+      return format(date, 'd.M.yyyy', { locale: fi });
+    };
+
+    describe('Report finisehd button', () => {
+      test('Shows the button when work can be reported being finished', async () => {
+        await setup();
+        screen.debug(undefined, 100000);
+        const button = await screen.findByRole('button', {
+          name: 'Ilmoita valmiiksi',
+        });
+        expect(button).toBeEnabled();
+      });
+
+      test('Does not show the button when work cannot be reported finished', async () => {
+        await setup(7);
+        expect(screen.queryByRole('button', { name: 'Ilmoita valmiiksi' })).not.toBeInTheDocument();
+      });
+    });
+
+    describe('Report work finished confirmation dialog', () => {
+      afterEach(() => {
+        jest.restoreAllMocks();
+        jest.clearAllMocks();
+      });
+
+      test('Shows previous work finished reports in confirmation dialog', async () => {
+        const user = await setup();
+
+        const button = await screen.findByRole('button', {
+          name: 'Ilmoita valmiiksi',
+        });
+        await user.click(button);
+
+        // confirmation dialog should be shown
+        expect(await screen.findByText('Ilmoita valmiiksi?')).toBeInTheDocument();
+        expect(
+          screen.getByText('Työ on aiemmin ilmoitettu valmiiksi seuraavasti', {
+            exact: false,
+          }),
+        ).toBeInTheDocument();
+        const reportedDate = new Date('2024-08-01T15:15:00.000Z');
+        expect(
+          screen.getByText(`1.8.2024 ${format(reportedDate, 'HH:mm')} päivämäärälle 1.8.2024`),
+        ).toBeInTheDocument();
+      });
+
+      test('Confirm button is disabled until a valid date is entered', async () => {
+        const user = await setup();
+
+        const button = await screen.findByRole('button', {
+          name: 'Ilmoita valmiiksi',
+        });
+        await user.click(button);
+
+        // confirmation dialog should be shown
+        expect(await screen.findByText('Ilmoita valmiiksi?')).toBeInTheDocument();
+        // confirmation button should be disabled until a valid date is entered
+        const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
+        expect(confirmButton).toBeDisabled();
+        const dateInput = screen.getByRole('textbox', { name: /päivämäärä/i });
+        await user.type(dateInput, validDate);
+        await user.tab();
+        expect(confirmButton).toBeEnabled();
+      });
+
+      test('Does not accept a date in the future', async () => {
+        const user = await setup();
+
+        const button = await screen.findByRole('button', {
+          name: 'Ilmoita valmiiksi',
+        });
+        await user.click(button);
+        expect(await screen.findByText('Ilmoita valmiiksi?')).toBeInTheDocument();
+
+        const date = tomorrow();
+        const dateInput = screen.getByRole('textbox', { name: /päivämäärä/i });
+        await user.type(dateInput, date);
+        await user.tab();
+
+        // validation error should be shown
+        expect(
+          await screen.findByText('Päivämäärä ei voi olla tulevaisuudessa'),
+        ).toBeInTheDocument();
+        // confirmation button should be disabled
+        expect(screen.getByRole('button', { name: 'Vahvista' })).toBeDisabled();
+      });
+
+      test('Does not accept a date in before start date', async () => {
+        const user = await setup();
+
+        const button = await screen.findByRole('button', {
+          name: 'Ilmoita valmiiksi',
+        });
+        await user.click(button);
+        expect(await screen.findByText('Ilmoita valmiiksi?')).toBeInTheDocument();
+
+        const date = dayBeforeStartDate();
+        const dateInput = screen.getByRole('textbox', { name: /päivämäärä/i });
+        await user.type(dateInput, date);
+        await user.tab();
+
+        // validation error should be shown
+        expect(
+          await screen.findByText(
+            'Päivämäärä ei voi olla ennen hakemuksen töiden alkamispäivää (12.1.2023)',
+          ),
+        ).toBeInTheDocument();
+        // confirmation button should be disabled
+        expect(screen.getByRole('button', { name: 'Vahvista' })).toBeDisabled();
+      });
+
+      test('Confirms the report', async () => {
+        const sendApplication = jest.spyOn(applicationApi, 'reportWorkFinished');
+        const user = await setup();
+
+        const button = await screen.findByRole('button', {
+          name: 'Ilmoita valmiiksi',
+        });
+        await user.click(button);
+
+        expect(await screen.findByText('Ilmoita valmiiksi?')).toBeInTheDocument();
+        const dateInput = screen.getByRole('textbox', { name: /päivämäärä/i });
+        await user.type(dateInput, validDate);
+        await user.tab();
+        const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
+        await user.click(confirmButton);
+
+        expect(await screen.findByText('Ilmoitus lähetetty')).toBeInTheDocument();
+        expect(sendApplication).toHaveBeenCalledTimes(1);
+        const reportedDate = sendApplication.mock.lastCall?.[0].date as Date;
+        expect(format(reportedDate, 'd.M.yyyy')).toBe(validDate);
+      });
+
+      test('Cancels the report', async () => {
+        const user = await setup();
+
+        const button = await screen.findByRole('button', {
+          name: 'Ilmoita valmiiksi',
+        });
+        await user.click(button);
+
+        expect(await screen.findByText('Ilmoita valmiiksi?')).toBeInTheDocument();
+        const cancelButton = screen.getByRole('button', { name: 'Peruuta' });
+        await user.click(cancelButton);
+
+        // confirmation dialog should be closed
+        expect(screen.queryByText('Ilmoita valmiiksi?')).not.toBeInTheDocument();
+      });
+
+      test('Shows error message if confirmation fails', async () => {
+        server.use(
+          http.post('/api/hakemukset/:id/tyo-valmis', async () => {
+            await delay(200);
+            return new HttpResponse(null, { status: 500 });
+          }),
+        );
+        const user = await setup();
+        const button = await screen.findByRole('button', {
+          name: 'Ilmoita valmiiksi',
         });
         await user.click(button);
 

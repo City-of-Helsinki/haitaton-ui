@@ -16,7 +16,7 @@ import { Feature } from 'ol';
 import { Geometry, Polygon as OlPolygon } from 'ol/geom';
 import { getSurfaceArea } from '../../../common/components/map/utils';
 import { HaittaIndexData } from '../../common/haittaIndexes/types';
-import { reportOperationalConditionSchema } from '../../kaivuilmoitus/validationSchema';
+import { reportCompletionDateSchema } from '../../kaivuilmoitus/validationSchema';
 
 export type ApplicationType = 'CABLE_REPORT' | 'EXCAVATION_NOTIFICATION';
 
@@ -359,4 +359,4 @@ export interface KaivuilmoitusUpdateData
   propertyDeveloperWithContacts?: ApplicationUpdateCustomerWithContacts | null;
 }
 
-export type ReportOperationalConditionData = yup.InferType<typeof reportOperationalConditionSchema>;
+export type ReportCompletionDateData = yup.InferType<typeof reportCompletionDateSchema>;

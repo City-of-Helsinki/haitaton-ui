@@ -1130,10 +1130,11 @@
       "maxAttachmentsNumberExceeded": "Tiedoston ({{fileName}}) lataus epäonnistui, liitteiden enimmäismäärä ({{maxNumber}} kpl) ylitetty.",
       "sentApplicationPersonalInfoNotification": "Lähetetyn hakemuksen omia tietoja ei voi muokata",
       "sendApplicationDisabled": "Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö.",
-      "reportOperationalConditionSuccessLabel": "Ilmoitus lähetetty",
+      "reportCompletionDateSuccessLabel": "Ilmoitus lähetetty",
       "reportOperationalConditionSuccessText": "Ilmoitus toiminnallisesta kunnosta on lähetetty hyväksyttäväksi.",
-      "reportOperationalConditionErrorLabel": "Ilmoituksen lähettäminen epäonnistui",
-      "reportOperationalConditionErrorText": "<0>Lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>"
+      "reportWorkFinishedSuccessText": "Ilmoitus valmistumisesta on lähetetty hyväksyttäväksi.",
+      "reportCompletionDateErrorLabel": "Ilmoituksen lähettäminen epäonnistui",
+      "reportCompletionDateErrorText": "<0>Lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>"
     },
     "sentDialog": {
       "title": "Hakemus lähetetty",
@@ -1149,6 +1150,13 @@
       "title": "Ilmoita toiminnalliseen kuntoon?",
       "instructions": "<p>Jos kaivutyön työalue on talvikaudella (1.12.–14.5.) normaalissa käytössä, voit ilmoittaa työn toiminnalliseen kuntoon ja alueen käyttömaksu katkeaa.</p><br><p>Ajoradan, pyörätien ja jalkakäytävän tulee olla tilapäisesti päällystetty asfaltilla pintaan saakka. Kaikki liikenteenohjauslaitteet tulee olla poistettu maastosta. Jalkakäytävillä ja muilla alueilla voi käyttää kivituhkaa tai hienoa mursketta, jos asiasta on sovittu etukäteen tarkastajan kanssa.</p><br><p>Jos tilapäistä päällystystä ei ole laitettu, eikä ilmoitusta toiminnallisesta tilasta ole tehty, laskutus jatkuu, kunnes ohjeita on noudatettu.<br>Katuluokan mukainen lopullinen päällystys on tehtävä 14.5. mennessä tai käyttömaksun laskutus jatkuu 15.5. alkaen, kunnes työ on hyväksytysti vastaanotettu.</p><br><p>Anna päivämäärä, jolle ilmoitat työn toiminnalliseen kuntoon. {{previousReportsIntro}}</p>",
       "previousReportsIntro": "Työ on aiemmin ilmoitettu toiminnalliseen kuntoon seuraavasti:",
+      "previouslyReportedAt": "{{reportedAt}} päivämäärälle {{dateReported}}",
+      "date": "Päivämäärä"
+    },
+    "workFinishedDialog": {
+      "title": "Ilmoita valmiiksi?",
+      "instructions": "Anna päivämäärä, jolle ilmoitat työn valmiiksi. {{previousReportsIntro}}</p>",
+      "previousReportsIntro": "Työ on aiemmin ilmoitettu valmiiksi seuraavasti:",
       "previouslyReportedAt": "{{reportedAt}} päivämäärälle {{dateReported}}",
       "date": "Päivämäärä"
     },
@@ -1174,7 +1182,8 @@
       "cancelApplication": "Peru hakemus",
       "editApplication": "Muokkaa hakemusta",
       "deletePlacementContract": "Poista sijoitussopimustunnus {{id}}",
-      "reportOperationalCondition": "Ilmoita toiminnalliseen kuntoon"
+      "reportOperationalCondition": "Ilmoita toiminnalliseen kuntoon",
+      "reportWorkFinished": "Ilmoita valmiiksi"
     },
     "errors": {
       "cancelConflict": "Hakemusta ei voida perua, koska se on edennyt käsittelyyn",

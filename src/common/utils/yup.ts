@@ -142,58 +142,54 @@ yup.addMethod(
   },
 );
 
-yup.addMethod(
-  yup.date,
-  'validOperationalConditionDate',
-  function isValidOperationalConditionDate() {
-    return this.test('validOperationalConditionDate', 'Invalid date', function (value) {
-      if (!value) {
-        return true;
-      }
-      const context = this.options.context;
-      if (!context) {
-        return true;
-      }
-      const { application, dateBeforeStartErrorMessageKey, dateInFutureErrorMessageKey } =
-        context as {
-          application: Application;
-          dateBeforeStartErrorMessageKey: string;
-          dateInFutureErrorMessageKey: string;
-        };
-      if (!application) {
-        return true;
-      }
-      if (!application.applicationData.startTime) {
-        return true;
-      }
-      const date = new Date(value);
-      date.setHours(0, 0, 0, 0);
-      const startDate = new Date(application.applicationData.startTime);
-      startDate.setHours(0, 0, 0, 0);
-      let isValid = date >= startDate;
-      if (!isValid) {
-        return this.createError({
-          path: this.path,
-          message: {
-            key: dateBeforeStartErrorMessageKey,
-            values: {
-              startDate: format(startDate, 'd.M.yyyy', { locale: fi }),
-            },
+yup.addMethod(yup.date, 'validCompletionDate', function isValidCompletionDate() {
+  return this.test('validCompletionDate', 'Invalid date', function (value) {
+    if (!value) {
+      return true;
+    }
+    const context = this.options.context;
+    if (!context) {
+      return true;
+    }
+    const { application, dateBeforeStartErrorMessageKey, dateInFutureErrorMessageKey } =
+      context as {
+        application: Application;
+        dateBeforeStartErrorMessageKey: string;
+        dateInFutureErrorMessageKey: string;
+      };
+    if (!application) {
+      return true;
+    }
+    if (!application.applicationData.startTime) {
+      return true;
+    }
+    const date = new Date(value);
+    date.setHours(0, 0, 0, 0);
+    const startDate = new Date(application.applicationData.startTime);
+    startDate.setHours(0, 0, 0, 0);
+    let isValid = date >= startDate;
+    if (!isValid) {
+      return this.createError({
+        path: this.path,
+        message: {
+          key: dateBeforeStartErrorMessageKey,
+          values: {
+            startDate: format(startDate, 'd.M.yyyy', { locale: fi }),
           },
-        });
-      }
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      isValid = date <= today;
-      return (
-        isValid ||
-        this.createError({
-          path: this.path,
-          message: { key: dateInFutureErrorMessageKey, values: {} },
-        })
-      );
-    });
-  },
-);
+        },
+      });
+    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    isValid = date <= today;
+    return (
+      isValid ||
+      this.createError({
+        path: this.path,
+        message: { key: dateInFutureErrorMessageKey, values: {} },
+      })
+    );
+  });
+});
 
 export default yup;

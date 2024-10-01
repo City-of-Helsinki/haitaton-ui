@@ -2,6 +2,7 @@ import {
   Accordion,
   Button,
   IconCheck,
+  IconCheckCircle,
   IconEnvelope,
   IconPen,
   IconTrash,
@@ -49,6 +50,7 @@ import {
   getCurrentDecisions,
   getDecisionFilename,
   isApplicationReportableInOperationalCondition,
+  isApplicationReportableWorkFinished,
   isApplicationSent,
   isContactIn,
 } from '../utils';
@@ -72,7 +74,7 @@ import { SignedInUser } from '../../hanke/hankeUsers/hankeUser';
 import useSendApplication from '../hooks/useSendApplication';
 import { validationSchema as johtoselvitysValidationSchema } from '../../johtoselvitys/validationSchema';
 import { validationSchema as kaivuilmoitusValidationSchema } from '../../kaivuilmoitus/validationSchema';
-import ApplicationReportOperationalConditionDialog from '../../kaivuilmoitus/components/ApplicationReportOperationalConditionDialog';
+import ApplicationReportCompletionDateDialog from '../../kaivuilmoitus/components/ApplicationReportCompletionDateDialog';
 import { formatToFinnishDate } from '../../../common/utils/date';
 import HaittaIndexes from '../../common/haittaIndexes/HaittaIndexes';
 import { calculateLiikennehaittaindeksienYhteenveto } from '../../kaivuilmoitus/utils';
@@ -262,6 +264,7 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
   const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const [showReportOperationalConditionDialog, setShowReportOperationalConditionDialog] =
     useState(false);
+  const [showReportWorkFinishedDialog, setShowReportWorkFinishedDialog] = useState(false);
   const hankeViewPath = useHankeViewPath(application.hankeTunnus);
   const { applicationData, applicationIdentifier, applicationType, alluStatus, id, paatokset } =
     application;
@@ -304,6 +307,10 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
     applicationType,
     alluStatus,
   );
+  const showReportWorkFinishedButton = isApplicationReportableWorkFinished(
+    applicationType,
+    alluStatus,
+  );
   const applicationSendMutation = useSendApplication();
 
   async function onSendApplication() {
@@ -317,6 +324,14 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
 
   function closeReportOperationalConditionDialog() {
     setShowReportOperationalConditionDialog(false);
+  }
+
+  function openReportWorkFinishedDialog() {
+    setShowReportWorkFinishedDialog(true);
+  }
+
+  function closeReportWorkFinishedDialog() {
+    setShowReportWorkFinishedDialog(false);
   }
 
   return (
@@ -423,6 +438,18 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
                 onClick={openReportOperationalConditionDialog}
               >
                 {t('hakemus:buttons:reportOperationalCondition')}
+              </Button>
+            </CheckRightsByHanke>
+          )}
+          {showReportWorkFinishedButton && (
+            <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
+              <Button
+                variant="success"
+                theme="coat"
+                iconLeft={<IconCheckCircle aria-hidden="true" />}
+                onClick={openReportWorkFinishedDialog}
+              >
+                {t('hakemus:buttons:reportWorkFinished')}
               </Button>
             </CheckRightsByHanke>
           )}
@@ -573,9 +600,18 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
         </InformationViewSidebar>
       </InformationViewContentContainer>
       {applicationType === 'EXCAVATION_NOTIFICATION' && (
-        <ApplicationReportOperationalConditionDialog
+        <ApplicationReportCompletionDateDialog
+          type="TOIMINNALLINEN_KUNTO"
           isOpen={showReportOperationalConditionDialog}
           onClose={closeReportOperationalConditionDialog}
+          applicationId={application.id as number}
+        />
+      )}
+      {applicationType === 'EXCAVATION_NOTIFICATION' && (
+        <ApplicationReportCompletionDateDialog
+          type="TYO_VALMIS"
+          isOpen={showReportWorkFinishedDialog}
+          onClose={closeReportWorkFinishedDialog}
           applicationId={application.id as number}
         />
       )}

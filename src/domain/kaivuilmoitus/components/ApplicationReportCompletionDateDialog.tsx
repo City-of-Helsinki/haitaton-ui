@@ -5,22 +5,31 @@ import DatePicker from '../../../common/components/datePicker/DatePicker';
 import {
   Application,
   Valmistumisilmoitus,
-  ReportOperationalConditionData,
+  ReportCompletionDateData,
+  ValmistumisilmoitusType,
 } from '../../application/types/application';
 import useLocale from '../../../common/hooks/useLocale';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { reportOperationalConditionSchema } from '../validationSchema';
+import { reportCompletionDateSchema } from '../validationSchema';
 import { useMutation } from 'react-query';
-import { reportOperationalCondition } from '../../application/utils';
+import { reportOperationalCondition, reportWorkFinished } from '../../application/utils';
 import { Box, VisuallyHiddenInput } from '@chakra-ui/react';
-import useApplicationReportOperationalConditionNotification from '../hooks/useApplicationReportOperationalConditionNotification';
+import useApplicationReportCompletionDateNotification from '../hooks/useApplicationReportCompletionDateNotification';
 import { format } from 'date-fns/format';
 import { fi } from 'date-fns/locale';
 import { useApplication } from '../../application/hooks/useApplication';
 
-const Instructions = ({ previousReports }: { previousReports: Valmistumisilmoitus[] }) => {
+const Instructions = ({
+  type,
+  previousReports,
+}: {
+  type: ValmistumisilmoitusType;
+  previousReports: Valmistumisilmoitus[];
+}) => {
   const { t } = useTranslation();
+  const dialogType =
+    type === 'TOIMINNALLINEN_KUNTO' ? 'operationalConditionDialog' : 'workFinishedDialog';
 
   // Generate the list of dates
   const previousReportsList =
@@ -39,7 +48,7 @@ const Instructions = ({ previousReports }: { previousReports: Valmistumisilmoitu
 
             return (
               <li key={report.reportedAt.toString()}>
-                {t('hakemus:operationalConditionDialog:previouslyReportedAt', {
+                {t(`hakemus:${dialogType}:previouslyReportedAt`, {
                   reportedAt,
                   dateReported,
                 })}
@@ -50,25 +59,25 @@ const Instructions = ({ previousReports }: { previousReports: Valmistumisilmoitu
     ) : null;
 
   const previousReportsIntro =
-    previousReports.length > 0 ? t('hakemus:operationalConditionDialog:previousReportsIntro') : '';
+    previousReports.length > 0 ? t(`hakemus:${dialogType}:previousReportsIntro`) : '';
 
   return (
     <Box marginBottom="var(--spacing-m)">
-      <Trans i18nKey="hakemus:operationalConditionDialog:instructions">
-        {{ previousReportsIntro }}
-      </Trans>
+      <Trans i18nKey={`hakemus:${dialogType}:instructions`}>{{ previousReportsIntro }}</Trans>
       {previousReports.length > 0 && <Box marginLeft="var(--spacing-m)">{previousReportsList}</Box>}
     </Box>
   );
 };
 
 type Props = {
+  type: ValmistumisilmoitusType;
   isOpen: boolean;
   onClose: () => void;
   applicationId: number;
 };
 
-const ApplicationReportOperationalConditionDialog: React.FC<Props> = ({
+const ApplicationReportCompletionDateDialog: React.FC<Props> = ({
+  type,
   isOpen,
   onClose,
   applicationId,
@@ -76,9 +85,9 @@ const ApplicationReportOperationalConditionDialog: React.FC<Props> = ({
   const { t } = useTranslation();
   const locale = useLocale();
   const { data: application, refetch } = useApplication(applicationId);
-  const formContext = useForm<ReportOperationalConditionData>({
+  const formContext = useForm<ReportCompletionDateData>({
     mode: 'onTouched',
-    resolver: yupResolver(reportOperationalConditionSchema),
+    resolver: yupResolver(reportCompletionDateSchema),
     context: {
       application: application,
       dateBeforeStartErrorMessageKey: 'dateBeforeStart',
@@ -87,13 +96,28 @@ const ApplicationReportOperationalConditionDialog: React.FC<Props> = ({
   });
   const { handleSubmit, reset: resetForm, formState } = formContext;
   const isConsifmButtonEnabled = formState.isValid;
-  const { mutate, reset: resetMutation, isLoading } = useMutation(reportOperationalCondition);
-  const { showReportOperationalConditionSuccess, showReportOperationalConditionError } =
-    useApplicationReportOperationalConditionNotification();
-  const dialogTitle = t('hakemus:operationalConditionDialog:title');
+  const {
+    mutate,
+    reset: resetMutation,
+    isLoading,
+  } = useMutation(
+    type === 'TOIMINNALLINEN_KUNTO' ? reportOperationalCondition : reportWorkFinished,
+  );
+  const { showReportCompletionDateSuccess, showReportCompletionDateError } =
+    useApplicationReportCompletionDateNotification(
+      type === 'TOIMINNALLINEN_KUNTO'
+        ? 'hakemus:notifications:reportOperationalConditionSuccessText'
+        : 'hakemus:notifications:reportWorkFinishedSuccessText',
+    );
+  const dialogType =
+    type === 'TOIMINNALLINEN_KUNTO' ? 'operationalConditionDialog' : 'workFinishedDialog';
+  const dialogTitle = t(`hakemus:${dialogType}:title`);
+  const dialogId = `application-report-${type}`;
   const { id, applicationData, valmistumisilmoitukset } = application as Application;
   const previousReports =
-    valmistumisilmoitukset?.TOIMINNALLINEN_KUNTO ?? ([] as Valmistumisilmoitus[]);
+    type === 'TOIMINNALLINEN_KUNTO'
+      ? valmistumisilmoitukset?.TOIMINNALLINEN_KUNTO ?? ([] as Valmistumisilmoitus[])
+      : valmistumisilmoitukset?.TYO_VALMIS ?? ([] as Valmistumisilmoitus[]);
   const startDate = new Date(applicationData.startTime?.toString() ?? 0);
   const today = new Date();
 
@@ -111,14 +135,14 @@ const ApplicationReportOperationalConditionDialog: React.FC<Props> = ({
     onClose();
   }
 
-  async function submitForm(data: ReportOperationalConditionData) {
+  async function submitForm(data: ReportCompletionDateData) {
     mutate(data, {
       onSuccess() {
-        showReportOperationalConditionSuccess();
+        showReportCompletionDateSuccess();
         handleClose();
       },
       onError() {
-        showReportOperationalConditionError();
+        showReportCompletionDateError();
         handleClose();
       },
     });
@@ -126,7 +150,7 @@ const ApplicationReportOperationalConditionDialog: React.FC<Props> = ({
 
   return (
     <Dialog
-      id="application-report-operational-condition"
+      id={dialogId}
       isOpen={isOpen}
       aria-labelledby={dialogTitle}
       variant="primary"
@@ -134,14 +158,14 @@ const ApplicationReportOperationalConditionDialog: React.FC<Props> = ({
       closeButtonLabelText={t('common:ariaLabels:closeButtonLabelText')}
     >
       <Dialog.Header
-        id="application-report-operational-condition-title"
+        id={`${dialogType}-title`}
         title={dialogTitle}
         iconLeft={<IconInfoCircleFill aria-hidden="true" />}
       />
       <FormProvider {...formContext}>
         <form onSubmit={handleSubmit(submitForm)}>
           <Dialog.Content>
-            <Instructions previousReports={previousReports} />
+            <Instructions type={type} previousReports={previousReports} />
             <VisuallyHiddenInput
               name="applicationId"
               value={id as number}
@@ -150,7 +174,7 @@ const ApplicationReportOperationalConditionDialog: React.FC<Props> = ({
             />
             <DatePicker
               name="date"
-              label={t(`hakemus:operationalConditionDialog:date`)}
+              label={t(`hakemus:${dialogType}:date`)}
               locale={locale}
               minDate={startDate}
               maxDate={today}
@@ -180,4 +204,4 @@ const ApplicationReportOperationalConditionDialog: React.FC<Props> = ({
   );
 };
 
-export default ApplicationReportOperationalConditionDialog;
+export default ApplicationReportCompletionDateDialog;

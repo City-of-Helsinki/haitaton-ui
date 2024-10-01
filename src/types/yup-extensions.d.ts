@@ -9,7 +9,7 @@ declare module 'yup' {
     detectedTrafficNuisance(type: HAITTOJENHALLINTATYYPPI): this;
   }
   interface DateSchema {
-    validOperationalConditionDate(): this;
+    validCompletionDate(): this;
   }
   interface CustomSchemaMetadata {
     pageName?: string | string[];

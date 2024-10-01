@@ -155,7 +155,7 @@ export const liitteetSchema = yup.object({
   applicationData: applicationDataSchema.pick(['additionalInfo']),
 });
 
-export const reportOperationalConditionSchema = yup.object({
+export const reportCompletionDateSchema = yup.object({
   applicationId: yup.number(),
-  date: yup.date().validOperationalConditionDate().nullable().required(),
+  date: yup.date().validCompletionDate().nullable().required(),
 });
