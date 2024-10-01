@@ -250,6 +250,14 @@ describe('Excavation announcement application view', () => {
     expect(queryByText('10-99 m')).toBeInTheDocument();
   });
 
+  test('Shows correct information in sidebar', async () => {
+    render(<ApplicationViewContainer id={5} />);
+    await waitForLoadingToFinish();
+    const sidebar = screen.getByTestId('application-view-sidebar');
+
+    expect(sidebar).toMatchSnapshot();
+  });
+
   describe('Report excavation announcement in operational condition', () => {
     const setup = async (id: number = 8) => {
       const { user } = render(<ApplicationViewContainer id={id} />);

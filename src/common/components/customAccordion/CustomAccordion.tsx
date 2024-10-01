@@ -3,8 +3,10 @@ import { IconAngleDown, IconAngleUp, useAccordion } from 'hds-react';
 import React from 'react';
 
 type Props = {
+  accordionBorderBottom?: boolean;
   heading: React.ReactNode;
   headingType?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  subHeading?: React.ReactNode;
   headingBorderBottom?: boolean;
   headingBackgroundColor?: string;
   headingElement?: React.ReactNode;
@@ -16,8 +18,10 @@ type Props = {
 };
 
 export default function CustomAccordion({
+  accordionBorderBottom = false,
   heading,
   headingType = 'h2',
+  subHeading,
   headingBorderBottom = true,
   headingBackgroundColor,
   headingElement,
@@ -33,13 +37,18 @@ export default function CustomAccordion({
     contentProps: accordionContentProps,
   } = useAccordion({ initiallyOpen });
   const headingButtonIcon = isOpen ? <IconAngleUp size="s" /> : <IconAngleDown size="s" />;
+  const showHeadingBorderBottom =
+    (headingBorderBottom && !accordionBorderBottom) || (accordionBorderBottom && isOpen);
 
   return (
-    <div className={className}>
+    <Box
+      borderBottom={accordionBorderBottom ? '1px solid var(--color-black-60)' : undefined}
+      className={className}
+    >
       <Box
         padding="var(--spacing-s)"
         backgroundColor={headingBackgroundColor}
-        borderBottom={headingBorderBottom ? '1px solid var(--color-black-30)' : undefined}
+        borderBottom={showHeadingBorderBottom ? '1px solid var(--color-black-30)' : undefined}
         {...accordionButtonProps}
       >
         <Grid
@@ -54,19 +63,22 @@ export default function CustomAccordion({
             alignItems="center"
             flexWrap={{ base: 'wrap', sm: 'nowrap' }}
           >
-            <Box
-              as={headingType}
-              className={headingSize === 'm' ? 'heading-s' : 'heading-xs'}
-              textAlign="start"
-            >
-              {strong ? <strong>{heading}</strong> : heading}
-            </Box>
+            <div>
+              <Box
+                as={headingType}
+                className={headingSize === 'm' ? 'heading-s' : 'heading-xs'}
+                textAlign="start"
+              >
+                {strong ? <strong>{heading}</strong> : heading}
+              </Box>
+              {subHeading}
+            </div>
             {headingElement}
           </Flex>
           {headingButtonIcon}
         </Grid>
       </Box>
       <div {...accordionContentProps}>{children}</div>
-    </div>
+    </Box>
   );
 }
