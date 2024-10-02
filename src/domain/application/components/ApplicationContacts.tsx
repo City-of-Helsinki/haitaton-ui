@@ -46,6 +46,7 @@ function isRegistryKeyInputEnabled(
   applicationType: ApplicationType,
 ) {
   return (
+    selectedContactType === undefined ||
     selectedContactType === 'COMPANY' ||
     selectedContactType === 'ASSOCIATION' ||
     (applicationType === 'EXCAVATION_NOTIFICATION' && customerType === 'customerWithContacts')
