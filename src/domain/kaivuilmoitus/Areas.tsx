@@ -104,6 +104,9 @@ export default function Areas({ hankeData }: Readonly<Props>) {
             relatedHankeAreaName: area.name,
             startDate: getValues('applicationData.startTime'),
             endDate: getValues('applicationData.endTime'),
+            liikennehaittaindeksi: tyoalue.tormaystarkasteluTulos
+              ? tyoalue.tormaystarkasteluTulos.liikennehaittaindeksi.indeksi
+              : null,
           });
           return tyoalue.openlayersFeature;
         }

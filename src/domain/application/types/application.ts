@@ -127,6 +127,7 @@ export class ApplicationGeometry implements PolygonWithCRS {
 export type ApplicationArea = {
   name?: string;
   geometry: ApplicationGeometry;
+  tormaystarkasteluTulos?: HaittaIndexData | null;
 };
 
 export class Tyoalue {

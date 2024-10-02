@@ -30,6 +30,7 @@ import FeatureInfoOverlay from '../../map/components/FeatureInfoOverlay/FeatureI
 import FitSource from '../../map/components/interations/FitSource';
 import { formatToFinnishDate } from '../../../common/utils/date';
 import isFeatureWithinFeatures from '../../map/utils/isFeatureWithinFeatures';
+import { styleFunction } from '../../map/utils/geometryStyle';
 
 type Props = {
   drawSource: VectorSource;
@@ -191,7 +192,7 @@ export default function ApplicationMap({
 
           {children}
 
-          <VectorLayer source={drawSource} zIndex={2} className="drawLayer" />
+          <VectorLayer source={drawSource} zIndex={2} className="drawLayer" style={styleFunction} />
 
           <OverviewMapControl />
 
