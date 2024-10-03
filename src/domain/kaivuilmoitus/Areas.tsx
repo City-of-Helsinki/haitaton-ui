@@ -128,7 +128,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
   const workTimesSet = startTime && endTime;
 
   const refreshHaittaIndexes = useCallback(
-    (kaivuilmoitusalueIndex?: number, tyoalue?: Tyoalue) => {
+    (kaivuilmoitusalueIndex?: number) => {
       const applicationData = getValues('applicationData');
       const kaivuilmoitusalueet = applicationData.areas;
       if (kaivuilmoitusalueIndex === undefined) {
@@ -155,6 +155,12 @@ export default function Areas({ hankeData }: Readonly<Props>) {
           haittaIndexesMutation.mutate(request, {
             onSuccess(data) {
               if (kaivuilmoitusalueIndex !== -1 && tyoalueIndex !== -1) {
+                const tyoalue = getValues(
+                  `applicationData.areas.${kaivuilmoitusalueIndex}.tyoalueet.${tyoalueIndex}`,
+                );
+                tyoalue.openlayersFeature?.setProperties({
+                  liikennehaittaindeksi: data.liikennehaittaindeksi.indeksi,
+                });
                 setValue(
                   `applicationData.areas.${kaivuilmoitusalueIndex}.tyoalueet.${tyoalueIndex}.tormaystarkasteluTulos`,
                   data,
@@ -164,16 +170,10 @@ export default function Areas({ hankeData }: Readonly<Props>) {
           });
         };
 
-        if (tyoalue === undefined) {
-          // calculate for all work areas
-          kaivuilmoitusalue.tyoalueet.forEach((ta, index) => {
-            calculateHaittaIndexesForTyoalue(kaivuilmoitusalue, ta, index);
-          });
-        } else {
-          // calculate for single work area
-          const tyoalueIndex = kaivuilmoitusalue.tyoalueet.indexOf(tyoalue);
-          calculateHaittaIndexesForTyoalue(kaivuilmoitusalue, tyoalue, tyoalueIndex);
-        }
+        // calculate for all work areas
+        kaivuilmoitusalue.tyoalueet.forEach((ta, index) => {
+          calculateHaittaIndexesForTyoalue(kaivuilmoitusalue, ta, index);
+        });
       }
     },
     [getValues, setValue, haittaIndexesMutation],
@@ -187,27 +187,40 @@ export default function Areas({ hankeData }: Readonly<Props>) {
       existingArea?.tyoalueet.length || 0,
       existingArea?.tyoalueet.length || 0,
     );
-    feature.setProperties({
-      areaName,
-      hankeName: hankeData.nimi,
-      startDate: getValues('applicationData.startTime'),
-      endDate: getValues('applicationData.endTime'),
-      relatedHankeAreaName: hankeArea.nimi,
+    const request = {
+      geometriat: {
+        featureCollection: formatFeaturesToHankeGeoJSON([feature]),
+      },
+      haittaAlkuPvm: startTime ?? new Date(),
+      haittaLoppuPvm: endTime ?? new Date(),
+      kaistaHaitta: hankeArea.kaistaHaitta ?? 'EI_VAIKUTA',
+      kaistaPituusHaitta: hankeArea.kaistaPituusHaitta ?? 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
+    };
+    haittaIndexesMutation.mutate(request, {
+      onSuccess(data) {
+        feature.setProperties({
+          areaName,
+          hankeName: hankeData.nimi,
+          startDate: startTime,
+          endDate: endTime,
+          relatedHankeAreaName: hankeArea.nimi,
+          tormaystarkasteluTulos: data,
+          liikennehaittaindeksi: data.liikennehaittaindeksi.indeksi,
+        });
+        if (!existingArea) {
+          const [emptyArea /*, newTyoalue*/] = getEmptyArea(hankeData, hankeArea, feature);
+          append(emptyArea);
+        } else {
+          const existingAreaIndex = areas.indexOf(existingArea);
+          const newTyoalue = new Tyoalue(feature);
+          setValue(
+            `applicationData.areas.${existingAreaIndex}.tyoalueet`,
+            areas[existingAreaIndex].tyoalueet.concat(newTyoalue),
+          );
+          setSelectedTabIndex(existingAreaIndex);
+        }
+      },
     });
-    if (!existingArea) {
-      const [emptyArea, newTyoalue] = getEmptyArea(hankeData, hankeArea, feature);
-      append(emptyArea);
-      refreshHaittaIndexes(areas.length, newTyoalue);
-    } else {
-      const existingAreaIndex = areas.indexOf(existingArea);
-      const newTyoalue = new Tyoalue(feature);
-      setValue(
-        `applicationData.areas.${existingAreaIndex}.tyoalueet`,
-        areas[existingAreaIndex].tyoalueet.concat(newTyoalue),
-      );
-      setSelectedTabIndex(existingAreaIndex);
-      refreshHaittaIndexes(existingAreaIndex, newTyoalue);
-    }
   }
 
   function handleAddArea(feature: Feature<Geometry>) {
@@ -245,13 +258,24 @@ export default function Areas({ hankeData }: Readonly<Props>) {
         return tyoalue.openlayersFeature?.get('areaName') === feature.get('areaName');
       });
       if (changedTyoalue) {
-        refreshHaittaIndexes(wathcApplicationAreas.indexOf(changedApplicationArea), changedTyoalue);
+        const request = {
+          geometriat: {
+            featureCollection: formatFeaturesToHankeGeoJSON([feature]),
+          },
+          haittaAlkuPvm: startTime ?? new Date(),
+          haittaLoppuPvm: endTime ?? new Date(),
+          kaistaHaitta: changedApplicationArea.kaistahaitta ?? 'EI_VAIKUTA',
+          kaistaPituusHaitta:
+            changedApplicationArea.kaistahaittojenPituus ?? 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
+        };
+        haittaIndexesMutation.mutate(request, {
+          onSuccess(data) {
+            changedTyoalue.tormaystarkasteluTulos = data;
+            feature.set('liikennehaittaindeksi', data.liikennehaittaindeksi.indeksi);
+          },
+        });
       }
     }
-  }
-
-  function handleRemoveArea(kaivuilmoitusalueIndex: number) {
-    refreshHaittaIndexes(kaivuilmoitusalueIndex);
   }
 
   function handleAreaSelectDialogClose() {
@@ -399,7 +423,6 @@ export default function Areas({ hankeData }: Readonly<Props>) {
                   alueIndex={index}
                   drawSource={drawSource}
                   hankeAlueName={alue.name}
-                  onRemoveArea={() => handleRemoveArea(index)}
                   onRemoveLastArea={() => remove(index)}
                 />
 

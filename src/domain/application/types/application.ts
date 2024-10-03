@@ -140,6 +140,7 @@ export class Tyoalue {
     this.geometry = new ApplicationGeometry((feature.getGeometry() as OlPolygon).getCoordinates());
     this.area = getSurfaceArea(feature.getGeometry()!);
     this.openlayersFeature = feature;
+    this.tormaystarkasteluTulos = feature.get('tormaystarkasteluTulos');
   }
 }
 
