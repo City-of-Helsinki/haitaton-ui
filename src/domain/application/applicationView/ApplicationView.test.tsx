@@ -212,6 +212,13 @@ describe('Cable report application view', () => {
 
     sendApplication.mockRestore();
   });
+
+  test('Shows decision links if decisions are available', async () => {
+    render(<ApplicationViewContainer id={9} />);
+    await waitForLoadingToFinish();
+
+    expect(screen.getByText('Lataa päätös (PDF)')).toBeInTheDocument();
+  });
 });
 
 describe('Excavation announcement application view', () => {

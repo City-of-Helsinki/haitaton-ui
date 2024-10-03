@@ -131,7 +131,7 @@ describe('Create johtoselvitys from dialog', () => {
     fillInformation();
     await user.click(screen.getByRole('button', { name: /luo hakemus/i }));
 
-    expect(window.location.pathname).toBe('/fi/johtoselvityshakemus/9/muokkaa');
+    expect(window.location.pathname).toBe('/fi/johtoselvityshakemus/10/muokkaa');
   });
 
   test('Should show validation errors and not create johtoselvitys if information is missing', async () => {
