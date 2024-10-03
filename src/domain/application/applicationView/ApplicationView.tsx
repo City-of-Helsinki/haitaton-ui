@@ -32,6 +32,7 @@ import {
 import { HankeData } from '../../types/hanke';
 import ApplicationStatusTag from '../components/ApplicationStatusTag';
 import {
+  AlluStatus,
   Application,
   ApplicationArea,
   JohtoselvitysData,
@@ -57,7 +58,8 @@ import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeade
 import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import Link from '../../../common/components/Link/Link';
 import useHankeViewPath from '../../hanke/hooks/useHankeViewPath';
-import DecisionLink from '../components/DecisionLink';
+import JohtoselvitysDecisionLink from '../../johtoselvitys/components/DecisionLink';
+import KaivuilmoitusDecisionLink from '../../kaivuilmoitus/components/DecisionLink';
 import { ApplicationCancel } from '../components/ApplicationCancel';
 import AttachmentSummary from '../components/summary/AttachmentSummary';
 import useAttachments from '../hooks/useAttachments';
@@ -336,15 +338,23 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
               <Box mb="var(--spacing-2-xs)">
                 <ApplicationStatusTag status={alluStatus} />
               </Box>
-              {currentDecisions.map((paatos) => (
-                <Box key={paatos.tyyppi} mt="var(--spacing-2-xs)">
-                  <DecisionLink
-                    id={paatos.id}
-                    linkText={t(`hakemus:labels:downloadDecision:${paatos.tyyppi}`)}
-                    filename={getDecisionFilename(paatos)}
-                  />
-                </Box>
-              ))}
+              {applicationType === 'CABLE_REPORT' && alluStatus === AlluStatus.DECISION && (
+                <JohtoselvitysDecisionLink
+                  applicationId={id}
+                  linkText={t('hakemus:labels:downloadDecision:PAATOS')}
+                  filename={applicationIdentifier}
+                />
+              )}
+              {applicationType === 'EXCAVATION_NOTIFICATION' &&
+                currentDecisions.map((paatos) => (
+                  <Box key={paatos.tyyppi} mt="var(--spacing-2-xs)">
+                    <KaivuilmoitusDecisionLink
+                      id={paatos.id}
+                      linkText={t(`hakemus:labels:downloadDecision:${paatos.tyyppi}`)}
+                      filename={getDecisionFilename(paatos)}
+                    />
+                  </Box>
+                ))}
             </Box>
           </SectionItemContent>
           <SectionItemTitle>{t('hakemus:labels:relatedHanke')}:</SectionItemTitle>

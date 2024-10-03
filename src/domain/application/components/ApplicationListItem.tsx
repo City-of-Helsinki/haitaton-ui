@@ -2,14 +2,15 @@ import { Card, IconEye } from 'hds-react';
 import { Box, Flex, Grid } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { HankkeenHakemus } from '../types/application';
+import { AlluStatus, HankkeenHakemus } from '../types/application';
 import styles from './ApplicationListItem.module.scss';
 import Text from '../../../common/components/text/Text';
 import ApplicationStatusTag from './ApplicationStatusTag';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
 import ApplicationDates from './ApplicationDates';
-import DecisionLink from './DecisionLink';
+import JohtoselvitysDecisionLink from '../../johtoselvitys/components/DecisionLink';
+import KaivuilmoitusDecisionLink from '../../kaivuilmoitus/components/DecisionLink';
 import { getCurrentDecisions, getDecisionFilename } from '../utils';
 
 type Props = { application: HankkeenHakemus };
@@ -59,15 +60,23 @@ function ApplicationListItem({ application }: Readonly<Props>) {
           <ApplicationDates startTime={startTime} endTime={endTime} />
           <Grid alignItems="start" templateColumns="auto 1fr" columnGap="var(--spacing-xs)">
             <ApplicationStatusTag status={alluStatus} />
-            {currentDecisions.map((paatos) => (
-              <Box as="span" key={paatos.tyyppi}>
-                <DecisionLink
-                  id={paatos.id}
-                  linkText={t(`hakemus:labels:downloadDecision:${paatos.tyyppi}`)}
-                  filename={getDecisionFilename(paatos)}
-                />
-              </Box>
-            ))}
+            {applicationType === 'CABLE_REPORT' && alluStatus === AlluStatus.DECISION && (
+              <JohtoselvitysDecisionLink
+                applicationId={id}
+                linkText={t('hakemus:labels:downloadDecision:PAATOS')}
+                filename={applicationIdentifier}
+              />
+            )}
+            {applicationType === 'EXCAVATION_NOTIFICATION' &&
+              currentDecisions.map((paatos) => (
+                <Box as="span" key={paatos.tyyppi}>
+                  <KaivuilmoitusDecisionLink
+                    id={paatos.id}
+                    linkText={t(`hakemus:labels:downloadDecision:${paatos.tyyppi}`)}
+                    filename={getDecisionFilename(paatos)}
+                  />
+                </Box>
+              ))}
           </Grid>
         </div>
         <Link

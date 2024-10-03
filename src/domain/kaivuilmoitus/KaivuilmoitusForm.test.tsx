@@ -278,7 +278,7 @@ test('Should be able fill perustiedot and save form', async () => {
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
   expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
-  expect(window.location.pathname).toBe('/fi/hakemus/9');
+  expect(window.location.pathname).toBe('/fi/hakemus/10');
 });
 
 test('Should not be able to save form if work name is missing', async () => {
