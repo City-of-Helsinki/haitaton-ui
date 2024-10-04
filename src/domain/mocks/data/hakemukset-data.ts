@@ -849,6 +849,12 @@ const hakemukset: Application[] = [
           city: 'Helsinki',
         },
       },
+      paperDecisionReceiver: {
+        name: 'Pekka Paperinen',
+        streetAddress: 'Paperipolku 3 A 4',
+        postalCode: '00451',
+        city: 'Helsinki',
+      },
     },
     paatokset: {
       KP2400001: [
@@ -1001,6 +1007,12 @@ const hakemukset: Application[] = [
       emergencyWork: false,
       propertyConnectivity: true,
       rockExcavation: true,
+      paperDecisionReceiver: {
+        name: 'Pekka Paperinen',
+        streetAddress: 'Paperipolku 3 A 4',
+        postalCode: '00451',
+        city: 'Helsinki',
+      },
     },
   } as Application<JohtoselvitysData>,
 ];

@@ -158,6 +158,13 @@ export type KaivuilmoitusAlue = {
   lisatiedot?: string;
 };
 
+export type PaperDecisionReceiver = {
+  name: string;
+  streetAddress: string;
+  postalCode: string;
+  city: string;
+};
+
 export type AttachmentType = 'MUU' | 'LIIKENNEJARJESTELY' | 'VALTAKIRJA';
 
 export interface ApplicationAttachmentMetadata extends AttachmentMetadata {
@@ -182,6 +189,7 @@ export interface JohtoselvitysData {
   emergencyWork: boolean;
   propertyConnectivity: boolean;
   rockExcavation: boolean | null;
+  paperDecisionReceiver?: PaperDecisionReceiver | null;
 }
 
 export interface KaivuilmoitusData {
@@ -205,6 +213,7 @@ export interface KaivuilmoitusData {
   propertyDeveloperWithContacts?: CustomerWithContacts | null;
   invoicingCustomer?: InvoicingCustomer | null;
   additionalInfo?: string | null;
+  paperDecisionReceiver?: PaperDecisionReceiver | null;
 }
 
 export type NewJohtoselvitysData = yup.InferType<typeof newJohtoselvitysSchema>;
