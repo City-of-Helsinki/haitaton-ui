@@ -22,7 +22,11 @@ export const registryKeySchema = yup
   })
   .when('type', {
     is: (value: string) => value === 'PERSON',
-    then: (schema) => schema.personalId(),
+    then: (schema) =>
+      schema.when('registryKeyHidden', {
+        is: (value: boolean) => !value,
+        then: (personalIdSchema) => personalIdSchema.personalId(),
+      }),
   });
 
 export const customerSchema = contactSchema.omit(['firstName', 'lastName']).shape({
