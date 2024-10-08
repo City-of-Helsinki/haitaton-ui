@@ -221,6 +221,8 @@
         "sukunimi": "Sukunimi",
         "ytunnus": "Y-tunnus",
         "yTunnusTaiHetu": "Y-tunnus tai henkilötunnus",
+        "henkilotunnus": "Henkilötunnus",
+        "muuTunnus": "Y-tunnus, henkilötunnus tai muu yksilöivä tunnus",
         "osoite": "Katuosoite",
         "postinumero": "Postinumero",
         "postitoimipaikka": "Postitoimipaikka",
