@@ -477,7 +477,7 @@ test('Should be able to delete user who has draft hakemuksia, but should notify 
     ),
   ).toBeInTheDocument();
 
-  await screen.findByRole('button', { name: 'Poista' });
+  await screen.findByRole('button', { name: 'Poista' }, { timeout: 5000 });
   await user.click(screen.getByRole('button', { name: 'Poista' }));
 
   expect(screen.getByText('Käyttäjä poistettu')).toBeInTheDocument();

@@ -11,8 +11,19 @@ import { ApplicationArea } from '../../application/types/application';
 export default function useApplicationFeatures(source: Vector, areas?: ApplicationArea[]) {
   useEffect(() => {
     if (areas && areas.length > 0) {
-      const applicationFeatures = areas.flatMap((area) => {
-        return new GeoJSON().readFeatures(area.geometry);
+      const applicationFeatures = areas.map((area) => {
+        const feature = new GeoJSON().readFeatures(area.geometry)[0] as Feature<Geometry>;
+
+        feature.setProperties(
+          {
+            liikennehaittaindeksi: area.tormaystarkasteluTulos
+              ? area.tormaystarkasteluTulos.liikennehaittaindeksi.indeksi
+              : null,
+          },
+          true,
+        );
+
+        return feature;
       }) as Feature<Geometry>[];
       source.addFeatures(applicationFeatures);
     }
