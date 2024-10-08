@@ -1,11 +1,6 @@
 import { useQuery } from 'react-query';
 import api from '../../api/api';
-import { Application, HankkeenHakemus } from '../types/application';
-
-async function getApplications() {
-  const { data } = await api.get<Application[]>(`/hakemukset`);
-  return data;
-}
+import { HankkeenHakemus } from '../types/application';
 
 async function getApplicationsForHanke(hankeTunnus?: string) {
   const { data } = await api.get<{ applications: HankkeenHakemus[] }>(
@@ -13,11 +8,6 @@ async function getApplicationsForHanke(hankeTunnus?: string) {
   );
   return data;
 }
-
-export function useApplications() {
-  return useQuery<Application[]>(['applications'], getApplications);
-}
-
 export function useApplicationsForHanke(hankeTunnus?: string) {
   return useQuery<{ applications: HankkeenHakemus[] }>(
     ['applicationsForHanke', hankeTunnus],

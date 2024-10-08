@@ -11,7 +11,7 @@ const contactSchema = yup
   .nullable()
   .required();
 
-// business id i.e. Y-tunnus
+// y-tunnus, henkilötunnus or general registry key
 export const registryKeySchema = yup
   .string()
   .defined()
@@ -26,6 +26,7 @@ export const customerSchema = contactSchema.omit(['firstName', 'lastName']).shap
   name: yup.string().trim().max(100).required(),
   type: yup.mixed<ContactType>().nullable().required(),
   registryKey: registryKeySchema,
+  registryKeyHidden: yup.boolean().required(),
 });
 
 export const customerWithContactsSchema = yup.object({

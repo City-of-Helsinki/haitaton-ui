@@ -33,6 +33,7 @@ function getEmptyCustomerWithContacts(): CustomerWithContacts {
       email: '',
       phone: '',
       registryKey: null,
+      registryKeyHidden: false,
     },
     contacts: [],
   };
@@ -56,13 +57,10 @@ function getRegistryKeyLabel(
   selectedContactType: keyof typeof ContactType | null,
   applicationType: ApplicationType,
 ) {
-  if (selectedContactType === 'COMPANY' || selectedContactType === 'ASSOCIATION') {
-    return t('form:yhteystiedot:labels:ytunnus');
-  }
   if (applicationType === 'EXCAVATION_NOTIFICATION' && customerType === 'customerWithContacts') {
     if (selectedContactType === 'PERSON') {
       return t('form:yhteystiedot:labels:henkilotunnus');
-    } else {
+    } else if (selectedContactType === 'OTHER') {
       return t('form:yhteystiedot:labels:muuTunnus');
     }
   }
@@ -83,7 +81,6 @@ const CustomerFields: React.FC<{
     selectedContactType,
     applicationType,
   );
-  const registryKeyInputDisabled = !registryKeyInputEnabled;
 
   useEffect(() => {
     // If setting contact type disables the registry key, set it to null
@@ -92,6 +89,10 @@ const CustomerFields: React.FC<{
         shouldValidate: true,
       });
     }
+    // always set registry key hidden to false when changing the contact type
+    setValue(`applicationData.${customerType}.customer.registryKeyHidden`, false, {
+      shouldValidate: true,
+    });
   }, [selectedContactType, customerType, applicationType, setValue]);
 
   function handleUserSelect(user: HankeUser) {
@@ -142,10 +143,10 @@ const CustomerFields: React.FC<{
         <TextInput
           name={`applicationData.${customerType}.customer.registryKey`}
           label={getRegistryKeyLabel(t, customerType, selectedContactType, applicationType)}
-          disabled={registryKeyInputDisabled}
+          disabled={!registryKeyInputEnabled}
           autoComplete="on"
           defaultValue={null}
-          required={applicationType === 'EXCAVATION_NOTIFICATION' && !registryKeyInputDisabled}
+          required={applicationType === 'EXCAVATION_NOTIFICATION' && registryKeyInputEnabled}
         />
       </ResponsiveGrid>
       <ResponsiveGrid maxColumns={2}>
