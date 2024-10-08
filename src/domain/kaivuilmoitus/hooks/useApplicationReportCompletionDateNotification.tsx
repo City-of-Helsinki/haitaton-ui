@@ -4,10 +4,11 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
 
 /**
- * Returns functions for showing success and error notifications for reporting application in operational condition.
+ * Returns functions for showing success and error notifications for reporting completion date for an application.
  */
-export default function useApplicationReportOperationalConditionNotification(
-  errorMessageKey: string = 'hakemus:notifications:reportOperationalConditionErrorText',
+export default function useApplicationReportCompletionDateNotification(
+  messageKey: string,
+  errorMessageKey: string = 'hakemus:notifications:reportCompletionDateErrorText',
 ) {
   const { t } = useTranslation();
   const { setNotification } = useGlobalNotification();
@@ -18,8 +19,8 @@ export default function useApplicationReportOperationalConditionNotification(
       dismissible: true,
       autoClose: true,
       autoCloseDuration: 8000,
-      label: t('hakemus:notifications:reportOperationalConditionSuccessLabel'),
-      message: t('hakemus:notifications:reportOperationalConditionSuccessText'),
+      label: t('hakemus:notifications:reportCompletionDateSuccessLabel'),
+      message: t(messageKey),
       type: 'success',
       closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
     });
@@ -41,7 +42,7 @@ export default function useApplicationReportOperationalConditionNotification(
       dismissible: true,
       autoClose: true,
       autoCloseDuration: 8000,
-      label: t('hakemus:notifications:reportOperationalConditionErrorLabel'),
+      label: t('hakemus:notifications:reportCompletionDateErrorLabel'),
       message: errorMessage,
       type: 'error',
       closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
@@ -49,7 +50,7 @@ export default function useApplicationReportOperationalConditionNotification(
   }
 
   return {
-    showReportOperationalConditionSuccess: showSuccess,
-    showReportOperationalConditionError: showError,
+    showReportCompletionDateSuccess: showSuccess,
+    showReportCompletionDateError: showError,
   };
 }

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Excavation announcement application view Shows correct information in sidebar 1`] = `
+exports[`Excavation notification application view Shows correct information in sidebar 1`] = `
 <div
   class="sideBar"
   data-testid="application-view-sidebar"

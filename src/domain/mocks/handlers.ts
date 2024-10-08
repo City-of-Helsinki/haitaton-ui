@@ -166,6 +166,10 @@ export const handlers = [
     return new HttpResponse();
   }),
 
+  http.post(`${apiUrl}/hakemukset/:id/tyo-valmis`, async () => {
+    return new HttpResponse();
+  }),
+
   http.delete(`${apiUrl}/hakemukset/:id`, async ({ params }) => {
     const { id } = params;
     await hakemuksetDB.remove(Number(id));

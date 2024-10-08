@@ -919,6 +919,13 @@ const hakemukset: Application[] = [
           reportedAt: new Date('2024-08-01T15:15:15Z'),
         },
       ],
+      TYO_VALMIS: [
+        {
+          type: 'TYO_VALMIS',
+          dateReported: new Date('2024-08-01'),
+          reportedAt: new Date('2024-08-01T15:15:15Z'),
+        },
+      ],
     },
   } as Application<KaivuilmoitusData>,
   {

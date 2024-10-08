@@ -14,7 +14,7 @@ import {
   Paatos,
   PaatosTila,
   PaatosTyyppi,
-  ReportOperationalConditionData,
+  ReportCompletionDateData,
 } from './types/application';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import { HIDDEN_FIELD_VALUE } from './constants';
@@ -61,8 +61,17 @@ export async function sendApplication(applicationId: number) {
 /**
  * Report application in operational condition
  */
-export async function reportOperationalCondition(data: ReportOperationalConditionData) {
+export async function reportOperationalCondition(data: ReportCompletionDateData) {
   await api.post<Application>(`/hakemukset/${data.applicationId}/toiminnallinen-kunto`, {
+    date: data.date,
+  });
+}
+
+/**
+ * Report application work finished
+ */
+export async function reportWorkFinished(data: ReportCompletionDateData) {
+  await api.post<Application>(`/hakemukset/${data.applicationId}/tyo-valmis`, {
     date: data.date,
   });
 }
@@ -109,6 +118,22 @@ export function isApplicationReportableInOperationalCondition(
       alluStatus === AlluStatus.RETURNED_TO_PREPARATION ||
       alluStatus === AlluStatus.DECISIONMAKING ||
       alluStatus === AlluStatus.DECISION)
+  );
+}
+
+export function isApplicationReportableWorkFinished(
+  applicationType: ApplicationType,
+  alluStatus: AlluStatusStrings | null,
+) {
+  return (
+    applicationType === 'EXCAVATION_NOTIFICATION' &&
+    (alluStatus === AlluStatus.PENDING ||
+      alluStatus === AlluStatus.HANDLING ||
+      alluStatus === AlluStatus.INFORMATION_RECEIVED ||
+      alluStatus === AlluStatus.RETURNED_TO_PREPARATION ||
+      alluStatus === AlluStatus.DECISIONMAKING ||
+      alluStatus === AlluStatus.DECISION ||
+      alluStatus === AlluStatus.OPERATIONAL_CONDITION)
   );
 }
 
