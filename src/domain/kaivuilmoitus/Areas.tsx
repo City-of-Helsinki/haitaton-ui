@@ -208,7 +208,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
           liikennehaittaindeksi: data.liikennehaittaindeksi.indeksi,
         });
         if (!existingArea) {
-          const [emptyArea /*, newTyoalue*/] = getEmptyArea(hankeData, hankeArea, feature);
+          const [emptyArea] = getEmptyArea(hankeData, hankeArea, feature);
           append(emptyArea);
         } else {
           const existingAreaIndex = areas.indexOf(existingArea);
