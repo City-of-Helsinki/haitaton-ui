@@ -135,6 +135,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         contractorWithContacts,
         propertyDeveloperWithContacts,
         representativeWithContacts,
+        invoicingCustomer,
       },
     }) {
       if (customerWithContacts) {
@@ -167,6 +168,13 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         setValue(
           'applicationData.representativeWithContacts.customer.yhteystietoId',
           representativeWithContacts.customer.yhteystietoId,
+        );
+      }
+      if (invoicingCustomer) {
+        setValue('applicationData.invoicingCustomer.registryKey', invoicingCustomer.registryKey);
+        setValue(
+          'applicationData.invoicingCustomer.registryKeyHidden',
+          invoicingCustomer.registryKeyHidden,
         );
       }
     },

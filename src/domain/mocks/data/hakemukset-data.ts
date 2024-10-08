@@ -700,6 +700,7 @@ const hakemukset: Application[] = [
         type: 'COMPANY',
         name: 'Laskutus Oy',
         registryKey: '1234567-1',
+        registryKeyHidden: false,
         postalAddress: {
           streetAddress: { streetName: 'Laskutuskuja 1' },
           postalCode: '00100',
@@ -841,6 +842,7 @@ const hakemukset: Application[] = [
         type: 'COMPANY',
         name: 'Laskutus Oy',
         registryKey: '1234567-1',
+        registryKeyHidden: false,
         postalAddress: {
           streetAddress: { streetName: 'Laskutuskuja 1' },
           postalCode: '00100',
@@ -936,6 +938,7 @@ const hakemukset: Application[] = [
           email: 'kalle@test.com',
           phone: '0000000000',
           registryKey: null,
+          registryKeyHidden: true,
           ovt: null,
           invoicingOperator: null,
           sapCustomerNumber: null,
@@ -963,6 +966,7 @@ const hakemukset: Application[] = [
           email: 'yritys2@test.com',
           phone: '0000000000',
           registryKey: '3227510-5',
+          registryKeyHidden: false,
           ovt: null,
           invoicingOperator: null,
           sapCustomerNumber: null,

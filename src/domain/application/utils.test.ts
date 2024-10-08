@@ -127,6 +127,63 @@ describe('modifyDataBeforeSend', () => {
       expect(modifiedApplicationData).toEqual(applicationData);
     },
   );
+
+  test('does not change excavation notification application data if invoicing contact type is not PERSON or OTHER', () => {
+    const applicationData = hakemukset[6].applicationData;
+
+    const modifiedApplicationData = modifyDataBeforeSend(applicationData);
+
+    expect(modifiedApplicationData).toEqual(applicationData);
+  });
+
+  test.each([[ContactType.PERSON], [ContactType.OTHER]])(
+    'nullifies registry key for invoicing contact if it is hidden',
+    (contactType) => {
+      const applicationData = {
+        ...hakemukset[7].applicationData,
+        invoicingCustomer: {
+          type: contactType,
+          name: 'Laskutus',
+          registryKey: HIDDEN_FIELD_VALUE,
+          registryKeyHidden: false,
+          postalAddress: {
+            streetAddress: { streetName: 'Laskutuskuja 1' },
+            postalCode: '00100',
+            city: 'Helsinki',
+          },
+        },
+      };
+
+      const modifiedApplicationData = modifyDataBeforeSend(applicationData);
+
+      expect(modifiedApplicationData.invoicingCustomer?.registryKey).toEqual(null);
+      expect(modifiedApplicationData.invoicingCustomer?.registryKeyHidden).toEqual(true);
+    },
+  );
+
+  test.each([[ContactType.PERSON], [ContactType.OTHER]])(
+    'does not change registry key for invoicing contact if it is not hidden',
+    (contactType) => {
+      const applicationData = {
+        ...hakemukset[7].applicationData,
+        invoicingCustomer: {
+          type: contactType,
+          name: 'Laskutus',
+          registryKey: '210495-170S',
+          registryKeyHidden: false,
+          postalAddress: {
+            streetAddress: { streetName: 'Laskutuskuja 1' },
+            postalCode: '00100',
+            city: 'Helsinki',
+          },
+        },
+      };
+
+      const modifiedApplicationData = modifyDataBeforeSend(applicationData);
+
+      expect(modifiedApplicationData).toEqual(applicationData);
+    },
+  );
 });
 
 describe('modifyDataAfterReceive', () => {
@@ -173,6 +230,46 @@ describe('modifyDataAfterReceive', () => {
       expect(
         modifiedApplication.applicationData.customerWithContacts?.customer?.registryKeyHidden,
       ).toEqual(true);
+    },
+  );
+
+  test('does not change excavation notification application data if invoicing contact type is not PERSON or OTHER', () => {
+    const application = hakemukset[6];
+
+    const modifiedApplication = modifyDataAfterReceive(application);
+
+    expect(modifiedApplication).toEqual(application);
+  });
+
+  test.each([[ContactType.PERSON], [ContactType.OTHER]])(
+    'masks registry key for invoicing contact if it is hidden',
+    (contactType) => {
+      const application = {
+        ...hakemukset[7],
+        applicationData: {
+          ...hakemukset[7].applicationData,
+          invoicingCustomer: {
+            type: contactType,
+            name: 'Laskutus',
+            registryKey: null,
+            registryKeyHidden: true,
+            postalAddress: {
+              streetAddress: { streetName: 'Laskutuskuja 1' },
+              postalCode: '00100',
+              city: 'Helsinki',
+            },
+          },
+        },
+      };
+
+      const modifiedApplication = modifyDataAfterReceive(application);
+
+      expect(modifiedApplication.applicationData.invoicingCustomer?.registryKey).toEqual(
+        HIDDEN_FIELD_VALUE,
+      );
+      expect(modifiedApplication.applicationData.invoicingCustomer?.registryKeyHidden).toEqual(
+        true,
+      );
     },
   );
 });

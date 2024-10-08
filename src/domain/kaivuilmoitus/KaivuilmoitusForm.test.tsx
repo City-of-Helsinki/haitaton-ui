@@ -649,6 +649,7 @@ test('OVT and registryKey fields should be send as null if they are left empyty'
         type: 'COMPANY',
         name: '',
         registryKey: '1234567-1',
+        registryKeyHidden: false,
         ovt: '123456789012',
         postalAddress: {
           streetAddress: { streetName: 'Laskutuskuja 1' },
@@ -1070,7 +1071,7 @@ test('Should be able to fill user email and phone by selecting existing user in 
   );
 });
 
-describe('Show correct registry key label', () => {
+describe('Registry key', () => {
   const hankeData = hankkeet[1] as HankeData;
   const application = cloneDeep(applications[6] as Application<KaivuilmoitusData>);
   const testApplication: Application<KaivuilmoitusData> = {
@@ -1095,7 +1096,7 @@ describe('Show correct registry key label', () => {
       fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
 
-      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(1);
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
       expect(screen.getByText('Henkilötunnus')).toBeInTheDocument();
     });
 
@@ -1108,7 +1109,7 @@ describe('Show correct registry key label', () => {
       fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Yritys')[0]);
 
-      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
       expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
     });
 
@@ -1121,7 +1122,7 @@ describe('Show correct registry key label', () => {
       fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Yhdistys')[0]);
 
-      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
       expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
     });
 
@@ -1134,7 +1135,7 @@ describe('Show correct registry key label', () => {
       fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Muu')[0]);
 
-      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(1);
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
       expect(
         screen.getByText('Y-tunnus, henkilötunnus tai muu yksilöivä tunnus'),
       ).toBeInTheDocument();
@@ -1262,7 +1263,7 @@ describe('Show correct registry key label', () => {
       fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
       fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
 
-      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
       expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
     });
 
@@ -1275,7 +1276,7 @@ describe('Show correct registry key label', () => {
       fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
       fireEvent.click(screen.getAllByText('Yritys')[1]);
 
-      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
       expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
     });
 
@@ -1288,7 +1289,7 @@ describe('Show correct registry key label', () => {
       fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
       fireEvent.click(screen.getAllByText('Yhdistys')[0]);
 
-      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
       expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
     });
 
@@ -1301,7 +1302,7 @@ describe('Show correct registry key label', () => {
       fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
       fireEvent.click(screen.getAllByText('Muu')[0]);
 
-      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
       expect(
         screen.queryByText('Y-tunnus, henkilötunnus tai muu yksilöivä tunnus'),
       ).not.toBeInTheDocument();
@@ -1344,6 +1345,101 @@ describe('Show correct registry key label', () => {
       expect(
         await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
       ).toBeDisabled();
+    });
+  });
+
+  describe('Invoicing customer', () => {
+    test('Should show henkilotunnus label when type is private person', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(screen.getByText('Henkilötunnus')).toBeInTheDocument();
+    });
+
+    test('Should show y-tunnus label when type is company', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByText('Yritys')[2]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
+      expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
+    });
+
+    test('Should show y-tunnus label when type is association', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByText('Yhdistys')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
+      expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
+    });
+
+    test('Should show general label when type is other', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByText('Muu')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(
+        screen.getByText('Y-tunnus, henkilötunnus tai muu yksilöivä tunnus'),
+      ).toBeInTheDocument();
+    });
+
+    test('Registry key is required for all customer types', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      // private person
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.invoicingCustomer.registryKey'),
+      ).toBeRequired();
+
+      // company
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByText('Yritys')[2]);
+
+      expect(
+        await screen.findByTestId('applicationData.invoicingCustomer.registryKey'),
+      ).toBeRequired();
+
+      // association
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByText('Yhdistys')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.invoicingCustomer.registryKey'),
+      ).toBeRequired();
+
+      // other
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByText('Muu')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.invoicingCustomer.registryKey'),
+      ).toBeRequired();
     });
   });
 });

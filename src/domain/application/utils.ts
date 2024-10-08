@@ -171,23 +171,42 @@ export function modifyDataBeforeSend<T extends JohtoselvitysUpdateData | Kaivuil
   if (applicationData.applicationType === 'CABLE_REPORT') {
     return applicationData;
   }
-  if (
-    applicationData.customerWithContacts?.customer?.type === 'PERSON' ||
-    applicationData.customerWithContacts?.customer?.type === 'OTHER'
-  ) {
-    const modifiedApplicationData = cloneDeep<T>(applicationData);
+  const kaivuilmoitusData = cloneDeep<KaivuilmoitusData>(applicationData as KaivuilmoitusData);
+
+  function modifyKaivuilmoitusCustomerDataBeforeSend() {
     if (
-      modifiedApplicationData?.customerWithContacts?.customer.registryKey === HIDDEN_FIELD_VALUE
+      kaivuilmoitusData.customerWithContacts?.customer?.type === 'PERSON' ||
+      kaivuilmoitusData.customerWithContacts?.customer?.type === 'OTHER'
     ) {
-      modifiedApplicationData.customerWithContacts.customer.registryKey = null;
-      modifiedApplicationData.customerWithContacts.customer.registryKeyHidden = true;
-    } else if (modifiedApplicationData?.customerWithContacts?.customer.registryKey === '') {
-      modifiedApplicationData.customerWithContacts.customer.registryKey = null;
-      modifiedApplicationData.customerWithContacts.customer.registryKeyHidden = false;
+      if (kaivuilmoitusData?.customerWithContacts?.customer.registryKey === HIDDEN_FIELD_VALUE) {
+        kaivuilmoitusData.customerWithContacts.customer.registryKey = null;
+        kaivuilmoitusData.customerWithContacts.customer.registryKeyHidden = true;
+      } else if (kaivuilmoitusData?.customerWithContacts?.customer.registryKey === '') {
+        kaivuilmoitusData.customerWithContacts.customer.registryKey = null;
+        kaivuilmoitusData.customerWithContacts.customer.registryKeyHidden = false;
+      }
     }
-    return modifiedApplicationData;
   }
-  return applicationData;
+
+  function modifyKaivuilmoitusInvoicingDataBeforeSend() {
+    if (
+      kaivuilmoitusData.invoicingCustomer?.type === 'PERSON' ||
+      kaivuilmoitusData.invoicingCustomer?.type === 'OTHER'
+    ) {
+      if (kaivuilmoitusData?.invoicingCustomer?.registryKey === HIDDEN_FIELD_VALUE) {
+        kaivuilmoitusData.invoicingCustomer.registryKey = null;
+        kaivuilmoitusData.invoicingCustomer.registryKeyHidden = true;
+      } else if (kaivuilmoitusData?.invoicingCustomer?.registryKey === '') {
+        kaivuilmoitusData.invoicingCustomer.registryKey = null;
+        kaivuilmoitusData.invoicingCustomer.registryKeyHidden = false;
+      }
+    }
+  }
+
+  modifyKaivuilmoitusCustomerDataBeforeSend();
+  modifyKaivuilmoitusInvoicingDataBeforeSend();
+
+  return kaivuilmoitusData as T;
 }
 
 export function modifyDataAfterReceive<T extends JohtoselvitysData | KaivuilmoitusData>(
@@ -196,17 +215,25 @@ export function modifyDataAfterReceive<T extends JohtoselvitysData | Kaivuilmoit
   if (application.applicationType === 'CABLE_REPORT') {
     return application;
   }
+  const kaivuilmoitusData = cloneDeep<KaivuilmoitusData>(
+    application.applicationData as KaivuilmoitusData,
+  );
   if (
-    (application.applicationData.customerWithContacts?.customer?.type === 'PERSON' ||
-      application.applicationData.customerWithContacts?.customer?.type === 'OTHER') &&
-    application.applicationData.customerWithContacts?.customer?.registryKeyHidden
+    (kaivuilmoitusData.customerWithContacts?.customer?.type === 'PERSON' ||
+      kaivuilmoitusData.customerWithContacts?.customer?.type === 'OTHER') &&
+    kaivuilmoitusData.customerWithContacts?.customer?.registryKeyHidden
   ) {
-    const modifiedApplicationData = cloneDeep<T>(application.applicationData);
-    modifiedApplicationData.customerWithContacts!.customer.registryKey = HIDDEN_FIELD_VALUE;
-    return {
-      ...application,
-      applicationData: modifiedApplicationData,
-    };
+    kaivuilmoitusData.customerWithContacts!.customer.registryKey = HIDDEN_FIELD_VALUE;
   }
-  return application;
+  if (
+    (kaivuilmoitusData.invoicingCustomer?.type === 'PERSON' ||
+      kaivuilmoitusData.invoicingCustomer?.type === 'OTHER') &&
+    kaivuilmoitusData.invoicingCustomer?.registryKeyHidden
+  ) {
+    kaivuilmoitusData.invoicingCustomer!.registryKey = HIDDEN_FIELD_VALUE;
+  }
+  return {
+    ...application,
+    applicationData: kaivuilmoitusData as T,
+  };
 }

@@ -350,7 +350,6 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByRole('button', { name: /lisää toimet haittojen hallintaan/i }));
 
-    screen.debug(undefined, 300000);
     expect(screen.getByTestId('test-LINJAAUTOLIIKENNE')).toBeInTheDocument();
     expect(
       screen.getByTestId('alueet.0.haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE'),

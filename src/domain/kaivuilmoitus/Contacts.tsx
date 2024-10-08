@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Box } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
@@ -9,13 +9,38 @@ import { ContactType } from '../application/types/application';
 import TextInput from '../../common/components/textInput/TextInput';
 import { useFormContext } from 'react-hook-form';
 import { KaivuilmoitusFormValues } from './types';
+import { TFunction } from 'i18next';
+import { HIDDEN_FIELD_VALUE } from '../application/constants';
+
+function getInvoicingRegistryKeyLabel(
+  t: TFunction<'translation', undefined>,
+  selectedContactType: string | null,
+) {
+  if (selectedContactType === 'PERSON') {
+    return t('form:yhteystiedot:labels:henkilotunnus');
+  } else if (selectedContactType === 'OTHER') {
+    return t('form:yhteystiedot:labels:muuTunnus');
+  }
+  return t('form:yhteystiedot:labels:ytunnus');
+}
 
 export default function Contacts() {
   const { t } = useTranslation();
-  const { watch, resetField, trigger } = useFormContext<KaivuilmoitusFormValues>();
+  const { watch, setValue, resetField, trigger } = useFormContext<KaivuilmoitusFormValues>();
 
-  const [selectedContactType, ovt, invoicingOperator, streetName, postalCode, city] = watch([
+  const [
+    selectedContactType,
+    registryKey,
+    registryKeyHidden,
+    ovt,
+    invoicingOperator,
+    streetName,
+    postalCode,
+    city,
+  ] = watch([
     'applicationData.invoicingCustomer.type',
+    'applicationData.invoicingCustomer.registryKey',
+    'applicationData.invoicingCustomer.registryKeyHidden',
     'applicationData.invoicingCustomer.ovt',
     'applicationData.invoicingCustomer.invoicingOperator',
     'applicationData.invoicingCustomer.postalAddress.streetAddress.streetName',
@@ -28,12 +53,47 @@ export default function Contacts() {
   const postalAddressRequired = !ovt || !invoicingOperator;
   const ovtRequired = !ovtDisabled && (!streetName || !postalCode || !city);
 
+  const isMounted = useRef(false);
+  const [originalRegistryKeyIsHidden, setOriginalRegistryKeyIsHidden] = useState(false);
+
+  useEffect(() => {
+    // set a flag to mark the original registry key as hidden value in order to be able to revert back to it
+    if (registryKey === HIDDEN_FIELD_VALUE) {
+      setOriginalRegistryKeyIsHidden(true);
+    }
+  }, []);
+
   useEffect(() => {
     if (selectedContactType === 'PERSON' || selectedContactType === 'OTHER') {
       resetField('applicationData.invoicingCustomer.ovt', { defaultValue: '' });
       resetField('applicationData.invoicingCustomer.invoicingOperator', { defaultValue: '' });
     }
-  }, [selectedContactType, resetField]);
+
+    if (isMounted.current) {
+      // if the contact type is changed (after mount), clear the registry key
+      resetField('applicationData.invoicingCustomer.registryKey', { defaultValue: '' });
+      setOriginalRegistryKeyIsHidden(false);
+    }
+  }, [selectedContactType, setValue, resetField]);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      if (originalRegistryKeyIsHidden && registryKey === HIDDEN_FIELD_VALUE) {
+        // set registry key hidden to true when changing the registry key back to the hidden value
+        setValue('applicationData.invoicingCustomer.registryKeyHidden', true, {
+          shouldValidate: true,
+        });
+      } else {
+        // set registry key hidden to false when changing the registry key
+        setValue('applicationData.invoicingCustomer.registryKeyHidden', false, {
+          shouldValidate: true,
+        });
+      }
+    }
+
+    // mark the component as mounted
+    isMounted.current = true;
+  }, [registryKey, setValue]);
 
   useEffect(() => {
     if (!postalAddressRequired) {
@@ -86,10 +146,11 @@ export default function Contacts() {
           />
           <TextInput
             name="applicationData.invoicingCustomer.registryKey"
-            label={t('form:yhteystiedot:labels:yTunnusTaiHetu')}
+            label={getInvoicingRegistryKeyLabel(t, selectedContactType)}
             required
             autoComplete="on"
             defaultValue={null}
+            helperText={registryKeyHidden ? t('form:yhteystiedot:helperTexts:registryKey') : ''}
           />
         </ResponsiveGrid>
         <ResponsiveGrid>
