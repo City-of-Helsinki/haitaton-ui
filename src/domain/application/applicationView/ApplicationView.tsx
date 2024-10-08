@@ -39,6 +39,7 @@ import {
   JohtoselvitysData,
   KaivuilmoitusAlue,
   KaivuilmoitusData,
+  PaperDecisionReceiver,
 } from '../types/application';
 import JohtoselvitysBasicInformationSummary from '../components/summary/JohtoselvitysBasicInformationSummary';
 import KaivuilmoitusBasicInformationSummary from '../components/summary/KaivuilmoitusBasicInformationSummary';
@@ -247,6 +248,27 @@ function KaivuilmoitusAreasInfo({ areas }: { areas: KaivuilmoitusAlue[] | null }
   });
 }
 
+function PaperDecisionReceiverSummary({
+  paperDecisionReceiver,
+}: {
+  paperDecisionReceiver: PaperDecisionReceiver;
+}) {
+  const { t } = useTranslation();
+
+  return (
+    <>
+      <SectionItemTitle>{t('hakemus:labels:paperDecisionOrdered')}</SectionItemTitle>
+      <SectionItemContent>
+        <p>{paperDecisionReceiver.name}</p>
+        <p>{paperDecisionReceiver.streetAddress}</p>
+        <p>
+          {paperDecisionReceiver.postalCode} {paperDecisionReceiver.city}
+        </p>
+      </SectionItemContent>
+    </>
+  );
+}
+
 const validationSchemas = {
   CABLE_REPORT: johtoselvitysValidationSchema,
   EXCAVATION_NOTIFICATION: kaivuilmoitusValidationSchema,
@@ -277,6 +299,7 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
     contractorWithContacts,
     propertyDeveloperWithContacts,
     representativeWithContacts,
+    paperDecisionReceiver,
   } = applicationData;
   const tyoalueet =
     applicationType === 'CABLE_REPORT'
@@ -535,6 +558,9 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
                   <InvoicingCustomerSummary
                     invoicingCustomer={(applicationData as KaivuilmoitusData).invoicingCustomer}
                   />
+                )}
+                {paperDecisionReceiver && (
+                  <PaperDecisionReceiverSummary paperDecisionReceiver={paperDecisionReceiver} />
                 )}
               </FormSummarySection>
             </TabPanel>

@@ -219,6 +219,29 @@ describe('Cable report application view', () => {
 
     expect(screen.getByText('Lataa päätös (PDF)')).toBeInTheDocument();
   });
+
+  describe('Contacts', () => {
+    test('Shows paper decision contact information when there is data', async () => {
+      const { user } = render(<ApplicationViewContainer id={9} />);
+      await waitForLoadingToFinish();
+      await user.click(screen.getByRole('tab', { name: /yhteystiedot/i }));
+      const { getByText } = within(screen.getByRole('tabpanel', { name: /yhteystiedot/i }));
+
+      expect(getByText('Päätös tilattu paperisena')).toBeInTheDocument();
+      expect(getByText('Pekka Paperinen')).toBeInTheDocument();
+      expect(getByText('Paperipolku 3 A 4')).toBeInTheDocument();
+      expect(getByText('00451 Helsinki')).toBeInTheDocument();
+    });
+
+    test('Does not show paper decision contact information when there is no data', async () => {
+      const { user } = render(<ApplicationViewContainer id={1} />);
+      await waitForLoadingToFinish();
+      await user.click(screen.getByRole('tab', { name: /yhteystiedot/i }));
+      const { queryByText } = within(screen.getByRole('tabpanel', { name: /yhteystiedot/i }));
+
+      expect(queryByText('Päätös tilattu paperisena')).not.toBeInTheDocument();
+    });
+  });
 });
 
 describe('Excavation notification application view', () => {
@@ -460,7 +483,7 @@ describe('Excavation notification application view', () => {
 
   describe('Report excavation notification work finished', () => {
     const setup = async (id: number = 8) => {
-      const { user } = render(<ApplicationViewContainer id={id} />);
+      const { user } = render(<ApplicationViewContainer id={id}/>);
       await waitForLoadingToFinish();
       return user;
     };
@@ -647,6 +670,29 @@ describe('Excavation notification application view', () => {
         expect(await screen.findByText('Ilmoituksen lähettäminen epäonnistui')).toBeInTheDocument();
         expect(screen.queryByText('Ilmoitus lähetetty')).not.toBeInTheDocument();
       });
+    });
+  });
+
+  describe('Contacts', () => {
+    test('Shows paper decision contact information when there is data', async () => {
+      const { user } = render(<ApplicationViewContainer id={8} />);
+      await waitForLoadingToFinish();
+      await user.click(screen.getByRole('tab', { name: /yhteystiedot/i }));
+      const { getByText } = within(screen.getByRole('tabpanel', { name: /yhteystiedot/i }));
+
+      expect(getByText('Päätös tilattu paperisena')).toBeInTheDocument();
+      expect(getByText('Pekka Paperinen')).toBeInTheDocument();
+      expect(getByText('Paperipolku 3 A 4')).toBeInTheDocument();
+      expect(getByText('00451 Helsinki')).toBeInTheDocument();
+    });
+
+    test('Does not show paper decision contact information when there is no data', async () => {
+      const { user } = render(<ApplicationViewContainer id={7} />);
+      await waitForLoadingToFinish();
+      await user.click(screen.getByRole('tab', { name: /yhteystiedot/i }));
+      const { queryByText } = within(screen.getByRole('tabpanel', { name: /yhteystiedot/i }));
+
+      expect(queryByText('Päätös tilattu paperisena')).not.toBeInTheDocument();
     });
   });
 });

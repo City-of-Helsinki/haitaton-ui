@@ -1115,7 +1115,8 @@
         "PAATOS": "Lataa päätös (PDF)",
         "TOIMINNALLINEN_KUNTO": "Lataa toiminnallinen kunto (PDF)",
         "TYO_VALMIS": "Lataa työ valmis (PDF)"
-      }
+      },
+      "paperDecisionOrdered": "Päätös tilattu paperisena"
     },
     "notifications": {
       "saveSuccessLabel": "Hakemus tallennettu",
