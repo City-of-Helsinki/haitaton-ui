@@ -887,6 +887,45 @@ describe('Show correct registry key label', () => {
         screen.queryByText('Y-tunnus, henkilötunnus tai muu yksilöivä tunnus'),
       ).not.toBeInTheDocument();
     });
+
+    test('Registry key is not required for company and association customer types and disabled for others', async () => {
+      const { user } = render(
+        <JohtoselvitysContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      // private person
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.customerWithContacts.customer.registryKey'),
+      ).toBeDisabled();
+
+      // company
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Yritys')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.customerWithContacts.customer.registryKey'),
+      ).not.toBeRequired();
+
+      // association
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Yhdistys')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.customerWithContacts.customer.registryKey'),
+      ).not.toBeRequired();
+
+      // other
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Muu')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.customerWithContacts.customer.registryKey'),
+      ).toBeDisabled();
+    });
   });
 
   describe('Contractor', () => {
@@ -942,6 +981,45 @@ describe('Show correct registry key label', () => {
       expect(
         screen.queryByText('Y-tunnus, henkilötunnus tai muu yksilöivä tunnus'),
       ).not.toBeInTheDocument();
+    });
+
+    test('Registry key is not required for company and association customer types and disabled for others', async () => {
+      const { user } = render(
+        <JohtoselvitysContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      // private person
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).toBeDisabled();
+
+      // company
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yritys')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).not.toBeRequired();
+
+      // association
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yhdistys')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).not.toBeRequired();
+
+      // other
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Muu')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).toBeDisabled();
     });
   });
 });

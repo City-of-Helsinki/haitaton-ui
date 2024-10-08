@@ -19,6 +19,10 @@ export const registryKeySchema = yup
   .when('type', {
     is: (value: string) => value === 'COMPANY' || value === 'ASSOCIATION',
     then: (schema) => schema.businessId(),
+  })
+  .when('type', {
+    is: (value: string) => value === 'PERSON',
+    then: (schema) => schema.personalId(),
   });
 
 export const customerSchema = contactSchema.omit(['firstName', 'lastName']).shape({

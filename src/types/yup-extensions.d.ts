@@ -5,6 +5,7 @@ declare module 'yup' {
   interface StringSchema {
     phone(message?: Message): this;
     businessId(message?: Message): this;
+    personalId(message?: Message): this;
     uniqueEmail(): this;
     detectedTrafficNuisance(type: HAITTOJENHALLINTATYYPPI): this;
   }

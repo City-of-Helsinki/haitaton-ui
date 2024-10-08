@@ -39,6 +39,14 @@ const kaivuilmoitusAlueSchema = yup.object({
   lisatiedot: yup.string(),
 });
 
+const customerWithContactsSchemaForKaivuilmoitusForTyostaVastaava = customerWithContactsSchema
+  .omit(['customer'])
+  .shape({
+    customer: customerSchema.omit(['registryKey']).shape({
+      registryKey: registryKeySchema.required(),
+    }),
+  });
+
 const customerWithContactsSchemaForKaivuilmoitus = customerWithContactsSchema
   .omit(['customer'])
   .shape({
@@ -79,7 +87,7 @@ const applicationDataSchema = yup.object().shape(
       }),
     requiredCompetence: yup.boolean().required(),
     contractorWithContacts: customerWithContactsSchemaForKaivuilmoitus,
-    customerWithContacts: customerWithContactsSchemaForKaivuilmoitus,
+    customerWithContacts: customerWithContactsSchemaForKaivuilmoitusForTyostaVastaava,
     propertyDeveloperWithContacts: customerWithContactsSchemaForKaivuilmoitus.nullable(),
     representativeWithContacts: customerWithContactsSchemaForKaivuilmoitus.nullable(),
     invoicingCustomer: invoicingCustomerSchema,

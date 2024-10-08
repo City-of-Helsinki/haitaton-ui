@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Accordion, Button, Fieldset, IconPlusCircle } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { useTranslation } from 'react-i18next';
@@ -81,18 +81,26 @@ const CustomerFields: React.FC<{
     selectedContactType,
     applicationType,
   );
+  const isMounted = useRef(false);
 
   useEffect(() => {
-    // If setting contact type disables the registry key, set it to null
-    if (!isRegistryKeyInputEnabled(customerType, selectedContactType, applicationType)) {
+    // If setting contact type disables the registry key or contact type is changed (after mount), clear the registry key
+    if (
+      !isRegistryKeyInputEnabled(customerType, selectedContactType, applicationType) ||
+      isMounted.current
+    ) {
       setValue(`applicationData.${customerType}.customer.registryKey`, null, {
         shouldValidate: true,
       });
     }
+
     // always set registry key hidden to false when changing the contact type
     setValue(`applicationData.${customerType}.customer.registryKeyHidden`, false, {
       shouldValidate: true,
     });
+
+    // mark the component as mounted
+    isMounted.current = true;
   }, [selectedContactType, customerType, applicationType, setValue]);
 
   function handleUserSelect(user: HankeUser) {
