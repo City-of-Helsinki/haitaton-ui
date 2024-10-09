@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Map from '../../common/components/map/Map';
 import Controls from '../../common/components/map/controls/Controls';
 import LayerControl from '../../common/components/map/controls/LayerControl';
@@ -19,6 +19,8 @@ import MapGuide from './components/MapGuide/MapGuide';
 import HankkeetProvider from './HankkeetProvider';
 import OverviewMapControl from '../../common/components/map/controls/OverviewMapControl';
 import AddressSearchContainer from './components/AddressSearch/AddressSearchContainer';
+import { HankeAlue } from '../types/hanke';
+import { areDatesWithinInterval } from './utils';
 
 const HankeMap: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [zoom] = useState(9); // TODO: also take zoom into consideration
@@ -30,6 +32,24 @@ const HankeMap: React.FC<React.PropsWithChildren<unknown>> = () => {
     setHankeFilterStartDate,
     setHankeFilterEndDate,
   } = useDateRangeFilter();
+
+  const filterHankeAlueet = useCallback(
+    (alueet: HankeAlue[]) => {
+      return alueet.filter((alue) =>
+        areDatesWithinInterval(
+          {
+            start: hankeFilterStartDate,
+            end: hankeFilterEndDate,
+          },
+          { allowOverlapping: true },
+        )({
+          start: alue.haittaAlkuPvm,
+          end: alue.haittaLoppuPvm,
+        }),
+      );
+    },
+    [hankeFilterStartDate, hankeFilterEndDate],
+  );
 
   return (
     <div className={styles.mapContainer} id="hankemap">
@@ -46,12 +66,7 @@ const HankeMap: React.FC<React.PropsWithChildren<unknown>> = () => {
           <FeatureClick />
           <GeometryHover>
             <HankeHoverBox />
-            <HankeLayer
-              startDate={hankeFilterStartDate}
-              endDate={hankeFilterEndDate}
-              centerOnMap
-              highlightFeatures
-            />
+            <HankeLayer filterHankeAlueet={filterHankeAlueet} centerOnMap highlightFeatures />
           </GeometryHover>
         </HankkeetProvider>
 

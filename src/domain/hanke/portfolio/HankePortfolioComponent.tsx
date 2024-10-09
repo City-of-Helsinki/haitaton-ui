@@ -28,7 +28,7 @@ import styles from './HankePortfolio.module.scss';
 import { formatToFinnishDate } from '../../../common/utils/date';
 import DateRangeControl from '../../../common/components/map/controls/DateRangeControl';
 import { usePortfolioFilter } from './hooks/usePortfolioFilter';
-import { hankeIsBetweenDates } from '../../map/utils';
+import { areDatesWithinInterval } from '../../map/utils';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
 import HankeVaiheTag from '../vaiheTag/HankeVaiheTag';
@@ -315,9 +315,12 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
       if (dateStart) {
         if (hankeFilterEndDate) {
           return dateStartRows.filter((hanke) =>
-            hankeIsBetweenDates({ startDate: dateStart, endDate: hankeFilterEndDate })({
-              startDate: hanke.values.alkuPvm,
-              endDate: hanke.values.loppuPvm,
+            areDatesWithinInterval(
+              { start: dateStart, end: hankeFilterEndDate },
+              { allowOverlapping: true },
+            )({
+              start: hanke.values.alkuPvm,
+              end: hanke.values.loppuPvm,
             }),
           );
         }
@@ -330,9 +333,12 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
       if (dateEnd) {
         if (hankeFilterStartDate) {
           return dateEndRows.filter((hanke) =>
-            hankeIsBetweenDates({ startDate: hankeFilterStartDate, endDate: dateEnd })({
-              startDate: hanke.values.alkuPvm,
-              endDate: hanke.values.loppuPvm,
+            areDatesWithinInterval(
+              { start: hankeFilterStartDate, end: dateEnd },
+              { allowOverlapping: true },
+            )({
+              start: hanke.values.alkuPvm,
+              end: hanke.values.loppuPvm,
             }),
           );
         }
