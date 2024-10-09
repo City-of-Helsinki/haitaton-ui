@@ -93,6 +93,7 @@ const CustomerFields: React.FC<{
     if (registryKey === HIDDEN_FIELD_VALUE) {
       setOriginalRegistryKeyIsHidden(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -129,6 +130,7 @@ const CustomerFields: React.FC<{
 
     // mark the component as mounted
     isMounted.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customerType, registryKey, setValue]);
 
   function handleUserSelect(user: HankeUser) {

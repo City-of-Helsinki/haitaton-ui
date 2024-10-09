@@ -61,6 +61,7 @@ export default function Contacts() {
     if (registryKey === HIDDEN_FIELD_VALUE) {
       setOriginalRegistryKeyIsHidden(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -93,6 +94,7 @@ export default function Contacts() {
 
     // mark the component as mounted
     isMounted.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [registryKey, setValue]);
 
   useEffect(() => {
