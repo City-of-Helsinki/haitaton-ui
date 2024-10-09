@@ -81,6 +81,7 @@ import HaittaIndexes from '../../common/haittaIndexes/HaittaIndexes';
 import { calculateLiikennehaittaindeksienYhteenveto } from '../../kaivuilmoitus/utils';
 import styles from './ApplicationView.module.scss';
 import CustomAccordion from '../../../common/components/customAccordion/CustomAccordion';
+import useFilterHankeAlueetByApplicationDates from '../hooks/useFilterHankeAlueetByApplicationDates';
 
 function SidebarTyoalueet({
   tyoalueet,
@@ -336,6 +337,11 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
   );
   const applicationSendMutation = useSendApplication();
 
+  const filterHankeAlueet = useFilterHankeAlueetByApplicationDates({
+    applicationStartDate: startTime,
+    applicationEndDate: endTime,
+  });
+
   async function onSendApplication() {
     setIsSendButtonDisabled(true);
     applicationSendMutation.mutate(id as number);
@@ -355,6 +361,13 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
 
   function closeReportWorkFinishedDialog() {
     setShowReportWorkFinishedDialog(false);
+  }
+
+  function getHankeWithAlueetFilteredByDates(hankeData: HankeData): HankeData {
+    return {
+      ...hankeData,
+      alueet: filterHankeAlueet(hankeData.alueet),
+    };
   }
 
   return (
@@ -586,7 +599,10 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
             <>
               <Box mb="var(--spacing-s)">
                 <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} showLink={false} />
-                <OwnHankeMap hanke={hanke} application={application} />
+                <OwnHankeMap
+                  hanke={getHankeWithAlueetFilteredByDates(hanke)}
+                  application={application}
+                />
               </Box>
               {applicationType === 'CABLE_REPORT' && (
                 <SidebarTyoalueet tyoalueet={tyoalueet} startTime={startTime} endTime={endTime} />

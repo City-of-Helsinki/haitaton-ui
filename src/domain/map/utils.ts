@@ -3,8 +3,9 @@ import axios from 'axios';
 import Geometry from 'ol/geom/Geometry';
 import { Feature } from 'ol';
 import Polygon from 'ol/geom/Polygon';
+import { Interval, isWithinInterval } from 'date-fns';
 import { HankeGeoJSON } from '../../common/types/hanke';
-import { GeometryData, HankeFilters } from './types';
+import { DateInterval, GeometryData } from './types';
 import { HankeData, HankeDataDraft, HankeGeometria } from '../types/hanke';
 import { getSurfaceArea } from '../../common/components/map/utils';
 
@@ -46,62 +47,36 @@ export const formatFeaturesToAlluGeoJSON = (features: GeometryData): unknown => 
 export const hankeHasGeometry = (hanke: HankeData | HankeDataDraft) =>
   hanke.alueet?.some((alue) => Boolean(alue.geometriat));
 
-export const hankeIsBetweenDates =
-  ({ endDate, startDate }: HankeFilters) =>
-  ({ startDate: comparedStartDate, endDate: comparedEndDate }: HankeFilters) => {
-    const filterStartDate = startDate ? new Date(startDate) : 0;
-    const filterEndDate = endDate ? new Date(endDate) : 0;
-    // both dates are unset in UI, return all
-    if (filterStartDate === 0 && filterEndDate === 0) return true;
-
-    const hankeEndDate = comparedEndDate ? new Date(comparedEndDate) : 0;
-
-    // end date is not set in UI
-    const hankeStartDate = comparedStartDate ? new Date(comparedStartDate) : 0;
-    if (filterEndDate === 0) {
-      if (
-        filterStartDate <= hankeStartDate ||
-        (filterStartDate >= hankeStartDate && filterStartDate <= hankeEndDate)
-      )
-        return true;
+/**
+ * Check if date range is is within interval.
+ * Interval to check against is given to the function as an object with start and end properties.
+ * Returns a function that takes a date range an checks if that is within the interval.
+ * Optional allowOverlapping option can be given, and if it's true the function
+ * will return true also if the date ranges overlap.
+ */
+export const areDatesWithinInterval =
+  (interval: DateInterval, options?: { allowOverlapping?: boolean }) =>
+  (dateRange: DateInterval) => {
+    if (!interval.start || !interval.end || !dateRange.start || !dateRange.end) {
+      return true;
     }
 
-    // both dates are set in the UI
-    if (
-      hankeStartDate <= filterStartDate &&
-      hankeStartDate <= filterEndDate &&
-      hankeEndDate >= filterStartDate &&
-      hankeEndDate <= filterEndDate
-    )
-      return true;
-    if (
-      hankeStartDate <= filterStartDate &&
-      hankeStartDate <= filterEndDate &&
-      hankeEndDate >= filterStartDate &&
-      hankeEndDate >= filterEndDate
-    )
-      return true;
-    if (
-      hankeStartDate >= filterStartDate &&
-      hankeStartDate <= filterEndDate &&
-      hankeEndDate >= filterStartDate &&
-      hankeEndDate <= filterEndDate
-    )
-      return true;
-    if (
-      hankeStartDate >= filterStartDate &&
-      hankeStartDate <= filterEndDate &&
-      hankeEndDate >= filterStartDate &&
-      hankeEndDate >= filterEndDate
-    )
-      return true;
+    const dateRangeStartWithinInterval = isWithinInterval(dateRange.start, interval as Interval);
+    const dateRangeEndWithinInterval = isWithinInterval(dateRange.end, interval as Interval);
 
-    return false;
+    if (options?.allowOverlapping) {
+      const intervalStartWithinDateRange = isWithinInterval(interval.start, dateRange as Interval);
+      const intervalEndWithinDateRange = isWithinInterval(interval.end, dateRange as Interval);
+      return (
+        dateRangeStartWithinInterval ||
+        dateRangeEndWithinInterval ||
+        intervalStartWithinDateRange ||
+        intervalEndWithinDateRange
+      );
+    }
+
+    return dateRangeStartWithinInterval && dateRangeEndWithinInterval;
   };
-
-export const byAllHankeFilters = (hankeFilters: HankeFilters) => (hanke: HankeData) =>
-  hankeHasGeometry(hanke) &&
-  hankeIsBetweenDates(hankeFilters)({ startDate: hanke.alkuPvm, endDate: hanke.loppuPvm });
 
 export function getStreetName(input: string) {
   const matches = input.match(/^\D+/);
