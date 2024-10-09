@@ -226,8 +226,18 @@ export function modifyDataBeforeSend<T extends JohtoselvitysUpdateData | Kaivuil
         kaivuilmoitusData.invoicingCustomer.registryKeyHidden = false;
       }
     }
+    if (kaivuilmoitusData?.invoicingCustomer?.ovt === '') {
+      kaivuilmoitusData.invoicingCustomer.ovt = null;
+    }
+    if (kaivuilmoitusData?.invoicingCustomer?.invoicingOperator === '') {
+      kaivuilmoitusData.invoicingCustomer.invoicingOperator = null;
+    }
+    if (kaivuilmoitusData?.invoicingCustomer?.customerReference === '') {
+      kaivuilmoitusData.invoicingCustomer.customerReference = null;
+    }
   }
 
+  console.log('modifyDataBeforeSend', kaivuilmoitusData);
   modifyKaivuilmoitusCustomerDataBeforeSend();
   modifyKaivuilmoitusInvoicingDataBeforeSend();
 

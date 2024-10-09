@@ -65,13 +65,13 @@ export default function Contacts() {
 
   useEffect(() => {
     if (selectedContactType === 'PERSON' || selectedContactType === 'OTHER') {
-      resetField('applicationData.invoicingCustomer.ovt', { defaultValue: '' });
-      resetField('applicationData.invoicingCustomer.invoicingOperator', { defaultValue: '' });
+      resetField('applicationData.invoicingCustomer.ovt', { defaultValue: null });
+      resetField('applicationData.invoicingCustomer.invoicingOperator', { defaultValue: null });
     }
 
     if (isMounted.current) {
       // if the contact type is changed (after mount), clear the registry key
-      resetField('applicationData.invoicingCustomer.registryKey', { defaultValue: '' });
+      resetField('applicationData.invoicingCustomer.registryKey', { defaultValue: null });
       setOriginalRegistryKeyIsHidden(false);
     }
   }, [selectedContactType, setValue, resetField]);

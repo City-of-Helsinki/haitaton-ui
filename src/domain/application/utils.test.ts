@@ -184,6 +184,32 @@ describe('modifyDataBeforeSend', () => {
       expect(modifiedApplicationData).toEqual(applicationData);
     },
   );
+
+  test('nullifies blank invoicing customer fields', () => {
+    const applicationData = {
+      ...hakemukset[7].applicationData,
+      invoicingCustomer: {
+        type: ContactType.PERSON,
+        name: 'Laskutushenkilö',
+        registryKey: null,
+        registryKeyHidden: true,
+        ovt: '',
+        invoicingOperator: '',
+        customerReference: '',
+        postalAddress: {
+          streetAddress: { streetName: 'Laskutuskuja 1' },
+          postalCode: '00100',
+          city: 'Helsinki',
+        },
+      },
+    };
+
+    const modifiedApplicationData = modifyDataBeforeSend(applicationData);
+
+    expect(modifiedApplicationData.invoicingCustomer?.ovt).toBeNull();
+    expect(modifiedApplicationData.invoicingCustomer?.invoicingOperator).toBeNull();
+    expect(modifiedApplicationData.invoicingCustomer?.customerReference).toBeNull();
+  });
 });
 
 describe('modifyDataAfterReceive', () => {

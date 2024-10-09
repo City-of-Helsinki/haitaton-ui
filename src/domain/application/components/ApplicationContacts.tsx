@@ -120,6 +120,13 @@ const CustomerFields: React.FC<{
       }
     }
 
+    if (registryKey === '') {
+      // set the registry key to null when it is empty
+      setValue(`applicationData.${customerType}.customer.registryKey`, null, {
+        shouldValidate: true,
+      });
+    }
+
     // mark the component as mounted
     isMounted.current = true;
   }, [customerType, registryKey, setValue]);
