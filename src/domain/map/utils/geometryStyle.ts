@@ -74,6 +74,12 @@ export const STYLES = {
     }),
     stroke: strokeHL,
   }),
+  PURPLE: new Style({
+    fill: new Fill({
+      color: '#ccccff',
+    }),
+    stroke: stroke,
+  }),
 };
 
 export const getStyleByStatus = (status: LIIKENNEHAITTA_STATUS, highlight = false): Style =>

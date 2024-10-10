@@ -26,7 +26,7 @@ import {
 } from '../types/hanke';
 import styles from './Kaivuilmoitus.module.scss';
 import ApplicationMap from '../application/components/ApplicationMap';
-import { KaivuilmoitusAlue, Tyoalue } from '../application/types/application';
+import { HankkeenHakemus, KaivuilmoitusAlue, Tyoalue } from '../application/types/application';
 import useSelectableTabs from '../../common/hooks/useSelectableTabs';
 import TextInput from '../../common/components/textInput/TextInput';
 import Dropdown from '../../common/components/dropdown/Dropdown';
@@ -42,6 +42,8 @@ import HaittaIndexes from '../common/haittaIndexes/HaittaIndexes';
 import useHaittaIndexes from '../hanke/hooks/useHaittaIndexes';
 import { calculateLiikennehaittaindeksienYhteenveto } from './utils';
 import useFilterHankeAlueetByApplicationDates from '../application/hooks/useFilterHankeAlueetByApplicationDates';
+import { STYLES } from '../map/utils/geometryStyle';
+import HakemusLayer from '../map/components/Layers/HakemusLayer';
 
 function getEmptyArea(
   hankeData: HankeData,
@@ -68,9 +70,10 @@ function getEmptyArea(
 
 type Props = {
   hankeData: HankeData;
+  hankkeenHakemukset: HankkeenHakemus[];
 };
 
-export default function Areas({ hankeData }: Readonly<Props>) {
+export default function Areas({ hankeData, hankkeenHakemukset }: Readonly<Props>) {
   const { t } = useTranslation();
   const locale = useLocale();
   const [multipleHankeAreaSpanningFeature, setMultipleHankeAreaSpanningFeature] =
@@ -116,6 +119,8 @@ export default function Areas({ hankeData }: Readonly<Props>) {
     );
     return new VectorSource({ features });
   });
+
+  const selectedJohtoselvitysTunnukset = getValues('applicationData.cableReports');
 
   const { tabRefs, setSelectedTabIndex } = useSelectableTabs(applicationAreas, {
     selectLastTabOnChange: true,
@@ -390,11 +395,20 @@ export default function Areas({ hankeData }: Readonly<Props>) {
           onChangeArea={handleChangeArea}
           restrictDrawingToHankeAreas
         >
+          {/* Hanke areas */}
           <HankeLayer
             hankeData={hankeData && [hankeData]}
             fitSource
             filterHankeAlueet={filterHankeAlueet}
           />
+          {/* Johtoselvitys areas */}
+          {hankkeenHakemukset
+            .filter((hakemus) =>
+              selectedJohtoselvitysTunnukset?.includes(hakemus.applicationIdentifier!),
+            )
+            .map((hakemus) => (
+              <HakemusLayer hakemusId={hakemus.id!} layerStyle={STYLES.PURPLE} />
+            ))}
         </ApplicationMap>
 
         {!workTimesSet && (
