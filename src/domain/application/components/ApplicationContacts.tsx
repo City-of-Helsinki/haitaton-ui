@@ -93,6 +93,7 @@ const CustomerFields: React.FC<{
     if (registryKey === HIDDEN_FIELD_VALUE) {
       setOriginalRegistryKeyIsHidden(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -120,8 +121,16 @@ const CustomerFields: React.FC<{
       }
     }
 
+    if (registryKey === '') {
+      // set the registry key to null when it is empty
+      setValue(`applicationData.${customerType}.customer.registryKey`, null, {
+        shouldValidate: true,
+      });
+    }
+
     // mark the component as mounted
     isMounted.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customerType, registryKey, setValue]);
 
   function handleUserSelect(user: HankeUser) {

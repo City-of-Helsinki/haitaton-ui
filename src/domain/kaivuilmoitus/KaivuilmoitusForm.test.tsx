@@ -635,7 +635,7 @@ test('OVT fields should be required if postal address fields are empty', async (
   ).not.toBeRequired();
 });
 
-test('OVT and registryKey fields should be send as null if they are left empyty', async () => {
+test('OVT and registryKey fields should be send as null if they are left empty', async () => {
   const applicationUpdateSpy = jest.spyOn(applicationApi, 'updateApplication');
   const hankeData = hankkeet[1] as HankeData;
   const application = cloneDeep(applications[5] as Application<KaivuilmoitusData>);
@@ -667,6 +667,55 @@ test('OVT and registryKey fields should be send as null if they are left empyty'
   await user.clear(screen.getByTestId('applicationData.invoicingCustomer.ovt'));
   await user.clear(screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator'));
   await user.clear(screen.getByTestId('applicationData.invoicingCustomer.registryKey'));
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+  const data = applicationUpdateSpy.mock.lastCall?.[0].data as KaivuilmoitusData;
+  expect(data?.customerWithContacts?.customer).toEqual(
+    expect.objectContaining({ registryKey: null }),
+  );
+  expect(data?.contractorWithContacts?.customer).toEqual(
+    expect.objectContaining({ registryKey: null }),
+  );
+  expect(data?.invoicingCustomer).toEqual(
+    expect.objectContaining({ invoicingOperator: null, ovt: null, registryKey: null }),
+  );
+
+  applicationUpdateSpy.mockClear();
+});
+
+test('OVT and registryKey fields should be send as null if they are left empty by changing customer type', async () => {
+  const applicationUpdateSpy = jest.spyOn(applicationApi, 'updateApplication');
+  const hankeData = hankkeet[1] as HankeData;
+  const application = cloneDeep(applications[5] as Application<KaivuilmoitusData>);
+  const testApplication: Application<KaivuilmoitusData> = {
+    ...application,
+    applicationData: {
+      ...application.applicationData,
+      customerWithContacts: null,
+      contractorWithContacts: null,
+      invoicingCustomer: {
+        type: 'COMPANY',
+        name: '',
+        registryKey: '1234567-1',
+        registryKeyHidden: false,
+        ovt: '123456789012',
+        postalAddress: {
+          streetAddress: { streetName: 'Laskutuskuja 1' },
+          postalCode: '00100',
+          city: 'Helsinki',
+        },
+      },
+    },
+  };
+  const { user } = render(
+    <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+  );
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+  // Change customer type to PERSON
+  await user.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+  await user.click(screen.getAllByText(/yksityishenkilö/i)[0]);
+
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
   const data = applicationUpdateSpy.mock.lastCall?.[0].data as KaivuilmoitusData;

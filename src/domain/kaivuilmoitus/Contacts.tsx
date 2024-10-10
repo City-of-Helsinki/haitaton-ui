@@ -61,17 +61,18 @@ export default function Contacts() {
     if (registryKey === HIDDEN_FIELD_VALUE) {
       setOriginalRegistryKeyIsHidden(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (selectedContactType === 'PERSON' || selectedContactType === 'OTHER') {
-      resetField('applicationData.invoicingCustomer.ovt', { defaultValue: '' });
-      resetField('applicationData.invoicingCustomer.invoicingOperator', { defaultValue: '' });
-    }
-
     if (isMounted.current) {
+      if (selectedContactType === 'PERSON' || selectedContactType === 'OTHER') {
+        resetField('applicationData.invoicingCustomer.ovt', { defaultValue: null });
+        resetField('applicationData.invoicingCustomer.invoicingOperator', { defaultValue: null });
+      }
+
       // if the contact type is changed (after mount), clear the registry key
-      resetField('applicationData.invoicingCustomer.registryKey', { defaultValue: '' });
+      resetField('applicationData.invoicingCustomer.registryKey', { defaultValue: null });
       setOriginalRegistryKeyIsHidden(false);
     }
   }, [selectedContactType, setValue, resetField]);
@@ -91,8 +92,16 @@ export default function Contacts() {
       }
     }
 
+    if (registryKey === '' || registryKey === undefined) {
+      // set the registry key to null when it is empty or undefined
+      setValue(`applicationData.invoicingCustomer.registryKey`, null, {
+        shouldValidate: true,
+      });
+    }
+
     // mark the component as mounted
     isMounted.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [registryKey, setValue]);
 
   useEffect(() => {
