@@ -65,12 +65,12 @@ export default function Contacts() {
   }, []);
 
   useEffect(() => {
-    if (selectedContactType === 'PERSON' || selectedContactType === 'OTHER') {
-      resetField('applicationData.invoicingCustomer.ovt', { defaultValue: null });
-      resetField('applicationData.invoicingCustomer.invoicingOperator', { defaultValue: null });
-    }
-
     if (isMounted.current) {
+      if (selectedContactType === 'PERSON' || selectedContactType === 'OTHER') {
+        resetField('applicationData.invoicingCustomer.ovt', { defaultValue: null });
+        resetField('applicationData.invoicingCustomer.invoicingOperator', { defaultValue: null });
+      }
+
       // if the contact type is changed (after mount), clear the registry key
       resetField('applicationData.invoicingCustomer.registryKey', { defaultValue: null });
       setOriginalRegistryKeyIsHidden(false);
@@ -90,6 +90,13 @@ export default function Contacts() {
           shouldValidate: true,
         });
       }
+    }
+
+    if (registryKey === '' || registryKey === undefined) {
+      // set the registry key to null when it is empty or undefined
+      setValue(`applicationData.invoicingCustomer.registryKey`, null, {
+        shouldValidate: true,
+      });
     }
 
     // mark the component as mounted

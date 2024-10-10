@@ -221,7 +221,10 @@ export function modifyDataBeforeSend<T extends JohtoselvitysUpdateData | Kaivuil
       if (kaivuilmoitusData?.invoicingCustomer?.registryKey === HIDDEN_FIELD_VALUE) {
         kaivuilmoitusData.invoicingCustomer.registryKey = null;
         kaivuilmoitusData.invoicingCustomer.registryKeyHidden = true;
-      } else if (kaivuilmoitusData?.invoicingCustomer?.registryKey === '') {
+      } else if (
+        kaivuilmoitusData?.invoicingCustomer?.registryKey === '' ||
+        kaivuilmoitusData?.invoicingCustomer?.registryKey == null
+      ) {
         kaivuilmoitusData.invoicingCustomer.registryKey = null;
         kaivuilmoitusData.invoicingCustomer.registryKeyHidden = false;
       }
@@ -237,7 +240,6 @@ export function modifyDataBeforeSend<T extends JohtoselvitysUpdateData | Kaivuil
     }
   }
 
-  console.log('modifyDataBeforeSend', kaivuilmoitusData);
   modifyKaivuilmoitusCustomerDataBeforeSend();
   modifyKaivuilmoitusInvoicingDataBeforeSend();
 
