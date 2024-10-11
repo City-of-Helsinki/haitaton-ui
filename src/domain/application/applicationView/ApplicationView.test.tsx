@@ -300,8 +300,11 @@ describe('Excavation notification application view', () => {
     render(<ApplicationViewContainer id={10} />);
     await waitForLoadingToFinish();
 
+    const reportedDate = new Date('2024-08-01T15:15:00.000Z');
     expect(
-      screen.getByText('Ilmoitettu valmiiksi 1.8.2024 18:15 päivämäärälle 1.8.2024'),
+      screen.getByText(
+        `Ilmoitettu valmiiksi 1.8.2024 ${format(reportedDate, 'HH:mm')} päivämäärälle 1.8.2024`,
+      ),
     ).toBeInTheDocument();
   });
 
