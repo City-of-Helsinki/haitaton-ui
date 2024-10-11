@@ -446,6 +446,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
                       label={t('hakemus:labels:tyonTarkoitus')}
                       mapValueToLabel={(value) => t(`hanke:tyomaaTyyppi:${value}`)}
                       errorMsg={t('hankeForm:insertFieldError')}
+                      required
                     />
                   </Box>
 
