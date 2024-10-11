@@ -229,6 +229,10 @@ test('Cable report application form can be filled and saved and sent to Allu', a
   expect(await screen.findByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
 
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
+
+  expect(await screen.findByText(/lähetä hakemus\?/i)).toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: /vahvista/i }));
+
   expect(await screen.findByText(/hakemus lähetetty/i)).toBeInTheDocument();
   expect(window.location.pathname).toBe('/fi/hakemus/10');
 });
