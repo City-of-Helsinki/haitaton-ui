@@ -1116,7 +1116,11 @@
         "TOIMINNALLINEN_KUNTO": "Lataa toiminnallinen kunto (PDF)",
         "TYO_VALMIS": "Lataa työ valmis (PDF)"
       },
-      "paperDecisionOrdered": "Päätös tilattu paperisena"
+      "paperDecisionOrdered": "Päätös tilattu paperisena",
+      "completionDate": {
+        "TOIMINNALLINEN_KUNTO": "Ilmoitettu toiminnalliseen kuntoon {{lastValmistumisilmoitus.reportedAt}} päivämäärälle {{lastValmistumisilmoitus.dateReported}}",
+        "TYO_VALMIS": "Ilmoitettu valmiiksi {{lastValmistumisilmoitus.reportedAt}} päivämäärälle {{lastValmistumisilmoitus.dateReported}}"
+      }
     },
     "notifications": {
       "saveSuccessLabel": "Hakemus tallennettu",
@@ -1184,8 +1188,8 @@
       "RETURNED_TO_PREPARATION": "Käsittelyssä",
       "DECISIONMAKING": "Odottaa päätöstä",
       "DECISION": "Päätös",
-      "OPERATIONAL_CONDITION": "Toiminnallinen kunto hyväksytty",
-      "FINISHED": "Työ valmis hyväksytty",
+      "OPERATIONAL_CONDITION": "Toiminnallinen kunto",
+      "FINISHED": "Työ valmis",
       "CANCELLED": "Hakemus peruttu",
       "ARCHIVED": "Työ arkistoitu",
       "REPLACED": "Korvattu",

@@ -296,6 +296,15 @@ describe('Cable report application view', () => {
 });
 
 describe('Excavation notification application view', () => {
+  test('Shows last completion date', async () => {
+    render(<ApplicationViewContainer id={8} />);
+    await waitForLoadingToFinish();
+
+    expect(
+      screen.getByText('Ilmoitettu valmiiksi 1.8.2024 18:15 päivämäärälle 1.8.2024'),
+    ).toBeInTheDocument();
+  });
+
   test('Shows decision links if decisions are available', async () => {
     render(<ApplicationViewContainer id={8} />);
     await waitForLoadingToFinish();
@@ -534,7 +543,7 @@ describe('Excavation notification application view', () => {
 
   describe('Report excavation notification work finished', () => {
     const setup = async (id: number = 8) => {
-      const { user } = render(<ApplicationViewContainer id={id}/>);
+      const { user } = render(<ApplicationViewContainer id={id} />);
       await waitForLoadingToFinish();
       return user;
     };

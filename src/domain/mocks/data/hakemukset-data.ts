@@ -711,7 +711,7 @@ const hakemukset: Application[] = [
   } as Application<KaivuilmoitusData>,
   {
     id: 8,
-    alluStatus: 'DECISION',
+    alluStatus: 'FINISHED',
     applicationType: 'EXCAVATION_NOTIFICATION',
     hankeTunnus: 'HAI22-2',
     applicationIdentifier: 'KP2400001',
