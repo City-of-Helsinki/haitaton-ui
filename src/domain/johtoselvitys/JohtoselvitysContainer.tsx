@@ -37,6 +37,7 @@ import {
   JohtoselvitysCreateData,
   JohtoselvitysData,
   JohtoselvitysUpdateData,
+  PaperDecisionReceiver,
 } from '../application/types/application';
 import Attachments from './Attachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
@@ -46,6 +47,7 @@ import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsF
 import useSaveApplication from '../application/hooks/useSaveApplication';
 import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
 import useSendApplication from '../application/hooks/useSendApplication';
+import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
 
 type Props = {
   hankeData?: HankeData;
@@ -134,6 +136,9 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
 
   const [attachmentsUploading, setAttachmentsUploading] = useState(false);
 
+  const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
+  const [showSendDialog, setShowSendDialog] = useState(false);
+
   const {
     applicationCreateMutation,
     applicationUpdateMutation,
@@ -186,6 +191,24 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     },
   });
 
+  async function onSendApplication(pdr: PaperDecisionReceiver | undefined | null) {
+    const data = getValues();
+    applicationSendMutation.mutate({
+      id: data.id as number,
+      paperDecisionReceiver: pdr,
+    });
+    setIsSendButtonDisabled(true);
+    setShowSendDialog(false);
+  }
+
+  function openSendDialog() {
+    setShowSendDialog(true);
+  }
+
+  function closeSendDialog() {
+    setShowSendDialog(false);
+  }
+
   function saveCableApplication(handleSuccess?: (data: Application<JohtoselvitysData>) => void) {
     const formData = getValues();
     if (!formData.id) {
@@ -210,14 +233,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         { onSuccess: handleSuccess },
       );
     }
-  }
-
-  async function sendCableApplication() {
-    const data = getValues();
-    applicationSendMutation.mutate({
-      id: data.id!,
-      paperDecisionReceiver: null, // TODO: use dialog instead or direct call
-    });
   }
 
   function handleStepChange() {
@@ -384,7 +399,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         isLoading={attachmentsUploading}
         isLoadingText={attachmentsUploadingText}
         onStepChange={handleStepChange}
-        onSubmit={handleSubmit(sendCableApplication)}
+        onSubmit={handleSubmit(openSendDialog)}
         stepChangeValidator={validateStepChange}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
@@ -445,9 +460,8 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
                 <Button
                   type="submit"
                   iconLeft={<IconEnvelope aria-hidden="true" />}
-                  isLoading={applicationSendMutation.isLoading}
                   loadingText={t('common:buttons:sendingText')}
-                  disabled={disableSendButton}
+                  disabled={disableSendButton || isSendButtonDisabled}
                 >
                   {t('hakemus:buttons:sendApplication')}
                 </Button>
@@ -478,6 +492,14 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         mainAction={closeAttachmentUploadErrorDialog}
         mainBtnLabel={t('common:ariaLabels:closeButtonLabelText')}
         variant="primary"
+      />
+
+      <ApplicationSendDialog
+        isOpen={showSendDialog}
+        isLoading={applicationSendMutation.isLoading}
+        onClose={closeSendDialog}
+        onSend={onSendApplication}
+        applicationId={getValues('id') as number}
       />
     </FormProvider>
   );

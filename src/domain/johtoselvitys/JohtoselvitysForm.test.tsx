@@ -299,6 +299,9 @@ test('Should show error message when sending fails', async () => {
 
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
 
+  expect(await screen.findByText(/lähetä hakemus\?/i)).toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: /vahvista/i }));
+
   expect(await screen.findByText(/lähettäminen epäonnistui/i)).toBeInTheDocument();
 });
 

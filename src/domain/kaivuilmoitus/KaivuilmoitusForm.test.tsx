@@ -1004,6 +1004,9 @@ test('Should be able to send application', async () => {
   await user.click(await screen.findByRole('button', { name: /yhteenveto/i }));
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
 
+  expect(await screen.findByText(/lähetä hakemus\?/i)).toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: /vahvista/i }));
+
   expect(await screen.findByText(/hakemus lähetetty/i)).toBeInTheDocument();
 });
 
@@ -1021,6 +1024,9 @@ test('Should show error message when sending fails', async () => {
   );
   await user.click(await screen.findByRole('button', { name: /yhteenveto/i }));
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
+
+  expect(await screen.findByText(/lähetä hakemus\?/i)).toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: /vahvista/i }));
 
   expect(await screen.findByText(/lähettäminen epäonnistui/i)).toBeInTheDocument();
 });
