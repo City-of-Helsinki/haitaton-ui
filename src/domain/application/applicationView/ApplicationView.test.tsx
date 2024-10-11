@@ -297,7 +297,7 @@ describe('Cable report application view', () => {
 
 describe('Excavation notification application view', () => {
   test('Shows last completion date', async () => {
-    render(<ApplicationViewContainer id={8} />);
+    render(<ApplicationViewContainer id={10} />);
     await waitForLoadingToFinish();
 
     expect(
@@ -306,7 +306,7 @@ describe('Excavation notification application view', () => {
   });
 
   test('Shows decision links if decisions are available', async () => {
-    render(<ApplicationViewContainer id={8} />);
+    render(<ApplicationViewContainer id={10} />);
     await waitForLoadingToFinish();
 
     expect(screen.getByText('Lataa päätös (PDF)')).toBeInTheDocument();
