@@ -17,6 +17,7 @@ import { Geometry, Polygon as OlPolygon } from 'ol/geom';
 import { getSurfaceArea } from '../../../common/components/map/utils';
 import { HaittaIndexData } from '../../common/haittaIndexes/types';
 import { reportCompletionDateSchema } from '../../kaivuilmoitus/validationSchema';
+import { sendSchema } from '../yupSchemas';
 
 export type ApplicationType = 'CABLE_REPORT' | 'EXCAVATION_NOTIFICATION';
 
@@ -373,3 +374,5 @@ export interface KaivuilmoitusUpdateData
 }
 
 export type ReportCompletionDateData = yup.InferType<typeof reportCompletionDateSchema>;
+
+export type ApplicationSendData = yup.InferType<typeof sendSchema>;

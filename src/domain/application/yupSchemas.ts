@@ -120,3 +120,22 @@ export const areaSchema = yup.object({
 });
 
 export const applicationTypeSchema = yup.mixed<ApplicationType>().defined().required();
+
+export const sendSchema = yup.object().shape({
+  applicationId: yup.number().defined().required(),
+  orderPaperDecision: yup.boolean().required(),
+  paperDecisionReceiver: yup.lazy((_value, context) => {
+    // Checking the value of `orderPaperDecision` from the context
+    if (context.parent.orderPaperDecision) {
+      return yup
+        .object({
+          name: yup.string().trim().max(100).required(),
+          streetAddress: yup.string().trim().max(100).required(),
+          postalCode: yup.string().trim().max(10).required(),
+          city: yup.string().trim().max(100).required(),
+        })
+        .required();
+    }
+    return yup.mixed().nullable();
+  }),
+});

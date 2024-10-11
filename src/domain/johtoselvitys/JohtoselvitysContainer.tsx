@@ -214,7 +214,10 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
 
   async function sendCableApplication() {
     const data = getValues();
-    applicationSendMutation.mutate(data.id!);
+    applicationSendMutation.mutate({
+      id: data.id!,
+      paperDecisionReceiver: null, // TODO: use dialog instead or direct call
+    });
   }
 
   function handleStepChange() {

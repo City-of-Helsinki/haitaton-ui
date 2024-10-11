@@ -210,7 +210,10 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
 
   async function sendApplication() {
     const data = getValues();
-    applicationSendMutation.mutate(data.id!);
+    applicationSendMutation.mutate({
+      id: data.id!,
+      paperDecisionReceiver: null, // TODO: use dialog instead or direct call
+    });
   }
 
   function handleStepChange() {

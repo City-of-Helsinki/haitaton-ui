@@ -15,6 +15,7 @@ import {
   PaatosTila,
   PaatosTyyppi,
   ReportCompletionDateData,
+  PaperDecisionReceiver,
 } from './types/application';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import { HIDDEN_FIELD_VALUE } from './constants';
@@ -53,8 +54,18 @@ export async function updateApplication<ApplicationData, UpdateData>({
 /**
  * Send application to Allu
  */
-export async function sendApplication(applicationId: number) {
-  const response = await api.post<Application>(`/hakemukset/${applicationId}/laheta`, {});
+export async function sendApplication(
+  applicationId: number,
+  paperDecisionReceiver: PaperDecisionReceiver | null | undefined,
+) {
+  const response = await api.post<Application>(
+    `/hakemukset/${applicationId}/laheta`,
+    paperDecisionReceiver
+      ? {
+          paperDecisionReceiver: paperDecisionReceiver,
+        }
+      : null,
+  );
   return response.data;
 }
 

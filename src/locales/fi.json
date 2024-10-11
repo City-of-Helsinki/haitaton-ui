@@ -1140,6 +1140,17 @@
       "reportCompletionDateErrorLabel": "Ilmoituksen lähettäminen epäonnistui",
       "reportCompletionDateErrorText": "<0>Lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>"
     },
+    "sendDialog": {
+      "title": "Lähetä hakemus?",
+      "instructions": "Hakemuksen päätös ja mahdolliset täydennyspyynnöt tulevat Haitaton-järjestelmään. Lähettämällä hakemuksen, sitoudut sähköiseen tiedoksiantoon. Halutessasi voit tilata päätöksen myös paperisena ilmoittamaasi osoitteeseen.",
+      "orderPaperDecision": "Tilaan päätöksen myös paperisena",
+      "paperDecisionNotificationLabel": "Täytä vastaanottajan tiedot",
+      "paperDecisionNotificationText": "Täytä vastaanottajan tiedot tilataksesi päätöksen myös paperisena.",
+      "name": "Nimi",
+      "streetAddress": "Katuosoite",
+      "postalCode": "Postinumero",
+      "city": "Postitoimipaikka"
+    },
     "sentDialog": {
       "title": "Hakemus lähetetty",
       "description": "Hakemus on lähetetty, eikä sitä voi enää muokata. Tarkastele hakemuksen tietoja hakemussivulla.",
