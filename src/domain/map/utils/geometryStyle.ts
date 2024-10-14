@@ -74,16 +74,25 @@ export const STYLES = {
     }),
     stroke: strokeHL,
   }),
-  PURPLE: new Style({
+  LAVENDER_BLUE: new Style({
     fill: new Fill({
-      color: '#ccccff',
+      color: getColorByStatus(LIIKENNEHAITTA_STATUS.LAVENDER_BLUE, opacity),
     }),
     stroke: stroke,
+  }),
+  LAVENDER_BLUE_HL: new Style({
+    fill: new Fill({
+      color: getColorByStatus(LIIKENNEHAITTA_STATUS.LAVENDER_BLUE, opacityHL),
+    }),
+    stroke: strokeHL,
   }),
 };
 
 export const getStyleByStatus = (status: LIIKENNEHAITTA_STATUS, highlight = false): Style =>
   $enum.mapValue(status).with({
+    [LIIKENNEHAITTA_STATUS.LAVENDER_BLUE]: highlight
+      ? STYLES.LAVENDER_BLUE_HL
+      : STYLES.LAVENDER_BLUE,
     [LIIKENNEHAITTA_STATUS.BLUE]: highlight ? STYLES.BLUE_HL : STYLES.BLUE,
     [LIIKENNEHAITTA_STATUS.GREY]: highlight ? STYLES.GREY_HL : STYLES.GREY,
     [LIIKENNEHAITTA_STATUS.GREEN]: highlight ? STYLES.GREEN_HL : STYLES.GREEN,
@@ -94,8 +103,8 @@ export const getStyleByStatus = (status: LIIKENNEHAITTA_STATUS, highlight = fals
 // Performance tips: https://github.com/openlayers/openlayers/issues/8392
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const styleFunction: any = (feature: FeatureLike, renderFeature: any, highlight = false) => {
-  const liikennehaittaindeksi: number | null = feature.get('liikennehaittaindeksi');
-  const status = getStatusByIndex(liikennehaittaindeksi);
+  const { statusKey, liikennehaittaindeksi } = feature.getProperties();
+  const status = (statusKey as LIIKENNEHAITTA_STATUS) ?? getStatusByIndex(liikennehaittaindeksi);
 
   return getStyleByStatus(status, highlight);
 };

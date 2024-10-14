@@ -42,8 +42,10 @@ import HaittaIndexes from '../common/haittaIndexes/HaittaIndexes';
 import useHaittaIndexes from '../hanke/hooks/useHaittaIndexes';
 import { calculateLiikennehaittaindeksienYhteenveto } from './utils';
 import useFilterHankeAlueetByApplicationDates from '../application/hooks/useFilterHankeAlueetByApplicationDates';
-import { STYLES } from '../map/utils/geometryStyle';
+import { styleFunction } from '../map/utils/geometryStyle';
 import HakemusLayer from '../map/components/Layers/HakemusLayer';
+import { OverlayProps } from '../../common/components/map/types';
+import { LIIKENNEHAITTA_STATUS } from '../common/utils/liikennehaittaindeksi';
 
 function getEmptyArea(
   hankeData: HankeData,
@@ -102,16 +104,24 @@ export default function Areas({ hankeData, hankkeenHakemukset }: Readonly<Props>
       area.tyoalueet.flatMap((tyoalue, index) => {
         if (tyoalue.openlayersFeature) {
           const areaName = getAreaDefaultName(t, index, area.tyoalueet.length);
-          tyoalue.openlayersFeature?.setProperties({
-            areaName,
-            hankeName: hankeData.nimi,
-            relatedHankeAreaName: area.name,
-            startDate: getValues('applicationData.startTime'),
-            endDate: getValues('applicationData.endTime'),
-            liikennehaittaindeksi: tyoalue.tormaystarkasteluTulos
-              ? tyoalue.tormaystarkasteluTulos.liikennehaittaindeksi.indeksi
-              : null,
-          });
+          tyoalue.openlayersFeature?.setProperties(
+            {
+              areaName,
+              hankeName: hankeData.nimi,
+              relatedHankeAreaName: area.name,
+              relatedHankeAreaId: area.hankealueId,
+              liikennehaittaindeksi: tyoalue.tormaystarkasteluTulos
+                ? tyoalue.tormaystarkasteluTulos.liikennehaittaindeksi.indeksi
+                : null,
+              overlayProps: new OverlayProps({
+                heading: areaName,
+                startDate: getValues('applicationData.startTime'),
+                endDate: getValues('applicationData.endTime'),
+                backgroundColor: 'var(--color-suomenlinna-light)',
+              }),
+            },
+            true,
+          );
           return tyoalue.openlayersFeature;
         }
         return [];
@@ -193,11 +203,6 @@ export default function Areas({ hankeData, hankkeenHakemukset }: Readonly<Props>
   function addTyoAlueToHankeArea(hankeArea: HankeAlue, feature: Feature<Geometry>) {
     const areas = getValues('applicationData.areas');
     const existingArea = areas.find((alue) => alue.hankealueId === hankeArea.id);
-    const areaName = getAreaDefaultName(
-      t,
-      existingArea?.tyoalueet.length || 0,
-      existingArea?.tyoalueet.length || 0,
-    );
     const request = {
       geometriat: {
         featureCollection: formatFeaturesToHankeGeoJSON([feature]),
@@ -210,13 +215,16 @@ export default function Areas({ hankeData, hankkeenHakemukset }: Readonly<Props>
     haittaIndexesMutation.mutate(request, {
       onSuccess(data) {
         feature.setProperties({
-          areaName,
           hankeName: hankeData.nimi,
-          startDate: startTime,
-          endDate: endTime,
           relatedHankeAreaName: hankeArea.nimi,
+          relatedHankeAreaId: hankeArea.id,
           tormaystarkasteluTulos: data,
           liikennehaittaindeksi: data.liikennehaittaindeksi.indeksi,
+          overlayProps: new OverlayProps({
+            startDate: getValues('applicationData.startTime'),
+            endDate: getValues('applicationData.endTime'),
+            backgroundColor: 'var(--color-suomenlinna-light)',
+          }),
         });
         if (!existingArea) {
           const [emptyArea] = getEmptyArea(hankeData, hankeArea, feature);
@@ -259,8 +267,8 @@ export default function Areas({ hankeData, hankkeenHakemukset }: Readonly<Props>
     const changedApplicationArea = wathcApplicationAreas.find((alue) => {
       const changedTyoalue = alue.tyoalueet.find(
         (tyoalue) =>
-          tyoalue.openlayersFeature?.get('relatedHankeAreaName') ===
-          feature.get('relatedHankeAreaName'),
+          tyoalue.openlayersFeature?.get('relatedHankeAreaId') ===
+          feature.get('relatedHankeAreaId'),
       );
       return !!changedTyoalue;
     });
@@ -407,7 +415,11 @@ export default function Areas({ hankeData, hankkeenHakemukset }: Readonly<Props>
               selectedJohtoselvitysTunnukset?.includes(hakemus.applicationIdentifier!),
             )
             .map((hakemus) => (
-              <HakemusLayer hakemusId={hakemus.id!} layerStyle={STYLES.PURPLE} />
+              <HakemusLayer
+                hakemusId={hakemus.id!}
+                layerStyle={styleFunction}
+                featureProperties={{ statusKey: LIIKENNEHAITTA_STATUS.LAVENDER_BLUE }}
+              />
             ))}
         </ApplicationMap>
 

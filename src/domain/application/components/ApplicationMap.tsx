@@ -8,7 +8,6 @@ import { Feature, Map as OlMap, MapBrowserEvent } from 'ol';
 import { Geometry, Point, Polygon } from 'ol/geom';
 import { FeatureLike } from 'ol/Feature';
 import { Coordinate } from 'ol/coordinate';
-import { Box } from '@chakra-ui/react';
 import { Layer } from 'ol/layer';
 import { ModifyEvent } from 'ol/interaction/Modify';
 import { createEditingStyle } from 'ol/style/Style';
@@ -28,9 +27,10 @@ import styles from './ApplicationMap.module.scss';
 import useForceUpdate from '../../../common/hooks/useForceUpdate';
 import FeatureInfoOverlay from '../../map/components/FeatureInfoOverlay/FeatureInfoOverlay';
 import FitSource from '../../map/components/interations/FitSource';
-import { formatToFinnishDate } from '../../../common/utils/date';
 import isFeatureWithinFeatures from '../../map/utils/isFeatureWithinFeatures';
 import { styleFunction } from '../../map/utils/geometryStyle';
+import { OverlayProps } from '../../../common/components/map/types';
+import AreaOverlay from '../../map/components/AreaOverlay/AreaOverlay';
 
 type Props = {
   drawSource: VectorSource;
@@ -160,9 +160,9 @@ export default function ApplicationMap({
           layerFilter: hankeLayerFilter,
         })
         .filter((hankeAreaFeature) => {
-          const relatedHankeAreaName = modifiedFeature.get('relatedHankeAreaName');
-          if (relatedHankeAreaName) {
-            return hankeAreaFeature.get('areaName') === relatedHankeAreaName;
+          const relatedHankeAreaId = modifiedFeature.get('relatedHankeAreaId');
+          if (relatedHankeAreaId) {
+            return hankeAreaFeature.get('id') === relatedHankeAreaId;
           }
           return true;
         });
@@ -200,24 +200,8 @@ export default function ApplicationMap({
 
           <FeatureInfoOverlay
             render={(feature) => {
-              const areaName = feature?.get('areaName');
-              const hankeName = feature?.get('hankeName');
-              const startDate = feature?.get('startDate');
-              const endDate = feature?.get('endDate');
-              if (!areaName || !hankeName) {
-                return null;
-              }
-              return (
-                <>
-                  {hankeName && <p>{hankeName}</p>}
-                  {<h4 className="heading-xxs">{areaName}</h4>}
-                  {startDate && endDate && (
-                    <Box as="p" fontSize="var(--fontsize-body-s)">
-                      {formatToFinnishDate(startDate)}–{formatToFinnishDate(endDate)}
-                    </Box>
-                  )}
-                </>
-              );
+              const overlayProperties = feature?.get('overlayProps') as OverlayProps | undefined;
+              return <AreaOverlay overlayProps={overlayProperties} />;
             }}
           />
 

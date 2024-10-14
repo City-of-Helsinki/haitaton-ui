@@ -14,8 +14,22 @@ describe('styleFunction', () => {
     [4, STYLES.RED],
     [5, STYLES.RED],
   ])('when liikennehaittaindeksi is %s, style is %s', (liikennehaittaindeksi, expectedStyle) => {
-    expect(styleFunction({ get: () => liikennehaittaindeksi }, undefined, false)).toBe(
-      expectedStyle,
-    );
+    expect(
+      styleFunction(
+        { getProperties: () => ({ liikennehaittaindeksi, statusKey: undefined }) },
+        undefined,
+        false,
+      ),
+    ).toBe(expectedStyle);
+  });
+
+  it('when statusKey is LAVENDER_BLUE, style is STYLES.LAVENDER_BLUE', () => {
+    expect(
+      styleFunction(
+        { getProperties: () => ({ liikennehaittaindeksi: undefined, statusKey: 'LAVENDER_BLUE' }) },
+        undefined,
+        false,
+      ),
+    ).toBe(STYLES.LAVENDER_BLUE);
   });
 });

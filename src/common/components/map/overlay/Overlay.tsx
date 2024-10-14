@@ -38,7 +38,6 @@ export default function MapOverlay({ position, children }: Readonly<Props>) {
     <Box
       ref={overlayElementRef}
       backgroundColor="var(--color-white)"
-      padding="var(--spacing-2-xs)"
       border="1px solid var(--color-black)"
     >
       {children}
