@@ -1,34 +1,28 @@
 import { useRef, useMemo, useContext } from 'react';
 import { Vector as VectorSource } from 'ol/source';
 import VectorLayer from '../../../../common/components/map/layers/VectorLayer';
-import { hankeIsBetweenDates } from '../../utils';
 import { styleFunction } from '../../utils/geometryStyle';
 import CenterProjectOnMap from '../interations/CenterProjectOnMap';
 import HankkeetContext from '../../HankkeetProviderContext';
 import HighlightFeatureOnMap from '../interations/HighlightFeatureOnMap';
 import useHankeFeatures from '../../hooks/useHankeFeatures';
-import { HankeData } from '../../../types/hanke';
-import { toStartOfDayUTCISO } from '../../../../common/utils/date';
+import { HankeAlue, HankeData } from '../../../types/hanke';
 import FitSource from '../interations/FitSource';
 
 type Props = {
   hankeData?: HankeData[];
-  startDate?: string | null;
-  endDate?: string | null;
   centerOnMap?: boolean;
   highlightFeatures?: boolean;
   fitSource?: boolean;
+  filterHankeAlueet?: (alueet: HankeAlue[]) => HankeAlue[];
 };
-
-const currentYear = new Date().getFullYear();
 
 function HankeLayer({
   hankeData,
-  startDate = `${currentYear}-01-01`,
-  endDate = `${currentYear + 1}-12-31`,
   centerOnMap = false,
   highlightFeatures = false,
   fitSource = false,
+  filterHankeAlueet,
 }: Readonly<Props>) {
   const { hankkeet: hankkeetFromContext } = useContext(HankkeetContext);
   const hankeSource = useRef(new VectorSource());
@@ -39,17 +33,9 @@ function HankeLayer({
     () =>
       hankkeet.map((hanke) => ({
         ...hanke,
-        alueet: hanke.alueet.filter((alue) =>
-          hankeIsBetweenDates({
-            startDate: startDate && toStartOfDayUTCISO(new Date(startDate)),
-            endDate,
-          })({
-            startDate: alue.haittaAlkuPvm?.toString() ?? null,
-            endDate: alue.haittaLoppuPvm?.toString() ?? null,
-          }),
-        ),
+        alueet: filterHankeAlueet ? filterHankeAlueet(hanke.alueet) : hanke.alueet,
       })),
-    [hankkeet, startDate, endDate],
+    [hankkeet, filterHankeAlueet],
   );
 
   useHankeFeatures(hankeSource.current, hankkeetFilteredByDates);

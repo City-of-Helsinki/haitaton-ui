@@ -41,6 +41,7 @@ import { getAreaDefaultName } from '../application/utils';
 import HaittaIndexes from '../common/haittaIndexes/HaittaIndexes';
 import useHaittaIndexes from '../hanke/hooks/useHaittaIndexes';
 import { calculateLiikennehaittaindeksienYhteenveto } from './utils';
+import useFilterHankeAlueetByApplicationDates from '../application/hooks/useFilterHankeAlueetByApplicationDates';
 
 function getEmptyArea(
   hankeData: HankeData,
@@ -126,6 +127,11 @@ export default function Areas({ hankeData }: Readonly<Props>) {
   const minEndDate = startTime ? new Date(startTime) : undefined;
   const maxDate = hankeData.loppuPvm ? new Date(hankeData.loppuPvm) : undefined;
   const workTimesSet = startTime && endTime;
+
+  const filterHankeAlueet = useFilterHankeAlueetByApplicationDates({
+    applicationStartDate: startTime,
+    applicationEndDate: endTime,
+  });
 
   const refreshHaittaIndexes = useCallback(
     (kaivuilmoitusalueIndex?: number) => {
@@ -386,9 +392,8 @@ export default function Areas({ hankeData }: Readonly<Props>) {
         >
           <HankeLayer
             hankeData={hankeData && [hankeData]}
-            startDate={startTime?.toString()}
-            endDate={endTime?.toString()}
             fitSource
+            filterHankeAlueet={filterHankeAlueet}
           />
         </ApplicationMap>
 

@@ -24,6 +24,7 @@ import DrawProvider from '../../common/components/map/modules/draw/DrawProvider'
 import useDrawContext from '../../common/components/map/modules/draw/useDrawContext';
 import ApplicationMap from '../application/components/ApplicationMap';
 import useAddressCoordinate from '../map/hooks/useAddressCoordinate';
+import useFilterHankeAlueetByApplicationDates from '../application/hooks/useFilterHankeAlueetByApplicationDates';
 
 function AreaList({
   applicationAreas,
@@ -144,6 +145,11 @@ export function Geometries({ hankeData }: Readonly<Props>) {
     getValues('applicationData.postalAddress.streetAddress.streetName'),
   );
 
+  const filterHankeAlueet = useFilterHankeAlueetByApplicationDates({
+    applicationStartDate: startTime,
+    applicationEndDate: endTime,
+  });
+
   function handleAddArea(feature: Feature<Geometry>) {
     append(getEmptyArea(feature));
   }
@@ -219,9 +225,8 @@ export function Geometries({ hankeData }: Readonly<Props>) {
           {!hankeData?.generated && (
             <HankeLayer
               hankeData={hankeData && [hankeData]}
-              startDate={startTime?.toString() ?? hankeData?.alkuPvm}
-              endDate={endTime?.toString() ?? hankeData?.loppuPvm}
               fitSource
+              filterHankeAlueet={filterHankeAlueet}
             />
           )}
         </ApplicationMap>
