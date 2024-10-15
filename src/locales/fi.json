@@ -1227,6 +1227,29 @@
       "EXCAVATION_NOTIFICATION": "$t(hakemus:applicationTypes:EXCAVATION_NOTIFICATION) (ja johtoselvitys)"
     }
   },
+  "taydennyspyynto": {
+    "taydennyspyynto": "Täydennyspyyntö",
+    "notificationText": "Muokkaa hakemusta korjataksesi seuraavat asiat",
+    "fields": {
+      "CUSTOMER": "$t(form:yhteystiedot:titles:customerWithContactsInfo)",
+      "INVOICING_CUSTOMER": "$t(form:yhteystiedot:titles:invoicingCustomerInfo)",
+      "PROPERTY_DEVELOPER": "$t(form:yhteystiedot:titles:propertyDeveloperInfo)",
+      "CONTRACTOR": "$t(form:yhteystiedot:titles:contractorInfo)",
+      "REPRESENTATIVE": "$t(form:yhteystiedot:titles:representativeInfo)",
+      "GEOMETRY": "$t(hakemus:labels:workAreaPlural)",
+      "START_TIME": "$t(hakemus:labels:startDate)",
+      "END_TIME": "$t(hakemus:labels:endDate)",
+      "IDENTIFICATION_NUMBER": "Haitattoman hanketunnus",
+      "CLIENT_APPLICATION_KIND": "$t(hakemus:labels:kuvaus)",
+      "APPLICATION_KIND": "$t(hakemus:labels:kuvaus)",
+      "POSTAL_ADDRESS": "$t(form:yhteystiedot:labels:osoite)",
+      "WORK_DESCRIPTION": "$t(hakemus:labels:kuvaus)",
+      "PROPERTY_IDENTIFICATION_NUMBER": "Kiinteistötunnus",
+      "ATTACHMENT": "$t(hankePortfolio:tabit:liitteet)",
+      "AREA": "$t(form:labels:pintaAla)",
+      "OTHER": "Muu"
+    }
+  },
   "hankeSidebar": {
     "ariaSidebarContent": "Hankkeen tiedot",
     "closeButtonAriaLabel": "Sulje hankevalikko",
