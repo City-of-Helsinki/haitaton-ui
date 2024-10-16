@@ -7,6 +7,7 @@ import { server } from '../mocks/test-server';
 import { HankeData } from '../types/hanke';
 import hankkeet from '../mocks/data/hankkeet-data';
 import applications from '../mocks/data/hakemukset-data';
+import * as hakemuksetDB from '../mocks/data/hakemukset';
 import { JohtoselvitysFormValues } from './types';
 import api from '../api/api';
 import {
@@ -286,14 +287,17 @@ test('Should show error message when sending fails', async () => {
 });
 
 test('Save and quit works', async () => {
-  const hankeData = hankkeet[1] as HankeData;
-  const hakemus = cloneDeep(applications[0] as Application<JohtoselvitysData>);
-  const { user } = render(<JohtoselvitysContainer hankeData={hankeData} application={hakemus} />);
+  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
+
+  await waitForLoadingToFinish();
+
+  // Fill basic information page
+  fillBasicInformation();
 
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
   expect(await screen.findAllByText(/hakemus tallennettu/i)).toHaveLength(2);
-  expect(window.location.pathname).toBe('/fi/hakemus/1');
+  expect(window.location.pathname).toBe(`/fi/hakemus/${(await hakemuksetDB.readAll()).length}`);
 });
 
 test('Should not save and quit if current form page is not valid', async () => {
