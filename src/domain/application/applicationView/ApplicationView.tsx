@@ -82,6 +82,7 @@ import { calculateLiikennehaittaindeksienYhteenveto } from '../../kaivuilmoitus/
 import styles from './ApplicationView.module.scss';
 import CustomAccordion from '../../../common/components/customAccordion/CustomAccordion';
 import useFilterHankeAlueetByApplicationDates from '../hooks/useFilterHankeAlueetByApplicationDates';
+import ApplicationSendDialog from '../components/ApplicationSendDialog';
 
 function SidebarTyoalueet({
   tyoalueet,
@@ -285,6 +286,7 @@ type Props = {
 function ApplicationView({ application, hanke, signedInUser, onEditApplication }: Readonly<Props>) {
   const { t } = useTranslation();
   const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
+  const [showSendDialog, setShowSendDialog] = useState(false);
   const [showReportOperationalConditionDialog, setShowReportOperationalConditionDialog] =
     useState(false);
   const [showReportWorkFinishedDialog, setShowReportWorkFinishedDialog] = useState(false);
@@ -342,9 +344,21 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
     applicationEndDate: endTime,
   });
 
-  async function onSendApplication() {
+  async function onSendApplication(pdr: PaperDecisionReceiver | undefined | null) {
+    applicationSendMutation.mutate({
+      id: id as number,
+      paperDecisionReceiver: pdr,
+    });
     setIsSendButtonDisabled(true);
-    applicationSendMutation.mutate(id as number);
+    setShowSendDialog(false);
+  }
+
+  function openSendDialog() {
+    setShowSendDialog(true);
+  }
+
+  function closeSendDialog() {
+    setShowSendDialog(false);
   }
 
   function openReportOperationalConditionDialog() {
@@ -445,9 +459,7 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
               <Button
                 theme="coat"
                 iconLeft={<IconEnvelope aria-hidden="true" />}
-                onClick={onSendApplication}
-                isLoading={applicationSendMutation.isLoading}
-                loadingText={t('common:buttons:sendingText')}
+                onClick={openSendDialog}
                 disabled={disableSendButton || isSendButtonDisabled}
               >
                 {t('hakemus:buttons:sendApplication')}
@@ -657,6 +669,13 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
           applicationId={application.id as number}
         />
       )}
+      <ApplicationSendDialog
+        isOpen={showSendDialog}
+        isLoading={applicationSendMutation.isLoading}
+        onClose={closeSendDialog}
+        onSend={onSendApplication}
+        applicationId={application.id as number}
+      />
     </InformationViewContainer>
   );
 }

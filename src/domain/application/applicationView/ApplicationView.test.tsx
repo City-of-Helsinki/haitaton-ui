@@ -93,7 +93,7 @@ describe('Cable report application view', () => {
     expect(screen.queryByRole('button', { name: 'Peru hakemus' })).not.toBeInTheDocument();
   });
 
-  test('Should be able to send application if it is not already sent', async () => {
+  test('Should be able to send application without paper decision order', async () => {
     const hakemus = cloneDeep(hakemukset[0]);
     server.use(
       http.get(`/api/hakemukset/:id`, async () => {
@@ -108,13 +108,58 @@ describe('Cable report application view', () => {
     const { user } = render(<ApplicationViewContainer id={1} />);
     await waitForLoadingToFinish();
 
-    await screen.findByRole('button', { name: 'Lähetä hakemus' });
-    const sendButton = screen.getByRole('button', { name: 'Lähetä hakemus' });
+    const sendButton = await screen.findByRole('button', { name: 'Lähetä hakemus' });
     expect(sendButton).toBeEnabled();
     await user.click(sendButton);
 
-    await screen.findByText('Hakemus lähetetty');
-    expect(screen.getByText('Hakemus lähetetty')).toBeInTheDocument();
+    expect(await screen.findByText('Lähetä hakemus?')).toBeInTheDocument();
+    const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
+    expect(confirmButton).toBeEnabled();
+    await user.click(confirmButton);
+
+    expect(await screen.findByText('Hakemus lähetetty')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Lähetä hakemus' })).not.toBeInTheDocument();
+  });
+
+  test('Should be able to send application with paper decision order', async () => {
+    const hakemus = cloneDeep(hakemukset[0]);
+    server.use(
+      http.get(`/api/hakemukset/:id`, async () => {
+        return HttpResponse.json(hakemus);
+      }),
+      http.post(`/api/hakemukset/:id/laheta`, async () => {
+        hakemus.alluStatus = 'PENDING';
+        return HttpResponse.json(hakemus);
+      }),
+    );
+
+    const { user } = render(<ApplicationViewContainer id={1} />);
+    await waitForLoadingToFinish();
+
+    const sendButton = await screen.findByRole('button', { name: 'Lähetä hakemus' });
+    expect(sendButton).toBeEnabled();
+    await user.click(sendButton);
+
+    expect(await screen.findByText('Lähetä hakemus?')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Tilaan päätöksen myös paperisena' }));
+
+    const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
+    expect(confirmButton).toBeDisabled();
+
+    expect(await screen.findByText('Täytä vastaanottajan tiedot')).toBeInTheDocument();
+    const nameInput = screen.getByText('Nimi');
+    await user.type(nameInput, 'Pekka Paperinen');
+    const streetAddressInput = screen.getByText('Katuosoite');
+    await user.type(streetAddressInput, 'Paperipolku 3 A 4');
+    const postalCodeInput = screen.getByText('Postinumero');
+    await user.type(postalCodeInput, '00451');
+    const cityInput = screen.getByText('Postitoimipaikka');
+    await user.type(cityInput, 'Helsinki');
+
+    expect(confirmButton).toBeEnabled();
+    await user.click(confirmButton);
+
+    expect(await screen.findByText('Hakemus lähetetty')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Lähetä hakemus' })).not.toBeInTheDocument();
   });
 
@@ -204,8 +249,14 @@ describe('Cable report application view', () => {
 
     const sendButton = await screen.findByRole('button', { name: 'Lähetä hakemus' });
     await user.click(sendButton);
-    await user.click(sendButton);
-    await user.click(sendButton);
+
+    expect(await screen.findByText('Lähetä hakemus?')).toBeInTheDocument();
+    const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
+    expect(confirmButton).toBeEnabled();
+    await user.click(confirmButton);
+    await user.click(confirmButton);
+    await user.click(confirmButton);
+
     await screen.findByText('Hakemus on lähetetty käsiteltäväksi.');
 
     expect(sendApplication).toHaveBeenCalledTimes(1);

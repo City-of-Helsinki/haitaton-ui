@@ -1,7 +1,7 @@
 import { useQueryClient } from 'react-query';
 import { sendApplication } from '../utils';
 import useApplicationSendNotification from './useApplicationSendNotification';
-import { Application } from '../types/application';
+import { Application, PaperDecisionReceiver } from '../types/application';
 import useDebouncedMutation from '../../../common/hooks/useDebouncedMutation';
 
 type Options = {
@@ -13,14 +13,18 @@ export default function useSendApplication(options?: Options) {
   const queryClient = useQueryClient();
   const { showSendSuccess, showSendError } = useApplicationSendNotification();
 
-  return useDebouncedMutation(sendApplication, {
-    onError() {
-      showSendError();
+  return useDebouncedMutation(
+    (variables: { id: number; paperDecisionReceiver: PaperDecisionReceiver | undefined | null }) =>
+      sendApplication(variables.id, variables.paperDecisionReceiver),
+    {
+      onError() {
+        showSendError();
+      },
+      async onSuccess(data) {
+        showSendSuccess();
+        await queryClient.invalidateQueries(['application', data.id], { refetchInactive: true });
+        onSuccess && onSuccess(data);
+      },
     },
-    async onSuccess(data) {
-      showSendSuccess();
-      await queryClient.invalidateQueries(['application', data.id], { refetchInactive: true });
-      onSuccess && onSuccess(data);
-    },
-  });
+  );
 }

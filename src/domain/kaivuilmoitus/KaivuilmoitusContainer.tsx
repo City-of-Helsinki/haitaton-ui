@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { merge } from 'lodash';
 import {
@@ -34,6 +34,7 @@ import {
   KaivuilmoitusCreateData,
   KaivuilmoitusData,
   KaivuilmoitusUpdateData,
+  PaperDecisionReceiver,
 } from '../application/types/application';
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 import {
@@ -50,6 +51,7 @@ import useNavigateToApplicationView from '../application/hooks/useNavigateToAppl
 import { isApplicationDraft, isContactIn } from '../application/utils';
 import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import useSendApplication from '../application/hooks/useSendApplication';
+import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
 
 type Props = {
   hankeData: HankeData;
@@ -63,11 +65,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   const [attachmentUploadErrors, setAttachmentUploadErrors] = useState<JSX.Element[]>([]);
   const { data: hankkeenHakemukset } = useApplicationsForHanke(hankeData.hankeTunnus);
   const { data: signedInUser } = usePermissionsForHanke(hankeData.hankeTunnus);
-  const applicationSendMutation = useSendApplication({
-    onSuccess(data) {
-      navigateToApplicationView(data.id?.toString());
-    },
-  });
   const johtoselvitysIds = hankkeenHakemukset?.applications
     .filter(
       (hakemus) =>
@@ -119,6 +116,9 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   );
 
   const [attachmentsUploading, setAttachmentsUploading] = useState(false);
+
+  const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
+  const [showSendDialog, setShowSendDialog] = useState(false);
 
   const {
     applicationCreateMutation,
@@ -208,9 +208,28 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     }
   }
 
-  async function sendApplication() {
+  const applicationSendMutation = useSendApplication({
+    onSuccess(data) {
+      navigateToApplicationView(data.id?.toString());
+    },
+  });
+
+  async function onSendApplication(pdr: PaperDecisionReceiver | undefined | null) {
     const data = getValues();
-    applicationSendMutation.mutate(data.id!);
+    applicationSendMutation.mutate({
+      id: data.id as number,
+      paperDecisionReceiver: pdr,
+    });
+    setIsSendButtonDisabled(true);
+    setShowSendDialog(false);
+  }
+
+  function openSendDialog() {
+    setShowSendDialog(true);
+  }
+
+  function closeSendDialog() {
+    setShowSendDialog(false);
   }
 
   function handleStepChange() {
@@ -317,7 +336,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         isLoading={attachmentsUploading}
         isLoadingText={attachmentsUploadingText}
         stepChangeValidator={validateStepChange}
-        onSubmit={handleSubmit(sendApplication)}
+        onSubmit={handleSubmit(openSendDialog)}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {
@@ -378,9 +397,8 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
                 <Button
                   type="submit"
                   iconLeft={<IconEnvelope />}
-                  isLoading={applicationSendMutation.isLoading}
                   loadingText={t('common:buttons:sendingText')}
-                  disabled={disableSendButton}
+                  disabled={disableSendButton || isSendButtonDisabled}
                 >
                   {t('hakemus:buttons:sendApplication')}
                 </Button>
@@ -424,6 +442,14 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         mainAction={closeAttachmentUploadErrorDialog}
         mainBtnLabel={t('common:ariaLabels:closeButtonLabelText')}
         variant="primary"
+      />
+
+      <ApplicationSendDialog
+        isOpen={showSendDialog}
+        isLoading={applicationSendMutation.isLoading}
+        onClose={closeSendDialog}
+        onSend={onSendApplication}
+        applicationId={getValues('id') as number}
       />
     </FormProvider>
   );
