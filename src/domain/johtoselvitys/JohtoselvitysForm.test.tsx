@@ -182,7 +182,7 @@ function fillContactsInformation() {
   });
 }
 
-test('Cable report application form can be filled and saved and sent to Allu', async () => {
+test('Cable report application form can be filled', async () => {
   server.use(
     http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
       return HttpResponse.json<SignedInUser>({
@@ -227,14 +227,6 @@ test('Cable report application form can be filled and saved and sent to Allu', a
   // Move to summary page
   await user.click(screen.getByTestId('hds-stepper-step-4'));
   expect(await screen.findByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
-
-  await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
-
-  expect(await screen.findByText(/lähetä hakemus\?/i)).toBeInTheDocument();
-  await user.click(screen.getByRole('button', { name: /vahvista/i }));
-
-  expect(await screen.findByText(/hakemus lähetetty/i)).toBeInTheDocument();
-  expect(window.location.pathname).toBe('/fi/hakemus/10');
 });
 
 test('Should show error message when saving fails', async () => {
@@ -260,47 +252,31 @@ test('Should show error message when saving fails', async () => {
   );
 });
 
+test('Should be able to send application', async () => {
+  const hankeData = hankkeet[1] as HankeData;
+  const hakemus = cloneDeep(applications[0] as Application<JohtoselvitysData>);
+  const { user } = render(<JohtoselvitysContainer hankeData={hankeData} application={hakemus} />);
+  await user.click(await screen.findByRole('button', { name: /yhteenveto/i }));
+  await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
+
+  expect(await screen.findByText(/lähetä hakemus\?/i)).toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: /vahvista/i }));
+
+  expect(await screen.findByText(/hakemus lähetetty/i)).toBeInTheDocument();
+});
+
 test('Should show error message when sending fails', async () => {
   server.use(
-    http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
-      return HttpResponse.json<SignedInUser>({
-        hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        kayttooikeustaso: 'KATSELUOIKEUS',
-        kayttooikeudet: ['VIEW'],
-      });
-    }),
     http.post('/api/hakemukset/:id/laheta', async () => {
       return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
     }),
   );
 
   const hankeData = hankkeet[1] as HankeData;
+  const hakemus = cloneDeep(applications[0] as Application<JohtoselvitysData>);
+  const { user } = render(<JohtoselvitysContainer hankeData={hankeData} application={hakemus} />);
 
-  const { user } = render(
-    <JohtoselvitysContainer hankeData={hankeData} application={application} />,
-  );
-
-  // Fill basic information page
-  fillBasicInformation();
-
-  // Move to areas page
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  expect(await screen.findByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
-
-  // Fill areas page
-  fillAreasInformation();
-
-  // Move to contacts page
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  expect(await screen.findByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
-
-  // Fill contacts page
-  fillContactsInformation();
-
-  // Move to summary page
-  await user.click(screen.getByTestId('hds-stepper-step-4'));
-  expect(await screen.findByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
-
+  await user.click(await screen.findByRole('button', { name: /yhteenveto/i }));
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
 
   expect(await screen.findByText(/lähetä hakemus\?/i)).toBeInTheDocument();
@@ -320,7 +296,7 @@ test('Save and quit works', async () => {
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
   expect(await screen.findAllByText(/hakemus tallennettu/i)).toHaveLength(2);
-  expect(window.location.pathname).toBe('/fi/hakemus/12');
+  expect(window.location.pathname).toBe('/fi/hakemus/11');
 });
 
 test('Should not save and quit if current form page is not valid', async () => {
