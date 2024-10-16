@@ -286,17 +286,14 @@ test('Should show error message when sending fails', async () => {
 });
 
 test('Save and quit works', async () => {
-  const { user } = render(<Johtoselvitys />, undefined, '/fi/johtoselvityshakemus?hanke=HAI22-2');
-
-  await waitForLoadingToFinish();
-
-  // Fill basic information page
-  fillBasicInformation();
+  const hankeData = hankkeet[1] as HankeData;
+  const hakemus = cloneDeep(applications[0] as Application<JohtoselvitysData>);
+  const { user } = render(<JohtoselvitysContainer hankeData={hankeData} application={hakemus} />);
 
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
   expect(await screen.findAllByText(/hakemus tallennettu/i)).toHaveLength(2);
-  expect(window.location.pathname).toBe('/fi/hakemus/11');
+  expect(window.location.pathname).toBe('/fi/hakemus/1');
 });
 
 test('Should not save and quit if current form page is not valid', async () => {
