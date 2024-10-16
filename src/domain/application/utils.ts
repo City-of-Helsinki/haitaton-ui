@@ -232,10 +232,22 @@ export function modifyDataBeforeSend<T extends JohtoselvitysUpdateData | Kaivuil
       if (kaivuilmoitusData?.invoicingCustomer?.registryKey === HIDDEN_FIELD_VALUE) {
         kaivuilmoitusData.invoicingCustomer.registryKey = null;
         kaivuilmoitusData.invoicingCustomer.registryKeyHidden = true;
-      } else if (kaivuilmoitusData?.invoicingCustomer?.registryKey === '') {
+      } else if (
+        kaivuilmoitusData?.invoicingCustomer?.registryKey === '' ||
+        kaivuilmoitusData?.invoicingCustomer?.registryKey == null
+      ) {
         kaivuilmoitusData.invoicingCustomer.registryKey = null;
         kaivuilmoitusData.invoicingCustomer.registryKeyHidden = false;
       }
+    }
+    if (kaivuilmoitusData?.invoicingCustomer?.ovt === '') {
+      kaivuilmoitusData.invoicingCustomer.ovt = null;
+    }
+    if (kaivuilmoitusData?.invoicingCustomer?.invoicingOperator === '') {
+      kaivuilmoitusData.invoicingCustomer.invoicingOperator = null;
+    }
+    if (kaivuilmoitusData?.invoicingCustomer?.customerReference === '') {
+      kaivuilmoitusData.invoicingCustomer.customerReference = null;
     }
   }
 
