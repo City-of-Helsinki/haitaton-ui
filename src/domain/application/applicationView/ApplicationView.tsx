@@ -12,7 +12,7 @@ import {
   TabPanel,
   Tabs,
 } from 'hds-react';
-import { Box } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
 import Geometry from 'ol/geom/Geometry';
 import Text from '../../../common/components/text/Text';
@@ -436,19 +436,21 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
           <SectionItemTitle>{t('hakemus:labels:applicationState')}:</SectionItemTitle>
           <SectionItemContent>
             <Box>
-              <Box mb="var(--spacing-2-xs)">
+              <Flex mb="var(--spacing-2-xs)" alignItems="center">
                 <ApplicationStatusTag status={alluStatus} />
                 {lastValmistumisilmoitus && (
-                  <span>
+                  <>
                     <IconCheck aria-hidden="true" />
-                    <Trans
-                      i18nKey={`hakemus:labels:completionDate:${lastValmistumisilmoitus.tyyppi}`}
-                    >
-                      Ilmoitettu {{ lastValmistumisilmoitus }}
-                    </Trans>
-                  </span>
+                    <Box as="span">
+                      <Trans
+                        i18nKey={`hakemus:labels:completionDate:${lastValmistumisilmoitus.tyyppi}`}
+                      >
+                        Ilmoitettu {{ lastValmistumisilmoitus }}
+                      </Trans>
+                    </Box>
+                  </>
                 )}
-              </Box>
+              </Flex>
               {applicationType === 'CABLE_REPORT' && alluStatus === AlluStatus.DECISION && (
                 <JohtoselvitysDecisionLink
                   applicationId={id}
