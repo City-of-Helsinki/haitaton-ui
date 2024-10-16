@@ -12,8 +12,8 @@ import {
   TabPanel,
   Tabs,
 } from 'hds-react';
-import { Box } from '@chakra-ui/react';
-import { useTranslation } from 'react-i18next';
+import { Box, Flex } from '@chakra-ui/react';
+import { Trans, useTranslation } from 'react-i18next';
 import Geometry from 'ol/geom/Geometry';
 import Text from '../../../common/components/text/Text';
 import {
@@ -34,12 +34,14 @@ import { HankeData } from '../../types/hanke';
 import ApplicationStatusTag from '../components/ApplicationStatusTag';
 import {
   AlluStatus,
+  AlluStatusStrings,
   Application,
   ApplicationArea,
   JohtoselvitysData,
   KaivuilmoitusAlue,
   KaivuilmoitusData,
   PaperDecisionReceiver,
+  Valmistumisilmoitukset,
 } from '../types/application';
 import JohtoselvitysBasicInformationSummary from '../components/summary/JohtoselvitysBasicInformationSummary';
 import KaivuilmoitusBasicInformationSummary from '../components/summary/KaivuilmoitusBasicInformationSummary';
@@ -76,7 +78,7 @@ import useSendApplication from '../hooks/useSendApplication';
 import { validationSchema as johtoselvitysValidationSchema } from '../../johtoselvitys/validationSchema';
 import { validationSchema as kaivuilmoitusValidationSchema } from '../../kaivuilmoitus/validationSchema';
 import ApplicationReportCompletionDateDialog from '../../kaivuilmoitus/components/ApplicationReportCompletionDateDialog';
-import { formatToFinnishDate } from '../../../common/utils/date';
+import { formatToFinnishDate, formatToFinnishDateTime } from '../../../common/utils/date';
 import HaittaIndexes from '../../common/haittaIndexes/HaittaIndexes';
 import { calculateLiikennehaittaindeksienYhteenveto } from '../../kaivuilmoitus/utils';
 import styles from './ApplicationView.module.scss';
@@ -271,6 +273,31 @@ function PaperDecisionReceiverSummary({
   );
 }
 
+function getLastValmistumisilmoitus(
+  alluStatus: AlluStatusStrings | null,
+  valmistumisilmoitukset: Valmistumisilmoitukset | null | undefined,
+) {
+  if (alluStatus == null || valmistumisilmoitukset == null) {
+    return null;
+  }
+  const reports =
+    alluStatus === 'OPERATIONAL_CONDITION'
+      ? valmistumisilmoitukset['TOIMINNALLINEN_KUNTO']
+      : valmistumisilmoitukset['TYO_VALMIS'];
+  if (!reports) {
+    return null;
+  }
+  const tyyppi = alluStatus === 'OPERATIONAL_CONDITION' ? 'TOIMINNALLINEN_KUNTO' : 'TYO_VALMIS';
+  const lastReport = reports.toSorted(
+    (a, b) => new Date(b.reportedAt).getTime() - new Date(a.reportedAt).getTime(),
+  )[0];
+  return {
+    tyyppi,
+    reportedAt: formatToFinnishDateTime(lastReport.reportedAt),
+    dateReported: formatToFinnishDate(lastReport.dateReported),
+  };
+}
+
 const validationSchemas = {
   CABLE_REPORT: johtoselvitysValidationSchema,
   EXCAVATION_NOTIFICATION: kaivuilmoitusValidationSchema,
@@ -291,8 +318,15 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
     useState(false);
   const [showReportWorkFinishedDialog, setShowReportWorkFinishedDialog] = useState(false);
   const hankeViewPath = useHankeViewPath(application.hankeTunnus);
-  const { applicationData, applicationIdentifier, applicationType, alluStatus, id, paatokset } =
-    application;
+  const {
+    applicationData,
+    applicationIdentifier,
+    applicationType,
+    alluStatus,
+    id,
+    paatokset,
+    valmistumisilmoitukset,
+  } = application;
   const {
     name,
     areas,
@@ -321,6 +355,8 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
 
   const geometries: Geometry[] = getAreaGeometries(tyoalueet);
   const totalSurfaceArea = getTotalSurfaceArea(geometries);
+
+  const lastValmistumisilmoitus = getLastValmistumisilmoitus(alluStatus, valmistumisilmoitukset);
 
   const isSent = isApplicationSent(alluStatus);
 
@@ -400,9 +436,21 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
           <SectionItemTitle>{t('hakemus:labels:applicationState')}:</SectionItemTitle>
           <SectionItemContent>
             <Box>
-              <Box mb="var(--spacing-2-xs)">
+              <Flex mb="var(--spacing-2-xs)" alignItems="center">
                 <ApplicationStatusTag status={alluStatus} />
-              </Box>
+                {lastValmistumisilmoitus && (
+                  <>
+                    <IconCheck aria-hidden="true" />
+                    <Box as="span">
+                      <Trans
+                        i18nKey={`hakemus:labels:completionDate:${lastValmistumisilmoitus.tyyppi}`}
+                      >
+                        Ilmoitettu {{ lastValmistumisilmoitus }}
+                      </Trans>
+                    </Box>
+                  </>
+                )}
+              </Flex>
               {applicationType === 'CABLE_REPORT' && alluStatus === AlluStatus.DECISION && (
                 <JohtoselvitysDecisionLink
                   applicationId={id}

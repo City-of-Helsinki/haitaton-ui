@@ -252,6 +252,8 @@ export interface Valmistumisilmoitus {
   reportedAt: Date;
 }
 
+export type Valmistumisilmoitukset = { [key in ValmistumisilmoitusType]?: Valmistumisilmoitus[] };
+
 export interface Application<T = JohtoselvitysData | KaivuilmoitusData> {
   id: number | null;
   alluid?: number | null;
@@ -261,7 +263,7 @@ export interface Application<T = JohtoselvitysData | KaivuilmoitusData> {
   applicationIdentifier?: string | null;
   hankeTunnus: string | null;
   paatokset?: { [key: string]: Paatos[] };
-  valmistumisilmoitukset?: { [key in ValmistumisilmoitusType]?: Valmistumisilmoitus[] } | null;
+  valmistumisilmoitukset?: Valmistumisilmoitukset | null;
 }
 
 export interface HankkeenHakemus {

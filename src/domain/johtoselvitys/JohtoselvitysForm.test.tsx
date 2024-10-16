@@ -7,6 +7,7 @@ import { server } from '../mocks/test-server';
 import { HankeData } from '../types/hanke';
 import hankkeet from '../mocks/data/hankkeet-data';
 import applications from '../mocks/data/hakemukset-data';
+import * as hakemuksetDB from '../mocks/data/hakemukset';
 import { JohtoselvitysFormValues } from './types';
 import api from '../api/api';
 import {
@@ -296,7 +297,7 @@ test('Save and quit works', async () => {
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
   expect(await screen.findAllByText(/hakemus tallennettu/i)).toHaveLength(2);
-  expect(window.location.pathname).toBe('/fi/hakemus/11');
+  expect(window.location.pathname).toBe(`/fi/hakemus/${(await hakemuksetDB.readAll()).length}`);
 });
 
 test('Should not save and quit if current form page is not valid', async () => {
