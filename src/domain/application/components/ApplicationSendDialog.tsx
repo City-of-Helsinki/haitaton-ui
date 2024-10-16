@@ -4,10 +4,9 @@ import {
   IconCheck,
   IconQuestionCircle,
   Notification,
-  TextInput,
   ToggleButton,
 } from 'hds-react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ApplicationSendData, PaperDecisionReceiver } from '../types/application';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -15,6 +14,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { sendSchema } from '../yupSchemas';
 import { Box, Grid, GridItem, VisuallyHiddenInput } from '@chakra-ui/react';
 import Text from '../../../common/components/text/Text';
+import TextInput from '../../../common/components/textInput/TextInput';
 
 type Props = {
   isOpen: boolean;
@@ -45,10 +45,6 @@ const ApplicationSendDialog: React.FC<Props> = ({
   const [orderPaperDecisionChecked] = watch(['orderPaperDecision']);
   const isConfirmButtonEnabled = formState.isValid;
   const dialogTitle = t('hakemus:sendDialog:title');
-
-  useEffect(() => {
-    formContext.setValue('applicationId', applicationId);
-  }, [formContext, applicationId, setValue]);
 
   async function submitForm(data: ApplicationSendData) {
     const paperDecisionReceiver = data.orderPaperDecision
@@ -123,7 +119,6 @@ const ApplicationSendDialog: React.FC<Props> = ({
                   <GridItem colSpan={2}>
                     <TextInput
                       {...register('paperDecisionReceiver.name')}
-                      id="paperDecisionReceiver.name"
                       name="paperDecisionReceiver.name"
                       label={t('hakemus:sendDialog:name')}
                       required={orderPaperDecisionChecked}
@@ -132,7 +127,6 @@ const ApplicationSendDialog: React.FC<Props> = ({
                   <GridItem colSpan={2}>
                     <TextInput
                       {...register('paperDecisionReceiver.streetAddress')}
-                      id="paperDecisionReceiver.streetAddress"
                       name="paperDecisionReceiver.streetAddress"
                       label={t('hakemus:sendDialog:streetAddress')}
                       required={orderPaperDecisionChecked}
@@ -141,7 +135,6 @@ const ApplicationSendDialog: React.FC<Props> = ({
                   <GridItem colSpan={{ sm: 1, xs: 2 }} colStart={{ sm: 1, xs: 1 }}>
                     <TextInput
                       {...register('paperDecisionReceiver.postalCode')}
-                      id="paperDecisionReceiver.postalCode"
                       name="paperDecisionReceiver.postalCode"
                       label={t('hakemus:sendDialog:postalCode')}
                       required={orderPaperDecisionChecked}
@@ -150,7 +143,6 @@ const ApplicationSendDialog: React.FC<Props> = ({
                   <GridItem colSpan={2} colStart={{ sm: 2, xs: 1 }}>
                     <TextInput
                       {...register('paperDecisionReceiver.city')}
-                      id="paperDecisionReceiver.city"
                       name="paperDecisionReceiver.city"
                       label={t('hakemus:sendDialog:city')}
                       required={orderPaperDecisionChecked}
