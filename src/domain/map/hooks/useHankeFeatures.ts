@@ -39,6 +39,7 @@ export default function useHankeFeatures(source: Vector, hankkeet: HankeData[]) 
                 startDate: alue.haittaAlkuPvm,
                 endDate: alue.haittaLoppuPvm,
                 backgroundColor: 'var(--color-summer-light)',
+                enableCopyArea: true,
               }),
             },
             true,
