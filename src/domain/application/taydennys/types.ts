@@ -18,7 +18,7 @@ export enum TaydennyspyyntoFieldKey {
   OTHER = 'OTHER',
 }
 
-type TaydennyspyyntoField = {
+export type TaydennyspyyntoField = {
   key: TaydennyspyyntoFieldKey;
   message: string;
 };

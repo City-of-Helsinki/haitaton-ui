@@ -2,6 +2,7 @@ import { render, screen } from '../../../testUtils/render';
 import TaydennyspyyntoNotification from './TaydennyspyyntoNotification';
 import { TaydennyspyyntoFieldKey } from './types';
 import i18next from '../../../locales/i18nForTests';
+import { sortTaydennyspyyntoFields } from './utils';
 
 describe('TaydennyspyyntoNotification', () => {
   test('Should render correct information for taydennyspyynto', () => {
@@ -74,7 +75,7 @@ describe('TaydennyspyyntoNotification', () => {
 
     expect(screen.getByText('Täydennyspyyntö')).toBeInTheDocument();
     expect(screen.getByText('Muokkaa hakemusta korjataksesi seuraavat asiat:')).toBeInTheDocument();
-    taydennyspyynto.kentat.forEach((kentta, index) => {
+    taydennyspyynto.kentat.toSorted(sortTaydennyspyyntoFields).forEach((kentta, index) => {
       const label = i18next.t(`taydennyspyynto:fields:${kentta.key}`);
       expect(screen.getAllByRole('listitem')[index]).toHaveTextContent(
         `${label}: ${kentta.message}`,
