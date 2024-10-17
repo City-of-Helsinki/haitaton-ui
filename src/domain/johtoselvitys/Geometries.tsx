@@ -162,6 +162,10 @@ export function Geometries({ hankeData }: Readonly<Props>) {
     append(getEmptyArea(feature));
   }
 
+  function handleCopyArea(feature: Feature<Geometry>) {
+    drawSource.addFeature(feature);
+  }
+
   function removeArea(index: number, areaFeature?: Feature<Geometry>) {
     if (areaFeature !== undefined) {
       setAreaToRemove({ index, areaFeature });
@@ -226,8 +230,10 @@ export function Geometries({ hankeData }: Readonly<Props>) {
           drawSource={drawSource}
           showDrawControls={Boolean(workTimesSet)}
           onAddArea={handleAddArea}
+          onCopyArea={handleCopyArea}
           mapCenter={addressCoordinate}
           restrictDrawingToHankeAreas={!hankeData?.generated}
+          workTimesSet={Boolean(workTimesSet)}
         >
           {/* Don't show hanke areas when hanke is generated */}
           {!hankeData?.generated && (

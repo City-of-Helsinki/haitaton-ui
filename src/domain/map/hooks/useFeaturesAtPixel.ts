@@ -37,7 +37,7 @@ export default function useFeaturesAtPixel() {
       if (!event.dragging) {
         handleFeaturesAtPixel(map, event);
       }
-    }, 10);
+    }, 5);
 
     map?.on('pointermove', handlePointerMove);
 

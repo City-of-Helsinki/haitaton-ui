@@ -1111,6 +1111,7 @@
       "requiredCompetence": "Työstä vastaavana tai asianhoitajana vakuutan, että työmaalla oleskeltaessa tai työskenneltäessä on paikalla aina ainakin yksi henkilö, jolla on voimassa Pääkaupunkiseudun katutyöt -koulutuksella saatu pätevyys (PKS-katutyökortti). Vastaan myös siitä, että kaivutyöstä vastaavalla on voimassa oleva Tieturva 1, Tieturva 2 tai PKS-katutyökortti. *",
       "additionalInformation": "Lisätietoja hakemuksesta",
       "tyonTarkoitus": "Työn tarkoitus",
+      "setWorkTimesToCopyArea": "Valitse ajanjakso kopioidaksesi työalueeksi",
       "downloadDecision": {
         "PAATOS": "Lataa päätös (PDF)",
         "TOIMINNALLINEN_KUNTO": "Lataa toiminnallinen kunto (PDF)",
@@ -1202,7 +1203,8 @@
       "editApplication": "Muokkaa hakemusta",
       "deletePlacementContract": "Poista sijoitussopimustunnus {{id}}",
       "reportOperationalCondition": "Ilmoita toiminnalliseen kuntoon",
-      "reportWorkFinished": "Ilmoita valmiiksi"
+      "reportWorkFinished": "Ilmoita valmiiksi",
+      "copyWorkArea": "Kopioi työalueeksi"
     },
     "errors": {
       "cancelConflict": "Hakemusta ei voida perua, koska se on edennyt käsittelyyn",

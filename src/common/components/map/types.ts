@@ -8,6 +8,7 @@ export class OverlayProps {
   startDate?: Date | string | null;
   endDate?: Date | string | null;
   backgroundColor?: string;
+  enableCopyArea?: boolean;
 
   constructor(props: OverlayProps) {
     this.heading = props.heading;
@@ -15,5 +16,6 @@ export class OverlayProps {
     this.startDate = props.startDate;
     this.endDate = props.endDate;
     this.backgroundColor = props.backgroundColor;
+    this.enableCopyArea = props.enableCopyArea;
   }
 }

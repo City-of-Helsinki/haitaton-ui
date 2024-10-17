@@ -27,6 +27,7 @@ export default function HakemusLayer({
       startDate: data?.applicationData.startTime,
       endDate: data?.applicationData.endTime,
       backgroundColor: 'var(--color-suomenlinna-light)',
+      enableCopyArea: true,
     }),
     ...featureProperties,
   });

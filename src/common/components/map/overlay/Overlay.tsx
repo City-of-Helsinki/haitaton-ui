@@ -34,13 +34,5 @@ export default function MapOverlay({ position, children }: Readonly<Props>) {
     };
   }, [map, position, children]);
 
-  return (
-    <Box
-      ref={overlayElementRef}
-      backgroundColor="var(--color-white)"
-      border="1px solid var(--color-black)"
-    >
-      {children}
-    </Box>
-  );
+  return <Box ref={overlayElementRef}>{children}</Box>;
 }
