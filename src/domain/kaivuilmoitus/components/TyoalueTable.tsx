@@ -13,6 +13,7 @@ import { getAreaDefaultName } from '../../application/utils';
 import ConfirmationDialog from '../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import './TyoalueTable.css';
 import { getSurfaceArea } from '../../../common/components/map/utils';
+import { OverlayProps } from '../../../common/components/map/types';
 
 type Props = {
   alueIndex: number;
@@ -52,7 +53,14 @@ export default function TyoalueTable({
 
   const tableRows: TableData[] = tyoalueet.map((alue, index) => {
     const areaName = getAreaDefaultName(t, index, tyoalueet.length);
-    alue.openlayersFeature?.set('areaName', areaName);
+    const previousOverlayProps = alue.openlayersFeature?.get('overlayProps') as OverlayProps;
+    alue.openlayersFeature?.setProperties(
+      {
+        areaName,
+        overlayProps: new OverlayProps({ ...previousOverlayProps, heading: areaName }),
+      },
+      true,
+    );
     return {
       id: alue.id,
       nimi: areaName,

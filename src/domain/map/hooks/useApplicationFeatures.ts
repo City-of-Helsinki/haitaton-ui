@@ -8,7 +8,11 @@ import { ApplicationArea } from '../../application/types/application';
 /**
  * Add features from application areas to map
  */
-export default function useApplicationFeatures(source: Vector, areas?: ApplicationArea[]) {
+export default function useApplicationFeatures(
+  source: Vector,
+  areas?: ApplicationArea[],
+  featureProperties: { [x: string]: unknown } = {},
+) {
   useEffect(() => {
     if (areas && areas.length > 0) {
       const applicationFeatures = areas.map((area) => {
@@ -19,6 +23,7 @@ export default function useApplicationFeatures(source: Vector, areas?: Applicati
             liikennehaittaindeksi: area.tormaystarkasteluTulos
               ? area.tormaystarkasteluTulos.liikennehaittaindeksi.indeksi
               : null,
+            ...featureProperties,
           },
           true,
         );
@@ -31,5 +36,5 @@ export default function useApplicationFeatures(source: Vector, areas?: Applicati
     return function cleanup() {
       source.clear();
     };
-  }, [source, areas]);
+  }, [source, areas, featureProperties]);
 }

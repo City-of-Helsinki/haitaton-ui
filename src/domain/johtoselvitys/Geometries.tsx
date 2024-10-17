@@ -25,6 +25,7 @@ import useDrawContext from '../../common/components/map/modules/draw/useDrawCont
 import ApplicationMap from '../application/components/ApplicationMap';
 import useAddressCoordinate from '../map/hooks/useAddressCoordinate';
 import useFilterHankeAlueetByApplicationDates from '../application/hooks/useFilterHankeAlueetByApplicationDates';
+import { OverlayProps } from '../../common/components/map/types';
 
 function AreaList({
   applicationAreas,
@@ -49,12 +50,19 @@ function AreaList({
         const surfaceArea = geometry && `(${formatSurfaceArea(geometry)})`;
         const areaName = getAreaDefaultName(t, index, applicationAreas.length);
 
-        area.feature?.setProperties({
-          areaName,
-          hankeName,
-          endDate: getValues('applicationData.endTime'),
-          startDate: getValues('applicationData.startTime'),
-        });
+        area.feature?.setProperties(
+          {
+            areaName,
+            hankeName,
+            overlayProps: new OverlayProps({
+              heading: areaName,
+              startDate: getValues('applicationData.startTime'),
+              endDate: getValues('applicationData.endTime'),
+              backgroundColor: 'var(--color-suomenlinna-light)',
+            }),
+          },
+          true,
+        );
 
         return (
           <li key={area.id}>

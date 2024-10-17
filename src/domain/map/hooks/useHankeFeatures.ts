@@ -4,6 +4,7 @@ import GeoJSON from 'ol/format/GeoJSON';
 import { Feature } from 'ol';
 import { Geometry } from 'ol/geom';
 import { HankeData } from '../../types/hanke';
+import { OverlayProps } from '../../../common/components/map/types';
 
 /**
  * Add features from hanke areas to map
@@ -31,8 +32,14 @@ export default function useHankeFeatures(source: Vector, hankkeet: HankeData[]) 
                 : null,
               areaName: alue.nimi,
               hankeName: hanke.nimi,
-              startDate: alue.haittaAlkuPvm,
-              endDate: alue.haittaLoppuPvm,
+              id: alue.id,
+              overlayProps: new OverlayProps({
+                heading: alue.nimi,
+                subHeading: `${hanke.nimi} (${hanke.hankeTunnus})`,
+                startDate: alue.haittaAlkuPvm,
+                endDate: alue.haittaLoppuPvm,
+                backgroundColor: 'var(--color-summer-light)',
+              }),
             },
             true,
           );

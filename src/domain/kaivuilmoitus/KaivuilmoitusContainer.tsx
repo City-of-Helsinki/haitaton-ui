@@ -287,7 +287,9 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       validationSchema: perustiedotSchema,
     },
     {
-      element: <Areas hankeData={hankeData} />,
+      element: (
+        <Areas hankeData={hankeData} hankkeenHakemukset={hankkeenHakemukset?.applications ?? []} />
+      ),
       label: t('form:headers:alueet'),
       state: StepState.available,
       validationSchema: alueetSchema,
