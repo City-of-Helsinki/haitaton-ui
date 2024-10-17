@@ -85,6 +85,7 @@ import styles from './ApplicationView.module.scss';
 import CustomAccordion from '../../../common/components/customAccordion/CustomAccordion';
 import useFilterHankeAlueetByApplicationDates from '../hooks/useFilterHankeAlueetByApplicationDates';
 import ApplicationSendDialog from '../components/ApplicationSendDialog';
+import TaydennyspyyntoNotification from '../taydennys/TaydennyspyyntoNotification';
 
 function SidebarTyoalueet({
   tyoalueet,
@@ -326,6 +327,7 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
     id,
     paatokset,
     valmistumisilmoitukset,
+    taydennyspyynto,
   } = application;
   const {
     name,
@@ -427,6 +429,12 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
         <Text tag="h2" styleAs="h3" weight="bold" spacingBottom="l">
           {applicationId}
         </Text>
+
+        {alluStatus === AlluStatus.WAITING_INFORMATION && taydennyspyynto && (
+          <Box mb="var(--spacing-l)">
+            <TaydennyspyyntoNotification taydennyspyynto={taydennyspyynto} />
+          </Box>
+        )}
 
         <FormSummarySection>
           <SectionItemTitle>{t('hakemus:labels:applicationType')}:</SectionItemTitle>

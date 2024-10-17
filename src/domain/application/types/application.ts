@@ -18,6 +18,7 @@ import { getSurfaceArea } from '../../../common/components/map/utils';
 import { HaittaIndexData } from '../../common/haittaIndexes/types';
 import { reportCompletionDateSchema } from '../../kaivuilmoitus/validationSchema';
 import { sendSchema } from '../yupSchemas';
+import { Taydennyspyynto } from '../taydennys/types';
 
 export type ApplicationType = 'CABLE_REPORT' | 'EXCAVATION_NOTIFICATION';
 
@@ -264,6 +265,7 @@ export interface Application<T = JohtoselvitysData | KaivuilmoitusData> {
   hankeTunnus: string | null;
   paatokset?: { [key: string]: Paatos[] };
   valmistumisilmoitukset?: Valmistumisilmoitukset | null;
+  taydennyspyynto?: Taydennyspyynto | null;
 }
 
 export interface HankkeenHakemus {

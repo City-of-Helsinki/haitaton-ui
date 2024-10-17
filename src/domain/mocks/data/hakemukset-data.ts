@@ -6,6 +6,7 @@ import {
   KaivuilmoitusData,
 } from '../../application/types/application';
 import { HAITTA_INDEX_TYPE } from '../../common/haittaIndexes/types';
+import { TaydennyspyyntoFieldKey } from '../../application/taydennys/types';
 
 const hakemukset: Application[] = [
   {
@@ -1207,6 +1208,128 @@ const hakemukset: Application[] = [
       ],
     },
   } as Application<KaivuilmoitusData>,
+  {
+    id: 11,
+    hankeTunnus: 'HAI22-2',
+    applicationType: 'CABLE_REPORT',
+    alluStatus: AlluStatus.WAITING_INFORMATION,
+    applicationIdentifier: 'JS2400005',
+    applicationData: {
+      applicationType: 'CABLE_REPORT',
+      name: 'Aidasmäentien putkityöt',
+      workDescription: 'Tehdään putkitöitä',
+      postalAddress: {
+        city: 'Helsinki',
+        postalCode: '00650',
+        streetAddress: { streetName: 'Aidasmäentie 5' },
+      },
+      constructionWork: true,
+      maintenanceWork: true,
+      emergencyWork: false,
+      propertyConnectivity: false,
+      rockExcavation: true,
+      areas: [
+        {
+          name: '',
+          geometry: {
+            type: 'Polygon',
+            crs: {
+              type: 'name',
+              properties: {
+                name: 'urn:ogc:def:crs:EPSG::3879',
+              },
+            },
+            coordinates: [
+              [
+                [25498574.56194478, 6679282.528783048],
+                [25498582.990384366, 6679282.528783048],
+                [25498582.990384366, 6679310.418567079],
+                [25498574.56194478, 6679310.418567079],
+                [25498574.56194478, 6679282.528783048],
+              ],
+            ],
+          },
+        },
+      ],
+      startTime: new Date('2024-08-13T21:59:59.999Z'),
+      endTime: new Date('2024-10-29T21:59:59.999Z'),
+      customerWithContacts: {
+        customer: {
+          type: 'COMPANY',
+          name: 'Yritys Oy',
+          country: 'FI',
+          email: 'yritys@test.com',
+          phone: '0000000000',
+          registryKey: '1164243-9',
+        },
+        contacts: [
+          {
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            email: 'matti.meikalainen@test.com',
+            firstName: 'Matti',
+            lastName: 'Meikäläinen',
+            orderer: true,
+            phone: '0401234567',
+          },
+        ],
+      },
+      contractorWithContacts: {
+        customer: {
+          type: 'COMPANY',
+          name: 'Yritys 2 Oy',
+          country: 'FI',
+          email: 'yritys2@test.com',
+          phone: '040123456',
+          registryKey: '3227510-5',
+        },
+        contacts: [
+          {
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb1',
+            email: 'tauno@test.com',
+            firstName: 'Tauno',
+            lastName: 'Testinen',
+            orderer: false,
+            phone: '0401234567',
+          },
+        ],
+      },
+      representativeWithContacts: null,
+      propertyDeveloperWithContacts: null,
+    },
+    taydennyspyynto: {
+      id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+      kentat: [
+        {
+          key: TaydennyspyyntoFieldKey.PROPERTY_DEVELOPER,
+          message: 'Virheellinen sähköpostiosoite',
+        },
+        {
+          key: TaydennyspyyntoFieldKey.START_TIME,
+          message: 'Korjaa aloituspäivämäärää',
+        },
+        {
+          key: TaydennyspyyntoFieldKey.END_TIME,
+          message: 'Korjaa lopetuspäivämäärää',
+        },
+        {
+          key: TaydennyspyyntoFieldKey.WORK_DESCRIPTION,
+          message: 'Tarkenna työn kuvausta',
+        },
+        {
+          key: TaydennyspyyntoFieldKey.GEOMETRY,
+          message: 'Korjaa karttarajausta',
+        },
+        {
+          key: TaydennyspyyntoFieldKey.ATTACHMENT,
+          message: 'Liikennejärjestelysuunnitelma ja valtakirja työstä vastaavalta puuttuu',
+        },
+        {
+          key: TaydennyspyyntoFieldKey.OTHER,
+          message: 'Korjaa myös liikennejärjestelytekstiä',
+        },
+      ],
+    },
+  } as Application<JohtoselvitysData>,
 ];
 
 export default hakemukset;

@@ -87,11 +87,11 @@ test('Should show tag with yellow background when status is HANDLING', () => {
   expect(tag).toHaveTextContent('Käsittelyssä');
 });
 
-test('Should show tag with yellow background when status is WAITING_INFORMATION', () => {
+test('Should show tag with red background when status is WAITING_INFORMATION', () => {
   render(<ApplicationStatusTag status="WAITING_INFORMATION" />);
   const tag = screen.getByTestId('application-status-tag');
 
-  expect(tag).toHaveClass('bgYellow');
+  expect(tag).toHaveClass('bgRed');
   expect(tag).toHaveTextContent('Täydennyspyyntö');
 });
 
