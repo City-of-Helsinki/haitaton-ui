@@ -54,12 +54,12 @@
     tslib "^2.3.0"
     zen-observable-ts "^1.2.5"
 
-"@axe-core/react@^4.8.5":
-  version "4.8.5"
-  resolved "https://registry.yarnpkg.com/@axe-core/react/-/react-4.8.5.tgz#49828fecb604a89027a7aac140cd483e6a7a848f"
-  integrity sha512-GKXFAc/VPa3sDPv8lqPZlDvBt0UNwOwN0B/EnUOaHTRe5IcLl+RfcD+LHVEE75Quc1LOgSyw4T0O9kvJuPzIxg==
+"@axe-core/react@^4.10.0":
+  version "4.10.0"
+  resolved "https://registry.yarnpkg.com/@axe-core/react/-/react-4.10.0.tgz#124cde86b9bbbf44fd0f2c787beed186b8b9a3d4"
+  integrity sha512-gpFj1+G0zabbd0ZDum1N5FPJtUOfPIfslXNH58WuR7opSK0WTwPJ49ZlYr/Wg2fA4VGI5lfkG5fAZSG9p8ecKw==
   dependencies:
-    axe-core "~4.8.4"
+    axe-core "~4.10.0"
     requestidlecallback "^0.3.0"
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.12.13":
@@ -5814,10 +5814,10 @@ await-to-js@^3.0.0:
   resolved "https://registry.yarnpkg.com/await-to-js/-/await-to-js-3.0.0.tgz#70929994185616f4675a91af6167eb61cc92868f"
   integrity sha512-zJAaP9zxTcvTHRlejau3ZOY4V7SRpiByf3/dxx2uyKxxor19tpmpV2QRsTKikckwhaPmr2dVpxxMr7jOCYVp5g==
 
-axe-core@^4.6.2, axe-core@~4.8.4:
-  version "4.8.4"
-  resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.8.4.tgz#90db39a2b316f963f00196434d964e6e23648643"
-  integrity sha512-CZLSKisu/bhJ2awW4kJndluz2HLZYIHh5Uy1+ZwDRkJi69811xgIXXfdU9HSLX0Th+ILrHj8qfL/5wzamsFtQg==
+axe-core@^4.6.2, axe-core@~4.10.0:
+  version "4.10.0"
+  resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.10.0.tgz#d9e56ab0147278272739a000880196cdfe113b59"
+  integrity sha512-Mr2ZakwQ7XUAjp7pAwQWRhhK8mQQ6JAaNWSjmjxil0R8BPioMtQsTLOolGYkji1rcL++3dCqZA3zWqpT+9Ew6g==
 
 axios@^1.7.7:
   version "1.7.7"
