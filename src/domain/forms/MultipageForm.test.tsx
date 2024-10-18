@@ -7,7 +7,14 @@ function Page1() {
   return (
     <div>
       <h1>Page 1</h1>
-      <TextInput id="testInput" label="Test input" errorText="Please enter a value for input" />
+      <TextInput
+        id="testInput"
+        label="Test input"
+        errorText="Please enter a value for input"
+        onPointerEnterCapture={() => {}}
+        onPointerLeaveCapture={() => {}}
+        crossOrigin=""
+      />
     </div>
   );
 }

@@ -17,7 +17,13 @@ function TestComponent() {
   return (
     <FormProvider {...methods}>
       <SearchInput id="test-field" name="testField" label="Test field" onSubmit={() => {}} />
-      <TextInput id="other-field" label="Other field" />
+      <TextInput
+        id="other-field"
+        label="Other field"
+        onPointerEnterCapture={() => {}}
+        onPointerLeaveCapture={() => {}}
+        crossOrigin=""
+      />
     </FormProvider>
   );
 }

@@ -73,6 +73,9 @@ export default function TagInput({
             pattern={pattern}
             placeholder={placeholder}
             helperText={helperText}
+            onPointerEnterCapture={() => {}}
+            onPointerLeaveCapture={() => {}}
+            crossOrigin=""
           />
           <Button variant="secondary" onClick={addTag}>
             {t('common:increment')}
