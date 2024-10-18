@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
-import { Notification } from 'hds-react';
+import { Button, IconPlusCircle, Notification } from 'hds-react';
+import { Box } from '@chakra-ui/react';
 import { debounce } from 'lodash';
 import { Feature, Map as OlMap, MapBrowserEvent } from 'ol';
 import { Geometry, Point, Polygon } from 'ol/geom';
@@ -38,8 +39,10 @@ type Props = {
   mapCenter?: Coordinate;
   onAddArea?: (feature: Feature<Geometry>) => void;
   onChangeArea?: (feature: Feature<Geometry>) => void;
+  onCopyArea?: (feature: Feature<Geometry>) => void;
   children?: React.ReactNode;
   restrictDrawingToHankeAreas?: boolean;
+  workTimesSet?: boolean;
 };
 
 export default function ApplicationMap({
@@ -47,8 +50,10 @@ export default function ApplicationMap({
   showDrawControls,
   mapCenter,
   restrictDrawingToHankeAreas = false,
+  workTimesSet,
   onAddArea,
   onChangeArea,
+  onCopyArea,
   children,
 }: Readonly<Props>) {
   const { t } = useTranslation();
@@ -181,6 +186,14 @@ export default function ApplicationMap({
     [hankeLayerFilter],
   );
 
+  function handleCopyArea(feature: Feature<Geometry>) {
+    if (onCopyArea) {
+      const newFeature = new Feature(feature.getGeometry()?.clone());
+      onCopyArea(newFeature);
+      setValue('geometriesChanged', true, { shouldDirty: true });
+    }
+  }
+
   return (
     <div>
       <div className={styles.mapContainer}>
@@ -201,7 +214,26 @@ export default function ApplicationMap({
           <FeatureInfoOverlay
             render={(feature) => {
               const overlayProperties = feature?.get('overlayProps') as OverlayProps | undefined;
-              return <AreaOverlay overlayProps={overlayProperties} />;
+              let copyAreaElement = null;
+              if (overlayProperties?.enableCopyArea && onCopyArea) {
+                copyAreaElement = workTimesSet ? (
+                  <Button
+                    theme="coat"
+                    size="small"
+                    iconLeft={<IconPlusCircle />}
+                    onClick={() => handleCopyArea(feature as Feature<Geometry>)}
+                  >
+                    {t('hakemus:buttons:copyWorkArea')}
+                  </Button>
+                ) : (
+                  <Box as="p" fontSize="var(--fontsize-body-s)">
+                    {t('hakemus:labels:setWorkTimesToCopyArea')}
+                  </Box>
+                );
+              }
+              return (
+                <AreaOverlay overlayProps={overlayProperties} copyAreaElement={copyAreaElement} />
+              );
             }}
           />
 

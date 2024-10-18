@@ -263,6 +263,11 @@ export default function Areas({ hankeData, hankkeenHakemukset }: Readonly<Props>
     }
   }
 
+  function handleCopyArea(feature: Feature<Geometry>) {
+    drawSource.addFeature(feature);
+    handleAddArea(feature);
+  }
+
   function handleChangeArea(feature: Feature<Geometry>) {
     const changedApplicationArea = wathcApplicationAreas.find((alue) => {
       const changedTyoalue = alue.tyoalueet.find(
@@ -401,7 +406,9 @@ export default function Areas({ hankeData, hankkeenHakemukset }: Readonly<Props>
           showDrawControls={Boolean(workTimesSet)}
           onAddArea={handleAddArea}
           onChangeArea={handleChangeArea}
+          onCopyArea={handleCopyArea}
           restrictDrawingToHankeAreas
+          workTimesSet={Boolean(workTimesSet)}
         >
           {/* Hanke areas */}
           <HankeLayer

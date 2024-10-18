@@ -1,12 +1,14 @@
+import React from 'react';
 import { Box } from '@chakra-ui/react';
 import { OverlayProps } from '../../../../common/components/map/types';
 import { formatToFinnishDate } from '../../../../common/utils/date';
 
 type Props = {
   overlayProps?: OverlayProps;
+  copyAreaElement?: React.ReactNode;
 };
 
-export default function AreaOverlay({ overlayProps }: Props) {
+export default function AreaOverlay({ overlayProps, copyAreaElement }: Readonly<Props>) {
   if (!overlayProps) {
     return null;
   }
@@ -18,7 +20,11 @@ export default function AreaOverlay({ overlayProps }: Props) {
   }
 
   return (
-    <Box backgroundColor={backgroundColor} padding="var(--spacing-2-xs)">
+    <Box
+      border="1px solid var(--color-black)"
+      backgroundColor={backgroundColor ?? 'var(--color-white)'}
+      padding="var(--spacing-2-xs)"
+    >
       {subHeading && <p>{subHeading}</p>}
       {<h4 className="heading-xxs">{heading}</h4>}
       {startDate && endDate && (
@@ -26,6 +32,7 @@ export default function AreaOverlay({ overlayProps }: Props) {
           {formatToFinnishDate(startDate)}–{formatToFinnishDate(endDate)}
         </Box>
       )}
+      {copyAreaElement && <Box marginTop="var(--spacing-3-xs)">{copyAreaElement}</Box>}
     </Box>
   );
 }
