@@ -11,7 +11,10 @@ import MapOverlay from '../../../../common/components/map/overlay/Overlay';
 import useDrawInteraction from '../../../../common/components/map/hooks/useDrawInteraction';
 import useIsModifying from '../../../../common/components/map/hooks/useIsModifying';
 
-function HoverElement({ position, children }: { position?: Pixel; children: React.ReactNode }) {
+function HoverElement({
+  position,
+  children,
+}: Readonly<{ position?: Pixel; children: React.ReactNode }>) {
   if (!position) {
     return null;
   }

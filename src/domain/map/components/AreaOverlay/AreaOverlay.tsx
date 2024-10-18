@@ -8,7 +8,7 @@ type Props = {
   copyAreaElement?: React.ReactNode;
 };
 
-export default function AreaOverlay({ overlayProps, copyAreaElement }: Props) {
+export default function AreaOverlay({ overlayProps, copyAreaElement }: Readonly<Props>) {
   if (!overlayProps) {
     return null;
   }
@@ -22,7 +22,7 @@ export default function AreaOverlay({ overlayProps, copyAreaElement }: Props) {
   return (
     <Box
       border="1px solid var(--color-black)"
-      backgroundColor={backgroundColor || 'var(--color-white)'}
+      backgroundColor={backgroundColor ?? 'var(--color-white)'}
       padding="var(--spacing-2-xs)"
     >
       {subHeading && <p>{subHeading}</p>}

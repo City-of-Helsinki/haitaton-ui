@@ -6,12 +6,21 @@ export default function useIsModifying() {
   const [isModifying, setIsModifying] = useState(false);
 
   useEffect(() => {
-    modifyInteraction?.on('modifystart', () => {
+    function handleModifyStart() {
       setIsModifying(true);
-    });
-    modifyInteraction?.on('modifyend', () => {
+    }
+
+    function handleModifyEnd() {
       setIsModifying(false);
-    });
+    }
+
+    modifyInteraction?.on('modifystart', handleModifyStart);
+    modifyInteraction?.on('modifyend', handleModifyEnd);
+
+    return function cleanup() {
+      modifyInteraction?.un('modifystart', handleModifyStart);
+      modifyInteraction?.un('modifyend', handleModifyEnd);
+    };
   }, [modifyInteraction]);
 
   return isModifying;
