@@ -27,6 +27,7 @@ import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import * as applicationApi from '../application/utils';
 import { HAITTA_INDEX_TYPE } from '../common/haittaIndexes/types';
 import { HIDDEN_FIELD_VALUE } from '../application/constants';
+import * as hakemuksetDB from '../mocks/data/hakemukset';
 
 afterEach(cleanup);
 
@@ -279,7 +280,7 @@ test('Should be able fill perustiedot and save form', async () => {
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
   expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
-  expect(window.location.pathname).toBe('/fi/hakemus/11');
+  expect(window.location.pathname).toBe(`/fi/hakemus/${(await hakemuksetDB.readAll()).length}`);
 });
 
 test('Should not be able to save form if work name is missing', async () => {

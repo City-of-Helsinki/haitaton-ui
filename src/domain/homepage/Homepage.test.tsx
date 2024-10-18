@@ -8,6 +8,7 @@ import i18n from '../../locales/i18nForTests';
 import { BrowserRouter } from 'react-router-dom';
 import { FeatureFlagsProvider } from '../../common/components/featureFlags/FeatureFlagsContext';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import * as hakemuksetDB from '../mocks/data/hakemukset';
 
 const userEmail = 'test.user@mail.com';
 
@@ -131,7 +132,9 @@ describe('Create johtoselvitys from dialog', () => {
     fillInformation();
     await user.click(screen.getByRole('button', { name: /luo hakemus/i }));
 
-    expect(window.location.pathname).toBe('/fi/johtoselvityshakemus/11/muokkaa');
+    expect(window.location.pathname).toBe(
+      `/fi/johtoselvityshakemus/${(await hakemuksetDB.readAll()).length}/muokkaa`,
+    );
   });
 
   test('Should show validation errors and not create johtoselvitys if information is missing', async () => {

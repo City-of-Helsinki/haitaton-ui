@@ -293,6 +293,65 @@ describe('Cable report application view', () => {
       expect(queryByText('Päätös tilattu paperisena')).not.toBeInTheDocument();
     });
   });
+
+  describe('Taydennyspyynto', () => {
+    test('Shows taydennyspyynto notification if there is a taydennyspyynto', async () => {
+      render(<ApplicationViewContainer id={11} />);
+      await waitForLoadingToFinish();
+
+      expect(screen.getByRole('heading', { name: 'Täydennyspyyntö' })).toBeInTheDocument();
+      expect(
+        screen.getByText('Muokkaa hakemusta korjataksesi seuraavat asiat:'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          (_, element) =>
+            element?.textContent === 'Rakennuttajan tiedot: Virheellinen sähköpostiosoite',
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          (_, element) =>
+            element?.textContent === 'Työn arvioitu alkupäivä: Korjaa aloituspäivämäärää',
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          (_, element) =>
+            element?.textContent === 'Työn arvioitu loppupäivä: Korjaa lopetuspäivämäärää',
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          (_, element) => element?.textContent === 'Työn kuvaus: Tarkenna työn kuvausta',
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          (_, element) => element?.textContent === 'Työalueet: Korjaa karttarajausta',
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          (_, element) =>
+            element?.textContent ===
+            'Liitteet: Liikennejärjestelysuunnitelma ja valtakirja työstä vastaavalta puuttuu',
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          (_, element) => element?.textContent === 'Muu: Korjaa myös liikennejärjestelytekstiä',
+        ),
+      ).toBeInTheDocument();
+    });
+
+    test('Does not show taydennyspyynto notification if there is no taydennyspyynto', async () => {
+      render(<ApplicationViewContainer id={1} />);
+      await waitForLoadingToFinish();
+
+      expect(screen.queryByRole('heading', { name: 'Täydennyspyyntö' })).not.toBeInTheDocument();
+    });
+  });
 });
 
 describe('Excavation notification application view', () => {
