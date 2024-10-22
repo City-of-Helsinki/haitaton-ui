@@ -18,6 +18,7 @@ import {
   HANKE_TYOMAATYYPPI_KEY,
 } from '../types/hanke';
 import { HaittaIndexData } from '../common/haittaIndexes/types';
+import { Taydennyspyynto } from '../application/taydennys/types';
 
 const tyoalueSchema = yup.object({
   geometry: geometrySchema.required(),
@@ -128,6 +129,7 @@ export const validationSchema: yup.ObjectSchema<KaivuilmoitusFormValues> = yup.o
   hankeTunnus: yup.string().defined().nullable(),
   applicationData: applicationDataSchema,
   valmistumisilmoitukset: yup.object().nullable().notRequired(),
+  taydennyspyynto: yup.mixed<Taydennyspyynto>().nullable(),
   selfIntersectingPolygon: yup.boolean().isFalse(),
   geometriesChanged: yup.boolean(),
 });

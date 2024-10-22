@@ -6,6 +6,7 @@ import {
   areaSchema,
   customerWithContactsSchema,
 } from '../application/yupSchemas';
+import { Taydennyspyynto } from '../application/taydennys/types';
 
 const addressSchema = yup
   .object({
@@ -59,6 +60,7 @@ export const validationSchema: yup.ObjectSchema<JohtoselvitysFormValues> = yup.o
     areas: yup.array(areaSchema).min(1).required(),
   }),
   valmistumisilmoitukset: yup.object().nullable().notRequired(),
+  taydennyspyynto: yup.mixed<Taydennyspyynto>().nullable(),
   selfIntersectingPolygon: yup.boolean().isFalse(),
   geometriesChanged: yup.boolean(),
 });
