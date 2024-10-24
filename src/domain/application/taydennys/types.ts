@@ -27,3 +27,8 @@ export type Taydennyspyynto = {
   id: string;
   kentat: TaydennyspyyntoField[];
 };
+
+export type Taydennys<T> = {
+  id: string;
+  applicationData: T;
+};

@@ -309,9 +309,18 @@ type Props = {
   hanke: HankeData | undefined;
   signedInUser: SignedInUser | undefined;
   onEditApplication: () => void;
+  onEditTaydennys: () => void;
+  creatingTaydennys?: boolean;
 };
 
-function ApplicationView({ application, hanke, signedInUser, onEditApplication }: Readonly<Props>) {
+function ApplicationView({
+  application,
+  hanke,
+  signedInUser,
+  onEditApplication,
+  onEditTaydennys,
+  creatingTaydennys,
+}: Readonly<Props>) {
   const { t } = useTranslation();
   const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const [showSendDialog, setShowSendDialog] = useState(false);
@@ -328,6 +337,7 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
     paatokset,
     valmistumisilmoitukset,
     taydennyspyynto,
+    taydennys,
   } = application;
   const {
     name,
@@ -554,6 +564,20 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
                 onClick={openReportWorkFinishedDialog}
               >
                 {t('hakemus:buttons:reportWorkFinished')}
+              </Button>
+            </CheckRightsByHanke>
+          )}
+          {alluStatus === AlluStatus.WAITING_INFORMATION && (
+            <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
+              <Button
+                theme="coat"
+                iconLeft={<IconPen aria-hidden="true" />}
+                onClick={onEditTaydennys}
+                isLoading={creatingTaydennys}
+              >
+                {!taydennys
+                  ? t('taydennys:buttons:createTaydennys')
+                  : t('taydennys:buttons:editTaydennys')}
               </Button>
             </CheckRightsByHanke>
           )}

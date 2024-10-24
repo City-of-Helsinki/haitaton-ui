@@ -9,6 +9,8 @@ import hakemukset from '../../mocks/data/hakemukset-data';
 import { cloneDeep } from 'lodash';
 import { format } from 'date-fns/format';
 import { fi } from 'date-fns/locale';
+import { Application, JohtoselvitysData } from '../types/application';
+import * as taydennysApi from '../taydennys/taydennysApi';
 
 describe('Cable report application view', () => {
   test('Correct information about application should be displayed', async () => {
@@ -350,6 +352,69 @@ describe('Cable report application view', () => {
       await waitForLoadingToFinish();
 
       expect(screen.queryByRole('heading', { name: 'Täydennyspyyntö' })).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Taydennys', () => {
+    async function setup(application: Application<JohtoselvitysData>) {
+      server.use(
+        http.get('/api/hakemukset/:id', async () => {
+          return HttpResponse.json<Application<JohtoselvitysData>>(application);
+        }),
+      );
+      const renderResult = render(<ApplicationViewContainer id={application.id!} />);
+      await waitForLoadingToFinish();
+      return renderResult;
+    }
+
+    test('Creates taydennys and navigates to edit taydennys path if taydennys does not exist', async () => {
+      const taydennysCreateSpy = jest.spyOn(taydennysApi, 'createTaydennys');
+      const application = hakemukset[10] as Application<JohtoselvitysData>;
+      server.use(
+        http.post('/api/hakemukset/:id/taydennys', async () => {
+          return HttpResponse.json(
+            {
+              id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+              applicationData: application.applicationData,
+            },
+            { status: 200 },
+          );
+        }),
+      );
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('button', { name: 'Täydennä' }));
+
+      expect(window.location.pathname).toBe(`/fi/johtoselvitystaydennys/${application.id}/muokkaa`);
+      expect(taydennysCreateSpy).toHaveBeenCalledWith(application.id?.toString());
+      taydennysCreateSpy.mockRestore();
+    });
+
+    test('Navigates to edit taydennys path if taydennys exists', async () => {
+      const application = cloneDeep(hakemukset[10]) as Application<JohtoselvitysData>;
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: application.applicationData,
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('button', { name: 'Muokkaa hakemusta (täydennys)' }));
+
+      expect(window.location.pathname).toBe(`/fi/johtoselvitystaydennys/${application.id}/muokkaa`);
+    });
+
+    test('Shows error notification if creating taydennys fails', async () => {
+      server.use(
+        http.post('/api/hakemukset/:id/taydennys', async () => {
+          return HttpResponse.json(
+            { errorMessage: 'Failed for testing purposes' },
+            { status: 500 },
+          );
+        }),
+      );
+      const application = hakemukset[10] as Application<JohtoselvitysData>;
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('button', { name: 'Täydennä' }));
+
+      expect(await screen.findByText('Tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument();
     });
   });
 });

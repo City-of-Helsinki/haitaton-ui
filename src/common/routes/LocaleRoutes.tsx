@@ -24,6 +24,7 @@ import UserIdentify from '../../domain/auth/components/UserIdentify';
 import EditUserPage from '../../pages/EditUserPage';
 import NewKaivuilmoitusPage from '../../pages/NewKaivuilmoitusPage';
 import EditKaivuilmoitusPage from '../../pages/EditKaivuilmoitusPage';
+import EditJohtoselvitysTaydennysPage from '../../pages/EditJohtoselvitysTaydennysPage';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
@@ -56,6 +57,10 @@ const LocaleRoutes = () => {
       <Route
         path={t('routes:EDIT_JOHTOSELVITYSHAKEMUS:path')}
         element={<PrivateRoute element={<EditJohtoselvitysPage />} />}
+      />
+      <Route
+        path={t('routes:EDIT_JOHTOSELVITYSTAYDENNYS:path')}
+        element={<PrivateRoute element={<EditJohtoselvitysTaydennysPage />} />}
       />
       <Route
         path={t('routes:KAIVUILMOITUSHAKEMUS:path')}

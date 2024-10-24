@@ -18,10 +18,12 @@ import {
   JohtoselvitysUpdateData,
   KaivuilmoitusCreateData,
   KaivuilmoitusData,
+  KaivuilmoitusUpdateData,
   NewJohtoselvitysData,
 } from '../application/types/application';
 import { defaultJohtoselvitysData } from './data/defaultJohtoselvitysData';
 import { PathParams } from 'msw/lib/core/utils/matching/matchRequestUrl';
+import ApiError from './apiError';
 
 const apiUrl = '/api';
 
@@ -348,4 +350,28 @@ export const handlers = [
       givenName: 'Testi',
     });
   }),
+
+  http.post(`${apiUrl}/hakemukset/:id/taydennys`, async ({ params }) => {
+    const { id } = params;
+    try {
+      const taydennys = await hakemuksetDB.createTaydennys(Number(id));
+      return HttpResponse.json(taydennys, { status: 200 });
+    } catch (error) {
+      return HttpResponse.json((<ApiError>error).message, { status: (<ApiError>error).status });
+    }
+  }),
+
+  http.put<PathParams, JohtoselvitysUpdateData | KaivuilmoitusUpdateData>(
+    `${apiUrl}/taydennykset/:id`,
+    async ({ params, request }) => {
+      const { id } = params;
+      const updates = await request.json();
+      try {
+        const taydennys = await hakemuksetDB.updateTaydennys(id as string, updates);
+        return HttpResponse.json(taydennys, { status: 200 });
+      } catch (error) {
+        return HttpResponse.json((<ApiError>error).message, { status: (<ApiError>error).status });
+      }
+    },
+  ),
 ];

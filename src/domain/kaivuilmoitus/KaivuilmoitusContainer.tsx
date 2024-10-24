@@ -295,7 +295,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       validationSchema: alueetSchema,
     },
     {
-      element: <Contacts />,
+      element: <Contacts hankeTunnus={hankeData.hankeTunnus} />,
       label: t('form:headers:yhteystiedot'),
       state: StepState.available,
       validationSchema: yhteystiedotSchema,

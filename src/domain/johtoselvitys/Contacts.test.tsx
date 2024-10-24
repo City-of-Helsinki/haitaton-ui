@@ -8,7 +8,7 @@ function Form({ application }: { application?: JohtoselvitysFormValues }) {
 
   return (
     <FormProvider {...methods}>
-      <Contacts />
+      <Contacts hankeTunnus={null} />
     </FormProvider>
   );
 }

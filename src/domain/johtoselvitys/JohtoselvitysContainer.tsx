@@ -307,7 +307,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         state: StepState.available,
       },
       {
-        element: <Geometries hankeData={hankeData} />,
+        element: <Geometries hankeData={hanke} />,
         label: t('form:headers:alueet'),
         /*
          * Determine initial state for the form step.
@@ -323,7 +323,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
           : StepState.disabled,
       },
       {
-        element: <Contacts />,
+        element: <Contacts hankeTunnus={hanke?.hankeTunnus ?? null} />,
         label: t('form:headers:yhteystiedot'),
         state: isPageValid<JohtoselvitysFormValues>(
           validationSchema,
@@ -362,7 +362,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
           : StepState.disabled,
       },
     ];
-  }, [t, getValues, pageFieldsToValidate, hankeData, existingAttachments, attachmentsLoadError]);
+  }, [t, getValues, pageFieldsToValidate, hanke, existingAttachments, attachmentsLoadError]);
 
   const hankeNameText = (
     <div style={{ visibility: hanke !== undefined ? 'visible' : 'hidden' }}>

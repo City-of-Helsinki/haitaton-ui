@@ -12,11 +12,17 @@ import hakemuksetData from './hakemukset-data';
 import { isApplicationPending } from '../../application/utils';
 import ApiError from '../apiError';
 import { cloneDeep } from 'lodash';
+import { faker } from '@faker-js/faker';
+import { Taydennys } from '../../application/taydennys/types';
 
 let hakemukset: Application[] = [...hakemuksetData];
 
 export async function read(id: number) {
   return hakemukset.find((hakemus) => hakemus.id === id);
+}
+
+async function readTaydennys(id: string) {
+  return hakemukset.find((hakemus) => hakemus.taydennys?.id === id)?.taydennys;
 }
 
 export async function readAll() {
@@ -134,4 +140,29 @@ export async function reportOperationalCondition(id: number) {
   const updatedHakemus = cloneDeep(hakemus);
   updatedHakemus.alluStatus = 'OPERATIONAL_CONDITION';
   return updatedHakemus;
+}
+
+export async function createTaydennys(id: number) {
+  const hakemus = await read(id);
+  if (!hakemus) {
+    throw new ApiError(`No application with id ${id}`, 404);
+  }
+  const taydennys: Taydennys<JohtoselvitysData | KaivuilmoitusData> = {
+    id: faker.string.uuid(),
+    applicationData: cloneDeep(hakemus.applicationData),
+  };
+  hakemus.taydennys = taydennys;
+  return taydennys;
+}
+
+export async function updateTaydennys(
+  id: string,
+  updates: JohtoselvitysUpdateData | KaivuilmoitusUpdateData,
+) {
+  const taydennys = await readTaydennys(id);
+  if (!taydennys) {
+    throw new ApiError(`No application with id ${id}`, 404);
+  }
+  taydennys.applicationData = Object.assign(taydennys.applicationData, updates);
+  return taydennys;
 }

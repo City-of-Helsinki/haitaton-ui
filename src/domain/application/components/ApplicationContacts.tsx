@@ -206,11 +206,12 @@ const CustomerFields: React.FC<{
   );
 };
 
-export default function ApplicationContacts() {
+export default function ApplicationContacts({
+  hankeTunnus,
+}: Readonly<{ hankeTunnus: string | null }>) {
   const { t } = useTranslation();
   const locale = useLocale();
   const { watch, setValue, getValues } = useFormContext<Application>();
-  const hankeTunnus = getValues('hankeTunnus');
   const { data: hankeUsers } = useHankeUsers(hankeTunnus);
   const queryClient = useQueryClient();
 

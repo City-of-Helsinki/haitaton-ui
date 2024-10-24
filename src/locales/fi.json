@@ -377,6 +377,13 @@
         "title": "Haitaton - Muokkaa johtoselvityshakemusta"
       }
     },
+    "EDIT_JOHTOSELVITYSTAYDENNYS": {
+      "path": "/johtoselvitystaydennys/:id/muokkaa",
+      "headerLabel": "Muokkaa täydennystä johtoselvityshakemukseen",
+      "meta": {
+        "title": "Haitaton - Muokkaa täydennystä johtoselvityshakemukseen"
+      }
+    },
     "KAIVUILMOITUSHAKEMUS": {
       "path": "/hankesalkku/:hankeTunnus/kaivuilmoitus",
       "headerLabel": "Luo uusi kaivuilmoitushakemus",
@@ -1250,6 +1257,15 @@
       "ATTACHMENT": "$t(hankePortfolio:tabit:liitteet)",
       "AREA": "$t(form:labels:pintaAla)",
       "OTHER": "Muu"
+    }
+  },
+  "taydennys": {
+    "labels": {
+      "originalInformation": "Alkuperäiset"
+    },
+    "buttons": {
+      "createTaydennys": "Täydennä",
+      "editTaydennys": "Muokkaa hakemusta (täydennys)"
     }
   },
   "hankeSidebar": {

@@ -257,15 +257,8 @@ export function modifyDataBeforeSend<T extends JohtoselvitysUpdateData | Kaivuil
   return kaivuilmoitusData as T;
 }
 
-export function modifyDataAfterReceive<T extends JohtoselvitysData | KaivuilmoitusData>(
-  application: Application<T>,
-): Application<T> {
-  if (application.applicationType === 'CABLE_REPORT') {
-    return application;
-  }
-  const kaivuilmoitusData = cloneDeep<KaivuilmoitusData>(
-    application.applicationData as KaivuilmoitusData,
-  );
+export function modifyKaivuilmoitusDataAfterReceive(applicationData: KaivuilmoitusData) {
+  const kaivuilmoitusData = cloneDeep(applicationData);
   if (
     (kaivuilmoitusData.customerWithContacts?.customer?.type === 'PERSON' ||
       kaivuilmoitusData.customerWithContacts?.customer?.type === 'OTHER') &&
@@ -280,6 +273,18 @@ export function modifyDataAfterReceive<T extends JohtoselvitysData | Kaivuilmoit
   ) {
     kaivuilmoitusData.invoicingCustomer!.registryKey = HIDDEN_FIELD_VALUE;
   }
+  return kaivuilmoitusData;
+}
+
+export function modifyDataAfterReceive<T extends JohtoselvitysData | KaivuilmoitusData>(
+  application: Application<T>,
+): Application<T> {
+  if (application.applicationType === 'CABLE_REPORT') {
+    return application;
+  }
+  const kaivuilmoitusData = modifyKaivuilmoitusDataAfterReceive(
+    application.applicationData as KaivuilmoitusData,
+  );
   return {
     ...application,
     applicationData: kaivuilmoitusData as T,
