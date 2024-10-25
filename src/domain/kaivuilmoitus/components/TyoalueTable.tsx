@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useFieldArray } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { Box, Flex } from '@chakra-ui/react';
 import { IconLocation, IconTrash, Table } from 'hds-react';
 import clsx from 'clsx';
@@ -14,11 +14,18 @@ import ConfirmationDialog from '../../../common/components/HDSConfirmationDialog
 import './TyoalueTable.css';
 import { getSurfaceArea } from '../../../common/components/map/utils';
 import { OverlayProps } from '../../../common/components/map/types';
+import { ApplicationArea, HankkeenHakemus } from '../../application/types/application';
+import { booleanIntersects } from '@turf/boolean-intersects';
+import booleanContains from '@turf/boolean-contains';
+import useLinkPath from '../../../common/hooks/useLinkPath';
+import { ROUTES } from '../../../common/types/route';
+import Link from '../../../common/components/Link/Link';
 
 type Props = {
   alueIndex: number;
   drawSource: VectorSource;
   hankeAlueName: string;
+  johtoselvitykset: HankkeenHakemus[];
   onRemoveArea?: () => void;
   onRemoveLastArea?: () => void;
 };
@@ -26,6 +33,7 @@ type Props = {
 type TableData = {
   id: string;
   nimi: string;
+  notification: string | JSX.Element | null;
   pintaAla: number;
   feature?: Feature<Geometry>;
   index: number;
@@ -35,10 +43,12 @@ export default function TyoalueTable({
   alueIndex,
   drawSource,
   hankeAlueName,
+  johtoselvitykset,
   onRemoveArea,
   onRemoveLastArea,
 }: Readonly<Props>) {
   const { t } = useTranslation();
+  const getApplicationPathView = useLinkPath(ROUTES.HAKEMUS);
   const {
     state: { selectedFeature },
     actions: { setSelectedFeature },
@@ -53,6 +63,39 @@ export default function TyoalueTable({
 
   const tableRows: TableData[] = tyoalueet.map((alue, index) => {
     const areaName = getAreaDefaultName(t, index, tyoalueet.length);
+    const overlappingJohtoselvitykset =
+      johtoselvitykset.filter((application) => {
+        return application.applicationData.areas?.find((area) => {
+          const applicationArea = area as ApplicationArea;
+          const areaIntersects = booleanIntersects(applicationArea.geometry, alue.geometry);
+          const areaContains = booleanContains(applicationArea.geometry, alue.geometry);
+          return areaIntersects && !areaContains;
+        });
+      }) || [];
+    const overlappingCount = overlappingJohtoselvitykset.length;
+    const overlappingNotification =
+      overlappingCount > 1 ? (
+        t('hakemus:labels:workAreaOverlapsMultiple')
+      ) : overlappingCount == 1 ? (
+        <Trans
+          i18nKey="hakemus:labels:workAreaOverlapsSingle"
+          components={{
+            a: (
+              <Link
+                href={getApplicationPathView({ id: overlappingJohtoselvitykset[0].id!.toString() })}
+                openInNewTab={true}
+                external={true}
+              >
+                Hakemus
+              </Link>
+            ),
+          }}
+          values={{ applicationIdentifier: overlappingJohtoselvitykset[0].applicationIdentifier }}
+        >
+          Työalue ylittää johtoselvityksen rajauksen, tee johtoselvitykseen{' '}
+          <a>{overlappingJohtoselvitykset[0].applicationIdentifier}</a> muutosilmoitus
+        </Trans>
+      ) : null;
     const previousOverlayProps = alue.openlayersFeature?.get('overlayProps') as OverlayProps;
     alue.openlayersFeature?.setProperties(
       {
@@ -64,6 +107,7 @@ export default function TyoalueTable({
     return {
       id: alue.id,
       nimi: areaName,
+      notification: overlappingNotification,
       pintaAla: Number(getSurfaceArea(alue.openlayersFeature!.getGeometry()!).toFixed(0)),
       feature: alue.openlayersFeature,
       index,
@@ -93,6 +137,11 @@ export default function TyoalueTable({
           <Box textDecoration="underline">{args.nimi}</Box>
         </Flex>
       ),
+    },
+    {
+      headerName: '',
+      key: 'notification',
+      isSortable: false,
     },
     {
       headerName: `${t('form:labels:pintaAla')} (m²)`,

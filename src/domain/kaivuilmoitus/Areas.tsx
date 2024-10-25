@@ -131,6 +131,9 @@ export default function Areas({ hankeData, hankkeenHakemukset }: Readonly<Props>
   });
 
   const selectedJohtoselvitysTunnukset = getValues('applicationData.cableReports');
+  const selectedJohtoselvitykset = hankkeenHakemukset.filter((hakemus) =>
+    selectedJohtoselvitysTunnukset?.includes(hakemus.applicationIdentifier!),
+  );
 
   const { tabRefs, setSelectedTabIndex } = useSelectableTabs(applicationAreas, {
     selectLastTabOnChange: true,
@@ -417,17 +420,13 @@ export default function Areas({ hankeData, hankkeenHakemukset }: Readonly<Props>
             filterHankeAlueet={filterHankeAlueet}
           />
           {/* Johtoselvitys areas */}
-          {hankkeenHakemukset
-            .filter((hakemus) =>
-              selectedJohtoselvitysTunnukset?.includes(hakemus.applicationIdentifier!),
-            )
-            .map((hakemus) => (
-              <HakemusLayer
-                hakemusId={hakemus.id!}
-                layerStyle={styleFunction}
-                featureProperties={{ statusKey: LIIKENNEHAITTA_STATUS.LAVENDER_BLUE }}
-              />
-            ))}
+          {selectedJohtoselvitykset.map((hakemus) => (
+            <HakemusLayer
+              hakemusId={hakemus.id!}
+              layerStyle={styleFunction}
+              featureProperties={{ statusKey: LIIKENNEHAITTA_STATUS.LAVENDER_BLUE }}
+            />
+          ))}
         </ApplicationMap>
 
         {!workTimesSet && (
@@ -461,6 +460,7 @@ export default function Areas({ hankeData, hankkeenHakemukset }: Readonly<Props>
                   alueIndex={index}
                   drawSource={drawSource}
                   hankeAlueName={alue.name}
+                  johtoselvitykset={selectedJohtoselvitykset}
                   onRemoveLastArea={() => remove(index)}
                 />
 

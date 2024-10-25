@@ -1088,6 +1088,8 @@
       "endDate": "Työn arvioitu loppupäivä",
       "workArea": "Työalue",
       "workAreaPlural": "Työalueet",
+      "workAreaOverlapsSingle": "Työalue ylittää johtoselvityksen rajauksen, tee johtoselvitykseen <a>{{applicationIdentifier}}</a> muutosilmoitus.",
+      "workAreaOverlapsMultiple": "Työalue ylittää usean johtoselvityksen rajauksen, tee muutosilmoitus.",
       "areaAdditionalInfo": "Lisätietoja alueesta",
       "areaInfo": "Alueen tiedot",
       "checkInfo": "Tarkista antamasi tiedot ja lähetä hakemus.",

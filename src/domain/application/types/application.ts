@@ -280,6 +280,7 @@ export interface HankkeenHakemus {
     startTime: Date | null;
     endTime: Date | null;
     pendingOnClient: boolean;
+    areas: ApplicationArea[] | KaivuilmoitusAlue[] | null;
   };
   paatokset?: { [key: string]: Paatos[] };
 }

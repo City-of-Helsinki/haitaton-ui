@@ -63,7 +63,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   const { setNotification } = useGlobalNotification();
   const navigateToApplicationView = useNavigateToApplicationView();
   const [attachmentUploadErrors, setAttachmentUploadErrors] = useState<JSX.Element[]>([]);
-  const { data: hankkeenHakemukset } = useApplicationsForHanke(hankeData.hankeTunnus);
+  const { data: hankkeenHakemukset } = useApplicationsForHanke(hankeData.hankeTunnus, true);
   const { data: signedInUser } = usePermissionsForHanke(hankeData.hankeTunnus);
   const johtoselvitysIds = hankkeenHakemukset?.applications
     .filter(
