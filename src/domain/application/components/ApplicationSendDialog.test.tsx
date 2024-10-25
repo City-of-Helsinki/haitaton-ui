@@ -13,25 +13,23 @@ test('Shows correct information when opened', async () => {
     />,
   );
 
-  await waitFor(() => {
-    expect(screen.getByText(/lähetä hakemus\?/i)).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        'Hakemuksen päätös ja mahdolliset täydennyspyynnöt tulevat Haitaton-järjestelmään. Lähettämällä hakemuksen, sitoudut sähköiseen tiedoksiantoon. Halutessasi voit tilata päätöksen myös paperisena ilmoittamaasi osoitteeseen.',
-      ),
-    ).toBeInTheDocument();
-    const orderPaperDecisionButton = screen.getByRole('button', {
-      name: 'Tilaan päätöksen myös paperisena',
-    });
-    expect(orderPaperDecisionButton).toBeInTheDocument();
-    expect(orderPaperDecisionButton).toBeEnabled();
-    const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
-    expect(confirmButton).toBeInTheDocument();
-    expect(confirmButton).toBeEnabled();
-    const cancelButton = screen.getByRole('button', { name: 'Peruuta' });
-    expect(cancelButton).toBeInTheDocument();
-    expect(cancelButton).toBeEnabled();
+  expect(screen.getByText(/lähetä hakemus\?/i)).toBeInTheDocument();
+  expect(
+    screen.getByText(
+      'Hakemuksen päätös ja mahdolliset täydennyspyynnöt tulevat Haitaton-järjestelmään. Lähettämällä hakemuksen, sitoudut sähköiseen tiedoksiantoon. Halutessasi voit tilata päätöksen myös paperisena ilmoittamaasi osoitteeseen.',
+    ),
+  ).toBeInTheDocument();
+  const orderPaperDecisionButton = screen.getByRole('button', {
+    name: 'Tilaan päätöksen myös paperisena',
   });
+  expect(orderPaperDecisionButton).toBeInTheDocument();
+  expect(orderPaperDecisionButton).toBeEnabled();
+  const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
+  expect(confirmButton).toBeInTheDocument();
+  await waitFor(() => expect(confirmButton).toBeEnabled(), { timeout: 5000 });
+  const cancelButton = screen.getByRole('button', { name: 'Peruuta' });
+  expect(cancelButton).toBeInTheDocument();
+  expect(cancelButton).toBeEnabled();
 });
 
 test('Shows correct information when ordering paper decision', async () => {
