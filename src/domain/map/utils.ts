@@ -11,9 +11,7 @@ import { getSurfaceArea } from '../../common/components/map/utils';
 
 export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJSON => {
   const format = new GeoJSON();
-  const json = format.writeFeatures(features, {
-    decimals: 2, // Not sure if this is correct
-  });
+  const json = format.writeFeatures(features);
   const data = JSON.parse(json);
 
   return {
@@ -24,23 +22,6 @@ export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJS
         name: 'urn:ogc:def:crs:EPSG::3879',
       },
     },
-  };
-};
-
-export const formatFeaturesToAlluGeoJSON = (features: GeometryData): unknown => {
-  const geoJson = new GeoJSON().writeFeaturesObject(features, {
-    decimals: 2, // Not sure if this is correct
-  });
-
-  return {
-    type: 'GeometryCollection',
-    crs: {
-      type: 'name',
-      properties: {
-        name: 'EPSG:3879',
-      },
-    },
-    geometries: geoJson.features.map((feature) => feature.geometry),
   };
 };
 
