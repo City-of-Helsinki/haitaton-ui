@@ -34,7 +34,7 @@ export const customerSchema = contactSchema.omit(['firstName', 'lastName']).shap
   name: yup.string().trim().max(100).required(),
   type: yup.mixed<ContactType>().nullable().required(),
   registryKey: registryKeySchema,
-  registryKeyHidden: yup.boolean().required(),
+  registryKeyHidden: yup.boolean().required().default(false),
 });
 
 export const customerWithContactsSchema = yup.object({

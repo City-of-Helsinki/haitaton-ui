@@ -40,58 +40,12 @@ const application: JohtoselvitysFormValues = {
   applicationData: {
     applicationType: 'CABLE_REPORT',
     name: '',
-    customerWithContacts: {
-      customer: {
-        type: 'COMPANY',
-        name: 'Test Person',
-        country: 'FI',
-        email: 'test@test.com',
-        phone: '0401234567',
-        registryKey: null,
-        registryKeyHidden: false,
-        ovt: null,
-        invoicingOperator: null,
-        sapCustomerNumber: null,
-      },
-      contacts: [
-        {
-          hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          email: 'test@test.com',
-          firstName: 'Test',
-          lastName: 'Person',
-          orderer: true,
-          phone: '0401234567',
-        },
-      ],
-    },
+    customerWithContacts: null,
     areas: DUMMY_AREAS as ApplicationArea[],
     startTime: null,
     endTime: null,
     workDescription: '',
-    contractorWithContacts: {
-      customer: {
-        type: 'COMPANY',
-        name: 'Test Person',
-        country: 'FI',
-        email: 'test@test.com',
-        phone: '0401234567',
-        registryKey: null,
-        registryKeyHidden: false,
-        ovt: null,
-        invoicingOperator: null,
-        sapCustomerNumber: null,
-      },
-      contacts: [
-        {
-          hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          email: 'test@test.com',
-          firstName: 'Test',
-          lastName: 'Person',
-          orderer: false,
-          phone: '0401234567',
-        },
-      ],
-    },
+    contractorWithContacts: null,
     postalAddress: null,
     representativeWithContacts: null,
     propertyDeveloperWithContacts: null,
@@ -143,25 +97,23 @@ function fillAreasInformation(options: DateOptions = {}) {
   });
 }
 
-function fillContactsInformation() {
+async function fillContactsInformation() {
   // Fill customer info
   fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
-  fireEvent.click(screen.getAllByText(/yritys/i)[0]);
+  fireEvent.click(screen.getAllByText(/yksityishenkilö/i)[0]);
   fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[0], {
-    target: { value: 'Yritys Oy' },
+    target: { value: 'Veera Vastaava' },
   });
-  fireEvent.change(
-    screen.getByTestId('applicationData.customerWithContacts.customer.registryKey'),
-    {
-      target: { value: '2182805-0' },
-    },
-  );
   fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.email'), {
-    target: { value: 'yritys@test.com' },
+    target: { value: 'veera.vastaava@test.com' },
   });
   fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.phone'), {
     target: { value: '0000000000' },
   });
+  fireEvent.change(screen.getAllByRole('combobox', { name: /yhteyshenkilöt/i })[0], {
+    target: { value: 'Tauno Testinen' },
+  });
+  fireEvent.click(screen.getAllByText(/tauno testinen/i)[0]);
 
   // Fill contractor info
   fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
@@ -181,6 +133,10 @@ function fillContactsInformation() {
   fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.customer.phone'), {
     target: { value: '0000000000' },
   });
+  fireEvent.change(screen.getAllByRole('combobox', { name: /yhteyshenkilöt/i })[1], {
+    target: { value: 'Tauno Testinen' },
+  });
+  fireEvent.click(screen.getAllByText(/tauno testinen/i)[1]);
 }
 
 test('Cable report application form can be filled', async () => {
@@ -223,10 +179,14 @@ test('Cable report application form can be filled', async () => {
   expect(await screen.findByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
 
   // Fill contacts page
-  fillContactsInformation();
+  await fillContactsInformation();
+
+  // Move to attachments page
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  expect(await screen.findByText('Vaihe 4/5: Liitteet')).toBeInTheDocument();
 
   // Move to summary page
-  await user.click(screen.getByTestId('hds-stepper-step-4'));
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
   expect(await screen.findByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
 });
 
