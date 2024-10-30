@@ -1,7 +1,8 @@
+import { useEffect } from 'react';
 import { Box } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
-import { Checkbox as HDSCheckbox, Fieldset, SelectionGroup, ToggleButton } from 'hds-react';
+import { Checkbox as HDSCheckbox, Fieldset, SelectionGroup } from 'hds-react';
 import { uniq } from 'lodash';
 import TextInput from '../../common/components/textInput/TextInput';
 import TextArea from '../../common/components/textArea/TextArea';
@@ -32,7 +33,7 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
     constructionWorkChecked,
     maintenanceWorkChecked,
     emergencyWorkChecked,
-    createCableReportNotChecked,
+    cableReportDone,
     placementContracts,
   ] = watch([
     'applicationData.constructionWork',
@@ -42,6 +43,15 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
     'applicationData.placementContracts',
   ]);
 
+  useEffect(() => {
+    if (!cableReportDone) {
+      setValue('applicationData.rockExcavation', false, { shouldDirty: true });
+      setValue('applicationData.cableReports', [], { shouldDirty: true });
+    } else {
+      setValue('applicationData.rockExcavation', null, { shouldDirty: true });
+    }
+  }, [cableReportDone, setValue]);
+
   // Trigger validation for constructionWork field
   function validateConstructionWork() {
     trigger('applicationData.constructionWork');
@@ -49,18 +59,6 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
 
   function getTagDeleteButtonAriaLabel(tag: string) {
     return t('hakemus:buttons:deletePlacementContract', { id: tag });
-  }
-
-  function handleCreateCableReportChange() {
-    const newValue = !createCableReportNotChecked;
-    setValue('applicationData.cableReportDone', newValue, {
-      shouldDirty: true,
-    });
-    if (!newValue) {
-      setValue('applicationData.rockExcavation', false, { shouldDirty: true });
-    } else {
-      setValue('applicationData.rockExcavation', null, { shouldDirty: true });
-    }
   }
 
   function handlePlacementContractsChange(updatedContracts: string[]) {
@@ -159,23 +157,36 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
       <Box as="h3" className="heading-s" marginBottom="var(--spacing-s)">
         {t('hakemus:labels:cableReportTitle')}
       </Box>
-      <Box as="div" marginBottom="var(--spacing-s)">
-        <ToggleButton
-          {...register('applicationData.cableReportDone')}
-          id="applicationData.createCablereport"
-          label={t('hakemus:labels:createCableReport')}
-          checked={!createCableReportNotChecked}
-          onChange={handleCreateCableReportChange}
-        />
+      <Box as="p" marginBottom="var(--spacing-s)">
+        {t('kaivuilmoitusForm:perustiedot:cableReportInstructions')}
       </Box>
-      {!createCableReportNotChecked && (
-        <Box as="div" marginBottom="var(--spacing-s)">
-          <Fieldset heading={t('hakemus:labels:newCableReport')} border>
+      <Box marginBottom="var(--spacing-m)">
+        <SelectionGroup
+          label={t('hakemus:labels:applyingCableReport')}
+          required
+          direction="horizontal"
+        >
+          <BooleanRadioButton<KaivuilmoitusFormValues>
+            name="applicationData.cableReportDone"
+            label={t('hakemus:labels:createCableReport')}
+            id="createCableReportYes"
+            value={false}
+          />
+          <BooleanRadioButton<KaivuilmoitusFormValues>
+            name="applicationData.cableReportDone"
+            label={t('hakemus:labels:useExisting')}
+            id="createCableReportNo"
+            value={true}
+          />
+        </SelectionGroup>
+      </Box>
+      {cableReportDone === false && (
+        <Fieldset heading={t('hakemus:labels:newCableReport')} border className={styles.formRow}>
+          <Box marginTop="var(--spacing-3-xs)">
             <SelectionGroup
               label={t('hakemus:labels:rockExcavation')}
               direction="horizontal"
               required
-              className={styles.formRow}
               errorText={getInputErrorText(t, errors?.applicationData?.rockExcavation)}
             >
               <BooleanRadioButton<KaivuilmoitusFormValues>
@@ -191,23 +202,32 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
                 value={false}
               />
             </SelectionGroup>
-          </Fieldset>
-        </Box>
+          </Box>
+        </Fieldset>
       )}
-      {johtoselvitysIds !== undefined && (
-        <InputCombobox
-          id="applicationData.cableReports"
-          name="applicationData.cableReports"
-          options={uniq(johtoselvitysIds.concat(getValues('applicationData.cableReports') ?? []))}
-          label={t('hakemus:labels:cableReports')}
-          helperText={t('hakemus:labels:cableReportsHelp')}
+      {johtoselvitysIds !== undefined && cableReportDone === true && (
+        <Fieldset
+          heading={t('hakemus:labels:useExistingCableReports')}
+          border
           className={styles.formRow}
-          pattern={/^[jJ][sS]\d{7}$/}
-          errorText={t('hakemus:errors:cableReport')}
-          placeholder="JSXXXXXXX"
-          uppercase
-          required={createCableReportNotChecked}
-        />
+        >
+          <Box marginTop="var(--spacing-3-xs)">
+            <InputCombobox
+              id="applicationData.cableReports"
+              name="applicationData.cableReports"
+              options={uniq(
+                johtoselvitysIds.concat(getValues('applicationData.cableReports') ?? []),
+              )}
+              label={t('hakemus:labels:cableReports')}
+              helperText={t('hakemus:labels:cableReportsHelp')}
+              pattern={/^[jJ][sS]\d{7}$/}
+              errorText={t('hakemus:errors:cableReport')}
+              placeholder="JSXXXXXXX"
+              uppercase
+              required
+            />
+          </Box>
+        </Fieldset>
       )}
 
       <Box as="h3" className="heading-s" marginBottom="var(--spacing-s)">

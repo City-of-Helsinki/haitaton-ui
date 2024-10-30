@@ -204,7 +204,7 @@ export interface KaivuilmoitusData {
   maintenanceWork: boolean;
   emergencyWork: boolean;
   rockExcavation: boolean | null;
-  cableReportDone: boolean;
+  cableReportDone: boolean | null;
   cableReports?: string[];
   placementContracts?: string[];
   requiredCompetence: boolean;

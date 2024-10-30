@@ -86,7 +86,7 @@ const applicationDataSchema = yup.object().shape(
         is: true,
         then: (schema) => schema.min(1),
       }),
-    requiredCompetence: yup.boolean().required(),
+    requiredCompetence: yup.boolean().required().isTrue(),
     contractorWithContacts: customerWithContactsSchemaForKaivuilmoitus,
     customerWithContacts: customerWithContactsSchemaForKaivuilmoitusForTyostaVastaava,
     propertyDeveloperWithContacts: customerWithContactsSchemaForKaivuilmoitus.nullable(),
@@ -144,6 +144,7 @@ export const perustiedotSchema = yup.object({
     'emergencyWork',
     'requiredCompetence',
     'cableReports',
+    'cableReportDone',
   ]),
 });
 
