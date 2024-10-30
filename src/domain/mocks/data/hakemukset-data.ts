@@ -1202,8 +1202,8 @@ const hakemukset: Application[] = [
       TYO_VALMIS: [
         {
           type: 'TYO_VALMIS',
-          dateReported: new Date('2024-08-01'),
-          reportedAt: new Date('2024-08-01T15:15:15Z'),
+          dateReported: new Date('2024-08-02'),
+          reportedAt: new Date('2024-08-02T15:15:15Z'),
         },
       ],
     },
