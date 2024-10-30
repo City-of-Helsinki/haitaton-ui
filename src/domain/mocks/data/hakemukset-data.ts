@@ -1338,7 +1338,7 @@ const hakemukset: Application[] = [
     applicationIdentifier: 'KP2400003',
     applicationData: {
       applicationType: 'EXCAVATION_NOTIFICATION',
-      name: 'Aidasmäentien valmiit kaivuut',
+      name: 'Aidasmäentien toiminnallisen kunnon kaivuut',
       startTime: new Date('2023-01-12T00:00:00Z'),
       endTime: new Date('2024-11-12T00:00:00Z'),
       workDescription: 'Kaivetaan Aidasmäentiellä',

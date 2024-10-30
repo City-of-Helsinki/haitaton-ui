@@ -236,7 +236,7 @@ test('Should render correct number of applications if they exist', async () => {
 
   await user.click(screen.getByRole('tab', { name: /hakemukset/i }));
 
-  expect(screen.getAllByTestId('application-card')).toHaveLength(9);
+  expect(screen.getAllByTestId('application-card')).toHaveLength(10);
 });
 
 test('Should show information if no applications exist', async () => {
