@@ -451,7 +451,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         isLoading={applicationSendMutation.isLoading}
         onClose={closeSendDialog}
         onSend={onSendApplication}
-        applicationId={getValues('id') as number}
       />
     </FormProvider>
   );

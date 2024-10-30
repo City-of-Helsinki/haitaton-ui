@@ -12,7 +12,7 @@ import { ApplicationSendData, PaperDecisionReceiver } from '../types/application
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { sendSchema } from '../yupSchemas';
-import { Box, Grid, GridItem, VisuallyHiddenInput } from '@chakra-ui/react';
+import { Box, Grid, GridItem } from '@chakra-ui/react';
 import Text from '../../../common/components/text/Text';
 import TextInput from '../../../common/components/textInput/TextInput';
 
@@ -21,21 +21,13 @@ type Props = {
   isLoading: boolean;
   onClose: () => void;
   onSend: (paperDecisionReceiver?: PaperDecisionReceiver | null) => void;
-  applicationId: number;
 };
 
-const ApplicationSendDialog: React.FC<Props> = ({
-  isOpen,
-  isLoading,
-  onClose,
-  onSend,
-  applicationId,
-}) => {
+const ApplicationSendDialog: React.FC<Props> = ({ isOpen, isLoading, onClose, onSend }) => {
   const { t } = useTranslation();
   const formContext = useForm<ApplicationSendData>({
     resolver: yupResolver(sendSchema),
     defaultValues: {
-      applicationId: applicationId,
       orderPaperDecision: false,
       paperDecisionReceiver: null,
     },
@@ -86,12 +78,6 @@ const ApplicationSendDialog: React.FC<Props> = ({
       <FormProvider {...formContext}>
         <form onSubmit={handleSubmit(submitForm)}>
           <Dialog.Content>
-            <VisuallyHiddenInput
-              name="applicationId"
-              value={applicationId}
-              aria-hidden="true"
-              readOnly
-            />
             <Text tag="p" spacingBottom="s">
               {t('hakemus:sendDialog:instructions')}
             </Text>

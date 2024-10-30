@@ -499,7 +499,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         isLoading={applicationSendMutation.isLoading}
         onClose={closeSendDialog}
         onSend={onSendApplication}
-        applicationId={getValues('id') as number}
       />
     </FormProvider>
   );

@@ -730,7 +730,6 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
         isLoading={applicationSendMutation.isLoading}
         onClose={closeSendDialog}
         onSend={onSendApplication}
-        applicationId={application.id as number}
       />
     </InformationViewContainer>
   );
