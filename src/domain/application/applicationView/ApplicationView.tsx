@@ -292,9 +292,8 @@ function getLastValmistumisilmoitus(
   const lastReport = reports.toSorted(
     (a, b) => new Date(b.reportedAt).getTime() - new Date(a.reportedAt).getTime(),
   )[0];
-  const tyyppi = lastReport.type;
   return {
-    tyyppi,
+    type: lastReport.type,
     reportedAt: formatToFinnishDateTime(lastReport.reportedAt),
     dateReported: formatToFinnishDate(lastReport.dateReported),
   };
@@ -455,7 +454,7 @@ function ApplicationView({ application, hanke, signedInUser, onEditApplication }
                     <IconCheck aria-hidden="true" />
                     <Box as="span">
                       <Trans
-                        i18nKey={`hakemus:labels:completionDate:${lastValmistumisilmoitus.tyyppi}`}
+                        i18nKey={`hakemus:labels:completionDate:${lastValmistumisilmoitus.type}`}
                       >
                         Ilmoitettu {{ lastValmistumisilmoitus }}
                       </Trans>
