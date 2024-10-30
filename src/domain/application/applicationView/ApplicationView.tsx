@@ -567,7 +567,7 @@ function ApplicationView({
               </Button>
             </CheckRightsByHanke>
           )}
-          {alluStatus === AlluStatus.WAITING_INFORMATION && (
+          {applicationType === 'CABLE_REPORT' && alluStatus === AlluStatus.WAITING_INFORMATION && (
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
               <Button
                 theme="coat"
