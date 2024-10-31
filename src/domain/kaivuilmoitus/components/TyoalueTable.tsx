@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useFieldArray } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { Box, Flex } from '@chakra-ui/react';
-import { IconLocation, IconTrash, Table } from 'hds-react';
+import { IconAlertCircleFill, IconLinkExternal, IconLocation, IconTrash, Table } from 'hds-react';
 import clsx from 'clsx';
 import { Feature } from 'ol';
-import { Geometry } from 'ol/geom';
+import { Geometry, Polygon as OlPolygon } from 'ol/geom';
 import VectorSource from 'ol/source/Vector';
 import useDrawContext from '../../../common/components/map/modules/draw/useDrawContext';
 import { KaivuilmoitusFormValues } from '../types';
@@ -14,7 +14,11 @@ import ConfirmationDialog from '../../../common/components/HDSConfirmationDialog
 import './TyoalueTable.css';
 import { getSurfaceArea } from '../../../common/components/map/utils';
 import { OverlayProps } from '../../../common/components/map/types';
-import { ApplicationArea, HankkeenHakemus } from '../../application/types/application';
+import {
+  ApplicationArea,
+  ApplicationGeometry,
+  HankkeenHakemus,
+} from '../../application/types/application';
 import { booleanIntersects } from '@turf/boolean-intersects';
 import booleanContains from '@turf/boolean-contains';
 import useLinkPath from '../../../common/hooks/useLinkPath';
@@ -48,30 +52,43 @@ function getOverlappingNotification(
   overlappingJohtoselvitykset: HankkeenHakemus[],
   t: TFunction,
   getApplicationPathView: (routeParams: Record<string, string>) => string,
-): string | JSX.Element | null {
+): JSX.Element | null {
   if (overlappingCount > 1) {
-    return t('hakemus:labels:workAreaOverlapsMultiple');
+    return (
+      <Flex gap="var(--spacing-xs)">
+        <IconAlertCircleFill color="var(--color-alert-dark)" />
+        <Box as="span">{t('hakemus:labels:workAreaOverlapsMultiple')}</Box>
+      </Flex>
+    );
   }
   if (overlappingCount == 1) {
     return (
-      <Trans
-        i18nKey="hakemus:labels:workAreaOverlapsSingle"
-        components={{
-          a: (
-            <Link
-              href={getApplicationPathView({ id: overlappingJohtoselvitykset[0].id!.toString() })}
-              openInNewTab={true}
-              external={true}
-            >
-              Hakemus
-            </Link>
-          ),
-        }}
-        values={{ applicationIdentifier: overlappingJohtoselvitykset[0].applicationIdentifier }}
-      >
-        Työalue ylittää johtoselvityksen rajauksen, tee johtoselvitykseen{' '}
-        <a>{overlappingJohtoselvitykset[0].applicationIdentifier}</a> muutosilmoitus
-      </Trans>
+      <Flex gap="var(--spacing-xs)">
+        <IconAlertCircleFill color="var(--color-alert-dark)" />
+        <Box as="span">
+          <Trans
+            i18nKey="hakemus:labels:workAreaOverlapsSingle"
+            components={{
+              a: (
+                <Link
+                  href={getApplicationPathView({
+                    id: overlappingJohtoselvitykset[0].id!.toString(),
+                  })}
+                  openInNewTab={true}
+                  external={true}
+                >
+                  Hakemus
+                </Link>
+              ),
+            }}
+            values={{ applicationIdentifier: overlappingJohtoselvitykset[0].applicationIdentifier }}
+          >
+            Työalue ylittää johtoselvityksen rajauksen, tee johtoselvitykseen{' '}
+            <a>{overlappingJohtoselvitykset[0].applicationIdentifier}</a> muutosilmoitus
+          </Trans>
+        </Box>
+        <IconLinkExternal />
+      </Flex>
     );
   }
   return null;
@@ -105,8 +122,11 @@ export default function TyoalueTable({
       johtoselvitykset.filter((application) => {
         return application.applicationData.areas?.find((area) => {
           const applicationArea = area as ApplicationArea;
-          const areaIntersects = booleanIntersects(applicationArea.geometry, alue.geometry);
-          const areaContains = booleanContains(applicationArea.geometry, alue.geometry);
+          const alueGeometry = new ApplicationGeometry(
+            (alue.openlayersFeature!.getGeometry()! as OlPolygon).getCoordinates(),
+          );
+          const areaIntersects = booleanIntersects(applicationArea.geometry, alueGeometry);
+          const areaContains = booleanContains(applicationArea.geometry, alueGeometry);
           return areaIntersects && !areaContains;
         });
       }) || [];
@@ -168,6 +188,7 @@ export default function TyoalueTable({
       headerName: `${t('form:labels:pintaAla')} (m²)`,
       key: 'pintaAla',
       isSortable: true,
+      transform: (args: TableData) => <Flex justifyContent="right">{args.pintaAla}</Flex>,
     },
     {
       headerName: '',
@@ -219,6 +240,7 @@ export default function TyoalueTable({
           rows={tableRows}
           indexKey="id"
           zebra
+          dense
           theme={{
             '--header-background-color': 'var(--color-black-90)',
           }}
