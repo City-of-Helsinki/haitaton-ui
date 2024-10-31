@@ -1,5 +1,5 @@
 import yup from '../../common/utils/yup';
-import { AlluStatus, ContactType } from '../application/types/application';
+import { AlluStatus, ContactType, KaivuilmoitusData } from '../application/types/application';
 import {
   applicationTypeSchema,
   customerSchema,
@@ -18,7 +18,7 @@ import {
   HANKE_TYOMAATYYPPI_KEY,
 } from '../types/hanke';
 import { HaittaIndexData } from '../common/haittaIndexes/types';
-import { Taydennyspyynto } from '../application/taydennys/types';
+import { Taydennys, Taydennyspyynto } from '../application/taydennys/types';
 
 const tyoalueSchema = yup.object({
   geometry: geometrySchema.required(),
@@ -130,6 +130,7 @@ export const validationSchema: yup.ObjectSchema<KaivuilmoitusFormValues> = yup.o
   applicationData: applicationDataSchema,
   valmistumisilmoitukset: yup.object().nullable().notRequired(),
   taydennyspyynto: yup.mixed<Taydennyspyynto>().nullable(),
+  taydennys: yup.mixed<Taydennys<KaivuilmoitusData>>().nullable(),
   selfIntersectingPolygon: yup.boolean().isFalse(),
   geometriesChanged: yup.boolean(),
 });

@@ -13,6 +13,7 @@ import {
   JohtoselvitysUpdateData,
 } from '../application/types/application';
 import { JohtoselvitysArea, JohtoselvitysFormValues } from './types';
+import { JohtoselvitysTaydennysFormValues } from '../johtoselvitysTaydennys/types';
 
 /**
  * Find the contact key that has orderer field true
@@ -48,7 +49,7 @@ export function getAreaGeometries(areas: JohtoselvitysArea[]) {
  * latest OpenLayers feature coordinates.
  */
 export function convertFormStateToJohtoselvitysUpdateData(
-  formState: JohtoselvitysFormValues,
+  formState: JohtoselvitysFormValues | JohtoselvitysTaydennysFormValues,
 ): JohtoselvitysUpdateData {
   // eslint-disable-next-line no-param-reassign
   delete formState.geometriesChanged;
@@ -88,6 +89,13 @@ export function convertFormStateToJohtoselvitysUpdateData(
   return applicationData;
 }
 
+export function mapToJohtoselvitysArea({ geometry }: ApplicationArea): JohtoselvitysArea {
+  return {
+    geometry,
+    feature: new Feature(new Polygon(geometry.coordinates)),
+  };
+}
+
 export function convertApplicationDataToFormState(
   application: Application<JohtoselvitysData> | undefined,
 ): JohtoselvitysFormValues | undefined {
@@ -97,14 +105,7 @@ export function convertApplicationDataToFormState(
 
   const data = cloneDeep(application);
 
-  const updatedAreas: JohtoselvitysArea[] = application.applicationData.areas.map(
-    function mapToJohtoselvitysArea({ geometry }): JohtoselvitysArea {
-      return {
-        geometry,
-        feature: new Feature(new Polygon(geometry.coordinates)),
-      };
-    },
-  );
+  const updatedAreas = application.applicationData.areas.map(mapToJohtoselvitysArea);
 
   data.applicationData.areas = updatedAreas;
 

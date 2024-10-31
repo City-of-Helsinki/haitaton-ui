@@ -5,7 +5,7 @@ import {
   modifyDataBeforeSend,
 } from './utils';
 import hakemukset from '../mocks/data/hakemukset-data';
-import { ContactType } from './types/application';
+import { Application, ContactType, KaivuilmoitusData } from './types/application';
 import { HIDDEN_FIELD_VALUE } from './constants';
 
 describe('getCurrentDecisions', () => {
@@ -288,7 +288,9 @@ describe('modifyDataAfterReceive', () => {
         },
       };
 
-      const modifiedApplication = modifyDataAfterReceive(application);
+      const modifiedApplication = modifyDataAfterReceive(
+        application as Application<KaivuilmoitusData>,
+      );
 
       expect(modifiedApplication.applicationData.invoicingCustomer?.registryKey).toEqual(
         HIDDEN_FIELD_VALUE,

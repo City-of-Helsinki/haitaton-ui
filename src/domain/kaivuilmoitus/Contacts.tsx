@@ -24,7 +24,7 @@ function getInvoicingRegistryKeyLabel(
   return t('form:yhteystiedot:labels:ytunnus');
 }
 
-export default function Contacts() {
+export default function Contacts({ hankeTunnus }: Readonly<{ hankeTunnus: string | null }>) {
   const { t } = useTranslation();
   const { watch, setValue, resetField, trigger } = useFormContext<KaivuilmoitusFormValues>();
 
@@ -125,7 +125,7 @@ export default function Contacts() {
 
   return (
     <>
-      <ApplicationContacts />
+      <ApplicationContacts hankeTunnus={hankeTunnus} />
 
       <Box marginTop="var(--spacing-l)" marginBottom="var(--spacing-l)" minInlineSize="auto">
         <Box marginBottom="var(--spacing-l)">
