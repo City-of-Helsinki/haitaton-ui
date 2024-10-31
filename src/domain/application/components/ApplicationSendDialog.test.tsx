@@ -4,13 +4,7 @@ import { waitFor } from '@testing-library/react';
 
 test('Shows correct information when opened', async () => {
   render(
-    <ApplicationSendDialog
-      isOpen={true}
-      isLoading={false}
-      onClose={() => {}}
-      onSend={() => {}}
-      applicationId={1}
-    />,
+    <ApplicationSendDialog isOpen={true} isLoading={false} onClose={() => {}} onSend={() => {}} />,
   );
 
   expect(screen.getByText(/lähetä hakemus\?/i)).toBeInTheDocument();
@@ -34,13 +28,7 @@ test('Shows correct information when opened', async () => {
 
 test('Shows correct information when ordering paper decision', async () => {
   const { user } = render(
-    <ApplicationSendDialog
-      isOpen={true}
-      isLoading={false}
-      onClose={() => {}}
-      onSend={() => {}}
-      applicationId={1}
-    />,
+    <ApplicationSendDialog isOpen={true} isLoading={false} onClose={() => {}} onSend={() => {}} />,
   );
 
   const orderPaperDecisionButton = screen.getByRole('button', {
@@ -73,13 +61,7 @@ test('Shows correct information when ordering paper decision', async () => {
 
 test('Enables confirmation button when form is filled', async () => {
   const { user } = render(
-    <ApplicationSendDialog
-      isOpen={true}
-      isLoading={false}
-      onClose={() => {}}
-      onSend={() => {}}
-      applicationId={1}
-    />,
+    <ApplicationSendDialog isOpen={true} isLoading={false} onClose={() => {}} onSend={() => {}} />,
   );
 
   const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
@@ -106,13 +88,7 @@ test('Enables confirmation button when form is filled', async () => {
 test('Confirm calls onSend', async () => {
   const onSend = jest.fn();
   const { user } = render(
-    <ApplicationSendDialog
-      isOpen={true}
-      isLoading={false}
-      onClose={() => {}}
-      onSend={onSend}
-      applicationId={1}
-    />,
+    <ApplicationSendDialog isOpen={true} isLoading={false} onClose={() => {}} onSend={onSend} />,
   );
 
   const orderPaperDecisionButton = screen.getByRole('button', {
@@ -136,13 +112,7 @@ test('Confirm calls onSend', async () => {
 test('Cancel calls onClose', async () => {
   const onClose = jest.fn();
   const { user } = render(
-    <ApplicationSendDialog
-      isOpen={true}
-      isLoading={false}
-      onClose={onClose}
-      onSend={() => {}}
-      applicationId={1}
-    />,
+    <ApplicationSendDialog isOpen={true} isLoading={false} onClose={onClose} onSend={() => {}} />,
   );
 
   const cancelButton = screen.getByRole('button', { name: 'Peruuta' });

@@ -122,7 +122,6 @@ export const areaSchema = yup.object({
 export const applicationTypeSchema = yup.mixed<ApplicationType>().defined().required();
 
 export const sendSchema = yup.object().shape({
-  applicationId: yup.number().defined().required(),
   orderPaperDecision: yup.boolean().required(),
   paperDecisionReceiver: yup.lazy((_value, context) => {
     // Checking the value of `orderPaperDecision` from the context
