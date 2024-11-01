@@ -46,6 +46,38 @@ test('Shows correct information when opened for cable report', async () => {
   expect(screen.getByText(/lähetä hakemus\?/i)).toBeInTheDocument();
   expect(
     screen.getByText(
+      'Hakemuksen päätös ja mahdolliset täydennyspyynnöt tulevat Haitaton-järjestelmään. Lähettämällä hakemuksen, sitoudut sähköiseen tiedoksiantoon. Halutessasi voit tilata päätöksen myös paperisena ilmoittamaasi osoitteeseen.',
+    ),
+  ).toBeInTheDocument();
+  const orderPaperDecisionButton = screen.getByRole('button', {
+    name: 'Tilaan päätöksen myös paperisena',
+  });
+  expect(orderPaperDecisionButton).toBeInTheDocument();
+  expect(orderPaperDecisionButton).toBeEnabled();
+  const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
+  expect(confirmButton).toBeInTheDocument();
+  await waitFor(() => expect(confirmButton).toBeEnabled(), { timeout: 5000 });
+  const cancelButton = screen.getByRole('button', { name: 'Peruuta' });
+  expect(cancelButton).toBeInTheDocument();
+  expect(cancelButton).toBeEnabled();
+});
+
+test('Shows correct information when opened for cable report when paper decision feature is disabled', async () => {
+  const OLD_ENV = { ...window._env_ };
+  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_CABLE_REPORT_PAPER_DECISION: 0 };
+  render(
+    <ApplicationSendDialog
+      type="CABLE_REPORT"
+      isOpen={true}
+      isLoading={false}
+      onClose={() => {}}
+      onSend={() => {}}
+    />,
+  );
+
+  expect(screen.getByText(/lähetä hakemus\?/i)).toBeInTheDocument();
+  expect(
+    screen.getByText(
       'Hakemuksen päätös ja mahdolliset täydennyspyynnöt tulevat Haitaton-järjestelmään. Lähettämällä hakemuksen, sitoudut sähköiseen tiedoksiantoon.',
     ),
   ).toBeInTheDocument();
@@ -59,6 +91,9 @@ test('Shows correct information when opened for cable report', async () => {
   const cancelButton = screen.getByRole('button', { name: 'Peruuta' });
   expect(cancelButton).toBeInTheDocument();
   expect(cancelButton).toBeEnabled();
+
+  jest.resetModules();
+  window._env_ = OLD_ENV;
 });
 
 test('Shows correct information when ordering paper decision', async () => {
