@@ -753,6 +753,7 @@ function ApplicationView({
         />
       )}
       <ApplicationSendDialog
+        type={applicationType}
         isOpen={showSendDialog}
         isLoading={applicationSendMutation.isLoading}
         onClose={closeSendDialog}

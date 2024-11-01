@@ -495,6 +495,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
       />
 
       <ApplicationSendDialog
+        type="CABLE_REPORT"
         isOpen={showSendDialog}
         isLoading={applicationSendMutation.isLoading}
         onClose={closeSendDialog}

@@ -7,6 +7,7 @@ type FeatureFlagsProviderProps = {
 export type FeatureFlagsContextProps = {
   publicHankkeet: boolean;
   hanke: boolean;
+  cableReportPaperDecision: boolean;
 };
 
 const FeatureFlagsContext = createContext<FeatureFlagsContextProps | undefined>(undefined);
@@ -16,6 +17,7 @@ export function FeatureFlagsProvider({ children }: FeatureFlagsProviderProps) {
     () => ({
       publicHankkeet: window._env_.REACT_APP_FEATURE_PUBLIC_HANKKEET === '1',
       hanke: window._env_.REACT_APP_FEATURE_HANKE === '1',
+      cableReportPaperDecision: window._env_.REACT_APP_FEATURE_CABLE_REPORT_PAPER_DECISION === '1',
     }),
     [],
   );
