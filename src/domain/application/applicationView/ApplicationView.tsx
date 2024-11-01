@@ -86,6 +86,7 @@ import CustomAccordion from '../../../common/components/customAccordion/CustomAc
 import useFilterHankeAlueetByApplicationDates from '../hooks/useFilterHankeAlueetByApplicationDates';
 import ApplicationSendDialog from '../components/ApplicationSendDialog';
 import TaydennyspyyntoNotification from '../taydennys/TaydennyspyyntoNotification';
+import { useQueryClient } from 'react-query';
 
 function SidebarTyoalueet({
   tyoalueet,
@@ -281,19 +282,18 @@ function getLastValmistumisilmoitus(
   if (alluStatus == null || valmistumisilmoitukset == null) {
     return null;
   }
-  const reports =
-    alluStatus === 'OPERATIONAL_CONDITION'
-      ? valmistumisilmoitukset['TOIMINNALLINEN_KUNTO']
-      : valmistumisilmoitukset['TYO_VALMIS'];
-  if (!reports) {
+  const reports = [
+    ...(valmistumisilmoitukset.TYO_VALMIS || []),
+    ...(valmistumisilmoitukset.TOIMINNALLINEN_KUNTO || []),
+  ];
+  if (reports.length === 0) {
     return null;
   }
-  const tyyppi = alluStatus === 'OPERATIONAL_CONDITION' ? 'TOIMINNALLINEN_KUNTO' : 'TYO_VALMIS';
   const lastReport = reports.toSorted(
     (a, b) => new Date(b.reportedAt).getTime() - new Date(a.reportedAt).getTime(),
   )[0];
   return {
-    tyyppi,
+    type: lastReport.type,
     reportedAt: formatToFinnishDateTime(lastReport.reportedAt),
     dateReported: formatToFinnishDate(lastReport.dateReported),
   };
@@ -322,6 +322,7 @@ function ApplicationView({
   creatingTaydennys,
 }: Readonly<Props>) {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const [showSendDialog, setShowSendDialog] = useState(false);
   const [showReportOperationalConditionDialog, setShowReportOperationalConditionDialog] =
@@ -414,6 +415,7 @@ function ApplicationView({
   }
 
   function closeReportOperationalConditionDialog() {
+    queryClient.invalidateQueries(['application', id], { refetchInactive: true }).then(() => {});
     setShowReportOperationalConditionDialog(false);
   }
 
@@ -422,6 +424,7 @@ function ApplicationView({
   }
 
   function closeReportWorkFinishedDialog() {
+    queryClient.invalidateQueries(['application', id], { refetchInactive: true }).then(() => {});
     setShowReportWorkFinishedDialog(false);
   }
 
@@ -461,7 +464,7 @@ function ApplicationView({
                     <IconCheck aria-hidden="true" />
                     <Box as="span">
                       <Trans
-                        i18nKey={`hakemus:labels:completionDate:${lastValmistumisilmoitus.tyyppi}`}
+                        i18nKey={`hakemus:labels:completionDate:${lastValmistumisilmoitus.type}`}
                       >
                         Ilmoitettu {{ lastValmistumisilmoitus }}
                       </Trans>

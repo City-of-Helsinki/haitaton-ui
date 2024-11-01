@@ -420,14 +420,26 @@ describe('Cable report application view', () => {
 });
 
 describe('Excavation notification application view', () => {
-  test('Shows last completion date', async () => {
-    render(<ApplicationViewContainer id={10} />);
+  test('Shows last completion date for operational condition', async () => {
+    render(<ApplicationViewContainer id={12} />);
     await waitForLoadingToFinish();
 
     const reportedDate = new Date('2024-08-01T15:15:00.000Z');
     expect(
       screen.getByText(
-        `Ilmoitettu valmiiksi 1.8.2024 ${format(reportedDate, 'HH:mm')} päivämäärälle 1.8.2024`,
+        `Ilmoitettu toiminnalliseen kuntoon 1.8.2024 ${format(reportedDate, 'HH:mm')} päivämäärälle 1.8.2024`,
+      ),
+    ).toBeInTheDocument();
+  });
+
+  test('Shows last completion date for work finished', async () => {
+    render(<ApplicationViewContainer id={10} />);
+    await waitForLoadingToFinish();
+
+    const reportedDate = new Date('2024-08-02T15:15:00.000Z');
+    expect(
+      screen.getByText(
+        `Ilmoitettu valmiiksi 2.8.2024 ${format(reportedDate, 'HH:mm')} päivämäärälle 2.8.2024`,
       ),
     ).toBeInTheDocument();
   });
