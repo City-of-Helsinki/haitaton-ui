@@ -353,6 +353,18 @@ describe('Cable report application view', () => {
 
       expect(screen.queryByRole('heading', { name: 'Täydennyspyyntö' })).not.toBeInTheDocument();
     });
+
+    test('Does not show taydennyspyynto notification if feature is not enabled', async () => {
+      const OLD_ENV = { ...window._env_ };
+      window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_INFORMATION_REQUEST: 0 };
+      render(<ApplicationViewContainer id={11} />);
+      await waitForLoadingToFinish();
+
+      expect(screen.queryByRole('heading', { name: 'Täydennyspyyntö' })).not.toBeInTheDocument();
+
+      jest.resetModules();
+      window._env_ = OLD_ENV;
+    });
   });
 
   describe('Taydennys', () => {
@@ -366,6 +378,36 @@ describe('Cable report application view', () => {
       await waitForLoadingToFinish();
       return renderResult;
     }
+
+    test('Does not show create taydennys button if the feature is disabled', async () => {
+      const OLD_ENV = { ...window._env_ };
+      window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_INFORMATION_REQUEST: 0 };
+      const application = cloneDeep(hakemukset[10]) as Application<JohtoselvitysData>;
+      await setup(application);
+
+      expect(screen.queryByRole('button', { name: 'Täydennä' })).not.toBeInTheDocument();
+
+      jest.resetModules();
+      window._env_ = OLD_ENV;
+    });
+
+    test('Does not show edit taydennys button if the feature is disabled', async () => {
+      const OLD_ENV = { ...window._env_ };
+      window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_INFORMATION_REQUEST: 0 };
+      const application = cloneDeep(hakemukset[10]) as Application<JohtoselvitysData>;
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: application.applicationData,
+      };
+      await setup(application);
+
+      expect(
+        screen.queryByRole('button', { name: 'Muokkaa hakemusta (täydennys)' }),
+      ).not.toBeInTheDocument();
+
+      jest.resetModules();
+      window._env_ = OLD_ENV;
+    });
 
     test('Creates taydennys and navigates to edit taydennys path if taydennys does not exist', async () => {
       const taydennysCreateSpy = jest.spyOn(taydennysApi, 'createTaydennys');
