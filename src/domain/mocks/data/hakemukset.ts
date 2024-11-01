@@ -44,7 +44,6 @@ export async function readAllForHanke(hankeTunnus: string): Promise<HankkeenHake
           name: application.applicationData.name,
           startTime: application.applicationData.startTime,
           endTime: application.applicationData.endTime,
-          pendingOnClient: isApplicationPending(application.alluStatus),
           areas: application.applicationData.areas,
         },
       };
