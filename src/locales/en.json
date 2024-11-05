@@ -786,7 +786,7 @@
       "applicationAdditionalInfo": "Additional information on the application",
       "applicationInfo": "Application information",
       "cableReports": "Identifiers of previous cable reports",
-      "cableReportsHelp": "Select one from the list or enter another identifier and press ‘Enter’ to add it",
+      "cableReportsHelp": "Select one from the list or enter another identifier and press ‘Enter’ to add it[TRANSLATION_PENDING]",
       "placementContractsTitle": "Placement agreements",
       "placementContracts": "Placement agreement identifier",
       "placementContractsHelp": "Enter the placement agreement identifier and press ‘Add’",

@@ -87,7 +87,7 @@ async function fillBasicInformation(
   }
 
   for (const cableReport of cableReports) {
-    fireEvent.change(screen.getByRole('combobox'), {
+    fireEvent.change(screen.getAllByRole('combobox')[1], {
       target: { value: cableReport },
     });
     await user.keyboard('{Enter}');
@@ -424,7 +424,7 @@ test('Should be able to fill form pages and show filled information in summary p
       cableReports: [],
       placementContracts: [],
       requiredCompetence: false,
-      areas: applications[4].applicationData.areas as KaivuilmoitusAlue[],
+      areas: cloneDeep(applications[4].applicationData.areas) as KaivuilmoitusAlue[],
       startTime: null,
       endTime: null,
       representativeWithContacts: null,
@@ -876,7 +876,7 @@ test('Should be able to upload attachments', async () => {
   const { user } = render(
     <KaivuilmoitusContainer
       hankeData={hankeData}
-      application={applications[4] as Application<KaivuilmoitusData>}
+      application={cloneDeep(applications[4]) as Application<KaivuilmoitusData>}
     />,
   );
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
@@ -938,7 +938,7 @@ test('Should be able to delete attachments', async () => {
   const { user } = render(
     <KaivuilmoitusContainer
       hankeData={hankeData}
-      application={applications[4] as Application<KaivuilmoitusData>}
+      application={cloneDeep(applications[4]) as Application<KaivuilmoitusData>}
     />,
   );
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
@@ -1004,7 +1004,7 @@ test('Should list existing attachments in the attachments page', async () => {
   const { user } = render(
     <KaivuilmoitusContainer
       hankeData={hankeData}
-      application={applications[4] as Application<KaivuilmoitusData>}
+      application={cloneDeep(applications[4]) as Application<KaivuilmoitusData>}
     />,
   );
   const button = await screen.findByRole('button', { name: /liitteet/i });
@@ -1244,7 +1244,7 @@ test('Should show and disable send button and show notification when user is not
 
 test('Should be able to fill user email and phone by selecting existing user in user name search input', async () => {
   const hankeData = hankkeet[1] as HankeData;
-  const application = applications[4] as Application<KaivuilmoitusData>;
+  const application = cloneDeep(applications[4]) as Application<KaivuilmoitusData>;
   const { user } = render(
     <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
   );

@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import VectorSource from 'ol/source/Vector';
 import { StyleLike } from 'ol/style/Style';
 import { useApplication } from '../../../application/hooks/useApplication';
-import { ApplicationArea } from '../../../application/types/application';
+import { ApplicationArea, KaivuilmoitusAlue } from '../../../application/types/application';
 import VectorLayer from '../../../../common/components/map/layers/VectorLayer';
 import useApplicationFeatures from '../../hooks/useApplicationFeatures';
 import { OverlayProps } from '../../../../common/components/map/types';
@@ -19,13 +19,24 @@ export default function HakemusLayer({
   featureProperties = {},
 }: Readonly<Props>) {
   const source = useRef(new VectorSource());
-  const { data } = useApplication(hakemusId);
-  const tyoalueet = (data?.applicationData.areas as ApplicationArea[]) ?? [];
+  const { data: application } = useApplication(hakemusId);
+  let tyoalueet: ApplicationArea[] = [];
+  if (application) {
+    tyoalueet =
+      application.applicationType === 'CABLE_REPORT'
+        ? (application.applicationData.areas as ApplicationArea[])
+        : (application.applicationData.areas as KaivuilmoitusAlue[]).flatMap(
+            (area) => area.tyoalueet,
+          );
+  }
+
   useApplicationFeatures(source.current, tyoalueet, {
     overlayProps: new OverlayProps({
-      heading: data ? `${data.applicationData.name} (${data.applicationIdentifier})` : null,
-      startDate: data?.applicationData.startTime,
-      endDate: data?.applicationData.endTime,
+      heading: application
+        ? `${application.applicationData.name} (${application.applicationIdentifier})`
+        : null,
+      startDate: application?.applicationData.startTime,
+      endDate: application?.applicationData.endTime,
       backgroundColor: 'var(--color-suomenlinna-light)',
       enableCopyArea: true,
     }),

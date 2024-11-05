@@ -1116,7 +1116,7 @@
       "useExistingCableReports": "Käytä olemassa olevia johtoselvityksiä",
       "newCableReport": "Uusi johtoselvitys",
       "cableReports": "Tehtyjen johtoselvitysten tunnukset",
-      "cableReportsHelp": "Valitse listasta tai kirjoita muu tunnus ja paina Enter lisätäksesi",
+      "cableReportsHelp": "Valitse kartalta tai listasta tai kirjoita muu tunnus ja paina Enter lisätäksesi",
       "placementContractsTitle": "Sijoitussopimukset",
       "placementContracts": "Sijoitussopimustunnus",
       "placementContractsHelp": "Anna sijoitussopimustunnus ja paina Lisää",
@@ -1218,7 +1218,9 @@
       "deletePlacementContract": "Poista sijoitussopimustunnus {{id}}",
       "reportOperationalCondition": "Ilmoita toiminnalliseen kuntoon",
       "reportWorkFinished": "Ilmoita valmiiksi",
-      "copyWorkArea": "Kopioi työalueeksi"
+      "copyWorkArea": "Kopioi työalueeksi",
+      "removeSelection": "Poista valinta",
+      "selectCableReport": "Valitse johtoselvitys"
     },
     "errors": {
       "cancelConflict": "Hakemusta ei voida perua, koska se on edennyt käsittelyyn",

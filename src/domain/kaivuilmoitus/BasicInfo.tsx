@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Box } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
@@ -13,12 +13,21 @@ import TagInput from '../../common/components/tagInput/TagInput';
 import InputCombobox from '../../common/components/inputCombobox/InputCombobox';
 import { getInputErrorText } from '../../common/utils/form';
 import BooleanRadioButton from '../../common/components/radiobutton/BooleanRadioButton';
+import JohtoselvitysSelectionMap from '../map/components/JohtoselvitysSelectionMap/JohtoselvitysSelectionMap';
+import { HankeData } from '../types/hanke';
+import { HankkeenHakemus } from '../application/types/application';
 
 type Props = {
+  hankeData: HankeData;
+  hankkeenHakemukset: HankkeenHakemus[];
   johtoselvitysIds?: string[];
 };
 
-export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
+export default function BasicInfo({
+  johtoselvitysIds,
+  hankeData,
+  hankkeenHakemukset,
+}: Readonly<Props>) {
   const { t } = useTranslation();
   const {
     register,
@@ -68,6 +77,12 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
       { shouldDirty: true },
     );
   }
+
+  const handleJohtoselvitysSelection = useCallback(
+    (tunnukset: string[]) =>
+      setValue('applicationData.cableReports', tunnukset, { shouldDirty: true }),
+    [setValue],
+  );
 
   return (
     <div>
@@ -212,6 +227,12 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
           className={styles.formRow}
         >
           <Box marginTop="var(--spacing-3-xs)">
+            <JohtoselvitysSelectionMap
+              hankeData={hankeData}
+              hankkeenHakemukset={hankkeenHakemukset}
+              selectedJohtoselvitysTunnukset={getValues('applicationData.cableReports') ?? []}
+              onSelectJohtoselvitys={handleJohtoselvitysSelection}
+            />
             <InputCombobox
               id="applicationData.cableReports"
               name="applicationData.cableReports"

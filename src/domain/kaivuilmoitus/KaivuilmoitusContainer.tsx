@@ -281,7 +281,13 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
 
   const formSteps = [
     {
-      element: <BasicInfo johtoselvitysIds={johtoselvitysIds} />,
+      element: (
+        <BasicInfo
+          hankeData={hankeData}
+          johtoselvitysIds={johtoselvitysIds}
+          hankkeenHakemukset={hankkeenHakemukset?.applications ?? []}
+        />
+      ),
       label: t('form:headers:perustiedot'),
       state: StepState.available,
       validationSchema: perustiedotSchema,

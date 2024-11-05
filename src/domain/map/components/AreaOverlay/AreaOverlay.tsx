@@ -5,10 +5,10 @@ import { formatToFinnishDate } from '../../../../common/utils/date';
 
 type Props = {
   overlayProps?: OverlayProps;
-  copyAreaElement?: React.ReactNode;
+  children?: React.ReactNode;
 };
 
-export default function AreaOverlay({ overlayProps, copyAreaElement }: Readonly<Props>) {
+export default function AreaOverlay({ overlayProps, children }: Readonly<Props>) {
   if (!overlayProps) {
     return null;
   }
@@ -32,7 +32,7 @@ export default function AreaOverlay({ overlayProps, copyAreaElement }: Readonly<
           {formatToFinnishDate(startDate)}–{formatToFinnishDate(endDate)}
         </Box>
       )}
-      {copyAreaElement && <Box marginTop="var(--spacing-3-xs)">{copyAreaElement}</Box>}
+      {children && <Box marginTop="var(--spacing-3-xs)">{children}</Box>}
     </Box>
   );
 }
