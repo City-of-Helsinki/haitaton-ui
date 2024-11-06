@@ -142,23 +142,85 @@ const hakemukset: Application[] = [
         {
           name: '',
           geometry: {
-            coordinates: [
-              [
-                [25496600.4, 6672964.92],
-                [25496623.43, 6672970.52],
-                [25496648.96, 6672941.62],
-                [25496646.75, 6672912.49],
-                [25496623.66, 6672920.17],
-                [25496600.4, 6672964.92],
-              ],
-            ],
             type: 'Polygon',
             crs: {
-              type: 'Polygon',
+              type: 'name',
               properties: {
-                name: '',
+                name: 'urn:ogc:def:crs:EPSG::3879',
               },
             },
+            coordinates: [
+              [
+                [25494614.68871366, 6683906.637168662],
+                [25494619.414848547, 6683899.965002187],
+                [25494627.1990258, 6683905.525157884],
+                [25494621.638921008, 6683912.475314327],
+                [25494614.68871366, 6683906.637168662],
+              ],
+            ],
+          },
+        },
+        {
+          name: '',
+          geometry: {
+            type: 'Polygon',
+            crs: {
+              type: 'name',
+              properties: {
+                name: 'urn:ogc:def:crs:EPSG::3879',
+              },
+            },
+            coordinates: [
+              [
+                [25494628.033046607, 6683959.458482345],
+                [25494618.58082774, 6683951.396289672],
+                [25494613.298712913, 6683959.18047965],
+                [25494621.916910976, 6683967.24268505],
+                [25494628.033046607, 6683959.458482345],
+              ],
+            ],
+          },
+        },
+        {
+          name: '',
+          geometry: {
+            type: 'Polygon',
+            crs: {
+              type: 'name',
+              properties: {
+                name: 'urn:ogc:def:crs:EPSG::3879',
+              },
+            },
+            coordinates: [
+              [
+                [25494639.781447817, 6683917.252315638],
+                [25494637.66393985, 6683925.29874123],
+                [25494651.427586548, 6683933.556921495],
+                [25494653.333320457, 6683924.875251267],
+                [25494639.781447817, 6683917.252315638],
+              ],
+            ],
+          },
+        },
+        {
+          name: '',
+          geometry: {
+            type: 'Polygon',
+            crs: {
+              type: 'name',
+              properties: {
+                name: 'urn:ogc:def:crs:EPSG::3879',
+              },
+            },
+            coordinates: [
+              [
+                [25494594.235660296, 6683935.024150826],
+                [25494601.411946468, 6683926.053793111],
+                [25494611.129843116, 6683931.585511421],
+                [25494604.701068502, 6683940.854883341],
+                [25494594.235660296, 6683935.024150826],
+              ],
+            ],
           },
         },
       ],
@@ -207,7 +269,7 @@ const hakemukset: Application[] = [
     alluStatus: AlluStatus.HANDLING,
     applicationType: 'CABLE_REPORT',
     hankeTunnus: 'HAI22-2',
-    applicationIdentifier: 'JS2300002',
+    applicationIdentifier: 'JS2300004',
     applicationData: {
       applicationType: 'CABLE_REPORT',
       name: 'Mannerheimintien parantaminen',
@@ -391,7 +453,7 @@ const hakemukset: Application[] = [
       emergencyWork: false,
       propertyConnectivity: false,
       rockExcavation: false,
-      cableReportDone: false,
+      cableReportDone: true,
       requiredCompetence: true,
       cableReports: ['JS2300002'],
       placementContracts: ['SL1234567'],
@@ -498,7 +560,7 @@ const hakemukset: Application[] = [
     alluStatus: AlluStatus.CANCELLED,
     applicationType: 'CABLE_REPORT',
     hankeTunnus: 'HAI22-4',
-    applicationIdentifier: 'JS2300002',
+    applicationIdentifier: 'JS2300005',
     applicationData: {
       applicationType: 'CABLE_REPORT',
       name: 'Mannerheimintien parantaminen',
@@ -585,9 +647,9 @@ const hakemukset: Application[] = [
       emergencyWork: false,
       propertyConnectivity: false,
       rockExcavation: false,
-      cableReportDone: false,
+      cableReportDone: true,
       requiredCompetence: true,
-      cableReports: ['JS2300002'],
+      cableReports: ['JS2300001', 'JS2300002'],
       placementContracts: ['SL1234567'],
       areas: [
         {
@@ -727,7 +789,7 @@ const hakemukset: Application[] = [
       emergencyWork: false,
       propertyConnectivity: false,
       rockExcavation: false,
-      cableReportDone: false,
+      cableReportDone: true,
       requiredCompetence: true,
       cableReports: ['JS2300002'],
       placementContracts: ['SL1234567'],
@@ -935,7 +997,29 @@ const hakemukset: Application[] = [
           },
         ],
       },
-      areas: [],
+      areas: [
+        {
+          name: '',
+          geometry: {
+            type: 'Polygon',
+            crs: {
+              type: 'name',
+              properties: {
+                name: 'urn:ogc:def:crs:EPSG::3879',
+              },
+            },
+            coordinates: [
+              [
+                [25494644.209000006, 6683933.009470033],
+                [25494637.653143637, 6683926.01656324],
+                [25494643.771929577, 6683921.864514204],
+                [25494649.67220031, 6683927.1091993],
+                [25494644.209000006, 6683933.009470033],
+              ],
+            ],
+          },
+        },
+      ],
       startTime: new Date('2023-07-13T21:59:59.999Z'),
       endTime: new Date('2023-09-31T21:59:59.999Z'),
       workDescription: 'Kaivetaan kuoppia Mannerheimintiellä',
@@ -1000,7 +1084,7 @@ const hakemukset: Application[] = [
       emergencyWork: false,
       propertyConnectivity: false,
       rockExcavation: false,
-      cableReportDone: false,
+      cableReportDone: true,
       requiredCompetence: true,
       cableReports: ['JS2300002'],
       placementContracts: ['SL1234567'],
@@ -1555,6 +1639,7 @@ export const hankkeenHakemukset: HankkeenHakemus[] = hakemukset
         startTime: hakemus.applicationData.startTime,
         endTime: hakemus.applicationData.endTime,
         pendingOnClient: hakemus.alluStatus === AlluStatus.PENDING_CLIENT,
+        areas: hakemus.applicationData.areas,
       },
       paatokset: hakemus.paatokset,
     };

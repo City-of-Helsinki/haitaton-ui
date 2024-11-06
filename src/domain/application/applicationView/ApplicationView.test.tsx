@@ -703,7 +703,6 @@ describe('Excavation notification application view', () => {
     describe('Report finisehd button', () => {
       test('Shows the button when work can be reported being finished', async () => {
         await setup();
-        screen.debug(undefined, 100000);
         const button = await screen.findByRole('button', {
           name: 'Ilmoita valmiiksi',
         });
