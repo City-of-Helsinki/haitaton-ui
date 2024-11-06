@@ -1638,7 +1638,6 @@ export const hankkeenHakemukset: HankkeenHakemus[] = hakemukset
         name: hakemus.applicationData.name,
         startTime: hakemus.applicationData.startTime,
         endTime: hakemus.applicationData.endTime,
-        pendingOnClient: hakemus.alluStatus === AlluStatus.PENDING_CLIENT,
         areas: hakemus.applicationData.areas,
       },
       paatokset: hakemus.paatokset,
