@@ -67,6 +67,7 @@ function JohtoselvitysSelect({
         .filter((feature) => {
           return selectedJohtoselvitysTunnukset.includes(feature.get('applicationIdentifier'));
         });
+      selectInteraction.current.getFeatures().clear();
       selectInteraction.current.getFeatures().extend(selectedJohtoselvitysFeatures ?? []);
     });
 

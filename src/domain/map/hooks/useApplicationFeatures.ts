@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Vector } from 'ol/source';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Feature } from 'ol';
@@ -13,8 +13,10 @@ export default function useApplicationFeatures(
   areas?: ApplicationArea[],
   featureProperties: { [x: string]: unknown } = {},
 ) {
+  const featuresAdded = useRef(false);
+
   useEffect(() => {
-    if (areas && areas.length > 0) {
+    if (areas && areas.length > 0 && !featuresAdded.current) {
       const applicationFeatures = areas.map((area) => {
         const feature = new GeoJSON().readFeatures(area.geometry)[0] as Feature<Geometry>;
 
@@ -31,10 +33,7 @@ export default function useApplicationFeatures(
         return feature;
       }) as Feature<Geometry>[];
       source.addFeatures(applicationFeatures);
+      featuresAdded.current = true;
     }
-
-    return function cleanup() {
-      source.clear();
-    };
   }, [source, areas, featureProperties]);
 }
