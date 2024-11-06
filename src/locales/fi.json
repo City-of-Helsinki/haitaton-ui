@@ -1160,7 +1160,8 @@
     },
     "sendDialog": {
       "title": "Lähetä hakemus?",
-      "instructions": "Hakemuksen päätös ja mahdolliset täydennyspyynnöt tulevat Haitaton-järjestelmään. Lähettämällä hakemuksen, sitoudut sähköiseen tiedoksiantoon. Halutessasi voit tilata päätöksen myös paperisena ilmoittamaasi osoitteeseen.",
+      "instructions": "Hakemuksen päätös ja mahdolliset täydennyspyynnöt tulevat Haitaton-järjestelmään. Lähettämällä hakemuksen, sitoudut sähköiseen tiedoksiantoon.",
+      "instructionsPaperDecision": "Halutessasi voit tilata päätöksen myös paperisena ilmoittamaasi osoitteeseen.",
       "orderPaperDecision": "Tilaan päätöksen myös paperisena",
       "paperDecisionNotificationLabel": "Täytä vastaanottajan tiedot",
       "paperDecisionNotificationText": "Täytä vastaanottajan tiedot tilataksesi päätöksen myös paperisena.",

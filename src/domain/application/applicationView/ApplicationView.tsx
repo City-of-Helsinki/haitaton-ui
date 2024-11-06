@@ -87,6 +87,7 @@ import useFilterHankeAlueetByApplicationDates from '../hooks/useFilterHankeAluee
 import ApplicationSendDialog from '../components/ApplicationSendDialog';
 import TaydennyspyyntoNotification from '../taydennys/TaydennyspyyntoNotification';
 import { useQueryClient } from 'react-query';
+import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
 
 function SidebarTyoalueet({
   tyoalueet,
@@ -322,6 +323,7 @@ function ApplicationView({
   creatingTaydennys,
 }: Readonly<Props>) {
   const { t } = useTranslation();
+  const features = useFeatureFlags();
   const queryClient = useQueryClient();
   const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const [showSendDialog, setShowSendDialog] = useState(false);
@@ -393,6 +395,10 @@ function ApplicationView({
     applicationEndDate: endTime,
   });
 
+  // TODO: at the moment information request (täydennyspyyntö) feature can be enabled for CABLE_REPORT applications only
+  const informationRequestFeatureEnabled =
+    applicationType === 'CABLE_REPORT' && features.informationRequest;
+
   async function onSendApplication(pdr: PaperDecisionReceiver | undefined | null) {
     applicationSendMutation.mutate({
       id: id as number,
@@ -443,11 +449,13 @@ function ApplicationView({
           {applicationId}
         </Text>
 
-        {alluStatus === AlluStatus.WAITING_INFORMATION && taydennyspyynto && (
-          <Box mb="var(--spacing-l)">
-            <TaydennyspyyntoNotification taydennyspyynto={taydennyspyynto} />
-          </Box>
-        )}
+        {informationRequestFeatureEnabled &&
+          alluStatus === AlluStatus.WAITING_INFORMATION &&
+          taydennyspyynto && (
+            <Box mb="var(--spacing-l)">
+              <TaydennyspyyntoNotification taydennyspyynto={taydennyspyynto} />
+            </Box>
+          )}
 
         <FormSummarySection>
           <SectionItemTitle>{t('hakemus:labels:applicationType')}:</SectionItemTitle>
@@ -570,7 +578,7 @@ function ApplicationView({
               </Button>
             </CheckRightsByHanke>
           )}
-          {applicationType === 'CABLE_REPORT' && alluStatus === AlluStatus.WAITING_INFORMATION && (
+          {informationRequestFeatureEnabled && alluStatus === AlluStatus.WAITING_INFORMATION && (
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
               <Button
                 theme="coat"
@@ -753,6 +761,7 @@ function ApplicationView({
         />
       )}
       <ApplicationSendDialog
+        type={applicationType}
         isOpen={showSendDialog}
         isLoading={applicationSendMutation.isLoading}
         onClose={closeSendDialog}

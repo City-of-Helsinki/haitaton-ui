@@ -2,9 +2,15 @@ import { render, screen } from '../../../testUtils/render';
 import ApplicationSendDialog from './ApplicationSendDialog';
 import { waitFor } from '@testing-library/react';
 
-test('Shows correct information when opened', async () => {
+test('Shows correct information when opened for excavation notification', async () => {
   render(
-    <ApplicationSendDialog isOpen={true} isLoading={false} onClose={() => {}} onSend={() => {}} />,
+    <ApplicationSendDialog
+      type="EXCAVATION_NOTIFICATION"
+      isOpen={true}
+      isLoading={false}
+      onClose={() => {}}
+      onSend={() => {}}
+    />,
   );
 
   expect(screen.getByText(/lähetä hakemus\?/i)).toBeInTheDocument();
@@ -26,9 +32,79 @@ test('Shows correct information when opened', async () => {
   expect(cancelButton).toBeEnabled();
 });
 
+test('Shows correct information when opened for cable report', async () => {
+  render(
+    <ApplicationSendDialog
+      type="CABLE_REPORT"
+      isOpen={true}
+      isLoading={false}
+      onClose={() => {}}
+      onSend={() => {}}
+    />,
+  );
+
+  expect(screen.getByText(/lähetä hakemus\?/i)).toBeInTheDocument();
+  expect(
+    screen.getByText(
+      'Hakemuksen päätös ja mahdolliset täydennyspyynnöt tulevat Haitaton-järjestelmään. Lähettämällä hakemuksen, sitoudut sähköiseen tiedoksiantoon. Halutessasi voit tilata päätöksen myös paperisena ilmoittamaasi osoitteeseen.',
+    ),
+  ).toBeInTheDocument();
+  const orderPaperDecisionButton = screen.getByRole('button', {
+    name: 'Tilaan päätöksen myös paperisena',
+  });
+  expect(orderPaperDecisionButton).toBeInTheDocument();
+  expect(orderPaperDecisionButton).toBeEnabled();
+  const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
+  expect(confirmButton).toBeInTheDocument();
+  await waitFor(() => expect(confirmButton).toBeEnabled(), { timeout: 5000 });
+  const cancelButton = screen.getByRole('button', { name: 'Peruuta' });
+  expect(cancelButton).toBeInTheDocument();
+  expect(cancelButton).toBeEnabled();
+});
+
+test('Shows correct information when opened for cable report when paper decision feature is disabled', async () => {
+  const OLD_ENV = { ...window._env_ };
+  window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_CABLE_REPORT_PAPER_DECISION: 0 };
+  render(
+    <ApplicationSendDialog
+      type="CABLE_REPORT"
+      isOpen={true}
+      isLoading={false}
+      onClose={() => {}}
+      onSend={() => {}}
+    />,
+  );
+
+  expect(screen.getByText(/lähetä hakemus\?/i)).toBeInTheDocument();
+  expect(
+    screen.getByText(
+      'Hakemuksen päätös ja mahdolliset täydennyspyynnöt tulevat Haitaton-järjestelmään. Lähettämällä hakemuksen, sitoudut sähköiseen tiedoksiantoon.',
+    ),
+  ).toBeInTheDocument();
+  const orderPaperDecisionButton = screen.queryByRole('button', {
+    name: 'Tilaan päätöksen myös paperisena',
+  });
+  expect(orderPaperDecisionButton).not.toBeInTheDocument();
+  const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
+  expect(confirmButton).toBeInTheDocument();
+  await waitFor(() => expect(confirmButton).toBeEnabled(), { timeout: 5000 });
+  const cancelButton = screen.getByRole('button', { name: 'Peruuta' });
+  expect(cancelButton).toBeInTheDocument();
+  expect(cancelButton).toBeEnabled();
+
+  jest.resetModules();
+  window._env_ = OLD_ENV;
+});
+
 test('Shows correct information when ordering paper decision', async () => {
   const { user } = render(
-    <ApplicationSendDialog isOpen={true} isLoading={false} onClose={() => {}} onSend={() => {}} />,
+    <ApplicationSendDialog
+      type="EXCAVATION_NOTIFICATION"
+      isOpen={true}
+      isLoading={false}
+      onClose={() => {}}
+      onSend={() => {}}
+    />,
   );
 
   const orderPaperDecisionButton = screen.getByRole('button', {
@@ -61,7 +137,13 @@ test('Shows correct information when ordering paper decision', async () => {
 
 test('Enables confirmation button when form is filled', async () => {
   const { user } = render(
-    <ApplicationSendDialog isOpen={true} isLoading={false} onClose={() => {}} onSend={() => {}} />,
+    <ApplicationSendDialog
+      type="EXCAVATION_NOTIFICATION"
+      isOpen={true}
+      isLoading={false}
+      onClose={() => {}}
+      onSend={() => {}}
+    />,
   );
 
   const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
@@ -88,7 +170,13 @@ test('Enables confirmation button when form is filled', async () => {
 test('Confirm calls onSend', async () => {
   const onSend = jest.fn();
   const { user } = render(
-    <ApplicationSendDialog isOpen={true} isLoading={false} onClose={() => {}} onSend={onSend} />,
+    <ApplicationSendDialog
+      type="EXCAVATION_NOTIFICATION"
+      isOpen={true}
+      isLoading={false}
+      onClose={() => {}}
+      onSend={onSend}
+    />,
   );
 
   const orderPaperDecisionButton = screen.getByRole('button', {
@@ -112,7 +200,13 @@ test('Confirm calls onSend', async () => {
 test('Cancel calls onClose', async () => {
   const onClose = jest.fn();
   const { user } = render(
-    <ApplicationSendDialog isOpen={true} isLoading={false} onClose={onClose} onSend={() => {}} />,
+    <ApplicationSendDialog
+      type="EXCAVATION_NOTIFICATION"
+      isOpen={true}
+      isLoading={false}
+      onClose={onClose}
+      onSend={() => {}}
+    />,
   );
 
   const cancelButton = screen.getByRole('button', { name: 'Peruuta' });

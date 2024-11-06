@@ -8,23 +8,26 @@ import {
 } from 'hds-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ApplicationSendData, PaperDecisionReceiver } from '../types/application';
+import { ApplicationSendData, ApplicationType, PaperDecisionReceiver } from '../types/application';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { sendSchema } from '../yupSchemas';
 import { Box, Grid, GridItem } from '@chakra-ui/react';
 import Text from '../../../common/components/text/Text';
 import TextInput from '../../../common/components/textInput/TextInput';
+import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
 
 type Props = {
+  type: ApplicationType;
   isOpen: boolean;
   isLoading: boolean;
   onClose: () => void;
   onSend: (paperDecisionReceiver?: PaperDecisionReceiver | null) => void;
 };
 
-const ApplicationSendDialog: React.FC<Props> = ({ isOpen, isLoading, onClose, onSend }) => {
+const ApplicationSendDialog: React.FC<Props> = ({ type, isOpen, isLoading, onClose, onSend }) => {
   const { t } = useTranslation();
+  const features = useFeatureFlags();
   const formContext = useForm<ApplicationSendData>({
     resolver: yupResolver(sendSchema),
     defaultValues: {
@@ -37,6 +40,8 @@ const ApplicationSendDialog: React.FC<Props> = ({ isOpen, isLoading, onClose, on
   const [orderPaperDecisionChecked] = watch(['orderPaperDecision']);
   const isConfirmButtonEnabled = formState.isValid;
   const dialogTitle = t('hakemus:sendDialog:title');
+  const paperDecisionFeatureEnabled =
+    type === 'EXCAVATION_NOTIFICATION' || features.cableReportPaperDecision;
 
   async function submitForm(data: ApplicationSendData) {
     const paperDecisionReceiver = data.orderPaperDecision
@@ -79,18 +84,23 @@ const ApplicationSendDialog: React.FC<Props> = ({ isOpen, isLoading, onClose, on
         <form onSubmit={handleSubmit(submitForm)}>
           <Dialog.Content>
             <Text tag="p" spacingBottom="s">
-              {t('hakemus:sendDialog:instructions')}
+              {t('hakemus:sendDialog:instructions') +
+                (paperDecisionFeatureEnabled
+                  ? ' ' + t('hakemus:sendDialog:instructionsPaperDecision')
+                  : '')}
             </Text>
-            <Box marginLeft="var(--spacing-xs)" marginBottom="var(--spacing-s)">
-              <ToggleButton
-                {...register('orderPaperDecision')}
-                id="orderPaperDecision"
-                label={t('hakemus:sendDialog:orderPaperDecision')}
-                checked={orderPaperDecisionChecked}
-                onChange={handleOrderPaperDecisionChange}
-              />
-            </Box>
-            {orderPaperDecisionChecked && (
+            {paperDecisionFeatureEnabled && (
+              <Box marginLeft="var(--spacing-xs)" marginBottom="var(--spacing-s)">
+                <ToggleButton
+                  {...register('orderPaperDecision')}
+                  id="orderPaperDecision"
+                  label={t('hakemus:sendDialog:orderPaperDecision')}
+                  checked={orderPaperDecisionChecked}
+                  onChange={handleOrderPaperDecisionChange}
+                />
+              </Box>
+            )}
+            {paperDecisionFeatureEnabled && orderPaperDecisionChecked && (
               <Box>
                 <Notification label={t('hakemus:sendDialog:paperDecisionNotificationLabel')}>
                   {t('hakemus:sendDialog:paperDecisionNotificationText')}
