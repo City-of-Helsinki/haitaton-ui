@@ -181,6 +181,7 @@ export default function JohtoselvitysSelectionMap({
         {/* Johtoselvitys areas */}
         {johtoselvitykset.map((hakemus) => (
           <HakemusLayer
+            key={hakemus.id}
             hakemusId={hakemus.id!}
             layerStyle={styleFunction}
             featureProperties={{
