@@ -466,6 +466,16 @@
       "YLEISOTILAISUUS": "Publikevenemang",
       "VAIHTOLAVA": "Växelflak"
     },
+    "kaistaHaitta": {
+      "EI_VAIKUTA": "Påverkar inte"
+    },
+    "kaistaPituusHaitta": {
+      "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Påverkar inte",
+      "PITUUS_ALLE_10_METRIA": "Mindre än 10 m",
+      "PITUUS_10_99_METRIA": "10–99 m",
+      "PITUUS_100_499_METRIA": "100–499 m",
+      "PITUUS_500_METRIA_TAI_ENEMMAN": "500 m eller mer"
+    },
     "meluHaitta": {
       "EI_MELUHAITTAA": "Inga bullerstörning",
       "SATUNNAINEN_MELUHAITTA": "Tillfällig bullerstörning",

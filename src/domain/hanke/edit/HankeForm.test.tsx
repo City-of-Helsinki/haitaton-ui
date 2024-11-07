@@ -265,7 +265,9 @@ describe('HankeForm', () => {
     // Vibration nuisance
     expect(screen.getByText('Jatkuva tärinähaitta')).toBeInTheDocument();
     // Lane hindrance
-    expect(screen.getByText('Vähentää kaistan yhdellä ajosuunnalla')).toBeInTheDocument();
+    expect(
+      screen.getByText('Yksi autokaista vähenee - ajosuunta vielä käytössä'),
+    ).toBeInTheDocument();
     // Hindrance affecting lane length
     expect(screen.getByText('Alle 10 m')).toBeInTheDocument();
   });

@@ -517,7 +517,7 @@ describe('Excavation notification application view', () => {
     expect(queryByText('Toistuva meluhaitta')).toBeInTheDocument();
     expect(queryByText('Jatkuva pölyhaitta')).toBeInTheDocument();
     expect(queryByText('Satunnainen tärinähaitta')).toBeInTheDocument();
-    expect(queryByText('Vähentää kaistan yhdellä ajosuunnalla')).toBeInTheDocument();
+    expect(queryByText('Yksi autokaista vähenee - ajosuunta vielä käytössä')).toBeInTheDocument();
     expect(queryByText('10-99 m')).toBeInTheDocument();
   });
 
