@@ -24,7 +24,7 @@ describe('AreaOverlay', () => {
 
   test('renders copyAreaElement if provided', () => {
     const copyAreaElement = <div>Copy Area Element</div>;
-    render(<AreaOverlay overlayProps={defaultProps} copyAreaElement={copyAreaElement} />);
+    render(<AreaOverlay overlayProps={defaultProps}>{copyAreaElement}</AreaOverlay>);
     expect(screen.getByText('Copy Area Element')).toBeInTheDocument();
   });
 

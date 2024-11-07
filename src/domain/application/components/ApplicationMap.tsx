@@ -231,9 +231,7 @@ export default function ApplicationMap({
                   </Box>
                 );
               }
-              return (
-                <AreaOverlay overlayProps={overlayProperties} copyAreaElement={copyAreaElement} />
-              );
+              return <AreaOverlay overlayProps={overlayProperties}>{copyAreaElement}</AreaOverlay>;
             }}
           />
 
