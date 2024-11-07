@@ -37,6 +37,7 @@ export default function BasicInfo({
     getValues,
     formState: { errors },
   } = useFormContext<KaivuilmoitusFormValues>();
+  const cableReports = getValues('applicationData.cableReports') ?? [];
 
   const [
     constructionWorkChecked,
@@ -74,6 +75,14 @@ export default function BasicInfo({
     setValue(
       'applicationData.placementContracts',
       updatedContracts.map((value) => value.toUpperCase()),
+      { shouldDirty: true },
+    );
+  }
+
+  function handleCableReportsChange(updatedCableReports: string[]) {
+    setValue(
+      'applicationData.cableReports',
+      updatedCableReports.map((value) => value.toUpperCase()),
       { shouldDirty: true },
     );
   }
@@ -220,33 +229,52 @@ export default function BasicInfo({
           </Box>
         </Fieldset>
       )}
-      {johtoselvitysIds !== undefined && cableReportDone === true && (
+      {cableReportDone === true && (
         <Fieldset
           heading={t('hakemus:labels:useExistingCableReports')}
           border
           className={styles.formRow}
         >
           <Box marginTop="var(--spacing-3-xs)">
-            <JohtoselvitysSelectionMap
-              hankeData={hankeData}
-              hankkeenHakemukset={hankkeenHakemukset}
-              selectedJohtoselvitysTunnukset={getValues('applicationData.cableReports') ?? []}
-              onSelectJohtoselvitys={handleJohtoselvitysSelection}
-            />
-            <InputCombobox
-              id="applicationData.cableReports"
-              name="applicationData.cableReports"
-              options={uniq(
-                johtoselvitysIds.concat(getValues('applicationData.cableReports') ?? []),
-              )}
-              label={t('hakemus:labels:cableReports')}
-              helperText={t('hakemus:labels:cableReportsHelp')}
-              pattern={/^[jJ][sS]\d{7}$/}
-              errorText={t('hakemus:errors:cableReport')}
-              placeholder="JSXXXXXXX"
-              uppercase
-              required
-            />
+            {johtoselvitysIds && johtoselvitysIds.length > 0 ? (
+              <>
+                <JohtoselvitysSelectionMap
+                  hankeData={hankeData}
+                  hankkeenHakemukset={hankkeenHakemukset}
+                  selectedJohtoselvitysTunnukset={cableReports}
+                  onSelectJohtoselvitys={handleJohtoselvitysSelection}
+                />
+                <InputCombobox
+                  id="applicationData.cableReports"
+                  name="applicationData.cableReports"
+                  options={uniq(johtoselvitysIds.concat(cableReports))}
+                  label={t('hakemus:labels:cableReports')}
+                  helperText={t('hakemus:labels:cableReportsHelp')}
+                  pattern={/^[jJ][sS]\d{7}$/}
+                  errorText={t('hakemus:errors:cableReport')}
+                  placeholder="JSXXXXXXX"
+                  uppercase
+                  required
+                />
+              </>
+            ) : (
+              <>
+                <Box as="p" marginBottom="var(--spacing-s)">
+                  {t('hakemus:labels:noCableReports')}
+                </Box>
+                <TagInput
+                  inputClassName={styles.tagInput}
+                  id="johtoselvitysTunnus"
+                  label={t('hakemus:labels:cableReportApplicationIdentifier')}
+                  tags={cableReports}
+                  pattern="^[jJ][sS]\d{7}$"
+                  placeholder="JSXXXXXXX"
+                  helperText={t('hakemus:labels:cableReportTagInputHelp')}
+                  errorText={t('hakemus:errors:cableReport')}
+                  onChange={handleCableReportsChange}
+                />
+              </>
+            )}
           </Box>
         </Fieldset>
       )}
@@ -256,6 +284,7 @@ export default function BasicInfo({
       </Box>
       <TagInput
         className={styles.formRow}
+        inputClassName={styles.tagInput}
         id="placementContract"
         label={t('hakemus:labels:placementContracts')}
         tags={placementContracts ?? []}

@@ -11,6 +11,7 @@ type Props = {
   placeholder?: string;
   helperText?: string;
   className?: string;
+  inputClassName?: string;
   pattern?: string;
   errorText?: string;
   tagDeleteButtonAriaLabel?: (tag: string) => string;
@@ -24,6 +25,7 @@ export default function TagInput({
   placeholder,
   helperText,
   className,
+  inputClassName,
   pattern,
   errorText,
   tagDeleteButtonAriaLabel,
@@ -61,6 +63,7 @@ export default function TagInput({
         >
           <TextInput
             id={id}
+            className={inputClassName}
             label={label}
             value={inputValue}
             onChange={(event) => setInputValue(event.target.value)}
@@ -77,7 +80,7 @@ export default function TagInput({
             onPointerLeaveCapture={() => {}}
             crossOrigin=""
           />
-          <Button variant="secondary" onClick={addTag}>
+          <Button variant="secondary" onClick={addTag} data-testid={`${id}-addButton`}>
             {t('common:increment')}
           </Button>
         </Flex>

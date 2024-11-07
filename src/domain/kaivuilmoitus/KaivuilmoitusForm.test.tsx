@@ -74,30 +74,42 @@ async function fillBasicInformation(
     }
   } else {
     fireEvent.click(screen.getByLabelText(/käytä olemassa olevia/i));
-  }
+    if (existingCableReport) {
+      await screen.findAllByLabelText(/tehtyjen johtoselvitysten tunnukset/i);
+      fireEvent.click(
+        screen.getByRole('button', {
+          name: 'Tehtyjen johtoselvitysten tunnukset: Sulje ja avaa valikko',
+        }),
+      );
+      fireEvent.click(screen.getByText(existingCableReport));
 
-  if (existingCableReport) {
-    await screen.findAllByLabelText(/tehtyjen johtoselvitysten tunnukset/i);
-    fireEvent.click(
-      screen.getByRole('button', {
-        name: 'Tehtyjen johtoselvitysten tunnukset: Sulje ja avaa valikko',
-      }),
-    );
-    fireEvent.click(screen.getByText(existingCableReport));
-  }
-
-  for (const cableReport of cableReports) {
-    fireEvent.change(screen.getAllByRole('combobox')[1], {
-      target: { value: cableReport },
-    });
-    await user.keyboard('{Enter}');
+      for (const cableReport of cableReports) {
+        fireEvent.change(screen.getAllByRole('combobox')[1], {
+          target: { value: cableReport },
+        });
+        await user.keyboard('{Enter}');
+      }
+    } else {
+      for (const cableReport of cableReports) {
+        fireEvent.change(screen.getByLabelText('Johtoselvitystunnus'), {
+          target: { value: cableReport },
+        });
+        fireEvent.click(
+          within(
+            screen.getByRole('group', {
+              name: /käytä olemassa olevia johtoselvityksiä/i,
+            }),
+          ).getByRole('button', { name: /lisää/i }),
+        );
+      }
+    }
   }
 
   for (const placementContract of placementContracts) {
     fireEvent.change(screen.getByLabelText('Sijoitussopimustunnus'), {
       target: { value: placementContract },
     });
-    fireEvent.click(screen.getByRole('button', { name: /lisää/i }));
+    fireEvent.click(screen.getByTestId('placementContract-addButton'));
   }
 
   if (requiredCompetence) {
@@ -546,6 +558,19 @@ test('If user selects "Hae uusi johtoselvitys" option, should show "Louhitaanko 
   expect(
     screen.getByText('Louhitaanko työn yhteydessä, esimerkiksi kallioperää?: Kyllä'),
   ).toBeInTheDocument();
+});
+
+test('If there are no previous cable reports in hanke, user can enter cable report application identifiers using tag input', async () => {
+  const hankeData = hankkeet[1] as HankeData;
+  const { user } = render(<KaivuilmoitusContainer hankeData={hankeData} />);
+  await fillBasicInformation(user, {
+    cableReportDone: true,
+    existingCableReport: null,
+    cableReports: ['JS2300003'],
+  });
+  await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+
+  expect(screen.getByText('JS2300003')).toBeInTheDocument();
 });
 
 test('Should show notifications if work areas overlap with johtoselvitys work areas', async () => {
