@@ -489,18 +489,19 @@
       "VAIHTOLAVA": "Vaihtolava"
     },
     "kaistaHaitta": {
-      "EI_VAIKUTA": "Ei vaikuta",
-      "VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA": "Vähentää kaistan yhdellä ajosuunnalla",
-      "VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA": "Vähentää samanaikaisesti kaistan kahdella ajosuunnalla",
-      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_KAHDELLA_AJOSUUNNALLA": "Vähentää samanaikaisesti useita kaistoja kahdella ajosuunnalla",
-      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA": "Vähentää samanaikaisesti useita kaistoja liittymien eri suunnilla"
+      "EI_VAIKUTA": "Ei vaikutusta autoliikenteen kaistamääriin",
+      "YKSI_KAISTA_VAHENEE": "Yksi autokaista vähenee - ajosuunta vielä käytössä",
+      "YKSI_KAISTA_VAHENEE_KAHDELLA_AJOSUUNNALLA": "Yksi autokaista vähenee kahdella ajosuunnalla - ajosuunnat vielä käytössä",
+      "USEITA_KAISTOJA_VAHENEE_AJOSUUNNILLA": "Useita autokaistoja vähenee ajosuunnilla - ajosuunnat vielä käytössä",
+      "YKSI_AJOSUUNTA_POISTUU_KAYTOSTA": "Yksi autoliikenteen ajosuunta poistuu käytöstä",
+      "USEITA_AJOSUUNTIA_POISTUU_KAYTOSTA": "Useita autoliikenteen ajosuuntia poistuu käytöstä"
     },
     "kaistaPituusHaitta": {
-      "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Ei vaikuta",
-      "PITUUS_ALLE_10_METRIA": "Alle 10 m",
-      "PITUUS_10_99_METRIA": "10-99 m",
-      "PITUUS_100_499_METRIA": "100-499 m",
-      "PITUUS_500_METRIA_TAI_ENEMMAN": "500 m tai enemmän"
+      "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Ei vaikuta autoliikenteen kaistajärjestelyihin",
+      "PITUUS_ALLE_10_METRIA": "Kaistavaikutusten pituus alle 10 m",
+      "PITUUS_10_99_METRIA": "Kaistavaikutusten pituus 10-99 m",
+      "PITUUS_100_499_METRIA": "Kaistavaikutusten pituus 100-499 m",
+      "PITUUS_500_METRIA_TAI_ENEMMAN": "Kaistavaikutusten pituus 500 m tai enemmän"
     },
     "meluHaitta": {
       "EI_MELUHAITTAA": "Ei meluhaittaa",

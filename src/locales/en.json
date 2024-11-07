@@ -470,20 +470,6 @@
       "YLEISOTILAISUUS": "Public event",
       "VAIHTOLAVA": "Swap body"
     },
-    "kaistaHaitta": {
-      "EI_VAIKUTA": "Does not affect",
-      "VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA": "Reduces one lane in one direction",
-      "VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA": "Simultaneously reduces lanes in two directions",
-      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_KAHDELLA_AJOSUUNNALLA": "Simultaneously reduces several lanes in two directions",
-      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA": "Simultaneously reduces several lanes in different directions of a junction[TRANSLATION_PENDING]"
-    },
-    "kaistaPituusHaitta": {
-      "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Does not affect",
-      "PITUUS_ALLE_10_METRIA": "Less than 10 m",
-      "PITUUS_10_99_METRIA": "10–99 m",
-      "PITUUS_100_499_METRIA": "100–499 m",
-      "PITUUS_500_METRIA_TAI_ENEMMAN": "500 m or more"
-    },
     "meluHaitta": {
       "EI_MELUHAITTAA": "No noise nuisance",
       "SATUNNAINEN_MELUHAITTA": "Occasional noise nuisance",
