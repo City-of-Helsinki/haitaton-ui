@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Box, HStack } from '@chakra-ui/react';
+import { Box, Flex, HStack } from '@chakra-ui/react';
 import { $enum } from 'ts-enum-util';
 import { FORMFIELD, HankeDataFormState } from '../types';
 import {
@@ -24,6 +24,10 @@ import styles from './Haittojenhallintasuunnitelma.module.scss';
 import ProcedureTips from '../../../common/haittaIndexes/ProcedureTips';
 import HaittaTooltipContent from '../../../common/haittaIndexes/HaittaTooltipContent';
 import { Button, IconPlusCircle } from 'hds-react';
+import Bus from '../../../../common/components/icons/Bus';
+import Car from '../../../../common/components/icons/Car';
+import Tram from '../../../../common/components/icons/Tram';
+import Bike from '../../../../common/components/icons/Bike';
 
 function mapNuisanceEnumIndexToNuisanceIndex(index: number): number {
   if (index === 2) return 3;
@@ -78,6 +82,21 @@ function HaittaIndexHeading({
   );
 }
 
+function TrafficIcon({
+  haittojenhallintatyyppi,
+}: Readonly<{ haittojenhallintatyyppi: HAITTOJENHALLINTATYYPPI }>) {
+  switch (haittojenhallintatyyppi) {
+    case HAITTOJENHALLINTATYYPPI.LINJAAUTOLIIKENNE:
+      return <Bus />;
+    case HAITTOJENHALLINTATYYPPI.RAITIOLIIKENNE:
+      return <Tram />;
+    case HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE:
+      return <Car />;
+    default:
+      return <Bike />;
+  }
+}
+
 type Props = {
   hanke: HankeData;
   index: number;
@@ -115,6 +134,7 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
   );
   const [isVisible, setVisible] =
     useState<Record<HAITTOJENHALLINTATYYPPI, boolean>>(initialVisibility);
+
   return (
     <div>
       <Box as="h4" mt="var(--spacing-m)" mb="var(--spacing-xs)" fontWeight="bold">
@@ -154,9 +174,10 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
       </Box>
       {haittojenhallintatyypit.map(([haitta, indeksi]) => (
         <div key={haitta} className="formWpr">
-          <Box as="h4" className="nuisanceType">
-            {t(`hankeForm:haittojenHallintaForm:nuisanceType:${haitta}`)}
-          </Box>
+          <Flex className="nuisanceType" columnGap="var(--spacing-s)" alignItems="center">
+            <TrafficIcon haittojenhallintatyyppi={haitta} />{' '}
+            <Box as="h4">{t(`hankeForm:haittojenHallintaForm:nuisanceType:${haitta}`)}</Box>
+          </Flex>
           {isVisible[haitta] ? (
             <div>
               <Box mt="var(--spacing-m)" mb="var(--spacing-m)">

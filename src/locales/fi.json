@@ -706,8 +706,8 @@
         "YLEINEN": "Toimet haittojen hallintaan",
         "PYORALIIKENNE": "Pyöräliikenteen merkittävyys",
         "AUTOLIIKENNE": "Autoliikenteen ruuhkautuminen",
-        "LINJAAUTOLIIKENNE": "Joukkoliikenteen merkittävyys: Linja-autojen paikallisliikenne",
-        "RAITIOLIIKENNE": "Joukkoliikenteen merkittävyys: Raitioliikenne",
+        "LINJAAUTOLIIKENNE": "Linja-autojen paikallisliikenne",
+        "RAITIOLIIKENNE": "Raitioliikenne",
         "MUUT": "Muut haittojenhallintatoimet"
       },
       "carTrafficNuisanceType": {

@@ -669,8 +669,8 @@
       "nuisanceType": {
         "PYORALIIKENNE": "Significance of cycling traffic",
         "AUTOLIIKENNE": "Congestion of motor traffic",
-        "LINJAAUTOLIIKENNE": "Significance of public transport: Local bus transport",
-        "RAITIOLIIKENNE": "Significance of public transport: Tram transport",
+        "LINJAAUTOLIIKENNE": "Local bus transport",
+        "RAITIOLIIKENNE": "Tram transport",
         "MUUT": "Other nuisance management measures"
       },
       "carTrafficNuisanceType": {}

@@ -140,11 +140,8 @@
 
   .nuisanceType {
     background: #e6e6e6;
-    padding-top: var(--spacing-l);
-    padding-bottom: var(--spacing-l);
-    padding-left: var(--spacing-m);
-    padding-right: var(--spacing-m);
+    padding: var(--spacing-m);
     font-weight: bold;
-    font-size: var(--fontsize-body-l);
+    font-size: var(--fontsize-body-xl);
   }
 }
