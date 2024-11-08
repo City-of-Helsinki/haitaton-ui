@@ -774,22 +774,24 @@
       "totalSurfaceAreaLong": "De inritade arbetsområdenas sammanlagda areal:",
       "applicationState": "Ansökans status",
       "relatedHanke": "Berör ansökan",
-      "downloadDecision": "Ladda ned beslut (PDF)",
-      "downloadDecisionShort": "Ladda ned PDF",
       "addedAreas": "Arbetsområden du lagt till",
       "removeAreaTitle": "Ta bort arbetsområde?",
       "removeAreaDescription": "Är du säker på att du vill ta bort arbetsområdet {{areaName}}?",
       "applicationAdditionalInfo": "Mer information om ansökan",
       "applicationInfo": "Ansökans uppgifter",
       "cableReports": "Koder för utförda ledningsutredningar",
-      "cableReportsHelp": "Välj i listan eller skriv in en annan kod och tryck på Enter för att lägga till den[TRANSLATION_PENDING]",
+      "cableReportsHelp": "Välj i listan eller skriv in en annan kod och tryck på Enter för att lägga till den",
       "placementContractsTitle": "Placeringsavtal",
       "placementContracts": "Kod för placeringsavtal",
       "placementContractsHelp": "Ange placeringsavtalets kod och tryck på Lägg till",
       "requiredCompetenceTitle": "Kompetens som krävs för arbetet",
       "requiredCompetence": "Som ansvarig för arbetet eller skötare av ärenden försäkrar jag att det vid vistelse eller arbete på arbetsplatsen alltid finns minst en person på plats som har gällande behörighet (kort) som erhållits genom en utbildning i gatuarbeten i huvudstadsregionen. Jag ansvarar också för att den som ansvarar för grävarbetet har gällande Vägskydd 1- eller Vägskydd 2-kort eller gatuarbetskort för huvudstadsregionen.*",
       "additionalInformation": "Mer information om ansökan",
-      "tyonTarkoitus": "Arbetets syfte"
+      "tyonTarkoitus": "Arbetets syfte",
+      "setWorkTimesToCopyArea": "Välj period för att kopiera till arbetsområde",
+      "downloadDecision": {
+        "PAATOS": "Ladda ner beslut (PDF)"
+      }
     },
     "notifications": {
       "saveSuccessLabel": "Ansökan har sparats",
@@ -807,6 +809,11 @@
       "maxAttachmentsNumberExceeded": "Maximalt antal bilagor ({{maxNumber}} st) har överskridits",
       "sentApplicationPersonalInfoNotification": "Egna upplysningar för den inskickade ansökan kan inte redigeras",
       "sendApplicationDisabled": "Ansökan kan endast skickas av den person som är kontaktperson för ansökan."
+    },
+    "sendDialog": {
+      "title": "Vill du skicka in ansökan?",
+      "instructions": "Du får beslutet om ansökan och en eventuell begäran om komplettering i systemet Haitaton. Genom att skicka in ansökan förbinder du dig till elektroniskt tillkännagivande.",
+      "instructionsPaperDecision": "Om du vill kan du också beställa beslutet i pappersformat genom att ange din adress."
     },
     "sentDialog": {
       "title": "Ansökan har skickats",
@@ -839,7 +846,8 @@
       "sendApplication": "Skicka ansökan",
       "cancelApplication": "Återta ansökan",
       "editApplication": "Ändra i ansökan",
-      "deletePlacementContract": "Ta bort koden för placeringsavtal {{id}}"
+      "deletePlacementContract": "Ta bort koden för placeringsavtal {{id}}",
+      "copyWorkArea": "Kopiera till arbetsområde"
     },
     "errors": {
       "cancelConflict": "Ansökan kan inte återtas emedan den gått vidare till handläggning",
@@ -858,7 +866,10 @@
       "CABLE_REPORT": "Utkast",
       "EXCAVATION_NOTIFICATION": "Utkast"
     },
-    "applicationTypeInstruction": "Välj typ av ansökan. Du kan vid anmälan om grävning även lämna en begäran om ledningsutredning, om du inte ännu har en sådan."
+    "applicationTypeInstruction": "Välj typ av ansökan. Du kan vid anmälan om grävning även lämna en begäran om ledningsutredning, om du inte ännu har en sådan.",
+    "addApplicationTypes": {
+      "EXCAVATION_NOTIFICATION": "$t(hakemus:applicationTypes:EXCAVATION_NOTIFICATION) (och ledningsutredning)"
+    }
   },
   "hankeSidebar": {
     "ariaSidebarContent": "Projektets uppgifter",
