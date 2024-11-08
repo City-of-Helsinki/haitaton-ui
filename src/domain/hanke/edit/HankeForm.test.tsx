@@ -307,9 +307,7 @@ describe('HankeForm', () => {
     ).toBeInTheDocument();
     expect(screen.getByTestId('test-AUTOLIIKENNE')).toHaveTextContent('3');
     expect(screen.getByTestId('alueet.0.haittojenhallintasuunnitelma.AUTOLIIKENNE')).toBeRequired();
-    expect(
-      screen.getByText('Joukkoliikenteen merkittävyys: Linja-autojen paikallisliikenne'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Linja-autojen paikallisliikenne')).toBeInTheDocument();
     expect(
       screen.getByText(
         'Haitaton ei löytänyt tätä kohderyhmää alueelta. Voit tarvittaessa lisätä toimet haittojen hallintaan.',

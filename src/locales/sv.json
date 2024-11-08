@@ -879,8 +879,8 @@
     "liikennehaittaindeksi": "Trafikolägenhetsindex",
     "autoliikenne": "Trafikstockningar i biltrafiken",
     "pyoraliikenne": "Betydelsen av cykeltrafik",
-    "raitioliikenne": "Betydelsen av kollektivtrafik: Spårvägstrafik",
-    "linjaautoliikenne": "Betydelsen av kollektivtrafik: Lokal busstrafik",
+    "raitioliikenne": "Spårvägstrafik",
+    "linjaautoliikenne": "Lokal busstrafik",
     "kiertoreittitarve": "Behov av omväg",
     "KIERTOREITTITARPEET": {
       "TODENNAKOINEN": "sannolik",

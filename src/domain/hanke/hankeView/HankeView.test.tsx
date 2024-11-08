@@ -164,11 +164,9 @@ test('Correct information about hanke should be displayed', async () => {
   expect(
     screen.getByText('Autoliikenteelle koituvien haittojen hallintasuunnitelma'),
   ).toBeInTheDocument();
-  expect(
-    screen.getByText('Joukkoliikenteen merkittävyys: Linja-autojen paikallisliikenne'),
-  ).toBeInTheDocument();
+  expect(screen.getByText('Linja-autojen paikallisliikenne')).toBeInTheDocument();
   // bus traffic has no nuisance control plan text
-  expect(screen.getByText('Joukkoliikenteen merkittävyys: Raitioliikenne')).toBeInTheDocument();
+  expect(screen.getByText('Raitioliikenne')).toBeInTheDocument();
   expect(
     screen.getByText('Raitioliikenteelle koituvien haittojen hallintasuunnitelma'),
   ).toBeInTheDocument();

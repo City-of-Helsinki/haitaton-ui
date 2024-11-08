@@ -1293,8 +1293,8 @@
     "liikennehaittaindeksi": "Liikennehaittaindeksi",
     "autoliikenne": "Autoliikenteen ruuhkautuminen",
     "pyoraliikenne": "Pyöräliikenteen merkittävyys",
-    "raitioliikenne": "Joukkoliikenteen merkittävyys: Raitioliikenne",
-    "linjaautoliikenne": "Joukkoliikenteen merkittävyys: Linja-autojen paikallisliikenne",
+    "raitioliikenne": "Raitioliikenne",
+    "linjaautoliikenne": "Linja-autojen paikallisliikenne",
     "kiertoreittitarve": "Kiertoreittitarve",
     "KIERTOREITTITARPEET": {
       "TODENNAKOINEN": "todennäköinen",
