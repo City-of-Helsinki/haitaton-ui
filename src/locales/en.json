@@ -778,22 +778,24 @@
       "totalSurfaceAreaLong": "Combined total area of the work areas drawn:",
       "applicationState": "Application state",
       "relatedHanke": "Related to project",
-      "downloadDecision": "Download decision (PDF)",
-      "downloadDecisionShort": "Download PDF",
       "addedAreas": "Areas added by you",
       "removeAreaTitle": "Remove area?",
       "removeAreaDescription": "Are you sure you want to remove the area {{areaName}}?",
       "applicationAdditionalInfo": "Additional information on the application",
       "applicationInfo": "Application information",
       "cableReports": "Identifiers of previous cable reports",
-      "cableReportsHelp": "Select one from the list or enter another identifier and press ‘Enter’ to add it[TRANSLATION_PENDING]",
+      "cableReportsHelp": "Select one from the list or enter another identifier and press ‘Enter’ to add it",
       "placementContractsTitle": "Placement agreements",
       "placementContracts": "Placement agreement identifier",
       "placementContractsHelp": "Enter the placement agreement identifier and press ‘Add’",
       "requiredCompetenceTitle": "Qualification required for the work",
       "requiredCompetence": "As the person in charge of the work or a representative, I affirm that there will always be at least one person with a valid roadwork qualification for the Helsinki metropolitan area (PKS) street work card present when the worksite is being used. I will also be responsible for ensuring that the person in charge of the excavation work has a valid roadwork safety 1, roadwork safety 2 or roadwork training for the Helsinki metropolitan area (PKS) street work card. *",
       "additionalInformation": "Additional information on the application",
-      "tyonTarkoitus": "Purpose of the work"
+      "tyonTarkoitus": "Purpose of the work",
+      "setWorkTimesToCopyArea": "Select timeframe to copy into work area",
+      "downloadDecision": {
+        "PAATOS": "Download decision (PDF)"
+      }
     },
     "notifications": {
       "saveSuccessLabel": "Application saved",
@@ -811,6 +813,11 @@
       "maxAttachmentsNumberExceeded": "The maximum number of attachments ({{maxNumber}} items) has been exceeded",
       "sentApplicationPersonalInfoNotification": "The personal information of the submitted application cannot be edited",
       "sendApplicationDisabled": "The application can only be submitted by the person designated as the contact person for the application."
+    },
+    "sendDialog": {
+      "title": "Submit application?",
+      "instructions": "The decision concerning your application and possible requests for additional information will be available in the Haitaton system. By submitting your application, you consent to being notified electronically.",
+      "instructionsPaperDecision": "You may also request a paper copy of the decision to an address you specify."
     },
     "sentDialog": {
       "title": "Application sent",
@@ -843,7 +850,8 @@
       "sendApplication": "Send application",
       "cancelApplication": "Cancel application",
       "editApplication": "Edit application",
-      "deletePlacementContract": "Remove placement agreement identifier {{id}}"
+      "deletePlacementContract": "Remove placement agreement identifier {{id}}",
+      "copyWorkArea": "Copy into work area"
     },
     "errors": {
       "cancelConflict": "The application cannot be cancelled because it has entered the processing stage",
@@ -862,7 +870,10 @@
       "CABLE_REPORT": "Draft",
       "EXCAVATION_NOTIFICATION": "Draft"
     },
-    "applicationTypeInstruction": "Select application type. Via the excavation report, you can also submit a cable report if you do not have one already."
+    "applicationTypeInstruction": "Select application type. Via the excavation report, you can also submit a cable report if you do not have one already.",
+    "addApplicationTypes": {
+      "EXCAVATION_NOTIFICATION": "$t(hakemus:applicationTypes:EXCAVATION_NOTIFICATION) (and cable report)"
+    }
   },
   "hankeSidebar": {
     "ariaSidebarContent": "Project information",
