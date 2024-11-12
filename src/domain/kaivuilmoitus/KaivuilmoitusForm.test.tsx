@@ -505,7 +505,9 @@ test('Should be able to fill form pages and show filled information in summary p
   expect(screen.getByText('Pölyhaitta: Jatkuva pölyhaitta')).toBeInTheDocument();
   expect(screen.getByText('Tärinähaitta: Satunnainen tärinähaitta')).toBeInTheDocument();
   expect(
-    screen.getByText('Autoliikenteen kaistahaitta: Vähentää kaistan yhdellä ajosuunnalla'),
+    screen.getByText(
+      'Autoliikenteen kaistahaitta: Yksi autokaista vähenee - ajosuunta vielä käytössä',
+    ),
   ).toBeInTheDocument();
   expect(screen.getByText('Kaistahaittojen pituus: 10-99 m')).toBeInTheDocument();
   expect(screen.getByText('Lisätietoja alueesta: -')).toBeInTheDocument();
@@ -1182,7 +1184,9 @@ test('Should show changed traffic nuisance index summary when kaistahaitta chang
   );
   await user.click(await screen.findByRole('button', { name: /alueet/i }));
 
-  const kaistahaittaSelection = await screen.findByText('Vähentää kaistan yhdellä ajosuunnalla');
+  const kaistahaittaSelection = await screen.findByText(
+    'Yksi autokaista vähenee - ajosuunta vielä käytössä',
+  );
   await user.click(kaistahaittaSelection);
   await user.click(await screen.findByText('Ei vaikuta'));
 

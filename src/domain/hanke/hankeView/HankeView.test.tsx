@@ -133,7 +133,9 @@ test('Correct information about hanke should be displayed', async () => {
   expect(screen.queryByText('Pölyhaitta: Toistuva pölyhaitta')).toBeInTheDocument();
   expect(screen.queryByText('Tärinähaitta: Jatkuva tärinähaitta')).toBeInTheDocument();
   expect(
-    screen.queryByText('Autoliikenteen kaistahaitta: Vähentää kaistan yhdellä ajosuunnalla'),
+    screen.queryByText(
+      'Autoliikenteen kaistahaitta: Yksi autokaista vähenee - ajosuunta vielä käytössä',
+    ),
   ).toBeInTheDocument();
   expect(screen.queryByText('Kaistahaittojen pituus: Alle 10 m')).toBeInTheDocument();
   await user.click(screen.getAllByRole('button', { name: /haittaindeksi/i })[1]);

@@ -467,11 +467,7 @@
       "VAIHTOLAVA": "Växelflak"
     },
     "kaistaHaitta": {
-      "EI_VAIKUTA": "Påverkar inte",
-      "VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA": "Reducerar med en fil i en körriktning",
-      "VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA": "Reducerar med en fil i två körriktningar samtidigt",
-      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_KAHDELLA_AJOSUUNNALLA": "Reducerar med flera filer i två körriktningar samtidigt",
-      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA": "Reducerar samtidigt med flera filer i olika riktningar från korsningen[TRANSLATION_PENDING]"
+      "EI_VAIKUTA": "Påverkar inte"
     },
     "kaistaPituusHaitta": {
       "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Påverkar inte",

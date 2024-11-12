@@ -471,11 +471,7 @@
       "VAIHTOLAVA": "Swap body"
     },
     "kaistaHaitta": {
-      "EI_VAIKUTA": "Does not affect",
-      "VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA": "Reduces one lane in one direction",
-      "VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA": "Simultaneously reduces lanes in two directions",
-      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_KAHDELLA_AJOSUUNNALLA": "Simultaneously reduces several lanes in two directions",
-      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA": "Simultaneously reduces several lanes in different directions of a junction[TRANSLATION_PENDING]"
+      "EI_VAIKUTA": "Does not affect"
     },
     "kaistaPituusHaitta": {
       "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Does not affect",
