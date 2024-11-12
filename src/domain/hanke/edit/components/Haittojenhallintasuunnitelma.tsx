@@ -92,8 +92,10 @@ function TrafficIcon({
       return <Tram />;
     case HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE:
       return <Car />;
-    default:
+    case HAITTOJENHALLINTATYYPPI.PYORALIIKENNE:
       return <Bike />;
+    default:
+      return <></>;
   }
 }
 
