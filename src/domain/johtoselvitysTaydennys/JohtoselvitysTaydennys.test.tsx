@@ -22,6 +22,7 @@ function setup(
     taydennys = {
       id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
       applicationData: application.applicationData,
+      muutokset: [],
     },
     hankeData = hankkeet[1] as HankeData,
     responseStatus = 200,

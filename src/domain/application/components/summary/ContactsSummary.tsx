@@ -48,8 +48,9 @@ export const ContactSummary: React.FC<{ contact: Contact }> = ({ contact }) => {
 
 const ContactsSummary: React.FC<{
   customerWithContacts?: CustomerWithContacts | null;
+  ContentContainer?: JSX.ElementType;
   title: string;
-}> = ({ customerWithContacts, title }) => {
+}> = ({ customerWithContacts, ContentContainer = SectionItemContent, title }) => {
   const { t } = useTranslation();
 
   if (!customerWithContacts || isCustomerEmpty(customerWithContacts.customer)) {
@@ -59,7 +60,7 @@ const ContactsSummary: React.FC<{
   return (
     <>
       <SectionItemTitle>{title}</SectionItemTitle>
-      <SectionItemContent>
+      <ContentContainer>
         <CustomerSummary customer={customerWithContacts.customer} />
         {customerWithContacts.contacts.length > 0 && (
           <>
@@ -78,7 +79,7 @@ const ContactsSummary: React.FC<{
             </Grid>
           </>
         )}
-      </SectionItemContent>
+      </ContentContainer>
     </>
   );
 };

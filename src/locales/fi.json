@@ -16,6 +16,7 @@
     "increment": "Lisää",
     "yes": "Kyllä",
     "no": "Ei",
+    "removed": "Poistettu",
     "confirmationDialog": {
       "interruptDialog": {
         "titleText": "Olet poistumassa lomakkeelta",
@@ -1274,7 +1275,8 @@
   },
   "taydennys": {
     "labels": {
-      "originalInformation": "Alkuperäiset"
+      "originalInformation": "Alkuperäiset",
+      "taydennykset": "Täydennykset"
     },
     "buttons": {
       "createTaydennys": "Täydennä",
