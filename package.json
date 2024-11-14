@@ -73,7 +73,7 @@
     "sass": "^1.77.6",
     "ts-enum-util": "^4.0.2",
     "typescript": "^5.3.3",
-    "undici": "^6.19.8",
+    "undici": "^6.21.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {
