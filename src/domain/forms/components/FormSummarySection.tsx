@@ -51,8 +51,24 @@ const SectionItemContentRemoved: React.FC<Readonly<SectionItemContentProps>> = (
       padding="var(--spacing-2-xs)"
       {...chakraProps}
     >
-      <Box as="p" color="var(--color-error)" marginBottom="var(--spacing-s)">
+      <Box as="p" color="var(--color-error)" marginBottom="var(--spacing-s)" fontWeight={500}>
         {t('common:removed')}:
+      </Box>
+      {children}
+    </SectionItemContent>
+  );
+};
+
+const SectionItemContentAdded: React.FC<Readonly<SectionItemContentProps>> = ({
+  children,
+  ...chakraProps
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <SectionItemContent border="1px solid black" padding="var(--spacing-2-xs)" {...chakraProps}>
+      <Box as="p" marginBottom="var(--spacing-s)" fontWeight={500}>
+        {t('taydennys:labels:taydennys')}:
       </Box>
       {children}
     </SectionItemContent>
@@ -77,4 +93,5 @@ export {
   SectionItemTitle,
   SectionItemContent,
   SectionItemContentRemoved,
+  SectionItemContentAdded,
 };

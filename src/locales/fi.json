@@ -1276,7 +1276,8 @@
   "taydennys": {
     "labels": {
       "originalInformation": "Alkuperäiset",
-      "taydennykset": "Täydennykset"
+      "taydennykset": "Täydennykset",
+      "taydennys": "Täydennys"
     },
     "buttons": {
       "createTaydennys": "Täydennä",

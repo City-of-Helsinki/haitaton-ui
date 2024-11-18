@@ -460,6 +460,196 @@ describe('Cable report application view', () => {
 
       expect(await screen.findByText('Tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument();
     });
+
+    test('Shows changed information in basic information tab', async () => {
+      const application = cloneDeep(hakemukset[10] as Application<JohtoselvitysData>);
+      const name = 'New name';
+      const postalAddress = {
+        streetAddress: {
+          streetName: 'New street',
+        },
+      };
+      const workDescription = 'New work description';
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: {
+          ...application.applicationData,
+          name,
+          postalAddress,
+          workDescription,
+          constructionWork: false,
+          propertyConnectivity: true,
+          emergencyWork: true,
+          rockExcavation: false,
+          areas: [
+            ...application.applicationData.areas,
+            {
+              name: '',
+              geometry: {
+                type: 'Polygon',
+                crs: {
+                  type: 'name',
+                  properties: {
+                    name: 'urn:ogc:def:crs:EPSG::3879',
+                  },
+                },
+                coordinates: [
+                  [
+                    [25498581.440262634, 6679345.526261961],
+                    [25498582.233686976, 6679350.99321805],
+                    [25498576.766730886, 6679351.786642391],
+                    [25498575.973306544, 6679346.319686302],
+                    [25498581.440262634, 6679345.526261961],
+                  ],
+                ],
+              },
+            },
+          ],
+        },
+        muutokset: [
+          'name',
+          'postalAddress',
+          'constructionWork',
+          'propertyConnectivity',
+          'emergencyWork',
+          'rockExcavation',
+          'workDescription',
+        ],
+      };
+      await setup(application);
+
+      expect(screen.getAllByText('Täydennys:').length).toBe(6);
+      expect(screen.getAllByText('Poistettu:').length).toBe(1);
+      expect(screen.getByText(name)).toBeInTheDocument();
+      expect(screen.getByText(postalAddress.streetAddress.streetName)).toBeInTheDocument();
+      expect(screen.getByText(workDescription)).toBeInTheDocument();
+      expect(screen.getByText('Olemassaolevan rakenteen kunnossapitotyöstä')).toBeInTheDocument();
+      expect(screen.getByText('Kiinteistöliittymien rakentamisesta')).toBeInTheDocument();
+      expect(screen.getAllByText('Uuden rakenteen tai johdon rakentamisesta').length).toBe(2);
+      expect(
+        screen.getByText(
+          'Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi',
+        ),
+      ).toBeInTheDocument();
+      expect(screen.getByText('Ei')).toBeInTheDocument();
+      expect(screen.getByText('264 m²')).toBeInTheDocument();
+    });
+
+    test('Shows changed information in areas tab', async () => {
+      const application = cloneDeep(hakemukset[10] as Application<JohtoselvitysData>);
+      application.applicationData.areas = [
+        ...application.applicationData.areas,
+        {
+          name: '',
+          geometry: {
+            type: 'Polygon',
+            crs: {
+              type: 'name',
+              properties: {
+                name: 'urn:ogc:def:crs:EPSG::3879',
+              },
+            },
+            coordinates: [
+              [
+                [25498581.440262634, 6679345.526261961],
+                [25498582.233686976, 6679350.99321805],
+                [25498576.766730886, 6679351.786642391],
+                [25498575.973306544, 6679346.319686302],
+                [25498581.440262634, 6679345.526261961],
+              ],
+            ],
+          },
+        },
+        {
+          name: '',
+          geometry: {
+            type: 'Polygon',
+            crs: {
+              type: 'name',
+              properties: {
+                name: 'urn:ogc:def:crs:EPSG::3879',
+              },
+            },
+            coordinates: [
+              [
+                [25498581.440262634, 6679345.526261961],
+                [25498582.233686976, 6679350.99321805],
+                [25498576.766730886, 6679351.786642391],
+                [25498575.973306544, 6679346.319686302],
+                [25498581.440262634, 6679345.526261961],
+              ],
+            ],
+          },
+        },
+      ];
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: {
+          ...application.applicationData,
+          areas: [
+            ...application.applicationData.areas.slice(0, 1),
+            {
+              name: '',
+              geometry: {
+                type: 'Polygon',
+                crs: {
+                  type: 'name',
+                  properties: {
+                    name: 'urn:ogc:def:crs:EPSG::3879',
+                  },
+                },
+                coordinates: [
+                  [
+                    [25498581.440262634, 6679345.526261961],
+                    [25498582.233686976, 6679350.99321805],
+                    [25498576.766730886, 6679351.786642391],
+                    [25498575.973306544, 6679346.319686302],
+                    [25498581.440262634, 6679345.526261961],
+                  ],
+                ],
+              },
+            },
+          ],
+        },
+        muutokset: ['areas[1]', 'areas[2]'],
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('tab', { name: /alueet/i }));
+
+      expect(screen.getAllByText('Täydennys:').length).toBe(2);
+      expect(screen.getAllByText('Poistettu:').length).toBe(1);
+      expect(screen.getByText('264 m²')).toBeInTheDocument();
+    });
+
+    test('Shows changed information in contacts tab', async () => {
+      const application = cloneDeep(hakemukset[10] as Application<JohtoselvitysData>);
+      application.applicationData.propertyDeveloperWithContacts = cloneDeep(
+        application.applicationData.customerWithContacts,
+      );
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: {
+          ...application.applicationData,
+          customerWithContacts: {
+            customer: {
+              ...application.applicationData.customerWithContacts!.customer,
+              name: 'New name',
+              email: 'newMail@test.com',
+            },
+            contacts: application.applicationData.customerWithContacts!.contacts,
+          },
+          propertyDeveloperWithContacts: null,
+        },
+        muutokset: ['customerWithContacts', 'propertyDeveloperWithContacts'],
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('tab', { name: /yhteystiedot/i }));
+
+      expect(screen.getAllByText('Täydennys:').length).toBe(1);
+      expect(screen.getAllByText('Poistettu:').length).toBe(1);
+      expect(screen.getByText('New name')).toBeInTheDocument();
+      expect(screen.getByText('newMail@test.com')).toBeInTheDocument();
+    });
   });
 });
 
