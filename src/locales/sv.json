@@ -665,8 +665,8 @@
       "nuisanceType": {
         "PYORALIIKENNE": "Betydelsen av cykeltrafik",
         "AUTOLIIKENNE": "Trafikstockningar i biltrafiken",
-        "LINJAAUTOLIIKENNE": "Betydelsen av spårvägstrafik: Lokal busstrafik",
-        "RAITIOLIIKENNE": "Betydelsen av spårvägstrafik: Spårvägstrafik",
+        "LINJAAUTOLIIKENNE": "Lokal busstrafik",
+        "RAITIOLIIKENNE": "Spårvägstrafik",
         "MUUT": "Andra åtgärder för att kontrollera olägenheter"
       },
       "carTrafficNuisanceType": {}
@@ -879,8 +879,8 @@
     "liikennehaittaindeksi": "Trafikolägenhetsindex",
     "autoliikenne": "Trafikstockningar i biltrafiken",
     "pyoraliikenne": "Betydelsen av cykeltrafik",
-    "raitioliikenne": "Betydelsen av kollektivtrafik: Spårvägstrafik",
-    "linjaautoliikenne": "Betydelsen av kollektivtrafik: Lokal busstrafik",
+    "raitioliikenne": "Spårvägstrafik",
+    "linjaautoliikenne": "Lokal busstrafik",
     "kiertoreittitarve": "Behov av omväg",
     "KIERTOREITTITARPEET": {
       "TODENNAKOINEN": "sannolik",

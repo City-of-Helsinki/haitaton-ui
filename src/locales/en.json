@@ -669,8 +669,8 @@
       "nuisanceType": {
         "PYORALIIKENNE": "Significance of cycling traffic",
         "AUTOLIIKENNE": "Congestion of motor traffic",
-        "LINJAAUTOLIIKENNE": "Significance of public transport: Local bus transport",
-        "RAITIOLIIKENNE": "Significance of public transport: Tram transport",
+        "LINJAAUTOLIIKENNE": "Local bus transport",
+        "RAITIOLIIKENNE": "Tram transport",
         "MUUT": "Other nuisance management measures"
       },
       "carTrafficNuisanceType": {}
@@ -883,8 +883,8 @@
     "liikennehaittaindeksi": "Traffic nuisance index",
     "autoliikenne": "Congestion of motor traffic",
     "pyoraliikenne": "Significance of cycling",
-    "raitioliikenne": "Significance of public transport: Rail transport",
-    "linjaautoliikenne": "Significance of public transport: Local bus transport",
+    "raitioliikenne": "Rail transport",
+    "linjaautoliikenne": "Local bus transport",
     "kiertoreittitarve": "Detour need",
     "KIERTOREITTITARPEET": {
       "TODENNAKOINEN": "likely",

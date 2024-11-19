@@ -706,8 +706,8 @@
         "YLEINEN": "Toimet haittojen hallintaan",
         "PYORALIIKENNE": "Pyöräliikenteen merkittävyys",
         "AUTOLIIKENNE": "Autoliikenteen ruuhkautuminen",
-        "LINJAAUTOLIIKENNE": "Joukkoliikenteen merkittävyys: Linja-autojen paikallisliikenne",
-        "RAITIOLIIKENNE": "Joukkoliikenteen merkittävyys: Raitioliikenne",
+        "LINJAAUTOLIIKENNE": "Linja-autojen paikallisliikenne",
+        "RAITIOLIIKENNE": "Raitioliikenne",
         "MUUT": "Muut haittojenhallintatoimet"
       },
       "carTrafficNuisanceType": {
@@ -1293,8 +1293,8 @@
     "liikennehaittaindeksi": "Liikennehaittaindeksi",
     "autoliikenne": "Autoliikenteen ruuhkautuminen",
     "pyoraliikenne": "Pyöräliikenteen merkittävyys",
-    "raitioliikenne": "Joukkoliikenteen merkittävyys: Raitioliikenne",
-    "linjaautoliikenne": "Joukkoliikenteen merkittävyys: Linja-autojen paikallisliikenne",
+    "raitioliikenne": "Raitioliikenne",
+    "linjaautoliikenne": "Linja-autojen paikallisliikenne",
     "kiertoreittitarve": "Kiertoreittitarve",
     "KIERTOREITTITARPEET": {
       "TODENNAKOINEN": "todennäköinen",
