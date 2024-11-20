@@ -1281,7 +1281,18 @@
     },
     "buttons": {
       "createTaydennys": "Täydennä",
-      "editTaydennys": "Muokkaa hakemusta (täydennys)"
+      "editTaydennys": "Muokkaa hakemusta (täydennys)",
+      "sendTaydennys": "Lähetä täydennys"
+    },
+    "notifications": {
+      "sendSuccessLabel": "Täydennys lähetetty",
+      "sendSuccessText": "Täydennys on lähetetty käsiteltäväksi.",
+      "sendErrorLabel": "Täydennyksen lähettäminen epäonnistui",
+      "sendErrorText": "$t(hakemus:notifications:reportCompletionDateErrorText)"
+    },
+    "sendDialog": {
+      "title": "Lähetä täydennetty hakemus käsittelyyn",
+      "description": "Lähettämällä tiedot käsittelyssä oleva hakemuksesi päivitetään täydennetyillä tiedoilla."
     }
   },
   "hankeSidebar": {

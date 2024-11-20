@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Button, IconSaveDiskette, StepState } from 'hds-react';
+import { Button, IconEnvelope, IconQuestionCircle, IconSaveDiskette, StepState } from 'hds-react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useQueryClient } from 'react-query';
 import { Taydennys } from '../application/taydennys/types';
@@ -31,6 +32,8 @@ import useUpdateTaydennys from '../application/taydennys/hooks/useUpdateTaydenny
 import { convertFormStateToJohtoselvitysUpdateData } from '../johtoselvitys/utils';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
 import { changeFormStep } from '../forms/utils';
+import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
+import useSendTaydennys from '../application/taydennys/hooks/useSendTaydennys';
 
 type Props = {
   taydennys: Taydennys<JohtoselvitysData>;
@@ -49,6 +52,8 @@ export default function JohtoselvitysTaydennysContainer({
   const navigateToApplicationView = useNavigateToApplicationView();
   const { taydennysUpdateMutation, showSaveNotification, setShowSaveNotification } =
     useUpdateTaydennys<JohtoselvitysData, JohtoselvitysUpdateData>();
+  const taydennysSendMutation = useSendTaydennys();
+  const [showSendDialog, setShowSendDialog] = useState(false);
 
   const formContext = useForm<JohtoselvitysTaydennysFormValues>({
     mode: 'onTouched',
@@ -61,8 +66,9 @@ export default function JohtoselvitysTaydennysContainer({
     getValues,
     setValue,
     trigger,
-    formState: { isDirty, errors },
+    formState: { isDirty, errors, isValid },
     watch,
+    handleSubmit,
   } = formContext;
   const watchFormValues = watch();
 
@@ -184,6 +190,23 @@ export default function JohtoselvitysTaydennysContainer({
     saveTaydennys(handleSuccess);
   }
 
+  function openSendDialog() {
+    setShowSendDialog(true);
+  }
+
+  function closeSendDialog() {
+    setShowSendDialog(false);
+  }
+
+  function sendTaydennys() {
+    taydennysSendMutation.mutate(taydennys.id, {
+      onSuccess(data) {
+        navigateToApplicationView(data.id?.toString());
+      },
+    });
+    closeSendDialog();
+  }
+
   function validateStepChange(changeStep: () => void, stepIndex: number) {
     return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger, errors, [
       'required',
@@ -202,6 +225,7 @@ export default function JohtoselvitysTaydennysContainer({
         }
         onStepChange={handleStepChange}
         stepChangeValidator={validateStepChange}
+        onSubmit={handleSubmit(openSendDialog)}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {
@@ -214,6 +238,8 @@ export default function JohtoselvitysTaydennysContainer({
             }
           }
 
+          const lastStep = activeStepIndex === formSteps.length - 1;
+          const showSendButton = lastStep && taydennys.muutokset.length > 0 && isValid;
           const saveAndQuitIsLoading = taydennysUpdateMutation.isLoading;
           const saveAndQuitLoadingText = t('common:buttons:savingText');
           return (
@@ -233,6 +259,16 @@ export default function JohtoselvitysTaydennysContainer({
               >
                 {t('hankeForm:saveDraftButton')}
               </Button>
+              {showSendButton && (
+                <Button
+                  type="submit"
+                  iconLeft={<IconEnvelope aria-hidden="true" />}
+                  loadingText={t('common:buttons:sendingText')}
+                  isLoading={taydennysSendMutation.isLoading}
+                >
+                  {t('taydennys:buttons:sendTaydennys')}
+                </Button>
+              )}
             </FormActions>
           );
         }}
@@ -244,6 +280,17 @@ export default function JohtoselvitysTaydennysContainer({
           onClose={() => setShowSaveNotification(false)}
         />
       )}
+
+      <ConfirmationDialog
+        title={t('taydennys:sendDialog:title')}
+        description={t('taydennys:sendDialog:description')}
+        showCloseButton
+        isOpen={showSendDialog}
+        close={closeSendDialog}
+        mainAction={sendTaydennys}
+        variant="primary"
+        headerIcon={<IconQuestionCircle />}
+      />
     </FormProvider>
   );
 }

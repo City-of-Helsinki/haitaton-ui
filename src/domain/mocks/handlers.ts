@@ -374,4 +374,10 @@ export const handlers = [
       }
     },
   ),
+
+  http.post(`${apiUrl}/taydennykset/:id/laheta`, async ({ params }) => {
+    const { id } = params;
+    const hakemus = await hakemuksetDB.sendTaydennys(id as string);
+    return HttpResponse.json(hakemus);
+  }),
 ];

@@ -22,7 +22,7 @@ export async function read(id: number) {
 }
 
 async function readTaydennys(id: string) {
-  return hakemukset.find((hakemus) => hakemus.taydennys?.id === id)?.taydennys;
+  return hakemukset.find((hakemus) => hakemus.taydennys?.id === id);
 }
 
 export async function readAll() {
@@ -160,10 +160,24 @@ export async function updateTaydennys(
   id: string,
   updates: JohtoselvitysUpdateData | KaivuilmoitusUpdateData,
 ) {
-  const taydennys = await readTaydennys(id);
+  const hakemus = await readTaydennys(id);
+  const taydennys = hakemus?.taydennys;
   if (!taydennys) {
     throw new ApiError(`No application with id ${id}`, 404);
   }
   taydennys.applicationData = Object.assign(taydennys.applicationData, updates);
   return taydennys;
+}
+
+export async function sendTaydennys(id: string) {
+  const hakemus = await readTaydennys(id);
+  if (!hakemus) {
+    throw new ApiError(`No application with id ${id}`, 404);
+  }
+  const updatedHakemus = cloneDeep(hakemus);
+  updatedHakemus.alluStatus = 'INFORMATION_RECEIVED';
+  updatedHakemus.applicationData = hakemus.taydennys!.applicationData;
+  updatedHakemus.taydennys = null;
+  updatedHakemus.taydennyspyynto = null;
+  return updatedHakemus;
 }
