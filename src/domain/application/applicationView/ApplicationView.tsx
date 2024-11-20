@@ -14,7 +14,6 @@ import {
 } from 'hds-react';
 import { Box, Flex } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
-import Geometry from 'ol/geom/Geometry';
 import Text from '../../../common/components/text/Text';
 import {
   InformationViewContainer,
@@ -27,6 +26,8 @@ import {
 import {
   FormSummarySection,
   SectionItemContent,
+  SectionItemContentAdded,
+  SectionItemContentRemoved,
   SectionItemTitle,
   SectionTitle,
 } from '../../forms/components/FormSummarySection';
@@ -88,6 +89,7 @@ import ApplicationSendDialog from '../components/ApplicationSendDialog';
 import TaydennyspyyntoNotification from '../taydennys/TaydennyspyyntoNotification';
 import { useQueryClient } from 'react-query';
 import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
+import AreaInformation from '../components/summary/AreaInformation';
 
 function SidebarTyoalueet({
   tyoalueet,
@@ -147,37 +149,95 @@ function TyoalueetList({ tyoalueet }: { tyoalueet: ApplicationArea[] }) {
   );
 }
 
+function TotalSurfaceArea({
+  tyoalueet,
+  changedAreas,
+}: Readonly<{
+  tyoalueet: ApplicationArea[];
+  changedAreas?: ApplicationArea[];
+}>) {
+  const totalSurfaceArea = getTotalSurfaceArea(getAreaGeometries(tyoalueet));
+  const changedTotalSurfaceArea =
+    changedAreas && getTotalSurfaceArea(getAreaGeometries(changedAreas));
+
+  return (
+    <>
+      {totalSurfaceArea > 0 && <p>{totalSurfaceArea} m²</p>}
+      {changedTotalSurfaceArea &&
+        changedTotalSurfaceArea > 0 &&
+        changedTotalSurfaceArea !== totalSurfaceArea && (
+          <SectionItemContentAdded marginTop="var(--spacing-s)">
+            <p>{changedTotalSurfaceArea} m²</p>
+          </SectionItemContentAdded>
+        )}
+    </>
+  );
+}
+
 function JohtoselvitysAreasInfo({
   tyoalueet,
-  startTime,
-  endTime,
+  changedAreas,
+  muutokset,
 }: {
   tyoalueet: ApplicationArea[];
-  startTime: Date | null;
-  endTime: Date | null;
+  changedAreas?: ApplicationArea[];
+  muutokset?: string[];
 }) {
   const { t } = useTranslation();
-  const locale = useLocale();
+  const areasRemoved =
+    changedAreas &&
+    muutokset &&
+    tyoalueet.filter((_, index) => muutokset.includes(`areas[${index}]`) && !changedAreas[index]);
 
-  return tyoalueet.map((_, index) => {
-    const areaName = getAreaDefaultName(t, index, tyoalueet.length);
-    return (
-      <Accordion
-        language={locale}
-        heading={areaName}
-        initiallyOpen
-        key={areaName}
-        className={styles.applicationAreaContainer}
-      >
-        <FormSummarySection style={{ marginBottom: 'auto' }}>
-          <SectionItemTitle>{t('hakemus:labels:areaDuration')}</SectionItemTitle>
-          <SectionItemContent>
-            <ApplicationDates startTime={startTime} endTime={endTime} />
-          </SectionItemContent>
-        </FormSummarySection>
-      </Accordion>
-    );
-  });
+  return (
+    <FormSummarySection>
+      <SectionItemTitle>{t('hakemus:labels:totalSurfaceArea')}</SectionItemTitle>
+      <SectionItemContent>
+        <TotalSurfaceArea tyoalueet={tyoalueet} changedAreas={changedAreas} />
+      </SectionItemContent>
+      <SectionItemTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionItemTitle>
+      <SectionItemContent>
+        {tyoalueet.map((area, index) => {
+          return (
+            <AreaInformation
+              area={area}
+              areaName={getAreaDefaultName(t, index, tyoalueet.length)}
+              key={index}
+            />
+          );
+        })}
+        {changedAreas && (
+          <SectionItemContentAdded>
+            {changedAreas.map((area, index) => {
+              if (!muutokset?.includes(`areas[${index}]`)) {
+                return null;
+              }
+              return (
+                <AreaInformation
+                  area={area}
+                  areaName={getAreaDefaultName(t, index, tyoalueet.length)}
+                  key={index}
+                />
+              );
+            })}
+          </SectionItemContentAdded>
+        )}
+        {areasRemoved && areasRemoved.length > 0 && (
+          <SectionItemContentRemoved marginTop="var(--spacing-s)">
+            {areasRemoved.map((area, index) => {
+              return (
+                <AreaInformation
+                  area={area}
+                  areaName={getAreaDefaultName(t, tyoalueet.indexOf(area), tyoalueet.length)}
+                  key={index}
+                />
+              );
+            })}
+          </SectionItemContentRemoved>
+        )}
+      </SectionItemContent>
+    </FormSummarySection>
+  );
 }
 
 function KaivuilmoitusAreasInfo({ areas }: { areas: KaivuilmoitusAlue[] | null }) {
@@ -190,8 +250,6 @@ function KaivuilmoitusAreasInfo({ areas }: { areas: KaivuilmoitusAlue[] | null }
 
   return areas.map((alue) => {
     const { tyoalueet } = alue;
-    const geometries: Geometry[] = getAreaGeometries(tyoalueet);
-    const totalSurfaceArea = getTotalSurfaceArea(geometries);
     return (
       <Accordion
         language={locale}
@@ -212,7 +270,9 @@ function KaivuilmoitusAreasInfo({ areas }: { areas: KaivuilmoitusAlue[] | null }
             <TyoalueetList tyoalueet={tyoalueet} />
           </SectionItemContent>
           <SectionItemTitle>{t('form:labels:kokonaisAla')}</SectionItemTitle>
-          <SectionItemContent>{totalSurfaceArea} m²</SectionItemContent>
+          <SectionItemContent>
+            <TotalSurfaceArea tyoalueet={tyoalueet} />
+          </SectionItemContent>
         </FormSummarySection>
         <Box marginBottom="var(--spacing-l)">
           <HaittaIndexes
@@ -357,6 +417,12 @@ function ApplicationView({
     applicationType === 'CABLE_REPORT'
       ? (areas as ApplicationArea[])
       : (areas as KaivuilmoitusAlue[]).flatMap((area) => area.tyoalueet);
+  const taydennysTyoalueet =
+    applicationType === 'CABLE_REPORT'
+      ? (application.taydennys?.applicationData.areas as ApplicationArea[] | undefined)
+      : (application.taydennys?.applicationData.areas as KaivuilmoitusAlue[] | undefined)?.flatMap(
+          (area) => area.tyoalueet,
+        );
   const kaivuilmoitusAlueet =
     applicationType === 'EXCAVATION_NOTIFICATION' ? (areas as KaivuilmoitusAlue[]) : null;
   const currentDecisions = getCurrentDecisions(paatokset);
@@ -367,9 +433,6 @@ function ApplicationView({
 
   // Text for the link leading back to hanke view
   const hankeLinkText = `${hanke?.nimi} (${hanke?.hankeTunnus})`;
-
-  const geometries: Geometry[] = getAreaGeometries(tyoalueet);
-  const totalSurfaceArea = getTotalSurfaceArea(geometries);
 
   const lastValmistumisilmoitus = getLastValmistumisilmoitus(alluStatus, valmistumisilmoitukset);
 
@@ -609,10 +672,12 @@ function ApplicationView({
               {applicationType === 'CABLE_REPORT' && (
                 <JohtoselvitysBasicInformationSummary
                   formData={application as Application<JohtoselvitysData>}
+                  changedData={taydennys?.applicationData as JohtoselvitysData}
+                  muutokset={taydennys?.muutokset}
                 >
                   <SectionItemTitle>{t('hakemus:labels:totalSurfaceArea')}</SectionItemTitle>
                   <SectionItemContent>
-                    {totalSurfaceArea > 0 && <p>{totalSurfaceArea} m²</p>}
+                    <TotalSurfaceArea tyoalueet={tyoalueet} changedAreas={taydennysTyoalueet} />
                   </SectionItemContent>
                 </JohtoselvitysBasicInformationSummary>
               )}
@@ -622,7 +687,7 @@ function ApplicationView({
                 >
                   <SectionItemTitle>{t('hakemus:labels:totalSurfaceArea')}</SectionItemTitle>
                   <SectionItemContent>
-                    {totalSurfaceArea > 0 && <p>{totalSurfaceArea} m²</p>}
+                    <TotalSurfaceArea tyoalueet={tyoalueet} />
                   </SectionItemContent>
                 </KaivuilmoitusBasicInformationSummary>
               )}
@@ -633,17 +698,47 @@ function ApplicationView({
                 <SectionItemTitle>{t('kaivuilmoitusForm:alueet:startDate')}</SectionItemTitle>
                 <SectionItemContent>
                   {startTime && <p>{formatToFinnishDate(startTime)}</p>}
+                  {application.taydennys?.muutokset.includes('startTime') && (
+                    <Box marginTop="var(--spacing-s)">
+                      {!application.taydennys?.applicationData.startTime ? (
+                        <SectionItemContentRemoved>
+                          {startTime && <p>{formatToFinnishDate(startTime)}</p>}
+                        </SectionItemContentRemoved>
+                      ) : (
+                        <SectionItemContentAdded>
+                          <p>
+                            {formatToFinnishDate(application.taydennys.applicationData.startTime)}
+                          </p>
+                        </SectionItemContentAdded>
+                      )}
+                    </Box>
+                  )}
                 </SectionItemContent>
                 <SectionItemTitle>{t('kaivuilmoitusForm:alueet:endDate')}</SectionItemTitle>
                 <SectionItemContent>
                   {endTime && <p>{formatToFinnishDate(endTime)}</p>}
+                  {application.taydennys?.muutokset.includes('endTime') && (
+                    <Box marginTop="var(--spacing-s)">
+                      {!application.taydennys?.applicationData.endTime ? (
+                        <SectionItemContentRemoved>
+                          {endTime && <p>{formatToFinnishDate(endTime)}</p>}
+                        </SectionItemContentRemoved>
+                      ) : (
+                        <SectionItemContentAdded>
+                          <p>
+                            {formatToFinnishDate(application.taydennys.applicationData.endTime)}
+                          </p>
+                        </SectionItemContentAdded>
+                      )}
+                    </Box>
+                  )}
                 </SectionItemContent>
               </FormSummarySection>
               {applicationType === 'CABLE_REPORT' && (
                 <JohtoselvitysAreasInfo
                   tyoalueet={tyoalueet}
-                  startTime={startTime}
-                  endTime={endTime}
+                  changedAreas={taydennysTyoalueet}
+                  muutokset={taydennys?.muutokset}
                 />
               )}
               {applicationType === 'EXCAVATION_NOTIFICATION' && (
@@ -658,18 +753,72 @@ function ApplicationView({
                   customerWithContacts={customerWithContacts}
                   title={t('form:yhteystiedot:titles:customerWithContacts')}
                 />
+                {application.taydennys?.muutokset.includes('customerWithContacts') &&
+                  application.taydennys.applicationData.customerWithContacts && (
+                    <ContactsSummary
+                      customerWithContacts={
+                        application.taydennys.applicationData.customerWithContacts
+                      }
+                      ContentContainer={SectionItemContentAdded}
+                    />
+                  )}
                 <ContactsSummary
                   customerWithContacts={contractorWithContacts}
                   title={t('form:yhteystiedot:titles:contractorWithContacts')}
                 />
+                {application.taydennys?.muutokset.includes('contractorWithContacts') &&
+                  application.taydennys.applicationData.contractorWithContacts && (
+                    <ContactsSummary
+                      customerWithContacts={
+                        application.taydennys.applicationData.contractorWithContacts
+                      }
+                      ContentContainer={SectionItemContentAdded}
+                    />
+                  )}
                 <ContactsSummary
                   customerWithContacts={propertyDeveloperWithContacts}
                   title={t('form:yhteystiedot:titles:rakennuttajat')}
                 />
+                {application.taydennys?.muutokset.includes('propertyDeveloperWithContacts') && (
+                  <ContactsSummary
+                    customerWithContacts={
+                      application.taydennys.applicationData.propertyDeveloperWithContacts ??
+                      propertyDeveloperWithContacts
+                    }
+                    title={
+                      !propertyDeveloperWithContacts
+                        ? t('form:yhteystiedot:titles:rakennuttajat')
+                        : undefined
+                    }
+                    ContentContainer={
+                      application.taydennys.applicationData.propertyDeveloperWithContacts
+                        ? SectionItemContentAdded
+                        : SectionItemContentRemoved
+                    }
+                  />
+                )}
                 <ContactsSummary
                   customerWithContacts={representativeWithContacts}
                   title={t('form:yhteystiedot:titles:representativeWithContacts')}
                 />
+                {application.taydennys?.muutokset.includes('representativeWithContacts') && (
+                  <ContactsSummary
+                    customerWithContacts={
+                      application.taydennys.applicationData.representativeWithContacts ??
+                      representativeWithContacts
+                    }
+                    title={
+                      !representativeWithContacts
+                        ? t('form:yhteystiedot:titles:representativeWithContacts')
+                        : undefined
+                    }
+                    ContentContainer={
+                      application.taydennys.applicationData.representativeWithContacts
+                        ? SectionItemContentAdded
+                        : SectionItemContentRemoved
+                    }
+                  />
+                )}
                 {applicationType === 'EXCAVATION_NOTIFICATION' && (
                   <InvoicingCustomerSummary
                     invoicingCustomer={(applicationData as KaivuilmoitusData).invoicingCustomer}

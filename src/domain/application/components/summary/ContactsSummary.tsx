@@ -49,7 +49,7 @@ export const ContactSummary: React.FC<{ contact: Contact }> = ({ contact }) => {
 const ContactsSummary: React.FC<{
   customerWithContacts?: CustomerWithContacts | null;
   ContentContainer?: JSX.ElementType;
-  title: string;
+  title?: string;
 }> = ({ customerWithContacts, ContentContainer = SectionItemContent, title }) => {
   const { t } = useTranslation();
 
@@ -59,7 +59,7 @@ const ContactsSummary: React.FC<{
 
   return (
     <>
-      <SectionItemTitle>{title}</SectionItemTitle>
+      {title ? <SectionItemTitle>{title}</SectionItemTitle> : <div />}
       <ContentContainer>
         <CustomerSummary customer={customerWithContacts.customer} />
         {customerWithContacts.contacts.length > 0 && (

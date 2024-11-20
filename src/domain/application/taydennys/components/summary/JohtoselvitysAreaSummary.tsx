@@ -1,9 +1,8 @@
 import Geometry from 'ol/geom/Geometry';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@chakra-ui/react';
-import { ApplicationArea, JohtoselvitysData } from '../../../types/application';
-import { getAreaGeometries, getAreaGeometry } from '../../../../johtoselvitys/utils';
-import { formatSurfaceArea, getTotalSurfaceArea } from '../../../../map/utils';
+import { JohtoselvitysData } from '../../../types/application';
+import { getAreaGeometries } from '../../../../johtoselvitys/utils';
+import { getTotalSurfaceArea } from '../../../../map/utils';
 import {
   FormSummarySection,
   SectionItemContent,
@@ -12,27 +11,8 @@ import {
   SectionTitle,
 } from '../../../../forms/components/FormSummarySection';
 import { formatToFinnishDate } from '../../../../../common/utils/date';
-import Text from '../../../../../common/components/text/Text';
 import { getAreaDefaultName } from '../../../utils';
-
-function AreaInformation({
-  area,
-  areaName,
-}: Readonly<{ area: ApplicationArea; areaName: string }>) {
-  const { t } = useTranslation();
-  const geom = getAreaGeometry(area);
-
-  return (
-    <Box marginBottom="var(--spacing-m)">
-      <Text tag="p" spacingBottom="s">
-        <strong>{areaName}</strong>
-      </Text>
-      <p>
-        {t('form:labels:pintaAla')}: {formatSurfaceArea(geom)}
-      </p>
-    </Box>
-  );
-}
+import AreaInformation from '../../../components/summary/AreaInformation';
 
 type Props = {
   data: JohtoselvitysData;
@@ -109,7 +89,10 @@ export default function JohtoselvitysAreaSummary({
             )}
             <SectionItemTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionItemTitle>
             <SectionItemContent>
-              {areasChanged.map((area, index) => {
+              {areas.map((area, index) => {
+                if (!muutokset.includes(`areas[${index}]`)) {
+                  return null;
+                }
                 return (
                   <AreaInformation
                     area={area}
