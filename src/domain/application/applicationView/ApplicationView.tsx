@@ -785,6 +785,11 @@ function ApplicationView({
                       application.taydennys.applicationData.propertyDeveloperWithContacts ??
                       propertyDeveloperWithContacts
                     }
+                    title={
+                      !propertyDeveloperWithContacts
+                        ? t('form:yhteystiedot:titles:rakennuttajat')
+                        : undefined
+                    }
                     ContentContainer={
                       application.taydennys.applicationData.propertyDeveloperWithContacts
                         ? SectionItemContentAdded
@@ -801,6 +806,11 @@ function ApplicationView({
                     customerWithContacts={
                       application.taydennys.applicationData.representativeWithContacts ??
                       representativeWithContacts
+                    }
+                    title={
+                      !representativeWithContacts
+                        ? t('form:yhteystiedot:titles:representativeWithContacts')
+                        : undefined
                     }
                     ContentContainer={
                       application.taydennys.applicationData.representativeWithContacts
