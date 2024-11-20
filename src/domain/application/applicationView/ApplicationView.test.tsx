@@ -398,6 +398,7 @@ describe('Cable report application view', () => {
       application.taydennys = {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
         applicationData: application.applicationData,
+        muutokset: [],
       };
       await setup(application);
 
@@ -436,6 +437,7 @@ describe('Cable report application view', () => {
       application.taydennys = {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
         applicationData: application.applicationData,
+        muutokset: [],
       };
       const { user } = await setup(application);
       await user.click(screen.getByRole('button', { name: 'Muokkaa hakemusta (täydennys)' }));

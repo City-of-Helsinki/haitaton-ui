@@ -31,4 +31,5 @@ export type Taydennyspyynto = {
 export type Taydennys<T> = {
   id: string;
   applicationData: T;
+  muutokset: string[];
 };

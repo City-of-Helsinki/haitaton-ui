@@ -2,6 +2,7 @@ import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Button, IconSaveDiskette, StepState } from 'hds-react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useQueryClient } from 'react-query';
 import { Taydennys } from '../application/taydennys/types';
 import {
   Application,
@@ -43,6 +44,7 @@ export default function JohtoselvitysTaydennysContainer({
   hankeData,
 }: Readonly<Props>) {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const { setNotification } = useGlobalNotification();
   const navigateToApplicationView = useNavigateToApplicationView();
   const { taydennysUpdateMutation, showSaveNotification, setShowSaveNotification } =
@@ -99,7 +101,13 @@ export default function JohtoselvitysTaydennysContainer({
       validationSchema: yhteystiedotSchema,
     },
     {
-      element: <ReviewAndSend originalApplication={originalApplication} />,
+      element: (
+        <ReviewAndSend
+          taydennys={getValues()}
+          muutokset={taydennys.muutokset}
+          originalApplication={originalApplication}
+        />
+      ),
       label: t('form:headers:yhteenveto'),
       state: StepState.available,
     },
@@ -110,7 +118,7 @@ export default function JohtoselvitysTaydennysContainer({
     taydennysUpdateMutation.mutate(
       { id: formData.id, data: convertFormStateToJohtoselvitysUpdateData(formData) },
       {
-        onSuccess({
+        async onSuccess({
           applicationData: {
             customerWithContacts,
             contractorWithContacts,
@@ -118,6 +126,9 @@ export default function JohtoselvitysTaydennysContainer({
             representativeWithContacts,
           },
         }) {
+          await queryClient.invalidateQueries(['application', originalApplication.id], {
+            refetchInactive: true,
+          });
           handleSuccess?.();
           if (customerWithContacts !== null) {
             setValue(
