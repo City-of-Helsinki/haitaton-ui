@@ -52,7 +52,7 @@ export default function JohtoselvitysTaydennysContainer({
   const navigateToApplicationView = useNavigateToApplicationView();
   const { taydennysUpdateMutation, showSaveNotification, setShowSaveNotification } =
     useUpdateTaydennys<JohtoselvitysData, JohtoselvitysUpdateData>();
-  const taydennysSendMutation = useSendTaydennys();
+  const sendTaydennysMutation = useSendTaydennys();
   const [showSendDialog, setShowSendDialog] = useState(false);
 
   const formContext = useForm<JohtoselvitysTaydennysFormValues>({
@@ -199,7 +199,7 @@ export default function JohtoselvitysTaydennysContainer({
   }
 
   function sendTaydennys() {
-    taydennysSendMutation.mutate(taydennys.id, {
+    sendTaydennysMutation.mutate(taydennys.id, {
       onSuccess(data) {
         navigateToApplicationView(data.id?.toString());
       },
@@ -264,7 +264,7 @@ export default function JohtoselvitysTaydennysContainer({
                   type="submit"
                   iconLeft={<IconEnvelope aria-hidden="true" />}
                   loadingText={t('common:buttons:sendingText')}
-                  isLoading={taydennysSendMutation.isLoading}
+                  isLoading={sendTaydennysMutation.isLoading}
                 >
                   {t('taydennys:buttons:sendTaydennys')}
                 </Button>
