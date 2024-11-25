@@ -11,7 +11,7 @@ type Props = {
   isOpen: boolean;
   close?: () => void;
   mainAction: () => void;
-  mainBtnLabel: string;
+  mainBtnLabel?: string;
   mainBtnIcon?: React.ReactElement;
   variant: DialogVariant;
   errorMsg?: string;
@@ -51,7 +51,7 @@ const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
       iconLeft={mainBtnIcon}
       isLoading={isLoading}
     >
-      {mainBtnLabel}
+      {mainBtnLabel ?? t('common:confirmationDialog:confirmButton')}
     </Button>
   );
 
