@@ -88,8 +88,9 @@ import useFilterHankeAlueetByApplicationDates from '../hooks/useFilterHankeAluee
 import ApplicationSendDialog from '../components/ApplicationSendDialog';
 import TaydennyspyyntoNotification from '../taydennys/TaydennyspyyntoNotification';
 import { useQueryClient } from 'react-query';
-import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
 import AreaInformation from '../components/summary/AreaInformation';
+import useIsInformationRequestFeatureEnabled from '../taydennys/hooks/useIsInformationRequestFeatureEnabled';
+import useSendTaydennys from './hooks/useSendTaydennys';
 
 function SidebarTyoalueet({
   tyoalueet,
@@ -383,7 +384,6 @@ function ApplicationView({
   creatingTaydennys,
 }: Readonly<Props>) {
   const { t } = useTranslation();
-  const features = useFeatureFlags();
   const queryClient = useQueryClient();
   const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const [showSendDialog, setShowSendDialog] = useState(false);
@@ -458,9 +458,9 @@ function ApplicationView({
     applicationEndDate: endTime,
   });
 
-  // TODO: at the moment information request (täydennyspyyntö) feature can be enabled for CABLE_REPORT applications only
-  const informationRequestFeatureEnabled =
-    applicationType === 'CABLE_REPORT' && features.informationRequest;
+  const informationRequestFeatureEnabled = useIsInformationRequestFeatureEnabled(applicationType);
+
+  const { sendTaydennysButton, sendTaydennysDialog } = useSendTaydennys(application);
 
   async function onSendApplication(pdr: PaperDecisionReceiver | undefined | null) {
     applicationSendMutation.mutate({
@@ -655,6 +655,9 @@ function ApplicationView({
               </Button>
             </CheckRightsByHanke>
           )}
+          <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
+            {sendTaydennysButton}
+          </CheckRightsByHanke>
         </InformationViewHeaderButtons>
       </InformationViewHeader>
 
@@ -916,6 +919,7 @@ function ApplicationView({
         onClose={closeSendDialog}
         onSend={onSendApplication}
       />
+      {sendTaydennysDialog}
     </InformationViewContainer>
   );
 }

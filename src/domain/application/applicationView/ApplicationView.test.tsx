@@ -11,6 +11,7 @@ import { format } from 'date-fns/format';
 import { fi } from 'date-fns/locale';
 import { Application, JohtoselvitysData } from '../types/application';
 import * as taydennysApi from '../taydennys/taydennysApi';
+import { USER_VIEW } from '../../mocks/signedInUser';
 
 describe('Cable report application view', () => {
   test('Correct information about application should be displayed', async () => {
@@ -373,6 +374,9 @@ describe('Cable report application view', () => {
         http.get('/api/hakemukset/:id', async () => {
           return HttpResponse.json<Application<JohtoselvitysData>>(application);
         }),
+        http.post('/api/taydennykset/:id/laheta', async () => {
+          return HttpResponse.json(application);
+        }),
       );
       const renderResult = render(<ApplicationViewContainer id={application.id!} />);
       await waitForLoadingToFinish();
@@ -649,6 +653,49 @@ describe('Cable report application view', () => {
       expect(screen.getAllByText('Poistettu:').length).toBe(1);
       expect(screen.getByText('New name')).toBeInTheDocument();
       expect(screen.getByText('newMail@test.com')).toBeInTheDocument();
+    });
+
+    test('Taydennys can be sent', async () => {
+      const application = cloneDeep(hakemukset[10]) as Application<JohtoselvitysData>;
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: application.applicationData,
+        muutokset: ['workDescription'],
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('button', { name: 'Lähetä täydennys' }));
+      await user.click(await screen.findByRole('button', { name: /vahvista/i }));
+
+      expect(await screen.findByText(/täydennys lähetetty/i)).toBeInTheDocument();
+    });
+
+    test('Send taydennys button is not visible if there are no changes', async () => {
+      const application = cloneDeep(hakemukset[10]) as Application<JohtoselvitysData>;
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: application.applicationData,
+        muutokset: [],
+      };
+      await setup(application);
+
+      expect(screen.queryByRole('button', { name: 'Lähetä täydennys' })).not.toBeInTheDocument();
+    });
+
+    test('Send taydennys button is not visible if user does not have permission', async () => {
+      server.use(
+        http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+          return HttpResponse.json<SignedInUser>(USER_VIEW);
+        }),
+      );
+      const application = cloneDeep(hakemukset[10]) as Application<JohtoselvitysData>;
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: application.applicationData,
+        muutokset: ['workDescription'],
+      };
+      await setup(application);
+
+      expect(screen.queryByRole('button', { name: 'Lähetä täydennys' })).not.toBeInTheDocument();
     });
   });
 });
