@@ -38,7 +38,7 @@
     "@turf/kinks": "^7.1.0",
     "@types/geojson": "^7946.0.14",
     "@types/jest": "^29.5.12",
-    "@types/node": "^22.5.4",
+    "@types/node": "^22.10.0",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
     "@types/react-helmet": "^6.1.11",
