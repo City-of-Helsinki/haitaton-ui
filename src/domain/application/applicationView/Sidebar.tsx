@@ -46,7 +46,7 @@ type SidebarProps = {
   application: Application;
 };
 
-export function Sidebar({ hanke, application }: Readonly<SidebarProps>) {
+export default function Sidebar({ hanke, application }: Readonly<SidebarProps>) {
   const { t } = useTranslation();
   const { applicationType, applicationData, taydennys } = application;
   const tyoalueet =

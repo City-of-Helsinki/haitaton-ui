@@ -51,7 +51,7 @@ test('renders form heading and labels for form steps', () => {
   expect(screen.getByText('Vaihe 1/2: Title 1')).toBeInTheDocument();
 });
 
-test('renders form notification if texts are given', () => {
+test('renders additional content to top of form if given', () => {
   const formSteps = [
     {
       element: <Page1 />,
@@ -72,13 +72,11 @@ test('renders form notification if texts are given', () => {
       heading="Test form"
       formSteps={formSteps}
       onStepChange={handleSave}
-      notificationLabel="Notification label"
-      notificationText="Notification text"
+      topElement={<p>Additional content</p>}
     />,
   );
 
-  expect(screen.getByText('Notification label')).toBeInTheDocument();
-  expect(screen.getByText('Notification text')).toBeInTheDocument();
+  expect(screen.getByText('Additional content')).toBeInTheDocument();
 });
 
 test('form pages can be navigated', async () => {

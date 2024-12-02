@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import { Notification, Stepper, StepState } from 'hds-react';
+import { Stepper, StepState } from 'hds-react';
 import { Box, Flex } from '@chakra-ui/react';
 import { AnyObject, ObjectSchema } from 'yup';
 import styles from './MultipageForm.module.scss';
@@ -46,6 +46,8 @@ interface Props {
   /** Heading of the form */
   heading: string;
   subHeading?: string | JSX.Element;
+  /** Additional element to show below form heading */
+  topElement?: React.ReactNode;
   /** Array of form steps to render */
   formSteps: FormStep[];
   isLoading?: boolean;
@@ -58,9 +60,6 @@ interface Props {
    * and should validate the step and execute the given function if step is valid.
    */
   stepChangeValidator?: (changeStep: () => void, stepIndex: number) => void;
-  notificationLabel?: string;
-  notificationText?: string;
-  formErrorsNotification?: React.ReactNode;
   formData?: unknown;
 }
 
@@ -78,9 +77,7 @@ const MultipageForm: React.FC<Props> = ({
   onStepChange,
   onSubmit,
   stepChangeValidator,
-  notificationLabel,
-  notificationText,
-  formErrorsNotification,
+  topElement,
   formData,
 }) => {
   const locale = useLocale();
@@ -143,13 +140,7 @@ const MultipageForm: React.FC<Props> = ({
 
       <MainHeading>{heading}</MainHeading>
 
-      {notificationLabel && notificationText && (
-        <Notification dataTestId="form-notification" size="large" label={notificationLabel}>
-          {notificationText}
-        </Notification>
-      )}
-
-      {formErrorsNotification}
+      {topElement}
 
       <div className={styles.stepper}>
         {isLoading ? (

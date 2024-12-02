@@ -3,7 +3,7 @@ import { render, screen } from '../../../testUtils/render';
 import hankkeet from '../../mocks/data/hankkeet-data';
 import hakemukset from '../../mocks/data/hakemukset-data';
 import { Application, JohtoselvitysData } from '../types/application';
-import { Sidebar } from './Sidebar';
+import Sidebar from './Sidebar';
 import { HankeData } from '../../types/hanke';
 
 describe('Sidebar', () => {

@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
-import { Button, IconCross, IconPlusCircle, IconSaveDiskette, StepState } from 'hds-react';
+import { Button, IconCross, IconPlusCircle, IconSaveDiskette, Link, StepState } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import VectorSource from 'ol/source/Vector';
+import { ValidationError } from 'yup';
 import { FormNotification, HankeDataFormState } from './types';
 import {
   hankeSchema,
@@ -32,9 +33,9 @@ import { changeFormStep, getFieldPaths } from '../../forms/utils';
 import { updateHanke } from './hankeApi';
 import { convertHankeAlueToFormState } from './utils';
 import { useValidationErrors } from '../../forms/hooks/useValidationErrors';
-import HankeDraftStateNotification from './components/HankeDraftStateNotification';
-import HankeFormMissingFieldsNotification from './components/MissingFieldsNotification';
 import DrawProvider from '../../../common/components/map/modules/draw/DrawProvider';
+import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
+import FormFieldsErrorSummary from '../../forms/components/FormFieldsErrorSummary';
 
 type Props = {
   formData: HankeDataFormState;
@@ -252,22 +253,58 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     [],
   ];
 
+  function mapToErrorListItem(error: ValidationError) {
+    const errorPath = error.path?.replace('[', '.').replace(']', '');
+    // Get parts of the path: for example for path 'alueet.0.meluHaitta' returns ['alueet', '0', 'meluHaitta'],
+    // and for example for 'alueet' just ['alueet']
+    const pathParts = errorPath?.match(/(\w+)/g) || [];
+
+    if (pathParts.length === 1 && pathParts[0] === 'alueet') {
+      pathParts[0] = 'alueet.empty';
+    }
+
+    const langKey = pathParts.reduce((acc, part, index) => {
+      if (index === 1) {
+        // Exclude the index from the lang key
+        return acc;
+      }
+      return `${acc}:${part}`;
+    }, 'hankeForm:missingFields');
+
+    const linkText = t(langKey, {
+      count: Number(pathParts[1]) + 1,
+      alueName: getValues(`alueet.${pathParts[1]}.nimi` as FieldPath<HankeDataFormState>),
+    });
+
+    return (
+      <li key={errorPath}>
+        <Link href={`#${errorPath}`} disableVisitedStyles>
+          {linkText}
+        </Link>
+      </li>
+    );
+  }
+
   const formErrorsNotification =
     (activeStepIndex === 5 && (
-      <HankeDraftStateNotification hanke={watchFormValues as HankeData} />
+      <FormPagesErrorSummary
+        data={watchFormValues}
+        schema={hankeSchema}
+        notificationLabel={t('hankePortfolio:draftState:labels:insufficientPhases')}
+      />
     )) ||
     (formErrorsByPage[activeStepIndex].length > 0 && (
-      <HankeFormMissingFieldsNotification
-        formErrors={formErrorsByPage[activeStepIndex]}
-        getValues={getValues}
-        notificationLabelKey={
+      <FormFieldsErrorSummary
+        notificationLabel={
           activeStepIndex === 2 &&
           haittojenHallintaErrors.length === 1 &&
           haittojenHallintaErrors[0].path === 'alueet'
-            ? 'hankePortfolio:draftState:labels:missingInformationForHaittojenhallinta'
-            : undefined
+            ? t('hankePortfolio:draftState:labels:missingInformationForHaittojenhallinta')
+            : t('hankePortfolio:draftState:labels:missingFields')
         }
-      />
+      >
+        {formErrorsByPage[activeStepIndex].map(mapToErrorListItem)}
+      </FormFieldsErrorSummary>
     ));
 
   // Fields to validate when changing step.
@@ -314,7 +351,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
           onStepChange={handleStepChange}
           isLoading={attachmentsUploading}
           isLoadingText={attachmentsUploadingText}
-          formErrorsNotification={formErrorsNotification}
+          topElement={formErrorsNotification}
           formData={watchFormValues}
           stepChangeValidator={validateStepChange}
         >
