@@ -1,6 +1,7 @@
 build/*
 public/*
 .eslintrc.js
+src/jest.polyfills.js
 src/react-app-env.d.ts
 src/serviceWorker.ts
 scripts/update-runtime-env.ts

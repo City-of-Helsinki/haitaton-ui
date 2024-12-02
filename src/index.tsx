@@ -11,40 +11,46 @@ import {
   useNavigationType,
 } from 'react-router-dom';
 
-Sentry.init({
-  dsn: window._env_.REACT_APP_SENTRY_DSN,
-  integrations: [
-    Sentry.browserTracingIntegration(),
-    Sentry.reactRouterV6BrowserTracingIntegration({
-      useEffect,
-      useLocation,
-      useNavigationType,
-      createRoutesFromChildren,
-      matchRoutes,
-    }),
-    Sentry.captureConsoleIntegration(),
-  ],
-  tracesSampleRate:
-    // no traces if not in prod or test
-    window._env_.REACT_APP_DISABLE_SENTRY === '1' ? 0.0 : 1.0,
-  environment: process.env.NODE_ENV,
-});
+if (window._env_.REACT_APP_DISABLE_SENTRY !== '1') {
+  Sentry.init({
+    dsn: window._env_.REACT_APP_SENTRY_DSN,
+    integrations: [
+      Sentry.browserTracingIntegration(),
+      Sentry.reactRouterV6BrowserTracingIntegration({
+        useEffect,
+        useLocation,
+        useNavigationType,
+        createRoutesFromChildren,
+        matchRoutes,
+      }),
+      Sentry.captureConsoleIntegration(),
+    ],
+    tracesSampleRate:
+      // no traces if not in prod or test
+      window._env_.REACT_APP_DISABLE_SENTRY === '1' ? 0.0 : 1.0,
+    environment: process.env.NODE_ENV,
+  });
+}
 
 const container = document.getElementById('root');
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const root = createRoot(container!);
 
-if (window._env_.REACT_APP_MOCK_API === 'use') {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
-  const { worker } = require('./domain/mocks/browser');
-  worker.start();
+async function enableMocking() {
+  if (window._env_.REACT_APP_MOCK_API !== 'use') {
+    return;
+  }
+  const { worker } = await import('./domain/mocks/browser');
+  return worker.start();
 }
 
 if (process.env.NODE_ENV !== 'production') {
   import('@axe-core/react').then((axe) => {
     // https://github.com/dequelabs/axe-core-npm/issues/176
     axe.default(React, ReactDOM, 1000, {}, undefined);
-    root.render(<App />);
+    enableMocking().then(() => {
+      root.render(<App />);
+    });
   });
 } else {
   root.render(<App />);

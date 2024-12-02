@@ -16,6 +16,9 @@ import { Feature } from 'ol';
 import { Geometry, Polygon as OlPolygon } from 'ol/geom';
 import { getSurfaceArea } from '../../../common/components/map/utils';
 import { HaittaIndexData } from '../../common/haittaIndexes/types';
+import { reportCompletionDateSchema } from '../../kaivuilmoitus/validationSchema';
+import { sendSchema } from '../yupSchemas';
+import { Taydennys, Taydennyspyynto } from '../taydennys/types';
 
 export type ApplicationType = 'CABLE_REPORT' | 'EXCAVATION_NOTIFICATION';
 
@@ -57,6 +60,7 @@ export type Customer = {
   email: string;
   phone: string;
   registryKey: string | null;
+  registryKeyHidden: boolean;
   ovt?: string | null;
   invoicingOperator?: string | null;
   sapCustomerNumber?: string | null;
@@ -71,7 +75,8 @@ export type CustomerWithContacts = {
 export type InvoicingCustomer = {
   type: keyof typeof ContactType | null;
   name: string;
-  registryKey: string;
+  registryKey: string | null;
+  registryKeyHidden: boolean;
   ovt?: string | null;
   invoicingOperator?: string | null;
   customerReference?: string | null;
@@ -126,6 +131,7 @@ export class ApplicationGeometry implements PolygonWithCRS {
 export type ApplicationArea = {
   name?: string;
   geometry: ApplicationGeometry;
+  tormaystarkasteluTulos?: HaittaIndexData | null;
 };
 
 export class Tyoalue {
@@ -138,6 +144,7 @@ export class Tyoalue {
     this.geometry = new ApplicationGeometry((feature.getGeometry() as OlPolygon).getCoordinates());
     this.area = getSurfaceArea(feature.getGeometry()!);
     this.openlayersFeature = feature;
+    this.tormaystarkasteluTulos = feature.get('tormaystarkasteluTulos');
   }
 }
 
@@ -153,6 +160,13 @@ export type KaivuilmoitusAlue = {
   kaistahaitta: HANKE_KAISTAHAITTA_KEY | null;
   kaistahaittojenPituus: HANKE_KAISTAPITUUSHAITTA_KEY | null;
   lisatiedot?: string;
+};
+
+export type PaperDecisionReceiver = {
+  name: string;
+  streetAddress: string;
+  postalCode: string;
+  city: string;
 };
 
 export type AttachmentType = 'MUU' | 'LIIKENNEJARJESTELY' | 'VALTAKIRJA';
@@ -179,6 +193,7 @@ export interface JohtoselvitysData {
   emergencyWork: boolean;
   propertyConnectivity: boolean;
   rockExcavation: boolean | null;
+  paperDecisionReceiver?: PaperDecisionReceiver | null;
 }
 
 export interface KaivuilmoitusData {
@@ -189,7 +204,7 @@ export interface KaivuilmoitusData {
   maintenanceWork: boolean;
   emergencyWork: boolean;
   rockExcavation: boolean | null;
-  cableReportDone: boolean;
+  cableReportDone: boolean | null;
   cableReports?: string[];
   placementContracts?: string[];
   requiredCompetence: boolean;
@@ -202,9 +217,43 @@ export interface KaivuilmoitusData {
   propertyDeveloperWithContacts?: CustomerWithContacts | null;
   invoicingCustomer?: InvoicingCustomer | null;
   additionalInfo?: string | null;
+  paperDecisionReceiver?: PaperDecisionReceiver | null;
 }
 
 export type NewJohtoselvitysData = yup.InferType<typeof newJohtoselvitysSchema>;
+
+export enum PaatosTyyppi {
+  PAATOS = 'PAATOS',
+  TOIMINNALLINEN_KUNTO = 'TOIMINNALLINEN_KUNTO',
+  TYO_VALMIS = 'TYO_VALMIS',
+}
+
+export enum PaatosTila {
+  NYKYINEN = 'NYKYINEN',
+  KORVATTU = 'KORVATTU',
+}
+
+export interface Paatos {
+  id: string;
+  hakemusId: number;
+  hakemustunnus: string;
+  tyyppi: PaatosTyyppi;
+  tila: PaatosTila;
+  nimi: string;
+  alkupaiva: Date;
+  loppupaiva: Date;
+  size: number;
+}
+
+export type ValmistumisilmoitusType = 'TOIMINNALLINEN_KUNTO' | 'TYO_VALMIS';
+
+export interface Valmistumisilmoitus {
+  type: ValmistumisilmoitusType;
+  dateReported: Date;
+  reportedAt: Date;
+}
+
+export type Valmistumisilmoitukset = { [key in ValmistumisilmoitusType]?: Valmistumisilmoitus[] };
 
 export interface Application<T = JohtoselvitysData | KaivuilmoitusData> {
   id: number | null;
@@ -214,6 +263,10 @@ export interface Application<T = JohtoselvitysData | KaivuilmoitusData> {
   applicationData: T;
   applicationIdentifier?: string | null;
   hankeTunnus: string | null;
+  paatokset?: { [key: string]: Paatos[] };
+  valmistumisilmoitukset?: Valmistumisilmoitukset | null;
+  taydennyspyynto?: Taydennyspyynto | null;
+  taydennys?: Taydennys<T> | null;
 }
 
 export interface HankkeenHakemus {
@@ -226,8 +279,9 @@ export interface HankkeenHakemus {
     name: string;
     startTime: Date | null;
     endTime: Date | null;
-    pendingOnClient: boolean;
+    areas: ApplicationArea[] | KaivuilmoitusAlue[] | null;
   };
+  paatokset?: { [key: string]: Paatos[] };
 }
 
 export interface ApplicationDeletionResult {
@@ -323,3 +377,7 @@ export interface KaivuilmoitusUpdateData
   representativeWithContacts?: ApplicationUpdateCustomerWithContacts | null;
   propertyDeveloperWithContacts?: ApplicationUpdateCustomerWithContacts | null;
 }
+
+export type ReportCompletionDateData = yup.InferType<typeof reportCompletionDateSchema>;
+
+export type ApplicationSendData = yup.InferType<typeof sendSchema>;

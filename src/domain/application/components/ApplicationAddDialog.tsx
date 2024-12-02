@@ -29,9 +29,9 @@ const ApplicationAddDialog: React.FC<Props> = ({ isOpen, onClose, hanke }) => {
 
   const dialogTitle = t('hakemus:headers:pickApplication');
   const applicationTypeOptions: Option[] = [
-    { label: t('hakemus:applicationTypes:CABLE_REPORT'), value: 'CABLE_REPORT' },
+    { label: t('hakemus:addApplicationTypes:CABLE_REPORT'), value: 'CABLE_REPORT' },
     {
-      label: t('hakemus:applicationTypes:EXCAVATION_NOTIFICATION'),
+      label: t('hakemus:addApplicationTypes:EXCAVATION_NOTIFICATION'),
       value: 'EXCAVATION_NOTIFICATION',
     },
   ];

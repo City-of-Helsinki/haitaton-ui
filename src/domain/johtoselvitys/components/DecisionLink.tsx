@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconDocument } from 'hds-react';
+import { IconDownload } from 'hds-react';
 import api from '../../api/api';
 import FileDownloadLink from '../../../common/components/fileDownloadLink/FileDownloadLink';
 
@@ -20,7 +20,7 @@ function DecisionLink({ linkText, filename, applicationId }: Props) {
       linkText={linkText}
       fileName={filename}
       linkIcon={
-        <IconDocument aria-hidden size="xs" style={{ marginRight: 'var(--spacing-3-xs)' }} />
+        <IconDownload aria-hidden size="xs" style={{ marginRight: 'var(--spacing-3-xs)' }} />
       }
       queryKey={['decision', applicationId]}
       queryFunction={() => getDecision(applicationId)}

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Accordion, Button, Fieldset, IconPlusCircle } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { useTranslation } from 'react-i18next';
@@ -6,6 +6,7 @@ import { useFormContext } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
 import {
   Application,
+  ApplicationType,
   Contact,
   ContactType,
   CustomerType,
@@ -21,6 +22,8 @@ import { HankeUser } from '../../hanke/hankeUsers/hankeUser';
 import { useHankeUsers } from '../../hanke/hankeUsers/hooks/useHankeUsers';
 import { mapHankeUserToContact } from '../../hanke/hankeUsers/utils';
 import UserSearchInput from '../../hanke/hankeUsers/UserSearchInput';
+import { TFunction } from 'i18next';
+import { HIDDEN_FIELD_VALUE } from '../constants';
 
 function getEmptyCustomerWithContacts(): CustomerWithContacts {
   return {
@@ -31,9 +34,39 @@ function getEmptyCustomerWithContacts(): CustomerWithContacts {
       email: '',
       phone: '',
       registryKey: null,
+      registryKeyHidden: false,
     },
     contacts: [],
   };
+}
+
+function isRegistryKeyInputEnabled(
+  customerType: CustomerType,
+  selectedContactType: keyof typeof ContactType | null,
+  applicationType: ApplicationType,
+) {
+  return (
+    selectedContactType === undefined ||
+    selectedContactType === 'COMPANY' ||
+    selectedContactType === 'ASSOCIATION' ||
+    (applicationType === 'EXCAVATION_NOTIFICATION' && customerType === 'customerWithContacts')
+  );
+}
+
+function getRegistryKeyLabel(
+  t: TFunction<'translation', undefined>,
+  customerType: CustomerType,
+  selectedContactType: keyof typeof ContactType | null,
+  applicationType: ApplicationType,
+) {
+  if (applicationType === 'EXCAVATION_NOTIFICATION' && customerType === 'customerWithContacts') {
+    if (selectedContactType === 'PERSON') {
+      return t('form:yhteystiedot:labels:henkilotunnus');
+    } else if (selectedContactType === 'OTHER') {
+      return t('form:yhteystiedot:labels:muuTunnus');
+    }
+  }
+  return t('form:yhteystiedot:labels:ytunnus');
 }
 
 const CustomerFields: React.FC<{
@@ -41,30 +74,64 @@ const CustomerFields: React.FC<{
   hankeUsers?: HankeUser[];
 }> = ({ customerType, hankeUsers }) => {
   const { t } = useTranslation();
-  const { watch, setValue } = useFormContext<Application>();
+  const { watch, setValue, getValues } = useFormContext<Application>();
 
-  const [selectedContactType, registryKey] = watch([
-    `applicationData.${customerType}.customer.type`,
-    `applicationData.${customerType}.customer.registryKey`,
-  ]);
+  const applicationType = getValues('applicationData.applicationType');
+  const selectedContactType = watch(`applicationData.${customerType}.customer.type`);
+  const registryKey = watch(`applicationData.${customerType}.customer.registryKey`);
+  const registryKeyHidden = watch(`applicationData.${customerType}.customer.registryKeyHidden`);
+  const registryKeyInputEnabled = isRegistryKeyInputEnabled(
+    customerType,
+    selectedContactType,
+    applicationType,
+  );
+  const isMounted = useRef(false);
+  const [originalRegistryKeyIsHidden, setOriginalRegistryKeyIsHidden] = useState(false);
 
   useEffect(() => {
-    // If setting contact type to other than company or association, set null to registry key
-    if (selectedContactType === 'PERSON' || selectedContactType === 'OTHER') {
+    // set a flag to mark the original registry key as hidden value in order to be able to revert back to it
+    if (registryKey === HIDDEN_FIELD_VALUE) {
+      setOriginalRegistryKeyIsHidden(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      // clear the registry key when changing the contact type after mount
       setValue(`applicationData.${customerType}.customer.registryKey`, null, {
         shouldValidate: true,
       });
+      setOriginalRegistryKeyIsHidden(false);
     }
-  }, [selectedContactType, customerType, setValue]);
+  }, [selectedContactType, customerType, applicationType, setValue]);
 
   useEffect(() => {
-    // When emptying registry key field, set its value to null
+    if (isMounted.current) {
+      if (originalRegistryKeyIsHidden && registryKey === HIDDEN_FIELD_VALUE) {
+        // set registry key hidden to true when changing the registry key back to the hidden value
+        setValue(`applicationData.${customerType}.customer.registryKeyHidden`, true, {
+          shouldValidate: true,
+        });
+      } else {
+        // set registry key hidden to false when changing the registry key after mount
+        setValue(`applicationData.${customerType}.customer.registryKeyHidden`, false, {
+          shouldValidate: true,
+        });
+      }
+    }
+
     if (registryKey === '') {
+      // set the registry key to null when it is empty
       setValue(`applicationData.${customerType}.customer.registryKey`, null, {
         shouldValidate: true,
       });
     }
-  }, [registryKey, customerType, setValue]);
+
+    // mark the component as mounted
+    isMounted.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [customerType, registryKey, setValue]);
 
   function handleUserSelect(user: HankeUser) {
     setValue(`applicationData.${customerType}.customer.email`, user.sahkoposti, {
@@ -113,9 +180,12 @@ const CustomerFields: React.FC<{
         />
         <TextInput
           name={`applicationData.${customerType}.customer.registryKey`}
-          label={t('form:yhteystiedot:labels:ytunnus')}
-          disabled={selectedContactType === 'PERSON' || selectedContactType === 'OTHER'}
+          label={getRegistryKeyLabel(t, customerType, selectedContactType, applicationType)}
+          disabled={!registryKeyInputEnabled}
           autoComplete="on"
+          defaultValue={null}
+          required={applicationType === 'EXCAVATION_NOTIFICATION' && registryKeyInputEnabled}
+          helperText={registryKeyHidden ? t('form:yhteystiedot:helperTexts:registryKey') : ''}
         />
       </ResponsiveGrid>
       <ResponsiveGrid maxColumns={2}>
@@ -136,11 +206,12 @@ const CustomerFields: React.FC<{
   );
 };
 
-export default function ApplicationContacts() {
+export default function ApplicationContacts({
+  hankeTunnus,
+}: Readonly<{ hankeTunnus: string | null }>) {
   const { t } = useTranslation();
   const locale = useLocale();
   const { watch, setValue, getValues } = useFormContext<Application>();
-  const hankeTunnus = getValues('hankeTunnus');
   const { data: hankeUsers } = useHankeUsers(hankeTunnus);
   const queryClient = useQueryClient();
 

@@ -1,5 +1,5 @@
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '../../testUtils/render';
 import KaivuilmoitusContainer from './KaivuilmoitusContainer';
 import { HankeData } from '../types/hanke';
@@ -8,6 +8,9 @@ import { server } from '../mocks/test-server';
 import {
   Application,
   ApplicationAttachmentMetadata,
+  ContactType,
+  Customer,
+  InvoicingCustomer,
   KaivuilmoitusAlue,
   KaivuilmoitusData,
 } from '../application/types/application';
@@ -15,12 +18,16 @@ import * as applicationAttachmentsApi from '../application/attachments';
 import applications from '../mocks/data/hakemukset-data';
 import {
   initApplicationAttachmentGetResponse,
+  initHaittaindeksitPostResponse,
   uploadApplicationAttachmentMock,
 } from '../../testUtils/helperFunctions';
-import { ContactType, Customer, InvoicingCustomer } from '../application/types/application';
 import { cloneDeep } from 'lodash';
 import { fillNewContactPersonForm } from '../forms/components/testUtils';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
+import * as applicationApi from '../application/utils';
+import { HAITTA_INDEX_TYPE } from '../common/haittaIndexes/types';
+import { HIDDEN_FIELD_VALUE } from '../application/constants';
+import * as hakemuksetDB from '../mocks/data/hakemukset';
 
 afterEach(cleanup);
 
@@ -31,7 +38,7 @@ async function fillBasicInformation(
     description?: string;
     cableReportDone?: boolean;
     rockExcavation?: boolean;
-    existingCableReport?: string;
+    existingCableReport?: string | null;
     cableReports?: string[];
     placementContracts?: string[];
     requiredCompetence?: boolean;
@@ -58,37 +65,51 @@ async function fillBasicInformation(
 
   fireEvent.click(screen.getByLabelText(/uuden rakenteen tai johdon rakentamisesta/i));
 
-  if (cableReportDone) {
+  if (!cableReportDone) {
     fireEvent.click(screen.getByLabelText(/hae uusi johtoselvitys/i));
     if (rockExcavation === true) {
       fireEvent.click(screen.getByLabelText(/kyllä/i));
     } else if (rockExcavation === false) {
       fireEvent.click(screen.getByLabelText(/ei/i));
     }
-  }
+  } else {
+    fireEvent.click(screen.getByLabelText(/käytä olemassa olevia/i));
+    if (existingCableReport) {
+      await screen.findAllByLabelText(/tehtyjen johtoselvitysten tunnukset/i);
+      fireEvent.click(
+        screen.getByRole('button', {
+          name: 'Tehtyjen johtoselvitysten tunnukset: Sulje ja avaa valikko',
+        }),
+      );
+      fireEvent.click(screen.getByText(existingCableReport));
 
-  if (existingCableReport) {
-    await screen.findAllByLabelText(/tehtyjen johtoselvitysten tunnukset/i);
-    fireEvent.click(
-      screen.getByRole('button', {
-        name: 'Tehtyjen johtoselvitysten tunnukset: Sulje ja avaa valikko',
-      }),
-    );
-    fireEvent.click(screen.getByText(existingCableReport));
-  }
-
-  for (const cableReport of cableReports) {
-    fireEvent.change(screen.getByRole('combobox'), {
-      target: { value: cableReport },
-    });
-    await user.keyboard('{Enter}');
+      for (const cableReport of cableReports) {
+        fireEvent.change(screen.getAllByRole('combobox')[1], {
+          target: { value: cableReport },
+        });
+        await user.keyboard('{Enter}');
+      }
+    } else {
+      for (const cableReport of cableReports) {
+        fireEvent.change(screen.getByLabelText('Johtoselvitystunnus'), {
+          target: { value: cableReport },
+        });
+        fireEvent.click(
+          within(
+            screen.getByRole('group', {
+              name: /käytä olemassa olevia johtoselvityksiä/i,
+            }),
+          ).getByRole('button', { name: /lisää/i }),
+        );
+      }
+    }
   }
 
   for (const placementContract of placementContracts) {
     fireEvent.change(screen.getByLabelText('Sijoitussopimustunnus'), {
       target: { value: placementContract },
     });
-    fireEvent.click(screen.getByRole('button', { name: /lisää/i }));
+    fireEvent.click(screen.getByTestId('placementContract-addButton'));
   }
 
   if (requiredCompetence) {
@@ -273,7 +294,7 @@ test('Should be able fill perustiedot and save form', async () => {
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
   expect(screen.queryAllByText(/hakemus tallennettu/i).length).toBe(2);
-  expect(window.location.pathname).toBe('/fi/hakemus/8');
+  expect(window.location.pathname).toBe(`/fi/hakemus/${(await hakemuksetDB.readAll()).length}`);
 });
 
 test('Should not be able to save form if work name is missing', async () => {
@@ -288,8 +309,8 @@ test('Should not be able to save form if work name is missing', async () => {
 
 test('Should show error message if saving fails', async () => {
   server.use(
-    rest.post('/api/hakemukset', async (req, res, ctx) => {
-      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    http.post('/api/hakemukset', async () => {
+      return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
     }),
   );
   const hankeData = hankkeet[1] as HankeData;
@@ -302,6 +323,23 @@ test('Should show error message if saving fails', async () => {
 });
 
 test('Should be able to fill form pages and show filled information in summary page', async () => {
+  initHaittaindeksitPostResponse({
+    autoliikenne: {
+      indeksi: 1.4,
+      haitanKesto: 5,
+      katuluokka: 1,
+      liikennemaara: 1,
+      kaistahaitta: 1,
+      kaistapituushaitta: 1,
+    },
+    pyoraliikenneindeksi: 0.0,
+    linjaautoliikenneindeksi: 0.0,
+    raitioliikenneindeksi: 0.0,
+    liikennehaittaindeksi: {
+      indeksi: 1.4,
+      tyyppi: HAITTA_INDEX_TYPE.AUTOLIIKENNEINDEKSI,
+    },
+  });
   initApplicationAttachmentGetResponse([
     {
       id: '8a77c842-3d6b-42df-8ed0-7d1493a2c015',
@@ -337,8 +375,7 @@ test('Should be able to fill form pages and show filled information in summary p
 
   const name = 'Kaivuilmoitus testi';
   const description = 'Testataan yhteenvetosivua';
-  const cableReportDone = false;
-  const rockExcavation = true;
+  const cableReportDone = true;
   const existingCableReport = 'JS2300001';
   const cableReports = ['JS2300002', 'JS2300003', 'JS2300004'];
   const placementContracts = ['SL0000001', 'SL0000002'];
@@ -351,6 +388,7 @@ test('Should be able to fill form pages and show filled information in summary p
     type: ContactType.COMPANY,
     name: 'Yritys Oy',
     registryKey: '2182805-0',
+    registryKeyHidden: false,
     email: 'yritys1@test.com',
     phone: '0000000000',
   };
@@ -358,6 +396,7 @@ test('Should be able to fill form pages and show filled information in summary p
     type: ContactType.COMPANY,
     name: 'Yritys 2 Oy',
     registryKey: '7126070-7',
+    registryKeyHidden: false,
     email: 'yritys2@test.com',
     phone: '0000000001',
   };
@@ -365,6 +404,7 @@ test('Should be able to fill form pages and show filled information in summary p
     type: ContactType.COMPANY,
     name: 'Yritys 3 Oy',
     registryKey: '1234567-1',
+    registryKeyHidden: false,
     ovt: '123456789012',
     invoicingOperator: '12345',
     customerReference: '6789',
@@ -396,7 +436,7 @@ test('Should be able to fill form pages and show filled information in summary p
       cableReports: [],
       placementContracts: [],
       requiredCompetence: false,
-      areas: applications[4].applicationData.areas as KaivuilmoitusAlue[],
+      areas: cloneDeep(applications[4].applicationData.areas) as KaivuilmoitusAlue[],
       startTime: null,
       endTime: null,
       representativeWithContacts: null,
@@ -411,7 +451,6 @@ test('Should be able to fill form pages and show filled information in summary p
     name,
     description,
     cableReportDone,
-    rockExcavation,
     existingCableReport,
     cableReports,
     placementContracts,
@@ -449,9 +488,6 @@ test('Should be able to fill form pages and show filled information in summary p
   expect(screen.getByText(name)).toBeInTheDocument();
   expect(screen.getByText(description)).toBeInTheDocument();
   expect(
-    screen.getByText('Louhitaanko työn yhteydessä, esimerkiksi kallioperää?: Ei'),
-  ).toBeInTheDocument();
-  expect(
     screen.getByText(`${existingCableReport}, ${cableReports.join(', ')}`),
   ).toBeInTheDocument();
   expect(screen.getByText(placementContracts.join(', '))).toBeInTheDocument();
@@ -465,11 +501,13 @@ test('Should be able to fill form pages and show filled information in summary p
   expect(screen.getByText('Pinta-ala: 188 m²')).toBeInTheDocument();
   expect(screen.getByText('Katuosoite: Aidasmäentie 5')).toBeInTheDocument();
   expect(screen.getByText('Työn tarkoitus: Vesi, Viemäri')).toBeInTheDocument();
-  expect(screen.getByText('Meluhaitta: 3: Toistuva meluhaitta')).toBeInTheDocument();
-  expect(screen.getByText('Pölyhaitta: 5: Jatkuva pölyhaitta')).toBeInTheDocument();
-  expect(screen.getByText('Tärinähaitta: 1: Satunnainen tärinähaitta')).toBeInTheDocument();
+  expect(screen.getByText('Meluhaitta: Toistuva meluhaitta')).toBeInTheDocument();
+  expect(screen.getByText('Pölyhaitta: Jatkuva pölyhaitta')).toBeInTheDocument();
+  expect(screen.getByText('Tärinähaitta: Satunnainen tärinähaitta')).toBeInTheDocument();
   expect(
-    screen.getByText('Autoliikenteen kaistahaitta: Vähentää kaistan yhdellä ajosuunnalla'),
+    screen.getByText(
+      'Autoliikenteen kaistahaitta: Yksi autokaista vähenee - ajosuunta vielä käytössä',
+    ),
   ).toBeInTheDocument();
   expect(screen.getByText('Kaistahaittojen pituus: 10-99 m')).toBeInTheDocument();
   expect(screen.getByText('Lisätietoja alueesta: -')).toBeInTheDocument();
@@ -506,6 +544,156 @@ test('Should be able to fill form pages and show filled information in summary p
   expect(
     screen.getByText('Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),
   ).toBeInTheDocument();
+});
+
+test('If user selects "Hae uusi johtoselvitys" option, should show "Louhitaanko työn yhteydessä, esimerkiksi kallioperää" selection', async () => {
+  const hankeData = hankkeet[1] as HankeData;
+  const { user } = render(<KaivuilmoitusContainer hankeData={hankeData} />);
+  await fillBasicInformation(user, {
+    cableReportDone: false,
+    existingCableReport: null,
+    rockExcavation: true,
+    cableReports: [],
+  });
+  await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+
+  expect(
+    screen.getByText('Louhitaanko työn yhteydessä, esimerkiksi kallioperää?: Kyllä'),
+  ).toBeInTheDocument();
+});
+
+test('If there are no previous cable reports in hanke, user can enter cable report application identifiers using tag input', async () => {
+  const hankeData = hankkeet[1] as HankeData;
+  const { user } = render(<KaivuilmoitusContainer hankeData={hankeData} />);
+  await fillBasicInformation(user, {
+    cableReportDone: true,
+    existingCableReport: null,
+    cableReports: ['JS2300003'],
+  });
+  await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+
+  expect(screen.getByText('JS2300003')).toBeInTheDocument();
+});
+
+test('Should show notifications if work areas overlap with johtoselvitys work areas', async () => {
+  const hankeData = hankkeet[1] as HankeData;
+  const application = cloneDeep(applications[6] as Application<KaivuilmoitusData>);
+  const testApplication: Application<KaivuilmoitusData> = {
+    ...application,
+    applicationData: {
+      ...application.applicationData,
+      areas: [
+        {
+          name: 'Hankealue 1',
+          hankealueId: 56,
+          tyoalueet: [
+            {
+              geometry: {
+                type: 'Polygon',
+                crs: {
+                  type: 'name',
+                  properties: {
+                    name: 'urn:ogc:def:crs:EPSG::3879',
+                  },
+                },
+                coordinates: [
+                  [
+                    [25494635.230971202, 6683913.733669287],
+                    [25494643.36179799, 6683920.780385833],
+                    [25494636.31508144, 6683928.9112126175],
+                    [25494628.184254654, 6683921.864496071],
+                    [25494635.230971202, 6683913.733669287],
+                  ],
+                ],
+              },
+              area: 115.11530422209897,
+              tormaystarkasteluTulos: {
+                autoliikenne: {
+                  indeksi: 0,
+                  haitanKesto: 5,
+                  katuluokka: 0,
+                  liikennemaara: 0,
+                  kaistahaitta: 1,
+                  kaistapituushaitta: 1,
+                },
+                pyoraliikenneindeksi: 0,
+                linjaautoliikenneindeksi: 0,
+                raitioliikenneindeksi: 0,
+                liikennehaittaindeksi: {
+                  indeksi: 0,
+                  tyyppi: HAITTA_INDEX_TYPE.LINJAAUTOLIIKENNEINDEKSI,
+                },
+              },
+            },
+            {
+              geometry: {
+                type: 'Polygon',
+                crs: {
+                  type: 'name',
+                  properties: {
+                    name: 'urn:ogc:def:crs:EPSG::3879',
+                  },
+                },
+                coordinates: [
+                  [
+                    [25494618.945962217, 6683947.45562766],
+                    [25494607.62978715, 6683938.090536971],
+                    [25494612.70259224, 6683927.164585924],
+                    [25494625.969780233, 6683933.407991625],
+                    [25494618.945962217, 6683947.45562766],
+                  ],
+                ],
+              },
+              area: 199.55716052596907,
+              tormaystarkasteluTulos: {
+                autoliikenne: {
+                  indeksi: 0,
+                  haitanKesto: 5,
+                  katuluokka: 0,
+                  liikennemaara: 0,
+                  kaistahaitta: 1,
+                  kaistapituushaitta: 1,
+                },
+                pyoraliikenneindeksi: 0,
+                linjaautoliikenneindeksi: 0,
+                raitioliikenneindeksi: 0,
+                liikennehaittaindeksi: {
+                  indeksi: 0,
+                  tyyppi: HAITTA_INDEX_TYPE.LINJAAUTOLIIKENNEINDEKSI,
+                },
+              },
+            },
+          ],
+          katuosoite: 'Kotikatu 12',
+          tyonTarkoitukset: ['VIEMARI', 'SADEVESI'],
+          meluhaitta: 'SATUNNAINEN_MELUHAITTA',
+          polyhaitta: 'SATUNNAINEN_POLYHAITTA',
+          tarinahaitta: 'TOISTUVA_TARINAHAITTA',
+          kaistahaitta: 'EI_VAIKUTA',
+          kaistahaittojenPituus: 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
+          lisatiedot: '',
+        },
+      ],
+    },
+  };
+  const { user } = render(
+    <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+  );
+
+  await user.click(screen.getByRole('button', { name: /alueet/i }));
+
+  expect(
+    await screen.findByText(
+      /työalue ylittää usean johtoselvityksen rajauksen, tee muutosilmoitus./i,
+    ),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText(/Työalue ylittää johtoselvityksen rajauksen, tee johtoselvitykseen/i),
+  ).toBeInTheDocument();
+  const link = screen.getByRole('link', { name: /JS2300001/i });
+  expect(link).toHaveAttribute('href', '/fi/hakemus/2');
+  expect(link).toHaveAttribute('target', '_blank');
+  expect(link).toHaveAttribute('rel', 'noopener');
 });
 
 test('Should show validation error if the new user has an existing email address', async () => {
@@ -609,6 +797,103 @@ test('OVT fields should be required if postal address fields are empty', async (
   ).not.toBeRequired();
 });
 
+test('OVT and registryKey fields should be send as null if they are left empty', async () => {
+  const applicationUpdateSpy = jest.spyOn(applicationApi, 'updateApplication');
+  const hankeData = hankkeet[1] as HankeData;
+  const application = cloneDeep(applications[5] as Application<KaivuilmoitusData>);
+  const testApplication: Application<KaivuilmoitusData> = {
+    ...application,
+    applicationData: {
+      ...application.applicationData,
+      customerWithContacts: null,
+      contractorWithContacts: null,
+      invoicingCustomer: {
+        type: 'COMPANY',
+        name: '',
+        registryKey: '1234567-1',
+        registryKeyHidden: false,
+        ovt: '123456789012',
+        postalAddress: {
+          streetAddress: { streetName: 'Laskutuskuja 1' },
+          postalCode: '00100',
+          city: 'Helsinki',
+        },
+      },
+    },
+  };
+  const { user } = render(
+    <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+  );
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+  // Clear ovt, invoicingOperator and registryKey fields of invoicingCustomer, which should set them to null
+  await user.clear(screen.getByTestId('applicationData.invoicingCustomer.ovt'));
+  await user.clear(screen.getByTestId('applicationData.invoicingCustomer.invoicingOperator'));
+  await user.clear(screen.getByTestId('applicationData.invoicingCustomer.registryKey'));
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+  const data = applicationUpdateSpy.mock.lastCall?.[0].data as KaivuilmoitusData;
+  expect(data?.customerWithContacts?.customer).toEqual(
+    expect.objectContaining({ registryKey: null }),
+  );
+  expect(data?.contractorWithContacts?.customer).toEqual(
+    expect.objectContaining({ registryKey: null }),
+  );
+  expect(data?.invoicingCustomer).toEqual(
+    expect.objectContaining({ invoicingOperator: null, ovt: null, registryKey: null }),
+  );
+
+  applicationUpdateSpy.mockClear();
+});
+
+test('OVT and registryKey fields should be send as null if they are left empty by changing customer type', async () => {
+  const applicationUpdateSpy = jest.spyOn(applicationApi, 'updateApplication');
+  const hankeData = hankkeet[1] as HankeData;
+  const application = cloneDeep(applications[5] as Application<KaivuilmoitusData>);
+  const testApplication: Application<KaivuilmoitusData> = {
+    ...application,
+    applicationData: {
+      ...application.applicationData,
+      customerWithContacts: null,
+      contractorWithContacts: null,
+      invoicingCustomer: {
+        type: 'COMPANY',
+        name: '',
+        registryKey: '1234567-1',
+        registryKeyHidden: false,
+        ovt: '123456789012',
+        postalAddress: {
+          streetAddress: { streetName: 'Laskutuskuja 1' },
+          postalCode: '00100',
+          city: 'Helsinki',
+        },
+      },
+    },
+  };
+  const { user } = render(
+    <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+  );
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+  // Change customer type to PERSON
+  await user.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+  await user.click(screen.getAllByText(/yksityishenkilö/i)[0]);
+
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+  const data = applicationUpdateSpy.mock.lastCall?.[0].data as KaivuilmoitusData;
+  expect(data?.customerWithContacts?.customer).toEqual(
+    expect.objectContaining({ registryKey: null }),
+  );
+  expect(data?.contractorWithContacts?.customer).toEqual(
+    expect.objectContaining({ registryKey: null }),
+  );
+  expect(data?.invoicingCustomer).toEqual(
+    expect.objectContaining({ invoicingOperator: null, ovt: null, registryKey: null }),
+  );
+
+  applicationUpdateSpy.mockClear();
+});
+
 test('Should be able to upload attachments', async () => {
   const uploadSpy = jest
     .spyOn(applicationAttachmentsApi, 'uploadAttachment')
@@ -618,7 +903,7 @@ test('Should be able to upload attachments', async () => {
   const { user } = render(
     <KaivuilmoitusContainer
       hankeData={hankeData}
-      application={applications[4] as Application<KaivuilmoitusData>}
+      application={cloneDeep(applications[4]) as Application<KaivuilmoitusData>}
     />,
   );
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
@@ -680,7 +965,7 @@ test('Should be able to delete attachments', async () => {
   const { user } = render(
     <KaivuilmoitusContainer
       hankeData={hankeData}
-      application={applications[4] as Application<KaivuilmoitusData>}
+      application={cloneDeep(applications[4]) as Application<KaivuilmoitusData>}
     />,
   );
   await user.click(screen.getByRole('button', { name: /liitteet/i }));
@@ -746,7 +1031,7 @@ test('Should list existing attachments in the attachments page', async () => {
   const { user } = render(
     <KaivuilmoitusContainer
       hankeData={hankeData}
-      application={applications[4] as Application<KaivuilmoitusData>}
+      application={cloneDeep(applications[4]) as Application<KaivuilmoitusData>}
     />,
   );
   const button = await screen.findByRole('button', { name: /liitteet/i });
@@ -788,6 +1073,23 @@ test('Should list existing attachments in the attachments page', async () => {
 });
 
 test('Should be able to remove work areas', async () => {
+  initHaittaindeksitPostResponse({
+    autoliikenne: {
+      indeksi: 1.4,
+      haitanKesto: 5,
+      katuluokka: 1,
+      liikennemaara: 1,
+      kaistahaitta: 1,
+      kaistapituushaitta: 1,
+    },
+    pyoraliikenneindeksi: 0.0,
+    linjaautoliikenneindeksi: 0.0,
+    raitioliikenneindeksi: 0.0,
+    liikennehaittaindeksi: {
+      indeksi: 1.4,
+      tyyppi: HAITTA_INDEX_TYPE.AUTOLIIKENNEINDEKSI,
+    },
+  });
   const hankeData = hankkeet[1] as HankeData;
   const application = cloneDeep(applications[4] as Application<KaivuilmoitusData>);
   const { user } = render(
@@ -831,6 +1133,81 @@ test('Should highlight selected work area', async () => {
   expect(workAreaTwo).toHaveClass('selected');
 });
 
+test('Should show initial traffic nuisance index summary', async () => {
+  const hankeData = hankkeet[1] as HankeData;
+  const application = cloneDeep(applications[4] as Application<KaivuilmoitusData>);
+  const { user } = render(
+    <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
+  );
+  await user.click(await screen.findByRole('button', { name: /alueet/i }));
+
+  const accordionHeader = await screen.findByRole('button', {
+    name: 'Työalueiden liikennehaittaindeksien yhteenveto (0-5)',
+  });
+  await user.click(accordionHeader);
+  expect(await screen.findByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('4');
+  expect(await screen.findByTestId('test-raitioliikenneindeksi')).toHaveTextContent('5');
+
+  const carTrafficAccordion = await screen.findByText('Autoliikenteen ruuhkautuminen');
+  await user.click(carTrafficAccordion);
+  expect(await screen.findByTestId('test-katuluokka')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-liikennemaara')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-kaistahaitta')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-kaistapituushaitta')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-haitanKesto')).toHaveTextContent('3');
+});
+
+test('Should show changed traffic nuisance index summary when kaistahaitta changes', async () => {
+  initHaittaindeksitPostResponse({
+    autoliikenne: {
+      indeksi: 3.0,
+      haitanKesto: 3,
+      katuluokka: 3,
+      liikennemaara: 3,
+      kaistahaitta: 1,
+      kaistapituushaitta: 3,
+    },
+    pyoraliikenneindeksi: 3.0,
+    linjaautoliikenneindeksi: 4.0,
+    raitioliikenneindeksi: 5.0,
+    liikennehaittaindeksi: {
+      indeksi: 5.0,
+      tyyppi: HAITTA_INDEX_TYPE.RAITIOLIIKENNEINDEKSI,
+    },
+  });
+  const hankeData = hankkeet[1] as HankeData;
+  const application = cloneDeep(applications[4] as Application<KaivuilmoitusData>);
+  const { user } = render(
+    <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
+  );
+  await user.click(await screen.findByRole('button', { name: /alueet/i }));
+
+  const kaistahaittaSelection = await screen.findByText(
+    'Yksi autokaista vähenee - ajosuunta vielä käytössä',
+  );
+  await user.click(kaistahaittaSelection);
+  await user.click(await screen.findByText('Ei vaikuta'));
+
+  const accordionHeader = await screen.findByRole('button', {
+    name: 'Työalueiden liikennehaittaindeksien yhteenveto (0-5)',
+  });
+  await user.click(accordionHeader);
+  expect(await screen.findByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('4');
+  expect(await screen.findByTestId('test-raitioliikenneindeksi')).toHaveTextContent('5');
+
+  const carTrafficAccordion = await screen.findByText('Autoliikenteen ruuhkautuminen');
+  await user.click(carTrafficAccordion);
+  expect(await screen.findByTestId('test-katuluokka')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-liikennemaara')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-kaistahaitta')).toHaveTextContent('1');
+  expect(await screen.findByTestId('test-kaistapituushaitta')).toHaveTextContent('3');
+  expect(await screen.findByTestId('test-haitanKesto')).toHaveTextContent('3');
+});
+
 test('Should be able to send application', async () => {
   const hankeData = hankkeet[1] as HankeData;
   const application = cloneDeep(applications[6] as Application<KaivuilmoitusData>);
@@ -840,13 +1217,16 @@ test('Should be able to send application', async () => {
   await user.click(await screen.findByRole('button', { name: /yhteenveto/i }));
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
 
+  expect(await screen.findByText(/lähetä hakemus\?/i)).toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: /vahvista/i }));
+
   expect(await screen.findByText(/hakemus lähetetty/i)).toBeInTheDocument();
 });
 
 test('Should show error message when sending fails', async () => {
   server.use(
-    rest.post('/api/hakemukset/:id/laheta', async (req, res, ctx) => {
-      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    http.post('/api/hakemukset/:id/laheta', async () => {
+      return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
     }),
   );
 
@@ -858,20 +1238,20 @@ test('Should show error message when sending fails', async () => {
   await user.click(await screen.findByRole('button', { name: /yhteenveto/i }));
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
 
+  expect(await screen.findByText(/lähetä hakemus\?/i)).toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: /vahvista/i }));
+
   expect(await screen.findByText(/lähettäminen epäonnistui/i)).toBeInTheDocument();
 });
 
 test('Should show and disable send button and show notification when user is not a contact person', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json<SignedInUser>({
-          hankeKayttajaId: 'not-a-contact-person-id',
-          kayttooikeustaso: 'KATSELUOIKEUS',
-          kayttooikeudet: ['VIEW'],
-        }),
-      );
+    http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+      return HttpResponse.json<SignedInUser>({
+        hankeKayttajaId: 'not-a-contact-person-id',
+        kayttooikeustaso: 'KATSELUOIKEUS',
+        kayttooikeudet: ['VIEW'],
+      });
     }),
   );
 
@@ -893,7 +1273,7 @@ test('Should show and disable send button and show notification when user is not
 
 test('Should be able to fill user email and phone by selecting existing user in user name search input', async () => {
   const hankeData = hankkeet[1] as HankeData;
-  const application = applications[4] as Application<KaivuilmoitusData>;
+  const application = cloneDeep(applications[4]) as Application<KaivuilmoitusData>;
   const { user } = render(
     <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
   );
@@ -908,4 +1288,377 @@ test('Should be able to fill user email and phone by selecting existing user in 
   expect(screen.getByTestId('applicationData.customerWithContacts.customer.phone')).toHaveValue(
     '0401234567',
   );
+});
+
+describe('Registry key', () => {
+  const hankeData = hankkeet[1] as HankeData;
+  const application = cloneDeep(applications[6] as Application<KaivuilmoitusData>);
+  const testApplication: Application<KaivuilmoitusData> = {
+    ...application,
+    applicationData: {
+      ...application.applicationData,
+      customerWithContacts: null,
+      contractorWithContacts: null,
+      propertyDeveloperWithContacts: null,
+      representativeWithContacts: null,
+      invoicingCustomer: null,
+    },
+  };
+
+  describe('Customer', () => {
+    test('Should show henkilotunnus label when type is private person', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(screen.getByText('Henkilötunnus')).toBeInTheDocument();
+    });
+
+    test('Should show y-tunnus label when type is company', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Yritys')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
+      expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
+    });
+
+    test('Should show y-tunnus label when type is association', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Yhdistys')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
+      expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
+    });
+
+    test('Should show general label when type is other', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Muu')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(
+        screen.getByText('Y-tunnus, henkilötunnus tai muu yksilöivä tunnus'),
+      ).toBeInTheDocument();
+    });
+
+    test('Registry key is required for all customer types', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      // private person
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.customerWithContacts.customer.registryKey'),
+      ).toBeRequired();
+
+      // company
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Yritys')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.customerWithContacts.customer.registryKey'),
+      ).toBeRequired();
+
+      // association
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Yhdistys')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.customerWithContacts.customer.registryKey'),
+      ).toBeRequired();
+
+      // other
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Muu')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.customerWithContacts.customer.registryKey'),
+      ).toBeRequired();
+    });
+
+    test('Should show info text for hidden registry key', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer
+          hankeData={hankeData}
+          application={{
+            ...testApplication,
+            applicationData: {
+              ...testApplication.applicationData,
+              customerWithContacts: {
+                customer: {
+                  type: 'PERSON',
+                  name: 'Testi Testinen',
+                  registryKey: HIDDEN_FIELD_VALUE,
+                  registryKeyHidden: true,
+                  email: 'testi@testi.fi',
+                  phone: '0401234567',
+                },
+                contacts: [],
+              },
+            },
+          }}
+        />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      expect(
+        await screen.findByText(
+          'Tunnus on piilotettu tietosuojasyistä. Voit halutessasi tallentaa uuden tunnuksen korvaamalla ******** tekstin uudella tunnuksella.',
+        ),
+      ).toBeInTheDocument();
+    });
+
+    test('Should be able to revert back to hidden registry key', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer
+          hankeData={hankeData}
+          application={{
+            ...testApplication,
+            applicationData: {
+              ...testApplication.applicationData,
+              customerWithContacts: {
+                customer: {
+                  type: 'PERSON',
+                  name: 'Testi Testinen',
+                  registryKey: HIDDEN_FIELD_VALUE,
+                  registryKeyHidden: true,
+                  email: 'testi@testi.fi',
+                  phone: '0401234567',
+                },
+                contacts: [],
+              },
+            },
+          }}
+        />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      await user.type(screen.getAllByRole('textbox', { name: /henkilötunnus/i })[0], 'invalid');
+      await user.click(document.body);
+
+      expect(await screen.findByText('Kentän arvo on virheellinen')).toBeInTheDocument();
+
+      await user.clear(screen.getAllByRole('textbox', { name: /henkilötunnus/i })[0]);
+      await user.type(
+        screen.getAllByRole('textbox', { name: /henkilötunnus/i })[0],
+        HIDDEN_FIELD_VALUE,
+      );
+      await user.click(document.body);
+
+      expect(screen.queryByText('Kentän arvo on virheellinen')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Contractor', () => {
+    test('Should show y-tunnus label when type is private person', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
+      expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
+    });
+
+    test('Should show y-tunnus label when type is company', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yritys')[1]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
+      expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
+    });
+
+    test('Should show y-tunnus label when type is association', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yhdistys')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
+      expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
+    });
+
+    test('Should show y-tunnus label when type is other', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Muu')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
+      expect(
+        screen.queryByText('Y-tunnus, henkilötunnus tai muu yksilöivä tunnus'),
+      ).not.toBeInTheDocument();
+    });
+
+    test('Registry key is required for company and association customer types and disabled for others', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      // private person
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).toBeDisabled();
+
+      // company
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yritys')[1]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).toBeRequired();
+
+      // association
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yhdistys')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).toBeRequired();
+
+      // other
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Muu')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).toBeDisabled();
+    });
+  });
+
+  describe('Invoicing customer', () => {
+    test('Should show henkilotunnus label when type is private person', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(screen.getByText('Henkilötunnus')).toBeInTheDocument();
+    });
+
+    test('Should show y-tunnus label when type is company', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByText('Yritys')[2]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
+      expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
+    });
+
+    test('Should show y-tunnus label when type is association', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByText('Yhdistys')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
+      expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
+    });
+
+    test('Should show general label when type is other', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByText('Muu')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(
+        screen.getByText('Y-tunnus, henkilötunnus tai muu yksilöivä tunnus'),
+      ).toBeInTheDocument();
+    });
+
+    test('Registry key is required for all customer types', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      // private person
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.invoicingCustomer.registryKey'),
+      ).toBeRequired();
+
+      // company
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByText('Yritys')[2]);
+
+      expect(
+        await screen.findByTestId('applicationData.invoicingCustomer.registryKey'),
+      ).toBeRequired();
+
+      // association
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByText('Yhdistys')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.invoicingCustomer.registryKey'),
+      ).toBeRequired();
+
+      // other
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByText('Muu')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.invoicingCustomer.registryKey'),
+      ).toBeRequired();
+    });
+  });
 });

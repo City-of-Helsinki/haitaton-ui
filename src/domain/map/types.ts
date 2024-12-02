@@ -44,3 +44,8 @@ export type MapTilelayerState = {
   id: MapTileLayerId;
   visible: boolean;
 };
+
+export type DateInterval = {
+  start: Date | string | number | null | undefined;
+  end: Date | string | number | null | undefined;
+};

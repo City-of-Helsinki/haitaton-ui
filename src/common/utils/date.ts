@@ -31,6 +31,18 @@ export const formatToFinnishDate = (date: string | Date | null) => {
   }
 };
 
+export const formatToFinnishDateTime = (date: string | Date | null) => {
+  if (!date) {
+    return undefined;
+  }
+
+  try {
+    return format(new Date(date), 'd.M.yyyy HH:mm', { locale: fi });
+  } catch (error) {
+    return undefined;
+  }
+};
+
 const ddmmyyyyRegex = /[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4}/;
 
 export const convertFinnishDate = (date: string) => {

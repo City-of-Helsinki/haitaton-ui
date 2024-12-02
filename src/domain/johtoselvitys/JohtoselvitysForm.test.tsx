@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { render, cleanup, fireEvent, screen, waitFor, within } from '../../testUtils/render';
 import Johtoselvitys from '../../pages/Johtoselvitys';
 import JohtoselvitysContainer from './JohtoselvitysContainer';
@@ -7,6 +7,7 @@ import { server } from '../mocks/test-server';
 import { HankeData } from '../types/hanke';
 import hankkeet from '../mocks/data/hankkeet-data';
 import applications from '../mocks/data/hakemukset-data';
+import * as hakemuksetDB from '../mocks/data/hakemukset';
 import { JohtoselvitysFormValues } from './types';
 import api from '../api/api';
 import {
@@ -39,56 +40,12 @@ const application: JohtoselvitysFormValues = {
   applicationData: {
     applicationType: 'CABLE_REPORT',
     name: '',
-    customerWithContacts: {
-      customer: {
-        type: 'COMPANY',
-        name: 'Test Person',
-        country: 'FI',
-        email: 'test@test.com',
-        phone: '0401234567',
-        registryKey: null,
-        ovt: null,
-        invoicingOperator: null,
-        sapCustomerNumber: null,
-      },
-      contacts: [
-        {
-          hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          email: 'test@test.com',
-          firstName: 'Test',
-          lastName: 'Person',
-          orderer: true,
-          phone: '0401234567',
-        },
-      ],
-    },
+    customerWithContacts: null,
     areas: DUMMY_AREAS as ApplicationArea[],
     startTime: null,
     endTime: null,
     workDescription: '',
-    contractorWithContacts: {
-      customer: {
-        type: 'COMPANY',
-        name: 'Test Person',
-        country: 'FI',
-        email: 'test@test.com',
-        phone: '0401234567',
-        registryKey: null,
-        ovt: null,
-        invoicingOperator: null,
-        sapCustomerNumber: null,
-      },
-      contacts: [
-        {
-          hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          email: 'test@test.com',
-          firstName: 'Test',
-          lastName: 'Person',
-          orderer: false,
-          phone: '0401234567',
-        },
-      ],
-    },
+    contractorWithContacts: null,
     postalAddress: null,
     representativeWithContacts: null,
     propertyDeveloperWithContacts: null,
@@ -140,25 +97,23 @@ function fillAreasInformation(options: DateOptions = {}) {
   });
 }
 
-function fillContactsInformation() {
+async function fillContactsInformation() {
   // Fill customer info
   fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
-  fireEvent.click(screen.getAllByText(/yritys/i)[0]);
+  fireEvent.click(screen.getAllByText(/yksityishenkilö/i)[0]);
   fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[0], {
-    target: { value: 'Yritys Oy' },
+    target: { value: 'Veera Vastaava' },
   });
-  fireEvent.change(
-    screen.getByTestId('applicationData.customerWithContacts.customer.registryKey'),
-    {
-      target: { value: '2182805-0' },
-    },
-  );
   fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.email'), {
-    target: { value: 'yritys@test.com' },
+    target: { value: 'veera.vastaava@test.com' },
   });
   fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.phone'), {
     target: { value: '0000000000' },
   });
+  fireEvent.change(screen.getAllByRole('combobox', { name: /yhteyshenkilöt/i })[0], {
+    target: { value: 'Tauno Testinen' },
+  });
+  fireEvent.click(screen.getAllByText(/tauno testinen/i)[0]);
 
   // Fill contractor info
   fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
@@ -178,19 +133,20 @@ function fillContactsInformation() {
   fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.customer.phone'), {
     target: { value: '0000000000' },
   });
+  fireEvent.change(screen.getAllByRole('combobox', { name: /yhteyshenkilöt/i })[1], {
+    target: { value: 'Tauno Testinen' },
+  });
+  fireEvent.click(screen.getAllByText(/tauno testinen/i)[1]);
 }
 
-test('Cable report application form can be filled and saved and sent to Allu', async () => {
+test('Cable report application form can be filled', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json<SignedInUser>({
-          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          kayttooikeustaso: 'KATSELUOIKEUS',
-          kayttooikeudet: ['VIEW'],
-        }),
-      );
+    http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+      return HttpResponse.json<SignedInUser>({
+        hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        kayttooikeustaso: 'KATSELUOIKEUS',
+        kayttooikeudet: ['VIEW'],
+      });
     }),
   );
 
@@ -223,21 +179,21 @@ test('Cable report application form can be filled and saved and sent to Allu', a
   expect(await screen.findByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
 
   // Fill contacts page
-  fillContactsInformation();
+  await fillContactsInformation();
+
+  // Move to attachments page
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  expect(await screen.findByText('Vaihe 4/5: Liitteet')).toBeInTheDocument();
 
   // Move to summary page
-  await user.click(screen.getByTestId('hds-stepper-step-4'));
+  await user.click(screen.getByRole('button', { name: /seuraava/i }));
   expect(await screen.findByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
-
-  await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
-  expect(await screen.findByText(/hakemus lähetetty/i)).toBeInTheDocument();
-  expect(window.location.pathname).toBe('/fi/hakemus/8');
 });
 
 test('Should show error message when saving fails', async () => {
   server.use(
-    rest.post('/api/hakemukset', async (req, res, ctx) => {
-      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    http.post('/api/hakemukset', async () => {
+      return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
     }),
   );
 
@@ -257,51 +213,35 @@ test('Should show error message when saving fails', async () => {
   );
 });
 
+test('Should be able to send application', async () => {
+  const hankeData = hankkeet[1] as HankeData;
+  const hakemus = cloneDeep(applications[0] as Application<JohtoselvitysData>);
+  const { user } = render(<JohtoselvitysContainer hankeData={hankeData} application={hakemus} />);
+  await user.click(await screen.findByRole('button', { name: /yhteenveto/i }));
+  await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
+
+  expect(await screen.findByText(/lähetä hakemus\?/i)).toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: /vahvista/i }));
+
+  expect(await screen.findByText(/hakemus lähetetty/i)).toBeInTheDocument();
+});
+
 test('Should show error message when sending fails', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json<SignedInUser>({
-          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          kayttooikeustaso: 'KATSELUOIKEUS',
-          kayttooikeudet: ['VIEW'],
-        }),
-      );
-    }),
-    rest.post('/api/hakemukset/:id/laheta', async (req, res, ctx) => {
-      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    http.post('/api/hakemukset/:id/laheta', async () => {
+      return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
     }),
   );
 
   const hankeData = hankkeet[1] as HankeData;
+  const hakemus = cloneDeep(applications[0] as Application<JohtoselvitysData>);
+  const { user } = render(<JohtoselvitysContainer hankeData={hankeData} application={hakemus} />);
 
-  const { user } = render(
-    <JohtoselvitysContainer hankeData={hankeData} application={application} />,
-  );
-
-  // Fill basic information page
-  fillBasicInformation();
-
-  // Move to areas page
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  expect(await screen.findByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
-
-  // Fill areas page
-  fillAreasInformation();
-
-  // Move to contacts page
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  expect(await screen.findByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
-
-  // Fill contacts page
-  fillContactsInformation();
-
-  // Move to summary page
-  await user.click(screen.getByTestId('hds-stepper-step-4'));
-  expect(await screen.findByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
-
+  await user.click(await screen.findByRole('button', { name: /yhteenveto/i }));
   await user.click(screen.getByRole('button', { name: /lähetä hakemus/i }));
+
+  expect(await screen.findByText(/lähetä hakemus\?/i)).toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: /vahvista/i }));
 
   expect(await screen.findByText(/lähettäminen epäonnistui/i)).toBeInTheDocument();
 });
@@ -317,7 +257,7 @@ test('Save and quit works', async () => {
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
   expect(await screen.findAllByText(/hakemus tallennettu/i)).toHaveLength(2);
-  expect(window.location.pathname).toBe('/fi/hakemus/10');
+  expect(window.location.pathname).toBe(`/fi/hakemus/${(await hakemuksetDB.readAll()).length}`);
 });
 
 test('Should not save and quit if current form page is not valid', async () => {
@@ -331,8 +271,8 @@ test('Should not save and quit if current form page is not valid', async () => {
 
 test('Should show error message and not navigate away when save and quit fails', async () => {
   server.use(
-    rest.post('/api/hakemukset', async (req, res, ctx) => {
-      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    http.post('/api/hakemukset', async () => {
+      return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
     }),
   );
 
@@ -380,15 +320,12 @@ test('Should save existing application between page changes when there are chang
 
 test('Should not show send button when application has moved to pending state', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json<SignedInUser>({
-          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          kayttooikeustaso: 'KATSELUOIKEUS',
-          kayttooikeudet: ['VIEW'],
-        }),
-      );
+    http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+      return HttpResponse.json<SignedInUser>({
+        hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        kayttooikeustaso: 'KATSELUOIKEUS',
+        kayttooikeudet: ['VIEW'],
+      });
     }),
   );
 
@@ -409,15 +346,12 @@ test('Should not show send button when application has moved to pending state', 
 
 test('Should show and disable send button and show notification when user is not a contact person', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json<SignedInUser>({
-          hankeKayttajaId: 'not-a-contact-person-id',
-          kayttooikeustaso: 'KATSELUOIKEUS',
-          kayttooikeudet: ['VIEW'],
-        }),
-      );
+    http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+      return HttpResponse.json<SignedInUser>({
+        hankeKayttajaId: 'not-a-contact-person-id',
+        kayttooikeustaso: 'KATSELUOIKEUS',
+        kayttooikeudet: ['VIEW'],
+      });
     }),
   );
 
@@ -442,15 +376,12 @@ test('Should show and disable send button and show notification when user is not
 
 test('Should show and enable button when application is edited in draft state and user is a contact person', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json<SignedInUser>({
-          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          kayttooikeustaso: 'KATSELUOIKEUS',
-          kayttooikeudet: ['VIEW'],
-        }),
-      );
+    http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+      return HttpResponse.json<SignedInUser>({
+        hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        kayttooikeustaso: 'KATSELUOIKEUS',
+        kayttooikeudet: ['VIEW'],
+      });
     }),
   );
 
@@ -573,8 +504,8 @@ async function uploadAttachmentMock({
 
 function initFileGetResponse(response: ApplicationAttachmentMetadata[]) {
   server.use(
-    rest.get('/api/hakemukset/:id/liitteet', async (req, res, ctx) => {
-      return res(ctx.status(200), ctx.json(response));
+    http.get('/api/hakemukset/:id/liitteet', async () => {
+      return HttpResponse.json(response);
     }),
   );
 }
@@ -830,4 +761,209 @@ test('Work description should be limited to 2000 characters', async () => {
   await user.type(screen.getByLabelText(/työn kuvaus/i), 'bbb');
 
   expect(screen.getByLabelText(/työn kuvaus/i)).toHaveValue(initialDescription.concat('b'));
+});
+
+describe('Show correct registry key label', () => {
+  const hankeData = hankkeet[1] as HankeData;
+  const johtoselvitysApplication = cloneDeep(applications[0] as Application<JohtoselvitysData>);
+  const testApplication: Application<JohtoselvitysData> = {
+    ...johtoselvitysApplication,
+    applicationData: {
+      ...johtoselvitysApplication.applicationData,
+      customerWithContacts: null,
+      contractorWithContacts: null,
+      propertyDeveloperWithContacts: null,
+      representativeWithContacts: null,
+    },
+  };
+
+  describe('Customer', () => {
+    test('Should show y-tunnus label when type is private person', async () => {
+      const { user } = render(
+        <JohtoselvitysContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
+    });
+
+    test('Should show y-tunnus label when type is company', async () => {
+      const { user } = render(
+        <JohtoselvitysContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Yritys')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
+    });
+
+    test('Should show y-tunnus label when type is association', async () => {
+      const { user } = render(
+        <JohtoselvitysContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Yhdistys')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
+    });
+
+    test('Should show y-tunnus label when type is other', async () => {
+      const { user } = render(
+        <JohtoselvitysContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Muu')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(
+        screen.queryByText('Y-tunnus, henkilötunnus tai muu yksilöivä tunnus'),
+      ).not.toBeInTheDocument();
+    });
+
+    test('Registry key is not required for company and association customer types and disabled for others', async () => {
+      const { user } = render(
+        <JohtoselvitysContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      // private person
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.customerWithContacts.customer.registryKey'),
+      ).toBeDisabled();
+
+      // company
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Yritys')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.customerWithContacts.customer.registryKey'),
+      ).not.toBeRequired();
+
+      // association
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Yhdistys')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.customerWithContacts.customer.registryKey'),
+      ).not.toBeRequired();
+
+      // other
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByText('Muu')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.customerWithContacts.customer.registryKey'),
+      ).toBeDisabled();
+    });
+  });
+
+  describe('Contractor', () => {
+    test('Should show y-tunnus label when type is private person', async () => {
+      const { user } = render(
+        <JohtoselvitysContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
+    });
+
+    test('Should show y-tunnus label when type is company', async () => {
+      const { user } = render(
+        <JohtoselvitysContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yritys')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
+    });
+
+    test('Should show y-tunnus label when type is association', async () => {
+      const { user } = render(
+        <JohtoselvitysContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yhdistys')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(screen.queryByText('Henkilötunnus')).not.toBeInTheDocument();
+    });
+
+    test('Should show y-tunnus label when type is other', async () => {
+      const { user } = render(
+        <JohtoselvitysContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Muu')[0]);
+
+      expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
+      expect(
+        screen.queryByText('Y-tunnus, henkilötunnus tai muu yksilöivä tunnus'),
+      ).not.toBeInTheDocument();
+    });
+
+    test('Registry key is not required for company and association customer types and disabled for others', async () => {
+      const { user } = render(
+        <JohtoselvitysContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      // private person
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).toBeDisabled();
+
+      // company
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yritys')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).not.toBeRequired();
+
+      // association
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yhdistys')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).not.toBeRequired();
+
+      // other
+      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Muu')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).toBeDisabled();
+    });
+  });
 });

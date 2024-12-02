@@ -1,7 +1,8 @@
+import { useCallback, useEffect } from 'react';
 import { Box } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
-import { Checkbox as HDSCheckbox, Fieldset, SelectionGroup, ToggleButton } from 'hds-react';
+import { Checkbox as HDSCheckbox, Fieldset, SelectionGroup } from 'hds-react';
 import { uniq } from 'lodash';
 import TextInput from '../../common/components/textInput/TextInput';
 import TextArea from '../../common/components/textArea/TextArea';
@@ -12,12 +13,21 @@ import TagInput from '../../common/components/tagInput/TagInput';
 import InputCombobox from '../../common/components/inputCombobox/InputCombobox';
 import { getInputErrorText } from '../../common/utils/form';
 import BooleanRadioButton from '../../common/components/radiobutton/BooleanRadioButton';
+import JohtoselvitysSelectionMap from '../map/components/JohtoselvitysSelectionMap/JohtoselvitysSelectionMap';
+import { HankeData } from '../types/hanke';
+import { HankkeenHakemus } from '../application/types/application';
 
 type Props = {
+  hankeData: HankeData;
+  hankkeenHakemukset: HankkeenHakemus[];
   johtoselvitysIds?: string[];
 };
 
-export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
+export default function BasicInfo({
+  johtoselvitysIds,
+  hankeData,
+  hankkeenHakemukset,
+}: Readonly<Props>) {
   const { t } = useTranslation();
   const {
     register,
@@ -27,12 +37,13 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
     getValues,
     formState: { errors },
   } = useFormContext<KaivuilmoitusFormValues>();
+  const cableReports = getValues('applicationData.cableReports') ?? [];
 
   const [
     constructionWorkChecked,
     maintenanceWorkChecked,
     emergencyWorkChecked,
-    createCableReportNotChecked,
+    cableReportDone,
     placementContracts,
   ] = watch([
     'applicationData.constructionWork',
@@ -41,6 +52,15 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
     'applicationData.cableReportDone',
     'applicationData.placementContracts',
   ]);
+
+  useEffect(() => {
+    if (!cableReportDone) {
+      setValue('applicationData.rockExcavation', false, { shouldDirty: true });
+      setValue('applicationData.cableReports', [], { shouldDirty: true });
+    } else {
+      setValue('applicationData.rockExcavation', null, { shouldDirty: true });
+    }
+  }, [cableReportDone, setValue]);
 
   // Trigger validation for constructionWork field
   function validateConstructionWork() {
@@ -51,18 +71,6 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
     return t('hakemus:buttons:deletePlacementContract', { id: tag });
   }
 
-  function handleCreateCableReportChange() {
-    const newValue = !createCableReportNotChecked;
-    setValue('applicationData.cableReportDone', newValue, {
-      shouldDirty: true,
-    });
-    if (!newValue) {
-      setValue('applicationData.rockExcavation', false, { shouldDirty: true });
-    } else {
-      setValue('applicationData.rockExcavation', null, { shouldDirty: true });
-    }
-  }
-
   function handlePlacementContractsChange(updatedContracts: string[]) {
     setValue(
       'applicationData.placementContracts',
@@ -70,6 +78,20 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
       { shouldDirty: true },
     );
   }
+
+  function handleCableReportsChange(updatedCableReports: string[]) {
+    setValue(
+      'applicationData.cableReports',
+      updatedCableReports.map((value) => value.toUpperCase()),
+      { shouldDirty: true },
+    );
+  }
+
+  const handleJohtoselvitysSelection = useCallback(
+    (tunnukset: string[]) =>
+      setValue('applicationData.cableReports', tunnukset, { shouldDirty: true }),
+    [setValue],
+  );
 
   return (
     <div>
@@ -159,23 +181,36 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
       <Box as="h3" className="heading-s" marginBottom="var(--spacing-s)">
         {t('hakemus:labels:cableReportTitle')}
       </Box>
-      <Box as="div" marginBottom="var(--spacing-s)">
-        <ToggleButton
-          {...register('applicationData.cableReportDone')}
-          id="applicationData.createCablereport"
-          label={t('hakemus:labels:createCableReport')}
-          checked={!createCableReportNotChecked}
-          onChange={handleCreateCableReportChange}
-        />
+      <Box as="p" marginBottom="var(--spacing-s)">
+        {t('kaivuilmoitusForm:perustiedot:cableReportInstructions')}
       </Box>
-      {!createCableReportNotChecked && (
-        <Box as="div" marginBottom="var(--spacing-s)">
-          <Fieldset heading={t('hakemus:labels:newCableReport')} border>
+      <Box marginBottom="var(--spacing-m)">
+        <SelectionGroup
+          label={t('hakemus:labels:applyingCableReport')}
+          required
+          direction="horizontal"
+        >
+          <BooleanRadioButton<KaivuilmoitusFormValues>
+            name="applicationData.cableReportDone"
+            label={t('hakemus:labels:createCableReport')}
+            id="createCableReportYes"
+            value={false}
+          />
+          <BooleanRadioButton<KaivuilmoitusFormValues>
+            name="applicationData.cableReportDone"
+            label={t('hakemus:labels:useExisting')}
+            id="createCableReportNo"
+            value={true}
+          />
+        </SelectionGroup>
+      </Box>
+      {cableReportDone === false && (
+        <Fieldset heading={t('hakemus:labels:newCableReport')} border className={styles.formRow}>
+          <Box marginTop="var(--spacing-3-xs)">
             <SelectionGroup
               label={t('hakemus:labels:rockExcavation')}
               direction="horizontal"
               required
-              className={styles.formRow}
               errorText={getInputErrorText(t, errors?.applicationData?.rockExcavation)}
             >
               <BooleanRadioButton<KaivuilmoitusFormValues>
@@ -191,22 +226,57 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
                 value={false}
               />
             </SelectionGroup>
-          </Fieldset>
-        </Box>
+          </Box>
+        </Fieldset>
       )}
-      {johtoselvitysIds !== undefined && (
-        <InputCombobox
-          id="applicationData.cableReports"
-          name="applicationData.cableReports"
-          options={uniq(johtoselvitysIds.concat(getValues('applicationData.cableReports') ?? []))}
-          label={t('hakemus:labels:cableReports')}
-          helperText={t('hakemus:labels:cableReportsHelp')}
+      {cableReportDone === true && (
+        <Fieldset
+          heading={t('hakemus:labels:useExistingCableReports')}
+          border
           className={styles.formRow}
-          pattern={/^[jJ][sS]\d{7}$/}
-          errorText={t('hakemus:errors:cableReport')}
-          placeholder="JSXXXXXXX"
-          uppercase
-        />
+        >
+          <Box marginTop="var(--spacing-3-xs)">
+            {johtoselvitysIds && johtoselvitysIds.length > 0 ? (
+              <>
+                <JohtoselvitysSelectionMap
+                  hankeData={hankeData}
+                  hankkeenHakemukset={hankkeenHakemukset}
+                  selectedJohtoselvitysTunnukset={cableReports}
+                  onSelectJohtoselvitys={handleJohtoselvitysSelection}
+                />
+                <InputCombobox
+                  id="applicationData.cableReports"
+                  name="applicationData.cableReports"
+                  options={uniq(johtoselvitysIds.concat(cableReports))}
+                  label={t('hakemus:labels:cableReports')}
+                  helperText={t('hakemus:labels:cableReportsHelp')}
+                  pattern={/^[jJ][sS]\d{7}$/}
+                  errorText={t('hakemus:errors:cableReport')}
+                  placeholder="JSXXXXXXX"
+                  uppercase
+                  required
+                />
+              </>
+            ) : (
+              <>
+                <Box as="p" marginBottom="var(--spacing-s)">
+                  {t('hakemus:labels:noCableReports')}
+                </Box>
+                <TagInput
+                  inputClassName={styles.tagInput}
+                  id="johtoselvitysTunnus"
+                  label={t('hakemus:labels:cableReportApplicationIdentifier')}
+                  tags={cableReports}
+                  pattern="^[jJ][sS]\d{7}$"
+                  placeholder="JSXXXXXXX"
+                  helperText={t('hakemus:labels:cableReportTagInputHelp')}
+                  errorText={t('hakemus:errors:cableReport')}
+                  onChange={handleCableReportsChange}
+                />
+              </>
+            )}
+          </Box>
+        </Fieldset>
       )}
 
       <Box as="h3" className="heading-s" marginBottom="var(--spacing-s)">
@@ -214,6 +284,7 @@ export default function BasicInfo({ johtoselvitysIds }: Readonly<Props>) {
       </Box>
       <TagInput
         className={styles.formRow}
+        inputClassName={styles.tagInput}
         id="placementContract"
         label={t('hakemus:labels:placementContracts')}
         tags={placementContracts ?? []}

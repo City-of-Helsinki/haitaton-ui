@@ -1,10 +1,12 @@
 import yup from '../../common/utils/yup';
-import { AlluStatus } from '../application/types/application';
+import { AlluStatus, ContactType, KaivuilmoitusData } from '../application/types/application';
 import {
   applicationTypeSchema,
+  customerSchema,
   customerWithContactsSchema,
   geometrySchema,
   invoicingCustomerSchema,
+  registryKeySchema,
 } from '../application/yupSchemas';
 import { KaivuilmoitusFormValues } from './types';
 import {
@@ -16,6 +18,7 @@ import {
   HANKE_TYOMAATYYPPI_KEY,
 } from '../types/hanke';
 import { HaittaIndexData } from '../common/haittaIndexes/types';
+import { Taydennys, Taydennyspyynto } from '../application/taydennys/types';
 
 const tyoalueSchema = yup.object({
   geometry: geometrySchema.required(),
@@ -37,12 +40,35 @@ const kaivuilmoitusAlueSchema = yup.object({
   lisatiedot: yup.string(),
 });
 
+const customerWithContactsSchemaForKaivuilmoitusForTyostaVastaava = customerWithContactsSchema
+  .omit(['customer'])
+  .shape({
+    customer: customerSchema.omit(['registryKey']).shape({
+      registryKey: registryKeySchema.required(),
+    }),
+  });
+
+const customerWithContactsSchemaForKaivuilmoitus = customerWithContactsSchema
+  .omit(['customer'])
+  .shape({
+    customer: customerSchema.omit(['registryKey']).shape({
+      registryKey: registryKeySchema.when('type', {
+        is: (value: string) => value === ContactType.COMPANY || value === ContactType.ASSOCIATION,
+        then: (schema) => schema.required(),
+      }),
+    }),
+  });
+
 const applicationDataSchema = yup.object().shape(
   {
     applicationType: applicationTypeSchema,
     name: yup.string().trim().required(),
     workDescription: yup.string().trim().required(),
-    rockExcavation: yup.boolean().nullable().required(),
+    rockExcavation: yup
+      .boolean()
+      .defined()
+      .nullable()
+      .when(['cableReportDone'], { is: false, then: (schema) => schema.required() }),
     constructionWork: yup
       .boolean()
       .defined()
@@ -53,11 +79,18 @@ const applicationDataSchema = yup.object().shape(
     maintenanceWork: yup.boolean().defined(),
     emergencyWork: yup.boolean().defined(),
     cableReportDone: yup.boolean().required(),
-    requiredCompetence: yup.boolean().required(),
-    contractorWithContacts: customerWithContactsSchema,
-    customerWithContacts: customerWithContactsSchema,
-    propertyDeveloperWithContacts: customerWithContactsSchema.nullable(),
-    representativeWithContacts: customerWithContactsSchema.nullable(),
+    cableReports: yup
+      .array()
+      .of(yup.string().required())
+      .when(['cableReportDone'], {
+        is: true,
+        then: (schema) => schema.min(1),
+      }),
+    requiredCompetence: yup.boolean().required().isTrue(),
+    contractorWithContacts: customerWithContactsSchemaForKaivuilmoitus,
+    customerWithContacts: customerWithContactsSchemaForKaivuilmoitusForTyostaVastaava,
+    propertyDeveloperWithContacts: customerWithContactsSchemaForKaivuilmoitus.nullable(),
+    representativeWithContacts: customerWithContactsSchemaForKaivuilmoitus.nullable(),
     invoicingCustomer: invoicingCustomerSchema,
     startTime: yup
       .date()
@@ -95,6 +128,9 @@ export const validationSchema: yup.ObjectSchema<KaivuilmoitusFormValues> = yup.o
   applicationIdentifier: yup.string().nullable(),
   hankeTunnus: yup.string().defined().nullable(),
   applicationData: applicationDataSchema,
+  valmistumisilmoitukset: yup.object().nullable().notRequired(),
+  taydennyspyynto: yup.mixed<Taydennyspyynto>().nullable(),
+  taydennys: yup.mixed<Taydennys<KaivuilmoitusData>>().nullable(),
   selfIntersectingPolygon: yup.boolean().isFalse(),
   geometriesChanged: yup.boolean(),
 });
@@ -108,6 +144,8 @@ export const perustiedotSchema = yup.object({
     'maintenanceWork',
     'emergencyWork',
     'requiredCompetence',
+    'cableReports',
+    'cableReportDone',
   ]),
 });
 
@@ -127,4 +165,9 @@ export const yhteystiedotSchema = yup.object({
 
 export const liitteetSchema = yup.object({
   applicationData: applicationDataSchema.pick(['additionalInfo']),
+});
+
+export const reportCompletionDateSchema = yup.object({
+  applicationId: yup.number(),
+  date: yup.date().validCompletionDate().nullable().required(),
 });

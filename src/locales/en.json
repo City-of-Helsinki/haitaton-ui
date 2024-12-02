@@ -471,11 +471,7 @@
       "VAIHTOLAVA": "Swap body"
     },
     "kaistaHaitta": {
-      "EI_VAIKUTA": "Does not affect",
-      "VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA": "Reduces one lane in one direction",
-      "VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA": "Simultaneously reduces lanes in two directions",
-      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_KAHDELLA_AJOSUUNNALLA": "Simultaneously reduces several lanes in two directions",
-      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA": "Simultaneously reduces several lanes in different directions of a junction"
+      "EI_VAIKUTA": "Does not affect"
     },
     "kaistaPituusHaitta": {
       "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Does not affect",
@@ -485,22 +481,22 @@
       "PITUUS_500_METRIA_TAI_ENEMMAN": "500 m or more"
     },
     "meluHaitta": {
-      "EI_MELUHAITTAA": "0: No noise nuisance",
-      "SATUNNAINEN_MELUHAITTA": "1: Occasional noise nuisance",
-      "TOISTUVA_MELUHAITTA": "3: Recurring noise nuisance",
-      "JATKUVA_MELUHAITTA": "5: Permanent noise nuisance"
+      "EI_MELUHAITTAA": "No noise nuisance",
+      "SATUNNAINEN_MELUHAITTA": "Occasional noise nuisance",
+      "TOISTUVA_MELUHAITTA": "Recurring noise nuisance",
+      "JATKUVA_MELUHAITTA": "Permanent noise nuisance"
     },
     "polyHaitta": {
-      "EI_POLYHAITTAA": "0: No dust nuisance",
-      "SATUNNAINEN_POLYHAITTA": "1: Occasional dust nuisance",
-      "TOISTUVA_POLYHAITTA": "3: Recurring noise nuisance",
-      "JATKUVA_POLYHAITTA": "5: Permanent noise nuisance"
+      "EI_POLYHAITTAA": "No dust nuisance",
+      "SATUNNAINEN_POLYHAITTA": "Occasional dust nuisance",
+      "TOISTUVA_POLYHAITTA": "Recurring dust nuisance",
+      "JATKUVA_POLYHAITTA": "Permanent dust nuisance"
     },
     "tarinaHaitta": {
-      "EI_TARINAHAITTAA": "0: No vibration nuisance",
-      "SATUNNAINEN_TARINAHAITTA": "1: Occasional vibration nuisance",
-      "TOISTUVA_TARINAHAITTA": "3: Recurring vibration nuisance",
-      "JATKUVA_TARINAHAITTA": "5: Permanent vibration nuisance"
+      "EI_TARINAHAITTAA": "No vibration nuisance",
+      "SATUNNAINEN_TARINAHAITTA": "Occasional vibration nuisance",
+      "TOISTUVA_TARINAHAITTA": "Recurring vibration nuisance",
+      "JATKUVA_TARINAHAITTA": "Permanent vibration nuisance"
     },
     "alue": {
       "title": "Project area {{index}}",
@@ -648,7 +644,7 @@
       "header": "Areas",
       "subHeader": "Project areas",
       "area": "Area",
-      "instructions": "Several geometries can be drawn for the project. Geometry areas affect the project’s traffic congestion indices. Drawing tools can be found at the bottom left of the map view. With the pen tool, you can draw polygonal geometries by clicking the point where you want an angle. With the square tool, you can create square areas by first clicking the map and moving the mouse in the direction you want. Clicking it again “closes” the square drawing. A geometry can be edited by “grabbing” the edge of the geometry and dragging. A square geometry can also be shaped by grabbing the edge. lete a geometry, first select the geometry by clicking it; a bin icon will appear in the bottom left drawing tools which you can click to delete the geometry.",
+      "instructions": "[TRANSLATION_PENDING]Several geometries can be drawn for the project. Geometry areas affect the project’s traffic congestion indices. Drawing tools can be found at the bottom left of the map view. With the pen tool, you can draw polygonal geometries by clicking the point where you want an angle. With the square tool, you can create square areas by first clicking the map and moving the mouse in the direction you want. Clicking it again “closes” the square drawing. A geometry can be edited by “grabbing” the edge of the geometry and dragging. A square geometry can also be shaped by grabbing the edge. lete a geometry, first select the geometry by clicking it; a bin icon will appear in the bottom left drawing tools which you can click to delete the geometry.",
       "instructions3": "You can edit an already drawn area by grabbing its edge and dragging the point to the desired location.",
       "noAlueet": "Draw the area on the map to mark the hazard assessments.",
       "haitatHeader": "Nuisance assessments for the area",
@@ -673,8 +669,8 @@
       "nuisanceType": {
         "PYORALIIKENNE": "Significance of cycling traffic",
         "AUTOLIIKENNE": "Congestion of motor traffic",
-        "LINJAAUTOLIIKENNE": "Significance of public transport: Local bus transport",
-        "RAITIOLIIKENNE": "Significance of public transport: Tram transport",
+        "LINJAAUTOLIIKENNE": "Local bus transport",
+        "RAITIOLIIKENNE": "Tram transport",
         "MUUT": "Other nuisance management measures"
       },
       "carTrafficNuisanceType": {}
@@ -778,8 +774,6 @@
       "totalSurfaceAreaLong": "Combined total area of the work areas drawn:",
       "applicationState": "Application state",
       "relatedHanke": "Related to project",
-      "downloadDecision": "Download decision (PDF)",
-      "downloadDecisionShort": "Download PDF",
       "addedAreas": "Areas added by you",
       "removeAreaTitle": "Remove area?",
       "removeAreaDescription": "Are you sure you want to remove the area {{areaName}}?",
@@ -793,7 +787,11 @@
       "requiredCompetenceTitle": "Qualification required for the work",
       "requiredCompetence": "As the person in charge of the work or a representative, I affirm that there will always be at least one person with a valid roadwork qualification for the Helsinki metropolitan area (PKS) street work card present when the worksite is being used. I will also be responsible for ensuring that the person in charge of the excavation work has a valid roadwork safety 1, roadwork safety 2 or roadwork training for the Helsinki metropolitan area (PKS) street work card. *",
       "additionalInformation": "Additional information on the application",
-      "tyonTarkoitus": "Purpose of the work"
+      "tyonTarkoitus": "Purpose of the work",
+      "setWorkTimesToCopyArea": "Select timeframe to copy into work area",
+      "downloadDecision": {
+        "PAATOS": "Download decision (PDF)"
+      }
     },
     "notifications": {
       "saveSuccessLabel": "Application saved",
@@ -811,6 +809,11 @@
       "maxAttachmentsNumberExceeded": "The maximum number of attachments ({{maxNumber}} items) has been exceeded",
       "sentApplicationPersonalInfoNotification": "The personal information of the submitted application cannot be edited",
       "sendApplicationDisabled": "The application can only be submitted by the person designated as the contact person for the application."
+    },
+    "sendDialog": {
+      "title": "Submit application?",
+      "instructions": "The decision concerning your application and possible requests for additional information will be available in the Haitaton system. By submitting your application, you consent to being notified electronically.",
+      "instructionsPaperDecision": "You may also request a paper copy of the decision to an address you specify."
     },
     "sentDialog": {
       "title": "Application sent",
@@ -831,8 +834,8 @@
       "RETURNED_TO_PREPARATION": "Returned to preparation",
       "DECISIONMAKING": "Decision pending",
       "DECISION": "Decision",
-      "OPERATIONAL_CONDITION": "Operational condition approved",
-      "FINISHED": "Work finished; approved",
+      "OPERATIONAL_CONDITION": "Operational condition",
+      "FINISHED": "Work finished",
       "CANCELLED": "Application cancelled",
       "ARCHIVED": "Work archived",
       "REPLACED": "Replaced",
@@ -843,7 +846,8 @@
       "sendApplication": "Send application",
       "cancelApplication": "Cancel application",
       "editApplication": "Edit application",
-      "deletePlacementContract": "Remove placement agreement identifier {{id}}"
+      "deletePlacementContract": "Remove placement agreement identifier {{id}}",
+      "copyWorkArea": "Copy into work area"
     },
     "errors": {
       "cancelConflict": "The application cannot be cancelled because it has entered the processing stage",
@@ -862,7 +866,10 @@
       "CABLE_REPORT": "Draft",
       "EXCAVATION_NOTIFICATION": "Draft"
     },
-    "applicationTypeInstruction": "Select application type. Via the excavation report, you can also submit a cable report if you do not have one already."
+    "applicationTypeInstruction": "Select application type. Via the excavation report, you can also submit a cable report if you do not have one already.",
+    "addApplicationTypes": {
+      "EXCAVATION_NOTIFICATION": "$t(hakemus:applicationTypes:EXCAVATION_NOTIFICATION) (and cable report)"
+    }
   },
   "hankeSidebar": {
     "ariaSidebarContent": "Project information",
@@ -876,8 +883,8 @@
     "liikennehaittaindeksi": "Traffic nuisance index",
     "autoliikenne": "Congestion of motor traffic",
     "pyoraliikenne": "Significance of cycling",
-    "raitioliikenne": "Significance of public transport: Rail transport",
-    "linjaautoliikenne": "Significance of public transport: Local bus transport",
+    "raitioliikenne": "Rail transport",
+    "linjaautoliikenne": "Local bus transport",
     "kiertoreittitarve": "Detour need",
     "KIERTOREITTITARPEET": {
       "TODENNAKOINEN": "likely",

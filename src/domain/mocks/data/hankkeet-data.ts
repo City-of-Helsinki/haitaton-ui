@@ -139,7 +139,7 @@ const hankkeet: HankeDataDraft[] = [
         hankeId: 2,
         haittaAlkuPvm: new Date('2023-01-12T00:00:00Z'),
         haittaLoppuPvm: new Date('2024-11-27T00:00:00Z'),
-        kaistaHaitta: HANKE_KAISTAHAITTA.VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA,
+        kaistaHaitta: HANKE_KAISTAHAITTA.YKSI_KAISTA_VAHENEE_KAHDELLA_AJOSUUNNALLA,
         kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA.PITUUS_100_499_METRIA,
         meluHaitta: HANKE_MELUHAITTA.JATKUVA_MELUHAITTA,
         polyHaitta: HANKE_POLYHAITTA.JATKUVA_POLYHAITTA,
@@ -223,7 +223,7 @@ const hankkeet: HankeDataDraft[] = [
         meluHaitta: HANKE_MELUHAITTA.TOISTUVA_MELUHAITTA,
         polyHaitta: HANKE_POLYHAITTA.JATKUVA_POLYHAITTA,
         tarinaHaitta: HANKE_TARINAHAITTA.SATUNNAINEN_TARINAHAITTA,
-        kaistaHaitta: HANKE_KAISTAHAITTA.VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA,
+        kaistaHaitta: HANKE_KAISTAHAITTA.YKSI_KAISTA_VAHENEE,
         kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA.PITUUS_10_99_METRIA,
         nimi: 'Hankealue 2',
         haittojenhallintasuunnitelma: {
@@ -352,7 +352,7 @@ const hankkeet: HankeDataDraft[] = [
         meluHaitta: HANKE_MELUHAITTA.SATUNNAINEN_MELUHAITTA,
         polyHaitta: HANKE_POLYHAITTA.TOISTUVA_POLYHAITTA,
         tarinaHaitta: HANKE_TARINAHAITTA.JATKUVA_TARINAHAITTA,
-        kaistaHaitta: HANKE_KAISTAHAITTA.VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA,
+        kaistaHaitta: HANKE_KAISTAHAITTA.YKSI_KAISTA_VAHENEE,
         kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA.PITUUS_ALLE_10_METRIA,
         nimi: 'Hankealue 1',
         geometriat: {

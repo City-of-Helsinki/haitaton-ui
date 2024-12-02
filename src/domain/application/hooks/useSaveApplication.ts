@@ -1,14 +1,27 @@
 import { useState } from 'react';
-import { useMutation } from 'react-query';
-import { createApplication, updateApplication } from '../utils';
-import { Application, JohtoselvitysData, KaivuilmoitusData } from '../types/application';
+import {
+  createApplication,
+  modifyDataAfterReceive,
+  modifyDataBeforeSend,
+  updateApplication,
+} from '../utils';
+import {
+  Application,
+  JohtoselvitysCreateData,
+  JohtoselvitysData,
+  JohtoselvitysUpdateData,
+  KaivuilmoitusCreateData,
+  KaivuilmoitusData,
+  KaivuilmoitusUpdateData,
+} from '../types/application';
+import useDebouncedMutation from '../../../common/hooks/useDebouncedMutation';
 
 type SuccessFunction<ApplicationData> = (data: Application<ApplicationData>) => void;
 
 export default function useSaveApplication<
   ApplicationData extends JohtoselvitysData | KaivuilmoitusData,
-  CreateData,
-  UpdateData,
+  CreateData extends JohtoselvitysCreateData | KaivuilmoitusCreateData,
+  UpdateData extends JohtoselvitysUpdateData | KaivuilmoitusUpdateData,
 >({
   onCreateSuccess,
   onUpdateSuccess,
@@ -20,25 +33,38 @@ export default function useSaveApplication<
     null,
   );
 
-  const applicationCreateMutation = useMutation(createApplication<ApplicationData, CreateData>, {
-    onMutate() {
-      setShowSaveNotification(null);
+  const applicationCreateMutation = useDebouncedMutation(
+    createApplication<ApplicationData, CreateData>,
+    {
+      onMutate() {
+        setShowSaveNotification(null);
+      },
+      onSuccess: onCreateSuccess,
+      onSettled() {
+        setShowSaveNotification('create');
+      },
     },
-    onSuccess: onCreateSuccess,
-    onSettled() {
-      setShowSaveNotification('create');
-    },
-  });
+  );
 
-  const applicationUpdateMutation = useMutation(updateApplication<ApplicationData, UpdateData>, {
-    onMutate() {
-      setShowSaveNotification(null);
+  const applicationUpdateMutation = useDebouncedMutation(
+    (data: { id: number; data: UpdateData }) =>
+      updateApplication<ApplicationData, UpdateData>({
+        id: data.id,
+        data: modifyDataBeforeSend(data.data),
+      }),
+    {
+      onMutate() {
+        setShowSaveNotification(null);
+      },
+      onSuccess(application: Application<ApplicationData>) {
+        const modifiedData = modifyDataAfterReceive(application);
+        onUpdateSuccess(modifiedData);
+      },
+      onSettled() {
+        setShowSaveNotification('update');
+      },
     },
-    onSuccess: onUpdateSuccess,
-    onSettled() {
-      setShowSaveNotification('update');
-    },
-  });
+  );
 
   return {
     applicationCreateMutation,

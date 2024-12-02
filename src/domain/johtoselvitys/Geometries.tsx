@@ -24,12 +24,16 @@ import DrawProvider from '../../common/components/map/modules/draw/DrawProvider'
 import useDrawContext from '../../common/components/map/modules/draw/useDrawContext';
 import ApplicationMap from '../application/components/ApplicationMap';
 import useAddressCoordinate from '../map/hooks/useAddressCoordinate';
+import useFilterHankeAlueetByApplicationDates from '../application/hooks/useFilterHankeAlueetByApplicationDates';
+import { OverlayProps } from '../../common/components/map/types';
 
 function AreaList({
   applicationAreas,
+  hankeName,
   onRemoveArea,
 }: Readonly<{
   applicationAreas: FieldArrayWithId<JohtoselvitysFormValues, 'applicationData.areas', 'id'>[];
+  hankeName?: string;
   onRemoveArea: (index: number, feature?: Feature<Geometry>) => void;
 }>) {
   const { t } = useTranslation();
@@ -37,6 +41,7 @@ function AreaList({
     actions: { setSelectedFeature },
   } = useDrawContext();
   const { tabRefs } = useSelectableTabs(applicationAreas, { selectLastTabOnChange: true });
+  const { getValues } = useFormContext<JohtoselvitysFormValues>();
 
   return (
     <Box as="ul" paddingLeft="var(--spacing-l)">
@@ -45,7 +50,19 @@ function AreaList({
         const surfaceArea = geometry && `(${formatSurfaceArea(geometry)})`;
         const areaName = getAreaDefaultName(t, index, applicationAreas.length);
 
-        area.feature?.set('areaName', areaName);
+        area.feature?.setProperties(
+          {
+            areaName,
+            hankeName,
+            overlayProps: new OverlayProps({
+              heading: areaName,
+              startDate: getValues('applicationData.startTime'),
+              endDate: getValues('applicationData.endTime'),
+              backgroundColor: 'var(--color-suomenlinna-light)',
+            }),
+          },
+          true,
+        );
 
         return (
           <li key={area.id}>
@@ -136,8 +153,17 @@ export function Geometries({ hankeData }: Readonly<Props>) {
     getValues('applicationData.postalAddress.streetAddress.streetName'),
   );
 
+  const filterHankeAlueet = useFilterHankeAlueetByApplicationDates({
+    applicationStartDate: startTime,
+    applicationEndDate: endTime,
+  });
+
   function handleAddArea(feature: Feature<Geometry>) {
     append(getEmptyArea(feature));
+  }
+
+  function handleCopyArea(feature: Feature<Geometry>) {
+    drawSource.addFeature(feature);
   }
 
   function removeArea(index: number, areaFeature?: Feature<Geometry>) {
@@ -204,15 +230,17 @@ export function Geometries({ hankeData }: Readonly<Props>) {
           drawSource={drawSource}
           showDrawControls={Boolean(workTimesSet)}
           onAddArea={handleAddArea}
+          onCopyArea={handleCopyArea}
           mapCenter={addressCoordinate}
+          restrictDrawingToHankeAreas={!hankeData?.generated}
+          workTimesSet={Boolean(workTimesSet)}
         >
           {/* Don't show hanke areas when hanke is generated */}
           {!hankeData?.generated && (
             <HankeLayer
               hankeData={hankeData && [hankeData]}
-              startDate={startTime?.toString() ?? hankeData?.alkuPvm}
-              endDate={endTime?.toString() ?? hankeData?.loppuPvm}
               fitSource
+              filterHankeAlueet={filterHankeAlueet}
             />
           )}
         </ApplicationMap>
@@ -228,7 +256,11 @@ export function Geometries({ hankeData }: Readonly<Props>) {
         <Text tag="h3" styleAs="h4" weight="bold">
           {t('hakemus:labels:addedAreas')}
         </Text>
-        <AreaList applicationAreas={applicationAreas} onRemoveArea={removeArea} />
+        <AreaList
+          applicationAreas={applicationAreas}
+          hankeName={hankeData?.nimi}
+          onRemoveArea={removeArea}
+        />
       </DrawProvider>
 
       <ConfirmationDialog

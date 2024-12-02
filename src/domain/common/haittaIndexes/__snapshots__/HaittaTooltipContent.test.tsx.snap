@@ -69,6 +69,9 @@ exports[`Should show correct tooltip for hankeIndexes:tooltips:PYORALIIKENNE 1`]
       0: Ei tunnistettua pyöräliikenteen reittiä
     </li>
     <li>
+      1: Puistoreitti, jolla mahdollisesti pyöräliikennettä
+    </li>
+    <li>
       2: Muut pyöräliikenteen yhteydet
     </li>
     <li>

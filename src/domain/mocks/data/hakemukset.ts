@@ -12,11 +12,17 @@ import hakemuksetData from './hakemukset-data';
 import { isApplicationPending } from '../../application/utils';
 import ApiError from '../apiError';
 import { cloneDeep } from 'lodash';
+import { faker } from '@faker-js/faker';
+import { Taydennys } from '../../application/taydennys/types';
 
 let hakemukset: Application[] = [...hakemuksetData];
 
 export async function read(id: number) {
   return hakemukset.find((hakemus) => hakemus.id === id);
+}
+
+async function readTaydennys(id: string) {
+  return hakemukset.find((hakemus) => hakemus.taydennys?.id === id);
 }
 
 export async function readAll() {
@@ -38,7 +44,7 @@ export async function readAllForHanke(hankeTunnus: string): Promise<HankkeenHake
           name: application.applicationData.name,
           startTime: application.applicationData.startTime,
           endTime: application.applicationData.endTime,
-          pendingOnClient: isApplicationPending(application.alluStatus),
+          areas: application.applicationData.areas,
         },
       };
     });
@@ -123,5 +129,55 @@ export async function sendHakemus(id: number) {
   }
   const updatedHakemus = cloneDeep(hakemus);
   updatedHakemus.alluStatus = 'PENDING';
+  return updatedHakemus;
+}
+
+export async function reportOperationalCondition(id: number) {
+  const hakemus = await read(id);
+  if (!hakemus) {
+    throw new ApiError(`No application with id ${id}`, 404);
+  }
+  const updatedHakemus = cloneDeep(hakemus);
+  updatedHakemus.alluStatus = 'OPERATIONAL_CONDITION';
+  return updatedHakemus;
+}
+
+export async function createTaydennys(id: number) {
+  const hakemus = await read(id);
+  if (!hakemus) {
+    throw new ApiError(`No application with id ${id}`, 404);
+  }
+  const taydennys: Taydennys<JohtoselvitysData | KaivuilmoitusData> = {
+    id: faker.string.uuid(),
+    applicationData: cloneDeep(hakemus.applicationData),
+    muutokset: [],
+  };
+  hakemus.taydennys = taydennys;
+  return taydennys;
+}
+
+export async function updateTaydennys(
+  id: string,
+  updates: JohtoselvitysUpdateData | KaivuilmoitusUpdateData,
+) {
+  const hakemus = await readTaydennys(id);
+  const taydennys = hakemus?.taydennys;
+  if (!taydennys) {
+    throw new ApiError(`No application with id ${id}`, 404);
+  }
+  taydennys.applicationData = Object.assign(taydennys.applicationData, updates);
+  return taydennys;
+}
+
+export async function sendTaydennys(id: string) {
+  const hakemus = await readTaydennys(id);
+  if (!hakemus) {
+    throw new ApiError(`No application with id ${id}`, 404);
+  }
+  const updatedHakemus = cloneDeep(hakemus);
+  updatedHakemus.alluStatus = 'INFORMATION_RECEIVED';
+  updatedHakemus.applicationData = hakemus.taydennys!.applicationData;
+  updatedHakemus.taydennys = null;
+  updatedHakemus.taydennyspyynto = null;
   return updatedHakemus;
 }

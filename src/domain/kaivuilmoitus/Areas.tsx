@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { Fieldset, Notification, Tab, TabList, TabPanel, Tabs, Tooltip } from 'hds-react';
@@ -6,7 +6,6 @@ import { Box, Flex, Grid } from '@chakra-ui/react';
 import { Feature } from 'ol';
 import { Geometry, Polygon } from 'ol/geom';
 import VectorSource from 'ol/source/Vector';
-import booleanIntersects from '@turf/boolean-intersects';
 import { polygon } from '@turf/helpers';
 import { $enum } from 'ts-enum-util';
 import Text from '../../common/components/text/Text';
@@ -27,45 +26,62 @@ import {
 } from '../types/hanke';
 import styles from './Kaivuilmoitus.module.scss';
 import ApplicationMap from '../application/components/ApplicationMap';
-import { KaivuilmoitusAlue, Tyoalue } from '../application/types/application';
+import { HankkeenHakemus, KaivuilmoitusAlue, Tyoalue } from '../application/types/application';
 import useSelectableTabs from '../../common/hooks/useSelectableTabs';
 import TextInput from '../../common/components/textInput/TextInput';
 import Dropdown from '../../common/components/dropdown/Dropdown';
 import DropdownMultiselect from '../../common/components/dropdown/DropdownMultiselect';
 import TextArea from '../../common/components/textArea/TextArea';
 import DrawProvider from '../../common/components/map/modules/draw/DrawProvider';
-import { getTotalSurfaceArea } from '../map/utils';
+import { formatFeaturesToHankeGeoJSON, getTotalSurfaceArea } from '../map/utils';
 import TyoalueTable from './components/TyoalueTable';
 import AreaSelectDialog from './components/AreaSelectDialog';
+import booleanContains from '@turf/boolean-contains';
+import { getAreaDefaultName } from '../application/utils';
+import HaittaIndexes from '../common/haittaIndexes/HaittaIndexes';
+import useHaittaIndexes from '../hanke/hooks/useHaittaIndexes';
+import { calculateLiikennehaittaindeksienYhteenveto } from './utils';
+import useFilterHankeAlueetByApplicationDates from '../application/hooks/useFilterHankeAlueetByApplicationDates';
+import { styleFunction } from '../map/utils/geometryStyle';
+import HakemusLayer from '../map/components/Layers/HakemusLayer';
+import { OverlayProps } from '../../common/components/map/types';
+import { LIIKENNEHAITTA_STATUS } from '../common/utils/liikennehaittaindeksi';
 
 function getEmptyArea(
   hankeData: HankeData,
   hankeAlue: HankeAlue,
   feature: Feature<Geometry>,
-): KaivuilmoitusAlue {
-  return {
-    name: hankeAlue.nimi!,
-    hankealueId: hankeAlue.id!,
-    tyoalueet: [new Tyoalue(feature)],
-    katuosoite: hankeData.tyomaaKatuosoite!,
-    tyonTarkoitukset: hankeData.tyomaaTyyppi,
-    meluhaitta: hankeAlue.meluHaitta,
-    polyhaitta: hankeAlue.polyHaitta,
-    tarinahaitta: hankeAlue.tarinaHaitta,
-    kaistahaitta: hankeAlue.kaistaHaitta,
-    kaistahaittojenPituus: hankeAlue.kaistaPituusHaitta,
-  };
+): [KaivuilmoitusAlue, Tyoalue] {
+  const tyoalue = new Tyoalue(feature);
+  return [
+    {
+      name: hankeAlue.nimi!,
+      hankealueId: hankeAlue.id!,
+      tyoalueet: [tyoalue],
+      katuosoite: hankeData.tyomaaKatuosoite!,
+      tyonTarkoitukset: hankeData.tyomaaTyyppi,
+      meluhaitta: hankeAlue.meluHaitta,
+      polyhaitta: hankeAlue.polyHaitta,
+      tarinahaitta: hankeAlue.tarinaHaitta,
+      kaistahaitta: hankeAlue.kaistaHaitta,
+      kaistahaittojenPituus: hankeAlue.kaistaPituusHaitta,
+    },
+    tyoalue,
+  ];
 }
 
 type Props = {
   hankeData: HankeData;
+  hankkeenHakemukset: HankkeenHakemus[];
 };
 
-export default function Areas({ hankeData }: Readonly<Props>) {
+export default function Areas({ hankeData, hankkeenHakemukset }: Readonly<Props>) {
   const { t } = useTranslation();
   const locale = useLocale();
   const [multipleHankeAreaSpanningFeature, setMultipleHankeAreaSpanningFeature] =
     useState<Feature<Geometry> | null>(null);
+  const [hankeAreasContainingNewArea, setHankeAreasContainingNewArea] = useState<HankeAlue[]>([]);
+
   const { getValues, setValue, watch, trigger } = useFormContext<KaivuilmoitusFormValues>();
   const {
     fields: applicationAreas,
@@ -75,6 +91,8 @@ export default function Areas({ hankeData }: Readonly<Props>) {
     name: 'applicationData.areas',
   });
   const wathcApplicationAreas = watch('applicationData.areas');
+  const haittaIndexesMutation = useHaittaIndexes();
+
   const totalSurfaceArea = getTotalSurfaceArea(
     wathcApplicationAreas
       .flatMap((area) => area.tyoalueet)
@@ -82,11 +100,40 @@ export default function Areas({ hankeData }: Readonly<Props>) {
   );
 
   const [drawSource] = useState<VectorSource>(() => {
-    const features = applicationAreas
-      .flatMap((area) => area.tyoalueet)
-      .flatMap((area) => (area.openlayersFeature ? area.openlayersFeature : []));
+    const features = applicationAreas.flatMap((area) =>
+      area.tyoalueet.flatMap((tyoalue, index) => {
+        if (tyoalue.openlayersFeature) {
+          const areaName = getAreaDefaultName(t, index, area.tyoalueet.length);
+          tyoalue.openlayersFeature?.setProperties(
+            {
+              areaName,
+              hankeName: hankeData.nimi,
+              relatedHankeAreaName: area.name,
+              relatedHankeAreaId: area.hankealueId,
+              liikennehaittaindeksi: tyoalue.tormaystarkasteluTulos
+                ? tyoalue.tormaystarkasteluTulos.liikennehaittaindeksi.indeksi
+                : null,
+              overlayProps: new OverlayProps({
+                heading: areaName,
+                startDate: getValues('applicationData.startTime'),
+                endDate: getValues('applicationData.endTime'),
+                backgroundColor: 'var(--color-suomenlinna-light)',
+              }),
+            },
+            true,
+          );
+          return tyoalue.openlayersFeature;
+        }
+        return [];
+      }),
+    );
     return new VectorSource({ features });
   });
+
+  const selectedJohtoselvitysTunnukset = getValues('applicationData.cableReports');
+  const selectedJohtoselvitykset = hankkeenHakemukset.filter((hakemus) =>
+    selectedJohtoselvitysTunnukset?.includes(hakemus.applicationIdentifier!),
+  );
 
   const { tabRefs, setSelectedTabIndex } = useSelectableTabs(applicationAreas, {
     selectLastTabOnChange: true,
@@ -99,35 +146,162 @@ export default function Areas({ hankeData }: Readonly<Props>) {
   const maxDate = hankeData.loppuPvm ? new Date(hankeData.loppuPvm) : undefined;
   const workTimesSet = startTime && endTime;
 
+  const filterHankeAlueet = useFilterHankeAlueetByApplicationDates({
+    applicationStartDate: startTime,
+    applicationEndDate: endTime,
+  });
+
+  const refreshHaittaIndexes = useCallback(
+    (kaivuilmoitusalueIndex?: number) => {
+      const applicationData = getValues('applicationData');
+      const kaivuilmoitusalueet = applicationData.areas;
+      if (kaivuilmoitusalueIndex === undefined) {
+        // calculate for all areas
+        kaivuilmoitusalueet.forEach((_, index) => {
+          refreshHaittaIndexes(index);
+        });
+      } else {
+        const kaivuilmoitusalue = kaivuilmoitusalueet[kaivuilmoitusalueIndex];
+        const calculateHaittaIndexesForTyoalue = (
+          ka: KaivuilmoitusAlue,
+          ta: Tyoalue,
+          tyoalueIndex: number,
+        ) => {
+          const request = {
+            geometriat: {
+              featureCollection: formatFeaturesToHankeGeoJSON([ta.openlayersFeature!]),
+            },
+            haittaAlkuPvm: applicationData.startTime ?? new Date(),
+            haittaLoppuPvm: applicationData.endTime ?? new Date(),
+            kaistaHaitta: ka.kaistahaitta ?? 'EI_VAIKUTA',
+            kaistaPituusHaitta: ka.kaistahaittojenPituus ?? 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
+          };
+          haittaIndexesMutation.mutate(request, {
+            onSuccess(data) {
+              if (kaivuilmoitusalueIndex !== -1 && tyoalueIndex !== -1) {
+                const tyoalue = getValues(
+                  `applicationData.areas.${kaivuilmoitusalueIndex}.tyoalueet.${tyoalueIndex}`,
+                );
+                tyoalue.openlayersFeature?.setProperties({
+                  liikennehaittaindeksi: data.liikennehaittaindeksi.indeksi,
+                });
+                setValue(
+                  `applicationData.areas.${kaivuilmoitusalueIndex}.tyoalueet.${tyoalueIndex}.tormaystarkasteluTulos`,
+                  data,
+                );
+              }
+            },
+          });
+        };
+
+        // calculate for all work areas
+        kaivuilmoitusalue.tyoalueet.forEach((ta, index) => {
+          calculateHaittaIndexesForTyoalue(kaivuilmoitusalue, ta, index);
+        });
+      }
+    },
+    [getValues, setValue, haittaIndexesMutation],
+  );
+
   function addTyoAlueToHankeArea(hankeArea: HankeAlue, feature: Feature<Geometry>) {
-    const existingArea = applicationAreas.find((alue) => alue.hankealueId === hankeArea.id);
-    if (!existingArea) {
-      append(getEmptyArea(hankeData, hankeArea, feature));
-    } else {
-      const existingAreaIndex = applicationAreas.indexOf(existingArea);
-      setValue(
-        `applicationData.areas.${existingAreaIndex}.tyoalueet`,
-        getValues(`applicationData.areas.${existingAreaIndex}.tyoalueet`).concat(
-          new Tyoalue(feature),
-        ),
-      );
-      setSelectedTabIndex(existingAreaIndex);
-    }
+    const areas = getValues('applicationData.areas');
+    const existingArea = areas.find((alue) => alue.hankealueId === hankeArea.id);
+    const request = {
+      geometriat: {
+        featureCollection: formatFeaturesToHankeGeoJSON([feature]),
+      },
+      haittaAlkuPvm: startTime ?? new Date(),
+      haittaLoppuPvm: endTime ?? new Date(),
+      kaistaHaitta: hankeArea.kaistaHaitta ?? 'EI_VAIKUTA',
+      kaistaPituusHaitta: hankeArea.kaistaPituusHaitta ?? 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
+    };
+    haittaIndexesMutation.mutate(request, {
+      onSuccess(data) {
+        feature.setProperties({
+          hankeName: hankeData.nimi,
+          relatedHankeAreaName: hankeArea.nimi,
+          relatedHankeAreaId: hankeArea.id,
+          tormaystarkasteluTulos: data,
+          liikennehaittaindeksi: data.liikennehaittaindeksi.indeksi,
+          overlayProps: new OverlayProps({
+            startDate: getValues('applicationData.startTime'),
+            endDate: getValues('applicationData.endTime'),
+            backgroundColor: 'var(--color-suomenlinna-light)',
+          }),
+        });
+        if (!existingArea) {
+          const [emptyArea] = getEmptyArea(hankeData, hankeArea, feature);
+          append(emptyArea);
+        } else {
+          const existingAreaIndex = areas.indexOf(existingArea);
+          const newTyoalue = new Tyoalue(feature);
+          setValue(
+            `applicationData.areas.${existingAreaIndex}.tyoalueet`,
+            areas[existingAreaIndex].tyoalueet.concat(newTyoalue),
+          );
+          setSelectedTabIndex(existingAreaIndex);
+        }
+      },
+    });
   }
 
   function handleAddArea(feature: Feature<Geometry>) {
     const newAreaPolygon = polygon((feature.getGeometry() as Polygon).getCoordinates());
-    // Check if the new tyoalue intersects with any of the existing hanke areas
-    const hankeAlueetContainingNewArea = hankeData.alueet.filter((alue) =>
-      booleanIntersects(alue.geometriat?.featureCollection.features[0], newAreaPolygon),
-    );
+    // Check if the new tyoalue is contained in any of the existing hanke areas
+    const hankeAlueetContainingNewArea = hankeData.alueet.filter((alue) => {
+      const hankeAlueFeature = alue.geometriat?.featureCollection.features[0];
+      return hankeAlueFeature && booleanContains(hankeAlueFeature, newAreaPolygon);
+    });
+    setHankeAreasContainingNewArea(hankeAlueetContainingNewArea);
 
     if (hankeAlueetContainingNewArea.length === 0) {
+      // If the new tyoalue does not intersect with any hanke area, remove it
       drawSource.removeFeature(feature);
     } else if (hankeAlueetContainingNewArea.length === 1) {
+      // If the new tyoalue is contained in exactly one hanke area, add it to that
       addTyoAlueToHankeArea(hankeAlueetContainingNewArea[0], feature);
     } else {
+      // New työalue is contained in multiple hanke areas, open dialog for user to select one
       setMultipleHankeAreaSpanningFeature(feature);
+    }
+  }
+
+  function handleCopyArea(feature: Feature<Geometry>) {
+    drawSource.addFeature(feature);
+    handleAddArea(feature);
+  }
+
+  function handleChangeArea(feature: Feature<Geometry>) {
+    const changedApplicationArea = wathcApplicationAreas.find((alue) => {
+      const changedTyoalue = alue.tyoalueet.find(
+        (tyoalue) =>
+          tyoalue.openlayersFeature?.get('relatedHankeAreaId') ===
+          feature.get('relatedHankeAreaId'),
+      );
+      return !!changedTyoalue;
+    });
+    if (changedApplicationArea) {
+      const changedTyoalue = changedApplicationArea.tyoalueet.find((tyoalue) => {
+        return tyoalue.openlayersFeature?.get('areaName') === feature.get('areaName');
+      });
+      if (changedTyoalue) {
+        const request = {
+          geometriat: {
+            featureCollection: formatFeaturesToHankeGeoJSON([feature]),
+          },
+          haittaAlkuPvm: startTime ?? new Date(),
+          haittaLoppuPvm: endTime ?? new Date(),
+          kaistaHaitta: changedApplicationArea.kaistahaitta ?? 'EI_VAIKUTA',
+          kaistaPituusHaitta:
+            changedApplicationArea.kaistahaittojenPituus ?? 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
+        };
+        haittaIndexesMutation.mutate(request, {
+          onSuccess(data) {
+            changedTyoalue.tormaystarkasteluTulos = data;
+            feature.set('liikennehaittaindeksi', data.liikennehaittaindeksi.indeksi);
+          },
+        });
+      }
     }
   }
 
@@ -143,14 +317,18 @@ export default function Areas({ hankeData }: Readonly<Props>) {
     setMultipleHankeAreaSpanningFeature(null);
   }
 
-  // Trigger validation for startTime field
-  function validateStartTime() {
-    trigger('applicationData.startTime');
+  function handleStartTimeChange() {
+    // Trigger validation for startTime field
+    trigger('applicationData.startTime').then(() => {
+      refreshHaittaIndexes();
+    });
   }
 
-  // Trigger validation for endTime field
-  function validateEndTime() {
-    trigger('applicationData.endTime');
+  function handleEndTimeChange() {
+    // Trigger validation for endTime field
+    trigger('applicationData.endTime').then(() => {
+      refreshHaittaIndexes();
+    });
   }
 
   return (
@@ -210,7 +388,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
               maxDate={maxDate}
               initialMonth={minStartDate}
               helperText={t('form:helperTexts:dateInForm')}
-              onValueChange={validateStartTime}
+              onValueChange={handleStartTimeChange}
             />
             <DatePicker
               name="applicationData.endTime"
@@ -221,7 +399,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
               maxDate={maxDate}
               initialMonth={minEndDate}
               helperText={t('form:helperTexts:dateInForm')}
-              onValueChange={validateEndTime}
+              onValueChange={handleEndTimeChange}
             />
           </ResponsiveGrid>
         </Fieldset>
@@ -230,13 +408,25 @@ export default function Areas({ hankeData }: Readonly<Props>) {
           drawSource={drawSource}
           showDrawControls={Boolean(workTimesSet)}
           onAddArea={handleAddArea}
+          onChangeArea={handleChangeArea}
+          onCopyArea={handleCopyArea}
+          restrictDrawingToHankeAreas
+          workTimesSet={Boolean(workTimesSet)}
         >
+          {/* Hanke areas */}
           <HankeLayer
             hankeData={hankeData && [hankeData]}
-            startDate={startTime?.toString()}
-            endDate={endTime?.toString()}
             fitSource
+            filterHankeAlueet={filterHankeAlueet}
           />
+          {/* Johtoselvitys areas */}
+          {selectedJohtoselvitykset.map((hakemus) => (
+            <HakemusLayer
+              hakemusId={hakemus.id!}
+              layerStyle={styleFunction}
+              featureProperties={{ statusKey: LIIKENNEHAITTA_STATUS.LAVENDER_BLUE }}
+            />
+          ))}
         </ApplicationMap>
 
         {!workTimesSet && (
@@ -270,6 +460,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
                   alueIndex={index}
                   drawSource={drawSource}
                   hankeAlueName={alue.name}
+                  johtoselvitykset={selectedJohtoselvitykset}
                   onRemoveLastArea={() => remove(index)}
                 />
 
@@ -293,6 +484,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
                       label={t('hakemus:labels:tyonTarkoitus')}
                       mapValueToLabel={(value) => t(`hanke:tyomaaTyyppi:${value}`)}
                       errorMsg={t('hankeForm:insertFieldError')}
+                      required
                     />
                   </Box>
 
@@ -344,6 +536,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
                         label: t(`hanke:kaistaHaitta:${value}`),
                       }))}
                       label={t('hankeForm:labels:kaistaHaitta')}
+                      onValueChange={() => refreshHaittaIndexes(index)}
                       required
                     />
                     <Dropdown
@@ -354,6 +547,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
                         label: t(`hanke:kaistaPituusHaitta:${value}`),
                       }))}
                       label={t(`hankeForm:labels:kaistaPituusHaitta`)}
+                      onValueChange={() => refreshHaittaIndexes(index)}
                       required
                     />
                   </Grid>
@@ -363,6 +557,16 @@ export default function Areas({ hankeData }: Readonly<Props>) {
                     label={t('hakemus:labels:areaAdditionalInfo')}
                   />
                 </Fieldset>
+
+                <Box mb="var(--spacing-m)" mt="var(--spacing-m)">
+                  <HaittaIndexes
+                    heading={`${t('kaivuilmoitusForm:alueet:liikennehaittaindeksienYhteenveto')} (0-5)`}
+                    haittaIndexData={
+                      wathcApplicationAreas &&
+                      calculateLiikennehaittaindeksienYhteenveto(wathcApplicationAreas[index])
+                    }
+                  />
+                </Box>
               </TabPanel>
             );
           })}
@@ -370,7 +574,7 @@ export default function Areas({ hankeData }: Readonly<Props>) {
 
         <AreaSelectDialog
           isOpen={Boolean(multipleHankeAreaSpanningFeature)}
-          hankeAreas={hankeData.alueet}
+          hankeAreas={hankeAreasContainingNewArea}
           onClose={handleAreaSelectDialogClose}
           onConfirm={handleAreaSelectConfirm}
         />

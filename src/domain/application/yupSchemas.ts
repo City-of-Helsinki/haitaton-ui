@@ -11,21 +11,30 @@ const contactSchema = yup
   .nullable()
   .required();
 
-// business id i.e. Y-tunnus
-const registryKeySchema = yup
+// y-tunnus, henkilötunnus or general registry key
+export const registryKeySchema = yup
   .string()
   .defined()
   .nullable()
   .when('type', {
     is: (value: string) => value === 'COMPANY' || value === 'ASSOCIATION',
     then: (schema) => schema.businessId(),
+  })
+  .when('type', {
+    is: (value: string) => value === 'PERSON',
+    then: (schema) =>
+      schema.when('registryKeyHidden', {
+        is: (value: boolean) => !value,
+        then: (personalIdSchema) => personalIdSchema.personalId(),
+      }),
   });
 
-const customerSchema = contactSchema.omit(['firstName', 'lastName']).shape({
+export const customerSchema = contactSchema.omit(['firstName', 'lastName']).shape({
   yhteystietoId: yup.string().nullable(),
   name: yup.string().trim().max(100).required(),
   type: yup.mixed<ContactType>().nullable().required(),
   registryKey: registryKeySchema,
+  registryKeyHidden: yup.boolean().required().default(false),
 });
 
 export const customerWithContactsSchema = yup.object({
@@ -65,6 +74,7 @@ export const invoicingCustomerSchema = yup.object().shape(
     name: yup.string().trim().max(100).required(),
     type: yup.mixed<ContactType>().required(),
     registryKey: registryKeySchema.required(),
+    registryKeyHidden: yup.boolean().required(),
     postalAddress: postalAddressSchema.when(['ovt', 'invoicingOperator'], {
       is: (ovt: string, invoicingOperator: string) => !ovt || !invoicingOperator,
       then: () => requiredPostalAddressSchema,
@@ -110,3 +120,21 @@ export const areaSchema = yup.object({
 });
 
 export const applicationTypeSchema = yup.mixed<ApplicationType>().defined().required();
+
+export const sendSchema = yup.object().shape({
+  orderPaperDecision: yup.boolean().required(),
+  paperDecisionReceiver: yup.lazy((_value, context) => {
+    // Checking the value of `orderPaperDecision` from the context
+    if (context.parent.orderPaperDecision) {
+      return yup
+        .object({
+          name: yup.string().trim().max(100).required(),
+          streetAddress: yup.string().trim().max(100).required(),
+          postalCode: yup.string().trim().max(10).required(),
+          city: yup.string().trim().max(100).required(),
+        })
+        .required();
+    }
+    return yup.mixed().nullable();
+  }),
+});

@@ -16,6 +16,7 @@
     "increment": "Lisää",
     "yes": "Kyllä",
     "no": "Ei",
+    "removed": "Poistettu",
     "confirmationDialog": {
       "interruptDialog": {
         "titleText": "Olet poistumassa lomakkeelta",
@@ -108,7 +109,9 @@
       "dateMax": "Viimeinen mahdollinen päivä on {{max}}",
       "yhteyshenkilotMin": "Vähintään yksi yhteyshenkilö tulee olla asetettuna",
       "emailAlreadyUsedInContacts": "Valitsemasi sähköpostiosoite löytyy jo hankkeen käyttäjähallinnasta. Lisää yhteyshenkilö pudotusvalikosta.",
-      "emailAlreadyUsedInUserManagement": "Valitsemasi sähköpostiosoite löytyy jo toiselta käyttäjältä."
+      "emailAlreadyUsedInUserManagement": "Valitsemasi sähköpostiosoite löytyy jo toiselta käyttäjältä.",
+      "dateBeforeStart": "Päivämäärä ei voi olla ennen hakemuksen töiden alkamispäivää ({{startDate}})",
+      "dateInFuture": "Päivämäärä ei voi olla tulevaisuudessa"
     },
     "errors": {
       "areaRequired": "Vähintään yksi alue vaaditaan",
@@ -219,6 +222,8 @@
         "sukunimi": "Sukunimi",
         "ytunnus": "Y-tunnus",
         "yTunnusTaiHetu": "Y-tunnus tai henkilötunnus",
+        "henkilotunnus": "Henkilötunnus",
+        "muuTunnus": "Y-tunnus, henkilötunnus tai muu yksilöivä tunnus",
         "osoite": "Katuosoite",
         "postinumero": "Postinumero",
         "postitoimipaikka": "Postitoimipaikka",
@@ -239,7 +244,8 @@
       },
       "helperTexts": {
         "otherPartyRole": "Tahon rooli hankkeessa",
-        "yhteyshenkilo": "Voit etsiä jo lisättyä henkilöä kirjoittamalla tai valitsemalla pudotusvalikosta, tai lisätä uuden yhteyshenkilön."
+        "yhteyshenkilo": "Voit etsiä jo lisättyä henkilöä kirjoittamalla tai valitsemalla pudotusvalikosta, tai lisätä uuden yhteyshenkilön.",
+        "registryKey": "Tunnus on piilotettu tietosuojasyistä. Voit halutessasi tallentaa uuden tunnuksen korvaamalla ******** tekstin uudella tunnuksella."
       },
       "contactType": {
         "YKSITYISHENKILO": "Yksityishenkilö",
@@ -372,6 +378,13 @@
         "title": "Haitaton - Muokkaa johtoselvityshakemusta"
       }
     },
+    "EDIT_JOHTOSELVITYSTAYDENNYS": {
+      "path": "/johtoselvitystaydennys/:id/muokkaa",
+      "headerLabel": "Muokkaa täydennystä johtoselvityshakemukseen",
+      "meta": {
+        "title": "Haitaton - Muokkaa täydennystä johtoselvityshakemukseen"
+      }
+    },
     "KAIVUILMOITUSHAKEMUS": {
       "path": "/hankesalkku/:hankeTunnus/kaivuilmoitus",
       "headerLabel": "Luo uusi kaivuilmoitushakemus",
@@ -478,10 +491,11 @@
     },
     "kaistaHaitta": {
       "EI_VAIKUTA": "Ei vaikuta",
-      "VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA": "Vähentää kaistan yhdellä ajosuunnalla",
-      "VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA": "Vähentää samanaikaisesti kaistan kahdella ajosuunnalla",
-      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_KAHDELLA_AJOSUUNNALLA": "Vähentää samanaikaisesti useita kaistoja kahdella ajosuunnalla",
-      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA": "Vähentää samanaikaisesti useita kaistoja liittymien eri suunnilla"
+      "YKSI_KAISTA_VAHENEE": "Yksi autokaista vähenee - ajosuunta vielä käytössä",
+      "YKSI_KAISTA_VAHENEE_KAHDELLA_AJOSUUNNALLA": "Yksi autokaista vähenee kahdella ajosuunnalla - ajosuunnat vielä käytössä",
+      "USEITA_KAISTOJA_VAHENEE_AJOSUUNNILLA": "Useita autokaistoja vähenee ajosuunnilla - ajosuunnat vielä käytössä",
+      "YKSI_AJOSUUNTA_POISTUU_KAYTOSTA": "Yksi autoliikenteen ajosuunta poistuu käytöstä",
+      "USEITA_AJOSUUNTIA_POISTUU_KAYTOSTA": "Useita autoliikenteen ajosuuntia poistuu käytöstä"
     },
     "kaistaPituusHaitta": {
       "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Ei vaikuta",
@@ -491,22 +505,22 @@
       "PITUUS_500_METRIA_TAI_ENEMMAN": "500 m tai enemmän"
     },
     "meluHaitta": {
-      "EI_MELUHAITTAA": "0: Ei meluhaittaa",
-      "SATUNNAINEN_MELUHAITTA": "1: Satunnainen meluhaitta",
-      "TOISTUVA_MELUHAITTA": "3: Toistuva meluhaitta",
-      "JATKUVA_MELUHAITTA": "5: Jatkuva meluhaitta"
+      "EI_MELUHAITTAA": "Ei meluhaittaa",
+      "SATUNNAINEN_MELUHAITTA": "Satunnainen meluhaitta",
+      "TOISTUVA_MELUHAITTA": "Toistuva meluhaitta",
+      "JATKUVA_MELUHAITTA": "Jatkuva meluhaitta"
     },
     "polyHaitta": {
-      "EI_POLYHAITTAA": "0: Ei pölyhaittaa",
-      "SATUNNAINEN_POLYHAITTA": "1: Satunnainen pölyhaitta",
-      "TOISTUVA_POLYHAITTA": "3: Toistuva pölyhaitta",
-      "JATKUVA_POLYHAITTA": "5: Jatkuva pölyhaitta"
+      "EI_POLYHAITTAA": "Ei pölyhaittaa",
+      "SATUNNAINEN_POLYHAITTA": "Satunnainen pölyhaitta",
+      "TOISTUVA_POLYHAITTA": "Toistuva pölyhaitta",
+      "JATKUVA_POLYHAITTA": "Jatkuva pölyhaitta"
     },
     "tarinaHaitta": {
-      "EI_TARINAHAITTAA": "0: Ei tärinähaittaa",
-      "SATUNNAINEN_TARINAHAITTA": "1: Satunnainen tärinähaitta",
-      "TOISTUVA_TARINAHAITTA": "3: Toistuva tärinähaitta",
-      "JATKUVA_TARINAHAITTA": "5: Jatkuva tärinähaitta"
+      "EI_TARINAHAITTAA": "Ei tärinähaittaa",
+      "SATUNNAINEN_TARINAHAITTA": "Satunnainen tärinähaitta",
+      "TOISTUVA_TARINAHAITTA": "Toistuva tärinähaitta",
+      "JATKUVA_TARINAHAITTA": "Jatkuva tärinähaitta"
     },
     "alue": {
       "title": "Hankealue {{index}}",
@@ -693,8 +707,8 @@
         "YLEINEN": "Toimet haittojen hallintaan",
         "PYORALIIKENNE": "Pyöräliikenteen merkittävyys",
         "AUTOLIIKENNE": "Autoliikenteen ruuhkautuminen",
-        "LINJAAUTOLIIKENNE": "Joukkoliikenteen merkittävyys: Linja-autojen paikallisliikenne",
-        "RAITIOLIIKENNE": "Joukkoliikenteen merkittävyys: Raitioliikenne",
+        "LINJAAUTOLIIKENNE": "Linja-autojen paikallisliikenne",
+        "RAITIOLIIKENNE": "Raitioliikenne",
         "MUUT": "Muut haittojenhallintatoimet"
       },
       "carTrafficNuisanceType": {
@@ -1034,13 +1048,16 @@
     "pageHeader": "Kaivuilmoitus",
     "requiredInstruction": "Kaikki tähdellä * merkityt kentät ovat hakemuksen lähettämisen kannalta pakollisia.",
     "perustiedot": {
-      "instructions": "<p>Helsingin kaupungin kaduilla, jalankulku- tai pyöräteillä, toreilla tai puistoissa tehtävistä kaivu-, kairaus- ja louhintatöistä on tehtävä kaivuilmoitus. Kaivuilmoituksen jättämisen yhteydessä pyydetään viranomaiselta automaattisesti myös johtoselvitys, mikäli aiemmin tehdyn johtoselvityksen tunnusta ei ole liitetty hakemukseen.</p><p>Hakemukseen liittyy olennaisena osana käyttäjän täyttämä haittojenhallintasuunnitelma, jonka toteutumista viranomainen seuraa työn aikana. Ilmoituksen liitteeksi laaditaan tilapäisen liikennejärjestelyn suunnitelma, mikäli työ vaikuttaa jalankulkuun pyöräliikenteeseen tai moottoriajoneuvoliikenteeseen tai pysäköintipaikkoja varataan muuhun käyttöön siirtokehotuskyltillä.</p><p>Kaivutyö tulee ilmoittaa talvikaudella (1.12.–14.5.) toiminnalliseen kuntoon ja kaikissa tapauksissa valmiiksi, jotta työ voidaan valvoa ja laskutus katkaista tai päättää.</p><p>$t(kaivuilmoitusForm:requiredInstruction) Työn nimi vaaditaan lomakkeen tallentamiseen.</p>"
+      "instructions": "<p>Helsingin kaupungin kaduilla, jalankulku- tai pyöräteillä, toreilla tai puistoissa tehtävistä kaivu-, kairaus- ja louhintatöistä on tehtävä kaivuilmoitus. Kaivuilmoituksen jättämisen yhteydessä pyydetään viranomaiselta automaattisesti myös johtoselvitys, mikäli aiemmin tehdyn johtoselvityksen tunnusta ei ole liitetty hakemukseen.</p><p>Hakemukseen liittyy olennaisena osana käyttäjän täyttämä haittojenhallintasuunnitelma, jonka toteutumista viranomainen seuraa työn aikana. Ilmoituksen liitteeksi laaditaan tilapäisen liikennejärjestelyn suunnitelma, mikäli työ vaikuttaa jalankulkuun pyöräliikenteeseen tai moottoriajoneuvoliikenteeseen tai pysäköintipaikkoja varataan muuhun käyttöön siirtokehotuskyltillä.</p><p>Kaivutyö tulee ilmoittaa talvikaudella (1.12.–14.5.) toiminnalliseen kuntoon ja kaikissa tapauksissa valmiiksi, jotta työ voidaan valvoa ja laskutus katkaista tai päättää.</p><p>$t(kaivuilmoitusForm:requiredInstruction) Työn nimi vaaditaan lomakkeen tallentamiseen.</p>",
+      "cableReportInstructions": "Voit joko hakea uuden johtoselvityksen tai valita hankkeelle jo lisättyjä johtoselvityksiä."
     },
     "alueet": {
       "instructions": "<p>Aloita hakemuksen työalueiden piirtäminen lisäämällä työn alku- ja loppupäivämäärät, jolloin hankealueesi ilmestyvät näkyviin. HUOM! Työn ajankohdan tulee sijoittua hankealueen aikavälille.</p><p>Voit muokata jo piirrettyä aluetta tarttumalla sen reunasta kiinni ja vetämällä pisteen haluamaasi kohtaan.</p><p>Jos haluat piirtää hankealueiden sisälle pienempiä työalueita, aktivoi piirtotyökalut kartan päältä. Huomioi, että työalueet tulee piirtää kokonaan hankealueiden sisälle.</p><p>Jos haluat käyttää koko hankealuetta työalueena, valitse hankealue kartalta aktiviiseksi ja hanketietolaatikosta \"Käytä työalueena\".</p><p>Voit lisätä samalle hakemukselle useampia alueita mikäli niiden aikaväli on sama. Jos haluat ilmoittaa useamman alueen eri aikaväleillä, tulee sinun tehdä erillinen hakemus.</p><p>Kartan vasemmassa reunassa olevilla kulkumuotovalitsimilla voit tarkastella hanke- ja työalueiden haittaindeksejä tietylle kulkumuodolle. Kaikki kulkumuodot ovat oletuksena aktiivisina, voit vaihtaa näkyvien kulkumuotojen määrää klikkaamalla ikoneja. Kartalla näkyy valittujen kulkumuotojen kriittisin indeksiväri.</p><p>$t(kaivuilmoitusForm:requiredInstruction)</p>",
       "areaInformationHeading": "Kaivuilmoitus työalueille",
       "startDate": "Työn alkupäivämäärä",
-      "endDate": "Työn loppupäivämäärä"
+      "endDate": "Työn loppupäivämäärä",
+      "liikennehaittaindeksienYhteenveto": "Työalueiden liikennehaittaindeksien yhteenveto",
+      "areaNuisanceDefinitions": "Työalueiden omat haittamäärittelyt"
     },
     "liitteetJaLisatiedot": {
       "instructions": "<p>Lisää tilapäisiä liikennejärjestelyitä koskevat suunnitelmat ja muut mahdolliset liitteet. Tilapäisiä liikennejärjestelyitä koskeva suunnitelma on pakollinen. Tarvittaessa katso <a>Helsingin kaupungin tyyppikuvat</a>.</p><p>Mikäli valtuutusta täyttämiseen tai työn suorittamiseen ei ole tehty kirjautumisen yhteydessä, tulee liitteeksi lisätä valtakirja pdf:nä.</p><p>Kaikki tähdellä * merkityt kentät ovat hakemuksen lähettämisen kannalta pakollisia.</p>",
@@ -1073,6 +1090,8 @@
       "endDate": "Työn arvioitu loppupäivä",
       "workArea": "Työalue",
       "workAreaPlural": "Työalueet",
+      "workAreaOverlapsSingle": "Työalue ylittää johtoselvityksen rajauksen, tee johtoselvitykseen <a>{{applicationIdentifier}}</a> muutosilmoitus.",
+      "workAreaOverlapsMultiple": "Työalue ylittää usean johtoselvityksen rajauksen, tee muutosilmoitus.",
       "areaAdditionalInfo": "Lisätietoja alueesta",
       "areaInfo": "Alueen tiedot",
       "checkInfo": "Tarkista antamasi tiedot ja lähetä hakemus.",
@@ -1087,8 +1106,6 @@
       "totalSurfaceAreaLong": "Piirrettyjen työalueiden yhteenlaskettu kokonaispinta-ala:",
       "applicationState": "Hakemuksen tila",
       "relatedHanke": "Liittyy hankkeeseen",
-      "downloadDecision": "Lataa päätös (PDF)",
-      "downloadDecisionShort": "Lataa PDF",
       "addedAreas": "Lisäämäsi työalueet",
       "removeAreaTitle": "Poista työalue?",
       "removeAreaDescription": "Haluatko varmasti poistaa työalueen {{areaName}}?",
@@ -1096,16 +1113,33 @@
       "applicationInfo": "Hakemuksen tiedot",
       "cableReportTitle": "Johtoselvitys",
       "createCableReport": "Hae uusi johtoselvitys",
+      "applyingCableReport": "Johtoselvityksen hakeminen",
+      "useExisting": "Käytä olemassa olevia",
+      "useExistingCableReports": "Käytä olemassa olevia johtoselvityksiä",
       "newCableReport": "Uusi johtoselvitys",
       "cableReports": "Tehtyjen johtoselvitysten tunnukset",
-      "cableReportsHelp": "Valitse listasta tai kirjoita muu tunnus ja paina Enter lisätäksesi",
+      "cableReportsHelp": "Valitse kartalta tai listasta tai kirjoita muu tunnus ja paina Enter lisätäksesi",
+      "noCableReports": "Haitaton ei löytänyt hankkeelle aiemmin lisättyjä johtoselvityksiä. Voit lisätä muita johtoselvityksiä tunnuksen perusteella.",
+      "cableReportApplicationIdentifier": "Johtoselvitystunnus",
+      "cableReportTagInputHelp": "Anna johtoselvitystunnus ja paina Lisää",
       "placementContractsTitle": "Sijoitussopimukset",
       "placementContracts": "Sijoitussopimustunnus",
       "placementContractsHelp": "Anna sijoitussopimustunnus ja paina Lisää",
       "requiredCompetenceTitle": "Työhön vaadittava pätevyys",
       "requiredCompetence": "Työstä vastaavana tai asianhoitajana vakuutan, että työmaalla oleskeltaessa tai työskenneltäessä on paikalla aina ainakin yksi henkilö, jolla on voimassa Pääkaupunkiseudun katutyöt -koulutuksella saatu pätevyys (PKS-katutyökortti). Vastaan myös siitä, että kaivutyöstä vastaavalla on voimassa oleva Tieturva 1, Tieturva 2 tai PKS-katutyökortti. *",
       "additionalInformation": "Lisätietoja hakemuksesta",
-      "tyonTarkoitus": "Työn tarkoitus"
+      "tyonTarkoitus": "Työn tarkoitus",
+      "setWorkTimesToCopyArea": "Valitse ajanjakso kopioidaksesi työalueeksi",
+      "downloadDecision": {
+        "PAATOS": "Lataa päätös (PDF)",
+        "TOIMINNALLINEN_KUNTO": "Lataa toiminnallinen kunto (PDF)",
+        "TYO_VALMIS": "Lataa työ valmis (PDF)"
+      },
+      "paperDecisionOrdered": "Päätös tilattu paperisena",
+      "completionDate": {
+        "TOIMINNALLINEN_KUNTO": "Ilmoitettu toiminnalliseen kuntoon {{lastValmistumisilmoitus.reportedAt}} päivämäärälle {{lastValmistumisilmoitus.dateReported}}",
+        "TYO_VALMIS": "Ilmoitettu valmiiksi {{lastValmistumisilmoitus.reportedAt}} päivämäärälle {{lastValmistumisilmoitus.dateReported}}"
+      }
     },
     "notifications": {
       "saveSuccessLabel": "Hakemus tallennettu",
@@ -1122,7 +1156,24 @@
       "noApplications": "Hankkeella ei ole lisättyjä hakemuksia",
       "maxAttachmentsNumberExceeded": "Tiedoston ({{fileName}}) lataus epäonnistui, liitteiden enimmäismäärä ({{maxNumber}} kpl) ylitetty.",
       "sentApplicationPersonalInfoNotification": "Lähetetyn hakemuksen omia tietoja ei voi muokata",
-      "sendApplicationDisabled": "Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö."
+      "sendApplicationDisabled": "Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö.",
+      "reportCompletionDateSuccessLabel": "Ilmoitus lähetetty",
+      "reportOperationalConditionSuccessText": "Ilmoitus toiminnallisesta kunnosta on lähetetty hyväksyttäväksi.",
+      "reportWorkFinishedSuccessText": "Ilmoitus valmistumisesta on lähetetty hyväksyttäväksi.",
+      "reportCompletionDateErrorLabel": "Ilmoituksen lähettäminen epäonnistui",
+      "reportCompletionDateErrorText": "<0>Lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>"
+    },
+    "sendDialog": {
+      "title": "Lähetä hakemus?",
+      "instructions": "Hakemuksen päätös ja mahdolliset täydennyspyynnöt tulevat Haitaton-järjestelmään. Lähettämällä hakemuksen, sitoudut sähköiseen tiedoksiantoon.",
+      "instructionsPaperDecision": "Halutessasi voit tilata päätöksen myös paperisena ilmoittamaasi osoitteeseen.",
+      "orderPaperDecision": "Tilaan päätöksen myös paperisena",
+      "paperDecisionNotificationLabel": "Täytä vastaanottajan tiedot",
+      "paperDecisionNotificationText": "Täytä vastaanottajan tiedot tilataksesi päätöksen myös paperisena.",
+      "name": "Nimi",
+      "streetAddress": "Katuosoite",
+      "postalCode": "Postinumero",
+      "city": "Postitoimipaikka"
     },
     "sentDialog": {
       "title": "Hakemus lähetetty",
@@ -1134,6 +1185,20 @@
       "instructions": "Työalue sijoittuu useamman hankealueen alueelle. Valitse hankealue, jolle työalue lisätään.",
       "cancelButton": "Peruuta ja poista työalue"
     },
+    "operationalConditionDialog": {
+      "title": "Ilmoita toiminnalliseen kuntoon?",
+      "instructions": "<p>Jos kaivutyön työalue on talvikaudella (1.12.–14.5.) normaalissa käytössä, voit ilmoittaa työn toiminnalliseen kuntoon ja alueen käyttömaksu katkeaa.</p><br><p>Ajoradan, pyörätien ja jalkakäytävän tulee olla tilapäisesti päällystetty asfaltilla pintaan saakka. Kaikki liikenteenohjauslaitteet tulee olla poistettu maastosta. Jalkakäytävillä ja muilla alueilla voi käyttää kivituhkaa tai hienoa mursketta, jos asiasta on sovittu etukäteen tarkastajan kanssa.</p><br><p>Jos tilapäistä päällystystä ei ole laitettu, eikä ilmoitusta toiminnallisesta tilasta ole tehty, laskutus jatkuu, kunnes ohjeita on noudatettu.<br>Katuluokan mukainen lopullinen päällystys on tehtävä 14.5. mennessä tai käyttömaksun laskutus jatkuu 15.5. alkaen, kunnes työ on hyväksytysti vastaanotettu.</p><br><p>Anna päivämäärä, jolle ilmoitat työn toiminnalliseen kuntoon. {{previousReportsIntro}}</p>",
+      "previousReportsIntro": "Työ on aiemmin ilmoitettu toiminnalliseen kuntoon seuraavasti:",
+      "previouslyReportedAt": "{{reportedAt}} päivämäärälle {{dateReported}}",
+      "date": "Päivämäärä"
+    },
+    "workFinishedDialog": {
+      "title": "Ilmoita valmiiksi?",
+      "instructions": "Anna päivämäärä, jolle ilmoitat työn valmiiksi. {{previousReportsIntro}}</p>",
+      "previousReportsIntro": "Työ on aiemmin ilmoitettu valmiiksi seuraavasti:",
+      "previouslyReportedAt": "{{reportedAt}} päivämäärälle {{dateReported}}",
+      "date": "Päivämäärä"
+    },
     "status": {
       "PENDING_CLIENT": "Näkyy viranomaiselle",
       "PENDING": "Odottaa käsittelyä",
@@ -1143,8 +1208,8 @@
       "RETURNED_TO_PREPARATION": "Käsittelyssä",
       "DECISIONMAKING": "Odottaa päätöstä",
       "DECISION": "Päätös",
-      "OPERATIONAL_CONDITION": "Toiminnallinen kunto hyväksytty",
-      "FINISHED": "Työ valmis hyväksytty",
+      "OPERATIONAL_CONDITION": "Toiminnallinen kunto",
+      "FINISHED": "Työ valmis",
       "CANCELLED": "Hakemus peruttu",
       "ARCHIVED": "Työ arkistoitu",
       "REPLACED": "Korvattu",
@@ -1155,7 +1220,12 @@
       "sendApplication": "Lähetä hakemus",
       "cancelApplication": "Peru hakemus",
       "editApplication": "Muokkaa hakemusta",
-      "deletePlacementContract": "Poista sijoitussopimustunnus {{id}}"
+      "deletePlacementContract": "Poista sijoitussopimustunnus {{id}}",
+      "reportOperationalCondition": "Ilmoita toiminnalliseen kuntoon",
+      "reportWorkFinished": "Ilmoita valmiiksi",
+      "copyWorkArea": "Kopioi työalueeksi",
+      "removeSelection": "Poista valinta",
+      "selectCableReport": "Valitse johtoselvitys"
     },
     "errors": {
       "cancelConflict": "Hakemusta ei voida perua, koska se on edennyt käsittelyyn",
@@ -1174,7 +1244,56 @@
       "CABLE_REPORT": "Luonnos",
       "EXCAVATION_NOTIFICATION": "Luonnos"
     },
-    "applicationTypeInstruction": "Valitse hakemustyyppi. Kaivuilmoituksen kautta pääset tekemään myös johtoselvityksen, mikäli sinulla ei sellaista vielä ole."
+    "applicationTypeInstruction": "Valitse hakemustyyppi. Kaivuilmoituksen kautta pääset tekemään myös johtoselvityksen, mikäli sinulla ei sellaista vielä ole.",
+    "addApplicationTypes": {
+      "CABLE_REPORT": "$t(hakemus:applicationTypes:CABLE_REPORT)",
+      "EXCAVATION_NOTIFICATION": "$t(hakemus:applicationTypes:EXCAVATION_NOTIFICATION) (ja johtoselvitys)"
+    }
+  },
+  "taydennyspyynto": {
+    "taydennyspyynto": "Täydennyspyyntö",
+    "notificationText": "Muokkaa hakemusta korjataksesi seuraavat asiat",
+    "fields": {
+      "CUSTOMER": "$t(form:yhteystiedot:titles:customerWithContactsInfo)",
+      "INVOICING_CUSTOMER": "$t(form:yhteystiedot:titles:invoicingCustomerInfo)",
+      "PROPERTY_DEVELOPER": "$t(form:yhteystiedot:titles:propertyDeveloperInfo)",
+      "CONTRACTOR": "$t(form:yhteystiedot:titles:contractorInfo)",
+      "REPRESENTATIVE": "$t(form:yhteystiedot:titles:representativeInfo)",
+      "GEOMETRY": "$t(hakemus:labels:workAreaPlural)",
+      "START_TIME": "$t(hakemus:labels:startDate)",
+      "END_TIME": "$t(hakemus:labels:endDate)",
+      "IDENTIFICATION_NUMBER": "Haitattoman hanketunnus",
+      "CLIENT_APPLICATION_KIND": "$t(hakemus:labels:kuvaus)",
+      "APPLICATION_KIND": "$t(hakemus:labels:kuvaus)",
+      "POSTAL_ADDRESS": "$t(form:yhteystiedot:labels:osoite)",
+      "WORK_DESCRIPTION": "$t(hakemus:labels:kuvaus)",
+      "PROPERTY_IDENTIFICATION_NUMBER": "Kiinteistötunnus",
+      "ATTACHMENT": "$t(hankePortfolio:tabit:liitteet)",
+      "AREA": "$t(form:labels:pintaAla)",
+      "OTHER": "Muu"
+    }
+  },
+  "taydennys": {
+    "labels": {
+      "originalInformation": "Alkuperäiset",
+      "taydennykset": "Täydennykset",
+      "taydennys": "Täydennys"
+    },
+    "buttons": {
+      "createTaydennys": "Täydennä",
+      "editTaydennys": "Muokkaa hakemusta (täydennys)",
+      "sendTaydennys": "Lähetä täydennys"
+    },
+    "notifications": {
+      "sendSuccessLabel": "Täydennys lähetetty",
+      "sendSuccessText": "Täydennys on lähetetty käsiteltäväksi.",
+      "sendErrorLabel": "Täydennyksen lähettäminen epäonnistui",
+      "sendErrorText": "$t(hakemus:notifications:reportCompletionDateErrorText)"
+    },
+    "sendDialog": {
+      "title": "Lähetä täydennetty hakemus käsittelyyn",
+      "description": "Lähettämällä tiedot käsittelyssä oleva hakemuksesi päivitetään täydennetyillä tiedoilla."
+    }
   },
   "hankeSidebar": {
     "ariaSidebarContent": "Hankkeen tiedot",
@@ -1188,8 +1307,8 @@
     "liikennehaittaindeksi": "Liikennehaittaindeksi",
     "autoliikenne": "Autoliikenteen ruuhkautuminen",
     "pyoraliikenne": "Pyöräliikenteen merkittävyys",
-    "raitioliikenne": "Joukkoliikenteen merkittävyys: Raitioliikenne",
-    "linjaautoliikenne": "Joukkoliikenteen merkittävyys: Linja-autojen paikallisliikenne",
+    "raitioliikenne": "Raitioliikenne",
+    "linjaautoliikenne": "Linja-autojen paikallisliikenne",
     "kiertoreittitarve": "Kiertoreittitarve",
     "KIERTOREITTITARPEET": {
       "TODENNAKOINEN": "todennäköinen",
@@ -1198,19 +1317,19 @@
     },
     "indexesNotCalculated": "Haittaindeksejä ei ole laskettu.",
     "tooltips": {
-      "PYORALIIKENNE": "<ul><li>0: Ei tunnistettua pyöräliikenteen reittiä</li><li>2: Muut pyöräliikenteen yhteydet</li><li>3: Muut pyöräliikenteen reitit (tai reitin/yhteyden luokitustieto puuttuu pyöräliikenteen tausta-aineistosta)</li><li>5: Pyöräliikenteen pääreitti tai pääreitin osana toimiva katu</li></ul>",
+      "PYORALIIKENNE": "<ul><li>0: Ei tunnistettua pyöräliikenteen reittiä</li><li>1: Puistoreitti, jolla mahdollisesti pyöräliikennettä</li><li>2: Muut pyöräliikenteen yhteydet</li><li>3: Muut pyöräliikenteen reitit (tai reitin/yhteyden luokitustieto puuttuu pyöräliikenteen tausta-aineistosta)</li><li>5: Pyöräliikenteen pääreitti tai pääreitin osana toimiva katu</li></ul>",
       "AUTOLIIKENNE": "Autoliikenteelle lasketaan painotettu haittaindeksi (0-5) siihen sisältyvien osa-alueiden mukaan.",
       "autoKatuluokka": "<ul><li>0: Ei tunnistettua katuluokkaa</li><li>1: Asuntokatu, huoltoväylä tai vähäliikenteinen katu</li><li>2: Kantakaupungin asuntokatu, huoltoväylä tai vähäliikenteinen katu</li><li>3: Paikallinen kokoojakatu</li><li>4: Alueellinen kokoojakatu</li><li>5: Pääkatu tai moottoriväylä</li></ul>",
       "autoliikenneMaara": "<ul><li>0: Ei tunnistettua autoliikennettä</li><li>1: Alle 500 autoa arkivuorokaudessa</li><li>2: 500 - 1 499 autoa arkivuorokaudessa</li><li>3: 1 500 - 4 999 autoa arkivuorokaudessa</li><li>4: 5 000 - 9 999 autoa arkivuorokaudessa</li><li>5: 10 000 tai enemmän autoja arkivuorokaudessa</li></ul>",
-      "autoKaistaHaitta": "<ul><li>1: Ei vaikuta kaistajärjestelyihin</li><li>2: $t(hanke:kaistaHaitta:VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA)</li><li>3: $t(hanke:kaistaHaitta:VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA)</li><li>4: $t(hanke:kaistaHaitta:VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_KAHDELLA_AJOSUUNNALLA)</li><li>5: $t(hanke:kaistaHaitta:VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA)</li></ul>",
+      "autoKaistaHaitta": "<ul><li>0: Ei vaikutusta autoliikenteen kaistamääriin</li><li>1: $t(hanke:kaistaHaitta:YKSI_KAISTA_VAHENEE)</li><li>2: $t(hanke:kaistaHaitta:YKSI_KAISTA_VAHENEE_KAHDELLA_AJOSUUNNALLA)</li><li>3: $t(hanke:kaistaHaitta:USEITA_KAISTOJA_VAHENEE_AJOSUUNNILLA)</li><li>4: $t(hanke:kaistaHaitta:YKSI_AJOSUUNTA_POISTUU_KAYTOSTA)</li><li>5: $t(hanke:kaistaHaitta:USEITA_AJOSUUNTIA_POISTUU_KAYTOSTA)</li></ul>",
       "autoKaistaPituusHaitta": "<ul><li>1: Ei vaikuta kaistajärjestelyihin</li><li>2: Kaistavaikutusten pituus alle 10 m</li><li>3: Kaistavaikutusten pituus 10-99 m</li><li>4: Kaistavaikutusten pituus 100-499 m</li><li>5: Kaistavaikutusten pituus 500 m tai enemmän</li></ul>",
       "autoHankkeenKesto": "<ul><li>1: Hankkeen kesto alle 2 viikkoa</li><li>3: Hankkeen kesto 2 viikkoa - 3 kuukautta</li><li>5: Hankkeen kesto yli 3 kuukautta</li></ul>",
       "LINJAAUTOLIIKENNE": "<ul><li>0: Ei linja-autojen paikallisliikennettä</li><li>2: Linja-autojen paikallisliikennettä muulloin, kuin ruuhka-aikana</li><li>3: Linja-autojen paikallisliikenteen linjojen vuoromäärä enintään 10 ruuhkatunnissa</li><li>4: Linja-autojen paikallisliikenteen runkolinja tai vuoromäärä enintään 20 ruuhkatunnissa</li><li>5: Kamppi-Rautatientori -alue, Mannerheimintie, Kaisaniemenkatu, Hämeentie tai linja-autojen paikallisliikenteen linjojen vuoromäärä yli 20 ruuhkatunnissa</li></ul>",
       "RAITIOLIIKENNE": "<ul><li>0: Ei tunnistettuja raitiotiekiskoja</li><li>3: Raitiotieverkon rataosa, joilla ei ole säännöllistä linjaliikennettä</li><li>5: Raitiotieverkon rataosa, jolla on säännöllistä linjaliikennettä</li></ul>",
       "MUUT": {
-        "meluHaitta": "<ul><li>$t(hanke:meluHaitta:EI_MELUHAITTAA)</li><li>$t(hanke:meluHaitta:SATUNNAINEN_MELUHAITTA)</li><li>$t(hanke:meluHaitta:TOISTUVA_MELUHAITTA)</li><li>$t(hanke:meluHaitta:JATKUVA_MELUHAITTA)</li></ul>",
-        "polyHaitta": "<ul><li>$t(hanke:polyHaitta:EI_POLYHAITTAA)</li><li>$t(hanke:polyHaitta:SATUNNAINEN_POLYHAITTA)</li><li>$t(hanke:polyHaitta:TOISTUVA_POLYHAITTA)</li><li>$t(hanke:polyHaitta:JATKUVA_POLYHAITTA)</li></ul>",
-        "tarinaHaitta": "<ul><li>$t(hanke:tarinaHaitta:EI_TARINAHAITTAA)</li><li>$t(hanke:tarinaHaitta:SATUNNAINEN_TARINAHAITTA)</li><li>$t(hanke:tarinaHaitta:TOISTUVA_TARINAHAITTA)</li><li>$t(hanke:tarinaHaitta:JATKUVA_TARINAHAITTA)</li></ul>"
+        "meluHaitta": "<ul><li>0: $t(hanke:meluHaitta:EI_MELUHAITTAA)</li><li>1: $t(hanke:meluHaitta:SATUNNAINEN_MELUHAITTA)</li><li>3: $t(hanke:meluHaitta:TOISTUVA_MELUHAITTA)</li><li>5: $t(hanke:meluHaitta:JATKUVA_MELUHAITTA)</li></ul>",
+        "polyHaitta": "<ul><li>0: $t(hanke:polyHaitta:EI_POLYHAITTAA)</li><li>1: $t(hanke:polyHaitta:SATUNNAINEN_POLYHAITTA)</li><li>3: $t(hanke:polyHaitta:TOISTUVA_POLYHAITTA)</li><li>5: $t(hanke:polyHaitta:JATKUVA_POLYHAITTA)</li></ul>",
+        "tarinaHaitta": "<ul><li>0: $t(hanke:tarinaHaitta:EI_TARINAHAITTAA)</li><li>1: $t(hanke:tarinaHaitta:SATUNNAINEN_TARINAHAITTA)</li><li>3: $t(hanke:tarinaHaitta:TOISTUVA_TARINAHAITTA)</li><li>5: $t(hanke:tarinaHaitta:JATKUVA_TARINAHAITTA)</li></ul>"
       }
     }
   },

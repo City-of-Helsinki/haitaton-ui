@@ -26,9 +26,9 @@ export async function create(data: HankeDataDraft) {
   const newHanke: Partial<HankeDataDraft> = {
     id: hankkeet.length + 1,
     hankeTunnus: generateHankeTunnus(),
-    nimi: data.nimi,
     tyomaaTyyppi: [],
     alueet: [],
+    ...data,
   };
   hankkeet.push(newHanke as HankeDataDraft);
   return newHanke;

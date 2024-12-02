@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse, delay } from 'msw';
 import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
@@ -20,6 +20,7 @@ import { cloneDeep } from 'lodash';
 import { Feature } from 'ol';
 import { Polygon } from 'ol/geom';
 import { waitForElementToBeRemoved } from '@testing-library/react';
+import { PathParams } from 'msw/lib/core/utils/matching/matchRequestUrl';
 
 afterEach(cleanup);
 
@@ -60,24 +61,25 @@ async function uploadAttachment({
 
 function initFileGetResponse(response: HankeAttachmentMetadata[]) {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/liitteet', async (req, res, ctx) => {
-      return res(ctx.status(200), ctx.json(response));
+    http.get('/api/hankkeet/:hankeTunnus/liitteet', async () => {
+      return HttpResponse.json(response);
     }),
   );
 }
 
 function initFileUploadResponse() {
   server.use(
-    rest.post('/api/hankkeet/:hankeTunnus/liitteet', async (req, res, ctx) => {
-      return res(ctx.delay(), ctx.status(200));
+    http.post('/api/hankkeet/:hankeTunnus/liitteet', async () => {
+      await delay();
+      return new HttpResponse();
     }),
   );
 }
 
 function initFileDeleteResponse() {
   server.use(
-    rest.delete('/api/hankkeet/:hankeTunnus/liitteet/:attachmentId', async (req, res, ctx) => {
-      return res(ctx.status(200));
+    http.delete('/api/hankkeet/:hankeTunnus/liitteet/:attachmentId', async () => {
+      return new HttpResponse();
     }),
   );
 }
@@ -257,13 +259,15 @@ describe('HankeForm', () => {
     // End date of the nuisance
     expect(screen.getByDisplayValue('24.2.2023')).toBeInTheDocument();
     // Noise nuisance
-    expect(screen.getByText('1: Satunnainen meluhaitta')).toBeInTheDocument();
+    expect(screen.getByText('Satunnainen meluhaitta')).toBeInTheDocument();
     // Dust nuisance
-    expect(screen.getByText('3: Toistuva pölyhaitta')).toBeInTheDocument();
+    expect(screen.getByText('Toistuva pölyhaitta')).toBeInTheDocument();
     // Vibration nuisance
-    expect(screen.getByText('5: Jatkuva tärinähaitta')).toBeInTheDocument();
+    expect(screen.getByText('Jatkuva tärinähaitta')).toBeInTheDocument();
     // Lane hindrance
-    expect(screen.getByText('Vähentää kaistan yhdellä ajosuunnalla')).toBeInTheDocument();
+    expect(
+      screen.getByText('Yksi autokaista vähenee - ajosuunta vielä käytössä'),
+    ).toBeInTheDocument();
     // Hindrance affecting lane length
     expect(screen.getByText('Alle 10 m')).toBeInTheDocument();
   });
@@ -303,9 +307,7 @@ describe('HankeForm', () => {
     ).toBeInTheDocument();
     expect(screen.getByTestId('test-AUTOLIIKENNE')).toHaveTextContent('3');
     expect(screen.getByTestId('alueet.0.haittojenhallintasuunnitelma.AUTOLIIKENNE')).toBeRequired();
-    expect(
-      screen.getByText('Joukkoliikenteen merkittävyys: Linja-autojen paikallisliikenne'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Linja-autojen paikallisliikenne')).toBeInTheDocument();
     expect(
       screen.getByText(
         'Haitaton ei löytänyt tätä kohderyhmää alueelta. Voit tarvittaessa lisätä toimet haittojen hallintaan.',
@@ -348,7 +350,6 @@ describe('HankeForm', () => {
 
     await user.click(screen.getByRole('button', { name: /lisää toimet haittojen hallintaan/i }));
 
-    screen.debug(undefined, 300000);
     expect(screen.getByTestId('test-LINJAAUTOLIIKENNE')).toBeInTheDocument();
     expect(
       screen.getByTestId('alueet.0.haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE'),
@@ -362,11 +363,11 @@ describe('HankeForm', () => {
     const { user } = await setupHaittojenHallintaPage();
     let haittojenhallintasuunnitelma: HankkeenHaittojenhallintasuunnitelma;
     server.use(
-      rest.put('/api/hankkeet/:hankeTunnus', async (req, res, ctx) => {
-        const hankeData = await req.json<HankeData>();
+      http.put<PathParams, HankeData>('/api/hankkeet/:hankeTunnus', async ({ request }) => {
+        const hankeData = await request.json();
         haittojenhallintasuunnitelma = hankeData.alueet[0]
           .haittojenhallintasuunnitelma as HankkeenHaittojenhallintasuunnitelma;
-        return res(ctx.status(200), ctx.json<HankeData>(hankeData));
+        return HttpResponse.json<HankeData>(hankeData);
       }),
     );
 
@@ -425,7 +426,7 @@ describe('HankeForm', () => {
     await user.click(screen.getByRole('button', { name: /tyyppi/i }));
     await user.click(screen.getByText(/yhteisö/i));
 
-    fireEvent.change(screen.getByTestId('omistajat.0.nimi'), {
+    fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[0], {
       target: { value: 'Omistaja Yritys' },
     });
     fireEvent.change(screen.getByLabelText(/y-tunnus/i), {
@@ -799,8 +800,8 @@ describe('HankeForm', () => {
     },
   ) {
     server.use(
-      rest.post('/api/haittaindeksit', async (_, res, ctx) => {
-        return res(ctx.status(200), ctx.json(nuisanceResponse));
+      http.post('/api/haittaindeksit', async () => {
+        return HttpResponse.json(nuisanceResponse);
       }),
     );
 
@@ -913,8 +914,8 @@ describe('New contact person form and contact person dropdown', () => {
 
   test('Should show error notification if creating new user fails', async () => {
     server.use(
-      rest.post('/api/hankkeet/:hankeTunnus/kayttajat', async (req, res, ctx) => {
-        return res(ctx.status(500));
+      http.post('/api/hankkeet/:hankeTunnus/kayttajat', async () => {
+        return new HttpResponse(null, { status: 500 });
       }),
     );
     const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
@@ -951,13 +952,8 @@ describe('New contact person form and contact person dropdown', () => {
       },
     ];
     server.use(
-      rest.get('/api/hankkeet/:hankeTunnus/kayttajat', async (req, res, ctx) => {
-        return res(
-          ctx.status(200),
-          ctx.json<{ kayttajat: HankeUser[] }>({
-            kayttajat: hankeUsers,
-          }),
-        );
+      http.get('/api/hankkeet/:hankeTunnus/kayttajat', async () => {
+        return HttpResponse.json<{ kayttajat: HankeUser[] }>({ kayttajat: hankeUsers });
       }),
     );
 
@@ -969,5 +965,57 @@ describe('New contact person form and contact person dropdown', () => {
         screen.getByText(`${hankeUser.etunimi} ${hankeUser.sukunimi} (${hankeUser.sahkoposti})`),
       ).toBeInTheDocument();
     });
+  });
+});
+
+describe('Selecting user in user name search input', () => {
+  test('Should fill email and phone number when selecting existing user in user name search input', async () => {
+    const hankeUsers: HankeUser[] = [
+      {
+        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        sahkoposti: 'matti.meikalainen@test.com',
+        etunimi: 'Matti',
+        sukunimi: 'Meikäläinen',
+        puhelinnumero: '0401234567',
+        kayttooikeustaso: 'KAIKKI_OIKEUDET',
+        roolit: [],
+        tunnistautunut: true,
+        kutsuttu: null,
+      },
+      {
+        id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
+        sahkoposti: 'marja@test.com',
+        etunimi: 'Marja',
+        sukunimi: 'Marjanen',
+        puhelinnumero: '0405554567',
+        kayttooikeustaso: 'KAIKKIEN_MUOKKAUS',
+        roolit: [],
+        tunnistautunut: true,
+        kutsuttu: null,
+      },
+    ];
+    server.use(
+      http.get('/api/hankkeet/:hankeTunnus/kayttajat', async () => {
+        return HttpResponse.json<{ kayttajat: HankeUser[] }>({ kayttajat: hankeUsers });
+      }),
+    );
+    const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-3" />);
+    const omistajaNameInput = screen.getAllByRole('combobox', { name: /nimi/i })[0];
+    await user.clear(omistajaNameInput);
+    await user.type(omistajaNameInput, 'marja');
+    await screen.findByText('Marja Marjanen');
+    await user.click(screen.getByText('Marja Marjanen'));
+
+    expect(screen.getByTestId('omistajat.0.email')).toHaveValue('marja@test.com');
+    expect(screen.getByTestId('omistajat.0.puhelinnumero')).toHaveValue('0405554567');
+
+    await user.click(screen.getByRole('button', { name: /lisää muu taho/i }));
+    const muuTahoNameInput = screen.getAllByRole('combobox', { name: /nimi/i })[1];
+    await user.type(muuTahoNameInput, 'matti');
+    await screen.findByText('Matti Meikäläinen');
+    await user.click(screen.getByText('Matti Meikäläinen'));
+
+    expect(screen.getByTestId('muut.0.email')).toHaveValue('matti.meikalainen@test.com');
+    expect(screen.getByTestId('muut.0.puhelinnumero')).toHaveValue('0401234567');
   });
 });

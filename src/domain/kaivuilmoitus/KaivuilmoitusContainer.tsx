@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { merge } from 'lodash';
 import {
@@ -34,6 +34,7 @@ import {
   KaivuilmoitusCreateData,
   KaivuilmoitusData,
   KaivuilmoitusUpdateData,
+  PaperDecisionReceiver,
 } from '../application/types/application';
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 import {
@@ -50,6 +51,7 @@ import useNavigateToApplicationView from '../application/hooks/useNavigateToAppl
 import { isApplicationDraft, isContactIn } from '../application/utils';
 import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import useSendApplication from '../application/hooks/useSendApplication';
+import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
 
 type Props = {
   hankeData: HankeData;
@@ -61,13 +63,8 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   const { setNotification } = useGlobalNotification();
   const navigateToApplicationView = useNavigateToApplicationView();
   const [attachmentUploadErrors, setAttachmentUploadErrors] = useState<JSX.Element[]>([]);
-  const { data: hankkeenHakemukset } = useApplicationsForHanke(hankeData.hankeTunnus);
+  const { data: hankkeenHakemukset } = useApplicationsForHanke(hankeData.hankeTunnus, true);
   const { data: signedInUser } = usePermissionsForHanke(hankeData.hankeTunnus);
-  const applicationSendMutation = useSendApplication({
-    onSuccess(data) {
-      navigateToApplicationView(data.id?.toString());
-    },
-  });
   const johtoselvitysIds = hankkeenHakemukset?.applications
     .filter(
       (hakemus) =>
@@ -87,8 +84,8 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       constructionWork: false,
       maintenanceWork: false,
       emergencyWork: false,
-      rockExcavation: false,
-      cableReportDone: false,
+      rockExcavation: null,
+      cableReportDone: null,
       cableReports: [],
       placementContracts: [],
       requiredCompetence: false,
@@ -110,7 +107,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     trigger,
     watch,
     handleSubmit,
-    formState: { isDirty, isValid },
+    formState: { isDirty, isValid, errors },
   } = formContext;
   const watchFormValues = watch();
 
@@ -119,6 +116,9 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   );
 
   const [attachmentsUploading, setAttachmentsUploading] = useState(false);
+
+  const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
+  const [showSendDialog, setShowSendDialog] = useState(false);
 
   const {
     applicationCreateMutation,
@@ -135,12 +135,21 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         contractorWithContacts,
         propertyDeveloperWithContacts,
         representativeWithContacts,
+        invoicingCustomer,
       },
     }) {
       if (customerWithContacts) {
         setValue(
           'applicationData.customerWithContacts.customer.yhteystietoId',
           customerWithContacts.customer.yhteystietoId,
+        );
+        setValue(
+          'applicationData.customerWithContacts.customer.registryKey',
+          customerWithContacts.customer.registryKey,
+        );
+        setValue(
+          'applicationData.customerWithContacts.customer.registryKeyHidden',
+          customerWithContacts.customer.registryKeyHidden,
         );
       }
       if (contractorWithContacts) {
@@ -159,6 +168,13 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         setValue(
           'applicationData.representativeWithContacts.customer.yhteystietoId',
           representativeWithContacts.customer.yhteystietoId,
+        );
+      }
+      if (invoicingCustomer) {
+        setValue('applicationData.invoicingCustomer.registryKey', invoicingCustomer.registryKey);
+        setValue(
+          'applicationData.invoicingCustomer.registryKeyHidden',
+          invoicingCustomer.registryKeyHidden,
         );
       }
     },
@@ -192,9 +208,28 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     }
   }
 
-  async function sendApplication() {
+  const applicationSendMutation = useSendApplication({
+    onSuccess(data) {
+      navigateToApplicationView(data.id?.toString());
+    },
+  });
+
+  async function onSendApplication(pdr: PaperDecisionReceiver | undefined | null) {
     const data = getValues();
-    applicationSendMutation.mutate(data.id!);
+    applicationSendMutation.mutate({
+      id: data.id as number,
+      paperDecisionReceiver: pdr,
+    });
+    setIsSendButtonDisabled(true);
+    setShowSendDialog(false);
+  }
+
+  function openSendDialog() {
+    setShowSendDialog(true);
+  }
+
+  function closeSendDialog() {
+    setShowSendDialog(false);
   }
 
   function handleStepChange() {
@@ -246,19 +281,27 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
 
   const formSteps = [
     {
-      element: <BasicInfo johtoselvitysIds={johtoselvitysIds} />,
+      element: (
+        <BasicInfo
+          hankeData={hankeData}
+          johtoselvitysIds={johtoselvitysIds}
+          hankkeenHakemukset={hankkeenHakemukset?.applications ?? []}
+        />
+      ),
       label: t('form:headers:perustiedot'),
       state: StepState.available,
       validationSchema: perustiedotSchema,
     },
     {
-      element: <Areas hankeData={hankeData} />,
+      element: (
+        <Areas hankeData={hankeData} hankkeenHakemukset={hankkeenHakemukset?.applications ?? []} />
+      ),
       label: t('form:headers:alueet'),
       state: StepState.available,
       validationSchema: alueetSchema,
     },
     {
-      element: <Contacts />,
+      element: <Contacts hankeTunnus={hankeData.hankeTunnus} />,
       label: t('form:headers:yhteystiedot'),
       state: StepState.available,
       validationSchema: yhteystiedotSchema,
@@ -285,7 +328,9 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
 
   function validateStepChange(changeStep: () => void, stepIndex: number) {
-    return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger);
+    return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger, errors, [
+      'required',
+    ]);
   }
 
   return (
@@ -299,7 +344,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         isLoading={attachmentsUploading}
         isLoadingText={attachmentsUploadingText}
         stepChangeValidator={validateStepChange}
-        onSubmit={handleSubmit(sendApplication)}
+        onSubmit={handleSubmit(openSendDialog)}
       >
         {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {
@@ -360,9 +405,8 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
                 <Button
                   type="submit"
                   iconLeft={<IconEnvelope />}
-                  isLoading={applicationSendMutation.isLoading}
                   loadingText={t('common:buttons:sendingText')}
-                  disabled={disableSendButton}
+                  disabled={disableSendButton || isSendButtonDisabled}
                 >
                   {t('hakemus:buttons:sendApplication')}
                 </Button>
@@ -406,6 +450,14 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         mainAction={closeAttachmentUploadErrorDialog}
         mainBtnLabel={t('common:ariaLabels:closeButtonLabelText')}
         variant="primary"
+      />
+
+      <ApplicationSendDialog
+        type="EXCAVATION_NOTIFICATION"
+        isOpen={showSendDialog}
+        isLoading={applicationSendMutation.isLoading}
+        onClose={closeSendDialog}
+        onSend={onSendApplication}
       />
     </FormProvider>
   );

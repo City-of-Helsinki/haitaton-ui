@@ -1,27 +1,17 @@
 import { useQuery } from 'react-query';
 import api from '../../api/api';
-import { Application, HankkeenHakemus } from '../types/application';
+import { HankkeenHakemus } from '../types/application';
 
-async function getApplications() {
-  const { data } = await api.get<Application[]>(`/hakemukset`);
+async function getApplicationsForHanke(hankeTunnus?: string, includeAreas: boolean = false) {
+  const requestUrl = `/hankkeet/${hankeTunnus}/hakemukset${includeAreas ? '?areas=true' : ''}`;
+  const { data } = await api.get<{ applications: HankkeenHakemus[] }>(requestUrl);
   return data;
 }
 
-async function getApplicationsForHanke(hankeTunnus?: string) {
-  const { data } = await api.get<{ applications: HankkeenHakemus[] }>(
-    `/hankkeet/${hankeTunnus}/hakemukset`,
-  );
-  return data;
-}
-
-export function useApplications() {
-  return useQuery<Application[]>(['applications'], getApplications);
-}
-
-export function useApplicationsForHanke(hankeTunnus?: string) {
+export function useApplicationsForHanke(hankeTunnus?: string, includeAreas: boolean = false) {
   return useQuery<{ applications: HankkeenHakemus[] }>(
     ['applicationsForHanke', hankeTunnus],
-    () => getApplicationsForHanke(hankeTunnus),
+    () => getApplicationsForHanke(hankeTunnus, includeAreas),
     { enabled: Boolean(hankeTunnus) },
   );
 }

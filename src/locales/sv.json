@@ -317,7 +317,7 @@
       "path": "/allmannaprojekt/karta",
       "headerLabel": "Projekt på allmänna områden",
       "meta": {
-        "title": "Haitaton - Projekt på allmänna områden"
+        "title": "Haitaton - Projekt på allmänna områden [TRANSLATION_PENDING]"
       }
     },
     "PUBLIC_HANKKEET_LIST": {
@@ -467,11 +467,7 @@
       "VAIHTOLAVA": "Växelflak"
     },
     "kaistaHaitta": {
-      "EI_VAIKUTA": "Påverkar inte",
-      "VAHENTAA_KAISTAN_YHDELLA_AJOSUUNNALLA": "Reducerar med en fil i en körriktning",
-      "VAHENTAA_SAMANAIKAISESTI_KAISTAN_KAHDELLA_AJOSUUNNALLA": "Reducerar med en fil i två körriktningar samtidigt",
-      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_KAHDELLA_AJOSUUNNALLA": "Reducerar med flera filer i två körriktningar samtidigt",
-      "VAHENTAA_SAMANAIKAISESTI_USEITA_KAISTOJA_LIITTYMIEN_ERI_SUUNNILLA": "Reducerar samtidigt med flera filer i olika riktningar från korsningen"
+      "EI_VAIKUTA": "Påverkar inte"
     },
     "kaistaPituusHaitta": {
       "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Påverkar inte",
@@ -481,22 +477,22 @@
       "PITUUS_500_METRIA_TAI_ENEMMAN": "500 m eller mer"
     },
     "meluHaitta": {
-      "EI_MELUHAITTAA": "0: Inga bullerstörning",
-      "SATUNNAINEN_MELUHAITTA": "1: Tillfällig bullerstörning",
-      "TOISTUVA_MELUHAITTA": "3: Återkommande bullerstörning",
-      "JATKUVA_MELUHAITTA": "5: Kontinuerling bullerstörning"
+      "EI_MELUHAITTAA": "Inga bullerstörning",
+      "SATUNNAINEN_MELUHAITTA": "Tillfällig bullerstörning",
+      "TOISTUVA_MELUHAITTA": "Återkommande bullerstörning",
+      "JATKUVA_MELUHAITTA": "Kontinuerling bullerstörning"
     },
     "polyHaitta": {
-      "EI_POLYHAITTAA": "0: Inga dammolägenhet",
-      "SATUNNAINEN_POLYHAITTA": "1: Tillfällig dammolägenhet",
-      "TOISTUVA_POLYHAITTA": "3: Återkommande dammolägenhet",
-      "JATKUVA_POLYHAITTA": "5: Kontinuerling dammolägenhet"
+      "EI_POLYHAITTAA": "Inga dammolägenhet",
+      "SATUNNAINEN_POLYHAITTA": "Tillfällig dammolägenhet",
+      "TOISTUVA_POLYHAITTA": "Återkommande dammolägenhet",
+      "JATKUVA_POLYHAITTA": "Kontinuerling dammolägenhet"
     },
     "tarinaHaitta": {
-      "EI_TARINAHAITTAA": "0: Inga vibrationsstörning",
-      "SATUNNAINEN_TARINAHAITTA": "1: Tillfällig vibrationsstörning",
-      "TOISTUVA_TARINAHAITTA": "3: Återkommande vibrationsstörning",
-      "JATKUVA_TARINAHAITTA": "5: Kontinuerling vibrationsstörning"
+      "EI_TARINAHAITTAA": "Inga vibrationsstörning",
+      "SATUNNAINEN_TARINAHAITTA": "Tillfällig vibrationsstörning",
+      "TOISTUVA_TARINAHAITTA": "Återkommande vibrationsstörning",
+      "JATKUVA_TARINAHAITTA": "Kontinuerling vibrationsstörning"
     },
     "alue": {
       "title": "Projektområde {{index}}",
@@ -644,7 +640,7 @@
       "header": "Områden",
       "subHeader": "Projektområden",
       "area": "Område",
-      "instructions": "Flera geometrier kan ritas för projektet. De geometriska områdena påverkar projektets trafikstörningsindex. Ritverktygen återfinns i kartvyns vänstra nedre kant. Med pennverktyget kan man rita polygoner genom att klicka på punkten där du vill ha ett hörn. Med rektangelverktyget kan du skapa rektangulära områden genom att först klicka på kartan och röra musen i önskad riktning. Ett nytt klick avslutar ritning av kvadraten. En polygon kan modifieras genom att ”greppa” i kanten och dra. Även en rektangulär figur kan modifieras genom att greppa i kanten. an radera en geometrisk figur genom att först välja den med ett klick, så att det bland ritverktygen i den vänstra nedre kanten kommer fram en papperskorg. Med ett klick på papperskorgen raderas figuren.",
+      "instructions": "[TRANSLATION_PENDING]Flera geometrier kan ritas för projektet. De geometriska områdena påverkar projektets trafikstörningsindex. Ritverktygen återfinns i kartvyns vänstra nedre kant. Med pennverktyget kan man rita polygoner genom att klicka på punkten där du vill ha ett hörn. Med rektangelverktyget kan du skapa rektangulära områden genom att först klicka på kartan och röra musen i önskad riktning. Ett nytt klick avslutar ritning av kvadraten. En polygon kan modifieras genom att ”greppa” i kanten och dra. Även en rektangulär figur kan modifieras genom att greppa i kanten. an radera en geometrisk figur genom att först välja den med ett klick, så att det bland ritverktygen i den vänstra nedre kanten kommer fram en papperskorg. Med ett klick på papperskorgen raderas figuren.",
       "instructions3": "Du kan ändra ett redan ritat område genom att hålla fast vid kanten och dra punkten till önskad position.",
       "noAlueet": "Rita området på kartan för att markera bedömningarna av olägenheter.",
       "haitatHeader": "Bedömning av ett områdes olägenheter",
@@ -669,8 +665,8 @@
       "nuisanceType": {
         "PYORALIIKENNE": "Betydelsen av cykeltrafik",
         "AUTOLIIKENNE": "Trafikstockningar i biltrafiken",
-        "LINJAAUTOLIIKENNE": "Betydelsen av spårvägstrafik: Lokal busstrafik",
-        "RAITIOLIIKENNE": "Betydelsen av spårvägstrafik: Spårvägstrafik",
+        "LINJAAUTOLIIKENNE": "Lokal busstrafik",
+        "RAITIOLIIKENNE": "Spårvägstrafik",
         "MUUT": "Andra åtgärder för att kontrollera olägenheter"
       },
       "carTrafficNuisanceType": {}
@@ -774,8 +770,6 @@
       "totalSurfaceAreaLong": "De inritade arbetsområdenas sammanlagda areal:",
       "applicationState": "Ansökans status",
       "relatedHanke": "Berör ansökan",
-      "downloadDecision": "Ladda ned beslut (PDF)",
-      "downloadDecisionShort": "Ladda ned PDF",
       "addedAreas": "Arbetsområden du lagt till",
       "removeAreaTitle": "Ta bort arbetsområde?",
       "removeAreaDescription": "Är du säker på att du vill ta bort arbetsområdet {{areaName}}?",
@@ -789,7 +783,11 @@
       "requiredCompetenceTitle": "Kompetens som krävs för arbetet",
       "requiredCompetence": "Som ansvarig för arbetet eller skötare av ärenden försäkrar jag att det vid vistelse eller arbete på arbetsplatsen alltid finns minst en person på plats som har gällande behörighet (kort) som erhållits genom en utbildning i gatuarbeten i huvudstadsregionen. Jag ansvarar också för att den som ansvarar för grävarbetet har gällande Vägskydd 1- eller Vägskydd 2-kort eller gatuarbetskort för huvudstadsregionen.*",
       "additionalInformation": "Mer information om ansökan",
-      "tyonTarkoitus": "Arbetets syfte"
+      "tyonTarkoitus": "Arbetets syfte",
+      "setWorkTimesToCopyArea": "Välj period för att kopiera till arbetsområde",
+      "downloadDecision": {
+        "PAATOS": "Ladda ner beslut (PDF)"
+      }
     },
     "notifications": {
       "saveSuccessLabel": "Ansökan har sparats",
@@ -807,6 +805,11 @@
       "maxAttachmentsNumberExceeded": "Maximalt antal bilagor ({{maxNumber}} st) har överskridits",
       "sentApplicationPersonalInfoNotification": "Egna upplysningar för den inskickade ansökan kan inte redigeras",
       "sendApplicationDisabled": "Ansökan kan endast skickas av den person som är kontaktperson för ansökan."
+    },
+    "sendDialog": {
+      "title": "Vill du skicka in ansökan?",
+      "instructions": "Du får beslutet om ansökan och en eventuell begäran om komplettering i systemet Haitaton. Genom att skicka in ansökan förbinder du dig till elektroniskt tillkännagivande.",
+      "instructionsPaperDecision": "Om du vill kan du också beställa beslutet i pappersformat genom att ange din adress."
     },
     "sentDialog": {
       "title": "Ansökan har skickats",
@@ -827,8 +830,8 @@
       "RETURNED_TO_PREPARATION": "Handläggning pågår",
       "DECISIONMAKING": "Inväntar beslut",
       "DECISION": "Beslut",
-      "OPERATIONAL_CONDITION": "Funktionellt skick godkänt",
-      "FINISHED": "Arbetet färdigt godkänt",
+      "OPERATIONAL_CONDITION": "Funktionellt skick",
+      "FINISHED": "Arbetet färdigt",
       "CANCELLED": "Ansökan har återtagits",
       "ARCHIVED": "Arbetet har arkiverats",
       "REPLACED": "Utbytt",
@@ -839,7 +842,8 @@
       "sendApplication": "Skicka ansökan",
       "cancelApplication": "Återta ansökan",
       "editApplication": "Ändra i ansökan",
-      "deletePlacementContract": "Ta bort koden för placeringsavtal {{id}}"
+      "deletePlacementContract": "Ta bort koden för placeringsavtal {{id}}",
+      "copyWorkArea": "Kopiera till arbetsområde"
     },
     "errors": {
       "cancelConflict": "Ansökan kan inte återtas emedan den gått vidare till handläggning",
@@ -858,7 +862,10 @@
       "CABLE_REPORT": "Utkast",
       "EXCAVATION_NOTIFICATION": "Utkast"
     },
-    "applicationTypeInstruction": "Välj typ av ansökan. Du kan vid anmälan om grävning även lämna en begäran om ledningsutredning, om du inte ännu har en sådan."
+    "applicationTypeInstruction": "Välj typ av ansökan. Du kan vid anmälan om grävning även lämna en begäran om ledningsutredning, om du inte ännu har en sådan.",
+    "addApplicationTypes": {
+      "EXCAVATION_NOTIFICATION": "$t(hakemus:applicationTypes:EXCAVATION_NOTIFICATION) (och ledningsutredning)"
+    }
   },
   "hankeSidebar": {
     "ariaSidebarContent": "Projektets uppgifter",
@@ -872,8 +879,8 @@
     "liikennehaittaindeksi": "Trafikolägenhetsindex",
     "autoliikenne": "Trafikstockningar i biltrafiken",
     "pyoraliikenne": "Betydelsen av cykeltrafik",
-    "raitioliikenne": "Betydelsen av kollektivtrafik: Spårvägstrafik",
-    "linjaautoliikenne": "Betydelsen av kollektivtrafik: Lokal busstrafik",
+    "raitioliikenne": "Spårvägstrafik",
+    "linjaautoliikenne": "Lokal busstrafik",
     "kiertoreittitarve": "Behov av omväg",
     "KIERTOREITTITARPEET": {
       "TODENNAKOINEN": "sannolik",

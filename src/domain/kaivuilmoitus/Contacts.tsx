@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Box } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
@@ -9,13 +9,38 @@ import { ContactType } from '../application/types/application';
 import TextInput from '../../common/components/textInput/TextInput';
 import { useFormContext } from 'react-hook-form';
 import { KaivuilmoitusFormValues } from './types';
+import { TFunction } from 'i18next';
+import { HIDDEN_FIELD_VALUE } from '../application/constants';
 
-export default function Contacts() {
+function getInvoicingRegistryKeyLabel(
+  t: TFunction<'translation', undefined>,
+  selectedContactType: string | null,
+) {
+  if (selectedContactType === 'PERSON') {
+    return t('form:yhteystiedot:labels:henkilotunnus');
+  } else if (selectedContactType === 'OTHER') {
+    return t('form:yhteystiedot:labels:muuTunnus');
+  }
+  return t('form:yhteystiedot:labels:ytunnus');
+}
+
+export default function Contacts({ hankeTunnus }: Readonly<{ hankeTunnus: string | null }>) {
   const { t } = useTranslation();
-  const { watch, resetField, trigger } = useFormContext<KaivuilmoitusFormValues>();
+  const { watch, setValue, resetField, trigger } = useFormContext<KaivuilmoitusFormValues>();
 
-  const [selectedContactType, ovt, invoicingOperator, streetName, postalCode, city] = watch([
+  const [
+    selectedContactType,
+    registryKey,
+    registryKeyHidden,
+    ovt,
+    invoicingOperator,
+    streetName,
+    postalCode,
+    city,
+  ] = watch([
     'applicationData.invoicingCustomer.type',
+    'applicationData.invoicingCustomer.registryKey',
+    'applicationData.invoicingCustomer.registryKeyHidden',
     'applicationData.invoicingCustomer.ovt',
     'applicationData.invoicingCustomer.invoicingOperator',
     'applicationData.invoicingCustomer.postalAddress.streetAddress.streetName',
@@ -28,12 +53,56 @@ export default function Contacts() {
   const postalAddressRequired = !ovt || !invoicingOperator;
   const ovtRequired = !ovtDisabled && (!streetName || !postalCode || !city);
 
+  const isMounted = useRef(false);
+  const [originalRegistryKeyIsHidden, setOriginalRegistryKeyIsHidden] = useState(false);
+
   useEffect(() => {
-    if (selectedContactType === 'PERSON' || selectedContactType === 'OTHER') {
-      resetField('applicationData.invoicingCustomer.ovt', { defaultValue: '' });
-      resetField('applicationData.invoicingCustomer.invoicingOperator', { defaultValue: '' });
+    // set a flag to mark the original registry key as hidden value in order to be able to revert back to it
+    if (registryKey === HIDDEN_FIELD_VALUE) {
+      setOriginalRegistryKeyIsHidden(true);
     }
-  }, [selectedContactType, resetField]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      if (selectedContactType === 'PERSON' || selectedContactType === 'OTHER') {
+        resetField('applicationData.invoicingCustomer.ovt', { defaultValue: null });
+        resetField('applicationData.invoicingCustomer.invoicingOperator', { defaultValue: null });
+      }
+
+      // if the contact type is changed (after mount), clear the registry key
+      resetField('applicationData.invoicingCustomer.registryKey', { defaultValue: null });
+      setOriginalRegistryKeyIsHidden(false);
+    }
+  }, [selectedContactType, setValue, resetField]);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      if (originalRegistryKeyIsHidden && registryKey === HIDDEN_FIELD_VALUE) {
+        // set registry key hidden to true when changing the registry key back to the hidden value
+        setValue('applicationData.invoicingCustomer.registryKeyHidden', true, {
+          shouldValidate: true,
+        });
+      } else {
+        // set registry key hidden to false when changing the registry key
+        setValue('applicationData.invoicingCustomer.registryKeyHidden', false, {
+          shouldValidate: true,
+        });
+      }
+    }
+
+    if (registryKey === '' || registryKey === undefined) {
+      // set the registry key to null when it is empty or undefined
+      setValue(`applicationData.invoicingCustomer.registryKey`, null, {
+        shouldValidate: true,
+      });
+    }
+
+    // mark the component as mounted
+    isMounted.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [registryKey, setValue]);
 
   useEffect(() => {
     if (!postalAddressRequired) {
@@ -56,7 +125,7 @@ export default function Contacts() {
 
   return (
     <>
-      <ApplicationContacts />
+      <ApplicationContacts hankeTunnus={hankeTunnus} />
 
       <Box marginTop="var(--spacing-l)" marginBottom="var(--spacing-l)" minInlineSize="auto">
         <Box marginBottom="var(--spacing-l)">
@@ -86,9 +155,11 @@ export default function Contacts() {
           />
           <TextInput
             name="applicationData.invoicingCustomer.registryKey"
-            label={t('form:yhteystiedot:labels:yTunnusTaiHetu')}
+            label={getInvoicingRegistryKeyLabel(t, selectedContactType)}
             required
             autoComplete="on"
+            defaultValue={null}
+            helperText={registryKeyHidden ? t('form:yhteystiedot:helperTexts:registryKey') : ''}
           />
         </ResponsiveGrid>
         <ResponsiveGrid>
@@ -97,12 +168,14 @@ export default function Contacts() {
             label={t('form:yhteystiedot:labels:ovt')}
             disabled={ovtDisabled}
             required={ovtRequired}
+            defaultValue={null}
           />
           <TextInput
             name="applicationData.invoicingCustomer.invoicingOperator"
             label={t('form:yhteystiedot:labels:invoicingOperator')}
             disabled={ovtDisabled}
             required={ovtRequired}
+            defaultValue={null}
           />
           <TextInput
             name="applicationData.invoicingCustomer.customerReference"

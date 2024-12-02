@@ -2,9 +2,9 @@ import { Button, Dialog, IconInfoCircle, IconTrash, Notification } from 'hds-rea
 import { Box } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { DeleteInfo, HankeUser } from './hankeUser';
-import { useMutation } from 'react-query';
 import { deleteUser } from './hankeUsersApi';
 import { isApplicationPending } from '../../application/utils';
+import useDebouncedMutation from '../../../common/hooks/useDebouncedMutation';
 
 type Props = {
   isOpen: boolean;
@@ -28,7 +28,11 @@ export default function UserDeleteDialog({
     ? t('hankeUsers:deleteDialog:title:canDelete')
     : t('hankeUsers:deleteDialog:title:cannotDelete');
 
-  const { mutate, isLoading, isError, reset } = useMutation(deleteUser);
+  const { mutate, isLoading, isError, reset } = useDebouncedMutation(deleteUser, {
+    onSuccess() {
+      onDelete(userToDelete!);
+    },
+  });
 
   function getDialogText() {
     if (onlyOmistajanYhteyshenkilo) {
@@ -67,11 +71,7 @@ export default function UserDeleteDialog({
   }
 
   function confirmDeleteUser() {
-    mutate(userToDelete?.id, {
-      onSuccess() {
-        onDelete(userToDelete!);
-      },
-    });
+    mutate(userToDelete?.id);
   }
 
   return (

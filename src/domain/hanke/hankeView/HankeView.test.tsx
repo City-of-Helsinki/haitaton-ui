@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { render, screen, within } from '../../../testUtils/render';
 import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
 import HankeViewContainer from './HankeViewContainer';
@@ -7,15 +7,12 @@ import { SignedInUser } from '../hankeUsers/hankeUser';
 
 function getViewPermissionForUser() {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json<SignedInUser>({
-          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          kayttooikeustaso: 'KATSELUOIKEUS',
-          kayttooikeudet: ['VIEW'],
-        }),
-      );
+    http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+      return HttpResponse.json<SignedInUser>({
+        hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        kayttooikeustaso: 'KATSELUOIKEUS',
+        kayttooikeudet: ['VIEW'],
+      });
     }),
   );
 }
@@ -132,11 +129,13 @@ test('Correct information about hanke should be displayed', async () => {
   expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('0');
   expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
   expect(screen.queryByText('11974 m²')).toBeInTheDocument();
-  expect(screen.queryByText('Meluhaitta: 1: Satunnainen meluhaitta')).toBeInTheDocument();
-  expect(screen.queryByText('Pölyhaitta: 3: Toistuva pölyhaitta')).toBeInTheDocument();
-  expect(screen.queryByText('Tärinähaitta: 5: Jatkuva tärinähaitta')).toBeInTheDocument();
+  expect(screen.queryByText('Meluhaitta: Satunnainen meluhaitta')).toBeInTheDocument();
+  expect(screen.queryByText('Pölyhaitta: Toistuva pölyhaitta')).toBeInTheDocument();
+  expect(screen.queryByText('Tärinähaitta: Jatkuva tärinähaitta')).toBeInTheDocument();
   expect(
-    screen.queryByText('Autoliikenteen kaistahaitta: Vähentää kaistan yhdellä ajosuunnalla'),
+    screen.queryByText(
+      'Autoliikenteen kaistahaitta: Yksi autokaista vähenee - ajosuunta vielä käytössä',
+    ),
   ).toBeInTheDocument();
   expect(screen.queryByText('Kaistahaittojen pituus: Alle 10 m')).toBeInTheDocument();
   await user.click(screen.getAllByRole('button', { name: /haittaindeksi/i })[1]);
@@ -165,11 +164,9 @@ test('Correct information about hanke should be displayed', async () => {
   expect(
     screen.getByText('Autoliikenteelle koituvien haittojen hallintasuunnitelma'),
   ).toBeInTheDocument();
-  expect(
-    screen.getByText('Joukkoliikenteen merkittävyys: Linja-autojen paikallisliikenne'),
-  ).toBeInTheDocument();
+  expect(screen.getByText('Linja-autojen paikallisliikenne')).toBeInTheDocument();
   // bus traffic has no nuisance control plan text
-  expect(screen.getByText('Joukkoliikenteen merkittävyys: Raitioliikenne')).toBeInTheDocument();
+  expect(screen.getByText('Raitioliikenne')).toBeInTheDocument();
   expect(
     screen.getByText('Raitioliikenteelle koituvien haittojen hallintasuunnitelma'),
   ).toBeInTheDocument();
@@ -239,7 +236,7 @@ test('Should render correct number of applications if they exist', async () => {
 
   await user.click(screen.getByRole('tab', { name: /hakemukset/i }));
 
-  expect(screen.getAllByTestId('application-card')).toHaveLength(5);
+  expect(screen.getAllByTestId('application-card')).toHaveLength(10);
 });
 
 test('Should show information if no applications exist', async () => {
@@ -254,8 +251,8 @@ test('Should show information if no applications exist', async () => {
 
 test('Should show error notification if loading applications fails', async () => {
   server.use(
-    rest.get('/api/hankkeet/:hankeTunnus/hakemukset', async (_, res, ctx) => {
-      return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+    http.get('/api/hankkeet/:hankeTunnus/hakemukset', async () => {
+      return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
     }),
   );
 

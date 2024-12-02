@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { render, screen, waitFor } from '../../../testUtils/render';
 import { server } from '../../mocks/test-server';
 import { AccessRightLevel, SignedInUser } from './hankeUser';
@@ -20,15 +20,12 @@ describe('CheckRightsByHanke', () => {
 
   test('Should not render children if user does not have required right', async () => {
     server.use(
-      rest.get('/api/hankkeet/:hankeTunnus/whoami', async (_, res, ctx) => {
-        return res(
-          ctx.status(200),
-          ctx.json<SignedInUser>({
-            hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            kayttooikeustaso: 'KATSELUOIKEUS',
-            kayttooikeudet: ['VIEW'],
-          }),
-        );
+      http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+        return HttpResponse.json<SignedInUser>({
+          hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          kayttooikeustaso: 'KATSELUOIKEUS',
+          kayttooikeudet: ['VIEW'],
+        });
       }),
     );
 

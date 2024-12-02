@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { I18nextProvider } from 'react-i18next';
 import { fireEvent, screen } from '../../testUtils/render';
 import { server } from '../mocks/test-server';
@@ -8,6 +8,7 @@ import i18n from '../../locales/i18nForTests';
 import { BrowserRouter } from 'react-router-dom';
 import { FeatureFlagsProvider } from '../../common/components/featureFlags/FeatureFlagsContext';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import * as hakemuksetDB from '../mocks/data/hakemukset';
 
 const userEmail = 'test.user@mail.com';
 
@@ -71,8 +72,8 @@ describe('Create new hanke from dialog', () => {
 
   test('Should show error notification if creating hanke fails', async () => {
     server.use(
-      rest.post('/api/hankkeet', async (req, res, ctx) => {
-        return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+      http.post('/api/hankkeet', async () => {
+        return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
       }),
     );
     const user = await openHankeCreateDialog();
@@ -131,7 +132,9 @@ describe('Create johtoselvitys from dialog', () => {
     fillInformation();
     await user.click(screen.getByRole('button', { name: /luo hakemus/i }));
 
-    expect(window.location.pathname).toBe('/fi/johtoselvityshakemus/8/muokkaa');
+    expect(window.location.pathname).toBe(
+      `/fi/johtoselvityshakemus/${(await hakemuksetDB.readAll()).length}/muokkaa`,
+    );
   });
 
   test('Should show validation errors and not create johtoselvitys if information is missing', async () => {
@@ -145,8 +148,8 @@ describe('Create johtoselvitys from dialog', () => {
 
   test('Should show error notification if creating johtoselvitys fails', async () => {
     server.use(
-      rest.post('/api/johtoselvityshakemus', async (req, res, ctx) => {
-        return res(ctx.status(500), ctx.json({ errorMessage: 'Failed for testing purposes' }));
+      http.post('/api/johtoselvityshakemus', async () => {
+        return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
       }),
     );
     const user = await openJohtoselvitysCreateDialog();
