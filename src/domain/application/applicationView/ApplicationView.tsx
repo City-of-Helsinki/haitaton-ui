@@ -58,10 +58,7 @@ import {
   isApplicationSent,
   isContactIn,
 } from '../utils';
-import ApplicationDates from '../components/ApplicationDates';
 import ContactsSummary from '../components/summary/ContactsSummary';
-import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
-import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import Link from '../../../common/components/Link/Link';
 import useHankeViewPath from '../../hanke/hooks/useHankeViewPath';
 import JohtoselvitysDecisionLink from '../../johtoselvitys/components/DecisionLink';
@@ -83,44 +80,13 @@ import { formatToFinnishDate, formatToFinnishDateTime } from '../../../common/ut
 import HaittaIndexes from '../../common/haittaIndexes/HaittaIndexes';
 import { calculateLiikennehaittaindeksienYhteenveto } from '../../kaivuilmoitus/utils';
 import styles from './ApplicationView.module.scss';
-import CustomAccordion from '../../../common/components/customAccordion/CustomAccordion';
-import useFilterHankeAlueetByApplicationDates from '../hooks/useFilterHankeAlueetByApplicationDates';
 import ApplicationSendDialog from '../components/ApplicationSendDialog';
 import TaydennyspyyntoNotification from '../taydennys/TaydennyspyyntoNotification';
 import { useQueryClient } from 'react-query';
 import AreaInformation from '../components/summary/AreaInformation';
 import useIsInformationRequestFeatureEnabled from '../taydennys/hooks/useIsInformationRequestFeatureEnabled';
 import useSendTaydennys from './hooks/useSendTaydennys';
-
-function SidebarTyoalueet({
-  tyoalueet,
-  startTime,
-  endTime,
-}: {
-  tyoalueet: ApplicationArea[];
-  startTime: Date | null;
-  endTime: Date | null;
-}) {
-  const { t } = useTranslation();
-
-  return tyoalueet.map((tyoalue, index) => {
-    const areaName = getAreaDefaultName(t, index, tyoalueet.length);
-    const geometry = getAreaGeometry(tyoalue);
-    return (
-      <Box
-        key={areaName}
-        padding="var(--spacing-s)"
-        paddingRight="var(--spacing-m)"
-        _notLast={{ borderBottom: '1px solid var(--color-black-30)' }}
-      >
-        <Text tag="p" styleAs="body-m" weight="bold" spacingBottom="2-xs">
-          {areaName} ({formatSurfaceArea(geometry)})
-        </Text>
-        <ApplicationDates startTime={startTime} endTime={endTime} />
-      </Box>
-    );
-  });
-}
+import { Sidebar } from './Sidebar';
 
 function TyoalueetList({ tyoalueet }: { tyoalueet: ApplicationArea[] }) {
   const { t } = useTranslation();
@@ -185,6 +151,10 @@ function JohtoselvitysAreasInfo({
   muutokset?: string[];
 }) {
   const { t } = useTranslation();
+  const areasChanged =
+    changedAreas &&
+    muutokset &&
+    changedAreas.filter((_, index) => muutokset.includes(`areas[${index}]`)).length > 0;
   const areasRemoved =
     changedAreas &&
     muutokset &&
@@ -207,7 +177,7 @@ function JohtoselvitysAreasInfo({
             />
           );
         })}
-        {changedAreas && (
+        {areasChanged && (
           <SectionItemContentAdded>
             {changedAreas.map((area, index) => {
               if (!muutokset?.includes(`areas[${index}]`)) {
@@ -453,11 +423,6 @@ function ApplicationView({
   );
   const applicationSendMutation = useSendApplication();
 
-  const filterHankeAlueet = useFilterHankeAlueetByApplicationDates({
-    applicationStartDate: startTime,
-    applicationEndDate: endTime,
-  });
-
   const informationRequestFeatureEnabled = useIsInformationRequestFeatureEnabled(applicationType);
 
   const { sendTaydennysButton, sendTaydennysDialog } = useSendTaydennys(application);
@@ -495,13 +460,6 @@ function ApplicationView({
   function closeReportWorkFinishedDialog() {
     queryClient.invalidateQueries(['application', id], { refetchInactive: true }).then(() => {});
     setShowReportWorkFinishedDialog(false);
-  }
-
-  function getHankeWithAlueetFilteredByDates(hankeData: HankeData): HankeData {
-    return {
-      ...hankeData,
-      alueet: filterHankeAlueet(hankeData.alueet),
-    };
   }
 
   return (
@@ -850,50 +808,7 @@ function ApplicationView({
           </Tabs>
         </InformationViewMainContent>
         <InformationViewSidebar testId="application-view-sidebar">
-          {hanke && (
-            <>
-              <Box mb="var(--spacing-s)">
-                <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} showLink={false} />
-                <OwnHankeMap
-                  hanke={getHankeWithAlueetFilteredByDates(hanke)}
-                  application={application}
-                />
-              </Box>
-              {applicationType === 'CABLE_REPORT' && (
-                <SidebarTyoalueet tyoalueet={tyoalueet} startTime={startTime} endTime={endTime} />
-              )}
-              {applicationType === 'EXCAVATION_NOTIFICATION' &&
-                kaivuilmoitusAlueet?.map((kaivuilmoitusAlue) => {
-                  const hankeAlue = hanke.alueet.find(
-                    (alue) => alue.id === kaivuilmoitusAlue.hankealueId,
-                  );
-                  return (
-                    <CustomAccordion
-                      key={kaivuilmoitusAlue.hankealueId}
-                      accordionBorderBottom
-                      headingSize="s"
-                      heading={kaivuilmoitusAlue.name}
-                      subHeading={
-                        <Box marginTop="var(--spacing-2-xs)">
-                          <ApplicationDates
-                            startTime={hankeAlue?.haittaAlkuPvm ?? null}
-                            endTime={hankeAlue?.haittaLoppuPvm ?? null}
-                          />
-                        </Box>
-                      }
-                    >
-                      <Box marginLeft="var(--spacing-s)">
-                        <SidebarTyoalueet
-                          tyoalueet={kaivuilmoitusAlue.tyoalueet}
-                          startTime={startTime}
-                          endTime={endTime}
-                        />
-                      </Box>
-                    </CustomAccordion>
-                  );
-                })}
-            </>
-          )}
+          {hanke && <Sidebar hanke={hanke} application={application} />}
         </InformationViewSidebar>
       </InformationViewContentContainer>
       {applicationType === 'EXCAVATION_NOTIFICATION' && (
