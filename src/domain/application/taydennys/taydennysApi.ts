@@ -34,3 +34,10 @@ export async function sendTaydennys<ApplicationData>(id: string) {
   const response = await api.post<Application<ApplicationData>>(`/taydennykset/${id}/laheta`);
   return response.data;
 }
+
+/**
+ * Delete taydennys
+ */
+export async function cancelTaydennys(id: string) {
+  await api.delete(`/taydennykset/${id}`);
+}

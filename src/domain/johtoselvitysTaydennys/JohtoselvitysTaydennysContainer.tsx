@@ -43,6 +43,7 @@ import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/Co
 import useSendTaydennys from '../application/taydennys/hooks/useSendTaydennys';
 import { isContactIn } from '../application/utils';
 import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
+import TaydennysCancel from '../application/taydennys/components/TaydennysCancel';
 
 type Props = {
   taydennys: Taydennys<JohtoselvitysData>;
@@ -262,6 +263,13 @@ export default function JohtoselvitysTaydennysContainer({
               onPrevious={handlePrevious}
               onNext={handleNext}
             >
+              <TaydennysCancel
+                application={originalApplication}
+                navigateToApplicationViewOnSuccess
+                buttonVariant="danger"
+                buttonIsLoading={saveAndQuitIsLoading}
+                buttonIsLoadingText={saveAndQuitLoadingText}
+              />
               <Button
                 variant="secondary"
                 iconLeft={<IconSaveDiskette aria-hidden="true" />}

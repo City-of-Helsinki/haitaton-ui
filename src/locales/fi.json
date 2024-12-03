@@ -1277,18 +1277,23 @@
     "labels": {
       "originalInformation": "Alkuperäiset",
       "taydennykset": "Täydennykset",
-      "taydennys": "Täydennys"
+      "taydennys": "Täydennys",
+      "cancelTitle": "Peru täydennysluonnos?",
+      "cancelDescription": "Haluatko varmasti perua täydennyspyyntöön vastaamisen? Tehdyt muutokset poistetaan."
     },
     "buttons": {
       "createTaydennys": "Täydennä",
       "editTaydennys": "Muokkaa hakemusta (täydennys)",
-      "sendTaydennys": "Lähetä täydennys"
+      "sendTaydennys": "Lähetä täydennys",
+      "cancelTaydennys": "Peru täydennysluonnos"
     },
     "notifications": {
       "sendSuccessLabel": "Täydennys lähetetty",
       "sendSuccessText": "Täydennys on lähetetty käsiteltäväksi.",
       "sendErrorLabel": "Täydennyksen lähettäminen epäonnistui",
-      "sendErrorText": "$t(hakemus:notifications:reportCompletionDateErrorText)"
+      "sendErrorText": "$t(hakemus:notifications:reportCompletionDateErrorText)",
+      "cancelSuccessLabel": "Täydennysluonnos peruttiin",
+      "cancelSuccessText": "Täydennysluonnos peruttiin onnistuneesti"
     },
     "sendDialog": {
       "title": "Lähetä täydennetty hakemus käsittelyyn",
