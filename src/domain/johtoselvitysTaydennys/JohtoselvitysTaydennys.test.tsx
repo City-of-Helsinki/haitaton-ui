@@ -8,6 +8,7 @@ import hankkeet from '../mocks/data/hankkeet-data';
 import hakemukset from '../mocks/data/hakemukset-data';
 import { server } from '../mocks/test-server';
 import { Taydennys } from '../application/taydennys/types';
+import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 
 function setup(
   options: {
@@ -178,5 +179,36 @@ describe('Sending taydennys', () => {
     await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
     expect(screen.queryByRole('button', { name: /lähetä täydennys/i })).not.toBeInTheDocument();
+  });
+
+  test('Should show and disable send button and show notification when user is not a contact person', async () => {
+    server.use(
+      http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+        return HttpResponse.json<SignedInUser>({
+          hankeKayttajaId: 'not-a-contact-person-id',
+          kayttooikeustaso: 'KATSELUOIKEUS',
+          kayttooikeudet: ['VIEW'],
+        });
+      }),
+    );
+
+    const { user } = setup({
+      taydennys: {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: cloneDeep(hakemukset[10] as Application<JohtoselvitysData>)
+          .applicationData,
+        muutokset: ['name'],
+      },
+    });
+
+    await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+
+    expect(screen.queryByRole('button', { name: /lähetä täydennys/i })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /lähetä täydennys/i })).toBeDisabled();
+    expect(
+      screen.queryAllByText(
+        'Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö.',
+      ),
+    ).toHaveLength(2);
   });
 });
