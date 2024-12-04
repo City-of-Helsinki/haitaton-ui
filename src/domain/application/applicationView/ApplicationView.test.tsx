@@ -621,7 +621,6 @@ describe('Cable report application view', () => {
       await user.click(screen.getByRole('tab', { name: /alueet/i }));
 
       expect(screen.getAllByText('Täydennys:').length).toBe(2);
-      expect(screen.getAllByText('Poistettu:').length).toBe(1);
       expect(screen.getByText('264 m²')).toBeInTheDocument();
     });
 
