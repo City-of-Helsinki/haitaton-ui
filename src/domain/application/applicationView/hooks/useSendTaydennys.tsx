@@ -1,18 +1,23 @@
 import { useState } from 'react';
-import { Button, IconEnvelope, IconQuestionCircle } from 'hds-react';
+import { Button, IconEnvelope, IconQuestionCircle, Notification } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { AlluStatus, Application } from '../../types/application';
 import { validationSchema as johtoselvitysValidationSchema } from '../../../johtoselvitysTaydennys/validationSchema';
 import ConfirmationDialog from '../../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import useIsInformationRequestFeatureEnabled from '../../taydennys/hooks/useIsInformationRequestFeatureEnabled';
 import useSendTaydennysMutation from '../../taydennys/hooks/useSendTaydennys';
+import { isContactIn } from '../../utils';
+import { SignedInUser } from '../../../hanke/hankeUsers/hankeUser';
 
 const validationSchemas = {
   CABLE_REPORT: johtoselvitysValidationSchema,
   EXCAVATION_NOTIFICATION: null,
 };
 
-export default function useSendTaydennys(application: Application) {
+export default function useSendTaydennys(
+  application: Application,
+  signedInUser: SignedInUser | undefined,
+) {
   const { t } = useTranslation();
   const informationRequestFeatureEnabled = useIsInformationRequestFeatureEnabled(
     application.applicationType,
@@ -27,6 +32,9 @@ export default function useSendTaydennys(application: Application) {
     application.taydennys.muutokset.length > 0;
   const [showSendTaydennysDialog, setShowSendTaydennysDialog] = useState(false);
   const sendTaydennysMutation = useSendTaydennysMutation();
+  const isContact =
+    application.taydennys && isContactIn(signedInUser, application.taydennys.applicationData);
+  const disableSendButton = Boolean(!isContact);
 
   function openSendTaydennysDialog() {
     setShowSendTaydennysDialog(true);
@@ -44,15 +52,28 @@ export default function useSendTaydennys(application: Application) {
   }
 
   const sendTaydennysButton = showSendTaydennysButton ? (
-    <Button
-      theme="coat"
-      iconLeft={<IconEnvelope />}
-      onClick={openSendTaydennysDialog}
-      loadingText={t('common:buttons:sendingText')}
-      isLoading={sendTaydennysMutation.isLoading}
-    >
-      {t('taydennys:buttons:sendTaydennys')}
-    </Button>
+    <>
+      <Button
+        theme="coat"
+        iconLeft={<IconEnvelope />}
+        onClick={openSendTaydennysDialog}
+        loadingText={t('common:buttons:sendingText')}
+        isLoading={sendTaydennysMutation.isLoading}
+        disabled={disableSendButton}
+      >
+        {t('taydennys:buttons:sendTaydennys')}
+      </Button>
+      {disableSendButton && (
+        <Notification
+          size="small"
+          style={{ marginTop: 'var(--spacing-xs)' }}
+          type="info"
+          label={t('hakemus:notifications:sendApplicationDisabled')}
+        >
+          {t('hakemus:notifications:sendApplicationDisabled')}
+        </Notification>
+      )}
+    </>
   ) : null;
 
   const sendTaydennysDialog = (

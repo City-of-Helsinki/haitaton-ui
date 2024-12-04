@@ -425,7 +425,7 @@ function ApplicationView({
 
   const informationRequestFeatureEnabled = useIsInformationRequestFeatureEnabled(applicationType);
 
-  const { sendTaydennysButton, sendTaydennysDialog } = useSendTaydennys(application);
+  const { sendTaydennysButton, sendTaydennysDialog } = useSendTaydennys(application, signedInUser);
 
   async function onSendApplication(pdr: PaperDecisionReceiver | undefined | null) {
     applicationSendMutation.mutate({
