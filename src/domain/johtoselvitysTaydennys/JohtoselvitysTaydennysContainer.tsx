@@ -1,7 +1,14 @@
 import { useState } from 'react';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Button, IconEnvelope, IconQuestionCircle, IconSaveDiskette, StepState } from 'hds-react';
+import {
+  Button,
+  IconEnvelope,
+  IconQuestionCircle,
+  IconSaveDiskette,
+  Notification,
+  StepState,
+} from 'hds-react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useQueryClient } from 'react-query';
 import { Taydennys } from '../application/taydennys/types';
@@ -34,6 +41,8 @@ import ApplicationSaveNotification from '../application/components/ApplicationSa
 import { changeFormStep } from '../forms/utils';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import useSendTaydennys from '../application/taydennys/hooks/useSendTaydennys';
+import { isContactIn } from '../application/utils';
+import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
 
 type Props = {
   taydennys: Taydennys<JohtoselvitysData>;
@@ -54,6 +63,7 @@ export default function JohtoselvitysTaydennysContainer({
     useUpdateTaydennys<JohtoselvitysData, JohtoselvitysUpdateData>();
   const sendTaydennysMutation = useSendTaydennys();
   const [showSendDialog, setShowSendDialog] = useState(false);
+  const { data: signedInUser } = usePermissionsForHanke(hankeData.hankeTunnus);
 
   const formContext = useForm<JohtoselvitysTaydennysFormValues>({
     mode: 'onTouched',
@@ -240,6 +250,9 @@ export default function JohtoselvitysTaydennysContainer({
 
           const lastStep = activeStepIndex === formSteps.length - 1;
           const showSendButton = lastStep && taydennys.muutokset.length > 0 && isValid;
+          const isContact = isContactIn(signedInUser, getValues('applicationData'));
+          const disableSendButton = showSendButton && !isContact;
+
           const saveAndQuitIsLoading = taydennysUpdateMutation.isLoading;
           const saveAndQuitLoadingText = t('common:buttons:savingText');
           return (
@@ -265,9 +278,20 @@ export default function JohtoselvitysTaydennysContainer({
                   iconLeft={<IconEnvelope aria-hidden="true" />}
                   loadingText={t('common:buttons:sendingText')}
                   isLoading={sendTaydennysMutation.isLoading}
+                  disabled={disableSendButton}
                 >
                   {t('taydennys:buttons:sendTaydennys')}
                 </Button>
+              )}
+              {disableSendButton && (
+                <Notification
+                  size="small"
+                  style={{ marginTop: 'var(--spacing-xs)' }}
+                  type="info"
+                  label={t('hakemus:notifications:sendApplicationDisabled')}
+                >
+                  {t('hakemus:notifications:sendApplicationDisabled')}
+                </Notification>
               )}
             </FormActions>
           );
