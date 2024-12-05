@@ -221,7 +221,10 @@ export default function JohtoselvitysTaydennysContainer({
         formSteps={formSteps}
         formData={watchFormValues}
         formErrorsNotification={
-          <TaydennyspyyntoNotification taydennyspyynto={originalApplication.taydennyspyynto!} />
+          <TaydennyspyyntoNotification
+            taydennyspyynto={originalApplication.taydennyspyynto!}
+            applicationType={originalApplication.applicationType}
+          />
         }
         onStepChange={handleStepChange}
         stepChangeValidator={validateStepChange}

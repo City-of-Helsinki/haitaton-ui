@@ -14,9 +14,7 @@ const validationSchemas = {
 
 export default function useSendTaydennys(application: Application) {
   const { t } = useTranslation();
-  const informationRequestFeatureEnabled = useIsInformationRequestFeatureEnabled(
-    application.applicationType,
-  );
+  const informationRequestFeatureEnabled = useIsInformationRequestFeatureEnabled();
   const taydennysValidationSchema = validationSchemas[application.applicationType];
   const isTaydennysValid = taydennysValidationSchema?.isValidSync(application.taydennys);
   const showSendTaydennysButton =
