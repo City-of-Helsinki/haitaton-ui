@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
-import { Button, IconCross, IconPlusCircle, IconSaveDiskette, Link, StepState } from 'hds-react';
+import { Button, IconCross, IconPlusCircle, IconSaveDiskette, StepState } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import VectorSource from 'ol/source/Vector';
-import { ValidationError } from 'yup';
 import { FormNotification, HankeDataFormState } from './types';
 import {
   hankeSchema,
@@ -31,7 +30,7 @@ import ApplicationAddDialog from '../../application/components/ApplicationAddDia
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
 import { changeFormStep, getFieldPaths } from '../../forms/utils';
 import { updateHanke } from './hankeApi';
-import { convertHankeAlueToFormState } from './utils';
+import { convertHankeAlueToFormState, mapValidationErrorToErrorListItem } from './utils';
 import { useValidationErrors } from '../../forms/hooks/useValidationErrors';
 import DrawProvider from '../../../common/components/map/modules/draw/DrawProvider';
 import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
@@ -253,38 +252,6 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     [],
   ];
 
-  function mapToErrorListItem(error: ValidationError) {
-    const errorPath = error.path?.replace('[', '.').replace(']', '');
-    // Get parts of the path: for example for path 'alueet.0.meluHaitta' returns ['alueet', '0', 'meluHaitta'],
-    // and for example for 'alueet' just ['alueet']
-    const pathParts = errorPath?.match(/(\w+)/g) || [];
-
-    if (pathParts.length === 1 && pathParts[0] === 'alueet') {
-      pathParts[0] = 'alueet.empty';
-    }
-
-    const langKey = pathParts.reduce((acc, part, index) => {
-      if (index === 1) {
-        // Exclude the index from the lang key
-        return acc;
-      }
-      return `${acc}:${part}`;
-    }, 'hankeForm:missingFields');
-
-    const linkText = t(langKey, {
-      count: Number(pathParts[1]) + 1,
-      alueName: getValues(`alueet.${pathParts[1]}.nimi` as FieldPath<HankeDataFormState>),
-    });
-
-    return (
-      <li key={errorPath}>
-        <Link href={`#${errorPath}`} disableVisitedStyles>
-          {linkText}
-        </Link>
-      </li>
-    );
-  }
-
   const formErrorsNotification =
     (activeStepIndex === 5 && (
       <FormPagesErrorSummary
@@ -303,7 +270,9 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
             : t('hankePortfolio:draftState:labels:missingFields')
         }
       >
-        {formErrorsByPage[activeStepIndex].map(mapToErrorListItem)}
+        {formErrorsByPage[activeStepIndex].map((error) =>
+          mapValidationErrorToErrorListItem(error, t, getValues),
+        )}
       </FormFieldsErrorSummary>
     ));
 
