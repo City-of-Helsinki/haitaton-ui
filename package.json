@@ -29,7 +29,7 @@
     "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^3.9.1",
     "@popperjs/core": "^2.11.8",
-    "@reduxjs/toolkit": "^2.1.0",
+    "@reduxjs/toolkit": "^2.4.0",
     "@sentry/react": "^8.1.0",
     "@turf/boolean-contains": "^7.1.0",
     "@turf/boolean-intersects": "^7.1.0",
