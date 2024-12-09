@@ -1353,7 +1353,9 @@
       "taydennykset": "Täydennykset",
       "taydennys": "Täydennys",
       "cancelTitle": "Peru täydennysluonnos?",
-      "cancelDescription": "Haluatko varmasti perua täydennyspyyntöön vastaamisen? Tehdyt muutokset poistetaan."
+      "cancelDescription": "Haluatko varmasti perua täydennyspyyntöön vastaamisen? Tehdyt muutokset poistetaan.",
+      "originalAttachments": "Alkuperäiset liitteet",
+      "addedAttachments": "Lisätyt liitetiedostot"
     },
     "buttons": {
       "createTaydennys": "Täydennä",

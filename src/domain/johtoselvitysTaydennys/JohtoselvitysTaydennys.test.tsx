@@ -1,14 +1,27 @@
 import { cloneDeep } from 'lodash';
 import { HttpResponse, http } from 'msw';
-import { fireEvent, render, screen } from '../../testUtils/render';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+} from '../../testUtils/render';
 import JohtoselvitysTaydennysContainer from './JohtoselvitysTaydennysContainer';
-import { Application, JohtoselvitysData } from '../application/types/application';
+import {
+  Application,
+  ApplicationAttachmentMetadata,
+  AttachmentType,
+  JohtoselvitysData,
+} from '../application/types/application';
 import { HankeData } from '../types/hanke';
 import hankkeet from '../mocks/data/hankkeet-data';
 import hakemukset from '../mocks/data/hakemukset-data';
 import { server } from '../mocks/test-server';
 import { Taydennys } from '../application/taydennys/types';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
+import api from '../api/api';
+import * as taydennysAttachmentsApi from '../application/taydennys/taydennysAttachmentsApi';
 
 function setup(
   options: {
@@ -371,5 +384,61 @@ describe('Error notification', () => {
     expect(screen.getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
     expect(screen.getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
     expect(screen.getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
+  });
+});
+
+describe('Taydennys attachments', () => {
+  async function uploadAttachmentMock({
+    taydennysId,
+    attachmentType,
+    file,
+    abortSignal,
+  }: {
+    taydennysId: string;
+    attachmentType: AttachmentType;
+    file: File;
+    abortSignal?: AbortSignal;
+  }) {
+    const { data } = await api.post<ApplicationAttachmentMetadata>(
+      `/taydennykset/${taydennysId}/liitteet?tyyppi=${attachmentType}`,
+      { liite: file },
+      {
+        signal: abortSignal,
+      },
+    );
+    return data;
+  }
+
+  function initFileGetResponse(response: ApplicationAttachmentMetadata[]) {
+    server.use(
+      http.get('/api/hakemukset/:id/liitteet', async () => {
+        return HttpResponse.json(response);
+      }),
+    );
+  }
+
+  test('Should be able to upload attachments', async () => {
+    const uploadSpy = jest
+      .spyOn(taydennysAttachmentsApi, 'uploadAttachment')
+      .mockImplementation(uploadAttachmentMock);
+    initFileGetResponse([]);
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: /liitteet/i }));
+    const fileUpload = await screen.findByLabelText('Raahaa tiedostot tänne');
+    await user.upload(fileUpload, [
+      new File(['test-a'], 'test-file-a.pdf', { type: 'application/pdf' }),
+      new File(['test-b'], 'test-file-b.pdf', { type: 'application/pdf' }),
+    ]);
+
+    await waitForElementToBeRemoved(() => screen.queryAllByText(/Tallennetaan tiedostoja/i), {
+      timeout: 10000,
+    });
+    await waitFor(
+      () => {
+        expect(screen.queryByText('2/2 tiedosto(a) tallennettu')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+    expect(uploadSpy).toHaveBeenCalledTimes(2);
   });
 });

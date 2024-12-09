@@ -75,15 +75,22 @@ const SectionItemContentAdded: React.FC<Readonly<SectionItemContentProps>> = ({
   );
 };
 
-const FormSummarySection: React.FC<{
+interface FormSummarySectionProps extends BoxProps {
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
-}> = ({ children, className, style }) => {
+}
+
+const FormSummarySection: React.FC<Readonly<FormSummarySectionProps>> = ({
+  children,
+  className,
+  style,
+  ...chakraProps
+}) => {
   return (
-    <section className={clsx(styles.container, className)} style={style}>
+    <Box as="section" className={clsx(styles.container, className)} style={style} {...chakraProps}>
       {children}
-    </section>
+    </Box>
   );
 };
 

@@ -50,6 +50,8 @@ import FormFieldsErrorSummary from '../forms/components/FormFieldsErrorSummary';
 import { isContactIn } from '../application/utils';
 import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import TaydennysCancel from '../application/taydennys/components/TaydennysCancel';
+import Attachments from './Attachments';
+import useAttachments from '../application/hooks/useAttachments';
 
 type Props = {
   taydennys: Taydennys<JohtoselvitysData>;
@@ -71,6 +73,11 @@ export default function JohtoselvitysTaydennysContainer({
   const sendTaydennysMutation = useSendTaydennys();
   const [showSendDialog, setShowSendDialog] = useState(false);
   const { data: signedInUser } = usePermissionsForHanke(hankeData.hankeTunnus);
+  const [attachmentsUploading, setAttachmentsUploading] = useState(false);
+  const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
+  const { data: originalAttachments, isError: attachmentsLoadError } = useAttachments(
+    originalApplication.id,
+  );
 
   const formContext = useForm<JohtoselvitysTaydennysFormValues>({
     mode: 'onTouched',
@@ -88,6 +95,10 @@ export default function JohtoselvitysTaydennysContainer({
     handleSubmit,
   } = formContext;
   const watchFormValues = watch();
+
+  function handleAttachmentUpload(isUploading: boolean) {
+    setAttachmentsUploading(isUploading);
+  }
 
   // Fields that are validated in each page when moving in the form
   const pageFieldsToValidate: FieldPath<JohtoselvitysTaydennysFormValues>[][] = [
@@ -126,6 +137,18 @@ export default function JohtoselvitysTaydennysContainer({
     },
     {
       element: (
+        <Attachments
+          applicationId={originalApplication.id!}
+          originalAttachments={originalAttachments}
+          attachmentsLoadError={attachmentsLoadError}
+          onFileUpload={handleAttachmentUpload}
+        />
+      ),
+      label: t('hankePortfolio:tabit:liitteet'),
+      state: StepState.available,
+    },
+    {
+      element: (
         <ReviewAndSend
           taydennys={getValues()}
           muutokset={taydennys.muutokset}
@@ -141,7 +164,7 @@ export default function JohtoselvitysTaydennysContainer({
   const perustiedotErrors = useValidationErrors(perustiedotSchema, watchFormValues);
   const alueetErrors = useValidationErrors(alueetSchema, watchFormValues);
   const yhteystiedotErrors = useValidationErrors(yhteystiedotSchema, watchFormValues);
-  const formErrorsByPage = [perustiedotErrors, alueetErrors, yhteystiedotErrors];
+  const formErrorsByPage = [perustiedotErrors, alueetErrors, yhteystiedotErrors, []];
 
   function mapToErrorListItem(error: ValidationError) {
     const errorPath = error.path?.replace('[', '.').replace(']', '');
@@ -287,6 +310,8 @@ export default function JohtoselvitysTaydennysContainer({
             <Box mt="var(--spacing-s)">{formErrorsNotification}</Box>
           </>
         }
+        isLoading={attachmentsUploading}
+        isLoadingText={attachmentsUploadingText}
         onStepChange={handleStepChange}
         stepChangeValidator={validateStepChange}
         onSubmit={handleSubmit(openSendDialog)}
@@ -307,8 +332,10 @@ export default function JohtoselvitysTaydennysContainer({
           const isContact = isContactIn(signedInUser, getValues('applicationData'));
           const disableSendButton = showSendButton && !isContact;
 
-          const saveAndQuitIsLoading = taydennysUpdateMutation.isLoading;
-          const saveAndQuitLoadingText = t('common:buttons:savingText');
+          const saveAndQuitIsLoading = taydennysUpdateMutation.isLoading || attachmentsUploading;
+          const saveAndQuitLoadingText = attachmentsUploading
+            ? attachmentsUploadingText
+            : t('common:buttons:savingText');
           return (
             <FormActions
               activeStepIndex={activeStep}
