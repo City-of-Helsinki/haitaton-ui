@@ -3,12 +3,17 @@ import { Notification } from 'hds-react';
 import { Box } from '@chakra-ui/react';
 import { Taydennyspyynto } from './types';
 import { sortTaydennyspyyntoFields } from './utils';
+import { ApplicationType } from '../types/application';
 
 type Props = {
   taydennyspyynto: Taydennyspyynto;
+  applicationType: ApplicationType;
 };
 
-export default function TaydennyspyyntoNotification({ taydennyspyynto }: Readonly<Props>) {
+export default function TaydennyspyyntoNotification({
+  taydennyspyynto,
+  applicationType,
+}: Readonly<Props>) {
   const { t } = useTranslation();
 
   return (
@@ -18,7 +23,8 @@ export default function TaydennyspyyntoNotification({ taydennyspyynto }: Readonl
         {taydennyspyynto.kentat.toSorted(sortTaydennyspyyntoFields).map((kentta) => {
           return (
             <li key={kentta.key}>
-              <strong>{t(`taydennyspyynto:fields:${kentta.key}`)}</strong>: {kentta.message}
+              <strong>{t(`taydennyspyynto:fields:${applicationType}:${kentta.key}`)}</strong>:{' '}
+              {kentta.message}
             </li>
           );
         })}

@@ -422,7 +422,7 @@ function ApplicationView({
   );
   const applicationSendMutation = useSendApplication();
 
-  const informationRequestFeatureEnabled = useIsInformationRequestFeatureEnabled(applicationType);
+  const informationRequestFeatureEnabled = useIsInformationRequestFeatureEnabled();
 
   const { sendTaydennysButton, sendTaydennysDialog } = useSendTaydennys(application, signedInUser);
 
@@ -473,7 +473,10 @@ function ApplicationView({
           alluStatus === AlluStatus.WAITING_INFORMATION &&
           taydennyspyynto && (
             <Box mb="var(--spacing-l)">
-              <TaydennyspyyntoNotification taydennyspyynto={taydennyspyynto} />
+              <TaydennyspyyntoNotification
+                taydennyspyynto={taydennyspyynto}
+                applicationType={applicationType}
+              />
             </Box>
           )}
 
