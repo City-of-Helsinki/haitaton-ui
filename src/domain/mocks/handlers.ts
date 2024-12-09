@@ -380,4 +380,10 @@ export const handlers = [
     const hakemus = await hakemuksetDB.sendTaydennys(id as string);
     return HttpResponse.json(hakemus);
   }),
+
+  http.delete(`${apiUrl}/taydennykset/:id`, async ({ params }) => {
+    const { id } = params;
+    await hakemuksetDB.cancelTaydennys(id as string);
+    return new HttpResponse();
+  }),
 ];

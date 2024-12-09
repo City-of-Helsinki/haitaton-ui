@@ -87,6 +87,7 @@ import AreaInformation from '../components/summary/AreaInformation';
 import useIsInformationRequestFeatureEnabled from '../taydennys/hooks/useIsInformationRequestFeatureEnabled';
 import useSendTaydennys from './hooks/useSendTaydennys';
 import { Sidebar } from './Sidebar';
+import TaydennysCancel from '../taydennys/components/TaydennysCancel';
 
 function TyoalueetList({ tyoalueet }: { tyoalueet: ApplicationArea[] }) {
   const { t } = useTranslation();
@@ -466,7 +467,7 @@ function ApplicationView({
     <InformationViewContainer>
       <InformationViewHeader backgroundColor="var(--color-suomenlinna-light)">
         <MainHeading>{name}</MainHeading>
-        <Text tag="h2" styleAs="h3" weight="bold" spacingBottom="l">
+        <Text tag="h2" styleAs="h3" weight="bold" spacingBottom="l" data-testid="allu_tunnus">
           {applicationId}
         </Text>
 
@@ -601,16 +602,19 @@ function ApplicationView({
           )}
           {informationRequestFeatureEnabled && alluStatus === AlluStatus.WAITING_INFORMATION && (
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
-              <Button
-                theme="coat"
-                iconLeft={<IconPen aria-hidden="true" />}
-                onClick={onEditTaydennys}
-                isLoading={creatingTaydennys}
-              >
-                {!taydennys
-                  ? t('taydennys:buttons:createTaydennys')
-                  : t('taydennys:buttons:editTaydennys')}
-              </Button>
+              <>
+                <Button
+                  theme="coat"
+                  iconLeft={<IconPen aria-hidden="true" />}
+                  onClick={onEditTaydennys}
+                  isLoading={creatingTaydennys}
+                >
+                  {!taydennys
+                    ? t('taydennys:buttons:createTaydennys')
+                    : t('taydennys:buttons:editTaydennys')}
+                </Button>
+                <TaydennysCancel application={application} />
+              </>
             </CheckRightsByHanke>
           )}
           <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>

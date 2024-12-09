@@ -35,6 +35,9 @@ function setup(
     http.post('/api/taydennykset/:id/laheta', async () => {
       return HttpResponse.json(application, { status: responseStatus });
     }),
+    http.delete('/api/taydennykset/:id', async () => {
+      return new HttpResponse(null, { status: responseStatus });
+    }),
   );
   return {
     ...render(
@@ -210,5 +213,26 @@ describe('Sending taydennys', () => {
         'Hakemuksen voi lähettää ainoastaan hakemuksen yhteyshenkilönä oleva henkilö.',
       ),
     ).toHaveLength(2);
+  });
+});
+
+describe('Canceling taydennys', () => {
+  test('Should be able to cancel taydennys', async () => {
+    const application = cloneDeep(hakemukset[10]) as Application<JohtoselvitysData>;
+    application.taydennys = {
+      id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+      applicationData: application.applicationData,
+      muutokset: [],
+    };
+    const { user } = setup({
+      application,
+      taydennys: application.taydennys,
+    });
+    await user.click(screen.getByRole('button', { name: /peru täydennysluonnos/i }));
+    await user.click(await screen.findByRole('button', { name: /vahvista/i }));
+
+    expect(await screen.findByText('Täydennysluonnos peruttiin')).toBeInTheDocument();
+    expect(screen.getByText('Täydennysluonnos peruttiin onnistuneesti')).toBeInTheDocument();
+    expect(window.location.pathname).toBe('/fi/hakemus/11');
   });
 });

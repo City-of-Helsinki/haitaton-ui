@@ -377,6 +377,9 @@ describe('Cable report application view', () => {
         http.post('/api/taydennykset/:id/laheta', async () => {
           return HttpResponse.json(application);
         }),
+        http.delete('/api/taydennykset/:id', async () => {
+          return new HttpResponse();
+        }),
       );
       const renderResult = render(<ApplicationViewContainer id={application.id!} />);
       await waitForLoadingToFinish();
@@ -696,6 +699,50 @@ describe('Cable report application view', () => {
       await setup(application);
 
       expect(screen.queryByRole('button', { name: 'Lähetä täydennys' })).not.toBeInTheDocument();
+    });
+
+    test('Should be able to cancel taydennys', async () => {
+      const application = cloneDeep(hakemukset[10]) as Application<JohtoselvitysData>;
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: application.applicationData,
+        muutokset: ['workDescription'],
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('button', { name: 'Peru täydennysluonnos' }));
+      await user.click(await screen.findByRole('button', { name: /vahvista/i }));
+
+      expect(await screen.findByText('Täydennysluonnos peruttiin')).toBeInTheDocument();
+      expect(screen.getByText('Täydennysluonnos peruttiin onnistuneesti')).toBeInTheDocument();
+    });
+
+    test('Cancel taydennys button is not visible if taydennys field is null', async () => {
+      const application = cloneDeep(hakemukset[10]) as Application<JohtoselvitysData>;
+      application.taydennys = null;
+      await setup(application);
+
+      expect(
+        screen.queryByRole('button', { name: 'Peru täydennysluonnos' }),
+      ).not.toBeInTheDocument();
+    });
+
+    test('Cancel taydennys button is not visible if user does not have permission', async () => {
+      server.use(
+        http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+          return HttpResponse.json<SignedInUser>(USER_VIEW);
+        }),
+      );
+      const application = cloneDeep(hakemukset[10]) as Application<JohtoselvitysData>;
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: application.applicationData,
+        muutokset: ['workDescription'],
+      };
+      await setup(application);
+
+      expect(
+        screen.queryByRole('button', { name: 'Peru täydennysluonnos' }),
+      ).not.toBeInTheDocument();
     });
   });
 });

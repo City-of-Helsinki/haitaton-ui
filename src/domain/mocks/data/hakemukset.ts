@@ -181,3 +181,11 @@ export async function sendTaydennys(id: string) {
   updatedHakemus.taydennyspyynto = null;
   return updatedHakemus;
 }
+
+export async function cancelTaydennys(id: string) {
+  const hakemus = await readTaydennys(id);
+  if (!hakemus) {
+    throw new ApiError(`No application with id ${id}`, 404);
+  }
+  hakemus.taydennys = null;
+}
