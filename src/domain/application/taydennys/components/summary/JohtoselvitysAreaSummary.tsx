@@ -26,15 +26,14 @@ export default function JohtoselvitysAreaSummary({
   muutokset,
 }: Readonly<Props>) {
   const { t } = useTranslation();
-  const { startTime, endTime, areas } = data;
+  const { startTime, endTime, areas: taydennysAreas } = data;
   const startTimeChanged = muutokset.includes('startTime');
   const endTimeChanged = muutokset.includes('endTime');
-  const areasChanged = areas.filter((_, index) => {
-    const areaChanged = muutokset.includes(`areas[${index}]`);
-    return areaChanged;
+  const areasChanged = taydennysAreas.filter((_, index) => {
+    return muutokset.includes(`areas[${index}]`);
   });
   const areasRemoved = originalData.areas.filter(
-    (_, index) => muutokset.includes(`areas[${index}]`) && !areas[index],
+    (_, index) => muutokset.includes(`areas[${index}]`) && !taydennysAreas[index],
   );
 
   if (
@@ -89,7 +88,7 @@ export default function JohtoselvitysAreaSummary({
             )}
             <SectionItemTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionItemTitle>
             <SectionItemContent>
-              {areas.map((area, index) => {
+              {taydennysAreas.map((area, index) => {
                 if (!muutokset.includes(`areas[${index}]`)) {
                   return null;
                 }
@@ -101,7 +100,7 @@ export default function JohtoselvitysAreaSummary({
                   />
                 );
               })}
-              {areasRemoved.length > 0 && (
+              {areasRemoved.length === originalData.areas.length && (
                 <SectionItemContentRemoved>
                   {areasRemoved.map((area, index) => {
                     return (

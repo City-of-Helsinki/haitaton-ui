@@ -131,13 +131,11 @@ function TotalSurfaceArea({
   return (
     <>
       {totalSurfaceArea > 0 && <p>{totalSurfaceArea} m²</p>}
-      {changedTotalSurfaceArea &&
-        changedTotalSurfaceArea > 0 &&
-        changedTotalSurfaceArea !== totalSurfaceArea && (
-          <SectionItemContentAdded marginTop="var(--spacing-s)">
-            <p>{changedTotalSurfaceArea} m²</p>
-          </SectionItemContentAdded>
-        )}
+      {changedTotalSurfaceArea !== undefined && changedTotalSurfaceArea !== totalSurfaceArea && (
+        <SectionItemContentAdded marginTop="var(--spacing-s)">
+          <p>{changedTotalSurfaceArea} m²</p>
+        </SectionItemContentAdded>
+      )}
     </>
   );
 }
@@ -194,7 +192,7 @@ function JohtoselvitysAreasInfo({
             })}
           </SectionItemContentAdded>
         )}
-        {areasRemoved && areasRemoved.length > 0 && (
+        {areasRemoved && areasRemoved.length === tyoalueet.length && (
           <SectionItemContentRemoved marginTop="var(--spacing-s)">
             {areasRemoved.map((area, index) => {
               return (
