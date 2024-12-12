@@ -1,5 +1,6 @@
 import api from '../../api/api';
-import { ApplicationAttachmentMetadata, AttachmentType } from '../types/application';
+import { AttachmentType } from '../types/application';
+import { TaydennysAttachmentMetadata } from './types';
 
 // Upload attachment for täydennys
 export async function uploadAttachment({
@@ -13,7 +14,7 @@ export async function uploadAttachment({
   file: File;
   abortSignal?: AbortSignal;
 }) {
-  const { data } = await api.post<ApplicationAttachmentMetadata>(
+  const { data } = await api.post<TaydennysAttachmentMetadata>(
     `/taydennykset/${taydennysId}/liitteet?tyyppi=${attachmentType}`,
     { liite: file },
     {

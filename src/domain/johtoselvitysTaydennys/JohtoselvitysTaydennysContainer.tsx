@@ -75,9 +75,7 @@ export default function JohtoselvitysTaydennysContainer({
   const { data: signedInUser } = usePermissionsForHanke(hankeData.hankeTunnus);
   const [attachmentsUploading, setAttachmentsUploading] = useState(false);
   const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
-  const { data: originalAttachments, isError: attachmentsLoadError } = useAttachments(
-    originalApplication.id,
-  );
+  const { data: originalAttachments } = useAttachments(originalApplication.id);
 
   const formContext = useForm<JohtoselvitysTaydennysFormValues>({
     mode: 'onTouched',
@@ -139,8 +137,8 @@ export default function JohtoselvitysTaydennysContainer({
       element: (
         <Attachments
           applicationId={originalApplication.id!}
+          taydennysAttachments={taydennys.liitteet}
           originalAttachments={originalAttachments}
-          attachmentsLoadError={attachmentsLoadError}
           onFileUpload={handleAttachmentUpload}
         />
       ),
@@ -150,9 +148,10 @@ export default function JohtoselvitysTaydennysContainer({
     {
       element: (
         <ReviewAndSend
-          taydennys={getValues()}
+          taydennys={taydennys}
           muutokset={taydennys.muutokset}
           originalApplication={originalApplication}
+          originalAttachments={originalAttachments ?? []}
         />
       ),
       label: t('form:headers:yhteenveto'),

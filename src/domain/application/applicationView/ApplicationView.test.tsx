@@ -12,6 +12,7 @@ import { fi } from 'date-fns/locale';
 import { Application, JohtoselvitysData } from '../types/application';
 import * as taydennysApi from '../taydennys/taydennysApi';
 import { USER_VIEW } from '../../mocks/signedInUser';
+import { createTaydennysAttachments } from '../../mocks/attachments';
 
 describe('Cable report application view', () => {
   test('Correct information about application should be displayed', async () => {
@@ -406,6 +407,7 @@ describe('Cable report application view', () => {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
         applicationData: application.applicationData,
         muutokset: [],
+        liitteet: [],
       };
       await setup(application);
 
@@ -445,6 +447,7 @@ describe('Cable report application view', () => {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
         applicationData: application.applicationData,
         muutokset: [],
+        liitteet: [],
       };
       const { user } = await setup(application);
       await user.click(screen.getByRole('button', { name: 'Muokkaa hakemusta (täydennys)' }));
@@ -522,6 +525,7 @@ describe('Cable report application view', () => {
           'rockExcavation',
           'workDescription',
         ],
+        liitteet: [],
       };
       await setup(application);
 
@@ -619,6 +623,7 @@ describe('Cable report application view', () => {
           ],
         },
         muutokset: ['areas[1]', 'areas[2]'],
+        liitteet: [],
       };
       const { user } = await setup(application);
       await user.click(screen.getByRole('tab', { name: /alueet/i }));
@@ -647,6 +652,7 @@ describe('Cable report application view', () => {
           propertyDeveloperWithContacts: null,
         },
         muutokset: ['customerWithContacts', 'propertyDeveloperWithContacts'],
+        liitteet: [],
       };
       const { user } = await setup(application);
       await user.click(screen.getByRole('tab', { name: /yhteystiedot/i }));
@@ -657,12 +663,32 @@ describe('Cable report application view', () => {
       expect(screen.getByText('newMail@test.com')).toBeInTheDocument();
     });
 
+    test('Shows changed information in attachments tab', async () => {
+      const taydennysId = 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c';
+      const taydennysAttachments = createTaydennysAttachments(taydennysId, 2);
+      const application = cloneDeep(hakemukset[10] as Application<JohtoselvitysData>);
+      application.taydennys = {
+        id: taydennysId,
+        applicationData: application.applicationData,
+        muutokset: [],
+        liitteet: taydennysAttachments,
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('tab', { name: /liitteet/i }));
+
+      expect(screen.getByText('Täydennys:')).toBeInTheDocument();
+      taydennysAttachments.forEach((attachment) => {
+        expect(screen.getByText(attachment.fileName)).toBeInTheDocument();
+      });
+    });
+
     test('Taydennys can be sent', async () => {
       const application = cloneDeep(hakemukset[10]) as Application<JohtoselvitysData>;
       application.taydennys = {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
         applicationData: application.applicationData,
         muutokset: ['workDescription'],
+        liitteet: [],
       };
       const { user } = await setup(application);
       await user.click(screen.getByRole('button', { name: 'Lähetä täydennys' }));
@@ -677,6 +703,7 @@ describe('Cable report application view', () => {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
         applicationData: application.applicationData,
         muutokset: [],
+        liitteet: [],
       };
       await setup(application);
 
@@ -694,6 +721,7 @@ describe('Cable report application view', () => {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
         applicationData: application.applicationData,
         muutokset: ['workDescription'],
+        liitteet: [],
       };
       await setup(application);
 
@@ -706,6 +734,7 @@ describe('Cable report application view', () => {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
         applicationData: application.applicationData,
         muutokset: ['workDescription'],
+        liitteet: [],
       };
       const { user } = await setup(application);
       await user.click(screen.getByRole('button', { name: 'Peru täydennysluonnos' }));
@@ -736,6 +765,7 @@ describe('Cable report application view', () => {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
         applicationData: application.applicationData,
         muutokset: ['workDescription'],
+        liitteet: [],
       };
       await setup(application);
 

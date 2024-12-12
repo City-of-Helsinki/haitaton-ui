@@ -3,7 +3,6 @@ import { Box } from '@chakra-ui/react';
 import { useQueryClient } from 'react-query';
 import { useFormContext } from 'react-hook-form';
 import Text from '../../common/components/text/Text';
-import { ApplicationAttachmentMetadata } from '../application/types/application';
 import FileUpload from '../../common/components/fileUpload/FileUpload';
 import { JohtoselvitysTaydennysFormValues } from './types';
 import {
@@ -18,19 +17,20 @@ import {
   SectionItemContent,
   SectionItemTitle,
 } from '../forms/components/FormSummarySection';
+import { ApplicationAttachmentMetadata } from '../application/types/application';
+import { TaydennysAttachmentMetadata } from '../application/taydennys/types';
 
 type Props = {
   applicationId: number;
-  originalAttachments: ApplicationAttachmentMetadata[] | undefined;
-  attachmentsLoadError: boolean;
+  taydennysAttachments: TaydennysAttachmentMetadata[];
+  originalAttachments?: ApplicationAttachmentMetadata[];
   onFileUpload: (isUploading: boolean) => void;
 };
 
 export default function Attachments({
   applicationId,
+  taydennysAttachments,
   originalAttachments,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  attachmentsLoadError,
   onFileUpload,
 }: Readonly<Props>) {
   const queryClient = useQueryClient();
@@ -40,7 +40,7 @@ export default function Attachments({
   function handleFileUpload(uploading: boolean) {
     onFileUpload(uploading);
     if (!uploading) {
-      queryClient.invalidateQueries('attachments');
+      queryClient.invalidateQueries(['application', applicationId]);
     }
   }
 
@@ -54,15 +54,17 @@ export default function Attachments({
         {t('hankePortfolio:tabit:liitteet')}
       </Text>
 
-      <FormSummarySection marginBottom="var(--spacing-m)">
-        <SectionItemTitle>{t('taydennys:labels:originalAttachments')}</SectionItemTitle>
-        <SectionItemContent>
-          <FileDownloadList
-            files={originalAttachments ?? []}
-            download={(file) => getApplicationAttachmentFile(applicationId, file.id)}
-          />
-        </SectionItemContent>
-      </FormSummarySection>
+      {originalAttachments && originalAttachments.length > 0 && (
+        <FormSummarySection marginBottom="var(--spacing-m)">
+          <SectionItemTitle>{t('taydennys:labels:originalAttachments')}</SectionItemTitle>
+          <SectionItemContent>
+            <FileDownloadList
+              files={originalAttachments}
+              download={(file) => getApplicationAttachmentFile(applicationId, file.id)}
+            />
+          </SectionItemContent>
+        </FormSummarySection>
+      )}
 
       <FileUpload
         id="cable-report-taydennys-file-upload"
@@ -70,8 +72,7 @@ export default function Attachments({
         maxSize={104857600}
         dragAndDrop
         multiple
-        // existingAttachments={existingAttachments}
-        // existingAttachmentsLoadError={attachmentsLoadError}
+        existingAttachments={taydennysAttachments}
         maxFilesNumber={20}
         uploadFunction={({ file, abortSignal }) =>
           uploadAttachment({
@@ -86,7 +87,7 @@ export default function Attachments({
         fileDeleteFunction={(file) =>
           deleteAttachment({ taydennysId: getValues('id'), attachmentId: file?.id })
         }
-        onFileDelete={() => queryClient.invalidateQueries('attachments')}
+        onFileDelete={() => queryClient.invalidateQueries(['application', applicationId])}
       />
     </Box>
   );
