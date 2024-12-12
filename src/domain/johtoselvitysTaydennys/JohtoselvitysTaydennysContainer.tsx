@@ -280,7 +280,10 @@ export default function JohtoselvitysTaydennysContainer({
         formData={watchFormValues}
         topElement={
           <>
-            <TaydennyspyyntoNotification taydennyspyynto={originalApplication.taydennyspyynto!} />
+            <TaydennyspyyntoNotification
+              taydennyspyynto={originalApplication.taydennyspyynto!}
+              applicationType="CABLE_REPORT"
+            />
             <Box mt="var(--spacing-s)">{formErrorsNotification}</Box>
           </>
         }

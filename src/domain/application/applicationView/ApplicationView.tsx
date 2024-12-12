@@ -473,7 +473,12 @@ function ApplicationView({
         <Box mb="var(--spacing-l)">
           {informationRequestFeatureEnabled &&
             alluStatus === AlluStatus.WAITING_INFORMATION &&
-            taydennyspyynto && <TaydennyspyyntoNotification taydennyspyynto={taydennyspyynto} />}
+            taydennyspyynto && (
+              <TaydennyspyyntoNotification
+                taydennyspyynto={taydennyspyynto}
+                applicationType={applicationType}
+              />
+            )}
           <Box mt="var(--spacing-s)">
             <FormPagesErrorSummary
               data={taydennys ?? application}
@@ -527,7 +532,11 @@ function ApplicationView({
           </SectionItemContent>
           <SectionItemTitle>{t('hakemus:labels:relatedHanke')}:</SectionItemTitle>
           <SectionItemContent>
-            {hanke && <Link href={hankeViewPath}>{hankeLinkText}</Link>}
+            {hanke && (
+              <Link href={hankeViewPath} data-testid="related_hanke">
+                {hankeLinkText}
+              </Link>
+            )}
           </SectionItemContent>
           <SectionItemTitle>{t('hankePortfolio:labels:oikeudet')}:</SectionItemTitle>
           <SectionItemContent>
