@@ -21,3 +21,11 @@ export interface Action {
   type: ACTION_TYPE;
   payload: { stepIndex: number; formData?: unknown };
 }
+
+export enum FORM_PAGES {
+  PERUSTIEDOT = 'perustiedot',
+  ALUEET = 'alueet',
+  HAITTOJEN_HALLINTA = 'haittojenHallinta',
+  YHTEYSTIEDOT = 'yhteystiedot',
+  LIITTEET = 'liitteet',
+}

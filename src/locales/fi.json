@@ -1248,6 +1248,59 @@
     "addApplicationTypes": {
       "CABLE_REPORT": "$t(hakemus:applicationTypes:CABLE_REPORT)",
       "EXCAVATION_NOTIFICATION": "$t(hakemus:applicationTypes:EXCAVATION_NOTIFICATION) (ja johtoselvitys)"
+    },
+    "missingFields": {
+      "notification": {
+        "pageLabel": "Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:",
+        "hakemusLabel": "Seuraavissa vaiheissa on puuttuvia tietoja hakemuksen lähettämiseksi:"
+      },
+      "name": "$t(hakemus:labels:nimi)",
+      "workDescription": "$t(hakemus:labels:kuvaus)",
+      "postalAddress": {
+        "streetAddress": {
+          "streetName": "$t(form:yhteystiedot:labels:osoite)"
+        }
+      },
+      "constructionWork": "$t(hakemus:labels:tyossaKyse)",
+      "startTime": "$t(hakemus:labels:startDate)",
+      "endTime": "$t(hakemus:labels:endDate)",
+      "areas": "Työalueen piirtäminen",
+      "customerWithContacts": {
+        "customer": {
+          "name": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:yhteystiedot:labels:nimi)",
+          "registryKey": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:yhteystiedot:labels:ytunnus)",
+          "email": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:yhteystiedot:labels:email)",
+          "phone": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:yhteystiedot:labels:puhelinnumero)"
+        },
+        "contacts": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:validations:yhteyshenkilotMin)"
+      },
+      "contractorWithContacts": {
+        "customer": {
+          "name": "$t(form:yhteystiedot:titles:contractorWithContacts): $t(form:yhteystiedot:labels:nimi)",
+          "registryKey": "$t(form:yhteystiedot:titles:contractorWithContacts): $t(form:yhteystiedot:labels:ytunnus)",
+          "email": "$t(form:yhteystiedot:titles:contractorWithContacts): $t(form:yhteystiedot:labels:email)",
+          "phone": "$t(form:yhteystiedot:titles:contractorWithContacts): $t(form:yhteystiedot:labels:puhelinnumero)"
+        },
+        "contacts": "$t(form:yhteystiedot:titles:contractorWithContacts): $t(form:validations:yhteyshenkilotMin)"
+      },
+      "propertyDeveloperWithContacts": {
+        "customer": {
+          "name": "$t(form:yhteystiedot:titles:propertyDeveloperWithContacts): $t(form:yhteystiedot:labels:nimi)",
+          "registryKey": "$t(form:yhteystiedot:titles:propertyDeveloperWithContacts): $t(form:yhteystiedot:labels:ytunnus)",
+          "email": "$t(form:yhteystiedot:titles:propertyDeveloperWithContacts): $t(form:yhteystiedot:labels:email)",
+          "phone": "$t(form:yhteystiedot:titles:propertyDeveloperWithContacts): $t(form:yhteystiedot:labels:puhelinnumero)"
+        },
+        "contacts": "$t(form:yhteystiedot:titles:propertyDeveloperWithContacts): $t(form:validations:yhteyshenkilotMin)"
+      },
+      "representativeWithContacts": {
+        "customer": {
+          "name": "$t(form:yhteystiedot:titles:representativeWithContacts): $t(form:yhteystiedot:labels:nimi)",
+          "registryKey": "$t(form:yhteystiedot:titles:representativeWithContacts): $t(form:yhteystiedot:labels:ytunnus)",
+          "email": "$t(form:yhteystiedot:titles:representativeWithContacts): $t(form:yhteystiedot:labels:email)",
+          "phone": "$t(form:yhteystiedot:titles:representativeWithContacts): $t(form:yhteystiedot:labels:puhelinnumero)"
+        },
+        "contacts": "$t(form:yhteystiedot:titles:representativeWithContacts): $t(form:validations:yhteyshenkilotMin)"
+      }
     }
   },
   "taydennyspyynto": {

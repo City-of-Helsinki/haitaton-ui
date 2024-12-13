@@ -86,7 +86,8 @@ import { useQueryClient } from 'react-query';
 import AreaInformation from '../components/summary/AreaInformation';
 import useIsInformationRequestFeatureEnabled from '../taydennys/hooks/useIsInformationRequestFeatureEnabled';
 import useSendTaydennys from './hooks/useSendTaydennys';
-import { Sidebar } from './Sidebar';
+import Sidebar from './Sidebar';
+import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
 import TaydennysCancel from '../taydennys/components/TaydennysCancel';
 
 function TyoalueetList({ tyoalueet }: { tyoalueet: ApplicationArea[] }) {
@@ -469,16 +470,23 @@ function ApplicationView({
           {applicationId}
         </Text>
 
-        {informationRequestFeatureEnabled &&
-          alluStatus === AlluStatus.WAITING_INFORMATION &&
-          taydennyspyynto && (
-            <Box mb="var(--spacing-l)">
+        <Box mb="var(--spacing-l)">
+          {informationRequestFeatureEnabled &&
+            alluStatus === AlluStatus.WAITING_INFORMATION &&
+            taydennyspyynto && (
               <TaydennyspyyntoNotification
                 taydennyspyynto={taydennyspyynto}
                 applicationType={applicationType}
               />
-            </Box>
-          )}
+            )}
+          <Box mt="var(--spacing-s)">
+            <FormPagesErrorSummary
+              data={taydennys ?? application}
+              schema={validationSchema}
+              notificationLabel={t('hakemus:missingFields:notification:hakemusLabel')}
+            />
+          </Box>
+        </Box>
 
         <FormSummarySection>
           <SectionItemTitle>{t('hakemus:labels:applicationType')}:</SectionItemTitle>
@@ -524,7 +532,11 @@ function ApplicationView({
           </SectionItemContent>
           <SectionItemTitle>{t('hakemus:labels:relatedHanke')}:</SectionItemTitle>
           <SectionItemContent>
-            {hanke && <Link href={hankeViewPath}>{hankeLinkText}</Link>}
+            {hanke && (
+              <Link href={hankeViewPath} data-testid="related_hanke">
+                {hankeLinkText}
+              </Link>
+            )}
           </SectionItemContent>
           <SectionItemTitle>{t('hankePortfolio:labels:oikeudet')}:</SectionItemTitle>
           <SectionItemContent>

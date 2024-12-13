@@ -2,6 +2,9 @@ import { Feature } from 'ol';
 import Polygon from 'ol/geom/Polygon';
 import { Polygon as GeoJSONPolygon } from 'geojson';
 import { max, min } from 'date-fns';
+import { ValidationError } from 'yup';
+import { Link } from 'hds-react';
+import { FieldPath, UseFormGetValues } from 'react-hook-form';
 import {
   HankeAlue,
   HankeYhteystieto,
@@ -22,6 +25,7 @@ import { getSurfaceArea } from '../../../common/components/map/utils';
 import { HankkeenHakemus } from '../../application/types/application';
 import { isApplicationCancelled, isApplicationPending } from '../../application/utils';
 import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../../common/haittaIndexes/types';
+import { TFunction } from 'i18next';
 
 function mapToAreaDates(areas: HankeAlue[] | undefined, key: 'haittaAlkuPvm' | 'haittaLoppuPvm') {
   return areas?.reduce((result: Date[], area) => {
@@ -214,4 +218,43 @@ export function sortedLiikenneHaittojenhallintatyyppi(
     });
 
   return sortedIndices.map((item) => [item.type, item.value] as [HAITTOJENHALLINTATYYPPI, number]);
+}
+
+/**
+ * Maps yup validation error to a list item.
+ */
+export function mapValidationErrorToErrorListItem(
+  error: ValidationError,
+  t: TFunction,
+  getValues: UseFormGetValues<HankeDataFormState>,
+) {
+  const errorPath = error.path?.replace('[', '.').replace(']', '');
+  // Get parts of the path: for example for path 'alueet.0.meluHaitta' returns ['alueet', '0', 'meluHaitta'],
+  // and for example for 'alueet' just ['alueet']
+  const pathParts = errorPath?.match(/(\w+)/g) || [];
+
+  if (pathParts.length === 1 && pathParts[0] === 'alueet') {
+    pathParts[0] = 'alueet.empty';
+  }
+
+  const langKey = pathParts.reduce((acc, part, index) => {
+    if (index === 1) {
+      // Exclude the index from the lang key
+      return acc;
+    }
+    return `${acc}:${part}`;
+  }, 'hankeForm:missingFields');
+
+  const linkText = t(langKey, {
+    count: Number(pathParts[1]) + 1,
+    alueName: getValues(`alueet.${pathParts[1]}.nimi` as FieldPath<HankeDataFormState>),
+  });
+
+  return (
+    <li key={errorPath}>
+      <Link href={`#${errorPath}`} disableVisitedStyles>
+        {linkText}
+      </Link>
+    </li>
+  );
 }

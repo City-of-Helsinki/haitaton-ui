@@ -236,3 +236,140 @@ describe('Canceling taydennys', () => {
     expect(window.location.pathname).toBe('/fi/hakemus/11');
   });
 });
+
+describe('Error notification', () => {
+  test('Should show fields with errors in notification in perustiedot page', async () => {
+    setup();
+
+    expect(
+      screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
+    ).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText(/työn nimi/i), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByLabelText(/katuosoite/i), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
+      target: { value: '' },
+    });
+    fireEvent.click(screen.getByLabelText(/uuden rakenteen tai johdon rakentamisesta/i));
+    fireEvent.click(screen.getByLabelText(/olemassaolevan rakenteen kunnossapitotyöstä/i));
+
+    expect(
+      await screen.findByText(
+        'Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /työn nimi/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /katuosoite/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /työn kuvaus/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /työssä on kyse/i })).toBeInTheDocument();
+  });
+
+  test('Should show fields with errors in notification in alueet page', async () => {
+    const { user } = setup();
+
+    await user.click(screen.getByRole('button', { name: /alueet/i }));
+
+    expect(
+      screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
+    ).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText(/työn arvioitu alkupäivä/i), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByLabelText(/työn arvioitu loppupäivä/i), {
+      target: { value: '' },
+    });
+
+    expect(
+      await screen.findByText(
+        'Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /työn arvioitu alkupäivä/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /työn arvioitu loppupäivä/i })).toBeInTheDocument();
+  });
+
+  test('Should show fields with errors in notification in yhteystiedot page', async () => {
+    const { user } = setup();
+
+    await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+    expect(
+      screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
+    ).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[0], {
+      target: { value: '' },
+    });
+    fireEvent.change(
+      screen.getByTestId('applicationData.customerWithContacts.customer.registryKey'),
+      {
+        target: { value: '123' },
+      },
+    );
+    fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.email'), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.phone'), {
+      target: { value: '' },
+    });
+    fireEvent.click(screen.getAllByRole('button', { name: /poista valittu/i })[0]);
+
+    expect(
+      await screen.findByText(
+        'Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', {
+        name: /työstä vastaava: Vähintään yksi yhteyshenkilö tulee olla asetettuna/i,
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työstä vastaava: Sähköposti/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työstä vastaava: Puhelin/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työstä vastaava: Nimi/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työstä vastaava: Y-tunnus/i })).toBeInTheDocument();
+  });
+
+  test('Should show pages that have errors in summary page', async () => {
+    const applicationData = cloneDeep(
+      hakemukset[10] as Application<JohtoselvitysData>,
+    ).applicationData;
+    const { user } = setup({
+      taydennys: {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: {
+          ...applicationData,
+          workDescription: '',
+          startTime: null,
+          customerWithContacts: {
+            ...applicationData.customerWithContacts,
+            customer: {
+              ...applicationData.customerWithContacts!.customer,
+              name: '',
+              registryKey: '123',
+              email: '',
+              phone: '',
+            },
+            contacts: [],
+          },
+        },
+        muutokset: [],
+      },
+    });
+    await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+
+    expect(
+      await screen.findByText(
+        'Seuraavissa vaiheissa on puuttuvia tietoja hakemuksen lähettämiseksi:',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
+    expect(screen.getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
+    expect(screen.getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
+  });
+});

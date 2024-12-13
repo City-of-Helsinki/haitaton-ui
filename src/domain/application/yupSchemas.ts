@@ -1,4 +1,5 @@
 import yup from '../../common/utils/yup';
+import { FORM_PAGES } from '../forms/types';
 import { ApplicationType, ContactType, PostalAddress } from './types/application';
 
 const contactSchema = yup
@@ -27,14 +28,23 @@ export const registryKeySchema = yup
         is: (value: boolean) => !value,
         then: (personalIdSchema) => personalIdSchema.personalId(),
       }),
-  });
+  })
+  .meta({ pageName: FORM_PAGES.YHTEYSTIEDOT });
 
-export const customerSchema = contactSchema.omit(['firstName', 'lastName']).shape({
+export const customerSchema = yup.object({
   yhteystietoId: yup.string().nullable(),
-  name: yup.string().trim().max(100).required(),
   type: yup.mixed<ContactType>().nullable().required(),
+  name: yup.string().trim().max(100).required().meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
   registryKey: registryKeySchema,
   registryKeyHidden: yup.boolean().required().default(false),
+  email: yup
+    .string()
+    .trim()
+    .email()
+    .max(100)
+    .required()
+    .meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
+  phone: yup.string().phone().trim().max(20).required().meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
 });
 
 export const customerWithContactsSchema = yup.object({
@@ -43,7 +53,8 @@ export const customerWithContactsSchema = yup.object({
     .array(contactSchema)
     .transform((value) => (value === null ? [] : value))
     .defined()
-    .min(1, ({ min }) => ({ key: 'yhteyshenkilotMin', values: { min } })),
+    .min(1, ({ min }) => ({ key: 'yhteyshenkilotMin', values: { min } }))
+    .meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
 });
 
 const postalAddressSchema = yup.object({

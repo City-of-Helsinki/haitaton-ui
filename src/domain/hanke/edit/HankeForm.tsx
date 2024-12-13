@@ -30,11 +30,11 @@ import ApplicationAddDialog from '../../application/components/ApplicationAddDia
 import { useGlobalNotification } from '../../../common/components/globalNotification/GlobalNotificationContext';
 import { changeFormStep, getFieldPaths } from '../../forms/utils';
 import { updateHanke } from './hankeApi';
-import { convertHankeAlueToFormState } from './utils';
+import { convertHankeAlueToFormState, mapValidationErrorToErrorListItem } from './utils';
 import { useValidationErrors } from '../../forms/hooks/useValidationErrors';
-import HankeDraftStateNotification from './components/HankeDraftStateNotification';
-import HankeFormMissingFieldsNotification from './components/MissingFieldsNotification';
 import DrawProvider from '../../../common/components/map/modules/draw/DrawProvider';
+import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
+import FormFieldsErrorSummary from '../../forms/components/FormFieldsErrorSummary';
 
 type Props = {
   formData: HankeDataFormState;
@@ -254,20 +254,26 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const formErrorsNotification =
     (activeStepIndex === 5 && (
-      <HankeDraftStateNotification hanke={watchFormValues as HankeData} />
+      <FormPagesErrorSummary
+        data={watchFormValues}
+        schema={hankeSchema}
+        notificationLabel={t('hankePortfolio:draftState:labels:insufficientPhases')}
+      />
     )) ||
     (formErrorsByPage[activeStepIndex].length > 0 && (
-      <HankeFormMissingFieldsNotification
-        formErrors={formErrorsByPage[activeStepIndex]}
-        getValues={getValues}
-        notificationLabelKey={
+      <FormFieldsErrorSummary
+        notificationLabel={
           activeStepIndex === 2 &&
           haittojenHallintaErrors.length === 1 &&
           haittojenHallintaErrors[0].path === 'alueet'
-            ? 'hankePortfolio:draftState:labels:missingInformationForHaittojenhallinta'
-            : undefined
+            ? t('hankePortfolio:draftState:labels:missingInformationForHaittojenhallinta')
+            : t('hankePortfolio:draftState:labels:missingFields')
         }
-      />
+      >
+        {formErrorsByPage[activeStepIndex].map((error) =>
+          mapValidationErrorToErrorListItem(error, t, getValues),
+        )}
+      </FormFieldsErrorSummary>
     ));
 
   // Fields to validate when changing step.
@@ -314,7 +320,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
           onStepChange={handleStepChange}
           isLoading={attachmentsUploading}
           isLoadingText={attachmentsUploadingText}
-          formErrorsNotification={formErrorsNotification}
+          topElement={formErrorsNotification}
           formData={watchFormValues}
           stepChangeValidator={validateStepChange}
         >
