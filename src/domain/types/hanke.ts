@@ -1,6 +1,7 @@
 import { PartialExcept } from '../../common/types/utils';
 import { HankeGeoJSON } from '../../common/types/hanke';
 import { HaittaIndexData } from '../common/haittaIndexes/types';
+import { Haittojenhallintasuunnitelma } from '../common/haittojenhallinta/types';
 
 export enum HANKE_VAIHE {
   OHJELMOINTI = 'OHJELMOINTI',
@@ -87,16 +88,6 @@ export enum HANKE_TARINAHAITTA {
 }
 export type HANKE_TARINAHAITTA_KEY = keyof typeof HANKE_TARINAHAITTA;
 
-export enum HAITTOJENHALLINTATYYPPI {
-  YLEINEN = 'YLEINEN',
-  PYORALIIKENNE = 'PYORALIIKENNE',
-  AUTOLIIKENNE = 'AUTOLIIKENNE',
-  RAITIOLIIKENNE = 'RAITIOLIIKENNE',
-  LINJAAUTOLIIKENNE = 'LINJAAUTOLIIKENNE',
-  MUUT = 'MUUT',
-}
-export type HAITTOJENHALLINTATYYPPI_KEY = keyof typeof HAITTOJENHALLINTATYYPPI;
-
 export enum HANKE_CONTACT_TYPE {
   OMISTAJAT = 'omistajat',
   RAKENNUTTAJAT = 'rakennuttajat',
@@ -161,10 +152,6 @@ export type HankeGeometria = {
   modifiedByUserId?: string | null;
 };
 
-export type HankkeenHaittojenhallintasuunnitelma = {
-  [key in HAITTOJENHALLINTATYYPPI_KEY]?: string;
-};
-
 export type HankeAlue = {
   id: number | null;
   hankeId?: number;
@@ -178,7 +165,7 @@ export type HankeAlue = {
   tarinaHaitta: HANKE_TARINAHAITTA_KEY | null;
   nimi?: string | null;
   tormaystarkasteluTulos?: HaittaIndexData | null;
-  haittojenhallintasuunnitelma?: HankkeenHaittojenhallintasuunnitelma;
+  haittojenhallintasuunnitelma?: Haittojenhallintasuunnitelma;
 };
 
 enum HANKE_STATUS {

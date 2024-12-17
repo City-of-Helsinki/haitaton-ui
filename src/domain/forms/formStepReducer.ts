@@ -18,7 +18,9 @@ export function createStepReducer(totalSteps: number) {
                 ...step,
                 state:
                   !step.validationSchema ||
-                  step.validationSchema.isValidSync(action.payload.formData)
+                  step.validationSchema.isValidSync(action.payload.formData, {
+                    context: step.context,
+                  })
                     ? StepState.completed
                     : StepState.attention,
               };
@@ -49,7 +51,9 @@ export function createStepReducer(totalSteps: number) {
                 ...step,
                 state:
                   !step.validationSchema ||
-                  step.validationSchema.isValidSync(action.payload.formData)
+                  step.validationSchema.isValidSync(action.payload.formData, {
+                    context: step.context,
+                  })
                     ? StepState.completed
                     : StepState.attention,
               };

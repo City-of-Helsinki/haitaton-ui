@@ -1070,6 +1070,30 @@
     },
     "yhteenveto": {
       "instructions": "Tarkista antamasi tiedot ja lähetä ilmoitus käsittelyyn."
+    },
+    "haittojenHallinta": {
+      "instructions": "Työsi saattaa aiheuttaa eri kulkumuodoille ja paikallisille toiminnoille haittoja. Haitaton laskee automaattisesti hanke- ja työalueittain haitan merkittävyyden arvon erikseen pyöräliikenteelle, raitioliikenteelle, linja-autojen paikallisliikenteelle sekä autoliikenteelle. Liikennehaittaindeksi kuvaa hankealueen pahimman tilanteen em. kulkumuotojen osalta.",
+      "instructions2": "Haittoja kuvataan jokaiselle kulkumuodolle määritellyllä asteikolla numeroin ja värein (0/harmaa = ei tunnistettu, 1-2/vihreä = ei merkittävää haittaa, 3/keltainen = todennäköinen haitta, 4-5/punainen = merkittävä haitta). Muut kuin em. kulkumuotoja koskevat tulokset esitetään pelkästään numeroin (0-5).",
+      "instructions3": "$t(hankeForm:haittojenHallintaForm:instructions2)",
+      "instructions4": "Tarkenna haittojenhallintasuunnitelmassa, millä toimenpiteillä hallitset työalueitasi koskevat haitat. Hankealueille määritellyt haittojenhallintatoimet näkyvät työalueiden suunnitelman pohjana. Muistathan käydä läpi kaikki työalueet.",
+      "nuisanceControlPlanSubHeader": "$t(hankeForm:haittojenHallintaForm:nuisanceControlPlanSubHeader)",
+      "helperText": "Työalueilla tehtävät tai sovitut toimet haittojen hallitsemiseksi tai estämiseksi",
+      "haittaindeksi": "Työalueiden haittaindeksi",
+      "labels": {
+        "YLEINEN": "Toimet työalueiden haittojen hallintaan",
+        "PYORALIIKENNE": "Toimet työalueiden haittojen hallintaan",
+        "AUTOLIIKENNE": "Toimet työalueiden haittojen hallintaan",
+        "LINJAAUTOLIIKENNE": "Toimet työalueiden haittojen hallintaan",
+        "RAITIOLIIKENNE": "Toimet työalueiden haittojen hallintaan",
+        "MUUT": "Toimet työalueiden haittojen hallintaan"
+      },
+      "carTrafficNuisanceType": {
+        "katuluokka": "$t(hankeForm:haittojenHallintaForm:carTrafficNuisanceType:katuluokka)",
+        "liikennemaara": "$t(hankeForm:haittojenHallintaForm:carTrafficNuisanceType:liikennemaara)",
+        "kaistahaitta": "$t(hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistahaitta)",
+        "kaistapituushaitta": "$t(hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistapituushaitta)",
+        "haitanKesto": "Työn kesto"
+      }
     }
   },
   "hakemus": {
@@ -1403,6 +1427,7 @@
       "autoKaistaHaitta": "<ul><li>0: Ei vaikutusta autoliikenteen kaistamääriin</li><li>1: $t(hanke:kaistaHaitta:YKSI_KAISTA_VAHENEE)</li><li>2: $t(hanke:kaistaHaitta:YKSI_KAISTA_VAHENEE_KAHDELLA_AJOSUUNNALLA)</li><li>3: $t(hanke:kaistaHaitta:USEITA_KAISTOJA_VAHENEE_AJOSUUNNILLA)</li><li>4: $t(hanke:kaistaHaitta:YKSI_AJOSUUNTA_POISTUU_KAYTOSTA)</li><li>5: $t(hanke:kaistaHaitta:USEITA_AJOSUUNTIA_POISTUU_KAYTOSTA)</li></ul>",
       "autoKaistaPituusHaitta": "<ul><li>1: Ei vaikuta kaistajärjestelyihin</li><li>2: Kaistavaikutusten pituus alle 10 m</li><li>3: Kaistavaikutusten pituus 10-99 m</li><li>4: Kaistavaikutusten pituus 100-499 m</li><li>5: Kaistavaikutusten pituus 500 m tai enemmän</li></ul>",
       "autoHankkeenKesto": "<ul><li>1: Hankkeen kesto alle 2 viikkoa</li><li>3: Hankkeen kesto 2 viikkoa - 3 kuukautta</li><li>5: Hankkeen kesto yli 3 kuukautta</li></ul>",
+      "autoTyonKesto": "<ul><li>1: Työn kesto alle 2 viikkoa</li><li>3: Työn kesto 2 viikkoa - 3 kuukautta</li><li>5: Työn kesto yli 3 kuukautta</li></ul>",
       "LINJAAUTOLIIKENNE": "<ul><li>0: Ei linja-autojen paikallisliikennettä</li><li>2: Linja-autojen paikallisliikennettä muulloin, kuin ruuhka-aikana</li><li>3: Linja-autojen paikallisliikenteen linjojen vuoromäärä enintään 10 ruuhkatunnissa</li><li>4: Linja-autojen paikallisliikenteen runkolinja tai vuoromäärä enintään 20 ruuhkatunnissa</li><li>5: Kamppi-Rautatientori -alue, Mannerheimintie, Kaisaniemenkatu, Hämeentie tai linja-autojen paikallisliikenteen linjojen vuoromäärä yli 20 ruuhkatunnissa</li></ul>",
       "RAITIOLIIKENNE": "<ul><li>0: Ei tunnistettuja raitiotiekiskoja</li><li>3: Raitiotieverkon rataosa, joilla ei ole säännöllistä linjaliikennettä</li><li>5: Raitiotieverkon rataosa, jolla on säännöllistä linjaliikennettä</li></ul>",
       "MUUT": {

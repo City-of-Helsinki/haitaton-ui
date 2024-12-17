@@ -26,6 +26,7 @@ import {
   yhteystiedotSchema,
   liitteetSchema,
   alueetSchema,
+  haittojenhallintaSuunnitelmaSchema,
 } from './validationSchema';
 import { useApplicationsForHanke } from '../application/hooks/useApplications';
 import {
@@ -52,6 +53,7 @@ import { isApplicationDraft, isContactIn } from '../application/utils';
 import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import useSendApplication from '../application/hooks/useSendApplication';
 import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
+import HaittojenHallinta from './HaittojenHallinta';
 
 type Props = {
   hankeData: HankeData;
@@ -100,6 +102,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     mode: 'onTouched',
     defaultValues: merge(initialValues, convertApplicationDataToFormState(application)),
     resolver: yupResolver(validationSchema),
+    context: { application },
   });
   const {
     getValues,
@@ -268,6 +271,8 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     ['applicationData.name'],
     // Areas page
     ['selfIntersectingPolygon'],
+    // Haittojenhallinta page
+    [],
     // Contacts page
     [
       'applicationData.customerWithContacts.customer.registryKey',
@@ -299,6 +304,13 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       label: t('form:headers:alueet'),
       state: StepState.available,
       validationSchema: alueetSchema,
+    },
+    {
+      element: <HaittojenHallinta />,
+      label: t('hankeForm:haittojenHallintaForm:header'),
+      state: StepState.available,
+      validationSchema: haittojenhallintaSuunnitelmaSchema,
+      context: { application },
     },
     {
       element: <Contacts hankeTunnus={hankeData.hankeTunnus} />,

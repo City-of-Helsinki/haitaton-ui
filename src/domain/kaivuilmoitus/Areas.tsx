@@ -65,6 +65,7 @@ function getEmptyArea(
       tarinahaitta: hankeAlue.tarinaHaitta,
       kaistahaitta: hankeAlue.kaistaHaitta,
       kaistahaittojenPituus: hankeAlue.kaistaPituusHaitta,
+      haittojenhallintasuunnitelma: {},
     },
     tyoalue,
   ];
@@ -565,6 +566,10 @@ export default function Areas({ hankeData, hankkeenHakemukset }: Readonly<Props>
                       wathcApplicationAreas &&
                       calculateLiikennehaittaindeksienYhteenveto(wathcApplicationAreas[index])
                     }
+                    autoHaitanKestoHeading={t(
+                      'kaivuilmoitusForm:haittojenHallinta:carTrafficNuisanceType:haitanKesto',
+                    )}
+                    autoHaitanKestoTooltipTranslationKey="hankeIndexes:tooltips:autoTyonKesto"
                   />
                 </Box>
               </TabPanel>

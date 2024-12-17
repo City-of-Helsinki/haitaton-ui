@@ -2,12 +2,7 @@ import { http, HttpResponse, delay } from 'msw';
 import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
-import {
-  HANKE_VAIHE,
-  HANKE_TYOMAATYYPPI,
-  HankeData,
-  HankkeenHaittojenhallintasuunnitelma,
-} from '../../types/hanke';
+import { HANKE_VAIHE, HANKE_TYOMAATYYPPI, HankeData } from '../../types/hanke';
 import { render, cleanup, fireEvent, waitFor, screen, within } from '../../../testUtils/render';
 import hankkeet from '../../mocks/data/hankkeet-data';
 import { server } from '../../mocks/test-server';
@@ -21,6 +16,7 @@ import { Feature } from 'ol';
 import { Polygon } from 'ol/geom';
 import { waitForElementToBeRemoved } from '@testing-library/react';
 import { PathParams } from 'msw/lib/core/utils/matching/matchRequestUrl';
+import { Haittojenhallintasuunnitelma } from '../../common/haittojenhallinta/types';
 
 afterEach(cleanup);
 
@@ -361,12 +357,12 @@ describe('HankeForm', () => {
 
   test('Nuisance control plan is updated correctly', async () => {
     const { user } = await setupHaittojenHallintaPage();
-    let haittojenhallintasuunnitelma: HankkeenHaittojenhallintasuunnitelma;
+    let haittojenhallintasuunnitelma: Haittojenhallintasuunnitelma;
     server.use(
       http.put<PathParams, HankeData>('/api/hankkeet/:hankeTunnus', async ({ request }) => {
         const hankeData = await request.json();
         haittojenhallintasuunnitelma = hankeData.alueet[0]
-          .haittojenhallintasuunnitelma as HankkeenHaittojenhallintasuunnitelma;
+          .haittojenhallintasuunnitelma as Haittojenhallintasuunnitelma;
         return HttpResponse.json<HankeData>(hankeData);
       }),
     );
