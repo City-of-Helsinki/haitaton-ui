@@ -386,4 +386,13 @@ export const handlers = [
     await hakemuksetDB.cancelTaydennys(id as string);
     return new HttpResponse();
   }),
+
+  http.post(`${apiUrl}/taydennykset/:id/liitteet`, async () => {
+    await delay(500);
+    return new HttpResponse();
+  }),
+
+  http.delete(`${apiUrl}/taydennykset/:id/liitteet/:attachmentId`, async () => {
+    return new HttpResponse();
+  }),
 ];

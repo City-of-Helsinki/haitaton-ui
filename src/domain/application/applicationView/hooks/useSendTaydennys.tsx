@@ -27,7 +27,7 @@ export default function useSendTaydennys(
     application.alluStatus === AlluStatus.WAITING_INFORMATION &&
     isTaydennysValid &&
     application.taydennys &&
-    application.taydennys.muutokset.length > 0;
+    (application.taydennys.muutokset.length > 0 || application.taydennys.liitteet.length > 0);
   const [showSendTaydennysDialog, setShowSendTaydennysDialog] = useState(false);
   const sendTaydennysMutation = useSendTaydennysMutation();
   const isContact =

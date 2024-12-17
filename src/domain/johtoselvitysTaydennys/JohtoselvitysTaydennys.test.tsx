@@ -1,14 +1,33 @@
 import { cloneDeep } from 'lodash';
 import { HttpResponse, http } from 'msw';
-import { fireEvent, render, screen } from '../../testUtils/render';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+  within,
+} from '../../testUtils/render';
 import JohtoselvitysTaydennysContainer from './JohtoselvitysTaydennysContainer';
-import { Application, JohtoselvitysData } from '../application/types/application';
+import {
+  Application,
+  ApplicationAttachmentMetadata,
+  AttachmentType,
+  JohtoselvitysData,
+} from '../application/types/application';
 import { HankeData } from '../types/hanke';
 import hankkeet from '../mocks/data/hankkeet-data';
 import hakemukset from '../mocks/data/hakemukset-data';
 import { server } from '../mocks/test-server';
-import { Taydennys } from '../application/taydennys/types';
+import { Taydennys, TaydennysAttachmentMetadata } from '../application/taydennys/types';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
+import api from '../api/api';
+import * as taydennysAttachmentsApi from '../application/taydennys/taydennysAttachmentsApi';
+import * as applicationAttachmentsApi from '../application/attachments';
+import { createApplicationAttachments, createTaydennysAttachments } from '../mocks/attachments';
+
+const applicationAttachments = createApplicationAttachments(11, 2);
+const taydennysAttachments = createTaydennysAttachments('c0a1fe7b-326c-4b25-a7bc-d1797762c01c', 2);
 
 function setup(
   options: {
@@ -24,6 +43,7 @@ function setup(
       id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
       applicationData: application.applicationData,
       muutokset: [],
+      liitteet: [],
     },
     hankeData = hankkeet[1] as HankeData,
     responseStatus = 200,
@@ -124,6 +144,7 @@ describe('Sending taydennys', () => {
         applicationData: cloneDeep(hakemukset[10] as Application<JohtoselvitysData>)
           .applicationData,
         muutokset: ['name'],
+        liitteet: [],
       },
     });
     await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
@@ -141,6 +162,7 @@ describe('Sending taydennys', () => {
         applicationData: cloneDeep(hakemukset[10] as Application<JohtoselvitysData>)
           .applicationData,
         muutokset: ['name'],
+        liitteet: [],
       },
       responseStatus: 500,
     });
@@ -158,6 +180,7 @@ describe('Sending taydennys', () => {
         applicationData: cloneDeep(hakemukset[10] as Application<JohtoselvitysData>)
           .applicationData,
         muutokset: [],
+        liitteet: [],
       },
     });
     await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
@@ -172,6 +195,7 @@ describe('Sending taydennys', () => {
         applicationData: cloneDeep(hakemukset[10] as Application<JohtoselvitysData>)
           .applicationData,
         muutokset: ['workDescription'],
+        liitteet: [],
       },
     });
 
@@ -201,6 +225,7 @@ describe('Sending taydennys', () => {
         applicationData: cloneDeep(hakemukset[10] as Application<JohtoselvitysData>)
           .applicationData,
         muutokset: ['name'],
+        liitteet: [],
       },
     });
 
@@ -223,6 +248,7 @@ describe('Canceling taydennys', () => {
       id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
       applicationData: application.applicationData,
       muutokset: [],
+      liitteet: [],
     };
     const { user } = setup({
       application,
@@ -359,6 +385,7 @@ describe('Error notification', () => {
           },
         },
         muutokset: [],
+        liitteet: [],
       },
     });
     await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
@@ -371,5 +398,113 @@ describe('Error notification', () => {
     expect(screen.getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
     expect(screen.getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
     expect(screen.getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
+  });
+});
+
+describe('Taydennys attachments', () => {
+  async function uploadAttachmentMock({
+    taydennysId,
+    attachmentType,
+    file,
+    abortSignal,
+  }: {
+    taydennysId: string;
+    attachmentType: AttachmentType;
+    file: File;
+    abortSignal?: AbortSignal;
+  }) {
+    const { data } = await api.post<TaydennysAttachmentMetadata>(
+      `/taydennykset/${taydennysId}/liitteet?tyyppi=${attachmentType}`,
+      { liite: file },
+      {
+        signal: abortSignal,
+      },
+    );
+    return data;
+  }
+
+  function initFileGetResponse(response: ApplicationAttachmentMetadata[]) {
+    server.use(
+      http.get('/api/hakemukset/:id/liitteet', async () => {
+        return HttpResponse.json(response);
+      }),
+    );
+  }
+
+  test('Should be able to upload attachments', async () => {
+    const uploadSpy = jest
+      .spyOn(taydennysAttachmentsApi, 'uploadAttachment')
+      .mockImplementation(uploadAttachmentMock);
+    initFileGetResponse([]);
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: /liitteet/i }));
+    const fileUpload = await screen.findByLabelText('Raahaa tiedostot tänne');
+    await user.upload(fileUpload, [
+      new File(['test-a'], 'test-file-a.pdf', { type: 'application/pdf' }),
+      new File(['test-b'], 'test-file-b.pdf', { type: 'application/pdf' }),
+    ]);
+
+    await waitForElementToBeRemoved(() => screen.queryAllByText(/Tallennetaan tiedostoja/i), {
+      timeout: 10000,
+    });
+    await waitFor(
+      () => {
+        expect(screen.queryByText('2/2 tiedosto(a) tallennettu')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+    expect(uploadSpy).toHaveBeenCalledTimes(2);
+  });
+
+  test('Should be able to delete attachments', async () => {
+    const fileName = taydennysAttachments[0].fileName;
+    initFileGetResponse([]);
+    const { user } = setup({
+      taydennys: {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: cloneDeep(hakemukset[10] as Application<JohtoselvitysData>)
+          .applicationData,
+        muutokset: [],
+        liitteet: taydennysAttachments,
+      },
+    });
+    await user.click(screen.getByRole('button', { name: /liitteet/i }));
+
+    taydennysAttachments.forEach((attachment) => {
+      expect(screen.getByText(attachment.fileName)).toBeInTheDocument();
+    });
+
+    const { getAllByRole } = within(await screen.findByTestId('file-upload-list'));
+    const fileListItems = getAllByRole('listitem');
+    const fileItem = fileListItems.find((i) => i.innerHTML.includes(fileName));
+    const { getByRole } = within(fileItem!);
+    await user.click(getByRole('button', { name: 'Poista' }));
+    const { getByRole: getByRoleInDialog, getByText: getByTextInDialog } = within(
+      await screen.findByRole('dialog'),
+    );
+
+    expect(
+      getByTextInDialog(`Haluatko varmasti poistaa liitetiedoston ${fileName}`),
+    ).toBeInTheDocument();
+    await user.click(getByRoleInDialog('button', { name: 'Poista' }));
+    expect(screen.getByText(`Liitetiedosto ${fileName} poistettu`)).toBeInTheDocument();
+  });
+
+  test('Should show original application attachments in attachments page', async () => {
+    const fetchContentMock = jest
+      .spyOn(applicationAttachmentsApi, 'getAttachmentFile')
+      .mockImplementation(jest.fn());
+    initFileGetResponse(applicationAttachments);
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: /liitteet/i }));
+
+    expect(screen.getByText('Alkuperäiset liitteet')).toBeInTheDocument();
+    applicationAttachments.forEach((attachment) => {
+      expect(screen.getByText(attachment.fileName)).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByText(applicationAttachments[0].fileName));
+
+    expect(fetchContentMock).toHaveBeenCalledWith(11, applicationAttachments[0].id);
   });
 });

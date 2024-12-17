@@ -41,6 +41,7 @@ describe('Sidebar', () => {
           ],
         },
         muutokset: ['areas[1]'],
+        liitteet: [],
       };
       const { user } = render(<Sidebar hanke={hanke} application={application} />);
 

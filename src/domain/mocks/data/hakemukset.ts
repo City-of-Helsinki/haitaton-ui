@@ -151,6 +151,7 @@ export async function createTaydennys(id: number) {
     id: faker.string.uuid(),
     applicationData: cloneDeep(hakemus.applicationData),
     muutokset: [],
+    liitteet: [],
   };
   hakemus.taydennys = taydennys;
   return taydennys;

@@ -89,6 +89,7 @@ import useSendTaydennys from './hooks/useSendTaydennys';
 import Sidebar from './Sidebar';
 import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
 import TaydennysCancel from '../taydennys/components/TaydennysCancel';
+import TaydennysAttachmentsList from '../taydennys/components/TaydennysAttachmentsList';
 
 function TyoalueetList({ tyoalueet }: { tyoalueet: ApplicationArea[] }) {
   const { t } = useTranslation();
@@ -809,17 +810,22 @@ function ApplicationView({
             </TabPanel>
             <TabPanel>
               {applicationType === 'EXCAVATION_NOTIFICATION' ? (
-                <SectionTitle>{t('form:headers:liitteetJaLisatiedot')}</SectionTitle>
-              ) : (
-                <SectionTitle>{t('hankePortfolio:tabit:liitteet')}</SectionTitle>
-              )}
-              {applicationType === 'EXCAVATION_NOTIFICATION' ? (
                 <KaivuilmoitusAttachmentSummary
                   formData={application as Application<KaivuilmoitusData>}
                   attachments={attachments}
                 />
-              ) : attachments && attachments.length > 0 ? (
-                <AttachmentSummary attachments={attachments} />
+              ) : attachments ? (
+                <AttachmentSummary
+                  attachments={attachments}
+                  children={
+                    taydennys?.liitteet &&
+                    taydennys.liitteet.length > 0 && (
+                      <SectionItemContentAdded mt="var(--spacing-xs)">
+                        <TaydennysAttachmentsList attachments={taydennys.liitteet} />
+                      </SectionItemContentAdded>
+                    )
+                  }
+                />
               ) : null}
             </TabPanel>
           </Tabs>

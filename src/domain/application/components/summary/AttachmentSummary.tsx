@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   FormSummarySection,
@@ -11,9 +10,10 @@ import { getAttachmentFile } from '../../attachments';
 
 type Props = {
   attachments: ApplicationAttachmentMetadata[];
+  children?: React.ReactNode;
 };
 
-function AttachmentSummary({ attachments }: Props) {
+function AttachmentSummary({ attachments, children }: Readonly<Props>) {
   const { t } = useTranslation();
 
   const download = (file: ApplicationAttachmentMetadata) =>
@@ -24,6 +24,7 @@ function AttachmentSummary({ attachments }: Props) {
       <SectionItemTitle>{t('hankePortfolio:tabit:liitteet')}</SectionItemTitle>
       <SectionItemContent>
         <FileDownloadList files={attachments} download={download} />
+        {children}
       </SectionItemContent>
     </FormSummarySection>
   );
