@@ -385,6 +385,7 @@ describe('Error notification', () => {
           },
         },
         muutokset: [],
+        liitteet: [],
       },
     });
     await user.click(screen.getByRole('button', { name: /yhteenveto/i }));

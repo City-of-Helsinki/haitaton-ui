@@ -327,7 +327,10 @@ export default function JohtoselvitysTaydennysContainer({
           }
 
           const lastStep = activeStep === formSteps.length - 1;
-          const showSendButton = lastStep && taydennys.muutokset.length > 0 && isValid;
+          const showSendButton =
+            lastStep &&
+            isValid &&
+            (taydennys.muutokset.length > 0 || taydennys.liitteet.length > 0);
           const isContact = isContactIn(signedInUser, getValues('applicationData'));
           const disableSendButton = showSendButton && !isContact;
 
