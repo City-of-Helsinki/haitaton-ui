@@ -1,39 +1,35 @@
 import React, { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Box, Flex, HStack } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import { $enum } from 'ts-enum-util';
 import { FORMFIELD, HankeDataFormState } from '../types';
 import {
-  HAITTOJENHALLINTATYYPPI,
   HANKE_MELUHAITTA,
   HANKE_POLYHAITTA,
   HANKE_TARINAHAITTA,
   HankeData,
-  HankkeenHaittojenhallintasuunnitelma,
 } from '../../../types/hanke';
 import TextArea from '../../../../common/components/textArea/TextArea';
-import { sortedLiikenneHaittojenhallintatyyppi } from '../utils';
 import useFieldArrayWithStateUpdate from '../../../../common/hooks/useFieldArrayWithStateUpdate';
 import HankealueMap from '../../../map/components/HankkeenHaittojenhallintasuunnitelma/HankealueMap';
 import useAddressCoordinate from '../../../map/hooks/useAddressCoordinate';
 import { HaittaIndexData } from '../../../common/haittaIndexes/types';
 import CustomAccordion from '../../../../common/components/customAccordion/CustomAccordion';
-import HaittaIndex from '../../../common/haittaIndexes/HaittaIndex';
 import { HaittaSubSection } from '../../../common/haittaIndexes/HaittaSubSection';
 import styles from './Haittojenhallintasuunnitelma.module.scss';
 import ProcedureTips from '../../../common/haittaIndexes/ProcedureTips';
 import HaittaTooltipContent from '../../../common/haittaIndexes/HaittaTooltipContent';
 import { Button, IconPlusCircle } from 'hds-react';
-import Bus from '../../../../common/components/icons/Bus';
-import Car from '../../../../common/components/icons/Car';
-import Tram from '../../../../common/components/icons/Tram';
-import Bike from '../../../../common/components/icons/Bike';
-
-function mapNuisanceEnumIndexToNuisanceIndex(index: number): number {
-  if (index === 2) return 3;
-  if (index === 3) return 5;
-  return index;
-}
+import {
+  HAITTOJENHALLINTATYYPPI,
+  Haittojenhallintasuunnitelma,
+} from '../../../common/haittojenhallinta/types';
+import {
+  mapNuisanceEnumIndexToNuisanceIndex,
+  sortedLiikenneHaittojenhallintatyyppi,
+} from '../../../common/haittojenhallinta/utils';
+import TrafficIcon from '../../../common/haittojenhallinta/TrafficIcon';
+import HaittaIndexHeading from '../../../common/haittojenhallinta/HaittaIndexHeading';
 
 /**
  * Nuisance control plan section for a traffic type should be visible if its index > 0,
@@ -42,7 +38,7 @@ function mapNuisanceEnumIndexToNuisanceIndex(index: number): number {
 function shouldBeVisible(
   type: HAITTOJENHALLINTATYYPPI,
   index: number,
-  haittojenhallintasuunnitelma?: HankkeenHaittojenhallintasuunnitelma,
+  haittojenhallintasuunnitelma?: Haittojenhallintasuunnitelma,
 ): boolean {
   return (
     index > 0 ||
@@ -50,61 +46,12 @@ function shouldBeVisible(
   );
 }
 
-function HaittaIndexHeading({
-  index,
-  haittojenhallintaTyyppi,
-  showTooltipHeading = true,
-  testId,
-}: Readonly<{
-  index: number | undefined;
-  haittojenhallintaTyyppi: string;
-  showTooltipHeading?: boolean;
-  testId?: string;
-}>) {
-  const { t } = useTranslation();
-  return (
-    <HStack spacing="12px">
-      <Box as="h4" className="heading-s">
-        {t(`hankeIndexes:haittaindeksi`)}
-      </Box>
-      <HaittaIndex
-        index={index}
-        showLabel={false}
-        testId={testId}
-        tooltipContent={
-          <HaittaTooltipContent
-            translationKey={`hankeIndexes:tooltips:${haittojenhallintaTyyppi}`}
-            showHeading={showTooltipHeading}
-          />
-        }
-      />
-    </HStack>
-  );
-}
-
-function TrafficIcon({
-  haittojenhallintatyyppi,
-}: Readonly<{ haittojenhallintatyyppi: HAITTOJENHALLINTATYYPPI }>) {
-  switch (haittojenhallintatyyppi) {
-    case HAITTOJENHALLINTATYYPPI.LINJAAUTOLIIKENNE:
-      return <Bus />;
-    case HAITTOJENHALLINTATYYPPI.RAITIOLIIKENNE:
-      return <Tram />;
-    case HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE:
-      return <Car />;
-    case HAITTOJENHALLINTATYYPPI.PYORALIIKENNE:
-      return <Bike />;
-    default:
-      return <></>;
-  }
-}
-
 type Props = {
   hanke: HankeData;
   index: number;
 };
 
-const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index }) => {
+const HankkeenHaittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index }) => {
   const { t } = useTranslation();
   const { fields: hankealueet } = useFieldArrayWithStateUpdate<HankeDataFormState, 'alueet'>({
     name: FORMFIELD.HANKEALUEET,
@@ -340,4 +287,4 @@ const Haittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke, index 
   );
 };
 
-export default Haittojenhallintasuunnitelma;
+export default HankkeenHaittojenhallintasuunnitelma;

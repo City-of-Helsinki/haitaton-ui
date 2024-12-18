@@ -1,0 +1,208 @@
+import { useTranslation } from 'react-i18next';
+import { $enum } from 'ts-enum-util';
+import { Box, Flex } from '@chakra-ui/layout';
+import TextArea from '../../../common/components/textArea/TextArea';
+import { KaivuilmoitusAlue } from '../../application/types/application';
+import { HAITTOJENHALLINTATYYPPI } from '../../common/haittojenhallinta/types';
+import {
+  mapNuisanceEnumIndexToNuisanceIndex,
+  sortedLiikenneHaittojenhallintatyyppi,
+} from '../../common/haittojenhallinta/utils';
+import { calculateLiikennehaittaindeksienYhteenveto } from '../utils';
+import TrafficIcon from '../../common/haittojenhallinta/TrafficIcon';
+import CustomAccordion from '../../../common/components/customAccordion/CustomAccordion';
+import { HaittaSubSection } from '../../common/haittaIndexes/HaittaSubSection';
+import HaittaIndexHeading from '../../common/haittojenhallinta/HaittaIndexHeading';
+import HaittaTooltipContent from '../../common/haittaIndexes/HaittaTooltipContent';
+import { HANKE_MELUHAITTA, HANKE_POLYHAITTA, HANKE_TARINAHAITTA } from '../../types/hanke';
+import styles from './HaittojenhallintaSuunnitelma.module.scss';
+
+type Props = {
+  kaivuilmoitusAlue: KaivuilmoitusAlue;
+  index: number;
+};
+
+export default function KaivuilmoitusHaittojenhallintaSuunnitelma({
+  kaivuilmoitusAlue,
+  index,
+}: Readonly<Props>) {
+  const { t } = useTranslation();
+  const tormaystarkasteluTulos = calculateLiikennehaittaindeksienYhteenveto(kaivuilmoitusAlue);
+  const haittojenhallintatyypit = sortedLiikenneHaittojenhallintatyyppi(tormaystarkasteluTulos);
+  const meluhaittaIndex = mapNuisanceEnumIndexToNuisanceIndex(
+    $enum(HANKE_MELUHAITTA).indexOfKey(kaivuilmoitusAlue.meluhaitta!),
+  );
+  const polyhaittaIndex = mapNuisanceEnumIndexToNuisanceIndex(
+    $enum(HANKE_POLYHAITTA).indexOfKey(kaivuilmoitusAlue.polyhaitta!),
+  );
+  const tarinaHaittaIndex = mapNuisanceEnumIndexToNuisanceIndex(
+    $enum(HANKE_TARINAHAITTA).indexOfKey(kaivuilmoitusAlue.tarinahaitta!),
+  );
+
+  return (
+    <Box mt="var(--spacing-m)">
+      <Box mb="var(--spacing-m)">
+        <TextArea
+          name={`applicationData.areas.${index}.haittojenhallintasuunnitelma.${HAITTOJENHALLINTATYYPPI.YLEINEN}`}
+          label={t(`kaivuilmoitusForm:haittojenHallinta:labels:${HAITTOJENHALLINTATYYPPI.YLEINEN}`)}
+          testId={`applicationData.areas.${index}.haittojenhallintasuunnitelma.${HAITTOJENHALLINTATYYPPI.YLEINEN}`}
+          required={true}
+          helperText={t('kaivuilmoitusForm:haittojenHallinta:helperText')}
+        />
+      </Box>
+      {haittojenhallintatyypit.map(([haitta, indeksi]) => {
+        return (
+          <Box mb="var(--spacing-m)" key={haitta}>
+            <Flex
+              backgroundColor="var(--color-black-10)"
+              padding="var(--spacing-m)"
+              columnGap="var(--spacing-s)"
+              alignItems="center"
+              mb="var(--spacing-m)"
+            >
+              <TrafficIcon haittojenhallintatyyppi={haitta} />{' '}
+              <Box as="h4" className="heading-s">
+                {t(`hankeForm:haittojenHallintaForm:nuisanceType:${haitta}`)}
+              </Box>
+            </Flex>
+            <Box mb="var(--spacing-m)">
+              {haitta === HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE ? (
+                <CustomAccordion
+                  heading={
+                    <HaittaIndexHeading
+                      index={indeksi}
+                      haittojenhallintaTyyppi={haitta}
+                      heading={t('kaivuilmoitusForm:haittojenHallinta:haittaindeksi')}
+                      showTooltipHeading={false}
+                      testId="test-AUTOLIIKENNE"
+                    />
+                  }
+                  headingBorderBottom={false}
+                >
+                  <HaittaSubSection
+                    heading={t(
+                      `kaivuilmoitusForm:haittojenHallinta:carTrafficNuisanceType:katuluokka`,
+                    )}
+                    index={tormaystarkasteluTulos?.autoliikenne.katuluokka}
+                    testId="test-katuluokka"
+                    tooltipContent={
+                      <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoKatuluokka" />
+                    }
+                  />
+                  <HaittaSubSection
+                    heading={t(
+                      `kaivuilmoitusForm:haittojenHallinta:carTrafficNuisanceType:liikennemaara`,
+                    )}
+                    index={tormaystarkasteluTulos?.autoliikenne.liikennemaara}
+                    testId="test-liikennemaara"
+                    tooltipContent={
+                      <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoliikenneMaara" />
+                    }
+                  />
+                  <HaittaSubSection
+                    heading={t(
+                      `kaivuilmoitusForm:haittojenHallinta:carTrafficNuisanceType:kaistahaitta`,
+                    )}
+                    index={tormaystarkasteluTulos?.autoliikenne.kaistahaitta}
+                    testId="test-kaistahaitta"
+                    tooltipContent={
+                      <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoKaistaHaitta" />
+                    }
+                  />
+                  <HaittaSubSection
+                    heading={t(
+                      `kaivuilmoitusForm:haittojenHallinta:carTrafficNuisanceType:kaistapituushaitta`,
+                    )}
+                    index={tormaystarkasteluTulos?.autoliikenne.kaistapituushaitta}
+                    testId="test-kaistapituushaitta"
+                    tooltipContent={
+                      <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoKaistaPituusHaitta" />
+                    }
+                  />
+                  <HaittaSubSection
+                    heading={t(
+                      `kaivuilmoitusForm:haittojenHallinta:carTrafficNuisanceType:haitanKesto`,
+                    )}
+                    index={tormaystarkasteluTulos?.autoliikenne.haitanKesto}
+                    testId="test-haitanKesto"
+                    tooltipContent={
+                      <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoTyonKesto" />
+                    }
+                  />
+                </CustomAccordion>
+              ) : (
+                <HaittaIndexHeading
+                  index={indeksi}
+                  haittojenhallintaTyyppi={haitta}
+                  heading={t('kaivuilmoitusForm:haittojenHallinta:haittaindeksi')}
+                  testId={`test-${haitta}`}
+                />
+              )}
+            </Box>
+            <TextArea
+              name={`applicationData.areas.${index}.haittojenhallintasuunnitelma.${haitta}`}
+              label={t(`kaivuilmoitusForm:haittojenHallinta:labels:${haitta}`)}
+              testId={`applicationData.areas.${index}.haittojenhallintasuunnitelma.${haitta}`}
+              required={indeksi > 0}
+              helperText={t('kaivuilmoitusForm:haittojenHallinta:helperText')}
+            />
+          </Box>
+        );
+      })}
+      <div>
+        <Box
+          as="h4"
+          backgroundColor="var(--color-black-10)"
+          padding="var(--spacing-m)"
+          className="heading-s"
+        >
+          {t(`hankeForm:haittojenHallintaForm:nuisanceType:${HAITTOJENHALLINTATYYPPI.MUUT}`)}
+        </Box>
+        <HaittaSubSection
+          heading={t(`hankeForm:labels:meluHaittaShort`)}
+          index={meluhaittaIndex}
+          showColorByIndex={false}
+          className={styles.muutHaittojenHallintaToimetSubSection}
+          testId="test-meluHaitta"
+          tooltipContent={
+            <HaittaTooltipContent translationKey="hankeIndexes:tooltips:MUUT:meluHaitta" />
+          }
+        />
+        <HaittaSubSection
+          heading={t(`hankeForm:labels:polyHaittaShort`)}
+          index={polyhaittaIndex}
+          showColorByIndex={false}
+          className={styles.muutHaittojenHallintaToimetSubSection}
+          testId="test-polyHaitta"
+          tooltipContent={
+            <HaittaTooltipContent translationKey="hankeIndexes:tooltips:MUUT:polyHaitta" />
+          }
+        />
+        <HaittaSubSection
+          heading={t(`hankeForm:labels:tarinaHaittaShort`)}
+          index={tarinaHaittaIndex}
+          showColorByIndex={false}
+          className={styles.muutHaittojenHallintaToimetSubSection}
+          testId="test-tarinaHaitta"
+          tooltipContent={
+            <HaittaTooltipContent translationKey="hankeIndexes:tooltips:MUUT:tarinaHaitta" />
+          }
+        />
+        <HaittaSubSection
+          heading={t(`hankeForm:labels:checkSurrounding`)}
+          showIndex={false}
+          className={styles.muutHaittojenHallintaToimetSubSection}
+        />
+        <Box mt="var(--spacing-m)">
+          <TextArea
+            name={`applicationData.areas.${index}.haittojenhallintasuunnitelma.${HAITTOJENHALLINTATYYPPI.MUUT}`}
+            label={t(`kaivuilmoitusForm:haittojenHallinta:labels:${HAITTOJENHALLINTATYYPPI.MUUT}`)}
+            testId={`applicationData.areas.${index}.haittojenhallintasuunnitelma.${HAITTOJENHALLINTATYYPPI.MUUT}`}
+            required={true}
+            helperText={t('kaivuilmoitusForm:haittojenHallinta:helperText')}
+          />
+        </Box>
+      </div>
+    </Box>
+  );
+}

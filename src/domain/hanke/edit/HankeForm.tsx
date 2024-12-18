@@ -208,6 +208,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       label: t('hankeForm:haittojenHallintaForm:header'),
       state: StepState.available,
       validationSchema: haittojenhallintaPublicSchema,
+      context: { hanke: formData },
     },
     {
       element: <HankeFormYhteystiedot errors={errors} register={register} hanke={formValues} />,

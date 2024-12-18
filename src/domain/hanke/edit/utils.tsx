@@ -5,13 +5,7 @@ import { max, min } from 'date-fns';
 import { ValidationError } from 'yup';
 import { Link } from 'hds-react';
 import { FieldPath, UseFormGetValues } from 'react-hook-form';
-import {
-  HankeAlue,
-  HankeYhteystieto,
-  HankeDataDraft,
-  HankeMuuTaho,
-  HAITTOJENHALLINTATYYPPI,
-} from '../../types/hanke';
+import { HankeAlue, HankeYhteystieto, HankeDataDraft, HankeMuuTaho } from '../../types/hanke';
 import {
   FORMFIELD,
   HankeAlueFormState,
@@ -24,7 +18,6 @@ import { formatFeaturesToHankeGeoJSON, getFeatureFromHankeGeometry } from '../..
 import { getSurfaceArea } from '../../../common/components/map/utils';
 import { HankkeenHakemus } from '../../application/types/application';
 import { isApplicationCancelled, isApplicationPending } from '../../application/utils';
-import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../../common/haittaIndexes/types';
 import { TFunction } from 'i18next';
 
 function mapToAreaDates(areas: HankeAlue[] | undefined, key: 'haittaAlkuPvm' | 'haittaLoppuPvm') {
@@ -176,48 +169,6 @@ export function getAreaDefaultName(areas?: HankeAlueFormState[]) {
   const maxAreaNumber = areas.map(getAreaNumber).reduce((a, b) => Math.max(a, b), 0);
 
   return `Hankealue ${maxAreaNumber + 1}`;
-}
-
-/**
- * Sorts HAITTOJENHALLINTATYYPPI based on given tormaystarkasteluTulos.
- * For example, if tormaystarkasteluTulos has {autoliikenneindeksi: 1.0, pyoraliiikenneindeksi: 1.3, linjaautoliikenneindeksi: 0.0, raitioliikenneindeksi: 0.0},
- * the result will be [[PYORALIIKENNE, 1.3], [AUTOLIIKENNE, 1.0], [LINJAAUTOLIIKENNE, 0.0], [RAITIOLIIKENNE, 0.0]].
- */
-export function sortedLiikenneHaittojenhallintatyyppi(
-  tormaystarkasteluTulos: HaittaIndexData | undefined,
-): [HAITTOJENHALLINTATYYPPI, number][] {
-  const defaultOrder = Object.values(HAITTOJENHALLINTATYYPPI).filter(
-    (type) => type !== HAITTOJENHALLINTATYYPPI.YLEINEN && type !== HAITTOJENHALLINTATYYPPI.MUUT,
-  );
-  if (!tormaystarkasteluTulos) {
-    return defaultOrder.map((type) => [type, 0] as [HAITTOJENHALLINTATYYPPI, number]);
-  }
-
-  function keyOfIndexType(key: HAITTA_INDEX_TYPE): keyof HaittaIndexData {
-    if (key === HAITTA_INDEX_TYPE.AUTOLIIKENNEINDEKSI) {
-      return 'autoliikenne';
-    }
-    return key.toLowerCase() as keyof HaittaIndexData;
-  }
-
-  function value(v: number | { indeksi: number }): number {
-    return typeof v === 'number' ? v : v.indeksi;
-  }
-
-  const sortedIndices = Object.values(HAITTA_INDEX_TYPE)
-    .map((key) => ({
-      type: key.toUpperCase().replace('INDEKSI', '') as HAITTOJENHALLINTATYYPPI,
-      value: value(tormaystarkasteluTulos[keyOfIndexType(key)]),
-    }))
-    .sort((a, b): number => {
-      const diff = b.value - a.value;
-      if (diff === 0) {
-        return defaultOrder.indexOf(a.type) - defaultOrder.indexOf(b.type);
-      }
-      return diff;
-    });
-
-  return sortedIndices.map((item) => [item.type, item.value] as [HAITTOJENHALLINTATYYPPI, number]);
 }
 
 /**

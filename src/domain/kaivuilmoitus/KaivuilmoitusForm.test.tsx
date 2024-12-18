@@ -303,7 +303,7 @@ test('Should not be able to save form if work name is missing', async () => {
   await fillBasicInformation(user, { name: '' });
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
-  expect(screen.getByText('Vaihe 1/5: Perustiedot')).toBeInTheDocument();
+  expect(screen.getByText('Vaihe 1/6: Perustiedot')).toBeInTheDocument();
   expect(screen.queryAllByText('Kenttä on pakollinen').length).toBe(1);
 });
 
@@ -318,7 +318,7 @@ test('Should show error message if saving fails', async () => {
   await fillBasicInformation(user);
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
-  expect(screen.getByText('Vaihe 1/5: Perustiedot')).toBeInTheDocument();
+  expect(screen.getByText('Vaihe 1/6: Perustiedot')).toBeInTheDocument();
   expect(screen.getAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
 });
 
@@ -461,17 +461,17 @@ test('Should be able to fill form pages and show filled information in summary p
   expect(await screen.findByText(/hakemus tallennettu/i)).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
 
-  expect(await screen.findByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 2/6: Alueet')).toBeInTheDocument();
 
   fillAreasInformation({ start: startDate, end: endDate });
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-  expect(await screen.findByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 4/6: Yhteystiedot')).toBeInTheDocument();
 
   fillContactsInformation({ customer, contractor, invoicingCustomer });
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-  expect(await screen.findByText('Vaihe 4/5: Liitteet ja lisätiedot')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 5/6: Liitteet ja lisätiedot')).toBeInTheDocument();
 
   await fillAttachments(user, {
     trafficArrangementPlanFiles: [
@@ -483,7 +483,7 @@ test('Should be able to fill form pages and show filled information in summary p
   });
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-  expect(await screen.findByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 6/6: Yhteenveto')).toBeInTheDocument();
   // Basic information
   expect(screen.getByText(name)).toBeInTheDocument();
   expect(screen.getByText(description)).toBeInTheDocument();
@@ -1147,7 +1147,7 @@ test('Should show initial traffic nuisance index summary', async () => {
   await user.click(accordionHeader);
   expect(await screen.findByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3');
   expect(await screen.findByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
-  expect(await screen.findByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('4');
+  expect(await screen.findByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('0');
   expect(await screen.findByTestId('test-raitioliikenneindeksi')).toHaveTextContent('5');
 
   const carTrafficAccordion = await screen.findByText('Autoliikenteen ruuhkautuminen');
@@ -1660,5 +1660,105 @@ describe('Registry key', () => {
         await screen.findByTestId('applicationData.invoicingCustomer.registryKey'),
       ).toBeRequired();
     });
+  });
+});
+
+describe('Haittojenhallintasuunnitelma', () => {
+  async function setupHaittojenHallintaPage(
+    hankeData: HankeData = hankkeet[2] as HankeData,
+    application: Application<KaivuilmoitusData> = cloneDeep(
+      applications[4] as Application<KaivuilmoitusData>,
+    ),
+  ) {
+    const renderResult = render(
+      <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
+    );
+    await renderResult.user.click(screen.getByRole('button', { name: /haittojen hallinta/i }));
+    expect(await screen.findByText('Vaihe 3/6: Haittojen hallinta')).toBeInTheDocument();
+    return renderResult;
+  }
+
+  test('Nuisance control plan is shown correctly', async () => {
+    await setupHaittojenHallintaPage();
+
+    expect(screen.getByText('Yleisten haittojen hallintasuunnitelma')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.YLEINEN'),
+    ).toBeRequired();
+    expect(
+      screen.getByText('Pyöräliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('test-PYORALIIKENNE')).toHaveTextContent('3');
+    expect(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.PYORALIIKENNE'),
+    ).toBeRequired();
+    expect(
+      screen.getByText('Autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('test-AUTOLIIKENNE')).toHaveTextContent('3');
+    expect(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.AUTOLIIKENNE'),
+    ).toBeRequired();
+    expect(screen.getByText('Linja-autojen paikallisliikenne')).toBeInTheDocument();
+    expect(screen.queryByTestId('test-LINJAAUTOLIIKENNE')).toHaveTextContent('0');
+    expect(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE'),
+    ).not.toBeRequired();
+    expect(
+      screen.getByText('Raitioliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('test-RAITIOLIIKENNE')).toHaveTextContent('5');
+    expect(screen.getByText('Muiden haittojen hallintasuunnitelma')).toBeInTheDocument();
+    expect(screen.getByTestId('test-meluHaitta')).toHaveTextContent('3');
+    expect(screen.getByTestId('test-polyHaitta')).toHaveTextContent('5');
+    expect(screen.getByTestId('test-tarinaHaitta')).toHaveTextContent('5');
+  });
+
+  test('Nuisance control plan can be filled', async () => {
+    const updatedHaittojenhallintasuunnitelma = ', johon on lisätty tekstiä.';
+    const applicationUpdateSpy = jest.spyOn(applicationApi, 'updateApplication');
+    const { user } = await setupHaittojenHallintaPage();
+    await user.type(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.YLEINEN'),
+      updatedHaittojenhallintasuunnitelma,
+    );
+    await user.type(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.PYORALIIKENNE'),
+      updatedHaittojenhallintasuunnitelma,
+    );
+    await user.type(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.AUTOLIIKENNE'),
+      updatedHaittojenhallintasuunnitelma,
+    );
+    await user.type(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.RAITIOLIIKENNE'),
+      updatedHaittojenhallintasuunnitelma,
+    );
+    await user.type(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.MUUT'),
+      updatedHaittojenhallintasuunnitelma,
+    );
+    await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+    const data = applicationUpdateSpy.mock.lastCall?.[0].data as KaivuilmoitusData;
+
+    expect(data?.areas[0].haittojenhallintasuunnitelma?.YLEINEN).toBe(
+      'Yleisten haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    );
+    expect(data?.areas[0].haittojenhallintasuunnitelma?.PYORALIIKENNE).toBe(
+      'Pyöräliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    );
+    expect(data?.areas[0].haittojenhallintasuunnitelma?.AUTOLIIKENNE).toBe(
+      'Autoliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    );
+    expect(data?.areas[0].haittojenhallintasuunnitelma?.LINJAAUTOLIIKENNE).toBe('');
+    expect(data?.areas[0].haittojenhallintasuunnitelma?.RAITIOLIIKENNE).toBe(
+      'Raitioliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    );
+    expect(data?.areas[0].haittojenhallintasuunnitelma?.MUUT).toBe(
+      'Muiden haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    );
+
+    applicationUpdateSpy.mockClear();
   });
 });

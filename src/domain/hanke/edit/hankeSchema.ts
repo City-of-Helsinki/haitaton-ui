@@ -1,7 +1,6 @@
 import yup from '../../../common/utils/yup';
 import {
   CONTACT_TYYPPI,
-  HAITTOJENHALLINTATYYPPI,
   HANKE_KAISTAHAITTA_KEY,
   HANKE_KAISTAPITUUSHAITTA_KEY,
   HANKE_MELUHAITTA_KEY,
@@ -14,6 +13,7 @@ import {
 import { CONTACT_FORMFIELD, FORMFIELD, HankeDataFormState, YHTEYSHENKILO_FORMFIELD } from './types';
 import { HaittaIndexData } from '../../common/haittaIndexes/types';
 import { FORM_PAGES } from '../../forms/types';
+import haittojenhallintaSchema from '../../common/haittojenhallinta/haittojenhallintaSchema';
 
 export const yhteyshenkiloSchema = yup.object({
   [YHTEYSHENKILO_FORMFIELD.ETUNIMI]: yup.string().max(50).required(),
@@ -55,33 +55,6 @@ const muuYhteystietoSchema = yhteystietoSchema
     [CONTACT_FORMFIELD.ORGANISAATIO]: yup.string().defined(),
     [CONTACT_FORMFIELD.OSASTO]: yup.string().defined(),
   });
-
-const haittojenhallintaSchema = yup.object({
-  [HAITTOJENHALLINTATYYPPI.YLEINEN]: yup
-    .string()
-    .required()
-    .meta({ pageName: FORM_PAGES.HAITTOJEN_HALLINTA }),
-  [HAITTOJENHALLINTATYYPPI.PYORALIIKENNE]: yup
-    .string()
-    .detectedTrafficNuisance(HAITTOJENHALLINTATYYPPI.PYORALIIKENNE)
-    .meta({ pageName: FORM_PAGES.HAITTOJEN_HALLINTA }),
-  [HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE]: yup
-    .string()
-    .detectedTrafficNuisance(HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE)
-    .meta({ pageName: FORM_PAGES.HAITTOJEN_HALLINTA }),
-  [HAITTOJENHALLINTATYYPPI.RAITIOLIIKENNE]: yup
-    .string()
-    .detectedTrafficNuisance(HAITTOJENHALLINTATYYPPI.RAITIOLIIKENNE)
-    .meta({ pageName: FORM_PAGES.HAITTOJEN_HALLINTA }),
-  [HAITTOJENHALLINTATYYPPI.LINJAAUTOLIIKENNE]: yup
-    .string()
-    .detectedTrafficNuisance(HAITTOJENHALLINTATYYPPI.LINJAAUTOLIIKENNE)
-    .meta({ pageName: FORM_PAGES.HAITTOJEN_HALLINTA }),
-  [HAITTOJENHALLINTATYYPPI.MUUT]: yup
-    .string()
-    .required()
-    .meta({ pageName: FORM_PAGES.HAITTOJEN_HALLINTA }),
-});
 
 export const hankeAlueetSchema = yup.object({
   [FORMFIELD.NIMI]: yup.string().nullable(),

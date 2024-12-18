@@ -19,6 +19,7 @@ import {
 } from '../types/hanke';
 import { HaittaIndexData } from '../common/haittaIndexes/types';
 import { Taydennys, Taydennyspyynto } from '../application/taydennys/types';
+import haittojenhallintaSchema from '../common/haittojenhallinta/haittojenhallintaSchema';
 
 const tyoalueSchema = yup.object({
   geometry: geometrySchema.required(),
@@ -38,6 +39,7 @@ const kaivuilmoitusAlueSchema = yup.object({
   kaistahaitta: yup.mixed<HANKE_KAISTAHAITTA_KEY>().required(),
   kaistahaittojenPituus: yup.mixed<HANKE_KAISTAPITUUSHAITTA_KEY>().required(),
   lisatiedot: yup.string(),
+  haittojenhallintasuunnitelma: haittojenhallintaSchema,
 });
 
 const customerWithContactsSchemaForKaivuilmoitusForTyostaVastaava = customerWithContactsSchema
@@ -150,7 +152,18 @@ export const perustiedotSchema = yup.object({
 });
 
 export const alueetSchema = yup.object({
-  applicationData: applicationDataSchema.pick(['areas']),
+  applicationData: applicationDataSchema.pick(['areas', 'startTime', 'endTime']).shape({
+    areas: yup
+      .array(kaivuilmoitusAlueSchema.omit(['haittojenhallintasuunnitelma']))
+      .min(1)
+      .required(),
+  }),
+});
+
+export const haittojenhallintaSuunnitelmaSchema = yup.object({
+  applicationData: applicationDataSchema.pick(['areas']).shape({
+    areas: yup.array(kaivuilmoitusAlueSchema.pick(['haittojenhallintasuunnitelma'])).min(1),
+  }),
 });
 
 export const yhteystiedotSchema = yup.object({

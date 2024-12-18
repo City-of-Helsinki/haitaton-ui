@@ -10,6 +10,8 @@ export interface StepperStep {
   label: string;
   state: StepState;
   validationSchema?: ObjectSchema<AnyObject>;
+  /** Context object for validation */
+  context?: AnyObject;
 }
 
 export interface State {

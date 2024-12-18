@@ -827,7 +827,7 @@ describe('Excavation notification application view', () => {
     expect(queryByText('188 m²')).toBeInTheDocument();
     expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3');
     expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
-    expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('4');
+    expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('0');
     expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('5');
     expect(queryByText('Toistuva meluhaitta')).toBeInTheDocument();
     expect(queryByText('Jatkuva pölyhaitta')).toBeInTheDocument();
