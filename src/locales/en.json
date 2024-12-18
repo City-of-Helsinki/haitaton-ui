@@ -6,7 +6,11 @@
     "loginButton": "Log in",
     "logoutButton": "Log out",
     "homePageLink": "Return to Haitaton <a>front page.</a>",
-    "supportLink": "You can also contact Haitaton technical support at the email address <a>haitatontuki@hel.fi.</a>"
+    "supportLink": "You can also contact Haitaton technical support at the email address <a>haitatontuki@hel.fi.</a>",
+    "loggingIn": "Logging in...",
+    "loggingOut": "Logging out...",
+    "loggingInErrorLabel": "Error during log-in",
+    "logoutError": "Error during log-out"
   },
   "common": {
     "increment": "Increment",
@@ -85,7 +89,8 @@
     },
     "haittaIndex": {
       "fillHaitat": "Fill in the nuisance assessments for the area to see the nuisance indexes",
-      "haittaIndexNumber": "Nuisance index number:"
+      "haittaIndexNumber": "Nuisance index number:",
+      "haittaIndexSelite": "Area-specific inconvenience index (0–5)"
     }
   },
   "form": {
@@ -103,7 +108,9 @@
       "dateMax": "The last possible date is {{max}}",
       "yhteyshenkilotMin": "At least one contact person must be set",
       "emailAlreadyUsedInContacts": "The e-mail address you selected can already be found in the user management of the project. Add contact from the drop-down menu.",
-      "emailAlreadyUsedInUserManagement": "The e-mail address you selected is already found by another user."
+      "emailAlreadyUsedInUserManagement": "The e-mail address you selected is already found by another user.",
+      "dateBeforeStart": "Date may not be earlier than the start of work date on the application ({{startDate}})",
+      "dateInFuture": "The date may not be in the future"
     },
     "errors": {
       "areaRequired": "At least one area is required",
@@ -166,6 +173,7 @@
       "areaName": "If you wish, you can name the area"
     },
     "requiredInstruction": "All fields marked with the asterisk * are mandatory.",
+    "requiredForPublicationInstruction": "Fields with an asterisk (*) are required to publish your project.",
     "yhteystiedot": {
       "header": "Contact information",
       "instructions": "The parties added in the project will receive a link by email.They can join the project on Haitaton via the link. After this, they can review the project and add applications to the project.",
@@ -213,6 +221,8 @@
         "sukunimi": "Last name",
         "ytunnus": "Business ID",
         "yTunnusTaiHetu": "Business ID or personal identity code",
+        "henkilotunnus": "Personal identity code",
+        "muuTunnus": "Business ID, personal identity code or other unique identifier",
         "osoite": "Street address",
         "postinumero": "Postal code",
         "postitoimipaikka": "City",
@@ -645,6 +655,7 @@
       "subHeader": "Project areas",
       "area": "Area",
       "instructions": "[TRANSLATION_PENDING]Several geometries can be drawn for the project. Geometry areas affect the project’s traffic congestion indices. Drawing tools can be found at the bottom left of the map view. With the pen tool, you can draw polygonal geometries by clicking the point where you want an angle. With the square tool, you can create square areas by first clicking the map and moving the mouse in the direction you want. Clicking it again “closes” the square drawing. A geometry can be edited by “grabbing” the edge of the geometry and dragging. A square geometry can also be shaped by grabbing the edge. lete a geometry, first select the geometry by clicking it; a bin icon will appear in the bottom left drawing tools which you can click to delete the geometry.",
+      "instructions2": "Transport mode selectors on the left side of the map allow you to view the inconvenience indices for project and work areas regarding particular transport modes. All transport modes are active by default. You can change visibility of the modes by clicking on the icons. The most critical index will be coloured in on the map.",
       "instructions3": "You can edit an already drawn area by grabbing its edge and dragging the point to the desired location.",
       "noAlueet": "Draw the area on the map to mark the hazard assessments.",
       "haitatHeader": "Nuisance assessments for the area",
@@ -659,6 +670,7 @@
       "subHeaderNoAlueet": "Project areas",
       "subHeaderAlueet": "Area locations",
       "instructions": "Your project may hinder different modes of transport and local operations. Haitaton automatically calculates a significance value for each nuisance by project area separately for bicycle traffic, tram traffic, local bus traffic and car traffic. The traffic nuisance index describes the worst situation in the project area in terms of the aforementioned modes of transport. The disturbances are represented with a scale determined for each mode of transport and colours (0/grey = not identified, 1–2/green = no significant nuisance, 3/yellow = probable nuisance, 4–5/red = significant nuisance). Results not concerning the aforementioned modes of transport are represented with numbers alone (0–5).",
+      "instructions2": "Transport mode selectors on the left side of the map allow you to view the inconvenience indices for project and work areas regarding particular transport modes. All transport modes are active by default. You can change visibility of the modes by clicking on the icons. The most critical index will be coloured in on the map.",
       "noAlueet": "Add project areas to fill in information",
       "nuisanceControlPlanSubHeader": "Nuisance management plan",
       "instructionsPlan": "Detail in the nuisance management plan which measures you will take to mitigate disturbances concerning the project areas. Be sure to go through all project areas.",
@@ -666,14 +678,306 @@
       "instructionsGeneral": "<0><0>Ensure the safety and accessibility of pedestrian traffic</0><1>Ensure transport connections to the properties</1><2>Carry out coordination with other projects and their alternate routes</2><3>Always notify the Rescue Department and the police when streets are closed from traffic</3><4>Always check whether your project or work is on a special transport route</4><5>Check the impacts on the existing traffic light controls (lane arrangements, indicators, the functionality of the lights)</5><6>Exceptional working hours</6></0>",
       "helperText": "Nuisance management or prevention measures that are to be carried out or have been agreed upon in the project area.",
       "subHeaderTrafficNuisanceIndex": "Based on the traffic nuisance index calculated for your project, special attention must be paid to the following requirements.",
+      "noNuisanceDetected": "Haitaton was unable to find that target group in the area. Add measures for managing the inconvenience, if necessary.",
+      "addControlPlan": "Add measures for managing the inconvenience",
       "nuisanceType": {
+        "YLEINEN": "Measures for managing the inconvenience",
         "PYORALIIKENNE": "Significance of cycling traffic",
         "AUTOLIIKENNE": "Congestion of motor traffic",
         "LINJAAUTOLIIKENNE": "Local bus transport",
         "RAITIOLIIKENNE": "Tram transport",
         "MUUT": "Other nuisance management measures"
       },
-      "carTrafficNuisanceType": {}
+      "carTrafficNuisanceType": {
+        "katuluokka": "Street classification",
+        "liikennemaara": "Volume of vehicle traffic",
+        "kaistahaitta": "Impact on vehicle traffic lanes",
+        "kaistapituushaitta": "Length of vehicle traffic lane impact",
+        "haitanKesto": "Duration of the project"
+      },
+      "procedureTips": {
+        "showTipsButton": "Display suggested measures",
+        "titles": {
+          "PYORALIIKENNE": "Cycling measures",
+          "AUTOLIIKENNE": "Vehicle traffic measures",
+          "LINJAAUTOLIIKENNE": "Bus traffic measures",
+          "RAITIOLIIKENNE": "Tram traffic measures",
+          "MUUT": "Other measures"
+        },
+        "PYORALIIKENNE": [
+          {
+            "tip": "Check the impacts on primary and priority cycling routes and ensure their availability. Make sure that quality level targets are met for temporary arrangements.",
+            "indexTreshold": 5
+          },
+          {
+            "tip": "Prepare to carry out work outside of rush hour on the primary and priority cycling routes, if such an order is issued in the decision regarding your notification/application. Restrictions will be put in place on weekdays at 6–9 am and 3–6 pm.",
+            "indexTreshold": 5
+          },
+          {
+            "tip": "Priority of cycling measures: 1. No changes to cycling arrangements / route excluded from the worksite; 2. Temporary shift of cycling route; 3. Temporary narrowing of cycling route; 4. Merging of transport modes on one lane (see Separation of transport modes); 5. Temporary move of cycling route to opposite side of vehicle lane; 6. Temporary alternate cycling route"
+          },
+          {
+            "tip": "As a rule, plan and implement temporary cycling arrangement in accordance with the original, permanent arrangements (e.g. one-way cycle paths/lanes or two-way cycling path). Try to retain cycling solutions that are separated from pedestrians, if currently in use. When vehicle traffic exceeds 7,000 cars per day, cycling should generally be separated from vehicle lanes as well. On primary cycling routes, separation should be a consideration even with smaller vehicle traffic volumes. Single direction cycling arrangements may only be proposed to be replaced with a mixed traffic solution at worksites, in which case a 30 km/h speed limit is set on the street."
+          },
+          {
+            "tip": "Plan and implement temporary crossing solutions for cycling routes, particularly at traffic light-controlled intersections, traffic direction function in mind, paying special attention to left turns, vision and lighting."
+          },
+          {
+            "tip": "Plan and implement clear signpost guidance for detours with specific consideration for cycling routes. Define the impacts on cycling and other necessary measures for the detour."
+          },
+          {
+            "tip": "Plan and implement cycling access to the different addresses, services etc."
+          },
+          {
+            "tip": "Find out the need to move a possible city bike station or other significant bicycle parking. Agree on city bike station changes with Kaupunkiliikenne Oy (<0>urakoitsijaohjeistus@kaupunkiliikenne.fi</0>) and with the Urban Environment Division’s traffic planning unit on significant changes to bicycle parking (<1>kaupunkiymparisto@hel.fi</1>, customer service tel. +358 9 310 22111).",
+            "links": [
+              null,
+              null
+            ]
+          },
+          {
+            "tip": "Announce significant works and possible cycling route changes as early as in the planning stage, well in advance of implementing new arrangements (general releases, local releases). Mark detours before the works begin."
+          },
+          {
+            "tip": "Firstly, implement cycling protections from the work area with railings and closures."
+          },
+          {
+            "tip": "Implement winter maintenance for cycling routes (incl. snow removal, anti-slip measures) next to the work area."
+          },
+          {
+            "tip": "Implement and maintain hard and clean cycling route surfaces (temporary pavement) as well as implement level changes with ramps."
+          },
+          {
+            "tip": "Notify different parties of the works and possible route changes well in advance of implementing the new arrangements (general releases, local releases)."
+          },
+          {
+            "tip": "Verify that your planned solutions comply with the instructions (in Finnish): <0>https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf</0>",
+            "links": [
+              null
+            ]
+          }
+        ],
+        "AUTOLIIKENNE": [
+          {
+            "tip": "Study the compound impact of traffic lane changes and timing with a traffic model. Also determine the changes to bus traffic. Study the requirements of the project and find out possible detour solutions.",
+            "indexTreshold": 4
+          },
+          {
+            "tip": "Study the impact, timing, and measures your project has on traffic lanes with a traffic model and simulation. Define and plan the measures to minimise any inconveniences, keeping other projects in the area in mind.",
+            "indexTreshold": 4
+          },
+          {
+            "tip": "Plan for your works to be primarily carried out outside of rush hour (weekdays at 6–9 am and 3–6 pm, and everyday on harbour routes at 10–10:30 am).",
+            "indexTreshold": 4
+          },
+          {
+            "tip": "Study and implement guidance methods to reduce the traffic volume in the project’s area of impact."
+          },
+          {
+            "tip": "Plan any vehicle detours, related guidance, and the necessary traffic light changes in advance."
+          },
+          {
+            "tip": "Check if your project is on a harbour traffic route (<0>Parking and route maps</0>). If this is the case, plan your works outside of rush hour (weekdays at 6–9 am and 3–6 pm, as well as every at 10–10:30 am on harbour routes).",
+            "links": [
+              "https://www.portofhelsinki.fi/yhteystiedot/kartat/pysakointi-ja-ajoreittikartat/"
+            ]
+          },
+          {
+            "tip": "Plan the arrangements or alternate routes for heavy vehicle traffic as well as maintenance and distribution traffic well in advance."
+          },
+          {
+            "tip": "Find out the number of required lanes from the Urban Environment Division’s traffic planning unit (<0>kaupunkiymparisto@hel.fi</0>, customer service tel. +358 9 310 22111) in the planning stage",
+            "links": [
+              null
+            ]
+          },
+          {
+            "tip": "Plan and ensure traffic light functioning in an area wider than the worksite (e.g. lane changes at traffic light-controlled intersections when entering the work area, indicator positioning and functioning during temporary arrangements, traffic lights on detours). To make these arrangements, contact the Helsinki Region Traffic Control Centre (<0>liikenteenhallintakeskus@hel.fi</0>, tel. +358 9 310 37555). Also contact them if you require temporary traffic lights.",
+            "links": [
+              null
+            ]
+          },
+          {
+            "tip": "Contact the Bus Federation (<0>Yhteystiedot – Linja-autoliitto</0> <1>firstname.lastname@linja-autoliitto.fi</1>), if your project takes place on a significant route or area for long-distance or tourist bus traffic.",
+            "links": [
+              null,
+              null
+            ]
+          },
+          {
+            "tip": "Announce significant works and possible vehicle route changes as early as in the planning stage, well in advance of the implementation (general releases, local releases)."
+          },
+          {
+            "tip": "Implement and maintain advance guidance from approaches to alternate routes."
+          },
+          {
+            "tip": "Lower speed limits in the vicinity of work areas."
+          },
+          {
+            "tip": "Do not direct pedestrians to use the vehicle lanes, unless they are given a protected passage there."
+          },
+          {
+            "tip": "Do not direct bicycle traffic to vehicle lanes, unless the situation allows for it (see Suggested measures for cycling)."
+          },
+          {
+            "tip": "Implement and maintain a consistent-quality pavement as well as up-to-date lane change and other markings and traffic control devices."
+          },
+          {
+            "tip": "Implement high-quality winter maintenance in the work area (e.g. snow removal, anti-slip measures, clear visibility and driving space)."
+          }
+        ],
+        "LINJAAUTOLIIKENNE": [
+          {
+            "tip": "Check if your project impacts a significant HSL bus route. Agree, early on, with HSL on the required measures of your project for bus traffic (<0>infra@hsl.fi</0>).",
+            "links": [
+              null
+            ]
+          },
+          {
+            "tip": "Plan the works and as a rule, carry them out outside of rush hour (6–9 am, 3–6 pm)."
+          },
+          {
+            "tip": "Contact HSL (<0>infra@hsl.fi</0>) in the planning stage if your project is on an HSL bus route and define, whether your project causes an inconvenience to HSL bus traffic, such as reduction in lanes, delays, longer travel time, route or stop changes etc. Plan possible bus detours in advance, along with related guidance and necessary mass transit benefits. Ensure that the route is functional for HSL and the Helsinki Region Traffic Control Centre (<1>liikenteenhallintakeskus@hel.fi</1>, tel. +358 9 310 37555; including for temporary traffic light control).",
+            "links": [
+              null,
+              null
+            ]
+          },
+          {
+            "tip": "If a worksite is at a bus terminus or prevents bus traffic on a street, contact HSL at least 2.5 months before the works are set to begin. If your worksite is not urgent, such as one required by a burst pipe, contact them at least 2 weeks before the start of the work. Further information: <0>Contractor – how to consider public transport on worksites</0>.",
+            "links": [
+              null
+            ]
+          },
+          {
+            "tip": "Implement unimpeded access to existing stops or plan the move of the stops, related guidance, and accessible pedestrian routes. Tram or bus stops may not be moved or closed without permission from HSL (<0>infra@hsl.fi</0>). Further information: <1>Contractor – how to consider public transport on worksites</1>.",
+            "links": [
+              null,
+              null
+            ]
+          },
+          {
+            "tip": "Announce significant works and possible bus route changes as early as in the planning stage, well in advance of the implementation (general releases, local releases)."
+          },
+          {
+            "tip": "Implement and maintain advance guidance from approaches to alternate routes."
+          },
+          {
+            "tip": "Implement and maintain a consistent-quality pavement as well as up-to-date lane change and other markings and traffic control devices."
+          },
+          {
+            "tip": "Implement high-quality winter maintenance in the work area (e.g. snow removal, anti-slip measures, clear visibility and driving space). Pay particular attention to bus turning circles in intersections."
+          }
+        ],
+        "RAITIOLIIKENNE": [
+          {
+            "tip": "Check if your project impacts the tram network. Early on, agree with HSL (services: <0>infra@hsl.fi</0>) on measures of your project for the tram network and, if necessary, with Kaupunkiliikenne Oy (rail infrastructure and systems: <1>urakoitsijaohjeistus@kaupunkiliikenne.fi</1>).",
+            "links": [
+              null,
+              null
+            ]
+          },
+          {
+            "tip": "Plan for the works to be carried out primarily outside of rail traffic service hours or rush hour (6–9 am, 3–6 pm).",
+            "indexTreshold": 5
+          },
+          {
+            "tip": "Evaluate the schedule of individual works in your project in advance and contact HSL (traffic services: <0>infra@hsl.fi</0>) and Kaupunkiliikenne Oy (rail infrastructure and systems: <1>urakoitsijaohjeistus@kaupunkiliikenne.fi</1>) to coordinate possible alternate arrangements with other alternate routes. Plan possible rail detours and mass transit benefits in advance and ensure the functioning of the route with HSL, Kaupunkiliikenne Oy and in terms of traffic lights, with the Helsinki Region Traffic Control Centre (<2>liikenteenhallintakeskus@hel.fi</2>, tel. +358 9 310 37555).",
+            "links": [
+              null,
+              null,
+              null
+            ]
+          },
+          {
+            "tip": "With rail traffic detours, notify HSL at least 8 weeks in advance of a work that lasts up to 3 days, and 5 months in advance of a work that lasts over 3 days. If rail traffic is replaced by buses, notify HSL at least 3 months in advance of a work that lasts up to 3 days, and 5 months in advance of a work that lasts over 3 days. Further information: <0>Constructor – considering mass transit at worksites</0> and <1>Works in the vicinity of tram tracks – Kaupunkiliikenne Oy</1>",
+            "links": [
+              null,
+              null
+            ]
+          },
+          {
+            "tip": "Check if tram track structures (incl. trolley wire attachments on buildings) or systems have to be temporarily disabled or moved. Also check if work areas are close to track areas or within 2 metres of trolley wires or carrier cables (NOTE! This distance is 4 metres on the fast light rail line). If this is necessary, agree on the arrangements with HSL (traffic services: <0>infra@hsl.fi</0>) and Kaupunkiliikenne Oy (track infrastructure and systems: <1>urakoitsijaohjeistus@kaupunkiliikenne.fi</1>. Further information: <2>Contractor – how to consider public transport on worksites</2> and a submittable form, <3>Works close to a tram track – Kaupunkiliikenne Oy</3> (Works close to tram tracks or near light rail line 15’s track area).",
+            "links": [
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          {
+            "tip": "Implement unimpeded access to existing stops or plan the move of the stops, related guidance, and accessible pedestrian routes. Tram or bus stops may not be moved or closed without permission from HSL (<0>infra@hsl.fi</0>). Further information: <1>Contractor – how to consider public transport on worksites</1>.",
+            "links": [
+              null,
+              null
+            ]
+          },
+          {
+            "tip": "Announce significant works and possible rail route changes as early as in the planning stage, well in advance of the implementation (general releases, local releases)."
+          },
+          {
+            "tip": "In your guidance, make sure that the trams’ traffic light controls function during the works."
+          }
+        ],
+        "MUUT": [
+          {
+            "tip": "Study the area impacted by noise, dust or vibration from your project and the sensitive functions therein (apartments, schools, vital services such as health, business premises, restaurant terraces, research institutes, nature targets, religious facilities etc.). "
+          },
+          {
+            "tip": "Inform the operators and properties at least one week before or immediately upon becoming aware of the start date of the work, when carrying out works that cause noise, dust or vibrations. Advance notifications are required for significantly disruptive works, at least 30 days before the work starts. Give the residents and various operators sufficient time to prepare for the upcoming disruption and negotiate with the operators of particularly sensitive functions."
+          },
+          {
+            "tip": "Study the opportunities or scheduling and work methods of your project to minimise emissions for these functions."
+          },
+          {
+            "tip": "Prepare a notification of disruptive noise at least 30 days before the works begin: <0>Notification of noise</0>",
+            "links": [
+              null
+            ]
+          },
+          {
+            "tip": "Significantly noisy operations are generally not allowed in the vicinity of residential buildings, accommodation or care facilities at night (10 pm – 7 am)."
+          },
+          {
+            "tip": "Noisy work should be avoided close to daycare centres at 12–2 pm, close to schools during 8 am – 3 pm, and close to office buildings during 9 am – 3 pm."
+          },
+          {
+            "tip": "Implement measures that reduce the noise disturbance, such as movable noise barriers."
+          },
+          {
+            "tip": "Prepare a collection plan for worksite water as part of the site plan in advance (start with evaluating the volume and quality of the water that needs to be collected). Any release of worksite water into the stormwater network must be agreed with Helsinki Region Environmental Services (HSY, <0>https://yhteydenotto.hsy.fi/asiakaspalvelu</0>, tel. +358 9 1561 2110). Initially, confirm with HSY on the network effect of releasing worksite water to the stormwater network on nature values (e.g. uncontrolled release of facade renovation dust into the network). Additional information: <1>Sewage instructions for worksite water</1> and <2>https://www.hel.fi/static/ymk/esitteet/tyomaavesi.pdf</2>",
+            "links": [
+              null,
+              null,
+              null
+            ]
+          },
+          {
+            "tip": "Wash the nearby streets daily, if the worksite features significant amounts of gravel or loose dirt. Prevent dusting from traffic lanes with a saline solution or by using a crushed stone surface. Also wash the worksite vehicles regularly."
+          },
+          {
+            "tip": "Wet and cover stored soil and stone material as well as construction waste. Wet and cover dusty loads during transportation outside of construction sites."
+          },
+          {
+            "tip": "Use dust collection equipment on open pit excavation devices (under 200 metres away from sensitive locations or when the quarry transportation route passes near dust-sensitive locations)."
+          },
+          {
+            "tip": "Verify that your solutions are compliant with the instructions: <0>https://www.hel.fi/static/ymk/esitteet/rakennustyomaapoly.pdf</0>",
+            "links": [
+              null
+            ]
+          },
+          {
+            "tip": "Prepare a notification of disruptive (noise and) vibration at least 30 days before the works begin: <0>Notification of noise</0>",
+            "links": [
+              null
+            ]
+          },
+          {
+            "tip": "Check the soil data and how much it conducts vibration. Plan to use work methods that minimise vibration."
+          }
+        ]
+      }
     },
     "hankkeenLiitteetForm": {
       "instructions": "Add attachments. Attachments added to the project will not be transferred to the applications."
@@ -727,7 +1031,9 @@
       "instructions": "<p>Start drawing the work areas of the application by entering start and end dates for the work, whereby your project areas will be displayed. PLEASE NOTE! The work must be scheduled within the timespan for the project area.</p><p>You can edit a previously drawn area by grabbing its edge and dragging the point to the desired location.</p><p>If you want to draw smaller work areas within the project areas, activate the drawing tools on top of the map. Please note that the work areas must be drawn entirely within the project areas.</p><p>If you want to use the entire project area as a work area, activate the project area on the map and select ‘Use as work area’.</p><p>You can add several areas to the same application if they have the same timespan. If you want to enter several areas with different timespans, you must submit a separate application.</p><p>[TRANSLATION_PENDING]</p><p>$t(kaivuilmoitusForm:requiredInstruction)</p>",
       "areaInformationHeading": "Excavation notification for work areas",
       "startDate": "Work start date",
-      "endDate": "Work end date"
+      "endDate": "Work end date",
+      "liikennehaittaindeksienYhteenveto": "Summary of traffic inconvenience indices for worksites",
+      "areaNuisanceDefinitions": "Self-definition of worksite inconvenience"
     },
     "liitteetJaLisatiedot": {
       "instructions": "<p>Add plans for temporary traffic arrangements and any other attachments. A plan for temporary traffic arrangements is obligatory. If necessary, see <a>the City of Helsinki’s standard solution images</a>.</p><p>If filling out the form or carrying out the work have not been authorised in the login process, a PDF-format power of attorney must be provided as an attachment.</p><p>All fields marked with the asterisk * are necessary for submitting the application.</p>",
@@ -779,6 +1085,9 @@
       "removeAreaDescription": "Are you sure you want to remove the area {{areaName}}?",
       "applicationAdditionalInfo": "Additional information on the application",
       "applicationInfo": "Application information",
+      "cableReportTitle": "Cable report",
+      "createCableReport": "Order a new cable report",
+      "newCableReport": "New cable report",
       "cableReports": "Identifiers of previous cable reports",
       "cableReportsHelp": "Select one from the list or enter another identifier and press ‘Enter’ to add it",
       "placementContractsTitle": "Placement agreements",
@@ -790,7 +1099,14 @@
       "tyonTarkoitus": "Purpose of the work",
       "setWorkTimesToCopyArea": "Select timeframe to copy into work area",
       "downloadDecision": {
-        "PAATOS": "Download decision (PDF)"
+        "PAATOS": "Download decision (PDF)",
+        "TOIMINNALLINEN_KUNTO": "Download functional condition (PDF)",
+        "TYO_VALMIS": "Download completed work (PDF)"
+      },
+      "paperDecisionOrdered": "Order for printed decision placed",
+      "completionDate": {
+        "TOIMINNALLINEN_KUNTO": "Functional condition reported on {{lastValmistumisilmoitus.reportedAt}} for {{lastValmistumisilmoitus.dateReported}}",
+        "TYO_VALMIS": "Completion reported on {{lastValmistumisilmoitus.reportedAt}} for {{lastValmistumisilmoitus.dateReported}}"
       }
     },
     "notifications": {
@@ -808,12 +1124,24 @@
       "noApplications": "No applications have been added to the project",
       "maxAttachmentsNumberExceeded": "The maximum number of attachments ({{maxNumber}} items) has been exceeded",
       "sentApplicationPersonalInfoNotification": "The personal information of the submitted application cannot be edited",
-      "sendApplicationDisabled": "The application can only be submitted by the person designated as the contact person for the application."
+      "sendApplicationDisabled": "The application can only be submitted by the person designated as the contact person for the application.",
+      "reportCompletionDateSuccessLabel": "Report sent",
+      "reportOperationalConditionSuccessText": "Report of functional condition submitted for approval.",
+      "reportWorkFinishedSuccessText": "Report of completion submitted for approval.",
+      "reportCompletionDateErrorLabel": "Submission failed",
+      "reportCompletionDateErrorText": "<0>An error occurred during submission. Try again later or contact Haitaton technical supoprt at <1>haitatontuki@hel.fi</1>.</0>"
     },
     "sendDialog": {
       "title": "Submit application?",
       "instructions": "The decision concerning your application and possible requests for additional information will be available in the Haitaton system. By submitting your application, you consent to being notified electronically.",
-      "instructionsPaperDecision": "You may also request a paper copy of the decision to an address you specify."
+      "instructionsPaperDecision": "You may also request a paper copy of the decision to an address you specify.",
+      "orderPaperDecision": "I want a printed copy of the decision",
+      "paperDecisionNotificationLabel": "Complete recipient information",
+      "paperDecisionNotificationText": "To receive a paper copy of the decision, please provide the recipient information here.",
+      "name": "Name",
+      "streetAddress": "Street address",
+      "postalCode": "Postal code",
+      "city": "City/town"
     },
     "sentDialog": {
       "title": "Application sent",
@@ -824,6 +1152,20 @@
       "title": "Choose a project area for the work area",
       "instructions": "The work area is located within several project areas. Choose the project area into which the work area will be added.",
       "cancelButton": "Cancel and remove the work area"
+    },
+    "operationalConditionDialog": {
+      "title": "Report functional condition?",
+      "instructions": "<p>If an excavation site is available for normal use during the winter season (1 January – 14 May), you can report it as being in functional condition, which suspends the usage fee of the area.</p><br><p>Traffic lanes, bicycle paths and the pavement must have a temporary asphalt surface. All traffic control devices must be removed from the site. Stone ash or finely crushed quarry may be used on pedestrian and other areas, if this has been agreed in advance with an inspector.</p><br><p>If the area is not paved temporarily, and a notification of functional condition has not been submitted, fees will continue to be charged until compliance has been restored.<br>The area’s surfaces must be paved in accordance with the street classification by 14 May, or the usage fees will resume on 15 May until the work is accepted as completed.</p><br>Enter the date on which you intend to report the work to be in functional condition. {{previousReportsIntro}}</p>",
+      "previousReportsIntro": "Previously, the work was reported to be in functional condition as follows:",
+      "previouslyReportedAt": "On {{reportedAt}} at {{dateReported}}",
+      "date": "Date"
+    },
+    "workFinishedDialog": {
+      "title": "Report completion?",
+      "instructions": "Enter the date on which you are reporting the work the be completed. {{previousReportsIntro}}</p>",
+      "previousReportsIntro": "Previously, the work was reported to be completed as follows:",
+      "previouslyReportedAt": "On {{reportedAt}} at {{dateReported}}",
+      "date": "Date"
     },
     "status": {
       "PENDING_CLIENT": "Visible to authorities",
@@ -847,6 +1189,8 @@
       "cancelApplication": "Cancel application",
       "editApplication": "Edit application",
       "deletePlacementContract": "Remove placement agreement identifier {{id}}",
+      "reportOperationalCondition": "Report functional condition",
+      "reportWorkFinished": "Report completion",
       "copyWorkArea": "Copy into work area"
     },
     "errors": {
@@ -869,6 +1213,14 @@
     "applicationTypeInstruction": "Select application type. Via the excavation report, you can also submit a cable report if you do not have one already.",
     "addApplicationTypes": {
       "EXCAVATION_NOTIFICATION": "$t(hakemus:applicationTypes:EXCAVATION_NOTIFICATION) (and cable report)"
+    }
+  },
+  "taydennyspyynto": {
+    "taydennyspyynto": "Request for supplementary information",
+    "notificationText": "Modify your application and correct the following items",
+    "fields": {
+      "CABLE_REPORT": {},
+      "EXCAVATION_NOTIFICATION": {}
     }
   },
   "hankeSidebar": {
