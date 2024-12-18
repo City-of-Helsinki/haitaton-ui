@@ -41,7 +41,7 @@ yarn-error.log*
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-node_modules/
+
 /test-results/
 /playwright-report/
 /blob-report/
