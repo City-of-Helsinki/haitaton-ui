@@ -310,7 +310,7 @@ const LiikennehaitanHallintasuunnitelmaInfo: React.FC<LiikennehaitanHallintasuun
   const { t } = useTranslation();
   return (
     <FormSummarySection
-      background={background || 'var(--color-white)'}
+      background={background ?? 'var(--color-white)'}
       paddingTop="var(--spacing-s)"
       paddingLeft="var(--spacing-s)"
       paddingBottom="var(--spacing-s)"
@@ -323,10 +323,10 @@ const LiikennehaitanHallintasuunnitelmaInfo: React.FC<LiikennehaitanHallintasuun
         <Flex>
           <Box w="85%">
             <HankkeenHaittojenhallintasuunnitelma
-              text={hankealue?.haittojenhallintasuunnitelma?.[tyyppi] || ''}
+              text={hankealue?.haittojenhallintasuunnitelma?.[tyyppi] ?? ''}
             />
             <Box paddingTop="var(--spacing-s)">
-              <Text tag="p">{alue.haittojenhallintasuunnitelma?.[tyyppi] || ''}</Text>
+              <Text tag="p">{alue.haittojenhallintasuunnitelma?.[tyyppi] ?? ''}</Text>
             </Box>
           </Box>
           <Box w="15%">
@@ -381,10 +381,10 @@ const HaittojenhallintasuunnitelmaInfo: React.FC<HaittojenHallintaProps> = ({
           <Flex>
             <Box w="85%">
               <HankkeenHaittojenhallintasuunnitelma
-                text={hankealue?.haittojenhallintasuunnitelma?.YLEINEN || ''}
+                text={hankealue?.haittojenhallintasuunnitelma?.YLEINEN ?? ''}
               />
               <Box paddingTop="var(--spacing-s)">
-                <Text tag="p">{kaivuilmoitusAlue.haittojenhallintasuunnitelma?.YLEINEN || ''}</Text>
+                <Text tag="p">{kaivuilmoitusAlue.haittojenhallintasuunnitelma?.YLEINEN ?? ''}</Text>
               </Box>
             </Box>
             <Box w="15%"></Box>
@@ -412,10 +412,10 @@ const HaittojenhallintasuunnitelmaInfo: React.FC<HaittojenHallintaProps> = ({
           <Flex>
             <Box w="85%">
               <HankkeenHaittojenhallintasuunnitelma
-                text={hankealue?.haittojenhallintasuunnitelma?.MUUT || ''}
+                text={hankealue?.haittojenhallintasuunnitelma?.MUUT ?? ''}
               />
               <Box paddingTop="var(--spacing-s)">
-                <Text tag="p">{kaivuilmoitusAlue.haittojenhallintasuunnitelma?.MUUT || ''}</Text>
+                <Text tag="p">{kaivuilmoitusAlue.haittojenhallintasuunnitelma?.MUUT ?? ''}</Text>
               </Box>
             </Box>
             <Box w="15%"></Box>

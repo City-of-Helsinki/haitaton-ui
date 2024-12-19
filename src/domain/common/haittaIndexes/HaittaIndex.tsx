@@ -29,7 +29,7 @@ export default function HaittaIndex({
     <Flex flexDirection="column" alignItems="center">
       {showLabel ? (
         <Box as="p" fontSize="var(--fontsize-body-s)" mb="var(--spacing-3-xs)">
-          {label || t('hankeIndexes:haittaindeksi')}
+          {label ?? t('hankeIndexes:haittaindeksi')}
         </Box>
       ) : null}
       <Flex alignItems="flex-start" gap="var(--spacing-3-xs)">
