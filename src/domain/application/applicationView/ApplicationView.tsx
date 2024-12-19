@@ -867,10 +867,10 @@ function ApplicationView({
                 <KaivuilmoitusAreasInfo areas={kaivuilmoitusAlueet} />
               )}
             </TabPanel>
-            {applicationType === 'EXCAVATION_NOTIFICATION' && (
-              <TabPanel>
-                {/* Nuisance management panel */}
-                {kaivuilmoitusAlueet?.map((alue, index) => {
+            <TabPanel>
+              {/* Nuisance management panel */}
+              {applicationType === 'EXCAVATION_NOTIFICATION' &&
+                kaivuilmoitusAlueet?.map((alue, index) => {
                   const hankealue = hankealueet?.find((ha) => ha.id === alue.hankealueId);
                   return (
                     <HaittojenhallintasuunnitelmaInfo
@@ -881,8 +881,7 @@ function ApplicationView({
                     />
                   );
                 })}
-              </TabPanel>
-            )}
+            </TabPanel>
             <TabPanel>
               {/* Contacts information panel */}
               <SectionTitle>{t('form:yhteystiedot:header')}</SectionTitle>
