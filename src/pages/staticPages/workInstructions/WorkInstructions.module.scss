@@ -1,0 +1,25 @@
+.navmain {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  align-self: stretch;
+}
+
+.container {
+  display: flex;
+  padding: 48px 128px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  align-self: stretch;
+}
+
+main {
+  display: flex;
+  padding: 8px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  flex: 1 0 0;
+  align-self: stretch;
+}

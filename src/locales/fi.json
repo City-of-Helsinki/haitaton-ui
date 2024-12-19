@@ -435,7 +435,7 @@
       }
     },
     "WORKINSTRUCTIONS": {
-      "path": "https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/tyomaan-luvat-ja-ohjeet",
+      "path": "/tyoohjeet",
       "headerLabel": "Työohjeet",
       "meta": {
         "title": "Haitaton - Työohjeet"
@@ -782,9 +782,7 @@
           },
           {
             "tip": "Tarkista suunnittelemiesi ratkaisujen ohjeidenmukaisuus: <0>https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf</0>",
-            "links": [
-              "https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf"
-            ]
+            "links": ["https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf"]
           }
         ],
         "AUTOLIIKENNE": [
@@ -817,15 +815,11 @@
           },
           {
             "tip": "Selvitä ajokaistojen lukumäärän säilyttämistarve ottamalla yhteyttä Kaupunkiympäristön toimialan liikennesuunnitteluun (<0>kaupunkiymparisto@hel.fi</0>, asiakaspalvelu puh. 09 310 22111) suunnitteluvaiheessa",
-            "links": [
-              "mailto:kaupunkiymparisto@hel.fi"
-            ]
+            "links": ["mailto:kaupunkiymparisto@hel.fi"]
           },
           {
             "tip": "Suunnittele ja varmista liikennevalojen toimivuus työn aluetta laajemmin (esim. liikennevaloliittymien tilapäiset kaistamuutokset työalueelle tultaessa, ilmaisimien sijainti ja toimivuus tilapäisissä järjestelyissä, kiertoreittien liikennevalot). Ole näiden osalta yhteydessä pääkaupunkiseudun liikenteenhallintakeskukseen (<0>liikenteenhallintakeskus@hel.fi</0>, p. 09 310 37555). Ole yhteydessä liikenteenhallintakeskukseen myös tilapäisten liikennevalojen tarpeesta.",
-            "links": [
-              "mailto:liikenteenhallintakeskus@hel.fi"
-            ]
+            "links": ["mailto:liikenteenhallintakeskus@hel.fi"]
           },
           {
             "tip": "Ota yhteyttä Linja-autoliittoon (<0>Yhteystiedot – Linja-autoliitto</0> <1>etunimi.sukunimi@linja-autoliitto.fi</1>), mikäli hankkeesi sijoittuu merkittävälle kauko- tai  turistiliikenteen reitille tai alueelle.",
@@ -859,32 +853,22 @@
         "LINJAAUTOLIIKENNE": [
           {
             "tip": "Tarkista, vaikuttaako hankkeesi merkittävään HSL:n linja-autoreittiin. Sovi aikaisessa vaiheessa hankkeen aiheuttamista linja-autoliikennettä koskevista toimenpidetarpeista HSL:n kanssa (<0>infra@hsl.fi</0>).",
-            "links": [
-              "mailto:infra@hsl.fi"
-            ]
+            "links": ["mailto:infra@hsl.fi"]
           },
           {
             "tip": "Suunnittele työt tehtäväksi ja toteuta ne lähtökohtaisesti ruuhka-ajan (klo 6-9, klo 15-18) ulkopuolella."
           },
           {
             "tip": "Ota yhteyttä HSL:ään (<0>infra@hsl.fi</0>) suunnitteluvaiheessa hankkeesi sijaitessa HSL:n linja-autoliikenteen reitillä sekä määrittele, aiheuttaako hankkeesi HSL:n linja-autoliikenteelle haittaa, kuten kaistojen vähentymistä, viivytyksiä, matka-ajan pidentymistä, reittimuutoksia, pysäkkimuutoksia ym. Suunnittele ajoissa mahdolliset linja-autoliikenteen kiertoreitit ja niiden opastus sekä tarvittavat joukkoliikenne-etuudet. Varmista reitin toimivuus HSL:n sekä valo-ohjauksen osalta pääkaupunkiseudun liikenteenhallintakeskuksen (<1>liikenteenhallintakeskus@hel.fi</1>, p. 09 310 37555) kanssa (myös tilapäinen valo-ohjaus).",
-            "links": [
-              "mailto:infra@hsl.fi",
-              "mailto:liikenteenhallintakeskus@hel.fi"
-            ]
+            "links": ["mailto:infra@hsl.fi", "mailto:liikenteenhallintakeskus@hel.fi"]
           },
           {
             "tip": "Jos työmaa on bussin päätepysäkillä tai se estää bussiliikenteen kyseisellä kadulla, ota yhteyttä vähintään 2,5 kuukautta ennen töiden alkua. Jos työmaa ei ole akuutti, esimerkiksi putkirikosta johtuva, ota yhteyttä vähintään 2 viikkoa ennen töiden alkua. Lisätietoa: <0>Urakoitsija - ota joukkoliikenne huomioon työmaalla</0>.",
-            "links": [
-              "http://hsl.fi/hsl/urakoitsijat"
-            ]
+            "links": ["http://hsl.fi/hsl/urakoitsijat"]
           },
           {
             "tip": "Toteuta esteetön pääsy nykyisille pysäkeille tai suunnittele ja toteuta pysäkkien siirtäminen, opastus ja esteettömät jalankulkuyhteydet. Raitio- ja linja-autopysäkkejä ei saa siirtää tai poistaa käytöstä ilman HSL:n lupaa (<0>infra@hsl.fi</0>). Lisätietoa: <1>Urakoitsija - ota joukkoliikenne huomioon työmaalla</1>.",
-            "links": [
-              "mailto:infra@hsl.fi",
-              "http://hsl.fi/hsl/urakoitsijat"
-            ]
+            "links": ["mailto:infra@hsl.fi", "http://hsl.fi/hsl/urakoitsijat"]
           },
           {
             "tip": "Tiedota merkittävistä töistä ja mahdollisista bussiliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen toteutusta eri osapuolille (yleiset tiedotteet, paikalliset tiedotteet)."
@@ -902,10 +886,7 @@
         "RAITIOLIIKENNE": [
           {
             "tip": "Tarkista, vaikuttaako hankkeesi raitiotieverkkoon. Sovi aikaisessa vaiheessa hankkeen aiheuttamista raitiotieverkon toimenpidetarpeista HSL:n kanssa (liikennöinti: <0>infra@hsl.fi</0>) ja tarvittaessa Kaupunkiliikenne Oy:n (ratainfra ja järjestelmät: <1>urakoitsijaohjeistus@kaupunkiliikenne.fi</1>) kanssa.",
-            "links": [
-              "mailto:infra@hsl.fi",
-              "mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi"
-            ]
+            "links": ["mailto:infra@hsl.fi", "mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi"]
           },
           {
             "tip": "Suunnittele työt tehtäväksi ja toteuta ne pääsääntöisesti raitioliikenteen liikennöintiajan ulkopuolella tai tee työt ruuhka-ajan (klo 6-9, klo 15-18) ulkopuolella.",
@@ -937,10 +918,7 @@
           },
           {
             "tip": "Toteuta esteetön pääsy nykyisille pysäkeille tai suunnittele ja toteuta pysäkkien siirtäminen, opastus ja esteettömät jalankulkuyhteydet. Raitio- ja linja-autopysäkkejä ei saa siirtää tai poistaa käytöstä ilman HSL:n lupaa (<0>infra@hsl.fi</0>). Lisätietoa: <1>Urakoitsija - ota joukkoliikenne huomioon työmaalla</1>.",
-            "links": [
-              "mailto:infra@hsl.fi",
-              "http://hsl.fi/hsl/urakoitsijat"
-            ]
+            "links": ["mailto:infra@hsl.fi", "http://hsl.fi/hsl/urakoitsijat"]
           },
           {
             "tip": "Tiedota merkittävistä töistä ja mahdollisista raitioliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen toteutusta eri osapuolille (yleiset tiedotteet, paikalliset tiedotteet)."
@@ -993,9 +971,7 @@
           },
           {
             "tip": "Tarkista ratkaisujesi ohjeidenmukaisuus: <0>https://www.hel.fi/static/ymk/esitteet/rakennustyomaapoly.pdf</0>",
-            "links": [
-              "https://www.hel.fi/static/ymk/esitteet/rakennustyomaapoly.pdf"
-            ]
+            "links": ["https://www.hel.fi/static/ymk/esitteet/rakennustyomaapoly.pdf"]
           },
           {
             "tip": "Laadi ilmoitus häiritsevästä (melusta ja) tärinästä viimeistään 30 vuorokautta ennen toiminnan aloittamista: <0>Meluilmoitus</0>",

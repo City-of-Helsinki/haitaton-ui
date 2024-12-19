@@ -26,6 +26,9 @@ import NewKaivuilmoitusPage from '../../pages/NewKaivuilmoitusPage';
 import EditKaivuilmoitusPage from '../../pages/EditKaivuilmoitusPage';
 import EditJohtoselvitysTaydennysPage from '../../pages/EditJohtoselvitysTaydennysPage';
 import EditKaivuilmoitusTaydennysPage from '../../pages/EditKaivuilmoitusTaydennysPage';
+import WorkInstructionsPage from '../../pages/staticPages/workInstructions/WorkInstructionsPage';
+import WorkInstructionsMain from '../../pages/staticPages/workInstructions/WorkInstructionsMain';
+import NuisanceControlInfo from '../../pages/staticPages/workInstructions/NuisanceControlInfo';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
@@ -82,12 +85,16 @@ const LocaleRoutes = () => {
       <Route path={t('routes:FULL_PAGE_MAP:path')} element={<FullPageMapPage />} />
       <Route path={t('routes:PUBLIC_HANKKEET:path')} element={<MapAndListPage />}>
         <Route element={<MapPage />} index />
-        <Route path={t('routes:PUBLIC_HANKKEET_MAP:path')} element={<MapPage />} />
+        <Route element={<WorkInstructionsMain />} index />
         <Route path={t('routes:PUBLIC_HANKKEET_LIST:path')} element={<HankeListPage />} />
       </Route>
       <Route path={t('routes:ACCESSIBILITY:path')} element={<AccessibilityPage />} />
       <Route path={t('routes:REFERENCES:path')} element={<ReferencesPage />} />
       <Route path={t('routes:PRIVACY_POLICY:path')} element={<PrivacyPolicyPage />} />
+      <Route path={t('routes:WORKINSTRUCTIONS:path')} element={<WorkInstructionsPage />}>
+        <Route element={<WorkInstructionsMain />} index />
+        <Route element={<NuisanceControlInfo />} path="haittojenhallinta" />
+      </Route>
       <Route path={t('routes:MANUAL:path')} element={<ManualPage />} />
       <Route path={t('routes:IDENTIFY_USER:path')} element={<UserIdentify />} />
       <Route path="*" element={<NotFoundPage />} />

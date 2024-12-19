@@ -419,7 +419,7 @@
       }
     },
     "WORKINSTRUCTIONS": {
-      "path": "https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/construction-phase-checklist",
+      "path": "/tyoohjeet",
       "headerLabel": "Work instructions",
       "meta": {
         "title": "Haitaton - Work instructions"
