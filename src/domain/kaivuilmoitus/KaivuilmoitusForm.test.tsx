@@ -1681,19 +1681,21 @@ describe('Haittojenhallintasuunnitelma', () => {
   test('Nuisance control plan is shown correctly', async () => {
     await setupHaittojenHallintaPage();
 
-    expect(screen.getByText('Yleisten haittojen hallintasuunnitelma')).toBeInTheDocument();
+    expect(
+      screen.getByText('Työalueen yleisten haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
     expect(
       screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.YLEINEN'),
     ).toBeRequired();
     expect(
-      screen.getByText('Pyöräliikenteelle koituvien haittojen hallintasuunnitelma'),
+      screen.getByText('Pyöräliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
     ).toBeInTheDocument();
     expect(screen.getByTestId('test-PYORALIIKENNE')).toHaveTextContent('3');
     expect(
       screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.PYORALIIKENNE'),
     ).toBeRequired();
     expect(
-      screen.getByText('Autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+      screen.getByText('Autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
     ).toBeInTheDocument();
     expect(screen.getByTestId('test-AUTOLIIKENNE')).toHaveTextContent('3');
     expect(
@@ -1705,10 +1707,10 @@ describe('Haittojenhallintasuunnitelma', () => {
       screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE'),
     ).not.toBeRequired();
     expect(
-      screen.getByText('Raitioliikenteelle koituvien haittojen hallintasuunnitelma'),
+      screen.getByText('Raitioliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
     ).toBeInTheDocument();
     expect(screen.getByTestId('test-RAITIOLIIKENNE')).toHaveTextContent('5');
-    expect(screen.getByText('Muiden haittojen hallintasuunnitelma')).toBeInTheDocument();
+    expect(screen.getByText('Muiden työalueen haittojen hallintasuunnitelma')).toBeInTheDocument();
     expect(screen.getByTestId('test-meluHaitta')).toHaveTextContent('3');
     expect(screen.getByTestId('test-polyHaitta')).toHaveTextContent('5');
     expect(screen.getByTestId('test-tarinaHaitta')).toHaveTextContent('5');
@@ -1743,20 +1745,20 @@ describe('Haittojenhallintasuunnitelma', () => {
     const data = applicationUpdateSpy.mock.lastCall?.[0].data as KaivuilmoitusData;
 
     expect(data?.areas[0].haittojenhallintasuunnitelma?.YLEINEN).toBe(
-      'Yleisten haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+      'Työalueen yleisten haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
     );
     expect(data?.areas[0].haittojenhallintasuunnitelma?.PYORALIIKENNE).toBe(
-      'Pyöräliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+      'Pyöräliikenteelle koituvien työalueen haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
     );
     expect(data?.areas[0].haittojenhallintasuunnitelma?.AUTOLIIKENNE).toBe(
-      'Autoliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+      'Autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
     );
     expect(data?.areas[0].haittojenhallintasuunnitelma?.LINJAAUTOLIIKENNE).toBe('');
     expect(data?.areas[0].haittojenhallintasuunnitelma?.RAITIOLIIKENNE).toBe(
-      'Raitioliikenteelle koituvien haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+      'Raitioliikenteelle koituvien työalueen haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
     );
     expect(data?.areas[0].haittojenhallintasuunnitelma?.MUUT).toBe(
-      'Muiden haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+      'Muiden työalueen haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
     );
 
     applicationUpdateSpy.mockClear();
