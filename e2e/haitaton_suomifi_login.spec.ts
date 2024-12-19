@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('Johtoselvityshakemus ei ole käytettävissä ennen kirjautumista', async ({ page }) => {
-  await page.goto(process.env.haitaton_testing);
+  await page.goto(process.env.haitaton_testing ?? "");
   await expect(page.getByLabel('Tee johtoselvityshakemus.', { exact: true })).not.toBeVisible();
   await page.getByLabel('Kirjaudu').click();
   await page.getByRole('link', { name: 'Test IdP' }).click();
