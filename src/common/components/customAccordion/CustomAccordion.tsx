@@ -3,6 +3,7 @@ import { IconAngleDown, IconAngleUp, useAccordion } from 'hds-react';
 import React from 'react';
 
 type Props = {
+  border?: boolean;
   accordionBorderBottom?: boolean;
   heading: React.ReactNode;
   headingType?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
@@ -18,6 +19,7 @@ type Props = {
 };
 
 export default function CustomAccordion({
+  border = false,
   accordionBorderBottom = false,
   heading,
   headingType = 'h2',
@@ -42,6 +44,7 @@ export default function CustomAccordion({
 
   return (
     <Box
+      border={border ? '1px solid var(--color-black-60)' : undefined}
       borderBottom={accordionBorderBottom ? '1px solid var(--color-black-60)' : undefined}
       className={className}
     >

@@ -836,6 +836,59 @@ describe('Excavation notification application view', () => {
     expect(queryByText('10-99 m')).toBeInTheDocument();
   });
 
+  test('Shows correct information in nuisance management tab', async () => {
+    const { user } = render(<ApplicationViewContainer id={5} />);
+    await waitForLoadingToFinish();
+    await user.click(screen.getByRole('tab', { name: /haittojen hallinta/i }));
+    const { queryByText } = within(screen.getByRole('tabpanel', { name: /haittojen hallinta/i }));
+
+    expect(queryByText('Työalueen yleisten haittojen hallintasuunnitelma')).toBeInTheDocument();
+    expect(
+      queryByText('Raitioliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(
+      queryByText('Pyöräliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(
+      queryByText('Autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(queryByText('Muiden työalueen haittojen hallintasuunnitelma')).toBeInTheDocument();
+    expect(screen.getByTestId('test-RAITIOLIIKENNE')).toHaveTextContent('5');
+    expect(screen.getByTestId('test-PYORALIIKENNE')).toHaveTextContent('3');
+    expect(screen.getByTestId('test-AUTOLIIKENNE')).toHaveTextContent('3');
+    expect(screen.getByTestId('test-LINJAAUTOLIIKENNE')).toHaveTextContent('0');
+    expect(queryByText('Yleisten haittojen hallintasuunnitelma')).not.toBeVisible();
+    expect(
+      queryByText('Raitioliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).not.toBeVisible();
+    expect(
+      queryByText('Pyöräliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).not.toBeVisible();
+    expect(
+      queryByText('Autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).not.toBeVisible();
+    expect(
+      queryByText('Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).not.toBeVisible();
+    expect(queryByText('Muiden haittojen hallintasuunnitelma')).not.toBeVisible();
+
+    // open "hankealueen haittojen hallinta" accordions
+    await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[0]);
+    expect(queryByText('Yleisten haittojen hallintasuunnitelma')).toBeVisible();
+    await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[1]);
+    expect(queryByText('Raitioliikenteelle koituvien haittojen hallintasuunnitelma')).toBeVisible();
+    await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[2]);
+    expect(queryByText('Pyöräliikenteelle koituvien haittojen hallintasuunnitelma')).toBeVisible();
+    await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[3]);
+    expect(queryByText('Autoliikenteelle koituvien haittojen hallintasuunnitelma')).toBeVisible();
+    await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[4]);
+    expect(
+      queryByText('Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).toBeVisible();
+    await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[5]);
+    expect(queryByText('Muiden haittojen hallintasuunnitelma')).toBeVisible();
+  });
+
   test('Shows correct information in sidebar', async () => {
     render(<ApplicationViewContainer id={5} />);
     await waitForLoadingToFinish();
