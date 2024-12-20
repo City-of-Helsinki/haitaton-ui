@@ -9,12 +9,12 @@ import {
 } from '../../forms/components/FormSummarySection';
 import { Box, Grid, GridItem } from '@chakra-ui/react';
 import HankkeenHaittojenhallintasuunnitelma from './HankkeenHaittojenhallintasuunnitelma';
+import Text from '../../../common/components/text/Text';
 import { HAITTOJENHALLINTATYYPPI } from '../../common/haittojenhallinta/types';
 import { KaivuilmoitusAlue } from '../../application/types/application';
 import { HankeAlue } from '../../types/hanke';
 import HaittaIndex from '../../common/haittaIndexes/HaittaIndex';
 import HaittaTooltipContent from '../../common/haittaIndexes/HaittaTooltipContent';
-import Text from '../../../common/components/text/Text';
 
 type LiikennehaitanHallintasuunnitelmaProps = {
   tyyppi: HAITTOJENHALLINTATYYPPI;
