@@ -7,7 +7,7 @@ import {
   SectionItemContent,
   SectionItemTitle,
 } from '../../forms/components/FormSummarySection';
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Grid, GridItem } from '@chakra-ui/react';
 import HankkeenHaittojenhallintasuunnitelma from './HankkeenHaittojenhallintasuunnitelma';
 import { HAITTOJENHALLINTATYYPPI } from '../../common/haittojenhallinta/types';
 import { KaivuilmoitusAlue } from '../../application/types/application';
@@ -42,8 +42,8 @@ const LiikennehaitanHallintasuunnitelmaInfo: React.FC<LiikennehaitanHallintasuun
         {t(`hankeForm:haittojenHallintaForm:nuisanceType:${tyyppi}`)}
       </SectionItemTitle>
       <SectionItemContent>
-        <Flex>
-          <Box w="85%">
+        <Grid templateColumns="9fr 1fr" gap="var(--spacing-xs)">
+          <GridItem>
             <HankkeenHaittojenhallintasuunnitelma
               text={hankealue?.haittojenhallintasuunnitelma?.[tyyppi] ?? ''}
             />
@@ -53,8 +53,8 @@ const LiikennehaitanHallintasuunnitelmaInfo: React.FC<LiikennehaitanHallintasuun
             <Box whiteSpace="pre-wrap" wordBreak="break-word" paddingTop="var(--spacing-xs)">
               {alue.haittojenhallintasuunnitelma?.[tyyppi] ?? ''}
             </Box>
-          </Box>
-          <Box w="15%" paddingLeft="var(--spacing-xs)">
+          </GridItem>
+          <GridItem width="80px">
             <HaittaIndex
               index={indeksi}
               label={t('kaivuilmoitusForm:haittojenHallinta:haittaindeksi')}
@@ -66,8 +66,8 @@ const LiikennehaitanHallintasuunnitelmaInfo: React.FC<LiikennehaitanHallintasuun
               }
               testId={`test-${tyyppi}`}
             />
-          </Box>
-        </Flex>
+          </GridItem>
+        </Grid>
       </SectionItemContent>
     </FormSummarySection>
   );
@@ -93,17 +93,17 @@ export const HaittojenhallintasuunnitelmaInfo: React.FC<HaittojenHallintaProps> 
           {t('kaivuilmoitusForm:haittojenHallinta:labels:YLEINEN')}
         </SectionItemTitle>
         <SectionItemContent>
-          <Flex>
-            <Box w="85%">
+          <Grid templateColumns="9fr 1fr" gap="var(--spacing-xs)">
+            <GridItem>
               <HankkeenHaittojenhallintasuunnitelma
                 text={hankealue?.haittojenhallintasuunnitelma?.YLEINEN ?? ''}
               />
               <Box whiteSpace="pre-wrap" wordBreak="break-word" paddingTop="var(--spacing-s)">
                 {kaivuilmoitusAlue.haittojenhallintasuunnitelma?.YLEINEN ?? ''}
               </Box>
-            </Box>
-            <Box w="15%" paddingLeft="var(--spacing-xs)"></Box>
-          </Flex>
+            </GridItem>
+            <GridItem width="80px"></GridItem>
+          </Grid>
         </SectionItemContent>
       </FormSummarySection>
       {haittojenhallintatyypit.map(([haitta, indeksi], i) => {
@@ -127,8 +127,8 @@ export const HaittojenhallintasuunnitelmaInfo: React.FC<HaittojenHallintaProps> 
           {t('hankeForm:haittojenHallintaForm:nuisanceType:MUUT')}
         </SectionItemTitle>
         <SectionItemContent>
-          <Flex>
-            <Box w="85%">
+          <Grid templateColumns="9fr 1fr" gap="var(--spacing-xs)">
+            <GridItem>
               <HankkeenHaittojenhallintasuunnitelma
                 text={hankealue?.haittojenhallintasuunnitelma?.MUUT ?? ''}
               />
@@ -138,9 +138,9 @@ export const HaittojenhallintasuunnitelmaInfo: React.FC<HaittojenHallintaProps> 
               <Box whiteSpace="pre-wrap" wordBreak="break-word" paddingTop="var(--spacing-xs)">
                 {kaivuilmoitusAlue.haittojenhallintasuunnitelma?.MUUT ?? ''}
               </Box>
-            </Box>
-            <Box w="15%" paddingLeft="var(--spacing-xs)"></Box>
-          </Flex>
+            </GridItem>
+            <GridItem width="80px"></GridItem>
+          </Grid>
         </SectionItemContent>
       </FormSummarySection>
     </>
