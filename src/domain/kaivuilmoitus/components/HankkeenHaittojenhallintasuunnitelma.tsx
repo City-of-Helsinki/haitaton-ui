@@ -35,6 +35,8 @@ export default function HankkeenHaittojenhallintasuunnitelma({ text }: Readonly<
         paddingLeft="var(--spacing-s)"
         paddingRight="var(--spacing-s)"
         paddingBottom="var(--spacing-s)"
+        whiteSpace="pre-wrap"
+        wordBreak="break-word"
       >
         {text}
       </Box>

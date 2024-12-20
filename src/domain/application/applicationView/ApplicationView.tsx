@@ -12,7 +12,7 @@ import {
   TabPanel,
   Tabs,
 } from 'hds-react';
-import { Box, Divider, Flex } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
 import Text from '../../../common/components/text/Text';
 import {
@@ -31,7 +31,7 @@ import {
   SectionItemTitle,
   SectionTitle,
 } from '../../forms/components/FormSummarySection';
-import { HankeAlue, HankeData } from '../../types/hanke';
+import { HankeData } from '../../types/hanke';
 import ApplicationStatusTag from '../components/ApplicationStatusTag';
 import {
   AlluStatus,
@@ -90,11 +90,7 @@ import Sidebar from './Sidebar';
 import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
 import TaydennysCancel from '../taydennys/components/TaydennysCancel';
 import TaydennysAttachmentsList from '../taydennys/components/TaydennysAttachmentsList';
-import HankkeenHaittojenhallintasuunnitelma from '../../kaivuilmoitus/components/HankkeenHaittojenhallintasuunnitelma';
-import HaittaIndex from '../../common/haittaIndexes/HaittaIndex';
-import { HAITTOJENHALLINTATYYPPI } from '../../common/haittojenhallinta/types';
-import HaittaTooltipContent from '../../common/haittaIndexes/HaittaTooltipContent';
-import { sortedLiikenneHaittojenhallintatyyppi } from '../../common/haittojenhallinta/utils';
+import { HaittojenhallintasuunnitelmaInfo } from '../../kaivuilmoitus/components/HaittojenhallintasuunnitelmaInfo';
 
 function TyoalueetList({ tyoalueet }: { tyoalueet: ApplicationArea[] }) {
   const { t } = useTranslation();
@@ -292,140 +288,6 @@ function KaivuilmoitusAreasInfo({ areas }: { areas: KaivuilmoitusAlue[] | null }
   });
 }
 
-type LiikennehaitanHallintasuunnitelmaProps = {
-  tyyppi: HAITTOJENHALLINTATYYPPI;
-  indeksi: number;
-  alue: KaivuilmoitusAlue;
-  hankealue?: HankeAlue;
-  background?: string;
-};
-
-const LiikennehaitanHallintasuunnitelmaInfo: React.FC<LiikennehaitanHallintasuunnitelmaProps> = ({
-  tyyppi,
-  indeksi,
-  alue,
-  hankealue,
-  background,
-}) => {
-  const { t } = useTranslation();
-  return (
-    <FormSummarySection
-      background={background ?? 'var(--color-white)'}
-      paddingTop="var(--spacing-s)"
-      paddingLeft="var(--spacing-s)"
-      paddingBottom="var(--spacing-s)"
-      marginBottom="var(--spacing-xs)"
-    >
-      <SectionItemTitle>
-        {t(`hankeForm:haittojenHallintaForm:nuisanceType:${tyyppi}`)}
-      </SectionItemTitle>
-      <SectionItemContent>
-        <Flex>
-          <Box w="85%">
-            <HankkeenHaittojenhallintasuunnitelma
-              text={hankealue?.haittojenhallintasuunnitelma?.[tyyppi] ?? ''}
-            />
-            <Box paddingTop="var(--spacing-s)">
-              <Text tag="p">{alue.haittojenhallintasuunnitelma?.[tyyppi] ?? ''}</Text>
-            </Box>
-          </Box>
-          <Box w="15%">
-            <HaittaIndex
-              index={indeksi}
-              label={t('kaivuilmoitusForm:haittojenHallinta:haittaindeksi')}
-              tooltipContent={
-                <HaittaTooltipContent
-                  translationKey={`hankeIndexes:tooltips:${tyyppi}`}
-                  showHeading={false}
-                />
-              }
-              testId={`test-${tyyppi}`}
-            />
-          </Box>
-        </Flex>
-      </SectionItemContent>
-    </FormSummarySection>
-  );
-};
-
-type HaittojenHallintaProps = {
-  kaivuilmoitusAlue: KaivuilmoitusAlue;
-  hankealue?: HankeAlue;
-  index: number;
-};
-
-const HaittojenhallintasuunnitelmaInfo: React.FC<HaittojenHallintaProps> = ({
-  kaivuilmoitusAlue,
-  hankealue,
-  index,
-}) => {
-  const { t } = useTranslation();
-  const locale = useLocale();
-  const tormaystarkasteluTulos = calculateLiikennehaittaindeksienYhteenveto(kaivuilmoitusAlue);
-  const haittojenhallintatyypit = sortedLiikenneHaittojenhallintatyyppi(tormaystarkasteluTulos);
-
-  return (
-    <Accordion
-      language={locale}
-      heading={t('hakemus:labels:workAreaPlural') + ' (' + kaivuilmoitusAlue.name + ')'}
-      initiallyOpen={index === 0}
-      theme={{
-        '--header-focus-outline-color': 'var(--color-white)',
-      }}
-    >
-      <FormSummarySection paddingLeft="var(--spacing-s)" marginBottom="var(--spacing-xs)">
-        <SectionItemTitle>
-          {t('kaivuilmoitusForm:haittojenHallinta:labels:YLEINEN')}
-        </SectionItemTitle>
-        <SectionItemContent>
-          <Flex>
-            <Box w="85%">
-              <HankkeenHaittojenhallintasuunnitelma
-                text={hankealue?.haittojenhallintasuunnitelma?.YLEINEN ?? ''}
-              />
-              <Box paddingTop="var(--spacing-s)">
-                <Text tag="p">{kaivuilmoitusAlue.haittojenhallintasuunnitelma?.YLEINEN ?? ''}</Text>
-              </Box>
-            </Box>
-            <Box w="15%"></Box>
-          </Flex>
-        </SectionItemContent>
-      </FormSummarySection>
-      <Divider marginBottom="var(--spacing-s)" />
-      {haittojenhallintatyypit.map(([haitta, indeksi], i) => {
-        return (
-          <LiikennehaitanHallintasuunnitelmaInfo
-            tyyppi={haitta}
-            indeksi={indeksi}
-            alue={kaivuilmoitusAlue}
-            hankealue={hankealue}
-            key={haitta}
-            background={i % 2 === 1 ? 'var(--color-black-5)' : 'var(--color-white)'}
-          />
-        );
-      })}
-      <FormSummarySection paddingLeft="var(--spacing-s)" marginBottom="var(--spacing-xs)">
-        <SectionItemTitle>
-          {t('hankeForm:haittojenHallintaForm:nuisanceType:MUUT')}
-        </SectionItemTitle>
-        <SectionItemContent>
-          <Flex>
-            <Box w="85%">
-              <HankkeenHaittojenhallintasuunnitelma
-                text={hankealue?.haittojenhallintasuunnitelma?.MUUT ?? ''}
-              />
-              <Box paddingTop="var(--spacing-s)">
-                <Text tag="p">{kaivuilmoitusAlue.haittojenhallintasuunnitelma?.MUUT ?? ''}</Text>
-              </Box>
-            </Box>
-            <Box w="15%"></Box>
-          </Flex>
-        </SectionItemContent>
-      </FormSummarySection>
-    </Accordion>
-  );
-};
-
 function PaperDecisionReceiverSummary({
   paperDecisionReceiver,
 }: {
@@ -494,6 +356,7 @@ function ApplicationView({
   creatingTaydennys,
 }: Readonly<Props>) {
   const { t } = useTranslation();
+  const locale = useLocale();
   const queryClient = useQueryClient();
   const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const [showSendDialog, setShowSendDialog] = useState(false);
@@ -873,12 +736,20 @@ function ApplicationView({
                 kaivuilmoitusAlueet?.map((alue, index) => {
                   const hankealue = hankealueet?.find((ha) => ha.id === alue.hankealueId);
                   return (
-                    <HaittojenhallintasuunnitelmaInfo
-                      key={alue.hankealueId}
-                      kaivuilmoitusAlue={alue}
-                      hankealue={hankealue}
-                      index={index}
-                    />
+                    <Accordion
+                      language={locale}
+                      heading={t('hakemus:labels:workAreaPlural') + ' (' + alue.name + ')'}
+                      initiallyOpen={index === 0}
+                      theme={{
+                        '--header-focus-outline-color': 'var(--color-white)',
+                      }}
+                    >
+                      <HaittojenhallintasuunnitelmaInfo
+                        key={alue.hankealueId}
+                        kaivuilmoitusAlue={alue}
+                        hankealue={hankealue}
+                      />
+                    </Accordion>
                   );
                 })}
             </TabPanel>
