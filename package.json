@@ -53,7 +53,7 @@
     "hds-design-tokens": "^3.9.0",
     "hds-react": "^3.10.1",
     "http-proxy-middleware": "^3.0.3",
-    "i18next": "^23.14.0",
+    "i18next": "^24.2.0",
     "i18next-browser-languagedetector": "^8.0.0",
     "jest-fetch-mock": "^3.0.3",
     "lodash": "^4.17.21",
