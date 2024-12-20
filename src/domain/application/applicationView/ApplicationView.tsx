@@ -743,6 +743,7 @@ function ApplicationView({
                       theme={{
                         '--header-focus-outline-color': 'var(--color-white)',
                       }}
+                      key={alue.hankealueId}
                     >
                       <HaittojenhallintasuunnitelmaInfo
                         key={alue.hankealueId}
