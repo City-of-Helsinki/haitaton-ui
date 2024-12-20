@@ -1163,7 +1163,8 @@
       "completionDate": {
         "TOIMINNALLINEN_KUNTO": "Ilmoitettu toiminnalliseen kuntoon {{lastValmistumisilmoitus.reportedAt}} päivämäärälle {{lastValmistumisilmoitus.dateReported}}",
         "TYO_VALMIS": "Ilmoitettu valmiiksi {{lastValmistumisilmoitus.reportedAt}} päivämäärälle {{lastValmistumisilmoitus.dateReported}}"
-      }
+      },
+      "hankeAreaNuisanceControl": "Hankealueen haittojen hallinta"
     },
     "notifications": {
       "saveSuccessLabel": "Hakemus tallennettu",

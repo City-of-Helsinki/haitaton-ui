@@ -7,6 +7,7 @@ import React from 'react';
 type Props = {
   index?: number;
   showLabel?: boolean;
+  label?: string;
   tooltipContent?: React.ReactNode;
   testId?: string;
   showTooltip?: boolean;
@@ -16,6 +17,7 @@ type Props = {
 export default function HaittaIndex({
   index,
   showLabel = true,
+  label,
   tooltipContent,
   testId,
   showTooltip = false,
@@ -27,7 +29,7 @@ export default function HaittaIndex({
     <Flex flexDirection="column" alignItems="center">
       {showLabel ? (
         <Box as="p" fontSize="var(--fontsize-body-s)" mb="var(--spacing-3-xs)">
-          {t('hankeIndexes:haittaindeksi')}
+          {label ?? t('hankeIndexes:haittaindeksi')}
         </Box>
       ) : null}
       <Flex alignItems="flex-start" gap="var(--spacing-3-xs)">

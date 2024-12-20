@@ -70,7 +70,7 @@ import { CheckRightsByHanke } from '../../hanke/hankeUsers/UserRightsCheck';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import KaivuilmoitusAttachmentSummary from '../components/summary/KaivuilmoitusAttachmentSummary';
 import InvoicingCustomerSummary from '../components/summary/InvoicingCustomerSummary';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { SignedInUser } from '../../hanke/hankeUsers/hankeUser';
 import useSendApplication from '../hooks/useSendApplication';
 import { validationSchema as johtoselvitysValidationSchema } from '../../johtoselvitys/validationSchema';
@@ -90,6 +90,7 @@ import Sidebar from './Sidebar';
 import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
 import TaydennysCancel from '../taydennys/components/TaydennysCancel';
 import TaydennysAttachmentsList from '../taydennys/components/TaydennysAttachmentsList';
+import { HaittojenhallintasuunnitelmaInfo } from '../../kaivuilmoitus/components/HaittojenhallintasuunnitelmaInfo';
 
 function TyoalueetList({ tyoalueet }: { tyoalueet: ApplicationArea[] }) {
   const { t } = useTranslation();
@@ -355,6 +356,7 @@ function ApplicationView({
   creatingTaydennys,
 }: Readonly<Props>) {
   const { t } = useTranslation();
+  const locale = useLocale();
   const queryClient = useQueryClient();
   const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const [showSendDialog, setShowSendDialog] = useState(false);
@@ -396,6 +398,7 @@ function ApplicationView({
         );
   const kaivuilmoitusAlueet =
     applicationType === 'EXCAVATION_NOTIFICATION' ? (areas as KaivuilmoitusAlue[]) : null;
+  const hankealueet = hanke?.alueet;
   const currentDecisions = getCurrentDecisions(paatokset);
   const applicationId =
     applicationIdentifier || t(`hakemus:applicationTypeDraft:${applicationType}`);
@@ -643,6 +646,9 @@ function ApplicationView({
             <TabList style={{ marginBottom: 'var(--spacing-m)' }}>
               <Tab>{t('hankePortfolio:tabit:perustiedot')}</Tab>
               <Tab>{t('hankePortfolio:tabit:alueet')}</Tab>
+              {applicationType === 'EXCAVATION_NOTIFICATION' && (
+                <Tab>{t('hankePortfolio:tabit:haittojenHallinta')}</Tab>
+              )}
               <Tab>{t('hankePortfolio:tabit:yhteystiedot')}</Tab>
               <Tab>{t('hankePortfolio:tabit:liitteet')}</Tab>
             </TabList>
@@ -723,6 +729,30 @@ function ApplicationView({
               {applicationType === 'EXCAVATION_NOTIFICATION' && (
                 <KaivuilmoitusAreasInfo areas={kaivuilmoitusAlueet} />
               )}
+            </TabPanel>
+            <TabPanel>
+              {/* Nuisance management panel */}
+              {applicationType === 'EXCAVATION_NOTIFICATION' &&
+                kaivuilmoitusAlueet?.map((alue, index) => {
+                  const hankealue = hankealueet?.find((ha) => ha.id === alue.hankealueId);
+                  return (
+                    <Accordion
+                      language={locale}
+                      heading={t('hakemus:labels:workAreaPlural') + ' (' + alue.name + ')'}
+                      initiallyOpen={index === 0}
+                      theme={{
+                        '--header-focus-outline-color': 'var(--color-white)',
+                      }}
+                      key={alue.hankealueId}
+                    >
+                      <HaittojenhallintasuunnitelmaInfo
+                        key={alue.hankealueId}
+                        kaivuilmoitusAlue={alue}
+                        hankealue={hankealue}
+                      />
+                    </Accordion>
+                  );
+                })}
             </TabPanel>
             <TabPanel>
               {/* Contacts information panel */}
