@@ -251,6 +251,10 @@ function KaivuilmoitusAreasInfo({ areas }: { areas: KaivuilmoitusAlue[] | null }
             heading={`${t('kaivuilmoitusForm:alueet:liikennehaittaindeksienYhteenveto')} (0-5)`}
             haittaIndexData={calculateLiikennehaittaindeksienYhteenveto(alue)}
             initiallyOpen
+            autoHaitanKestoHeading={t(
+              'kaivuilmoitusForm:haittojenHallinta:carTrafficNuisanceType:haitanKesto',
+            )}
+            autoHaitanKestoTooltipTranslationKey="hankeIndexes:tooltips:autoTyonKesto"
           />
         </Box>
         <Box as="h2" className="heading-xxs" marginBottom="var(--spacing-m)">

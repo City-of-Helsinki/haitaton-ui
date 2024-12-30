@@ -1,6 +1,10 @@
 import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../haittaIndexes/types';
 import { HAITTOJENHALLINTATYYPPI } from './types';
 
+function getHaittaIndexValue(v: number | { indeksi: number }): number {
+  return typeof v === 'number' ? v : v.indeksi;
+}
+
 /**
  * Sorts HAITTOJENHALLINTATYYPPI based on given tormaystarkasteluTulos.
  * For example, if tormaystarkasteluTulos has {autoliikenneindeksi: 1.0, pyoraliiikenneindeksi: 1.3, linjaautoliikenneindeksi: 0.0, raitioliikenneindeksi: 0.0},
@@ -23,14 +27,10 @@ export function sortedLiikenneHaittojenhallintatyyppi(
     return key.toLowerCase() as keyof HaittaIndexData;
   }
 
-  function value(v: number | { indeksi: number }): number {
-    return typeof v === 'number' ? v : v.indeksi;
-  }
-
   const sortedIndices = Object.values(HAITTA_INDEX_TYPE)
     .map((key) => ({
       type: key.toUpperCase().replace('INDEKSI', '') as HAITTOJENHALLINTATYYPPI,
-      value: value(tormaystarkasteluTulos[keyOfIndexType(key)]),
+      value: getHaittaIndexValue(tormaystarkasteluTulos[keyOfIndexType(key)]),
     }))
     .sort((a, b): number => {
       const diff = b.value - a.value;
@@ -47,4 +47,27 @@ export function mapNuisanceEnumIndexToNuisanceIndex(index: number): number {
   if (index === 2) return 3;
   if (index === 3) return 5;
   return index;
+}
+
+/**
+ * Get haitta index value for given haittojenhallinta tyyppi from tormaystarkasteluTulos
+ */
+export function getHaittaIndexForTyyppi(
+  tormaystarkasteluTulos: HaittaIndexData | null | undefined,
+  haittojenhallintaTyyppi: HAITTOJENHALLINTATYYPPI,
+) {
+  if (!tormaystarkasteluTulos) {
+    return 0;
+  }
+
+  function getKeyOfHaittaIndexTyyppi(tyyppi: HAITTOJENHALLINTATYYPPI): keyof HaittaIndexData {
+    if (tyyppi === HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE) {
+      return 'autoliikenne';
+    }
+    return `${tyyppi.toLowerCase()}indeksi` as keyof HaittaIndexData;
+  }
+
+  return getHaittaIndexValue(
+    tormaystarkasteluTulos[getKeyOfHaittaIndexTyyppi(haittojenhallintaTyyppi)],
+  );
 }

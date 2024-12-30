@@ -4,8 +4,13 @@ import Text from '../../common/components/text/Text';
 import useFieldArrayWithStateUpdate from '../../common/hooks/useFieldArrayWithStateUpdate';
 import { KaivuilmoitusFormValues } from './types';
 import HaittojenhallintaSuunnitelma from './components/HaittojenhallintaSuunnitelma';
+import { HankeData } from '../types/hanke';
 
-export default function HaittojenHallinta() {
+type Props = {
+  hankeData: HankeData;
+};
+
+export default function HaittojenHallinta({ hankeData }: Readonly<Props>) {
   const { t } = useTranslation();
   const { fields: hakemusAlueet } = useFieldArrayWithStateUpdate<
     KaivuilmoitusFormValues,
@@ -40,9 +45,14 @@ export default function HaittojenHallinta() {
           })}
         </TabList>
         {hakemusAlueet.map((alue, index) => {
+          const hankeAlue = hankeData.alueet.find((ha) => ha.id === alue.hankealueId);
           return (
             <TabPanel key={alue.id}>
-              <HaittojenhallintaSuunnitelma kaivuilmoitusAlue={alue} index={index} />
+              <HaittojenhallintaSuunnitelma
+                hankeAlue={hankeAlue!}
+                kaivuilmoitusAlue={alue}
+                index={index}
+              />
             </TabPanel>
           );
         })}

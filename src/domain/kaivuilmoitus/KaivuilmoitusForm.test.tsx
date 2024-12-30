@@ -1665,7 +1665,7 @@ describe('Registry key', () => {
 
 describe('Haittojenhallintasuunnitelma', () => {
   async function setupHaittojenHallintaPage(
-    hankeData: HankeData = hankkeet[2] as HankeData,
+    hankeData: HankeData = hankkeet[1] as HankeData,
     application: Application<KaivuilmoitusData> = cloneDeep(
       applications[4] as Application<KaivuilmoitusData>,
     ),

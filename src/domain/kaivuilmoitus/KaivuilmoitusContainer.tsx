@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { merge } from 'lodash';
 import {
@@ -306,7 +306,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       validationSchema: alueetSchema,
     },
     {
-      element: <HaittojenHallinta />,
+      element: <HaittojenHallinta hankeData={hankeData} />,
       label: t('hankeForm:haittojenHallintaForm:header'),
       state: StepState.available,
       validationSchema: haittojenhallintaSuunnitelmaSchema,
