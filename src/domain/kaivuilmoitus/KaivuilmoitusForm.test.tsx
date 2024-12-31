@@ -1756,8 +1756,13 @@ describe('Haittojenhallintasuunnitelma', () => {
     expect(screen.getByText('Linja-autojen paikallisliikenne')).toBeInTheDocument();
     expect(screen.queryByTestId('test-LINJAAUTOLIIKENNE')).toHaveTextContent('0');
     expect(
-      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE'),
-    ).not.toBeRequired();
+      screen.getByText(
+        'Haitaton ei löytänyt tätä kohderyhmää alueelta. Voit tarvittaessa lisätä toimet haittojen hallintaan.',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Lisää toimet haittojen hallintaan' }),
+    ).toBeInTheDocument();
     expect(
       screen.getByText('Raitioliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
     ).toBeInTheDocument();
@@ -1814,5 +1819,19 @@ describe('Haittojenhallintasuunnitelma', () => {
     );
 
     applicationUpdateSpy.mockClear();
+  });
+
+  test('Non-detected nuisance field is shown correctly on nuisance control plan page', async () => {
+    const { user } = await setupHaittojenHallintaPage();
+
+    await user.click(screen.getByRole('button', { name: /lisää toimet haittojen hallintaan/i }));
+
+    expect(screen.getByTestId('test-LINJAAUTOLIIKENNE')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE'),
+    ).not.toBeRequired();
   });
 });

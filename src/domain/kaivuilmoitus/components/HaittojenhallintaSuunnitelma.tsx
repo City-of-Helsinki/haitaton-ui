@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
 import { Box, Flex } from '@chakra-ui/layout';
+import { Button, IconPlusCircle } from 'hds-react';
 import TextArea from '../../../common/components/textArea/TextArea';
 import { KaivuilmoitusAlue } from '../../application/types/application';
 import { HAITTOJENHALLINTATYYPPI } from '../../common/haittojenhallinta/types';
@@ -22,6 +23,7 @@ import {
 } from '../../types/hanke';
 import styles from './HaittojenhallintaSuunnitelma.module.scss';
 import HaittojenhallintaMap from './HaittojenhallintaMap';
+import useIsHaittojenhallintaSectionVisible from '../../common/haittojenhallinta/useIsHaittojenhallintaSectionVisible';
 
 type Props = {
   hankeAlue: HankeAlue;
@@ -45,6 +47,10 @@ export default function KaivuilmoitusHaittojenhallintaSuunnitelma({
   );
   const tarinaHaittaIndex = mapNuisanceEnumIndexToNuisanceIndex(
     $enum(HANKE_TARINAHAITTA).indexOfKey(kaivuilmoitusAlue.tarinahaitta!),
+  );
+  const { isVisible, setVisible } = useIsHaittojenhallintaSectionVisible(
+    haittojenhallintatyypit,
+    kaivuilmoitusAlue.haittojenhallintasuunnitelma,
   );
 
   return (
@@ -92,6 +98,7 @@ export default function KaivuilmoitusHaittojenhallintaSuunnitelma({
                     />
                   }
                   headingBorderBottom={false}
+                  headingBoxProps={{ paddingLeft: 0 }}
                 >
                   <HaittaSubSection
                     heading={t(
@@ -153,13 +160,28 @@ export default function KaivuilmoitusHaittojenhallintaSuunnitelma({
                 />
               )}
             </Box>
-            <TextArea
-              name={`applicationData.areas.${index}.haittojenhallintasuunnitelma.${haitta}`}
-              label={t(`kaivuilmoitusForm:haittojenHallinta:labels:${haitta}`)}
-              testId={`applicationData.areas.${index}.haittojenhallintasuunnitelma.${haitta}`}
-              required={indeksi > 0}
-              helperText={t('kaivuilmoitusForm:haittojenHallinta:helperText')}
-            />
+            {isVisible[haitta] ? (
+              <TextArea
+                name={`applicationData.areas.${index}.haittojenhallintasuunnitelma.${haitta}`}
+                label={t(`kaivuilmoitusForm:haittojenHallinta:labels:${haitta}`)}
+                testId={`applicationData.areas.${index}.haittojenhallintasuunnitelma.${haitta}`}
+                required={indeksi > 0}
+                helperText={t('kaivuilmoitusForm:haittojenHallinta:helperText')}
+              />
+            ) : (
+              <>
+                <Box as="p" mb="var(--spacing-s)">
+                  {t('hankeForm:haittojenHallintaForm:noNuisanceDetected')}
+                </Box>
+                <Button
+                  variant="supplementary"
+                  iconLeft={<IconPlusCircle />}
+                  onClick={() => setVisible(haitta)}
+                >
+                  {t('hankeForm:haittojenHallintaForm:addControlPlan')}
+                </Button>
+              </>
+            )}
           </Box>
         );
       })}

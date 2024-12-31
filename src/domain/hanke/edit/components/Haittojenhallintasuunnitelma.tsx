@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Box, Flex } from '@chakra-ui/react';
 import { $enum } from 'ts-enum-util';
@@ -20,31 +20,14 @@ import styles from './Haittojenhallintasuunnitelma.module.scss';
 import ProcedureTips from '../../../common/haittaIndexes/ProcedureTips';
 import HaittaTooltipContent from '../../../common/haittaIndexes/HaittaTooltipContent';
 import { Button, IconPlusCircle } from 'hds-react';
-import {
-  HAITTOJENHALLINTATYYPPI,
-  Haittojenhallintasuunnitelma,
-} from '../../../common/haittojenhallinta/types';
+import { HAITTOJENHALLINTATYYPPI } from '../../../common/haittojenhallinta/types';
 import {
   mapNuisanceEnumIndexToNuisanceIndex,
   sortedLiikenneHaittojenhallintatyyppi,
 } from '../../../common/haittojenhallinta/utils';
 import TrafficIcon from '../../../common/haittojenhallinta/TrafficIcon';
 import HaittaIndexHeading from '../../../common/haittojenhallinta/HaittaIndexHeading';
-
-/**
- * Nuisance control plan section for a traffic type should be visible if its index > 0,
- * or if it has some content.
- */
-function shouldBeVisible(
-  type: HAITTOJENHALLINTATYYPPI,
-  index: number,
-  haittojenhallintasuunnitelma?: Haittojenhallintasuunnitelma,
-): boolean {
-  return (
-    index > 0 ||
-    (haittojenhallintasuunnitelma ? (haittojenhallintasuunnitelma[type]?.length ?? 0) > 0 : false)
-  );
-}
+import useIsHaittojenhallintaSectionVisible from '../../../common/haittojenhallinta/useIsHaittojenhallintaSectionVisible';
 
 type Props = {
   hanke: HankeData;
@@ -60,7 +43,6 @@ const HankkeenHaittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke
   const tormaystarkasteluTulos = hankealue.tormaystarkasteluTulos as HaittaIndexData;
   const haittojenhallintasuunnitelma = hankealue.haittojenhallintasuunnitelma;
   const haittojenhallintatyypit = sortedLiikenneHaittojenhallintatyyppi(tormaystarkasteluTulos);
-  const liikennehaittatyypit = haittojenhallintatyypit.map(([tyyppi]) => tyyppi);
   const addressCoordinate = useAddressCoordinate(hanke.tyomaaKatuosoite);
   const meluhaittaIndex = mapNuisanceEnumIndexToNuisanceIndex(
     $enum(HANKE_MELUHAITTA).indexOfKey(hankealue.meluHaitta!),
@@ -71,18 +53,10 @@ const HankkeenHaittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke
   const tarinaHaittaIndex = mapNuisanceEnumIndexToNuisanceIndex(
     $enum(HANKE_TARINAHAITTA).indexOfKey(hankealue.tarinaHaitta!),
   );
-  const initialVisibility = liikennehaittatyypit.reduce(
-    (acc, type) => {
-      const found = haittojenhallintatyypit.find((value) => value[0] === type);
-      return {
-        ...acc,
-        [type]: shouldBeVisible(type, found ? found[1] : 0, haittojenhallintasuunnitelma),
-      };
-    },
-    {} as Record<HAITTOJENHALLINTATYYPPI, boolean>,
+  const { isVisible, setVisible } = useIsHaittojenhallintaSectionVisible(
+    haittojenhallintatyypit,
+    haittojenhallintasuunnitelma,
   );
-  const [isVisible, setVisible] =
-    useState<Record<HAITTOJENHALLINTATYYPPI, boolean>>(initialVisibility);
 
   return (
     <div>
@@ -221,7 +195,7 @@ const HankkeenHaittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke
               <Button
                 variant="supplementary"
                 iconLeft={<IconPlusCircle aria-hidden />}
-                onClick={() => setVisible((state) => ({ ...state, [haitta]: true }))}
+                onClick={() => setVisible(haitta)}
               >
                 {t('hankeForm:haittojenHallintaForm:addControlPlan')}
               </Button>
