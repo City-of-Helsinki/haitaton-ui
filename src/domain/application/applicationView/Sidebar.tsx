@@ -77,14 +77,16 @@ export default function Sidebar({ hanke, application }: Readonly<SidebarProps>) 
   function getHankeWithAlueetFilteredByDates(hankeData: HankeData): HankeData {
     return {
       ...hankeData,
-      alueet: filterHankeAlueet(hankeData.alueet),
+      // Do not show hanke alueet for generated hanke
+      alueet: !hankeData.generated ? filterHankeAlueet(hankeData.alueet) : [],
     };
   }
 
   function getHankeWithAlueetFilteredByDatesForTaydennys(hankeData: HankeData): HankeData {
     return {
       ...hankeData,
-      alueet: filterHankeAlueetForTaydennys(hankeData.alueet),
+      // Do not show hanke alueet for generated hanke
+      alueet: !hankeData.generated ? filterHankeAlueetForTaydennys(hankeData.alueet) : [],
     };
   }
 
