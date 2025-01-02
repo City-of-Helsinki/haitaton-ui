@@ -41,3 +41,8 @@ yarn-error.log*
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
