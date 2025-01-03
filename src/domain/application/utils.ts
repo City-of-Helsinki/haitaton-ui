@@ -285,8 +285,14 @@ export function modifyDataAfterReceive<T extends JohtoselvitysData | Kaivuilmoit
   const kaivuilmoitusData = modifyKaivuilmoitusDataAfterReceive(
     application.applicationData as KaivuilmoitusData,
   );
+  const taydennysData =
+    application.taydennys &&
+    modifyKaivuilmoitusDataAfterReceive(application.taydennys.applicationData as KaivuilmoitusData);
   return {
     ...application,
     applicationData: kaivuilmoitusData as T,
+    taydennys: application.taydennys
+      ? { ...application.taydennys, applicationData: taydennysData as T }
+      : undefined,
   };
 }

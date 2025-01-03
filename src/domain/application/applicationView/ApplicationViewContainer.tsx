@@ -8,7 +8,7 @@ import ErrorLoadingText from '../../../common/components/errorLoadingText/ErrorL
 import useHanke from '../../hanke/hooks/useHanke';
 import { useApplication } from '../hooks/useApplication';
 import useLinkPath from '../../../common/hooks/useLinkPath';
-import { HAKEMUS_ROUTES, ROUTES } from '../../../common/types/route';
+import { HAKEMUS_ROUTES, HAKEMUS_TAYDENNYS_ROUTES } from '../../../common/types/route';
 import { usePermissionsForHanke } from '../../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
 import useCreateTaydennys from '../taydennys/hooks/useCreateTaydennys';
@@ -26,7 +26,9 @@ function ApplicationViewContainer({ id }: Readonly<Props>) {
   const getEditApplicationPath = useLinkPath(
     HAKEMUS_ROUTES[application?.applicationType ?? 'CABLE_REPORT'],
   );
-  const getEditTaydennysPath = useLinkPath(ROUTES.EDIT_JOHTOSELVITYSTAYDENNYS);
+  const getEditTaydennysPath = useLinkPath(
+    HAKEMUS_TAYDENNYS_ROUTES[application?.applicationType ?? 'CABLE_REPORT'],
+  );
   const createTaydennysMutation = useCreateTaydennys();
 
   function editApplication() {

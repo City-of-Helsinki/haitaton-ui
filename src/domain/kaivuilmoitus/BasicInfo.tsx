@@ -34,18 +34,18 @@ export default function BasicInfo({
     trigger,
     watch,
     setValue,
-    getValues,
     formState: { errors },
   } = useFormContext<KaivuilmoitusFormValues>();
-  const cableReports = getValues('applicationData.cableReports') ?? [];
 
   const [
+    cableReports = [],
     constructionWorkChecked,
     maintenanceWorkChecked,
     emergencyWorkChecked,
     cableReportDone,
     placementContracts,
   ] = watch([
+    'applicationData.cableReports',
     'applicationData.constructionWork',
     'applicationData.maintenanceWork',
     'applicationData.emergencyWork',
