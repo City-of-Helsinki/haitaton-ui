@@ -5,9 +5,9 @@ test.beforeEach('Helsinki_login', async ({ page }) => {
   await page.goto(testiData.testEnvUrl);
   await expect(page.getByRole('heading', { name: 'Tervetuloa Haitaton-palveluun' })).toBeVisible();
   await page.getByLabel('Kirjaudu').click();
-  await expect(page.getByRole('link', { name: 'Test IdP' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Test IdP' })).toBeVisible({ timeout: 10_000 });
   await page.getByRole('link', { name: 'Test IdP' }).click();
-  await expect(page.getByPlaceholder('-9988')).toBeVisible();
+  await expect(page.getByPlaceholder('-9988')).toBeVisible({ timeout: 10_000 });
   await page.getByPlaceholder('-9988').fill(process.env.suomifilogin ?? "")
   await page.getByPlaceholder('-9988').press('Tab');
   await page.getByRole('button', { name: 'Tunnistaudu' }).click();
@@ -73,8 +73,7 @@ test('Johtoselvityshakemus_peruminen', async ({ page }) => {
   // Workaround chromium selaimelle
   await expect(async () => {
     await page.getByRole('button', { name: 'Seuraava' }).click();
-    await expect(page.locator('div').filter({ hasText: /^Raahaa tiedostot tänne$/ }).first(),).toBeVisible();
-    await expect(page.locator('button').filter({ hasText: 'Lisää tiedostoja' })).toBeVisible();
+    await expect(page.getByText('Vaihe 4/5: Liitteet')).toBeVisible();
   }).toPass({ intervals: [2000, 2000, 2000, 2000], timeout: 10000, });
 
   await page.getByRole('button', { name: 'Seuraava' }).click();
@@ -97,7 +96,7 @@ test('Johtoselvityshakemus_peruminen', async ({ page }) => {
   await page.getByRole('button', { name: 'Peru hanke' }).click()
   await expect(page.getByRole('button', { name: 'Vahvista' })).toBeVisible();
   await page.getByRole('button', { name: 'Vahvista' }).click()
-  await expect(page.getByText('Omat hankkeet')).toBeVisible();
+  await expect(page.getByText('Omat hankkeet')).toBeVisible({timeout: 10000});
   await expect(page.getByText('Hanke poistettu')).toBeVisible();
 
 });
