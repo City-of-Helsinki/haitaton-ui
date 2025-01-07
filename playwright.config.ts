@@ -66,6 +66,9 @@ export default defineConfig({
       use: {
         ...devices['Desktop Safari'],
         viewport: { width: 1920, height: 1080 },
+        launchOptions: {
+          slowMo: 1000,
+        }
       },
     },
 

@@ -1,4 +1,6 @@
 
+import { test, expect } from '@playwright/test';
+
 const today: Date = new Date();
 const todayFull: string = today.toISOString();
 const todayDate: number = today.getDate()
@@ -6,6 +8,16 @@ const todayDate: number = today.getDate()
 const tomorrow: Date = new Date(today);
 tomorrow.setDate(today.getDate() + 1);
 const currentMonth: string = today.toLocaleString('fi-FI', { month: "long" });
+
+export async function tarkistaTulokset(page, hakemusLinkki, teksti) {
+  await expect(async () => {
+    await page.goto(hakemusLinkki);
+    await page.getByText('Hakemukset').click();
+    await expect(page.getByTestId('application-status-tag')).toBeVisible();
+    await expect(page.getByTestId('application-status-tag')).toContainText(teksti, { timeout: 5000, });
+  }).toPass({ intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000], timeout: 120000, });
+}
+
 
 interface TestUser {
   username: string;
