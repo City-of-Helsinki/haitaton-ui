@@ -512,6 +512,58 @@ test('Should be able to fill form pages and show filled information in summary p
   expect(screen.getByText('Kaistahaittojen pituus: 10-99 m')).toBeInTheDocument();
   expect(screen.getByText('Lisätietoja alueesta: -')).toBeInTheDocument();
 
+  // Nuisance management
+  expect(screen.getByText('Työalueen yleisten haittojen hallintasuunnitelma')).toBeInTheDocument();
+  expect(
+    screen.getByText('Raitioliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText('Pyöräliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText('Autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
+  ).toBeInTheDocument();
+  expect(screen.getByText('Muiden työalueen haittojen hallintasuunnitelma')).toBeInTheDocument();
+  expect(screen.getByTestId('test-RAITIOLIIKENNE')).toHaveTextContent('1');
+  expect(screen.getByTestId('test-PYORALIIKENNE')).toHaveTextContent('3');
+  expect(screen.getByTestId('test-AUTOLIIKENNE')).toHaveTextContent('1.4');
+  expect(screen.getByTestId('test-LINJAAUTOLIIKENNE')).toHaveTextContent('0');
+  expect(screen.getByText('Yleisten haittojen hallintasuunnitelma')).not.toBeVisible();
+  expect(
+    screen.getByText('Raitioliikenteelle koituvien haittojen hallintasuunnitelma'),
+  ).not.toBeVisible();
+  expect(
+    screen.getByText('Pyöräliikenteelle koituvien haittojen hallintasuunnitelma'),
+  ).not.toBeVisible();
+  expect(
+    screen.getByText('Autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+  ).not.toBeVisible();
+  expect(
+    screen.getByText('Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+  ).not.toBeVisible();
+  expect(screen.getByText('Muiden haittojen hallintasuunnitelma')).not.toBeVisible();
+  // open "hankealueen haittojen hallinta" accordions
+  await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[0]);
+  expect(screen.getByText('Yleisten haittojen hallintasuunnitelma')).toBeVisible();
+  await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[1]);
+  expect(
+    screen.getByText('Pyöräliikenteelle koituvien haittojen hallintasuunnitelma'),
+  ).toBeVisible();
+  await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[2]);
+  expect(
+    screen.getByText('Autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+  ).toBeVisible();
+  await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[3]);
+  expect(
+    screen.getByText('Raitioliikenteelle koituvien haittojen hallintasuunnitelma'),
+  ).toBeVisible();
+  await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[4]);
+  expect(
+    screen.getByText('Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+  ).toBeVisible();
+  await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[5]);
+  expect(screen.getByText('Muiden haittojen hallintasuunnitelma')).toBeVisible();
+
   // Contacts information
   expect(screen.getByText(customer.name)).toBeInTheDocument();
   expect(screen.getByText(customer.registryKey)).toBeInTheDocument();

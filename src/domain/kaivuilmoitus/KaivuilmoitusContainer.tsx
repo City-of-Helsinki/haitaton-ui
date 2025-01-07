@@ -331,7 +331,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       validationSchema: liitteetSchema,
     },
     {
-      element: <ReviewAndSend attachments={existingAttachments} />,
+      element: <ReviewAndSend hankealueet={hankeData.alueet} attachments={existingAttachments} />,
       label: t('form:headers:yhteenveto'),
       state: StepState.available,
     },
