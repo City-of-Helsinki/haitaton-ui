@@ -6,8 +6,8 @@ const BgColorOverride = () => {
     <Helmet>
       <style>
         {`
-        #root {
-          background-color: white;
+        html, #root {
+          background-color: #fff;
         }
       `}
       </style>

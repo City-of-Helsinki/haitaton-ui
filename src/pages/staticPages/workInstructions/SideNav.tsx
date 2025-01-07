@@ -5,7 +5,7 @@ const SideNav: React.FC<React.PropsWithChildren<unknown>> = () => {
   return (
     <>
       <SideNavigation
-        defaultOpenMainLevels={[]}
+        defaultOpenMainLevels={[1, 2]}
         id="side-navigation"
         toggleButtonLabel="Navigate to page"
       >
@@ -17,9 +17,33 @@ const SideNav: React.FC<React.PropsWithChildren<unknown>> = () => {
         ></SideNavigation.MainLevel>
         <SideNavigation.MainLevel
           icon={<IconDocument />}
+          href="/fi/tyoohjeet"
+          id="#main-level-1"
+          label="Haittojenhallinnan lisätietokortit"
+        ></SideNavigation.MainLevel>
+        <SideNavigation.MainLevel
+          index={1}
           href="/fi/tyoohjeet/haittojenhallinta"
           id="main-level-3"
-          label="Haittojenhallinnan lisätietokortit"
+          label="1. Tiedotus eri osapuolille ja palaute"
+        >
+          <SideNavigation.SubLevel
+            href="/fi/tyoohjeet/haittojenhallinta/1/perustaso"
+            id="sub-level-5"
+            label="Vaadittava perustaso"
+            mainLevelIndex={1}
+          ></SideNavigation.SubLevel>
+          <SideNavigation.SubLevel href="/map" id="sub-level-3" label="Mahdollinen lisätaso" />
+        </SideNavigation.MainLevel>
+        <SideNavigation.MainLevel
+          external
+          href="https://tapahtumat.hel.fi/"
+          openInNewTab
+          openInNewTabAriaLabel="Opens in a new tab."
+          openInExternalDomainAriaLabel="Opens a different website."
+          id="main-level-4"
+          label="Työmaan luvat ja ohjeet"
+          withDivider
         />
         <SideNavigation.MainLevel
           external
@@ -28,8 +52,16 @@ const SideNav: React.FC<React.PropsWithChildren<unknown>> = () => {
           openInNewTabAriaLabel="Opens in a new tab."
           openInExternalDomainAriaLabel="Opens a different website."
           id="main-level-4"
-          label="Tapahtumat.hel.fi"
-          withDivider
+          label="Maksut"
+        />
+        <SideNavigation.MainLevel
+          external
+          href="https://tapahtumat.hel.fi/"
+          openInNewTab
+          openInNewTabAriaLabel="Opens in a new tab."
+          openInExternalDomainAriaLabel="Opens a different website."
+          id="main-level-4"
+          label="Tilapäisten liikennejärjestelyiden ohje ja tyyppikuvat"
         />
       </SideNavigation>
     </>

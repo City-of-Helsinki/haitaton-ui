@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PageMeta from '../../components/PageMeta';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import SideNav from './SideNav';
@@ -9,12 +9,13 @@ import Breadcrumbs from './Breadcrumbs';
 
 const WorkInstructionsPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { WORKINSTRUCTIONS } = useLocalizedRoutes();
+  const [breadcrumbs] = useState([{ title: 'Työhjeet', path: '/' }]);
 
   return (
     <>
       <PageMeta routeData={WORKINSTRUCTIONS} />
       <BgColorOverride />
-      <Breadcrumbs />
+      <Breadcrumbs breadcrumbs={breadcrumbs} />
       <div className={styles.container}>
         <div className={styles.navmain}>
           <SideNav />

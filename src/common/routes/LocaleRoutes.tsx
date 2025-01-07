@@ -28,7 +28,8 @@ import EditJohtoselvitysTaydennysPage from '../../pages/EditJohtoselvitysTaydenn
 import EditKaivuilmoitusTaydennysPage from '../../pages/EditKaivuilmoitusTaydennysPage';
 import WorkInstructionsPage from '../../pages/staticPages/workInstructions/WorkInstructionsPage';
 import WorkInstructionsMain from '../../pages/staticPages/workInstructions/WorkInstructionsMain';
-import NuisanceControlInfo from '../../pages/staticPages/workInstructions/NuisanceControlInfo';
+import CardsIndex from '../../pages/staticPages/workInstructions/cards/CardsIndex';
+import { Card1Additional, Card1Basic } from '../../pages/staticPages/workInstructions/cards/1';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
@@ -93,7 +94,9 @@ const LocaleRoutes = () => {
       <Route path={t('routes:PRIVACY_POLICY:path')} element={<PrivacyPolicyPage />} />
       <Route path={t('routes:WORKINSTRUCTIONS:path')} element={<WorkInstructionsPage />}>
         <Route element={<WorkInstructionsMain />} index />
-        <Route element={<NuisanceControlInfo />} path="haittojenhallinta" />
+        <Route path="haittojenhallinta" element={<CardsIndex />} />
+        <Route path="haittojenhallinta/1/perustaso" element={<Card1Basic />}></Route>
+        <Route path="haittojenhallinta/1/lisataso" element={<Card1Additional />}></Route>
       </Route>
       <Route path={t('routes:MANUAL:path')} element={<ManualPage />} />
       <Route path={t('routes:IDENTIFY_USER:path')} element={<UserIdentify />} />
