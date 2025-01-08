@@ -9,11 +9,9 @@
   padding-bottom: var(--spacing-layout-m);
   flex-direction: row;
 
-  /* 
   @include respond-below(m) {
     flex-direction: column;
   }
-    */
 }
 
 .main {
