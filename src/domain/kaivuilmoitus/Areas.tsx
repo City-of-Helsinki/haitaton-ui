@@ -423,6 +423,7 @@ export default function Areas({ hankeData, hankkeenHakemukset }: Readonly<Props>
           {/* Johtoselvitys areas */}
           {selectedJohtoselvitykset.map((hakemus) => (
             <HakemusLayer
+              key={hakemus.id}
               hakemusId={hakemus.id!}
               layerStyle={styleFunction}
               featureProperties={{ statusKey: LIIKENNEHAITTA_STATUS.LAVENDER_BLUE }}

@@ -14,15 +14,23 @@ import CustomAccordion from '../../../common/components/customAccordion/CustomAc
 import { HaittaSubSection } from '../../common/haittaIndexes/HaittaSubSection';
 import HaittaIndexHeading from '../../common/haittojenhallinta/HaittaIndexHeading';
 import HaittaTooltipContent from '../../common/haittaIndexes/HaittaTooltipContent';
-import { HANKE_MELUHAITTA, HANKE_POLYHAITTA, HANKE_TARINAHAITTA } from '../../types/hanke';
+import {
+  HANKE_MELUHAITTA,
+  HANKE_POLYHAITTA,
+  HANKE_TARINAHAITTA,
+  HankeAlue,
+} from '../../types/hanke';
 import styles from './HaittojenhallintaSuunnitelma.module.scss';
+import HaittojenhallintaMap from './HaittojenhallintaMap';
 
 type Props = {
+  hankeAlue: HankeAlue;
   kaivuilmoitusAlue: KaivuilmoitusAlue;
   index: number;
 };
 
 export default function KaivuilmoitusHaittojenhallintaSuunnitelma({
+  hankeAlue,
   kaivuilmoitusAlue,
   index,
 }: Readonly<Props>) {
@@ -66,6 +74,12 @@ export default function KaivuilmoitusHaittojenhallintaSuunnitelma({
               </Box>
             </Flex>
             <Box mb="var(--spacing-m)">
+              <HaittojenhallintaMap
+                hankeAlue={hankeAlue}
+                kaivuilmoitusAlue={kaivuilmoitusAlue}
+                haittojenHallintaTyyppi={haitta}
+                mb="var(--spacing-m)"
+              />
               {haitta === HAITTOJENHALLINTATYYPPI.AUTOLIIKENNE ? (
                 <CustomAccordion
                   heading={

@@ -78,7 +78,7 @@ const Map: React.FC<React.PropsWithChildren<Props>> = ({
 
   return (
     <MapContext.Provider value={{ map, layers }}>
-      <div ref={mapRef} className={mapClassName} id="ol-map">
+      <div ref={mapRef} className={mapClassName} id="ol-map" style={{ height: '100%' }}>
         {map && children}
       </div>
     </MapContext.Provider>
