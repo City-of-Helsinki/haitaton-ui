@@ -21,12 +21,14 @@ type Props = {
   hankeData: HankeData;
   hankkeenHakemukset: HankkeenHakemus[];
   johtoselvitysIds?: string[];
+  disableCreateNewJohtoselvitys?: boolean;
 };
 
 export default function BasicInfo({
   johtoselvitysIds,
   hankeData,
   hankkeenHakemukset,
+  disableCreateNewJohtoselvitys = false,
 }: Readonly<Props>) {
   const { t } = useTranslation();
   const {
@@ -195,6 +197,7 @@ export default function BasicInfo({
             label={t('hakemus:labels:createCableReport')}
             id="createCableReportYes"
             value={false}
+            disabled={disableCreateNewJohtoselvitys}
           />
           <BooleanRadioButton<KaivuilmoitusFormValues>
             name="applicationData.cableReportDone"

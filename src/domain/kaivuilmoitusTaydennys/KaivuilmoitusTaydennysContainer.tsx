@@ -124,6 +124,7 @@ export default function KaivuilmoitusTaydennysContainer({
           hankeData={hankeData}
           johtoselvitysIds={johtoselvitysIds}
           hankkeenHakemukset={hankkeenHakemukset?.applications ?? []}
+          disableCreateNewJohtoselvitys
         />
       ),
       label: t('form:headers:perustiedot'),

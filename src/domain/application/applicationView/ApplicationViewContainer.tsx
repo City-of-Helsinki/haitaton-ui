@@ -3,6 +3,7 @@ import { AxiosError } from 'axios';
 import { Flex } from '@chakra-ui/react';
 import { Notification } from 'hds-react';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from 'react-query';
 import ApplicationView from './ApplicationView';
 import ErrorLoadingText from '../../../common/components/errorLoadingText/ErrorLoadingText';
 import useHanke from '../../hanke/hooks/useHanke';
@@ -19,6 +20,7 @@ type Props = {
 
 function ApplicationViewContainer({ id }: Readonly<Props>) {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const { data: application, isLoading, isError, error } = useApplication(id);
   const { data: hanke } = useHanke(application?.hankeTunnus);
   const { data: signedInUser } = usePermissionsForHanke(application?.hankeTunnus ?? undefined);
@@ -43,7 +45,10 @@ function ApplicationViewContainer({ id }: Readonly<Props>) {
       if (!application?.taydennys) {
         // If there is no taydennys, create one
         createTaydennysMutation.mutate(applicationId.toString(), {
-          onSuccess() {
+          async onSuccess() {
+            await queryClient.invalidateQueries(['application', applicationId], {
+              refetchInactive: true,
+            });
             navigate(getEditTaydennysPath({ id: applicationId.toString() }));
           },
         });
