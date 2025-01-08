@@ -1,25 +1,26 @@
+@import 'src/assets/styles/layout';
+
 .navmain {
   display: flex;
   align-items: flex-start;
-  gap: 48px;
+  gap: var(--spacing-layout-m);
   align-self: stretch;
+  padding-top: var(--spacing-layout-m);
+  padding-bottom: var(--spacing-layout-m);
+  flex-direction: row;
+
+  /* 
+  @include respond-below(m) {
+    flex-direction: column;
+  }
+    */
 }
 
-.container {
-  display: flex;
-  padding: 48px 128px;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 32px;
-  align-self: stretch;
-}
-
-main {
-  display: flex;
+.main {
+  max-width: 798px;
   padding: 8px;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 32px;
-  flex: 1 0 0;
-  align-self: stretch;
+}
+
+.sidenavcontainer {
+  max-width: 340px;
 }

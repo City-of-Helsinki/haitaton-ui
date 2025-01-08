@@ -5,7 +5,7 @@ import Text from '../../../common/components/text/Text';
 const WorkInstructionsMain = () => {
   return (
     <>
-      <MainHeading spacingBottom="l">Työohjeet</MainHeading>
+      <MainHeading spacingBottom="xl">Työohjeet</MainHeading>
       <Text tag="p">
         Tältä sivulta löydät tärkeimmät yleisten alueiden hankkeita ja työmaita koskevat
         ohjeistukset, kuten haittojenhallinnan lisätietokortit.

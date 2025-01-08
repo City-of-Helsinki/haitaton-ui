@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import MainHeading from '../../../../common/components/mainHeading/MainHeading';
 import Text from '../../../../common/components/text/Text';
+import { useBreadcrumbs } from '../WorkInstructionsPage';
 
 const CardsIndex = () => {
+  const { setBreadcrumbs } = useBreadcrumbs();
+
+  useEffect(() => {
+    const updateBreadcrumbs = () =>
+      setBreadcrumbs([
+        { title: 'Työhjeet', path: '/' },
+        { title: 'Haittojenhallinan lisäkortit', path: '/' },
+      ]);
+
+    updateBreadcrumbs();
+  }, [setBreadcrumbs]);
+
   return (
     <>
-      <MainHeading spacingBottom="l">Haittojenhallinnan lisätietokortit</MainHeading>
+      <MainHeading spacingBottom="xl">Haittojenhallinnan lisätietokortit</MainHeading>
       <Text tag="p">
         Nämä lisätietokortit täydentävät Haitaton-järjestelmän haittojenhallinnan toimenpidevinkkejä
         esittämällä laajemmin kaupungin vaatiman perustason toimet sekä hankekohtaisesti

@@ -1,7 +1,27 @@
+@import 'src/assets/styles/layout';
+
 a {
   text-decoration: underline;
 }
 
 .content {
   margin-bottom: var(--spacing-xl);
+}
+
+.puffcontainer {
+  margin-bottom: var(--spacing-m);
+}
+
+.puff {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-m);
+}
+
+.additionalsummary {
+  margin-bottom: var(--spacing-m);
+
+  ul {
+    list-style-position: inside;
+  }
 }

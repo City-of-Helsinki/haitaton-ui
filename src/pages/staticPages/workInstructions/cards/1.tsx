@@ -1,11 +1,26 @@
-import React from 'react';
-import MainHeading from '../../../../common/components/mainHeading/MainHeading';
+import React, { useEffect } from 'react';
 import Text from '../../../../common/components/text/Text';
 import Puff from './Puff';
 import AdditionalSummary from './AdditionalSummary';
 import styles from './cards.module.scss';
+import { useBreadcrumbs } from '../WorkInstructionsPage';
+import MainHeading from '../../../../common/components/mainHeading/MainHeading';
 
 const Card1Basic: React.FC = () => {
+  const { setBreadcrumbs } = useBreadcrumbs();
+
+  useEffect(() => {
+    const updateBreadcrumbs = () =>
+      setBreadcrumbs([
+        { title: 'Työhjeet', path: '/fi/tyoohjeet' },
+        { title: 'Haittojenhallinan lisäkortit', path: '/' },
+        { title: '1. Tiedotus eri osapuolille ja palaute', path: '/' },
+        { title: 'Vaadittava perustaso', path: '/' },
+      ]);
+
+    updateBreadcrumbs();
+  }, [setBreadcrumbs]);
+
   return (
     <>
       <MainHeading spacingBottom="xl">1. Tiedotus eri osapuolille ja palaute</MainHeading>
@@ -91,6 +106,20 @@ const Card1Basic: React.FC = () => {
 };
 
 const Card1Additional: React.FC = () => {
+  const { setBreadcrumbs } = useBreadcrumbs();
+
+  useEffect(() => {
+    const updateBreadcrumbs = () =>
+      setBreadcrumbs([
+        { title: 'Työhjeet', path: '/' },
+        { title: 'Haittojenhallinan lisäkortit', path: '/' },
+        { title: '1. Tiedotus eri osapuolille ja palaute', path: '/' },
+        { title: 'Mahdollinen lisätaso', path: '/' },
+      ]);
+
+    updateBreadcrumbs();
+  }, [setBreadcrumbs]);
+
   return (
     <>
       <h1>Card 1 Additional</h1>

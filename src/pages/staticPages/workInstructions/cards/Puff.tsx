@@ -1,21 +1,28 @@
 import { Card } from 'hds-react';
 import React from 'react';
 import Idea from '../../../../common/components/icons/Idea';
+import styles from './cards.module.scss';
 
 const Puff: React.FC<React.PropsWithChildren<{ children?: React.ReactNode }>> = ({ children }) => {
   return (
-    <Card
-      theme={{
-        '--background-color': 'var(--color-info-light',
-        '--padding-horizontal': 'var(--spacing-l)',
-        '--padding-vertical': 'var(--spacing-m)',
-      }}
-    >
-      <div style={{ width: '128px', height: '128px' }}>
-        <Idea />
-      </div>
-      <div>{children}</div>
-    </Card>
+    <div className={styles.puffcontainer}>
+      <Card
+        theme={{
+          '--background-color': 'var(--color-info-light',
+          '--padding-horizontal': 'var(--spacing-l)',
+          '--padding-vertical': 'var(--spacing-m)',
+        }}
+      >
+        <div className={styles.puff}>
+          <div>
+            <div style={{ width: '128px', height: '128px' }}>
+              <Idea />
+            </div>
+          </div>
+          <div>{children}</div>
+        </div>
+      </Card>
+    </div>
   );
 };
 
