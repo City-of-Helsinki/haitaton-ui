@@ -1,4 +1,4 @@
-import { Box, Flex, Grid } from '@chakra-ui/react';
+import { Box, BoxProps, Flex, Grid } from '@chakra-ui/react';
 import { IconAngleDown, IconAngleUp, useAccordion } from 'hds-react';
 import React from 'react';
 
@@ -12,6 +12,7 @@ type Props = {
   headingBackgroundColor?: string;
   headingElement?: React.ReactNode;
   headingSize?: 'm' | 's';
+  headingBoxProps?: BoxProps;
   strong?: boolean;
   initiallyOpen?: boolean;
   className?: string;
@@ -28,6 +29,7 @@ export default function CustomAccordion({
   headingBackgroundColor,
   headingElement,
   headingSize = 'm',
+  headingBoxProps,
   strong = false,
   initiallyOpen = false,
   children,
@@ -52,6 +54,7 @@ export default function CustomAccordion({
         padding="var(--spacing-s)"
         backgroundColor={headingBackgroundColor}
         borderBottom={showHeadingBorderBottom ? '1px solid var(--color-black-30)' : undefined}
+        {...headingBoxProps}
         {...accordionButtonProps}
       >
         <Grid
