@@ -1,3 +1,4 @@
+import { TaydennysAttachmentMetadata } from '../application/taydennys/types';
 import { KaivuilmoitusFormValues } from '../kaivuilmoitus/types';
 
 export interface KaivuilmoitusTaydennysFormValues
@@ -15,4 +16,5 @@ export interface KaivuilmoitusTaydennysFormValues
   > {
   id: string;
   muutokset: string[];
+  liitteet: TaydennysAttachmentMetadata[];
 }

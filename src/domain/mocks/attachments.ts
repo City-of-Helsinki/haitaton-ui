@@ -2,42 +2,42 @@ import { faker } from '@faker-js/faker/.';
 import { TaydennysAttachmentMetadata } from '../application/taydennys/types';
 import { ApplicationAttachmentMetadata, AttachmentType } from '../application/types/application';
 
-function createTaydennysAttachment(taydennysId: string): TaydennysAttachmentMetadata {
-  return {
-    id: faker.string.uuid(),
-    taydennysId,
-    fileName: faker.system.commonFileName('pdf'),
-    attachmentType: faker.helpers.arrayElement<AttachmentType>(['MUU', 'LIIKENNEJARJESTELY']),
-    contentType: 'application/pdf',
-    size: faker.number.int({ min: 1, max: 1000000 }),
-    createdByUserId: faker.string.uuid(),
-    createdAt: faker.date.recent().toISOString(),
+function createAttachment(
+  id: number | string,
+  attachment: Partial<ApplicationAttachmentMetadata | TaydennysAttachmentMetadata>,
+): ApplicationAttachmentMetadata | TaydennysAttachmentMetadata {
+  const metadata = {
+    id: attachment.id ?? faker.string.uuid(),
+    fileName: attachment.fileName ?? faker.system.commonFileName('pdf'),
+    attachmentType:
+      attachment.attachmentType ??
+      faker.helpers.arrayElement<AttachmentType>(['MUU', 'LIIKENNEJARJESTELY', 'VALTAKIRJA']),
+    contentType: attachment.contentType ?? 'application/pdf',
+    size: attachment.size ?? faker.number.int({ min: 1, max: 1000000 }),
+    createdByUserId: attachment.createdByUserId ?? faker.string.uuid(),
+    createdAt: attachment.createdAt ?? faker.date.recent().toISOString(),
   };
+
+  if (typeof id === 'number') {
+    return { ...metadata, applicationId: id } as ApplicationAttachmentMetadata;
+  }
+  return { ...metadata, taydennysId: id } as TaydennysAttachmentMetadata;
 }
 
 export function createTaydennysAttachments(
   taydennysId: string,
-  count: number,
+  attachments: Partial<TaydennysAttachmentMetadata>[],
 ): TaydennysAttachmentMetadata[] {
-  return Array.from({ length: count }, () => createTaydennysAttachment(taydennysId));
-}
-
-function createApplicationAttachment(applicationId: number): ApplicationAttachmentMetadata {
-  return {
-    id: faker.string.uuid(),
-    applicationId,
-    fileName: faker.system.commonFileName('pdf'),
-    attachmentType: faker.helpers.arrayElement<AttachmentType>(['MUU', 'LIIKENNEJARJESTELY']),
-    contentType: 'application/pdf',
-    size: faker.number.int({ min: 1, max: 1000000 }),
-    createdByUserId: faker.string.uuid(),
-    createdAt: faker.date.recent().toISOString(),
-  };
+  return attachments.map((attachment) =>
+    createAttachment(taydennysId, attachment),
+  ) as TaydennysAttachmentMetadata[];
 }
 
 export function createApplicationAttachments(
   applicationId: number,
-  count: number,
+  attachments: Partial<ApplicationAttachmentMetadata>[],
 ): ApplicationAttachmentMetadata[] {
-  return Array.from({ length: count }, () => createApplicationAttachment(applicationId));
+  return attachments.map((attachment) =>
+    createAttachment(applicationId, attachment),
+  ) as ApplicationAttachmentMetadata[];
 }

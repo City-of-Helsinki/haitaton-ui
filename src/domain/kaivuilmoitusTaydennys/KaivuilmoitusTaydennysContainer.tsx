@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -34,6 +35,8 @@ import useNavigateToApplicationView from '../application/hooks/useNavigateToAppl
 import { changeFormStep } from '../forms/utils';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
 import TaydennysCancel from '../application/taydennys/components/TaydennysCancel';
+import Attachments from './Attachments';
+import useAttachments from '../application/hooks/useAttachments';
 
 type Props = {
   taydennys: Taydennys<KaivuilmoitusData>;
@@ -57,6 +60,9 @@ export default function KaivuilmoitusTaydennysContainer({
         hakemus.applicationType === 'CABLE_REPORT' && Boolean(hakemus.applicationIdentifier),
     )
     .map((hakemus) => hakemus.applicationIdentifier!);
+  const { data: originalAttachments } = useAttachments(originalApplication.id);
+  const [attachmentsUploading, setAttachmentsUploading] = useState(false);
+  const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
 
   const formContext = useForm<KaivuilmoitusTaydennysFormValues>({
     mode: 'onTouched',
@@ -96,6 +102,10 @@ export default function KaivuilmoitusTaydennysContainer({
         );
       }
     });
+
+  function handleAttachmentUpload(isUploading: boolean) {
+    setAttachmentsUploading(isUploading);
+  }
 
   // Fields that are validated in each page when moving in the form
   // If validation of a field fails, the form will not move to the next page
@@ -152,6 +162,18 @@ export default function KaivuilmoitusTaydennysContainer({
       label: t('form:headers:yhteystiedot'),
       state: StepState.available,
       validationSchema: yhteystiedotSchema,
+    },
+    {
+      element: (
+        <Attachments
+          applicationId={originalApplication.id!}
+          taydennysAttachments={taydennys.liitteet}
+          originalAttachments={originalAttachments}
+          onFileUpload={handleAttachmentUpload}
+        />
+      ),
+      label: t('hankePortfolio:tabit:liitteet'),
+      state: StepState.available,
     },
   ];
 
@@ -212,6 +234,8 @@ export default function KaivuilmoitusTaydennysContainer({
             applicationType="EXCAVATION_NOTIFICATION"
           />
         }
+        isLoading={attachmentsUploading}
+        isLoadingText={attachmentsUploadingText}
         onStepChange={handleStepChange}
         stepChangeValidator={validateStepChange}
       >
@@ -226,8 +250,10 @@ export default function KaivuilmoitusTaydennysContainer({
             }
           }
 
-          const saveAndQuitIsLoading = taydennysUpdateMutation.isLoading;
-          const saveAndQuitLoadingText = t('common:buttons:savingText');
+          const saveAndQuitIsLoading = taydennysUpdateMutation.isLoading || attachmentsUploading;
+          const saveAndQuitLoadingText = attachmentsUploading
+            ? attachmentsUploadingText
+            : t('common:buttons:savingText');
 
           return (
             <FormActions
@@ -235,6 +261,10 @@ export default function KaivuilmoitusTaydennysContainer({
               totalSteps={formSteps.length}
               onPrevious={handlePrevious}
               onNext={handleNext}
+              previousButtonIsLoading={attachmentsUploading}
+              previousButtonLoadingText={attachmentsUploadingText}
+              nextButtonIsLoading={attachmentsUploading}
+              nextButtonLoadingText={attachmentsUploadingText}
             >
               <TaydennysCancel
                 application={originalApplication}

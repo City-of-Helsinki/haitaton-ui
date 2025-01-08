@@ -1073,7 +1073,10 @@
       "mandateCheck": "Tarkista valtakirja",
       "mandateInfo": "Tietosuojasyistä hakemukselle lisättyä valtakirjaa ei enää tallennuksen jälkeen pääse katselemaan. Tarkistathan ennen lisäämistä, että kyseinen valtakirja on oikea.",
       "otherAttachments": "Muut liitteet",
-      "additionalInformation": "Lisätiedot"
+      "additionalInformation": "Lisätiedot",
+      "originalTrafficArrangementPlan": "Alkuperäiset tilapäisiä liikennejärjestelyitä koskevat suunnitelmat",
+      "originalMandate": "Alkuperäinen valtakirja",
+      "originalOtherAttachments": "Alkuperäiset muut liitteet"
     },
     "yhteenveto": {
       "instructions": "Tarkista antamasi tiedot ja lähetä ilmoitus käsittelyyn."
