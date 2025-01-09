@@ -25,6 +25,7 @@ import EditUserPage from '../../pages/EditUserPage';
 import NewKaivuilmoitusPage from '../../pages/NewKaivuilmoitusPage';
 import EditKaivuilmoitusPage from '../../pages/EditKaivuilmoitusPage';
 import EditJohtoselvitysTaydennysPage from '../../pages/EditJohtoselvitysTaydennysPage';
+import EditKaivuilmoitusTaydennysPage from '../../pages/EditKaivuilmoitusTaydennysPage';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
@@ -69,6 +70,10 @@ const LocaleRoutes = () => {
       <Route
         path={t('routes:EDIT_KAIVUILMOITUSHAKEMUS:path')}
         element={<PrivateRoute element={<EditKaivuilmoitusPage />} />}
+      />
+      <Route
+        path={t('routes:EDIT_KAIVUILMOITUSTAYDENNYS:path')}
+        element={<PrivateRoute element={<EditKaivuilmoitusTaydennysPage />} />}
       />
       <Route
         path={t('routes:HAKEMUS:path')}

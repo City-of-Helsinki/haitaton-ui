@@ -3,12 +3,13 @@ import { AxiosError } from 'axios';
 import { Flex } from '@chakra-ui/react';
 import { Notification } from 'hds-react';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from 'react-query';
 import ApplicationView from './ApplicationView';
 import ErrorLoadingText from '../../../common/components/errorLoadingText/ErrorLoadingText';
 import useHanke from '../../hanke/hooks/useHanke';
 import { useApplication } from '../hooks/useApplication';
 import useLinkPath from '../../../common/hooks/useLinkPath';
-import { HAKEMUS_ROUTES, ROUTES } from '../../../common/types/route';
+import { HAKEMUS_ROUTES, HAKEMUS_TAYDENNYS_ROUTES } from '../../../common/types/route';
 import { usePermissionsForHanke } from '../../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
 import useCreateTaydennys from '../taydennys/hooks/useCreateTaydennys';
@@ -19,6 +20,7 @@ type Props = {
 
 function ApplicationViewContainer({ id }: Readonly<Props>) {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const { data: application, isLoading, isError, error } = useApplication(id);
   const { data: hanke } = useHanke(application?.hankeTunnus);
   const { data: signedInUser } = usePermissionsForHanke(application?.hankeTunnus ?? undefined);
@@ -26,7 +28,9 @@ function ApplicationViewContainer({ id }: Readonly<Props>) {
   const getEditApplicationPath = useLinkPath(
     HAKEMUS_ROUTES[application?.applicationType ?? 'CABLE_REPORT'],
   );
-  const getEditTaydennysPath = useLinkPath(ROUTES.EDIT_JOHTOSELVITYSTAYDENNYS);
+  const getEditTaydennysPath = useLinkPath(
+    HAKEMUS_TAYDENNYS_ROUTES[application?.applicationType ?? 'CABLE_REPORT'],
+  );
   const createTaydennysMutation = useCreateTaydennys();
 
   function editApplication() {
@@ -41,7 +45,10 @@ function ApplicationViewContainer({ id }: Readonly<Props>) {
       if (!application?.taydennys) {
         // If there is no taydennys, create one
         createTaydennysMutation.mutate(applicationId.toString(), {
-          onSuccess() {
+          async onSuccess() {
+            await queryClient.invalidateQueries(['application', applicationId], {
+              refetchInactive: true,
+            });
             navigate(getEditTaydennysPath({ id: applicationId.toString() }));
           },
         });

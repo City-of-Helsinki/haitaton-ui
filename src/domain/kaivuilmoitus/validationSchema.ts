@@ -61,7 +61,7 @@ const customerWithContactsSchemaForKaivuilmoitus = customerWithContactsSchema
     }),
   });
 
-const applicationDataSchema = yup.object().shape(
+export const applicationDataSchema = yup.object().shape(
   {
     applicationType: applicationTypeSchema,
     name: yup.string().trim().required(),
