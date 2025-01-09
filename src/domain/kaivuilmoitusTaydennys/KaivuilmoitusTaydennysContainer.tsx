@@ -141,7 +141,7 @@ export default function KaivuilmoitusTaydennysContainer({
       validationSchema: alueetSchema,
     },
     {
-      element: <HaittojenHallinta />,
+      element: <HaittojenHallinta hankeData={hankeData} />,
       label: t('hankeForm:haittojenHallintaForm:header'),
       state: StepState.available,
       validationSchema: haittojenhallintaSuunnitelmaSchema,
