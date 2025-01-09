@@ -94,9 +94,9 @@ const LocaleRoutes = () => {
       <Route path={t('routes:PRIVACY_POLICY:path')} element={<PrivacyPolicyPage />} />
       <Route path={t('routes:WORKINSTRUCTIONS:path')} element={<WorkInstructionsPage />}>
         <Route element={<WorkInstructionsMain />} index />
-        <Route path="haittojenhallinta" element={<CardsIndex />} />
-        <Route path="haittojenhallinta/1/perustaso" element={<Card1Basic />}></Route>
-        <Route path="haittojenhallinta/1/lisataso" element={<Card1Additional />}></Route>
+        <Route path={t('routes:CARDS_INDEX:path')} element={<CardsIndex />} />
+        <Route path={t('routes:CARD_1_BASIC:path')} element={<Card1Basic />}></Route>
+        <Route path={t('routes:CARD_1_ADDITIONAL:path')} element={<Card1Additional />}></Route>
       </Route>
       <Route path={t('routes:MANUAL:path')} element={<ManualPage />} />
       <Route path={t('routes:IDENTIFY_USER:path')} element={<UserIdentify />} />

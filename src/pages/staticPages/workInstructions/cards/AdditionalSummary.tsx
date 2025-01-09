@@ -1,10 +1,12 @@
 import { Button, Card } from 'hds-react';
 import React from 'react';
 import styles from './cards.module.scss';
+import { useTranslation } from 'react-i18next';
 
 const AdditionalSummary: React.FC<React.PropsWithChildren<{ children?: React.ReactNode }>> = ({
   children,
 }) => {
+  const { t } = useTranslation();
   return (
     <Card
       heading="Mahdollinen lisätaso"
@@ -24,7 +26,7 @@ const AdditionalSummary: React.FC<React.PropsWithChildren<{ children?: React.Rea
           window.open('/fi/tyoohjeet/haittojenhallinta/1/lisataso');
         }}
       >
-        Lue lisää
+        {t('workInstructions:cards:readMore')}
       </Button>
     </Card>
   );

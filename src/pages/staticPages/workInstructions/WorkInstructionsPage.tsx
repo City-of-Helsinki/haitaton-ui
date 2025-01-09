@@ -20,7 +20,7 @@ export function useBreadcrumbs() {
 
 const WorkInstructionsPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { WORKINSTRUCTIONS } = useLocalizedRoutes();
-  const [breadcrumbs, setBreadcrumbs] = useState([{ title: 'Työhjeet', path: '/' }]);
+  const [breadcrumbs, setBreadcrumbs] = useState([]);
 
   return (
     <>

@@ -441,6 +441,153 @@
         "title": "Haitaton - Työohjeet"
       }
     },
+    "CARDS_INDEX": {
+      "path": "/tyoohjeet/haittojenhallinta",
+      "headerLabel": "Haittojenhallinnan lisätietokortit",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_1_BASIC": {
+      "path": "/tyoohjeet/haittojenhallinta/1/perustaso",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_1_ADDITIONAL": {
+      "path": "/tyoohjeet/haittojenhallinta/1/lisataso",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_2_BASIC": {
+      "path": "",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_2_ADDITIONAL": {
+      "path": "",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_3_BASIC": {
+      "path": "",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_3_ADDITIONAL": {
+      "path": "",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_4_BASIC": {
+      "path": "",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_4_ADDITIONAL": {
+      "path": "",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_5_BASIC": {
+      "path": "",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_5_ADDITIONAL": {
+      "path": "",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_6_BASIC": {
+      "path": "",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_6_ADDITIONAL": {
+      "path": "",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_7_BASIC": {
+      "path": "",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_7_ADDITIONAL": {
+      "path": "",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_8_BASIC": {
+      "path": "",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_8_ADDITIONAL": {
+      "path": "",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_9_BASIC": {
+      "path": "",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_9_ADDITIONAL": {
+      "path": "",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_10_BASIC": {
+      "path": "",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
+    "CARD_10_ADDITIONAL": {
+      "path": "",
+      "headerLabel": "",
+      "meta": {
+        "title": ""
+      }
+    },
     "MANUAL": {
       "path": "/kaytto-ohjeet",
       "headerLabel": "Käyttöohjeet ja tuki",
@@ -1792,5 +1939,76 @@
     "text": "",
     "imageLabel": "Kuva: Lille Santanen",
     "imageAltText": "Piirretty kuva rakennustyömaasta"
+  },
+  "workInstructions": {
+    "breadcrumb": "Murupolku",
+    "main": {
+      "header": "Työohjeet",
+      "content": "Tältä sivulta löydät tärkeimmät yleisten alueiden hankkeita ja työmaita koskevat ohjeistukset, kuten haittojenhallinnan lisätietokortit."
+    },
+    "cardsIndex": {
+      "header": "Haittojenhallinnan lisätietokortit",
+      "content": "Nämä lisätietokortit täydentävät Haitaton-järjestelmän haittojenhallinnan toimenpidevinkkejä esittämällä laajemmin kaupungin vaatiman perustason toimet sekä hankekohtaisesti sovellettavia mahdollisia lisätason toimia. Toimenpiteet perustuvat kaupungin aiempaan Työmaaopas-ohjeeseen, jota on täydennetty Vuoden katutyömaa -kilpailusta kerätyillä parhailla käytännöillä vuoden 2024 aikana. Ratkaisevaa haittojenhallinnan onnistumisessa ovat työmaan asenne, infran käyttäjille intuitiiviset järjestelyt sekä työmaan tekemä aktiivinen seuranta ja reagointi muutoksiin ja puutteisiin."
+    },
+    "cards": {
+      "basicLevel": "Vaadittava perustaso",
+      "additionalLevel": "Mahdollinen lisätaso",
+      "readMore": "Lue lisää",
+      "1": {
+        "header": "Tiedotus eri osapuolille ja palaute",
+        "puff": "        <p><b>Kerro alueen asukkaille, yrityksille ja muille toimijoille työmaasta vähintään viikkoaennen sen alkua.</b>{' '}Työmaan aloittamisesta kertovassa tiedotteessa tulee kertoa:</p><br></br><ul><li>työmaan tarkka</li><li>aloituspäivämäärä, </li><li>työmaan arvioitu kesto, </li><li>mitä työmaalla tehdään,</li><li>poikkeusreitit,</li><li>mahdolliset muutokset joukkoliikenteeseen ja pysäkkeihin,</li><li>päiväaikataulu, </li><li>melua aiheuttavien työvaiheiden arvioitu ajankohta sekä urakoitsijan sekä rakennuttajanyhteystiedot.</li></ul>",
+        "content": "<p><b>Valitse sopivat viestintäkanavat yhdessä tilaajan viestinnän kanssa,</b> jajoukkoliikenteestä tiedottaminen sovitaan yhdessä HSL:n kanssa. Herkkien kohteiden (kutenkoulut, päiväkodit, sairaalat ja vanhainkodit) osalta on varauduttava neuvottelemaantyöajoista ja kohteiden huomioimisesta rakentamisessa erikseen. Myös työmaan aikaisistahäiriöistä viivästyksistä sekä työmaan loppumisesta tulee tiedottaa yhteistyössä tilaajanviestinnän kanssa. Helsingin Kaupunkiympäristön hankkeissa viestinnän yhteistyökumppaninaon<a href=\"mailto:kymp.viestinta@hel.fi\" className=\"hds-link\" target=\"_blank\">kymp.viestinta@hel.fi.</a></p><br></br><p><b>Viestinnän tulee olla selkeää, yleistajuista ja ymmärrettävää.</b> Pyri puhumaanaktiivissa passiivin sijaan. Älä esimerkiksi kirjoita työmaatauluun, että ”alueellasaneerataan kunnallistekniikkaa”, vaan ”uusimme vesijohtoja ja viemäreitä”. Käytä vainselkeitä päälauseita.</p><br></br><p><b>Työmailla seurataan palautteita ja vikailmoituksia,</b> joita kaupunkilaiset jättäväthankkeen omaan palautejärjestelmään tai Helsingin kaupungin hankkeissa kaupunginpalautejärjestelmään (<ahref=\"https://palautteet.hel.fi/\"className=\"hds-link\"target=\"_blank\"aria-label=\"Palautejärjestelmä. Avautuu uuteen ikkunaan.\">https://palautteet.hel.fi/</a>). Niiden perusteella tehdään tarvittavat korjaukset. Esimerkiksi jalankulkijaninfotaulussa ja työmaataulussa kannustetaan antamaan palautetta ja linkataanpalautejärjestelmään. Myös QR-koodia voidaan hyödyntää.</p>",
+        "additionalLevelSummary": "<ul><li>Varmista jalankulun turvallisuus ja esteettömyys</li><li>Varmista kulkuyhteydet kiinteistöihin</li><li>Tee yhteensovitus muiden hankkeiden ja töiden sekä niiden kiertoreittien kanssa</li><li>Ilmoita aina katujen sulkemisesta liikenteeltä Pelastuslaitokselle ja Poliisille</li><li>Tarkista aina, onko hankkeesi tai työsi erikoiskuljetusten reitillä</li><li>Tarkista vaikutukset olevaan liikennevalo-ohjaukseen (kaistajärjestelyt, ilmaisimet,valojen toimivuus)</li><li>Poikkeavat työajat</li></ul>"
+      },
+      "2": {
+        "header": "",
+        "content": ""
+      },
+      "3": {
+        "header": "",
+        "content": ""
+      },
+      "4": {
+        "header": "",
+        "content": ""
+      },
+      "5": {
+        "header": "",
+        "content": ""
+      },
+      "6": {
+        "header": "",
+        "content": ""
+      },
+      "7": {
+        "header": "",
+        "content": ""
+      },
+      "8": {
+        "header": "",
+        "content": ""
+      },
+      "9": {
+        "header": "",
+        "content": ""
+      },
+      "10": {
+        "header": "",
+        "content": ""
+      }
+    },
+    "sideNav": {
+      "moveToPage": "Siirry sivulle",
+      "openInNewTab": "Avautuu uudessa välilehdessä.",
+      "opensnExternalDomain": "Avautuu eri verkkosivulla.",
+      "externalLink": {
+        "permitsAndInstructions": { "label": "Tyomaan luvat ja ohjeet", "href": "" },
+        "payments": { "label": "Maksut", "href": "" },
+        "trafficArrangementsAndTypePicturs": {
+          "label": "Tilapäisten liikennejärjestelyjen ohje ja tyyppikuvat",
+          "href": ""
+        }
+      }
+    }
   }
 }

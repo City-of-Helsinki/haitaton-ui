@@ -2,47 +2,50 @@ import React from 'react';
 import { IconDocument, IconInfoCircle, SideNavigation } from 'hds-react';
 import styles from './WorkInstructions.module.scss';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const SideNav: React.FC<React.PropsWithChildren<unknown>> = () => {
+  const { t } = useTranslation();
   const location = useLocation();
 
   return (
     <div className={styles.sidenavcontainer}>
       <SideNavigation
-        defaultOpenMainLevels={[1, 2]}
+        defaultOpenMainLevels={[1]}
         id="side-navigation"
-        toggleButtonLabel="Siirry sivulle"
+        toggleButtonLabel={t('workInstructions:sideNav:moveToPage')}
       >
         <SideNavigation.MainLevel
           icon={<IconInfoCircle />}
           href="/fi/tyoohjeet"
           id="#main-level-1"
-          label="Työohjeet"
-          active={location.pathname.endsWith('tyoohjeet')}
+          label={t('workInstructions:main:header')}
+          active={location.pathname.endsWith(t('routes:WORKINSTRUCTIONS:path'))}
         ></SideNavigation.MainLevel>
         <SideNavigation.MainLevel
           icon={<IconDocument />}
           href="/fi/tyoohjeet/haittojenhallinta"
           id="#main-level-1"
-          label="Haittojenhallinnan lisätietokortit"
-          active={location.pathname.endsWith('haittojenhallinta')}
+          label={t('workInstructions:cardsIndex:header')}
+          active={location.pathname.endsWith(t('routes:CARDS_INDEX:path'))}
         ></SideNavigation.MainLevel>
+
         <SideNavigation.MainLevel
           index={1}
           id="main-level-3"
-          label="1. Tiedotus eri osapuolille ja palaute"
+          label={`1. ${t('workInstructions:cards:1:header')}`}
         >
           <SideNavigation.SubLevel
             href="/fi/tyoohjeet/haittojenhallinta/1/perustaso"
             id="sub-level-5"
-            label="Vaadittava perustaso"
+            label={t('workInstructions:cards:basicLevel')}
             mainLevelIndex={1}
             active={location.pathname.endsWith('haittojenhallinta/1/perustaso')}
           ></SideNavigation.SubLevel>
           <SideNavigation.SubLevel
             href="/fi/tyoohjeet/haittojenhallinta/1/lisataso"
             id="sub-level-3"
-            label="Mahdollinen lisätaso"
+            label={t('workInstructions:cards:additionalLevel')}
             active={location.pathname.endsWith('haittojenhallinta/1/lisataso')}
           />
         </SideNavigation.MainLevel>
@@ -50,8 +53,8 @@ const SideNav: React.FC<React.PropsWithChildren<unknown>> = () => {
           external
           href="https://tapahtumat.hel.fi/"
           openInNewTab
-          openInNewTabAriaLabel="Opens in a new tab."
-          openInExternalDomainAriaLabel="Avautuu eri verkkosivulla."
+          openInNewTabAriaLabel={t('workInstructions:sideNav:openInNewTab')}
+          openInExternalDomainAriaLabel={t('workInstructions:sideNav:openInExternalDomain')}
           id="main-level-4"
           label="Työmaan luvat ja ohjeet"
           withDivider
@@ -60,8 +63,8 @@ const SideNav: React.FC<React.PropsWithChildren<unknown>> = () => {
           external
           href="https://tapahtumat.hel.fi/"
           openInNewTab
-          openInNewTabAriaLabel="Opens in a new tab."
-          openInExternalDomainAriaLabel="Avautuu eri verkkosivulla."
+          openInNewTabAriaLabel={t('workInstructions:sideNav:openInNewTab')}
+          openInExternalDomainAriaLabel={t('workInstructions:sideNav:openInExternalDomain')}
           id="main-level-4"
           label="Maksut"
         />
@@ -69,8 +72,8 @@ const SideNav: React.FC<React.PropsWithChildren<unknown>> = () => {
           external
           href="https://tapahtumat.hel.fi/"
           openInNewTab
-          openInNewTabAriaLabel="Opens in a new tab."
-          openInExternalDomainAriaLabel="Avautuu eri verkkosivulla."
+          openInNewTabAriaLabel={t('workInstructions:sideNav:openInNewTab')}
+          openInExternalDomainAriaLabel={t('workInstructions:sideNav:openInExternalDomain')}
           id="main-level-4"
           label="Tilapäisten liikennejärjestelyiden ohje ja tyyppikuvat"
         />

@@ -16,6 +16,10 @@ a {
   display: flex;
   flex-direction: row;
   gap: var(--spacing-m);
+
+  ul {
+    list-style-position: inside;
+  }
 }
 
 .additionalsummary {
