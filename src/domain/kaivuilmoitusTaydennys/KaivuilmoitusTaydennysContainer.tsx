@@ -33,6 +33,7 @@ import { useGlobalNotification } from '../../common/components/globalNotificatio
 import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
 import { changeFormStep } from '../forms/utils';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
+import TaydennysCancel from '../application/taydennys/components/TaydennysCancel';
 
 type Props = {
   taydennys: Taydennys<KaivuilmoitusData>;
@@ -140,7 +141,7 @@ export default function KaivuilmoitusTaydennysContainer({
       validationSchema: alueetSchema,
     },
     {
-      element: <HaittojenHallinta />,
+      element: <HaittojenHallinta hankeData={hankeData} />,
       label: t('hankeForm:haittojenHallintaForm:header'),
       state: StepState.available,
       validationSchema: haittojenhallintaSuunnitelmaSchema,
@@ -235,6 +236,13 @@ export default function KaivuilmoitusTaydennysContainer({
               onPrevious={handlePrevious}
               onNext={handleNext}
             >
+              <TaydennysCancel
+                application={originalApplication}
+                navigateToApplicationViewOnSuccess
+                buttonVariant="danger"
+                buttonIsLoading={saveAndQuitIsLoading}
+                buttonIsLoadingText={saveAndQuitLoadingText}
+              />
               <Button
                 variant="secondary"
                 onClick={handleSaveAndQuit}

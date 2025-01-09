@@ -12,24 +12,25 @@ import KaivuilmoitusTaydennysContainer from './KaivuilmoitusTaydennysContainer';
 function setup(
   options: {
     application?: Application<KaivuilmoitusData>;
+    taydennys?: Taydennys<KaivuilmoitusData>;
     hankeData?: HankeData;
     responseStatus?: number;
   } = {},
 ) {
   const {
     application = cloneDeep(hakemukset[12]) as Application<KaivuilmoitusData>,
+    taydennys = {
+      id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+      applicationData: application.applicationData,
+      muutokset: [],
+      liitteet: [],
+    },
     hankeData = hankkeet[1] as HankeData,
     responseStatus = 200,
   } = options;
-  application.taydennys = {
-    id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
-    applicationData: application.applicationData,
-    muutokset: [],
-    liitteet: [],
-  };
   server.use(
     http.put('/api/taydennykset/:id', async () => {
-      return HttpResponse.json<Taydennys<KaivuilmoitusData>>(application.taydennys, {
+      return HttpResponse.json<Taydennys<KaivuilmoitusData>>(taydennys, {
         status: responseStatus,
       });
     }),
@@ -45,7 +46,7 @@ function setup(
       <KaivuilmoitusTaydennysContainer
         hankeData={hankeData}
         originalApplication={application}
-        taydennys={application.taydennys}
+        taydennys={taydennys}
       />,
       undefined,
       `/fi/kaivuilmoitustaydennys/${application.id}/muokkaa`,
@@ -98,5 +99,27 @@ describe('Taydennyspyynto notification', () => {
 
     expect(screen.getByRole('heading', { name: 'Täydennyspyyntö' })).toBeInTheDocument();
     expect(screen.getByText('Muokkaa hakemusta korjataksesi seuraavat asiat:')).toBeInTheDocument();
+  });
+});
+
+describe('Canceling taydennys', () => {
+  test('Should be able to cancel taydennys', async () => {
+    const application = cloneDeep(hakemukset[12]) as Application<KaivuilmoitusData>;
+    application.taydennys = {
+      id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+      applicationData: application.applicationData,
+      muutokset: [],
+      liitteet: [],
+    };
+    const { user } = setup({
+      application,
+      taydennys: application.taydennys,
+    });
+    await user.click(screen.getByRole('button', { name: /peru täydennysluonnos/i }));
+    await user.click(await screen.findByRole('button', { name: /vahvista/i }));
+
+    expect(await screen.findByText('Täydennysluonnos peruttiin')).toBeInTheDocument();
+    expect(screen.getByText('Täydennysluonnos peruttiin onnistuneesti')).toBeInTheDocument();
+    expect(window.location.pathname).toBe('/fi/hakemus/13');
   });
 });
