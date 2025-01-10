@@ -26,8 +26,14 @@ import * as taydennysAttachmentsApi from '../application/taydennys/taydennysAtta
 import * as applicationAttachmentsApi from '../application/attachments';
 import { createApplicationAttachments, createTaydennysAttachments } from '../mocks/attachments';
 
-const applicationAttachments = createApplicationAttachments(11, 2);
-const taydennysAttachments = createTaydennysAttachments('c0a1fe7b-326c-4b25-a7bc-d1797762c01c', 2);
+const applicationAttachments = createApplicationAttachments(11, [
+  { attachmentType: 'MUU' },
+  { attachmentType: 'MUU' },
+]);
+const taydennysAttachments = createTaydennysAttachments('c0a1fe7b-326c-4b25-a7bc-d1797762c01c', [
+  { attachmentType: 'MUU' },
+  { attachmentType: 'MUU' },
+]);
 
 function setup(
   options: {
