@@ -5,19 +5,19 @@ import { useTranslation } from 'react-i18next';
 export const BREADCRUMBS = {
   homePage: {
     title: 'Etusivu',
-    path: '/',
+    path: 'routes:HOME:path',
   },
   tyoOhjeet: {
-    title: 'routes:WORKINSTRUCTIONS:headerLabel',
+    title: 'workInstructions:main:header',
     path: 'routes:WORKINSTRUCTIONS:path',
   },
   cardsIndex: {
     title: 'routes:CARDS_INDEX:headerLabel',
     path: 'routes:CARDS_INDEX:path',
   },
-  card1: {
-    title: 'workInstructions:cards:1:header',
-    path: null,
+  card: {
+    title: 'workInstructions:cards',
+    path: 'routes:CARD:path',
   },
   basicLevel: {
     title: 'workInstructions:cards:basicLevel',
@@ -33,17 +33,15 @@ const Breadcrumbs: React.FC<React.PropsWithChildren<{ breadcrumbs: BreadcrumbLis
   breadcrumbs,
 }) => {
   const { t, i18n } = useTranslation();
-  console.log(breadcrumbs);
   const translatedBreadcrumbs = [BREADCRUMBS.homePage, ...breadcrumbs].map((breadcrumb, i) => {
     return {
       title: t(breadcrumb.title),
       path:
-        breadcrumb.path && i !== breadcrumbs.length - 1
+        breadcrumb.path && i !== breadcrumbs.length
           ? `/${i18n.language}${t(breadcrumb.path)}`
           : null,
     };
   });
-  console.log('t', translatedBreadcrumbs);
 
   return <Breadcrumb ariaLabel={t('workInstructions:breadcrumb')} list={translatedBreadcrumbs} />;
 };

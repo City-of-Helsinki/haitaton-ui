@@ -445,147 +445,16 @@
       "path": "/tyoohjeet/haittojenhallinta",
       "headerLabel": "Haittojenhallinnan lisätietokortit",
       "meta": {
-        "title": ""
+        "title": "Haitaton - Työohjeet - Haittojenhallinnan lisätietokortit"
       }
     },
-    "CARD_1_BASIC": {
-      "path": "/tyoohjeet/haittojenhallinta/1/perustaso",
-      "headerLabel": "",
+    "CARD": {
+      "path": "/tyoohjeet/haittojenhallinta/kortit/",
+      "basicLevel": "perustaso",
+      "additionalLevel": "lisataso",
+      "headerLabel": "Haittojenhallinnan lisätietokortit",
       "meta": {
-        "title": ""
-      }
-    },
-    "CARD_1_ADDITIONAL": {
-      "path": "/tyoohjeet/haittojenhallinta/1/lisataso",
-      "headerLabel": "",
-      "meta": {
-        "title": ""
-      }
-    },
-    "CARD_2_BASIC": {
-      "path": "",
-      "headerLabel": "",
-      "meta": {
-        "title": ""
-      }
-    },
-    "CARD_2_ADDITIONAL": {
-      "path": "",
-      "headerLabel": "",
-      "meta": {
-        "title": ""
-      }
-    },
-    "CARD_3_BASIC": {
-      "path": "",
-      "headerLabel": "",
-      "meta": {
-        "title": ""
-      }
-    },
-    "CARD_3_ADDITIONAL": {
-      "path": "",
-      "headerLabel": "",
-      "meta": {
-        "title": ""
-      }
-    },
-    "CARD_4_BASIC": {
-      "path": "",
-      "headerLabel": "",
-      "meta": {
-        "title": ""
-      }
-    },
-    "CARD_4_ADDITIONAL": {
-      "path": "",
-      "headerLabel": "",
-      "meta": {
-        "title": ""
-      }
-    },
-    "CARD_5_BASIC": {
-      "path": "",
-      "headerLabel": "",
-      "meta": {
-        "title": ""
-      }
-    },
-    "CARD_5_ADDITIONAL": {
-      "path": "",
-      "headerLabel": "",
-      "meta": {
-        "title": ""
-      }
-    },
-    "CARD_6_BASIC": {
-      "path": "",
-      "headerLabel": "",
-      "meta": {
-        "title": ""
-      }
-    },
-    "CARD_6_ADDITIONAL": {
-      "path": "",
-      "headerLabel": "",
-      "meta": {
-        "title": ""
-      }
-    },
-    "CARD_7_BASIC": {
-      "path": "",
-      "headerLabel": "",
-      "meta": {
-        "title": ""
-      }
-    },
-    "CARD_7_ADDITIONAL": {
-      "path": "",
-      "headerLabel": "",
-      "meta": {
-        "title": ""
-      }
-    },
-    "CARD_8_BASIC": {
-      "path": "",
-      "headerLabel": "",
-      "meta": {
-        "title": ""
-      }
-    },
-    "CARD_8_ADDITIONAL": {
-      "path": "",
-      "headerLabel": "",
-      "meta": {
-        "title": ""
-      }
-    },
-    "CARD_9_BASIC": {
-      "path": "",
-      "headerLabel": "",
-      "meta": {
-        "title": ""
-      }
-    },
-    "CARD_9_ADDITIONAL": {
-      "path": "",
-      "headerLabel": "",
-      "meta": {
-        "title": ""
-      }
-    },
-    "CARD_10_BASIC": {
-      "path": "",
-      "headerLabel": "",
-      "meta": {
-        "title": ""
-      }
-    },
-    "CARD_10_ADDITIONAL": {
-      "path": "",
-      "headerLabel": "",
-      "meta": {
-        "title": ""
+        "title": "Haitaton - Työohjeet - Haittojenhallinnan lisätietokortit"
       }
     },
     "MANUAL": {
@@ -1954,9 +1823,10 @@
       "basicLevel": "Vaadittava perustaso",
       "additionalLevel": "Mahdollinen lisätaso",
       "readMore": "Lue lisää",
+      "notFound": "Ohjetta ei löytynyt",
       "1": {
-        "header": "Tiedotus eri osapuolille ja palaute",
-        "puff": "        <p><b>Kerro alueen asukkaille, yrityksille ja muille toimijoille työmaasta vähintään viikkoaennen sen alkua.</b>{' '}Työmaan aloittamisesta kertovassa tiedotteessa tulee kertoa:</p><br></br><ul><li>työmaan tarkka</li><li>aloituspäivämäärä, </li><li>työmaan arvioitu kesto, </li><li>mitä työmaalla tehdään,</li><li>poikkeusreitit,</li><li>mahdolliset muutokset joukkoliikenteeseen ja pysäkkeihin,</li><li>päiväaikataulu, </li><li>melua aiheuttavien työvaiheiden arvioitu ajankohta sekä urakoitsijan sekä rakennuttajanyhteystiedot.</li></ul>",
+        "header": "1. Tiedotus eri osapuolille ja palaute",
+        "puff": "<p><b>Kerro alueen asukkaille, yrityksille ja muille toimijoille työmaasta vähintään viikkoaennen sen alkua.</b>{' '}Työmaan aloittamisesta kertovassa tiedotteessa tulee kertoa:</p><br></br><ul><li>työmaan tarkka</li><li>aloituspäivämäärä, </li><li>työmaan arvioitu kesto, </li><li>mitä työmaalla tehdään,</li><li>poikkeusreitit,</li><li>mahdolliset muutokset joukkoliikenteeseen ja pysäkkeihin,</li><li>päiväaikataulu, </li><li>melua aiheuttavien työvaiheiden arvioitu ajankohta sekä urakoitsijan sekä rakennuttajanyhteystiedot.</li></ul>",
         "content": "<p><b>Valitse sopivat viestintäkanavat yhdessä tilaajan viestinnän kanssa,</b> jajoukkoliikenteestä tiedottaminen sovitaan yhdessä HSL:n kanssa. Herkkien kohteiden (kutenkoulut, päiväkodit, sairaalat ja vanhainkodit) osalta on varauduttava neuvottelemaantyöajoista ja kohteiden huomioimisesta rakentamisessa erikseen. Myös työmaan aikaisistahäiriöistä viivästyksistä sekä työmaan loppumisesta tulee tiedottaa yhteistyössä tilaajanviestinnän kanssa. Helsingin Kaupunkiympäristön hankkeissa viestinnän yhteistyökumppaninaon<a href=\"mailto:kymp.viestinta@hel.fi\" className=\"hds-link\" target=\"_blank\">kymp.viestinta@hel.fi.</a></p><br></br><p><b>Viestinnän tulee olla selkeää, yleistajuista ja ymmärrettävää.</b> Pyri puhumaanaktiivissa passiivin sijaan. Älä esimerkiksi kirjoita työmaatauluun, että ”alueellasaneerataan kunnallistekniikkaa”, vaan ”uusimme vesijohtoja ja viemäreitä”. Käytä vainselkeitä päälauseita.</p><br></br><p><b>Työmailla seurataan palautteita ja vikailmoituksia,</b> joita kaupunkilaiset jättäväthankkeen omaan palautejärjestelmään tai Helsingin kaupungin hankkeissa kaupunginpalautejärjestelmään (<ahref=\"https://palautteet.hel.fi/\"className=\"hds-link\"target=\"_blank\"aria-label=\"Palautejärjestelmä. Avautuu uuteen ikkunaan.\">https://palautteet.hel.fi/</a>). Niiden perusteella tehdään tarvittavat korjaukset. Esimerkiksi jalankulkijaninfotaulussa ja työmaataulussa kannustetaan antamaan palautetta ja linkataanpalautejärjestelmään. Myös QR-koodia voidaan hyödyntää.</p>",
         "additionalLevelSummary": "<ul><li>Varmista jalankulun turvallisuus ja esteettömyys</li><li>Varmista kulkuyhteydet kiinteistöihin</li><li>Tee yhteensovitus muiden hankkeiden ja töiden sekä niiden kiertoreittien kanssa</li><li>Ilmoita aina katujen sulkemisesta liikenteeltä Pelastuslaitokselle ja Poliisille</li><li>Tarkista aina, onko hankkeesi tai työsi erikoiskuljetusten reitillä</li><li>Tarkista vaikutukset olevaan liikennevalo-ohjaukseen (kaistajärjestelyt, ilmaisimet,valojen toimivuus)</li><li>Poikkeavat työajat</li></ul>"
       },
@@ -2001,12 +1871,18 @@
       "moveToPage": "Siirry sivulle",
       "openInNewTab": "Avautuu uudessa välilehdessä.",
       "opensnExternalDomain": "Avautuu eri verkkosivulla.",
-      "externalLink": {
-        "permitsAndInstructions": { "label": "Tyomaan luvat ja ohjeet", "href": "" },
-        "payments": { "label": "Maksut", "href": "" },
-        "trafficArrangementsAndTypePicturs": {
+      "externalLinks": {
+        "permitsAndInstructions": {
+          "label": "Tyomaan luvat ja ohjeet",
+          "url": "https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/tyomaan-luvat-ja-ohjeet"
+        },
+        "payments": {
+          "label": "Maksut",
+          "url": "https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/tyomaan-luvat-ja-ohjeet/kaduilla-ja-puistoissa-tehtavat-tyot#maksut--vastuut-ja-voimassa-olevat-aluevuokraukset-ja-kaivuilmoitukset"
+        },
+        "temporaryTrafficArrangement": {
           "label": "Tilapäisten liikennejärjestelyjen ohje ja tyyppikuvat",
-          "href": ""
+          "url": "https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/tyomaan-luvat-ja-ohjeet/kaduilla-ja-puistoissa-tehtavat-tyot#ohjeita-tilapaisiin-liikennejarjestelyihin-ja-suunnitteluun"
         }
       }
     }

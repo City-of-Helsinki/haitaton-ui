@@ -29,7 +29,11 @@ import EditKaivuilmoitusTaydennysPage from '../../pages/EditKaivuilmoitusTaydenn
 import WorkInstructionsPage from '../../pages/staticPages/workInstructions/WorkInstructionsPage';
 import WorkInstructionsMain from '../../pages/staticPages/workInstructions/WorkInstructionsMain';
 import CardsIndex from '../../pages/staticPages/workInstructions/cards/CardsIndex';
-import { Card1Additional, Card1Basic } from '../../pages/staticPages/workInstructions/cards/1';
+import {
+  Card,
+  Card1Additional,
+  Card1Basic,
+} from '../../pages/staticPages/workInstructions/cards/Cards';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
@@ -95,6 +99,7 @@ const LocaleRoutes = () => {
       <Route path={t('routes:WORKINSTRUCTIONS:path')} element={<WorkInstructionsPage />}>
         <Route element={<WorkInstructionsMain />} index />
         <Route path={t('routes:CARDS_INDEX:path')} element={<CardsIndex />} />
+        <Route path={`${t('routes:CARD:path')}:number/:type`} element={<Card />}></Route>
         <Route path={t('routes:CARD_1_BASIC:path')} element={<Card1Basic />}></Route>
         <Route path={t('routes:CARD_1_ADDITIONAL:path')} element={<Card1Additional />}></Route>
       </Route>

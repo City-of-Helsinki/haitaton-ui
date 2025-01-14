@@ -1,12 +1,108 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IconDocument, IconInfoCircle, SideNavigation } from 'hds-react';
 import styles from './WorkInstructions.module.scss';
-import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 
-const SideNav: React.FC<React.PropsWithChildren<unknown>> = () => {
+const SideNav: React.FC = () => {
   const { t } = useTranslation();
-  const location = useLocation();
+  const [active, setActive] = useState('');
+  const navigate = useNavigate();
+  const { CARD, WORKINSTRUCTIONS, CARDS_INDEX } = useLocalizedRoutes();
+
+  const setActivePage = (
+    event: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
+    path: string,
+  ) => {
+    event.preventDefault();
+    setActive(path);
+    navigate(path);
+  };
+
+  const renderCardLevels = () => {
+    const cardLevels = [];
+    for (let i = 1; i <= 10; i++) {
+      cardLevels.push(
+        <SideNavigation.MainLevel
+          key={`card-${i}`}
+          index={i}
+          id={`card-${i}`}
+          label={`${i}. ${t(`workInstructions:cards:${i}:header`)}`}
+        >
+          <SideNavigation.SubLevel
+            href={`${CARD.path}${i}/perustaso`}
+            id={`card-${i}-basic`}
+            label={t('workInstructions:cards:basicLevel')}
+            mainLevelIndex={i}
+            onClick={(e) => setActivePage(e, `${CARD.path}${i}/${t('routes:CARD:basicLevel')}`)}
+            active={active === `${CARD.path}${i}/${t('routes:CARD:basicLevel')}`}
+          />
+          <SideNavigation.SubLevel
+            href={`${CARD.path}${i}/lisataso`}
+            id={`card-${i}-additional`}
+            label={t('workInstructions:cards:additionalLevel')}
+            onClick={(e) =>
+              setActivePage(e, `${CARD.path}${i}/${t('routes:CARD:additionalLevel')}`)
+            }
+            active={active === `${CARD.path}${i}/${t('routes:CARD:additionalLevel')}`}
+          />
+        </SideNavigation.MainLevel>,
+      );
+    }
+    return cardLevels;
+  };
+
+  const sideNavItems = [
+    <SideNavigation.MainLevel
+      key="work-instructions"
+      icon={<IconInfoCircle />}
+      href={WORKINSTRUCTIONS.path}
+      id="#work-instructions"
+      label={t('workInstructions:main:header')}
+      onClick={(e) => setActivePage(e, WORKINSTRUCTIONS.path)}
+      active={active === WORKINSTRUCTIONS.path}
+    />,
+    <SideNavigation.MainLevel
+      key="cards-index"
+      icon={<IconDocument />}
+      href={CARDS_INDEX.path}
+      id="#cards-index"
+      label={t('workInstructions:cardsIndex:header')}
+      onClick={(e) => setActivePage(e, CARDS_INDEX.path)}
+      active={active === CARDS_INDEX.path}
+    />,
+    ...renderCardLevels(),
+    <SideNavigation.MainLevel
+      key="external-link"
+      external
+      href={t('workInstructions:sideNav:externalLinks:permitsAndInstructions:url')}
+      openInNewTab
+      openInNewTabAriaLabel={t('workInstructions:sideNav:openInNewTab')}
+      openInExternalDomainAriaLabel={t('workInstructions:sideNav:openInExternalDomain')}
+      id="external-link-permits-and-instructions"
+      label={t('workInstructions:sideNav:externalLinks:permitsAndInstructions:label')}
+      withDivider
+    />,
+    <SideNavigation.MainLevel
+      external
+      href={t('workInstructions:sideNav:externalLinks:payments:url')}
+      openInNewTab
+      openInNewTabAriaLabel={t('workInstructions:sideNav:openInNewTab')}
+      openInExternalDomainAriaLabel={t('workInstructions:sideNav:openInExternalDomain')}
+      id="external-link-payments"
+      label={t('workInstructions:sideNav:externalLinks:payments:label')}
+    />,
+    <SideNavigation.MainLevel
+      external
+      href={t('workInstructions:sideNav:externalLinks:temporaryTrafficArrangement:url')}
+      openInNewTab
+      openInNewTabAriaLabel={t('workInstructions:sideNav:openInNewTab')}
+      openInExternalDomainAriaLabel={t('workInstructions:sideNav:openInExternalDomain')}
+      id="external-link-temporary-traffic-arrangement"
+      label={t('workInstructions:sideNav:externalLinks:temporaryTrafficArrangement:label')}
+    />,
+  ];
 
   return (
     <div className={styles.sidenavcontainer}>
@@ -15,68 +111,7 @@ const SideNav: React.FC<React.PropsWithChildren<unknown>> = () => {
         id="side-navigation"
         toggleButtonLabel={t('workInstructions:sideNav:moveToPage')}
       >
-        <SideNavigation.MainLevel
-          icon={<IconInfoCircle />}
-          href="/fi/tyoohjeet"
-          id="#main-level-1"
-          label={t('workInstructions:main:header')}
-          active={location.pathname.endsWith(t('routes:WORKINSTRUCTIONS:path'))}
-        ></SideNavigation.MainLevel>
-        <SideNavigation.MainLevel
-          icon={<IconDocument />}
-          href="/fi/tyoohjeet/haittojenhallinta"
-          id="#main-level-1"
-          label={t('workInstructions:cardsIndex:header')}
-          active={location.pathname.endsWith(t('routes:CARDS_INDEX:path'))}
-        ></SideNavigation.MainLevel>
-
-        <SideNavigation.MainLevel
-          index={1}
-          id="main-level-3"
-          label={`1. ${t('workInstructions:cards:1:header')}`}
-        >
-          <SideNavigation.SubLevel
-            href="/fi/tyoohjeet/haittojenhallinta/1/perustaso"
-            id="sub-level-5"
-            label={t('workInstructions:cards:basicLevel')}
-            mainLevelIndex={1}
-            active={location.pathname.endsWith('haittojenhallinta/1/perustaso')}
-          ></SideNavigation.SubLevel>
-          <SideNavigation.SubLevel
-            href="/fi/tyoohjeet/haittojenhallinta/1/lisataso"
-            id="sub-level-3"
-            label={t('workInstructions:cards:additionalLevel')}
-            active={location.pathname.endsWith('haittojenhallinta/1/lisataso')}
-          />
-        </SideNavigation.MainLevel>
-        <SideNavigation.MainLevel
-          external
-          href="https://tapahtumat.hel.fi/"
-          openInNewTab
-          openInNewTabAriaLabel={t('workInstructions:sideNav:openInNewTab')}
-          openInExternalDomainAriaLabel={t('workInstructions:sideNav:openInExternalDomain')}
-          id="main-level-4"
-          label="Työmaan luvat ja ohjeet"
-          withDivider
-        />
-        <SideNavigation.MainLevel
-          external
-          href="https://tapahtumat.hel.fi/"
-          openInNewTab
-          openInNewTabAriaLabel={t('workInstructions:sideNav:openInNewTab')}
-          openInExternalDomainAriaLabel={t('workInstructions:sideNav:openInExternalDomain')}
-          id="main-level-4"
-          label="Maksut"
-        />
-        <SideNavigation.MainLevel
-          external
-          href="https://tapahtumat.hel.fi/"
-          openInNewTab
-          openInNewTabAriaLabel={t('workInstructions:sideNav:openInNewTab')}
-          openInExternalDomainAriaLabel={t('workInstructions:sideNav:openInExternalDomain')}
-          id="main-level-4"
-          label="Tilapäisten liikennejärjestelyiden ohje ja tyyppikuvat"
-        />
+        {sideNavItems}
       </SideNavigation>
     </div>
   );
