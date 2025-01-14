@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { Fieldset, Notification, Tab, TabList, TabPanel, Tabs, Tooltip } from 'hds-react';
 import { Box, Flex, Grid } from '@chakra-ui/react';
 import { Feature } from 'ol';
@@ -46,6 +46,7 @@ import { styleFunction } from '../map/utils/geometryStyle';
 import HakemusLayer from '../map/components/Layers/HakemusLayer';
 import { OverlayProps } from '../../common/components/map/types';
 import { LIIKENNEHAITTA_STATUS } from '../common/utils/liikennehaittaindeksi';
+import useFieldArrayWithStateUpdate from '../../common/hooks/useFieldArrayWithStateUpdate';
 
 function getEmptyArea(
   hankeData: HankeData,
@@ -88,7 +89,7 @@ export default function Areas({ hankeData, hankkeenHakemukset }: Readonly<Props>
     fields: applicationAreas,
     append,
     remove,
-  } = useFieldArray<KaivuilmoitusFormValues, 'applicationData.areas'>({
+  } = useFieldArrayWithStateUpdate<KaivuilmoitusFormValues, 'applicationData.areas'>({
     name: 'applicationData.areas',
   });
   const wathcApplicationAreas = watch('applicationData.areas');

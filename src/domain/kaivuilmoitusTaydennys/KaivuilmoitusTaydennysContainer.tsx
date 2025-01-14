@@ -4,6 +4,7 @@ import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Button, IconSaveDiskette, StepState } from 'hds-react';
 import { useQueryClient } from 'react-query';
+import { Box } from '@chakra-ui/layout';
 import { KaivuilmoitusTaydennysFormValues } from './types';
 import { validationSchema } from './validationSchema';
 import { convertTaydennysDataToFormState } from './utils';
@@ -37,6 +38,9 @@ import ApplicationSaveNotification from '../application/components/ApplicationSa
 import TaydennysCancel from '../application/taydennys/components/TaydennysCancel';
 import Attachments from './Attachments';
 import useAttachments from '../application/hooks/useAttachments';
+import FormFieldsErrorSummary from '../forms/components/FormFieldsErrorSummary';
+import { mapValidationErrorToErrorListItem } from '../kaivuilmoitus/mapValidationErrorToErrorListItem';
+import { useFormErrorsByPage } from '../kaivuilmoitus/hooks/useFormErrorsByPage';
 
 type Props = {
   taydennys: Taydennys<KaivuilmoitusData>;
@@ -177,6 +181,17 @@ export default function KaivuilmoitusTaydennysContainer({
     },
   ];
 
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
+  const formErrorsByPage = useFormErrorsByPage(watchFormValues, { application: taydennys });
+
+  const formErrorsNotification = formErrorsByPage[activeStepIndex].length > 0 && (
+    <FormFieldsErrorSummary notificationLabel={t('hakemus:missingFields:notification:pageLabel')}>
+      {formErrorsByPage[activeStepIndex].map((error) =>
+        mapValidationErrorToErrorListItem(error, t, getValues),
+      )}
+    </FormFieldsErrorSummary>
+  );
+
   function saveTaydennys(handleSuccess?: () => void) {
     const formData = getValues();
     taydennysUpdateMutation.mutate(
@@ -192,7 +207,8 @@ export default function KaivuilmoitusTaydennysContainer({
     );
   }
 
-  function handleStepChange() {
+  function handleStepChange(stepIndex: number) {
+    setActiveStepIndex(stepIndex);
     // Save application when page is changed
     // only if something has changed
     if (isDirty) {
@@ -229,17 +245,20 @@ export default function KaivuilmoitusTaydennysContainer({
         formSteps={formSteps}
         formData={watchFormValues}
         topElement={
-          <TaydennyspyyntoNotification
-            taydennyspyynto={originalApplication.taydennyspyynto!}
-            applicationType="EXCAVATION_NOTIFICATION"
-          />
+          <>
+            <TaydennyspyyntoNotification
+              taydennyspyynto={originalApplication.taydennyspyynto!}
+              applicationType="EXCAVATION_NOTIFICATION"
+            />
+            <Box mt="var(--spacing-s)">{formErrorsNotification}</Box>
+          </>
         }
         isLoading={attachmentsUploading}
         isLoadingText={attachmentsUploadingText}
         onStepChange={handleStepChange}
         stepChangeValidator={validateStepChange}
       >
-        {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
+        {function renderFormActions(activeStep, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {
             // Make sure that application name is valid before saving and quitting
             const applicationValid = await trigger('applicationData.name', {
@@ -257,7 +276,7 @@ export default function KaivuilmoitusTaydennysContainer({
 
           return (
             <FormActions
-              activeStepIndex={activeStepIndex}
+              activeStepIndex={activeStep}
               totalSteps={formSteps.length}
               onPrevious={handlePrevious}
               onNext={handleNext}

@@ -169,6 +169,10 @@ export default function JohtoselvitysTaydennysContainer({
     const errorPath = error.path?.replace('[', '.').replace(']', '');
     const pathParts = errorPath?.match(/(\w+)/g) || [];
 
+    if (pathParts.length === 1 && pathParts[0] === 'areas') {
+      pathParts[0] = 'areas.empty';
+    }
+
     const langKey = pathParts
       .filter((part) => part !== 'applicationData')
       .reduce((acc, part) => {

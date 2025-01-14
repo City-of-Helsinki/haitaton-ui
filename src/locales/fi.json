@@ -1297,13 +1297,32 @@
         }
       },
       "constructionWork": "$t(hakemus:labels:tyossaKyse)",
+      "cableReports": "$t(hakemus:labels:cableReports)",
+      "cableReportDone": "$t(hakemus:labels:applyingCableReport)",
+      "requiredCompetence": "$t(hakemus:labels:requiredCompetenceTitle)",
       "startTime": "$t(hakemus:labels:startDate)",
+      "startTime_kaivuilmoitus": "$t(kaivuilmoitusForm:alueet:startDate)",
       "endTime": "$t(hakemus:labels:endDate)",
-      "areas": "Työalueen piirtäminen",
+      "endTime_kaivuilmoitus": "$t(kaivuilmoitusForm:alueet:endDate)",
+      "areas": {
+        "empty": "Työalueen piirtäminen",
+        "katuosoite": "$t(hakemus:labels:workAreaPlural) ({{areaName}}): $t(hankePortfolio:labels:katuosoite)",
+        "tyonTarkoitukset": "$t(hakemus:labels:workAreaPlural) ({{areaName}}): $t(hakemus:labels:tyonTarkoitus)",
+        "haittojenhallintasuunnitelma": {
+          "YLEINEN": "$t(hakemus:labels:workAreaPlural) ({{areaName}}): $t(kaivuilmoitusForm:haittojenHallinta:labels:YLEINEN)",
+          "PYORALIIKENNE": "$t(hakemus:labels:workAreaPlural) ({{areaName}}) $t(hankeForm:haittojenHallintaForm:nuisanceType.PYORALIIKENNE): $t(kaivuilmoitusForm:haittojenHallinta:labels:PYORALIIKENNE)",
+          "AUTOLIIKENNE": "$t(hakemus:labels:workAreaPlural) ({{areaName}}) $t(hankeForm:haittojenHallintaForm:nuisanceType.AUTOLIIKENNE): $t(kaivuilmoitusForm:haittojenHallinta:labels:AUTOLIIKENNE)",
+          "LINJAAUTOLIIKENNE": "$t(hakemus:labels:workAreaPlural) ({{areaName}}) $t(hankeForm:haittojenHallintaForm:nuisanceType.LINJAAUTOLIIKENNE): $t(kaivuilmoitusForm:haittojenHallinta:labels:LINJAAUTOLIIKENNE)",
+          "RAITIOLIIKENNE": "$t(hakemus:labels:workAreaPlural) ({{areaName}}) $t(hankeForm:haittojenHallintaForm:nuisanceType.RAITIOLIIKENNE): $t(kaivuilmoitusForm:haittojenHallinta:labels:RAITIOLIIKENNE)",
+          "MUUT": "$t(hakemus:labels:workAreaPlural) ({{areaName}}) $t(hankeForm:haittojenHallintaForm:nuisanceType.MUUT): $t(kaivuilmoitusForm:haittojenHallinta:labels:MUUT)"
+        }
+      },
       "customerWithContacts": {
         "customer": {
           "name": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:yhteystiedot:labels:nimi)",
           "registryKey": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:yhteystiedot:labels:ytunnus)",
+          "registryKey_person": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:yhteystiedot:labels:henkilotunnus)",
+          "registryKey_muu": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:yhteystiedot:labels:muuTunnus)",
           "email": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:yhteystiedot:labels:email)",
           "phone": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:yhteystiedot:labels:puhelinnumero)"
         },
@@ -1335,6 +1354,23 @@
           "phone": "$t(form:yhteystiedot:titles:representativeWithContacts): $t(form:yhteystiedot:labels:puhelinnumero)"
         },
         "contacts": "$t(form:yhteystiedot:titles:representativeWithContacts): $t(form:validations:yhteyshenkilotMin)"
+      },
+      "invoicingCustomer": {
+        "name": "$t(form:yhteystiedot:titles:invoicingCustomerInfo): $t(form:yhteystiedot:labels:nimi)",
+        "registryKey": "$t(form:yhteystiedot:titles:invoicingCustomerInfo): $t(form:yhteystiedot:labels:ytunnus)",
+        "registryKey_person": "$t(form:yhteystiedot:titles:invoicingCustomerInfo): $t(form:yhteystiedot:labels:henkilotunnus)",
+        "registryKey_muu": "$t(form:yhteystiedot:titles:invoicingCustomerInfo): $t(form:yhteystiedot:labels:muuTunnus)",
+        "email": "$t(form:yhteystiedot:titles:invoicingCustomerInfo): $t(form:yhteystiedot:labels:email)",
+        "phone": "$t(form:yhteystiedot:titles:invoicingCustomerInfo): $t(form:yhteystiedot:labels:puhelinnumero)",
+        "postalAddress": {
+          "streetAddress": {
+            "streetName": "$t(form:yhteystiedot:titles:invoicingCustomerInfo): $t(form:yhteystiedot:labels:osoite)"
+          },
+          "postalCode": "$t(form:yhteystiedot:titles:invoicingCustomerInfo): $t(form:yhteystiedot:labels:postinumero)",
+          "city": "$t(form:yhteystiedot:titles:invoicingCustomerInfo): $t(form:yhteystiedot:labels:postitoimipaikka)"
+        },
+        "ovt": "$t(form:yhteystiedot:titles:invoicingCustomerInfo): $t(form:yhteystiedot:labels:ovt)",
+        "invoicingOperator": "$t(form:yhteystiedot:titles:invoicingCustomerInfo): $t(form:yhteystiedot:labels:invoicingOperator)"
       }
     }
   },
