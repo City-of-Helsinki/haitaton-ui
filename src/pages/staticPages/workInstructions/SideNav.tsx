@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IconDocument, IconInfoCircle, SideNavigation } from 'hds-react';
 import styles from './WorkInstructions.module.scss';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 
@@ -10,6 +10,11 @@ const SideNav: React.FC = () => {
   const [active, setActive] = useState('');
   const navigate = useNavigate();
   const { CARD, WORKINSTRUCTIONS, CARDS_INDEX } = useLocalizedRoutes();
+  const { number = '', type = '' } = useParams<{ number: string; type: string }>();
+
+  useEffect(() => {
+    setActive(window.location.pathname);
+  }, [number, type]);
 
   const setActivePage = (
     event: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
@@ -25,7 +30,6 @@ const SideNav: React.FC = () => {
     for (let i = 1; i <= 10; i++) {
       cardLevels.push(
         <SideNavigation.MainLevel
-          key={`card-${i}`}
           index={i}
           id={`card-${i}`}
           label={`${i}. ${t(`workInstructions:cards:${i}:header`)}`}
@@ -55,7 +59,6 @@ const SideNav: React.FC = () => {
 
   const sideNavItems = [
     <SideNavigation.MainLevel
-      key="work-instructions"
       icon={<IconInfoCircle />}
       href={WORKINSTRUCTIONS.path}
       id="#work-instructions"
@@ -64,7 +67,6 @@ const SideNav: React.FC = () => {
       active={active === WORKINSTRUCTIONS.path}
     />,
     <SideNavigation.MainLevel
-      key="cards-index"
       icon={<IconDocument />}
       href={CARDS_INDEX.path}
       id="#cards-index"
@@ -74,7 +76,6 @@ const SideNav: React.FC = () => {
     />,
     ...renderCardLevels(),
     <SideNavigation.MainLevel
-      key="external-link"
       external
       href={t('workInstructions:sideNav:externalLinks:permitsAndInstructions:url')}
       openInNewTab
