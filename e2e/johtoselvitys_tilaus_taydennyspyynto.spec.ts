@@ -8,7 +8,7 @@ test.beforeEach('Helsinki_login', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'Test IdP' })).toBeVisible();
   await page.getByRole('link', { name: 'Test IdP' }).click();
   await expect(page.getByPlaceholder('-9988')).toBeVisible();
-  await page.getByPlaceholder('-9988').fill(process.env.suomifilogin ?? "");
+  await page.getByPlaceholder('-9988').fill(testiData.suomifilogin);
   await page.getByPlaceholder('-9988').press('Tab');
   await page.getByRole('button', { name: 'Tunnistaudu' }).click();
   await expect(page.getByRole('button', { name: 'Continue to service' })).toBeVisible();
@@ -98,10 +98,10 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   await expect(page.getByTestId('application-status-tag')).toContainText('Odottaa käsittelyä');
 
   // check allu
-  await page.goto(process.env.allu_testing ?? "");
+  await page.goto(testiData.allu_url);
   await expect(page.getByPlaceholder('Username')).toBeEmpty();
   await page.getByPlaceholder('Username').click();
-  await page.getByPlaceholder('Username').fill(process.env.allupw ?? "");
+  await page.getByPlaceholder('Username').fill(testiData.allupw);
   await page.getByRole('button', { name: 'Submit' }).click();
   await expect(page.getByRole('link', { name: 'HAKEMUKSET' })).toBeVisible();
   await page.getByRole('link', { name: 'HAKEMUKSET' }).click();
@@ -146,10 +146,10 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
 
 
   // check allu
-  await page.goto(process.env.allu_testing ?? "");
+  await page.goto(testiData.allu_url);
   await expect(page.getByPlaceholder('Username')).toBeEmpty();
   await page.getByPlaceholder('Username').click();
-  await page.getByPlaceholder('Username').fill(process.env.allupw ?? "");
+  await page.getByPlaceholder('Username').fill(testiData.allupw);
   await page.getByRole('button', { name: 'Submit' }).click();
   await expect(page.getByRole('link', { name: 'HAKEMUKSET' })).toBeVisible();
   await page.getByRole('link', { name: 'HAKEMUKSET' }).click();

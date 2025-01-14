@@ -8,7 +8,7 @@ test.beforeEach('Helsinki_login', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'Test IdP' })).toBeVisible({ timeout: 10_000 });
   await page.getByRole('link', { name: 'Test IdP' }).click();
   await expect(page.getByPlaceholder('-9988')).toBeVisible({ timeout: 10_000 });
-  await page.getByPlaceholder('-9988').fill(process.env.suomifilogin ?? "")
+  await page.getByPlaceholder('-9988').fill(testiData.suomifilogin)
   await page.getByPlaceholder('-9988').press('Tab');
   await page.getByRole('button', { name: 'Tunnistaudu' }).click();
   await expect(page.getByRole('button', { name: 'Continue to service' })).toBeVisible();
