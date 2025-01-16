@@ -44,50 +44,50 @@ interface Testiosoite {
 };
 
 export const perustaja: TestUser = {
-  username: process.env.taasiakasusername ?? "",
-  email: process.env.taasiakasemail ?? "",
-  phonenumber: process.env.taasiakasphonenumber ?? "",
-  y_tunnus: process.env.taasiakasytunnus ?? ""
+  username: process.env.TAASIAKASUSERNAME ?? "",
+  email: process.env.TAASIAKASEMAIL ?? "",
+  phonenumber: process.env.TAASIAKASPHONENUMBER ?? "",
+  y_tunnus: process.env.TAASIAKASYTUNNUS ?? ""
 };
 
 export const vastaava: TestUser = {
-  username: process.env.tavastaavausername ?? "",
-  email: process.env.tavastaavaemail ?? "",
-  phonenumber: process.env.tavastaavaphonenumber ?? "",
-  y_tunnus: process.env.tavastaavaytunnus ?? ""
+  username: process.env.TAVASTAAVAUSERNAME ?? "",
+  email: process.env.TAVASTAAVAEMAIL ?? "",
+  phonenumber: process.env.TAVASTAAVAPHONENUMBER ?? "",
+  y_tunnus: process.env.TAVASTAAVAYTUNNUS ?? ""
 };
 export const suorittaja: TestUser = {
-  username: process.env.tasuorittajausername ?? "",
-  email: process.env.tasuorittajaemail ?? "",
-  phonenumber: process.env.tasuorittajaphonenumber ?? "",
-  y_tunnus: process.env.tasuorittajaytunnus ?? ""
+  username: process.env.TASUORITTAJAUSERNAME ?? "",
+  email: process.env.TASUORITTAJAEMAIL ?? "",
+  phonenumber: process.env.TASUORITTAJAPHONENUMBER ?? "",
+  y_tunnus: process.env.TASUORITTAJAYTUNNUS ?? ""
 };
 export const rakennuttaja: TestUser = {
-  username: process.env.tarakennuttajausername ?? "",
-  email: process.env.tarakennuttajaemail ?? "",
-  phonenumber: process.env.tarakennuttajaphonenumber ?? "",
-  y_tunnus: process.env.tarakennuttajaytunnus ?? ""
+  username: process.env.TARAKENNUTTAJAUSERNAME ?? "",
+  email: process.env.TARAKENNUTTAJAEMAIL ?? "",
+  phonenumber: process.env.TARAKENNUTTAJAPHONENUMBER ?? "",
+  y_tunnus: process.env.TARAKENNUTTAJAYTUNNUS ?? ""
 };
 export const asianhoitaja: TestUser = {
-  username: process.env.taasianhoitajausername ?? "",
-  email: process.env.taasianhoitajaemail ?? "",
-  phonenumber: process.env.taasianhoitajaphonenumber ?? "",
-  y_tunnus: process.env.taasianhoitajaytunnus ?? ""
+  username: process.env.TAASIANHOITAJAUSERNAME ?? "",
+  email: process.env.TAASIANHOITAJAEMAIL ?? "",
+  phonenumber: process.env.TAASIANHOITAJAPHONENUMBER ?? "",
+  y_tunnus: process.env.TAASIANHOITAJAYTUNNUS ?? ""
 };
 
 export const testiData: HaitatonTestData = {
-  testEnvUrl: process.env.tahaitatontesting ?? "",
+  testEnvUrl: process.env.TAHAITATONTESTING ?? "",
   runtime: todayFull,
   today: today,
   todayFull: todayFull,
   todayDate: todayDate,
   tomorrow: tomorrow,
   currentMonth: currentMonth,
-  allu_url: process.env.taallutesting ?? "",
-  suomifilogin: process.env.tasuomifilogin ?? "",
-  allupw : process.env.taallupw ?? ""
+  allu_url: process.env.TAALLUTESTING ?? "",
+  suomifilogin: process.env.TASUOMIFILOGIN ?? "",
+  allupw : process.env.TAALLUPW ?? ""
 };
 
 export const testiOsoite: Testiosoite = {
-  address: process.env.taasiakasos1 ?? ""
+  address: process.env.TAASIAKASOS1 ?? ""
 };
