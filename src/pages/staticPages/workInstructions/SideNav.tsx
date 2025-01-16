@@ -32,7 +32,7 @@ const SideNav: React.FC = () => {
         <SideNavigation.MainLevel
           index={i}
           id={`card-${i}`}
-          label={`${i}. ${t(`workInstructions:cards:${i}:header`)}`}
+          label={`${t(`workInstructions:cards:${i}:header`)}`}
         >
           <SideNavigation.SubLevel
             href={`${CARD.path}${i}/perustaso`}

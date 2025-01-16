@@ -1,11 +1,21 @@
 @import 'src/assets/styles/layout';
 
-a {
-  text-decoration: underline;
-}
-
 .content {
+  a {
+    text-decoration: underline;
+  }
+
   margin-bottom: var(--spacing-xl);
+
+  h3 {
+    color: var(--greyscale-black-90);
+    font-size: var(--fontsize-heading-xs);
+    font-weight: 700;
+  }
+
+  p {
+    font-size: var(--fontsize-body-l);
+  }
 }
 
 .puffcontainer {
@@ -16,6 +26,8 @@ a {
   display: flex;
   flex-direction: row;
   gap: var(--spacing-m);
+  color: var(--greyscale-black-90);
+  font-size: var(--fontsize-heading-xs);
 
   ul {
     list-style-position: inside;
@@ -24,6 +36,8 @@ a {
 
 .additionalsummary {
   margin-bottom: var(--spacing-m);
+  color: var(--greyscale-black-90);
+  font-size: var(--fontsize-heading-xs);
 
   ul {
     list-style-position: inside;
