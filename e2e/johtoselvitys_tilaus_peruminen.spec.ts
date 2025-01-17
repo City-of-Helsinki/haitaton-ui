@@ -96,7 +96,7 @@ test('Johtoselvityshakemus_peruminen', async ({ page }) => {
   await page.getByRole('button', { name: 'Peru hanke' }).click()
   await expect(page.getByRole('button', { name: 'Vahvista' })).toBeVisible();
   await page.getByRole('button', { name: 'Vahvista' }).click()
-  await expect(page.getByText('Omat hankkeet')).toBeVisible({timeout: 10000});
+  await expect(page.getByTestId('hankeListLink')).toBeVisible({timeout: 10000});
   await expect(page.getByText('Hanke poistettu')).toBeVisible();
 
 });
