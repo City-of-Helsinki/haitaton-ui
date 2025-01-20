@@ -56,7 +56,7 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   await page.getByTestId('applicationData.customerWithContacts.customer.email').fill(vastaava.email);
   await page.getByTestId('applicationData.customerWithContacts.customer.phone').fill(vastaava.phonenumber);
   await page.locator('#hds-combobox-11-toggle-button').click();
-  await page.getByRole('option', { name: `${perustaja.username}` }).getByLabel('check').click();
+  await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page.locator('#hds-combobox-11-toggle-button').click();
   await page.locator('[id="applicationData\\.contractorWithContacts\\.customer\\.name"]').click();
   await page.locator('[id="applicationData\\.contractorWithContacts\\.customer\\.name"]').fill(suorittaja.username);
@@ -84,7 +84,7 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   await page.getByRole('button', { name: 'Vahvista' }).click();
   await expect(page.getByText('Hakemus lähetetty')).toBeVisible();
   const johtoselvityshakemusUrl = page.url()
-  console.log(johtoselvityshakemusUrl)
+  // console.log(johtoselvityshakemusUrl)
   const hakemuksenTunnus = await page.getByTestId('allu_tunnus').textContent();
   const linkkiHakemukseen = await page.locator('a').filter({ hasText: /HAI/gm }).getAttribute('href');
   const linkkiHakemukseenEdit = linkkiHakemukseen?.slice(3);
@@ -173,4 +173,3 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   await tarkistaTulokset(page, hakemusLinkki, "Päätös")
 
 });
-
