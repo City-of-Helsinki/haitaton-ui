@@ -18,7 +18,7 @@ import { Box } from '@chakra-ui/react';
 import { Taydennys } from '../application/taydennys/types';
 import TaydennysBasicInformationSummary from '../application/taydennys/components/summary/JohtoselvitysBasicInformationSummary';
 import TaydennysAreaSummary from '../application/taydennys/components/summary/JohtoselvitysAreaSummary';
-import TaydennysContactsSummary from '../application/taydennys/components/summary/JohtoselvitysContactsSummary';
+import TaydennysContactsSummary from '../application/taydennys/components/summary/ContactsSummary';
 import AttachmentSummary from '../application/components/summary/AttachmentSummary';
 import TaydennysAttachmentsList from '../application/taydennys/components/TaydennysAttachmentsList';
 

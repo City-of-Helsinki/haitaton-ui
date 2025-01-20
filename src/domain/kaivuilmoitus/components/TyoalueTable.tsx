@@ -211,6 +211,7 @@ export default function TyoalueTable({
       setValue(
         `applicationData.areas.${alueIndex}.tyoalueet`,
         tyoalueet.filter((_, i) => i !== areaToRemove.index),
+        { shouldValidate: true, shouldDirty: true },
       );
       drawSource.removeFeature(areaToRemove.feature!);
       setAreaToRemove(null);

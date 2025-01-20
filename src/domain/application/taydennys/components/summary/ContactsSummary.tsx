@@ -1,19 +1,20 @@
 import { useTranslation } from 'react-i18next';
-import { JohtoselvitysData } from '../../../types/application';
+import { JohtoselvitysData, KaivuilmoitusData } from '../../../types/application';
 import {
   FormSummarySection,
   SectionItemContentRemoved,
   SectionTitle,
 } from '../../../../forms/components/FormSummarySection';
 import ContactsSummary from '../../../components/summary/ContactsSummary';
+import InvoicingCustomerSummary from '../../../components/summary/InvoicingCustomerSummary';
 
 type Props = {
-  data: JohtoselvitysData;
-  originalData: JohtoselvitysData;
+  data: JohtoselvitysData | KaivuilmoitusData;
+  originalData: JohtoselvitysData | KaivuilmoitusData;
   muutokset: string[];
 };
 
-export default function JohtoselvitysContactsSummary({
+export default function TaydennysContactsSummary({
   data,
   originalData,
   muutokset,
@@ -25,16 +26,20 @@ export default function JohtoselvitysContactsSummary({
     propertyDeveloperWithContacts,
     representativeWithContacts,
   } = data;
+  const invoicingCustomer = (data as KaivuilmoitusData).invoicingCustomer;
+
   const customerWithContactsChanged = muutokset.includes('customerWithContacts');
   const contractorWithContactsChanged = muutokset.includes('contractorWithContacts');
   const propertyDeveloperWithContactsChanged = muutokset.includes('propertyDeveloperWithContacts');
   const representativeWithContactsChanged = muutokset.includes('representativeWithContacts');
+  const invoicingCustomerChanged = muutokset.includes('invoicingCustomer');
 
   if (
     !customerWithContactsChanged &&
     !contractorWithContactsChanged &&
     !propertyDeveloperWithContactsChanged &&
-    !representativeWithContactsChanged
+    !representativeWithContactsChanged &&
+    !invoicingCustomerChanged
   ) {
     return null;
   }
@@ -74,6 +79,9 @@ export default function JohtoselvitysContactsSummary({
             title={t('form:yhteystiedot:titles:representativeWithContacts')}
             ContentContainer={!representativeWithContacts ? SectionItemContentRemoved : undefined}
           />
+        )}
+        {invoicingCustomerChanged && (
+          <InvoicingCustomerSummary invoicingCustomer={invoicingCustomer} />
         )}
       </FormSummarySection>
     </>

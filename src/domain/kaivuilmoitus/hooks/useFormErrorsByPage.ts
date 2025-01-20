@@ -22,6 +22,7 @@ export function useFormErrorsByPage<T>(formData: T, context: AnyObject) {
     haittojenhallintaErrors,
     yhteystiedotErrors,
     [],
+    [],
   ];
 
   return formErrorsByPage;

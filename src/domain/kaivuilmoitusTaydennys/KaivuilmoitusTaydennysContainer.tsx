@@ -41,6 +41,7 @@ import useAttachments from '../application/hooks/useAttachments';
 import FormFieldsErrorSummary from '../forms/components/FormFieldsErrorSummary';
 import { mapValidationErrorToErrorListItem } from '../kaivuilmoitus/mapValidationErrorToErrorListItem';
 import { useFormErrorsByPage } from '../kaivuilmoitus/hooks/useFormErrorsByPage';
+import ReviewAndSend from './ReviewAndSend';
 
 type Props = {
   taydennys: Taydennys<KaivuilmoitusData>;
@@ -177,6 +178,19 @@ export default function KaivuilmoitusTaydennysContainer({
         />
       ),
       label: t('hankePortfolio:tabit:liitteet'),
+      state: StepState.available,
+    },
+    {
+      element: (
+        <ReviewAndSend
+          taydennys={taydennys}
+          muutokset={taydennys.muutokset}
+          originalApplication={originalApplication}
+          originalAttachments={originalAttachments ?? []}
+          hankealueet={hankeData.alueet}
+        />
+      ),
+      label: t('form:headers:yhteenveto'),
       state: StepState.available,
     },
   ];
