@@ -1626,5 +1626,23 @@
     "text": "",
     "imageLabel": "Image by: Lille Santanen",
     "imageAltText": "An illustration of a construction site"
+  },
+  "workInstructions": {
+    "sideNav": {
+      "externalLinks": {
+        "permitsAndInstructions": {
+          "label": "Permits and instructions for construction site",
+          "url": "https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/permits-and-instructions-for-construction-site"
+        },
+        "payments": {
+          "label": "Fees",
+          "url": "https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/permits-and-instructions-for-construction-site/working-on-streets-and-in-parks#fees--responsibilities-and-current-area-rentals-and-excavation-notifications"
+        },
+        "temporaryTrafficArrangement": {
+          "label": "Instructions and standard solution images for temporary traffic arrangements",
+          "url": "https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/permits-and-instructions-for-construction-site/working-on-streets-and-in-parks#instructions-for-temporary-traffic-arrangements-and-planning"
+        }
+      }
+    }
   }
 }
