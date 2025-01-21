@@ -24,7 +24,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   // reporter: 'html',
-  reporter: [['list'],['html'],['junit', { outputFile: 'test-results/e2e-junit-results.xml' }]],
+  reporter: [['list'],['html', {open: 'never', outputFolder: 'e2e/report'}],['junit', { outputFile: 'e2e/report/e2e-junit-results.xml' }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     viewport: { width: 1920, height: 1080 },
@@ -37,6 +37,11 @@ export default defineConfig({
       mode: 'on',
       size: { width: 1920, height: 1080 },
     },
+    contextOptions: {
+      recordVideo: {
+        dir: './e2e/report',
+      },
+    },
   },
 
   /* Configure projects for major browsers */
@@ -48,7 +53,7 @@ export default defineConfig({
         deviceScaleFactor: undefined,
         viewport: { width: 1920, height: 1080 },
         launchOptions: {
-          args: ['--start-maximized'],
+          // args: ['--start-maximized'],
           slowMo: 700,
         },
       },

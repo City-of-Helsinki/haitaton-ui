@@ -56,7 +56,7 @@ test('Johtoselvityshakemus_tilaus', async ({ page }) => {
   await page.getByTestId('applicationData.customerWithContacts.customer.email').fill(vastaava.email);
   await page.getByTestId('applicationData.customerWithContacts.customer.phone').fill(vastaava.phonenumber);
   await page.locator('#hds-combobox-11-toggle-button').click();
-  await page.getByRole('option', { name: `${perustaja.username}` }).getByLabel('check').click();
+  await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page.locator('#hds-combobox-11-toggle-button').click();
   await page.locator('[id="applicationData\\.contractorWithContacts\\.customer\\.name"]').click();
   await page.locator('[id="applicationData\\.contractorWithContacts\\.customer\\.name"]').fill(suorittaja.username);
