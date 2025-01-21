@@ -3,6 +3,7 @@ import { Button, IconEnvelope, IconQuestionCircle, Notification } from 'hds-reac
 import { useTranslation } from 'react-i18next';
 import { AlluStatus, Application } from '../../types/application';
 import { validationSchema as johtoselvitysValidationSchema } from '../../../johtoselvitysTaydennys/validationSchema';
+import { validationSchema as kaivuilmoitusValidationSchema } from '../../../kaivuilmoitusTaydennys/validationSchema';
 import ConfirmationDialog from '../../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import useIsInformationRequestFeatureEnabled from '../../taydennys/hooks/useIsInformationRequestFeatureEnabled';
 import useSendTaydennysMutation from '../../taydennys/hooks/useSendTaydennys';
@@ -11,7 +12,7 @@ import { SignedInUser } from '../../../hanke/hankeUsers/hankeUser';
 
 const validationSchemas = {
   CABLE_REPORT: johtoselvitysValidationSchema,
-  EXCAVATION_NOTIFICATION: null,
+  EXCAVATION_NOTIFICATION: kaivuilmoitusValidationSchema,
 };
 
 export default function useSendTaydennys(

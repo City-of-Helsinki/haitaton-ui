@@ -2,7 +2,14 @@ import { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Button, IconSaveDiskette, StepState } from 'hds-react';
+import {
+  Button,
+  IconEnvelope,
+  IconQuestionCircle,
+  IconSaveDiskette,
+  Notification,
+  StepState,
+} from 'hds-react';
 import { useQueryClient } from 'react-query';
 import { Box } from '@chakra-ui/layout';
 import { KaivuilmoitusTaydennysFormValues } from './types';
@@ -42,6 +49,10 @@ import FormFieldsErrorSummary from '../forms/components/FormFieldsErrorSummary';
 import { mapValidationErrorToErrorListItem } from '../kaivuilmoitus/mapValidationErrorToErrorListItem';
 import { useFormErrorsByPage } from '../kaivuilmoitus/hooks/useFormErrorsByPage';
 import ReviewAndSend from './ReviewAndSend';
+import { isContactIn } from '../application/utils';
+import useSendTaydennys from '../application/taydennys/hooks/useSendTaydennys';
+import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
+import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 
 type Props = {
   taydennys: Taydennys<KaivuilmoitusData>;
@@ -65,6 +76,9 @@ export default function KaivuilmoitusTaydennysContainer({
         hakemus.applicationType === 'CABLE_REPORT' && Boolean(hakemus.applicationIdentifier),
     )
     .map((hakemus) => hakemus.applicationIdentifier!);
+  const sendTaydennysMutation = useSendTaydennys();
+  const [showSendDialog, setShowSendDialog] = useState(false);
+  const { data: signedInUser } = usePermissionsForHanke(hankeData.hankeTunnus);
   const { data: originalAttachments } = useAttachments(originalApplication.id);
   const [attachmentsUploading, setAttachmentsUploading] = useState(false);
   const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
@@ -81,7 +95,8 @@ export default function KaivuilmoitusTaydennysContainer({
     setValue,
     watch,
     trigger,
-    formState: { isDirty },
+    formState: { isDirty, isValid },
+    handleSubmit,
   } = formContext;
   const watchFormValues = watch();
 
@@ -247,6 +262,23 @@ export default function KaivuilmoitusTaydennysContainer({
     saveTaydennys(handleSuccess);
   }
 
+  function openSendDialog() {
+    setShowSendDialog(true);
+  }
+
+  function closeSendDialog() {
+    setShowSendDialog(false);
+  }
+
+  function sendTaydennys() {
+    sendTaydennysMutation.mutate(taydennys.id, {
+      onSuccess(data) {
+        navigateToApplicationView(data.id?.toString());
+      },
+    });
+    closeSendDialog();
+  }
+
   function validateStepChange(changeStep: () => void, stepIndex: number) {
     return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger);
   }
@@ -271,6 +303,7 @@ export default function KaivuilmoitusTaydennysContainer({
         isLoadingText={attachmentsUploadingText}
         onStepChange={handleStepChange}
         stepChangeValidator={validateStepChange}
+        onSubmit={handleSubmit(openSendDialog)}
       >
         {function renderFormActions(activeStep, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {
@@ -282,6 +315,14 @@ export default function KaivuilmoitusTaydennysContainer({
               saveAndQuit();
             }
           }
+
+          const lastStep = activeStepIndex === formSteps.length - 1;
+          const showSendButton =
+            lastStep &&
+            isValid &&
+            (taydennys.muutokset.length > 0 || taydennys.liitteet.length > 0);
+          const isContact = isContactIn(signedInUser, getValues('applicationData'));
+          const disableSendButton = showSendButton && !isContact;
 
           const saveAndQuitIsLoading = taydennysUpdateMutation.isLoading || attachmentsUploading;
           const saveAndQuitLoadingText = attachmentsUploading
@@ -315,6 +356,27 @@ export default function KaivuilmoitusTaydennysContainer({
               >
                 {t('hankeForm:saveDraftButton')}
               </Button>
+              {showSendButton && (
+                <Button
+                  type="submit"
+                  iconLeft={<IconEnvelope aria-hidden="true" />}
+                  loadingText={t('common:buttons:sendingText')}
+                  isLoading={sendTaydennysMutation.isLoading}
+                  disabled={disableSendButton}
+                >
+                  {t('taydennys:buttons:sendTaydennys')}
+                </Button>
+              )}
+              {disableSendButton && (
+                <Notification
+                  size="small"
+                  style={{ marginTop: 'var(--spacing-xs)' }}
+                  type="info"
+                  label={t('hakemus:notifications:sendApplicationDisabled')}
+                >
+                  {t('hakemus:notifications:sendApplicationDisabled')}
+                </Notification>
+              )}
             </FormActions>
           );
         }}
@@ -326,6 +388,17 @@ export default function KaivuilmoitusTaydennysContainer({
           onClose={() => setShowSaveNotification(false)}
         />
       )}
+
+      <ConfirmationDialog
+        title={t('taydennys:sendDialog:title')}
+        description={t('taydennys:sendDialog:description')}
+        showCloseButton
+        isOpen={showSendDialog}
+        close={closeSendDialog}
+        mainAction={sendTaydennys}
+        variant="primary"
+        headerIcon={<IconQuestionCircle />}
+      />
     </FormProvider>
   );
 }
