@@ -51,7 +51,7 @@ const WorkInstructionsMain: React.FC = () => {
           </p>
           <br />
           <p>Viralliset työohjeet löytyvät Helsingin kaupungin sivuilta osoitteesta</p>
-          <a href={t('workInstructions:sideNav:externalLinks:permitsAndInstructions')}>
+          <a href={t('workInstructions:sideNav:externalLinks:permitsAndInstructions:url')}>
             Työmaan luvat ja ohjeet (hel.fi)
           </a>
         </Trans>
