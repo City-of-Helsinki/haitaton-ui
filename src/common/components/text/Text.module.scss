@@ -5,7 +5,6 @@
 
   &--h1 {
     font-size: var(--fontsize-heading-xl);
-    line-height: var(--lineheight-s);
 
     @include respond-below(m) {
       font-size: var(--fontsize-heading-l);

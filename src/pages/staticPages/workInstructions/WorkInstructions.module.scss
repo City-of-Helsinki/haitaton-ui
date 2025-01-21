@@ -17,6 +17,10 @@
 .main {
   max-width: 798px;
   padding: var(--spacing-2-xs);
+
+  h1 {
+    line-height: var(--lineheight-s);
+  }
 }
 
 .sidenavcontainer {

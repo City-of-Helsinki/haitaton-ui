@@ -15,7 +15,7 @@ const Puff: React.FC<React.PropsWithChildren<{ children?: React.ReactNode }>> = 
       >
         <div className={styles.puff}>
           <div>
-            <div style={{ width: '128px', height: '128px' }}>
+            <div className={styles.icon}>
               <Idea />
             </div>
           </div>
