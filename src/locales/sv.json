@@ -419,10 +419,26 @@
       }
     },
     "WORKINSTRUCTIONS": {
-      "path": "https://www.hel.fi/sv/stadsmiljo-och-trafik/tomter-och-bygglov/anvisningar-for-byggskedet",
+      "path": "/arbetsanvisningar",
       "headerLabel": "Arbetsanvisningar",
       "meta": {
         "title": "Haitaton - Arbetsanvisningar"
+      }
+    },
+    "CARDS_INDEX": {
+      "path": "/arbetsanvisningar/hantering-av-olagenheter/",
+      "headerLabel": "Ytterligare informationskort för hanterin av olågenheter",
+      "meta": {
+        "title": "Haitaton - Arbetsanvisningar - Ytterligare informationskort för hanterin av olågenheter"
+      }
+    },
+    "CARD": {
+      "path": "/arbetsanvisningar/hantering-av-olagenheter/kort/",
+      "basicLevel": "grundlaggande",
+      "additionalLevel": "ytterligare",
+      "headerLabel": "Ytterligare informationskort för hanterin av olågenheter",
+      "meta": {
+        "title": "Haitaton - Arbetsanvisningar - Ytterligare informationskort för hanterin av olågenheter"
       }
     },
     "MANUAL": {

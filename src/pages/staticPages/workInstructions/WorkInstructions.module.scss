@@ -22,3 +22,15 @@
 .sidenavcontainer {
   max-width: 340px;
 }
+
+.content {
+  a {
+    text-decoration: underline;
+  }
+
+  margin-bottom: var(--spacing-xl);
+
+  p {
+    font-size: var(--fontsize-body-l);
+  }
+}

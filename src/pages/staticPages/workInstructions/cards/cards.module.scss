@@ -22,6 +22,25 @@
   }
 }
 
+.images {
+  padding-top: var(--spacing-xl);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--spacing-l);
+}
+
+.imgContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  align-items: flex-start;
+
+  p {
+    max-width: 304px;
+  }
+}
+
 .puffcontainer {
   margin-bottom: var(--spacing-m);
 }

@@ -9,6 +9,13 @@ import { Trans, useTranslation } from 'react-i18next';
 import { BREADCRUMBS } from '../Breadcrumbs';
 import { useParams } from 'react-router-dom';
 import { BreadcrumbListItem, Link } from 'hds-react';
+import card2Img from './card2-img.png';
+import card3Img1 from './card3-img1.png';
+import card3Img2 from './card3-img2.png';
+import card5Img1 from './card5-img1.png';
+import card5Img2 from './card5-img2.png';
+import card5Img3 from './card5-img3.png';
+import card6Img1 from './card6-img1.png';
 
 const Card1Basic: React.FC = () => {
   const { t } = useTranslation();
@@ -414,6 +421,12 @@ const Card2Additional: React.FC = () => {
             <a href="mailto:toimisto@hun.fi">toimisto@hun.fi</a>).
           </p>
         </Trans>
+        <div className={styles.images}>
+          <div className={styles.imgContainer}>
+            <img src={card2Img} alt={t('workInstructions:cards:2:image1AltText')}></img>
+            <p>{t('workInstructions:cards:pictureBy')}: Silja Laine, Ramboll</p>
+          </div>
+        </div>
       </div>
     </>
   );
@@ -628,6 +641,16 @@ const Card3Additional: React.FC = () => {
             <a href="mailto:toimisto@hun.fi">toimisto@hun.fi</a>).
           </p>
         </Trans>
+        <div className={styles.images}>
+          <div className={styles.imgContainer}>
+            <img src={card3Img1} alt={t('workInstructions:cards:3:image1AltText')}></img>
+            <p>{t('workInstructions:cards:pictureBy')}: Susa Junnola</p>
+          </div>
+          <div className={styles.imgContainer}>
+            <img src={card3Img2} alt={t('workInstructions:cards:3:image2AltText')}></img>
+            <p>{t('workInstructions:cards:pictureBy')}: Ramudden</p>
+          </div>
+        </div>
       </div>
     </>
   );
@@ -1007,6 +1030,26 @@ const Card5Additional: React.FC = () => {
             tai kiskourien kohdat.
           </p>
         </Trans>
+        <div className={styles.images}>
+          <div className={styles.imgContainer}>
+            <img src={card5Img1} alt={t('workInstructions:cards:5:image1AltText')}></img>
+            <p>{t('workInstructions:cards:pictureBy')}: Silja Laine, Ramboll</p>
+          </div>
+          <div className={styles.imgContainer}>
+            <img src={card5Img2} alt={t('workInstructions:cards:5:image2AltText')}></img>
+            <p>
+              {t('workInstructions:cards:pictureBy')}: Vuoden katutyömaa -kilpailun raati / Aino
+              Mensonen, Ramboll
+            </p>
+          </div>
+          <div className={styles.imgContainer}>
+            <img src={card5Img3} alt={t('workInstructions:cards:5:image3AltText')}></img>
+            <p>
+              {t('workInstructions:cards:pictureBy')}: Vuoden katutyömaa -kilpailun raati / Aino
+              Mensonen, Ramboll
+            </p>
+          </div>
+        </div>
       </div>
     </>
   );
@@ -1155,6 +1198,15 @@ const Card6Additional: React.FC = () => {
           <br />
           <p>Pyöräilijöitä varoitetaan maahan maalatulla kävelijän kuvakkeella.</p>
         </Trans>
+        <div className={styles.images}>
+          <div className={styles.imgContainer}>
+            <img src={card6Img1} alt={t('workInstructions:cards:6:image1AltText')}></img>
+            <p>
+              {t('workInstructions:cards:pictureBy')}: Vuoden katutyömaa kilpailun raati / Aino
+              Mensonen, Ramboll
+            </p>
+          </div>
+        </div>
       </div>
     </>
   );

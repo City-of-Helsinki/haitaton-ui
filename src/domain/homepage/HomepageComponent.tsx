@@ -71,7 +71,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
       key: 'ohjeet',
       actionLink: WORKINSTRUCTIONS.path,
       imgProps: undefined,
-      external: true,
+      external: false,
       featureFlags: [],
     },
   ];
@@ -95,6 +95,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
       key: 'ohjeet',
       actionLink: WORKINSTRUCTIONS.path,
       imgProps: undefined,
+      external: false,
       featureFlags: [],
     },
   ];

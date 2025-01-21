@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
-import Text from '../../../common/components/text/Text';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useBreadcrumbs } from './WorkInstructionsPage';
 import { BREADCRUMBS } from './Breadcrumbs';
+import { Link } from 'hds-react';
+import styles from './WorkInstructions.module.scss';
 
 const WorkInstructionsMain: React.FC = () => {
   const { t } = useTranslation();
@@ -17,7 +18,44 @@ const WorkInstructionsMain: React.FC = () => {
   return (
     <>
       <MainHeading spacingBottom="xl">{t('workInstructions:main:header')}</MainHeading>
-      <Text tag="p">{t('workInstructions:main:content')}</Text>
+
+      <div className={styles.content}>
+        <Trans
+          i18nKey="workInstructions:main:content"
+          components={{
+            p: <p />,
+            a: (
+              <Link
+                href={t('workInstructions:sideNav:externalLinks:permitsAndInstructions:url')}
+                external
+                openInNewTab
+                openInNewTabAriaLabel="components:link:openInNewTabAriaLabel"
+                openInExternalDomainAriaLabel={t('components:link:openInExternalDomainAriaLabel')}
+                style={{ fontSize: 'var(--fontsize-body-l)' }}
+              >
+                linktext
+              </Link>
+            ),
+          }}
+        >
+          <p>
+            Haitaton tarjoaa hanke- ja hakemuslomakkeiden haittojenhallinnan täyttösivulla käyttäjän
+            avuksi toimenpidevinkkejä, joissa esitetään kootusti mm. tärkeitä aikamääreitä ennakkoon
+            tehtäviin yhteydenottoihin ja neuvotteluihin.
+          </p>
+          <br />
+          <p>
+            Tälle sivustolle on koottu lisätietokortteja, jotka täydentävät osaa haittojenhallinnan
+            toimenpidevinkeistä sekä antavat lisätason ideoita perustasoa laadukkaamman työmaan
+            toteutukseen kolmansien osapuolten kannalta.
+          </p>
+          <br />
+          <p>Viralliset työohjeet löytyvät Helsingin kaupungin sivuilta osoitteesta</p>
+          <a href={t('workInstructions:sideNav:externalLinks:permitsAndInstructions')}>
+            Työmaan luvat ja ohjeet (hel.fi)
+          </a>
+        </Trans>
+      </div>
     </>
   );
 };

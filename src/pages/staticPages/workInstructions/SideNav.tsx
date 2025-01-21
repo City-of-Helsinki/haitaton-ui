@@ -35,7 +35,7 @@ const SideNav: React.FC = () => {
           label={`${t(`workInstructions:cards:${i}:header`)}`}
         >
           <SideNavigation.SubLevel
-            href={`${CARD.path}${i}/perustaso`}
+            href={`${CARD.path}${i}/${t('routes:CARD:basicLevel')}`}
             id={`card-${i}-basic`}
             label={t('workInstructions:cards:basicLevel')}
             mainLevelIndex={i}
@@ -43,7 +43,7 @@ const SideNav: React.FC = () => {
             active={active === `${CARD.path}${i}/${t('routes:CARD:basicLevel')}`}
           />
           <SideNavigation.SubLevel
-            href={`${CARD.path}${i}/lisataso`}
+            href={`${CARD.path}${i}/${t('routes:CARD:additionalLevel')}`}
             id={`card-${i}-additional`}
             label={t('workInstructions:cards:additionalLevel')}
             onClick={(e) =>

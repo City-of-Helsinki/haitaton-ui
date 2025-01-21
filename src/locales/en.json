@@ -419,10 +419,26 @@
       }
     },
     "WORKINSTRUCTIONS": {
-      "path": "/tyoohjeet",
+      "path": "/workinstructions",
       "headerLabel": "Work instructions",
       "meta": {
         "title": "Haitaton - Work instructions"
+      }
+    },
+    "CARDS_INDEX": {
+      "path": "/workinstructions/handling-of-nuisances/",
+      "headerLabel": "Work instructions - Handling of nuisances",
+      "meta": {
+        "title": "Haitaton - Work instructions - Additional information cards for handling of nuisances"
+      }
+    },
+    "CARD": {
+      "path": "/workinstructions/handling-of-nuisances/cards/",
+      "basicLevel": "basic",
+      "additionalLevel": "additional",
+      "headerLabel": "Ytterligare informationskort för hanterin av olågenheter",
+      "meta": {
+        "title": "Haitaton - Work Instructions - Additional information cards for handling of nuisances"
       }
     },
     "MANUAL": {
