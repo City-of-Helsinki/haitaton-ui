@@ -15,7 +15,7 @@ const AdditionalSummary: React.FC<React.PropsWithChildren<{ children?: React.Rea
 
   return (
     <Card
-      heading="Mahdollinen lisätaso"
+      heading={t('workInstructions:cards:additionalLevel')}
       style={{ width: '100%' }}
       theme={{
         '--background-color': 'var(--color-black-5)',
