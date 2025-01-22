@@ -235,9 +235,13 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     vaihe,
   });
   const alueetErrors = useValidationErrors(hankeAlueetPublicSchema, { alueet });
-  const haittojenHallintaErrors = useValidationErrors(haittojenhallintaPublicSchema, {
-    alueet,
-  });
+  const haittojenHallintaErrors = useValidationErrors(
+    haittojenhallintaPublicSchema,
+    {
+      alueet,
+    },
+    { hanke: formData },
+  );
   const yhteystiedotErrors = useValidationErrors(hankeYhteystiedotPublicSchema, {
     omistajat,
     rakennuttajat,

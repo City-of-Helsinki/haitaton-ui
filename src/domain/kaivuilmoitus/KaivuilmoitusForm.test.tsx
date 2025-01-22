@@ -1182,7 +1182,7 @@ test('Should highlight selected work area', async () => {
 
   await user.click(workAreaTwo);
   expect(workAreaOne).not.toHaveClass('selected');
-  expect(workAreaTwo).toHaveClass('selected');
+  expect(await screen.findByRole('button', { name: 'Työalue 2' })).toHaveClass('selected');
 });
 
 test('Should show initial traffic nuisance index summary', async () => {

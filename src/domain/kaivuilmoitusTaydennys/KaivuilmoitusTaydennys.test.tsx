@@ -18,6 +18,7 @@ import { createApplicationAttachments, createTaydennysAttachments } from '../moc
 import api from '../api/api';
 import * as taydennysAttachmentsApi from '../application/taydennys/taydennysAttachmentsApi';
 import * as applicationAttachmentsApi from '../application/attachments';
+import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../common/haittaIndexes/types';
 
 const applicationAttachments = createApplicationAttachments(13, [
   { attachmentType: 'LIIKENNEJARJESTELY' },
@@ -59,6 +60,28 @@ function setup(
     }),
     http.delete('/api/taydennykset/:id', async () => {
       return new HttpResponse(null, { status: responseStatus });
+    }),
+    http.post('/api/haittaindeksit', async () => {
+      return HttpResponse.json<HaittaIndexData>(
+        {
+          liikennehaittaindeksi: {
+            indeksi: 0,
+            tyyppi: HAITTA_INDEX_TYPE.PYORALIIKENNEINDEKSI,
+          },
+          pyoraliikenneindeksi: 0,
+          autoliikenne: {
+            indeksi: 0,
+            haitanKesto: 0,
+            katuluokka: 0,
+            liikennemaara: 0,
+            kaistahaitta: 0,
+            kaistapituushaitta: 0,
+          },
+          linjaautoliikenneindeksi: 0,
+          raitioliikenneindeksi: 0,
+        },
+        { status: responseStatus },
+      );
     }),
   );
   return {
@@ -301,5 +324,147 @@ describe('Taydennys attachments', () => {
     await user.click(screen.getByText(applicationAttachments[0].fileName));
 
     expect(fetchContentMock).toHaveBeenCalledWith(13, applicationAttachments[0].id);
+  });
+});
+
+describe('Error notification', () => {
+  test('Should show fields with errors in notification in perustiedot page', async () => {
+    setup();
+
+    expect(
+      screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
+    ).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText(/työn nimi/i), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
+      target: { value: '' },
+    });
+    fireEvent.click(screen.getByLabelText(/uuden rakenteen tai johdon rakentamisesta/i));
+    fireEvent.click(screen.getByRole('checkbox', { name: /työstä vastaavana/i }));
+
+    expect(
+      await screen.findByText(
+        'Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /työn nimi/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /työn kuvaus/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /työssä on kyse/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /työhön vaadittava pätevyys/i })).toBeInTheDocument();
+  });
+
+  test('Should show fields with errors in notification in alueet page', async () => {
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: /alueet/i }));
+
+    expect(
+      screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
+    ).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText(/työn alkupäivämäärä/i), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByLabelText(/työn loppupäivämäärä/i), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByLabelText(/katuosoite/i), {
+      target: { value: '' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /poista valittu/i }));
+
+    expect(
+      await screen.findByText(
+        'Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työn alkupäivämäärä/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työn loppupäivämäärä/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Työalueet (Hankealue 2): Katuosoite' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Työalueet (Hankealue 2): Työn tarkoitus' }),
+    ).toBeInTheDocument();
+  });
+
+  test('Should show fields with errors in notification in haittojenhallinta page', async () => {
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: /haittojen hallinta/i }));
+
+    expect(
+      screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
+    ).not.toBeInTheDocument();
+
+    fireEvent.change(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.YLEINEN'),
+      {
+        target: { value: '' },
+      },
+    );
+    fireEvent.change(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.PYORALIIKENNE'),
+      {
+        target: { value: '' },
+      },
+    );
+
+    expect(
+      await screen.findByText(
+        'Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', {
+        name: 'Työalueet (Hankealue 2): Toimet työalueiden haittojen hallintaan',
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', {
+        name: 'Työalueet (Hankealue 2) Pyöräliikenteen merkittävyys: Toimet työalueiden haittojen hallintaan',
+      }),
+    ).toBeInTheDocument();
+  });
+
+  test('Should show fields with errors in notification in yhteystiedot page', async () => {
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+    expect(
+      screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
+    ).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[0], {
+      target: { value: '' },
+    });
+    fireEvent.change(
+      screen.getByTestId('applicationData.customerWithContacts.customer.registryKey'),
+      {
+        target: { value: '123' },
+      },
+    );
+    fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.email'), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.phone'), {
+      target: { value: '' },
+    });
+    fireEvent.click(screen.getAllByRole('button', { name: /poista valittu/i })[0]);
+
+    expect(
+      await screen.findByText(
+        'Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', {
+        name: /työstä vastaava: Vähintään yksi yhteyshenkilö tulee olla asetettuna/i,
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työstä vastaava: Sähköposti/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työstä vastaava: Puhelin/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työstä vastaava: Nimi/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työstä vastaava: Y-tunnus/i })).toBeInTheDocument();
   });
 });
