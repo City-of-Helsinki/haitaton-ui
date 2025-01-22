@@ -46,7 +46,7 @@ const Card1Basic: React.FC = () => {
             <li>päiväaikataulu, </li>
             <li>
               melua aiheuttavien työvaiheiden arvioitu ajankohta sekä urakoitsijan sekä
-              rakennuttajanyhteystiedot.
+              rakennuttajan yhteystiedot.
             </li>
           </ul>
         </Trans>
@@ -59,10 +59,10 @@ const Card1Basic: React.FC = () => {
           <p>
             <strong>Valitse sopivat viestintäkanavat yhdessä tilaajan viestinnän kanssa,</strong> ja
             joukkoliikenteestä tiedottaminen sovitaan yhdessä HSL:n kanssa. Herkkien kohteiden
-            (kutenkoulut, päiväkodit, sairaalat ja vanhainkodit) osalta on varauduttava
+            (kuten koulut, päiväkodit, sairaalat ja vanhainkodit) osalta on varauduttava
             neuvottelemaan työajoista ja kohteiden huomioimisesta rakentamisessa erikseen. Myös
-            työmaan aikaisista häiriöistä viivästyksistä sekä työmaan loppumisesta tulee tiedottaa
-            yhteistyössä tilaajanviestinnän kanssa. Helsingin Kaupunkiympäristön hankkeissa
+            työmaan aikaisista häiriöistä, viivästyksistä sekä työmaan loppumisesta tulee tiedottaa
+            yhteistyössä tilaajan viestinnän kanssa. Helsingin Kaupunkiympäristön hankkeissa
             viestinnän yhteistyökumppanina on
             <a href="mailto:kymp.viestinta@hel.fi" className="hds-link" target="_blank">
               kymp.viestinta@hel.fi.
@@ -108,8 +108,8 @@ const Card1Basic: React.FC = () => {
             </li>
             <li>Tarkista aina, onko hankkeesi tai työsi erikoiskuljetusten reitillä</li>
             <li>
-              Tarkista vaikutukset olevaan liikennevalo-ohjaukseen (kaistajärjestelyt,
-              ilmaisimet,valojen toimivuus)
+              Tarkista vaikutukset olevaan liikennevalo-ohjaukseen (kaistajärjestelyt, ilmaisimet,
+              valojen toimivuus)
             </li>
             <li>Poikkeavat työajat</li>
           </ul>
