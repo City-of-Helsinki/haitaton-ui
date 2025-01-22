@@ -29,8 +29,10 @@ const WorkInstructionsMain: React.FC = () => {
                 href={t('workInstructions:sideNav:externalLinks:permitsAndInstructions:url')}
                 external
                 openInNewTab
-                openInNewTabAriaLabel="components:link:openInNewTabAriaLabel"
-                openInExternalDomainAriaLabel={t('components:link:openInExternalDomainAriaLabel')}
+                openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
+                openInExternalDomainAriaLabel={t(
+                  'common:components:link:openInExternalDomainAriaLabel',
+                )}
                 style={{ fontSize: 'var(--fontsize-body-l)' }}
               >
                 linktext

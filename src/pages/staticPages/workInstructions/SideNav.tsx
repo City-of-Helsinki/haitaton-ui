@@ -79,8 +79,8 @@ const SideNav: React.FC = () => {
       external
       href={t('workInstructions:sideNav:externalLinks:permitsAndInstructions:url')}
       openInNewTab
-      openInNewTabAriaLabel={t('workInstructions:sideNav:openInNewTab')}
-      openInExternalDomainAriaLabel={t('workInstructions:sideNav:openInExternalDomain')}
+      openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
+      openInExternalDomainAriaLabel={t('common:components:link:openInExternalDomainAriaLabel')}
       id="external-link-permits-and-instructions"
       label={t('workInstructions:sideNav:externalLinks:permitsAndInstructions:label')}
       withDivider
@@ -89,8 +89,8 @@ const SideNav: React.FC = () => {
       external
       href={t('workInstructions:sideNav:externalLinks:payments:url')}
       openInNewTab
-      openInNewTabAriaLabel={t('workInstructions:sideNav:openInNewTab')}
-      openInExternalDomainAriaLabel={t('workInstructions:sideNav:openInExternalDomain')}
+      openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
+      openInExternalDomainAriaLabel={t('common:components:link:openInExternalDomainAriaLabel')}
       id="external-link-payments"
       label={t('workInstructions:sideNav:externalLinks:payments:label')}
     />,
@@ -98,8 +98,8 @@ const SideNav: React.FC = () => {
       external
       href={t('workInstructions:sideNav:externalLinks:temporaryTrafficArrangement:url')}
       openInNewTab
-      openInNewTabAriaLabel={t('workInstructions:sideNav:openInNewTab')}
-      openInExternalDomainAriaLabel={t('workInstructions:sideNav:openInExternalDomain')}
+      openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
+      openInExternalDomainAriaLabel={t('common:components:link:openInExternalDomainAriaLabel')}
       id="external-link-temporary-traffic-arrangement"
       label={t('workInstructions:sideNav:externalLinks:temporaryTrafficArrangement:label')}
     />,

@@ -139,8 +139,10 @@ const Card1Additional: React.FC = () => {
                 href="https://oma.media.fi/lehti/helsingin-uutiset/yhteystiedot/laheta-juttuvinkki/"
                 external
                 openInNewTab
-                openInNewTabAriaLabel="components:link:openInNewTabAriaLabel"
-                openInExternalDomainAriaLabel={t('components:link:openInExternalDomainAriaLabel')}
+                openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
+                openInExternalDomainAriaLabel={t(
+                  'common:components:link:openInExternalDomainAriaLabel',
+                )}
                 style={{ fontSize: 'var(--fontsize-body-l)' }}
               >
                 linktext
@@ -232,8 +234,10 @@ const Card2Basic: React.FC = () => {
                 href=""
                 external
                 openInNewTab
-                openInNewTabAriaLabel="components:link:openInNewTabAriaLabel"
-                openInExternalDomainAriaLabel={t('components:link:openInExternalDomainAriaLabel')}
+                openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
+                openInExternalDomainAriaLabel={t(
+                  'common:components:link:openInExternalDomainAriaLabel',
+                )}
                 style={{ fontSize: 'var(--fontsize-body-l)' }}
               >
                 linktext
@@ -296,8 +300,10 @@ const Card2Basic: React.FC = () => {
                 href="https://www.hel.fi/static/hki4all/ohjeet/2022/suraku-kortti-1.pdf"
                 external
                 openInNewTab
-                openInNewTabAriaLabel="components:link:openInNewTabAriaLabel"
-                openInExternalDomainAriaLabel={t('components:link:openInExternalDomainAriaLabel')}
+                openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
+                openInExternalDomainAriaLabel={t(
+                  'common:components:link:openInExternalDomainAriaLabel',
+                )}
                 style={{ fontSize: 'var(--fontsize-body-l)' }}
               >
                 linktext
@@ -308,8 +314,10 @@ const Card2Basic: React.FC = () => {
                 href={t('workInstructions:cards:2:link2Url')}
                 external
                 openInNewTab
-                openInNewTabAriaLabel="components:link:openInNewTabAriaLabel"
-                openInExternalDomainAriaLabel={t('components:link:openInExternalDomainAriaLabel')}
+                openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
+                openInExternalDomainAriaLabel={t(
+                  'common:components:link:openInExternalDomainAriaLabel',
+                )}
                 style={{ fontSize: 'var(--fontsize-body-l)' }}
               >
                 linktext
@@ -474,8 +482,10 @@ const Card3Basic: React.FC = () => {
                 href="https://www.hel.fi/static/hki4all/ohjeet/2022/suraku-kortti-1.pdf"
                 external
                 openInNewTab
-                openInNewTabAriaLabel="components:link:openInNewTabAriaLabel"
-                openInExternalDomainAriaLabel={t('components:link:openInExternalDomainAriaLabel')}
+                openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
+                openInExternalDomainAriaLabel={t(
+                  'common:components:link:openInExternalDomainAriaLabel',
+                )}
                 style={{ fontSize: 'var(--fontsize-body-l)' }}
               >
                 linktext
@@ -486,8 +496,10 @@ const Card3Basic: React.FC = () => {
                 href={t('workInstructions:cards:2:link2Url')}
                 external
                 openInNewTab
-                openInNewTabAriaLabel="components:link:openInNewTabAriaLabel"
-                openInExternalDomainAriaLabel={t('components:link:openInExternalDomainAriaLabel')}
+                openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
+                openInExternalDomainAriaLabel={t(
+                  'common:components:link:openInExternalDomainAriaLabel',
+                )}
                 style={{ fontSize: 'var(--fontsize-body-l)' }}
               >
                 linktext
@@ -698,8 +710,10 @@ const Card4Basic: React.FC = () => {
                 href="https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf"
                 external
                 openInNewTab
-                openInNewTabAriaLabel="components:link:openInNewTabAriaLabel"
-                openInExternalDomainAriaLabel={t('components:link:openInExternalDomainAriaLabel')}
+                openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
+                openInExternalDomainAriaLabel={t(
+                  'common:components:link:openInExternalDomainAriaLabel',
+                )}
                 style={{ fontSize: 'var(--fontsize-body-l)' }}
               >
                 linktext
@@ -1076,8 +1090,10 @@ const Card6Basic: React.FC = () => {
                 href="https://www.hel.fi/static/hkr/luvat/pks_kaivutyoohje.pdf"
                 external
                 openInNewTab
-                openInNewTabAriaLabel="components:link:openInNewTabAriaLabel"
-                openInExternalDomainAriaLabel={t('components:link:openInExternalDomainAriaLabel')}
+                openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
+                openInExternalDomainAriaLabel={t(
+                  'common:components:link:openInExternalDomainAriaLabel',
+                )}
                 style={{ fontSize: 'var(--fontsize-body-l)' }}
               >
                 linktext
@@ -1608,8 +1624,10 @@ const Card10Basic: React.FC = () => {
                 href="https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/ympariston-ja-luonnon-suojelu/ymparistohaittojen-ehkaisy/ymparistonsuojelumaaraykset"
                 external
                 openInNewTab
-                openInNewTabAriaLabel="components:link:openInNewTabAriaLabel"
-                openInExternalDomainAriaLabel={t('components:link:openInExternalDomainAriaLabel')}
+                openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
+                openInExternalDomainAriaLabel={t(
+                  'common:components:link:openInExternalDomainAriaLabel',
+                )}
                 style={{ fontSize: 'var(--fontsize-body-l)' }}
               >
                 linktext
