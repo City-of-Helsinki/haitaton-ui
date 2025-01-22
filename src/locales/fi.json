@@ -1426,7 +1426,10 @@
       "cancelTitle": "Peru täydennysluonnos?",
       "cancelDescription": "Haluatko varmasti perua täydennyspyyntöön vastaamisen? Tehdyt muutokset poistetaan.",
       "originalAttachments": "Alkuperäiset liitteet",
-      "addedAttachments": "Lisätyt liitetiedostot"
+      "addedAttachments": "Lisätyt liitetiedostot",
+      "addedTrafficArrangementPlan": "Lisätyt tilapäisiä liikennejärjestelyitä koskevat suunnitelmat",
+      "addedMandate": "Lisätty valtakirja",
+      "addedOtherAttachments": "Lisätyt muut liitteet"
     },
     "buttons": {
       "createTaydennys": "Täydennä",

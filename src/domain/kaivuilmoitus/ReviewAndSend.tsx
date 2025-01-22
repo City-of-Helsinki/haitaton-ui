@@ -11,42 +11,7 @@ import AttachmentSummary from '../application/components/summary/KaivuilmoitusAt
 import { ApplicationAttachmentMetadata } from '../application/types/application';
 import AreaSummary from './components/AreaSummary';
 import { HankeAlue } from '../types/hanke';
-import { Tab, TabList, TabPanel, Tabs } from 'hds-react';
-import { HaittojenhallintasuunnitelmaInfo } from './components/HaittojenhallintasuunnitelmaInfo';
-
-const HaittojenhallintaSummary: React.FC<{
-  hankealueet: HankeAlue[];
-  formData: KaivuilmoitusFormValues;
-}> = ({ hankealueet, formData }) => {
-  const { t } = useTranslation();
-  const kaivuilmoitusAlueet = formData.applicationData.areas;
-
-  return (
-    <Tabs>
-      <TabList style={{ marginBottom: 'var(--spacing-m)' }}>
-        {kaivuilmoitusAlueet.map((alue) => {
-          return (
-            <Tab key={alue.hankealueId}>
-              {t('hakemus:labels:workAreaPlural') + ' (' + alue.name + ')'}
-            </Tab>
-          );
-        })}
-      </TabList>
-      {kaivuilmoitusAlueet.map((alue) => {
-        const hankealue = hankealueet?.find((ha) => ha.id === alue.hankealueId);
-        return (
-          <TabPanel key={alue.hankealueId}>
-            <HaittojenhallintasuunnitelmaInfo
-              key={alue.hankealueId}
-              kaivuilmoitusAlue={alue}
-              hankealue={hankealue}
-            />
-          </TabPanel>
-        );
-      })}
-    </Tabs>
-  );
-};
+import HaittojenhallintaSummary from './components/HaittojenhallintaSummary';
 
 type Props = {
   hankealueet: HankeAlue[];
