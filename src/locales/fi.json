@@ -554,7 +554,9 @@
       "totalSurfaceAreaLong": "Hanke-alueiden kokonaispinta-ala",
       "liikenneverkollinenHaitta": "Hankealueen liikenneverkollinen haitta",
       "haittaMaarittelyt": "Hankealueen omat haittamäärittelyt",
-      "liikennehaittaIndeksit": "Hankealueen liikennehaittaindeksit"
+      "liikennehaittaIndeksit": "Hankealueen liikennehaittaindeksit",
+      "haittaIndexesChangedLabel": "Liikennehaittaindeksit ovat muuttuneet",
+      "haittaIndexesChanged": "Työalueille lasketut liikennehaittaindeksit ovat muuttuneet. Tarkista haittojenhallintasuunnitelma."
     }
   },
   "hankeForm": {
