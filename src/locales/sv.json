@@ -419,10 +419,26 @@
       }
     },
     "WORKINSTRUCTIONS": {
-      "path": "https://www.hel.fi/sv/stadsmiljo-och-trafik/tomter-och-bygglov/anvisningar-for-byggskedet",
+      "path": "/arbetsanvisningar",
       "headerLabel": "Arbetsanvisningar",
       "meta": {
         "title": "Haitaton - Arbetsanvisningar"
+      }
+    },
+    "CARDS_INDEX": {
+      "path": "/arbetsanvisningar/hantering-av-olagenheter/",
+      "headerLabel": "Ytterligare informationskort för hanterin av olågenheter",
+      "meta": {
+        "title": "Haitaton - Arbetsanvisningar - Ytterligare informationskort för hanterin av olågenheter"
+      }
+    },
+    "CARD": {
+      "path": "/arbetsanvisningar/hantering-av-olagenheter/kort/",
+      "basicLevel": "grundlaggande",
+      "additionalLevel": "ytterligare",
+      "headerLabel": "Ytterligare informationskort för hanterin av olågenheter",
+      "meta": {
+        "title": "Haitaton - Arbetsanvisningar - Ytterligare informationskort för hanterin av olågenheter"
       }
     },
     "MANUAL": {
@@ -1601,5 +1617,23 @@
     "text": "",
     "imageLabel": "Bild: Lille Santanen",
     "imageAltText": "Tecknad bild av byggarbetsplats"
+  },
+  "workInstructions": {
+    "sideNav": {
+      "externalLinks": {
+        "permitsAndInstructions": {
+          "label": "Tillstånd och anvisningar för byggplatsen",
+          "url": "https://www.hel.fi/sv/stadsmiljo-och-trafik/tomter-och-bygglov/tillstand-och-anvisningar-for-byggplatsen"
+        },
+        "payments": {
+          "label": "Afgifter",
+          "url": "https://www.hel.fi/sv/stadsmiljo-och-trafik/tomter-och-bygglov/tillstand-och-anvisningar-for-byggplatsen/arbete-pa-gatu-eller-parkomraden#avgifter--ansvar-och-gallande-hyrning-av-omraden-och-gravanmalningar"
+        },
+        "temporaryTrafficArrangement": {
+          "label": "Anvisningar för tillfälliga trafikarrangemang och typbilder",
+          "url": "https://www.hel.fi/sv/stadsmiljo-och-trafik/tomter-och-bygglov/tillstand-och-anvisningar-for-byggplatsen/arbete-pa-gatu-eller-parkomraden#anvisningar-for-tillfalliga-trafikarrangemang-och-planering"
+        }
+      }
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Header, IconUser, Link, Logo, logoFi, logoSv } from 'hds-react';
+import { Header, IconUser, Logo, logoFi, logoSv } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useMatch, useLocation, useNavigate } from 'react-router-dom';
 import { $enum } from 'ts-enum-util';
@@ -25,8 +25,14 @@ const languageLabels = {
 };
 
 function HaitatonHeader() {
-  const { HOME, PUBLIC_HANKKEET, PUBLIC_HANKKEET_MAP, HANKEPORTFOLIO, JOHTOSELVITYSHAKEMUS } =
-    useLocalizedRoutes();
+  const {
+    HOME,
+    PUBLIC_HANKKEET,
+    PUBLIC_HANKKEET_MAP,
+    HANKEPORTFOLIO,
+    JOHTOSELVITYSHAKEMUS,
+    WORKINSTRUCTIONS,
+  } = useLocalizedRoutes();
   const { t, i18n } = useTranslation();
   const user = useUser();
   const isAuthenticated = useIsAuthenticated();
@@ -47,10 +53,10 @@ function HaitatonHeader() {
     path: HANKEPORTFOLIO.path,
     end: false,
   });
-
-  const workInstructionsAriaLabel = `${t('routes:WORKINSTRUCTIONS:headerLabel')}. ${t(
-    'common:components:link:openInNewTabAriaLabel',
-  )} ${t('common:components:link:openInExternalDomainAriaLabel')}`;
+  const isWorkInstructionsPath = useMatch({
+    path: WORKINSTRUCTIONS.path,
+    end: false,
+  });
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -192,11 +198,10 @@ function HaitatonHeader() {
           />
           <Header.Link
             label={t('routes:WORKINSTRUCTIONS:headerLabel')}
-            as={Link}
-            href={t('routes:WORKINSTRUCTIONS:path')}
-            external
-            openInNewTab
-            aria-label={workInstructionsAriaLabel}
+            as={NavLink}
+            to={WORKINSTRUCTIONS.path}
+            aria-label={t('routes:workInstructionsAriaLabel')}
+            active={Boolean(isWorkInstructionsPath)}
           >
             {t('routes:WORKINSTRUCTIONS:headerLabel')}
           </Header.Link>

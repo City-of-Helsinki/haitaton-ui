@@ -57,6 +57,9 @@ const useLinkPath = (route: ROUTES): ((routeParams: RouteParams) => string) => {
     [ROUTES.PRIVACY_POLICY]: defaultReturnFunc,
     [ROUTES.REFERENCES]: defaultReturnFunc,
     [ROUTES.MANUAL]: defaultReturnFunc,
+    [ROUTES.WORKINSTRUCTIONS]: defaultReturnFunc,
+    [ROUTES.CARDS_INDEX]: defaultReturnFunc,
+    [ROUTES.CARD]: defaultReturnFunc,
   });
 };
 

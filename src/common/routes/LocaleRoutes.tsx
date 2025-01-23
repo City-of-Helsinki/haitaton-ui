@@ -26,6 +26,10 @@ import NewKaivuilmoitusPage from '../../pages/NewKaivuilmoitusPage';
 import EditKaivuilmoitusPage from '../../pages/EditKaivuilmoitusPage';
 import EditJohtoselvitysTaydennysPage from '../../pages/EditJohtoselvitysTaydennysPage';
 import EditKaivuilmoitusTaydennysPage from '../../pages/EditKaivuilmoitusTaydennysPage';
+import WorkInstructionsPage from '../../pages/staticPages/workInstructions/WorkInstructionsPage';
+import WorkInstructionsMain from '../../pages/staticPages/workInstructions/WorkInstructionsMain';
+import CardsIndex from '../../pages/staticPages/workInstructions/cards/CardsIndex';
+import { Card } from '../../pages/staticPages/workInstructions/cards/Cards';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
@@ -88,6 +92,11 @@ const LocaleRoutes = () => {
       <Route path={t('routes:ACCESSIBILITY:path')} element={<AccessibilityPage />} />
       <Route path={t('routes:REFERENCES:path')} element={<ReferencesPage />} />
       <Route path={t('routes:PRIVACY_POLICY:path')} element={<PrivacyPolicyPage />} />
+      <Route path={t('routes:WORKINSTRUCTIONS:path')} element={<WorkInstructionsPage />}>
+        <Route element={<WorkInstructionsMain />} index />
+        <Route path={t('routes:CARDS_INDEX:path')} element={<CardsIndex />} />
+        <Route path={`${t('routes:CARD:path')}:number/:type`} element={<Card />}></Route>
+      </Route>
       <Route path={t('routes:MANUAL:path')} element={<ManualPage />} />
       <Route path={t('routes:IDENTIFY_USER:path')} element={<UserIdentify />} />
       <Route path="*" element={<NotFoundPage />} />
