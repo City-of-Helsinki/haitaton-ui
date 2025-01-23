@@ -37,8 +37,7 @@ const Card1Basic: React.FC = () => {
           </p>
           <br></br>
           <ul>
-            <li>työmaan tarkka</li>
-            <li>aloituspäivämäärä, </li>
+            <li>työmaan tarkka aloituspäivämäärä, </li>
             <li>työmaan arvioitu kesto, </li>
             <li>mitä työmaalla tehdään,</li>
             <li>poikkeusreitit,</li>
