@@ -1545,7 +1545,6 @@ describe('Excavation notification application view', () => {
       await user.click(screen.getByRole('tab', { name: /alueet/i }));
 
       expect(screen.getAllByText('Täydennys:').length).toBe(8);
-      screen.debug(undefined, 100000);
       expect(screen.getByText('392 m²')).toBeInTheDocument();
     });
 

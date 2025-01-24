@@ -984,7 +984,7 @@ function ApplicationView({
                     invoicingCustomer={(applicationData as KaivuilmoitusData).invoicingCustomer}
                     taydennysInvoicingCustomer={
                       (application.taydennys?.applicationData as KaivuilmoitusData)
-                        .invoicingCustomer
+                        ?.invoicingCustomer
                     }
                   />
                 )}
@@ -1001,7 +1001,7 @@ function ApplicationView({
                   attachments={attachments}
                   taydennysAttachments={taydennys?.liitteet}
                   taydennysAdditionalInfo={
-                    (taydennys?.applicationData as KaivuilmoitusData).additionalInfo
+                    (taydennys?.applicationData as KaivuilmoitusData)?.additionalInfo
                   }
                 />
               ) : attachments ? (

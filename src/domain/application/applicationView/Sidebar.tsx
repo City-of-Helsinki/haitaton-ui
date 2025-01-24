@@ -59,7 +59,6 @@ function KaivuilmoitusAlueet({
 }: Readonly<KaivuilmoitusAlueetProps>) {
   return (
     <>
-      {' '}
       {kaivuilmoitusAlueet?.map((kaivuilmoitusAlue) => {
         const hankeAlue = hanke.alueet.find((alue) => alue.id === kaivuilmoitusAlue.hankealueId);
 
