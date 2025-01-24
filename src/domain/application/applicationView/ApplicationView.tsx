@@ -994,10 +994,15 @@ function ApplicationView({
               </FormSummarySection>
             </TabPanel>
             <TabPanel>
+              {/* Attachments panel */}
               {applicationType === 'EXCAVATION_NOTIFICATION' ? (
                 <KaivuilmoitusAttachmentSummary
                   formData={application as Application<KaivuilmoitusData>}
                   attachments={attachments}
+                  taydennysAttachments={taydennys?.liitteet}
+                  taydennysAdditionalInfo={
+                    (taydennys?.applicationData as KaivuilmoitusData).additionalInfo
+                  }
                 />
               ) : attachments ? (
                 <AttachmentSummary

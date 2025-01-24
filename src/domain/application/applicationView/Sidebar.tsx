@@ -1,7 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { Box } from '@chakra-ui/layout';
 import { Tab, TabList, TabPanel, Tabs } from 'hds-react';
-import { Application, ApplicationArea, KaivuilmoitusAlue } from '../types/application';
+import {
+  Application,
+  ApplicationArea,
+  KaivuilmoitusAlue,
+  KaivuilmoitusData,
+} from '../types/application';
 import { getAreaDefaultName } from '../utils';
 import { getAreaGeometry } from '../../johtoselvitys/utils';
 import Text from '../../../common/components/text/Text';
@@ -41,6 +46,52 @@ function SidebarTyoalueet({ tyoalueet, startTime, endTime }: Readonly<SidebarTyo
   });
 }
 
+type KaivuilmoitusAlueetProps = {
+  kaivuilmoitusAlueet?: KaivuilmoitusAlue[] | null;
+  hanke: HankeData;
+  applicationData: KaivuilmoitusData;
+};
+
+function KaivuilmoitusAlueet({
+  kaivuilmoitusAlueet,
+  hanke,
+  applicationData,
+}: Readonly<KaivuilmoitusAlueetProps>) {
+  return (
+    <>
+      {' '}
+      {kaivuilmoitusAlueet?.map((kaivuilmoitusAlue) => {
+        const hankeAlue = hanke.alueet.find((alue) => alue.id === kaivuilmoitusAlue.hankealueId);
+
+        return (
+          <CustomAccordion
+            key={kaivuilmoitusAlue.hankealueId}
+            accordionBorderBottom
+            headingSize="s"
+            heading={kaivuilmoitusAlue.name}
+            subHeading={
+              <Box marginTop="var(--spacing-2-xs)">
+                <ApplicationDates
+                  startTime={hankeAlue?.haittaAlkuPvm ?? null}
+                  endTime={hankeAlue?.haittaLoppuPvm ?? null}
+                />
+              </Box>
+            }
+          >
+            <Box marginLeft="var(--spacing-s)">
+              <SidebarTyoalueet
+                tyoalueet={kaivuilmoitusAlue.tyoalueet}
+                startTime={applicationData.startTime}
+                endTime={applicationData.endTime}
+              />
+            </Box>
+          </CustomAccordion>
+        );
+      })}
+    </>
+  );
+}
+
 type SidebarProps = {
   hanke: HankeData;
   application: Application;
@@ -62,6 +113,10 @@ export default function Sidebar({ hanke, application }: Readonly<SidebarProps>) 
   const kaivuilmoitusAlueet =
     applicationType === 'EXCAVATION_NOTIFICATION'
       ? (applicationData.areas as KaivuilmoitusAlue[])
+      : null;
+  const taydennysKaivuilmoitusAlueet =
+    applicationType === 'EXCAVATION_NOTIFICATION'
+      ? (taydennys?.applicationData.areas as KaivuilmoitusAlue[] | undefined)
       : null;
 
   const filterHankeAlueet = useFilterHankeAlueetByApplicationDates({
@@ -103,34 +158,13 @@ export default function Sidebar({ hanke, application }: Readonly<SidebarProps>) 
           endTime={applicationData.endTime}
         />
       )}
-      {applicationType === 'EXCAVATION_NOTIFICATION' &&
-        kaivuilmoitusAlueet?.map((kaivuilmoitusAlue) => {
-          const hankeAlue = hanke.alueet.find((alue) => alue.id === kaivuilmoitusAlue.hankealueId);
-          return (
-            <CustomAccordion
-              key={kaivuilmoitusAlue.hankealueId}
-              accordionBorderBottom
-              headingSize="s"
-              heading={kaivuilmoitusAlue.name}
-              subHeading={
-                <Box marginTop="var(--spacing-2-xs)">
-                  <ApplicationDates
-                    startTime={hankeAlue?.haittaAlkuPvm ?? null}
-                    endTime={hankeAlue?.haittaLoppuPvm ?? null}
-                  />
-                </Box>
-              }
-            >
-              <Box marginLeft="var(--spacing-s)">
-                <SidebarTyoalueet
-                  tyoalueet={kaivuilmoitusAlue.tyoalueet}
-                  startTime={applicationData.startTime}
-                  endTime={applicationData.endTime}
-                />
-              </Box>
-            </CustomAccordion>
-          );
-        })}
+      {applicationType === 'EXCAVATION_NOTIFICATION' && (
+        <KaivuilmoitusAlueet
+          kaivuilmoitusAlueet={kaivuilmoitusAlueet}
+          hanke={hanke}
+          applicationData={applicationData as KaivuilmoitusData}
+        />
+      )}
     </>
   );
 
@@ -155,6 +189,13 @@ export default function Sidebar({ hanke, application }: Readonly<SidebarProps>) 
                 tyoalueet={taydennysTyoalueet ?? []}
                 startTime={taydennys.applicationData.startTime}
                 endTime={taydennys.applicationData.endTime}
+              />
+            )}
+            {applicationType === 'EXCAVATION_NOTIFICATION' && (
+              <KaivuilmoitusAlueet
+                kaivuilmoitusAlueet={taydennysKaivuilmoitusAlueet}
+                hanke={hanke}
+                applicationData={applicationData as KaivuilmoitusData}
               />
             )}
           </Box>
