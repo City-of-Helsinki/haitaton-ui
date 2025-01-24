@@ -1409,6 +1409,248 @@ describe('Excavation notification application view', () => {
       expect(await screen.findByText('Tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument();
     });
 
+    test('Shows changed information in basic information tab', async () => {
+      const application = cloneDeep(hakemukset[12] as Application<KaivuilmoitusData>);
+      const name = 'New name';
+      const workDescription = 'New work description';
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: {
+          ...application.applicationData,
+          name,
+          workDescription,
+          constructionWork: false,
+          maintenanceWork: true,
+          emergencyWork: true,
+          cableReports: [...(application.applicationData.cableReports || []), 'JS2300003'],
+          placementContracts: [
+            ...(application.applicationData.placementContracts || []),
+            'SL1234568',
+          ],
+          areas: [
+            {
+              ...application.applicationData.areas[0],
+              tyoalueet: [
+                ...application.applicationData.areas[0].tyoalueet,
+                {
+                  area: 10,
+                  geometry: {
+                    type: 'Polygon',
+                    crs: {
+                      type: 'name',
+                      properties: {
+                        name: 'urn:ogc:def:crs:EPSG::3879',
+                      },
+                    },
+                    coordinates: [
+                      [
+                        [25498581.440262634, 6679345.526261961],
+                        [25498582.233686976, 6679350.99321805],
+                        [25498576.766730886, 6679351.786642391],
+                        [25498575.973306544, 6679346.319686302],
+                        [25498581.440262634, 6679345.526261961],
+                      ],
+                    ],
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        muutokset: [
+          'name',
+          'workDescription',
+          'constructionWork',
+          'maintenanceWork',
+          'emergencyWork',
+          'cableReports',
+          'placementContracts',
+        ],
+        liitteet: [],
+      };
+      await setup(application);
+
+      expect(screen.getAllByText('Täydennys:').length).toBe(6);
+      expect(screen.getAllByText('Poistettu:').length).toBe(1);
+      expect(screen.getByText(name)).toBeInTheDocument();
+      expect(screen.getByText(workDescription)).toBeInTheDocument();
+      expect(screen.getByText('Olemassaolevan rakenteen kunnossapitotyöstä')).toBeInTheDocument();
+      expect(screen.getAllByText('Uuden rakenteen tai johdon rakentamisesta').length).toBe(2);
+      expect(
+        screen.getByText(
+          'Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi',
+        ),
+      ).toBeInTheDocument();
+      expect(screen.getByText('JS2300003')).toBeInTheDocument();
+      expect(screen.getByText('SL1234568')).toBeInTheDocument();
+      expect(screen.getByText('188 m²')).toBeInTheDocument();
+    });
+
+    test('Shows changed information in areas tab', async () => {
+      const application = cloneDeep(hakemukset[12] as Application<KaivuilmoitusData>);
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: {
+          ...application.applicationData,
+          areas: [
+            {
+              ...application.applicationData.areas[0],
+              tyoalueet: [
+                ...application.applicationData.areas[0].tyoalueet.slice(0, 1),
+                {
+                  area: 10,
+                  geometry: {
+                    type: 'Polygon',
+                    crs: {
+                      type: 'name',
+                      properties: {
+                        name: 'urn:ogc:def:crs:EPSG::3879',
+                      },
+                    },
+                    coordinates: [
+                      [
+                        [25498574.56194478, 6679282.528783048],
+                        [25498582.990384366, 6679282.528783048],
+                        [25498582.990384366, 6679310.418567079],
+                        [25498574.56194478, 6679310.418567079],
+                        [25498574.56194478, 6679282.528783048],
+                      ],
+                    ],
+                  },
+                },
+              ],
+              tyonTarkoitukset: ['VESI', 'TIETOLIIKENNE'],
+              meluhaitta: 'SATUNNAINEN_MELUHAITTA',
+              polyhaitta: 'SATUNNAINEN_POLYHAITTA',
+              tarinahaitta: 'TOISTUVA_TARINAHAITTA',
+              kaistahaitta: 'YKSI_KAISTA_VAHENEE_KAHDELLA_AJOSUUNNALLA',
+              kaistahaittojenPituus: 'PITUUS_ALLE_10_METRIA',
+              lisatiedot: 'Lisätiedot',
+            },
+          ],
+        },
+        muutokset: [
+          'areas[0].tyoalueet[1]',
+          'areas[0].tyonTarkoitukset',
+          'areas[0].meluhaitta',
+          'areas[0].polyhaitta',
+          'areas[0].tarinahaitta',
+          'areas[0].kaistahaitta',
+          'areas[0].kaistahaittojenPituus',
+          'areas[0].lisatiedot',
+        ],
+        liitteet: [],
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('tab', { name: /alueet/i }));
+
+      expect(screen.getAllByText('Täydennys:').length).toBe(8);
+      screen.debug(undefined, 100000);
+      expect(screen.getByText('392 m²')).toBeInTheDocument();
+    });
+
+    test('Shows changed information in haittojen hallinta tab', async () => {
+      const application = cloneDeep(hakemukset[12] as Application<KaivuilmoitusData>);
+      application.applicationData.propertyDeveloperWithContacts = cloneDeep(
+        application.applicationData.customerWithContacts,
+      );
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: {
+          ...application.applicationData,
+          areas: [
+            {
+              ...application.applicationData.areas[0],
+              haittojenhallintasuunnitelma: {
+                YLEINEN: 'Täydennetty työalueen yleisten haittojen hallintasuunnitelma',
+                PYORALIIKENNE:
+                  'Täydennetty pyöräliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+                AUTOLIIKENNE:
+                  'Täydennetty autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+                LINJAAUTOLIIKENNE:
+                  'Linja-autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+                RAITIOLIIKENNE:
+                  'Täydennetty raitioliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+                MUUT: '',
+              },
+            },
+          ],
+        },
+        muutokset: [
+          'areas[0].haittojenhallintasuunnitelma[YLEINEN]',
+          'areas[0].haittojenhallintasuunnitelma[PYORALIIKENNE]',
+          'areas[0].haittojenhallintasuunnitelma[AUTOLIIKENNE]',
+          'areas[0].haittojenhallintasuunnitelma[LINJAAUTOLIIKENNE]',
+          'areas[0].haittojenhallintasuunnitelma[RAITOLIIKENNE]',
+          'areas[0].haittojenhallintasuunnitelma[MUUT]',
+        ],
+        liitteet: [],
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('tab', { name: /haittojen hallinta/i }));
+
+      expect(screen.getAllByText('Täydennys:').length).toBe(6);
+    });
+
+    test('Shows changed information in contacts tab', async () => {
+      const application = cloneDeep(hakemukset[12] as Application<KaivuilmoitusData>);
+      application.applicationData.propertyDeveloperWithContacts = cloneDeep(
+        application.applicationData.customerWithContacts,
+      );
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: {
+          ...application.applicationData,
+          customerWithContacts: {
+            customer: {
+              ...application.applicationData.customerWithContacts!.customer,
+              name: 'New name',
+              email: 'newMail@test.com',
+            },
+            contacts: application.applicationData.customerWithContacts!.contacts,
+          },
+          propertyDeveloperWithContacts: null,
+          invoicingCustomer: {
+            ...application.applicationData.invoicingCustomer!,
+            name: 'Uusi Laskutus Oy',
+          },
+        },
+        muutokset: ['customerWithContacts', 'propertyDeveloperWithContacts', 'invoicingCustomer'],
+        liitteet: [],
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('tab', { name: /yhteystiedot/i }));
+
+      expect(screen.getAllByText('Täydennys:').length).toBe(2);
+      expect(screen.getAllByText('Poistettu:').length).toBe(1);
+      expect(screen.getByText('New name')).toBeInTheDocument();
+      expect(screen.getByText('newMail@test.com')).toBeInTheDocument();
+      expect(screen.getByText('Uusi Laskutus Oy')).toBeInTheDocument();
+    });
+
+    test('Shows changed information in attachments tab', async () => {
+      const taydennysId = 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c';
+      const taydennysAttachments = createTaydennysAttachments(taydennysId, [
+        { attachmentType: 'LIIKENNEJARJESTELY' },
+        { attachmentType: 'VALTAKIRJA' },
+        { attachmentType: 'MUU' },
+      ]);
+      const application = cloneDeep(hakemukset[12] as Application<KaivuilmoitusData>);
+      application.taydennys = {
+        id: taydennysId,
+        applicationData: application.applicationData,
+        muutokset: [],
+        liitteet: taydennysAttachments,
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('tab', { name: /liitteet/i }));
+
+      expect(screen.getAllByText('Täydennys:').length).toBe(3);
+      taydennysAttachments.forEach((attachment) => {
+        expect(screen.getByText(attachment.fileName)).toBeInTheDocument();
+      });
+    });
+
     test('Taydennys can be sent', async () => {
       const application = cloneDeep(hakemukset[12]) as Application<KaivuilmoitusData>;
       application.taydennys = {
