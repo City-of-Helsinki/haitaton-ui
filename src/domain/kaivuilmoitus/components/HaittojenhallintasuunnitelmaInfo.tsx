@@ -6,6 +6,7 @@ import { sortedLiikenneHaittojenhallintatyyppi } from '../../common/haittojenhal
 import {
   FormSummarySection,
   SectionItemContent,
+  SectionItemContentAdded,
   SectionItemTitle,
 } from '../../forms/components/FormSummarySection';
 import { Box, Grid, GridItem } from '@chakra-ui/react';
@@ -24,6 +25,7 @@ type LiikennehaitanHallintasuunnitelmaProps = {
   tyyppi: HAITTOJENHALLINTATYYPPI;
   indeksi: number;
   alue: KaivuilmoitusAlue;
+  taydennysAlue?: KaivuilmoitusAlue;
   hankealue?: HankeAlue;
 };
 
@@ -31,6 +33,7 @@ const LiikennehaitanHallintasuunnitelmaInfo: React.FC<LiikennehaitanHallintasuun
   tyyppi,
   indeksi,
   alue,
+  taydennysAlue,
   hankealue,
 }) => {
   const { t } = useTranslation();
@@ -55,6 +58,15 @@ const LiikennehaitanHallintasuunnitelmaInfo: React.FC<LiikennehaitanHallintasuun
             <Box whiteSpace="pre-wrap" wordBreak="break-word" paddingTop="var(--spacing-xs)">
               {alue.haittojenhallintasuunnitelma?.[tyyppi] ?? ''}
             </Box>
+            {taydennysAlue &&
+              taydennysAlue.haittojenhallintasuunnitelma?.[tyyppi] !==
+                alue.haittojenhallintasuunnitelma?.[tyyppi] && (
+                <SectionItemContentAdded>
+                  <Box whiteSpace="pre-wrap" wordBreak="break-word" paddingTop="var(--spacing-xs)">
+                    {taydennysAlue.haittojenhallintasuunnitelma?.[tyyppi] ?? ''}
+                  </Box>
+                </SectionItemContentAdded>
+              )}
           </GridItem>
           <GridItem width="80px">
             <HaittaIndex
@@ -76,18 +88,20 @@ const LiikennehaitanHallintasuunnitelmaInfo: React.FC<LiikennehaitanHallintasuun
 };
 
 type HaittojenHallintaProps = {
-  kaivuilmoitusAlue: KaivuilmoitusAlue;
+  alue: KaivuilmoitusAlue;
+  taydennysAlue?: KaivuilmoitusAlue;
   hankealue?: HankeAlue;
   visibleHaittojenhallintaTyypit?: HAITTOJENHALLINTATYYPPI[];
 };
 
 export const HaittojenhallintasuunnitelmaInfo: React.FC<HaittojenHallintaProps> = ({
-  kaivuilmoitusAlue,
+  alue,
+  taydennysAlue,
   hankealue,
   visibleHaittojenhallintaTyypit = haittojenhallintaTyypit,
 }) => {
   const { t } = useTranslation();
-  const tormaystarkasteluTulos = calculateLiikennehaittaindeksienYhteenveto(kaivuilmoitusAlue);
+  const tormaystarkasteluTulos = calculateLiikennehaittaindeksienYhteenveto(taydennysAlue ?? alue);
   const haittojenhallintatyypit = sortedLiikenneHaittojenhallintatyyppi(
     tormaystarkasteluTulos,
   ).filter(([haitta]) => visibleHaittojenhallintaTyypit.includes(haitta));
@@ -110,8 +124,21 @@ export const HaittojenhallintasuunnitelmaInfo: React.FC<HaittojenHallintaProps> 
                   text={hankealue?.haittojenhallintasuunnitelma?.YLEINEN ?? ''}
                 />
                 <Box whiteSpace="pre-wrap" wordBreak="break-word" paddingTop="var(--spacing-s)">
-                  {kaivuilmoitusAlue.haittojenhallintasuunnitelma?.YLEINEN ?? ''}
+                  {alue.haittojenhallintasuunnitelma?.YLEINEN ?? ''}
                 </Box>
+                {taydennysAlue &&
+                  taydennysAlue.haittojenhallintasuunnitelma?.YLEINEN !==
+                    alue.haittojenhallintasuunnitelma?.YLEINEN && (
+                    <SectionItemContentAdded>
+                      <Box
+                        whiteSpace="pre-wrap"
+                        wordBreak="break-word"
+                        paddingTop="var(--spacing-s)"
+                      >
+                        {taydennysAlue.haittojenhallintasuunnitelma?.YLEINEN ?? ''}
+                      </Box>
+                    </SectionItemContentAdded>
+                  )}
               </GridItem>
               <GridItem width="80px"></GridItem>
             </Grid>
@@ -123,7 +150,8 @@ export const HaittojenhallintasuunnitelmaInfo: React.FC<HaittojenHallintaProps> 
           <LiikennehaitanHallintasuunnitelmaInfo
             tyyppi={haitta}
             indeksi={indeksi}
-            alue={kaivuilmoitusAlue}
+            alue={alue}
+            taydennysAlue={taydennysAlue}
             hankealue={hankealue}
             key={haitta}
           />
@@ -148,8 +176,21 @@ export const HaittojenhallintasuunnitelmaInfo: React.FC<HaittojenHallintaProps> 
                   {t('kaivuilmoitusForm:haittojenHallinta:labels:YLEINEN')}
                 </Text>
                 <Box whiteSpace="pre-wrap" wordBreak="break-word" paddingTop="var(--spacing-xs)">
-                  {kaivuilmoitusAlue.haittojenhallintasuunnitelma?.MUUT ?? ''}
+                  {alue.haittojenhallintasuunnitelma?.MUUT ?? ''}
                 </Box>
+                {taydennysAlue &&
+                  taydennysAlue.haittojenhallintasuunnitelma?.MUUT !==
+                    alue.haittojenhallintasuunnitelma?.MUUT && (
+                    <SectionItemContentAdded>
+                      <Box
+                        whiteSpace="pre-wrap"
+                        wordBreak="break-word"
+                        paddingTop="var(--spacing-xs)"
+                      >
+                        {taydennysAlue.haittojenhallintasuunnitelma?.MUUT ?? ''}
+                      </Box>
+                    </SectionItemContentAdded>
+                  )}
               </GridItem>
               <GridItem width="80px"></GridItem>
             </Grid>

@@ -529,12 +529,14 @@ function ApplicationView({
     applicationType === 'CABLE_REPORT'
       ? (areas as ApplicationArea[])
       : (areas as KaivuilmoitusAlue[]).flatMap((area) => area.tyoalueet);
+  const kaivuilmoitusTaydennysAlueet =
+    applicationType === 'EXCAVATION_NOTIFICATION'
+      ? (application.taydennys?.applicationData.areas as KaivuilmoitusAlue[] | undefined)
+      : null;
   const taydennysTyoalueet =
     applicationType === 'CABLE_REPORT'
       ? (application.taydennys?.applicationData.areas as ApplicationArea[] | undefined)
-      : (application.taydennys?.applicationData.areas as KaivuilmoitusAlue[] | undefined)?.flatMap(
-          (area) => area.tyoalueet,
-        );
+      : kaivuilmoitusTaydennysAlueet?.flatMap((area) => area.tyoalueet);
   const kaivuilmoitusAlueet =
     applicationType === 'EXCAVATION_NOTIFICATION' ? (areas as KaivuilmoitusAlue[]) : null;
   const hankealueet = hanke?.alueet;
@@ -880,6 +882,9 @@ function ApplicationView({
               {applicationType === 'EXCAVATION_NOTIFICATION' &&
                 kaivuilmoitusAlueet?.map((alue, index) => {
                   const hankealue = hankealueet?.find((ha) => ha.id === alue.hankealueId);
+                  const taydennysAlue = kaivuilmoitusTaydennysAlueet?.find(
+                    (ta) => ta.hankealueId === alue.hankealueId,
+                  );
                   return (
                     <Accordion
                       language={locale}
@@ -892,7 +897,8 @@ function ApplicationView({
                     >
                       <HaittojenhallintasuunnitelmaInfo
                         key={alue.hankealueId}
-                        kaivuilmoitusAlue={alue}
+                        alue={alue}
+                        taydennysAlue={taydennysAlue}
                         hankealue={hankealue}
                       />
                     </Accordion>

@@ -30,7 +30,7 @@ export default function HaittojenhallintaSummary({ hankealueet, formData }: Read
           <TabPanel key={alue.hankealueId}>
             <HaittojenhallintasuunnitelmaInfo
               key={alue.hankealueId}
-              kaivuilmoitusAlue={alue}
+              alue={alue}
               hankealue={hankealue}
             />
           </TabPanel>
