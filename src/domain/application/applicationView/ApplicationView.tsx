@@ -982,6 +982,10 @@ function ApplicationView({
                 {applicationType === 'EXCAVATION_NOTIFICATION' && (
                   <InvoicingCustomerSummary
                     invoicingCustomer={(applicationData as KaivuilmoitusData).invoicingCustomer}
+                    taydennysInvoicingCustomer={
+                      (application.taydennys?.applicationData as KaivuilmoitusData)
+                        .invoicingCustomer
+                    }
                   />
                 )}
                 {paperDecisionReceiver && (
