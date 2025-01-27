@@ -543,7 +543,7 @@ describe('Cable report application view', () => {
         ),
       ).toBeInTheDocument();
       expect(screen.getByText('Ei')).toBeInTheDocument();
-      expect(screen.getByText('264 m²')).toBeInTheDocument();
+      expect(screen.getByText('266 m²')).toBeInTheDocument();
     });
 
     test('Shows changed information in areas tab', async () => {
@@ -629,7 +629,7 @@ describe('Cable report application view', () => {
       await user.click(screen.getByRole('tab', { name: /alueet/i }));
 
       expect(screen.getAllByText('Täydennys:').length).toBe(2);
-      expect(screen.getByText('264 m²')).toBeInTheDocument();
+      expect(screen.getByText('266 m²')).toBeInTheDocument();
     });
 
     test('Shows changed information in contacts tab', async () => {
@@ -824,10 +824,10 @@ describe('Excavation notification application view', () => {
     expect(queryByText('Aidasmäentie 5')).toBeInTheDocument();
     expect(queryByText('Vesi, Viemäri')).toBeInTheDocument();
     expect(queryByText('Työalue 1')).toBeInTheDocument();
-    expect(queryByText('Pinta-ala: 158 m²')).toBeInTheDocument();
+    expect(queryByText('Pinta-ala: 159 m²')).toBeInTheDocument();
     expect(queryByText('Työalue 2')).toBeInTheDocument();
-    expect(queryByText('Pinta-ala: 30 m²')).toBeInTheDocument();
-    expect(queryByText('188 m²')).toBeInTheDocument();
+    expect(queryByText('Pinta-ala: 31 m²')).toBeInTheDocument();
+    expect(queryByText('190 m²')).toBeInTheDocument();
     expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3');
     expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
     expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('0');

@@ -112,10 +112,10 @@ test('Correct information about hanke should be displayed', async () => {
   expect(screen.queryByText('Ohjelmointi')).toBeInTheDocument();
   expect(screen.queryByText('Kaukolämpö')).toBeInTheDocument();
   expect(screen.queryByText('Ei')).toBeInTheDocument();
-  expect(screen.queryByText('11974 m²')).toBeInTheDocument();
+  expect(screen.queryByText('12041 m²')).toBeInTheDocument();
 
   // Data in sidebar
-  expect(screen.queryByText('Hankealue 1 (11974 m²)')).toBeInTheDocument();
+  expect(screen.queryByText('Hankealue 1 (12041 m²)')).toBeInTheDocument();
   expect(screen.queryByText('2.1.2023–24.2.2023')).toBeInTheDocument();
 
   // Change to areas tab
@@ -128,7 +128,7 @@ test('Correct information about hanke should be displayed', async () => {
   expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('2');
   expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('0');
   expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
-  expect(screen.queryByText('11974 m²')).toBeInTheDocument();
+  expect(screen.queryByText('12041 m²')).toBeInTheDocument();
   expect(screen.queryByText('Meluhaitta: Satunnainen meluhaitta')).toBeInTheDocument();
   expect(screen.queryByText('Pölyhaitta: Toistuva pölyhaitta')).toBeInTheDocument();
   expect(screen.queryByText('Tärinähaitta: Jatkuva tärinähaitta')).toBeInTheDocument();

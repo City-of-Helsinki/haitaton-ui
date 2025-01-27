@@ -51,7 +51,7 @@ describe('JohtoselvitysAreaSummary', () => {
     );
 
     expect(screen.getByText('Työalue')).toBeInTheDocument();
-    expect(screen.getByText('Pinta-ala: 234 m²')).toBeInTheDocument();
+    expect(screen.getByText('Pinta-ala: 235 m²')).toBeInTheDocument();
     expect(screen.queryByText(/poistettu/i)).not.toBeInTheDocument();
   });
 
@@ -66,6 +66,6 @@ describe('JohtoselvitysAreaSummary', () => {
 
     expect(screen.getByText(/poistettu/i)).toBeInTheDocument();
     expect(screen.getByText('Työalue')).toBeInTheDocument();
-    expect(screen.getByText('Pinta-ala: 234 m²')).toBeInTheDocument();
+    expect(screen.getByText('Pinta-ala: 235 m²')).toBeInTheDocument();
   });
 });

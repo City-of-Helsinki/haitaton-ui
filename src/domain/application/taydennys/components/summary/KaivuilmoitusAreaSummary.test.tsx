@@ -87,9 +87,9 @@ describe('Kaivuilmoitus taydennys AreaSummary', () => {
           element?.tagName === 'P' && element?.textContent === 'Työalueet (Hankealue 2)',
       ),
     ).toBeInTheDocument();
-    expect(screen.getByText('Työalue 1 (158 m²)')).toBeInTheDocument();
-    expect(screen.getByText('Työalue 2 (30 m²)')).toBeInTheDocument();
-    expect(screen.getByText('Pinta-ala: 188 m²')).toBeInTheDocument();
+    expect(screen.getByText('Työalue 1 (159 m²)')).toBeInTheDocument();
+    expect(screen.getByText('Työalue 2 (31 m²)')).toBeInTheDocument();
+    expect(screen.getByText('Pinta-ala: 190 m²')).toBeInTheDocument();
     expect(screen.getByText('Katuosoite: Aidasmäentie 6')).toBeInTheDocument();
     expect(screen.getByText('Työn tarkoitus: Viemäri, Kaukolämpö')).toBeInTheDocument();
     expect(screen.getByText('Meluhaitta: Jatkuva meluhaitta')).toBeInTheDocument();
@@ -114,9 +114,9 @@ describe('Kaivuilmoitus taydennys AreaSummary', () => {
     );
 
     expect(screen.getByText(/poistettu/i)).toBeInTheDocument();
-    expect(screen.getByText('Työalue 1 (158 m²)')).toBeInTheDocument();
-    expect(screen.getByText('Työalue 2 (30 m²)')).toBeInTheDocument();
-    expect(screen.getByText('Pinta-ala: 188 m²')).toBeInTheDocument();
+    expect(screen.getByText('Työalue 1 (159 m²)')).toBeInTheDocument();
+    expect(screen.getByText('Työalue 2 (31 m²)')).toBeInTheDocument();
+    expect(screen.getByText('Pinta-ala: 190 m²')).toBeInTheDocument();
     expect(screen.getByText('Katuosoite: Aidasmäentie 5')).toBeInTheDocument();
     expect(screen.getByText('Työn tarkoitus: Vesi')).toBeInTheDocument();
     expect(screen.getByText('Meluhaitta: Toistuva meluhaitta')).toBeInTheDocument();
