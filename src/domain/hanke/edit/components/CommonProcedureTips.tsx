@@ -2,18 +2,32 @@ import { Box } from '@chakra-ui/react';
 import { Accordion, IconDocument, IconLightbulb, Link } from 'hds-react';
 import React from 'react';
 import Text from '../../../../common/components/text/Text';
+import { Trans, useTranslation } from 'react-i18next';
+
+type CardLink = { number: number; heading: string; content: string; cardLinks: number[] };
 
 const CommonProcedureTips: React.FC = () => {
-  return (
-    <Box mb="var(--spacing-l)" padding="var(--spacing-s)" backgroundColor="var(--color-black-5)">
-      <Box display="flex" flexDirection="row" gap="var(--spacing-xs)" alignItems="center">
-        <IconLightbulb />
-        <Text tag="h4" styleAs="h3" weight="bold">
-          Tarkista aina nämä toimenpiteet
-        </Text>
-      </Box>
+  const { t } = useTranslation();
+
+  const renderProcedureTips = () => {
+    const tipContents: CardLink[] = [];
+    for (let i = 1; i <= 14; i++) {
+      tipContents.push({
+        number: i,
+        heading: t(`hankeForm:haittojenHallintaForm:procedureTips:common:${i}:heading`),
+        content: t(`hankeForm:haittojenHallintaForm:procedureTips:common:${i}:content`),
+        cardLinks: [],
+      });
+    }
+    tipContents.find((tip) => tip.number === 1)?.cardLinks.push(8, 9);
+    tipContents.find((tip) => tip.number === 2)?.cardLinks.push(2, 3, 5, 6, 7);
+    tipContents.find((tip) => tip.number === 3)?.cardLinks.push(5, 7);
+    tipContents.find((tip) => tip.number === 4)?.cardLinks.push(10);
+    tipContents.find((tip) => tip.number === 9)?.cardLinks.push(1);
+
+    const procedureTips = tipContents.map((tip) => (
       <Accordion
-        heading="Kulkuyhteydet kiinteistöihin ja joukkoliikennepysäkeille"
+        heading={tip.heading}
         size="s"
         headingLevel={5}
         theme={{
@@ -22,18 +36,51 @@ const CommonProcedureTips: React.FC = () => {
         }}
       >
         <Box as="p" mb="var(--spacing-s)">
-          Suunnittele ja toteuta kulkuyhteydet kiinteistöihin eri kulkumuodoille sekä esteettömät
-          jalankulkuyhteydet joukkoliikennepysäkeille. Varmista kiinteistöjen (erityisesti
-          sairaalat, apteekit, koulut, päiväkodit, hoitolaitokset) jalankulkuyhteyksien
-          esteettömyys.
+          <Trans
+            i18nKey={`hankeForm:haittojenHallintaForm:procedureTips:common:${tip.number}:text`}
+            components={{
+              a: (
+                <a className="hds-link hds-link--medium" aria-label="Opens a different website.">
+                  External link
+                  <span
+                    className="hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon"
+                    aria-hidden="true"
+                  ></span>
+                </a>
+              ),
+              span: <span />,
+            }}
+          >
+            replaced
+          </Trans>
         </Box>
-        <Box as="p" mb="var(--spacing-s)">
-          <strong>Lue lisää toimenpiteiden lisätietokorteista (avautuu uuteen välilehteen):</strong>
-          <Link iconLeft={<IconDocument />} size="M" href="/card">
-            8. Julkisen liikenteen ja pysäkkien huomioon ottaminen
-          </Link>
-        </Box>
+        {tip.cardLinks.length > 0 && (
+          <Box as="p" mb="var(--spacing-s)">
+            <strong>
+              {t('hankeForm:haittojenHallintaForm:procedureTips:common:nuisanceCardLinks')}
+            </strong>
+            {tip.cardLinks.map((linkId) => (
+              <Link iconLeft={<IconDocument />} size="M" href="/card">
+                {`${t(`workInstructions:cards:${linkId}:header`)}`}
+              </Link>
+            ))}
+          </Box>
+        )}
       </Accordion>
+    ));
+
+    return procedureTips;
+  };
+
+  return (
+    <Box mb="var(--spacing-l)" padding="var(--spacing-s)" backgroundColor="var(--color-black-5)">
+      <Box display="flex" flexDirection="row" gap="var(--spacing-xs)" alignItems="center">
+        <IconLightbulb />
+        <Text tag="h4" styleAs="h3" weight="bold">
+          {t('hankeForm:haittojenHallintaForm:subHeaderPlan')}
+        </Text>
+      </Box>
+      {renderProcedureTips()}
     </Box>
   );
 };

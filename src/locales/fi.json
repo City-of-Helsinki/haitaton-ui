@@ -742,6 +742,65 @@
         "haitanKesto": "Hankkeen kesto"
       },
       "procedureTips": {
+        "common": {
+          "nuisanceCardLinks": "Lue lisää toimenpiteiden lisätietokorteista (avautuu uuteen välilehteen): ",
+          "1": {
+            "heading": "Kulkuyhteydet kiinteistöihin ja joukkoliikennepysäkeille",
+            "text": "Suunnittele ja toteuta kulkuyhteydet kiinteistöihin eri kulkumuodoille sekä esteettömät jalankulkuyhteydet joukkoliikennepysäkeille. Varmista kiinteistöjen (erityisesti sairaalat, apteekit, koulut, päiväkodit, hoitolaitokset) jalankulkuyhteyksien esteettömyys. <a href=\"https://hel.fi\">hel.fi <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\"aria-hidden=\"true\"></span></a> <a href=\"https://hel2.fi\">hel2.fi</a>"
+          },
+          "2": {
+            "heading": "Jalankulun turvalliset ja esteettömät reitit",
+            "text": ""
+          },
+          "3": {
+            "heading": "Opastus, liikenteenohjaus ja valaistus",
+            "text": ""
+          },
+          "4": {
+            "heading": "Työalueen suunnittelu ja järjestelyiden ylläpito",
+            "text": ""
+          },
+          "5": {
+            "heading": "Pelastustoimi",
+            "text": ""
+          },
+          "6": {
+            "heading": "Yhteensovitus muiden hankkeiden ja kiertoreittien kanssa",
+            "text": ""
+          },
+          "7": {
+            "heading": "Yhteensovitus olevien rakenteiden kanssa",
+            "text": ""
+          },
+          "8": {
+            "heading": "Liikennevalo-ohjaus",
+            "text": ""
+          },
+          "9": {
+            "heading": "Hankeviestintä",
+            "text": ""
+          },
+          "10": {
+            "heading": "Erikoiskuljetusten reitit ",
+            "text": ""
+          },
+          "11": {
+            "heading": "Junaliikenne",
+            "text": ""
+          },
+          "12": {
+            "heading": "Metroliikenne",
+            "text": ""
+          },
+          "13": {
+            "heading": "Sähköautojen latauspisteet",
+            "text": ""
+          },
+          "14": {
+            "heading": "Sähköpotkulautojen pysäköintialueet ",
+            "text": ""
+          }
+        },
         "showTipsButton": "Näytä toimenpidevinkit",
         "titles": {
           "PYORALIIKENNE": "Pyöräliikenteen toimenpiteet",
