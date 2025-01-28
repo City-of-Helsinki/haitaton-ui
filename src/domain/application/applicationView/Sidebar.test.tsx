@@ -46,13 +46,13 @@ describe('Sidebar', () => {
       const { user } = render(<Sidebar hanke={hanke} application={application} />);
 
       expect(screen.getByText('Täydennykset')).toBeInTheDocument();
-      expect(screen.getByText('Työalue 1 (234 m²)')).toBeInTheDocument();
-      expect(screen.getByText('Työalue 2 (30 m²)')).toBeInTheDocument();
+      expect(screen.getByText('Työalue 1 (235 m²)')).toBeInTheDocument();
+      expect(screen.getByText('Työalue 2 (31 m²)')).toBeInTheDocument();
 
       await user.click(screen.getByText('Alkuperäiset'));
 
-      expect(screen.getByText('Työalue (234 m²)')).toBeInTheDocument();
-      expect(screen.queryByText('Työalue 2 (30 m²)')).not.toBeInTheDocument();
+      expect(screen.getByText('Työalue (235 m²)')).toBeInTheDocument();
+      expect(screen.queryByText('Työalue 2 (31 m²)')).not.toBeInTheDocument();
     });
 
     test('If there is no taydennys, should not show taydennys tabs', async () => {

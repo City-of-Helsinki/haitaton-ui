@@ -496,9 +496,9 @@ test('Should be able to fill form pages and show filled information in summary p
   // Areas information
   expect(screen.getByText(startDate)).toBeInTheDocument();
   expect(screen.getByText(endDate)).toBeInTheDocument();
-  expect(screen.getByText('Työalue 1 (158 m²)')).toBeInTheDocument();
-  expect(screen.getByText('Työalue 2 (30 m²)')).toBeInTheDocument();
-  expect(screen.getByText('Pinta-ala: 188 m²')).toBeInTheDocument();
+  expect(screen.getByText('Työalue 1 (159 m²)')).toBeInTheDocument();
+  expect(screen.getByText('Työalue 2 (31 m²)')).toBeInTheDocument();
+  expect(screen.getByText('Pinta-ala: 190 m²')).toBeInTheDocument();
   expect(screen.getByText('Katuosoite: Aidasmäentie 5')).toBeInTheDocument();
   expect(screen.getByText('Työn tarkoitus: Vesi, Viemäri')).toBeInTheDocument();
   expect(screen.getByText('Meluhaitta: Toistuva meluhaitta')).toBeInTheDocument();

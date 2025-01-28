@@ -1,5 +1,31 @@
-import { Polygon } from 'ol/geom';
-import { isPolygonSelfIntersecting } from './utils';
+import { Point, Polygon } from 'ol/geom';
+import { getSurfaceArea, isPolygonSelfIntersecting } from './utils';
+
+describe('surface area', () => {
+  test('should return correct surface area for a polygon', () => {
+    const polygonToCheck = new Polygon([
+      [
+        [25496681.078125, 6673024.67578125],
+        [25496905.16015625, 6673024.67578125],
+        [25496905.16015625, 6673156.75],
+        [25496681.078125, 6673156.75],
+        [25496681.078125, 6673024.67578125],
+      ],
+    ]);
+
+    const result = getSurfaceArea(polygonToCheck);
+
+    expect(result).toBeCloseTo(29595.459213256836, 1);
+  });
+
+  test('should return NaN when the geometry is not a polygon', () => {
+    const pointToCheck = new Point([25496681.078125, 6673024.67578125]);
+
+    const result = getSurfaceArea(pointToCheck);
+
+    expect(result).toBe(NaN);
+  });
+});
 
 describe('self-intersecting polygon', () => {
   test('should return true if polygon is self-intersecting', () => {

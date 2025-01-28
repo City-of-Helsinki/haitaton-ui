@@ -481,7 +481,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 158.4294946899533,
+              area: 159.32433261766946,
               tormaystarkasteluTulos: {
                 liikennehaittaindeksi: {
                   indeksi: 3,
@@ -519,7 +519,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 30.345726208334995,
+              area: 30.517131072352957,
               tormaystarkasteluTulos: {
                 liikennehaittaindeksi: {
                   indeksi: 5,
@@ -683,7 +683,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 158.4294946899533,
+              area: 159.32433261766946,
             },
             {
               geometry: {
@@ -704,7 +704,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 30.345726208334995,
+              area: 30.517131072352957,
             },
           ],
           katuosoite: 'Aidasmäentie 5',
@@ -833,7 +833,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 158.4294946899533,
+              area: 159.32433261766946,
             },
             {
               geometry: {
@@ -854,7 +854,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 30.345726208334995,
+              area: 30.517131072352957,
             },
           ],
           katuosoite: 'Aidasmäentie 5',
@@ -1128,7 +1128,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 158.4294946899533,
+              area: 159.32433261766946,
             },
             {
               geometry: {
@@ -1149,7 +1149,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 30.345726208334995,
+              area: 30.517131072352957,
             },
           ],
           katuosoite: 'Aidasmäentie 5',
@@ -1475,7 +1475,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 158.4294946899533,
+              area: 159.32433261766946,
             },
             {
               geometry: {
@@ -1496,7 +1496,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 30.345726208334995,
+              area: 30.517131072352957,
             },
           ],
           katuosoite: 'Aidasmäentie 5',
@@ -1682,7 +1682,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 158.4294946899533,
+              area: 159.32433261766946,
               tormaystarkasteluTulos: {
                 liikennehaittaindeksi: {
                   indeksi: 3,
@@ -1720,7 +1720,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 30.345726208334995,
+              area: 30.517131072352957,
               tormaystarkasteluTulos: {
                 liikennehaittaindeksi: {
                   indeksi: 3,
