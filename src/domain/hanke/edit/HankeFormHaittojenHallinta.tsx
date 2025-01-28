@@ -12,6 +12,7 @@ import { HankeData } from '../../types/hanke';
 import HankeMap from '../../map/components/HankkeenHaittojenhallintasuunnitelma/HankeMap';
 import VectorSource from 'ol/source/Vector';
 import useAddressCoordinate from '../../map/hooks/useAddressCoordinate';
+import CommonProcedureTips from './components/CommonProcedureTips';
 
 const HankeFormHaittojenHallinta: React.FC<FormProps> = ({ hanke }) => {
   const { t } = useTranslation();
@@ -62,9 +63,10 @@ const HankeFormHaittojenHallinta: React.FC<FormProps> = ({ hanke }) => {
               {t('hankeForm:haittojenHallintaForm:nuisanceControlPlanSubHeader')}
             </Box>
           </Text>
-          <Box mb="var(--spacing-m)">
+          <Box mb="var(--spacing-l)">
             <p>{t('hankeForm:haittojenHallintaForm:instructionsPlan')}</p>
           </Box>
+          <CommonProcedureTips />
           <Tabs>
             <TabList>
               {hankealueet.map((alue, index) => {
