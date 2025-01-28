@@ -1,10 +1,13 @@
-import { FieldPath, FieldValues, UseFormGetValues } from 'react-hook-form';
 import { ValidationError } from 'yup';
 import { TFunction } from 'i18next';
 import { ContactType } from '../application/types/application';
 import { Link } from 'hds-react';
+import { KaivuilmoitusFormValues } from './types';
+import { KaivuilmoitusTaydennysFormValues } from '../kaivuilmoitusTaydennys/types';
 
-function getTranslationContextForContactType(contactType: keyof typeof ContactType | null) {
+function getTranslationContextForContactType(
+  contactType: keyof typeof ContactType | null | undefined,
+) {
   if (contactType === 'PERSON') {
     return 'person';
   } else if (contactType === 'OTHER') {
@@ -12,10 +15,10 @@ function getTranslationContextForContactType(contactType: keyof typeof ContactTy
   }
 }
 
-export function mapValidationErrorToErrorListItem<T extends FieldValues>(
+export function mapValidationErrorToErrorListItem(
   error: ValidationError,
   t: TFunction,
-  getValues: UseFormGetValues<T>,
+  formData: KaivuilmoitusFormValues | KaivuilmoitusTaydennysFormValues,
 ) {
   const errorPath = error.path?.replace('[', '.').replace(']', '');
   const pathParts = errorPath?.match(/(\w+)/g)?.filter((part) => part !== 'applicationData') || [];
@@ -27,13 +30,11 @@ export function mapValidationErrorToErrorListItem<T extends FieldValues>(
   let context;
   if (pathParts[0] === 'customerWithContacts') {
     context = getTranslationContextForContactType(
-      getValues('applicationData.customerWithContacts.customer.type' as FieldPath<T>),
+      formData.applicationData.customerWithContacts?.customer.type,
     );
   }
   if (pathParts[0] === 'invoicingCustomer') {
-    context = getTranslationContextForContactType(
-      getValues('applicationData.invoicingCustomer.type' as FieldPath<T>),
-    );
+    context = getTranslationContextForContactType(formData.applicationData.invoicingCustomer?.type);
   }
   if (pathParts[0] === 'startTime') {
     context = 'kaivuilmoitus';
@@ -52,7 +53,7 @@ export function mapValidationErrorToErrorListItem<T extends FieldValues>(
 
   const linkText = t(langKey, {
     count: Number(pathParts[1]) + 1,
-    areaName: getValues(`applicationData.areas.${pathParts[1]}.name` as FieldPath<T>),
+    areaName: formData.applicationData.areas[Number(pathParts[1])]?.name,
     context,
   });
 

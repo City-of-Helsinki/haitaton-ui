@@ -1,15 +1,16 @@
-import { UseFormGetValues } from 'react-hook-form';
 import { ValidationError } from 'yup';
 import { render, screen } from '@testing-library/react';
-import { KaivuilmoitusFormValues } from './types';
 import { t } from '../../locales/i18nForTests';
+import { cloneDeep } from 'lodash';
 import { mapValidationErrorToErrorListItem } from './mapValidationErrorToErrorListItem';
-import { ContactType } from '../application/types/application';
+import { Application, ContactType, KaivuilmoitusData } from '../application/types/application';
+import applications from '../mocks/data/hakemukset-data';
+
+const application = cloneDeep(applications[6]) as Application<KaivuilmoitusData>;
 
 test('Should show error for simple error path, for example work description', () => {
   const error = new ValidationError('Test error', undefined, 'applicationData.workDescription');
-  const getValues: UseFormGetValues<KaivuilmoitusFormValues> = jest.fn().mockReturnValue({});
-  render(mapValidationErrorToErrorListItem(error, t, getValues));
+  render(mapValidationErrorToErrorListItem(error, t, application));
 
   expect(screen.getByText('Työn kuvaus')).toBeInTheDocument();
   expect(screen.getByRole('link')).toHaveAttribute('href', '#applicationData.workDescription');
@@ -17,19 +18,15 @@ test('Should show error for simple error path, for example work description', ()
 
 test('Should show error for application area', () => {
   const error = new ValidationError('Test error', undefined, 'applicationData.areas[0].katuosoite');
-  const getValues: UseFormGetValues<KaivuilmoitusFormValues> = jest
-    .fn()
-    .mockReturnValue('Test Area');
-  render(mapValidationErrorToErrorListItem(error, t, getValues));
+  render(mapValidationErrorToErrorListItem(error, t, application));
 
-  expect(screen.getByText('Työalueet (Test Area): Katuosoite')).toBeInTheDocument();
+  expect(screen.getByText('Työalueet (Hankealue 2): Katuosoite')).toBeInTheDocument();
   expect(screen.getByRole('link')).toHaveAttribute('href', '#applicationData.areas.0.katuosoite');
 });
 
 test('Should show error when there are no areas', () => {
   const error = new ValidationError('Test error', undefined, 'applicationData.areas');
-  const getValues: UseFormGetValues<KaivuilmoitusFormValues> = jest.fn().mockReturnValue({});
-  render(mapValidationErrorToErrorListItem(error, t, getValues));
+  render(mapValidationErrorToErrorListItem(error, t, application));
 
   expect(screen.getByText('Työalueen piirtäminen')).toBeInTheDocument();
 });
@@ -40,13 +37,10 @@ test('Should show error for haittojenhallintasuunnitelma', () => {
     undefined,
     'applicationData.areas[0].haittojenhallintasuunnitelma.YLEINEN',
   );
-  const getValues: UseFormGetValues<KaivuilmoitusFormValues> = jest
-    .fn()
-    .mockReturnValue('Test Area');
-  render(mapValidationErrorToErrorListItem(error, t, getValues));
+  render(mapValidationErrorToErrorListItem(error, t, application));
 
   expect(
-    screen.getByText('Työalueet (Test Area): Toimet työalueiden haittojen hallintaan'),
+    screen.getByText('Työalueet (Hankealue 2): Toimet työalueiden haittojen hallintaan'),
   ).toBeInTheDocument();
   expect(screen.getByRole('link')).toHaveAttribute(
     'href',
@@ -97,10 +91,26 @@ test.each([
   ],
 ])(`Should show error for contact with path %s and type %s`, (path, contactType, errorMsg) => {
   const error = new ValidationError('Test error', undefined, path);
-  const getValues: UseFormGetValues<KaivuilmoitusFormValues> = jest
-    .fn()
-    .mockReturnValue(contactType);
-  render(mapValidationErrorToErrorListItem(error, t, getValues));
+  render(
+    mapValidationErrorToErrorListItem(error, t, {
+      ...application,
+      applicationData: {
+        ...application.applicationData,
+        customerWithContacts: {
+          ...application.applicationData.customerWithContacts,
+          customer: {
+            ...application.applicationData.customerWithContacts!.customer,
+            type: contactType,
+          },
+          contacts: [],
+        },
+        invoicingCustomer: {
+          ...application.applicationData.invoicingCustomer!,
+          type: contactType,
+        },
+      },
+    }),
+  );
 
   expect(screen.getByText(errorMsg)).toBeInTheDocument();
   expect(screen.getByRole('link')).toHaveAttribute('href', `#${path}`);
@@ -111,8 +121,7 @@ test.each([
   ['applicationData.endTime', 'Työn loppupäivämäärä'],
 ])(`Should show error for date with path %s and text %s`, (path, errorMsg) => {
   const error = new ValidationError('Test error', undefined, path);
-  const getValues: UseFormGetValues<KaivuilmoitusFormValues> = jest.fn().mockReturnValue({});
-  render(mapValidationErrorToErrorListItem(error, t, getValues));
+  render(mapValidationErrorToErrorListItem(error, t, application));
 
   expect(screen.getByText(errorMsg)).toBeInTheDocument();
   expect(screen.getByRole('link')).toHaveAttribute('href', `#${path}`);

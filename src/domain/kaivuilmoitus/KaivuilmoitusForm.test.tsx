@@ -25,7 +25,7 @@ import { cloneDeep } from 'lodash';
 import { fillNewContactPersonForm } from '../forms/components/testUtils';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import * as applicationApi from '../application/utils';
-import { HAITTA_INDEX_TYPE } from '../common/haittaIndexes/types';
+import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../common/haittaIndexes/types';
 import { HIDDEN_FIELD_VALUE } from '../application/constants';
 import * as hakemuksetDB from '../mocks/data/hakemukset';
 
@@ -1833,5 +1833,186 @@ describe('Haittojenhallintasuunnitelma', () => {
     expect(
       screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE'),
     ).not.toBeRequired();
+  });
+});
+
+describe('Error notification', () => {
+  function setup(
+    application: Application<KaivuilmoitusData> = cloneDeep(
+      applications[6],
+    ) as Application<KaivuilmoitusData>,
+  ) {
+    const hankeData = hankkeet[1] as HankeData;
+    server.use(
+      http.post('/api/haittaindeksit', async () => {
+        return HttpResponse.json<HaittaIndexData>({
+          liikennehaittaindeksi: {
+            indeksi: 0,
+            tyyppi: HAITTA_INDEX_TYPE.PYORALIIKENNEINDEKSI,
+          },
+          pyoraliikenneindeksi: 0,
+          autoliikenne: {
+            indeksi: 0,
+            haitanKesto: 0,
+            katuluokka: 0,
+            liikennemaara: 0,
+            kaistahaitta: 0,
+            kaistapituushaitta: 0,
+          },
+          linjaautoliikenneindeksi: 0,
+          raitioliikenneindeksi: 0,
+        });
+      }),
+    );
+    return render(<KaivuilmoitusContainer hankeData={hankeData} application={application} />);
+  }
+
+  test('Should show fields with errors in notification in perustiedot page', async () => {
+    setup();
+
+    expect(
+      screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
+    ).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText(/työn nimi/i), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
+      target: { value: '' },
+    });
+    fireEvent.click(screen.getByLabelText(/uuden rakenteen tai johdon rakentamisesta/i));
+    fireEvent.click(screen.getByRole('checkbox', { name: /työstä vastaavana/i }));
+
+    expect(
+      await screen.findByText(
+        'Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /työn nimi/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /työn kuvaus/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /työssä on kyse/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /työhön vaadittava pätevyys/i })).toBeInTheDocument();
+  });
+
+  test('Should show fields with errors in notification in alueet page', async () => {
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: /alueet/i }));
+
+    expect(
+      screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
+    ).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText(/työn alkupäivämäärä/i), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByLabelText(/työn loppupäivämäärä/i), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByLabelText(/katuosoite/i), {
+      target: { value: '' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /poista valittu/i }));
+
+    expect(
+      await screen.findByText(
+        'Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työn alkupäivämäärä/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työn loppupäivämäärä/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Työalueet (Hankealue 2): Katuosoite' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Työalueet (Hankealue 2): Työn tarkoitus' }),
+    ).toBeInTheDocument();
+  });
+
+  test('Should show fields with errors in notification in haittojenhallinta page', async () => {
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: /haittojen hallinta/i }));
+
+    expect(
+      screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
+    ).not.toBeInTheDocument();
+
+    fireEvent.change(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.YLEINEN'),
+      {
+        target: { value: '' },
+      },
+    );
+
+    expect(
+      await screen.findByText(
+        'Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', {
+        name: 'Työalueet (Hankealue 2): Toimet työalueiden haittojen hallintaan',
+      }),
+    ).toBeInTheDocument();
+  });
+
+  test('Should show fields with errors in notification in yhteystiedot page', async () => {
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+    expect(
+      screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
+    ).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[0], {
+      target: { value: '' },
+    });
+    fireEvent.change(
+      screen.getByTestId('applicationData.customerWithContacts.customer.registryKey'),
+      {
+        target: { value: '123' },
+      },
+    );
+    fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.email'), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.phone'), {
+      target: { value: '' },
+    });
+    fireEvent.click(screen.getAllByRole('button', { name: /poista valittu/i })[0]);
+
+    expect(
+      await screen.findByText(
+        'Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', {
+        name: /työstä vastaava: Vähintään yksi yhteyshenkilö tulee olla asetettuna/i,
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työstä vastaava: Sähköposti/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työstä vastaava: Puhelin/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työstä vastaava: Nimi/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työstä vastaava: Y-tunnus/i })).toBeInTheDocument();
+  });
+
+  test('Should show pages that have missing information for hanke to be public in summary page', async () => {
+    const application = cloneDeep(applications[6]) as Application<KaivuilmoitusData>;
+    application.applicationData = {
+      ...application.applicationData,
+      workDescription: '',
+      startTime: null,
+      customerWithContacts: null,
+    };
+    const { user } = setup(application);
+
+    await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+
+    await screen.findByText(
+      'Seuraavissa vaiheissa on puuttuvia tietoja hakemuksen lähettämiseksi:',
+    );
+    expect(screen.getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
+    expect(screen.getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
+    expect(screen.getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
   });
 });
