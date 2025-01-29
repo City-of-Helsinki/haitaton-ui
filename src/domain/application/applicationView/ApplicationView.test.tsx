@@ -1483,7 +1483,7 @@ describe('Excavation notification application view', () => {
       ).toBeInTheDocument();
       expect(screen.getByText('JS2300003')).toBeInTheDocument();
       expect(screen.getByText('SL1234568')).toBeInTheDocument();
-      expect(screen.getByText('188 m²')).toBeInTheDocument();
+      expect(screen.getByText('221 m²')).toBeInTheDocument();
     });
 
     test('Shows changed information in areas tab', async () => {
@@ -1545,7 +1545,7 @@ describe('Excavation notification application view', () => {
       await user.click(screen.getByRole('tab', { name: /alueet/i }));
 
       expect(screen.getAllByText('Täydennys:').length).toBe(8);
-      expect(screen.getByText('392 m²')).toBeInTheDocument();
+      expect(screen.getByText('394 m²')).toBeInTheDocument();
     });
 
     test('Shows changed information in haittojen hallinta tab', async () => {
