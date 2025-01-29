@@ -746,59 +746,59 @@
           "nuisanceCardLinks": "Lue lisää toimenpiteiden lisätietokorteista (avautuu uuteen välilehteen): ",
           "1": {
             "heading": "Kulkuyhteydet kiinteistöihin ja joukkoliikennepysäkeille",
-            "text": "Suunnittele ja toteuta kulkuyhteydet kiinteistöihin eri kulkumuodoille sekä esteettömät jalankulkuyhteydet joukkoliikennepysäkeille. Varmista kiinteistöjen (erityisesti sairaalat, apteekit, koulut, päiväkodit, hoitolaitokset) jalankulkuyhteyksien esteettömyys. <a href=\"https://hel.fi\">hel.fi <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\"aria-hidden=\"true\"></span></a> <a href=\"https://hel2.fi\">hel2.fi</a>"
+            "text": "Suunnittele ja toteuta kulkuyhteydet kiinteistöihin eri kulkumuodoille sekä esteettömät jalankulkuyhteydet joukkoliikennepysäkeille. Varmista kiinteistöjen (erityisesti sairaalat, apteekit, koulut, päiväkodit, hoitolaitokset) jalankulkuyhteyksien esteettömyys."
           },
           "2": {
             "heading": "Jalankulun turvalliset ja esteettömät reitit",
-            "text": ""
+            "text": "Suunnittele ja toteuta jalankulun turvalliset ja esteettömät reitit.  Ohjaa jalankulku riittävän ajoissa mahdollisimman lyhyelle kiertoreitille siten, että työn kohdalla ei oikaista käyttäen turvattomia reittejä. Kerro ennakkotiedotteissa, onko jalankulku ohjattu kadun toiselle puolelle vai onko jalankulkijoille erotettu väylä ajoradasta - näin autat erityisesti näkövammaisia suunnistamaan ja pyörätuolin käyttäjiä suunnittelemaan kulkureittejä ennakkoon. Korosta suojateitä (esim. valaistus, huomiovalot, heijastintolpat, autojen hidastetöyssyt) ja toteuta ne turvallisilla näkemillä ja esteettöminä. Luiskaa reunakivet, aitaa työmaat sekä varmista riittävän leveät, tasaiset ja loivat kulkuväylät jalankululle. Tarkista ratkaisujen ohjeidenmukaisuus: <a href=\"https://helsinkikaikille.hel.fi/ohjeita-esteettomyyden-toteuttamiseen/helsingin-kaupungin-ohjeet-ulkoalueille/\">https://helsinkikaikille.hel.fi/ohjeita-esteettomyyden-toteuttamiseen/helsingin-kaupungin-ohjeet-ulkoalueille/<span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\"aria-hidden=\"true\"></span></a>"
           },
           "3": {
             "heading": "Opastus, liikenteenohjaus ja valaistus",
-            "text": ""
+            "text": "Suunnittele ja toteuta selkeät, havaittavat, luettavat, katkeamattomat, kontrastiset ja moniaistiset opasteet ja liikennevalot. Järjestä tarvittaessa korvaava tai täydentävä valaistus reiteille."
           },
           "4": {
             "heading": "Työalueen suunnittelu ja järjestelyiden ylläpito",
-            "text": ""
+            "text": "Suunnittele ja toteuta selkeät, havaittavat, luettavat, katkeamattomat, kontrastiset ja moniaistiset opasteet ja liikennevalot. Järjestä tarvittaessa korvaava tai täydentävä valaistus reiteille."
           },
           "5": {
             "heading": "Pelastustoimi",
-            "text": ""
+            "text": "Varmista pelastustoimen toimintaedellytykset työsi alueella. Ilmoita aina katujen sulkemisesta liikenteeltä pelastuslaitokselle ja poliisille (<a href=\"mailto:tilannekeskus@hel.fi\">tilannekeskus@hel.fi</a>, puh. 09 310 30150)."
           },
           "6": {
             "heading": "Yhteensovitus muiden hankkeiden ja kiertoreittien kanssa",
-            "text": ""
+            "text": "Tee yhteensovitus alueen muiden hankkeiden työkohteiden aikataulun ja tehtävien kanssa sekä eri töiden tarvitsemien kiertoreittien osalta siten, että alueelle kohdistuvat haitat voidaan jatkuvasti minimoida."
           },
           "7": {
             "heading": "Yhteensovitus olevien rakenteiden kanssa",
-            "text": ""
+            "text": "Selvitä alueella olevat muut toimijat (rakenteet) ja tee yhteensovitus niiden kanssa."
           },
           "8": {
             "heading": "Liikennevalo-ohjaus",
-            "text": ""
+            "text": "Tarkista vaikutukset alueen nykyiseen liikennevalo-ohjaukseen eri kulkumuotojen osalta (kaistajärjestelyt, ilmaisimet, valojen toimivuus). Jos työskentely vaikuttaa liikennevalojen toimintaan, ole yhteydessä pääkaupunkiseudun liikenteenhallintakeskukseen (<a href=\"mailto:liikenteenhallintakeskus@hel.fi\">liikenteenhallintakeskus@hel.fi</a> , p. 09 310 37555). Ole yhteydessä liikenteenhallintakeskukseen myös tilapäisten liikennevalojen tarpeesta."
           },
           "9": {
             "heading": "Hankeviestintä",
-            "text": ""
+            "text": "Viesti hankkeesta ja työstä avoimesti, ajantasaisesti ja monikanavaisesti. Osallista asiantuntijoita, paikallisia toimijoita ja kaupunkilaisia esimerkiksi turvallisten ja esteettömien ratkaisujen arvioinnissa ja soveltamisessa. Hyödynnä saatua palautetta hankkeen ja työalueen järjestelyiden kehittämisessä."
           },
           "10": {
             "heading": "Erikoiskuljetusten reitit ",
-            "text": ""
+            "text": "Tarkista, onko työsi erikoiskuljetusten reitillä ja reittien asettamat vaatimukset Kaupunkiympäristön toimialan liikennesuunnittelusta (<a href=\"mailto:kaupunkiymparisto@hel.fi\">kaupunkiymparisto@hel.fi</a>, asiakaspalvelu puh. 09 310 22111) sekä Pirkanmaan ELY-keskuksesta (<a href=\"mailto:erikoiskuljetukset@ely-keskus.fi\">erikoiskuljetukset@ely-keskus.fi</a>, Liikenteen asiakaspalvelun neuvonta puh. 0295 020 600)."
           },
           "11": {
             "heading": "Junaliikenne",
-            "text": ""
+            "text": "Sovi junaliikenteeseen vaikuttavista järjestelyistä Väyläviraston kanssa (<a href=\"https://vayla.fi/palveluntuottajat/ammattiliikenne-raiteilla/lomakkeet-ja-luvat\">https://vayla.fi/palveluntuottajat/ammattiliikenne-raiteilla/lomakkeet-ja-luvat<span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\"aria-hidden=\"true\"></span></a>, <a href=\"mailto:kirjaamo@vayla.fi\">kirjaamo@vayla.fi</a>) sekä HSL:n (lähijunaliikenne: <a href=\"mailto:infra@hsl.fi\">infra@hsl.fi</a>) ja/tai VR:n (lähi- ja kaukojunaliikenne: vaihde puh. 029 4343) kanssa."
           },
           "12": {
             "heading": "Metroliikenne",
-            "text": ""
+            "text": "Työn ulottuessa 200 m säteelle metroradasta tarkista Kaupunkiliikenne Oy:n vaatimukset ja ole tarvittaessa yhdeydessä Kaupunkiliikenne Oy:n (ratainfra ja järjestelmät: <a href=\"mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi\">urakoitsijaohjeistus@kaupunkiliikenne.fi</a>) kanssa."
           },
           "13": {
             "heading": "Sähköautojen latauspisteet",
-            "text": ""
+            "text": "Ole etukäteen yhteydessä latauslaitteen operaattoritahoon ja sovi tarvittaessa järjestelyistä."
           },
           "14": {
             "heading": "Sähköpotkulautojen pysäköintialueet ",
-            "text": ""
+            "text": "Ole yhteydessä Kaupunkiympäristön toimialan liikennesuunnitteluun (<a href=\"mailto:kaupunkiymparisto@hel.fi\">kaupunkiymparisto@hel.fi</a>, asiakaspalvelu puh. 09 310 22111, esim. alueen käyttö tai estot tietyille alueille)"
           }
         },
         "showTipsButton": "Näytä toimenpidevinkit",

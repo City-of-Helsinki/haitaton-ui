@@ -5,6 +5,7 @@ import useFieldArrayWithStateUpdate from '../../common/hooks/useFieldArrayWithSt
 import { KaivuilmoitusFormValues } from './types';
 import HaittojenhallintaSuunnitelma from './components/HaittojenhallintaSuunnitelma';
 import { HankeData } from '../types/hanke';
+import CommonProcedureTips from '../common/haittojenhallinta/CommonProcedureTips';
 
 type Props = {
   hankeData: HankeData;
@@ -35,9 +36,10 @@ export default function HaittojenHallinta({ hankeData }: Readonly<Props>) {
       <Text tag="h3" styleAs="h4" weight="bold" spacingBottom="m">
         {t('kaivuilmoitusForm:haittojenHallinta:nuisanceControlPlanSubHeader')}
       </Text>
-      <Text tag="p" spacingBottom="m">
+      <Text tag="p" spacingBottom="l">
         {t('kaivuilmoitusForm:haittojenHallinta:instructions4')}
       </Text>
+      <CommonProcedureTips />
       <Tabs>
         <TabList>
           {hakemusAlueet.map((alue) => {

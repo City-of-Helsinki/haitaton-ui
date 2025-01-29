@@ -1733,6 +1733,7 @@ describe('Haittojenhallintasuunnitelma', () => {
   test('Nuisance control plan is shown correctly', async () => {
     await setupHaittojenHallintaPage();
 
+    expect(screen.getByTestId('test-common-nuisances')).toBeInTheDocument();
     expect(
       screen.getByText('Työalueen yleisten haittojen hallintasuunnitelma'),
     ).toBeInTheDocument();
