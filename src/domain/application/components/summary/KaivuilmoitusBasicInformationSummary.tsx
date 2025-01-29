@@ -49,6 +49,7 @@ export default function BasicInformationSummary({
     (muutos) => !workIsAboutRemoved.includes(muutos),
   );
 
+  const cableRepostsChanged = changedData && muutokset && muutokset.includes('cableReports');
   const cableReportsAdded = changedData?.cableReports?.filter(
     (cableReport) => !cableReports?.includes(cableReport),
   );
@@ -56,6 +57,8 @@ export default function BasicInformationSummary({
     (cableReport) => !changedData?.cableReports?.includes(cableReport),
   );
 
+  const placementContractsChanged =
+    changedData && muutokset && muutokset.includes('placementContracts');
   const placementContractsAdded = changedData?.placementContracts?.filter(
     (placementContract) => !placementContracts?.includes(placementContract),
   );
@@ -133,12 +136,12 @@ export default function BasicInformationSummary({
       <SectionItemTitle>{t('hakemus:labels:cableReports')}</SectionItemTitle>
       <SectionItemContent>
         <p>{cableReports?.join(', ')}</p>
-        {(cableReportsAdded?.length || 0) > 0 && (
+        {cableRepostsChanged && (cableReportsAdded?.length || 0) > 0 && (
           <SectionItemContentAdded marginTop="var(--spacing-s)">
             {cableReportsAdded?.map((changed) => <p key={changed}>{changed}</p>)}
           </SectionItemContentAdded>
         )}
-        {(cableReportsRemoved?.length || 0) > 0 && (
+        {cableRepostsChanged && (cableReportsRemoved?.length || 0) > 0 && (
           <SectionItemContentRemoved marginTop="var(--spacing-s)">
             {cableReportsRemoved?.map((removed) => <p key={removed}>{removed}</p>)}
           </SectionItemContentRemoved>
@@ -147,12 +150,12 @@ export default function BasicInformationSummary({
       <SectionItemTitle>{t('hakemus:labels:placementContractsTitle')}</SectionItemTitle>
       <SectionItemContent>
         <p>{placementContracts?.join(', ')}</p>
-        {(placementContractsAdded?.length || 0) > 0 && (
+        {placementContractsChanged && (placementContractsAdded?.length || 0) > 0 && (
           <SectionItemContentAdded marginTop="var(--spacing-s)">
             {placementContractsAdded?.map((changed) => <p key={changed}>{changed}</p>)}
           </SectionItemContentAdded>
         )}
-        {(placementContractsRemoved?.length || 0) > 0 && (
+        {placementContractsChanged && (placementContractsRemoved?.length || 0) > 0 && (
           <SectionItemContentRemoved marginTop="var(--spacing-s)">
             {placementContractsRemoved?.map((removed) => <p key={removed}>{removed}</p>)}
           </SectionItemContentRemoved>
