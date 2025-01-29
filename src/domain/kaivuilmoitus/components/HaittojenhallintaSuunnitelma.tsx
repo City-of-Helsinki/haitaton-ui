@@ -177,6 +177,7 @@ export default function KaivuilmoitusHaittojenhallintaSuunnitelma({
                   variant="supplementary"
                   iconLeft={<IconPlusCircle />}
                   onClick={() => setVisible(haitta)}
+                  data-testid={`lisaa_${haitta}`}
                 >
                   {t('hankeForm:haittojenHallintaForm:addControlPlan')}
                 </Button>

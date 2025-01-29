@@ -54,6 +54,7 @@ import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsF
 import useSendApplication from '../application/hooks/useSendApplication';
 import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
 import HaittojenHallinta from './HaittojenHallinta';
+import FormErrorsNotification from './components/FormErrorsNotification';
 
 type Props = {
   hankeData: HankeData;
@@ -235,12 +236,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     setShowSendDialog(false);
   }
 
-  function handleStepChange() {
-    if (isDirty) {
-      saveApplication();
-    }
-  }
-
   function saveAndQuit() {
     function handleSuccess(data: Application<KaivuilmoitusData>) {
       navigateToApplicationView(data.id?.toString());
@@ -337,6 +332,16 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     },
   ];
 
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
+  const lastStep = activeStepIndex === formSteps.length - 1;
+
+  function handleStepChange(stepIndex: number) {
+    setActiveStepIndex(stepIndex);
+    if (isDirty) {
+      saveApplication();
+    }
+  }
+
   const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
 
   function validateStepChange(changeStep: () => void, stepIndex: number) {
@@ -352,13 +357,21 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         subHeading={`${hankeData.nimi} (${hankeData.hankeTunnus})`}
         formSteps={formSteps}
         formData={watchFormValues}
+        topElement={
+          <FormErrorsNotification
+            data={watchFormValues}
+            validationContext={{ application }}
+            activeStepIndex={activeStepIndex}
+            lastStep={lastStep}
+          />
+        }
         onStepChange={handleStepChange}
         isLoading={attachmentsUploading}
         isLoadingText={attachmentsUploadingText}
         stepChangeValidator={validateStepChange}
         onSubmit={handleSubmit(openSendDialog)}
       >
-        {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
+        {function renderFormActions(activeStep, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {
             // Make sure that application name is valid before saving and quitting
             const applicationValid = await trigger('applicationData.name', {
@@ -377,7 +390,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
             ? attachmentsUploadingText
             : t('common:buttons:savingText');
 
-          const lastStep = activeStepIndex === formSteps.length - 1;
           const isDraft = isApplicationDraft(getValues('alluStatus') as AlluStatus | null);
           const isContact = isContactIn(signedInUser, getValues('applicationData'));
           const showSendButton = lastStep && isDraft && isValid;
@@ -385,7 +397,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
 
           return (
             <FormActions
-              activeStepIndex={activeStepIndex}
+              activeStepIndex={activeStep}
               totalSteps={formSteps.length}
               onPrevious={handlePrevious}
               onNext={handleNext}

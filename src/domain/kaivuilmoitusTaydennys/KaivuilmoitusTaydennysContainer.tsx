@@ -45,14 +45,12 @@ import ApplicationSaveNotification from '../application/components/ApplicationSa
 import TaydennysCancel from '../application/taydennys/components/TaydennysCancel';
 import Attachments from './Attachments';
 import useAttachments from '../application/hooks/useAttachments';
-import FormFieldsErrorSummary from '../forms/components/FormFieldsErrorSummary';
-import { mapValidationErrorToErrorListItem } from '../kaivuilmoitus/mapValidationErrorToErrorListItem';
-import { useFormErrorsByPage } from '../kaivuilmoitus/hooks/useFormErrorsByPage';
 import ReviewAndSend from './ReviewAndSend';
 import { isContactIn } from '../application/utils';
 import useSendTaydennys from '../application/taydennys/hooks/useSendTaydennys';
 import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
+import FormErrorsNotification from '../kaivuilmoitus/components/FormErrorsNotification';
 
 type Props = {
   taydennys: Taydennys<KaivuilmoitusData>;
@@ -211,15 +209,7 @@ export default function KaivuilmoitusTaydennysContainer({
   ];
 
   const [activeStepIndex, setActiveStepIndex] = useState(0);
-  const formErrorsByPage = useFormErrorsByPage(watchFormValues, { application: taydennys });
-
-  const formErrorsNotification = formErrorsByPage[activeStepIndex].length > 0 && (
-    <FormFieldsErrorSummary notificationLabel={t('hakemus:missingFields:notification:pageLabel')}>
-      {formErrorsByPage[activeStepIndex].map((error) =>
-        mapValidationErrorToErrorListItem(error, t, getValues),
-      )}
-    </FormFieldsErrorSummary>
-  );
+  const lastStep = activeStepIndex === formSteps.length - 1;
 
   function saveTaydennys(handleSuccess?: () => void) {
     const formData = getValues();
@@ -296,7 +286,14 @@ export default function KaivuilmoitusTaydennysContainer({
               taydennyspyynto={originalApplication.taydennyspyynto!}
               applicationType="EXCAVATION_NOTIFICATION"
             />
-            <Box mt="var(--spacing-s)">{formErrorsNotification}</Box>
+            <Box mt="var(--spacing-s)">
+              <FormErrorsNotification
+                data={watchFormValues}
+                validationContext={{ application: taydennys }}
+                activeStepIndex={activeStepIndex}
+                lastStep={lastStep}
+              />
+            </Box>
           </>
         }
         isLoading={attachmentsUploading}
@@ -316,7 +313,6 @@ export default function KaivuilmoitusTaydennysContainer({
             }
           }
 
-          const lastStep = activeStepIndex === formSteps.length - 1;
           const showSendButton =
             lastStep &&
             isValid &&

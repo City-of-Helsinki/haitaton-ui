@@ -67,10 +67,10 @@ const postalAddressSchema = yup.object({
 
 const requiredPostalAddressSchema = yup.object({
   streetAddress: yup.object({
-    streetName: yup.string().required(),
+    streetName: yup.string().required().meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
   }),
-  postalCode: yup.string().required(),
-  city: yup.string().required(),
+  postalCode: yup.string().required().meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
+  city: yup.string().required().meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
 });
 
 function ovtRequired(postalAddress: PostalAddress, type: ContactType) {
@@ -82,17 +82,29 @@ function ovtRequired(postalAddress: PostalAddress, type: ContactType) {
 
 export const invoicingCustomerSchema = yup.object().shape(
   {
-    name: yup.string().trim().max(100).required(),
+    name: yup.string().trim().max(100).required().meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
     type: yup.mixed<ContactType>().required(),
-    registryKey: registryKeySchema.required(),
+    registryKey: registryKeySchema.required().meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
     registryKeyHidden: yup.boolean().required(),
     postalAddress: postalAddressSchema.when(['ovt', 'invoicingOperator'], {
       is: (ovt: string, invoicingOperator: string) => !ovt || !invoicingOperator,
       then: () => requiredPostalAddressSchema,
       otherwise: (schema) => schema,
     }),
-    email: yup.string().nullable().trim().email().max(100),
-    phone: yup.string().nullable().phone().trim().max(20),
+    email: yup
+      .string()
+      .nullable()
+      .trim()
+      .email()
+      .max(100)
+      .meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
+    phone: yup
+      .string()
+      .nullable()
+      .phone()
+      .trim()
+      .max(20)
+      .meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
     ovt: yup
       .string()
       .nullable()
@@ -101,14 +113,16 @@ export const invoicingCustomerSchema = yup.object().shape(
       .when(['postalAddress', 'type'], {
         is: ovtRequired,
         then: (schema) => schema.required(),
-      }),
+      })
+      .meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
     invoicingOperator: yup
       .string()
       .nullable()
       .when(['postalAddress', 'type'], {
         is: ovtRequired,
         then: (schema) => schema.required(),
-      }),
+      })
+      .meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
     customerReference: yup.string().nullable(),
   },
   [
