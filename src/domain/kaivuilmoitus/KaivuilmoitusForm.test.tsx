@@ -1743,6 +1743,7 @@ describe('Haittojenhallintasuunnitelma', () => {
       screen.getByText('Pyöräliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
     ).toBeInTheDocument();
     expect(screen.getByTestId('test-PYORALIIKENNE')).toHaveTextContent('3');
+    expect(screen.getByTestId('show-tips-button-PYORALIIKENNE')).toBeInTheDocument();
     expect(
       screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.PYORALIIKENNE'),
     ).toBeRequired();
@@ -1750,11 +1751,13 @@ describe('Haittojenhallintasuunnitelma', () => {
       screen.getByText('Autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
     ).toBeInTheDocument();
     expect(screen.getByTestId('test-AUTOLIIKENNE')).toHaveTextContent('3');
+    expect(screen.getByTestId('show-tips-button-AUTOLIIKENNE')).toBeInTheDocument();
     expect(
       screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.AUTOLIIKENNE'),
     ).toBeRequired();
     expect(screen.getByText('Linja-autojen paikallisliikenne')).toBeInTheDocument();
     expect(screen.queryByTestId('test-LINJAAUTOLIIKENNE')).toHaveTextContent('0');
+    expect(screen.queryByTestId('show-tips-button-LINJAAUTOLIIKENNE')).not.toBeInTheDocument();
     expect(
       screen.getByText(
         'Haitaton ei löytänyt tätä kohderyhmää alueelta. Voit tarvittaessa lisätä toimet haittojen hallintaan.',
@@ -1767,10 +1770,12 @@ describe('Haittojenhallintasuunnitelma', () => {
       screen.getByText('Raitioliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
     ).toBeInTheDocument();
     expect(screen.getByTestId('test-RAITIOLIIKENNE')).toHaveTextContent('5');
+    expect(screen.getByTestId('show-tips-button-RAITIOLIIKENNE')).toBeInTheDocument();
     expect(screen.getByText('Muiden työalueen haittojen hallintasuunnitelma')).toBeInTheDocument();
     expect(screen.getByTestId('test-meluHaitta')).toHaveTextContent('3');
     expect(screen.getByTestId('test-polyHaitta')).toHaveTextContent('5');
     expect(screen.getByTestId('test-tarinaHaitta')).toHaveTextContent('5');
+    expect(screen.getByTestId('show-tips-button-MUUT')).toBeInTheDocument();
   });
 
   test('Nuisance control plan can be filled', async () => {

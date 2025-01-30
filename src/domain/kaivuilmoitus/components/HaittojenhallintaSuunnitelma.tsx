@@ -24,6 +24,7 @@ import {
 import styles from './HaittojenhallintaSuunnitelma.module.scss';
 import HaittojenhallintaMap from './HaittojenhallintaMap';
 import useIsHaittojenhallintaSectionVisible from '../../common/haittojenhallinta/useIsHaittojenhallintaSectionVisible';
+import ProcedureTips from '../../common/haittaIndexes/ProcedureTips';
 
 type Props = {
   hankeAlue: HankeAlue;
@@ -161,13 +162,18 @@ export default function KaivuilmoitusHaittojenhallintaSuunnitelma({
               )}
             </Box>
             {isVisible[haitta] ? (
-              <TextArea
-                name={`applicationData.areas.${index}.haittojenhallintasuunnitelma.${haitta}`}
-                label={t(`kaivuilmoitusForm:haittojenHallinta:labels:${haitta}`)}
-                testId={`applicationData.areas.${index}.haittojenhallintasuunnitelma.${haitta}`}
-                required={indeksi > 0}
-                helperText={t('kaivuilmoitusForm:haittojenHallinta:helperText')}
-              />
+              <>
+                <Box mt="var(--spacing-s)">
+                  <ProcedureTips haittojenhallintaTyyppi={haitta} haittaIndex={indeksi} />
+                </Box>
+                <TextArea
+                  name={`applicationData.areas.${index}.haittojenhallintasuunnitelma.${haitta}`}
+                  label={t(`kaivuilmoitusForm:haittojenHallinta:labels:${haitta}`)}
+                  testId={`applicationData.areas.${index}.haittojenhallintasuunnitelma.${haitta}`}
+                  required={indeksi > 0}
+                  helperText={t('kaivuilmoitusForm:haittojenHallinta:helperText')}
+                />
+              </>
             ) : (
               <>
                 <Box as="p" mb="var(--spacing-s)">
@@ -230,6 +236,9 @@ export default function KaivuilmoitusHaittojenhallintaSuunnitelma({
           showIndex={false}
           className={styles.muutHaittojenHallintaToimetSubSection}
         />
+        <Box mt="var(--spacing-s)">
+          <ProcedureTips haittojenhallintaTyyppi="MUUT" haittaIndex={0} />
+        </Box>
         <Box mt="var(--spacing-m)">
           <TextArea
             name={`applicationData.areas.${index}.haittojenhallintasuunnitelma.${HAITTOJENHALLINTATYYPPI.MUUT}`}
