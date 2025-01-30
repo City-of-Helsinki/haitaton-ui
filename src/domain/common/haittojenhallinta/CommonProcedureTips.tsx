@@ -30,6 +30,7 @@ const CommonProcedureTips: React.FC = () => {
 
     const procedureTips = tipContents.map((tip) => (
       <Accordion
+        key={tip.number}
         heading={tip.heading}
         size="s"
         headingLevel={5}
@@ -68,6 +69,7 @@ const CommonProcedureTips: React.FC = () => {
             </strong>
             {tip.cardLinks.map((linkId) => (
               <Link
+                key={linkId}
                 iconLeft={<IconDocument />}
                 size="M"
                 href={`${CARD.path}${linkId}/${t('routes:CARD:basicLevel')}`}
