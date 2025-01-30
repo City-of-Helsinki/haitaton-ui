@@ -8,6 +8,7 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
     <button
       aria-expanded="false"
       class="Button-module_button__1msFE button_hds-button__2A0je Button-module_secondary__1nABp button_hds-button--secondary__1NOWS Button-module_theme-black__m8giY button_hds-button--theme-black__3K_k4"
+      data-testid="show-tips-button-AUTOLIIKENNE"
       type="button"
     >
       <div
@@ -145,6 +146,7 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
     <button
       aria-expanded="false"
       class="Button-module_button__1msFE button_hds-button__2A0je Button-module_secondary__1nABp button_hds-button--secondary__1NOWS Button-module_theme-black__m8giY button_hds-button--theme-black__3K_k4"
+      data-testid="show-tips-button-AUTOLIIKENNE"
       type="button"
     >
       <div
@@ -291,6 +293,7 @@ exports[`Should show correct tips for LINJAAUTOLIIKENNE and haittaindex 3 1`] = 
     <button
       aria-expanded="false"
       class="Button-module_button__1msFE button_hds-button__2A0je Button-module_secondary__1nABp button_hds-button--secondary__1NOWS Button-module_theme-black__m8giY button_hds-button--theme-black__3K_k4"
+      data-testid="show-tips-button-LINJAAUTOLIIKENNE"
       type="button"
     >
       <div
@@ -420,6 +423,7 @@ exports[`Should show correct tips for MUUT and haittaindex 0 1`] = `
     <button
       aria-expanded="false"
       class="Button-module_button__1msFE button_hds-button__2A0je Button-module_secondary__1nABp button_hds-button--secondary__1NOWS Button-module_theme-black__m8giY button_hds-button--theme-black__3K_k4"
+      data-testid="show-tips-button-MUUT"
       type="button"
     >
       <div
@@ -572,6 +576,7 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 4 1`] = `
     <button
       aria-expanded="false"
       class="Button-module_button__1msFE button_hds-button__2A0je Button-module_secondary__1nABp button_hds-button--secondary__1NOWS Button-module_theme-black__m8giY button_hds-button--theme-black__3K_k4"
+      data-testid="show-tips-button-PYORALIIKENNE"
       type="button"
     >
       <div
@@ -685,6 +690,7 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 5 1`] = `
     <button
       aria-expanded="false"
       class="Button-module_button__1msFE button_hds-button__2A0je Button-module_secondary__1nABp button_hds-button--secondary__1NOWS Button-module_theme-black__m8giY button_hds-button--theme-black__3K_k4"
+      data-testid="show-tips-button-PYORALIIKENNE"
       type="button"
     >
       <div
@@ -804,6 +810,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 4 1`] = `
     <button
       aria-expanded="false"
       class="Button-module_button__1msFE button_hds-button__2A0je Button-module_secondary__1nABp button_hds-button--secondary__1NOWS Button-module_theme-black__m8giY button_hds-button--theme-black__3K_k4"
+      data-testid="show-tips-button-RAITIOLIIKENNE"
       type="button"
     >
       <div
@@ -984,6 +991,7 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 5 1`] = `
     <button
       aria-expanded="false"
       class="Button-module_button__1msFE button_hds-button__2A0je Button-module_secondary__1nABp button_hds-button--secondary__1NOWS Button-module_theme-black__m8giY button_hds-button--theme-black__3K_k4"
+      data-testid="show-tips-button-RAITIOLIIKENNE"
       type="button"
     >
       <div
