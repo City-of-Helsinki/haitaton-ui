@@ -37,6 +37,7 @@ interface HaitatonTestData {
   allu_url: string,
   suomifilogin: string,
   allupw: string
+  hankesalkku: string
 };
 
 interface Testiosoite {
@@ -85,7 +86,8 @@ export const testiData: HaitatonTestData = {
   currentMonth: currentMonth,
   allu_url: process.env.TA_ALLU_TESTING ?? "",
   suomifilogin: process.env.TA_SUOMIFI_LOGIN ?? "",
-  allupw : process.env.TA_ALLU_PW ?? ""
+  allupw : process.env.TA_ALLU_PW ?? "",
+  hankesalkku : process.env.TA_HAIT_TEST_HANKESALKKU ?? ""
 };
 
 export const testiOsoite: Testiosoite = {

@@ -5,6 +5,7 @@ test('Johtoselvityshakemus ei ole käytettävissä ennen kirjautumista', async (
   await page.goto(testiData.testEnvUrl);
   await expect(page.getByLabel('Tee johtoselvityshakemus.', { exact: true })).not.toBeVisible();
   await page.getByLabel('Kirjaudu').click();
+  await page.getByRole('link', { name: 'Suomi.fi identification' }).click();
   await page.getByRole('link', { name: 'Test IdP' }).click();
   await page.getByRole('link', { name: 'Käytä oletusta 210281-' }).click();
   await page.getByRole('button', { name: 'Tunnistaudu' }).click();

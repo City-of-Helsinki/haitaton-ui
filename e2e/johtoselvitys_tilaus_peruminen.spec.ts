@@ -5,6 +5,7 @@ test.beforeEach('Helsinki_login', async ({ page }) => {
   await page.goto(testiData.testEnvUrl);
   await expect(page.getByRole('heading', { name: 'Tervetuloa Haitaton-palveluun' })).toBeVisible();
   await page.getByLabel('Kirjaudu').click();
+  await page.getByRole('link', { name: 'Suomi.fi identification' }).click();
   await expect(page.getByRole('link', { name: 'Test IdP' })).toBeVisible({ timeout: 10_000 });
   await page.getByRole('link', { name: 'Test IdP' }).click();
   await expect(page.getByPlaceholder('-9988')).toBeVisible({ timeout: 10_000 });
