@@ -243,6 +243,8 @@ function KaivuilmoitusAreasInfo({
     const changedHaittaIndexes =
       changedAlue && calculateLiikennehaittaindeksienYhteenveto(changedAlue);
     const haittaIndexesChanged = changedHaittaIndexes && haittaIndexes !== changedHaittaIndexes;
+    const tyonTarkoituksetChanged =
+      changedAlue && muutokset?.includes(`${changedPropertyPrefix}.tyonTarkoitukset`);
     const tyonTarkoituksetAdded = changedAlue?.tyonTarkoitukset?.filter(
       (tyonTarkoitus) => !alue?.tyonTarkoitukset?.includes(tyonTarkoitus),
     );
@@ -281,14 +283,14 @@ function KaivuilmoitusAreasInfo({
           <SectionItemTitle>{t('hakemus:labels:tyonTarkoitus')}</SectionItemTitle>
           <SectionItemContent>
             {alue.tyonTarkoitukset?.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')}
-            {(tyonTarkoituksetAdded?.length || 0) > 0 && (
+            {tyonTarkoituksetChanged && (tyonTarkoituksetAdded?.length || 0) > 0 && (
               <SectionItemContentAdded marginTop="var(--spacing-s)">
                 {tyonTarkoituksetAdded?.map((changed) => (
                   <p key={changed}>{t(`hanke:tyomaaTyyppi:${changed}`)}</p>
                 ))}
               </SectionItemContentAdded>
             )}
-            {(tyonTarkoituksetRemoved?.length || 0) > 0 && (
+            {tyonTarkoituksetChanged && (tyonTarkoituksetRemoved?.length || 0) > 0 && (
               <SectionItemContentRemoved marginTop="var(--spacing-s)">
                 {tyonTarkoituksetRemoved?.map((removed) => (
                   <p key={removed}>{t(`hanke:tyomaaTyyppi:${removed}`)}</p>
