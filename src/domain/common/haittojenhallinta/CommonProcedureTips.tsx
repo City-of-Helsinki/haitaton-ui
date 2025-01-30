@@ -76,7 +76,7 @@ const CommonProcedureTips: React.FC = () => {
                 openInNewTab
                 openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
               >
-                {`${t(`workInstructions:cards:${linkId}:header`)}`}
+                {t(`workInstructions:cards:${linkId}:header`)}
               </Link>
             ))}
           </Box>
