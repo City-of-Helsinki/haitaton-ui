@@ -61,6 +61,7 @@ interface Props {
    */
   stepChangeValidator?: (changeStep: () => void, stepIndex: number) => void;
   formData?: unknown;
+  validationContext?: AnyObject;
 }
 
 /**
@@ -79,6 +80,7 @@ const MultipageForm: React.FC<Props> = ({
   stepChangeValidator,
   topElement,
   formData,
+  validationContext,
 }) => {
   const locale = useLocale();
 
@@ -113,20 +115,23 @@ const MultipageForm: React.FC<Props> = ({
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     stepIndex: number,
   ) {
-    handleStepChange({ type: ACTION_TYPE.SET_ACTIVE, payload: { stepIndex, formData } });
+    handleStepChange({
+      type: ACTION_TYPE.SET_ACTIVE,
+      payload: { stepIndex, formData, validationContext },
+    });
   }
 
   function handlePrevious() {
     handleStepChange({
       type: ACTION_TYPE.SET_ACTIVE,
-      payload: { stepIndex: state.activeStepIndex - 1, formData },
+      payload: { stepIndex: state.activeStepIndex - 1, formData, validationContext },
     });
   }
 
   function handleNext() {
     handleStepChange({
       type: ACTION_TYPE.COMPLETE_STEP,
-      payload: { stepIndex: state.activeStepIndex, formData },
+      payload: { stepIndex: state.activeStepIndex, formData, validationContext },
     });
   }
 

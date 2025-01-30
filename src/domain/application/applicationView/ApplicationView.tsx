@@ -491,6 +491,7 @@ function ApplicationView({
             <FormPagesErrorSummary
               data={taydennys ?? application}
               schema={validationSchema}
+              validationContext={{ application: taydennys ?? application }}
               notificationLabel={t('hakemus:missingFields:notification:hakemusLabel')}
             />
           </Box>

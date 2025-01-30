@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { Button, IconCross, IconPlusCircle, IconSaveDiskette, StepState } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -50,12 +50,14 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   children,
 }) => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const { HANKEPORTFOLIO } = useLocalizedRoutes();
   const navigate = useNavigate();
   const { setNotification } = useGlobalNotification();
   const [showNotification, setShowNotification] = useState<FormNotification | null>(null);
   const [showAddApplicationDialog, setShowAddApplicationDialog] = useState(false);
   const [attachmentsUploading, setAttachmentsUploading] = useState(false);
+  const validationContext = { hanke: formData };
   const formContext = useForm<HankeDataFormState>({
     mode: 'onTouched',
     reValidateMode: 'onChange',
@@ -64,7 +66,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     shouldUnregister: false,
     defaultValues: formData,
     resolver: yupResolver(hankeSchema),
-    context: { hanke: formData },
+    context: validationContext,
   });
 
   const {
@@ -112,6 +114,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       setShowNotification('error');
     },
     onSuccess(data) {
+      queryClient.setQueryData(['hanke', data.hankeTunnus], data);
       setValue('hankeTunnus', data.hankeTunnus);
       setValue('tormaystarkasteluTulos', data.tormaystarkasteluTulos);
       setValue('status', data.status);
@@ -208,7 +211,6 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       label: t('hankeForm:haittojenHallintaForm:header'),
       state: StepState.available,
       validationSchema: haittojenhallintaPublicSchema,
-      context: { hanke: formData },
     },
     {
       element: <HankeFormYhteystiedot errors={errors} register={register} hanke={formValues} />,
@@ -240,7 +242,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     {
       alueet,
     },
-    { hanke: formData },
+    validationContext,
   );
   const yhteystiedotErrors = useValidationErrors(hankeYhteystiedotPublicSchema, {
     omistajat,
@@ -262,6 +264,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       <FormPagesErrorSummary
         data={watchFormValues}
         schema={hankeSchema}
+        validationContext={validationContext}
         notificationLabel={t('hankePortfolio:draftState:labels:insufficientPhases')}
       />
     )) ||
@@ -327,6 +330,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
           isLoadingText={attachmentsUploadingText}
           topElement={formErrorsNotification}
           formData={watchFormValues}
+          validationContext={validationContext}
           stepChangeValidator={validateStepChange}
         >
           {function renderFormActions(activeStep, handlePrevious, handleNext) {
