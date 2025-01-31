@@ -81,7 +81,10 @@ export default function TaydennysContactsSummary({
           />
         )}
         {invoicingCustomerChanged && (
-          <InvoicingCustomerSummary invoicingCustomer={invoicingCustomer} />
+          <InvoicingCustomerSummary
+            invoicingCustomer={invoicingCustomer}
+            title={t('form:yhteystiedot:titles:invoicingCustomerInfo')}
+          />
         )}
       </FormSummarySection>
     </>
