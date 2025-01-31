@@ -71,7 +71,7 @@ function AttachmentSummary({
         {mandates && mandates.length > 0 && <FileDownloadList files={mandates} />}
         {taydennysMandates && taydennysMandates.length > 0 && (
           <SectionItemContentAdded mt="var(--spacing-xs)">
-            <TaydennysAttachmentsList attachments={taydennysMandates} />
+            <TaydennysAttachmentsList attachments={taydennysMandates} allowDownload={false} />
           </SectionItemContentAdded>
         )}
       </SectionItemContent>

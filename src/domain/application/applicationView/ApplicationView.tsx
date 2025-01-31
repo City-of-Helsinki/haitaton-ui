@@ -982,13 +982,29 @@ function ApplicationView({
                   />
                 )}
                 {applicationType === 'EXCAVATION_NOTIFICATION' && (
-                  <InvoicingCustomerSummary
-                    invoicingCustomer={(applicationData as KaivuilmoitusData).invoicingCustomer}
-                    taydennysInvoicingCustomer={
+                  <>
+                    <InvoicingCustomerSummary
+                      invoicingCustomer={(applicationData as KaivuilmoitusData).invoicingCustomer}
+                      title={t('form:yhteystiedot:titles:invoicingCustomerInfo')}
+                    />
+                    {application.taydennys?.muutokset.includes('invoicingCustomer') &&
                       (application.taydennys?.applicationData as KaivuilmoitusData)
-                        ?.invoicingCustomer
-                    }
-                  />
+                        .invoicingCustomer && (
+                        <InvoicingCustomerSummary
+                          invoicingCustomer={
+                            (application.taydennys?.applicationData as KaivuilmoitusData)
+                              .invoicingCustomer ??
+                            (applicationData as KaivuilmoitusData).invoicingCustomer
+                          }
+                          title={
+                            !(applicationData as KaivuilmoitusData).invoicingCustomer
+                              ? t('form:yhteystiedot:titles:invoicingCustomerInfo')
+                              : undefined
+                          }
+                          ContentContainer={SectionItemContentAdded}
+                        />
+                      )}
+                  </>
                 )}
                 {paperDecisionReceiver && (
                   <PaperDecisionReceiverSummary paperDecisionReceiver={paperDecisionReceiver} />
