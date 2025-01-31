@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { perustaja, vastaava, suorittaja, rakennuttaja, asianhoitaja, testiData, testiOsoite, } from './_setup';
+import { perustaja, vastaava, suorittaja, testiData, testiOsoite, } from './_setup';
 
 test.beforeEach('Helsinki_login', async ({ page }) => {
   await page.goto(testiData.testEnvUrl);
@@ -17,7 +17,7 @@ test.beforeEach('Helsinki_login', async ({ page }) => {
   await expect(page.getByLabel('Tee johtoselvityshakemus.', { exact: true })).toBeVisible({ timeout: 10000, });
 });
 
-test('Johtoselvityshakemus_tilaus', async ({ page }) => {
+test('Johtoselvityshakemus_tilaus ja käsittely', async ({ page }) => {
   test.setTimeout(120000);
   test.slow();
   await page.getByLabel('Tee johtoselvityshakemus.', { exact: true }).click();
@@ -39,8 +39,7 @@ test('Johtoselvityshakemus_tilaus', async ({ page }) => {
   await page.getByText('Hakemus tallennettu').waitFor({ state: 'hidden', timeout: 10000 });
   await page.getByLabel('Valitse päivämäärä').first().click();
   await page.getByRole('button', { name: `${testiData.currentMonth} ${testiData.todayDate}`, exact: true }).click();
-  await page.getByLabel('Valitse päivämäärä').nth(1).click();
-  await page.getByRole('button', { name: `${testiData.currentMonth} ${testiData.todayDate + 1}`, exact: true, }).click();
+  await page.getByLabel('Työn arvioitu loppupäivä*').fill(testiData.tomorrowType);
   // Merkkaa kartta-canvas
   await page.getByTestId('draw-control-Polygon').click();
   await page.locator('canvas').first().click({ position: { x: 454, y: 221, } });

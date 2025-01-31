@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { perustaja, vastaava, suorittaja, rakennuttaja, asianhoitaja, testiData, testiOsoite, tarkistaTulokset } from './_setup';
+import { testiData } from './_setup';
 
 test('Johtoselvityshakemus ei ole käytettävissä ennen kirjautumista', async ({ page }) => {
   await page.goto(testiData.testEnvUrl);

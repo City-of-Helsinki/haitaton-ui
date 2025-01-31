@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { perustaja, vastaava, suorittaja, rakennuttaja, asianhoitaja, testiData, testiOsoite, tarkistaTulokset } from './_setup';
+import { perustaja, suorittaja, rakennuttaja, testiData, testiOsoite } from './_setup';
 
 test.beforeEach('Helsinki_login', async ({ page }) => {
   await page.goto(testiData.testEnvUrl);
@@ -46,8 +46,8 @@ test('Uusi hanke', async ({ page }) => {
     await page.locator('canvas').first().click({ position: { x: 454, y: 221, }, });
     await page.getByLabel('Valitse päivämäärä').first().click();
     await page.getByRole('button', { name: `${testiData.currentMonth} ${testiData.todayDate}`, exact: true }).click();
-    await page.getByLabel('Valitse päivämäärä').nth(1).click();
-    await page.getByRole('button', { name: `${testiData.currentMonth} ${testiData.todayDate + 1}`, exact: true, }).click();
+    await page.getByLabel('Haittojen loppupäivä*').click();
+    await page.getByLabel('Haittojen loppupäivä*').fill(testiData.tomorrowType);
     await page.getByRole('button', { name: 'Meluhaitta *' }).click();
     await page.getByRole('option', { name: 'Satunnainen meluhaitta' }).click();
     await page.getByRole('button', { name: 'Pölyhaitta *' }).click();

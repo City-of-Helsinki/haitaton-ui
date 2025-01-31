@@ -5,8 +5,9 @@ const today: Date = new Date();
 const todayFull: string = today.toISOString();
 const todayDate: number = today.getDate()
 
-const tomorrow: Date = new Date(today);
+const tomorrow: Date = new Date();
 tomorrow.setDate(today.getDate() + 1);
+const tommorowType = `${tomorrow.getDate()}.${tomorrow.getMonth() +1}.${tomorrow.getFullYear()}`
 const currentMonth: string = today.toLocaleString('fi-FI', { month: "long" });
 
 export async function tarkistaTulokset(page, hakemusLinkki, teksti) {
@@ -36,8 +37,9 @@ interface HaitatonTestData {
   currentMonth: string,
   allu_url: string,
   suomifilogin: string,
-  allupw: string
-  hankesalkku: string
+  allupw: string,
+  hankesalkku: string,
+  tomorrowType: string,
 };
 
 interface Testiosoite {
@@ -87,7 +89,8 @@ export const testiData: HaitatonTestData = {
   allu_url: process.env.TA_ALLU_TESTING ?? "",
   suomifilogin: process.env.TA_SUOMIFI_LOGIN ?? "",
   allupw : process.env.TA_ALLU_PW ?? "",
-  hankesalkku : process.env.TA_HAIT_TEST_HANKESALKKU ?? ""
+  hankesalkku : process.env.TA_HAIT_TEST_HANKESALKKU ?? "",
+  tomorrowType: tommorowType,
 };
 
 export const testiOsoite: Testiosoite = {
