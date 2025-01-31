@@ -1,10 +1,11 @@
 import { test, expect } from '@playwright/test';
-import { perustaja, vastaava, suorittaja, rakennuttaja, asianhoitaja, testiData, testiOsoite, tarkistaTulokset } from './_setup';
+import { perustaja, vastaava, suorittaja, testiData, testiOsoite, tarkistaTulokset } from './_setup';
 
 test.beforeEach('Helsinki_login', async ({ page }) => {
   await page.goto(testiData.testEnvUrl);
   await expect(page.getByRole('heading', { name: 'Tervetuloa Haitaton-palveluun' })).toBeVisible();
   await page.getByLabel('Kirjaudu').click();
+  await page.getByRole('link', { name: 'Suomi.fi identification' }).click();
   await expect(page.getByRole('link', { name: 'Test IdP' })).toBeVisible();
   await page.getByRole('link', { name: 'Test IdP' }).click();
   await expect(page.getByPlaceholder('-9988')).toBeVisible();
@@ -38,8 +39,7 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   await page.getByText('Hakemus tallennettu').waitFor({ state: 'hidden', timeout: 10000 });
   await page.getByLabel('Valitse päivämäärä').first().click();
   await page.getByRole('button', { name: `${testiData.currentMonth} ${testiData.todayDate}`, exact: true }).click();
-  await page.getByLabel('Valitse päivämäärä').nth(1).click();
-  await page.getByRole('button', { name: `${testiData.currentMonth} ${testiData.todayDate + 1}`, exact: true, }).click();
+  await page.getByLabel('Työn arvioitu loppupäivä*').fill(testiData.tomorrowType);
   // Merkkaa kartta-canvas
   await page.getByTestId('draw-control-Polygon').click();
   await page.locator('canvas').first().click({ position: { x: 454, y: 221, } });
@@ -83,8 +83,6 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Peruuta' })).toBeVisible();
   await page.getByRole('button', { name: 'Vahvista' }).click();
   await expect(page.getByText('Hakemus lähetetty')).toBeVisible();
-  const johtoselvityshakemusUrl = page.url()
-  // console.log(johtoselvityshakemusUrl)
   const hakemuksenTunnus = await page.getByTestId('allu_tunnus').textContent();
   const linkkiHakemukseen = await page.locator('a').filter({ hasText: /HAI/gm }).getAttribute('href');
   const linkkiHakemukseenEdit = linkkiHakemukseen?.slice(3);
