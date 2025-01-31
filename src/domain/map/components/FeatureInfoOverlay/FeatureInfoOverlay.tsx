@@ -38,13 +38,23 @@ function HoverElement({
  */
 function FeatureInfoOverlay({
   render,
+  all = false,
 }: {
   render: (feature?: FeatureLike | null) => React.ReactNode;
+  all?: boolean;
 }) {
   const drawInteraction = useDrawInteraction();
   const isModifying = useIsModifying();
 
   const hoveredFeaturesWithPixel = useFeaturesAtPixel();
+  let hoveredFeatures = hoveredFeaturesWithPixel.map((f) => f?.feature);
+  if (all) {
+    // last feature is the Hanke feature which should be rendered at the top
+    hoveredFeatures = hoveredFeatures.reverse();
+  } else {
+    // only show the top feature info overlay
+    hoveredFeatures = hoveredFeatures.slice(0, 1);
+  }
 
   const {
     state: { selectedFeature },
@@ -65,7 +75,11 @@ function FeatureInfoOverlay({
       {/* Use div element for hovered features. */}
       {!selectedFeature && !drawInteraction?.getActive() && !isModifying && (
         <HoverElement position={hoveredFeaturesWithPixel[0]?.featurePixel}>
-          {render(hoveredFeaturesWithPixel[0]?.feature)}
+          <>
+            {hoveredFeatures.map((feature, index) => (
+              <React.Fragment key={index}>{render(feature)}</React.Fragment>
+            ))}
+          </>
         </HoverElement>
       )}
     </>

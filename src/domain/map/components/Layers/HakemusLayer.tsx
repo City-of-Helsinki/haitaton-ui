@@ -6,6 +6,7 @@ import { ApplicationArea, KaivuilmoitusAlue } from '../../../application/types/a
 import VectorLayer from '../../../../common/components/map/layers/VectorLayer';
 import useApplicationFeatures from '../../hooks/useApplicationFeatures';
 import { OverlayProps } from '../../../../common/components/map/types';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   hakemusId: number;
@@ -18,6 +19,7 @@ export default function HakemusLayer({
   layerStyle,
   featureProperties = {},
 }: Readonly<Props>) {
+  const { t } = useTranslation();
   const source = useRef(new VectorSource());
   const { data: application } = useApplication(hakemusId);
   let tyoalueet: ApplicationArea[] = [];
@@ -30,7 +32,7 @@ export default function HakemusLayer({
           );
   }
 
-  useApplicationFeatures(source.current, tyoalueet, {
+  useApplicationFeatures(source.current, t, tyoalueet, {
     overlayProps: new OverlayProps({
       heading: application
         ? `${application.applicationData.name} (${application.applicationIdentifier})`
