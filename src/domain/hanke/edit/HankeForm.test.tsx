@@ -854,6 +854,18 @@ describe('HankeForm', () => {
       expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('3');
     });
   });
+
+  test('Should show notification if haitta indexes increase', async () => {
+    const { feature } = await setupHaittaIndexUpdateTest();
+
+    feature.changed();
+
+    expect(
+      await screen.findByText(
+        'Hankealueille lasketut liikennehaittaindeksit ovat muuttuneet. Tarkista haittojenhallintasuunnitelma.',
+      ),
+    ).toBeInTheDocument();
+  });
 });
 
 describe('New contact person form and contact person dropdown', () => {

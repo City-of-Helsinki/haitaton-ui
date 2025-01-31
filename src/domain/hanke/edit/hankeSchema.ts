@@ -115,6 +115,7 @@ export const hankeSchema: yup.ObjectSchema<HankeDataFormState> = yup.object().sh
   [FORMFIELD.TOTEUTTAJAT]: yup.array(yhteystietoSchema).defined(),
   [FORMFIELD.MUUTTAHOT]: yup.array(muuYhteystietoSchema).defined(),
   geometriesChanged: yup.boolean(),
+  haittaIndexesIncreased: yup.boolean().isFalse(),
   id: yup.number(),
   hankeTunnus: yup.string(),
   onYKTHanke: yup.boolean().nullable(),
