@@ -29,6 +29,7 @@ export default function FormErrorsNotification({
       <FormPagesErrorSummary
         data={data}
         schema={validationSchema}
+        validationContext={validationContext}
         notificationLabel={t('hakemus:missingFields:notification:hakemusLabel')}
       />
     );

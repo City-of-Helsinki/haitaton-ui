@@ -339,7 +339,7 @@ const HankeView: React.FC<Props> = ({
 
       <InformationViewHeader backgroundColor="var(--color-summer-light)">
         <MainHeading>{hankeData?.nimi}</MainHeading>
-        <Text tag="h2" styleAs="h3" weight="bold" spacingBottom="l">
+        <Text tag="h2" styleAs="h3" weight="bold" spacingBottom="l" data-testid="hanke-tunnus">
           {hankeData?.hankeTunnus}
         </Text>
         <Text tag="p" styleAs="body-s" spacingBottom="l">
@@ -416,6 +416,7 @@ const HankeView: React.FC<Props> = ({
             <FormPagesErrorSummary
               data={hankeData}
               schema={hankeSchema}
+              validationContext={{ hanke: hankeData }}
               notificationLabel={t('hankePortfolio:draftState:labels:insufficientPhases')}
               testId="hankeDraftStateNotification"
             />

@@ -16,6 +16,7 @@ function sortPages(a: string, b: string) {
 type Props<T> = {
   data: T;
   schema: ObjectSchema<AnyObject>;
+  validationContext?: AnyObject;
   notificationLabel: string;
   /** Additional class names to apply to the notification */
   className?: string;
@@ -28,12 +29,13 @@ type Props<T> = {
 export default function FormPagesErrorSummary<T>({
   data,
   schema,
+  validationContext,
   notificationLabel,
   className,
   testId,
 }: Readonly<Props<T>>) {
   const { t } = useTranslation();
-  const validationErrors = useValidationErrors(schema, data);
+  const validationErrors = useValidationErrors(schema, data, validationContext);
   const schemasWithErrors = validationErrors.map(
     (error) => reach(schema, error.path as string).describe() as SchemaDescription,
   );

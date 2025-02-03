@@ -173,7 +173,6 @@ export default function KaivuilmoitusTaydennysContainer({
       label: t('hankeForm:haittojenHallintaForm:header'),
       state: StepState.available,
       validationSchema: haittojenhallintaSuunnitelmaSchema,
-      context: { application: taydennys },
     },
     {
       element: <Contacts hankeTunnus={hankeData.hankeTunnus} />,
@@ -280,6 +279,7 @@ export default function KaivuilmoitusTaydennysContainer({
         subHeading={`${hankeData.nimi} (${hankeData.hankeTunnus})`}
         formSteps={formSteps}
         formData={watchFormValues}
+        validationContext={{ application: watchFormValues }}
         topElement={
           <>
             <TaydennyspyyntoNotification
@@ -289,7 +289,7 @@ export default function KaivuilmoitusTaydennysContainer({
             <Box mt="var(--spacing-s)">
               <FormErrorsNotification
                 data={watchFormValues}
-                validationContext={{ application: taydennys }}
+                validationContext={{ application: watchFormValues }}
                 activeStepIndex={activeStepIndex}
                 lastStep={lastStep}
               />

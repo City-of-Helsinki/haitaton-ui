@@ -99,11 +99,12 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       propertyDeveloperWithContacts: null,
     },
   };
+  const [validationContext, setValidationContext] = useState({ application });
   const formContext = useForm<KaivuilmoitusFormValues>({
     mode: 'onTouched',
     defaultValues: merge(initialValues, convertApplicationDataToFormState(application)),
     resolver: yupResolver(validationSchema),
-    context: { application },
+    context: validationContext,
   });
   const {
     getValues,
@@ -130,18 +131,21 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     showSaveNotification,
     setShowSaveNotification,
   } = useSaveApplication<KaivuilmoitusData, KaivuilmoitusCreateData, KaivuilmoitusUpdateData>({
-    onCreateSuccess({ id }) {
-      setValue('id', id);
+    onCreateSuccess(data) {
+      setValidationContext({ application: data });
+      setValue('id', data.id);
     },
-    onUpdateSuccess({
-      applicationData: {
-        customerWithContacts,
-        contractorWithContacts,
-        propertyDeveloperWithContacts,
-        representativeWithContacts,
-        invoicingCustomer,
-      },
-    }) {
+    onUpdateSuccess(data) {
+      setValidationContext({ application: data });
+      const {
+        applicationData: {
+          customerWithContacts,
+          contractorWithContacts,
+          propertyDeveloperWithContacts,
+          representativeWithContacts,
+          invoicingCustomer,
+        },
+      } = data;
       if (customerWithContacts) {
         setValue(
           'applicationData.customerWithContacts.customer.yhteystietoId',
@@ -305,7 +309,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       label: t('hankeForm:haittojenHallintaForm:header'),
       state: StepState.available,
       validationSchema: haittojenhallintaSuunnitelmaSchema,
-      context: { application },
     },
     {
       element: <Contacts hankeTunnus={hankeData.hankeTunnus} />,
@@ -360,11 +363,12 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         topElement={
           <FormErrorsNotification
             data={watchFormValues}
-            validationContext={{ application }}
+            validationContext={{ application: watchFormValues }}
             activeStepIndex={activeStepIndex}
             lastStep={lastStep}
           />
         }
+        validationContext={{ application: watchFormValues }}
         onStepChange={handleStepChange}
         isLoading={attachmentsUploading}
         isLoadingText={attachmentsUploadingText}

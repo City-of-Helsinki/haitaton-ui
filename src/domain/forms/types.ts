@@ -10,8 +10,6 @@ export interface StepperStep {
   label: string;
   state: StepState;
   validationSchema?: ObjectSchema<AnyObject>;
-  /** Context object for validation */
-  context?: AnyObject;
 }
 
 export interface State {
@@ -21,7 +19,7 @@ export interface State {
 
 export interface Action {
   type: ACTION_TYPE;
-  payload: { stepIndex: number; formData?: unknown };
+  payload: { stepIndex: number; formData?: unknown; validationContext?: AnyObject };
 }
 
 export enum FORM_PAGES {
