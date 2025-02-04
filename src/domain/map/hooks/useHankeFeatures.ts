@@ -11,7 +11,11 @@ import { OverlayProps } from '../../../common/components/map/types';
  * and add liikennehaittaindeksi as property
  * for each feature
  */
-export default function useHankeFeatures(source: Vector, hankkeet: HankeData[]) {
+export default function useHankeFeatures(
+  source: Vector,
+  hankkeet: HankeData[],
+  fullDetails = true,
+) {
   useEffect(() => {
     source.clear();
     hankkeet.forEach((hanke) => {
@@ -35,9 +39,9 @@ export default function useHankeFeatures(source: Vector, hankkeet: HankeData[]) 
               id: alue.id,
               overlayProps: new OverlayProps({
                 heading: alue.nimi,
-                subHeading: `${hanke.nimi} (${hanke.hankeTunnus})`,
-                startDate: alue.haittaAlkuPvm,
-                endDate: alue.haittaLoppuPvm,
+                subHeading: fullDetails ? `${hanke.nimi} (${hanke.hankeTunnus})` : null,
+                startDate: fullDetails ? alue.haittaAlkuPvm : null,
+                endDate: fullDetails ? alue.haittaLoppuPvm : null,
                 backgroundColor: 'var(--color-summer-light)',
                 enableCopyArea: true,
               }),
@@ -52,5 +56,5 @@ export default function useHankeFeatures(source: Vector, hankkeet: HankeData[]) 
       }
     });
     source.dispatchEvent('featuresAdded');
-  }, [source, hankkeet]);
+  }, [source, hankkeet, fullDetails]);
 }
