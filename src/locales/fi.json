@@ -723,6 +723,7 @@
       "instructions2": "Kartan vasemmassa reunassa olevilla kulkumuotovalitsimilla voit tarkastella hanke- ja työalueiden haittaindeksejä tietylle kulkumuodolle. Kaikki kulkumuodot ovat oletuksena aktiivisina, voit vaihtaa näkyvien kulkumuotojen määrää klikkaamalla ikoneja. Kartalla näkyy valittujen kulkumuotojen kriittisin indeksiväri.",
       "noAlueet": "Lisää hankealueita täyttääksesi tietoja",
       "nuisanceControlPlanSubHeader": "Haittojenhallintasuunnitelma",
+      "noHankeNuisanceDetected": "Haitaton ei ole tunnistanut hankealueelta tätä kohderyhmää",
       "instructionsPlan": "Kerro haittojenhallintasuunnitelmassa, millä toimenpiteillä hallitset hankealueita koskevat haitat. Muistathan käydä läpi kaikki hankealueet.",
       "subHeaderPlan": "Tarkista aina nämä toimenpiteet",
       "helperText": "Hankealueella tehtävät tai sovitut toimet haittojen hallitsemiseksi tai estämiseksi.",
@@ -1166,6 +1167,7 @@
       "instructions4": "Tarkenna haittojenhallintasuunnitelmassa, millä toimenpiteillä hallitset työalueitasi koskevat haitat. Hankealueille määritellyt haittojenhallintatoimet näkyvät työalueiden suunnitelman pohjana. Muistathan käydä läpi kaikki työalueet.",
       "nuisanceControlPlanSubHeader": "$t(hankeForm:haittojenHallintaForm:nuisanceControlPlanSubHeader)",
       "helperText": "Työalueilla tehtävät tai sovitut toimet haittojen hallitsemiseksi tai estämiseksi",
+      "hankeHaittaindeksi": "Hankealueen haittaindeksi",
       "haittaindeksi": "Työalueiden haittaindeksi",
       "labels": {
         "YLEINEN": "Toimet työalueiden haittojen hallintaan",

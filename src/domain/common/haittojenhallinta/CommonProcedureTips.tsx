@@ -103,8 +103,7 @@ const CommonProcedureTips: React.FC = () => {
           '--header-font-size': 'var(--fontsize-heading-s)',
         }}
       >
-        {' '}
-        {renderProcedureTips()}
+        <Box mb="var(--spacing-s)"> {renderProcedureTips()}</Box>
       </Accordion>
     </Box>
   );
