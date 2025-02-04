@@ -709,7 +709,8 @@
       "noAlueet": "Piirrä alue kartalle merkitäksesi haitta-arviot.",
       "haitatHeader": "Alueen haitta-arviot",
       "haitatInstructions": "Anna arvio suurimmista mahdollisista vaikutuksista hankealueella.",
-      "removeAreaButton": "Poista alue"
+      "removeAreaButton": "Poista alue",
+      "haittaIndexesChanged": "Hankealueille lasketut liikennehaittaindeksit ovat muuttuneet. Tarkista haittojenhallintasuunnitelma."
     },
     "tyomaanTiedotForm": {
       "header": "Hankkeen lisätiedot"

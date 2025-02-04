@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Tab, TabList, TabPanel, Tabs } from 'hds-react';
+import { Notification, Tab, TabList, TabPanel, Tabs } from 'hds-react';
 import { Feature } from 'ol';
 import VectorSource from 'ol/source/Vector';
 import Geometry from 'ol/geom/Geometry';
@@ -20,6 +20,7 @@ import { getAreaDefaultName } from './utils';
 import useHaittaIndexes from '../hooks/useHaittaIndexes';
 import HaittaIndexes from '../../common/haittaIndexes/HaittaIndexes';
 import useDrawContext from '../../../common/components/map/modules/draw/useDrawContext';
+import { haveHaittaIndexesIncreased } from '../../common/haittaIndexes/utils';
 
 function getEmptyArea(feature: Feature): Omit<HankeAlueFormState, 'geometriat'> {
   return {
@@ -40,7 +41,13 @@ const HankeFormAlueet: React.FC<FormProps & { drawSource: VectorSource }> = ({
   drawSource,
 }) => {
   const { t } = useTranslation();
-  const { setValue, trigger, watch, getValues } = useFormContext<HankeDataFormState>();
+  const {
+    setValue,
+    trigger,
+    watch,
+    getValues,
+    formState: { errors },
+  } = useFormContext<HankeDataFormState>();
   const {
     fields: hankeAlueet,
     append,
@@ -81,6 +88,13 @@ const HankeFormAlueet: React.FC<FormProps & { drawSource: VectorSource }> = ({
     };
   }, [getValues, setValue]);
 
+  useEffect(() => {
+    // Reset haittaIndexesIncreased on unmount
+    return function cleanup() {
+      setValue('haittaIndexesIncreased', false, { shouldValidate: true });
+    };
+  }, [setValue]);
+
   const calculateHaittaIndexes = useCallback(
     (hankeAlue: HankeAlueFormState) => {
       const hankeAlueIndex = watchHankeAlueet?.indexOf(hankeAlue);
@@ -108,6 +122,12 @@ const HankeFormAlueet: React.FC<FormProps & { drawSource: VectorSource }> = ({
           },
           {
             onSuccess(data) {
+              if (
+                hanke.status === 'PUBLIC' &&
+                haveHaittaIndexesIncreased(data, hankeAlue.tormaystarkasteluTulos)
+              ) {
+                setValue('haittaIndexesIncreased', true, { shouldValidate: true });
+              }
               hankeAlue.feature?.setProperties({
                 liikennehaittaindeksi: data.liikennehaittaindeksi.indeksi,
               });
@@ -119,7 +139,7 @@ const HankeFormAlueet: React.FC<FormProps & { drawSource: VectorSource }> = ({
         );
       }
     },
-    [setValue, haittaIndexesMutation, watchHankeAlueet],
+    [setValue, haittaIndexesMutation, watchHankeAlueet, hanke.status],
   );
 
   const handleAddFeature = useCallback(
@@ -203,6 +223,16 @@ const HankeFormAlueet: React.FC<FormProps & { drawSource: VectorSource }> = ({
           drawSource={drawSource}
         />
       </Box>
+
+      {errors.haittaIndexesIncreased && (
+        <Notification
+          type="alert"
+          label={t('hankeForm:hankkeenAlueForm:haittaIndexesChanged')}
+          notificationAriaLabel={t('common:components:notification:notification')}
+          autoClose={false}
+          style={{ marginBottom: 'var(--spacing-s)' }}
+        />
+      )}
 
       {hankeAlueet.length < 1 ? (
         <Box textAlign="center" mt="var(--spacing-2-xl)" mb="var(--spacing-2-xl)">

@@ -66,6 +66,7 @@ export interface HankeAlueFormState extends HankeAlue {
 
 export interface HankeDataFormState extends PartialExcept<HankeData, HankeContactTypeKey> {
   geometriesChanged?: boolean; // "virtualField"
+  haittaIndexesIncreased?: boolean; // "virtualField"
   alueet?: HankeAlueFormState[];
 }
 
