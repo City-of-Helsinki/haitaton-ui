@@ -92,6 +92,7 @@ const CommonProcedureTips: React.FC = () => {
       paddingBottom="var(--spacing-s)"
       mb="var(--spacing-l)"
       backgroundColor="var(--color-black-5)"
+      data-testid="test-common-nuisances"
     >
       <Accordion
         heading={t('hankeForm:haittojenHallintaForm:subHeaderPlan')}
