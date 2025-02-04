@@ -27,7 +27,6 @@ export default function useApplicationFeatures(
 
         feature.setProperties(
           {
-            workAreaName: areaName,
             overlayProps: new OverlayProps({
               heading: areaName,
               backgroundColor: 'var(--color-suomenlinna-light)',
@@ -45,5 +44,5 @@ export default function useApplicationFeatures(
       source.addFeatures(applicationFeatures);
       featuresAdded.current = true;
     }
-  }, [source, areas, featureProperties]);
+  }, [source, areas, featureProperties, t]);
 }
