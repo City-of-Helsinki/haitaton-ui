@@ -56,5 +56,5 @@ export default function useHankeFeatures(
       }
     });
     source.dispatchEvent('featuresAdded');
-  }, [source, hankkeet]);
+  }, [source, hankkeet, fullDetails]);
 }
