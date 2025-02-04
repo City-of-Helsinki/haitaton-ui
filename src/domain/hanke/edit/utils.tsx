@@ -16,9 +16,14 @@ import {
 } from './types';
 import { formatFeaturesToHankeGeoJSON, getFeatureFromHankeGeometry } from '../../map/utils';
 import { getSurfaceArea } from '../../../common/components/map/utils';
-import { HankkeenHakemus } from '../../application/types/application';
+import {
+  ApplicationArea,
+  HankkeenHakemus,
+  KaivuilmoitusAlue,
+} from '../../application/types/application';
 import { isApplicationCancelled, isApplicationPending } from '../../application/utils';
 import { TFunction } from 'i18next';
+import booleanContains from '@turf/boolean-contains';
 
 function mapToAreaDates(areas: HankeAlue[] | undefined, key: 'haittaAlkuPvm' | 'haittaLoppuPvm') {
   return areas?.reduce((result: Date[], area) => {
@@ -207,5 +212,43 @@ export function mapValidationErrorToErrorListItem(
         {linkText}
       </Link>
     </li>
+  );
+}
+
+/**
+ * Check if hanke area contains any hakemus areas
+ */
+export function hankealueContaisHakemusalues(
+  hankeAlue: HankeAlue,
+  applications?: HankkeenHakemus[] | null,
+) {
+  if (!applications) {
+    return false;
+  }
+  const hankeFeature = hankeAlue.geometriat?.featureCollection.features[0];
+  if (!hankeFeature) {
+    return false;
+  }
+  const johtoselvitysApplications = applications.filter(
+    (hakemus) => hakemus.applicationType == 'CABLE_REPORT',
+  );
+  const kaivuilmoitusApplications = applications.filter(
+    (hakemus) => hakemus.applicationType == 'EXCAVATION_NOTIFICATION',
+  );
+  const johtoselvitysGeometries = johtoselvitysApplications
+    .flatMap((hakemus) => (hakemus.applicationData.areas || []) as ApplicationArea[])
+    .filter((area) => area.geometry)
+    .map((area) => area.geometry);
+  const kaivuilmoitusGeometries = kaivuilmoitusApplications
+    .flatMap((hakemus) =>
+      ((hakemus.applicationData.areas || []) as KaivuilmoitusAlue[]).flatMap(
+        (area) => area.tyoalueet,
+      ),
+    )
+    .filter((area) => area.geometry)
+    .map((area) => area.geometry);
+  const hakemusGeometries = [...johtoselvitysGeometries, ...kaivuilmoitusGeometries];
+  return hakemusGeometries.some(
+    (hakemusGeometry) => hakemusGeometry && booleanContains(hankeFeature, hakemusGeometry),
   );
 }

@@ -778,6 +778,21 @@ describe('HankeForm', () => {
     expect(screen.queryByText(/hankealue 1/i)).not.toBeInTheDocument();
   });
 
+  test('Should not allow deletion of hanke area if there are application areas inside it', async () => {
+    const hanke = cloneDeep(hankkeet[1] as HankeDataFormState);
+    const { user } = await setupAlueetPage(hanke);
+
+    await user.click(screen.getByRole('button', { name: 'Poista alue' }));
+
+    const { getByRole, getByText } = within(screen.getByRole('dialog'));
+    expect(getByText('Aluetta ei voi poistaa')).toBeInTheDocument();
+    expect(getByRole('button', { name: 'Sulje' })).toBeInTheDocument();
+
+    await user.click(getByRole('button', { name: 'Sulje' }));
+
+    expect(screen.queryByText(/hankealue 1/i)).toBeInTheDocument();
+  });
+
   async function setupHaittaIndexUpdateTest(
     nuisanceResponse = {
       autoliikenne: {
