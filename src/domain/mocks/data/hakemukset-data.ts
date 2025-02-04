@@ -1652,7 +1652,6 @@ const hakemukset: Application[] = [
       constructionWork: true,
       maintenanceWork: false,
       emergencyWork: false,
-      propertyConnectivity: false,
       rockExcavation: false,
       cableReportDone: true,
       requiredCompetence: true,

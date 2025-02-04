@@ -57,7 +57,7 @@ export default function HaittojenhallintaSummary({
             <TabPanel key={alue.hankealueId}>
               <HaittojenhallintasuunnitelmaInfo
                 key={alue.hankealueId}
-                kaivuilmoitusAlue={alue}
+                alue={alue}
                 hankealue={hankealue}
                 visibleHaittojenhallintaTyypit={visibleHaittojenhallintaTyypit}
               />
