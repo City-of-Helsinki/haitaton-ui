@@ -1,10 +1,9 @@
 import { Box } from '@chakra-ui/react';
-import { Accordion, IconDocument, IconLightbulb, Link } from 'hds-react';
+import { Accordion, IconDocument, Link } from 'hds-react';
 import React from 'react';
 
 import { Trans, useTranslation } from 'react-i18next';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
-import Text from '../../../common/components/text/Text';
 
 type CardLink = { number: number; heading: string; content: string; cardLinks: number[] };
 
@@ -36,7 +35,7 @@ const CommonProcedureTips: React.FC = () => {
         headingLevel={5}
         theme={{
           '--content-font-size': 'var(--fontsize-body-m)',
-          '--header-font-size': 'var(--fontsize-heading-s)',
+          '--header-font-size': 'var(--fontsize-heading-xs)',
         }}
       >
         <Box as="p" mb="var(--spacing-s)">
@@ -88,14 +87,24 @@ const CommonProcedureTips: React.FC = () => {
   };
 
   return (
-    <Box mb="var(--spacing-l)" padding="var(--spacing-s)" backgroundColor="var(--color-black-5)">
-      <Box display="flex" flexDirection="row" gap="var(--spacing-xs)" alignItems="center">
-        <IconLightbulb />
-        <Text tag="h4" styleAs="h3" weight="bold" data-testid="test-common-nuisances">
-          {t('hankeForm:haittojenHallintaForm:subHeaderPlan')}
-        </Text>
-      </Box>
-      {renderProcedureTips()}
+    <Box
+      paddingX="var(--spacing-s)"
+      paddingBottom="var(--spacing-s)"
+      mb="var(--spacing-l)"
+      backgroundColor="var(--color-black-5)"
+    >
+      <Accordion
+        heading={t('hankeForm:haittojenHallintaForm:subHeaderPlan')}
+        size="s"
+        headingLevel={4}
+        initiallyOpen
+        theme={{
+          '--header-font-size': 'var(--fontsize-heading-s)',
+        }}
+      >
+        {' '}
+        {renderProcedureTips()}
+      </Accordion>
     </Box>
   );
 };
