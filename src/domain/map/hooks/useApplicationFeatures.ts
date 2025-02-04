@@ -40,7 +40,7 @@ export default function useApplicationFeatures(
         );
 
         return feature;
-      }) as Feature<Geometry>[];
+      });
       source.addFeatures(applicationFeatures);
       featuresAdded.current = true;
     }
