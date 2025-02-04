@@ -289,6 +289,8 @@ describe('HankeForm', () => {
   test('Nuisance control plan is shown correctly', async () => {
     await setupHaittojenHallintaPage();
 
+    expect(screen.getByTestId('test-common-nuisances')).toBeInTheDocument();
+
     expect(screen.getByText('Yleisten haittojen hallintasuunnitelma')).toBeInTheDocument();
     expect(screen.getByTestId('alueet.0.haittojenhallintasuunnitelma.YLEINEN')).toBeRequired();
     expect(

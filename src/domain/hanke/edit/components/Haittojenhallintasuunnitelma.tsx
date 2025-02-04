@@ -1,5 +1,5 @@
 import React from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Box, Flex } from '@chakra-ui/react';
 import { $enum } from 'ts-enum-util';
 import { FORMFIELD, HankeDataFormState } from '../types';
@@ -62,24 +62,6 @@ const HankkeenHaittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke
     <div>
       <Box as="h4" mt="var(--spacing-m)" mb="var(--spacing-xs)" fontWeight="bold">
         {t('hankeForm:haittojenHallintaForm:subHeaderPlan')}
-      </Box>
-      <Box mb="var(--spacing-m)" ml="var(--spacing-l)">
-        <Trans i18nKey="hankeForm:haittojenHallintaForm:instructionsGeneral">
-          <ul>
-            <li>Varmista jalankulun turvallisuus ja esteettömyys</li>
-            <li>Varmista kulkuyhteydet kiinteistöihin</li>
-            <li>Tee yhteensovitus muiden hankkeiden ja töiden sekä niiden kiertoreittien kanssa</li>
-            <li>
-              Ilmoita aina katujen sulkemisesta liikenteeltä Pelastuslaitokselle ja Poliisille
-            </li>
-            <li>Tarkista aina, onko hankkeesi tai työsi erikoiskuljetusten reitillä</li>
-            <li>
-              Tarkista vaikutukset olevaan liikennevalo-ohjaukseen (kaistajärjestelyt, ilmaisimet,
-              valojen toimivuus)
-            </li>
-            <li>Poikkeavat työajat</li>
-          </ul>
-        </Trans>
       </Box>
       <div key={HAITTOJENHALLINTATYYPPI.YLEINEN} className="formWpr">
         <TextArea
