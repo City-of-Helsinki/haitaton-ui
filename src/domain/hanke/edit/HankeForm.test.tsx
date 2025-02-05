@@ -17,6 +17,8 @@ import { Polygon } from 'ol/geom';
 import { waitForElementToBeRemoved } from '@testing-library/react';
 import { PathParams } from 'msw/lib/core/utils/matching/matchRequestUrl';
 import { Haittojenhallintasuunnitelma } from '../../common/haittojenhallinta/types';
+import hankkeenHakemukset from '../../mocks/data/hakemukset-data';
+import { hankealueContaisHakemusalues } from './utils';
 
 afterEach(cleanup);
 
@@ -457,7 +459,7 @@ describe('HankeForm', () => {
   });
 
   test('Should be able to save and quit', async () => {
-    const hanke = cloneDeep(hankkeet[1]);
+    const hanke = cloneDeep(hankkeet[0] as HankeDataFormState);
     const hankeName = hanke.nimi;
 
     const { user } = render(
@@ -473,8 +475,8 @@ describe('HankeForm', () => {
     fillBasicInformation({ name: hankeName });
     await user.click(screen.getByRole('button', { name: 'Tallenna ja keskeytä' }));
 
-    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2');
-    expect(screen.getByText(`Hanke ${hankeName} (HAI22-2) tallennettu omiin hankkeisiin.`));
+    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-1');
+    expect(screen.getByText(`Hanke ${hankeName} (HAI22-1) tallennettu omiin hankkeisiin.`));
   });
 
   test('Should be able to save hanke in the last page', async () => {
@@ -652,6 +654,7 @@ describe('HankeForm', () => {
     const testHanke = {
       ...hankkeet[0],
       kuvaus: '',
+      tyomaaKatuosoite: '',
       vaihe: null,
     };
 
@@ -780,6 +783,13 @@ describe('HankeForm', () => {
 
   test('Should not allow deletion of hanke area if there are application areas inside it', async () => {
     const hanke = cloneDeep(hankkeet[1] as HankeDataFormState);
+    hanke.vaihe = 'OHJELMOINTI';
+    const hankealue = hanke.alueet![0];
+    console.log(hankealue.geometriat?.featureCollection.features);
+    const hakemukset = hankkeenHakemukset;
+    const x = hankealueContaisHakemusalues(hankealue, hakemukset);
+    console.log('Does hanke area contain hakemus areas?', x);
+
     const { user } = await setupAlueetPage(hanke);
 
     await user.click(screen.getByRole('button', { name: 'Poista alue' }));
