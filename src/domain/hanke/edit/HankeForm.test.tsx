@@ -459,7 +459,7 @@ describe('HankeForm', () => {
   });
 
   test('Should be able to save and quit', async () => {
-    const hanke = cloneDeep(hankkeet[0] as HankeDataFormState);
+    const hanke = cloneDeep(hankkeet[0]);
     const hankeName = hanke.nimi;
 
     const { user } = render(
