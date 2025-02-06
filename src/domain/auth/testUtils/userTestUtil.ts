@@ -5,7 +5,7 @@ const client_id = 'test-client';
 
 const tokenExpirationTimeInSeconds = 3600;
 
-export function createUser(placeUserToStorage = true): User {
+export function createUser(placeUserToStorage = true, ad_groups?: string[]): User {
   const nowAsSeconds = Math.round(Date.now() / 1000);
   const expires_in = tokenExpirationTimeInSeconds;
   const expires_at = nowAsSeconds + expires_in;
@@ -23,6 +23,7 @@ export function createUser(placeUserToStorage = true): User {
       name: 'Test User',
       email: 'test.user@mail.com',
       amr: ['validAmr'],
+      ad_groups,
     },
     refresh_token: 'refresh_token',
     scope: 'openid profile',

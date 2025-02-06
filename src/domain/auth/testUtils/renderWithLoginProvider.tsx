@@ -27,6 +27,7 @@ export type RenderWithLoginProviderProps = {
   state: OidcClientState;
   returnUser: boolean;
   placeUserToStorage?: boolean;
+  userADGroups?: string[];
   errorType?: 'SIGNIN_ERROR' | 'INVALID_OR_EXPIRED_USER' | 'RENEWAL_FAILED';
   children?: React.ReactNode;
 };
@@ -35,6 +36,7 @@ export function renderWithLoginProvider({
   state,
   returnUser,
   placeUserToStorage = true,
+  userADGroups,
   errorType,
   children,
 }: RenderWithLoginProviderProps) {
@@ -45,7 +47,7 @@ export function renderWithLoginProvider({
     connect: (targetBeacon) => {
       beacon = targetBeacon;
       beacon.addListener(triggerForAllOidcClientSignals, (signal) => {
-        const user = createUser(placeUserToStorage);
+        const user = createUser(placeUserToStorage, userADGroups);
         const oidcClient = signal.context as OidcClient;
         jest.spyOn(oidcClient, 'getState').mockReturnValue(state);
         jest.spyOn(oidcClient, 'getUser').mockReturnValue(user);

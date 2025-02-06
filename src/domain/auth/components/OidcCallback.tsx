@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import { Flex } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Link as HDSLink, LoginCallbackHandler, OidcClientError } from 'hds-react';
+import { Link as HDSLink, LoginCallbackHandler, OidcClientError, User } from 'hds-react';
 import Text from '../../../common/components/text/Text';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import Link from '../../../common/components/Link/Link';
+import ADGroupsError from './ADGroupsError';
+import isStringArray from '../../../common/utils/isStringArray';
+import hasAllowedADGroups from '../adGroups';
+import { useNavigate } from 'react-router-dom';
 
-type AuthenticationError = 'permissionDeniedByUserError' | 'unknown';
+type AuthenticationError = 'permissionDeniedByUserError' | 'unknown' | 'adGroupsError';
 
 type AuthErrorProps = {
   errorText: string;
@@ -52,9 +56,18 @@ const AuthError = ({ errorText }: Readonly<AuthErrorProps>) => {
 const OidcCallback = () => {
   const { t } = useTranslation();
   const [authenticationError, setAuthenticationError] = useState<AuthenticationError | null>(null);
+  const navigate = useNavigate();
 
-  function onSuccess() {
-    window.location.pathname = '/';
+  function onSuccess(user: User) {
+    const { ad_groups } = user.profile;
+    const useADFilter = window._env_.REACT_APP_USE_AD_FILTER === '1';
+    // Check if user has required AD groups (when signing in with AD and AD filtering is enabled)
+    if (useADFilter && isStringArray(ad_groups) && !hasAllowedADGroups(ad_groups)) {
+      setAuthenticationError('adGroupsError');
+      return;
+    }
+
+    navigate('/', { replace: true });
   }
 
   function onError(error?: OidcClientError) {
@@ -74,6 +87,7 @@ const OidcCallback = () => {
         {authenticationError === 'unknown' && (
           <AuthError errorText={t('authentication:genericError')} />
         )}
+        {authenticationError === 'adGroupsError' && <ADGroupsError />}
       </>
     </LoginCallbackHandler>
   );
