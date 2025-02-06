@@ -64,8 +64,8 @@ const hakemukset: Application[] = [
           },
         },
       ],
-      startTime: new Date('2023-07-13T21:59:59.999Z'),
-      endTime: new Date('2023-07-15T21:59:59.999Z'),
+      startTime: new Date('2023-07-14T00:00:00.000Z'),
+      endTime: new Date('2023-07-16T00:00:00.000Z'),
       workDescription: 'Kuvaus',
       contractorWithContacts: {
         customer: {
@@ -224,8 +224,8 @@ const hakemukset: Application[] = [
           },
         },
       ],
-      startTime: new Date('2023-07-13T21:59:59.999Z'),
-      endTime: new Date('2023-09-31T21:59:59.999Z'),
+      startTime: new Date('2023-07-14T00:00:00.000Z'),
+      endTime: new Date('2023-10-01T00:00:00.000Z'),
       workDescription: 'Kaivetaan kuoppia Mannerheimintiellä',
       contractorWithContacts: {
         customer: {
@@ -298,8 +298,8 @@ const hakemukset: Application[] = [
         ],
       },
       areas: [],
-      startTime: new Date('2023-07-13T21:59:59.999Z'),
-      endTime: new Date('2023-09-31T21:59:59.999Z'),
+      startTime: new Date('2023-07-14T00:00:00.000Z'),
+      endTime: new Date('2023-10-01T00:00:00.000Z'),
       workDescription: 'Kaivetaan kuoppia Mannerheimintiellä',
       contractorWithContacts: {
         customer: {
@@ -395,8 +395,8 @@ const hakemukset: Application[] = [
           },
         },
       ],
-      startTime: new Date('2023-06-13T21:59:59.999Z'),
-      endTime: new Date('2023-10-15T21:59:59.999Z'),
+      startTime: new Date('2023-06-14T00:00:00.000Z'),
+      endTime: new Date('2023-10-16T00:00:00.000Z'),
       workDescription: 'Kairataan Mannerheimintiellä',
       contractorWithContacts: {
         customer: {
@@ -597,8 +597,8 @@ const hakemukset: Application[] = [
         ],
       },
       areas: [],
-      startTime: new Date('2023-07-13T21:59:59.999Z'),
-      endTime: new Date('2023-09-31T21:59:59.999Z'),
+      startTime: new Date('2023-07-14T00:00:00.000Z'),
+      endTime: new Date('2023-10-01T00:00:00.000Z'),
       workDescription: 'Kaivetaan kuoppia Mannerheimintiellä',
       contractorWithContacts: {
         customer: {
@@ -1036,8 +1036,8 @@ const hakemukset: Application[] = [
           },
         },
       ],
-      startTime: new Date('2023-07-13T21:59:59.999Z'),
-      endTime: new Date('2023-09-31T21:59:59.999Z'),
+      startTime: new Date('2023-07-14T00:00:00.000Z'),
+      endTime: new Date('2023-10-01T00:00:00.000Z'),
       workDescription: 'Kaivetaan kuoppia Mannerheimintiellä',
       contractorWithContacts: {
         customer: {
@@ -1351,8 +1351,8 @@ const hakemukset: Application[] = [
           },
         },
       ],
-      startTime: new Date('2024-08-13T21:59:59.999Z'),
-      endTime: new Date('2024-10-29T21:59:59.999Z'),
+      startTime: new Date('2024-08-14T00:00:00.000Z'),
+      endTime: new Date('2024-10-30T00:00:00.000Z'),
       customerWithContacts: {
         customer: {
           type: 'COMPANY',
