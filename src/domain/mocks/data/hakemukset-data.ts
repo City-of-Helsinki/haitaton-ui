@@ -65,7 +65,7 @@ const hakemukset: Application[] = [
         },
       ],
       startTime: new Date('2023-07-13T21:59:59.999Z'),
-      endTime: new Date('2023-07-13T21:59:59.999Z'),
+      endTime: new Date('2023-07-15T21:59:59.999Z'),
       workDescription: 'Kuvaus',
       contractorWithContacts: {
         customer: {

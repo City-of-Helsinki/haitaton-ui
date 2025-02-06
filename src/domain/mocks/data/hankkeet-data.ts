@@ -294,8 +294,8 @@ const hankkeet: HankeDataDraft[] = [
     kuvaus:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
     tyomaaKatuosoite: 'Mannerheimintie 6',
-    alkuPvm: '2023-01-02T00:00:00Z',
-    loppuPvm: '2023-02-24T00:00:00Z',
+    alkuPvm: '2023-06-14T00:00:00Z',
+    loppuPvm: '2023-10-16T00:00:00Z',
     vaihe: 'OHJELMOINTI',
     tyomaaTyyppi: ['KAUKOLAMPO'],
     version: 0,
@@ -347,8 +347,8 @@ const hankkeet: HankeDataDraft[] = [
     alueet: [
       {
         id: 1,
-        haittaAlkuPvm: new Date('2023-01-02T21:59:59.999Z'),
-        haittaLoppuPvm: new Date('2023-02-24T21:59:59.999Z'),
+        haittaAlkuPvm: new Date('2023-06-13T21:59:59.999Z'),
+        haittaLoppuPvm: new Date('2023-10-15T21:59:59.999Z'),
         meluHaitta: HANKE_MELUHAITTA.SATUNNAINEN_MELUHAITTA,
         polyHaitta: HANKE_POLYHAITTA.TOISTUVA_POLYHAITTA,
         tarinaHaitta: HANKE_TARINAHAITTA.JATKUVA_TARINAHAITTA,

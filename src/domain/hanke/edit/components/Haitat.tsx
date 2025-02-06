@@ -19,7 +19,11 @@ import {
 } from '../../../types/hanke';
 import styles from './Haitat.module.scss';
 import TextInput from '../../../../common/components/textInput/TextInput';
-import { getAreaDefaultName, hankealueContaisHakemusalues } from '../utils';
+import {
+  getHankealueDateLimits,
+  getApplicationsInsideHankealue,
+  getAreaDefaultName,
+} from '../utils';
 import ConfirmationDialog from '../../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import { useApplicationsForHanke } from '../../../application/hooks/useApplications';
 
@@ -39,7 +43,6 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea, onChangeArea }) => {
   const watchHankeAlue = watch(`${FORMFIELD.HANKEALUEET}.${index}`) as HankeAlue;
   const haittaAlkuPvm = watchHankeAlue.haittaAlkuPvm;
   const haittaLoppuPvm = watchHankeAlue.haittaLoppuPvm;
-  const minEndDate = haittaAlkuPvm && new Date(haittaAlkuPvm);
 
   const [areaToRemove, setAreaToRemove] = useState<number | null>(null);
   const [cannotRemoveArea, setCannotRemoveArea] = useState(false);
@@ -50,9 +53,13 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea, onChangeArea }) => {
   );
 
   const { data: hankkeenHakemukset } = useApplicationsForHanke(hanketunnus, true);
-  const applicationAreasInHankeArea = hankealueContaisHakemusalues(
-    watchHankeAlue,
-    hankkeenHakemukset?.applications,
+  const hakemukset = hankkeenHakemukset?.applications || [];
+  const applicationsInsideHankealue = getApplicationsInsideHankealue(watchHankeAlue, hakemukset);
+  const hasApplicationAreasInsideHankeArea = applicationsInsideHankealue.length > 0;
+
+  const [maxStartDate, minEndDate] = getHankealueDateLimits(
+    haittaAlkuPvm,
+    applicationsInsideHankealue,
   );
 
   useEffect(() => {
@@ -97,7 +104,9 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea, onChangeArea }) => {
             theme="black"
             iconLeft={<IconCross />}
             onClick={() =>
-              applicationAreasInHankeArea ? setCannotRemoveArea(true) : setAreaToRemove(index)
+              hasApplicationAreasInsideHankeArea
+                ? setCannotRemoveArea(true)
+                : setAreaToRemove(index)
             }
           >
             {t('hankeForm:hankkeenAlueForm:removeAreaButton')}
@@ -117,6 +126,8 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea, onChangeArea }) => {
             name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.HAITTA_ALKU_PVM}`}
             label={t(`hankeForm:labels:${FORMFIELD.HAITTA_ALKU_PVM}`)}
             locale={locale}
+            maxDate={maxStartDate || undefined}
+            initialMonth={maxStartDate || undefined}
             helperText={t('form:helperTexts:dateInForm')}
             onValueChange={handleNuisancesChange}
             required

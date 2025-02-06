@@ -35,6 +35,7 @@ import { useValidationErrors } from '../../forms/hooks/useValidationErrors';
 import DrawProvider from '../../../common/components/map/modules/draw/DrawProvider';
 import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
 import FormFieldsErrorSummary from '../../forms/components/FormFieldsErrorSummary';
+import { useApplicationsForHanke } from '../../application/hooks/useApplications';
 
 type Props = {
   formData: HankeDataFormState;
@@ -57,7 +58,12 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   const [showNotification, setShowNotification] = useState<FormNotification | null>(null);
   const [showAddApplicationDialog, setShowAddApplicationDialog] = useState(false);
   const [attachmentsUploading, setAttachmentsUploading] = useState(false);
-  const validationContext = { hanke: formData };
+  const hakemukset = useApplicationsForHanke(formData.hankeTunnus, true);
+  const validationContext = {
+    hanke: formData,
+    hakemukset: hakemukset.data?.applications,
+    dateConflictWithWorkAreasErrorKey: 'dateConflictWithWorkAreas',
+  };
   const formContext = useForm<HankeDataFormState>({
     mode: 'onTouched',
     reValidateMode: 'onChange',

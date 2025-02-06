@@ -114,7 +114,8 @@
       "emailAlreadyUsedInContacts": "Valitsemasi sähköpostiosoite löytyy jo hankkeen käyttäjähallinnasta. Lisää yhteyshenkilö pudotusvalikosta.",
       "emailAlreadyUsedInUserManagement": "Valitsemasi sähköpostiosoite löytyy jo toiselta käyttäjältä.",
       "dateBeforeStart": "Päivämäärä ei voi olla ennen hakemuksen töiden alkamispäivää ({{startDate}})",
-      "dateInFuture": "Päivämäärä ei voi olla tulevaisuudessa"
+      "dateInFuture": "Päivämäärä ei voi olla tulevaisuudessa",
+      "dateConflictWithWorkAreas": "Tällä hankealueella on jo hakemusten kautta lisättyjä työalueita. Et voi lyhentää hankealueen ajankohtaa lyhyemmäksi kuin työalueiden ajankohdat."
     },
     "errors": {
       "areaRequired": "Vähintään yksi alue vaaditaan",
