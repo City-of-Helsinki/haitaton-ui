@@ -101,7 +101,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
   ];
 
   let loginContainer = null;
-  if (!isAuthenticated && !features.publicHankkeet) {
+  if (!isAuthenticated) {
     loginContainer = (
       <div className={styles.loginContainer}>
         <img
@@ -219,6 +219,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
               </Notification>
             </div>
           )}
+          {loginContainer}
 
           <Grid
             templateColumns={`repeat(auto-fit, minmax(300px, ${
@@ -253,8 +254,6 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
               );
             })}
           </Grid>
-
-          {loginContainer}
         </article>
 
         <HankeCreateDialog isOpen={showHankeCreateDialog} onClose={closeHankeCreateDialog} />

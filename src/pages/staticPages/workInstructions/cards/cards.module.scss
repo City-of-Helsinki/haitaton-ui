@@ -36,6 +36,10 @@
   gap: var(--spacing-xs);
   align-items: flex-start;
 
+  img {
+    max-width: 304px;
+  }
+
   p {
     max-width: 304px;
   }
