@@ -241,8 +241,7 @@ yup.addMethod(yup.date, 'validHankealueDate', function isValidHankealueDate(type
     if (!hakemukset) {
       return true;
     }
-    const path = this.path;
-    const indexMatch = path.match(/alueet\[(\d+)]/);
+    const indexMatch = /alueet\[(\d+)]/.exec(this.path);
     const hankealueIndex = indexMatch ? parseInt(indexMatch[1], 10) : undefined;
     if (hankealueIndex === undefined) {
       return true;
