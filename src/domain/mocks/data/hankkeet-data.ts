@@ -347,8 +347,8 @@ const hankkeet: HankeDataDraft[] = [
     alueet: [
       {
         id: 1,
-        haittaAlkuPvm: new Date('2023-06-13T21:59:59.999Z'),
-        haittaLoppuPvm: new Date('2023-10-15T21:59:59.999Z'),
+        haittaAlkuPvm: new Date('2023-06-14T00:00:00.000Z'),
+        haittaLoppuPvm: new Date('2023-10-16T00:00:00.000Z'),
         meluHaitta: HANKE_MELUHAITTA.SATUNNAINEN_MELUHAITTA,
         polyHaitta: HANKE_POLYHAITTA.TOISTUVA_POLYHAITTA,
         tarinaHaitta: HANKE_TARINAHAITTA.JATKUVA_TARINAHAITTA,

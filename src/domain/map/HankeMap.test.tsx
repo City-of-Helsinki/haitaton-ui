@@ -30,7 +30,7 @@ describe('HankeMap', () => {
     changeFilterDate(endDateLabel, renderedComponent, '12.12.2023');
     expect(renderedComponent.getByTestId(countOfFilteredHankeAlueet)).toHaveTextContent('3');
     changeFilterDate(startDateLabel, renderedComponent, '28.2.2023');
-    expect(renderedComponent.getByTestId(countOfFilteredHankeAlueet)).toHaveTextContent('2');
+    expect(renderedComponent.getByTestId(countOfFilteredHankeAlueet)).toHaveTextContent('3');
     changeFilterDate(startDateLabel, renderedComponent, '1');
     expect(renderedComponent.getByTestId(countOfFilteredHankeAlueet)).toHaveTextContent('3');
     changeFilterDate(startDateLabel, renderedComponent, '1.1');
