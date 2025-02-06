@@ -49,6 +49,8 @@ function HankeNuisanceControl({
 }: Readonly<HankeNuisanceControlProps>) {
   const { t } = useTranslation();
 
+  if (!haitta) return null;
+
   const hankeText = haittojenhallintasuunnitelma && haittojenhallintasuunnitelma[haitta];
 
   return (
@@ -58,17 +60,18 @@ function HankeNuisanceControl({
           label={t('hakemus:labels:hankeAreaNuisanceControl')}
           style={{ overflow: 'visible' }}
         >
-          {haitta !== HAITTOJENHALLINTATYYPPI.YLEINEN && (
-            <Box mb="var(--spacing-s)">
-              <HaittaIndexHeading
-                index={indeksi}
-                haittojenhallintaTyyppi={haitta}
-                heading={t('kaivuilmoitusForm:haittojenHallinta:hankeHaittaindeksi')}
-                testId={`test-${haitta}`}
-              />
-            </Box>
-          )}
-          <Box as="p" className="text-sm">
+          {haitta !== HAITTOJENHALLINTATYYPPI.YLEINEN &&
+            haitta !== HAITTOJENHALLINTATYYPPI.MUUT && (
+              <Box mb="var(--spacing-s)">
+                <HaittaIndexHeading
+                  index={indeksi}
+                  haittojenhallintaTyyppi={haitta}
+                  heading={t('kaivuilmoitusForm:haittojenHallinta:hankeHaittaindeksi')}
+                  testId={`test-hanke-${haitta}`}
+                />
+              </Box>
+            )}
+          <Box as="p" className="text-sm" data-testid={`test-hanke-nuisance-control-${haitta}`}>
             {indeksi === 0 && !hankeText
               ? t('hankeForm:haittojenHallintaForm:noHankeNuisanceDetected')
               : hankeText}
@@ -86,7 +89,7 @@ export default function KaivuilmoitusHaittojenhallintaSuunnitelma({
 }: Readonly<Props>) {
   const { t } = useTranslation();
 
-  const hankeTormaystarkasteluTulos = hankeAlue.tormaystarkasteluTulos as HaittaIndexData;
+  const hankeTormaystarkasteluTulos = hankeAlue?.tormaystarkasteluTulos as HaittaIndexData;
   const hankeHaittojenhallintatyypit = sortedLiikenneHaittojenhallintatyyppi(
     hankeTormaystarkasteluTulos,
   );
@@ -231,7 +234,7 @@ export default function KaivuilmoitusHaittojenhallintaSuunnitelma({
             </Box>
             {isVisible[haitta] ? (
               <>
-                <Box mt="var(--spacing-s)">
+                <Box mt="var(--spacing-s)" mb="var(--spacing-s)">
                   <ProcedureTips haittojenhallintaTyyppi={haitta} haittaIndex={indeksi} />
                 </Box>
                 <TextArea
@@ -265,6 +268,7 @@ export default function KaivuilmoitusHaittojenhallintaSuunnitelma({
           as="h4"
           backgroundColor="var(--color-black-10)"
           padding="var(--spacing-m)"
+          mb="var(--spacing-m)"
           className="heading-s"
         >
           {t(`hankeForm:haittojenHallintaForm:nuisanceType:${HAITTOJENHALLINTATYYPPI.MUUT}`)}
@@ -304,7 +308,12 @@ export default function KaivuilmoitusHaittojenhallintaSuunnitelma({
           showIndex={false}
           className={styles.muutHaittojenHallintaToimetSubSection}
         />
+
         <Box mt="var(--spacing-s)">
+          <HankeNuisanceControl
+            haitta={HAITTOJENHALLINTATYYPPI.MUUT}
+            haittojenhallintasuunnitelma={hankeAlue?.haittojenhallintasuunnitelma}
+          />
           <ProcedureTips haittojenhallintaTyyppi="MUUT" haittaIndex={0} />
         </Box>
         <Box mt="var(--spacing-m)">

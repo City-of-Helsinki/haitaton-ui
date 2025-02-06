@@ -1735,6 +1735,31 @@ describe('Haittojenhallintasuunnitelma', () => {
     return renderResult;
   }
 
+  test.only('Hanke nuisance control plans are shown', async () => {
+    await setupHaittojenHallintaPage();
+    expect(screen.queryByTestId('test-hanke-YLEINEN')).not.toBeInTheDocument();
+    expect(screen.getByTestId('test-hanke-PYORALIIKENNE')).toHaveTextContent('2');
+    expect(screen.getByTestId('test-hanke-nuisance-control-PYORALIIKENNE')).toHaveTextContent(
+      'Pyöräliikenteelle koituvien haittojen hallintasuunnitelma',
+    );
+    expect(screen.getByTestId('test-hanke-AUTOLIIKENNE')).toHaveTextContent('1.1');
+    expect(screen.getByTestId('test-hanke-nuisance-control-AUTOLIIKENNE')).toHaveTextContent(
+      'Autoliikenteelle koituvien haittojen hallintasuunnitelma',
+    );
+    expect(screen.getByTestId('test-hanke-LINJAAUTOLIIKENNE')).toHaveTextContent('3');
+    expect(screen.getByTestId('test-hanke-nuisance-control-LINJAAUTOLIIKENNE')).toHaveTextContent(
+      'Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma',
+    );
+    expect(screen.getByTestId('test-hanke-RAITIOLIIKENNE')).toHaveTextContent('2');
+    expect(screen.getByTestId('test-hanke-nuisance-control-RAITIOLIIKENNE')).toHaveTextContent(
+      'Raitioliikenteelle koituvien haittojen hallintasuunnitelma',
+    );
+    expect(screen.queryByTestId('test-hanke-MUUT')).not.toBeInTheDocument();
+    expect(screen.getByTestId('test-hanke-nuisance-control-MUUT')).toHaveTextContent(
+      'Muiden haittojen hallintasuunnitelma',
+    );
+  });
+
   test('Nuisance control plan is shown correctly', async () => {
     await setupHaittojenHallintaPage();
 
