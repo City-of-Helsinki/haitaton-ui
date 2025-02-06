@@ -101,7 +101,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
   ];
 
   let loginContainer = null;
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !features.publicHankkeet) {
     loginContainer = (
       <div className={styles.loginContainer}>
         <img
