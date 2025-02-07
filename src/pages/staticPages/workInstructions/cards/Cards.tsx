@@ -178,6 +178,15 @@ const Card1Additional: React.FC = () => {
           <br />
           <h3>Pikaviestitiedotteet</h3>
           <p>
+            Haastavissa kohteissa voidaan ottaa käyttöön tilattavat tiedotteet tekstiviesteinä tai
+            muun sovitun pikaviestipalvelun kautta. Monella työmaalla on ollut käytössä
+            WhatsApp-ryhmä, jossa kerrotaan työmaan aikatauluista ja välitetään tilannetietoja
+            vähintään kerran viikossa. Jos työmaan viestinnässä on käytössä esim. WhatsApp, tulee
+            työmaataulussa kertoa siitä.
+          </p>
+          <br />
+          <h3>Työmaan esittelykokonaisuus</h3>
+          <p>
             Työmaata esitellään laajemmin esimerkiksi kontin tai seinäkkeen avulla.
             Esittelykokonaisuudessa kerrotaan tarkemmin tehtävästä työstä, sen vaiheista,
             erityispiirteistä ja suunnitelmista. Lisäksi esitellään työmaan suunniteltu lopputulos
