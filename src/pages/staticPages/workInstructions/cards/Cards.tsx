@@ -16,6 +16,9 @@ import card5Img1 from './card5-img1.png';
 import card5Img2 from './card5-img2.png';
 import card5Img3 from './card5-img3.png';
 import card6Img1 from './card6-img1.png';
+import card7Img1 from './card7-img1.png';
+import card7Img2 from './card7-img2.png';
+import card7Img3 from './card7-img3.png';
 
 const Card1Basic: React.FC = () => {
   const { t } = useTranslation();
@@ -524,11 +527,16 @@ const Card3Basic: React.FC = () => {
             </strong>
             Samalla voidaan tarkistaa, minne kävelyn ja pyöräilyn opasteet tulee sijoittaa sekä
             arvioida miten helppo liiketiloihin ja kiinteistöihin on päästä jalan ja pyörällä.
-            Käytöstä poissaolevien liikennevalojen valot tulee huputtaa ja napit tarvittaessa
-            peittää. Käytöstä poissaolevat liikennemerkit tulee huputtaa tai poistaa (myös
-            työmaa-aitauksen sisälle jäävät) työn ajaksi samoin kadunpintaan maalatut liikenteen
-            ohjausmerkinnät, jotka ovat ristiriitaisia väliaikaisten liikennejärjestelyjen kanssa,
-            poistetaan jyrsimällä. Ääniopastus tulee huomioida myös työmaan aikana.
+          </p>
+          <p>
+            <strong>
+              Käytöstä poissaolevien liikennevalojen valot tulee huputtaa ja napit tarvittaessa
+              peittää.
+            </strong>
+            Käytöstä poissaolevat liikennemerkit tulee huputtaa tai poistaa (myös työmaa-aitauksen
+            sisälle jäävät) työn ajaksi, samoin kadunpintaan maalatut liikenteen ohjausmerkinnät,
+            jotka ovat ristiriitaisia väliaikaisten liikennejärjestelyjen kanssa, poistetaan
+            jyrsimällä. Ääniopastus tulee huomioida myös työmaan aikana.
           </p>
           <br />
           <p>
@@ -761,7 +769,7 @@ const Card4Basic: React.FC = () => {
               peittää.
             </strong>{' '}
             Käytöstä poissaolevat liikennemerkit tulee huputtaa tai poistaa (myös työmaa-aitauksen
-            sisälle jäävät) työn ajaksi samoin kadunpintaan maalatut liikenteen ohjausmerkinnät,
+            sisälle jäävät) työn ajaksi, samoin kadunpintaan maalatut liikenteen ohjausmerkinnät,
             jotka ovat ristiriitaisia väliaikaisten liikennejärjestelyjen kanssa, poistetaan
             jyrsimällä.
           </p>
@@ -780,6 +788,7 @@ const Card4Basic: React.FC = () => {
             pyörää kuin poistettuun telineeseen. Kaupunkipyöräasemien osalta tulee olla yhteydessä
             Kaupunkiliikenne Oy:öön, jotta korvaava sijainti löydetään.
           </p>
+          <br />
           <h3>Ohjeet</h3>
           <br />
           <a href="https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf">
@@ -1294,6 +1303,20 @@ const Card7Basic: React.FC = () => {
             </strong>
           </p>
         </Trans>
+        <div className={styles.images}>
+          <div className={styles.imgContainer}>
+            <img src={card7Img1} alt={t('workInstructions:cards:7:image1AltText')}></img>
+            <p>{t('workInstructions:cards:pictureBy')}: Susa Junnola</p>
+          </div>
+          <div className={styles.imgContainer}>
+            <img src={card7Img2} alt={t('workInstructions:cards:7:image2AltText')}></img>
+            <p>{t('workInstructions:cards:pictureBy')}: Ramudden</p>
+          </div>
+          <div className={styles.imgContainer}>
+            <img src={card7Img3} alt={t('workInstructions:cards:7:image3AltText')}></img>
+            <p>{t('workInstructions:cards:pictureBy')}: Ramudden</p>
+          </div>
+        </div>
       </div>
       <AdditionalSummary>
         <Trans
@@ -1712,7 +1735,7 @@ const Card10Additional: React.FC = () => {
           <br />
           <h3>Kaupunkilaisten huomioiminen</h3>
           <p>
-            Lähellä asuvien ja työmaan läheisyydessä liikkuvien asukkaiden huomioinen esim.
+            Lähellä asuvien ja työmaan läheisyydessä liikkuvien asukkaiden huomioiminen esim.
             jakamalla korvatulppia.
           </p>
           <br />
