@@ -51,34 +51,31 @@ function HankeNuisanceControl({
 
   if (!haitta) return null;
 
-  const hankeText = haittojenhallintasuunnitelma && haittojenhallintasuunnitelma[haitta];
+  const hankeText = haittojenhallintasuunnitelma?.[haitta];
 
   return (
-    <>
-      <Box mb="var(--spacing-m)">
-        <Notification
-          label={t('hakemus:labels:hankeAreaNuisanceControl')}
-          style={{ overflow: 'visible' }}
-        >
-          {haitta !== HAITTOJENHALLINTATYYPPI.YLEINEN &&
-            haitta !== HAITTOJENHALLINTATYYPPI.MUUT && (
-              <Box mb="var(--spacing-s)">
-                <HaittaIndexHeading
-                  index={indeksi}
-                  haittojenhallintaTyyppi={haitta}
-                  heading={t('kaivuilmoitusForm:haittojenHallinta:hankeHaittaindeksi')}
-                  testId={`test-hanke-${haitta}`}
-                />
-              </Box>
-            )}
-          <Box as="p" className="text-sm" data-testid={`test-hanke-nuisance-control-${haitta}`}>
-            {indeksi === 0 && !hankeText
-              ? t('hankeForm:haittojenHallintaForm:noHankeNuisanceDetected')
-              : hankeText}
+    <Box mb="var(--spacing-m)">
+      <Notification
+        label={t('hakemus:labels:hankeAreaNuisanceControl')}
+        style={{ overflow: 'visible' }}
+      >
+        {haitta !== HAITTOJENHALLINTATYYPPI.YLEINEN && haitta !== HAITTOJENHALLINTATYYPPI.MUUT && (
+          <Box mb="var(--spacing-s)">
+            <HaittaIndexHeading
+              index={indeksi}
+              haittojenhallintaTyyppi={haitta}
+              heading={t('kaivuilmoitusForm:haittojenHallinta:hankeHaittaindeksi')}
+              testId={`test-hanke-${haitta}`}
+            />
           </Box>
-        </Notification>
-      </Box>
-    </>
+        )}
+        <Box as="p" className="text-sm" data-testid={`test-hanke-nuisance-control-${haitta}`}>
+          {indeksi === 0 && !hankeText
+            ? t('hankeForm:haittojenHallintaForm:noHankeNuisanceDetected')
+            : hankeText}
+        </Box>
+      </Notification>
+    </Box>
   );
 }
 
@@ -222,14 +219,12 @@ export default function KaivuilmoitusHaittojenhallintaSuunnitelma({
                   />
                 </CustomAccordion>
               ) : (
-                <>
-                  <HaittaIndexHeading
-                    index={indeksi}
-                    haittojenhallintaTyyppi={haitta}
-                    heading={t('kaivuilmoitusForm:haittojenHallinta:haittaindeksi')}
-                    testId={`test-${haitta}`}
-                  />
-                </>
+                <HaittaIndexHeading
+                  index={indeksi}
+                  haittojenhallintaTyyppi={haitta}
+                  heading={t('kaivuilmoitusForm:haittojenHallinta:haittaindeksi')}
+                  testId={`test-${haitta}`}
+                />
               )}
             </Box>
             {isVisible[haitta] ? (
