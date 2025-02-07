@@ -17,8 +17,6 @@ import { Polygon } from 'ol/geom';
 import { waitForElementToBeRemoved } from '@testing-library/react';
 import { PathParams } from 'msw/lib/core/utils/matching/matchRequestUrl';
 import { Haittojenhallintasuunnitelma } from '../../common/haittojenhallinta/types';
-import hankkeenHakemukset from '../../mocks/data/hakemukset-data';
-import { hankealueContaisHakemusalues } from './utils';
 
 afterEach(cleanup);
 
@@ -784,11 +782,6 @@ describe('HankeForm', () => {
   test('Should not allow deletion of hanke area if there are application areas inside it', async () => {
     const hanke = cloneDeep(hankkeet[1] as HankeDataFormState);
     hanke.vaihe = 'OHJELMOINTI';
-    const hankealue = hanke.alueet![0];
-    console.log(hankealue.geometriat?.featureCollection.features);
-    const hakemukset = hankkeenHakemukset;
-    const x = hankealueContaisHakemusalues(hankealue, hakemukset);
-    console.log('Does hanke area contain hakemus areas?', x);
 
     const { user } = await setupAlueetPage(hanke);
 
