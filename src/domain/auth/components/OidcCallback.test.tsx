@@ -71,57 +71,59 @@ describe('<OidcCallback />', () => {
     expect(await findByText('Home page')).toBeInTheDocument();
   });
 
-  it('should show AD group error message when user does not have required AD groups', async () => {
-    const OLD_ENV = { ...window._env_ };
-    window._env_ = {
-      ...OLD_ENV,
-      REACT_APP_USE_AD_FILTER: '1',
-      REACT_APP_ALLOWED_AD_GROUPS: 'test_group_2;test_group_3',
-    };
-    const { findByText } = getWrapper({
-      state: 'NO_SESSION',
-      returnUser: true,
-      errorType: undefined,
-      userADGroups: ['test_group'],
+  describe('helsinki AD login', () => {
+    it('should show AD group error message when user does not have required AD groups', async () => {
+      const OLD_ENV = { ...window._env_ };
+      window._env_ = {
+        ...OLD_ENV,
+        REACT_APP_USE_AD_FILTER: '1',
+        REACT_APP_ALLOWED_AD_GROUPS: 'test_group_2;test_group_3',
+      };
+      const { findByText } = getWrapper({
+        state: 'NO_SESSION',
+        returnUser: true,
+        errorType: undefined,
+        userADGroups: ['test_group'],
+      });
+
+      expect(await findByText('Ei käyttöoikeutta Haitaton-asiointiin')).toBeInTheDocument();
+      window._env_ = OLD_ENV;
     });
 
-    expect(await findByText('Ei käyttöoikeutta Haitaton-asiointiin')).toBeInTheDocument();
-    window._env_ = OLD_ENV;
-  });
+    it('should redirect user to home page when user has required AD groups', async () => {
+      const OLD_ENV = { ...window._env_ };
+      window._env_ = {
+        ...OLD_ENV,
+        REACT_APP_USE_AD_FILTER: '1',
+        REACT_APP_ALLOWED_AD_GROUPS: 'test_group;test_group_2;test_group_3',
+      };
+      const { findByText } = getWrapper({
+        state: 'NO_SESSION',
+        returnUser: true,
+        errorType: undefined,
+        userADGroups: ['test_group'],
+      });
 
-  it('should redirect user to home page when user has required AD groups', async () => {
-    const OLD_ENV = { ...window._env_ };
-    window._env_ = {
-      ...OLD_ENV,
-      REACT_APP_USE_AD_FILTER: '1',
-      REACT_APP_ALLOWED_AD_GROUPS: 'test_group;test_group_2;test_group_3',
-    };
-    const { findByText } = getWrapper({
-      state: 'NO_SESSION',
-      returnUser: true,
-      errorType: undefined,
-      userADGroups: ['test_group'],
+      expect(await findByText('Home page')).toBeInTheDocument();
+      window._env_ = OLD_ENV;
     });
 
-    expect(await findByText('Home page')).toBeInTheDocument();
-    window._env_ = OLD_ENV;
-  });
+    it('should redirect user to home page when REACT_APP_USE_AD_FILTER is not in use even when user does not have required AD groups', async () => {
+      const OLD_ENV = { ...window._env_ };
+      window._env_ = {
+        ...OLD_ENV,
+        REACT_APP_USE_AD_FILTER: '0',
+        REACT_APP_ALLOWED_AD_GROUPS: 'test_group_2',
+      };
+      const { findByText } = getWrapper({
+        state: 'NO_SESSION',
+        returnUser: true,
+        errorType: undefined,
+        userADGroups: ['test_group'],
+      });
 
-  it('should redirect user to home page when REACT_APP_USE_AD_FILTER is not in use even when user does not have required AD groups', async () => {
-    const OLD_ENV = { ...window._env_ };
-    window._env_ = {
-      ...OLD_ENV,
-      REACT_APP_USE_AD_FILTER: '0',
-      REACT_APP_ALLOWED_AD_GROUPS: 'test_group_2',
-    };
-    const { findByText } = getWrapper({
-      state: 'NO_SESSION',
-      returnUser: true,
-      errorType: undefined,
-      userADGroups: ['test_group'],
+      expect(await findByText('Home page')).toBeInTheDocument();
+      window._env_ = OLD_ENV;
     });
-
-    expect(await findByText('Home page')).toBeInTheDocument();
-    window._env_ = OLD_ENV;
   });
 });

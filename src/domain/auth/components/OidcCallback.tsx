@@ -1,14 +1,20 @@
 import { useState } from 'react';
 import { Flex } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Link as HDSLink, LoginCallbackHandler, OidcClientError, User } from 'hds-react';
+import {
+  Link as HDSLink,
+  LoginCallbackHandler,
+  OidcClientError,
+  User,
+  useOidcClient,
+} from 'hds-react';
 import Text from '../../../common/components/text/Text';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import Link from '../../../common/components/Link/Link';
 import ADGroupsError from './ADGroupsError';
-import isStringArray from '../../../common/utils/isStringArray';
-import hasAllowedADGroups from '../adGroups';
+import hasAllowedADGroups from '../hasAllowedADGroups';
 import { useNavigate } from 'react-router-dom';
+import toStringArray from '../../../common/utils/toStringArray';
 
 type AuthenticationError = 'permissionDeniedByUserError' | 'unknown' | 'adGroupsError';
 
@@ -57,12 +63,16 @@ const OidcCallback = () => {
   const { t } = useTranslation();
   const [authenticationError, setAuthenticationError] = useState<AuthenticationError | null>(null);
   const navigate = useNavigate();
+  const oidcClient = useOidcClient();
 
   function onSuccess(user: User) {
     const { ad_groups } = user.profile;
     const useADFilter = window._env_.REACT_APP_USE_AD_FILTER === '1';
-    // Check if user has required AD groups (when signing in with AD and AD filtering is enabled)
-    if (useADFilter && isStringArray(ad_groups) && !hasAllowedADGroups(ad_groups)) {
+    const amr = oidcClient.getAmr();
+    const helsinkiADUsed = amr?.includes('helsinkiad');
+
+    // Check if user has required AD groups (when login is done with AD and AD filtering is enabled).
+    if (helsinkiADUsed && useADFilter && !hasAllowedADGroups(toStringArray(ad_groups))) {
       setAuthenticationError('adGroupsError');
       return;
     }

@@ -51,6 +51,9 @@ export function renderWithLoginProvider({
         const oidcClient = signal.context as OidcClient;
         jest.spyOn(oidcClient, 'getState').mockReturnValue(state);
         jest.spyOn(oidcClient, 'getUser').mockReturnValue(user);
+        jest
+          .spyOn(oidcClient, 'getAmr')
+          .mockReturnValue(userADGroups === undefined ? ['suomi_fi'] : ['helsinkiad']);
         if (!returnUser) {
           jest.spyOn(oidcClient, 'handleCallback').mockRejectedValue(handleError);
         } else {
