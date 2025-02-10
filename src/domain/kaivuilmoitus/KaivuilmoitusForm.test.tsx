@@ -1735,7 +1735,7 @@ describe('Haittojenhallintasuunnitelma', () => {
     return renderResult;
   }
 
-  test.only('Hanke nuisance control plans are shown', async () => {
+  test('Hanke nuisance control plans are shown', async () => {
     await setupHaittojenHallintaPage();
     expect(screen.queryByTestId('test-hanke-YLEINEN')).not.toBeInTheDocument();
     expect(screen.getByTestId('test-hanke-PYORALIIKENNE')).toHaveTextContent('2');
