@@ -10,7 +10,9 @@
     "loggingIn": "Kirjaudutaan sisään...",
     "loggingOut": "Kirjaudutaan ulos...",
     "loggingInErrorLabel": "Kirjautumisessa tapahtui virhe",
-    "logoutError": "Uloskirjautumisessa tapahtui virhe"
+    "logoutError": "Uloskirjautumisessa tapahtui virhe",
+    "noADPermissionHeading": "Ei käyttöoikeutta Haitaton-asiointiin",
+    "noADPermissionText": "Sinulla ei ole oikeutta AD-tunnistautumiseen. <a>Kirjaudu ulos</a> Haitattomasta ja yritä uudelleen suomi.fi-tunnistautumisen kautta."
   },
   "common": {
     "increment": "Lisää",

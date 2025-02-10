@@ -1,6 +1,6 @@
 import { Routes, Route, MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
-import { cleanup, waitFor } from '@testing-library/react';
+import { cleanup } from '@testing-library/react';
 import OidcCallback from './OidcCallback';
 import { LOGIN_CALLBACK_PATH } from '../constants';
 import i18n from '../../../locales/i18nForTests';
@@ -9,15 +9,17 @@ import {
   renderWithLoginProvider,
 } from '../testUtils/renderWithLoginProvider';
 
-function getWrapper({ state, returnUser, errorType }: RenderWithLoginProviderProps) {
+function getWrapper({ state, returnUser, errorType, userADGroups }: RenderWithLoginProviderProps) {
   return renderWithLoginProvider({
     state,
     returnUser,
     errorType,
+    userADGroups,
     children: (
       <I18nextProvider i18n={i18n}>
         <MemoryRouter initialEntries={[LOGIN_CALLBACK_PATH]}>
           <Routes>
+            <Route path="/" element={<div>Home page</div>} />
             <Route path={LOGIN_CALLBACK_PATH} element={<OidcCallback />} />
           </Routes>
         </MemoryRouter>
@@ -59,9 +61,69 @@ describe('<OidcCallback />', () => {
     ).toBeInTheDocument();
   });
 
-  it('should redirect user after successful login', async () => {
-    getWrapper({ state: 'NO_SESSION', returnUser: true, errorType: 'RENEWAL_FAILED' });
+  it('should redirect user to home page after successful login', async () => {
+    const { findByText } = getWrapper({
+      state: 'NO_SESSION',
+      returnUser: true,
+      errorType: undefined,
+    });
 
-    await waitFor(() => expect(window.location.pathname).toEqual('/'));
+    expect(await findByText('Home page')).toBeInTheDocument();
+  });
+
+  describe('helsinki AD login', () => {
+    it('should show AD group error message when user does not have required AD groups', async () => {
+      const OLD_ENV = { ...window._env_ };
+      window._env_ = {
+        ...OLD_ENV,
+        REACT_APP_USE_AD_FILTER: '1',
+        REACT_APP_ALLOWED_AD_GROUPS: 'test_group_2;test_group_3',
+      };
+      const { findByText } = getWrapper({
+        state: 'NO_SESSION',
+        returnUser: true,
+        errorType: undefined,
+        userADGroups: ['test_group'],
+      });
+
+      expect(await findByText('Ei käyttöoikeutta Haitaton-asiointiin')).toBeInTheDocument();
+      window._env_ = OLD_ENV;
+    });
+
+    it('should redirect user to home page when user has required AD groups', async () => {
+      const OLD_ENV = { ...window._env_ };
+      window._env_ = {
+        ...OLD_ENV,
+        REACT_APP_USE_AD_FILTER: '1',
+        REACT_APP_ALLOWED_AD_GROUPS: 'test_group;test_group_2;test_group_3',
+      };
+      const { findByText } = getWrapper({
+        state: 'NO_SESSION',
+        returnUser: true,
+        errorType: undefined,
+        userADGroups: ['test_group'],
+      });
+
+      expect(await findByText('Home page')).toBeInTheDocument();
+      window._env_ = OLD_ENV;
+    });
+
+    it('should redirect user to home page when REACT_APP_USE_AD_FILTER is not in use even when user does not have required AD groups', async () => {
+      const OLD_ENV = { ...window._env_ };
+      window._env_ = {
+        ...OLD_ENV,
+        REACT_APP_USE_AD_FILTER: '0',
+        REACT_APP_ALLOWED_AD_GROUPS: 'test_group_2',
+      };
+      const { findByText } = getWrapper({
+        state: 'NO_SESSION',
+        returnUser: true,
+        errorType: undefined,
+        userADGroups: ['test_group'],
+      });
+
+      expect(await findByText('Home page')).toBeInTheDocument();
+      window._env_ = OLD_ENV;
+    });
   });
 });
