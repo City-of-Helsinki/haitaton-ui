@@ -69,7 +69,12 @@ function HankeNuisanceControl({
             />
           </Box>
         )}
-        <Box as="p" className="text-sm" data-testid={`test-hanke-nuisance-control-${haitta}`}>
+        <Box
+          as="p"
+          className="text-sm"
+          style={{ whiteSpace: 'pre-wrap' }}
+          data-testid={`test-hanke-nuisance-control-${haitta}`}
+        >
           {indeksi === 0 && !hankeText
             ? t('hankeForm:haittojenHallintaForm:noHankeNuisanceDetected')
             : hankeText}
