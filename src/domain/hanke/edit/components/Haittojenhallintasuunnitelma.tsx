@@ -60,10 +60,7 @@ const HankkeenHaittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke
 
   return (
     <div>
-      <Box as="h4" mt="var(--spacing-m)" mb="var(--spacing-xs)" fontWeight="bold">
-        {t('hankeForm:haittojenHallintaForm:subHeaderPlan')}
-      </Box>
-      <div key={HAITTOJENHALLINTATYYPPI.YLEINEN} className="formWpr">
+      <Box mt="var(--spacing-m)" key={HAITTOJENHALLINTATYYPPI.YLEINEN} className="formWpr">
         <TextArea
           name={`${FORMFIELD.HANKEALUEET}.${index}.haittojenhallintasuunnitelma.${HAITTOJENHALLINTATYYPPI.YLEINEN}`}
           label={t(
@@ -73,7 +70,7 @@ const HankkeenHaittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke
           required={true}
           helperText={t('hankeForm:haittojenHallintaForm:helperText')}
         />
-      </div>
+      </Box>
       <Box as="p" mb="var(--spacing-m)">
         {t('hankeForm:haittojenHallintaForm:subHeaderTrafficNuisanceIndex')}
       </Box>
