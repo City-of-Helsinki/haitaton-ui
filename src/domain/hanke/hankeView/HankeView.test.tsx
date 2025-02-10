@@ -271,7 +271,7 @@ test('Should navigate to application view when clicking application identifier l
 
   await waitForLoadingToFinish();
   await user.click(screen.getByRole('tab', { name: /hakemukset/i }));
-  await user.click(screen.getByTestId('applicationViewLinkIdentifier-2'));
+  await user.click(screen.getByTestId('applicationViewLinkIdentifier-JS2300001'));
 
   expect(window.location.pathname).toBe('/fi/hakemus/2');
   expect(screen.queryByText('Mannerheimintien kuopat')).toBeInTheDocument();
