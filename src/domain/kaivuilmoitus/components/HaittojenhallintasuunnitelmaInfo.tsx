@@ -50,7 +50,10 @@ const LiikennehaitanHallintasuunnitelmaInfo: React.FC<LiikennehaitanHallintasuun
         <Grid templateColumns="9fr 1fr" gap="var(--spacing-xs)">
           <GridItem>
             <HankkeenHaittojenhallintasuunnitelma
-              text={hankealue?.haittojenhallintasuunnitelma?.[tyyppi] ?? ''}
+              text={
+                hankealue?.haittojenhallintasuunnitelma?.[tyyppi] ||
+                t('hankeForm:haittojenHallintaForm:noHankeNuisanceDetected')
+              }
             />
             <Text spacingTop="xs" weight="bold" styleAs="h6" tag="h6">
               {t('kaivuilmoitusForm:haittojenHallinta:labels:YLEINEN')}
@@ -121,7 +124,7 @@ export const HaittojenhallintasuunnitelmaInfo: React.FC<HaittojenHallintaProps> 
             <Grid templateColumns="9fr 1fr" gap="var(--spacing-xs)">
               <GridItem>
                 <HankkeenHaittojenhallintasuunnitelma
-                  text={hankealue?.haittojenhallintasuunnitelma?.YLEINEN ?? ''}
+                  text={hankealue?.haittojenhallintasuunnitelma?.YLEINEN || ''}
                 />
                 <Box whiteSpace="pre-wrap" wordBreak="break-word" paddingTop="var(--spacing-s)">
                   {alue.haittojenhallintasuunnitelma?.YLEINEN ?? ''}
