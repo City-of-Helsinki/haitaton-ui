@@ -170,8 +170,9 @@
       "fillWithOwnInformation": "Fyll i med egna uppgifter"
     },
     "helperTexts": {
-      "dateInForm": "Ge i formatet DD.MM.ÅÅÅÅ",
-      "areaName": "Du kan valfritt ge området ett namn"
+      "dateInForm": "Ge i formatet DD.MM.ÅÅÅÅ.",
+      "areaName": "Du kan valfritt ge området ett namn",
+      "isPublicInformation": "Detta kommer att publiceras."
     },
     "requiredInstruction": "Alla fält markerade med * är obligatoriska.",
     "requiredForPublicationInstruction": "Fält som är märkta med stjärna * krävs för att publicera projektet.",

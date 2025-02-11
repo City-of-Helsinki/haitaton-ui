@@ -170,8 +170,9 @@
       "fillWithOwnInformation": "Fill out with your own information"
     },
     "helperTexts": {
-      "dateInForm": "Enter in format D.M.YYYY",
-      "areaName": "If you wish, you can name the area"
+      "dateInForm": "Enter in format D.M.YYYY.",
+      "areaName": "If you wish, you can name the area",
+      "isPublicInformation": "This information will be published."
     },
     "requiredInstruction": "All fields marked with the asterisk * are mandatory.",
     "requiredForPublicationInstruction": "Fields with an asterisk (*) are required to publish your project.",
