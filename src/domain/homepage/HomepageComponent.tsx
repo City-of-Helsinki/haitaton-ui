@@ -22,6 +22,7 @@ import MainHeading from '../../common/components/mainHeading/MainHeading';
 import HankeCreateDialog from '../hanke/hankeCreateDialog/HankeCreateDialog';
 import JohtoselvitysCreateDialog from '../johtoselvitys/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
 import useIsAuthenticated from '../auth/useIsAuthenticated';
+import useLocale from '../../common/hooks/useLocale';
 
 const FEEDBACK_NOTIFICATION_CLOSED = 'feedback-notification-closed';
 
@@ -37,6 +38,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [showJohtoselvitysCreateDialog, setShowJohtoselvitysCreateDialog] = useState(false);
   const isAuthenticated = useIsAuthenticated();
   const features = useFeatureFlags();
+  const locale = useLocale();
 
   const loggedInLinks = [
     {
@@ -124,6 +126,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
             loggingInText={t('authentication:loggingIn')}
             errorText={t('authentication:loggingInErrorLabel')}
             spinnerColor="var(--color-coat-of-arms)"
+            redirectionProps={{ language: locale }}
           >
             {t('homepage:loginContainer:button')}
           </LoginButton>
@@ -188,7 +191,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
           <Container>
             <p>
               {t('homepage:info')}
-              <Link href="#" onClick={() => login()}>
+              <Link href="#" onClick={() => login({ language: locale })}>
                 {t('homepage:info_link')}
               </Link>
             </p>
