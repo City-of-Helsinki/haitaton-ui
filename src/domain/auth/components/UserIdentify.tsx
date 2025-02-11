@@ -63,7 +63,7 @@ function UserIdentify() {
   }
 
   if (!isAuthenticated) {
-    login();
+    login({ language: locale });
     return null;
   }
 
