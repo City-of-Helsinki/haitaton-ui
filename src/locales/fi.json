@@ -173,8 +173,9 @@
       "fillWithOwnInformation": "Täytä omilla tiedoilla"
     },
     "helperTexts": {
-      "dateInForm": "Anna muodossa P.K.VVVV",
-      "areaName": "Halutessasi voit nimetä alueen"
+      "dateInForm": "Anna muodossa P.K.VVVV.",
+      "areaName": "Halutessasi voit nimetä alueen.",
+      "isPublicInformation": "Tämä tieto julkaistaan."
     },
     "requiredInstruction": "Kaikki tähdellä * merkityt kentät ovat pakollisia.",
     "requiredForPublicationInstruction": "Tähdellä * merkityt kentät vaaditaan hankkeen julkaisemiseksi.",
@@ -705,7 +706,7 @@
     "perustiedotForm": {
       "header": "Perustiedot",
       "ytkHankeHeader": "YKT-hanke",
-      "instructions": "<1>Hankkeen luonnin kautta pääset lähettämään myös hakemuksia.</1><1><0>HUOM!</0> Mikäli teet pelkkää johtoselvitystä yksityiselle alueelle, <2>täytä hakemus</2>. Yleisten alueiden johtoselvitykset haetaan hankkeen luonnin jälkeen kaivuilmoituksen kautta.</1><1>Lisäämällä hankkeen tiedot, pystyt kopioimaan ne lopuksi tarvitsemiisi hakemuksiin.</1>"
+      "instructions": "<1>Hankkeen luonnin kautta pääset lähettämään myös hakemuksia.</1><1><0>HUOM!</0> Mikäli teet pelkkää johtoselvitystä yksityiselle alueelle, <2>täytä hakemus</2>. Yleisten alueiden johtoselvitykset haetaan hankkeen luonnin jälkeen kaivuilmoituksen kautta.</1><1>Huomioithan, että seuraavat tiedot näytetään julkisesti kaikille Haitattoman käyttäjille hankkeen julkaisun jälkeen:</1><3><4>Hankkeen nimi ja tunnus sekä ajankohta</4><4>Hankkeen kuvaus</4><4>Hankealueiden nimet ja ajankohdat</4><4>Hankealueiden liikennehaittaindeksit</4><4>Hankkeen omistajataho</4><4>Hankkeen suunnitteluvaihe ja työn tyyppi</4></3><1>Lisäämällä hankkeen tiedot, pystyt kopioimaan ne lopuksi tarvitsemiisi hakemuksiin.</1>"
     },
     "hankkeenAlueForm": {
       "header": "Alueet",

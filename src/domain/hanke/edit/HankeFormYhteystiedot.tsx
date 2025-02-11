@@ -63,7 +63,8 @@ const ContactFields: React.FC<
   const { t } = useTranslation();
   const { watch, setValue } = useFormContext();
   const selectedContactType = watch(`${contactType}.${index}.tyyppi`);
-  const registryKeyInputDisabled = selectedContactType === CONTACT_TYYPPI.YKSITYISHENKILO;
+  const isPrivatePerson = selectedContactType === CONTACT_TYYPPI.YKSITYISHENKILO;
+  const registryKeyInputDisabled = isPrivatePerson;
 
   useEffect(() => {
     if (registryKeyInputDisabled) {
@@ -106,6 +107,7 @@ const ContactFields: React.FC<
           required
           hankeUsers={hankeUsers}
           onUserSelect={handleUserSelect}
+          isPublic={!isPrivatePerson}
         />
         <TextInput
           name={`${contactType}.${index}.${CONTACT_FORMFIELD.TUNNUS}`}
