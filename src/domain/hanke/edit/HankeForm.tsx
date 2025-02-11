@@ -242,7 +242,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     tyomaaKatuosoite,
     vaihe,
   });
-  const alueetErrors = useValidationErrors(hankeAlueetPublicSchema, { alueet });
+  const alueetErrors = useValidationErrors(hankeAlueetPublicSchema, { alueet }, validationContext);
   const haittojenHallintaErrors = useValidationErrors(
     haittojenhallintaPublicSchema,
     {
