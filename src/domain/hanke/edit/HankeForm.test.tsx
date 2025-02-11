@@ -457,7 +457,7 @@ describe('HankeForm', () => {
   });
 
   test('Should be able to save and quit', async () => {
-    const hanke = cloneDeep(hankkeet[1]);
+    const hanke = cloneDeep(hankkeet[0]);
     const hankeName = hanke.nimi;
 
     const { user } = render(
@@ -473,8 +473,8 @@ describe('HankeForm', () => {
     fillBasicInformation({ name: hankeName });
     await user.click(screen.getByRole('button', { name: 'Tallenna ja keskeytä' }));
 
-    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2');
-    expect(screen.getByText(`Hanke ${hankeName} (HAI22-2) tallennettu omiin hankkeisiin.`));
+    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-1');
+    expect(screen.getByText(`Hanke ${hankeName} (HAI22-1) tallennettu omiin hankkeisiin.`));
   });
 
   test('Should be able to save hanke in the last page', async () => {
@@ -652,6 +652,7 @@ describe('HankeForm', () => {
     const testHanke = {
       ...hankkeet[0],
       kuvaus: '',
+      tyomaaKatuosoite: '',
       vaihe: null,
     };
 
@@ -776,6 +777,23 @@ describe('HankeForm', () => {
     await user.click(getByRole('button', { name: 'Poista' }));
 
     expect(screen.queryByText(/hankealue 1/i)).not.toBeInTheDocument();
+  });
+
+  test('Should not allow deletion of hanke area if there are application areas inside it', async () => {
+    const hanke = cloneDeep(hankkeet[1] as HankeDataFormState);
+    hanke.vaihe = 'OHJELMOINTI';
+
+    const { user } = await setupAlueetPage(hanke);
+
+    await user.click(screen.getByRole('button', { name: 'Poista alue' }));
+
+    const { getByRole, getByText } = within(screen.getByRole('dialog'));
+    expect(getByText('Aluetta ei voi poistaa')).toBeInTheDocument();
+    expect(getByRole('button', { name: 'Sulje' })).toBeInTheDocument();
+
+    await user.click(getByRole('button', { name: 'Sulje' }));
+
+    expect(screen.queryByText(/hankealue 1/i)).toBeInTheDocument();
   });
 
   async function setupHaittaIndexUpdateTest(

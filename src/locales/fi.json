@@ -622,6 +622,8 @@
       "rights": "Käyttöoikeutesi hankkeelle",
       "removeAreaTitle": "Poista alue",
       "removeAreaDescription": "Haluatko varmasti poistaa hankealueen {{areaName}}?",
+      "cannotRemoveAreaTitle": "Aluetta ei voi poistaa",
+      "cannotRemoveAreaDescription": "Hankealueen sisällä on hakemusten työalueita, joten aluetta ei voi poistaa. Tarkastele meneillään olevia hakemuksia hankesivun Hakemukset-välilehdellä.",
       "hankeAlue": "Hankealue",
       "haittojenhallintasuunnitelma": {
         "YLEINEN": "Toimet hankealueen haittojen hallintaan",
@@ -658,23 +660,27 @@
       "omistajat": {
         "nimi": "$t(form:yhteystiedot:titles:omistaja): $t(form:yhteystiedot:labels:nimi)",
         "email": "$t(form:yhteystiedot:titles:omistaja): $t(form:yhteystiedot:labels:email)",
-        "ytunnus": "$t(form:yhteystiedot:titles:omistaja): $t(form:yhteystiedot:labels:ytunnus)"
+        "ytunnus": "$t(form:yhteystiedot:titles:omistaja): $t(form:yhteystiedot:labels:ytunnus)",
+        "puhelinnumero": "$t(form:yhteystiedot:titles:omistaja): $t(form:yhteystiedot:labels:puhelinnumero)"
       },
       "toteuttajat": {
         "nimi": "$t(form:yhteystiedot:titles:toteuttajat): $t(form:yhteystiedot:labels:nimi)",
         "email": "$t(form:yhteystiedot:titles:toteuttajat): $t(form:yhteystiedot:labels:email)",
-        "ytunnus": "$t(form:yhteystiedot:titles:toteuttajat): $t(form:yhteystiedot:labels:ytunnus)"
+        "ytunnus": "$t(form:yhteystiedot:titles:toteuttajat): $t(form:yhteystiedot:labels:ytunnus)",
+        "puhelinnumero": "$t(form:yhteystiedot:titles:toteuttajat): $t(form:yhteystiedot:labels:puhelinnumero)"
       },
       "rakennuttajat": {
         "nimi": "$t(form:yhteystiedot:titles:rakennuttajat): $t(form:yhteystiedot:labels:nimi)",
         "email": "$t(form:yhteystiedot:titles:rakennuttajat): $t(form:yhteystiedot:labels:email)",
-        "ytunnus": "$t(form:yhteystiedot:titles:rakennuttajat): $t(form:yhteystiedot:labels:ytunnus)"
+        "ytunnus": "$t(form:yhteystiedot:titles:rakennuttajat): $t(form:yhteystiedot:labels:ytunnus)",
+        "puhelinnumero": "$t(form:yhteystiedot:titles:rakennuttajat): $t(form:yhteystiedot:labels:puhelinnumero)"
       },
       "muut": {
         "rooli": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:rooli)",
         "nimi": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:nimi)",
         "email": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:email)",
-        "ytunnus": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:ytunnus)"
+        "ytunnus": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:ytunnus)",
+        "puhelinnumero": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:puhelinnumero)"
       }
     },
     "toolTips": {
