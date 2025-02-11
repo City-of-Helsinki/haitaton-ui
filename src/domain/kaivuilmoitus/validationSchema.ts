@@ -138,7 +138,11 @@ export const applicationDataSchema = yup.object().shape(
       .nullable()
       .required()
       .meta({ pageName: FORM_PAGES.ALUEET }),
-    areas: yup.array(kaivuilmoitusAlueSchema).min(1).required(),
+    areas: yup
+      .array(kaivuilmoitusAlueSchema)
+      .min(1)
+      .required()
+      .meta({ pageName: FORM_PAGES.ALUEET }),
     additionalInfo: yup.string().max(2000).nullable(),
   },
   [['startTime', 'endTime']],
