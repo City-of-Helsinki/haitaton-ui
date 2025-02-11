@@ -399,9 +399,6 @@
         "title": "Haitaton – Edit the excavation notification application"
       }
     },
-    "EDIT_KAIVUILMOITUSTAYDENNYS": {
-      "meta": {}
-    },
     "HAITATON_INFO": {
       "path": "/info",
       "headerLabel": "About Haitaton",

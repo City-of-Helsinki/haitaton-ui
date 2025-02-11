@@ -399,9 +399,6 @@
         "title": "Haitaton – Ändra ansökan om grävningsanmälan"
       }
     },
-    "EDIT_KAIVUILMOITUSTAYDENNYS": {
-      "meta": {}
-    },
     "HAITATON_INFO": {
       "path": "/info",
       "headerLabel": "Information om Haitaton",
