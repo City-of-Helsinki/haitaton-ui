@@ -251,9 +251,9 @@ describe('HankeForm', () => {
     // Area name
     expect(screen.getByTestId('alueet.0.nimi')).toHaveValue('Hankealue 1');
     // Start date of the nuisance
-    expect(screen.getByDisplayValue('2.1.2023')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('14.6.2023')).toBeInTheDocument();
     // End date of the nuisance
-    expect(screen.getByDisplayValue('24.2.2023')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('16.10.2023')).toBeInTheDocument();
     // Noise nuisance
     expect(screen.getByText('Satunnainen meluhaitta')).toBeInTheDocument();
     // Dust nuisance
@@ -794,6 +794,25 @@ describe('HankeForm', () => {
     await user.click(getByRole('button', { name: 'Sulje' }));
 
     expect(screen.queryByText(/hankealue 1/i)).toBeInTheDocument();
+  });
+
+  test('Should show validation error message if area start date is after application start date', async () => {
+    const hanke = cloneDeep(hankkeet[1] as HankeDataFormState);
+    hanke.vaihe = 'OHJELMOINTI';
+
+    const { user } = await setupAlueetPage(hanke);
+
+    fireEvent.change(screen.getByLabelText(/haittojen alkupäivä/i), {
+      target: { value: '1.9.2024' },
+    });
+    await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+    expect(screen.queryByText('Vaihe 2/6: Alueet')).toBeInTheDocument();
+    expect(
+      screen.queryByText(
+        'Tällä hankealueella on jo hakemusten kautta lisättyjä työalueita. Et voi lyhentää hankealueen ajankohtaa lyhyemmäksi kuin työalueiden ajankohdat.',
+      ),
+    ).toBeInTheDocument();
   });
 
   async function setupHaittaIndexUpdateTest(

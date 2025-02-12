@@ -107,8 +107,8 @@ test('Correct information about hanke should be displayed', async () => {
     ),
   ).toBeInTheDocument();
   expect(screen.queryByText('Mannerheimintie 6')).toBeInTheDocument();
-  expect(screen.queryByText('2.1.2023')).toBeInTheDocument();
-  expect(screen.queryByText('24.2.2023')).toBeInTheDocument();
+  expect(screen.queryByText('14.6.2023')).toBeInTheDocument();
+  expect(screen.queryByText('16.10.2023')).toBeInTheDocument();
   expect(screen.queryByText('Ohjelmointi')).toBeInTheDocument();
   expect(screen.queryByText('Kaukolämpö')).toBeInTheDocument();
   expect(screen.queryByText('Ei')).toBeInTheDocument();
@@ -116,14 +116,14 @@ test('Correct information about hanke should be displayed', async () => {
 
   // Data in sidebar
   expect(screen.queryByText('Hankealue 1 (12041 m²)')).toBeInTheDocument();
-  expect(screen.queryByText('2.1.2023–24.2.2023')).toBeInTheDocument();
+  expect(screen.queryByText('14.6.2023–16.10.2023')).toBeInTheDocument();
 
   // Change to areas tab
   await user.click(screen.getByRole('tab', { name: /alueet/i }));
 
   // Data in areas tab
   expect(screen.queryByText('Hankealue 1')).toBeInTheDocument();
-  expect(screen.getAllByText('2.1.2023–24.2.2023').length).toBe(2);
+  expect(screen.getAllByText('14.6.2023–16.10.2023').length).toBe(2);
   expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3.5');
   expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('2');
   expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('0');

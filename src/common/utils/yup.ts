@@ -5,6 +5,7 @@ import { HankeUser } from '../../domain/hanke/hankeUsers/hankeUser';
 import { HankeDataFormState } from '../../domain/hanke/edit/types';
 import {
   Application,
+  HankkeenHakemus,
   KaivuilmoitusAlue,
   KaivuilmoitusData,
 } from '../../domain/application/types/application';
@@ -14,6 +15,10 @@ import isValidPersonalId from './isValidPersonalId';
 import { HAITTOJENHALLINTATYYPPI } from '../../domain/common/haittojenhallinta/types';
 import { HaittaIndexData } from '../../domain/common/haittaIndexes/types';
 import { calculateLiikennehaittaindeksienYhteenveto } from '../../domain/kaivuilmoitus/utils';
+import {
+  getApplicationsInsideHankealue,
+  getHankealueDateLimits,
+} from '../../domain/hanke/edit/utils';
 
 // https://github.com/jquense/yup/blob/master/src/locale.ts
 yup.setLocale({
@@ -213,6 +218,75 @@ yup.addMethod(yup.date, 'validCompletionDate', function isValidCompletionDate() 
         message: { key: dateInFutureErrorMessageKey, values: {} },
       })
     );
+  });
+});
+
+/**
+ * Validates that hankealue date is within the limits of hakemukset with work areas inside the hankealue.
+ */
+yup.addMethod(yup.date, 'validHankealueDate', function isValidHankealueDate(type: 'start' | 'end') {
+  return this.test('validHankealueDate', 'Invalid date', function (value) {
+    if (!value) {
+      return true;
+    }
+    const context = this.options.context;
+    if (!context) {
+      return true;
+    }
+    const { hanke, hakemukset, dateConflictWithWorkAreasErrorKey } = context as {
+      hanke: HankeDataFormState;
+      hakemukset?: HankkeenHakemus[];
+      dateConflictWithWorkAreasErrorKey: string;
+    };
+    if (!hakemukset) {
+      return true;
+    }
+    const indexMatch = /alueet\[(\d+)]/.exec(this.path);
+    const hankealueIndex = indexMatch ? parseInt(indexMatch[1], 10) : undefined;
+    if (hankealueIndex === undefined) {
+      return true;
+    }
+    const hankealue = hanke.alueet ? hanke.alueet[hankealueIndex] : undefined;
+    if (!hankealue) {
+      return true;
+    }
+    const hakemuksetHankealueella = getApplicationsInsideHankealue(hankealue, hakemukset);
+    const [maxStartDate, minEndDate] = getHankealueDateLimits(
+      hankealue.haittaAlkuPvm,
+      hakemuksetHankealueella,
+    );
+    if (!maxStartDate || !minEndDate) {
+      return true;
+    }
+    const date = new Date(value);
+    date.setHours(0, 0, 0, 0);
+    if (type === 'start') {
+      maxStartDate.setHours(0, 0, 0, 0);
+      if (date > maxStartDate) {
+        return this.createError({
+          path: this.path,
+          message: {
+            key: dateConflictWithWorkAreasErrorKey,
+            values: {},
+          },
+        });
+      }
+      return true;
+    }
+    if (type === 'end') {
+      minEndDate.setHours(0, 0, 0, 0);
+      if (date < minEndDate) {
+        return this.createError({
+          path: this.path,
+          message: {
+            key: dateConflictWithWorkAreasErrorKey,
+            values: {},
+          },
+        });
+      }
+      return true;
+    }
+    return true;
   });
 });
 
