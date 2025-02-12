@@ -29,7 +29,6 @@ import {
   SectionItemContentAdded,
   SectionItemContentRemoved,
   SectionItemTitle,
-  SectionTitle,
 } from '../../forms/components/FormSummarySection';
 import { HankeData } from '../../types/hanke';
 import ApplicationStatusTag from '../components/ApplicationStatusTag';
@@ -255,7 +254,7 @@ function KaivuilmoitusAreasInfo({
     return (
       <Accordion
         language={locale}
-        heading={alue.name}
+        heading={t('hakemus:labels:workAreasInProjectArea', { projectName: alue.name })}
         initiallyOpen
         key={alue.hankealueId}
         className={styles.applicationAreaContainer}
@@ -930,7 +929,6 @@ function ApplicationView({
             </TabPanel>
             <TabPanel>
               {/* Contacts information panel */}
-              <SectionTitle>{t('form:yhteystiedot:header')}</SectionTitle>
               <FormSummarySection>
                 <ContactsSummary
                   customerWithContacts={customerWithContacts}

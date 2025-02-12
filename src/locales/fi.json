@@ -128,7 +128,7 @@
     },
     "headers": {
       "perustiedot": "Perustiedot",
-      "alueet": "Alueet",
+      "alueet": "Alueiden piirto",
       "yhteystiedot": "Yhteystiedot",
       "liitteetJaLisatiedot": "Liitteet ja lisätiedot",
       "yhteenveto": "Yhteenveto",
@@ -580,10 +580,10 @@
     "nextButton": "Seuraava",
     "previousButton": "Edellinen",
     "insertFieldError": "Syötä kenttä",
-    "savingSuccessHeader": "Luonnos tallennettu",
-    "savingSuccessText": "Luonnos on tallennettu Hankelistalle",
-    "savingFailHeader": "Joku meni vikaan",
-    "savingFailText": "Luonnosta ei saatu tallennettua, koita uudelleen",
+    "savingSuccessHeader": "Hanke tallennettu",
+    "savingSuccessText": "Hanke on tallennettu Omiin hankkeisiin.",
+    "savingFailHeader": "Jokin meni vikaan",
+    "savingFailText": "Hanketta ei saatu tallennettua, yritä hetken päästä uudelleen.",
     "saveAndQuitSuccessHeader": "Hanke tallennettu",
     "saveAndQuitSuccessText": "Hanke {{name}} ({{hankeTunnus}}) tallennettu omiin hankkeisiin.",
     "closeAriaLabel": "Poistu kaavakkeelta tallentamatta",
@@ -710,7 +710,7 @@
       "instructions": "<1>Hankkeen luonnin kautta pääset lähettämään myös hakemuksia.</1><1><0>HUOM!</0> Mikäli teet pelkkää johtoselvitystä yksityiselle alueelle, <2>täytä hakemus</2>. Yleisten alueiden johtoselvitykset haetaan hankkeen luonnin jälkeen kaivuilmoituksen kautta.</1><1>Huomioithan, että seuraavat tiedot näytetään julkisesti kaikille Haitattoman käyttäjille hankkeen julkaisun jälkeen:</1><3><4>Hankkeen nimi ja tunnus sekä ajankohta</4><4>Hankkeen kuvaus</4><4>Hankealueiden nimet ja ajankohdat</4><4>Hankealueiden liikennehaittaindeksit</4><4>Hankkeen omistajataho</4><4>Hankkeen suunnitteluvaihe ja työn tyyppi</4></3><1>Lisäämällä hankkeen tiedot, pystyt kopioimaan ne lopuksi tarvitsemiisi hakemuksiin.</1>"
     },
     "hankkeenAlueForm": {
-      "header": "Alueet",
+      "header": "Alueiden piirto",
       "subHeader": "Hankealueet",
       "area": "Alue",
       "instructions": "Hankkeelle voi piirtää useita alueita. Piirretyille alueille muodostuu automaattisesti liikennehaittaindeksit (arvot 0-5, 5 on merkittävin). Indeksit perustuvat hankealueiden sijaintiin pyörä-, joukko- ja autoliikenteen reiteillä. Hankealueiden liikenneverkollinen merkittävyys kuvataan kartalla liikennevalovärein (vihreä = ei haittaa, keltainen = todennäköinen haitta, punainen = merkittävä haitta).",
@@ -727,8 +727,8 @@
     },
     "haittojenHallintaForm": {
       "header": "Haittojen hallinta",
-      "subHeaderNoAlueet": "Hankealueet",
-      "subHeaderAlueet": "Alueiden sijainti",
+      "subHeaderNoAlueet": "Lisää hankealueita täyttääksesi tietoja. ",
+      "subHeaderAlueet": "Hankealueet",
       "instructions": "Hankkeesi saattaa aiheuttaa eri kulkumuodoille ja paikallisille toiminnoille haittoja. Haitaton laskee automaattisesti hankealueittain haitan merkittävyyden arvon erikseen pyöräliikenteelle, raitioliikenteelle, linja-autojen paikallisliikenteelle sekä autoliikenteelle. Liikennehaittaindeksi kuvaa hankealueen pahimman tilanteen em. kulkumuotojen osalta. Haittoja kuvataan jokaiselle kulkumuodolle määritellyllä asteikolla numeroin ja värein (0/harmaa = ei tunnistettu, 1-2/vihreä = ei merkittävää haittaa, 3/keltainen = todennäköinen haitta, 4-5/punainen = merkittävä haitta). Muut kuin em. kulkumuotoja koskevat tulokset esitetään pelkästään numeroin (0-5).",
       "instructions2": "Kartan vasemmassa reunassa olevilla kulkumuotovalitsimilla voit tarkastella hanke- ja työalueiden haittaindeksejä tietylle kulkumuodolle. Kaikki kulkumuodot ovat oletuksena aktiivisina, voit vaihtaa näkyvien kulkumuotojen määrää klikkaamalla ikoneja. Kartalla näkyy valittujen kulkumuotojen kriittisin indeksiväri.",
       "noAlueet": "Lisää hankealueita täyttääksesi tietoja",
@@ -1264,7 +1264,8 @@
         "TOIMINNALLINEN_KUNTO": "Ilmoitettu toiminnalliseen kuntoon {{lastValmistumisilmoitus.reportedAt}} päivämäärälle {{lastValmistumisilmoitus.dateReported}}",
         "TYO_VALMIS": "Ilmoitettu valmiiksi {{lastValmistumisilmoitus.reportedAt}} päivämäärälle {{lastValmistumisilmoitus.dateReported}}"
       },
-      "hankeAreaNuisanceControl": "Hankealueen haittojen hallinta"
+      "hankeAreaNuisanceControl": "Hankealueen haittojen hallinta",
+      "workAreasInProjectArea": "Työalueet hankealueella {{projectName}}"
     },
     "notifications": {
       "saveSuccessLabel": "Hakemus tallennettu",
