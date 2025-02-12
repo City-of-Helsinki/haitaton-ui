@@ -386,18 +386,22 @@
       }
     },
     "KAIVUILMOITUSHAKEMUS": {
-      "path": "/hankesalkku/:hankeTunnus/kaivuilmoitus",
-      "headerLabel": "Skapa ny ansökan om  grävningsanmälan",
+      "path": "/projektportfolj/:hankeTunnus/gravningsanmalan",
+      "headerLabel": "Skapa ny ansökan om grävningsanmälan",
       "meta": {
         "title": "Haitaton – Skapa ny ansökan om grävningsanmälan"
       }
     },
     "EDIT_KAIVUILMOITUSHAKEMUS": {
-      "path": "/kaivuilmoitus/:id/muokkaa",
+      "path": "/gravningsanmalan/:id/redigera",
       "headerLabel": "Ändra ansökan om grävningsanmälan",
       "meta": {
         "title": "Haitaton – Ändra ansökan om grävningsanmälan"
       }
+    },
+    "EDIT_KAIVUILMOITUSTAYDENNYS": {
+      "path": "/kompletteringavgravningsanmalan/:id/redigera",
+      "meta": {}
     },
     "HAITATON_INFO": {
       "path": "/info",
