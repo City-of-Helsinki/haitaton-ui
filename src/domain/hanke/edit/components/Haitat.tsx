@@ -129,7 +129,6 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea, onChangeArea }) => {
             helperText={`${t('form:helperTexts:dateInForm')} ${t('form:helperTexts:isPublicInformation')}`}
             maxDate={maxStartDate || undefined}
             initialMonth={maxStartDate || undefined}
-            helperText={t('form:helperTexts:dateInForm')}
             onValueChange={handleNuisancesChange}
             required
           />
