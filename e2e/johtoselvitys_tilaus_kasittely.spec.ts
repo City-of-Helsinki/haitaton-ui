@@ -1,20 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { perustaja, vastaava, suorittaja, testiData, testiOsoite, } from './_setup';
+import { perustaja, vastaava, suorittaja, testiData, testiOsoite, helsinkiLogin } from './_setup';
 
 test.beforeEach('Helsinki_login', async ({ page }) => {
-  await page.goto(testiData.testEnvUrl);
-  await expect(page.getByRole('heading', { name: 'Tervetuloa Haitaton-palveluun' })).toBeVisible();
-  await page.getByLabel('Kirjaudu').click();
-  await page.getByRole('link', { name: 'Suomi.fi identification' }).click();
-  await expect(page.getByRole('link', { name: 'Test IdP' })).toBeVisible();
-  await page.getByRole('link', { name: 'Test IdP' }).click();
-  await expect(page.getByPlaceholder('-9988')).toBeVisible();
-  await page.getByPlaceholder('-9988').fill(testiData.suomifilogin);
-  await page.getByPlaceholder('-9988').press('Tab');
-  await page.getByRole('button', { name: 'Tunnistaudu' }).click();
-  await expect(page.getByRole('button', { name: 'Continue to service' })).toBeVisible();
-  await page.getByRole('button', { name: 'Continue to service' }).click();
-  await expect(page.getByLabel('Tee johtoselvityshakemus.', { exact: true })).toBeVisible({ timeout: 10000, });
+  helsinkiLogin(page);
 });
 
 test('Johtoselvityshakemus_tilaus ja käsittely', async ({ page }) => {
