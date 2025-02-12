@@ -115,7 +115,7 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea, onChangeArea }) => {
           <TextInput
             name={`${FORMFIELD.HANKEALUEET}.${index}.nimi`}
             label={t('form:labels:areaName')}
-            helperText={t('form:helperTexts:areaName')}
+            helperText={`${t('form:helperTexts:areaName')} ${t('form:helperTexts:isPublicInformation')}`}
             defaultValue={areaDefaultName}
             maxLength={100}
           />
@@ -126,9 +126,9 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea, onChangeArea }) => {
             name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.HAITTA_ALKU_PVM}`}
             label={t(`hankeForm:labels:${FORMFIELD.HAITTA_ALKU_PVM}`)}
             locale={locale}
+            helperText={`${t('form:helperTexts:dateInForm')} ${t('form:helperTexts:isPublicInformation')}`}
             maxDate={maxStartDate || undefined}
             initialMonth={maxStartDate || undefined}
-            helperText={t('form:helperTexts:dateInForm')}
             onValueChange={handleNuisancesChange}
             required
           />
@@ -138,7 +138,7 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea, onChangeArea }) => {
             locale={locale}
             minDate={minEndDate || undefined}
             initialMonth={minEndDate || undefined}
-            helperText={t('form:helperTexts:dateInForm')}
+            helperText={`${t('form:helperTexts:dateInForm')} ${t('form:helperTexts:isPublicInformation')}`}
             onValueChange={handleNuisancesChange}
             required
           />

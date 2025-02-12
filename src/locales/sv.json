@@ -170,8 +170,9 @@
       "fillWithOwnInformation": "Fyll i med egna uppgifter"
     },
     "helperTexts": {
-      "dateInForm": "Ge i formatet DD.MM.ÅÅÅÅ",
-      "areaName": "Du kan valfritt ge området ett namn"
+      "dateInForm": "Ge i formatet DD.MM.ÅÅÅÅ.",
+      "areaName": "Du kan valfritt ge området ett namn",
+      "isPublicInformation": "Detta kommer att publiceras."
     },
     "requiredInstruction": "Alla fält markerade med * är obligatoriska.",
     "requiredForPublicationInstruction": "Fält som är märkta med stjärna * krävs för att publicera projektet.",
@@ -690,7 +691,7 @@
     "perustiedotForm": {
       "header": "Grundläggande uppgifter om projektet",
       "ytkHankeHeader": "Gemensamt kommunaltekniskt projekt",
-      "instructions": "<1>Via att skapa ett projekt kan du också skicka ansökningar.</1><1><0>OBS!</0> Om du enbart utför ledningsutredningar för ett privat område, <2>fyll i en ansökan</2>. Ledningsutredningar för allmänna områden söks efter att projektet skapats, med grävanmälningar.</1><1>Genom att lägga till uppgifter om projektet kan du till sist kopiera dem till ansökningarna som du behöver.</1>"
+      "instructions": "<1>Via att skapa ett projekt kan du också skicka ansökningar.</1><1><0>OBS!</0> Om du enbart utför ledningsutredningar för ett privat område, <2>fyll i en ansökan</2>. Ledningsutredningar för allmänna områden söks efter att projektet skapats, med grävanmälningar.</1><1>Observera att följande information kommer att visas offentligt för alla Haitaton-användare efter att projektet har publicerats:</1><3><4>Projektets namn och identifierare samt tidpunkt</4><4>Beskrivning av projektet</4><4>Områdenas namn och tidpunkter</4><4>Områdenas trafikstörningsindex</4><4>Projektets ägare</4><4>Projektets skede och typ av byggarbetsplats</4></3><1>Genom att lägga till uppgifter om projektet kan du till sist kopiera dem till ansökningarna som du behöver.</1>"
     },
     "hankkeenAlueForm": {
       "header": "Områden",
