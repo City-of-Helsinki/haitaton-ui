@@ -1,4 +1,4 @@
-import { cloneDeep, omitBy } from 'lodash';
+import _, { cloneDeep, omitBy } from 'lodash';
 import { Feature } from 'ol';
 import { Polygon } from 'ol/geom';
 import {
@@ -150,4 +150,16 @@ export function calculateLiikennehaittaindeksienYhteenveto(
       };
     }, emptyHaittaIndexData);
   return summary;
+}
+
+/**
+ * Check if traffic nuisance indexes have changed between two kaivuilmoitusalues.
+ */
+export function hasHaittaIndexesChanged(alue1: KaivuilmoitusAlue, alue2?: KaivuilmoitusAlue) {
+  if (!alue2) {
+    return false;
+  }
+  const haittaIndexes = calculateLiikennehaittaindeksienYhteenveto(alue1);
+  const changedHaittaIndexes = calculateLiikennehaittaindeksienYhteenveto(alue2);
+  return !_.isEqual(haittaIndexes, changedHaittaIndexes);
 }
