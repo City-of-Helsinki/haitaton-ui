@@ -58,7 +58,11 @@ const muuYhteystietoSchema = yhteystietoSchema
 
 export const hankeAlueetSchema = yup.object({
   [FORMFIELD.NIMI]: yup.string().nullable(),
-  [FORMFIELD.HAITTA_ALKU_PVM]: yup.date().required().meta({ pageName: FORM_PAGES.ALUEET }),
+  [FORMFIELD.HAITTA_ALKU_PVM]: yup
+    .date()
+    .validHankealueDate('start')
+    .required()
+    .meta({ pageName: FORM_PAGES.ALUEET }),
   [FORMFIELD.HAITTA_LOPPU_PVM]: yup
     .date()
     .when(FORMFIELD.HAITTA_ALKU_PVM, (alkuPvm: Date[], schema: yup.DateSchema) => {
@@ -68,6 +72,7 @@ export const hankeAlueetSchema = yup.object({
         return schema;
       }
     })
+    .validHankealueDate('end')
     .required()
     .meta({ pageName: FORM_PAGES.ALUEET }),
   [FORMFIELD.MELUHAITTA]: yup

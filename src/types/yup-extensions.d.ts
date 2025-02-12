@@ -11,6 +11,7 @@ declare module 'yup' {
   }
   interface DateSchema {
     validCompletionDate(): this;
+    validHankealueDate(type: 'start' | 'end'): this;
   }
   interface CustomSchemaMetadata {
     pageName?: string | string[];

@@ -216,18 +216,18 @@ export function mapValidationErrorToErrorListItem(
 }
 
 /**
- * Check if hanke area contains any hakemus areas
+ * Returns hakemukset that are inside hankealue
  */
-export function hankealueContaisHakemusalues(
+export function getApplicationsInsideHankealue(
   hankeAlue: HankeAlue,
-  applications?: HankkeenHakemus[] | null,
-) {
-  if (!applications) {
-    return false;
+  applications: HankkeenHakemus[],
+): HankkeenHakemus[] {
+  if (applications.length === 0) {
+    return [];
   }
   const hankeFeature = hankeAlue.geometriat?.featureCollection.features[0];
   if (!hankeFeature) {
-    return false;
+    return [];
   }
   const johtoselvitysApplications = applications.filter(
     (hakemus) => hakemus.applicationType == 'CABLE_REPORT',
@@ -235,20 +235,45 @@ export function hankealueContaisHakemusalues(
   const kaivuilmoitusApplications = applications.filter(
     (hakemus) => hakemus.applicationType == 'EXCAVATION_NOTIFICATION',
   );
-  const johtoselvitysGeometries = johtoselvitysApplications
-    .flatMap((hakemus) => (hakemus.applicationData.areas || []) as ApplicationArea[])
-    .filter((area) => area.geometry)
-    .map((area) => area.geometry);
-  const kaivuilmoitusGeometries = kaivuilmoitusApplications
-    .flatMap((hakemus) =>
-      ((hakemus.applicationData.areas || []) as KaivuilmoitusAlue[]).flatMap(
-        (area) => area.tyoalueet,
+  const johtoselvitysApplicationInsideHankealue: HankkeenHakemus[] =
+    johtoselvitysApplications.filter((hakemus) =>
+      ((hakemus.applicationData.areas || []) as ApplicationArea[]).some(
+        (area) => area.geometry && booleanContains(hankeFeature, area.geometry),
       ),
-    )
-    .filter((area) => area.geometry)
-    .map((area) => area.geometry);
-  const hakemusGeometries = [...johtoselvitysGeometries, ...kaivuilmoitusGeometries];
-  return hakemusGeometries.some(
-    (hakemusGeometry) => hakemusGeometry && booleanContains(hankeFeature, hakemusGeometry),
+    );
+  const kaivuilmoitusApplicationInsideHankealue: HankkeenHakemus[] =
+    kaivuilmoitusApplications.filter((hakemus) =>
+      ((hakemus.applicationData.areas || []) as KaivuilmoitusAlue[])
+        .flatMap((area) => area.tyoalueet)
+        .some((area) => area.geometry && booleanContains(hankeFeature, area.geometry)),
+    );
+  return [...johtoselvitysApplicationInsideHankealue, ...kaivuilmoitusApplicationInsideHankealue];
+}
+
+export type DateLimits = [maxStartDate: Date | null, minEndDate: Date | null];
+
+/**
+ * Returns valid date limits for hankealue so that the maximum start date is the earliest start date of hakemukset and the minimum end date is the latest end date of hakemukset.
+ */
+export function getHankealueDateLimits(
+  haittaAlkuPvm: Date | null,
+  hakemukset: HankkeenHakemus[],
+): DateLimits {
+  const { hakemusStartDates, hakemusEndDates } = hakemukset.reduce(
+    (acc, hakemus) => {
+      const startTime = hakemus.applicationData.startTime;
+      const endTime = hakemus.applicationData.endTime;
+
+      if (startTime !== null && endTime !== null) {
+        acc.hakemusStartDates.push(startTime);
+        acc.hakemusEndDates.push(endTime);
+      }
+      return acc;
+    },
+    { hakemusStartDates: [] as Date[], hakemusEndDates: [] as Date[] },
   );
+  if (hakemusStartDates.length === 0 || hakemusEndDates.length === 0) {
+    return [null, haittaAlkuPvm && new Date(haittaAlkuPvm)];
+  }
+  return [min(hakemusStartDates), max(hakemusEndDates)];
 }

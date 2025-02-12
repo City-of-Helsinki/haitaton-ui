@@ -158,6 +158,7 @@ function HaitatonHeader() {
           errorText={t('authentication:genericError')}
           errorCloseAriaLabel={t('common:ariaLabels:closeButtonLabelText')}
           loggingInText={t('authentication:loggingIn')}
+          redirectionProps={{ language: i18n.language }}
           fixedRightPosition
         />
       </Header.ActionBar>
