@@ -27,7 +27,7 @@ test('Draft state notification is rendered when hanke is in draft state', async 
 
   expect(draftStateElement).toBeInTheDocument();
   expect(getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
-  expect(getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
+  expect(getByRole('listitem', { name: /alueiden/i })).toBeInTheDocument();
   expect(getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
 });
 
@@ -41,7 +41,7 @@ test('Draft state notification only shows form pages with missing information', 
 
   expect(draftStateElement).toBeInTheDocument();
   expect(queryByRole('listitem', { name: /perustiedot/i })).not.toBeInTheDocument();
-  expect(getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
+  expect(getByRole('listitem', { name: /alueiden/i })).toBeInTheDocument();
   expect(getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
 });
 

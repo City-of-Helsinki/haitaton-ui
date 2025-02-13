@@ -54,8 +54,8 @@ export default function FormPagesErrorSummary<T>({
         <Box as="ul" marginLeft="var(--spacing-m)">
           {errorPages.map((page) => {
             return (
-              <li key={page} aria-label={t(`hankePortfolio:tabit:${page}`)}>
-                {t(`hankePortfolio:tabit:${page}`)}
+              <li key={page} aria-label={t(`form:headers:${page}`)}>
+                {t(`form:headers:${page}`)}
               </li>
             );
           })}

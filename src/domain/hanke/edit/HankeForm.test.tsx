@@ -134,7 +134,7 @@ async function setupAlueetPage(hanke: HankeDataFormState = hankkeet[2] as HankeD
   );
 
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  expect(await screen.findByText('Vaihe 2/6: Alueet')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 2/6: Alueiden piirto')).toBeInTheDocument();
 
   return { user };
 }
@@ -734,7 +734,7 @@ describe('HankeForm', () => {
       'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavissa vaiheissa on puuttuvia tietoja:',
     );
     expect(screen.getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
-    expect(screen.getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
+    expect(screen.getByRole('listitem', { name: /alueiden/i })).toBeInTheDocument();
     expect(screen.getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
   });
 
@@ -807,7 +807,7 @@ describe('HankeForm', () => {
     });
     await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-    expect(screen.queryByText('Vaihe 2/6: Alueet')).toBeInTheDocument();
+    expect(screen.queryByText('Vaihe 2/6: Alueiden piirto')).toBeInTheDocument();
     expect(
       screen.queryByText(
         'Tällä hankealueella on jo hakemusten kautta lisättyjä työalueita. Et voi lyhentää hankealueen ajankohtaa lyhyemmäksi kuin työalueiden ajankohdat.',

@@ -130,9 +130,11 @@
       "perustiedot": "Perustiedot",
       "alueet": "Alueiden piirto",
       "yhteystiedot": "Yhteystiedot",
+      "liitteet": "Liitteet",
       "liitteetJaLisatiedot": "Liitteet ja lisätiedot",
       "yhteenveto": "Yhteenveto",
-      "hakemusInfo": "Hakemuksen tiedot"
+      "hakemusInfo": "Hakemuksen tiedot",
+      "haittojenHallinta": "Haittojen hallinta"
     },
     "labels": {
       "pintaAla": "Pinta-ala",

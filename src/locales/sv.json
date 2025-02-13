@@ -127,8 +127,10 @@
       "alueet": "Ritning av områden",
       "yhteystiedot": "Kontaktuppgifter",
       "liitteetJaLisatiedot": "Bilagor och ytterligare information",
+      "liitteet": "Bilagor",
       "yhteenveto": "Sammanfattning",
-      "hakemusInfo": "Ansökans uppgifter"
+      "hakemusInfo": "Ansökans uppgifter",
+      "haittojenHallinta": "Hantering av olägenheter"
     },
     "labels": {
       "pintaAla": "Areal",

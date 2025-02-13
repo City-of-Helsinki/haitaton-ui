@@ -127,8 +127,10 @@
       "alueet": "Area selection",
       "yhteystiedot": "Contact information",
       "liitteetJaLisatiedot": "Attachments and additional information",
+      "liitteet": "Attachment",
       "yhteenveto": "Summary",
-      "hakemusInfo": "Application information"
+      "hakemusInfo": "Application information",
+      "haittojenHallina": "Nuisance management"
     },
     "labels": {
       "pintaAla": "Area",

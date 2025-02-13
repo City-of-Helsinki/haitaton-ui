@@ -169,7 +169,7 @@ test('Cable report application form can be filled', async () => {
 
   // Move to areas page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  expect(await screen.findByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 2/5: Alueiden piirto')).toBeInTheDocument();
 
   // Fill areas page
   fillAreasInformation();
@@ -414,14 +414,14 @@ test('Should not allow start date be after end date', async () => {
 
   // Move to areas page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  expect(await screen.findByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 2/5: Alueiden piirto')).toBeInTheDocument();
 
   // Fill areas page with start time after end time
   fillAreasInformation({ start: '1.6.2024', end: '1.4.2024' });
 
   // Should not be able to move to next page
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  expect(await screen.findByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 2/5: Alueiden piirto')).toBeInTheDocument();
 });
 
 test('Should not allow step change when current step is invalid', async () => {
