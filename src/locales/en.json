@@ -387,20 +387,21 @@
       }
     },
     "KAIVUILMOITUSHAKEMUS": {
-      "path": "/hankesalkku/:hankeTunnus/kaivuilmoitus",
+      "path": "/projectportfolio/:hankeTunnus/excavation-notification",
       "headerLabel": "Create a new excavation notification application",
       "meta": {
         "title": "Haitaton – Create a new excavation notification application"
       }
     },
     "EDIT_KAIVUILMOITUSHAKEMUS": {
-      "path": "/kaivuilmoitus/:id/muokkaa",
+      "path": "/excavation-notification/:id/edit",
       "headerLabel": "Edit the excavation notification application",
       "meta": {
         "title": "Haitaton – Edit the excavation notification application"
       }
     },
     "EDIT_KAIVUILMOITUSTAYDENNYS": {
+      "path": "/excavation-notification-supplementary-information/:id/edit",
       "meta": {}
     },
     "HAITATON_INFO": {
