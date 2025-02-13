@@ -71,9 +71,11 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
     },
     {
       key: 'ohjeet',
-      actionLink: WORKINSTRUCTIONS.path,
+      actionLink: features.hanke
+        ? WORKINSTRUCTIONS.path
+        : t('workInstructions:sideNav:externalLinks:permitsAndInstructions:url'),
       imgProps: undefined,
-      external: false,
+      external: !features.hanke,
       featureFlags: [],
     },
   ];
@@ -98,7 +100,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
       actionLink: WORKINSTRUCTIONS.path,
       imgProps: undefined,
       external: false,
-      featureFlags: [],
+      featureFlags: ['hanke'],
     },
   ];
 

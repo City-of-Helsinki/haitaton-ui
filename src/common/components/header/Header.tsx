@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Header, IconUser, Logo, logoFi, logoSv } from 'hds-react';
+import { Header, IconUser, Link, Logo, logoFi, logoSv } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useMatch, useLocation, useNavigate } from 'react-router-dom';
 import { $enum } from 'ts-enum-util';
@@ -197,15 +197,26 @@ function HaitatonHeader() {
             active={Boolean(isHankePortfolioPath)}
             data-testid="hankeListLink"
           />
-          <Header.Link
-            label={t('routes:WORKINSTRUCTIONS:headerLabel')}
-            as={NavLink}
-            to={WORKINSTRUCTIONS.path}
-            aria-label={t('routes:workInstructionsAriaLabel')}
-            active={Boolean(isWorkInstructionsPath)}
-          >
-            {t('routes:WORKINSTRUCTIONS:headerLabel')}
-          </Header.Link>
+          {features.hanke ? (
+            <Header.Link
+              label={t('routes:WORKINSTRUCTIONS:headerLabel')}
+              as={NavLink}
+              to={WORKINSTRUCTIONS.path}
+              active={Boolean(isWorkInstructionsPath)}
+            >
+              {t('routes:WORKINSTRUCTIONS:headerLabel')}
+            </Header.Link>
+          ) : (
+            <Header.Link
+              label={t('routes:WORKINSTRUCTIONS:headerLabel')}
+              as={Link}
+              href={t('workInstructions:sideNav:externalLinks:permitsAndInstructions:url')}
+              external
+              openInNewTab
+            >
+              {t('routes:WORKINSTRUCTIONS:headerLabel')}
+            </Header.Link>
+          )}
         </Header.NavigationMenu>
       )}
       <HankeCreateDialog isOpen={showHankeCreateDialog} onClose={closeHankeCreateDialog} />

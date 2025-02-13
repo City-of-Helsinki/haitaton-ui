@@ -115,4 +115,39 @@ describe('Header', () => {
     await changeLanguage(user, 'English', 'Svenska');
     expect(window.location.pathname).toBe('/sv/ansokan/1');
   });
+
+  test('Should render external work instructions link when hanke feature is disabled', async () => {
+    const OLD_ENV = { ...window._env_ };
+    window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_HANKE: '0' };
+    await i18next.changeLanguage('fi');
+    getWrapper(true);
+
+    const linkElement = screen.getByRole('link', {
+      name: 'Työohjeet. Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon.',
+    });
+    expect(linkElement).toHaveAttribute('target', '_blank');
+    expect(linkElement).toHaveAttribute('rel', 'noopener');
+    expect(linkElement).toHaveAttribute(
+      'href',
+      'https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/tyomaan-luvat-ja-ohjeet',
+    );
+
+    window._env_ = OLD_ENV;
+  });
+
+  test('Should render internal work instructions link when hanke feature is enabled', async () => {
+    const OLD_ENV = { ...window._env_ };
+    window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_HANKE: '1' };
+    await i18next.changeLanguage('fi');
+    getWrapper(true);
+
+    const linkElement = await screen.findByRole('link', {
+      name: 'Työohjeet',
+    });
+    expect(linkElement).not.toHaveAttribute('target', '_blank');
+    expect(linkElement).not.toHaveAttribute('rel', 'noopener');
+    expect(linkElement).toHaveAttribute('href', '/fi/tyoohjeet');
+
+    window._env_ = OLD_ENV;
+  });
 });
