@@ -1,20 +1,29 @@
 import { test, expect } from '@playwright/test';
-import { perustaja, vastaava, suorittaja, testiData, testiOsoite, tarkistaTulokset } from './_setup';
+import {
+  perustaja,
+  vastaava,
+  suorittaja,
+  testiData,
+  testiOsoite,
+  tarkistaTulokset,
+} from './_setup';
 
 test.beforeEach('Helsinki_login', async ({ page }) => {
   await page.goto(testiData.testEnvUrl);
   await expect(page.getByRole('heading', { name: 'Tervetuloa Haitaton-palveluun' })).toBeVisible();
   await page.getByLabel('Kirjaudu').click();
-  await page.getByRole('link', { name: 'Suomi.fi identification' }).click();
-  await expect(page.getByRole('link', { name: 'Test IdP' })).toBeVisible();
-  await page.getByRole('link', { name: 'Test IdP' }).click();
+  await page.getByRole('link', { name: 'Suomi.fi-tunnistautuminen' }).click();
+  await expect(page.getByRole('link', { name: 'Testitunnistaja' })).toBeVisible();
+  await page.getByRole('link', { name: 'Testitunnistaja' }).click();
   await expect(page.getByPlaceholder('-9988')).toBeVisible();
   await page.getByPlaceholder('-9988').fill(testiData.suomifilogin);
   await page.getByPlaceholder('-9988').press('Tab');
   await page.getByRole('button', { name: 'Tunnistaudu' }).click();
-  await expect(page.getByRole('button', { name: 'Continue to service' })).toBeVisible();
-  await page.getByRole('button', { name: 'Continue to service' }).click();
-  await expect(page.getByLabel('Tee johtoselvityshakemus.', { exact: true })).toBeVisible({ timeout: 10000, });
+  await expect(page.getByRole('button', { name: 'Jatka palveluun' })).toBeVisible();
+  await page.getByRole('button', { name: 'Jatka palveluun' }).click();
+  await expect(page.getByLabel('Tee johtoselvityshakemus.', { exact: true })).toBeVisible({
+    timeout: 10000,
+  });
 });
 
 test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
@@ -28,7 +37,9 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   await page.getByTestId('nimi').fill(testiData.todayFull);
   await page.getByRole('button', { name: 'Luo hakemus' }).click();
   await page.getByTestId('applicationData.postalAddress.streetAddress.streetName').click();
-  await page.getByTestId('applicationData.postalAddress.streetAddress.streetName').fill(testiOsoite.address);
+  await page
+    .getByTestId('applicationData.postalAddress.streetAddress.streetName')
+    .fill(testiOsoite.address);
   await expect(page.getByTestId('save-form-btn')).toBeVisible();
   await page.getByLabel('Uuden rakenteen tai johdon').check();
   await page.getByText('Kyllä').click();
@@ -38,42 +49,78 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   // Merkkaa päivämäärät
   await page.getByText('Hakemus tallennettu').waitFor({ state: 'hidden', timeout: 10000 });
   await page.getByLabel('Valitse päivämäärä').first().click();
-  await page.getByRole('button', { name: `${testiData.currentMonth} ${testiData.todayDate}`, exact: true }).click();
+  await page
+    .getByRole('button', { name: `${testiData.currentMonth} ${testiData.todayDate}`, exact: true })
+    .click();
   await page.getByLabel('Työn arvioitu loppupäivä*').fill(testiData.tomorrowType);
   // Merkkaa kartta-canvas
   await page.getByTestId('draw-control-Polygon').click();
-  await page.locator('canvas').first().click({ position: { x: 454, y: 221, } });
-  await page.locator('canvas').first().click({ position: { x: 543, y: 221, }, });
-  await page.locator('canvas').first().click({ position: { x: 454, y: 289, } });
-  await page.locator('canvas').first().click({ position: { x: 454, y: 221, }, });
+  await page
+    .locator('canvas')
+    .first()
+    .click({ position: { x: 454, y: 221 } });
+  await page
+    .locator('canvas')
+    .first()
+    .click({ position: { x: 543, y: 221 } });
+  await page
+    .locator('canvas')
+    .first()
+    .click({ position: { x: 454, y: 289 } });
+  await page
+    .locator('canvas')
+    .first()
+    .click({ position: { x: 454, y: 221 } });
   await page.getByRole('button', { name: 'Seuraava' }).click();
   await page.getByText('Hakemus tallennettu').waitFor({ state: 'hidden', timeout: 10000 });
   // Täytä hakijoiden tiedot
   await page.locator('[id="applicationData\\.customerWithContacts\\.customer\\.name"]').click();
-  await page.locator('[id="applicationData\\.customerWithContacts\\.customer\\.name"]').fill(vastaava.username);
-  await page.getByTestId('applicationData.customerWithContacts.customer.registryKey').fill(vastaava.y_tunnus);
+  await page
+    .locator('[id="applicationData\\.customerWithContacts\\.customer\\.name"]')
+    .fill(vastaava.username);
+  await page
+    .getByTestId('applicationData.customerWithContacts.customer.registryKey')
+    .fill(vastaava.y_tunnus);
   await page.getByTestId('applicationData.customerWithContacts.customer.email').click();
-  await page.getByTestId('applicationData.customerWithContacts.customer.email').fill(vastaava.email);
-  await page.getByTestId('applicationData.customerWithContacts.customer.phone').fill(vastaava.phonenumber);
+  await page
+    .getByTestId('applicationData.customerWithContacts.customer.email')
+    .fill(vastaava.email);
+  await page
+    .getByTestId('applicationData.customerWithContacts.customer.phone')
+    .fill(vastaava.phonenumber);
   await page.locator('#hds-combobox-11-toggle-button').click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page.locator('#hds-combobox-11-toggle-button').click();
   await page.locator('[id="applicationData\\.contractorWithContacts\\.customer\\.name"]').click();
-  await page.locator('[id="applicationData\\.contractorWithContacts\\.customer\\.name"]').fill(suorittaja.username);
-  await page.getByTestId('applicationData.contractorWithContacts.customer.registryKey').fill(suorittaja.y_tunnus);
+  await page
+    .locator('[id="applicationData\\.contractorWithContacts\\.customer\\.name"]')
+    .fill(suorittaja.username);
+  await page
+    .getByTestId('applicationData.contractorWithContacts.customer.registryKey')
+    .fill(suorittaja.y_tunnus);
   await page.getByTestId('applicationData.contractorWithContacts.customer.email').click();
-  await page.getByTestId('applicationData.contractorWithContacts.customer.email').fill(suorittaja.email);
-  await page.getByTestId('applicationData.contractorWithContacts.customer.phone').fill(suorittaja.phonenumber);
-  await page.getByRole('region', { name: 'Työn suorittajan tiedot' }).getByLabel('Yhteyshenkilöt: Sulje ja avaa').click();
+  await page
+    .getByTestId('applicationData.contractorWithContacts.customer.email')
+    .fill(suorittaja.email);
+  await page
+    .getByTestId('applicationData.contractorWithContacts.customer.phone')
+    .fill(suorittaja.phonenumber);
+  await page
+    .getByRole('region', { name: 'Työn suorittajan tiedot' })
+    .getByLabel('Yhteyshenkilöt: Sulje ja avaa')
+    .click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
-  await page.getByRole('region', { name: 'Työn suorittajan tiedot' }).getByLabel('Yhteyshenkilöt: Sulje ja avaa').click();
+  await page
+    .getByRole('region', { name: 'Työn suorittajan tiedot' })
+    .getByLabel('Yhteyshenkilöt: Sulje ja avaa')
+    .click();
   await expect(page.getByRole('button', { name: 'Peru hakemus' })).toBeVisible();
 
   // Workaround chromium selaimelle
   await expect(async () => {
     await page.getByRole('button', { name: 'Seuraava' }).click();
     await expect(page.getByText('Vaihe 4/5: Liitteet')).toBeVisible();
-  }).toPass({ intervals: [2000, 2000, 2000, 2000, 2000], timeout: 12000, });
+  }).toPass({ intervals: [2000, 2000, 2000, 2000, 2000], timeout: 12000 });
 
   // hakemuksen lähettäminen
   await page.getByRole('button', { name: 'Seuraava' }).click();
@@ -84,13 +131,16 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   await page.getByRole('button', { name: 'Vahvista' }).click();
   await expect(page.getByText('Hakemus lähetetty')).toBeVisible();
   const hakemuksenTunnus = await page.getByTestId('allu_tunnus').textContent();
-  const linkkiHakemukseen = await page.locator('a').filter({ hasText: /HAI/gm }).getAttribute('href');
+  const linkkiHakemukseen = await page
+    .locator('a')
+    .filter({ hasText: /HAI/gm })
+    .getAttribute('href');
   const linkkiHakemukseenEdit = linkkiHakemukseen?.slice(3);
   const hakemusLinkki = `${testiData.testEnvUrl}${linkkiHakemukseenEdit}`;
 
   // Tarkista hanke
   await page.goto(hakemusLinkki);
-  await expect(page.getByText("Hakemukset")).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByText('Hakemukset')).toBeVisible({ timeout: 10_000 });
   await page.getByText('Hakemukset').click();
   await expect(page.getByTestId('application-status-tag')).toBeVisible();
   await expect(page.getByTestId('application-status-tag')).toContainText('Odottaa käsittelyä');
@@ -123,25 +173,28 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   await page.getByLabel('Selite *').fill('Testi Auto Maatio');
   await page.getByRole('button', { name: 'LÄHETÄ PYYNTÖ' }).click();
   await expect(page.getByText('Hakemus siirretty odottamaan täydennystä')).toBeVisible();
-  await page.getByText('Hakemus siirretty odottamaan täydennystä').waitFor({ state: 'hidden', timeout: 10000 });
-  await tarkistaTulokset(page, hakemusLinkki, "Täydennyspyyntö")
-  await page.locator("[data-testid^=applicationViewLinkIdentifier-]").click()
+  await page
+    .getByText('Hakemus siirretty odottamaan täydennystä')
+    .waitFor({ state: 'hidden', timeout: 10000 });
+  await tarkistaTulokset(page, hakemusLinkki, 'Täydennyspyyntö');
+  await page.locator('[data-testid^=applicationViewLinkIdentifier-]').click();
 
   await page.getByText('Täydennä').click();
-  await expect(page.locator("#set-focus-here")).toBeVisible()
+  await expect(page.locator('#set-focus-here')).toBeVisible();
   await page.getByText('Yhteystiedot').click();
-  await page.getByTestId('applicationData.customerWithContacts.customer.phone').fill("0001234567");
+  await page.getByTestId('applicationData.customerWithContacts.customer.phone').fill('0001234567');
   await page.getByRole('button', { name: 'Seuraava' }).click();
   await page.getByText('Hakemus tallennettu').waitFor({ state: 'hidden', timeout: 10000 });
   await page.getByText('Yhteystiedot').click();
-  await page.getByTestId('applicationData.customerWithContacts.customer.phone').fill(vastaava.phonenumber);
+  await page
+    .getByTestId('applicationData.customerWithContacts.customer.phone')
+    .fill(vastaava.phonenumber);
   await page.getByRole('button', { name: 'Seuraava' }).click();
   await page.getByText('Hakemus tallennettu').waitFor({ state: 'hidden', timeout: 10000 });
   await page.getByText('Yhteenveto').click();
   await page.getByText('Lähetä täydennys').click();
   await page.getByText('Vahvista').click();
-  await tarkistaTulokset(page, hakemusLinkki, "Täydennetty käsittelyyn")
-
+  await tarkistaTulokset(page, hakemusLinkki, 'Täydennetty käsittelyyn');
 
   // check allu
   await page.goto(testiData.allu_url);
@@ -160,7 +213,9 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'TALLENNA' })).toBeVisible();
   await page.getByRole('button', { name: 'TALLENNA' }).click();
   await page.getByText(' Täydennyspyyntö käsitelty ').waitFor({ state: 'hidden', timeout: 10000 });
-  await page.getByText(' Ilmoitus hakemuksen muutoksista kuitattu ').waitFor({ state: 'hidden', timeout: 10000 });
+  await page
+    .getByText(' Ilmoitus hakemuksen muutoksista kuitattu ')
+    .waitFor({ state: 'hidden', timeout: 10000 });
   await expect(page.getByRole('button', { name: 'PÄÄTTÄMISEEN' })).toBeVisible({ timeout: 10_000 });
   await page.getByRole('button', { name: 'PÄÄTTÄMISEEN' }).click();
   await expect(page.getByRole('button', { name: 'PÄÄTÄ' })).toBeVisible();
@@ -168,6 +223,5 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Päätä hakemus' })).toBeVisible();
   await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
   await expect(page.getByRole('heading', { name: 'TYÖJONO' })).toBeVisible();
-  await tarkistaTulokset(page, hakemusLinkki, "Päätös")
-
+  await tarkistaTulokset(page, hakemusLinkki, 'Päätös');
 });

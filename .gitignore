@@ -46,3 +46,6 @@ out/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Playwright report directory
+/e2e/report
