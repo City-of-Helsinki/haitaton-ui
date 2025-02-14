@@ -174,3 +174,57 @@ describe('Create johtoselvitys from dialog', () => {
     expect(screen.getByText('Puhelinnumero on virheellinen')).toBeInTheDocument();
   });
 });
+
+describe('Work instructions link', () => {
+  function setup() {
+    return renderWithLoginProvider({
+      state: 'VALID_SESSION',
+      returnUser: true,
+      placeUserToStorage: true,
+      children: (
+        <I18nextProvider i18n={i18n}>
+          <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+              <FeatureFlagsProvider>
+                <Homepage />
+              </FeatureFlagsProvider>
+            </BrowserRouter>
+          </QueryClientProvider>
+        </I18nextProvider>
+      ),
+    });
+  }
+
+  test('Should render external work instructions link when hanke feature is disabled', () => {
+    const OLD_ENV = { ...window._env_ };
+    window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_HANKE: '0' };
+    setup();
+
+    const linkElement = screen.getByRole('link', {
+      name: 'Tutustu ohjeisiin. Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon.',
+    });
+    expect(linkElement).toHaveAttribute('target', '_blank');
+    expect(linkElement).toHaveAttribute('rel', 'noopener');
+    expect(linkElement).toHaveAttribute(
+      'href',
+      'https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/tyomaan-luvat-ja-ohjeet',
+    );
+
+    window._env_ = OLD_ENV;
+  });
+
+  test('Should render internal work instructions link when hanke feature is enabled', () => {
+    const OLD_ENV = { ...window._env_ };
+    window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_HANKE: '1' };
+    setup();
+
+    const linkElement = screen.getByRole('link', {
+      name: 'Tutustu ohjeisiin.',
+    });
+    expect(linkElement).not.toHaveAttribute('target', '_blank');
+    expect(linkElement).not.toHaveAttribute('rel', 'noopener');
+    expect(linkElement).toHaveAttribute('href', '/fi/tyoohjeet');
+
+    window._env_ = OLD_ENV;
+  });
+});
