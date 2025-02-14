@@ -35,6 +35,23 @@ export async function helsinkiLogin(page, env=testiData.testEnvUrl) {
   await expect(page.getByLabel('Tee johtoselvityshakemus.', { exact: true })).toBeVisible({ timeout: 10000, });
 }
 
+export function idGenerator(length:number) {
+  const words = [
+    'Alfa', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Foxtrot', 'Golf', 'Hotel',
+    'India', 'Juliett', 'Kilo', 'Lima', 'Mike', 'November', 'Oscar', 'Papa',
+    'Quebec', 'Romeo', 'Sierra', 'Tango', 'Uniform', 'Victor', 'Whiskey', 'X-ray',
+    'Yankee', 'Zulu'
+];
+
+let result = '';
+
+for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * words.length);
+    result += words[randomIndex] + '-';
+}
+
+return result.trim();
+}
 
 interface TestUser {
   username: string;

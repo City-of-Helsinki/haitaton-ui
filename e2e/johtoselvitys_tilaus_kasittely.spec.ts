@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { perustaja, vastaava, suorittaja, testiData, testiOsoite, helsinkiLogin } from './_setup';
 
 test.beforeEach('Helsinki_login', async ({ page }) => {
-  helsinkiLogin(page);
+  await helsinkiLogin(page);
 });
 
 test('Johtoselvityshakemus_tilaus ja käsittely', async ({ page }) => {

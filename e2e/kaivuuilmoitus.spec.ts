@@ -1,15 +1,16 @@
 import { test, expect } from '@playwright/test';
-import { perustaja, suorittaja, rakennuttaja, vastaava, asianhoitaja, testiData, testiOsoite, helsinkiLogin } from './_setup';
+import { perustaja, suorittaja, rakennuttaja, vastaava, asianhoitaja, testiData, testiOsoite, helsinkiLogin, idGenerator } from './_setup';
 
 test.beforeEach('Helsinki_login', async ({ page }) => {
-  helsinkiLogin(page);
+  await helsinkiLogin(page);
 });
 
 
 test('Kaivuuilmoitus', async ({ page }) => {
     test.setTimeout(320000);
     await page.getByLabel('Luo uusi hanke.', { exact: true }).click();
-    await page.getByTestId('nimi').fill(`${testiData.runtime}`);
+    const ajonNimi = `Testiautomaatio-${idGenerator(4)}`
+    await page.getByTestId('nimi').fill(ajonNimi);
     await page.getByTestId('perustaja.sahkoposti').fill(perustaja.email);
     await page.getByTestId('perustaja.puhelinnumero').fill(perustaja.phonenumber);
     await page.getByRole('button', { name: 'Luo hanke' }).click();
@@ -102,7 +103,7 @@ test('Kaivuuilmoitus', async ({ page }) => {
     await page.getByLabel('', { exact: true }).click();
     await page.getByRole('option', { name: 'Kaivuilmoitus (ja' }).click();
     await page.getByRole('button', { name: 'Luo hakemus' }).click();
-    await page.getByTestId('applicationData.name').fill(`Testiautomaatio ${testiData.today}`);
+    await page.getByTestId('applicationData.name').fill(ajonNimi);
     await page.getByLabel('Työn kuvaus*').fill('Työn kuvaus');
     await page.getByLabel('Uuden rakenteen tai johdon').check();
     await page.getByText('Hae uusi johtoselvitys').click();
@@ -222,7 +223,7 @@ test('Kaivuuilmoitus', async ({ page }) => {
 
   // Odotetaan tuloksia
   await expect(async () => {
-    await page.goto(`${testiData.testEnvUrl}/hankesalkku/${hanketunnus}`)
+    await page.goto(`${testiData.hankesalkku}${hanketunnus}`)
     await page.getByText('Hakemukset').click();
     await expect(page.getByTestId('application-card').first()).toContainText('Päätös', { timeout: 2000, });
     await expect(page.getByTestId('application-card').nth(1)).toContainText('Päätös', { timeout: 2000, });

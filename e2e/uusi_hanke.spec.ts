@@ -1,23 +1,24 @@
 import { test, expect } from '@playwright/test';
-import { perustaja, suorittaja, rakennuttaja, testiData, testiOsoite, helsinkiLogin } from './_setup';
+import { perustaja, suorittaja, rakennuttaja, testiData, testiOsoite, helsinkiLogin, idGenerator } from './_setup';
 
 test.beforeEach('Helsinki_login', async ({ page }) => {
-  helsinkiLogin(page);
+  await helsinkiLogin(page);
 });
 
 
 test('Uusi hanke', async ({ page }) => {
-    test.setTimeout(160000);
+    test.setTimeout(240000);
     await page.getByLabel('Luo uusi hanke.', { exact: true }).click();
     await page.getByTestId('nimi').click();
-    await page.getByTestId('nimi').fill(`${testiData.runtime}`);
+    const ajonNimi = `${idGenerator(4)}`
+    await page.getByTestId('nimi').fill(ajonNimi);
     await page.getByTestId('perustaja.sahkoposti').click();
     await page.getByTestId('perustaja.sahkoposti').fill(perustaja.email);
     await page.getByTestId('perustaja.puhelinnumero').click();
     await page.getByTestId('perustaja.puhelinnumero').fill(perustaja.phonenumber);
     await page.getByRole('button', { name: 'Luo hanke' }).click();
     await page.getByTestId('kuvaus').click();
-    await page.getByTestId('kuvaus').fill('Testiautomaatio');
+    await page.getByTestId('kuvaus').fill(`${ajonNimi} Tämä on testiautomaatiota varten luotu`);
     await page.getByTestId('tyomaaKatuosoite').click();
     await page.getByTestId('tyomaaKatuosoite').fill(testiOsoite.address);
     await page.getByText('Ohjelmointi').click();
@@ -99,9 +100,11 @@ test('Uusi hanke', async ({ page }) => {
     await page.getByRole('button', { name: 'Seuraava' }).click();
     await page.getByText('Hakemus tallennettu').waitFor({ state: 'hidden', timeout: 10000 });
     await page.getByRole('button', { name: 'Tallenna', exact: true }).click();
+    await expect(page.locator("[data-testid^=hanke-tunnus]")).toBeVisible();
+    let hanketunnus = await page.locator("[data-testid^=hanke-tunnus]").textContent();
     await page.getByRole('link', { name: 'Haitaton' }).click();
     await page.getByTestId('hankeListLink').click();
-    await page.getByPlaceholder('Esim. hankkeen nimi tai tunnus').fill(`${testiData.runtime}`);
+    await page.getByPlaceholder('Esim. hankkeen nimi tai tunnus').fill(ajonNimi);
     await page.getByLabel('Search', { exact: true }).click();
-    await page.getByText(`${testiData.runtime}`).click();
+    await page.getByText(`${hanketunnus}`).click();
 })
