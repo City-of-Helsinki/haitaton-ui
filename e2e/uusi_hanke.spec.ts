@@ -10,7 +10,7 @@ test('Uusi hanke', async ({ page }) => {
     test.setTimeout(240000);
     await page.getByLabel('Luo uusi hanke.', { exact: true }).click();
     await page.getByTestId('nimi').click();
-    const ajonNimi = `${idGenerator(4)}`
+    const ajonNimi = `TA${testiData.runtime}-${idGenerator(1)}`
     await page.getByTestId('nimi').fill(ajonNimi);
     await page.getByTestId('perustaja.sahkoposti').click();
     await page.getByTestId('perustaja.sahkoposti').fill(perustaja.email);
