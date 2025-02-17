@@ -1540,6 +1540,11 @@
       "description": "Lähettämällä tiedot käsittelyssä oleva hakemuksesi päivitetään täydennetyillä tiedoilla."
     }
   },
+  "muutosilmoitus": {
+    "buttons": {
+      "createMuutosilmoitus": "Tee muutosilmoitus"
+    }
+  },
   "hankeSidebar": {
     "ariaSidebarContent": "Hankkeen tiedot",
     "closeButtonAriaLabel": "Sulje hankevalikko",
