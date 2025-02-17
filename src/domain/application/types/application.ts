@@ -20,6 +20,7 @@ import { reportCompletionDateSchema } from '../../kaivuilmoitus/validationSchema
 import { sendSchema } from '../yupSchemas';
 import { Taydennys, Taydennyspyynto } from '../taydennys/types';
 import { Haittojenhallintasuunnitelma } from '../../common/haittojenhallinta/types';
+import { Muutosilmoitus } from '../muutosilmoitus/types';
 
 export type ApplicationType = 'CABLE_REPORT' | 'EXCAVATION_NOTIFICATION';
 
@@ -269,6 +270,7 @@ export interface Application<T = JohtoselvitysData | KaivuilmoitusData> {
   valmistumisilmoitukset?: Valmistumisilmoitukset | null;
   taydennyspyynto?: Taydennyspyynto | null;
   taydennys?: Taydennys<T> | null;
+  muutosilmoitus?: Muutosilmoitus<T>;
 }
 
 export interface HankkeenHakemus {

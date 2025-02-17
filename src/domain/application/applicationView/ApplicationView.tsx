@@ -486,6 +486,8 @@ type Props = {
   onEditApplication: () => void;
   onEditTaydennys: () => void;
   creatingTaydennys?: boolean;
+  onEditMuutosilmoitus: () => void;
+  creatingMuutosilmoitus?: boolean;
 };
 
 function ApplicationView({
@@ -495,6 +497,8 @@ function ApplicationView({
   onEditApplication,
   onEditTaydennys,
   creatingTaydennys,
+  onEditMuutosilmoitus,
+  creatingMuutosilmoitus,
 }: Readonly<Props>) {
   const { t } = useTranslation();
   const locale = useLocale();
@@ -573,6 +577,10 @@ function ApplicationView({
   const informationRequestFeatureEnabled = useIsInformationRequestFeatureEnabled();
 
   const { sendTaydennysButton, sendTaydennysDialog } = useSendTaydennys(application, signedInUser);
+
+  const showMuutosilmoitusButton =
+    applicationType === 'EXCAVATION_NOTIFICATION' &&
+    (alluStatus === AlluStatus.DECISION || alluStatus === AlluStatus.OPERATIONAL_CONDITION);
 
   async function onSendApplication(pdr: PaperDecisionReceiver | undefined | null) {
     applicationSendMutation.mutate({
@@ -736,6 +744,18 @@ function ApplicationView({
               >
                 {t('hakemus:notifications:sendApplicationDisabled')}
               </Notification>
+            </CheckRightsByHanke>
+          )}
+          {showMuutosilmoitusButton && (
+            <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
+              <Button
+                theme="coat"
+                iconLeft={<IconPen />}
+                onClick={onEditMuutosilmoitus}
+                isLoading={creatingMuutosilmoitus}
+              >
+                {t('muutosilmoitus:buttons:createMuutosilmoitus')}
+              </Button>
             </CheckRightsByHanke>
           )}
           {showReportOperationalConditionButton && (

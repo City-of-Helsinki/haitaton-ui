@@ -6,7 +6,7 @@ import { Taydennys } from './types';
  * Create new taydennys
  * @param id application id
  */
-export async function createTaydennys<ApplicationData>(id: string) {
+export async function createTaydennys<ApplicationData>(id: number) {
   const response = await api.post<Taydennys<ApplicationData>>(`/hakemukset/${id}/taydennys`);
   return response.data;
 }
