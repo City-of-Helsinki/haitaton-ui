@@ -37,7 +37,7 @@ const AreaSummary: React.FC<Props> = ({ formData }) => {
       <SectionItemContent>
         <p>{totalSurfaceArea} m²</p>
       </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionItemTitle>
+      <SectionItemTitle>{t('form:labels:areas')}</SectionItemTitle>
       <SectionItemContent>
         {areas.map((area, index) => {
           return (

@@ -29,7 +29,6 @@ import {
   SectionItemContentAdded,
   SectionItemContentRemoved,
   SectionItemTitle,
-  SectionTitle,
 } from '../../forms/components/FormSummarySection';
 import { HankeData } from '../../types/hanke';
 import ApplicationStatusTag from '../components/ApplicationStatusTag';
@@ -168,7 +167,7 @@ function JohtoselvitysAreasInfo({
       <SectionItemContent>
         <TotalSurfaceArea tyoalueet={tyoalueet} changedAreas={changedAreas} />
       </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionItemTitle>
+      <SectionItemTitle>{t('form:labels:areas')}</SectionItemTitle>
       <SectionItemContent>
         {tyoalueet.map((area, index) => {
           return (
@@ -255,7 +254,7 @@ function KaivuilmoitusAreasInfo({
     return (
       <Accordion
         language={locale}
-        heading={alue.name}
+        heading={t('hakemus:labels:workAreasInProjectArea', { projectName: alue.name })}
         initiallyOpen
         key={alue.hankealueId}
         className={styles.applicationAreaContainer}
@@ -300,7 +299,7 @@ function KaivuilmoitusAreasInfo({
           </SectionItemContent>
           {!areasChanged && (
             <>
-              <SectionItemTitle>{t('form:headers:alueet')}</SectionItemTitle>
+              <SectionItemTitle>{t('form:labels:areas')}</SectionItemTitle>
               <SectionItemContent>
                 <TyoalueetList tyoalueet={originalTyoalueet} />
               </SectionItemContent>
@@ -930,7 +929,6 @@ function ApplicationView({
             </TabPanel>
             <TabPanel>
               {/* Contacts information panel */}
-              <SectionTitle>{t('form:yhteystiedot:header')}</SectionTitle>
               <FormSummarySection>
                 <ContactsSummary
                   customerWithContacts={customerWithContacts}

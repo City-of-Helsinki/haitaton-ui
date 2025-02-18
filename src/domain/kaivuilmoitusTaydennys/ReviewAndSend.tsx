@@ -122,7 +122,7 @@ export default function ReviewAndSend({
           <SectionTitle>{t('form:headers:perustiedot')}</SectionTitle>
           <BasicInformationSummary formData={originalApplication} />
 
-          <SectionTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionTitle>
+          <SectionTitle>{t('form:labels:areas')}</SectionTitle>
           <AreaSummary formData={originalApplication} />
 
           <SectionTitle>{t('hankePortfolio:tabit:haittojenHallinta')}</SectionTitle>

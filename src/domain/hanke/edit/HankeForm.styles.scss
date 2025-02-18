@@ -142,6 +142,11 @@
     margin-bottom: var(--spacing-s);
   }
 
+  .noAreasText {
+    line-height: var(--lineheight-s);
+    font-weight: 500;
+  }
+
   .nuisanceType {
     background: #e6e6e6;
     padding: var(--spacing-m);

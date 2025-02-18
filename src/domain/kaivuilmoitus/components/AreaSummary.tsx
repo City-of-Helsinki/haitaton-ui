@@ -106,7 +106,7 @@ const AreaSummary: React.FC<Props> = ({ formData }) => {
       <SectionItemTitle>{t('kaivuilmoitusForm:alueet:endDate')}</SectionItemTitle>
       <SectionItemContent>{endTime && <p>{formatToFinnishDate(endTime)}</p>}</SectionItemContent>
 
-      <SectionItemTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionItemTitle>
+      <SectionItemTitle>{t('form:labels:areas')}</SectionItemTitle>
       <SectionItemContent>
         {areas.map((area) => (
           <AreaDetail key={area.hankealueId} area={area} />

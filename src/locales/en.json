@@ -124,11 +124,13 @@
     },
     "headers": {
       "perustiedot": "Basic information",
-      "alueet": "Areas",
+      "alueet": "Plotting Areas",
       "yhteystiedot": "Contact information",
       "liitteetJaLisatiedot": "Attachments and additional information",
+      "liitteet": "Attachment",
       "yhteenveto": "Summary",
-      "hakemusInfo": "Application information"
+      "hakemusInfo": "Application information",
+      "haittojenHallinta": "Nuisance management"
     },
     "labels": {
       "pintaAla": "Area",
@@ -137,6 +139,7 @@
       "roleHelper": "Your main role in the worksite",
       "fromHelsinkiProfile": "Retrieved from Helsinki profile",
       "addressInformation": "Address information",
+      "areas": "Areas",
       "kokonaisAla": "Total area",
       "areaName": "Area name",
       "timespan": "Timespan",
@@ -571,10 +574,10 @@
     "nextButton": "Next",
     "previousButton": "Previous",
     "insertFieldError": "Enter a field",
-    "savingSuccessHeader": "Draft saved",
-    "savingSuccessText": "The draft has been saved in the project list",
+    "savingSuccessHeader": "Project saved",
+    "savingSuccessText": "The project has been saved in the project list.",
     "savingFailHeader": "Something went wrong",
-    "savingFailText": "Could not save the draft, try again",
+    "savingFailText": "Could not save the project, please try again.",
     "saveAndQuitSuccessHeader": "Project saved",
     "saveAndQuitSuccessText": "Project {{name}} ({{project ID}}) saved to your projects.",
     "closeAriaLabel": "Exit the form without saving",
@@ -695,7 +698,7 @@
       "instructions": "<1>You can also send applications via the project creation.</1><1><0>PLEASE NOTE!</0> If you are only working on a cable report for a private area, <2>fill in the application</2>. Cable reports for public areas are applied for after the project has been created, via the excavation notification.</1><1>Please note that the following information will be publicly displayed to all Haitaton users after the project is published:</1><3><4>Project name, identifier and time period</4><4>Project description</4><4>Project area names and time periods</4><4>Project area traffic nuisance indexes</4><4>Project owner</4><4>Project phase and worksite type</4></3><1>When you have added the project information, you can copy it to the applications as required.</1>"
     },
     "hankkeenAlueForm": {
-      "header": "Areas",
+      "header": "Plotting Areas",
       "subHeader": "Project areas",
       "area": "Area",
       "instructions": "[TRANSLATION_PENDING]Several geometries can be drawn for the project. Geometry areas affect the project’s traffic congestion indices. Drawing tools can be found at the bottom left of the map view. With the pen tool, you can draw polygonal geometries by clicking the point where you want an angle. With the square tool, you can create square areas by first clicking the map and moving the mouse in the direction you want. Clicking it again “closes” the square drawing. A geometry can be edited by “grabbing” the edge of the geometry and dragging. A square geometry can also be shaped by grabbing the edge. lete a geometry, first select the geometry by clicking it; a bin icon will appear in the bottom left drawing tools which you can click to delete the geometry.",
@@ -711,8 +714,8 @@
     },
     "haittojenHallintaForm": {
       "header": "Nuisance control",
-      "subHeaderNoAlueet": "Project areas",
-      "subHeaderAlueet": "Area locations",
+      "subHeaderNoAlueet": "Please select project areas to fill the information.",
+      "subHeaderAlueet": "Project areas",
       "instructions": "Your project may hinder different modes of transport and local operations. Haitaton automatically calculates a significance value for each nuisance by project area separately for bicycle traffic, tram traffic, local bus traffic and car traffic. The traffic nuisance index describes the worst situation in the project area in terms of the aforementioned modes of transport. The disturbances are represented with a scale determined for each mode of transport and colours (0/grey = not identified, 1–2/green = no significant nuisance, 3/yellow = probable nuisance, 4–5/red = significant nuisance). Results not concerning the aforementioned modes of transport are represented with numbers alone (0–5).",
       "instructions2": "Transport mode selectors on the left side of the map allow you to view the inconvenience indices for project and work areas regarding particular transport modes. All transport modes are active by default. You can change visibility of the modes by clicking on the icons. The most critical index will be coloured in on the map.",
       "noAlueet": "Add project areas to fill in information",
@@ -1185,7 +1188,8 @@
         "TOIMINNALLINEN_KUNTO": "Functional condition reported on {{lastValmistumisilmoitus.reportedAt}} for {{lastValmistumisilmoitus.dateReported}}",
         "TYO_VALMIS": "Completion reported on {{lastValmistumisilmoitus.reportedAt}} for {{lastValmistumisilmoitus.dateReported}}"
       },
-      "hankeAreaNuisanceControl": "Nuisance control in the project area"
+      "hankeAreaNuisanceControl": "Nuisance control in the project area",
+      "workAreasInProjectArea": "Work areas in project area {{projectName}}"
     },
     "notifications": {
       "saveSuccessLabel": "Application saved",

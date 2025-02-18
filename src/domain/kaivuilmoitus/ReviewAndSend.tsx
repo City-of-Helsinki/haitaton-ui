@@ -41,7 +41,7 @@ export const ReviewAndSend: React.FC<React.PropsWithChildren<Props>> = ({
       <SectionTitle>{t('form:headers:perustiedot')}</SectionTitle>
       <BasicInformationSummary formData={getValues()} />
 
-      <SectionTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionTitle>
+      <SectionTitle>{t('form:labels:areas')}</SectionTitle>
       <AreaSummary formData={getValues()} />
 
       <SectionTitle>{t('hankePortfolio:tabit:haittojenHallinta')}</SectionTitle>

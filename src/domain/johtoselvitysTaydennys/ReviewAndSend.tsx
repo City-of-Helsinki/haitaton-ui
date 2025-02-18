@@ -78,7 +78,7 @@ export default function ReviewAndSend({
           <SectionTitle>{t('hankeForm:perustiedotForm:header')}</SectionTitle>
           <BasicInformationSummary formData={originalApplication} />
 
-          <SectionTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionTitle>
+          <SectionTitle>{t('form:labels:areas')}</SectionTitle>
           <AreaSummary formData={originalApplication} />
 
           <SectionTitle>{t('form:yhteystiedot:header')}</SectionTitle>

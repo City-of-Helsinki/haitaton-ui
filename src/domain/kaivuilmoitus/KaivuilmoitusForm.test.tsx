@@ -461,7 +461,7 @@ test('Should be able to fill form pages and show filled information in summary p
   expect(await screen.findByText(/hakemus tallennettu/i)).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
 
-  expect(await screen.findByText('Vaihe 2/6: Alueet')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 2/6: Alueiden piirto')).toBeInTheDocument();
 
   fillAreasInformation({ start: startDate, end: endDate });
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
@@ -732,7 +732,7 @@ test('Should show notifications if work areas overlap with johtoselvitys work ar
     <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
   );
 
-  await user.click(screen.getByRole('button', { name: /alueet/i }));
+  await user.click(screen.getByRole('button', { name: /alueiden/i }));
 
   expect(
     await screen.findByText(
@@ -1147,7 +1147,7 @@ test('Should be able to remove work areas', async () => {
   const { user } = render(
     <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
   );
-  await user.click(await screen.findByRole('button', { name: /alueet/i }));
+  await user.click(await screen.findByRole('button', { name: /alueiden/i }));
 
   await user.click(await screen.findByRole('button', { name: /poista työalue 1/i }));
 
@@ -1175,7 +1175,7 @@ test('Should highlight selected work area', async () => {
   const { user } = render(
     <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
   );
-  await user.click(await screen.findByRole('button', { name: /alueet/i }));
+  await user.click(await screen.findByRole('button', { name: /alueiden/i }));
 
   const workAreaOne = await screen.findByRole('button', { name: 'Työalue 1' });
   const workAreaTwo = await screen.findByRole('button', { name: 'Työalue 2' });
@@ -1196,7 +1196,7 @@ test('Should show initial traffic nuisance index summary', async () => {
   const { user } = render(
     <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
   );
-  await user.click(await screen.findByRole('button', { name: /alueet/i }));
+  await user.click(await screen.findByRole('button', { name: /alueiden/i }));
 
   const accordionHeader = await screen.findByRole('button', {
     name: 'Työalueiden liikennehaittaindeksien yhteenveto (0-5)',
@@ -1239,7 +1239,7 @@ test('Should show changed traffic nuisance index summary when kaistahaitta chang
   const { user } = render(
     <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
   );
-  await user.click(await screen.findByRole('button', { name: /alueet/i }));
+  await user.click(await screen.findByRole('button', { name: /alueiden/i }));
 
   const kaistahaittaSelection = await screen.findByText(
     'Yksi autokaista vähenee - ajosuunta vielä käytössä',
@@ -1932,7 +1932,7 @@ describe('Error notification', () => {
 
   test('Should show fields with errors in notification in alueet page', async () => {
     const { user } = setup();
-    await user.click(screen.getByRole('button', { name: /alueet/i }));
+    await user.click(screen.getByRole('button', { name: /alueiden/i }));
 
     expect(
       screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
@@ -2048,7 +2048,7 @@ describe('Error notification', () => {
       'Seuraavissa vaiheissa on puuttuvia tietoja hakemuksen lähettämiseksi:',
     );
     expect(screen.getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
-    expect(screen.getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
+    expect(screen.getByRole('listitem', { name: /alueiden/i })).toBeInTheDocument();
     expect(screen.getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
   });
 });

@@ -41,7 +41,7 @@ const HankeFormSummary: React.FC<Props> = ({ formData }) => {
       <SectionTitle>{t('hankeForm:perustiedotForm:header')}</SectionTitle>
       <BasicInformationSummary formData={formData} />
 
-      <SectionTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionTitle>
+      <SectionTitle>{t('form:labels:areas')}</SectionTitle>
 
       {formData.alueet !== undefined && formData.alueet?.length > 0 ? (
         <FormSummarySection>
@@ -49,7 +49,7 @@ const HankeFormSummary: React.FC<Props> = ({ formData }) => {
           <SectionItemContent>
             {areasTotalSurfaceArea && <p>{areasTotalSurfaceArea} m²</p>}
           </SectionItemContent>
-          <SectionItemTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionItemTitle>
+          <SectionItemTitle>{t('form:labels:areas')}</SectionItemTitle>
           <SectionItemContent>
             {formData.alueet?.map((alue, index) => (
               <AreaSummary key={index} area={alue} index={index} />

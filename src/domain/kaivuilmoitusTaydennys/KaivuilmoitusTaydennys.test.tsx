@@ -463,7 +463,7 @@ describe('Error notification', () => {
 
   test('Should show fields with errors in notification in alueet page', async () => {
     const { user } = setup();
-    await user.click(screen.getByRole('button', { name: /alueet/i }));
+    await user.click(screen.getByRole('button', { name: /alueiden/i }));
 
     expect(
       screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),

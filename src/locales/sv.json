@@ -124,11 +124,13 @@
     },
     "headers": {
       "perustiedot": "Basdata",
-      "alueet": "Områden",
+      "alueet": "Ritning av områden",
       "yhteystiedot": "Kontaktuppgifter",
       "liitteetJaLisatiedot": "Bilagor och ytterligare information",
+      "liitteet": "Bilagor",
       "yhteenveto": "Sammanfattning",
-      "hakemusInfo": "Ansökans uppgifter"
+      "hakemusInfo": "Ansökans uppgifter",
+      "haittojenHallinta": "Hantering av olägenheter"
     },
     "labels": {
       "pintaAla": "Areal",
@@ -137,6 +139,7 @@
       "roleHelper": "Egentlig roll i arbetet",
       "fromHelsinkiProfile": "Sökt på basis av Helsingforsprofilen",
       "addressInformation": "Adressuppgifter",
+      "areas": "Områden",
       "kokonaisAla": "Områdenas totala areal",
       "areaName": "Områdets namn",
       "timespan": "Tidsperiod",
@@ -571,10 +574,10 @@
     "nextButton": "Nästa",
     "previousButton": "Föregående",
     "insertFieldError": "Skriv in fält",
-    "savingSuccessHeader": "Utkast sparat",
-    "savingSuccessText": "Utkastet är sparat i Projektlistan",
+    "savingSuccessHeader": "Projektet sparat",
+    "savingSuccessText": "Projektet är sparat i egna projekt",
     "savingFailHeader": "Något gick fel",
-    "savingFailText": "Utkastet kunde inte sparas, försök på nytt",
+    "savingFailText": "Projektet kunde inte sparas, försök på nytt",
     "saveAndQuitSuccessHeader": "Projektet har sparats",
     "saveAndQuitSuccessText": "Projektet {{name}} ({{hankeTunnus}}) har sparats i egna projekt.",
     "closeAriaLabel": "Lämna formuläret utan att spara",
@@ -696,7 +699,7 @@
     },
     "hankkeenAlueForm": {
       "header": "Områden",
-      "subHeader": "Projektområden",
+      "subHeader": "Ritning av områden",
       "area": "Område",
       "instructions": "[TRANSLATION_PENDING]Flera geometrier kan ritas för projektet. De geometriska områdena påverkar projektets trafikstörningsindex. Ritverktygen återfinns i kartvyns vänstra nedre kant. Med pennverktyget kan man rita polygoner genom att klicka på punkten där du vill ha ett hörn. Med rektangelverktyget kan du skapa rektangulära områden genom att först klicka på kartan och röra musen i önskad riktning. Ett nytt klick avslutar ritning av kvadraten. En polygon kan modifieras genom att ”greppa” i kanten och dra. Även en rektangulär figur kan modifieras genom att greppa i kanten. an radera en geometrisk figur genom att först välja den med ett klick, så att det bland ritverktygen i den vänstra nedre kanten kommer fram en papperskorg. Med ett klick på papperskorgen raderas figuren.",
       "instructions2": "Med färdsättsväljarna i den vänstra kanten kan du granska olägenhetsindexet för specifika färdsätt för projekt- och arbetsområdena. Alla färdsätt är automatiskt aktiva, du kan byta antalet färdsätt som visas genom att klicka på ikonerna. På kartan visas den mest kritiska indexfärgen för de valda färdsätten.",
@@ -711,8 +714,8 @@
     },
     "haittojenHallintaForm": {
       "header": "Hantering av olägenheter",
-      "subHeaderNoAlueet": "Projektområden",
-      "subHeaderAlueet": "Områdenas läge",
+      "subHeaderNoAlueet": "Lägg till projektområden för att fylla i uppgifter.",
+      "subHeaderAlueet": "Projektområden",
       "instructions": "Ditt projekt kan orsaka olägenheter för olika transportformer och lokala verksamheter. Haitaton beräknar automatiskt ett värde för olägenhetens betydelse i respektive projektområde, separat för cykeltrafik, spårvägstrafik, lokal busstrafik och biltrafik. Indexet för olägenheter för trafiken beskriver den värsta situationen i projektområdet för ovan nämnda transportformers del. Olägenheterna beskrivs med en skala för varje transportform med hjälp av siffror och färger (0/grå = ej identifierad, 1–2/grön = ingen betydande olägenhet, 3/gul = sannolik olägenhet, 4–5/röd =betydande olägenhet). Resultat som gäller andra än ovan nämnda transportformer presenteras endast som siffror (0–5).",
       "instructions2": "Med färdsättsväljarna i den vänstra kanten kan du granska olägenhetsindexet för specifika färdsätt för projekt- och arbetsområdena. Alla färdsätt är automatiskt aktiva, du kan byta antalet färdsätt som visas genom att klicka på ikonerna. På kartan visas den mest kritiska indexfärgen för de valda färdsätten.",
       "noAlueet": "Lägg till projektområden för att fylla i uppgifter",
@@ -1185,7 +1188,8 @@
         "TOIMINNALLINEN_KUNTO": "Anmälan om funktionsdugligt skick gjord {{lastValmistumisilmoitus.reportedAt}} för datumet {{lastValmistumisilmoitus.dateReported}}",
         "TYO_VALMIS": "Anmälan som färdigt gjord {{lastValmistumisilmoitus.reportedAt}} för datumet {{lastValmistumisilmoitus.dateReported}}"
       },
-      "hankeAreaNuisanceControl": "Hantering av olägenheter i projektområdet"
+      "hankeAreaNuisanceControl": "Hantering av olägenheter i projektområdet",
+      "workAreasInProjectArea": "Arbetsområden i projectområdet {{projectName}}"
     },
     "notifications": {
       "saveSuccessLabel": "Ansökan har sparats",

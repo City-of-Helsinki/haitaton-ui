@@ -303,7 +303,7 @@ describe('Error notification', () => {
   test('Should show fields with errors in notification in alueet page', async () => {
     const { user } = setup();
 
-    await user.click(screen.getByRole('button', { name: /alueet/i }));
+    await user.click(screen.getByRole('button', { name: /alueiden/i }));
 
     expect(
       screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
@@ -402,7 +402,7 @@ describe('Error notification', () => {
       ),
     ).toBeInTheDocument();
     expect(screen.getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
-    expect(screen.getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
+    expect(screen.getByRole('listitem', { name: /alueiden/i })).toBeInTheDocument();
     expect(screen.getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
   });
 });
