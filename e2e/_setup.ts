@@ -19,6 +19,35 @@ export async function tarkistaTulokset(page, hakemusLinkki, teksti) {
   }).toPass({ intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000], timeout: 120000, });
 }
 
+export async function helsinkiLogin(page, env=testiData.testEnvUrl) {
+  await page.goto(env);
+  await expect(page.getByRole('heading', { name: 'Tervetuloa Haitaton-palveluun' })).toBeVisible();
+  await page.getByLabel('Kirjaudu').click();
+  await page.getByText('Suomi.fi-tunnistautuminen').click();
+  await expect(page.getByText('Testitunnistaja')).toBeVisible();
+  await page.getByText('Testitunnistaja').click();
+  await expect(page.getByPlaceholder('-9988')).toBeVisible();
+  await page.getByPlaceholder('-9988').fill(testiData.suomifilogin);
+  await page.getByPlaceholder('-9988').press('Tab');
+  await page.getByRole('button', { name: 'Tunnistaudu' }).click();
+  await expect(page.getByText("Jatka palveluun")).toBeVisible();
+  await page.getByText('Jatka palveluun').click();
+  await expect(page.getByLabel('Tee johtoselvityshakemus.', { exact: true })).toBeVisible({ timeout: 10000, });
+}
+
+export function idGenerator(length:number) {
+  const words = [
+    'Alfa', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Foxtrot', 'Golf', 'Hotel',
+    'India', 'Juliett', 'Kilo', 'Lima', 'Mike', 'November', 'Oscar', 'Papa',
+    'Quebec', 'Romeo', 'Sierra', 'Tango', 'Uniform', 'Victor', 'Whiskey', 'X-ray',
+    'Yankee', 'Zulu'
+];
+
+  return [...Array(length)]
+    .map((_) => Math.floor(Math.random() * words.length))
+    .map((i) => words[i])
+    .join('-');
+}
 
 interface TestUser {
   username: string;
