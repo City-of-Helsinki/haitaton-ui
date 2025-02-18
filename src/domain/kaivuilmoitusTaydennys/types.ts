@@ -13,6 +13,7 @@ export interface KaivuilmoitusTaydennysFormValues
     | 'valmistumisilmoitukset'
     | 'taydennyspyynto'
     | 'taydennys'
+    | 'muutosilmoitus'
   > {
   id: string;
   muutokset: string[];

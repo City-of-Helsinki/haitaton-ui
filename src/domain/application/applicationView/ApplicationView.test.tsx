@@ -13,6 +13,7 @@ import { Application, JohtoselvitysData, KaivuilmoitusData } from '../types/appl
 import * as taydennysApi from '../taydennys/taydennysApi';
 import { USER_VIEW } from '../../mocks/signedInUser';
 import { createTaydennysAttachments } from '../../mocks/attachments';
+import * as muutosilmoitusApi from '../muutosilmoitus/muutosilmoitusApi';
 
 describe('Cable report application view', () => {
   test('Correct information about application should be displayed', async () => {
@@ -275,6 +276,13 @@ describe('Cable report application view', () => {
     expect(screen.getByText('Lataa päätös (PDF)')).toBeInTheDocument();
   });
 
+  test('Does not show create muutosilmoitus button for johtoselvitys', async () => {
+    render(<ApplicationViewContainer id={9} />);
+    await waitForLoadingToFinish();
+
+    expect(screen.queryByRole('button', { name: 'Tee muutosilmoitus' })).not.toBeInTheDocument();
+  });
+
   describe('Contacts', () => {
     test('Shows paper decision contact information when there is data', async () => {
       const { user } = render(<ApplicationViewContainer id={9} />);
@@ -437,7 +445,7 @@ describe('Cable report application view', () => {
       await user.click(screen.getByRole('button', { name: 'Täydennä' }));
 
       expect(window.location.pathname).toBe(`/fi/johtoselvitystaydennys/${application.id}/muokkaa`);
-      expect(taydennysCreateSpy).toHaveBeenCalledWith(application.id?.toString());
+      expect(taydennysCreateSpy).toHaveBeenCalledWith(application.id);
       taydennysCreateSpy.mockRestore();
     });
 
@@ -1375,7 +1383,7 @@ describe('Excavation notification application view', () => {
       await user.click(screen.getByRole('button', { name: 'Täydennä' }));
 
       expect(window.location.pathname).toBe(`/fi/kaivuilmoitustaydennys/${application.id}/muokkaa`);
-      expect(taydennysCreateSpy).toHaveBeenCalledWith(application.id?.toString());
+      expect(taydennysCreateSpy).toHaveBeenCalledWith(application.id);
       taydennysCreateSpy.mockRestore();
     });
 
@@ -1740,6 +1748,64 @@ describe('Excavation notification application view', () => {
       expect(
         screen.queryByRole('button', { name: 'Peru täydennysluonnos' }),
       ).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Muutosilmoitus', () => {
+    async function setup(application: Application<KaivuilmoitusData>) {
+      server.use(
+        http.get('/api/hakemukset/:id', async () => {
+          return HttpResponse.json<Application<KaivuilmoitusData>>(application);
+        }),
+      );
+      const renderResult = render(<ApplicationViewContainer id={application.id!} />);
+      await waitForLoadingToFinish();
+      return renderResult;
+    }
+
+    test('Does not show create muutosilmoitus button if application has wrong status', async () => {
+      const application = cloneDeep(hakemukset[7]) as Application<KaivuilmoitusData>;
+      application.alluStatus = 'HANDLING';
+      await setup(application);
+
+      expect(screen.queryByRole('button', { name: 'Tee muutosilmoitus' })).not.toBeInTheDocument();
+    });
+
+    test('Creates muutosilmoitus muutosilmoitus does not exist', async () => {
+      const muutosilmoitusCreateSpy = jest.spyOn(muutosilmoitusApi, 'createMuutosilmoitus');
+      const application = hakemukset[7] as Application<KaivuilmoitusData>;
+      server.use(
+        http.post('/api/hakemukset/:id/muutosilmoitus', async () => {
+          return HttpResponse.json(
+            {
+              id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+              applicationData: application.applicationData,
+            },
+            { status: 200 },
+          );
+        }),
+      );
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('button', { name: 'Tee muutosilmoitus' }));
+
+      expect(muutosilmoitusCreateSpy).toHaveBeenCalledWith(application.id);
+      muutosilmoitusCreateSpy.mockRestore();
+    });
+
+    test('Shows error notification if creating muutosilmoitus fails', async () => {
+      server.use(
+        http.post('/api/hakemukset/:id/muutosilmoitus', async () => {
+          return HttpResponse.json(
+            { errorMessage: 'Failed for testing purposes' },
+            { status: 500 },
+          );
+        }),
+      );
+      const application = hakemukset[7] as Application<KaivuilmoitusData>;
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('button', { name: 'Tee muutosilmoitus' }));
+
+      expect(await screen.findByText('Tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument();
     });
   });
 });

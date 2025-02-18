@@ -10,7 +10,8 @@ export interface JohtoselvitysFormData extends JohtoselvitysData {
   areas: JohtoselvitysArea[];
 }
 
-export interface JohtoselvitysFormValues extends Omit<Application<JohtoselvitysData>, 'paatokset'> {
+export interface JohtoselvitysFormValues
+  extends Omit<Application<JohtoselvitysData>, 'paatokset' | 'muutosilmoitus'> {
   applicationData: JohtoselvitysFormData;
   geometriesChanged?: boolean; // virtualField
   selfIntersectingPolygon?: boolean; // virtualField

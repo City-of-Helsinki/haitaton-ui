@@ -395,4 +395,14 @@ export const handlers = [
   http.delete(`${apiUrl}/taydennykset/:id/liitteet/:attachmentId`, async () => {
     return new HttpResponse();
   }),
+
+  http.post(`${apiUrl}/hakemukset/:id/muutosilmoitus`, async ({ params }) => {
+    const { id } = params;
+    try {
+      const muutosilmoitus = await hakemuksetDB.createTaydennys(Number(id));
+      return HttpResponse.json(muutosilmoitus, { status: 200 });
+    } catch (error) {
+      return HttpResponse.json((<ApiError>error).message, { status: (<ApiError>error).status });
+    }
+  }),
 ];
