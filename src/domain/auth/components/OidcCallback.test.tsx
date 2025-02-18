@@ -9,12 +9,12 @@ import {
   renderWithLoginProvider,
 } from '../testUtils/renderWithLoginProvider';
 
-function getWrapper({ state, returnUser, errorType, userADGroups }: RenderWithLoginProviderProps) {
+function getWrapper({ state, returnUser, errorType, userProfile }: RenderWithLoginProviderProps) {
   return renderWithLoginProvider({
     state,
     returnUser,
     errorType,
-    userADGroups,
+    userProfile,
     children: (
       <I18nextProvider i18n={i18n}>
         <MemoryRouter initialEntries={[LOGIN_CALLBACK_PATH]}>
@@ -83,7 +83,7 @@ describe('<OidcCallback />', () => {
         state: 'NO_SESSION',
         returnUser: true,
         errorType: undefined,
-        userADGroups: ['test_group'],
+        userProfile: { ad_groups: ['test_group'] },
       });
 
       expect(await findByText('Ei käyttöoikeutta Haitaton-asiointiin')).toBeInTheDocument();
@@ -101,7 +101,7 @@ describe('<OidcCallback />', () => {
         state: 'NO_SESSION',
         returnUser: true,
         errorType: undefined,
-        userADGroups: ['test_group'],
+        userProfile: { ad_groups: ['test_group'] },
       });
 
       expect(await findByText('Home page')).toBeInTheDocument();
@@ -119,11 +119,28 @@ describe('<OidcCallback />', () => {
         state: 'NO_SESSION',
         returnUser: true,
         errorType: undefined,
-        userADGroups: ['test_group'],
+        userProfile: { ad_groups: ['test_group'] },
       });
 
       expect(await findByText('Home page')).toBeInTheDocument();
       window._env_ = OLD_ENV;
+    });
+
+    it('should show error message when user does not have given_name or family_name', async () => {
+      const { findByText, getByText } = getWrapper({
+        state: 'NO_SESSION',
+        returnUser: true,
+        errorType: undefined,
+        userProfile: { given_name: '', family_name: '', ad_groups: ['test_group'] },
+      });
+
+      expect(await findByText('Kirjautuminen epäonnistui')).toBeInTheDocument();
+      expect(
+        getByText(
+          'Kirjautuminen AD:n kautta epäonnistui, sillä Haitaton ei saanut kirjautumisen yhteydessä nimeäsi.',
+          { exact: false },
+        ),
+      ).toBeInTheDocument();
     });
   });
 });

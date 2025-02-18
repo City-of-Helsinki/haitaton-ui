@@ -7,6 +7,7 @@ import {
   OidcClientError,
   OidcClientProps,
   OidcClientState,
+  Profile,
   triggerForAllOidcClientSignals,
 } from 'hds-react';
 import { createUser } from './userTestUtil';
@@ -27,7 +28,7 @@ export type RenderWithLoginProviderProps = {
   state: OidcClientState;
   returnUser: boolean;
   placeUserToStorage?: boolean;
-  userADGroups?: string[];
+  userProfile?: Partial<Profile>;
   errorType?: 'SIGNIN_ERROR' | 'INVALID_OR_EXPIRED_USER' | 'RENEWAL_FAILED';
   children?: React.ReactNode;
 };
@@ -36,7 +37,7 @@ export function renderWithLoginProvider({
   state,
   returnUser,
   placeUserToStorage = true,
-  userADGroups,
+  userProfile,
   errorType,
   children,
 }: RenderWithLoginProviderProps) {
@@ -47,13 +48,13 @@ export function renderWithLoginProvider({
     connect: (targetBeacon) => {
       beacon = targetBeacon;
       beacon.addListener(triggerForAllOidcClientSignals, (signal) => {
-        const user = createUser(placeUserToStorage, userADGroups);
+        const user = createUser(placeUserToStorage, userProfile);
         const oidcClient = signal.context as OidcClient;
         jest.spyOn(oidcClient, 'getState').mockReturnValue(state);
         jest.spyOn(oidcClient, 'getUser').mockReturnValue(user);
         jest
           .spyOn(oidcClient, 'getAmr')
-          .mockReturnValue(userADGroups === undefined ? ['suomi_fi'] : ['helsinkiad']);
+          .mockReturnValue(userProfile?.ad_groups === undefined ? ['suomi_fi'] : ['helsinkiad']);
         if (!returnUser) {
           jest.spyOn(oidcClient, 'handleCallback').mockRejectedValue(handleError);
         } else {

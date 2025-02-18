@@ -12,7 +12,9 @@
     "loggingInErrorLabel": "Kirjautumisessa tapahtui virhe",
     "logoutError": "Uloskirjautumisessa tapahtui virhe",
     "noADPermissionHeading": "Ei käyttöoikeutta Haitaton-asiointiin",
-    "noADPermissionText": "Sinulla ei ole oikeutta AD-tunnistautumiseen. <a>Kirjaudu ulos</a> Haitattomasta ja yritä uudelleen suomi.fi-tunnistautumisen kautta."
+    "noADPermissionText": "Sinulla ei ole oikeutta AD-tunnistautumiseen. <a>Kirjaudu ulos</a> Haitattomasta ja yritä uudelleen suomi.fi-tunnistautumisen kautta.",
+    "noADUserNameHeading": "Kirjautuminen epäonnistui",
+    "noADUserNameText": "Kirjautuminen AD:n kautta epäonnistui, sillä Haitaton ei saanut kirjautumisen yhteydessä nimeäsi. Ota yhteyttä organisaatiosi IT-tukeen tai <a>kirjaudu ulos</a> Haitattomasta ja yritä uudelleen suomi.fi-tunnistautumisen kautta."
   },
   "common": {
     "increment": "Lisää",

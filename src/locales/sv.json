@@ -10,7 +10,11 @@
     "loggingIn": "Loggar in...",
     "loggingOut": "Loggar ut...",
     "loggingInErrorLabel": "Ett fel uppstod vid inloggningen",
-    "logoutError": "Ett fel uppstod vid utloggningen"
+    "logoutError": "Ett fel uppstod vid utloggningen",
+    "noADPermissionHeading": "Ingen användarrätt till Haitaton ärenden",
+    "noADPermissionText": "Du har inte rätt till AD-autentisering. <a>Logga ut</a> från Haitaton och försök på nytt via suomi.fi-identifikationen.",
+    "noADUserNameHeading": "Inloggningen misslyckades",
+    "noADUserNameText": "Inloggning via AD misslyckades eftersom Haiton inte fick ditt namn vid inloggningen. Kontakta IT-supporten i din organisation eller <a>logga ut</a> från Haitaton och försök igen via suomi.fi-identifikation."
   },
   "common": {
     "increment": "Lägg till",
