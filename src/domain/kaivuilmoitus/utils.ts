@@ -1,4 +1,4 @@
-import _, { cloneDeep, omitBy } from 'lodash';
+import { cloneDeep, isEqual, omitBy } from 'lodash';
 import { Feature } from 'ol';
 import { Polygon } from 'ol/geom';
 import {
@@ -161,5 +161,5 @@ export function hasHaittaIndexesChanged(alue1: KaivuilmoitusAlue, alue2?: Kaivui
   }
   const haittaIndexes = calculateLiikennehaittaindeksienYhteenveto(alue1);
   const changedHaittaIndexes = calculateLiikennehaittaindeksienYhteenveto(alue2);
-  return !_.isEqual(haittaIndexes, changedHaittaIndexes);
+  return !isEqual(haittaIndexes, changedHaittaIndexes);
 }
