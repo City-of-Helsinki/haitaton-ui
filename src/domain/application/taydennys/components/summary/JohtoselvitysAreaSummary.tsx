@@ -50,7 +50,7 @@ export default function JohtoselvitysAreaSummary({
 
   return (
     <>
-      <SectionTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionTitle>
+      <SectionTitle>{t('form:labels:areas')}</SectionTitle>
       <FormSummarySection>
         {startTimeChanged && (
           <>
@@ -86,7 +86,7 @@ export default function JohtoselvitysAreaSummary({
                 </SectionItemContent>
               </>
             )}
-            <SectionItemTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionItemTitle>
+            <SectionItemTitle>{t('form:labels:areas')}</SectionItemTitle>
             <SectionItemContent>
               {taydennysAreas.map((area, index) => {
                 if (!muutokset.includes(`areas[${index}]`)) {

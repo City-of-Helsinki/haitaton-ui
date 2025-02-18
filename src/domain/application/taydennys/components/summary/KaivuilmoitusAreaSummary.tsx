@@ -169,7 +169,7 @@ export default function KaivuilmoitusAreaSummary({
 
   return (
     <>
-      <SectionTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionTitle>
+      <SectionTitle>{t('form:labels:areas')}</SectionTitle>
       <FormSummarySection>
         {totalSurfaceArea > 0 && (
           <>
@@ -197,7 +197,7 @@ export default function KaivuilmoitusAreaSummary({
         )}
         {(changedAreas.length > 0 || removedAreas.length > 0) && (
           <>
-            <SectionItemTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionItemTitle>
+            <SectionItemTitle>{t('form:labels:areas')}</SectionItemTitle>
             <SectionItemContent>
               {changedAreas.map((area) => (
                 <AreaDetail key={area.hankealueId} area={area} />

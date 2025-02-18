@@ -167,7 +167,7 @@ function JohtoselvitysAreasInfo({
       <SectionItemContent>
         <TotalSurfaceArea tyoalueet={tyoalueet} changedAreas={changedAreas} />
       </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionItemTitle>
+      <SectionItemTitle>{t('form:labels:areas')}</SectionItemTitle>
       <SectionItemContent>
         {tyoalueet.map((area, index) => {
           return (
@@ -299,7 +299,7 @@ function KaivuilmoitusAreasInfo({
           </SectionItemContent>
           {!areasChanged && (
             <>
-              <SectionItemTitle>{t('form:headers:alueet')}</SectionItemTitle>
+              <SectionItemTitle>{t('form:labels:areas')}</SectionItemTitle>
               <SectionItemContent>
                 <TyoalueetList tyoalueet={originalTyoalueet} />
               </SectionItemContent>
