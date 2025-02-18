@@ -43,14 +43,10 @@ export function idGenerator(length:number) {
     'Yankee', 'Zulu'
 ];
 
-let result = '';
-
-for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * words.length);
-    result += words[randomIndex] + '-';
-}
-
-return result.trim();
+  return [...Array(length)]
+    .map((_) => Math.floor(Math.random() * words.length))
+    .map((i) => words[i])
+    .join('-');
 }
 
 interface TestUser {
