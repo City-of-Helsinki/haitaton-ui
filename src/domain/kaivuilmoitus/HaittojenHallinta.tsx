@@ -43,7 +43,11 @@ export default function HaittojenHallinta({ hankeData }: Readonly<Props>) {
       <Tabs>
         <TabList>
           {hakemusAlueet.map((alue) => {
-            return <Tab key={alue.id}>{alue.name}</Tab>;
+            return (
+              <Tab key={alue.id}>
+                {t('hakemus:labels:workAreaPlural')} ({alue.name})
+              </Tab>
+            );
           })}
         </TabList>
         {hakemusAlueet.map((alue, index) => {

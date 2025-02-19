@@ -523,7 +523,7 @@ describe('Error notification', () => {
     ).toBeInTheDocument();
     expect(
       screen.getByRole('link', {
-        name: 'Työalueet (Hankealue 2): Toimet työalueiden haittojen hallintaan',
+        name: 'Työalueet (Hankealue 2): Yleiset toimet työalueiden haittojen hallintaan',
       }),
     ).toBeInTheDocument();
     expect(
