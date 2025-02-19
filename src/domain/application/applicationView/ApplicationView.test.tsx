@@ -14,6 +14,7 @@ import * as taydennysApi from '../taydennys/taydennysApi';
 import { USER_VIEW } from '../../mocks/signedInUser';
 import { createTaydennysAttachments } from '../../mocks/attachments';
 import * as muutosilmoitusApi from '../muutosilmoitus/muutosilmoitusApi';
+import { HAITTA_INDEX_TYPE } from '../../common/haittaIndexes/types';
 
 describe('Cable report application view', () => {
   test('Correct information about application should be displayed', async () => {
@@ -1525,6 +1526,23 @@ describe('Excavation notification application view', () => {
                       ],
                     ],
                   },
+                  tormaystarkasteluTulos: {
+                    liikennehaittaindeksi: {
+                      indeksi: 5,
+                      tyyppi: HAITTA_INDEX_TYPE.AUTOLIIKENNEINDEKSI,
+                    },
+                    pyoraliikenneindeksi: 3,
+                    autoliikenne: {
+                      indeksi: 5,
+                      haitanKesto: 5,
+                      katuluokka: 5,
+                      liikennemaara: 5,
+                      kaistahaitta: 5,
+                      kaistapituushaitta: 5,
+                    },
+                    linjaautoliikenneindeksi: 0,
+                    raitioliikenneindeksi: 1,
+                  },
                 },
               ],
               tyonTarkoitukset: ['VESI', 'TIETOLIIKENNE'],
@@ -1554,6 +1572,11 @@ describe('Excavation notification application view', () => {
 
       expect(screen.getAllByText('Täydennys:').length).toBe(8);
       expect(screen.getByText('394 m²')).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Työalueille lasketut liikennehaittaindeksit ovat muuttuneet. Tarkista haittojenhallintasuunnitelma.',
+        ),
+      ).toBeInTheDocument();
     });
 
     test('Shows changed information in haittojen hallinta tab', async () => {

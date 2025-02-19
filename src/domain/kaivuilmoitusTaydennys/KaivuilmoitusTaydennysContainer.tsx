@@ -162,7 +162,11 @@ export default function KaivuilmoitusTaydennysContainer({
     },
     {
       element: (
-        <Areas hankeData={hankeData} hankkeenHakemukset={hankkeenHakemukset?.applications ?? []} />
+        <Areas
+          hankeData={hankeData}
+          hankkeenHakemukset={hankkeenHakemukset?.applications ?? []}
+          originalHakemus={originalApplication}
+        />
       ),
       label: t('form:headers:alueet'),
       state: StepState.available,

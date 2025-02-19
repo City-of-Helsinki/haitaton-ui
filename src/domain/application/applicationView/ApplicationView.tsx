@@ -77,7 +77,10 @@ import { validationSchema as kaivuilmoitusValidationSchema } from '../../kaivuil
 import ApplicationReportCompletionDateDialog from '../../kaivuilmoitus/components/ApplicationReportCompletionDateDialog';
 import { formatToFinnishDate, formatToFinnishDateTime } from '../../../common/utils/date';
 import HaittaIndexes from '../../common/haittaIndexes/HaittaIndexes';
-import { calculateLiikennehaittaindeksienYhteenveto } from '../../kaivuilmoitus/utils';
+import {
+  calculateLiikennehaittaindeksienYhteenveto,
+  hasHaittaIndexesChanged,
+} from '../../kaivuilmoitus/utils';
 import styles from './ApplicationView.module.scss';
 import ApplicationSendDialog from '../components/ApplicationSendDialog';
 import TaydennyspyyntoNotification from '../taydennys/TaydennyspyyntoNotification';
@@ -155,11 +158,13 @@ function JohtoselvitysAreasInfo({
   const areasChanged =
     changedAreas &&
     muutokset &&
-    changedAreas.filter((_, index) => muutokset.includes(`areas[${index}]`)).length > 0;
+    changedAreas.filter((_area, index) => muutokset.includes(`areas[${index}]`)).length > 0;
   const areasRemoved =
     changedAreas &&
     muutokset &&
-    tyoalueet.filter((_, index) => muutokset.includes(`areas[${index}]`) && !changedAreas[index]);
+    tyoalueet.filter(
+      (_area, index) => muutokset.includes(`areas[${index}]`) && !changedAreas[index],
+    );
 
   return (
     <FormSummarySection>
@@ -231,17 +236,14 @@ function KaivuilmoitusAreasInfo({
   const areasChanged =
     changedAreas &&
     muutokset &&
-    changedAreas.filter((_, index) => muutokset.includes(`areas[${index}]`)).length > 0;
+    changedAreas.filter((_alue, index) => muutokset.includes(`areas[${index}]`)).length > 0;
 
   return areas.map((alue, index) => {
     const changedAlue = changedAreas?.at(index);
     const changedPropertyPrefix = `areas[${index}]`;
     const { tyoalueet: originalTyoalueet } = alue;
     const { tyoalueet: changedTyoalueet } = changedAlue ?? {};
-    const haittaIndexes = calculateLiikennehaittaindeksienYhteenveto(alue);
-    const changedHaittaIndexes =
-      changedAlue && calculateLiikennehaittaindeksienYhteenveto(changedAlue);
-    const haittaIndexesChanged = changedHaittaIndexes && haittaIndexes !== changedHaittaIndexes;
+    const haittaIndexesChanged = hasHaittaIndexesChanged(alue, changedAlue);
     const tyonTarkoituksetChanged =
       changedAlue && muutokset?.includes(`${changedPropertyPrefix}.tyonTarkoitukset`);
     const tyonTarkoituksetAdded = changedAlue?.tyonTarkoitukset?.filter(
