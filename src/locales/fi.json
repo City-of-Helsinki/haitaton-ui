@@ -1556,7 +1556,7 @@
       "userUpdatedErrorLabel": "Virhe päivityksessä",
       "userUpdatedErrorText": "<0>Käyttäjätietojen päivityksessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa <1>haitatontuki@hel.fi</1>.</0>",
       "userIdentifiedLabel": "Tunnistautuminen onnistui",
-      "userIdentifiedText": "Tunnistautuminen onnistui. Sinut on nyt lisätty hankkeelle ({{hankeNimi}} {{hankeTunnus}}).",
+      "userIdentifiedText": "Sinut on nyt lisätty hankkeelle ({{hankeNimi}} {{hankeTunnus}}).",
       "userIdentifiedError": "Tunnistautuminen epäonnistui",
       "invitationSentSuccessLabel": "Kutsulinkki lähetetty",
       "invitationSentSuccessText": "Kutsulinkki lähetetty osoitteeseen {{email}}.",

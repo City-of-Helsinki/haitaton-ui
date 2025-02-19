@@ -1115,7 +1115,7 @@
       "userUpdatedErrorLabel": "Error in the updating process",
       "userUpdatedErrorText": "<0>An error occurred when updating user information. Please try again later or contact the Haitaton technical support by email <1>haitatontuki@hel.fi</1>.</0>",
       "userIdentifiedLabel": "Login successful",
-      "userIdentifiedText": "Login successful. You have now been added to the project ({{hankeNimi}} {{hankeTunnus}}).",
+      "userIdentifiedText": "You have now been added to the project ({{hankeNimi}} {{hankeTunnus}}).",
       "userIdentifiedError": "Login failed",
       "invitationSentSuccessLabel": "Invitation link sent",
       "invitationSentSuccessText": "Invitation link sent to the address {{email}}.",
