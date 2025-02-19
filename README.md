@@ -32,6 +32,17 @@ with `scripts/update-runtime-env.ts`, which contains the actual used variables w
 App is not using create-react-app's default `process.env` way to refer of variables
 but `window._env_` object.
 
+### `yarn e2e`
+
+Runs Playwright tests with the default parameters.
+
+To run the tests, copy `.env.e2e.example` to `.env.e2e` and fill in the missing variables. The
+correct values can be found from the
+[E2E confluence page](https://helsinkisolutionoffice.atlassian.net/wiki/x/aAA9KQI).
+
+On that page, you can also find out how to run single tests or run playwright with different
+parameters.
+
 ### `yarn build`
 
 Builds the app for production to the `build` folder.<br />
