@@ -52,10 +52,6 @@ const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
           Havaitut puutteet
         </Text>
         <Text tag="p" spacingBottom="xs">
-          Sivuston hakemusten pudotusvalikoihin ei voi kohdistaa ruudunlukijalla (WCAG 2.1: 2.1.1
-          Näppäimistö)
-        </Text>
-        <Text tag="p" spacingBottom="xs">
           Hakemuksen työalueen voi lisätä vain hiirellä (WCAG 2.1: 2.1.1 Näppäimistö)
         </Text>
         <Text tag="p" spacingBottom="xs">
@@ -63,17 +59,8 @@ const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
           Linkin tarkoitus (kontekstissa))
         </Text>
         <Text tag="p" spacingBottom="xs">
-          Omat Hankkeet-sivulla on painikkeita, joilla ei ole saavutettavaa kuvausta ja jotka eivät
-          ilmoita toiminnastaan ruudunlukijalle (WCAG 2.1: 4.1.2 Nimi, rooli, arvo, 4.1.3: Tilasta
-          kertovat viestit)
-        </Text>
-        <Text tag="p" spacingBottom="xs">
           Omien hankkeiden otsikoiden nimeäminen ruudunlukijalle on epäselvää (WCAG 2.1: 1.3.1
           Informaatio ja suhteet)
-        </Text>
-        <Text tag="p">
-          Sivutuksen vaihtaminen ja lomakkeen avaaminen eivät siirrä kohdistusta sivun/lomakkeen
-          alkuun (WCAG 2.1: 2.4.3 Kohdistusjärjestys)
         </Text>
 
         <Text tag="h2" styleAs="h3" spacing="m">
