@@ -1,10 +1,14 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { Link, useOidcClient } from 'hds-react';
+import { Trans } from 'react-i18next';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
-import { Trans, useTranslation } from 'react-i18next';
 
-export default function ADGroupsError() {
-  const { t } = useTranslation();
+type Props = {
+  errorHeading: string;
+  errorTextKey: string;
+};
+
+export default function ADError({ errorHeading, errorTextKey }: Readonly<Props>) {
   const oidcClient = useOidcClient();
 
   function logout() {
@@ -22,14 +26,14 @@ export default function ADGroupsError() {
       gap={{ base: 'var(--spacing-m)', md: 'var(--spacing-4-xl)' }}
       px="var(--spacing-s)"
     >
-      <MainHeading>{t('authentication:noADPermissionHeading')}</MainHeading>
+      <MainHeading>{errorHeading}</MainHeading>
       <Box
         as="p"
         maxWidth="612px"
         fontSize={{ base: 'var(--fontsize-body-m)', md: 'var(--fontsize-body-l)' }}
       >
         <Trans
-          i18nKey="authentication:noADPermissionText"
+          i18nKey={errorTextKey}
           components={{
             a: (
               <Box

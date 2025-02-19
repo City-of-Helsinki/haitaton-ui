@@ -11,12 +11,16 @@ import {
 import Text from '../../../common/components/text/Text';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import Link from '../../../common/components/Link/Link';
-import ADGroupsError from './ADGroupsError';
+import ADError from './ADError';
 import hasAllowedADGroups from '../hasAllowedADGroups';
 import { useNavigate } from 'react-router-dom';
 import toStringArray from '../../../common/utils/toStringArray';
 
-type AuthenticationError = 'permissionDeniedByUserError' | 'unknown' | 'adGroupsError';
+type AuthenticationError =
+  | 'permissionDeniedByUserError'
+  | 'unknown'
+  | 'adGroupsError'
+  | 'adNameError';
 
 type AuthErrorProps = {
   errorText: string;
@@ -66,15 +70,22 @@ const OidcCallback = () => {
   const oidcClient = useOidcClient();
 
   function onSuccess(user: User) {
-    const { ad_groups } = user.profile;
+    const { ad_groups, given_name, family_name } = user.profile;
     const useADFilter = window._env_.REACT_APP_USE_AD_FILTER === '1';
     const amr = oidcClient.getAmr();
     const helsinkiADUsed = amr?.includes('helsinkiad');
 
-    // Check if user has required AD groups (when login is done with AD and AD filtering is enabled).
-    if (helsinkiADUsed && useADFilter && !hasAllowedADGroups(toStringArray(ad_groups))) {
-      setAuthenticationError('adGroupsError');
-      return;
+    if (helsinkiADUsed) {
+      // Check if user has required AD groups (when login is done with AD and AD filtering is enabled).
+      if (useADFilter && !hasAllowedADGroups(toStringArray(ad_groups))) {
+        setAuthenticationError('adGroupsError');
+        return;
+      }
+      // Check that user's given_name and family_name are defined and are not empty (when login is done with AD).
+      if (!given_name || !family_name) {
+        setAuthenticationError('adNameError');
+        return;
+      }
     }
 
     navigate('/', { replace: true });
@@ -97,7 +108,18 @@ const OidcCallback = () => {
         {authenticationError === 'unknown' && (
           <AuthError errorText={t('authentication:genericError')} />
         )}
-        {authenticationError === 'adGroupsError' && <ADGroupsError />}
+        {authenticationError === 'adGroupsError' && (
+          <ADError
+            errorHeading={t('authentication:noADPermissionHeading')}
+            errorTextKey="authentication:noADPermissionText"
+          />
+        )}
+        {authenticationError === 'adNameError' && (
+          <ADError
+            errorHeading={t('authentication:noADUserNameHeading')}
+            errorTextKey="authentication:noADUserNameText"
+          />
+        )}
       </>
     </LoginCallbackHandler>
   );

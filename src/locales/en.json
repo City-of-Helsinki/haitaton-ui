@@ -10,7 +10,11 @@
     "loggingIn": "Logging in...",
     "loggingOut": "Logging out...",
     "loggingInErrorLabel": "Error during log-in",
-    "logoutError": "Error during log-out"
+    "logoutError": "Error during log-out",
+    "noADPermissionHeading": "No access rights to Haitaton service",
+    "noADPermissionText": "You are not entitled to AD identification. <a>Log out</a> of Haitaton and try again through the suomi.fi authentication.",
+    "noADUserNameHeading": "Login failed",
+    "noADUserNameText": "Login via AD failed, as Haitaton did not receive your name upon login. Contact your organization's IT support or <a>log out</a> of Haitaton and try again through the suomi.fi-authentication."
   },
   "common": {
     "increment": "Increment",
