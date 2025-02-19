@@ -165,23 +165,26 @@ const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
         </Text>
         <Text tag="p" spacingBottom="xs">
           Mikäli henkilö kokee, ettei hänen ilmoitukseensa tai tiedusteluunsa ole vastattu tai
-          vastaus ei ole tyydyttävä, voi asiasta tehdä ilmoituksen Etelä-Suomen
-          aluehallintovirastoon. Etelä-Suomen aluehallintoviraston sivulla kerrotaan tarkasti, miten
-          asia käsitellään.
+          vastaus ei ole tyydyttävä, voi asiasta tehdä ilmoituksen Traficomille. Traficomin sivulla
+          kerrotaan tarkasti, miten asia käsitellään.
         </Text>
         <Text tag="p" weight="bold">
-          Etelä-Suomen aluehallintovirasto
+          Liikenne- ja viestintävirasto Traficom
         </Text>
         <Text tag="p">
-          Saavutettavuuden valvonnan yksikkö
+          <Link
+            href="http://www.saavutettavuusvaatimukset.fi"
+            external
+            openInExternalDomainAriaLabel={t(
+              'common:components:link:openInExternalDomainAriaLabel',
+            )}
+          >
+            www.saavutettavuusvaatimukset.fi
+          </Link>
           <br />
-          www.saavutettavuusvaatimukset.fi
+          <Link href="mailto:saavutettavuus@traficom.fi">saavutettavuus@traficom.fi</Link>
           <br />
-          saavutettavuus@avi.fi
-          <br />
-          Puhelinvaihde: 0295 016 000
-          <br />
-          Avoinna: ma-pe klo 8.00 – 16.15
+          Puhelinvaihde: 029 534 5000
           <br />
         </Text>
 
