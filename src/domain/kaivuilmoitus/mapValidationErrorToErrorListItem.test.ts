@@ -40,7 +40,7 @@ test('Should show error for haittojenhallintasuunnitelma', () => {
   render(mapValidationErrorToErrorListItem(error, t, application));
 
   expect(
-    screen.getByText('Työalueet (Hankealue 2): Toimet työalueiden haittojen hallintaan'),
+    screen.getByText('Työalueet (Hankealue 2): Yleiset toimet työalueiden haittojen hallintaan'),
   ).toBeInTheDocument();
   expect(screen.getByRole('link')).toHaveAttribute(
     'href',

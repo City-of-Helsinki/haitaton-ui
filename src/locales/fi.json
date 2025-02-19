@@ -1183,7 +1183,7 @@
       "hankeHaittaindeksi": "Hankealueen haittaindeksi",
       "haittaindeksi": "Työalueiden haittaindeksi",
       "labels": {
-        "YLEINEN": "Toimet työalueiden haittojen hallintaan",
+        "YLEINEN": "Yleiset toimet työalueiden haittojen hallintaan",
         "PYORALIIKENNE": "Toimet työalueiden haittojen hallintaan",
         "AUTOLIIKENNE": "Toimet työalueiden haittojen hallintaan",
         "LINJAAUTOLIIKENNE": "Toimet työalueiden haittojen hallintaan",
