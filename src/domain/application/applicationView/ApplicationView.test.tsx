@@ -1849,16 +1849,23 @@ describe('Excavation notification application view', () => {
 
     test('Shows muutosilmoitus sent notification and hides continue button if muutosilmoitus is sent', async () => {
       const application = cloneDeep(hakemukset[7]) as Application<KaivuilmoitusData>;
+      const sentDate = new Date();
       application.muutosilmoitus = {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
         applicationData: application.applicationData,
-        sent: '2025-02-19T10:34:05.991Z',
+        sent: sentDate.toISOString(),
       };
       await setup(application);
 
       expect(
         screen.getByText(
-          'Hakemukselle on tehty muutosilmoitus, joka on lähetetty käsittelyyn 19.2.2025 12:34',
+          `Hakemukselle on tehty muutosilmoitus, joka on lähetetty käsittelyyn ${format(
+            sentDate,
+            'd.M.yyyy HH:mm',
+            {
+              locale: fi,
+            },
+          )}`,
         ),
       ).toBeInTheDocument();
       expect(
