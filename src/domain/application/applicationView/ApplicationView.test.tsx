@@ -1794,7 +1794,7 @@ describe('Excavation notification application view', () => {
       expect(screen.queryByRole('button', { name: 'Tee muutosilmoitus' })).not.toBeInTheDocument();
     });
 
-    test('Creates muutosilmoitus muutosilmoitus does not exist', async () => {
+    test('Creates muutosilmoitus if muutosilmoitus does not exist', async () => {
       const muutosilmoitusCreateSpy = jest.spyOn(muutosilmoitusApi, 'createMuutosilmoitus');
       const application = hakemukset[7] as Application<KaivuilmoitusData>;
       server.use(
@@ -1809,6 +1809,9 @@ describe('Excavation notification application view', () => {
         }),
       );
       const { user } = await setup(application);
+
+      expect(screen.queryByText('Hakemukselle on luotu muutosilmoitus')).not.toBeInTheDocument();
+
       await user.click(screen.getByRole('button', { name: 'Tee muutosilmoitus' }));
 
       expect(muutosilmoitusCreateSpy).toHaveBeenCalledWith(application.id);
@@ -1829,6 +1832,38 @@ describe('Excavation notification application view', () => {
       await user.click(screen.getByRole('button', { name: 'Tee muutosilmoitus' }));
 
       expect(await screen.findByText('Tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument();
+    });
+
+    test('Shows muutosilmoitus created notification and continue button if muutosilmoitus exists but is not sent', async () => {
+      const application = cloneDeep(hakemukset[7]) as Application<KaivuilmoitusData>;
+      application.muutosilmoitus = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        sent: null,
+      };
+      await setup(application);
+
+      expect(screen.getByText('Hakemukselle on luotu muutosilmoitus')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Jatka muutosilmoitusta' })).toBeInTheDocument();
+    });
+
+    test('Shows muutosilmoitus sent notification and hides continue button if muutosilmoitus is sent', async () => {
+      const application = cloneDeep(hakemukset[7]) as Application<KaivuilmoitusData>;
+      application.muutosilmoitus = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        sent: '2025-02-19T10:34:05.991Z',
+      };
+      await setup(application);
+
+      expect(
+        screen.getByText(
+          'Hakemukselle on tehty muutosilmoitus, joka on lähetetty käsittelyyn 19.2.2025 12:34',
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: 'Jatka muutosilmoitusta' }),
+      ).not.toBeInTheDocument();
     });
   });
 });
