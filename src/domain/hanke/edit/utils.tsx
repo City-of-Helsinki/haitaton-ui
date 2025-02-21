@@ -1,6 +1,6 @@
 import { Feature } from 'ol';
 import Polygon from 'ol/geom/Polygon';
-import { Polygon as GeoJSONPolygon } from 'geojson';
+import { Feature as GeoJSONFeature, FeatureCollection, Polygon as GeoJSONPolygon } from 'geojson';
 import { max, min } from 'date-fns';
 import { ValidationError } from 'yup';
 import { Link } from 'hds-react';
@@ -20,10 +20,14 @@ import {
   ApplicationArea,
   HankkeenHakemus,
   KaivuilmoitusAlue,
+  Tyoalue,
 } from '../../application/types/application';
 import { isApplicationCancelled, isApplicationPending } from '../../application/utils';
 import { TFunction } from 'i18next';
 import booleanContains from '@turf/boolean-contains';
+import booleanEqual from '@turf/boolean-equal';
+import { feature, featureCollection } from '@turf/helpers';
+import intersect from '@turf/intersect';
 
 function mapToAreaDates(areas: HankeAlue[] | undefined, key: 'haittaAlkuPvm' | 'haittaLoppuPvm') {
   return areas?.reduce((result: Date[], area) => {
@@ -129,12 +133,12 @@ export const convertHankeDataToFormState = (
 export function calculateTotalSurfaceArea(areas?: HankeAlueFormState[]) {
   try {
     const areasTotalSurfaceArea = areas?.reduce((surfaceArea, currArea) => {
-      const feature =
+      const feat =
         currArea.feature ||
         (currArea.geometriat && getFeatureFromHankeGeometry(currArea.geometriat));
 
-      if (!feature) return surfaceArea;
-      const geom = feature.getGeometry();
+      if (!feat) return surfaceArea;
+      const geom = feat.getGeometry();
       const currAreaSurface = geom && Math.round(getSurfaceArea(geom));
       return currAreaSurface ? surfaceArea + currAreaSurface : surfaceArea;
     }, 0);
@@ -248,6 +252,47 @@ export function getApplicationsInsideHankealue(
         .some((area) => area.geometry && booleanContains(hankeFeature, area.geometry)),
     );
   return [...johtoselvitysApplicationInsideHankealue, ...kaivuilmoitusApplicationInsideHankealue];
+}
+
+/**
+ * Returns true if feature1 contains feature2.
+ *
+ * Due to a bug in Turf.js's `booleanContains` function (https://github.com/Turfjs/turf/issues/2588),
+ * this function checks that the intersection of feature1 and feature2 is equal to feature2.
+ */
+export function featureContains(
+  feature1: GeoJSONFeature<GeoJSONPolygon>,
+  feature2: GeoJSONFeature<GeoJSONPolygon>,
+): boolean {
+  const features: FeatureCollection<GeoJSONPolygon> = featureCollection([feature1, feature2]);
+  const intersected = intersect(features);
+  return (intersected && booleanEqual(intersected, feature2)) || false;
+}
+
+/**
+ * Returns work areas that are inside hankealue feature
+ */
+export function getWorkAreasInsideHankealueFeature(
+  hankeFeature: GeoJSONFeature<GeoJSONPolygon>,
+  applications: HankkeenHakemus[],
+): (ApplicationArea | Tyoalue)[] {
+  if (applications.length === 0) {
+    return [];
+  }
+  const johtoselvitysApplications = applications.filter(
+    (hakemus) => hakemus.applicationType == 'CABLE_REPORT',
+  );
+  const kaivuilmoitusApplications = applications.filter(
+    (hakemus) => hakemus.applicationType == 'EXCAVATION_NOTIFICATION',
+  );
+  const johtoselvitysWorkAreasInsideHankealue: ApplicationArea[] = johtoselvitysApplications
+    .flatMap((hakemus) => (hakemus.applicationData.areas || []) as ApplicationArea[])
+    .filter((area) => featureContains(hankeFeature, feature(area.geometry)));
+  const kaivuilmoitusWorkAreasInsideHankealue: Tyoalue[] = kaivuilmoitusApplications
+    .flatMap((hakemus) => (hakemus.applicationData.areas || []) as KaivuilmoitusAlue[])
+    .flatMap((area) => area.tyoalueet)
+    .filter((area) => area.geometry && featureContains(hankeFeature, feature(area.geometry)));
+  return [...johtoselvitysWorkAreasInsideHankealue, ...kaivuilmoitusWorkAreasInsideHankealue];
 }
 
 export type DateLimits = [maxStartDate: Date | null, minEndDate: Date | null];
