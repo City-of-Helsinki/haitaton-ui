@@ -865,6 +865,14 @@ const hakemukset: Application[] = [
           kaistahaitta: 'YKSI_KAISTA_VAHENEE',
           kaistahaittojenPituus: 'PITUUS_10_99_METRIA',
           lisatiedot: '',
+          haittojenhallintasuunnitelma: {
+            YLEINEN: 'Työalueen yleisten haittojen hallintasuunnitelma',
+            PYORALIIKENNE: 'Pyöräliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+            AUTOLIIKENNE: 'Autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+            LINJAAUTOLIIKENNE: '',
+            RAITIOLIIKENNE: 'Raitioliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+            MUUT: 'Muiden työalueen haittojen hallintasuunnitelma',
+          },
         },
       ],
       customerWithContacts: {
@@ -898,7 +906,7 @@ const hakemukset: Application[] = [
           country: 'FI',
           email: 'yritys2@test.com',
           phone: '040123456',
-          registryKey: null,
+          registryKey: '1234567-1',
           registryKeyHidden: false,
           ovt: null,
           invoicingOperator: null,

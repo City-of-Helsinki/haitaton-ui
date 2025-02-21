@@ -93,6 +93,7 @@ import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary'
 import TaydennysCancel from '../taydennys/components/TaydennysCancel';
 import TaydennysAttachmentsList from '../taydennys/components/TaydennysAttachmentsList';
 import { HaittojenhallintasuunnitelmaInfo } from '../../kaivuilmoitus/components/HaittojenhallintasuunnitelmaInfo';
+import MuutosilmoitusNotification from '../muutosilmoitus/components/MuutosilmoitusNotification';
 
 function TyoalueetList({ tyoalueet }: { tyoalueet: ApplicationArea[] }) {
   const { t } = useTranslation();
@@ -520,6 +521,7 @@ function ApplicationView({
     valmistumisilmoitukset,
     taydennyspyynto,
     taydennys,
+    muutosilmoitus,
   } = application;
   const {
     name,
@@ -581,7 +583,8 @@ function ApplicationView({
 
   const showMuutosilmoitusButton =
     applicationType === 'EXCAVATION_NOTIFICATION' &&
-    (alluStatus === AlluStatus.DECISION || alluStatus === AlluStatus.OPERATIONAL_CONDITION);
+    (alluStatus === AlluStatus.DECISION || alluStatus === AlluStatus.OPERATIONAL_CONDITION) &&
+    !muutosilmoitus?.sent;
 
   async function onSendApplication(pdr: PaperDecisionReceiver | undefined | null) {
     applicationSendMutation.mutate({
@@ -635,6 +638,7 @@ function ApplicationView({
                 applicationType={applicationType}
               />
             )}
+          {muutosilmoitus && <MuutosilmoitusNotification sent={muutosilmoitus.sent} />}
           <Box mt="var(--spacing-s)">
             <FormPagesErrorSummary
               data={taydennys ?? application}
@@ -755,7 +759,9 @@ function ApplicationView({
                 onClick={onEditMuutosilmoitus}
                 isLoading={creatingMuutosilmoitus}
               >
-                {t('muutosilmoitus:buttons:createMuutosilmoitus')}
+                {!muutosilmoitus
+                  ? t('muutosilmoitus:buttons:createMuutosilmoitus')
+                  : t('muutosilmoitus:buttons:editMuutosilmoitus')}
               </Button>
             </CheckRightsByHanke>
           )}

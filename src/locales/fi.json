@@ -1548,7 +1548,13 @@
   },
   "muutosilmoitus": {
     "buttons": {
-      "createMuutosilmoitus": "Tee muutosilmoitus"
+      "createMuutosilmoitus": "Tee muutosilmoitus",
+      "editMuutosilmoitus": "Jatka muutosilmoitusta"
+    },
+    "notification": {
+      "label": "Muutosilmoitus",
+      "createdText": "Hakemukselle on luotu muutosilmoitus",
+      "sentText": "Hakemukselle on tehty muutosilmoitus, joka on lähetetty käsittelyyn {{date}}"
     }
   },
   "hankeSidebar": {
