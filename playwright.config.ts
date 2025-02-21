@@ -1,12 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+import path from 'path';
 
 /**
- * Read environment variables from file.
+ * Read environment variables from file if we're not in CI.
  * https://github.com/motdotla/dotenv
  */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+if (!process.env.CI) {
+  dotenv.config({ path: path.resolve(__dirname, '.env.e2e') });
+}
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -24,7 +26,11 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   // reporter: 'html',
-  reporter: [['list'],['html', {open: 'never', outputFolder: 'e2e/report'}],['junit', { outputFile: 'e2e/report/e2e-junit-results.xml' }]],
+  reporter: [
+    ['list'],
+    ['html', { open: 'never', outputFolder: 'e2e/report' }],
+    ['junit', { outputFile: 'e2e/report/e2e-junit-results.xml' }],
+  ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     viewport: { width: 1920, height: 1080 },
@@ -74,7 +80,7 @@ export default defineConfig({
         viewport: { width: 1920, height: 1080 },
         launchOptions: {
           slowMo: 1000,
-        }
+        },
       },
     },
 
