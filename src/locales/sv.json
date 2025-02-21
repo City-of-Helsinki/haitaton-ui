@@ -1692,7 +1692,7 @@
       "userUpdatedErrorLabel": "Ett fel uppstod vid uppdateringen",
       "userUpdatedErrorText": "<0>Ett fel uppstod när användarinformation skulle uppdateras. Försök igen senare eller kontakta Haitatons tekniska support med e-post till <1>haitatontuki@hel.fi</1>.</0>",
       "userIdentifiedLabel": "Identifieringen lyckades",
-      "userIdentifiedText": "Identifieringen lyckades. Du har nu lagts till i projektet ({{hankeNimi}} {{hankeTunnus}}).",
+      "userIdentifiedText": "Du har nu lagts till i projektet ({{hankeNimi}} {{hankeTunnus}}).",
       "userIdentifiedError": "Identifieringen misslyckades",
       "invitationSentSuccessLabel": "Inbjudningslänken skickades",
       "invitationSentSuccessText": "Inbjudningslänken skickades till {{email}}.",

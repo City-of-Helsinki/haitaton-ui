@@ -69,7 +69,7 @@ test('Should identify user after login', async () => {
   expect(identifyUser).toHaveBeenCalledWith(id);
   expect(
     screen.queryByText(
-      'Tunnistautuminen onnistui. Sinut on nyt lisätty hankkeelle (Aidasmäentien vesihuollon rakentaminen HAI22-2).',
+      'Sinut on nyt lisätty hankkeelle (Aidasmäentien vesihuollon rakentaminen HAI22-2).',
     ),
   ).toBeInTheDocument();
 });
