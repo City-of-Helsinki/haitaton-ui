@@ -8,6 +8,10 @@ import { HankeGeoJSON } from '../../common/types/hanke';
 import { DateInterval, GeometryData } from './types';
 import { HankeData, HankeDataDraft, HankeGeometria } from '../types/hanke';
 import { getSurfaceArea } from '../../common/components/map/utils';
+import { Feature as GeoJSONFeature, FeatureCollection, Polygon as GeoJSONPolygon } from 'geojson';
+import { featureCollection } from '@turf/helpers';
+import booleanEqual from '@turf/boolean-equal';
+import intersect from '@turf/intersect';
 
 export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJSON => {
   const format = new GeoJSON();
@@ -133,4 +137,19 @@ export function getFeatureFromHankeGeometry(geometry: HankeGeometria) {
   );
 
   return feature;
+}
+
+/**
+ * Returns true if feature1 contains feature2.
+ *
+ * Due to a bug in Turf.js's `booleanContains` function (https://github.com/Turfjs/turf/issues/2588),
+ * this function checks that the intersection of feature1 and feature2 is equal to feature2.
+ */
+export function featureContains(
+  feature1: GeoJSONFeature<GeoJSONPolygon>,
+  feature2: GeoJSONFeature<GeoJSONPolygon>,
+): boolean {
+  const features: FeatureCollection<GeoJSONPolygon> = featureCollection([feature1, feature2]);
+  const intersected = intersect(features);
+  return (intersected && booleanEqual(intersected, feature2)) || false;
 }

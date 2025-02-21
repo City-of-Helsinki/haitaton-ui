@@ -1,6 +1,6 @@
 import { Feature } from 'ol';
 import Polygon from 'ol/geom/Polygon';
-import { Feature as GeoJSONFeature, FeatureCollection, Polygon as GeoJSONPolygon } from 'geojson';
+import { Feature as GeoJSONFeature, Polygon as GeoJSONPolygon } from 'geojson';
 import { max, min } from 'date-fns';
 import { ValidationError } from 'yup';
 import { Link } from 'hds-react';
@@ -14,7 +14,11 @@ import {
   HankePostMuuTaho,
   HankePostYhteystieto,
 } from './types';
-import { formatFeaturesToHankeGeoJSON, getFeatureFromHankeGeometry } from '../../map/utils';
+import {
+  featureContains,
+  formatFeaturesToHankeGeoJSON,
+  getFeatureFromHankeGeometry,
+} from '../../map/utils';
 import { getSurfaceArea } from '../../../common/components/map/utils';
 import {
   ApplicationArea,
@@ -25,9 +29,7 @@ import {
 import { isApplicationCancelled, isApplicationPending } from '../../application/utils';
 import { TFunction } from 'i18next';
 import booleanContains from '@turf/boolean-contains';
-import booleanEqual from '@turf/boolean-equal';
-import { feature, featureCollection } from '@turf/helpers';
-import intersect from '@turf/intersect';
+import { feature } from '@turf/helpers';
 
 function mapToAreaDates(areas: HankeAlue[] | undefined, key: 'haittaAlkuPvm' | 'haittaLoppuPvm') {
   return areas?.reduce((result: Date[], area) => {
@@ -252,21 +254,6 @@ export function getApplicationsInsideHankealue(
         .some((area) => area.geometry && booleanContains(hankeFeature, area.geometry)),
     );
   return [...johtoselvitysApplicationInsideHankealue, ...kaivuilmoitusApplicationInsideHankealue];
-}
-
-/**
- * Returns true if feature1 contains feature2.
- *
- * Due to a bug in Turf.js's `booleanContains` function (https://github.com/Turfjs/turf/issues/2588),
- * this function checks that the intersection of feature1 and feature2 is equal to feature2.
- */
-export function featureContains(
-  feature1: GeoJSONFeature<GeoJSONPolygon>,
-  feature2: GeoJSONFeature<GeoJSONPolygon>,
-): boolean {
-  const features: FeatureCollection<GeoJSONPolygon> = featureCollection([feature1, feature2]);
-  const intersected = intersect(features);
-  return (intersected && booleanEqual(intersected, feature2)) || false;
 }
 
 /**
