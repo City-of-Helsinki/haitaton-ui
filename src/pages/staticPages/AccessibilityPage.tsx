@@ -173,7 +173,7 @@ const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
         </Text>
         <Text tag="p">
           <Link
-            href="http://www.saavutettavuusvaatimukset.fi"
+            href="https://www.saavutettavuusvaatimukset.fi"
             external
             openInExternalDomainAriaLabel={t(
               'common:components:link:openInExternalDomainAriaLabel',
