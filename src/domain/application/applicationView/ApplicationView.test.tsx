@@ -9,9 +9,12 @@ import hakemukset from '../../mocks/data/hakemukset-data';
 import { cloneDeep } from 'lodash';
 import { format } from 'date-fns/format';
 import { fi } from 'date-fns/locale';
-import { Application, JohtoselvitysData } from '../types/application';
+import { Application, JohtoselvitysData, KaivuilmoitusData } from '../types/application';
 import * as taydennysApi from '../taydennys/taydennysApi';
 import { USER_VIEW } from '../../mocks/signedInUser';
+import { createTaydennysAttachments } from '../../mocks/attachments';
+import * as muutosilmoitusApi from '../muutosilmoitus/muutosilmoitusApi';
+import { HAITTA_INDEX_TYPE } from '../../common/haittaIndexes/types';
 
 describe('Cable report application view', () => {
   test('Correct information about application should be displayed', async () => {
@@ -274,6 +277,13 @@ describe('Cable report application view', () => {
     expect(screen.getByText('Lataa päätös (PDF)')).toBeInTheDocument();
   });
 
+  test('Does not show create muutosilmoitus button for johtoselvitys', async () => {
+    render(<ApplicationViewContainer id={9} />);
+    await waitForLoadingToFinish();
+
+    expect(screen.queryByRole('button', { name: 'Tee muutosilmoitus' })).not.toBeInTheDocument();
+  });
+
   describe('Contacts', () => {
     test('Shows paper decision contact information when there is data', async () => {
       const { user } = render(<ApplicationViewContainer id={9} />);
@@ -377,6 +387,9 @@ describe('Cable report application view', () => {
         http.post('/api/taydennykset/:id/laheta', async () => {
           return HttpResponse.json(application);
         }),
+        http.delete('/api/taydennykset/:id', async () => {
+          return new HttpResponse();
+        }),
       );
       const renderResult = render(<ApplicationViewContainer id={application.id!} />);
       await waitForLoadingToFinish();
@@ -403,6 +416,7 @@ describe('Cable report application view', () => {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
         applicationData: application.applicationData,
         muutokset: [],
+        liitteet: [],
       };
       await setup(application);
 
@@ -432,7 +446,7 @@ describe('Cable report application view', () => {
       await user.click(screen.getByRole('button', { name: 'Täydennä' }));
 
       expect(window.location.pathname).toBe(`/fi/johtoselvitystaydennys/${application.id}/muokkaa`);
-      expect(taydennysCreateSpy).toHaveBeenCalledWith(application.id?.toString());
+      expect(taydennysCreateSpy).toHaveBeenCalledWith(application.id);
       taydennysCreateSpy.mockRestore();
     });
 
@@ -442,6 +456,7 @@ describe('Cable report application view', () => {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
         applicationData: application.applicationData,
         muutokset: [],
+        liitteet: [],
       };
       const { user } = await setup(application);
       await user.click(screen.getByRole('button', { name: 'Muokkaa hakemusta (täydennys)' }));
@@ -519,6 +534,7 @@ describe('Cable report application view', () => {
           'rockExcavation',
           'workDescription',
         ],
+        liitteet: [],
       };
       await setup(application);
 
@@ -536,7 +552,7 @@ describe('Cable report application view', () => {
         ),
       ).toBeInTheDocument();
       expect(screen.getByText('Ei')).toBeInTheDocument();
-      expect(screen.getByText('264 m²')).toBeInTheDocument();
+      expect(screen.getByText('266 m²')).toBeInTheDocument();
     });
 
     test('Shows changed information in areas tab', async () => {
@@ -616,13 +632,13 @@ describe('Cable report application view', () => {
           ],
         },
         muutokset: ['areas[1]', 'areas[2]'],
+        liitteet: [],
       };
       const { user } = await setup(application);
       await user.click(screen.getByRole('tab', { name: /alueet/i }));
 
       expect(screen.getAllByText('Täydennys:').length).toBe(2);
-      expect(screen.getAllByText('Poistettu:').length).toBe(1);
-      expect(screen.getByText('264 m²')).toBeInTheDocument();
+      expect(screen.getByText('266 m²')).toBeInTheDocument();
     });
 
     test('Shows changed information in contacts tab', async () => {
@@ -645,6 +661,7 @@ describe('Cable report application view', () => {
           propertyDeveloperWithContacts: null,
         },
         muutokset: ['customerWithContacts', 'propertyDeveloperWithContacts'],
+        liitteet: [],
       };
       const { user } = await setup(application);
       await user.click(screen.getByRole('tab', { name: /yhteystiedot/i }));
@@ -655,12 +672,35 @@ describe('Cable report application view', () => {
       expect(screen.getByText('newMail@test.com')).toBeInTheDocument();
     });
 
+    test('Shows changed information in attachments tab', async () => {
+      const taydennysId = 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c';
+      const taydennysAttachments = createTaydennysAttachments(taydennysId, [
+        { attachmentType: 'MUU' },
+        { attachmentType: 'MUU' },
+      ]);
+      const application = cloneDeep(hakemukset[10] as Application<JohtoselvitysData>);
+      application.taydennys = {
+        id: taydennysId,
+        applicationData: application.applicationData,
+        muutokset: [],
+        liitteet: taydennysAttachments,
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('tab', { name: /liitteet/i }));
+
+      expect(screen.getByText('Täydennys:')).toBeInTheDocument();
+      taydennysAttachments.forEach((attachment) => {
+        expect(screen.getByText(attachment.fileName)).toBeInTheDocument();
+      });
+    });
+
     test('Taydennys can be sent', async () => {
       const application = cloneDeep(hakemukset[10]) as Application<JohtoselvitysData>;
       application.taydennys = {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
         applicationData: application.applicationData,
         muutokset: ['workDescription'],
+        liitteet: [],
       };
       const { user } = await setup(application);
       await user.click(screen.getByRole('button', { name: 'Lähetä täydennys' }));
@@ -675,6 +715,7 @@ describe('Cable report application view', () => {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
         applicationData: application.applicationData,
         muutokset: [],
+        liitteet: [],
       };
       await setup(application);
 
@@ -692,10 +733,57 @@ describe('Cable report application view', () => {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
         applicationData: application.applicationData,
         muutokset: ['workDescription'],
+        liitteet: [],
       };
       await setup(application);
 
       expect(screen.queryByRole('button', { name: 'Lähetä täydennys' })).not.toBeInTheDocument();
+    });
+
+    test('Should be able to cancel taydennys', async () => {
+      const application = cloneDeep(hakemukset[10]) as Application<JohtoselvitysData>;
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: application.applicationData,
+        muutokset: ['workDescription'],
+        liitteet: [],
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('button', { name: 'Peru täydennysluonnos' }));
+      await user.click(await screen.findByRole('button', { name: /vahvista/i }));
+
+      expect(await screen.findByText('Täydennysluonnos peruttiin')).toBeInTheDocument();
+      expect(screen.getByText('Täydennysluonnos peruttiin onnistuneesti')).toBeInTheDocument();
+    });
+
+    test('Cancel taydennys button is not visible if taydennys field is null', async () => {
+      const application = cloneDeep(hakemukset[10]) as Application<JohtoselvitysData>;
+      application.taydennys = null;
+      await setup(application);
+
+      expect(
+        screen.queryByRole('button', { name: 'Peru täydennysluonnos' }),
+      ).not.toBeInTheDocument();
+    });
+
+    test('Cancel taydennys button is not visible if user does not have permission', async () => {
+      server.use(
+        http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+          return HttpResponse.json<SignedInUser>(USER_VIEW);
+        }),
+      );
+      const application = cloneDeep(hakemukset[10]) as Application<JohtoselvitysData>;
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: application.applicationData,
+        muutokset: ['workDescription'],
+        liitteet: [],
+      };
+      await setup(application);
+
+      expect(
+        screen.queryByRole('button', { name: 'Peru täydennysluonnos' }),
+      ).not.toBeInTheDocument();
     });
   });
 });
@@ -745,19 +833,72 @@ describe('Excavation notification application view', () => {
     expect(queryByText('Aidasmäentie 5')).toBeInTheDocument();
     expect(queryByText('Vesi, Viemäri')).toBeInTheDocument();
     expect(queryByText('Työalue 1')).toBeInTheDocument();
-    expect(queryByText('Pinta-ala: 158 m²')).toBeInTheDocument();
+    expect(queryByText('Pinta-ala: 159 m²')).toBeInTheDocument();
     expect(queryByText('Työalue 2')).toBeInTheDocument();
-    expect(queryByText('Pinta-ala: 30 m²')).toBeInTheDocument();
-    expect(queryByText('188 m²')).toBeInTheDocument();
+    expect(queryByText('Pinta-ala: 31 m²')).toBeInTheDocument();
+    expect(queryByText('190 m²')).toBeInTheDocument();
     expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3');
     expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
-    expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('4');
+    expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('0');
     expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('5');
     expect(queryByText('Toistuva meluhaitta')).toBeInTheDocument();
     expect(queryByText('Jatkuva pölyhaitta')).toBeInTheDocument();
     expect(queryByText('Satunnainen tärinähaitta')).toBeInTheDocument();
     expect(queryByText('Yksi autokaista vähenee - ajosuunta vielä käytössä')).toBeInTheDocument();
     expect(queryByText('10-99 m')).toBeInTheDocument();
+  });
+
+  test('Shows correct information in nuisance management tab', async () => {
+    const { user } = render(<ApplicationViewContainer id={5} />);
+    await waitForLoadingToFinish();
+    await user.click(screen.getByRole('tab', { name: /haittojen hallinta/i }));
+    const { queryByText } = within(screen.getByRole('tabpanel', { name: /haittojen hallinta/i }));
+
+    expect(queryByText('Työalueen yleisten haittojen hallintasuunnitelma')).toBeInTheDocument();
+    expect(
+      queryByText('Raitioliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(
+      queryByText('Pyöräliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(
+      queryByText('Autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(queryByText('Muiden työalueen haittojen hallintasuunnitelma')).toBeInTheDocument();
+    expect(screen.getByTestId('test-RAITIOLIIKENNE')).toHaveTextContent('5');
+    expect(screen.getByTestId('test-PYORALIIKENNE')).toHaveTextContent('3');
+    expect(screen.getByTestId('test-AUTOLIIKENNE')).toHaveTextContent('3');
+    expect(screen.getByTestId('test-LINJAAUTOLIIKENNE')).toHaveTextContent('0');
+    expect(queryByText('Yleisten haittojen hallintasuunnitelma')).not.toBeVisible();
+    expect(
+      queryByText('Raitioliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).not.toBeVisible();
+    expect(
+      queryByText('Pyöräliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).not.toBeVisible();
+    expect(
+      queryByText('Autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).not.toBeVisible();
+    expect(
+      queryByText('Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).not.toBeVisible();
+    expect(queryByText('Muiden haittojen hallintasuunnitelma')).not.toBeVisible();
+
+    // open "hankealueen haittojen hallinta" accordions
+    await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[0]);
+    expect(queryByText('Yleisten haittojen hallintasuunnitelma')).toBeVisible();
+    await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[1]);
+    expect(queryByText('Raitioliikenteelle koituvien haittojen hallintasuunnitelma')).toBeVisible();
+    await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[2]);
+    expect(queryByText('Pyöräliikenteelle koituvien haittojen hallintasuunnitelma')).toBeVisible();
+    await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[3]);
+    expect(queryByText('Autoliikenteelle koituvien haittojen hallintasuunnitelma')).toBeVisible();
+    await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[4]);
+    expect(
+      queryByText('Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+    ).toBeVisible();
+    await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[5]);
+    expect(queryByText('Muiden haittojen hallintasuunnitelma')).toBeVisible();
   });
 
   test('Shows correct information in sidebar', async () => {
@@ -1172,6 +1313,564 @@ describe('Excavation notification application view', () => {
       const { queryByText } = within(screen.getByRole('tabpanel', { name: /yhteystiedot/i }));
 
       expect(queryByText('Päätös tilattu paperisena')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Taydennys', () => {
+    async function setup(application: Application<KaivuilmoitusData>) {
+      server.use(
+        http.get('/api/hakemukset/:id', async () => {
+          return HttpResponse.json<Application<KaivuilmoitusData>>(application);
+        }),
+        http.post('/api/taydennykset/:id/laheta', async () => {
+          return HttpResponse.json(application);
+        }),
+        http.delete('/api/taydennykset/:id', async () => {
+          return new HttpResponse();
+        }),
+      );
+      const renderResult = render(<ApplicationViewContainer id={application.id!} />);
+      await waitForLoadingToFinish();
+      return renderResult;
+    }
+
+    test('Does not show create taydennys button if the feature is disabled', async () => {
+      const OLD_ENV = { ...window._env_ };
+      window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_INFORMATION_REQUEST: 0 };
+      const application = cloneDeep(hakemukset[12]) as Application<KaivuilmoitusData>;
+      await setup(application);
+
+      expect(screen.queryByRole('button', { name: 'Täydennä' })).not.toBeInTheDocument();
+
+      jest.resetModules();
+      window._env_ = OLD_ENV;
+    });
+
+    test('Does not show edit taydennys button if the feature is disabled', async () => {
+      const OLD_ENV = { ...window._env_ };
+      window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_INFORMATION_REQUEST: 0 };
+      const application = cloneDeep(hakemukset[12]) as Application<KaivuilmoitusData>;
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        muutokset: [],
+        liitteet: [],
+      };
+      await setup(application);
+
+      expect(
+        screen.queryByRole('button', { name: 'Muokkaa hakemusta (täydennys)' }),
+      ).not.toBeInTheDocument();
+
+      jest.resetModules();
+      window._env_ = OLD_ENV;
+    });
+
+    test('Creates taydennys and navigates to edit taydennys path if taydennys does not exist', async () => {
+      const taydennysCreateSpy = jest.spyOn(taydennysApi, 'createTaydennys');
+      const application = hakemukset[12] as Application<KaivuilmoitusData>;
+      server.use(
+        http.post('/api/hakemukset/:id/taydennys', async () => {
+          return HttpResponse.json(
+            {
+              id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+              applicationData: application.applicationData,
+            },
+            { status: 200 },
+          );
+        }),
+      );
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('button', { name: 'Täydennä' }));
+
+      expect(window.location.pathname).toBe(`/fi/kaivuilmoitustaydennys/${application.id}/muokkaa`);
+      expect(taydennysCreateSpy).toHaveBeenCalledWith(application.id);
+      taydennysCreateSpy.mockRestore();
+    });
+
+    test('Navigates to edit taydennys path if taydennys exists', async () => {
+      const application = cloneDeep(hakemukset[12]) as Application<KaivuilmoitusData>;
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        muutokset: [],
+        liitteet: [],
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('button', { name: 'Muokkaa hakemusta (täydennys)' }));
+
+      expect(window.location.pathname).toBe(`/fi/kaivuilmoitustaydennys/${application.id}/muokkaa`);
+    });
+
+    test('Shows error notification if creating taydennys fails', async () => {
+      server.use(
+        http.post('/api/hakemukset/:id/taydennys', async () => {
+          return HttpResponse.json(
+            { errorMessage: 'Failed for testing purposes' },
+            { status: 500 },
+          );
+        }),
+      );
+      const application = hakemukset[12] as Application<KaivuilmoitusData>;
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('button', { name: 'Täydennä' }));
+
+      expect(await screen.findByText('Tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument();
+    });
+
+    test('Shows changed information in basic information tab', async () => {
+      const application = cloneDeep(hakemukset[12] as Application<KaivuilmoitusData>);
+      const name = 'New name';
+      const workDescription = 'New work description';
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: {
+          ...application.applicationData,
+          name,
+          workDescription,
+          constructionWork: false,
+          maintenanceWork: true,
+          emergencyWork: true,
+          cableReports: [...(application.applicationData.cableReports || []), 'JS2300003'],
+          placementContracts: [
+            ...(application.applicationData.placementContracts || []),
+            'SL1234568',
+          ],
+          areas: [
+            {
+              ...application.applicationData.areas[0],
+              tyoalueet: [
+                ...application.applicationData.areas[0].tyoalueet,
+                {
+                  area: 10,
+                  geometry: {
+                    type: 'Polygon',
+                    crs: {
+                      type: 'name',
+                      properties: {
+                        name: 'urn:ogc:def:crs:EPSG::3879',
+                      },
+                    },
+                    coordinates: [
+                      [
+                        [25498581.440262634, 6679345.526261961],
+                        [25498582.233686976, 6679350.99321805],
+                        [25498576.766730886, 6679351.786642391],
+                        [25498575.973306544, 6679346.319686302],
+                        [25498581.440262634, 6679345.526261961],
+                      ],
+                    ],
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        muutokset: [
+          'name',
+          'workDescription',
+          'constructionWork',
+          'maintenanceWork',
+          'emergencyWork',
+          'cableReports',
+          'placementContracts',
+        ],
+        liitteet: [],
+      };
+      await setup(application);
+
+      expect(screen.getAllByText('Täydennys:').length).toBe(6);
+      expect(screen.getAllByText('Poistettu:').length).toBe(1);
+      expect(screen.getByText(name)).toBeInTheDocument();
+      expect(screen.getByText(workDescription)).toBeInTheDocument();
+      expect(screen.getByText('Olemassaolevan rakenteen kunnossapitotyöstä')).toBeInTheDocument();
+      expect(screen.getAllByText('Uuden rakenteen tai johdon rakentamisesta').length).toBe(2);
+      expect(
+        screen.getByText(
+          'Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi',
+        ),
+      ).toBeInTheDocument();
+      expect(screen.getByText('JS2300003')).toBeInTheDocument();
+      expect(screen.getByText('SL1234568')).toBeInTheDocument();
+      expect(screen.getByText('221 m²')).toBeInTheDocument();
+    });
+
+    test('Shows changed information in areas tab', async () => {
+      const application = cloneDeep(hakemukset[12] as Application<KaivuilmoitusData>);
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: {
+          ...application.applicationData,
+          areas: [
+            {
+              ...application.applicationData.areas[0],
+              tyoalueet: [
+                ...application.applicationData.areas[0].tyoalueet.slice(0, 1),
+                {
+                  area: 10,
+                  geometry: {
+                    type: 'Polygon',
+                    crs: {
+                      type: 'name',
+                      properties: {
+                        name: 'urn:ogc:def:crs:EPSG::3879',
+                      },
+                    },
+                    coordinates: [
+                      [
+                        [25498574.56194478, 6679282.528783048],
+                        [25498582.990384366, 6679282.528783048],
+                        [25498582.990384366, 6679310.418567079],
+                        [25498574.56194478, 6679310.418567079],
+                        [25498574.56194478, 6679282.528783048],
+                      ],
+                    ],
+                  },
+                  tormaystarkasteluTulos: {
+                    liikennehaittaindeksi: {
+                      indeksi: 5,
+                      tyyppi: HAITTA_INDEX_TYPE.AUTOLIIKENNEINDEKSI,
+                    },
+                    pyoraliikenneindeksi: 3,
+                    autoliikenne: {
+                      indeksi: 5,
+                      haitanKesto: 5,
+                      katuluokka: 5,
+                      liikennemaara: 5,
+                      kaistahaitta: 5,
+                      kaistapituushaitta: 5,
+                    },
+                    linjaautoliikenneindeksi: 0,
+                    raitioliikenneindeksi: 1,
+                  },
+                },
+              ],
+              tyonTarkoitukset: ['VESI', 'TIETOLIIKENNE'],
+              meluhaitta: 'SATUNNAINEN_MELUHAITTA',
+              polyhaitta: 'SATUNNAINEN_POLYHAITTA',
+              tarinahaitta: 'TOISTUVA_TARINAHAITTA',
+              kaistahaitta: 'YKSI_KAISTA_VAHENEE_KAHDELLA_AJOSUUNNALLA',
+              kaistahaittojenPituus: 'PITUUS_ALLE_10_METRIA',
+              lisatiedot: 'Lisätiedot',
+            },
+          ],
+        },
+        muutokset: [
+          'areas[0].tyoalueet[1]',
+          'areas[0].tyonTarkoitukset',
+          'areas[0].meluhaitta',
+          'areas[0].polyhaitta',
+          'areas[0].tarinahaitta',
+          'areas[0].kaistahaitta',
+          'areas[0].kaistahaittojenPituus',
+          'areas[0].lisatiedot',
+        ],
+        liitteet: [],
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('tab', { name: /alueet/i }));
+
+      expect(screen.getAllByText('Täydennys:').length).toBe(8);
+      expect(screen.getByText('394 m²')).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Työalueille lasketut liikennehaittaindeksit ovat muuttuneet. Tarkista haittojenhallintasuunnitelma.',
+        ),
+      ).toBeInTheDocument();
+    });
+
+    test('Shows changed information in haittojen hallinta tab', async () => {
+      const application = cloneDeep(hakemukset[12] as Application<KaivuilmoitusData>);
+      application.applicationData.propertyDeveloperWithContacts = cloneDeep(
+        application.applicationData.customerWithContacts,
+      );
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: {
+          ...application.applicationData,
+          areas: [
+            {
+              ...application.applicationData.areas[0],
+              haittojenhallintasuunnitelma: {
+                YLEINEN: 'Täydennetty työalueen yleisten haittojen hallintasuunnitelma',
+                PYORALIIKENNE:
+                  'Täydennetty pyöräliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+                AUTOLIIKENNE:
+                  'Täydennetty autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+                LINJAAUTOLIIKENNE:
+                  'Linja-autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+                RAITIOLIIKENNE:
+                  'Täydennetty raitioliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+                MUUT: '',
+              },
+            },
+          ],
+        },
+        muutokset: [
+          'areas[0].haittojenhallintasuunnitelma[YLEINEN]',
+          'areas[0].haittojenhallintasuunnitelma[PYORALIIKENNE]',
+          'areas[0].haittojenhallintasuunnitelma[AUTOLIIKENNE]',
+          'areas[0].haittojenhallintasuunnitelma[LINJAAUTOLIIKENNE]',
+          'areas[0].haittojenhallintasuunnitelma[RAITOLIIKENNE]',
+          'areas[0].haittojenhallintasuunnitelma[MUUT]',
+        ],
+        liitteet: [],
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('tab', { name: /haittojen hallinta/i }));
+
+      expect(screen.getAllByText('Täydennys:').length).toBe(6);
+    });
+
+    test('Shows changed information in contacts tab', async () => {
+      const application = cloneDeep(hakemukset[12] as Application<KaivuilmoitusData>);
+      application.applicationData.propertyDeveloperWithContacts = cloneDeep(
+        application.applicationData.customerWithContacts,
+      );
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        applicationData: {
+          ...application.applicationData,
+          customerWithContacts: {
+            customer: {
+              ...application.applicationData.customerWithContacts!.customer,
+              name: 'New name',
+              email: 'newMail@test.com',
+            },
+            contacts: application.applicationData.customerWithContacts!.contacts,
+          },
+          propertyDeveloperWithContacts: null,
+          invoicingCustomer: {
+            ...application.applicationData.invoicingCustomer!,
+            name: 'Uusi Laskutus Oy',
+          },
+        },
+        muutokset: ['customerWithContacts', 'propertyDeveloperWithContacts', 'invoicingCustomer'],
+        liitteet: [],
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('tab', { name: /yhteystiedot/i }));
+
+      expect(screen.getAllByText('Täydennys:').length).toBe(2);
+      expect(screen.getAllByText('Poistettu:').length).toBe(1);
+      expect(screen.getByText('New name')).toBeInTheDocument();
+      expect(screen.getByText('newMail@test.com')).toBeInTheDocument();
+      expect(screen.getByText('Uusi Laskutus Oy')).toBeInTheDocument();
+    });
+
+    test('Shows changed information in attachments tab', async () => {
+      const taydennysId = 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c';
+      const taydennysAttachments = createTaydennysAttachments(taydennysId, [
+        { attachmentType: 'LIIKENNEJARJESTELY' },
+        { attachmentType: 'VALTAKIRJA' },
+        { attachmentType: 'MUU' },
+      ]);
+      const application = cloneDeep(hakemukset[12] as Application<KaivuilmoitusData>);
+      application.taydennys = {
+        id: taydennysId,
+        applicationData: application.applicationData,
+        muutokset: [],
+        liitteet: taydennysAttachments,
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('tab', { name: /liitteet/i }));
+
+      expect(screen.getAllByText('Täydennys:').length).toBe(3);
+      taydennysAttachments.forEach((attachment) => {
+        expect(screen.getByText(attachment.fileName)).toBeInTheDocument();
+      });
+    });
+
+    test('Taydennys can be sent', async () => {
+      const application = cloneDeep(hakemukset[12]) as Application<KaivuilmoitusData>;
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        muutokset: ['workDescription'],
+        liitteet: [],
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('button', { name: 'Lähetä täydennys' }));
+      await user.click(await screen.findByRole('button', { name: /vahvista/i }));
+
+      expect(await screen.findByText(/täydennys lähetetty/i)).toBeInTheDocument();
+    });
+
+    test('Send taydennys button is not visible if there are no changes', async () => {
+      const application = cloneDeep(hakemukset[12]) as Application<KaivuilmoitusData>;
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        muutokset: [],
+        liitteet: [],
+      };
+      await setup(application);
+
+      expect(screen.queryByRole('button', { name: 'Lähetä täydennys' })).not.toBeInTheDocument();
+    });
+
+    test('Send taydennys button is not visible if user does not have permission', async () => {
+      server.use(
+        http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+          return HttpResponse.json<SignedInUser>(USER_VIEW);
+        }),
+      );
+      const application = cloneDeep(hakemukset[12]) as Application<KaivuilmoitusData>;
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        muutokset: ['workDescription'],
+        liitteet: [],
+      };
+      await setup(application);
+
+      expect(screen.queryByRole('button', { name: 'Lähetä täydennys' })).not.toBeInTheDocument();
+    });
+
+    test('Should be able to cancel taydennys', async () => {
+      const application = cloneDeep(hakemukset[12]) as Application<KaivuilmoitusData>;
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        muutokset: ['workDescription'],
+        liitteet: [],
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('button', { name: 'Peru täydennysluonnos' }));
+      await user.click(await screen.findByRole('button', { name: /vahvista/i }));
+
+      expect(await screen.findByText('Täydennysluonnos peruttiin')).toBeInTheDocument();
+      expect(screen.getByText('Täydennysluonnos peruttiin onnistuneesti')).toBeInTheDocument();
+    });
+
+    test('Cancel taydennys button is not visible if taydennys field is null', async () => {
+      const application = cloneDeep(hakemukset[12]) as Application<KaivuilmoitusData>;
+      application.taydennys = null;
+      await setup(application);
+
+      expect(
+        screen.queryByRole('button', { name: 'Peru täydennysluonnos' }),
+      ).not.toBeInTheDocument();
+    });
+
+    test('Cancel taydennys button is not visible if user does not have permission', async () => {
+      server.use(
+        http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+          return HttpResponse.json<SignedInUser>(USER_VIEW);
+        }),
+      );
+      const application = cloneDeep(hakemukset[12]) as Application<KaivuilmoitusData>;
+      application.taydennys = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        muutokset: ['workDescription'],
+        liitteet: [],
+      };
+      await setup(application);
+
+      expect(
+        screen.queryByRole('button', { name: 'Peru täydennysluonnos' }),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Muutosilmoitus', () => {
+    async function setup(application: Application<KaivuilmoitusData>) {
+      server.use(
+        http.get('/api/hakemukset/:id', async () => {
+          return HttpResponse.json<Application<KaivuilmoitusData>>(application);
+        }),
+      );
+      const renderResult = render(<ApplicationViewContainer id={application.id!} />);
+      await waitForLoadingToFinish();
+      return renderResult;
+    }
+
+    test('Does not show create muutosilmoitus button if application has wrong status', async () => {
+      const application = cloneDeep(hakemukset[7]) as Application<KaivuilmoitusData>;
+      application.alluStatus = 'HANDLING';
+      await setup(application);
+
+      expect(screen.queryByRole('button', { name: 'Tee muutosilmoitus' })).not.toBeInTheDocument();
+    });
+
+    test('Creates muutosilmoitus if muutosilmoitus does not exist', async () => {
+      const muutosilmoitusCreateSpy = jest.spyOn(muutosilmoitusApi, 'createMuutosilmoitus');
+      const application = hakemukset[7] as Application<KaivuilmoitusData>;
+      server.use(
+        http.post('/api/hakemukset/:id/muutosilmoitus', async () => {
+          return HttpResponse.json(
+            {
+              id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+              applicationData: application.applicationData,
+            },
+            { status: 200 },
+          );
+        }),
+      );
+      const { user } = await setup(application);
+
+      expect(screen.queryByText('Hakemukselle on luotu muutosilmoitus')).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole('button', { name: 'Tee muutosilmoitus' }));
+
+      expect(muutosilmoitusCreateSpy).toHaveBeenCalledWith(application.id);
+      muutosilmoitusCreateSpy.mockRestore();
+    });
+
+    test('Shows error notification if creating muutosilmoitus fails', async () => {
+      server.use(
+        http.post('/api/hakemukset/:id/muutosilmoitus', async () => {
+          return HttpResponse.json(
+            { errorMessage: 'Failed for testing purposes' },
+            { status: 500 },
+          );
+        }),
+      );
+      const application = hakemukset[7] as Application<KaivuilmoitusData>;
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('button', { name: 'Tee muutosilmoitus' }));
+
+      expect(await screen.findByText('Tapahtui virhe. Yritä uudestaan.')).toBeInTheDocument();
+    });
+
+    test('Shows muutosilmoitus created notification and continue button if muutosilmoitus exists but is not sent', async () => {
+      const application = cloneDeep(hakemukset[7]) as Application<KaivuilmoitusData>;
+      application.muutosilmoitus = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        sent: null,
+      };
+      await setup(application);
+
+      expect(screen.getByText('Hakemukselle on luotu muutosilmoitus')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Jatka muutosilmoitusta' })).toBeInTheDocument();
+    });
+
+    test('Shows muutosilmoitus sent notification and hides continue button if muutosilmoitus is sent', async () => {
+      const application = cloneDeep(hakemukset[7]) as Application<KaivuilmoitusData>;
+      const sentDate = new Date();
+      application.muutosilmoitus = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        sent: sentDate.toISOString(),
+      };
+      await setup(application);
+
+      expect(
+        screen.getByText(
+          `Hakemukselle on tehty muutosilmoitus, joka on lähetetty käsittelyyn ${format(
+            sentDate,
+            'd.M.yyyy HH:mm',
+            {
+              locale: fi,
+            },
+          )}`,
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: 'Jatka muutosilmoitusta' }),
+      ).not.toBeInTheDocument();
     });
   });
 });

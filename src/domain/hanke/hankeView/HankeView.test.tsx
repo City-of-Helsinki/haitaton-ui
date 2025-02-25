@@ -27,7 +27,7 @@ test('Draft state notification is rendered when hanke is in draft state', async 
 
   expect(draftStateElement).toBeInTheDocument();
   expect(getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
-  expect(getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
+  expect(getByRole('listitem', { name: /alueiden/i })).toBeInTheDocument();
   expect(getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
 });
 
@@ -41,7 +41,7 @@ test('Draft state notification only shows form pages with missing information', 
 
   expect(draftStateElement).toBeInTheDocument();
   expect(queryByRole('listitem', { name: /perustiedot/i })).not.toBeInTheDocument();
-  expect(getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
+  expect(getByRole('listitem', { name: /alueiden/i })).toBeInTheDocument();
   expect(getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
 });
 
@@ -107,28 +107,28 @@ test('Correct information about hanke should be displayed', async () => {
     ),
   ).toBeInTheDocument();
   expect(screen.queryByText('Mannerheimintie 6')).toBeInTheDocument();
-  expect(screen.queryByText('2.1.2023')).toBeInTheDocument();
-  expect(screen.queryByText('24.2.2023')).toBeInTheDocument();
+  expect(screen.queryByText('14.6.2023')).toBeInTheDocument();
+  expect(screen.queryByText('16.10.2023')).toBeInTheDocument();
   expect(screen.queryByText('Ohjelmointi')).toBeInTheDocument();
   expect(screen.queryByText('Kaukolämpö')).toBeInTheDocument();
   expect(screen.queryByText('Ei')).toBeInTheDocument();
-  expect(screen.queryByText('11974 m²')).toBeInTheDocument();
+  expect(screen.queryByText('12041 m²')).toBeInTheDocument();
 
   // Data in sidebar
-  expect(screen.queryByText('Hankealue 1 (11974 m²)')).toBeInTheDocument();
-  expect(screen.queryByText('2.1.2023–24.2.2023')).toBeInTheDocument();
+  expect(screen.queryByText('Hankealue 1 (12041 m²)')).toBeInTheDocument();
+  expect(screen.queryByText('14.6.2023–16.10.2023')).toBeInTheDocument();
 
   // Change to areas tab
   await user.click(screen.getByRole('tab', { name: /alueet/i }));
 
   // Data in areas tab
   expect(screen.queryByText('Hankealue 1')).toBeInTheDocument();
-  expect(screen.getAllByText('2.1.2023–24.2.2023').length).toBe(2);
+  expect(screen.getAllByText('14.6.2023–16.10.2023').length).toBe(2);
   expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3.5');
   expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('2');
   expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('0');
   expect(screen.getByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
-  expect(screen.queryByText('11974 m²')).toBeInTheDocument();
+  expect(screen.queryByText('12041 m²')).toBeInTheDocument();
   expect(screen.queryByText('Meluhaitta: Satunnainen meluhaitta')).toBeInTheDocument();
   expect(screen.queryByText('Pölyhaitta: Toistuva pölyhaitta')).toBeInTheDocument();
   expect(screen.queryByText('Tärinähaitta: Jatkuva tärinähaitta')).toBeInTheDocument();
@@ -271,7 +271,7 @@ test('Should navigate to application view when clicking application identifier l
 
   await waitForLoadingToFinish();
   await user.click(screen.getByRole('tab', { name: /hakemukset/i }));
-  await user.click(screen.getByTestId('applicationViewLinkIdentifier-2'));
+  await user.click(screen.getByTestId('applicationViewLinkIdentifier-JS2300001'));
 
   expect(window.location.pathname).toBe('/fi/hakemus/2');
   expect(screen.queryByText('Mannerheimintien kuopat')).toBeInTheDocument();

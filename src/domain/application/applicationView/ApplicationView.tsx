@@ -29,7 +29,6 @@ import {
   SectionItemContentAdded,
   SectionItemContentRemoved,
   SectionItemTitle,
-  SectionTitle,
 } from '../../forms/components/FormSummarySection';
 import { HankeData } from '../../types/hanke';
 import ApplicationStatusTag from '../components/ApplicationStatusTag';
@@ -58,10 +57,7 @@ import {
   isApplicationSent,
   isContactIn,
 } from '../utils';
-import ApplicationDates from '../components/ApplicationDates';
 import ContactsSummary from '../components/summary/ContactsSummary';
-import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
-import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import Link from '../../../common/components/Link/Link';
 import useHankeViewPath from '../../hanke/hooks/useHankeViewPath';
 import JohtoselvitysDecisionLink from '../../johtoselvitys/components/DecisionLink';
@@ -73,7 +69,7 @@ import { CheckRightsByHanke } from '../../hanke/hankeUsers/UserRightsCheck';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import KaivuilmoitusAttachmentSummary from '../components/summary/KaivuilmoitusAttachmentSummary';
 import InvoicingCustomerSummary from '../components/summary/InvoicingCustomerSummary';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { SignedInUser } from '../../hanke/hankeUsers/hankeUser';
 import useSendApplication from '../hooks/useSendApplication';
 import { validationSchema as johtoselvitysValidationSchema } from '../../johtoselvitys/validationSchema';
@@ -81,46 +77,23 @@ import { validationSchema as kaivuilmoitusValidationSchema } from '../../kaivuil
 import ApplicationReportCompletionDateDialog from '../../kaivuilmoitus/components/ApplicationReportCompletionDateDialog';
 import { formatToFinnishDate, formatToFinnishDateTime } from '../../../common/utils/date';
 import HaittaIndexes from '../../common/haittaIndexes/HaittaIndexes';
-import { calculateLiikennehaittaindeksienYhteenveto } from '../../kaivuilmoitus/utils';
+import {
+  calculateLiikennehaittaindeksienYhteenveto,
+  hasHaittaIndexesChanged,
+} from '../../kaivuilmoitus/utils';
 import styles from './ApplicationView.module.scss';
-import CustomAccordion from '../../../common/components/customAccordion/CustomAccordion';
-import useFilterHankeAlueetByApplicationDates from '../hooks/useFilterHankeAlueetByApplicationDates';
 import ApplicationSendDialog from '../components/ApplicationSendDialog';
 import TaydennyspyyntoNotification from '../taydennys/TaydennyspyyntoNotification';
 import { useQueryClient } from 'react-query';
 import AreaInformation from '../components/summary/AreaInformation';
 import useIsInformationRequestFeatureEnabled from '../taydennys/hooks/useIsInformationRequestFeatureEnabled';
 import useSendTaydennys from './hooks/useSendTaydennys';
-
-function SidebarTyoalueet({
-  tyoalueet,
-  startTime,
-  endTime,
-}: {
-  tyoalueet: ApplicationArea[];
-  startTime: Date | null;
-  endTime: Date | null;
-}) {
-  const { t } = useTranslation();
-
-  return tyoalueet.map((tyoalue, index) => {
-    const areaName = getAreaDefaultName(t, index, tyoalueet.length);
-    const geometry = getAreaGeometry(tyoalue);
-    return (
-      <Box
-        key={areaName}
-        padding="var(--spacing-s)"
-        paddingRight="var(--spacing-m)"
-        _notLast={{ borderBottom: '1px solid var(--color-black-30)' }}
-      >
-        <Text tag="p" styleAs="body-m" weight="bold" spacingBottom="2-xs">
-          {areaName} ({formatSurfaceArea(geometry)})
-        </Text>
-        <ApplicationDates startTime={startTime} endTime={endTime} />
-      </Box>
-    );
-  });
-}
+import Sidebar from './Sidebar';
+import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
+import TaydennysCancel from '../taydennys/components/TaydennysCancel';
+import TaydennysAttachmentsList from '../taydennys/components/TaydennysAttachmentsList';
+import { HaittojenhallintasuunnitelmaInfo } from '../../kaivuilmoitus/components/HaittojenhallintasuunnitelmaInfo';
+import MuutosilmoitusNotification from '../muutosilmoitus/components/MuutosilmoitusNotification';
 
 function TyoalueetList({ tyoalueet }: { tyoalueet: ApplicationArea[] }) {
   const { t } = useTranslation();
@@ -164,13 +137,11 @@ function TotalSurfaceArea({
   return (
     <>
       {totalSurfaceArea > 0 && <p>{totalSurfaceArea} m²</p>}
-      {changedTotalSurfaceArea &&
-        changedTotalSurfaceArea > 0 &&
-        changedTotalSurfaceArea !== totalSurfaceArea && (
-          <SectionItemContentAdded marginTop="var(--spacing-s)">
-            <p>{changedTotalSurfaceArea} m²</p>
-          </SectionItemContentAdded>
-        )}
+      {changedTotalSurfaceArea !== undefined && changedTotalSurfaceArea !== totalSurfaceArea && (
+        <SectionItemContentAdded marginTop="var(--spacing-s)">
+          <p>{changedTotalSurfaceArea} m²</p>
+        </SectionItemContentAdded>
+      )}
     </>
   );
 }
@@ -185,10 +156,16 @@ function JohtoselvitysAreasInfo({
   muutokset?: string[];
 }) {
   const { t } = useTranslation();
+  const areasChanged =
+    changedAreas &&
+    muutokset &&
+    changedAreas.filter((_area, index) => muutokset.includes(`areas[${index}]`)).length > 0;
   const areasRemoved =
     changedAreas &&
     muutokset &&
-    tyoalueet.filter((_, index) => muutokset.includes(`areas[${index}]`) && !changedAreas[index]);
+    tyoalueet.filter(
+      (_area, index) => muutokset.includes(`areas[${index}]`) && !changedAreas[index],
+    );
 
   return (
     <FormSummarySection>
@@ -196,7 +173,7 @@ function JohtoselvitysAreasInfo({
       <SectionItemContent>
         <TotalSurfaceArea tyoalueet={tyoalueet} changedAreas={changedAreas} />
       </SectionItemContent>
-      <SectionItemTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionItemTitle>
+      <SectionItemTitle>{t('form:labels:areas')}</SectionItemTitle>
       <SectionItemContent>
         {tyoalueet.map((area, index) => {
           return (
@@ -207,7 +184,7 @@ function JohtoselvitysAreasInfo({
             />
           );
         })}
-        {changedAreas && (
+        {areasChanged && (
           <SectionItemContentAdded>
             {changedAreas.map((area, index) => {
               if (!muutokset?.includes(`areas[${index}]`)) {
@@ -223,7 +200,7 @@ function JohtoselvitysAreasInfo({
             })}
           </SectionItemContentAdded>
         )}
-        {areasRemoved && areasRemoved.length > 0 && (
+        {areasRemoved && areasRemoved.length === tyoalueet.length && (
           <SectionItemContentRemoved marginTop="var(--spacing-s)">
             {areasRemoved.map((area, index) => {
               return (
@@ -241,7 +218,15 @@ function JohtoselvitysAreasInfo({
   );
 }
 
-function KaivuilmoitusAreasInfo({ areas }: { areas: KaivuilmoitusAlue[] | null }) {
+function KaivuilmoitusAreasInfo({
+  areas,
+  changedAreas,
+  muutokset,
+}: {
+  areas: KaivuilmoitusAlue[] | null;
+  changedAreas?: KaivuilmoitusAlue[];
+  muutokset?: string[];
+}) {
   const { t } = useTranslation();
   const locale = useLocale();
 
@@ -249,37 +234,105 @@ function KaivuilmoitusAreasInfo({ areas }: { areas: KaivuilmoitusAlue[] | null }
     return null;
   }
 
-  return areas.map((alue) => {
-    const { tyoalueet } = alue;
+  const areasChanged =
+    changedAreas &&
+    muutokset &&
+    changedAreas.filter((_alue, index) => muutokset.includes(`areas[${index}]`)).length > 0;
+
+  return areas.map((alue, index) => {
+    const changedAlue = changedAreas?.at(index);
+    const changedPropertyPrefix = `areas[${index}]`;
+    const { tyoalueet: originalTyoalueet } = alue;
+    const { tyoalueet: changedTyoalueet } = changedAlue ?? {};
+    const haittaIndexesChanged = hasHaittaIndexesChanged(alue, changedAlue);
+    const tyonTarkoituksetChanged =
+      changedAlue && muutokset?.includes(`${changedPropertyPrefix}.tyonTarkoitukset`);
+    const tyonTarkoituksetAdded = changedAlue?.tyonTarkoitukset?.filter(
+      (tyonTarkoitus) => !alue?.tyonTarkoitukset?.includes(tyonTarkoitus),
+    );
+    const tyonTarkoituksetRemoved = alue.tyonTarkoitukset?.filter(
+      (tyonTarkoitus) => !changedAlue?.tyonTarkoitukset?.includes(tyonTarkoitus),
+    );
+
     return (
       <Accordion
         language={locale}
-        heading={alue.name}
+        heading={t('hakemus:labels:workAreasInProjectArea', { projectName: alue.name })}
         initiallyOpen
         key={alue.hankealueId}
         className={styles.applicationAreaContainer}
       >
         <FormSummarySection style={{ marginBottom: 'var(--spacing-l)' }}>
           <SectionItemTitle>{t('form:yhteystiedot:labels:osoite')}</SectionItemTitle>
-          <SectionItemContent>{alue.katuosoite}</SectionItemContent>
+          <SectionItemContent>
+            {alue.katuosoite}
+            {changedAlue &&
+              muutokset &&
+              muutokset.includes(`${changedPropertyPrefix}.katuosoite`) && (
+                <Box marginTop="var(--spacing-s)">
+                  {!changedAlue.katuosoite ? (
+                    <SectionItemContentRemoved>
+                      <p>{alue.katuosoite}</p>
+                    </SectionItemContentRemoved>
+                  ) : (
+                    <SectionItemContentAdded>
+                      <p>{changedAlue.katuosoite}</p>
+                    </SectionItemContentAdded>
+                  )}
+                </Box>
+              )}
+          </SectionItemContent>
           <SectionItemTitle>{t('hakemus:labels:tyonTarkoitus')}</SectionItemTitle>
           <SectionItemContent>
             {alue.tyonTarkoitukset?.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')}
+            {tyonTarkoituksetChanged && (tyonTarkoituksetAdded?.length || 0) > 0 && (
+              <SectionItemContentAdded marginTop="var(--spacing-s)">
+                {tyonTarkoituksetAdded?.map((changed) => (
+                  <p key={changed}>{t(`hanke:tyomaaTyyppi:${changed}`)}</p>
+                ))}
+              </SectionItemContentAdded>
+            )}
+            {tyonTarkoituksetChanged && (tyonTarkoituksetRemoved?.length || 0) > 0 && (
+              <SectionItemContentRemoved marginTop="var(--spacing-s)">
+                {tyonTarkoituksetRemoved?.map((removed) => (
+                  <p key={removed}>{t(`hanke:tyomaaTyyppi:${removed}`)}</p>
+                ))}
+              </SectionItemContentRemoved>
+            )}
           </SectionItemContent>
-          <SectionItemTitle>{t('form:headers:alueet')}</SectionItemTitle>
-          <SectionItemContent>
-            <TyoalueetList tyoalueet={tyoalueet} />
-          </SectionItemContent>
+          {!areasChanged && (
+            <>
+              <SectionItemTitle>{t('form:labels:areas')}</SectionItemTitle>
+              <SectionItemContent>
+                <TyoalueetList tyoalueet={originalTyoalueet} />
+              </SectionItemContent>
+            </>
+          )}
           <SectionItemTitle>{t('form:labels:kokonaisAla')}</SectionItemTitle>
           <SectionItemContent>
-            <TotalSurfaceArea tyoalueet={tyoalueet} />
+            <TotalSurfaceArea tyoalueet={originalTyoalueet} changedAreas={changedTyoalueet} />
           </SectionItemContent>
         </FormSummarySection>
+        {haittaIndexesChanged && (
+          <Box marginBottom="var(--spacing-l)">
+            <Notification
+              type="alert"
+              size="small"
+              label={t('hanke:alue:haittaIndexesChangedLabel')}
+            >
+              {t('hanke:alue:haittaIndexesChanged')}
+            </Notification>
+          </Box>
+        )}
         <Box marginBottom="var(--spacing-l)">
           <HaittaIndexes
             heading={`${t('kaivuilmoitusForm:alueet:liikennehaittaindeksienYhteenveto')} (0-5)`}
-            haittaIndexData={calculateLiikennehaittaindeksienYhteenveto(alue)}
+            haittaIndexData={calculateLiikennehaittaindeksienYhteenveto(changedAlue ?? alue)}
             initiallyOpen
+            autoHaitanKestoHeading={t(
+              'kaivuilmoitusForm:haittojenHallinta:carTrafficNuisanceType:haitanKesto',
+            )}
+            autoHaitanKestoTooltipTranslationKey="hankeIndexes:tooltips:autoTyonKesto"
           />
         </Box>
         <Box as="h2" className="heading-xxs" marginBottom="var(--spacing-m)">
@@ -289,27 +342,89 @@ function KaivuilmoitusAreasInfo({ areas }: { areas: KaivuilmoitusAlue[] | null }
           <SectionItemTitle>{t('hankeForm:labels:meluHaitta')}</SectionItemTitle>
           <SectionItemContent>
             {alue.meluhaitta ? t(`hanke:meluHaitta:${alue.meluhaitta}`) : '-'}
+            {changedAlue &&
+              muutokset &&
+              muutokset.includes(`${changedPropertyPrefix}.meluhaitta`) && (
+                <Box marginTop="var(--spacing-s)">
+                  <SectionItemContentAdded>
+                    <p>{t(`hanke:meluHaitta:${changedAlue.meluhaitta}`)}</p>
+                  </SectionItemContentAdded>
+                </Box>
+              )}
           </SectionItemContent>
           <SectionItemTitle>{t('hankeForm:labels:polyHaitta')}</SectionItemTitle>
           <SectionItemContent>
             {alue.polyhaitta ? t(`hanke:polyHaitta:${alue.polyhaitta}`) : '-'}
+            {changedAlue &&
+              muutokset &&
+              muutokset.includes(`${changedPropertyPrefix}.polyhaitta`) && (
+                <Box marginTop="var(--spacing-s)">
+                  <SectionItemContentAdded>
+                    <p>{t(`hanke:polyHaitta:${changedAlue.polyhaitta}`)}</p>
+                  </SectionItemContentAdded>
+                </Box>
+              )}
           </SectionItemContent>
           <SectionItemTitle>{t('hankeForm:labels:tarinaHaitta')}</SectionItemTitle>
           <SectionItemContent>
             {alue.tarinahaitta ? t(`hanke:tarinaHaitta:${alue.tarinahaitta}`) : '-'}
+            {changedAlue &&
+              muutokset &&
+              muutokset.includes(`${changedPropertyPrefix}.tarinahaitta`) && (
+                <Box marginTop="var(--spacing-s)">
+                  <SectionItemContentAdded>
+                    <p>{t(`hanke:tarinaHaitta:${changedAlue.tarinahaitta}`)}</p>
+                  </SectionItemContentAdded>
+                </Box>
+              )}
           </SectionItemContent>
           <SectionItemTitle>{t('hankeForm:labels:kaistaHaitta')}</SectionItemTitle>
           <SectionItemContent>
             {alue.kaistahaitta ? t(`hanke:kaistaHaitta:${alue.kaistahaitta}`) : '-'}
+            {changedAlue &&
+              muutokset &&
+              muutokset.includes(`${changedPropertyPrefix}.kaistahaitta`) && (
+                <Box marginTop="var(--spacing-s)">
+                  <SectionItemContentAdded>
+                    <p>{t(`hanke:kaistaHaitta:${changedAlue.kaistahaitta}`)}</p>
+                  </SectionItemContentAdded>
+                </Box>
+              )}
           </SectionItemContent>
           <SectionItemTitle>{t('hankeForm:labels:kaistaPituusHaitta')}</SectionItemTitle>
           <SectionItemContent>
             {alue.kaistahaittojenPituus
               ? t(`hanke:kaistaPituusHaitta:${alue.kaistahaittojenPituus}`)
               : '-'}
+            {changedAlue &&
+              muutokset &&
+              muutokset.includes(`${changedPropertyPrefix}.kaistahaittojenPituus`) && (
+                <Box marginTop="var(--spacing-s)">
+                  <SectionItemContentAdded>
+                    <p>{t(`hanke:kaistaPituusHaitta:${changedAlue.kaistahaittojenPituus}`)}</p>
+                  </SectionItemContentAdded>
+                </Box>
+              )}
           </SectionItemContent>
           <SectionItemTitle>{t('hakemus:labels:areaAdditionalInfo')}</SectionItemTitle>
-          <SectionItemContent>{alue.lisatiedot ? alue.lisatiedot : '-'}</SectionItemContent>
+          <SectionItemContent>
+            {alue.lisatiedot ? alue.lisatiedot : '-'}
+            {changedAlue &&
+              muutokset &&
+              muutokset.includes(`${changedPropertyPrefix}.lisatiedot`) && (
+                <Box marginTop="var(--spacing-s)">
+                  {!changedAlue.lisatiedot ? (
+                    <SectionItemContentRemoved>
+                      <p>{alue.lisatiedot}</p>
+                    </SectionItemContentRemoved>
+                  ) : (
+                    <SectionItemContentAdded>
+                      <p>{changedAlue.lisatiedot}</p>
+                    </SectionItemContentAdded>
+                  )}
+                </Box>
+              )}
+          </SectionItemContent>
         </FormSummarySection>
       </Accordion>
     );
@@ -373,6 +488,8 @@ type Props = {
   onEditApplication: () => void;
   onEditTaydennys: () => void;
   creatingTaydennys?: boolean;
+  onEditMuutosilmoitus: () => void;
+  creatingMuutosilmoitus?: boolean;
 };
 
 function ApplicationView({
@@ -382,8 +499,11 @@ function ApplicationView({
   onEditApplication,
   onEditTaydennys,
   creatingTaydennys,
+  onEditMuutosilmoitus,
+  creatingMuutosilmoitus,
 }: Readonly<Props>) {
   const { t } = useTranslation();
+  const locale = useLocale();
   const queryClient = useQueryClient();
   const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const [showSendDialog, setShowSendDialog] = useState(false);
@@ -401,6 +521,7 @@ function ApplicationView({
     valmistumisilmoitukset,
     taydennyspyynto,
     taydennys,
+    muutosilmoitus,
   } = application;
   const {
     name,
@@ -417,14 +538,17 @@ function ApplicationView({
     applicationType === 'CABLE_REPORT'
       ? (areas as ApplicationArea[])
       : (areas as KaivuilmoitusAlue[]).flatMap((area) => area.tyoalueet);
+  const kaivuilmoitusTaydennysAlueet =
+    applicationType === 'EXCAVATION_NOTIFICATION'
+      ? (application.taydennys?.applicationData.areas as KaivuilmoitusAlue[] | undefined)
+      : null;
   const taydennysTyoalueet =
     applicationType === 'CABLE_REPORT'
       ? (application.taydennys?.applicationData.areas as ApplicationArea[] | undefined)
-      : (application.taydennys?.applicationData.areas as KaivuilmoitusAlue[] | undefined)?.flatMap(
-          (area) => area.tyoalueet,
-        );
+      : kaivuilmoitusTaydennysAlueet?.flatMap((area) => area.tyoalueet);
   const kaivuilmoitusAlueet =
     applicationType === 'EXCAVATION_NOTIFICATION' ? (areas as KaivuilmoitusAlue[]) : null;
+  const hankealueet = hanke?.alueet;
   const currentDecisions = getCurrentDecisions(paatokset);
   const applicationId =
     applicationIdentifier || t(`hakemus:applicationTypeDraft:${applicationType}`);
@@ -453,14 +577,14 @@ function ApplicationView({
   );
   const applicationSendMutation = useSendApplication();
 
-  const filterHankeAlueet = useFilterHankeAlueetByApplicationDates({
-    applicationStartDate: startTime,
-    applicationEndDate: endTime,
-  });
+  const informationRequestFeatureEnabled = useIsInformationRequestFeatureEnabled();
 
-  const informationRequestFeatureEnabled = useIsInformationRequestFeatureEnabled(applicationType);
+  const { sendTaydennysButton, sendTaydennysDialog } = useSendTaydennys(application, signedInUser);
 
-  const { sendTaydennysButton, sendTaydennysDialog } = useSendTaydennys(application);
+  const showMuutosilmoitusButton =
+    applicationType === 'EXCAVATION_NOTIFICATION' &&
+    (alluStatus === AlluStatus.DECISION || alluStatus === AlluStatus.OPERATIONAL_CONDITION) &&
+    !muutosilmoitus?.sent;
 
   async function onSendApplication(pdr: PaperDecisionReceiver | undefined | null) {
     applicationSendMutation.mutate({
@@ -497,28 +621,33 @@ function ApplicationView({
     setShowReportWorkFinishedDialog(false);
   }
 
-  function getHankeWithAlueetFilteredByDates(hankeData: HankeData): HankeData {
-    return {
-      ...hankeData,
-      alueet: filterHankeAlueet(hankeData.alueet),
-    };
-  }
-
   return (
     <InformationViewContainer>
       <InformationViewHeader backgroundColor="var(--color-suomenlinna-light)">
         <MainHeading>{name}</MainHeading>
-        <Text tag="h2" styleAs="h3" weight="bold" spacingBottom="l">
+        <Text tag="h2" styleAs="h3" weight="bold" spacingBottom="l" data-testid="allu_tunnus">
           {applicationId}
         </Text>
 
-        {informationRequestFeatureEnabled &&
-          alluStatus === AlluStatus.WAITING_INFORMATION &&
-          taydennyspyynto && (
-            <Box mb="var(--spacing-l)">
-              <TaydennyspyyntoNotification taydennyspyynto={taydennyspyynto} />
-            </Box>
-          )}
+        <Box mb="var(--spacing-l)">
+          {informationRequestFeatureEnabled &&
+            alluStatus === AlluStatus.WAITING_INFORMATION &&
+            taydennyspyynto && (
+              <TaydennyspyyntoNotification
+                taydennyspyynto={taydennyspyynto}
+                applicationType={applicationType}
+              />
+            )}
+          {muutosilmoitus && <MuutosilmoitusNotification sent={muutosilmoitus.sent} />}
+          <Box mt="var(--spacing-s)">
+            <FormPagesErrorSummary
+              data={taydennys ?? application}
+              schema={validationSchema}
+              validationContext={{ application: taydennys ?? application }}
+              notificationLabel={t('hakemus:missingFields:notification:hakemusLabel')}
+            />
+          </Box>
+        </Box>
 
         <FormSummarySection>
           <SectionItemTitle>{t('hakemus:labels:applicationType')}:</SectionItemTitle>
@@ -564,7 +693,11 @@ function ApplicationView({
           </SectionItemContent>
           <SectionItemTitle>{t('hakemus:labels:relatedHanke')}:</SectionItemTitle>
           <SectionItemContent>
-            {hanke && <Link href={hankeViewPath}>{hankeLinkText}</Link>}
+            {hanke && (
+              <Link href={hankeViewPath} data-testid="related_hanke">
+                {hankeLinkText}
+              </Link>
+            )}
           </SectionItemContent>
           <SectionItemTitle>{t('hankePortfolio:labels:oikeudet')}:</SectionItemTitle>
           <SectionItemContent>
@@ -618,6 +751,20 @@ function ApplicationView({
               </Notification>
             </CheckRightsByHanke>
           )}
+          {showMuutosilmoitusButton && (
+            <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
+              <Button
+                theme="coat"
+                iconLeft={<IconPen />}
+                onClick={onEditMuutosilmoitus}
+                isLoading={creatingMuutosilmoitus}
+              >
+                {!muutosilmoitus
+                  ? t('muutosilmoitus:buttons:createMuutosilmoitus')
+                  : t('muutosilmoitus:buttons:editMuutosilmoitus')}
+              </Button>
+            </CheckRightsByHanke>
+          )}
           {showReportOperationalConditionButton && (
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
               <Button
@@ -643,16 +790,19 @@ function ApplicationView({
           )}
           {informationRequestFeatureEnabled && alluStatus === AlluStatus.WAITING_INFORMATION && (
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
-              <Button
-                theme="coat"
-                iconLeft={<IconPen aria-hidden="true" />}
-                onClick={onEditTaydennys}
-                isLoading={creatingTaydennys}
-              >
-                {!taydennys
-                  ? t('taydennys:buttons:createTaydennys')
-                  : t('taydennys:buttons:editTaydennys')}
-              </Button>
+              <>
+                <Button
+                  theme="coat"
+                  iconLeft={<IconPen aria-hidden="true" />}
+                  onClick={onEditTaydennys}
+                  isLoading={creatingTaydennys}
+                >
+                  {!taydennys
+                    ? t('taydennys:buttons:createTaydennys')
+                    : t('taydennys:buttons:editTaydennys')}
+                </Button>
+                <TaydennysCancel application={application} />
+              </>
             </CheckRightsByHanke>
           )}
           <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
@@ -667,6 +817,9 @@ function ApplicationView({
             <TabList style={{ marginBottom: 'var(--spacing-m)' }}>
               <Tab>{t('hankePortfolio:tabit:perustiedot')}</Tab>
               <Tab>{t('hankePortfolio:tabit:alueet')}</Tab>
+              {applicationType === 'EXCAVATION_NOTIFICATION' && (
+                <Tab>{t('hankePortfolio:tabit:haittojenHallinta')}</Tab>
+              )}
               <Tab>{t('hankePortfolio:tabit:yhteystiedot')}</Tab>
               <Tab>{t('hankePortfolio:tabit:liitteet')}</Tab>
             </TabList>
@@ -687,10 +840,12 @@ function ApplicationView({
               {applicationType === 'EXCAVATION_NOTIFICATION' && (
                 <KaivuilmoitusBasicInformationSummary
                   formData={application as Application<KaivuilmoitusData>}
+                  changedData={taydennys?.applicationData as KaivuilmoitusData}
+                  muutokset={taydennys?.muutokset}
                 >
                   <SectionItemTitle>{t('hakemus:labels:totalSurfaceArea')}</SectionItemTitle>
                   <SectionItemContent>
-                    <TotalSurfaceArea tyoalueet={tyoalueet} />
+                    <TotalSurfaceArea tyoalueet={tyoalueet} changedAreas={taydennysTyoalueet} />
                   </SectionItemContent>
                 </KaivuilmoitusBasicInformationSummary>
               )}
@@ -745,12 +900,43 @@ function ApplicationView({
                 />
               )}
               {applicationType === 'EXCAVATION_NOTIFICATION' && (
-                <KaivuilmoitusAreasInfo areas={kaivuilmoitusAlueet} />
+                <KaivuilmoitusAreasInfo
+                  areas={kaivuilmoitusAlueet}
+                  changedAreas={taydennys?.applicationData?.areas as KaivuilmoitusAlue[]}
+                  muutokset={taydennys?.muutokset}
+                />
               )}
             </TabPanel>
             <TabPanel>
+              {/* Nuisance management panel */}
+              {applicationType === 'EXCAVATION_NOTIFICATION' &&
+                kaivuilmoitusAlueet?.map((alue, index) => {
+                  const hankealue = hankealueet?.find((ha) => ha.id === alue.hankealueId);
+                  const taydennysAlue = kaivuilmoitusTaydennysAlueet?.find(
+                    (ta) => ta.hankealueId === alue.hankealueId,
+                  );
+                  return (
+                    <Accordion
+                      language={locale}
+                      heading={t('hakemus:labels:workAreaPlural') + ' (' + alue.name + ')'}
+                      initiallyOpen={index === 0}
+                      theme={{
+                        '--header-focus-outline-color': 'var(--color-white)',
+                      }}
+                      key={alue.hankealueId}
+                    >
+                      <HaittojenhallintasuunnitelmaInfo
+                        key={alue.hankealueId}
+                        alue={alue}
+                        taydennysAlue={taydennysAlue}
+                        hankealue={hankealue}
+                      />
+                    </Accordion>
+                  );
+                })}
+            </TabPanel>
+            <TabPanel>
               {/* Contacts information panel */}
-              <SectionTitle>{t('form:yhteystiedot:header')}</SectionTitle>
               <FormSummarySection>
                 <ContactsSummary
                   customerWithContacts={customerWithContacts}
@@ -823,9 +1009,29 @@ function ApplicationView({
                   />
                 )}
                 {applicationType === 'EXCAVATION_NOTIFICATION' && (
-                  <InvoicingCustomerSummary
-                    invoicingCustomer={(applicationData as KaivuilmoitusData).invoicingCustomer}
-                  />
+                  <>
+                    <InvoicingCustomerSummary
+                      invoicingCustomer={(applicationData as KaivuilmoitusData).invoicingCustomer}
+                      title={t('form:yhteystiedot:titles:invoicingCustomerInfo')}
+                    />
+                    {application.taydennys?.muutokset.includes('invoicingCustomer') &&
+                      (application.taydennys?.applicationData as KaivuilmoitusData)
+                        .invoicingCustomer && (
+                        <InvoicingCustomerSummary
+                          invoicingCustomer={
+                            (application.taydennys?.applicationData as KaivuilmoitusData)
+                              .invoicingCustomer ??
+                            (applicationData as KaivuilmoitusData).invoicingCustomer
+                          }
+                          title={
+                            !(applicationData as KaivuilmoitusData).invoicingCustomer
+                              ? t('form:yhteystiedot:titles:invoicingCustomerInfo')
+                              : undefined
+                          }
+                          ContentContainer={SectionItemContentAdded}
+                        />
+                      )}
+                  </>
                 )}
                 {paperDecisionReceiver && (
                   <PaperDecisionReceiverSummary paperDecisionReceiver={paperDecisionReceiver} />
@@ -833,67 +1039,34 @@ function ApplicationView({
               </FormSummarySection>
             </TabPanel>
             <TabPanel>
-              {applicationType === 'EXCAVATION_NOTIFICATION' ? (
-                <SectionTitle>{t('form:headers:liitteetJaLisatiedot')}</SectionTitle>
-              ) : (
-                <SectionTitle>{t('hankePortfolio:tabit:liitteet')}</SectionTitle>
-              )}
+              {/* Attachments panel */}
               {applicationType === 'EXCAVATION_NOTIFICATION' ? (
                 <KaivuilmoitusAttachmentSummary
                   formData={application as Application<KaivuilmoitusData>}
                   attachments={attachments}
+                  taydennysAttachments={taydennys?.liitteet}
+                  taydennysAdditionalInfo={
+                    (taydennys?.applicationData as KaivuilmoitusData)?.additionalInfo
+                  }
                 />
-              ) : attachments && attachments.length > 0 ? (
-                <AttachmentSummary attachments={attachments} />
+              ) : attachments ? (
+                <AttachmentSummary
+                  attachments={attachments}
+                  children={
+                    taydennys?.liitteet &&
+                    taydennys.liitteet.length > 0 && (
+                      <SectionItemContentAdded mt="var(--spacing-xs)">
+                        <TaydennysAttachmentsList attachments={taydennys.liitteet} />
+                      </SectionItemContentAdded>
+                    )
+                  }
+                />
               ) : null}
             </TabPanel>
           </Tabs>
         </InformationViewMainContent>
         <InformationViewSidebar testId="application-view-sidebar">
-          {hanke && (
-            <>
-              <Box mb="var(--spacing-s)">
-                <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} showLink={false} />
-                <OwnHankeMap
-                  hanke={getHankeWithAlueetFilteredByDates(hanke)}
-                  application={application}
-                />
-              </Box>
-              {applicationType === 'CABLE_REPORT' && (
-                <SidebarTyoalueet tyoalueet={tyoalueet} startTime={startTime} endTime={endTime} />
-              )}
-              {applicationType === 'EXCAVATION_NOTIFICATION' &&
-                kaivuilmoitusAlueet?.map((kaivuilmoitusAlue) => {
-                  const hankeAlue = hanke.alueet.find(
-                    (alue) => alue.id === kaivuilmoitusAlue.hankealueId,
-                  );
-                  return (
-                    <CustomAccordion
-                      key={kaivuilmoitusAlue.hankealueId}
-                      accordionBorderBottom
-                      headingSize="s"
-                      heading={kaivuilmoitusAlue.name}
-                      subHeading={
-                        <Box marginTop="var(--spacing-2-xs)">
-                          <ApplicationDates
-                            startTime={hankeAlue?.haittaAlkuPvm ?? null}
-                            endTime={hankeAlue?.haittaLoppuPvm ?? null}
-                          />
-                        </Box>
-                      }
-                    >
-                      <Box marginLeft="var(--spacing-s)">
-                        <SidebarTyoalueet
-                          tyoalueet={kaivuilmoitusAlue.tyoalueet}
-                          startTime={startTime}
-                          endTime={endTime}
-                        />
-                      </Box>
-                    </CustomAccordion>
-                  );
-                })}
-            </>
-          )}
+          {hanke && <Sidebar hanke={hanke} application={application} />}
         </InformationViewSidebar>
       </InformationViewContentContainer>
       {applicationType === 'EXCAVATION_NOTIFICATION' && (

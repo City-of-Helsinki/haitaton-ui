@@ -9,11 +9,12 @@ import {
 import { modifyDataBeforeSend } from '../../utils';
 import { updateTaydennys } from '../taydennysApi';
 import { modifyTaydennysAfterReceive } from '../utils';
+import { Taydennys } from '../types';
 
 export default function useUpdateTaydennys<
   ApplicationData extends JohtoselvitysData | KaivuilmoitusData,
   UpdateData extends JohtoselvitysUpdateData | KaivuilmoitusUpdateData,
->() {
+>(onUpdateSuccess?: (data: Taydennys<ApplicationData>) => void) {
   const [showSaveNotification, setShowSaveNotification] = useState<boolean>(false);
 
   const taydennysUpdateMutation = useDebouncedMutation(
@@ -24,7 +25,8 @@ export default function useUpdateTaydennys<
         setShowSaveNotification(false);
       },
       async onSuccess(data) {
-        return modifyTaydennysAfterReceive(data);
+        onUpdateSuccess?.(modifyTaydennysAfterReceive(data) as Taydennys<ApplicationData>);
+        return data;
       },
       onSettled() {
         setShowSaveNotification(true);

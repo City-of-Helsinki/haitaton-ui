@@ -40,7 +40,13 @@ export default function ProcedureTips({ haittojenhallintaTyyppi, haittaIndex }: 
   return (
     <>
       <Box mb="var(--spacing-s)">
-        <Button iconLeft={buttonIcon} variant="secondary" theme="black" {...accordionButtonProps}>
+        <Button
+          iconLeft={buttonIcon}
+          variant="secondary"
+          theme="black"
+          {...accordionButtonProps}
+          data-testid={`show-tips-button-${haittojenhallintaTyyppi}`}
+        >
           {t('hankeForm:haittojenHallintaForm:procedureTips:showTipsButton')}
         </Button>
       </Box>

@@ -6,7 +6,7 @@ import { Taydennys } from './types';
  * Create new taydennys
  * @param id application id
  */
-export async function createTaydennys<ApplicationData>(id: string) {
+export async function createTaydennys<ApplicationData>(id: number) {
   const response = await api.post<Taydennys<ApplicationData>>(`/hakemukset/${id}/taydennys`);
   return response.data;
 }
@@ -33,4 +33,11 @@ export async function updateTaydennys<ApplicationData, UpdateData>({
 export async function sendTaydennys<ApplicationData>(id: string) {
   const response = await api.post<Application<ApplicationData>>(`/taydennykset/${id}/laheta`);
   return response.data;
+}
+
+/**
+ * Delete taydennys
+ */
+export async function cancelTaydennys(id: string) {
+  await api.delete(`/taydennykset/${id}`);
 }

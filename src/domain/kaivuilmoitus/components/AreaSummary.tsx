@@ -1,4 +1,3 @@
-import React from 'react';
 import Geometry from 'ol/geom/Geometry';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@chakra-ui/react';
@@ -16,9 +15,7 @@ import { KaivuilmoitusAlue } from '../../application/types/application';
 
 function AreaDetail({ area }: Readonly<{ area: KaivuilmoitusAlue }>) {
   const { t } = useTranslation();
-  const totalSurfaceArea = getTotalSurfaceArea(
-    area.tyoalueet.map((alue) => alue.openlayersFeature!.getGeometry()!),
-  );
+  const totalSurfaceArea = getTotalSurfaceArea(area.tyoalueet.map((alue) => getAreaGeometry(alue)));
 
   return (
     <Box marginBottom="var(--spacing-m)">
@@ -93,7 +90,7 @@ const AreaSummary: React.FC<Props> = ({ formData }) => {
 
   const geometries: Geometry[] = areas
     .flatMap((area) => area.tyoalueet)
-    .map((alue) => alue.openlayersFeature!.getGeometry()!);
+    .map((alue) => getAreaGeometry(alue));
   const totalSurfaceArea = getTotalSurfaceArea(geometries);
 
   return (
@@ -109,7 +106,7 @@ const AreaSummary: React.FC<Props> = ({ formData }) => {
       <SectionItemTitle>{t('kaivuilmoitusForm:alueet:endDate')}</SectionItemTitle>
       <SectionItemContent>{endTime && <p>{formatToFinnishDate(endTime)}</p>}</SectionItemContent>
 
-      <SectionItemTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionItemTitle>
+      <SectionItemTitle>{t('form:labels:areas')}</SectionItemTitle>
       <SectionItemContent>
         {areas.map((area) => (
           <AreaDetail key={area.hankealueId} area={area} />

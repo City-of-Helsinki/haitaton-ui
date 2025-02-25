@@ -40,6 +40,8 @@ function UserIdentify() {
             type: 'success',
             dismissible: true,
             closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
+            autoClose: true,
+            autoCloseDuration: 30000,
           });
         },
         onSettled() {
@@ -63,7 +65,7 @@ function UserIdentify() {
   }
 
   if (!isAuthenticated) {
-    login();
+    login({ language: locale });
     return null;
   }
 

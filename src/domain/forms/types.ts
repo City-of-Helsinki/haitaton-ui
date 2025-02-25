@@ -19,5 +19,13 @@ export interface State {
 
 export interface Action {
   type: ACTION_TYPE;
-  payload: { stepIndex: number; formData?: unknown };
+  payload: { stepIndex: number; formData?: unknown; validationContext?: AnyObject };
+}
+
+export enum FORM_PAGES {
+  PERUSTIEDOT = 'perustiedot',
+  ALUEET = 'alueet',
+  HAITTOJEN_HALLINTA = 'haittojenHallinta',
+  YHTEYSTIEDOT = 'yhteystiedot',
+  LIITTEET = 'liitteet',
 }

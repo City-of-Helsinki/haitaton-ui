@@ -14,6 +14,7 @@ import ApiError from '../apiError';
 import { cloneDeep } from 'lodash';
 import { faker } from '@faker-js/faker';
 import { Taydennys } from '../../application/taydennys/types';
+import { Muutosilmoitus } from '../../application/muutosilmoitus/types';
 
 let hakemukset: Application[] = [...hakemuksetData];
 
@@ -151,6 +152,7 @@ export async function createTaydennys(id: number) {
     id: faker.string.uuid(),
     applicationData: cloneDeep(hakemus.applicationData),
     muutokset: [],
+    liitteet: [],
   };
   hakemus.taydennys = taydennys;
   return taydennys;
@@ -180,4 +182,26 @@ export async function sendTaydennys(id: string) {
   updatedHakemus.taydennys = null;
   updatedHakemus.taydennyspyynto = null;
   return updatedHakemus;
+}
+
+export async function cancelTaydennys(id: string) {
+  const hakemus = await readTaydennys(id);
+  if (!hakemus) {
+    throw new ApiError(`No application with id ${id}`, 404);
+  }
+  hakemus.taydennys = null;
+}
+
+export async function createMuutosilmoitus(id: number) {
+  const hakemus = await read(id);
+  if (!hakemus) {
+    throw new ApiError(`No application with id ${id}`, 404);
+  }
+  const muutosilmoitus: Muutosilmoitus<JohtoselvitysData | KaivuilmoitusData> = {
+    id: faker.string.uuid(),
+    applicationData: cloneDeep(hakemus.applicationData),
+    sent: null,
+  };
+  hakemus.muutosilmoitus = muutosilmoitus;
+  return muutosilmoitus;
 }

@@ -1,9 +1,19 @@
 import { useState } from 'react';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Button, IconEnvelope, IconQuestionCircle, IconSaveDiskette, StepState } from 'hds-react';
+import {
+  Button,
+  IconEnvelope,
+  IconQuestionCircle,
+  IconSaveDiskette,
+  Link,
+  StepState,
+  Notification,
+} from 'hds-react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useQueryClient } from 'react-query';
+import { Box } from '@chakra-ui/react';
+import { ValidationError } from 'yup';
 import { Taydennys } from '../application/taydennys/types';
 import {
   Application,
@@ -34,6 +44,14 @@ import ApplicationSaveNotification from '../application/components/ApplicationSa
 import { changeFormStep } from '../forms/utils';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import useSendTaydennys from '../application/taydennys/hooks/useSendTaydennys';
+import { useValidationErrors } from '../forms/hooks/useValidationErrors';
+import FormPagesErrorSummary from '../forms/components/FormPagesErrorSummary';
+import FormFieldsErrorSummary from '../forms/components/FormFieldsErrorSummary';
+import { isContactIn } from '../application/utils';
+import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
+import TaydennysCancel from '../application/taydennys/components/TaydennysCancel';
+import Attachments from './Attachments';
+import useAttachments from '../application/hooks/useAttachments';
 
 type Props = {
   taydennys: Taydennys<JohtoselvitysData>;
@@ -54,6 +72,10 @@ export default function JohtoselvitysTaydennysContainer({
     useUpdateTaydennys<JohtoselvitysData, JohtoselvitysUpdateData>();
   const sendTaydennysMutation = useSendTaydennys();
   const [showSendDialog, setShowSendDialog] = useState(false);
+  const { data: signedInUser } = usePermissionsForHanke(hankeData.hankeTunnus);
+  const [attachmentsUploading, setAttachmentsUploading] = useState(false);
+  const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
+  const { data: originalAttachments } = useAttachments(originalApplication.id);
 
   const formContext = useForm<JohtoselvitysTaydennysFormValues>({
     mode: 'onTouched',
@@ -72,6 +94,10 @@ export default function JohtoselvitysTaydennysContainer({
   } = formContext;
   const watchFormValues = watch();
 
+  function handleAttachmentUpload(isUploading: boolean) {
+    setAttachmentsUploading(isUploading);
+  }
+
   // Fields that are validated in each page when moving in the form
   const pageFieldsToValidate: FieldPath<JohtoselvitysTaydennysFormValues>[][] = [
     // Basic information page
@@ -85,6 +111,7 @@ export default function JohtoselvitysTaydennysContainer({
       'applicationData.propertyDeveloperWithContacts.customer.registryKey',
       'applicationData.representativeWithContacts.customer.registryKey',
     ],
+    [],
   ];
 
   const formSteps = [
@@ -108,16 +135,72 @@ export default function JohtoselvitysTaydennysContainer({
     },
     {
       element: (
+        <Attachments
+          applicationId={originalApplication.id!}
+          taydennysAttachments={taydennys.liitteet}
+          originalAttachments={originalAttachments}
+          onFileUpload={handleAttachmentUpload}
+        />
+      ),
+      label: t('hankePortfolio:tabit:liitteet'),
+      state: StepState.available,
+    },
+    {
+      element: (
         <ReviewAndSend
-          taydennys={getValues()}
+          taydennys={taydennys}
           muutokset={taydennys.muutokset}
           originalApplication={originalApplication}
+          originalAttachments={originalAttachments ?? []}
         />
       ),
       label: t('form:headers:yhteenveto'),
       state: StepState.available,
     },
   ];
+
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
+  const perustiedotErrors = useValidationErrors(perustiedotSchema, watchFormValues);
+  const alueetErrors = useValidationErrors(alueetSchema, watchFormValues);
+  const yhteystiedotErrors = useValidationErrors(yhteystiedotSchema, watchFormValues);
+  const formErrorsByPage = [perustiedotErrors, alueetErrors, yhteystiedotErrors, []];
+
+  function mapToErrorListItem(error: ValidationError) {
+    const errorPath = error.path?.replace('[', '.').replace(']', '');
+    const pathParts = errorPath?.match(/(\w+)/g) || [];
+
+    if (pathParts.length === 1 && pathParts[0] === 'areas') {
+      pathParts[0] = 'areas.empty';
+    }
+
+    const langKey = pathParts
+      .filter((part) => part !== 'applicationData')
+      .reduce((acc, part) => {
+        return `${acc}:${part}`;
+      }, 'hakemus:missingFields');
+
+    return (
+      <li key={errorPath}>
+        <Link href={`#${errorPath}`} disableVisitedStyles>
+          {t(langKey)}
+        </Link>
+      </li>
+    );
+  }
+
+  const formErrorsNotification =
+    (activeStepIndex === formSteps.length - 1 && (
+      <FormPagesErrorSummary
+        data={watchFormValues}
+        schema={validationSchema}
+        notificationLabel={t('hakemus:missingFields:notification:hakemusLabel')}
+      />
+    )) ||
+    (formErrorsByPage[activeStepIndex].length > 0 && (
+      <FormFieldsErrorSummary notificationLabel={t('hakemus:missingFields:notification:pageLabel')}>
+        {formErrorsByPage[activeStepIndex].map(mapToErrorListItem)}
+      </FormFieldsErrorSummary>
+    ));
 
   function saveTaydennys(handleSuccess?: () => void) {
     const formData = getValues();
@@ -165,7 +248,8 @@ export default function JohtoselvitysTaydennysContainer({
     );
   }
 
-  function handleStepChange() {
+  function handleStepChange(stepIndex: number) {
+    setActiveStepIndex(stepIndex);
     // Save application when page is changed
     // only if something has changed
     if (isDirty) {
@@ -220,17 +304,25 @@ export default function JohtoselvitysTaydennysContainer({
         subHeading={`${hankeData.nimi} (${hankeData.hankeTunnus})`}
         formSteps={formSteps}
         formData={watchFormValues}
-        formErrorsNotification={
-          <TaydennyspyyntoNotification taydennyspyynto={originalApplication.taydennyspyynto!} />
+        topElement={
+          <>
+            <TaydennyspyyntoNotification
+              taydennyspyynto={originalApplication.taydennyspyynto!}
+              applicationType="CABLE_REPORT"
+            />
+            <Box mt="var(--spacing-s)">{formErrorsNotification}</Box>
+          </>
         }
+        isLoading={attachmentsUploading}
+        isLoadingText={attachmentsUploadingText}
         onStepChange={handleStepChange}
         stepChangeValidator={validateStepChange}
         onSubmit={handleSubmit(openSendDialog)}
       >
-        {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
+        {function renderFormActions(activeStep, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {
             // Make sure that current application page is valid before saving and quitting
-            const applicationPageValid = await trigger(pageFieldsToValidate[activeStepIndex], {
+            const applicationPageValid = await trigger(pageFieldsToValidate[activeStep], {
               shouldFocus: true,
             });
             if (applicationPageValid) {
@@ -238,17 +330,32 @@ export default function JohtoselvitysTaydennysContainer({
             }
           }
 
-          const lastStep = activeStepIndex === formSteps.length - 1;
-          const showSendButton = lastStep && taydennys.muutokset.length > 0 && isValid;
-          const saveAndQuitIsLoading = taydennysUpdateMutation.isLoading;
-          const saveAndQuitLoadingText = t('common:buttons:savingText');
+          const lastStep = activeStep === formSteps.length - 1;
+          const showSendButton =
+            lastStep &&
+            isValid &&
+            (taydennys.muutokset.length > 0 || taydennys.liitteet.length > 0);
+          const isContact = isContactIn(signedInUser, getValues('applicationData'));
+          const disableSendButton = showSendButton && !isContact;
+
+          const saveAndQuitIsLoading = taydennysUpdateMutation.isLoading || attachmentsUploading;
+          const saveAndQuitLoadingText = attachmentsUploading
+            ? attachmentsUploadingText
+            : t('common:buttons:savingText');
           return (
             <FormActions
-              activeStepIndex={activeStepIndex}
+              activeStepIndex={activeStep}
               totalSteps={formSteps.length}
               onPrevious={handlePrevious}
               onNext={handleNext}
             >
+              <TaydennysCancel
+                application={originalApplication}
+                navigateToApplicationViewOnSuccess
+                buttonVariant="danger"
+                buttonIsLoading={saveAndQuitIsLoading}
+                buttonIsLoadingText={saveAndQuitLoadingText}
+              />
               <Button
                 variant="secondary"
                 iconLeft={<IconSaveDiskette aria-hidden="true" />}
@@ -265,9 +372,20 @@ export default function JohtoselvitysTaydennysContainer({
                   iconLeft={<IconEnvelope aria-hidden="true" />}
                   loadingText={t('common:buttons:sendingText')}
                   isLoading={sendTaydennysMutation.isLoading}
+                  disabled={disableSendButton}
                 >
                   {t('taydennys:buttons:sendTaydennys')}
                 </Button>
+              )}
+              {disableSendButton && (
+                <Notification
+                  size="small"
+                  style={{ marginTop: 'var(--spacing-xs)' }}
+                  type="info"
+                  label={t('hakemus:notifications:sendApplicationDisabled')}
+                >
+                  {t('hakemus:notifications:sendApplicationDisabled')}
+                </Notification>
               )}
             </FormActions>
           );

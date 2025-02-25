@@ -5,14 +5,18 @@ import { cloneDeep, isEqual, uniqBy } from 'lodash';
 /**
  * Validates input data and returns validation errors if validation fails
  */
-export function useValidationErrors<T>(schema: ObjectSchema<AnyObject>, data: T) {
+export function useValidationErrors<T>(
+  schema: ObjectSchema<AnyObject>,
+  data: T,
+  context?: AnyObject,
+) {
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
   const ref = useRef<T | null>(null);
   useEffect(() => {
     if (!isEqual(ref.current, data)) {
       ref.current = cloneDeep(data);
       schema
-        .validate(data, { abortEarly: false, context: { hanke: data } })
+        .validate(data, { abortEarly: false, context })
         .then(() => {
           setValidationErrors([]);
         })
@@ -20,6 +24,6 @@ export function useValidationErrors<T>(schema: ObjectSchema<AnyObject>, data: T)
           setValidationErrors(uniqBy(error.inner, 'path'));
         });
     }
-  }, [schema, data]);
+  }, [schema, data, context]);
   return validationErrors;
 }

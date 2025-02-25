@@ -10,6 +10,7 @@ type Props = {
   onUserSelect: (user: HankeUser) => void;
   hankeUsers?: HankeUser[];
   required?: boolean;
+  isPublic?: boolean;
 };
 
 export default function UserSearchInput({
@@ -18,9 +19,11 @@ export default function UserSearchInput({
   onUserSelect,
   hankeUsers,
   required,
+  isPublic,
 }: Readonly<Props>) {
   const { t } = useTranslation();
   const suggestions = useRef([] as (HankeUser & { label: string })[]);
+  const helperText = isPublic ? t('form:helperTexts:isPublicInformation') : '';
 
   async function getSuggestions(searchString: string) {
     const suggestionsItems =
@@ -44,6 +47,7 @@ export default function UserSearchInput({
   return (
     <SearchInput
       name={fieldName}
+      helperText={helperText}
       id={id}
       label={
         <Flex alignItems="flex-end">

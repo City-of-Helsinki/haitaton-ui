@@ -12,6 +12,8 @@ type Props = {
   haittaIndexData: HaittaIndexData | null | undefined;
   initiallyOpen?: boolean;
   className?: string;
+  autoHaitanKestoHeading?: string;
+  autoHaitanKestoTooltipTranslationKey?: string;
 };
 
 export default function HaittaIndexes({
@@ -19,6 +21,8 @@ export default function HaittaIndexes({
   haittaIndexData,
   initiallyOpen = false,
   className,
+  autoHaitanKestoHeading,
+  autoHaitanKestoTooltipTranslationKey,
 }: Readonly<Props>) {
   const { t } = useTranslation();
 
@@ -91,11 +95,19 @@ export default function HaittaIndexes({
               }
             />
             <HaittaSubSection
-              heading={t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:haitanKesto`)}
+              heading={
+                autoHaitanKestoHeading ??
+                t(`hankeForm:haittojenHallintaForm:carTrafficNuisanceType:haitanKesto`)
+              }
               index={haittaIndexData?.autoliikenne.haitanKesto}
               testId="test-haitanKesto"
               tooltipContent={
-                <HaittaTooltipContent translationKey="hankeIndexes:tooltips:autoHankkeenKesto" />
+                <HaittaTooltipContent
+                  translationKey={
+                    autoHaitanKestoTooltipTranslationKey ??
+                    'hankeIndexes:tooltips:autoHankkeenKesto'
+                  }
+                />
               }
             />
           </CustomAccordion>

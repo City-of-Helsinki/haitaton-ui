@@ -25,7 +25,7 @@ import { cloneDeep } from 'lodash';
 import { fillNewContactPersonForm } from '../forms/components/testUtils';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import * as applicationApi from '../application/utils';
-import { HAITTA_INDEX_TYPE } from '../common/haittaIndexes/types';
+import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../common/haittaIndexes/types';
 import { HIDDEN_FIELD_VALUE } from '../application/constants';
 import * as hakemuksetDB from '../mocks/data/hakemukset';
 
@@ -303,7 +303,7 @@ test('Should not be able to save form if work name is missing', async () => {
   await fillBasicInformation(user, { name: '' });
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
-  expect(screen.getByText('Vaihe 1/5: Perustiedot')).toBeInTheDocument();
+  expect(screen.getByText('Vaihe 1/6: Perustiedot')).toBeInTheDocument();
   expect(screen.queryAllByText('Kenttä on pakollinen').length).toBe(1);
 });
 
@@ -318,7 +318,7 @@ test('Should show error message if saving fails', async () => {
   await fillBasicInformation(user);
   await user.click(screen.getByRole('button', { name: /tallenna ja keskeytä/i }));
 
-  expect(screen.getByText('Vaihe 1/5: Perustiedot')).toBeInTheDocument();
+  expect(screen.getByText('Vaihe 1/6: Perustiedot')).toBeInTheDocument();
   expect(screen.getAllByText(/tallentaminen epäonnistui/i)[0]).toBeInTheDocument();
 });
 
@@ -461,17 +461,17 @@ test('Should be able to fill form pages and show filled information in summary p
   expect(await screen.findByText(/hakemus tallennettu/i)).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: /sulje ilmoitus/i }));
 
-  expect(await screen.findByText('Vaihe 2/5: Alueet')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 2/6: Alueiden piirto')).toBeInTheDocument();
 
   fillAreasInformation({ start: startDate, end: endDate });
-  await user.click(screen.getByRole('button', { name: /seuraava/i }));
+  await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-  expect(await screen.findByText('Vaihe 3/5: Yhteystiedot')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 4/6: Yhteystiedot')).toBeInTheDocument();
 
   fillContactsInformation({ customer, contractor, invoicingCustomer });
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-  expect(await screen.findByText('Vaihe 4/5: Liitteet ja lisätiedot')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 5/6: Liitteet ja lisätiedot')).toBeInTheDocument();
 
   await fillAttachments(user, {
     trafficArrangementPlanFiles: [
@@ -483,7 +483,7 @@ test('Should be able to fill form pages and show filled information in summary p
   });
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
 
-  expect(await screen.findByText('Vaihe 5/5: Yhteenveto')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 6/6: Yhteenveto')).toBeInTheDocument();
   // Basic information
   expect(screen.getByText(name)).toBeInTheDocument();
   expect(screen.getByText(description)).toBeInTheDocument();
@@ -496,9 +496,9 @@ test('Should be able to fill form pages and show filled information in summary p
   // Areas information
   expect(screen.getByText(startDate)).toBeInTheDocument();
   expect(screen.getByText(endDate)).toBeInTheDocument();
-  expect(screen.getByText('Työalue 1 (158 m²)')).toBeInTheDocument();
-  expect(screen.getByText('Työalue 2 (30 m²)')).toBeInTheDocument();
-  expect(screen.getByText('Pinta-ala: 188 m²')).toBeInTheDocument();
+  expect(screen.getByText('Työalue 1 (159 m²)')).toBeInTheDocument();
+  expect(screen.getByText('Työalue 2 (31 m²)')).toBeInTheDocument();
+  expect(screen.getByText('Pinta-ala: 190 m²')).toBeInTheDocument();
   expect(screen.getByText('Katuosoite: Aidasmäentie 5')).toBeInTheDocument();
   expect(screen.getByText('Työn tarkoitus: Vesi, Viemäri')).toBeInTheDocument();
   expect(screen.getByText('Meluhaitta: Toistuva meluhaitta')).toBeInTheDocument();
@@ -511,6 +511,58 @@ test('Should be able to fill form pages and show filled information in summary p
   ).toBeInTheDocument();
   expect(screen.getByText('Kaistahaittojen pituus: 10-99 m')).toBeInTheDocument();
   expect(screen.getByText('Lisätietoja alueesta: -')).toBeInTheDocument();
+
+  // Nuisance management
+  expect(screen.getByText('Työalueen yleisten haittojen hallintasuunnitelma')).toBeInTheDocument();
+  expect(
+    screen.getByText('Raitioliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText('Pyöräliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText('Autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
+  ).toBeInTheDocument();
+  expect(screen.getByText('Muiden työalueen haittojen hallintasuunnitelma')).toBeInTheDocument();
+  expect(screen.getByTestId('test-RAITIOLIIKENNE')).toHaveTextContent('1');
+  expect(screen.getByTestId('test-PYORALIIKENNE')).toHaveTextContent('3');
+  expect(screen.getByTestId('test-AUTOLIIKENNE')).toHaveTextContent('1.4');
+  expect(screen.getByTestId('test-LINJAAUTOLIIKENNE')).toHaveTextContent('0');
+  expect(screen.getByText('Yleisten haittojen hallintasuunnitelma')).not.toBeVisible();
+  expect(
+    screen.getByText('Raitioliikenteelle koituvien haittojen hallintasuunnitelma'),
+  ).not.toBeVisible();
+  expect(
+    screen.getByText('Pyöräliikenteelle koituvien haittojen hallintasuunnitelma'),
+  ).not.toBeVisible();
+  expect(
+    screen.getByText('Autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+  ).not.toBeVisible();
+  expect(
+    screen.getByText('Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+  ).not.toBeVisible();
+  expect(screen.getByText('Muiden haittojen hallintasuunnitelma')).not.toBeVisible();
+  // open "hankealueen haittojen hallinta" accordions
+  await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[0]);
+  expect(screen.getByText('Yleisten haittojen hallintasuunnitelma')).toBeVisible();
+  await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[1]);
+  expect(
+    screen.getByText('Pyöräliikenteelle koituvien haittojen hallintasuunnitelma'),
+  ).toBeVisible();
+  await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[2]);
+  expect(
+    screen.getByText('Autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+  ).toBeVisible();
+  await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[3]);
+  expect(
+    screen.getByText('Raitioliikenteelle koituvien haittojen hallintasuunnitelma'),
+  ).toBeVisible();
+  await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[4]);
+  expect(
+    screen.getByText('Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma'),
+  ).toBeVisible();
+  await user.click(screen.getAllByText('Hankealueen haittojen hallinta')[5]);
+  expect(screen.getByText('Muiden haittojen hallintasuunnitelma')).toBeVisible();
 
   // Contacts information
   expect(screen.getByText(customer.name)).toBeInTheDocument();
@@ -680,7 +732,7 @@ test('Should show notifications if work areas overlap with johtoselvitys work ar
     <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
   );
 
-  await user.click(screen.getByRole('button', { name: /alueet/i }));
+  await user.click(screen.getByRole('button', { name: /alueiden/i }));
 
   expect(
     await screen.findByText(
@@ -1095,7 +1147,7 @@ test('Should be able to remove work areas', async () => {
   const { user } = render(
     <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
   );
-  await user.click(await screen.findByRole('button', { name: /alueet/i }));
+  await user.click(await screen.findByRole('button', { name: /alueiden/i }));
 
   await user.click(await screen.findByRole('button', { name: /poista työalue 1/i }));
 
@@ -1123,14 +1175,19 @@ test('Should highlight selected work area', async () => {
   const { user } = render(
     <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
   );
-  await user.click(await screen.findByRole('button', { name: /alueet/i }));
+  await user.click(await screen.findByRole('button', { name: /alueiden/i }));
 
   const workAreaOne = await screen.findByRole('button', { name: 'Työalue 1' });
   const workAreaTwo = await screen.findByRole('button', { name: 'Työalue 2' });
 
   await user.click(workAreaTwo);
   expect(workAreaOne).not.toHaveClass('selected');
-  expect(workAreaTwo).toHaveClass('selected');
+  await waitFor(
+    () => {
+      expect(screen.queryByRole('button', { name: 'Työalue 2' })).toHaveClass('selected');
+    },
+    { timeout: 5000 },
+  );
 });
 
 test('Should show initial traffic nuisance index summary', async () => {
@@ -1139,7 +1196,7 @@ test('Should show initial traffic nuisance index summary', async () => {
   const { user } = render(
     <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
   );
-  await user.click(await screen.findByRole('button', { name: /alueet/i }));
+  await user.click(await screen.findByRole('button', { name: /alueiden/i }));
 
   const accordionHeader = await screen.findByRole('button', {
     name: 'Työalueiden liikennehaittaindeksien yhteenveto (0-5)',
@@ -1147,7 +1204,7 @@ test('Should show initial traffic nuisance index summary', async () => {
   await user.click(accordionHeader);
   expect(await screen.findByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('3');
   expect(await screen.findByTestId('test-autoliikenneindeksi')).toHaveTextContent('3');
-  expect(await screen.findByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('4');
+  expect(await screen.findByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('0');
   expect(await screen.findByTestId('test-raitioliikenneindeksi')).toHaveTextContent('5');
 
   const carTrafficAccordion = await screen.findByText('Autoliikenteen ruuhkautuminen');
@@ -1182,7 +1239,7 @@ test('Should show changed traffic nuisance index summary when kaistahaitta chang
   const { user } = render(
     <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
   );
-  await user.click(await screen.findByRole('button', { name: /alueet/i }));
+  await user.click(await screen.findByRole('button', { name: /alueiden/i }));
 
   const kaistahaittaSelection = await screen.findByText(
     'Yksi autokaista vähenee - ajosuunta vielä käytössä',
@@ -1660,5 +1717,338 @@ describe('Registry key', () => {
         await screen.findByTestId('applicationData.invoicingCustomer.registryKey'),
       ).toBeRequired();
     });
+  });
+});
+
+describe('Haittojenhallintasuunnitelma', () => {
+  async function setupHaittojenHallintaPage(
+    hankeData: HankeData = hankkeet[1] as HankeData,
+    application: Application<KaivuilmoitusData> = cloneDeep(
+      applications[4] as Application<KaivuilmoitusData>,
+    ),
+  ) {
+    const renderResult = render(
+      <KaivuilmoitusContainer hankeData={hankeData} application={application} />,
+    );
+    await renderResult.user.click(screen.getByRole('button', { name: /haittojen hallinta/i }));
+    expect(await screen.findByText('Vaihe 3/6: Haittojen hallinta')).toBeInTheDocument();
+    return renderResult;
+  }
+
+  test('Hanke nuisance control plans are shown', async () => {
+    await setupHaittojenHallintaPage();
+    expect(screen.queryByTestId('test-hanke-YLEINEN')).not.toBeInTheDocument();
+    expect(screen.getByTestId('test-hanke-PYORALIIKENNE')).toHaveTextContent('2');
+    expect(screen.getByTestId('test-hanke-nuisance-control-PYORALIIKENNE')).toHaveTextContent(
+      'Pyöräliikenteelle koituvien haittojen hallintasuunnitelma',
+    );
+    expect(screen.getByTestId('test-hanke-AUTOLIIKENNE')).toHaveTextContent('1.1');
+    expect(screen.getByTestId('test-hanke-nuisance-control-AUTOLIIKENNE')).toHaveTextContent(
+      'Autoliikenteelle koituvien haittojen hallintasuunnitelma',
+    );
+    expect(screen.getByTestId('test-hanke-LINJAAUTOLIIKENNE')).toHaveTextContent('3');
+    expect(screen.getByTestId('test-hanke-nuisance-control-LINJAAUTOLIIKENNE')).toHaveTextContent(
+      'Linja-autoliikenteelle koituvien haittojen hallintasuunnitelma',
+    );
+    expect(screen.getByTestId('test-hanke-RAITIOLIIKENNE')).toHaveTextContent('2');
+    expect(screen.getByTestId('test-hanke-nuisance-control-RAITIOLIIKENNE')).toHaveTextContent(
+      'Raitioliikenteelle koituvien haittojen hallintasuunnitelma',
+    );
+    expect(screen.queryByTestId('test-hanke-MUUT')).not.toBeInTheDocument();
+    expect(screen.getByTestId('test-hanke-nuisance-control-MUUT')).toHaveTextContent(
+      'Muiden haittojen hallintasuunnitelma',
+    );
+  });
+
+  test('Nuisance control plan is shown correctly', async () => {
+    await setupHaittojenHallintaPage();
+
+    expect(screen.getByTestId('test-common-nuisances')).toBeInTheDocument();
+    expect(
+      screen.getByText('Työalueen yleisten haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.YLEINEN'),
+    ).toBeRequired();
+    expect(
+      screen.getByText('Pyöräliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('test-PYORALIIKENNE')).toHaveTextContent('3');
+    expect(screen.getByTestId('show-tips-button-PYORALIIKENNE')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.PYORALIIKENNE'),
+    ).toBeRequired();
+    expect(
+      screen.getByText('Autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('test-AUTOLIIKENNE')).toHaveTextContent('3');
+    expect(screen.getByTestId('show-tips-button-AUTOLIIKENNE')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.AUTOLIIKENNE'),
+    ).toBeRequired();
+    expect(screen.getByText('Linja-autojen paikallisliikenne')).toBeInTheDocument();
+    expect(screen.queryByTestId('test-LINJAAUTOLIIKENNE')).toHaveTextContent('0');
+    expect(screen.queryByTestId('show-tips-button-LINJAAUTOLIIKENNE')).not.toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Haitaton ei löytänyt tätä kohderyhmää alueelta. Voit tarvittaessa lisätä toimet haittojen hallintaan.',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Lisää toimet haittojen hallintaan' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('Raitioliikenteelle koituvien työalueen haittojen hallintasuunnitelma'),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('test-RAITIOLIIKENNE')).toHaveTextContent('5');
+    expect(screen.getByTestId('show-tips-button-RAITIOLIIKENNE')).toBeInTheDocument();
+    expect(screen.getByText('Muiden työalueen haittojen hallintasuunnitelma')).toBeInTheDocument();
+    expect(screen.getByTestId('test-meluHaitta')).toHaveTextContent('3');
+    expect(screen.getByTestId('test-polyHaitta')).toHaveTextContent('5');
+    expect(screen.getByTestId('test-tarinaHaitta')).toHaveTextContent('5');
+    expect(screen.getByTestId('show-tips-button-MUUT')).toBeInTheDocument();
+  });
+
+  test('Nuisance control plan can be filled', async () => {
+    const updatedHaittojenhallintasuunnitelma = ', johon on lisätty tekstiä.';
+    const applicationUpdateSpy = jest.spyOn(applicationApi, 'updateApplication');
+    const { user } = await setupHaittojenHallintaPage();
+    await user.type(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.YLEINEN'),
+      updatedHaittojenhallintasuunnitelma,
+    );
+    await user.type(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.PYORALIIKENNE'),
+      updatedHaittojenhallintasuunnitelma,
+    );
+    await user.type(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.AUTOLIIKENNE'),
+      updatedHaittojenhallintasuunnitelma,
+    );
+    await user.type(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.RAITIOLIIKENNE'),
+      updatedHaittojenhallintasuunnitelma,
+    );
+    await user.type(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.MUUT'),
+      updatedHaittojenhallintasuunnitelma,
+    );
+    await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+    const data = applicationUpdateSpy.mock.lastCall?.[0].data as KaivuilmoitusData;
+
+    expect(data?.areas[0].haittojenhallintasuunnitelma?.YLEINEN).toBe(
+      'Työalueen yleisten haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    );
+    expect(data?.areas[0].haittojenhallintasuunnitelma?.PYORALIIKENNE).toBe(
+      'Pyöräliikenteelle koituvien työalueen haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    );
+    expect(data?.areas[0].haittojenhallintasuunnitelma?.AUTOLIIKENNE).toBe(
+      'Autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    );
+    expect(data?.areas[0].haittojenhallintasuunnitelma?.LINJAAUTOLIIKENNE).toBe('');
+    expect(data?.areas[0].haittojenhallintasuunnitelma?.RAITIOLIIKENNE).toBe(
+      'Raitioliikenteelle koituvien työalueen haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    );
+    expect(data?.areas[0].haittojenhallintasuunnitelma?.MUUT).toBe(
+      'Muiden työalueen haittojen hallintasuunnitelma, johon on lisätty tekstiä.',
+    );
+
+    applicationUpdateSpy.mockClear();
+  });
+
+  test('Non-detected nuisance field is shown correctly on nuisance control plan page', async () => {
+    const { user } = await setupHaittojenHallintaPage();
+
+    await user.click(screen.getByRole('button', { name: /lisää toimet haittojen hallintaan/i }));
+
+    expect(screen.getByTestId('test-LINJAAUTOLIIKENNE')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE'),
+    ).not.toBeRequired();
+  });
+});
+
+describe('Error notification', () => {
+  function setup(
+    application: Application<KaivuilmoitusData> = cloneDeep(
+      applications[6],
+    ) as Application<KaivuilmoitusData>,
+  ) {
+    const hankeData = hankkeet[1] as HankeData;
+    server.use(
+      http.post('/api/haittaindeksit', async () => {
+        return HttpResponse.json<HaittaIndexData>({
+          liikennehaittaindeksi: {
+            indeksi: 0,
+            tyyppi: HAITTA_INDEX_TYPE.PYORALIIKENNEINDEKSI,
+          },
+          pyoraliikenneindeksi: 0,
+          autoliikenne: {
+            indeksi: 0,
+            haitanKesto: 0,
+            katuluokka: 0,
+            liikennemaara: 0,
+            kaistahaitta: 0,
+            kaistapituushaitta: 0,
+          },
+          linjaautoliikenneindeksi: 0,
+          raitioliikenneindeksi: 0,
+        });
+      }),
+    );
+    return render(<KaivuilmoitusContainer hankeData={hankeData} application={application} />);
+  }
+
+  test('Should show fields with errors in notification in perustiedot page', async () => {
+    setup();
+
+    expect(
+      screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
+    ).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText(/työn nimi/i), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByLabelText(/työn kuvaus/i), {
+      target: { value: '' },
+    });
+    fireEvent.click(screen.getByLabelText(/uuden rakenteen tai johdon rakentamisesta/i));
+    fireEvent.click(screen.getByRole('checkbox', { name: /työstä vastaavana/i }));
+
+    expect(
+      await screen.findByText(
+        'Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /työn nimi/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /työn kuvaus/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /työssä on kyse/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /työhön vaadittava pätevyys/i })).toBeInTheDocument();
+  });
+
+  test('Should show fields with errors in notification in alueet page', async () => {
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: /alueiden/i }));
+
+    expect(
+      screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
+    ).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText(/työn alkupäivämäärä/i), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByLabelText(/työn loppupäivämäärä/i), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByLabelText(/katuosoite/i), {
+      target: { value: '' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /poista valittu/i }));
+
+    expect(
+      await screen.findByText(
+        'Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työn alkupäivämäärä/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työn loppupäivämäärä/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Työalueet (Hankealue 2): Katuosoite' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Työalueet (Hankealue 2): Työn tarkoitus' }),
+    ).toBeInTheDocument();
+  });
+
+  test('Should show fields with errors in notification in haittojenhallinta page', async () => {
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: /haittojen hallinta/i }));
+
+    expect(
+      screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
+    ).not.toBeInTheDocument();
+
+    fireEvent.change(
+      screen.getByTestId('applicationData.areas.0.haittojenhallintasuunnitelma.YLEINEN'),
+      {
+        target: { value: '' },
+      },
+    );
+
+    expect(
+      await screen.findByText(
+        'Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', {
+        name: 'Työalueet (Hankealue 2): Yleiset toimet työalueiden haittojen hallintaan',
+      }),
+    ).toBeInTheDocument();
+  });
+
+  test('Should show fields with errors in notification in yhteystiedot page', async () => {
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+    expect(
+      screen.queryByText('Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:'),
+    ).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[0], {
+      target: { value: '' },
+    });
+    fireEvent.change(
+      screen.getByTestId('applicationData.customerWithContacts.customer.registryKey'),
+      {
+        target: { value: '123' },
+      },
+    );
+    fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.email'), {
+      target: { value: '' },
+    });
+    fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.phone'), {
+      target: { value: '' },
+    });
+    fireEvent.click(screen.getAllByRole('button', { name: /poista valittu/i })[0]);
+
+    expect(
+      await screen.findByText(
+        'Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', {
+        name: /työstä vastaava: Vähintään yksi yhteyshenkilö tulee olla asetettuna/i,
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työstä vastaava: Sähköposti/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työstä vastaava: Puhelin/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työstä vastaava: Nimi/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Työstä vastaava: Y-tunnus/i })).toBeInTheDocument();
+  });
+
+  test('Should show pages that have missing information for hanke to be public in summary page', async () => {
+    const application = cloneDeep(applications[6]) as Application<KaivuilmoitusData>;
+    application.applicationData = {
+      ...application.applicationData,
+      workDescription: '',
+      startTime: null,
+      customerWithContacts: null,
+    };
+    const { user } = setup(application);
+
+    await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+
+    await screen.findByText(
+      'Seuraavissa vaiheissa on puuttuvia tietoja hakemuksen lähettämiseksi:',
+    );
+    expect(screen.getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
+    expect(screen.getByRole('listitem', { name: /alueiden/i })).toBeInTheDocument();
+    expect(screen.getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
   });
 });

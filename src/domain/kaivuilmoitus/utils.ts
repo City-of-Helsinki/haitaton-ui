@@ -1,4 +1,4 @@
-import { cloneDeep, omitBy } from 'lodash';
+import { cloneDeep, isEqual, omitBy } from 'lodash';
 import { Feature } from 'ol';
 import { Polygon } from 'ol/geom';
 import {
@@ -10,12 +10,13 @@ import {
 } from '../application/types/application';
 import { KaivuilmoitusFormValues } from './types';
 import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../common/haittaIndexes/types';
+import { KaivuilmoitusTaydennysFormValues } from '../kaivuilmoitusTaydennys/types';
 
 /**
  * Convert kaivuilmoitus form state to application update data.
  */
 export function convertFormStateToKaivuilmoitusUpdateData(
-  formState: KaivuilmoitusFormValues,
+  formState: KaivuilmoitusFormValues | KaivuilmoitusTaydennysFormValues,
 ): KaivuilmoitusUpdateData {
   const applicationData: KaivuilmoitusUpdateData = cloneDeep(formState.applicationData);
 
@@ -36,6 +37,18 @@ export function convertFormStateToKaivuilmoitusUpdateData(
   return applicationData;
 }
 
+export function mapToKaivuilmoitusArea(area: KaivuilmoitusAlue): KaivuilmoitusAlue {
+  return {
+    ...area,
+    tyoalueet: area.tyoalueet.map((tyoalue) => {
+      return {
+        ...tyoalue,
+        openlayersFeature: new Feature(new Polygon(tyoalue.geometry.coordinates)),
+      };
+    }),
+  };
+}
+
 /**
  * Convert application data coming from backend to form state.
  */
@@ -49,17 +62,7 @@ export function convertApplicationDataToFormState(
   const data = cloneDeep(application);
 
   // Add openlayers feature to each tyoalue
-  const updatedAreas = data.applicationData.areas.map((area) => {
-    return {
-      ...area,
-      tyoalueet: area.tyoalueet.map((tyoalue) => {
-        return {
-          ...tyoalue,
-          openlayersFeature: new Feature(new Polygon(tyoalue.geometry.coordinates)),
-        };
-      }),
-    };
-  });
+  const updatedAreas = data.applicationData.areas.map(mapToKaivuilmoitusArea);
   data.applicationData.areas = updatedAreas;
 
   // Remove null values from application data
@@ -147,4 +150,16 @@ export function calculateLiikennehaittaindeksienYhteenveto(
       };
     }, emptyHaittaIndexData);
   return summary;
+}
+
+/**
+ * Check if traffic nuisance indexes have changed between two kaivuilmoitusalues.
+ */
+export function hasHaittaIndexesChanged(alue1: KaivuilmoitusAlue, alue2?: KaivuilmoitusAlue) {
+  if (!alue2) {
+    return false;
+  }
+  const haittaIndexes = calculateLiikennehaittaindeksienYhteenveto(alue1);
+  const changedHaittaIndexes = calculateLiikennehaittaindeksienYhteenveto(alue2);
+  return !isEqual(haittaIndexes, changedHaittaIndexes);
 }

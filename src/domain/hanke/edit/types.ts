@@ -66,6 +66,7 @@ export interface HankeAlueFormState extends HankeAlue {
 
 export interface HankeDataFormState extends PartialExcept<HankeData, HankeContactTypeKey> {
   geometriesChanged?: boolean; // "virtualField"
+  haittaIndexesIncreased?: boolean; // "virtualField"
   alueet?: HankeAlueFormState[];
 }
 
@@ -99,10 +100,3 @@ export type YhteyshenkiloWithoutName = Pick<
   Yhteyshenkilo,
   YHTEYSHENKILO_FORMFIELD.EMAIL | YHTEYSHENKILO_FORMFIELD.PUHELINNUMERO
 >;
-
-export enum HANKE_PAGES {
-  PERUSTIEDOT = 'perustiedot',
-  ALUEET = 'alueet',
-  HAITTOJEN_HALLINTA = 'haittojenHallinta',
-  YHTEYSTIEDOT = 'yhteystiedot',
-}

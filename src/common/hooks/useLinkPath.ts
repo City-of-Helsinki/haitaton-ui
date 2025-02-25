@@ -51,11 +51,15 @@ const useLinkPath = (route: ROUTES): ((routeParams: RouteParams) => string) => {
     [ROUTES.EDIT_JOHTOSELVITYSTAYDENNYS]: applicationIdReturnFunc,
     [ROUTES.KAIVUILMOITUSHAKEMUS]: hankeTunnusReturnFunc,
     [ROUTES.EDIT_KAIVUILMOITUSHAKEMUS]: applicationIdReturnFunc,
+    [ROUTES.EDIT_KAIVUILMOITUSTAYDENNYS]: applicationIdReturnFunc,
     [ROUTES.HAITATON_INFO]: defaultReturnFunc,
     [ROUTES.ACCESSIBILITY]: defaultReturnFunc,
     [ROUTES.PRIVACY_POLICY]: defaultReturnFunc,
     [ROUTES.REFERENCES]: defaultReturnFunc,
     [ROUTES.MANUAL]: defaultReturnFunc,
+    [ROUTES.WORKINSTRUCTIONS]: defaultReturnFunc,
+    [ROUTES.CARDS_INDEX]: defaultReturnFunc,
+    [ROUTES.CARD]: defaultReturnFunc,
   });
 };
 

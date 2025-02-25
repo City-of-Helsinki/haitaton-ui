@@ -2,13 +2,10 @@ import { Feature } from 'ol';
 import Polygon from 'ol/geom/Polygon';
 import { Polygon as GeoJSONPolygon } from 'geojson';
 import { max, min } from 'date-fns';
-import {
-  HankeAlue,
-  HankeYhteystieto,
-  HankeDataDraft,
-  HankeMuuTaho,
-  HAITTOJENHALLINTATYYPPI,
-} from '../../types/hanke';
+import { ValidationError } from 'yup';
+import { Link } from 'hds-react';
+import { FieldPath, UseFormGetValues } from 'react-hook-form';
+import { HankeAlue, HankeYhteystieto, HankeDataDraft, HankeMuuTaho } from '../../types/hanke';
 import {
   FORMFIELD,
   HankeAlueFormState,
@@ -19,9 +16,14 @@ import {
 } from './types';
 import { formatFeaturesToHankeGeoJSON, getFeatureFromHankeGeometry } from '../../map/utils';
 import { getSurfaceArea } from '../../../common/components/map/utils';
-import { HankkeenHakemus } from '../../application/types/application';
+import {
+  ApplicationArea,
+  HankkeenHakemus,
+  KaivuilmoitusAlue,
+} from '../../application/types/application';
 import { isApplicationCancelled, isApplicationPending } from '../../application/utils';
-import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../../common/haittaIndexes/types';
+import { TFunction } from 'i18next';
+import booleanContains from '@turf/boolean-contains';
 
 function mapToAreaDates(areas: HankeAlue[] | undefined, key: 'haittaAlkuPvm' | 'haittaLoppuPvm') {
   return areas?.reduce((result: Date[], area) => {
@@ -175,43 +177,103 @@ export function getAreaDefaultName(areas?: HankeAlueFormState[]) {
 }
 
 /**
- * Sorts HAITTOJENHALLINTATYYPPI based on given tormaystarkasteluTulos.
- * For example, if tormaystarkasteluTulos has {autoliikenneindeksi: 1.0, pyoraliiikenneindeksi: 1.3, linjaautoliikenneindeksi: 0.0, raitioliikenneindeksi: 0.0},
- * the result will be [[PYORALIIKENNE, 1.3], [AUTOLIIKENNE, 1.0], [LINJAAUTOLIIKENNE, 0.0], [RAITIOLIIKENNE, 0.0]].
+ * Maps yup validation error to a list item.
  */
-export function sortedLiikenneHaittojenhallintatyyppi(
-  tormaystarkasteluTulos: HaittaIndexData | undefined,
-): [HAITTOJENHALLINTATYYPPI, number][] {
-  const defaultOrder = Object.values(HAITTOJENHALLINTATYYPPI).filter(
-    (type) => type !== HAITTOJENHALLINTATYYPPI.YLEINEN && type !== HAITTOJENHALLINTATYYPPI.MUUT,
-  );
-  if (!tormaystarkasteluTulos) {
-    return defaultOrder.map((type) => [type, 0] as [HAITTOJENHALLINTATYYPPI, number]);
+export function mapValidationErrorToErrorListItem(
+  error: ValidationError,
+  t: TFunction,
+  getValues: UseFormGetValues<HankeDataFormState>,
+) {
+  const errorPath = error.path?.replace('[', '.').replace(']', '');
+  // Get parts of the path: for example for path 'alueet.0.meluHaitta' returns ['alueet', '0', 'meluHaitta'],
+  // and for example for 'alueet' just ['alueet']
+  const pathParts = errorPath?.match(/(\w+)/g) || [];
+
+  if (pathParts.length === 1 && pathParts[0] === 'alueet') {
+    pathParts[0] = 'alueet.empty';
   }
 
-  function keyOfIndexType(key: HAITTA_INDEX_TYPE): keyof HaittaIndexData {
-    if (key === HAITTA_INDEX_TYPE.AUTOLIIKENNEINDEKSI) {
-      return 'autoliikenne';
+  const langKey = pathParts.reduce((acc, part, index) => {
+    if (index === 1) {
+      // Exclude the index from the lang key
+      return acc;
     }
-    return key.toLowerCase() as keyof HaittaIndexData;
-  }
+    return `${acc}:${part}`;
+  }, 'hankeForm:missingFields');
 
-  function value(v: number | { indeksi: number }): number {
-    return typeof v === 'number' ? v : v.indeksi;
-  }
+  const linkText = t(langKey, {
+    count: Number(pathParts[1]) + 1,
+    alueName: getValues(`alueet.${pathParts[1]}.nimi` as FieldPath<HankeDataFormState>),
+  });
 
-  const sortedIndices = Object.values(HAITTA_INDEX_TYPE)
-    .map((key) => ({
-      type: key.toUpperCase().replace('INDEKSI', '') as HAITTOJENHALLINTATYYPPI,
-      value: value(tormaystarkasteluTulos[keyOfIndexType(key)]),
-    }))
-    .sort((a, b): number => {
-      const diff = b.value - a.value;
-      if (diff === 0) {
-        return defaultOrder.indexOf(a.type) - defaultOrder.indexOf(b.type);
+  return (
+    <li key={errorPath}>
+      <Link href={`#${errorPath}`} disableVisitedStyles>
+        {linkText}
+      </Link>
+    </li>
+  );
+}
+
+/**
+ * Returns hakemukset that are inside hankealue
+ */
+export function getApplicationsInsideHankealue(
+  hankeAlue: HankeAlue,
+  applications: HankkeenHakemus[],
+): HankkeenHakemus[] {
+  if (applications.length === 0) {
+    return [];
+  }
+  const hankeFeature = hankeAlue.geometriat?.featureCollection.features[0];
+  if (!hankeFeature) {
+    return [];
+  }
+  const johtoselvitysApplications = applications.filter(
+    (hakemus) => hakemus.applicationType == 'CABLE_REPORT',
+  );
+  const kaivuilmoitusApplications = applications.filter(
+    (hakemus) => hakemus.applicationType == 'EXCAVATION_NOTIFICATION',
+  );
+  const johtoselvitysApplicationInsideHankealue: HankkeenHakemus[] =
+    johtoselvitysApplications.filter((hakemus) =>
+      ((hakemus.applicationData.areas || []) as ApplicationArea[]).some(
+        (area) => area.geometry && booleanContains(hankeFeature, area.geometry),
+      ),
+    );
+  const kaivuilmoitusApplicationInsideHankealue: HankkeenHakemus[] =
+    kaivuilmoitusApplications.filter((hakemus) =>
+      ((hakemus.applicationData.areas || []) as KaivuilmoitusAlue[])
+        .flatMap((area) => area.tyoalueet)
+        .some((area) => area.geometry && booleanContains(hankeFeature, area.geometry)),
+    );
+  return [...johtoselvitysApplicationInsideHankealue, ...kaivuilmoitusApplicationInsideHankealue];
+}
+
+export type DateLimits = [maxStartDate: Date | null, minEndDate: Date | null];
+
+/**
+ * Returns valid date limits for hankealue so that the maximum start date is the earliest start date of hakemukset and the minimum end date is the latest end date of hakemukset.
+ */
+export function getHankealueDateLimits(
+  haittaAlkuPvm: Date | null,
+  hakemukset: HankkeenHakemus[],
+): DateLimits {
+  const { hakemusStartDates, hakemusEndDates } = hakemukset.reduce(
+    (acc, hakemus) => {
+      const startTime = hakemus.applicationData.startTime;
+      const endTime = hakemus.applicationData.endTime;
+
+      if (startTime !== null && endTime !== null) {
+        acc.hakemusStartDates.push(startTime);
+        acc.hakemusEndDates.push(endTime);
       }
-      return diff;
-    });
-
-  return sortedIndices.map((item) => [item.type, item.value] as [HAITTOJENHALLINTATYYPPI, number]);
+      return acc;
+    },
+    { hakemusStartDates: [] as Date[], hakemusEndDates: [] as Date[] },
+  );
+  if (hakemusStartDates.length === 0 || hakemusEndDates.length === 0) {
+    return [null, haittaAlkuPvm && new Date(haittaAlkuPvm)];
+  }
+  return [min(hakemusStartDates), max(hakemusEndDates)];
 }

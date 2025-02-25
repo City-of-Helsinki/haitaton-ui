@@ -2,12 +2,7 @@ import { http, HttpResponse, delay } from 'msw';
 import { FORMFIELD, HankeDataFormState } from './types';
 import HankeForm from './HankeForm';
 import HankeFormContainer from './HankeFormContainer';
-import {
-  HANKE_VAIHE,
-  HANKE_TYOMAATYYPPI,
-  HankeData,
-  HankkeenHaittojenhallintasuunnitelma,
-} from '../../types/hanke';
+import { HANKE_VAIHE, HANKE_TYOMAATYYPPI, HankeData } from '../../types/hanke';
 import { render, cleanup, fireEvent, waitFor, screen, within } from '../../../testUtils/render';
 import hankkeet from '../../mocks/data/hankkeet-data';
 import { server } from '../../mocks/test-server';
@@ -21,6 +16,7 @@ import { Feature } from 'ol';
 import { Polygon } from 'ol/geom';
 import { waitForElementToBeRemoved } from '@testing-library/react';
 import { PathParams } from 'msw/lib/core/utils/matching/matchRequestUrl';
+import { Haittojenhallintasuunnitelma } from '../../common/haittojenhallinta/types';
 
 afterEach(cleanup);
 
@@ -138,7 +134,7 @@ async function setupAlueetPage(hanke: HankeDataFormState = hankkeet[2] as HankeD
   );
 
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
-  expect(await screen.findByText('Vaihe 2/6: Alueet')).toBeInTheDocument();
+  expect(await screen.findByText('Vaihe 2/6: Alueiden piirto')).toBeInTheDocument();
 
   return { user };
 }
@@ -255,9 +251,9 @@ describe('HankeForm', () => {
     // Area name
     expect(screen.getByTestId('alueet.0.nimi')).toHaveValue('Hankealue 1');
     // Start date of the nuisance
-    expect(screen.getByDisplayValue('2.1.2023')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('14.6.2023')).toBeInTheDocument();
     // End date of the nuisance
-    expect(screen.getByDisplayValue('24.2.2023')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('16.10.2023')).toBeInTheDocument();
     // Noise nuisance
     expect(screen.getByText('Satunnainen meluhaitta')).toBeInTheDocument();
     // Dust nuisance
@@ -292,6 +288,8 @@ describe('HankeForm', () => {
 
   test('Nuisance control plan is shown correctly', async () => {
     await setupHaittojenHallintaPage();
+
+    expect(screen.getByTestId('test-common-nuisances')).toBeInTheDocument();
 
     expect(screen.getByText('Yleisten haittojen hallintasuunnitelma')).toBeInTheDocument();
     expect(screen.getByTestId('alueet.0.haittojenhallintasuunnitelma.YLEINEN')).toBeRequired();
@@ -361,12 +359,12 @@ describe('HankeForm', () => {
 
   test('Nuisance control plan is updated correctly', async () => {
     const { user } = await setupHaittojenHallintaPage();
-    let haittojenhallintasuunnitelma: HankkeenHaittojenhallintasuunnitelma;
+    let haittojenhallintasuunnitelma: Haittojenhallintasuunnitelma;
     server.use(
       http.put<PathParams, HankeData>('/api/hankkeet/:hankeTunnus', async ({ request }) => {
         const hankeData = await request.json();
         haittojenhallintasuunnitelma = hankeData.alueet[0]
-          .haittojenhallintasuunnitelma as HankkeenHaittojenhallintasuunnitelma;
+          .haittojenhallintasuunnitelma as Haittojenhallintasuunnitelma;
         return HttpResponse.json<HankeData>(hankeData);
       }),
     );
@@ -459,7 +457,7 @@ describe('HankeForm', () => {
   });
 
   test('Should be able to save and quit', async () => {
-    const hanke = cloneDeep(hankkeet[1]);
+    const hanke = cloneDeep(hankkeet[0]);
     const hankeName = hanke.nimi;
 
     const { user } = render(
@@ -475,8 +473,8 @@ describe('HankeForm', () => {
     fillBasicInformation({ name: hankeName });
     await user.click(screen.getByRole('button', { name: 'Tallenna ja keskeytä' }));
 
-    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-2');
-    expect(screen.getByText(`Hanke ${hankeName} (HAI22-2) tallennettu omiin hankkeisiin.`));
+    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-1');
+    expect(screen.getByText(`Hanke ${hankeName} (HAI22-1) tallennettu omiin hankkeisiin.`));
   });
 
   test('Should be able to save hanke in the last page', async () => {
@@ -654,6 +652,7 @@ describe('HankeForm', () => {
     const testHanke = {
       ...hankkeet[0],
       kuvaus: '',
+      tyomaaKatuosoite: '',
       vaihe: null,
     };
 
@@ -735,7 +734,7 @@ describe('HankeForm', () => {
       'Hanke on luonnostilassa. Sen näkyvyys muille hankkeille on rajoitettua, eikä sille voi lisätä hakemuksia. Seuraavissa vaiheissa on puuttuvia tietoja:',
     );
     expect(screen.getByRole('listitem', { name: /perustiedot/i })).toBeInTheDocument();
-    expect(screen.getByRole('listitem', { name: /alueet/i })).toBeInTheDocument();
+    expect(screen.getByRole('listitem', { name: /alueiden/i })).toBeInTheDocument();
     expect(screen.getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
   });
 
@@ -778,6 +777,42 @@ describe('HankeForm', () => {
     await user.click(getByRole('button', { name: 'Poista' }));
 
     expect(screen.queryByText(/hankealue 1/i)).not.toBeInTheDocument();
+  });
+
+  test('Should not allow deletion of hanke area if there are application areas inside it', async () => {
+    const hanke = cloneDeep(hankkeet[1] as HankeDataFormState);
+    hanke.vaihe = 'OHJELMOINTI';
+
+    const { user } = await setupAlueetPage(hanke);
+
+    await user.click(screen.getByRole('button', { name: 'Poista alue' }));
+
+    const { getByRole, getByText } = within(screen.getByRole('dialog'));
+    expect(getByText('Aluetta ei voi poistaa')).toBeInTheDocument();
+    expect(getByRole('button', { name: 'Sulje' })).toBeInTheDocument();
+
+    await user.click(getByRole('button', { name: 'Sulje' }));
+
+    expect(screen.queryByText(/hankealue 1/i)).toBeInTheDocument();
+  });
+
+  test('Should show validation error message if area start date is after application start date', async () => {
+    const hanke = cloneDeep(hankkeet[1] as HankeDataFormState);
+    hanke.vaihe = 'OHJELMOINTI';
+
+    const { user } = await setupAlueetPage(hanke);
+
+    fireEvent.change(screen.getByLabelText(/haittojen alkupäivä/i), {
+      target: { value: '1.9.2024' },
+    });
+    await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+    expect(screen.queryByText('Vaihe 2/6: Alueiden piirto')).toBeInTheDocument();
+    expect(
+      screen.queryByText(
+        'Tällä hankealueella on jo hakemusten kautta lisättyjä työalueita. Et voi lyhentää hankealueen ajankohtaa lyhyemmäksi kuin työalueiden ajankohdat.',
+      ),
+    ).toBeInTheDocument();
   });
 
   async function setupHaittaIndexUpdateTest(
@@ -857,6 +892,18 @@ describe('HankeForm', () => {
       expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('2');
       expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('3');
     });
+  });
+
+  test('Should show notification if haitta indexes increase', async () => {
+    const { feature } = await setupHaittaIndexUpdateTest();
+
+    feature.changed();
+
+    expect(
+      await screen.findByText(
+        'Hankealueille lasketut liikennehaittaindeksit ovat muuttuneet. Tarkista haittojenhallintasuunnitelma.',
+      ),
+    ).toBeInTheDocument();
   });
 });
 

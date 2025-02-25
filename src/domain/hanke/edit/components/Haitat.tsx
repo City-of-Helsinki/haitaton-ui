@@ -19,8 +19,13 @@ import {
 } from '../../../types/hanke';
 import styles from './Haitat.module.scss';
 import TextInput from '../../../../common/components/textInput/TextInput';
-import { getAreaDefaultName } from '../utils';
+import {
+  getHankealueDateLimits,
+  getApplicationsInsideHankealue,
+  getAreaDefaultName,
+} from '../utils';
 import ConfirmationDialog from '../../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
+import { useApplicationsForHanke } from '../../../application/hooks/useApplications';
 
 type Props = {
   index: number;
@@ -32,18 +37,29 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea, onChangeArea }) => {
   const { t } = useTranslation();
   const locale = useLocale();
   const { getValues, watch, setValue } = useFormContext<HankeDataFormState>();
+  const hanketunnus = getValues(FORMFIELD.TUNNUS);
   const formValues: HankeAlue[] = getValues(FORMFIELD.HANKEALUEET) as HankeAlue[];
 
   const watchHankeAlue = watch(`${FORMFIELD.HANKEALUEET}.${index}`) as HankeAlue;
   const haittaAlkuPvm = watchHankeAlue.haittaAlkuPvm;
   const haittaLoppuPvm = watchHankeAlue.haittaLoppuPvm;
-  const minEndDate = haittaAlkuPvm && new Date(haittaAlkuPvm);
 
   const [areaToRemove, setAreaToRemove] = useState<number | null>(null);
+  const [cannotRemoveArea, setCannotRemoveArea] = useState(false);
 
   const areaDefaultName = useMemo(
     () => getAreaDefaultName(getValues(FORMFIELD.HANKEALUEET)),
     [getValues],
+  );
+
+  const { data: hankkeenHakemukset } = useApplicationsForHanke(hanketunnus, true);
+  const hakemukset = hankkeenHakemukset?.applications || [];
+  const applicationsInsideHankealue = getApplicationsInsideHankealue(watchHankeAlue, hakemukset);
+  const hasApplicationAreasInsideHankeArea = applicationsInsideHankealue.length > 0;
+
+  const [maxStartDate, minEndDate] = getHankealueDateLimits(
+    haittaAlkuPvm,
+    applicationsInsideHankealue,
   );
 
   useEffect(() => {
@@ -61,6 +77,10 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea, onChangeArea }) => {
 
   function closeAreaRemoveDialog() {
     setAreaToRemove(null);
+  }
+
+  function closeCannotRemoveAreaDialog() {
+    setCannotRemoveArea(false);
   }
 
   const handleNuisancesChange = debounce(
@@ -83,7 +103,11 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea, onChangeArea }) => {
             variant="secondary"
             theme="black"
             iconLeft={<IconCross />}
-            onClick={() => setAreaToRemove(index)}
+            onClick={() =>
+              hasApplicationAreasInsideHankeArea
+                ? setCannotRemoveArea(true)
+                : setAreaToRemove(index)
+            }
           >
             {t('hankeForm:hankkeenAlueForm:removeAreaButton')}
           </Button>
@@ -91,7 +115,7 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea, onChangeArea }) => {
           <TextInput
             name={`${FORMFIELD.HANKEALUEET}.${index}.nimi`}
             label={t('form:labels:areaName')}
-            helperText={t('form:helperTexts:areaName')}
+            helperText={`${t('form:helperTexts:areaName')} ${t('form:helperTexts:isPublicInformation')}`}
             defaultValue={areaDefaultName}
             maxLength={100}
           />
@@ -102,7 +126,9 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea, onChangeArea }) => {
             name={`${FORMFIELD.HANKEALUEET}.${index}.${FORMFIELD.HAITTA_ALKU_PVM}`}
             label={t(`hankeForm:labels:${FORMFIELD.HAITTA_ALKU_PVM}`)}
             locale={locale}
-            helperText={t('form:helperTexts:dateInForm')}
+            helperText={`${t('form:helperTexts:dateInForm')} ${t('form:helperTexts:isPublicInformation')}`}
+            maxDate={maxStartDate || undefined}
+            initialMonth={maxStartDate || undefined}
             onValueChange={handleNuisancesChange}
             required
           />
@@ -112,7 +138,7 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea, onChangeArea }) => {
             locale={locale}
             minDate={minEndDate || undefined}
             initialMonth={minEndDate || undefined}
-            helperText={t('form:helperTexts:dateInForm')}
+            helperText={`${t('form:helperTexts:dateInForm')} ${t('form:helperTexts:isPublicInformation')}`}
             onValueChange={handleNuisancesChange}
             required
           />
@@ -196,6 +222,15 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea, onChangeArea }) => {
         mainBtnLabel={t('common:buttons:remove')}
         mainBtnIcon={<IconTrash />}
         variant="danger"
+      />
+      <ConfirmationDialog
+        title={t('hankeForm:labels:cannotRemoveAreaTitle')}
+        description={t('hankeForm:labels:cannotRemoveAreaDescription')}
+        isOpen={cannotRemoveArea}
+        mainAction={closeCannotRemoveAreaDialog}
+        mainBtnLabel={t('common:ariaLabels:closeButtonLabelText')}
+        variant="primary"
+        showSecondaryButton={false}
       />
     </>
   );

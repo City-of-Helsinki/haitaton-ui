@@ -7,11 +7,17 @@ import {
   customerWithContactsSchema,
 } from '../application/yupSchemas';
 import { Taydennys, Taydennyspyynto } from '../application/taydennys/types';
+import { FORM_PAGES } from '../forms/types';
 
 const addressSchema = yup
   .object({
     streetAddress: yup.object({
-      streetName: yup.string().trim().nullable().required(),
+      streetName: yup
+        .string()
+        .trim()
+        .nullable()
+        .required()
+        .meta({ pageName: FORM_PAGES.PERUSTIEDOT }),
     }),
     postalCode: yup.string(),
     city: yup.string(),
@@ -20,17 +26,18 @@ const addressSchema = yup
 
 export const johtoselvitysApplicationDataSchema = yup.object({
   applicationType: applicationTypeSchema,
-  name: yup.string().trim().required(),
+  name: yup.string().trim().required().meta({ pageName: FORM_PAGES.PERUSTIEDOT }),
   postalAddress: addressSchema,
-  workDescription: yup.string().trim().required(),
-  rockExcavation: yup.boolean().nullable().required(),
+  workDescription: yup.string().trim().required().meta({ pageName: FORM_PAGES.PERUSTIEDOT }),
+  rockExcavation: yup.boolean().nullable().required().meta({ pageName: FORM_PAGES.PERUSTIEDOT }),
   constructionWork: yup
     .boolean()
     .defined()
     .when(['maintenanceWork', 'emergencyWork', 'propertyConnectivity'], {
       is: false,
       then: (schema) => schema.isTrue(),
-    }),
+    })
+    .meta({ pageName: FORM_PAGES.PERUSTIEDOT }),
   maintenanceWork: yup.boolean().defined(),
   emergencyWork: yup.boolean().defined(),
   propertyConnectivity: yup.boolean().defined(),
@@ -38,7 +45,7 @@ export const johtoselvitysApplicationDataSchema = yup.object({
   customerWithContacts: customerWithContactsSchema,
   propertyDeveloperWithContacts: customerWithContactsSchema.nullable(),
   representativeWithContacts: customerWithContactsSchema.nullable(),
-  startTime: yup.date().nullable().required(),
+  startTime: yup.date().nullable().required().meta({ pageName: FORM_PAGES.ALUEET }),
   endTime: yup
     .date()
     .when('startTime', (startTime: Date[], schema: yup.DateSchema) => {
@@ -49,8 +56,9 @@ export const johtoselvitysApplicationDataSchema = yup.object({
       }
     })
     .nullable()
-    .required(),
-  areas: yup.array(areaSchema).min(1).required(),
+    .required()
+    .meta({ pageName: FORM_PAGES.ALUEET }),
+  areas: yup.array(areaSchema).min(1).required().meta({ pageName: FORM_PAGES.ALUEET }),
 });
 
 export const validationSchema: yup.ObjectSchema<JohtoselvitysFormValues> = yup.object({
@@ -90,7 +98,7 @@ export const perustiedotSchema = yup.object({
 });
 
 export const alueetSchema = yup.object({
-  applicationData: johtoselvitysApplicationDataSchema.pick(['areas']),
+  applicationData: johtoselvitysApplicationDataSchema.pick(['startTime', 'endTime', 'areas']),
 });
 
 export const yhteystiedotSchema = yup.object({

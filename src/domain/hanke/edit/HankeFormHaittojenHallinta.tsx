@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { FORMFIELD, FormProps, HankeDataFormState } from './types';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import Text from '../../../common/components/text/Text';
-import { Tab, TabList, TabPanel, Tabs } from 'hds-react';
+import { IconAlertCircle, Tab, TabList, TabPanel, Tabs } from 'hds-react';
 import useFieldArrayWithStateUpdate from '../../../common/hooks/useFieldArrayWithStateUpdate';
 import useSelectableTabs from '../../../common/hooks/useSelectableTabs';
 import useHighlightArea from '../../map/hooks/useHighlightArea';
@@ -12,6 +12,7 @@ import { HankeData } from '../../types/hanke';
 import HankeMap from '../../map/components/HankkeenHaittojenhallintasuunnitelma/HankeMap';
 import VectorSource from 'ol/source/Vector';
 import useAddressCoordinate from '../../map/hooks/useAddressCoordinate';
+import CommonProcedureTips from '../../common/haittojenhallinta/CommonProcedureTips';
 
 const HankeFormHaittojenHallinta: React.FC<FormProps> = ({ hanke }) => {
   const { t } = useTranslation();
@@ -37,24 +38,27 @@ const HankeFormHaittojenHallinta: React.FC<FormProps> = ({ hanke }) => {
         {t('form:requiredForPublicationInstruction')}
       </Text>
 
-      {hankealueet.length < 1 ? (
-        <Text tag="h3" styleAs="h4" weight="bold">
-          <Box mb="var(--spacing-m)">{t('hankeForm:haittojenHallintaForm:subHeaderNoAlueet')}</Box>
-        </Text>
-      ) : (
-        <Text tag="h3" styleAs="h4" weight="bold">
-          <Box mb="var(--spacing-m)">{t('hankeForm:haittojenHallintaForm:subHeaderAlueet')}</Box>
-        </Text>
-      )}
+      <Text tag="h3" styleAs="h4" weight="bold">
+        <Box mb="var(--spacing-m)">{t('hankeForm:haittojenHallintaForm:subHeaderAlueet')}</Box>
+      </Text>
 
       <Box mb="var(--spacing-m)">
         <HankeMap hanke={hanke as HankeData} center={addressCoordinate} drawSource={drawSource} />
       </Box>
 
       {hankealueet.length < 1 ? (
-        <Box textAlign="center" mt="var(--spacing-2-xl)" mb="var(--spacing-2-xl)">
-          <p>{t('hankeForm:haittojenHallintaForm:subHeaderAlueet')}</p>
-        </Box>
+        <Flex
+          textAlign="center"
+          justifyContent="center"
+          alignItems="center"
+          gap="var(--spacing-2-xs)"
+          mt="var(--spacing-2-xl)"
+          mb="var(--spacing-2-xl)"
+          className="text-m noAreasText"
+        >
+          <IconAlertCircle size="s" />
+          {t('hankeForm:haittojenHallintaForm:subHeaderNoAlueet')}
+        </Flex>
       ) : (
         <div>
           <Text tag="h3" styleAs="h4" weight="bold">
@@ -62,9 +66,10 @@ const HankeFormHaittojenHallinta: React.FC<FormProps> = ({ hanke }) => {
               {t('hankeForm:haittojenHallintaForm:nuisanceControlPlanSubHeader')}
             </Box>
           </Text>
-          <Box mb="var(--spacing-m)">
+          <Box mb="var(--spacing-l)">
             <p>{t('hankeForm:haittojenHallintaForm:instructionsPlan')}</p>
           </Box>
+          <CommonProcedureTips />
           <Tabs>
             <TabList>
               {hankealueet.map((alue, index) => {

@@ -1,12 +1,26 @@
 import { useState } from 'react';
 import { Flex } from '@chakra-ui/react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Link as HDSLink, LoginCallbackHandler, OidcClientError } from 'hds-react';
+import {
+  Link as HDSLink,
+  LoginCallbackHandler,
+  OidcClientError,
+  User,
+  useOidcClient,
+} from 'hds-react';
 import Text from '../../../common/components/text/Text';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import Link from '../../../common/components/Link/Link';
+import ADError from './ADError';
+import hasAllowedADGroups from '../hasAllowedADGroups';
+import { useNavigate } from 'react-router-dom';
+import toStringArray from '../../../common/utils/toStringArray';
 
-type AuthenticationError = 'permissionDeniedByUserError' | 'unknown';
+type AuthenticationError =
+  | 'permissionDeniedByUserError'
+  | 'unknown'
+  | 'adGroupsError'
+  | 'adNameError';
 
 type AuthErrorProps = {
   errorText: string;
@@ -52,9 +66,29 @@ const AuthError = ({ errorText }: Readonly<AuthErrorProps>) => {
 const OidcCallback = () => {
   const { t } = useTranslation();
   const [authenticationError, setAuthenticationError] = useState<AuthenticationError | null>(null);
+  const navigate = useNavigate();
+  const oidcClient = useOidcClient();
 
-  function onSuccess() {
-    window.location.pathname = '/';
+  function onSuccess(user: User) {
+    const { ad_groups, given_name, family_name } = user.profile;
+    const useADFilter = window._env_.REACT_APP_USE_AD_FILTER === '1';
+    const amr = oidcClient.getAmr();
+    const helsinkiADUsed = amr?.includes('helsinkiad');
+
+    if (helsinkiADUsed) {
+      // Check if user has required AD groups (when login is done with AD and AD filtering is enabled).
+      if (useADFilter && !hasAllowedADGroups(toStringArray(ad_groups))) {
+        setAuthenticationError('adGroupsError');
+        return;
+      }
+      // Check that user's given_name and family_name are defined and are not empty (when login is done with AD).
+      if (!given_name || !family_name) {
+        setAuthenticationError('adNameError');
+        return;
+      }
+    }
+
+    navigate('/', { replace: true });
   }
 
   function onError(error?: OidcClientError) {
@@ -73,6 +107,18 @@ const OidcCallback = () => {
         )}
         {authenticationError === 'unknown' && (
           <AuthError errorText={t('authentication:genericError')} />
+        )}
+        {authenticationError === 'adGroupsError' && (
+          <ADError
+            errorHeading={t('authentication:noADPermissionHeading')}
+            errorTextKey="authentication:noADPermissionText"
+          />
+        )}
+        {authenticationError === 'adNameError' && (
+          <ADError
+            errorHeading={t('authentication:noADUserNameHeading')}
+            errorTextKey="authentication:noADUserNameText"
+          />
         )}
       </>
     </LoginCallbackHandler>

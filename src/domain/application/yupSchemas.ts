@@ -1,4 +1,5 @@
 import yup from '../../common/utils/yup';
+import { FORM_PAGES } from '../forms/types';
 import { ApplicationType, ContactType, PostalAddress } from './types/application';
 
 const contactSchema = yup
@@ -27,14 +28,23 @@ export const registryKeySchema = yup
         is: (value: boolean) => !value,
         then: (personalIdSchema) => personalIdSchema.personalId(),
       }),
-  });
+  })
+  .meta({ pageName: FORM_PAGES.YHTEYSTIEDOT });
 
-export const customerSchema = contactSchema.omit(['firstName', 'lastName']).shape({
+export const customerSchema = yup.object({
   yhteystietoId: yup.string().nullable(),
-  name: yup.string().trim().max(100).required(),
   type: yup.mixed<ContactType>().nullable().required(),
+  name: yup.string().trim().max(100).required().meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
   registryKey: registryKeySchema,
   registryKeyHidden: yup.boolean().required().default(false),
+  email: yup
+    .string()
+    .trim()
+    .email()
+    .max(100)
+    .required()
+    .meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
+  phone: yup.string().phone().trim().max(20).required().meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
 });
 
 export const customerWithContactsSchema = yup.object({
@@ -43,7 +53,8 @@ export const customerWithContactsSchema = yup.object({
     .array(contactSchema)
     .transform((value) => (value === null ? [] : value))
     .defined()
-    .min(1, ({ min }) => ({ key: 'yhteyshenkilotMin', values: { min } })),
+    .min(1, ({ min }) => ({ key: 'yhteyshenkilotMin', values: { min } }))
+    .meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
 });
 
 const postalAddressSchema = yup.object({
@@ -56,10 +67,10 @@ const postalAddressSchema = yup.object({
 
 const requiredPostalAddressSchema = yup.object({
   streetAddress: yup.object({
-    streetName: yup.string().required(),
+    streetName: yup.string().required().meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
   }),
-  postalCode: yup.string().required(),
-  city: yup.string().required(),
+  postalCode: yup.string().required().meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
+  city: yup.string().required().meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
 });
 
 function ovtRequired(postalAddress: PostalAddress, type: ContactType) {
@@ -71,17 +82,29 @@ function ovtRequired(postalAddress: PostalAddress, type: ContactType) {
 
 export const invoicingCustomerSchema = yup.object().shape(
   {
-    name: yup.string().trim().max(100).required(),
+    name: yup.string().trim().max(100).required().meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
     type: yup.mixed<ContactType>().required(),
-    registryKey: registryKeySchema.required(),
+    registryKey: registryKeySchema.required().meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
     registryKeyHidden: yup.boolean().required(),
     postalAddress: postalAddressSchema.when(['ovt', 'invoicingOperator'], {
       is: (ovt: string, invoicingOperator: string) => !ovt || !invoicingOperator,
       then: () => requiredPostalAddressSchema,
       otherwise: (schema) => schema,
     }),
-    email: yup.string().nullable().trim().email().max(100),
-    phone: yup.string().nullable().phone().trim().max(20),
+    email: yup
+      .string()
+      .nullable()
+      .trim()
+      .email()
+      .max(100)
+      .meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
+    phone: yup
+      .string()
+      .nullable()
+      .phone()
+      .trim()
+      .max(20)
+      .meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
     ovt: yup
       .string()
       .nullable()
@@ -90,14 +113,16 @@ export const invoicingCustomerSchema = yup.object().shape(
       .when(['postalAddress', 'type'], {
         is: ovtRequired,
         then: (schema) => schema.required(),
-      }),
+      })
+      .meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
     invoicingOperator: yup
       .string()
       .nullable()
       .when(['postalAddress', 'type'], {
         is: ovtRequired,
         then: (schema) => schema.required(),
-      }),
+      })
+      .meta({ pageName: FORM_PAGES.YHTEYSTIEDOT }),
     customerReference: yup.string().nullable(),
   },
   [

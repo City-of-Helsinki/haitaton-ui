@@ -8,10 +8,11 @@ import ErrorLoadingText from '../../../common/components/errorLoadingText/ErrorL
 import useHanke from '../../hanke/hooks/useHanke';
 import { useApplication } from '../hooks/useApplication';
 import useLinkPath from '../../../common/hooks/useLinkPath';
-import { HAKEMUS_ROUTES, ROUTES } from '../../../common/types/route';
+import { HAKEMUS_ROUTES, HAKEMUS_TAYDENNYS_ROUTES } from '../../../common/types/route';
 import { usePermissionsForHanke } from '../../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
 import useCreateTaydennys from '../taydennys/hooks/useCreateTaydennys';
+import useCreateMuutosilmoitus from '../muutosilmoitus/hooks/useCreateMuutosilmoitus';
 
 type Props = {
   id: number;
@@ -20,33 +21,46 @@ type Props = {
 function ApplicationViewContainer({ id }: Readonly<Props>) {
   const { t } = useTranslation();
   const { data: application, isLoading, isError, error } = useApplication(id);
+  const applicationId = application?.id;
   const { data: hanke } = useHanke(application?.hankeTunnus);
   const { data: signedInUser } = usePermissionsForHanke(application?.hankeTunnus ?? undefined);
   const navigate = useNavigate();
   const getEditApplicationPath = useLinkPath(
     HAKEMUS_ROUTES[application?.applicationType ?? 'CABLE_REPORT'],
   );
-  const getEditTaydennysPath = useLinkPath(ROUTES.EDIT_JOHTOSELVITYSTAYDENNYS);
+  const getEditTaydennysPath = useLinkPath(
+    HAKEMUS_TAYDENNYS_ROUTES[application?.applicationType ?? 'CABLE_REPORT'],
+  );
   const createTaydennysMutation = useCreateTaydennys();
+  const createMuutosilmoitusMutation = useCreateMuutosilmoitus();
 
   function editApplication() {
-    if (application?.id) {
-      navigate(getEditApplicationPath({ id: application?.id.toString() }));
+    if (applicationId) {
+      navigate(getEditApplicationPath({ id: applicationId.toString() }));
     }
   }
 
   function editTaydennys() {
-    const applicationId = application?.id;
     if (applicationId) {
       if (!application?.taydennys) {
         // If there is no taydennys, create one
-        createTaydennysMutation.mutate(applicationId.toString(), {
+        createTaydennysMutation.mutate(applicationId, {
           onSuccess() {
             navigate(getEditTaydennysPath({ id: applicationId.toString() }));
           },
         });
       } else {
         navigate(getEditTaydennysPath({ id: applicationId.toString() }));
+      }
+    }
+  }
+
+  function editMuutosilmoitus() {
+    if (applicationId) {
+      if (!application?.muutosilmoitus) {
+        // If there is no muutosilmoitus, create one
+        // TODO: Navigation to muutosilmoitus form will be implemented in HAI-3401
+        createMuutosilmoitusMutation.mutate(applicationId);
       }
     }
   }
@@ -80,6 +94,8 @@ function ApplicationViewContainer({ id }: Readonly<Props>) {
         onEditApplication={editApplication}
         onEditTaydennys={editTaydennys}
         creatingTaydennys={createTaydennysMutation.isLoading}
+        onEditMuutosilmoitus={editMuutosilmoitus}
+        creatingMuutosilmoitus={createMuutosilmoitusMutation.isLoading}
       />
       {createTaydennysMutation.isError && (
         <Notification
@@ -88,6 +104,17 @@ function ApplicationViewContainer({ id }: Readonly<Props>) {
           type="error"
           closeButtonLabelText={t('common:components:notification:closeButtonLabelText')}
           onClose={() => createTaydennysMutation.reset()}
+        >
+          {t('common:error')}
+        </Notification>
+      )}
+      {createMuutosilmoitusMutation.isError && (
+        <Notification
+          position="top-right"
+          dismissible
+          type="error"
+          closeButtonLabelText={t('common:components:notification:closeButtonLabelText')}
+          onClose={() => createMuutosilmoitusMutation.reset()}
         >
           {t('common:error')}
         </Notification>

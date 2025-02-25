@@ -10,15 +10,20 @@ import InvoicingCustomerSummary from '../application/components/summary/Invoicin
 import AttachmentSummary from '../application/components/summary/KaivuilmoitusAttachmentSummary';
 import { ApplicationAttachmentMetadata } from '../application/types/application';
 import AreaSummary from './components/AreaSummary';
+import { HankeAlue } from '../types/hanke';
+import HaittojenhallintaSummary from './components/HaittojenhallintaSummary';
 
 type Props = {
+  hankealueet: HankeAlue[];
   attachments: ApplicationAttachmentMetadata[] | undefined;
 };
 
-export const ReviewAndSend: React.FC<React.PropsWithChildren<Props>> = ({ attachments }) => {
+export const ReviewAndSend: React.FC<React.PropsWithChildren<Props>> = ({
+  hankealueet,
+  attachments,
+}) => {
   const { getValues } = useFormContext<KaivuilmoitusFormValues>();
   const { t } = useTranslation();
-
   const {
     customerWithContacts,
     contractorWithContacts,
@@ -36,8 +41,11 @@ export const ReviewAndSend: React.FC<React.PropsWithChildren<Props>> = ({ attach
       <SectionTitle>{t('form:headers:perustiedot')}</SectionTitle>
       <BasicInformationSummary formData={getValues()} />
 
-      <SectionTitle>{t('hankeForm:hankkeenAlueForm:header')}</SectionTitle>
+      <SectionTitle>{t('form:labels:areas')}</SectionTitle>
       <AreaSummary formData={getValues()} />
+
+      <SectionTitle>{t('hankePortfolio:tabit:haittojenHallinta')}</SectionTitle>
+      <HaittojenhallintaSummary hankealueet={hankealueet} formData={getValues()} />
 
       <SectionTitle>{t('form:yhteystiedot:header')}</SectionTitle>
       <FormSummarySection>

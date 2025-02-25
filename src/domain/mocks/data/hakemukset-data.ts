@@ -64,8 +64,8 @@ const hakemukset: Application[] = [
           },
         },
       ],
-      startTime: new Date('2023-07-13T21:59:59.999Z'),
-      endTime: new Date('2023-07-13T21:59:59.999Z'),
+      startTime: new Date('2023-07-14T00:00:00.000Z'),
+      endTime: new Date('2023-07-16T00:00:00.000Z'),
       workDescription: 'Kuvaus',
       contractorWithContacts: {
         customer: {
@@ -224,8 +224,8 @@ const hakemukset: Application[] = [
           },
         },
       ],
-      startTime: new Date('2023-07-13T21:59:59.999Z'),
-      endTime: new Date('2023-09-31T21:59:59.999Z'),
+      startTime: new Date('2023-07-14T00:00:00.000Z'),
+      endTime: new Date('2023-10-01T00:00:00.000Z'),
       workDescription: 'Kaivetaan kuoppia Mannerheimintiellä',
       contractorWithContacts: {
         customer: {
@@ -298,8 +298,8 @@ const hakemukset: Application[] = [
         ],
       },
       areas: [],
-      startTime: new Date('2023-07-13T21:59:59.999Z'),
-      endTime: new Date('2023-09-31T21:59:59.999Z'),
+      startTime: new Date('2023-07-14T00:00:00.000Z'),
+      endTime: new Date('2023-10-01T00:00:00.000Z'),
       workDescription: 'Kaivetaan kuoppia Mannerheimintiellä',
       contractorWithContacts: {
         customer: {
@@ -395,8 +395,8 @@ const hakemukset: Application[] = [
           },
         },
       ],
-      startTime: new Date('2023-06-13T21:59:59.999Z'),
-      endTime: new Date('2023-10-15T21:59:59.999Z'),
+      startTime: new Date('2023-06-14T00:00:00.000Z'),
+      endTime: new Date('2023-10-16T00:00:00.000Z'),
       workDescription: 'Kairataan Mannerheimintiellä',
       contractorWithContacts: {
         customer: {
@@ -481,7 +481,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 158.4294946899533,
+              area: 159.32433261766946,
               tormaystarkasteluTulos: {
                 liikennehaittaindeksi: {
                   indeksi: 3,
@@ -496,7 +496,7 @@ const hakemukset: Application[] = [
                   kaistahaitta: 1,
                   kaistapituushaitta: 1,
                 },
-                linjaautoliikenneindeksi: 1,
+                linjaautoliikenneindeksi: 0,
                 raitioliikenneindeksi: 1,
               },
             },
@@ -519,7 +519,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 30.345726208334995,
+              area: 30.517131072352957,
               tormaystarkasteluTulos: {
                 liikennehaittaindeksi: {
                   indeksi: 5,
@@ -534,7 +534,7 @@ const hakemukset: Application[] = [
                   kaistahaitta: 3,
                   kaistapituushaitta: 3,
                 },
-                linjaautoliikenneindeksi: 4,
+                linjaautoliikenneindeksi: 0,
                 raitioliikenneindeksi: 5,
               },
             },
@@ -547,6 +547,14 @@ const hakemukset: Application[] = [
           kaistahaitta: 'YKSI_KAISTA_VAHENEE',
           kaistahaittojenPituus: 'PITUUS_10_99_METRIA',
           lisatiedot: '',
+          haittojenhallintasuunnitelma: {
+            YLEINEN: 'Työalueen yleisten haittojen hallintasuunnitelma',
+            PYORALIIKENNE: 'Pyöräliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+            AUTOLIIKENNE: 'Autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+            LINJAAUTOLIIKENNE: '',
+            RAITIOLIIKENNE: 'Raitioliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+            MUUT: 'Muiden työalueen haittojen hallintasuunnitelma',
+          },
         },
       ],
       customerWithContacts: null,
@@ -589,8 +597,8 @@ const hakemukset: Application[] = [
         ],
       },
       areas: [],
-      startTime: new Date('2023-07-13T21:59:59.999Z'),
-      endTime: new Date('2023-09-31T21:59:59.999Z'),
+      startTime: new Date('2023-07-14T00:00:00.000Z'),
+      endTime: new Date('2023-10-01T00:00:00.000Z'),
       workDescription: 'Kaivetaan kuoppia Mannerheimintiellä',
       contractorWithContacts: {
         customer: {
@@ -675,7 +683,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 158.4294946899533,
+              area: 159.32433261766946,
             },
             {
               geometry: {
@@ -696,7 +704,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 30.345726208334995,
+              area: 30.517131072352957,
             },
           ],
           katuosoite: 'Aidasmäentie 5',
@@ -707,6 +715,14 @@ const hakemukset: Application[] = [
           kaistahaitta: 'YKSI_KAISTA_VAHENEE',
           kaistahaittojenPituus: 'PITUUS_10_99_METRIA',
           lisatiedot: '',
+          haittojenhallintasuunnitelma: {
+            YLEINEN: 'Yleisten haittojen hallintasuunnitelma',
+            PYORALIIKENNE: '',
+            AUTOLIIKENNE: '',
+            LINJAAUTOLIIKENNE: '',
+            RAITIOLIIKENNE: '',
+            MUUT: 'Muiden haittojen hallintasuunnitelma',
+          },
         },
       ],
       customerWithContacts: {
@@ -817,7 +833,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 158.4294946899533,
+              area: 159.32433261766946,
             },
             {
               geometry: {
@@ -838,7 +854,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 30.345726208334995,
+              area: 30.517131072352957,
             },
           ],
           katuosoite: 'Aidasmäentie 5',
@@ -849,6 +865,14 @@ const hakemukset: Application[] = [
           kaistahaitta: 'YKSI_KAISTA_VAHENEE',
           kaistahaittojenPituus: 'PITUUS_10_99_METRIA',
           lisatiedot: '',
+          haittojenhallintasuunnitelma: {
+            YLEINEN: 'Työalueen yleisten haittojen hallintasuunnitelma',
+            PYORALIIKENNE: 'Pyöräliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+            AUTOLIIKENNE: 'Autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+            LINJAAUTOLIIKENNE: '',
+            RAITIOLIIKENNE: 'Raitioliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+            MUUT: 'Muiden työalueen haittojen hallintasuunnitelma',
+          },
         },
       ],
       customerWithContacts: {
@@ -882,7 +906,7 @@ const hakemukset: Application[] = [
           country: 'FI',
           email: 'yritys2@test.com',
           phone: '040123456',
-          registryKey: null,
+          registryKey: '1234567-1',
           registryKeyHidden: false,
           ovt: null,
           invoicingOperator: null,
@@ -1020,8 +1044,8 @@ const hakemukset: Application[] = [
           },
         },
       ],
-      startTime: new Date('2023-07-13T21:59:59.999Z'),
-      endTime: new Date('2023-09-31T21:59:59.999Z'),
+      startTime: new Date('2023-07-14T00:00:00.000Z'),
+      endTime: new Date('2023-10-01T00:00:00.000Z'),
       workDescription: 'Kaivetaan kuoppia Mannerheimintiellä',
       contractorWithContacts: {
         customer: {
@@ -1112,7 +1136,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 158.4294946899533,
+              area: 159.32433261766946,
             },
             {
               geometry: {
@@ -1133,7 +1157,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 30.345726208334995,
+              area: 30.517131072352957,
             },
           ],
           katuosoite: 'Aidasmäentie 5',
@@ -1335,8 +1359,8 @@ const hakemukset: Application[] = [
           },
         },
       ],
-      startTime: new Date('2024-08-13T21:59:59.999Z'),
-      endTime: new Date('2024-10-29T21:59:59.999Z'),
+      startTime: new Date('2024-08-14T00:00:00.000Z'),
+      endTime: new Date('2024-10-30T00:00:00.000Z'),
       customerWithContacts: {
         customer: {
           type: 'COMPANY',
@@ -1459,7 +1483,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 158.4294946899533,
+              area: 159.32433261766946,
             },
             {
               geometry: {
@@ -1480,7 +1504,7 @@ const hakemukset: Application[] = [
                   ],
                 ],
               },
-              area: 30.345726208334995,
+              area: 30.517131072352957,
             },
           ],
           katuosoite: 'Aidasmäentie 5',
@@ -1617,6 +1641,198 @@ const hakemukset: Application[] = [
           type: 'TOIMINNALLINEN_KUNTO',
           dateReported: new Date('2024-08-01'),
           reportedAt: new Date('2024-08-01T15:15:15Z'),
+        },
+      ],
+    },
+  } as Application<KaivuilmoitusData>,
+  {
+    id: 13,
+    alluStatus: 'WAITING_INFORMATION',
+    applicationType: 'EXCAVATION_NOTIFICATION',
+    hankeTunnus: 'HAI22-2',
+    applicationIdentifier: 'KP2400004',
+    applicationData: {
+      applicationType: 'EXCAVATION_NOTIFICATION',
+      name: 'Tietoliikennetyöt',
+      startTime: new Date('2023-06-14T00:00:00Z'),
+      endTime: new Date('2023-09-10T00:00:00Z'),
+      workDescription: 'Tehdään tietoliikennetöitä',
+      constructionWork: true,
+      maintenanceWork: false,
+      emergencyWork: false,
+      rockExcavation: false,
+      cableReportDone: true,
+      requiredCompetence: true,
+      cableReports: ['JS2300002'],
+      placementContracts: ['SL1234567'],
+      areas: [
+        {
+          name: 'Hankealue 2',
+          hankealueId: 2,
+          tyoalueet: [
+            {
+              geometry: {
+                type: 'Polygon',
+                crs: {
+                  type: 'name',
+                  properties: {
+                    name: 'urn:ogc:def:crs:EPSG::3879',
+                  },
+                },
+                coordinates: [
+                  [
+                    [25498585.50387858, 6679353.862125141],
+                    [25498588.30930639, 6679372.671835153],
+                    [25498578.30073113, 6679371.404998987],
+                    [25498577.10224065, 6679355.728613365],
+                    [25498585.50387858, 6679353.862125141],
+                  ],
+                ],
+              },
+              area: 159.32433261766946,
+              tormaystarkasteluTulos: {
+                liikennehaittaindeksi: {
+                  indeksi: 3,
+                  tyyppi: HAITTA_INDEX_TYPE.PYORALIIKENNEINDEKSI,
+                },
+                pyoraliikenneindeksi: 3,
+                autoliikenne: {
+                  indeksi: 1,
+                  haitanKesto: 1,
+                  katuluokka: 1,
+                  liikennemaara: 1,
+                  kaistahaitta: 1,
+                  kaistapituushaitta: 1,
+                },
+                linjaautoliikenneindeksi: 0,
+                raitioliikenneindeksi: 1,
+              },
+            },
+            {
+              geometry: {
+                type: 'Polygon',
+                crs: {
+                  type: 'name',
+                  properties: {
+                    name: 'urn:ogc:def:crs:EPSG::3879',
+                  },
+                },
+                coordinates: [
+                  [
+                    [25498581.440262634, 6679345.526261961],
+                    [25498582.233686976, 6679350.99321805],
+                    [25498576.766730886, 6679351.786642391],
+                    [25498575.973306544, 6679346.319686302],
+                    [25498581.440262634, 6679345.526261961],
+                  ],
+                ],
+              },
+              area: 30.517131072352957,
+              tormaystarkasteluTulos: {
+                liikennehaittaindeksi: {
+                  indeksi: 3,
+                  tyyppi: HAITTA_INDEX_TYPE.PYORALIIKENNEINDEKSI,
+                },
+                pyoraliikenneindeksi: 3,
+                autoliikenne: {
+                  indeksi: 1,
+                  haitanKesto: 1,
+                  katuluokka: 1,
+                  liikennemaara: 1,
+                  kaistahaitta: 1,
+                  kaistapituushaitta: 1,
+                },
+                linjaautoliikenneindeksi: 0,
+                raitioliikenneindeksi: 1,
+              },
+            },
+          ],
+          katuosoite: 'Aidasmäentie 5',
+          tyonTarkoitukset: ['VESI'],
+          meluhaitta: 'TOISTUVA_MELUHAITTA',
+          polyhaitta: 'JATKUVA_POLYHAITTA',
+          tarinahaitta: 'SATUNNAINEN_TARINAHAITTA',
+          kaistahaitta: 'YKSI_KAISTA_VAHENEE',
+          kaistahaittojenPituus: 'PITUUS_10_99_METRIA',
+          lisatiedot: '',
+          haittojenhallintasuunnitelma: {
+            YLEINEN: 'Työalueen yleisten haittojen hallintasuunnitelma',
+            PYORALIIKENNE: 'Pyöräliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+            AUTOLIIKENNE: 'Autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+            LINJAAUTOLIIKENNE: '',
+            RAITIOLIIKENNE: 'Raitioliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+            MUUT: 'Muiden työalueen haittojen hallintasuunnitelma',
+          },
+        },
+      ],
+      customerWithContacts: {
+        customer: {
+          type: 'COMPANY',
+          name: 'Yritys Oy',
+          country: 'FI',
+          email: 'yritys@test.com',
+          phone: '0000000000',
+          registryKey: '1164243-9',
+          registryKeyHidden: false,
+          ovt: null,
+          invoicingOperator: null,
+          sapCustomerNumber: null,
+        },
+        contacts: [
+          {
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            email: 'matti.meikalainen@test.com',
+            firstName: 'Matti',
+            lastName: 'Meikäläinen',
+            orderer: true,
+            phone: '0401234567',
+          },
+        ],
+      },
+      contractorWithContacts: {
+        customer: {
+          type: 'COMPANY',
+          name: 'Yritys 2 Oy',
+          country: 'FI',
+          email: 'yritys2@test.com',
+          phone: '040123456',
+          registryKey: '1234567-1',
+          registryKeyHidden: false,
+          ovt: null,
+          invoicingOperator: null,
+          sapCustomerNumber: null,
+        },
+        contacts: [
+          {
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb1',
+            email: 'tauno@test.com',
+            firstName: 'Tauno',
+            lastName: 'Testinen',
+            orderer: false,
+            phone: '0401234567',
+          },
+        ],
+      },
+      representativeWithContacts: null,
+      propertyDeveloperWithContacts: null,
+      invoicingCustomer: {
+        type: 'COMPANY',
+        name: 'Laskutus Oy',
+        registryKey: '1234567-1',
+        registryKeyHidden: false,
+        postalAddress: {
+          streetAddress: { streetName: 'Laskutuskuja 1' },
+          postalCode: '00100',
+          city: 'Helsinki',
+        },
+      },
+    },
+    taydennyspyynto: {
+      id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+      kentat: [
+        {
+          key: TaydennyspyyntoFieldKey.WORK_DESCRIPTION,
+          message: 'Tarkenna työn kuvausta',
         },
       ],
     },

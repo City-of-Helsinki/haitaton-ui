@@ -19,6 +19,8 @@ import {
 } from '../types/hanke';
 import { HaittaIndexData } from '../common/haittaIndexes/types';
 import { Taydennys, Taydennyspyynto } from '../application/taydennys/types';
+import haittojenhallintaSchema from '../common/haittojenhallinta/haittojenhallintaSchema';
+import { FORM_PAGES } from '../forms/types';
 
 const tyoalueSchema = yup.object({
   geometry: geometrySchema.required(),
@@ -30,14 +32,28 @@ const kaivuilmoitusAlueSchema = yup.object({
   name: yup.string().required(),
   hankealueId: yup.number().required(),
   tyoalueet: yup.array(tyoalueSchema).defined(),
-  katuosoite: yup.string().required(),
-  tyonTarkoitukset: yup.array(yup.mixed<HANKE_TYOMAATYYPPI_KEY>().defined()).min(1).required(),
-  meluhaitta: yup.mixed<HANKE_MELUHAITTA_KEY>().required(),
-  polyhaitta: yup.mixed<HANKE_POLYHAITTA_KEY>().required(),
-  tarinahaitta: yup.mixed<HANKE_TARINAHAITTA_KEY>().required(),
-  kaistahaitta: yup.mixed<HANKE_KAISTAHAITTA_KEY>().required(),
-  kaistahaittojenPituus: yup.mixed<HANKE_KAISTAPITUUSHAITTA_KEY>().required(),
+  katuosoite: yup.string().required().meta({ pageName: FORM_PAGES.ALUEET }),
+  tyonTarkoitukset: yup
+    .array(yup.mixed<HANKE_TYOMAATYYPPI_KEY>().defined())
+    .min(1)
+    .required()
+    .meta({ pageName: FORM_PAGES.ALUEET }),
+  meluhaitta: yup.mixed<HANKE_MELUHAITTA_KEY>().required().meta({ pageName: FORM_PAGES.ALUEET }),
+  polyhaitta: yup.mixed<HANKE_POLYHAITTA_KEY>().required().meta({ pageName: FORM_PAGES.ALUEET }),
+  tarinahaitta: yup
+    .mixed<HANKE_TARINAHAITTA_KEY>()
+    .required()
+    .meta({ pageName: FORM_PAGES.ALUEET }),
+  kaistahaitta: yup
+    .mixed<HANKE_KAISTAHAITTA_KEY>()
+    .required()
+    .meta({ pageName: FORM_PAGES.ALUEET }),
+  kaistahaittojenPituus: yup
+    .mixed<HANKE_KAISTAPITUUSHAITTA_KEY>()
+    .required()
+    .meta({ pageName: FORM_PAGES.ALUEET }),
   lisatiedot: yup.string(),
+  haittojenhallintasuunnitelma: haittojenhallintaSchema,
 });
 
 const customerWithContactsSchemaForKaivuilmoitusForTyostaVastaava = customerWithContactsSchema
@@ -59,11 +75,11 @@ const customerWithContactsSchemaForKaivuilmoitus = customerWithContactsSchema
     }),
   });
 
-const applicationDataSchema = yup.object().shape(
+export const applicationDataSchema = yup.object().shape(
   {
     applicationType: applicationTypeSchema,
-    name: yup.string().trim().required(),
-    workDescription: yup.string().trim().required(),
+    name: yup.string().trim().required().meta({ pageName: FORM_PAGES.PERUSTIEDOT }),
+    workDescription: yup.string().trim().required().meta({ pageName: FORM_PAGES.PERUSTIEDOT }),
     rockExcavation: yup
       .boolean()
       .defined()
@@ -75,18 +91,24 @@ const applicationDataSchema = yup.object().shape(
       .when(['maintenanceWork', 'emergencyWork'], {
         is: false,
         then: (schema) => schema.isTrue(),
-      }),
+      })
+      .meta({ pageName: FORM_PAGES.PERUSTIEDOT }),
     maintenanceWork: yup.boolean().defined(),
     emergencyWork: yup.boolean().defined(),
-    cableReportDone: yup.boolean().required(),
+    cableReportDone: yup.boolean().required().meta({ pageName: FORM_PAGES.PERUSTIEDOT }),
     cableReports: yup
       .array()
       .of(yup.string().required())
       .when(['cableReportDone'], {
         is: true,
         then: (schema) => schema.min(1),
-      }),
-    requiredCompetence: yup.boolean().required().isTrue(),
+      })
+      .meta({ pageName: FORM_PAGES.PERUSTIEDOT }),
+    requiredCompetence: yup
+      .boolean()
+      .required()
+      .isTrue()
+      .meta({ pageName: FORM_PAGES.PERUSTIEDOT }),
     contractorWithContacts: customerWithContactsSchemaForKaivuilmoitus,
     customerWithContacts: customerWithContactsSchemaForKaivuilmoitusForTyostaVastaava,
     propertyDeveloperWithContacts: customerWithContactsSchemaForKaivuilmoitus.nullable(),
@@ -102,7 +124,8 @@ const applicationDataSchema = yup.object().shape(
         }
       })
       .nullable()
-      .required(),
+      .required()
+      .meta({ pageName: FORM_PAGES.ALUEET }),
     endTime: yup
       .date()
       .when('startTime', (startTime: Date[], schema: yup.DateSchema) => {
@@ -113,8 +136,13 @@ const applicationDataSchema = yup.object().shape(
         }
       })
       .nullable()
-      .required(),
-    areas: yup.array(kaivuilmoitusAlueSchema).min(1).required(),
+      .required()
+      .meta({ pageName: FORM_PAGES.ALUEET }),
+    areas: yup
+      .array(kaivuilmoitusAlueSchema)
+      .min(1)
+      .required()
+      .meta({ pageName: FORM_PAGES.ALUEET }),
     additionalInfo: yup.string().max(2000).nullable(),
   },
   [['startTime', 'endTime']],
@@ -150,7 +178,18 @@ export const perustiedotSchema = yup.object({
 });
 
 export const alueetSchema = yup.object({
-  applicationData: applicationDataSchema.pick(['areas']),
+  applicationData: applicationDataSchema.pick(['areas', 'startTime', 'endTime']).shape({
+    areas: yup
+      .array(kaivuilmoitusAlueSchema.omit(['haittojenhallintasuunnitelma']))
+      .min(1)
+      .required(),
+  }),
+});
+
+export const haittojenhallintaSuunnitelmaSchema = yup.object({
+  applicationData: applicationDataSchema.pick(['areas']).shape({
+    areas: yup.array(kaivuilmoitusAlueSchema.pick(['haittojenhallintasuunnitelma'])).min(1),
+  }),
 });
 
 export const yhteystiedotSchema = yup.object({

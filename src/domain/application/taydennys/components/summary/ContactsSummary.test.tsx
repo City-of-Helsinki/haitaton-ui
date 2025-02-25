@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
-import JohtoselvitysContactsSummary from './JohtoselvitysContactsSummary';
-import { JohtoselvitysData } from '../../../types/application';
+import ContactsSummary from './ContactsSummary';
+import { JohtoselvitysData, KaivuilmoitusData } from '../../../types/application';
 import applications from '../../../../mocks/data/hakemukset-data';
 import { render, screen } from '../../../../../testUtils/render';
 
@@ -58,17 +58,21 @@ const mockData: JohtoselvitysData = {
   },
 };
 
-describe('JohtoselvitysContactsSummary', () => {
+const kaivuilmoitusTestApplication = cloneDeep(
+  applications[12].applicationData as KaivuilmoitusData,
+);
+
+describe('ContactsSummary', () => {
   test('renders nothing if no changes are detected', () => {
     const { container } = render(
-      <JohtoselvitysContactsSummary data={mockData} originalData={mockData} muutokset={[]} />,
+      <ContactsSummary data={mockData} originalData={mockData} muutokset={[]} />,
     );
     expect(container).toBeEmptyDOMElement();
   });
 
   test('renders customer with contacts change correctly', () => {
     render(
-      <JohtoselvitysContactsSummary
+      <ContactsSummary
         data={{
           ...mockData,
           customerWithContacts: {
@@ -94,7 +98,7 @@ describe('JohtoselvitysContactsSummary', () => {
 
   test('renders contractor with contacts change correctly', () => {
     render(
-      <JohtoselvitysContactsSummary
+      <ContactsSummary
         data={{
           ...mockData,
           contractorWithContacts: {
@@ -120,7 +124,7 @@ describe('JohtoselvitysContactsSummary', () => {
 
   test('renders property developer with contacts change correctly', () => {
     render(
-      <JohtoselvitysContactsSummary
+      <ContactsSummary
         data={{
           ...mockData,
           propertyDeveloperWithContacts: {
@@ -153,7 +157,7 @@ describe('JohtoselvitysContactsSummary', () => {
 
   test('renders representative with contacts change correctly', () => {
     render(
-      <JohtoselvitysContactsSummary
+      <ContactsSummary
         data={{
           ...mockData,
           representativeWithContacts: {
@@ -186,7 +190,7 @@ describe('JohtoselvitysContactsSummary', () => {
 
   test('renders removed property developer with contacts correctly', () => {
     render(
-      <JohtoselvitysContactsSummary
+      <ContactsSummary
         data={{ ...mockData, propertyDeveloperWithContacts: null }}
         originalData={mockData}
         muutokset={['propertyDeveloperWithContacts']}
@@ -213,7 +217,7 @@ describe('JohtoselvitysContactsSummary', () => {
 
   test('renders removed representative with contacts correctly', () => {
     render(
-      <JohtoselvitysContactsSummary
+      <ContactsSummary
         data={{ ...mockData, representativeWithContacts: null }}
         originalData={mockData}
         muutokset={['representativeWithContacts']}
@@ -236,5 +240,27 @@ describe('JohtoselvitysContactsSummary', () => {
       expect(screen.getByText(contact.email)).toBeInTheDocument();
       expect(screen.getByText(contact.phone)).toBeInTheDocument();
     });
+  });
+
+  test('renders invoicing customer change correctly', () => {
+    render(
+      <ContactsSummary
+        data={{
+          ...kaivuilmoitusTestApplication,
+          invoicingCustomer: {
+            ...kaivuilmoitusTestApplication.invoicingCustomer!,
+            name: 'New invoicing customer',
+          },
+        }}
+        originalData={kaivuilmoitusTestApplication}
+        muutokset={['invoicingCustomer']}
+      />,
+    );
+
+    expect(screen.getByText('Laskutustiedot')).toBeInTheDocument();
+    expect(screen.getByText('New invoicing customer')).toBeInTheDocument();
+    expect(
+      screen.getByText(kaivuilmoitusTestApplication.invoicingCustomer!.registryKey!),
+    ).toBeInTheDocument();
   });
 });

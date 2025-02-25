@@ -1,3 +1,6 @@
+import { AttachmentMetadata } from '../../../common/types/attachment';
+import { AttachmentType } from '../types/application';
+
 export enum TaydennyspyyntoFieldKey {
   CUSTOMER = 'CUSTOMER',
   INVOICING_CUSTOMER = 'INVOICING_CUSTOMER',
@@ -28,8 +31,14 @@ export type Taydennyspyynto = {
   kentat: TaydennyspyyntoField[];
 };
 
+export interface TaydennysAttachmentMetadata extends AttachmentMetadata {
+  taydennysId: string;
+  attachmentType: AttachmentType;
+}
+
 export type Taydennys<T> = {
   id: string;
   applicationData: T;
   muutokset: string[];
+  liitteet: TaydennysAttachmentMetadata[];
 };

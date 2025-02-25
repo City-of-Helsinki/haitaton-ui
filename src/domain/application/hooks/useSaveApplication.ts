@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useQueryClient } from 'react-query';
 import {
   createApplication,
   modifyDataAfterReceive,
@@ -32,6 +33,7 @@ export default function useSaveApplication<
   const [showSaveNotification, setShowSaveNotification] = useState<'create' | 'update' | null>(
     null,
   );
+  const queryClient = useQueryClient();
 
   const applicationCreateMutation = useDebouncedMutation(
     createApplication<ApplicationData, CreateData>,
@@ -57,6 +59,7 @@ export default function useSaveApplication<
         setShowSaveNotification(null);
       },
       onSuccess(application: Application<ApplicationData>) {
+        queryClient.setQueryData(['application', application.id], application);
         const modifiedData = modifyDataAfterReceive(application);
         onUpdateSuccess(modifiedData);
       },

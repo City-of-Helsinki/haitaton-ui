@@ -1,7 +1,6 @@
 import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
 import { get as getProjection } from 'ol/proj';
-import { getArea } from 'ol/sphere';
 import Geometry from 'ol/geom/Geometry';
 import Polygon from 'ol/geom/Polygon';
 import { polygon } from '@turf/helpers';
@@ -18,7 +17,11 @@ export const projection = getProjection('EPSG:3879');
 projection?.setExtent([25440000, 6630000, 25571072, 6761072]);
 
 export function getSurfaceArea(geometry: Geometry) {
-  return getArea(geometry, { projection: projection || undefined });
+  if (geometry.getType() == 'Polygon') {
+    return (geometry as Polygon).getArea();
+  } else {
+    return NaN;
+  }
 }
 
 /**

@@ -9,39 +9,33 @@ import { styleFunction } from '../../utils/geometryStyle';
 import FitSource from '../interations/FitSource';
 import useHankeFeatures from '../../hooks/useHankeFeatures';
 import styles from './OwnHankeMap.module.scss';
-import {
-  Application,
-  ApplicationArea,
-  KaivuilmoitusAlue,
-} from '../../../application/types/application';
+import { ApplicationArea, Tyoalue } from '../../../application/types/application';
 import useApplicationFeatures from '../../hooks/useApplicationFeatures';
+import { useTranslation } from 'react-i18next';
+import FeatureInfoOverlay from '../FeatureInfoOverlay/FeatureInfoOverlay';
+import { OverlayProps } from '../../../../common/components/map/types';
+import AreaOverlay from '../AreaOverlay/AreaOverlay';
+import DrawProvider from '../../../../common/components/map/modules/draw/DrawProvider';
 
 type Props = {
   hanke: HankeData;
-  application?: Application;
+  tyoalueet?: ApplicationArea[] | Tyoalue[];
 };
 
-const OwnHankeMap: React.FC<Props> = ({ hanke, application }) => {
-  const hankeSource = useRef(new VectorSource());
-  useHankeFeatures(hankeSource.current, [hanke]);
+const OwnHankeMap: React.FC<Props> = ({ hanke, tyoalueet }) => {
+  const { t } = useTranslation();
 
-  let tyoalueet: ApplicationArea[] = [];
-  if (application) {
-    tyoalueet =
-      application.applicationType === 'CABLE_REPORT'
-        ? (application.applicationData.areas as ApplicationArea[])
-        : (application.applicationData.areas as KaivuilmoitusAlue[]).flatMap(
-            (area) => area.tyoalueet,
-          );
-  }
+  const hankeSource = useRef(new VectorSource());
+  useHankeFeatures(hankeSource.current, [hanke], false);
 
   const applicationSource = useRef(new VectorSource());
-  useApplicationFeatures(applicationSource.current, tyoalueet);
+  useApplicationFeatures(applicationSource.current, t, tyoalueet);
 
   return (
     <div className={styles.mapContainer}>
       <Map zoom={9} mapClassName={styles.mapContainer__inner} showAttribution={false}>
         <Kantakartta />
+
         <VectorLayer
           source={hankeSource.current}
           zIndex={100}
@@ -55,9 +49,18 @@ const OwnHankeMap: React.FC<Props> = ({ hanke, application }) => {
           className="applicationGeometryLayer"
           style={(feature: FeatureLike) => styleFunction(feature, undefined, true)}
         />
-        <FitSource
-          source={application && tyoalueet.length ? applicationSource.current : hankeSource.current}
-        />
+
+        <FitSource source={tyoalueet?.length ? applicationSource.current : hankeSource.current} />
+
+        <DrawProvider source={applicationSource.current}>
+          <FeatureInfoOverlay
+            render={(feature) => {
+              const overlayProperties = feature?.get('overlayProps') as OverlayProps | undefined;
+              return <AreaOverlay overlayProps={overlayProperties} />;
+            }}
+            all={true}
+          />
+        </DrawProvider>
       </Map>
     </div>
   );

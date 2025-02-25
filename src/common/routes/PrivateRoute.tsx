@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { REDIRECT_PATH_KEY } from './constants';
 import { useOidcClient } from 'hds-react';
 import useIsAuthenticated from '../../domain/auth/useIsAuthenticated';
+import useLocale from '../hooks/useLocale';
 
 type Props = {
   element: JSX.Element;
@@ -12,6 +13,7 @@ const PrivateRoute: React.FC<React.PropsWithChildren<Props>> = ({ element }) => 
   const { login } = useOidcClient();
   const isAuthenticated = useIsAuthenticated();
   const location = useLocation();
+  const locale = useLocale();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -24,7 +26,7 @@ const PrivateRoute: React.FC<React.PropsWithChildren<Props>> = ({ element }) => 
     // save URL path to session storage and navigate to login,
     // so that user can be redirected to that route after login
     sessionStorage.setItem(REDIRECT_PATH_KEY, location.pathname);
-    login();
+    login({ language: locale });
     return null;
   }
 

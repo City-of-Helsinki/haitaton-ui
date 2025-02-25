@@ -2,12 +2,23 @@ import * as yup from 'yup';
 import { formatToFinnishDate } from './date';
 import isValidBusinessId from '../../common/utils/isValidBusinessId';
 import { HankeUser } from '../../domain/hanke/hankeUsers/hankeUser';
-import { HAITTOJENHALLINTATYYPPI } from '../../domain/types/hanke';
 import { HankeDataFormState } from '../../domain/hanke/edit/types';
-import { Application } from '../../domain/application/types/application';
+import {
+  Application,
+  HankkeenHakemus,
+  KaivuilmoitusAlue,
+  KaivuilmoitusData,
+} from '../../domain/application/types/application';
 import { format } from 'date-fns/format';
 import { fi } from 'date-fns/locale';
 import isValidPersonalId from './isValidPersonalId';
+import { HAITTOJENHALLINTATYYPPI } from '../../domain/common/haittojenhallinta/types';
+import { HaittaIndexData } from '../../domain/common/haittaIndexes/types';
+import { calculateLiikennehaittaindeksienYhteenveto } from '../../domain/kaivuilmoitus/utils';
+import {
+  getApplicationsInsideHankealue,
+  getHankealueDateLimits,
+} from '../../domain/hanke/edit/utils';
 
 // https://github.com/jquense/yup/blob/master/src/locale.ts
 yup.setLocale({
@@ -93,24 +104,33 @@ yup.addMethod(
         if (!context) {
           return true;
         }
-        const { hanke } = context as {
-          hanke: HankeDataFormState;
+        const { hanke, application } = context as {
+          hanke?: HankeDataFormState;
+          application?: Application<KaivuilmoitusData>;
         };
-        // Retrieve the correct area from hanke
-        const hankeAlueet = hanke.alueet;
+        // Retrieve the correct area
+        const alueet = hanke?.alueet ?? application?.applicationData.areas;
         const pathSegments: string[] = this.path.split('.');
-        const hankeAluePathSegment = pathSegments.length > 0 ? pathSegments[0] : '';
-        const match = hankeAluePathSegment.match(/\[(\d+)]/);
-        let hankeAlueIndex = 0;
+        const aluePathSegment = pathSegments.length > 0 ? pathSegments[0] : '';
+        const match = aluePathSegment.match(/\[(\d+)]/);
+        let alueIndex = 0;
         if (match) {
-          hankeAlueIndex = parseInt(match[1], 10);
+          alueIndex = parseInt(match[1], 10);
         }
-        if (!hankeAlueet || isNaN(hankeAlueIndex) || !hankeAlueet[hankeAlueIndex]) {
+        if (!alueet || isNaN(alueIndex) || !alueet[alueIndex]) {
           return true;
         }
-        const hankeAlue = hankeAlueet[hankeAlueIndex];
+        const alue = alueet[alueIndex];
 
-        const tormaystarkasteluTulos = hankeAlue?.tormaystarkasteluTulos;
+        let tormaystarkasteluTulos: HaittaIndexData | null | undefined;
+        if ('tormaystarkasteluTulos' in alue) {
+          tormaystarkasteluTulos = alue.tormaystarkasteluTulos;
+        } else {
+          tormaystarkasteluTulos = calculateLiikennehaittaindeksienYhteenveto(
+            alue as KaivuilmoitusAlue,
+          );
+        }
+
         if (!tormaystarkasteluTulos) {
           return true;
         }
@@ -198,6 +218,75 @@ yup.addMethod(yup.date, 'validCompletionDate', function isValidCompletionDate() 
         message: { key: dateInFutureErrorMessageKey, values: {} },
       })
     );
+  });
+});
+
+/**
+ * Validates that hankealue date is within the limits of hakemukset with work areas inside the hankealue.
+ */
+yup.addMethod(yup.date, 'validHankealueDate', function isValidHankealueDate(type: 'start' | 'end') {
+  return this.test('validHankealueDate', 'Invalid date', function (value) {
+    if (!value) {
+      return true;
+    }
+    const context = this.options.context;
+    if (!context) {
+      return true;
+    }
+    const { hanke, hakemukset, dateConflictWithWorkAreasErrorKey } = context as {
+      hanke: HankeDataFormState;
+      hakemukset?: HankkeenHakemus[];
+      dateConflictWithWorkAreasErrorKey: string;
+    };
+    if (!hakemukset) {
+      return true;
+    }
+    const indexMatch = /alueet\[(\d+)]/.exec(this.path);
+    const hankealueIndex = indexMatch ? parseInt(indexMatch[1], 10) : undefined;
+    if (hankealueIndex === undefined) {
+      return true;
+    }
+    const hankealue = hanke.alueet ? hanke.alueet[hankealueIndex] : undefined;
+    if (!hankealue) {
+      return true;
+    }
+    const hakemuksetHankealueella = getApplicationsInsideHankealue(hankealue, hakemukset);
+    const [maxStartDate, minEndDate] = getHankealueDateLimits(
+      hankealue.haittaAlkuPvm,
+      hakemuksetHankealueella,
+    );
+    if (!maxStartDate || !minEndDate) {
+      return true;
+    }
+    const date = new Date(value);
+    date.setHours(0, 0, 0, 0);
+    if (type === 'start') {
+      maxStartDate.setHours(0, 0, 0, 0);
+      if (date > maxStartDate) {
+        return this.createError({
+          path: this.path,
+          message: {
+            key: dateConflictWithWorkAreasErrorKey,
+            values: {},
+          },
+        });
+      }
+      return true;
+    }
+    if (type === 'end') {
+      minEndDate.setHours(0, 0, 0, 0);
+      if (date < minEndDate) {
+        return this.createError({
+          path: this.path,
+          message: {
+            key: dateConflictWithWorkAreasErrorKey,
+            values: {},
+          },
+        });
+      }
+      return true;
+    }
+    return true;
   });
 });
 

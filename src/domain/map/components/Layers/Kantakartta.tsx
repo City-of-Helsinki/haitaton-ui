@@ -17,36 +17,62 @@ const Kantakartta = () => {
     attributions: [t('map:attribution')],
   };
 
+  const WMSRequestParams = {
+    FORMAT: 'image/jpeg',
+    WIDTH: 256,
+    HEIGHT: 256,
+    VERSION: '1.1.1',
+    TRANSPARENT: 'false',
+  };
+
   return (
     <>
       <TileLayer
-        minZoom={9}
+        minZoom={10}
         source={
           new TileWMS({
             ...sourceOptions,
             params: {
+              ...WMSRequestParams,
               LAYERS: 'Kantakartta',
-              FORMAT: 'image/jpeg',
-              WIDTH: 256,
-              HEIGHT: 256,
-              VERSION: '1.1.1',
-              TRANSPARENT: 'false',
             },
           })
         }
       />
       <TileLayer
-        maxZoom={9}
+        maxZoom={10}
+        minZoom={8}
         source={
           new TileWMS({
             ...sourceOptions,
             params: {
+              ...WMSRequestParams,
+              LAYERS: 'Kiinteistokartan_maastotiedot',
+            },
+          })
+        }
+      />
+      <TileLayer
+        maxZoom={8}
+        minZoom={7}
+        source={
+          new TileWMS({
+            ...sourceOptions,
+            params: {
+              ...WMSRequestParams,
               LAYERS: 'Opaskartta_Helsinki',
-              FORMAT: 'image/jpeg',
-              WIDTH: 256,
-              HEIGHT: 256,
-              VERSION: '1.1.1',
-              TRANSPARENT: 'false',
+            },
+          })
+        }
+      />
+      <TileLayer
+        maxZoom={7}
+        source={
+          new TileWMS({
+            ...sourceOptions,
+            params: {
+              ...WMSRequestParams,
+              LAYERS: 'Opaskartta_Helsinki_harvanimi',
             },
           })
         }

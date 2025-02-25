@@ -19,6 +19,8 @@ import { HaittaIndexData } from '../../common/haittaIndexes/types';
 import { reportCompletionDateSchema } from '../../kaivuilmoitus/validationSchema';
 import { sendSchema } from '../yupSchemas';
 import { Taydennys, Taydennyspyynto } from '../taydennys/types';
+import { Haittojenhallintasuunnitelma } from '../../common/haittojenhallinta/types';
+import { Muutosilmoitus } from '../muutosilmoitus/types';
 
 export type ApplicationType = 'CABLE_REPORT' | 'EXCAVATION_NOTIFICATION';
 
@@ -160,6 +162,7 @@ export type KaivuilmoitusAlue = {
   kaistahaitta: HANKE_KAISTAHAITTA_KEY | null;
   kaistahaittojenPituus: HANKE_KAISTAPITUUSHAITTA_KEY | null;
   lisatiedot?: string;
+  haittojenhallintasuunnitelma?: Haittojenhallintasuunnitelma;
 };
 
 export type PaperDecisionReceiver = {
@@ -267,6 +270,7 @@ export interface Application<T = JohtoselvitysData | KaivuilmoitusData> {
   valmistumisilmoitukset?: Valmistumisilmoitukset | null;
   taydennyspyynto?: Taydennyspyynto | null;
   taydennys?: Taydennys<T> | null;
+  muutosilmoitus?: Muutosilmoitus<T>;
 }
 
 export interface HankkeenHakemus {

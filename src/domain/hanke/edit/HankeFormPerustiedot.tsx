@@ -52,6 +52,18 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
             . Yleisten alueiden johtoselvitykset haetaan hankkeen luonnin jälkeen kaivuilmoituksen
             kautta.
           </p>
+          <p>
+            Huomioithan, että seuraavat tiedot näytetään julkisesti kaikille Haitattoman käyttäjille
+            hankkeen julkaisun jälkeen:
+          </p>
+          <ul>
+            <li>Hankkeen nimi ja tunnus sekä ajankohta</li>
+            <li>Hankkeen kuvaus</li>
+            <li>Hankealueiden nimet ja ajankohdat</li>
+            <li>Hankealueiden liikennehaittaindeksit</li>
+            <li>Hankkeen omistajataho</li>
+            <li>Hankkeen suunnitteluvaihe ja työn tyyppi</li>
+          </ul>
           <p>Lisäämällä hankkeen tiedot, pystyt kopioimaan ne lopuksi tarvitsemiisi hakemuksiin.</p>
         </Trans>
       </div>
@@ -59,11 +71,17 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
         <h2 className="heading-m">{t('hankeSidebar:ariaSidebarContent')}</h2>
       </Box>
       <div className="formWpr">
-        <TextInput name={FORMFIELD.NIMI} maxLength={100} required />
+        <TextInput
+          helperText={t('form:helperTexts:isPublicInformation')}
+          name={FORMFIELD.NIMI}
+          maxLength={100}
+          required
+        />
       </div>
       <div className="formWpr">
         <TextArea
           id={FORMFIELD.KUVAUS}
+          helperText={t('form:helperTexts:isPublicInformation')}
           label={t(`hankeForm:labels:${FORMFIELD.KUVAUS}`)}
           defaultValue={hanke[FORMFIELD.KUVAUS] || ''}
           invalid={!!errors[FORMFIELD.KUVAUS]}
@@ -87,6 +105,7 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
       </div>
       <div className="formWpr">
         <SelectionGroup
+          helperText={t('form:helperTexts:isPublicInformation')}
           label={t(`hankeForm:labels:${FORMFIELD.VAIHE}`)}
           errorText={getInputErrorText(t, errors[FORMFIELD.VAIHE])}
           tooltipLabel={t(`hankeForm:labels:${FORMFIELD.VAIHE}`)}
@@ -111,6 +130,7 @@ const HankeFormPerustiedot: React.FC<React.PropsWithChildren<FormProps>> = ({
       </div>
       <div className="formWpr">
         <DropdownMultiselect
+          helperText={t('form:helperTexts:isPublicInformation')}
           name={FORMFIELD.TYOMAATYYPPI}
           id={FORMFIELD.TYOMAATYYPPI}
           options={$enum(HANKE_TYOMAATYYPPI).map((value) => ({

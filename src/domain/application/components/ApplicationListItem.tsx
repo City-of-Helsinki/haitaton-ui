@@ -49,7 +49,7 @@ function ApplicationListItem({ application }: Readonly<Props>) {
                 aria-label={
                   t(`routes:${ROUTES.HAKEMUS}.meta.title`) + ` ${name}` + ` ${applicationId}`
                 }
-                data-testid={`applicationViewLinkIdentifier-${id}`}
+                data-testid={`applicationViewLinkIdentifier-${applicationIdentifier ?? id}`}
                 className={styles.applicationLink}
               >
                 {applicationId}

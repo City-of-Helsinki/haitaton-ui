@@ -69,6 +69,10 @@
     flex-direction: column;
     gap: var(--spacing-s);
     margin-bottom: var(--spacing-m);
+
+    li {
+      list-style-position: inside;
+    }
   }
 
   .formWpr {
@@ -136,6 +140,11 @@
   .fieldset {
     padding: var(--spacing-s);
     margin-bottom: var(--spacing-s);
+  }
+
+  .noAreasText {
+    line-height: var(--lineheight-s);
+    font-weight: 500;
   }
 
   .nuisanceType {

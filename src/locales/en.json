@@ -6,12 +6,21 @@
     "loginButton": "Log in",
     "logoutButton": "Log out",
     "homePageLink": "Return to Haitaton <a>front page.</a>",
-    "supportLink": "You can also contact Haitaton technical support at the email address <a>haitatontuki@hel.fi.</a>"
+    "supportLink": "You can also contact Haitaton technical support at the email address <a>haitatontuki@hel.fi.</a>",
+    "loggingIn": "Logging in...",
+    "loggingOut": "Logging out...",
+    "loggingInErrorLabel": "Error during log-in",
+    "logoutError": "Error during log-out",
+    "noADPermissionHeading": "No access rights to Haitaton service",
+    "noADPermissionText": "You are not entitled to AD identification. <a>Log out</a> of Haitaton and try again through the suomi.fi authentication.",
+    "noADUserNameHeading": "Login failed",
+    "noADUserNameText": "Login via AD failed, as Haitaton did not receive your name upon login. Contact your organization's IT support or <a>log out</a> of Haitaton and try again through the suomi.fi-authentication."
   },
   "common": {
     "increment": "Increment",
     "yes": "Yes",
     "no": "No",
+    "removed": "Deleted",
     "confirmationDialog": {
       "interruptDialog": {
         "titleText": "You are about to exit the form",
@@ -85,7 +94,8 @@
     },
     "haittaIndex": {
       "fillHaitat": "Fill in the nuisance assessments for the area to see the nuisance indexes",
-      "haittaIndexNumber": "Nuisance index number:"
+      "haittaIndexNumber": "Nuisance index number:",
+      "haittaIndexSelite": "Area-specific inconvenience index (0–5)"
     }
   },
   "form": {
@@ -103,7 +113,9 @@
       "dateMax": "The last possible date is {{max}}",
       "yhteyshenkilotMin": "At least one contact person must be set",
       "emailAlreadyUsedInContacts": "The e-mail address you selected can already be found in the user management of the project. Add contact from the drop-down menu.",
-      "emailAlreadyUsedInUserManagement": "The e-mail address you selected is already found by another user."
+      "emailAlreadyUsedInUserManagement": "The e-mail address you selected is already found by another user.",
+      "dateBeforeStart": "Date may not be earlier than the start of work date on the application ({{startDate}})",
+      "dateInFuture": "The date may not be in the future"
     },
     "errors": {
       "areaRequired": "At least one area is required",
@@ -116,11 +128,13 @@
     },
     "headers": {
       "perustiedot": "Basic information",
-      "alueet": "Areas",
+      "alueet": "Plotting Areas",
       "yhteystiedot": "Contact information",
       "liitteetJaLisatiedot": "Attachments and additional information",
+      "liitteet": "Attachment",
       "yhteenveto": "Summary",
-      "hakemusInfo": "Application information"
+      "hakemusInfo": "Application information",
+      "haittojenHallinta": "Nuisance management"
     },
     "labels": {
       "pintaAla": "Area",
@@ -129,6 +143,7 @@
       "roleHelper": "Your main role in the worksite",
       "fromHelsinkiProfile": "Retrieved from Helsinki profile",
       "addressInformation": "Address information",
+      "areas": "Areas",
       "kokonaisAla": "Total area",
       "areaName": "Area name",
       "timespan": "Timespan",
@@ -162,10 +177,12 @@
       "fillWithOwnInformation": "Fill out with your own information"
     },
     "helperTexts": {
-      "dateInForm": "Enter in format D.M.YYYY",
-      "areaName": "If you wish, you can name the area"
+      "dateInForm": "Enter in format D.M.YYYY.",
+      "areaName": "If you wish, you can name the area",
+      "isPublicInformation": "This information will be published."
     },
     "requiredInstruction": "All fields marked with the asterisk * are mandatory.",
+    "requiredForPublicationInstruction": "Fields with an asterisk (*) are required to publish your project.",
     "yhteystiedot": {
       "header": "Contact information",
       "instructions": "The parties added in the project will receive a link by email.They can join the project on Haitaton via the link. After this, they can review the project and add applications to the project.",
@@ -213,6 +230,8 @@
         "sukunimi": "Last name",
         "ytunnus": "Business ID",
         "yTunnusTaiHetu": "Business ID or personal identity code",
+        "henkilotunnus": "Personal identity code",
+        "muuTunnus": "Business ID, personal identity code or other unique identifier",
         "osoite": "Street address",
         "postinumero": "Postal code",
         "postitoimipaikka": "City",
@@ -233,7 +252,8 @@
       },
       "helperTexts": {
         "otherPartyRole": "Party’s role in the project",
-        "yhteyshenkilo": "You can search an added person by typing or using the drop-down menu, or you can add a new contact."
+        "yhteyshenkilo": "You can search an added person by typing or using the drop-down menu, or you can add a new contact.",
+        "registryKey": "The ID is hidden for privacy reasons. If you wish, you can save your new ID by replacing the ******** text with your new ID."
       },
       "contactType": {
         "YKSITYISHENKILO": "Private individual",
@@ -366,19 +386,30 @@
         "title": "Haitaton - Edit cable report application"
       }
     },
+    "EDIT_JOHTOSELVITYSTAYDENNYS": {
+      "path": "/cable-report-supplementary-information/:id/edit",
+      "headerLabel": "Edit the supplementary information to the cable report application",
+      "meta": {
+        "title": "Haitaton - Edit the supplementary information to the cable report application"
+      }
+    },
     "KAIVUILMOITUSHAKEMUS": {
-      "path": "/hankesalkku/:hankeTunnus/kaivuilmoitus",
+      "path": "/projectportfolio/:hankeTunnus/excavation-notification",
       "headerLabel": "Create a new excavation notification application",
       "meta": {
         "title": "Haitaton – Create a new excavation notification application"
       }
     },
     "EDIT_KAIVUILMOITUSHAKEMUS": {
-      "path": "/kaivuilmoitus/:id/muokkaa",
+      "path": "/excavation-notification/:id/edit",
       "headerLabel": "Edit the excavation notification application",
       "meta": {
         "title": "Haitaton – Edit the excavation notification application"
       }
+    },
+    "EDIT_KAIVUILMOITUSTAYDENNYS": {
+      "path": "/excavation-notification-supplementary-information/:id/edit",
+      "meta": {}
     },
     "HAITATON_INFO": {
       "path": "/info",
@@ -409,10 +440,26 @@
       }
     },
     "WORKINSTRUCTIONS": {
-      "path": "https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/construction-phase-checklist",
+      "path": "/workinstructions",
       "headerLabel": "Work instructions",
       "meta": {
         "title": "Haitaton - Work instructions"
+      }
+    },
+    "CARDS_INDEX": {
+      "path": "/workinstructions/handling-of-nuisances/",
+      "headerLabel": "Work instructions - Handling of nuisances",
+      "meta": {
+        "title": "Haitaton - Work instructions - Additional information cards for handling of nuisances"
+      }
+    },
+    "CARD": {
+      "path": "/workinstructions/handling-of-nuisances/cards/",
+      "basicLevel": "basic",
+      "additionalLevel": "additional",
+      "headerLabel": "Additional information cards for handling of nuisances",
+      "meta": {
+        "title": "Haitaton - Work Instructions - Additional information cards for handling of nuisances"
       }
     },
     "MANUAL": {
@@ -471,7 +518,12 @@
       "VAIHTOLAVA": "Swap body"
     },
     "kaistaHaitta": {
-      "EI_VAIKUTA": "Does not affect"
+      "EI_VAIKUTA": "Does not affect",
+      "YKSI_KAISTA_VAHENEE": "One car lane will be eliminated – traffic direction remains in use",
+      "YKSI_KAISTA_VAHENEE_KAHDELLA_AJOSUUNNALLA": "One car lane will be eliminated in two directions – traffic directions remain in use.",
+      "USEITA_KAISTOJA_VAHENEE_AJOSUUNNILLA": "Several car lanes will be eliminated in all directions – traffic directions remain in use",
+      "YKSI_AJOSUUNTA_POISTUU_KAYTOSTA": "One direction of car traffic will be closed",
+      "USEITA_AJOSUUNTIA_POISTUU_KAYTOSTA": "Several directions of car traffic will be closed"
     },
     "kaistaPituusHaitta": {
       "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Does not affect",
@@ -526,10 +578,10 @@
     "nextButton": "Next",
     "previousButton": "Previous",
     "insertFieldError": "Enter a field",
-    "savingSuccessHeader": "Draft saved",
-    "savingSuccessText": "The draft has been saved in the project list",
+    "savingSuccessHeader": "Project saved",
+    "savingSuccessText": "The project has been saved in the project list.",
     "savingFailHeader": "Something went wrong",
-    "savingFailText": "Could not save the draft, try again",
+    "savingFailText": "Could not save the project, please try again.",
     "saveAndQuitSuccessHeader": "Project saved",
     "saveAndQuitSuccessText": "Project {{name}} ({{project ID}}) saved to your projects.",
     "closeAriaLabel": "Exit the form without saving",
@@ -556,6 +608,7 @@
       "polyHaittaShort": "Dust",
       "tarinaHaitta": "Vibration nuisance",
       "tarinaHaittaShort": "Vibration",
+      "checkSurrounding": "Also check other surrounding functions",
       "tyomaaKatuosoite": "Street address",
       "onYKTHanke": "The project is a Shared Public Utility Site (YKT) project",
       "sukunimi": "Last name",
@@ -593,7 +646,14 @@
         "meluHaitta": "{{alueName}}: $t(hankeForm:labels:meluHaitta)",
         "polyHaitta": "{{alueName}}: $t(hankeForm:labels:polyHaitta)",
         "tarinaHaitta": "{{alueName}}: $t(hankeForm:labels:tarinaHaitta)",
-        "haittojenhallintasuunnitelma": {}
+        "haittojenhallintasuunnitelma": {
+          "YLEINEN": "{{alueName}}: $t(hankeForm:labels:haittojenhallintasuunnitelma.YLEINEN)",
+          "PYORALIIKENNE": "{{alueName}}: $t(hankeForm:haittojenHallintaForm:nuisanceType.PYORALIIKENNE): $t(hankeForm:labels:haittojenhallintasuunnitelma.PYORALIIKENNE)",
+          "AUTOLIIKENNE": "{{alueName}}: $t(hankeForm:haittojenHallintaForm:nuisanceType.AUTOLIIKENNE): $t(hankeForm:labels:haittojenhallintasuunnitelma.AUTOLIIKENNE)",
+          "LINJAAUTOLIIKENNE": "{{alueName}}: $t(hankeForm:haittojenHallintaForm:nuisanceType.LINJAAUTOLIIKENNE): $t(hankeForm:labels:haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE)",
+          "RAITIOLIIKENNE": "{{alueName}}: $t(hankeForm:haittojenHallintaForm:nuisanceType.RAITIOLIIKENNE): $t(hankeForm:labels:haittojenhallintasuunnitelma.RAITIOLIIKENNE)",
+          "MUUT": "{{alueName}}: $t(hankeForm:haittojenHallintaForm:nuisanceType.MUUT): $t(hankeForm:labels:haittojenhallintasuunnitelma.MUUT)"
+        }
       },
       "omistajat": {
         "nimi": "$t(form:yhteystiedot:titles:omistaja): $t(form:yhteystiedot:labels:nimi)",
@@ -611,6 +671,7 @@
         "ytunnus": "$t(form:yhteystiedot:titles:rakennuttajat): $t(form:yhteystiedot:labels:ytunnus)"
       },
       "muut": {
+        "rooli": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:rooli)",
         "nimi": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:nimi)",
         "email": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:email)",
         "ytunnus": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:ytunnus)"
@@ -638,13 +699,14 @@
     "perustiedotForm": {
       "header": "Basic project information",
       "ytkHankeHeader": "Shared Public Utility Site (YKT) project",
-      "instructions": "<1>You can also send applications via the project creation.</1><1><0>PLEASE NOTE!</0> If you are only working on a cable report for a private area, <2>fill in the application</2>. Cable reports for public areas are applied for after the project has been created, via the excavation notification.</1><1>When you have added the project information, you can copy it to the applications as required.</1>"
+      "instructions": "<1>You can also send applications via the project creation.</1><1><0>PLEASE NOTE!</0> If you are only working on a cable report for a private area, <2>fill in the application</2>. Cable reports for public areas are applied for after the project has been created, via the excavation notification.</1><1>Please note that the following information will be publicly displayed to all Haitaton users after the project is published:</1><3><4>Project name, identifier and time period</4><4>Project description</4><4>Project area names and time periods</4><4>Project area traffic nuisance indexes</4><4>Project owner</4><4>Project phase and worksite type</4></3><1>When you have added the project information, you can copy it to the applications as required.</1>"
     },
     "hankkeenAlueForm": {
-      "header": "Areas",
+      "header": "Plotting Areas",
       "subHeader": "Project areas",
       "area": "Area",
       "instructions": "[TRANSLATION_PENDING]Several geometries can be drawn for the project. Geometry areas affect the project’s traffic congestion indices. Drawing tools can be found at the bottom left of the map view. With the pen tool, you can draw polygonal geometries by clicking the point where you want an angle. With the square tool, you can create square areas by first clicking the map and moving the mouse in the direction you want. Clicking it again “closes” the square drawing. A geometry can be edited by “grabbing” the edge of the geometry and dragging. A square geometry can also be shaped by grabbing the edge. lete a geometry, first select the geometry by clicking it; a bin icon will appear in the bottom left drawing tools which you can click to delete the geometry.",
+      "instructions2": "Transport mode selectors on the left side of the map allow you to view the inconvenience indices for project and work areas regarding particular transport modes. All transport modes are active by default. You can change visibility of the modes by clicking on the icons. The most critical index will be coloured in on the map.",
       "instructions3": "You can edit an already drawn area by grabbing its edge and dragging the point to the desired location.",
       "noAlueet": "Draw the area on the map to mark the hazard assessments.",
       "haitatHeader": "Nuisance assessments for the area",
@@ -656,9 +718,10 @@
     },
     "haittojenHallintaForm": {
       "header": "Nuisance control",
-      "subHeaderNoAlueet": "Project areas",
-      "subHeaderAlueet": "Area locations",
+      "subHeaderNoAlueet": "Please select project areas to fill the information.",
+      "subHeaderAlueet": "Project areas",
       "instructions": "Your project may hinder different modes of transport and local operations. Haitaton automatically calculates a significance value for each nuisance by project area separately for bicycle traffic, tram traffic, local bus traffic and car traffic. The traffic nuisance index describes the worst situation in the project area in terms of the aforementioned modes of transport. The disturbances are represented with a scale determined for each mode of transport and colours (0/grey = not identified, 1–2/green = no significant nuisance, 3/yellow = probable nuisance, 4–5/red = significant nuisance). Results not concerning the aforementioned modes of transport are represented with numbers alone (0–5).",
+      "instructions2": "Transport mode selectors on the left side of the map allow you to view the inconvenience indices for project and work areas regarding particular transport modes. All transport modes are active by default. You can change visibility of the modes by clicking on the icons. The most critical index will be coloured in on the map.",
       "noAlueet": "Add project areas to fill in information",
       "nuisanceControlPlanSubHeader": "Nuisance management plan",
       "instructionsPlan": "Detail in the nuisance management plan which measures you will take to mitigate disturbances concerning the project areas. Be sure to go through all project areas.",
@@ -666,14 +729,306 @@
       "instructionsGeneral": "<0><0>Ensure the safety and accessibility of pedestrian traffic</0><1>Ensure transport connections to the properties</1><2>Carry out coordination with other projects and their alternate routes</2><3>Always notify the Rescue Department and the police when streets are closed from traffic</3><4>Always check whether your project or work is on a special transport route</4><5>Check the impacts on the existing traffic light controls (lane arrangements, indicators, the functionality of the lights)</5><6>Exceptional working hours</6></0>",
       "helperText": "Nuisance management or prevention measures that are to be carried out or have been agreed upon in the project area.",
       "subHeaderTrafficNuisanceIndex": "Based on the traffic nuisance index calculated for your project, special attention must be paid to the following requirements.",
+      "noNuisanceDetected": "Haitaton was unable to find that target group in the area. Add measures for managing the inconvenience, if necessary.",
+      "addControlPlan": "Add measures for managing the inconvenience",
       "nuisanceType": {
+        "YLEINEN": "Measures for managing the inconvenience",
         "PYORALIIKENNE": "Significance of cycling traffic",
         "AUTOLIIKENNE": "Congestion of motor traffic",
         "LINJAAUTOLIIKENNE": "Local bus transport",
         "RAITIOLIIKENNE": "Tram transport",
         "MUUT": "Other nuisance management measures"
       },
-      "carTrafficNuisanceType": {}
+      "carTrafficNuisanceType": {
+        "katuluokka": "Street classification",
+        "liikennemaara": "Volume of vehicle traffic",
+        "kaistahaitta": "Impact on vehicle traffic lanes",
+        "kaistapituushaitta": "Length of vehicle traffic lane impact",
+        "haitanKesto": "Duration of the project"
+      },
+      "procedureTips": {
+        "showTipsButton": "Display suggested measures",
+        "titles": {
+          "PYORALIIKENNE": "Cycling measures",
+          "AUTOLIIKENNE": "Vehicle traffic measures",
+          "LINJAAUTOLIIKENNE": "Bus traffic measures",
+          "RAITIOLIIKENNE": "Tram traffic measures",
+          "MUUT": "Other measures"
+        },
+        "PYORALIIKENNE": [
+          {
+            "tip": "Check the impacts on primary and priority cycling routes and ensure their availability. Make sure that quality level targets are met for temporary arrangements.",
+            "indexTreshold": 5
+          },
+          {
+            "tip": "Prepare to carry out work outside of rush hour on the primary and priority cycling routes, if such an order is issued in the decision regarding your notification/application. Restrictions will be put in place on weekdays at 6–9 am and 3–6 pm.",
+            "indexTreshold": 5
+          },
+          {
+            "tip": "Priority of cycling measures: 1. No changes to cycling arrangements / route excluded from the worksite; 2. Temporary shift of cycling route; 3. Temporary narrowing of cycling route; 4. Merging of transport modes on one lane (see Separation of transport modes); 5. Temporary move of cycling route to opposite side of vehicle lane; 6. Temporary alternate cycling route"
+          },
+          {
+            "tip": "As a rule, plan and implement temporary cycling arrangement in accordance with the original, permanent arrangements (e.g. one-way cycle paths/lanes or two-way cycling path). Try to retain cycling solutions that are separated from pedestrians, if currently in use. When vehicle traffic exceeds 7,000 cars per day, cycling should generally be separated from vehicle lanes as well. On primary cycling routes, separation should be a consideration even with smaller vehicle traffic volumes. Single direction cycling arrangements may only be proposed to be replaced with a mixed traffic solution at worksites, in which case a 30 km/h speed limit is set on the street."
+          },
+          {
+            "tip": "Plan and implement temporary crossing solutions for cycling routes, particularly at traffic light-controlled intersections, traffic direction function in mind, paying special attention to left turns, vision and lighting."
+          },
+          {
+            "tip": "Plan and implement clear signpost guidance for detours with specific consideration for cycling routes. Define the impacts on cycling and other necessary measures for the detour."
+          },
+          {
+            "tip": "Plan and implement cycling access to the different addresses, services etc."
+          },
+          {
+            "tip": "Find out the need to move a possible city bike station or other significant bicycle parking. Agree on city bike station changes with Kaupunkiliikenne Oy (<0>urakoitsijaohjeistus@kaupunkiliikenne.fi</0>) and with the Urban Environment Division’s traffic planning unit on significant changes to bicycle parking (<1>kaupunkiymparisto@hel.fi</1>, customer service tel. +358 9 310 22111).",
+            "links": [
+              "mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi",
+              "mailto:kaupunkiymparisto@hel.fi"
+            ]
+          },
+          {
+            "tip": "Announce significant works and possible cycling route changes as early as in the planning stage, well in advance of implementing new arrangements (general releases, local releases). Mark detours before the works begin."
+          },
+          {
+            "tip": "Firstly, implement cycling protections from the work area with railings and closures."
+          },
+          {
+            "tip": "Implement winter maintenance for cycling routes (incl. snow removal, anti-slip measures) next to the work area."
+          },
+          {
+            "tip": "Implement and maintain hard and clean cycling route surfaces (temporary pavement) as well as implement level changes with ramps."
+          },
+          {
+            "tip": "Notify different parties of the works and possible route changes well in advance of implementing the new arrangements (general releases, local releases)."
+          },
+          {
+            "tip": "Verify that your planned solutions comply with the instructions (in Finnish): <0>https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf</0>",
+            "links": [
+              "https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf"
+            ]
+          }
+        ],
+        "AUTOLIIKENNE": [
+          {
+            "tip": "Study the compound impact of traffic lane changes and timing with a traffic model. Also determine the changes to bus traffic. Study the requirements of the project and find out possible detour solutions.",
+            "indexTreshold": 4
+          },
+          {
+            "tip": "Study the impact, timing, and measures your project has on traffic lanes with a traffic model and simulation. Define and plan the measures to minimise any inconveniences, keeping other projects in the area in mind.",
+            "indexTreshold": 4
+          },
+          {
+            "tip": "Plan for your works to be primarily carried out outside of rush hour (weekdays at 6–9 am and 3–6 pm, and everyday on harbour routes at 10–10:30 am).",
+            "indexTreshold": 4
+          },
+          {
+            "tip": "Study and implement guidance methods to reduce the traffic volume in the project’s area of impact."
+          },
+          {
+            "tip": "Plan any vehicle detours, related guidance, and the necessary traffic light changes in advance."
+          },
+          {
+            "tip": "Check if your project is on a harbour traffic route (<0>Parking and route maps</0>). If this is the case, plan your works outside of rush hour (weekdays at 6–9 am and 3–6 pm, as well as every at 10–10:30 am on harbour routes).",
+            "links": [
+              "https://www.portofhelsinki.fi/yhteystiedot/kartat/pysakointi-ja-ajoreittikartat/"
+            ]
+          },
+          {
+            "tip": "Plan the arrangements or alternate routes for heavy vehicle traffic as well as maintenance and distribution traffic well in advance."
+          },
+          {
+            "tip": "Find out the number of required lanes from the Urban Environment Division’s traffic planning unit (<0>kaupunkiymparisto@hel.fi</0>, customer service tel. +358 9 310 22111) in the planning stage",
+            "links": [
+              "mailto:kaupunkiymparisto@hel.fi"
+            ]
+          },
+          {
+            "tip": "Plan and ensure traffic light functioning in an area wider than the worksite (e.g. lane changes at traffic light-controlled intersections when entering the work area, indicator positioning and functioning during temporary arrangements, traffic lights on detours). To make these arrangements, contact the Helsinki Region Traffic Control Centre (<0>liikenteenhallintakeskus@hel.fi</0>, tel. +358 9 310 37555). Also contact them if you require temporary traffic lights.",
+            "links": [
+              "mailto:liikenteenhallintakeskus@hel.fi"
+            ]
+          },
+          {
+            "tip": "Contact the Bus Federation (<0>Yhteystiedot – Linja-autoliitto</0> <1>firstname.lastname@linja-autoliitto.fi</1>), if your project takes place on a significant route or area for long-distance or tourist bus traffic.",
+            "links": [
+              "https://www.linja-autoliitto.fi/yhteystiedot/",
+              "mailto:firstname.lastname@linja-autoliitto.fi"
+            ]
+          },
+          {
+            "tip": "Announce significant works and possible vehicle route changes as early as in the planning stage, well in advance of the implementation (general releases, local releases)."
+          },
+          {
+            "tip": "Implement and maintain advance guidance from approaches to alternate routes."
+          },
+          {
+            "tip": "Lower speed limits in the vicinity of work areas."
+          },
+          {
+            "tip": "Do not direct pedestrians to use the vehicle lanes, unless they are given a protected passage there."
+          },
+          {
+            "tip": "Do not direct bicycle traffic to vehicle lanes, unless the situation allows for it (see Suggested measures for cycling)."
+          },
+          {
+            "tip": "Implement and maintain a consistent-quality pavement as well as up-to-date lane change and other markings and traffic control devices."
+          },
+          {
+            "tip": "Implement high-quality winter maintenance in the work area (e.g. snow removal, anti-slip measures, clear visibility and driving space)."
+          }
+        ],
+        "LINJAAUTOLIIKENNE": [
+          {
+            "tip": "Check if your project impacts a significant HSL bus route. Agree, early on, with HSL on the required measures of your project for bus traffic (<0>infra@hsl.fi</0>).",
+            "links": [
+              "mailto:infra@hsl.fi"
+            ]
+          },
+          {
+            "tip": "Plan the works and as a rule, carry them out outside of rush hour (6–9 am, 3–6 pm)."
+          },
+          {
+            "tip": "Contact HSL (<0>infra@hsl.fi</0>) in the planning stage if your project is on an HSL bus route and define, whether your project causes an inconvenience to HSL bus traffic, such as reduction in lanes, delays, longer travel time, route or stop changes etc. Plan possible bus detours in advance, along with related guidance and necessary mass transit benefits. Ensure that the route is functional for HSL and the Helsinki Region Traffic Control Centre (<1>liikenteenhallintakeskus@hel.fi</1>, tel. +358 9 310 37555; including for temporary traffic light control).",
+            "links": [
+              "mailto:infra@hsl.fi",
+              "mailto:liikenteenhallintakeskus@hel.fi"
+            ]
+          },
+          {
+            "tip": "If a worksite is at a bus terminus or prevents bus traffic on a street, contact HSL at least 2.5 months before the works are set to begin. If your worksite is not urgent, such as one required by a burst pipe, contact them at least 2 weeks before the start of the work. Further information: <0>Contractor – how to consider public transport on worksites</0>.",
+            "links": [
+              "http://hsl.fi/hsl/urakoitsijat"
+            ]
+          },
+          {
+            "tip": "Implement unimpeded access to existing stops or plan the move of the stops, related guidance, and accessible pedestrian routes. Tram or bus stops may not be moved or closed without permission from HSL (<0>infra@hsl.fi</0>). Further information: <1>Contractor – how to consider public transport on worksites</1>.",
+            "links": [
+              "mailto:infra@hsl.fi",
+              "http://hsl.fi/hsl/urakoitsijat"
+            ]
+          },
+          {
+            "tip": "Announce significant works and possible bus route changes as early as in the planning stage, well in advance of the implementation (general releases, local releases)."
+          },
+          {
+            "tip": "Implement and maintain advance guidance from approaches to alternate routes."
+          },
+          {
+            "tip": "Implement and maintain a consistent-quality pavement as well as up-to-date lane change and other markings and traffic control devices."
+          },
+          {
+            "tip": "Implement high-quality winter maintenance in the work area (e.g. snow removal, anti-slip measures, clear visibility and driving space). Pay particular attention to bus turning circles in intersections."
+          }
+        ],
+        "RAITIOLIIKENNE": [
+          {
+            "tip": "Check if your project impacts the tram network. Early on, agree with HSL (services: <0>infra@hsl.fi</0>) on measures of your project for the tram network and, if necessary, with Kaupunkiliikenne Oy (rail infrastructure and systems: <1>urakoitsijaohjeistus@kaupunkiliikenne.fi</1>).",
+            "links": [
+              "mailto:infra@hsl.fi",
+              "mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi"
+            ]
+          },
+          {
+            "tip": "Plan for the works to be carried out primarily outside of rail traffic service hours or rush hour (6–9 am, 3–6 pm).",
+            "indexTreshold": 5
+          },
+          {
+            "tip": "Evaluate the schedule of individual works in your project in advance and contact HSL (traffic services: <0>infra@hsl.fi</0>) and Kaupunkiliikenne Oy (rail infrastructure and systems: <1>urakoitsijaohjeistus@kaupunkiliikenne.fi</1>) to coordinate possible alternate arrangements with other alternate routes. Plan possible rail detours and mass transit benefits in advance and ensure the functioning of the route with HSL, Kaupunkiliikenne Oy and in terms of traffic lights, with the Helsinki Region Traffic Control Centre (<2>liikenteenhallintakeskus@hel.fi</2>, tel. +358 9 310 37555).",
+            "links": [
+              "mailto:infra@hsl.fi",
+              "mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi",
+              "mailto:liikenteenhallintakeskus@hel.fi"
+            ]
+          },
+          {
+            "tip": "With rail traffic detours, notify HSL at least 8 weeks in advance of a work that lasts up to 3 days, and 5 months in advance of a work that lasts over 3 days. If rail traffic is replaced by buses, notify HSL at least 3 months in advance of a work that lasts up to 3 days, and 5 months in advance of a work that lasts over 3 days. Further information: <0>Constructor – considering mass transit at worksites</0> and <1>Works in the vicinity of tram tracks – Kaupunkiliikenne Oy</1>",
+            "links": [
+              "http://hsl.fi/hsl/urakoitsijat",
+              "https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/"
+            ]
+          },
+          {
+            "tip": "Check if tram track structures (incl. trolley wire attachments on buildings) or systems have to be temporarily disabled or moved. Also check if work areas are close to track areas or within 2 metres of trolley wires or carrier cables (NOTE! This distance is 4 metres on the fast light rail line). If this is necessary, agree on the arrangements with HSL (traffic services: <0>infra@hsl.fi</0>) and Kaupunkiliikenne Oy (track infrastructure and systems: <1>urakoitsijaohjeistus@kaupunkiliikenne.fi</1>. Further information: <2>Contractor – how to consider public transport on worksites</2> and a submittable form, <3>Works close to a tram track – Kaupunkiliikenne Oy</3> (Works close to tram tracks or near light rail line 15’s track area).",
+            "links": [
+              "mailto:infra@hsl.fi",
+              "mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi",
+              "http://hsl.fi/hsl/urakoitsijat",
+              "https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/"
+            ]
+          },
+          {
+            "tip": "Implement unimpeded access to existing stops or plan the move of the stops, related guidance, and accessible pedestrian routes. Tram or bus stops may not be moved or closed without permission from HSL (<0>infra@hsl.fi</0>). Further information: <1>Contractor – how to consider public transport on worksites</1>.",
+            "links": [
+              "mailto:infra@hsl.fi",
+              "http://hsl.fi/hsl/urakoitsijat"
+            ]
+          },
+          {
+            "tip": "Announce significant works and possible rail route changes as early as in the planning stage, well in advance of the implementation (general releases, local releases)."
+          },
+          {
+            "tip": "In your guidance, make sure that the trams’ traffic light controls function during the works."
+          }
+        ],
+        "MUUT": [
+          {
+            "tip": "Study the area impacted by noise, dust or vibration from your project and the sensitive functions therein (apartments, schools, vital services such as health, business premises, restaurant terraces, research institutes, nature targets, religious facilities etc.). "
+          },
+          {
+            "tip": "Inform the operators and properties at least one week before or immediately upon becoming aware of the start date of the work, when carrying out works that cause noise, dust or vibrations. Advance notifications are required for significantly disruptive works, at least 30 days before the work starts. Give the residents and various operators sufficient time to prepare for the upcoming disruption and negotiate with the operators of particularly sensitive functions."
+          },
+          {
+            "tip": "Study the opportunities or scheduling and work methods of your project to minimise emissions for these functions."
+          },
+          {
+            "tip": "Prepare a notification of disruptive noise at least 30 days before the works begin: <0>Notification of noise</0>",
+            "links": [
+              "https://www.hel.fi/en/business-and-work/businesses-and-entrepreneurs/permits-and-facilities-for-businesses/environmental-permit-and-notifications/notification-of-noise"
+            ]
+          },
+          {
+            "tip": "Significantly noisy operations are generally not allowed in the vicinity of residential buildings, accommodation or care facilities at night (10 pm – 7 am)."
+          },
+          {
+            "tip": "Noisy work should be avoided close to daycare centres at 12–2 pm, close to schools during 8 am – 3 pm, and close to office buildings during 9 am – 3 pm."
+          },
+          {
+            "tip": "Implement measures that reduce the noise disturbance, such as movable noise barriers."
+          },
+          {
+            "tip": "Prepare a collection plan for worksite water as part of the site plan in advance (start with evaluating the volume and quality of the water that needs to be collected). Any release of worksite water into the stormwater network must be agreed with Helsinki Region Environmental Services (HSY, <0>https://yhteydenotto.hsy.fi/asiakaspalvelu</0>, tel. +358 9 1561 2110). Initially, confirm with HSY on the network effect of releasing worksite water to the stormwater network on nature values (e.g. uncontrolled release of facade renovation dust into the network). Additional information: <1>Sewage instructions for worksite water</1> and <2>https://www.hel.fi/static/ymk/esitteet/tyomaavesi.pdf</2>",
+            "links": [
+              "https://yhteydenotto.hsy.fi/asiakaspalvelu/s/?language=en_US",
+              "https://www.hsy.fi/vesi-ja-viemarit/tyomaavesien-viemarointiohje/",
+              "https://www.hel.fi/static/ymk/esitteet/tyomaavesi.pdf"
+            ]
+          },
+          {
+            "tip": "Wash the nearby streets daily, if the worksite features significant amounts of gravel or loose dirt. Prevent dusting from traffic lanes with a saline solution or by using a crushed stone surface. Also wash the worksite vehicles regularly."
+          },
+          {
+            "tip": "Wet and cover stored soil and stone material as well as construction waste. Wet and cover dusty loads during transportation outside of construction sites."
+          },
+          {
+            "tip": "Use dust collection equipment on open pit excavation devices (under 200 metres away from sensitive locations or when the quarry transportation route passes near dust-sensitive locations)."
+          },
+          {
+            "tip": "Verify that your solutions are compliant with the instructions: <0>https://www.hel.fi/static/ymk/esitteet/rakennustyomaapoly.pdf</0>",
+            "links": [
+              "https://www.hel.fi/static/ymk/esitteet/rakennustyomaapoly.pdf"
+            ]
+          },
+          {
+            "tip": "Prepare a notification of disruptive (noise and) vibration at least 30 days before the works begin: <0>Notification of noise</0>",
+            "links": [
+              "https://www.hel.fi/en/business-and-work/businesses-and-entrepreneurs/permits-and-facilities-for-businesses/environmental-permit-and-notifications/notification-of-noise"
+            ]
+          },
+          {
+            "tip": "Check the soil data and how much it conducts vibration. Plan to use work methods that minimise vibration."
+          }
+        ]
+      }
     },
     "hankkeenLiitteetForm": {
       "instructions": "Add attachments. Attachments added to the project will not be transferred to the applications."
@@ -721,13 +1076,16 @@
     "pageHeader": "Excavation notification",
     "requiredInstruction": "Filling out all fields marked with the asterisk * is required for submitting the application.",
     "perustiedot": {
-      "instructions": "<p>Any excavation, drilling or quarrying works carried out on streets, on pedestrian or cycling routes, on market squares or in parks in Helsinki require submitting an excavation notification. When an excavation notification is submitted, the authority is also automatically requested for a cable report if the identifier of a previously issued cable report is not attached to the application.</p><p>An essential part of the application is a nuisance management plan filled out by the user, the implementation of which will be monitored by the authority during the work. A temporary traffic arrangement plan is created as an attachment to the notification if the work affects pedestrian, cycling or motor vehicle traffic, or parking spaces are reserved for other use with a moving request sign.</p><p>The excavation work must be reported as operational in the winter season (1 December–14 May) and complete in all cases so that the work can be supervised and invoicing can be suspended or ended.</p><p>$t(kaivuilmoitusForm:requiredInstruction) The name of the work is required for saving the form.</p>"
+      "instructions": "<p>Any excavation, drilling or quarrying works carried out on streets, on pedestrian or cycling routes, on market squares or in parks in Helsinki require submitting an excavation notification. When an excavation notification is submitted, the authority is also automatically requested for a cable report if the identifier of a previously issued cable report is not attached to the application.</p><p>An essential part of the application is a nuisance management plan filled out by the user, the implementation of which will be monitored by the authority during the work. A temporary traffic arrangement plan is created as an attachment to the notification if the work affects pedestrian, cycling or motor vehicle traffic, or parking spaces are reserved for other use with a moving request sign.</p><p>The excavation work must be reported as operational in the winter season (1 December–14 May) and complete in all cases so that the work can be supervised and invoicing can be suspended or ended.</p><p>$t(kaivuilmoitusForm:requiredInstruction) The name of the work is required for saving the form.</p>",
+      "cableReportInstructions": "You can either apply for a new cable report or select cable reports already added to the project."
     },
     "alueet": {
       "instructions": "<p>Start drawing the work areas of the application by entering start and end dates for the work, whereby your project areas will be displayed. PLEASE NOTE! The work must be scheduled within the timespan for the project area.</p><p>You can edit a previously drawn area by grabbing its edge and dragging the point to the desired location.</p><p>If you want to draw smaller work areas within the project areas, activate the drawing tools on top of the map. Please note that the work areas must be drawn entirely within the project areas.</p><p>If you want to use the entire project area as a work area, activate the project area on the map and select ‘Use as work area’.</p><p>You can add several areas to the same application if they have the same timespan. If you want to enter several areas with different timespans, you must submit a separate application.</p><p>[TRANSLATION_PENDING]</p><p>$t(kaivuilmoitusForm:requiredInstruction)</p>",
       "areaInformationHeading": "Excavation notification for work areas",
       "startDate": "Work start date",
-      "endDate": "Work end date"
+      "endDate": "Work end date",
+      "liikennehaittaindeksienYhteenveto": "Summary of traffic inconvenience indices for worksites",
+      "areaNuisanceDefinitions": "Self-definition of worksite inconvenience"
     },
     "liitteetJaLisatiedot": {
       "instructions": "<p>Add plans for temporary traffic arrangements and any other attachments. A plan for temporary traffic arrangements is obligatory. If necessary, see <a>the City of Helsinki’s standard solution images</a>.</p><p>If filling out the form or carrying out the work have not been authorised in the login process, a PDF-format power of attorney must be provided as an attachment.</p><p>All fields marked with the asterisk * are necessary for submitting the application.</p>",
@@ -740,6 +1098,30 @@
     },
     "yhteenveto": {
       "instructions": "Check the information you entered and submit the notification for processing."
+    },
+    "haittojenHallinta": {
+      "instructions": "Your work may hinder different transport modes and local operations. Haitaton automatically calculates the significance of the nuisance for each project and work area separately for cycling, rail, local bus services, and car traffic. The traffic nuisance index describes the worst situation in the project area for these transport modes.",
+      "instructions2": "Nuisances are described on a scale defined for each transport mode, using numbers and colours (0/grey = not identified, 1–2/green = no significant nuisance, 3/yellow = likely nuisance, 4–5/red = significant nuisance). The results for transport modes other than those mentioned above are shown in numerical form only (0–5).",
+      "instructions3": "$t(hankeForm:haittojenHallintaForm:instructions2)",
+      "instructions4": "In your nuisance control plan, specify the measures you will take to control nuisances in your work areas. The nuisance control measures specified for the project areas will form the basis of the plan for the work areas. Please remember to go through all the work areas.",
+      "nuisanceControlPlanSubHeader": "$t(hankeForm:haittojenHallintaForm:nuisanceControlPlanSubHeader)",
+      "helperText": "Actions to be taken or agreed measures in work areas to control or prevent nuisances",
+      "haittaindeksi": "Nuisance index for work areas",
+      "labels": {
+        "YLEINEN": "[TRANSLATION_PENDING]Measures to control nuisances in work areas",
+        "PYORALIIKENNE": "Measures to control nuisances in work areas",
+        "AUTOLIIKENNE": "Measures to control nuisances in work areas",
+        "LINJAAUTOLIIKENNE": "Measures to control nuisances in work areas",
+        "RAITIOLIIKENNE": "Measures to control nuisances in work areas",
+        "MUUT": "Measures to control nuisances in work areas"
+      },
+      "carTrafficNuisanceType": {
+        "katuluokka": "$t(hankeForm:haittojenHallintaForm:carTrafficNuisanceType:katuluokka)",
+        "liikennemaara": "$t(hankeForm:haittojenHallintaForm:carTrafficNuisanceType:liikennemaara)",
+        "kaistahaitta": "$t(hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistahaitta)",
+        "kaistapituushaitta": "$t(hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistapituushaitta)",
+        "haitanKesto": "Duration of work"
+      }
     }
   },
   "hakemus": {
@@ -760,6 +1142,8 @@
       "endDate": "Estimated end date for work",
       "workArea": "Work area",
       "workAreaPlural": "Work areas",
+      "workAreaOverlapsSingle": "The work area extends beyond the boundary of the cable report; submit a <a>{{{applicationIdentifier}}</a> change notification to the cable report.",
+      "workAreaOverlapsMultiple": "The work area extends beyond the boundaries of several cable reports; submit a change notification.",
       "areaAdditionalInfo": "Further information about the area",
       "areaInfo": "Area information",
       "checkInfo": "Check the information you entered and send the application.",
@@ -779,8 +1163,17 @@
       "removeAreaDescription": "Are you sure you want to remove the area {{areaName}}?",
       "applicationAdditionalInfo": "Additional information on the application",
       "applicationInfo": "Application information",
+      "cableReportTitle": "Cable report",
+      "createCableReport": "Order a new cable report",
+      "applyingCableReport": "Applying for a cable report",
+      "useExisting": "Use existing",
+      "useExistingCableReports": "Use existing cable reports",
+      "newCableReport": "New cable report",
       "cableReports": "Identifiers of previous cable reports",
       "cableReportsHelp": "Select one from the list or enter another identifier and press ‘Enter’ to add it",
+      "noCableReports": "Haitaton could not find any previously added cable reports for the project. You can add other cable reports based on the ID.",
+      "cableReportApplicationIdentifier": "Cable report ID",
+      "cableReportTagInputHelp": "Enter the cable report ID and press Add",
       "placementContractsTitle": "Placement agreements",
       "placementContracts": "Placement agreement identifier",
       "placementContractsHelp": "Enter the placement agreement identifier and press ‘Add’",
@@ -790,8 +1183,17 @@
       "tyonTarkoitus": "Purpose of the work",
       "setWorkTimesToCopyArea": "Select timeframe to copy into work area",
       "downloadDecision": {
-        "PAATOS": "Download decision (PDF)"
-      }
+        "PAATOS": "Download decision (PDF)",
+        "TOIMINNALLINEN_KUNTO": "Download functional condition (PDF)",
+        "TYO_VALMIS": "Download completed work (PDF)"
+      },
+      "paperDecisionOrdered": "Order for printed decision placed",
+      "completionDate": {
+        "TOIMINNALLINEN_KUNTO": "Functional condition reported on {{lastValmistumisilmoitus.reportedAt}} for {{lastValmistumisilmoitus.dateReported}}",
+        "TYO_VALMIS": "Completion reported on {{lastValmistumisilmoitus.reportedAt}} for {{lastValmistumisilmoitus.dateReported}}"
+      },
+      "hankeAreaNuisanceControl": "Nuisance control in the project area",
+      "workAreasInProjectArea": "Work areas in project area {{projectName}}"
     },
     "notifications": {
       "saveSuccessLabel": "Application saved",
@@ -808,12 +1210,24 @@
       "noApplications": "No applications have been added to the project",
       "maxAttachmentsNumberExceeded": "The maximum number of attachments ({{maxNumber}} items) has been exceeded",
       "sentApplicationPersonalInfoNotification": "The personal information of the submitted application cannot be edited",
-      "sendApplicationDisabled": "The application can only be submitted by the person designated as the contact person for the application."
+      "sendApplicationDisabled": "The application can only be submitted by the person designated as the contact person for the application.",
+      "reportCompletionDateSuccessLabel": "Report sent",
+      "reportOperationalConditionSuccessText": "Report of functional condition submitted for approval.",
+      "reportWorkFinishedSuccessText": "Report of completion submitted for approval.",
+      "reportCompletionDateErrorLabel": "Submission failed",
+      "reportCompletionDateErrorText": "<0>An error occurred during submission. Try again later or contact Haitaton technical supoprt at <1>haitatontuki@hel.fi</1>.</0>"
     },
     "sendDialog": {
       "title": "Submit application?",
       "instructions": "The decision concerning your application and possible requests for additional information will be available in the Haitaton system. By submitting your application, you consent to being notified electronically.",
-      "instructionsPaperDecision": "You may also request a paper copy of the decision to an address you specify."
+      "instructionsPaperDecision": "You may also request a paper copy of the decision to an address you specify.",
+      "orderPaperDecision": "I want a printed copy of the decision",
+      "paperDecisionNotificationLabel": "Complete recipient information",
+      "paperDecisionNotificationText": "To receive a paper copy of the decision, please provide the recipient information here.",
+      "name": "Name",
+      "streetAddress": "Street address",
+      "postalCode": "Postal code",
+      "city": "City/town"
     },
     "sentDialog": {
       "title": "Application sent",
@@ -824,6 +1238,20 @@
       "title": "Choose a project area for the work area",
       "instructions": "The work area is located within several project areas. Choose the project area into which the work area will be added.",
       "cancelButton": "Cancel and remove the work area"
+    },
+    "operationalConditionDialog": {
+      "title": "Report functional condition?",
+      "instructions": "<p>If an excavation site is available for normal use during the winter season (1 January – 14 May), you can report it as being in functional condition, which suspends the usage fee of the area.</p><br><p>Traffic lanes, bicycle paths and the pavement must have a temporary asphalt surface. All traffic control devices must be removed from the site. Stone ash or finely crushed quarry may be used on pedestrian and other areas, if this has been agreed in advance with an inspector.</p><br><p>If the area is not paved temporarily, and a notification of functional condition has not been submitted, fees will continue to be charged until compliance has been restored.<br>The area’s surfaces must be paved in accordance with the street classification by 14 May, or the usage fees will resume on 15 May until the work is accepted as completed.</p><br>Enter the date on which you intend to report the work to be in functional condition. {{previousReportsIntro}}</p>",
+      "previousReportsIntro": "Previously, the work was reported to be in functional condition as follows:",
+      "previouslyReportedAt": "On {{reportedAt}} at {{dateReported}}",
+      "date": "Date"
+    },
+    "workFinishedDialog": {
+      "title": "Report completion?",
+      "instructions": "Enter the date on which you are reporting the work the be completed. {{previousReportsIntro}}</p>",
+      "previousReportsIntro": "Previously, the work was reported to be completed as follows:",
+      "previouslyReportedAt": "On {{reportedAt}} at {{dateReported}}",
+      "date": "Date"
     },
     "status": {
       "PENDING_CLIENT": "Visible to authorities",
@@ -847,7 +1275,11 @@
       "cancelApplication": "Cancel application",
       "editApplication": "Edit application",
       "deletePlacementContract": "Remove placement agreement identifier {{id}}",
-      "copyWorkArea": "Copy into work area"
+      "reportOperationalCondition": "Report functional condition",
+      "reportWorkFinished": "Report completion",
+      "copyWorkArea": "Copy into work area",
+      "removeSelection": "Clear selection",
+      "selectCableReport": "Select a cable report"
     },
     "errors": {
       "cancelConflict": "The application cannot be cancelled because it has entered the processing stage",
@@ -868,7 +1300,134 @@
     },
     "applicationTypeInstruction": "Select application type. Via the excavation report, you can also submit a cable report if you do not have one already.",
     "addApplicationTypes": {
+      "CABLE_REPORT": "$t(hakemus:applicationTypes:CABLE_REPORT)",
       "EXCAVATION_NOTIFICATION": "$t(hakemus:applicationTypes:EXCAVATION_NOTIFICATION) (and cable report)"
+    },
+    "missingFields": {
+      "notification": {
+        "pageLabel": "The following fields on this page are required in order to submit your application:",
+        "hakemusLabel": "The following steps are missing information needed to submit your application:"
+      },
+      "name": "$t(hakemus:labels:nimi)",
+      "workDescription": "$t(hakemus:labels:kuvaus)",
+      "postalAddress": {
+        "streetAddress": {
+          "streetName": "$t(form:yhteystiedot:labels:osoite)"
+        }
+      },
+      "constructionWork": "$t(hakemus:labels:tyossaKyse)",
+      "startTime": "$t(hakemus:labels:startDate)",
+      "endTime": "$t(hakemus:labels:endDate)",
+      "areas": "Drawing the working area",
+      "customerWithContacts": {
+        "customer": {
+          "name": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:yhteystiedot:labels:nimi)",
+          "registryKey": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:yhteystiedot:labels:ytunnus)",
+          "email": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:yhteystiedot:labels:email)",
+          "phone": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:yhteystiedot:labels:puhelinnumero)"
+        },
+        "contacts": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:validations:yhteyshenkilotMin)"
+      },
+      "contractorWithContacts": {
+        "customer": {
+          "name": "$t(form:yhteystiedot:titles:contractorWithContacts): $t(form:yhteystiedot:labels:nimi)",
+          "registryKey": "$t(form:yhteystiedot:titles:contractorWithContacts): $t(form:yhteystiedot:labels:ytunnus)",
+          "email": "$t(form:yhteystiedot:titles:contractorWithContacts): $t(form:yhteystiedot:labels:email)",
+          "phone": "$t(form:yhteystiedot:titles:contractorWithContacts): $t(form:yhteystiedot:labels:puhelinnumero)"
+        },
+        "contacts": "$t(form:yhteystiedot:titles:contractorWithContacts): $t(form:validations:yhteyshenkilotMin)"
+      },
+      "propertyDeveloperWithContacts": {
+        "customer": {
+          "name": "$t(form:yhteystiedot:titles:propertyDeveloperWithContacts): $t(form:yhteystiedot:labels:nimi)",
+          "registryKey": "$t(form:yhteystiedot:titles:propertyDeveloperWithContacts): $t(form:yhteystiedot:labels:ytunnus)",
+          "email": "$t(form:yhteystiedot:titles:propertyDeveloperWithContacts): $t(form:yhteystiedot:labels:email)",
+          "phone": "$t(form:yhteystiedot:titles:propertyDeveloperWithContacts): $t(form:yhteystiedot:labels:puhelinnumero)"
+        },
+        "contacts": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:validations:yhteyshenkilotMin)"
+      },
+      "representativeWithContacts": {
+        "customer": {
+          "name": "$t(form:yhteystiedot:titles:representativeWithContacts): $t(form:yhteystiedot:labels:nimi)",
+          "registryKey": "$t(form:yhteystiedot:titles:representativeWithContacts): $t(form:yhteystiedot:labels:ytunnus)",
+          "email": "$t(form:yhteystiedot:titles:representativeWithContacts): $t(form:yhteystiedot:labels:email)",
+          "phone": "$t(form:yhteystiedot:titles:representativeWithContacts): $t(form:yhteystiedot:labels:puhelinnumero)"
+        },
+        "contacts": "$t(form:yhteystiedot:titles:representativeWithContacts): $t(form:validations:yhteyshenkilotMin)"
+      }
+    }
+  },
+  "taydennyspyynto": {
+    "taydennyspyynto": "Request for supplementary information",
+    "notificationText": "Modify your application and correct the following items",
+    "fields": {
+      "CABLE_REPORT": {
+        "CUSTOMER": "$t(form:yhteystiedot:titles:customerWithContactsInfo)",
+        "INVOICING_CUSTOMER": "$t(form:yhteystiedot:titles:invoicingCustomerInfo)",
+        "PROPERTY_DEVELOPER": "$t(form:yhteystiedot:titles:propertyDeveloperInfo)",
+        "CONTRACTOR": "$t(form:yhteystiedot:titles:contractorInfo)",
+        "REPRESENTATIVE": "$t(form:yhteystiedot:titles:representativeInfo)",
+        "GEOMETRY": "$t(hakemus:labels:workAreaPlural)",
+        "START_TIME": "$t(hakemus:labels:startDate)",
+        "END_TIME": "$t(hakemus:labels:endDate)",
+        "IDENTIFICATION_NUMBER": "Haitaton project ID",
+        "CLIENT_APPLICATION_KIND": "$t(hakemus:labels:kuvaus)",
+        "APPLICATION_KIND": "$t(hakemus:labels:kuvaus)",
+        "POSTAL_ADDRESS": "$t(form:yhteystiedot:labels:osoite)",
+        "WORK_DESCRIPTION": "$t(hakemus:labels:kuvaus)",
+        "PROPERTY_IDENTIFICATION_NUMBER": "Property ID",
+        "ATTACHMENT": "$t(hankePortfolio:tabit:liitteet)",
+        "AREA": "$t(form:labels:pintaAla)",
+        "OTHER": "Other"
+      },
+      "EXCAVATION_NOTIFICATION": {
+        "CUSTOMER": "$t(form:yhteystiedot:titles:customerWithContactsInfo)",
+        "INVOICING_CUSTOMER": "$t(form:yhteystiedot:titles:invoicingCustomerInfo)",
+        "PROPERTY_DEVELOPER": "$t(form:yhteystiedot:titles:propertyDeveloperInfo)",
+        "CONTRACTOR": "$t(form:yhteystiedot:titles:contractorInfo)",
+        "REPRESENTATIVE": "$t(form:yhteystiedot:titles:representativeInfo)",
+        "GEOMETRY": "$t(hakemus:labels:workAreaPlural)",
+        "START_TIME": "$t(kaivuilmoitusForm:alueet:startDate)",
+        "END_TIME": "$t(kaivuilmoitusForm:alueet:endDate)",
+        "IDENTIFICATION_NUMBER": "Haitaton project ID",
+        "CLIENT_APPLICATION_KIND": "$t(hakemus:labels:kuvaus)",
+        "APPLICATION_KIND": "$t(hakemus:labels:kuvaus)",
+        "POSTAL_ADDRESS": "$t(form:yhteystiedot:labels:osoite)",
+        "WORK_DESCRIPTION": "$t(hakemus:labels:kuvaus)",
+        "PROPERTY_IDENTIFICATION_NUMBER": "Property ID",
+        "ATTACHMENT": "$t(hankePortfolio:tabit:liitteet)",
+        "AREA": "$t(form:labels:pintaAla)",
+        "OTHER": "Other"
+      }
+    }
+  },
+  "taydennys": {
+    "labels": {
+      "originalInformation": "Original",
+      "taydennykset": "Supplementary information provided",
+      "taydennys": "Supplement",
+      "cancelTitle": "Cancel the draft supplementary information?",
+      "cancelDescription": "Are you sure you want to cancel your response to the request for supplementary information? The changes you have made will be deleted.",
+      "originalAttachments": "Original attachments",
+      "addedAttachments": "Added attachments"
+    },
+    "buttons": {
+      "createTaydennys": "Supplement",
+      "editTaydennys": "Edit application (supplement)",
+      "sendTaydennys": "Submit supplementary information",
+      "cancelTaydennys": "Cancel the draft supplementary information"
+    },
+    "notifications": {
+      "sendSuccessLabel": "Supplementary information submitted",
+      "sendSuccessText": "The supplementary information has been submitted for processing.",
+      "sendErrorLabel": "Submission of supplementary information failed",
+      "sendErrorText": "$t(hakemus:notifications:reportCompletionDateErrorText)",
+      "cancelSuccessLabel": "The draft supplementary information was cancelled",
+      "cancelSuccessText": "The draft supplementary information was cancelled successfully"
+    },
+    "sendDialog": {
+      "title": "Submit the supplemented application for processing",
+      "description": "By submitting the information, your pending application will be updated with the supplemented information."
     }
   },
   "hankeSidebar": {
@@ -891,7 +1450,24 @@
       "EI_TARVETTA": "no need",
       "MERKITTAVA": "significant"
     },
-    "indexesNotCalculated": "No nuisance indices have been calculated."
+    "indexesNotCalculated": "No nuisance indices have been calculated.",
+    "tooltips": {
+      "PYORALIIKENNE": "<ul><li>0: No identified cycling route</li><li><li>1: Park route with potential bicycle traffic</li><li><li>2: Other bicycle traffic connections</li><li><li>3: Other cycling routes (or the route/connection classification is missing from the bicycle traffic background data)</li><li>5: A main cycling route or a street that is part of a main route</li></ul>",
+      "AUTOLIIKENNE": "A weighted nuisance index (0–5) is calculated for car traffic according to the areas it includes.",
+      "autoKatuluokka": "<ul><li>0: No identified street classification</li><li>1: Residential street, service road or low-traffic street</li><li>2: A city centre residential street, service road or low-traffic street</li><li>3: Local collector street</li><li>4: Regional collector street</li><li><li>5: Main street or motorway</li></ul>",
+      "autoliikenneMaara": "<ul><li>0: No identified car traffic</li><li>1: Less than 500 cars during a weekday</li><li><li>2: 500–1,499 cars during a weekday</li><li><li>3: 1 500–4,999 cars during a weekday</li><li><li>4: 5 000–9,999 cars during a weekday</li><li><li>5: 10,000 or more cars during a weekday</li></ul>",
+      "autoKaistaHaitta": "<ul><li>0: No impact on the number of car traffic lanes</li><li><li>1: $t(hanke:kaistaHaitta:YKSI_KAISTA_VAHENEE)</li><li>2: $t(hanke:kaistaHaitta:YKSI_KAISTA_VAHENEE_KAHDELLA_AJOSUUNNALLA)</li><li>3: $t(hanke:kaistaHaitta:USEITA_KAISTOJA_VAHENEE_AJOSUUNNILLA)</li><li>4: $t(hanke:kaistaHaitta:YKSI_AJOSUUNTA_POISTUU_KAYTOSTA)</li><li>5: $t(hanke:kaistaHaitta:USEITA_AJOSUUNTIA_POISTUU_KAYTOSTA)</li></ul>",
+      "autoKaistaPituusHaitta": "<ul><li>1: Will not affect traffic lane arrangements</li><li><li>2: Length of vehicle traffic lane impact is less than 10 m</li><li>3: Length of vehicle traffic lane impact is less than 10–99 m</li><li>4: Length of vehicle traffic lane impact is less than 100–499 m</li><li>5: Length of vehicle traffic lane impact is 500 m or more</li><li>5:",
+      "autoHankkeenKesto": "<ul><li>1: Project duration: less than 2 weeks</li><li><li>3: Project duration: 2 weeks to 3 months</li><li>5: Project duration: more than 3 months</li><li>5:",
+      "autoTyonKesto": "<ul><li>1: Work duration: less than 2 weeks</li><li><li>3: Work duration: 2 weeks to 3 months</li><li>5: Work duration: more than 3 months</li><li>5:",
+      "LINJAAUTOLIIKENNE": "<ul><li>0: No local bus traffic</li><li><li>2: Local bus traffic at off-peak times</li><li><li>3: Number of local bus routes do not exceed 10 buses per peak hour</li><li>4: Number of local bus routes do not exceed 20 buses per peak hour</li><li>5: Kamppi-Rautatientori area, Mannerheimintie, Kaisaniemenkatu, Hämeentie or local bus routes with more than 20 buses per peak hour</li></ul>",
+      "RAITIOLIIKENNE": "<ul><li>0: No identified tram rails</li><li>3: Section of the tram network without regular service</li><li><li>5: Section of the tram network with regular service</li><li><li>5:",
+      "MUUT": {
+        "meluHaitta": "<ul><li>0: $t(hanke:meluHaitta:EI_MELUHAITTAA)</li><li>1: $t(hanke:meluHaitta:SATUNNAINEN_MELUHAITTA)</li><li>3: $t(hanke:meluHaitta:TOISTUVA_MELUHAITTA)</li><li>5: $t(hanke:meluHaitta:JATKUVA_MELUHAITTA)</li></ul>",
+        "polyHaitta": "<ul><li>0: $t(hanke:polyHaitta:EI_POLYHAITTAA)</li><li>1: $t(hanke:polyHaitta:SATUNNAINEN_POLYHAITTA)</li><li>3: $t(hanke:polyHaitta:TOISTUVA_POLYHAITTA)</li><li>5: $t(hanke:polyHaitta:JATKUVA_POLYHAITTA)</li></ul>",
+        "tarinaHaitta": "<ul><li>0: $t(hanke:tarinaHaitta:EI_TARINAHAITTAA)</li><li>1: $t(hanke:tarinaHaitta:SATUNNAINEN_TARINAHAITTA)</li><li>3: $t(hanke:tarinaHaitta:TOISTUVA_TARINAHAITTA)</li><li>5: $t(hanke:tarinaHaitta:JATKUVA_TARINAHAITTA)</li></ul>"
+      }
+    }
   },
   "homepage": {
     "pageTitle": "Welcome to the Haitaton service",
@@ -1021,7 +1597,8 @@
       "labels": {
         "draft": "The project is in a draft state. Its visibility to other projects is limited and applications cannot be added to it.",
         "insufficientPhases": "$t(hankePortfolio:draftState:labels:draft) The following stages contain missing information:",
-        "missingFields": "$t(hankePortfolio:draftState:labels:draft) The following fields on this page are mandatory to publish the project:"
+        "missingFields": "$t(hankePortfolio:draftState:labels:draft) The following fields on this page are mandatory to publish the project:",
+        "missingInformationForHaittojenhallinta": "$t(projectPortfolio:draftState:labels:draft) The following information on the form is required to complete nuisance control:"
       }
     }
   },
@@ -1115,7 +1692,7 @@
       "userUpdatedErrorLabel": "Error in the updating process",
       "userUpdatedErrorText": "<0>An error occurred when updating user information. Please try again later or contact the Haitaton technical support by email <1>haitatontuki@hel.fi</1>.</0>",
       "userIdentifiedLabel": "Login successful",
-      "userIdentifiedText": "Login successful. You have now been added to the project ({{hankeNimi}} {{hankeTunnus}}).",
+      "userIdentifiedText": "You have now been added to the project ({{hankeNimi}} {{hankeTunnus}}).",
       "userIdentifiedError": "Login failed",
       "invitationSentSuccessLabel": "Invitation link sent",
       "invitationSentSuccessText": "Invitation link sent to the address {{email}}.",
@@ -1258,5 +1835,23 @@
     "text": "",
     "imageLabel": "Image by: Lille Santanen",
     "imageAltText": "An illustration of a construction site"
+  },
+  "workInstructions": {
+    "sideNav": {
+      "externalLinks": {
+        "permitsAndInstructions": {
+          "label": "Permits and instructions for construction site",
+          "url": "https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/permits-and-instructions-for-construction-site"
+        },
+        "payments": {
+          "label": "Fees",
+          "url": "https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/permits-and-instructions-for-construction-site/working-on-streets-and-in-parks#fees--responsibilities-and-current-area-rentals-and-excavation-notifications"
+        },
+        "temporaryTrafficArrangement": {
+          "label": "Instructions and standard solution images for temporary traffic arrangements",
+          "url": "https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/permits-and-instructions-for-construction-site/working-on-streets-and-in-parks#instructions-for-temporary-traffic-arrangements-and-planning"
+        }
+      }
+    }
   }
 }

@@ -25,8 +25,14 @@ const languageLabels = {
 };
 
 function HaitatonHeader() {
-  const { HOME, PUBLIC_HANKKEET, PUBLIC_HANKKEET_MAP, HANKEPORTFOLIO, JOHTOSELVITYSHAKEMUS } =
-    useLocalizedRoutes();
+  const {
+    HOME,
+    PUBLIC_HANKKEET,
+    PUBLIC_HANKKEET_MAP,
+    HANKEPORTFOLIO,
+    JOHTOSELVITYSHAKEMUS,
+    WORKINSTRUCTIONS,
+  } = useLocalizedRoutes();
   const { t, i18n } = useTranslation();
   const user = useUser();
   const isAuthenticated = useIsAuthenticated();
@@ -47,10 +53,10 @@ function HaitatonHeader() {
     path: HANKEPORTFOLIO.path,
     end: false,
   });
-
-  const workInstructionsAriaLabel = `${t('routes:WORKINSTRUCTIONS:headerLabel')}. ${t(
-    'common:components:link:openInNewTabAriaLabel',
-  )} ${t('common:components:link:openInExternalDomainAriaLabel')}`;
+  const isWorkInstructionsPath = useMatch({
+    path: WORKINSTRUCTIONS.path,
+    end: false,
+  });
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -152,6 +158,7 @@ function HaitatonHeader() {
           errorText={t('authentication:genericError')}
           errorCloseAriaLabel={t('common:ariaLabels:closeButtonLabelText')}
           loggingInText={t('authentication:loggingIn')}
+          redirectionProps={{ language: i18n.language }}
           fixedRightPosition
         />
       </Header.ActionBar>
@@ -190,16 +197,26 @@ function HaitatonHeader() {
             active={Boolean(isHankePortfolioPath)}
             data-testid="hankeListLink"
           />
-          <Header.Link
-            label={t('routes:WORKINSTRUCTIONS:headerLabel')}
-            as={Link}
-            href={t('routes:WORKINSTRUCTIONS:path')}
-            external
-            openInNewTab
-            aria-label={workInstructionsAriaLabel}
-          >
-            {t('routes:WORKINSTRUCTIONS:headerLabel')}
-          </Header.Link>
+          {features.hanke ? (
+            <Header.Link
+              label={t('routes:WORKINSTRUCTIONS:headerLabel')}
+              as={NavLink}
+              to={WORKINSTRUCTIONS.path}
+              active={Boolean(isWorkInstructionsPath)}
+            >
+              {t('routes:WORKINSTRUCTIONS:headerLabel')}
+            </Header.Link>
+          ) : (
+            <Header.Link
+              label={t('routes:WORKINSTRUCTIONS:headerLabel')}
+              as={Link}
+              href={t('workInstructions:sideNav:externalLinks:permitsAndInstructions:url')}
+              external
+              openInNewTab
+            >
+              {t('routes:WORKINSTRUCTIONS:headerLabel')}
+            </Header.Link>
+          )}
         </Header.NavigationMenu>
       )}
       <HankeCreateDialog isOpen={showHankeCreateDialog} onClose={closeHankeCreateDialog} />

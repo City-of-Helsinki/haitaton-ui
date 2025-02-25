@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { merge } from 'lodash';
 import {
@@ -26,6 +26,7 @@ import {
   yhteystiedotSchema,
   liitteetSchema,
   alueetSchema,
+  haittojenhallintaSuunnitelmaSchema,
 } from './validationSchema';
 import { useApplicationsForHanke } from '../application/hooks/useApplications';
 import {
@@ -52,6 +53,8 @@ import { isApplicationDraft, isContactIn } from '../application/utils';
 import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import useSendApplication from '../application/hooks/useSendApplication';
 import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
+import HaittojenHallinta from './HaittojenHallinta';
+import FormErrorsNotification from './components/FormErrorsNotification';
 
 type Props = {
   hankeData: HankeData;
@@ -96,10 +99,12 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       propertyDeveloperWithContacts: null,
     },
   };
+  const [validationContext, setValidationContext] = useState({ application });
   const formContext = useForm<KaivuilmoitusFormValues>({
     mode: 'onTouched',
     defaultValues: merge(initialValues, convertApplicationDataToFormState(application)),
     resolver: yupResolver(validationSchema),
+    context: validationContext,
   });
   const {
     getValues,
@@ -126,18 +131,21 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     showSaveNotification,
     setShowSaveNotification,
   } = useSaveApplication<KaivuilmoitusData, KaivuilmoitusCreateData, KaivuilmoitusUpdateData>({
-    onCreateSuccess({ id }) {
-      setValue('id', id);
+    onCreateSuccess(data) {
+      setValidationContext({ application: data });
+      setValue('id', data.id);
     },
-    onUpdateSuccess({
-      applicationData: {
-        customerWithContacts,
-        contractorWithContacts,
-        propertyDeveloperWithContacts,
-        representativeWithContacts,
-        invoicingCustomer,
-      },
-    }) {
+    onUpdateSuccess(data) {
+      setValidationContext({ application: data });
+      const {
+        applicationData: {
+          customerWithContacts,
+          contractorWithContacts,
+          propertyDeveloperWithContacts,
+          representativeWithContacts,
+          invoicingCustomer,
+        },
+      } = data;
       if (customerWithContacts) {
         setValue(
           'applicationData.customerWithContacts.customer.yhteystietoId',
@@ -232,12 +240,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     setShowSendDialog(false);
   }
 
-  function handleStepChange() {
-    if (isDirty) {
-      saveApplication();
-    }
-  }
-
   function saveAndQuit() {
     function handleSuccess(data: Application<KaivuilmoitusData>) {
       navigateToApplicationView(data.id?.toString());
@@ -268,6 +270,8 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     ['applicationData.name'],
     // Areas page
     ['selfIntersectingPolygon'],
+    // Haittojenhallinta page
+    [],
     // Contacts page
     [
       'applicationData.customerWithContacts.customer.registryKey',
@@ -301,6 +305,12 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       validationSchema: alueetSchema,
     },
     {
+      element: <HaittojenHallinta hankeData={hankeData} />,
+      label: t('hankeForm:haittojenHallintaForm:header'),
+      state: StepState.available,
+      validationSchema: haittojenhallintaSuunnitelmaSchema,
+    },
+    {
       element: <Contacts hankeTunnus={hankeData.hankeTunnus} />,
       label: t('form:headers:yhteystiedot'),
       state: StepState.available,
@@ -319,11 +329,21 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       validationSchema: liitteetSchema,
     },
     {
-      element: <ReviewAndSend attachments={existingAttachments} />,
+      element: <ReviewAndSend hankealueet={hankeData.alueet} attachments={existingAttachments} />,
       label: t('form:headers:yhteenveto'),
       state: StepState.available,
     },
   ];
+
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
+  const lastStep = activeStepIndex === formSteps.length - 1;
+
+  function handleStepChange(stepIndex: number) {
+    setActiveStepIndex(stepIndex);
+    if (isDirty) {
+      saveApplication();
+    }
+  }
 
   const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
 
@@ -340,13 +360,22 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         subHeading={`${hankeData.nimi} (${hankeData.hankeTunnus})`}
         formSteps={formSteps}
         formData={watchFormValues}
+        topElement={
+          <FormErrorsNotification
+            data={watchFormValues}
+            validationContext={{ application: watchFormValues }}
+            activeStepIndex={activeStepIndex}
+            lastStep={lastStep}
+          />
+        }
+        validationContext={{ application: watchFormValues }}
         onStepChange={handleStepChange}
         isLoading={attachmentsUploading}
         isLoadingText={attachmentsUploadingText}
         stepChangeValidator={validateStepChange}
         onSubmit={handleSubmit(openSendDialog)}
       >
-        {function renderFormActions(activeStepIndex, handlePrevious, handleNext) {
+        {function renderFormActions(activeStep, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {
             // Make sure that application name is valid before saving and quitting
             const applicationValid = await trigger('applicationData.name', {
@@ -365,7 +394,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
             ? attachmentsUploadingText
             : t('common:buttons:savingText');
 
-          const lastStep = activeStepIndex === formSteps.length - 1;
           const isDraft = isApplicationDraft(getValues('alluStatus') as AlluStatus | null);
           const isContact = isContactIn(signedInUser, getValues('applicationData'));
           const showSendButton = lastStep && isDraft && isValid;
@@ -373,7 +401,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
 
           return (
             <FormActions
-              activeStepIndex={activeStepIndex}
+              activeStepIndex={activeStep}
               totalSteps={formSteps.length}
               onPrevious={handlePrevious}
               onNext={handleNext}

@@ -34,7 +34,6 @@ import ApplicationAddDialog from '../../application/components/ApplicationAddDia
 import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
 import CompressedAreaIndex from '../hankeIndexes/CompressedAreaIndex';
-import HankeDraftStateNotification from '../edit/components/HankeDraftStateNotification';
 import { useApplicationsForHanke } from '../../application/hooks/useApplications';
 import ApplicationList from '../../application/components/ApplicationList';
 import ErrorLoadingText from '../../../common/components/errorLoadingText/ErrorLoadingText';
@@ -59,6 +58,8 @@ import HaittaIndexes from '../../common/haittaIndexes/HaittaIndexes';
 import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
 import HaittaIndex from '../../common/haittaIndexes/HaittaIndex';
 import HaittaTooltipContent from '../../common/haittaIndexes/HaittaTooltipContent';
+import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
+import { hankeSchema } from '../edit/hankeSchema';
 
 type AreaProps = {
   area: HankeAlue;
@@ -338,7 +339,7 @@ const HankeView: React.FC<Props> = ({
 
       <InformationViewHeader backgroundColor="var(--color-summer-light)">
         <MainHeading>{hankeData?.nimi}</MainHeading>
-        <Text tag="h2" styleAs="h3" weight="bold" spacingBottom="l">
+        <Text tag="h2" styleAs="h3" weight="bold" spacingBottom="l" data-testid="hanke-tunnus">
           {hankeData?.hankeTunnus}
         </Text>
         <Text tag="p" styleAs="body-s" spacingBottom="l">
@@ -412,7 +413,13 @@ const HankeView: React.FC<Props> = ({
               generated={hankeData.generated}
               className={styles.stateNotification}
             />
-            <HankeDraftStateNotification hanke={hankeData} className={styles.stateNotification} />
+            <FormPagesErrorSummary
+              data={hankeData}
+              schema={hankeSchema}
+              validationContext={{ hanke: hankeData }}
+              notificationLabel={t('hankePortfolio:draftState:labels:insufficientPhases')}
+              testId="hankeDraftStateNotification"
+            />
           </FeatureFlags>
 
           <Tabs initiallyActiveTab={features.hanke ? initiallyActiveTab : 0}>

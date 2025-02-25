@@ -22,13 +22,15 @@ import MainHeading from '../../common/components/mainHeading/MainHeading';
 import HankeCreateDialog from '../hanke/hankeCreateDialog/HankeCreateDialog';
 import JohtoselvitysCreateDialog from '../johtoselvitys/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
 import useIsAuthenticated from '../auth/useIsAuthenticated';
+import useLocale from '../../common/hooks/useLocale';
 
 const FEEDBACK_NOTIFICATION_CLOSED = 'feedback-notification-closed';
 
 const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation();
   const { login } = useOidcClient();
-  const { PUBLIC_HANKKEET_MAP, PUBLIC_HANKKEET_LIST, HANKEPORTFOLIO } = useLocalizedRoutes();
+  const { PUBLIC_HANKKEET_MAP, PUBLIC_HANKKEET_LIST, HANKEPORTFOLIO, WORKINSTRUCTIONS } =
+    useLocalizedRoutes();
   const [feedbackOpen, setFeedbackOpen] = useState(
     !sessionStorage.getItem(FEEDBACK_NOTIFICATION_CLOSED),
   );
@@ -36,6 +38,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [showJohtoselvitysCreateDialog, setShowJohtoselvitysCreateDialog] = useState(false);
   const isAuthenticated = useIsAuthenticated();
   const features = useFeatureFlags();
+  const locale = useLocale();
 
   const loggedInLinks = [
     {
@@ -68,9 +71,11 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
     },
     {
       key: 'ohjeet',
-      actionLink: t('routes:WORKINSTRUCTIONS:path'),
+      actionLink: features.hanke
+        ? WORKINSTRUCTIONS.path
+        : t('workInstructions:sideNav:externalLinks:permitsAndInstructions:url'),
       imgProps: undefined,
-      external: true,
+      external: !features.hanke,
       featureFlags: [],
     },
   ];
@@ -89,6 +94,13 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
       imgProps: { src: img1, width: 384, height: 245 },
       external: false,
       featureFlags: ['publicHankkeet'],
+    },
+    {
+      key: 'ohjeet',
+      actionLink: WORKINSTRUCTIONS.path,
+      imgProps: undefined,
+      external: false,
+      featureFlags: ['hanke'],
     },
   ];
 
@@ -116,6 +128,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
             loggingInText={t('authentication:loggingIn')}
             errorText={t('authentication:loggingInErrorLabel')}
             spinnerColor="var(--color-coat-of-arms)"
+            redirectionProps={{ language: locale }}
           >
             {t('homepage:loginContainer:button')}
           </LoginButton>
@@ -180,7 +193,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
           <Container>
             <p>
               {t('homepage:info')}
-              <Link href="#" onClick={() => login()}>
+              <Link href="#" onClick={() => login({ language: locale })}>
                 {t('homepage:info_link')}
               </Link>
             </p>
@@ -211,6 +224,7 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
               </Notification>
             </div>
           )}
+          {loginContainer}
 
           <Grid
             templateColumns={`repeat(auto-fit, minmax(300px, ${
@@ -245,8 +259,6 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
               );
             })}
           </Grid>
-
-          {loginContainer}
         </article>
 
         <HankeCreateDialog isOpen={showHankeCreateDialog} onClose={closeHankeCreateDialog} />

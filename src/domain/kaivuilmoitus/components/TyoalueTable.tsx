@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useFieldArray } from 'react-hook-form';
+import { useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { Box, Flex } from '@chakra-ui/react';
 import { IconAlertCircleFill, IconLinkExternal, IconLocation, IconTrash, Table } from 'hds-react';
@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import { Feature } from 'ol';
 import { Geometry, Polygon as OlPolygon } from 'ol/geom';
 import VectorSource from 'ol/source/Vector';
+import { uniqueId } from 'lodash';
 import useDrawContext from '../../../common/components/map/modules/draw/useDrawContext';
 import { KaivuilmoitusFormValues } from '../types';
 import { getAreaDefaultName } from '../../application/utils';
@@ -18,6 +19,7 @@ import {
   ApplicationArea,
   ApplicationGeometry,
   HankkeenHakemus,
+  Tyoalue,
 } from '../../application/types/application';
 import { booleanIntersects } from '@turf/boolean-intersects';
 import booleanContains from '@turf/boolean-contains';
@@ -108,12 +110,8 @@ export default function TyoalueTable({
     state: { selectedFeature },
     actions: { setSelectedFeature },
   } = useDrawContext();
-  const { fields: tyoalueet, remove } = useFieldArray<
-    KaivuilmoitusFormValues,
-    `applicationData.areas.${number}.tyoalueet`
-  >({
-    name: `applicationData.areas.${alueIndex}.tyoalueet`,
-  });
+  const { getValues, setValue } = useFormContext<KaivuilmoitusFormValues>();
+  const tyoalueet = getValues(`applicationData.areas.${alueIndex}.tyoalueet`) as Tyoalue[];
   const [areaToRemove, setAreaToRemove] = useState<TableData | null>(null);
 
   const tableRows: TableData[] = tyoalueet.map((alue, index) => {
@@ -146,7 +144,7 @@ export default function TyoalueTable({
       true,
     );
     return {
-      id: alue.id,
+      id: uniqueId(),
       nimi: areaName,
       notification: overlappingNotification,
       pintaAla: Number(getSurfaceArea(alue.openlayersFeature!.getGeometry()!).toFixed(0)),
@@ -210,7 +208,11 @@ export default function TyoalueTable({
 
   function confirmRemoveArea() {
     if (areaToRemove !== null) {
-      remove(areaToRemove.index);
+      setValue(
+        `applicationData.areas.${alueIndex}.tyoalueet`,
+        tyoalueet.filter((_, i) => i !== areaToRemove.index),
+        { shouldValidate: true, shouldDirty: true },
+      );
       drawSource.removeFeature(areaToRemove.feature!);
       setAreaToRemove(null);
       if (tyoalueet.length > 1 && onRemoveArea) {

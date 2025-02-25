@@ -6,12 +6,21 @@
     "loginButton": "Logga in",
     "logoutButton": "Logga ut",
     "homePageLink": "Återgå till Haitatons <a>framsida.</a>",
-    "supportLink": "Du kan också kontakta Haitaton tekniska support på e-postadressen <a>haitatontuki@hel.fi.</a>"
+    "supportLink": "Du kan också kontakta Haitaton tekniska support på e-postadressen <a>haitatontuki@hel.fi.</a>",
+    "loggingIn": "Loggar in...",
+    "loggingOut": "Loggar ut...",
+    "loggingInErrorLabel": "Ett fel uppstod vid inloggningen",
+    "logoutError": "Ett fel uppstod vid utloggningen",
+    "noADPermissionHeading": "Ingen användarrätt till Haitaton ärenden",
+    "noADPermissionText": "Du har inte rätt till AD-autentisering. <a>Logga ut</a> från Haitaton och försök på nytt via suomi.fi-identifikationen.",
+    "noADUserNameHeading": "Inloggningen misslyckades",
+    "noADUserNameText": "Inloggning via AD misslyckades eftersom Haiton inte fick ditt namn vid inloggningen. Kontakta IT-supporten i din organisation eller <a>logga ut</a> från Haitaton och försök igen via suomi.fi-identifikation."
   },
   "common": {
     "increment": "Lägg till",
     "yes": "Ja",
     "no": "Nej",
+    "removed": "Makulerad",
     "confirmationDialog": {
       "interruptDialog": {
         "titleText": "Du är på väg att lämna formuläret",
@@ -62,6 +71,10 @@
       },
       "footer": {
         "backToTop": "Tillbaka upp"
+      },
+      "loadingSpinner": {
+        "loadingText": "Laddar",
+        "loadingFinishedText": "Uppladdningen är klar"
       }
     },
     "error": "Det inträffade ett fel. Försök på nytt.",
@@ -81,7 +94,8 @@
     },
     "haittaIndex": {
       "fillHaitat": "Fyll i uppskattningar av olägenheterna i området för att se indexen för olägenheter",
-      "haittaIndexNumber": "Värde för indexet för olägenheter:"
+      "haittaIndexNumber": "Värde för indexet för olägenheter:",
+      "haittaIndexSelite": "Områdesspecifikt olägenhetsindex (0–5)"
     }
   },
   "form": {
@@ -99,7 +113,9 @@
       "dateMax": "Sista möjliga dag är {{max}}",
       "yhteyshenkilotMin": "Minst en kontaktperson ska vara inställd",
       "emailAlreadyUsedInContacts": "Den e-postadress du valt finns redan i projektets användarhantering. Lägg till en kontakt från rullgardinsmeyn.",
-      "emailAlreadyUsedInUserManagement": "Den e-postadress du valt finss redan hos en annan användare."
+      "emailAlreadyUsedInUserManagement": "Den e-postadress du valt finss redan hos en annan användare.",
+      "dateBeforeStart": "Datumet kan inte vara tidigare än inledningsdatumet för arbetet i ansökan ({{startDate}})",
+      "dateInFuture": "Datumet kan inte vara i framtiden"
     },
     "errors": {
       "areaRequired": "Det krävs minst ett område",
@@ -112,11 +128,13 @@
     },
     "headers": {
       "perustiedot": "Basdata",
-      "alueet": "Områden",
+      "alueet": "Ritning av områden",
       "yhteystiedot": "Kontaktuppgifter",
       "liitteetJaLisatiedot": "Bilagor och ytterligare information",
+      "liitteet": "Bilagor",
       "yhteenveto": "Sammanfattning",
-      "hakemusInfo": "Ansökans uppgifter"
+      "hakemusInfo": "Ansökans uppgifter",
+      "haittojenHallinta": "Hantering av olägenheter"
     },
     "labels": {
       "pintaAla": "Areal",
@@ -125,6 +143,7 @@
       "roleHelper": "Egentlig roll i arbetet",
       "fromHelsinkiProfile": "Sökt på basis av Helsingforsprofilen",
       "addressInformation": "Adressuppgifter",
+      "areas": "Områden",
       "kokonaisAla": "Områdenas totala areal",
       "areaName": "Områdets namn",
       "timespan": "Tidsperiod",
@@ -158,10 +177,12 @@
       "fillWithOwnInformation": "Fyll i med egna uppgifter"
     },
     "helperTexts": {
-      "dateInForm": "Ge i formatet DD.MM.ÅÅÅÅ",
-      "areaName": "Du kan valfritt ge området ett namn"
+      "dateInForm": "Ge i formatet DD.MM.ÅÅÅÅ.",
+      "areaName": "Du kan valfritt ge området ett namn",
+      "isPublicInformation": "Detta kommer att publiceras."
     },
     "requiredInstruction": "Alla fält markerade med * är obligatoriska.",
+    "requiredForPublicationInstruction": "Fält som är märkta med stjärna * krävs för att publicera projektet.",
     "yhteystiedot": {
       "header": "Kontaktuppgifter",
       "instructions": "Parterna att läggas till projektet får en länk med e-post via vilken de kan ansluta sig till projektet i Haitaton. Därefter kan de se projektet och skapa ansökningar till det.",
@@ -209,6 +230,8 @@
         "sukunimi": "Efternamn",
         "ytunnus": "FO-nummer",
         "yTunnusTaiHetu": "FO-nummer eller personbeteckning",
+        "henkilotunnus": "Personbeteckning",
+        "muuTunnus": "FO-nummer, personbeteckning eller annan unik identifikationskod",
         "osoite": "Gatuadress",
         "postinumero": "Postnummer",
         "postitoimipaikka": "Postort",
@@ -229,7 +252,8 @@
       },
       "helperTexts": {
         "otherPartyRole": "Partens roll i projektet",
-        "yhteyshenkilo": "Du kan söka personer som redan lagts till genom att skriva eller välja ut en rullgardinsmeny eller lägga till via ny kontaktperson."
+        "yhteyshenkilo": "Du kan söka personer som redan lagts till genom att skriva eller välja ut en rullgardinsmeny eller lägga till via ny kontaktperson.",
+        "registryKey": "Koden är dold på grund av dataskyddet. Om du vill kan du spara en ny kod genom att ersätta ******** texten med den nya koden."
       },
       "contactType": {
         "YKSITYISHENKILO": "Privatperson",
@@ -362,19 +386,30 @@
         "title": "Haitaton – Ändra ansökan om ledningsutredning"
       }
     },
+    "EDIT_JOHTOSELVITYSTAYDENNYS": {
+      "path": "/kompletteringavledningsutredning/:id/redigera",
+      "headerLabel": "Redigera kompletteringen till ansökan om ledningsutredning",
+      "meta": {
+        "title": "Haitaton – Redigera kompletteringen till ansökan om ledningsutredning"
+      }
+    },
     "KAIVUILMOITUSHAKEMUS": {
-      "path": "/hankesalkku/:hankeTunnus/kaivuilmoitus",
-      "headerLabel": "Skapa ny ansökan om  grävningsanmälan",
+      "path": "/projektportfolj/:hankeTunnus/gravningsanmalan",
+      "headerLabel": "Skapa ny ansökan om grävningsanmälan",
       "meta": {
         "title": "Haitaton – Skapa ny ansökan om grävningsanmälan"
       }
     },
     "EDIT_KAIVUILMOITUSHAKEMUS": {
-      "path": "/kaivuilmoitus/:id/muokkaa",
+      "path": "/gravningsanmalan/:id/redigera",
       "headerLabel": "Ändra ansökan om grävningsanmälan",
       "meta": {
         "title": "Haitaton – Ändra ansökan om grävningsanmälan"
       }
+    },
+    "EDIT_KAIVUILMOITUSTAYDENNYS": {
+      "path": "/kompletteringavgravningsanmalan/:id/redigera",
+      "meta": {}
     },
     "HAITATON_INFO": {
       "path": "/info",
@@ -405,10 +440,26 @@
       }
     },
     "WORKINSTRUCTIONS": {
-      "path": "https://www.hel.fi/sv/stadsmiljo-och-trafik/tomter-och-bygglov/anvisningar-for-byggskedet",
+      "path": "/arbetsanvisningar",
       "headerLabel": "Arbetsanvisningar",
       "meta": {
         "title": "Haitaton - Arbetsanvisningar"
+      }
+    },
+    "CARDS_INDEX": {
+      "path": "/arbetsanvisningar/hantering-av-olagenheter/",
+      "headerLabel": "Ytterligare informationskort för hanterin av olågenheter",
+      "meta": {
+        "title": "Haitaton - Arbetsanvisningar - Ytterligare informationskort för hanterin av olågenheter"
+      }
+    },
+    "CARD": {
+      "path": "/arbetsanvisningar/hantering-av-olagenheter/kort/",
+      "basicLevel": "grundlaggande",
+      "additionalLevel": "ytterligare",
+      "headerLabel": "Ytterligare informationskort för hanterin av olågenheter",
+      "meta": {
+        "title": "Haitaton - Arbetsanvisningar - Ytterligare informationskort för hanterin av olågenheter"
       }
     },
     "MANUAL": {
@@ -467,7 +518,12 @@
       "VAIHTOLAVA": "Växelflak"
     },
     "kaistaHaitta": {
-      "EI_VAIKUTA": "Påverkar inte"
+      "EI_VAIKUTA": "Påverkar inte",
+      "YKSI_KAISTA_VAHENEE": "En körfil mindre – körriktningen ännu i bruk",
+      "YKSI_KAISTA_VAHENEE_KAHDELLA_AJOSUUNNALLA": "En körfil mindre i två körriktningar – körriktningarna ännu i bruk",
+      "USEITA_KAISTOJA_VAHENEE_AJOSUUNNILLA": "Flera körfiler mindre i körriktningarna – körriktningarna ännu i bruk",
+      "YKSI_AJOSUUNTA_POISTUU_KAYTOSTA": "En körriktning för biltrafiken stängs av",
+      "USEITA_AJOSUUNTIA_POISTUU_KAYTOSTA": "Flera körriktningar för biltrafiken stängs av"
     },
     "kaistaPituusHaitta": {
       "EI_VAIKUTA_KAISTAJARJESTELYIHIN": "Påverkar inte",
@@ -522,10 +578,10 @@
     "nextButton": "Nästa",
     "previousButton": "Föregående",
     "insertFieldError": "Skriv in fält",
-    "savingSuccessHeader": "Utkast sparat",
-    "savingSuccessText": "Utkastet är sparat i Projektlistan",
+    "savingSuccessHeader": "Projektet sparat",
+    "savingSuccessText": "Projektet är sparat i egna projekt",
     "savingFailHeader": "Något gick fel",
-    "savingFailText": "Utkastet kunde inte sparas, försök på nytt",
+    "savingFailText": "Projektet kunde inte sparas, försök på nytt",
     "saveAndQuitSuccessHeader": "Projektet har sparats",
     "saveAndQuitSuccessText": "Projektet {{name}} ({{hankeTunnus}}) har sparats i egna projekt.",
     "closeAriaLabel": "Lämna formuläret utan att spara",
@@ -552,6 +608,7 @@
       "polyHaittaShort": "Damm",
       "tarinaHaitta": "Vibrationsstörning",
       "tarinaHaittaShort": "Vibration",
+      "checkSurrounding": "Kontrollera även andra kringliggande funktioner",
       "tyomaaKatuosoite": "Gatuadress",
       "onYKTHanke": "Projektet är ett gemensamt kommunaltekniskt arbete",
       "sukunimi": "Efternamn",
@@ -589,7 +646,14 @@
         "meluHaitta": "{{alueName}}: $t(hankeForm:labels:meluHaitta)",
         "polyHaitta": "{{alueName}}: $t(hankeForm:labels:polyHaitta)",
         "tarinaHaitta": "{{alueName}}: $t(hankeForm:labels:tarinaHaitta)",
-        "haittojenhallintasuunnitelma": {}
+        "haittojenhallintasuunnitelma": {
+          "YLEINEN": "{{alueName}}: $t(hankeForm:labels:haittojenhallintasuunnitelma.YLEINEN)",
+          "PYORALIIKENNE": "{{alueName}}: $t(hankeForm:haittojenHallintaForm:nuisanceType.PYORALIIKENNE): $t(hankeForm:labels:haittojenhallintasuunnitelma.PYORALIIKENNE)",
+          "AUTOLIIKENNE": "{{alueName}}: $t(hankeForm:haittojenHallintaForm:nuisanceType.AUTOLIIKENNE): $t(hankeForm:labels:haittojenhallintasuunnitelma.AUTOLIIKENNE)",
+          "LINJAAUTOLIIKENNE": "{{alueName}}: $t(hankeForm:haittojenHallintaForm:nuisanceType.LINJAAUTOLIIKENNE): $t(hankeForm:labels:haittojenhallintasuunnitelma.LINJAAUTOLIIKENNE)",
+          "RAITIOLIIKENNE": "{{alueName}}: $t(hankeForm:haittojenHallintaForm:nuisanceType.RAITIOLIIKENNE): $t(hankeForm:labels:haittojenhallintasuunnitelma.RAITIOLIIKENNE)",
+          "MUUT": "{{alueName}}: $t(hankeForm:haittojenHallintaForm:nuisanceType.MUUT): $t(hankeForm:labels:haittojenhallintasuunnitelma.MUUT)"
+        }
       },
       "omistajat": {
         "nimi": "$t(form:yhteystiedot:titles:omistaja): $t(form:yhteystiedot:labels:nimi)",
@@ -607,6 +671,7 @@
         "ytunnus": "$t(form:yhteystiedot:titles:rakennuttajat): $t(form:yhteystiedot:labels:ytunnus)"
       },
       "muut": {
+        "rooli": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:rooli)",
         "nimi": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:nimi)",
         "email": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:email)",
         "ytunnus": "$t(form:yhteystiedot:titles:muut): $t(form:yhteystiedot:labels:ytunnus)"
@@ -634,13 +699,14 @@
     "perustiedotForm": {
       "header": "Grundläggande uppgifter om projektet",
       "ytkHankeHeader": "Gemensamt kommunaltekniskt projekt",
-      "instructions": "<1>Via att skapa ett projekt kan du också skicka ansökningar.</1><1><0>OBS!</0> Om du enbart utför ledningsutredningar för ett privat område, <2>fyll i en ansökan</2>. Ledningsutredningar för allmänna områden söks efter att projektet skapats, med grävanmälningar.</1><1>Genom att lägga till uppgifter om projektet kan du till sist kopiera dem till ansökningarna som du behöver.</1>"
+      "instructions": "<1>Via att skapa ett projekt kan du också skicka ansökningar.</1><1><0>OBS!</0> Om du enbart utför ledningsutredningar för ett privat område, <2>fyll i en ansökan</2>. Ledningsutredningar för allmänna områden söks efter att projektet skapats, med grävanmälningar.</1><1>Observera att följande information kommer att visas offentligt för alla Haitaton-användare efter att projektet har publicerats:</1><3><4>Projektets namn och identifierare samt tidpunkt</4><4>Beskrivning av projektet</4><4>Områdenas namn och tidpunkter</4><4>Områdenas trafikstörningsindex</4><4>Projektets ägare</4><4>Projektets skede och typ av byggarbetsplats</4></3><1>Genom att lägga till uppgifter om projektet kan du till sist kopiera dem till ansökningarna som du behöver.</1>"
     },
     "hankkeenAlueForm": {
       "header": "Områden",
-      "subHeader": "Projektområden",
+      "subHeader": "Ritning av områden",
       "area": "Område",
       "instructions": "[TRANSLATION_PENDING]Flera geometrier kan ritas för projektet. De geometriska områdena påverkar projektets trafikstörningsindex. Ritverktygen återfinns i kartvyns vänstra nedre kant. Med pennverktyget kan man rita polygoner genom att klicka på punkten där du vill ha ett hörn. Med rektangelverktyget kan du skapa rektangulära områden genom att först klicka på kartan och röra musen i önskad riktning. Ett nytt klick avslutar ritning av kvadraten. En polygon kan modifieras genom att ”greppa” i kanten och dra. Även en rektangulär figur kan modifieras genom att greppa i kanten. an radera en geometrisk figur genom att först välja den med ett klick, så att det bland ritverktygen i den vänstra nedre kanten kommer fram en papperskorg. Med ett klick på papperskorgen raderas figuren.",
+      "instructions2": "Med färdsättsväljarna i den vänstra kanten kan du granska olägenhetsindexet för specifika färdsätt för projekt- och arbetsområdena. Alla färdsätt är automatiskt aktiva, du kan byta antalet färdsätt som visas genom att klicka på ikonerna. På kartan visas den mest kritiska indexfärgen för de valda färdsätten.",
       "instructions3": "Du kan ändra ett redan ritat område genom att hålla fast vid kanten och dra punkten till önskad position.",
       "noAlueet": "Rita området på kartan för att markera bedömningarna av olägenheter.",
       "haitatHeader": "Bedömning av ett områdes olägenheter",
@@ -652,9 +718,10 @@
     },
     "haittojenHallintaForm": {
       "header": "Hantering av olägenheter",
-      "subHeaderNoAlueet": "Projektområden",
-      "subHeaderAlueet": "Områdenas läge",
+      "subHeaderNoAlueet": "Lägg till projektområden för att fylla i uppgifter.",
+      "subHeaderAlueet": "Projektområden",
       "instructions": "Ditt projekt kan orsaka olägenheter för olika transportformer och lokala verksamheter. Haitaton beräknar automatiskt ett värde för olägenhetens betydelse i respektive projektområde, separat för cykeltrafik, spårvägstrafik, lokal busstrafik och biltrafik. Indexet för olägenheter för trafiken beskriver den värsta situationen i projektområdet för ovan nämnda transportformers del. Olägenheterna beskrivs med en skala för varje transportform med hjälp av siffror och färger (0/grå = ej identifierad, 1–2/grön = ingen betydande olägenhet, 3/gul = sannolik olägenhet, 4–5/röd =betydande olägenhet). Resultat som gäller andra än ovan nämnda transportformer presenteras endast som siffror (0–5).",
+      "instructions2": "Med färdsättsväljarna i den vänstra kanten kan du granska olägenhetsindexet för specifika färdsätt för projekt- och arbetsområdena. Alla färdsätt är automatiskt aktiva, du kan byta antalet färdsätt som visas genom att klicka på ikonerna. På kartan visas den mest kritiska indexfärgen för de valda färdsätten.",
       "noAlueet": "Lägg till projektområden för att fylla i uppgifter",
       "nuisanceControlPlanSubHeader": "Plan över hantering av olägenheter",
       "instructionsPlan": "Berätta i planen över hantering av olägenheter genom vilka åtgärder olägenheterna i projektområdet ska hanteras. Kom ihåg att gå igenom alla projektområden.",
@@ -662,14 +729,306 @@
       "instructionsGeneral": "<0><0>Se till att fotgängare kan ta sig fram tryggt och obehindrat</0><1>Säkerställ passager till fastigheterna</1><2>Samordna med andra projekt och arbeten samt omvägar kring dem</2><3>Meddela alltid räddningsverket och polisen om gator stängs för trafik</3><4>Kontrollera alltid om ditt projekt eller arbete utförs på en rutt för specialtransporter</4><5>Kontrollera effekterna på trafikljusstyrningen (körfält, detektorer, ljusens funktion</5><6>Avvikande arbetstider</6></0>",
       "helperText": "Åtgärder som vidtas eller avtalats i projektområdet för att kontrollera och förhindra olägenheter.",
       "subHeaderTrafficNuisanceIndex": "Utifrån det index för olägenheter för trafiken som beräknats för projektet ska man fästa särskild uppmärksamhet vid följande krav.",
+      "noNuisanceDetected": "Haitaton hittade inte den här målgruppen i området. Om du vill kan du lägga till åtgärder för olägenhetshantering.",
+      "addControlPlan": "Lägg till åtgärder för olägenhetshantering",
       "nuisanceType": {
+        "YLEINEN": "Åtgärder för olägenhetshantering",
         "PYORALIIKENNE": "Betydelsen av cykeltrafik",
         "AUTOLIIKENNE": "Trafikstockningar i biltrafiken",
-        "LINJAAUTOLIIKENNE": "Lokal busstrafik",
-        "RAITIOLIIKENNE": "Spårvägstrafik",
+        "LINJAAUTOLIIKENNE": "Betydelsen av spårvägstrafik: Lokal busstrafik",
+        "RAITIOLIIKENNE": "Betydelsen av spårvägstrafik: Spårvägstrafik",
         "MUUT": "Andra åtgärder för att kontrollera olägenheter"
       },
-      "carTrafficNuisanceType": {}
+      "carTrafficNuisanceType": {
+        "katuluokka": "Gatuklass",
+        "liikennemaara": "Mängd biltrafik",
+        "kaistahaitta": "Påverkan på antalet filer för biltrafiken",
+        "kaistapituushaitta": "Längd för påverkan på filer för biltrafiken",
+        "haitanKesto": "Projektets längd"
+      },
+      "procedureTips": {
+        "showTipsButton": "Visa tips på åtgärder",
+        "titles": {
+          "PYORALIIKENNE": "Åtgärder för cykeltrafiken",
+          "AUTOLIIKENNE": "Åtgärder för biltrafiken",
+          "LINJAAUTOLIIKENNE": "Åtgärder för busstrafiken",
+          "RAITIOLIIKENNE": "Åtgärder för spårvagnstrafiken",
+          "MUUT": "Andra åtgärder"
+        },
+        "PYORALIIKENNE": [
+          {
+            "tip": "Granska påverkan på huvudlederna för cykeltrafiken och prioriterade leder och säkerställ att de fungerar. Säkerställ att målen för kvalitetsnivå uppfylls med de tillfälliga arrangemangen.",
+            "indexTreshold": 5
+          },
+          {
+            "tip": "Förbered för att utföra arbetet utanför rusningstid på det prioriterade nätverket av cykelvägar och huvudlederna för cykeltrafiken, om så bestäms i beslutet om anmälan/ansökan. Begränsningen infaller vardagar kl. 6–9 och 15–18.",
+            "indexTreshold": 5
+          },
+          {
+            "tip": "Prioriterad ordning för åtgärder riktade mot cykeltrafiken: 1. Inga ändringar i arrangemangen för cykeltrafiken/skydd av cykelväg från byggarbetsplatsen; 2. Tillfällig förflyttning av arrangemang för cykeltrafiken i ett tvärsnitt; 3. Tillfällig begränsning i arrangemangen för cykeltrafiken; 4. Kombinera färdsätt på samma trafikled (se punkten om att avskilja färdsätt); 5. Tillfällig förflyttning av cykeltrafiken till den motsatta sidan av körbanan; 6. Tillfällig förflyttning av cykeltrafiken till en annan led"
+          },
+          {
+            "tip": "Planera och genomför i princip tillfälliga arrangemang för cykeltrafiken i enlighet med de ursprungliga permanenta arrangemangen (t.ex. enkelriktade cykelvägar/-filer eller en dubbelriktad cykelväg). Försök att bevara lösningar där gångtrafiken är avskild från cykeltrafiken, om en sådan finns i nuläget. När mängden biltrafik överstiger 7000 fordon per dygn ska cykeltrafiken också i allmänhet avskiljas från biltrafiken. Det är viktigt att överväga avskiljning på huvudlederna för cykeltrafiken, även om mängden biltrafik är mindre. Det är endast möjligt att föreslå att ersätta enkelriktade arrangemang för cykeltrafiken vid byggarbetsplatsen med lösningar för blandad trafik, och då ska gatan ha en hastighetsbegränsning på 30 km/h."
+          },
+          {
+            "tip": "Planera och genomför tillfälliga korsningsarrangemang för cykeltrafiken i synnerhet i korsningar med trafikljus för att säkerställa att de olika körriktningarna, i synnerhet vänstersvängar, och sikten och belysningen fungerar."
+          },
+          {
+            "tip": "Planera och genomför tydlig och säker vägledning för den alternativa vägen som beaktar cykeltrafiken separat. Definiera påverkan på cykeltrafiken och nödvändiga övriga åtgärder för den alternativa vägen."
+          },
+          {
+            "tip": "Planera och se till att cykeltrafiken har tillgång till olika adresser och tjänster etc."
+          },
+          {
+            "tip": "Red ut behoven av att flytta en eventuell station för stadscyklar eller en annan viktig parkeringsplats för cyklar. Kom överens om behoven av att flytta stationer för stadscyklar med Stadstrafik Ab (<0>urakoitsijaohjeistus@kaupunkiliikenne.fi</0>) och kundtjänsten för trafikplaneringen inom Stadsmiljösektorn (<1>kaupunkiymparisto@hel.fi</1>, kundtjänst tfn  09 310 22111) när det gäller viktiga parkeringsplatser för cyklar.",
+            "links": [
+              "mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi",
+              "mailto:kaupunkiymparisto@hel.fi"
+            ]
+          },
+          {
+            "tip": "Meddela om betydande arbeten och eventuella ruttändringar för cykeltrafiken redan i planeringsfasen och i god tid innan de nya arrangemangen genomförs (allmänna meddelanden, lokala meddelanden). Markera den alternativa vägen i terrängen innan arbetet inleds."
+          },
+          {
+            "tip": "Se genast från början till att cykeltrafiken är skyddad från arbetsområdet genom räcken och stängningsanordningar."
+          },
+          {
+            "tip": "Se till att cykelvägarna vid byggarbetsplatsen underhålls under vintern (bl.a. snöskottning och halkbekämpning)."
+          },
+          {
+            "tip": "Se till att ytan på cykelvägar och sneddade trottoarkanter hålls hårda och rena (tillfällig beläggning)."
+          },
+          {
+            "tip": "Meddela olika parter om arbetet och eventuella ruttändringar i god tid innan de nya arrangemangen genomförs (allmänna meddelanden, lokala meddelanden)."
+          },
+          {
+            "tip": "Kontrollera om de lösningar du har planerat följer anvisningarna: <0>https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf</0>",
+            "links": [
+              "https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf (på finska)"
+            ]
+          }
+        ],
+        "AUTOLIIKENNE": [
+          {
+            "tip": "Undersök gemensam påverkan och inpassning av projekt som påverkar körfiler med hjälp av en modellering av trafiken. Definiera också hur busstrafiken påverkas. Red ut krav på projektet och undersök vid behov möjligheter till alternativa vägar.",
+            "indexTreshold": 4
+          },
+          {
+            "tip": "Undersök påverkan, inpassning och åtgärder för ditt projekt som påverkar körfiler med hjälp av en modellering och simulering av trafiken. Definiera och planera åtgärder för att minimera olägenheter genom att också ta andra projekt i området i beaktande.",
+            "indexTreshold": 4
+          },
+          {
+            "tip": "Planera arbetet så att det i princip ska utföras utanför rusningstid och utför det i princip utanför rusningstid (vardagar klockan kl. 6–9 och 15–18 och på hamnrutter dagligen kl. 10–10.30).",
+            "indexTreshold": 4
+          },
+          {
+            "tip": "Red ut och verkställ sätt att styra trafiken för att minska mängden biltrafik i området som påverkas av projektet."
+          },
+          {
+            "tip": "Planera i god tid eventuella alternativa vägar för biltrafiken, vägledning för dem och nödvändiga ändringar i trafikljusen."
+          },
+          {
+            "tip": "Kontrollera om projektet ligger på rutten för hamntrafiken (<0>Parkering och körrutt kartor</0>). Om det gör det ska arbetet planeras så att det utförs utanför rusningstiden för biltrafiken (vardagar klockan kl. 6–9 och 15–18 och på hamnrutter dagligen kl. 10–10.30).",
+            "links": [
+              "https://www.portofhelsinki.fi/sv/kontaktuppgifter/kartor/parkering-och-korrutt-kartor/)."
+            ]
+          },
+          {
+            "tip": "Planera i god tid arrangemang och/eller alternativa vägar som fungerar för tung trafik, servicetrafik och distributionstrafik."
+          },
+          {
+            "tip": "Red ut antalet körfiler som behöver bevaras genom att kontakta trafikplaneringen inom Stadsmiljösektorn (<0>kaupunkiymparisto@hel.fi</0>, kundtjänst tfn  09 310 22111) i planeringsfasen.",
+            "links": [
+              "mailto:kaupunkiymparisto@hel.fi"
+            ]
+          },
+          {
+            "tip": "Planera och säkerställ att trafikljusen fungerar även utanför området för arbetet (t.ex. tillfälliga filändringar i korsningar med trafikljus när man kommer till arbetsområdet, var detektorer finns och huruvida de fungerar i tillfälliga arrangemang och trafikljus på alternativa vägar). Kontakta huvudstadsregionens trafikstyrningscentral (<0>liikenteenhallintakeskus@hel.fi</0>, tfn 09 310 37555) när det gäller de här frågorna. Kontakta också trafikstyrningscentralen när det gäller behov av tillfälliga trafikljus.",
+            "links": [
+              "mailto:liikenteenhallintakeskus@hel.fi"
+            ]
+          },
+          {
+            "tip": "Kontakta Linja-autoliitto (<0>Kontaktuppgifter – Linja-autoliitto</0> <1>fornamn.efternamn@linja-autoliitto.fi</1>) ifall projektet ligger på eller i närheten av viktiga rutter för fjärr- eller turisttrafiken.",
+            "links": [
+              "https://www.linja-autoliitto.fi/yhteystiedot/ (på finska)",
+              "mailto:förnamn.efternamn@linja-autoliitto.fi"
+            ]
+          },
+          {
+            "tip": "Meddela olika parter om betydande arbeten och eventuella ruttändringar för biltrafiken redan i planeringsfasen och i god tid innan de nya arrangemanget genomförs (allmänna meddelanden, lokala meddelanden)."
+          },
+          {
+            "tip": "Genomför och upprätthåll förhandsvägledning från de olika riktningarna och till de alternativa körrutterna."
+          },
+          {
+            "tip": "Begränsa körhastigheten i närheten av arbetsområdet."
+          },
+          {
+            "tip": "Styr inte fotgängare till körbanan om det inte finns en egen avgränsad trafikled för dem på körbanan."
+          },
+          {
+            "tip": "Styr inte cykeltrafiken till körbanan tillsammans med biltrafiken, förutom i motiverade fall (se tips på åtgärder för cykeltrafiken)."
+          },
+          {
+            "tip": "Genomför och upprätthåll en jämn beläggning på körbanan och aktuella filbytesmarkeringar, andra markeringar på körbanan och trafikdirigeringsanordningar på platsen."
+          },
+          {
+            "tip": "Genomför högklassigt vinterunderhåll på byggarbetsplatsen (bl.a. snöskottning, halkbekämpning och bevarande av körutrymme och sikt)."
+          }
+        ],
+        "LINJAAUTOLIIKENNE": [
+          {
+            "tip": "Kontrollera om projektet påverkar viktiga rutter för HRT:s bussar. Kom i ett tidigt skede överens tillsammans med HRT (<0>infra@hsl.fi</0>) om behovet av åtgärder för busstrafiken på grund av projektet.",
+            "links": [
+              "mailto:infra@hsl.fi"
+            ]
+          },
+          {
+            "tip": "Planera arbetet så att det i princip ska utföras utanför rusningstid och utför det i princip utanför rusningstid (vardagar klockan kl. 6–9 och 15–18)."
+          },
+          {
+            "tip": "Kontakta HRT (<0>infra@hsl.fi</0>) i planeringsskedet om projektet ligger på en rutt för HRT:s bussar och definiera om projektet orsakar olägenhet för HRT:s busstrafik, som till exempel mindre filer, förseningar, förlängda restider, ruttändringar, ändrade hållplatser etc. Planera i god tid för eventuella alternativa vägar för busstrafiken, vägledning för dem och nödvändiga förmåner för kollektivtrafiken. Kontrollera med huvudstadsregionens trafikstyrningscentral (<1>liikenteenhallintakeskus@hel.fi</1>, tfn 09 310 37555) att leden fungerar för HRT och signalregleringen (också tillfällig signalreglering).",
+            "links": [
+              "mailto:infra@hsl.fi",
+              "mailto:liikenteenhallintakeskus@hel.fi"
+            ]
+          },
+          {
+            "tip": "Om byggarbetsplatsen ligger på en ändhållplats för en buss eller hindrar busstrafiken på gatan i fråga, ska du ta kontakt minst 2,5 månader innan arbetet inleds. Om byggarbetsplatsen inte är akut, till exempel på grund av ett trasigt rör, ska du ta kontakt minst två veckor innan arbetet inleds. Mer information: <0>Entreprenörer – ta kollektivtrafiken i beaktande på byggarbetsplatsen</0>.",
+            "links": [
+              "http://hsl.fi/hsl/urakoitsijat (på finska)"
+            ]
+          },
+          {
+            "tip": "Se till att det finns en tillgänglighetsanpassad passage till hållplatserna eller planera och genomför flyttning av hållplatser, vägledning och tillgängliga passager för fotgängare. Spårvagns- och busshållplatser får inte flyttas eller tas ur bruk utan HRT:s tillstånd (<0>infra@hsl.fi</0>). Mer information: <1>Entreprenörer – ta kollektivtrafiken i beaktande på byggarbetsplatsen</1>.",
+            "links": [
+              "mailto:infra@hsl.fi",
+              "http://hsl.fi/hsl/urakoitsijat (på finska)"
+            ]
+          },
+          {
+            "tip": "Meddela olika parter om betydande arbeten och eventuella ruttändringar för busstrafiken redan i planeringsfasen och i god tid innan de nya arrangemanget genomförs (allmänna meddelanden, lokala meddelanden)."
+          },
+          {
+            "tip": "Genomför och upprätthåll förhandsvägledning från de olika riktningarna och till de alternativa körrutterna."
+          },
+          {
+            "tip": "Genomför och upprätthåll en jämn beläggning på körbanan och aktuella filbytesmarkeringar, andra markeringar på körbanan och trafikdirigeringsanordningar på platsen."
+          },
+          {
+            "tip": "Genomför högklassigt vinterunderhåll på byggarbetsplatsen (bl.a. snöskottning, halkbekämpning och bevarande av körutrymme och sikt). Säkerställ i synnerhet att det finns tillräckligt med utrymme för bussar att svänga i korsningar."
+          }
+        ],
+        "RAITIOLIIKENNE": [
+          {
+            "tip": "Kontrollera om projektet påverkar spårvagnsnätet. Kom i ett tidigt överens med HRT (trafikering: <0>infra@hsl.fi</0>) och vid behov med Stadstrafik Ab (baninfrastruktur och system: <1>urakoitsijaohjeistus@kaupunkiliikenne.fi</1>) om behov av åtgärder för spårvagnsnätverket på grund av projektet.",
+            "links": [
+              "mailto:infra@hsl.fi",
+              "mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi"
+            ]
+          },
+          {
+            "tip": "Planera arbetet så att det i huvudsak ska utföras utanför spårvagnstrafikens trafikeringstid och utför det i huvudsak utanför spårvagnstrafikens trafikeringstid eller utanför rusningstid kl. 6–9 och 15–18.",
+            "indexTreshold": 5
+          },
+          {
+            "tip": "Bedöm i god tid tidpunkterna för enskilda arbeten inom projektet och kontakta HRT (trafikering: <0>infra@hsl.fi</0>) och Stadstrafik Ab (baninfrastruktur och system: <1>urakoitsijaohjeistus@kaupunkiliikenne.fi</1>) på förhand, så att eventuella specialarrangemang kan samordnas med andra avvikande rutter. Planera eventuella alternativa vägar för spårvagnstrafiken och förmåner för kollektivtrafiken, och kontrollera med huvudstadsregionens trafikstyrningscentral (<2>liikenteenhallintakeskus@hel.fi</2>, p. 09 310 37555) att rutten fungerar för HRT, Stadstrafik Ab och trafikljusen.",
+            "links": [
+              "mailto:infra@hsl.fi",
+              "mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi",
+              "mailto:liikenteenhallintakeskus@hel.fi"
+            ]
+          },
+          {
+            "tip": "När det gäller avvikande rutter för spårvagnstrafiken ska en anmälan göras till HRT åtta veckor innan arbetet inleds om arbetet pågår i högst tre dygn, och fem månader innan arbetet inleds om arbetet pågår längre än tre dygn. När det gäller busstrafik som ersätter spårvagnstrafiken ska en anmälan göras till HRT tre månader innan arbetet inleds om arbetet pågår i högst tre dygn, och fem månader innan arbetet inleds om arbetet pågår längre än tre dygn. Mer information: <0>Entreprenörer – ta kollektivtrafiken i beaktande på byggarbetsplatsen</0> och <1>Arbeten i närheten av en spårväg – Stadstrafik Ab</1> (på finska)",
+            "links": [
+              "http://hsl.fi/hsl/urakoitsijat (på finska)",
+              "https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/ (på finska)"
+            ]
+          },
+          {
+            "tip": "Kontrollera om strukturer eller system för spårvägen (även kontaktledningsupphängning på byggnadsfasader) behöver rivas eller flyttas tillfälligt. Kontrollera också om arbete kommer att behöva utföras i närheten av banområdet eller inom två meter från kontaktledningar eller stödvajrar (OBS! Avståndet för snabbspårvägen är fyra meter). Om det behövs ska det avtalas med HRT (trafikering: <0>infra@hsl.fi</0>) och Stadstrafik Ab (baninfrastruktur och system: <1>urakoitsijaohjeistus@kaupunkiliikenne.fi</1>) . Mer information: <2>Entreprenörer – ta kollektivtrafiken i beaktande på byggarbetsplatsen</2> och ett formulär att fylla i <3>Arbeten i närheten av en spårväg – Stadstrafik Ab</3> (på finska) (Arbeten på rälsområde eller Arbeten på banområdet för snabbspårväg 15).",
+            "links": [
+              "mailto:infra@hsl.fi",
+              "mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi",
+              "http://hsl.fi/hsl/urakoitsijat (på finska)",
+              "https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/ (på finska)"
+            ]
+          },
+          {
+            "tip": "Se till att det finns en tillgänglighetsanpassad passage till hållplatserna eller planera och genomför flyttning av hållplatser, vägledning och tillgängliga passager för fotgängare. Spårvagns- och busshållplatser får inte flyttas eller tas ur bruk utan HRT:s tillstånd (<0>infra@hsl.fi</0>). Mer information: <1>Entreprenörer – ta kollektivtrafiken i beaktande på byggarbetsplatsen</1>.",
+            "links": [
+              "mailto:infra@hsl.fi",
+              "http://hsl.fi/hsl/urakoitsijat (på finska)"
+            ]
+          },
+          {
+            "tip": "Meddela olika parter om betydande arbeten och eventuella ruttändringar för spårvagnstrafiken redan i planeringsfasen och i god tid innan de nya arrangemanget genomförs (allmänna meddelanden, lokala meddelanden)."
+          },
+          {
+            "tip": "Säkerställ vid genomförandet att trafikljusstyrningen för spårvägarna fungerar under arbetet."
+          }
+        ],
+        "MUUT": [
+          {
+            "tip": "Red ut vilket område som påverkas av buller, damm eller skakningar från arbetet och vilka känsliga funktioner som finns inom området (bostäder, daghem, skolor, viktiga tjänster som hälso- och sjukvårdstjänster, affärslokaler, restaurangterrasser, forskningsanläggningar, naturobjekt, religiösa institutioner etc.). "
+          },
+          {
+            "tip": "Meddela aktörerna och fastigheterna minst en vecka innan eller omedelbart när tidpunkten för arbetet är bestämd, när arbete som orsakar buller, damm eller skakningar ska utföras. Särskilt störande arbeten ska anmälas senast 30 dagar innan arbetet inleds. Ge invånarna och olika aktörer tid att förbereda sig på störningar som kommer att uppstå och förhandla med aktörer om olägenheter, i synnerhet i närheten av känsliga funktioner."
+          },
+          {
+            "tip": "Red ut möjligheterna till åtgärder för att minimera olägenheter när det gäller tidsplanering och arbetsmetoder."
+          },
+          {
+            "tip": "Upprätta en bulleranmälan om störande buller senast 30 dagar innan arbetet inleds: <0>Bulleranmälan</0>",
+            "links": [
+              "https://www.hel.fi/sv/foretag-och-arbete/foretag-och-foretagare/foretagens-tillstand-och-lokaler/miljotillstand-och-anmalningar/bulleranmalan"
+            ]
+          },
+          {
+            "tip": "I närheten av bostads- och inkvarteringslägenheter och vårdinrättningar får du i huvudsak inte utföra verksamhet som orsakar särskilt störande buller nattetid kl. 22–7."
+          },
+          {
+            "tip": "Undvik att utföra arbeten som orsakar buller i närheten av daghem kl. 12–14, skolor kl. 8–15 och kontor kl. 9–15."
+          },
+          {
+            "tip": "Genomför åtgärder för att minska påverkan av buller, använd till exempel flyttbara bullerskydd."
+          },
+          {
+            "tip": "Upprätta en hanteringsplan för vatten på byggarbetsplatsen i god tid som en del av planeringen av byggarbetsplatsen (bedöm till att börja med mängden vatten som ska föras bort och kvaliteten på det). Att leda vatten från byggarbetsplatsen till dagvattennätverket måste avtals med Helsingforsregionens miljötjänster (HRM) (<0>https://yhteydenotto.hsy.fi/asiakaspalvelu/s/?language=sv</0>, telefonväxel 09 1561 2110). Utred tillsammans med HRM hur vatten från byggarbetsplatsen skulle påverka nätverket, bland annat naturvärdena vid nätverkets utloppsände (till exempel att damm från fasadrenovering okontrollerat hamnar i nätverket). Mer information: <1>Anvisningar om byggplatsvattnens avlopp</1> och <2>https://www.hel.fi/static/ymk/esitteet/tyomaavesi.pdf</2>",
+            "links": [
+              "https://yhteydenotto.hsy.fi/asiakaspalvelu/s/?language=sv,",
+              "https://www.hsy.fi/sv/vatten-och-avlopp/anslutning-till-vatten-och-avloppsnat/anslutning-under-byggtid/anvisningar-om-byggplatsvattnens-avlopp/",
+              "https://www.hel.fi/static/ymk/esitteet/tyomaavesi.pdf"
+            ]
+          },
+          {
+            "tip": "Använd ett tvättaggregat på de närliggande gatorna dagligen, om arbetsområdet har en markyta av grus eller lös jord. Förhindra att körfilerna dammas ner med hjälp av till exempel saltlösning eller krossyta. Använd ett tvätteggregat också på fordonen på byggarbetsplatsen, om det behövs."
+          },
+          {
+            "tip": "Fukta och täck över lagrat jord- och stenmateial och rivningsavfall. Fukta och täck över dammande last som förs utanför byggarbetsplatsen."
+          },
+          {
+            "tip": "Använd utrustning för dammuppsamling på borrningsutrustning för dagbrott (mindre än 200 meter från känsliga objekt eller när transportrutten för sprängsten ligger i närheten av dammkänsliga objekt)."
+          },
+          {
+            "tip": "Kontrollera att lösningarna följer anvisningarna: <0>https://www.hel.fi/static/ymk/esitteet/rakennustyomaapoly.pdf</0>",
+            "links": [
+              "https://www.hel.fi/static/ymk/esitteet/rakennustyomaapoly.pdf"
+            ]
+          },
+          {
+            "tip": "Upprätta en anmälan om störande (buller och) skakningar senast 30 dagar innan arbetet inleds: <0>Bulleranmälan</0>",
+            "links": [
+              "https://www.hel.fi/sv/foretag-och-arbete/foretag-och-foretagare/foretagens-tillstand-och-lokaler/miljotillstand-och-anmalningar/bulleranmalan"
+            ]
+          },
+          {
+            "tip": "Kontrollera information om jordmånen och hur jordmånen påverkar hur skakningar sprider sig. Planera arbetsmetoderna så att påverkan av skakningarna minimeras."
+          }
+        ]
+      }
     },
     "hankkeenLiitteetForm": {
       "instructions": "Lägg till eventuella bilagor. De bilagor som fogas till projektet överförs inte till ansökningarna."
@@ -717,13 +1076,16 @@
     "pageHeader": "Grävningsanmälan",
     "requiredInstruction": "Alla fält markerade med * måste fyllas i för att ansökan ska kunna skickas.",
     "perustiedot": {
-      "instructions": "<p>För gräv-, borrnings- och brytningsarbeten som görs på Helsingfors stads gator, gång- och cykelvägar eller torg eller i parker ska man göra en grävningsanmälan. När en grävningsanmälan lämnas in begärs automatiskt även en ledningsutredning av myndigheten, om en kod för en tidigare ledningsutredning inte har bifogats till ansökan.</p><p>En plan över hanteringen av olägenheter som fyllts i av användaren är en väsentlig del av ansökan, och myndigheten följer upp genomförandet av den under arbetet. Till anmälan bifogas en plan för tillfälliga trafikarrangemang, om arbetet påverkar fotgängar-, cykel- eller motorfordonstrafiken eller om parkeringsplatser reserveras för annat bruk genom en skylt med uppmaning att flytta bilar.</p><p>Under vintersäsongen (1.12–14.5) ska man anmäla om grävarbetet är aktivt och man ska alltid anmäla när det är slutfört, så att arbetet kan övervakas och faktureringen avbrytas eller avslutas.</p><p>$t(kaivuilmoitusForm:requiredInstruction) Arbetets namn krävs för att formuläret ska kunna sparas</p>"
+      "instructions": "<p>För gräv-, borrnings- och brytningsarbeten som görs på Helsingfors stads gator, gång- och cykelvägar eller torg eller i parker ska man göra en grävningsanmälan. När en grävningsanmälan lämnas in begärs automatiskt även en ledningsutredning av myndigheten, om en kod för en tidigare ledningsutredning inte har bifogats till ansökan.</p><p>En plan över hanteringen av olägenheter som fyllts i av användaren är en väsentlig del av ansökan, och myndigheten följer upp genomförandet av den under arbetet. Till anmälan bifogas en plan för tillfälliga trafikarrangemang, om arbetet påverkar fotgängar-, cykel- eller motorfordonstrafiken eller om parkeringsplatser reserveras för annat bruk genom en skylt med uppmaning att flytta bilar.</p><p>Under vintersäsongen (1.12–14.5) ska man anmäla om grävarbetet är aktivt och man ska alltid anmäla när det är slutfört, så att arbetet kan övervakas och faktureringen avbrytas eller avslutas.</p><p>$t(kaivuilmoitusForm:requiredInstruction) Arbetets namn krävs för att formuläret ska kunna sparas</p>",
+      "cableReportInstructions": "Du kan antingen ansöka om en ny ledningsutredning eller välja ledningsutredningar som redan lagts till för projektet."
     },
     "alueet": {
       "instructions": "<p>Börja rita in arbetsområdena för ansökan genom att lägga till arbetets start- och slutdatum, så att dina projektområden visas. Obs! Tidpunkten för arbetet ska vara inom projektområdets tidsintervall.</p><p>Du kan redigera ett område som du redan ritat in genom att ta tag i dess kant och dra punkten till det ställe du vill.</p><p>Om du vill rita in mindre arbetsområden inom projektområdena, kan du aktivera ritverktygen på kartan. Observera att arbetsområdena ska ritas in helt och hållet inom projektområdena.</p><p>Om du vill använda ett helt projektområde som arbetsområde, välj projektområdet på kartan så att det blir aktivt och välj ”Använd som arbetsområde” i projektets inforuta.</p><p>Du kan lägga till flera områden i samma ansökan, om deras tidsintervall är detsamma. Om du vill anmäla flera områden med olika tidsintervall, ska du göra separata ansökningar.</p><p>[TRANSLATION_PENDING]</p><p>$t(kaivuilmoitusForm:requiredInstruction)</p>",
       "areaInformationHeading": "Grävningsanmälan för arbetsområden",
       "startDate": "Arbetets startdatum",
-      "endDate": "Arbetets slutdatum"
+      "endDate": "Arbetets slutdatum",
+      "liikennehaittaindeksienYhteenveto": "Sammanfattning av olägenhetsindex för trafiken vid arbetsområdena",
+      "areaNuisanceDefinitions": "Egna definitioner av olägenheter för arbetsområdena"
     },
     "liitteetJaLisatiedot": {
       "instructions": "<p>Lägg till planer för tillfälliga trafikarrangemang och eventuella övriga bilagor. En plan för tillfälliga trafikarrangemang är obligatorisk. Se vid behov <a>Helsingfors stads typbilder</a>.</p><p>Om inget befullmäktigande för ifyllande eller utförande av arbetet har gjorts i samband med inloggningen, ska man bifoga en fullmakt i pdf-format</p><p>Alla fält som är markerade med en asterisk * måste fyllas i för att ansökan ska kunna skickas.</p>",
@@ -736,6 +1098,30 @@
     },
     "yhteenveto": {
       "instructions": "Kontrollera de uppgifter du uppgett och skicka in anmälan för behandling."
+    },
+    "haittojenHallinta": {
+      "instructions": "Ditt arbete kan orsaka olägenheter för olika transportmedel och lokala verksamheter. Haitaton räknar automatiskt separat ut hur betydande olägenheten är per projekt och arbetsområde för cykeltrafiken, spårvagnstrafiken, den lokala busstrafiken samt biltrafiken. Trafikens olägenhetsindex beskriver den värsta situationen för de ovan nämnda transportmedlen.",
+      "instructions2": "Olägenheterna beskrivs med siffror och färger på en skala som fastställts för varje transportmedel (0/grå = inte identifierad, 1–2/grön = ingen betydande olägenhet, 3/gul = sannolik olägenhet, 4–5/röd = betydlig olägenhet). Andra resultat än de som gäller de ovannämnda transportmedlen presenteras endast med siffror (0–5).",
+      "instructions3": "$t(hankeForm:haittojenHallintaForm:instructions2)",
+      "instructions4": "I planen över hanteringen av olägenheter ska du precisera vilka metoder du använder för att hantera olägenheterna på ditt arbetsområde. De åtgärder för hanteringen av olägenheter som fastställts för projektområdena visas som grund för planen för arbetsområdena. Kom ihåg att gå igenom alla arbetsområden.",
+      "nuisanceControlPlanSubHeader": "$t(hankeForm:haittojenHallintaForm:nuisanceControlPlanSubHeader)",
+      "helperText": "De åtgärder som ska utföras på eller som avtalats för arbetsområdena för att hantera eller förhindra olägenheter",
+      "haittaindeksi": "Arbetsområdenas olägenhetsindex",
+      "labels": {
+        "YLEINEN": "[TRANSLATION_PENDING]Åtgärderna för att hantera olägenheter på arbetsområdena",
+        "PYORALIIKENNE": "Åtgärderna för att hantera olägenheter på arbetsområdena",
+        "AUTOLIIKENNE": "Åtgärderna för att hantera olägenheter på arbetsområdena",
+        "LINJAAUTOLIIKENNE": "Åtgärderna för att hantera olägenheter på arbetsområdena",
+        "RAITIOLIIKENNE": "Åtgärderna för att hantera olägenheter på arbetsområdena",
+        "MUUT": "Åtgärderna för att hantera olägenheter på arbetsområdena"
+      },
+      "carTrafficNuisanceType": {
+        "katuluokka": "$t(hankeForm:haittojenHallintaForm:carTrafficNuisanceType:katuluokka)",
+        "liikennemaara": "$t(hankeForm:haittojenHallintaForm:carTrafficNuisanceType:liikennemaara)",
+        "kaistahaitta": "$t(hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistahaitta)",
+        "kaistapituushaitta": "$t(hankeForm:haittojenHallintaForm:carTrafficNuisanceType:kaistapituushaitta)",
+        "haitanKesto": "Arbetets varaktighet"
+      }
     }
   },
   "hakemus": {
@@ -756,6 +1142,8 @@
       "endDate": "Beräknad slutdag för arbetet",
       "workArea": "Arbetsområde",
       "workAreaPlural": "Arbetsområden",
+      "workAreaOverlapsSingle": "Arbetsområdet överskrider ledningsutredningens begränsning, gör en ändringsanmälan i ledningsutredningen <a>{{applicationIdentifier}}</a>.",
+      "workAreaOverlapsMultiple": "Arbetsområdet överskrider flera ledningsutredningars begränsning, gör ändringsanmälan.",
       "areaAdditionalInfo": "Mer information om området",
       "areaInfo": "Uppgifter om området",
       "checkInfo": "Kontrollera uppgifterna du gett och skicka ansökan.",
@@ -775,8 +1163,17 @@
       "removeAreaDescription": "Är du säker på att du vill ta bort arbetsområdet {{areaName}}?",
       "applicationAdditionalInfo": "Mer information om ansökan",
       "applicationInfo": "Ansökans uppgifter",
+      "cableReportTitle": "Ledningsutredning",
+      "createCableReport": "Hämta en ny ledningsutredning",
+      "applyingCableReport": "Ansöka om ledningsutredning",
+      "useExisting": "Använd befintliga",
+      "useExistingCableReports": "Använd befintliga ledningsutredningar",
+      "newCableReport": "Ny ledningsutredning",
       "cableReports": "Koder för utförda ledningsutredningar",
       "cableReportsHelp": "Välj i listan eller skriv in en annan kod och tryck på Enter för att lägga till den",
+      "noCableReports": "Haitaton kunde inte hitta ledningsutredningar som tidigare lagts till för projektet. Du kan lägga till andra ledningsutredningar baserat på koden.",
+      "cableReportApplicationIdentifier": "Ledningsutredningskod",
+      "cableReportTagInputHelp": "Ange ledningsutredningskod och klicka på Lägg till",
       "placementContractsTitle": "Placeringsavtal",
       "placementContracts": "Kod för placeringsavtal",
       "placementContractsHelp": "Ange placeringsavtalets kod och tryck på Lägg till",
@@ -786,8 +1183,17 @@
       "tyonTarkoitus": "Arbetets syfte",
       "setWorkTimesToCopyArea": "Välj period för att kopiera till arbetsområde",
       "downloadDecision": {
-        "PAATOS": "Ladda ner beslut (PDF)"
-      }
+        "PAATOS": "Ladda ner beslut (PDF)",
+        "TOIMINNALLINEN_KUNTO": "Ladda upp funktionsdugligt skick (PDF)",
+        "TYO_VALMIS": "Ladda upp arbete färdigt (PDF)"
+      },
+      "paperDecisionOrdered": "Beslutet har beställts i pappersform",
+      "completionDate": {
+        "TOIMINNALLINEN_KUNTO": "Anmälan om funktionsdugligt skick gjord {{lastValmistumisilmoitus.reportedAt}} för datumet {{lastValmistumisilmoitus.dateReported}}",
+        "TYO_VALMIS": "Anmälan som färdigt gjord {{lastValmistumisilmoitus.reportedAt}} för datumet {{lastValmistumisilmoitus.dateReported}}"
+      },
+      "hankeAreaNuisanceControl": "Hantering av olägenheter i projektområdet",
+      "workAreasInProjectArea": "Arbetsområden i projectområdet {{projectName}}"
     },
     "notifications": {
       "saveSuccessLabel": "Ansökan har sparats",
@@ -804,12 +1210,24 @@
       "noApplications": "Inga ansökningar har lagts till projektet",
       "maxAttachmentsNumberExceeded": "Maximalt antal bilagor ({{maxNumber}} st) har överskridits",
       "sentApplicationPersonalInfoNotification": "Egna upplysningar för den inskickade ansökan kan inte redigeras",
-      "sendApplicationDisabled": "Ansökan kan endast skickas av den person som är kontaktperson för ansökan."
+      "sendApplicationDisabled": "Ansökan kan endast skickas av den person som är kontaktperson för ansökan.",
+      "reportCompletionDateSuccessLabel": "Anmälan har skickats",
+      "reportOperationalConditionSuccessText": "Anmälan om funktionsdugligt skick har skickats iväg för godkännande.",
+      "reportWorkFinishedSuccessText": "Anmälan om när arbetet är färdigt har skickats iväg för godkännande.",
+      "reportCompletionDateErrorLabel": "Det gick inte att skicka anmälan.",
+      "reportCompletionDateErrorText": "<0>Ett fel uppstod när anmälan skulle skickas. Försök igen senare eller kontakta Haitatons tekniska stöd <1>haitatontuki@hel.fi</1>.</0>"
     },
     "sendDialog": {
       "title": "Vill du skicka in ansökan?",
       "instructions": "Du får beslutet om ansökan och en eventuell begäran om komplettering i systemet Haitaton. Genom att skicka in ansökan förbinder du dig till elektroniskt tillkännagivande.",
-      "instructionsPaperDecision": "Om du vill kan du också beställa beslutet i pappersformat genom att ange din adress."
+      "instructionsPaperDecision": "Om du vill kan du också beställa beslutet i pappersformat genom att ange din adress.",
+      "orderPaperDecision": "Jag beställer också beslutet i pappersform.",
+      "paperDecisionNotificationLabel": "Fyll i mottagarens uppgifter.",
+      "paperDecisionNotificationText": "Fyll i mottagarens uppgifter för att också beställa beslutet i pappersform.",
+      "name": "Namn",
+      "streetAddress": "Gatuadress",
+      "postalCode": "Postnummer",
+      "city": "Postort"
     },
     "sentDialog": {
       "title": "Ansökan har skickats",
@@ -820,6 +1238,20 @@
       "title": "Välj arbetsområdets projektområde",
       "instructions": "Arbetsområdet är beläget inom flera projektområden. Välj projektområde där arbetsområdet ska läggas till.",
       "cancelButton": "Ångra och ta bort arbetsområdet"
+    },
+    "operationalConditionDialog": {
+      "title": "Anmäl som funktionsduglig?",
+      "instructions": "<p>Om arbetsområdet för grävningsarbete används normalt under vintersäsongen (1.12–14.5) kan du anmäla arbetet som funktionsdugligt, så avbryts användningsavgiften för området.</p><br><p>Ytan på en körbana, cykelväg eller trottoar ska vara tillfälligt belagd med asfalt. All trafikstyrningsutrustning ska tas bort från terrängen. På trottoarer och andra områden kan stenmjöl eller fint kross användas om saken har avtalats i förväg med inspektören.</p><br><p>Om ingen tillfällig beläggning har lagts och ingen anmälan om funktionsdugligt skick har gjorts fortsätter faktureringen tills anvisningarna har följts.<br>Slutlig beläggning som motsvarar gatuklassen ska göras senast den 14 maj och faktureringen för användningsavgiften fortsätter från och med den 15 maj tills arbetet har tagits emot och godkänts.</p><br><p>Ange datum för när du anmäler arbetet som funktionsdugligt. {{previousReportsIntro}}</p>",
+      "previousReportsIntro": "Arbetet har tidigare anmälts som funktionsdugligt enligt följande:",
+      "previouslyReportedAt": "{{reportedAt}} för datumet {{dateReported}}",
+      "date": "Datum"
+    },
+    "workFinishedDialog": {
+      "title": "Anmäl som färdigt?",
+      "instructions": "Ange datum för när du anmäler arbetet som färdigt. {{previousReportsIntro}}</p>",
+      "previousReportsIntro": "Arbetet har tidigare anmälts som färdigt enligt följande:",
+      "previouslyReportedAt": "{{reportedAt}} för datumet {{dateReported}}",
+      "date": "Datum"
     },
     "status": {
       "PENDING_CLIENT": "Ses av myndigheten",
@@ -843,7 +1275,11 @@
       "cancelApplication": "Återta ansökan",
       "editApplication": "Ändra i ansökan",
       "deletePlacementContract": "Ta bort koden för placeringsavtal {{id}}",
-      "copyWorkArea": "Kopiera till arbetsområde"
+      "reportOperationalCondition": "Anmäl som funktionsdugligt",
+      "reportWorkFinished": "Anmäl som färdigt",
+      "copyWorkArea": "Kopiera till arbetsområde",
+      "removeSelection": "Radera val",
+      "selectCableReport": "Välj ledningsutredning"
     },
     "errors": {
       "cancelConflict": "Ansökan kan inte återtas emedan den gått vidare till handläggning",
@@ -864,7 +1300,134 @@
     },
     "applicationTypeInstruction": "Välj typ av ansökan. Du kan vid anmälan om grävning även lämna en begäran om ledningsutredning, om du inte ännu har en sådan.",
     "addApplicationTypes": {
+      "CABLE_REPORT": "$t(hakemus:applicationTypes:CABLE_REPORT)",
       "EXCAVATION_NOTIFICATION": "$t(hakemus:applicationTypes:EXCAVATION_NOTIFICATION) (och ledningsutredning)"
+    },
+    "missingFields": {
+      "notification": {
+        "pageLabel": "Följande fält på denna sida krävs för att skicka ansökan:",
+        "hakemusLabel": "I följande faser saknas uppgifter för att skicka ansökan:"
+      },
+      "name": "$t(hakemus:labels:nimi)",
+      "workDescription": "$t(hakemus:labels:kuvaus)",
+      "postalAddress": {
+        "streetAddress": {
+          "streetName": "$t(form:yhteystiedot:labels:osoite)"
+        }
+      },
+      "constructionWork": "$t(hakemus:labels:tyossaKyse)",
+      "startTime": "$t(hakemus:labels:startDate)",
+      "endTime": "$t(hakemus:labels:endDate)",
+      "areas": "Rita arbetsområdet",
+      "customerWithContacts": {
+        "customer": {
+          "name": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:yhteystiedot:labels:nimi)",
+          "registryKey": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:yhteystiedot:labels:ytunnus)",
+          "email": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:yhteystiedot:labels:email)",
+          "phone": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:yhteystiedot:labels:puhelinnumero)"
+        },
+        "contacts": "$t(form:yhteystiedot:titles:customerWithContacts): $t(form:validations:yhteyshenkilotMin)"
+      },
+      "contractorWithContacts": {
+        "customer": {
+          "name": "$t(form:yhteystiedot:titles:contractorWithContacts): $t(form:yhteystiedot:labels:nimi)",
+          "registryKey": "$t(form:yhteystiedot:titles:contractorWithContacts): $t(form:yhteystiedot:labels:ytunnus)",
+          "email": "$t(form:yhteystiedot:titles:contractorWithContacts): $t(form:yhteystiedot:labels:email)",
+          "phone": "$t(form:yhteystiedot:titles:contractorWithContacts): $t(form:yhteystiedot:labels:puhelinnumero)"
+        },
+        "contacts": "$t(form:yhteystiedot:titles:contractorWithContacts): $t(form:validations:yhteyshenkilotMin)"
+      },
+      "propertyDeveloperWithContacts": {
+        "customer": {
+          "name": "$t(form:yhteystiedot:titles:propertyDeveloperWithContacts): $t(form:yhteystiedot:labels:nimi)",
+          "registryKey": "$t(form:yhteystiedot:titles:propertyDeveloperWithContacts): $t(form:yhteystiedot:labels:ytunnus)",
+          "email": "$t(form:yhteystiedot:titles:propertyDeveloperWithContacts): $t(form:yhteystiedot:labels:email)",
+          "phone": "$t(form:yhteystiedot:titles:propertyDeveloperWithContacts): $t(form:yhteystiedot:labels:puhelinnumero)"
+        },
+        "contacts": "$t(form:yhteystiedot:titles:propertyDeveloperWithContacts): $t(form:validations:yhteyshenkilotMin)"
+      },
+      "representativeWithContacts": {
+        "customer": {
+          "name": "$t(form:yhteystiedot:titles:representativeWithContacts): $t(form:yhteystiedot:labels:nimi)",
+          "registryKey": "$t(form:yhteystiedot:titles:representativeWithContacts): $t(form:yhteystiedot:labels:ytunnus)",
+          "email": "$t(form:yhteystiedot:titles:representativeWithContacts): $t(form:yhteystiedot:labels:email)",
+          "phone": "$t(form:yhteystiedot:titles:representativeWithContacts): $t(form:yhteystiedot:labels:puhelinnumero)"
+        },
+        "contacts": "$t(form:yhteystiedot:titles:representativeWithContacts): $t(form:validations:yhteyshenkilotMin)"
+      }
+    }
+  },
+  "taydennyspyynto": {
+    "taydennyspyynto": "Begäran om komplettering",
+    "notificationText": "Redigera ansökan för att korrigera följande saker",
+    "fields": {
+      "CABLE_REPORT": {
+        "CUSTOMER": "$t(form:yhteystiedot:titles:customerWithContactsInfo)",
+        "INVOICING_CUSTOMER": "$t(form:yhteystiedot:titles:invoicingCustomerInfo)",
+        "PROPERTY_DEVELOPER": "$t(form:yhteystiedot:titles:propertyDeveloperInfo)",
+        "CONTRACTOR": "$t(form:yhteystiedot:titles:contractorInfo)",
+        "REPRESENTATIVE": "$t(form:yhteystiedot:titles:representativeInfo)",
+        "GEOMETRY": "$t(hakemus:labels:workAreaPlural)",
+        "START_TIME": "$t(hakemus:labels:startDate)",
+        "END_TIME": "$t(hakemus:labels:endDate)",
+        "IDENTIFICATION_NUMBER": "Projektkod för Haitaton",
+        "CLIENT_APPLICATION_KIND": "$t(hakemus:labels:kuvaus)",
+        "APPLICATION_KIND": "$t(hakemus:labels:kuvaus)",
+        "POSTAL_ADDRESS": "$t(form:yhteystiedot:labels:osoite)",
+        "WORK_DESCRIPTION": "$t(hakemus:labels:kuvaus)",
+        "PROPERTY_IDENTIFICATION_NUMBER": "Fastighetsbeteckning",
+        "ATTACHMENT": "$t(hankePortfolio:tabit:liitteet)",
+        "AREA": "$t(form:labels:pintaAla)",
+        "OTHER": "Annan"
+      },
+      "EXCAVATION_NOTIFICATION": {
+        "CUSTOMER": "$t(form:yhteystiedot:titles:customerWithContactsInfo)",
+        "INVOICING_CUSTOMER": "$t(form:yhteystiedot:titles:invoicingCustomerInfo)",
+        "PROPERTY_DEVELOPER": "$t(form:yhteystiedot:titles:propertyDeveloperInfo)",
+        "CONTRACTOR": "$t(form:yhteystiedot:titles:contractorInfo)",
+        "REPRESENTATIVE": "$t(form:yhteystiedot:titles:representativeInfo)",
+        "GEOMETRY": "$t(hakemus:labels:workAreaPlural)",
+        "START_TIME": "$t(kaivuilmoitusForm:alueet:startDate)",
+        "END_TIME": "$t(kaivuilmoitusForm:alueet:endDate)",
+        "IDENTIFICATION_NUMBER": "Projektkod för Haitaton",
+        "CLIENT_APPLICATION_KIND": "$t(hakemus:labels:kuvaus)",
+        "APPLICATION_KIND": "$t(hakemus:labels:kuvaus)",
+        "POSTAL_ADDRESS": "$t(form:yhteystiedot:labels:osoite)",
+        "WORK_DESCRIPTION": "$t(hakemus:labels:kuvaus)",
+        "PROPERTY_IDENTIFICATION_NUMBER": "Fastighetsbeteckning",
+        "ATTACHMENT": "$t(hankePortfolio:tabit:liitteet)",
+        "AREA": "$t(form:labels:pintaAla)",
+        "OTHER": "Annan"
+      }
+    }
+  },
+  "taydennys": {
+    "labels": {
+      "originalInformation": "Ursprungliga",
+      "taydennykset": "Kompletteringar",
+      "taydennys": "Komplettering",
+      "cancelTitle": "Ta bort kompletteringsutkastet?",
+      "cancelDescription": "Är du säker på att du vill ta bort svaret på begäran om komplettering? De gjorda ändringarna raderas.",
+      "originalAttachments": "Ursprungliga bilagor",
+      "addedAttachments": "Bilagor som lagts till"
+    },
+    "buttons": {
+      "createTaydennys": "Komplettera",
+      "editTaydennys": "Redigera ansökan (komplettering)",
+      "sendTaydennys": "Skicka komplettering",
+      "cancelTaydennys": "Ta bort kompletteringsutkast"
+    },
+    "notifications": {
+      "sendSuccessLabel": "Kompletteringen skickad",
+      "sendSuccessText": "Kompletteringen har skickats för handläggning.",
+      "sendErrorLabel": "Det gick inte att skicka kompletteringen",
+      "sendErrorText": "$t(hakemus:notifications:reportCompletionDateErrorText)",
+      "cancelSuccessLabel": "Kompletteringsutkastet togs bort",
+      "cancelSuccessText": "Kompletteringsutkastet togs framgångsrikt bort"
+    },
+    "sendDialog": {
+      "title": "Skicka den kompletterade ansökan för handläggning",
+      "description": "När du skickar uppgifterna uppdateras din ansökan som handläggs med de kompletterade uppgifterna."
     }
   },
   "hankeSidebar": {
@@ -887,7 +1450,24 @@
       "EI_TARVETTA": "inget behov",
       "MERKITTAVA": "betydande"
     },
-    "indexesNotCalculated": "Olägenhetsindex har inte beräknats."
+    "indexesNotCalculated": "Olägenhetsindex har inte beräknats.",
+    "tooltips": {
+      "PYORALIIKENNE": "<ul><li>0: Ingen identifierad rutt för cykeltrafiken</li><li>1: Parkväg som eventuellt har cykeltrafik</li><li>2: Andra cykeltrafikförbindelser</li><li>3: Andra rutter med cykeltrafik (eller klassificeringsuppgifterna för rutten/förbindelsen fattas i bakgrundsuppgifterna för cykeltrafiken)</li><li>5: Cykeltrafikens huvudrutt eller en gata som utgör en del av huvudrutten</li></ul>",
+      "AUTOLIIKENNE": "För biltrafiken beräknas ett viktat olägenhetsindex (0–5) enligt de delområden som ingår i denna.",
+      "autoKatuluokka": "<ul><li>0: Ingen identifierad gatuklass</li><li>1: Bostadsgata, underhållsled eller gata med lite trafik</li><li>2: Bostadsgata, underhållsled eller gata med lite trafik i stadskärnan</li><li>3: Lokal uppsamlingsväg</li><li>4: Regional uppsamlingsväg</li><li>5: Huvudgata eller motortrafikled</li></ul>",
+      "autoliikenneMaara": "<ul><li>0: Ingen identifierad biltrafik</li><li>1: Mindre än 500 bilar per dygn på vardagar</li><li>2: 500–1 499 bilar per dygn på vardagar</li><li>3: 1 500–4 999 bilar per dygn på vardagar</li><li>4: 5 000–9 999 bilar per dygn på vardagar</li><li>5: 10 000 eller fler bilar per dygn på vardagar</li></ul>",
+      "autoKaistaHaitta": "<ul><li>0: Påverkar inte antalet filer för biltrafiken</li><li>1: $t(hanke:kaistaHaitta:YKSI_KAISTA_VAHENEE)</li><li>2: $t(hanke:kaistaHaitta:YKSI_KAISTA_VAHENEE_KAHDELLA_AJOSUUNNALLA)</li><li>3: $t(hanke:kaistaHaitta:USEITA_KAISTOJA_VAHENEE_AJOSUUNNILLA)</li><li>4: $t(hanke:kaistaHaitta:YKSI_AJOSUUNTA_POISTUU_KAYTOSTA)</li><li>5: $t(hanke:kaistaHaitta:USEITA_AJOSUUNTIA_POISTUU_KAYTOSTA)</li></ul>",
+      "autoKaistaPituusHaitta": "<ul><li>1: Påverkar inte körfältsarrangemangen</li><li>2: Sträckan för effekterna på körfältet mindre än 10 m</li><li>3: Sträckan för effekterna på körfältet 10–99 m</li><li>4: Sträckan för effekterna på körfältet 100–499 m</li><li>5: Sträckan för effekterna på körfältet 500 m eller mer</li></ul>",
+      "autoHankkeenKesto": "<ul><li>1: Projektets varaktighet mindre än 2 veckor</li><li>3: Projektets varaktighet 2 veckor– 3 månader</li><li>5: Projektets varaktighet mer än 3 månader</li></ul>",
+      "autoTyonKesto": "<ul><li>1: Arbetets varaktighet mindre än 2 veckor</li><li>3: Arbetets varaktighet 2 veckor– 3 månader</li><li>5: Arbetets varaktighet mer än 3 månader</li></ul>",
+      "LINJAAUTOLIIKENNE": "<ul><li>0: Ingen lokal busstrafik</li><li>2: Lokal busstrafik vid andra tider än under rusningstid</li><li>3: Högst 10 turer i den lokala busstrafikens linjer under rusningstid</li><li>4: Högst 20 stamlinjer eller turer i den lokala busstrafiken under rusningstid</li><li>5: Området kring Kampen-Järnvägstorget, Mannerheimvägen, Kajsaniemigatan, Tavastvägen eller antalet turer i den lokala busstrafikens linjer är mer än 20 under rusningstrafik</li></ul>",
+      "RAITIOLIIKENNE": "<ul><li>0: Inga identifierade spårvägsskenor</li><li>3: Spår i spårvägsnätet utan regelbunden linjetrafik</li><li>5: Spår i spårvägsnätet med regelbunden linjetrafik</li></ul>",
+      "MUUT": {
+        "meluHaitta": "<ul><li>0: $t(hanke:meluHaitta:EI_MELUHAITTAA)</li><li>1: $t(hanke:meluHaitta:SATUNNAINEN_MELUHAITTA)</li><li>3: $t(hanke:meluHaitta:TOISTUVA_MELUHAITTA)</li><li>5: $t(hanke:meluHaitta:JATKUVA_MELUHAITTA)</li></ul>",
+        "polyHaitta": "<ul><li>0: $t(hanke:polyHaitta:EI_POLYHAITTAA)</li><li>1: $t(hanke:polyHaitta:SATUNNAINEN_POLYHAITTA)</li><li>3: $t(hanke:polyHaitta:TOISTUVA_POLYHAITTA)</li><li>5: $t(hanke:polyHaitta:JATKUVA_POLYHAITTA)</li></ul>",
+        "tarinaHaitta": "<ul><li>0: $t(hanke:tarinaHaitta:EI_TARINAHAITTAA)</li><li>1: $t(hanke:tarinaHaitta:SATUNNAINEN_TARINAHAITTA)</li><li>3: $t(hanke:tarinaHaitta:TOISTUVA_TARINAHAITTA)</li><li>5: $t(hanke:tarinaHaitta:JATKUVA_TARINAHAITTA)</li></ul>"
+      }
+    }
   },
   "homepage": {
     "pageTitle": "Välkommen till tjänsten Haitaton",
@@ -1017,7 +1597,8 @@
       "labels": {
         "draft": "Projektet är i utkastfasen. Dess synlighet för andra projekt är begränsad och inga ansökningar kan läggas till.",
         "insufficientPhases": "$t(hankePortfolio:draftState:labels:draft) Följande faser har uppgifter som saknas:",
-        "missingFields": "$t(hankePortfolio:draftState:labels:draft) Följande fält på den här sidan krävs för att publicera projektet:"
+        "missingFields": "$t(hankePortfolio:draftState:labels:draft) Följande fält på den här sidan krävs för att publicera projektet:",
+        "missingInformationForHaittojenhallinta": "$t(hankePortfolio:draftState:labels:draft) Seuraavat tiedot lomakkeella vaaditaan haittojenhallinnan täyttämiseen:"
       }
     }
   },
@@ -1045,6 +1626,15 @@
       "step": "Sortera tabellen enligt skede",
       "startDate": "Sortera tabellen enligt startdatum",
       "endDate": "Sortera tabellen enligt slutdatum"
+    },
+    "sortLabels": {
+      "sorted": "Tabellen ordnad",
+      "nimi": "Projektets namn",
+      "vaihe": "Projektskede",
+      "alkuPvm": "Startdag för projektet",
+      "loppuPvm": "Slutdag för projektet",
+      "asc": "stigande",
+      "desc": "sjunkande"
     },
     "buttons": {
       "edit": "Modifiera projektet",
@@ -1102,7 +1692,7 @@
       "userUpdatedErrorLabel": "Ett fel uppstod vid uppdateringen",
       "userUpdatedErrorText": "<0>Ett fel uppstod när användarinformation skulle uppdateras. Försök igen senare eller kontakta Haitatons tekniska support med e-post till <1>haitatontuki@hel.fi</1>.</0>",
       "userIdentifiedLabel": "Identifieringen lyckades",
-      "userIdentifiedText": "Identifieringen lyckades. Du har nu lagts till i projektet ({{hankeNimi}} {{hankeTunnus}}).",
+      "userIdentifiedText": "Du har nu lagts till i projektet ({{hankeNimi}} {{hankeTunnus}}).",
       "userIdentifiedError": "Identifieringen misslyckades",
       "invitationSentSuccessLabel": "Inbjudningslänken skickades",
       "invitationSentSuccessText": "Inbjudningslänken skickades till {{email}}.",
@@ -1245,5 +1835,23 @@
     "text": "",
     "imageLabel": "Bild: Lille Santanen",
     "imageAltText": "Tecknad bild av byggarbetsplats"
+  },
+  "workInstructions": {
+    "sideNav": {
+      "externalLinks": {
+        "permitsAndInstructions": {
+          "label": "Tillstånd och anvisningar för byggplatsen",
+          "url": "https://www.hel.fi/sv/stadsmiljo-och-trafik/tomter-och-bygglov/tillstand-och-anvisningar-for-byggplatsen"
+        },
+        "payments": {
+          "label": "Afgifter",
+          "url": "https://www.hel.fi/sv/stadsmiljo-och-trafik/tomter-och-bygglov/tillstand-och-anvisningar-for-byggplatsen/arbete-pa-gatu-eller-parkomraden#avgifter--ansvar-och-gallande-hyrning-av-omraden-och-gravanmalningar"
+        },
+        "temporaryTrafficArrangement": {
+          "label": "Anvisningar för tillfälliga trafikarrangemang och typbilder",
+          "url": "https://www.hel.fi/sv/stadsmiljo-och-trafik/tomter-och-bygglov/tillstand-och-anvisningar-for-byggplatsen/arbete-pa-gatu-eller-parkomraden#anvisningar-for-tillfalliga-trafikarrangemang-och-planering"
+        }
+      }
+    }
   }
 }

@@ -41,3 +41,11 @@ yarn-error.log*
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/e2e/report
+.env.e2e

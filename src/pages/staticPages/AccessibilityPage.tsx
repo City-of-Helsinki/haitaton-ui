@@ -52,10 +52,6 @@ const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
           Havaitut puutteet
         </Text>
         <Text tag="p" spacingBottom="xs">
-          Sivuston hakemusten pudotusvalikoihin ei voi kohdistaa ruudunlukijalla (WCAG 2.1: 2.1.1
-          Näppäimistö)
-        </Text>
-        <Text tag="p" spacingBottom="xs">
           Hakemuksen työalueen voi lisätä vain hiirellä (WCAG 2.1: 2.1.1 Näppäimistö)
         </Text>
         <Text tag="p" spacingBottom="xs">
@@ -63,17 +59,8 @@ const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
           Linkin tarkoitus (kontekstissa))
         </Text>
         <Text tag="p" spacingBottom="xs">
-          Omat Hankkeet-sivulla on painikkeita, joilla ei ole saavutettavaa kuvausta ja jotka eivät
-          ilmoita toiminnastaan ruudunlukijalle (WCAG 2.1: 4.1.2 Nimi, rooli, arvo, 4.1.3: Tilasta
-          kertovat viestit)
-        </Text>
-        <Text tag="p" spacingBottom="xs">
           Omien hankkeiden otsikoiden nimeäminen ruudunlukijalle on epäselvää (WCAG 2.1: 1.3.1
           Informaatio ja suhteet)
-        </Text>
-        <Text tag="p">
-          Sivutuksen vaihtaminen ja lomakkeen avaaminen eivät siirrä kohdistusta sivun/lomakkeen
-          alkuun (WCAG 2.1: 2.4.3 Kohdistusjärjestys)
         </Text>
 
         <Text tag="h2" styleAs="h3" spacing="m">
@@ -178,23 +165,26 @@ const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
         </Text>
         <Text tag="p" spacingBottom="xs">
           Mikäli henkilö kokee, ettei hänen ilmoitukseensa tai tiedusteluunsa ole vastattu tai
-          vastaus ei ole tyydyttävä, voi asiasta tehdä ilmoituksen Etelä-Suomen
-          aluehallintovirastoon. Etelä-Suomen aluehallintoviraston sivulla kerrotaan tarkasti, miten
-          asia käsitellään.
+          vastaus ei ole tyydyttävä, voi asiasta tehdä ilmoituksen Traficomille. Traficomin sivulla
+          kerrotaan tarkasti, miten asia käsitellään.
         </Text>
         <Text tag="p" weight="bold">
-          Etelä-Suomen aluehallintovirasto
+          Liikenne- ja viestintävirasto Traficom
         </Text>
         <Text tag="p">
-          Saavutettavuuden valvonnan yksikkö
+          <Link
+            href="https://www.saavutettavuusvaatimukset.fi"
+            external
+            openInExternalDomainAriaLabel={t(
+              'common:components:link:openInExternalDomainAriaLabel',
+            )}
+          >
+            www.saavutettavuusvaatimukset.fi
+          </Link>
           <br />
-          www.saavutettavuusvaatimukset.fi
+          <Link href="mailto:saavutettavuus@traficom.fi">saavutettavuus@traficom.fi</Link>
           <br />
-          saavutettavuus@avi.fi
-          <br />
-          Puhelinvaihde: 0295 016 000
-          <br />
-          Avoinna: ma-pe klo 8.00 – 16.15
+          Puhelinvaihde: 029 534 5000
           <br />
         </Text>
 
