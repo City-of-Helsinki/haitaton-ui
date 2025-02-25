@@ -46,7 +46,7 @@ describe('areDatesWithinInterval', () => {
 });
 
 describe('featureContains', () => {
-  test('returns true if features are equal', () => {
+  test('returns true if features have equal geometries without properties', () => {
     const feature1 = feature(
       polygon([
         [
@@ -68,6 +68,70 @@ describe('featureContains', () => {
           [0, 0],
         ],
       ]).geometry,
+    );
+    expect(featureContains(feature1, feature2)).toBe(true);
+  });
+
+  test('returns true if features have equal geometries and equal properties', () => {
+    const feature1 = feature(
+      polygon([
+        [
+          [0, 0],
+          [0, 3],
+          [3, 3],
+          [3, 0],
+          [0, 0],
+        ],
+      ]).geometry,
+      {
+        name: 'Feature 1',
+      },
+    );
+    const feature2 = feature(
+      polygon([
+        [
+          [0, 0],
+          [0, 3],
+          [3, 3],
+          [3, 0],
+          [0, 0],
+        ],
+      ]).geometry,
+      {
+        name: 'Feature 1',
+      },
+    );
+    expect(featureContains(feature1, feature2)).toBe(true);
+  });
+
+  test('returns true if features have equal geometries but different properties', () => {
+    const feature1 = feature(
+      polygon([
+        [
+          [0, 0],
+          [0, 3],
+          [3, 3],
+          [3, 0],
+          [0, 0],
+        ],
+      ]).geometry,
+      {
+        name: 'Feature 1',
+      },
+    );
+    const feature2 = feature(
+      polygon([
+        [
+          [0, 0],
+          [0, 3],
+          [3, 3],
+          [3, 0],
+          [0, 0],
+        ],
+      ]).geometry,
+      {
+        name: 'Feature 2',
+      },
     );
     expect(featureContains(feature1, feature2)).toBe(true);
   });
@@ -144,6 +208,36 @@ describe('featureContains', () => {
           [7, 3],
           [7, 0],
           [4, 0],
+        ],
+      ]).geometry,
+    );
+    expect(featureContains(feature1, feature2)).toBe(false);
+  });
+
+  test('returns false if intersection is a multipolygon', () => {
+    const feature1 = feature(
+      polygon([
+        [
+          [0, 2],
+          [2, 2],
+          [2, 4],
+          [3, 4],
+          [3, 2],
+          [5, 2],
+          [5, 5],
+          [0, 5],
+          [0, 2],
+        ],
+      ]).geometry,
+    );
+    const feature2 = feature(
+      polygon([
+        [
+          [1, 0],
+          [4, 0],
+          [4, 3],
+          [1, 3],
+          [1, 0],
         ],
       ]).geometry,
     );

@@ -144,6 +144,7 @@ export function getFeatureFromHankeGeometry(geometry: HankeGeometria) {
  *
  * Due to a bug in Turf.js's `booleanContains` function (https://github.com/Turfjs/turf/issues/2588),
  * this function checks that the intersection of feature1 and feature2 is equal to feature2.
+ * Equality is checked without properties.
  */
 export function featureContains(
   feature1: GeoJSONFeature<GeoJSONPolygon>,
@@ -151,5 +152,6 @@ export function featureContains(
 ): boolean {
   const features: FeatureCollection<GeoJSONPolygon> = featureCollection([feature1, feature2]);
   const intersected = intersect(features);
-  return (intersected && booleanEqual(intersected, feature2)) || false;
+  const feature2WithoutProperties: GeoJSONFeature<GeoJSONPolygon> = { ...feature2, properties: {} };
+  return (intersected && booleanEqual(intersected, feature2WithoutProperties)) || false;
 }
