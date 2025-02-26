@@ -8,7 +8,7 @@ import ErrorLoadingText from '../../../common/components/errorLoadingText/ErrorL
 import useHanke from '../../hanke/hooks/useHanke';
 import { useApplication } from '../hooks/useApplication';
 import useLinkPath from '../../../common/hooks/useLinkPath';
-import { HAKEMUS_ROUTES, HAKEMUS_TAYDENNYS_ROUTES } from '../../../common/types/route';
+import { HAKEMUS_ROUTES, HAKEMUS_TAYDENNYS_ROUTES, ROUTES } from '../../../common/types/route';
 import { usePermissionsForHanke } from '../../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
 import useCreateTaydennys from '../taydennys/hooks/useCreateTaydennys';
@@ -31,6 +31,7 @@ function ApplicationViewContainer({ id }: Readonly<Props>) {
   const getEditTaydennysPath = useLinkPath(
     HAKEMUS_TAYDENNYS_ROUTES[application?.applicationType ?? 'CABLE_REPORT'],
   );
+  const getEditMuutosilmoitusPath = useLinkPath(ROUTES.EDIT_KAIVUILMOITUSMUUTOSILMOITUS);
   const createTaydennysMutation = useCreateTaydennys();
   const createMuutosilmoitusMutation = useCreateMuutosilmoitus();
 
@@ -59,8 +60,13 @@ function ApplicationViewContainer({ id }: Readonly<Props>) {
     if (applicationId) {
       if (!application?.muutosilmoitus) {
         // If there is no muutosilmoitus, create one
-        // TODO: Navigation to muutosilmoitus form will be implemented in HAI-3401
-        createMuutosilmoitusMutation.mutate(applicationId);
+        createMuutosilmoitusMutation.mutate(applicationId, {
+          onSuccess() {
+            navigate(getEditMuutosilmoitusPath({ id: applicationId.toString() }));
+          },
+        });
+      } else {
+        navigate(getEditMuutosilmoitusPath({ id: applicationId.toString() }));
       }
     }
   }

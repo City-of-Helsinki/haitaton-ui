@@ -1,6 +1,4 @@
-import { JohtoselvitysData, KaivuilmoitusData } from '../types/application';
-import { modifyKaivuilmoitusDataAfterReceive } from '../utils';
-import { TaydennyspyyntoFieldKey, TaydennyspyyntoField, Taydennys } from './types';
+import { TaydennyspyyntoFieldKey, TaydennyspyyntoField } from './types';
 
 const order = {
   [TaydennyspyyntoFieldKey.IDENTIFICATION_NUMBER]: 1,
@@ -24,19 +22,4 @@ const order = {
 
 export function sortTaydennyspyyntoFields(a: TaydennyspyyntoField, b: TaydennyspyyntoField) {
   return order[a.key] - order[b.key];
-}
-
-export function modifyTaydennysAfterReceive(
-  taydennys: Taydennys<JohtoselvitysData | KaivuilmoitusData>,
-) {
-  if (taydennys.applicationData.applicationType === 'CABLE_REPORT') {
-    return taydennys;
-  }
-  const kaivuilmoitusData = modifyKaivuilmoitusDataAfterReceive(
-    taydennys.applicationData as KaivuilmoitusData,
-  );
-  return {
-    ...taydennys,
-    applicationData: kaivuilmoitusData,
-  };
 }

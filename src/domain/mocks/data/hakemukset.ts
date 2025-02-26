@@ -26,6 +26,10 @@ async function readTaydennys(id: string) {
   return hakemukset.find((hakemus) => hakemus.taydennys?.id === id);
 }
 
+async function readMuutosilmoitus(id: string) {
+  return hakemukset.find((hakemus) => hakemus.muutosilmoitus?.id === id);
+}
+
 export async function readAll() {
   return hakemukset;
 }
@@ -203,5 +207,18 @@ export async function createMuutosilmoitus(id: number) {
     sent: null,
   };
   hakemus.muutosilmoitus = muutosilmoitus;
+  return muutosilmoitus;
+}
+
+export async function updateMuutosilmoitus(
+  id: string,
+  updates: JohtoselvitysUpdateData | KaivuilmoitusUpdateData,
+) {
+  const hakemus = await readMuutosilmoitus(id);
+  const muutosilmoitus = hakemus?.muutosilmoitus;
+  if (!muutosilmoitus) {
+    throw new ApiError(`No muutosilmoitus with id ${id}`, 404);
+  }
+  muutosilmoitus.applicationData = Object.assign(muutosilmoitus.applicationData, updates);
   return muutosilmoitus;
 }

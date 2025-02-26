@@ -399,10 +399,24 @@ export const handlers = [
   http.post(`${apiUrl}/hakemukset/:id/muutosilmoitus`, async ({ params }) => {
     const { id } = params;
     try {
-      const muutosilmoitus = await hakemuksetDB.createTaydennys(Number(id));
+      const muutosilmoitus = await hakemuksetDB.createMuutosilmoitus(Number(id));
       return HttpResponse.json(muutosilmoitus, { status: 200 });
     } catch (error) {
       return HttpResponse.json((<ApiError>error).message, { status: (<ApiError>error).status });
     }
   }),
+
+  http.put<PathParams, JohtoselvitysUpdateData | KaivuilmoitusUpdateData>(
+    `${apiUrl}/muutosilmoitukset/:id`,
+    async ({ params, request }) => {
+      const { id } = params;
+      const updates = await request.json();
+      try {
+        const muutosilmoitus = await hakemuksetDB.updateMuutosilmoitus(id as string, updates);
+        return HttpResponse.json(muutosilmoitus, { status: 200 });
+      } catch (error) {
+        return HttpResponse.json((<ApiError>error).message, { status: (<ApiError>error).status });
+      }
+    },
+  ),
 ];

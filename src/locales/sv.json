@@ -411,6 +411,10 @@
       "path": "/kompletteringavgravningsanmalan/:id/redigera",
       "meta": {}
     },
+    "EDIT_KAIVUILMOITUSMUUTOSILMOITUS": {
+      "path": "/kaivuilmoitus-muutosilmoitus/:id/muokkaa",
+      "meta": {}
+    },
     "HAITATON_INFO": {
       "path": "/info",
       "headerLabel": "Information om Haitaton",

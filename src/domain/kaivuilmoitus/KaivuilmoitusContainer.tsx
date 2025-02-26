@@ -49,7 +49,7 @@ import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/Co
 import { changeFormStep } from '../forms/utils';
 import Areas from './Areas';
 import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
-import { isApplicationDraft, isContactIn } from '../application/utils';
+import { getJohtoselvitysIdentifiers, isApplicationDraft, isContactIn } from '../application/utils';
 import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import useSendApplication from '../application/hooks/useSendApplication';
 import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
@@ -68,12 +68,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
   const [attachmentUploadErrors, setAttachmentUploadErrors] = useState<JSX.Element[]>([]);
   const { data: hankkeenHakemukset } = useApplicationsForHanke(hankeData.hankeTunnus, true);
   const { data: signedInUser } = usePermissionsForHanke(hankeData.hankeTunnus);
-  const johtoselvitysIds = hankkeenHakemukset?.applications
-    .filter(
-      (hakemus) =>
-        hakemus.applicationType === 'CABLE_REPORT' && Boolean(hakemus.applicationIdentifier),
-    )
-    .map((hakemus) => hakemus.applicationIdentifier!);
+  const johtoselvitysIds = getJohtoselvitysIdentifiers(hankkeenHakemukset?.applications);
 
   const initialValues: KaivuilmoitusFormValues = {
     id: null,

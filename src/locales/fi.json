@@ -416,6 +416,13 @@
         "title": "Haitaton - Muokkaa täydennystä kaivuilmoitushakemukseen"
       }
     },
+    "EDIT_KAIVUILMOITUSMUUTOSILMOITUS": {
+      "path": "/kaivuilmoitus-muutosilmoitus/:id/muokkaa",
+      "headerLabel": "Muokkaa muutosilmoitusta kaivuilmoitushakemukseen",
+      "meta": {
+        "title": "Haitaton - Muokkaa muutosilmoitusta kaivuilmoitushakemukseen"
+      }
+    },
     "HAITATON_INFO": {
       "path": "/tietoja",
       "headerLabel": "Tietoja Haitattomasta",
@@ -1547,6 +1554,10 @@
     }
   },
   "muutosilmoitus": {
+    "heading": "$t(muutosilmoitus:notification:label)",
+    "labels": {
+      "originalInformation": "$t(taydennys:labels:originalInformation)"
+    },
     "buttons": {
       "createMuutosilmoitus": "Tee muutosilmoitus",
       "editMuutosilmoitus": "Jatka muutosilmoitusta"
