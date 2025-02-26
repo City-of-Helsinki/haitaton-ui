@@ -16,6 +16,7 @@ import {
   PaatosTyyppi,
   ReportCompletionDateData,
   PaperDecisionReceiver,
+  HankkeenHakemus,
 } from './types/application';
 import { SignedInUser } from '../hanke/hankeUsers/hankeUser';
 import { HIDDEN_FIELD_VALUE } from './constants';
@@ -288,11 +289,31 @@ export function modifyDataAfterReceive<T extends JohtoselvitysData | Kaivuilmoit
   const taydennysData =
     application.taydennys &&
     modifyKaivuilmoitusDataAfterReceive(application.taydennys.applicationData as KaivuilmoitusData);
+  const muutosilmoitusData =
+    application.muutosilmoitus &&
+    modifyKaivuilmoitusDataAfterReceive(
+      application.muutosilmoitus.applicationData as KaivuilmoitusData,
+    );
   return {
     ...application,
     applicationData: kaivuilmoitusData as T,
     taydennys: application.taydennys
       ? { ...application.taydennys, applicationData: taydennysData as T }
       : undefined,
+    muutosilmoitus: application.muutosilmoitus
+      ? { ...application.muutosilmoitus, applicationData: muutosilmoitusData as T }
+      : undefined,
   };
+}
+
+/**
+ * Return application identifiers of johtoselvitys applications for a hanke
+ */
+export function getJohtoselvitysIdentifiers(hankkeenHakemukset?: HankkeenHakemus[]) {
+  return hankkeenHakemukset
+    ?.filter(
+      (hakemus) =>
+        hakemus.applicationType === 'CABLE_REPORT' && Boolean(hakemus.applicationIdentifier),
+    )
+    .map((hakemus) => hakemus.applicationIdentifier!);
 }

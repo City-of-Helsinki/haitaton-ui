@@ -11,12 +11,16 @@ import {
 import { KaivuilmoitusFormValues } from './types';
 import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../common/haittaIndexes/types';
 import { KaivuilmoitusTaydennysFormValues } from '../kaivuilmoitusTaydennys/types';
+import { KaivuilmoitusMuutosilmoitusFormValues } from '../kaivuilmoitusMuutosilmoitus/types';
 
 /**
  * Convert kaivuilmoitus form state to application update data.
  */
 export function convertFormStateToKaivuilmoitusUpdateData(
-  formState: KaivuilmoitusFormValues | KaivuilmoitusTaydennysFormValues,
+  formState:
+    | KaivuilmoitusFormValues
+    | KaivuilmoitusTaydennysFormValues
+    | KaivuilmoitusMuutosilmoitusFormValues,
 ): KaivuilmoitusUpdateData {
   const applicationData: KaivuilmoitusUpdateData = cloneDeep(formState.applicationData);
 

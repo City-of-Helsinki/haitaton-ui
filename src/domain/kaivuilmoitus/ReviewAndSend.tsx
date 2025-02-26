@@ -65,7 +65,10 @@ export const ReviewAndSend: React.FC<React.PropsWithChildren<Props>> = ({
           customerWithContacts={representativeWithContacts}
           title={t('form:yhteystiedot:titles:representativeWithContacts')}
         />
-        <InvoicingCustomerSummary invoicingCustomer={invoicingCustomer} />
+        <InvoicingCustomerSummary
+          invoicingCustomer={invoicingCustomer}
+          title={t('form:yhteystiedot:titles:invoicingCustomerInfo')}
+        />
       </FormSummarySection>
 
       <SectionTitle>{t('form:headers:liitteetJaLisatiedot')}</SectionTitle>

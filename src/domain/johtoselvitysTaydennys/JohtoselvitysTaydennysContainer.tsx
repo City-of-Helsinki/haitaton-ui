@@ -11,7 +11,6 @@ import {
   Notification,
 } from 'hds-react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useQueryClient } from 'react-query';
 import { Box } from '@chakra-ui/react';
 import { ValidationError } from 'yup';
 import { Taydennys } from '../application/taydennys/types';
@@ -38,7 +37,6 @@ import {
 import ReviewAndSend from './ReviewAndSend';
 import TaydennyspyyntoNotification from '../application/taydennys/TaydennyspyyntoNotification';
 import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
-import useUpdateTaydennys from '../application/taydennys/hooks/useUpdateTaydennys';
 import { convertFormStateToJohtoselvitysUpdateData } from '../johtoselvitys/utils';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
 import { changeFormStep } from '../forms/utils';
@@ -52,6 +50,8 @@ import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsF
 import TaydennysCancel from '../application/taydennys/components/TaydennysCancel';
 import Attachments from './Attachments';
 import useAttachments from '../application/hooks/useAttachments';
+import { updateTaydennys } from '../application/taydennys/taydennysApi';
+import useUpdateHakemus from '../application/taydennysAndMuutosilmoitusCommon/hooks/useUpdateHakemus';
 
 type Props = {
   taydennys: Taydennys<JohtoselvitysData>;
@@ -65,11 +65,8 @@ export default function JohtoselvitysTaydennysContainer({
   hankeData,
 }: Readonly<Props>) {
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
   const { setNotification } = useGlobalNotification();
   const navigateToApplicationView = useNavigateToApplicationView();
-  const { taydennysUpdateMutation, showSaveNotification, setShowSaveNotification } =
-    useUpdateTaydennys<JohtoselvitysData, JohtoselvitysUpdateData>();
   const sendTaydennysMutation = useSendTaydennys();
   const [showSendDialog, setShowSendDialog] = useState(false);
   const { data: signedInUser } = usePermissionsForHanke(hankeData.hankeTunnus);
@@ -93,6 +90,11 @@ export default function JohtoselvitysTaydennysContainer({
     handleSubmit,
   } = formContext;
   const watchFormValues = watch();
+
+  const { hakemusUpdateMutation, showSaveNotification, setShowSaveNotification } = useUpdateHakemus<
+    JohtoselvitysData,
+    JohtoselvitysUpdateData
+  >(originalApplication.id, updateTaydennys);
 
   function handleAttachmentUpload(isUploading: boolean) {
     setAttachmentsUploading(isUploading);
@@ -204,7 +206,7 @@ export default function JohtoselvitysTaydennysContainer({
 
   function saveTaydennys(handleSuccess?: () => void) {
     const formData = getValues();
-    taydennysUpdateMutation.mutate(
+    hakemusUpdateMutation.mutate(
       { id: formData.id, data: convertFormStateToJohtoselvitysUpdateData(formData) },
       {
         async onSuccess({
@@ -215,9 +217,6 @@ export default function JohtoselvitysTaydennysContainer({
             representativeWithContacts,
           },
         }) {
-          await queryClient.invalidateQueries(['application', originalApplication.id], {
-            refetchInactive: true,
-          });
           handleSuccess?.();
           if (customerWithContacts !== null) {
             setValue(
@@ -338,7 +337,7 @@ export default function JohtoselvitysTaydennysContainer({
           const isContact = isContactIn(signedInUser, getValues('applicationData'));
           const disableSendButton = showSendButton && !isContact;
 
-          const saveAndQuitIsLoading = taydennysUpdateMutation.isLoading || attachmentsUploading;
+          const saveAndQuitIsLoading = hakemusUpdateMutation.isLoading || attachmentsUploading;
           const saveAndQuitLoadingText = attachmentsUploading
             ? attachmentsUploadingText
             : t('common:buttons:savingText');
@@ -394,7 +393,7 @@ export default function JohtoselvitysTaydennysContainer({
 
       {showSaveNotification && (
         <ApplicationSaveNotification
-          saveSuccess={taydennysUpdateMutation.isSuccess}
+          saveSuccess={hakemusUpdateMutation.isSuccess}
           onClose={() => setShowSaveNotification(false)}
         />
       )}

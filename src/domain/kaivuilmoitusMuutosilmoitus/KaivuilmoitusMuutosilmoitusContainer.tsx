@@ -1,65 +1,49 @@
-import { useState } from 'react';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import {
-  Button,
-  IconEnvelope,
-  IconQuestionCircle,
-  IconSaveDiskette,
-  Notification,
-  StepState,
-} from 'hds-react';
-import { Box } from '@chakra-ui/layout';
-import { KaivuilmoitusTaydennysFormValues } from './types';
-import { validationSchema } from './validationSchema';
-import { convertTaydennysDataToFormState } from './utils';
-import { Taydennys } from '../application/taydennys/types';
+import { FieldPath, FormProvider, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Button, IconSaveDiskette, StepState } from 'hds-react';
+import { Muutosilmoitus } from '../application/muutosilmoitus/types';
 import {
   Application,
   KaivuilmoitusData,
   KaivuilmoitusUpdateData,
 } from '../application/types/application';
 import { HankeData } from '../types/hanke';
-import MultipageForm from '../forms/MultipageForm';
+import { convertMuutosilmoitusDataToFormState } from './utils';
+import { updateMuutosilmoitus } from '../application/muutosilmoitus/muutosilmoitusApi';
 import BasicInfo from '../kaivuilmoitus/BasicInfo';
 import {
-  perustiedotSchema,
   alueetSchema,
   haittojenhallintaSuunnitelmaSchema,
+  perustiedotSchema,
   yhteystiedotSchema,
 } from '../kaivuilmoitus/validationSchema';
+import { useApplicationsForHanke } from '../application/hooks/useApplications';
 import Areas from '../kaivuilmoitus/Areas';
 import HaittojenHallinta from '../kaivuilmoitus/HaittojenHallinta';
 import Contacts from '../kaivuilmoitus/Contacts';
-import { useApplicationsForHanke } from '../application/hooks/useApplications';
-import FormActions from '../forms/components/FormActions';
-import TaydennyspyyntoNotification from '../application/taydennys/TaydennyspyyntoNotification';
 import { convertFormStateToKaivuilmoitusUpdateData } from '../kaivuilmoitus/utils';
+import MultipageForm from '../forms/MultipageForm';
+import { changeFormStep } from '../forms/utils';
+import FormActions from '../forms/components/FormActions';
+import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
+import useUpdateHakemus from '../application/taydennysAndMuutosilmoitusCommon/hooks/useUpdateHakemus';
+import { getJohtoselvitysIdentifiers } from '../application/utils';
+import { KaivuilmoitusMuutosilmoitusFormValues } from './types';
+import { validationSchema } from './validationSchema';
+import ReviewAndSend from './ReviewAndSend';
+import useAttachments from '../application/hooks/useAttachments';
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
-import { changeFormStep } from '../forms/utils';
-import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
-import TaydennysCancel from '../application/taydennys/components/TaydennysCancel';
-import Attachments from './Attachments';
-import useAttachments from '../application/hooks/useAttachments';
-import ReviewAndSend from './ReviewAndSend';
-import { getJohtoselvitysIdentifiers, isContactIn } from '../application/utils';
-import useSendTaydennys from '../application/taydennys/hooks/useSendTaydennys';
-import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
-import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
-import FormErrorsNotification from '../kaivuilmoitus/components/FormErrorsNotification';
-import { updateTaydennys } from '../application/taydennys/taydennysApi';
-import useUpdateHakemus from '../application/taydennysAndMuutosilmoitusCommon/hooks/useUpdateHakemus';
 
 type Props = {
-  taydennys: Taydennys<KaivuilmoitusData>;
+  muutosilmoitus: Muutosilmoitus<KaivuilmoitusData>;
   originalApplication: Application<KaivuilmoitusData>;
   hankeData: HankeData;
 };
 
-export default function KaivuilmoitusTaydennysContainer({
-  taydennys,
+export default function KaivuilmoitusMuutosilmoitusContainer({
+  muutosilmoitus,
   originalApplication,
   hankeData,
 }: Readonly<Props>) {
@@ -68,18 +52,13 @@ export default function KaivuilmoitusTaydennysContainer({
   const navigateToApplicationView = useNavigateToApplicationView();
   const { data: hankkeenHakemukset } = useApplicationsForHanke(hankeData.hankeTunnus, true);
   const johtoselvitysIds = getJohtoselvitysIdentifiers(hankkeenHakemukset?.applications);
-  const sendTaydennysMutation = useSendTaydennys();
-  const [showSendDialog, setShowSendDialog] = useState(false);
-  const { data: signedInUser } = usePermissionsForHanke(hankeData.hankeTunnus);
   const { data: originalAttachments } = useAttachments(originalApplication.id);
-  const [attachmentsUploading, setAttachmentsUploading] = useState(false);
-  const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
 
-  const formContext = useForm<KaivuilmoitusTaydennysFormValues>({
+  const formContext = useForm<KaivuilmoitusMuutosilmoitusFormValues>({
     mode: 'onTouched',
-    defaultValues: convertTaydennysDataToFormState(taydennys),
+    defaultValues: convertMuutosilmoitusDataToFormState(muutosilmoitus),
     resolver: yupResolver(validationSchema),
-    context: { application: taydennys },
+    context: { application: muutosilmoitus },
   });
 
   const {
@@ -87,8 +66,7 @@ export default function KaivuilmoitusTaydennysContainer({
     setValue,
     watch,
     trigger,
-    formState: { isDirty, isValid },
-    handleSubmit,
+    formState: { isDirty },
   } = formContext;
   const watchFormValues = watch();
 
@@ -97,7 +75,7 @@ export default function KaivuilmoitusTaydennysContainer({
     KaivuilmoitusUpdateData
   >(
     originalApplication.id,
-    updateTaydennys,
+    updateMuutosilmoitus,
     function onUpdateSuccess({ applicationData: { customerWithContacts, invoicingCustomer } }) {
       if (customerWithContacts) {
         setValue(
@@ -119,13 +97,9 @@ export default function KaivuilmoitusTaydennysContainer({
     },
   );
 
-  function handleAttachmentUpload(isUploading: boolean) {
-    setAttachmentsUploading(isUploading);
-  }
-
   // Fields that are validated in each page when moving in the form
   // If validation of a field fails, the form will not move to the next page
-  const pageFieldsToValidate: FieldPath<KaivuilmoitusTaydennysFormValues>[][] = [
+  const pageFieldsToValidate: FieldPath<KaivuilmoitusMuutosilmoitusFormValues>[][] = [
     // Basic information page
     ['applicationData.name'],
     // Areas page
@@ -184,21 +158,7 @@ export default function KaivuilmoitusTaydennysContainer({
     },
     {
       element: (
-        <Attachments
-          applicationId={originalApplication.id!}
-          taydennysAttachments={taydennys.liitteet}
-          originalAttachments={originalAttachments}
-          onFileUpload={handleAttachmentUpload}
-        />
-      ),
-      label: t('hankePortfolio:tabit:liitteet'),
-      state: StepState.available,
-    },
-    {
-      element: (
         <ReviewAndSend
-          taydennys={taydennys}
-          muutokset={taydennys.muutokset}
           originalApplication={originalApplication}
           originalAttachments={originalAttachments ?? []}
           hankealueet={hankeData.alueet}
@@ -209,10 +169,7 @@ export default function KaivuilmoitusTaydennysContainer({
     },
   ];
 
-  const [activeStepIndex, setActiveStepIndex] = useState(0);
-  const lastStep = activeStepIndex === formSteps.length - 1;
-
-  function saveTaydennys(handleSuccess?: () => void) {
+  function saveMuutosilmoitus(handleSuccess?: () => void) {
     const formData = getValues();
     hakemusUpdateMutation.mutate(
       { id: formData.id, data: convertFormStateToKaivuilmoitusUpdateData(formData) },
@@ -222,12 +179,11 @@ export default function KaivuilmoitusTaydennysContainer({
     );
   }
 
-  function handleStepChange(stepIndex: number) {
-    setActiveStepIndex(stepIndex);
+  function handleStepChange() {
     // Save application when page is changed
     // only if something has changed
     if (isDirty) {
-      saveTaydennys();
+      saveMuutosilmoitus();
     }
   }
 
@@ -245,24 +201,7 @@ export default function KaivuilmoitusTaydennysContainer({
         closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
       });
     }
-    saveTaydennys(handleSuccess);
-  }
-
-  function openSendDialog() {
-    setShowSendDialog(true);
-  }
-
-  function closeSendDialog() {
-    setShowSendDialog(false);
-  }
-
-  function sendTaydennys() {
-    sendTaydennysMutation.mutate(taydennys.id, {
-      onSuccess(data) {
-        navigateToApplicationView(data.id?.toString());
-      },
-    });
-    closeSendDialog();
+    saveMuutosilmoitus(handleSuccess);
   }
 
   function validateStepChange(changeStep: () => void, stepIndex: number) {
@@ -272,32 +211,13 @@ export default function KaivuilmoitusTaydennysContainer({
   return (
     <FormProvider {...formContext}>
       <MultipageForm
-        heading={t('hakemus:buttons:editApplication')}
-        subHeading={`${hankeData.nimi} (${hankeData.hankeTunnus})`}
+        heading={t('muutosilmoitus:heading')}
+        subHeading={`${originalApplication.applicationData.name} (${originalApplication.applicationIdentifier})`}
         formSteps={formSteps}
         formData={watchFormValues}
         validationContext={{ application: watchFormValues }}
-        topElement={
-          <>
-            <TaydennyspyyntoNotification
-              taydennyspyynto={originalApplication.taydennyspyynto!}
-              applicationType="EXCAVATION_NOTIFICATION"
-            />
-            <Box mt="var(--spacing-s)">
-              <FormErrorsNotification
-                data={watchFormValues}
-                validationContext={{ application: watchFormValues }}
-                activeStepIndex={activeStepIndex}
-                lastStep={lastStep}
-              />
-            </Box>
-          </>
-        }
-        isLoading={attachmentsUploading}
-        isLoadingText={attachmentsUploadingText}
         onStepChange={handleStepChange}
         stepChangeValidator={validateStepChange}
-        onSubmit={handleSubmit(openSendDialog)}
       >
         {function renderFormActions(activeStep, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {
@@ -310,17 +230,8 @@ export default function KaivuilmoitusTaydennysContainer({
             }
           }
 
-          const showSendButton =
-            lastStep &&
-            isValid &&
-            (taydennys.muutokset.length > 0 || taydennys.liitteet.length > 0);
-          const isContact = isContactIn(signedInUser, getValues('applicationData'));
-          const disableSendButton = showSendButton && !isContact;
-
-          const saveAndQuitIsLoading = hakemusUpdateMutation.isLoading || attachmentsUploading;
-          const saveAndQuitLoadingText = attachmentsUploading
-            ? attachmentsUploadingText
-            : t('common:buttons:savingText');
+          const saveAndQuitIsLoading = hakemusUpdateMutation.isLoading;
+          const saveAndQuitLoadingText = t('common:buttons:savingText');
 
           return (
             <FormActions
@@ -328,18 +239,7 @@ export default function KaivuilmoitusTaydennysContainer({
               totalSteps={formSteps.length}
               onPrevious={handlePrevious}
               onNext={handleNext}
-              previousButtonIsLoading={attachmentsUploading}
-              previousButtonLoadingText={attachmentsUploadingText}
-              nextButtonIsLoading={attachmentsUploading}
-              nextButtonLoadingText={attachmentsUploadingText}
             >
-              <TaydennysCancel
-                application={originalApplication}
-                navigateToApplicationViewOnSuccess
-                buttonVariant="danger"
-                buttonIsLoading={saveAndQuitIsLoading}
-                buttonIsLoadingText={saveAndQuitLoadingText}
-              />
               <Button
                 variant="secondary"
                 onClick={handleSaveAndQuit}
@@ -349,27 +249,6 @@ export default function KaivuilmoitusTaydennysContainer({
               >
                 {t('hankeForm:saveDraftButton')}
               </Button>
-              {showSendButton && (
-                <Button
-                  type="submit"
-                  iconLeft={<IconEnvelope aria-hidden="true" />}
-                  loadingText={t('common:buttons:sendingText')}
-                  isLoading={sendTaydennysMutation.isLoading}
-                  disabled={disableSendButton}
-                >
-                  {t('taydennys:buttons:sendTaydennys')}
-                </Button>
-              )}
-              {disableSendButton && (
-                <Notification
-                  size="small"
-                  style={{ marginTop: 'var(--spacing-xs)' }}
-                  type="info"
-                  label={t('hakemus:notifications:sendApplicationDisabled')}
-                >
-                  {t('hakemus:notifications:sendApplicationDisabled')}
-                </Notification>
-              )}
             </FormActions>
           );
         }}
@@ -381,17 +260,6 @@ export default function KaivuilmoitusTaydennysContainer({
           onClose={() => setShowSaveNotification(false)}
         />
       )}
-
-      <ConfirmationDialog
-        title={t('taydennys:sendDialog:title')}
-        description={t('taydennys:sendDialog:description')}
-        showCloseButton
-        isOpen={showSendDialog}
-        close={closeSendDialog}
-        mainAction={sendTaydennys}
-        variant="primary"
-        headerIcon={<IconQuestionCircle />}
-      />
     </FormProvider>
   );
 }

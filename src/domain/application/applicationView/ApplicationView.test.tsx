@@ -1794,7 +1794,7 @@ describe('Excavation notification application view', () => {
       expect(screen.queryByRole('button', { name: 'Tee muutosilmoitus' })).not.toBeInTheDocument();
     });
 
-    test('Creates muutosilmoitus if muutosilmoitus does not exist', async () => {
+    test('Creates muutosilmoitus and navigates to edit muutosilmoitus path if muutosilmoitus does not exist', async () => {
       const muutosilmoitusCreateSpy = jest.spyOn(muutosilmoitusApi, 'createMuutosilmoitus');
       const application = hakemukset[7] as Application<KaivuilmoitusData>;
       server.use(
@@ -1814,8 +1814,26 @@ describe('Excavation notification application view', () => {
 
       await user.click(screen.getByRole('button', { name: 'Tee muutosilmoitus' }));
 
+      expect(window.location.pathname).toBe(
+        `/fi/kaivuilmoitus-muutosilmoitus/${application.id}/muokkaa`,
+      );
       expect(muutosilmoitusCreateSpy).toHaveBeenCalledWith(application.id);
       muutosilmoitusCreateSpy.mockRestore();
+    });
+
+    test('Navigates to edit muutosilmoitus path if muutosilmoitus exists', async () => {
+      const application = cloneDeep(hakemukset[7]) as Application<KaivuilmoitusData>;
+      application.muutosilmoitus = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        sent: null,
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('button', { name: 'Jatka muutosilmoitusta' }));
+
+      expect(window.location.pathname).toBe(
+        `/fi/kaivuilmoitus-muutosilmoitus/${application.id}/muokkaa`,
+      );
     });
 
     test('Shows error notification if creating muutosilmoitus fails', async () => {

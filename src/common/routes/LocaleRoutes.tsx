@@ -30,6 +30,7 @@ import WorkInstructionsPage from '../../pages/staticPages/workInstructions/WorkI
 import WorkInstructionsMain from '../../pages/staticPages/workInstructions/WorkInstructionsMain';
 import CardsIndex from '../../pages/staticPages/workInstructions/cards/CardsIndex';
 import { Card } from '../../pages/staticPages/workInstructions/cards/Cards';
+import EditKaivuilmoitusMuutosilmoitusPage from '../../pages/EditKaivuilmoitusMuutosilmoitusPage';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
@@ -78,6 +79,10 @@ const LocaleRoutes = () => {
       <Route
         path={t('routes:EDIT_KAIVUILMOITUSTAYDENNYS:path')}
         element={<PrivateRoute element={<EditKaivuilmoitusTaydennysPage />} />}
+      />
+      <Route
+        path={t('routes:EDIT_KAIVUILMOITUSMUUTOSILMOITUS:path')}
+        element={<PrivateRoute element={<EditKaivuilmoitusMuutosilmoitusPage />} />}
       />
       <Route
         path={t('routes:HAKEMUS:path')}
