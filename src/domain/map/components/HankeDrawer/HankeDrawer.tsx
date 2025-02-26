@@ -150,12 +150,7 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
 
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
           {mapTileLayers.ortokartta.visible && <Ortokartta opacity={ortoLayerOpacity} />}
-          <VectorLayer
-            source={drawSource}
-            zIndex={100}
-            className="drawLayer"
-            style={styleFunction}
-          />
+          <VectorLayer source={drawSource} zIndex={0} className="drawLayer" style={styleFunction} />
 
           {hankkeenHakemukset?.map((hakemus) => (
             <HakemusLayer key={hakemus.id} hakemusId={hakemus.id!} layerStyle={styleFunction} />
