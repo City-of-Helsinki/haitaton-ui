@@ -19,6 +19,7 @@ import card6Img1 from './card6-img1.png';
 import card7Img1 from './card7-img1.png';
 import card7Img2 from './card7-img2.png';
 import card7Img3 from './card7-img3.png';
+import { useLocalizedRoutes } from '../../../../common/hooks/useLocalizedRoutes';
 
 const Card1Basic: React.FC = () => {
   const { t } = useTranslation();
@@ -102,18 +103,14 @@ const Card1Basic: React.FC = () => {
           components={{ ul: <ul />, li: <li /> }}
         >
           <ul>
-            <li>Varmista jalankulun turvallisuus ja esteettömyys</li>
-            <li>Varmista kulkuyhteydet kiinteistöihin</li>
-            <li>Tee yhteensovitus muiden hankkeiden ja töiden sekä niiden kiertoreittien kanssa</li>
-            <li>
-              Ilmoita aina katujen sulkemisesta liikenteeltä Pelastuslaitokselle ja Poliisille
-            </li>
-            <li>Tarkista aina, onko hankkeesi tai työsi erikoiskuljetusten reitillä</li>
-            <li>
-              Tarkista vaikutukset olevaan liikennevalo-ohjaukseen (kaistajärjestelyt, ilmaisimet,
-              valojen toimivuus)
-            </li>
-            <li>Poikkeavat työajat</li>
+            <li>Työmaan tapahtumat</li>
+            <li>Jalkautuminen taloyhtiöiden, elinkeinoharjoittajien ja asukkaiden pariin</li>
+            <li>Opastajat työmaalla</li>
+            <li>Pikaviestitiedotteet</li>
+            <li>Työmaan esittelykokonaisuus</li>
+            <li>Viestintävastaava ja/tai sometiimi</li>
+            <li>Työmaan viestintäkampanja</li>
+            <li>Liikennetiedotteita voidaan jakaa myös Helsingin Uutisten uutisvirrassa</li>
           </ul>
         </Trans>
       </AdditionalSummary>
@@ -1795,22 +1792,27 @@ const Card: React.FC = () => {
   const { number = '', type = '' } = useParams<{ number: string; type: string }>();
   const { setBreadcrumbs } = useBreadcrumbs();
   const { t } = useTranslation();
+  const { CARD } = useLocalizedRoutes();
 
   useEffect(() => {
     const breadcrumb: BreadcrumbListItem = {
       title: `workInstructions:cards:${number}:header`,
-      path: '',
+      path:
+        type === t('routes:CARD:additionalLevel')
+          ? `${t('routes:CARD:path')}${number}/${t('routes:CARD:basicLevel')}`
+          : '',
     };
 
-    const updateBreadcrumbs = () =>
-      setBreadcrumbs([
-        BREADCRUMBS.cardsIndex,
-        breadcrumb,
-        type === t('routes:CARD:basicLevel') ? BREADCRUMBS.basicLevel : BREADCRUMBS.additionalLevel,
-      ]);
+    const updateBreadcrumbs = () => {
+      if (type === t('routes:CARD:additionalLevel')) {
+        setBreadcrumbs([BREADCRUMBS.cardsIndex, breadcrumb, BREADCRUMBS.additionalLevel]);
+      } else {
+        setBreadcrumbs([BREADCRUMBS.cardsIndex, breadcrumb]);
+      }
+    };
 
     updateBreadcrumbs();
-  }, [setBreadcrumbs, number, type, t]);
+  }, [setBreadcrumbs, number, type, t, CARD.path]);
 
   const renderCard = (cardNumber: string) => {
     switch (cardNumber) {
