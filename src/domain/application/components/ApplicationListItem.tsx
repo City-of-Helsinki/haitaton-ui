@@ -37,15 +37,13 @@ function ApplicationListItem({ hankeTunnus, application }: Readonly<Props>) {
       : ROUTES.EDIT_KAIVUILMOITUSHAKEMUS;
   const editMuutosilmoitusRoute =
     applicationType === 'CABLE_REPORT'
-      ? ROUTES.EDIT_JOHTOSELVITYSHAKEMUS /* TODO change when cable report muutosilmoitus is supported */
+      ? ROUTES.HAKEMUS /* TODO change when cable report muutosilmoitus is supported */
       : ROUTES.EDIT_KAIVUILMOITUSMUUTOSILMOITUS;
   const getApplicationPathEdit = useLinkPath(editRoute);
   const getMuutosilmoitusPathEdit = useLinkPath(editMuutosilmoitusRoute);
   const isSent = isApplicationSent(alluStatus);
   const { name, startTime, endTime } = applicationData;
-  const muutosilmoitusId = muutosilmoitus?.id;
-  const muutosilmoitusStatus: AlluStatus | null =
-    (muutosilmoitus?.sent && AlluStatus.PENDING) || null;
+  const muutosilmoitusStatus: AlluStatus | null = muutosilmoitus?.sent ? AlluStatus.PENDING : null;
   const isMuutosilmoitusSent = isApplicationSent(muutosilmoitusStatus);
   const {
     name: muutosilmoitusName,
@@ -54,7 +52,6 @@ function ApplicationListItem({ hankeTunnus, application }: Readonly<Props>) {
   } = muutosilmoitus?.hakemusdata || {};
   const applicationId =
     applicationIdentifier || t(`hakemus:applicationTypeDraft:${applicationType}`);
-
   const applicationViewPath = getApplicationPathView({ id: (id as number).toString() });
   const applicationEditPath = getApplicationPathEdit({ id: (id as number).toString() });
   const muutosilmoitusEditPath =
@@ -97,7 +94,7 @@ function ApplicationListItem({ hankeTunnus, application }: Readonly<Props>) {
           </Grid>
         </div>
         <Box paddingRight="var(--spacing-xs)">
-          {!isSent ? (
+          {!isSent && (
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hankeTunnus}>
               <Link
                 to={applicationEditPath}
@@ -107,7 +104,7 @@ function ApplicationListItem({ hankeTunnus, application }: Readonly<Props>) {
                 <IconPen aria-hidden="true" />
               </Link>
             </CheckRightsByHanke>
-          ) : null}
+          )}
         </Box>
         <Box paddingRight="14px">
           <Link
@@ -165,7 +162,7 @@ function ApplicationListItem({ hankeTunnus, application }: Readonly<Props>) {
                       ` ${muutosilmoitusName}` +
                       ` ${applicationId}`
                     }
-                    data-testid={`muutosilmoitusViewLinkIdentifier-${muutosilmoitusId}`}
+                    data-testid={`muutosilmoitusViewLinkIdentifier-${id}`}
                     className={styles.applicationLink}
                   >
                     {t(`muutosilmoitus:labels:muutosilmoitus`)}
@@ -184,7 +181,7 @@ function ApplicationListItem({ hankeTunnus, application }: Readonly<Props>) {
               </Grid>
             </div>
             <Box paddingRight="var(--spacing-xs)">
-              {!isMuutosilmoitusSent ? (
+              {!isMuutosilmoitusSent && (
                 <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hankeTunnus}>
                   <Link
                     to={muutosilmoitusEditPath || ''}
@@ -194,12 +191,12 @@ function ApplicationListItem({ hankeTunnus, application }: Readonly<Props>) {
                     <IconPen aria-hidden="true" />
                   </Link>
                 </CheckRightsByHanke>
-              ) : null}
+              )}
             </Box>
             <Link
               to={applicationViewPath}
               aria-label={t(`routes:${ROUTES.HAKEMUS}.meta.title`) + ` ${muutosilmoitusName}`}
-              data-testid={`muutosilmoitusViewLink-${muutosilmoitusId}`}
+              data-testid={`muutosilmoitusViewLink-${id}`}
             >
               <IconEye aria-hidden="true" />
             </Link>
