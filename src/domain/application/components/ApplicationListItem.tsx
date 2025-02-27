@@ -49,7 +49,7 @@ function ApplicationListItem({ hankeTunnus, application }: Readonly<Props>) {
     name: muutosilmoitusName,
     startTime: muutosilmoitusStartTime,
     endTime: muutosilmoitusEndTime,
-  } = muutosilmoitus?.hakemusdata || {};
+  } = muutosilmoitus?.applicationData || {};
   const applicationId =
     applicationIdentifier || t(`hakemus:applicationTypeDraft:${applicationType}`);
   const applicationViewPath = getApplicationPathView({ id: (id as number).toString() });

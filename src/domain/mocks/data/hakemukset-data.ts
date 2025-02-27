@@ -2169,7 +2169,7 @@ export default hakemukset;
 export const hankkeenHakemukset: HankkeenHakemus[] = hakemukset
   .filter((hakemus) => hakemus.hankeTunnus === 'HAI22-2')
   .map((hakemus) => {
-    const application: HankkeenHakemus = {
+    return {
       id: hakemus.id,
       alluid: hakemus.alluid,
       alluStatus: hakemus.alluStatus,
@@ -2182,13 +2182,6 @@ export const hankkeenHakemukset: HankkeenHakemus[] = hakemukset
         areas: hakemus.applicationData.areas,
       },
       paatokset: hakemus.paatokset,
+      muutosilmoitus: hakemus.muutosilmoitus,
     };
-    if (hakemus.muutosilmoitus) {
-      application.muutosilmoitus = {
-        id: hakemus.muutosilmoitus.id,
-        sent: hakemus.muutosilmoitus.sent ? new Date(hakemus.muutosilmoitus.sent) : null,
-        hakemusdata: hakemus.muutosilmoitus.applicationData,
-      };
-    }
-    return application;
   });
