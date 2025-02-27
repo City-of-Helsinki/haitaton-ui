@@ -184,7 +184,7 @@ function ApplicationListItem({ hankeTunnus, application }: Readonly<Props>) {
               {!isMuutosilmoitusSent && (
                 <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hankeTunnus}>
                   <Link
-                    to={muutosilmoitusEditPath || ''}
+                    to={muutosilmoitusEditPath ?? ''}
                     aria-label={t(`routes:${editRoute}.meta.title`) + ` ${name}`}
                     data-testid={`muutosilmoitusEditLink-${id}`}
                   >

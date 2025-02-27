@@ -8,12 +8,12 @@ import ApplicationListItem from './ApplicationListItem';
 import { Language } from '../../../common/types/language';
 import styles from './ApplicationList.module.scss';
 
-type Props = {
+interface Props {
   hankeTunnus: string;
   applications: HankkeenHakemus[];
-};
+}
 
-function ApplicationList({ hankeTunnus, applications }: Props) {
+function ApplicationList({ hankeTunnus, applications }: Readonly<Props>) {
   const { t, i18n } = useTranslation();
 
   const columns: Column<HankkeenHakemus>[] = React.useMemo(() => {
