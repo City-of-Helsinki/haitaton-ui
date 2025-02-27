@@ -183,16 +183,25 @@ export function isContactIn(
   return false;
 }
 
-export function getCurrentDecisions(paatokset?: { [key: string]: Paatos[] }): Paatos[] {
+export function getCurrentDecisions(
+  paatokset?: { [key: string]: Paatos[] },
+  reversed: boolean = false,
+): Paatos[] {
   if (!paatokset) {
     return [];
   }
   const allDecisions = Object.values(paatokset).flat();
-  const order = {
-    [PaatosTyyppi.TYO_VALMIS]: 1,
-    [PaatosTyyppi.TOIMINNALLINEN_KUNTO]: 2,
-    [PaatosTyyppi.PAATOS]: 3,
-  };
+  const order = !reversed
+    ? {
+        [PaatosTyyppi.TYO_VALMIS]: 1,
+        [PaatosTyyppi.TOIMINNALLINEN_KUNTO]: 2,
+        [PaatosTyyppi.PAATOS]: 3,
+      }
+    : {
+        [PaatosTyyppi.TYO_VALMIS]: 3,
+        [PaatosTyyppi.TOIMINNALLINEN_KUNTO]: 2,
+        [PaatosTyyppi.PAATOS]: 1,
+      };
   const currentOrders = allDecisions.filter((paatos) => paatos.tila === PaatosTila.NYKYINEN);
   currentOrders.sort((a, b) => order[a.tyyppi] - order[b.tyyppi]);
   return currentOrders;

@@ -286,6 +286,16 @@ export interface HankkeenHakemus {
     areas: ApplicationArea[] | KaivuilmoitusAlue[] | null;
   };
   paatokset?: { [key: string]: Paatos[] };
+  muutosilmoitus?: {
+    id: string;
+    sent: Date | null;
+    hakemusdata: {
+      name: string;
+      startTime: Date | null;
+      endTime: Date | null;
+      areas: ApplicationArea[] | KaivuilmoitusAlue[] | null;
+    };
+  };
 }
 
 export interface ApplicationDeletionResult {

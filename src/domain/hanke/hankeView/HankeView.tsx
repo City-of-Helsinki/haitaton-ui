@@ -498,7 +498,10 @@ const HankeView: React.FC<Props> = ({
                   </Flex>
                 )}
                 {applicationsResponse?.applications && (
-                  <ApplicationList applications={applicationsResponse.applications} />
+                  <ApplicationList
+                    hankeTunnus={hankeData.hankeTunnus}
+                    applications={applicationsResponse.applications}
+                  />
                 )}
                 {error && <ErrorLoadingText />}
               </>
