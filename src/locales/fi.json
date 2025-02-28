@@ -1556,7 +1556,8 @@
   "muutosilmoitus": {
     "heading": "$t(muutosilmoitus:notification:label)",
     "labels": {
-      "originalInformation": "$t(taydennys:labels:originalInformation)"
+      "originalInformation": "$t(taydennys:labels:originalInformation)",
+      "muutokset": "Muutokset"
     },
     "buttons": {
       "createMuutosilmoitus": "Tee muutosilmoitus",
