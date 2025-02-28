@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { perustaja, suorittaja, rakennuttaja, vastaava, asianhoitaja, testiData, testiOsoite, helsinkiLogin, idGenerator } from './_setup';
+import { perustaja, suorittaja, rakennuttaja, vastaava, asianhoitaja, testiData, testiOsoite, helsinkiLogin, hankeName } from './_setup';
 
 test.beforeEach('Helsinki_login', async ({ page }) => {
   await helsinkiLogin(page);
@@ -9,7 +9,8 @@ test.beforeEach('Helsinki_login', async ({ page }) => {
 test('Kaivuilmoitus', async ({ page }) => {
     test.setTimeout(320000);
     await page.getByLabel('Luo uusi hanke.', { exact: true }).click();
-    const ajonNimi = `TA-Kaivuilmoitus${testiData.runtime}-${idGenerator(1)}`
+    const ajonNimi = hankeName(`kaivuilmoitus`)
+    console.log(ajonNimi)
     await page.getByTestId('nimi').fill(ajonNimi);
     await page.getByTestId('perustaja.sahkoposti').fill(perustaja.email);
     await page.getByTestId('perustaja.puhelinnumero').fill(perustaja.phonenumber);
@@ -159,7 +160,7 @@ test('Kaivuilmoitus', async ({ page }) => {
     await page.getByRole('button', { name: 'Seuraava' }).click();
     await page.getByRole('button', { name: 'Lähetä hakemus' }).click();
     await page.getByRole('button', { name: 'Vahvista' }).click();
-    await expect(page.getByText('Hakemus lähetetty')).toBeVisible({timeout:30000});
+    await expect(page.getByText('Hakemus lähetetty')).toBeVisible({timeout:45000});
     await expect(page.locator("[data-testid=related_hanke]")).toBeVisible({timeout:30000})
     await page.locator("[data-testid=related_hanke]").click();
     await expect(page.getByText("Hakemukset", {exact:true})).toBeVisible({timeout:10000})

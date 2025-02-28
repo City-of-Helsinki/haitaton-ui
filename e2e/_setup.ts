@@ -10,6 +10,10 @@ tomorrow.setDate(today.getDate() + 1);
 const tommorowType = `${tomorrow.getDate()}.${tomorrow.getMonth() +1}.${tomorrow.getFullYear()}`
 const currentMonth: string = today.toLocaleString('fi-FI', { month: "long" });
 
+export function hankeName(testName: string) {
+  return `TA-${testName}-${todayFull}-${idGenerator(1)}`;
+}
+
 export async function tarkistaTulokset(page, hakemusLinkki, teksti) {
   await expect(async () => {
     await page.goto(hakemusLinkki);

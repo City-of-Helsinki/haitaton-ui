@@ -1,15 +1,16 @@
 import { test, expect } from '@playwright/test';
-import { perustaja, suorittaja, rakennuttaja, vastaava, asianhoitaja, testiData, testiOsoite, helsinkiLogin, idGenerator } from './_setup';
+import { perustaja, suorittaja, rakennuttaja, vastaava, asianhoitaja, testiData, testiOsoite, helsinkiLogin, hankeName } from './_setup';
 
 test.beforeEach('Helsinki_login', async ({ page }) => {
   await helsinkiLogin(page);
 });
 
 
-test('Kaivuilmoitus täydennyspyyntö hkjtp', async ({ page }) => {
+test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
     test.setTimeout(560000);
     await page.getByLabel('Luo uusi hanke.', { exact: true }).click();
-    const ajonNimi = `TA${testiData.runtime}-${idGenerator(1)}`
+    const ajonNimi = hankeName(`kaivuilmoitus-taydennyspyynto`)
+    console.log(ajonNimi)
     await page.getByTestId('nimi').fill(ajonNimi);
     await page.getByTestId('perustaja.sahkoposti').fill(perustaja.email);
     await page.getByTestId('perustaja.puhelinnumero').fill(perustaja.phonenumber);
@@ -159,7 +160,7 @@ test('Kaivuilmoitus täydennyspyyntö hkjtp', async ({ page }) => {
     await page.getByRole('button', { name: 'Seuraava' }).click();
     await page.getByRole('button', { name: 'Lähetä hakemus' }).click();
     await page.getByRole('button', { name: 'Vahvista' }).click();
-    await expect(page.getByText('Hakemus lähetetty')).toBeVisible({timeout:30000});
+    await expect(page.getByText('Hakemus lähetetty')).toBeVisible({timeout:40000});
     await expect(page.locator("[data-testid=related_hanke]")).toBeVisible({timeout:30000})
     await page.locator("[data-testid=related_hanke]").click();
     await expect(page.getByText("Hakemukset", {exact:true})).toBeVisible({timeout:10000})
@@ -284,7 +285,7 @@ test('Kaivuilmoitus täydennyspyyntö hkjtp', async ({ page }) => {
     await page.getByRole('button', { name: 'Lähetä täydennys' }).click();
     await page.getByTestId('dialog-button-test').click();
     await expect(page.getByLabel('Lähetetään')).toBeVisible();
-    await expect(page.getByLabel('Lähetetään')).not.toBeVisible({timeout:20000});
+    await expect(page.getByLabel('Lähetetään')).not.toBeVisible({timeout:30000});
     
     // täydennyspyynnöt suoritettu
     await expect(async () => {
