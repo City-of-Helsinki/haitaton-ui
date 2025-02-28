@@ -11,7 +11,6 @@ test('Uusi hanke', async ({ page }) => {
     await page.getByLabel('Luo uusi hanke.', { exact: true }).click();
     await page.getByTestId('nimi').click();
     const ajonNimi = hankeName(`uusi-hanke`)
-    console.log(ajonNimi)
     await page.getByTestId('nimi').fill(ajonNimi);
     await page.getByTestId('perustaja.sahkoposti').click();
     await page.getByTestId('perustaja.sahkoposti').fill(perustaja.email);

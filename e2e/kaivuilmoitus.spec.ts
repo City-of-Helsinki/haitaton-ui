@@ -10,7 +10,6 @@ test('Kaivuilmoitus', async ({ page }) => {
     test.setTimeout(320000);
     await page.getByLabel('Luo uusi hanke.', { exact: true }).click();
     const ajonNimi = hankeName(`kaivuilmoitus`)
-    console.log(ajonNimi)
     await page.getByTestId('nimi').fill(ajonNimi);
     await page.getByTestId('perustaja.sahkoposti').fill(perustaja.email);
     await page.getByTestId('perustaja.puhelinnumero').fill(perustaja.phonenumber);

@@ -14,7 +14,6 @@ test('Johtoselvityshakemus_peruminen', async ({ page }) => {
   await page.getByTestId('perustaja.puhelinnumero').fill(perustaja.phonenumber);
   await page.getByTestId('nimi').click();
   const ajonNimi = hankeName(`johtoselvitys-tilaus-peruminen`)
-  console.log(ajonNimi)
   await page.getByTestId('nimi').fill(ajonNimi);
   await page.getByRole('button', { name: 'Luo hakemus' }).click();
   await page.getByTestId('applicationData.postalAddress.streetAddress.streetName').click();

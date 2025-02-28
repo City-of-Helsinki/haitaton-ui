@@ -13,7 +13,6 @@ test('Johtoselvityshakemus_tilaus ja käsittely', async ({ page }) => {
   await page.getByTestId('perustaja.puhelinnumero').click();
   await page.getByTestId('perustaja.puhelinnumero').fill(perustaja.phonenumber);
   const ajonNimi = hankeName(`johtoselvitys-tilaus-kasittely`)
-  console.log(ajonNimi)
   await page.getByTestId('nimi').click();
   await page.getByTestId('nimi').fill(ajonNimi);
   await page.getByRole('button', { name: 'Luo hakemus' }).click();
