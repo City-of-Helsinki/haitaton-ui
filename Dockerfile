@@ -12,7 +12,7 @@ USER default
 RUN yarn && yarn cache clean --force
 RUN REACT_APP_DISABLE_SENTRY=0 yarn build
 
-FROM registry.access.redhat.com/ubi9/nginx-122
+FROM registry.access.redhat.com/ubi9/nginx-124
 # Install mods for nginx that include the Headers More mod, that allows the
 # removal of the Server -header
 RUN apt-get update && apt-get --no-install-recommends install -y nginx-extras && apt-get clean

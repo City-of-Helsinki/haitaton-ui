@@ -25,7 +25,7 @@ COPY ./tsconfig.eslint.json /builder/tsconfig.eslint.json
 COPY ./.eslintrc.js /builder/.eslintrc.js
 RUN REACT_APP_DISABLE_SENTRY=1 yarn build
 
-FROM registry.access.redhat.com/ubi9/nginx-122
+FROM registry.access.redhat.com/ubi9/nginx-124
 # Install mods for nginx that include the Headers More mod, that allows the
 # removal of the Server -header
 #RUN apt-get update && apt-get --no-install-recommends install -y nginx-extras && apt-get clean
