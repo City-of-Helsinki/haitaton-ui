@@ -83,7 +83,7 @@ export function convertApplicationDataToFormState(
  * Summary is calculated by taking the maximum value of each index type from all work areas.
  */
 export function calculateLiikennehaittaindeksienYhteenveto(
-  kaivuilmoitusalue: KaivuilmoitusAlue,
+  kaivuilmoitusalue?: KaivuilmoitusAlue,
 ): HaittaIndexData {
   const emptyHaittaIndexData: HaittaIndexData = {
     liikennehaittaindeksi: {
@@ -102,7 +102,12 @@ export function calculateLiikennehaittaindeksienYhteenveto(
     linjaautoliikenneindeksi: 0,
     raitioliikenneindeksi: 0,
   };
-  const summary = kaivuilmoitusalue.tyoalueet
+
+  if (!kaivuilmoitusalue) {
+    return emptyHaittaIndexData;
+  }
+
+  return kaivuilmoitusalue.tyoalueet
     .map((tyoalue) => tyoalue.tormaystarkasteluTulos ?? emptyHaittaIndexData)
     .reduce((acc, haittaindeksi) => {
       return {
@@ -153,7 +158,6 @@ export function calculateLiikennehaittaindeksienYhteenveto(
         ),
       };
     }, emptyHaittaIndexData);
-  return summary;
 }
 
 /**
