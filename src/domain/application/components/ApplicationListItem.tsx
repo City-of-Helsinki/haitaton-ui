@@ -89,7 +89,7 @@ function ApplicationListItem({ hankeTunnus, application }: Readonly<Props>) {
           <Box>
             <ApplicationDates startTime={startTime} endTime={endTime} />
           </Box>
-          <Grid alignItems="center" templateColumns="auto 1fr">
+          <Grid alignItems="start" templateColumns="auto 1fr">
             <ApplicationStatusTag status={alluStatus} />
           </Grid>
         </div>
@@ -176,7 +176,7 @@ function ApplicationListItem({ hankeTunnus, application }: Readonly<Props>) {
                   endTime={muutosilmoitusEndTime || null}
                 />
               </Box>
-              <Grid alignItems="center" templateColumns="auto 1fr">
+              <Grid alignItems="start" templateColumns="auto 1fr">
                 <ApplicationStatusTag status={muutosilmoitusStatus} />
               </Grid>
             </div>
