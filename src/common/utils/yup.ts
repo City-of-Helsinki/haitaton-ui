@@ -111,7 +111,9 @@ yup.addMethod(
         // Retrieve the correct area
         const alueet = hanke?.alueet ?? application?.applicationData.areas;
         const pathSegments: string[] = this.path.split('.');
-        const aluePathSegment = pathSegments.length > 0 ? pathSegments[0] : '';
+        const aluePathSegment =
+          pathSegments.find((segment) => segment.includes('alueet') || segment.includes('areas')) ??
+          '';
         const match = aluePathSegment.match(/\[(\d+)]/);
         let alueIndex = 0;
         if (match) {

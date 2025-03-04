@@ -2051,4 +2051,94 @@ describe('Error notification', () => {
     expect(screen.getByRole('listitem', { name: /alueiden/i })).toBeInTheDocument();
     expect(screen.getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
   });
+
+  test('Should not show validation errors in haittojenhallinta page for liikennemuodot that have no detected nuisances', async () => {
+    const application = cloneDeep(applications[4]) as Application<KaivuilmoitusData>;
+    application.applicationData.areas = [
+      ...application.applicationData.areas,
+      {
+        name: 'Hankealue 1',
+        hankealueId: 1,
+        tyoalueet: [
+          {
+            geometry: {
+              type: 'Polygon',
+              crs: {
+                type: 'name',
+                properties: {
+                  name: 'urn:ogc:def:crs:EPSG::3879',
+                },
+              },
+              coordinates: [
+                [
+                  [25498583.867247857, 6679281.28058593],
+                  [25498584.13087749, 6679314.065289769],
+                  [25498573.17171292, 6679313.3807182815],
+                  [25498571.913494226, 6679281.456795131],
+                  [25498583.867247857, 6679281.28058593],
+                ],
+              ],
+            },
+            area: 159.32433261766946,
+            tormaystarkasteluTulos: {
+              liikennehaittaindeksi: {
+                indeksi: 0,
+                tyyppi: HAITTA_INDEX_TYPE.PYORALIIKENNEINDEKSI,
+              },
+              pyoraliikenneindeksi: 0,
+              autoliikenne: {
+                indeksi: 0,
+                haitanKesto: 0,
+                katuluokka: 0,
+                liikennemaara: 0,
+                kaistahaitta: 0,
+                kaistapituushaitta: 0,
+              },
+              linjaautoliikenneindeksi: 0,
+              raitioliikenneindeksi: 0,
+            },
+          },
+        ],
+        katuosoite: 'Aidasmäentie 5',
+        tyonTarkoitukset: ['VESI', 'VIEMARI'],
+        meluhaitta: 'TOISTUVA_MELUHAITTA',
+        polyhaitta: 'JATKUVA_POLYHAITTA',
+        tarinahaitta: 'SATUNNAINEN_TARINAHAITTA',
+        kaistahaitta: 'EI_VAIKUTA',
+        kaistahaittojenPituus: 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
+        lisatiedot: '',
+        haittojenhallintasuunnitelma: {
+          YLEINEN: 'Työalueen yleisten haittojen hallintasuunnitelma',
+          PYORALIIKENNE: '',
+          AUTOLIIKENNE: '',
+          LINJAAUTOLIIKENNE: '',
+          RAITIOLIIKENNE: '',
+          MUUT: 'Muiden työalueen haittojen hallintasuunnitelma',
+        },
+      },
+    ];
+    const { user } = setup(application);
+    await user.click(screen.getByRole('button', { name: /haittojen hallinta/i }));
+
+    expect(
+      screen.queryByRole('link', {
+        name: 'Työalueet (Hankealue 1) Pyöräliikenteen merkittävyys: Toimet työalueiden haittojen hallintaan',
+      }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', {
+        name: 'Työalueet (Hankealue 1) Autoliikenteen ruuhkautuminen: Toimet työalueiden haittojen hallintaan',
+      }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', {
+        name: 'Työalueet (Hankealue 1) Raitioliikenne: Toimet työalueiden haittojen hallintaan',
+      }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', {
+        name: 'Työalueet (Hankealue 1) Linja-autojen paikallisliikenne: Toimet työalueiden haittojen hallintaan',
+      }),
+    ).not.toBeInTheDocument();
+  });
 });
