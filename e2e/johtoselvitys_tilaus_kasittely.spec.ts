@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { perustaja, vastaava, suorittaja, testiData, testiOsoite, helsinkiLogin } from './_setup';
+import { perustaja, vastaava, suorittaja, testiData, testiOsoite, helsinkiLogin, hankeName } from './_setup';
 
 test.beforeEach('Helsinki_login', async ({ page }) => {
   await helsinkiLogin(page);
@@ -12,8 +12,9 @@ test('Johtoselvityshakemus_tilaus ja käsittely', async ({ page }) => {
   await page.getByTestId('perustaja.sahkoposti').fill(perustaja.email);
   await page.getByTestId('perustaja.puhelinnumero').click();
   await page.getByTestId('perustaja.puhelinnumero').fill(perustaja.phonenumber);
+  const ajonNimi = hankeName(`johtoselvitys-tilaus-kasittely`)
   await page.getByTestId('nimi').click();
-  await page.getByTestId('nimi').fill(testiData.todayFull);
+  await page.getByTestId('nimi').fill(ajonNimi);
   await page.getByRole('button', { name: 'Luo hakemus' }).click();
   await page.getByTestId('applicationData.postalAddress.streetAddress.streetName').click();
   await page.getByTestId('applicationData.postalAddress.streetAddress.streetName').fill(testiOsoite.address);

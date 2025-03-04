@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { perustaja, suorittaja, rakennuttaja, testiData, testiOsoite, helsinkiLogin, idGenerator } from './_setup';
+import { perustaja, suorittaja, rakennuttaja, testiData, testiOsoite, helsinkiLogin, hankeName } from './_setup';
 
 test.beforeEach('Helsinki_login', async ({ page }) => {
   await helsinkiLogin(page);
@@ -10,7 +10,7 @@ test('Uusi hanke', async ({ page }) => {
     test.setTimeout(240000);
     await page.getByLabel('Luo uusi hanke.', { exact: true }).click();
     await page.getByTestId('nimi').click();
-    const ajonNimi = `TA${testiData.runtime}-${idGenerator(1)}`
+    const ajonNimi = hankeName(`uusi-hanke`)
     await page.getByTestId('nimi').fill(ajonNimi);
     await page.getByTestId('perustaja.sahkoposti').click();
     await page.getByTestId('perustaja.sahkoposti').fill(perustaja.email);
