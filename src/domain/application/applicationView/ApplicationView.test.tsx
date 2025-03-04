@@ -1871,7 +1871,7 @@ describe('Excavation notification application view', () => {
       application.muutosilmoitus = {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
         applicationData: application.applicationData,
-        sent: sentDate.toISOString(),
+        sent: sentDate,
       };
       await setup(application);
 

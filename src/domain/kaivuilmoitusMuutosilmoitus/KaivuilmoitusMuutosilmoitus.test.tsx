@@ -23,7 +23,7 @@ function setup(
     muutosilmoitus = {
       id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
       applicationData: application.applicationData,
-      sent: '2025-09-01T15:00:00.000Z',
+      sent: new Date('2025-09-01T15:00:00.000Z'),
     },
     hankeData = hankkeet[1] as HankeData,
     responseStatus = 200,

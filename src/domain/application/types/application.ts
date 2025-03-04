@@ -286,6 +286,7 @@ export interface HankkeenHakemus {
     areas: ApplicationArea[] | KaivuilmoitusAlue[] | null;
   };
   paatokset?: { [key: string]: Paatos[] };
+  muutosilmoitus?: Muutosilmoitus<JohtoselvitysData | KaivuilmoitusData>;
 }
 
 export interface ApplicationDeletionResult {

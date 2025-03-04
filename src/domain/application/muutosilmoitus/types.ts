@@ -1,4 +1,4 @@
-export type MuutosilmoitusSent = string | null;
+export type MuutosilmoitusSent = Date | null;
 
 export type Muutosilmoitus<T> = {
   id: string;

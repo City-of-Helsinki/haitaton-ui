@@ -29,3 +29,9 @@
     text-decoration: underline;
   }
 }
+
+.muutosilmoitusCard {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--spacing-s);
+}

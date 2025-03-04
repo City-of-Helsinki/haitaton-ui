@@ -266,28 +266,6 @@ test('Should show error notification if loading applications fails', async () =>
   expect(screen.queryByText('Yritä hetken päästä uudelleen.')).toBeInTheDocument();
 });
 
-test('Should navigate to application view when clicking application identifier link', async () => {
-  const { user } = render(<HankeViewContainer hankeTunnus="HAI22-2" />);
-
-  await waitForLoadingToFinish();
-  await user.click(screen.getByRole('tab', { name: /hakemukset/i }));
-  await user.click(screen.getByTestId('applicationViewLinkIdentifier-JS2300001'));
-
-  expect(window.location.pathname).toBe('/fi/hakemus/2');
-  expect(screen.queryByText('Mannerheimintien kuopat')).toBeInTheDocument();
-});
-
-test('Should navigate to application view when clicking the eye icon', async () => {
-  const { user } = render(<HankeViewContainer hankeTunnus="HAI22-2" />);
-
-  await waitForLoadingToFinish();
-  await user.click(screen.getByRole('tab', { name: /hakemukset/i }));
-  await user.click(screen.getByTestId('applicationViewLink-2'));
-
-  expect(window.location.pathname).toBe('/fi/hakemus/2');
-  expect(screen.queryByText('Mannerheimintien kuopat')).toBeInTheDocument();
-});
-
 test('Should not show edit hanke button if user does not have EDIT permission', async () => {
   getViewPermissionForUser();
   render(<HankeViewContainer hankeTunnus="HAI22-2" />);

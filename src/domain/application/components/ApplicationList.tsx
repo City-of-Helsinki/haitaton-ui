@@ -8,15 +8,21 @@ import ApplicationListItem from './ApplicationListItem';
 import { Language } from '../../../common/types/language';
 import styles from './ApplicationList.module.scss';
 
-type Props = {
+interface Props {
+  hankeTunnus: string;
   applications: HankkeenHakemus[];
-};
+}
 
-function ApplicationList({ applications }: Props) {
+function ApplicationList({ hankeTunnus, applications }: Readonly<Props>) {
   const { t, i18n } = useTranslation();
 
   const columns: Column<HankkeenHakemus>[] = React.useMemo(() => {
     return [
+      {
+        id: 'id',
+        accessor: 'id',
+        defaultCanFilter: true,
+      },
       {
         id: 'name',
         accessor: (application) => application.applicationData.name,
@@ -42,7 +48,7 @@ function ApplicationList({ applications }: Props) {
       data: applications,
       initialState: {
         pageSize: 10,
-        sortBy: React.useMemo(() => [{ id: 'name', desc: false }], []),
+        sortBy: React.useMemo(() => [{ id: 'id', desc: true }], []),
       },
     },
     useSortBy,
@@ -65,7 +71,13 @@ function ApplicationList({ applications }: Props) {
   return (
     <div>
       {page.map((row) => {
-        return <ApplicationListItem key={row.original.id} application={row.original} />;
+        return (
+          <ApplicationListItem
+            key={row.original.id}
+            hankeTunnus={hankeTunnus}
+            application={row.original}
+          />
+        );
       })}
 
       <div className={styles.pagination}>

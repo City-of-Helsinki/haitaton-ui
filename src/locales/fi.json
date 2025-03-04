@@ -573,6 +573,15 @@
       "liikennehaittaIndeksit": "Hankealueen liikennehaittaindeksit",
       "haittaIndexesChangedLabel": "Liikennehaittaindeksit ovat muuttuneet",
       "haittaIndexesChanged": "Työalueille lasketut liikennehaittaindeksit ovat muuttuneet. Tarkista haittojenhallintasuunnitelma."
+    },
+    "hakemuslista": {
+      "labels": {
+        "downloadDecision": {
+          "PAATOS": "Lataa viimeisin päätös (PDF)",
+          "TOIMINNALLINEN_KUNTO": "Lataa toiminnallinen kunto (PDF)",
+          "TYO_VALMIS": "Lataa työ valmis (PDF)"
+        }
+      }
     }
   },
   "hankeForm": {
@@ -1556,6 +1565,7 @@
   "muutosilmoitus": {
     "heading": "$t(muutosilmoitus:notification:label)",
     "labels": {
+      "muutosilmoitus": "Muutosilmoitus",
       "originalInformation": "$t(taydennys:labels:originalInformation)",
       "muutokset": "Muutokset"
     },
