@@ -477,9 +477,6 @@ function KaivuilmoitusAreasInfo({
       {addedAreas.length > 0 && (
         <SectionItemContentAdded>
           {addedAreas.map((area, index) => {
-            if (!muutokset?.includes(`areas[${index}]`)) {
-              return null;
-            }
             return (
               <KaivuilmoitusAreaInfo originalArea={area} areasHaveChanged={false} index={index} />
             );
@@ -558,9 +555,6 @@ function KaivuilmoitusAreasNuisanceInfo({
       {addedAreas.length > 0 && (
         <SectionItemContentAdded>
           {addedAreas.map((area, index) => {
-            if (!muutokset?.includes(`areas[${index}]`)) {
-              return null;
-            }
             const hankeArea = hankeAreas?.find((ha) => ha.id === area.hankealueId);
             return (
               <Accordion
