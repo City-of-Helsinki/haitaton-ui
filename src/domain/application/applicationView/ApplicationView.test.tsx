@@ -1827,6 +1827,7 @@ describe('Excavation notification application view', () => {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
         applicationData: application.applicationData,
         sent: null,
+        muutokset: [],
       };
       const { user } = await setup(application);
       await user.click(screen.getByRole('button', { name: 'Jatka muutosilmoitusta' }));
@@ -1858,6 +1859,7 @@ describe('Excavation notification application view', () => {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
         applicationData: application.applicationData,
         sent: null,
+        muutokset: [],
       };
       await setup(application);
 
@@ -1870,6 +1872,7 @@ describe('Excavation notification application view', () => {
       const sentDate = new Date();
       application.muutosilmoitus = {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        muutokset: [],
         applicationData: application.applicationData,
         sent: sentDate,
       };
@@ -1889,6 +1892,246 @@ describe('Excavation notification application view', () => {
       expect(
         screen.queryByRole('button', { name: 'Jatka muutosilmoitusta' }),
       ).not.toBeInTheDocument();
+    });
+
+    test('Shows changed information in basic information tab', async () => {
+      const application = cloneDeep(hakemukset[12] as Application<KaivuilmoitusData>);
+      const name = 'New name';
+      const workDescription = 'New work description';
+      application.muutosilmoitus = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        sent: null,
+        applicationData: {
+          ...application.applicationData,
+          name,
+          workDescription,
+          constructionWork: false,
+          maintenanceWork: true,
+          emergencyWork: true,
+          cableReports: [...(application.applicationData.cableReports || []), 'JS2300003'],
+          placementContracts: [
+            ...(application.applicationData.placementContracts || []),
+            'SL1234568',
+          ],
+          areas: [
+            {
+              ...application.applicationData.areas[0],
+              tyoalueet: [
+                ...application.applicationData.areas[0].tyoalueet,
+                {
+                  area: 10,
+                  geometry: {
+                    type: 'Polygon',
+                    crs: {
+                      type: 'name',
+                      properties: {
+                        name: 'urn:ogc:def:crs:EPSG::3879',
+                      },
+                    },
+                    coordinates: [
+                      [
+                        [25498581.440262634, 6679345.526261961],
+                        [25498582.233686976, 6679350.99321805],
+                        [25498576.766730886, 6679351.786642391],
+                        [25498575.973306544, 6679346.319686302],
+                        [25498581.440262634, 6679345.526261961],
+                      ],
+                    ],
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        muutokset: [
+          'name',
+          'workDescription',
+          'constructionWork',
+          'maintenanceWork',
+          'emergencyWork',
+          'cableReports',
+          'placementContracts',
+        ],
+      };
+      await setup(application);
+
+      expect(screen.getAllByText('Muutos:').length).toBe(6);
+      expect(screen.getAllByText('Poistettu:').length).toBe(1);
+      expect(screen.getByText(name)).toBeInTheDocument();
+      expect(screen.getByText(workDescription)).toBeInTheDocument();
+      expect(screen.getByText('Olemassaolevan rakenteen kunnossapitotyöstä')).toBeInTheDocument();
+      expect(screen.getAllByText('Uuden rakenteen tai johdon rakentamisesta').length).toBe(2);
+      expect(
+        screen.getByText(
+          'Kaivutyö on aloitettu ennen johtoselvityksen tilaamista merkittävien vahinkojen välttämiseksi',
+        ),
+      ).toBeInTheDocument();
+      expect(screen.getByText('JS2300003')).toBeInTheDocument();
+      expect(screen.getByText('SL1234568')).toBeInTheDocument();
+      expect(screen.getByText('221 m²')).toBeInTheDocument();
+    });
+
+    test('Shows changed information in areas tab', async () => {
+      const application = cloneDeep(hakemukset[12] as Application<KaivuilmoitusData>);
+      application.muutosilmoitus = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        sent: null,
+        applicationData: {
+          ...application.applicationData,
+          areas: [
+            {
+              ...application.applicationData.areas[0],
+              tyoalueet: [
+                ...application.applicationData.areas[0].tyoalueet.slice(0, 1),
+                {
+                  area: 10,
+                  geometry: {
+                    type: 'Polygon',
+                    crs: {
+                      type: 'name',
+                      properties: {
+                        name: 'urn:ogc:def:crs:EPSG::3879',
+                      },
+                    },
+                    coordinates: [
+                      [
+                        [25498574.56194478, 6679282.528783048],
+                        [25498582.990384366, 6679282.528783048],
+                        [25498582.990384366, 6679310.418567079],
+                        [25498574.56194478, 6679310.418567079],
+                        [25498574.56194478, 6679282.528783048],
+                      ],
+                    ],
+                  },
+                  tormaystarkasteluTulos: {
+                    liikennehaittaindeksi: {
+                      indeksi: 5,
+                      tyyppi: HAITTA_INDEX_TYPE.AUTOLIIKENNEINDEKSI,
+                    },
+                    pyoraliikenneindeksi: 3,
+                    autoliikenne: {
+                      indeksi: 5,
+                      haitanKesto: 5,
+                      katuluokka: 5,
+                      liikennemaara: 5,
+                      kaistahaitta: 5,
+                      kaistapituushaitta: 5,
+                    },
+                    linjaautoliikenneindeksi: 0,
+                    raitioliikenneindeksi: 1,
+                  },
+                },
+              ],
+              tyonTarkoitukset: ['VESI', 'TIETOLIIKENNE'],
+              meluhaitta: 'SATUNNAINEN_MELUHAITTA',
+              polyhaitta: 'SATUNNAINEN_POLYHAITTA',
+              tarinahaitta: 'TOISTUVA_TARINAHAITTA',
+              kaistahaitta: 'YKSI_KAISTA_VAHENEE_KAHDELLA_AJOSUUNNALLA',
+              kaistahaittojenPituus: 'PITUUS_ALLE_10_METRIA',
+              lisatiedot: 'Lisätiedot',
+            },
+          ],
+        },
+        muutokset: [
+          'areas[0].tyoalueet[1]',
+          'areas[0].tyonTarkoitukset',
+          'areas[0].meluhaitta',
+          'areas[0].polyhaitta',
+          'areas[0].tarinahaitta',
+          'areas[0].kaistahaitta',
+          'areas[0].kaistahaittojenPituus',
+          'areas[0].lisatiedot',
+        ],
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('tab', { name: /alueet/i }));
+
+      expect(screen.getAllByText('Muutos:').length).toBe(8);
+      expect(screen.getByText('394 m²')).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Työalueille lasketut liikennehaittaindeksit ovat muuttuneet. Tarkista haittojenhallintasuunnitelma.',
+        ),
+      ).toBeInTheDocument();
+    });
+
+    test('Shows changed information in haittojen hallinta tab', async () => {
+      const application = cloneDeep(hakemukset[12] as Application<KaivuilmoitusData>);
+      application.applicationData.propertyDeveloperWithContacts = cloneDeep(
+        application.applicationData.customerWithContacts,
+      );
+      application.muutosilmoitus = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        sent: null,
+        applicationData: {
+          ...application.applicationData,
+          areas: [
+            {
+              ...application.applicationData.areas[0],
+              haittojenhallintasuunnitelma: {
+                YLEINEN: 'Täydennetty työalueen yleisten haittojen hallintasuunnitelma',
+                PYORALIIKENNE:
+                  'Täydennetty pyöräliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+                AUTOLIIKENNE:
+                  'Täydennetty autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+                LINJAAUTOLIIKENNE:
+                  'Linja-autoliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+                RAITIOLIIKENNE:
+                  'Täydennetty raitioliikenteelle koituvien työalueen haittojen hallintasuunnitelma',
+                MUUT: '',
+              },
+            },
+          ],
+        },
+        muutokset: [
+          'areas[0].haittojenhallintasuunnitelma[YLEINEN]',
+          'areas[0].haittojenhallintasuunnitelma[PYORALIIKENNE]',
+          'areas[0].haittojenhallintasuunnitelma[AUTOLIIKENNE]',
+          'areas[0].haittojenhallintasuunnitelma[LINJAAUTOLIIKENNE]',
+          'areas[0].haittojenhallintasuunnitelma[RAITOLIIKENNE]',
+          'areas[0].haittojenhallintasuunnitelma[MUUT]',
+        ],
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('tab', { name: /haittojen hallinta/i }));
+
+      expect(screen.getAllByText('Muutos:').length).toBe(6);
+    });
+
+    test('Shows changed information in contacts tab', async () => {
+      const application = cloneDeep(hakemukset[12] as Application<KaivuilmoitusData>);
+      application.applicationData.propertyDeveloperWithContacts = cloneDeep(
+        application.applicationData.customerWithContacts,
+      );
+      application.muutosilmoitus = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c',
+        sent: null,
+        applicationData: {
+          ...application.applicationData,
+          customerWithContacts: {
+            customer: {
+              ...application.applicationData.customerWithContacts!.customer,
+              name: 'New name',
+              email: 'newMail@test.com',
+            },
+            contacts: application.applicationData.customerWithContacts!.contacts,
+          },
+          propertyDeveloperWithContacts: null,
+          invoicingCustomer: {
+            ...application.applicationData.invoicingCustomer!,
+            name: 'Uusi Laskutus Oy',
+          },
+        },
+        muutokset: ['customerWithContacts', 'propertyDeveloperWithContacts', 'invoicingCustomer'],
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('tab', { name: /yhteystiedot/i }));
+
+      expect(screen.getAllByText('Muutos:').length).toBe(2);
+      expect(screen.getAllByText('Poistettu:').length).toBe(1);
+      expect(screen.getByText('New name')).toBeInTheDocument();
+      expect(screen.getByText('newMail@test.com')).toBeInTheDocument();
+      expect(screen.getByText('Uusi Laskutus Oy')).toBeInTheDocument();
     });
   });
 });
