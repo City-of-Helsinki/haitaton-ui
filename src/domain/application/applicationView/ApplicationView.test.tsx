@@ -1863,7 +1863,7 @@ describe('Excavation notification application view', () => {
       };
       await setup(application);
 
-      expect(screen.getByText('Hakemukselle on luotu muutosilmoitus')).toBeInTheDocument();
+      expect(screen.getByText('Hakemuksella on keskeneräinen muutosilmoitus.')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Jatka muutosilmoitusta' })).toBeInTheDocument();
     });
 

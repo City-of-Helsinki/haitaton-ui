@@ -1576,7 +1576,7 @@
     },
     "notification": {
       "label": "Muutosilmoitus",
-      "createdText": "Hakemukselle on luotu muutosilmoitus",
+      "createdText": "Hakemuksella on keskeneräinen muutosilmoitus.",
       "sentText": "Hakemukselle on tehty muutosilmoitus, joka on lähetetty käsittelyyn {{date}}"
     }
   },
