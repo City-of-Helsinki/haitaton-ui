@@ -224,13 +224,13 @@ function KaivuilmoitusAreaInfo({
   changedArea,
   muutokset,
   index,
-}: {
+}: Readonly<{
   originalArea?: KaivuilmoitusAlue;
   areasHaveChanged?: boolean;
   changedArea?: KaivuilmoitusAlue;
   muutokset?: string[];
   index: number;
-}) {
+}>) {
   const { t } = useTranslation();
   const locale = useLocale();
 
@@ -407,7 +407,7 @@ function KaivuilmoitusAreaInfo({
         </SectionItemContent>
         <SectionItemTitle>{t('hakemus:labels:areaAdditionalInfo')}</SectionItemTitle>
         <SectionItemContent>
-          {originalArea?.lisatiedot || '-'}
+          {originalArea?.lisatiedot ?? '-'}
           {changedArea &&
             muutokset &&
             muutokset.includes(`${changedPropertyPrefix}.lisatiedot`) && (
@@ -430,18 +430,18 @@ function KaivuilmoitusAreaInfo({
 }
 
 function areasInclude(areas: KaivuilmoitusAlue[] | null, area: KaivuilmoitusAlue) {
-  return areas !== null && areas.some((a) => a.hankealueId === area.hankealueId);
+  return areas?.some((a) => a.hankealueId === area.hankealueId);
 }
 
 function KaivuilmoitusAreasInfo({
   originalAreas,
   changedAreas,
   muutokset,
-}: {
+}: Readonly<{
   originalAreas: KaivuilmoitusAlue[] | null;
   changedAreas?: KaivuilmoitusAlue[];
   muutokset?: string[];
-}) {
+}>) {
   if (originalAreas === null && changedAreas === undefined) {
     return null;
   }
@@ -466,6 +466,7 @@ function KaivuilmoitusAreasInfo({
         const changedAlue = changedAreas?.find((a) => a.hankealueId === area.hankealueId);
         return (
           <KaivuilmoitusAreaInfo
+            key={area.hankealueId}
             originalArea={area}
             areasHaveChanged={areasHaveChanged}
             changedArea={changedAlue}
@@ -478,7 +479,12 @@ function KaivuilmoitusAreasInfo({
         <SectionItemContentAdded>
           {addedAreas.map((area, index) => {
             return (
-              <KaivuilmoitusAreaInfo originalArea={area} areasHaveChanged={false} index={index} />
+              <KaivuilmoitusAreaInfo
+                key={area.hankealueId}
+                originalArea={area}
+                areasHaveChanged={false}
+                index={index}
+              />
             );
           })}
         </SectionItemContentAdded>
@@ -487,7 +493,12 @@ function KaivuilmoitusAreasInfo({
         <SectionItemContentRemoved marginTop="var(--spacing-s)">
           {removedAreas.map((area, index) => {
             return (
-              <KaivuilmoitusAreaInfo originalArea={area} areasHaveChanged={false} index={index} />
+              <KaivuilmoitusAreaInfo
+                key={area.hankealueId}
+                originalArea={area}
+                areasHaveChanged={false}
+                index={index}
+              />
             );
           })}
         </SectionItemContentRemoved>
@@ -501,12 +512,12 @@ function KaivuilmoitusAreasNuisanceInfo({
   originalAreas,
   changedAreas,
   muutokset,
-}: {
+}: Readonly<{
   hankeAreas?: HankeAlue[];
   originalAreas: KaivuilmoitusAlue[] | null;
   changedAreas?: KaivuilmoitusAlue[];
   muutokset?: string[];
-}) {
+}>) {
   const { t } = useTranslation();
   const locale = useLocale();
 
