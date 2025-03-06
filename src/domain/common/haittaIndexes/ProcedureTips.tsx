@@ -12,6 +12,7 @@ export default function ProcedureTips({ haittojenhallintaTyyppi, haittaIndex }: 
   const { t } = useTranslation();
 
   const { CARD } = useLocalizedRoutes();
+  const isOther = ['MUUT', 'MELU', 'POLY', 'TARTINA'].includes(haittojenhallintaTyyppi);
 
   const tips: {
     // Procedure tip title
@@ -72,7 +73,7 @@ export default function ProcedureTips({ haittojenhallintaTyyppi, haittaIndex }: 
       <Box
         paddingX="var(--spacing-s)"
         paddingBottom="var(--spacing-s)"
-        mb="var(--spacing-l)"
+        mb={isOther ? 'var(--spacing-xs)' : 'var(--spacing-l)'}
         backgroundColor="var(--color-black-5)"
         data-testid="test-common-nuisances"
       >
@@ -82,7 +83,6 @@ export default function ProcedureTips({ haittojenhallintaTyyppi, haittaIndex }: 
           )}
           size="s"
           headingLevel={4}
-          initiallyOpen
           theme={{
             '--header-font-size': 'var(--fontsize-heading-s)',
           }}

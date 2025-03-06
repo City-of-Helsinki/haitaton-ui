@@ -842,7 +842,10 @@
           "AUTOLIIKENNE": "Autoliikennettä koskevat toimenpidevinkit",
           "LINJAAUTOLIIKENNE": "Linja-autojen paikallisliikennettä koskevat toimenpidevinkit",
           "RAITIOLIIKENNE": "Raitioliikennettä koskevat toimenpidevinkit",
-          "MUUT": "Päästöille yhteiset toimenpidevinkit"
+          "MUUT": "Päästöille yhteiset toimenpidevinkit",
+          "MELU": "Meluhaittaa koskevat toimenpidevinkit",
+          "POLY": "Pölyhaittaa koskevat toimenpidevinkit",
+          "TARINA": "Tärinää koskevat toimenpidevinkit"
         },
         "PYORALIIKENNE": [
           {
@@ -1052,59 +1055,64 @@
         ],
         "MUUT": [
           {
+            "heading": "Päästöjen vaikutusalue ja herkät toiminnot",
             "tip": "Selvitä työsi melu-, pöly- tai tärinäpäästöjen vaikutusalue ja sillä olevat herkät toiminnot (asunnot, päiväkodit, koulut, tärkeät palvelut, kuten terveyspalvelut, liiketilat, ravintolaterassit, tutkimuslaitokset, luontokohteet, uskonnolliset laitokset ym.). "
           },
           {
-            "tip": "Tiedota toimijoille ja kiinteistöille vähintään viikkoa ennen tai välittömästi töiden ajankohdan ollessa tiedossa, kun tehdään melu-, pöly- tai tärinähaittaa aiheuttavia töitä. Erittäin häiritsevästä työstä tulee tehdä ilmoitus viimeistään 30 vuorokautta ennen töiden aloittamista. Anna asukkaille ja eri toimijoille aikaa varautua etukäteen tiedossa oleviin häriöihin ja neuvottele erityisesti herkkien toimintojen lähellä haitoista toimijoiden kanssa."
+            "heading": "Ennakkotiedotus ja tiedotus muutoksista",
+            "tip": "Tiedota toimijoille ja kiinteistöille vähintään viikkoa ennen tai välittömästi töiden ajankohdan ollessa tiedossa, kun tehdään melu-, pöly- tai tärinähaittaa aiheuttavia töitä. Erittäin häiritsevästä työstä tulee tehdä ilmoitus viimeistään 30 vuorokautta ennen töiden aloittamista. Anna asukkaille ja eri toimijoille aikaa varautua etukäteen tiedossa oleviin häriöihin ja neuvottele erityisesti herkkien toimintojen lähellä haitoista toimijoiden kanssa.",
+            "cardLinks": [1]
           },
           {
-            "tip": "Selvitä työsi aikatauluttamisen ja työmenetelmien mahdollisuudet päästöhaittojen minimoimiseksi toiminnoille."
+            "heading": "Työn aikatauluttaminen ja työmenetelmät",
+            "tip": "Selvitä työsi aikatauluttamisen ja työmenetelmien mahdollisuudet päästöhaittojen minimoimiseksi toiminnoille.",
+            "cardLinks": [10]
+          }
+        ],
+        "MELU": [
+          {
+            "heading": "Meluilmoitus",
+            "tip": "Laadi meluilmoitus häiritsevästä melusta viimeistään 30 vuorokautta ennen toiminnan aloittamista: <external href=\"https://www.hel.fi/fi/yritykset-ja-tyo/yritykset-ja-yrittajat/yritysten-luvat-ja-tilat/ymparistolupa-ja-ilmoitukset/meluilmoitus\">Meluilmoitus</external>"
           },
           {
-            "tip": "Laadi meluilmoitus häiritsevästä melusta viimeistään 30 vuorokautta ennen toiminnan aloittamista: <0>Meluilmoitus</0>",
-            "links": [
-              "https://www.hel.fi/fi/yritykset-ja-tyo/yritykset-ja-yrittajat/yritysten-luvat-ja-tilat/ymparistolupa-ja-ilmoitukset/meluilmoitus"
-            ]
+            "heading": "Työaikarajoitukset",
+            "tip": "Asuin- ja majoitushuoneistojen sekä hoitolaitosten läheisyydessä et pääsääntöisesti saa harjoittaa erityisen häiritsevää melua aiheuttavaa toimintaa yöaikaan klo 22–7. Vältä meluavia töitä päiväkotien läheisyydessä  klo 12-14, koulujen läheisyydessä klo 8-15 sekä toimistojen läheisyydessä klo 9-15."
           },
           {
-            "tip": "Asuin- ja majoitushuoneistojen sekä hoitolaitosten läheisyydessä et pääsääntöisesti saa harjoittaa erityisen häiritsevää melua aiheuttavaa toimintaa yöaikaan klo 22–7."
+            "heading": "Melua vähentävät ratkaisut",
+            "tip": "Toteuta meluvaikutuksia vähentäviä ratkaisuja, kuten siirrettävä meluaita.",
+            "cardLinks": [10]
+          }
+        ],
+        "POLY": [
+          {
+            "heading": "Työmaavesien käsittely",
+            "tip": "Laadi työmaavesien käsittelysuunnitelma hyvissä ajoin osana työmaan suunnittelua (aluksi arvioi poistettavien vesien määrä ja laatu). Työmaavesien johtamisesta hulevesiverkostoon tulee sopia Helsingin Seudun Ympäristöpalveluihin (HSY) (<external href=\"https://yhteydenotto.hsy.fi/asiakaspalvelu\">https://yhteydenotto.hsy.fi/asiakaspalvelu</external>, puh. vaihde 09 1561 2110). Varmista HSY:n kanssa työmaavesien johtamisen verkostolliset vaikutukset mm. verkoston purkupään luontoarvoihin (esim. julkisivuremonttien pölyn hallitsematon päätyminen verkostoon). Lisätiedot: <external href=\"https://www.hsy.fi/vesi-ja-viemarit/tyomaavesien-viemarointiohje/\">Työmaavesien viemäröintiohje</external> sekä <external href=\"https://www.hel.fi/static/ymk/esitteet/tyomaavesi.pdf\">https://www.hel.fi/static/ymk/esitteet/tyomaavesi.pdf</external>"
           },
           {
-            "tip": "Vältä meluavia töitä päiväkotien läheisyydessä  klo 12-14, koulujen läheisyydessä klo 8-15 sekä toimistojen läheisyydessä klo 9-15."
-          },
-          {
-            "tip": "Toteuta meluvaikutuksia vähentäviä ratkaisuja, kuten siirrettävä meluaita."
-          },
-          {
-            "tip": "Laadi työmaavesien käsittelysuunnitelma hyvissä ajoin osana työmaan suunnittelua (aluksi arvioi poistettavien vesien määrä ja laatu). Työmaavesien johtamisesta hulevesiverkostoon tulee sopia Helsingin Seudun Ympäristöpalveluihin (HSY) (<0>https://yhteydenotto.hsy.fi/asiakaspalvelu</0>, puh. vaihde 09 1561 2110). Varmista HSY:n kanssa työmaavesien johtamisen verkostolliset vaikutukset mm. verkoston purkupään luontoarvoihin (esim. julkisivuremonttien pölyn hallitsematon päätyminen verkostoon). Lisätiedot: <1>Työmaavesien viemäröintiohje</1> sekä <2>https://www.hel.fi/static/ymk/esitteet/tyomaavesi.pdf</2>",
-            "links": [
-              "https://yhteydenotto.hsy.fi/asiakaspalvelu,",
-              "https://www.hsy.fi/vesi-ja-viemarit/tyomaavesien-viemarointiohje/",
-              "https://www.hel.fi/static/ymk/esitteet/tyomaavesi.pdf"
-            ]
-          },
-          {
+            "heading": "Pesurin käyttö",
             "tip": "Käytä pesuria lähikaduille päivittäin, jos työalue on sora- tai irtomaa-ainespintainen. Estä ajoväylien pölyäminen esimerkiksi suolaliuoksella tai murskepinnalla. Käytä pesuria tarvittaessa myös työmaa-ajoneuvoihin."
           },
           {
+            "heading": "Pölyävien varastojen ja kuormien suojaaminen",
             "tip": "Kastele ja peitä varastoidut maa- ja kiviainekset sekä purkujätteet. Kastele ja peitä pölyävät kuormat kuljetettaessa niitä rakennustyömaan ulkopuolelle."
           },
           {
-            "tip": "Käytä pölynkeräyslaitteistoja avolouhinnan porauslaitteissa (alle 200 metrin päässä herkistä kohteista tai kun louheen kuljetusreitti sijaitsee pölylle herkkien kohteiden läheisyydessä)."
+            "heading": "Pölyn leviämisen estäminen",
+            "tip": "Suunnittele ja käytä pölyä aiheuttavissa työvaiheissa pölyn leviämistä estäviä toimia. Käytä pölynkeräyslaitteistoja avolouhinnan porauslaitteissa (alle 200 metrin päässä herkistä kohteista tai kun louheen kuljetusreitti sijaitsee pölylle herkkien kohteiden läheisyydessä). Estä ajoväylien pölyäminen esimerkiksi suolaliuoksella tai käytä työmaan sisäisinä ajoreitteinä tarvittaessa murskepintaisia väyliä."
           },
           {
-            "tip": "Tarkista ratkaisujesi ohjeidenmukaisuus: <0>https://www.hel.fi/static/ymk/esitteet/rakennustyomaapoly.pdf</0>",
-            "links": [
-              "https://www.hel.fi/static/ymk/esitteet/rakennustyomaapoly.pdf"
-            ]
+            "heading": "Rakennustyömaan pölyä koskevat ohjeet",
+            "tip": "Tarkista ratkaisujesi ohjeidenmukaisuus: <external href=\"https://www.hel.fi/static/ymk/esitteet/rakennustyomaapoly.pdf\">https://www.hel.fi/static/ymk/esitteet/rakennustyomaapoly.pdf</external>"
+          }
+        ],
+        "TARINA": [
+          {
+            "heading": "Melu- ja tärinäilmoitus",
+            "tip": "Laadi ilmoitus häiritsevästä (melusta ja) tärinästä viimeistään 30 vuorokautta ennen toiminnan aloittamista: <external href=\"https://www.hel.fi/fi/yritykset-ja-tyo/yritykset-ja-yrittajat/yritysten-luvat-ja-tilat/ymparistolupa-ja-ilmoitukset/meluilmoitus\">Meluilmoitus</external>"
           },
           {
-            "tip": "Laadi ilmoitus häiritsevästä (melusta ja) tärinästä viimeistään 30 vuorokautta ennen toiminnan aloittamista: <0>Meluilmoitus</0>",
-            "links": [
-              "https://www.hel.fi/fi/yritykset-ja-tyo/yritykset-ja-yrittajat/yritysten-luvat-ja-tilat/ymparistolupa-ja-ilmoitukset/meluilmoitus"
-            ]
-          },
-          {
+            "heading": "Maaperä ja työmenetelmät",
             "tip": "Tarkista maaperätiedot ja miten maaperä vaikuttaa tärinän leviämiseen. Suunnittele työmenetelmät siten, että tärinävaikutukset minimoituvat."
           }
         ]
