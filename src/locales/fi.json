@@ -31,6 +31,7 @@
       "confirmButton": "Vahvista"
     },
     "components": {
+      "moveToPage": "Siirry sivulle",
       "link": {
         "openInNewTabAriaLabel": "Avautuu uudessa välilehdessä.",
         "openInExternalDomainAriaLabel": "Siirtyy toiseen sivustoon.",
