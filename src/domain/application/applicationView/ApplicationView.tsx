@@ -30,7 +30,7 @@ import {
   SectionItemContentRemoved,
   SectionItemTitle,
 } from '../../forms/components/FormSummarySection';
-import { HankeData } from '../../types/hanke';
+import { HankeAlue, HankeData } from '../../types/hanke';
 import ApplicationStatusTag from '../components/ApplicationStatusTag';
 import {
   AlluStatus,
@@ -218,217 +218,401 @@ function JohtoselvitysAreasInfo({
   );
 }
 
-function KaivuilmoitusAreasInfo({
-  areas,
-  changedAreas,
+function KaivuilmoitusAreaInfo({
+  originalArea,
+  areasHaveChanged,
+  changedArea,
   muutokset,
-}: {
-  areas: KaivuilmoitusAlue[] | null;
-  changedAreas?: KaivuilmoitusAlue[];
+  index,
+}: Readonly<{
+  originalArea?: KaivuilmoitusAlue;
+  areasHaveChanged?: boolean;
+  changedArea?: KaivuilmoitusAlue;
   muutokset?: string[];
-}) {
+  index: number;
+}>) {
   const { t } = useTranslation();
   const locale = useLocale();
 
-  if (!areas) {
+  if (originalArea === undefined && changedArea === undefined) {
     return null;
   }
 
-  const areasChanged =
+  const changedPropertyPrefix = `areas[${index}]`;
+  const { tyoalueet: originalTyoalueet } = originalArea ?? {};
+  const { tyoalueet: changedTyoalueet } = changedArea ?? {};
+  const haittaIndexesChanged = originalArea
+    ? hasHaittaIndexesChanged(originalArea, changedArea)
+    : false;
+  const tyonTarkoituksetChanged =
+    changedArea && muutokset?.includes(`${changedPropertyPrefix}.tyonTarkoitukset`);
+  const tyonTarkoituksetAdded = changedArea?.tyonTarkoitukset?.filter(
+    (tyonTarkoitus) => !originalArea?.tyonTarkoitukset?.includes(tyonTarkoitus),
+  );
+  const tyonTarkoituksetRemoved = originalArea?.tyonTarkoitukset?.filter(
+    (tyonTarkoitus) => !changedArea?.tyonTarkoitukset?.includes(tyonTarkoitus),
+  );
+
+  return (
+    <Accordion
+      language={locale}
+      heading={t('hakemus:labels:workAreasInProjectArea', {
+        projectName: originalArea?.name ?? changedArea?.name ?? '',
+      })}
+      initiallyOpen
+      key={originalArea?.hankealueId ?? changedArea?.hankealueId}
+      className={styles.applicationAreaContainer}
+    >
+      <FormSummarySection style={{ marginBottom: 'var(--spacing-l)' }}>
+        <SectionItemTitle>{t('form:yhteystiedot:labels:osoite')}</SectionItemTitle>
+        <SectionItemContent>
+          {originalArea?.katuosoite ?? changedArea?.katuosoite}
+          {changedArea &&
+            muutokset &&
+            muutokset.includes(`${changedPropertyPrefix}.katuosoite`) && (
+              <Box marginTop="var(--spacing-s)">
+                {!changedArea.katuosoite ? (
+                  <SectionItemContentRemoved>
+                    <p>{originalArea?.katuosoite}</p>
+                  </SectionItemContentRemoved>
+                ) : (
+                  <SectionItemContentAdded>
+                    <p>{changedArea.katuosoite}</p>
+                  </SectionItemContentAdded>
+                )}
+              </Box>
+            )}
+        </SectionItemContent>
+        <SectionItemTitle>{t('hakemus:labels:tyonTarkoitus')}</SectionItemTitle>
+        <SectionItemContent>
+          {originalArea?.tyonTarkoitukset
+            ?.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`))
+            .join(', ')}
+          {tyonTarkoituksetChanged && (tyonTarkoituksetAdded?.length || 0) > 0 && (
+            <SectionItemContentAdded marginTop="var(--spacing-s)">
+              {tyonTarkoituksetAdded?.map((changed) => (
+                <p key={changed}>{t(`hanke:tyomaaTyyppi:${changed}`)}</p>
+              ))}
+            </SectionItemContentAdded>
+          )}
+          {tyonTarkoituksetChanged && (tyonTarkoituksetRemoved?.length || 0) > 0 && (
+            <SectionItemContentRemoved marginTop="var(--spacing-s)">
+              {tyonTarkoituksetRemoved?.map((removed) => (
+                <p key={removed}>{t(`hanke:tyomaaTyyppi:${removed}`)}</p>
+              ))}
+            </SectionItemContentRemoved>
+          )}
+        </SectionItemContent>
+        {!areasHaveChanged && originalTyoalueet && (
+          <>
+            <SectionItemTitle>{t('form:labels:areas')}</SectionItemTitle>
+            <SectionItemContent>
+              <TyoalueetList tyoalueet={originalTyoalueet} />
+            </SectionItemContent>
+          </>
+        )}
+        <SectionItemTitle>{t('form:labels:kokonaisAla')}</SectionItemTitle>
+        <SectionItemContent>
+          <TotalSurfaceArea tyoalueet={originalTyoalueet || []} changedAreas={changedTyoalueet} />
+        </SectionItemContent>
+      </FormSummarySection>
+      {haittaIndexesChanged && (
+        <Box marginBottom="var(--spacing-l)">
+          <Notification type="alert" size="small" label={t('hanke:alue:haittaIndexesChangedLabel')}>
+            {t('hanke:alue:haittaIndexesChanged')}
+          </Notification>
+        </Box>
+      )}
+      <Box marginBottom="var(--spacing-l)">
+        <HaittaIndexes
+          heading={`${t('kaivuilmoitusForm:alueet:liikennehaittaindeksienYhteenveto')} (0-5)`}
+          haittaIndexData={calculateLiikennehaittaindeksienYhteenveto(changedArea ?? originalArea)}
+          initiallyOpen
+          autoHaitanKestoHeading={t(
+            'kaivuilmoitusForm:haittojenHallinta:carTrafficNuisanceType:haitanKesto',
+          )}
+          autoHaitanKestoTooltipTranslationKey="hankeIndexes:tooltips:autoTyonKesto"
+        />
+      </Box>
+      <Box as="h2" className="heading-xxs" marginBottom="var(--spacing-m)">
+        {t('kaivuilmoitusForm:alueet:areaNuisanceDefinitions')}
+      </Box>
+      <FormSummarySection style={{ marginBottom: 'var(--spacing-s)' }}>
+        <SectionItemTitle>{t('hankeForm:labels:meluHaitta')}</SectionItemTitle>
+        <SectionItemContent>
+          {originalArea?.meluhaitta ? t(`hanke:meluHaitta:${originalArea.meluhaitta}`) : '-'}
+          {changedArea &&
+            muutokset &&
+            muutokset.includes(`${changedPropertyPrefix}.meluhaitta`) && (
+              <Box marginTop="var(--spacing-s)">
+                <SectionItemContentAdded>
+                  <p>{t(`hanke:meluHaitta:${changedArea.meluhaitta}`)}</p>
+                </SectionItemContentAdded>
+              </Box>
+            )}
+        </SectionItemContent>
+        <SectionItemTitle>{t('hankeForm:labels:polyHaitta')}</SectionItemTitle>
+        <SectionItemContent>
+          {originalArea?.polyhaitta ? t(`hanke:polyHaitta:${originalArea.polyhaitta}`) : '-'}
+          {changedArea &&
+            muutokset &&
+            muutokset.includes(`${changedPropertyPrefix}.polyhaitta`) && (
+              <Box marginTop="var(--spacing-s)">
+                <SectionItemContentAdded>
+                  <p>{t(`hanke:polyHaitta:${changedArea.polyhaitta}`)}</p>
+                </SectionItemContentAdded>
+              </Box>
+            )}
+        </SectionItemContent>
+        <SectionItemTitle>{t('hankeForm:labels:tarinaHaitta')}</SectionItemTitle>
+        <SectionItemContent>
+          {originalArea?.tarinahaitta ? t(`hanke:tarinaHaitta:${originalArea.tarinahaitta}`) : '-'}
+          {changedArea &&
+            muutokset &&
+            muutokset.includes(`${changedPropertyPrefix}.tarinahaitta`) && (
+              <Box marginTop="var(--spacing-s)">
+                <SectionItemContentAdded>
+                  <p>{t(`hanke:tarinaHaitta:${changedArea.tarinahaitta}`)}</p>
+                </SectionItemContentAdded>
+              </Box>
+            )}
+        </SectionItemContent>
+        <SectionItemTitle>{t('hankeForm:labels:kaistaHaitta')}</SectionItemTitle>
+        <SectionItemContent>
+          {originalArea?.kaistahaitta ? t(`hanke:kaistaHaitta:${originalArea.kaistahaitta}`) : '-'}
+          {changedArea &&
+            muutokset &&
+            muutokset.includes(`${changedPropertyPrefix}.kaistahaitta`) && (
+              <Box marginTop="var(--spacing-s)">
+                <SectionItemContentAdded>
+                  <p>{t(`hanke:kaistaHaitta:${changedArea.kaistahaitta}`)}</p>
+                </SectionItemContentAdded>
+              </Box>
+            )}
+        </SectionItemContent>
+        <SectionItemTitle>{t('hankeForm:labels:kaistaPituusHaitta')}</SectionItemTitle>
+        <SectionItemContent>
+          {originalArea?.kaistahaittojenPituus
+            ? t(`hanke:kaistaPituusHaitta:${originalArea.kaistahaittojenPituus}`)
+            : '-'}
+          {changedArea &&
+            muutokset &&
+            muutokset.includes(`${changedPropertyPrefix}.kaistahaittojenPituus`) && (
+              <Box marginTop="var(--spacing-s)">
+                <SectionItemContentAdded>
+                  <p>{t(`hanke:kaistaPituusHaitta:${changedArea.kaistahaittojenPituus}`)}</p>
+                </SectionItemContentAdded>
+              </Box>
+            )}
+        </SectionItemContent>
+        <SectionItemTitle>{t('hakemus:labels:areaAdditionalInfo')}</SectionItemTitle>
+        <SectionItemContent>
+          {originalArea?.lisatiedot ?? '-'}
+          {changedArea &&
+            muutokset &&
+            muutokset.includes(`${changedPropertyPrefix}.lisatiedot`) && (
+              <Box marginTop="var(--spacing-s)">
+                {!changedArea.lisatiedot ? (
+                  <SectionItemContentRemoved>
+                    <p>{originalArea?.lisatiedot}</p>
+                  </SectionItemContentRemoved>
+                ) : (
+                  <SectionItemContentAdded>
+                    <p>{changedArea.lisatiedot}</p>
+                  </SectionItemContentAdded>
+                )}
+              </Box>
+            )}
+        </SectionItemContent>
+      </FormSummarySection>
+    </Accordion>
+  );
+}
+
+function areasInclude(areas: KaivuilmoitusAlue[] | null, area: KaivuilmoitusAlue) {
+  return areas?.some((a) => a.hankealueId === area.hankealueId);
+}
+
+function KaivuilmoitusAreasInfo({
+  originalAreas,
+  changedAreas,
+  muutokset,
+}: Readonly<{
+  originalAreas: KaivuilmoitusAlue[] | null;
+  changedAreas?: KaivuilmoitusAlue[];
+  muutokset?: string[];
+}>) {
+  if (originalAreas === null && changedAreas === undefined) {
+    return null;
+  }
+
+  const areasHaveChanged =
     changedAreas &&
     muutokset &&
-    changedAreas.filter((_alue, index) => muutokset.includes(`areas[${index}]`)).length > 0;
+    changedAreas.filter((_area, index) => muutokset.includes(`areas[${index}]`)).length > 0;
+  const addedAreas = areasHaveChanged
+    ? changedAreas.filter((area) => !areasInclude(originalAreas, area))
+    : [];
+  const removedAreas = areasHaveChanged
+    ? originalAreas?.filter((area) => !areasInclude(changedAreas, area)) ?? []
+    : [];
 
-  return areas.map((alue, index) => {
-    const changedAlue = changedAreas?.at(index);
-    const changedPropertyPrefix = `areas[${index}]`;
-    const { tyoalueet: originalTyoalueet } = alue;
-    const { tyoalueet: changedTyoalueet } = changedAlue ?? {};
-    const haittaIndexesChanged = hasHaittaIndexesChanged(alue, changedAlue);
-    const tyonTarkoituksetChanged =
-      changedAlue && muutokset?.includes(`${changedPropertyPrefix}.tyonTarkoitukset`);
-    const tyonTarkoituksetAdded = changedAlue?.tyonTarkoitukset?.filter(
-      (tyonTarkoitus) => !alue?.tyonTarkoitukset?.includes(tyonTarkoitus),
-    );
-    const tyonTarkoituksetRemoved = alue.tyonTarkoitukset?.filter(
-      (tyonTarkoitus) => !changedAlue?.tyonTarkoitukset?.includes(tyonTarkoitus),
-    );
-
-    return (
-      <Accordion
-        language={locale}
-        heading={t('hakemus:labels:workAreasInProjectArea', { projectName: alue.name })}
-        initiallyOpen
-        key={alue.hankealueId}
-        className={styles.applicationAreaContainer}
-      >
-        <FormSummarySection style={{ marginBottom: 'var(--spacing-l)' }}>
-          <SectionItemTitle>{t('form:yhteystiedot:labels:osoite')}</SectionItemTitle>
-          <SectionItemContent>
-            {alue.katuosoite}
-            {changedAlue &&
-              muutokset &&
-              muutokset.includes(`${changedPropertyPrefix}.katuosoite`) && (
-                <Box marginTop="var(--spacing-s)">
-                  {!changedAlue.katuosoite ? (
-                    <SectionItemContentRemoved>
-                      <p>{alue.katuosoite}</p>
-                    </SectionItemContentRemoved>
-                  ) : (
-                    <SectionItemContentAdded>
-                      <p>{changedAlue.katuosoite}</p>
-                    </SectionItemContentAdded>
-                  )}
-                </Box>
-              )}
-          </SectionItemContent>
-          <SectionItemTitle>{t('hakemus:labels:tyonTarkoitus')}</SectionItemTitle>
-          <SectionItemContent>
-            {alue.tyonTarkoitukset?.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')}
-            {tyonTarkoituksetChanged && (tyonTarkoituksetAdded?.length || 0) > 0 && (
-              <SectionItemContentAdded marginTop="var(--spacing-s)">
-                {tyonTarkoituksetAdded?.map((changed) => (
-                  <p key={changed}>{t(`hanke:tyomaaTyyppi:${changed}`)}</p>
-                ))}
-              </SectionItemContentAdded>
-            )}
-            {tyonTarkoituksetChanged && (tyonTarkoituksetRemoved?.length || 0) > 0 && (
-              <SectionItemContentRemoved marginTop="var(--spacing-s)">
-                {tyonTarkoituksetRemoved?.map((removed) => (
-                  <p key={removed}>{t(`hanke:tyomaaTyyppi:${removed}`)}</p>
-                ))}
-              </SectionItemContentRemoved>
-            )}
-          </SectionItemContent>
-          {!areasChanged && (
-            <>
-              <SectionItemTitle>{t('form:labels:areas')}</SectionItemTitle>
-              <SectionItemContent>
-                <TyoalueetList tyoalueet={originalTyoalueet} />
-              </SectionItemContent>
-            </>
-          )}
-          <SectionItemTitle>{t('form:labels:kokonaisAla')}</SectionItemTitle>
-          <SectionItemContent>
-            <TotalSurfaceArea tyoalueet={originalTyoalueet} changedAreas={changedTyoalueet} />
-          </SectionItemContent>
-        </FormSummarySection>
-        {haittaIndexesChanged && (
-          <Box marginBottom="var(--spacing-l)">
-            <Notification
-              type="alert"
-              size="small"
-              label={t('hanke:alue:haittaIndexesChangedLabel')}
-            >
-              {t('hanke:alue:haittaIndexesChanged')}
-            </Notification>
-          </Box>
-        )}
-        <Box marginBottom="var(--spacing-l)">
-          <HaittaIndexes
-            heading={`${t('kaivuilmoitusForm:alueet:liikennehaittaindeksienYhteenveto')} (0-5)`}
-            haittaIndexData={calculateLiikennehaittaindeksienYhteenveto(changedAlue ?? alue)}
-            initiallyOpen
-            autoHaitanKestoHeading={t(
-              'kaivuilmoitusForm:haittojenHallinta:carTrafficNuisanceType:haitanKesto',
-            )}
-            autoHaitanKestoTooltipTranslationKey="hankeIndexes:tooltips:autoTyonKesto"
+  return (
+    <>
+      {originalAreas?.map((area, index) => {
+        if (areasInclude(removedAreas, area)) {
+          return null;
+        }
+        const changedAlue = changedAreas?.find((a) => a.hankealueId === area.hankealueId);
+        return (
+          <KaivuilmoitusAreaInfo
+            key={area.hankealueId}
+            originalArea={area}
+            areasHaveChanged={areasHaveChanged}
+            changedArea={changedAlue}
+            muutokset={muutokset}
+            index={index}
           />
-        </Box>
-        <Box as="h2" className="heading-xxs" marginBottom="var(--spacing-m)">
-          {t('kaivuilmoitusForm:alueet:areaNuisanceDefinitions')}
-        </Box>
-        <FormSummarySection style={{ marginBottom: 'var(--spacing-s)' }}>
-          <SectionItemTitle>{t('hankeForm:labels:meluHaitta')}</SectionItemTitle>
-          <SectionItemContent>
-            {alue.meluhaitta ? t(`hanke:meluHaitta:${alue.meluhaitta}`) : '-'}
-            {changedAlue &&
-              muutokset &&
-              muutokset.includes(`${changedPropertyPrefix}.meluhaitta`) && (
-                <Box marginTop="var(--spacing-s)">
-                  <SectionItemContentAdded>
-                    <p>{t(`hanke:meluHaitta:${changedAlue.meluhaitta}`)}</p>
-                  </SectionItemContentAdded>
-                </Box>
-              )}
-          </SectionItemContent>
-          <SectionItemTitle>{t('hankeForm:labels:polyHaitta')}</SectionItemTitle>
-          <SectionItemContent>
-            {alue.polyhaitta ? t(`hanke:polyHaitta:${alue.polyhaitta}`) : '-'}
-            {changedAlue &&
-              muutokset &&
-              muutokset.includes(`${changedPropertyPrefix}.polyhaitta`) && (
-                <Box marginTop="var(--spacing-s)">
-                  <SectionItemContentAdded>
-                    <p>{t(`hanke:polyHaitta:${changedAlue.polyhaitta}`)}</p>
-                  </SectionItemContentAdded>
-                </Box>
-              )}
-          </SectionItemContent>
-          <SectionItemTitle>{t('hankeForm:labels:tarinaHaitta')}</SectionItemTitle>
-          <SectionItemContent>
-            {alue.tarinahaitta ? t(`hanke:tarinaHaitta:${alue.tarinahaitta}`) : '-'}
-            {changedAlue &&
-              muutokset &&
-              muutokset.includes(`${changedPropertyPrefix}.tarinahaitta`) && (
-                <Box marginTop="var(--spacing-s)">
-                  <SectionItemContentAdded>
-                    <p>{t(`hanke:tarinaHaitta:${changedAlue.tarinahaitta}`)}</p>
-                  </SectionItemContentAdded>
-                </Box>
-              )}
-          </SectionItemContent>
-          <SectionItemTitle>{t('hankeForm:labels:kaistaHaitta')}</SectionItemTitle>
-          <SectionItemContent>
-            {alue.kaistahaitta ? t(`hanke:kaistaHaitta:${alue.kaistahaitta}`) : '-'}
-            {changedAlue &&
-              muutokset &&
-              muutokset.includes(`${changedPropertyPrefix}.kaistahaitta`) && (
-                <Box marginTop="var(--spacing-s)">
-                  <SectionItemContentAdded>
-                    <p>{t(`hanke:kaistaHaitta:${changedAlue.kaistahaitta}`)}</p>
-                  </SectionItemContentAdded>
-                </Box>
-              )}
-          </SectionItemContent>
-          <SectionItemTitle>{t('hankeForm:labels:kaistaPituusHaitta')}</SectionItemTitle>
-          <SectionItemContent>
-            {alue.kaistahaittojenPituus
-              ? t(`hanke:kaistaPituusHaitta:${alue.kaistahaittojenPituus}`)
-              : '-'}
-            {changedAlue &&
-              muutokset &&
-              muutokset.includes(`${changedPropertyPrefix}.kaistahaittojenPituus`) && (
-                <Box marginTop="var(--spacing-s)">
-                  <SectionItemContentAdded>
-                    <p>{t(`hanke:kaistaPituusHaitta:${changedAlue.kaistahaittojenPituus}`)}</p>
-                  </SectionItemContentAdded>
-                </Box>
-              )}
-          </SectionItemContent>
-          <SectionItemTitle>{t('hakemus:labels:areaAdditionalInfo')}</SectionItemTitle>
-          <SectionItemContent>
-            {alue.lisatiedot ? alue.lisatiedot : '-'}
-            {changedAlue &&
-              muutokset &&
-              muutokset.includes(`${changedPropertyPrefix}.lisatiedot`) && (
-                <Box marginTop="var(--spacing-s)">
-                  {!changedAlue.lisatiedot ? (
-                    <SectionItemContentRemoved>
-                      <p>{alue.lisatiedot}</p>
-                    </SectionItemContentRemoved>
-                  ) : (
-                    <SectionItemContentAdded>
-                      <p>{changedAlue.lisatiedot}</p>
-                    </SectionItemContentAdded>
-                  )}
-                </Box>
-              )}
-          </SectionItemContent>
-        </FormSummarySection>
-      </Accordion>
-    );
-  });
+        );
+      })}
+      {addedAreas.length > 0 && (
+        <SectionItemContentAdded>
+          {addedAreas.map((area, index) => {
+            return (
+              <KaivuilmoitusAreaInfo
+                key={area.hankealueId}
+                originalArea={area}
+                areasHaveChanged={false}
+                index={index}
+              />
+            );
+          })}
+        </SectionItemContentAdded>
+      )}
+      {removedAreas.length > 0 && (
+        <SectionItemContentRemoved marginTop="var(--spacing-s)">
+          {removedAreas.map((area, index) => {
+            return (
+              <KaivuilmoitusAreaInfo
+                key={area.hankealueId}
+                originalArea={area}
+                areasHaveChanged={false}
+                index={index}
+              />
+            );
+          })}
+        </SectionItemContentRemoved>
+      )}
+    </>
+  );
+}
+
+function KaivuilmoitusAreasNuisanceInfo({
+  hankeAreas,
+  originalAreas,
+  changedAreas,
+  muutokset,
+}: Readonly<{
+  hankeAreas?: HankeAlue[];
+  originalAreas: KaivuilmoitusAlue[] | null;
+  changedAreas?: KaivuilmoitusAlue[];
+  muutokset?: string[];
+}>) {
+  const { t } = useTranslation();
+  const locale = useLocale();
+
+  if (originalAreas === null && changedAreas === undefined) {
+    return null;
+  }
+
+  const areasHaveChanged =
+    changedAreas &&
+    muutokset &&
+    changedAreas.filter((_area, index) => muutokset.includes(`areas[${index}]`)).length > 0;
+  const addedAreas = areasHaveChanged
+    ? changedAreas.filter((area) => !areasInclude(originalAreas, area))
+    : [];
+  const removedAreas = areasHaveChanged
+    ? originalAreas?.filter((area) => !areasInclude(changedAreas, area)) ?? []
+    : [];
+
+  return (
+    <>
+      {originalAreas?.map((area, index) => {
+        if (areasInclude(removedAreas, area)) {
+          return null;
+        }
+        const hankeArea = hankeAreas?.find((ha) => ha.id === area.hankealueId);
+        const changedArea = changedAreas?.find((a) => a.hankealueId === area.hankealueId);
+        return (
+          <Accordion
+            language={locale}
+            heading={t('hakemus:labels:workAreaPlural') + ' (' + area.name + ')'}
+            initiallyOpen={index === 0}
+            theme={{
+              '--header-focus-outline-color': 'var(--color-white)',
+            }}
+            key={area.hankealueId}
+          >
+            <HaittojenhallintasuunnitelmaInfo
+              key={area.hankealueId}
+              alue={area}
+              taydennysAlue={changedArea}
+              hankealue={hankeArea}
+            />
+          </Accordion>
+        );
+      })}
+      {addedAreas.length > 0 && (
+        <SectionItemContentAdded>
+          {addedAreas.map((area, index) => {
+            const hankeArea = hankeAreas?.find((ha) => ha.id === area.hankealueId);
+            return (
+              <Accordion
+                language={locale}
+                heading={t('hakemus:labels:workAreaPlural') + ' (' + area.name + ')'}
+                initiallyOpen={index === 0}
+                theme={{
+                  '--header-focus-outline-color': 'var(--color-white)',
+                }}
+                key={area.hankealueId}
+              >
+                <HaittojenhallintasuunnitelmaInfo
+                  key={area.hankealueId}
+                  alue={area}
+                  hankealue={hankeArea}
+                />
+              </Accordion>
+            );
+          })}
+        </SectionItemContentAdded>
+      )}
+      {removedAreas.length > 0 && (
+        <SectionItemContentRemoved marginTop="var(--spacing-s)">
+          {removedAreas.map((area, index) => {
+            const hankeArea = hankeAreas?.find((ha) => ha.id === area.hankealueId);
+            return (
+              <Accordion
+                language={locale}
+                heading={t('hakemus:labels:workAreaPlural') + ' (' + area.name + ')'}
+                initiallyOpen={index === 0}
+                theme={{
+                  '--header-focus-outline-color': 'var(--color-white)',
+                }}
+                key={area.hankealueId}
+              >
+                <HaittojenhallintasuunnitelmaInfo
+                  key={area.hankealueId}
+                  alue={area}
+                  hankealue={hankeArea}
+                />
+              </Accordion>
+            );
+          })}
+        </SectionItemContentRemoved>
+      )}
+    </>
+  );
 }
 
 function PaperDecisionReceiverSummary({
@@ -503,7 +687,6 @@ function ApplicationView({
   creatingMuutosilmoitus,
 }: Readonly<Props>) {
   const { t } = useTranslation();
-  const locale = useLocale();
   const queryClient = useQueryClient();
   const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const [showSendDialog, setShowSendDialog] = useState(false);
@@ -901,7 +1084,7 @@ function ApplicationView({
               )}
               {applicationType === 'EXCAVATION_NOTIFICATION' && (
                 <KaivuilmoitusAreasInfo
-                  areas={kaivuilmoitusAlueet}
+                  originalAreas={kaivuilmoitusAlueet}
                   changedAreas={taydennys?.applicationData?.areas as KaivuilmoitusAlue[]}
                   muutokset={taydennys?.muutokset}
                 />
@@ -909,31 +1092,14 @@ function ApplicationView({
             </TabPanel>
             <TabPanel>
               {/* Nuisance management panel */}
-              {applicationType === 'EXCAVATION_NOTIFICATION' &&
-                kaivuilmoitusAlueet?.map((alue, index) => {
-                  const hankealue = hankealueet?.find((ha) => ha.id === alue.hankealueId);
-                  const taydennysAlue = kaivuilmoitusTaydennysAlueet?.find(
-                    (ta) => ta.hankealueId === alue.hankealueId,
-                  );
-                  return (
-                    <Accordion
-                      language={locale}
-                      heading={t('hakemus:labels:workAreaPlural') + ' (' + alue.name + ')'}
-                      initiallyOpen={index === 0}
-                      theme={{
-                        '--header-focus-outline-color': 'var(--color-white)',
-                      }}
-                      key={alue.hankealueId}
-                    >
-                      <HaittojenhallintasuunnitelmaInfo
-                        key={alue.hankealueId}
-                        alue={alue}
-                        taydennysAlue={taydennysAlue}
-                        hankealue={hankealue}
-                      />
-                    </Accordion>
-                  );
-                })}
+              {applicationType === 'EXCAVATION_NOTIFICATION' && (
+                <KaivuilmoitusAreasNuisanceInfo
+                  hankeAreas={hankealueet}
+                  originalAreas={kaivuilmoitusAlueet}
+                  changedAreas={taydennys?.applicationData?.areas as KaivuilmoitusAlue[]}
+                  muutokset={taydennys?.muutokset}
+                />
+              )}
             </TabPanel>
             <TabPanel>
               {/* Contacts information panel */}
