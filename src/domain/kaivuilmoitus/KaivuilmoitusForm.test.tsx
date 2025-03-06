@@ -1807,6 +1807,9 @@ describe('Haittojenhallintasuunnitelma', () => {
     expect(screen.getByTestId('test-polyHaitta')).toHaveTextContent('5');
     expect(screen.getByTestId('test-tarinaHaitta')).toHaveTextContent('5');
     expect(screen.getByTestId('show-tips-button-MUUT')).toBeInTheDocument();
+    expect(screen.getByTestId('show-tips-button-MELU')).toBeInTheDocument();
+    expect(screen.getByTestId('show-tips-button-POLY')).toBeInTheDocument();
+    expect(screen.getByTestId('show-tips-button-TARINA')).toBeInTheDocument();
   });
 
   test('Nuisance control plan can be filled', async () => {

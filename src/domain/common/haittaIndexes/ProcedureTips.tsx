@@ -75,7 +75,7 @@ export default function ProcedureTips({ haittojenhallintaTyyppi, haittaIndex }: 
         paddingBottom="var(--spacing-s)"
         mb={isOther ? 'var(--spacing-xs)' : 'var(--spacing-l)'}
         backgroundColor="var(--color-black-5)"
-        data-testid="test-common-nuisances"
+        data-testid={`show-tips-button-${haittojenhallintaTyyppi}`}
       >
         <Accordion
           heading={t(
