@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import PageMeta from '../../components/PageMeta';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
-import SideNav from './SideNav';
 import styles from '../StaticContent.module.scss';
 import BgColorOverride from '../BgColorOverride';
 import { Outlet } from 'react-router-dom';
-import Breadcrumbs from '../Breadcrumbs';
 import { Container } from 'hds-react';
+import Breadcrumbs from '../Breadcrumbs';
+import SideNav from './SideNav';
 
-const WorkInstructionsPage: React.FC<React.PropsWithChildren<unknown>> = () => {
-  const { WORKINSTRUCTIONS } = useLocalizedRoutes();
+const UserManualPage: React.FC<React.PropsWithChildren<unknown>> = () => {
+  const { MANUAL } = useLocalizedRoutes();
   const [breadcrumbs, setBreadcrumbs] = useState([]);
 
   return (
     <>
-      <PageMeta routeData={WORKINSTRUCTIONS} />
+      <PageMeta routeData={MANUAL} />
       <BgColorOverride />
       <Breadcrumbs breadcrumbs={breadcrumbs} />
       <Container alignWithHeader>
@@ -29,4 +29,4 @@ const WorkInstructionsPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   );
 };
 
-export default WorkInstructionsPage;
+export default UserManualPage;

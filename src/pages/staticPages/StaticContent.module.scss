@@ -1,3 +1,44 @@
+@import 'src/assets/styles/layout';
+
 .orderedList {
   padding-left: 2rem;
+}
+
+.navmain {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-layout-m);
+  align-self: stretch;
+  padding-top: var(--spacing-layout-m);
+  padding-bottom: var(--spacing-layout-m);
+  flex-direction: row;
+
+  @include respond-below(m) {
+    flex-direction: column;
+  }
+}
+
+.main {
+  max-width: 798px;
+  padding: var(--spacing-2-xs);
+
+  h1 {
+    line-height: var(--lineheight-s);
+  }
+}
+
+.sidenavcontainer {
+  max-width: 340px;
+}
+
+.content {
+  a {
+    text-decoration: underline;
+  }
+
+  margin-bottom: var(--spacing-xl);
+
+  p {
+    font-size: var(--fontsize-body-l);
+  }
 }

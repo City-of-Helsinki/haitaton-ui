@@ -18,7 +18,6 @@ import HankePage from '../../pages/HankePage';
 import ApplicationPage from '../../pages/ApplicationPage';
 import EditJohtoselvitysPage from '../../pages/EditJohtoselvitysPage';
 import NotFoundPage from '../../pages/staticPages/404Page';
-import ManualPage from '../../pages/staticPages/ManualPage';
 import AccessRightsPage from '../../pages/AccessRightsPage';
 import UserIdentify from '../../domain/auth/components/UserIdentify';
 import EditUserPage from '../../pages/EditUserPage';
@@ -31,6 +30,8 @@ import WorkInstructionsMain from '../../pages/staticPages/workInstructions/WorkI
 import CardsIndex from '../../pages/staticPages/workInstructions/cards/CardsIndex';
 import { Card } from '../../pages/staticPages/workInstructions/cards/Cards';
 import EditKaivuilmoitusMuutosilmoitusPage from '../../pages/EditKaivuilmoitusMuutosilmoitusPage';
+import UserManualPage from '../../pages/staticPages/userManual/UserManualPage';
+import UserManualMain from '../../pages/staticPages/userManual/UserManualMain';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
@@ -102,7 +103,9 @@ const LocaleRoutes = () => {
         <Route path={t('routes:CARDS_INDEX:path')} element={<CardsIndex />} />
         <Route path={`${t('routes:CARD:path')}:number/:type`} element={<Card />}></Route>
       </Route>
-      <Route path={t('routes:MANUAL:path')} element={<ManualPage />} />
+      <Route path={t('routes:MANUAL:path')} element={<UserManualPage />}>
+        <Route element={<UserManualMain />} index />
+      </Route>
       <Route path={t('routes:IDENTIFY_USER:path')} element={<UserIdentify />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

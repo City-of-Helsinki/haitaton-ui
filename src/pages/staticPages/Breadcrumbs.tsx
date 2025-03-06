@@ -1,6 +1,7 @@
 import { Breadcrumb, BreadcrumbListItem } from 'hds-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useOutletContext } from 'react-router-dom';
 
 export const BREADCRUMBS = {
   homePage: {
@@ -27,7 +28,21 @@ export const BREADCRUMBS = {
     title: 'workInstructions:cards:additionalLevel',
     path: null,
   },
+  manual: {
+    title: 'staticPages:manualPage:main:heading',
+    path: null,
+  },
 };
+
+type ContextType = {
+  breadcrumbs: BreadcrumbListItem[];
+  setBreadcrumbs: React.Dispatch<React.SetStateAction<BreadcrumbListItem[]>>;
+};
+
+// use in child routes to set breadcrumbs
+export function useBreadcrumbs() {
+  return useOutletContext<ContextType>();
+}
 
 const Breadcrumbs: React.FC<React.PropsWithChildren<{ breadcrumbs: BreadcrumbListItem[] }>> = ({
   breadcrumbs,
@@ -43,7 +58,7 @@ const Breadcrumbs: React.FC<React.PropsWithChildren<{ breadcrumbs: BreadcrumbLis
     };
   });
 
-  return <Breadcrumb ariaLabel={t('workInstructions:breadcrumb')} list={translatedBreadcrumbs} />;
+  return <Breadcrumb ariaLabel={t('common:components:breadcrumb')} list={translatedBreadcrumbs} />;
 };
 
 export default Breadcrumbs;
