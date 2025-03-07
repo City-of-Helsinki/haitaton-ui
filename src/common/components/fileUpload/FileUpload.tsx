@@ -255,7 +255,7 @@ export default function FileUpload<T extends AttachmentMetadata>({
               <Button
                 variant="supplementary"
                 iconLeft={<IconCross aria-hidden />}
-                style={{ color: 'var(--color-error)' }}
+                theme="black"
                 onClick={cancelRequests}
               >
                 {t('common:confirmationDialog:cancelButton')}
