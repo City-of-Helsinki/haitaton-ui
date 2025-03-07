@@ -205,6 +205,7 @@ export async function createMuutosilmoitus(id: number) {
     id: faker.string.uuid(),
     applicationData: cloneDeep(hakemus.applicationData),
     sent: null,
+    muutokset: [],
   };
   hakemus.muutosilmoitus = muutosilmoitus;
   return muutosilmoitus;

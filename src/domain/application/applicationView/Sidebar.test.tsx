@@ -156,6 +156,7 @@ describe('Sidebar', () => {
             areas: getAreas(application),
           },
           sent: null,
+          muutokset: ['areas[0].tyoalueet[2]'],
         };
         const { user } = setup(application);
 

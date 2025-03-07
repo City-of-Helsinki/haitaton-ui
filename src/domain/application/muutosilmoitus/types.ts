@@ -4,4 +4,5 @@ export type Muutosilmoitus<T> = {
   id: string;
   applicationData: T;
   sent: MuutosilmoitusSent;
+  muutokset: string[];
 };
