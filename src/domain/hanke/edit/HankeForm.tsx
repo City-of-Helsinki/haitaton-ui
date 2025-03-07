@@ -57,7 +57,6 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   const { setNotification } = useGlobalNotification();
   const [showNotification, setShowNotification] = useState<FormNotification | null>(null);
   const [showAddApplicationDialog, setShowAddApplicationDialog] = useState(false);
-  const [attachmentsUploading, setAttachmentsUploading] = useState(false);
   const hakemukset = useApplicationsForHanke(formData.hankeTunnus, true);
   const validationContext = {
     hanke: formData,
@@ -131,11 +130,8 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     },
   });
 
-  const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
-  const saveAndQuitButtonIsLoading = hankeMutation.isLoading || attachmentsUploading;
-  const saveAndQuitButtonLoadingText = attachmentsUploading
-    ? attachmentsUploadingText
-    : t('common:buttons:savingText');
+  const saveAndQuitButtonIsLoading = hankeMutation.isLoading;
+  const saveAndQuitButtonLoadingText = t('common:buttons:savingText');
 
   const [drawSource] = useState<VectorSource>(new VectorSource());
 
@@ -176,10 +172,6 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   useEffect(() => {
     onIsDirtyChange(isDirty);
   }, [isDirty, onIsDirtyChange]);
-
-  function handleFileUpload(uploading: boolean) {
-    setAttachmentsUploading(uploading);
-  }
 
   function handleStepChange(stepIndex: number) {
     setActiveStepIndex(stepIndex);
@@ -225,7 +217,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       validationSchema: hankeYhteystiedotPublicSchema,
     },
     {
-      element: <HankeFormLiitteet onFileUpload={handleFileUpload} />,
+      element: <HankeFormLiitteet />,
       label: t('hankePortfolio:tabit:liitteet'),
       state: StepState.available,
     },
@@ -332,8 +324,6 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
           heading={formHeading}
           formSteps={formSteps}
           onStepChange={handleStepChange}
-          isLoading={attachmentsUploading}
-          isLoadingText={attachmentsUploadingText}
           topElement={formErrorsNotification}
           formData={watchFormValues}
           validationContext={validationContext}
@@ -348,17 +338,11 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
                 totalSteps={formSteps.length}
                 onPrevious={handlePrevious}
                 onNext={handleNext}
-                previousButtonIsLoading={attachmentsUploading}
-                previousButtonLoadingText={attachmentsUploadingText}
-                nextButtonIsLoading={attachmentsUploading}
-                nextButtonLoadingText={attachmentsUploadingText}
               >
                 <Button
                   variant="danger"
                   iconLeft={<IconCross aria-hidden />}
                   onClick={() => onFormClose(formValues.hankeTunnus)}
-                  isLoading={attachmentsUploading}
-                  loadingText={attachmentsUploadingText}
                 >
                   {t('hankeForm:cancelButton')}
                 </Button>

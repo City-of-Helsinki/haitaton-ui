@@ -12,17 +12,15 @@ import FileUpload from '../../common/components/fileUpload/FileUpload';
 type Props = {
   existingAttachments: ApplicationAttachmentMetadata[] | undefined;
   attachmentsLoadError: boolean;
-  onFileUpload: (isUploading: boolean) => void;
 };
 
-function Attachments({ existingAttachments, attachmentsLoadError, onFileUpload }: Readonly<Props>) {
+function Attachments({ existingAttachments, attachmentsLoadError }: Readonly<Props>) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const { getValues } = useFormContext<JohtoselvitysFormValues>();
   const alluStatus = getValues('alluStatus');
 
   function handleFileUpload(uploading: boolean) {
-    onFileUpload(uploading);
     if (!uploading) {
       queryClient.invalidateQueries('attachments');
     }

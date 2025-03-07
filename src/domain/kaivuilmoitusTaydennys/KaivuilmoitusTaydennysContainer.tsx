@@ -72,8 +72,6 @@ export default function KaivuilmoitusTaydennysContainer({
   const [showSendDialog, setShowSendDialog] = useState(false);
   const { data: signedInUser } = usePermissionsForHanke(hankeData.hankeTunnus);
   const { data: originalAttachments } = useAttachments(originalApplication.id);
-  const [attachmentsUploading, setAttachmentsUploading] = useState(false);
-  const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
 
   const formContext = useForm<KaivuilmoitusTaydennysFormValues>({
     mode: 'onTouched',
@@ -118,10 +116,6 @@ export default function KaivuilmoitusTaydennysContainer({
       }
     },
   );
-
-  function handleAttachmentUpload(isUploading: boolean) {
-    setAttachmentsUploading(isUploading);
-  }
 
   // Fields that are validated in each page when moving in the form
   // If validation of a field fails, the form will not move to the next page
@@ -188,7 +182,6 @@ export default function KaivuilmoitusTaydennysContainer({
           applicationId={originalApplication.id!}
           taydennysAttachments={taydennys.liitteet}
           originalAttachments={originalAttachments}
-          onFileUpload={handleAttachmentUpload}
         />
       ),
       label: t('hankePortfolio:tabit:liitteet'),
@@ -293,8 +286,6 @@ export default function KaivuilmoitusTaydennysContainer({
             </Box>
           </>
         }
-        isLoading={attachmentsUploading}
-        isLoadingText={attachmentsUploadingText}
         onStepChange={handleStepChange}
         stepChangeValidator={validateStepChange}
         onSubmit={handleSubmit(openSendDialog)}
@@ -317,10 +308,8 @@ export default function KaivuilmoitusTaydennysContainer({
           const isContact = isContactIn(signedInUser, getValues('applicationData'));
           const disableSendButton = showSendButton && !isContact;
 
-          const saveAndQuitIsLoading = hakemusUpdateMutation.isLoading || attachmentsUploading;
-          const saveAndQuitLoadingText = attachmentsUploading
-            ? attachmentsUploadingText
-            : t('common:buttons:savingText');
+          const saveAndQuitIsLoading = hakemusUpdateMutation.isLoading;
+          const saveAndQuitLoadingText = t('common:buttons:savingText');
 
           return (
             <FormActions
@@ -328,10 +317,6 @@ export default function KaivuilmoitusTaydennysContainer({
               totalSteps={formSteps.length}
               onPrevious={handlePrevious}
               onNext={handleNext}
-              previousButtonIsLoading={attachmentsUploading}
-              previousButtonLoadingText={attachmentsUploadingText}
-              nextButtonIsLoading={attachmentsUploading}
-              nextButtonLoadingText={attachmentsUploadingText}
             >
               <TaydennysCancel
                 application={originalApplication}

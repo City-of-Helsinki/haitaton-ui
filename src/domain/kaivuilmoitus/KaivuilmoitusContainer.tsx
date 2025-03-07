@@ -115,8 +115,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     getValues('id'),
   );
 
-  const [attachmentsUploading, setAttachmentsUploading] = useState(false);
-
   const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const [showSendDialog, setShowSendDialog] = useState(false);
 
@@ -252,10 +250,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     saveApplication(handleSuccess);
   }
 
-  function handleAttachmentUpload(isUploading: boolean) {
-    setAttachmentsUploading(isUploading);
-  }
-
   function closeAttachmentUploadErrorDialog() {
     setAttachmentUploadErrors([]);
   }
@@ -316,7 +310,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         <Attachments
           existingAttachments={existingAttachments}
           attachmentsLoadError={attachmentsLoadError}
-          onFileUpload={handleAttachmentUpload}
         />
       ),
       label: t('form:headers:liitteetJaLisatiedot'),
@@ -339,8 +332,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       saveApplication();
     }
   }
-
-  const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
 
   function validateStepChange(changeStep: () => void, stepIndex: number) {
     return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger, errors, [
@@ -365,8 +356,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
         }
         validationContext={{ application: watchFormValues }}
         onStepChange={handleStepChange}
-        isLoading={attachmentsUploading}
-        isLoadingText={attachmentsUploadingText}
         stepChangeValidator={validateStepChange}
         onSubmit={handleSubmit(openSendDialog)}
       >
@@ -382,12 +371,8 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
           }
 
           const saveAndQuitIsLoading =
-            applicationCreateMutation.isLoading ||
-            applicationUpdateMutation.isLoading ||
-            attachmentsUploading;
-          const saveAndQuitLoadingText = attachmentsUploading
-            ? attachmentsUploadingText
-            : t('common:buttons:savingText');
+            applicationCreateMutation.isLoading || applicationUpdateMutation.isLoading;
+          const saveAndQuitLoadingText = t('common:buttons:savingText');
 
           const isDraft = isApplicationDraft(getValues('alluStatus') as AlluStatus | null);
           const isContact = isContactIn(signedInUser, getValues('applicationData'));
@@ -400,10 +385,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
               totalSteps={formSteps.length}
               onPrevious={handlePrevious}
               onNext={handleNext}
-              previousButtonIsLoading={attachmentsUploading}
-              previousButtonLoadingText={attachmentsUploadingText}
-              nextButtonIsLoading={attachmentsUploading}
-              nextButtonLoadingText={attachmentsUploadingText}
             >
               <ApplicationCancel
                 applicationId={getValues('id')}
