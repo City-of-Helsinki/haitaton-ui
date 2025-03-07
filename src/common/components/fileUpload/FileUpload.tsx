@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useMutation } from 'react-query';
-import { Flex } from '@chakra-ui/react';
+import { Flex, ModalContent, ModalOverlay } from '@chakra-ui/react';
 import { Button, FileInput, IconAlertCircleFill, IconCheckCircleFill, IconCross } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { differenceBy } from 'lodash';
@@ -14,6 +14,7 @@ import FileList from './FileList';
 import { FileDeleteFunction, FileDownLoadFunction, ShowDeleteButtonFunction } from './types';
 import ErrorLoadingText from '../errorLoadingText/ErrorLoadingText';
 import LoadingSpinner from '../spinner/LoadingSpinner';
+import InlineModal from '../inlineModal/InlineModal';
 
 function useDragAndDropFiles() {
   const ref = useRef<HTMLDivElement>(null);
@@ -236,22 +237,33 @@ export default function FileUpload<T extends AttachmentMetadata>({
   return (
     <div>
       <Flex alignItems="center" className={styles.uploadContainer} ref={dropZoneRef}>
-        {filesUploading ? (
-          <Flex className={styles.loadingContainer} direction={{ base: 'column', sm: 'row' }}>
-            <LoadingSpinner small className={styles.loadingSpinner} />
-            <Text tag="p" className={styles.loadingText}>
-              {t('common:components:fileUpload:loadingText')}
-            </Text>
-            <Button
-              variant="supplementary"
-              iconLeft={<IconCross aria-hidden />}
-              style={{ color: 'var(--color-error)' }}
-              onClick={cancelRequests}
-            >
-              {t('common:confirmationDialog:cancelButton')}
-            </Button>
-          </Flex>
-        ) : (
+        <InlineModal
+          isOpen={filesUploading}
+          onClose={() => {}}
+          blockScrollOnMount={false}
+          closeOnEsc={false}
+          closeOnOverlayClick={false}
+          motionPreset="none"
+        >
+          <ModalOverlay bg="whiteAlpha.700" />
+          <ModalContent boxShadow="none">
+            <Flex className={styles.loadingContainer} direction={{ base: 'column', sm: 'row' }}>
+              <LoadingSpinner small className={styles.loadingSpinner} />
+              <Text tag="p" className={styles.loadingText}>
+                {t('common:components:fileUpload:loadingText')}
+              </Text>
+              <Button
+                variant="supplementary"
+                iconLeft={<IconCross aria-hidden />}
+                style={{ color: 'var(--color-error)' }}
+                onClick={cancelRequests}
+              >
+                {t('common:confirmationDialog:cancelButton')}
+              </Button>
+            </Flex>
+          </ModalContent>
+        </InlineModal>
+        {!filesUploading && (
           <FileInput
             id={id}
             accept={accept}

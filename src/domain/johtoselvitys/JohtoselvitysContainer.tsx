@@ -134,8 +134,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
 
   const navigateToApplicationView = useNavigateToApplicationView();
 
-  const [attachmentsUploading, setAttachmentsUploading] = useState(false);
-
   const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const [showSendDialog, setShowSendDialog] = useState(false);
 
@@ -260,10 +258,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     saveCableApplication(handleSuccess);
   }
 
-  function handleAttachmentUpload(isUploading: boolean) {
-    setAttachmentsUploading(isUploading);
-  }
-
   function closeAttachmentUploadErrorDialog() {
     setAttachmentUploadErrors([]);
   }
@@ -338,7 +332,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
           <Attachments
             existingAttachments={existingAttachments}
             attachmentsLoadError={attachmentsLoadError}
-            onFileUpload={handleAttachmentUpload}
           />
         ),
         label: t('hankePortfolio:tabit:liitteet'),
@@ -374,8 +367,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     return changeFormStep(changeStep, pageFieldsToValidate[stepIndex], trigger);
   }
 
-  const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
-
   return (
     <FormProvider {...formContext}>
       {/* Notifications for saving application */}
@@ -396,8 +387,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
         heading={t('johtoselvitysForm:pageHeader')}
         subHeading={hankeNameText}
         formSteps={formSteps}
-        isLoading={attachmentsUploading}
-        isLoadingText={attachmentsUploadingText}
         onStepChange={handleStepChange}
         onSubmit={handleSubmit(openSendDialog)}
         stepChangeValidator={validateStepChange}
@@ -420,22 +409,14 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
           const disableSendButton = showSendButton && !isContact;
 
           const saveAndQuitIsLoading =
-            applicationCreateMutation.isLoading ||
-            applicationUpdateMutation.isLoading ||
-            attachmentsUploading;
-          const saveAndQuitLoadingText = attachmentsUploading
-            ? attachmentsUploadingText
-            : t('common:buttons:savingText');
+            applicationCreateMutation.isLoading || applicationUpdateMutation.isLoading;
+          const saveAndQuitLoadingText = t('common:buttons:savingText');
           return (
             <FormActions
               activeStepIndex={activeStepIndex}
               totalSteps={formSteps.length}
               onPrevious={handlePrevious}
               onNext={handleNext}
-              previousButtonIsLoading={attachmentsUploading}
-              previousButtonLoadingText={attachmentsUploadingText}
-              nextButtonIsLoading={attachmentsUploading}
-              nextButtonLoadingText={attachmentsUploadingText}
             >
               <ApplicationCancel
                 applicationId={getValues('id')}

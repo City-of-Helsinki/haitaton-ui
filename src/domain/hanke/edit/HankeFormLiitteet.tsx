@@ -13,11 +13,7 @@ import {
 } from '../hankeAttachments/hankeAttachmentsApi';
 import { AttachmentMetadata } from '../../../common/types/attachment';
 
-type Props = {
-  onFileUpload: (uploading: boolean) => void;
-};
-
-function HankeFormLiitteet({ onFileUpload }: Readonly<Props>) {
+function HankeFormLiitteet() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { getValues } = useFormContext<HankeDataFormState>();
@@ -40,7 +36,6 @@ function HankeFormLiitteet({ onFileUpload }: Readonly<Props>) {
   }
 
   function handleUpload(uploading: boolean) {
-    onFileUpload(uploading);
     if (!uploading) {
       queryClient.invalidateQueries(HANKE_ATTACHMENTS_QUERY_KEY);
     }

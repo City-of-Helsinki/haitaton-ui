@@ -24,21 +24,18 @@ type Props = {
   applicationId: number;
   taydennysAttachments: TaydennysAttachmentMetadata[];
   originalAttachments?: ApplicationAttachmentMetadata[];
-  onFileUpload: (isUploading: boolean) => void;
 };
 
 export default function Attachments({
   applicationId,
   taydennysAttachments,
   originalAttachments,
-  onFileUpload,
 }: Readonly<Props>) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const { getValues } = useFormContext<JohtoselvitysTaydennysFormValues>();
 
   function handleFileUpload(uploading: boolean) {
-    onFileUpload(uploading);
     if (!uploading) {
       queryClient.invalidateQueries(['application', applicationId]);
     }
