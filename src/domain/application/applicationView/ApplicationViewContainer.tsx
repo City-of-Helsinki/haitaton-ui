@@ -13,6 +13,7 @@ import { usePermissionsForHanke } from '../../hanke/hankeUsers/hooks/useUserRigh
 import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
 import useCreateTaydennys from '../taydennys/hooks/useCreateTaydennys';
 import useCreateMuutosilmoitus from '../muutosilmoitus/hooks/useCreateMuutosilmoitus';
+import { MuutosLabelProvider } from '../taydennysAndMuutosilmoitusCommon/MuutosLabelContext';
 
 type Props = {
   id: number;
@@ -92,7 +93,11 @@ function ApplicationViewContainer({ id }: Readonly<Props>) {
   }
 
   return (
-    <>
+    <MuutosLabelProvider
+      value={
+        application.taydennys ? t('taydennys:labels:taydennys') : t('muutosilmoitus:labels:muutos')
+      }
+    >
       <ApplicationView
         application={application}
         hanke={hanke}
@@ -125,7 +130,7 @@ function ApplicationViewContainer({ id }: Readonly<Props>) {
           {t('common:error')}
         </Notification>
       )}
-    </>
+    </MuutosLabelProvider>
   );
 }
 

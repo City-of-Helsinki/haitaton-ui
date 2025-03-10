@@ -94,7 +94,6 @@ import TaydennysCancel from '../taydennys/components/TaydennysCancel';
 import TaydennysAttachmentsList from '../taydennys/components/TaydennysAttachmentsList';
 import { HaittojenhallintasuunnitelmaInfo } from '../../kaivuilmoitus/components/HaittojenhallintasuunnitelmaInfo';
 import MuutosilmoitusNotification from '../muutosilmoitus/components/MuutosilmoitusNotification';
-import { MuutosLabelProvider } from '../taydennysAndMuutosilmoitusCommon/MuutosLabelContext';
 
 function TyoalueetList({ tyoalueet }: { tyoalueet: ApplicationArea[] }) {
   const { t } = useTranslation();
@@ -1001,232 +1000,228 @@ function ApplicationView({
 
       <InformationViewContentContainer>
         <InformationViewMainContent>
-          <MuutosLabelProvider
-            value={taydennys ? t('taydennys:labels:taydennys') : t('muutosilmoitus:labels:muutos')}
-          >
-            <Tabs>
-              <TabList style={{ marginBottom: 'var(--spacing-m)' }}>
-                <Tab>{t('hankePortfolio:tabit:perustiedot')}</Tab>
-                <Tab>{t('hankePortfolio:tabit:alueet')}</Tab>
-                {applicationType === 'EXCAVATION_NOTIFICATION' && (
-                  <Tab>{t('hankePortfolio:tabit:haittojenHallinta')}</Tab>
-                )}
-                <Tab>{t('hankePortfolio:tabit:yhteystiedot')}</Tab>
-                <Tab>{t('hankePortfolio:tabit:liitteet')}</Tab>
-              </TabList>
-              <TabPanel>
-                {/* Basic information panel */}
-                {applicationType === 'CABLE_REPORT' && (
-                  <JohtoselvitysBasicInformationSummary
-                    formData={application as Application<JohtoselvitysData>}
-                    changedData={changedData as JohtoselvitysData}
-                    muutokset={muutokset}
-                  >
-                    <SectionItemTitle>{t('hakemus:labels:totalSurfaceArea')}</SectionItemTitle>
-                    <SectionItemContent>
-                      <TotalSurfaceArea tyoalueet={tyoalueet} changedAreas={taydennysTyoalueet} />
-                    </SectionItemContent>
-                  </JohtoselvitysBasicInformationSummary>
-                )}
-                {applicationType === 'EXCAVATION_NOTIFICATION' && (
-                  <KaivuilmoitusBasicInformationSummary
-                    formData={application as Application<KaivuilmoitusData>}
-                    changedData={changedData as KaivuilmoitusData}
-                    muutokset={muutokset}
-                  >
-                    <SectionItemTitle>{t('hakemus:labels:totalSurfaceArea')}</SectionItemTitle>
-                    <SectionItemContent>
-                      <TotalSurfaceArea tyoalueet={tyoalueet} changedAreas={taydennysTyoalueet} />
-                    </SectionItemContent>
-                  </KaivuilmoitusBasicInformationSummary>
-                )}
-              </TabPanel>
-              <TabPanel>
-                {/* Areas information panel */}
-                <FormSummarySection style={{ marginBottom: 'var(--spacing-m)' }}>
-                  <SectionItemTitle>{t('kaivuilmoitusForm:alueet:startDate')}</SectionItemTitle>
+          <Tabs>
+            <TabList style={{ marginBottom: 'var(--spacing-m)' }}>
+              <Tab>{t('hankePortfolio:tabit:perustiedot')}</Tab>
+              <Tab>{t('hankePortfolio:tabit:alueet')}</Tab>
+              {applicationType === 'EXCAVATION_NOTIFICATION' && (
+                <Tab>{t('hankePortfolio:tabit:haittojenHallinta')}</Tab>
+              )}
+              <Tab>{t('hankePortfolio:tabit:yhteystiedot')}</Tab>
+              <Tab>{t('hankePortfolio:tabit:liitteet')}</Tab>
+            </TabList>
+            <TabPanel>
+              {/* Basic information panel */}
+              {applicationType === 'CABLE_REPORT' && (
+                <JohtoselvitysBasicInformationSummary
+                  formData={application as Application<JohtoselvitysData>}
+                  changedData={changedData as JohtoselvitysData}
+                  muutokset={muutokset}
+                >
+                  <SectionItemTitle>{t('hakemus:labels:totalSurfaceArea')}</SectionItemTitle>
                   <SectionItemContent>
-                    {startTime && <p>{formatToFinnishDate(startTime)}</p>}
-                    {muutokset?.includes('startTime') && (
-                      <Box marginTop="var(--spacing-s)">
-                        {!changedData?.startTime ? (
-                          <SectionItemContentRemoved>
-                            {startTime && <p>{formatToFinnishDate(startTime)}</p>}
-                          </SectionItemContentRemoved>
-                        ) : (
-                          <SectionItemContentAdded>
-                            <p>{formatToFinnishDate(changedData.startTime)}</p>
-                          </SectionItemContentAdded>
-                        )}
-                      </Box>
-                    )}
+                    <TotalSurfaceArea tyoalueet={tyoalueet} changedAreas={taydennysTyoalueet} />
                   </SectionItemContent>
-                  <SectionItemTitle>{t('kaivuilmoitusForm:alueet:endDate')}</SectionItemTitle>
+                </JohtoselvitysBasicInformationSummary>
+              )}
+              {applicationType === 'EXCAVATION_NOTIFICATION' && (
+                <KaivuilmoitusBasicInformationSummary
+                  formData={application as Application<KaivuilmoitusData>}
+                  changedData={changedData as KaivuilmoitusData}
+                  muutokset={muutokset}
+                >
+                  <SectionItemTitle>{t('hakemus:labels:totalSurfaceArea')}</SectionItemTitle>
                   <SectionItemContent>
-                    {endTime && <p>{formatToFinnishDate(endTime)}</p>}
-                    {muutokset?.includes('endTime') && (
-                      <Box marginTop="var(--spacing-s)">
-                        {!changedData?.endTime ? (
-                          <SectionItemContentRemoved>
-                            {endTime && <p>{formatToFinnishDate(endTime)}</p>}
-                          </SectionItemContentRemoved>
-                        ) : (
-                          <SectionItemContentAdded>
-                            <p>{formatToFinnishDate(changedData.endTime)}</p>
-                          </SectionItemContentAdded>
-                        )}
-                      </Box>
-                    )}
+                    <TotalSurfaceArea tyoalueet={tyoalueet} changedAreas={taydennysTyoalueet} />
                   </SectionItemContent>
-                </FormSummarySection>
-                {applicationType === 'CABLE_REPORT' && (
-                  <JohtoselvitysAreasInfo
-                    tyoalueet={tyoalueet}
-                    changedAreas={taydennysTyoalueet}
-                    muutokset={muutokset}
-                  />
-                )}
-                {applicationType === 'EXCAVATION_NOTIFICATION' && (
-                  <KaivuilmoitusAreasInfo
-                    originalAreas={kaivuilmoitusAlueet}
-                    changedAreas={changedData?.areas as KaivuilmoitusAlue[]}
-                    muutokset={muutokset}
-                  />
-                )}
-              </TabPanel>
-              <TabPanel>
-                {/* Nuisance management panel */}
-                {applicationType === 'EXCAVATION_NOTIFICATION' && (
-                  <KaivuilmoitusAreasNuisanceInfo
-                    hankeAreas={hankealueet}
-                    originalAreas={kaivuilmoitusAlueet}
-                    changedAreas={changedData?.areas as KaivuilmoitusAlue[]}
-                    muutokset={muutokset}
-                  />
-                )}
-              </TabPanel>
-              <TabPanel>
-                {/* Contacts information panel */}
-                <FormSummarySection>
-                  <ContactsSummary
-                    customerWithContacts={customerWithContacts}
-                    title={t('form:yhteystiedot:titles:customerWithContacts')}
-                  />
-                  {muutokset?.includes('customerWithContacts') &&
-                    changedData?.customerWithContacts && (
-                      <ContactsSummary
-                        customerWithContacts={changedData?.customerWithContacts}
-                        ContentContainer={SectionItemContentAdded}
-                      />
-                    )}
-                  <ContactsSummary
-                    customerWithContacts={contractorWithContacts}
-                    title={t('form:yhteystiedot:titles:contractorWithContacts')}
-                  />
-                  {muutokset?.includes('contractorWithContacts') &&
-                    changedData?.contractorWithContacts && (
-                      <ContactsSummary
-                        customerWithContacts={changedData?.contractorWithContacts}
-                        ContentContainer={SectionItemContentAdded}
-                      />
-                    )}
-                  <ContactsSummary
-                    customerWithContacts={propertyDeveloperWithContacts}
-                    title={t('form:yhteystiedot:titles:rakennuttajat')}
-                  />
-                  {muutokset?.includes('propertyDeveloperWithContacts') && (
-                    <ContactsSummary
-                      customerWithContacts={
-                        changedData?.propertyDeveloperWithContacts ?? propertyDeveloperWithContacts
-                      }
-                      title={
-                        !propertyDeveloperWithContacts
-                          ? t('form:yhteystiedot:titles:rakennuttajat')
-                          : undefined
-                      }
-                      ContentContainer={
-                        changedData?.propertyDeveloperWithContacts
-                          ? SectionItemContentAdded
-                          : SectionItemContentRemoved
-                      }
-                    />
-                  )}
-                  <ContactsSummary
-                    customerWithContacts={representativeWithContacts}
-                    title={t('form:yhteystiedot:titles:representativeWithContacts')}
-                  />
-                  {muutokset?.includes('representativeWithContacts') && (
-                    <ContactsSummary
-                      customerWithContacts={
-                        changedData?.representativeWithContacts ?? representativeWithContacts
-                      }
-                      title={
-                        !representativeWithContacts
-                          ? t('form:yhteystiedot:titles:representativeWithContacts')
-                          : undefined
-                      }
-                      ContentContainer={
-                        changedData?.representativeWithContacts
-                          ? SectionItemContentAdded
-                          : SectionItemContentRemoved
-                      }
-                    />
-                  )}
-                  {applicationType === 'EXCAVATION_NOTIFICATION' && (
-                    <>
-                      <InvoicingCustomerSummary
-                        invoicingCustomer={(applicationData as KaivuilmoitusData).invoicingCustomer}
-                        title={t('form:yhteystiedot:titles:invoicingCustomerInfo')}
-                      />
-                      {muutokset?.includes('invoicingCustomer') &&
-                        (changedData as KaivuilmoitusData).invoicingCustomer && (
-                          <InvoicingCustomerSummary
-                            invoicingCustomer={
-                              (changedData as KaivuilmoitusData).invoicingCustomer ??
-                              (applicationData as KaivuilmoitusData).invoicingCustomer
-                            }
-                            title={
-                              !(applicationData as KaivuilmoitusData).invoicingCustomer
-                                ? t('form:yhteystiedot:titles:invoicingCustomerInfo')
-                                : undefined
-                            }
-                            ContentContainer={SectionItemContentAdded}
-                          />
-                        )}
-                    </>
-                  )}
-                  {paperDecisionReceiver && (
-                    <PaperDecisionReceiverSummary paperDecisionReceiver={paperDecisionReceiver} />
-                  )}
-                </FormSummarySection>
-              </TabPanel>
-              <TabPanel>
-                {/* Attachments panel */}
-                {applicationType === 'EXCAVATION_NOTIFICATION' ? (
-                  <KaivuilmoitusAttachmentSummary
-                    formData={application as Application<KaivuilmoitusData>}
-                    attachments={attachments}
-                    taydennysAttachments={taydennys?.liitteet}
-                    taydennysAdditionalInfo={
-                      (taydennys?.applicationData as KaivuilmoitusData)?.additionalInfo
-                    }
-                  />
-                ) : attachments ? (
-                  <AttachmentSummary
-                    attachments={attachments}
-                    children={
-                      taydennys?.liitteet &&
-                      taydennys.liitteet.length > 0 && (
-                        <SectionItemContentAdded mt="var(--spacing-xs)">
-                          <TaydennysAttachmentsList attachments={taydennys.liitteet} />
+                </KaivuilmoitusBasicInformationSummary>
+              )}
+            </TabPanel>
+            <TabPanel>
+              {/* Areas information panel */}
+              <FormSummarySection style={{ marginBottom: 'var(--spacing-m)' }}>
+                <SectionItemTitle>{t('kaivuilmoitusForm:alueet:startDate')}</SectionItemTitle>
+                <SectionItemContent>
+                  {startTime && <p>{formatToFinnishDate(startTime)}</p>}
+                  {muutokset?.includes('startTime') && (
+                    <Box marginTop="var(--spacing-s)">
+                      {!changedData?.startTime ? (
+                        <SectionItemContentRemoved>
+                          {startTime && <p>{formatToFinnishDate(startTime)}</p>}
+                        </SectionItemContentRemoved>
+                      ) : (
+                        <SectionItemContentAdded>
+                          <p>{formatToFinnishDate(changedData.startTime)}</p>
                         </SectionItemContentAdded>
-                      )
+                      )}
+                    </Box>
+                  )}
+                </SectionItemContent>
+                <SectionItemTitle>{t('kaivuilmoitusForm:alueet:endDate')}</SectionItemTitle>
+                <SectionItemContent>
+                  {endTime && <p>{formatToFinnishDate(endTime)}</p>}
+                  {muutokset?.includes('endTime') && (
+                    <Box marginTop="var(--spacing-s)">
+                      {!changedData?.endTime ? (
+                        <SectionItemContentRemoved>
+                          {endTime && <p>{formatToFinnishDate(endTime)}</p>}
+                        </SectionItemContentRemoved>
+                      ) : (
+                        <SectionItemContentAdded>
+                          <p>{formatToFinnishDate(changedData.endTime)}</p>
+                        </SectionItemContentAdded>
+                      )}
+                    </Box>
+                  )}
+                </SectionItemContent>
+              </FormSummarySection>
+              {applicationType === 'CABLE_REPORT' && (
+                <JohtoselvitysAreasInfo
+                  tyoalueet={tyoalueet}
+                  changedAreas={taydennysTyoalueet}
+                  muutokset={muutokset}
+                />
+              )}
+              {applicationType === 'EXCAVATION_NOTIFICATION' && (
+                <KaivuilmoitusAreasInfo
+                  originalAreas={kaivuilmoitusAlueet}
+                  changedAreas={changedData?.areas as KaivuilmoitusAlue[]}
+                  muutokset={muutokset}
+                />
+              )}
+            </TabPanel>
+            <TabPanel>
+              {/* Nuisance management panel */}
+              {applicationType === 'EXCAVATION_NOTIFICATION' && (
+                <KaivuilmoitusAreasNuisanceInfo
+                  hankeAreas={hankealueet}
+                  originalAreas={kaivuilmoitusAlueet}
+                  changedAreas={changedData?.areas as KaivuilmoitusAlue[]}
+                  muutokset={muutokset}
+                />
+              )}
+            </TabPanel>
+            <TabPanel>
+              {/* Contacts information panel */}
+              <FormSummarySection>
+                <ContactsSummary
+                  customerWithContacts={customerWithContacts}
+                  title={t('form:yhteystiedot:titles:customerWithContacts')}
+                />
+                {muutokset?.includes('customerWithContacts') &&
+                  changedData?.customerWithContacts && (
+                    <ContactsSummary
+                      customerWithContacts={changedData?.customerWithContacts}
+                      ContentContainer={SectionItemContentAdded}
+                    />
+                  )}
+                <ContactsSummary
+                  customerWithContacts={contractorWithContacts}
+                  title={t('form:yhteystiedot:titles:contractorWithContacts')}
+                />
+                {muutokset?.includes('contractorWithContacts') &&
+                  changedData?.contractorWithContacts && (
+                    <ContactsSummary
+                      customerWithContacts={changedData?.contractorWithContacts}
+                      ContentContainer={SectionItemContentAdded}
+                    />
+                  )}
+                <ContactsSummary
+                  customerWithContacts={propertyDeveloperWithContacts}
+                  title={t('form:yhteystiedot:titles:rakennuttajat')}
+                />
+                {muutokset?.includes('propertyDeveloperWithContacts') && (
+                  <ContactsSummary
+                    customerWithContacts={
+                      changedData?.propertyDeveloperWithContacts ?? propertyDeveloperWithContacts
+                    }
+                    title={
+                      !propertyDeveloperWithContacts
+                        ? t('form:yhteystiedot:titles:rakennuttajat')
+                        : undefined
+                    }
+                    ContentContainer={
+                      changedData?.propertyDeveloperWithContacts
+                        ? SectionItemContentAdded
+                        : SectionItemContentRemoved
                     }
                   />
-                ) : null}
-              </TabPanel>
-            </Tabs>
-          </MuutosLabelProvider>
+                )}
+                <ContactsSummary
+                  customerWithContacts={representativeWithContacts}
+                  title={t('form:yhteystiedot:titles:representativeWithContacts')}
+                />
+                {muutokset?.includes('representativeWithContacts') && (
+                  <ContactsSummary
+                    customerWithContacts={
+                      changedData?.representativeWithContacts ?? representativeWithContacts
+                    }
+                    title={
+                      !representativeWithContacts
+                        ? t('form:yhteystiedot:titles:representativeWithContacts')
+                        : undefined
+                    }
+                    ContentContainer={
+                      changedData?.representativeWithContacts
+                        ? SectionItemContentAdded
+                        : SectionItemContentRemoved
+                    }
+                  />
+                )}
+                {applicationType === 'EXCAVATION_NOTIFICATION' && (
+                  <>
+                    <InvoicingCustomerSummary
+                      invoicingCustomer={(applicationData as KaivuilmoitusData).invoicingCustomer}
+                      title={t('form:yhteystiedot:titles:invoicingCustomerInfo')}
+                    />
+                    {muutokset?.includes('invoicingCustomer') &&
+                      (changedData as KaivuilmoitusData).invoicingCustomer && (
+                        <InvoicingCustomerSummary
+                          invoicingCustomer={
+                            (changedData as KaivuilmoitusData).invoicingCustomer ??
+                            (applicationData as KaivuilmoitusData).invoicingCustomer
+                          }
+                          title={
+                            !(applicationData as KaivuilmoitusData).invoicingCustomer
+                              ? t('form:yhteystiedot:titles:invoicingCustomerInfo')
+                              : undefined
+                          }
+                          ContentContainer={SectionItemContentAdded}
+                        />
+                      )}
+                  </>
+                )}
+                {paperDecisionReceiver && (
+                  <PaperDecisionReceiverSummary paperDecisionReceiver={paperDecisionReceiver} />
+                )}
+              </FormSummarySection>
+            </TabPanel>
+            <TabPanel>
+              {/* Attachments panel */}
+              {applicationType === 'EXCAVATION_NOTIFICATION' ? (
+                <KaivuilmoitusAttachmentSummary
+                  formData={application as Application<KaivuilmoitusData>}
+                  attachments={attachments}
+                  taydennysAttachments={taydennys?.liitteet}
+                  taydennysAdditionalInfo={
+                    (taydennys?.applicationData as KaivuilmoitusData)?.additionalInfo
+                  }
+                />
+              ) : attachments ? (
+                <AttachmentSummary
+                  attachments={attachments}
+                  children={
+                    taydennys?.liitteet &&
+                    taydennys.liitteet.length > 0 && (
+                      <SectionItemContentAdded mt="var(--spacing-xs)">
+                        <TaydennysAttachmentsList attachments={taydennys.liitteet} />
+                      </SectionItemContentAdded>
+                    )
+                  }
+                />
+              ) : null}
+            </TabPanel>
+          </Tabs>
         </InformationViewMainContent>
         <InformationViewSidebar testId="application-view-sidebar">
           {hanke && <Sidebar hanke={hanke} application={application} />}
