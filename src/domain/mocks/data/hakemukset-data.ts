@@ -2010,6 +2010,7 @@ const hakemukset: Application[] = [
     muutosilmoitus: {
       id: '6a24e4a6-8f87-4da7-96f9-5f6b54ea6834',
       sent: null,
+      muutokset: [],
       applicationData: {
         applicationType: 'EXCAVATION_NOTIFICATION',
         name: 'Aidasmäentien muutoskaivuut',

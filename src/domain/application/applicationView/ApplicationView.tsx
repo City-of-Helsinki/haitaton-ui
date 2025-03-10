@@ -717,17 +717,21 @@ function ApplicationView({
     representativeWithContacts,
     paperDecisionReceiver,
   } = applicationData;
+
+  const muutokset = taydennys?.muutokset ?? muutosilmoitus?.muutokset;
+  const changedData = taydennys?.applicationData ?? muutosilmoitus?.applicationData;
+
   const tyoalueet =
     applicationType === 'CABLE_REPORT'
       ? (areas as ApplicationArea[])
       : (areas as KaivuilmoitusAlue[]).flatMap((area) => area.tyoalueet);
   const kaivuilmoitusTaydennysAlueet =
     applicationType === 'EXCAVATION_NOTIFICATION'
-      ? (application.taydennys?.applicationData.areas as KaivuilmoitusAlue[] | undefined)
+      ? (changedData?.areas as KaivuilmoitusAlue[] | undefined)
       : null;
   const taydennysTyoalueet =
     applicationType === 'CABLE_REPORT'
-      ? (application.taydennys?.applicationData.areas as ApplicationArea[] | undefined)
+      ? (changedData?.areas as ApplicationArea[] | undefined)
       : kaivuilmoitusTaydennysAlueet?.flatMap((area) => area.tyoalueet);
   const kaivuilmoitusAlueet =
     applicationType === 'EXCAVATION_NOTIFICATION' ? (areas as KaivuilmoitusAlue[]) : null;
@@ -1011,8 +1015,8 @@ function ApplicationView({
               {applicationType === 'CABLE_REPORT' && (
                 <JohtoselvitysBasicInformationSummary
                   formData={application as Application<JohtoselvitysData>}
-                  changedData={taydennys?.applicationData as JohtoselvitysData}
-                  muutokset={taydennys?.muutokset}
+                  changedData={changedData as JohtoselvitysData}
+                  muutokset={muutokset}
                 >
                   <SectionItemTitle>{t('hakemus:labels:totalSurfaceArea')}</SectionItemTitle>
                   <SectionItemContent>
@@ -1023,8 +1027,8 @@ function ApplicationView({
               {applicationType === 'EXCAVATION_NOTIFICATION' && (
                 <KaivuilmoitusBasicInformationSummary
                   formData={application as Application<KaivuilmoitusData>}
-                  changedData={taydennys?.applicationData as KaivuilmoitusData}
-                  muutokset={taydennys?.muutokset}
+                  changedData={changedData as KaivuilmoitusData}
+                  muutokset={muutokset}
                 >
                   <SectionItemTitle>{t('hakemus:labels:totalSurfaceArea')}</SectionItemTitle>
                   <SectionItemContent>
@@ -1039,17 +1043,15 @@ function ApplicationView({
                 <SectionItemTitle>{t('kaivuilmoitusForm:alueet:startDate')}</SectionItemTitle>
                 <SectionItemContent>
                   {startTime && <p>{formatToFinnishDate(startTime)}</p>}
-                  {application.taydennys?.muutokset.includes('startTime') && (
+                  {muutokset?.includes('startTime') && (
                     <Box marginTop="var(--spacing-s)">
-                      {!application.taydennys?.applicationData.startTime ? (
+                      {!changedData?.startTime ? (
                         <SectionItemContentRemoved>
                           {startTime && <p>{formatToFinnishDate(startTime)}</p>}
                         </SectionItemContentRemoved>
                       ) : (
                         <SectionItemContentAdded>
-                          <p>
-                            {formatToFinnishDate(application.taydennys.applicationData.startTime)}
-                          </p>
+                          <p>{formatToFinnishDate(changedData.startTime)}</p>
                         </SectionItemContentAdded>
                       )}
                     </Box>
@@ -1058,17 +1060,15 @@ function ApplicationView({
                 <SectionItemTitle>{t('kaivuilmoitusForm:alueet:endDate')}</SectionItemTitle>
                 <SectionItemContent>
                   {endTime && <p>{formatToFinnishDate(endTime)}</p>}
-                  {application.taydennys?.muutokset.includes('endTime') && (
+                  {muutokset?.includes('endTime') && (
                     <Box marginTop="var(--spacing-s)">
-                      {!application.taydennys?.applicationData.endTime ? (
+                      {!changedData?.endTime ? (
                         <SectionItemContentRemoved>
                           {endTime && <p>{formatToFinnishDate(endTime)}</p>}
                         </SectionItemContentRemoved>
                       ) : (
                         <SectionItemContentAdded>
-                          <p>
-                            {formatToFinnishDate(application.taydennys.applicationData.endTime)}
-                          </p>
+                          <p>{formatToFinnishDate(changedData.endTime)}</p>
                         </SectionItemContentAdded>
                       )}
                     </Box>
@@ -1079,14 +1079,14 @@ function ApplicationView({
                 <JohtoselvitysAreasInfo
                   tyoalueet={tyoalueet}
                   changedAreas={taydennysTyoalueet}
-                  muutokset={taydennys?.muutokset}
+                  muutokset={muutokset}
                 />
               )}
               {applicationType === 'EXCAVATION_NOTIFICATION' && (
                 <KaivuilmoitusAreasInfo
                   originalAreas={kaivuilmoitusAlueet}
-                  changedAreas={taydennys?.applicationData?.areas as KaivuilmoitusAlue[]}
-                  muutokset={taydennys?.muutokset}
+                  changedAreas={changedData?.areas as KaivuilmoitusAlue[]}
+                  muutokset={muutokset}
                 />
               )}
             </TabPanel>
@@ -1096,8 +1096,8 @@ function ApplicationView({
                 <KaivuilmoitusAreasNuisanceInfo
                   hankeAreas={hankealueet}
                   originalAreas={kaivuilmoitusAlueet}
-                  changedAreas={taydennys?.applicationData?.areas as KaivuilmoitusAlue[]}
-                  muutokset={taydennys?.muutokset}
+                  changedAreas={changedData?.areas as KaivuilmoitusAlue[]}
+                  muutokset={muutokset}
                 />
               )}
             </TabPanel>
@@ -1108,12 +1108,10 @@ function ApplicationView({
                   customerWithContacts={customerWithContacts}
                   title={t('form:yhteystiedot:titles:customerWithContacts')}
                 />
-                {application.taydennys?.muutokset.includes('customerWithContacts') &&
-                  application.taydennys.applicationData.customerWithContacts && (
+                {muutokset?.includes('customerWithContacts') &&
+                  changedData?.customerWithContacts && (
                     <ContactsSummary
-                      customerWithContacts={
-                        application.taydennys.applicationData.customerWithContacts
-                      }
+                      customerWithContacts={changedData?.customerWithContacts}
                       ContentContainer={SectionItemContentAdded}
                     />
                   )}
@@ -1121,12 +1119,10 @@ function ApplicationView({
                   customerWithContacts={contractorWithContacts}
                   title={t('form:yhteystiedot:titles:contractorWithContacts')}
                 />
-                {application.taydennys?.muutokset.includes('contractorWithContacts') &&
-                  application.taydennys.applicationData.contractorWithContacts && (
+                {muutokset?.includes('contractorWithContacts') &&
+                  changedData?.contractorWithContacts && (
                     <ContactsSummary
-                      customerWithContacts={
-                        application.taydennys.applicationData.contractorWithContacts
-                      }
+                      customerWithContacts={changedData?.contractorWithContacts}
                       ContentContainer={SectionItemContentAdded}
                     />
                   )}
@@ -1134,11 +1130,10 @@ function ApplicationView({
                   customerWithContacts={propertyDeveloperWithContacts}
                   title={t('form:yhteystiedot:titles:rakennuttajat')}
                 />
-                {application.taydennys?.muutokset.includes('propertyDeveloperWithContacts') && (
+                {muutokset?.includes('propertyDeveloperWithContacts') && (
                   <ContactsSummary
                     customerWithContacts={
-                      application.taydennys.applicationData.propertyDeveloperWithContacts ??
-                      propertyDeveloperWithContacts
+                      changedData?.propertyDeveloperWithContacts ?? propertyDeveloperWithContacts
                     }
                     title={
                       !propertyDeveloperWithContacts
@@ -1146,7 +1141,7 @@ function ApplicationView({
                         : undefined
                     }
                     ContentContainer={
-                      application.taydennys.applicationData.propertyDeveloperWithContacts
+                      changedData?.propertyDeveloperWithContacts
                         ? SectionItemContentAdded
                         : SectionItemContentRemoved
                     }
@@ -1156,11 +1151,10 @@ function ApplicationView({
                   customerWithContacts={representativeWithContacts}
                   title={t('form:yhteystiedot:titles:representativeWithContacts')}
                 />
-                {application.taydennys?.muutokset.includes('representativeWithContacts') && (
+                {muutokset?.includes('representativeWithContacts') && (
                   <ContactsSummary
                     customerWithContacts={
-                      application.taydennys.applicationData.representativeWithContacts ??
-                      representativeWithContacts
+                      changedData?.representativeWithContacts ?? representativeWithContacts
                     }
                     title={
                       !representativeWithContacts
@@ -1168,7 +1162,7 @@ function ApplicationView({
                         : undefined
                     }
                     ContentContainer={
-                      application.taydennys.applicationData.representativeWithContacts
+                      changedData?.representativeWithContacts
                         ? SectionItemContentAdded
                         : SectionItemContentRemoved
                     }
@@ -1180,13 +1174,11 @@ function ApplicationView({
                       invoicingCustomer={(applicationData as KaivuilmoitusData).invoicingCustomer}
                       title={t('form:yhteystiedot:titles:invoicingCustomerInfo')}
                     />
-                    {application.taydennys?.muutokset.includes('invoicingCustomer') &&
-                      (application.taydennys?.applicationData as KaivuilmoitusData)
-                        .invoicingCustomer && (
+                    {muutokset?.includes('invoicingCustomer') &&
+                      (changedData as KaivuilmoitusData).invoicingCustomer && (
                         <InvoicingCustomerSummary
                           invoicingCustomer={
-                            (application.taydennys?.applicationData as KaivuilmoitusData)
-                              .invoicingCustomer ??
+                            (changedData as KaivuilmoitusData).invoicingCustomer ??
                             (applicationData as KaivuilmoitusData).invoicingCustomer
                           }
                           title={
