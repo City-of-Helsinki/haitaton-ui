@@ -1567,7 +1567,8 @@
     "labels": {
       "muutosilmoitus": "Muutosilmoitus",
       "originalInformation": "$t(taydennys:labels:originalInformation)",
-      "muutokset": "Muutokset"
+      "muutokset": "Muutokset",
+      "muutos": "Muutos"
     },
     "buttons": {
       "createMuutosilmoitus": "Tee muutosilmoitus",
@@ -1575,7 +1576,7 @@
     },
     "notification": {
       "label": "Muutosilmoitus",
-      "createdText": "Hakemukselle on luotu muutosilmoitus",
+      "createdText": "Hakemuksella on keskeneräinen muutosilmoitus.",
       "sentText": "Hakemukselle on tehty muutosilmoitus, joka on lähetetty käsittelyyn {{date}}"
     }
   },
