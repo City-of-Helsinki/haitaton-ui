@@ -751,14 +751,7 @@
         "haitanKesto": "Duration of the project"
       },
       "procedureTips": {
-        "showTipsButton": "Display suggested measures",
-        "titles": {
-          "PYORALIIKENNE": "Cycling measures",
-          "AUTOLIIKENNE": "Vehicle traffic measures",
-          "LINJAAUTOLIIKENNE": "Bus traffic measures",
-          "RAITIOLIIKENNE": "Tram traffic measures",
-          "MUUT": "Other measures"
-        }
+        "showTipsButton": "Display suggested measures"
       }
     },
     "hankkeenLiitteetForm": {

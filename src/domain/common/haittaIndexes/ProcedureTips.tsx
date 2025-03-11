@@ -12,7 +12,7 @@ export default function ProcedureTips({ haittojenhallintaTyyppi, haittaIndex }: 
   const { t } = useTranslation();
 
   const { CARD } = useLocalizedRoutes();
-  const isOther = ['MUUT', 'MELU', 'POLY', 'TARTINA'].includes(haittojenhallintaTyyppi);
+  const isOther = ['MUUT', 'MELU', 'POLY', 'TARINA'].includes(haittojenhallintaTyyppi);
 
   const tips: {
     // Procedure tip title

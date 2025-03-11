@@ -751,14 +751,7 @@
         "haitanKesto": "Projektets längd"
       },
       "procedureTips": {
-        "showTipsButton": "Visa tips på åtgärder",
-        "titles": {
-          "PYORALIIKENNE": "Åtgärder för cykeltrafiken",
-          "AUTOLIIKENNE": "Åtgärder för biltrafiken",
-          "LINJAAUTOLIIKENNE": "Åtgärder för busstrafiken",
-          "RAITIOLIIKENNE": "Åtgärder för spårvagnstrafiken",
-          "MUUT": "Andra åtgärder"
-        }
+        "showTipsButton": "Visa tips på åtgärder"
       }
     },
     "hankkeenLiitteetForm": {
