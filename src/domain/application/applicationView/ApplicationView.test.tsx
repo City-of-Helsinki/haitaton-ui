@@ -242,10 +242,10 @@ describe('Cable report application view', () => {
     cancelApplication.mockRestore();
   });
 
-  test('Should not send multiple requests if clicking Send button many times', async () => {
+  test('Confirming send disables dialog buttons', async () => {
     server.use(
       http.post('/api/hakemukset/:id/laheta', async () => {
-        await delay(200);
+        await delay(500);
         return new HttpResponse();
       }),
     );
@@ -260,10 +260,9 @@ describe('Cable report application view', () => {
     const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
     expect(confirmButton).toBeEnabled();
     await user.click(confirmButton);
-    await user.click(confirmButton);
-    await user.click(confirmButton);
-
-    await screen.findByText('Hakemus on lähetetty käsiteltäväksi.');
+    expect(confirmButton).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Lähetetään' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Peruuta' })).toBeDisabled();
 
     expect(sendApplication).toHaveBeenCalledTimes(1);
 

@@ -35,7 +35,6 @@ import {
   KaivuilmoitusCreateData,
   KaivuilmoitusData,
   KaivuilmoitusUpdateData,
-  PaperDecisionReceiver,
 } from '../application/types/application';
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 import {
@@ -51,7 +50,6 @@ import Areas from './Areas';
 import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
 import { getJohtoselvitysIdentifiers, isApplicationDraft, isContactIn } from '../application/utils';
 import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
-import useSendApplication from '../application/hooks/useSendApplication';
 import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
 import HaittojenHallinta from './HaittojenHallinta';
 import FormErrorsNotification from './components/FormErrorsNotification';
@@ -115,7 +113,6 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     getValues('id'),
   );
 
-  const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const [showSendDialog, setShowSendDialog] = useState(false);
 
   const {
@@ -209,28 +206,13 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
     }
   }
 
-  const applicationSendMutation = useSendApplication({
-    onSuccess(data) {
-      navigateToApplicationView(data.id?.toString());
-    },
-  });
-
-  async function onSendApplication(pdr: PaperDecisionReceiver | undefined | null) {
-    const data = getValues();
-    applicationSendMutation.mutate({
-      id: data.id as number,
-      paperDecisionReceiver: pdr,
-    });
-    setIsSendButtonDisabled(true);
-    setShowSendDialog(false);
-  }
-
   function openSendDialog() {
     setShowSendDialog(true);
   }
 
-  function closeSendDialog() {
+  function closeSendDialog(id?: number | null) {
     setShowSendDialog(false);
+    navigateToApplicationView(id?.toString());
   }
 
   function saveAndQuit() {
@@ -410,7 +392,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
                   type="submit"
                   iconLeft={<IconEnvelope />}
                   loadingText={t('common:buttons:sendingText')}
-                  disabled={disableSendButton || isSendButtonDisabled}
+                  disabled={disableSendButton}
                 >
                   {t('hakemus:buttons:sendApplication')}
                 </Button>
@@ -458,10 +440,9 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
 
       <ApplicationSendDialog
         type="EXCAVATION_NOTIFICATION"
+        id={application?.id}
         isOpen={showSendDialog}
-        isLoading={applicationSendMutation.isLoading}
         onClose={closeSendDialog}
-        onSend={onSendApplication}
       />
     </FormProvider>
   );
