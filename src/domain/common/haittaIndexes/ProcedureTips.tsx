@@ -42,6 +42,7 @@ export default function ProcedureTips({ haittojenhallintaTyyppi, haittaIndex }: 
   const translationComponents = {
     p: <p />,
     br: <br />,
+    ol: <ol style={{ listStylePosition: 'inside' }} />,
     ul: <ul style={{ listStylePosition: 'inside' }} />,
     li: <li />,
     external: (
