@@ -51,7 +51,7 @@ const UserManualMain: React.FC = () => {
             style={{ display: 'block' }}
             external
             openInNewTab
-            openInNewTabAriaLabel="common:components:link:openInNewTabAriaLabel"
+            openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
             openInExternalDomainAriaLabel={t(
               'common:components:link:openInExternalDomainAriaLabel',
             )}
