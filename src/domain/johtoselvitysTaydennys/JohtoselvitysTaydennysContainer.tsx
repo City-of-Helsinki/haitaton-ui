@@ -70,8 +70,6 @@ export default function JohtoselvitysTaydennysContainer({
   const sendTaydennysMutation = useSendTaydennys();
   const [showSendDialog, setShowSendDialog] = useState(false);
   const { data: signedInUser } = usePermissionsForHanke(hankeData.hankeTunnus);
-  const [attachmentsUploading, setAttachmentsUploading] = useState(false);
-  const attachmentsUploadingText: string = t('common:components:fileUpload:loadingText');
   const { data: originalAttachments } = useAttachments(originalApplication.id);
 
   const formContext = useForm<JohtoselvitysTaydennysFormValues>({
@@ -95,10 +93,6 @@ export default function JohtoselvitysTaydennysContainer({
     JohtoselvitysData,
     JohtoselvitysUpdateData
   >(originalApplication.id, updateTaydennys);
-
-  function handleAttachmentUpload(isUploading: boolean) {
-    setAttachmentsUploading(isUploading);
-  }
 
   // Fields that are validated in each page when moving in the form
   const pageFieldsToValidate: FieldPath<JohtoselvitysTaydennysFormValues>[][] = [
@@ -141,7 +135,6 @@ export default function JohtoselvitysTaydennysContainer({
           applicationId={originalApplication.id!}
           taydennysAttachments={taydennys.liitteet}
           originalAttachments={originalAttachments}
-          onFileUpload={handleAttachmentUpload}
         />
       ),
       label: t('hankePortfolio:tabit:liitteet'),
@@ -312,8 +305,6 @@ export default function JohtoselvitysTaydennysContainer({
             <Box mt="var(--spacing-s)">{formErrorsNotification}</Box>
           </>
         }
-        isLoading={attachmentsUploading}
-        isLoadingText={attachmentsUploadingText}
         onStepChange={handleStepChange}
         stepChangeValidator={validateStepChange}
         onSubmit={handleSubmit(openSendDialog)}
@@ -337,10 +328,8 @@ export default function JohtoselvitysTaydennysContainer({
           const isContact = isContactIn(signedInUser, getValues('applicationData'));
           const disableSendButton = showSendButton && !isContact;
 
-          const saveAndQuitIsLoading = hakemusUpdateMutation.isLoading || attachmentsUploading;
-          const saveAndQuitLoadingText = attachmentsUploading
-            ? attachmentsUploadingText
-            : t('common:buttons:savingText');
+          const saveAndQuitIsLoading = hakemusUpdateMutation.isLoading;
+          const saveAndQuitLoadingText = t('common:buttons:savingText');
           return (
             <FormActions
               activeStepIndex={activeStep}
