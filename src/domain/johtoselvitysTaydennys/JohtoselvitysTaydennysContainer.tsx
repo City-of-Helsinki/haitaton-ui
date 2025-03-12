@@ -161,8 +161,8 @@ export default function JohtoselvitysTaydennysContainer({
   const alueetErrors = useValidationErrors(alueetSchema, watchFormValues);
   const yhteystiedotErrors = useValidationErrors(yhteystiedotSchema, watchFormValues);
   const formErrorsByPage = [perustiedotErrors, alueetErrors, yhteystiedotErrors, []];
-  const [isSending, setSending] = useState(false);
-  const [isError, setError] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   function mapToErrorListItem(error: ValidationError) {
     const errorPath = error.path?.replace('[', '.').replace(']', '');
@@ -271,31 +271,31 @@ export default function JohtoselvitysTaydennysContainer({
   }
 
   function openSendDialog() {
-    setError(false);
+    setIsError(false);
     setShowSendDialog(true);
   }
 
   function closeSendDialog() {
     if (!isSending) {
-      setError(false);
+      setIsError(false);
       setShowSendDialog(false);
     }
   }
 
   function sendTaydennys() {
-    setSending(true);
-    setError(false);
+    setIsSending(true);
+    setIsError(false);
     sendTaydennysMutation.mutate(taydennys.id, {
       onSuccess(data) {
-        setError(false);
+        setIsError(false);
         showSendSuccess();
-        setSending(false);
+        setIsSending(false);
         closeSendDialog();
         navigateToApplicationView(data.id?.toString());
       },
       onError() {
-        setSending(false);
-        setError(true);
+        setIsSending(false);
+        setIsError(true);
       },
     });
   }

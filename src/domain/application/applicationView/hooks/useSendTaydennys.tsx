@@ -36,35 +36,35 @@ export default function useSendTaydennys(
   const { showSendSuccess } = useTaydennysSendNotification();
   const isContact =
     application.taydennys && isContactIn(signedInUser, application.taydennys.applicationData);
-  const [isSending, setSending] = useState(false);
-  const [isError, setError] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   function openSendTaydennysDialog() {
-    setError(false);
+    setIsError(false);
     setShowSendTaydennysDialog(true);
   }
 
   function closeSendTaydennysDialog() {
     if (!isSending) {
-      setError(false);
+      setIsError(false);
       setShowSendTaydennysDialog(false);
     }
   }
 
   function sendTaydennysHakemus() {
     if (application.taydennys?.id) {
-      setSending(true);
-      setError(false);
+      setIsSending(true);
+      setIsError(false);
       sendTaydennysMutation.mutate(application.taydennys.id, {
         onSuccess() {
-          setError(false);
+          setIsError(false);
           showSendSuccess();
-          setSending(false);
+          setIsSending(false);
           closeSendTaydennysDialog();
         },
         onError() {
-          setSending(false);
-          setError(true);
+          setIsSending(false);
+          setIsError(true);
         },
       });
     }

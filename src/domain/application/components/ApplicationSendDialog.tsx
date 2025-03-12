@@ -44,8 +44,8 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
   const dialogTitle = t('hakemus:sendDialog:title');
   const paperDecisionFeatureEnabled =
     type === 'EXCAVATION_NOTIFICATION' || features.cableReportPaperDecision;
-  const [isSending, setSending] = useState(false);
-  const [isError, setError] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const applicationSendMutation = useSendApplication();
   const { showSendSuccess } = useApplicationSendNotification();
@@ -54,8 +54,8 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
     const paperDecisionReceiver = data.orderPaperDecision
       ? (data.paperDecisionReceiver as PaperDecisionReceiver)
       : null;
-    setError(false);
-    setSending(true);
+    setIsError(false);
+    setIsSending(true);
     applicationSendMutation.mutate(
       {
         id: id as number,
@@ -63,14 +63,14 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
       },
       {
         onSuccess(applicationData) {
-          setError(false);
+          setIsError(false);
           showSendSuccess();
-          setSending(false);
+          setIsSending(false);
           onClose(applicationData.id);
         },
         onError() {
-          setError(true);
-          setSending(false);
+          setIsError(true);
+          setIsSending(false);
         },
       },
     );
@@ -87,7 +87,7 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
   }
 
   function handleClose() {
-    setError(false);
+    setIsError(false);
     reset();
     onClose();
   }
