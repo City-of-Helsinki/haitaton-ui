@@ -31,6 +31,7 @@
       "confirmButton": "Vahvista"
     },
     "components": {
+      "moveToPage": "Siirry sivulle",
       "link": {
         "openInNewTabAriaLabel": "Avautuu uudessa välilehdessä.",
         "openInExternalDomainAriaLabel": "Siirtyy toiseen sivustoon.",
@@ -1953,13 +1954,15 @@
       "secondLinkUrl": "https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Keha/Sahkoisten%20asiointipalveluiden%20rekisteri.pdf"
     },
     "manualPage": {
-      "title": "Käyttöohjeet ja tuki",
-      "linkText": "Avaa käyttöohje tästä (pdf)",
-      "supportText": "Haitaton-järjestelmän tekninen tuki: <a>haitatontuki@hel.fi</a>",
-      "bodyText": "Johtotietopalvelun yhteystiedot löytyvät oheisen linkin takaa: <a>https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/johtotietopalvelu </a>",
-      "contactText": "<p>- sähköpostiosoite: <a>johtotietopalvelu@hel.fi</a></p><p>- puhelin: 09 310 31940</p>",
-      "linkUrl": "https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-asiakasohje.pdf",
-      "cableLocationServiceLink": "https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/johtotietopalvelu "
+      "main": {
+        "heading": "Käyttöohjeet ja tuki",
+        "text": "Näiltä sivuilta löydät Haitattoman käyttöohjeet. Ongelmatilanteissa ota yhteyttä tekniseen tukeen.",
+        "contact": "Yhteystiedot",
+        "haitatonContact": "Haitaton-järjestelmän tekninen tuki",
+        "cableServiceContact": "Johtotietopalvelun yhteystiedot",
+        "cableLocationServiceLink": "https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/johtotietopalvelu ",
+        "cableService": "Johtotietopalvelu"
+      }
     },
     "404Page": {
       "title": "Sivua ei löytynyt",
@@ -1987,7 +1990,6 @@
     "imageAltText": "Piirretty kuva rakennustyömaasta"
   },
   "workInstructions": {
-    "breadcrumb": "Murupolku",
     "main": {
       "header": "Työohjeet",
       "content": "<p>Haitaton tarjoaa hanke- ja hakemuslomakkeiden haittojenhallinnan täyttösivulla käyttäjän avuksi toimenpidevinkkejä, joissa esitetään kootusti mm. tärkeitä aikamääreitä ennakkoon tehtäviin yhteydenottoihin ja neuvotteluihin.</p><br /><p>Tälle sivustolle on koottu lisätietokortteja, jotka täydentävät osaa haittojenhallinnan toimenpidevinkeistä sekä antavat lisätason ideoita perustasoa laadukkaamman työmaan toteutukseen kolmansien osapuolten kannalta.</p><br /><p>Viralliset työohjeet löytyvät Helsingin kaupungin sivuilta osoitteesta</p><a href=\"https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/tyomaan-luvat-ja-ohjeet\">Työmaan luvat ja ohjeet (hel.fi)</a>"
@@ -2081,7 +2083,6 @@
       }
     },
     "sideNav": {
-      "moveToPage": "Siirry sivulle",
       "externalLinks": {
         "permitsAndInstructions": {
           "label": "Työmaan luvat ja ohjeet",

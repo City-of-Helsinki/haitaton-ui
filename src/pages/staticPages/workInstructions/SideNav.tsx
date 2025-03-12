@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { IconDocument, IconInfoCircle, SideNavigation } from 'hds-react';
-import styles from './WorkInstructions.module.scss';
+import styles from '../StaticContent.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
@@ -104,7 +104,7 @@ const SideNav: React.FC = () => {
       <SideNavigation
         defaultOpenMainLevels={[1]}
         id="side-navigation"
-        toggleButtonLabel={t('workInstructions:sideNav:moveToPage')}
+        toggleButtonLabel={t('common:components:moveToPage')}
       >
         {sideNavItems}
       </SideNavigation>

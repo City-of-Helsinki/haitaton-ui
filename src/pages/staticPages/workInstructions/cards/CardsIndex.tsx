@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import MainHeading from '../../../../common/components/mainHeading/MainHeading';
 import Text from '../../../../common/components/text/Text';
-import { useBreadcrumbs } from '../WorkInstructionsPage';
 import { useTranslation } from 'react-i18next';
-import { BREADCRUMBS } from '../Breadcrumbs';
+import { BREADCRUMBS, useBreadcrumbs } from '../../Breadcrumbs';
 import styles from './cards.module.scss';
 
 const CardsIndex: React.FC = () => {

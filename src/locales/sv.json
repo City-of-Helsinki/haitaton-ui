@@ -1807,13 +1807,10 @@
       "secondLinkUrl": "https://www.hel.fi/static/liitteet-2019/Kaupunginkanslia/Rekisteriselosteet/Keha/Register%20over%20e-tjanster.pdf"
     },
     "manualPage": {
-      "title": "Bruksanvisning och support",
-      "linkText": "Öppna anvisining här (pdf)",
-      "supportText": "Haitatons tekniska support: <a>haitatontuki@hel.fi</a>",
-      "bodyText": "Kontaktuppgifterna för ledningstjänsten finns på länken: <a>https://www.hel.fi/sv/stadsmiljo-och-trafik/tomter-och-bygglov/ledningstjanst</a>",
-      "contactText": "<p>-  e-post: <a>johtotietopalvelu@hel.fi</a></p><p>- telefon: 09 310 31940</p>",
-      "linkUrl": "https://www.hel.fi/static/hkr/luvat/haitaton/haitaton-bruksanvisning.pdf",
+      "main": {
+        "heading": "Bruksanvisning och support",
       "cableLocationServiceLink": "https://www.hel.fi/sv/stadsmiljo-och-trafik/tomter-och-bygglov/ledningstjanst"
+      }
     },
     "404Page": {
       "title": "Sidan finns inte",
