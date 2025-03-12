@@ -111,3 +111,19 @@ describe('Saving the form', () => {
     );
   });
 });
+
+describe('Canceling muutosilmoitus', () => {
+  test('Should be able to cancel muutosilmoitus', async () => {
+    const application = cloneDeep(hakemukset[13]) as Application<KaivuilmoitusData>;
+    const { user } = setup({
+      application,
+      muutosilmoitus: application.muutosilmoitus!,
+    });
+    await user.click(screen.getByRole('button', { name: /peru muutosilmoitus/i }));
+    await user.click(await screen.findByRole('button', { name: /vahvista/i }));
+
+    expect(await screen.findByText('Muutosilmoitus peruttiin')).toBeInTheDocument();
+    expect(screen.getByText('Muutosilmoitus peruttiin onnistuneesti')).toBeInTheDocument();
+    expect(window.location.pathname).toBe('/fi/hakemus/14');
+  });
+});

@@ -15,6 +15,7 @@ export async function createMuutosilmoitus<ApplicationData>(id: number) {
 /**
  * Update muutosilmoitus
  * @param id muutosilmoitus id
+ * @param data updated data
  */
 export async function updateMuutosilmoitus<ApplicationData, UpdateData>({
   id,
@@ -25,4 +26,11 @@ export async function updateMuutosilmoitus<ApplicationData, UpdateData>({
 }) {
   const response = await api.put<Muutosilmoitus<ApplicationData>>(`/muutosilmoitukset/${id}`, data);
   return response.data;
+}
+
+/**
+ * Delete muutosilmoitus
+ */
+export async function cancelMuutosilmoitus(id: string) {
+  await api.delete(`/muutosilmoitukset/${id}`);
 }

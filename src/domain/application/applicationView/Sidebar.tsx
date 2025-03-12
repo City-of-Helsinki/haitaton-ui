@@ -21,6 +21,7 @@ import { HankeAlue, HankeData } from '../../types/hanke';
 import CustomAccordion from '../../../common/components/customAccordion/CustomAccordion';
 import { Taydennys } from '../taydennys/types';
 import { Muutosilmoitus } from '../muutosilmoitus/types';
+import React from 'react';
 
 function getTyoalueet(
   applicationType: ApplicationType,
@@ -108,7 +109,7 @@ type AreaTabsProps = {
   hanke: HankeData;
   applicationType: ApplicationType;
   taydennys?: Taydennys<JohtoselvitysData | KaivuilmoitusData> | null;
-  muutosilmoitus?: Muutosilmoitus<JohtoselvitysData | KaivuilmoitusData>;
+  muutosilmoitus?: Muutosilmoitus<JohtoselvitysData | KaivuilmoitusData> | null;
   originalHakemusContent: React.ReactNode;
 };
 

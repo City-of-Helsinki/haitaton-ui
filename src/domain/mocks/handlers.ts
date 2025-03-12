@@ -419,4 +419,10 @@ export const handlers = [
       }
     },
   ),
+
+  http.delete(`${apiUrl}/muutosilmoitukset/:id`, async ({ params }) => {
+    const { id } = params;
+    await hakemuksetDB.cancelMuutosilmoitus(id as string);
+    return new HttpResponse();
+  }),
 ];

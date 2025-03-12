@@ -37,6 +37,7 @@ import useAttachments from '../application/hooks/useAttachments';
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
 import FormErrorsNotification from '../kaivuilmoitus/components/FormErrorsNotification';
+import MuutosilmoitusCancel from '../application/muutosilmoitus/components/MuutosilmoitusCancel';
 
 type Props = {
   muutosilmoitus: Muutosilmoitus<KaivuilmoitusData>;
@@ -254,6 +255,13 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
               onPrevious={handlePrevious}
               onNext={handleNext}
             >
+              <MuutosilmoitusCancel
+                application={originalApplication}
+                navigateToApplicationViewOnSuccess
+                buttonVariant="danger"
+                buttonIsLoading={saveAndQuitIsLoading}
+                buttonIsLoadingText={saveAndQuitLoadingText}
+              />
               <Button
                 variant="secondary"
                 onClick={handleSaveAndQuit}
