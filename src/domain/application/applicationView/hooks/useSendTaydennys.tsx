@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { Button, IconEnvelope, IconQuestionCircle, Notification } from 'hds-react';
-import { useTranslation } from 'react-i18next';
+import React, { useState } from 'react';
+import { Button, IconEnvelope, IconQuestionCircle, Link, Notification } from 'hds-react';
+import { Trans, useTranslation } from 'react-i18next';
 import { AlluStatus, Application } from '../../types/application';
 import { validationSchema as johtoselvitysValidationSchema } from '../../../johtoselvitysTaydennys/validationSchema';
 import { validationSchema as kaivuilmoitusValidationSchema } from '../../../kaivuilmoitusTaydennys/validationSchema';
@@ -9,6 +9,8 @@ import useIsInformationRequestFeatureEnabled from '../../taydennys/hooks/useIsIn
 import useSendTaydennysMutation from '../../taydennys/hooks/useSendTaydennys';
 import { isContactIn } from '../../utils';
 import { SignedInUser } from '../../../hanke/hankeUsers/hankeUser';
+import { Box } from '@chakra-ui/react';
+import useTaydennysSendNotification from '../../taydennys/hooks/useTaydennysSendNotification';
 
 const validationSchemas = {
   CABLE_REPORT: johtoselvitysValidationSchema,
@@ -31,22 +33,40 @@ export default function useSendTaydennys(
     (application.taydennys.muutokset.length > 0 || application.taydennys.liitteet.length > 0);
   const [showSendTaydennysDialog, setShowSendTaydennysDialog] = useState(false);
   const sendTaydennysMutation = useSendTaydennysMutation();
+  const { showSendSuccess } = useTaydennysSendNotification();
   const isContact =
     application.taydennys && isContactIn(signedInUser, application.taydennys.applicationData);
-  const disableSendButton = Boolean(!isContact);
+  const [isSending, setSending] = useState(false);
+  const [isError, setError] = useState(false);
 
   function openSendTaydennysDialog() {
+    setError(false);
     setShowSendTaydennysDialog(true);
   }
 
   function closeSendTaydennysDialog() {
-    setShowSendTaydennysDialog(false);
+    if (!isSending) {
+      setError(false);
+      setShowSendTaydennysDialog(false);
+    }
   }
 
   function sendTaydennysHakemus() {
     if (application.taydennys?.id) {
-      sendTaydennysMutation.mutate(application.taydennys.id);
-      closeSendTaydennysDialog();
+      setSending(true);
+      setError(false);
+      sendTaydennysMutation.mutate(application.taydennys.id, {
+        onSuccess() {
+          setError(false);
+          showSendSuccess();
+          setSending(false);
+          closeSendTaydennysDialog();
+        },
+        onError() {
+          setSending(false);
+          setError(true);
+        },
+      });
     }
   }
 
@@ -58,11 +78,11 @@ export default function useSendTaydennys(
         onClick={openSendTaydennysDialog}
         loadingText={t('common:buttons:sendingText')}
         isLoading={sendTaydennysMutation.isLoading}
-        disabled={disableSendButton}
+        disabled={isSending}
       >
         {t('taydennys:buttons:sendTaydennys')}
       </Button>
-      {disableSendButton && (
+      {!isContact && (
         <Notification
           size="small"
           style={{ marginTop: 'var(--spacing-xs)' }}
@@ -78,13 +98,39 @@ export default function useSendTaydennys(
   const sendTaydennysDialog = (
     <ConfirmationDialog
       title={t('taydennys:sendDialog:title')}
-      description={t('taydennys:sendDialog:description')}
+      description={
+        isError ? (
+          <>
+            {t('taydennys:sendDialog:description')}
+            <Box paddingTop="var(--spacing-s)">
+              <Notification
+                type="error"
+                size="small"
+                label={t('taydennys:notifications:sendErrorLabel')}
+              >
+                <Trans i18nKey="taydennys:notifications:sendErrorText">
+                  <p>
+                    Lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä
+                    Haitattoman tekniseen tukeen sähköpostiosoitteessa
+                    <Link href="mailto:haitatontuki@hel.fi">haitatontuki@hel.fi</Link>.
+                  </p>
+                </Trans>
+              </Notification>
+            </Box>
+          </>
+        ) : (
+          t('taydennys:sendDialog:description')
+        )
+      }
       showCloseButton
       isOpen={showSendTaydennysDialog}
       close={closeSendTaydennysDialog}
       mainAction={sendTaydennysHakemus}
       variant="primary"
+      isLoading={isSending}
+      loadingText={t('common:buttons:sendingText')}
       headerIcon={<IconQuestionCircle />}
+      disabled={isSending}
     />
   );
 

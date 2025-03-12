@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import {
   Button,
   IconEnvelope,
   IconQuestionCircle,
   IconSaveDiskette,
+  Link,
   Notification,
   StepState,
 } from 'hds-react';
@@ -51,6 +52,7 @@ import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/Co
 import FormErrorsNotification from '../kaivuilmoitus/components/FormErrorsNotification';
 import { updateTaydennys } from '../application/taydennys/taydennysApi';
 import useUpdateHakemus from '../application/taydennysAndMuutosilmoitusCommon/hooks/useUpdateHakemus';
+import useTaydennysSendNotification from '../application/taydennys/hooks/useTaydennysSendNotification';
 
 type Props = {
   taydennys: Taydennys<KaivuilmoitusData>;
@@ -69,6 +71,7 @@ export default function KaivuilmoitusTaydennysContainer({
   const { data: hankkeenHakemukset } = useApplicationsForHanke(hankeData.hankeTunnus, true);
   const johtoselvitysIds = getJohtoselvitysIdentifiers(hankkeenHakemukset?.applications);
   const sendTaydennysMutation = useSendTaydennys();
+  const { showSendSuccess } = useTaydennysSendNotification();
   const [showSendDialog, setShowSendDialog] = useState(false);
   const { data: signedInUser } = usePermissionsForHanke(hankeData.hankeTunnus);
   const { data: originalAttachments } = useAttachments(originalApplication.id);
@@ -204,6 +207,8 @@ export default function KaivuilmoitusTaydennysContainer({
 
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const lastStep = activeStepIndex === formSteps.length - 1;
+  const [isSending, setSending] = useState(false);
+  const [isError, setError] = useState(false);
 
   function saveTaydennys(handleSuccess?: () => void) {
     const formData = getValues();
@@ -242,20 +247,33 @@ export default function KaivuilmoitusTaydennysContainer({
   }
 
   function openSendDialog() {
+    setError(false);
     setShowSendDialog(true);
   }
 
   function closeSendDialog() {
-    setShowSendDialog(false);
+    if (!isSending) {
+      setError(false);
+      setShowSendDialog(false);
+    }
   }
 
   function sendTaydennys() {
+    setSending(true);
+    setError(false);
     sendTaydennysMutation.mutate(taydennys.id, {
       onSuccess(data) {
+        setError(false);
+        showSendSuccess();
+        setSending(false);
+        closeSendDialog();
         navigateToApplicationView(data.id?.toString());
       },
+      onError() {
+        setSending(false);
+        setError(true);
+      },
     });
-    closeSendDialog();
   }
 
   function validateStepChange(changeStep: () => void, stepIndex: number) {
@@ -369,13 +387,39 @@ export default function KaivuilmoitusTaydennysContainer({
 
       <ConfirmationDialog
         title={t('taydennys:sendDialog:title')}
-        description={t('taydennys:sendDialog:description')}
+        description={
+          isError ? (
+            <>
+              {t('taydennys:sendDialog:description')}
+              <Box paddingTop="var(--spacing-s)">
+                <Notification
+                  type="error"
+                  size="small"
+                  label={t('taydennys:notifications:sendErrorLabel')}
+                >
+                  <Trans i18nKey="taydennys:notifications:sendErrorText">
+                    <p>
+                      Lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä
+                      Haitattoman tekniseen tukeen sähköpostiosoitteessa
+                      <Link href="mailto:haitatontuki@hel.fi">haitatontuki@hel.fi</Link>.
+                    </p>
+                  </Trans>
+                </Notification>
+              </Box>
+            </>
+          ) : (
+            t('taydennys:sendDialog:description')
+          )
+        }
         showCloseButton
         isOpen={showSendDialog}
         close={closeSendDialog}
         mainAction={sendTaydennys}
         variant="primary"
+        isLoading={isSending}
+        loadingText={t('common:buttons:sendingText')}
         headerIcon={<IconQuestionCircle />}
+        disabled={isSending}
       />
     </FormProvider>
   );

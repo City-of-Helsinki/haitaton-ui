@@ -54,8 +54,8 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
     const paperDecisionReceiver = data.orderPaperDecision
       ? (data.paperDecisionReceiver as PaperDecisionReceiver)
       : null;
-    setSending(true);
     setError(false);
+    setSending(true);
     applicationSendMutation.mutate(
       {
         id: id as number,
@@ -199,7 +199,7 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
             <Button
               type="submit"
               iconLeft={<IconCheck />}
-              isLoading={applicationSendMutation.isLoading}
+              isLoading={isSending}
               loadingText={t('common:buttons:sendingText')}
               disabled={!isConfirmButtonEnabled || isSending}
             >

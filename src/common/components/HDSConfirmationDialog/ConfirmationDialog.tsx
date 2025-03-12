@@ -18,7 +18,9 @@ type Props = {
   showCloseButton?: boolean;
   showSecondaryButton?: boolean;
   isLoading?: boolean;
+  loadingText?: string;
   headerIcon?: React.ReactNode;
+  disabled?: boolean;
 };
 
 const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
@@ -34,12 +36,14 @@ const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
   showCloseButton = false,
   showSecondaryButton = true,
   isLoading = false,
+  loadingText = mainBtnLabel,
   headerIcon = (
     <IconAlertCircleFill
       aria-hidden="true"
       color={variant === 'primary' ? 'var(--color-bus)' : 'var(--color-brick)'}
     />
   ),
+  disabled = false,
 }) => {
   const { t } = useTranslation();
 
@@ -50,6 +54,8 @@ const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
       variant={variant}
       iconLeft={mainBtnIcon}
       isLoading={isLoading}
+      loadingText={loadingText}
+      disabled={disabled}
     >
       {mainBtnLabel ?? t('common:confirmationDialog:confirmButton')}
     </Button>
@@ -61,6 +67,7 @@ const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
       onClick={close}
       theme={variant === 'danger' ? 'black' : 'default'}
       data-testid="dialog-cancel-test"
+      disabled={disabled}
     >
       {t('common:confirmationDialog:cancelButton')}
     </Button>
