@@ -87,9 +87,11 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
   }
 
   function handleClose() {
-    setIsError(false);
-    reset();
-    onClose();
+    if (!isSending) {
+      setIsError(false);
+      reset();
+      onClose();
+    }
   }
 
   return (
@@ -98,7 +100,7 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
       isOpen={isOpen}
       aria-labelledby={dialogTitle}
       variant="primary"
-      close={onClose}
+      close={handleClose}
       closeButtonLabelText={t('common:ariaLabels:closeButtonLabelText')}
     >
       <Dialog.Header
