@@ -9,7 +9,7 @@ const SideNav: React.FC = () => {
   const { t } = useTranslation();
   const [active, setActive] = useState('');
   const navigate = useNavigate();
-  const { MANUAL } = useLocalizedRoutes();
+  const { MANUAL, GLOSSARY } = useLocalizedRoutes();
   const { number = '', type = '' } = useParams<{ number: string; type: string }>();
 
   useEffect(() => {
@@ -40,7 +40,13 @@ const SideNav: React.FC = () => {
           onClick={(e) => setActivePage(e, MANUAL.path)}
           active={active === MANUAL.path}
         />
-        ,
+        <SideNavigation.MainLevel
+          href={GLOSSARY.path}
+          id="#glossary"
+          label={t('staticPages:manualPage:glossary:heading')}
+          onClick={(e) => setActivePage(e, GLOSSARY.path)}
+          active={active === GLOSSARY.path}
+        />
       </SideNavigation>
     </div>
   );

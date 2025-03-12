@@ -472,6 +472,13 @@
         "title": "Haitaton - Käyttöohjeet ja tuki"
       }
     },
+    "GLOSSARY": {
+      "path": "/kaytto-ohjeet/sanasto",
+      "headerLabel": "Haittomassa käytetty sanasto",
+      "meta": {
+        "title": "Haitaton - Haittomassa käytetty sanasto"
+      }
+    },
     "IDENTIFY_USER": {
       "path": "/kutsu",
       "headerLabel": "Tunnistaudu Haitattomaan",
@@ -1959,6 +1966,12 @@
         "cableServiceContact": "Johtotietopalvelun yhteystiedot",
         "cableLocationServiceLink": "https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/johtotietopalvelu ",
         "cableService": "Johtotietopalvelu"
+      },
+      "glossary": {
+        "heading": "Haitattomassa käytetty sanasto",
+        "openAll": "Avaa kaikki",
+        "closeAll": "Sulje kaikki",
+        "words": []
       }
     },
     "404Page": {

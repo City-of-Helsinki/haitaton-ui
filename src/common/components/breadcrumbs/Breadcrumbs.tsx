@@ -47,6 +47,10 @@ export const BREADCRUMBS: Record<BreadcrumbName, Breadcrumb> = {
   },
   manual: {
     title: 'staticPages:manualPage:main:heading',
+    path: 'routes:MANUAL:path',
+  },
+  glossary: {
+    title: 'staticPages:manualPage:glossary:heading',
     path: null,
   },
 };

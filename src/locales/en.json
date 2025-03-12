@@ -463,6 +463,13 @@
         "title": "Haitaton - Manual and support"
       }
     },
+    "GLOSSARY": {
+      "path": "/manual/vocabulary",
+      "headerLabel": "Haitaton vocabulary",
+      "meta": {
+        "title": "Haitaton - Haitaton vocabulary"
+      }
+    },
     "IDENTIFY_USER": {
       "path": "/invitation",
       "headerLabel": "Log in to Haitaton",

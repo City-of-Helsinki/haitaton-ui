@@ -463,6 +463,13 @@
         "title": "Haitaton - Bruksanvisning och support"
       }
     },
+    "GLOSSARY": {
+      "path": "/bruksanvisning/ordbok",
+      "headerLabel": "Ordbok för Haitaton",
+      "meta": {
+        "title": "Haitaton - Ordbok för Haitaton"
+      }
+    },
     "IDENTIFY_USER": {
       "path": "/inbjudan",
       "headerLabel": "Identifiera dig i Haitaton",
