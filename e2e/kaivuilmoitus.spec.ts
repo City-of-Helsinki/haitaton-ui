@@ -33,7 +33,9 @@ test('Kaivuilmoitus', async ({ page }) => {
   await page.getByRole('option', { name: 'Vesi', exact: true }).getByLabel('check').click();
   await page.getByLabel('Työn tyyppi: Sulje ja avaa').click();
   await page.getByRole('button', { name: 'Seuraava' }).click();
-  await page.getByText('Hanke tallennettu').waitFor({ state: 'hidden', timeout: 10000 });
+  await expect(page.getByText('Hanke tallennettu')).toBeVisible();
+  await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
+
   await page.getByTestId('draw-control-Square').click();
   await page
     .locator('canvas')
@@ -69,7 +71,8 @@ test('Kaivuilmoitus', async ({ page }) => {
   await page.getByLabel('', { exact: true }).click();
   await page.getByRole('option', { name: 'Alle 10 m' }).click();
   await page.getByRole('button', { name: 'Seuraava' }).click();
-  await page.getByText('Hanke tallennettu').waitFor({ state: 'hidden', timeout: 10000 });
+  await expect(page.getByText('Hanke tallennettu')).toBeVisible();
+  await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
 
   let count = await page.getByText(/Lisää toimet haittojen hallintaan/).count();
   while (count > 0) {
@@ -104,7 +107,9 @@ test('Kaivuilmoitus', async ({ page }) => {
     .getByTestId('alueet.0.haittojenhallintasuunnitelma.MUUT')
     .fill('testiautomaatiotoimet bussiliikenne');
   await page.getByRole('button', { name: 'Seuraava' }).click();
-  await page.getByText('Hanke tallennettu').waitFor({ state: 'hidden', timeout: 10000 });
+  await expect(page.getByText('Hanke tallennettu')).toBeVisible();
+  await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
+
   await page.getByRole('combobox', { name: 'Nimi *' }).click();
   await page.getByRole('combobox', { name: 'Nimi *' }).fill(perustaja.username);
   await page.getByTestId('omistajat.0.ytunnus').fill(perustaja.y_tunnus);
@@ -133,9 +138,13 @@ test('Kaivuilmoitus', async ({ page }) => {
     .click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page.getByRole('button', { name: 'Seuraava' }).click();
-  await page.getByText('Hanke tallennettu').waitFor({ state: 'hidden', timeout: 10000 });
+  await expect(page.getByText('Hanke tallennettu')).toBeVisible();
+  await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
+
   await page.getByRole('button', { name: 'Seuraava' }).click();
-  await page.getByText('Hanke tallennettu').waitFor({ state: 'hidden', timeout: 10000 });
+  await expect(page.getByText('Hanke tallennettu')).toBeVisible();
+  await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
+
   await page.getByRole('button', { name: 'Tallenna ja lisää hakemuksia', exact: true }).click();
   // Lisää kaivuilmoitus
   await page.getByLabel('', { exact: true }).click();
