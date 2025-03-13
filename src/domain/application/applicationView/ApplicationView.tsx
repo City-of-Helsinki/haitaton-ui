@@ -58,8 +58,6 @@ import {
   isContactIn,
 } from '../utils';
 import ContactsSummary from '../components/summary/ContactsSummary';
-import Link from '../../../common/components/Link/Link';
-import useHankeViewPath from '../../hanke/hooks/useHankeViewPath';
 import JohtoselvitysDecisionLink from '../../johtoselvitys/components/DecisionLink';
 import KaivuilmoitusDecisionLink from '../../kaivuilmoitus/components/DecisionLink';
 import { ApplicationCancel } from '../components/ApplicationCancel';
@@ -693,7 +691,6 @@ function ApplicationView({
   const [showReportOperationalConditionDialog, setShowReportOperationalConditionDialog] =
     useState(false);
   const [showReportWorkFinishedDialog, setShowReportWorkFinishedDialog] = useState(false);
-  const hankeViewPath = useHankeViewPath(application.hankeTunnus);
   const {
     applicationData,
     applicationIdentifier,
@@ -741,9 +738,6 @@ function ApplicationView({
     applicationIdentifier || t(`hakemus:applicationTypeDraft:${applicationType}`);
 
   const { data: attachments } = useAttachments(id);
-
-  // Text for the link leading back to hanke view
-  const hankeLinkText = `${hanke?.nimi} (${hanke?.hankeTunnus})`;
 
   const lastValmistumisilmoitus = getLastValmistumisilmoitus(alluStatus, valmistumisilmoitukset);
 
@@ -870,14 +864,6 @@ function ApplicationView({
                   </Box>
                 ))}
             </Box>
-          </SectionItemContent>
-          <SectionItemTitle>{t('hakemus:labels:relatedHanke')}:</SectionItemTitle>
-          <SectionItemContent>
-            {hanke && (
-              <Link href={hankeViewPath} data-testid="related_hanke">
-                {hankeLinkText}
-              </Link>
-            )}
           </SectionItemContent>
           <SectionItemTitle>{t('hankePortfolio:labels:oikeudet')}:</SectionItemTitle>
           <SectionItemContent>

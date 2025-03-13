@@ -5,7 +5,6 @@ import {
   Table,
   IconEnvelope,
   IconCheckCircleFill,
-  Breadcrumb,
   IconUser,
   IconClock,
   IconMenuDots,
@@ -28,7 +27,6 @@ import { useQueryClient } from 'react-query';
 import styles from './AccessRightsView.module.scss';
 import { Language } from '../../../common/types/language';
 import { HankeUser, SignedInUser } from '../hankeUsers/hankeUser';
-import useHankeViewPath from '../hooks/useHankeViewPath';
 import Container from '../../../common/components/container/Container';
 import UserCard from './UserCard';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
@@ -129,16 +127,14 @@ const ACCESS_RIGHT_LEVEL_KEY = 'kayttooikeustaso';
 type Props = {
   hankeUsers: HankeUser[];
   hankeTunnus: string;
-  hankeName: string;
   signedInUser?: SignedInUser;
 };
 
-function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: Readonly<Props>) {
+function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser }: Readonly<Props>) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { HANKEPORTFOLIO } = useLocalizedRoutes();
   const queryClient = useQueryClient();
-  const hankeViewPath = useHankeViewPath(hankeTunnus);
   const getEditUserPath = useLinkPath(ROUTES.EDIT_USER);
   const { setNotification } = useGlobalNotification();
   const [usersData, setUsersData] = useState<HankeUserWithWholeName[]>(() =>
@@ -383,19 +379,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
     <article className={styles.container}>
       <header className={styles.header}>
         <Container>
-          <div className={styles.breadcrumb}>
-            <Breadcrumb
-              ariaLabel={t('hankePortfolio:ariaLabels:breadcrumb:ariaLabel')}
-              list={[
-                { path: hankeViewPath, title: `${hankeName} (${hankeTunnus})` },
-                {
-                  path: null,
-                  title: t('hankeUsers:userManagementTitle'),
-                },
-              ]}
-            />
-          </div>
-          <MainHeading spacingBottom="l">{t('hankeUsers:userManagementTitle')}</MainHeading>
+          <MainHeading>{t('hankeUsers:userManagementTitle')}</MainHeading>
         </Container>
       </header>
 

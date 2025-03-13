@@ -33,15 +33,6 @@ describe('Cable report application view', () => {
     expect(screen.queryByText('Kaikki oikeudet')).toBeInTheDocument();
   });
 
-  test('Link back to related hanke should work', async () => {
-    const { user } = render(<ApplicationViewContainer id={4} />);
-    await waitForLoadingToFinish();
-
-    await user.click(screen.getByRole('link', { name: 'Mannerheimintien kaukolämpö (HAI22-3)' }));
-
-    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-3');
-  });
-
   test('Should show error notification if application is not found', async () => {
     server.use(
       http.get('/api/hakemukset/:id', async () => {

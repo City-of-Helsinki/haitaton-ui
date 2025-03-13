@@ -6,6 +6,7 @@ import HankeDelete from '../edit/components/HankeDelete';
 import useHanke from '../hooks/useHanke';
 import HankeView from './HankeView';
 import { usePermissionsForHanke } from '../hankeUsers/hooks/useUserRightsForHanke';
+import Breadcrumbs, { BREADCRUMBS } from '../../../common/components/breadcrumbs/Breadcrumbs';
 
 type Props = {
   hankeTunnus?: string;
@@ -41,6 +42,14 @@ const HankeViewContainer: React.FC<Props> = ({ hankeTunnus }) => {
 
   return (
     <>
+      {hankeData && (
+        <Breadcrumbs
+          breadcrumbs={[
+            BREADCRUMBS.omatHankkeet,
+            { path: null, title: `${hankeData.nimi} (${hankeTunnus})`, skipTranslate: true },
+          ]}
+        />
+      )}
       <HankeDelete
         isOpen={deleteDialogOpen}
         onClose={handleDeleteDialogClose}

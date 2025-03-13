@@ -8,6 +8,8 @@ import useHanke from '../hooks/useHanke';
 import AccessRightsView from './AccessRightsView';
 import { usePermissionsForHanke } from '../hankeUsers/hooks/useUserRightsForHanke';
 import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
+import Breadcrumbs, { BREADCRUMBS } from '../../../common/components/breadcrumbs/Breadcrumbs';
+import useHankeViewPath from '../hooks/useHankeViewPath';
 
 type Props = {
   hankeTunnus: string;
@@ -18,6 +20,7 @@ function AccessRightsViewContainer({ hankeTunnus }: Props) {
   const { data: hankeUsers, isLoading, isError, error } = useHankeUsers(hankeTunnus);
   const { data: hankeData } = useHanke(hankeTunnus);
   const { data: signedInUser } = usePermissionsForHanke(hankeTunnus);
+  const hankeViewPath = useHankeViewPath(hankeData?.hankeTunnus ?? null);
 
   if (isLoading) {
     return (
@@ -40,12 +43,27 @@ function AccessRightsViewContainer({ hankeTunnus }: Props) {
   }
 
   return (
-    <AccessRightsView
-      hankeUsers={hankeUsers}
-      hankeTunnus={hankeTunnus}
-      hankeName={hankeData?.nimi}
-      signedInUser={signedInUser}
-    />
+    <>
+      <Breadcrumbs
+        breadcrumbs={[
+          BREADCRUMBS.omatHankkeet,
+          {
+            path: hankeViewPath,
+            title: `${hankeData.nimi} (${hankeData.hankeTunnus})`,
+            skipTranslate: true,
+          },
+          {
+            path: null,
+            title: 'hankeUsers:userManagementTitle',
+          },
+        ]}
+      />
+      <AccessRightsView
+        hankeUsers={hankeUsers}
+        hankeTunnus={hankeTunnus}
+        signedInUser={signedInUser}
+      />
+    </>
   );
 }
 

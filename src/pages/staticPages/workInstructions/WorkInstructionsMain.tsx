@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import { Trans, useTranslation } from 'react-i18next';
-import { BREADCRUMBS, useBreadcrumbs } from '../Breadcrumbs';
+import { BREADCRUMBS, useBreadcrumbs } from '../../../common/components/breadcrumbs/Breadcrumbs';
 import { Link } from 'hds-react';
 import styles from '../StaticContent.module.scss';
+
 const WorkInstructionsMain: React.FC = () => {
   const { t } = useTranslation();
   const { setBreadcrumbs } = useBreadcrumbs();

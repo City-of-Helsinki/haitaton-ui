@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import { useTranslation } from 'react-i18next';
 import styles from '../StaticContent.module.scss';
-import { BREADCRUMBS, useBreadcrumbs } from '../Breadcrumbs';
+import { BREADCRUMBS, useBreadcrumbs } from '../../../common/components/breadcrumbs/Breadcrumbs';
 import Text from '../../../common/components/text/Text';
 
 import { Box } from '@chakra-ui/react';

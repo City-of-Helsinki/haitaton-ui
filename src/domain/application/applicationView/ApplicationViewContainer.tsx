@@ -14,6 +14,8 @@ import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
 import useCreateTaydennys from '../taydennys/hooks/useCreateTaydennys';
 import useCreateMuutosilmoitus from '../muutosilmoitus/hooks/useCreateMuutosilmoitus';
 import { MuutosLabelProvider } from '../taydennysAndMuutosilmoitusCommon/MuutosLabelContext';
+import Breadcrumbs, { BREADCRUMBS } from '../../../common/components/breadcrumbs/Breadcrumbs';
+import useHankeViewPath from '../../hanke/hooks/useHankeViewPath';
 
 type Props = {
   id: number;
@@ -26,6 +28,7 @@ function ApplicationViewContainer({ id }: Readonly<Props>) {
   const { data: hanke } = useHanke(application?.hankeTunnus);
   const { data: signedInUser } = usePermissionsForHanke(application?.hankeTunnus ?? undefined);
   const navigate = useNavigate();
+  const hankeViewPath = useHankeViewPath(hanke?.hankeTunnus ?? null);
   const getEditApplicationPath = useLinkPath(
     HAKEMUS_ROUTES[application?.applicationType ?? 'CABLE_REPORT'],
   );
@@ -92,12 +95,33 @@ function ApplicationViewContainer({ id }: Readonly<Props>) {
     return null;
   }
 
+  const applicationIdentifier =
+    application.applicationIdentifier ||
+    t(`hakemus:applicationTypeDraft:${application.applicationType}`);
+
   return (
     <MuutosLabelProvider
       value={
         application.taydennys ? t('taydennys:labels:taydennys') : t('muutosilmoitus:labels:muutos')
       }
     >
+      {hanke && (
+        <Breadcrumbs
+          breadcrumbs={[
+            BREADCRUMBS.omatHankkeet,
+            {
+              path: hankeViewPath,
+              title: `${hanke.nimi} (${hanke.hankeTunnus})`,
+              skipTranslate: true,
+            },
+            {
+              path: null,
+              title: `${application.applicationData.name} (${applicationIdentifier})`,
+              skipTranslate: true,
+            },
+          ]}
+        />
+      )}
       <ApplicationView
         application={application}
         hanke={hanke}

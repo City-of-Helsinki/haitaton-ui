@@ -5,7 +5,7 @@ import SideNav from './SideNav';
 import styles from '../StaticContent.module.scss';
 import BgColorOverride from '../BgColorOverride';
 import { Outlet } from 'react-router-dom';
-import Breadcrumbs from '../Breadcrumbs';
+import Breadcrumbs from '../../../common/components/breadcrumbs/Breadcrumbs';
 import { Container } from 'hds-react';
 
 const WorkInstructionsPage: React.FC<React.PropsWithChildren<unknown>> = () => {
