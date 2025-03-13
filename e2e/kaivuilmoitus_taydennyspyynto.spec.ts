@@ -141,7 +141,9 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
   await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
 
   await page.getByRole('button', { name: 'Seuraava' }).click();
-  await page.getByText('Hanke tallennettu').waitFor({ state: 'hidden', timeout: 10000 });
+  await expect(page.getByText('Hanke tallennettu')).toBeVisible();
+  await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
+
   await page.getByRole('button', { name: 'Tallenna ja lisää hakemuksia', exact: true }).click();
   // Lisää kaivuilmoitus
   await page.getByLabel('', { exact: true }).click();
