@@ -1967,6 +1967,58 @@
         "cableLocationServiceLink": "https://www.hel.fi/fi/kaupunkiymparisto-ja-liikenne/tontit-ja-rakentamisen-luvat/johtotietopalvelu ",
         "cableService": "Johtotietopalvelu"
       },
+      "asioinninToimintokokonaisuudet": {
+        "heading": "Asioinnin toimintokokonaisuudet",
+        "content": ""
+      },
+      "asioinninKulku": {
+        "heading": "Asioinnin kulku",
+        "content": ""
+      },
+      "hankkeenPerustaminen": {
+        "heading": "1. Hankkeen perustaminen",
+        "content": ""
+      },
+      "hakemuksienTekeminen": {
+        "heading": "2. Hakemuksien tekeminen ja lähettäminen käsittelyyn",
+        "content": ""
+      },
+      "tyonSeuranta": {
+        "heading": "3. Työn seuranta ja valmistumisesta ilmoittaminen",
+        "content": ""
+      },
+      "taydennyspyynto": {
+        "heading": "Johtoselvityksen tai kaivuilmoituksen täydennyspyyntö ja siihen vastaaminen",
+        "content": ""
+      },
+      "muutosilmoitus": {
+        "heading": "Muutosilmoituksen tekeminen kaivuilmoitukselle",
+        "content": ""
+      },
+      "johtoselvitys": {
+        "heading": "Pelkän johtoselvityshakemuksen tekeminen",
+        "content": ""
+      },
+      "hankkeenJaHakemuksenTilat": {
+        "heading": "Hankkeen ja hakemuksen tilat",
+        "content": ""
+      },
+      "haittaindeksit": {
+        "heading": "Haittaindeksit ja haittojenhallintasuunnitelma",
+        "content": ""
+      },
+      "laskentaperiaatteet": {
+        "heading": "Haittaindeksien laskentaperiaatteet ja luokitukset",
+        "content": ""
+      },
+      "laatiminen": {
+        "heading": "Haittojenhallintasuunnitelman laatiminen, ylläpito ja toteuttaminen",
+        "content": ""
+      },
+      "yhteyshenkilot": {
+        "heading": "Yhteyshenkilöiden lisääminen ja muokkaaminen sekä niiden käyttöoikeudet",
+        "content": ""
+      },
       "glossary": {
         "heading": "Haitattomassa käytetty sanasto",
         "openAll": "Avaa kaikki",

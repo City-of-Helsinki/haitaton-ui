@@ -31,6 +31,7 @@ import EditKaivuilmoitusMuutosilmoitusPage from '../../pages/EditKaivuilmoitusMu
 import UserManualPage from '../../pages/staticPages/userManual/UserManualPage';
 import UserManualMain from '../../pages/staticPages/userManual/UserManualMain';
 import Glossary from '../../pages/staticPages/userManual/Glossary';
+import ManualPage from '../../pages/staticPages/userManual/ManualPages';
 
 const LocaleRoutes = () => {
   const { t } = useTranslation();
@@ -100,6 +101,7 @@ const LocaleRoutes = () => {
       </Route>
       <Route path={t('routes:MANUAL:path')} element={<UserManualPage />}>
         <Route element={<UserManualMain />} index />
+        <Route path={`${t('routes:MANUAL:path')}/:id`} element={<ManualPage />}></Route>
         <Route path={t('routes:GLOSSARY:path')} element={<Glossary />} />
       </Route>
       <Route path={t('routes:IDENTIFY_USER:path')} element={<UserIdentify />} />

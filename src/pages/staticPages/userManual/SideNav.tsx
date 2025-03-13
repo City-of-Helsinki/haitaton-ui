@@ -10,11 +10,11 @@ const SideNav: React.FC = () => {
   const [active, setActive] = useState('');
   const navigate = useNavigate();
   const { MANUAL, GLOSSARY } = useLocalizedRoutes();
-  const { number = '', type = '' } = useParams<{ number: string; type: string }>();
+  const { id = '' } = useParams<{ id: string }>();
 
   useEffect(() => {
     setActive(window.location.pathname);
-  }, [number, type]);
+  }, [id]);
 
   const setActivePage = (
     event: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
@@ -41,6 +41,92 @@ const SideNav: React.FC = () => {
           active={active === MANUAL.path}
         />
         <SideNavigation.MainLevel
+          id="#asioinninToimintokokonaisuudet"
+          label={t('staticPages:manualPage:asioinninToimintokokonaisuudet:heading')}
+          href={`${MANUAL.path}/asioinninToimintokokonaisuudet`}
+          onClick={(e) => setActivePage(e, `${MANUAL.path}/asioinninToimintokokonaisuudet`)}
+          active={active === `${MANUAL.path}/asioinninToimintokokonaisuudet`}
+        >
+          <SideNavigation.SubLevel
+            id="#hankkeenPerustaminen"
+            href={`${MANUAL.path}/hankkeenPerustaminen`}
+            label={t('staticPages:manualPage:hankkeenPerustaminen:heading')}
+            onClick={(e) => setActivePage(e, `${MANUAL.path}/hankkeenPerustaminen`)}
+            active={active === `${MANUAL.path}/hankkeenPerustaminen`}
+          />
+          <SideNavigation.SubLevel
+            id="#hakemuksienTekeminen"
+            href={`${MANUAL.path}/hakemuksienTekeminen`}
+            label={t('staticPages:manualPage:hakemuksienTekeminen:heading')}
+            onClick={(e) => setActivePage(e, `${MANUAL.path}/hakemuksienTekeminen`)}
+            active={active === `${MANUAL.path}/hakemuksienTekeminen`}
+          />
+          <SideNavigation.SubLevel
+            id="#tyonSeuranta"
+            href={`${MANUAL.path}/tyonSeuranta`}
+            label={t('staticPages:manualPage:tyonSeuranta:heading')}
+            onClick={(e) => setActivePage(e, `${MANUAL.path}/tyonSeuranta`)}
+            active={active === `${MANUAL.path}/tyonSeuranta`}
+          />
+          <SideNavigation.SubLevel
+            id="#taydennyspyynto"
+            href={`${MANUAL.path}/taydennyspyynto`}
+            label={t('staticPages:manualPage:taydennyspyynto:heading')}
+            onClick={(e) => setActivePage(e, `${MANUAL.path}/taydennyspyynto`)}
+            active={active === `${MANUAL.path}/taydennyspyynto`}
+          />
+          <SideNavigation.SubLevel
+            id="#muutosilmoitus"
+            href={`${MANUAL.path}/muutosilmoitus`}
+            label={t('staticPages:manualPage:muutosilmoitus:heading')}
+            onClick={(e) => setActivePage(e, `${MANUAL.path}/muutosilmoitus`)}
+            active={active === `${MANUAL.path}/muutosilmoitus`}
+          />
+          <SideNavigation.SubLevel
+            id="#johtoselvitys"
+            href={`${MANUAL.path}/johtoselvitys`}
+            label={t('staticPages:manualPage:johtoselvitys:heading')}
+            onClick={(e) => setActivePage(e, `${MANUAL.path}/johtoselvitys`)}
+            active={active === `${MANUAL.path}/johtoselvitys`}
+          />
+        </SideNavigation.MainLevel>
+        <SideNavigation.MainLevel
+          id="#hankkeenJaHakemuksenTilat"
+          href={`${MANUAL.path}/hankkeenJaHakemuksenTilat`}
+          label={t('staticPages:manualPage:hankkeenJaHakemuksenTilat:heading')}
+          onClick={(e) => setActivePage(e, `${MANUAL.path}/hankkeenJaHakemuksenTilat`)}
+          active={active === `${MANUAL.path}/hankkeenJaHakemuksenTilat`}
+        />
+        <SideNavigation.MainLevel
+          id="#haittaindeksit"
+          label={t('staticPages:manualPage:haittaindeksit:heading')}
+          href={`${MANUAL.path}/haittaindeksit`}
+          onClick={(e) => setActivePage(e, `${MANUAL.path}/haittaindeksit`)}
+          active={active === `${MANUAL.path}/haittaindeksit`}
+        >
+          <SideNavigation.SubLevel
+            id="#laskentaperiaatteet"
+            href={`${MANUAL.path}/laskentaperiaatteet`}
+            label={t('staticPages:manualPage:laskentaperiaatteet:heading')}
+            onClick={(e) => setActivePage(e, `${MANUAL.path}/laskentaperiaatteet`)}
+            active={active === `${MANUAL.path}/laskentaperiaatteet`}
+          />
+          <SideNavigation.SubLevel
+            id="#laatiminen"
+            href={`${MANUAL.path}/laatiminen`}
+            label={t('staticPages:manualPage:laatiminen:heading')}
+            onClick={(e) => setActivePage(e, `${MANUAL.path}/laatiminen`)}
+            active={active === `${MANUAL.path}/laatiminen`}
+          />
+        </SideNavigation.MainLevel>
+        <SideNavigation.MainLevel
+          id="#yhteyshenkilot"
+          href={`${MANUAL.path}/yhteyshenkilot`}
+          label={t('staticPages:manualPage:yhteyshenkilot:heading')}
+          onClick={(e) => setActivePage(e, `${MANUAL.path}/yhteyshenkilot`)}
+          active={active === `${MANUAL.path}/yhteyshenkilot`}
+        />
+        <SideNavigation.MainLevel
           href={GLOSSARY.path}
           id="#glossary"
           label={t('staticPages:manualPage:glossary:heading')}
@@ -51,5 +137,4 @@ const SideNav: React.FC = () => {
     </div>
   );
 };
-
 export default SideNav;
