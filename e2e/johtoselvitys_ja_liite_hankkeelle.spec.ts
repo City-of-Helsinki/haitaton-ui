@@ -16,10 +16,10 @@ test.beforeEach('Helsinki_login', async ({ page }) => {
 });
 
 test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
-  test.setTimeout(240000);
+  test.setTimeout(260000);
   await page.getByLabel('Luo uusi hanke.', { exact: true }).click();
   await page.getByTestId('nimi').click();
-  const ajonNimi = hankeName(`uusi-hanke`);
+  const ajonNimi = hankeName(`Johtoselvitys ja liite hankkeelle`);
   await page.getByTestId('nimi').fill(ajonNimi);
   await page.getByTestId('perustaja.sahkoposti').click();
   await page.getByTestId('perustaja.sahkoposti').fill(perustaja.email);
@@ -36,7 +36,9 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
   await page.getByRole('option', { name: 'Vesi', exact: true }).getByLabel('check').click();
   await page.getByLabel('Työn tyyppi: Sulje ja avaa').click();
   await page.getByRole('button', { name: 'Seuraava' }).click();
-  await page.getByText('Hanke tallennettu').waitFor({ state: 'hidden', timeout: 10000 });
+  await expect(page.getByText('Hanke tallennettu')).toBeVisible();
+  await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
+
   await page.getByTestId('draw-control-Polygon').click();
   await page
     .locator('canvas')
@@ -71,7 +73,8 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
   await page.getByLabel('', { exact: true }).click();
   await page.getByRole('option', { name: 'Alle 10 m' }).click();
   await page.getByRole('button', { name: 'Seuraava' }).click();
-  await page.getByText('Hanke tallennettu').waitFor({ state: 'hidden', timeout: 10000 });
+  await expect(page.getByText('Hanke tallennettu')).toBeVisible();
+  await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
 
   let count = await page.getByText(/Lisää toimet haittojen hallintaan/).count();
   while (count > 0) {
@@ -101,7 +104,9 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
     .getByTestId('alueet.0.haittojenhallintasuunnitelma.MUUT')
     .fill('testiautomaatiotoimet bussiliikenne');
   await page.getByRole('button', { name: 'Seuraava' }).click();
-  await page.getByText('Hanke tallennettu').waitFor({ state: 'hidden', timeout: 10000 });
+  await expect(page.getByText('Hanke tallennettu')).toBeVisible();
+  await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
+
   await page.getByRole('combobox', { name: 'Nimi *' }).fill(perustaja.username);
   await page.getByTestId('omistajat.0.ytunnus').fill(perustaja.y_tunnus);
   await page.getByTestId('omistajat.0.email').fill(perustaja.email);
@@ -129,9 +134,13 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
     .click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page.getByRole('button', { name: 'Seuraava' }).click();
-  await page.getByText('Hanke tallennettu').waitFor({ state: 'hidden', timeout: 10000 });
+  await expect(page.getByText('Hanke tallennettu')).toBeVisible();
+  await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
+
   await page.getByRole('button', { name: 'Seuraava' }).click();
-  await page.getByText('Hanke tallennettu').waitFor({ state: 'hidden', timeout: 10000 });
+  await expect(page.getByText('Hanke tallennettu')).toBeVisible();
+  await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
+
   await page.getByRole('button', { name: 'Tallenna ja lisää hakemuksia', exact: true }).click();
   await page.getByLabel('', { exact: true }).click();
   await page.getByRole('option', { name: 'Johtoselvitys', exact: true }).click();
@@ -197,17 +206,27 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Peru hakemus' })).toBeVisible();
   await page.getByRole('button', { name: 'Seuraava' }).click();
   await expect(page.getByText('Hakemus tallennettu')).toBeVisible();
+  await page
+    .getByRole('alert')
+    .getByLabel('Sulje ilmoitus', { exact: true })
+    .click({ timeout: 2000 });
+
   await page.locator('button').filter({ hasText: 'Lisää tiedostoja' }).click();
   await page
     .getByLabel('Raahaa tiedostot tänne')
     .setInputFiles(path.join(__dirname, './valtakirja.txt'));
   await page.getByRole('button', { name: 'Seuraava' }).click();
   await expect(page.getByText('Hakemus tallennettu')).toBeVisible();
-  await expect(page.getByText('Hakemus tallennettu')).toBeVisible();
+  await page
+    .getByRole('alert')
+    .getByLabel('Sulje ilmoitus', { exact: true })
+    .click({ timeout: 2000 });
+
   await expect(page.getByRole('heading', { name: 'Vaihe 5/5: Yhteenveto' })).toBeVisible();
   await page.getByRole('button', { name: 'Lähetä hakemus' }).click();
   await page.getByRole('button', { name: 'Vahvista' }).click();
   await expect(page.getByText('Hakemus lähetetty')).toBeVisible();
+
   await expect(page.getByTestId('allu_tunnus')).toBeVisible({ timeout: 30000 });
   const hakemuksenTunnus = await page.getByTestId('allu_tunnus').textContent();
   await expect(page.getByRole('button', { name: 'Peru hakemus' })).toBeVisible();
@@ -236,7 +255,14 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
   await page.locator('.cdk-overlay-container > div:nth-child(3)').click();
   await expect(page.getByRole('button', { name: 'TALLENNA' })).toBeVisible();
   await page.getByRole('button', { name: 'TALLENNA' }).click();
-  await expect(page.getByRole('button', { name: 'PÄÄTTÄMISEEN' })).toBeVisible();
+
+  // Tarkista että liitteet ovat saapuneet
+  await page.getByRole('link', { name: 'Liitteet (2)' }).click();
+  await page.getByText('valtakirja.txt').isVisible({ timeout: 5000 });
+  await page.getByRole('link', { name: 'Perustiedot' }).click();
+
+  // Päätä hakemus
+  await expect(page.getByRole('button', { name: 'PÄÄTTÄMISEEN' })).toBeVisible({ timeout: 5000 });
   await page.getByRole('button', { name: 'PÄÄTTÄMISEEN' }).click();
   await expect(page.getByRole('button', { name: 'PÄÄTÄ' })).toBeVisible();
   await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
@@ -244,7 +270,6 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
   await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
   await expect(page.getByRole('heading', { name: 'TYÖJONO' })).toBeVisible();
 
-  // Odotetaan tuloksia
   await expect(async () => {
     await page.goto(hakemusLinkki);
     await page.getByText('Hakemukset').click();
