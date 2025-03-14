@@ -828,9 +828,9 @@ function ApplicationView({
           {muutosilmoitus && <MuutosilmoitusNotification sent={muutosilmoitus.sent} />}
           <Box mt="var(--spacing-s)">
             <FormPagesErrorSummary
-              data={taydennys ?? application}
+              data={taydennys ?? muutosilmoitus ?? application}
               schema={validationSchema}
-              validationContext={{ application: taydennys ?? application }}
+              validationContext={{ application: taydennys ?? muutosilmoitus ?? application }}
               notificationLabel={t('hakemus:missingFields:notification:hakemusLabel')}
             />
           </Box>

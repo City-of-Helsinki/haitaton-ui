@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -35,6 +36,7 @@ import ReviewAndSend from './ReviewAndSend';
 import useAttachments from '../application/hooks/useAttachments';
 import { useGlobalNotification } from '../../common/components/globalNotification/GlobalNotificationContext';
 import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
+import FormErrorsNotification from '../kaivuilmoitus/components/FormErrorsNotification';
 
 type Props = {
   muutosilmoitus: Muutosilmoitus<KaivuilmoitusData>;
@@ -169,6 +171,9 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
     },
   ];
 
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
+  const lastStep = activeStepIndex === formSteps.length - 1;
+
   function saveMuutosilmoitus(handleSuccess?: () => void) {
     const formData = getValues();
     hakemusUpdateMutation.mutate(
@@ -179,7 +184,8 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
     );
   }
 
-  function handleStepChange() {
+  function handleStepChange(stepIndex: number) {
+    setActiveStepIndex(stepIndex);
     // Save application when page is changed
     // only if something has changed
     if (isDirty) {
@@ -218,6 +224,14 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
         validationContext={{ application: watchFormValues }}
         onStepChange={handleStepChange}
         stepChangeValidator={validateStepChange}
+        topElement={
+          <FormErrorsNotification
+            data={watchFormValues}
+            validationContext={{ application: watchFormValues }}
+            activeStepIndex={activeStepIndex}
+            lastStep={lastStep}
+          />
+        }
       >
         {function renderFormActions(activeStep, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {
