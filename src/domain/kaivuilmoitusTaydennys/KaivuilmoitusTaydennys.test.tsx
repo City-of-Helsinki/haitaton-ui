@@ -12,7 +12,7 @@ import hakemukset from '../mocks/data/hakemukset-data';
 import { server } from '../mocks/test-server';
 import { HttpResponse, http } from 'msw';
 import { Taydennys, TaydennysAttachmentMetadata } from '../application/taydennys/types';
-import { act, fireEvent, render, screen, waitFor, within } from '../../testUtils/render';
+import { fireEvent, render, screen, waitFor, within } from '../../testUtils/render';
 import KaivuilmoitusTaydennysContainer from './KaivuilmoitusTaydennysContainer';
 import { createApplicationAttachments, createTaydennysAttachments } from '../mocks/attachments';
 import api from '../api/api';
@@ -358,9 +358,12 @@ describe('Taydennys attachments', () => {
       mandateFiles: [new File(['valtakirja'], 'valtakirja.pdf', { type: 'application/pdf' })],
       otherFiles: [new File(['muu'], 'muu.png', { type: 'image/png' })],
     });
-    await act(async () => {
-      waitFor(() => expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0));
-    });
+    await waitFor(
+      () => {
+        expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0);
+      },
+      { timeout: 5000 },
+    );
     await waitFor(
       () => {
         expect(screen.queryAllByText('1/1 tiedosto(a) tallennettu')).toHaveLength(3);
