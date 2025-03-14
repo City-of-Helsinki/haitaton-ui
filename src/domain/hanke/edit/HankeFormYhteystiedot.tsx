@@ -169,7 +169,7 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
   });
 
   const addOmistaja = useCallback(() => {
-    appendOmistaja(getEmptyContact(), { shouldFocus: false });
+    appendOmistaja(getEmptyContact(), { shouldFocus: true });
   }, [appendOmistaja]);
 
   // initialize Omistaja to have at least one contact

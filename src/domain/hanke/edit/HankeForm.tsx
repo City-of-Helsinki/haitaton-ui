@@ -22,7 +22,7 @@ import HankeFormLiitteet from './HankeFormLiitteet';
 import HankeFormSummary from './HankeFormSummary';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
-import { HankeData } from '../../types/hanke';
+import { HankeContactTypeKey, HankeData, HankeYhteystieto } from '../../types/hanke';
 import MultipageForm from '../../forms/MultipageForm';
 import FormActions from '../../forms/components/FormActions';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
@@ -36,6 +36,7 @@ import DrawProvider from '../../../common/components/map/modules/draw/DrawProvid
 import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
 import FormFieldsErrorSummary from '../../forms/components/FormFieldsErrorSummary';
 import { useApplicationsForHanke } from '../../application/hooks/useApplications';
+import isValidBusinessId from '../../../common/utils/isValidBusinessId';
 
 type Props = {
   formData: HankeDataFormState;
@@ -315,8 +316,46 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       ]
     : [['nimi']];
 
-  function validateStepChange(changeStep: () => void, stepIndex: number) {
-    return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger);
+  function validateStepChange(
+    changeStep: () => void,
+    stepIndex: number,
+    direction?: 'forward' | 'backward',
+  ) {
+    if (direction !== 'backward' && stepIndex === 3) {
+      let hasInvalidId = false;
+
+      const contactTypes: HankeContactTypeKey[] = [
+        'omistajat' as HankeContactTypeKey,
+        'rakennuttajat' as HankeContactTypeKey,
+        'toteuttajat' as HankeContactTypeKey,
+      ];
+
+      for (const contactType of contactTypes) {
+        const contacts = getValues(contactType);
+
+        for (const contact of contacts) {
+          if ('ytunnus' in contact) {
+            // Type guard
+            const tunnus = (contact as HankeYhteystieto).ytunnus;
+
+            // Check if Business ID is not present or is invalid
+            if (!tunnus || tunnus === '' || !isValidBusinessId(tunnus)) {
+              console.error('Invalid or empty Business ID');
+              hasInvalidId = true;
+              break;
+            }
+          }
+        }
+        if (hasInvalidId) break;
+      }
+      // Only move to the next step if no invalid IDs were found
+      if (!hasInvalidId) {
+        return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger);
+      }
+    } else {
+      // If moving backward, always allow progression to the previous step
+      return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger);
+    }
   }
 
   return (
