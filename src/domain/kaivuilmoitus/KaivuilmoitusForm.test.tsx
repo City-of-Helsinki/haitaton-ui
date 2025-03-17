@@ -1,6 +1,6 @@
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 import { http, HttpResponse } from 'msw';
-import { act, cleanup, fireEvent, render, screen, waitFor, within } from '../../testUtils/render';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '../../testUtils/render';
 import KaivuilmoitusContainer from './KaivuilmoitusContainer';
 import { HankeData } from '../types/hanke';
 import hankkeet from '../mocks/data/hankkeet-data';
@@ -967,9 +967,12 @@ test('Should be able to upload attachments', async () => {
     otherFiles: [new File(['muu'], 'muu.png', { type: 'image/png' })],
   });
 
-  await act(async () => {
-    waitFor(() => expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0));
-  });
+  await waitFor(
+    () => {
+      expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0);
+    },
+    { timeout: 5000 },
+  );
   await waitFor(
     () => {
       expect(screen.queryAllByText('1/1 tiedosto(a) tallennettu')).toHaveLength(3);
