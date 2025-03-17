@@ -46,6 +46,13 @@ const SideNav: React.FC = () => {
           href={`${MANUAL.path}/asioinninToimintokokonaisuudet`}
           onClick={(e) => setActivePage(e, `${MANUAL.path}/asioinninToimintokokonaisuudet`)}
           active={active === `${MANUAL.path}/asioinninToimintokokonaisuudet`}
+        />
+        <SideNavigation.MainLevel
+          id="#asioinninKulku"
+          label={t('staticPages:manualPage:asioinninKulku:heading')}
+          href={`${MANUAL.path}/asioinninKulku`}
+          onClick={(e) => setActivePage(e, `${MANUAL.path}/asioinninKulku`)}
+          active={active === `${MANUAL.path}/asioinninKulku`}
         >
           <SideNavigation.SubLevel
             id="#hankkeenPerustaminen"
@@ -125,7 +132,22 @@ const SideNav: React.FC = () => {
           label={t('staticPages:manualPage:yhteyshenkilot:heading')}
           onClick={(e) => setActivePage(e, `${MANUAL.path}/yhteyshenkilot`)}
           active={active === `${MANUAL.path}/yhteyshenkilot`}
-        />
+        >
+          <SideNavigation.SubLevel
+            id="#kutsunSaaminen"
+            href={`${MANUAL.path}/kutsunSaaminen`}
+            label={t('staticPages:manualPage:kutsunSaaminen:heading')}
+            onClick={(e) => setActivePage(e, `${MANUAL.path}/kutsunSaaminen`)}
+            active={active === `${MANUAL.path}/kutsunSaaminen`}
+          />
+          <SideNavigation.SubLevel
+            id="#kayttooikeustasot"
+            href={`${MANUAL.path}/kayttooikeustasot`}
+            label={t('staticPages:manualPage:kayttooikeustasot:heading')}
+            onClick={(e) => setActivePage(e, `${MANUAL.path}/kayttooikeustasot`)}
+            active={active === `${MANUAL.path}/kayttooikeustasot`}
+          />
+        </SideNavigation.MainLevel>
         <SideNavigation.MainLevel
           href={GLOSSARY.path}
           id="#glossary"

@@ -2019,6 +2019,14 @@
         "heading": "Yhteyshenkilöiden lisääminen ja muokkaaminen sekä niiden käyttöoikeudet",
         "content": ""
       },
+      "kutsunSaaminen": {
+        "heading": "Kutsun saaminen hankkeelle sähköpostilla ja hankkeelle tunnistautuminen",
+        "content": ""
+      },
+      "kayttooikeustasot": {
+        "heading": "Käyttöoikeustasot",
+        "content": ""
+      },
       "glossary": {
         "heading": "Haitattomassa käytetty sanasto",
         "openAll": "Avaa kaikki",
