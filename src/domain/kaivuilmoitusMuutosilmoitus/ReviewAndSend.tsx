@@ -7,15 +7,22 @@ import {
   KaivuilmoitusData,
 } from '../application/types/application';
 import { HankeAlue } from '../types/hanke';
+import { Muutosilmoitus } from '../application/muutosilmoitus/types';
 import KaivuilmoitusSummary from '../kaivuilmoitus/components/KaivuilmoitusSummary';
+import BasicInformationSummary from '../application/taydennysAndMuutosilmoitusCommon/components/summary/KaivuilmoitusBasicInformationSummary';
+import AreaSummary from '../application/taydennysAndMuutosilmoitusCommon/components/summary/KaivuilmoitusAreaSummary';
+import HaittojenhallintaSummary from '../application/taydennysAndMuutosilmoitusCommon/components/summary/KaivuilmoitusHaittojenhallintaSummary';
+import ContactsSummary from '../application/taydennysAndMuutosilmoitusCommon/components/summary/ContactsSummary';
 
 type Props = {
+  muutosilmoitus: Muutosilmoitus<KaivuilmoitusData>;
   originalApplication: Application<KaivuilmoitusData>;
   originalAttachments: ApplicationAttachmentMetadata[];
   hankealueet: HankeAlue[];
 };
 
 export default function ReviewAndSend({
+  muutosilmoitus,
   originalApplication,
   originalAttachments,
   hankealueet,
@@ -25,8 +32,33 @@ export default function ReviewAndSend({
   return (
     <Tabs>
       <TabList>
+        <Tab>{t('muutosilmoitus:labels:muutokset')}</Tab>
         <Tab>{t('muutosilmoitus:labels:originalInformation')}</Tab>
       </TabList>
+      <TabPanel>
+        <Box mt="var(--spacing-s)">
+          <BasicInformationSummary
+            data={muutosilmoitus.applicationData}
+            originalData={originalApplication.applicationData}
+            muutokset={muutosilmoitus.muutokset}
+          />
+          <AreaSummary
+            data={muutosilmoitus.applicationData}
+            originalData={originalApplication.applicationData}
+            muutokset={muutosilmoitus.muutokset}
+          />
+          <HaittojenhallintaSummary
+            hankealueet={hankealueet}
+            kaivuilmoitusAlueet={muutosilmoitus.applicationData.areas}
+            muutokset={muutosilmoitus.muutokset}
+          />
+          <ContactsSummary
+            data={muutosilmoitus.applicationData}
+            originalData={originalApplication.applicationData}
+            muutokset={muutosilmoitus.muutokset}
+          />
+        </Box>
+      </TabPanel>
       <TabPanel>
         <Box mt="var(--spacing-s)">
           <KaivuilmoitusSummary

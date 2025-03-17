@@ -14,10 +14,10 @@ import {
   SectionTitle,
 } from '../forms/components/FormSummarySection';
 import { HankeAlue } from '../types/hanke';
-import TaydennysBasicInformationSummary from '../application/taydennys/components/summary/KaivuilmoitusBasicInformationSummary';
-import TaydennysAreasSummary from '../application/taydennys/components/summary/KaivuilmoitusAreaSummary';
-import TaydennysHaittojenhallintaSummary from '../application/taydennys/components/summary/KaivuilmoitusHaittojenhallintaSummary';
-import TaydennysContactsSummary from '../application/taydennys/components/summary/ContactsSummary';
+import TaydennysBasicInformationSummary from '../application/taydennysAndMuutosilmoitusCommon/components/summary/KaivuilmoitusBasicInformationSummary';
+import TaydennysAreasSummary from '../application/taydennysAndMuutosilmoitusCommon/components/summary/KaivuilmoitusAreaSummary';
+import TaydennysHaittojenhallintaSummary from '../application/taydennysAndMuutosilmoitusCommon/components/summary/KaivuilmoitusHaittojenhallintaSummary';
+import TaydennysContactsSummary from '../application/taydennysAndMuutosilmoitusCommon/components/summary/ContactsSummary';
 import TaydennysAttachmentsList from '../application/taydennys/components/TaydennysAttachmentsList';
 import KaivuilmoitusSummary from '../kaivuilmoitus/components/KaivuilmoitusSummary';
 
