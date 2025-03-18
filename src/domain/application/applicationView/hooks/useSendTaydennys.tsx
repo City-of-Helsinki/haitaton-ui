@@ -37,16 +37,13 @@ export default function useSendTaydennys(
   const isContact =
     application.taydennys && isContactIn(signedInUser, application.taydennys.applicationData);
   const [isSending, setIsSending] = useState(false);
-  const [isError, setIsError] = useState(false);
 
   function openSendTaydennysDialog() {
-    setIsError(false);
     setShowSendTaydennysDialog(true);
   }
 
   function closeSendTaydennysDialog() {
     if (!isSending) {
-      setIsError(false);
       setShowSendTaydennysDialog(false);
     }
   }
@@ -54,17 +51,14 @@ export default function useSendTaydennys(
   function sendTaydennysHakemus() {
     if (application.taydennys?.id) {
       setIsSending(true);
-      setIsError(false);
       sendTaydennysMutation.mutate(application.taydennys.id, {
         onSuccess() {
-          setIsError(false);
           showSendSuccess();
           setIsSending(false);
           closeSendTaydennysDialog();
         },
         onError() {
           setIsSending(false);
-          setIsError(true);
         },
       });
     }
@@ -99,7 +93,7 @@ export default function useSendTaydennys(
     <ConfirmationDialog
       title={t('taydennys:sendDialog:title')}
       description={
-        isError ? (
+        sendTaydennysMutation.isError ? (
           <>
             {t('taydennys:sendDialog:description')}
             <Box paddingTop="var(--spacing-s)">

@@ -45,7 +45,6 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
   const paperDecisionFeatureEnabled =
     type === 'EXCAVATION_NOTIFICATION' || features.cableReportPaperDecision;
   const [isSending, setIsSending] = useState(false);
-  const [isError, setIsError] = useState(false);
 
   const applicationSendMutation = useSendApplication();
   const { showSendSuccess } = useApplicationSendNotification();
@@ -54,7 +53,6 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
     const paperDecisionReceiver = data.orderPaperDecision
       ? (data.paperDecisionReceiver as PaperDecisionReceiver)
       : null;
-    setIsError(false);
     setIsSending(true);
     applicationSendMutation.mutate(
       {
@@ -63,13 +61,11 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
       },
       {
         onSuccess(applicationData) {
-          setIsError(false);
           showSendSuccess();
           setIsSending(false);
           onClose(applicationData.id);
         },
         onError() {
-          setIsError(true);
           setIsSending(false);
         },
       },
@@ -88,7 +84,6 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
 
   function handleClose() {
     if (!isSending) {
-      setIsError(false);
       reset();
       onClose();
     }
@@ -180,7 +175,7 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
                 </Grid>
               </Box>
             )}
-            {isError && (
+            {applicationSendMutation.isError && (
               <Notification
                 type="error"
                 size="small"

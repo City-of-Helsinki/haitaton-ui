@@ -162,7 +162,6 @@ export default function JohtoselvitysTaydennysContainer({
   const yhteystiedotErrors = useValidationErrors(yhteystiedotSchema, watchFormValues);
   const formErrorsByPage = [perustiedotErrors, alueetErrors, yhteystiedotErrors, []];
   const [isSending, setIsSending] = useState(false);
-  const [isError, setIsError] = useState(false);
 
   function mapToErrorListItem(error: ValidationError) {
     const errorPath = error.path?.replace('[', '.').replace(']', '');
@@ -271,23 +270,19 @@ export default function JohtoselvitysTaydennysContainer({
   }
 
   function openSendDialog() {
-    setIsError(false);
     setShowSendDialog(true);
   }
 
   function closeSendDialog() {
     if (!isSending) {
-      setIsError(false);
       setShowSendDialog(false);
     }
   }
 
   function sendTaydennys() {
     setIsSending(true);
-    setIsError(false);
     sendTaydennysMutation.mutate(taydennys.id, {
       onSuccess(data) {
-        setIsError(false);
         showSendSuccess();
         setIsSending(false);
         closeSendDialog();
@@ -295,7 +290,6 @@ export default function JohtoselvitysTaydennysContainer({
       },
       onError() {
         setIsSending(false);
-        setIsError(true);
       },
     });
   }
@@ -407,7 +401,7 @@ export default function JohtoselvitysTaydennysContainer({
       <ConfirmationDialog
         title={t('taydennys:sendDialog:title')}
         description={
-          isError ? (
+          sendTaydennysMutation.isError ? (
             <>
               {t('taydennys:sendDialog:description')}
               <Box paddingTop="var(--spacing-s)">
