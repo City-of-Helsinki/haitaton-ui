@@ -1,7 +1,7 @@
 import { zipWith } from 'lodash';
 
 export default function isValidBusinessId(value: string | null | undefined): boolean {
-  if (value === null || value === '') return false;
+  if (value === null || value === '') return true;
 
   if (value === undefined) return false;
 
