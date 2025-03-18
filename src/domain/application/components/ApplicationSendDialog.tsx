@@ -4,10 +4,11 @@ import {
   IconCheck,
   IconQuestionCircle,
   Link,
+  LoadingSpinner,
   Notification,
   ToggleButton,
 } from 'hds-react';
-import React, { useState } from 'react';
+import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { ApplicationSendData, ApplicationType, PaperDecisionReceiver } from '../types/application';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -44,7 +45,6 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
   const dialogTitle = t('hakemus:sendDialog:title');
   const paperDecisionFeatureEnabled =
     type === 'EXCAVATION_NOTIFICATION' || features.cableReportPaperDecision;
-  const [isSending, setIsSending] = useState(false);
 
   const applicationSendMutation = useSendApplication();
   const { showSendSuccess } = useApplicationSendNotification();
@@ -53,7 +53,6 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
     const paperDecisionReceiver = data.orderPaperDecision
       ? (data.paperDecisionReceiver as PaperDecisionReceiver)
       : null;
-    setIsSending(true);
     applicationSendMutation.mutate(
       {
         id: id as number,
@@ -62,11 +61,7 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
       {
         onSuccess(applicationData) {
           showSendSuccess();
-          setIsSending(false);
           onClose(applicationData.id);
-        },
-        onError() {
-          setIsSending(false);
         },
       },
     );
@@ -83,11 +78,18 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
   }
 
   function handleClose() {
-    if (!isSending) {
+    if (!applicationSendMutation.isLoading) {
       reset();
+      applicationSendMutation.reset();
       onClose();
     }
   }
+
+  const submitButtonIcon = applicationSendMutation.isLoading ? (
+    <LoadingSpinner small />
+  ) : (
+    <IconCheck />
+  );
 
   return (
     <Dialog
@@ -120,7 +122,7 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
                   label={t('hakemus:sendDialog:orderPaperDecision')}
                   checked={orderPaperDecisionChecked}
                   onChange={handleOrderPaperDecisionChange}
-                  disabled={isSending}
+                  disabled={applicationSendMutation.isLoading}
                 />
               </Box>
             )}
@@ -142,7 +144,7 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
                       name="paperDecisionReceiver.name"
                       label={t('hakemus:sendDialog:name')}
                       required={orderPaperDecisionChecked}
-                      disabled={isSending}
+                      disabled={applicationSendMutation.isLoading}
                     />
                   </GridItem>
                   <GridItem colSpan={2}>
@@ -151,7 +153,7 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
                       name="paperDecisionReceiver.streetAddress"
                       label={t('hakemus:sendDialog:streetAddress')}
                       required={orderPaperDecisionChecked}
-                      disabled={isSending}
+                      disabled={applicationSendMutation.isLoading}
                     />
                   </GridItem>
                   <GridItem colSpan={{ sm: 1, xs: 2 }} colStart={{ sm: 1, xs: 1 }}>
@@ -160,7 +162,7 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
                       name="paperDecisionReceiver.postalCode"
                       label={t('hakemus:sendDialog:postalCode')}
                       required={orderPaperDecisionChecked}
-                      disabled={isSending}
+                      disabled={applicationSendMutation.isLoading}
                     />
                   </GridItem>
                   <GridItem colSpan={2} colStart={{ sm: 2, xs: 1 }}>
@@ -169,7 +171,7 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
                       name="paperDecisionReceiver.city"
                       label={t('hakemus:sendDialog:city')}
                       required={orderPaperDecisionChecked}
-                      disabled={isSending}
+                      disabled={applicationSendMutation.isLoading}
                     />
                   </GridItem>
                 </Grid>
@@ -195,14 +197,18 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
           <Dialog.ActionButtons>
             <Button
               type="submit"
-              iconLeft={<IconCheck />}
-              isLoading={isSending}
-              loadingText={t('common:buttons:sendingText')}
-              disabled={!isConfirmButtonEnabled || isSending}
+              iconLeft={submitButtonIcon}
+              disabled={!isConfirmButtonEnabled || applicationSendMutation.isLoading}
             >
-              {t('common:confirmationDialog:confirmButton')}
+              {applicationSendMutation.isLoading
+                ? t('common:buttons:sendingText')
+                : t('common:confirmationDialog:confirmButton')}
             </Button>
-            <Button variant="secondary" onClick={handleClose} disabled={isSending}>
+            <Button
+              variant="secondary"
+              onClick={handleClose}
+              disabled={applicationSendMutation.isLoading}
+            >
               {t('common:confirmationDialog:cancelButton')}
             </Button>
           </Dialog.ActionButtons>

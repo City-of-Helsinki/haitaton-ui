@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { Button, IconEnvelope, IconQuestionCircle, Link, Notification } from 'hds-react';
+import {
+  Button,
+  IconEnvelope,
+  IconQuestionCircle,
+  Link,
+  LoadingSpinner,
+  Notification,
+} from 'hds-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { AlluStatus, Application } from '../../types/application';
 import { validationSchema as johtoselvitysValidationSchema } from '../../../johtoselvitysTaydennys/validationSchema';
@@ -36,45 +43,46 @@ export default function useSendTaydennys(
   const { showSendSuccess } = useTaydennysSendNotification();
   const isContact =
     application.taydennys && isContactIn(signedInUser, application.taydennys.applicationData);
-  const [isSending, setIsSending] = useState(false);
 
   function openSendTaydennysDialog() {
     setShowSendTaydennysDialog(true);
   }
 
   function closeSendTaydennysDialog() {
-    if (!isSending) {
+    if (!sendTaydennysMutation.isLoading) {
+      sendTaydennysMutation.reset();
       setShowSendTaydennysDialog(false);
     }
   }
 
   function sendTaydennysHakemus() {
     if (application.taydennys?.id) {
-      setIsSending(true);
       sendTaydennysMutation.mutate(application.taydennys.id, {
         onSuccess() {
           showSendSuccess();
-          setIsSending(false);
           closeSendTaydennysDialog();
-        },
-        onError() {
-          setIsSending(false);
         },
       });
     }
   }
 
+  const sendButtonIcon = sendTaydennysMutation.isLoading ? (
+    <LoadingSpinner small />
+  ) : (
+    <IconEnvelope />
+  );
+
   const sendTaydennysButton = showSendTaydennysButton ? (
     <>
       <Button
         theme="coat"
-        iconLeft={<IconEnvelope />}
+        iconLeft={sendButtonIcon}
         onClick={openSendTaydennysDialog}
-        loadingText={t('common:buttons:sendingText')}
-        isLoading={sendTaydennysMutation.isLoading}
-        disabled={isSending}
+        disabled={sendTaydennysMutation.isLoading}
       >
-        {t('taydennys:buttons:sendTaydennys')}
+        {sendTaydennysMutation.isLoading
+          ? t('common:buttons:sendingText')
+          : t('taydennys:buttons:sendTaydennys')}
       </Button>
       {!isContact && (
         <Notification
@@ -121,10 +129,10 @@ export default function useSendTaydennys(
       close={closeSendTaydennysDialog}
       mainAction={sendTaydennysHakemus}
       variant="primary"
-      isLoading={isSending}
+      isLoading={sendTaydennysMutation.isLoading}
       loadingText={t('common:buttons:sendingText')}
       headerIcon={<IconQuestionCircle />}
-      disabled={isSending}
+      disabled={sendTaydennysMutation.isLoading}
     />
   );
 

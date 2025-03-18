@@ -9,6 +9,7 @@ import {
   Link,
   StepState,
   Notification,
+  LoadingSpinner,
 } from 'hds-react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@chakra-ui/react';
@@ -161,7 +162,6 @@ export default function JohtoselvitysTaydennysContainer({
   const alueetErrors = useValidationErrors(alueetSchema, watchFormValues);
   const yhteystiedotErrors = useValidationErrors(yhteystiedotSchema, watchFormValues);
   const formErrorsByPage = [perustiedotErrors, alueetErrors, yhteystiedotErrors, []];
-  const [isSending, setIsSending] = useState(false);
 
   function mapToErrorListItem(error: ValidationError) {
     const errorPath = error.path?.replace('[', '.').replace(']', '');
@@ -274,22 +274,18 @@ export default function JohtoselvitysTaydennysContainer({
   }
 
   function closeSendDialog() {
-    if (!isSending) {
+    if (!sendTaydennysMutation.isLoading) {
+      sendTaydennysMutation.reset();
       setShowSendDialog(false);
     }
   }
 
   function sendTaydennys() {
-    setIsSending(true);
     sendTaydennysMutation.mutate(taydennys.id, {
       onSuccess(data) {
         showSendSuccess();
-        setIsSending(false);
         closeSendDialog();
         navigateToApplicationView(data.id?.toString());
-      },
-      onError() {
-        setIsSending(false);
       },
     });
   }
@@ -340,7 +336,19 @@ export default function JohtoselvitysTaydennysContainer({
           const disableSendButton = showSendButton && !isContact;
 
           const saveAndQuitIsLoading = hakemusUpdateMutation.isLoading;
-          const saveAndQuitLoadingText = t('common:buttons:savingText');
+          const saveAndQuiteButtonIcon = saveAndQuitIsLoading ? (
+            <LoadingSpinner small />
+          ) : (
+            <IconSaveDiskette />
+          );
+          const saveAndQuitButtonText = saveAndQuitIsLoading
+            ? t('common:buttons:savingText')
+            : t('hankeForm:saveDraftButton');
+
+          const sendIsLoading = sendTaydennysMutation.isLoading;
+          const sendButtonIcon = sendIsLoading ? <LoadingSpinner small /> : <IconEnvelope />;
+          const sendButtonText = t('common:buttons:sendingText');
+
           return (
             <FormActions
               activeStepIndex={activeStep}
@@ -353,27 +361,19 @@ export default function JohtoselvitysTaydennysContainer({
                 navigateToApplicationViewOnSuccess
                 buttonVariant="danger"
                 buttonIsLoading={saveAndQuitIsLoading}
-                buttonIsLoadingText={saveAndQuitLoadingText}
+                buttonIsLoadingText={t('common:buttons:savingText')}
               />
               <Button
                 variant="secondary"
-                iconLeft={<IconSaveDiskette aria-hidden="true" />}
+                iconLeft={saveAndQuiteButtonIcon}
                 data-testid="save-form-btn"
                 onClick={handleSaveAndQuit}
-                isLoading={saveAndQuitIsLoading}
-                loadingText={saveAndQuitLoadingText}
               >
-                {t('hankeForm:saveDraftButton')}
+                {saveAndQuitButtonText}
               </Button>
               {showSendButton && (
-                <Button
-                  type="submit"
-                  iconLeft={<IconEnvelope aria-hidden="true" />}
-                  loadingText={t('common:buttons:sendingText')}
-                  isLoading={sendTaydennysMutation.isLoading}
-                  disabled={disableSendButton}
-                >
-                  {t('taydennys:buttons:sendTaydennys')}
+                <Button type="submit" iconLeft={sendButtonIcon} disabled={disableSendButton}>
+                  {sendButtonText}
                 </Button>
               )}
               {disableSendButton && (
@@ -429,10 +429,10 @@ export default function JohtoselvitysTaydennysContainer({
         close={closeSendDialog}
         mainAction={sendTaydennys}
         variant="primary"
-        isLoading={isSending}
+        isLoading={sendTaydennysMutation.isLoading}
         loadingText={t('common:buttons:sendingText')}
         headerIcon={<IconQuestionCircle />}
-        disabled={isSending}
+        disabled={sendTaydennysMutation.isLoading}
       />
     </FormProvider>
   );

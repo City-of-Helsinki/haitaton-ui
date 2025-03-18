@@ -8,6 +8,7 @@ import {
   IconQuestionCircle,
   IconSaveDiskette,
   Link,
+  LoadingSpinner,
   Notification,
   StepState,
 } from 'hds-react';
@@ -207,7 +208,6 @@ export default function KaivuilmoitusTaydennysContainer({
 
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const lastStep = activeStepIndex === formSteps.length - 1;
-  const [isSending, setIsSending] = useState(false);
 
   function saveTaydennys(handleSuccess?: () => void) {
     const formData = getValues();
@@ -250,22 +250,18 @@ export default function KaivuilmoitusTaydennysContainer({
   }
 
   function closeSendDialog() {
-    if (!isSending) {
+    if (!sendTaydennysMutation.isLoading) {
+      sendTaydennysMutation.reset();
       setShowSendDialog(false);
     }
   }
 
   function sendTaydennys() {
-    setIsSending(true);
     sendTaydennysMutation.mutate(taydennys.id, {
       onSuccess(data) {
         showSendSuccess();
-        setIsSending(false);
         closeSendDialog();
         navigateToApplicationView(data.id?.toString());
-      },
-      onError() {
-        setIsSending(false);
       },
     });
   }
@@ -321,7 +317,18 @@ export default function KaivuilmoitusTaydennysContainer({
           const disableSendButton = showSendButton && !isContact;
 
           const saveAndQuitIsLoading = hakemusUpdateMutation.isLoading;
-          const saveAndQuitLoadingText = t('common:buttons:savingText');
+          const saveAndQuiteButtonIcon = saveAndQuitIsLoading ? (
+            <LoadingSpinner small />
+          ) : (
+            <IconSaveDiskette />
+          );
+          const saveAndQuitButtonText = saveAndQuitIsLoading
+            ? t('common:buttons:savingText')
+            : t('hankeForm:saveDraftButton');
+
+          const sendIsLoading = sendTaydennysMutation.isLoading;
+          const sendButtonIcon = sendIsLoading ? <LoadingSpinner small /> : <IconEnvelope />;
+          const sendButtonText = t('common:buttons:sendingText');
 
           return (
             <FormActions
@@ -335,26 +342,24 @@ export default function KaivuilmoitusTaydennysContainer({
                 navigateToApplicationViewOnSuccess
                 buttonVariant="danger"
                 buttonIsLoading={saveAndQuitIsLoading}
-                buttonIsLoadingText={saveAndQuitLoadingText}
+                buttonIsLoadingText={saveAndQuitButtonText}
               />
               <Button
                 variant="secondary"
                 onClick={handleSaveAndQuit}
-                iconLeft={<IconSaveDiskette />}
-                isLoading={saveAndQuitIsLoading}
-                loadingText={saveAndQuitLoadingText}
+                iconLeft={saveAndQuiteButtonIcon}
               >
-                {t('hankeForm:saveDraftButton')}
+                {saveAndQuitButtonText}
               </Button>
               {showSendButton && (
                 <Button
                   type="submit"
-                  iconLeft={<IconEnvelope aria-hidden="true" />}
+                  iconLeft={sendButtonIcon}
                   loadingText={t('common:buttons:sendingText')}
                   isLoading={sendTaydennysMutation.isLoading}
                   disabled={disableSendButton}
                 >
-                  {t('taydennys:buttons:sendTaydennys')}
+                  {sendIsLoading ? sendButtonText : t('taydennys:buttons:sendTaydennys')}
                 </Button>
               )}
               {disableSendButton && (
@@ -410,10 +415,10 @@ export default function KaivuilmoitusTaydennysContainer({
         close={closeSendDialog}
         mainAction={sendTaydennys}
         variant="primary"
-        isLoading={isSending}
+        isLoading={sendTaydennysMutation.isLoading}
         loadingText={t('common:buttons:sendingText')}
         headerIcon={<IconQuestionCircle />}
-        disabled={isSending}
+        disabled={sendTaydennysMutation.isLoading}
       />
     </FormProvider>
   );
