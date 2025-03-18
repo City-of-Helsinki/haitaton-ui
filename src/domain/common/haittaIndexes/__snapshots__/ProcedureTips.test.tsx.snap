@@ -288,12 +288,16 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
               >
                 Tarkista, onko hankkeesi satamaliikenteen reitillä (
                 <a
-                  aria-label="Avautuu uudessa välilehdessä."
+                  aria-label="Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon."
                   class="hds-link hds-link--medium"
                   href="https://www.portofhelsinki.fi/yhteystiedot/kartat/pysakointi-ja-ajoreittikartat/"
                   target="_blank"
                 >
-                  Pysäköinti ja ajoreittikartat
+                  Pysäköinti ja ajoreittikartat 
+                  <span
+                    aria-hidden="true"
+                    class="hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon"
+                  />
                 </a>
                 ) Jos on, suunnittele työt tehtäväksi autoliikenteen ruuhka-ajan ulkopuolella (arkisin klo 6-9 ja klo 15-18 sekä satamareiteillä päivittäin klo 10-10.30).
               </p>
@@ -390,8 +394,9 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
                   href="mailto:luvat@hel.fi"
                   target="_blank"
                 >
-                  , asiakaspalvelu puh. 09 310 22111) suunnitteluvaiheessa
+                  luvat@hel.fi
                 </a>
+                , asiakaspalvelu puh. 09 310 22111) suunnitteluvaiheessa
               </p>
               <button
                 aria-label="Sulje Ajokaistojen lukumäärä"
@@ -578,12 +583,16 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 3 1`] = `
               >
                 Ota yhteyttä Linja-autoliittoon (
                 <a
-                  aria-label="Avautuu uudessa välilehdessä."
+                  aria-label="Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon."
                   class="hds-link hds-link--medium"
                   href="https://www.linja-autoliitto.fi/yhteystiedot/"
                   target="_blank"
                 >
-                  Yhteystiedot – Linja-autoliitto
+                  Yhteystiedot – Linja-autoliitto 
+                  <span
+                    aria-hidden="true"
+                    class="hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon"
+                  />
                 </a>
                  
                 <a
@@ -1850,12 +1859,16 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
               >
                 Tarkista, onko hankkeesi satamaliikenteen reitillä (
                 <a
-                  aria-label="Avautuu uudessa välilehdessä."
+                  aria-label="Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon."
                   class="hds-link hds-link--medium"
                   href="https://www.portofhelsinki.fi/yhteystiedot/kartat/pysakointi-ja-ajoreittikartat/"
                   target="_blank"
                 >
-                  Pysäköinti ja ajoreittikartat
+                  Pysäköinti ja ajoreittikartat 
+                  <span
+                    aria-hidden="true"
+                    class="hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon"
+                  />
                 </a>
                 ) Jos on, suunnittele työt tehtäväksi autoliikenteen ruuhka-ajan ulkopuolella (arkisin klo 6-9 ja klo 15-18 sekä satamareiteillä päivittäin klo 10-10.30).
               </p>
@@ -1952,8 +1965,9 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
                   href="mailto:luvat@hel.fi"
                   target="_blank"
                 >
-                  , asiakaspalvelu puh. 09 310 22111) suunnitteluvaiheessa
+                  luvat@hel.fi
                 </a>
+                , asiakaspalvelu puh. 09 310 22111) suunnitteluvaiheessa
               </p>
               <button
                 aria-label="Sulje Ajokaistojen lukumäärä"
@@ -2140,12 +2154,16 @@ exports[`Should show correct tips for AUTOLIIKENNE and haittaindex 4 1`] = `
               >
                 Ota yhteyttä Linja-autoliittoon (
                 <a
-                  aria-label="Avautuu uudessa välilehdessä."
+                  aria-label="Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon."
                   class="hds-link hds-link--medium"
                   href="https://www.linja-autoliitto.fi/yhteystiedot/"
                   target="_blank"
                 >
-                  Yhteystiedot – Linja-autoliitto
+                  Yhteystiedot – Linja-autoliitto 
+                  <span
+                    aria-hidden="true"
+                    class="hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon"
+                  />
                 </a>
                  
                 <a
@@ -2995,12 +3013,16 @@ exports[`Should show correct tips for LINJAAUTOLIIKENNE and haittaindex 3 1`] = 
                 <p>
                   Jos työmaa on bussin päätepysäkillä tai se estää bussiliikenteen kyseisellä kadulla, ota yhteyttä vähintään 2,5 kuukautta ennen töiden alkua. Jos työmaa ei ole akuutti, esimerkiksi putkirikosta johtuva, ota yhteyttä vähintään 2 viikkoa ennen töiden alkua. Lisätietoa: 
                   <a
-                    aria-label="Avautuu uudessa välilehdessä."
+                    aria-label="Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon."
                     class="hds-link hds-link--medium"
                     href="https://www.hsl.fi/hsl/urakoitsijat"
                     target="_blank"
                   >
-                    Urakoitsija - ota joukkoliikenne huomioon työmaalla
+                    Urakoitsija - ota joukkoliikenne huomioon työmaalla 
+                    <span
+                      aria-hidden="true"
+                      class="hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon"
+                    />
                   </a>
                   .
                 </p>
@@ -3138,12 +3160,16 @@ exports[`Should show correct tips for LINJAAUTOLIIKENNE and haittaindex 3 1`] = 
                 </a>
                 ). Lisätietoa: 
                 <a
-                  aria-label="Avautuu uudessa välilehdessä."
+                  aria-label="Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon."
                   class="hds-link hds-link--medium"
                   href="https://www.hsl.fi/hsl/urakoitsijat"
                   target="_blank"
                 >
-                  Urakoitsija - ota joukkoliikenne huomioon työmaalla
+                  Urakoitsija - ota joukkoliikenne huomioon työmaalla 
+                  <span
+                    aria-hidden="true"
+                    class="hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon"
+                  />
                 </a>
                 .
               </p>
@@ -5354,7 +5380,7 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 4 1`] = `
               >
                 Tarkista suunnittelemiesi ratkaisujen ohjeidenmukaisuus: 
                 <a
-                  aria-label="Avautuu uudessa välilehdessä."
+                  aria-label="Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon."
                   class="hds-link hds-link--medium"
                   href="https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf"
                   target="_blank"
@@ -6888,7 +6914,7 @@ exports[`Should show correct tips for PYORALIIKENNE and haittaindex 5 1`] = `
               >
                 Tarkista suunnittelemiesi ratkaisujen ohjeidenmukaisuus: 
                 <a
-                  aria-label="Avautuu uudessa välilehdessä."
+                  aria-label="Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon."
                   class="hds-link hds-link--medium"
                   href="https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf"
                   target="_blank"
@@ -7219,21 +7245,29 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 4 1`] = `
                 <p>
                   Raitioliikenteen poikkeusreittien osalta tee ilmoitus HSL:lle enintään 3 vuorokauden töissä 8 viikkoa ennen töiden alkua ja yli 3 vuorokauden töissä 5 kuukautta ennen töiden alkua. Raitioliikennettä korvaavan bussiliikenteen tapauksessa tee ilmoitus HSL:lle enintään 3 vuorokauden töissä 3 kuukautta ennen töiden alkua ja yli 3 vuorokauden töissä 5 kuukautta ennen töiden alkua. Lisätietoja: 
                   <a
-                    aria-label="Avautuu uudessa välilehdessä."
+                    aria-label="Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon."
                     class="hds-link hds-link--medium"
                     href="https://www.hsl.fi/hsl/urakoitsijat"
                     target="_blank"
                   >
-                    Urakoitsija - ota joukkoliikenne huomioon työmaalla
+                    Urakoitsija - ota joukkoliikenne huomioon työmaalla 
+                    <span
+                      aria-hidden="true"
+                      class="hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon"
+                    />
                   </a>
                    sekä 
                   <a
-                    aria-label="Avautuu uudessa välilehdessä."
+                    aria-label="Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon."
                     class="hds-link hds-link--medium"
                     href="https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/"
                     target="_blank"
                   >
-                    Työt raitiotieradan läheisyydessä - Kaupunkiliikenne Oy
+                    Työt raitiotieradan läheisyydessä - Kaupunkiliikenne Oy 
+                    <span
+                      aria-hidden="true"
+                      class="hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon"
+                    />
                   </a>
                 </p>
               </p>
@@ -7379,21 +7413,29 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 4 1`] = `
                 </a>
                 ) kanssa. Lisätietoja: 
                 <a
-                  aria-label="Avautuu uudessa välilehdessä."
+                  aria-label="Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon."
                   class="hds-link hds-link--medium"
                   href="https://hsl.fi/hsl/urakoitsijat"
                   target="_blank"
                 >
-                  Urakoitsija - ota joukkoliikenne huomioon työmaalla
+                  Urakoitsija - ota joukkoliikenne huomioon työmaalla 
+                  <span
+                    aria-hidden="true"
+                    class="hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon"
+                  />
                 </a>
                  sekä täytettävä lomake 
                 <a
-                  aria-label="Avautuu uudessa välilehdessä."
+                  aria-label="Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon."
                   class="hds-link hds-link--medium"
                   href="https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/"
                   target="_blank"
                 >
-                  Työt raitiotieradan läheisyydessä - Kaupunkiliikenne Oy
+                  Työt raitiotieradan läheisyydessä - Kaupunkiliikenne Oy 
+                  <span
+                    aria-hidden="true"
+                    class="hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon"
+                  />
                 </a>
                  (Työskentely kiskoalueella tai Työskentelu pikaratikka 15 -rata-alueella).
               </p>
@@ -7494,12 +7536,16 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 4 1`] = `
                 </a>
                 ). Lisätietoa: 
                 <a
-                  aria-label="Avautuu uudessa välilehdessä."
+                  aria-label="Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon."
                   class="hds-link hds-link--medium"
                   href="http://hsl.fi/hsl/urakoitsijat"
                   target="_blank"
                 >
-                  Urakoitsija - ota joukkoliikenne huomioon työmaalla
+                  Urakoitsija - ota joukkoliikenne huomioon työmaalla 
+                  <span
+                    aria-hidden="true"
+                    class="hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon"
+                  />
                 </a>
                 .
               </p>
@@ -8171,21 +8217,29 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 5 1`] = `
                 <p>
                   Raitioliikenteen poikkeusreittien osalta tee ilmoitus HSL:lle enintään 3 vuorokauden töissä 8 viikkoa ennen töiden alkua ja yli 3 vuorokauden töissä 5 kuukautta ennen töiden alkua. Raitioliikennettä korvaavan bussiliikenteen tapauksessa tee ilmoitus HSL:lle enintään 3 vuorokauden töissä 3 kuukautta ennen töiden alkua ja yli 3 vuorokauden töissä 5 kuukautta ennen töiden alkua. Lisätietoja: 
                   <a
-                    aria-label="Avautuu uudessa välilehdessä."
+                    aria-label="Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon."
                     class="hds-link hds-link--medium"
                     href="https://www.hsl.fi/hsl/urakoitsijat"
                     target="_blank"
                   >
-                    Urakoitsija - ota joukkoliikenne huomioon työmaalla
+                    Urakoitsija - ota joukkoliikenne huomioon työmaalla 
+                    <span
+                      aria-hidden="true"
+                      class="hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon"
+                    />
                   </a>
                    sekä 
                   <a
-                    aria-label="Avautuu uudessa välilehdessä."
+                    aria-label="Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon."
                     class="hds-link hds-link--medium"
                     href="https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/"
                     target="_blank"
                   >
-                    Työt raitiotieradan läheisyydessä - Kaupunkiliikenne Oy
+                    Työt raitiotieradan läheisyydessä - Kaupunkiliikenne Oy 
+                    <span
+                      aria-hidden="true"
+                      class="hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon"
+                    />
                   </a>
                 </p>
               </p>
@@ -8331,21 +8385,29 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 5 1`] = `
                 </a>
                 ) kanssa. Lisätietoja: 
                 <a
-                  aria-label="Avautuu uudessa välilehdessä."
+                  aria-label="Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon."
                   class="hds-link hds-link--medium"
                   href="https://hsl.fi/hsl/urakoitsijat"
                   target="_blank"
                 >
-                  Urakoitsija - ota joukkoliikenne huomioon työmaalla
+                  Urakoitsija - ota joukkoliikenne huomioon työmaalla 
+                  <span
+                    aria-hidden="true"
+                    class="hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon"
+                  />
                 </a>
                  sekä täytettävä lomake 
                 <a
-                  aria-label="Avautuu uudessa välilehdessä."
+                  aria-label="Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon."
                   class="hds-link hds-link--medium"
                   href="https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/"
                   target="_blank"
                 >
-                  Työt raitiotieradan läheisyydessä - Kaupunkiliikenne Oy
+                  Työt raitiotieradan läheisyydessä - Kaupunkiliikenne Oy 
+                  <span
+                    aria-hidden="true"
+                    class="hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon"
+                  />
                 </a>
                  (Työskentely kiskoalueella tai Työskentelu pikaratikka 15 -rata-alueella).
               </p>
@@ -8446,12 +8508,16 @@ exports[`Should show correct tips for RAITIOLIIKENNE and haittaindex 5 1`] = `
                 </a>
                 ). Lisätietoa: 
                 <a
-                  aria-label="Avautuu uudessa välilehdessä."
+                  aria-label="Avautuu uudessa välilehdessä. Siirtyy toiseen sivustoon."
                   class="hds-link hds-link--medium"
                   href="http://hsl.fi/hsl/urakoitsijat"
                   target="_blank"
                 >
-                  Urakoitsija - ota joukkoliikenne huomioon työmaalla
+                  Urakoitsija - ota joukkoliikenne huomioon työmaalla 
+                  <span
+                    aria-hidden="true"
+                    class="hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon"
+                  />
                 </a>
                 .
               </p>
