@@ -1478,7 +1478,7 @@
     "pageTitle_loggedIn": "Welcome to Haitaton e-services",
     "pageSubTitle_loggedIn": "The system is intended for advancing projects taking place in public areas and managing the disturbances caused by them",
     "pageSubTitle": "Service for monitoring projects and their negative impacts in public areas",
-    "info": "In the Haitaton service, you can learn about and give feedback on all ongoing and upcoming projects in public areas. You can view projects on a map or in a list. Are you starting a project or submitting applications?",
+    "info": "In the Haitaton service, you can learn about and give feedback on all ongoing and upcoming projects in public areas. You can view projects on a map. Are you starting a project or submitting applications?",
     "info_link": "Go to the Haitaton service",
     "notification": {
       "heading": "Help us improve Haitaton!",
@@ -1516,12 +1516,12 @@
     },
     "kartta": {
       "title": "View the projects",
-      "description": "View a map or a list of ongoing and upcoming projects in public areas.",
+      "description": "View a map of ongoing and upcoming projects created in Haiton.",
       "actionText": "View projects on a map"
     },
     "kartta_kirjautumaton": {
-      "title": "Projects on a map",
-      "description": "View current and future projects on a map",
+      "title": "Projects in public areas",
+      "description": "View current and future projects on a map.",
       "actionText": "View projects on a map"
     },
     "tietoja_haitattomasta": {

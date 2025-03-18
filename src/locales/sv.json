@@ -1478,7 +1478,7 @@
     "pageTitle_loggedIn": "Välkommen att utföra ärenden i Haitaton",
     "pageSubTitle_loggedIn": "Hanteringssystemet för att främja projekt i allmänna områden och att hantera olägenheter",
     "pageSubTitle": "En tjänst för uppföljning av projekt på allmänna områden och uppföljning av deras olägenheter",
-    "info": "I tjänsten Haitaton kan du bekanta dig med alla pågående och kommande projekt på allmänna områden samt ge respons på dem. Du kan granska projekt på kartan eller i en lista. Ska du starta ett projekt eller lämna ansökningar?",
+    "info": "I tjänsten Haitaton kan du bekanta dig med alla pågående och kommande projekt på allmänna områden samt ge respons på dem. Du kan granska projekt på kartan. Ska du starta ett projekt eller lämna ansökningar?",
     "info_link": "Gå till ärendehantering i Haitaton",
     "notification": {
       "heading": "Hjälp oss med att göra Haitaton ännu bättre!",
@@ -1516,12 +1516,12 @@
     },
     "kartta": {
       "title": "Bekanta dig med projekten",
-      "description": "Bekanta dig med pågående projekt på allmänna områden på en karta eller i listform.",
+      "description": "Bekanta dig med pågående och kommande projekt skapade i Haitaton på en karta.",
       "actionText": "Bekanta dig med projekten på en karta"
     },
     "kartta_kirjautumaton": {
-      "title": "Projekten på kartan",
-      "description": "Bekanta dig med pågående och kommande projekt på kartan",
+      "title": "Projekt i allmänna områden",
+      "description": "Bekanta dig med pågående och kommande projekt på kartan.",
       "actionText": "Bekanta dig med projekten på en karta"
     },
     "tietoja_haitattomasta": {

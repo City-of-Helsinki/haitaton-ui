@@ -1625,7 +1625,7 @@
     "pageTitle_loggedIn": "Tervetuloa Haitaton-asiointiin",
     "pageSubTitle_loggedIn": "Asiointijärjestelmä yleisille alueille sijoittuvien hankkeiden edistämiseen ja haittojen hallintaan",
     "pageSubTitle": "Palvelu yleisille alueille sijoittuvien hankkeiden ja niiden haittojen seurantaan",
-    "info": "Haitaton-palvelussa pääset tutustumaan kaikkiin yleisillä alueilla käynnissä oleviin ja tuleviin hankkeisiin sekä antamaan niille palautetta. Voit tarkastella hankkeita kartalla tai listalla. Oletko perustamassa hanketta tai tekemässä hakemuksia?",
+    "info": "Haitaton-palvelussa pääset tutustumaan kaikkiin yleisillä alueilla käynnissä oleviin ja tuleviin hankkeisiin sekä antamaan niille palautetta. Voit tarkastella hankkeita kartalla. Oletko perustamassa hanketta tai tekemässä hakemuksia?",
     "info_link": "Siirry Haitaton-asiointiin",
     "notification": {
       "heading": "Auta meitä tekemään Haitattomasta vielä parempi!",
@@ -1663,12 +1663,12 @@
     },
     "kartta": {
       "title": "Tutustu hankkeisiin",
-      "description": "Tutustu käynnissä oleviin ja tuleviin hankkeisiin yleisillä alueilla kartalla tai listauksena.",
+      "description": "Tutustu käynnissä oleviin ja tuleviin Haitattomassa luotuihin hankkeisiin kartalla.",
       "actionText": "Tutustu hankkeisiin kartalla"
     },
     "kartta_kirjautumaton": {
-      "title": "Hankkeet kartalla",
-      "description": "Tutustu käynnissä oleviin ja tuleviin hankkeisiin kartalla",
+      "title": "Hankkeet yleisillä alueilla",
+      "description": "Tutustu käynnissä oleviin ja tuleviin hankkeisiin kartalla.",
       "actionText": "Tutustu hankkeisiin kartalla"
     },
     "tietoja_haitattomasta": {

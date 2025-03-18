@@ -29,8 +29,7 @@ const FEEDBACK_NOTIFICATION_CLOSED = 'feedback-notification-closed';
 const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation();
   const { login } = useOidcClient();
-  const { PUBLIC_HANKKEET_MAP, PUBLIC_HANKKEET_LIST, HANKEPORTFOLIO, WORKINSTRUCTIONS } =
-    useLocalizedRoutes();
+  const { PUBLIC_HANKKEET_MAP, HANKEPORTFOLIO, WORKINSTRUCTIONS } = useLocalizedRoutes();
   const [feedbackOpen, setFeedbackOpen] = useState(
     !sessionStorage.getItem(FEEDBACK_NOTIFICATION_CLOSED),
   );
@@ -85,13 +84,6 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
       key: 'kartta_kirjautumaton',
       actionLink: PUBLIC_HANKKEET_MAP.path,
       imgProps: { src: img4, width: 384, height: 245 },
-      external: false,
-      featureFlags: ['publicHankkeet'],
-    },
-    {
-      key: 'hankelista',
-      actionLink: PUBLIC_HANKKEET_LIST.path,
-      imgProps: { src: img1, width: 384, height: 245 },
       external: false,
       featureFlags: ['publicHankkeet'],
     },
