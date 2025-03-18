@@ -27,7 +27,7 @@ export default function useSendMuutosilmoitus(
     application.muutosilmoitus &&
     application.muutosilmoitus.sent == null &&
     application.muutosilmoitus.muutokset.length >
-      0; /* TODO when muutosilmoitus have attachments add this or-clause: || application.muutosilmoitus.liitteet.length > 0*/
+      0 /* TODO when muutosilmoitus have attachments add this or-clause: || application.muutosilmoitus.liitteet.length > 0*/;
   const [showSendDialog, setShowSendDialog] = useState(false);
   const isContact =
     application.muutosilmoitus &&
