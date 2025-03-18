@@ -347,7 +347,9 @@ export default function JohtoselvitysTaydennysContainer({
 
           const sendIsLoading = sendTaydennysMutation.isLoading;
           const sendButtonIcon = sendIsLoading ? <LoadingSpinner small /> : <IconEnvelope />;
-          const sendButtonText = t('common:buttons:sendingText');
+          const sendButtonText = sendIsLoading
+            ? t('common:buttons:sendingText')
+            : t('taydennys:buttons:sendTaydennys');
 
           return (
             <FormActions
