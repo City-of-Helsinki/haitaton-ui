@@ -1571,14 +1571,22 @@
     "buttons": {
       "createMuutosilmoitus": "Tee muutosilmoitus",
       "editMuutosilmoitus": "Jatka muutosilmoitusta",
-      "cancelMuutosilmoitus": "Peru muutosilmoitus"
+      "cancelMuutosilmoitus": "Peru muutosilmoitus",
+      "sendMuutosilmoitus": "Lähetä muutosilmoitus"
     },
     "notification": {
       "label": "Muutosilmoitus",
       "createdText": "Hakemuksella on keskeneräinen muutosilmoitus.",
+      "sendSuccessLabel": "Muutosilmoitus lähetetty",
+      "sendSuccessText": "Muutosilmoitus on lähetetty käsiteltäväksi.",
+      "sendErrorLabel": "Muutosilmoituksen lähettäminen epäonnistui",
+      "sendErrorText": "$t(hakemus:notifications:reportCompletionDateErrorText)",
       "sentText": "Hakemukselle on tehty muutosilmoitus, joka on lähetetty käsittelyyn {{date}}",
       "cancelSuccessLabel": "Muutosilmoitus peruttiin",
       "cancelSuccessText": "Muutosilmoitus peruttiin onnistuneesti"
+    },
+    "sendDialog": {
+      "title": "Lähetä muutosilmoitus?"
     }
   },
   "hankeSidebar": {

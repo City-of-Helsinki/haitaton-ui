@@ -2,7 +2,14 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, IconSaveDiskette, StepState } from 'hds-react';
+import {
+  Button,
+  IconEnvelope,
+  IconSaveDiskette,
+  LoadingSpinner,
+  Notification,
+  StepState,
+} from 'hds-react';
 import { Muutosilmoitus } from '../application/muutosilmoitus/types';
 import {
   Application,
@@ -29,7 +36,7 @@ import { changeFormStep } from '../forms/utils';
 import FormActions from '../forms/components/FormActions';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
 import useUpdateHakemus from '../application/taydennysAndMuutosilmoitusCommon/hooks/useUpdateHakemus';
-import { getJohtoselvitysIdentifiers } from '../application/utils';
+import { getJohtoselvitysIdentifiers, isContactIn } from '../application/utils';
 import { KaivuilmoitusMuutosilmoitusFormValues } from './types';
 import { validationSchema } from './validationSchema';
 import ReviewAndSend from './ReviewAndSend';
@@ -38,6 +45,8 @@ import { useGlobalNotification } from '../../common/components/globalNotificatio
 import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
 import FormErrorsNotification from '../kaivuilmoitus/components/FormErrorsNotification';
 import MuutosilmoitusCancel from '../application/muutosilmoitus/components/MuutosilmoitusCancel';
+import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
+import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
 
 type Props = {
   muutosilmoitus: Muutosilmoitus<KaivuilmoitusData>;
@@ -54,6 +63,8 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
   const { setNotification } = useGlobalNotification();
   const navigateToApplicationView = useNavigateToApplicationView();
   const { data: hankkeenHakemukset } = useApplicationsForHanke(hankeData.hankeTunnus, true);
+  const [showSendDialog, setShowSendDialog] = useState(false);
+  const { data: signedInUser } = usePermissionsForHanke(hankeData.hankeTunnus);
   const johtoselvitysIds = getJohtoselvitysIdentifiers(hankkeenHakemukset?.applications);
   const { data: originalAttachments } = useAttachments(originalApplication.id);
 
@@ -69,7 +80,8 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
     setValue,
     watch,
     trigger,
-    formState: { isDirty },
+    formState: { isDirty, isValid },
+    handleSubmit,
   } = formContext;
   const watchFormValues = watch();
 
@@ -173,9 +185,6 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
     },
   ];
 
-  const [activeStepIndex, setActiveStepIndex] = useState(0);
-  const lastStep = activeStepIndex === formSteps.length - 1;
-
   function saveMuutosilmoitus(handleSuccess?: () => void) {
     const formData = getValues();
     hakemusUpdateMutation.mutate(
@@ -185,6 +194,9 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
       },
     );
   }
+
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
+  const lastStep = activeStepIndex === formSteps.length - 1;
 
   function handleStepChange(stepIndex: number) {
     setActiveStepIndex(stepIndex);
@@ -212,6 +224,15 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
     saveMuutosilmoitus(handleSuccess);
   }
 
+  function openSendDialog() {
+    setShowSendDialog(true);
+  }
+
+  function closeSendDialog(id?: number | null) {
+    setShowSendDialog(false);
+    navigateToApplicationView(id?.toString());
+  }
+
   function validateStepChange(changeStep: () => void, stepIndex: number) {
     return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger);
   }
@@ -234,6 +255,7 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
             lastStep={lastStep}
           />
         }
+        onSubmit={handleSubmit(openSendDialog)}
       >
         {function renderFormActions(activeStep, handlePrevious, handleNext) {
           async function handleSaveAndQuit() {
@@ -248,6 +270,19 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
 
           const saveAndQuitIsLoading = hakemusUpdateMutation.isLoading;
           const saveAndQuitLoadingText = t('common:buttons:savingText');
+          const saveButtonIcon = saveAndQuitIsLoading ? (
+            <LoadingSpinner small />
+          ) : (
+            <IconSaveDiskette />
+          );
+
+          const isContact = isContactIn(signedInUser, getValues('applicationData'));
+          const showSendButton =
+            lastStep &&
+            isValid &&
+            muutosilmoitus.muutokset.length >
+              0 /* TODO when muutosilmoitus has attachments add this or-clause: || muutosilmoitus.liitteet.length > 0*/;
+          const disableSendButton = showSendButton && !isContact;
 
           return (
             <FormActions
@@ -263,15 +298,28 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
                 buttonIsLoading={saveAndQuitIsLoading}
                 buttonIsLoadingText={saveAndQuitLoadingText}
               />
-              <Button
-                variant="secondary"
-                onClick={handleSaveAndQuit}
-                iconLeft={<IconSaveDiskette />}
-                isLoading={saveAndQuitIsLoading}
-                loadingText={saveAndQuitLoadingText}
-              >
-                {t('hankeForm:saveDraftButton')}
+              <Button variant="secondary" onClick={handleSaveAndQuit} iconLeft={saveButtonIcon}>
+                {saveAndQuitIsLoading ? saveAndQuitLoadingText : t('hankeForm:saveDraftButton')}
               </Button>
+              {showSendButton && (
+                <Button
+                  type="submit"
+                  iconLeft={<IconEnvelope aria-hidden="true" />}
+                  disabled={disableSendButton}
+                >
+                  {t('muutosilmoitus:buttons:sendMuutosilmoitus')}
+                </Button>
+              )}
+              {disableSendButton && (
+                <Notification
+                  size="small"
+                  style={{ marginTop: 'var(--spacing-xs)' }}
+                  type="info"
+                  label={t('hakemus:notifications:sendApplicationDisabled')}
+                >
+                  {t('hakemus:notifications:sendApplicationDisabled')}
+                </Notification>
+              )}
             </FormActions>
           );
         }}
@@ -283,6 +331,13 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
           onClose={() => setShowSaveNotification(false)}
         />
       )}
+
+      <ApplicationSendDialog
+        application={originalApplication}
+        muutosilmoitus={getValues()}
+        isOpen={showSendDialog}
+        onClose={closeSendDialog}
+      />
     </FormProvider>
   );
 }

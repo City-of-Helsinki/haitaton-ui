@@ -232,3 +232,12 @@ export async function cancelMuutosilmoitus(id: string) {
   }
   hakemus.muutosilmoitus = null;
 }
+
+export async function sendMuutosilmoitus(id: string) {
+  const hakemus = await readMuutosilmoitus(id);
+  const muutosilmoitus = hakemus?.muutosilmoitus;
+  if (!muutosilmoitus) {
+    throw new ApiError(`No muutosilmoitus with id ${id}`, 404);
+  }
+  return muutosilmoitus;
+}

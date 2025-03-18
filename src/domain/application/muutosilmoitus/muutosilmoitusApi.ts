@@ -1,5 +1,6 @@
 import api from '../../api/api';
 import { Muutosilmoitus } from './types';
+import { Application, PaperDecisionReceiver } from '../types/application';
 
 /**
  * Create muutosilmoitus
@@ -25,6 +26,24 @@ export async function updateMuutosilmoitus<ApplicationData, UpdateData>({
   data: UpdateData;
 }) {
   const response = await api.put<Muutosilmoitus<ApplicationData>>(`/muutosilmoitukset/${id}`, data);
+  return response.data;
+}
+
+/**
+ * Send muutosilmoitus to Allu
+ */
+export async function sendMuutosilmoitus(
+  id: string,
+  paperDecisionReceiver: PaperDecisionReceiver | null | undefined,
+) {
+  const response = await api.post<Application>(
+    `/muutosilmoitukset/${id}/laheta`,
+    paperDecisionReceiver
+      ? {
+          paperDecisionReceiver: paperDecisionReceiver,
+        }
+      : null,
+  );
   return response.data;
 }
 

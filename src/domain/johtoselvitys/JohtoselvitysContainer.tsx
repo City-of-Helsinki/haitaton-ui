@@ -458,8 +458,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
       />
 
       <ApplicationSendDialog
-        type="CABLE_REPORT"
-        id={getValues('id')}
+        application={getValues()}
         isOpen={showSendDialog}
         onClose={closeSendDialog}
       />

@@ -4,7 +4,7 @@ import { useGlobalNotification } from '../../../common/components/globalNotifica
 /**
  * Returns functions for showing success notification for sending application
  */
-export default function useApplicationSendNotification() {
+export default function useApplicationSendNotification(isMuutosilmoitus: boolean = false) {
   const { t } = useTranslation();
   const { setNotification } = useGlobalNotification();
 
@@ -14,8 +14,12 @@ export default function useApplicationSendNotification() {
       dismissible: true,
       autoClose: true,
       autoCloseDuration: 8000,
-      label: t('hakemus:notifications:sendSuccessLabel'),
-      message: t('hakemus:notifications:sendSuccessText'),
+      label: isMuutosilmoitus
+        ? t('muutosilmoitus:notification:sendSuccessLabel')
+        : t('hakemus:notifications:sendSuccessLabel'),
+      message: isMuutosilmoitus
+        ? t('muutosilmoitus:notification:sendSuccessText')
+        : t('hakemus:notifications:sendSuccessText'),
       type: 'success',
       closeButtonLabelText: t('common:components:notification:closeButtonLabelText'),
     });

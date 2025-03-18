@@ -127,3 +127,23 @@ describe('Canceling muutosilmoitus', () => {
     expect(window.location.pathname).toBe('/fi/hakemus/14');
   });
 });
+
+describe('Sending muutosilmoitus', () => {
+  test('Should be able to send muutosilmoitus', async () => {
+    const application = cloneDeep(hakemukset[13]) as Application<KaivuilmoitusData>;
+    const { user } = setup({
+      application,
+      muutosilmoitus: {
+        ...application.muutosilmoitus!,
+        sent: null,
+        muutokset: ['workDescription'],
+      },
+    });
+    await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+    await user.click(screen.getByRole('button', { name: /lähetä muutosilmoitus/i }));
+    await user.click(await screen.findByRole('button', { name: /vahvista/i }));
+
+    expect(await screen.findByText('Muutosilmoitus lähetetty')).toBeInTheDocument();
+    expect(screen.getByText('Muutosilmoitus on lähetetty käsiteltäväksi.')).toBeInTheDocument();
+  });
+});
