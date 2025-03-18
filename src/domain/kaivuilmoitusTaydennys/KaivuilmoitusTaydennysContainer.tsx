@@ -208,7 +208,6 @@ export default function KaivuilmoitusTaydennysContainer({
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const lastStep = activeStepIndex === formSteps.length - 1;
   const [isSending, setIsSending] = useState(false);
-  const [isError, setIsError] = useState(false);
 
   function saveTaydennys(handleSuccess?: () => void) {
     const formData = getValues();
@@ -247,23 +246,19 @@ export default function KaivuilmoitusTaydennysContainer({
   }
 
   function openSendDialog() {
-    setIsError(false);
     setShowSendDialog(true);
   }
 
   function closeSendDialog() {
     if (!isSending) {
-      setIsError(false);
       setShowSendDialog(false);
     }
   }
 
   function sendTaydennys() {
     setIsSending(true);
-    setIsError(false);
     sendTaydennysMutation.mutate(taydennys.id, {
       onSuccess(data) {
-        setIsError(false);
         showSendSuccess();
         setIsSending(false);
         closeSendDialog();
@@ -271,7 +266,6 @@ export default function KaivuilmoitusTaydennysContainer({
       },
       onError() {
         setIsSending(false);
-        setIsError(true);
       },
     });
   }
@@ -388,7 +382,7 @@ export default function KaivuilmoitusTaydennysContainer({
       <ConfirmationDialog
         title={t('taydennys:sendDialog:title')}
         description={
-          isError ? (
+          sendTaydennysMutation.isError ? (
             <>
               {t('taydennys:sendDialog:description')}
               <Box paddingTop="var(--spacing-s)">
