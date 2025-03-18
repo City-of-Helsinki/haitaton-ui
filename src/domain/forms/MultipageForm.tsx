@@ -59,11 +59,7 @@ interface Props {
    * Function that is called with a function that changes step and current step index,
    * and should validate the step and execute the given function if step is valid.
    */
-  stepChangeValidator?: (
-    changeStep: () => void,
-    stepIndex: number,
-    direction?: 'forward' | 'backward',
-  ) => void;
+  stepChangeValidator?: (changeStep: () => void, stepIndex: number) => void;
   formData?: unknown;
   validationContext?: AnyObject;
 }
@@ -95,7 +91,7 @@ const MultipageForm: React.FC<Props> = ({
   };
   const [state, dispatch] = useReducer(stepReducer, initialState);
 
-  function handleStepChange(value: Action & { direction?: 'forward' | 'backward' }) {
+  function handleStepChange(value: Action) {
     function changeStep() {
       window.scrollTo(0, 0);
       dispatch(value);
@@ -109,7 +105,7 @@ const MultipageForm: React.FC<Props> = ({
     }
 
     if (stepChangeValidator) {
-      stepChangeValidator(changeStep, state.activeStepIndex, value.direction);
+      stepChangeValidator(changeStep, state.activeStepIndex);
     } else {
       changeStep();
     }
@@ -119,35 +115,16 @@ const MultipageForm: React.FC<Props> = ({
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     stepIndex: number,
   ) {
-    const direction: 'forward' | 'backward' =
-      stepIndex > state.activeStepIndex ? 'forward' : 'backward';
-
-    if (direction === 'backward' || !stepChangeValidator) {
-      handleStepChange({
-        type: ACTION_TYPE.SET_ACTIVE,
-        payload: { stepIndex, formData, validationContext },
-        direction,
-      });
-    } else {
-      stepChangeValidator(
-        () => {
-          handleStepChange({
-            type: ACTION_TYPE.SET_ACTIVE,
-            payload: { stepIndex, formData, validationContext },
-            direction,
-          });
-        },
-        state.activeStepIndex,
-        direction,
-      );
-    }
+    handleStepChange({
+      type: ACTION_TYPE.SET_ACTIVE,
+      payload: { stepIndex, formData, validationContext },
+    });
   }
 
   function handlePrevious() {
     handleStepChange({
       type: ACTION_TYPE.SET_ACTIVE,
       payload: { stepIndex: state.activeStepIndex - 1, formData, validationContext },
-      direction: 'backward',
     });
   }
 
@@ -155,7 +132,6 @@ const MultipageForm: React.FC<Props> = ({
     handleStepChange({
       type: ACTION_TYPE.COMPLETE_STEP,
       payload: { stepIndex: state.activeStepIndex, formData, validationContext },
-      direction: 'forward',
     });
   }
 

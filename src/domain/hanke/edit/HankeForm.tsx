@@ -319,9 +319,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
   function validateStepChange(
     changeStep: () => void,
     stepIndex: number,
-    direction?: 'forward' | 'backward',
   ) {
-    if (direction !== 'backward' && stepIndex === 3) {
       let hasInvalidId = false;
 
       const contactTypes: HankeContactTypeKey[] = [
@@ -340,7 +338,6 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
 
             // Check if Business ID is not present or is invalid
             if (!tunnus || tunnus === '' || !isValidBusinessId(tunnus)) {
-              console.error('Invalid or empty Business ID');
               hasInvalidId = true;
               break;
             }
@@ -351,10 +348,6 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       // Only move to the next step if no invalid IDs were found
       if (!hasInvalidId) {
         return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger);
-      }
-    } else {
-      // If moving backward, always allow progression to the previous step
-      return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger);
     }
   }
 
