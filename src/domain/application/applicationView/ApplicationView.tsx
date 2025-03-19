@@ -71,7 +71,6 @@ import KaivuilmoitusAttachmentSummary from '../components/summary/KaivuilmoitusA
 import InvoicingCustomerSummary from '../components/summary/InvoicingCustomerSummary';
 import React, { useState } from 'react';
 import { SignedInUser } from '../../hanke/hankeUsers/hankeUser';
-import useSendApplication from '../hooks/useSendApplication';
 import { validationSchema as johtoselvitysValidationSchema } from '../../johtoselvitys/validationSchema';
 import { validationSchema as kaivuilmoitusValidationSchema } from '../../kaivuilmoitus/validationSchema';
 import ApplicationReportCompletionDateDialog from '../../kaivuilmoitus/components/ApplicationReportCompletionDateDialog';
@@ -688,7 +687,6 @@ function ApplicationView({
 }: Readonly<Props>) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const [showSendDialog, setShowSendDialog] = useState(false);
   const [showReportOperationalConditionDialog, setShowReportOperationalConditionDialog] =
     useState(false);
@@ -762,8 +760,6 @@ function ApplicationView({
     applicationType,
     alluStatus,
   );
-  const applicationSendMutation = useSendApplication();
-
   const informationRequestFeatureEnabled = useIsInformationRequestFeatureEnabled();
 
   const { sendTaydennysButton, sendTaydennysDialog } = useSendTaydennys(application, signedInUser);
@@ -772,15 +768,6 @@ function ApplicationView({
     applicationType === 'EXCAVATION_NOTIFICATION' &&
     (alluStatus === AlluStatus.DECISION || alluStatus === AlluStatus.OPERATIONAL_CONDITION) &&
     !muutosilmoitus?.sent;
-
-  async function onSendApplication(pdr: PaperDecisionReceiver | undefined | null) {
-    applicationSendMutation.mutate({
-      id: id as number,
-      paperDecisionReceiver: pdr,
-    });
-    setIsSendButtonDisabled(true);
-    setShowSendDialog(false);
-  }
 
   function openSendDialog() {
     setShowSendDialog(true);
@@ -920,7 +907,7 @@ function ApplicationView({
                 theme="coat"
                 iconLeft={<IconEnvelope aria-hidden="true" />}
                 onClick={openSendDialog}
-                disabled={disableSendButton || isSendButtonDisabled}
+                disabled={disableSendButton}
               >
                 {t('hakemus:buttons:sendApplication')}
               </Button>
@@ -1245,10 +1232,9 @@ function ApplicationView({
       )}
       <ApplicationSendDialog
         type={applicationType}
+        id={application.id}
         isOpen={showSendDialog}
-        isLoading={applicationSendMutation.isLoading}
         onClose={closeSendDialog}
-        onSend={onSendApplication}
       />
       {sendTaydennysDialog}
     </InformationViewContainer>

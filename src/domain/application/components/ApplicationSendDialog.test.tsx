@@ -1,15 +1,18 @@
 import { render, screen } from '../../../testUtils/render';
 import ApplicationSendDialog from './ApplicationSendDialog';
 import { waitFor } from '@testing-library/react';
+import { server } from '../../mocks/test-server';
+import { http, HttpResponse } from 'msw';
+import { cloneDeep } from 'lodash';
+import hakemukset from '../../mocks/data/hakemukset-data';
 
 test('Shows correct information when opened for excavation notification', async () => {
   render(
     <ApplicationSendDialog
       type="EXCAVATION_NOTIFICATION"
+      id={1}
       isOpen={true}
-      isLoading={false}
       onClose={() => {}}
-      onSend={() => {}}
     />,
   );
 
@@ -33,15 +36,7 @@ test('Shows correct information when opened for excavation notification', async 
 });
 
 test('Shows correct information when opened for cable report', async () => {
-  render(
-    <ApplicationSendDialog
-      type="CABLE_REPORT"
-      isOpen={true}
-      isLoading={false}
-      onClose={() => {}}
-      onSend={() => {}}
-    />,
-  );
+  render(<ApplicationSendDialog type="CABLE_REPORT" id={1} isOpen={true} onClose={() => {}} />);
 
   expect(screen.getByText(/lähetä hakemus\?/i)).toBeInTheDocument();
   expect(
@@ -65,15 +60,7 @@ test('Shows correct information when opened for cable report', async () => {
 test('Shows correct information when opened for cable report when paper decision feature is disabled', async () => {
   const OLD_ENV = { ...window._env_ };
   window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_CABLE_REPORT_PAPER_DECISION: 0 };
-  render(
-    <ApplicationSendDialog
-      type="CABLE_REPORT"
-      isOpen={true}
-      isLoading={false}
-      onClose={() => {}}
-      onSend={() => {}}
-    />,
-  );
+  render(<ApplicationSendDialog type="CABLE_REPORT" id={1} isOpen={true} onClose={() => {}} />);
 
   expect(screen.getByText(/lähetä hakemus\?/i)).toBeInTheDocument();
   expect(
@@ -100,10 +87,9 @@ test('Shows correct information when ordering paper decision', async () => {
   const { user } = render(
     <ApplicationSendDialog
       type="EXCAVATION_NOTIFICATION"
+      id={1}
       isOpen={true}
-      isLoading={false}
       onClose={() => {}}
-      onSend={() => {}}
     />,
   );
 
@@ -139,10 +125,9 @@ test('Enables confirmation button when form is filled', async () => {
   const { user } = render(
     <ApplicationSendDialog
       type="EXCAVATION_NOTIFICATION"
+      id={1}
       isOpen={true}
-      isLoading={false}
       onClose={() => {}}
-      onSend={() => {}}
     />,
   );
 
@@ -167,15 +152,23 @@ test('Enables confirmation button when form is filled', async () => {
   expect(confirmButton).toBeEnabled();
 });
 
-test('Confirm calls onSend', async () => {
-  const onSend = jest.fn();
+test('Sends the application when confirmed', async () => {
+  const hakemus = cloneDeep(hakemukset[0]);
+  let sent = false;
+  server.use(
+    http.post(`/api/hakemukset/:id/laheta`, async () => {
+      hakemus.alluStatus = 'PENDING';
+      sent = true;
+      return HttpResponse.json(hakemus);
+    }),
+  );
+
   const { user } = render(
     <ApplicationSendDialog
       type="EXCAVATION_NOTIFICATION"
+      id={1}
       isOpen={true}
-      isLoading={false}
       onClose={() => {}}
-      onSend={onSend}
     />,
   );
 
@@ -194,19 +187,51 @@ test('Confirm calls onSend', async () => {
   await user.type(cityInput, 'Helsinki');
   const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
   await user.click(confirmButton);
-  expect(onSend).toHaveBeenCalled();
+  expect(sent).toBe(true);
 });
 
-test('Cancel calls onClose', async () => {
-  const onClose = jest.fn();
+test('Shows error message when sending fails', async () => {
+  server.use(
+    http.post(`/api/hakemukset/:id/laheta`, async () => {
+      return HttpResponse.json({ errorMessage: 'Failed for testing purposes' }, { status: 500 });
+    }),
+  );
+
   const { user } = render(
     <ApplicationSendDialog
       type="EXCAVATION_NOTIFICATION"
+      id={1}
       isOpen={true}
-      isLoading={false}
-      onClose={onClose}
-      onSend={() => {}}
+      onClose={() => {}}
     />,
+  );
+
+  const orderPaperDecisionButton = screen.getByRole('button', {
+    name: 'Tilaan päätöksen myös paperisena',
+  });
+  await user.click(orderPaperDecisionButton);
+  await screen.findByText('Täytä vastaanottajan tiedot');
+  const nameInput = screen.getByText('Nimi');
+  await user.type(nameInput, 'Pekka Paperinen');
+  const streetAddressInput = screen.getByText('Katuosoite');
+  await user.type(streetAddressInput, 'Paperitie 1');
+  const postalCodeInput = screen.getByText('Postinumero');
+  await user.type(postalCodeInput, '00100');
+  const cityInput = screen.getByText('Postitoimipaikka');
+  await user.type(cityInput, 'Helsinki');
+  const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
+  await user.click(confirmButton);
+  expect(
+    await screen.findByText(
+      'Hakemuksen lähettäminen käsittelyyn epäonnistui. Yritä lähettämistä myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa',
+    ),
+  ).toBeInTheDocument();
+});
+
+test('Calls onClose when cancelled', async () => {
+  const onClose = jest.fn();
+  const { user } = render(
+    <ApplicationSendDialog type="EXCAVATION_NOTIFICATION" id={1} isOpen={true} onClose={onClose} />,
   );
 
   const cancelButton = screen.getByRole('button', { name: 'Peruuta' });

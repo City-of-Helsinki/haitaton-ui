@@ -37,7 +37,6 @@ import {
   JohtoselvitysCreateData,
   JohtoselvitysData,
   JohtoselvitysUpdateData,
-  PaperDecisionReceiver,
 } from '../application/types/application';
 import Attachments from './Attachments';
 import ConfirmationDialog from '../../common/components/HDSConfirmationDialog/ConfirmationDialog';
@@ -46,7 +45,6 @@ import { APPLICATION_ID_STORAGE_KEY } from '../application/constants';
 import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import useSaveApplication from '../application/hooks/useSaveApplication';
 import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
-import useSendApplication from '../application/hooks/useSendApplication';
 import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
 
 type Props = {
@@ -134,7 +132,6 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
 
   const navigateToApplicationView = useNavigateToApplicationView();
 
-  const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
   const [showSendDialog, setShowSendDialog] = useState(false);
 
   const {
@@ -183,28 +180,13 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
     },
   });
 
-  const applicationSendMutation = useSendApplication({
-    onSuccess(data) {
-      navigateToApplicationView(data.id?.toString());
-    },
-  });
-
-  async function onSendApplication(pdr: PaperDecisionReceiver | undefined | null) {
-    const data = getValues();
-    applicationSendMutation.mutate({
-      id: data.id as number,
-      paperDecisionReceiver: pdr,
-    });
-    setIsSendButtonDisabled(true);
-    setShowSendDialog(false);
-  }
-
   function openSendDialog() {
     setShowSendDialog(true);
   }
 
-  function closeSendDialog() {
+  function closeSendDialog(id?: number | null) {
     setShowSendDialog(false);
+    navigateToApplicationView(id?.toString());
   }
 
   function saveCableApplication(handleSuccess?: (data: Application<JohtoselvitysData>) => void) {
@@ -442,7 +424,7 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
                   type="submit"
                   iconLeft={<IconEnvelope aria-hidden="true" />}
                   loadingText={t('common:buttons:sendingText')}
-                  disabled={disableSendButton || isSendButtonDisabled}
+                  disabled={disableSendButton}
                 >
                   {t('hakemus:buttons:sendApplication')}
                 </Button>
@@ -477,10 +459,9 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
 
       <ApplicationSendDialog
         type="CABLE_REPORT"
+        id={getValues('id')}
         isOpen={showSendDialog}
-        isLoading={applicationSendMutation.isLoading}
         onClose={closeSendDialog}
-        onSend={onSendApplication}
       />
     </FormProvider>
   );

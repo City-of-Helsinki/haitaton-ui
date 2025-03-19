@@ -3,11 +3,13 @@ import {
   Dialog,
   IconCheck,
   IconQuestionCircle,
+  Link,
+  LoadingSpinner,
   Notification,
   ToggleButton,
 } from 'hds-react';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { ApplicationSendData, ApplicationType, PaperDecisionReceiver } from '../types/application';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -16,16 +18,17 @@ import { Box, Grid, GridItem } from '@chakra-ui/react';
 import Text from '../../../common/components/text/Text';
 import TextInput from '../../../common/components/textInput/TextInput';
 import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
+import useSendApplication from '../hooks/useSendApplication';
+import useApplicationSendNotification from '../hooks/useApplicationSendNotification';
 
 type Props = {
   type: ApplicationType;
+  id?: number | null;
   isOpen: boolean;
-  isLoading: boolean;
-  onClose: () => void;
-  onSend: (paperDecisionReceiver?: PaperDecisionReceiver | null) => void;
+  onClose: (id?: number | null) => void;
 };
 
-const ApplicationSendDialog: React.FC<Props> = ({ type, isOpen, isLoading, onClose, onSend }) => {
+const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) => {
   const { t } = useTranslation();
   const features = useFeatureFlags();
   const formContext = useForm<ApplicationSendData>({
@@ -43,12 +46,25 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, isOpen, isLoading, onClo
   const paperDecisionFeatureEnabled =
     type === 'EXCAVATION_NOTIFICATION' || features.cableReportPaperDecision;
 
+  const applicationSendMutation = useSendApplication();
+  const { showSendSuccess } = useApplicationSendNotification();
+
   async function submitForm(data: ApplicationSendData) {
     const paperDecisionReceiver = data.orderPaperDecision
       ? (data.paperDecisionReceiver as PaperDecisionReceiver)
       : null;
-    onSend(paperDecisionReceiver);
-    onClose();
+    applicationSendMutation.mutate(
+      {
+        id: id as number,
+        paperDecisionReceiver: paperDecisionReceiver,
+      },
+      {
+        onSuccess(applicationData) {
+          showSendSuccess();
+          onClose(applicationData.id);
+        },
+      },
+    );
   }
 
   function handleOrderPaperDecisionChange() {
@@ -62,9 +78,18 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, isOpen, isLoading, onClo
   }
 
   function handleClose() {
-    reset();
-    onClose();
+    if (!applicationSendMutation.isLoading) {
+      reset();
+      applicationSendMutation.reset();
+      onClose();
+    }
   }
+
+  const submitButtonIcon = applicationSendMutation.isLoading ? (
+    <LoadingSpinner small />
+  ) : (
+    <IconCheck />
+  );
 
   return (
     <Dialog
@@ -72,7 +97,7 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, isOpen, isLoading, onClo
       isOpen={isOpen}
       aria-labelledby={dialogTitle}
       variant="primary"
-      close={onClose}
+      close={handleClose}
       closeButtonLabelText={t('common:ariaLabels:closeButtonLabelText')}
     >
       <Dialog.Header
@@ -97,6 +122,7 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, isOpen, isLoading, onClo
                   label={t('hakemus:sendDialog:orderPaperDecision')}
                   checked={orderPaperDecisionChecked}
                   onChange={handleOrderPaperDecisionChange}
+                  disabled={applicationSendMutation.isLoading}
                 />
               </Box>
             )}
@@ -118,6 +144,7 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, isOpen, isLoading, onClo
                       name="paperDecisionReceiver.name"
                       label={t('hakemus:sendDialog:name')}
                       required={orderPaperDecisionChecked}
+                      disabled={applicationSendMutation.isLoading}
                     />
                   </GridItem>
                   <GridItem colSpan={2}>
@@ -126,6 +153,7 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, isOpen, isLoading, onClo
                       name="paperDecisionReceiver.streetAddress"
                       label={t('hakemus:sendDialog:streetAddress')}
                       required={orderPaperDecisionChecked}
+                      disabled={applicationSendMutation.isLoading}
                     />
                   </GridItem>
                   <GridItem colSpan={{ sm: 1, xs: 2 }} colStart={{ sm: 1, xs: 1 }}>
@@ -134,6 +162,7 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, isOpen, isLoading, onClo
                       name="paperDecisionReceiver.postalCode"
                       label={t('hakemus:sendDialog:postalCode')}
                       required={orderPaperDecisionChecked}
+                      disabled={applicationSendMutation.isLoading}
                     />
                   </GridItem>
                   <GridItem colSpan={2} colStart={{ sm: 2, xs: 1 }}>
@@ -142,24 +171,44 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, isOpen, isLoading, onClo
                       name="paperDecisionReceiver.city"
                       label={t('hakemus:sendDialog:city')}
                       required={orderPaperDecisionChecked}
+                      disabled={applicationSendMutation.isLoading}
                     />
                   </GridItem>
                 </Grid>
               </Box>
+            )}
+            {applicationSendMutation.isError && (
+              <Notification
+                type="error"
+                size="small"
+                label={t('hakemus:notifications:sendErrorLabel')}
+              >
+                <Trans i18nKey="hakemus:notifications:sendErrorText">
+                  <p>
+                    Hakemuksen lähettäminen käsittelyyn epäonnistui. Yritä lähettämistä myöhemmin
+                    uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa
+                    <Link href="mailto:haitatontuki@hel.fi">haitatontuki@hel.fi</Link>.
+                  </p>
+                </Trans>
+              </Notification>
             )}
           </Dialog.Content>
 
           <Dialog.ActionButtons>
             <Button
               type="submit"
-              iconLeft={<IconCheck />}
-              isLoading={isLoading}
-              loadingText={t('common:buttons:sendingText')}
-              disabled={!isConfirmButtonEnabled}
+              iconLeft={submitButtonIcon}
+              disabled={!isConfirmButtonEnabled || applicationSendMutation.isLoading}
             >
-              {t('common:confirmationDialog:confirmButton')}
+              {applicationSendMutation.isLoading
+                ? t('common:buttons:sendingText')
+                : t('common:confirmationDialog:confirmButton')}
             </Button>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button
+              variant="secondary"
+              onClick={handleClose}
+              disabled={applicationSendMutation.isLoading}
+            >
               {t('common:confirmationDialog:cancelButton')}
             </Button>
           </Dialog.ActionButtons>
