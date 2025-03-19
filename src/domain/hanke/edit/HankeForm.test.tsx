@@ -931,7 +931,7 @@ describe('New contact person form and contact person dropdown', () => {
     await user.click(screen.getByRole('button', { name: /lisää uusi yhteyshenkilö/i }));
     await user.click(screen.getByRole('button', { name: /tallenna ja lisää yhteyshenkilö/i }));
 
-    expect(await screen.findAllByText('Kenttä on pakollinen')).toHaveLength(4);
+    expect(await screen.findAllByText('Kenttä on pakollinen')).toHaveLength(5);
     expect(screen.queryByText('Yhteyshenkilö tallennettu')).not.toBeInTheDocument();
   });
 
