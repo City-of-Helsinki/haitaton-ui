@@ -130,14 +130,18 @@ describe('Canceling muutosilmoitus', () => {
 
 describe('Sending muutosilmoitus', () => {
   test('Should be able to send muutosilmoitus', async () => {
-    const application = cloneDeep(hakemukset[13]) as Application<KaivuilmoitusData>;
-    const { user } = setup({
-      ...application,
+    const applicationBase = cloneDeep(hakemukset[13]) as Application<KaivuilmoitusData>;
+    const application = {
+      ...applicationBase,
       muutosilmoitus: {
-        ...application.muutosilmoitus!,
+        ...applicationBase.muutosilmoitus!,
         sent: null,
         muutokset: ['workDescription'],
       },
+    };
+    const { user } = setup({
+      application: application,
+      muutosilmoitus: application.muutosilmoitus,
     });
     await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
     await user.click(screen.getByRole('button', { name: /lähetä muutosilmoitus/i }));
