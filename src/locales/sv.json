@@ -76,6 +76,9 @@
       "loadingSpinner": {
         "loadingText": "Laddar",
         "loadingFinishedText": "Uppladdningen är klar"
+      },
+      "breadcrumb": {
+        "ariaLabel": "Projektets navigation"
       }
     },
     "error": "Det inträffade ett fel. Försök på nytt.",
@@ -1479,7 +1482,7 @@
     "manualPage": {
       "main": {
         "heading": "Bruksanvisning och support",
-      "cableLocationServiceLink": "https://www.hel.fi/sv/stadsmiljo-och-trafik/tomter-och-bygglov/ledningstjanst"
+        "cableLocationServiceLink": "https://www.hel.fi/sv/stadsmiljo-och-trafik/tomter-och-bygglov/ledningstjanst"
       }
     },
     "404Page": {

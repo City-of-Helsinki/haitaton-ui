@@ -76,6 +76,9 @@
       "loadingSpinner": {
         "loadingText": "Loading",
         "loadingFinishedText": "Loading is finished"
+      },
+      "breadcrumb": {
+        "ariaLabel": "Project navigation"
       }
     },
     "error": "An error occurred. Try again.",
@@ -1480,7 +1483,7 @@
       "title": "Manual and support",
       "main": {
         "heading": "Manual and support",
-      "cableLocationServiceLink": "https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/cable-location-service"
+        "cableLocationServiceLink": "https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/cable-location-service"
       }
     },
     "404Page": {
