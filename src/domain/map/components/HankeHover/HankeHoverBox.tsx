@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import HoverContext from '../../../../common/components/map/interactions/hover/HoverContext';
 import styles from './HankeHover.module.scss';
 import Text from '../../../../common/components/text/Text';
+import { format } from 'date-fns';
 
 const HankeHoverBox: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { hoveredHankeAreaData, hoverPosition } = useContext(HoverContext);
@@ -37,7 +38,7 @@ const HankeHoverBox: React.FC<React.PropsWithChildren<unknown>> = () => {
           <Text tag="p">{hankeArea.areaName}</Text>
 
           {hankeArea.startDate && hankeArea.endDate && (
-            <Text tag="p">{`${hankeArea.startDate} - ${hankeArea.endDate}`}</Text>
+            <Text tag="p">{`${format(new Date(hankeArea.startDate), 'dd.MM.yyyy')} - ${format(new Date(hankeArea.endDate), 'dd.MM.yyyy')}`}</Text>
           )}
         </div>
       ))}

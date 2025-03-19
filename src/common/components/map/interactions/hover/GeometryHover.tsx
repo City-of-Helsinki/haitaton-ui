@@ -1,5 +1,4 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { format } from 'date-fns';
 import { MapBrowserEvent } from 'ol';
 import MapContext from '../../MapContext';
 import { MapInstance, OverlayProps } from '../../types';
@@ -25,8 +24,8 @@ const GeometryHover: React.FC<React.PropsWithChildren<unknown>> = ({ children })
           hankeName,
           hankeTunnus,
           areaName,
-          startDate: startDate && format(new Date(startDate), 'dd.MM.yyyy'),
-          endDate: endDate && format(new Date(endDate), 'dd.MM.yyyy'),
+          startDate,
+          endDate,
         });
       });
     }
