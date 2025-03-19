@@ -7,10 +7,10 @@ import HoverContext, { HankeAlueHoverData } from './HoverContext';
 const GeometryHover: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   const { map } = useContext(MapContext);
   const [hoverPosition, setHoverPosition] = useState([0, 0]);
-  const [hoveredHankeAreaData, setHoveredHankeData] = useState([] as HankeAlueHoverData[]);
+  const [hoveredHankeAreaData, setHoveredHankeAreaData] = useState([] as HankeAlueHoverData[]);
 
   const highlightHankeOnPixel = (mapInstance: MapInstance, evt: MapBrowserEvent<UIEvent>) => {
-    setHoveredHankeData([]);
+    setHoveredHankeAreaData([]);
     const hankeAreaDataAtPixel: HankeAlueHoverData[] = [];
     const foundFeatures = mapInstance?.getFeaturesAtPixel(evt.pixel) || [];
     if (foundFeatures?.length > 0) {
@@ -29,7 +29,7 @@ const GeometryHover: React.FC<React.PropsWithChildren<unknown>> = ({ children })
         });
       });
     }
-    setHoveredHankeData(hankeAreaDataAtPixel);
+    setHoveredHankeAreaData(hankeAreaDataAtPixel);
     setHoverPosition(evt.pixel);
   };
 
