@@ -7,7 +7,7 @@ import useNavigateToApplicationView from '../../hooks/useNavigateToApplicationVi
 import { useGlobalNotification } from '../../../../common/components/globalNotification/GlobalNotificationContext';
 import useDebouncedMutation from '../../../../common/hooks/useDebouncedMutation';
 import ConfirmationDialog from '../../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
-import { cancelTaydennys } from '../taydennysApi';
+import { cancelMuutosilmoitus } from '../muutosilmoitusApi';
 
 type Props = {
   application: Application;
@@ -17,7 +17,7 @@ type Props = {
   buttonIsLoadingText?: string;
 };
 
-export default function TaydennysCancel({
+export default function MuutosilmoitusCancel({
   application,
   navigateToApplicationViewOnSuccess,
   buttonVariant,
@@ -33,9 +33,9 @@ export default function TaydennysCancel({
   const [errorMessage, setErrorMessage] = useState('');
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  const isCancelPossible = Boolean(application.taydennys);
+  const isCancelPossible = Boolean(application.muutosilmoitus);
 
-  const taydennysCancelMutation = useDebouncedMutation(cancelTaydennys, {
+  const muutosilmoitusCancelMutation = useDebouncedMutation(cancelMuutosilmoitus, {
     onError() {
       setErrorMessage(t('common:error'));
       setIsButtonDisabled(false);
@@ -43,8 +43,8 @@ export default function TaydennysCancel({
     onSuccess() {
       const closeButtonLabelText = t('common:components:notification:closeButtonLabelText');
       setNotification(true, {
-        label: t('taydennys:notifications:cancelSuccessLabel'),
-        message: t('taydennys:notifications:cancelSuccessText'),
+        label: t('muutosilmoitus:notification:cancelSuccessLabel'),
+        message: t('muutosilmoitus:notification:cancelSuccessText'),
         type: 'success',
         dismissible: true,
         closeButtonLabelText,
@@ -63,8 +63,8 @@ export default function TaydennysCancel({
 
   function doApplicationCancel() {
     setIsButtonDisabled(true);
-    if (application.taydennys?.id) {
-      taydennysCancelMutation.mutate(application.taydennys.id);
+    if (application.muutosilmoitus?.id) {
+      muutosilmoitusCancelMutation.mutate(application.muutosilmoitus.id);
     }
   }
 
@@ -82,7 +82,7 @@ export default function TaydennysCancel({
   }
 
   const buttonIconStart =
-    taydennysCancelMutation.isLoading || isButtonDisabled ? (
+    muutosilmoitusCancelMutation.isLoading || isButtonDisabled ? (
       <LoadingSpinner small />
     ) : (
       <IconCross />
@@ -91,8 +91,8 @@ export default function TaydennysCancel({
   return (
     <>
       <ConfirmationDialog
-        title={t('taydennys:labels:cancelTitle')}
-        description={t('taydennys:labels:cancelDescription')}
+        title={t('muutosilmoitus:labels:cancelTitle')}
+        description={t('muutosilmoitus:labels:cancelDescription')}
         isOpen={isConfirmationDialogOpen}
         close={closeConfirmationDialog}
         mainAction={doApplicationCancel}
@@ -100,9 +100,9 @@ export default function TaydennysCancel({
         mainBtnIcon={<IconTrash />}
         variant="danger"
         errorMsg={errorMessage}
-        isLoading={taydennysCancelMutation.isLoading || isButtonDisabled}
+        isLoading={muutosilmoitusCancelMutation.isLoading || isButtonDisabled}
         loadingText={t('common:buttons:sendingText')}
-        disabled={taydennysCancelMutation.isLoading || isButtonDisabled}
+        disabled={muutosilmoitusCancelMutation.isLoading || isButtonDisabled}
       />
 
       <Button
@@ -114,7 +114,7 @@ export default function TaydennysCancel({
       >
         {buttonIsLoading || isButtonDisabled
           ? buttonIsLoadingText
-          : t('taydennys:buttons:cancelTaydennys')}
+          : t('muutosilmoitus:buttons:cancelMuutosilmoitus')}
       </Button>
     </>
   );

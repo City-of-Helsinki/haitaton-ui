@@ -93,6 +93,7 @@ import TaydennysCancel from '../taydennys/components/TaydennysCancel';
 import TaydennysAttachmentsList from '../taydennys/components/TaydennysAttachmentsList';
 import { HaittojenhallintasuunnitelmaInfo } from '../../kaivuilmoitus/components/HaittojenhallintasuunnitelmaInfo';
 import MuutosilmoitusNotification from '../muutosilmoitus/components/MuutosilmoitusNotification';
+import MuutosilmoitusCancel from '../muutosilmoitus/components/MuutosilmoitusCancel';
 
 function TyoalueetList({ tyoalueet }: { tyoalueet: ApplicationArea[] }) {
   const { t } = useTranslation();
@@ -927,16 +928,19 @@ function ApplicationView({
           )}
           {showMuutosilmoitusButton && (
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
-              <Button
-                theme="coat"
-                iconLeft={<IconPen />}
-                onClick={onEditMuutosilmoitus}
-                isLoading={creatingMuutosilmoitus}
-              >
-                {!muutosilmoitus
-                  ? t('muutosilmoitus:buttons:createMuutosilmoitus')
-                  : t('muutosilmoitus:buttons:editMuutosilmoitus')}
-              </Button>
+              <>
+                <Button
+                  theme="coat"
+                  iconLeft={<IconPen />}
+                  onClick={onEditMuutosilmoitus}
+                  isLoading={creatingMuutosilmoitus}
+                >
+                  {!muutosilmoitus
+                    ? t('muutosilmoitus:buttons:createMuutosilmoitus')
+                    : t('muutosilmoitus:buttons:editMuutosilmoitus')}
+                </Button>
+                <MuutosilmoitusCancel application={application} />
+              </>
             </CheckRightsByHanke>
           )}
           {showReportOperationalConditionButton && (

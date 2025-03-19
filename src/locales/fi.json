@@ -1564,16 +1564,21 @@
       "muutosilmoitus": "Muutosilmoitus",
       "originalInformation": "$t(taydennys:labels:originalInformation)",
       "muutokset": "Muutokset",
-      "muutos": "Muutos"
+      "muutos": "Muutos",
+      "cancelTitle": "Peru muutosilmoitus?",
+      "cancelDescription": "Haluatko varmasti perua hakemukseen tehdyt muutokset ja palauttaa aiemman päätöksen tiedot?"
     },
     "buttons": {
       "createMuutosilmoitus": "Tee muutosilmoitus",
-      "editMuutosilmoitus": "Jatka muutosilmoitusta"
+      "editMuutosilmoitus": "Jatka muutosilmoitusta",
+      "cancelMuutosilmoitus": "Peru muutosilmoitus"
     },
     "notification": {
       "label": "Muutosilmoitus",
       "createdText": "Hakemuksella on keskeneräinen muutosilmoitus.",
-      "sentText": "Hakemukselle on tehty muutosilmoitus, joka on lähetetty käsittelyyn {{date}}"
+      "sentText": "Hakemukselle on tehty muutosilmoitus, joka on lähetetty käsittelyyn {{date}}",
+      "cancelSuccessLabel": "Muutosilmoitus peruttiin",
+      "cancelSuccessText": "Muutosilmoitus peruttiin onnistuneesti"
     }
   },
   "hankeSidebar": {

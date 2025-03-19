@@ -223,3 +223,12 @@ export async function updateMuutosilmoitus(
   muutosilmoitus.applicationData = Object.assign(muutosilmoitus.applicationData, updates);
   return muutosilmoitus;
 }
+
+export async function cancelMuutosilmoitus(id: string) {
+  const hakemus = await readMuutosilmoitus(id);
+  const muutosilmoitus = hakemus?.muutosilmoitus;
+  if (!muutosilmoitus) {
+    throw new ApiError(`No muutosilmoitus with id ${id}`, 404);
+  }
+  hakemus.muutosilmoitus = null;
+}

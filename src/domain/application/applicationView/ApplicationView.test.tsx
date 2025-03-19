@@ -2132,5 +2132,35 @@ describe('Excavation notification application view', () => {
       expect(screen.getByText('newMail@test.com')).toBeInTheDocument();
       expect(screen.getByText('Uusi Laskutus Oy')).toBeInTheDocument();
     });
+
+    test('Should be able to cancel muutosilmoitus', async () => {
+      const application = cloneDeep(hakemukset[13]) as Application<KaivuilmoitusData>;
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('button', { name: 'Peru muutosilmoitus' }));
+      await user.click(await screen.findByRole('button', { name: /vahvista/i }));
+
+      expect(await screen.findByText('Muutosilmoitus peruttiin')).toBeInTheDocument();
+      expect(screen.getByText('Muutosilmoitus peruttiin onnistuneesti')).toBeInTheDocument();
+    });
+
+    test('Cancel muutosilmoitus button is not visible if muutosilmoitus field is null', async () => {
+      const application = cloneDeep(hakemukset[13]) as Application<KaivuilmoitusData>;
+      application.muutosilmoitus = null;
+      await setup(application);
+
+      expect(screen.queryByRole('button', { name: 'Peru muutosilmoitus' })).not.toBeInTheDocument();
+    });
+
+    test('Cancel muutosilmoitus button is not visible if user does not have permission', async () => {
+      server.use(
+        http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+          return HttpResponse.json<SignedInUser>(USER_VIEW);
+        }),
+      );
+      const application = cloneDeep(hakemukset[13]) as Application<KaivuilmoitusData>;
+      await setup(application);
+
+      expect(screen.queryByRole('button', { name: 'Peru muutosilmoitus' })).not.toBeInTheDocument();
+    });
   });
 });

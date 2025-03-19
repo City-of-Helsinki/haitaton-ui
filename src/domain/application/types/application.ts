@@ -270,7 +270,7 @@ export interface Application<T = JohtoselvitysData | KaivuilmoitusData> {
   valmistumisilmoitukset?: Valmistumisilmoitukset | null;
   taydennyspyynto?: Taydennyspyynto | null;
   taydennys?: Taydennys<T> | null;
-  muutosilmoitus?: Muutosilmoitus<T>;
+  muutosilmoitus?: Muutosilmoitus<T> | null;
 }
 
 export interface HankkeenHakemus {
@@ -286,7 +286,7 @@ export interface HankkeenHakemus {
     areas: ApplicationArea[] | KaivuilmoitusAlue[] | null;
   };
   paatokset?: { [key: string]: Paatos[] };
-  muutosilmoitus?: Muutosilmoitus<JohtoselvitysData | KaivuilmoitusData>;
+  muutosilmoitus?: Muutosilmoitus<JohtoselvitysData | KaivuilmoitusData> | null;
 }
 
 export interface ApplicationDeletionResult {
