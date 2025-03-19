@@ -839,282 +839,278 @@
         },
         "showTipsButton": "Näytä toimenpidevinkit",
         "titles": {
-          "PYORALIIKENNE": "Pyöräliikenteen toimenpiteet",
-          "AUTOLIIKENNE": "Autoliikenteen toimenpiteet",
-          "LINJAAUTOLIIKENNE": "Linja-autoliikenteen toimenpiteet",
-          "RAITIOLIIKENNE": "Raitioliikenteen toimenpiteet",
-          "MUUT": "Muut toimenpiteet"
+          "PYORALIIKENNE": "Pyöräliikennettä koskevat toimenpidevinkit",
+          "AUTOLIIKENNE": "Autoliikennettä koskevat toimenpidevinkit",
+          "LINJAAUTOLIIKENNE": "Linja-autojen paikallisliikennettä koskevat toimenpidevinkit",
+          "RAITIOLIIKENNE": "Raitioliikennettä koskevat toimenpidevinkit",
+          "MUUT": "Päästöille yhteiset toimenpidevinkit",
+          "MELU": "Meluhaittaa koskevat toimenpidevinkit",
+          "POLY": "Pölyhaittaa koskevat toimenpidevinkit",
+          "TARINA": "Tärinää koskevat toimenpidevinkit"
         },
         "PYORALIIKENNE": [
           {
+            "heading": "Pääreittien ja priorisoitujen reittien toimivuus",
             "tip": "Tarkista vaikutukset pyöräliikenteen pääreitteihin ja priorisoituihin reitteihin ja varmista näiden toimivuus. Varmista, että laatutasotavoitteet toteutuvat tilapäisissä järjestelyissä.",
             "indexTreshold": 5
           },
           {
+            "heading": "Pääverkolla olevien töiden ajoitus",
             "tip": "Valmistaudu töiden tekemiseen ruuhka-ajan ulkopuolella priorisoidulla pyöräverkolla sekä pyöräilyn pääreiteillä, mikäli tämä tulee ilmoituksen/hakemuksen päätöksessä määräykseksi. Rajoitus toteutetaan arkisin klo 6-9 ja 15-18.",
             "indexTreshold": 5
           },
           {
-            "tip": "Pyöräliikenteeseen kohdistuvien toimenpiteiden priorisoitu järjestys: 1. Ei muutoksia pyöräliikenteen järjestelyihin / pyörätien suojaaminen työmaalta; 2. Pyöräliikenteen järjestelyn tilapäinen siirto poikkileikkauksessa; 3. Pyöräliikenteen järjestelyn tilapäinen kaventaminen; 4. Kulkumuotojen yhdistäminen samalle väylälle (ks. kohta kulkumuotojen erottelu); 5. Pyöräliikenteen tilapäinen siirto ajoradan vastakkaiselle puolelle; 6. Pyöräliikenteen tilapäinen siirto eri reitille"
+            "heading": "Pyöräliikenteeseen kohdistuvien toimenpiteiden priorisoitu järjestys",
+            "tip": "Pyöräliikenteeseen kohdistuvien toimenpiteiden priorisoitu järjestys on seuraavan listan mukainen. Pääreiteillä pitäydytään lähtökohtaisesti ensimmäisessä toimenpiteessä: <ol><li>Ei muutoksia pyöräliikenteen järjestelyihin / pyörätien suojaaminen työmaalta</li><li>Pyöräliikenteen järjestelyn tilapäinen siirto poikkileikkauksessa</li><li>Pyöräliikenteen järjestelyn tilapäinen kaventaminen</li><li>Kulkumuotojen yhdistäminen samalle väylälle (ks. kohta kulkumuotojen erottelu)</li><li>Pyöräliikenteen tilapäinen siirto ajoradan vastakkaiselle puolelle</li><li>Pyöräliikenteen tilapäinen siirto eri reitille</li></ol>"
           },
           {
-            "tip": "Suunnittele ja toteuta pyöräliikenteen tilapäiset järjestelyt lähtökohtaisesti alkuperäisten pysyvien järjestelyiden (esim. yksisuuntaiset pyörätiet/-kaistat tai kaksisuuntainen pyörätie) mukaisesti. Pyri säilyttämään jalankulusta eroteltu pyöräliikenteen ratkaisu, jos sellainen on nykytilassa. Kun autoliikenteen määrä ylittää 7000 ajoneuvoa vuorokaudessa, tulee pyöräliikenne yleensä erotella myös autoliikenteestä. Pyöräliikenteen pääreiteillä erottelu on tarpeen harkita vähäisemmilläkin autoliikenteen liikennemäärillä. Vain 1-suuntaisia pyöräliikenteen järjestelyitä on mahdollista esittää korvattavaksi työmaan kohdalla sekaliikenneratkaisulla, jolloin kadulle osoitetaan 30 km/h nopeusrajoitus."
+            "heading": "Pyöräliikenteen erottelu muista kulkumuodoista",
+            "tip": "Suunnittele ja toteuta pyöräliikenteen tilapäiset järjestelyt lähtökohtaisesti alkuperäisten pysyvien järjestelyiden (esim. yksisuuntaiset pyörätiet/-kaistat tai kaksisuuntainen pyörätie) mukaisesti. Pyri säilyttämään jalankulusta eroteltu pyöräliikenteen ratkaisu, jos sellainen on nykytilassa. Kun autoliikenteen määrä ylittää 7000 ajoneuvoa vuorokaudessa, tulee pyöräliikenne yleensä erotella myös autoliikenteestä. Pyöräliikenteen pääreiteillä erottelu on tarpeen harkita vähäisemmilläkin autoliikenteen liikennemäärillä. Vain 1-suuntaisia pyöräliikenteen järjestelyitä on mahdollista esittää korvattavaksi työmaan kohdalla sekaliikenneratkaisulla, jolloin kadulle osoitetaan 30 km/h nopeusrajoitus.",
+            "cardLinks": [4]
           },
           {
-            "tip": "Suunnittele ja toteuta pyöräliikenteen tilapäiset risteysjärjestelyt erityisesti liikennevalo-ohjatuissa liittymissä eri ajosuuntien toimivuuden, mutta erityisesti vasemmalle kääntymisen sekä näkemien ja valaistuksen osalta."
+            "heading": "Risteysjärjestelyt",
+            "tip": "Suunnittele ja toteuta pyöräliikenteen tilapäiset risteysjärjestelyt erityisesti liikennevalo-ohjatuissa liittymissä eri ajosuuntien toimivuuden, mutta erityisesti vasemmalle kääntymisen sekä näkemien ja valaistuksen osalta.",
+            "cardLinks": [4]
           },
           {
-            "tip": "Suunnittele ja toteuta selkeä pyöräliikenteen erikseen huomioon ottava ja turvallisesti asennettu opastus kiertoreitille. Määrittele pyöräliikenteen vaikutukset ja tarvittavat muut toimenpiteet kiertoreitille."
+            "heading": "Kiertoreitit",
+            "tip": "Suunnittele ja toteuta selkeä pyöräliikenteen erikseen huomioon ottava ja turvallisesti asennettu opastus kiertoreitille. Määrittele pyöräliikenteen vaikutukset ja tarvittavat muut toimenpiteet kiertoreitille.",
+            "cardLinks": [5]
           },
           {
+            "heading": "Saavutettavuus",
             "tip": "Suunnittele ja toteuta pyöräliikenteen saavutettavuus eri osoitteisiin, palveluihin ym."
           },
           {
-            "tip": "Selvitä mahdollisen kaupunkipyöräaseman tai muun merkittävän pyöräpysäköinnin siirtotarpeet. Sovi kaupunkipyöräasemien muutostarpeista Kaupunkiliikenne Oy:n (<0>urakoitsijaohjeistus@kaupunkiliikenne.fi</0>) kanssa ja merkittävien pyöräpysäköintialueiden osalta Kaupunkiympäristön toimialan liikennesuunnittelun (<1>kaupunkiymparisto@hel.fi</1>, asiakaspalvelu puh. 09 310 22111) kanssa.",
-            "links": [
-              "mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi",
-              "mailto:kaupunkiymparisto@hel.fi"
-            ]
+            "heading": "Pyöräpysäköinti",
+            "tip": "Selvitä mahdollisen kaupunkipyöräaseman tai muun merkittävän pyöräpysäköinnin siirtotarpeet. Sovi kaupunkipyöräasemien muutostarpeista Kaupunkiliikenne Oy:n (<mailto href=\"mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi\">urakoitsijaohjeistus@kaupunkiliikenne.fi</mailto>) kanssa ja merkittävien pyöräpysäköintialueiden osalta Kaupunkiympäristön toimialan liikennesuunnittelun (<mailto href=\"mailto:kaupunkiymparisto@hel.fi\">kaupunkiymparisto@hel.fi</mailto>, asiakaspalvelu puh. 09 310 22111) kanssa. Lähelle poistettua pyörätelinetta sijoittamaasi väliaikaiseen telineeseen tulee mahtua yhtä monta pyörää, kuin poistettuun telineeseen."
           },
           {
-            "tip": "Tiedota merkittävistä töistä ja mahdollisista pyöräliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen uusien järjestelyiden toteutusta (yleiset tiedotteet, paikalliset tiedotteet). Merkitse kiertoreitti maastoon ennen työn aloittamista."
+            "heading": "Ennakkotiedotus ja tiedotus muutoksista",
+            "tip": "Tiedota merkittävistä töistä ja mahdollisista pyöräliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen uusien järjestelyiden toteutusta (yleiset tiedotteet, paikalliset tiedotteet). Merkitse kiertoreitti maastoon ennen työn aloittamista. Tiedota eri osapuolille mahdollisista muutoksista reiteissä hyvissä ajoin ennen uusien järjestelyiden toteutusta.",
+            "cardLinks": [1]
           },
           {
-            "tip": "Toteuta heti ensimmäiseksi pyöräliikenteen suojaus työalueesta kaiteilla ja sulkulaitteilla."
+            "heading": "Pyöräliikenteen suojaus työmaasta",
+            "tip": "Toteuta heti ensimmäiseksi pyöräliikenteen suojaus työalueesta kaiteilla ja sulkulaitteilla.",
+            "cardLinks": [6, 7]
           },
           {
-            "tip": "Toteuta pyöräteiden talvikunnossapito (mm. lumien poisto, liukkaudentorjunta) työn kohdalla."
+            "heading": "Kunnossapito",
+            "tip": "Jos työsi estää normaalin pyöräteiden koneellisen kunnossapidon yleisillä alueilla, toteuta työn kohdalla laadukas kunnossapito (mm. puhtaus, lumien poisto, liukkaudentorjunta, ajotilan ja näkemien säilyttäminen)."
           },
           {
-            "tip": "Toteuta ja ylläpidä kovat ja puhtaat pyöräteiden pinnat (väliaikainen päällyste) sekä luiskatut tasovaihdot."
+            "heading": "Pyöräteiden pinnanlaatu",
+            "tip": "Toteuta ja ylläpidä kovat ja puhtaat pyöräteiden pinnat (väliaikainen päällyste) sekä luiskatut tasovaihdot.",
+            "cardLinks": [2]
           },
+
           {
-            "tip": "Tiedota eri osapuolille työstä sekä mahdollisista muutoksista reiteissä hyvissä ajoin ennen uusien järjestelyiden toteutusta (yleiset tiedotteet, paikalliset tiedotteet)."
-          },
-          {
-            "tip": "Tarkista suunnittelemiesi ratkaisujen ohjeidenmukaisuus: <0>https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf</0>",
-            "links": [
-              "https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf"
-            ]
+            "heading": "Pyöräliikenteen reittien työnaikaisten järjestelyiden ohjeet",
+            "tip": "Tarkista suunnittelemiesi ratkaisujen ohjeidenmukaisuus: <external href=\"https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf\">https://www.hel.fi/static/hkr/luvat/pyoraliikenteen_tyomaaohje.pdf</0>"
           }
         ],
         "AUTOLIIKENNE": [
           {
-            "tip": "Tutki ajokaistoihin vaikuttavien hankkeiden yhteisvaikutuksia ja ajoitusta liikenteen mallinnuksen avulla. Määrittele myös vaikutukset linja-autoliikenteeseen. Selvitä vaatimuksia hankkeelle sekä tutki tarvittaessa kiertoreittimahdollisuuksia.",
+            "heading": "Autoliikenteen laaja-alainen vaikutusten arviointi",
+            "tip": "Tutki ajokaistoihin vaikuttavien hankkeiden yhteisvaikutuksia ja ajoitusta hankkeen varhaisessa vaiheessa esimerkiksi liikenteen laaja-alaisen mallinnuksen avulla. Määrittele myös vaikutukset linja-autoliikenteeseen. Selvitä vaatimuksia hankkeelle sekä tutki tarvittaessa kiertoreittimahdollisuuksia.",
             "indexTreshold": 4
           },
           {
-            "tip": "Tutki ajokaistoihin vaikuttavan hankkeesi vaikutuksia, ajoitusta ja toimenpiteitä liikenteen mallinnuksen ja simuloinnin avulla. Määrittele ja suunnittele toimenpiteet haittojen minimoimiseksi ottaen huomioon myös muut alueella olevat hankkeet.",
+            "heading": "Autoliikenteen paikallisten vaikutusten arviointi",
+            "tip": "Tutki ajokaistoihin vaikuttavan hankkeesi vaikutuksia, ajoitusta ja toimenpiteitä esimerkiksi paikallistenliikenteen toimivuustarkasteluiden avulla. Määrittele ja suunnittele toimenpiteet autoliikenteen haittojen minimoimiseksi ottaen huomioon myös muut alueella olevat hankkeet ja toiminnot.",
             "indexTreshold": 4
           },
           {
-            "tip": "Suunnittele työt tehtäväksi ja toteuta ne lähtökohtaisesti ruuhka-ajan ulkopuolella (arkisin klo 6-9 ja klo 15-18 sekä satamareiteillä päivittäin klo 10-10.30).",
+            "heading": "Työaikarajoitukset",
+            "tip": "Suunnittele pää- ja kokoojakatujen työt tehtäväksi ja toteuta ne lähtökohtaisesti ruuhka-ajan ulkopuolella (arkisin klo 6–9 ja klo 15-18 sekä satamareiteillä päivittäin klo 10-10.30).",
             "indexTreshold": 4
           },
           {
-            "tip": "Selvitä ja toimeenpane liikkumisen ohjauksen keinoja autoliikenteen määrän vähentämiseksi hankkeen vaikutusalueella."
+            "heading": "Liikkumisen ohjaus",
+            "tip": "Selvitä ja toimeenpane liikkumisen ohjauksen keinoja autoliikenteen määrän vähentämiseksi hankkeen vaikutusalueella. Näitä voivat olla esimerkiksi ohjaaminen eri kulkumuotoihin tai liikkumisen ajoittamiseen ruuhka-ajan ulkopuolelle."
           },
           {
-            "tip": "Suunnittele ajoissa mahdolliset autoliikenteen kiertoreitit, niiden opastus sekä tarvittavat liikennevalojen muutokset."
+            "heading": "Kiertoreitit",
+            "tip": "Suunnittele ajoissa mahdolliset autoliikenteen kiertoreitit, niiden opastus sekä tarvittavat liikennevalojen muutokset. Suunnittele ajoissa toimivat järjestelyt ja/tai kiertoreitit myös raskaalle liikenteelle, huoltoliikenteelle ja jakeluliikenteelle."
           },
           {
-            "tip": "Tarkista, onko hankkeesi satamaliikenteen reitillä (<0>Pysäköinti ja ajoreittikartat</0>) Jos on, suunnittele työt tehtäväksi autoliikenteen ruuhka-ajan ulkopuolella (arkisin klo 6-9 ja klo 15-18 sekä satamareiteillä päivittäin klo 10-10.30).",
-            "links": [
-              "https://www.portofhelsinki.fi/yhteystiedot/kartat/pysakointi-ja-ajoreittikartat/)."
-            ]
+            "heading": "Satamaliikenteen reitit",
+            "tip": "Tarkista, onko hankkeesi satamaliikenteen reitillä (<external href=\"https://www.portofhelsinki.fi/yhteystiedot/kartat/pysakointi-ja-ajoreittikartat/\">Pysäköinti ja ajoreittikartat <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>) Jos on, suunnittele työt tehtäväksi autoliikenteen ruuhka-ajan ulkopuolella (arkisin klo 6-9 ja klo 15-18 sekä satamareiteillä päivittäin klo 10-10.30)."
           },
           {
-            "tip": "Suunnittele ajoissa raskaalle liikenteelle, huoltoliikenteelle ja jakeluliikenteelle toimivat järjestelyt ja/tai kiertoreitit."
+            "heading": "Ajokaistojen lukumäärä",
+            "tip": "Selvitä ajokaistojen lukumäärän säilyttämistarve ottamalla yhteyttä Kaupunkiympäristön toimialan liikennesuunnitteluun (<mailto href=\"mailto:luvat@hel.fi\">luvat@hel.fi</mailto>, asiakaspalvelu puh. 09 310 22111) suunnitteluvaiheessa"
           },
           {
-            "tip": "Selvitä ajokaistojen lukumäärän säilyttämistarve ottamalla yhteyttä Kaupunkiympäristön toimialan liikennesuunnitteluun (<0>kaupunkiymparisto@hel.fi</0>, asiakaspalvelu puh. 09 310 22111) suunnitteluvaiheessa",
-            "links": [
-              "mailto:kaupunkiymparisto@hel.fi"
-            ]
+            "heading": "Liikennevalot",
+            "tip": "Suunnittele ja varmista liikennevalojen toimivuus työn aluetta laajemmin (esim. liikennevaloliittymien tilapäiset kaistamuutokset työalueelle tultaessa, ilmaisimien sijainti ja toimivuus tilapäisissä järjestelyissä, kiertoreittien liikennevalot). Ole näiden osalta yhteydessä pääkaupunkiseudun liikenteenhallintakeskukseen (<mailto href=\"mailto:liikenteenhallintakeskus@hel.fi\">liikenteenhallintakeskus@hel.fi</mailto>, p. 09 310 37555). Ole yhteydessä liikenteenhallintakeskukseen myös tilapäisten liikennevalojen tarpeesta."
           },
           {
-            "tip": "Suunnittele ja varmista liikennevalojen toimivuus työn aluetta laajemmin (esim. liikennevaloliittymien tilapäiset kaistamuutokset työalueelle tultaessa, ilmaisimien sijainti ja toimivuus tilapäisissä järjestelyissä, kiertoreittien liikennevalot). Ole näiden osalta yhteydessä pääkaupunkiseudun liikenteenhallintakeskukseen (<0>liikenteenhallintakeskus@hel.fi</0>, p. 09 310 37555). Ole yhteydessä liikenteenhallintakeskukseen myös tilapäisten liikennevalojen tarpeesta.",
-            "links": [
-              "mailto:liikenteenhallintakeskus@hel.fi"
-            ]
+            "heading": "Linja-autojen kauko- ja turistiliikenne",
+            "tip": "Ota yhteyttä Linja-autoliittoon (<external href=\"https://www.linja-autoliitto.fi/yhteystiedot/\">Yhteystiedot – Linja-autoliitto <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external> <mailto href=\"mailto:etunimi.sukunimi@linja-autoliitto.fi\">etunimi.sukunimi@linja-autoliitto.fi</mailto>), mikäli hankkeesi sijoittuu merkittävälle kauko- tai turistiliikenteen reitille tai alueelle."
           },
           {
-            "tip": "Ota yhteyttä Linja-autoliittoon (<0>Yhteystiedot – Linja-autoliitto</0> <1>etunimi.sukunimi@linja-autoliitto.fi</1>), mikäli hankkeesi sijoittuu merkittävälle kauko- tai  turistiliikenteen reitille tai alueelle.",
-            "links": [
-              "https://www.linja-autoliitto.fi/yhteystiedot/",
-              "mailto:etunimi.sukunimi@linja-autoliitto.fi"
-            ]
+            "heading": "Ennakkotiedotus ja tiedotus muutoksista",
+            "tip": "Tiedota merkittävistä töistä ja mahdollisista autoliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen toteutusta eri osapuolille (yleiset tiedotteet, paikalliset tiedotteet). Tiedota eri osapuolille mahdollisista muutoksista reiteissä hyvissä ajoin ennen uusien järjestelyiden toteutusta.",
+            "cardLinks": [1]
           },
           {
-            "tip": "Tiedota merkittävistä töistä ja mahdollisista autoliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen toteutusta eri osapuolille (yleiset tiedotteet, paikalliset tiedotteet)."
+            "heading": "Opastus",
+            "tip": "Toteuta ja ylläpidä ennakko-opastus lähestymissuunnilta vaihtoehtoisille tai suunnitelluille ajoreiteille. Huomioi opasteita suunniteltaessa niiden sijaintipaikoissa nopeusrajoitus (opasteen tekstikoko)."
           },
           {
-            "tip": "Toteuta ja ylläpidä ennakko-opastus lähestymissuunnilta vaihtoehtoisille ajoreiteille."
+            "heading": "Ajonopeuden rajoittaminen",
+            "tip": "Rajoita ajonopeutta työalueen läheisyydessä erityisesti päiväkotien, koulujen, puistojen, vanhainkotien ja vammaispalveluiden lähellä. Käytä tarvittaessa autoilijoiden nopeusnäyttöjä hymiötoiminnolla. Sijainnit katselmoidaan työmaalla. Huomioi myös rajoituksen päättäminen työmaan jälkeen."
           },
           {
-            "tip": "Rajoita ajonopeutta työalueen läheisyydessä."
+            "heading": "Kulkumuotojen erottelu",
+            "tip": "Älä ohjaa jalankulkijoita ajoradalle, ellei jalankulkijoille ole rajattu omaa turvallista ja riittävän leveää kulkuväylää ajoradalta. Älä ohjaa pyöräliikennettä ajoradalle autoliikenteen sekaan, paitsi perustelluissa tilanteissa (ks. pyöräliikenteen toimenpidevinkit).",
+            "cardLinks": [3, 4]
           },
           {
-            "tip": "Älä ohjaa jalankulkijoita ajoradalle, ellei niille ole rajattu omaa kulkuväylää ajoradalta."
-          },
-          {
-            "tip": "Alä ohjaa pyöräliikennettä ajoradalle autoliikenteen sekaan, paitsi perustelluissa tilanteissa (ks. pyöräliikenteen toimenpidevinkit)."
-          },
-          {
+            "heading": "Ajoratapäällysteet ja -merkinnät",
             "tip": "Toteuta ja ylläpidä työn kohdalla tasalaatuinen ajoratapäällyste sekä ajantasaiset kaistanvaihtomerkinnät, muut ajoratamerkinnät ja liikenteenohjauslaitteet."
           },
           {
-            "tip": "Toteuta työn kohdalla laadukas talvikunnossapito (mm. lumien poisto, liukkaudentorjunta, ajotilan ja näkemien säilyttäminen)."
+            "heading": "Kunnossapito",
+            "tip": "Jos työsi estää normaalin koneellisen kunnossapidon yleisillä alueilla, toteuta työn kohdalla laadukas kunnossapito (mm. puhtaus, lumien poisto, liukkaudentorjunta, ajotilan ja näkemien säilyttäminen)."
           }
         ],
         "LINJAAUTOLIIKENNE": [
           {
-            "tip": "Tarkista, vaikuttaako hankkeesi merkittävään HSL:n linja-autoreittiin. Sovi aikaisessa vaiheessa hankkeen aiheuttamista linja-autoliikennettä koskevista toimenpidetarpeista HSL:n kanssa (<0>infra@hsl.fi</0>).",
-            "links": [
-              "mailto:infra@hsl.fi"
-            ]
+            "heading": "Hankkeen vaikutus linja-autojen paikallisliikenteen reitteihin",
+            "tip": "Tarkista, vaikuttaako hankkeesi merkittävään HSL:n linja-autoreittiin. Sovi aikaisessa vaiheessa hankkeen aiheuttamista linja-autoliikennettä koskevista toimenpidetarpeista HSL:n kanssa (<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>).",
+            "indexTreshold": 4
           },
           {
-            "tip": "Suunnittele työt tehtäväksi ja toteuta ne lähtökohtaisesti ruuhka-ajan (klo 6-9, klo 15-18) ulkopuolella."
+            "heading": "Työaikarajoitukset",
+            "tip": "Suunnittele työt tehtäväksi ja toteuta ne lähtökohtaisesti ruuhka-ajan (klo 6-9, klo 15-18) ulkopuolella.",
+            "indexTreshold": 4
           },
           {
-            "tip": "Ota yhteyttä HSL:ään (<0>infra@hsl.fi</0>) suunnitteluvaiheessa hankkeesi sijaitessa HSL:n linja-autoliikenteen reitillä sekä määrittele, aiheuttaako hankkeesi HSL:n linja-autoliikenteelle haittaa, kuten kaistojen vähentymistä, viivytyksiä, matka-ajan pidentymistä, reittimuutoksia, pysäkkimuutoksia ym. Suunnittele ajoissa mahdolliset linja-autoliikenteen kiertoreitit ja niiden opastus sekä tarvittavat joukkoliikenne-etuudet. Varmista reitin toimivuus HSL:n sekä valo-ohjauksen osalta pääkaupunkiseudun liikenteenhallintakeskuksen (<1>liikenteenhallintakeskus@hel.fi</1>, p. 09 310 37555) kanssa (myös tilapäinen valo-ohjaus).",
-            "links": [
-              "mailto:infra@hsl.fi",
-              "mailto:liikenteenhallintakeskus@hel.fi"
-            ]
+            "heading": "Ennakkoon tehtävät yhteydenotot ja sovittavat liikennöintijärjestelyt",
+            "tip": "<p>Ota yhteyttä HSL:ään (<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>) suunnitteluvaiheessa hankkeesi sijaitessa HSL:n linja-autoliikenteen reitillä sekä määrittele, aiheuttaako hankkeesi HSL:n linja-autoliikenteelle haittaa, kuten kaistojen vähentymistä, viivytyksiä, matka-ajan pidentymistä, reittimuutoksia, pysäkkimuutoksia ym. Suunnittele ajoissa mahdolliset linja-autoliikenteen kiertoreitit ja niiden opastus sekä tarvittavat joukkoliikenne-etuudet. Varmista reitin toimivuus HSL:n sekä valo-ohjauksen osalta pääkaupunkiseudun liikenteenhallintakeskuksen (<mailto href=\"mailto:liikenteenhallintakeskus@hel.fi\">liikenteenhallintakeskus@hel.fi</mailto>, p. 09 310 37555) kanssa (myös tilapäinen valo-ohjaus). Sovi tarvittaessa HSL:n kanssa koeajo liikenteen sujuvuuden varmistamiseksi.</p><br><p>Jos työmaa on bussin päätepysäkillä tai se estää bussiliikenteen kyseisellä kadulla, ota yhteyttä vähintään 2,5 kuukautta ennen töiden alkua. Jos työmaa ei ole akuutti, esimerkiksi putkirikosta johtuva, ota yhteyttä vähintään 2 viikkoa ennen töiden alkua. Lisätietoa: <external href=\"https://www.hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>.</p>",
+            "cardLinks": [8]
           },
           {
-            "tip": "Jos työmaa on bussin päätepysäkillä tai se estää bussiliikenteen kyseisellä kadulla, ota yhteyttä vähintään 2,5 kuukautta ennen töiden alkua. Jos työmaa ei ole akuutti, esimerkiksi putkirikosta johtuva, ota yhteyttä vähintään 2 viikkoa ennen töiden alkua. Lisätietoa: <0>Urakoitsija - ota joukkoliikenne huomioon työmaalla</0>.",
-            "links": [
-              "http://hsl.fi/hsl/urakoitsijat"
-            ]
+            "heading": "Pysäkkijärjestelyt ja kulku pysäkeille",
+            "tip": "Toteuta esteetön pääsy nykyisille pysäkeille tai suunnittele ja toteuta pysäkkien siirtäminen, opastus ja esteettömät jalankulkuyhteydet. Raitio- ja linja-autopysäkkejä ei saa siirtää tai poistaa käytöstä ilman HSL:n lupaa (<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>). Lisätietoa: <external href=\"https://www.hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>.",
+            "cardLinks": [8]
           },
           {
-            "tip": "Toteuta esteetön pääsy nykyisille pysäkeille tai suunnittele ja toteuta pysäkkien siirtäminen, opastus ja esteettömät jalankulkuyhteydet. Raitio- ja linja-autopysäkkejä ei saa siirtää tai poistaa käytöstä ilman HSL:n lupaa (<0>infra@hsl.fi</0>). Lisätietoa: <1>Urakoitsija - ota joukkoliikenne huomioon työmaalla</1>.",
-            "links": [
-              "mailto:infra@hsl.fi",
-              "http://hsl.fi/hsl/urakoitsijat"
-            ]
+            "heading": "Ennakkotiedotus ja tiedotus muutoksista",
+            "tip": "Tiedota merkittävistä töistä ja mahdollisista bussiliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen toteutusta eri osapuolille (yleiset tiedotteet, paikalliset tiedotteet). Tiedota eri osapuolille mahdollisista muutoksista reiteissä hyvissä ajoin ennen uusien järjestelyiden toteutusta.",
+            "cardLinks": [1]
           },
           {
-            "tip": "Tiedota merkittävistä töistä ja mahdollisista bussiliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen toteutusta eri osapuolille (yleiset tiedotteet, paikalliset tiedotteet)."
-          },
-          {
+            "heading": "Opastus",
             "tip": "Toteuta ja ylläpidä ennakko-opastus lähestymissuunnilta vaihtoehtoisille ajoreiteille."
           },
           {
+            "heading": "Ajoratapäällysteet ja -merkinnät",
             "tip": "Toteuta ja ylläpidä työn kohdalla tasalaatuinen ajoratapäällyste sekä ajantasaiset kaistanvaihtomerkinnät, muut ajoratamerkinnät ja liikenteenohjauslaitteet."
           },
           {
-            "tip": "Toteuta työn kohdalla laadukas talvikunnossapito (mm. lumien poisto, liukkaudentorjunta, ajotilan ja näkemien säilyttäminen). Varmista erityisesti riittävät tilat bussien kääntymiseen liittymissä."
+            "heading": "Kunnossapito",
+            "tip": "Jos työsi estää normaalin koneellisen kunnossapidon yleisillä alueilla, toteuta työn kohdalla laadukas kunnossapito (mm. puhtaus, lumien poisto, liukkaudentorjunta, ajotilan ja näkemien säilyttäminen)."
           }
         ],
         "RAITIOLIIKENNE": [
           {
-            "tip": "Tarkista, vaikuttaako hankkeesi raitiotieverkkoon. Sovi aikaisessa vaiheessa hankkeen aiheuttamista raitiotieverkon toimenpidetarpeista HSL:n kanssa (liikennöinti: <0>infra@hsl.fi</0>) ja tarvittaessa Kaupunkiliikenne Oy:n (ratainfra ja järjestelmät: <1>urakoitsijaohjeistus@kaupunkiliikenne.fi</1>) kanssa.",
-            "links": [
-              "mailto:infra@hsl.fi",
-              "mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi"
-            ]
+            "heading": "Hankkeen vaikutus raitiotieliikenteeseen",
+            "tip": "Tarkista, miten hankkeesi vaikuttaa raitiotieverkkoon. Sovi aikaisessa vaiheessa hankkeen aiheuttamista raitiotieverkon toimenpidetarpeista HSL:n kanssa (liikennöinti: <mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>) ja tarvittaessa Kaupunkiliikenne Oy:n (ratainfra ja järjestelmät: <mailto href=\"mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi\">urakoitsijaohjeistus@kaupunkiliikenne.fi</mailto>) kanssa."
           },
           {
-            "tip": "Suunnittele työt tehtäväksi ja toteuta ne pääsääntöisesti raitioliikenteen liikennöintiajan ulkopuolella tai tee työt ruuhka-ajan (klo 6-9, klo 15-18) ulkopuolella.",
+            "heading": "Työaikarajoitukset",
+            "tip": "Suunnittele työt tehtäväksi ja toteuta ne pääsääntöisesti raitioliikenteen liikennöintiajan ulkopuolella mm. turvallisuussyistä. Raitiotien liikennöintihäiriöiden minimoimiseksi tee pakolliset työt ruuhka-ajan (klo 6-9, klo 15-18) ulkopuolella.",
             "indexTreshold": 5
           },
           {
-            "tip": "Arvioi ajoissa hankkeeseen liittyvien yksittäisten töiden ajankohdat ja ole ennakkoon yhteydessä HSL:ään (liikennöinti: <0>infra@hsl.fi</0>) ja Kaupunkiliikenne Oy:öön (ratainfra ja järjestelmät: <1>urakoitsijaohjeistus@kaupunkiliikenne.fi</1>), jotta mahdollisesti tarvittavia poikkeusjärjestelyitä voidaan koordinoida muiden poikkeusreittien kanssa. Suunnittele mahdolliset raitioliikenteen kiertoreitit ja joukkoliikenne-etuudet sekä varmista reitin toimivuus HSL:n, Kaupunkiliikenne Oy:n  sekä liikennevalojen osalta pääkaupunkiseudun liikenteenhallintakeskuksen (<2>liikenteenhallintakeskus@hel.fi</2>, p. 09 310 37555) kanssa.",
-            "links": [
-              "mailto:infra@hsl.fi",
-              "mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi",
-              "mailto:liikenteenhallintakeskus@hel.fi"
-            ]
+            "heading": "Ennakkoon tehtävät yhteydenotot ja sovittavat liikennöintijärjestelyt",
+            "tip": "<p>Arvioi ajoissa hankkeeseen liittyvien yksittäisten töiden ajankohdat ja ole ennakkoon yhteydessä HSL:ään (liikennöinti: <mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>) ja Kaupunkiliikenne Oy:öön (ratainfra ja järjestelmät: <mailto href=\"mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi\">urakoitsijaohjeistus@kaupunkiliikenne.fi</mailto>), jotta mahdollisesti tarvittavia poikkeusjärjestelyitä voidaan koordinoida muiden poikkeusreittien kanssa. Suunnittele mahdolliset raitioliikenteen kiertoreitit ja joukkoliikenne-etuudet sekä varmista reitin toimivuus HSL:n, Kaupunkiliikenne Oy:n  sekä liikennevalojen osalta pääkaupunkiseudun liikenteenhallintakeskuksen (<mailto href=\"mailto:liikenteenhallintakeskus@hel.fi\">liikenteenhallintakeskus@hel.fi</mailto>, p. 09 310 37555) kanssa.</p><br><p>Raitioliikenteen poikkeusreittien osalta tee ilmoitus HSL:lle enintään 3 vuorokauden töissä 8 viikkoa ennen töiden alkua ja yli 3 vuorokauden töissä 5 kuukautta ennen töiden alkua. Raitioliikennettä korvaavan bussiliikenteen tapauksessa tee ilmoitus HSL:lle enintään 3 vuorokauden töissä 3 kuukautta ennen töiden alkua ja yli 3 vuorokauden töissä 5 kuukautta ennen töiden alkua. Lisätietoja: <external href=\"https://www.hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external> sekä <external href=\"https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/\">Työt raitiotieradan läheisyydessä - Kaupunkiliikenne Oy <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external></p>",
+            "cardLinks": [8]
           },
           {
-            "tip": "Raitioliikenteen poikkeusreittien osalta tee ilmoitus HSL:lle enintään 3 vuorokauden töissä 8 viikkoa ennen töiden alkua ja yli 3 vuorokauden töissä 5 kuukautta ennen töiden alkua. Raitioliikennettä korvaavan bussiliikenteen tapauksessa tee ilmoitus HSL:lle enintään 3 vuorokauden töissä 3 kuukautta ennen töiden alkua ja yli 3 vuorokauden töissä 5 kuukautta ennen töiden alkua. Lisätietoja: <0>Urakoitsija - ota joukkoliikenne huomioon työmaalla</0> sekä <1>Työt raitiotieradan läheisyydessä - Kaupunkiliikenne Oy</1>",
-            "links": [
-              "http://hsl.fi/hsl/urakoitsijat",
-              "https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/"
-            ]
+            "heading": "Raitiotien rakenteet ja työskentely rata-alueen lähellä",
+            "tip": "Tarkista, joudutaanko raitiotien rakenteita (ml. rakennusten julkisivuissa olevat ajolankaripustukset) tai järjestelmiä tilapäisesti purkamaan tai siirtämään. Tarkista myös, joudutaanko työtä tekemään rata-alueen lähellä tai 2 m etäisyydellä ajojohtimista tai kannatinvaijereista (HUOM! Pikaraitiotiellä etäisyys 4 m). Jos joudutaan, sovi niistä HSL:n (liikennöinti: <mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>) sekä Kaupunkiliikenne Oy:n (ratainfra ja järjestelmät: <mailto href=\"mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi\">urakoitsijaohjeistus@kaupunkiliikenne.fi</mailto>) kanssa. Lisätietoja: <external href=\"https://hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external> sekä täytettävä lomake <external href=\"https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/\">Työt raitiotieradan läheisyydessä - Kaupunkiliikenne Oy <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external> (Työskentely kiskoalueella tai Työskentelu pikaratikka 15 -rata-alueella)."
           },
           {
-            "tip": "Tarkista, joudutaanko raitiotien rakenteita (ml. rakennusten julkisivuissa olevat ajolankaripustukset) tai järjestelmiä tilapäisesti purkamaan tai siirtämään. Tarkista myös, joudutaanko työtä tekemään rata-alueen lähellä tai 2 m etäisyydellä ajojohtimista tai kannatinvaijereista (HUOM! Pikaraitiotiellä etäisyys 4 m). Jos joudutaan, sovi niistä HSL:n (liikennöinti: <0>infra@hsl.fi</0>) sekä Kaupunkiliikenne Oy:n (ratainfra ja järjestelmät: <1>urakoitsijaohjeistus@kaupunkiliikenne.fi</1>) kanssa. Lisätietoja: <2>Urakoitsija - ota joukkoliikenne huomioon työmaalla</2> sekä täytettävä lomake <3>Työt raitiotieradan läheisyydessä - Kaupunkiliikenne Oy</3> (Työskentely kiskoalueella tai Työskentelu pikaratikka 15 -rata-alueella).",
-            "links": [
-              "mailto:infra@hsl.fi",
-              "mailto:urakoitsijaohjeistus@kaupunkiliikenne.fi",
-              "http://hsl.fi/hsl/urakoitsijat",
-              "https://kaupunkiliikenne.fi/kaupunkiraidehankkeet-ja-kunnossapito/urakoitsijalle/tyot-raitiotieradan-laheisyydessa/"
-            ]
+            "heading": "Pysäkkijärjestelyt ja kulku pysäkeille",
+            "tip": "Toteuta esteetön pääsy nykyisille pysäkeille tai suunnittele ja toteuta pysäkkien siirtäminen, opastus ja esteettömät jalankulkuyhteydet. Raitio- ja linja-autopysäkkejä ei saa siirtää tai poistaa käytöstä ilman HSL:n lupaa (<mailto href=\"mailto:infra@hsl.fi\">infra@hsl.fi</mailto>). Lisätietoa: <external href=\"http://hsl.fi/hsl/urakoitsijat\">Urakoitsija - ota joukkoliikenne huomioon työmaalla <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>.",
+            "cardLinks": [8]
           },
           {
-            "tip": "Toteuta esteetön pääsy nykyisille pysäkeille tai suunnittele ja toteuta pysäkkien siirtäminen, opastus ja esteettömät jalankulkuyhteydet. Raitio- ja linja-autopysäkkejä ei saa siirtää tai poistaa käytöstä ilman HSL:n lupaa (<0>infra@hsl.fi</0>). Lisätietoa: <1>Urakoitsija - ota joukkoliikenne huomioon työmaalla</1>.",
-            "links": [
-              "mailto:infra@hsl.fi",
-              "http://hsl.fi/hsl/urakoitsijat"
-            ]
+            "heading": "Ennakkotiedotus ja tiedotus muutoksista",
+            "tip": "Tiedota merkittävistä töistä ja mahdollisista raitioliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen toteutusta eri osapuolille (yleiset tiedotteet, paikalliset tiedotteet). Tiedota eri osapuolille mahdollisista muutoksista reiteissä hyvissä ajoin ennen uusien järjestelyiden toteutusta.",
+            "cardLinks": [1]
           },
           {
-            "tip": "Tiedota merkittävistä töistä ja mahdollisista raitioliikenteen reittimuutoksista jo suunnitteluvaiheessa ja hyvissä ajoin ennen toteutusta eri osapuolille (yleiset tiedotteet, paikalliset tiedotteet)."
-          },
-          {
-            "tip": "Varmista toteutuksessa, että raitioteiden liikennevalo-ohjaus toimii työnaikaisesti."
+            "heading": "Liikennevalo-ohjaus",
+            "tip": "Varmista toteutuksessa, että raitioteiden liikennevalo-ohjaus toimii työnaikaisesti. Sovi valo-ohjauksen muutoksista pääkaupunkiseudun liikenteenhallintakeskuksen (<mailto href=\"liikenteenhallintakeskus@hel.fi\">liikenteenhallintakeskus@hel.fi</mailto>, p. 09 310 37555) kanssa."
           }
         ],
         "MUUT": [
           {
-            "tip": "Selvitä työsi melu-, pöly- tai tärinäpäästöjen vaikutusalue ja sillä olevat herkät toiminnot (asunnot, päiväkodit, koulut, tärkeät palvelut, kuten terveyspalvelut, liiketilat, ravintolaterassit, tutkimuslaitokset, luontokohteet, uskonnolliset laitokset ym.). "
+            "heading": "Päästöjen vaikutusalue ja herkät toiminnot",
+            "tip": "Selvitä työsi melu-, pöly- tai tärinäpäästöjen vaikutusalue ja sillä olevat herkät toiminnot (asunnot, päiväkodit, koulut, tärkeät palvelut, kuten terveyspalvelut, liiketilat, ravintolaterassit, tutkimuslaitokset, luontokohteet, uskonnolliset laitokset ym.). Sovi tarvittavista toimenpiteistä tunnistettujen herkkien kohteiden kanssa."
           },
           {
-            "tip": "Tiedota toimijoille ja kiinteistöille vähintään viikkoa ennen tai välittömästi töiden ajankohdan ollessa tiedossa, kun tehdään melu-, pöly- tai tärinähaittaa aiheuttavia töitä. Erittäin häiritsevästä työstä tulee tehdä ilmoitus viimeistään 30 vuorokautta ennen töiden aloittamista. Anna asukkaille ja eri toimijoille aikaa varautua etukäteen tiedossa oleviin häriöihin ja neuvottele erityisesti herkkien toimintojen lähellä haitoista toimijoiden kanssa."
+            "heading": "Ennakkotiedotus ja tiedotus muutoksista",
+            "tip": "Tiedota toimijoille ja kiinteistöille vähintään viikkoa ennen tai välittömästi töiden ajankohdan ollessa tiedossa, kun tehdään melu-, pöly- tai tärinähaittaa aiheuttavia töitä. Erittäin häiritsevästä työstä tulee tehdä ilmoitus viimeistään 30 vuorokautta ennen töiden aloittamista. Anna asukkaille ja eri toimijoille aikaa varautua etukäteen tiedossa oleviin häriöihin ja neuvottele erityisesti herkkien toimintojen lähellä haitoista toimijoiden kanssa.",
+            "cardLinks": [1]
           },
           {
-            "tip": "Selvitä työsi aikatauluttamisen ja työmenetelmien mahdollisuudet päästöhaittojen minimoimiseksi toiminnoille."
+            "heading": "Työn aikatauluttaminen ja työmenetelmät",
+            "tip": "Selvitä työsi aikatauluttamisen ja työmenetelmien mahdollisuudet päästöhaittojen minimoimiseksi toiminnoille.",
+            "cardLinks": [10]
+          }
+        ],
+        "MELU": [
+          {
+            "heading": "Meluilmoitus",
+            "tip": "Laadi meluilmoitus häiritsevästä melusta viimeistään 30 vuorokautta ennen toiminnan aloittamista: <external href=\"https://www.hel.fi/fi/yritykset-ja-tyo/yritykset-ja-yrittajat/yritysten-luvat-ja-tilat/ymparistolupa-ja-ilmoitukset/meluilmoitus\">Meluilmoitus <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>"
           },
           {
-            "tip": "Laadi meluilmoitus häiritsevästä melusta viimeistään 30 vuorokautta ennen toiminnan aloittamista: <0>Meluilmoitus</0>",
-            "links": [
-              "https://www.hel.fi/fi/yritykset-ja-tyo/yritykset-ja-yrittajat/yritysten-luvat-ja-tilat/ymparistolupa-ja-ilmoitukset/meluilmoitus"
-            ]
+            "heading": "Työaikarajoitukset",
+            "tip": "Asuin- ja majoitushuoneistojen sekä hoitolaitosten läheisyydessä et pääsääntöisesti saa harjoittaa erityisen häiritsevää melua aiheuttavaa toimintaa yöaikaan klo 22–7. Vältä meluavia töitäpäiväkotien läheisyydessä klo 12-14, koulujen läheisyydessä klo 8-15 sekä toimistojen läheisyydessä klo 9-15. Jaksota erityisen meluavat työt rajoitusten ulkopuolelle."
           },
           {
-            "tip": "Asuin- ja majoitushuoneistojen sekä hoitolaitosten läheisyydessä et pääsääntöisesti saa harjoittaa erityisen häiritsevää melua aiheuttavaa toimintaa yöaikaan klo 22–7."
+            "heading": "Melua vähentävät ratkaisut",
+            "tip": "Toteuta meluvaikutuksia vähentäviä ratkaisuja, kuten siirrettävä meluaita.",
+            "cardLinks": [10]
+          }
+        ],
+        "POLY": [
+          {
+            "heading": "Työmaavesien käsittely",
+            "tip": "Laadi työmaavesien käsittelysuunnitelma hyvissä ajoin osana työmaan suunnittelua (aluksi arvioi poistettavien vesien määrä ja laatu). Työmaavesien johtamisesta hulevesiverkostoon tulee sopia Helsingin Seudun Ympäristöpalveluihin (HSY) (<external href=\"https://yhteydenotto.hsy.fi/asiakaspalvelu\">https://yhteydenotto.hsy.fi/asiakaspalvelu <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>, puh. vaihde 09 1561 2110). Varmista HSY:n kanssa työmaavesien johtamisen verkostolliset vaikutukset mm. verkoston purkupään luontoarvoihin (esim. julkisivuremonttien pölyn hallitsematon päätyminen verkostoon). Lisätiedot: <external href=\"https://www.hsy.fi/vesi-ja-viemarit/tyomaavesien-viemarointiohje/\">Työmaavesien viemäröintiohje <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external> sekä <external href=\"https://www.hel.fi/static/ymk/esitteet/tyomaavesi.pdf\">https://www.hel.fi/static/ymk/esitteet/tyomaavesi.pdf <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>"
           },
           {
-            "tip": "Vältä meluavia töitä päiväkotien läheisyydessä  klo 12-14, koulujen läheisyydessä klo 8-15 sekä toimistojen läheisyydessä klo 9-15."
-          },
-          {
-            "tip": "Toteuta meluvaikutuksia vähentäviä ratkaisuja, kuten siirrettävä meluaita."
-          },
-          {
-            "tip": "Laadi työmaavesien käsittelysuunnitelma hyvissä ajoin osana työmaan suunnittelua (aluksi arvioi poistettavien vesien määrä ja laatu). Työmaavesien johtamisesta hulevesiverkostoon tulee sopia Helsingin Seudun Ympäristöpalveluihin (HSY) (<0>https://yhteydenotto.hsy.fi/asiakaspalvelu</0>, puh. vaihde 09 1561 2110). Varmista HSY:n kanssa työmaavesien johtamisen verkostolliset vaikutukset mm. verkoston purkupään luontoarvoihin (esim. julkisivuremonttien pölyn hallitsematon päätyminen verkostoon). Lisätiedot: <1>Työmaavesien viemäröintiohje</1> sekä <2>https://www.hel.fi/static/ymk/esitteet/tyomaavesi.pdf</2>",
-            "links": [
-              "https://yhteydenotto.hsy.fi/asiakaspalvelu,",
-              "https://www.hsy.fi/vesi-ja-viemarit/tyomaavesien-viemarointiohje/",
-              "https://www.hel.fi/static/ymk/esitteet/tyomaavesi.pdf"
-            ]
-          },
-          {
+            "heading": "Pesurin käyttö",
             "tip": "Käytä pesuria lähikaduille päivittäin, jos työalue on sora- tai irtomaa-ainespintainen. Estä ajoväylien pölyäminen esimerkiksi suolaliuoksella tai murskepinnalla. Käytä pesuria tarvittaessa myös työmaa-ajoneuvoihin."
           },
           {
+            "heading": "Pölyävien varastojen ja kuormien suojaaminen",
             "tip": "Kastele ja peitä varastoidut maa- ja kiviainekset sekä purkujätteet. Kastele ja peitä pölyävät kuormat kuljetettaessa niitä rakennustyömaan ulkopuolelle."
           },
           {
-            "tip": "Käytä pölynkeräyslaitteistoja avolouhinnan porauslaitteissa (alle 200 metrin päässä herkistä kohteista tai kun louheen kuljetusreitti sijaitsee pölylle herkkien kohteiden läheisyydessä)."
+            "heading": "Pölyn leviämisen estäminen",
+            "tip": "Suunnittele ja käytä pölyä aiheuttavissa työvaiheissa pölyn leviämistä estäviä toimia. Käytä pölynkeräyslaitteistoja avolouhinnan porauslaitteissa (alle 200 metrin päässä herkistä kohteista tai kun louheen kuljetusreitti sijaitsee pölylle herkkien kohteiden läheisyydessä). Estä ajoväylien pölyäminen esimerkiksi suolaliuoksella tai käytä työmaan sisäisinä ajoreitteinä tarvittaessa murskepintaisia väyliä."
           },
           {
-            "tip": "Tarkista ratkaisujesi ohjeidenmukaisuus: <0>https://www.hel.fi/static/ymk/esitteet/rakennustyomaapoly.pdf</0>",
-            "links": [
-              "https://www.hel.fi/static/ymk/esitteet/rakennustyomaapoly.pdf"
-            ]
+            "heading": "Rakennustyömaan pölyä koskevat ohjeet",
+            "tip": "Tarkista ratkaisujesi ohjeidenmukaisuus: <external href=\"https://www.hel.fi/static/ymk/esitteet/rakennustyomaapoly.pdf\">https://www.hel.fi/static/ymk/esitteet/rakennustyomaapoly.pdf <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>"
+          }
+        ],
+        "TARINA": [
+          {
+            "heading": "Melu- ja tärinäilmoitus",
+            "tip": "Laadi ilmoitus häiritsevästä (melusta ja) tärinästä viimeistään 30 vuorokautta ennen toiminnan aloittamista: <external href=\"https://www.hel.fi/fi/yritykset-ja-tyo/yritykset-ja-yrittajat/yritysten-luvat-ja-tilat/ymparistolupa-ja-ilmoitukset/meluilmoitus\">Meluilmoitus <span className=\"hds-icon icon hds-icon--link-external hds-icon--size-s vertical-align-medium-icon\" aria-hidden=\"true\"></span></external>"
           },
           {
-            "tip": "Laadi ilmoitus häiritsevästä (melusta ja) tärinästä viimeistään 30 vuorokautta ennen toiminnan aloittamista: <0>Meluilmoitus</0>",
-            "links": [
-              "https://www.hel.fi/fi/yritykset-ja-tyo/yritykset-ja-yrittajat/yritysten-luvat-ja-tilat/ymparistolupa-ja-ilmoitukset/meluilmoitus"
-            ]
-          },
-          {
+            "heading": "Maaperä ja työmenetelmät",
             "tip": "Tarkista maaperätiedot ja miten maaperä vaikuttaa tärinän leviämiseen. Suunnittele työmenetelmät siten, että tärinävaikutukset minimoituvat."
           }
         ]

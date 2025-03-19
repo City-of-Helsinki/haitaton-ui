@@ -315,6 +315,9 @@ export default function KaivuilmoitusHaittojenhallintaSuunnitelma({
             haittojenhallintasuunnitelma={hankeAlue?.haittojenhallintasuunnitelma}
           />
           <ProcedureTips haittojenhallintaTyyppi="MUUT" haittaIndex={0} />
+          <ProcedureTips haittojenhallintaTyyppi="MELU" haittaIndex={0} />
+          <ProcedureTips haittojenhallintaTyyppi="POLY" haittaIndex={0} />
+          <ProcedureTips haittojenhallintaTyyppi="TARINA" haittaIndex={0} />
         </Box>
         <Box mt="var(--spacing-m)">
           <TextArea

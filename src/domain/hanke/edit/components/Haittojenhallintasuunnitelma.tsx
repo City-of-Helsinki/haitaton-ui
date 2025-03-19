@@ -223,6 +223,9 @@ const HankkeenHaittojenhallintasuunnitelma: React.FC<Readonly<Props>> = ({ hanke
         />
         <Box mt="var(--spacing-s)">
           <ProcedureTips haittojenhallintaTyyppi="MUUT" haittaIndex={0} />
+          <ProcedureTips haittojenhallintaTyyppi="MELU" haittaIndex={0} />
+          <ProcedureTips haittojenhallintaTyyppi="POLY" haittaIndex={0} />
+          <ProcedureTips haittojenhallintaTyyppi="TARINA" haittaIndex={0} />
         </Box>
         <Box mt="var(--spacing-m)">
           <TextArea
