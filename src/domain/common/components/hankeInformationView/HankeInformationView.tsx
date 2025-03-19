@@ -42,7 +42,7 @@ function InformationViewContentContainer({
 }>) {
   return (
     <div
-      className={clsx(styles.contentContainer, {
+      className={clsx(styles.contentContainer, styles.paddingLeft, {
         [styles.contentContainer__hideSideBar]: hideSideBar,
       })}
     >
@@ -58,7 +58,7 @@ function InformationViewMainContent({
   children: React.ReactNode | React.ReactNode[];
   className?: string;
 }>) {
-  return <div className={clsx(styles.mainContent, styles.paddingLeft, className)}>{children}</div>;
+  return <div className={clsx(styles.mainContent, className)}>{children}</div>;
 }
 
 function InformationViewSidebar({
