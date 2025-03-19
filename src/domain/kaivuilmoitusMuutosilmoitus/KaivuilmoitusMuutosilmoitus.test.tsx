@@ -132,7 +132,7 @@ describe('Sending muutosilmoitus', () => {
   test('Should be able to send muutosilmoitus', async () => {
     const application = cloneDeep(hakemukset[13]) as Application<KaivuilmoitusData>;
     const { user } = setup({
-      application,
+      ...application,
       muutosilmoitus: {
         ...application.muutosilmoitus!,
         sent: null,
