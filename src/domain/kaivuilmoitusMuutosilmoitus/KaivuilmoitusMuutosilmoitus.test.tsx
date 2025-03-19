@@ -57,6 +57,21 @@ function setup(
         { status: responseStatus },
       );
     }),
+    http.post('/api/muutosilmoitukset/:id/laheta', async () => {
+      return HttpResponse.json<Application>(
+        {
+          ...application,
+          muutosilmoitus: {
+            ...muutosilmoitus,
+            sent: new Date(),
+          },
+        },
+        { status: responseStatus },
+      );
+    }),
+    http.delete('/api/muutosilmoitukset/:id', async () => {
+      return new HttpResponse(null, { status: responseStatus });
+    }),
   );
   return {
     ...render(
@@ -118,6 +133,7 @@ describe('Canceling muutosilmoitus', () => {
     const { user } = setup({
       application,
       muutosilmoitus: application.muutosilmoitus!,
+      responseStatus: 204,
     });
     await user.click(screen.getByRole('button', { name: /peru muutosilmoitus/i }));
     await user.click(await screen.findByRole('button', { name: /vahvista/i }));
