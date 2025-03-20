@@ -87,7 +87,7 @@ const ApplicationSendDialog: React.FC<Props> = ({
       : null;
     applicationSendMutation.mutate(
       {
-        id: isMuutosilmoitus ? (muutosilmoitus.id! as string) : (id as number),
+        id: isMuutosilmoitus ? muutosilmoitus.id : (id as number),
         paperDecisionReceiver: paperDecisionReceiver,
       },
       {
