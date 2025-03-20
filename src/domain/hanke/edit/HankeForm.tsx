@@ -22,7 +22,7 @@ import HankeFormLiitteet from './HankeFormLiitteet';
 import HankeFormSummary from './HankeFormSummary';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
-import { HankeContactTypeKey, HankeData, HankeYhteystieto } from '../../types/hanke';
+import { HankeContactTypeKey, HankeData, HankeYhteystieto, CONTACT_TYYPPI } from '../../types/hanke';
 import MultipageForm from '../../forms/MultipageForm';
 import FormActions from '../../forms/components/FormActions';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
@@ -320,34 +320,32 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
     changeStep: () => void,
     stepIndex: number,
   ) {
-      let hasInvalidId = false;
+    let hasInvalidId = false;
 
-      const contactTypes: HankeContactTypeKey[] = [
-        'omistajat' as HankeContactTypeKey,
-        'rakennuttajat' as HankeContactTypeKey,
-        'toteuttajat' as HankeContactTypeKey,
-      ];
+    const contactTypes: HankeContactTypeKey[] = [
+      'omistajat' as HankeContactTypeKey,
+      'rakennuttajat' as HankeContactTypeKey,
+      'toteuttajat' as HankeContactTypeKey,
+    ];
 
-      for (const contactType of contactTypes) {
-        const contacts = getValues(contactType);
+    for (const contactType of contactTypes) {
+      const contacts = getValues(contactType);
 
-        for (const contact of contacts) {
-          if ('ytunnus' in contact) {
-            // Type guard
-            const tunnus = (contact as HankeYhteystieto).ytunnus;
+      for (const contact of contacts) {
+        if ('ytunnus' in contact && contact.tyyppi !== CONTACT_TYYPPI.YKSITYISHENKILO) {
+          const tunnus = (contact as HankeYhteystieto).ytunnus;
 
-            // Check if Business ID is not present or is invalid
-            if (!tunnus || tunnus === '' || !isValidBusinessId(tunnus)) {
-              hasInvalidId = true;
-              break;
-            }
+          // Check if Business ID is not present or is invalid
+          if (!tunnus || tunnus === '' || !isValidBusinessId(tunnus)) {
+            hasInvalidId = true;
+            return;
           }
         }
-        if (hasInvalidId) break;
       }
-      // Only move to the next step if no invalid IDs were found
-      if (!hasInvalidId) {
-        return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger);
+    }
+    // Only move to the next step if no invalid IDs were found
+    if (!hasInvalidId) {
+      return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger);
     }
   }
 
