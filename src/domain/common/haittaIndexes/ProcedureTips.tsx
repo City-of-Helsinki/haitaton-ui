@@ -17,8 +17,6 @@ type Tip = {
  * Component for displaying list of procedure tips (toimenpidevinkit) for different haittojenhallinta types.
  */
 const ProcedureTips: React.FC<Props> = memo(({ haittojenhallintaTyyppi, haittaIndex }) => {
-  console.log('ProcedureTips render');
-
   const { t } = useTranslation();
 
   const { CARD } = useLocalizedRoutes();
