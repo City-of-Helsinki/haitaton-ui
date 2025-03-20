@@ -10,7 +10,7 @@ type Tip = {
   heading: string;
   tip: string;
   indexTreshold?: number;
-  cardLinks?: string[];
+  cardLinks?: number[];
 };
 
 /**
