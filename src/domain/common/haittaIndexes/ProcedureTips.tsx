@@ -2,30 +2,33 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Accordion, IconDocument, Link } from 'hds-react';
 import { Box } from '@chakra-ui/react';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
+import { memo, useMemo } from 'react';
 
 type Props = { haittojenhallintaTyyppi: string; haittaIndex: number };
+
+type Tip = {
+  heading: string;
+  tip: string;
+  indexTreshold?: number;
+  cardLinks?: string[];
+};
 
 /**
  * Component for displaying list of procedure tips (toimenpidevinkit) for different haittojenhallinta types.
  */
-export default function ProcedureTips({ haittojenhallintaTyyppi, haittaIndex }: Readonly<Props>) {
+const ProcedureTips: React.FC<Props> = memo(({ haittojenhallintaTyyppi, haittaIndex }) => {
+  console.log('ProcedureTips render');
+
   const { t } = useTranslation();
 
   const { CARD } = useLocalizedRoutes();
   const isOther = ['MUUT', 'MELU', 'POLY', 'TARINA'].includes(haittojenhallintaTyyppi);
 
-  const tips: {
-    // Procedure tip title
-    heading: string;
-    // Procedure tip text
-    tip: string;
-    // Index treshold for showing the tip (if undefined, show the tip always)
-    indexTreshold?: number;
-    // Links to procedure tip cards
-    cardLinks?: number[];
-  }[] = t(`hankeForm:haittojenHallintaForm:procedureTips:${haittojenhallintaTyyppi}`, {
-    returnObjects: true,
-  });
+  const tips: Tip[] = useMemo(() => {
+    return t(`hankeForm:haittojenHallintaForm:procedureTips:${haittojenhallintaTyyppi}`, {
+      returnObjects: true,
+    });
+  }, [t, haittojenhallintaTyyppi]);
 
   // If tip has indexTreshold, show the tip only if haittaIndex is greater or equal to the treshold,
   // so that the tip is shown only when the index is high enough.
@@ -122,4 +125,6 @@ export default function ProcedureTips({ haittojenhallintaTyyppi, haittaIndex }: 
       </Accordion>
     </Box>
   );
-}
+});
+
+export default ProcedureTips;
