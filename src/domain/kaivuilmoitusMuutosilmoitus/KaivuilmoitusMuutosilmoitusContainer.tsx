@@ -162,6 +162,7 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
     {
       element: (
         <ReviewAndSend
+          muutosilmoitus={muutosilmoitus}
           originalApplication={originalApplication}
           originalAttachments={originalAttachments ?? []}
           hankealueet={hankeData.alueet}
