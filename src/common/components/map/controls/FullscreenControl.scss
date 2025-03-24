@@ -6,10 +6,7 @@
   width: 50px;
   border-radius: 0;
 
-  &:hover {
-    color: var(--color-white);
-  }
-
+  &:hover,
   &:focus {
     color: var(--color-white);
   }
