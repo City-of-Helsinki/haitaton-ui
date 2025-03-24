@@ -7,9 +7,12 @@
     min-width: 21.875rem;
     background-color: var(--color-coat-of-arms-light);
     padding: var(--spacing-xs);
-    font-size: var(--fontsize-body-s);
-    line-height: var(--lineheight-xl);
-    font-weight: normal;
     border: 1px solid black;
+
+    p {
+      font-size: var(--fontsize-body-s);
+      line-height: var(--lineheight-xl);
+      font-weight: normal;
+    }
   }
 }
