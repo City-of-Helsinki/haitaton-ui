@@ -9,7 +9,6 @@ import VectorLayer from '../../../../common/components/map/layers/VectorLayer';
 import FitSource from '../interations/FitSource';
 import useHankealueFeature from '../../hooks/useHankealueFeature';
 import AddressSearchContainer from '../AddressSearch/AddressSearchContainer';
-import hankeDrawerStyles from '../HankeDrawer/HankeDrawer.module.scss';
 import Ortokartta from '../Layers/Ortokartta';
 import Controls from '../../../../common/components/map/controls/Controls';
 import LayerControl from '../../../../common/components/map/controls/LayerControl';
@@ -47,7 +46,7 @@ const HankealueMap: React.FC<Props> = ({
         <Map zoom={zoom} center={center} mapClassName={styles.mapContainer__inner}>
           <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} zIndex={1000} />
 
-          <OverviewMapControl className={hankeDrawerStyles.overviewMap} />
+          <OverviewMapControl />
 
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
           {mapTileLayers.ortokartta.visible && <Ortokartta opacity={ortoLayerOpacity} />}

@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 100;
+  z-index: 1;
   pointer-events: none;
 }
 
@@ -16,25 +16,18 @@
   border: 1px solid black;
 }
 
-.controlMenu {
-  background: var(--color-white);
-  padding: var(--spacing-s) var(--spacing-xs) var(--spacing-xs) var(--spacing-3-xs);
-  border: 2px solid var(--color-black-60) !important;
-
-  &__divider {
-    margin-top: var(--spacing-xs);
-    margin-bottom: var(--spacing-xs);
-  }
-}
-
 .tileLayerControl {
   position: absolute;
-  top: var(--spacing-s);
-  right: var(--spacing-s);
+  top: var(--spacing-xs);
+  right: 9px;
   background: var(--color-black-80);
 
+  &:hover {
+    outline: 1px solid black;
+  }
+
   &__button {
-    padding: var(--spacing-3-xs) var(--spacing-2-xs);
+    padding: 7px 8px 1px;
   }
 }
 
