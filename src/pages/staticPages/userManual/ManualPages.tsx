@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { BreadcrumbListItem } from 'hds-react';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import styles from './manualpages.module.scss';
+import Puff from '../workInstructions/cards/Puff';
 
 const ManualPage: React.FC = () => {
   const { id = '' } = useParams<{ id: string }>();
@@ -77,6 +78,8 @@ const ManualPage: React.FC = () => {
     ol: <ol style={{ listStylePosition: 'inside' }} />,
     ul: <ul style={{ listStylePosition: 'inside' }} />,
     li: <li />,
+    Puff: <Puff />,
+    a: <a />,
   };
 
   return (
