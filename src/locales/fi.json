@@ -31,6 +31,7 @@
       "confirmButton": "Vahvista"
     },
     "components": {
+      "paginationAriaLabel": "Sivutus",
       "moveToPage": "Siirry sivulle",
       "link": {
         "openInNewTabAriaLabel": "Avautuu uudessa välilehdessä.",
@@ -338,20 +339,6 @@
       "headerLabel": "Hankkeet yleisillä alueilla",
       "meta": {
         "title": "Haitaton - Hankkeet yleisillä alueilla"
-      }
-    },
-    "PUBLIC_HANKKEET_MAP": {
-      "path": "/julkisethankkeet/kartta",
-      "headerLabel": "Hankkeet yleisillä alueilla",
-      "meta": {
-        "title": "Haitaton - Hankkeet yleisillä alueilla kartalla"
-      }
-    },
-    "PUBLIC_HANKKEET_LIST": {
-      "path": "/julkisethankkeet/hankelista",
-      "headerLabel": "Hankkeet yleisillä alueilla",
-      "meta": {
-        "title": "Haitaton - Hankelista"
       }
     },
     "EDIT_HANKE": {
@@ -1656,11 +1643,6 @@
       "description": "Omista hankkeista löydät aiemmin luomasi hankkeet ja hakemukset.",
       "actionText": "Avaa omat hankkeet"
     },
-    "hankelista": {
-      "title": "Hankkeet listana",
-      "description": "Tutustu käynnissä oleviin ja tuleviin hankkeisiin listauksena.",
-      "actionText": "Avaa hankelista"
-    },
     "kartta": {
       "title": "Tutustu hankkeisiin",
       "description": "Tutustu käynnissä oleviin ja tuleviin Haitattomassa luotuihin hankkeisiin kartalla.",
@@ -1742,7 +1724,19 @@
       "oikeudet": "Käyttöoikeutesi hankkeelle"
     },
     "ariaLabels": {
-      "expandHankeCard": "Laajenna hankkeen tiedot"
+      "expandHankeCard": "Laajenna hankkeen tiedot",
+      "breadcrumb": "Hankkeen navigaatio"
+    },
+    "buttons": {
+      "edit": "Muokkaa hanketta",
+      "delete": "Poista hanke",
+      "endHanke": "Päätä hanke",
+      "addApplication": "Lisää hakemus",
+      "editRights": "Hallitse käyttöoikeuksia",
+      "toFirstPage": "Listan ensimmäiselle sivulle",
+      "toPreviousPage": "Listan edelliselle sivulle",
+      "toNextPage": "Listan seuraavalle sivulle",
+      "toLastPage": "Listan viimeiselle sivulle"
     },
     "draftState": {
       "labels": {
@@ -1759,49 +1753,6 @@
       "map": "Kartta",
       "list": "Lista"
     }
-  },
-  "hankeList": {
-    "pageHeader": "Hankelista",
-    "paginationHeader": "Sivu",
-    "paginatioAriaLabel": "Sivutus",
-    "tableHeader": {
-      "id": "Tunnus",
-      "name": "Nimi",
-      "step": "Vaihe",
-      "startDate": "Aloitus",
-      "endDate": "Lopetus"
-    },
-    "sortButtons": {
-      "id": "Lajittele taulukko tunnuksen mukaan",
-      "name": "Lajittele taulukko nimen mukaan",
-      "step": "Lajittele taulukko vaiheen mukaan",
-      "startDate": "Lajittele taulukko aloitus päivämäärän mukaan",
-      "endDate": "Lajittele taulukko lopetus päivämäärän mukaan"
-    },
-    "sortLabels": {
-      "sorted": "Taulukko järjestetty",
-      "nimi": "Hankkeen nimi",
-      "vaihe": "Hankkeen vaihe",
-      "alkuPvm": "Hankkeen alkupäivä",
-      "loppuPvm": "Hankkeen loppupäivä",
-      "asc": "nouseva",
-      "desc": "laskeva"
-    },
-    "buttons": {
-      "edit": "Muokkaa hanketta",
-      "delete": "Poista hanke",
-      "endHanke": "Päätä hanke",
-      "addApplication": "Lisää hakemus",
-      "editRights": "Hallitse käyttöoikeuksia",
-      "toFirstPage": "Listan ensimmäiselle sivulle",
-      "toPreviousPage": "Listan edelliselle sivulle",
-      "toNextPage": "Listan seuraavalle sivulle",
-      "toLastPage": "Listan viimeiselle sivulle"
-    },
-    "breadcrumb": {
-      "ariaLabel": "Hankkeen navigaatio"
-    },
-    "listDescription": "Voit käyttää taulukon otsikkopainikkeita taulukon järjestämiseen"
   },
   "hankeUsers": {
     "role": "Rooli hankkeessa",

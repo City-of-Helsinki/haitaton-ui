@@ -31,6 +31,7 @@
       "confirmButton": "Confirm"
     },
     "components": {
+      "paginationAriaLabel": "Paging",
       "link": {
         "openInNewTabAriaLabel": "Opens in a new tab.",
         "openInExternalDomainAriaLabel": "Leads to another website."
@@ -335,20 +336,6 @@
       "headerLabel": "Projects in public areas",
       "meta": {
         "title": "Haitaton - Projects in public areas"
-      }
-    },
-    "PUBLIC_HANKKEET_MAP": {
-      "path": "/publicprojects/map",
-      "headerLabel": "Projects in public areas",
-      "meta": {
-        "title": "Haitaton - Projects in public areas on a map"
-      }
-    },
-    "PUBLIC_HANKKEET_LIST": {
-      "path": "/publicprojects/projectlist",
-      "headerLabel": "Projects in public areas",
-      "meta": {
-        "title": "Haitaton - Project list"
       }
     },
     "EDIT_HANKE": {
@@ -1509,11 +1496,6 @@
       "description": "In your own projects, you will find the projects and applications that you have previously created.",
       "actionText": "Open your own projects"
     },
-    "hankelista": {
-      "title": "Project list",
-      "description": "View a list of ongoing and upcoming projects.",
-      "actionText": "Open project list"
-    },
     "kartta": {
       "title": "View the projects",
       "description": "View a map of ongoing and upcoming projects created in Haiton.",
@@ -1595,7 +1577,19 @@
       "oikeudet": "Your access rights to the project"
     },
     "ariaLabels": {
-      "expandHankeCard": "Expand project information"
+      "expandHankeCard": "Expand project information",
+      "breadcrumb": "Project navigation"
+    },
+    "buttons": {
+      "edit": "Edit project",
+      "delete": "Remove project",
+      "endHanke": "End project",
+      "addApplication": "Add application",
+      "editRights": "Manage access rights",
+      "toFirstPage": "To the first page of the list",
+      "toPreviousPage": "To the previous page of the list",
+      "toNextPage": "To the next page of the list",
+      "toLastPage": "To the last page of the list"
     },
     "draftState": {
       "labels": {
@@ -1612,49 +1606,6 @@
       "map": "Map",
       "list": "List"
     }
-  },
-  "hankeList": {
-    "pageHeader": "Project list",
-    "paginationHeader": "Page",
-    "paginatioAriaLabel": "Paging",
-    "tableHeader": {
-      "id": "Identifier",
-      "name": "Name",
-      "step": "Phase",
-      "startDate": "Start",
-      "endDate": "Finish"
-    },
-    "sortButtons": {
-      "id": "Sort the table by identifier",
-      "name": "Sort the table by name",
-      "step": "Sort the table by phase",
-      "startDate": "Sort the table by start date",
-      "endDate": "Sort the table by end date"
-    },
-    "sortLabels": {
-      "sorted": "The table was ordered",
-      "nimi": "Project name",
-      "vaihe": "Project phase",
-      "alkuPvm": "Project start date",
-      "loppuPvm": "Project end date",
-      "asc": "ascending",
-      "desc": "descending"
-    },
-    "buttons": {
-      "edit": "Edit project",
-      "delete": "Remove project",
-      "endHanke": "End project",
-      "addApplication": "Add application",
-      "editRights": "Manage access rights",
-      "toFirstPage": "To the first page of the list",
-      "toPreviousPage": "To the previous page of the list",
-      "toNextPage": "To the next page of the list",
-      "toLastPage": "To the last page of the list"
-    },
-    "breadcrumb": {
-      "ariaLabel": "Project navigation"
-    },
-    "listDescription": "You can use the header buttons of the table to arrange the table"
   },
   "hankeUsers": {
     "role": "Role in project",

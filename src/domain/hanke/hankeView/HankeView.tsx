@@ -358,7 +358,7 @@ const HankeView: React.FC<Props> = ({
                 iconLeft={<IconPen aria-hidden="true" />}
                 theme="coat"
               >
-                {t('hankeList:buttons:edit')}
+                {t('hankePortfolio:buttons:edit')}
               </Button>
             </CheckRightsByHanke>
             <CheckRightsByHanke
@@ -372,7 +372,7 @@ const HankeView: React.FC<Props> = ({
                   theme="coat"
                   onClick={addApplication}
                 >
-                  {t('hankeList:buttons:addApplication')}
+                  {t('hankePortfolio:buttons:addApplication')}
                 </Button>
               ) : null}
             </CheckRightsByHanke>
@@ -388,7 +388,7 @@ const HankeView: React.FC<Props> = ({
           <FeatureFlags flags={['hanke']}>
             <CheckRightsByHanke requiredRight="DELETE" hankeTunnus={hankeData.hankeTunnus}>
               <Button variant="primary" iconLeft={<IconCross aria-hidden="true" />} theme="black">
-                {t('hankeList:buttons:endHanke')}
+                {t('hankePortfolio:buttons:endHanke')}
               </Button>
             </CheckRightsByHanke>
           </FeatureFlags>
