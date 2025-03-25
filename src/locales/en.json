@@ -1498,7 +1498,7 @@
     },
     "kartta": {
       "title": "View the projects",
-      "description": "View a map of ongoing and upcoming projects created in Haiton.",
+      "description": "View a map of ongoing and upcoming projects created in Haitaton.",
       "actionText": "View projects on a map"
     },
     "kartta_kirjautumaton": {
