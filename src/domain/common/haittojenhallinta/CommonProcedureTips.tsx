@@ -1,13 +1,13 @@
 import { Box } from '@chakra-ui/react';
 import { Accordion, IconDocument, Link } from 'hds-react';
-import React from 'react';
+import React, { memo } from 'react';
 
 import { Trans, useTranslation } from 'react-i18next';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 
 type CardLink = { number: number; heading: string; content: string; cardLinks: number[] };
 
-const CommonProcedureTips: React.FC = () => {
+const CommonProcedureTips: React.FC = memo(() => {
   const { CARD } = useLocalizedRoutes();
   const { t } = useTranslation();
 
@@ -107,6 +107,6 @@ const CommonProcedureTips: React.FC = () => {
       </Accordion>
     </Box>
   );
-};
+});
 
 export default CommonProcedureTips;
