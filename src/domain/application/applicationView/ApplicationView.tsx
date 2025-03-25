@@ -94,6 +94,7 @@ import TaydennysAttachmentsList from '../taydennys/components/TaydennysAttachmen
 import { HaittojenhallintasuunnitelmaInfo } from '../../kaivuilmoitus/components/HaittojenhallintasuunnitelmaInfo';
 import MuutosilmoitusNotification from '../muutosilmoitus/components/MuutosilmoitusNotification';
 import MuutosilmoitusCancel from '../muutosilmoitus/components/MuutosilmoitusCancel';
+import useSendMuutosilmoitus from './hooks/useSendMuutosilmoitus';
 
 function TyoalueetList({ tyoalueet }: { tyoalueet: ApplicationArea[] }) {
   const { t } = useTranslation();
@@ -764,6 +765,10 @@ function ApplicationView({
   const informationRequestFeatureEnabled = useIsInformationRequestFeatureEnabled();
 
   const { sendTaydennysButton, sendTaydennysDialog } = useSendTaydennys(application, signedInUser);
+  const { sendMuutosilmoitusButton, sendMuutosilmoitusDialog } = useSendMuutosilmoitus(
+    application,
+    signedInUser,
+  );
 
   const showMuutosilmoitusButton =
     applicationType === 'EXCAVATION_NOTIFICATION' &&
@@ -943,6 +948,9 @@ function ApplicationView({
               </>
             </CheckRightsByHanke>
           )}
+          <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
+            {sendMuutosilmoitusButton}
+          </CheckRightsByHanke>
           {showReportOperationalConditionButton && (
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
               <Button
@@ -1235,12 +1243,12 @@ function ApplicationView({
         />
       )}
       <ApplicationSendDialog
-        type={applicationType}
-        id={application.id}
+        application={application}
         isOpen={showSendDialog}
         onClose={closeSendDialog}
       />
       {sendTaydennysDialog}
+      {sendMuutosilmoitusDialog}
     </InformationViewContainer>
   );
 }

@@ -425,4 +425,10 @@ export const handlers = [
     await hakemuksetDB.cancelMuutosilmoitus(id as string);
     return new HttpResponse();
   }),
+
+  http.post(`${apiUrl}/muutosilmoitukset/:id/laheta`, async ({ params }) => {
+    const { id } = params;
+    const muutosilmoitus = await hakemuksetDB.sendMuutosilmoitus(id as string);
+    return HttpResponse.json(muutosilmoitus);
+  }),
 ];

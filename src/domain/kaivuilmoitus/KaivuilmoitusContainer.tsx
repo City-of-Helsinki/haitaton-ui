@@ -439,8 +439,7 @@ export default function KaivuilmoitusContainer({ hankeData, application }: Reado
       />
 
       <ApplicationSendDialog
-        type="EXCAVATION_NOTIFICATION"
-        id={getValues('id')}
+        application={getValues()}
         isOpen={showSendDialog}
         onClose={closeSendDialog}
       />
