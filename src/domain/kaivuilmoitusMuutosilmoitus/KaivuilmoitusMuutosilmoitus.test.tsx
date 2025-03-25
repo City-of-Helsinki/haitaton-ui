@@ -1,14 +1,43 @@
 import { HttpResponse, http } from 'msw';
 import { cloneDeep } from 'lodash';
 import { server } from '../mocks/test-server';
-import { Application, KaivuilmoitusData } from '../application/types/application';
-import { Muutosilmoitus } from '../application/muutosilmoitus/types';
+import {
+  Application,
+  ApplicationAttachmentMetadata,
+  AttachmentType,
+  KaivuilmoitusData,
+} from '../application/types/application';
+import {
+  Muutosilmoitus,
+  MuutosilmoitusAttachmentMetadata,
+} from '../application/muutosilmoitus/types';
 import { HankeData } from '../types/hanke';
-import { fireEvent, render, screen } from '../../testUtils/render';
+import { fireEvent, render, screen, waitFor, within } from '../../testUtils/render';
 import KaivuilmoitusMuutosilmoitusContainer from './KaivuilmoitusMuutosilmoitusContainer';
 import hankkeet from '../mocks/data/hankkeet-data';
 import hakemukset from '../mocks/data/hakemukset-data';
 import { HAITTA_INDEX_TYPE, HaittaIndexData } from '../common/haittaIndexes/types';
+import { UserEvent } from '@testing-library/user-event/index';
+import api from '../api/api';
+import * as muutosilmoitusAttachmentApi from '../application/muutosilmoitus/muutosilmoitusAttachmentsApi';
+import * as applicationAttachmentsApi from '../application/attachments';
+import {
+  createApplicationAttachments,
+  createMuutosilmoitusAttachments,
+} from '../mocks/attachments';
+
+const applicationAttachments = createApplicationAttachments(13, [
+  { attachmentType: 'LIIKENNEJARJESTELY' },
+  { attachmentType: 'MUU' },
+]);
+const muutosilmoitusAttachments = createMuutosilmoitusAttachments(
+  'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+  [
+    { attachmentType: 'LIIKENNEJARJESTELY' },
+    { attachmentType: 'VALTAKIRJA' },
+    { attachmentType: 'MUU' },
+  ],
+);
 
 function setup(
   options: {
@@ -24,6 +53,7 @@ function setup(
       id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
       applicationData: application.applicationData,
       sent: new Date('2025-09-01T15:00:00.000Z'),
+      liitteet: [],
       muutokset: [],
     },
     hankeData = hankkeet[1] as HankeData,
@@ -87,6 +117,47 @@ function setup(
   };
 }
 
+async function fillAttachments(
+  user: UserEvent,
+  options: {
+    trafficArrangementPlanFiles?: File[];
+    mandateFiles?: File[];
+    otherFiles?: File[];
+    additionalInfo?: string;
+  } = {},
+) {
+  const {
+    trafficArrangementPlanFiles = [
+      new File(['Liikennejärjestelyt'], 'liikennejärjestelyt.pdf', { type: 'application/pdf' }),
+    ],
+    mandateFiles = [],
+    otherFiles = [],
+    additionalInfo = 'Lisätietoja',
+  } = options;
+
+  const fileUploads = await screen.findAllByLabelText('Raahaa tiedostot tänne');
+  if (trafficArrangementPlanFiles) {
+    const fileUpload = fileUploads[0];
+    await user.upload(fileUpload, trafficArrangementPlanFiles);
+  }
+
+  if (mandateFiles) {
+    const fileUpload = fileUploads[1];
+    await user.upload(fileUpload, mandateFiles);
+  }
+
+  if (otherFiles) {
+    const fileUpload = fileUploads[2];
+    await user.upload(fileUpload, otherFiles);
+  }
+
+  if (additionalInfo) {
+    fireEvent.change(screen.getByLabelText(/lisätietoja hakemuksesta/i), {
+      target: { value: additionalInfo },
+    });
+  }
+}
+
 describe('Saving the form', () => {
   test('Should be able to save and quit', async () => {
     const { user } = setup();
@@ -141,6 +212,129 @@ describe('Canceling muutosilmoitus', () => {
     expect(await screen.findByText('Muutosilmoitus peruttiin')).toBeInTheDocument();
     expect(screen.getByText('Muutosilmoitus peruttiin onnistuneesti')).toBeInTheDocument();
     expect(window.location.pathname).toBe('/fi/hakemus/14');
+  });
+});
+
+describe('Muutosilmoitus attachments', () => {
+  async function uploadAttachmentMock({
+    muutosilmoitusId,
+    attachmentType,
+    file,
+    abortSignal,
+  }: {
+    muutosilmoitusId: string;
+    attachmentType: AttachmentType;
+    file: File;
+    abortSignal?: AbortSignal;
+  }) {
+    const { data } = await api.post<MuutosilmoitusAttachmentMetadata>(
+      `/muutosilmoitukset/${muutosilmoitusId}/liitteet?tyyppi=${attachmentType}`,
+      { liite: file },
+      {
+        signal: abortSignal,
+      },
+    );
+    return data;
+  }
+
+  function initFileGetResponse(response: ApplicationAttachmentMetadata[]) {
+    server.use(
+      http.get('/api/hakemukset/:id/liitteet', async () => {
+        return HttpResponse.json(response);
+      }),
+    );
+  }
+
+  test('Should be able to upload attachments', async () => {
+    const uploadSpy = jest
+      .spyOn(muutosilmoitusAttachmentApi, 'uploadAttachment')
+      .mockImplementation(uploadAttachmentMock);
+    initFileGetResponse([]);
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: /liitteet/i }));
+    await fillAttachments(user, {
+      trafficArrangementPlanFiles: [
+        new File(['liikennejärjestelyt'], 'liikennejärjestelyt.pdf', { type: 'application/pdf' }),
+      ],
+      mandateFiles: [new File(['valtakirja'], 'valtakirja.pdf', { type: 'application/pdf' })],
+      otherFiles: [new File(['muu'], 'muu.png', { type: 'image/png' })],
+    });
+    await waitFor(
+      () => {
+        expect(screen.queryAllByText('Tallennetaan tiedostoja')).toHaveLength(0);
+      },
+      { timeout: 5000 },
+    );
+    await waitFor(
+      () => {
+        expect(screen.queryAllByText('1/1 tiedosto(a) tallennettu')).toHaveLength(3);
+      },
+      { timeout: 5000 },
+    );
+    expect(uploadSpy).toHaveBeenCalledTimes(3);
+  });
+
+  test('Should be able to delete attachments', async () => {
+    initFileGetResponse([]);
+    const testApplication = cloneDeep(hakemukset[12]) as Application<KaivuilmoitusData>;
+    testApplication.muutosilmoitus = {
+      id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+      sent: null,
+      applicationData: testApplication.applicationData,
+      muutokset: [],
+      liitteet: muutosilmoitusAttachments,
+    };
+    const { user } = setup({
+      application: testApplication,
+      muutosilmoitus: testApplication.muutosilmoitus,
+    });
+    await user.click(screen.getByRole('button', { name: /liitteet/i }));
+
+    muutosilmoitusAttachments.forEach((attachment) => {
+      expect(screen.getByText(attachment.fileName)).toBeInTheDocument();
+    });
+
+    const fileUploadLists = screen.getAllByTestId('file-upload-list');
+    let index = 0;
+    for (const fileUploadList of fileUploadLists) {
+      const metadata = muutosilmoitusAttachments[index++];
+      const { getAllByRole } = within(fileUploadList);
+      const fileListItems = getAllByRole('listitem');
+      const fileItem = fileListItems.find((i) => i.innerHTML.includes(metadata.fileName));
+      const { getByRole } = within(fileItem!);
+      await user.click(getByRole('button', { name: 'Poista' }));
+      const { getByRole: getByRoleInDialog, getByText: getByTextInDialog } = within(
+        await screen.findByRole('dialog'),
+      );
+
+      expect(
+        getByTextInDialog(`Haluatko varmasti poistaa liitetiedoston ${metadata.fileName}`),
+      ).toBeInTheDocument();
+      await user.click(getByRoleInDialog('button', { name: 'Poista' }));
+      expect(screen.getByText(`Liitetiedosto ${metadata.fileName} poistettu`)).toBeInTheDocument();
+    }
+  });
+
+  test('Should show original application attachments in attachments page', async () => {
+    const fetchContentMock = jest
+      .spyOn(applicationAttachmentsApi, 'getAttachmentFile')
+      .mockImplementation(jest.fn());
+    initFileGetResponse(applicationAttachments);
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: /liitteet/i }));
+
+    expect(
+      screen.getByText('Alkuperäiset tilapäisiä liikennejärjestelyitä koskevat suunnitelmat'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Alkuperäinen valtakirja')).toBeInTheDocument();
+    expect(screen.getByText('Alkuperäiset muut liitteet')).toBeInTheDocument();
+    applicationAttachments.forEach((attachment) => {
+      expect(screen.getByText(attachment.fileName)).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByText(applicationAttachments[0].fileName));
+
+    expect(fetchContentMock).toHaveBeenCalledWith(13, applicationAttachments[0].id);
   });
 });
 

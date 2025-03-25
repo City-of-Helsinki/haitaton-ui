@@ -2161,6 +2161,7 @@ const hakemukset: Application[] = [
           city: 'Helsinki',
         },
       },
+      liitteet: [],
     },
   } as Application<KaivuilmoitusData>,
 ];

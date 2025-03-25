@@ -8,7 +8,7 @@ import {
   deleteAttachment,
   getAttachmentFile,
   uploadAttachment,
-} from '../application/taydennys/taydennysAttachmentsApi';
+} from '../application/muutosilmoitus/muutosilmoitusAttachmentsApi';
 import { getAttachmentFile as getApplicationAttachmentFile } from '../application/attachments';
 import FileDownloadList from '../../common/components/fileDownloadList/FileDownloadList';
 import {
@@ -17,25 +17,25 @@ import {
   SectionItemTitle,
 } from '../forms/components/FormSummarySection';
 import { ApplicationAttachmentMetadata } from '../application/types/application';
-import { TaydennysAttachmentMetadata } from '../application/taydennys/types';
-import { KaivuilmoitusTaydennysFormValues } from './types';
+import { MuutosilmoitusAttachmentMetadata } from '../application/muutosilmoitus/types';
+import { KaivuilmoitusMuutosilmoitusFormValues } from './types';
 import TextArea from '../../common/components/textArea/TextArea';
 import { AttachmentMetadata } from '../../common/types/attachment';
 
 type Props = {
   applicationId: number;
-  taydennysAttachments: TaydennysAttachmentMetadata[];
+  muutosilmoitusAttachments: MuutosilmoitusAttachmentMetadata[];
   originalAttachments?: ApplicationAttachmentMetadata[];
 };
 
 export default function Attachments({
   applicationId,
-  taydennysAttachments,
+  muutosilmoitusAttachments,
   originalAttachments,
 }: Readonly<Props>) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
-  const { getValues } = useFormContext<KaivuilmoitusTaydennysFormValues>();
+  const { getValues } = useFormContext<KaivuilmoitusMuutosilmoitusFormValues>();
   const originalTrafficArrangementPlans = originalAttachments?.filter(
     (attachment) => attachment.attachmentType === 'LIIKENNEJARJESTELY',
   );
@@ -61,7 +61,7 @@ export default function Attachments({
   }
 
   function deleteFile(file: AttachmentMetadata) {
-    return deleteAttachment({ taydennysId: getValues('id'), attachmentId: file?.id });
+    return deleteAttachment({ muutosilmoitusId: getValues('id'), attachmentId: file?.id });
   }
 
   function handleFileDelete() {
@@ -130,13 +130,13 @@ export default function Attachments({
         maxSize={104857600}
         dragAndDrop
         multiple
-        existingAttachments={taydennysAttachments?.filter(
+        existingAttachments={muutosilmoitusAttachments?.filter(
           (metadata) => metadata.attachmentType === 'LIIKENNEJARJESTELY',
         )}
         maxFilesNumber={20}
         uploadFunction={({ file, abortSignal }) =>
           uploadAttachment({
-            taydennysId: getValues('id')!,
+            muutosilmoitusId: getValues('id')!,
             attachmentType: 'LIIKENNEJARJESTELY',
             file,
             abortSignal,
@@ -165,13 +165,13 @@ export default function Attachments({
         maxSize={104857600}
         dragAndDrop
         multiple
-        existingAttachments={taydennysAttachments?.filter(
+        existingAttachments={muutosilmoitusAttachments?.filter(
           (metadata) => metadata.attachmentType === 'VALTAKIRJA',
         )}
         maxFilesNumber={20}
         uploadFunction={({ file, abortSignal }) =>
           uploadAttachment({
-            taydennysId: getValues('id')!,
+            muutosilmoitusId: getValues('id')!,
             attachmentType: 'VALTAKIRJA',
             file,
             abortSignal,
@@ -191,13 +191,13 @@ export default function Attachments({
         maxSize={104857600}
         dragAndDrop
         multiple
-        existingAttachments={taydennysAttachments?.filter(
+        existingAttachments={muutosilmoitusAttachments?.filter(
           (metadata) => metadata.attachmentType === 'MUU',
         )}
         maxFilesNumber={20}
         uploadFunction={({ file, abortSignal }) =>
           uploadAttachment({
-            taydennysId: getValues('id')!,
+            muutosilmoitusId: getValues('id')!,
             attachmentType: 'MUU',
             file,
             abortSignal,

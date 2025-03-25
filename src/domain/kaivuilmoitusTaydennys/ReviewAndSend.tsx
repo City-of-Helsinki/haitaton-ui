@@ -20,6 +20,7 @@ import TaydennysHaittojenhallintaSummary from '../application/taydennysAndMuutos
 import TaydennysContactsSummary from '../application/taydennysAndMuutosilmoitusCommon/components/summary/ContactsSummary';
 import TaydennysAttachmentsList from '../application/taydennys/components/TaydennysAttachmentsList';
 import KaivuilmoitusSummary from '../kaivuilmoitus/components/KaivuilmoitusSummary';
+import React from 'react';
 
 type Props = {
   taydennys: Taydennys<KaivuilmoitusData>;
@@ -109,6 +110,16 @@ export default function ReviewAndSend({
                 )}
               </FormSummarySection>
             </>
+          )}
+          {muutokset.includes('additionalInfo') && (
+            <FormSummarySection>
+              <SectionItemTitle>
+                {t('kaivuilmoitusForm:liitteetJaLisatiedot:additionalInformation')}
+              </SectionItemTitle>
+              <SectionItemContent>
+                <p>{taydennys.applicationData.additionalInfo}</p>
+              </SectionItemContent>
+            </FormSummarySection>
           )}
         </Box>
       </TabPanel>

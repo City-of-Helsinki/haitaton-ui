@@ -47,6 +47,7 @@ import FormErrorsNotification from '../kaivuilmoitus/components/FormErrorsNotifi
 import MuutosilmoitusCancel from '../application/muutosilmoitus/components/MuutosilmoitusCancel';
 import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
+import Attachments from './Attachments';
 
 type Props = {
   muutosilmoitus: Muutosilmoitus<KaivuilmoitusData>;
@@ -173,6 +174,17 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
     },
     {
       element: (
+        <Attachments
+          applicationId={originalApplication.id!}
+          muutosilmoitusAttachments={muutosilmoitus.liitteet}
+          originalAttachments={originalAttachments}
+        />
+      ),
+      label: t('hankePortfolio:tabit:liitteet'),
+      state: StepState.available,
+    },
+    {
+      element: (
         <ReviewAndSend
           muutosilmoitus={muutosilmoitus}
           originalApplication={originalApplication}
@@ -280,8 +292,7 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
           const showSendButton =
             lastStep &&
             isValid &&
-            muutosilmoitus.muutokset.length >
-              0; /* TODO when muutosilmoitus has attachments add this or-clause: || muutosilmoitus.liitteet.length > 0*/
+            (muutosilmoitus.muutokset.length > 0 || muutosilmoitus.liitteet.length > 0);
           const disableSendButton = showSendButton && !isContact;
 
           return (

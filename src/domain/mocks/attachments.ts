@@ -1,11 +1,14 @@
 import { faker } from '@faker-js/faker/.';
 import { TaydennysAttachmentMetadata } from '../application/taydennys/types';
 import { ApplicationAttachmentMetadata, AttachmentType } from '../application/types/application';
+import { MuutosilmoitusAttachmentMetadata } from '../application/muutosilmoitus/types';
 
 function createAttachment(
   id: number | string,
-  attachment: Partial<ApplicationAttachmentMetadata | TaydennysAttachmentMetadata>,
-): ApplicationAttachmentMetadata | TaydennysAttachmentMetadata {
+  attachment: Partial<
+    ApplicationAttachmentMetadata | TaydennysAttachmentMetadata | MuutosilmoitusAttachmentMetadata
+  >,
+): ApplicationAttachmentMetadata | TaydennysAttachmentMetadata | MuutosilmoitusAttachmentMetadata {
   const metadata = {
     id: attachment.id ?? faker.string.uuid(),
     fileName: attachment.fileName ?? faker.system.commonFileName('pdf'),
@@ -24,6 +27,15 @@ function createAttachment(
   return { ...metadata, taydennysId: id } as TaydennysAttachmentMetadata;
 }
 
+export function createApplicationAttachments(
+  applicationId: number,
+  attachments: Partial<ApplicationAttachmentMetadata>[],
+): ApplicationAttachmentMetadata[] {
+  return attachments.map((attachment) =>
+    createAttachment(applicationId, attachment),
+  ) as ApplicationAttachmentMetadata[];
+}
+
 export function createTaydennysAttachments(
   taydennysId: string,
   attachments: Partial<TaydennysAttachmentMetadata>[],
@@ -33,11 +45,11 @@ export function createTaydennysAttachments(
   ) as TaydennysAttachmentMetadata[];
 }
 
-export function createApplicationAttachments(
-  applicationId: number,
-  attachments: Partial<ApplicationAttachmentMetadata>[],
-): ApplicationAttachmentMetadata[] {
+export function createMuutosilmoitusAttachments(
+  muutosilmoitusId: string,
+  attachments: Partial<MuutosilmoitusAttachmentMetadata>[],
+): MuutosilmoitusAttachmentMetadata[] {
   return attachments.map((attachment) =>
-    createAttachment(applicationId, attachment),
-  ) as ApplicationAttachmentMetadata[];
+    createAttachment(muutosilmoitusId, attachment),
+  ) as MuutosilmoitusAttachmentMetadata[];
 }
