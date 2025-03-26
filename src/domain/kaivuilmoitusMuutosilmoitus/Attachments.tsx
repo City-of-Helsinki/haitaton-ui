@@ -52,12 +52,12 @@ export default function Attachments({
 
   function handleFileUpload(uploading: boolean) {
     if (!uploading) {
-      queryClient.invalidateQueries(['application', applicationId]);
+      queryClient.invalidateQueries(['application', applicationId]).then(() => {});
     }
   }
 
   function downloadAttachment(file: AttachmentMetadata) {
-    return getAttachmentFile(getValues('id')!, file.id);
+    return getAttachmentFile(getValues('id'), file.id);
   }
 
   function deleteFile(file: AttachmentMetadata) {
@@ -65,7 +65,7 @@ export default function Attachments({
   }
 
   function handleFileDelete() {
-    queryClient.invalidateQueries(['application', applicationId]);
+    queryClient.invalidateQueries(['application', applicationId]).then(() => {});
   }
 
   return (
@@ -136,7 +136,7 @@ export default function Attachments({
         maxFilesNumber={20}
         uploadFunction={({ file, abortSignal }) =>
           uploadAttachment({
-            muutosilmoitusId: getValues('id')!,
+            muutosilmoitusId: getValues('id'),
             attachmentType: 'LIIKENNEJARJESTELY',
             file,
             abortSignal,
@@ -171,7 +171,7 @@ export default function Attachments({
         maxFilesNumber={20}
         uploadFunction={({ file, abortSignal }) =>
           uploadAttachment({
-            muutosilmoitusId: getValues('id')!,
+            muutosilmoitusId: getValues('id'),
             attachmentType: 'VALTAKIRJA',
             file,
             abortSignal,
@@ -197,7 +197,7 @@ export default function Attachments({
         maxFilesNumber={20}
         uploadFunction={({ file, abortSignal }) =>
           uploadAttachment({
-            muutosilmoitusId: getValues('id')!,
+            muutosilmoitusId: getValues('id'),
             attachmentType: 'MUU',
             file,
             abortSignal,
