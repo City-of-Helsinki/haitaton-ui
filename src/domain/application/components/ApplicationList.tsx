@@ -87,7 +87,7 @@ function ApplicationList({ hankeTunnus, applications }: Readonly<Props>) {
           pageHref={() => ''}
           pageCount={pageCount}
           pageIndex={pageIndex}
-          paginationAriaLabel={t('hankeList:paginatioAriaLabel')}
+          paginationAriaLabel={t('common:components:paginationAriaLabel')}
         />
       </div>
     </div>

@@ -31,6 +31,7 @@
       "confirmButton": "Bekräfta"
     },
     "components": {
+      "paginationAriaLabel": "Sidnumrering",
       "link": {
         "openInNewTabAriaLabel": "Öppnas i en ny flik.",
         "openInExternalDomainAriaLabel": "Går till en annan webbplats."
@@ -335,20 +336,6 @@
       "headerLabel": "Projekt på allmänna områden",
       "meta": {
         "title": "Haitaton - Projekt på allmänna områden"
-      }
-    },
-    "PUBLIC_HANKKEET_MAP": {
-      "path": "/allmannaprojekt/karta",
-      "headerLabel": "Projekt på allmänna områden",
-      "meta": {
-        "title": "Haitaton - Projekt på allmänna områden [TRANSLATION_PENDING]"
-      }
-    },
-    "PUBLIC_HANKKEET_LIST": {
-      "path": "/allmannaprojekt/projektlista",
-      "headerLabel": "Projekt på allmänna områden",
-      "meta": {
-        "title": "Haitaton - Projektlista"
       }
     },
     "EDIT_HANKE": {
@@ -1197,7 +1184,7 @@
     "pageTitle_loggedIn": "Välkommen att utföra ärenden i Haitaton",
     "pageSubTitle_loggedIn": "Hanteringssystemet för att främja projekt i allmänna områden och att hantera olägenheter",
     "pageSubTitle": "En tjänst för uppföljning av projekt på allmänna områden och uppföljning av deras olägenheter",
-    "info": "I tjänsten Haitaton kan du bekanta dig med alla pågående och kommande projekt på allmänna områden samt ge respons på dem. Du kan granska projekt på kartan eller i en lista. Ska du starta ett projekt eller lämna ansökningar?",
+    "info": "I tjänsten Haitaton kan du bekanta dig med alla pågående och kommande projekt på allmänna områden samt ge respons på dem. Du kan granska projekt på kartan. Ska du starta ett projekt eller lämna ansökningar?",
     "info_link": "Gå till ärendehantering i Haitaton",
     "notification": {
       "heading": "Hjälp oss med att göra Haitaton ännu bättre!",
@@ -1228,19 +1215,14 @@
       "description": "Under egna projekt hittar du de projekt och ansökningar du skapat tidigare.",
       "actionText": "Öppna egna projekt"
     },
-    "hankelista": {
-      "title": "Projekt i listform",
-      "description": "Bekanta dig med pågående och kommande projekt i listform.",
-      "actionText": "Öppna projektlistan"
-    },
     "kartta": {
       "title": "Bekanta dig med projekten",
-      "description": "Bekanta dig med pågående projekt på allmänna områden på en karta eller i listform.",
+      "description": "Bekanta dig med pågående och kommande projekt skapade i Haitaton på en karta.",
       "actionText": "Bekanta dig med projekten på en karta"
     },
     "kartta_kirjautumaton": {
-      "title": "Projekten på kartan",
-      "description": "Bekanta dig med pågående och kommande projekt på kartan",
+      "title": "Projekt i allmänna områden",
+      "description": "Bekanta dig med pågående och kommande projekt på kartan.",
       "actionText": "Bekanta dig med projekten på en karta"
     },
     "tietoja_haitattomasta": {
@@ -1314,7 +1296,19 @@
       "oikeudet": "Din användarrätt för projektet"
     },
     "ariaLabels": {
-      "expandHankeCard": "Utvidga projektets uppgifter"
+      "expandHankeCard": "Utvidga projektets uppgifter",
+      "breadcrumb": "Projektets navigation"
+    },
+    "buttons": {
+      "edit": "Modifiera projektet",
+      "delete": "Radera projektet",
+      "endHanke": "Avsluta projektet",
+      "addApplication": "Lägg till ansökan",
+      "editRights": "Hantera användarrättigheter",
+      "toFirstPage": "Till listans första sida",
+      "toPreviousPage": "Till listans föregående sida",
+      "toNextPage": "Till listans följande sida",
+      "toLastPage": "Till listans sista sida"
     },
     "draftState": {
       "labels": {
@@ -1331,49 +1325,6 @@
       "map": "Karta",
       "list": "Lista"
     }
-  },
-  "hankeList": {
-    "pageHeader": "Projektlista",
-    "paginationHeader": "Sida",
-    "paginatioAriaLabel": "Sidnumrering",
-    "tableHeader": {
-      "id": "Kod",
-      "name": "Namn",
-      "step": "Skede",
-      "startDate": "Start",
-      "endDate": "Slut"
-    },
-    "sortButtons": {
-      "id": "Sortera tabellen enligt kod",
-      "name": "Sortera tabellen enligt namn",
-      "step": "Sortera tabellen enligt skede",
-      "startDate": "Sortera tabellen enligt startdatum",
-      "endDate": "Sortera tabellen enligt slutdatum"
-    },
-    "sortLabels": {
-      "sorted": "Tabellen ordnad",
-      "nimi": "Projektets namn",
-      "vaihe": "Projektskede",
-      "alkuPvm": "Startdag för projektet",
-      "loppuPvm": "Slutdag för projektet",
-      "asc": "stigande",
-      "desc": "sjunkande"
-    },
-    "buttons": {
-      "edit": "Modifiera projektet",
-      "delete": "Radera projektet",
-      "endHanke": "Avsluta projektet",
-      "addApplication": "Lägg till ansökan",
-      "editRights": "Hantera användarrättigheter",
-      "toFirstPage": "Till listans första sida",
-      "toPreviousPage": "Till listans föregående sida",
-      "toNextPage": "Till listans följande sida",
-      "toLastPage": "Till listans sista sida"
-    },
-    "breadcrumb": {
-      "ariaLabel": "Projektets navigation"
-    },
-    "listDescription": "Du kan använda rubrikknapparna i tabellen för att arrangera den"
   },
   "hankeUsers": {
     "role": "Roll i projektet",

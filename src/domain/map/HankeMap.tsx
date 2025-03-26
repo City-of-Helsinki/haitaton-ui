@@ -15,7 +15,6 @@ import { MapTileLayerId } from './types';
 import FeatureClick from '../../common/components/map/interactions/FeatureClick';
 import GeometryHover from '../../common/components/map/interactions/hover/GeometryHover';
 import HankeHoverBox from './components/HankeHover/HankeHoverBox';
-import MapGuide from './components/MapGuide/MapGuide';
 import HankkeetProvider from './HankkeetProvider';
 import OverviewMapControl from '../../common/components/map/controls/OverviewMapControl';
 import AddressSearchContainer from './components/AddressSearch/AddressSearchContainer';
@@ -56,7 +55,6 @@ const HankeMap: React.FC<React.PropsWithChildren<unknown>> = () => {
       <Map zoom={zoom} mapClassName={styles.mapContainer__inner}>
         <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} />
 
-        <MapGuide />
         {mapTileLayers.kantakartta.visible && <Kantakartta />}
         {mapTileLayers.ortokartta.visible && <Ortokartta opacity={ortoLayerOpacity} />}
         <OverviewMapControl />

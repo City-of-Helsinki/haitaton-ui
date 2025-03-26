@@ -385,7 +385,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
         <Container>
           <div className={styles.breadcrumb}>
             <Breadcrumb
-              ariaLabel={t('hankeList:breadcrumb:ariaLabel')}
+              ariaLabel={t('hankePortfolio:ariaLabels:breadcrumb:ariaLabel')}
               list={[
                 { path: hankeViewPath, title: `${hankeName} (${hankeTunnus})` },
                 {
@@ -483,7 +483,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, hankeName, signedInUser }: 
             pageHref={() => ''}
             pageCount={pageCount}
             pageIndex={pageIndex}
-            paginationAriaLabel={t('hankeList:paginatioAriaLabel')}
+            paginationAriaLabel={t('common:components:paginationAriaLabel')}
           />
         </div>
 

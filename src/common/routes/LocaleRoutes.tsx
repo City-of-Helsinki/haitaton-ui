@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
-import HankeListPage from '../../pages/HankeListPage';
 import MapPage from '../../pages/MapPage';
 import HankePortfolioPage from '../../pages/HankePortfolioPage';
 import EditHankePage from '../../pages/EditHankePage';
@@ -12,7 +11,6 @@ import ReferencesPage from '../../pages/staticPages/ReferencesPage';
 import PrivacyPolicyPage from '../../pages/staticPages/PrivacyPolicyPage';
 import Johtoselvitys from '../../pages/Johtoselvitys';
 import PrivateRoute from './PrivateRoute';
-import MapAndListPage from '../../pages/MapAndListPage';
 import FullPageMapPage from '../../pages/FullPageMapPage';
 import HankePage from '../../pages/HankePage';
 import ApplicationPage from '../../pages/ApplicationPage';
@@ -90,11 +88,7 @@ const LocaleRoutes = () => {
         element={<PrivateRoute element={<ApplicationPage />} />}
       />
       <Route path={t('routes:FULL_PAGE_MAP:path')} element={<FullPageMapPage />} />
-      <Route path={t('routes:PUBLIC_HANKKEET:path')} element={<MapAndListPage />}>
-        <Route element={<MapPage />} index />
-        <Route path={t('routes:PUBLIC_HANKKEET_MAP:path')} element={<MapPage />} />
-        <Route path={t('routes:PUBLIC_HANKKEET_LIST:path')} element={<HankeListPage />} />
-      </Route>
+      <Route path={t('routes:PUBLIC_HANKKEET:path')} element={<MapPage />}></Route>
       <Route path={t('routes:ACCESSIBILITY:path')} element={<AccessibilityPage />} />
       <Route path={t('routes:REFERENCES:path')} element={<ReferencesPage />} />
       <Route path={t('routes:PRIVACY_POLICY:path')} element={<PrivacyPolicyPage />} />

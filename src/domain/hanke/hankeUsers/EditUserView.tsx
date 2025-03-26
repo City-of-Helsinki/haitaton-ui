@@ -257,7 +257,7 @@ function EditUserView({
         <Container>
           <div className={styles.breadcrumb}>
             <Breadcrumb
-              ariaLabel={t('hankeList:breadcrumb:ariaLabel')}
+              ariaLabel={t('hankePortfolio:ariaLabels:breadcrumb:ariaLabel')}
               list={[
                 { path: hankeViewPath, title: `${hankeName} (${hankeTunnus})` },
                 {
