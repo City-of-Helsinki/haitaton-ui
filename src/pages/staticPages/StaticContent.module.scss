@@ -19,6 +19,7 @@
 }
 
 .main {
+  width: 100%;
   max-width: 798px;
   padding: var(--spacing-2-xs);
 
@@ -38,7 +39,8 @@
 
   margin-bottom: var(--spacing-xl);
 
-  p {
+  p,
+  a {
     font-size: var(--fontsize-body-l);
   }
 }

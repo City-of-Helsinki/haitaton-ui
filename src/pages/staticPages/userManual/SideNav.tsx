@@ -41,6 +41,13 @@ const SideNav: React.FC = () => {
           active={active === MANUAL.path}
         />
         <SideNavigation.MainLevel
+          id="#periaatteet"
+          label={t('staticPages:manualPage:periaatteet:heading')}
+          href={`${MANUAL.path}/periaatteet`}
+          onClick={(e) => setActivePage(e, `${MANUAL.path}/periaatteet`)}
+          active={active === `${MANUAL.path}/periaatteet`}
+        />
+        <SideNavigation.MainLevel
           id="#asioinninToimintokokonaisuudet"
           label={t('staticPages:manualPage:asioinninToimintokokonaisuudet:heading')}
           href={`${MANUAL.path}/asioinninToimintokokonaisuudet`}
@@ -148,6 +155,13 @@ const SideNav: React.FC = () => {
             active={active === `${MANUAL.path}/kayttooikeustasot`}
           />
         </SideNavigation.MainLevel>
+        <SideNavigation.MainLevel
+          id="#sahkopostiheratteet"
+          label={t('staticPages:manualPage:sahkopostiheratteet:heading')}
+          href={`${MANUAL.path}/sahkopostiheratteet`}
+          onClick={(e) => setActivePage(e, `${MANUAL.path}/sahkopostiheratteet`)}
+          active={active === `${MANUAL.path}/sahkopostiheratteet`}
+        />
         <SideNavigation.MainLevel
           href={GLOSSARY.path}
           id="#glossary"

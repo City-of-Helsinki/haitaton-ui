@@ -2,15 +2,17 @@ import { useParams } from 'react-router-dom';
 import { BREADCRUMBS, useBreadcrumbs } from '../Breadcrumbs';
 import { Trans, useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
-import { BreadcrumbListItem } from 'hds-react';
+import { Accordion, BreadcrumbListItem } from 'hds-react';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import styles from './manualpages.module.scss';
 import Puff from '../workInstructions/cards/Puff';
+import useLocale from '../../../common/hooks/useLocale';
 
 const ManualPage: React.FC = () => {
   const { id = '' } = useParams<{ id: string }>();
   const { setBreadcrumbs } = useBreadcrumbs();
   const { t } = useTranslation();
+  const locale = useLocale();
 
   // sorry for hard-coded values here, a better way would have required a lot of effort =(
   const isAsioinninKulkuSubPage = [
@@ -80,6 +82,7 @@ const ManualPage: React.FC = () => {
     li: <li />,
     Puff: <Puff />,
     a: <a />,
+    Accordion: <Accordion language={locale} />,
   };
 
   return (

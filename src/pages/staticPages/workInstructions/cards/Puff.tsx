@@ -19,7 +19,7 @@ const Puff: React.FC<React.PropsWithChildren<{ children?: React.ReactNode }>> = 
               <Idea />
             </div>
           </div>
-          <div>{children}</div>
+          <div className={styles.puffcontent}>{children}</div>
         </div>
       </Card>
     </div>

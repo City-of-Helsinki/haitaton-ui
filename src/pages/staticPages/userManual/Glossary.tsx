@@ -5,6 +5,7 @@ import styles from '../StaticContent.module.scss';
 import { BREADCRUMBS, useBreadcrumbs } from '../Breadcrumbs';
 import { Accordion, Button, IconAngleDown, IconAngleUp } from 'hds-react';
 import { Flex } from '@chakra-ui/react';
+import useLocale from '../../../common/hooks/useLocale';
 
 interface Word {
   term: string;
@@ -13,6 +14,7 @@ interface Word {
 
 const Glossary: React.FC = () => {
   const { t } = useTranslation();
+  const locale = useLocale();
   const { setBreadcrumbs } = useBreadcrumbs();
   const [isAllOpen, setIsAllOpen] = useState(false);
 
@@ -38,6 +40,16 @@ const Glossary: React.FC = () => {
     ol: <ol style={{ listStylePosition: 'inside' }} />,
     ul: <ul style={{ listStylePosition: 'inside' }} />,
     li: <li />,
+    span: <span />,
+    a: (
+      <a
+        className="hds-link hds-link--medium"
+        aria-label={`${t('common:components:link:openInNewTabAriaLabel')} ${t('common:components:link:openInExternalDomainAriaLabel')}`}
+        target="_blank"
+      >
+        External link
+      </a>
+    ),
   };
 
   const toggleAll = (allOpen: boolean): void => {
@@ -87,6 +99,7 @@ const Glossary: React.FC = () => {
           </Flex>
           {words.map((word) => (
             <Accordion
+              language={locale}
               heading={word.term}
               key={word.term}
               onClick={() => handleAccordionClick(isAllOpen)}
