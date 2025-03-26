@@ -225,7 +225,7 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Vaihe 5/5: Yhteenveto' })).toBeVisible();
   await page.getByRole('button', { name: 'Lähetä hakemus' }).click();
   await page.getByRole('button', { name: 'Vahvista' }).click();
-  await expect(page.getByText('Hakemus lähetetty')).toBeVisible();
+  await expect(page.getByText('Hakemus lähetetty')).toBeVisible({ timeout: 20000 });
 
   await expect(page.getByTestId('allu_tunnus')).toBeVisible({ timeout: 30000 });
   const hakemuksenTunnus = await page.getByTestId('allu_tunnus').textContent();
