@@ -77,8 +77,8 @@ const ManualPage: React.FC = () => {
   const translationComponents = {
     p: <p />,
     br: <br />,
-    ol: <ol style={{ listStylePosition: 'inside' }} />,
-    ul: <ul style={{ listStylePosition: 'inside' }} />,
+    ol: <ol />,
+    ul: <ul />,
     li: <li />,
     Puff: <Puff />,
     a: <a />,

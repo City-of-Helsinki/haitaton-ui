@@ -163,6 +163,13 @@ const SideNav: React.FC = () => {
           active={active === `${MANUAL.path}/sahkopostiheratteet`}
         />
         <SideNavigation.MainLevel
+          id="#karttatoiminnot"
+          label={t('staticPages:manualPage:karttatoiminnot:heading')}
+          href={`${MANUAL.path}/karttatoiminnot`}
+          onClick={(e) => setActivePage(e, `${MANUAL.path}/karttatoiminnot`)}
+          active={active === `${MANUAL.path}/karttatoiminnot`}
+        />
+        <SideNavigation.MainLevel
           href={GLOSSARY.path}
           id="#glossary"
           label={t('staticPages:manualPage:glossary:heading')}
