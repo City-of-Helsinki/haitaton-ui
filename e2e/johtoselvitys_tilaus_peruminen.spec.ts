@@ -134,7 +134,7 @@ test('Johtoselvityshakemus_peruminen', async ({ page }) => {
   await page.getByRole('button', { name: 'Vahvista' }).click();
   await expect(page.getByText('Hakemus lähetetty')).toBeVisible();
   const linkkiHakemukseen = await page
-    .locator('a')
+    .getByRole('link')
     .filter({ hasText: /HAI/gm })
     .getAttribute('href');
   const linkkiHakemukseenEdit = linkkiHakemukseen?.slice(3);

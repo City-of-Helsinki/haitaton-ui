@@ -52,11 +52,19 @@
 .paddingLeft {
   padding-left: var(--spacing-m);
 
-  @include respond-above(l) {
-    padding-left: 80px;
+  @include respond-above(xl) {
+    padding-left: 100px;
   }
 
-  @include respond-above(xl) {
-    padding-left: 150px;
+  @media (width >= 1600px) {
+    padding-left: 15%;
+  }
+
+  @media (width >= 2000px) {
+    padding-left: 22%;
+  }
+
+  @media (width >= 2500px) {
+    padding-left: 27%;
   }
 }

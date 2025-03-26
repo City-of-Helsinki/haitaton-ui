@@ -411,7 +411,6 @@ test('Should not show delete user button for user who is the only with all permi
   render(
     <AccessRightsView
       hankeTunnus="HAI22-2"
-      hankeName="Aidasmäentien vesihuollon rakentaminen"
       hankeUsers={users.slice(0, 2) as HankeUser[]}
       signedInUser={USER_ALL}
     />,
@@ -491,7 +490,6 @@ test('User should be able to delete themselves', async () => {
   const { user } = render(
     <AccessRightsView
       hankeTunnus="HAI22-2"
-      hankeName="Aidasmäentien vesihuollon rakentaminen"
       hankeUsers={hankeUsers}
       signedInUser={{ ...USER_ALL, hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6' }}
     />,

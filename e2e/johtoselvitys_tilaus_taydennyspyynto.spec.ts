@@ -135,7 +135,7 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   await expect(page.getByText('Hakemus lähetetty')).toBeVisible();
   const hakemuksenTunnus = await page.getByTestId('allu_tunnus').textContent();
   const linkkiHakemukseen = await page
-    .locator('a')
+    .getByRole('link')
     .filter({ hasText: /HAI/gm })
     .getAttribute('href');
   const linkkiHakemukseenEdit = linkkiHakemukseen?.slice(3);

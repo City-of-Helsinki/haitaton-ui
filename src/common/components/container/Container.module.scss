@@ -4,9 +4,9 @@
   max-width: var(--breakpoint-xl);
   margin-left: auto;
   margin-right: auto;
-  padding: 0 var(--spacing-s) 0 var(--spacing-s);
+  padding: 0 var(--spacing-xs);
 
   @include respond-above(s) {
-    padding: 0 var(--spacing-l) 0 var(--spacing-l);
+    padding: 0 var(--spacing-m);
   }
 }
