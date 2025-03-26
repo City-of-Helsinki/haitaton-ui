@@ -420,15 +420,24 @@ export const handlers = [
     },
   ),
 
+  http.post(`${apiUrl}/muutosilmoitukset/:id/laheta`, async ({ params }) => {
+    const { id } = params;
+    const muutosilmoitus = await hakemuksetDB.sendMuutosilmoitus(id as string);
+    return HttpResponse.json(muutosilmoitus);
+  }),
+
   http.delete(`${apiUrl}/muutosilmoitukset/:id`, async ({ params }) => {
     const { id } = params;
     await hakemuksetDB.cancelMuutosilmoitus(id as string);
     return new HttpResponse();
   }),
 
-  http.post(`${apiUrl}/muutosilmoitukset/:id/laheta`, async ({ params }) => {
-    const { id } = params;
-    const muutosilmoitus = await hakemuksetDB.sendMuutosilmoitus(id as string);
-    return HttpResponse.json(muutosilmoitus);
+  http.post(`${apiUrl}/muutosilmoitukset/:id/liitteet`, async () => {
+    await delay(500);
+    return new HttpResponse();
+  }),
+
+  http.delete(`${apiUrl}/muutosilmoitukset/:id/liitteet/:attachmentId`, async () => {
+    return new HttpResponse();
   }),
 ];
