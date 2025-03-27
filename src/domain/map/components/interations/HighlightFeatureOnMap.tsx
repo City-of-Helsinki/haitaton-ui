@@ -12,13 +12,13 @@ type Props = {
 const HighlightFeatureOnMap: React.FC<React.PropsWithChildren<Props>> = ({ source }) => {
   const location = useLocation();
   const { map } = useContext(MapContext);
-  const { hoveredHankeTunnukset } = useContext(HoverContext);
+  const { hoveredHankeAreaData } = useContext(HoverContext);
   const hankeTunnus = new URLSearchParams(location.search).get('hanke');
 
   const highlightFeature = useCallback(() => {
     source.getFeatures().some((feature) => {
       if (
-        hoveredHankeTunnukset.includes(feature.get('hankeTunnus')) ||
+        hoveredHankeAreaData.includes(feature.get('hankeTunnus')) ||
         feature.get('hankeTunnus') === hankeTunnus
       ) {
         feature.setStyle(styleFunction(feature, undefined, true));
@@ -27,7 +27,7 @@ const HighlightFeatureOnMap: React.FC<React.PropsWithChildren<Props>> = ({ sourc
       }
       return false;
     });
-  }, [hankeTunnus, hoveredHankeTunnukset, source]);
+  }, [hankeTunnus, hoveredHankeAreaData, source]);
 
   useEffect(() => {
     source.on('addfeature', () => {
@@ -37,7 +37,7 @@ const HighlightFeatureOnMap: React.FC<React.PropsWithChildren<Props>> = ({ sourc
 
   useEffect(() => {
     highlightFeature();
-  }, [hankeTunnus, hoveredHankeTunnukset, highlightFeature]);
+  }, [hankeTunnus, hoveredHankeAreaData, highlightFeature]);
 
   return null;
 };

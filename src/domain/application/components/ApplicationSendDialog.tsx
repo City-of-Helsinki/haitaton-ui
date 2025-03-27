@@ -10,7 +10,13 @@ import {
 } from 'hds-react';
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { ApplicationSendData, ApplicationType, PaperDecisionReceiver } from '../types/application';
+import {
+  Application,
+  ApplicationSendData,
+  JohtoselvitysData,
+  KaivuilmoitusData,
+  PaperDecisionReceiver,
+} from '../types/application';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { sendSchema } from '../yupSchemas';
@@ -20,66 +26,89 @@ import TextInput from '../../../common/components/textInput/TextInput';
 import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
 import useSendApplication from '../hooks/useSendApplication';
 import useApplicationSendNotification from '../hooks/useApplicationSendNotification';
+import { KaivuilmoitusMuutosilmoitusFormValues } from '../../kaivuilmoitusMuutosilmoitus/types';
+import { Muutosilmoitus } from '../muutosilmoitus/types';
 
 type Props = {
-  type: ApplicationType;
-  id?: number | null;
+  application: Application;
+  muutosilmoitus?:
+    | KaivuilmoitusMuutosilmoitusFormValues
+    | Muutosilmoitus<KaivuilmoitusData | JohtoselvitysData>
+    | null;
   isOpen: boolean;
   onClose: (id?: number | null) => void;
 };
 
-const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) => {
+/**
+ * A dialog for sending an application or muutosilmoitus to Allu.
+ *
+ * @param application
+ * @param muutosilmoitus
+ * @param isOpen
+ * @param onClose
+ * @constructor
+ */
+const ApplicationSendDialog: React.FC<Props> = ({
+  application,
+  muutosilmoitus,
+  isOpen,
+  onClose,
+}) => {
   const { t } = useTranslation();
+  const { applicationType } = application;
+  const { id, applicationData } = muutosilmoitus ?? application;
+  const isMuutosilmoitus = muutosilmoitus != null;
   const features = useFeatureFlags();
+  const [showPaperDecision, setShowPaperDecision] = React.useState(
+    applicationData.paperDecisionReceiver != null,
+  );
   const formContext = useForm<ApplicationSendData>({
     resolver: yupResolver(sendSchema),
     defaultValues: {
-      orderPaperDecision: false,
-      paperDecisionReceiver: null,
+      orderPaperDecision: applicationData.paperDecisionReceiver != null,
+      paperDecisionReceiver: applicationData.paperDecisionReceiver,
     },
   });
 
-  const { handleSubmit, formState, register, watch, setValue, resetField, reset } = formContext;
-  const [orderPaperDecisionChecked] = watch(['orderPaperDecision']);
+  const { handleSubmit, formState, register, setValue } = formContext;
   const isConfirmButtonEnabled = formState.isValid;
-  const dialogTitle = t('hakemus:sendDialog:title');
+  const dialogTitle = isMuutosilmoitus
+    ? t('muutosilmoitus:sendDialog:title')
+    : t('hakemus:sendDialog:title');
   const paperDecisionFeatureEnabled =
-    type === 'EXCAVATION_NOTIFICATION' || features.cableReportPaperDecision;
+    applicationType === 'EXCAVATION_NOTIFICATION' || features.cableReportPaperDecision;
 
-  const applicationSendMutation = useSendApplication();
-  const { showSendSuccess } = useApplicationSendNotification();
+  const applicationSendMutation = useSendApplication({ isMuutosilmoitus: isMuutosilmoitus });
+  const { showSendSuccess } = useApplicationSendNotification(isMuutosilmoitus);
 
-  async function submitForm(data: ApplicationSendData) {
-    const paperDecisionReceiver = data.orderPaperDecision
-      ? (data.paperDecisionReceiver as PaperDecisionReceiver)
+  async function submitForm(sendData: ApplicationSendData) {
+    const paperDecisionReceiver = sendData.orderPaperDecision
+      ? (sendData.paperDecisionReceiver as PaperDecisionReceiver)
       : null;
     applicationSendMutation.mutate(
       {
-        id: id as number,
+        id: isMuutosilmoitus ? muutosilmoitus.id : (id as number),
         paperDecisionReceiver: paperDecisionReceiver,
       },
       {
-        onSuccess(applicationData) {
+        onSuccess(data) {
           showSendSuccess();
-          onClose(applicationData.id);
+          onClose(data.id);
         },
       },
     );
   }
 
   function handleOrderPaperDecisionChange() {
-    const newValue = !orderPaperDecisionChecked;
+    const newValue = !showPaperDecision;
     setValue('orderPaperDecision', newValue, {
       shouldDirty: true,
     });
-    if (!newValue) {
-      resetField('paperDecisionReceiver', { defaultValue: null });
-    }
+    setShowPaperDecision(newValue);
   }
 
   function handleClose() {
     if (!applicationSendMutation.isLoading) {
-      reset();
       applicationSendMutation.reset();
       onClose();
     }
@@ -120,13 +149,13 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
                   {...register('orderPaperDecision')}
                   id="orderPaperDecision"
                   label={t('hakemus:sendDialog:orderPaperDecision')}
-                  checked={orderPaperDecisionChecked}
+                  checked={showPaperDecision}
                   onChange={handleOrderPaperDecisionChange}
                   disabled={applicationSendMutation.isLoading}
                 />
               </Box>
             )}
-            {paperDecisionFeatureEnabled && orderPaperDecisionChecked && (
+            {paperDecisionFeatureEnabled && showPaperDecision && (
               <Box>
                 <Notification label={t('hakemus:sendDialog:paperDecisionNotificationLabel')}>
                   {t('hakemus:sendDialog:paperDecisionNotificationText')}
@@ -143,7 +172,7 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
                       {...register('paperDecisionReceiver.name')}
                       name="paperDecisionReceiver.name"
                       label={t('hakemus:sendDialog:name')}
-                      required={orderPaperDecisionChecked}
+                      required={showPaperDecision}
                       disabled={applicationSendMutation.isLoading}
                     />
                   </GridItem>
@@ -152,7 +181,7 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
                       {...register('paperDecisionReceiver.streetAddress')}
                       name="paperDecisionReceiver.streetAddress"
                       label={t('hakemus:sendDialog:streetAddress')}
-                      required={orderPaperDecisionChecked}
+                      required={showPaperDecision}
                       disabled={applicationSendMutation.isLoading}
                     />
                   </GridItem>
@@ -161,7 +190,7 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
                       {...register('paperDecisionReceiver.postalCode')}
                       name="paperDecisionReceiver.postalCode"
                       label={t('hakemus:sendDialog:postalCode')}
-                      required={orderPaperDecisionChecked}
+                      required={showPaperDecision}
                       disabled={applicationSendMutation.isLoading}
                     />
                   </GridItem>
@@ -170,7 +199,7 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
                       {...register('paperDecisionReceiver.city')}
                       name="paperDecisionReceiver.city"
                       label={t('hakemus:sendDialog:city')}
-                      required={orderPaperDecisionChecked}
+                      required={showPaperDecision}
                       disabled={applicationSendMutation.isLoading}
                     />
                   </GridItem>
@@ -178,19 +207,36 @@ const ApplicationSendDialog: React.FC<Props> = ({ type, id, isOpen, onClose }) =
               </Box>
             )}
             {applicationSendMutation.isError && (
-              <Notification
-                type="error"
-                size="small"
-                label={t('hakemus:notifications:sendErrorLabel')}
-              >
-                <Trans i18nKey="hakemus:notifications:sendErrorText">
-                  <p>
-                    Hakemuksen lähettäminen käsittelyyn epäonnistui. Yritä lähettämistä myöhemmin
-                    uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen sähköpostiosoitteessa
-                    <Link href="mailto:haitatontuki@hel.fi">haitatontuki@hel.fi</Link>.
-                  </p>
-                </Trans>
-              </Notification>
+              <Box paddingTop="var(--spacing-s)">
+                <Notification
+                  type="error"
+                  size="small"
+                  label={
+                    isMuutosilmoitus
+                      ? t('muutosilmoitus:notification:sendErrorLabel')
+                      : t('hakemus:notifications:sendErrorLabel')
+                  }
+                >
+                  {isMuutosilmoitus ? (
+                    <Trans i18nKey="muutosilmoitus:notification:sendErrorText">
+                      <p>
+                        Lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen tai ota yhteyttä
+                        Haitattoman tekniseen tukeen sähköpostiosoitteessa
+                        <Link href="mailto:haitatontuki@hel.fi">haitatontuki@hel.fi</Link>.
+                      </p>
+                    </Trans>
+                  ) : (
+                    <Trans i18nKey="hakemus:notifications:sendErrorText">
+                      <p>
+                        Hakemuksen lähettäminen käsittelyyn epäonnistui. Yritä lähettämistä
+                        myöhemmin uudelleen tai ota yhteyttä Haitattoman tekniseen tukeen
+                        sähköpostiosoitteessa
+                        <Link href="mailto:haitatontuki@hel.fi">haitatontuki@hel.fi</Link>.
+                      </p>
+                    </Trans>
+                  )}
+                </Notification>
+              </Box>
             )}
           </Dialog.Content>
 

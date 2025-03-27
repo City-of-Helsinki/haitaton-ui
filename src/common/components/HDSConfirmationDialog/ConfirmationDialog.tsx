@@ -1,9 +1,8 @@
 import React from 'react';
-import { Dialog, Button, DialogVariant } from 'hds-react';
-import { IconAlertCircleFill, IconErrorFill } from 'hds-react/icons';
+import { Dialog, Button, DialogVariant, LoadingSpinner, Notification } from 'hds-react';
+import { IconAlertCircleFill } from 'hds-react/icons';
 import { useTranslation } from 'react-i18next';
-
-import styles from './ConfirmationDialog.module.scss';
+import { Box } from '@chakra-ui/react';
 
 type Props = {
   title: string;
@@ -47,17 +46,17 @@ const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { t } = useTranslation();
 
+  const iconLeft = isLoading ? <LoadingSpinner small /> : mainBtnIcon;
+
   const mainButton = (
     <Button
       onClick={mainAction}
       data-testid="dialog-button-test"
       variant={variant}
-      iconLeft={mainBtnIcon}
-      isLoading={isLoading}
-      loadingText={loadingText}
+      iconLeft={iconLeft}
       disabled={disabled}
     >
-      {mainBtnLabel ?? t('common:confirmationDialog:confirmButton')}
+      {isLoading ? loadingText : mainBtnLabel ?? t('common:confirmationDialog:confirmButton')}
     </Button>
   );
 
@@ -93,10 +92,11 @@ const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
           <div data-testid="dialog-description-test">{description}</div>
         )}
         {errorMsg && (
-          <div className={styles.errorMsg}>
-            <IconErrorFill />
-            <p>{errorMsg}</p>
-          </div>
+          <Box paddingTop="var(--spacing-s)">
+            <Notification type="error" size="small" label={errorMsg}>
+              {errorMsg}
+            </Notification>
+          </Box>
         )}
       </Dialog.Content>
       <Dialog.ActionButtons>

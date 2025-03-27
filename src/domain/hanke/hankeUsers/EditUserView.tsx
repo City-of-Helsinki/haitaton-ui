@@ -1,6 +1,5 @@
 import { Trans, useTranslation } from 'react-i18next';
 import {
-  Breadcrumb,
   Button,
   IconCheckCircleFill,
   IconClock,
@@ -18,7 +17,6 @@ import Container from '../../../common/components/container/Container';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import { AccessRightLevel, HankeUser, SignedInUser } from './hankeUser';
 import styles from './EditUserView.module.scss';
-import useHankeViewPath from '../hooks/useHankeViewPath';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
 import AccessRightsInfo from '../accessRights/AccessRightsInfo';
@@ -52,7 +50,6 @@ type Props = {
   hankeUsers?: HankeUser[];
   signedInUser?: SignedInUser;
   hankeTunnus: string;
-  hankeName?: string;
 };
 
 type AccessRightLevelOption = {
@@ -80,12 +77,10 @@ function EditUserView({
   hankeUsers,
   signedInUser,
   hankeTunnus,
-  hankeName,
 }: Readonly<Props>) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { HANKEPORTFOLIO } = useLocalizedRoutes();
-  const hankeViewPath = useHankeViewPath(hankeTunnus);
   const getHankeUsersPath = useLinkPath(ROUTES.ACCESS_RIGHTS);
   const features = useFeatureFlags();
   const formContext = useForm({
@@ -255,22 +250,6 @@ function EditUserView({
     <div className={styles.container}>
       <header className={styles.header}>
         <Container>
-          <div className={styles.breadcrumb}>
-            <Breadcrumb
-              ariaLabel={t('hankeList:breadcrumb:ariaLabel')}
-              list={[
-                { path: hankeViewPath, title: `${hankeName} (${hankeTunnus})` },
-                {
-                  path: getHankeUsersPath({ hankeTunnus }),
-                  title: t('hankeUsers:userManagementTitle'),
-                },
-                {
-                  path: null,
-                  title: t('hankeUsers:userEditTitle'),
-                },
-              ]}
-            />
-          </div>
           <MainHeading spacingBottom="m">
             {t('hankeUsers:userEditTitle')}: {userFullName}
           </MainHeading>

@@ -58,8 +58,6 @@ import {
   isContactIn,
 } from '../utils';
 import ContactsSummary from '../components/summary/ContactsSummary';
-import Link from '../../../common/components/Link/Link';
-import useHankeViewPath from '../../hanke/hooks/useHankeViewPath';
 import JohtoselvitysDecisionLink from '../../johtoselvitys/components/DecisionLink';
 import KaivuilmoitusDecisionLink from '../../kaivuilmoitus/components/DecisionLink';
 import { ApplicationCancel } from '../components/ApplicationCancel';
@@ -93,6 +91,8 @@ import TaydennysCancel from '../taydennys/components/TaydennysCancel';
 import TaydennysAttachmentsList from '../taydennys/components/TaydennysAttachmentsList';
 import { HaittojenhallintasuunnitelmaInfo } from '../../kaivuilmoitus/components/HaittojenhallintasuunnitelmaInfo';
 import MuutosilmoitusNotification from '../muutosilmoitus/components/MuutosilmoitusNotification';
+import MuutosilmoitusCancel from '../muutosilmoitus/components/MuutosilmoitusCancel';
+import useSendMuutosilmoitus from './hooks/useSendMuutosilmoitus';
 
 function TyoalueetList({ tyoalueet }: { tyoalueet: ApplicationArea[] }) {
   const { t } = useTranslation();
@@ -691,7 +691,6 @@ function ApplicationView({
   const [showReportOperationalConditionDialog, setShowReportOperationalConditionDialog] =
     useState(false);
   const [showReportWorkFinishedDialog, setShowReportWorkFinishedDialog] = useState(false);
-  const hankeViewPath = useHankeViewPath(application.hankeTunnus);
   const {
     applicationData,
     applicationIdentifier,
@@ -740,9 +739,6 @@ function ApplicationView({
 
   const { data: attachments } = useAttachments(id);
 
-  // Text for the link leading back to hanke view
-  const hankeLinkText = `${hanke?.nimi} (${hanke?.hankeTunnus})`;
-
   const lastValmistumisilmoitus = getLastValmistumisilmoitus(alluStatus, valmistumisilmoitukset);
 
   const isSent = isApplicationSent(alluStatus);
@@ -763,6 +759,10 @@ function ApplicationView({
   const informationRequestFeatureEnabled = useIsInformationRequestFeatureEnabled();
 
   const { sendTaydennysButton, sendTaydennysDialog } = useSendTaydennys(application, signedInUser);
+  const { sendMuutosilmoitusButton, sendMuutosilmoitusDialog } = useSendMuutosilmoitus(
+    application,
+    signedInUser,
+  );
 
   const showMuutosilmoitusButton =
     applicationType === 'EXCAVATION_NOTIFICATION' &&
@@ -865,14 +865,6 @@ function ApplicationView({
                 ))}
             </Box>
           </SectionItemContent>
-          <SectionItemTitle>{t('hakemus:labels:relatedHanke')}:</SectionItemTitle>
-          <SectionItemContent>
-            {hanke && (
-              <Link href={hankeViewPath} data-testid="related_hanke">
-                {hankeLinkText}
-              </Link>
-            )}
-          </SectionItemContent>
           <SectionItemTitle>{t('hankePortfolio:labels:oikeudet')}:</SectionItemTitle>
           <SectionItemContent>
             {t(`hankeUsers:accessRightLevels:${signedInUser?.kayttooikeustaso}`)}
@@ -927,18 +919,24 @@ function ApplicationView({
           )}
           {showMuutosilmoitusButton && (
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
-              <Button
-                theme="coat"
-                iconLeft={<IconPen />}
-                onClick={onEditMuutosilmoitus}
-                isLoading={creatingMuutosilmoitus}
-              >
-                {!muutosilmoitus
-                  ? t('muutosilmoitus:buttons:createMuutosilmoitus')
-                  : t('muutosilmoitus:buttons:editMuutosilmoitus')}
-              </Button>
+              <>
+                <Button
+                  theme="coat"
+                  iconLeft={<IconPen />}
+                  onClick={onEditMuutosilmoitus}
+                  isLoading={creatingMuutosilmoitus}
+                >
+                  {!muutosilmoitus
+                    ? t('muutosilmoitus:buttons:createMuutosilmoitus')
+                    : t('muutosilmoitus:buttons:editMuutosilmoitus')}
+                </Button>
+                <MuutosilmoitusCancel application={application} />
+              </>
             </CheckRightsByHanke>
           )}
+          <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
+            {sendMuutosilmoitusButton}
+          </CheckRightsByHanke>
           {showReportOperationalConditionButton && (
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
               <Button
@@ -1231,12 +1229,12 @@ function ApplicationView({
         />
       )}
       <ApplicationSendDialog
-        type={applicationType}
-        id={application.id}
+        application={application}
         isOpen={showSendDialog}
         onClose={closeSendDialog}
       />
       {sendTaydennysDialog}
+      {sendMuutosilmoitusDialog}
     </InformationViewContainer>
   );
 }

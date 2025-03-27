@@ -7,14 +7,8 @@ import { cloneDeep } from 'lodash';
 import hakemukset from '../../mocks/data/hakemukset-data';
 
 test('Shows correct information when opened for excavation notification', async () => {
-  render(
-    <ApplicationSendDialog
-      type="EXCAVATION_NOTIFICATION"
-      id={1}
-      isOpen={true}
-      onClose={() => {}}
-    />,
-  );
+  const hakemus = cloneDeep(hakemukset[0]);
+  render(<ApplicationSendDialog application={hakemus} isOpen={true} onClose={() => {}} />);
 
   expect(screen.getByText(/lähetä hakemus\?/i)).toBeInTheDocument();
   expect(
@@ -36,7 +30,8 @@ test('Shows correct information when opened for excavation notification', async 
 });
 
 test('Shows correct information when opened for cable report', async () => {
-  render(<ApplicationSendDialog type="CABLE_REPORT" id={1} isOpen={true} onClose={() => {}} />);
+  const hakemus = cloneDeep(hakemukset[0]);
+  render(<ApplicationSendDialog application={hakemus} isOpen={true} onClose={() => {}} />);
 
   expect(screen.getByText(/lähetä hakemus\?/i)).toBeInTheDocument();
   expect(
@@ -60,7 +55,8 @@ test('Shows correct information when opened for cable report', async () => {
 test('Shows correct information when opened for cable report when paper decision feature is disabled', async () => {
   const OLD_ENV = { ...window._env_ };
   window._env_ = { ...OLD_ENV, REACT_APP_FEATURE_CABLE_REPORT_PAPER_DECISION: 0 };
-  render(<ApplicationSendDialog type="CABLE_REPORT" id={1} isOpen={true} onClose={() => {}} />);
+  const hakemus = cloneDeep(hakemukset[0]);
+  render(<ApplicationSendDialog application={hakemus} isOpen={true} onClose={() => {}} />);
 
   expect(screen.getByText(/lähetä hakemus\?/i)).toBeInTheDocument();
   expect(
@@ -84,13 +80,9 @@ test('Shows correct information when opened for cable report when paper decision
 });
 
 test('Shows correct information when ordering paper decision', async () => {
+  const hakemus = cloneDeep(hakemukset[0]);
   const { user } = render(
-    <ApplicationSendDialog
-      type="EXCAVATION_NOTIFICATION"
-      id={1}
-      isOpen={true}
-      onClose={() => {}}
-    />,
+    <ApplicationSendDialog application={hakemus} isOpen={true} onClose={() => {}} />,
   );
 
   const orderPaperDecisionButton = screen.getByRole('button', {
@@ -122,13 +114,9 @@ test('Shows correct information when ordering paper decision', async () => {
 });
 
 test('Enables confirmation button when form is filled', async () => {
+  const hakemus = cloneDeep(hakemukset[0]);
   const { user } = render(
-    <ApplicationSendDialog
-      type="EXCAVATION_NOTIFICATION"
-      id={1}
-      isOpen={true}
-      onClose={() => {}}
-    />,
+    <ApplicationSendDialog application={hakemus} isOpen={true} onClose={() => {}} />,
   );
 
   const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
@@ -153,7 +141,7 @@ test('Enables confirmation button when form is filled', async () => {
 });
 
 test('Sends the application when confirmed', async () => {
-  const hakemus = cloneDeep(hakemukset[0]);
+  const hakemus = cloneDeep(hakemukset[4]);
   let sent = false;
   server.use(
     http.post(`/api/hakemukset/:id/laheta`, async () => {
@@ -164,12 +152,7 @@ test('Sends the application when confirmed', async () => {
   );
 
   const { user } = render(
-    <ApplicationSendDialog
-      type="EXCAVATION_NOTIFICATION"
-      id={1}
-      isOpen={true}
-      onClose={() => {}}
-    />,
+    <ApplicationSendDialog application={hakemus} isOpen={true} onClose={() => {}} />,
   );
 
   const orderPaperDecisionButton = screen.getByRole('button', {
@@ -197,13 +180,9 @@ test('Shows error message when sending fails', async () => {
     }),
   );
 
+  const hakemus = cloneDeep(hakemukset[4]);
   const { user } = render(
-    <ApplicationSendDialog
-      type="EXCAVATION_NOTIFICATION"
-      id={1}
-      isOpen={true}
-      onClose={() => {}}
-    />,
+    <ApplicationSendDialog application={hakemus} isOpen={true} onClose={() => {}} />,
   );
 
   const orderPaperDecisionButton = screen.getByRole('button', {
@@ -229,9 +208,10 @@ test('Shows error message when sending fails', async () => {
 });
 
 test('Calls onClose when cancelled', async () => {
+  const hakemus = cloneDeep(hakemukset[4]);
   const onClose = jest.fn();
   const { user } = render(
-    <ApplicationSendDialog type="EXCAVATION_NOTIFICATION" id={1} isOpen={true} onClose={onClose} />,
+    <ApplicationSendDialog application={hakemus} isOpen={true} onClose={onClose} />,
   );
 
   const cancelButton = screen.getByRole('button', { name: 'Peruuta' });

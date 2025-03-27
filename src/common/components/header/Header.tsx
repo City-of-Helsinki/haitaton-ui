@@ -25,14 +25,8 @@ const languageLabels = {
 };
 
 function HaitatonHeader() {
-  const {
-    HOME,
-    PUBLIC_HANKKEET,
-    PUBLIC_HANKKEET_MAP,
-    HANKEPORTFOLIO,
-    JOHTOSELVITYSHAKEMUS,
-    WORKINSTRUCTIONS,
-  } = useLocalizedRoutes();
+  const { HOME, PUBLIC_HANKKEET, HANKEPORTFOLIO, JOHTOSELVITYSHAKEMUS, WORKINSTRUCTIONS } =
+    useLocalizedRoutes();
   const { t, i18n } = useTranslation();
   const user = useUser();
   const isAuthenticated = useIsAuthenticated();
@@ -169,7 +163,7 @@ function HaitatonHeader() {
             <Header.Link
               label={PUBLIC_HANKKEET.label}
               as={NavLink}
-              to={PUBLIC_HANKKEET_MAP.path}
+              to={PUBLIC_HANKKEET.path}
               active={Boolean(isMapPath)}
             />
           )}

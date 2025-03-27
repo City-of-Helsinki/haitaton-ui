@@ -5,7 +5,7 @@ import AdditionalSummary from './AdditionalSummary';
 import styles from './cards.module.scss';
 import MainHeading from '../../../../common/components/mainHeading/MainHeading';
 import { Trans, useTranslation } from 'react-i18next';
-import { BREADCRUMBS, useBreadcrumbs } from '../../Breadcrumbs';
+import { BREADCRUMBS, useBreadcrumbs } from '../../../../common/components/breadcrumbs/Breadcrumbs';
 import { useParams } from 'react-router-dom';
 import { BreadcrumbListItem, Link } from 'hds-react';
 import card2Img from './card2-img.png';

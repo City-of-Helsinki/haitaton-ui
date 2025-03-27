@@ -21,6 +21,7 @@ import { HaittaIndexData } from '../common/haittaIndexes/types';
 import { Taydennys, Taydennyspyynto } from '../application/taydennys/types';
 import haittojenhallintaSchema from '../common/haittojenhallinta/haittojenhallintaSchema';
 import { FORM_PAGES } from '../forms/types';
+import { Muutosilmoitus } from '../application/muutosilmoitus/types';
 
 const tyoalueSchema = yup.object({
   geometry: geometrySchema.required(),
@@ -161,6 +162,7 @@ export const validationSchema: yup.ObjectSchema<KaivuilmoitusFormValues> = yup.o
   taydennys: yup.mixed<Taydennys<KaivuilmoitusData>>().nullable(),
   selfIntersectingPolygon: yup.boolean().isFalse(),
   geometriesChanged: yup.boolean(),
+  muutosilmoitus: yup.mixed<Muutosilmoitus<KaivuilmoitusData>>().nullable(),
 });
 
 export const perustiedotSchema = yup.object({

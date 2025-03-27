@@ -14,11 +14,7 @@ type Props = {
   muutokset: string[];
 };
 
-export default function TaydennysContactsSummary({
-  data,
-  originalData,
-  muutokset,
-}: Readonly<Props>) {
+export default function ChangedContactsSummary({ data, originalData, muutokset }: Readonly<Props>) {
   const { t } = useTranslation();
   const {
     customerWithContacts,

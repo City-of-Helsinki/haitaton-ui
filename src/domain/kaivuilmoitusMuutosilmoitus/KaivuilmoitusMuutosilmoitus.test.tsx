@@ -57,6 +57,21 @@ function setup(
         { status: responseStatus },
       );
     }),
+    http.post('/api/muutosilmoitukset/:id/laheta', async () => {
+      return HttpResponse.json<Application>(
+        {
+          ...application,
+          muutosilmoitus: {
+            ...muutosilmoitus,
+            sent: new Date(),
+          },
+        },
+        { status: responseStatus },
+      );
+    }),
+    http.delete('/api/muutosilmoitukset/:id', async () => {
+      return new HttpResponse(null, { status: responseStatus });
+    }),
   );
   return {
     ...render(
@@ -109,5 +124,46 @@ describe('Saving the form', () => {
     expect(window.location.pathname).toBe(
       `/fi/kaivuilmoitus-muutosilmoitus/${application.id}/muokkaa`,
     );
+  });
+});
+
+describe('Canceling muutosilmoitus', () => {
+  test('Should be able to cancel muutosilmoitus', async () => {
+    const application = cloneDeep(hakemukset[13]) as Application<KaivuilmoitusData>;
+    const { user } = setup({
+      application,
+      muutosilmoitus: application.muutosilmoitus!,
+      responseStatus: 204,
+    });
+    await user.click(screen.getByRole('button', { name: /peru muutosilmoitus/i }));
+    await user.click(await screen.findByRole('button', { name: /vahvista/i }));
+
+    expect(await screen.findByText('Muutosilmoitus peruttiin')).toBeInTheDocument();
+    expect(screen.getByText('Muutosilmoitus peruttiin onnistuneesti')).toBeInTheDocument();
+    expect(window.location.pathname).toBe('/fi/hakemus/14');
+  });
+});
+
+describe('Sending muutosilmoitus', () => {
+  test('Should be able to send muutosilmoitus', async () => {
+    const applicationBase = cloneDeep(hakemukset[13]) as Application<KaivuilmoitusData>;
+    const application = {
+      ...applicationBase,
+      muutosilmoitus: {
+        ...applicationBase.muutosilmoitus!,
+        sent: null,
+        muutokset: ['workDescription'],
+      },
+    };
+    const { user } = setup({
+      application: application,
+      muutosilmoitus: application.muutosilmoitus,
+    });
+    await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
+    await user.click(screen.getByRole('button', { name: /lähetä muutosilmoitus/i }));
+    await user.click(await screen.findByRole('button', { name: /vahvista/i }));
+
+    expect(await screen.findByText('Muutosilmoitus lähetetty')).toBeInTheDocument();
+    expect(screen.getByText('Muutosilmoitus on lähetetty käsiteltäväksi.')).toBeInTheDocument();
   });
 });

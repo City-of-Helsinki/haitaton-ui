@@ -1,4 +1,4 @@
-import { http, HttpResponse, delay } from 'msw';
+import { delay, http, HttpResponse } from 'msw';
 import { render, screen, within } from '../../../testUtils/render';
 import ApplicationViewContainer from './ApplicationViewContainer';
 import { waitForLoadingToFinish } from '../../../testUtils/helperFunctions';
@@ -9,12 +9,18 @@ import hakemukset from '../../mocks/data/hakemukset-data';
 import { cloneDeep } from 'lodash';
 import { format } from 'date-fns/format';
 import { fi } from 'date-fns/locale';
-import { Application, JohtoselvitysData, KaivuilmoitusData } from '../types/application';
+import {
+  Application,
+  JohtoselvitysData,
+  KaivuilmoitusData,
+  PaperDecisionReceiver,
+} from '../types/application';
 import * as taydennysApi from '../taydennys/taydennysApi';
 import { USER_VIEW } from '../../mocks/signedInUser';
 import { createTaydennysAttachments } from '../../mocks/attachments';
 import * as muutosilmoitusApi from '../muutosilmoitus/muutosilmoitusApi';
 import { HAITTA_INDEX_TYPE } from '../../common/haittaIndexes/types';
+import { PathParams } from 'msw/lib/core/utils/matching/matchRequestUrl';
 
 describe('Cable report application view', () => {
   test('Correct information about application should be displayed', async () => {
@@ -25,15 +31,6 @@ describe('Cable report application view', () => {
     expect(screen.queryByText('JS2300003')).toBeInTheDocument();
     expect(screen.queryByText('Odottaa käsittelyä')).toBeInTheDocument();
     expect(screen.queryByText('Kaikki oikeudet')).toBeInTheDocument();
-  });
-
-  test('Link back to related hanke should work', async () => {
-    const { user } = render(<ApplicationViewContainer id={4} />);
-    await waitForLoadingToFinish();
-
-    await user.click(screen.getByRole('link', { name: 'Mannerheimintien kaukolämpö (HAI22-3)' }));
-
-    expect(window.location.pathname).toBe('/fi/hankesalkku/HAI22-3');
   });
 
   test('Should show error notification if application is not found', async () => {
@@ -2131,6 +2128,295 @@ describe('Excavation notification application view', () => {
       expect(screen.getByText('New name')).toBeInTheDocument();
       expect(screen.getByText('newMail@test.com')).toBeInTheDocument();
       expect(screen.getByText('Uusi Laskutus Oy')).toBeInTheDocument();
+    });
+
+    test('Should be able to send muutosilmoitus without paper decision order', async () => {
+      const application = cloneDeep(hakemukset[7]) as Application<KaivuilmoitusData>;
+      application.muutosilmoitus = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        sent: null,
+        muutokset: ['workDescription'],
+      };
+      const { user } = await setup(application);
+      server.use(
+        http.get(`/api/hakemukset/:id`, async () => {
+          return HttpResponse.json({
+            ...application,
+            muutosilmoitus: {
+              ...application.muutosilmoitus,
+              sent: new Date(),
+            },
+          });
+        }),
+        http.post(`/api/muutosilmoitukset/:id/laheta`, async () => {
+          return HttpResponse.json({
+            ...application,
+            muutosilmoitus: null,
+          });
+        }),
+      );
+
+      const sendButton = await screen.findByRole('button', { name: 'Lähetä muutosilmoitus' });
+      expect(sendButton).toBeEnabled();
+      await user.click(sendButton);
+
+      expect(await screen.findByText('Lähetä muutosilmoitus?')).toBeInTheDocument();
+      const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
+      expect(confirmButton).toBeEnabled();
+      await user.click(confirmButton);
+
+      expect(await screen.findByText('Muutosilmoitus lähetetty')).toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: 'Lähetä muutosilmoitus' }),
+      ).not.toBeInTheDocument();
+    });
+
+    test('Should be able to send application with paper decision order', async () => {
+      const application = cloneDeep(hakemukset[7]) as Application<KaivuilmoitusData>;
+      application.muutosilmoitus = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        sent: null,
+        muutokset: ['workDescription'],
+      };
+      application.applicationData.paperDecisionReceiver = null;
+      let pdr: PaperDecisionReceiver | null = null;
+      const { user } = await setup(application);
+
+      server.use(
+        http.get(`/api/hakemukset/:id`, async () => {
+          return HttpResponse.json({
+            ...application,
+            muutosilmoitus: {
+              ...application.muutosilmoitus,
+              sent: new Date(),
+            },
+          });
+        }),
+        http.post<PathParams, { paperDecisionReceiver: PaperDecisionReceiver }>(
+          `/api/muutosilmoitukset/:id/laheta`,
+          async ({ request }) => {
+            const { paperDecisionReceiver } = await request.json();
+            pdr = paperDecisionReceiver;
+            return HttpResponse.json({
+              ...application,
+              muutosilmoitus: null,
+            });
+          },
+        ),
+      );
+
+      const sendButton = await screen.findByRole('button', { name: 'Lähetä muutosilmoitus' });
+      expect(sendButton).toBeEnabled();
+      await user.click(sendButton);
+
+      expect(await screen.findByText('Lähetä muutosilmoitus?')).toBeInTheDocument();
+      await user.click(screen.getByRole('button', { name: 'Tilaan päätöksen myös paperisena' }));
+
+      const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
+      expect(confirmButton).toBeDisabled();
+
+      expect(await screen.findByText('Täytä vastaanottajan tiedot')).toBeInTheDocument();
+      const nameInput = screen.getByText('Nimi');
+      await user.type(nameInput, 'Pekka Paperinen');
+      const streetAddressInput = screen.getByText('Katuosoite');
+      await user.type(streetAddressInput, 'Paperipolku 3 A 4');
+      const postalCodeInput = screen.getByText('Postinumero');
+      await user.type(postalCodeInput, '00451');
+      const cityInput = screen.getByText('Postitoimipaikka');
+      await user.type(cityInput, 'Helsinki');
+
+      expect(confirmButton).toBeEnabled();
+      await user.click(confirmButton);
+
+      expect(await screen.findByText('Muutosilmoitus lähetetty')).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Lähetä hakemus' })).not.toBeInTheDocument();
+      expect(pdr).toEqual({
+        name: 'Pekka Paperinen',
+        streetAddress: 'Paperipolku 3 A 4',
+        postalCode: '00451',
+        city: 'Helsinki',
+      });
+    });
+
+    test('Should not be able to send muutosilmoitus if it has moved to handling in Allu', async () => {
+      const application = cloneDeep(hakemukset[7]) as Application<KaivuilmoitusData>;
+      application.muutosilmoitus = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        sent: new Date(),
+        muutokset: ['workDescription'],
+      };
+      await setup(application);
+
+      expect(
+        screen.queryByRole('button', { name: 'Lähetä muutosilmoitus' }),
+      ).not.toBeInTheDocument();
+    });
+
+    test('Should disable Send button if user is not a contact person on application', async () => {
+      server.resetHandlers();
+      server.use(
+        http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+          return HttpResponse.json<SignedInUser>({
+            hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb4',
+            kayttooikeustaso: 'HAKEMUSASIOINTI',
+            kayttooikeudet: ['EDIT_APPLICATIONS'],
+          });
+        }),
+      );
+      const application = cloneDeep(hakemukset[7]) as Application<KaivuilmoitusData>;
+      application.muutosilmoitus = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        sent: null,
+        muutokset: ['workDescription'],
+      };
+      await setup(application);
+
+      await screen.findByRole('button', { name: 'Lähetä muutosilmoitus' }, { timeout: 10000 });
+      const sendButton = screen.getByRole('button', { name: 'Lähetä muutosilmoitus' });
+      expect(sendButton).toBeDisabled();
+    });
+
+    test('Should not show buttons if user does not have correct permission', async () => {
+      server.resetHandlers();
+      server.use(
+        http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+          return HttpResponse.json<SignedInUser>({
+            hankeKayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            kayttooikeustaso: 'KATSELUOIKEUS',
+            kayttooikeudet: ['VIEW'],
+          });
+        }),
+      );
+      const application = cloneDeep(hakemukset[7]) as Application<KaivuilmoitusData>;
+      application.muutosilmoitus = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        sent: null,
+        muutokset: ['workDescription'],
+      };
+      await setup(application);
+
+      expect(
+        screen.queryByRole('button', { name: 'Jatka muutosilmoitusta' }),
+      ).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Peru muutosilmoitus' })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: 'Lähetä muutosilmoitus' }),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: 'Ilmoita toiminnalliseen kuntoon' }),
+      ).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Ilmoita valmiiksi' })).not.toBeInTheDocument();
+    });
+
+    test('Should not send multiple requests if clicking muutosilmoitus cancel confirm button many times', async () => {
+      server.use(
+        http.delete('/api/muutosilmoitukset/:id', async () => {
+          await delay(200);
+          return new HttpResponse();
+        }),
+      );
+      const application = cloneDeep(hakemukset[7]) as Application<KaivuilmoitusData>;
+      application.muutosilmoitus = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        sent: null,
+        muutokset: ['workDescription'],
+      };
+      const cancelMuutosilmoitus = jest.spyOn(muutosilmoitusApi, 'cancelMuutosilmoitus');
+      const { user } = await setup(application);
+
+      await screen.findByRole('button', { name: 'Peru muutosilmoitus' });
+
+      await user.click(screen.getByRole('button', { name: 'Peru muutosilmoitus' }));
+      const confirmCancelButton = screen.getByRole('button', { name: 'Vahvista' });
+      await user.click(confirmCancelButton);
+      await user.click(confirmCancelButton);
+      await user.click(confirmCancelButton);
+      await screen.findByText('Muutosilmoitus peruttiin onnistuneesti');
+
+      expect(cancelMuutosilmoitus).toHaveBeenCalledTimes(1);
+
+      cancelMuutosilmoitus.mockRestore();
+    });
+
+    test('Confirming send disables dialog buttons', async () => {
+      const application = cloneDeep(hakemukset[7]) as Application<KaivuilmoitusData>;
+      application.muutosilmoitus = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        sent: null,
+        muutokset: ['workDescription'],
+      };
+      const { user } = await setup(application);
+      server.use(
+        http.get(`/api/hakemukset/:id`, async () => {
+          return HttpResponse.json({
+            ...application,
+            muutosilmoitus: {
+              ...application.muutosilmoitus,
+              sent: new Date(),
+            },
+          });
+        }),
+        http.post(`/api/muutosilmoitukset/:id/laheta`, async () => {
+          await delay(500);
+          return HttpResponse.json({
+            ...application,
+            muutosilmoitus: null,
+          });
+        }),
+      );
+      const sendApplication = jest.spyOn(muutosilmoitusApi, 'sendMuutosilmoitus');
+
+      const sendButton = await screen.findByRole('button', { name: 'Lähetä muutosilmoitus' });
+      await user.click(sendButton);
+
+      expect(await screen.findByText('Lähetä muutosilmoitus?')).toBeInTheDocument();
+      const confirmButton = screen.getByRole('button', { name: 'Vahvista' });
+      expect(confirmButton).toBeEnabled();
+      await user.click(confirmButton);
+      expect(confirmButton).toBeDisabled();
+      expect(screen.getByRole('button', { name: 'Lähetetään' })).toBeDisabled();
+      expect(screen.getByRole('button', { name: 'Peruuta' })).toBeDisabled();
+
+      expect(sendApplication).toHaveBeenCalledTimes(1);
+
+      sendApplication.mockRestore();
+    });
+
+    test('Should be able to cancel muutosilmoitus', async () => {
+      const application = cloneDeep(hakemukset[13]) as Application<KaivuilmoitusData>;
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('button', { name: 'Peru muutosilmoitus' }));
+      await user.click(await screen.findByRole('button', { name: /vahvista/i }));
+
+      expect(await screen.findByText('Muutosilmoitus peruttiin')).toBeInTheDocument();
+      expect(screen.getByText('Muutosilmoitus peruttiin onnistuneesti')).toBeInTheDocument();
+    });
+
+    test('Cancel muutosilmoitus button is not visible if muutosilmoitus field is null', async () => {
+      const application = cloneDeep(hakemukset[13]) as Application<KaivuilmoitusData>;
+      application.muutosilmoitus = null;
+      await setup(application);
+
+      expect(screen.queryByRole('button', { name: 'Peru muutosilmoitus' })).not.toBeInTheDocument();
+    });
+
+    test('Cancel muutosilmoitus button is not visible if user does not have permission', async () => {
+      server.use(
+        http.get('/api/hankkeet/:hankeTunnus/whoami', async () => {
+          return HttpResponse.json<SignedInUser>(USER_VIEW);
+        }),
+      );
+      const application = cloneDeep(hakemukset[13]) as Application<KaivuilmoitusData>;
+      await setup(application);
+
+      expect(screen.queryByRole('button', { name: 'Peru muutosilmoitus' })).not.toBeInTheDocument();
     });
   });
 });

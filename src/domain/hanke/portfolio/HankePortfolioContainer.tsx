@@ -7,6 +7,7 @@ import HankePortfolioComponent from './HankePortfolioComponent';
 import { usePermissionsByHanke } from '../hankeUsers/hooks/useUserRightsForHanke';
 import ErrorLoadingText from '../../../common/components/errorLoadingText/ErrorLoadingText';
 import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
+import Breadcrumbs, { BREADCRUMBS } from '../../../common/components/breadcrumbs/Breadcrumbs';
 
 const getHankkeet = async () => {
   const { data } = await api.get<HankeData[]>(`/hankkeet`, {
@@ -38,7 +39,10 @@ const HankePortfolioContainer: React.FC<React.PropsWithChildren<unknown>> = () =
 
   // Add header to fix Axe "page-has-heading-one"-error
   return hankkeet ? (
-    <HankePortfolioComponent hankkeet={hankkeet} signedInUserByHanke={userData} />
+    <>
+      <Breadcrumbs breadcrumbs={[BREADCRUMBS.omatHankkeet]} />
+      <HankePortfolioComponent hankkeet={hankkeet} signedInUserByHanke={userData} />
+    </>
   ) : (
     <></>
   );

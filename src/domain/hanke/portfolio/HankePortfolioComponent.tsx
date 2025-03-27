@@ -679,7 +679,7 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
                   pageHref={() => ''}
                   pageCount={pageCount}
                   pageIndex={pageIndex}
-                  paginationAriaLabel={t('hankeList:paginatioAriaLabel')}
+                  paginationAriaLabel={t('common:components:paginationAriaLabel')}
                 />
               </div>
             )}

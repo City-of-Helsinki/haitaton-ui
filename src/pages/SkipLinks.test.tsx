@@ -11,7 +11,7 @@ import InfoPage from './staticPages/InfoPage';
 import ManualPage from './staticPages/ManualPage';
 import PrivacyPolicyPage from './staticPages/PrivacyPolicyPage';
 import ReferencesPage from './staticPages/ReferencesPage';
-import MapAndListPage from './MapAndListPage';
+import MapPage from './MapPage';
 
 const skipLinkQuery = `#${SKIP_TO_ELEMENT_ID}`;
 
@@ -35,7 +35,7 @@ describe('There should be a skip link in the page', () => {
     await waitFor(() => expect(container.querySelector(skipLinkQuery)).toBeInTheDocument());
   });
   test('Map and list page', async () => {
-    const { container } = render(<MapAndListPage />);
+    const { container } = render(<MapPage />);
     await waitFor(() => expect(container.querySelector(skipLinkQuery)).toBeInTheDocument());
   });
   test('404 Page', async () => {

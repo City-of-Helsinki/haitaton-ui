@@ -249,8 +249,7 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
   await page.getByRole('button', { name: 'Lähetä hakemus' }).click();
   await page.getByRole('button', { name: 'Vahvista' }).click();
   await expect(page.getByText('Hakemus lähetetty')).toBeVisible({ timeout: 40000 });
-  await expect(page.locator('[data-testid=related_hanke]')).toBeVisible({ timeout: 30000 });
-  await page.locator('[data-testid=related_hanke]').click();
+  await page.getByRole('link').filter({ hasText: /HAI/gm }).click();
   await expect(page.getByText('Hakemukset', { exact: true })).toBeVisible({ timeout: 10000 });
   await page.getByText('Hakemukset', { exact: true }).click();
 
