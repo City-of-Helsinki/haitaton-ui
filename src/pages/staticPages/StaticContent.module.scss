@@ -44,3 +44,38 @@
     font-size: var(--fontsize-body-l);
   }
 }
+
+.puffcontainer {
+  margin-bottom: var(--spacing-m);
+}
+
+.puff {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-m);
+  color: var(--greyscale-black-90);
+  font-size: var(--fontsize-heading-xs);
+
+  @include respond-below(s) {
+    flex-direction: column;
+  }
+
+  .icon {
+    width: 128px;
+    height: 128px;
+  }
+
+  .puffcontent {
+    align-content: center;
+  }
+
+  h3 {
+    color: var(--greyscale-black-90);
+    font-size: var(--fontsize-heading-xs);
+    font-weight: 700;
+  }
+
+  ul {
+    list-style-position: inside;
+  }
+}

@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { Accordion, BreadcrumbListItem } from 'hds-react';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import styles from './manualpages.module.scss';
-import Puff from '../workInstructions/cards/Puff';
+import Puff from '..//Puff';
 import useLocale from '../../../common/hooks/useLocale';
 
 const ManualPage: React.FC = () => {

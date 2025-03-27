@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Text from '../../../../common/components/text/Text';
-import Puff from './Puff';
+import Puff from '../../Puff';
 import AdditionalSummary from './AdditionalSummary';
 import styles from './cards.module.scss';
 import MainHeading from '../../../../common/components/mainHeading/MainHeading';
