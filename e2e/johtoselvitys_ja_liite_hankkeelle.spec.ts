@@ -231,8 +231,7 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
   const hakemuksenTunnus = await page.getByTestId('allu_tunnus').textContent();
   await expect(page.getByRole('button', { name: 'Peru hakemus' })).toBeVisible();
   const linkkiHakemukseen = await page
-    .locator('a')
-    .filter({ hasText: /HAI/gm })
+    .getByRole('link', { name: 'TA-Johtoselvitys ja liite' })
     .getAttribute('href');
   const linkkiHakemukseenEdit = linkkiHakemukseen?.slice(3);
   const hakemusLinkki = `${testiData.testEnvUrl}${linkkiHakemukseenEdit}`;
@@ -278,4 +277,9 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
       timeout: 5000,
     });
   }).toPass({ intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000], timeout: 120000 });
+
+  // Tarkista haitattomasta että liite näkyy
+  await page.locator('[data-testid^="applicationViewLinkIdentifier-"]').click();
+  await page.getByText('Liitteet').click();
+  await expect(page.getByText('valtakirja.txt')).toBeVisible();
 });
