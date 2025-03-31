@@ -83,6 +83,15 @@ const ManualPage: React.FC = () => {
     Puff: <Puff />,
     a: <a />,
     Accordion: <Accordion language={locale} />,
+    table: <table />,
+    caption: <caption />,
+    thead: <thead />,
+    tbody: <tbody />,
+    tr: <tr />,
+    th: <th />,
+    td: <td />,
+    strong: <strong />,
+    div: <div />,
   };
 
   return (
