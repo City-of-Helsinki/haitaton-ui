@@ -22,6 +22,16 @@
     font-size: var(--fontsize-body-l);
     list-style-position: inside;
   }
+
+  figure {
+    margin-top: var(--spacing-m);
+    margin-bottom: var(--spacing-m);
+  }
+
+  figcaption {
+    margin-top: var(--spacing-s);
+    font-size: var(--fontsize-body-s);
+  }
 }
 
 .images {
