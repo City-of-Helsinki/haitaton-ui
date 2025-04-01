@@ -1489,7 +1489,8 @@
     "manualPage": {
       "main": {
         "heading": "Bruksanvisning och support",
-        "cableLocationServiceLink": "https://www.hel.fi/sv/stadsmiljo-och-trafik/tomter-och-bygglov/ledningstjanst"
+        "cableLocationServiceLink": "https://www.hel.fi/sv/stadsmiljo-och-trafik/tomter-och-bygglov/ledningstjanst",
+        "excavationServiceLink": "https://www.hel.fi/sv/stadsmiljo-och-trafik/tomter-och-bygglov/tillstand-och-anvisningar-for-byggplatsen/arbete-pa-gatu-eller-parkomraden#kontaktuppgifter"
       }
     },
     "404Page": {

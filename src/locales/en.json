@@ -1490,7 +1490,8 @@
       "title": "Manual and support",
       "main": {
         "heading": "Manual and support",
-        "cableLocationServiceLink": "https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/cable-location-service"
+        "cableLocationServiceLink": "https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/cable-location-service",
+        "excavationServiceLink": "https://www.hel.fi/en/urban-environment-and-traffic/plots-and-building-permits/permits-and-instructions-for-construction-site/working-on-streets-and-in-parks#contact-information"
       }
     },
     "404Page": {
