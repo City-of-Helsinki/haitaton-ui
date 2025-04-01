@@ -22,7 +22,12 @@ import HankeFormLiitteet from './HankeFormLiitteet';
 import HankeFormSummary from './HankeFormSummary';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
-import { HankeContactTypeKey, HankeData, HankeYhteystieto, CONTACT_TYYPPI } from '../../types/hanke';
+import {
+  HankeContactTypeKey,
+  HankeData,
+  HankeYhteystieto,
+  CONTACT_TYYPPI,
+} from '../../types/hanke';
 import MultipageForm from '../../forms/MultipageForm';
 import FormActions from '../../forms/components/FormActions';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
@@ -308,10 +313,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
       ]
     : [['nimi']];
 
-  function validateStepChange(
-    changeStep: () => void,
-    stepIndex: number,
-  ) {
+  function validateStepChange(changeStep: () => void, stepIndex: number) {
     let hasInvalidId = false;
 
     const contactTypes: HankeContactTypeKey[] = [

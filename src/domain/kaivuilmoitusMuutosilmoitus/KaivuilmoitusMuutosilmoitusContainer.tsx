@@ -281,7 +281,7 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
             lastStep &&
             isValid &&
             muutosilmoitus.muutokset.length >
-              0 /* TODO when muutosilmoitus has attachments add this or-clause: || muutosilmoitus.liitteet.length > 0*/;
+              0; /* TODO when muutosilmoitus has attachments add this or-clause: || muutosilmoitus.liitteet.length > 0*/
           const disableSendButton = showSendButton && !isContact;
 
           return (
