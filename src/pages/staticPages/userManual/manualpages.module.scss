@@ -32,6 +32,10 @@
     margin-top: var(--spacing-s);
     font-size: var(--fontsize-body-s);
   }
+
+  td {
+    vertical-align: top;
+  }
 }
 
 .images {

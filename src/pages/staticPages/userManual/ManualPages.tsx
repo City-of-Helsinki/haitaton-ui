@@ -10,6 +10,7 @@ import useLocale from '../../../common/hooks/useLocale';
 import HaittojenhallintaImg1 from './figures/haittojenhallintasuunnitelma_1.png';
 import HaittojenhallintaImg2 from './figures/haittojenhallintasuunnitelma_2.png';
 import JohtoselvitysImg1 from './figures/johtoselvitys.png';
+import VaiheetImg1 from './figures/vaiheet.png';
 
 const ManualPage: React.FC = () => {
   const { id = '' } = useParams<{ id: string }>();
@@ -86,6 +87,9 @@ const ManualPage: React.FC = () => {
   const JohtoselvitysImg1Component = (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
     <img src={JohtoselvitysImg1} {...props} />
   );
+  const VaiheetImg1Component = (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
+    <img src={VaiheetImg1} {...props} />
+  );
 
   const translationComponents = {
     p: <p />,
@@ -108,6 +112,7 @@ const ManualPage: React.FC = () => {
     HaittojenhallintaImg1Component: <HaittojenhallintaImg1Component />,
     HaittojenhallintaImg2Component: <HaittojenhallintaImg2Component />,
     JohtoselvitysImg1Component: <JohtoselvitysImg1Component />,
+    VaiheetImg1Component: <VaiheetImg1Component />,
     figure: <figure />,
     figcaption: <figcaption />,
   };
