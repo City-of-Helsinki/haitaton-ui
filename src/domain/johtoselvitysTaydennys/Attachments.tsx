@@ -7,7 +7,7 @@ import FileUpload from '../../common/components/fileUpload/FileUpload';
 import { JohtoselvitysTaydennysFormValues } from './types';
 import {
   deleteAttachment,
-  getAttachmentFile,
+  downloadAttachment,
   uploadAttachment,
 } from '../application/taydennys/taydennysAttachmentsApi';
 import { getAttachmentFile as getApplicationAttachmentFile } from '../application/attachments';
@@ -72,18 +72,11 @@ export default function Attachments({
         existingAttachments={taydennysAttachments}
         maxFilesNumber={20}
         uploadFunction={({ file, abortSignal }) =>
-          uploadAttachment({
-            taydennysId: getValues('id')!,
-            attachmentType: 'MUU',
-            file,
-            abortSignal,
-          })
+          uploadAttachment(getValues('id')!, 'MUU', file, abortSignal)
         }
         onUpload={handleFileUpload}
-        fileDownLoadFunction={(file) => getAttachmentFile(getValues('id')!, file.id)}
-        fileDeleteFunction={(file) =>
-          deleteAttachment({ taydennysId: getValues('id'), attachmentId: file?.id })
-        }
+        fileDownLoadFunction={(file) => downloadAttachment(getValues('id')!, file.id)}
+        fileDeleteFunction={(file) => deleteAttachment(getValues('id'), file?.id)}
         onFileDelete={() => queryClient.invalidateQueries(['application', applicationId])}
       />
     </Box>

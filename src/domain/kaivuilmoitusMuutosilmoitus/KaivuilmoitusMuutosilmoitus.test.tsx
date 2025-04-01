@@ -216,17 +216,12 @@ describe('Canceling muutosilmoitus', () => {
 });
 
 describe('Muutosilmoitus attachments', () => {
-  async function uploadAttachmentMock({
-    muutosilmoitusId,
-    attachmentType,
-    file,
-    abortSignal,
-  }: {
-    muutosilmoitusId: string;
-    attachmentType: AttachmentType;
-    file: File;
-    abortSignal?: AbortSignal;
-  }) {
+  async function uploadAttachmentMock(
+    muutosilmoitusId: string,
+    attachmentType: AttachmentType,
+    file: File,
+    abortSignal?: AbortSignal,
+  ) {
     const { data } = await api.post<MuutosilmoitusAttachmentMetadata>(
       `/muutosilmoitukset/${muutosilmoitusId}/liitteet?tyyppi=${attachmentType}`,
       { liite: file },

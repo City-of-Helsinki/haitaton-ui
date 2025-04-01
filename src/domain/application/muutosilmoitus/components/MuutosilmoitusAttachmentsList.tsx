@@ -1,5 +1,5 @@
 import FileDownloadList from '../../../../common/components/fileDownloadList/FileDownloadList';
-import { getAttachmentFile } from '../muutosilmoitusAttachmentsApi';
+import { downloadAttachment } from '../muutosilmoitusAttachmentsApi';
 import { MuutosilmoitusAttachmentMetadata } from '../types';
 
 type Props = {
@@ -12,7 +12,7 @@ export default function MuutosilmoitusAttachmentsList({
   allowDownload = true,
 }: Readonly<Props>) {
   function download(file: MuutosilmoitusAttachmentMetadata) {
-    return getAttachmentFile(file.muutosilmoitusId, file.id);
+    return downloadAttachment(file.muutosilmoitusId, file.id);
   }
 
   return <FileDownloadList files={attachments} download={allowDownload ? download : undefined} />;

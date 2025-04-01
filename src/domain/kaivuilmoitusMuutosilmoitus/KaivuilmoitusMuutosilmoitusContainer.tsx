@@ -47,7 +47,12 @@ import FormErrorsNotification from '../kaivuilmoitus/components/FormErrorsNotifi
 import MuutosilmoitusCancel from '../application/muutosilmoitus/components/MuutosilmoitusCancel';
 import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsForHanke';
 import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
-import Attachments from './Attachments';
+import Attachments from '../application/taydennysAndMuutosilmoitusCommon/components/Attachments';
+import {
+  uploadAttachment,
+  deleteAttachment,
+  downloadAttachment,
+} from '../application/muutosilmoitus/muutosilmoitusAttachmentsApi';
 
 type Props = {
   muutosilmoitus: Muutosilmoitus<KaivuilmoitusData>;
@@ -176,8 +181,13 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
       element: (
         <Attachments
           applicationId={originalApplication.id!}
-          muutosilmoitusAttachments={muutosilmoitus.liitteet}
+          attachments={muutosilmoitus.liitteet}
           originalAttachments={originalAttachments}
+          api={{
+            uploadAttachment: uploadAttachment,
+            deleteAttachment: deleteAttachment,
+            downloadAttachment: downloadAttachment,
+          }}
         />
       ),
       label: t('hankePortfolio:tabit:liitteet'),

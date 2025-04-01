@@ -3,17 +3,12 @@ import { AttachmentType } from '../types/application';
 import { MuutosilmoitusAttachmentMetadata } from './types';
 
 // Upload attachment for muutosilmoitus
-export async function uploadAttachment({
-  muutosilmoitusId,
-  attachmentType,
-  file,
-  abortSignal,
-}: {
-  muutosilmoitusId: string;
-  attachmentType: AttachmentType;
-  file: File;
-  abortSignal?: AbortSignal;
-}) {
+export async function uploadAttachment(
+  muutosilmoitusId: string,
+  attachmentType: AttachmentType,
+  file: File,
+  abortSignal: AbortSignal | undefined,
+) {
   const { data } = await api.post<MuutosilmoitusAttachmentMetadata>(
     `/muutosilmoitukset/${muutosilmoitusId}/liitteet?tyyppi=${attachmentType}`,
     { liite: file },
@@ -28,7 +23,7 @@ export async function uploadAttachment({
 }
 
 // Download attachment file
-export async function getAttachmentFile(muutosilmoitusId: string, attachmentId: string) {
+export async function downloadAttachment(muutosilmoitusId: string, attachmentId: string) {
   const { data } = await api.get<Blob>(
     `/muutosilmoitukset/${muutosilmoitusId}/liitteet/${attachmentId}/content`,
     { responseType: 'blob' },
@@ -37,12 +32,9 @@ export async function getAttachmentFile(muutosilmoitusId: string, attachmentId: 
 }
 
 // Delete attachment
-export async function deleteAttachment({
-  muutosilmoitusId,
-  attachmentId,
-}: {
-  muutosilmoitusId: string | null;
-  attachmentId: string | undefined;
-}) {
+export async function deleteAttachment(
+  muutosilmoitusId: string | null,
+  attachmentId: string | undefined,
+) {
   await api.delete(`/muutosilmoitukset/${muutosilmoitusId}/liitteet/${attachmentId}`);
 }
