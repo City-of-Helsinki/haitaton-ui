@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom';
-import { BREADCRUMBS, useBreadcrumbs } from '../Breadcrumbs';
 import { Trans, useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import { Accordion, BreadcrumbListItem } from 'hds-react';
@@ -11,6 +10,7 @@ import HaittojenhallintaImg1 from './figures/haittojenhallintasuunnitelma_1.png'
 import HaittojenhallintaImg2 from './figures/haittojenhallintasuunnitelma_2.png';
 import JohtoselvitysImg1 from './figures/johtoselvitys.png';
 import VaiheetImg1 from './figures/vaiheet.png';
+import { BREADCRUMBS, useBreadcrumbs } from '../../../common/components/breadcrumbs/Breadcrumbs';
 
 const ManualPage: React.FC = () => {
   const { id = '' } = useParams<{ id: string }>();

@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import { Trans, useTranslation } from 'react-i18next';
 import styles from '../StaticContent.module.scss';
-import { BREADCRUMBS, useBreadcrumbs } from '../Breadcrumbs';
+
 import { Accordion, Button, IconAngleDown, IconAngleUp } from 'hds-react';
 import { Flex } from '@chakra-ui/react';
 import useLocale from '../../../common/hooks/useLocale';
+import { BREADCRUMBS, useBreadcrumbs } from '../../../common/components/breadcrumbs/Breadcrumbs';
 
 interface Word {
   term: string;

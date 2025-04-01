@@ -12,7 +12,8 @@ type BreadcrumbName =
   | 'card'
   | 'basicLevel'
   | 'additionalLevel'
-  | 'manual';
+  | 'manual'
+  | 'glossary';
 
 type Breadcrumb = BreadcrumbListItem & { skipTranslate?: boolean };
 
