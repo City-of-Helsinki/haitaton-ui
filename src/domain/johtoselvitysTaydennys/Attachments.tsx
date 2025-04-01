@@ -72,10 +72,10 @@ export default function Attachments({
         existingAttachments={taydennysAttachments}
         maxFilesNumber={20}
         uploadFunction={({ file, abortSignal }) =>
-          uploadAttachment(getValues('id')!, 'MUU', file, abortSignal)
+          uploadAttachment(getValues('id'), 'MUU', file, abortSignal)
         }
         onUpload={handleFileUpload}
-        fileDownLoadFunction={(file) => downloadAttachment(getValues('id')!, file.id)}
+        fileDownLoadFunction={(file) => downloadAttachment(getValues('id'), file.id)}
         fileDeleteFunction={(file) => deleteAttachment(getValues('id'), file?.id)}
         onFileDelete={() => queryClient.invalidateQueries(['application', applicationId])}
       />
