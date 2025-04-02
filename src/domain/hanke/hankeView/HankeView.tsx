@@ -422,7 +422,7 @@ const HankeView: React.FC<Props> = ({
             />
           </FeatureFlags>
 
-          <Tabs initiallyActiveTab={features.hanke ? initiallyActiveTab : 0}>
+          <Tabs small initiallyActiveTab={features.hanke ? initiallyActiveTab : 0}>
             {tabList}
             {features.hanke && (
               <TabPanel>

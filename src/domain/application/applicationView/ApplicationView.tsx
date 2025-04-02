@@ -985,7 +985,7 @@ function ApplicationView({
 
       <InformationViewContentContainer>
         <InformationViewMainContent>
-          <Tabs>
+          <Tabs small>
             <TabList style={{ marginBottom: 'var(--spacing-m)' }}>
               <Tab>{t('hankePortfolio:tabit:perustiedot')}</Tab>
               <Tab>{t('hankePortfolio:tabit:alueet')}</Tab>
