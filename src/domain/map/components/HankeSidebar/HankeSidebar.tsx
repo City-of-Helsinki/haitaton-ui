@@ -70,9 +70,13 @@ const SidebarSection: React.FC<React.PropsWithChildren<SectionProps>> = ({ title
       <Text tag="h3" styleAs="h6" weight="bold" spacingBottom="2-xs">
         {title}
       </Text>
-      <Text tag="p" styleAs="body-s" spacingBottom="2-xs">
-        {content}
-      </Text>
+      {typeof content === 'string' ? (
+        <Text tag="p" styleAs="body-s" spacingBottom="2-xs">
+          {content}
+        </Text>
+      ) : (
+        <>{content}</>
+      )}
     </Box>
   ) : null;
 
