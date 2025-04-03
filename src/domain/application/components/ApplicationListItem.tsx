@@ -15,9 +15,9 @@ import { getCurrentDecisions, getDecisionFilename, isApplicationSent } from '../
 import { CheckRightsByHanke } from '../../hanke/hankeUsers/UserRightsCheck';
 import React from 'react';
 
-type Props = { hankeTunnus: string; application: HankkeenHakemus };
+type Props = { hankeTunnus: string; hankeStatus: string; application: HankkeenHakemus };
 
-function ApplicationListItem({ hankeTunnus, application }: Readonly<Props>) {
+function ApplicationListItem({ hankeTunnus, hankeStatus, application }: Readonly<Props>) {
   const { t } = useTranslation();
   const getApplicationPathView = useLinkPath(ROUTES.HAKEMUS);
 
@@ -42,6 +42,7 @@ function ApplicationListItem({ hankeTunnus, application }: Readonly<Props>) {
   const getApplicationPathEdit = useLinkPath(editRoute);
   const getMuutosilmoitusPathEdit = useLinkPath(editMuutosilmoitusRoute);
   const isSent = isApplicationSent(alluStatus);
+  const isReadonly = isSent || hankeStatus === 'COMPLETED';
   const { name, startTime, endTime } = applicationData;
   const muutosilmoitusStatus: AlluStatus | null = muutosilmoitus?.sent ? AlluStatus.PENDING : null;
   const isMuutosilmoitusSent = isApplicationSent(muutosilmoitusStatus);
@@ -94,7 +95,7 @@ function ApplicationListItem({ hankeTunnus, application }: Readonly<Props>) {
           </Grid>
         </div>
         <Box paddingRight="var(--spacing-xs)">
-          {!isSent && (
+          {!isReadonly && (
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hankeTunnus}>
               <Link
                 to={applicationEditPath}

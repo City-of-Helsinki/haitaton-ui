@@ -171,7 +171,7 @@ export type HankeAlue = {
 enum HANKE_STATUS {
   DRAFT = 'DRAFT',
   PUBLIC = 'PUBLIC',
-  ENDED = 'ENDED',
+  COMPLETED = 'COMPLETED',
 }
 
 export type HANKE_STATUS_KEY = keyof typeof HANKE_STATUS;

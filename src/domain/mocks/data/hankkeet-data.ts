@@ -601,6 +601,135 @@ const hankkeet: HankeDataDraft[] = [
     generated: true,
     alueet: [],
   },
+  {
+    id: 12,
+    hankeTunnus: 'HAI22-12',
+    onYKTHanke: false,
+    nimi: 'Mannerheimintien päättynyt kaukolämpö',
+    kuvaus:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
+    tyomaaKatuosoite: 'Mannerheimintie 6',
+    alkuPvm: '2023-06-14T00:00:00Z',
+    loppuPvm: '2023-10-16T00:00:00Z',
+    vaihe: 'OHJELMOINTI',
+    tyomaaTyyppi: ['KAUKOLAMPO'],
+    version: 0,
+    createdBy: '1',
+    createdAt: '2022-11-27T11:44:22.443735Z',
+    modifiedBy: null,
+    modifiedAt: null,
+    status: 'COMPLETED',
+    omistajat: [
+      {
+        id: 1,
+        tyyppi: 'YRITYS',
+        nimi: 'Kauppisen maansiirtofirma KY',
+        ytunnus: '5341034-5',
+        email: 'toimisto@testi.com',
+        puhelinnumero: '0501234567',
+        yhteyshenkilot: [
+          {
+            id: '129fd4d0-4a00-4c43-8c02-2e32c31dd1f9',
+            etunimi: 'Esa',
+            sukunimi: 'Kauppinen',
+            sahkoposti: 'esa.kauppinen@maansiirtofirma.com',
+            puhelinnumero: '0507654321',
+          },
+        ],
+      },
+    ],
+    rakennuttajat: [],
+    toteuttajat: [],
+    muut: [],
+    tormaystarkasteluTulos: {
+      autoliikenne: {
+        indeksi: 1.0,
+        haitanKesto: 1,
+        katuluokka: 1,
+        liikennemaara: 1,
+        kaistahaitta: 1,
+        kaistapituushaitta: 1,
+      },
+      pyoraliikenneindeksi: 3.5,
+      linjaautoliikenneindeksi: 1,
+      raitioliikenneindeksi: 2,
+      liikennehaittaindeksi: {
+        indeksi: 3.5,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        tyyppi: 'PYORALIIKENNEINDEKSI' as any,
+      },
+    },
+    alueet: [
+      {
+        id: 1,
+        haittaAlkuPvm: new Date('2023-06-14T00:00:00.000Z'),
+        haittaLoppuPvm: new Date('2023-10-16T00:00:00.000Z'),
+        meluHaitta: HANKE_MELUHAITTA.SATUNNAINEN_MELUHAITTA,
+        polyHaitta: HANKE_POLYHAITTA.TOISTUVA_POLYHAITTA,
+        tarinaHaitta: HANKE_TARINAHAITTA.JATKUVA_TARINAHAITTA,
+        kaistaHaitta: HANKE_KAISTAHAITTA.YKSI_KAISTA_VAHENEE,
+        kaistaPituusHaitta: HANKE_KAISTAPITUUSHAITTA.PITUUS_ALLE_10_METRIA,
+        nimi: 'Hankealue 1',
+        geometriat: {
+          featureCollection: {
+            type: 'FeatureCollection',
+            features: [
+              {
+                type: 'Feature',
+                geometry: {
+                  type: 'Polygon',
+                  coordinates: [
+                    [
+                      [25496559.78, 6672988.05],
+                      [25496681.62, 6672825.27],
+                      [25496727.94, 6672856.74],
+                      [25496595.92, 6673029.09],
+                      [25496549.25, 6673005.46],
+                      [25496559.78, 6672988.05],
+                    ],
+                  ],
+                },
+                properties: {
+                  hankeTunnus: 'HAI22-3',
+                },
+              },
+            ],
+            crs: {
+              type: 'name',
+              properties: {
+                name: 'urn:ogc:def:crs:EPSG::3879',
+              },
+            },
+          },
+        },
+        tormaystarkasteluTulos: {
+          autoliikenne: {
+            indeksi: 3.0,
+            haitanKesto: 3,
+            katuluokka: 3,
+            liikennemaara: 3,
+            kaistahaitta: 3,
+            kaistapituushaitta: 3,
+          },
+          pyoraliikenneindeksi: 3.5,
+          linjaautoliikenneindeksi: 0,
+          raitioliikenneindeksi: 2,
+          liikennehaittaindeksi: {
+            indeksi: 3.5,
+            tyyppi: HAITTA_INDEX_TYPE.PYORALIIKENNEINDEKSI,
+          },
+        },
+        haittojenhallintasuunnitelma: {
+          YLEINEN: 'Yleisten haittojen hallintasuunnitelma',
+          PYORALIIKENNE: 'Pyöräliikenteelle koituvien haittojen hallintasuunnitelma',
+          AUTOLIIKENNE: 'Autoliikenteelle koituvien haittojen hallintasuunnitelma',
+          LINJAAUTOLIIKENNE: '',
+          RAITIOLIIKENNE: 'Raitioliikenteelle koituvien haittojen hallintasuunnitelma',
+          MUUT: 'Muiden haittojen hallintasuunnitelma',
+        },
+      },
+    ],
+  },
 ];
 
 export default hankkeet;

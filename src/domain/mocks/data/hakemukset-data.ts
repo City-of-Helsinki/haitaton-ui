@@ -2164,6 +2164,102 @@ const hakemukset: Application[] = [
       liitteet: [],
     },
   } as Application<KaivuilmoitusData>,
+  {
+    id: 15,
+    alluStatus: null,
+    applicationType: 'CABLE_REPORT',
+    hankeTunnus: 'HAI22-12',
+    applicationIdentifier: null,
+    applicationData: {
+      applicationType: 'CABLE_REPORT',
+      name: 'Mannerheimintien päättyneet luonnoskaivuut',
+      customerWithContacts: {
+        customer: {
+          type: 'COMPANY',
+          name: 'Yritys Oy',
+          country: 'FI',
+          email: 'yritys@test.com',
+          phone: '0000000000',
+          registryKey: '1164243-9',
+          registryKeyHidden: false,
+          ovt: null,
+          invoicingOperator: null,
+          sapCustomerNumber: null,
+        },
+        contacts: [
+          {
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            email: 'matti.meikalainen@test.com',
+            firstName: 'Matti',
+            lastName: 'Meikäläinen',
+            orderer: true,
+            phone: '0401234567',
+          },
+        ],
+      },
+      areas: [
+        {
+          geometry: {
+            type: 'Polygon',
+            crs: {
+              type: 'name',
+              properties: {
+                name: 'urn:ogc:def:crs:EPSG::3879',
+              },
+            },
+            coordinates: [
+              [
+                [25498583.87, 6679281.28],
+                [25498584.13, 6679314.07],
+                [25498573.17, 6679313.38],
+                [25498571.91, 6679281.46],
+                [25498583.87, 6679281.28],
+              ],
+            ],
+          },
+        },
+      ],
+      startTime: new Date('2023-07-14T00:00:00.000Z'),
+      endTime: new Date('2023-07-16T00:00:00.000Z'),
+      workDescription: 'Kuvaus',
+      contractorWithContacts: {
+        customer: {
+          type: 'COMPANY',
+          name: 'Yritys 2 Oy',
+          country: 'FI',
+          email: 'yritys2@test.com',
+          phone: '040123456',
+          registryKey: null,
+          registryKeyHidden: false,
+          ovt: null,
+          invoicingOperator: null,
+          sapCustomerNumber: null,
+        },
+        contacts: [
+          {
+            hankekayttajaId: '3fa85f64-5717-4562-b3fc-2c963f66afb1',
+            email: 'tauno@test.com',
+            firstName: 'Tauno',
+            lastName: 'Testinen',
+            orderer: false,
+            phone: '0401234567',
+          },
+        ],
+      },
+      postalAddress: {
+        city: 'Helsinki',
+        postalCode: '00100',
+        streetAddress: { streetName: 'Mannerheimintie 5' },
+      },
+      representativeWithContacts: null,
+      propertyDeveloperWithContacts: null,
+      constructionWork: true,
+      maintenanceWork: false,
+      emergencyWork: false,
+      propertyConnectivity: false,
+      rockExcavation: true,
+    },
+  } as Application<JohtoselvitysData>,
 ];
 
 export default hakemukset;

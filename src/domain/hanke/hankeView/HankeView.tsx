@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   Accordion,
   Button,
-  IconCross,
   IconPen,
   IconPlusCircle,
   IconTrash,
@@ -297,10 +296,6 @@ const HankeView: React.FC<Props> = ({
     setShowAddApplicationDialog(false);
   }
 
-  const isCancelPossible = applicationsResponse
-    ? canHankeBeCancelled(applicationsResponse.applications)
-    : true;
-
   if (!hankeData) {
     return (
       <Flex justify="center" mt="var(--spacing-xl)">
@@ -313,6 +308,10 @@ const HankeView: React.FC<Props> = ({
 
   const { omistajat, rakennuttajat, toteuttajat, muut, alueet, status } = hankeData;
   const isHankePublic = status === 'PUBLIC';
+  const isHankeCompleted = status === 'COMPLETED';
+  const isCancelPossible =
+    !isHankeCompleted &&
+    (applicationsResponse ? canHankeBeCancelled(applicationsResponse.applications) : true);
 
   const tabList = features.hanke ? (
     <TabList className={styles.tabList}>
@@ -352,14 +351,16 @@ const HankeView: React.FC<Props> = ({
         <InformationViewHeaderButtons>
           <FeatureFlags flags={['hanke']}>
             <CheckRightsByHanke requiredRight="EDIT" hankeTunnus={hankeData.hankeTunnus}>
-              <Button
-                onClick={onEditHanke}
-                variant="primary"
-                iconLeft={<IconPen aria-hidden="true" />}
-                theme="coat"
-              >
-                {t('hankePortfolio:buttons:edit')}
-              </Button>
+              {!isHankeCompleted ? (
+                <Button
+                  onClick={onEditHanke}
+                  variant="primary"
+                  iconLeft={<IconPen aria-hidden="true" />}
+                  theme="coat"
+                >
+                  {t('hankePortfolio:buttons:edit')}
+                </Button>
+              ) : null}
             </CheckRightsByHanke>
             <CheckRightsByHanke
               requiredRight="EDIT_APPLICATIONS"
@@ -385,13 +386,6 @@ const HankeView: React.FC<Props> = ({
           >
             {t('hankeUsers:userManagementTitle')}
           </Button>
-          <FeatureFlags flags={['hanke']}>
-            <CheckRightsByHanke requiredRight="DELETE" hankeTunnus={hankeData.hankeTunnus}>
-              <Button variant="primary" iconLeft={<IconCross aria-hidden="true" />} theme="black">
-                {t('hankePortfolio:buttons:endHanke')}
-              </Button>
-            </CheckRightsByHanke>
-          </FeatureFlags>
           {!isLoading && isCancelPossible && (
             <CheckRightsByHanke requiredRight="DELETE" hankeTunnus={hankeData.hankeTunnus}>
               <Button
@@ -500,6 +494,7 @@ const HankeView: React.FC<Props> = ({
                 {applicationsResponse?.applications && (
                   <ApplicationList
                     hankeTunnus={hankeData.hankeTunnus}
+                    hankeStatus={hankeData.status}
                     applications={applicationsResponse.applications}
                   />
                 )}

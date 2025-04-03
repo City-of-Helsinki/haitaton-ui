@@ -128,9 +128,10 @@ type Props = {
   hankeUsers: HankeUser[];
   hankeTunnus: string;
   signedInUser?: SignedInUser;
+  readonly?: boolean;
 };
 
-function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser }: Readonly<Props>) {
+function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: Readonly<Props>) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { HANKEPORTFOLIO } = useLocalizedRoutes();
@@ -285,7 +286,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser }: Readonly<Pr
 
     return (
       <Grid gridTemplateColumns="1fr 1fr 1fr" gap="var(--spacing-s)" justifyContent="flex-end">
-        {canEditUser(args) ? (
+        {!readonly && canEditUser(args) ? (
           <Link to={getEditUserPath({ hankeTunnus, id: args.id })}>
             <IconPen
               style={{ display: 'block' }}
@@ -295,7 +296,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser }: Readonly<Pr
             />
           </Link>
         ) : null}
-        {showUserDeleteButton(args, hankeUsers, signedInUser) ? (
+        {!readonly && showUserDeleteButton(args, hankeUsers, signedInUser) ? (
           <button aria-label={t('hankeUsers:buttons:delete')} onClick={() => setDeletedUser(args)}>
             {deleteInfoQueryResult.isLoading && args.id === userToDelete?.id ? (
               <LoadingSpinner small />
@@ -308,7 +309,9 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser }: Readonly<Pr
             )}
           </button>
         ) : null}
-        {!args.tunnistautunut && signedInUser?.kayttooikeudet.includes('RESEND_INVITATION') ? (
+        {!readonly &&
+        !args.tunnistautunut &&
+        signedInUser?.kayttooikeudet.includes('RESEND_INVITATION') ? (
           <Menu>
             <MenuButton as="button">
               {isSending ? (
@@ -428,7 +431,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser }: Readonly<Pr
                   </p>
                 </Box>
                 <Flex flexWrap="wrap" gap="var(--spacing-s)">
-                  {canEditUser(row.original) && (
+                  {!readonly && canEditUser(row.original) && (
                     <Button
                       iconLeft={<IconPen />}
                       variant="secondary"
@@ -437,7 +440,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser }: Readonly<Pr
                       {t('hankeUsers:buttons:edit')}
                     </Button>
                   )}
-                  {showUserDeleteButton(row.original, hankeUsers, signedInUser) && (
+                  {!readonly && showUserDeleteButton(row.original, hankeUsers, signedInUser) && (
                     <Button
                       iconLeft={<IconTrash />}
                       variant="danger"

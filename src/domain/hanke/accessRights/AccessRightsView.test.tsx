@@ -511,3 +511,21 @@ test('User should be able to delete themselves', async () => {
 
   await reset();
 });
+
+describe('Completed hanke', () => {
+  test('Does not show edit buttons', async () => {
+    render(<AccessRightsViewContainer hankeTunnus="HAI22-12" />);
+    await waitForLoadingToFinish();
+
+    expect(screen.queryByRole('img', { name: 'Muokkaa tietoja' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Muokkaa tietoja' })).not.toBeInTheDocument();
+  });
+
+  test('Does not show delete buttons', async () => {
+    render(<AccessRightsViewContainer hankeTunnus="HAI22-12" />);
+    await waitForLoadingToFinish();
+
+    expect(screen.queryByRole('img', { name: 'Poista käyttäjä' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Poista käyttäjä' })).not.toBeInTheDocument();
+  });
+});
