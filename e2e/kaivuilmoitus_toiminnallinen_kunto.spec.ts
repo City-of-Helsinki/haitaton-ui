@@ -376,6 +376,7 @@ test('Kaivuilmoitus => toiminnallinen kunto ja valmis', async ({ page }) => {
   await page.getByRole('button', { name: 'HYVÄKSY' }).click();
 
   // Odotetaan tuloksia "toiminnallinen kunto"
+  await page.goto(testiData.alluTriggerUrl);
   await expect(async () => {
     await page.goto(`${testiData.hankesalkku}${hanketunnus}`);
     await page.getByText('Hakemukset').click();
@@ -424,6 +425,7 @@ test('Kaivuilmoitus => toiminnallinen kunto ja valmis', async ({ page }) => {
   await expect(page.getByText('VALMIS', { exact: true })).toBeVisible();
 
   // Odotetaan tuloksia "valmis"
+  await page.goto(testiData.alluTriggerUrl);
   await expect(async () => {
     await page.goto(`${testiData.hankesalkku}${hanketunnus}`);
     await page.getByText('Hakemukset').click();

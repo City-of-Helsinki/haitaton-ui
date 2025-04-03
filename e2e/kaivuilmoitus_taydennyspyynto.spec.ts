@@ -339,7 +339,9 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
   await page.getByLabel('Selite *').click();
   await page.getByLabel('Selite *').fill('Testiautomaatio täydennyspyyntö');
   await page.getByRole('button', { name: 'LÄHETÄ PYYNTÖ' }).click();
+
   // Odotetaan tuloksia
+  await page.goto(testiData.alluTriggerUrl);
   await expect(async () => {
     await page.goto(`${testiData.hankesalkku}${hanketunnus}`);
     await page.getByText('Hakemukset').click();
@@ -417,6 +419,7 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
   await expect(page.getByTestId('dialog-description-test')).not.toBeVisible({ timeout: 30000 });
 
   // täydennyspyynnöt suoritettu
+  await page.goto(testiData.alluTriggerUrl);
   await expect(async () => {
     await page.goto(`${testiData.hankesalkku}${hanketunnus}`);
     await page.getByText('Hakemukset').click();
@@ -476,6 +479,7 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
   await expect(page.getByLabel('Hakemus päätetty')).toBeVisible();
 
   // tarkista haitattomasta
+  await page.goto(testiData.alluTriggerUrl);
   await expect(async () => {
     await page.goto(`${testiData.hankesalkku}${hanketunnus}`);
     await page.getByText('Hakemukset').click();
@@ -538,6 +542,7 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
   await expect(page.getByText('TYÖJONO')).toBeVisible();
 
   // Odotetaan tuloksia "valmis"
+  await page.goto(testiData.alluTriggerUrl);
   await expect(async () => {
     await page.goto(`${testiData.hankesalkku}${hanketunnus}`);
     await page.getByText('Hakemukset').click();

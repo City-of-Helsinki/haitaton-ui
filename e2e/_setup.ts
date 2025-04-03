@@ -21,6 +21,7 @@ export const testiData: HaitatonTestData = {
   suomifilogin: process.env.TA_SUOMIFI_LOGIN ?? '',
   allupw: process.env.TA_ALLU_PW ?? '',
   hankesalkku: process.env.TA_HAIT_TEST_HANKESALKKU ?? '',
+  alluTriggerUrl: process.env.TA_ALLU_TRIGGER ?? '',
   tomorrowType: tommorowType,
 };
 
@@ -83,6 +84,7 @@ interface HaitatonTestData {
   suomifilogin: string;
   allupw: string;
   hankesalkku: string;
+  alluTriggerUrl: string;
   tomorrowType: string;
 }
 
