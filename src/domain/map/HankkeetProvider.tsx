@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import api from '../api/api';
 import HankkeetContext from './HankkeetProviderContext';
-import { HankeData } from '../types/hanke';
+import { PublicHanke, toHankeData } from '../types/hanke';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const convertArrayToObject = (array: any[], key: string) => {
@@ -15,28 +15,23 @@ const convertArrayToObject = (array: any[], key: string) => {
   }, initialValue);
 };
 
-const HankkeetProvider: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
-  const getProjectsWithGeometry = async () => {
-    const response = await api.get<HankeData[]>('/public-hankkeet', {
-      params: {
-        geometry: true,
-      },
-    });
-    return response;
+const HankkeetProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const getPublicHankkeet = async () => {
+    return await api.get<PublicHanke[]>('/public-hankkeet');
   };
 
-  const useProjectsWithGeometry = () =>
-    useQuery(['projectsWithGeometry'], getProjectsWithGeometry, {
+  const usePublicHankkeet = () =>
+    useQuery(['projectsWithGeometry'], getPublicHankkeet, {
       refetchOnWindowFocus: false,
       retry: false,
     });
 
-  const { data } = useProjectsWithGeometry();
-  const projectsData = data ? data.data : [];
-  const hankkeetObject = data ? convertArrayToObject(data.data, 'hankeTunnus') : {};
+  const { data } = usePublicHankkeet();
+  const hankeData = data ? data.data.map(toHankeData) : [];
+  const hankkeetObject = data ? convertArrayToObject(hankeData, 'hankeTunnus') : {};
 
   return (
-    <HankkeetContext.Provider value={{ hankkeet: projectsData, hankkeetObject }}>
+    <HankkeetContext.Provider value={{ hankkeet: hankeData, hankkeetObject }}>
       {children}
     </HankkeetContext.Provider>
   );

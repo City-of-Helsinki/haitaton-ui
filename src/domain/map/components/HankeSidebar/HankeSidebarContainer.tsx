@@ -14,6 +14,7 @@ const HankeSidebarContainer: React.FC<React.PropsWithChildren<Props>> = ({ hanke
   const location = useLocation();
   const navigate = useNavigate();
   const hankkeenTunnus = hankeTunnus || new URLSearchParams(location.search).get('hanke');
+  const hankealueNimi = new URLSearchParams(location.search).get('hankealue')!;
 
   useEffect(() => {
     setIsOpen(true);
@@ -31,6 +32,7 @@ const HankeSidebarContainer: React.FC<React.PropsWithChildren<Props>> = ({ hanke
   return (
     <HankeSidebar
       hanke={hankkeetObject[hankkeenTunnus]}
+      hankealueNimi={hankealueNimi}
       isOpen={isOpen}
       handleClose={handleClose}
     />

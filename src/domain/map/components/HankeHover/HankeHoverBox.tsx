@@ -6,7 +6,7 @@ import styles from './HankeHover.module.scss';
 import Text from '../../../../common/components/text/Text';
 import { format } from 'date-fns';
 
-const HankeHoverBox: React.FC<React.PropsWithChildren<unknown>> = () => {
+const HankeHoverBox: React.FC<React.PropsWithChildren> = () => {
   const { hoveredHankeAreaData, hoverPosition } = useContext(HoverContext);
 
   const navigate = useNavigate();
@@ -16,11 +16,15 @@ const HankeHoverBox: React.FC<React.PropsWithChildren<unknown>> = () => {
     left: hoverPosition[0] + 2 || 0,
   };
 
-  const openHanke = (e: React.MouseEvent, hankeTunnus?: string | null) => {
+  const openHanke = (
+    e: React.MouseEvent,
+    hankeTunnus?: string | null,
+    hankealueNimi?: string | null,
+  ) => {
     e.preventDefault();
     if (!hankeTunnus) return;
     navigate({
-      search: `?hanke=${hankeTunnus}`,
+      search: `?hanke=${hankeTunnus}&hankealue=${hankealueNimi}`,
     });
   };
 
@@ -29,9 +33,9 @@ const HankeHoverBox: React.FC<React.PropsWithChildren<unknown>> = () => {
       {hoveredHankeAreaData.map((hankeArea) => (
         <div key={hankeArea.hankeTunnus}>
           <Link
-            href={`/?hanke=${hankeArea.hankeTunnus}`}
+            href={`/?hanke=${hankeArea.hankeTunnus}&hankealue=${hankeArea.areaName}`}
             size="M"
-            onClick={(e) => openHanke(e, hankeArea.hankeTunnus)}
+            onClick={(e) => openHanke(e, hankeArea.hankeTunnus, hankeArea.areaName)}
           >
             {`${hankeArea.hankeName} (${hankeArea.hankeTunnus})`}
           </Link>

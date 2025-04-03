@@ -65,7 +65,7 @@ export async function updateSelf({
   return data;
 }
 
-// Get user id and rights of the signed in user for a hanke
+// Get user id and rights of the signed-in user for a hanke
 export async function getSignedInUserForHanke(hankeTunnus?: string): Promise<SignedInUser> {
   const { data } = await api.get<SignedInUser>(`hankkeet/${hankeTunnus}/whoami`);
   return data;
