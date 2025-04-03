@@ -180,6 +180,7 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
     .getByText('Hakemus siirretty odottamaan täydennystä')
     .waitFor({ state: 'hidden', timeout: 10000 });
 
+  await page.goto(testiData.alluTriggerUrl);
   await expect(async () => {
     await page.goto(hakemusLinkki);
     await page.getByText('Hakemukset').click();
@@ -217,6 +218,7 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   await page.getByText('Lähetä täydennys').click();
   await page.getByText('Vahvista').click();
 
+  await page.goto(testiData.alluTriggerUrl);
   await expect(async () => {
     await page.goto(hakemusLinkki);
     await page.getByText('Hakemukset').click();
@@ -255,6 +257,7 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
   await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
   await expect(page.getByRole('heading', { name: 'TYÖJONO' })).toBeVisible();
 
+  await page.goto(testiData.alluTriggerUrl);
   await expect(async () => {
     await page.goto(hakemusLinkki);
     await page.getByText('Hakemukset').click();

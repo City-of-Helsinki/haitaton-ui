@@ -269,6 +269,7 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
   await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
   await expect(page.getByRole('heading', { name: 'TYÖJONO' })).toBeVisible();
 
+  await page.goto(testiData.alluTriggerUrl);
   await expect(async () => {
     await page.goto(hakemusLinkki);
     await page.getByText('Hakemukset').click();
