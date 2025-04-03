@@ -172,7 +172,7 @@ const HankeSidebar: React.FC<React.PropsWithChildren<Props>> = ({
             title={t('hankeForm:labels.kuvaus')}
             content={
               <Box whiteSpace="pre-wrap" wordBreak="break-word">
-                {hanke.kuvaus || ''}
+                {hanke.kuvaus ?? ''}
               </Box>
             }
           />

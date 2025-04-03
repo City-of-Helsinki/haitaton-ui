@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useQuery } from 'react-query';
 import api from '../api/api';
 import HankkeetContext from './HankkeetProviderContext';
@@ -27,14 +27,17 @@ const HankkeetProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     });
 
   const { data } = usePublicHankkeet();
-  const hankeData = data ? data.data.map(toHankeData) : [];
-  const hankkeetObject = data ? convertArrayToObject(hankeData, 'hankeTunnus') : {};
-
-  return (
-    <HankkeetContext.Provider value={{ hankkeet: hankeData, hankkeetObject }}>
-      {children}
-    </HankkeetContext.Provider>
+  const hankeData = useMemo(() => (data?.data ? data.data.map(toHankeData) : []), [data]);
+  const hankkeetObject = useMemo(
+    () => (data?.data ? convertArrayToObject(hankeData, 'hankeTunnus') : {}),
+    [data?.data, hankeData],
   );
+  const value = useMemo(
+    () => ({ hankkeet: hankeData, hankkeetObject }),
+    [hankeData, hankkeetObject],
+  );
+
+  return <HankkeetContext.Provider value={value}>{children}</HankkeetContext.Provider>;
 };
 
 export default HankkeetProvider;
