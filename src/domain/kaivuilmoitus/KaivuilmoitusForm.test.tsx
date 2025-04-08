@@ -77,19 +77,8 @@ async function fillBasicInformation(
     fireEvent.click(screen.getByLabelText(/käytä olemassa olevia/i));
     if (existingCableReport) {
       await screen.findAllByLabelText(/tehtyjen johtoselvitysten tunnukset/i);
-      fireEvent.click(
-        screen.getByRole('button', {
-          name: 'Tehtyjen johtoselvitysten tunnukset: Sulje ja avaa valikko',
-        }),
-      );
+      fireEvent.click(screen.getByRole('button', { name: /tehtyjen johtoselvitysten tunnukset/i }));
       fireEvent.click(screen.getByText(existingCableReport));
-
-      for (const cableReport of cableReports) {
-        fireEvent.change(screen.getAllByRole('combobox')[1], {
-          target: { value: cableReport },
-        });
-        await user.keyboard('{Enter}');
-      }
     } else {
       for (const cableReport of cableReports) {
         fireEvent.change(screen.getByLabelText('Johtoselvitystunnus'), {
@@ -210,7 +199,7 @@ function fillContactsInformation(
   } = options;
 
   // Fill customer info
-  fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+  fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
   fireEvent.click(screen.getAllByText(/yritys/i)[0]);
   fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[0], {
     target: { value: customer.name },
@@ -227,9 +216,11 @@ function fillContactsInformation(
   fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.phone'), {
     target: { value: customer.phone },
   });
+  fireEvent.click(screen.getAllByRole('button', { name: /yhteyshenkilöt/i })[0]);
+  fireEvent.click(screen.getAllByText(/tauno testinen/i)[0]);
 
   // Fill contractor info
-  fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+  fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
   fireEvent.click(screen.getAllByText(/yritys/i)[1]);
   fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[1], {
     target: { value: contractor.name },
@@ -246,9 +237,11 @@ function fillContactsInformation(
   fireEvent.change(screen.getByTestId('applicationData.contractorWithContacts.customer.phone'), {
     target: { value: contractor.phone },
   });
+  fireEvent.click(screen.getAllByRole('button', { name: /yhteyshenkilöt/i })[1]);
+  fireEvent.click(screen.getByText('Matti Meikäläinen (matti.meikalainen@test.com)'));
 
   // Fill invoicing customer info
-  fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+  fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
   fireEvent.click(screen.getAllByText(/yritys/i)[2]);
   fireEvent.change(screen.getByTestId('applicationData.invoicingCustomer.name'), {
     target: { value: invoicingCustomer.name },
@@ -378,7 +371,6 @@ test('Should be able to fill form pages and show filled information in summary p
   const description = 'Testataan yhteenvetosivua';
   const cableReportDone = true;
   const existingCableReport = 'JS2300001';
-  const cableReports = ['JS2300002', 'JS2300003', 'JS2300004'];
   const placementContracts = ['SL0000001', 'SL0000002'];
   const hankeData = hankkeet[1] as HankeData;
 
@@ -453,7 +445,6 @@ test('Should be able to fill form pages and show filled information in summary p
     description,
     cableReportDone,
     existingCableReport,
-    cableReports,
     placementContracts,
   });
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
@@ -488,9 +479,7 @@ test('Should be able to fill form pages and show filled information in summary p
   // Basic information
   expect(screen.getByText(name)).toBeInTheDocument();
   expect(screen.getByText(description)).toBeInTheDocument();
-  expect(
-    screen.getByText(`${existingCableReport}, ${cableReports.join(', ')}`),
-  ).toBeInTheDocument();
+  expect(screen.getByText(existingCableReport)).toBeInTheDocument();
   expect(screen.getByText(placementContracts.join(', '))).toBeInTheDocument();
   expect(screen.getByText('Kyllä')).toBeInTheDocument();
 
@@ -606,7 +595,6 @@ test('If user selects "Hae uusi johtoselvitys" option, should show "Louhitaanko 
     cableReportDone: false,
     existingCableReport: null,
     rockExcavation: true,
-    cableReports: [],
   });
   await user.click(screen.getByRole('button', { name: /yhteenveto/i }));
 
@@ -893,7 +881,7 @@ test('Should disable OVT fields if invoicing customer type is not COMPANY or ASS
   await fillBasicInformation(user);
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-  fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+  fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
   fireEvent.click(screen.getByText(/yksityishenkilö/i));
 
   expect(screen.getByTestId('applicationData.invoicingCustomer.ovt')).toBeDisabled();
@@ -1041,7 +1029,7 @@ test('OVT and registryKey fields should be send as null if they are left empty b
   await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
   // Change customer type to PERSON
-  await user.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+  await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
   await user.click(screen.getAllByText(/yksityishenkilö/i)[0]);
 
   await user.click(screen.getByRole('button', { name: /seuraava/i }));
@@ -1486,7 +1474,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
@@ -1499,7 +1487,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Yritys')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
@@ -1512,7 +1500,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Yhdistys')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
@@ -1525,7 +1513,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Muu')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
@@ -1534,14 +1522,14 @@ describe('Registry key', () => {
       ).toBeInTheDocument();
     });
 
-    test('Registry key is required for all customer types', async () => {
+    test('Registry key is required for private, company and association types', async () => {
       const { user } = render(
         <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
       // private person
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
 
       expect(
@@ -1549,7 +1537,7 @@ describe('Registry key', () => {
       ).toBeRequired();
 
       // company
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Yritys')[0]);
 
       expect(
@@ -1557,15 +1545,21 @@ describe('Registry key', () => {
       ).toBeRequired();
 
       // association
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Yhdistys')[0]);
 
       expect(
         await screen.findByTestId('applicationData.customerWithContacts.customer.registryKey'),
       ).toBeRequired();
+    });
 
-      // other
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[0]);
+    test('Registry key is required for other contact type', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[0]);
       fireEvent.click(screen.getAllByText('Muu')[0]);
 
       expect(
@@ -1653,7 +1647,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
       fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
@@ -1666,7 +1660,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
       fireEvent.click(screen.getAllByText('Yritys')[1]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
@@ -1679,7 +1673,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
       fireEvent.click(screen.getAllByText('Yhdistys')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
@@ -1692,7 +1686,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
       fireEvent.click(screen.getAllByText('Muu')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
@@ -1701,38 +1695,50 @@ describe('Registry key', () => {
       ).not.toBeInTheDocument();
     });
 
-    test('Registry key is required for company and association customer types and disabled for others', async () => {
+    test('Registry key is required for company and association customer types', async () => {
       const { user } = render(
         <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      // private person
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
-      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
-
-      expect(
-        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
-      ).toBeDisabled();
-
       // company
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
-      fireEvent.click(screen.getAllByText('Yritys')[1]);
+      await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      await user.click(screen.getAllByText('Yritys')[1]);
 
       expect(
         await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
       ).toBeRequired();
 
       // association
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
-      fireEvent.click(screen.getAllByText('Yhdistys')[0]);
+      await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      await user.click(screen.getAllByText('Yhdistys')[0]);
 
       expect(
         await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
       ).toBeRequired();
+    });
 
-      // other
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+    test('Registry key is disabled for private customer type', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
+      fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
+
+      expect(
+        await screen.findByTestId('applicationData.contractorWithContacts.customer.registryKey'),
+      ).toBeDisabled();
+    });
+
+    test('Registry key is disabled for other customer type', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
       fireEvent.click(screen.getAllByText('Muu')[0]);
 
       expect(
@@ -1748,7 +1754,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
       fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
@@ -1761,7 +1767,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
       fireEvent.click(screen.getAllByText('Yritys')[2]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
@@ -1774,7 +1780,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
       fireEvent.click(screen.getAllByText('Yhdistys')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(3);
@@ -1787,7 +1793,7 @@ describe('Registry key', () => {
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
       fireEvent.click(screen.getAllByText('Muu')[0]);
 
       expect(await screen.findAllByText('Y-tunnus')).toHaveLength(2);
@@ -1796,14 +1802,14 @@ describe('Registry key', () => {
       ).toBeInTheDocument();
     });
 
-    test('Registry key is required for all customer types', async () => {
+    test('Registry key is required for private, company and association types', async () => {
       const { user } = render(
         <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
       );
       await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
 
       // private person
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
       fireEvent.click(screen.getAllByText('Yksityishenkilö')[0]);
 
       expect(
@@ -1811,23 +1817,29 @@ describe('Registry key', () => {
       ).toBeRequired();
 
       // company
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
-      fireEvent.click(screen.getAllByText('Yritys')[2]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByText('Yritys')[0]);
 
       expect(
         await screen.findByTestId('applicationData.invoicingCustomer.registryKey'),
       ).toBeRequired();
 
       // association
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
       fireEvent.click(screen.getAllByText('Yhdistys')[0]);
 
       expect(
         await screen.findByTestId('applicationData.invoicingCustomer.registryKey'),
       ).toBeRequired();
+    });
 
-      // other
-      fireEvent.click(screen.getAllByRole('button', { name: /tyyppi/i })[2]);
+    test('Registry key is required for other contact type', async () => {
+      const { user } = render(
+        <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+      );
+      await user.click(screen.getByRole('button', { name: /yhteystiedot/i }));
+
+      fireEvent.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[2]);
       fireEvent.click(screen.getAllByText('Muu')[0]);
 
       expect(

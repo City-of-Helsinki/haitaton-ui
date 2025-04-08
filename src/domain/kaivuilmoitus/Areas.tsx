@@ -1,7 +1,16 @@
 import React, { useCallback, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
-import { Fieldset, Notification, Tab, TabList, TabPanel, Tabs, Tooltip } from 'hds-react';
+import {
+  Fieldset,
+  Notification,
+  NotificationSize,
+  Tab,
+  TabList,
+  TabPanel,
+  Tabs,
+  Tooltip,
+} from 'hds-react';
 import { Box, Flex, Grid } from '@chakra-ui/react';
 import { Feature } from 'ol';
 import { Geometry, Polygon } from 'ol/geom';
@@ -467,7 +476,10 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
 
         {totalSurfaceArea > 0 && (
           <Box marginBottom="var(--spacing-m)">
-            <Notification label={t('hakemus:labels:totalSurfaceArea')} size="small">
+            <Notification
+              label={t('hakemus:labels:totalSurfaceArea')}
+              size={NotificationSize.Small}
+            >
               {t('hakemus:labels:totalSurfaceAreaLong')} {totalSurfaceArea} m²
             </Notification>
           </Box>
@@ -477,7 +489,7 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
           <Box marginBottom="var(--spacing-m)">
             <Notification
               type="alert"
-              size="small"
+              size={NotificationSize.Small}
               label={t('hanke:alue:haittaIndexesChangedLabel')}
             >
               {t('hanke:alue:haittaIndexesChanged')}

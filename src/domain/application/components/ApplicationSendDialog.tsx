@@ -1,11 +1,11 @@
 import {
-  Button,
+  ButtonVariant,
   Dialog,
   IconCheck,
   IconQuestionCircle,
   Link,
-  LoadingSpinner,
   Notification,
+  NotificationSize,
   ToggleButton,
 } from 'hds-react';
 import React from 'react';
@@ -28,6 +28,7 @@ import useSendApplication from '../hooks/useSendApplication';
 import useApplicationSendNotification from '../hooks/useApplicationSendNotification';
 import { KaivuilmoitusMuutosilmoitusFormValues } from '../../kaivuilmoitusMuutosilmoitus/types';
 import { Muutosilmoitus } from '../muutosilmoitus/types';
+import Button from '../../../common/components/button/Button';
 
 type Props = {
   application: Application;
@@ -128,12 +129,6 @@ const ApplicationSendDialog: React.FC<Props> = ({
     }
   }
 
-  const submitButtonIcon = applicationSendMutation.isLoading ? (
-    <LoadingSpinner small />
-  ) : (
-    <IconCheck />
-  );
-
   return (
     <Dialog
       id="application-send"
@@ -146,7 +141,7 @@ const ApplicationSendDialog: React.FC<Props> = ({
       <Dialog.Header
         id="application-send-title"
         title={dialogTitle}
-        iconLeft={<IconQuestionCircle aria-hidden="true" />}
+        iconStart={<IconQuestionCircle aria-hidden="true" />}
       />
       <FormProvider {...formContext}>
         <form onSubmit={handleSubmit(submitForm)}>
@@ -224,7 +219,7 @@ const ApplicationSendDialog: React.FC<Props> = ({
               <Box paddingTop="var(--spacing-s)">
                 <Notification
                   type="error"
-                  size="small"
+                  size={NotificationSize.Small}
                   label={
                     isMuutosilmoitus
                       ? t('muutosilmoitus:notification:sendErrorLabel')
@@ -257,15 +252,15 @@ const ApplicationSendDialog: React.FC<Props> = ({
           <Dialog.ActionButtons>
             <Button
               type="submit"
-              iconLeft={submitButtonIcon}
-              disabled={!isConfirmButtonEnabled || applicationSendMutation.isLoading}
+              iconStart={<IconCheck />}
+              disabled={!isConfirmButtonEnabled}
+              isLoading={applicationSendMutation.isLoading}
+              loadingText={t('common:buttons:sendingText')}
             >
-              {applicationSendMutation.isLoading
-                ? t('common:buttons:sendingText')
-                : t('common:confirmationDialog:confirmButton')}
+              {t('common:confirmationDialog:confirmButton')}
             </Button>
             <Button
-              variant="secondary"
+              variant={ButtonVariant.Secondary}
               onClick={handleClose}
               disabled={applicationSendMutation.isLoading}
             >

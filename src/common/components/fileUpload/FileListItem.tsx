@@ -1,13 +1,23 @@
 import { Box } from '@chakra-ui/react';
 import { format, isToday } from 'date-fns';
 import { fi } from 'date-fns/locale';
-import { Button, formatBytes, IconCross, IconDocument, IconDownload, IconPhoto } from 'hds-react';
+import {
+  ButtonPresetTheme,
+  ButtonSize,
+  ButtonVariant,
+  formatBytes,
+  IconCross,
+  IconDocument,
+  IconDownload,
+  IconPhoto,
+} from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { AttachmentMetadata } from '../../types/attachment';
 import FileDownloadLink from '../fileDownloadLink/FileDownloadLink';
 import Text from '../text/Text';
 import styles from './FileListItem.module.scss';
 import { FileDownLoadFunction, ShowDeleteButtonFunction } from './types';
+import Button from '../button/Button';
 
 type Props = {
   file: AttachmentMetadata;
@@ -75,10 +85,10 @@ export default function FileListItem({
       {showDeleteButton && (
         <Button
           className={styles.fileListItemButton}
-          iconLeft={<IconCross aria-hidden />}
-          variant="supplementary"
-          size="small"
-          theme="black"
+          iconStart={<IconCross aria-hidden />}
+          variant={ButtonVariant.Supplementary}
+          size={ButtonSize.Small}
+          theme={ButtonPresetTheme.Black}
           onClick={deleteFile}
           data-testid={`delete-${file.id}`}
           isLoading={deletingFile}

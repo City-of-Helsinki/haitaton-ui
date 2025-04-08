@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { HankkeenHakemus } from '../types/application';
 import ApplicationListItem from './ApplicationListItem';
 import { Language } from '../../../common/types/language';
-import styles from './ApplicationList.module.scss';
 
 interface Props {
   hankeTunnus: string;
@@ -82,7 +81,7 @@ function ApplicationList({ hankeTunnus, hankeStatus, applications }: Readonly<Pr
         );
       })}
 
-      <div className={styles.pagination}>
+      <Box className="haitaton-pagination" mb="var(--spacing-s)">
         <Pagination
           language={i18n.language as Language}
           onChange={handlePageChange}
@@ -91,7 +90,7 @@ function ApplicationList({ hankeTunnus, hankeStatus, applications }: Readonly<Pr
           pageIndex={pageIndex}
           paginationAriaLabel={t('common:components:paginationAriaLabel')}
         />
-      </div>
+      </Box>
     </div>
   );
 }

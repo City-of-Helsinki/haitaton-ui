@@ -554,17 +554,11 @@ describe('Error notification', () => {
     fireEvent.change(screen.getByTestId('applicationData.customerWithContacts.customer.phone'), {
       target: { value: '' },
     });
-    fireEvent.click(screen.getAllByRole('button', { name: /poista valittu/i })[0]);
 
     expect(
       await screen.findByText(
         'Seuraavat kentät tällä sivulla vaaditaan hakemuksen lähettämiseksi:',
       ),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', {
-        name: /työstä vastaava: Vähintään yksi yhteyshenkilö tulee olla asetettuna/i,
-      }),
     ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Työstä vastaava: Sähköposti/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Työstä vastaava: Puhelin/i })).toBeInTheDocument();

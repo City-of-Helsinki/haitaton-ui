@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
-import { Accordion, Button, Fieldset, IconPlusCircle } from 'hds-react';
+import { Accordion, Button, ButtonVariant, Fieldset, IconPlusCircle } from 'hds-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { CONTACT_FORMFIELD, FORMFIELD, FormProps, HankeDataFormState } from './types';
 import {
@@ -254,13 +254,15 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
           );
         })}
 
-        <Button
-          variant="supplementary"
-          iconLeft={<IconPlusCircle aria-hidden />}
-          onClick={() => appendOmistaja(getEmptyContact())}
-        >
-          {t('form:yhteystiedot:titles:lisaaOmistaja')}
-        </Button>
+        <div className="haitaton-button-icon-size-initial">
+          <Button
+            variant={ButtonVariant.Supplementary}
+            iconStart={<IconPlusCircle />}
+            onClick={() => appendOmistaja(getEmptyContact())}
+          >
+            {t('form:yhteystiedot:titles:lisaaOmistaja')}
+          </Button>
+        </div>
       </Accordion>
 
       {/* Rakennuttaja */}
@@ -300,13 +302,15 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
           );
         })}
 
-        <Button
-          variant="supplementary"
-          iconLeft={<IconPlusCircle aria-hidden />}
-          onClick={() => appendRakennuttaja(getEmptyContact())}
-        >
-          {t('form:yhteystiedot:titles:lisaaRakennuttaja')}
-        </Button>
+        <div className="haitaton-button-icon-size-initial">
+          <Button
+            variant={ButtonVariant.Supplementary}
+            iconStart={<IconPlusCircle />}
+            onClick={() => appendRakennuttaja(getEmptyContact())}
+          >
+            {t('form:yhteystiedot:titles:lisaaRakennuttaja')}
+          </Button>
+        </div>
       </Accordion>
 
       {/* Toteuttaja */}
@@ -346,13 +350,15 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
           );
         })}
 
-        <Button
-          variant="supplementary"
-          iconLeft={<IconPlusCircle aria-hidden />}
-          onClick={() => appendToteuttaja(getEmptyContact())}
-        >
-          {t('form:yhteystiedot:titles:lisaaToteuttaja')}
-        </Button>
+        <div className="haitaton-button-icon-size-initial">
+          <Button
+            variant={ButtonVariant.Supplementary}
+            iconStart={<IconPlusCircle />}
+            onClick={() => appendToteuttaja(getEmptyContact())}
+          >
+            {t('form:yhteystiedot:titles:lisaaToteuttaja')}
+          </Button>
+        </div>
       </Accordion>
 
       {/* Muut tahot */}
@@ -424,13 +430,15 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
           );
         })}
 
-        <Button
-          variant="supplementary"
-          iconLeft={<IconPlusCircle aria-hidden />}
-          onClick={() => appendMuuTaho(getEmptyOtherContact())}
-        >
-          {t('form:yhteystiedot:titles:lisaaMuuTaho')}
-        </Button>
+        <div className="haitaton-button-icon-size-initial">
+          <Button
+            variant={ButtonVariant.Supplementary}
+            iconStart={<IconPlusCircle />}
+            onClick={() => appendMuuTaho(getEmptyOtherContact())}
+          >
+            {t('form:yhteystiedot:titles:lisaaMuuTaho')}
+          </Button>
+        </div>
       </Accordion>
     </div>
   );

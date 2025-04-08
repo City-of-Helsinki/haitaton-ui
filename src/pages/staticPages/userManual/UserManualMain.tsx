@@ -38,7 +38,7 @@ const UserManualMain: React.FC = () => {
           </Box>
           <Link
             style={{ display: 'block' }}
-            iconLeft={<IconEnvelope />}
+            iconStart={<IconEnvelope />}
             href="mailto:haitatontuki@hel.fi"
           >
             haitatontuki@hel.fi
@@ -61,12 +61,12 @@ const UserManualMain: React.FC = () => {
           </Link>
           <Link
             style={{ display: 'block' }}
-            iconLeft={<IconEnvelope />}
+            iconStart={<IconEnvelope />}
             href="mailto:johtotietopalvelu@hel.fi"
           >
             johtotietopalvelu@hel.fi
           </Link>
-          <Link style={{ display: 'block' }} iconLeft={<IconPhone />} href="tel:+358931031940">
+          <Link style={{ display: 'block' }} iconStart={<IconPhone />} href="tel:+358931031940">
             +358 9 310 31940
           </Link>
           <br />

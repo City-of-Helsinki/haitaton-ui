@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Link } from 'hds-react';
+import { Link, LinkSize } from 'hds-react';
 import { useNavigate } from 'react-router-dom';
 import HoverContext from '../../../../common/components/map/interactions/hover/HoverContext';
 import styles from './HankeHover.module.scss';
@@ -34,7 +34,7 @@ const HankeHoverBox: React.FC<React.PropsWithChildren> = () => {
         <div key={hankeArea.hankeTunnus}>
           <Link
             href={`/?hanke=${hankeArea.hankeTunnus}&hankealue=${hankeArea.areaId}`}
-            size="M"
+            size={LinkSize.Medium}
             onClick={(e) => openHanke(e, hankeArea.hankeTunnus, hankeArea.areaId)}
           >
             {`${hankeArea.hankeName} (${hankeArea.hankeTunnus})`}

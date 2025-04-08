@@ -1,6 +1,15 @@
 import React, { useCallback, useEffect } from 'react';
 import { Flex } from '@chakra-ui/react';
-import { Button, IconCross, IconPlusCircle, Tab, TabList, TabPanel, Tabs } from 'hds-react';
+import {
+  Button,
+  ButtonVariant,
+  IconCross,
+  IconPlusCircle,
+  Tab,
+  TabList,
+  TabPanel,
+  Tabs,
+} from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { UseFieldArrayRemove } from 'react-hook-form';
 import styles from './Contact.module.scss';
@@ -63,8 +72,8 @@ const Contact = <T,>({
       <Flex justify="right" align="center" mb="var(--spacing-s)">
         {canBeRemoved && onRemove && (
           <Button
-            variant="supplementary"
-            iconLeft={<IconCross aria-hidden />}
+            variant={ButtonVariant.Supplementary}
+            iconStart={<IconCross />}
             onClick={() => onRemove(index)}
           >
             {t(`form:yhteystiedot:buttons:remove:${contactType}`)}
@@ -103,8 +112,8 @@ const Contact = <T,>({
       )}
 
       <Button
-        variant="supplementary"
-        iconLeft={<IconPlusCircle aria-hidden />}
+        variant={ButtonVariant.Supplementary}
+        iconStart={<IconPlusCircle />}
         onClick={addSubContact}
         className={styles.addSubContactButton}
       >

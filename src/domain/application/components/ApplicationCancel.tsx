@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from 'hds-react';
+import { ButtonVariant } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
 import { AlluStatusStrings } from '../types/application';
@@ -11,6 +11,7 @@ import {
   useNavigateToHankeList,
 } from '../../hanke/hooks/useNavigateToApplicationList';
 import useDebouncedMutation from '../../../common/hooks/useDebouncedMutation';
+import Button from '../../../common/components/button/Button';
 
 type Props = {
   applicationId: number | null;
@@ -98,8 +99,8 @@ export const ApplicationCancel: React.FC<Props> = ({
       />
 
       <Button
-        variant="danger"
-        iconLeft={buttonIcon}
+        variant={ButtonVariant.Danger}
+        iconStart={buttonIcon}
         onClick={openConfirmationDialog}
         isLoading={saveAndQuitIsLoading || isButtonDisabled}
         loadingText={saveAndQuitIsLoadingText}

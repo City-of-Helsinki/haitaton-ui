@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import { Accordion, IconDocument, Link } from 'hds-react';
+import { Accordion, AccordionSize, IconDocument, Link, LinkSize } from 'hds-react';
 import React, { memo } from 'react';
 
 import { Trans, useTranslation } from 'react-i18next';
@@ -31,7 +31,7 @@ const CommonProcedureTips: React.FC = memo(() => {
       <Accordion
         key={tip.number}
         heading={tip.heading}
-        size="s"
+        size={AccordionSize.Small}
         headingLevel={5}
         theme={{
           '--content-font-size': 'var(--fontsize-body-m)',
@@ -69,8 +69,8 @@ const CommonProcedureTips: React.FC = memo(() => {
             {tip.cardLinks.map((linkId) => (
               <Link
                 key={linkId}
-                iconLeft={<IconDocument />}
-                size="M"
+                iconStart={<IconDocument />}
+                size={LinkSize.Medium}
                 href={`${CARD.path}${linkId}/${t('routes:CARD:basicLevel')}`}
                 openInNewTab
                 openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
@@ -96,14 +96,16 @@ const CommonProcedureTips: React.FC = memo(() => {
     >
       <Accordion
         heading={t('hankeForm:haittojenHallintaForm:subHeaderPlan')}
-        size="s"
+        size={AccordionSize.Small}
         headingLevel={4}
         initiallyOpen
         theme={{
           '--header-font-size': 'var(--fontsize-heading-s)',
         }}
       >
-        <Box mb="var(--spacing-s)"> {renderProcedureTips()}</Box>
+        <Box mb="var(--spacing-s)" width="100%">
+          {renderProcedureTips()}
+        </Box>
       </Accordion>
     </Box>
   );

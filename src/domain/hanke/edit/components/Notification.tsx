@@ -27,7 +27,7 @@ const NotificationComp: React.FC<React.PropsWithChildren<Props>> = ({
         onClose={() => setOpen(false)}
         type={typeProps}
         style={{ zIndex: 100 }}
-        dataTestId={testId}
+        data-testid={testId}
       >
         {children}
       </Notification>

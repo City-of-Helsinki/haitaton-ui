@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
-import { Button, IconPlusCircle, Notification } from 'hds-react';
+import { Button, ButtonPresetTheme, ButtonSize, IconPlusCircle, Notification } from 'hds-react';
 import { Box } from '@chakra-ui/react';
 import { debounce } from 'lodash';
 import { Feature, Map as OlMap, MapBrowserEvent } from 'ol';
@@ -226,9 +226,9 @@ export default function ApplicationMap({
               if (overlayProperties?.enableCopyArea && onCopyArea) {
                 copyAreaElement = workTimesSet ? (
                   <Button
-                    theme="coat"
-                    size="small"
-                    iconLeft={<IconPlusCircle />}
+                    theme={ButtonPresetTheme.Coat}
+                    size={ButtonSize.Small}
+                    iconStart={<IconPlusCircle />}
                     onClick={() => handleCopyArea(feature as Feature<Geometry>)}
                   >
                     {t('hakemus:buttons:copyWorkArea')}

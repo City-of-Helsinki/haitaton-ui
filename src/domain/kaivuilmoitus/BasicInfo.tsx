@@ -256,6 +256,8 @@ export default function BasicInfo({
                   pattern={/^[jJ][sS]\d{7}$/}
                   errorText={t('hakemus:errors:cableReport')}
                   placeholder="JSXXXXXXX"
+                  filterPlaceholder={t('hakemus:labels:cableReportFilterPlaceholder')}
+                  filterWithAnotherTerm={t('hakemus:labels:cableReportFilterWithAnotherTerm')}
                   uppercase
                   required
                 />

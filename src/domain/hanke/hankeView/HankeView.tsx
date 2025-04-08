@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import {
   Accordion,
   Button,
+  ButtonPresetTheme,
+  ButtonVariant,
   IconPen,
   IconPlusCircle,
   IconTrash,
@@ -81,7 +83,7 @@ const HankeAreaInfo: React.FC<AreaProps> = ({ area, index }) => {
       initiallyOpen
       className={styles.hankeAreaContainer}
     >
-      <div>
+      <Box width="100%">
         <FormSummarySection>
           <SectionItemTitle>{t('hanke:alue:duration')}</SectionItemTitle>
           <SectionItemContent>
@@ -122,7 +124,7 @@ const HankeAreaInfo: React.FC<AreaProps> = ({ area, index }) => {
           {t(`hankeForm:labels:${FORMFIELD.KAISTAPITUUSHAITTA}`)}:{' '}
           {t(`hanke:${FORMFIELD.KAISTAPITUUSHAITTA}:${area.kaistaPituusHaitta}`)}
         </Text>
-      </div>
+      </Box>
     </Accordion>
   );
 };
@@ -377,9 +379,9 @@ const HankeView: React.FC<Props> = ({
               {!isHankeCompleted ? (
                 <Button
                   onClick={onEditHanke}
-                  variant="primary"
-                  iconLeft={<IconPen aria-hidden="true" />}
-                  theme="coat"
+                  variant={ButtonVariant.Primary}
+                  iconStart={<IconPen />}
+                  theme={ButtonPresetTheme.Coat}
                 >
                   {t('hankePortfolio:buttons:edit')}
                 </Button>
@@ -391,9 +393,9 @@ const HankeView: React.FC<Props> = ({
             >
               {isHankePublic ? (
                 <Button
-                  variant="primary"
-                  iconLeft={<IconPlusCircle aria-hidden="true" />}
-                  theme="coat"
+                  variant={ButtonVariant.Primary}
+                  iconStart={<IconPlusCircle />}
+                  theme={ButtonPresetTheme.Coat}
                   onClick={addApplication}
                 >
                   {t('hankePortfolio:buttons:addApplication')}
@@ -403,9 +405,9 @@ const HankeView: React.FC<Props> = ({
           </FeatureFlags>
           <Button
             onClick={onEditRights}
-            variant="primary"
-            iconLeft={<IconUser aria-hidden="true" />}
-            theme="coat"
+            variant={ButtonVariant.Primary}
+            iconStart={<IconUser />}
+            theme={ButtonPresetTheme.Coat}
           >
             {t('hankeUsers:userManagementTitle')}
           </Button>
@@ -413,8 +415,8 @@ const HankeView: React.FC<Props> = ({
             <CheckRightsByHanke requiredRight="DELETE" hankeTunnus={hankeData.hankeTunnus}>
               <Button
                 onClick={onCancelHanke}
-                variant="danger"
-                iconLeft={<IconTrash aria-hidden="true" />}
+                variant={ButtonVariant.Danger}
+                iconStart={<IconTrash />}
               >
                 {t('hankeForm:cancelButton')}
               </Button>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from 'react-query';
-import { Button, IconCross, IconPlusCircle, IconSaveDiskette, StepState } from 'hds-react';
+import { ButtonVariant, IconCross, IconPlusCircle, IconSaveDiskette, StepState } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import VectorSource from 'ol/source/Vector';
@@ -42,6 +42,7 @@ import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary'
 import FormFieldsErrorSummary from '../../forms/components/FormFieldsErrorSummary';
 import { useApplicationsForHanke } from '../../application/hooks/useApplications';
 import isValidBusinessId from '../../../common/utils/isValidBusinessId';
+import Button from '../../../common/components/button/Button';
 
 type Props = {
   formData: HankeDataFormState;
@@ -138,6 +139,7 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const saveAndQuitButtonIsLoading = hankeMutation.isLoading;
   const saveAndQuitButtonLoadingText = t('common:buttons:savingText');
+  const saveAndQuitButtonIcon = <IconSaveDiskette />;
 
   const [drawSource] = useState<VectorSource>(new VectorSource());
 
@@ -372,16 +374,16 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
                 onNext={handleNext}
               >
                 <Button
-                  variant="danger"
-                  iconLeft={<IconCross aria-hidden />}
+                  variant={ButtonVariant.Danger}
+                  iconStart={<IconCross />}
                   onClick={() => onFormClose(formValues.hankeTunnus)}
                 >
                   {t('hankeForm:cancelButton')}
                 </Button>
                 {!lastStep && (
                   <Button
-                    variant="supplementary"
-                    iconLeft={<IconSaveDiskette aria-hidden="true" />}
+                    variant={ButtonVariant.Supplementary}
+                    iconStart={saveAndQuitButtonIcon}
                     onClick={saveAndQuit}
                     data-testid="save-form-btn"
                     isLoading={saveAndQuitButtonIsLoading}
@@ -394,19 +396,19 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
                   <>
                     {isHankePublic && (
                       <Button
-                        variant="secondary"
-                        iconLeft={<IconPlusCircle aria-hidden />}
+                        variant={ButtonVariant.Secondary}
+                        iconStart={<IconPlusCircle />}
                         onClick={saveAndAddApplication}
                       >
                         {t('hankeForm:saveAndAddButton')}
                       </Button>
                     )}
                     <Button
-                      variant="primary"
-                      iconLeft={<IconSaveDiskette aria-hidden />}
+                      variant={ButtonVariant.Primary}
+                      iconStart={saveAndQuitButtonIcon}
                       onClick={saveAndQuit}
-                      isLoading={hankeMutation.isLoading}
-                      loadingText={t('common:buttons:savingText')}
+                      isLoading={saveAndQuitButtonIsLoading}
+                      loadingText={saveAndQuitButtonLoadingText}
                     >
                       {t('hankeForm:saveButton')}
                     </Button>

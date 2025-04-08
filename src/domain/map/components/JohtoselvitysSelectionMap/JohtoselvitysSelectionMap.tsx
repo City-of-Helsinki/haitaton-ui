@@ -1,5 +1,11 @@
 import { useCallback, useContext, useEffect, useRef } from 'react';
-import { Button, IconMinusCircleFill, IconPlusCircle } from 'hds-react';
+import {
+  Button,
+  ButtonPresetTheme,
+  ButtonSize,
+  IconMinusCircleFill,
+  IconPlusCircle,
+} from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import VectorSource from 'ol/source/Vector';
 import { Select } from 'ol/interaction';
@@ -155,9 +161,9 @@ export default function JohtoselvitysSelectionMap({
 
                 selectionButton = (
                   <Button
-                    size="small"
-                    theme="coat"
-                    iconLeft={
+                    size={ButtonSize.Small}
+                    theme={ButtonPresetTheme.Coat}
+                    iconStart={
                       selectionButtonType === 'remove' ? (
                         <IconMinusCircleFill />
                       ) : (

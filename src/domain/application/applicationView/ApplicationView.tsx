@@ -1,12 +1,14 @@
 import {
   Accordion,
-  Button,
+  ButtonPresetTheme,
+  ButtonVariant,
   IconCheck,
   IconCheckCircle,
   IconEnvelope,
   IconPen,
   IconTrash,
   Notification,
+  NotificationSize,
   Tab,
   TabList,
   TabPanel,
@@ -93,6 +95,7 @@ import { HaittojenhallintasuunnitelmaInfo } from '../../kaivuilmoitus/components
 import MuutosilmoitusNotification from '../muutosilmoitus/components/MuutosilmoitusNotification';
 import MuutosilmoitusCancel from '../muutosilmoitus/components/MuutosilmoitusCancel';
 import useSendMuutosilmoitus from './hooks/useSendMuutosilmoitus';
+import Button from '../../../common/components/button/Button';
 
 function TyoalueetList({ tyoalueet }: { tyoalueet: ApplicationArea[] }) {
   const { t } = useTranslation();
@@ -317,12 +320,16 @@ function KaivuilmoitusAreaInfo({
       </FormSummarySection>
       {haittaIndexesChanged && (
         <Box marginBottom="var(--spacing-l)">
-          <Notification type="alert" size="small" label={t('hanke:alue:haittaIndexesChangedLabel')}>
+          <Notification
+            type="alert"
+            size={NotificationSize.Small}
+            label={t('hanke:alue:haittaIndexesChangedLabel')}
+          >
             {t('hanke:alue:haittaIndexesChanged')}
           </Notification>
         </Box>
       )}
-      <Box marginBottom="var(--spacing-l)">
+      <Box marginBottom="var(--spacing-l)" width="100%">
         <HaittaIndexes
           heading={`${t('kaivuilmoitusForm:alueet:liikennehaittaindeksienYhteenveto')} (0-5)`}
           haittaIndexData={calculateLiikennehaittaindeksienYhteenveto(changedArea ?? originalArea)}
@@ -548,9 +555,6 @@ function KaivuilmoitusAreasNuisanceInfo({
             language={locale}
             heading={t('hakemus:labels:workAreaPlural') + ' (' + area.name + ')'}
             initiallyOpen={index === 0}
-            theme={{
-              '--header-focus-outline-color': 'var(--color-white)',
-            }}
             key={area.hankealueId}
           >
             <HaittojenhallintasuunnitelmaInfo
@@ -571,9 +575,6 @@ function KaivuilmoitusAreasNuisanceInfo({
                 language={locale}
                 heading={t('hakemus:labels:workAreaPlural') + ' (' + area.name + ')'}
                 initiallyOpen={index === 0}
-                theme={{
-                  '--header-focus-outline-color': 'var(--color-white)',
-                }}
                 key={area.hankealueId}
               >
                 <HaittojenhallintasuunnitelmaInfo
@@ -595,9 +596,6 @@ function KaivuilmoitusAreasNuisanceInfo({
                 language={locale}
                 heading={t('hakemus:labels:workAreaPlural') + ' (' + area.name + ')'}
                 initiallyOpen={index === 0}
-                theme={{
-                  '--header-focus-outline-color': 'var(--color-white)',
-                }}
                 key={area.hankealueId}
               >
                 <HaittojenhallintasuunnitelmaInfo
@@ -876,8 +874,8 @@ function ApplicationView({
           {!hankeIsCompleted && !isSent ? (
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
               <Button
-                theme="coat"
-                iconLeft={<IconPen aria-hidden="true" />}
+                theme={ButtonPresetTheme.Coat}
+                iconStart={<IconPen />}
                 onClick={onEditApplication}
               >
                 {t('hakemus:buttons:editApplication')}
@@ -897,8 +895,8 @@ function ApplicationView({
           {showSendButton && (
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
               <Button
-                theme="coat"
-                iconLeft={<IconEnvelope aria-hidden="true" />}
+                theme={ButtonPresetTheme.Coat}
+                iconStart={<IconEnvelope />}
                 onClick={openSendDialog}
                 disabled={disableSendButton}
               >
@@ -909,7 +907,7 @@ function ApplicationView({
           {disableSendButton && (
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
               <Notification
-                size="small"
+                size={NotificationSize.Small}
                 style={{ marginTop: 'var(--spacing-xs)' }}
                 type="info"
                 label={t('hakemus:notifications:sendApplicationDisabled')}
@@ -922,8 +920,8 @@ function ApplicationView({
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
               <>
                 <Button
-                  theme="coat"
-                  iconLeft={<IconPen />}
+                  theme={ButtonPresetTheme.Coat}
+                  iconStart={<IconPen />}
                   onClick={onEditMuutosilmoitus}
                   isLoading={creatingMuutosilmoitus}
                 >
@@ -941,8 +939,8 @@ function ApplicationView({
           {showReportOperationalConditionButton && (
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
               <Button
-                theme="coat"
-                iconLeft={<IconCheck aria-hidden="true" />}
+                theme={ButtonPresetTheme.Coat}
+                iconStart={<IconCheck />}
                 onClick={openReportOperationalConditionDialog}
               >
                 {t('hakemus:buttons:reportOperationalCondition')}
@@ -952,9 +950,9 @@ function ApplicationView({
           {showReportWorkFinishedButton && (
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
               <Button
-                variant="success"
-                theme="coat"
-                iconLeft={<IconCheckCircle aria-hidden="true" />}
+                variant={ButtonVariant.Success}
+                theme={ButtonPresetTheme.Coat}
+                iconStart={<IconCheckCircle />}
                 onClick={openReportWorkFinishedDialog}
               >
                 {t('hakemus:buttons:reportWorkFinished')}
@@ -965,8 +963,8 @@ function ApplicationView({
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
               <>
                 <Button
-                  theme="coat"
-                  iconLeft={<IconPen aria-hidden="true" />}
+                  theme={ButtonPresetTheme.Coat}
+                  iconStart={<IconPen />}
                   onClick={onEditTaydennys}
                   isLoading={creatingTaydennys}
                 >

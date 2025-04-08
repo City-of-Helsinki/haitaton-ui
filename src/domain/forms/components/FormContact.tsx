@@ -1,6 +1,14 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
-import { Button, IconCross, IconPlusCircle, Notification } from 'hds-react';
+import {
+  Button,
+  ButtonVariant,
+  IconCross,
+  IconPlusCircle,
+  Notification,
+  Tooltip,
+  TooltipProps,
+} from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { UseFieldArrayRemove } from 'react-hook-form';
 import NewContactPersonForm, { ContactPersonAddedNotification } from './NewContactPersonForm';
@@ -26,11 +34,7 @@ interface Props<T, R> {
   onRemove?: UseFieldArrayRemove;
   onContactPersonAdded?: (newHankeUser: HankeUser) => void;
   required?: boolean;
-  tooltip?: {
-    tooltipButtonLabel: string;
-    tooltipLabel: string;
-    tooltipText: string;
-  };
+  tooltip?: ReactElement<TooltipProps, typeof Tooltip>;
   children: React.ReactNode;
 }
 
@@ -69,12 +73,12 @@ const FormContact = <T, R>({
   }
 
   return (
-    <>
+    <div className="haitaton-button-icon-size-initial">
       <Flex justify="right" align="center" mb="var(--spacing-s)">
         {canBeRemoved && onRemove && (
           <Button
-            variant="supplementary"
-            iconLeft={<IconCross aria-hidden />}
+            variant={ButtonVariant.Supplementary}
+            iconStart={<IconCross />}
             onClick={() => onRemove(index)}
           >
             {t(`form:yhteystiedot:buttons:remove:${contactType}`)}
@@ -84,31 +88,29 @@ const FormContact = <T, R>({
 
       {children}
 
-      <Box maxWidth="var(--width-form-3-col)">
-        <ResponsiveGrid maxColumns={3}>
-          <Box style={{ gridColumn: 'span 2' }}>
-            <ContactPersonSelect<R>
-              name={name}
-              hankeUsers={hankeUsers}
-              mapHankeUserToValue={mapHankeUserToValue}
-              mapValueToLabel={mapValueToLabel}
-              transformValue={transformValue}
-              required={required}
-              tooltip={tooltip}
-            />
-          </Box>
-          <Box display="flex" alignItems="center" justifyContent="start" mb="var(--spacing-m)">
-            <Button
-              variant="secondary"
-              iconLeft={<IconPlusCircle aria-hidden />}
-              onClick={toggleNewContactForm}
-              disabled={showNewContactPersonForm}
-            >
-              {t(`form:yhteystiedot:buttons:addNewContactPerson`)}
-            </Button>
-          </Box>
-        </ResponsiveGrid>
-      </Box>
+      <ResponsiveGrid maxColumns={3}>
+        <Box gridColumn="span 2" mr={{ base: '0', lg: 'var(--spacing-xs)' }}>
+          <ContactPersonSelect<R>
+            name={name}
+            hankeUsers={hankeUsers}
+            mapHankeUserToValue={mapHankeUserToValue}
+            mapValueToLabel={mapValueToLabel}
+            transformValue={transformValue}
+            required={required}
+            tooltip={tooltip}
+          />
+        </Box>
+        <Flex alignItems="flex-start" mt={{ base: '0', lg: '28px' }}>
+          <Button
+            variant={ButtonVariant.Secondary}
+            iconStart={<IconPlusCircle />}
+            onClick={toggleNewContactForm}
+            disabled={showNewContactPersonForm}
+          >
+            {t(`form:yhteystiedot:buttons:addNewContactPerson`)}
+          </Button>
+        </Flex>
+      </ResponsiveGrid>
 
       <Transition
         showChildren={showNewContactPersonForm}
@@ -150,7 +152,7 @@ const FormContact = <T, R>({
           {t('form:yhteystiedot:notifications:descriptions:contactPersonSaveError')}
         </Notification>
       )}
-    </>
+    </div>
   );
 };
 

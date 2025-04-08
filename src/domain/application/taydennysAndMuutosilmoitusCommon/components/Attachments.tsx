@@ -1,5 +1,5 @@
 import { Trans, useTranslation } from 'react-i18next';
-import { Link, Notification } from 'hds-react';
+import { Link, Notification, NotificationSize } from 'hds-react';
 import { Box, Flex } from '@chakra-ui/react';
 import { useQueryClient } from 'react-query';
 import { useFormContext } from 'react-hook-form';
@@ -159,7 +159,7 @@ export default function Attachments({
         {t('kaivuilmoitusForm:liitteetJaLisatiedot:mandate')}
       </Box>
       <Notification
-        size="small"
+        size={NotificationSize.Small}
         type="info"
         label={t('kaivuilmoitusForm:liitteetJaLisatiedot:mandateCheck')}
         style={{ marginTop: 'var(--spacing-s)', marginBottom: 'var(--spacing-s)' }}

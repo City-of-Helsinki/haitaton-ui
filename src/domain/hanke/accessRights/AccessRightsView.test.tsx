@@ -76,7 +76,7 @@ test('Pagination works', async () => {
   render(<AccessRightsViewContainer hankeTunnus="HAI22-2" />);
 
   await waitForLoadingToFinish();
-  fireEvent.click(screen.getByTestId('hds-pagination-next-button'));
+  fireEvent.click(screen.getByRole('button', { name: /seuraava/i }));
 
   expect((screen.getByRole('table') as HTMLTableElement).tBodies[0].rows).toHaveLength(2);
   expect(screen.getAllByText(`${users[10].etunimi} ${users[10].sukunimi}`)).toHaveLength(2);

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, IconCross, IconTrash, LoadingSpinner } from 'hds-react';
+import { useState } from 'react';
+import { ButtonPresetTheme, ButtonVariant, IconCross, IconTrash } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 import { Application } from '../../types/application';
@@ -8,11 +8,12 @@ import { useGlobalNotification } from '../../../../common/components/globalNotif
 import useDebouncedMutation from '../../../../common/hooks/useDebouncedMutation';
 import ConfirmationDialog from '../../../../common/components/HDSConfirmationDialog/ConfirmationDialog';
 import { cancelMuutosilmoitus } from '../muutosilmoitusApi';
+import Button from '../../../../common/components/button/Button';
 
 type Props = {
   application: Application;
   navigateToApplicationViewOnSuccess?: boolean;
-  buttonVariant?: 'primary' | 'danger';
+  buttonVariant?: ButtonVariant.Primary | ButtonVariant.Danger;
   buttonIsLoading?: boolean;
   buttonIsLoadingText?: string;
 };
@@ -81,13 +82,6 @@ export default function MuutosilmoitusCancel({
     return null;
   }
 
-  const buttonIconStart =
-    muutosilmoitusCancelMutation.isLoading || isButtonDisabled ? (
-      <LoadingSpinner small />
-    ) : (
-      <IconCross />
-    );
-
   return (
     <>
       <ConfirmationDialog
@@ -107,14 +101,14 @@ export default function MuutosilmoitusCancel({
 
       <Button
         variant={buttonVariant}
-        theme="coat"
-        iconLeft={buttonIconStart}
+        theme={ButtonPresetTheme.Coat}
+        iconStart={<IconCross />}
         onClick={openConfirmationDialog}
         disabled={isButtonDisabled}
+        isLoading={buttonIsLoading}
+        loadingText={buttonIsLoadingText}
       >
-        {buttonIsLoading || isButtonDisabled
-          ? buttonIsLoadingText
-          : t('muutosilmoitus:buttons:cancelMuutosilmoitus')}
+        {t('muutosilmoitus:buttons:cancelMuutosilmoitus')}
       </Button>
     </>
   );

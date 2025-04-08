@@ -420,8 +420,8 @@ describe('HankeForm', () => {
 
     // Hanke owner (accordion open by default)
     // Yritys should be default contact type
-    expect(screen.getByText(/yritys/i)).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: /tyyppi/i }));
+    expect(screen.getByRole('combobox', { name: /yritys/i })).toBeInTheDocument();
+    await user.click(screen.getByRole('combobox', { name: /tyyppi/i }));
     await user.click(screen.getByText(/yhteisö/i));
 
     fireEvent.change(screen.getAllByRole('combobox', { name: /nimi/i })[0], {
@@ -441,7 +441,7 @@ describe('HankeForm', () => {
     await user.click(screen.getByText(/lisää rakennuttaja/i));
     expect(screen.getAllByText('Rakennuttaja')).toHaveLength(1);
 
-    await user.click(screen.getAllByRole('button', { name: /tyyppi/i })[1]);
+    await user.click(screen.getAllByRole('combobox', { name: /tyyppi/i })[1]);
     await user.click(screen.getByText(/yksityishenkilö/i));
     expect(screen.getAllByLabelText(/y-tunnus/i)[1]).toBeDisabled();
 
@@ -872,7 +872,7 @@ describe('HankeForm', () => {
     expect(screen.getByTestId('test-linjaautoliikenneindeksi')).toHaveTextContent('0');
     expect(screen.getByTestId('test-raitioliikenneindeksi')).toHaveTextContent('2');
 
-    await user.click(screen.getByRole('button', { name: 'Kaistahaittojen pituus *' }));
+    await user.click(screen.getByRole('combobox', { name: /Kaistahaittojen pituus/ }));
     await user.click(screen.getByText('10-99 m'));
 
     expect(screen.getByTestId('test-pyoraliikenneindeksi')).toHaveTextContent('4');
@@ -922,8 +922,8 @@ describe('New contact person form and contact person dropdown', () => {
 
     expect(await screen.findByText('Yhteyshenkilö tallennettu')).toBeInTheDocument();
     expect(
-      screen.getByText(`${newUser.etunimi} ${newUser.sukunimi} (${newUser.sahkoposti})`),
-    ).toBeInTheDocument();
+      screen.getAllByText(`${newUser.etunimi} ${newUser.sukunimi} (${newUser.sahkoposti})`),
+    ).toHaveLength(2);
   });
 
   test('Should not be able to create new user and show validation errors if info is not filled', async () => {
@@ -1005,7 +1005,7 @@ describe('New contact person form and contact person dropdown', () => {
     );
 
     const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
-    await user.click(screen.getByRole('button', { name: 'Yhteyshenkilöt: Sulje ja avaa valikko' }));
+    await user.click(screen.getByRole('button', { name: /yhteyshenkilöt/i }));
 
     hankeUsers.forEach((hankeUser) => {
       expect(

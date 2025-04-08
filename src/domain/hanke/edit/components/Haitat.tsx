@@ -1,7 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Button, Fieldset, IconCross, IconTrash } from 'hds-react';
+import {
+  Button,
+  ButtonPresetTheme,
+  ButtonVariant,
+  Fieldset,
+  IconCross,
+  IconTrash,
+} from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { Spacer } from '@chakra-ui/react';
 import { debounce } from 'lodash';
@@ -100,9 +107,9 @@ const Haitat: React.FC<Props> = ({ index, onRemoveArea, onChangeArea }) => {
       >
         <div className={`${styles.formRow} ${styles.formRowEven} ${styles.formRowReverse}`}>
           <Button
-            variant="secondary"
-            theme="black"
-            iconLeft={<IconCross />}
+            variant={ButtonVariant.Secondary}
+            theme={ButtonPresetTheme.Black}
+            iconStart={<IconCross />}
             onClick={() =>
               hasApplicationAreasInsideHankeArea
                 ? setCannotRemoveArea(true)

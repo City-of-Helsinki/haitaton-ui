@@ -6,7 +6,7 @@ import Geometry from 'ol/geom/Geometry';
 import { FieldArrayWithId, useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box, Flex } from '@chakra-ui/react';
-import { Button, Fieldset, IconAlertCircleFill, IconCross } from 'hds-react';
+import { Button, ButtonVariant, Fieldset, IconAlertCircleFill, IconCross } from 'hds-react';
 
 import { formatSurfaceArea } from '../map/utils';
 import Text from '../../common/components/text/Text';
@@ -78,9 +78,9 @@ function AreaList({
                 </div>
               </Box>
               <Button
-                variant="supplementary"
+                variant={ButtonVariant.Supplementary}
                 style={{ color: 'var(--color-error)' }}
-                iconLeft={<IconCross aria-hidden="true" />}
+                iconStart={<IconCross />}
                 onClick={() => onRemoveArea(index, area.feature)}
               >
                 {t('hankeForm:hankkeenAlueForm:removeAreaButton')}

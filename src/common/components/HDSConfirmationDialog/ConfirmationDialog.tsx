@@ -1,8 +1,16 @@
 import React from 'react';
-import { Dialog, Button, DialogVariant, LoadingSpinner, Notification } from 'hds-react';
+import {
+  Dialog,
+  DialogVariant,
+  Notification,
+  ButtonVariant,
+  ButtonPresetTheme,
+  NotificationSize,
+} from 'hds-react';
 import { IconAlertCircleFill } from 'hds-react/icons';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@chakra-ui/react';
+import Button from '../button/Button';
 
 type Props = {
   title: string;
@@ -46,25 +54,25 @@ const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { t } = useTranslation();
 
-  const iconLeft = isLoading ? <LoadingSpinner small /> : mainBtnIcon;
-
   const mainButton = (
     <Button
       onClick={mainAction}
       data-testid="dialog-button-test"
-      variant={variant}
-      iconLeft={iconLeft}
+      variant={variant === 'danger' ? ButtonVariant.Danger : ButtonVariant.Primary}
+      iconStart={mainBtnIcon}
       disabled={disabled}
+      isLoading={isLoading}
+      loadingText={loadingText}
     >
-      {isLoading ? loadingText : mainBtnLabel ?? t('common:confirmationDialog:confirmButton')}
+      {mainBtnLabel ?? t('common:confirmationDialog:confirmButton')}
     </Button>
   );
 
   const secondaryButton = showSecondaryButton && (
     <Button
-      variant="secondary"
+      variant={ButtonVariant.Secondary}
       onClick={close}
-      theme={variant === 'danger' ? 'black' : 'default'}
+      theme={variant === 'danger' ? ButtonPresetTheme.Black : undefined}
       data-testid="dialog-cancel-test"
       disabled={disabled}
     >
@@ -84,7 +92,7 @@ const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
       close={showCloseButton ? (close as any) : undefined}
       closeButtonLabelText={t('common:ariaLabels:closeButtonLabelText')}
     >
-      <Dialog.Header id="dialog-title" title={title} iconLeft={headerIcon} />
+      <Dialog.Header id="dialog-title" title={title} iconStart={headerIcon} />
       <Dialog.Content>
         {typeof description === 'string' ? (
           <p data-testid="dialog-description-test">{description}</p>
@@ -93,7 +101,7 @@ const ConfirmationDialog: React.FC<React.PropsWithChildren<Props>> = ({
         )}
         {errorMsg && (
           <Box paddingTop="var(--spacing-s)">
-            <Notification type="error" size="small" label={errorMsg}>
+            <Notification type="error" size={NotificationSize.Small} label={errorMsg}>
               {errorMsg}
             </Notification>
           </Box>

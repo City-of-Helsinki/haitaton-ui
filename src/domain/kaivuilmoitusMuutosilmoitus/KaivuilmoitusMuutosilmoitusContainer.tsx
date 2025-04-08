@@ -4,10 +4,11 @@ import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Button,
+  ButtonVariant,
   IconEnvelope,
   IconSaveDiskette,
-  LoadingSpinner,
   Notification,
+  NotificationSize,
   StepState,
 } from 'hds-react';
 import { Muutosilmoitus } from '../application/muutosilmoitus/types';
@@ -53,6 +54,7 @@ import {
   deleteAttachment,
   downloadAttachment,
 } from '../application/muutosilmoitus/muutosilmoitusAttachmentsApi';
+import LoadingSpinner from '../../common/components/spinner/LoadingSpinner';
 
 type Props = {
   muutosilmoitus: Muutosilmoitus<KaivuilmoitusData>;
@@ -315,25 +317,26 @@ export default function KaivuilmoitusMuutosilmoitusContainer({
               <MuutosilmoitusCancel
                 application={originalApplication}
                 navigateToApplicationViewOnSuccess
-                buttonVariant="danger"
+                buttonVariant={ButtonVariant.Danger}
                 buttonIsLoading={saveAndQuitIsLoading}
                 buttonIsLoadingText={saveAndQuitLoadingText}
               />
-              <Button variant="secondary" onClick={handleSaveAndQuit} iconLeft={saveButtonIcon}>
+              <Button
+                variant={ButtonVariant.Secondary}
+                onClick={handleSaveAndQuit}
+                iconStart={saveButtonIcon}
+                disabled={saveAndQuitIsLoading}
+              >
                 {saveAndQuitIsLoading ? saveAndQuitLoadingText : t('hankeForm:saveDraftButton')}
               </Button>
               {showSendButton && (
-                <Button
-                  type="submit"
-                  iconLeft={<IconEnvelope aria-hidden="true" />}
-                  disabled={disableSendButton}
-                >
+                <Button type="submit" iconStart={<IconEnvelope />} disabled={disableSendButton}>
                   {t('muutosilmoitus:buttons:sendMuutosilmoitus')}
                 </Button>
               )}
               {disableSendButton && (
                 <Notification
-                  size="small"
+                  size={NotificationSize.Small}
                   style={{ marginTop: 'var(--spacing-xs)' }}
                   type="info"
                   label={t('hakemus:notifications:sendApplicationDisabled')}

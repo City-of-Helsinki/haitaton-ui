@@ -96,6 +96,7 @@
     "buttons": {
       "savingText": "Tallennetaan",
       "sendingText": "Lähetetään",
+      "loadingText": "$t(common:components:loadingSpinner:loadingText)",
       "remove": "Poista"
     },
     "haittaIndex": {
@@ -1299,6 +1300,8 @@
       "newCableReport": "Uusi johtoselvitys",
       "cableReports": "Tehtyjen johtoselvitysten tunnukset",
       "cableReportsHelp": "Valitse kartalta tai listasta tai kirjoita muu tunnus ja paina Enter lisätäksesi",
+      "cableReportFilterPlaceholder": "Anna teksti suodatusta varten tai kirjoita muu tunnus",
+      "cableReportFilterWithAnotherTerm": "Kokeile toisia sanoja tai kirjoita muu tunnus ja paina Enter lisätäksesi",
       "noCableReports": "Haitaton ei löytänyt hankkeelle aiemmin lisättyjä johtoselvityksiä. Voit lisätä muita johtoselvityksiä tunnuksen perusteella.",
       "cableReportApplicationIdentifier": "Johtoselvitystunnus",
       "cableReportTagInputHelp": "Anna johtoselvitystunnus ja paina Lisää",

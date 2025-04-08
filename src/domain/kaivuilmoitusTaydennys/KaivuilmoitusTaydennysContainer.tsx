@@ -3,13 +3,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import {
-  Button,
+  ButtonVariant,
   IconEnvelope,
   IconQuestionCircle,
   IconSaveDiskette,
   Link,
-  LoadingSpinner,
   Notification,
+  NotificationSize,
   StepState,
 } from 'hds-react';
 import { Box } from '@chakra-ui/layout';
@@ -59,6 +59,7 @@ import {
   downloadAttachment,
   uploadAttachment,
 } from '../application/taydennys/taydennysAttachmentsApi';
+import Button from '../../common/components/button/Button';
 
 type Props = {
   taydennys: Taydennys<KaivuilmoitusData>;
@@ -319,26 +320,19 @@ export default function KaivuilmoitusTaydennysContainer({
             }
           }
 
+          const isContact = isContactIn(signedInUser, getValues('applicationData'));
+
+          const saveAndQuitIsLoading = hakemusUpdateMutation.isLoading;
+          const saveAndQuiteButtonIcon = <IconSaveDiskette />;
+          const saveAndQuitButtonText = t('hankeForm:saveDraftButton');
+
           const showSendButton =
             lastStep &&
             isValid &&
             (taydennys.muutokset.length > 0 || taydennys.liitteet.length > 0);
-          const isContact = isContactIn(signedInUser, getValues('applicationData'));
-          const disableSendButton = showSendButton && !isContact;
-
-          const saveAndQuitIsLoading = hakemusUpdateMutation.isLoading;
-          const saveAndQuiteButtonIcon = saveAndQuitIsLoading ? (
-            <LoadingSpinner small />
-          ) : (
-            <IconSaveDiskette />
-          );
-          const saveAndQuitButtonText = saveAndQuitIsLoading
-            ? t('common:buttons:savingText')
-            : t('hankeForm:saveDraftButton');
-
           const sendIsLoading = sendTaydennysMutation.isLoading;
-          const sendButtonIcon = sendIsLoading ? <LoadingSpinner small /> : <IconEnvelope />;
-          const sendButtonText = t('common:buttons:sendingText');
+          const sendButtonIcon = <IconEnvelope />;
+          const disableSendButton = showSendButton && !isContact;
 
           return (
             <FormActions
@@ -350,31 +344,33 @@ export default function KaivuilmoitusTaydennysContainer({
               <TaydennysCancel
                 application={originalApplication}
                 navigateToApplicationViewOnSuccess
-                buttonVariant="danger"
+                buttonVariant={ButtonVariant.Danger}
                 buttonIsLoading={saveAndQuitIsLoading}
                 buttonIsLoadingText={saveAndQuitButtonText}
               />
               <Button
-                variant="secondary"
+                variant={ButtonVariant.Secondary}
                 onClick={handleSaveAndQuit}
-                iconLeft={saveAndQuiteButtonIcon}
+                iconStart={saveAndQuiteButtonIcon}
+                isLoading={saveAndQuitIsLoading}
+                loadingText={t('common:buttons:savingText')}
               >
                 {saveAndQuitButtonText}
               </Button>
               {showSendButton && (
                 <Button
                   type="submit"
-                  iconLeft={sendButtonIcon}
                   loadingText={t('common:buttons:sendingText')}
-                  isLoading={sendTaydennysMutation.isLoading}
+                  isLoading={sendIsLoading}
+                  iconStart={sendButtonIcon}
                   disabled={disableSendButton}
                 >
-                  {sendIsLoading ? sendButtonText : t('taydennys:buttons:sendTaydennys')}
+                  {t('taydennys:buttons:sendTaydennys')}
                 </Button>
               )}
               {disableSendButton && (
                 <Notification
-                  size="small"
+                  size={NotificationSize.Small}
                   style={{ marginTop: 'var(--spacing-xs)' }}
                   type="info"
                   label={t('hakemus:notifications:sendApplicationDisabled')}
@@ -403,7 +399,7 @@ export default function KaivuilmoitusTaydennysContainer({
               <Box paddingTop="var(--spacing-s)">
                 <Notification
                   type="error"
-                  size="small"
+                  size={NotificationSize.Small}
                   label={t('taydennys:notifications:sendErrorLabel')}
                 >
                   <Trans i18nKey="taydennys:notifications:sendErrorText">

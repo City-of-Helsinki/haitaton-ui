@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, IconEnvelope, Notification } from 'hds-react';
+import { Button, ButtonPresetTheme, IconEnvelope, Notification, NotificationSize } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { AlluStatus, Application } from '../../types/application';
 import { validationSchema as johtoselvitysValidationSchema } from '../../../johtoselvitysTaydennys/validationSchema';
@@ -44,8 +44,8 @@ export default function useSendMuutosilmoitus(
   const sendButton = showSendButton ? (
     <>
       <Button
-        theme="coat"
-        iconLeft={<IconEnvelope />}
+        theme={ButtonPresetTheme.Coat}
+        iconStart={<IconEnvelope />}
         onClick={openSendDialog}
         disabled={showSendButton && !isContact}
       >
@@ -53,7 +53,7 @@ export default function useSendMuutosilmoitus(
       </Button>
       {!isContact && (
         <Notification
-          size="small"
+          size={NotificationSize.Small}
           style={{ marginTop: 'var(--spacing-xs)' }}
           type="info"
           label={t('hakemus:notifications:sendApplicationDisabled')}

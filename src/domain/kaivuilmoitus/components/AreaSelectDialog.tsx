@@ -1,6 +1,13 @@
 import { useState } from 'react';
 import { Box } from '@chakra-ui/react';
-import { Button, Dialog, IconAlertCircle, RadioButton, SelectionGroup } from 'hds-react';
+import {
+  Button,
+  ButtonVariant,
+  Dialog,
+  IconAlertCircle,
+  RadioButton,
+  SelectionGroup,
+} from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { HankeAlue } from '../../types/hanke';
 
@@ -38,7 +45,7 @@ export default function AreaSelectDialog({
       <Dialog.Header
         id="kaivuilmoitus-area-selection-header"
         title={dialogTitle}
-        iconLeft={<IconAlertCircle />}
+        iconStart={<IconAlertCircle />}
       />
       <Dialog.Content>
         <Box as="p" marginBottom="var(--spacing-s)">
@@ -69,7 +76,7 @@ export default function AreaSelectDialog({
         >
           {t('common:confirmationDialog:confirmButton')}
         </Button>
-        <Button type="button" variant="secondary" onClick={onClose}>
+        <Button type="button" variant={ButtonVariant.Secondary} onClick={onClose}>
           {t('hakemus:areaSelectionDialog:cancelButton')}
         </Button>
       </Dialog.ActionButtons>

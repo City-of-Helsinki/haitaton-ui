@@ -1,5 +1,5 @@
 import { Box, BoxProps, Flex, Grid } from '@chakra-ui/react';
-import { IconAngleDown, IconAngleUp, useAccordion } from 'hds-react';
+import { IconAngleDown, IconAngleUp, IconSize, useAccordion } from 'hds-react';
 import React from 'react';
 
 type Props = {
@@ -40,7 +40,11 @@ export default function CustomAccordion({
     buttonProps: accordionButtonProps,
     contentProps: accordionContentProps,
   } = useAccordion({ initiallyOpen });
-  const headingButtonIcon = isOpen ? <IconAngleUp size="s" /> : <IconAngleDown size="s" />;
+  const headingButtonIcon = isOpen ? (
+    <IconAngleUp size={IconSize.Small} />
+  ) : (
+    <IconAngleDown size={IconSize.Small} />
+  );
   const showHeadingBorderBottom =
     (headingBorderBottom && !accordionBorderBottom) || (accordionBorderBottom && isOpen);
 

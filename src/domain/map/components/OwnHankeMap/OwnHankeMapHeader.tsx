@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconLinkExternal, IconLocation, Link } from 'hds-react';
+import { IconLinkExternal, IconLocation, IconSize, Link, LinkSize } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import Text from '../../../../common/components/text/Text';
 import useLinkPath from '../../../../common/hooks/useLinkPath';
@@ -27,11 +27,11 @@ const OwnHankeMapHeader: React.FC<{ hankeTunnus: string; showLink?: boolean }> =
             href={getFullPageMapPath({ hankeTunnus })}
             openInNewTab
             disableVisitedStyles
-            size="S"
+            size={LinkSize.Small}
           >
             {t('hankePortfolio:openMapToNewWindow')}
           </Link>
-          <IconLinkExternal size="xs" />
+          <IconLinkExternal size={IconSize.ExtraSmall} />
         </div>
       )}
     </header>

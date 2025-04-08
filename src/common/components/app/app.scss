@@ -50,3 +50,17 @@ footer {
     margin-bottom: var(--spacing-s) !important;
   }
 }
+
+.haitaton-pagination {
+  margin-top: var(--spacing-s);
+
+  span[class*='item-link'] {
+    width: var(--link-height);
+  }
+}
+
+.haitaton-button-icon-size-initial {
+  button {
+    --icon-size: initial;
+  }
+}

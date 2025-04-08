@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FieldPath, FormProvider, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import {
@@ -10,6 +10,8 @@ import {
   StepState,
   Notification,
   LoadingSpinner,
+  NotificationSize,
+  ButtonVariant,
 } from 'hds-react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@chakra-ui/react';
@@ -361,26 +363,27 @@ export default function JohtoselvitysTaydennysContainer({
               <TaydennysCancel
                 application={originalApplication}
                 navigateToApplicationViewOnSuccess
-                buttonVariant="danger"
+                buttonVariant={ButtonVariant.Danger}
                 buttonIsLoading={saveAndQuitIsLoading}
                 buttonIsLoadingText={t('common:buttons:savingText')}
               />
               <Button
-                variant="secondary"
-                iconLeft={saveAndQuiteButtonIcon}
+                variant={ButtonVariant.Secondary}
+                iconStart={saveAndQuiteButtonIcon}
+                disabled={saveAndQuitIsLoading}
                 data-testid="save-form-btn"
                 onClick={handleSaveAndQuit}
               >
                 {saveAndQuitButtonText}
               </Button>
               {showSendButton && (
-                <Button type="submit" iconLeft={sendButtonIcon} disabled={disableSendButton}>
+                <Button type="submit" iconStart={sendButtonIcon} disabled={disableSendButton}>
                   {sendButtonText}
                 </Button>
               )}
               {disableSendButton && (
                 <Notification
-                  size="small"
+                  size={NotificationSize.Small}
                   style={{ marginTop: 'var(--spacing-xs)' }}
                   type="info"
                   label={t('hakemus:notifications:sendApplicationDisabled')}
@@ -409,7 +412,7 @@ export default function JohtoselvitysTaydennysContainer({
               <Box paddingTop="var(--spacing-s)">
                 <Notification
                   type="error"
-                  size="small"
+                  size={NotificationSize.Small}
                   label={t('taydennys:notifications:sendErrorLabel')}
                 >
                   <Trans i18nKey="taydennys:notifications:sendErrorText">

@@ -49,7 +49,7 @@ export default function FormPagesErrorSummary<T>({
         label={notificationLabel}
         className={className}
         type="alert"
-        dataTestId={testId}
+        data-testid={testId}
       >
         <Box as="ul" marginLeft="var(--spacing-m)">
           {errorPages.map((page) => {
