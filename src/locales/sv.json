@@ -463,6 +463,13 @@
         "title": "Haitaton - Bruksanvisning och support"
       }
     },
+    "GLOSSARY": {
+      "path": "/bruksanvisning/ordbok",
+      "headerLabel": "Ordbok för Haitaton",
+      "meta": {
+        "title": "Haitaton - Ordbok för Haitaton"
+      }
+    },
     "IDENTIFY_USER": {
       "path": "/inbjudan",
       "headerLabel": "Identifiera dig i Haitaton",
@@ -1482,7 +1489,8 @@
     "manualPage": {
       "main": {
         "heading": "Bruksanvisning och support",
-        "cableLocationServiceLink": "https://www.hel.fi/sv/stadsmiljo-och-trafik/tomter-och-bygglov/ledningstjanst"
+        "cableLocationServiceLink": "https://www.hel.fi/sv/stadsmiljo-och-trafik/tomter-och-bygglov/ledningstjanst",
+        "excavationServiceLink": "https://www.hel.fi/sv/stadsmiljo-och-trafik/tomter-och-bygglov/tillstand-och-anvisningar-for-byggplatsen/arbete-pa-gatu-eller-parkomraden#kontaktuppgifter"
       }
     },
     "404Page": {

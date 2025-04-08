@@ -69,6 +69,28 @@ const UserManualMain: React.FC = () => {
           <Link style={{ display: 'block' }} iconLeft={<IconPhone />} href="tel:+358931031940">
             +358 9 310 31940
           </Link>
+          <br />
+          <Box as="p" marginBottom="var(--spacing-2-xs)">
+            <strong>{t('staticPages:manualPage:main:excavationContact')}</strong>
+          </Box>
+          <Link
+            style={{ display: 'block' }}
+            external
+            openInNewTab
+            openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
+            openInExternalDomainAriaLabel={t(
+              'common:components:link:openInExternalDomainAriaLabel',
+            )}
+            href={t('staticPages:manualPage:main:excavationServiceLink')}
+          >
+            {t('staticPages:manualPage:main:excavationService')} (hel.fi)
+          </Link>
+          <Link style={{ display: 'block' }} iconLeft={<IconEnvelope />} href="mailto:luvat@hel.fi">
+            luvat@hel.fi
+          </Link>
+          <Link style={{ display: 'block' }} iconLeft={<IconPhone />} href="tel:+358931022111">
+            +358 9 310 22111
+          </Link>
         </Box>
       </div>
     </>

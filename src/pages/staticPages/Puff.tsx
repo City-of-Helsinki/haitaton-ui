@@ -1,7 +1,7 @@
 import { Card } from 'hds-react';
 import React from 'react';
-import Idea from '../../../../common/components/icons/Idea';
-import styles from './cards.module.scss';
+import styles from './StaticContent.module.scss';
+import Idea from '../../common/components/icons/Idea';
 
 const Puff: React.FC<React.PropsWithChildren<{ children?: React.ReactNode }>> = ({ children }) => {
   return (
@@ -19,7 +19,7 @@ const Puff: React.FC<React.PropsWithChildren<{ children?: React.ReactNode }>> = 
               <Idea />
             </div>
           </div>
-          <div>{children}</div>
+          <div className={styles.puffcontent}>{children}</div>
         </div>
       </Card>
     </div>
