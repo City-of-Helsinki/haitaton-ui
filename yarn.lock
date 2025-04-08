@@ -8714,20 +8714,20 @@ hash.js@^1.0.0, hash.js@^1.0.3:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
 
-hds-core@4.3.0, hds-core@^4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/hds-core/-/hds-core-4.3.0.tgz#5e117d7f223b367b0d5cbe0429d4fa1a64f8515c"
-  integrity sha512-FCZ/KLZXeU1Qh6Mc1S5FshikWsYrYI0n6WVlr1TOizDOrrFKGEaIFR5EF/BndGWcJ2+KLv+NdNidgadlJ9UJ1Q==
+hds-core@4.4.0, hds-core@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/hds-core/-/hds-core-4.4.0.tgz#6f17eaa1db94294fd8708395f759ffe350f84709"
+  integrity sha512-2CRkUGyOLSVLCLOE9bfOe/Ed75qxizPyZaSFuA+hCqb/67TB2H662v9LJ5ZTfMIIn90dPd3fAocepZeUiM3stQ==
 
-hds-design-tokens@^4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/hds-design-tokens/-/hds-design-tokens-4.3.0.tgz#7418c42b0998e93eeacf1ec18656fd91bebe9d35"
-  integrity sha512-ujBIvqdTEvSiRgp92NNDwa2ugysuFpNkOjMIe3ePPc7f0xlNgXSGt/7tDcT7fEBf2U6wfRhjEOKuR/0K0GAFfg==
+hds-design-tokens@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/hds-design-tokens/-/hds-design-tokens-4.4.0.tgz#9410be1b226ff2b4f02a555cb53e8a10aa323f2b"
+  integrity sha512-wCxp3Dn7tdBN8nsOyUA79OC9mhGpq0+ntO3c7i6bYaFUxCqoQzhIwZuc0mnk5h4Y7cpbRuORT3v7NSn+RCaSWg==
 
-hds-react@^4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/hds-react/-/hds-react-4.3.0.tgz#51dc1befe26a851fb68a1939c70e31747e16517d"
-  integrity sha512-AXOo3KFbFSRxhRjCBiLveTzCAnMMAMtiVWffccpLlyl6AdA18uPPDAkrlzDaACZIqJBgI5S1OpKkY/ukmrWYmw==
+hds-react@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/hds-react/-/hds-react-4.4.0.tgz#d66da099bf15f146436858e28cfe128b578654c4"
+  integrity sha512-VSUCiP5CSfw94V+Hb1AWVjZW/wXQGeNHSrTzM+ro6uZ+4pL/TLNK4+WONkLvPzzSmI5my837w9fLAKKVCf409A==
   dependencies:
     "@apollo/client" "^3.10.1"
     "@babel/runtime" "7.17.9"
@@ -8745,7 +8745,7 @@ hds-react@^4.3.0:
     date-fns "2.16.1"
     downshift "6.0.6"
     graphql "^16.8.1"
-    hds-core "4.3.0"
+    hds-core "4.4.0"
     jwt-decode "^3.1.2"
     kashe "1.0.4"
     lodash "^4.17.21"
