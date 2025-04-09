@@ -28,6 +28,7 @@ import HakemusLayer from '../Layers/HakemusLayer';
 import { HankkeenHakemus } from '../../../application/types/application';
 import { ModifyEvent } from 'ol/interaction/Modify';
 import { getWorkAreasInsideHankealueFeature } from '../../../hanke/edit/utils';
+import FullScreenControl from '../../../../common/components/map/controls/FullscreenControl';
 
 type Props = {
   features: Array<Feature | undefined> | undefined;
@@ -144,13 +145,15 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
           mapClassName={styles.mapContainer__inner}
           showAttribution={false}
         >
-          <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} zIndex={1000} />
+          <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} zIndex={100} />
 
-          <OverviewMapControl className={hankeDrawerStyles.overviewMap} />
+          <FullScreenControl />
+
+          <OverviewMapControl />
 
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
           {mapTileLayers.ortokartta.visible && <Ortokartta opacity={ortoLayerOpacity} />}
-          <VectorLayer source={drawSource} zIndex={0} className="drawLayer" style={styleFunction} />
+          <VectorLayer source={drawSource} zIndex={1} className="drawLayer" style={styleFunction} />
 
           {hankkeenHakemukset?.map((hakemus) => (
             <HakemusLayer key={hakemus.id} hakemusId={hakemus.id!} layerStyle={styleFunction} />
@@ -165,6 +168,7 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
             <LayerControl
               tileLayers={Object.values(mapTileLayers)}
               onClickTileLayer={(id: MapTileLayerId) => toggleMapTileLayer(id)}
+              className={hankeDrawerStyles.layerControl}
             />
           </Controls>
         </Map>

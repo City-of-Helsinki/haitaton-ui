@@ -132,7 +132,7 @@ export default function JohtoselvitysSelectionMap({
       <Map zoom={9} mapClassName={styles.mapContainer__inner} showAttribution={false}>
         <Kantakartta />
         <AddressSearchContainer position={{ top: '1rem', left: '1rem' }} zIndex={2} />
-        <OverviewMapControl className={styles.overviewMap} />
+        <OverviewMapControl />
         <JohtoselvitysSelect
           selectedJohtoselvitysTunnukset={selectedJohtoselvitysTunnukset}
           onSelectFeature={handleFeatureSelection}

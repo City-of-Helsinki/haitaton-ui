@@ -222,7 +222,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
             </div>
             <div className={styles.gridBasicInfo}>
               <Text tag="h3" styleAs="h6" weight="bold" className={styles.infoHeader}>
-                Hankkeen omistaja
+                {t('form:yhteystiedot:titles:omistaja')}
               </Text>
               <Text tag="p" styleAs="body-m" className={styles.infoContent}>
                 {hanke.omistajat && hanke.omistajat[0]?.nimi}

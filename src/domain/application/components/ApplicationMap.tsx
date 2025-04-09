@@ -32,6 +32,7 @@ import isFeatureWithinFeatures from '../../map/utils/isFeatureWithinFeatures';
 import { styleFunction } from '../../map/utils/geometryStyle';
 import { OverlayProps } from '../../../common/components/map/types';
 import AreaOverlay from '../../map/components/AreaOverlay/AreaOverlay';
+import FullScreenControl from '../../../common/components/map/controls/FullscreenControl';
 
 type Props = {
   drawSource: VectorSource;
@@ -197,7 +198,12 @@ export default function ApplicationMap({
   return (
     <div>
       <div className={styles.mapContainer}>
-        <Map zoom={9} center={mapCenter} mapClassName={styles.mapContainer__inner}>
+        <Map
+          zoom={9}
+          center={mapCenter}
+          mapClassName={styles.mapContainer__inner}
+          showAttribution={false}
+        >
           {mapTileLayers.kantakartta.visible && <Kantakartta />}
           {mapTileLayers.ortokartta.visible && <Ortokartta opacity={ortoLayerOpacity} />}
 
@@ -208,6 +214,8 @@ export default function ApplicationMap({
           <VectorLayer source={drawSource} zIndex={2} className="drawLayer" style={styleFunction} />
 
           <OverviewMapControl />
+
+          <FullScreenControl />
 
           <FitSource source={drawSource} fitOnce />
 
@@ -248,6 +256,7 @@ export default function ApplicationMap({
             <LayerControl
               tileLayers={Object.values(mapTileLayers)}
               onClickTileLayer={(id: MapTileLayerId) => toggleMapTileLayer(id)}
+              className={styles.layerControl}
             />
           </Controls>
         </Map>
