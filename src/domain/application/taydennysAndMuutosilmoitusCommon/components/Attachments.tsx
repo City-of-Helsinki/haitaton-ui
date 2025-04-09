@@ -3,39 +3,51 @@ import { Link, Notification } from 'hds-react';
 import { Box, Flex } from '@chakra-ui/react';
 import { useQueryClient } from 'react-query';
 import { useFormContext } from 'react-hook-form';
-import FileUpload from '../../common/components/fileUpload/FileUpload';
-import {
-  deleteAttachment,
-  getAttachmentFile,
-  uploadAttachment,
-} from '../application/taydennys/taydennysAttachmentsApi';
-import { getAttachmentFile as getApplicationAttachmentFile } from '../application/attachments';
-import FileDownloadList from '../../common/components/fileDownloadList/FileDownloadList';
+import FileUpload from '../../../../common/components/fileUpload/FileUpload';
+import { getAttachmentFile as getApplicationAttachmentFile } from '../../../application/attachments';
+import FileDownloadList from '../../../../common/components/fileDownloadList/FileDownloadList';
 import {
   FormSummarySection,
   SectionItemContent,
   SectionItemTitle,
-} from '../forms/components/FormSummarySection';
-import { ApplicationAttachmentMetadata } from '../application/types/application';
-import { TaydennysAttachmentMetadata } from '../application/taydennys/types';
-import { KaivuilmoitusTaydennysFormValues } from './types';
-import TextArea from '../../common/components/textArea/TextArea';
-import { AttachmentMetadata } from '../../common/types/attachment';
+} from '../../../forms/components/FormSummarySection';
+import { ApplicationAttachmentMetadata, AttachmentType } from '../../types/application';
+import { MuutosilmoitusAttachmentMetadata } from '../../muutosilmoitus/types';
+import TextArea from '../../../../common/components/textArea/TextArea';
+import { AttachmentMetadata } from '../../../../common/types/attachment';
+import { KaivuilmoitusMuutosilmoitusFormValues } from '../../../kaivuilmoitusMuutosilmoitus/types';
+import { KaivuilmoitusTaydennysFormValues } from '../../../kaivuilmoitusTaydennys/types';
+import { TaydennysAttachmentMetadata } from '../../taydennys/types';
+
+type AttachmentAPI = {
+  uploadAttachment: (
+    id: string,
+    attachmentType: AttachmentType,
+    file: File,
+    abortSignal?: AbortSignal,
+  ) => Promise<TaydennysAttachmentMetadata | MuutosilmoitusAttachmentMetadata>;
+  deleteAttachment: (id: string | null, attachmentId: string | undefined) => Promise<void>;
+  downloadAttachment: (id: string, attachmentId: string) => Promise<string>;
+};
 
 type Props = {
   applicationId: number;
-  taydennysAttachments: TaydennysAttachmentMetadata[];
+  attachments: TaydennysAttachmentMetadata[] | MuutosilmoitusAttachmentMetadata[];
   originalAttachments?: ApplicationAttachmentMetadata[];
+  api: AttachmentAPI;
 };
 
 export default function Attachments({
   applicationId,
-  taydennysAttachments,
+  attachments,
   originalAttachments,
+  api,
 }: Readonly<Props>) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
-  const { getValues } = useFormContext<KaivuilmoitusTaydennysFormValues>();
+  const { getValues } = useFormContext<
+    KaivuilmoitusTaydennysFormValues | KaivuilmoitusMuutosilmoitusFormValues
+  >();
   const originalTrafficArrangementPlans = originalAttachments?.filter(
     (attachment) => attachment.attachmentType === 'LIIKENNEJARJESTELY',
   );
@@ -52,20 +64,20 @@ export default function Attachments({
 
   function handleFileUpload(uploading: boolean) {
     if (!uploading) {
-      queryClient.invalidateQueries(['application', applicationId]);
+      queryClient.invalidateQueries(['application', applicationId]).then(() => {});
     }
   }
 
-  function downloadTaydennysAttachment(file: AttachmentMetadata) {
-    return getAttachmentFile(getValues('id')!, file.id);
+  function downloadAttachment(file: AttachmentMetadata) {
+    return api.downloadAttachment(getValues('id'), file.id);
   }
 
   function deleteFile(file: AttachmentMetadata) {
-    return deleteAttachment({ taydennysId: getValues('id'), attachmentId: file?.id });
+    return api.deleteAttachment(getValues('id'), file?.id);
   }
 
   function handleFileDelete() {
-    queryClient.invalidateQueries(['application', applicationId]);
+    queryClient.invalidateQueries(['application', applicationId]).then(() => {});
   }
 
   return (
@@ -130,20 +142,15 @@ export default function Attachments({
         maxSize={104857600}
         dragAndDrop
         multiple
-        existingAttachments={taydennysAttachments?.filter(
+        existingAttachments={attachments?.filter(
           (metadata) => metadata.attachmentType === 'LIIKENNEJARJESTELY',
         )}
         maxFilesNumber={20}
         uploadFunction={({ file, abortSignal }) =>
-          uploadAttachment({
-            taydennysId: getValues('id')!,
-            attachmentType: 'LIIKENNEJARJESTELY',
-            file,
-            abortSignal,
-          })
+          api.uploadAttachment(getValues('id'), 'LIIKENNEJARJESTELY', file, abortSignal)
         }
         onUpload={handleFileUpload}
-        fileDownLoadFunction={downloadTaydennysAttachment}
+        fileDownLoadFunction={downloadAttachment}
         fileDeleteFunction={deleteFile}
         onFileDelete={handleFileDelete}
       />
@@ -165,17 +172,12 @@ export default function Attachments({
         maxSize={104857600}
         dragAndDrop
         multiple
-        existingAttachments={taydennysAttachments?.filter(
+        existingAttachments={attachments?.filter(
           (metadata) => metadata.attachmentType === 'VALTAKIRJA',
         )}
         maxFilesNumber={20}
         uploadFunction={({ file, abortSignal }) =>
-          uploadAttachment({
-            taydennysId: getValues('id')!,
-            attachmentType: 'VALTAKIRJA',
-            file,
-            abortSignal,
-          })
+          api.uploadAttachment(getValues('id'), 'VALTAKIRJA', file, abortSignal)
         }
         onUpload={handleFileUpload}
         fileDeleteFunction={deleteFile}
@@ -191,20 +193,13 @@ export default function Attachments({
         maxSize={104857600}
         dragAndDrop
         multiple
-        existingAttachments={taydennysAttachments?.filter(
-          (metadata) => metadata.attachmentType === 'MUU',
-        )}
+        existingAttachments={attachments?.filter((metadata) => metadata.attachmentType === 'MUU')}
         maxFilesNumber={20}
         uploadFunction={({ file, abortSignal }) =>
-          uploadAttachment({
-            taydennysId: getValues('id')!,
-            attachmentType: 'MUU',
-            file,
-            abortSignal,
-          })
+          api.uploadAttachment(getValues('id'), 'MUU', file, abortSignal)
         }
         onUpload={handleFileUpload}
-        fileDownLoadFunction={downloadTaydennysAttachment}
+        fileDownLoadFunction={downloadAttachment}
         fileDeleteFunction={deleteFile}
         onFileDelete={handleFileDelete}
       />

@@ -17,7 +17,10 @@ import {
 } from '../types/application';
 import * as taydennysApi from '../taydennys/taydennysApi';
 import { USER_VIEW } from '../../mocks/signedInUser';
-import { createTaydennysAttachments } from '../../mocks/attachments';
+import {
+  createMuutosilmoitusAttachments,
+  createTaydennysAttachments,
+} from '../../mocks/attachments';
 import * as muutosilmoitusApi from '../muutosilmoitus/muutosilmoitusApi';
 import { HAITTA_INDEX_TYPE } from '../../common/haittaIndexes/types';
 import { PathParams } from 'msw/lib/core/utils/matching/matchRequestUrl';
@@ -1824,6 +1827,7 @@ describe('Excavation notification application view', () => {
         applicationData: application.applicationData,
         sent: null,
         muutokset: [],
+        liitteet: [],
       };
       const { user } = await setup(application);
       await user.click(screen.getByRole('button', { name: 'Jatka muutosilmoitusta' }));
@@ -1856,6 +1860,7 @@ describe('Excavation notification application view', () => {
         applicationData: application.applicationData,
         sent: null,
         muutokset: [],
+        liitteet: [],
       };
       await setup(application);
 
@@ -1871,6 +1876,7 @@ describe('Excavation notification application view', () => {
         muutokset: [],
         applicationData: application.applicationData,
         sent: sentDate,
+        liitteet: [],
       };
       await setup(application);
 
@@ -1939,6 +1945,7 @@ describe('Excavation notification application view', () => {
             },
           ],
         },
+        liitteet: [],
         muutokset: [
           'name',
           'workDescription',
@@ -2028,6 +2035,7 @@ describe('Excavation notification application view', () => {
             },
           ],
         },
+        liitteet: [],
         muutokset: [
           'areas[0].tyoalueet[1]',
           'areas[0].tyonTarkoitukset',
@@ -2079,6 +2087,7 @@ describe('Excavation notification application view', () => {
             },
           ],
         },
+        liitteet: [],
         muutokset: [
           'areas[0].haittojenhallintasuunnitelma[YLEINEN]',
           'areas[0].haittojenhallintasuunnitelma[PYORALIIKENNE]',
@@ -2118,6 +2127,7 @@ describe('Excavation notification application view', () => {
             name: 'Uusi Laskutus Oy',
           },
         },
+        liitteet: [],
         muutokset: ['customerWithContacts', 'propertyDeveloperWithContacts', 'invoicingCustomer'],
       };
       const { user } = await setup(application);
@@ -2130,12 +2140,37 @@ describe('Excavation notification application view', () => {
       expect(screen.getByText('Uusi Laskutus Oy')).toBeInTheDocument();
     });
 
+    test('Shows changed information in attachments tab', async () => {
+      const muutosilmoitusId = 'c0a1fe7b-326c-4b25-a7bc-d1797762c01c';
+      const muutosilmoitusAttachments = createMuutosilmoitusAttachments(muutosilmoitusId, [
+        { attachmentType: 'LIIKENNEJARJESTELY' },
+        { attachmentType: 'VALTAKIRJA' },
+        { attachmentType: 'MUU' },
+      ]);
+      const application = cloneDeep(hakemukset[7]) as Application<KaivuilmoitusData>;
+      application.muutosilmoitus = {
+        id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
+        applicationData: application.applicationData,
+        sent: null,
+        liitteet: muutosilmoitusAttachments,
+        muutokset: ['workDescription'],
+      };
+      const { user } = await setup(application);
+      await user.click(screen.getByRole('tab', { name: /liitteet/i }));
+
+      expect(screen.getAllByText('Muutos:').length).toBe(3);
+      muutosilmoitusAttachments.forEach((attachment) => {
+        expect(screen.getByText(attachment.fileName)).toBeInTheDocument();
+      });
+    });
+
     test('Should be able to send muutosilmoitus without paper decision order', async () => {
       const application = cloneDeep(hakemukset[7]) as Application<KaivuilmoitusData>;
       application.muutosilmoitus = {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
         applicationData: application.applicationData,
         sent: null,
+        liitteet: [],
         muutokset: ['workDescription'],
       };
       const { user } = await setup(application);
@@ -2178,6 +2213,7 @@ describe('Excavation notification application view', () => {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
         applicationData: application.applicationData,
         sent: null,
+        liitteet: [],
         muutokset: ['workDescription'],
       };
       application.applicationData.paperDecisionReceiver = null;
@@ -2246,6 +2282,7 @@ describe('Excavation notification application view', () => {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
         applicationData: application.applicationData,
         sent: new Date(),
+        liitteet: [],
         muutokset: ['workDescription'],
       };
       await setup(application);
@@ -2271,6 +2308,7 @@ describe('Excavation notification application view', () => {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
         applicationData: application.applicationData,
         sent: null,
+        liitteet: [],
         muutokset: ['workDescription'],
       };
       await setup(application);
@@ -2296,6 +2334,7 @@ describe('Excavation notification application view', () => {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
         applicationData: application.applicationData,
         sent: null,
+        liitteet: [],
         muutokset: ['workDescription'],
       };
       await setup(application);
@@ -2325,6 +2364,7 @@ describe('Excavation notification application view', () => {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
         applicationData: application.applicationData,
         sent: null,
+        liitteet: [],
         muutokset: ['workDescription'],
       };
       const cancelMuutosilmoitus = jest.spyOn(muutosilmoitusApi, 'cancelMuutosilmoitus');
@@ -2350,6 +2390,7 @@ describe('Excavation notification application view', () => {
         id: 'c0a1fe7b-326c-4b25-a7bc-d1797762c01d',
         applicationData: application.applicationData,
         sent: null,
+        liitteet: [],
         muutokset: ['workDescription'],
       };
       const { user } = await setup(application);

@@ -1191,6 +1191,10 @@ function ApplicationView({
                   taydennysAdditionalInfo={
                     (taydennys?.applicationData as KaivuilmoitusData)?.additionalInfo
                   }
+                  muutosilmoitusAttachments={muutosilmoitus?.liitteet}
+                  muutosilmoitusAdditionalInfo={
+                    (muutosilmoitus?.applicationData as KaivuilmoitusData)?.additionalInfo
+                  }
                 />
               ) : attachments ? (
                 <AttachmentSummary

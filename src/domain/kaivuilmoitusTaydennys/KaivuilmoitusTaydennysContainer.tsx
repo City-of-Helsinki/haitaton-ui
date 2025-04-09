@@ -43,7 +43,6 @@ import useNavigateToApplicationView from '../application/hooks/useNavigateToAppl
 import { changeFormStep } from '../forms/utils';
 import ApplicationSaveNotification from '../application/components/ApplicationSaveNotification';
 import TaydennysCancel from '../application/taydennys/components/TaydennysCancel';
-import Attachments from './Attachments';
 import useAttachments from '../application/hooks/useAttachments';
 import ReviewAndSend from './ReviewAndSend';
 import { getJohtoselvitysIdentifiers, isContactIn } from '../application/utils';
@@ -54,6 +53,12 @@ import FormErrorsNotification from '../kaivuilmoitus/components/FormErrorsNotifi
 import { updateTaydennys } from '../application/taydennys/taydennysApi';
 import useUpdateHakemus from '../application/taydennysAndMuutosilmoitusCommon/hooks/useUpdateHakemus';
 import useTaydennysSendNotification from '../application/taydennys/hooks/useTaydennysSendNotification';
+import Attachments from '../application/taydennysAndMuutosilmoitusCommon/components/Attachments';
+import {
+  deleteAttachment,
+  downloadAttachment,
+  uploadAttachment,
+} from '../application/taydennys/taydennysAttachmentsApi';
 
 type Props = {
   taydennys: Taydennys<KaivuilmoitusData>;
@@ -184,8 +189,13 @@ export default function KaivuilmoitusTaydennysContainer({
       element: (
         <Attachments
           applicationId={originalApplication.id!}
-          taydennysAttachments={taydennys.liitteet}
+          attachments={taydennys.liitteet}
           originalAttachments={originalAttachments}
+          api={{
+            uploadAttachment: uploadAttachment,
+            deleteAttachment: deleteAttachment,
+            downloadAttachment: downloadAttachment,
+          }}
         />
       ),
       label: t('hankePortfolio:tabit:liitteet'),

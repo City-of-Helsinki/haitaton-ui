@@ -206,6 +206,7 @@ export async function createMuutosilmoitus(id: number) {
     applicationData: cloneDeep(hakemus.applicationData),
     sent: null,
     muutokset: [],
+    liitteet: [],
   };
   hakemus.muutosilmoitus = muutosilmoitus;
   return muutosilmoitus;

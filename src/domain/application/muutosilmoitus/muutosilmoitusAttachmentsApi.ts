@@ -1,16 +1,16 @@
 import api from '../../api/api';
 import { AttachmentType } from '../types/application';
-import { TaydennysAttachmentMetadata } from './types';
+import { MuutosilmoitusAttachmentMetadata } from './types';
 
-// Upload attachment for täydennys
+// Upload attachment for muutosilmoitus
 export async function uploadAttachment(
-  taydennysId: string,
+  muutosilmoitusId: string,
   attachmentType: AttachmentType,
   file: File,
   abortSignal: AbortSignal | undefined,
 ) {
-  const { data } = await api.post<TaydennysAttachmentMetadata>(
-    `/taydennykset/${taydennysId}/liitteet?tyyppi=${attachmentType}`,
+  const { data } = await api.post<MuutosilmoitusAttachmentMetadata>(
+    `/muutosilmoitukset/${muutosilmoitusId}/liitteet?tyyppi=${attachmentType}`,
     { liite: file },
     {
       headers: {
@@ -23,9 +23,9 @@ export async function uploadAttachment(
 }
 
 // Download attachment file
-export async function downloadAttachment(taydennysId: string, attachmentId: string) {
+export async function downloadAttachment(muutosilmoitusId: string, attachmentId: string) {
   const { data } = await api.get<Blob>(
-    `/taydennykset/${taydennysId}/liitteet/${attachmentId}/content`,
+    `/muutosilmoitukset/${muutosilmoitusId}/liitteet/${attachmentId}/content`,
     { responseType: 'blob' },
   );
   return URL.createObjectURL(data);
@@ -33,8 +33,8 @@ export async function downloadAttachment(taydennysId: string, attachmentId: stri
 
 // Delete attachment
 export async function deleteAttachment(
-  taydennysId: string | null,
+  muutosilmoitusId: string | null,
   attachmentId: string | undefined,
 ) {
-  await api.delete(`/taydennykset/${taydennysId}/liitteet/${attachmentId}`);
+  await api.delete(`/muutosilmoitukset/${muutosilmoitusId}/liitteet/${attachmentId}`);
 }
