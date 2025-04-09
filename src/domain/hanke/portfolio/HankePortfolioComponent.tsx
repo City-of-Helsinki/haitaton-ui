@@ -9,9 +9,8 @@ import {
   useAsyncDebounce,
   useSortBy,
 } from 'react-table';
-import { useAccordion, Card, Select, Button, Pagination, SearchInput, Tag } from 'hds-react';
+import { useAccordion, Card, Select, Button, Pagination, SearchInput } from 'hds-react';
 import {
-  IconAlertCircle,
   IconAngleDown,
   IconAngleUp,
   IconEye,
@@ -21,7 +20,6 @@ import {
 } from 'hds-react/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
-import { Flex } from '@chakra-ui/react';
 import Text from '../../../common/components/text/Text';
 import { HankeData, HANKE_TYOMAATYYPPI, HANKE_VAIHE } from '../../types/hanke';
 import styles from './HankePortfolio.module.scss';
@@ -47,6 +45,7 @@ import useFocusToElement from '../../../common/hooks/useFocusToElement';
 import HDSLink from '../../../common/components/Link/Link';
 import HankeCreateDialog from '../hankeCreateDialog/HankeCreateDialog';
 import MapPlaceholder from '../../map/components/MapPlaceholder/MapPlaceholder';
+import HankeStatusTag from '../components/HankeStatusTag';
 
 type CustomAccordionProps = {
   hanke: HankeData;
@@ -98,14 +97,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
                 {hanke.nimi}
               </Text>
               <FeatureFlags flags={['hanke']}>
-                {hanke.status === 'DRAFT' && (
-                  <Tag>
-                    <Flex alignItems="center">
-                      <IconAlertCircle style={{ marginRight: 'var(--spacing-2-xs)' }} />
-                      {t('hakemus:status:null')}
-                    </Flex>
-                  </Tag>
-                )}
+                <HankeStatusTag status={hanke.status} />
                 <HankeVaiheTag tagName={hanke.vaihe} />
               </FeatureFlags>
             </div>
