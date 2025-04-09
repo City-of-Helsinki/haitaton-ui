@@ -580,6 +580,11 @@
           "TYO_VALMIS": "Lataa työ valmis (PDF)"
         }
       }
+    },
+    "status": {
+      "null": "$t(hanke:status:DRAFT)",
+      "DRAFT": "Luonnos",
+      "COMPLETED": "Valmis"
     }
   },
   "hankeForm": {
