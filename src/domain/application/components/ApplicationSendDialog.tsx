@@ -62,16 +62,21 @@ const ApplicationSendDialog: React.FC<Props> = ({
   const [showPaperDecision, setShowPaperDecision] = React.useState(
     applicationData.paperDecisionReceiver != null,
   );
+  const [originalPaperDecisionReceiver] = React.useState(
+    applicationData.paperDecisionReceiver || null,
+  );
   const formContext = useForm<ApplicationSendData>({
+    mode: 'onChange',
     resolver: yupResolver(sendSchema),
     defaultValues: {
       orderPaperDecision: applicationData.paperDecisionReceiver != null,
-      paperDecisionReceiver: applicationData.paperDecisionReceiver,
+      paperDecisionReceiver: applicationData.paperDecisionReceiver ?? null,
     },
   });
 
-  const { handleSubmit, formState, register, setValue } = formContext;
+  const { handleSubmit, formState, register, setValue, clearErrors } = formContext;
   const isConfirmButtonEnabled = formState.isValid;
+
   const dialogTitle = isMuutosilmoitus
     ? t('muutosilmoitus:sendDialog:title')
     : t('hakemus:sendDialog:title');
@@ -101,9 +106,18 @@ const ApplicationSendDialog: React.FC<Props> = ({
 
   function handleOrderPaperDecisionChange() {
     const newValue = !showPaperDecision;
-    setValue('orderPaperDecision', newValue, {
-      shouldDirty: true,
-    });
+    setValue('orderPaperDecision', newValue, { shouldDirty: true, shouldValidate: true });
+    if (!newValue) {
+      // Clear the form state value so validation passes
+      setValue('paperDecisionReceiver', null, { shouldDirty: true, shouldValidate: true });
+      clearErrors('paperDecisionReceiver');
+    } else {
+      // Restore the original value if the user toggles back on
+      setValue('paperDecisionReceiver', originalPaperDecisionReceiver, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    }
     setShowPaperDecision(newValue);
   }
 
