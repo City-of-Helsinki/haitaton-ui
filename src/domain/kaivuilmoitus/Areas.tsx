@@ -386,18 +386,12 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
             </p>
             <p>
               Jos haluat käyttää koko hankealuetta työalueena, valitse hankealue kartalta
-              aktiviiseksi ja hanketietolaatikosta "Käytä työalueena".
+              aktiviiseksi ja hanketietolaatikosta "Kopioi työalueeksi".
             </p>
             <p>
               Voit lisätä samalle hakemukselle useampia alueita mikäli niiden aikaväli on sama. Jos
               haluat ilmoittaa useamman alueen eri aikaväleillä, tulee sinun tehdä erillinen
               hakemus.
-            </p>
-            <p>
-              Kartan vasemmassa reunassa olevilla kulkumuotovalitsimilla voit tarkastella hanke- ja
-              työalueiden haittaindeksejä tietylle kulkumuodolle. Kaikki kulkumuodot ovat oletuksena
-              aktiivisina, voit vaihtaa näkyvien kulkumuotojen määrää klikkaamalla ikoneja. Kartalla
-              näkyy valittujen kulkumuotojen kriittisin indeksiväri.
             </p>
             <p>
               Kaikki tähdellä * merkityt kentät ovat hakemuksen lähettämisen kannalta pakollisia.
