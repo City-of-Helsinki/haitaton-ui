@@ -729,6 +729,7 @@ const hankkeet: HankeDataDraft[] = [
         },
       },
     ],
+    deletionDate: '2024-04-16',
   },
 ];
 

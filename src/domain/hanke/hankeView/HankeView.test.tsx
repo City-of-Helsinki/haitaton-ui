@@ -338,4 +338,16 @@ describe('Completed hanke', () => {
 
     expect(screen.getByRole('button', { name: /käyttäjähallinta/i })).toBeInTheDocument();
   });
+
+  test('Should show notification', async () => {
+    render(<HankeViewContainer hankeTunnus="HAI22-12" />);
+    await waitForLoadingToFinish();
+
+    expect(screen.getByText('Hanke on siirretty Valmis-tilaan')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Hanketta ei voi enää muokata eikä sille voi lisätä hakemuksia. Hanke poistetaan aikaisintaan 16.4.2024, jolloin kaikki hankkeen ja sen hakemusten tiedot poistuvat Haitattomasta.',
+      ),
+    ).toBeInTheDocument();
+  });
 });

@@ -200,6 +200,7 @@ export interface HankeData {
   modifiedBy?: null | string;
   modifiedAt?: null | string;
   generated?: boolean;
+  deletionDate?: string | null;
 }
 
 type DraftRequiredFields = 'nimi' | 'kuvaus' | 'vaihe';

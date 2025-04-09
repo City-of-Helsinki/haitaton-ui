@@ -6,6 +6,7 @@ import {
   IconPlusCircle,
   IconTrash,
   IconUser,
+  Notification,
   Tab,
   TabList,
   TabPanel,
@@ -306,7 +307,7 @@ const HankeView: React.FC<Props> = ({
 
   const areasTotalSurfaceArea = calculateTotalSurfaceArea(hankeData.alueet);
 
-  const { omistajat, rakennuttajat, toteuttajat, muut, alueet, status } = hankeData;
+  const { omistajat, rakennuttajat, toteuttajat, muut, alueet, status, deletionDate } = hankeData;
   const isHankePublic = status === 'PUBLIC';
   const isHankeCompleted = status === 'COMPLETED';
   const isCancelPossible =
@@ -414,6 +415,16 @@ const HankeView: React.FC<Props> = ({
               notificationLabel={t('hankePortfolio:draftState:labels:insufficientPhases')}
               testId="hankeDraftStateNotification"
             />
+            {isHankeCompleted && (
+              <Notification
+                type="success"
+                label={t('hankePortfolio:completedState:labels:completed')}
+              >
+                {t('hankePortfolio:completedState:notifications:completed', {
+                  date: formatToFinnishDate(deletionDate ?? null),
+                })}
+              </Notification>
+            )}
           </FeatureFlags>
 
           <Tabs small initiallyActiveTab={features.hanke ? initiallyActiveTab : 0}>
