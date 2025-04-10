@@ -1,20 +1,28 @@
-import { cleanup } from '@testing-library/react';
 import HankeSidebar from './HankeSidebar';
-import { render } from '../../../../testUtils/render';
 import hankeList from '../../../mocks/hankeList';
+import { cleanup, render, screen } from '../../../../testUtils/render';
+import { formatToFinnishDate } from '../../../../common/utils/date';
 
 afterEach(cleanup);
 
 describe('HankeSidebar', () => {
   test('Should be display data correctly', async () => {
-    const { findByText } = render(
-      <HankeSidebar hanke={hankeList[0]} isOpen handleClose={() => ({})} />,
+    const hanke = hankeList[0];
+    const hankealue = hanke.alueet[0];
+    render(
+      <HankeSidebar hanke={hanke} hankealueId={hankealue.id!} isOpen handleClose={() => ({})} />,
     );
-    expect(findByText('Mannerheimintie autottomaksi')).toBeTruthy();
-    expect(findByText('26.11.2020')).toBeTruthy();
-    expect(findByText('17.11.2020')).toBeTruthy();
-    expect(findByText('Objelmointi')).toBeTruthy();
-    expect(findByText('Sadevesi, Viemäri')).toBeTruthy();
-    expect(findByText('Hankkeen kuvaus')).toBeTruthy();
+    const hankealueAlkuPvm = formatToFinnishDate(hankealue.haittaAlkuPvm);
+    const hankealueLoppuPvm = formatToFinnishDate(hankealue.haittaLoppuPvm);
+    const hankeAlkuPvm = formatToFinnishDate(hanke.alkuPvm);
+    const hankeLoppuPvm = formatToFinnishDate(hanke.loppuPvm);
+    expect(screen.getByText('Mannerheimintie autottomaksi: Hankealue 1')).toBeInTheDocument();
+    expect(screen.getByText(`${hankealueAlkuPvm} - ${hankealueLoppuPvm}`)).toBeInTheDocument();
+    expect(screen.getByText('Mannerheimintie autottomaksi (HAI22-1)')).toBeInTheDocument();
+    expect(screen.getByText(`${hankeAlkuPvm} - ${hankeLoppuPvm}`)).toBeInTheDocument();
+    expect(screen.getByText('Yksityishenkilö')).toBeInTheDocument();
+    expect(screen.getByText('Ohjelmointi')).toBeInTheDocument();
+    expect(screen.getByText('Vesi, Viemäri')).toBeInTheDocument();
+    expect(screen.getByText('Hankkeen kuvaus on lyhyt mutta ytimekäs')).toBeInTheDocument();
   });
 });

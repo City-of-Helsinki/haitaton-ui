@@ -1624,7 +1624,14 @@
   "hankeSidebar": {
     "ariaSidebarContent": "Hankkeen tiedot",
     "closeButtonAriaLabel": "Sulje hankevalikko",
-    "editHanke": "Muokkaa hankkeen tietoja"
+    "editHanke": "Muokkaa hankkeen tietoja",
+    "labels": {
+      "hankealueenAjankohta": "Hankealueen ajankohta",
+      "hanke": "Hanke",
+      "hankkeenAjankohta": "Hankkeen ajankohta",
+      "omistaja": "Hankkeen omistaja",
+      "yksityishenkilo": "Yksityishenkilö"
+    }
   },
   "hankeIndexes": {
     "haittaindeksi": "Haittaindeksi",

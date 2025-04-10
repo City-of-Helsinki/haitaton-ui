@@ -3,10 +3,10 @@ import { HankeData, HANKE_POLYHAITTA } from '../types/hanke';
 const hankeList: HankeData[] = [
   {
     id: 1,
-    hankeTunnus: 'SMTGEN2_1',
+    hankeTunnus: 'HAI22-1',
     onYKTHanke: false,
     nimi: 'Mannerheimintie autottomaksi',
-    kuvaus: 'Hankkeen kuvaus',
+    kuvaus: 'Hankkeen kuvaus on lyhyt mutta ytimekäs',
     alkuPvm: '2022-10-02:00:00Z',
     loppuPvm: '2022-10-10:00:00Z',
     vaihe: 'OHJELMOINTI',
@@ -16,7 +16,15 @@ const hankeList: HankeData[] = [
     modifiedBy: null,
     modifiedAt: null,
     status: 'PUBLIC',
-    omistajat: [],
+    omistajat: [
+      {
+        tyyppi: 'YKSITYISHENKILO',
+        nimi: 'Yksityishenkilö',
+        ytunnus: null,
+        email: '',
+        puhelinnumero: '',
+      },
+    ],
     rakennuttajat: [],
     toteuttajat: [],
     muut: [],
@@ -25,6 +33,7 @@ const hankeList: HankeData[] = [
       {
         id: 1,
         hankeId: 1,
+        nimi: 'Hankealue 1',
         geometriat: {
           id: 1,
           featureCollection: {
@@ -33,7 +42,7 @@ const hankeList: HankeData[] = [
             features: [
               {
                 type: 'Feature',
-                properties: { hankeTunnus: 'SMTGEN2_2' },
+                properties: { hankeTunnus: 'HAI22-2' },
                 geometry: {
                   type: 'Polygon',
                   crs: { type: 'name', properties: { name: 'EPSG:3879' } },
@@ -56,8 +65,8 @@ const hankeList: HankeData[] = [
           modifiedByUserId: null,
           modifiedAt: '2022-01-19T13:01:26.024Z',
         },
-        haittaAlkuPvm: new Date('2022-11-21T21:59:59.999Z'),
-        haittaLoppuPvm: new Date('2022-11-30T21:59:59.999Z'),
+        haittaAlkuPvm: new Date('2022-10-02T21:59:59.999Z'),
+        haittaLoppuPvm: new Date('2022-10-08T21:59:59.999Z'),
         meluHaitta: 'SATUNNAINEN_MELUHAITTA',
         polyHaitta: HANKE_POLYHAITTA.TOISTUVA_POLYHAITTA,
         tarinaHaitta: 'SATUNNAINEN_TARINAHAITTA',
@@ -70,7 +79,7 @@ const hankeList: HankeData[] = [
   },
   {
     id: 2,
-    hankeTunnus: 'SMTGEN2_2',
+    hankeTunnus: 'HAI22-2',
     onYKTHanke: true,
     nimi: 'dsf',
     kuvaus: '',
@@ -100,7 +109,7 @@ const hankeList: HankeData[] = [
             features: [
               {
                 type: 'Feature',
-                properties: { hankeTunnus: 'SMTGEN2_2' },
+                properties: { hankeTunnus: 'HAI22-2' },
                 geometry: {
                   type: 'Polygon',
                   crs: { type: 'name', properties: { name: 'EPSG:3879' } },
