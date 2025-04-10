@@ -3,21 +3,21 @@ import { HankeData } from '../../types/hanke';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 
-const getHankkeet = async () => {
-  const { data } = await api.get<HankeData[]>(`/hankkeet`, {
+const getHankkeet = async (geometry: boolean) => {
+  const { data } = await api.get<HankeData[]>('/hankkeet', {
     params: {
-      geometry: false,
+      geometry: geometry,
     },
   });
   return data;
 };
 
-export default function useHankkeet() {
+export default function useHankkeet(geometry = false) {
   return useQuery<HankeData[] | null>(
     ['hankkeet'],
     async () => {
       try {
-        return await getHankkeet();
+        return await getHankkeet(geometry);
       } catch (error: unknown) {
         if (
           (axios.isAxiosError(error) && error.response?.status === 401) ||

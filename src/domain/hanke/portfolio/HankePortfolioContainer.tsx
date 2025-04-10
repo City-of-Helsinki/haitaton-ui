@@ -8,7 +8,7 @@ import Breadcrumbs, { BREADCRUMBS } from '../../../common/components/breadcrumbs
 import useHankkeet from '../hooks/useHankkeet';
 
 const HankePortfolioContainer: React.FC<React.PropsWithChildren<unknown>> = () => {
-  const { data: hankkeet, isError, isLoading } = useHankkeet();
+  const { data: hankkeet, isError, isLoading } = useHankkeet(true);
   const { data: signedInUserByHanke } = usePermissionsByHanke();
   const userData = signedInUserByHanke ?? {};
 
