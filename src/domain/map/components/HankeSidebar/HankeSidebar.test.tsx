@@ -10,12 +10,7 @@ describe('HankeSidebar', () => {
     const hanke = hankeList[0];
     const hankealue = hanke.alueet[0];
     render(
-      <HankeSidebar
-        hanke={hanke}
-        hankealueNimi={hankealue.nimi!}
-        isOpen
-        handleClose={() => ({})}
-      />,
+      <HankeSidebar hanke={hanke} hankealueId={hankealue.id!} isOpen handleClose={() => ({})} />,
     );
     const hankealueAlkuPvm = formatToFinnishDate(hankealue.haittaAlkuPvm);
     const hankealueLoppuPvm = formatToFinnishDate(hankealue.haittaLoppuPvm);

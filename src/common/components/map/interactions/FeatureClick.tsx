@@ -18,9 +18,9 @@ const HankeClick: React.FC<React.PropsWithChildren<unknown>> = () => {
             if (features.length > 0) {
               features.some((feature) => {
                 const hankeTunnus = feature.get('hankeTunnus');
-                const hankealueNimi = feature.get('areaName');
+                const hankealueId = feature.get('id');
                 navigate({
-                  search: `?hanke=${hankeTunnus}&hankealue=${hankealueNimi}`,
+                  search: `?hanke=${hankeTunnus}&hankealue=${hankealueId}`,
                 });
                 return true;
               });

@@ -8,12 +8,10 @@ import styles from './HankeSidebar.module.scss';
 import { formatToFinnishDate } from '../../../../common/utils/date';
 import { TFunction } from 'i18next';
 import HaittaIndexes from '../../../common/haittaIndexes/HaittaIndexes';
-import api from '../../../api/api';
-import { useQuery } from 'react-query';
-import axios from 'axios';
 import useHankeViewPath from '../../../hanke/hooks/useHankeViewPath';
 import { ROUTES } from '../../../../common/types/route';
-import { Link } from 'hds-react';
+import useHankkeet from '../../../hanke/hooks/useHankkeet';
+import { Link } from 'react-router-dom';
 
 function omistajaNimet(
   omistajat: HankeYhteystieto[],
@@ -26,37 +24,6 @@ function omistajaNimet(
   );
   const uniqueNames = Array.from(new Set(names));
   return uniqueNames.join(', ');
-}
-
-const getHankkeet = async () => {
-  const { data } = await api.get<HankeData[]>(`/hankkeet`, {
-    params: {
-      geometry: false,
-    },
-  });
-  return data;
-};
-
-function useHankkeet() {
-  return useQuery<HankeData[] | null>(
-    ['hankkeet'],
-    async () => {
-      try {
-        return await getHankkeet();
-      } catch (error: unknown) {
-        if (
-          (axios.isAxiosError(error) && error.response?.status === 401) ||
-          (error instanceof Error && error.message === 'No token')
-        ) {
-          return null;
-        }
-        throw error;
-      }
-    },
-    {
-      enabled: true,
-    },
-  );
 }
 
 type SectionProps = {
@@ -82,14 +49,14 @@ const SidebarSection: React.FC<React.PropsWithChildren<SectionProps>> = ({ title
 
 type Props = {
   hanke: HankeData;
-  hankealueNimi: string;
+  hankealueId: number;
   isOpen: boolean;
   handleClose: () => void;
 };
 
 const HankeSidebar: React.FC<React.PropsWithChildren<Props>> = ({
   hanke,
-  hankealueNimi,
+  hankealueId,
   isOpen,
   handleClose,
 }) => {
@@ -99,7 +66,7 @@ const HankeSidebar: React.FC<React.PropsWithChildren<Props>> = ({
   const tyomaaTyyppiContent = hanke.tyomaaTyyppi.length
     ? hanke.tyomaaTyyppi.map((tyyppi) => t(`hanke:tyomaaTyyppi:${tyyppi}`)).join(', ')
     : '-';
-  const hankealue = hanke.alueet.find((ha) => ha.nimi === hankealueNimi)!;
+  const hankealue = hanke.alueet.find((ha) => ha.id === hankealueId)!;
   const hankeViewPath = useHankeViewPath(hanke?.hankeTunnus);
 
   return (
@@ -138,15 +105,13 @@ const HankeSidebar: React.FC<React.PropsWithChildren<Props>> = ({
             content={
               isUsersHanke ? (
                 <Link
-                  href={hankeViewPath}
+                  to={hankeViewPath}
                   aria-label={
                     // eslint-disable-next-line
                     t(`routes:${ROUTES.HANKE}.meta.title`) +
                     ` ${hanke.nimi} - ${hanke.hankeTunnus} `
                   }
                   data-testid="hankeViewLink"
-                  disableVisitedStyles
-                  size="S"
                   style={{ display: 'block', width: 'fit-content', border: 'none' }}
                 >
                   {hanke.nimi} ({hanke.hankeTunnus})

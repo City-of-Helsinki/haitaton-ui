@@ -4,6 +4,7 @@ export type HankeAlueHoverData = {
   hankeTunnus?: string | null;
   hankeName?: string | null;
   areaName?: string | null;
+  areaId?: number | null;
   startDate?: Date | string | null;
   endDate?: Date | string | null;
 };

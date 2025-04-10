@@ -18,12 +18,14 @@ const GeometryHover: React.FC<React.PropsWithChildren<unknown>> = ({ children })
         const hankeTunnus = feature?.get('hankeTunnus') as string;
         const hankeName = feature?.get('hankeName') as string;
         const areaName = feature?.get('areaName') as string;
+        const areaId = feature?.get('id') as number;
         const { startDate, endDate } = feature?.get('overlayProps') as OverlayProps;
 
         hankeAreaDataAtPixel.push({
           hankeName,
           hankeTunnus,
           areaName,
+          areaId,
           startDate,
           endDate,
         });

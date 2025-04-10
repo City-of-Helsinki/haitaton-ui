@@ -19,12 +19,12 @@ const HankeHoverBox: React.FC<React.PropsWithChildren> = () => {
   const openHanke = (
     e: React.MouseEvent,
     hankeTunnus?: string | null,
-    hankealueNimi?: string | null,
+    hankealueId?: number | null,
   ) => {
     e.preventDefault();
     if (!hankeTunnus) return;
     navigate({
-      search: `?hanke=${hankeTunnus}&hankealue=${hankealueNimi}`,
+      search: `?hanke=${hankeTunnus}&hankealue=${hankealueId}`,
     });
   };
 
@@ -33,9 +33,9 @@ const HankeHoverBox: React.FC<React.PropsWithChildren> = () => {
       {hoveredHankeAreaData.map((hankeArea) => (
         <div key={hankeArea.hankeTunnus}>
           <Link
-            href={`/?hanke=${hankeArea.hankeTunnus}&hankealue=${hankeArea.areaName}`}
+            href={`/?hanke=${hankeArea.hankeTunnus}&hankealue=${hankeArea.areaId}`}
             size="M"
-            onClick={(e) => openHanke(e, hankeArea.hankeTunnus, hankeArea.areaName)}
+            onClick={(e) => openHanke(e, hankeArea.hankeTunnus, hankeArea.areaId)}
           >
             {`${hankeArea.hankeName} (${hankeArea.hankeTunnus})`}
           </Link>
