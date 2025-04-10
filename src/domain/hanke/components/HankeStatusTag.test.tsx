@@ -27,7 +27,7 @@ test('Should show tag with green background when status is COMPLETED', () => {
   expect(tag).toHaveTextContent('Valmis');
 });
 
-function TestComponent({ changedStatus }: { changedStatus: HANKE_STATUS_KEY }) {
+function TestComponent({ changedStatus }: Readonly<{ changedStatus: HANKE_STATUS_KEY }>) {
   const [status, setStatus] = useState<HANKE_STATUS_KEY | null>('DRAFT');
 
   function changeStatus() {
