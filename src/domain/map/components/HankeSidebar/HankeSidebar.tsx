@@ -112,7 +112,7 @@ const HankeSidebar: React.FC<React.PropsWithChildren<Props>> = ({
                     ` ${hanke.nimi} - ${hanke.hankeTunnus} `
                   }
                   data-testid="hankeViewLink"
-                  style={{ display: 'block', width: 'fit-content', border: 'none' }}
+                  className={styles.hankeSidebar__hankeLink}
                 >
                   {hanke.nimi} ({hanke.hankeTunnus})
                 </Link>
