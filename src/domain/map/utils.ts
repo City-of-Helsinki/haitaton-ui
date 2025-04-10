@@ -6,12 +6,13 @@ import Polygon from 'ol/geom/Polygon';
 import { Interval, isWithinInterval } from 'date-fns';
 import { HankeGeoJSON } from '../../common/types/hanke';
 import { DateInterval, GeometryData } from './types';
-import { HankeData, HankeDataDraft, HankeGeometria } from '../types/hanke';
+import { HankeGeometria } from '../types/hanke';
 import { getSurfaceArea } from '../../common/components/map/utils';
 import { Feature as GeoJSONFeature, FeatureCollection, Polygon as GeoJSONPolygon } from 'geojson';
-import { featureCollection } from '@turf/helpers';
+import { feature, featureCollection } from '@turf/helpers';
 import booleanEqual from '@turf/boolean-equal';
 import intersect from '@turf/intersect';
+import { ApplicationGeometry } from '../application/types/application';
 
 export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJSON => {
   const format = new GeoJSON();
@@ -29,13 +30,10 @@ export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJS
   };
 };
 
-export const hankeHasGeometry = (hanke: HankeData | HankeDataDraft) =>
-  hanke.alueet?.some((alue) => Boolean(alue.geometriat));
-
 /**
- * Check if date range is is within interval.
+ * Check if date range is within interval.
  * Interval to check against is given to the function as an object with start and end properties.
- * Returns a function that takes a date range an checks if that is within the interval.
+ * Returns a function that takes a date range and checks if that is within the interval.
  * Optional allowOverlapping option can be given, and if it's true the function
  * will return true also if the date ranges overlap.
  */
@@ -117,10 +115,9 @@ export function formatSurfaceArea(geometry: Geometry | undefined) {
  */
 export function getTotalSurfaceArea(geometries: Geometry[]): number {
   try {
-    const totalSurfaceArea = geometries.reduce((totalArea, geom) => {
+    return geometries.reduce((totalArea, geom) => {
       return totalArea + Math.round(getSurfaceArea(geom));
     }, 0);
-    return totalSurfaceArea;
   } catch (error) {
     return 0;
   }
@@ -132,11 +129,7 @@ export function getTotalSurfaceArea(geometries: Geometry[]): number {
  * @returns OpenLayers Feature
  */
 export function getFeatureFromHankeGeometry(geometry: HankeGeometria) {
-  const feature = new Feature(
-    new Polygon(geometry.featureCollection.features[0]?.geometry.coordinates),
-  );
-
-  return feature;
+  return new Feature(new Polygon(geometry.featureCollection.features[0]?.geometry.coordinates));
 }
 
 /**
@@ -154,4 +147,13 @@ export function featureContains(
   const intersected = intersect(features);
   const feature2WithoutProperties: GeoJSONFeature<GeoJSONPolygon> = { ...feature2, properties: {} };
   return (intersected && booleanEqual(intersected, feature2WithoutProperties)) || false;
+}
+
+export function applicationGeometryContains(
+  geometry1: ApplicationGeometry,
+  geometry2: ApplicationGeometry,
+): boolean {
+  const feature1 = feature(geometry1);
+  const feature2 = feature(geometry2);
+  return featureContains(feature1, feature2);
 }

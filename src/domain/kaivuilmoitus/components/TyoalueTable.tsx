@@ -22,11 +22,11 @@ import {
   Tyoalue,
 } from '../../application/types/application';
 import { booleanIntersects } from '@turf/boolean-intersects';
-import booleanContains from '@turf/boolean-contains';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
 import Link from '../../../common/components/Link/Link';
 import { TFunction } from 'i18next';
+import { applicationGeometryContains } from '../../map/utils';
 
 type Props = {
   alueIndex: number;
@@ -124,7 +124,7 @@ export default function TyoalueTable({
             (alue.openlayersFeature!.getGeometry()! as OlPolygon).getCoordinates(),
           );
           const areaIntersects = booleanIntersects(applicationArea.geometry, alueGeometry);
-          const areaContains = booleanContains(applicationArea.geometry, alueGeometry);
+          const areaContains = applicationGeometryContains(applicationArea.geometry, alueGeometry);
           return areaIntersects && !areaContains;
         });
       }) || [];
