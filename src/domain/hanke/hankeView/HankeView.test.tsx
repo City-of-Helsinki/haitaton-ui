@@ -316,3 +316,38 @@ test('Should show user management button', async () => {
 
   expect(screen.queryByRole('button', { name: 'Käyttäjähallinta' })).toBeInTheDocument();
 });
+
+describe('Completed hanke', () => {
+  test('Should not show edit button', async () => {
+    render(<HankeViewContainer hankeTunnus="HAI22-12" />);
+    await waitForLoadingToFinish();
+
+    expect(screen.queryByRole('button', { name: /muokkaa hanketta/i })).not.toBeInTheDocument();
+  });
+
+  test('Should not show cancel button', async () => {
+    render(<HankeViewContainer hankeTunnus="HAI22-12" />);
+    await waitForLoadingToFinish();
+
+    expect(screen.queryByRole('button', { name: /peru hanke/i })).not.toBeInTheDocument();
+  });
+
+  test('Should show user management button', async () => {
+    render(<HankeViewContainer hankeTunnus="HAI22-12" />);
+    await waitForLoadingToFinish();
+
+    expect(screen.getByRole('button', { name: /käyttäjähallinta/i })).toBeInTheDocument();
+  });
+
+  test('Should show notification', async () => {
+    render(<HankeViewContainer hankeTunnus="HAI22-12" />);
+    await waitForLoadingToFinish();
+
+    expect(screen.getByText('Hanke on siirretty Valmis-tilaan')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Hanketta ei voi enää muokata eikä sille voi lisätä hakemuksia. Hanke poistetaan aikaisintaan 16.4.2024, jolloin kaikki hankkeen ja sen hakemusten tiedot poistuvat Haitattomasta.',
+      ),
+    ).toBeInTheDocument();
+  });
+});

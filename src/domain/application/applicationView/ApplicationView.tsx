@@ -742,11 +742,12 @@ function ApplicationView({
   const lastValmistumisilmoitus = getLastValmistumisilmoitus(alluStatus, valmistumisilmoitukset);
 
   const isSent = isApplicationSent(alluStatus);
+  const hankeIsCompleted = hanke?.status === 'COMPLETED';
 
   const validationSchema = validationSchemas[applicationType];
   const isValid = validationSchema.isValidSync(application);
   const isContact = isContactIn(signedInUser, applicationData);
-  const showSendButton = !isSent && isValid;
+  const showSendButton = !hankeIsCompleted && !isSent && isValid;
   const disableSendButton = showSendButton && !isContact;
   const showReportOperationalConditionButton = isApplicationReportableInOperationalCondition(
     applicationType,
@@ -872,7 +873,7 @@ function ApplicationView({
         </FormSummarySection>
 
         <InformationViewHeaderButtons>
-          {!isSent ? (
+          {!hankeIsCompleted && !isSent ? (
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
               <Button
                 theme="coat"
@@ -883,7 +884,7 @@ function ApplicationView({
               </Button>
             </CheckRightsByHanke>
           ) : null}
-          {hanke ? (
+          {hanke && !hankeIsCompleted ? (
             <CheckRightsByHanke requiredRight="EDIT_APPLICATIONS" hankeTunnus={hanke?.hankeTunnus}>
               <ApplicationCancel
                 applicationId={id}

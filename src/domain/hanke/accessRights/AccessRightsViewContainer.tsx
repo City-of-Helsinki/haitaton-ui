@@ -21,6 +21,7 @@ function AccessRightsViewContainer({ hankeTunnus }: Props) {
   const { data: hankeData } = useHanke(hankeTunnus);
   const { data: signedInUser } = usePermissionsForHanke(hankeTunnus);
   const hankeViewPath = useHankeViewPath(hankeData?.hankeTunnus ?? null);
+  const isReadonly = hankeData?.status === 'COMPLETED';
 
   if (isLoading) {
     return (
@@ -62,6 +63,7 @@ function AccessRightsViewContainer({ hankeTunnus }: Props) {
         hankeUsers={hankeUsers}
         hankeTunnus={hankeTunnus}
         signedInUser={signedInUser}
+        readonly={isReadonly}
       />
     </>
   );

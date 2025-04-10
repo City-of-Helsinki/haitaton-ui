@@ -171,7 +171,7 @@ export type HankeAlue = {
 enum HANKE_STATUS {
   DRAFT = 'DRAFT',
   PUBLIC = 'PUBLIC',
-  ENDED = 'ENDED',
+  COMPLETED = 'COMPLETED',
 }
 
 export type HANKE_STATUS_KEY = keyof typeof HANKE_STATUS;
@@ -200,6 +200,7 @@ export interface HankeData {
   modifiedBy?: null | string;
   modifiedAt?: null | string;
   generated?: boolean;
+  deletionDate?: string | null;
 }
 
 type DraftRequiredFields = 'nimi' | 'kuvaus' | 'vaihe';

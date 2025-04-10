@@ -2461,3 +2461,12 @@ describe('Excavation notification application view', () => {
     });
   });
 });
+
+describe('Completed hanke', () => {
+  test('Should not show any buttons', async () => {
+    render(<ApplicationViewContainer id={15} />);
+    await waitForLoadingToFinish();
+
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+  });
+});

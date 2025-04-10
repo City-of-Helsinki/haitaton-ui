@@ -1798,6 +1798,14 @@
         "missingFields": "$t(hankePortfolio:draftState:labels:draft) Seuraavat kentät tällä sivulla vaaditaan hankeen julkaisemiseksi:",
         "missingInformationForHaittojenhallinta": "$t(hankePortfolio:draftState:labels:draft) Seuraavat tiedot lomakkeella vaaditaan haittojenhallinnan täyttämiseen:"
       }
+    },
+    "completedState": {
+      "labels": {
+        "completed": "Hanke on siirretty Valmis-tilaan"
+      },
+      "notifications": {
+        "completed": "Hanketta ei voi enää muokata eikä sille voi lisätä hakemuksia. Hanke poistetaan aikaisintaan {{date}}, jolloin kaikki hankkeen ja sen hakemusten tiedot poistuvat Haitattomasta."
+      }
     }
   },
   "publicHankkeet": {

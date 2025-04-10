@@ -1154,7 +1154,7 @@ test('Should be able to remove work areas', async () => {
 
   await user.click(await screen.findByRole('button', { name: /poista työalue 1/i }));
 
-  const { getByRole, getByText } = within(await screen.findByRole('dialog'));
+  const { getByRole, getByText } = within(await screen.findByRole('dialog', {}, { timeout: 5000 }));
   expect(getByText('Haluatko varmasti poistaa työalueen Työalue 1?')).toBeInTheDocument();
   await user.click(getByRole('button', { name: /vahvista/i }));
 
@@ -1162,7 +1162,7 @@ test('Should be able to remove work areas', async () => {
 
   await user.click(await screen.findByRole('button', { name: /poista työalue/i }));
   const { getByRole: getByRoleInDialogTwo, getByText: getByTextInDialogTwo } = within(
-    await screen.findByRole('dialog'),
+    await screen.findByRole('dialog', {}, { timeout: 5000 }),
   );
   expect(getByTextInDialogTwo('Haluatko varmasti poistaa työalueen Työalue?')).toBeInTheDocument();
   await user.click(getByRoleInDialogTwo('button', { name: /vahvista/i }));

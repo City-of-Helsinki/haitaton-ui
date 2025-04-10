@@ -5,7 +5,11 @@ import { waitFor } from '@testing-library/react';
 
 test('Correct information about each application should be displayed', async () => {
   const { user } = render(
-    <ApplicationList hankeTunnus="HAI22-2" applications={hankkeenHakemukset} />,
+    <ApplicationList
+      hankeTunnus="HAI22-2"
+      hankeStatus="PUBLIC"
+      applications={hankkeenHakemukset}
+    />,
   );
 
   // application types
@@ -49,7 +53,11 @@ test('Correct information about each application should be displayed', async () 
 
 test('Navigating to application view from name works', async () => {
   const { user } = render(
-    <ApplicationList hankeTunnus="HAI22-2" applications={hankkeenHakemukset} />,
+    <ApplicationList
+      hankeTunnus="HAI22-2"
+      hankeStatus="PUBLIC"
+      applications={hankkeenHakemukset}
+    />,
   );
 
   await user.click(screen.getAllByText('Luonnos')[1]);
@@ -59,7 +67,11 @@ test('Navigating to application view from name works', async () => {
 
 test('Navigating to application view from icon works', async () => {
   const { user } = render(
-    <ApplicationList hankeTunnus="HAI22-2" applications={hankkeenHakemukset} />,
+    <ApplicationList
+      hankeTunnus="HAI22-2"
+      hankeStatus="PUBLIC"
+      applications={hankkeenHakemukset}
+    />,
   );
 
   await user.click(screen.getByTestId('applicationViewLink-7'));
@@ -69,7 +81,11 @@ test('Navigating to application view from icon works', async () => {
 
 test('Navigating to application form works', async () => {
   const { user } = render(
-    <ApplicationList hankeTunnus="HAI22-2" applications={hankkeenHakemukset} />,
+    <ApplicationList
+      hankeTunnus="HAI22-2"
+      hankeStatus="PUBLIC"
+      applications={hankkeenHakemukset}
+    />,
   );
 
   await waitFor(
@@ -86,7 +102,11 @@ test('Navigating to application form works', async () => {
 
 test('Navigating to muutosilmoitus form works', async () => {
   const { user } = render(
-    <ApplicationList hankeTunnus="HAI22-2" applications={hankkeenHakemukset} />,
+    <ApplicationList
+      hankeTunnus="HAI22-2"
+      hankeStatus="PUBLIC"
+      applications={hankkeenHakemukset}
+    />,
   );
 
   await waitFor(
@@ -99,4 +119,25 @@ test('Navigating to muutosilmoitus form works', async () => {
   await user.click(screen.getByTestId('muutosilmoitusEditLink-14'));
 
   expect(window.location.pathname).toBe('/fi/kaivuilmoitus-muutosilmoitus/14/muokkaa');
+});
+
+describe('Completed hanke', () => {
+  test('Cannot navigate to application form', async () => {
+    render(
+      <ApplicationList
+        hankeTunnus="HAI22-2"
+        hankeStatus="COMPLETED"
+        applications={hankkeenHakemukset}
+      />,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('applicationViewLink-7')).toBeInTheDocument();
+      },
+      { interval: 100, timeout: 5000 },
+    );
+
+    expect(screen.queryByTestId('applicationEditLink-7')).not.toBeInTheDocument();
+  });
 });
