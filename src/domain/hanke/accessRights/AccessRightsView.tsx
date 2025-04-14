@@ -462,11 +462,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
           )}
         </div>
 
-<<<<<<< HEAD
         <Box mb="var(--spacing-s)">
-=======
-        <Box className="haitaton-pagination" mb="var(--spacing-s)">
->>>>>>> 341ed1fb (HAI-3372 Upgrade HDS packages to version 4.3.0)
           <Pagination
             onChange={handleTablePageChange}
             pageHref={() => ''}
