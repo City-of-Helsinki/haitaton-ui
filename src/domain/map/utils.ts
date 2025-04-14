@@ -8,11 +8,18 @@ import { HankeGeoJSON } from '../../common/types/hanke';
 import { DateInterval, GeometryData } from './types';
 import { HankeGeometria } from '../types/hanke';
 import { getSurfaceArea } from '../../common/components/map/utils';
-import { Feature as GeoJSONFeature, FeatureCollection, Polygon as GeoJSONPolygon } from 'geojson';
-import { feature, featureCollection } from '@turf/helpers';
+import {
+  Feature as GeoJSONFeature,
+  FeatureCollection,
+  Polygon as GeoJSONPolygon,
+  Position,
+} from 'geojson';
+import { feature, featureCollection, multiPolygon } from '@turf/helpers';
+import booleanIntersects from '@turf/boolean-intersects';
+import union from '@turf/union';
 import booleanEqual from '@turf/boolean-equal';
 import intersect from '@turf/intersect';
-import { ApplicationGeometry } from '../application/types/application';
+import { ApplicationArea, ApplicationGeometry } from '../application/types/application';
 
 export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJSON => {
   const format = new GeoJSON();
@@ -156,4 +163,52 @@ export function applicationGeometryContains(
   const feature1 = feature(geometry1);
   const feature2 = feature(geometry2);
   return featureContains(feature1, feature2);
+}
+
+/**
+ * Combines multiple application areas into a single unified area by performing a union operation
+ * on their geometries. The function iterates through the provided application areas and checks
+ * if their geometries intersect with the current combined area. If they do, it merges them into
+ * a single geometry.
+ */
+export function createUnionFromAreas(areas: ApplicationArea[], initialValue: ApplicationArea) {
+  return areas.reduce((combinedArea, currentArea) => {
+    if (booleanIntersects(combinedArea.geometry, currentArea.geometry)) {
+      const features = featureCollection([
+        feature(combinedArea.geometry),
+        feature(currentArea.geometry),
+      ]);
+      const unionFeature = union(features);
+      if (unionFeature?.geometry) {
+        return {
+          ...combinedArea,
+          geometry: new ApplicationGeometry(unionFeature.geometry.coordinates as Position[][]),
+        };
+      }
+    }
+    return combinedArea;
+  }, initialValue);
+}
+
+/**
+ * Creates a MultiPolygon geometry by combining the geometries of the given areas.
+ * If the geometry of the current area intersects with the combined geometry,
+ * it merges the coordinates into a single MultiPolygon. Otherwise, it skips the current area.
+ */
+export function createMultiPolygonFromAreas(
+  areas: ApplicationArea[],
+  initialValue: ApplicationArea,
+) {
+  return areas.reduce(
+    (combinedArea, currentArea) => {
+      if (booleanIntersects(combinedArea.geometry, currentArea.geometry)) {
+        return multiPolygon([
+          ...combinedArea.geometry.coordinates,
+          currentArea.geometry.coordinates,
+        ]);
+      }
+      return combinedArea;
+    },
+    multiPolygon([initialValue.geometry.coordinates]),
+  );
 }
