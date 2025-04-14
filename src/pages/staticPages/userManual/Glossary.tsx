@@ -3,7 +3,15 @@ import MainHeading from '../../../common/components/mainHeading/MainHeading';
 import { Trans, useTranslation } from 'react-i18next';
 import styles from '../StaticContent.module.scss';
 
-import { Accordion, Button, IconAngleDown, IconAngleUp } from 'hds-react';
+import {
+  Accordion,
+  Button,
+  ButtonPresetTheme,
+  ButtonSize,
+  ButtonVariant,
+  IconAngleDown,
+  IconAngleUp,
+} from 'hds-react';
 import { Flex } from '@chakra-ui/react';
 import useLocale from '../../../common/hooks/useLocale';
 import { BREADCRUMBS, useBreadcrumbs } from '../../../common/components/breadcrumbs/Breadcrumbs';
@@ -89,10 +97,10 @@ const Glossary: React.FC = () => {
         <Flex direction="column">
           <Flex justify="right">
             <Button
-              size="small"
-              variant="supplementary"
-              iconRight={buttonIcon}
-              theme="black"
+              size={ButtonSize.Small}
+              variant={ButtonVariant.Supplementary}
+              iconEnd={buttonIcon}
+              theme={ButtonPresetTheme.Black}
               onClick={() => toggleAll(isAllOpen)}
             >
               {buttonText}

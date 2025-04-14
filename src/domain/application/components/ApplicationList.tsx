@@ -1,11 +1,10 @@
 import React from 'react';
 import { Box } from '@chakra-ui/react';
 import { useTable, Column, usePagination, useSortBy } from 'react-table';
-import { Pagination } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { HankkeenHakemus } from '../types/application';
 import ApplicationListItem from './ApplicationListItem';
-import { Language } from '../../../common/types/language';
+import Pagination from '../../../common/components/pagination/Pagination';
 
 interface Props {
   hankeTunnus: string;
@@ -14,7 +13,7 @@ interface Props {
 }
 
 function ApplicationList({ hankeTunnus, hankeStatus, applications }: Readonly<Props>) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const columns: Column<HankkeenHakemus>[] = React.useMemo(() => {
     return [
@@ -81,9 +80,8 @@ function ApplicationList({ hankeTunnus, hankeStatus, applications }: Readonly<Pr
         );
       })}
 
-      <Box className="haitaton-pagination" mb="var(--spacing-s)">
+      <Box mb="var(--spacing-s)">
         <Pagination
-          language={i18n.language as Language}
           onChange={handlePageChange}
           pageHref={() => ''}
           pageCount={pageCount}

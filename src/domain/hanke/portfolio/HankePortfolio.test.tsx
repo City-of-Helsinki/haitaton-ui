@@ -101,7 +101,7 @@ describe('HankePortfolioComponent', () => {
     );
     const numberElement = await screen.findByTestId('numberOfFilteredRows');
     expect(numberElement).toHaveTextContent('3');
-    const button = screen.getByRole('combobox', { name: 'Työn tyyppi' });
+    const button = screen.getByRole('combobox', { name: /Työn tyyppi/ });
     await user.click(button);
     await user.click(screen.getByText('Sähkö'));
     const hankeVaiheet = screen.getByText('Hankevaiheet');
@@ -112,7 +112,7 @@ describe('HankePortfolioComponent', () => {
     await user.click(screen.getByText('Viemäri'));
     await user.click(hankeVaiheet);
     expect(numberElement).toHaveTextContent('2');
-    await user.click(screen.getByRole('combobox', { name: 'Työn tyyppi' }));
+    await user.click(screen.getByRole('combobox', { name: /Työn tyyppi/ }));
     await user.click(screen.getByText('Sadevesi'));
     await user.click(hankeVaiheet);
     expect(numberElement).toHaveTextContent('3');

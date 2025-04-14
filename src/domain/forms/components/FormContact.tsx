@@ -73,10 +73,11 @@ const FormContact = <T, R>({
   }
 
   return (
-    <div className="haitaton-button-icon-size-initial">
+    <div>
       <Flex justify="right" align="center" mb="var(--spacing-s)">
         {canBeRemoved && onRemove && (
           <Button
+            className="haitaton-button-icon-size-initial"
             variant={ButtonVariant.Supplementary}
             iconStart={<IconCross />}
             onClick={() => onRemove(index)}
@@ -89,7 +90,7 @@ const FormContact = <T, R>({
       {children}
 
       <ResponsiveGrid maxColumns={3}>
-        <Box gridColumn="span 2" mr={{ base: '0', lg: 'var(--spacing-xs)' }}>
+        <Box gridColumn="span 2" maxWidth="var(--width-form-2-col)">
           <ContactPersonSelect<R>
             name={name}
             hankeUsers={hankeUsers}
@@ -102,6 +103,7 @@ const FormContact = <T, R>({
         </Box>
         <Flex alignItems="flex-start" mt={{ base: '0', lg: '28px' }}>
           <Button
+            className="haitaton-button-icon-size-initial"
             variant={ButtonVariant.Secondary}
             iconStart={<IconPlusCircle />}
             onClick={toggleNewContactForm}

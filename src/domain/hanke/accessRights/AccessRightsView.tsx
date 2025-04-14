@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  Pagination,
   SearchInput,
   Table,
   IconEnvelope,
@@ -26,7 +25,6 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
 import styles from './AccessRightsView.module.scss';
-import { Language } from '../../../common/types/language';
 import { HankeUser, SignedInUser } from '../hankeUsers/hankeUser';
 import Container from '../../../common/components/container/Container';
 import UserCard from './UserCard';
@@ -50,6 +48,7 @@ import { useGlobalNotification } from '../../../common/components/globalNotifica
 import Text from '../../../common/components/text/Text';
 import LoadingSpinner from '../../../common/components/spinner/LoadingSpinner';
 import Button from '../../../common/components/button/Button';
+import Pagination from '../../../common/components/pagination/Pagination';
 
 function UserIcon({
   user,
@@ -134,7 +133,7 @@ type Props = {
 };
 
 function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: Readonly<Props>) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { HANKEPORTFOLIO } = useLocalizedRoutes();
   const queryClient = useQueryClient();
@@ -463,9 +462,8 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
           )}
         </div>
 
-        <Box className="haitaton-pagination" mb="var(--spacing-s)">
+        <Box mb="var(--spacing-s)">
           <Pagination
-            language={i18n.language as Language}
             onChange={handleTablePageChange}
             pageHref={() => ''}
             pageCount={pageCount}

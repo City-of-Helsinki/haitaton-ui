@@ -1,4 +1,4 @@
-import { ButtonProps, Button as HDSButton } from 'hds-react';
+import { ButtonProps, ButtonVariant, Button as HDSButton } from 'hds-react';
 import LoadingSpinner from '../spinner/LoadingSpinner';
 
 type Props = ButtonProps & {
@@ -16,13 +16,21 @@ export default function Button({
   iconStart,
   disabled,
   children,
+  variant,
   ...rest
 }: Readonly<Props>) {
   const buttonIconStart = isLoading ? <LoadingSpinner small /> : iconStart;
   const buttonText = isLoading && loadingText ? loadingText : children;
+  const buttonVariant = isLoading ? ButtonVariant.Clear : variant;
 
   return (
-    <HDSButton iconStart={buttonIconStart} disabled={disabled || isLoading} {...rest}>
+    <HDSButton
+      iconStart={buttonIconStart}
+      disabled={disabled || isLoading}
+      variant={buttonVariant ?? ButtonVariant.Primary}
+      style={{ cursor: isLoading ? 'wait' : '' }}
+      {...rest}
+    >
       {buttonText}
     </HDSButton>
   );

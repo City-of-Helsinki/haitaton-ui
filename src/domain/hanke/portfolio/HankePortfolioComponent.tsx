@@ -14,7 +14,6 @@ import {
   Card,
   Select,
   Button,
-  Pagination,
   SearchInput,
   ButtonPresetTheme,
   ButtonVariant,
@@ -41,7 +40,6 @@ import { areDatesWithinInterval } from '../../map/utils';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
 import HankeVaiheTag from '../vaiheTag/HankeVaiheTag';
-import { Language } from '../../../common/types/language';
 import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
 import HankeGeneratedStateNotification from '../edit/components/HankeGeneratedStateNotification';
@@ -57,6 +55,7 @@ import HDSLink from '../../../common/components/Link/Link';
 import HankeCreateDialog from '../hankeCreateDialog/HankeCreateDialog';
 import MapPlaceholder from '../../map/components/MapPlaceholder/MapPlaceholder';
 import HankeStatusTag from '../components/HankeStatusTag';
+import Pagination from '../../../common/components/pagination/Pagination';
 
 type CustomAccordionProps = {
   hanke: HankeData;
@@ -669,16 +668,13 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
             )}
 
             {rows.length > 0 && (
-              <div className="haitaton-pagination">
-                <Pagination
-                  language={i18n.language as Language}
-                  onChange={handlePageChange}
-                  pageHref={() => ''}
-                  pageCount={pageCount}
-                  pageIndex={pageIndex}
-                  paginationAriaLabel={t('common:components:paginationAriaLabel')}
-                />
-              </div>
+              <Pagination
+                onChange={handlePageChange}
+                pageHref={() => ''}
+                pageCount={pageCount}
+                pageIndex={pageIndex}
+                paginationAriaLabel={t('common:components:paginationAriaLabel')}
+              />
             )}
           </div>
         </Container>

@@ -51,16 +51,6 @@ footer {
   }
 }
 
-.haitaton-pagination {
-  margin-top: var(--spacing-s);
-
-  span[class*='item-link'] {
-    width: var(--link-height);
-  }
-}
-
 .haitaton-button-icon-size-initial {
-  button {
-    --icon-size: initial;
-  }
+  --icon-size: initial;
 }

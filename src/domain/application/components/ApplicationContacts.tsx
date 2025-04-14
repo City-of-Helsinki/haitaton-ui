@@ -359,15 +359,14 @@ export default function ApplicationContacts({
         )}
 
         {!isPropertyDeveloper && (
-          <div className="haitaton-button-icon-size-initial">
-            <Button
-              variant={ButtonVariant.Supplementary}
-              iconStart={<IconPlusCircle />}
-              onClick={() => addCustomerWithContacts('propertyDeveloperWithContacts')}
-            >
-              {t('form:yhteystiedot:titles:lisaaRakennuttaja')}
-            </Button>
-          </div>
+          <Button
+            className="haitaton-button-icon-size-initial"
+            variant={ButtonVariant.Supplementary}
+            iconStart={<IconPlusCircle />}
+            onClick={() => addCustomerWithContacts('propertyDeveloperWithContacts')}
+          >
+            {t('form:yhteystiedot:titles:lisaaRakennuttaja')}
+          </Button>
         )}
       </Accordion>
 
@@ -399,15 +398,14 @@ export default function ApplicationContacts({
         )}
 
         {!isRepresentative && (
-          <div className="haitaton-button-icon-size-initial">
-            <Button
-              variant={ButtonVariant.Supplementary}
-              iconStart={<IconPlusCircle />}
-              onClick={() => addCustomerWithContacts('representativeWithContacts')}
-            >
-              {t('form:yhteystiedot:titles:addRepresentative')}
-            </Button>
-          </div>
+          <Button
+            className="haitaton-button-icon-size-initial"
+            variant={ButtonVariant.Supplementary}
+            iconStart={<IconPlusCircle />}
+            onClick={() => addCustomerWithContacts('representativeWithContacts')}
+          >
+            {t('form:yhteystiedot:titles:addRepresentative')}
+          </Button>
         )}
       </Accordion>
     </div>
