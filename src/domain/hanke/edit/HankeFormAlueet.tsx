@@ -205,9 +205,6 @@ const HankeFormAlueet: React.FC<FormProps & { drawSource: VectorSource }> = ({
       <Box mb="var(--spacing-m)">
         <p>{t('hankeForm:hankkeenAlueForm:instructions2')}</p>
       </Box>
-      <Box mb="var(--spacing-m)">
-        <p>{t('hankeForm:hankkeenAlueForm:instructions3')}</p>
-      </Box>
       <Text tag="p" spacingBottom="m">
         {t('form:requiredForPublicationInstruction')}
       </Text>

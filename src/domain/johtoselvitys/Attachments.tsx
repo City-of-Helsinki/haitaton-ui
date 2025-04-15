@@ -42,7 +42,7 @@ function Attachments({ existingAttachments, attachmentsLoadError }: Readonly<Pro
 
       <FileUpload
         id="cable-report-file-upload"
-        accept=".pdf,.jpg,.jpeg,.png,.dgn,.dwg,.docx,.txt,.gt"
+        accept=".pdf,.jpg,.jpeg,.png,.dgn,.docx,.txt,.gt"
         maxSize={104857600}
         dragAndDrop
         multiple

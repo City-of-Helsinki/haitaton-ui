@@ -72,7 +72,8 @@ function getRegistryKeyLabel(
 const CustomerFields: React.FC<{
   customerType: CustomerType;
   hankeUsers?: HankeUser[];
-}> = ({ customerType, hankeUsers }) => {
+  tooltipText?: string;
+}> = ({ customerType, hankeUsers, tooltipText }) => {
   const { t } = useTranslation();
   const { watch, setValue, getValues } = useFormContext<Application>();
 
@@ -145,6 +146,7 @@ const CustomerFields: React.FC<{
   return (
     <Fieldset
       heading={t(`form:yhteystiedot:titles:${customerType}`)}
+      tooltipText={tooltipText}
       style={{
         paddingTop: 'var(--spacing-s)',
         maxWidth: 'var(--width-form-2-col)',
@@ -208,7 +210,8 @@ const CustomerFields: React.FC<{
 
 export default function ApplicationContacts({
   hankeTunnus,
-}: Readonly<{ hankeTunnus: string | null }>) {
+  customerDescription,
+}: Readonly<{ hankeTunnus: string | null; customerDescription?: string }>) {
   const { t } = useTranslation();
   const locale = useLocale();
   const { watch, setValue, getValues } = useFormContext<Application>();
@@ -291,7 +294,11 @@ export default function ApplicationContacts({
           tooltipText: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
         }}
       >
-        <CustomerFields customerType="customerWithContacts" hankeUsers={hankeUsers} />
+        <CustomerFields
+          customerType="customerWithContacts"
+          hankeUsers={hankeUsers}
+          tooltipText={customerDescription}
+        />
       </FormContact>
 
       {/* Työn suorittaja */}

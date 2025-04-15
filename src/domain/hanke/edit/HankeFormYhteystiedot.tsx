@@ -212,6 +212,9 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
       <Text tag="p" styleAs="body-m" spacingBottom="s">
         {t(`form:yhteystiedot:instructions`)}
       </Text>
+      <Text tag="p" styleAs="body-m" spacingBottom="s">
+        {t(`form:requiredForPublicationInstruction`)}
+      </Text>
 
       {/* Omistaja */}
       <Accordion
