@@ -42,7 +42,6 @@ import DrawProvider from '../../common/components/map/modules/draw/DrawProvider'
 import { formatFeaturesToHankeGeoJSON, getTotalSurfaceArea } from '../map/utils';
 import TyoalueTable from './components/TyoalueTable';
 import AreaSelectDialog from './components/AreaSelectDialog';
-import booleanContains from '@turf/boolean-contains';
 import { getAreaDefaultName } from '../application/utils';
 import HaittaIndexes from '../common/haittaIndexes/HaittaIndexes';
 import useHaittaIndexes from '../hanke/hooks/useHaittaIndexes';
@@ -53,6 +52,7 @@ import HakemusLayer from '../map/components/Layers/HakemusLayer';
 import { OverlayProps } from '../../common/components/map/types';
 import { LIIKENNEHAITTA_STATUS } from '../common/utils/liikennehaittaindeksi';
 import useFieldArrayWithStateUpdate from '../../common/hooks/useFieldArrayWithStateUpdate';
+import { featureContains } from "../map/utils";
 
 function getEmptyArea(
   hankeData: HankeData,
@@ -278,7 +278,7 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
     // Check if the new tyoalue is contained in any of the existing hanke areas
     const hankeAlueetContainingNewArea = hankeData.alueet.filter((alue) => {
       const hankeAlueFeature = alue.geometriat?.featureCollection.features[0];
-      return hankeAlueFeature && booleanContains(hankeAlueFeature, newAreaPolygon);
+      return hankeAlueFeature && featureContains(hankeAlueFeature, newAreaPolygon);
     });
     setHankeAreasContainingNewArea(hankeAlueetContainingNewArea);
 
@@ -289,8 +289,18 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
       // If the new tyoalue is contained in exactly one hanke area, add it to that
       addTyoAlueToHankeArea(hankeAlueetContainingNewArea[0], feature);
     } else {
-      // New työalue is contained in multiple hanke areas, open dialog for user to select one
-      setMultipleHankeAreaSpanningFeature(feature);
+      // check is the new tyoalue inside more than one hanke area
+      const allAreasContainFeature = hankeAlueetContainingNewArea.every((alue) => {
+        const hankeAlueFeature = alue.geometriat?.featureCollection.features[0];
+        return hankeAlueFeature && featureContains(hankeAlueFeature, newAreaPolygon);
+      });
+
+      if (allAreasContainFeature) {
+        // New työalue is contained in multiple hanke areas, open dialog for user to select one
+        setMultipleHankeAreaSpanningFeature(feature);
+      } else {
+        drawSource.removeFeature(feature);
+      }
     }
   }
 
