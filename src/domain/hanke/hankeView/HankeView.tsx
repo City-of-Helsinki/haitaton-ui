@@ -350,7 +350,7 @@ const HankeView: React.FC<Props> = ({
 
       <InformationViewHeader backgroundColor="var(--color-summer-light)">
         <MainHeading>{hankeData?.nimi}</MainHeading>
-        <Flex style={{ marginBottom: 'var(--spacing-m)' }} gap="4">
+        <Flex marginBottom="var(--spacing-m)" gap="4">
           <Text tag="h2" styleAs="h3" weight="bold" data-testid="hanke-tunnus">
             {hankeData?.hankeTunnus}
           </Text>
