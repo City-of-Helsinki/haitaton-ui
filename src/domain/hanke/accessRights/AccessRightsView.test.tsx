@@ -528,4 +528,20 @@ describe('Completed hanke', () => {
     expect(screen.queryByRole('img', { name: 'Poista käyttäjä' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Poista käyttäjä' })).not.toBeInTheDocument();
   });
+
+  test('Should show resending invitation button', async () => {
+    const { user } = render(<AccessRightsViewContainer hankeTunnus="HAI22-12" />);
+    await waitForLoadingToFinish();
+
+    const invitationMenus = await screen.findAllByRole('button', {
+      name: 'Käyttäjävalikko',
+    });
+    const invitationMenu = invitationMenus[0];
+    await user.click(invitationMenu);
+    expect(
+      await screen.findByRole('menuitem', {
+        name: 'Lähetä kutsulinkki uudelleen',
+      }),
+    ).toBeInTheDocument();
+  });
 });

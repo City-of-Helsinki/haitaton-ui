@@ -309,9 +309,7 @@ function AccessRightsView({ hankeUsers, hankeTunnus, signedInUser, readonly }: R
             )}
           </button>
         ) : null}
-        {!readonly &&
-        !args.tunnistautunut &&
-        signedInUser?.kayttooikeudet.includes('RESEND_INVITATION') ? (
+        {!args.tunnistautunut && signedInUser?.kayttooikeudet.includes('RESEND_INVITATION') ? (
           <Menu>
             <MenuButton as="button">
               {isSending ? (
