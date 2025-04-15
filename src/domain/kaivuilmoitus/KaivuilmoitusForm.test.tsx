@@ -11,6 +11,7 @@ import {
   ContactType,
   Customer,
   InvoicingCustomer,
+  JohtoselvitysData,
   KaivuilmoitusAlue,
   KaivuilmoitusData,
 } from '../application/types/application';
@@ -746,6 +747,119 @@ test('Should show notifications if work areas overlap with johtoselvitys work ar
   expect(link).toHaveAttribute('href', '/fi/hakemus/2');
   expect(link).toHaveAttribute('target', '_blank');
   expect(link).toHaveAttribute('rel', 'noopener');
+});
+
+test('Should not show notification if work area is within johtoselvitys work areas union', async () => {
+  const newJohtoselvitys = cloneDeep(applications[1] as Application<JohtoselvitysData>);
+  const testJohtoselvitys: Application<JohtoselvitysData> = {
+    ...newJohtoselvitys,
+    applicationData: {
+      ...newJohtoselvitys.applicationData,
+      areas: [
+        {
+          geometry: {
+            type: 'Polygon',
+            crs: {
+              type: 'name',
+              properties: {
+                name: 'urn:ogc:def:crs:EPSG::3879',
+              },
+            },
+            coordinates: [
+              [
+                [25498574.68585571, 6679312.984220641],
+                [25498575.341154203, 6679304.136547383],
+                [25498582.939986356, 6679303.918114552],
+                [25498582.476817265, 6679313.077998086],
+                [25498574.68585571, 6679312.984220641],
+              ],
+            ],
+          },
+        },
+      ],
+    },
+  };
+
+  server.use(
+    http.get(`/api/hankkeet/:hankeTunnus/hakemukset`, async () => {
+      return HttpResponse.json({ applications: [testJohtoselvitys, applications[10]] });
+    }),
+  );
+
+  const hankeData = hankkeet[1] as HankeData;
+  const application = cloneDeep(applications[6] as Application<KaivuilmoitusData>);
+  const testApplication: Application<KaivuilmoitusData> = {
+    ...application,
+    applicationData: {
+      ...application.applicationData,
+      cableReports: ['JS2300001', 'JS2400005'],
+      areas: [
+        {
+          name: 'Hankealue 1',
+          hankealueId: 56,
+          tyoalueet: [
+            {
+              geometry: {
+                type: 'Polygon',
+                crs: {
+                  type: 'name',
+                  properties: {
+                    name: 'urn:ogc:def:crs:EPSG::3879',
+                  },
+                },
+                coordinates: [
+                  [
+                    [25498576.5562583, 6679311.2533405945],
+                    [25498576.031333327, 6679285.029964675],
+                    [25498582.364741784, 6679285.035682811],
+                    [25498581.625386678, 6679311.506082247],
+                    [25498576.5562583, 6679311.2533405945],
+                  ],
+                ],
+              },
+              area: 115.11530422209897,
+              tormaystarkasteluTulos: {
+                autoliikenne: {
+                  indeksi: 0,
+                  haitanKesto: 5,
+                  katuluokka: 0,
+                  liikennemaara: 0,
+                  kaistahaitta: 1,
+                  kaistapituushaitta: 1,
+                },
+                pyoraliikenneindeksi: 0,
+                linjaautoliikenneindeksi: 0,
+                raitioliikenneindeksi: 0,
+                liikennehaittaindeksi: {
+                  indeksi: 0,
+                  tyyppi: HAITTA_INDEX_TYPE.LINJAAUTOLIIKENNEINDEKSI,
+                },
+              },
+            },
+          ],
+          katuosoite: 'Kotikatu 12',
+          tyonTarkoitukset: ['VIEMARI', 'SADEVESI'],
+          meluhaitta: 'SATUNNAINEN_MELUHAITTA',
+          polyhaitta: 'SATUNNAINEN_POLYHAITTA',
+          tarinahaitta: 'TOISTUVA_TARINAHAITTA',
+          kaistahaitta: 'EI_VAIKUTA',
+          kaistahaittojenPituus: 'EI_VAIKUTA_KAISTAJARJESTELYIHIN',
+          lisatiedot: '',
+        },
+      ],
+    },
+  };
+  const { user } = render(
+    <KaivuilmoitusContainer hankeData={hankeData} application={testApplication} />,
+  );
+  await user.click(screen.getByRole('button', { name: /alueiden/i }));
+
+  expect(
+    screen.queryByText(/työalue ylittää usean johtoselvityksen rajauksen, tee muutosilmoitus./i),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.queryByText(/Työalue ylittää johtoselvityksen rajauksen, tee johtoselvitykseen/i),
+  ).not.toBeInTheDocument();
 });
 
 test('Should show validation error if the new user has an existing email address', async () => {
