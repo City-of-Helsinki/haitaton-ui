@@ -31,6 +31,32 @@ test('Draft state notification is rendered when hanke is in draft state', async 
   expect(getByRole('listitem', { name: /yhteystiedot/i })).toBeInTheDocument();
 });
 
+test('Should show DRAFT state tag', async () => {
+  render(<HankeViewContainer hankeTunnus="HAI22-1" />);
+  await waitForLoadingToFinish();
+
+  const tag = screen.getByTestId('hanke-status-tag');
+
+  expect(tag).not.toHaveClass('bgGreen');
+  expect(tag).toHaveTextContent('Luonnos');
+});
+
+test('Should show duration', async () => {
+  render(<HankeViewContainer hankeTunnus="HAI22-1" />);
+  await waitForLoadingToFinish();
+
+  expect(screen.getByText('Hankkeen kesto:')).toBeInTheDocument();
+  expect(screen.getByText('26.11.2022 - 17.12.2022')).toBeInTheDocument();
+});
+
+test('Should show access rights', async () => {
+  render(<HankeViewContainer hankeTunnus="HAI22-1" />);
+  await waitForLoadingToFinish();
+
+  expect(screen.getByText('Käyttöoikeutesi hankkeelle:')).toBeInTheDocument();
+  expect(screen.getByText('Kaikki oikeudet')).toBeInTheDocument();
+});
+
 test('Draft state notification only shows form pages with missing information', async () => {
   render(<HankeViewContainer hankeTunnus="HAI22-4" />);
 
@@ -349,5 +375,15 @@ describe('Completed hanke', () => {
         'Hanketta ei voi enää muokata eikä sille voi lisätä hakemuksia. Hanke poistetaan aikaisintaan 16.4.2024, jolloin kaikki hankkeen ja sen hakemusten tiedot poistuvat Haitattomasta.',
       ),
     ).toBeInTheDocument();
+  });
+
+  test('Should show tag', async () => {
+    render(<HankeViewContainer hankeTunnus="HAI22-12" />);
+    await waitForLoadingToFinish();
+
+    const tag = screen.getByTestId('hanke-status-tag');
+
+    expect(tag).toHaveClass('bgGreen');
+    expect(tag).toHaveTextContent('Valmis');
   });
 });

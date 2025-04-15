@@ -1,0 +1,9 @@
+.hankeStatusTag {
+  display: flex;
+  align-items: center;
+}
+
+.bgGreen {
+  background-color: var(--color-success) !important;
+  color: var(--color-white) !important;
+}

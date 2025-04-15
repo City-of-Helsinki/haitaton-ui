@@ -60,6 +60,7 @@ import HaittaIndex from '../../common/haittaIndexes/HaittaIndex';
 import HaittaTooltipContent from '../../common/haittaIndexes/HaittaTooltipContent';
 import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
 import { hankeSchema } from '../edit/hankeSchema';
+import HankeStatusTag from '../components/HankeStatusTag';
 
 type AreaProps = {
   area: HankeAlue;
@@ -307,7 +308,17 @@ const HankeView: React.FC<Props> = ({
 
   const areasTotalSurfaceArea = calculateTotalSurfaceArea(hankeData.alueet);
 
-  const { omistajat, rakennuttajat, toteuttajat, muut, alueet, status, deletionDate } = hankeData;
+  const {
+    omistajat,
+    rakennuttajat,
+    toteuttajat,
+    muut,
+    alueet,
+    status,
+    deletionDate,
+    alkuPvm,
+    loppuPvm,
+  } = hankeData;
   const isHankePublic = status === 'PUBLIC';
   const isHankeCompleted = status === 'COMPLETED';
   const isCancelPossible =
@@ -339,15 +350,26 @@ const HankeView: React.FC<Props> = ({
 
       <InformationViewHeader backgroundColor="var(--color-summer-light)">
         <MainHeading>{hankeData?.nimi}</MainHeading>
-        <Text tag="h2" styleAs="h3" weight="bold" spacingBottom="l" data-testid="hanke-tunnus">
-          {hankeData?.hankeTunnus}
-        </Text>
-        <Text tag="p" styleAs="body-s" spacingBottom="l">
-          <strong style={{ marginRight: 'var(--spacing-s)' }}>
-            {t('hankePortfolio:labels:oikeudet')}:
-          </strong>
-          {t(`hankeUsers:accessRightLevels:${signedInUser?.kayttooikeustaso}`)}
-        </Text>
+        <Flex marginBottom="var(--spacing-m)" gap="4">
+          <Text tag="h2" styleAs="h3" weight="bold" data-testid="hanke-tunnus">
+            {hankeData?.hankeTunnus}
+          </Text>
+          <HankeStatusTag status={status} />
+        </Flex>
+        <FormSummarySection>
+          <>
+            <SectionItemTitle>{t('hankePortfolio:labels:hankkeenKesto')}:</SectionItemTitle>
+            <SectionItemContent>
+              {`${formatToFinnishDate(alkuPvm) ?? ''} - ${formatToFinnishDate(loppuPvm) ?? ''}`}{' '}
+            </SectionItemContent>
+          </>
+          <>
+            <SectionItemTitle>{t('hankePortfolio:labels:oikeudet')}:</SectionItemTitle>
+            <SectionItemContent>
+              {t(`hankeUsers:accessRightLevels:${signedInUser?.kayttooikeustaso}`)}
+            </SectionItemContent>
+          </>
+        </FormSummarySection>
 
         <InformationViewHeaderButtons>
           <FeatureFlags flags={['hanke']}>
@@ -408,13 +430,15 @@ const HankeView: React.FC<Props> = ({
               generated={hankeData.generated}
               className={styles.stateNotification}
             />
-            <FormPagesErrorSummary
-              data={hankeData}
-              schema={hankeSchema}
-              validationContext={{ hanke: hankeData }}
-              notificationLabel={t('hankePortfolio:draftState:labels:insufficientPhases')}
-              testId="hankeDraftStateNotification"
-            />
+            {!isHankeCompleted && (
+              <FormPagesErrorSummary
+                data={hankeData}
+                schema={hankeSchema}
+                validationContext={{ hanke: hankeData }}
+                notificationLabel={t('hankePortfolio:draftState:labels:insufficientPhases')}
+                testId="hankeDraftStateNotification"
+              />
+            )}
             {isHankeCompleted && (
               <Notification
                 type="success"
