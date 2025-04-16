@@ -8,7 +8,8 @@ function HaitatonFooter({
   backgroundColor = 'var(--color-summer)',
 }: Readonly<{ backgroundColor?: string }>) {
   const { t, i18n } = useTranslation();
-  const { MANUAL, HAITATON_INFO, ACCESSIBILITY, PRIVACY_POLICY } = useLocalizedRoutes();
+  const { MANUAL, HAITATON_INFO, ACCESSIBILITY, PRIVACY_POLICY, COOKIE_CONSENT } =
+    useLocalizedRoutes();
   const { HOME } = useLocalizedRoutes();
   const logoSrc = i18n.language === 'sv' ? logoSv : logoFi;
 
@@ -26,6 +27,7 @@ function HaitatonFooter({
         <Footer.Link as={Link} to={HAITATON_INFO.path} label={HAITATON_INFO.label} />
         <Footer.Link as={Link} to={ACCESSIBILITY.path} label={ACCESSIBILITY.label} />
         <Footer.Link as={Link} to={PRIVACY_POLICY.path} label={PRIVACY_POLICY.label} />
+        <Footer.Link as={Link} to={COOKIE_CONSENT.path} label={COOKIE_CONSENT.label} />
       </Footer.Navigation>
       <Footer.Base
         logo={<Logo src={logoSrc} size={LogoSize.Medium} alt={t('common:logoAlt')} />}

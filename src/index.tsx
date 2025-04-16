@@ -32,6 +32,8 @@ if (window._env_.REACT_APP_DISABLE_SENTRY !== '1') {
   });
 }
 
+const matomoEnabled = window._env_.REACT_APP_MATOMO_ENABLED === '1';
+
 const container = document.getElementById('root');
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const root = createRoot(container!);
@@ -49,11 +51,11 @@ if (process.env.NODE_ENV !== 'production') {
     // https://github.com/dequelabs/axe-core-npm/issues/176
     axe.default(React, ReactDOM, 1000, {}, undefined);
     enableMocking().then(() => {
-      root.render(<App />);
+      root.render(<App matomoEnabled={matomoEnabled} />);
     });
   });
 } else {
-  root.render(<App />);
+  root.render(<App matomoEnabled={matomoEnabled} />);
 }
 
 declare global {

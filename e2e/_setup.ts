@@ -131,6 +131,8 @@ export const testiOsoite: Testiosoite = {
 export async function helsinkiLogin(page: Page, env = testiData.testEnvUrl) {
   await page.goto(env);
   await expect(page.getByRole('heading', { name: 'Tervetuloa Haitaton-palveluun' })).toBeVisible();
+  await page.getByRole('button', { name: 'Hyväksy kaikki evästeet' }).click();
+  await expect(page.getByText('Haitaton käyttää evästeitä')).not.toBeVisible();
   await page.getByLabel('Kirjaudu').click();
   await page.getByText('Suomi.fi-tunnistautuminen').click();
   await expect(page.getByText('Testitunnistaja')).toBeVisible();

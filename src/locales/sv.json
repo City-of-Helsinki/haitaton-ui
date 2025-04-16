@@ -476,6 +476,13 @@
       "meta": {
         "title": "Haitaton – Identifiera dig i Haitaton"
       }
+    },
+    "COOKIE_CONSENT": {
+      "path": "/cookie-inställningar",
+      "headerLabel": "Cookie-inställningar",
+      "meta": {
+        "title": "Haitaton - Cookie-inställningar"
+      }
     }
   },
   "hanke": {

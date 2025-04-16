@@ -9,7 +9,7 @@ import {
   helsinkiLogin,
   hankeName,
 } from './_setup';
-import path from 'path';
+import path = require('path');
 
 test.beforeEach('Helsinki_login', async ({ page }) => {
   await helsinkiLogin(page);

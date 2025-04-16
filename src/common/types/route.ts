@@ -26,6 +26,7 @@ export enum ROUTES {
   WORKINSTRUCTIONS = 'WORKINSTRUCTIONS',
   CARDS_INDEX = 'CARDS_INDEX',
   CARD = 'CARD',
+  COOKIE_CONSENT = 'COOKIE_CONSENT',
 }
 
 export type Route = keyof typeof ROUTES;

@@ -476,6 +476,13 @@
       "meta": {
         "title": "Haitaton - Log in to Haitaton"
       }
+    },
+    "COOKIE_CONSENT": {
+      "path": "/cookie-settings",
+      "headerLabel": "Cookie settings",
+      "meta": {
+        "title": "Haitaton - Cookie settings"
+      }
     }
   },
   "hanke": {
