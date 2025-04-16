@@ -251,9 +251,6 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await expect(page.getByText('Hakemukset', { exact: true })).toBeVisible({ timeout: 10000 });
   await page.getByText('Hakemukset', { exact: true }).click();
 
-  const johtoselvitys = await page
-    .locator('[data-testid^=applicationViewLinkIdentifier-JS]')
-    .textContent();
   const kaivuilmoitus = await page
     .locator('[data-testid^=applicationViewLinkIdentifier-KP]')
     .textContent();
@@ -280,31 +277,19 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await page.locator('.cdk-overlay-container > div:nth-child(3)').click();
   await expect(page.getByRole('button', { name: 'TALLENNA' })).toBeVisible();
   await page.getByRole('button', { name: 'TALLENNA' }).click();
-  // Johtoselvitys
-  await page.getByRole('link', { name: 'HAKEMUKSET' }).click();
-  await expect(page.getByRole('button', { name: 'HAE' })).toBeVisible();
-  await page.getByLabel('Hakemuksen tunnus').fill(`${johtoselvitys}`);
-  await page.getByRole('button', { name: 'HAE' }).click();
-  await expect(page.getByRole('link', { name: `${johtoselvitys}` })).toBeVisible({
-    timeout: 20000,
-  });
-  await page.getByRole('link', { name: `${johtoselvitys}` }).click();
-  await page.getByRole('button', { name: 'NÄYTÄ UUDET TIEDOT' }).click();
-  await page.getByRole('button', { name: 'KÄSITTELYYN' }).click();
-  await page.getByLabel('Hakemuksen lajit *').getByText('Hakemuksen lajit').click();
-  await page.getByText('Katu- ja vihertyöt').click();
-  await page.locator('.cdk-overlay-container > div:nth-child(3)').click();
-  await expect(page.getByRole('button', { name: 'TALLENNA' })).toBeVisible();
-  await page.getByRole('button', { name: 'TALLENNA' }).click();
 
   // Odotetaan tuloksia
+  await page.goto(testiData.alluTriggerUrl);
   await expect(async () => {
     await page.goto(`${testiData.hankesalkku}${hanketunnus}`);
     await page.getByText('Hakemukset').click();
-    await expect(page.getByTestId('application-card').first()).toContainText('Käsittelyssä', {
-      timeout: 2000,
-    });
-    await expect(page.getByTestId('application-card').nth(1)).toContainText('Käsittelyssä', {
+    await expect(page.getByTestId('application-status-tag').first()).toContainText(
+      'Odottaa käsittelyä',
+      {
+        timeout: 2000,
+      },
+    );
+    await expect(page.getByTestId('application-status-tag').nth(1)).toContainText('Käsittelyssä', {
       timeout: 2000,
     });
   }).toPass({ intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000], timeout: 120000 });
@@ -314,17 +299,6 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await page.goto(testiData.allu_url);
   await page.getByPlaceholder('Username').fill(testiData.allupw);
   await page.getByRole('button', { name: 'Submit' }).click();
-  await expect(page.getByRole('link', { name: 'HAKEMUKSET' })).toBeVisible();
-  await page.getByRole('link', { name: 'HAKEMUKSET' }).click();
-  await page.getByLabel('Hakemuksen tunnus').fill(`${johtoselvitys}`);
-  await page.getByRole('button', { name: 'HAE' }).click();
-  await page.getByRole('link', { name: `${johtoselvitys}` }).click();
-
-  await page.getByRole('button', { name: 'PÄÄTTÄMISEEN' }).click();
-  await expect(page.getByText('KÄSITTELYSSÄ')).toBeVisible();
-  await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
-  await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
-  await expect(page.getByLabel('Hakemus päätetty')).toBeVisible();
 
   await page.getByRole('link', { name: 'HAKEMUKSET' }).click();
   await page.getByLabel('Hakemuksen tunnus').fill(`${kaivuilmoitus}`);
@@ -348,9 +322,12 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await expect(async () => {
     await page.goto(`${testiData.hankesalkku}${hanketunnus}`);
     await page.getByText('Hakemukset').click();
-    await expect(page.getByTestId('application-status-tag').first()).toContainText('Päätös', {
-      timeout: 2000,
-    });
+    await expect(page.getByTestId('application-status-tag').first()).toContainText(
+      'Odottaa käsittelyä',
+      {
+        timeout: 2000,
+      },
+    );
     await expect(page.getByTestId('application-status-tag').nth(1)).toContainText('Päätös', {
       timeout: 2000,
     });
@@ -387,13 +364,48 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await page.getByRole('button', { name: 'HAE' }).click();
   await expect(page.getByRole('link', { name: `${kaivuilmoitus}` })).toBeVisible();
   await page.getByRole('link', { name: `${kaivuilmoitus}` }).click();
-  await page.getByRole('button', { name: 'KUITTAA' }).click();
 
-  await page.goto(`${testiData.hankesalkku}${hanketunnus}`);
-  await page.getByText('Hakemukset').click();
-  await page.getByTestId(`applicationViewLinkIdentifier-${kaivuilmoitus}`).click();
+  // Tarkista että liitteet ovat saapuneet
+  await page.getByRole('link', { name: 'Liitteet' }).click();
+  await page.getByText('valtakirja_pdf.pdf').isVisible({ timeout: 5000 });
+  await page.getByRole('link', { name: 'Perustiedot' }).click();
 
-  await expect(page.getByText('Hakemukselle on tehty')).toBeVisible();
+  // Korvaava päätös
+  await expect(page.getByRole('link', { name: 'Näytä' })).toBeVisible();
+  await page.getByRole('link', { name: 'Näytä' }).click();
+  await expect(page.getByText('valtakirja_pdf.pdf')).toBeVisible();
+  await page.getByRole('button', { name: 'KORVAAVA PÄÄTÖS' }).click();
+  await page.getByRole('button', { name: 'TALLENNA' }).click();
+  await page.getByRole('option', { name: 'Muut muutokset' }).getByRole('button').click();
+
+  await page.getByRole('button', { name: 'PÄÄTTÄMISEEN' }).click();
+  await page.getByRole('button', { name: 'EHDOTA HYVÄKSYMISTÄ' }).click();
+  await page
+    .locator('div')
+    .filter({ hasText: /^Perustelut \*$/ })
+    .nth(4)
+    .click();
+  await page.getByLabel('Perustelut *').fill('Testiautomaatio perustelut');
+  await page.getByLabel('Valitse päättäjä').getByText('Valitse päättäjä').click();
+  await page.getByText('all rights user').click();
+  await page.getByRole('button', { name: 'TALLENNA' }).click();
+  await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
+  await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
+  await expect(page.getByLabel('Hakemus päätetty')).toBeVisible();
+
+  // kaivuilmoitustunnus on muuttunut
+
+  await page.goto(testiData.alluTriggerUrl);
+  const kaivuilmoitusMuutosilmoitus = `${kaivuilmoitus}-2`;
+  await expect(async () => {
+    await page.goto(`${testiData.hankesalkku}${hanketunnus}`);
+    await page.getByText('Hakemukset').click();
+    await expect(
+      page.getByTestId(`applicationViewLinkIdentifier-${kaivuilmoitusMuutosilmoitus}`),
+    ).toBeVisible();
+  }).toPass({ intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000], timeout: 160000 });
+
+  await page.getByTestId(`applicationViewLinkIdentifier-${kaivuilmoitusMuutosilmoitus}`).click();
 
   // Ilmoita valmiiksi
 
@@ -424,7 +436,6 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await expect(page.getByText('Valmistumisen ilmoituspäivä')).toBeVisible();
   await page.getByRole('link', { name: /Valvonta/gm }).click();
   await page.getByRole('button', { name: 'OMAKSI' }).first().click();
-  await page.getByRole('option', { name: 'Muut muutokset' }).getByRole('button').click();
   await page.getByRole('button', { name: 'HYVÄKSY' }).click();
   await page.getByLabel('Valvojan merkinnät *').click();
   await page.getByLabel('Valvojan merkinnät *').fill('Valmiiksi merkinnät');
@@ -442,14 +453,17 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await expect(page.getByText('TYÖJONO')).toBeVisible();
 
   // Odotetaan tuloksia "valmis"
-  await page.goto(testiData.alluTriggerUrl);
   await expect(async () => {
+    await page.goto(testiData.alluTriggerUrl);
     await page.goto(`${testiData.hankesalkku}${hanketunnus}`);
     await page.getByText('Hakemukset').click();
-    await page.getByTestId(`applicationViewLinkIdentifier-${kaivuilmoitus}`).click();
+    await page.getByTestId(`applicationViewLinkIdentifier-${kaivuilmoitusMuutosilmoitus}`).click();
     await expect(page.getByTestId('application-status-tag').getByText('Työ valmis')).toBeVisible();
     await expect(page.getByRole('link', { name: 'Lataa työ valmis (PDF)' })).toBeVisible({
       timeout: 2000,
     });
-  }).toPass({ intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000], timeout: 160000 });
+  }).toPass({
+    intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000],
+    timeout: 96000,
+  });
 });
