@@ -147,13 +147,13 @@ export function getFeatureFromHankeGeometry(geometry: HankeGeometria) {
  * Equality is checked without properties.
  */
 export function featureContains(
-  feature1: GeoJSONFeature<GeoJSONPolygon>,
-  feature2: GeoJSONFeature<GeoJSONPolygon>,
+  outer: GeoJSONFeature<GeoJSONPolygon>,
+  inner: GeoJSONFeature<GeoJSONPolygon>,
 ): boolean {
-  const features: FeatureCollection<GeoJSONPolygon> = featureCollection([feature1, feature2]);
+  const features: FeatureCollection<GeoJSONPolygon> = featureCollection([outer, inner]);
   const intersected = intersect(features);
-  const feature2WithoutProperties: GeoJSONFeature<GeoJSONPolygon> = { ...feature2, properties: {} };
-  return (intersected && booleanEqual(intersected, feature2WithoutProperties)) || false;
+  const innerWithoutProperties: GeoJSONFeature<GeoJSONPolygon> = { ...inner, properties: {} };
+  return (intersected && booleanEqual(intersected, innerWithoutProperties)) || false;
 }
 
 export function applicationGeometryContains(
