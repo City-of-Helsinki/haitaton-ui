@@ -8,9 +8,8 @@ function HaitatonFooter({
   backgroundColor = 'var(--color-summer)',
 }: Readonly<{ backgroundColor?: string }>) {
   const { t, i18n } = useTranslation();
-  const { MANUAL, HAITATON_INFO, ACCESSIBILITY, PRIVACY_POLICY, COOKIE_CONSENT } =
+  const { HOME, MANUAL, HAITATON_INFO, ACCESSIBILITY, PRIVACY_POLICY, COOKIE_CONSENT } =
     useLocalizedRoutes();
-  const { HOME } = useLocalizedRoutes();
   const logoSrc = i18n.language === 'sv' ? logoSv : logoFi;
 
   return (

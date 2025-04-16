@@ -490,7 +490,7 @@
       }
     },
     "COOKIE_CONSENT": {
-      "path": "/evästeasetukset",
+      "path": "/evasteasetukset",
       "headerLabel": "Evästeasetukset",
       "meta": {
         "title": "Haitaton - Evästeasetukset"

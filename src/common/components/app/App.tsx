@@ -98,7 +98,7 @@ function App({ matomoEnabled }: Readonly<{ matomoEnabled: boolean }>) {
           </LoginProvider>
         </Provider>
       </TrackingWrapper>
-      <ExternalScripts enableMatomo={enableMatomo} />
+      <ExternalScripts matomoEnabled={enableMatomo} />
     </CookieConsentContextProvider>
   );
 }

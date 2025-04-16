@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 type Props = {
-  enableMatomo: boolean;
+  matomoEnabled: boolean;
 };
 
 function MatomoScript(): JSX.Element | null {
@@ -23,8 +23,8 @@ function MatomoScript(): JSX.Element | null {
   return null;
 }
 
-export function ExternalScripts({ enableMatomo }: Props): JSX.Element | null {
-  if (!enableMatomo) {
+export function ExternalScripts({ matomoEnabled }: Props): JSX.Element | null {
+  if (!matomoEnabled) {
     return null;
   }
 
