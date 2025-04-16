@@ -39,7 +39,7 @@ import Dropdown from '../../common/components/dropdown/Dropdown';
 import DropdownMultiselect from '../../common/components/dropdown/DropdownMultiselect';
 import TextArea from '../../common/components/textArea/TextArea';
 import DrawProvider from '../../common/components/map/modules/draw/DrawProvider';
-import { formatFeaturesToHankeGeoJSON, getTotalSurfaceArea } from '../map/utils';
+import { formatFeaturesToHankeGeoJSON, getTotalSurfaceArea, featureContains } from '../map/utils';
 import TyoalueTable from './components/TyoalueTable';
 import AreaSelectDialog from './components/AreaSelectDialog';
 import { getAreaDefaultName } from '../application/utils';
@@ -52,7 +52,6 @@ import HakemusLayer from '../map/components/Layers/HakemusLayer';
 import { OverlayProps } from '../../common/components/map/types';
 import { LIIKENNEHAITTA_STATUS } from '../common/utils/liikennehaittaindeksi';
 import useFieldArrayWithStateUpdate from '../../common/hooks/useFieldArrayWithStateUpdate';
-import { featureContains } from "../map/utils";
 
 function getEmptyArea(
   hankeData: HankeData,
@@ -289,18 +288,8 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
       // If the new tyoalue is contained in exactly one hanke area, add it to that
       addTyoAlueToHankeArea(hankeAlueetContainingNewArea[0], feature);
     } else {
-      // check is the new tyoalue inside more than one hanke area
-      const allAreasContainFeature = hankeAlueetContainingNewArea.every((alue) => {
-        const hankeAlueFeature = alue.geometriat?.featureCollection.features[0];
-        return hankeAlueFeature && featureContains(hankeAlueFeature, newAreaPolygon);
-      });
-
-      if (allAreasContainFeature) {
-        // New työalue is contained in multiple hanke areas, open dialog for user to select one
-        setMultipleHankeAreaSpanningFeature(feature);
-      } else {
-        drawSource.removeFeature(feature);
-      }
+      // New työalue is contained in multiple hanke areas, open dialog for user to select one
+      setMultipleHankeAreaSpanningFeature(feature);
     }
   }
 
