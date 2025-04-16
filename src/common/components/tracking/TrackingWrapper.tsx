@@ -5,7 +5,10 @@ type TrackingWrapperProps = {
   matomoEnabled: boolean;
 };
 
-export function TrackingWrapper({ children, matomoEnabled }: TrackingWrapperProps): JSX.Element {
+export function TrackingWrapper({
+  children,
+  matomoEnabled,
+}: Readonly<TrackingWrapperProps>): JSX.Element {
   useEffect(() => {
     if (matomoEnabled) {
       try {

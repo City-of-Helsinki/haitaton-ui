@@ -23,7 +23,7 @@ function MatomoScript(): JSX.Element | null {
   return null;
 }
 
-export function ExternalScripts({ matomoEnabled }: Props): JSX.Element | null {
+export function ExternalScripts({ matomoEnabled }: Readonly<Props>): JSX.Element | null {
   if (!matomoEnabled) {
     return null;
   }
