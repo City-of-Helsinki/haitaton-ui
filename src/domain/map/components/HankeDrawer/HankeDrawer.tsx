@@ -29,6 +29,7 @@ import { HankkeenHakemus } from '../../../application/types/application';
 import { ModifyEvent } from 'ol/interaction/Modify';
 import { getWorkAreasInsideHankealueFeature } from '../../../hanke/edit/utils';
 import FullScreenControl from '../../../../common/components/map/controls/FullscreenControl';
+import useDrawContext from '../../../../common/components/map/modules/draw/useDrawContext';
 
 type Props = {
   features: Array<Feature | undefined> | undefined;
@@ -56,6 +57,10 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
   const { mapTileLayers, toggleMapTileLayer, handleUpdateGeometryState } = useMapDataLayers();
   const ortoLayerOpacity = mapTileLayers.kantakartta.visible ? 0.5 : 1;
   const [drawSource] = useState<VectorSource>(existingDrawSource || new VectorSource());
+
+  const {
+    actions: { setSelectedFeature },
+  } = useDrawContext();
 
   // Draw existing features
   useEffect(() => {
@@ -128,9 +133,11 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
         // If original hankealue feature has different work area features than modified feature,
         // revert back to original geometry
         modifiedFeature.setGeometry(originalFeature.getGeometry());
+      } else {
+        setSelectedFeature(modifiedFeature as Feature<Geometry>);
       }
     },
-    [hankkeenHakemukset],
+    [hankkeenHakemukset, setSelectedFeature],
   );
 
   return (

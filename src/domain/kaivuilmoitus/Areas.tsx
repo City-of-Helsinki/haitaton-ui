@@ -329,6 +329,8 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
             changedTyoalue.tormaystarkasteluTulos = data;
             feature.set('liikennehaittaindeksi', data.liikennehaittaindeksi.indeksi);
             refreshHaittaIndexesChanged(changedApplicationArea);
+            const existingAreaIndex = wathcApplicationAreas.indexOf(changedApplicationArea);
+            setSelectedTabIndex(existingAreaIndex);
           },
         });
       }

@@ -33,6 +33,7 @@ import { styleFunction } from '../../map/utils/geometryStyle';
 import { OverlayProps } from '../../../common/components/map/types';
 import AreaOverlay from '../../map/components/AreaOverlay/AreaOverlay';
 import FullScreenControl from '../../../common/components/map/controls/FullscreenControl';
+import useDrawContext from '../../../common/components/map/modules/draw/useDrawContext';
 
 type Props = {
   drawSource: VectorSource;
@@ -67,6 +68,10 @@ export default function ApplicationMap({
 
   const { mapTileLayers, toggleMapTileLayer } = useMapDataLayers();
   const ortoLayerOpacity = mapTileLayers.kantakartta.visible ? 0.5 : 1;
+
+  const {
+    actions: { setSelectedFeature },
+  } = useDrawContext();
 
   useEffect(() => {
     function handleAddFeature(e: VectorSourceEvent<FeatureLike>) {
@@ -182,9 +187,11 @@ export default function ApplicationMap({
       ) {
         // If mofified feature is going over hanke feature, revert back to original geometry
         modifiedFeature.setGeometry(originalFeature.getGeometry());
+      } else {
+        setSelectedFeature(modifiedFeature as Feature<Geometry>);
       }
     },
-    [hankeLayerFilter],
+    [hankeLayerFilter, setSelectedFeature],
   );
 
   function handleCopyArea(feature: Feature<Geometry>) {
