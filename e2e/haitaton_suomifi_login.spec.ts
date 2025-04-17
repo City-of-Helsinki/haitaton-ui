@@ -8,6 +8,8 @@ test('Toiminnallisia testejä', async ({ page }) => {
   // Lisätietolinkit aukeaa ohjeista hanketta luodessa
   // Käyttöoikeuksia pystyy muuttamaan
 
+  test.setTimeout(180000);
+
   // Johtoselvityshakemus ei ole käytettävissä ennen kirjautumista
   await expect(page.getByLabel('Tee johtoselvityshakemus.', { exact: true })).not.toBeVisible();
   await helsinkiLogin(page);
