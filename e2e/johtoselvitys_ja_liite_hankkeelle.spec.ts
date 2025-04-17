@@ -31,10 +31,9 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
   await page.getByTestId('tyomaaKatuosoite').click();
   await page.getByTestId('tyomaaKatuosoite').fill(testiOsoite.address);
   await page.getByText('Ohjelmointi').click();
-  await page.getByLabel('', { exact: true }).click();
-  await page.getByLabel('Työn tyyppi: Sulje ja avaa').click();
-  await page.getByRole('option', { name: 'Vesi', exact: true }).getByLabel('check').click();
-  await page.getByLabel('Työn tyyppi: Sulje ja avaa').click();
+  await page.getByRole('button', { name: /Työn tyyppi/ }).click();
+  await page.getByRole('option', { name: /Vesi/ }).click();
+  await page.getByRole('button', { name: /Työn tyyppi/ }).click();
   await page.getByRole('button', { name: 'Seuraava' }).click();
   await expect(page.getByText('Hanke tallennettu')).toBeVisible();
   await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
@@ -62,15 +61,15 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
     .click();
   await page.getByLabel('Haittojen loppupäivä*').click();
   await page.getByLabel('Haittojen loppupäivä*').fill(testiData.tomorrowType);
-  await page.getByRole('button', { name: 'Meluhaitta *' }).click();
+  await page.getByRole('combobox', { name: /Meluhaitta/ }).click();
   await page.getByRole('option', { name: 'Satunnainen meluhaitta' }).click();
-  await page.getByRole('button', { name: 'Pölyhaitta *' }).click();
+  await page.getByRole('combobox', { name: /Pölyhaitta/ }).click();
   await page.getByRole('option', { name: 'Satunnainen pölyhaitta' }).click();
-  await page.getByRole('button', { name: 'Tärinähaitta *' }).click();
+  await page.getByRole('combobox', { name: /Tärinähaitta/ }).click();
   await page.getByRole('option', { name: 'Satunnainen tärinähaitta' }).click();
-  await page.getByRole('button', { name: 'Autoliikenteen kaistahaitta *' }).click();
+  await page.getByRole('combobox', { name: /Autoliikenteen kaistahaitta/ }).click();
   await page.getByRole('option', { name: 'Yksi autokaista vähenee -' }).click();
-  await page.getByLabel('', { exact: true }).click();
+  await page.getByRole('combobox', { name: /Kaistahaittojen pituus/ }).click();
   await page.getByRole('option', { name: 'Alle 10 m' }).click();
   await page.getByRole('button', { name: 'Seuraava' }).click();
   await expect(page.getByText('Hanke tallennettu')).toBeVisible();
@@ -111,7 +110,7 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
   await page.getByTestId('omistajat.0.ytunnus').fill(perustaja.y_tunnus);
   await page.getByTestId('omistajat.0.email').fill(perustaja.email);
   await page.getByTestId('omistajat.0.puhelinnumero').fill(perustaja.phonenumber);
-  await page.getByLabel('Yhteyshenkilöt: Sulje ja avaa').click();
+  await page.getByRole('button', { name: /Yhteyshenkilöt/ }).click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page.getByRole('button', { name: 'Lisää rakennuttaja' }).click();
   await page.locator('[id="rakennuttajat\\.0\\.nimi"]').fill(rakennuttaja.username);
@@ -120,7 +119,7 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
   await page.getByTestId('rakennuttajat.0.puhelinnumero').fill(rakennuttaja.phonenumber);
   await page
     .getByRole('region', { name: 'Rakennuttajan tiedot' })
-    .getByLabel('Yhteyshenkilöt: Sulje ja avaa')
+    .getByRole('button', { name: /Yhteyshenkilöt/ })
     .click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page.getByRole('button', { name: 'Lisää toteuttaja' }).click();
@@ -130,7 +129,7 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
   await page.getByTestId('toteuttajat.0.puhelinnumero').fill(suorittaja.phonenumber);
   await page
     .getByRole('region', { name: 'Toteuttajan tiedot' })
-    .getByLabel('Yhteyshenkilöt: Sulje ja avaa')
+    .getByRole('button', { name: /Yhteyshenkilöt/ })
     .click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page.getByRole('button', { name: 'Seuraava' }).click();
@@ -142,7 +141,7 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
   await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
 
   await page.getByRole('button', { name: 'Tallenna ja lisää hakemuksia', exact: true }).click();
-  await page.getByLabel('', { exact: true }).click();
+  await page.getByRole('combobox', { name: 'Hakemustyyppi' }).click();
   await page.getByRole('option', { name: 'Johtoselvitys', exact: true }).click();
   await page.getByRole('button', { name: 'Luo hakemus' }).click();
   await page.getByTestId('applicationData.name').fill('Johtoselvitys Hankkeelle');
@@ -197,12 +196,9 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
     .fill(suorittaja.phonenumber);
   await page
     .getByRole('region', { name: 'Työn suorittajan tiedot' })
-    .getByLabel('Yhteyshenkilöt: Sulje ja avaa')
+    .getByRole('button', { name: /Yhteyshenkilöt/ })
     .click();
-  await page
-    .getByRole('option', { name: `${perustaja.username}` })
-    .getByLabel('check')
-    .click();
+  await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await expect(page.getByRole('button', { name: 'Peru hakemus' })).toBeVisible();
   await page.getByRole('button', { name: 'Seuraava' }).click();
   await expect(page.getByText('Hakemus tallennettu')).toBeVisible();
@@ -231,7 +227,9 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
   const hakemuksenTunnus = await page.getByTestId('allu_tunnus').textContent();
   await expect(page.getByRole('button', { name: 'Peru hakemus' })).toBeVisible();
   const linkkiHakemukseen = await page
-    .getByRole('link', { name: 'TA-Johtoselvitys ja liite' })
+    .getByLabel('Hankkeen navigaatio')
+    .locator('div')
+    .getByText('TA-Johtoselvitys ja liite')
     .getAttribute('href');
   const linkkiHakemukseenEdit = linkkiHakemukseen?.slice(3);
   const hakemusLinkki = `${testiData.testEnvUrl}${linkkiHakemukseenEdit}`;
