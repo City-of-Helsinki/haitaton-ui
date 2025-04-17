@@ -110,7 +110,10 @@ test('Permissions dropdown should be disabled and delete button should be hidden
   render(<EditUserContainer id={users[0].id} hankeTunnus={hankeTunnus} />);
   await waitForLoadingToFinish();
 
-  expect(screen.getByRole('button', { name: /käyttöoikeudet/i })).toBeDisabled();
+  expect(screen.getByRole('combobox', { name: /käyttöoikeudet/i })).toHaveAttribute(
+    'aria-disabled',
+    'true',
+  );
   expect(screen.queryByRole('button', { name: /poista käyttäjä/i })).not.toBeInTheDocument();
 });
 
@@ -118,7 +121,10 @@ test('Permissions dropdown should be disabled if editing own information', async
   render(<EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afa6" hankeTunnus="HAI22-2" />);
   await waitForLoadingToFinish();
 
-  expect(screen.getByRole('button', { name: /käyttöoikeudet/i })).toBeDisabled();
+  expect(screen.getByRole('combobox', { name: /käyttöoikeudet/i })).toHaveAttribute(
+    'aria-disabled',
+    'true',
+  );
 });
 
 test('Permissions dropdown should be disabled and delete button should be hidden if user does not have enough rights', async () => {
@@ -131,7 +137,10 @@ test('Permissions dropdown should be disabled and delete button should be hidden
   render(<EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afa8" hankeTunnus="HAI22-2" />);
   await waitForLoadingToFinish();
 
-  expect(screen.getByRole('button', { name: /käyttöoikeudet/i })).toBeDisabled();
+  expect(screen.getByRole('combobox', { name: /käyttöoikeudet/i })).toHaveAttribute(
+    'aria-disabled',
+    'true',
+  );
   expect(screen.queryByRole('button', { name: /poista käyttäjä/i })).not.toBeInTheDocument();
 });
 
@@ -227,7 +236,7 @@ test('Should be able to edit users information', async () => {
   const sahkoposti = 'teppo.testaaja@test.com';
   const puhelinnumero = '1234567';
   fillUserInformation({ etunimi, sukunimi, sahkoposti, puhelinnumero });
-  fireEvent.click(screen.getByRole('button', { name: /käyttöoikeudet/i }));
+  fireEvent.click(screen.getByRole('combobox', { name: /käyttöoikeudet/i }));
   fireEvent.click(screen.getAllByText('Kaikki oikeudet')[1]);
   await user.click(screen.getByRole('button', { name: /tallenna muutokset/i }));
 
@@ -277,7 +286,7 @@ test('Should show error notification if editing users permission fails', async (
     <EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afa7" hankeTunnus="HAI22-2" />,
   );
   await waitForLoadingToFinish();
-  fireEvent.click(screen.getByRole('button', { name: /käyttöoikeudet/i }));
+  fireEvent.click(screen.getByRole('combobox', { name: /käyttöoikeudet/i }));
   fireEvent.click(screen.getByText('Katseluoikeus'));
   await user.click(screen.getByRole('button', { name: /tallenna muutokset/i }));
 
@@ -341,7 +350,7 @@ test('Should not be able to select hanke editing access rights if the feature is
   render(<EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afb4" hankeTunnus="HAI22-2" />);
   await waitForLoadingToFinish();
 
-  fireEvent.click(screen.getByRole('button', { name: /käyttöoikeudet/i }));
+  fireEvent.click(screen.getByRole('combobox', { name: /käyttöoikeudet/i }));
 
   expect(screen.queryByText('Hankkeen ja hakemusten muokkaus')).not.toBeInTheDocument();
   expect(screen.queryByText('Hankemuokkaus')).not.toBeInTheDocument();
@@ -357,7 +366,7 @@ test('Should be able to select hanke editing access rights if the feature is ena
   render(<EditUserContainer id="3fa85f64-5717-4562-b3fc-2c963f66afb4" hankeTunnus="HAI22-2" />);
   await waitForLoadingToFinish();
 
-  fireEvent.click(screen.getByRole('button', { name: /käyttöoikeudet/i }));
+  fireEvent.click(screen.getByRole('combobox', { name: /käyttöoikeudet/i }));
 
   expect(screen.queryByText('Hankkeen ja hakemusten muokkaus')).toBeInTheDocument();
   expect(screen.queryByText('Hankemuokkaus')).toBeInTheDocument();

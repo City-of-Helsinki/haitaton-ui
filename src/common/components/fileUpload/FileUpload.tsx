@@ -1,7 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { useMutation } from 'react-query';
 import { Flex, ModalContent, ModalOverlay } from '@chakra-ui/react';
-import { Button, FileInput, IconAlertCircleFill, IconCheckCircleFill, IconCross } from 'hds-react';
+import {
+  Button,
+  ButtonPresetTheme,
+  ButtonVariant,
+  FileInput,
+  IconAlertCircleFill,
+  IconCheckCircleFill,
+  IconCross,
+} from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { differenceBy } from 'lodash';
 import { AxiosError } from 'axios';
@@ -253,9 +261,9 @@ export default function FileUpload<T extends AttachmentMetadata>({
                 {t('common:components:fileUpload:loadingText')}
               </Text>
               <Button
-                variant="supplementary"
-                iconLeft={<IconCross aria-hidden />}
-                theme="black"
+                variant={ButtonVariant.Supplementary}
+                iconStart={<IconCross aria-hidden />}
+                theme={ButtonPresetTheme.Black}
                 onClick={cancelRequests}
               >
                 {t('common:confirmationDialog:cancelButton')}

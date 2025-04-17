@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tag } from 'hds-react';
+import { Tag, TagTheme } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import { HANKE_VAIHE, HANKE_VAIHE_KEY } from '../../types/hanke';
@@ -10,15 +10,15 @@ type TagProps = {
   uppercase?: boolean;
 };
 
-const themes = {
+const themes: Record<HANKE_VAIHE_KEY, TagTheme> = {
   [HANKE_VAIHE.OHJELMOINTI]: {
-    '--tag-background': 'var(--color-coat-of-arms-light)',
+    '--background-color': 'var(--color-coat-of-arms-light)',
   },
   [HANKE_VAIHE.SUUNNITTELU]: {
-    '--tag-background': 'var(--color-brick-light)',
+    '--background-color': 'var(--color-brick-light)',
   },
   [HANKE_VAIHE.RAKENTAMINEN]: {
-    '--tag-background': 'var(--color-bus-light)',
+    '--background-color': 'var(--color-bus-light)',
   },
 };
 
@@ -30,7 +30,11 @@ const HankeVaiheTag: React.FC<React.PropsWithChildren<TagProps>> = ({ tagName, u
   }
 
   return (
-    <Tag theme={themes[tagName]} className={clsx({ [styles.uppercase]: uppercase })}>
+    <Tag
+      theme={themes[tagName]}
+      className={clsx({ [styles.uppercase]: uppercase })}
+      placeholder={t('hankeForm:labels.vaihe')}
+    >
       {t(`hanke:vaihe:${tagName}`)}
     </Tag>
   );

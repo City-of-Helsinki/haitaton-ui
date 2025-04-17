@@ -1,4 +1,4 @@
-import { Notification } from 'hds-react';
+import { Notification, NotificationSize } from 'hds-react';
 import { MuutosilmoitusSent } from '../types';
 import { format } from 'date-fns/format';
 import { fi } from 'date-fns/locale';
@@ -17,7 +17,11 @@ export default function MuutosilmoitusNotification({ sent }: Readonly<Props>) {
     });
 
   return (
-    <Notification type="alert" label={t('muutosilmoitus:notification:label')} size="small">
+    <Notification
+      type="alert"
+      label={t('muutosilmoitus:notification:label')}
+      size={NotificationSize.Small}
+    >
       {formattedSentDate === null
         ? t('muutosilmoitus:notification:createdText')
         : t('muutosilmoitus:notification:sentText', { date: formattedSentDate })}

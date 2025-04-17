@@ -285,7 +285,7 @@ export default function TyoalueTable({
           theme={{
             '--header-background-color': 'var(--color-black-90)',
           }}
-          dataTestId="tyoalueet-table"
+          data-testid="tyoalueet-table"
         />
       </Box>
 

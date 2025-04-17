@@ -9,7 +9,16 @@ import {
   useAsyncDebounce,
   useSortBy,
 } from 'react-table';
-import { useAccordion, Card, Select, Button, Pagination, SearchInput } from 'hds-react';
+import {
+  useAccordion,
+  Card,
+  Select,
+  Button,
+  SearchInput,
+  ButtonPresetTheme,
+  ButtonVariant,
+  SupportedLanguage,
+} from 'hds-react';
 import {
   IconAngleDown,
   IconAngleUp,
@@ -17,6 +26,7 @@ import {
   IconInfoCircle,
   IconPen,
   IconSearch,
+  IconSize,
 } from 'hds-react/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
@@ -30,7 +40,6 @@ import { areDatesWithinInterval } from '../../map/utils';
 import useLinkPath from '../../../common/hooks/useLinkPath';
 import { ROUTES } from '../../../common/types/route';
 import HankeVaiheTag from '../vaiheTag/HankeVaiheTag';
-import { Language } from '../../../common/types/language';
 import OwnHankeMap from '../../map/components/OwnHankeMap/OwnHankeMap';
 import OwnHankeMapHeader from '../../map/components/OwnHankeMap/OwnHankeMapHeader';
 import HankeGeneratedStateNotification from '../edit/components/HankeGeneratedStateNotification';
@@ -46,6 +55,7 @@ import HDSLink from '../../../common/components/Link/Link';
 import HankeCreateDialog from '../hankeCreateDialog/HankeCreateDialog';
 import MapPlaceholder from '../../map/components/MapPlaceholder/MapPlaceholder';
 import HankeStatusTag from '../components/HankeStatusTag';
+import Pagination from '../../../common/components/pagination/Pagination';
 
 type CustomAccordionProps = {
   hanke: HankeData;
@@ -62,7 +72,11 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
   const { isOpen, buttonProps, contentProps } = useAccordion({ initiallyOpen: false });
 
   // Change icon based on accordion open state
-  const icon = isOpen ? <IconAngleUp size="m" /> : <IconAngleDown size="m" />;
+  const icon = isOpen ? (
+    <IconAngleUp size={IconSize.Medium} />
+  ) : (
+    <IconAngleDown size={IconSize.Medium} />
+  );
 
   const { t } = useTranslation();
 
@@ -252,11 +266,15 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
 
         <div className={styles.hankeCardButtons}>
           <FeatureFlags flags={['hanke']}>
-            <Button theme="coat" onClick={navigateToHanke}>
+            <Button theme={ButtonPresetTheme.Coat} onClick={navigateToHanke}>
               {t('hankePortfolio:showHankeButton')}
             </Button>
           </FeatureFlags>
-          <Button theme="coat" variant="secondary" onClick={() => navigateToApplications()}>
+          <Button
+            theme={ButtonPresetTheme.Coat}
+            variant={ButtonVariant.Secondary}
+            onClick={() => navigateToApplications()}
+          >
             {t('hankePortfolio:showApplicationsButton')}
           </Button>
         </div>
@@ -547,48 +565,34 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
 
               <Select
                 className={styles.hankeVaihe}
-                multiselect
-                label={t('hankePortfolio:hankevaiheet')}
+                multiSelect
+                texts={{
+                  label: t('hankePortfolio:hankevaiheet'),
+                  language: i18n.language as SupportedLanguage,
+                }}
                 options={hankeVaiheOptions}
-                defaultValue={[]}
-                clearButtonAriaLabel={
-                  // eslint-disable-next-line prefer-template
-                  t('common:components:multiselect:clear') + ' ' + t('hankePortfolio:hankevaiheet')
-                }
-                // eslint-disable-next-line no-template-curly-in-string
-                selectedItemRemoveButtonAriaLabel="Remove {value}"
                 onChange={updateHankeVaihe}
-                value={
-                  selectedHankeVaiheet.map((hankeVaihe) => ({
-                    label: t(`hanke:vaihe:${hankeVaihe}`),
-                    value: hankeVaihe,
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  })) as any
-                }
+                value={selectedHankeVaiheet.map((hankeVaihe) => ({
+                  label: t(`hanke:vaihe:${hankeVaihe}`),
+                  value: hankeVaihe,
+                }))}
+                style={{ maxWidth: 'none' }}
               />
 
               <Select
                 className={styles.hankeTyyppi}
-                multiselect
-                label={t('hankeForm:labels:tyomaaTyyppi')}
+                multiSelect
+                texts={{
+                  label: t('hankeForm:labels:tyomaaTyyppi'),
+                  language: i18n.language as SupportedLanguage,
+                }}
                 options={hankeTyyppiOptions}
-                defaultValue={[]}
-                clearButtonAriaLabel={
-                  // eslint-disable-next-line prefer-template
-                  t('common:components:multiselect:clear') +
-                  ' ' +
-                  t('hankeForm:labels:tyomaaTyyppi')
-                }
-                // eslint-disable-next-line no-template-curly-in-string
-                selectedItemRemoveButtonAriaLabel="Remove {value}"
                 onChange={updateHankeTyyppi}
-                value={
-                  selectedHankeTyypit.map((hankeTyyppi) => ({
-                    label: t(`hanke:tyomaaTyyppi:${hankeTyyppi}`),
-                    value: hankeTyyppi,
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  })) as any
-                }
+                value={selectedHankeTyypit.map((hankeTyyppi) => ({
+                  label: t(`hanke:tyomaaTyyppi:${hankeTyyppi}`),
+                  value: hankeTyyppi,
+                }))}
+                style={{ maxWidth: 'none' }}
               />
             </FeatureFlags>
 
@@ -608,7 +612,7 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
           </button>
           <div className={styles.filtersInfoText} aria-hidden>
             <div className={styles.icon}>
-              <IconInfoCircle size="xs" color="var(--color-black-60)" />
+              <IconInfoCircle size={IconSize.ExtraSmall} color="var(--color-black-60)" />
             </div>
             <p>{t('hankePortfolio:filtersInfoText')}</p>
           </div>
@@ -639,7 +643,7 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
               })}
             {rows.length === 0 && (
               <div className={styles.notFoundContainer}>
-                <IconSearch size="l" />
+                <IconSearch size={IconSize.Large} />
                 <div>
                   <Text tag="p" spacingTop="m" spacingBottom="s" className="heading-m">
                     {t('hankePortfolio:noneFound')}
@@ -664,16 +668,13 @@ const PaginatedPortfolio: React.FC<React.PropsWithChildren<PagedRowsProps>> = ({
             )}
 
             {rows.length > 0 && (
-              <div className={styles.pagination}>
-                <Pagination
-                  language={i18n.language as Language}
-                  onChange={handlePageChange}
-                  pageHref={() => ''}
-                  pageCount={pageCount}
-                  pageIndex={pageIndex}
-                  paginationAriaLabel={t('common:components:paginationAriaLabel')}
-                />
-              </div>
+              <Pagination
+                onChange={handlePageChange}
+                pageHref={() => ''}
+                pageCount={pageCount}
+                pageIndex={pageIndex}
+                paginationAriaLabel={t('common:components:paginationAriaLabel')}
+              />
             )}
           </div>
         </Container>

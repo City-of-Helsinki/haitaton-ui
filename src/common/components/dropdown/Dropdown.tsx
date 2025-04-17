@@ -1,6 +1,6 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Select, Tooltip } from 'hds-react';
+import { Select, SupportedLanguage, Tooltip } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import { getInputErrorText } from '../../utils/form';
 import { TooltipProps } from '../../types/tooltip';
@@ -18,8 +18,6 @@ type PropTypes = {
   invalid?: boolean;
   tooltip?: TooltipProps;
   disabled?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  isOptionDisabled?: (option: any) => boolean;
   required?: boolean;
   style?: React.CSSProperties;
   onValueChange?: (value: string) => void;
@@ -35,12 +33,11 @@ const Dropdown: React.FC<React.PropsWithChildren<PropTypes>> = ({
   invalid,
   tooltip,
   disabled,
-  isOptionDisabled,
   required,
   style,
   onValueChange,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { control } = useFormContext();
 
   return (
@@ -55,32 +52,38 @@ const Dropdown: React.FC<React.PropsWithChildren<PropTypes>> = ({
         control={control}
         rules={rules}
         defaultValue={defaultValue}
-        render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
+        render={({ field: { onChange, onBlur, value, ref }, fieldState: { error } }) => {
           return (
             <Select
+              ref={ref}
               id={id}
-              label={label}
+              texts={{
+                label,
+                language: i18n.language as SupportedLanguage,
+                error: getInputErrorText(t, error),
+              }}
               defaultValue={
                 defaultValue
-                  ? options.find((o) => o.value === defaultValue)
-                  : options.find((o) => o.value === value)
+                  ? options.find((o) => o.value === defaultValue)?.value
+                  : options.find((o) => o.value === value)?.value
               }
               options={options}
               invalid={invalid || Boolean(error)}
-              value={options.find((o) => o.value === value) || null}
+              value={options.find((o) => o.value === value)?.value}
               onBlur={onBlur}
-              onChange={(option: Option) => {
-                if (option) {
-                  onChange(option.value);
-                  onValueChange && onValueChange(option.value);
+              onChange={(_, clickedOption: Option) => {
+                if (clickedOption) {
+                  onChange(clickedOption.value);
+                  onValueChange && onValueChange(clickedOption.value);
                 }
                 onBlur();
               }}
               required={required}
               disabled={disabled}
-              isOptionDisabled={isOptionDisabled}
-              error={getInputErrorText(t, error)}
-              style={style}
+              style={{
+                maxWidth: 'none',
+                ...style,
+              }}
             />
           );
         }}

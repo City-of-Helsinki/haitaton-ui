@@ -28,10 +28,9 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
   await page.getByTestId('tyomaaKatuosoite').click();
   await page.getByTestId('tyomaaKatuosoite').fill(testiOsoite.address);
   await page.getByText('Ohjelmointi').click();
-  await page.getByLabel('', { exact: true }).click();
-  await page.getByLabel('Työn tyyppi: Sulje ja avaa').click();
-  await page.getByRole('option', { name: 'Vesi', exact: true }).getByLabel('check').click();
-  await page.getByLabel('Työn tyyppi: Sulje ja avaa').click();
+  await page.getByRole('button', { name: /Työn tyyppi/ }).click();
+  await page.getByRole('option', { name: /Vesi/ }).click();
+  await page.getByRole('button', { name: /Työn tyyppi/ }).click();
   await page.getByRole('button', { name: 'Seuraava' }).click();
   await expect(page.getByText('Hanke tallennettu')).toBeVisible();
   await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
@@ -58,15 +57,15 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
   await page.getByLabel('Haittojen alkupäivä*').first().press('Enter');
   await page.getByLabel('Haittojen loppupäivä*').fill('31.12.2025');
   await page.getByLabel('Haittojen loppupäivä*').press('Enter');
-  await page.getByRole('button', { name: 'Meluhaitta *' }).click();
+  await page.getByRole('combobox', { name: /Meluhaitta/ }).click();
   await page.getByRole('option', { name: 'Satunnainen meluhaitta' }).click();
-  await page.getByRole('button', { name: 'Pölyhaitta *' }).click();
+  await page.getByRole('combobox', { name: /Pölyhaitta/ }).click();
   await page.getByRole('option', { name: 'Satunnainen pölyhaitta' }).click();
-  await page.getByRole('button', { name: 'Tärinähaitta *' }).click();
+  await page.getByRole('combobox', { name: /Tärinähaitta/ }).click();
   await page.getByRole('option', { name: 'Satunnainen tärinähaitta' }).click();
-  await page.getByRole('button', { name: 'Autoliikenteen kaistahaitta *' }).click();
+  await page.getByRole('combobox', { name: /Autoliikenteen kaistahaitta/ }).click();
   await page.getByRole('option', { name: 'Yksi autokaista vähenee -' }).click();
-  await page.getByLabel('', { exact: true }).click();
+  await page.getByRole('combobox', { name: /Kaistahaittojen pituus/ }).click();
   await page.getByRole('option', { name: 'Alle 10 m' }).click();
   await page.getByRole('button', { name: 'Seuraava' }).click();
   await expect(page.getByText('Hanke tallennettu')).toBeVisible();
@@ -113,7 +112,7 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
   await page.getByTestId('omistajat.0.ytunnus').fill(perustaja.y_tunnus);
   await page.getByTestId('omistajat.0.email').fill(perustaja.email);
   await page.getByTestId('omistajat.0.puhelinnumero').fill(perustaja.phonenumber);
-  await page.getByLabel('Yhteyshenkilöt: Sulje ja avaa').click();
+  await page.getByRole('button', { name: /Yhteyshenkilöt/ }).click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page.getByRole('button', { name: 'Lisää rakennuttaja' }).click();
   await page.locator('[id="rakennuttajat\\.0\\.nimi"]').fill(rakennuttaja.username);
@@ -122,7 +121,7 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
   await page.getByTestId('rakennuttajat.0.puhelinnumero').fill(rakennuttaja.phonenumber);
   await page
     .getByRole('region', { name: 'Rakennuttajan tiedot' })
-    .getByLabel('Yhteyshenkilöt: Sulje ja avaa')
+    .getByRole('button', { name: /Yhteyshenkilöt/ })
     .click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page.getByRole('button', { name: 'Lisää toteuttaja' }).click();
@@ -132,7 +131,7 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
   await page.getByTestId('toteuttajat.0.puhelinnumero').fill(suorittaja.phonenumber);
   await page
     .getByRole('region', { name: 'Toteuttajan tiedot' })
-    .getByLabel('Yhteyshenkilöt: Sulje ja avaa')
+    .getByRole('button', { name: /Yhteyshenkilöt/ })
     .click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page.getByRole('button', { name: 'Seuraava' }).click();
@@ -145,7 +144,7 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
 
   await page.getByRole('button', { name: 'Tallenna ja lisää hakemuksia', exact: true }).click();
   // Lisää kaivuilmoitus
-  await page.getByLabel('', { exact: true }).click();
+  await page.getByRole('combobox', { name: 'Hakemustyyppi' }).click();
   await page.getByRole('option', { name: 'Kaivuilmoitus (ja' }).click();
   await page.getByRole('button', { name: 'Luo hakemus' }).click();
   await page.getByTestId('applicationData.name').fill(ajonNimi);
@@ -217,7 +216,10 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
   await page
     .getByTestId('applicationData.customerWithContacts.customer.phone')
     .fill(vastaava.phonenumber);
-  await page.locator('[id$=toggle-button]').nth(1).click();
+  await page
+    .getByRole('button', { name: /Yhteyshenkilöt/ })
+    .first()
+    .click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page
     .locator('[id="applicationData\\.contractorWithContacts\\.customer\\.name"]')
@@ -233,7 +235,7 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
     .fill(suorittaja.phonenumber);
   await page
     .getByRole('region', { name: 'Työn suorittajan tiedot' })
-    .getByLabel('Yhteyshenkilöt: Sulje ja avaa')
+    .getByRole('button', { name: /Yhteyshenkilöt/ })
     .click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page.getByTestId('applicationData.invoicingCustomer.name').fill(asianhoitaja.username);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@chakra-ui/react';
-import { IconAlertCircle } from 'hds-react';
+import { IconAlertCircle, IconSize } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import Text from '../text/Text';
 
@@ -15,7 +15,7 @@ function ErrorLoadingText({ children }: Props) {
 
   return (
     <Box textAlign="center" my="var(--spacing-2-xl)">
-      <IconAlertCircle size="l" style={{ marginBottom: 'var(--spacing-m)' }} />
+      <IconAlertCircle size={IconSize.Large} style={{ marginBottom: 'var(--spacing-m)' }} />
       {childCount > 0 ? (
         <div>{children}</div>
       ) : (

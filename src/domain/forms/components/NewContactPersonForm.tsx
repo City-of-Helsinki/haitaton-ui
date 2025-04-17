@@ -1,7 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Fieldset, IconCheck, IconCross, Notification } from 'hds-react';
+import {
+  ButtonVariant,
+  Fieldset,
+  IconCheck,
+  IconCross,
+  Notification,
+  NotificationSize,
+} from 'hds-react';
 import ResponsiveGrid from '../../../common/components/grid/ResponsiveGrid';
 import TextInput from '../../../common/components/textInput/TextInput';
 import { createHankeUser } from '../../hanke/hankeUsers/hankeUsersApi';
@@ -10,6 +17,7 @@ import { Yhteyshenkilo, YHTEYSHENKILO_FORMFIELD } from '../../hanke/edit/types';
 import styles from './NewContactPersonForm.module.scss';
 import { HankeUser } from '../../hanke/hankeUsers/hankeUser';
 import useDebouncedMutation from '../../../common/hooks/useDebouncedMutation';
+import Button from '../../../common/components/button/Button';
 
 export type ContactPersonAddedNotification = 'success' | 'error' | null;
 
@@ -72,7 +80,7 @@ function NewContactPersonForm({
           type="info"
           position="inline"
           label={t('form:yhteystiedot:notifications:descriptions:contactPersonInfo')}
-          size="small"
+          size={NotificationSize.Small}
           className={styles.infoNotification}
         >
           {t('form:yhteystiedot:notifications:descriptions:contactPersonInfo')}
@@ -102,10 +110,14 @@ function NewContactPersonForm({
           />
         </ResponsiveGrid>
         <div className={styles.formButtons}>
-          <Button iconLeft={<IconCheck />} onClick={saveContact} isLoading={isLoading}>
+          <Button iconStart={<IconCheck />} onClick={saveContact} isLoading={isLoading}>
             {t('form:yhteystiedot:buttons:saveAndAddContactPerson')}
           </Button>
-          <Button iconLeft={<IconCross />} variant="secondary" onClick={cancelContactAdd}>
+          <Button
+            iconStart={<IconCross />}
+            variant={ButtonVariant.Secondary}
+            onClick={cancelContactAdd}
+          >
             {t('common:confirmationDialog:cancelButton')}
           </Button>
         </div>

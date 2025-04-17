@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { IconPen } from 'hds-react';
+import { IconPen, IconSize } from 'hds-react';
 import clsx from 'clsx';
 import { $enum } from 'ts-enum-util';
 import IconSquare from '../../../icons/Square';
@@ -18,7 +18,7 @@ const getDrawIcon = (drawTool: DRAWTOOLTYPE) => {
         </div>
       );
     case DRAWTOOLTYPE.POLYGON:
-      return <IconPen size="s" aria-hidden="true" />;
+      return <IconPen size={IconSize.Small} aria-hidden="true" />;
     default:
       return null;
   }

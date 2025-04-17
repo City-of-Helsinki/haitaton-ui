@@ -31,14 +31,17 @@ function HankeStatusTag({ status }: Readonly<{ status: HANKE_STATUS_KEY | null }
 
   return (
     <Tag
+      theme={{
+        '--background-color': 'var(--color-black-10)',
+      }}
       className={clsx({
         [styles.bgGreen]: bgGreen,
       })}
+      iconStart={icon}
       data-testid="hanke-status-tag"
+      placeholder={statusText}
     >
-      <div className={styles.hankeStatusTag}>
-        {icon} {statusText}
-      </div>
+      {statusText}
     </Tag>
   );
 }

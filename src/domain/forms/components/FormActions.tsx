@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, IconArrowLeft, IconArrowRight } from 'hds-react';
+import { ButtonVariant, IconArrowLeft, IconArrowRight } from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import styles from './FormActions.module.scss';
+import Button from '../../../common/components/button/Button';
 
 interface Props {
   activeStepIndex: number;
@@ -33,8 +34,8 @@ const FormActions: React.FC<React.PropsWithChildren<Props>> = ({
     <div className={styles.actions}>
       {!firstStep && (
         <Button
-          iconLeft={<IconArrowLeft />}
-          variant="secondary"
+          iconStart={<IconArrowLeft />}
+          variant={ButtonVariant.Secondary}
           onClick={onPrevious}
           isLoading={previousButtonIsLoading}
           loadingText={previousButtonLoadingText}
@@ -45,8 +46,8 @@ const FormActions: React.FC<React.PropsWithChildren<Props>> = ({
       {children}
       {!lastStep && (
         <Button
-          iconRight={<IconArrowRight />}
-          variant="secondary"
+          iconStart={<IconArrowRight />}
+          variant={ButtonVariant.Secondary}
           onClick={onNext}
           isLoading={nextButtonIsLoading}
           loadingText={nextButtonLoadingText}

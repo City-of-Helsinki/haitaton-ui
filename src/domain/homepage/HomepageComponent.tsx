@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import { Box, Grid } from '@chakra-ui/react';
-import { Koros, Link, LoginButton, Notification, useOidcClient } from 'hds-react';
+import {
+  ButtonPresetTheme,
+  ButtonVariant,
+  Koros,
+  Link,
+  LoginButton,
+  Notification,
+  useOidcClient,
+} from 'hds-react';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import Container from '../../common/components/container/Container';
@@ -115,8 +123,8 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
             {t('homepage:loginContainer:description')}
           </p>
           <LoginButton
-            variant="secondary"
-            theme="black"
+            variant={ButtonVariant.Secondary}
+            theme={ButtonPresetTheme.Black}
             loggingInText={t('authentication:loggingIn')}
             errorText={t('authentication:loggingInErrorLabel')}
             spinnerColor="var(--color-coat-of-arms)"

@@ -8,7 +8,7 @@ import { deleteAttachment, getAttachmentFile, uploadAttachment } from '../applic
 import { KaivuilmoitusFormValues } from './types';
 import FileUpload from '../../common/components/fileUpload/FileUpload';
 import styles from './Kaivuilmoitus.module.scss';
-import { Link, Notification } from 'hds-react';
+import { Link, Notification, NotificationSize } from 'hds-react';
 import TextArea from '../../common/components/textArea/TextArea';
 
 type Props = {
@@ -85,7 +85,7 @@ function Attachments({ existingAttachments, attachmentsLoadError }: Readonly<Pro
         {t('kaivuilmoitusForm:liitteetJaLisatiedot:mandate')}
       </Box>
       <Notification
-        size="small"
+        size={NotificationSize.Small}
         type="info"
         label={t('kaivuilmoitusForm:liitteetJaLisatiedot:mandateCheck')}
         style={{ marginTop: 'var(--spacing-s)', marginBottom: 'var(--spacing-s)' }}

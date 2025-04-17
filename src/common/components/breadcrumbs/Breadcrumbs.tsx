@@ -86,7 +86,7 @@ const Breadcrumbs: React.FC<React.PropsWithChildren<{ breadcrumbs: Breadcrumb[] 
     <Box backgroundColor="var(--color-white)">
       <Container alignWithHeader>
         <Breadcrumb
-          ariaLabel={t('common:components:breadcrumb:ariaLabel')}
+          aria-label={t('common:components:breadcrumb:ariaLabel')}
           list={translatedBreadcrumbs}
           theme={{
             '--horizontal-margin-large': '0',

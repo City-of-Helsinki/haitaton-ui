@@ -15,8 +15,9 @@ function TestComponent() {
 test('Should be able to add new option to the list', async () => {
   const newInput = 'input2';
   const { user } = render(<TestComponent />);
+  await user.click(screen.getByRole('button', { name: /test combobox/i }));
   await user.type(screen.getByRole('combobox'), newInput);
   await user.keyboard('{Enter}');
 
-  expect(screen.getAllByText(newInput)).toHaveLength(2);
+  expect(screen.getAllByText(newInput)).toHaveLength(3);
 });

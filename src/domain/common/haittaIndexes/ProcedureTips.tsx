@@ -1,5 +1,5 @@
 import { Trans, useTranslation } from 'react-i18next';
-import { Accordion, IconDocument, Link } from 'hds-react';
+import { Accordion, AccordionSize, IconDocument, Link, LinkSize } from 'hds-react';
 import { Box } from '@chakra-ui/react';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import { memo, useMemo } from 'react';
@@ -77,18 +77,18 @@ const ProcedureTips: React.FC<Props> = memo(({ haittojenhallintaTyyppi, haittaIn
         heading={t(
           `hankeForm:haittojenHallintaForm:procedureTips:titles:${haittojenhallintaTyyppi}`,
         )}
-        size="s"
+        size={AccordionSize.Small}
         headingLevel={4}
         theme={{
           '--header-font-size': 'var(--fontsize-heading-s)',
         }}
       >
-        <Box mb="var(--spacing-s)">
+        <Box mb="var(--spacing-s)" width="100%">
           {filteredTips.map((item) => (
             <Accordion
               key={item.heading}
               heading={item.heading}
-              size="s"
+              size={AccordionSize.Small}
               headingLevel={5}
               theme={{
                 '--content-font-size': 'var(--fontsize-body-m)',
@@ -106,8 +106,8 @@ const ProcedureTips: React.FC<Props> = memo(({ haittojenhallintaTyyppi, haittaIn
                   {item.cardLinks?.map((linkId) => (
                     <Link
                       key={linkId}
-                      iconLeft={<IconDocument />}
-                      size="M"
+                      iconStart={<IconDocument />}
+                      size={LinkSize.Medium}
                       href={`${CARD.path}${linkId}/${t('routes:CARD:basicLevel')}`}
                       openInNewTab
                       openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}

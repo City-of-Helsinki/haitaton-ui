@@ -86,9 +86,15 @@ test('Johtoselvityshakemus_peruminen', async ({ page }) => {
   await page
     .getByTestId('applicationData.customerWithContacts.customer.phone')
     .fill(vastaava.phonenumber);
-  await page.locator('#hds-combobox-11-toggle-button').click();
+  await page
+    .getByRole('button', { name: /Yhteyshenkilöt/ })
+    .first()
+    .click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
-  await page.locator('#hds-combobox-11-toggle-button').click();
+  await page
+    .getByRole('button', { name: /Yhteyshenkilöt/ })
+    .first()
+    .click();
   await page.locator('[id="applicationData\\.contractorWithContacts\\.customer\\.name"]').click();
   await page
     .locator('[id="applicationData\\.contractorWithContacts\\.customer\\.name"]')
@@ -105,12 +111,12 @@ test('Johtoselvityshakemus_peruminen', async ({ page }) => {
     .fill(suorittaja.phonenumber);
   await page
     .getByRole('region', { name: 'Työn suorittajan tiedot' })
-    .getByLabel('Yhteyshenkilöt: Sulje ja avaa')
+    .getByRole('button', { name: /Yhteyshenkilöt/ })
     .click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page
     .getByRole('region', { name: 'Työn suorittajan tiedot' })
-    .getByLabel('Yhteyshenkilöt: Sulje ja avaa')
+    .getByRole('button', { name: /Yhteyshenkilöt/ })
     .click();
   await expect(page.getByRole('button', { name: 'Peru hakemus' })).toBeVisible();
   await page.getByRole('button', { name: 'Seuraava' }).waitFor();

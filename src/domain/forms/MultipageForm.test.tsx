@@ -108,14 +108,12 @@ test('form pages can be navigated', async () => {
     </MultipageForm>,
   );
 
-  const stepperStepTwoButton = screen.getByTestId('hds-stepper-step-1');
-  await user.click(stepperStepTwoButton);
+  await user.click(screen.getByRole('button', { name: /Title 2/ }));
   expect(handleSave).toHaveBeenCalledTimes(1);
   expect(screen.getByText('Vaihe 2/2: Title 2')).toBeDefined();
   expect(screen.getByText('Page 2')).toBeDefined();
 
-  const stepperStepOneButton = screen.getByTestId('hds-stepper-step-0');
-  await user.click(stepperStepOneButton);
+  await user.click(screen.getByRole('button', { name: /Title 1/ }));
   expect(handleSave).toHaveBeenCalledTimes(2);
   expect(screen.getByText('Vaihe 1/2: Title 1')).toBeDefined();
   expect(screen.getByText('Page 1')).toBeDefined();

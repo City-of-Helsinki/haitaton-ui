@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Flex } from '@chakra-ui/react';
-import { Button, Notification, Tag, TextInput } from 'hds-react';
+import { Button, ButtonVariant, Notification, NotificationSize, Tag, TextInput } from 'hds-react';
 import { uniq } from 'lodash';
 
 type Props = {
@@ -80,13 +80,17 @@ export default function TagInput({
             onPointerLeaveCapture={() => {}}
             crossOrigin=""
           />
-          <Button variant="secondary" onClick={addTag} data-testid={`${id}-addButton`}>
+          <Button
+            variant={ButtonVariant.Secondary}
+            onClick={addTag}
+            data-testid={`${id}-addButton`}
+          >
             {t('common:increment')}
           </Button>
         </Flex>
         {showError && (
           <Box marginBottom="var(--spacing-s)">
-            <Notification label={errorText} type="error" size="small">
+            <Notification label={errorText} type="error" size={NotificationSize.Small}>
               {errorText}
             </Notification>
           </Box>
@@ -95,9 +99,8 @@ export default function TagInput({
       <Flex gap="var(--spacing-2-xs)" wrap="wrap">
         {uniq(tags).map((tag) => (
           <Tag
-            deleteButtonAriaLabel={
-              tagDeleteButtonAriaLabel ? tagDeleteButtonAriaLabel(tag) : undefined
-            }
+            aria-label={tagDeleteButtonAriaLabel ? tagDeleteButtonAriaLabel(tag) : undefined}
+            placeholder={placeholder}
             onDelete={() => {
               deleteTag(tag);
             }}

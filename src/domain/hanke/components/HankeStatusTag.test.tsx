@@ -44,12 +44,11 @@ function TestComponent({ changedStatus }: Readonly<{ changedStatus: HANKE_STATUS
 
 test('Should change background color from default to green when status changes from DRAFT to COMPLETED', async () => {
   render(<TestComponent changedStatus="COMPLETED" />);
-  const tag = screen.getByTestId('hanke-status-tag');
   const button = screen.getByRole('button');
 
-  expect(tag).not.toHaveClass('bgGreen');
+  expect(screen.getByTestId('hanke-status-tag')).not.toHaveClass('bgGreen');
 
   fireEvent.click(button);
 
-  expect(tag).toHaveClass('bgGreen');
+  expect(screen.getByTestId('hanke-status-tag')).toHaveClass('bgGreen');
 });

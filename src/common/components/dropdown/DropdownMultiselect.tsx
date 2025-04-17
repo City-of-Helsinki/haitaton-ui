@@ -1,36 +1,24 @@
-import { ReactNode } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Combobox } from 'hds-react';
+import { Select, SelectProps, SupportedLanguage, defaultFilter } from 'hds-react';
 import { useTranslation } from 'react-i18next';
-
-import { TooltipProps } from '../../types/tooltip';
 import { getInputErrorText } from '../../utils/form';
-
-type Option<T> = { value: T; label: string };
 
 type PropTypes<T> = {
   name: string;
   id: string;
   rules?: { required: boolean };
-  defaultValue?: Option<T>[];
   label: string;
   helperText?: string;
-  options: Array<Option<T>>;
   errorMsg?: string;
-  tooltip?: TooltipProps;
-  icon?: ReactNode;
-  clearable?: boolean;
   placeholder?: string;
-  required?: boolean;
   mapValueToLabel: (value: T) => string;
   transformValue?: (value: T) => T;
-};
+} & SelectProps;
 
 function DropdownMultiselect<T>({
   name,
   rules,
   options,
-  defaultValue,
   label,
   errorMsg,
   tooltip,
@@ -42,41 +30,67 @@ function DropdownMultiselect<T>({
   mapValueToLabel,
   transformValue,
 }: Readonly<PropTypes<T>>) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { control } = useFormContext();
 
   return (
     <Controller
       name={name}
       control={control}
-      defaultValue={defaultValue}
       rules={rules}
-      render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
+      render={({ field: { onChange, onBlur, value, ref }, fieldState: { error } }) => {
         return (
-          <Combobox<Option<T>>
+          <Select
+            ref={ref}
+            multiSelect
             options={options}
-            label={label}
-            helper={helperText}
+            texts={{
+              label,
+              assistive: helperText,
+              placeholder,
+              error: errorMsg ?? getInputErrorText(t, error),
+              dropdownButtonAriaLabel: t('common:components:multiselect:toggle'),
+              filterClearButtonAriaLabel: t('common:components:multiselect:clear'),
+              tagRemoveSelectionAriaLabel: t('common:components:multiselect:removeSelected'),
+              language: i18n.language as SupportedLanguage,
+            }}
+            filter={defaultFilter}
             invalid={Boolean(error)}
-            defaultValue={defaultValue}
-            value={value?.map((v: T) => ({
-              value: transformValue ? transformValue(v) : v,
-              label: mapValueToLabel(v),
-            }))}
-            onChange={(option: Option<T>[]) => onChange(option.map((o) => o.value))}
-            toggleButtonAriaLabel={t('common:components:multiselect:toggle')}
-            selectedItemRemoveButtonAriaLabel={t('common:components:multiselect:removeSelected')}
-            clearButtonAriaLabel={t('common:components:multiselect:clear')}
-            multiselect
+            value={value?.map((v: T) => {
+              const updatedValue = transformValue ? transformValue(v) : v;
+              // If the value is not a string, stringify it
+              // to ensure it can be used as a value in the select
+              const stringifiedValue =
+                typeof updatedValue !== 'string' ? JSON.stringify(updatedValue) : updatedValue;
+              return {
+                value: stringifiedValue,
+                label: mapValueToLabel(v),
+                selected: true,
+              };
+            })}
+            onChange={(selectedOptions) => {
+              onChange(
+                selectedOptions.map((o) => {
+                  let val = o.value;
+                  // If the value is a JSON string,
+                  // parse it to get the original object value
+                  try {
+                    val = JSON.parse(o.value);
+                    // eslint-disable-next-line no-empty
+                  } catch (_) {}
+                  return val;
+                }),
+              );
+            }}
             icon={icon}
             clearable={clearable}
             onBlur={onBlur}
-            error={errorMsg ?? getInputErrorText(t, error)}
-            placeholder={placeholder}
-            tooltipButtonLabel={tooltip?.tooltipButtonLabel}
-            tooltipLabel={tooltip?.tooltipLabel}
-            tooltipText={tooltip?.tooltipText}
+            tooltip={tooltip}
             required={required}
+            theme={{
+              '--tag-background-color': 'var(--color-black-10)',
+            }}
+            style={{ maxWidth: 'none' }}
           />
         );
       }}

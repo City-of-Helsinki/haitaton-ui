@@ -1,10 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import {
-  Button,
+  ButtonVariant,
   IconCross,
   IconEnvelope,
   IconSaveDiskette,
   Notification,
+  NotificationSize,
   StepState,
 } from 'hds-react';
 import { FormProvider, useForm, FieldPath } from 'react-hook-form';
@@ -46,6 +47,7 @@ import { usePermissionsForHanke } from '../hanke/hankeUsers/hooks/useUserRightsF
 import useSaveApplication from '../application/hooks/useSaveApplication';
 import useNavigateToApplicationView from '../application/hooks/useNavigateToApplicationView';
 import ApplicationSendDialog from '../application/components/ApplicationSendDialog';
+import Button from '../../common/components/button/Button';
 
 type Props = {
   hankeData?: HankeData;
@@ -410,8 +412,8 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
               />
 
               <Button
-                variant="secondary"
-                iconLeft={<IconSaveDiskette aria-hidden="true" />}
+                variant={ButtonVariant.Secondary}
+                iconStart={<IconSaveDiskette />}
                 data-testid="save-form-btn"
                 onClick={handleSaveAndQuit}
                 isLoading={saveAndQuitIsLoading}
@@ -420,18 +422,13 @@ const JohtoselvitysContainer: React.FC<React.PropsWithChildren<Props>> = ({
                 {t('hankeForm:saveDraftButton')}
               </Button>
               {showSendButton && (
-                <Button
-                  type="submit"
-                  iconLeft={<IconEnvelope aria-hidden="true" />}
-                  loadingText={t('common:buttons:sendingText')}
-                  disabled={disableSendButton}
-                >
+                <Button type="submit" iconStart={<IconEnvelope />} disabled={disableSendButton}>
                   {t('hakemus:buttons:sendApplication')}
                 </Button>
               )}
               {disableSendButton && (
                 <Notification
-                  size="small"
+                  size={NotificationSize.Small}
                   style={{ marginTop: 'var(--spacing-xs)' }}
                   type="info"
                   label={t('hakemus:notifications:sendApplicationDisabled')}

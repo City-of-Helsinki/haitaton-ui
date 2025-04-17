@@ -1,6 +1,7 @@
 import { Trans, useTranslation } from 'react-i18next';
 import {
-  Button,
+  ButtonPresetTheme,
+  ButtonVariant,
   IconCheckCircleFill,
   IconClock,
   IconCross,
@@ -44,6 +45,7 @@ import UserDeleteInfoErrorNotification from './UserDeleteInfoErrorNotification';
 import { useEffect, useState } from 'react';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
 import { useFeatureFlags } from '../../../common/components/featureFlags/FeatureFlagsContext';
+import Button from '../../../common/components/button/Button';
 
 type Props = {
   user: HankeUser;
@@ -134,7 +136,12 @@ function EditUserView({
         features.hanke || (rightLevel !== 'KAIKKIEN_MUOKKAUS' && rightLevel !== 'HANKEMUOKKAUS'),
     )
     .map((rightLevel) => {
-      return { label: t(`hankeUsers:accessRightLevels:${rightLevel}`), value: rightLevel };
+      return {
+        label: t(`hankeUsers:accessRightLevels:${rightLevel}`),
+        value: rightLevel,
+        disabled:
+          rightLevel === 'KAIKKI_OIKEUDET' && signedInUser?.kayttooikeustaso !== 'KAIKKI_OIKEUDET',
+      };
     });
 
   const isOnlyWithAllRights: boolean =
@@ -282,8 +289,8 @@ function EditUserView({
             <Flex marginTop="var(--spacing-xl)" gap="var(--spacing-s)" flexWrap="wrap">
               {!tunnistautunut && (
                 <Button
-                  iconLeft={<IconEnvelope />}
-                  theme="coat"
+                  iconStart={<IconEnvelope />}
+                  theme={ButtonPresetTheme.Coat}
                   onClick={() => sendInvitation(user)}
                   isLoading={resendInvitationMutation.isLoading}
                   disabled={linksSentTo.current.includes(id)}
@@ -293,8 +300,8 @@ function EditUserView({
               )}
               {showDeleteButton && (
                 <Button
-                  iconLeft={<IconTrash />}
-                  variant="danger"
+                  iconStart={<IconTrash />}
+                  variant={ButtonVariant.Danger}
                   isLoading={deleteInfoQueryResult.isLoading}
                   onClick={() => setDeletedUser(user)}
                 >
@@ -345,10 +352,6 @@ function EditUserView({
                 options={accessRightLevelOptions}
                 required
                 disabled={isDropdownDisabled}
-                isOptionDisabled={(option) =>
-                  option.value === 'KAIKKI_OIKEUDET' &&
-                  signedInUser?.kayttooikeustaso !== 'KAIKKI_OIKEUDET'
-                }
               />
             </ResponsiveGrid>
 
@@ -358,15 +361,15 @@ function EditUserView({
               gap="var(--spacing-s)"
             >
               <Button
-                iconLeft={<IconSaveDisketteFill />}
+                iconStart={<IconSaveDisketteFill />}
                 isLoading={saveButtonIsLoading}
                 type="submit"
               >
                 {t('form:buttons:saveChanges')}
               </Button>
               <Button
-                iconLeft={<IconCross />}
-                variant="secondary"
+                iconStart={<IconCross />}
+                variant={ButtonVariant.Secondary}
                 onClick={navigateToHankeUsersView}
               >
                 {t('common:confirmationDialog:cancelButton')}

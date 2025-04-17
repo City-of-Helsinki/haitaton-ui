@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { $enum } from 'ts-enum-util';
-import { Accordion, Button, Fieldset, IconPlusCircle } from 'hds-react';
+import { Accordion, Button, ButtonVariant, Fieldset, IconPlusCircle } from 'hds-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { CONTACT_FORMFIELD, FORMFIELD, FormProps, HankeDataFormState } from './types';
 import {
@@ -255,8 +255,9 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
         })}
 
         <Button
-          variant="supplementary"
-          iconLeft={<IconPlusCircle aria-hidden />}
+          className="haitaton-button-icon-size-initial"
+          variant={ButtonVariant.Supplementary}
+          iconStart={<IconPlusCircle />}
           onClick={() => appendOmistaja(getEmptyContact())}
         >
           {t('form:yhteystiedot:titles:lisaaOmistaja')}
@@ -301,8 +302,9 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
         })}
 
         <Button
-          variant="supplementary"
-          iconLeft={<IconPlusCircle aria-hidden />}
+          className="haitaton-button-icon-size-initial"
+          variant={ButtonVariant.Supplementary}
+          iconStart={<IconPlusCircle />}
           onClick={() => appendRakennuttaja(getEmptyContact())}
         >
           {t('form:yhteystiedot:titles:lisaaRakennuttaja')}
@@ -347,8 +349,9 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
         })}
 
         <Button
-          variant="supplementary"
-          iconLeft={<IconPlusCircle aria-hidden />}
+          className="haitaton-button-icon-size-initial"
+          variant={ButtonVariant.Supplementary}
+          iconStart={<IconPlusCircle />}
           onClick={() => appendToteuttaja(getEmptyContact())}
         >
           {t('form:yhteystiedot:titles:lisaaToteuttaja')}
@@ -425,8 +428,9 @@ const HankeFormYhteystiedot: React.FC<Readonly<FormProps>> = ({ hanke }) => {
         })}
 
         <Button
-          variant="supplementary"
-          iconLeft={<IconPlusCircle aria-hidden />}
+          className="haitaton-button-icon-size-initial"
+          variant={ButtonVariant.Supplementary}
+          iconStart={<IconPlusCircle />}
           onClick={() => appendMuuTaho(getEmptyOtherContact())}
         >
           {t('form:yhteystiedot:titles:lisaaMuuTaho')}

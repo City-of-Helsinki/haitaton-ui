@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import {
-  Button,
+  ButtonPresetTheme,
   IconEnvelope,
   IconQuestionCircle,
   Link,
-  LoadingSpinner,
   Notification,
+  NotificationSize,
 } from 'hds-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { AlluStatus, Application } from '../../types/application';
@@ -18,6 +18,7 @@ import { isContactIn } from '../../utils';
 import { SignedInUser } from '../../../hanke/hankeUsers/hankeUser';
 import { Box } from '@chakra-ui/react';
 import useTaydennysSendNotification from '../../taydennys/hooks/useTaydennysSendNotification';
+import Button from '../../../../common/components/button/Button';
 
 const validationSchemas = {
   CABLE_REPORT: johtoselvitysValidationSchema,
@@ -66,27 +67,20 @@ export default function useSendTaydennys(
     }
   }
 
-  const sendButtonIcon = sendTaydennysMutation.isLoading ? (
-    <LoadingSpinner small />
-  ) : (
-    <IconEnvelope />
-  );
-
   const sendTaydennysButton = showSendTaydennysButton ? (
     <>
       <Button
-        theme="coat"
-        iconLeft={sendButtonIcon}
+        theme={ButtonPresetTheme.Coat}
+        iconStart={<IconEnvelope />}
         onClick={openSendTaydennysDialog}
-        disabled={sendTaydennysMutation.isLoading}
+        isLoading={sendTaydennysMutation.isLoading}
+        loadingText={t('common:buttons:sendingText')}
       >
-        {sendTaydennysMutation.isLoading
-          ? t('common:buttons:sendingText')
-          : t('taydennys:buttons:sendTaydennys')}
+        {t('taydennys:buttons:sendTaydennys')}
       </Button>
       {!isContact && (
         <Notification
-          size="small"
+          size={NotificationSize.Small}
           style={{ marginTop: 'var(--spacing-xs)' }}
           type="info"
           label={t('hakemus:notifications:sendApplicationDisabled')}
@@ -107,7 +101,7 @@ export default function useSendTaydennys(
             <Box paddingTop="var(--spacing-s)">
               <Notification
                 type="error"
-                size="small"
+                size={NotificationSize.Small}
                 label={t('taydennys:notifications:sendErrorLabel')}
               >
                 <Trans i18nKey="taydennys:notifications:sendErrorText">

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Accordion, Button, Fieldset, IconPlusCircle } from 'hds-react';
+import { Accordion, Button, ButtonVariant, Fieldset, IconPlusCircle, Tooltip } from 'hds-react';
 import { $enum } from 'ts-enum-util';
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
@@ -226,6 +226,15 @@ export default function ApplicationContacts({
   const isPropertyDeveloper = Boolean(propertyDeveloper);
   const isRepresentative = Boolean(representative);
 
+  const formContactTooltip = (
+    <Tooltip
+      tooltipLabel={t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo')}
+      buttonLabel={t('hankeForm:toolTips:tipOpenLabel')}
+    >
+      {t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo')}
+    </Tooltip>
+  );
+
   function addCustomerWithContacts(customerType: CustomerType) {
     setValue(`applicationData.${customerType}`, getEmptyCustomerWithContacts());
   }
@@ -288,11 +297,7 @@ export default function ApplicationContacts({
           addYhteyshenkiloForYhteystieto('customerWithContacts', user)
         }
         required
-        tooltip={{
-          tooltipButtonLabel: t('hankeForm:toolTips:tipOpenLabel'),
-          tooltipLabel: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
-          tooltipText: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
-        }}
+        tooltip={formContactTooltip}
       >
         <CustomerFields
           customerType="customerWithContacts"
@@ -320,11 +325,7 @@ export default function ApplicationContacts({
             addYhteyshenkiloForYhteystieto('contractorWithContacts', user)
           }
           required
-          tooltip={{
-            tooltipButtonLabel: t('hankeForm:toolTips:tipOpenLabel'),
-            tooltipLabel: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
-            tooltipText: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
-          }}
+          tooltip={formContactTooltip}
         >
           <CustomerFields customerType="contractorWithContacts" hankeUsers={hankeUsers} />
         </FormContact>
@@ -351,11 +352,7 @@ export default function ApplicationContacts({
               addYhteyshenkiloForYhteystieto('propertyDeveloperWithContacts', user)
             }
             required
-            tooltip={{
-              tooltipButtonLabel: t('hankeForm:toolTips:tipOpenLabel'),
-              tooltipLabel: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
-              tooltipText: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
-            }}
+            tooltip={formContactTooltip}
           >
             <CustomerFields customerType="propertyDeveloperWithContacts" hankeUsers={hankeUsers} />
           </FormContact>
@@ -363,8 +360,9 @@ export default function ApplicationContacts({
 
         {!isPropertyDeveloper && (
           <Button
-            variant="supplementary"
-            iconLeft={<IconPlusCircle aria-hidden="true" />}
+            className="haitaton-button-icon-size-initial"
+            variant={ButtonVariant.Supplementary}
+            iconStart={<IconPlusCircle />}
             onClick={() => addCustomerWithContacts('propertyDeveloperWithContacts')}
           >
             {t('form:yhteystiedot:titles:lisaaRakennuttaja')}
@@ -393,11 +391,7 @@ export default function ApplicationContacts({
               addYhteyshenkiloForYhteystieto('representativeWithContacts', user)
             }
             required
-            tooltip={{
-              tooltipButtonLabel: t('hankeForm:toolTips:tipOpenLabel'),
-              tooltipLabel: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
-              tooltipText: t('form:yhteystiedot:tooltips:hakemusYhteyshenkilo'),
-            }}
+            tooltip={formContactTooltip}
           >
             <CustomerFields customerType="representativeWithContacts" hankeUsers={hankeUsers} />
           </FormContact>
@@ -405,8 +399,9 @@ export default function ApplicationContacts({
 
         {!isRepresentative && (
           <Button
-            variant="supplementary"
-            iconLeft={<IconPlusCircle aria-hidden="true" />}
+            className="haitaton-button-icon-size-initial"
+            variant={ButtonVariant.Supplementary}
+            iconStart={<IconPlusCircle />}
             onClick={() => addCustomerWithContacts('representativeWithContacts')}
           >
             {t('form:yhteystiedot:titles:addRepresentative')}
