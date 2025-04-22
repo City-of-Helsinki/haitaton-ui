@@ -125,7 +125,7 @@ describe('Sidebar', () => {
         const { user } = setup(application);
 
         expect(screen.getByText('Täydennykset')).toBeInTheDocument();
-        await user.click(screen.getByText('Hankealue 2'));
+        await user.click(screen.getByText('Hankealue 1'));
         expect(screen.getByText('Työalue 1 (159 m²)')).toBeInTheDocument();
         expect(screen.getByText('Työalue 2 (31 m²)')).toBeInTheDocument();
         expect(screen.getByText('Työalue 3 (62 m²)')).toBeInTheDocument();
@@ -163,7 +163,7 @@ describe('Sidebar', () => {
 
         expect(screen.getByText('Muutokset')).toBeInTheDocument();
 
-        await user.click(screen.getByText('Hankealue 2'));
+        await user.click(screen.getByText('Hankealue 1'));
 
         expect(screen.getByText('Työalue 1 (159 m²)')).toBeInTheDocument();
         expect(screen.getByText('Työalue 2 (31 m²)')).toBeInTheDocument();
