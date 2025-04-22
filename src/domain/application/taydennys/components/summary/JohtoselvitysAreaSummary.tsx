@@ -45,7 +45,7 @@ export default function JohtoselvitysAreaSummary({
     return null;
   }
 
-  const geometries: Geometry[] = getAreaGeometries(areasChanged);
+  const geometries: Geometry[] = getAreaGeometries(data.areas);
   const totalSurfaceArea = getTotalSurfaceArea(geometries);
 
   return (
@@ -78,42 +78,22 @@ export default function JohtoselvitysAreaSummary({
         )}
         {(areasChanged.length > 0 || areasRemoved.length > 0) && (
           <>
-            {areasChanged.length > 0 && (
-              <>
-                <SectionItemTitle>{t('form:labels:kokonaisAla')}</SectionItemTitle>
-                <SectionItemContent>
-                  <p>{totalSurfaceArea} m²</p>
-                </SectionItemContent>
-              </>
-            )}
+            <SectionItemTitle>{t('form:labels:kokonaisAla')}</SectionItemTitle>
+            <SectionItemContent>
+              <p>{totalSurfaceArea} m²</p>
+            </SectionItemContent>
             <SectionItemTitle>{t('form:labels:areas')}</SectionItemTitle>
             <SectionItemContent>
-              {taydennysAreas.map((area, index) => {
-                if (!muutokset.includes(`areas[${index}]`)) {
-                  return null;
-                }
-                return (
-                  <AreaInformation
-                    area={area}
-                    areaName={getAreaDefaultName(t, index, originalData.areas.length)}
-                    key={index}
-                  />
-                );
-              })}
-              {areasRemoved.length === originalData.areas.length && (
+              {areasChanged.length > 0 &&
+                areasChanged.map((area, index) => {
+                  const name = getAreaDefaultName(t, index, areasChanged.length);
+                  return <AreaInformation area={area} areaName={name} key={index} />;
+                })}
+              {areasRemoved.length > 0 && (
                 <SectionItemContentRemoved>
                   {areasRemoved.map((area, index) => {
-                    return (
-                      <AreaInformation
-                        area={area}
-                        areaName={getAreaDefaultName(
-                          t,
-                          originalData.areas.indexOf(area),
-                          originalData.areas.length,
-                        )}
-                        key={index}
-                      />
-                    );
+                    const name = getAreaDefaultName(t, index, areasRemoved.length);
+                    return <AreaInformation area={area} areaName={name} key={index} />;
                   })}
                 </SectionItemContentRemoved>
               )}

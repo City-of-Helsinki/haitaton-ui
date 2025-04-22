@@ -17,7 +17,8 @@ describe('Kaivuilmoitus taydennys HaittojenhallintaSummary', () => {
     const { container } = render(
       <KaivuilmoitusHaittojenhallintaSummary
         hankealueet={testHanke.alueet!}
-        kaivuilmoitusAlueet={mockData.areas}
+        data={mockData}
+        originalData={mockData}
         muutokset={[]}
       />,
     );
@@ -29,15 +30,19 @@ describe('Kaivuilmoitus taydennys HaittojenhallintaSummary', () => {
     render(
       <KaivuilmoitusHaittojenhallintaSummary
         hankealueet={testHanke.alueet!}
-        kaivuilmoitusAlueet={[
-          {
-            ...mockData.areas[0],
-            haittojenhallintasuunnitelma: {
-              PYORALIIKENNE: 'Pyöräliikenteen haitat',
-              MUUT: 'Muut haitat',
+        data={{
+          ...mockData,
+          areas: [
+            {
+              ...mockData.areas[0],
+              haittojenhallintasuunnitelma: {
+                PYORALIIKENNE: 'Pyöräliikenteen haitat',
+                MUUT: 'Muut haitat',
+              },
             },
-          },
-        ]}
+          ],
+        }}
+        originalData={mockData}
         muutokset={[
           'areas[0].haittojenhallintasuunnitelma[PYORALIIKENNE]',
           'areas[0].haittojenhallintasuunnitelma[MUUT]',
@@ -45,7 +50,7 @@ describe('Kaivuilmoitus taydennys HaittojenhallintaSummary', () => {
       />,
     );
 
-    expect(screen.getByText('Työalueet (Hankealue 2)')).toBeInTheDocument();
+    expect(screen.getByText('Työalueet (Hankealue 1)')).toBeInTheDocument();
     expect(screen.getByText('Pyöräliikenteen merkittävyys')).toBeInTheDocument();
     expect(screen.getByText('Pyöräliikenteen haitat')).toBeInTheDocument();
     expect(screen.getByText('Muut haittojenhallintatoimet')).toBeInTheDocument();

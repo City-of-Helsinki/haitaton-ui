@@ -1,4 +1,4 @@
-import { cloneDeep, findKey } from 'lodash';
+import { cloneDeep } from 'lodash';
 import { Feature } from 'ol';
 import Geometry from 'ol/geom/Geometry';
 import Polygon from 'ol/geom/Polygon';
@@ -7,27 +7,17 @@ import {
   ApplicationArea,
   ApplicationGeometry,
   ApplicationUpdateCustomerWithContacts,
-  CustomerType,
-  isCustomerWithContacts,
   JohtoselvitysData,
   JohtoselvitysUpdateData,
 } from '../application/types/application';
 import { JohtoselvitysArea, JohtoselvitysFormValues } from './types';
 import { JohtoselvitysTaydennysFormValues } from '../johtoselvitysTaydennys/types';
-
-/**
- * Find the contact key that has orderer field true
- */
-export function findOrdererKey(data: JohtoselvitysData): CustomerType {
-  const ordererRole = findKey(data, (value) => {
-    if (isCustomerWithContacts(value)) {
-      return value.contacts[0]?.orderer;
-    }
-    return false;
-  });
-
-  return ordererRole as CustomerType;
-}
+import { HankeAlue } from '../types/hanke';
+import {
+  featureContainsApplicationGeometry,
+  getFeatureFromHankeGeometry,
+  olFeatureToGeoJSON,
+} from '../map/utils';
 
 export function getAreaGeometry(area: JohtoselvitysArea): Geometry {
   if (area.feature) {
@@ -58,20 +48,19 @@ export function convertFormStateToJohtoselvitysUpdateData(
 
   const applicationData: JohtoselvitysUpdateData = cloneDeep(formState.applicationData);
 
-  const updatedAreas: ApplicationArea[] = formState.applicationData.areas.map(
-    function mapToApplicationArea({ geometry, feature }): ApplicationArea {
-      const coordinates = feature
-        ? (feature.getGeometry() as Polygon).getCoordinates()
-        : geometry.coordinates;
+  applicationData.areas = formState.applicationData.areas.map(function mapToApplicationArea({
+    geometry,
+    feature,
+  }): ApplicationArea {
+    const coordinates = feature
+      ? (feature.getGeometry() as Polygon).getCoordinates()
+      : geometry.coordinates;
 
-      return {
-        name: '',
-        geometry: new ApplicationGeometry(coordinates),
-      };
-    },
-  );
-
-  applicationData.areas = updatedAreas;
+    return {
+      name: '',
+      geometry: new ApplicationGeometry(coordinates),
+    };
+  });
 
   applicationData.customerWithContacts = ApplicationUpdateCustomerWithContacts.Create(
     formState.applicationData.customerWithContacts,
@@ -105,9 +94,48 @@ export function convertApplicationDataToFormState(
 
   const data = cloneDeep(application);
 
-  const updatedAreas = application.applicationData.areas.map(mapToJohtoselvitysArea);
-
-  data.applicationData.areas = updatedAreas;
+  data.applicationData.areas = application.applicationData.areas.map(mapToJohtoselvitysArea);
 
   return data;
 }
+
+function getHankealueContainingJohtoselvitysArea(
+  johtoselvitysArea: JohtoselvitysArea,
+  hankeAreas: HankeAlue[],
+): HankeAlue | undefined {
+  return hankeAreas.find((area) => {
+    const olFeature = area.geometriat && getFeatureFromHankeGeometry(area.geometriat);
+    const geoJsonFeature = olFeatureToGeoJSON(olFeature);
+    return (
+      geoJsonFeature &&
+      featureContainsApplicationGeometry(geoJsonFeature, johtoselvitysArea.geometry)
+    );
+  });
+}
+
+/**
+ * Get johtoselvitys areas grouped by hanke area. This can be used in places where johtoselvitys areas need to be grouped by the hanke area where they are located.
+ *
+ * @param applicationAreas
+ * @param hankeAreas
+ */
+export function getAreasGroupedByHankeArea(
+  applicationAreas: JohtoselvitysArea[],
+  hankeAreas: HankeAlue[],
+): Record<string, JohtoselvitysArea[]> {
+  const areasByHanke = {} as Record<string, JohtoselvitysArea[]>;
+  applicationAreas.forEach((area) => {
+    const hankeArea = getHankealueContainingJohtoselvitysArea(area, hankeAreas);
+    const id = hankeArea && hankeArea.id?.toString();
+    if (id) {
+      if (!areasByHanke[id]) {
+        areasByHanke[id] = [];
+      }
+      areasByHanke[id].push(area);
+    }
+  });
+  return areasByHanke;
+}
+
+export const length = (rec: Record<string, ApplicationArea[]>) => Object.keys(rec).length;
+export const isEmpty = (rec: Record<string, ApplicationArea[]>) => length(rec) === 0;

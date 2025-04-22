@@ -68,7 +68,8 @@ export default function ReviewAndSend({
           />
           <TaydennysHaittojenhallintaSummary
             hankealueet={hankealueet}
-            kaivuilmoitusAlueet={taydennys.applicationData.areas}
+            data={taydennys.applicationData}
+            originalData={originalApplication.applicationData}
             muutokset={muutokset}
           />
           <TaydennysContactsSummary
