@@ -48,10 +48,9 @@ import Dropdown from '../../common/components/dropdown/Dropdown';
 import DropdownMultiselect from '../../common/components/dropdown/DropdownMultiselect';
 import TextArea from '../../common/components/textArea/TextArea';
 import DrawProvider from '../../common/components/map/modules/draw/DrawProvider';
-import { formatFeaturesToHankeGeoJSON, getTotalSurfaceArea } from '../map/utils';
+import { formatFeaturesToHankeGeoJSON, getTotalSurfaceArea, featureContains } from '../map/utils';
 import TyoalueTable from './components/TyoalueTable';
 import AreaSelectDialog from './components/AreaSelectDialog';
-import booleanContains from '@turf/boolean-contains';
 import { getAreaDefaultName } from '../application/utils';
 import HaittaIndexes from '../common/haittaIndexes/HaittaIndexes';
 import useHaittaIndexes from '../hanke/hooks/useHaittaIndexes';
@@ -287,7 +286,7 @@ export default function Areas({ hankeData, hankkeenHakemukset, originalHakemus }
     // Check if the new tyoalue is contained in any of the existing hanke areas
     const hankeAlueetContainingNewArea = hankeData.alueet.filter((alue) => {
       const hankeAlueFeature = alue.geometriat?.featureCollection.features[0];
-      return hankeAlueFeature && booleanContains(hankeAlueFeature, newAreaPolygon);
+      return hankeAlueFeature && featureContains(hankeAlueFeature, newAreaPolygon);
     });
     setHankeAreasContainingNewArea(hankeAlueetContainingNewArea);
 
