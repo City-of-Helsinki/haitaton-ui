@@ -188,7 +188,7 @@ export default function ApplicationMap({
         // If mofified feature is going over hanke feature, revert back to original geometry
         modifiedFeature.setGeometry(originalFeature.getGeometry());
       } else {
-        setSelectedFeature(modifiedFeature as Feature<Geometry>);
+        setSelectedFeature(modifiedFeature);
       }
     },
     [hankeLayerFilter, setSelectedFeature],

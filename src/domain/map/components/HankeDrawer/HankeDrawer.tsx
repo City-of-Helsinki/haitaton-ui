@@ -134,7 +134,7 @@ const HankeDrawer: React.FC<React.PropsWithChildren<Props>> = ({
         // revert back to original geometry
         modifiedFeature.setGeometry(originalFeature.getGeometry());
       } else {
-        setSelectedFeature(modifiedFeature as Feature<Geometry>);
+        setSelectedFeature(modifiedFeature);
       }
     },
     [hankkeenHakemukset, setSelectedFeature],
