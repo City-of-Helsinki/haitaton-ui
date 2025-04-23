@@ -41,7 +41,7 @@ const AreaSummary: React.FC<Props> = ({ formData }) => {
       <SectionItemContent>
         {areas.map((area, index) => {
           const name = getAreaDefaultName(t, index, areas.length);
-          return <AreaInformation area={area} areaName={name} key={index} />;
+          return <AreaInformation area={area} areaName={name} key={name} />;
         })}
       </SectionItemContent>
     </FormSummarySection>

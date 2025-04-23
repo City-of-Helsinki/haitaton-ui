@@ -126,7 +126,7 @@ export function getAreasGroupedByHankeArea(
   const areasByHanke = {} as Record<string, JohtoselvitysArea[]>;
   applicationAreas.forEach((area) => {
     const hankeArea = getHankealueContainingJohtoselvitysArea(area, hankeAreas);
-    const id = hankeArea && hankeArea.id?.toString();
+    const id = hankeArea?.id?.toString();
     if (id) {
       if (!areasByHanke[id]) {
         areasByHanke[id] = [];

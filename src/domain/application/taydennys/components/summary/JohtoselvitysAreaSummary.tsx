@@ -87,13 +87,13 @@ export default function JohtoselvitysAreaSummary({
               {areasChanged.length > 0 &&
                 areasChanged.map((area, index) => {
                   const name = getAreaDefaultName(t, index, areasChanged.length);
-                  return <AreaInformation area={area} areaName={name} key={index} />;
+                  return <AreaInformation area={area} areaName={name} key={name} />;
                 })}
               {areasRemoved.length > 0 && (
                 <SectionItemContentRemoved>
                   {areasRemoved.map((area, index) => {
                     const name = getAreaDefaultName(t, index, areasRemoved.length);
-                    return <AreaInformation area={area} areaName={name} key={index} />;
+                    return <AreaInformation area={area} areaName={name} key={name} />;
                   })}
                 </SectionItemContentRemoved>
               )}
