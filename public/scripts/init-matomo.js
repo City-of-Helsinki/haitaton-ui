@@ -4,7 +4,7 @@ _paq.push(['setExcludedQueryParams', ['state', 'session_state', 'iss', 'code']])
 _paq.push(['trackPageView']);
 _paq.push(['enableLinkTracking']);
 (function () {
-  var u = '//matomo.hel.fi/';
+  var u = 'https://matomo.hel.fi/';
   _paq.push(['setTrackerUrl', u + 'matomo.php']);
   _paq.push(['setSiteId', '78']);
   var d = document,
