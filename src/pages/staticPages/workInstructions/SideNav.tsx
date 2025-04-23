@@ -32,7 +32,7 @@ const SideNav: React.FC = () => {
         <SideNavigation.MainLevel
           index={i}
           id={`card-${i}`}
-          label={`${t(`workInstructions:cards:${i}:header`)}`}
+          label={t(`workInstructions:cards:card${i}:header`)}
           href={`${CARD.path}${i}/${t('routes:CARD:basicLevel')}`}
           onClick={(e) => setActivePage(e, `${CARD.path}${i}/${t('routes:CARD:basicLevel')}`)}
         >
