@@ -488,6 +488,13 @@
       "meta": {
         "title": "Haitaton - Tunnistaudu Haitattomaan"
       }
+    },
+    "COOKIE_CONSENT": {
+      "path": "/evasteasetukset",
+      "headerLabel": "Evästeasetukset",
+      "meta": {
+        "title": "Haitaton - Evästeasetukset"
+      }
     }
   },
   "hanke": {
