@@ -11,6 +11,25 @@ const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { ACCESSIBILITY } = useLocalizedRoutes();
   const { t } = useTranslation();
 
+  const translationComponents = {
+    h2: <h2 className="heading-l" />,
+    h3: <h3 className="heading-m" />,
+    h4: <h4 className="heading-s" />,
+    ul: <ul />,
+    li: <li />,
+    p: <p />,
+    b: <b />,
+    internal: <a className="hds-link hds-link--medium" />,
+    mailto: <a className="hds-link hds-link--medium" />,
+    a: (
+      <a
+        className="hds-link hds-link--medium"
+        aria-label={t('common:components:link:openInExternalDomainAriaLabel')}
+      />
+    ),
+    span: <span />,
+  };
+
   return (
     <Container>
       <PageMeta routeData={ACCESSIBILITY} />
@@ -21,24 +40,7 @@ const AccessibilityPage: React.FC<React.PropsWithChildren<unknown>> = () => {
         <HdsContainer style={{ padding: '2rem', backgroundColor: 'white' }}>
           <Trans
             i18nKey="staticPages:accessibility:content"
-            components={{
-              h2: <h2 className="heading-l" />,
-              h3: <h3 className="heading-m" />,
-              h4: <h4 className="heading-s" />,
-              ul: <ul />,
-              li: <li />,
-              p: <p />,
-              b: <b />,
-              internal: <a className="hds-link hds-link--medium" />,
-              mailto: <a className="hds-link hds-link--medium" />,
-              a: (
-                <a
-                  className="hds-link hds-link--medium"
-                  aria-label={t('common:components:link:openInExternalDomainAriaLabel')}
-                />
-              ),
-              span: <span />,
-            }}
+            components={translationComponents}
           ></Trans>
         </HdsContainer>
       </div>
