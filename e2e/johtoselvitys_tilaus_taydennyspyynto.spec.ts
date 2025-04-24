@@ -194,7 +194,7 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
     await expect(page.getByTestId('application-status-tag')).toContainText('Täydennyspyyntö', {
       timeout: 5000,
     });
-  }).toPass({ intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000], timeout: 120000 });
+  }).toPass({ intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout: 120000 });
 
   await page.locator('[data-testid^=applicationViewLinkIdentifier-]').click();
 
@@ -233,7 +233,7 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
       'Täydennetty käsittelyyn',
       { timeout: 5000 },
     );
-  }).toPass({ intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000], timeout: 120000 });
+  }).toPass({ intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout: 120000 });
 
   // check allu
   await page.goto(testiData.allu_url);
@@ -271,5 +271,5 @@ test('Johtoselvityshakemus_tilaus_taydennyspyynto', async ({ page }) => {
     await expect(page.getByTestId('application-status-tag')).toContainText('Päätös', {
       timeout: 5000,
     });
-  }).toPass({ intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000], timeout: 120000 });
+  }).toPass({ intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout: 120000 });
 });

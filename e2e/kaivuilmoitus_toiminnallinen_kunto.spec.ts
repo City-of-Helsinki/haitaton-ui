@@ -325,16 +325,18 @@ test('Kaivuilmoitus => toiminnallinen kunto ja valmis', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'TYÖJONO' })).toBeVisible({ timeout: 10000 });
 
   // Odotetaan tuloksia
+  await page.goto(testiData.alluTriggerUrl);
   await expect(async () => {
     await page.goto(`${testiData.hankesalkku}${hanketunnus}`);
     await page.getByText('Hakemukset').click();
-    await expect(page.getByTestId('application-card').first()).toContainText('Päätös', {
-      timeout: 2000,
-    });
-    await expect(page.getByTestId('application-card').nth(1)).toContainText('Päätös', {
-      timeout: 2000,
-    });
-  }).toPass({ intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000], timeout: 120000 });
+    await expect(
+      page
+        .getByTestId('application-card')
+        .filter({ hasText: 'Kaivuilmoitus' })
+        .getByTestId('application-status-tag')
+        .filter({ hasText: 'Päätös' }),
+    ).toHaveCount(2, { timeout: 2000 });
+  }).toPass({ intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout: 120000 });
 
   // Aseta toiminnallinen kunto päälle
   await page.getByTestId(`applicationViewLinkIdentifier-${kaivuilmoitus}`).click();
@@ -389,7 +391,7 @@ test('Kaivuilmoitus => toiminnallinen kunto ja valmis', async ({ page }) => {
     await expect(
       page.getByTestId('application-status-tag').getByText('Toiminnallinen kunto'),
     ).toBeVisible({ timeout: 2000 });
-  }).toPass({ intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000], timeout: 120000 });
+  }).toPass({ intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout: 120000 });
 
   // Ilmoita valmiiksi
 
@@ -437,7 +439,7 @@ test('Kaivuilmoitus => toiminnallinen kunto ja valmis', async ({ page }) => {
     await expect(page.getByTestId('application-status-tag').getByText('Työ valmis')).toBeVisible();
     await expect(page.getByRole('link', { name: 'Lataa työ valmis (PDF)' })).toBeVisible();
   }).toPass({
-    intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000],
+    intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 3000, 3000, 3000],
     timeout: 240000,
   });
 });

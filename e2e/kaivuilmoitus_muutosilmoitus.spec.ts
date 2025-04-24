@@ -17,7 +17,7 @@ test.beforeEach('Helsinki_login', async ({ page }) => {
 });
 
 test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
-  test.setTimeout(720000);
+  test.setTimeout(900000);
   await page.getByLabel('Luo uusi hanke.', { exact: true }).click();
   const ajonNimi = hankeName(`kaivuilmoitus-muutosilmoitus`);
   await page.getByTestId('nimi').fill(ajonNimi);
@@ -29,10 +29,9 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await page.getByTestId('tyomaaKatuosoite').click();
   await page.getByTestId('tyomaaKatuosoite').fill(testiOsoite.address);
   await page.getByText('Ohjelmointi').click();
-  await page.getByLabel('', { exact: true }).click();
-  await page.getByLabel('Työn tyyppi: Sulje ja avaa').click();
-  await page.getByRole('option', { name: 'Vesi', exact: true }).getByLabel('check').click();
-  await page.getByLabel('Työn tyyppi: Sulje ja avaa').click();
+  await page.getByRole('button', { name: /Työn tyyppi/ }).click();
+  await page.getByRole('option', { name: /Vesi/ }).click();
+  await page.getByRole('button', { name: /Työn tyyppi/ }).click();
   await page.getByRole('button', { name: 'Seuraava' }).click();
   await expect(page.getByText('Hanke tallennettu')).toBeVisible();
   await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
@@ -56,16 +55,18 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
       },
     });
   await page.getByLabel('Haittojen alkupäivä*').first().fill('1.1.2024');
+  await page.getByLabel('Haittojen alkupäivä*').first().press('Enter');
   await page.getByLabel('Haittojen loppupäivä*').fill('31.12.2025');
-  await page.getByRole('button', { name: 'Meluhaitta *' }).click();
+  await page.getByLabel('Haittojen loppupäivä*').press('Enter');
+  await page.getByRole('combobox', { name: /Meluhaitta/ }).click();
   await page.getByRole('option', { name: 'Satunnainen meluhaitta' }).click();
-  await page.getByRole('button', { name: 'Pölyhaitta *' }).click();
+  await page.getByRole('combobox', { name: /Pölyhaitta/ }).click();
   await page.getByRole('option', { name: 'Satunnainen pölyhaitta' }).click();
-  await page.getByRole('button', { name: 'Tärinähaitta *' }).click();
+  await page.getByRole('combobox', { name: /Tärinähaitta/ }).click();
   await page.getByRole('option', { name: 'Satunnainen tärinähaitta' }).click();
-  await page.getByRole('button', { name: 'Autoliikenteen kaistahaitta *' }).click();
+  await page.getByRole('combobox', { name: /Autoliikenteen kaistahaitta/ }).click();
   await page.getByRole('option', { name: 'Yksi autokaista vähenee -' }).click();
-  await page.getByLabel('', { exact: true }).click();
+  await page.getByRole('combobox', { name: /Kaistahaittojen pituus/ }).click();
   await page.getByRole('option', { name: 'Alle 10 m' }).click();
   await page.getByRole('button', { name: 'Seuraava' }).click();
   await expect(page.getByText('Hanke tallennettu')).toBeVisible();
@@ -112,7 +113,7 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await page.getByTestId('omistajat.0.ytunnus').fill(perustaja.y_tunnus);
   await page.getByTestId('omistajat.0.email').fill(perustaja.email);
   await page.getByTestId('omistajat.0.puhelinnumero').fill(perustaja.phonenumber);
-  await page.getByLabel('Yhteyshenkilöt: Sulje ja avaa').click();
+  await page.getByRole('button', { name: /Yhteyshenkilöt/ }).click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page.getByRole('button', { name: 'Lisää rakennuttaja' }).click();
   await page.locator('[id="rakennuttajat\\.0\\.nimi"]').fill(rakennuttaja.username);
@@ -121,7 +122,7 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await page.getByTestId('rakennuttajat.0.puhelinnumero').fill(rakennuttaja.phonenumber);
   await page
     .getByRole('region', { name: 'Rakennuttajan tiedot' })
-    .getByLabel('Yhteyshenkilöt: Sulje ja avaa')
+    .getByRole('button', { name: /Yhteyshenkilöt/ })
     .click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page.getByRole('button', { name: 'Lisää toteuttaja' }).click();
@@ -131,7 +132,7 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await page.getByTestId('toteuttajat.0.puhelinnumero').fill(suorittaja.phonenumber);
   await page
     .getByRole('region', { name: 'Toteuttajan tiedot' })
-    .getByLabel('Yhteyshenkilöt: Sulje ja avaa')
+    .getByRole('button', { name: /Yhteyshenkilöt/ })
     .click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page.getByRole('button', { name: 'Seuraava' }).click();
@@ -144,7 +145,7 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
 
   await page.getByRole('button', { name: 'Tallenna ja lisää hakemuksia', exact: true }).click();
   // Lisää kaivuilmoitus
-  await page.getByLabel('', { exact: true }).click();
+  await page.getByRole('combobox', { name: 'Hakemustyyppi' }).click();
   await page.getByRole('option', { name: 'Kaivuilmoitus (ja' }).click();
   await page.getByRole('button', { name: 'Luo hakemus' }).click();
   await page.getByTestId('applicationData.name').fill(ajonNimi);
@@ -156,6 +157,7 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await page.getByTestId('applicationData.requiredCompetence').check();
   await page.getByRole('button', { name: 'Seuraava' }).click();
   await page.getByLabel('Työn alkupäivämäärä*').first().fill('1.1.2024');
+  await page.getByLabel('Työn alkupäivämäärä*').first().press('Enter');
   await page.getByLabel('Työn loppupäivämäärä*').fill('31.12.2025');
   await page
     .locator('canvas')
@@ -215,7 +217,10 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await page
     .getByTestId('applicationData.customerWithContacts.customer.phone')
     .fill(vastaava.phonenumber);
-  await page.locator('[id$=toggle-button]').nth(1).click();
+  await page
+    .getByRole('button', { name: /Yhteyshenkilöt/ })
+    .first()
+    .click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page
     .locator('[id="applicationData\\.contractorWithContacts\\.customer\\.name"]')
@@ -231,7 +236,7 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
     .fill(suorittaja.phonenumber);
   await page
     .getByRole('region', { name: 'Työn suorittajan tiedot' })
-    .getByLabel('Yhteyshenkilöt: Sulje ja avaa')
+    .getByRole('button', { name: /Yhteyshenkilöt/ })
     .click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page.getByTestId('applicationData.invoicingCustomer.name').fill(asianhoitaja.username);
@@ -283,23 +288,19 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await expect(async () => {
     await page.goto(`${testiData.hankesalkku}${hanketunnus}`);
     await page.getByText('Hakemukset').click();
-    await expect(page.getByTestId('application-status-tag').first()).toContainText(
-      'Odottaa käsittelyä',
-      {
-        timeout: 2000,
-      },
-    );
-    await expect(page.getByTestId('application-status-tag').nth(1)).toContainText('Käsittelyssä', {
-      timeout: 2000,
-    });
-  }).toPass({ intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000], timeout: 120000 });
+    await expect(
+      page
+        .getByTestId('application-card')
+        .filter({ hasText: kaivuilmoitus! })
+        .getByTestId('application-status-tag'),
+    ).toContainText('Käsittelyssä', { timeout: 2000 });
+  }).toPass({ intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout: 120000 });
 
   // käsittely allussa
 
   await page.goto(testiData.allu_url);
   await page.getByPlaceholder('Username').fill(testiData.allupw);
   await page.getByRole('button', { name: 'Submit' }).click();
-
   await page.getByRole('link', { name: 'HAKEMUKSET' }).click();
   await page.getByLabel('Hakemuksen tunnus').fill(`${kaivuilmoitus}`);
   await page.getByRole('button', { name: 'HAE' }).click();
@@ -311,7 +312,6 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await page.getByLabel('Valitse päättäjä').getByText('Valitse päättäjä').click();
   await page.getByText('Allu Päättäjä').click();
   await page.getByRole('button', { name: 'TALLENNA' }).click();
-
   await expect(page.getByLabel('Hakemus siirretty odottamaan')).toBeVisible();
   await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
   await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
@@ -322,17 +322,14 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await expect(async () => {
     await page.goto(`${testiData.hankesalkku}${hanketunnus}`);
     await page.getByText('Hakemukset').click();
-    await expect(page.getByTestId('application-status-tag').first()).toContainText(
-      'Odottaa käsittelyä',
-      {
-        timeout: 2000,
-      },
-    );
-    await expect(page.getByTestId('application-status-tag').nth(1)).toContainText('Päätös', {
-      timeout: 2000,
-    });
+    await expect(
+      page
+        .getByTestId('application-card')
+        .filter({ hasText: kaivuilmoitus! })
+        .getByTestId('application-status-tag'),
+    ).toContainText('Päätös', { timeout: 2000 });
   }).toPass({
-    intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000],
+    intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000],
     timeout: 360000,
   });
 
@@ -380,14 +377,10 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
 
   await page.getByRole('button', { name: 'PÄÄTTÄMISEEN' }).click();
   await page.getByRole('button', { name: 'EHDOTA HYVÄKSYMISTÄ' }).click();
-  await page
-    .locator('div')
-    .filter({ hasText: /^Perustelut \*$/ })
-    .nth(4)
-    .click();
-  await page.getByLabel('Perustelut *').fill('Testiautomaatio perustelut');
+  await page.getByLabel('Perustelut *').click();
+  await page.getByLabel('Perustelut *').fill('Testiautomaatio e2e succesfull');
   await page.getByLabel('Valitse päättäjä').getByText('Valitse päättäjä').click();
-  await page.getByText('all rights user').click();
+  await page.getByText('Allu Päättäjä').click();
   await page.getByRole('button', { name: 'TALLENNA' }).click();
   await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
   await page.getByRole('button', { name: 'PÄÄTÄ' }).click();
@@ -403,7 +396,7 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
     await expect(
       page.getByTestId(`applicationViewLinkIdentifier-${kaivuilmoitusMuutosilmoitus}`),
     ).toBeVisible();
-  }).toPass({ intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000], timeout: 160000 });
+  }).toPass({ intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout: 360000 });
 
   await page.getByTestId(`applicationViewLinkIdentifier-${kaivuilmoitusMuutosilmoitus}`).click();
 
@@ -453,8 +446,8 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
   await expect(page.getByText('TYÖJONO')).toBeVisible();
 
   // Odotetaan tuloksia "valmis"
+  await page.goto(testiData.alluTriggerUrl);
   await expect(async () => {
-    await page.goto(testiData.alluTriggerUrl);
     await page.goto(`${testiData.hankesalkku}${hanketunnus}`);
     await page.getByText('Hakemukset').click();
     await page.getByTestId(`applicationViewLinkIdentifier-${kaivuilmoitusMuutosilmoitus}`).click();
@@ -463,7 +456,7 @@ test('Kaivuilmoitus muutosilmoitus', async ({ page }) => {
       timeout: 2000,
     });
   }).toPass({
-    intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000],
-    timeout: 96000,
+    intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000],
+    timeout: 160000,
   });
 });

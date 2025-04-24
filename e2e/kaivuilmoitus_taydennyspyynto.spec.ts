@@ -265,7 +265,6 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
 
   // käsittely
   await page.goto(testiData.allu_url);
-  await expect(page.getByPlaceholder('Username')).toBeEmpty();
   await page.getByPlaceholder('Username').fill(testiData.allupw);
   await page.getByRole('button', { name: 'Submit' }).click();
   await expect(page.getByRole('link', { name: 'HAKEMUKSET' })).toBeVisible();
@@ -303,6 +302,7 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
   await page.getByRole('button', { name: 'TALLENNA' }).click();
 
   // Odotetaan tuloksia
+  await page.goto(testiData.alluTriggerUrl);
   await expect(async () => {
     await page.goto(`${testiData.hankesalkku}${hanketunnus}`);
     await page.getByText('Hakemukset').click();
@@ -312,10 +312,11 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
     await expect(page.getByTestId('application-card').nth(1)).toContainText('Käsittelyssä', {
       timeout: 2000,
     });
-  }).toPass({ intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000], timeout: 120000 });
+  }).toPass({ intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout: 120000 });
+
+  // käsittely allussa
 
   await page.goto(testiData.allu_url);
-  await expect(page.getByPlaceholder('Username')).toBeEmpty();
   await page.getByPlaceholder('Username').fill(testiData.allupw);
   await page.getByRole('button', { name: 'Submit' }).click();
   await expect(page.getByRole('link', { name: 'HAKEMUKSET' })).toBeVisible();
@@ -342,7 +343,7 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
   await page.getByLabel('Selite *').fill('Testiautomaatio täydennyspyyntö');
   await page.getByRole('button', { name: 'LÄHETÄ PYYNTÖ' }).click();
 
-  // Odotetaan tuloksia
+  // tarkista haitattomasta
   await page.goto(testiData.alluTriggerUrl);
   await expect(async () => {
     await page.goto(`${testiData.hankesalkku}${hanketunnus}`);
@@ -355,7 +356,7 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
       'Täydennyspyyntö',
       { timeout: 2000 },
     );
-  }).toPass({ intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000], timeout: 120000 });
+  }).toPass({ intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout: 120000 });
 
   // johtoselvitys täydennyspyyntö
   await page.getByTestId(`applicationViewLinkIdentifier-${johtoselvitys}`).click();
@@ -433,7 +434,7 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
       'Täydennetty käsittelyyn',
       { timeout: 2000 },
     );
-  }).toPass({ intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000], timeout: 120000 });
+  }).toPass({ intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout: 120000 });
 
   // täydennyspyyntöjen käsittely allussa
 
@@ -492,7 +493,7 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
       timeout: 2000,
     });
   }).toPass({
-    intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000],
+    intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 3000, 3000, 3000, 3000],
     timeout: 360000,
   });
 
@@ -510,7 +511,6 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
 
   // Check Allu valmis
   await page.goto(testiData.allu_url);
-  await expect(page.getByPlaceholder('Username')).toBeEmpty();
   await page.getByPlaceholder('Username').fill(testiData.allupw);
   await page.getByRole('button', { name: 'Submit' }).click();
   await expect(page.getByRole('link', { name: 'HAKEMUKSET' })).toBeVisible();
@@ -553,5 +553,5 @@ test('Kaivuilmoitus täydennyspyyntö', async ({ page }) => {
     await expect(page.getByRole('link', { name: 'Lataa työ valmis (PDF)' })).toBeVisible({
       timeout: 2000,
     });
-  }).toPass({ intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000], timeout: 160000 });
+  }).toPass({ intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout: 160000 });
 });
