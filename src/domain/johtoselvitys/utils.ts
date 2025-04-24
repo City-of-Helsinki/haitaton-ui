@@ -12,12 +12,6 @@ import {
 } from '../application/types/application';
 import { JohtoselvitysArea, JohtoselvitysFormValues } from './types';
 import { JohtoselvitysTaydennysFormValues } from '../johtoselvitysTaydennys/types';
-import { HankeAlue } from '../types/hanke';
-import {
-  featureContainsApplicationGeometry,
-  getFeatureFromHankeGeometry,
-  olFeatureToGeoJSON,
-} from '../map/utils';
 
 export function getAreaGeometry(area: JohtoselvitysArea): Geometry {
   if (area.feature) {
@@ -98,44 +92,3 @@ export function convertApplicationDataToFormState(
 
   return data;
 }
-
-function getHankealueContainingJohtoselvitysArea(
-  johtoselvitysArea: JohtoselvitysArea,
-  hankeAreas: HankeAlue[],
-): HankeAlue | undefined {
-  return hankeAreas.find((area) => {
-    const olFeature = area.geometriat && getFeatureFromHankeGeometry(area.geometriat);
-    const geoJsonFeature = olFeatureToGeoJSON(olFeature);
-    return (
-      geoJsonFeature &&
-      featureContainsApplicationGeometry(geoJsonFeature, johtoselvitysArea.geometry)
-    );
-  });
-}
-
-/**
- * Get johtoselvitys areas grouped by hanke area. This can be used in places where johtoselvitys areas need to be grouped by the hanke area where they are located.
- *
- * @param applicationAreas
- * @param hankeAreas
- */
-export function getAreasGroupedByHankeArea(
-  applicationAreas: JohtoselvitysArea[],
-  hankeAreas: HankeAlue[],
-): Record<string, JohtoselvitysArea[]> {
-  const areasByHanke = {} as Record<string, JohtoselvitysArea[]>;
-  applicationAreas.forEach((area) => {
-    const hankeArea = getHankealueContainingJohtoselvitysArea(area, hankeAreas);
-    const id = hankeArea?.id?.toString();
-    if (id) {
-      if (!areasByHanke[id]) {
-        areasByHanke[id] = [];
-      }
-      areasByHanke[id].push(area);
-    }
-  });
-  return areasByHanke;
-}
-
-export const length = (rec: Record<string, ApplicationArea[]>) => Object.keys(rec).length;
-export const isEmpty = (rec: Record<string, ApplicationArea[]>) => length(rec) === 0;
