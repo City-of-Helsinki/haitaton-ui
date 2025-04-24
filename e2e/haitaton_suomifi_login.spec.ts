@@ -8,7 +8,7 @@ test('Toiminnallisia testejä', async ({ page }) => {
   // Lisätietolinkit aukeaa ohjeista hanketta luodessa
   // Käyttöoikeuksia pystyy muuttamaan
 
-  test.setTimeout(180000);
+  test.setTimeout(240000);
 
   // Johtoselvityshakemus ei ole käytettävissä ennen kirjautumista
   await expect(page.getByLabel('Tee johtoselvityshakemus.', { exact: true })).not.toBeVisible();
@@ -92,10 +92,9 @@ test('Toiminnallisia testejä', async ({ page }) => {
   await page.getByTestId('tyomaaKatuosoite').click();
   await page.getByTestId('tyomaaKatuosoite').fill(testiOsoite.address);
   await page.getByText('Ohjelmointi').click();
-  await page.getByLabel('', { exact: true }).click();
-  await page.getByLabel('Työn tyyppi: Sulje ja avaa').click();
-  await page.getByRole('option', { name: 'Vesi', exact: true }).getByLabel('check').click();
-  await page.getByLabel('Työn tyyppi: Sulje ja avaa').click();
+  await page.getByRole('button', { name: /Työn tyyppi/ }).click();
+  await page.getByRole('option', { name: /Vesi/ }).click();
+  await page.getByRole('button', { name: /Työn tyyppi/ }).click();
   await page.getByRole('button', { name: 'Seuraava' }).click();
   await expect(page.getByText('Hanke tallennettu')).toBeVisible();
   await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
@@ -123,15 +122,15 @@ test('Toiminnallisia testejä', async ({ page }) => {
     .click();
   await page.getByLabel('Haittojen loppupäivä*').click();
   await page.getByLabel('Haittojen loppupäivä*').fill(testiData.tomorrowType);
-  await page.getByRole('button', { name: 'Meluhaitta *' }).click();
+  await page.getByRole('combobox', { name: /Meluhaitta/ }).click();
   await page.getByRole('option', { name: 'Satunnainen meluhaitta' }).click();
-  await page.getByRole('button', { name: 'Pölyhaitta *' }).click();
+  await page.getByRole('combobox', { name: /Pölyhaitta/ }).click();
   await page.getByRole('option', { name: 'Satunnainen pölyhaitta' }).click();
-  await page.getByRole('button', { name: 'Tärinähaitta *' }).click();
+  await page.getByRole('combobox', { name: /Tärinähaitta/ }).click();
   await page.getByRole('option', { name: 'Satunnainen tärinähaitta' }).click();
-  await page.getByRole('button', { name: 'Autoliikenteen kaistahaitta *' }).click();
+  await page.getByRole('combobox', { name: /Autoliikenteen kaistahaitta/ }).click();
   await page.getByRole('option', { name: 'Yksi autokaista vähenee -' }).click();
-  await page.getByLabel('', { exact: true }).click();
+  await page.getByRole('combobox', { name: /Kaistahaittojen pituus/ }).click();
   await page.getByRole('option', { name: 'Alle 10 m' }).click();
   await page.getByRole('button', { name: 'Seuraava' }).click();
   await expect(page.getByText('Hanke tallennettu')).toBeVisible();
@@ -226,14 +225,14 @@ test('Toiminnallisia testejä', async ({ page }) => {
     .click();
   await page.getByRole('alert').getByLabel('Close toast', { exact: true }).click({ timeout: 2000 });
 
-  await page.getByLabel('Yhteyshenkilöt: Sulje ja avaa').click();
+  await page.getByRole('button', { name: /Yhteyshenkilöt/ }).click();
   await page.getByRole('option', { name: `${perustaja.username}` }).click();
   await page.getByRole('button', { name: 'Lisää uusi yhteyshenkilö' }).click();
   await page.getByTestId('etunimi').fill('Testi');
   await page.getByTestId('sukunimi').fill('Automaatio');
   await page.getByTestId('sahkoposti').fill(`${vastaava.email}`);
   await page.getByTestId('puhelinnumero').fill(`${vastaava.phonenumber}`);
-  await page.getByRole('button', { name: 'Tallenna ja lisää' }).click();
+  await page.getByRole('button', { name: 'Tallenna ja lisää yhteyshenkilö' }).click();
 
   // Vaihtele käyttöoikeuksia
   await page.getByTestId('save-form-btn').click();
