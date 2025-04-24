@@ -193,7 +193,7 @@
     "requiredForPublicationInstruction": "Tähdellä * merkityt kentät vaaditaan hankkeen julkaisemiseksi.",
     "yhteystiedot": {
       "header": "Yhteystiedot",
-      "instructions": "Hankkeelle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hankkeeseeen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hanketta ja luomaan hankkeelle hakemuksia.",
+      "instructions": "Hankkeelle lisättävät tahot saavat sähköpostiinsa linkin, jonka kautta he pystyvät liittymään hankkeeseen Haitattomassa. Tämän jälkeen he pystyvät tarkastelemaan hanketta ja luomaan hankkeelle hakemuksia.",
       "streetAddressOrOVT": "Laskutustiedoissa joko OVT-tunnus tai katuosoite ovat pakollisia, molempia ei tarvitse täyttää.",
       "titles": {
         "omistaja": "Hankkeen omistaja",
