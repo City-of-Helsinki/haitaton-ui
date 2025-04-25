@@ -144,17 +144,19 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
             </Link>
             <FeatureFlags flags={['hanke']}>
               <CheckRightsByUser requiredRight="EDIT" signedInUser={signedInUser}>
-                <Link
-                  to={getEditHankePath({ hankeTunnus: hanke.hankeTunnus })}
-                  aria-label={
-                    // eslint-disable-next-line
-                    t(`routes:${ROUTES.EDIT_HANKE}.meta.title`) +
-                    ` ${hanke.nimi} - ${hanke.hankeTunnus} `
-                  }
-                  data-testid="hankeEditLink"
-                >
-                  <IconPen aria-hidden />
-                </Link>
+                {hanke.status !== 'COMPLETED' ? (
+                  <Link
+                    to={getEditHankePath({ hankeTunnus: hanke.hankeTunnus })}
+                    aria-label={
+                      // eslint-disable-next-line
+                      t(`routes:${ROUTES.EDIT_HANKE}.meta.title`) +
+                      ` ${hanke.nimi} - ${hanke.hankeTunnus} `
+                    }
+                    data-testid="hankeEditLink"
+                  >
+                    <IconPen aria-hidden />
+                  </Link>
+                ) : null}
               </CheckRightsByUser>
             </FeatureFlags>
           </div>

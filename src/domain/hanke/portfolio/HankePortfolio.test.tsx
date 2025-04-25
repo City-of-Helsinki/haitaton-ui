@@ -158,13 +158,29 @@ describe('HankePortfolioComponent', () => {
     });
   });
 
+  test('Should not show edit link for completed hanke', async () => {
+    const completedHankkeet = hankeList.filter((hanke) => hanke.status == 'COMPLETED');
+    const hankeTunnusList = completedHankkeet.map((hanke) => hanke.hankeTunnus);
+    const signedUserData: SignedInUserByHanke = {
+      ...userDataByHanke(hankeTunnusList, AccessRightLevel.HANKEMUOKKAUS),
+    };
+
+    render(
+      <HankePortfolioComponent hankkeet={completedHankkeet} signedInUserByHanke={signedUserData} />,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryAllByTestId('hankeEditLink')).toHaveLength(0);
+    });
+  });
+
   test('Should show draft state notification for hankkeet that are in draft state', async () => {
     render(<HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />);
 
     expect(screen.getAllByText('Luonnos')).toHaveLength(1);
   });
 
-  test('Should show completed state notification for hankkeet that are in draft state', async () => {
+  test('Should show completed state notification for hankkeet that are in completed state', async () => {
     render(<HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />);
 
     expect(screen.getAllByText('Valmis')).toHaveLength(1);
