@@ -15,6 +15,48 @@ import { formatToFinnishDate } from '../../../../../common/utils/date';
 import { getAreaGeometry } from '../../../../johtoselvitys/utils';
 import { formatSurfaceArea, getTotalSurfaceArea } from '../../../../map/utils';
 import { getAreaDefaultName } from '../../../utils';
+import { isNewArea } from '../../utils';
+
+function getKaivuilmoitusAlueChanges(
+  kaivuilmoitusAlue: KaivuilmoitusAlue,
+  muutokset: string[],
+  index: number,
+) {
+  return {
+    ...kaivuilmoitusAlue,
+    katuosoite: muutokset.includes(`areas[${index}].katuosoite`)
+      ? kaivuilmoitusAlue.katuosoite
+      : undefined,
+    tyonTarkoitukset: muutokset.includes(`areas[${index}].tyonTarkoitukset`)
+      ? kaivuilmoitusAlue.tyonTarkoitukset
+      : undefined,
+    meluhaitta: muutokset.includes(`areas[${index}].meluhaitta`)
+      ? kaivuilmoitusAlue.meluhaitta
+      : undefined,
+    polyhaitta: muutokset.includes(`areas[${index}].polyhaitta`)
+      ? kaivuilmoitusAlue.polyhaitta
+      : undefined,
+    tarinahaitta: muutokset.includes(`areas[${index}].tarinahaitta`)
+      ? kaivuilmoitusAlue.tarinahaitta
+      : undefined,
+    kaistahaitta: muutokset.includes(`areas[${index}].kaistahaitta`)
+      ? kaivuilmoitusAlue.kaistahaitta
+      : undefined,
+    kaistahaittojenPituus: muutokset.includes(`areas[${index}].kaistahaittojenPituus`)
+      ? kaivuilmoitusAlue.kaistahaittojenPituus
+      : undefined,
+    lisatiedot: muutokset.includes(`areas[${index}].lisatiedot`)
+      ? kaivuilmoitusAlue.lisatiedot
+      : undefined,
+    // If there are changes to any work areas, include all work areas
+    tyoalueet:
+      kaivuilmoitusAlue.tyoalueet.filter((_, tyoalueIndex) => {
+        return muutokset.includes(`areas[${index}].tyoalueet[${tyoalueIndex}]`);
+      }).length > 0
+        ? kaivuilmoitusAlue.tyoalueet
+        : [],
+  };
+}
 
 function AreaDetail({ area }: Readonly<{ area: PartialExcept<KaivuilmoitusAlue, 'tyoalueet'> }>) {
   const { t } = useTranslation();
@@ -112,47 +154,16 @@ export default function KaivuilmoitusAreaSummary({
   const endTimeChanged = muutokset.includes('endTime');
   const changedAreas: PartialExcept<KaivuilmoitusAlue, 'tyoalueet'>[] = taydennysAreas
     .map((kaivuilmoitusAlue, index) => {
-      return {
-        ...kaivuilmoitusAlue,
-        katuosoite: muutokset.includes(`areas[${index}].katuosoite`)
-          ? kaivuilmoitusAlue.katuosoite
-          : undefined,
-        tyonTarkoitukset: muutokset.includes(`areas[${index}].tyonTarkoitukset`)
-          ? kaivuilmoitusAlue.tyonTarkoitukset
-          : undefined,
-        meluhaitta: muutokset.includes(`areas[${index}].meluhaitta`)
-          ? kaivuilmoitusAlue.meluhaitta
-          : undefined,
-        polyhaitta: muutokset.includes(`areas[${index}].polyhaitta`)
-          ? kaivuilmoitusAlue.polyhaitta
-          : undefined,
-        tarinahaitta: muutokset.includes(`areas[${index}].tarinahaitta`)
-          ? kaivuilmoitusAlue.tarinahaitta
-          : undefined,
-        kaistahaitta: muutokset.includes(`areas[${index}].kaistahaitta`)
-          ? kaivuilmoitusAlue.kaistahaitta
-          : undefined,
-        kaistahaittojenPituus: muutokset.includes(`areas[${index}].kaistahaittojenPituus`)
-          ? kaivuilmoitusAlue.kaistahaittojenPituus
-          : undefined,
-        lisatiedot: muutokset.includes(`areas[${index}].lisatiedot`)
-          ? kaivuilmoitusAlue.lisatiedot
-          : undefined,
-        // If there are changes to any work areas, include all work areas
-        tyoalueet:
-          kaivuilmoitusAlue.tyoalueet.filter((_, tyoalueIndex) => {
-            return muutokset.includes(`areas[${index}].tyoalueet[${tyoalueIndex}]`);
-          }).length > 0
-            ? kaivuilmoitusAlue.tyoalueet
-            : [],
-      };
+      if (isNewArea(index, muutokset)) {
+        return kaivuilmoitusAlue;
+      } else {
+        return getKaivuilmoitusAlueChanges(kaivuilmoitusAlue, muutokset, index);
+      }
     })
     .filter((_, index) => {
       return muutokset.includes(`areas[${index}]`);
     });
-
   const removedAreas = differenceBy(originalData.areas, taydennysAreas, 'hankealueId');
-
   if (
     changedAreas.length === 0 &&
     removedAreas.length === 0 &&
@@ -162,7 +173,7 @@ export default function KaivuilmoitusAreaSummary({
     return null;
   }
 
-  const geometries: Geometry[] = changedAreas
+  const geometries: Geometry[] = taydennysAreas
     .flatMap((area) => area.tyoalueet)
     .map((alue) => getAreaGeometry(alue));
   const totalSurfaceArea = getTotalSurfaceArea(geometries);

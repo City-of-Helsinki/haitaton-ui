@@ -14,15 +14,20 @@ import {
   Polygon as GeoJSONPolygon,
   Position,
 } from 'geojson';
-import { feature, featureCollection, multiPolygon } from '@turf/helpers';
+import {
+  feature as turfFeature,
+  featureCollection as turfFeatureCollection,
+  multiPolygon as turfMultiPolygon,
+} from '@turf/helpers';
 import booleanIntersects from '@turf/boolean-intersects';
 import union from '@turf/union';
 import booleanEqual from '@turf/boolean-equal';
 import intersect from '@turf/intersect';
 import { ApplicationArea, ApplicationGeometry } from '../application/types/application';
 
+const format = new GeoJSON();
+
 export const formatFeaturesToHankeGeoJSON = (features: GeometryData): HankeGeoJSON => {
-  const format = new GeoJSON();
   const json = format.writeFeatures(features);
   const data = JSON.parse(json);
 
@@ -150,19 +155,39 @@ export function featureContains(
   outer: GeoJSONFeature<GeoJSONPolygon>,
   inner: GeoJSONFeature<GeoJSONPolygon>,
 ): boolean {
-  const features: FeatureCollection<GeoJSONPolygon> = featureCollection([outer, inner]);
+  const features: FeatureCollection<GeoJSONPolygon> = turfFeatureCollection([outer, inner]);
   const intersected = intersect(features);
   const innerWithoutProperties: GeoJSONFeature<GeoJSONPolygon> = { ...inner, properties: {} };
   return (intersected && booleanEqual(intersected, innerWithoutProperties)) || false;
 }
 
 export function applicationGeometryContains(
-  geometry1: ApplicationGeometry,
-  geometry2: ApplicationGeometry,
+  puter: ApplicationGeometry,
+  inner: ApplicationGeometry,
 ): boolean {
-  const feature1 = feature(geometry1);
-  const feature2 = feature(geometry2);
-  return featureContains(feature1, feature2);
+  const outerFeature = turfFeature(puter);
+  const innerFeature = turfFeature(inner);
+  return featureContains(outerFeature, innerFeature);
+}
+
+export function featureContainsApplicationGeometry(
+  feature: GeoJSONFeature<GeoJSONPolygon>,
+  geometry: ApplicationGeometry,
+): boolean {
+  const inner = turfFeature(geometry);
+  return featureContains(feature, inner);
+}
+
+export function olFeatureToGeoJSON(
+  feature?: Feature<Polygon>,
+): GeoJSONFeature<GeoJSONPolygon> | undefined {
+  return (
+    feature &&
+    (format.writeFeatureObject(feature, {
+      featureProjection: 'EPSG:3879',
+      dataProjection: 'EPSG:3879',
+    }) as GeoJSONFeature<GeoJSONPolygon>)
+  );
 }
 
 /**
@@ -174,9 +199,9 @@ export function applicationGeometryContains(
 export function createUnionFromAreas(areas: ApplicationArea[], initialValue: ApplicationArea) {
   return areas.reduce((combinedArea, currentArea) => {
     if (booleanIntersects(combinedArea.geometry, currentArea.geometry)) {
-      const features = featureCollection([
-        feature(combinedArea.geometry),
-        feature(currentArea.geometry),
+      const features = turfFeatureCollection([
+        turfFeature(combinedArea.geometry),
+        turfFeature(currentArea.geometry),
       ]);
       const unionFeature = union(features);
       if (unionFeature?.geometry) {
@@ -202,13 +227,13 @@ export function createMultiPolygonFromAreas(
   return areas.reduce(
     (combinedArea, currentArea) => {
       if (booleanIntersects(combinedArea.geometry, currentArea.geometry)) {
-        return multiPolygon([
+        return turfMultiPolygon([
           ...combinedArea.geometry.coordinates,
           currentArea.geometry.coordinates,
         ]);
       }
       return combinedArea;
     },
-    multiPolygon([initialValue.geometry.coordinates]),
+    turfMultiPolygon([initialValue.geometry.coordinates]),
   );
 }

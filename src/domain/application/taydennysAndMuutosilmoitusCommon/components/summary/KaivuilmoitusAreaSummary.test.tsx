@@ -62,6 +62,15 @@ describe('Kaivuilmoitus taydennys AreaSummary', () => {
               kaistahaittojenPituus: 'PITUUS_ALLE_10_METRIA',
               lisatiedot: 'Lorem ipsum',
             },
+            {
+              ...mockData.areas[0], // a "new" area
+              name: 'Hankealue 2',
+              tyoalueet: [
+                {
+                  ...mockData.areas[0].tyoalueet[0],
+                },
+              ],
+            },
           ],
         }}
         originalData={mockData}
@@ -77,14 +86,16 @@ describe('Kaivuilmoitus taydennys AreaSummary', () => {
           'areas[0].kaistahaitta',
           'areas[0].kaistahaittojenPituus',
           'areas[0].lisatiedot',
+          'areas[1]',
         ]}
       />,
     );
 
+    // changed area
     expect(
       screen.getByText(
         (_, element) =>
-          element?.tagName === 'P' && element?.textContent === 'Työalueet (Hankealue 2)',
+          element?.tagName === 'P' && element?.textContent === 'Työalueet (Hankealue 1)',
       ),
     ).toBeInTheDocument();
     expect(screen.getByText('Työalue 1 (159 m²)')).toBeInTheDocument();
@@ -102,6 +113,27 @@ describe('Kaivuilmoitus taydennys AreaSummary', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('Kaistahaittojen pituus: Alle 10 m')).toBeInTheDocument();
     expect(screen.getByText('Lisätietoja alueesta: Lorem ipsum')).toBeInTheDocument();
+
+    // new area
+    expect(
+      screen.getByText(
+        (_, element) =>
+          element?.tagName === 'P' && element?.textContent === 'Työalueet (Hankealue 2)',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Työalue (159 m²)')).toBeInTheDocument();
+    expect(screen.getByText('Pinta-ala: 159 m²')).toBeInTheDocument();
+    expect(screen.getByText('Katuosoite: Aidasmäentie 5')).toBeInTheDocument();
+    expect(screen.getByText('Työn tarkoitus: Vesi')).toBeInTheDocument();
+    expect(screen.getByText('Meluhaitta: Toistuva meluhaitta')).toBeInTheDocument();
+    expect(screen.getByText('Pölyhaitta: Jatkuva pölyhaitta')).toBeInTheDocument();
+    expect(screen.getByText('Tärinähaitta: Satunnainen tärinähaitta')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Autoliikenteen kaistahaitta: Yksi autokaista vähenee - ajosuunta vielä käytössä',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Kaistahaittojen pituus: 10-99 m')).toBeInTheDocument();
   });
 
   test('renders removed areas', () => {

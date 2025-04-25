@@ -66,7 +66,8 @@ export default function ReviewAndSend({
           />
           <HaittojenhallintaSummary
             hankealueet={hankealueet}
-            kaivuilmoitusAlueet={muutosilmoitus.applicationData.areas}
+            data={muutosilmoitus.applicationData}
+            originalData={originalApplication.applicationData}
             muutokset={muutosilmoitus.muutokset}
           />
           <ContactsSummary
