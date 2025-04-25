@@ -112,7 +112,7 @@ const ProcedureTips: React.FC<Props> = memo(({ haittojenhallintaTyyppi, haittaIn
                       openInNewTab
                       openInNewTabAriaLabel={t('common:components:link:openInNewTabAriaLabel')}
                     >
-                      {t(`workInstructions:cards:${linkId}:header`)}
+                      {t(`workInstructions:cards:card${linkId}:header`)}
                     </Link>
                   ))}
                 </Box>
