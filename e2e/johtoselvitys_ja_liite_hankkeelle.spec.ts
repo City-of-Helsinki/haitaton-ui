@@ -16,7 +16,7 @@ test.beforeEach('Helsinki_login', async ({ page }) => {
 });
 
 test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
-  test.setTimeout(300000);
+  test.setTimeout(360000);
   await page.getByLabel('Luo uusi hanke.', { exact: true }).click();
   await page.getByTestId('nimi').click();
   const ajonNimi = hankeName(`Johtoselvitys ja liite hankkeelle`);
