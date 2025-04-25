@@ -8,7 +8,7 @@ import styles from './OwnHankeMapHeader.module.scss';
 
 const OwnHankeMapHeader: React.FC<{ hankeTunnus: string; showLink?: boolean }> = ({
   hankeTunnus,
-  showLink = true,
+  showLink = false,
 }) => {
   const { t } = useTranslation();
   const getFullPageMapPath = useLinkPath(ROUTES.FULL_PAGE_MAP);

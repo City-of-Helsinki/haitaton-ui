@@ -158,7 +158,7 @@ function AreaTabs({
       <TabPanel>
         <Box mt="var(--spacing-s)">
           <Box mb="var(--spacing-s)">
-            <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} showLink={false} />
+            <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} />
             <OwnHankeMap hanke={hanke} tyoalueet={tyoalueet} />
           </Box>
           {applicationType === 'CABLE_REPORT' && (
@@ -239,7 +239,7 @@ export default function Sidebar({ hanke, application }: Readonly<SidebarProps>) 
   const hakemusContent = (
     <>
       <Box mb="var(--spacing-s)">
-        <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} showLink={false} />
+        <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} />
         <OwnHankeMap hanke={getHankeWithAlueetFilteredByDates(hanke)} tyoalueet={tyoalueet} />
       </Box>
       {applicationType === 'CABLE_REPORT' && (

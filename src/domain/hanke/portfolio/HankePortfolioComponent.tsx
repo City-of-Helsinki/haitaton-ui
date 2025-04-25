@@ -249,10 +249,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ hanke, signedInUser, 
           </div>
           <div>
             <FeatureFlags flags={['hanke']}>
-              <OwnHankeMapHeader
-                hankeTunnus={hanke.hankeTunnus}
-                showLink={hanke.alueet?.length > 0}
-              />
+              <OwnHankeMapHeader hankeTunnus={hanke.hankeTunnus} />
               {hanke.alueet?.length > 0 && isOpen ? (
                 <div data-testid="hanke-map">
                   <OwnHankeMap hanke={hanke} />
