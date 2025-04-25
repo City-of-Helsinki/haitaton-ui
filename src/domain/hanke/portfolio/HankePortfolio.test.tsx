@@ -144,7 +144,7 @@ describe('HankePortfolioComponent', () => {
     window._env_ = OLD_ENV;
   });
 
-  test('Should render edit hanke links for hankkeet that user has edit rights', async () => {
+  test('Should show edit links for uncompleted hankkeet that user has edit rights', async () => {
     const hankeTunnusList = hankeList.map((hanke) => hanke.hankeTunnus);
     const signedUserData: SignedInUserByHanke = {
       ...userDataByHanke(hankeTunnusList),
@@ -154,7 +154,7 @@ describe('HankePortfolioComponent', () => {
     render(<HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={signedUserData} />);
 
     await waitFor(() => {
-      expect(screen.queryAllByTestId('hankeEditLink')).toHaveLength(2);
+      expect(screen.queryAllByTestId('hankeEditLink')).toHaveLength(1);
     });
   });
 
