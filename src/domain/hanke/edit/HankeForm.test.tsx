@@ -1066,3 +1066,56 @@ describe('Selecting user in user name search input', () => {
     expect(screen.getByTestId('muut.0.puhelinnumero')).toHaveValue('0401234567');
   });
 });
+
+describe('Yhteystieto ytunnus validation', () => {
+  describe('Draft hanke', () => {
+    test('Should be able to move to next page if ytunnus field is empty', async () => {
+      const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
+      fireEvent.change(screen.getByLabelText(/y-tunnus/i), {
+        target: { value: '' },
+      });
+      await user.tab();
+      await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+      expect(await screen.findByText('Vaihe 5/6: Liitteet')).toBeInTheDocument();
+    });
+
+    test('Should not be able to move to next page if ytunnus is invalid', async () => {
+      const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-1" />);
+      fireEvent.change(screen.getByLabelText(/y-tunnus/i), {
+        target: { value: '1234567-8' },
+      });
+      await user.tab();
+      await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+      expect(screen.getByText('Vaihe 4/6: Yhteystiedot')).toBeInTheDocument();
+      expect(screen.getByLabelText(/y-tunnus/i)).toHaveFocus();
+      expect(screen.getByText('Kentän arvo on virheellinen')).toBeInTheDocument();
+    });
+  });
+
+  describe('Public hanke', () => {
+    test('Should not be able to move to next page if ytunnus is empty or invalid', async () => {
+      const { user } = await setupYhteystiedotPage(<HankeFormContainer hankeTunnus="HAI22-3" />);
+      fireEvent.change(screen.getByLabelText(/y-tunnus/i), {
+        target: { value: '' },
+      });
+      await user.tab();
+      await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+      expect(screen.getByText('Vaihe 4/6: Yhteystiedot')).toBeInTheDocument();
+      expect(screen.getByLabelText(/y-tunnus/i)).toHaveFocus();
+      expect(screen.getByText('Kenttä on pakollinen')).toBeInTheDocument();
+
+      fireEvent.change(screen.getByLabelText(/y-tunnus/i), {
+        target: { value: '1234567-8' },
+      });
+      await user.tab();
+      await user.click(screen.getByRole('button', { name: /seuraava/i }));
+
+      expect(screen.getByText('Vaihe 4/6: Yhteystiedot')).toBeInTheDocument();
+      expect(screen.getByLabelText(/y-tunnus/i)).toHaveFocus();
+      expect(screen.getByText('Kentän arvo on virheellinen')).toBeInTheDocument();
+    });
+  });
+});

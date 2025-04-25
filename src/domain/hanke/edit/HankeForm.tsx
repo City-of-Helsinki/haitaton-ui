@@ -22,12 +22,7 @@ import HankeFormLiitteet from './HankeFormLiitteet';
 import HankeFormSummary from './HankeFormSummary';
 import FormNotifications from './components/FormNotifications';
 import './HankeForm.styles.scss';
-import {
-  HankeContactTypeKey,
-  HankeData,
-  HankeYhteystieto,
-  CONTACT_TYYPPI,
-} from '../../types/hanke';
+import { HankeData } from '../../types/hanke';
 import MultipageForm from '../../forms/MultipageForm';
 import FormActions from '../../forms/components/FormActions';
 import { useLocalizedRoutes } from '../../../common/hooks/useLocalizedRoutes';
@@ -41,7 +36,6 @@ import DrawProvider from '../../../common/components/map/modules/draw/DrawProvid
 import FormPagesErrorSummary from '../../forms/components/FormPagesErrorSummary';
 import FormFieldsErrorSummary from '../../forms/components/FormFieldsErrorSummary';
 import { useApplicationsForHanke } from '../../application/hooks/useApplications';
-import isValidBusinessId from '../../../common/utils/isValidBusinessId';
 import Button from '../../../common/components/button/Button';
 
 type Props = {
@@ -313,36 +307,39 @@ const HankeForm: React.FC<React.PropsWithChildren<Props>> = ({
           hankeYhteystiedotPublicSchema.describe().fields,
         ) as FieldPath<HankeDataFormState>[],
       ]
-    : [['nimi']];
+    : [
+        // Basic information page
+        ['nimi'],
+        // Areas page
+        [],
+        // Haittojen hallinta page
+        [],
+        // Contacts page
+        // Only get the ytunnus fields from omistajat, rakennuttajat and toteuttajat
+        [
+          ...getFieldPaths<HankeDataFormState>(getValues('omistajat'), 'omistajat').filter((path) =>
+            /ytunnus/i.test(path),
+          ),
+          ...getFieldPaths<HankeDataFormState>(getValues('rakennuttajat'), 'rakennuttajat').filter(
+            (path) => /ytunnus/i.test(path),
+          ),
+          ...getFieldPaths<HankeDataFormState>(getValues('toteuttajat'), 'toteuttajat').filter(
+            (path) => /ytunnus/i.test(path),
+          ),
+        ],
+      ];
 
   function validateStepChange(changeStep: () => void, stepIndex: number) {
-    let hasInvalidId = false;
+    // Ignore 'required' errors in 'Yhteystiedot' step if hanke is not public
+    const errorsToIgnore = stepIndex === 3 && !isHankePublic ? ['required'] : undefined;
 
-    const contactTypes: HankeContactTypeKey[] = [
-      'omistajat' as HankeContactTypeKey,
-      'rakennuttajat' as HankeContactTypeKey,
-      'toteuttajat' as HankeContactTypeKey,
-    ];
-
-    for (const contactType of contactTypes) {
-      const contacts = getValues(contactType);
-
-      for (const contact of contacts) {
-        if ('ytunnus' in contact && contact.tyyppi !== CONTACT_TYYPPI.YKSITYISHENKILO) {
-          const tunnus = (contact as HankeYhteystieto).ytunnus;
-
-          // Check if Business ID is not present or is invalid
-          if (!tunnus || tunnus === '' || !isValidBusinessId(tunnus)) {
-            hasInvalidId = true;
-            return;
-          }
-        }
-      }
-    }
-    // Only move to the next step if no invalid IDs were found
-    if (!hasInvalidId) {
-      return changeFormStep(changeStep, pageFieldsToValidate[stepIndex] || [], trigger);
-    }
+    return changeFormStep(
+      changeStep,
+      pageFieldsToValidate[stepIndex] || [],
+      trigger,
+      errors,
+      errorsToIgnore,
+    );
   }
 
   return (
