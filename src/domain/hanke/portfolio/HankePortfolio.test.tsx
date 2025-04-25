@@ -144,7 +144,7 @@ describe('HankePortfolioComponent', () => {
     window._env_ = OLD_ENV;
   });
 
-  test('Should render edit hanke links for hankkeet that user has edit rights', async () => {
+  test('Should show edit links for uncompleted hankkeet that user has edit rights', async () => {
     const hankeTunnusList = hankeList.map((hanke) => hanke.hankeTunnus);
     const signedUserData: SignedInUserByHanke = {
       ...userDataByHanke(hankeTunnusList),
@@ -154,7 +154,23 @@ describe('HankePortfolioComponent', () => {
     render(<HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={signedUserData} />);
 
     await waitFor(() => {
-      expect(screen.queryAllByTestId('hankeEditLink')).toHaveLength(2);
+      expect(screen.queryAllByTestId('hankeEditLink')).toHaveLength(1);
+    });
+  });
+
+  test('Should not show edit link for completed hanke', async () => {
+    const completedHankkeet = hankeList.filter((hanke) => hanke.status == 'COMPLETED');
+    const hankeTunnusList = completedHankkeet.map((hanke) => hanke.hankeTunnus);
+    const signedUserData: SignedInUserByHanke = {
+      ...userDataByHanke(hankeTunnusList, AccessRightLevel.HANKEMUOKKAUS),
+    };
+
+    render(
+      <HankePortfolioComponent hankkeet={completedHankkeet} signedInUserByHanke={signedUserData} />,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryAllByTestId('hankeEditLink')).toHaveLength(0);
     });
   });
 
@@ -164,7 +180,7 @@ describe('HankePortfolioComponent', () => {
     expect(screen.getAllByText('Luonnos')).toHaveLength(1);
   });
 
-  test('Should show completed state notification for hankkeet that are in draft state', async () => {
+  test('Should show completed state notification for hankkeet that are in completed state', async () => {
     render(<HankePortfolioComponent hankkeet={hankeList} signedInUserByHanke={{}} />);
 
     expect(screen.getAllByText('Valmis')).toHaveLength(1);
