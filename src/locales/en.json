@@ -593,7 +593,8 @@
     },
     "status": {
       "null": "$t(hanke:status:DRAFT)",
-      "DRAFT": "Draft"
+      "DRAFT": "Draft",
+      "COMPLETED": "Completed"
     }
   },
   "hankeForm": {
@@ -618,7 +619,7 @@
     "savingFailHeader": "Something went wrong",
     "savingFailText": "Could not save the project, please try again.",
     "saveAndQuitSuccessHeader": "Project saved",
-    "saveAndQuitSuccessText": "Project {{name}} ({{project ID}}) saved to your projects.",
+    "saveAndQuitSuccessText": "Project {{name}} ({{hankeTunnus}}) saved to your projects.",
     "closeAriaLabel": "Exit the form without saving",
     "confirmIndexCalculationButton": "Continue to index calculation",
     "cancelDialog": {
@@ -742,7 +743,7 @@
       "header": "Plotting Areas",
       "subHeader": "Project areas",
       "area": "Area",
-      "instructions": "[TRANSLATION_PENDING]Several geometries can be drawn for the project. Geometry areas affect the project’s traffic congestion indices. Drawing tools can be found at the bottom left of the map view. With the pen tool, you can draw polygonal geometries by clicking the point where you want an angle. With the square tool, you can create square areas by first clicking the map and moving the mouse in the direction you want. Clicking it again “closes” the square drawing. A geometry can be edited by “grabbing” the edge of the geometry and dragging. A square geometry can also be shaped by grabbing the edge. lete a geometry, first select the geometry by clicking it; a bin icon will appear in the bottom left drawing tools which you can click to delete the geometry.",
+      "instructions": "Several areas can be drawn for the project. The traffic nuisance indices (values 0-5, of which 5 are the most significant) are automatically generated in the plotted areas. The indices are based on the location of the project areas on cycle, public transport and car routes. The traffic network significance of the project areas is depicted on the map with traffic light colors (green = no nuisance, yellow = probable nuisance, red = significant nuisance).",
       "instructions2": "You can edit an already drawn area by grabbing its edge and dragging the point to the desired location.",
       "noAlueet": "Draw the area on the map to mark the hazard assessments.",
       "haitatHeader": "Nuisance assessments for the area",
@@ -1239,7 +1240,7 @@
       "hankeHaittaindeksi": "Nuisance index of the project area",
       "haittaindeksi": "Nuisance index for work areas",
       "labels": {
-        "YLEINEN": "[TRANSLATION_PENDING]Measures to control nuisances in work areas",
+        "YLEINEN": "Measures to control nuisances in work areas",
         "PYORALIIKENNE": "Measures to control nuisances in work areas",
         "AUTOLIIKENNE": "Measures to control nuisances in work areas",
         "LINJAAUTOLIIKENNE": "Measures to control nuisances in work areas",
@@ -1273,7 +1274,7 @@
       "endDate": "Estimated end date for work",
       "workArea": "Work area",
       "workAreaPlural": "Work areas",
-      "workAreaOverlapsSingle": "The work area extends beyond the boundary of the cable report; submit a <a>{{{applicationIdentifier}}</a> change notification to the cable report.",
+      "workAreaOverlapsSingle": "The work area extends beyond the boundary of the cable report <a>{{applicationIdentifier}}</a>. Change the boundary of the work area or apply for a new cable report.",
       "workAreaOverlapsMultiple": "The work area extends beyond the boundaries of several cable reports; submit a change notification.",
       "areaAdditionalInfo": "Further information about the area",
       "areaInfo": "Area information",
@@ -1302,6 +1303,8 @@
       "newCableReport": "New cable report",
       "cableReports": "Identifiers of previous cable reports",
       "cableReportsHelp": "Select one from the list or enter another identifier and press ‘Enter’ to add it",
+      "cableReportFilterPlaceholder": "Enter text for filtering or type another ID",
+      "cableReportFilterWithAnotherTerm": "Try other words or type another ID and press Enter to add",
       "noCableReports": "Haitaton could not find any previously added cable reports for the project. You can add other cable reports based on the ID.",
       "cableReportApplicationIdentifier": "Cable report ID",
       "cableReportTagInputHelp": "Enter the cable report ID and press Add",
@@ -1333,7 +1336,7 @@
       "saveErrorText": "<0>Failed to save the application. Please try again later or contact the Haitaton technical support by email <1>haitatontuki@hel.fi</1>.</0>",
       "sendSuccessLabel": "Application sent",
       "sendErrorLabel": "Sending failed",
-      "sendSuccessText": "The application was sent for processing. [TRANSLATION_PENDING]",
+      "sendSuccessText": "The application was sent for processing. Notice of the application was sent to the contact persons added to the application.",
       "sendErrorText": "<0>Failed to submit the application for processing. Please try again later or contact the Haitaton technical support by email <1>haitatontuki@hel.fi.</1></0>",
       "cancelSuccessLabel": "Application cancelled",
       "cancelSuccessText": "The application has been cancelled",
@@ -1623,7 +1626,9 @@
     "closeButtonAriaLabel": "Close project menu",
     "editHanke": "Edit project Information",
     "labels": {
+      "hankealueenAjankohta": "Period of the project area",
       "hanke": "Project",
+      "hankkeenAjankohta": "Period of the project",
       "omistaja": "Project owner",
       "yksityishenkilo": "Private individual"
     }
@@ -1667,7 +1672,7 @@
     "pageTitle_loggedIn": "Welcome to Haitaton e-services",
     "pageSubTitle_loggedIn": "The system is intended for advancing projects taking place in public areas and managing the disturbances caused by them",
     "pageSubTitle": "Service for monitoring projects and their negative impacts in public areas",
-    "info": "In the Haitaton service, you can learn about and give feedback on all ongoing and upcoming projects in public areas. You can view projects on a map. Are you starting a project or submitting applications?",
+    "info": "In the Haitaton service, you can learn about all ongoing and upcoming projects in public areas. You can view projects on a map. Are you starting a project or submitting applications?",
     "info_link": "Go to the Haitaton service",
     "notification": {
       "heading": "Help us improve Haitaton!",
@@ -1802,8 +1807,12 @@
       }
     },
     "completedState": {
-      "labels": {},
-      "notifications": {}
+      "labels": {
+        "completed": "The project has been moved to Completed state."
+      },
+      "notifications": {
+        "completed": "The project can no longer be edited and applications cannot be added to it. The project will be removed at the earliest {{date}}, so that all information about the project and its applications will be removed from Haitaton."
+      }
     }
   },
   "publicHankkeet": {

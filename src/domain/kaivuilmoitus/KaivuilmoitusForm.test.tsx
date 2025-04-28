@@ -728,9 +728,7 @@ test('Should show notifications if work areas overlap with johtoselvitys work ar
       /työalue ylittää usean johtoselvityksen rajauksen, tee muutosilmoitus./i,
     ),
   ).toBeInTheDocument();
-  expect(
-    screen.getByText(/Työalue ylittää johtoselvityksen rajauksen, tee johtoselvitykseen/i),
-  ).toBeInTheDocument();
+  expect(screen.getByText(/Työalue ylittää johtoselvityksen/i)).toBeInTheDocument();
   const link = screen.getByRole('link', { name: /JS2300001/i });
   expect(link).toHaveAttribute('href', '/fi/hakemus/2');
   expect(link).toHaveAttribute('target', '_blank');
@@ -845,9 +843,7 @@ test('Should not show notification if work area is within johtoselvitys work are
   expect(
     screen.queryByText(/työalue ylittää usean johtoselvityksen rajauksen, tee muutosilmoitus./i),
   ).not.toBeInTheDocument();
-  expect(
-    screen.queryByText(/Työalue ylittää johtoselvityksen rajauksen, tee johtoselvitykseen/i),
-  ).not.toBeInTheDocument();
+  expect(screen.queryByText(/Työalue ylittää johtoselvityksen/i)).not.toBeInTheDocument();
 });
 
 test('Should show validation error if the new user has an existing email address', async () => {
