@@ -1810,9 +1810,14 @@ const Card: React.FC = () => {
 
     const updateBreadcrumbs = () => {
       if (type === t('routes:CARD:additionalLevel')) {
-        setBreadcrumbs([BREADCRUMBS.cardsIndex, breadcrumb, BREADCRUMBS.additionalLevel]);
+        setBreadcrumbs([
+          BREADCRUMBS.tyoOhjeet,
+          BREADCRUMBS.cardsIndex,
+          breadcrumb,
+          BREADCRUMBS.additionalLevel,
+        ]);
       } else {
-        setBreadcrumbs([BREADCRUMBS.cardsIndex, breadcrumb]);
+        setBreadcrumbs([BREADCRUMBS.tyoOhjeet, BREADCRUMBS.cardsIndex, breadcrumb]);
       }
     };
 
