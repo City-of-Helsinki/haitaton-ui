@@ -752,11 +752,17 @@ const Card4Basic: React.FC = () => {
           </p>
           <br />
           <p>
-            <strong>Pyöräliikenne voidaan ohjata ajoradalle,</strong> jos ajoradan liikennemäärä on
-            melko pieni ja nopeusrajoitus on alhainen (max 30 km/h). Jalankulkijoiden ja
-            pyöräilijöiden pääreitin tulee olla mahdollisimman selkeä. Pyöräilijöille täytyy tarjota
-            riittävän tiheästi reittejä, joita pitkin työmaan tai autotien voi ylittää
-            turvallisesti. Reittejä tulee kehittää edelleen myös työmaan aikana.
+            <strong>
+              Yksisuuntaisten pyöräteiden tai -kaistojen liikenne voidaan ohjata ajoradalle
+              pyöräkaistoille tai sekaliikenteeseen turvallisten siirtymäkohtien avulla, jos
+              ajoradan liikennemäärä on melko pieni ja nopeusrajoitus on alhainen (max 30 km/h).
+              Kaksisuuntaisen pyörätien liikennettä ei voi osoittaa sekaliikenteeseen.
+            </strong>{' '}
+            Ajoradan puolelle väliaikaisesti siirrettävä kaksisuuntainen pyörätie tulee erotella
+            raskaalla törmäyssuojalla ajoradan autoliikenteestä. Jalankulkijoiden ja pyöräilijöiden
+            pääreitin tulee olla mahdollisimman selkeä. Pyöräilijöille täytyy tarjota riittävän
+            tiheästi reittejä, joita pitkin työmaan tai autotien voi ylittää turvallisesti. Reittejä
+            tulee kehittää edelleen myös työmaan aikana.
           </p>
           <br />
           <p>
