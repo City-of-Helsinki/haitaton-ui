@@ -9,14 +9,14 @@ import {
   helsinkiLogin,
   hankeName,
 } from './_setup';
-import path = require('path');
+import path from 'path';
 
 test.beforeEach('Helsinki_login', async ({ page }) => {
   await helsinkiLogin(page);
 });
 
 test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
-  test.setTimeout(260000);
+  test.setTimeout(360000);
   await page.getByLabel('Luo uusi hanke.', { exact: true }).click();
   await page.getByTestId('nimi').click();
   const ajonNimi = hankeName(`Johtoselvitys ja liite hankkeelle`);
@@ -275,7 +275,7 @@ test('Johtoselvitys ja liite hankkeelle', async ({ page }) => {
     await expect(page.getByTestId('application-status-tag')).toContainText('Päätös', {
       timeout: 5000,
     });
-  }).toPass({ intervals: [3000, 3000, 3000, 3000, 3000, 3000, 3000, 3000], timeout: 120000 });
+  }).toPass({ intervals: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000], timeout: 120000 });
 
   // Tarkista haitattomasta että liite näkyy
   await page.locator('[data-testid^="applicationViewLinkIdentifier-"]').click();

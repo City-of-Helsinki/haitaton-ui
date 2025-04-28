@@ -13,7 +13,7 @@ test.beforeEach('Helsinki_login', async ({ page }) => {
   await helsinkiLogin(page);
 });
 
-test('Uusi hanke', async ({ page }) => {
+test('Uusi hanke ja hakutyökalu', async ({ page }) => {
   test.setTimeout(240000);
   await page.getByLabel('Luo uusi hanke.', { exact: true }).click();
   await page.getByTestId('nimi').click();
