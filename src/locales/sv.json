@@ -593,7 +593,8 @@
     },
     "status": {
       "null": "$t(hanke:status:DRAFT)",
-      "DRAFT": "Utkast"
+      "DRAFT": "Utkast",
+      "COMPLETED": "Färdig"
     }
   },
   "hankeForm": {
@@ -742,7 +743,7 @@
       "header": "Områden",
       "subHeader": "Ritning av områden",
       "area": "Område",
-      "instructions": "[TRANSLATION_PENDING]Flera geometrier kan ritas för projektet. De geometriska områdena påverkar projektets trafikstörningsindex. Ritverktygen återfinns i kartvyns vänstra nedre kant. Med pennverktyget kan man rita polygoner genom att klicka på punkten där du vill ha ett hörn. Med rektangelverktyget kan du skapa rektangulära områden genom att först klicka på kartan och röra musen i önskad riktning. Ett nytt klick avslutar ritning av kvadraten. En polygon kan modifieras genom att ”greppa” i kanten och dra. Även en rektangulär figur kan modifieras genom att greppa i kanten. an radera en geometrisk figur genom att först välja den med ett klick, så att det bland ritverktygen i den vänstra nedre kanten kommer fram en papperskorg. Med ett klick på papperskorgen raderas figuren.",
+      "instructions": "Flera områden kan ritas upp för projektet. För de ritade områdena bildas automatiskt trafikolägenhetsindex (värden 0-5, varav 5 är mest betydande). Indexen baserar sig på projektområdenas placering på cykel-, kollektiv- och biltrafikens rutter. Projektområdenas betydelse för trafiknätet beskrivs på kartan med trafikljussignaler (grön = ingen olägenhet, gul = sannolik olägenhet, röd = betydande olägenhet).",
       "instructions2": "Du kan ändra ett redan ritat område genom att hålla fast vid kanten och dra punkten till önskad position.",
       "noAlueet": "Rita området på kartan för att markera bedömningarna av olägenheter.",
       "haitatHeader": "Bedömning av ett områdes olägenheter",
@@ -1239,7 +1240,7 @@
       "hankeHaittaindeksi": "Projektområdets index för olägenheter",
       "haittaindeksi": "Arbetsområdenas olägenhetsindex",
       "labels": {
-        "YLEINEN": "[TRANSLATION_PENDING]Åtgärderna för att hantera olägenheter på arbetsområdena",
+        "YLEINEN": "Åtgärderna för att hantera olägenheter på arbetsområdena",
         "PYORALIIKENNE": "Åtgärderna för att hantera olägenheter på arbetsområdena",
         "AUTOLIIKENNE": "Åtgärderna för att hantera olägenheter på arbetsområdena",
         "LINJAAUTOLIIKENNE": "Åtgärderna för att hantera olägenheter på arbetsområdena",
@@ -1273,7 +1274,7 @@
       "endDate": "Beräknad slutdag för arbetet",
       "workArea": "Arbetsområde",
       "workAreaPlural": "Arbetsområden",
-      "workAreaOverlapsSingle": "Arbetsområdet överskrider ledningsutredningens begränsning, gör en ändringsanmälan i ledningsutredningen <a>{{applicationIdentifier}}</a>.",
+      "workAreaOverlapsSingle": "Arbetsområdet överskrider ledningsutredningens <a>{{applicationIdentifier}}</a> begränsning, ändra begränsning av arbetsområdet eller sök en ny ledningsutredning.",
       "workAreaOverlapsMultiple": "Arbetsområdet överskrider flera ledningsutredningars begränsning, gör ändringsanmälan.",
       "areaAdditionalInfo": "Mer information om området",
       "areaInfo": "Uppgifter om området",
@@ -1302,6 +1303,8 @@
       "newCableReport": "Ny ledningsutredning",
       "cableReports": "Koder för utförda ledningsutredningar",
       "cableReportsHelp": "Välj i listan eller skriv in en annan kod och tryck på Enter för att lägga till den",
+      "cableReportFilterPlaceholder": "Ange text för filtrering eller skriv in ett annat ID",
+      "cableReportFilterWithAnotherTerm": "Prova andra ord eller skriv ett annat ID och tryck Enter för att lägga till ",
       "noCableReports": "Haitaton kunde inte hitta ledningsutredningar som tidigare lagts till för projektet. Du kan lägga till andra ledningsutredningar baserat på koden.",
       "cableReportApplicationIdentifier": "Ledningsutredningskod",
       "cableReportTagInputHelp": "Ange ledningsutredningskod och klicka på Lägg till",
@@ -1333,7 +1336,7 @@
       "saveErrorText": "<0>Ansökan kunde inte sparas. Försök igen senare eller kontakta Haitatons tekniska support med e-post till <1>haitatontuki@hel.fi</1>.</0>",
       "sendSuccessLabel": "Ansökan har skickats",
       "sendErrorLabel": "Ansökan kunde inte skickas",
-      "sendSuccessText": "Ansökan har skickats för handläggning. [TRANSLATION_PENDING]",
+      "sendSuccessText": "Ansökan har skickats för handläggning. Meddelandet om ansökan skickades till de kontaktpersoner som lagts till i ansökan.",
       "sendErrorText": "<0>Det gick inte att skicka in ansökan för behandling. Försök skicka den igen senare eller kontakta Haitatons tekniska support på e-postadressen <1>haitatontuki@hel.fi.</1></0>",
       "cancelSuccessLabel": "Ansökan återtogs",
       "cancelSuccessText": "Ansökan kunde återtas",
@@ -1623,8 +1626,10 @@
     "closeButtonAriaLabel": "Stäng projektmenyn",
     "editHanke": "Redigera projektets uppgifter",
     "labels": {
+      "hankealueenAjankohta": "Tidsperiod för projektområdet",
       "hanke": "Projekt",
-      "omistaja": "Projektets ägare",
+      "hankkeenAjankohta": "Tidsperiod för projektet",
+      "omistaja": "Projektägaren",
       "yksityishenkilo": "Privatperson"
     }
   },
@@ -1667,7 +1672,7 @@
     "pageTitle_loggedIn": "Välkommen att utföra ärenden i Haitaton",
     "pageSubTitle_loggedIn": "Hanteringssystemet för att främja projekt i allmänna områden och att hantera olägenheter",
     "pageSubTitle": "En tjänst för uppföljning av projekt på allmänna områden och uppföljning av deras olägenheter",
-    "info": "I tjänsten Haitaton kan du bekanta dig med alla pågående och kommande projekt på allmänna områden samt ge respons på dem. Du kan granska projekt på kartan. Ska du starta ett projekt eller lämna ansökningar?",
+    "info": "I tjänsten Haitaton kan du bekanta dig med alla pågående och kommande projekt på allmänna områden. Du kan granska projekt på kartan. Ska du starta ett projekt eller lämna ansökningar?",
     "info_link": "Gå till ärendehantering i Haitaton",
     "notification": {
       "heading": "Hjälp oss med att göra Haitaton ännu bättre!",
@@ -1802,8 +1807,12 @@
       }
     },
     "completedState": {
-      "labels": {},
-      "notifications": {}
+      "labels": {
+        "completed": "Projektet har flyttats till Färdig-läge"
+      },
+      "notifications": {
+        "completed": "Projektet kan inte längre redigeras och inga ansökningar kan läggas till. Projektet kommer att tas bort tidigast {{date}}, varvid all information om projektet och dess ansökningar kommer att tas bort från Haitaton."
+      }
     }
   },
   "publicHankkeet": {
