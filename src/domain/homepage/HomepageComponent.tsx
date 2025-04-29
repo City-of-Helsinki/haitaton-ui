@@ -3,7 +3,7 @@ import { Box, Grid } from '@chakra-ui/react';
 import {
   ButtonPresetTheme,
   ButtonVariant,
-  Koros,
+  Hero,
   Link,
   LoginButton,
   Notification,
@@ -26,11 +26,11 @@ import {
   FeatureFlagsContextProps,
   useFeatureFlags,
 } from '../../common/components/featureFlags/FeatureFlagsContext';
-import MainHeading from '../../common/components/mainHeading/MainHeading';
 import HankeCreateDialog from '../hanke/hankeCreateDialog/HankeCreateDialog';
 import JohtoselvitysCreateDialog from '../johtoselvitys/johtoselvitysCreateDialog/JohtoselvitysCreateDialog';
 import useIsAuthenticated from '../auth/useIsAuthenticated';
 import useLocale from '../../common/hooks/useLocale';
+import { SKIP_TO_ELEMENT_ID } from '../../common/constants/constants';
 
 const FEEDBACK_NOTIFICATION_CLOSED = 'feedback-notification-closed';
 
@@ -173,15 +173,19 @@ const Homepage: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   return (
     <div className={clsx({ [styles.bgWhite]: !isAuthenticated && !features.publicHankkeet })}>
-      <div className={styles.heroContainer}>
-        <section className={styles.hero}>
-          <MainHeading spacing="s">{pageTitle}</MainHeading>
-          <Text tag="h2" styleAs="h3" spacing="s" weight="bold">
-            {pageSubtitle}
-          </Text>
-        </section>
-        <Koros type="basic" flipVertical className={styles.koros} />
-      </div>
+      <Hero
+        theme={{
+          '--background-color': 'var(--color-summer)',
+          '--koros-color': `${isAuthenticated ? 'var(--color-black-5' : 'var(--color-white'}`,
+        }}
+        variant="noImage"
+        centeredContent
+      >
+        <Hero.Title id={SKIP_TO_ELEMENT_ID} tabIndex={-1} aria-live="polite">
+          {pageTitle}
+        </Hero.Title>
+        <Hero.Text>{pageSubtitle}</Hero.Text>
+      </Hero>
 
       {!isAuthenticated && features.publicHankkeet && (
         <Box
